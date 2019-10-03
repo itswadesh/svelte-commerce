@@ -1,6 +1,8 @@
 <script>
   import { get, put, post } from "./../lib/api";
   import { goto, stores } from "@sapper/app";
+  import Textbox from "./../components/ui/Textbox.svelte";
+  import Button from "./../components/ui/Button.svelte";
   let sku = "",
     product = {};
   async function getFromFlipkart() {
@@ -20,31 +22,24 @@
   }
 </script>
 
-<input
-  class="text-base text-base rounded-sm pb-4 border-b-2 hover:border-pink-500
-  shadow-md pt-3 pl-1"
-  type="text"
-  placeholder="SKU"
-  bind:value={sku} />
-<button
-  class="uppercase bg-green-500 width text-white h-10 rounded"
-  on:click={getFromFlipkart}>
-  Grab From Flipkart
-</button>
-{#if product.variants}
-  {product.name}
+<div class="m-5">
+  <Textbox label="SKU" bind:value={sku} />
+  <Button on:click={getFromFlipkart} text="Grab From Flipkart" />
+  {#if product.variants}
+    {product.name}
+    <br />
+    <form on:submit|preventDefault={submit}>
+      <input
+        class="text-base text-base rounded-sm pb-4 border-b-2
+        hover:border-pink-500 shadow-md pt-3 pl-1"
+        placeholder="Price"
+        bind:value={product.variants[0].price} />
+      <button
+        on:click={getFromFlipkart}
+        class="uppercase bg-pink-500 width text-white h-10 rounded">
+        Save
+      </button>
+    </form>
+  {/if}
   <br />
-  <form on:submit|preventDefault={submit}>
-    <input
-      class="text-base text-base rounded-sm pb-4 border-b-2
-      hover:border-pink-500 shadow-md pt-3 pl-1"
-      placeholder="Price"
-      bind:value={product.variants[0].price} />
-    <button
-      type="submit"
-      class="uppercase bg-pink-500 width text-white h-10 rounded">
-      Save
-    </button>
-  </form>
-{/if}
-<br />
+</div>

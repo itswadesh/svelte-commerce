@@ -1,13 +1,6 @@
 <script>
-  import { typingTimeout } from "./../config";
-  export let search = "";
-</script>
 
-<style>
-  img {
-    margin-right: 1rem;
-  }
-</style>
+</script>
 
 <form novalidate autocomplete="off">
   <div class="search_fix" />
