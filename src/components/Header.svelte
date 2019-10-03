@@ -38,21 +38,5 @@
       style="flex:1">
       <Search />
     </div>
-    <div
-      class="flex items-center justify-between flex-shrink-0 py-4 order-3
-      sm:order-4 mx-2 w-40">
-      <a class="w-auto" href="/login" v-if="!user">
-        <img class="h-4 ml-2" src="/avatar.png" alt="" />
-        <div class="inline-text-gray text-xs font-bold">Profile</div>
-      </a>
-      <a class="w-auto" href="/my" v-else>
-        <img class="h-4 ml-2" src="/avatar.png" alt="" />
-        <div class="inline-text-gray text-xs font-bold">Profile</div>
-      </a>
-      <a class="w-auto" href="/wishlist">
-        <img class="h-4 ml-3 center" src="/bookmark.png" alt="" />
-        <div class="text-xs inline-text-gray font-bold">Whistlist</div>
-      </a>
-    </div>
   </nav>
 </header>
