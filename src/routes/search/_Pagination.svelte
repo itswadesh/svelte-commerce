@@ -1,12 +1,10 @@
 <script>
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
-  export let count = 2,
+  export let count = 10,
     current = 1;
-  function pages() {
-    if (this.count > 10) this.count = 10;
-    return parseInt(this.count);
-  }
+  count = parseInt(count);
+  if (count > 10) count = 10;
 </script>
 
 <style>
@@ -48,23 +46,23 @@
         class="lg:mx-5 bg-white hover:bg-gray-100 text-gray-800 font-semibold
         lg:py-2 p-2 lg:px-4 border border-gray-400 rounded shadow rounded
         inline-flex items-center"
-        on:click={dispatch('change', current - 1)}>
+        on:click={() => dispatch('change', current - 1)}>
         <i class="fa fa-caret-left" />
         &nbsp;
         <span>Previous</span>
       </button>
-      {#each pages as i}
+      {#each { length: count } as _, i}
         <li
           class="lg:py-2 lg:px-3 py-2 px-1 lg:mx-2"
           class:active={current === i}
-          on:click={dispatch('change', i)}>
-          {{ i }}
+          on:click={() => dispatch('change', i + 1)}>
+          {i + 1}
         </li>
       {/each}
       <button
         class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4
         border border-gray-400 rounded shadow rounded inline-flex items-center"
-        on:click={dispatch('change', current + 1)}>
+        on:click={() => dispatch('change', current + 1)}>
         <span>Next</span>
         &nbsp;
         <i class="fa fa-caret-right" />

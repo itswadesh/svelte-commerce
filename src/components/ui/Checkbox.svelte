@@ -1,89 +1,109 @@
 <script>
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
-  export let model = null,
-    i = {},
-    selectedItems = [];
+  export let id = "",
+    model = [],
+    items = [],
+    selectedItems = [],
+    color = "none",
+    circle = false,
+    value,
+    count = "",
+    name = "",
+    required = false,
+    disabled = false,
+    size = "",
+    title = "",
+    fontSize = "";
+
+  function changed() {
+    dispatch("change", model);
+  }
 </script>
 
 <style>
-  .containers {
-    display: block;
-    position: relative;
-    padding-left: 13px;
-    margin-bottom: 12px;
-    font-size: 22px;
-    user-select: none;
-    margin-top: 0.5rem;
+  .filter-container {
+    max-height: 400px;
+    overflow: auto;
   }
-
-  /* Hide the browser's default checkbox */
-  .containers input {
+  .common-checkboxIndicator {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
     position: absolute;
-    opacity: 0;
-    height: 0;
-    width: 0;
+    top: 0;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #c3c2c9;
+    background: #fff;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    margin-top: 1px;
   }
-
-  /* Create a custom checkbox */
-  .checkmark {
-    height: 14px;
-    width: 14px;
-    display: inline-block;
+  .common-customCheckbox {
     position: relative;
-    top: 2px;
-    background-repeat: no-repeat;
-    border: 1px solid #a4a4a4;
-    border-radius: 3px;
-    margin-right: 12px;
+    cursor: pointer;
   }
-  .border1 {
-    border-bottom: 1px solid #f7efef;
-    width: 100%;
-    margin-left: 2rem;
-    padding-top: 0.5rem;
+  .common-customCheckbox input:checked ~ .common-checkboxIndicator {
+    border: none;
+    background: #ff3f6c;
   }
-
-  /* When the checkbox is checked, add a blue background */
-  .containers input:checked ~ .checkmark {
-    background-color: #ed54a4;
-  }
-
-  /* Create the checkmark/indicator (hidden when not checked) */
-  .checkmark:after {
+  .common-checkboxIndicator:after {
     content: "";
     position: absolute;
-    display: none;
-  }
-  .containers input:checked ~ .checkmark:after {
-    display: block;
-  }
-  /* Style the checkmark/indicator */
-  .containers .checkmark:after {
+    top: 4px;
     left: 4px;
-    top: 1px;
-    width: 4px;
-    height: 7px;
-    border: solid white;
-    border-width: 0 2px 2px 0;
-    -webkit-transform: rotate(45deg);
-    transform: rotate(45deg);
+    width: 8px;
+    height: 5px;
+    border: 2px solid #fff;
+    border-color: #fff;
+    border-top-style: none;
+    border-right-style: none;
+    -webkit-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
   }
-
-  .font {
-    font-size: 0.8rem;
+  label {
+    line-height: 2;
+    cursor: pointer;
   }
 </style>
 
-{#if i.name}
-  <label class="containers ">
-    <input
-      type="checkbox"
-      bind:group={selectedItems}
-      value={i.name}
-      on:change={() => dispatch('go', { model, selectedItems })} />
-    <span class="checkmark " />
-    <span class="font">{i.name}</span>
-    <div class="border1" />
-  </label>
-{/if}
+<!-- {selectedItems} -->
+<p class="ml-2 py-2 font-semibold text-sm px-2">{title}</p>
+<ul class="ml-2 py-2 px-2 filter-container">
+  {#each items as i}
+    {#if i.key}
+      <li>
+        <label
+          class="vertical-filters-label common-customCheckbox hover:bg-none">
+          <input
+            type="checkbox"
+            {name}
+            {disabled}
+            {required}
+            {color}
+            bind:group={selectedItems}
+            value={i.key}
+            on:change={() => dispatch('go', { model, selectedItems })} />
+          <span
+            v-if="color"
+            data-colorhex="black"
+            class="colour-label colour-colorDisplay"
+            style.background-color={color} />
+          <span class="text-gray-800 ml-2 text-sm">{i.key}</span>
+          <span class="text-gray-500 text-xs">({i.doc_count})</span>
+          <div class="common-checkboxIndicator" />
+        </label>
+      </li>
+    {/if}
+  {/each}
+</ul>

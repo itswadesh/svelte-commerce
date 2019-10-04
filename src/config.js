@@ -1,6 +1,6 @@
 const REMOTE_API_URL = 'https://api.litekart.in'
-const LOCAL_API_URL = 'https://api.litekart.in'
-// const LOCAL_API_URL = 'http://localhost:9006'
+// const LOCAL_API_URL = 'https://api.litekart.in'
+const LOCAL_API_URL = 'http://localhost:7000'
 const REMOTE_STORE_URL = 'https://laptops.hopyshopy.com'
 const LOCAL_STORE_URL = 'http://localhost:4400'
 const apiUrl = (process.env.NODE_ENV === 'production') ? REMOTE_API_URL : LOCAL_API_URL

@@ -1,4 +1,21 @@
 import { currency as currencyConfig } from './../config'
+function constructQry(url, fl) {
+    url += "?";
+    Object.keys(fl).forEach(e => {
+        if (fl[e] && fl[e] !== "undefined" && fl[e].length > 0)
+            url += `${e}=${fl[e]}&`;
+    });
+    return url;
+}
+function constructURL2(url, fl) {
+    url += "?";
+    Object.keys(fl).forEach(e => {
+        if (e == 'page') return
+        if (fl[e] && fl[e] !== "undefined" && fl[e].length > 0)
+            url += `${e}=${fl[e]}&`;
+    });
+    return url;
+}
 function constructURL(url, category, fl) {
     if (category) url += category + "?";
     Object.keys(fl).forEach(e => {
@@ -9,7 +26,7 @@ function constructURL(url, category, fl) {
     return url;
 }
 function date(value) {
-     const date = new Date(value)
+    const date = new Date(value)
     return date.toLocaleString(['en-US'], { month: 'short', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
 }
 function currency(value, currency, decimals) {
@@ -17,7 +34,7 @@ function currency(value, currency, decimals) {
     value = parseFloat(value)
     if (!isFinite(value) || (!value && value !== 0)) return ''
     currency = currency != null ? currency : currencyConfig.symbol
-    decimals = decimals != null ? decimals : 2
+    decimals = decimals != null ? decimals : 0
     let stringified = Math.abs(value).toFixed(decimals)
     let _int = decimals
         ? stringified.slice(0, -1 - decimals)
@@ -35,4 +52,4 @@ function currency(value, currency, decimals) {
         _float
 }
 
-export { constructURL, currency,date }
+export { constructURL, constructQry, constructURL2, currency, date }

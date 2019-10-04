@@ -4,59 +4,45 @@
   import Product from "./_Product.svelte";
   import LeftSideBar from "./_LeftSideBar.svelte";
   // import MobileFilters from "~/components/MobileFilters";
-  // import HeaderBody from "~/components/HeaderBody";
+  import HeaderBody from "./../../components/HeaderBody.svelte";
   // import NoProduct from "~/components/NoProduct";
   import Loading from "./../../components/ui/Loading.svelte";
-  import { constructURL } from "./../../lib";
+  import { constructQry, constructURL2 } from "./../../lib";
   import { get, put, post } from "./../../lib/api";
   import { goto, stores } from "@sapper/app";
   import { sorts } from "./../../config";
   const { session, page } = stores();
   let showMobileFilter = false,
-    fl = {
-      brands: [],
-      price: [],
-      categories: [],
-      colors: [],
-      sizes: [],
-      price: [1, 100],
-      sort: null,
-      features: { Type: [], Fit: [], Fabric: [], Neck: [], Color: [] },
-      sorts
-    },
     products = [],
     facets = [],
     category = {},
     productCount = 0,
+    pageSize = 10,
     currentPage = 1,
     loading = false,
-    query = {};
-  page.subscribe(({ query }) => {
-    query = query;
+    query;
+  page.subscribe(page => {
+    query = page.query;
+    getData(query);
   });
-  function created() {
-    currentPage = parseInt(query.page);
-  }
-  function changePage(p) {
-    let fl = { ...fl };
+
+  function changePage(e, p) {
+    let fl = { ...query };
     delete fl.page;
-    delete fl.categories;
-    const url = constructURL("/", fl);
-    let page = parseInt(p || 1);
+    // delete fl.categories;
+    const url = constructURL2("/search", fl);
+    let page = parseInt(e.detail || 1);
     goto(`${url}page=${page}`);
   }
-  function facetRemoved(f) {
-    fl = f;
-  }
-  async function getData() {
+  async function getData(query) {
     try {
       loading = true;
-      const products = await get("/products/es", {
-        params: { ...query }
-      });
-      productCount = products.count;
-      products = products.data;
-      facets = products.facets.all_aggs;
+      let url = constructQry("products/es", query);
+      const p = await get(url);
+      pageSize = p.data.length;
+      productCount = p.count;
+      products = p.data;
+      facets = p.facets.all_aggs;
     } catch (e) {
     } finally {
       loading = false;
@@ -64,7 +50,7 @@
   }
 </script>
 
-{JSON.stringify(query)}
+<!-- {JSON.stringify(products)} -->
 {#if showMobileFilter}
   <!-- <MobileFilters
       class="flex-none max-w-xs"
@@ -77,18 +63,26 @@
     <LeftSideBar
       class="flex-none max-w-xs hidden md:block"
       bind:facets
-      bind:fl />
+      bind:query />
     <div class="w-full">
-      <!-- <HeaderBody
-          bind:count="{productCount}"
-          bind:fl="{fl}"
-          on:removed="{facetRemoved}"
-          on:showFilters="{showMobileFilter=true}"
-        /> -->
-      <Pagination
-        count={10}
-        current={parseInt(query.page || 1)}
-        on:change={changePage} />
+      <HeaderBody
+        count={productCount}
+        on:showFilters={() => (showMobileFilter = true)} />
+      {#if products.length == 0 && !loading}
+        <!-- <NoProduct /> -->
+      {:else if products && products.length > 0}
+        <div class="flex flex-wrap">
+          {#each products as p}
+            <Product product={p} />
+          {/each}
+        </div>
+      {/if}
+      {#if Math.ceil(productCount / pageSize) > 1}
+        <Pagination
+          count={Math.ceil(productCount / pageSize)}
+          current={parseInt(query.page || 1)}
+          on:change={changePage} />
+      {/if}
     </div>
   </div>
 {/if}
