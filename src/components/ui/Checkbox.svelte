@@ -7,7 +7,6 @@
     selectedItems = [],
     color = "none",
     circle = false,
-    value,
     count = "",
     name = "",
     required = false,

@@ -1,4 +1,5 @@
 <script>
+  import Header from "./../../components/Header.svelte";
   import Pagination from "./_Pagination.svelte";
   // import Skeleton from "~/components/Skeleton";
   import Product from "./_Product.svelte";
@@ -48,8 +49,14 @@
       loading = false;
     }
   }
+  function search(e) {
+    query = {};
+    query.q = e.detail;
+    getData(query);
+  }
 </script>
 
+<Header on:search={search} />
 <!-- {JSON.stringify(products)} -->
 {#if showMobileFilter}
   <!-- <MobileFilters
@@ -60,10 +67,7 @@
     /> -->
 {:else}
   <div class="flex">
-    <LeftSideBar
-      class="flex-none max-w-xs hidden md:block"
-      bind:facets
-      bind:query />
+    <LeftSideBar bind:facets bind:query />
     <div class="w-full">
       <HeaderBody
         count={productCount}

@@ -18,9 +18,9 @@
 <div class="flex-none lg:flex justify-between px-2 py-6 text-sm items-center">
   <Breadcrumb class="px-1 py-0" />
   <div class="font-semibold flex p-1">
-    <div class="font-hairline">{count} laptops</div>
+    <div class="font-hairline">{count} laptops found</div>
   </div>
-  <div class="flex-wrap p-1">
+  <div class="flex-wrap p-1 hidden md:block">
     <div class="text-sm">
       <div class="inline-block relative">
         <select

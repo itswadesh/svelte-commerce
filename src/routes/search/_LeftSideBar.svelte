@@ -10,34 +10,6 @@
     fl = {},
     loadingPrice = true; // Required because after loading finished then only we will initiate the price slider component
 
-  page.subscribe(page => {
-    query = page.query;
-    // if (query.categories) {
-    //   fl.categories = query.categories.split(",");
-    // } else {
-    //   fl.categories = [];
-    // }
-    // if (query.brands) {
-    //   fl.brands = query.brands.split(",");
-    // } else {
-    //   fl.brands = [];
-    // }
-    // if (query.sizes) {
-    //   fl.sizes = query.sizes.split(",");
-    // } else {
-    //   fl.sizes = [];
-    // }
-    // if (query.colors) {
-    //   fl.colors = query.colors.split(",");
-    // } else {
-    //   fl.colors = [];
-    // }
-    // if (query.sort) {
-    //   fl.sort = query.sort;
-    // } else {
-    //   fl.sort = null;
-    // }
-  });
   function remove(k, i) {
     let ix = query[k].indexOf(i);
     query[k].splice(ix, 1);
@@ -51,16 +23,17 @@
   }
 </script>
 
-<div class="py-6 w-1/5">
-  <div
-    class="font-bold flex justify-between md:px-3 lg:px-4 items-center pt-3
-    text-sm md:text-xs"
-    style="margin-top:1px;">
-    <div class="text-gray">FILTERS</div>
-    <div class="text-right text-pink-500 cursor-pointer">CLEAR ALL</div>
-  </div>
+<div class="max-w-xs hidden md:block md:w-64">
+  <div class="py-6">
+    <div
+      class="font-bold flex justify-between md:px-3 lg:px-4 items-center pt-3
+      text-sm md:text-xs"
+      style="margin-top:1px;">
+      <div class="text-gray">FILTERS</div>
+      <div class="text-right text-pink-500 cursor-pointer">CLEAR ALL</div>
+    </div>
 
-  <!-- {#each query as v, k}
+    <!-- {#each query as v, k}
     {#if v && v.length > 0 && k != 'page' && k != 'sort'}
       <div class="flex flex-wrap items-center text-xs">
         {#each v as i, ix}
@@ -75,48 +48,49 @@
       </div>
     {/if}
   {/each} -->
-  {#if facets.categories && facets.categories.all.buckets && facets.categories.all.buckets.length > 0}
-    <Checkbox
-      items={facets.categories.all.buckets}
-      title="CATEGORY"
-      model="categories"
-      selectedItems={query.categories || []}
-      on:go={goCheckbox} />
-  {/if}
-  {#if facets.brands && facets.brands.all.buckets && facets.brands.all.buckets.length > 0}
-    <Checkbox
-      items={facets.brands.all.buckets}
-      title="BRANDS"
-      model="brands"
-      selectedItems={query.brands || []}
-      on:go={goCheckbox} />
-  {/if}
-  {#if facets.sizes && facets.sizes.all.buckets && facets.sizes.all.buckets.length > 0}
-    <Checkbox
-      items={facets.sizes.all.buckets}
-      title="SIZES"
-      model="sizes"
-      selectedItems={query.sizes || []}
-      on:go={goCheckbox} />
-  {/if}
-  {#if facets.features && facets.features.name && facets.features.name.buckets && facets.features.name.buckets.length > 0}
-    {#each facets.features.name.buckets as v, k}
-      {#if v.key != 'Color' && v.val && v.val.buckets && v.val.buckets.length > 0}
-        <Checkbox
-          items={v.val.buckets}
-          title={v.key.toUpperCase()}
-          model={v.key}
-          selectedItems={query[v.key] || []}
-          on:go={goCheckbox} />
-      {/if}
-    {/each}
-  {/if}
-  {#if facets.colors && facets.colors.colors && facets.colors.colors.name && facets.colors.colors.name.buckets && facets.colors.colors.name.buckets.length > 0}
-    <Checkbox
-      items={facets.colors.colors.name.buckets}
-      title="COLOR"
-      model="color"
-      selectedItems={query.colors || []}
-      on:go={goCheckbox} />
-  {/if}
+    {#if facets.categories && facets.categories.all.buckets && facets.categories.all.buckets.length > 0}
+      <Checkbox
+        items={facets.categories.all.buckets}
+        title="CATEGORY"
+        model="categories"
+        selectedItems={query.categories || []}
+        on:go={goCheckbox} />
+    {/if}
+    {#if facets.brands && facets.brands.all.buckets && facets.brands.all.buckets.length > 0}
+      <Checkbox
+        items={facets.brands.all.buckets}
+        title="BRANDS"
+        model="brands"
+        selectedItems={query.brands || []}
+        on:go={goCheckbox} />
+    {/if}
+    {#if facets.sizes && facets.sizes.all.buckets && facets.sizes.all.buckets.length > 0}
+      <Checkbox
+        items={facets.sizes.all.buckets}
+        title="SIZES"
+        model="sizes"
+        selectedItems={query.sizes || []}
+        on:go={goCheckbox} />
+    {/if}
+    {#if facets.features && facets.features.name && facets.features.name.buckets && facets.features.name.buckets.length > 0}
+      {#each facets.features.name.buckets as v, k}
+        {#if v.key != 'Color' && v.val && v.val.buckets && v.val.buckets.length > 0}
+          <Checkbox
+            items={v.val.buckets}
+            title={v.key.toUpperCase()}
+            model={v.key}
+            selectedItems={query[v.key] || []}
+            on:go={goCheckbox} />
+        {/if}
+      {/each}
+    {/if}
+    {#if facets.colors && facets.colors.colors && facets.colors.colors.name && facets.colors.colors.name.buckets && facets.colors.colors.name.buckets.length > 0}
+      <Checkbox
+        items={facets.colors.colors.name.buckets}
+        title="COLOR"
+        model="color"
+        selectedItems={query.colors || []}
+        on:go={goCheckbox} />
+    {/if}
+  </div>
 </div>
