@@ -1,4 +1,5 @@
 <script>
+  import { currency } from "./../../lib";
   export let product = {};
 </script>
 
@@ -17,12 +18,13 @@
   {#if product}
     <a href={'/' + product._source.slug + '?id=' + product._id} class="w-full">
       <div>
-        <img
-          class="w-full h-64"
-          style="object-fit: cover; max-height:316px;"
-          v-if="product._source.imgUrls"
-          v-lazy="product._source.imgUrls[0]"
-          alt />
+        {#if product._source.imgUrls}
+          <!-- <img
+            class="w-full h-64"
+            style="object-fit: cover; max-height:316px;"
+            src={product._source.imgUrls[0]}
+            alt /> -->
+        {/if}
         <div class="p-1 text-center">
           <div class="text-gray-900 lg:font-bold sm:font-normal text-sm">
             {product._source.name}
@@ -32,7 +34,9 @@
             v-if="product._source.categories && product._source.categories[0]">
             {product._source.categories[0].name}
           </div>
-          <div class="text-gray-700">{product._source.variants[0].price}</div>
+          <div class="text-gray-700">
+            {currency(product._source.variants[0].price)}
+          </div>
         </div>
       </div>
     </a>
