@@ -1,10 +1,10 @@
 <script>
-  import Header from "../components/Header.svelte";
+  // import Header from "../components/Header.svelte";
 
-  export let segment;
+  // export let segment;
 </script>
 
-<Header {segment} />
+<!-- <Header {segment} /> -->
 
 <main>
   <slot />

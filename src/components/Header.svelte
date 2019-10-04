@@ -4,7 +4,8 @@
   import { stores, goto } from "@sapper/app";
   const { session } = stores();
   import { auth } from "./../routes/auth-store.js";
-
+  import { createEventDispatcher } from "svelte";
+  const dispatch = createEventDispatcher();
   export let showtab = true,
     mysearch = false;
 
@@ -16,6 +17,9 @@
 
   function closeSidebar() {
     this.sidebar = false;
+  }
+  function search(q) {
+    dispatch("search", q.detail);
   }
 </script>
 
@@ -36,7 +40,7 @@
     <div
       class="mx-2 py-2 border-gray-300 relative order-4 sm:order-3"
       style="flex:1">
-      <Search />
+      <Search on:search={search} />
     </div>
   </nav>
 </header>
