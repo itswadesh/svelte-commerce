@@ -16,7 +16,7 @@
 </script>
 
 <div class="flex-none lg:flex justify-between px-2 py-6 text-sm items-center">
-  <Breadcrumb class="px-1 py-0" />
+  <Breadcrumb />
   <div class="font-semibold flex p-1">
     <div class="font-hairline">{count} laptops found</div>
   </div>
@@ -49,7 +49,9 @@
     <i class="fa fa-sliders px-3 mr-2" aria-hidden="true" />
     Filter
   </div>
-  <div class="flex-1 text-gray-700 text-center font-normal px-4">0 items</div>
+  <div class="flex-1 text-gray-700 text-center font-normal px-4">
+    {count} laptops
+  </div>
   <div class="flex-1 text-gray-700 text-center px-4 text-pink-500">
     <i class="fa fa-sort mr-2" aria-hidden="true" />
     Sort

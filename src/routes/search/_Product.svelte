@@ -19,24 +19,33 @@
     <a href={'/' + product._source.slug + '?id=' + product._id} class="w-full">
       <div>
         {#if product._source.imgUrls}
-          <!-- <img
+          <img
             class="w-full h-64"
-            style="object-fit: cover; max-height:316px;"
-            src={product._source.imgUrls[0]}
-            alt /> -->
+            style="object-fit: contain; max-height:316px;"
+            src={product._source.imgUrls[0]['200x200']}
+            alt />
         {/if}
-        <div class="p-1 text-center">
+        <div class="p-1 text-start">
           <div class="text-gray-900 lg:font-bold sm:font-normal text-sm">
             {product._source.name}
           </div>
-          <div
-            class="text-black font-thin text-sm"
-            v-if="product._source.categories && product._source.categories[0]">
-            {product._source.categories[0].name}
-          </div>
           <div class="text-gray-700">
-            {currency(product._source.variants[0].price)}
+            {currency(product._source.specialPrice)}
+            <del>{currency(product._source.price)}</del>
+            <del>{currency(product._source.mrp)}</del>
           </div>
+          <div class="text-black font-thin text-sm">
+            {product._source.color.name}
+          </div>
+          {#if product._source.keyFeatures}
+            <div class="text-black font-thin text-sm">
+              <ul>
+                {#each product._source.keyFeatures as f}
+                  <li>{f}</li>
+                {/each}
+              </ul>
+            </div>
+          {/if}
         </div>
       </div>
     </a>

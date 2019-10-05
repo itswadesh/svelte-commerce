@@ -38,7 +38,7 @@
   async function getData(query) {
     try {
       loading = true;
-      let url = constructQry("products/es", query);
+      let url = constructQry("electronics/es", query);
       const p = await get(url);
       pageSize = p.data.length;
       productCount = p.count;
