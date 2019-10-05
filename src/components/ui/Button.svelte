@@ -8,7 +8,7 @@
 <button
   {size}
   on:click
-  class="w-full p-3 text-lg font-bold rounded bg-pink-500 hover:bg-pink-600
+  class="px-3 py-1 text-lg font-bold rounded bg-pink-500 hover:bg-pink-600
   text-white">
-  {text}
+  <slot />
 </button>

@@ -3,13 +3,14 @@
   const dispatch = createEventDispatcher();
   export let label = "",
     type = "text",
-    value = "";
+    value = "",
+    cls = "";
 </script>
 
 <style>
   .group {
     position: relative;
-    margin-bottom: 1.5rem;
+    /* margin-bottom: 1.5rem; */
   }
   label {
     pointer-events: none;
@@ -40,12 +41,14 @@
   }
 </style>
 
-<div class="group">
-  <input
-    bind:value
-    class="bg-gray-200 border-b w-full rounded hover:bg-gray-300
-    focus:outline-none focus:border-pink-500"
-    required
-    :aria-label="label" />
-  <label class="text-gray-500">{label}</label>
+<div class={cls}>
+  <div class="group">
+    <input
+      bind:value
+      class="bg-gray-200 border-b w-full rounded hover:bg-gray-300
+      focus:outline-none focus:border-pink-500"
+      required
+      :aria-label="label" />
+    <label class="text-gray-500">{label}</label>
+  </div>
 </div>
