@@ -71,14 +71,6 @@
         selectedItems={query.brands || []}
         on:go={goCheckbox} />
     {/if}
-    {#if facets.sizes && facets.sizes.all.buckets && facets.sizes.all.buckets.length > 0}
-      <Checkbox
-        items={facets.sizes.all.buckets}
-        title="SIZES"
-        model="sizes"
-        selectedItems={query.sizes || []}
-        on:go={goCheckbox} />
-    {/if}
     {#if facets.features && facets.features.name && facets.features.name.buckets && facets.features.name.buckets.length > 0}
       {#each facets.features.name.buckets as v, k}
         {#if v.key != 'Color' && v.val && v.val.buckets && v.val.buckets.length > 0}

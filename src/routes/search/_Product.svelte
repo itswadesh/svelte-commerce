@@ -29,7 +29,7 @@
       <div>
         {#if product._source.imgUrls}
           <img
-            class="w-full h-64 zoom"
+            class="w-full zoom mb-3"
             style="object-fit: contain; max-height:316px;"
             src={product._source.imgUrls[0]['200x200']}
             alt />
@@ -38,10 +38,8 @@
           <div class="text-gray-900 lg:font-bold sm:font-normal text-sm">
             {product._source.name}
           </div>
-          {product._source.price}
           <div class="text-gray-700">
-            {currency(product._source.specialPrice)}
-            <del>{currency(product._source.price)}</del>
+            {currency(product._source.specialPrice || product._source.price)}
             <del>{currency(product._source.mrp)}</del>
           </div>
           <div class="text-black font-thin text-sm">

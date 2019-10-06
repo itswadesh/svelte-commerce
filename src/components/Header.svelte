@@ -1,5 +1,4 @@
 <script>
-  import Megamenu from "./Megamenu.svelte";
   import Search from "./Search.svelte";
   import { stores, goto } from "@sapper/app";
   const { session } = stores();
@@ -33,9 +32,7 @@
       </a>
       <div
         class="hidden lg:block flex flex-none text-sm py-4 xs:justify-between
-        items-center text-gray order-2">
-        <!-- <Megamenu /> -->
-      </div>
+        items-center text-gray order-2" />
     </div>
     <div
       class="mx-2 py-2 border-gray-300 relative order-4 sm:order-3"
