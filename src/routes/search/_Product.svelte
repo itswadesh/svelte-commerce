@@ -12,6 +12,12 @@
       opacity: 1;
     }
   }
+  .zoom {
+    transition: transform 0.7s;
+  }
+  .zoom:hover {
+    transform: scale(1.035);
+  }
 </style>
 
 <div class="flex p-2 w-1/2 lg:w-1/4 xl:w-1/5 justify-between">
@@ -23,7 +29,7 @@
       <div>
         {#if product._source.imgUrls}
           <img
-            class="w-full h-64"
+            class="w-full h-64 zoom"
             style="object-fit: contain; max-height:316px;"
             src={product._source.imgUrls[0]['200x200']}
             alt />

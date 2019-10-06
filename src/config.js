@@ -7,8 +7,8 @@ const storeUrl = (process.env.NODE_ENV === 'production') ? REMOTE_STORE_URL : LO
 const sorts = [
     { name: "Relevance", val: null },
     { name: "Whats New", val: "-createdAt" },
-    { name: "Price low to high", val: "variants.price" },
-    { name: "Price high to low", val: "-variants.price" }
+    { name: "Price low to high", val: "price" },
+    { name: "Price high to low", val: "-price" }
 ]
 export const typingTimeout = 0 // After this delay the search api will be fired
 const HOST = 'https://www.hopyshopy.com'
