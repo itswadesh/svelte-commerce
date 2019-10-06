@@ -1,22 +1,25 @@
 <script>
-  import Breadcrumb from "./ui/Breadcrumb.svelte";
   import Checkbox from "./ui/Checkbox.svelte";
   import { constructURL2 } from "./../lib";
   import { sorts } from "./../config";
   import { goto, stores } from "@sapper/app";
+  const { session, page } = stores();
+
   export let sortBy = null,
     count = 0,
-    showFilters = false,
-    query = {};
-
+    showFilters = false;
+  let query = {};
+  page.subscribe(page => {
+    query = page.query;
+  });
   function sort() {
+    query.sort = sortBy;
     let url = constructURL2("/search", query);
     goto(url);
   }
 </script>
 
 <div class="flex-none lg:flex justify-between px-2 py-6 text-sm items-center">
-  <Breadcrumb />
   <div class="font-semibold flex p-1">
     <div class="font-hairline">{count} laptops found</div>
   </div>
@@ -24,10 +27,10 @@
     <div class="text-sm">
       <div class="inline-block relative">
         <select
+          bind:value={sortBy}
           class="text-black border-gray-100 cursor-pointer cursor-pointer block
           appearance-none bg-white border border-gray-400 hover:border-gray-500
           px-4 py-2 pr-8 leading-tight focus:outline-none focus:none"
-          v-model="sortBy"
           on:change={sort}>
           {#each sorts as s, ix}
             <option class="bg-white" value={s.val}>{s.name}</option>

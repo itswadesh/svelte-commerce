@@ -1,12 +1,5 @@
 <script>
-  let thisLoading = false,
-    loadingTimer = 10;
-  function start() {
-    this.thisLoading = true;
-  }
-  function finish() {
-    this.thisLoading = false;
-  }
+  export let loading = false;
 </script>
 
 <style>
@@ -67,11 +60,11 @@
   }
 </style>
 
-<template>
-  <div id="wave" v-if="thisLoading">
+{#if loading}
+  <div id="wave">
     <span class="dot olive" />
     <span class="dot blue" />
     <span class="dot green" />
     <span class="dot red" />
   </div>
-</template>
+{/if}

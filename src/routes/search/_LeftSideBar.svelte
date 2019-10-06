@@ -9,7 +9,10 @@
     query = {},
     fl = {},
     loadingPrice = true; // Required because after loading finished then only we will initiate the price slider component
-
+  function clearFilters() {
+    let url = constructURL2("/search", {});
+    goto(url);
+  }
   function remove(k, i) {
     let ix = query[k].indexOf(i);
     query[k].splice(ix, 1);
@@ -30,7 +33,11 @@
       text-sm md:text-xs"
       style="margin-top:1px;">
       <div class="text-gray">FILTERS</div>
-      <div class="text-right text-pink-500 cursor-pointer">CLEAR ALL</div>
+      <button
+        on:click={clearFilters}
+        class="text-right text-pink-500 cursor-pointer">
+        CLEAR ALL
+      </button>
     </div>
 
     <!-- {#each query as v, k}

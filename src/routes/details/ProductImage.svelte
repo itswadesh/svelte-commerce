@@ -10,7 +10,7 @@
   }
 </script>
 
-<style scoped>
+<style>
   .zoom {
     transition: transform 0.7s;
   }
