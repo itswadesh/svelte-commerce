@@ -29,6 +29,7 @@
           <div class="text-gray-900 lg:font-bold sm:font-normal text-sm">
             {product._source.name}
           </div>
+          {product._source.price}
           <div class="text-gray-700">
             {currency(product._source.specialPrice)}
             <del>{currency(product._source.price)}</del>

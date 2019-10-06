@@ -15,11 +15,6 @@ polka()
 		apiProxy,
 		authenticationMiddleware,
 		sapper.middleware({
-			session: (req, res) => ({
-				user: req.user || {},
-				token: req.token,
-				cart: req.cart || {}
-			})
 		})
 	)
 	.listen(PORT, err => {
