@@ -3,8 +3,8 @@
   import Pagination from "./_Pagination.svelte";
   // import Skeleton from "~/components/Skeleton";
   import Product from "./_Product.svelte";
-  import LeftSideBar from "./_LeftSideBar.svelte";
-  // import MobileFilters from "~/components/MobileFilters";
+  import DesktopFilters from "./_DesktopFilters.svelte";
+  import MobileFilters from "./_MobileFilters.svelte";
   import HeaderBody from "./../../components/HeaderBody.svelte";
   // import NoProduct from "~/components/NoProduct";
   import Loading from "./../../components/ui/Loading.svelte";
@@ -54,6 +54,9 @@
     query.q = e.detail;
     getData(query);
   }
+  function toggle(e) {
+    showMobileFilter = e.detail;
+  }
 </script>
 
 <svelte:head>
@@ -61,20 +64,15 @@
 </svelte:head>
 <Header on:search={search} />
 {#if showMobileFilter}
-  <!-- <MobileFilters
-      class="flex-none max-w-xs"
-      bind:facets="{facets}"
-      bind:fl="{fl}"
-      on:hide="{showMobileFilter=false}"
-    /> -->
+  <MobileFilters {facets} on:hide={toggle} />
 {:else}
   <Loading {loading} />
   <div class="flex">
-    <LeftSideBar bind:facets bind:query />
+    <DesktopFilters bind:facets bind:query />
     <div class="w-full">
       <HeaderBody
         count={productCount}
-        on:showFilters={() => (showMobileFilter = true)} />
+        on:hide={() => (showMobileFilter = !showMobileFilter)} />
       {#if products.length == 0 && !loading}
         <!-- <NoProduct /> -->
       {:else if products && products.length > 0}

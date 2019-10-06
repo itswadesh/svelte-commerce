@@ -4,7 +4,8 @@
   import { sorts } from "./../config";
   import { goto, stores } from "@sapper/app";
   const { session, page } = stores();
-
+  import { createEventDispatcher } from "svelte";
+  const dispatch = createEventDispatcher();
   export let sortBy = null,
     count = 0,
     showFilters = false;
@@ -19,7 +20,7 @@
   }
 </script>
 
-<div class="flex-none lg:flex justify-between px-2 py-6 text-sm items-center">
+<div class="flex-none lg:flex justify-between px-2 py-2 text-sm items-center">
   <div class="font-semibold flex p-1">
     <div class="font-hairline">{count} laptops found</div>
   </div>
@@ -29,8 +30,8 @@
         <select
           bind:value={sortBy}
           class="text-black border-gray-100 cursor-pointer cursor-pointer block
-          appearance-none bg-white border border-gray-400 hover:border-gray-500
-          px-4 py-2 pr-8 leading-tight focus:outline-none focus:none"
+          bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8
+          focus:outline-none"
           on:change={sort}>
           {#each sorts as s, ix}
             <option class="bg-white" value={s.val}>{s.name}</option>
@@ -45,18 +46,27 @@
     </div>
   </div>
 </div>
-<div class="xs:block lg:hidden flex shadow-md py-4 bg-white w-full mb-1">
+<div class="lg:hidden flex shadow-md py-4 bg-white w-full mb-1">
   <div
-    class="flex-1 text-gray-700 text-left text-pink-500"
-    on:click={() => (showFilters = !showFilters)}>
-    <i class="fa fa-sliders px-3 mr-2" aria-hidden="true" />
+    class="flex-1 flex items-center text-gray-700 text-left text-pink-500"
+    on:click={() => dispatch('hide', !showFilters)}>
+    <i class="fa fa-sliders-h px-3" />
     Filter
   </div>
-  <div class="flex-1 text-gray-700 text-center font-normal px-4">
+  <div class="hidden md:block text-gray-700 text-center font-normal px-4">
     {count} laptops
   </div>
-  <div class="flex-1 text-gray-700 text-center px-4 text-pink-500">
+  <div class="text-gray-700 text-center px-4 text-pink-500">
     <i class="fa fa-sort mr-2" aria-hidden="true" />
-    Sort
+    <select
+      bind:value={sortBy}
+      class="flex-1 text-pink-600 border-gray-100 cursor-pointer cursor-pointer
+      bg-white border border-gray-400 hover:border-gray-500 px-4 py-2
+      focus:outline-none"
+      on:change={sort}>
+      {#each sorts as s, ix}
+        <option class="bg-white" value={s.val}>{s.name}</option>
+      {/each}
+    </select>
   </div>
 </div>
