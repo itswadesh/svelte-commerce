@@ -16,7 +16,10 @@
 
 <div class="flex p-2 w-1/2 lg:w-1/4 xl:w-1/5 justify-between">
   {#if product}
-    <a href={'/' + product._source.slug + '?id=' + product._id} class="w-full">
+    <a
+      href={'/' + product._source.slug + '?id=' + product._id}
+      rel="prefetch"
+      class="w-full">
       <div>
         {#if product._source.imgUrls}
           <img

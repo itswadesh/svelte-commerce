@@ -89,9 +89,9 @@
   <meta
     data-hid="description"
     name="description"
-    content="Huge Collection of Jewellery, Handbags, Clutches, Sunglasses,
-    Clothing, Nightwear & More!" />
+    content={product && product.description} />
 </svelte:head>
+<Header />
 {#if !product}
   Requested product not found.
 {:else}
