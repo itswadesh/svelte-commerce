@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="flex flex-wrap justify-between">
-      <a href="/" class="w-1/2 lg:w-56 md:w-1/3">
+      <a href="/" class="w-1/2 lg:w-56 md:w-1/3" rel="prefetch">
         <div class="shadow m-2 relative">
           <img
             class="h-48 w-full object-cover"
@@ -34,7 +34,7 @@
         </div>
       </a>
 
-      <a href="/" class="w-1/2 lg:w-56 md:w-1/3">
+      <a href="/" class="w-1/2 lg:w-56 md:w-1/3" rel="prefetch">
         <div class="shadow m-2 relative">
           <img
             class="h-48 w-full object-cover"
@@ -61,7 +61,7 @@
         </div>
       </a>
 
-      <a href="/" class="w-1/2 lg:w-56 md:w-1/3">
+      <a href="/" class="w-1/2 lg:w-56 md:w-1/3" rel="prefetch">
         <div class="shadow m-2 relative">
           <img
             class="h-48 w-full object-cover"

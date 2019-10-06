@@ -56,6 +56,9 @@
   }
 </script>
 
+<svelte:head>
+  <title>List of India's best laptops - Curated manually</title>
+</svelte:head>
 <Header on:search={search} />
 <!-- {JSON.stringify(products)} -->
 {#if showMobileFilter}
@@ -66,6 +69,7 @@
       on:hide="{showMobileFilter=false}"
     /> -->
 {:else}
+  <Loading />
   <div class="flex">
     <LeftSideBar bind:facets bind:query />
     <div class="w-full">
