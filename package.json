@@ -11,8 +11,12 @@
     "cy:open": "cypress open",
     "test": "run-p --race dev cy:run",
     "watch:tailwind": "postcss static/tailwind.css -o static/index.css -w",
-    "build:tailwind": "NODE_ENV=production postcss static/tailwind.css -o static/index.css",
-    "build": "npm run build:tailwind && sapper build --legacy"
+    "build:tailwind": "cross-env NODE_ENV=production postcss static/tailwind.css -o static/index.css",
+    "build": "run-p build:tailwind buildS",
+    "buildS": "cross-env NODE_ENV=production sapper build --legacy",
+    "live": "run-s build copy liveS",
+    "liveS": "node devops/live.js",
+    "copy": "node devops/copy.js"
   },
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^1.3.0",
@@ -29,6 +33,8 @@
     "@babel/plugin-transform-runtime": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/runtime": "^7.0.0",
+    "cross-env": "^6.0.3",
+    "dotenv": "^8.1.0",
     "npm-run-all": "^4.1.5",
     "postcss-cli": "^6.1.3",
     "rollup": "^1.12.0",
@@ -39,6 +45,8 @@
     "rollup-plugin-svelte": "^5.0.1",
     "rollup-plugin-terser": "^4.0.4",
     "sapper": "^0.27.0",
+    "shelljs": "^0.8.3",
+    "ssh2shell": "^1.9.3",
     "svelte": "^3.0.0",
     "tailwindcss": "^1.1.2"
   }

@@ -1,9 +1,8 @@
-const REMOTE_API_URL = 'https://api.litekart.in'
 // const LOCAL_API_URL = 'https://api.litekart.in'
 const LOCAL_API_URL = 'http://localhost:7000'
-const REMOTE_STORE_URL = 'https://laptops.hopyshopy.com'
 const LOCAL_STORE_URL = 'http://localhost:4400'
-const apiUrl = (process.env.NODE_ENV === 'production') ? REMOTE_API_URL : LOCAL_API_URL
+const REMOTE_STORE_URL = 'https://www.hopyshopy.com'
+const apiUrl = LOCAL_API_URL
 const storeUrl = (process.env.NODE_ENV === 'production') ? REMOTE_STORE_URL : LOCAL_STORE_URL
 const sorts = [
     { name: "Relevance", val: null },
@@ -12,7 +11,7 @@ const sorts = [
     { name: "Price high to low", val: "-variants.price" }
 ]
 export const typingTimeout = 0 // After this delay the search api will be fired
-const HOST = 'https://laptops.hopyshopy.com'
+const HOST = 'https://www.hopyshopy.com'
 
 const currency = {
     symbol: '₹',
