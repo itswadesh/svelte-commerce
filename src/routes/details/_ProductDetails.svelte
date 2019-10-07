@@ -136,7 +136,7 @@
           href={product.productUrl}
           class="w-1/2 lg:w-1/3 bg-white border border-green-600 text-black py-2
           px-3 rounded font-bold text-xs lg:text-lg text-center">
-          BUY FROM LOCAL STORE
+          BUY LOCAL
           <img
             src="/store.svg"
             alt="local"
