@@ -13,16 +13,16 @@
   page.subscribe(page => {
     query = page.query;
   });
-  function search(q) {
+  function search() {
     // When coming from home (or another page)
-    if (home) goto("/search?q=" + q);
+    if (home) goto("/search?q=" + query.q);
     // goto reloads the page. Hence focus is lost
-    else history.pushState({}, null, "/search?q=" + q);
-    dispatch("search", q);
+    else history.pushState({}, null, "/search?q=" + query.q);
+    dispatch("search", query.q);
   }
 </script>
 
-<form novalidate autocomplete="off">
+<form novalidate autocomplete="off" on:submit|preventDefault={search}>
   <div class="search_fix" />
   <div class="absolute">
     <i class="fa fa-search m-3 text-gray-500" aria-hidden="true" />
@@ -37,4 +37,5 @@
     border-0 h-10 focus:outline-none"
     placeholder="Search for products,brands and more"
     name="search" />
+  <button type="submit" />
 </form>

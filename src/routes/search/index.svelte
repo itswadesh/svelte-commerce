@@ -23,7 +23,8 @@
     pageSize = 10,
     currentPage = 1,
     loading = false,
-    query;
+    query,
+    searchQuery;
   page.subscribe(page => {
     query = page.query;
     getData(query);
@@ -40,6 +41,7 @@
   async function getData(query) {
     try {
       loading = true;
+      searchQuery = query.q;
       let url = constructQry("electronics/es", query);
       const p = await get(url);
       pageSize = p.data.length;
@@ -62,28 +64,28 @@
 </script>
 
 <svelte:head>
-  <title>List of India's best laptops - Curated manually</title>
+  <title>{`Collection of handpicked laptops with ${query.q}`}</title>
   <meta
     data-hid="description"
     name="description"
-    content="Collection of handpicked electronic items, worth buying. These are
-    best in quality, performance, feels good to use, ergonomic, stylish" />
+    content={`Collection of handpicked laptops with ${query.q}`} />
   <meta
     data-hid="og:title"
     name="og_title"
-    content="List of India's best laptops - Curated manually" />
+    content={`Collection of handpicked laptops with ${query.q}`} />
   <meta
     data-hid="og:title"
     name="og_title"
     property="og:title"
-    content="Collection of handpicked electronic items, worth buying" />
+    content={`Collection of handpicked laptops with ${query.q}`} />
   <meta name="og_url" property="og:url" content={`${HOST}/search`} />
   <!-- Twitter -->
-  <meta name="twitter:title" content="Hand picked laptops for you" />
+  <meta
+    name="twitter:title"
+    content={`Collection of handpicked laptops with ${query.q}`} />
   <meta
     name="twitter:description"
-    content="Collection of handpicked electronic items, worth buying. These are
-    best in quality, performance, feels good to use, ergonomic, stylish" />
+    content="content={`Collection of handpicked laptops with ${query.q}`}" />
 </svelte:head>
 <Header on:search={search} />
 {#if showMobileFilter}
@@ -94,6 +96,7 @@
     <DesktopFilters bind:facets bind:query />
     <div class="w-full">
       <HeaderBody
+        {searchQuery}
         count={productCount}
         on:hide={() => (showMobileFilter = !showMobileFilter)} />
       {#if products.length == 0 && !loading}

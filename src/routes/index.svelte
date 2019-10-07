@@ -65,7 +65,7 @@
       </h2>
       <div class=" mt-5">
         <a
-          href="search?q=asus"
+          href="search?brands=Asus&page=1"
           rel="prefetch"
           class="focus:outline-none bg-transparent hover:bg-purple-500
           hover:text-white text-purple-700 border border-purple-500 rounded-full
