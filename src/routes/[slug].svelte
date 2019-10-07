@@ -43,6 +43,44 @@
     data-hid="description"
     name="description"
     content={product && product.description} />
+  <meta data-hid="og:title" name="og_title" content={product && product.name} />
+  <meta
+    data-hid="og:description"
+    name="og_description"
+    property="og:description"
+    content={product && product.description} />
+  <meta
+    name="og_url"
+    property="og:url"
+    content={product && `${HOST}/${product.slug}?id=${product._id}`} />
+  <meta
+    name="og_image"
+    property="og:image"
+    content={product && product.imgUrls && product.imgUrls[0] && product.imgUrls[0]['800x800']} />
+  <meta property="og:image:width" content="800" />
+  <meta property="og:image:height" content="800" />
+  <!-- Twitter -->
+  <meta name="twitter:title" content={product && product.name} />
+  <meta name="twitter:description" content={product && product.description} />
+  <meta
+    name="twitter:image:src"
+    content={product && product.imgUrls && product.imgUrls[0] && product.imgUrls[0]['800x800']} />
+  <!-- Google / Schema.org markup: -->
+  <meta hid="product_name" itemprop="name" content={product && product.name} />
+  <meta
+    hid="product_description"
+    itemprop="description"
+    content={product && product.description} />
+  <meta
+    hid="product_image"
+    itemprop="image"
+    content={product && product.imgUrls && product.imgUrls[0] && product.imgUrls[0]['800x800']} />
+  <meta
+    hid="product_price"
+    name="product_price"
+    property="product:price"
+    itemprop="image"
+    content={product && product.localPrice} />
 </svelte:head>
 <Header />
 {#if !product}

@@ -28,6 +28,7 @@
     <i class="fa fa-search m-3 text-gray-500" aria-hidden="true" />
   </div>
   <input
+    aria-label="Search Box"
     type="text"
     on:input={() => search(query.q)}
     bind:this={searchInput}

@@ -39,7 +39,8 @@
         </select>
         <div
           class="pointer-events-none absolute inset-y-0 right-0 flex
-          items-center px-2 text-gray-700">
+          items-center px-2 text-gray-700"
+          aria-label="sort">
           <i class="fa fa-caret-down px-1" />
         </div>
       </div>
@@ -47,18 +48,19 @@
   </div>
 </div>
 <div class="lg:hidden flex shadow-md py-4 bg-white w-full mb-1">
-  <div
-    class="flex-1 flex items-center text-gray-700 text-left text-pink-500"
+  <button
+    class="flex-1 flex items-center text-left text-pink-500"
     on:click={() => dispatch('hide', !showFilters)}>
     <i class="fa fa-sliders-h px-3" />
     Filter
-  </div>
+  </button>
   <div class="hidden md:block text-gray-700 text-center font-normal px-4">
     {count} laptops
   </div>
   <div class="text-gray-700 text-center px-4 text-pink-500">
     <i class="fa fa-sort mr-2" aria-hidden="true" />
     <select
+      aria-label="sort"
       bind:value={sortBy}
       class="flex-1 text-pink-600 border-gray-100 cursor-pointer cursor-pointer
       bg-white border border-gray-400 hover:border-gray-500 px-4 py-2
