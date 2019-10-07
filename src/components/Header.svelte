@@ -27,8 +27,8 @@
     class="flex items-center justify-between flex-wrap bg-white-800"
     style="box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.05);">
     <div class="flex items-center flex-shrink-0 text-orange order-1">
-      <a href="/" rel="prefetch">
-        <img class="w-12 h-10 ml-4" src="/logo.svg" alt="" />
+      <a href="/" rel="prefetch" aria-label="logo">
+        <img class="w-12 h-10 ml-4" src="/logo.svg" alt="logo" />
       </a>
       <div
         class="hidden lg:block flex flex-none text-sm py-4 xs:justify-between
