@@ -1,9 +1,9 @@
 .DS_Store
 /node_modules/
 /src/node_modules/@sapper/
+/static/index.css
 yarn-error.log
 /cypress/screenshots/
 /__sapper__/
 prod
 .env
-static/index.css

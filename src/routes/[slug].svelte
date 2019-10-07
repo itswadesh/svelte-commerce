@@ -3,9 +3,9 @@
   import { currency } from "./../lib";
   import { HOST } from "./../config";
   import Header from "./../components/Header.svelte";
-  import ProductImage from "./details/ProductImage.svelte";
-  import Breadcrumb from "./details/Breadcrumb.svelte";
-  import ProductDetails from "./details/ProductDetails.svelte";
+  import ProductImage from "./details/_ProductImage.svelte";
+  import Breadcrumb from "./details/_Breadcrumb.svelte";
+  import ProductDetails from "./details/_ProductDetails.svelte";
 
   export async function preload({ params, query }) {
     let product = {},
