@@ -7,7 +7,9 @@
   let query;
   let searchInput;
   import { onMount } from "svelte";
-  onMount(() => setTimeout(() => searchInput.focus(), 0));
+  onMount(() => {
+    if (!home && query.q) setTimeout(() => searchInput.focus(), 0);
+  });
   page.subscribe(page => {
     query = page.query;
   });
