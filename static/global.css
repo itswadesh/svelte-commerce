@@ -1,6 +1,9 @@
-body {
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
+  body {
+    font-family: "Poppins", sans-serif;
+  }
+  button {
+    font-family: "Poppins", sans-serif;
+  }
 @media only screen and (min-width: 1000px) {
   ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);

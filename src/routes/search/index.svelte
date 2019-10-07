@@ -2,12 +2,12 @@
   import { HOST } from "./../../config";
   import Header from "./../../components/Header.svelte";
   import Pagination from "./_Pagination.svelte";
-  // import Skeleton from "~/components/Skeleton";
   import Product from "./_Product.svelte";
+  import ProductSkeleton from "./_ProductSkeleton.svelte";
   import DesktopFilters from "./_DesktopFilters.svelte";
   import MobileFilters from "./_MobileFilters.svelte";
-  import HeaderBody from "./../../components/HeaderBody.svelte";
-  // import NoProduct from "~/components/NoProduct";
+  import HeaderBody from "./_HeaderBody.svelte";
+  import NoProduct from "./_NoProduct.svelte";
   import Loading from "./../../components/ui/Loading.svelte";
   import { constructQry, constructURL2 } from "./../../lib";
   import { get, put, post } from "./../../lib/api";
@@ -91,7 +91,6 @@
 {#if showMobileFilter}
   <MobileFilters {facets} on:hide={toggle} />
 {:else}
-  <Loading {loading} />
   <div class="flex">
     <DesktopFilters bind:facets bind:query />
     <div class="w-full">
@@ -99,8 +98,14 @@
         {searchQuery}
         count={productCount}
         on:hide={() => (showMobileFilter = !showMobileFilter)} />
-      {#if products.length == 0 && !loading}
-        <!-- <NoProduct /> -->
+      {#if loading}
+        <div class="flex flex-wrap">
+          {#each { length: 15 } as _, i}
+            <ProductSkeleton />
+          {/each}
+        </div>
+      {:else if products.length == 0 && !loading}
+        <NoProduct />
       {:else if products && products.length > 0}
         <div class="flex flex-wrap">
           {#each products as p}

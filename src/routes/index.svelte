@@ -1,30 +1,139 @@
 <script>
-  import { HOST } from "./../config";
   import Header from "./../components/Header.svelte";
+  import { HOST } from "./../config";
+  import { goto } from "@sapper/app";
 </script>
 
 <style>
-  .banner-container {
-    position: relative;
-  }
-  .content {
-    line-height: 1.5;
-  }
-  h3 {
-    letter-spacing: 10px;
-  }
-  ul > li a {
-    margin: 20px;
-    padding: 10px;
+  .presentation {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    width: 90%;
+    margin: auto;
+    min-height: 80vh;
     align-items: center;
   }
-  ul > li img {
-    max-width: 100%;
-    height: 110px;
-    margin-bottom: 1rem;
+  .introduction {
+    flex: 1;
+  }
+  .intro-text h1 {
+    font-size: 44px;
+    font-weight: 500;
+    background: linear-gradient(to right, #494964, #6f6f89);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .intro-text p {
+    margin-top: 5px;
+    font-size: 22px;
+    color: #585772;
+  }
+  .cta {
+    padding: 50px 0px 0px 0px;
+  }
+  .cta-select {
+    border: 2px solid #c36cbb;
+    background: transparent;
+    color: #c36cbb;
+    width: 150px;
+    height: 50px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  .cta-add {
+    background: #c36cbb;
+    width: 150px;
+    height: 50px;
+    cursor: pointer;
+    font-size: 16px;
+    border: none;
+    color: white;
+  }
+
+  .cover {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    height: 60vh;
+  }
+  .cover img {
+    height: 100%;
+    filter: drop-shadow(0px 5px 3px black);
+    animation: drop 1.5s ease;
+  }
+
+  .big-circle {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: -1;
+    opacity: 0.5;
+    height: 80%;
+  }
+  .medium-circle {
+    position: absolute;
+    top: 30%;
+    right: 30%;
+    z-index: -1;
+    height: 60%;
+    opacity: 0.4;
+  }
+  .small-circle {
+    position: absolute;
+    bottom: 0%;
+    left: 20%;
+    z-index: -1;
+  }
+
+  .laptop-select {
+    width: 15%;
+    display: flex;
+    justify-content: space-around;
+    position: absolute;
+    right: 20%;
+  }
+
+  @keyframes drop {
+    0% {
+      opacity: 0;
+      transform: translateY(-80px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0px);
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    .presentation {
+      flex-direction: column;
+    }
+    .introduction {
+      margin-top: 5vh;
+      text-align: center;
+    }
+    .intro-text h1 {
+      font-size: 30px;
+    }
+    .intro-text p {
+      font-size: 18px;
+    }
+    .cta {
+      padding: 10px 0px 0px 0px;
+    }
+    .laptop-select {
+      bottom: 5%;
+      right: 50%;
+      width: 50%;
+      transform: translate(50%, 5%);
+    }
+    .cover img {
+      height: 80%;
+    }
+    .small-circle,
+    .medium-circle,
+    .big-circle {
+      opacity: 0.2;
+    }
   }
 </style>
 
@@ -53,85 +162,37 @@
     best in quality, performance, feels good to use, ergonomic, stylish" />
 </svelte:head>
 <Header home={true} />
-<div class=" text-gray-700">
-  <div class="banner-container flex items-center flex-wrap">
-    <img src="banner.jpg" alt="Best Laptops" class="w-full mb-2" />
-    <div class="content mx-2 md:mx-20 md:absolute">
-      <h1 class="text-2xl md:text-3xl font-bold">
-        Hand Picked Laptops for You
-      </h1>
-      <h2 class="text-sm md:text-md">
-        SHOP FOR THE BEST LAPTOPS COLLECTION IN INDIA
-      </h2>
-      <div class=" mt-5">
-        <a
-          href="search?brands=Asus&page=1"
-          rel="prefetch"
-          class="focus:outline-none bg-transparent hover:bg-purple-500
-          hover:text-white text-purple-700 border border-purple-500 rounded-full
-          px-4 py-2 text-xs ">
-          ASUS LAPTOPS
-        </a>
-      </div>
+<section class="presentation">
+  <div class="introduction">
+    <div class="intro-text">
+      <h1>Laptop for the future</h1>
+      <p>
+        The new 14 inch bezeless display oferring a 4k display with touch
+        screen.
+      </p>
+    </div>
+    <div class="cta">
+      <button class="cta-select" on:click={() => goto('/search')}>
+        All laptops
+      </button>
+      <button class="cta-add ml-5" on:click={() => goto('/search')}>
+        Buy Now
+      </button>
     </div>
   </div>
-  <h3
-    class="border-b-2 border-dashed border-gray-400 text-center pt-5 pb-2
-    text-3xl">
-    Based on your requirements
-  </h3>
-  <ul class="flex flex-wrap">
-    <li>
-      <a href="/search?Processor%20Name=Core%20i7&page=1" rel="prefetch">
-        <img src="/cpu.svg" alt="i7" />
-        i7
-      </a>
-    </li>
-    <li>
-      <a href="/search?SSD=Yes&page=1" rel="prefetch">
-        <img src="/ssd-drive.svg" alt="ssd" />
-        SSD
-      </a>
-    </li>
-    <li>
-      <a href="/search?Backlit%20Keyboard=Yes&page=1" rel="prefetch">
-        <img src="/keyboard.svg" alt="keyboard" />
-        Backlit Keyboard
-      </a>
-    </li>
-    <li>
-      <a
-        href="/search?Screen%20Size=39.62%20cm%20(15.6%20inch)&page=1"
-        rel="prefetch">
-        <img src="/analytics.svg" alt="screen" />
-        15 inch
-      </a>
-    </li>
-    <li>
-      <a
-        href="/search?Screen%20Type=Full%20HD%20LED%20Backlit%20Wideview%20Display&page=1"
-        rel="prefetch">
-        <img src="/1080p-full-hd.svg" alt="resolution" />
-        FULL HD
-      </a>
-    </li>
-    <li>
-      <a href="/search?RAM=8%20GB&page=1" rel="prefetch">
-        <img src="/ram.svg" alt="ram" />
-        8GB RAM
-      </a>
-    </li>
-    <li>
-      <a href="/search?Finger%20Print%20Sensor=Yes&page=1" rel="prefetch">
-        <img src="/finger-print.svg" alt="fingerprint" />
-        FINGER PRINT
-      </a>
-    </li>
-    <li>
-      <a href="/search?Touchscreen=Yes&page=1" rel="prefetch">
-        <img src="/laptop-touch.svg" alt="touch" />
-        TOUCH SCREEN
-      </a>
-    </li>
-  </ul>
+  <div class="cover">
+    <img src="./img/matebook.png" alt="matebook" />
+  </div>
+</section>
+
+<div class="laptop-select">
+  <img src="./img/arrow-left.svg" alt="" />
+  <img src="./img/dot.svg" alt="" />
+  <img src="./img/dot-full.svg" alt="" />
+  <img src="./img/dot-full.svg" alt="" />
+  <img src="./img/arrow-right.svg" alt="" />
 </div>
+
+<img class="big-circle" src="./img/big-eclipse.svg" alt="" />
+<img class="medium-circle" src="./img/mid-eclipse.svg" alt="" />
+<img class="small-circle" src="./img/small-eclipse.svg" alt="" />

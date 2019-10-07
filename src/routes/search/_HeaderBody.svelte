@@ -1,7 +1,7 @@
 <script>
-  import Checkbox from "./ui/Checkbox.svelte";
-  import { constructURL2 } from "./../lib";
-  import { sorts } from "./../config";
+  import Checkbox from "./../../components/ui/Checkbox.svelte";
+  import { constructURL2 } from "./../../lib";
+  import { sorts } from "./../../config";
   import { goto, stores } from "@sapper/app";
   const { session, page } = stores();
   import { createEventDispatcher } from "svelte";
@@ -23,7 +23,7 @@
 
 <div class="flex-none lg:flex justify-between px-2 py-2 text-sm items-center">
   <div class="font-semibold flex p-1">
-    <h1 class="font-hairline">{count} laptops found with {searchQuery}</h1>
+    <h1 class="font-hairline">{count} laptops found</h1>
   </div>
   <div class="flex-wrap p-1 hidden md:block">
     <div class="text-sm">
