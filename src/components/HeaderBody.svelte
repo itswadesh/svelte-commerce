@@ -8,7 +8,8 @@
   const dispatch = createEventDispatcher();
   export let sortBy = null,
     count = 0,
-    showFilters = false;
+    showFilters = false,
+    searchQuery = "";
   let query = {};
   page.subscribe(page => {
     query = page.query;
@@ -22,7 +23,7 @@
 
 <div class="flex-none lg:flex justify-between px-2 py-2 text-sm items-center">
   <div class="font-semibold flex p-1">
-    <div class="font-hairline">{count} laptops found</div>
+    <h1 class="font-hairline">{count} laptops found with {searchQuery}</h1>
   </div>
   <div class="flex-wrap p-1 hidden md:block">
     <div class="text-sm">
