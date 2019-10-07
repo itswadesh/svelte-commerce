@@ -15,54 +15,89 @@
   </div>
   {#if product}
     <div class="flex flex-wrap">
-      <div
-        class="flex items-center px-3 text-gray-700 font-semibold py-3
-        tracking-wider">
-        <span class="text-lg mr-2">
-          <img
-            src="flipkart.jfif"
-            alt="flipkart"
-            style="width: 30px; height: 30px;" />
-        </span>
-        <span class="text-lg mr-2">
-          {currency(product.specialPrice || product.price)}
-        </span>
-        {#if product.mrp > (product.specialPrice || product.price)}
-          <span class="font-hairline line-through mr-2">
-            {currency(product.mrp)}
-          </span>
-        {/if}
-        {#if calculateOffPercent(product.specialPrice || product.price, product.mrp) > 0}
-          <span class="text-orange-500 text-xs">
-            ({calculateOffPercent(product.specialPrice || product.price, product.mrp)}%
-            OFF)
-          </span>
-        {/if}
-      </div>
-      <div
-        class="flex items-center px-3 text-gray-700 font-semibold py-3
-        tracking-wider">
-        <span class="text-lg mr-2">
-          <img
-            src="amazon.jfif"
-            alt="amazon"
-            style="width: 30px; height: 30px;" />
-        </span>
-        <span class="text-lg mr-2">
-          {currency(product.specialPrice || product.price)}
-        </span>
-        {#if product.mrp > (product.specialPrice || product.price)}
-          <span class="font-hairline line-through mr-2">
-            {currency(product.mrp)}
-          </span>
-        {/if}
-        {#if calculateOffPercent(product.specialPrice || product.price, product.mrp) > 0}
-          <span class="text-orange-500 text-xs">
-            ({calculateOffPercent(product.specialPrice || product.price, product.mrp)}%
-            OFF)
-          </span>
-        {/if}
-      </div>
+      {#if product.flipkart}
+        <div class=" text-gray-700 py-3">
+          <div class="flex items-center px-3 font-semibold tracking-wider">
+            <span class="text-lg mr-2">
+              <img
+                src="flipkart.jfif"
+                alt="flipkart"
+                style="width: 30px; height: 30px;" />
+            </span>
+            <span class="text-lg mr-2">
+              {currency(product.flipkart.specialPrice || product.flipkart.price)}
+              {#if product.flipkart.shippingCharge}
+                +{currency(product.flipkart.shippingCharge)}
+              {/if}
+            </span>
+            {#if product.flipkart.mrp > (product.flipkart.specialPrice || product.flipkart.price)}
+              <span class="font-hairline line-through mr-2">
+                {currency(product.flipkart.mrp)}
+              </span>
+            {/if}
+            {#if calculateOffPercent(product.flipkart.specialPrice || product.flipkart.price, product.flipkart.mrp) > 0}
+              <span class="text-orange-500 text-xs">
+                ({calculateOffPercent(product.flipkart.specialPrice || product.flipkart.price, product.flipkart.mrp)}%
+                OFF)
+              </span>
+            {/if}
+          </div>
+          <div class="pl-3">3 day delivery</div>
+        </div>
+      {/if}
+      {#if product.amazon}
+        <div class=" text-gray-700 py-3">
+          <div class="flex items-center px-3 font-semibold tracking-wider">
+            <span class="text-lg mr-2">
+              <img
+                src="amazon.jfif"
+                alt="amazon"
+                style="width: 30px; height: 30px;" />
+            </span>
+            <span class="text-lg mr-2">
+              {currency(product.amazon.specialPrice || product.amazon.price)}
+            </span>
+            {#if product.amazon.mrp > (product.amazon.specialPrice || product.amazon.price)}
+              <span class="font-hairline line-through mr-2">
+                {currency(product.amazon.mrp)}
+              </span>
+            {/if}
+            {#if calculateOffPercent(product.amazon.specialPrice || product.amazon.price, product.amazon.mrp) > 0}
+              <span class="text-orange-500 text-xs">
+                ({calculateOffPercent(product.amazon.specialPrice || product.amazon.price, product.amazon.mrp)}%
+                OFF)
+              </span>
+            {/if}
+          </div>
+          <br />
+          <div class="pl-3">3 day delivery</div>
+        </div>
+      {/if}
+      {#if product.localPrice}
+        <div class=" py-3 text-green-700">
+          <div class="flex items-center px-3 font-semibold tracking-wider">
+            <span class="text-lg mr-2">
+              <img
+                src="store.svg"
+                alt="amazon"
+                style="width: 30px; height: 30px;" />
+            </span>
+            <span class="text-lg mr-2">{currency(product.localPrice)}</span>
+            {#if product.flipkart.mrp > product.localPrice}
+              <span class="font-hairline line-through mr-2">
+                {currency(product.flipkart.mrp)}
+              </span>
+            {/if}
+            {#if calculateOffPercent(product.localPrice, product.flipkart.mrp) > 0}
+              <span class="text-orange-500 text-xs">
+                ({calculateOffPercent(product.localPrice, product.flipkart.mrp)}%
+                OFF)
+              </span>
+            {/if}
+          </div>
+          <div class="pl-3">same day delivery</div>
+        </div>
+      {/if}
     </div>
   {/if}
   <div>
@@ -82,17 +117,32 @@
             style="display:inline-block;width: 30px; height: 30px;" />
         </a>
       {/if}
-      <a
-        target="blank"
-        href={product.productUrl}
-        class="w-1/2 lg:w-1/3 bg-white border border-grey-300 text-black py-2
-        px-3 rounded font-bold text-xs lg:text-lg text-center">
-        BUY FROM
-        <img
-          src="/flipkart.jfif"
-          alt="flipkart"
-          style="display:inline-block;width: 30px; height: 30px;" />
-      </a>
+      {#if product.flipkart.price}
+        <a
+          target="blank"
+          href={product.productUrl}
+          class="w-1/2 lg:w-1/3 mr-2 bg-white border border-yellow-700
+          text-black py-2 px-3 rounded font-bold text-xs lg:text-lg text-center">
+          BUY FROM
+          <img
+            src="/flipkart.jfif"
+            alt="flipkart"
+            style="display:inline-block;width: 30px; height: 30px;" />
+        </a>
+      {/if}
+      {#if product.localPrice}
+        <a
+          target="blank"
+          href={product.productUrl}
+          class="w-1/2 lg:w-1/3 bg-white border border-green-600 text-black py-2
+          px-3 rounded font-bold text-xs lg:text-lg text-center">
+          BUY FROM LOCAL STORE
+          <img
+            src="/store.svg"
+            alt="local"
+            style="display:inline-block;width: 30px; height: 30px;" />
+        </a>
+      {/if}
     </div>
     <div class="py-8 border-b border-gray-300 px-3">
       <p class="font-bold text-lg">
