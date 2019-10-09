@@ -117,7 +117,7 @@
             style="display:inline-block;width: 30px; height: 30px;" />
         </a>
       {/if}
-      {#if product.flipkart.price}
+      {#if product.flipkart && product.flipkart.price}
         <a
           target="blank"
           href={product.productUrl}
