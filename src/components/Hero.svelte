@@ -78,15 +78,14 @@
     bottom: 0%;
     left: 20%;
     z-index: -1;
-  } */
-
+  }
   .laptop-select {
     width: 15%;
     display: flex;
     justify-content: space-around;
     position: absolute;
     right: 20%;
-  }
+  } */
 
   @keyframes drop {
     0% {
@@ -116,16 +115,16 @@
     .cta {
       padding: 10px 0px 0px 0px;
     }
-    .laptop-select {
+    .cover img {
+      height: 80%;
+    }
+    /* .laptop-select {
       bottom: 5%;
       right: 50%;
       width: 50%;
       transform: translate(50%, 5%);
     }
-    .cover img {
-      height: 80%;
-    }
-    /* .small-circle,
+    .small-circle,
     .medium-circle,
     .big-circle {
       opacity: 0.2;
@@ -156,13 +155,13 @@
   </div>
 </section>
 
-<div class="laptop-select">
+<!-- <div class="laptop-select">
   <img src="./img/arrow-left.svg" alt="" />
   <img src="./img/dot.svg" alt="" />
   <img src="./img/dot-full.svg" alt="" />
   <img src="./img/dot-full.svg" alt="" />
   <img src="./img/arrow-right.svg" alt="" />
-</div>
+</div> -->
 
 <!-- <img class="big-circle" src="./img/big-eclipse.svg" alt="" />
 <img class="medium-circle" src="./img/mid-eclipse.svg" alt="" />
