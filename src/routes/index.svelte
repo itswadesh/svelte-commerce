@@ -1,9 +1,31 @@
 <script>
   import Header from "./../components/Header.svelte";
+  import Hero from "./../components/Hero.svelte";
+  import Banners from "./../components/Banners.svelte";
   import Deals from "./../components/Deals.svelte";
-  import Banner from "./../components/Banner.svelte";
+  import ProductSkeleton from "./../components/ProductSkeleton.svelte";
+  import { get, put, post } from "./../lib/api";
   import { HOST } from "./../config";
   import { goto } from "@sapper/app";
+  let loading = false,
+    latestProducts = [],
+    asusProducts = [];
+  async function getLatest() {
+    try {
+      const p = await get("electronics");
+      latestProducts = p.data;
+      return latestProducts;
+    } catch (e) {}
+  }
+  getLatest();
+  async function getAsus() {
+    try {
+      const p = await get("electronics", { params: { brandName: "asus" } });
+      asusProducts = p.data;
+      return asusProducts;
+    } catch (e) {}
+  }
+  getAsus();
 </script>
 
 <svelte:head>
@@ -31,5 +53,16 @@
     best in quality, performance, feels good to use, ergonomic, stylish" />
 </svelte:head>
 <Header home={true} />
-<Banner />
-<Deals />
+<Hero />
+<br />
+{#await getLatest()}
+  <ProductSkeleton count={5} />
+{:then latestProducts}
+  <Deals products={latestProducts} />
+{/await}
+<Banners />
+{#await getAsus()}
+  <ProductSkeleton count={5} />
+{:then asusProducts}
+  <Deals products={asusProducts} />
+{/await}

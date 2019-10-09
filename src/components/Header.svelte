@@ -25,7 +25,7 @@
 <header>
   <nav class="flex items-center justify-between p-3">
     <a href="/" rel="prefetch" aria-label="logo">
-      <img class="w-6 h-6 ml-4" src="/logo.svg" alt="logo" />
+      <img class="w-6 h-6" src="/logo.svg" alt="logo" />
     </a>
     <div class="mx-2 border-gray-300 relative" style="flex:1">
       <Search on:search={search} {home} />

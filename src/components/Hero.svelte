@@ -1,3 +1,7 @@
+<script>
+  import { goto } from "@sapper/app";
+</script>
+
 <style>
   .presentation {
     display: flex;
