@@ -1,6 +1,7 @@
 # Installation
 
-```yarn
+```
+yarn
 yarn dev
 ```
 
@@ -8,7 +9,8 @@ yarn dev
 
 ### Setup devops/live.js (Change according to your hosting envirnoment)
 
-```const PM2_NAME = 'h'
+```
+const PM2_NAME = 'h'
 const REMOTE_DIR = '/var/www/hopyshopy/www'
 const REMOTE_HOST = '165.22.222.60'
 const REMOTE_USER = 'root'
@@ -38,3 +40,4 @@ If required change `src/config.js` according to your requirement
 - Responsive
 - Loading Indicators
 - Componentized Checkbox, Radio, Textbox
+- PWA
