@@ -57,7 +57,7 @@
     filter: drop-shadow(0px 5px 3px black);
     animation: drop 1.5s ease;
   }
-  .big-circle {
+  /* .big-circle {
     position: absolute;
     top: 0px;
     right: 0px;
@@ -78,7 +78,7 @@
     bottom: 0%;
     left: 20%;
     z-index: -1;
-  }
+  } */
 
   .laptop-select {
     width: 15%;
@@ -125,11 +125,11 @@
     .cover img {
       height: 80%;
     }
-    .small-circle,
+    /* .small-circle,
     .medium-circle,
     .big-circle {
       opacity: 0.2;
-    }
+    } */
   }
 </style>
 
@@ -164,6 +164,6 @@
   <img src="./img/arrow-right.svg" alt="" />
 </div>
 
-<img class="big-circle" src="./img/big-eclipse.svg" alt="" />
+<!-- <img class="big-circle" src="./img/big-eclipse.svg" alt="" />
 <img class="medium-circle" src="./img/mid-eclipse.svg" alt="" />
-<img class="small-circle" src="./img/small-eclipse.svg" alt="" />
+<img class="small-circle" src="./img/small-eclipse.svg" alt="" /> -->
