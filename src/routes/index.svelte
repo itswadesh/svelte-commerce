@@ -53,7 +53,7 @@
     best in quality, performance, feels good to use, ergonomic, stylish" />
 </svelte:head>
 <Header home={true} />
-<Hero />
+<!-- <Hero /> -->
 <br />
 {#await getLatest()}
   <ProductSkeleton count={5} />

@@ -32,7 +32,7 @@
     on:input={() => search(query.q)}
     bind:this={searchInput}
     bind:value={query.q}
-    class="w-full px-10 bg-purple-white pr-4 border border-gray-200 rounded
+    class="w-full px-10 bg-purple-white pr-4 border border-gray-200 rounded-full
     border-0 h-10 focus:outline-none text-xs shadow"
     placeholder="Search for products,brands and more"
     name="search" />
