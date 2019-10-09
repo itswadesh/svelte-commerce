@@ -29,6 +29,12 @@ function date(value) {
     const date = new Date(value)
     return date.toLocaleString(['en-US'], { month: 'short', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
 }
+function truncate(text, stop, clamp) {
+    if (text)
+        return text.slice(0, stop) + (stop < text.length ? clamp || '...' : '')
+    else
+        return ""
+}
 function currency(value, currency, decimals) {
     const digitsRE = /(\d{3})(?=\d)/g
     value = parseFloat(value)
@@ -52,4 +58,4 @@ function currency(value, currency, decimals) {
         _float
 }
 
-export { constructURL, constructQry, constructURL2, currency, date }
+export { constructURL, constructQry, constructURL2, currency, date, truncate }
