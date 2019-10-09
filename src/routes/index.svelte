@@ -53,16 +53,16 @@
     best in quality, performance, feels good to use, ergonomic, stylish" />
 </svelte:head>
 <Header home={true} />
-<!-- <Hero /> -->
+<Hero />
 <br />
 {#await getLatest()}
   <ProductSkeleton count={5} />
 {:then latestProducts}
-  <Deals products={latestProducts} />
+  <Deals products={latestProducts} title="Latest Laptops" />
 {/await}
 <Banners />
 {#await getAsus()}
   <ProductSkeleton count={5} />
 {:then asusProducts}
-  <Deals products={asusProducts} />
+  <Deals products={asusProducts} title="Asus Laptops" />
 {/await}

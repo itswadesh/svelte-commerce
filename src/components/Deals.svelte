@@ -2,7 +2,8 @@
   import { onMount } from "svelte";
   import { truncate } from "./../lib";
 
-  export let products = [];
+  export let products = [],
+    title = "";
   const uniqueId = `siema--${Math.random()
     .toString(36)
     .substring(2, 10)}`;
@@ -63,7 +64,7 @@
 <div
   class="relative my-5 pt-2 lg:pt-5 pb-5 mx-2 lg:mx-5 px-2 lg:px-5 shadow-lg
   border rounded">
-  <h1 class="mb-5 text-gray-800 text-2xl">i7 laptops</h1>
+  <h1 class="mb-5 text-gray-800 text-2xl">{title}</h1>
   <div class="">
     {#if currentSlide != 0}
       <button on:click={prev} class="hidden lg:block prev">
