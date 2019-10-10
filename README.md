@@ -1,6 +1,8 @@
 # Installation
 
 ```
+git clone https://github.com/itswadesh/sapper-ecommerce.git
+cd sapper-ecommerce
 yarn
 yarn dev
 ```
@@ -41,3 +43,4 @@ If required change `src/config.js` according to your requirement
 - Loading Indicators
 - Componentized Checkbox, Radio, Textbox
 - PWA
+- `>90` PWA score

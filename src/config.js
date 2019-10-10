@@ -1,5 +1,5 @@
-// const LOCAL_API_URL = 'https://api.litekart.in'
-const LOCAL_API_URL = 'http://localhost:7000'
+const LOCAL_API_URL = 'https://api.litekart.in'
+// const LOCAL_API_URL = 'http://localhost:7000'
 const LOCAL_STORE_URL = 'http://localhost:4400'
 const REMOTE_STORE_URL = 'https://www.hopyshopy.com'
 const apiUrl = LOCAL_API_URL
