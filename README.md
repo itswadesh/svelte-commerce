@@ -1,11 +1,20 @@
 # Installation
 
+Install following
+- [NodeJS](https://nodejs.org/en/)
+- [Yarn](https://yarnpkg.com/en/)
+- [Git](https://git-scm.com/)
+
 ```
 git clone https://github.com/itswadesh/sapper-ecommerce.git
 cd sapper-ecommerce
 yarn
 yarn dev
 ```
+
+Thats all !
+
+Open http://localhost:4400 on chrome. Your app should be live
 
 # Deployment
 
