@@ -1,9 +1,7 @@
 # Installation
 
 Install following
-- [NodeJS](https://nodejs.org/en/)
-- [Yarn](https://yarnpkg.com/en/)
-- [Git](https://git-scm.com/)
+- [NodeJS](https://nodejs.org/en/) - [Yarn](https://yarnpkg.com/en/) - [Git](https://git-scm.com/)
 
 ```
 git clone https://github.com/itswadesh/sapper-ecommerce.git
