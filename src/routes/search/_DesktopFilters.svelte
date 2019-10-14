@@ -35,7 +35,7 @@
       <div class="text-gray">FILTERS</div>
       <button
         on:click={clearFilters}
-        class="text-right text-pink-500 cursor-pointer">
+        class="text-right text-purple-500 cursor-pointer">
         CLEAR ALL
       </button>
     </div>

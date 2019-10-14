@@ -1,6 +1,6 @@
 <script>
   import { lazyload } from "../../actions/lazyload";
-  import { currency } from "./../../lib";
+  import { currency, CDN_URL } from "./../../lib";
   export let product = {};
 </script>
 
@@ -28,13 +28,13 @@
       rel="prefetch"
       class="w-full">
       <div>
-        {#if product._source.imgUrls}
+        {#if product._source.img}
           <!-- for lazyloading to work src image needs to be low quality and should be about 3px by 3px 
           data-src holds the high quality image -->
           <img
             use:lazyload
             src="/3px.png"
-            data-src={product._source.imgUrls[0]['200x200']}
+            data-src={CDN_URL + product._source.img[0]}
             alt={product.name}
             class="w-full zoom mb-3"
             style="object-fit: contain; max-height:316px;" />

@@ -36,7 +36,9 @@
 <div class="m-5">
   <div class="flex">
     <Textbox label="SKU" bind:value={sku} cls="flex-1" />
-    <Button on:click={() => getFromFlipkart(sku)}>Fetch From Flipkart</Button>
+    <Button rounded={true} on:click={() => getFromFlipkart(sku)}>
+      Fetch From Flipkart
+    </Button>
   </div>
   {#if product && product.name}
     {product.name}
@@ -44,21 +46,25 @@
     <!-- <form on:submit|preventDefault={submit}>
       <input
         class="text-base text-base rounded-sm pb-4 border-b-2
-        hover:border-pink-500 shadow-md pt-3 pl-1"
+        hover:border-purple-500 shadow-md pt-3 pl-1"
         placeholder="Price"
         bind:value={product.price} />
       <button
         on:click={getFromFlipkart}
-        class="uppercase bg-pink-500 width text-white h-10 rounded">
+        class="uppercase bg-purple-500 width text-white h-10 rounded">
         Save
       </button>
     </form> -->
   {/if}
   <br />
-  <div class="flex">
+  <form
+    class="flex"
+    novalidate
+    autocomplete="off"
+    on:submit|preventDefault={searchFromFlipkart}>
     <Textbox label="Search" bind:value={q} cls="flex-1" />
-    <Button on:click={searchFromFlipkart}>Search From Flipkart</Button>
-  </div>
+    <Button rounded={true} size="xl">Search From Flipkart</Button>
+  </form>
   {#if products && products.length > 0}
     <div class="flex flex-wrap">
       {#each products as p}
@@ -72,6 +78,7 @@
           <del>{currency(p.productBaseInfoV1.maximumRetailPrice.amount)}</del>
           <!-- <li>Link: {p.productBaseInfoV1.productUrl}</li> -->
           <Button
+            rounded={true}
             on:click={() => getFromFlipkart(p.productBaseInfoV1.productId)}>
             Fetch
           </Button>
