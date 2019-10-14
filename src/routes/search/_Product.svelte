@@ -1,4 +1,5 @@
 <script>
+  import { lazyload } from "../../actions/lazyload";
   import { currency } from "./../../lib";
   export let product = {};
 </script>
@@ -28,11 +29,15 @@
       class="w-full">
       <div>
         {#if product._source.imgUrls}
+          <!-- for lazyloading to work src image needs to be low quality and should be about 3px by 3px 
+          data-src holds the high quality image -->
           <img
+            use:lazyload
+            src="/3px.png"
+            data-src={product._source.imgUrls[0]['200x200']}
+            alt={product.name}
             class="w-full zoom mb-3"
-            style="object-fit: contain; max-height:316px;"
-            src={product._source.imgUrls[0]['200x200']}
-            alt />
+            style="object-fit: contain; max-height:316px;" />
         {/if}
         <div class="p-1 text-start">
           <div class="text-gray-900 lg:font-bold sm:font-normal text-sm">
