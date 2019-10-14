@@ -6,6 +6,7 @@ import { authenticationMiddleware } from './lib/auth'
 import { apiUrl } from './config'
 const proxy = require('http-proxy-middleware');
 const apiProxy = proxy('/api', { target: apiUrl, changeOrigin: true });
+const imgProxy = proxy('/images', { target: apiUrl, changeOrigin: true });
 const { PORT, NODE_ENV } = process.env;
 const dev = NODE_ENV === 'development';
 polka()
@@ -13,6 +14,7 @@ polka()
 		compression({ threshold: 0 }),
 		sirv('static', { dev }),
 		apiProxy,
+		imgProxy,
 		authenticationMiddleware,
 		sapper.middleware({
 		})

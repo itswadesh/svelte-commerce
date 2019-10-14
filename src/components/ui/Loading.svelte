@@ -6,7 +6,7 @@
   div#wave .olive {
     background: rgba(128, 128, 0, 0.5);
   }
-  div#wave .blue {
+  div#wave .purple {
     background: rgba(0, 0, 255, 0.5);
   }
   div#wave .green {
@@ -63,7 +63,7 @@
 {#if loading}
   <div id="wave">
     <span class="dot olive" />
-    <span class="dot blue" />
+    <span class="dot purple" />
     <span class="dot green" />
     <span class="dot red" />
   </div>

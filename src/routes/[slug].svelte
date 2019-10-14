@@ -20,7 +20,7 @@
         name: product && product.name,
         description: product && product.description,
         sku: product && product.sku,
-        image: HOST + (product && product.imgUrls && product.imgUrls["400x400"])
+        image: HOST + (product && product.img)
       };
       return { product, structuredData };
     } catch (e) {
@@ -56,7 +56,7 @@
   <meta
     name="og_image"
     property="og:image"
-    content={product && product.imgUrls && product.imgUrls[0] && product.imgUrls[0]['800x800']} />
+    content={product && product.img && product.img[0]} />
   <meta property="og:image:width" content="800" />
   <meta property="og:image:height" content="800" />
   <!-- Twitter -->
@@ -64,7 +64,7 @@
   <meta name="twitter:description" content={product && product.description} />
   <meta
     name="twitter:image:src"
-    content={product && product.imgUrls && product.imgUrls[0] && product.imgUrls[0]['800x800']} />
+    content={product && product.img && product.img[0]} />
   <!-- Google / Schema.org markup: -->
   <meta hid="product_name" itemprop="name" content={product && product.name} />
   <meta
@@ -74,7 +74,7 @@
   <meta
     hid="product_image"
     itemprop="image"
-    content={product && product.imgUrls && product.imgUrls[0] && product.imgUrls[0]['800x800']} />
+    content={product && product.img && product.img[0]} />
   <meta
     hid="product_price"
     name="product_price"

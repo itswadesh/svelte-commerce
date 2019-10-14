@@ -78,7 +78,7 @@
       {#each products as p (p._id)}
         <div class="mx-1 lg:mx-5">
           <a href={'/' + p.slug + '?id=' + p._id}>
-            <img class="h-32" src={p.imgUrls[0]['200x200']} alt="" />
+            <img class="h-32" src={p.img[0]} alt="" />
             <div class="mt-3 text-gray-800">{truncate(p.name, 45)}</div>
           </a>
         </div>

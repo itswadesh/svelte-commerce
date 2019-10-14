@@ -2,13 +2,16 @@
   export let icon = "",
     size = "default",
     text = "",
-    color = "none";
+    color = "none",
+    rounded = false,
+    large = false;
 </script>
 
 <button
-  {size}
+  {rounded}
   on:click
-  class="px-3 py-1 text-lg font-bold rounded bg-pink-500 hover:bg-pink-600
-  text-white">
+  class="px-4 font-bold text-{size} bg-purple-500 hover:bg-purple-600 text-white"
+  class:rounded
+  class:font-bold={size == 'xl'}>
   <slot />
 </button>

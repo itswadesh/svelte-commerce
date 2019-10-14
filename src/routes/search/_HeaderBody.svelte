@@ -50,7 +50,7 @@
 </div>
 <div class="lg:hidden flex shadow-md py-4 bg-white w-full mb-1">
   <button
-    class="flex-1 flex items-center text-left text-pink-500"
+    class="flex-1 flex items-center text-left text-purple-500"
     on:click={() => dispatch('hide', !showFilters)}>
     <i class="fa fa-sliders-h px-3" />
     Filter
@@ -58,12 +58,12 @@
   <div class="hidden md:block text-gray-700 text-center font-normal px-4">
     {count} laptops
   </div>
-  <div class="text-gray-700 text-center px-4 text-pink-500">
+  <div class="text-gray-700 text-center px-4 text-purple-500">
     <i class="fa fa-sort mr-2" aria-hidden="true" />
     <select
       aria-label="sort"
       bind:value={sortBy}
-      class="flex-1 text-pink-600 border-gray-100 cursor-pointer cursor-pointer
+      class="flex-1 text-purple-600 border-gray-100 cursor-pointer cursor-pointer
       bg-white border border-gray-400 hover:border-gray-500 px-4 py-2
       focus:outline-none"
       on:change={sort}>

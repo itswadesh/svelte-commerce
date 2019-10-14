@@ -41,9 +41,9 @@
 
 <style>
   .selected {
-    color: pink;
+    color: purple;
     background-color: white;
-    border-left: 4px solid pink;
+    border-left: 4px solid purple;
   }
   ul > li {
     font: bold;
@@ -158,7 +158,7 @@
           {/if}
         </div>
       </div>
-      <div class="w-full text-center bg-pink-500 text-white absolute bottom-0">
+      <div class="w-full text-center bg-purple-500 text-white absolute bottom-0">
         <button class="w-full p-4 cursor-pointer font-bold focus:outline-none">
           APPLY
         </button>
