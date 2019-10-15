@@ -39,7 +39,7 @@ async function send({ method, path, data, token, cookie }) {
 			return json;
 		}
 	}
-	catch (e) { throw new Error(e.toString()); }
+	catch (e) { throw e; }
 }
 
 function get(path, params, token, cookie) {
