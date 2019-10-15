@@ -28,7 +28,7 @@ var host = {
         "cd " + REMOTE_DIR,
         "sudo tar xf arialshop.tar.gz -C " + REMOTE_DIR,
         "sudo rm arialshop.tar.gz",
-        "sudo yarn install --prod",
+        "sudo npm install --prod",
         "sudo pm2 reload " + PM2_NAME
     ]
 };

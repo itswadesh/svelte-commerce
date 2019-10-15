@@ -26,6 +26,7 @@
     query,
     searchQuery;
   page.subscribe(page => {
+   console.log('page.subscribe',);
     query = page.query;
     getData(query);
   });
@@ -56,6 +57,7 @@
   function search(e) {
     query = {};
     query.q = e.detail;
+     console.log('search',);
     getData(query);
   }
   function toggle(e) {
