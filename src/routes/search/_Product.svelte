@@ -2,7 +2,7 @@
   import { lazyload } from "../../actions/lazyload";
   import { currency } from "./../../lib";
   import { stores } from "@sapper/app";
-  const { preloading, page, session } = stores();
+  const { session } = stores();
   export let product = {};
 </script>
 
