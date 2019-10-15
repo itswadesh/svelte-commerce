@@ -2,7 +2,6 @@
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
   export let label = "",
-    type = "text",
     value = "",
     cls = "",
     placeholder = " ";

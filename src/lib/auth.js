@@ -7,7 +7,7 @@ async function authenticationMiddleware(req, res, next) {
     try {
         user = await get("users/me", null, cookies.get('token'));
     } catch (e) {
-        // console.log('err at users', e.toString());
+        console.log('err at users', e.toString());
     }
     try {
         cart = await get("cart", null, cookies.get('token'), `MADid=${cookies.get('MADid')}`);

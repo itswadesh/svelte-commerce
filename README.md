@@ -39,6 +39,11 @@ If required change `src/config.js` according to your requirement
 
 - TailwindCSS Integrated
 - Server Rendered
+- Fontawesome
+- Lazy loading images
+- Login
+- Settings from database
+- Stores
 - SEO features
 - Carousel (Slider)
 - Instant Search
