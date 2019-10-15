@@ -1,6 +1,8 @@
 <script>
   import { lazyload } from "../../actions/lazyload";
-  import { currency, CDN_URL } from "./../../lib";
+  import { currency } from "./../../lib";
+  import { stores } from "@sapper/app";
+  const { preloading, page, session } = stores();
   export let product = {};
 </script>
 
@@ -33,8 +35,8 @@
           data-src holds the high quality image -->
           <img
             use:lazyload
-            src="/3px.png"
-            data-src={CDN_URL + product._source.img[0]}
+            src={$session.settings.CDN_URL + product._source.img[0] + '?tr=w-3,h-3'}
+            data-src={$session.settings.CDN_URL + product._source.img[0] + '?tr=w-300,h-200'}
             alt={product.name}
             class="w-full zoom mb-3"
             style="object-fit: contain; max-height:316px;" />

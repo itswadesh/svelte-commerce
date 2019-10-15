@@ -2,7 +2,7 @@
   import Search from "./Search.svelte";
   import { stores, goto } from "@sapper/app";
   const { session } = stores();
-  import { auth } from "./../routes/auth-store.js";
+  import { auth } from "./../store/auth.js";
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
   export let home = false,

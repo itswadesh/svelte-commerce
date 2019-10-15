@@ -57,5 +57,4 @@ function currency(value, currency, decimals) {
         _int.slice(i).replace(digitsRE, '$1,') +
         _float
 }
-const CDN_URL = '/images'
-export { constructURL, constructQry, constructURL2, currency, date, truncate, CDN_URL }
+export { constructURL, constructQry, constructURL2, currency, date, truncate }
