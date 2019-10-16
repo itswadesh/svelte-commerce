@@ -3,8 +3,10 @@
   import { stores, goto } from "@sapper/app";
   const { session } = stores();
   import { currency } from "./../lib";
+  import { fadeIn, fadeOut } from "./../actions/pageFade";
 </script>
 
+<main in:fadeIn out:fadeOut>
 <Header />
 <h1>Cart</h1>
 <!-- {JSON.stringify($session.cart)} -->
@@ -15,3 +17,4 @@
   {/each}
 </div>
 <div class="cart-summary">{$session.cart.subtotal}={$session.cart.total}</div>
+</main>

@@ -1,12 +1,21 @@
 <script>
   import Search from "./Search.svelte";
+  import Loader from "./ui/Loader.svelte";
   import { stores, goto } from "@sapper/app";
-  const { session } = stores();
+  const { preloading, session } = stores();
   import { auth } from "./../store/auth.js";
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
   export let home = false,
-    mysearch = false;
+    mysearch = false,
+    loading = false;
+
+  preloading.subscribe(_ => {
+    if(_==true)
+    setTimeout(function() {loading=_},250)
+    else
+    loading = _;
+  });
 
   function logout() {
     $session.user = {};
@@ -17,6 +26,7 @@
   function closeSidebar() {
     this.sidebar = false;
   }
+
   function search(q) {
     dispatch("search", q.detail);
   }
@@ -43,4 +53,7 @@
       <a href="/cart" class="mr-4">Cart</a>
     </div>
   </nav>
+  {#if loading}
+    <Loader />
+  {/if}
 </header>

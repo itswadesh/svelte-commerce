@@ -13,8 +13,8 @@
   import { get, put, post } from "./../../lib/api";
   import { goto, stores } from "@sapper/app";
   import { sorts } from "./../../config";
-
-  const { session, page } = stores();
+  import { fadeIn, fadeOut } from "./../../actions/pageFade";
+  const { preloading, page, session } = stores();
   let showMobileFilter = false,
     products = [],
     facets = [],
@@ -26,7 +26,7 @@
     query,
     searchQuery;
   page.subscribe(page => {
-   console.log('page.subscribe',);
+    console.log("page.subscribe");
     query = page.query;
     getData(query);
   });
@@ -57,7 +57,6 @@
   function search(e) {
     query = {};
     query.q = e.detail;
-     console.log('search',);
     getData(query);
   }
   function toggle(e) {
@@ -89,38 +88,41 @@
     name="twitter:description"
     content="content={`Collection of handpicked laptops with ${query.q}`}" />
 </svelte:head>
-<Header on:search={search} />
-{#if showMobileFilter}
-  <MobileFilters {facets} on:hide={toggle} />
-{:else}
-  <div class="flex">
-    <DesktopFilters bind:facets bind:query />
-    <div class="w-full">
-      <HeaderBody
-        {searchQuery}
-        count={productCount}
-        on:hide={() => (showMobileFilter = !showMobileFilter)} />
-      {#if loading}
-        <div class="flex flex-wrap">
-          {#each { length: 15 } as _, i}
-            <ProductSkeleton />
-          {/each}
-        </div>
-      {:else if products.length == 0 && !loading}
-        <NoProduct />
-      {:else if products && products.length > 0}
-        <div class="flex flex-wrap">
-          {#each products as p}
-            <Product product={p} />
-          {/each}
-        </div>
-      {/if}
-      {#if Math.ceil(productCount / pageSize) > 1}
-        <Pagination
-          count={Math.ceil(productCount / pageSize)}
-          current={parseInt(query.page || 1)}
-          on:change={changePage} />
-      {/if}
+
+<main in:fadeIn out:fadeOut>
+  <Header on:search={search} />
+  {#if showMobileFilter}
+    <MobileFilters {facets} on:hide={toggle} />
+  {:else}
+    <div class="flex">
+      <DesktopFilters bind:facets bind:query />
+      <div class="w-full">
+        <HeaderBody
+          {searchQuery}
+          count={productCount}
+          on:hide={() => (showMobileFilter = !showMobileFilter)} />
+        {#if loading}
+          <div class="flex flex-wrap">
+            {#each { length: 15 } as _, i}
+              <ProductSkeleton />
+            {/each}
+          </div>
+        {:else if products.length == 0 && !loading}
+          <NoProduct />
+        {:else if products && products.length > 0}
+          <div class="flex flex-wrap">
+            {#each products as p}
+              <Product product={p} />
+            {/each}
+          </div>
+        {/if}
+        {#if Math.ceil(productCount / pageSize) > 1}
+          <Pagination
+            count={Math.ceil(productCount / pageSize)}
+            current={parseInt(query.page || 1)}
+            on:change={changePage} />
+        {/if}
+      </div>
     </div>
-  </div>
-{/if}
+  {/if}
+</main>
