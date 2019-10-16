@@ -6,8 +6,9 @@
   const cookies = Cookie();
   import Textbox from "./../components/ui/Textbox.svelte";
   import Passwordbox from "./../components/ui/Passwordbox.svelte";
+  import Header from "./../components/Header.svelte";
+  import { fadeIn, fadeOut } from "./../actions/pageFade";
   let loading = false,
-    fadeIn = "",
     disable = "disable",
     p = {},
     msg = null,
@@ -213,10 +214,13 @@
     content="Login to Hopyshopy" />
   <meta data-hid="og:title" name="og_title" content="Login to Hopyshopy" />
 </svelte:head>
-<div>
+<main in:fadeIn out:fadeOut>
+<Header />
+<div class="relative z-50">
+  <div class="flex justify-center items-end">
+      <div class="flex justify-center items-center">
   <div class="bg-gray-100 xs:mobile-login h-full px-4">
     <div class="container mx-auto h-full flex items-center">
-      <div class="lg:w-1/3 w-full">
         <div class="border-teal border-t-12 bg-white mb-6 rounded shadow-2xl">
           <div class="p-0 secondary text-white rounded rounded-b-none">
             <h1 class="text-xl mb-6 text-left p-3">
@@ -229,7 +233,7 @@
             </h1>
           </div>
           <form on:submit|preventDefault={submit} class="center">
-            <div class="p-6">
+            <div class="p-6 lg:p-12">
               {#if err}
                 <div class="text-red-600 mb-5 text-center">{err}</div>
               {:else if msg}
@@ -296,7 +300,9 @@
             </div>
           </form>
         </div>
-      </div>
+  </div>
+   </div>
     </div>
   </div>
 </div>
+</main>

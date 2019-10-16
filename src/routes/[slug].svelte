@@ -6,6 +6,7 @@
   import ProductImage from "./details/_ProductImage.svelte";
   import Breadcrumb from "./details/_Breadcrumb.svelte";
   import ProductDetails from "./details/_ProductDetails.svelte";
+  import { send, receive } from "./../actions/crossfade";
 
   export async function preload({ params, query }) {
     let product = {},
@@ -83,13 +84,15 @@
     content={product && product.localPrice} />
 </svelte:head>
 <Header />
-{#if !product}
-  Requested product not found.
-{:else}
-  <Breadcrumb {product} />
-  <div class="flex flex-wrap justify-start">
-    <ProductImage {product} />
-    <ProductDetails {product} />
-    <!-- <SimilarProducts :product="product" /> -->
-  </div>
-{/if}
+<main in:receive out:send>
+  {#if !product}
+    Requested product not found.
+  {:else}
+    <Breadcrumb {product} />
+    <div class="flex flex-wrap justify-start">
+      <ProductImage {product} />
+      <ProductDetails {product} />
+      <!-- <SimilarProducts :product="product" /> -->
+    </div>
+  {/if}
+</main>
