@@ -4,6 +4,7 @@
   import { get, put, post } from "./../lib/api";
   import Cookie from "cookie-universal";
   const cookies = Cookie();
+  import { toast } from "./../actions/toast.js";
   import Textbox from "./../components/ui/Textbox.svelte";
   import Passwordbox from "./../components/ui/Passwordbox.svelte";
   import Header from "./../components/Header.svelte";
@@ -24,6 +25,11 @@
     err = null;
   $: isEmail = uid.includes("@");
   $: isPhone = uid.length >= 10 && uid.match(phoneno) ? true : false;
+  $: if (otp) {
+    if (otp.length == 4) {
+      phoneLogin();
+    }
+  }
   $: if (uid) {
     showOTP = false;
     signup = false;
@@ -58,6 +64,7 @@
     }
   }
   async function phoneLogin() {
+    // toast.show({ show: true, color: "err", msg: "error...", duration: 7000 });
     loading = true;
     if (!showOTP) {
       // When clicked 1st time
@@ -175,7 +182,14 @@
   .border-t {
     border-bottom: 1px solid lightgray;
   }
-
+  .otp-container {
+    height: 48px;
+    width: 136px;
+    background-color: #eff1f4;
+    border-radius: 4px;
+    position: relative;
+    display: inline-block;
+  }
   .otp-container .otp-seperator {
     background-color: #dfe1e6;
     border: 1px solid #dfe1e6;
@@ -197,8 +211,14 @@
     left: 100px;
   }
   .otp-container .otp-content {
-    letter-spacing: 15px;
+    height: inherit;
+    width: 150px;
+    background-color: transparent;
     border: 1px solid transparent;
+    outline: transparent;
+    letter-spacing: 15px;
+    font-size: 22px;
+    padding-left: 16px;
   }
   input + label {
     position: relative;
@@ -215,94 +235,104 @@
   <meta data-hid="og:title" name="og_title" content="Login to Hopyshopy" />
 </svelte:head>
 <main in:fadeIn out:fadeOut>
-<Header />
-<div class="relative z-50">
-  <div class="flex justify-center items-end">
+  <Header home={true} />
+  <div class="relative z-50">
+    <div class="flex justify-center items-end">
       <div class="flex justify-center items-center">
-  <div class="bg-gray-100 xs:mobile-login h-full px-4">
-    <div class="container mx-auto h-full flex items-center">
-        <div class="border-teal border-t-12 bg-white mb-6 rounded shadow-2xl">
-          <div class="p-0 secondary text-white rounded rounded-b-none">
-            <h1 class="text-xl mb-6 text-left p-3">
-              {#if !signup}
-                <span class="font-extrabold">SIGN IN</span>
-              {:else}
-                <span class="font-extrabold">SIGN UP</span>
-                TO YOUR ACCOUNT
-              {/if}
-            </h1>
-          </div>
-          <form on:submit|preventDefault={submit} class="center">
-            <div class="p-6 lg:p-12">
-              {#if err}
-                <div class="text-red-600 mb-5 text-center">{err}</div>
-              {:else if msg}
-                <div class="text-green-600 mb-5 text-center">{msg}</div>
-              {/if}
-              <Textbox bind:value={uid} label="Email/Phone" />
-              <br />
-              {#if signup}
-                <Textbox value={firstName} label="Fisrt Name" class="w-full" />
-                <br />
-                <Textbox value={lastName} label="Last Name" class="w-full" />
-                <br />
-              {/if}
-              <!-- <p class="text-red-500 mb-5 text-xs font-hairline">Please enter password</p> -->
-              <!-- Show password box -->
-              {#if !isPhone && showOTP}
-                <Passwordbox
-                  bind:value={password}
-                  label="Password"
-                  cls="w-full" />
-              {:else if showOTP}
-                <!-- Show OTP box -->
-                <div class="otp-container">
-                  <div
-                    id="wraper1"
-                    class="otp-seperator w-1 h-1 rounded absolute"
-                    class:wraper-hide={otp.length > 0} />
-                  <div
-                    id="wraper2"
-                    class="otp-seperator w-1 h-1 rounded absolute"
-                    class:wraper-hide={otp.length > 1} />
-                  <div
-                    id="wraper3"
-                    class="otp-seperator w-1 h-1 rounded absolute"
-                    class:wraper-hide={otp.length > 2} />
-                  <div
-                    id="wraper4"
-                    class="otp-seperator w-1 h-1 rounded absolute"
-                    class:wraper-hide={otp.length > 3} />
-                  <input
-                    bind:value={otp}
-                    name="otp"
-                    class="otp-content outline-none pl-4 otp-content w-32
-                    bg-transparent border border-gray-400"
-                    maxlength="4"
-                    autocomplete="off" />
-                </div>
-              {/if}
-              <br />
-              <br />
-              <div class="flex items-center justify-between">
-                <button
-                  type="submit"
-                  disabled={loading}
-                  class="flex items-center justify-center h-14 text-2xl
-                  outline-none w-full font-bold py-2 rounded primary"
-                  class:primary={!loading}
-                  class:border={loading}>
-                  {#if loading}
-                    <img src="/loading.svg" alt class:loading />
-                  {:else}{submitText}{/if}
-                </button>
+        <div class="h-full px-4">
+          <div class="container mx-auto h-full flex items-center">
+            <div
+              class="border-teal border-t-12 bg-white mb-6 rounded shadow-2xl">
+              <div class="p-0 secondary text-white rounded rounded-b-none">
+                <h1 class="text-xl mb-6 text-left p-3">
+                  {#if !signup}
+                    <span class="font-extrabold">SIGN IN</span>
+                  {:else}
+                    <span class="font-extrabold">SIGN UP</span>
+                    TO YOUR ACCOUNT
+                  {/if}
+                </h1>
               </div>
+              <form on:submit|preventDefault={submit} class="center">
+                <div class="p-6 lg:p-12">
+                  {#if err}
+                    <div class="text-red-600 mb-5 text-center">{err}</div>
+                  {:else if msg}
+                    <div class="text-green-600 mb-5 text-center">{msg}</div>
+                  {/if}
+                  <Textbox bind:value={uid} label="Email/Phone" />
+                  <br />
+                  {#if signup}
+                    <Textbox
+                      value={firstName}
+                      label="Fisrt Name"
+                      class="w-full" />
+                    <br />
+                    <Textbox
+                      value={lastName}
+                      label="Last Name"
+                      class="w-full" />
+                    <br />
+                  {/if}
+                  <!-- <p class="text-red-500 mb-5 text-xs font-hairline">Please enter password</p> -->
+
+                  {#if !isPhone && showOTP}
+                    <!-- Show password box -->
+                    <Passwordbox
+                      bind:value={password}
+                      label="Password"
+                      cls="w-full" />
+                  {:else}
+                    <!-- Show OTP box -->
+                    <div class=" flex justify-center text-center">
+                      <div class="otp-container">
+                        <div
+                          id="wraper1"
+                          class="otp-seperator w-1 h-1 rounded absolute"
+                          class:wraper-hide={otp.length > 0} />
+                        <div
+                          id="wraper2"
+                          class="otp-seperator w-1 h-1 rounded absolute"
+                          class:wraper-hide={otp.length > 1} />
+                        <div
+                          id="wraper3"
+                          class="otp-seperator w-1 h-1 rounded absolute"
+                          class:wraper-hide={otp.length > 2} />
+                        <div
+                          id="wraper4"
+                          class="otp-seperator w-1 h-1 rounded absolute"
+                          class:wraper-hide={otp.length > 3} />
+                        <input
+                          bind:value={otp}
+                          name="otp"
+                          class="otp-content outline-none pl-4 otp-content w-32
+                          bg-transparent border border-gray-400"
+                          maxlength="4"
+                          autocomplete="off" />
+                      </div>
+                    </div>
+                  {/if}
+                  <br />
+                  <br />
+                  <div class="flex items-center justify-between">
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      class="flex items-center justify-center h-14 text-2xl
+                      outline-none w-full font-bold py-2 rounded primary"
+                      class:primary={!loading}
+                      class:border={loading}>
+                      {#if loading}
+                        <img src="/loading.svg" alt class:loading />
+                      {:else}{submitText}{/if}
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
-          </form>
+          </div>
         </div>
-  </div>
-   </div>
+      </div>
     </div>
   </div>
-</div>
 </main>

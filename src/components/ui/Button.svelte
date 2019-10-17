@@ -3,15 +3,16 @@
     size = "default",
     text = "",
     color = "none",
-    rounded = false,
-    large = false;
+    full = false,
+    rounded = false;
 </script>
 
 <button
   {rounded}
   on:click
-  class="px-4 font-bold text-{size} bg-purple-500 hover:bg-purple-600 text-white"
+  class="py-4 px-4 text-{size} bg-purple-500 hover:bg-purple-600 text-white"
   class:rounded
-  class:font-bold={size == 'xl'}>
+  class:font-bold={size == 'xl'}
+  class:w-full={full}>
   <slot />
 </button>

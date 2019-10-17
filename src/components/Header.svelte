@@ -8,13 +8,15 @@
   const dispatch = createEventDispatcher();
   export let home = false,
     mysearch = false,
-    loading = false;
+    loading = false,
+    segment;
 
   preloading.subscribe(_ => {
-    if(_==true)
-    setTimeout(function() {loading=_},250)
-    else
-    loading = _;
+    if (_ == true)
+      setTimeout(function() {
+        loading = _;
+      }, 250);
+    else loading = _;
   });
 
   function logout() {
@@ -40,18 +42,21 @@
     <div class="mx-2 border-gray-300 relative" style="flex:1">
       <Search on:search={search} {home} />
     </div>
-    <div class="ml-4">
-      <i class="fa fa-user" />
-      {#if $session.token && $session.token != ''}
-        <a href="/account" class="no-underline">Account</a>
-      {:else}
-        <a href="/login" class="mr-4">Login</a>
-      {/if}
-    </div>
-    <div>
+    {#if $session.token && $session.token != ''}
+      <a href="/my" class="ml-4">
+        <i class="fa fa-user" />
+        <span>Account</span>
+      </a>
+    {:else}
+      <a href="/login" class="mx-4">
+        <i class="fa fa-user" />
+        <span>Login</span>
+      </a>
+    {/if}
+    <a href="/cart" class="mr-4">
       <i class="fa fa-shopping-cart" />
-      <a href="/cart" class="mr-4">Cart</a>
-    </div>
+      <span>Cart ({$session.cart.qty})</span>
+    </a>
   </nav>
   {#if loading}
     <Loader />

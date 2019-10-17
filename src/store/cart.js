@@ -27,7 +27,7 @@ function getCart() {
         add: async (payload) => {
             // let token = cookies.get('token')
             try {
-                const data = await post("cart/add", payload);
+                const data = await post("cart/addE", payload);
                 set(data)
                 // console.log('setCart', data)
                 return data
@@ -46,12 +46,6 @@ function getCart() {
         showCart: () => {
             return showCart
         },
-        checkCart: ({ pid, vid }) => { // Returns true when there is item in cart
-            var found = state.items.some(function (el) {
-                return el.product._id === pid && el.variant._id === vid;
-            });
-            return found
-        },
         setCart: (data) => {
             set({
                 items: data.items || [],
@@ -63,36 +57,21 @@ function getCart() {
             })
         },
         toggleCart: (payload) => {
-            state.showCart = payload
-        },
-        applyDiscount: (state, amount) => {
-            state.discount = amount
+            showCart = payload
         },
         checkout: async ({ paymentMethod, address }) => {
             // let token = cookies.get('token')
             paymentMethod = paymentMethod || 'COD'
-            switch (paymentMethod) {
-                case "COD":
-                    try {
-                        let order = await post('electronics-orders', { address: { qrno: address }, paymentMethod: 'COD' })
-                        const data = await cart.fetch();
-                        set(data)
-                        return order
-                        // this.$router.push('/order-success?id=' + order._id + '&amount=' + order.amount.total)
-                    } catch (e) {
-                        console.log('setErr', e.toString())
-                        throw e
-                    }
-                    break;
-                case "Stripe":
-                    console.log('setErr', 'Stripe not implemented yet. Proceed with COD')
-                    break;
-                default:
-                    console.log('setErr', 'The checkout service ' + paymentMethod + ' not yet implemented')
-                    console.log("Unknown checkout service: " + paymentMethod);
-                    break;
+            try {
+                let order = await post('electronics-orders', { address: { qrno: address }, paymentMethod: 'COD' })
+                const data = await cart.fetch();
+                set(data)
+                return order
+            } catch (e) {
+                console.log('setErr', e.toString())
+                throw e
             }
-        },
+        }
     }
 }
 export const cart = getCart()
