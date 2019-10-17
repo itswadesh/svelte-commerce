@@ -1,10 +1,15 @@
 <script>
   import Button from "./../../components/ui/Button.svelte";
   import { currency } from "./../../lib";
+  import { cart } from "./../../store/cart.js";
   export let product = {};
   function calculateOffPercent(price, mrp) {
     let percent = ((mrp - price) * 100) / mrp;
     return Math.round(percent);
+  }
+  function addToCart(qty) {
+    console.log(product.variants);
+    cart.add({ pid: product._id, vid: product.variants[0]._id, qty });
   }
 </script>
 
@@ -131,17 +136,17 @@
         </a>
       {/if}
       {#if product.localPrice}
-        <a
+        <button
           target="blank"
-          href={product.productUrl}
+          on:click={() => addToCart(1)}
           class="w-1/2 lg:w-1/3 bg-white border border-green-600 text-black py-2
           px-3 rounded font-bold text-xs lg:text-lg text-center">
-          BUY LOCAL
+          ADD TO CART
           <img
             src="/store.svg"
             alt="local"
             style="display:inline-block;width: 30px; height: 30px;" />
-        </a>
+        </button>
       {/if}
     </div>
     <div class="py-8 border-b border-gray-300 px-3">
