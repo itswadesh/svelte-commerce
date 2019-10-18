@@ -8,7 +8,7 @@
         Rs 300 instant Cashback with PayPal on a minimum spend of Rs 1000. TCA
       </li>
     </ul>
-    <a href="#" class="text-blue-700 p-5 font-semibold">
+    <a href="/" class="text-blue-700 p-5 font-semibold">
       Show More
       <i class="fa fa-angle-down" aria-hidden="true" />
     </a>

@@ -39,20 +39,28 @@ If required change `src/config.js` according to your requirement
 
 - TailwindCSS Integrated
 - Server Rendered
-- Fontawesome
+- Proxy + API integrated
 - Lazy loading images
+- Animations (Page transition)
 - Login
+- Cart & Checkout
 - Settings from database
 - Stores
-- SEO features
+- SEO optimized pages
 - Carousel (Slider)
+- Loading Indicators
+- Componentized Checkbox, Radio, Textbox
 - Instant Search
 - Faceted filters
 - 1 click deploy to live server
 - API calls
 - Skeletons
 - Responsive
-- Loading Indicators
-- Componentized Checkbox, Radio, Textbox
+- Fontawesome
 - PWA
 - `>90` PWA score
+- filters: First, Date, Truncate, Currency
+- Generate production version files with css minified
+- PUT, POST, DELETE calls with Bearer Authorization
+- Storing tokens into cookie
+

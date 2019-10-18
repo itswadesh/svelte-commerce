@@ -8,6 +8,7 @@
   import CartItem from "./_CartItem.svelte";
   import { stores, goto } from "@sapper/app";
   const { session } = stores();
+  import { cart } from "./../../store/cart.js";
   import { currency } from "./../../lib";
   import { fadeIn, fadeOut } from "./../../actions/pageFade";
 </script>
