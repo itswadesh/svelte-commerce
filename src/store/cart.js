@@ -20,6 +20,7 @@ function getCart() {
             try {
                 const data = await get('cart', null)
                 // console.log('setCart', data)
+                set(data)
                 return data
             }
             catch (e) { }
@@ -28,12 +29,12 @@ function getCart() {
             // let token = cookies.get('token')
             try {
                 const data = await post("cart/addE", payload);
-                set(data)
                 // console.log('setCart', data)
+                set(data)
                 return data
             }
             catch (e) {
-                console.log('setErr', e)
+                // console.log('setErr', e)
                 throw e.toString()
             }
         },

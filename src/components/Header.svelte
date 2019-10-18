@@ -4,6 +4,7 @@
   import { stores, goto } from "@sapper/app";
   const { preloading, session } = stores();
   import { auth } from "./../store/auth.js";
+  import { cart } from "./../store/cart.js";
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
   export let home = false,
@@ -55,7 +56,7 @@
     {/if}
     <a href="/cart" class="mr-4">
       <i class="fa fa-shopping-cart" />
-      <span>Cart ({$session.cart.qty})</span>
+      <span>Cart ({$cart.qty})</span>
     </a>
   </nav>
   {#if loading}
