@@ -8,9 +8,9 @@
 </script>
 
 <style>
-  .active {
+  /* .active {
     @apply bg-black font-medium text-white tracking-wide rounded-sm;
-  }
+  } */
   .pagination-container {
     list-style: none;
     text-align: center;
@@ -41,16 +41,17 @@
       Page {current} of {count}
     </li>
     <div class="flex-1 justify-start w-full lg:w-auto">
-      <button
-        v-if="current>1"
-        class="lg:mx-5 bg-white hover:bg-gray-100 text-gray-800 font-semibold
-        lg:py-2 p-2 lg:px-4 border border-gray-400 rounded shadow rounded
-        inline-flex items-center"
-        on:click={() => dispatch('change', current - 1)}>
-        <i class="fa fa-caret-left" />
-        &nbsp;
-        <span>Previous</span>
-      </button>
+      {#if current > 1}
+        <button
+          class="lg:mx-5 bg-white hover:bg-gray-100 text-gray-800 font-semibold
+          lg:py-2 p-2 lg:px-4 border border-gray-400 rounded shadow rounded
+          inline-flex items-center"
+          on:click={() => dispatch('change', current - 1)}>
+          <i class="fa fa-caret-left" />
+          &nbsp;
+          <span>Previous</span>
+        </button>
+      {/if}
       {#each { length: count } as _, i}
         <li
           class="lg:py-2 lg:px-3 py-2 px-1 lg:mx-2"

@@ -16,25 +16,20 @@ function getCart() {
     return {
         subscribe,
         fetch: async () => {// This is only to get data from saved cart
-            // let token = cookies.get('token')
             try {
                 const data = await get('cart', null)
-                // console.log('setCart', data)
                 set(data)
                 return data
             }
             catch (e) { }
         },
         add: async (payload) => {
-            // let token = cookies.get('token')
             try {
                 const data = await post("cart/addE", payload);
-                // console.log('setCart', data)
                 set(data)
                 return data
             }
             catch (e) {
-                // console.log('setErr', e)
                 throw e.toString()
             }
         },
