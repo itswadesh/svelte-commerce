@@ -30,7 +30,7 @@ function getCart() {
                 return data
             }
             catch (e) {
-                throw e.toString()
+                throw e
             }
         },
         setPromo: (data) => {
@@ -62,7 +62,7 @@ function getCart() {
                 set(data)
                 return order
             } catch (e) {
-                console.log('err...', e.toString())
+                // console.log('err...', e.toString())
                 throw e
             }
         }

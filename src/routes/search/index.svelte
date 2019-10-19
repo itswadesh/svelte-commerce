@@ -40,6 +40,7 @@
     goto(`${url}page=${page}`);
   }
   async function getData(query) {
+    console.log("Search page getData...........");
     try {
       loading = true;
       searchQuery = query.q;

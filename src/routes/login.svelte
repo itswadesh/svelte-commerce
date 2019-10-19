@@ -14,7 +14,7 @@
     p = {},
     msg = null,
     signup = false,
-    uid = "1111111111",
+    uid = "",
     password = "",
     firstName = "",
     lastName = "",

@@ -40,7 +40,7 @@
         <div class="flex justify-between pt-5 pb-5">
           {#each order.items as item, index}
             <CartItem
-              product={{ name: item.name, slug: item.slug, _id: item.pid }}
+              product={{ name: item.name, slug: item.slug, _id: item.pid, img: item.img }}
               variant={{ sku: item.sku, size: item.size, img: item.img, mrp: item.mrp, price: item.price, _id: item.vid }}
               qty={item.qty}
               cartButton={false} />
