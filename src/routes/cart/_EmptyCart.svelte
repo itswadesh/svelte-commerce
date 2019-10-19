@@ -3,14 +3,8 @@
 </script>
 
 <style>
-  .hr-line {
-    border-bottom: 1px solid lightgray;
-  }
   .fa-truck {
     transform: scaleX(-1);
-  }
-  .bb {
-    border-bottom: 1px dashed lightgray;
   }
   .fa-truck,
   .fa-undo,
