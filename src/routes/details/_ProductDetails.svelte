@@ -8,7 +8,6 @@
     return Math.round(percent);
   }
   function addToCart(qty) {
-    console.log(product.variants);
     cart.add({ pid: product._id, vid: product.variants[0]._id, qty });
   }
 </script>

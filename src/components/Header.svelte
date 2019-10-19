@@ -44,19 +44,19 @@
       <Search on:search={search} {home} />
     </div>
     {#if $session.token && $session.token != ''}
-      <a href="/my" class="ml-4">
+      <a href="/my" class="mx-4">
         <i class="fa fa-user" />
-        <span>Account</span>
+        <span class="hidden lg:block">Account</span>
       </a>
     {:else}
       <a href="/login" class="mx-4">
         <i class="fa fa-user" />
-        <span>Login</span>
+        <span class="hidden lg:block">Login</span>
       </a>
     {/if}
     <a href="/cart" class="mr-4">
       <i class="fa fa-shopping-cart" />
-      <span>Cart ({$cart.qty})</span>
+      <span class="hidden lg:block">Cart ({$cart.qty})</span>
     </a>
   </nav>
   {#if loading}

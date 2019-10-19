@@ -93,11 +93,12 @@
             bind:group={selectedItems}
             value={i.key}
             on:change={() => dispatch('go', { model, selectedItems })} />
-          <span
-            v-if="color"
-            data-colorhex="black"
-            class="colour-label colour-colorDisplay"
-            style.background-color={color} />
+          {#if color}
+            <span
+              data-colorhex="black"
+              class="colour-label colour-colorDisplay"
+              style.background-color={color} />
+          {/if}
           <span class="text-gray-800 ml-2 text-sm">{i.key}</span>
           <span class="text-gray-500 text-xs">({i.doc_count})</span>
           <div class="common-checkboxIndicator" />
