@@ -2,6 +2,7 @@
   import Button from "./../../components/ui/Button.svelte";
   import { currency } from "./../../lib";
   import { cart } from "./../../store/cart.js";
+  import { goto } from "@sapper/app";
   export let product = {};
   function calculateOffPercent(price, mrp) {
     let percent = ((mrp - price) * 100) / mrp;
@@ -9,6 +10,7 @@
   }
   function addToCart(qty) {
     cart.add({ pid: product._id, vid: product.variants[0]._id, qty });
+    goto("/cart");
   }
 </script>
 
