@@ -6,17 +6,6 @@
 </script>
 
 <div class="lg:w-1/4 mt-10 lg:pr-20 xs:w-full px-3">
-  <!-- <div class="w-full flex flex-wrap hr-line justify-between pb-2 relative">
-    <input
-      type="search"
-      class="bg-gray-200 border p-2 w-full rounded focus:outline-none"
-      placeholder="Promo Code" />
-    <button
-      class="absolute right-0 text-sm mt-2 text-gray-500 pr-2 focus:outline-none
-      hover:text-gray-600 cursor-pointer">
-      APPLY
-    </button>
-  </div> -->
   <div class="4/5 right-0 border-b border-dotted lg:mb-0">
     <div>
       <p class="text-black mt-4 font-normal text-xl">Price Summary</p>
@@ -73,7 +62,6 @@
         {currency(cart.total)}
       </div>
     </div>
-
     <slot />
   </div>
 </div>

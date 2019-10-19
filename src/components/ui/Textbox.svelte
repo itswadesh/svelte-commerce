@@ -23,7 +23,7 @@
 
   .floating-input:focus {
     outline: none;
-    border-bottom: 2px solid purple;
+    border-bottom: 2px solid red;
   }
 
   label {

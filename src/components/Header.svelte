@@ -35,6 +35,22 @@
   }
 </script>
 
+<style>
+  .desktop-badge {
+    font-size: 8px;
+    left: 11px;
+    top: -6px;
+    height: 15px;
+    width: 14px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .desktop-badge .number {
+    margin-top: 1.5px;
+    margin-left: -1px;
+  }
+</style>
+
 <header>
   <nav class="flex items-center justify-between m-4 text-gray-700">
     <a href="/" rel="prefetch" aria-label="logo" class="mx-4">
@@ -44,19 +60,24 @@
       <Search on:search={search} {home} />
     </div>
     {#if $session.token && $session.token != ''}
-      <a href="/my" class="mx-4">
-        <i class="fa fa-user" />
+      <a href="/my" class="mx-4 flex items-center">
+        <i class="fa fa-user mr-2" />
         <span class="hidden lg:block">Account</span>
       </a>
     {:else}
-      <a href="/login" class="mx-4">
-        <i class="fa fa-user" />
+      <a href="/login" class="mx-4 flex items-center">
+        <i class="fa fa-user mr-2" />
         <span class="hidden lg:block">Login</span>
       </a>
     {/if}
-    <a href="/cart" class="mr-4">
-      <i class="fa fa-shopping-cart" />
-      <span class="hidden lg:block">Cart ({$cart.qty})</span>
+    <a href="/cart" class="mr-4 flex items-center relative">
+      <i class="fa fa-shopping-cart mr-2" />
+      <span class="hidden lg:block">Cart</span>
+      <div
+        class="primary font-bold desktop-badge rounded-full px-1 absolute
+        text-center">
+        <div class="number">{$cart.qty}</div>
+      </div>
     </a>
   </nav>
   {#if loading}

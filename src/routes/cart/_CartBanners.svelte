@@ -5,12 +5,10 @@
   .fa-truck {
     transform: scaleX(-1);
   }
-  .bb {
-    border-bottom: 1px dashed lightgray;
-  }
   .fa-truck,
   .fa-undo,
-  .fa-shield {
+  .fa-shield,
+  .fa-lock {
     font-size: 2rem;
   }
 </style>
@@ -30,7 +28,7 @@
       </p>
     </div>
     <div class="bg-gray-200 rounded p-3 my-1">
-      <i class="fa fa-shield text-gray-500" />
+      <i class="fa fa-lock text-gray-500" />
       <p class="text-gray-500 text-lg font-normal">Secure shopping</p>
       <p class="text-gray-500 text-xs">
         Your payment details are fully encrypted

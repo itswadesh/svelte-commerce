@@ -63,4 +63,5 @@ If required change `src/config.js` according to your requirement
 - Generate production version files with css minified
 - PUT, POST, DELETE calls with Bearer Authorization
 - Storing tokens into cookie
+- Loader on route change with 100ms delay
 

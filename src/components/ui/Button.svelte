@@ -10,7 +10,8 @@
 <button
   {rounded}
   on:click
-  class="py-4 px-4 text-{size} bg-purple-500 hover:bg-purple-600 text-white"
+  class="py-4 px-4 text-{size}
+  {color} hover:bg-purple-600 text-white"
   class:rounded
   class:font-bold={size == 'xl'}
   class:w-full={full}>
