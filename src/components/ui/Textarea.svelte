@@ -22,7 +22,7 @@
 
   .floating-input:focus {
     outline: none;
-    border-bottom: 2px solid purple;
+    border-bottom: 2px solid red;
   }
 
   label {
@@ -56,6 +56,7 @@
 <div class={cls}>
   <div class="floating-label">
     <textarea
+      autofocus
       rows="4"
       bind:value
       class="floating-input bg-gray-100 border-b w-full rounded

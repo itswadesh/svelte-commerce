@@ -56,15 +56,13 @@ function getCart() {
             showCart = payload
         },
         checkout: async ({ paymentMethod, address }) => {
-            // let token = cookies.get('token')
-            paymentMethod = paymentMethod || 'COD'
             try {
-                let order = await post('electronics-orders', { address: { qrno: address }, paymentMethod: 'COD' })
+                let order = await post('orders', { address, paymentMethod: paymentMethod || 'COD' })
                 const data = await cart.fetch();
                 set(data)
                 return order
             } catch (e) {
-                console.log('setErr', e.toString())
+                console.log('err...', e.toString())
                 throw e
             }
         }

@@ -4,8 +4,6 @@
   import EmptyCart from "./_EmptyCart.svelte";
   import CartSummary from "./_CartSummary.svelte";
   import CartBanners from "./_CartBanners.svelte";
-  import CartItemSkeleton from "./_CartItemSkeleton.svelte";
-  import CartItem from "./_CartItem.svelte";
   import Textarea from "./../../components/ui/Textarea.svelte";
   import { cart } from "./../../store/cart.js";
   import { stores, goto } from "@sapper/app";
@@ -13,6 +11,12 @@
   import { currency } from "./../../lib";
   import { fadeIn, fadeOut } from "./../../actions/pageFade";
   let address;
+  async function placeOrder() {
+    try {
+      const o = await cart.checkout({ address });
+      goto("/cart/order-success?id=" + o._id);
+    } catch (e) {}
+  }
 </script>
 
 <main in:fadeIn out:fadeOut>
@@ -27,9 +31,9 @@
           <div class="w-full hr-line justify-between pb-2">
             <div class="w-full p-3 bg-white mt-3 flex flex-wrap">
               <div
-                class="text-left headings text-3xl w-20 border-r border-gray-200
+                class="text-left headings text-3xl border-r border-gray-200
                 font-bold">
-                Cart
+                Checkout
               </div>
               <span class="text-sm mx-4 text-gray-500">
                 {$cart.qty} items
@@ -45,7 +49,7 @@
         <CartSummary cart={$cart}>
           <Button
             full={true}
-            on:click={() => goto('/cart/checkout')}
+            on:click={placeOrder}
             rounded={true}
             size="xl"
             color="primary">
