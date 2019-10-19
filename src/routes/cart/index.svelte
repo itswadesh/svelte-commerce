@@ -10,6 +10,10 @@
   import { cart } from "./../../store/cart.js";
   import { currency } from "./../../lib";
   import { fadeIn, fadeOut } from "./../../actions/pageFade";
+  function goCheckout() {
+    if ($session.token && $session.token != "") goto("/cart/checkout");
+    else goto("/login");
+  }
 </script>
 
 <main in:fadeIn out:fadeOut>
@@ -47,7 +51,7 @@
         <CartSummary cart={$cart}>
           <Button
             full={true}
-            on:click={() => goto('/cart/checkout')}
+            on:click={goCheckout}
             rounded={true}
             size="xl"
             color="primary">

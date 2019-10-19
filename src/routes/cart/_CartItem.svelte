@@ -2,6 +2,10 @@
   import CartButtons from "./_CartButtons.svelte";
   import { currency } from "./../../lib";
   import { cart } from "./../../store/cart.js";
+  import { lazyload } from "../../actions/lazyload";
+  import { stores } from "@sapper/app";
+  const { preloading, page, session } = stores();
+
   export let product = {},
     variant = {},
     qty,
@@ -18,15 +22,6 @@
     }
   }
 
-  async function checkAndAddToCart(item) {
-    try {
-      loading = true;
-      await cart.setCart(item);
-      loading = false;
-    } catch (e) {
-      console.log("err...", e.toString());
-    }
-  }
   function calculateOffPercent(mrp, price) {
     let percent = ((mrp - price) * 100) / mrp;
     return Math.round(percent);
@@ -37,9 +32,10 @@
   <div class="w-1/2 lg:w-1/3">
     <div>
       <img
+        use:lazyload
         class="lg:rounded xs:rounded-b-none w-64"
         src="/3px.png"
-        data-src={product.img}
+        data-src={$session.settings.CDN_URL + product.img}
         alt="product image" />
       <!-- <div class="lg:hidden xs:visible text-black p-2 bg-gray-300 rounded rounded-t-none">Arrives 19 Sep</div> -->
     </div>

@@ -11,6 +11,7 @@
   // $: user = $session.user || {};
   function logout() {
     $session.user = {};
+    $session.token = null;
     cookies.set("token", null);
     goto("/");
   }

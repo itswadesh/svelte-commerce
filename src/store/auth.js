@@ -8,13 +8,14 @@ function authenticate() {
         subscribe,
         me: async () => {
             try {
-                let data = await get("users/me");
-                set(data)
+                let user = await get("users/me", null, cookies.get('token'));
+                user.token = cookies.get('token')
+                set(user)
                 // cookies.set('Authorization', data.token, { path: '/', maxAge: tokenExpiry })
-                return data
+                return user
             } catch (e) {
                 set({})
-                throw e.toString()
+                throw e
             }
         },
         login: async ({ phone, password }) => {

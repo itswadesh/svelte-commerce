@@ -15,7 +15,9 @@
     try {
       const o = await cart.checkout({ address });
       goto("/cart/order-success?id=" + o._id);
-    } catch (e) {}
+    } catch (e) {
+      goto("/login");
+    }
   }
 </script>
 
