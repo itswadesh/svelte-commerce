@@ -80,7 +80,6 @@
       </div>
     </a>
   </nav>
-  {loading}
   {#if loading}
     <Loader />
   {/if}
