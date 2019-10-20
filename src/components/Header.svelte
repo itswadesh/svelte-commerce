@@ -13,11 +13,11 @@
     segment;
 
   preloading.subscribe(_ => {
-    if (_ == true)
-      setTimeout(function() {
-        loading = _;
-      }, 250);
-    else loading = _;
+    // if (_ == true)
+    //   setTimeout(function() {
+    //     loading = _;
+    //   }, 250);
+    loading = _;
   });
 
   function logout() {
@@ -80,6 +80,7 @@
       </div>
     </a>
   </nav>
+  {loading}
   {#if loading}
     <Loader />
   {/if}
