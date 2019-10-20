@@ -1,7 +1,7 @@
 {
   "name": "sapper-ecommerce",
   "description": "e-commerce project created using Sapper, Svelte, TailwindCSS, Rollup",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "license": "MIT",
   "scripts": {
     "dev": "run-p watch:tailwind sapper:dev",

@@ -223,12 +223,17 @@
 </svelte:head>
 <main in:fadeIn out:fadeOut>
   <Header home={true} />
+
   <div class="relative z-50">
     <div class="h-full px-4">
       <div class="container mx-auto flex items-center justify-center">
-        <div
-          class="w-full md:w-1/2 lg:w-1/3 border-teal border-t-12 bg-white mb-6
-          rounded shadow-2xl">
+        <div class="w-full md:w-1/2 lg:w-1/3 mb-6 rounded shadow-2xl">
+          <div>
+            <p class="mb-2 p-2 text-xs bg-yellow-400 rounded">
+              SMS provider configured only for Indian Numbers. Please use email
+              instead
+            </p>
+          </div>
           <div class="p-0 secondary text-white rounded rounded-b-none">
             <h1 class="text-xl mb-6 text-left p-3">
               {#if !signup}
@@ -239,7 +244,7 @@
               {/if}
             </h1>
           </div>
-          <form on:submit|preventDefault={submit} class="center">
+          <form on:submit|preventDefault={submit} class="center bg-white">
             <div class="p-6 lg:p-12">
               {#if err}
                 <div class="text-red-600 mb-5 text-center">{err}</div>

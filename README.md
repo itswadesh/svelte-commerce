@@ -1,7 +1,19 @@
+<img src="https://github.com/itswadesh/sapper-ecommerce/blob/master/static/deployed.jpg?raw=true"></img>
+
+# Svelte Commerce - Attach Svelte store font to any ecommerce API (e.g. <a href="https://magento.com/">Magento</a>, <a href="https://www.moltin.com/">Moltin</a>, <a href="https://www.shopify.com/">Shopify</a> ...)
+
+![version](https://img.shields.io/badge/node-v12.x-blue.svg)
+![Branch stable](https://img.shields.io/badge/stable%20branch-master-blue.svg)
+![Branch Develop](https://img.shields.io/badge/dev%20branch-dev-blue.svg)
+<a href="https://codenx.slack.com">![Branch Develop](https://img.shields.io/badge/community%20chat-slack-FF1493.svg)</a>
+
+- Svelte Commerce is a storefront for your existing eCommerce. 
+- It is possible to connect with any eCommerce backend
+- No need to make a big leap or invest huge amount. Just take this opend source project and attach to existing backend.
+
 # Installation
 
-Install following
-- [NodeJS](https://nodejs.org/en/) - [Yarn](https://yarnpkg.com/en/) - [Git](https://git-scm.com/)
+Install - [NodeJS](https://nodejs.org/en/) - [Yarn](https://yarnpkg.com/en/) - [Git](https://git-scm.com/)
 
 ```
 git clone https://github.com/itswadesh/sapper-ecommerce.git
@@ -31,6 +43,8 @@ Next
 ```
 yarn live
 ```
+
+<img src="https://github.com/itswadesh/sapper-ecommerce/blob/master/static/deployed.jpg?raw=true"></img>
 
 # Configurations
 If required change `src/config.js` according to your requirement

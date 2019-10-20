@@ -41,9 +41,9 @@
 
 <style>
   .selected {
-    color: purple;
+    color: #da1c5f;
     background-color: white;
-    border-left: 4px solid purple;
+    border-left: 4px solid #da1c5f;
   }
   ul > li {
     font: bold;
@@ -51,17 +51,11 @@
     padding: 10px;
     font-size: 1.1rem;
   }
-  /* .show-for-small-only {
-  background: #f5f5f5;
-  height: 1px;
-  position: relative;
-  top: 13px;
-  margin-left: 15px;
-  width: calc(100% + 16px);
-} */
   ul > li {
-    cursor: pointer;
-    font-size: 1rem;
+    font: bold;
+    color: gray;
+    padding: 10px;
+    font-size: 1.1rem;
   }
 </style>
 
@@ -158,8 +152,10 @@
           {/if}
         </div>
       </div>
-      <div class="w-full text-center bg-purple-500 text-white absolute bottom-0">
-        <button class="w-full p-4 cursor-pointer font-bold focus:outline-none">
+      <div class="w-full text-center primary absolute bottom-0">
+        <button
+          class="w-full p-4 cursor-pointer font-bold focus:outline-none"
+          on:click={hide}>
           APPLY
         </button>
       </div>
