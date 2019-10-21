@@ -156,18 +156,12 @@
 </script>
 
 <style>
-  .border-t {
-    border-bottom: 1px solid lightgray;
-  }
   .container {
     max-height: 80vh !important;
     min-height: 80vh !important;
   }
   .wraper-hide {
     visibility: hidden;
-  }
-  .border-t {
-    border-bottom: 1px solid lightgray;
   }
   .otp-container {
     height: 48px;
@@ -206,10 +200,6 @@
     letter-spacing: 15px;
     font-size: 22px;
     padding-left: 16px;
-  }
-  input + label {
-    position: relative;
-    z-index: 999;
   }
 </style>
 
