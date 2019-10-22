@@ -28,7 +28,7 @@ function authenticate() {
             } catch (e) {
                 cookies.remove('token')
                 set({})
-                throw e.toString()
+                throw e
             }
         },
         signup: async (credentials) => {
@@ -39,7 +39,7 @@ function authenticate() {
                 return data;
             } catch (e) {
                 set({})
-                throw e.toString()
+                throw e
             }
         },
         logout: async () => {
@@ -49,24 +49,22 @@ function authenticate() {
                 return response;
             } catch (e) {
                 set({})
-                throw e.toString()
+                throw e
             }
         },
         forgotPassword: async (payload) => {
             try {
                 return await post('/users/forgot', payload)
             } catch (e) {
-                throw e.toString()
+                throw e
             }
         },
         async changePassword(payload) {
             try {
                 const data = await put('/users/password', payload)
-                console.log('info', data.message, { root: true })
-                // router.push('/my') // Push does not work from here. It stay at the same page without natigating. Rather it should be done from callee page
                 return data
             } catch (e) {
-                throw e.toString()
+                throw e
             }
         },
         async resetPassword(payload) {
@@ -78,20 +76,16 @@ function authenticate() {
                 }
                 return data
             } catch (e) {
-                throw e.toString()
+                throw e
             }
         },
-        async updateProfile({ firstName, lastName, state, city, zip, avatar, gender, dob, language }) {
+        async updateProfile({ firstName, lastName, state, city, zip, avatar, gender, dob, language, address }) {
             try {
-                const data = await put('/users/profile', { firstName, lastName, state, city, zip, avatar, gender, dob, language })
-                if (data) {
-                    // console.log('setUser', { email: data.email, firstName: data.firstName, lastName: data.lastName, avatar: data.avatar, dob: data.dob, gender: data.gender, language: data.language })
-                    // this.$cookies.set('Authorization', data.token, { path: '/', maxAge: tokenExpiry })
-                    // console.log('info', 'Profile updated.', { root: true })
-                    return data
-                }
+                const data = await put('/users/profile', { firstName, lastName, state, city, zip, avatar, gender, dob, language, address })
+                set(data)
+                return data;
             } catch (e) {
-                throw e.toString()
+                throw e
             }
         },
     }
