@@ -54,7 +54,7 @@
 </style>
 
 <div class={cls}>
-  <div class="floating-label">
+  <div class="floating-label mb-10">
     <textarea
       autofocus
       rows="4"

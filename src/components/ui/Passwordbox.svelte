@@ -55,7 +55,7 @@
 </style>
 
 <div class={cls}>
-  <div class="floating-label">
+  <div class="floating-label mb-10">
     <input
       type="password"
       bind:value

@@ -55,7 +55,7 @@
 </style>
 
 <div class={cls}>
-  <div class="floating-label">
+  <div class="floating-label mb-10">
     <input
       bind:value
       class="floating-input bg-gray-100 border-b w-full rounded

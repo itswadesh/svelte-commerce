@@ -1,1 +1,39 @@
-password
+<script>
+  import Passwordbox from "./../../components/ui/Passwordbox.svelte";
+  import { fadeIn, fadeOut } from "./../../actions/pageFade";
+  import Button from "./../../components/ui/Button.svelte";
+  import { auth } from "./../../store/auth";
+  let password = {},
+    show = false,
+    err = null;
+  async function submit() {
+    try {
+      password = await auth.changePassword(password);
+      show = true;
+    } catch (e) {
+      err = e;
+    }
+  }
+</script>
+
+<main in:fadeIn out:fadeOut class="m-auto w-full lg:w-1/2">
+  <div class="flex justify-between items-center my-4">
+    <a href="/my">
+      <i class="fa fa-arrow-left" />
+    </a>
+    <h1 class="text-2xl font-bold p-6 text-center">Change Password</h1>
+  </div>
+  {#if err}
+    <p class="mb-2 p-2 text-xs primary rounded">{err}</p>
+  {:else if show}
+    <p class="mb-2 p-2 text-xs bg-yellow-400 rounded">Password Changed</p>
+  {/if}
+  <form on:submit|preventDefault={submit} class="text-center bg-white">
+    <Passwordbox bind:value={password.oldPassword} label="Current Password" />
+    <Passwordbox bind:value={password.newPassword} label="New Password" />
+    <br />
+    <Button type="submit" full={true} rounded={true} size="xl" color="primary">
+      Save
+    </Button>
+  </form>
+</main>

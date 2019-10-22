@@ -1,13 +1,9 @@
 <style>
-  .hr-line {
-    border-bottom: 1px solid lightgray;
-  }
   .fa-truck {
     transform: scaleX(-1);
   }
   .fa-truck,
   .fa-undo,
-  .fa-shield,
   .fa-lock {
     font-size: 2rem;
   }
