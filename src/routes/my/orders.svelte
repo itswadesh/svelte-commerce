@@ -4,13 +4,14 @@
   import { date } from "./../../lib";
   import CartItem from "./../cart/_CartItem.svelte";
   import { fadeIn, fadeOut } from "./../../actions/pageFade";
+
   let orders;
   async function getOrders() {
     try {
       let o = await get("orders/my");
       return (orders = o.data);
     } catch (e) {
-      console.log("err...", e.toString());
+      goto("/login");
     }
   }
   getOrders();

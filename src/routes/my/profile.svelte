@@ -4,11 +4,16 @@
   import { fadeIn, fadeOut } from "./../../actions/pageFade";
   import { auth } from "./../../store/auth";
   import { get, put, post } from "./../../lib/api";
+  import { goto } from "@sapper/app";
   let user = {},
     show = false,
     err = null;
   async function getMe() {
-    user = await get("users/me");
+    try {
+      user = await get("users/me");
+    } catch (e) {
+      goto("/login");
+    }
   }
   getMe();
   async function submit() {

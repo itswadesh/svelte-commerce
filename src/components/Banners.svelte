@@ -1,5 +1,5 @@
 <script>
-  import { goto } from "@sapper/app";
+
 </script>
 
 <div class="flex flex-wrap">

@@ -3,9 +3,18 @@
   import { fadeIn, fadeOut } from "./../../actions/pageFade";
   import Button from "./../../components/ui/Button.svelte";
   import { auth } from "./../../store/auth";
+  import { goto } from "@sapper/app";
   let password = {},
     show = false,
     err = null;
+  async function getMe() {
+    try {
+      user = await get("users/me");
+    } catch (e) {
+      goto("/login");
+    }
+  }
+  getMe();
   async function submit() {
     try {
       password = await auth.changePassword(password);
