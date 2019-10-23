@@ -1,5 +1,8 @@
 <script>
   import { goto } from "@sapper/app";
+  import { stores } from "@sapper/app";
+  const { session } = stores();
+  import { lazyload } from "./../actions/lazyload";
 </script>
 
 <style>
@@ -57,36 +60,6 @@
     filter: drop-shadow(0px 5px 3px black);
     animation: drop 1.5s ease;
   }
-  /* .big-circle {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    z-index: -1;
-    opacity: 0.5;
-    height: 80%;
-  }
-  .medium-circle {
-    position: absolute;
-    top: 30%;
-    right: 30%;
-    z-index: -1;
-    height: 60%;
-    opacity: 0.4;
-  }
-  .small-circle {
-    position: absolute;
-    bottom: 0%;
-    left: 20%;
-    z-index: -1;
-  }
-  .laptop-select {
-    width: 15%;
-    display: flex;
-    justify-content: space-around;
-    position: absolute;
-    right: 20%;
-  } */
-
   @keyframes drop {
     0% {
       opacity: 0;
@@ -118,17 +91,6 @@
     .cover img {
       height: 80%;
     }
-    /* .laptop-select {
-      bottom: 5%;
-      right: 50%;
-      width: 50%;
-      transform: translate(50%, 5%);
-    }
-    .small-circle,
-    .medium-circle,
-    .big-circle {
-      opacity: 0.2;
-    } */
   }
 </style>
 
@@ -151,18 +113,10 @@
     </div>
   </div>
   <div class="cover">
-    <img src="./img/matebook.png" alt="matebook" />
+    <img
+      use:lazyload
+      src="/3px.png"
+      alt="matebook"
+      data-src={$session.settings.CDN_URL + $session.settings.banners.hero.img} />
   </div>
 </section>
-
-<!-- <div class="laptop-select">
-  <img src="./img/arrow-left.svg" alt="" />
-  <img src="./img/dot.svg" alt="" />
-  <img src="./img/dot-full.svg" alt="" />
-  <img src="./img/dot-full.svg" alt="" />
-  <img src="./img/arrow-right.svg" alt="" />
-</div> -->
-
-<!-- <img class="big-circle" src="./img/big-eclipse.svg" alt="" />
-<img class="medium-circle" src="./img/mid-eclipse.svg" alt="" />
-<img class="small-circle" src="./img/small-eclipse.svg" alt="" /> -->

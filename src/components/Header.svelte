@@ -60,12 +60,12 @@
       <Search on:search={search} {home} />
     </div>
     {#if $session.token && $session.token != ''}
-      <a href="/my" class="mx-4 flex items-center">
+      <a href="/my" class="mx-4 flex items-center" aria-label="Account">
         <i class="fa fa-user mr-2" />
         <span class="hidden lg:block">Account</span>
       </a>
     {:else}
-      <a href="/login" class="mx-4 flex items-center">
+      <a href="/login" class="mx-4 flex items-center" aria-label="Login">
         <i class="fa fa-user mr-2" />
         <span class="hidden lg:block">Login</span>
       </a>

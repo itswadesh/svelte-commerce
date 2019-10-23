@@ -26,20 +26,14 @@
     cursor: default;
     font-weight: 400;
   }
-  li {
-    display: inline-block;
-    font-weight: 500;
-    cursor: pointer;
-    border-radius: 0.4rem;
-  }
 </style>
 
 <div class="flex flex-row w-full px-1">
-  <ul
+  <div
     class="flex-1 pagination-container justify-start w-full text-xs lg:text-sm">
-    <li class="pagination-paginationMeta w-full lg:w-auto">
+    <div class="pagination-paginationMeta w-full lg:w-auto">
       Page {current} of {count}
-    </li>
+    </div>
     <div class="flex-1 justify-start w-full lg:w-auto">
       {#if current > 1}
         <button
@@ -53,12 +47,12 @@
         </button>
       {/if}
       {#each { length: count } as _, i}
-        <li
+        <div
           class="lg:py-2 lg:px-3 py-2 px-1 lg:mx-2"
           class:active={current === i}
           on:click={() => dispatch('change', i + 1)}>
           {i + 1}
-        </li>
+        </div>
       {/each}
       <button
         class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4
@@ -69,5 +63,5 @@
         <i class="fa fa-caret-right" />
       </button>
     </div>
-  </ul>
+  </div>
 </div>

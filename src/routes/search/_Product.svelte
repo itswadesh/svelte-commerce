@@ -37,7 +37,7 @@
             use:lazyload
             src={$session.settings.CDN_URL + product._source.img[0] + '?tr=w-3,h-2'}
             data-src={$session.settings.CDN_URL + product._source.img[0] + '?tr=w-300,h-200'}
-            alt={product.name}
+            alt=""
             class="w-full zoom mb-3"
             style="object-fit: contain; max-height:316px;" />
         {/if}

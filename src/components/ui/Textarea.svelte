@@ -56,7 +56,6 @@
 <div class={cls}>
   <div class="floating-label mb-10">
     <textarea
-      autofocus
       rows="4"
       bind:value
       class="floating-input bg-gray-100 border-b w-full rounded

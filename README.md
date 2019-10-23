@@ -1,4 +1,4 @@
-<img src="https://github.com/itswadesh/sapper-ecommerce/blob/master/static/litekart-banner.png?raw=true"></img>
+<img src="https://github.com/itswadesh/sapper-ecommerce/blob/master/static/litekart-banner.png?raw=true" alt/>
 
 # Svelte Commerce - Attach Svelte store front to any ecommerce API (e.g. <a href="https://magento.com/">Magento</a>, <a href="https://www.moltin.com/">Moltin</a>, <a href="https://www.shopify.com/">Shopify</a> ...)
 
@@ -6,6 +6,13 @@
 ![Branch stable](https://img.shields.io/badge/stable%20branch-master-blue.svg)
 ![Branch Develop](https://img.shields.io/badge/dev%20branch-dev-blue.svg)
 <a href="https://codenx.slack.com">![Branch Develop](https://img.shields.io/badge/community%20chat-slack-FF1493.svg)</a>
+
+# Built for speed
+  ## Google Lighthouse/Pagespeed Audit Score (Search Page)
+  <img src="https://github.com/itswadesh/sapper-ecommerce/blob/master/static/light-house-search.jpg?raw=true" alt />
+  
+  ## Google Lighthouse/Pagespeed Audit Score (Detail Page)
+  <img src="https://github.com/itswadesh/sapper-ecommerce/blob/master/static/light-house-detail.jpg?raw=true" alt />
 
 - Svelte Commerce is a storefront for your existing eCommerce. 
 - It is possible to connect with any eCommerce backend
@@ -44,7 +51,7 @@ Next
 yarn live
 ```
 
-<img src="https://github.com/itswadesh/sapper-ecommerce/blob/master/static/deployed.jpg?raw=true"></img>
+<img src="https://github.com/itswadesh/sapper-ecommerce/blob/master/static/deployed.jpg?raw=true" alt />
 
 # Configurations
 If required change `src/config.js` according to your requirement

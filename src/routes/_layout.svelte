@@ -1,11 +1,9 @@
 <script>
-  // import Header from "../components/Header.svelte";
-
-  // export let segment;
+  import Footer from "../components/Footer.svelte";
 </script>
-
-<!-- <Header {segment} /> -->
 
 <main>
   <slot />
 </main>
+
+<Footer />
