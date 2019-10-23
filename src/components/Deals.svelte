@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { truncate } from "./../lib";
+  import { lazyload } from "./../actions/lazyload";
   import { stores } from "@sapper/app";
   const { session } = stores();
   export let products = [],
@@ -79,7 +80,12 @@
       {#each products as p (p._id)}
         <div class="mx-1 lg:mx-5">
           <a href={'/' + p.slug + '?id=' + p._id}>
-            <img class="h-32" src={$session.settings.CDN_URL + p.img[0]} alt="" />
+            <img
+              use:lazyload
+              src={$session.settings.CDN_URL + p.img[0] + '?tr=w-3,h-3'}
+              data-src={$session.settings.CDN_URL + p.img[0]}
+              class="h-32"
+              alt="" />
             <div class="mt-3 text-gray-800">{truncate(p.name, 45)}</div>
           </a>
         </div>
