@@ -14,7 +14,8 @@
   ## Google Lighthouse/Pagespeed Audit Score (Detail Page)
   <img src="https://github.com/itswadesh/sapper-ecommerce/blob/master/static/light-house-detail.jpg?raw=true" alt />
 
-- Svelte Commerce is a storefront for your existing eCommerce. 
+# What is Litekart?
+- Litekart is a storefront for your existing eCommerce. 
 - It is possible to connect with any eCommerce backend
 - No need to make a big leap or invest huge amount. Just take this opend source project and attach to existing backend.
 
@@ -85,4 +86,5 @@ If required change `src/config.js` according to your requirement
 - PUT, POST, DELETE calls with Bearer Authorization
 - Storing tokens into cookie
 - Loader on route change with 100ms delay
+- Integrated Google Analytics
 

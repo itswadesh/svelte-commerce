@@ -15,10 +15,14 @@ async function authenticationMiddleware(req, res, next) {
     } else {
         req.user = {}
         req.token = null
+        cookies.set('token', null)
     }
     try {
         cart = await get("cart", null, cookies.get('token'), `guest=${cookies.get('guest')}`);
     } catch (e) {
+        req.user = {}
+        req.token = null
+        cookies.set('token', null)
         console.log('err at cart', e.toString());
     }
     req.cart = cart

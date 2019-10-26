@@ -28,8 +28,7 @@
     "node-fetch": "^2.6.0",
     "polka": "next",
     "siema": "^1.5.1",
-    "sirv": "^0.4.0",
-    "svelte-feather-icons": "^2.0.0"
+    "sirv": "^0.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

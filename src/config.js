@@ -6,7 +6,7 @@ export const typingTimeout = 0 // After this delay the search api will be fired
 const HOST = 'https://www.hopyshopy.com'
 const currency = { symbol: '₹', code: 'INR' }
 const tokenExpiry = 60 * 60 * 24 * 365 // Login validity in seconds
-const ANALYTICS_TRACKING_ID = 'UA-131207633-1'
+const ANALYTICS_TRACKING_ID = 'UA-49421899-5'
 const sorts = [
     { name: "Relevance", val: null },
     { name: "Whats New", val: "-createdAt" },
