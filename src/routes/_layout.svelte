@@ -2,7 +2,7 @@
   import Footer from "../components/Footer.svelte";
 </script>
 
-<main>
+<main style="min-height:92.5vh">
   <slot />
 </main>
 

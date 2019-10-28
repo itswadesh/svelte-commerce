@@ -7,14 +7,14 @@
   let password = {},
     show = false,
     err = null;
-  async function getMe() {
-    try {
-      user = await get("users/me");
-    } catch (e) {
-      goto("/login");
-    }
-  }
-  getMe();
+  // async function getMe() {
+  //   try {
+  //     user = await get("users/me");
+  //   } catch (e) {
+  //     goto("/login");
+  //   }
+  // }
+  // getMe();
   async function submit() {
     try {
       password = await auth.changePassword(password);
