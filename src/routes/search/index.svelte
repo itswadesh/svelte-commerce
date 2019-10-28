@@ -46,7 +46,7 @@
       searchQuery = query.q;
       let url = constructQry("electronics/es", query);
       const p = await get(url);
-      pageSize = p.data.length;
+      pageSize = p.pageSize;
       productCount = p.count;
       products = p.data;
       facets = p.facets.all_aggs;
