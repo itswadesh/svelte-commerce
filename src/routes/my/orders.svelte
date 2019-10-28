@@ -18,12 +18,14 @@
 </script>
 
 <main in:fadeIn out:fadeOut>
-  <div class="mt-0 lg:mt-10 w-full lg:px-10 px-2">
+  <div class="lg:px-10 px-2">
     <div class="flex justify-between items-center my-4">
       <a href="/my">
         <i class="fa fa-arrow-left" />
       </a>
-      <div class="text-2xl font-bold p-6 text-center lg:text-left">Orders</div>
+      <div class="text-2xl font-bold lg:p-6 text-center lg:text-left">
+        Orders
+      </div>
     </div>
     <!-- {JSON.stringify(orders)} -->
     {#await getOrders()}

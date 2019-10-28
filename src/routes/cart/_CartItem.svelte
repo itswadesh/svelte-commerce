@@ -28,7 +28,7 @@
   }
 </script>
 
-<div class="flex justify-between pt-5 pb-5 border-b border-gray-300">
+<div class="flex justify-between pt-5 pb-5">
   <div class="w-1/2 lg:w-1/3">
     <div>
       <img

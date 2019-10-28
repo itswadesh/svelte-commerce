@@ -60,7 +60,7 @@
       <Search on:search={search} {home} />
     </div>
     {#if $session.token && $session.token != ''}
-      <a href="/my" class="mx-4 flex items-center" aria-label="Account">
+      <a href="/my/orders" class="mx-4 flex items-center" aria-label="Account">
         <i class="fa fa-user mr-2" />
         <span class="hidden lg:block">Account</span>
       </a>
