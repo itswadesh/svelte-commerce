@@ -54,10 +54,7 @@
 <header>
   <nav class="flex items-center justify-between m-4 text-gray-700">
     <a href="/" rel="prefetch" aria-label="logo" class="mx-4">
-      <img
-        class="w-6 h-6"
-        src={$session.settings.CDN_URL + '/favicon.png'}
-        alt="logo" />
+      <img class="w-6 h-6" src={'/favicon.png'} alt="logo" />
     </a>
     <div class="mx-2 border-gray-300 relative" style="flex:1">
       <Search on:search={search} {home} />
