@@ -117,6 +117,6 @@
       use:lazyload
       src="/3px.png"
       alt="matebook"
-      data-src={$session.settings.CDN_URL + $session.settings.banners.hero.img} />
+      data-src={$session.settings.banners && $session.settings.banners.hero && $session.settings.banners.hero.img} />
   </div>
 </section>
