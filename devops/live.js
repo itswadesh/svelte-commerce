@@ -5,8 +5,8 @@ dotenv.config({ path: '.env' });
 // Start Config
 const PM2_NAME = 'h'
 const REMOTE_DIR = '/var/www/hopyshopy/www'
-const REMOTE_HOST = '137.116.115.92'
-const REMOTE_USER = 'ubuntu'
+const REMOTE_HOST = '139.59.42.129'
+const REMOTE_USER = 'root'
 const PRIVATE_KEY = process.env.LIVE_KEY
 const FILE_NAMES = '__sapper__ package.json static'
 // End Config
