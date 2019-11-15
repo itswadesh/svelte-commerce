@@ -5,9 +5,14 @@
 ![version](https://img.shields.io/badge/node-v12.x-blue.svg)
 ![Branch stable](https://img.shields.io/badge/stable%20branch-master-blue.svg)
 ![Branch Develop](https://img.shields.io/badge/dev%20branch-dev-blue.svg)
-<a href="https://codenx.slack.com">![Branch Develop](https://img.shields.io/badge/community%20chat-slack-FF1493.svg)</a>
+<a href="https://codenx.slack.com" target="blank">![Branch Develop](https://img.shields.io/badge/community%20chat-slack-FF1493.svg)</a>
 
 # Built for speed
+
+> Following are the test results when all servers (Elasticsearch, Node, Static Server, Client) give a ping response <100 ms. The demo app hopyshopy.com is hosted at Mumbai (India), If you are testing from another country, the results my vary. 
+
+> Solution to the above issue is to use a CDN. I am trying to find sponcers to migrate all to a CDN in near future.
+
   ## Google Lighthouse/Pagespeed Audit Score (Search Page)
   <img src="https://github.com/itswadesh/sapper-ecommerce/blob/master/static/light-house-search.jpg?raw=true" alt />
   
