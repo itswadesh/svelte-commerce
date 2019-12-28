@@ -10,7 +10,7 @@ const ANALYTICS_TRACKING_ID = 'UA-49421899-5'
 const sorts = [
     { name: "Relevance", val: null },
     { name: "Whats New", val: "-createdAt" },
-    { name: "Price low to high", val: "price" },
-    { name: "Price high to low", val: "-price" }
+    { name: "Price low to high", val: "localPrice" },
+    { name: "Price high to low", val: "-localPrice" }
 ]
 export { sorts, HOST, currency, tokenExpiry, apiUrl, storeUrl, ANALYTICS_TRACKING_ID }
