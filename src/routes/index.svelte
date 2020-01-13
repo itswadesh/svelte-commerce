@@ -29,28 +29,27 @@
 </script>
 
 <svelte:head>
-  <title>List of India's best laptops - Curated manually</title>
+  <title>Online store for electronics using Litekart ecommerce</title>
   <meta
     data-hid="description"
     name="description"
-    content="Collection of handpicked electronic items, worth buying. These are
-    best in quality, performance, feels good to use, ergonomic, stylish" />
-  <meta
-    data-hid="og:title"
-    name="og_title"
-    content="List of India's best laptops - Curated manually" />
+    content="Online electronics store using Litekart ecommerce platform.
+    Features include search, filter, lazy load, infinite scrolling" />
+  <meta data-hid="og:title" name="og_title" content="" />
   <meta
     data-hid="og:title"
     name="og_title"
     property="og:title"
-    content="Collection of handpicked electronic items, worth buying" />
+    content="Online store for electronics using Litekart ecommerce" />
   <meta name="og_url" property="og:url" content={`${HOST}/search`} />
   <!-- Twitter -->
   <meta name="twitter:title" content="Hand picked laptops for you" />
   <meta
     name="twitter:description"
-    content="Collection of handpicked electronic items, worth buying. These are
-    best in quality, performance, feels good to use, ergonomic, stylish" />
+    content="Online electronics store using Litekart ecommerce platform.
+    Features include search, filter, lazy load, infinite scrolling" />
+  <link rel="canonical" href={`${HOST}`} />
+  <link rel="alternate" hreflang="en" href={`${HOST}`} />
 </svelte:head>
 <Header home={true} />
 <Hero />
