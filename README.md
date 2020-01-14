@@ -1,4 +1,4 @@
-![Litekart](https://www.litekart.in)
+[Litekart](https://www.litekart.in)
 
 <img src="https://github.com/itswadesh/sapper-ecommerce/blob/master/static/litekart-banner.png?raw=true" alt/>
 
