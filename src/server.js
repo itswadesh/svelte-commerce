@@ -11,14 +11,15 @@ const { PORT, NODE_ENV, API_URL } = process.env;
 const proxy = require('http-proxy-middleware');
 const apiProxy = proxy('/api', { target: API_URL || apiUrl, changeOrigin: true });
 const imgProxy = proxy('/images', { target: API_URL || apiUrl, changeOrigin: true });
+const sitemapProxy = proxy('/sitemap-hs.xml', { target: API_URL || apiUrl, changeOrigin: true });
+
 
 const dev = NODE_ENV === 'development';
 polka()
 	.use(
 		compression({ threshold: 0 }),
 		sirv('static', { dev }),
-		apiProxy,
-		imgProxy,
+		apiProxy, imgProxy, sitemapProxy,
 		authenticationMiddleware,
 		sapper.middleware({
 			session: (req, res) => ({
