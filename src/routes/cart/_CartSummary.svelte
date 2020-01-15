@@ -45,7 +45,7 @@
     </div>
     <div class="text-xs bg-red-100 rounded p-2 text-gray-500 my-2">
       <div class="flex items-center">
-        <img src="/shield.png" class="w-12 pr-2" alt="shield image" />
+        <img src="/shield.png" class="w-12 pr-2" alt="" />
         <div class="ml-1 justify">
           Genuine products. 15 day returns. 100% secure payments.
           <span class="text-black">Know More</span>

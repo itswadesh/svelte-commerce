@@ -31,7 +31,7 @@
             <img
               class="containerr w-1/2"
               src="/emptycart.png"
-              alt="empty cart" />
+              alt="" />
           </div>
         </div>
         <div class="w-full left-0">

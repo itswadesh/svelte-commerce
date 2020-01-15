@@ -36,7 +36,7 @@
         class="lg:rounded xs:rounded-b-none w-64"
         src="/3px.png"
         data-src={$session.settings.CDN_URL + product.img}
-        alt="product image" />
+        alt="" />
       <!-- <div class="lg:hidden xs:visible text-black p-2 bg-gray-300 rounded rounded-t-none">Arrives 19 Sep</div> -->
     </div>
   </div>
@@ -86,7 +86,7 @@
                     <img
                       src="/loading.svg"
                       class="w-3 h-3 rotateOutDownLeft"
-                      alt="loading icon" />
+                      alt="..." />
                   {:else}
                     <i class="fa fa-trash" />
                   {/if}
