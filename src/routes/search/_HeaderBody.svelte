@@ -31,7 +31,7 @@
         <select
           bind:value={sortBy}
           class="text-black border-gray-100 cursor-pointer cursor-pointer block
-          bg-white border border-gray-400 hover:border-gray-500 px-4 py-2
+          border border-gray-400 hover:border-gray-500 px-4 py-2
           focus:outline-none"
           on:change={sort}>
           {#each sorts as s, ix}
@@ -48,7 +48,7 @@
     </div>
   </div>
 </div>
-<div class="lg:hidden flex shadow-md py-4 bg-white w-full mb-1">
+<div class="lg:hidden flex shadow-md py-4 w-full mb-1">
   <button
     class="flex-1 flex items-center text-left text-primary"
     on:click={() => dispatch('hide', !showFilters)}>
@@ -63,7 +63,7 @@
     <select
       aria-label="sort"
       bind:value={sortBy}
-      class="flex-1 text-primary border-gray-100 cursor-pointer bg-white border
+      class="flex-1 text-primary border-gray-100 cursor-pointer border
       border-gray-400 hover:border-gray-500 px-4 py-2 focus:outline-none"
       on:change={sort}>
       {#each sorts as s, ix}
