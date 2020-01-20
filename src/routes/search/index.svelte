@@ -3,6 +3,7 @@
   import Header from "./../../components/Header.svelte";
   import Pagination from "./_Pagination.svelte";
   import Product from "./_Product.svelte";
+  import Product1 from "./../../components/Product.svelte";
   import ProductSkeleton from "./_ProductSkeleton.svelte";
   import DesktopFilters from "./_DesktopFilters.svelte";
   import MobileFilters from "./_MobileFilters.svelte";
@@ -113,7 +114,7 @@
         {:else if products && products.length > 0}
           <div class="flex flex-wrap">
             {#each products as p}
-              <Product product={p} />
+              <Product1 product={p} />
             {/each}
           </div>
         {/if}
