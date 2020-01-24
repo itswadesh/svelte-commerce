@@ -2,7 +2,7 @@
 <img src="https://github.com/itswadesh/sapper-ecommerce/blob/master/static/litekart-banner.png?raw=true" alt/>
 </a>
 
-# Svelte Commerce(Litekart) - Attach Svelte store front to any ecommerce API (e.g. <a href="https://magento.com/">Magento</a>, <a href="https://www.moltin.com/">Moltin</a>, <a href="https://www.shopify.com/">Shopify</a> ...)
+# <a href="https://www.litekart.in/">Svelte Commerce</a> (Litekart) - Attach Svelte store front to any ecommerce API (e.g. <a href="https://magento.com/">Magento</a>, <a href="https://www.moltin.com/">Moltin</a>, <a href="https://www.shopify.com/">Shopify</a> ...)
 
 ![version](https://img.shields.io/badge/node-v12.x-blue.svg)
 ![Branch stable](https://img.shields.io/badge/stable%20branch-master-blue.svg)
