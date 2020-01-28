@@ -25,7 +25,7 @@
   import { goto, stores } from "@sapper/app";
   const { session } = stores();
   import { onMount } from "svelte";
-  export let product, segment;
+  export let product;
 </script>
 
 <svelte:head>
