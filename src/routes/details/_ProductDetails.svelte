@@ -17,7 +17,7 @@
 <div class="w-full md:w-6/12 lg:w-7/12 leading-relaxed">
   <div class="pb-4 border-b border-gray-200 px-3">
     <p class="text-2xl text-gray-700 font-semibold">{product.brandName}</p>
-    <p>{product.name}</p>
+    <p class="leading-loose">{product.name}</p>
   </div>
   {#if product}
     <div class="flex flex-wrap">
@@ -114,71 +114,63 @@
         <a
           target="blank"
           href={product.amazonUrl}
-          class="w-1/2 lg:w-1/3 mr-2 bg-red-600 hover:bg-red-500 text-white py-2
-          px-3 rounded font-bold text-xs lg:text-lg text-center">
-          BUY FROM
-          <img
-            src="amazon.jfif"
-            alt="amazon"
-            style="display:inline-block;width: 30px; height: 30px;" />
+          class="w-full lg:mx-64 text-center items-center justify-center h-14
+          text-2xl outline-none font-bold mr-2 px-32 py-2 rounded primary">
+          Get it from
+          <i class="fab fa-amazon mt-2" />
         </a>
-      {/if}
-      {#if product.flipkart && product.flipkart.price}
+      {:else if product.flipkart && product.flipkart.price}
         <a
           target="blank"
           href={product.productUrl}
-          class="w-1/2 lg:w-1/3 mr-2 bg-white border border-yellow-700
-          text-black py-2 px-3 rounded font-bold text-xs lg:text-lg text-center">
-          BUY FROM
-          <img
-            src="/flipkart.jfif"
-            alt="flipkart"
-            style="display:inline-block;width: 30px; height: 30px;" />
+          class="w-full lg:mx-64 text-center items-center justify-center h-14
+          text-2xl outline-none font-bold mr-2 px-4 lg:px-32 py-2 rounded
+          primary">
+          Get it from
+          <i class="fas fa-store mt-2" />
         </a>
-      {/if}
-      {#if product.localPrice}
+      {:else if product.localPrice}
         <button
           target="blank"
           on:click={() => addToCart(1)}
-          class="w-1/2 lg:w-1/3 bg-white border border-green-600 text-black py-2
-          px-3 rounded font-bold text-xs lg:text-lg text-center">
-          ADD TO CART
-          <img
-            src="/store.svg"
-            alt="local"
-            style="display:inline-block;width: 30px; height: 30px;" />
+          class="w-full lg:mx-64 items-center w-1/2 lg:w-1/3 bg-white border
+          border-red-600 text-primary py-2 px-3 rounded font-bold lg:text-lg
+          text-2xl text-center">
+          Add to cart
+          <i class="fas fa-shopping-cart" />
         </button>
       {/if}
     </div>
-    <div class="py-8 border-b border-gray-300 px-3">
-      <p class="font-bold text-lg">
-        TOP FEATURES
-        <i class="fa fa-tag ml-2 text-gray-600" aria-hidden="true" />
-      </p>
-      <div>
+    <div class="py-4 border-b border-gray-300 px-3">
+      <h4 class="font-bold text-xl">Top Features</h4>
+      <ul class="text-xs">
         {#if product.keyFeatures}
           {#each product.keyFeatures as k}
-            <div
-              class="w-full my-2 lg:w-3/5 relative text-left px-3 py-2 rounded
-              border hover:border-gray-500">
-              <div class="font-bold">{k}</div>
-            </div>
+            <li
+              class="w-full inline lg:w-3/5 pr-3 hover:text-gray-600
+              tracking-widest leading-loose">
+              &bull; {k}
+            </li>
           {/each}
         {/if}
-      </div>
+      </ul>
     </div>
-    <div class="py-8 border-b border-gray-300 px-3">
-      <p class="font-bold text-lg">
-        PRODUCT DETAILS
-        <i class="fa fa-list-alt ml-2 text-gray-600" aria-hidden="true" />
-      </p>
-      <span class="text-gray-500">{product.description}</span>
+    {#if product.description}
+      <br />
+      <h4 class="mt-2 font-bold text-xl my-4">Description</h4>
+      <div class="text-xs tracking-widest">{product.description}</div>
+    {/if}
+    <div class="ml-4">
+      <h4 class="font-bold text-xl my-4">Attributes</h4>
       {#if product.features}
         {#each product.features as f}
-          <p class="font-bold text-lg">{f.key}</p>
-          <div class="flex flex-wrap">
-            <div class="border-b border-gray-400 mr-4 w-1/2">
-              <span class="text-gray-700 text-sm">{f.val}</span>
+          <div class="flex flex-wrap items-center">
+            <div
+              class="text-sm font-semibold w-1/3 tracking-widest leading-loose">
+              {f.key}
+            </div>
+            <div class="text-gray-700 text-xs tracking-widest leading-loose">
+              {f.val}
             </div>
           </div>
         {/each}
