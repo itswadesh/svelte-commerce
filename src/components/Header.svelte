@@ -50,7 +50,7 @@
     <a href="/" rel="prefetch" aria-label="logo" class="mx-4">
       <img class="w-6 h-6" src={'/favicon.png'} alt="logo" />
     </a>
-    <div class="mx-2 border-gray-300 relative" style="flex:1">
+    <div class="flex justify-center w-full mx-2 border-gray-300">
       <Search on:search={search} {home} />
     </div>
     {#if $session.token && $session.token != ''}
