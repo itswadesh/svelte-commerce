@@ -22,7 +22,11 @@
   }
 </script>
 
-<form novalidate autocomplete="off" on:submit|preventDefault={search}>
+<form
+  class="text-center"
+  novalidate
+  autocomplete="off"
+  on:submit|preventDefault={search}>
   <div class="absolute">
     <i class="fa fa-search m-3 text-gray-500" aria-hidden="true" />
   </div>
@@ -32,8 +36,8 @@
     on:input={() => search(query.q)}
     bind:this={searchInput}
     bind:value={query.q}
-    class="w-full px-10 bg-purple-white pr-4 border border-gray-200 rounded-full
-    border-0 h-10 focus:outline-none text-xs shadow"
+    class="w-full lg:w-1/2 px-10 bg-purple-white pr-4 border border-gray-200
+    rounded-full border-0 h-10 focus:outline-none text-xs shadow"
     placeholder="Search for products,brands and more"
     name="search" />
 </form>
