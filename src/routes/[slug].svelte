@@ -73,7 +73,7 @@
     itemprop="image"
     content={product && product.localPrice} />
 </svelte:head>
-<Header />
+<Header home={true} />
 <main in:receive out:send>
   {#if !product}
     Requested product not found.
