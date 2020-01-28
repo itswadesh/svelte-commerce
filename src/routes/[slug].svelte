@@ -7,23 +7,13 @@
   import Breadcrumb from "./details/_Breadcrumb.svelte";
   import ProductDetails from "./details/_ProductDetails.svelte";
   import { send, receive } from "./../actions/crossfade";
-
   export async function preload({ params, query }) {
     let product = {},
-      err = null,
-      structuredData = {};
+      err = null;
     try {
       product = await get(`electronics/${query.id}`);
       if (!product) return;
-      structuredData = {
-        "@context": "http://schema.org/",
-        "@type": "Product",
-        name: product && product.name,
-        description: product && product.description,
-        sku: product && product.sku,
-        image: HOST + (product && product.img)
-      };
-      return { product, structuredData };
+      return { product };
     } catch (e) {
       product = {};
       this.error(500, e.toString());
@@ -35,7 +25,7 @@
   import { goto, stores } from "@sapper/app";
   const { session } = stores();
   import { onMount } from "svelte";
-  export let product, structuredData;
+  export let product, segment;
 </script>
 
 <svelte:head>

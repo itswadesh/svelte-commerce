@@ -3,8 +3,7 @@
   import { stores } from "@sapper/app";
   const { preloading, page, session } = stores();
   export let product = {},
-    currentImage = null,
-    carouselShow = false;
+    currentImage = null;
 
   currentImage = product.img && product.img[0];
   function showAsCurrentImage(image) {

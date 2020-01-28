@@ -4,11 +4,8 @@
   import { constructURL2 } from "./../../lib";
   import { goto, stores } from "@sapper/app";
   const { session, page } = stores();
-  export let clear = false,
-    facets = {},
-    query = {},
-    fl = {},
-    loadingPrice = true; // Required because after loading finished then only we will initiate the price slider component
+  export let facets = {},
+    query = {}; // Required because after loading finished then only we will initiate the price slider component
   function clearFilters() {
     let url = constructURL2("/search", {});
     goto(url);

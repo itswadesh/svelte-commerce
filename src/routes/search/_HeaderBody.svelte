@@ -8,8 +8,7 @@
   const dispatch = createEventDispatcher();
   export let sortBy = null,
     count = 0,
-    showFilters = false,
-    searchQuery = "";
+    showFilters = false;
   let query = {};
   page.subscribe(page => {
     query = page.query;

@@ -10,8 +10,7 @@
   page.subscribe(page => {
     query = page.query;
   });
-  export let clear = Boolean,
-    facets = [];
+  export let facets = [];
   let selected = "brands",
     loadingPrice = true, // Required because after loading finished then only we will initiate the price slider component
     showMobileFilter = true;

@@ -1,7 +1,5 @@
 <script>
-  export let icon = "",
-    size = "default",
-    text = "",
+  export let size = "default",
     color = "none",
     full = false,
     rounded = false;
