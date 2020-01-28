@@ -32,19 +32,17 @@
           <div
             class="ml-2 text-gray-600 text-xs uppercase font-semibold
             tracking-wide">
-            {product._source.color.name} &bull; {product._source.size}
+            {product._source.color.name} &bull; {currency(product._source.flipkart.specialPrice)}
           </div>
         </div>
-        <h4 class="mt-1 font-semibold text-lg leading-tight truncate">
-          {product._source.name}
-        </h4>
-        <div class="mt-1">
+        <h4 class="mt-1 font-semibold text-xs">{product._source.name}</h4>
+        <!-- <div class="mt-1">
           {currency(product._source.specialPrice || product._source.price)}
           <del class="text-gray-600 text-sm">
             {currency(product._source.mrp)}
           </del>
-        </div>
-        <div class="mt-2 flex items-center">
+        </div> -->
+        <!-- <div class="mt-2 flex items-center">
           <svg
             v-for="i in 5"
             :key="i"
@@ -64,7 +62,7 @@
               1.582 0 0 1-1.643.117l-3.865-2-3.865 2z" />
           </svg>
           <span class="ml-2 text-gray-600 text-sm">{5} reviews</span>
-        </div>
+        </div> -->
       </div>
     </a>
   {/if}

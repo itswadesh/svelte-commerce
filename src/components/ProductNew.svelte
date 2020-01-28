@@ -19,7 +19,7 @@
   <div class="relative pb-5/6">
     <img
       v-if="product._source.img"
-      src={product.imgUrls[0]['400x400']}
+      src={product.img[0]}
       alt=""
       class="absolute h-full w-full object-contain rounded-lg shadow-md" />
   </div>
