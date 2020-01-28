@@ -1,7 +1,6 @@
 <script>
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
-  export let title = null;
   export let model = null;
   export let items = null;
   export let selectedItems = {};

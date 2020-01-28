@@ -1,19 +1,14 @@
 <script>
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
-  export let id = "",
-    model = [],
+  export let model = [],
     items = [],
     selectedItems = [],
     color = "none",
-    circle = false,
-    count = "",
     name = "",
     required = false,
     disabled = false,
-    size = "",
-    title = "",
-    fontSize = "";
+    title = "";
 
   function changed() {
     dispatch("change", model);

@@ -8,15 +8,9 @@
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
   export let home = false,
-    mysearch = false,
-    loading = false,
-    segment;
+    loading = false;
 
   preloading.subscribe(_ => {
-    // if (_ == true)
-    //   setTimeout(function() {
-    //     loading = _;
-    //   }, 250);
     loading = _;
   });
 
