@@ -14,16 +14,18 @@
     query = page.query;
   });
   function search() {
-    // When coming from home (or another page)
-    if (home) goto("/search?q=" + query.q);
-    // goto reloads the page. Hence focus is lost
-    else history.pushState({}, null, "/search?q=" + query.q);
-    dispatch("search", query.q);
+    setTimeout(() => {
+      // When coming from home (or another page)
+      if (home) goto("/search?q=" + query.q);
+      // goto reloads the page. Hence focus is lost
+      else history.pushState({}, null, "/search?q=" + query.q);
+      dispatch("search", query.q);
+    }, 300);
   }
 </script>
 
 <form
-  class="text-center"
+  class="w-full lg:w-1/2 text-center"
   novalidate
   autocomplete="off"
   on:submit|preventDefault={search}>

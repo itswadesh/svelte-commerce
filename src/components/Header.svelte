@@ -48,7 +48,7 @@
 <header>
   <nav class="flex items-center justify-between m-4 text-gray-700">
     <a href="/" rel="prefetch" aria-label="logo" class="mx-4">
-      <img class="w-6 h-6" src={'/favicon.png'} alt="logo" />
+      <img class="h-6 w-10" src={'/favicon.png'} alt="logo" />
     </a>
     <div class="flex justify-center w-full mx-2 border-gray-300">
       <Search on:search={search} {home} />
