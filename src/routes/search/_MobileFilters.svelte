@@ -36,6 +36,14 @@
     let url = constructURL2("/search", query);
     goto(`${url}page=${query.page || 1}`);
   }
+  let features = ["Processor Brand","Processor Name","Screen Size","RAM","Touchscreen","RAM Type","Screen Resolution","SSD","Processor Generation","Keyboard","Weight","HDD Capacity","Mic In","Battery Backup","Expandable Memory","SSD Capacity","Finger Print Sensor","Backlit Keyboard","NFC Support","Face Recognition","Optane Memory"]
+  function checkFeature(k){
+   return features.includes(k)
+  }
+  function stringToArray(v){
+    let a =query[v.key] && query[v.key].split(',') || []
+    return a
+  }
 </script>
 
 <style>
@@ -96,7 +104,7 @@
               Colour
             </li>
             {#each facets.features && facets.features.name && facets.features.name.buckets && facets.features.name.buckets as f}
-              {#if f.key != 'Color'}
+              {#if checkFeature(f.key)}
                 <li
                   on:click={() => (selected = f.key)}
                   class:selected={selected == f.key}>
@@ -144,7 +152,7 @@
                   items={v.val.buckets}
                   title={v.key.toUpperCase()}
                   model={v.key}
-                  selectedItems={query[v.key] || []}
+                  selectedItems={stringToArray(v)}
                   on:go={goCheckbox} />
               {/if}
             {/each}

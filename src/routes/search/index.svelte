@@ -26,9 +26,11 @@
     loading = false,
     query,
     searchQuery;
+   $: noOfPages= Math.ceil(productCount / 24);
   page.subscribe(page => {
     console.log("page.subscribe");
     query = page.query;
+    if(query.q==undefined) query.q = ""
     getData(query);
   });
 
@@ -116,12 +118,10 @@
             {/each}
           </div>
         {/if}
-        {#if Math.ceil(productCount / pageSize) > 1}
           <Pagination
-            count={Math.ceil(productCount / pageSize)}
+            count={noOfPages}
             current={parseInt(query.page || 1)}
             on:change={changePage} />
-        {/if}
       </div>
     </div>
   {/if}

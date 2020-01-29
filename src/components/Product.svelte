@@ -1,6 +1,6 @@
 <script>
   import { lazyload } from "./../actions/lazyload";
-  import { currency } from "./../lib";
+  import { currency,truncate } from "./../lib";
   import { stores } from "@sapper/app";
   const { session } = stores();
   export let product = {};
@@ -24,18 +24,17 @@
       </div>
       <div class="p-6">
         <div class="flex items-baseline">
-          <span
+          <!-- <span
             class="inline-block bg-teal-200 text-teal-800 text-xs px-2
             rounded-full uppercase font-semibold tracking-wide">
             New
-          </span>
+          </span> -->
           <div
-            class="ml-2 text-gray-600 text-xs uppercase font-semibold
-            tracking-wide">
-            {product._source.color.name} &bull; {currency(product._source.flipkart.specialPrice)}
+            class="text-lg uppercase font-semibold
+            tracking-wide truncate">{currency(product._source.flipkart.specialPrice)}
           </div>
         </div>
-        <h4 class="mt-1 font-semibold text-xs">{product._source.name}</h4>
+        <h4 class="mt-1 text-xs text-gray-900">{truncate(product._source.name,60)}</h4>
         <!-- <div class="mt-1">
           {currency(product._source.specialPrice || product._source.price)}
           <del class="text-gray-600 text-sm">

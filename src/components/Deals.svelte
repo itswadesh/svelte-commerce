@@ -21,7 +21,7 @@
       perPage: {
         300: 2,
         768: 3,
-        1024: 3,
+        1024: 4,
         1920: 5
       },
       onChange: onChangeCallback
