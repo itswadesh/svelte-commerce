@@ -43,10 +43,16 @@
     margin-top: 1.5px;
     margin-left: -1px;
   }
+  .sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
 </style>
 
-<header>
-  <nav class="flex items-center justify-between m-4 text-gray-700">
+<header class="sticky bg-white py-4 lg:py-0">
+  <nav class="flex items-center justify-between mx-4 text-gray-700">
     <a href="/" rel="prefetch" aria-label="logo" class="mx-4">
       <img src={'/favicon.png'} alt="logo" style="width:100%;" />
     </a>
