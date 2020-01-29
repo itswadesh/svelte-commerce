@@ -28,7 +28,6 @@
     searchQuery;
    $: noOfPages= Math.ceil(productCount / 24);
   page.subscribe(page => {
-    console.log("page.subscribe");
     query = page.query;
     if(query.q==undefined) query.q = ""
     getData(query);
@@ -37,13 +36,11 @@
   function changePage(e, p) {
     let fl = { ...query };
     delete fl.page;
-    // delete fl.categories;
     const url = constructURL2("/search", fl);
     let page = parseInt(e.detail || 1);
     goto(`${url}page=${page}`);
   }
   async function getData(query) {
-    console.log("Search page getData...........");
     try {
       loading = true;
       searchQuery = query.q;
