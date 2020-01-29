@@ -27,7 +27,6 @@
       src={$session.settings.CDN_URL + currentImage + '?tr=w-3,h-3'}
       data-src={$session.settings.CDN_URL + currentImage}
       alt={product.name}
-      class="w-full zoom mb-3"
-      style="object-fit: contain; max-height:316px;" />
+      class="w-full zoom mb-3 object-contain" />
   </div>
 </div>
