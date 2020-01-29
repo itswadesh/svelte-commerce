@@ -21,8 +21,15 @@
 </script>
 
 <div class="flex-none lg:flex justify-between px-2 py-2 text-sm items-center">
-  <div class="font-semibold flex p-1">
-    <h1 class="font-hairline">{count} laptops found</h1>
+  <div class="flex p-1 p-1">
+    {#if !count}
+      <div class="">Will just take a second...</div>
+    {:else}
+      <div class=" ml-4 ">
+        <span class=" font-bold">{count}</span>
+        <span class="font-thin">laptops found</span>
+      </div>
+    {/if}
   </div>
   <div class="flex-wrap p-1 hidden md:block">
     <div class="text-sm">

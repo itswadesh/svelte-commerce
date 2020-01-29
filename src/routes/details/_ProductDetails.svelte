@@ -17,7 +17,7 @@
 <div class="w-full md:w-6/12 lg:w-7/12 leading-relaxed">
   <div class="pb-4 border-b border-gray-200 px-3">
     <p class="text-2xl text-gray-700 font-semibold">{product.brandName}</p>
-    <p class="leading-loose">{product.name}</p>
+    <p class="leading-loose tracking-widest">{product.name}</p>
   </div>
   {#if product}
     <div class="flex flex-wrap">

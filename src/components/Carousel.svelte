@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { truncate } from "./../lib";
+  import { truncate, currency } from "./../lib";
   import { lazyload } from "./../actions/lazyload";
   import { stores } from "@sapper/app";
   const { session } = stores();
@@ -21,8 +21,8 @@
       perPage: {
         300: 2,
         768: 3,
-        1024: 6,
-        1920: 8
+        1024: 3,
+        1920: 5
       },
       onChange: onChangeCallback
     });
@@ -63,10 +63,8 @@
   }
 </style>
 
-<div
-  class="relative my-5 pt-2 lg:pt-5 pb-5 mx-2 lg:mx-5 px-2 lg:px-5 shadow-lg
-  border rounded">
-  <h1 class="mb-5 text-gray-800 text-2xl">{title}</h1>
+<div class="relative pt-2 lg:pt-5 mx-0 lg:mx-5 px-2 lg:px-5 rounded">
+  <h1 class="mb-5 text-gray-800 text-2xl font-bold underline">{title}</h1>
   <div class="">
     {#if currentSlide != 0}
       <button on:click={prev} class="hidden lg:block prev">
@@ -78,15 +76,22 @@
     </button>
     <div class={uniqueId}>
       {#each products as p (p._id)}
-        <div class="mx-1 lg:mx-5">
+        <div class="mx-1 lg:mr-5 bg-white py-4 rounded-lg">
           <a href={'/' + p._source.slug + '?id=' + p._id}>
             <img
               use:lazyload
               src={$session.settings.CDN_URL + p._source.img[0] + '?tr=w-3,h-3'}
-              data-src={$session.settings.CDN_URL + p._source.img[0]}
-              class="h-32"
+              data-src={$session.settings.CDN_URL + p._source.img[0] + '?tr=w-320,h-250'}
+              class="w-full object-contain"
               alt="" />
-            <div class="mt-3 text-gray-800">{truncate(p._source.name, 45)}</div>
+            <div
+              class="px-2 lg:px-8 mt-3 text-xs lg:text-sm h-18 overflow-hidden
+              tracking-widest">
+              {truncate(p._source.name, 100)}
+            </div>
+            <h3 class="px-2 lg:px-8 mt-3 font-semibold tracking-widest">
+              {currency(p._source.flipkart.price)}
+            </h3>
           </a>
         </div>
       {/each}

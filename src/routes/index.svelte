@@ -30,7 +30,7 @@
       return latestProducts;
     } catch (e) {}
   }
-  getLatest();
+  // getLatest();
   async function getHP() {
     try {
       const p = await get("electronics", { brandName: "HP" });
@@ -38,7 +38,7 @@
       return HPProducts;
     } catch (e) {}
   }
-  getHP();
+  // getHP();
   async function getDell() {
     try {
       const p = await get("electronics", { brandName: "Dell" });
@@ -46,7 +46,7 @@
       return DellProducts;
     } catch (e) {}
   }
-  getDell();
+  // getDell();
   async function getLenovo() {
     try {
       const p = await get("electronics", { brandName: "Lenovo" });
@@ -54,7 +54,7 @@
       return LenovoProducts;
     } catch (e) {}
   }
-  getLenovo();
+  // getLenovo();
   async function getAsus() {
     try {
       const p = await get("electronics", { brandName: "Asus" });
@@ -62,7 +62,7 @@
       return asusProducts;
     } catch (e) {}
   }
-  getAsus();
+  // getAsus();
   async function getAcer() {
     try {
       const p = await get("electronics", { brandName: "Acer" });
@@ -70,8 +70,7 @@
       return AcerProducts;
     } catch (e) {}
   }
-  getAcer();
-  //www.hopyshopy.com/api/electronics/es?RAM=4%20GB,64%20GB&Processor%20Name=Core%20i7&page=1
+  // getAcer();
   async function getI7() {
     try {
       const p = await get("electronics/es", { "Processor Name": "Core i7" });
@@ -79,7 +78,7 @@
       return I7Products;
     } catch (e) {}
   }
-  getI7();
+  // getI7();
   async function getI5() {
     try {
       const p = await get("electronics/es", { "Processor Name": "Core i5" });
@@ -87,7 +86,7 @@
       return I5Products;
     } catch (e) {}
   }
-  getI5();
+  // getI5();
   async function getI3() {
     try {
       const p = await get("electronics/es", { "Processor Name": "Core i3" });
@@ -95,7 +94,7 @@
       return I3Products;
     } catch (e) {}
   }
-  getI3();
+  // getI3();
   async function getSSD() {
     try {
       const p = await get("electronics/es", { SSD: "Yes" });
@@ -103,7 +102,7 @@
       return SSDProducts;
     } catch (e) {}
   }
-  getSSD();
+  // getSSD();
   async function get64GB() {
     try {
       const p = await get("electronics/es", { RAM: "64 GB" });
@@ -111,7 +110,7 @@
       return R64GBProducts;
     } catch (e) {}
   }
-  get64GB();
+  // get64GB();
   async function get32GB() {
     try {
       const p = await get("electronics/es", { RAM: "32 GB" });
@@ -119,7 +118,7 @@
       return R32GBProducts;
     } catch (e) {}
   }
-  get32GB();
+  // get32GB();
   async function get16GB() {
     try {
       const p = await get("electronics/es", { RAM: "16 GB" });
@@ -127,7 +126,7 @@
       return R16GBProducts;
     } catch (e) {}
   }
-  get16GB();
+  // get16GB();
   async function get8GB() {
     try {
       const p = await get("electronics/es", { RAM: "8 GB" });
@@ -135,7 +134,7 @@
       return R8GBProducts;
     } catch (e) {}
   }
-  get8GB();
+  // get8GB();
 </script>
 
 <svelte:head>
@@ -163,27 +162,6 @@
 </svelte:head>
 <Header home={true} />
 <!-- <Hero /> -->
-<br />
-{#await getI7()}
-  <ProductSkeleton count={5} />
-{:then I7Products}
-  <Carousel products={I7Products} title="I7 Laptops" />
-{/await}
-{#await getI5()}
-  <ProductSkeleton count={5} />
-{:then I5Products}
-  <Carousel products={I5Products} title="I5 Laptops" />
-{/await}
-{#await getI3()}
-  <ProductSkeleton count={5} />
-{:then I3Products}
-  <Carousel products={I3Products} title="I3 Laptops" />
-{/await}
-{#await getLatest()}
-  <ProductSkeleton count={5} />
-{:then latestProducts}
-  <Deals products={latestProducts} title="Latest Laptops" />
-{/await}
 <!-- <Banners /> -->
 {#await getHP()}
   <ProductSkeleton count={5} />
@@ -205,21 +183,41 @@
 {:then asusProducts}
   <Deals products={asusProducts} title="Asus Laptops" />
 {/await}
-{#await getAcer()}
+<!-- {#await getAcer()}
   <ProductSkeleton count={5} />
 {:then AcerProducts}
   <Deals products={AcerProducts} title="Acer Laptops" />
-{/await}
+{/await} -->
 {#await getSSD()}
   <ProductSkeleton count={5} />
 {:then SSDProducts}
   <Carousel products={SSDProducts} title="SSD Laptops" />
 {/await}
-{#await get64GB()}
+{#await getI7()}
+  <ProductSkeleton count={5} />
+{:then I7Products}
+  <Carousel products={I7Products} title="I7 Laptops" />
+{/await}
+{#await getI5()}
+  <ProductSkeleton count={5} />
+{:then I5Products}
+  <Carousel products={I5Products} title="I5 Laptops" />
+{/await}
+{#await getI3()}
+  <ProductSkeleton count={5} />
+{:then I3Products}
+  <Carousel products={I3Products} title="I3 Laptops" />
+{/await}
+{#await getLatest()}
+  <ProductSkeleton count={5} />
+{:then latestProducts}
+  <Deals products={latestProducts} title="Latest Laptops" />
+{/await}
+<!-- {#await get64GB()}
   <ProductSkeleton count={5} />
 {:then R64GBProducts}
   <Carousel products={R64GBProducts} title="64GB Laptops" />
-{/await}
+{/await} -->
 {#await get32GB()}
   <ProductSkeleton count={5} />
 {:then R32GBProducts}
