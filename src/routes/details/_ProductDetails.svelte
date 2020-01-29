@@ -25,10 +25,7 @@
         <div class=" text-gray-700 py-3">
           <div class="flex items-center px-3 font-semibold tracking-wider">
             <span class="text-lg mr-2">
-              <img
-                src="flipkart.jfif"
-                alt="flipkart"
-                style="width: 30px; height: 30px;" />
+              <img src="/flipkart-512.png" alt="" class="w-8" />
             </span>
             <span class="text-lg mr-2">
               {currency(product.flipkart.specialPrice || product.flipkart.price)}
@@ -55,10 +52,7 @@
         <div class=" text-gray-700 py-3">
           <div class="flex items-center px-3 font-semibold tracking-wider">
             <span class="text-lg mr-2">
-              <img
-                src="amazon.jfif"
-                alt="amazon"
-                style="width: 30px; height: 30px;" />
+              <i class="fab fa-amazon mt-2" />
             </span>
             <span class="text-lg mr-2">
               {currency(product.amazon.specialPrice || product.amazon.price)}
@@ -83,10 +77,7 @@
         <div class=" py-3 text-green-700">
           <div class="flex items-center px-3 font-semibold tracking-wider">
             <span class="text-lg mr-2">
-              <img
-                src="store.svg"
-                alt="amazon"
-                style="width: 30px; height: 30px;" />
+              <i class="fas fa-store mt-2" />
             </span>
             <span class="text-lg mr-2">{currency(product.localPrice)}</span>
             {#if product.flipkart.mrp > product.localPrice}
@@ -115,7 +106,7 @@
           target="blank"
           href={product.amazonUrl}
           class="w-full lg:mx-64 text-center items-center justify-center h-14
-          text-2xl outline-none font-bold mr-2 px-32 py-2 rounded primary">
+          text-2xl outline-none font-bold mr-2 py-2 rounded primary">
           Get it from
           <i class="fab fa-amazon mt-2" />
         </a>
@@ -123,11 +114,10 @@
         <a
           target="blank"
           href={product.productUrl}
-          class="w-full lg:mx-64 text-center items-center justify-center h-14
-          text-2xl outline-none font-bold mr-2 px-4 lg:px-32 py-2 rounded
-          primary">
+          class="flex w-full lg:mx-64 text-center items-center justify-center
+          h-14 text-2xl outline-none font-bold mr-2 py-2 rounded primary">
           Get it from
-          <i class="fas fa-store mt-2" />
+          <img src="/flipkart-512.png" alt="" class="w-8" />
         </a>
       {:else if product.localPrice}
         <button

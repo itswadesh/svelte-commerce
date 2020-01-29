@@ -67,28 +67,26 @@
 </script>
 
 <svelte:head>
-  <title>{`Collection of handpicked laptops with ${query.q}`}</title>
+  <title>{`Top 20 ${query.q} laptops in India`}</title>
   <meta
     data-hid="description"
     name="description"
-    content={`Collection of handpicked laptops with ${query.q}`} />
+    content={`Best ${query.q} laptops in India`} />
   <meta
     data-hid="og:title"
     name="og_title"
-    content={`Collection of handpicked laptops with ${query.q}`} />
+    content={`Top 20 ${query.q} laptops in India`} />
   <meta
     data-hid="og:title"
     name="og_title"
     property="og:title"
-    content={`Collection of handpicked laptops with ${query.q}`} />
+    content={`Top 20 ${query.q} laptops in India`} />
   <meta name="og_url" property="og:url" content={`${HOST}/search`} />
   <!-- Twitter -->
-  <meta
-    name="twitter:title"
-    content={`Collection of handpicked laptops with ${query.q}`} />
+  <meta name="twitter:title" content={`Top 20 ${query.q} laptops in India`} />
   <meta
     name="twitter:description"
-    content="content={`Collection of handpicked laptops with ${query.q}`}" />
+    content="content={`Best ${query.q} laptops in India`}" />
 </svelte:head>
 
 <main in:fadeIn out:fadeOut>

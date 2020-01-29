@@ -2,7 +2,7 @@ import { storeUrl } from './../config'
 import Cookie from 'cookie-universal'
 const cookies = Cookie()
 let tkn = cookies.get('token')
-async function send({ method, path, data, token, cookie }) {
+async function send({ method, path, params, data, token, cookie }) {
 	const fetch = process.browser ? window.fetch : require('node-fetch').default;
 	const opts = {
 		method, headers: {
@@ -27,8 +27,12 @@ async function send({ method, path, data, token, cookie }) {
 	else if (tkn) {
 		opts.headers['Authorization'] = `Bearer ${tkn}`;
 	}
+	let url = new URL(`${storeUrl}/api/${path}`)
+	if (params) {
+		Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+	}
 	try {
-		let response = await fetch(`${storeUrl}/api/${path}`, opts)
+		let response = await fetch(url, opts)
 		let json = await response.text()
 		if (!response.ok) {
 			throw json
