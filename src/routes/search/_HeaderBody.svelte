@@ -54,7 +54,7 @@
     </div>
   </div>
 </div>
-<div class="lg:hidden flex shadow-md py-4 w-full mb-1">
+<div class="md:hidden flex shadow-md py-4 w-full mb-1">
   <button
     class="flex-1 flex items-center text-left text-primary"
     on:click={() => dispatch('hide', !showFilters)}>

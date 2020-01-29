@@ -13,14 +13,14 @@
     background-color: #282c3f;
   }
 </style>
-
+{#if count>1}
 <div class="flex justify-between items-center">
   <div class="text-gray-500 items-center">Page {current} of {count}</div>
   <div class="flex-1 flex items-center text-center justify-center">
     {#if current > 1}
       <button
         class="lg:mx-5 bg-white hover:bg-gray-100 text-gray-800 font-semibold
-        lg:py-2 p-2 lg:px-4 border border-gray-400 rounded shadow rounded
+        lg:py-2 p-2 lg:px-4 border border-gray-400 rounded shadow rounded-full
         inline-flex items-center"
         on:click={() => dispatch('change', current - 1)}>
         <i class="fa fa-caret-left" />
@@ -40,7 +40,7 @@
     {#if current < count}
       <button
         class="lg:mx-5 bg-white hover:bg-gray-100 text-gray-800 font-semibold
-        lg:py-2 p-2 lg:px-4 border border-gray-400 rounded shadow rounded
+        lg:py-2 p-2 lg:px-4 border border-gray-400 rounded-full shadow rounded
         inline-flex items-center"
         on:click={() => dispatch('change', current + 1)}>
         <span>Next</span>
@@ -50,3 +50,4 @@
     {/if}
   </div>
 </div>
+{/if}

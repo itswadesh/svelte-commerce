@@ -3,11 +3,13 @@
   import Radio from "./../../components/ui/Radio.svelte";
   import { constructURL2 } from "./../../lib";
   import { goto, stores } from "@sapper/app";
+  import { onMount } from "svelte";
   const { session, page } = stores();
+import { beforeUpdate, tick } from 'svelte';
   export let facets = {},
     query = {}; // Required because after loading finished then only we will initiate the price slider component
   function clearFilters() {
-    let url = constructURL2("/search", {});
+    let url = "/search";
     goto(url);
   }
   function remove(k, i) {
@@ -21,8 +23,22 @@
     let url = constructURL2("/search", query);
     goto(`${url}page=${query.page || 1}`);
   }
+  // "Processor Brand","Processor Name","Screen Size",
+  let features = ["RAM","Touchscreen","RAM Type","Screen Resolution","SSD","Processor Generation","Keyboard","Weight","HDD Capacity","Mic In","Battery Backup","Expandable Memory","SSD Capacity","Finger Print Sensor","Backlit Keyboard","NFC Support","Face Recognition","Optane Memory"]
+  function checkFeature(k){
+   return features.includes(k)
+  }
+  function stringToArray(v){
+    let a =query[v.key] && query[v.key].split(',') || []
+    return a
+  }
+  // beforeUpdate(async () => {
+  //   await tick();
+  //   // array1.filter(value => array2.includes(value))
+  //   let facets =  facets.features.name.buckets.filter(k=> features.includes(k.key))
+  //   console.log('xxxxxxxxxxxxxxxxx',nr);
+  // });
 </script>
-
 <div class="max-w-xs hidden md:block md:w-64">
   <div class="py-6">
     <div
@@ -52,14 +68,14 @@
       </div>
     {/if}
   {/each} -->
-    {#if facets.categories && facets.categories.all.buckets && facets.categories.all.buckets.length > 0}
+    <!-- {#if facets.categories && facets.categories.all.buckets && facets.categories.all.buckets.length > 0}
       <Checkbox
         items={facets.categories.all.buckets}
         title="CATEGORY"
         model="categories"
         selectedItems={query.categories || []}
         on:go={goCheckbox} />
-    {/if}
+    {/if} -->
     {#if facets.brands && facets.brands.all.buckets && facets.brands.all.buckets.length > 0}
       <Checkbox
         items={facets.brands.all.buckets}
@@ -70,12 +86,12 @@
     {/if}
     {#if facets.features && facets.features.name && facets.features.name.buckets && facets.features.name.buckets.length > 0}
       {#each facets.features.name.buckets as v, k}
-        {#if v.key != 'Color' && v.val && v.val.buckets && v.val.buckets.length > 0}
+        {#if checkFeature(v.key) && v.val && v.val.buckets && v.val.buckets.length > 0}
           <Checkbox
             items={v.val.buckets}
             title={v.key.toUpperCase()}
             model={v.key}
-            selectedItems={query[v.key] || []}
+            selectedItems={stringToArray(v)}
             on:go={goCheckbox} />
         {/if}
       {/each}
