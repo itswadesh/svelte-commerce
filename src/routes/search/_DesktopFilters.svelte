@@ -23,8 +23,7 @@ import { beforeUpdate, tick } from 'svelte';
     let url = constructURL2("/search", query);
     goto(`${url}page=${query.page || 1}`);
   }
-  // "Processor Brand","Processor Name","Screen Size",
-  let features = ["RAM","Touchscreen","RAM Type","Screen Resolution","SSD","Processor Generation","Keyboard","Weight","HDD Capacity","Mic In","Battery Backup","Expandable Memory","SSD Capacity","Finger Print Sensor","Backlit Keyboard","NFC Support","Face Recognition","Optane Memory"]
+  let features = ["Processor Brand","Processor Name","Screen Size","RAM","Touchscreen","RAM Type","Screen Resolution","SSD","Processor Generation","Keyboard","Weight","HDD Capacity","Mic In","Battery Backup","Expandable Memory","SSD Capacity","Finger Print Sensor","Backlit Keyboard","NFC Support","Face Recognition","Optane Memory"]
   function checkFeature(k){
    return features.includes(k)
   }

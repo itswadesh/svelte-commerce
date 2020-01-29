@@ -4,7 +4,7 @@
   export let count = 10,
     current = 1;
   count = parseInt(count);
-  if (count > 10) count = 10;
+  $: pages =(count > 10) ? 10 : count;
 </script>
 
 <style>
@@ -28,7 +28,7 @@
         <span>Previous</span>
       </button>
     {/if}
-    {#each { length: count } as _, i}
+    {#each { length: pages } as _, i}
       <button
         class="py-1 px-2 lg:mx-2 w-8 h-8 rounded-full border
         hover:border-gray-500"
