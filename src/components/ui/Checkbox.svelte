@@ -71,10 +71,9 @@
   }
 </style>
 
-<!-- {selectedItems} -->
 <p class="ml-2 py-2 font-semibold text-sm px-2">{title}</p>
 <ul class="ml-2 py-2 px-2 filter-container">
-  {#each items as i}
+  {#each items as i (i.key)}
     {#if i.key}
       <li>
         <label
