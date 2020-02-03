@@ -5,7 +5,7 @@
   import { goto, stores } from "@sapper/app";
   import { onMount } from "svelte";
   const { session, page } = stores();
-import { beforeUpdate, tick } from 'svelte';
+  import { beforeUpdate, tick } from "svelte";
   export let facets = {},
     query = {}; // Required because after loading finished then only we will initiate the price slider component
   function clearFilters() {
@@ -21,15 +21,37 @@ import { beforeUpdate, tick } from 'svelte';
   function goCheckbox(e) {
     query[e.detail.model] = e.detail.selectedItems;
     let url = constructURL2("/search", query);
-    goto(`${url}page=${query.page || 1}`);
+    goto(`${url}page=1}`);
   }
-  let features = ["Processor Brand","Processor Name","Screen Size","RAM","Touchscreen","RAM Type","Screen Resolution","SSD","Processor Generation","Keyboard","Weight","HDD Capacity","Mic In","Battery Backup","Expandable Memory","SSD Capacity","Finger Print Sensor","Backlit Keyboard","NFC Support","Face Recognition","Optane Memory"]
-  function checkFeature(k){
-   return features.includes(k)
+  let features = [
+    "Processor Brand",
+    "Processor Name",
+    "Screen Size",
+    "RAM",
+    "Touchscreen",
+    "RAM Type",
+    "Screen Resolution",
+    "SSD",
+    "Processor Generation",
+    "Keyboard",
+    "Weight",
+    "HDD Capacity",
+    "Mic In",
+    "Battery Backup",
+    "Expandable Memory",
+    "SSD Capacity",
+    "Finger Print Sensor",
+    "Backlit Keyboard",
+    "NFC Support",
+    "Face Recognition",
+    "Optane Memory"
+  ];
+  function checkFeature(k) {
+    return features.includes(k);
   }
-  function stringToArray(v){
-    let a =query[v.key] && query[v.key].split(',') || []
-    return a
+  function stringToArray(v) {
+    let a = (query[v.key] && query[v.key].split(",")) || [];
+    return a;
   }
   // beforeUpdate(async () => {
   //   await tick();
@@ -38,6 +60,7 @@ import { beforeUpdate, tick } from 'svelte';
   //   console.log('xxxxxxxxxxxxxxxxx',nr);
   // });
 </script>
+
 <div class="max-w-xs hidden md:block md:w-64">
   <div class="py-6">
     <div
