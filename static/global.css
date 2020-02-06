@@ -4,7 +4,61 @@ body {
 }
 button {
   font-family: "Montserrat", sans-serif;
+  outline: none !important;
 }
+button:disabled {
+  background: #ccc !important;
+  transition: all .2s ease-in;
+}
+input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus,
+  select:-webkit-autofill,
+  select:-webkit-autofill:hover,
+  select:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+  .toast{
+    animation: fadein .5s;
+    font-size:1.2rem;
+    font-weight: 400;
+    background-color: #f3555a;
+    color:#fff;
+    position: fixed;
+    cursor: pointer;
+    top:2%;
+    right:2%;
+    padding: .8rem 2rem;
+    z-index: 10;
+  }
+  @keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  .info{
+    background: rgb(91, 192, 222);
+    color:#fff;
+    border-left: 1px solid rgba(255, 255, 255, 0.4);
+  }
+  .success{
+    background: #22ce6c;
+    color: #fff;
+    border-left: 1px solid rgba(255, 255, 255, 0.4);
+  }
+  .warning{
+    background: #ffb900;
+    color: #000;
+    border-left: 1px solid rgba(0, 0, 0, 0.2);
+  }
+  .err{
+    background: #f3555a;
+    color: #fff;
+    border-left: 1px solid rgba(0, 0, 0, 0.2);
+  }
 .underline {
 background-image: linear-gradient(
   to right,
