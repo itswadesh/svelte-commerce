@@ -78,11 +78,35 @@ async function getAddress() {
 }
 </script>
 
-<div class="container  w-full mx-auto max-w-6xl text-gray-500 pb-20">
+<section
+	class="container  w-full mx-auto max-w-6xl px-4 sm:px-10 pb-10 py-5 md:py-10 text-gray-800 ">
 	<CheckoutHeader selected="payment" />
-	<div class="mt-10 lg:flex lg:justify-center lg:space-x-10">
-		<div class="lg:w-3/5">
-			<h1 class="text-2xl text-center  lg:text-left font-semibold">Cart Summary</h1>
+	<div class="mt-10 md:flex md:justify-center md:space-x-10 xl:space-x-20">
+		<div class="md:w-2/5">
+			<h2 class="text-2xl md:text-3xl lg:text-4xl font-bold tracking-wide ">Payment Methods</h2>
+
+			<div
+				class="mt-5 p-6 mx-auto bg-white border rounded-lg shadow-lg flex items-center justify-between">
+				<h2 class="text-xl font-semibold">COD</h2>
+
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="h-6 w-6"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor">
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"
+					></path>
+				</svg>
+			</div>
+		</div>
+
+		<div class="mt-5 md:mt-0 md:w-3/5">
+			<h2 class="text-2xl md:text-3xl lg:text-4xl font-bold tracking-wide ">Cart Summary</h2>
 
 			<div class="mt-5 p-6 mx-auto bg-white border rounded-lg shadow-lg">
 				<h5 class="capitalize font-semibold tracking-wide text-lg">Delivery Address:</h5>
@@ -125,28 +149,5 @@ async function getAddress() {
 				loading="{loading}"
 				on:submit="{submit}" />
 		</div>
-
-		<div class="lg:w-2/5">
-			<h1 class="text-2xl text-center  lg:text-left font-semibold">Payment Methods</h1>
-
-			<div
-				class="mt-5 p-6 mx-auto bg-white border rounded-lg shadow-lg flex items-center justify-between">
-				<h2 class="text-xl font-semibold">COD</h2>
-
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					class="h-6 w-6"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke="currentColor">
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"
-					></path>
-				</svg>
-			</div>
-		</div>
 	</div>
-</div>
+</section>
