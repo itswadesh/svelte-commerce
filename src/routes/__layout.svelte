@@ -34,10 +34,9 @@ export let user
 			<slot />
 		</div>
 	</div>
-	<div class="mt-20  md:hidden">
-		<div class="fixed bottom-0 w-full">
-			<MobFooter />
-		</div>
+
+	<div class="pt-20 fixed bottom-0 z-50 w-full  md:hidden">
+		<MobFooter />
 	</div>
 </PageTransitions>
 <ToastContainer let:data>
