@@ -1,19 +1,18 @@
 <script>
-  import { first } from "./../../lib";
-  import Header from "./../../components/Header.svelte";
-  import { stores, goto } from "@sapper/app";
-  const { session, page } = stores();
-  import Cookie from "cookie-universal";
-  const cookies = Cookie();
-  import { fadeIn, fadeOut } from "./../../actions/pageFade";
-  let selected = true;
-  export let segment;
+  import { first } from './../../lib'
+  import { stores, goto } from '@sapper/app'
+  const { session, page } = stores()
+  import Cookie from 'cookie-universal'
+  const cookies = Cookie()
+  import { fadeIn, fadeOut } from './../../actions/pageFade'
+  let selected = true
+  export let segment
   // $: user = $session.user || {};
   function logout() {
-    $session.user = {};
-    $session.token = null;
-    cookies.set("token", null);
-    goto("/");
+    $session.user = {}
+    $session.token = null
+    cookies.set('token', null)
+    goto('/')
   }
 </script>
 

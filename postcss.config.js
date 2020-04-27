@@ -1,16 +1,32 @@
-const tailwindcss = require("tailwindcss");
-
-// only needed if you want to purge
-const purgecss = require("@fullhuman/postcss-purgecss")({
-    content: ["./src/**/*.svelte", "./src/**/*.html"],
-    defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || []
-});
+const mode = process.env.NODE_ENV
+const dev = mode === 'development'
 
 module.exports = {
-    plugins: [
-        tailwindcss("./tailwind.config.js"),
+  plugins: [
+    require('postcss-import')(),
+    require('postcss-url')(),
+    require('tailwindcss')('./tailwind.config.js'),
+    require('autoprefixer')(),
+    !dev &&
+      require('@fullhuman/postcss-purgecss')({
+        content: ['./src/**/*.svelte', './src/**/*.html'],
+        defaultExtractor: (content) => {
+          let matching = []
 
-        // only needed if you want to purge
-        ...(process.env.NODE_ENV === "production" ? [purgecss] : [])
-    ]
-};
+          const regulars = content.match(/[\w-/:%]+(?<!:)/g)
+          const classDirectives = content.match(/(?<=class:)[\w-/:%]+(?<!:)/g)
+
+          if (regulars) {
+            matching.push(...regulars)
+          }
+
+          if (classDirectives) {
+            matching.push(...classDirectives)
+          }
+
+          return matching
+        },
+      }),
+    !dev && require('cssnano')({ preset: 'default' }),
+  ],
+}

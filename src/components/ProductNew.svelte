@@ -1,19 +1,19 @@
 <script>
-  import { get, put, post } from "./../lib/api";
-  import { createEventDispatcher } from "svelte";
-  import { lazyload } from "./../actions/lazyload";
-  import { currency } from "./../lib";
-  import { stores } from "@sapper/app";
-  const { session } = stores();
-  const dispatch = createEventDispatcher();
-  export let product = {};
+  import { get, put, post } from './../lib/api'
+  import { createEventDispatcher } from 'svelte'
+  import { lazyload } from './../actions/lazyload'
+  import { currency } from './../lib'
+  import { stores } from '@sapper/app'
+  const { session } = stores()
+  const dispatch = createEventDispatcher()
+  export let product = {}
   async function submit(product) {
     try {
       // product = await patch("electronics/" + product.id, product);
-      product = await post("electronics/amazon", product);
-      dispatch("update");
+      product = await post('electronics/amazon', product)
+      dispatch('update')
     } catch (e) {
-      console.log("err...", e.toString());
+      console.log('err...', e.toString())
     }
   }
 </script>

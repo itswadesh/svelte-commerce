@@ -1,5 +1,5 @@
 <script>
-  export let count;
+  export let count
 </script>
 
 <div class="flex overflow-hidden">

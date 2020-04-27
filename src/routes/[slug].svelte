@@ -1,31 +1,31 @@
 <script context="module">
-  import { get } from "./../lib/api";
-  import { currency } from "./../lib";
-  import { HOST } from "./../config";
-  import Header from "./../components/Header.svelte";
-  import ProductImage from "./details/_ProductImage.svelte";
-  import Breadcrumb from "./details/_Breadcrumb.svelte";
-  import ProductDetails from "./details/_ProductDetails.svelte";
-  import { send, receive } from "./../actions/crossfade";
+  import { get } from './../lib/api'
+  import { currency } from './../lib'
+  import { host } from './../config'
+  import Nav from './../components/Nav.svelte'
+  import ProductImage from './details/_ProductImage.svelte'
+  import Breadcrumb from './details/_Breadcrumb.svelte'
+  import ProductDetails from './details/_ProductDetails.svelte'
+  import { send, receive } from './../actions/crossfade'
   export async function preload({ params, query }) {
     let product = {},
-      err = null;
+      err = null
     try {
-      product = await get(`electronics/${query.id}`);
-      if (!product) return;
-      return { product };
+      product = await get(`electronics/${query.id}`)
+      if (!product) return
+      return { product }
     } catch (e) {
-      product = {};
-      this.error(500, e.toString());
+      product = {}
+      this.error(500, e.toString())
     }
   }
 </script>
 
 <script>
-  import { goto, stores } from "@sapper/app";
-  const { session } = stores();
-  import { onMount } from "svelte";
-  export let product;
+  import { goto, stores } from '@sapper/app'
+  const { session } = stores()
+  import { onMount } from 'svelte'
+  export let product
 </script>
 
 <svelte:head>
@@ -43,7 +43,7 @@
   <meta
     name="og_url"
     property="og:url"
-    content={product && `${HOST}/${product.slug}?id=${product._id}`} />
+    content={product && `${host}/${product.slug}?id=${product._id}`} />
   <meta
     name="og_image"
     property="og:image"
@@ -73,7 +73,7 @@
     itemprop="image"
     content={product && product.localPrice} />
 </svelte:head>
-<Header home={true} />
+<Nav home={true} />
 <main in:receive out:send>
   {#if !product}
     Requested product not found.

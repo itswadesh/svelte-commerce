@@ -1,22 +1,22 @@
 <script>
-  import { onMount } from "svelte";
-  import { truncate, currency } from "./../lib";
-  import { lazyload } from "./../actions/lazyload";
-  import { stores } from "@sapper/app";
-  const { session } = stores();
+  import { onMount } from 'svelte'
+  import { truncate, currency } from './../lib'
+  import { lazyload } from './../actions/lazyload'
+  import { stores } from '@sapper/app'
+  const { session } = stores()
   export let products = [],
-    title = "";
+    title = ''
   const uniqueId = `siema--${Math.random()
     .toString(36)
-    .substring(2, 10)}`;
+    .substring(2, 10)}`
   let Siema,
     controller,
-    currentSlide = 0;
+    currentSlide = 0
   onMount(async () => {
-    const module = await import("siema");
-    Siema = module.default;
+    const module = await import('siema')
+    Siema = module.default
     controller = new Siema({
-      selector: "." + uniqueId,
+      selector: '.' + uniqueId,
       loop: true,
       perPage: {
         300: 2,
@@ -25,16 +25,16 @@
         1920: 5
       },
       onChange: onChangeCallback
-    });
-  });
+    })
+  })
   function onChangeCallback() {
-    currentSlide = this.currentSlide;
+    currentSlide = this.currentSlide
   }
   function prev() {
-    controller.prev();
+    controller.prev()
   }
   function next() {
-    controller.next();
+    controller.next()
   }
 </script>
 

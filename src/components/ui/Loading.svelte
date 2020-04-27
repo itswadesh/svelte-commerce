@@ -1,5 +1,5 @@
 <script>
-  export let loading = false;
+  export let loading = false
 </script>
 
 <style>

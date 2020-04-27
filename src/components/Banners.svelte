@@ -1,7 +1,7 @@
 <script>
-  import { lazyload } from "./../actions/lazyload";
-  import { stores } from "@sapper/app";
-  const { session } = stores();
+  import { lazyload } from './../actions/lazyload'
+  import { stores } from '@sapper/app'
+  const { session } = stores()
 </script>
 
 <!-- <div class="flex flex-wrap">
