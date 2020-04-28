@@ -42,4 +42,5 @@
   </div>
 </div>
 
-<div class="fixed top-0 z-1 bg-gray-300 opacity-75 w-full h-full overflow-auto" />
+<div
+  class="fixed top-0 z-1 bg-gray-300 opacity-75 w-full h-full overflow-auto" />

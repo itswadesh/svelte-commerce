@@ -1,6 +1,6 @@
 <script>
-  import { HOST } from "./../config";
-  import Header from "./../components/Header.svelte";
+  import { host } from './../config'
+  import Nav from './../components/Nav.svelte'
 </script>
 
 <style>
@@ -44,7 +44,7 @@
     name="og_title"
     property="og:title"
     content="Collection of handpicked electronic items, worth buying" />
-  <meta name="og_url" property="og:url" content={`${HOST}/search`} />
+  <meta name="og_url" property="og:url" content={`${host}/search`} />
   <!-- Twitter -->
   <meta name="twitter:title" content="Hand picked laptops for you" />
   <meta
@@ -52,7 +52,7 @@
     content="Collection of handpicked electronic items, worth buying. These are
     best in quality, performance, feels good to use, ergonomic, stylish" />
 </svelte:head>
-<Header home={true} />
+<Nav home={true} />
 <div class=" text-gray-700">
   <div class="banner-container flex items-center flex-wrap">
     <img src="banner.jpg" alt="Best Laptops" class="w-full mb-2" />

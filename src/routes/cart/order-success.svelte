@@ -1,24 +1,24 @@
 <script>
-  import { onMount } from "svelte";
-  import Header from "./../../components/Header.svelte";
-  import { currency } from "./../../lib";
-  import { fadeIn, fadeOut } from "./../../actions/pageFade";
-  import { get, put, post } from "./../../lib/api";
-  import { stores, goto } from "@sapper/app";
-  import CartItem from "./_CartItem.svelte";
-  const { page } = stores();
-  let order = {};
+  import { onMount } from 'svelte'
+  import Nav from './../../components/Nav.svelte'
+  import { currency } from './../../lib'
+  import { fadeIn, fadeOut } from './../../actions/pageFade'
+  import { get, put, post } from './../../lib/api'
+  import { stores, goto } from '@sapper/app'
+  import CartItem from './_CartItem.svelte'
+  const { page } = stores()
+  let order = {}
   async function getOrderDetail() {
     try {
-      order = await get("orders/public/" + $page.query.id);
-      return order;
+      order = await get('orders/public/' + $page.query.id)
+      return order
     } catch (e) {}
   }
-  getOrderDetail();
+  getOrderDetail()
 </script>
 
 <main in:fadeIn out:fadeOut>
-  <Header home={true} />
+  <Nav home={true} />
   <div class="flex flex-wrap justify-center">
     {#await getOrderDetail()}
       <div class="text-gray-700 font-bold text-xl mb-2">

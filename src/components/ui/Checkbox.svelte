@@ -1,17 +1,17 @@
 <script>
-  import { createEventDispatcher } from "svelte";
-  const dispatch = createEventDispatcher();
+  import { createEventDispatcher } from 'svelte'
+  const dispatch = createEventDispatcher()
   export let model = [],
     items = [],
     selectedItems = [],
-    color = "none",
-    name = "",
+    color = 'none',
+    name = '',
     required = false,
     disabled = false,
-    title = "";
+    title = ''
 
   function changed() {
-    dispatch("change", model);
+    dispatch('change', model)
   }
 </script>
 
@@ -45,7 +45,7 @@
     background: #ff3f6c;
   }
   .common-checkboxIndicator:after {
-    content: "";
+    content: '';
     position: absolute;
     top: 4px;
     left: 4px;

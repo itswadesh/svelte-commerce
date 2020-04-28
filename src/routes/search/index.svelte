@@ -1,21 +1,21 @@
 <script>
-  import { HOST } from "./../../config";
-  import Header from "./../../components/Header.svelte";
-  import Pagination from "./_Pagination.svelte";
-  import Product from "./_Product.svelte";
-  import Product1 from "./../../components/Product.svelte";
-  import ProductSkeleton from "./_ProductSkeleton.svelte";
-  import DesktopFilters from "./_DesktopFilters.svelte";
-  import MobileFilters from "./_MobileFilters.svelte";
-  import HeaderBody from "./_HeaderBody.svelte";
-  import NoProduct from "./_NoProduct.svelte";
-  import Loading from "./../../components/ui/Loading.svelte";
-  import { constructQry, constructURL2 } from "./../../lib";
-  import { get, put, post } from "./../../lib/api";
-  import { goto, stores } from "@sapper/app";
-  import { sorts } from "./../../config";
-  import { fadeIn, fadeOut } from "./../../actions/pageFade";
-  const { preloading, page, session } = stores();
+  import { host } from './../../config'
+  import Nav from './../../components/Nav.svelte'
+  import Pagination from './_Pagination.svelte'
+  import Product from './_Product.svelte'
+  import Product1 from './../../components/Product.svelte'
+  import ProductSkeleton from './_ProductSkeleton.svelte'
+  import DesktopFilters from './_DesktopFilters.svelte'
+  import MobileFilters from './_MobileFilters.svelte'
+  import HeaderBody from './_HeaderBody.svelte'
+  import NoProduct from './_NoProduct.svelte'
+  import Loading from './../../components/ui/Loading.svelte'
+  import { constructQry, constructURL2 } from './../../lib'
+  import { get, put, post } from './../../lib/api'
+  import { goto, stores } from '@sapper/app'
+  import { sorts } from './../../config'
+  import { fadeIn, fadeOut } from './../../actions/pageFade'
+  const { preloading, page, session } = stores()
   let showMobileFilter = false,
     products = [],
     facets = [],
@@ -25,43 +25,51 @@
     currentPage = 1,
     loading = false,
     query,
-    searchQuery;
-   $: noOfPages= Math.ceil(productCount / 24);
+    searchQuery
+  $: noOfPages = Math.ceil(productCount / 24)
   page.subscribe(page => {
-    query = page.query;
-    if(query.q==undefined) query.q = ""
-    getData(query);
-  });
+    query = page.query
+    if (query.q == undefined) query.q = ''
+    getData(query)
+  })
 
   function changePage(e, p) {
-    let fl = { ...query };
-    delete fl.page;
-    const url = constructURL2("/search", fl);
-    let page = parseInt(e.detail || 1);
-    goto(`${url}page=${page}`);
+    let fl = { ...query }
+    delete fl.page
+    const url = constructURL2('/search', fl)
+    let page = parseInt(e.detail || 1)
+    goto(`${url}page=${page}`)
+    // scrollToTop();
   }
+  // function scrollToTop() {
+  //   window.scroll({
+  //     behavior: "smooth",
+  //     left: 0,
+  //     top: 0
+  //   });
+  // }
   async function getData(query) {
     try {
-      loading = true;
-      searchQuery = query.q;
-      let url = constructQry("electronics/es", query);
-      const p = await get(url);
-      pageSize = p.pageSize;
-      productCount = p.count;
-      products = p.data;
-      facets = p.facets.all_aggs;
+      loading = true
+      searchQuery = query.q
+      let url = constructQry('electronics/es', query)
+      const p = await get(url)
+      pageSize = p.pageSize
+      productCount = p.count
+      products = p.data
+      facets = p.facets.all_aggs
     } catch (e) {
     } finally {
-      loading = false;
+      loading = false
     }
   }
   function search(e) {
-    query = {};
-    query.q = e.detail;
-    getData(query);
+    query = {}
+    query.q = e.detail
+    getData(query)
   }
   function toggle(e) {
-    showMobileFilter = e.detail;
+    showMobileFilter = e.detail
   }
 </script>
 
@@ -80,7 +88,7 @@
     name="og_title"
     property="og:title"
     content={`Top 20 ${query.q} laptops in India`} />
-  <meta name="og_url" property="og:url" content={`${HOST}/search`} />
+  <meta name="og_url" property="og:url" content={`${host}/search`} />
   <!-- Twitter -->
   <meta name="twitter:title" content={`Top 20 ${query.q} laptops in India`} />
   <meta
@@ -89,7 +97,7 @@
 </svelte:head>
 
 <main in:fadeIn out:fadeOut>
-  <Header on:search={search} />
+  <Nav on:search={search} />
   {#if showMobileFilter}
     <MobileFilters {facets} on:hide={toggle} />
   {:else}
@@ -115,10 +123,10 @@
             {/each}
           </div>
         {/if}
-          <Pagination
-            count={noOfPages}
-            current={parseInt(query.page || 1)}
-            on:change={changePage} />
+        <Pagination
+          count={noOfPages}
+          current={parseInt(query.page || 1)}
+          on:change={changePage} />
       </div>
     </div>
   {/if}

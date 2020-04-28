@@ -1,28 +1,28 @@
 <script>
-  import Header from "./../../components/Header.svelte";
-  import Button from "./../../components/ui/Button.svelte";
-  import EmptyCart from "./_EmptyCart.svelte";
-  import CartSummary from "./_CartSummary.svelte";
-  import CartBanners from "./_CartBanners.svelte";
-  import Textarea from "./../../components/ui/Textarea.svelte";
-  import { cart } from "./../../store/cart.js";
-  import { stores, goto } from "@sapper/app";
+  import Nav from './../../components/Nav.svelte'
+  import Button from './../../components/ui/Button.svelte'
+  import EmptyCart from './_EmptyCart.svelte'
+  import CartSummary from './_CartSummary.svelte'
+  import CartBanners from './_CartBanners.svelte'
+  import Textarea from './../../components/ui/Textarea.svelte'
+  import { cart } from './../../store/cart.js'
+  import { stores, goto } from '@sapper/app'
   // const { session } = stores();
-  import { currency } from "./../../lib";
-  import { fadeIn, fadeOut } from "./../../actions/pageFade";
-  let address;
+  import { currency } from './../../lib'
+  import { fadeIn, fadeOut } from './../../actions/pageFade'
+  let address
   async function placeOrder() {
     try {
-      const o = await cart.checkout({ address });
-      goto("/cart/order-success?id=" + o._id);
+      const o = await cart.checkout({ address })
+      goto('/cart/order-success?id=' + o._id)
     } catch (e) {
-      goto("/login");
+      goto('/login')
     }
   }
 </script>
 
 <main in:fadeIn out:fadeOut>
-  <Header home={true} />
+  <Nav home={true} />
   <div>
     {#if !$cart || !$cart.qty || $cart.qty == 0}
       <EmptyCart />
