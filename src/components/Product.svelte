@@ -1,9 +1,9 @@
 <script>
-  import { lazyload } from "./../actions/lazyload";
-  import { currency,truncate } from "./../lib";
-  import { stores } from "@sapper/app";
-  const { session } = stores();
-  export let product = {};
+  import { lazyload } from './../actions/lazyload'
+  import { currency, truncate } from './../lib'
+  import { stores } from '@sapper/app'
+  const { session } = stores()
+  export let product = {}
 </script>
 
 <div class="flex p-2 w-1/2 lg:w-1/3 xl:w-1/4 justify-between">
@@ -29,12 +29,13 @@
             rounded-full uppercase font-semibold tracking-wide">
             New
           </span> -->
-          <div
-            class="text-lg uppercase font-semibold
-            tracking-wide truncate">{currency(product._source.flipkart.specialPrice)}
+          <div class="text-lg uppercase font-semibold tracking-wide truncate">
+            {currency(product._source.flipkart.specialPrice)}
           </div>
         </div>
-        <h4 class="mt-1 text-xs text-gray-900">{truncate(product._source.name,60)}</h4>
+        <h4 class="mt-1 text-xs text-gray-900">
+          {truncate(product._source.name, 60)}
+        </h4>
         <!-- <div class="mt-1">
           {currency(product._source.specialPrice || product._source.price)}
           <del class="text-gray-600 text-sm">

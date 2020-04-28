@@ -1,12 +1,12 @@
 <script>
-  import Header from "./../../components/Header.svelte";
-  import AccountMenu from "./_AccountMenu.svelte";
-  import { fadeIn, fadeOut } from "./../../actions/pageFade";
-  export let segment;
+  import Nav from './../../components/Nav.svelte'
+  import AccountMenu from './_AccountMenu.svelte'
+  import { fadeIn, fadeOut } from './../../actions/pageFade'
+  export let segment
 </script>
 
 <main in:fadeIn out:fadeOut>
-  <Header />
+  <Nav />
   <div
     class="flex flex-wrap lg:flex-no-wrap justify-center bg-gray-100 lg:p-5
     lg:mt-10"

@@ -1,41 +1,43 @@
 <script>
-  import { onMount } from "svelte";
-  import { truncate, currency } from "./../lib";
-  import { lazyload } from "./../actions/lazyload";
-  import { stores } from "@sapper/app";
-  const { session } = stores();
+  import { onMount } from 'svelte'
+  import { truncate, currency } from './../lib'
+  import { lazyload } from './../actions/lazyload'
+  import { stores } from '@sapper/app'
+  const { session } = stores()
+  import Carousel from '@beyonk/svelte-carousel'
+  import { ChevronLeftIcon, ChevronRightIcon } from 'svelte-feather-icons'
   export let products = [],
-    title = "";
-  const uniqueId = `siema--${Math.random()
-    .toString(36)
-    .substring(2, 10)}`;
-  let Siema,
-    controller,
-    currentSlide = 0;
-  onMount(async () => {
-    const module = await import("siema");
-    Siema = module.default;
-    controller = new Siema({
-      selector: "." + uniqueId,
-      loop: true,
-      perPage: {
-        300: 2,
-        768: 3,
-        1024: 4,
-        1920: 5
-      },
-      onChange: onChangeCallback
-    });
-  });
-  function onChangeCallback() {
-    currentSlide = this.currentSlide;
-  }
-  function prev() {
-    controller.prev();
-  }
-  function next() {
-    controller.next();
-  }
+    title = ''
+  // const uniqueId = `siema--${Math.random()
+  //   .toString(36)
+  //   .substring(2, 10)}`
+  // let Siema,
+  //   controller,
+  //   currentSlide = 0
+  // onMount(async () => {
+  //   const module = await import('siema')
+  //   Siema = module.default
+  //   controller = new Siema({
+  //     selector: '.' + uniqueId,
+  //     loop: true,
+  //     perPage: {
+  //       300: 2,
+  //       768: 3,
+  //       1024: 4,
+  //       1920: 5
+  //     },
+  //     onChange: onChangeCallback
+  //   })
+  // })
+  // function onChangeCallback() {
+  //   currentSlide = this.currentSlide
+  // }
+  // function prev() {
+  //   controller.prev()
+  // }
+  // function next() {
+  //   controller.next()
+  // }
 </script>
 
 <style>
@@ -63,18 +65,11 @@
   }
 </style>
 
+<!-- w-1/2 sm:w-1/3 md:w-1/3 lg:w-1/4 xl:w-1/5  -->
 <div class="relative pt-2 lg:pt-5 mx-0 lg:mx-5 px-2 lg:px-5 rounded">
   <h1 class="mb-5 text-gray-800 text-2xl font-bold underline">{title}</h1>
-  <div class="">
-    {#if currentSlide != 0}
-      <button on:click={prev} class="hidden lg:block prev">
-        <i class="fa fa-chevron-left" />
-      </button>
-    {/if}
-    <button on:click={next} class="hidden lg:block next">
-      <i class="fa fa-chevron-right" />
-    </button>
-    <div class={uniqueId}>
+  {#if products && products.length}
+    <Carousel perPage={{ 320: 2, 786: 3, 1199: 4, 1919: 5 }}>
       {#each products as p (p._id)}
         <div class="mx-1 lg:mr-5 bg-white py-4 rounded-lg">
           <a href={'/' + p.slug + '?id=' + p._id}>
@@ -95,6 +90,6 @@
           </a>
         </div>
       {/each}
-    </div>
-  </div>
+    </Carousel>
+  {/if}
 </div>

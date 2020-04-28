@@ -1,0 +1,10 @@
+{
+  "semi": false,
+  "singleQuote": true,
+  "vetur.format.defaultFormatterOptions": {
+    "prettier": {
+      "singleQuote": true
+    }
+  },
+  "jsxSingleQuote": true
+}

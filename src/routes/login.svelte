@@ -1,98 +1,98 @@
 <script>
-  import { stores, goto } from "@sapper/app";
-  const { session, page } = stores();
-  import { get, put, post } from "./../lib/api";
-  import Cookie from "cookie-universal";
-  const cookies = Cookie();
-  import { toast } from "./../actions/toast.js";
-  import Textbox from "./../components/ui/Textbox.svelte";
-  import Passwordbox from "./../components/ui/Passwordbox.svelte";
-  import Header from "./../components/Header.svelte";
-  import { fadeIn, fadeOut } from "./../actions/pageFade";
+  import { stores, goto } from '@sapper/app'
+  const { session, page } = stores()
+  import { get, put, post } from './../lib/api'
+  import Cookie from 'cookie-universal'
+  const cookies = Cookie()
+  import { toast } from './../actions/toast.js'
+  import Textbox from './../components/ui/Textbox.svelte'
+  import Passwordbox from './../components/ui/Passwordbox.svelte'
+  import Nav from './../components/Nav.svelte'
+  import { fadeIn, fadeOut } from './../actions/pageFade'
   let loading = false,
-    disable = "disable",
+    disable = 'disable',
     p = {},
     msg = null,
     signup = false,
-    uid = "",
-    password = "",
-    firstName = "",
-    lastName = "",
-    otp = "",
+    uid = '',
+    password = '',
+    firstName = '',
+    lastName = '',
+    otp = '',
     showOTP = false,
     phoneno = /^[+()\d-]+$/,
-    submitText = "Verify",
-    err = null;
-  $: isEmail = uid.includes("@");
-  $: isPhone = uid.length >= 10 && uid.match(phoneno) ? true : false;
+    submitText = 'Verify',
+    err = null
+  $: isEmail = uid.includes('@')
+  $: isPhone = uid.length >= 10 && uid.match(phoneno) ? true : false
   $: if (otp) {
     if (otp.length == 4) {
-      phoneLogin();
+      phoneLogin()
     }
   }
   $: if (uid) {
-    showOTP = false;
-    signup = false;
+    showOTP = false
+    signup = false
   }
   $: if (signup) {
-    submitText = "Signup New Account";
+    submitText = 'Signup New Account'
   } else if (!isPhone && !isEmail && !showOTP) {
-    submitText = "Verify";
+    submitText = 'Verify'
   } else if (isPhone && !showOTP) {
-    submitText = "Verify Phone";
+    submitText = 'Verify Phone'
   } else if (isEmail && !showOTP) {
-    submitText = "Verify Email";
+    submitText = 'Verify Email'
   } else if (isPhone && showOTP) {
-    submitText = "Verify OTP";
+    submitText = 'Verify OTP'
   } else {
-    submitText = "Login Now";
+    submitText = 'Login Now'
   }
   async function submit() {
-    msg = err = null;
-    if (!uid || uid == "") {
-      err = "Please enter your email/phone no";
-      return;
+    msg = err = null
+    if (!uid || uid == '') {
+      err = 'Please enter your email/phone no'
+      return
     }
     if (!isPhone && !isEmail) {
-      err = "Entered email is not valid";
-      return;
+      err = 'Entered email is not valid'
+      return
     }
     if (isPhone) {
-      await phoneLogin();
+      await phoneLogin()
     } else {
-      await emailLogin();
+      await emailLogin()
     }
   }
   async function phoneLogin() {
     // toast.show({ show: true, color: "err", msg: "error...", duration: 7000 });
-    loading = true;
+    loading = true
     if (!showOTP) {
       // When clicked 1st time
       try {
-        const otp = await get("users/phone/" + uid);
-        showOTP = true;
-        msg = "Please enter OTP sent to your Mobile";
+        const otp = await get('users/phone/' + uid)
+        showOTP = true
+        msg = 'Please enter OTP sent to your Mobile'
         // $refs.otp.focus();
-        return;
+        return
       } catch (e) {
-        err = e;
-        console.log("err...", e);
+        err = e
+        console.log('err...', e)
       } finally {
-        loading = false;
+        loading = false
       }
     } else {
       // Final submission
       try {
-        loading = true;
-        const u = await post("auth/local", { uid, password: otp });
-        $session.user = u.user;
-        $session.token = u.token;
-        cookies.set("token", u.token);
-        goto("/");
+        loading = true
+        const u = await post('auth/local', { uid, password: otp })
+        $session.user = u.user
+        $session.token = u.token
+        cookies.set('token', u.token)
+        goto('/')
       } catch (e) {
-        err = e;
+        err = e
       } finally {
-        loading = false;
+        loading = false
       }
     }
   }
@@ -100,56 +100,56 @@
     if (!showOTP) {
       // When clicked 1st time
       try {
-        const otp = await get("users/email/" + uid);
-        showOTP = true;
-        msg = "Please enter your password";
+        const otp = await get('users/email/' + uid)
+        showOTP = true
+        msg = 'Please enter your password'
         // $refs.otp.focus();
-        return;
+        return
       } catch (e) {
-        if (e.response && e.response.status == "400") {
-          signup = true;
-          showOTP = true;
-          console.log("400 err...", e.response.status);
+        if (e.response && e.response.status == '400') {
+          signup = true
+          showOTP = true
+          console.log('400 err...', e.response.status)
         } else {
-          signup = true;
-          showOTP = true;
-          console.log("err...", e.toString());
+          signup = true
+          showOTP = true
+          console.log('err...', e.toString())
         }
-        err = "";
+        err = ''
       } finally {
-        showOTP = true;
-        loading = false;
+        showOTP = true
+        loading = false
       }
     } else {
       // Final submission
       try {
-        loading = true;
-        let u = {};
+        loading = true
+        let u = {}
         if (signup) {
           // Signup
-          u = await post("users", {
+          u = await post('users', {
             email: uid,
             firstName: firstName,
             lastName: lastName,
             password
-          });
+          })
         } else {
           // Login
-          u = await post("auth/local", { uid, password });
+          u = await post('auth/local', { uid, password })
         }
-        $session.user = u.user;
-        $session.token = u.token;
-        cookies.set("token", u.token);
+        $session.user = u.user
+        $session.token = u.token
+        cookies.set('token', u.token)
         // showOTP = true;
-        goto("/");
+        goto('/')
         // $refs.password.focus();
       } catch (e) {
-        showOTP = false;
-        err = e;
+        showOTP = false
+        err = e
         // $refs.uid.focus();
       } finally {
-        showOTP = true;
-        loading = false;
+        showOTP = true
+        loading = false
       }
     }
   }
@@ -212,7 +212,7 @@
   <meta data-hid="og:title" name="og_title" content="Login to Hopyshopy" />
 </svelte:head>
 <main in:fadeIn out:fadeOut>
-  <Header home={true} />
+  <Nav home={true} />
 
   <div class="relative z-50">
     <div class="h-full px-4">

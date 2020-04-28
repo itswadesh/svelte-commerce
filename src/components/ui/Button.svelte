@@ -1,8 +1,8 @@
 <script>
-  export let size = "default",
-    color = "none",
+  export let size = 'default',
+    color = 'none',
     full = false,
-    rounded = false;
+    rounded = false
 </script>
 
 <button

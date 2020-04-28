@@ -1,9 +1,9 @@
 <script>
-  import { createEventDispatcher } from "svelte";
-  const dispatch = createEventDispatcher();
-  export let model = null;
-  export let items = null;
-  export let selectedItems = {};
+  import { createEventDispatcher } from 'svelte'
+  const dispatch = createEventDispatcher()
+  export let model = null
+  export let items = null
+  export let selectedItems = {}
 </script>
 
 <style>
@@ -61,7 +61,7 @@
   } */
 
   .color-btn:after {
-    content: "";
+    content: '';
     position: absolute;
     display: none;
   }

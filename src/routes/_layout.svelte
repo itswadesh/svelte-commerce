@@ -1,14 +1,26 @@
 <script>
-  import Footer from "../components/Footer.svelte";
-  import { toast } from "./../actions/toast.js";
+  import Footer from '../components/Footer.svelte'
+  import { toast } from './../actions/toast.js'
+  import { stores } from '@sapper/app'
+  import Stylesheet from '../components/Stylesheet.svelte'
+  import PreloadingIndicator from '../components/PreloadingIndicator.svelte'
+  import Nav from '../components/Nav.svelte'
+  export let segment
+  const { preloading } = stores()
 </script>
 
-<main class="antialiased" style="min-height:92.5vh">
-  <slot />
-</main>
+{#if $preloading}
+  <PreloadingIndicator />
+{/if}
+<Stylesheet />
 
-<Footer />
-
+<div class="min-h-screen font-sans antialiased text-gray-900 flex flex-col">
+  <!-- <Nav {segment} /> -->
+  <div class="flex-1">
+    <slot />
+  </div>
+  <Footer />
+</div>
 {#if $toast.show}
   <div class="flex justify-center">
     <div class="toast {$toast.color}">{$toast.msg}</div>

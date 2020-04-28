@@ -1,10 +1,10 @@
 <script>
-  import { createEventDispatcher } from "svelte";
-  const dispatch = createEventDispatcher();
-  export let label = "",
-    value = "",
-    cls = "",
-    placeholder = " ";
+  import { createEventDispatcher } from 'svelte'
+  const dispatch = createEventDispatcher()
+  export let label = '',
+    value = '',
+    cls = '',
+    placeholder = ' '
 </script>
 
 <style>
@@ -47,7 +47,7 @@
   }
 
   .floating-select:focus ~ label,
-  .floating-select:not([value=""]):valid ~ label {
+  .floating-select:not([value='']):valid ~ label {
     top: -18px;
     font-size: 14px;
     color: #555;

@@ -1,23 +1,23 @@
 <script>
-  import Header from "./../../components/Header.svelte";
-  import Button from "./../../components/ui/Button.svelte";
-  import EmptyCart from "./_EmptyCart.svelte";
-  import CartSummary from "./_CartSummary.svelte";
-  import CartBanners from "./_CartBanners.svelte";
-  import CartItem from "./_CartItem.svelte";
-  import { stores, goto } from "@sapper/app";
-  const { session } = stores();
-  import { cart } from "./../../store/cart.js";
-  import { currency } from "./../../lib";
-  import { fadeIn, fadeOut } from "./../../actions/pageFade";
+  import Nav from './../../components/Nav.svelte'
+  import Button from './../../components/ui/Button.svelte'
+  import EmptyCart from './_EmptyCart.svelte'
+  import CartSummary from './_CartSummary.svelte'
+  import CartBanners from './_CartBanners.svelte'
+  import CartItem from './_CartItem.svelte'
+  import { stores, goto } from '@sapper/app'
+  const { session } = stores()
+  import { cart } from './../../store/cart.js'
+  import { currency } from './../../lib'
+  import { fadeIn, fadeOut } from './../../actions/pageFade'
   function goCheckout() {
-    if ($session.token && $session.token != "") goto("/cart/checkout");
-    else goto("/login");
+    if ($session.token && $session.token != '') goto('/cart/checkout')
+    else goto('/login')
   }
 </script>
 
 <main in:fadeIn out:fadeOut>
-  <Header home={true} />
+  <Nav home={true} />
   <div>
     {#if !$cart || !$cart.qty || $cart.qty == 0}
       <EmptyCart />

@@ -1,8 +1,8 @@
 <script>
-  import { goto } from "@sapper/app";
-  import { stores } from "@sapper/app";
-  const { session } = stores();
-  import { lazyload } from "./../actions/lazyload";
+  import { goto } from '@sapper/app'
+  import { stores } from '@sapper/app'
+  const { session } = stores()
+  import { lazyload } from './../actions/lazyload'
 </script>
 
 <style>

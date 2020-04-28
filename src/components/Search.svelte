@@ -1,26 +1,26 @@
 <script>
-  import { goto, stores } from "@sapper/app";
-  const { session, page } = stores();
-  import { createEventDispatcher } from "svelte";
-  const dispatch = createEventDispatcher();
-  export let home = false;
-  let query;
-  let searchInput;
-  import { onMount } from "svelte";
+  import { goto, stores } from '@sapper/app'
+  const { session, page } = stores()
+  import { createEventDispatcher } from 'svelte'
+  const dispatch = createEventDispatcher()
+  export let home = false
+  let query
+  let searchInput
+  import { onMount } from 'svelte'
   onMount(() => {
-    if (!home && query.q) setTimeout(() => searchInput.focus(), 0);
-  });
+    if (!home && query.q) setTimeout(() => searchInput.focus(), 0)
+  })
   page.subscribe(page => {
-    query = page.query;
-  });
+    query = page.query
+  })
   function search() {
     setTimeout(() => {
       // When coming from home (or another page)
-      if (home) goto("/search?q=" + query.q);
+      if (home) goto('/search?q=' + query.q)
       // goto reloads the page. Hence focus is lost
-      else history.pushState({}, null, "/search?q=" + query.q);
-      dispatch("search", query.q);
-    }, 300);
+      else history.pushState({}, null, '/search?q=' + query.q)
+      dispatch('search', query.q)
+    }, 300)
   }
 </script>
 

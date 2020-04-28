@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "name": "sapper-commerce",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "now-sapper"
+    }
+  ],
+  "regions": ["bom1"]
+}

@@ -1,31 +1,31 @@
 <script>
-  import Search from "./Search.svelte";
-  import Loader from "./ui/Loader.svelte";
-  import { stores, goto } from "@sapper/app";
-  const { preloading, session } = stores();
-  import { auth } from "./../store/auth.js";
-  import { cart } from "./../store/cart.js";
-  import { createEventDispatcher } from "svelte";
-  const dispatch = createEventDispatcher();
+  import Search from './Search.svelte'
+  import Loader from './ui/Loader.svelte'
+  import { stores, goto } from '@sapper/app'
+  const { preloading, session } = stores()
+  import { auth } from './../store/auth.js'
+  import { cart } from './../store/cart.js'
+  import { createEventDispatcher } from 'svelte'
+  const dispatch = createEventDispatcher()
   export let home = false,
-    loading = false;
+    loading = false
 
   preloading.subscribe(_ => {
-    loading = _;
-  });
+    loading = _
+  })
 
   function logout() {
-    $session.user = {};
-    $session.token = undefined;
-    auth.logout();
+    $session.user = {}
+    $session.token = undefined
+    auth.logout()
   }
 
   function closeSidebar() {
-    this.sidebar = false;
+    this.sidebar = false
   }
 
   function search(q) {
-    dispatch("search", q.detail);
+    dispatch('search', q.detail)
   }
 </script>
 
