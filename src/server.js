@@ -4,19 +4,19 @@ import compression from 'compression'
 import * as sapper from '@sapper/server'
 import { authenticationMiddleware } from './lib/auth'
 import { api_url } from './config'
-const dotenv = require('dotenv').config()
+require('dotenv').config()
 const { PORT, NODE_ENV, API_URL } = process.env
 
-const proxy = require('http-proxy-middleware')
-const apiProxy = proxy('/api', {
+const { createProxyMiddleware } = require('http-proxy-middleware')
+const apiProxy = createProxyMiddleware('/api', {
   target: API_URL || api_url,
   changeOrigin: true,
 })
-const imgProxy = proxy('/images', {
+const imgProxy = createProxyMiddleware('/images', {
   target: API_URL || api_url,
   changeOrigin: true,
 })
-const sitemapProxy = proxy('/sitemap-hs.xml', {
+const sitemapProxy = createProxyMiddleware('/sitemap-hs.xml', {
   target: API_URL || api_url,
   changeOrigin: true,
 })

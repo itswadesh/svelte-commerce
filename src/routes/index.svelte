@@ -183,11 +183,11 @@
 {:then asusProducts}
   <Deals products={asusProducts} title="Asus Laptops" />
 {/await}
-<!-- {#await getAcer()}
+{#await getAcer()}
   <ProductSkeleton count={5} />
 {:then AcerProducts}
   <Deals products={AcerProducts} title="Acer Laptops" />
-{/await} -->
+{/await}
 {#await getSSD()}
   <ProductSkeleton count={5} />
 {:then SSDProducts}
@@ -218,11 +218,11 @@
 {:then R64GBProducts}
   <Carousel products={R64GBProducts} title="64GB Laptops" />
 {/await} -->
-{#await get32GB()}
+<!-- {#await get32GB()}
   <ProductSkeleton count={5} />
 {:then R32GBProducts}
   <Carousel products={R32GBProducts} title="32GB Laptops" />
-{/await}
+{/await} -->
 {#await get16GB()}
   <ProductSkeleton count={5} />
 {:then R16GBProducts}
