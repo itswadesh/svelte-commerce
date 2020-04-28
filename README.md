@@ -2,7 +2,7 @@
 <img src="https://github.com/itswadesh/sapper-ecommerce/blob/master/static/litekart-banner.png?raw=true" alt/>
 </a>
 
-On sapper/svelte version bump do the following else it will show error while navigating on home page
+On sapper/svelte version bump do the following else it will show error while navigating on home page with carousel
 
 `node_modules/svelte/internal/index.mjs`
 
