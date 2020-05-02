@@ -23,6 +23,12 @@ function detach(node) {
 ![Branch Develop](https://img.shields.io/badge/dev%20branch-dev-blue.svg)
 <a href="https://codenx.slack.com" target="blank">![Branch Develop](https://img.shields.io/badge/community%20chat-slack-FF1493.svg)</a>
 
+![Home Page](https://github.com/itswadesh/sapper-ecommerce/blob/master/static/screenshots/home.png?raw=true)
+![Detail Page](https://github.com/itswadesh/sapper-ecommerce/blob/master/static/screenshots/detail.png?raw=true)
+![Search Page](https://github.com/itswadesh/sapper-ecommerce/blob/master/static/screenshots/search.png?raw=true)
+![Empty Cart](https://github.com/itswadesh/sapper-ecommerce/blob/master/static/screenshots/empty-cart.png?raw=true)
+![Login Page](https://github.com/itswadesh/sapper-ecommerce/blob/master/static/screenshots/login.png?raw=true)
+
 # Built for speed
 
 > Following are the test results when all servers (Elasticsearch, Node, Static Server, Client) give a ping response <100 ms. The demo app hopyshopy.com is hosted at Mumbai (India), If you are testing from another country, the results my vary.
@@ -58,6 +64,10 @@ Thats all !
 Open http://localhost:4400 on chrome. Your app should be live
 
 # Deployment
+
+### Deploy to Netlify
+
+<a href="https://app.netlify.com/start/deploy?repository=https://github.com/itswadesh/sapper-ecommerce"><img src="https://www.netlify.com/img/deploy/button.svg" alt="Deploy to Netlify"></a>
 
 ### Setup devops/live.js (Change according to your hosting envirnoment)
 
