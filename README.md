@@ -23,11 +23,11 @@ function detach(node) {
 ![Branch Develop](https://img.shields.io/badge/dev%20branch-dev-blue.svg)
 <a href="https://codenx.slack.com" target="blank">![Branch Develop](https://img.shields.io/badge/community%20chat-slack-FF1493.svg)</a>
 
-![Home Page](https://github.com/itswadesh/sapper-ecommerce/blob/master/static/screenshots/home.png?raw=true)
-![Detail Page](https://github.com/itswadesh/sapper-ecommerce/blob/master/static/screenshots/detail.png?raw=true)
-![Search Page](https://github.com/itswadesh/sapper-ecommerce/blob/master/static/screenshots/search.png?raw=true)
-![Empty Cart](https://github.com/itswadesh/sapper-ecommerce/blob/master/static/screenshots/empty-cart.png?raw=true)
-![Login Page](https://github.com/itswadesh/sapper-ecommerce/blob/master/static/screenshots/login.png?raw=true)
+|                                                                                                                     |                                                                                                                  |                                                                                                                  |
+| ------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| ![Home Page](https://github.com/itswadesh/sapper-ecommerce/blob/master/static/screenshots/home.png?raw=true)        | ![Detail Page](https://github.com/itswadesh/sapper-ecommerce/blob/master/static/screenshots/detail.png?raw=true) | ![Search Page](https://github.com/itswadesh/sapper-ecommerce/blob/master/static/screenshots/search.png?raw=true) |  |
+| ![Empty Cart](https://github.com/itswadesh/sapper-ecommerce/blob/master/static/screenshots/empty-cart.png?raw=true) | ![Login Page](https://github.com/itswadesh/sapper-ecommerce/blob/master/static/screenshots/login.png?raw=true)   | ![Filters](https://github.com/itswadesh/sapper-ecommerce/blob/master/static/screenshots/filters.png?raw=true)    |
+|                                                                                                                     |                                                                                                                  |                                                                                                                  |
 
 # Built for speed
 
