@@ -40,9 +40,7 @@ function hideitems() {
 	class="flex-shrink-0 w-52 mx-2 mb-2 md:mx-4 md:mb-4 group  hover:bg-white hover:shadow-md text-gray-800"
 	on:mouseenter="{showitems}"
 	on:mouseleave="{hideitems}">
-	<a
-		href="{'/' + product._source?.slug + '?id=' + product?._id}"
-		class="block overflow-hidden hover:shadow-lg">
+	<a href="{'/' + product._source?.slug + '?id=' + product?._id}" class="block overflow-hidden ">
 		<div class="">
 			<img
 				alt=""
@@ -99,9 +97,11 @@ function hideitems() {
 					<div class="mt-1.5 flex items-baseline justify-start">
 						<h5 class="mr-1 text-sm">Sizes:</h5>
 						<h5 class="space-x-1 text-xs font-medium text-gray-500 flex items-baseline ">
-							{#each product.variants as v, i}
-								<div>{v.size}</div>
-							{/each}
+							{#if product?.variants?.length}
+								{#each product?.variants as v, i}
+									<div>{v.size}</div>
+								{/each}
+							{/if}
 						</h5>
 					</div>
 					<!-- Size chart end-->
