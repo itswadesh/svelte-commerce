@@ -1,6 +1,7 @@
-<script context="module">
-export async function load({ session: { user } }) {
-	fetchCart()
+<script context="module" lang="ts">
+export async function load({ session: { user, token } }) {
+	// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', token)
+	fetchCart(token)
 	return { props: { user } }
 }
 </script>
@@ -20,7 +21,7 @@ export let user
 </script>
 
 <PageTransitions refresh="{$page.path}">
-	<div>
+	<div class="bg-gray-50 font-sans antialiased">
 		<div class="mb-12 lg:mb-20">
 			<div class="fixed top-0 z-50 block w-full md:hidden">
 				<MobNav user="{user}" />
@@ -35,7 +36,7 @@ export let user
 		</div>
 	</div>
 
-	<div class="pt-20 fixed bottom-0 z-50 w-full  md:hidden">
+	<div class=" fixed bottom-0 z-50 w-full  md:hidden">
 		<MobFooter />
 	</div>
 </PageTransitions>
