@@ -1,9 +1,9 @@
 <script context="module" lang="ts">
 import type { Load } from '@sveltejs/kit'
-export const load: Load = async ({ session }) => {
-	if (!session.user) {
+export const load: Load = async ({ page: { path }, session: { user } }) => {
+	if (!user) {
 		return {
-			redirect: '/login',
+			redirect: `/login?ref=${path}`,
 			status: 302,
 		}
 	}
@@ -25,7 +25,7 @@ const seoProps = {
 
 <SEO {...seoProps} />
 
-<section class="w-full max-w-6xl lg:h-screen md:pt-5 lg:pt-0">
+<section class="w-full lg:h-screen md:pt-5 lg:pt-0">
 	<div class="w-full p-2 sm:p-6 flex items-start ">
 		<div>
 			<SidebarDashboard />
