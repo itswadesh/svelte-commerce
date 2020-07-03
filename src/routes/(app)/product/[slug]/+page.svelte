@@ -63,15 +63,18 @@ import FrequentlyBoughtProduct from './_FrequentlyBoughtProduct.svelte'
 import Gallery from '$lib/components/Product/Gallery.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import productNonVeg from '$lib/assets/product/non-veg.png'
+import productVeg from '$lib/assets/product/veg.png'
 import Radio from '$lib/ui/Radio.svelte'
+import RadioColor from '$lib/ui/RadioColor.svelte'
+import RadioSize from '$lib/ui/RadioSize.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import SimilarProducts from '$lib/components/Product/SimilarProducts.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
+import UserForm from '$lib/components/Product/UserForm.svelte'
 import viewport from '$lib/actions/useViewPort'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
-import RadioSize from '$lib/ui/RadioSize.svelte'
-import RadioColor from '$lib/ui/RadioColor.svelte'
 
 const dispatch = createEventDispatcher()
 
@@ -81,10 +84,11 @@ export let data
 
 // console.log('zzzzzzzzzzzzzzzzzz', data)
 
-let selectedImgCdn
+let selectedImgIndex
 let seoProps = {
-	title: `Details of product ${data.product?.name}`,
-	description: `Details of product ${data.product?.name}`
+	title: `Details of product ${data.product?.title}` || ' ',
+	description: data.product?.metaDescription || ' ',
+	keywords: data.product?.keywords || ' '
 }
 let wishlisted = false,
 	productReview = {}
@@ -164,20 +168,36 @@ async function addToBag(p) {
 	cartButtonText = 'Adding...'
 
 	try {
-		const cart = await post(
+		let cart = await post(
 			'carts/add-to-cart',
 			{
 				pid: p._id,
 				vid: p._id,
 				qty: 1,
 				options: selectedOptions,
+
 				store: $page.data.store?.id
 			},
 			$page.data.origin
 		)
-
-		console.log('selectedLinkiedProducts inside add to cart function =', selectedLinkiedProducts)
-
+		if (selectedLinkiedProducts?.length) {
+			for (const i of selectedLinkiedProducts) {
+				cart = await post(
+					'carts/add-to-cart',
+					{
+						pid: i,
+						vid: i,
+						qty: 1,
+						store: $page.data.store?.id
+					},
+					$page.data.origin
+				)
+			}
+		}
+		// console.log('selectedLinkiedProducts inside add to cart function =', selectedLinkiedProducts)
+		const response = await fetch('/server/cart')
+		cart = await response.json()
+		console.error('Cart called after add to cart', cart.cart_id, cart.qty)
 		if (cart) {
 			const cookieCart = {
 				cartId: cart?.cart_id,
@@ -188,6 +208,7 @@ async function addToBag(p) {
 				total: cart?.total,
 				currencySymbol: cart?.currencySymbol,
 				discount: cart?.discount,
+				savings: cart?.savings,
 				selfTakeout: cart?.selfTakeout,
 				shipping: cart?.shipping,
 				unavailableItems: cart?.unavailableItems,
@@ -265,18 +286,31 @@ function alertToSelectMandatoryOptions() {
 
 $: {
 	const o1 = []
-	// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', selectedOptions)
 	for (const i in selectedOptions) {
 		if (Array.isArray(selectedOptions[i])) o1.push({ option: i, values: o[i] })
 		else o1.push({ option: i, values: [selectedOptions[i]] })
 	}
 
+	// console.log('oooooooooooooooooo', o)
+	// console.log('dddddddddddddd', o1)
+
+	//   if (!this.selectedOptions) this.selectedOptions = []
+	//   for (const i in o) {
+	//     this.selectedOptions.push({ option: i, values: [o[i]] })
+	//   }
+
+	//   console.log('occccccccccccccccccccccc', this.selectedOptions)
+	// },
+
+	// dateChanged(o) {
+	//   if (!this.selectedOptions) this.selectedOptions = []
+	//   this.selectedOptions.push(o)
 	selectedOptions1 = o1
 }
 
 async function toggleWishlist(id) {
 	if (!$page.data.me) {
-		goto('/auth/otp-login')
+		goto(`/auth/otp-login?ref=/my/wishlist/add/${id}`)
 	}
 
 	try {
@@ -310,8 +344,8 @@ function scrollTo(elementId) {
 	})
 }
 
-function handleGallery(img) {
-	selectedImgCdn = img
+function handleGallery(index) {
+	selectedImgIndex = index
 	showPhotosModal = true
 }
 
@@ -322,7 +356,7 @@ function handleMobileCanvas() {
 }
 </script>
 
-<!-- <SEO {...seoProps} /> -->
+<SEO {...seoProps} />
 
 <svelte:window bind:scrollY="{y}" />
 
@@ -347,16 +381,15 @@ function handleMobileCanvas() {
 				{#if !data.product?.isCustomized}
 					<div
 						class="flex w-full grid-cols-2 flex-row gap-2 overflow-x-scroll scrollbar-none md:grid">
-						{#if data?.product?.imagesCdn?.length}
-							{#each data.product?.imagesCdn as imgCdn}
+						{#if data?.product?.images?.length}
+							{#each data.product?.images as img, index}
 								<button
 									type="button"
-									class="w-full flex-shrink-0 cursor-zoom-in overflow-hidden rounded md:h-full md:w-full md:flex-shrink"
-									on:click="{() => handleGallery(imgCdn)}">
+									class="h-auto w-full flex-shrink-0 cursor-zoom-in overflow-hidden rounded md:flex-shrink"
+									on:click="{() => handleGallery(index)}">
 									<LazyImg
-										src="{imgCdn}"
+										src="{img}"
 										alt="{data.product?.name}"
-										width="416"
 										height="600"
 										class="h-full w-full transform object-contain object-center transition duration-700" />
 								</button>
@@ -434,9 +467,9 @@ function handleMobileCanvas() {
 						{#if $page?.data?.store?.isFnb && data.product.foodType}
 							<div>
 								{#if data.product.foodType === 'veg'}
-									<img src="/product/veg.png" alt="veg" class="h-5 w-5" />
+									<img src="{productVeg}" alt="veg" class="h-5 w-5" />
 								{:else if data.product.foodType === 'nonveg' || data.product.foodType === 'E'}
-									<img src="/product/non-veg.png" alt="non veg" class="h-5 w-5" />
+									<img src="{productNonVeg}" alt="non veg" class="h-5 w-5" />
 								{/if}
 							</div>
 						{/if}
@@ -473,25 +506,24 @@ function handleMobileCanvas() {
 				<!-- prices -->
 
 				<div class="mb-2 flex flex-wrap items-center gap-4">
-					<span class="whitespace-nowrap text-xl sm:text-2xl"
-						><b>{data.product?.formattedPrice}</b></span>
+					<span class="whitespace-nowrap text-xl sm:text-2xl">
+						<b>{data.product?.formattedPrice}</b>
+					</span>
 
 					{#if data.product?.mrp > data.product?.price}
 						<span class="whitespace-nowrap text-lg text-gray-500 sm:text-xl">
 							<strike>{data.product?.formattedMrp}</strike>
 						</span>
 
-						{#if Math.floor(((data.product?.mrp - data.product?.price) / data.product?.mrp) * 100) > 0}
-							<span class="whitespace-nowrap text-lg font-semibold text-primary-500 sm:text-xl">
-								({Math.floor(
-									((data.product?.mrp - data.product?.price) / data.product?.mrp) * 100
-								)}% off)
+						{#if data.product?.discount > 0}
+							<span class="whitespace-nowrap text-lg font-semibold text-amber-500 sm:text-xl">
+								({data.product?.discount}% off)
 							</span>
 						{/if}
 					{/if}
 				</div>
 
-				<p class="mb-5 text-sm font-semibold text-green-600">Inclusive of all taxes</p>
+				<p class="mb-5 text-sm font-semibold text-green-700">Inclusive of all taxes</p>
 
 				<!-- New and Tags -->
 
@@ -535,7 +567,7 @@ function handleMobileCanvas() {
 							</svg>
 						</h6>
 
-						<div class="flex flex-wrap gap-4">
+						<div class="flex flex-wrap gap-2">
 							<button
 								type="button"
 								class="overflow-hidden rounded border py-1 px-3 text-sm font-medium uppercase transition duration-500 focus:outline-none
@@ -548,6 +580,66 @@ function handleMobileCanvas() {
 						</div>
 					</div>
 				{/if}
+
+				<!-- Group Products -->
+
+				{#if data.product?.groupProduct?.length}
+					<div class="mb-5">
+						<h6 class="mb-5 flex items-center gap-2 font-semibold uppercase">
+							<span> Similar Products </span>
+
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke-width="1.5"
+								stroke="currentColor"
+								class="h-5 w-5">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 01-1.125-1.125v-3.75zM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-8.25zM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-2.25z"
+								></path>
+							</svg>
+						</h6>
+
+						<ul class="flex flex-wrap gap-2">
+							{#each data.product?.groupProduct as gp}
+								<li>
+									<a
+										href="/product/{gp.slug}"
+										class="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border transition duration-300 hover:border-primary-500">
+										<LazyImg
+											src="{gp.img}"
+											alt="{gp.img}"
+											height="56"
+											class="h-14 w-auto object-contain object-center" />
+									</a>
+								</li>
+							{/each}
+						</ul>
+					</div>
+				{/if}
+
+				<!-- {#if moreOptions?.length > 0}
+					<div class="mb-5 flex flex-col gap-2">
+						{#each moreOptions as option}
+							<label for="{option.title}" class="flex items-center gap-2 text-sm font-medium">
+								{#if option.type === 'checkbox'}
+									<input
+										type="checkbox"
+										name="{option.title}"
+										id="{option.title}"
+										class="h-4 w-4" />
+								{/if}
+
+								<span>
+									{option.title}
+								</span>
+							</label>
+						{/each}
+					</div>
+				{/if} -->
 
 				<!-- select options  -->
 
@@ -723,9 +815,9 @@ function handleMobileCanvas() {
 										method="POST"
 										use:enhance="{() => {
 											return async ({ result }) => {
-												result.data.qty < 0
-													? fireGTagEvent('remove_from_cart', result.data)
-													: fireGTagEvent('add_to_cart', result.data)
+												result?.data?.qty < 0
+													? fireGTagEvent('remove_from_cart', result?.data)
+													: fireGTagEvent('add_to_cart', result?.data)
 
 												// cartButtonText = 'Added To Cart'
 												bounceItemFromTop = true
@@ -1107,7 +1199,10 @@ function handleMobileCanvas() {
 	</div>
 </div>
 
-<Gallery bind:showPhotosModal product="{data.product}" />
+<Gallery
+	bind:selectedImgIndex="{selectedImgIndex}"
+	bind:showPhotosModal="{showPhotosModal}"
+	product="{data.product}" />
 
 {#if bounceItemFromTop}
 	<AnimatedCartItem img="{customizedImg || data.product?.img}" />
