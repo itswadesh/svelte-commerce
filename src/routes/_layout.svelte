@@ -4,8 +4,7 @@
   import { stores } from '@sapper/app'
   import Stylesheet from '../components/Stylesheet.svelte'
   import PreloadingIndicator from '../components/PreloadingIndicator.svelte'
-  import Nav from '../components/Nav.svelte'
-  export let segment
+  // import Nav from '../components/Nav.svelte'
   const { preloading } = stores()
 </script>
 
@@ -14,7 +13,7 @@
 {/if}
 <Stylesheet />
 
-<div class="min-h-screen font-sans antialiased text-gray-900 flex flex-col">
+<div class="flex flex-col min-h-screen font-sans antialiased text-gray-900">
   <!-- <Nav {segment} /> -->
   <div class="flex-1">
     <slot />

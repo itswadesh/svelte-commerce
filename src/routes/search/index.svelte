@@ -101,7 +101,7 @@
   {#if showMobileFilter}
     <MobileFilters {facets} on:hide={toggle} />
   {:else}
-    <div class="flex">
+    <div class="flex pt-10">
       <DesktopFilters bind:facets bind:query />
       <div class="w-full">
         <HeaderBody
@@ -117,9 +117,9 @@
         {:else if products.length == 0 && !loading}
           <NoProduct />
         {:else if products && products.length > 0}
-          <div class="flex flex-wrap">
+          <div class="flex flex-wrap justify-center">
             {#each products as p}
-              <Product1 product={p} />
+              <Product1 product={p._source} />
             {/each}
           </div>
         {/if}
