@@ -7,13 +7,11 @@
 <script lang="ts">
 import { createEventDispatcher, getContext, onMount } from 'svelte'
 import { cubicOut } from 'svelte/easing'
-import { currency, toast } from '$lib/util'
-import { fade, fly, slide } from 'svelte/transition'
+import { fade, fly } from 'svelte/transition'
 import { getAPI, post } from '$lib/util/api'
 import { goto, invalidateAll } from '$app/navigation'
 import { logo } from './config'
 import { page } from '$app/stores'
-import { settings } from './store'
 import Autocomplete from '$lib/components/Autocomplete/Autocomplete.svelte'
 import Cookie from 'cookie-universal'
 import Item from '$lib/AutocompleteItem.svelte'
@@ -27,6 +25,8 @@ const dispatch = createEventDispatcher()
 const cookies = Cookie()
 
 export let me, cart, data, showCartSidebar, openSidebar, store
+
+console.log('page', $page)
 
 let q = ''
 let showDropdownAccount = false
@@ -189,13 +189,25 @@ const getSelectionLabel = (option) => option.name
 				</button>
 			{/if}
 
-			<!-- Logo -->
+			<!-- Website Logo/Name -->
 
 			<a class="block flex-shrink-0" href="/" aria-label="Click to route home">
-				<img
-					src="{logo}"
-					alt=" "
-					class="h-auto max-h-10 w-32 object-contain object-center sm:max-h-16" />
+				{#if $page?.data?.store?.logo}
+					<img
+						src="{$page?.data?.store?.logo}"
+						alt=" "
+						class="h-auto max-h-10 w-32 object-contain object-center sm:max-h-16" />
+				{:else if $page?.data?.store?.websiteName}
+					<h1
+						class="bg-gradient-to-b from-primary-500 to-secondary-500 bg-clip-text text-2xl font-extrabold text-transparent sm:text-3xl">
+						{$page?.data?.store?.websiteName}
+					</h1>
+				{:else}
+					<img
+						src="{logo}"
+						alt=" "
+						class="h-auto max-h-10 w-32 object-contain object-center sm:max-h-16" />
+				{/if}
 			</a>
 		</div>
 

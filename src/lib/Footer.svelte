@@ -79,8 +79,9 @@ let footerItems = [
 			{ title: 'Bulk Order Inquiry', link: '/bulk-order-inquiry', new: true },
 			{
 				title: 'Join as Vendor',
-				link: `https://admin.litekart.in/${$page.data.store?.loginUrl}?role=vendor&store=${$page.data.store?.id}`,
-				new: true
+				link: `{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store?.id}`,
+				new: true,
+				target: '_blank'
 			}
 		]
 	}
@@ -170,7 +171,8 @@ async function getStoreData() {
 // }
 </script>
 
-<div class="bg-primary-500 p-3 text-center tracking-wide text-white sm:px-10">
+<div
+	class="bg-gradient-to-r from-primary-500 to-secondary-500 p-3 text-center tracking-wide text-white sm:px-10">
 	<p class="mb-1 text-xl font-semibold uppercase">Truly Indian Brand</p>
 
 	<p>Over <span class="font-semibold">2 Million</span> Happy Customers</p>
@@ -190,6 +192,7 @@ async function getStoreData() {
 						{#each item?.subMenu as item}
 							<li class="flex max-w-max items-center">
 								<a
+									target="{item.target}"
 									href="{item.link}"
 									aria-label="Click to route this page"
 									class="link-underline link-underline-gray whitespace-pre-wrap">
