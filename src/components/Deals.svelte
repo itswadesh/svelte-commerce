@@ -41,9 +41,34 @@
   <h1 class="mb-5 text-2xl font-bold text-gray-800 underline">{title}</h1>
   {#if products && products.length}
     <Carousel perPage={{ 320: 1, 786: 2, 1199: 4, 1919: 5 }}>
-      {#each products as p (p._id)}
-        <div class="slide-content">
-          <Product product={p} />
+      {#each products as product (product._id)}
+        <div class="mr-4 slide-content">
+          <a
+            href={'/' + product.slug + '?id=' + product._id}
+            class="block bg-white rounded-md shadow-md avatar zoom hover:shadow-lg">
+            <img
+              alt=""
+              use:lazyload
+              src={$session.settings.CDN_URL + product.img[0] + '?tr=w-3,h-2'}
+              data-src={$session.settings.CDN_URL + product.img[0] + '?tr=w-300,h-200'}
+              class="object-cover object-top w-full"
+              style="" />
+            <div class="px-8 py-4">
+              <h2
+                href={'/' + product.slug + '?id=' + product._id}
+                class="text-xl truncate ">
+                {product.name}
+              </h2>
+              <div class="flex flex-wrap items-center justify-between my-2 ">
+                <div class="text-3xl font-bold ">
+                  {currency(product.flipkart.specialPrice)}
+                </div>
+                {#if product.stock < 1}
+                  <div class="text-xs text-red-500">Out of stock</div>
+                {/if}
+              </div>
+            </div>
+          </a>
         </div>
         <!-- <div class="py-4 mx-1 bg-white rounded-lg lg:mr-5">
           <a href={'/' + p.slug + '?id=' + p._id}>

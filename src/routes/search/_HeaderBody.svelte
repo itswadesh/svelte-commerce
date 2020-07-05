@@ -21,9 +21,9 @@
 </script>
 
 <div class="items-center justify-between flex-none px-2 py-2 text-sm lg:flex">
-  <div class="flex items-center justify-center p-1 mt-8">
+  <div class="flex items-center justify-center p-1 mt-12 lg:mt-8">
     {#if !count}
-      <div class="">Will just take a second...</div>
+      <div class="">Will just take a moment...</div>
     {:else}
       <div class="ml-4 ">
         <span class="font-bold ">{count}</span>

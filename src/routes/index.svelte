@@ -171,7 +171,7 @@
   {:then HPProducts}
     <Deals products={HPProducts} title="HP Laptops" />
   {/await}
-  <!-- {#await getDell()}
+  {#await getDell()}
     <ProductSkeleton count={5} />
   {:then DellProducts}
     <Deals products={DellProducts} title="Dell Laptops" />
@@ -186,7 +186,7 @@
   {:then asusProducts}
     <Deals products={asusProducts} title="Asus Laptops" />
   {/await}
-  {#await getAcer()}
+  <!-- {#await getAcer()}
     <ProductSkeleton count={5} />
   {:then AcerProducts}
     <Deals products={AcerProducts} title="Acer Laptops" />
@@ -194,46 +194,46 @@
   {#await getSSD()}
     <ProductSkeleton count={5} />
   {:then SSDProducts}
-    <Carousel products={SSDProducts} title="SSD Laptops" />
+    <Deals products={SSDProducts} title="SSD Laptops" />
   {/await}
   {#await getI7()}
     <ProductSkeleton count={5} />
   {:then I7Products}
-    <Carousel products={I7Products} title="I7 Laptops" />
+    <Deals products={I7Products} title="I7 Laptops" />
   {/await}
   {#await getI5()}
     <ProductSkeleton count={5} />
   {:then I5Products}
-    <Carousel products={I5Products} title="I5 Laptops" />
+    <Deals products={I5Products} title="I5 Laptops" />
   {/await}
   {#await getI3()}
     <ProductSkeleton count={5} />
   {:then I3Products}
-    <Carousel products={I3Products} title="I3 Laptops" />
-  {/await}
+    <Deals products={I3Products} title="I3 Laptops" />
+  {/await} -->
   {#await getLatest()}
     <ProductSkeleton count={5} />
   {:then latestProducts}
     <Deals products={latestProducts} title="Latest Laptops" />
-  {/await} -->
+  {/await}
   <!-- {#await get64GB()}
   <ProductSkeleton count={5} />
 {:then R64GBProducts}
-  <Carousel products={R64GBProducts} title="64GB Laptops" />
-{/await} -->
-  <!-- {#await get32GB()}
+  <Deals products={R64GBProducts} title="64GB Laptops" />
+{/await}
+{#await get32GB()}
   <ProductSkeleton count={5} />
 {:then R32GBProducts}
-  <Carousel products={R32GBProducts} title="32GB Laptops" />
-{/await} -->
-  <!-- {#await get16GB()}
+  <Deals products={R32GBProducts} title="32GB Laptops" />
+{/await}
+  {#await get16GB()}
     <ProductSkeleton count={5} />
   {:then R16GBProducts}
-    <Carousel products={R16GBProducts} title="16GB Laptops" />
+    <Deals products={R16GBProducts} title="16GB Laptops" />
   {/await}
   {#await get8GB()}
     <ProductSkeleton count={5} />
   {:then R8GBProducts}
-    <Carousel products={R8GBProducts} title="8GB Laptops" />
+    <Deals products={R8GBProducts} title="8GB Laptops" />
   {/await} -->
 </div>

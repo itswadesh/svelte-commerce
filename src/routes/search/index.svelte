@@ -119,7 +119,7 @@
         {:else if products && products.length > 0}
           <div class="flex flex-wrap justify-center">
             {#each products as p}
-              <Product1 product={p._source} />
+              <Product1 product={p} />
             {/each}
           </div>
         {/if}

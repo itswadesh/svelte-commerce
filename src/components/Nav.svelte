@@ -68,8 +68,8 @@
 <header class="fixed z-20 w-full bg-white shadow-lg opacity-75 blur mb-22">
   <nav class="container flex flex-wrap items-center justify-between mx-auto">
     <div class="flex flex-wrap items-center flex-shrink-0 order-1 text-orange">
-      <a rel="prefetch" href="/" class="flex my-1">
-        <img class="h-6 mx-2" src="/favicon.png" alt="Home" />
+      <a rel="prefetch" href="/" class="flex py-2 my-1">
+        <img class="h-6 mx-2" src="/logo.png" alt="Home" />
         <span class="font-bold ">Hopyshopy</span>
       </a>
     </div>
@@ -108,7 +108,7 @@
 <!-- <header class="sticky py-4 bg-white lg:py-0">
   <nav class="flex items-center justify-between mx-4 text-gray-700">
     <a href="/" rel="prefetch" aria-label="logo" class="mx-4">
-      <img src={'/favicon.png'} alt="logo" class="w-16" />
+      <img src={'/logo.png'} alt="logo" class="w-16" />
     </a>
     <div class="flex justify-center w-full px-2 border-gray-300">
       <Search on:search={search} {home} />
