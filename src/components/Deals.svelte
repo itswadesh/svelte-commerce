@@ -6,38 +6,9 @@
   const { session } = stores()
   import Carousel from '@beyonk/svelte-carousel'
   import { ChevronLeftIcon, ChevronRightIcon } from 'svelte-feather-icons'
+  import Product from './Product.svelte'
   export let products = [],
     title = ''
-  // const uniqueId = `siema--${Math.random()
-  //   .toString(36)
-  //   .substring(2, 10)}`
-  // let Siema,
-  //   controller,
-  //   currentSlide = 0
-  // onMount(async () => {
-  //   const module = await import('siema')
-  //   Siema = module.default
-  //   controller = new Siema({
-  //     selector: '.' + uniqueId,
-  //     loop: true,
-  //     perPage: {
-  //       300: 2,
-  //       768: 3,
-  //       1024: 4,
-  //       1920: 5
-  //     },
-  //     onChange: onChangeCallback
-  //   })
-  // })
-  // function onChangeCallback() {
-  //   currentSlide = this.currentSlide
-  // }
-  // function prev() {
-  //   controller.prev()
-  // }
-  // function next() {
-  //   controller.next()
-  // }
 </script>
 
 <style>
@@ -66,29 +37,56 @@
 </style>
 
 <!-- w-1/2 sm:w-1/3 md:w-1/3 lg:w-1/4 xl:w-1/5  -->
-<div class="relative pt-2 lg:pt-5 mx-0 lg:mx-5 px-2 lg:px-5 rounded">
-  <h1 class="mb-5 text-gray-800 text-2xl font-bold underline">{title}</h1>
+<div class="relative px-2 pt-2 mx-0 rounded lg:pt-5 lg:mx-5 lg:px-5">
+  <h1 class="mb-5 text-2xl font-bold text-gray-800 underline">{title}</h1>
   {#if products && products.length}
-    <Carousel perPage={{ 320: 2, 786: 3, 1199: 4, 1919: 5 }}>
-      {#each products as p (p._id)}
-        <div class="mx-1 lg:mr-5 bg-white py-4 rounded-lg">
+    <Carousel perPage={{ 320: 1, 786: 2, 1199: 4, 1919: 5 }}>
+      {#each products as product (product._id)}
+        <div class="mr-4 slide-content">
+          <a
+            href={'/' + product.slug + '?id=' + product._id}
+            class="block bg-white rounded-md shadow-md avatar zoom hover:shadow-lg">
+            <img
+              alt=""
+              use:lazyload
+              src={$session.settings.CDN_URL + product.img[0] + '?tr=w-3,h-2'}
+              data-src={$session.settings.CDN_URL + product.img[0] + '?tr=w-300,h-200'}
+              class="object-cover object-top w-full"
+              style="" />
+            <div class="px-8 py-4">
+              <h2
+                href={'/' + product.slug + '?id=' + product._id}
+                class="text-xl truncate ">
+                {product.name}
+              </h2>
+              <div class="flex flex-wrap items-center justify-between my-2 ">
+                <div class="text-3xl font-bold ">
+                  {currency(product.flipkart.specialPrice)}
+                </div>
+                {#if product.stock < 1}
+                  <div class="text-xs text-red-500">Out of stock</div>
+                {/if}
+              </div>
+            </div>
+          </a>
+        </div>
+        <!-- <div class="py-4 mx-1 bg-white rounded-lg lg:mr-5">
           <a href={'/' + p.slug + '?id=' + p._id}>
             <img
               use:lazyload
               src={$session.settings.CDN_URL + p.img[0] + '?tr=w-3,h-3'}
               data-src={$session.settings.CDN_URL + p.img[0] + '?tr=w-320,h-250'}
-              class="w-full object-contain"
+              class="object-contain w-full"
               alt="" />
             <div
-              class="px-2 lg:px-8 mt-3 text-xs lg:text-sm h-18 overflow-hidden
-              tracking-widest">
+              class="px-2 mt-3 overflow-hidden text-xs tracking-widest lg:px-8 lg:text-sm h-18">
               {truncate(p.name, 100)}
             </div>
-            <h3 class="px-2 lg:px-8 mt-3 font-semibold tracking-widest">
+            <h3 class="px-2 mt-3 font-semibold tracking-widest lg:px-8">
               {currency(p.flipkart.price)}
             </h3>
           </a>
-        </div>
+        </div> -->
       {/each}
     </Carousel>
   {/if}

@@ -74,7 +74,7 @@
     content={product && product.localPrice} />
 </svelte:head>
 <Nav home={true} />
-<main in:receive out:send>
+<main in:receive out:send class="mt-20">
   {#if !product}
     Requested product not found.
   {:else}
@@ -82,7 +82,6 @@
     <div class="flex flex-wrap justify-start">
       <ProductImage {product} />
       <ProductDetails {product} />
-      <!-- <SimilarProducts :product="product" /> -->
     </div>
   {/if}
 </main>
