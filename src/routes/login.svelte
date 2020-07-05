@@ -213,19 +213,18 @@
 </svelte:head>
 <main in:fadeIn out:fadeOut>
   <Nav home={true} />
-
-  <div class="relative z-50">
-    <div class="h-full px-4">
-      <div class="container mx-auto flex items-center justify-center">
-        <div class="w-full md:w-1/2 lg:w-1/3 mb-6 rounded shadow-2xl">
+  <div class="z-50">
+    <div class="px-4">
+      <div class="container flex items-center justify-center mx-auto">
+        <div class="w-full mb-6 rounded shadow-2xl md:w-1/2 lg:w-1/3">
           <div>
-            <p class="mb-2 p-2 text-xs bg-yellow-400 rounded">
+            <p class="p-2 mb-2 text-xs bg-yellow-400 rounded">
               SMS provider configured only for Indian Numbers. Please use email
               instead
             </p>
           </div>
-          <div class="p-0 secondary text-white rounded rounded-b-none">
-            <h1 class="text-xl mb-6 text-left p-3">
+          <div class="p-0 text-white rounded rounded-b-none secondary">
+            <h1 class="p-3 mb-6 text-xl text-left">
               {#if !signup}
                 <span class="font-extrabold">SIGN IN</span>
               {:else}
@@ -234,12 +233,12 @@
               {/if}
             </h1>
           </div>
-          <form on:submit|preventDefault={submit} class="center bg-white">
+          <form on:submit|preventDefault={submit} class="bg-white center">
             <div class="p-6 lg:p-12">
               {#if err}
-                <div class="text-red-600 mb-5 text-center">{err}</div>
+                <div class="mb-5 text-center text-red-600">{err}</div>
               {:else if msg}
-                <div class="text-green-600 mb-5 text-center">{msg}</div>
+                <div class="mb-5 text-center text-green-600">{msg}</div>
               {/if}
               <Textbox bind:value={uid} label="Email/Phone" />
               <br />
@@ -249,7 +248,7 @@
                 <Textbox value={lastName} label="Last Name" class="w-full" />
                 <br />
               {/if}
-              <!-- <p class="text-red-500 mb-5 text-xs font-hairline">Please enter password</p> -->
+              <!-- <p class="mb-5 text-xs font-hairline text-red-500">Please enter password</p> -->
 
               {#if !isPhone && showOTP}
                 <!-- Show password box -->
@@ -259,29 +258,28 @@
                   cls="w-full" />
               {:else if showOTP}
                 <!-- Show OTP box -->
-                <div class=" flex justify-center text-center">
+                <div class="flex justify-center text-center ">
                   <div class="otp-container">
                     <div
                       id="wraper1"
-                      class="otp-seperator w-1 h-1 rounded absolute"
+                      class="absolute w-1 h-1 rounded otp-seperator"
                       class:wraper-hide={otp.length > 0} />
                     <div
                       id="wraper2"
-                      class="otp-seperator w-1 h-1 rounded absolute"
+                      class="absolute w-1 h-1 rounded otp-seperator"
                       class:wraper-hide={otp.length > 1} />
                     <div
                       id="wraper3"
-                      class="otp-seperator w-1 h-1 rounded absolute"
+                      class="absolute w-1 h-1 rounded otp-seperator"
                       class:wraper-hide={otp.length > 2} />
                     <div
                       id="wraper4"
-                      class="otp-seperator w-1 h-1 rounded absolute"
+                      class="absolute w-1 h-1 rounded otp-seperator"
                       class:wraper-hide={otp.length > 3} />
                     <input
                       bind:value={otp}
                       name="otp"
-                      class="otp-content outline-none pl-4 otp-content w-32
-                      bg-transparent border border-gray-400"
+                      class="w-32 pl-4 bg-transparent border border-gray-400 outline-none otp-content"
                       maxlength="4"
                       autocomplete="off" />
                   </div>
@@ -293,8 +291,7 @@
                 <button
                   type="submit"
                   disabled={loading}
-                  class="flex items-center justify-center h-14 text-2xl
-                  outline-none w-full font-bold py-2 rounded primary"
+                  class="flex items-center justify-center w-full py-2 text-2xl font-bold rounded outline-none h-14 primary"
                   class:primary={!loading}
                   class:border={loading}>
                   {#if loading}

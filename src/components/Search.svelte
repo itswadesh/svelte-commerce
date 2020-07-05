@@ -3,6 +3,7 @@
   const { session, page } = stores()
   import { createEventDispatcher } from 'svelte'
   const dispatch = createEventDispatcher()
+  import { SearchIcon } from 'svelte-feather-icons'
   export let home = false
   let query
   let searchInput
@@ -25,12 +26,13 @@
 </script>
 
 <form
-  class="w-full lg:w-1/2 text-center"
+  class="w-full pb-2 text-center lg:w-1/2 md:pb-0"
   novalidate
   autocomplete="off"
   on:submit|preventDefault={search}>
+  <div class="search_fix" />
   <div class="absolute">
-    <i class="fa fa-search m-3 text-gray-500" aria-hidden="true" />
+    <SearchIcon size="16" class="m-3 text-gray-500" />
   </div>
   <input
     aria-label="Search Box"
@@ -38,8 +40,7 @@
     on:input={() => search(query.q)}
     bind:this={searchInput}
     bind:value={query.q}
-    class="w-full px-10 bg-purple-white pr-4 border border-gray-200 rounded-full
-    border-0 h-10 focus:outline-none text-xs shadow"
+    class="w-full h-10 px-10 pr-4 text-xs border-0 rounded-b-sm shadow bg-purple-white focus:outline-none text-2"
     placeholder="Search for products,brands and more"
     name="search" />
 </form>

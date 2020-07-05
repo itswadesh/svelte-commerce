@@ -2,6 +2,7 @@
   import Nav from './../components/Nav.svelte'
   import Hero from './../components/Hero.svelte'
   import Banners from './../components/Banners.svelte'
+  import FFBanner from './../components/FFBanner.svelte'
   import Deals from './../components/Deals.svelte'
   import Carousel from './../components/Carousel.svelte'
   import ProductSkeleton from './../components/ProductSkeleton.svelte'
@@ -161,75 +162,78 @@
   <link rel="alternate" hreflang="en" href={`${host}`} />
 </svelte:head>
 <Nav home={true} />
-<!-- <Hero /> -->
-<!-- <Banners /> -->
-{#await getHP()}
-  <ProductSkeleton count={5} />
-{:then HPProducts}
-  <Deals products={HPProducts} title="HP Laptops" />
-{/await}
-{#await getDell()}
-  <ProductSkeleton count={5} />
-{:then DellProducts}
-  <Deals products={DellProducts} title="Dell Laptops" />
-{/await}
-{#await getLenovo()}
-  <ProductSkeleton count={5} />
-{:then LenovoProducts}
-  <Deals products={LenovoProducts} title="Lenovo Laptops" />
-{/await}
-{#await getAsus()}
-  <ProductSkeleton count={5} />
-{:then asusProducts}
-  <Deals products={asusProducts} title="Asus Laptops" />
-{/await}
-{#await getAcer()}
-  <ProductSkeleton count={5} />
-{:then AcerProducts}
-  <Deals products={AcerProducts} title="Acer Laptops" />
-{/await}
-{#await getSSD()}
-  <ProductSkeleton count={5} />
-{:then SSDProducts}
-  <Carousel products={SSDProducts} title="SSD Laptops" />
-{/await}
-{#await getI7()}
-  <ProductSkeleton count={5} />
-{:then I7Products}
-  <Carousel products={I7Products} title="I7 Laptops" />
-{/await}
-{#await getI5()}
-  <ProductSkeleton count={5} />
-{:then I5Products}
-  <Carousel products={I5Products} title="I5 Laptops" />
-{/await}
-{#await getI3()}
-  <ProductSkeleton count={5} />
-{:then I3Products}
-  <Carousel products={I3Products} title="I3 Laptops" />
-{/await}
-{#await getLatest()}
-  <ProductSkeleton count={5} />
-{:then latestProducts}
-  <Deals products={latestProducts} title="Latest Laptops" />
-{/await}
-<!-- {#await get64GB()}
+<div class="mt-20">
+  <!-- <FFBanner /> -->
+  <!-- <Hero /> -->
+  <!-- <Banners /> -->
+  {#await getHP()}
+    <ProductSkeleton count={5} />
+  {:then HPProducts}
+    <Deals products={HPProducts} title="HP Laptops" />
+  {/await}
+  {#await getDell()}
+    <ProductSkeleton count={5} />
+  {:then DellProducts}
+    <Deals products={DellProducts} title="Dell Laptops" />
+  {/await}
+  {#await getLenovo()}
+    <ProductSkeleton count={5} />
+  {:then LenovoProducts}
+    <Deals products={LenovoProducts} title="Lenovo Laptops" />
+  {/await}
+  {#await getAsus()}
+    <ProductSkeleton count={5} />
+  {:then asusProducts}
+    <Deals products={asusProducts} title="Asus Laptops" />
+  {/await}
+  <!-- {#await getAcer()}
+    <ProductSkeleton count={5} />
+  {:then AcerProducts}
+    <Deals products={AcerProducts} title="Acer Laptops" />
+  {/await}
+  {#await getSSD()}
+    <ProductSkeleton count={5} />
+  {:then SSDProducts}
+    <Deals products={SSDProducts} title="SSD Laptops" />
+  {/await}
+  {#await getI7()}
+    <ProductSkeleton count={5} />
+  {:then I7Products}
+    <Deals products={I7Products} title="I7 Laptops" />
+  {/await}
+  {#await getI5()}
+    <ProductSkeleton count={5} />
+  {:then I5Products}
+    <Deals products={I5Products} title="I5 Laptops" />
+  {/await}
+  {#await getI3()}
+    <ProductSkeleton count={5} />
+  {:then I3Products}
+    <Deals products={I3Products} title="I3 Laptops" />
+  {/await} -->
+  {#await getLatest()}
+    <ProductSkeleton count={5} />
+  {:then latestProducts}
+    <Deals products={latestProducts} title="Latest Laptops" />
+  {/await}
+  <!-- {#await get64GB()}
   <ProductSkeleton count={5} />
 {:then R64GBProducts}
-  <Carousel products={R64GBProducts} title="64GB Laptops" />
-{/await} -->
-<!-- {#await get32GB()}
+  <Deals products={R64GBProducts} title="64GB Laptops" />
+{/await}
+{#await get32GB()}
   <ProductSkeleton count={5} />
 {:then R32GBProducts}
-  <Carousel products={R32GBProducts} title="32GB Laptops" />
-{/await} -->
-{#await get16GB()}
-  <ProductSkeleton count={5} />
-{:then R16GBProducts}
-  <Carousel products={R16GBProducts} title="16GB Laptops" />
+  <Deals products={R32GBProducts} title="32GB Laptops" />
 {/await}
-{#await get8GB()}
-  <ProductSkeleton count={5} />
-{:then R8GBProducts}
-  <Carousel products={R8GBProducts} title="8GB Laptops" />
-{/await}
+  {#await get16GB()}
+    <ProductSkeleton count={5} />
+  {:then R16GBProducts}
+    <Deals products={R16GBProducts} title="16GB Laptops" />
+  {/await}
+  {#await get8GB()}
+    <ProductSkeleton count={5} />
+  {:then R8GBProducts}
+    <Deals products={R8GBProducts} title="8GB Laptops" />
+  {/await} -->
+</div>
