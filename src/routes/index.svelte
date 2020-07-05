@@ -164,8 +164,8 @@
 <Nav home={true} />
 <div class="mt-20">
   <!-- <FFBanner /> -->
-  <!-- <Hero /> -->
-  <!-- <Banners /> -->
+  <Hero />
+  <Banners />
   {#await getHP()}
     <ProductSkeleton count={5} />
   {:then HPProducts}
