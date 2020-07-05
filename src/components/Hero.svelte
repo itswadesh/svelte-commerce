@@ -32,16 +32,16 @@
     padding: 50px 0px 0px 0px;
   }
   .cta-select {
-    border: 2px solid #c36cbb;
+    border: 2px solid #38eaff;
     background: transparent;
-    color: #c36cbb;
+    color: #38eaff;
     width: 150px;
     height: 50px;
     cursor: pointer;
     font-size: 16px;
   }
   .cta-add {
-    background: #c36cbb;
+    background: #38eaff;
     width: 150px;
     height: 50px;
     cursor: pointer;
@@ -107,7 +107,7 @@
       <button class="cta-select" on:click={() => goto('/search')}>
         All laptops
       </button>
-      <button class="cta-add ml-5" on:click={() => goto('/search')}>
+      <button class="ml-5 cta-add" on:click={() => goto('/search')}>
         Buy Now
       </button>
     </div>

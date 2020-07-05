@@ -64,11 +64,7 @@ select:-webkit-autofill:focus {
   border-left: 1px solid rgba(0, 0, 0, 0.2);
 }
 .underline {
-  background-image: linear-gradient(
-    to right,
-    rgb(250, 112, 154) 0%,
-    rgb(254, 225, 64) 100%
-  );
+  background-image: linear-gradient(87deg, #38eaff, #b05af1);
   background-repeat: no-repeat;
   background-size: 100% 0.2em;
   background-position: 0 88%;
