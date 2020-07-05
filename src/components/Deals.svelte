@@ -17,7 +17,7 @@
     outline: none;
     z-index: 100;
     top: 30%;
-    left: -30px;
+    left: -35px;
     width: 47px;
     height: 104px;
     background-color: hsla(0, 0%, 100%, 0.98) !important;
@@ -28,7 +28,7 @@
     outline: none;
     z-index: 100;
     top: 30%;
-    right: -30px;
+    right: -35px;
     width: 47px;
     height: 104px;
     background-color: hsla(0, 0%, 100%, 0.98) !important;
@@ -41,6 +41,9 @@
   <h1 class="mb-5 text-2xl font-bold text-gray-800 underline">{title}</h1>
   {#if products && products.length}
     <Carousel perPage={{ 320: 1, 786: 2, 1199: 4, 1919: 5 }}>
+      <span class="prev control" slot="left-control">
+        <ChevronLeftIcon />
+      </span>
       {#each products as product (product._id)}
         <div class="mr-4 slide-content">
           <a
@@ -70,24 +73,10 @@
             </div>
           </a>
         </div>
-        <!-- <div class="py-4 mx-1 bg-white rounded-lg lg:mr-5">
-          <a href={'/' + p.slug + '?id=' + p._id}>
-            <img
-              use:lazyload
-              src={$session.settings.CDN_URL + p.img[0] + '?tr=w-3,h-3'}
-              data-src={$session.settings.CDN_URL + p.img[0] + '?tr=w-320,h-250'}
-              class="object-contain w-full"
-              alt="" />
-            <div
-              class="px-2 mt-3 overflow-hidden text-xs tracking-widest lg:px-8 lg:text-sm h-18">
-              {truncate(p.name, 100)}
-            </div>
-            <h3 class="px-2 mt-3 font-semibold tracking-widest lg:px-8">
-              {currency(p.flipkart.price)}
-            </h3>
-          </a>
-        </div> -->
       {/each}
+      <span class="next control" slot="right-control">
+        <ChevronRightIcon />
+      </span>
     </Carousel>
   {/if}
 </div>

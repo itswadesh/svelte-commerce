@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "sapper dev --port 4400",
-    "build": "cross-env NODE_ENV=production sapper build --legacy",
+    "build": "cross-env NODE_ENV=production sapper build --port 4400 --legacy",
     "export": "cross-env NODE_ENV=production sapper export --legacy",
     "start": "cross-env NODE_ENV=production node __sapper__/build",
     "live": "run-s build copy liveS",
