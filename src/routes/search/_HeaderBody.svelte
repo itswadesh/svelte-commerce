@@ -66,7 +66,7 @@
     <select
       aria-label="sort"
       bind:value={sortBy}
-      class="flex-1 px-4 py-2 border border-gray-100 border-gray-400 cursor-pointer text-primary hover:border-gray-500 focus:outline-none"
+      class="flex-1 px-4 py-2 border border-gray-400 cursor-pointer text-primary hover:border-gray-500 focus:outline-none"
       on:change={sort}>
       {#each sorts as s, ix}
         <option class="bg-white" value={s.val}>{s.name}</option>

@@ -1,26 +1,26 @@
 <script>
-  import { get, put, post } from "./../lib/api";
-  import { goto, stores } from "@sapper/app";
-  import Textbox from "./../components/ui/Textbox.svelte";
-  import Button from "./../components/ui/Button.svelte";
-  import { currency } from "./../lib";
+  import { get, put, post } from './../lib/api'
+  import { goto, stores } from '@sapper/app'
+  import Textbox from './../components/ui/Textbox.svelte'
+  import Button from './../components/ui/Button.svelte'
+  import { currency } from './../lib'
 
-  let sku = "",
+  let sku = '',
     product = {},
-    q = "",
-    products = [];
+    q = '',
+    products = []
   async function getFromFlipkart(sku) {
     try {
-      product = await get("electronics/flipkart/" + sku);
+      product = await get('electronics/flipkart/' + sku)
     } catch (e) {
-      console.log("err...", e.toString());
+      console.log('err...', e.toString())
     }
   }
   async function searchFromFlipkart() {
     try {
-      products = await get("electronics/flipkart/search?q=" + q);
+      products = await get('electronics/flipkart/search?q=' + q)
     } catch (e) {
-      console.log("err...", e.toString());
+      console.log('err...', e.toString())
     }
   }
   // async function submit() {
@@ -45,13 +45,12 @@
     <br />
     <!-- <form on:submit|preventDefault={submit}>
       <input
-        class="text-base text-base rounded-sm pb-4 border-b-2
-        hover:border-purple-500 shadow-md pt-3 pl-1"
+        class="pt-3 pb-4 pl-1 text-base border-b-2 rounded-sm shadow-md hover:border-purple-500"
         placeholder="Price"
         bind:value={product.price} />
       <button
         on:click={getFromFlipkart}
-        class="uppercase bg-purple-500 width text-white h-10 rounded">
+        class="h-10 text-white uppercase bg-purple-500 rounded width">
         Save
       </button>
     </form> -->
@@ -68,7 +67,7 @@
   {#if products && products.length > 0}
     <div class="flex flex-wrap">
       {#each products as p}
-        <div class="m-2 p-2 border border-gray-400 w-64">
+        <div class="w-64 p-2 m-2 border border-gray-400">
           <img src={p.productBaseInfoV1.imageUrls['200x200']} alt="" />
           {p.productBaseInfoV1.productBrand} - {p.productBaseInfoV1.title}
           <!-- <li>SKU: {p.productBaseInfoV1.productId}</li> -->

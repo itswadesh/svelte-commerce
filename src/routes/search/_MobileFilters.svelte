@@ -1,47 +1,69 @@
 <script>
-  import Checkbox from "./../../components/ui/Checkbox.svelte";
-  import Radio from "./../../components/ui/Radio.svelte";
-  import { constructURL2 } from "./../../lib";
-  import { goto, stores } from "@sapper/app";
-  import { createEventDispatcher } from "svelte";
-  const dispatch = createEventDispatcher();
-  const { session, page } = stores();
-  let query;
+  import Checkbox from './../../components/ui/Checkbox.svelte'
+  import Radio from './../../components/ui/Radio.svelte'
+  import { constructURL2 } from './../../lib'
+  import { goto, stores } from '@sapper/app'
+  import { createEventDispatcher } from 'svelte'
+  const dispatch = createEventDispatcher()
+  const { session, page } = stores()
+  let query
   page.subscribe(page => {
-    query = page.query;
-  });
-  export let facets = [];
-  let selected = "brands",
+    query = page.query
+  })
+  export let facets = []
+  let selected = 'brands',
     loadingPrice = true, // Required because after loading finished then only we will initiate the price slider component
-    showMobileFilter = true;
+    showMobileFilter = true
   function hide() {
-    dispatch("hide");
+    dispatch('hide')
   }
   function clearFilters() {
-    dispatch("hide");
-    let url = constructURL2("/search", {});
-    goto(url);
+    dispatch('hide')
+    let url = constructURL2('/search', {})
+    goto(url)
   }
   function changed(e) {
-    query[e.model] = e.checked;
-    let url = constructURL("/search", query);
-    goto(url);
+    query[e.model] = e.checked
+    let url = constructURL('/search', query)
+    goto(url)
   }
   function checkCategory() {}
   function go(slug) {
-    goto("/" + slug);
+    goto('/' + slug)
   }
   function goCheckbox(e) {
-    query[e.detail.model] = e.detail.selectedItems;
-    let url = constructURL2("/search", query);
-    goto(`${url}page=${query.page || 1}`);
+    query[e.detail.model] = e.detail.selectedItems
+    let url = constructURL2('/search', query)
+    goto(`${url}page=${query.page || 1}`)
   }
-  let features = ["Processor Brand","Processor Name","Screen Size","RAM","Touchscreen","RAM Type","Screen Resolution","SSD","Processor Generation","Keyboard","Weight","HDD Capacity","Mic In","Battery Backup","Expandable Memory","SSD Capacity","Finger Print Sensor","Backlit Keyboard","NFC Support","Face Recognition","Optane Memory"]
-  function checkFeature(k){
-   return features.includes(k)
+  let features = [
+    'Processor Brand',
+    'Processor Name',
+    'Screen Size',
+    'RAM',
+    'Touchscreen',
+    'RAM Type',
+    'Screen Resolution',
+    'SSD',
+    'Processor Generation',
+    'Keyboard',
+    'Weight',
+    'HDD Capacity',
+    'Mic In',
+    'Battery Backup',
+    'Expandable Memory',
+    'SSD Capacity',
+    'Finger Print Sensor',
+    'Backlit Keyboard',
+    'NFC Support',
+    'Face Recognition',
+    'Optane Memory'
+  ]
+  function checkFeature(k) {
+    return features.includes(k)
   }
-  function stringToArray(v){
-    let a =query[v.key] && query[v.key].split(',') || []
+  function stringToArray(v) {
+    let a = (query[v.key] && query[v.key].split(',')) || []
     return a
   }
 </script>
@@ -72,21 +94,21 @@
     h-screen max-w-lg">
     <!-- Mobile version starts here -->
 
-    <div class="block md:hidden h-full">
-      <div class="flex shadow-md py-4 bg-white w-full">
-        <div class="flex-1 text-gray-700 text-left" on:click={hide}>
-          <i class="fa fa-times ml-2" aria-hidden="true" />
+    <div class="block h-full md:hidden">
+      <div class="flex w-full py-4 bg-white shadow-md">
+        <div class="flex-1 text-left text-gray-700" on:click={hide}>
+          <i class="ml-2 fa fa-times" aria-hidden="true" />
         </div>
-        <div class="flex-1 text-gray-700 text-center font-bold">FILTER</div>
+        <div class="flex-1 font-bold text-center text-gray-700">FILTER</div>
         <div
-          class="flex-1 text-gray-700 text-right mr-2"
+          class="flex-1 mr-2 text-right text-gray-700"
           on:click={clearFilters}>
           Clear all
         </div>
       </div>
-      <div class="w-full flex mt-1 h-full">
+      <div class="flex w-full h-full mt-1">
         <div class="w-2/5 overflow-y-scroll">
-          <ul class="bg-gray-200 h-full">
+          <ul class="h-full bg-gray-200">
             <!-- <li
               on:click="{()=>selected='categories'}"
               class:selected={selected=='categories'}
@@ -159,9 +181,9 @@
           {/if}
         </div>
       </div>
-      <div class="w-full text-center primary absolute bottom-0">
+      <div class="absolute bottom-0 w-full text-center primary">
         <button
-          class="w-full p-4 cursor-pointer font-bold focus:outline-none"
+          class="w-full p-4 font-bold cursor-pointer focus:outline-none"
           on:click={hide}>
           APPLY
         </button>

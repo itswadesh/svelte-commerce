@@ -53,31 +53,28 @@
     best in quality, performance, feels good to use, ergonomic, stylish" />
 </svelte:head>
 <Nav home={true} />
-<div class=" text-gray-700">
-  <div class="banner-container flex items-center flex-wrap">
+<div class="text-gray-700 ">
+  <div class="flex flex-wrap items-center banner-container">
     <img src="banner.jpg" alt="Best Laptops" class="w-full mb-2" />
-    <div class="content mx-2 md:mx-20 md:absolute">
-      <h1 class="text-2xl md:text-3xl font-bold">
+    <div class="mx-2 content md:mx-20 md:absolute">
+      <h1 class="text-2xl font-bold md:text-3xl">
         Hand Picked Laptops for You
       </h1>
       <h2 class="text-sm md:text-md">
         SHOP FOR THE BEST LAPTOPS COLLECTION IN INDIA
       </h2>
-      <div class=" mt-5">
+      <div class="mt-5 ">
         <a
           href="search?brands=Asus&page=1"
           rel="prefetch"
-          class="focus:outline-none bg-transparent hover:bg-purple-500
-          hover:text-white text-purple-700 border border-purple-500 rounded-full
-          px-4 py-2 text-xs ">
+          class="px-4 py-2 text-xs text-purple-700 bg-transparent border border-purple-500 rounded-full focus:outline-none hover:bg-purple-500 hover:text-white ">
           ASUS LAPTOPS
         </a>
       </div>
     </div>
   </div>
   <h3
-    class="border-b-2 border-dashed border-gray-400 text-center pt-5 pb-2
-    text-3xl">
+    class="pt-5 pb-2 text-3xl text-center border-b-2 border-gray-400 border-dashed">
     Based on your requirements
   </h3>
   <ul class="flex flex-wrap">

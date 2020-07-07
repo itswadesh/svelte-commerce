@@ -1,7 +1,7 @@
 <script>
-  import AccountMenu from "./_AccountMenu.svelte";
+  import AccountMenu from './_AccountMenu.svelte'
 </script>
 
-<div class="lg:hidden block">
+<div class="block lg:hidden">
   <AccountMenu segment="/" />
 </div>

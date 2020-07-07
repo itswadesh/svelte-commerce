@@ -5,11 +5,11 @@
     <div>
       <a href="https://github.com/itswadesh/sapper-ecommerce" target="blank">
         <i class="fa fa-star" alt />
-        <span class=" underline">@github</span>
+        <span class="underline ">@github</span>
       </a>
       <a href="https://www.litekart.in" target="blank">
         <i class="fa fa-heart" alt />
-        <span class=" underline">litekart</span>
+        <span class="underline ">litekart</span>
       </a>
     </div>
   </div>

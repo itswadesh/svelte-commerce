@@ -1,21 +1,19 @@
 <div>
   <div
-    class="w-full p-2 bg-white shadow rounded border-l-4 border-green-500
-    text-sm">
-    <div class="font-semibold text-green-500 p-2">Offers</div>
-    <ul class="font-hairline text-gray-500 pl-5">
+    class="w-full p-2 text-sm bg-white border-l-4 border-green-500 rounded shadow">
+    <div class="p-2 font-semibold text-green-500">Offers</div>
+    <ul class="pl-5 font-hairline text-gray-500">
       <li class="list-disc">
         Rs 300 instant Cashback with PayPal on a minimum spend of Rs 1000. TCA
       </li>
     </ul>
-    <a href="/" class="text-blue-700 p-5 font-semibold">
+    <a href="/" class="p-5 font-semibold text-blue-700">
       Show More
       <i class="fa fa-angle-down" aria-hidden="true" />
     </a>
   </div>
   <div
-    class="w-full p-3 bg-white shadow rounded border border-gray-300 text-sm
-    mt-3">
+    class="w-full p-3 mt-3 text-sm bg-white border border-gray-300 rounded shadow">
     <div class="font-hairline text-gray-500">
       <i class="fa fa-truck" aria-hidden="true" />
       Shop for

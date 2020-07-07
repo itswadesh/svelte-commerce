@@ -1,29 +1,29 @@
 <script>
-  export let pid, vid, qty;
-  let loading = false;
-  import { cart } from "./../../store/cart.js";
+  export let pid, vid, qty
+  let loading = false
+  import { cart } from './../../store/cart.js'
 
   async function addToBag(qty) {
     if (!vid) {
-      console.log("Please select a size");
+      console.log('Please select a size')
     } else {
-      loading = true;
-      await cart.add({ pid, vid, qty });
-      loading = false;
+      loading = true
+      await cart.add({ pid, vid, qty })
+      loading = false
     }
   }
   function checkCart({ pid, vid }) {
     let found = $cart.items.some(function(el) {
-      return el.product._id === pid && el.variant._id === vid;
-    });
-    return found;
+      return el.product._id === pid && el.variant._id === vid
+    })
+    return found
   }
 </script>
 
 <div class="flex">
   {#if !checkCart({ pid, vid })}
     <div disabled={!vid} on:click={() => addToBag(1)}>
-      <button class="primary rounded px-2 rounded">
+      <button class="px-2 rounded primary">
         <i class="fa fa-plus" />
         Add to Cart
       </button>
@@ -33,11 +33,11 @@
     <div>
       <div class="flex flex-wrap">
         <button
-          class="muted rounded-full w-8 h-8"
+          class="w-8 h-8 rounded-full muted"
           on:click={() => addToBag(-1)}>
-          <i class="fa fa-minus m-auto" aria-hidden="true" />
+          <i class="m-auto fa fa-minus" aria-hidden="true" />
         </button>
-        <div class="px-2 flex items-center text-center">
+        <div class="flex items-center px-2 text-center">
           {#if !loading}
             <div>{qty}</div>
           {:else}
@@ -45,10 +45,10 @@
           {/if}
         </div>
         <button
-          class="primary rounded-full w-8 h-8"
+          class="w-8 h-8 rounded-full primary"
           :disabled="!variant || variant.price<1 || variant.stock<1 || loading"
           on:click={() => addToBag(1)}>
-          <i class="fa fa-plus m-auto" aria-hidden="true" />
+          <i class="m-auto fa fa-plus" aria-hidden="true" />
         </button>
       </div>
     </div>
