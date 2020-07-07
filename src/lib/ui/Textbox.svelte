@@ -1,67 +1,180 @@
-<style>
-.floating-label {
-	position: relative;
-}
-.floating-input {
-	font-size: 14px;
-	padding: 4px 4px;
-	display: block;
-	width: 100%;
-	height: 48px;
-	padding: 14px 12px 0;
-	border: none;
-}
-
-.floating-input:focus {
-	outline: none;
-	border-bottom: 2px solid black;
-}
-
-label {
-	color: #999;
-	font-size: 16px;
-	font-weight: normal;
-	position: absolute;
-	pointer-events: none;
-	left: 8px;
-	top: 11px;
-	transition: 0.2s ease all;
-	-moz-transition: 0.2s ease all;
-	-webkit-transition: 0.2s ease all;
-}
-
-.floating-input:focus ~ label,
-.floating-input:not(:placeholder-shown) ~ label {
-	top: 1px;
-	font-size: 14px;
-	color: #555;
-}
-
-.floating-select:focus ~ label,
-.floating-select:not([value='']):valid ~ label {
-	top: -18px;
-	font-size: 14px;
-	color: #555;
-}
-</style>
-
 <script>
 import { createEventDispatcher } from 'svelte'
+
 const dispatch = createEventDispatcher()
-export let label = '',
-	value = '',
-	cls = '',
-	placeholder = ' '
+
+let clazz = ''
+export { clazz as class }
+
+export let alphaNumeric = false
+export let autoFocus = false
+export let disabled = false
+export let error = false
+export let id = ''
+export let isAlphaNumeric = null
+export let name = ''
+export let placeholder = ''
+export let required = false
+export let success = false
+export let value = ''
+export let type = 'text'
+
+function handleInput() {
+	if (alphaNumeric === true) {
+		isAlphaNumeric = value.match('^[A-Za-z0-9]+$')
+
+		if (isAlphaNumeric === null) {
+			error = true
+		} else {
+			error = false
+			dispatch('input')
+		}
+	} else {
+		dispatch('input')
+	}
+}
 </script>
 
-<div class="{cls}">
-	<div class=" floating-label">
+<div>
+	{#if type === 'text'}
 		<input
-			bind:value
-			class="w-full bg-gray-100 border-b rounded floating-input hover:bg-gray-300 focus:outline-none focus:border-pink-500"
+			type="text"
+			bind:value="{value}"
+			id="{id}"
+			name="{name}"
+			autoFocus="{autoFocus}"
+			class="w-full rounded-md border border-gray-300 p-2 text-sm placeholder-gray-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 {clazz} 
+		{disabled ? 'cursor-not-allowed bg-gray-100' : 'bg-transparent hover:bg-gray-50'}
+		{success ? 'border-green-500 focus:border-green-500 bg-green-100 focus:ring-green-500' : ''}
+		{error ? 'border-red-500 focus:border-red-500 bg-red-100 focus:ring-red-500' : ''}"
 			placeholder="{placeholder}"
-			aria-label="{label}" />
-		<span class="highlight"></span>
-		<label>{label}</label>
-	</div>
+			required="{required}"
+			disabled="{disabled}"
+			aria-label="{placeholder}"
+			on:input="{handleInput}"
+			on:blur="{() => dispatch('blur')}" />
+	{:else if type === 'email'}
+		<input
+			type="email"
+			bind:value="{value}"
+			id="{id}"
+			name="{name}"
+			autoFocus="{autoFocus}"
+			class="w-full rounded-md border border-gray-300 p-2 text-sm placeholder-gray-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 {clazz} 
+		{disabled ? 'cursor-not-allowed bg-gray-100' : 'bg-transparent hover:bg-gray-50'}
+		{success ? 'border-green-500 focus:border-green-500 bg-green-100 focus:ring-green-500' : ''}
+		{error ? 'border-red-500 focus:border-red-500 bg-red-100 focus:ring-red-500' : ''}"
+			placeholder="{placeholder}"
+			required="{required}"
+			disabled="{disabled}"
+			aria-label="{placeholder}"
+			on:input="{handleInput}"
+			on:blur="{() => dispatch('blur')}" />
+	{:else if type === 'password'}
+		<input
+			type="password"
+			bind:value="{value}"
+			id="{id}"
+			name="{name}"
+			autoFocus="{autoFocus}"
+			class="w-full rounded-md border border-gray-300 p-2 text-sm placeholder-gray-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 {clazz} 
+		{disabled ? 'cursor-not-allowed bg-gray-100' : 'bg-transparent hover:bg-gray-50'}
+		{success ? 'border-green-500 focus:border-green-500 bg-green-100 focus:ring-green-500' : ''}
+		{error ? 'border-red-500 focus:border-red-500 bg-red-100 focus:ring-red-500' : ''}"
+			placeholder="{placeholder}"
+			required="{required}"
+			disabled="{disabled}"
+			aria-label="{placeholder}"
+			on:input="{handleInput}"
+			on:blur="{() => dispatch('blur')}" />
+	{:else if type === 'date'}
+		<input
+			type="date"
+			bind:value="{value}"
+			id="{id}"
+			name="{name}"
+			autoFocus="{autoFocus}"
+			class="w-full rounded-md border border-gray-300 p-2 text-sm placeholder-gray-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 {clazz} 
+		{disabled ? 'cursor-not-allowed bg-gray-100' : 'bg-transparent hover:bg-gray-50'}
+		{success ? 'border-green-500 focus:border-green-500 bg-green-100 focus:ring-green-500' : ''}
+		{error ? 'border-red-500 focus:border-red-500 bg-red-100 focus:ring-red-500' : ''}"
+			placeholder="{placeholder}"
+			required="{required}"
+			disabled="{disabled}"
+			aria-label="{placeholder}"
+			on:input="{handleInput}"
+			on:blur="{() => dispatch('blur')}" />
+	{:else if type === 'time'}
+		<input
+			type="time"
+			bind:value="{value}"
+			id="{id}"
+			name="{name}"
+			autoFocus="{autoFocus}"
+			class="w-full rounded-md border border-gray-300 p-2 text-sm placeholder-gray-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 {clazz} 
+		{disabled ? 'cursor-not-allowed bg-gray-100' : 'bg-transparent hover:bg-gray-50'}
+		{success ? 'border-green-500 focus:border-green-500 bg-green-100 focus:ring-green-500' : ''}
+		{error ? 'border-red-500 focus:border-red-500 bg-red-100 focus:ring-red-500' : ''}"
+			placeholder="{placeholder}"
+			required="{required}"
+			disabled="{disabled}"
+			aria-label="{placeholder}"
+			on:input="{handleInput}"
+			on:blur="{() => dispatch('blur')}" />
+	{:else if type === 'number'}
+		<input
+			type="number"
+			bind:value="{value}"
+			id="{id}"
+			name="{name}"
+			autoFocus="{autoFocus}"
+			class="w-full rounded-md border border-gray-300 p-2 text-sm placeholder-gray-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 {clazz} 
+		{disabled ? 'cursor-not-allowed bg-gray-100' : 'bg-transparent hover:bg-gray-50'}
+		{success ? 'border-green-500 focus:border-green-500 bg-green-100 focus:ring-green-500' : ''}
+		{error ? 'border-red-500 focus:border-red-500 bg-red-100 focus:ring-red-500' : ''}"
+			placeholder="{placeholder}"
+			required="{required}"
+			disabled="{disabled}"
+			aria-label="{placeholder}"
+			on:input="{handleInput}"
+			on:blur="{() => dispatch('blur')}" />
+	{:else if type === 'tel'}
+		<input
+			type="tel"
+			bind:value="{value}"
+			id="{id}"
+			name="{name}"
+			autoFocus="{autoFocus}"
+			class="w-full rounded-md border border-gray-300 p-2 text-sm placeholder-gray-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 {clazz} 
+		{disabled ? 'cursor-not-allowed bg-gray-100' : 'bg-transparent hover:bg-gray-50'}
+		{success ? 'border-green-500 focus:border-green-500 bg-green-100 focus:ring-green-500' : ''}
+		{error ? 'border-red-500 focus:border-red-500 bg-red-100 focus:ring-red-500' : ''}"
+			placeholder="{placeholder}"
+			required="{required}"
+			disabled="{disabled}"
+			aria-label="{placeholder}"
+			on:input="{handleInput}"
+			on:blur="{() => dispatch('blur')}" />
+	{:else if type === 'datetime-local'}
+		<input
+			type="datetime-local"
+			bind:value="{value}"
+			id="{id}"
+			name="{name}"
+			autoFocus="{autoFocus}"
+			class="w-full rounded-md border border-gray-300 p-2 text-sm placeholder-gray-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 {clazz} 
+		{disabled ? 'cursor-not-allowed bg-gray-100' : 'bg-transparent hover:bg-gray-50'}
+		{success ? 'border-green-500 focus:border-green-500 bg-green-100 focus:ring-green-500' : ''}
+		{error ? 'border-red-500 focus:border-red-500 bg-red-100 focus:ring-red-500' : ''}"
+			placeholder="{placeholder}"
+			required="{required}"
+			disabled="{disabled}"
+			aria-label="{placeholder}"
+			on:input="{handleInput}"
+			on:blur="{() => dispatch('blur')}" />
+	{/if}
+
+	{#if alphaNumeric && error}
+		<p class="mt-2 text-xs text-red-500">Must contain only letters and numbers with no spaces</p>
+	{/if}
 </div>
