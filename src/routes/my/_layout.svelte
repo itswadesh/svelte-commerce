@@ -8,13 +8,12 @@
 <main in:fadeIn out:fadeOut>
   <Nav />
   <div
-    class="flex flex-wrap lg:flex-no-wrap justify-center bg-gray-100 lg:p-5
-    lg:mt-10"
+    class="flex flex-wrap justify-center bg-gray-100 lg:flex-no-wrap lg:p-5 lg:mt-10"
     style="min-height:84vh;">
-    <div class="hidden lg:block lg:w-1/5 text-center bg-white shadow rounded">
+    <div class="hidden text-center bg-white rounded shadow lg:block lg:w-1/5">
       <AccountMenu {segment} />
     </div>
-    <div class="w-full bg-white shadow rounded lg:ml-5 p-2 ">
+    <div class="w-full p-2 bg-white rounded shadow lg:ml-5 ">
       <slot />
     </div>
   </div>

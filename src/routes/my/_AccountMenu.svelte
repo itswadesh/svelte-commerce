@@ -25,10 +25,9 @@
   }
 </style>
 
-<div class="p-10 border-b border-gray-200 text-center">
+<div class="p-10 text-center border-b border-gray-200">
   <span
-    class="h-20 w-20 p-2 text-4xl text-gray-600 rounded-full bg-gray-200
-    inline-block">
+    class="inline-block w-20 h-20 p-2 text-4xl text-gray-600 bg-gray-200 rounded-full">
     {first($session.user.firstName || 'A')}
   </span>
   <br />
@@ -44,52 +43,52 @@
     <a
       href="/my/orders"
       class:text-red-500={segment == 'orders'}
-      class="w-full flex flex-wrap text-lg items-center">
+      class="flex flex-wrap items-center w-full text-lg">
       <div class="w-1/5">
-        <i class="fa fa-archive p-5" aria-hidden="true" />
+        <i class="p-5 fa fa-archive" aria-hidden="true" />
       </div>
-      <div class="w-4/5 text-left p-3">Orders</div>
+      <div class="w-4/5 p-3 text-left">Orders</div>
     </a>
   </li>
   <li>
     <a
       href="/my/address"
       class:text-red-500={segment == 'address'}
-      class="w-full flex flex-wrap text-lg items-center">
+      class="flex flex-wrap items-center w-full text-lg">
       <div class="w-1/5">
-        <i class="fa fa-address-card p-5" aria-hidden="true" />
+        <i class="p-5 fa fa-address-card" aria-hidden="true" />
       </div>
-      <div class="w-4/5 text-left p-3">Address</div>
+      <div class="w-4/5 p-3 text-left">Address</div>
     </a>
   </li>
   <li>
     <a
       href="/my/profile"
       class:text-red-500={segment == 'profile'}
-      class="w-full flex flex-wrap text-lg items-center">
+      class="flex flex-wrap items-center w-full text-lg">
       <div class="w-1/5">
-        <i class="fa fa-user-circle p-5" aria-hidden="true" />
+        <i class="p-5 fa fa-user-circle" aria-hidden="true" />
       </div>
-      <div class="w-4/5 text-left p-3">Profile Details</div>
+      <div class="w-4/5 p-3 text-left">Profile Details</div>
     </a>
   </li>
   <li>
     <a
       href="/my/password"
-      class="w-full flex flex-wrap text-lg items-center"
+      class="flex flex-wrap items-center w-full text-lg"
       class:text-red-500={segment == 'password'}>
       <div class="w-1/5">
-        <i class="fa fa-key p-5" aria-hidden="true" />
+        <i class="p-5 fa fa-key" aria-hidden="true" />
       </div>
-      <div class="w-4/5 text-left p-3">Password</div>
+      <div class="w-4/5 p-3 text-left">Password</div>
     </a>
   </li>
   <li>
-    <button on:click={logout} class="logout w-full flex flex-wrap text-lg">
+    <button on:click={logout} class="flex flex-wrap w-full text-lg logout">
       <div class="w-1/5">
-        <i class="fa fa-power-off p-5" aria-hidden="true" />
+        <i class="p-5 fa fa-power-off" aria-hidden="true" />
       </div>
-      <div class="w-4/5 text-left p-3">Sign Out</div>
+      <div class="w-4/5 p-3 text-left">Sign Out</div>
     </button>
   </li>
 </ul>

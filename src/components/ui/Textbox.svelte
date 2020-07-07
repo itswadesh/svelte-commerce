@@ -55,11 +55,10 @@
 </style>
 
 <div class={cls}>
-  <div class="floating-label mb-10">
+  <div class="mb-10 floating-label">
     <input
       bind:value
-      class="floating-input bg-gray-100 border-b w-full rounded
-      hover:bg-gray-300 focus:outline-none focus:border-pink-500"
+      class="w-full bg-gray-100 border-b rounded floating-input hover:bg-gray-300 focus:outline-none focus:border-pink-500"
       {placeholder}
       aria-label={label} />
     <span class="highlight" />

@@ -49,20 +49,6 @@
     border-radius: 50%;
     display: inline-block;
   }
-  .desktop-badge .number {
-    margin-top: 1.5px;
-    margin-left: -1px;
-  }
-
-  .fix-search {
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: white;
-    padding: 10px;
-    z-index: 100;
-    margin: 0px;
-  }
 </style>
 
 <header class="fixed z-20 w-full bg-white shadow-lg opacity-75 blur mb-22">

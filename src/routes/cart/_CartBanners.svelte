@@ -10,23 +10,23 @@
 </style>
 
 <div class="hidden lg:block">
-  <div class="w-full flex justify-between mt-6 mb-6">
-    <div class="bg-gray-200 rounded my-1 p-3">
-      <i class="fa fa-truck text-gray-500" />
-      <p class="text-gray-500 text-lg font-normal">Free Shipping*</p>
-      <p class="text-gray-500 text-xs">On orders of ₹500 and above.Details</p>
+  <div class="flex justify-between w-full mt-6 mb-6">
+    <div class="p-3 my-1 bg-gray-200 rounded">
+      <i class="text-gray-500 fa fa-truck" />
+      <p class="text-lg font-normal text-gray-500">Free Shipping*</p>
+      <p class="text-xs text-gray-500">On orders of ₹500 and above.Details</p>
     </div>
-    <div class="bg-gray-200 rounded p-3 m-1">
-      <i class="fa fa-undo text-gray-500" />
-      <p class="text-gray-500 text-lg font-normal">Easy returns</p>
-      <p class="text-gray-500 text-xs">
+    <div class="p-3 m-1 bg-gray-200 rounded">
+      <i class="text-gray-500 fa fa-undo" />
+      <p class="text-lg font-normal text-gray-500">Easy returns</p>
+      <p class="text-xs text-gray-500">
         Send items back for free within 15 days
       </p>
     </div>
-    <div class="bg-gray-200 rounded p-3 my-1">
-      <i class="fa fa-lock text-gray-500" />
-      <p class="text-gray-500 text-lg font-normal">Secure shopping</p>
-      <p class="text-gray-500 text-xs">
+    <div class="p-3 my-1 bg-gray-200 rounded">
+      <i class="text-gray-500 fa fa-lock" />
+      <p class="text-lg font-normal text-gray-500">Secure shopping</p>
+      <p class="text-xs text-gray-500">
         Your payment details are fully encrypted
       </p>
     </div>

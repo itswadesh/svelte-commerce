@@ -71,8 +71,8 @@
   }
 </style>
 
-<p class="ml-2 py-2 font-semibold text-sm px-2">{title}</p>
-<ul class="ml-2 py-2 px-2 filter-container">
+<p class="px-2 py-2 ml-2 text-sm font-semibold">{title}</p>
+<ul class="px-2 py-2 ml-2 filter-container">
   {#each items as i (i.key)}
     {#if i.key}
       <li>
@@ -93,8 +93,8 @@
               class="colour-label colour-colorDisplay"
               style.background-color={color} />
           {/if}
-          <span class="text-gray-800 ml-2 text-sm">{i.key}</span>
-          <span class="text-gray-500 text-xs">({i.doc_count})</span>
+          <span class="ml-2 text-sm text-gray-800">{i.key}</span>
+          <span class="text-xs text-gray-500">({i.doc_count})</span>
           <div class="common-checkboxIndicator" />
         </label>
       </li>

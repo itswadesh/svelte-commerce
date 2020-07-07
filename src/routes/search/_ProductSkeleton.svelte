@@ -1,10 +1,9 @@
-<div class="flex p-2 w-1/2 lg:w-1/4 xl:w-1/5 justify-between">
+<div class="flex justify-between w-1/2 p-2 lg:w-1/4 xl:w-1/5">
   <div class="w-full">
     <div>
       <div class="w-full h-48 bg-gray-200 rounded" style />
       <div
-        class="bg-gray-200 mt-1 p-2 w-full text-gray-900 lg:font-bold
-        sm:font-normal text-sm" />
+        class="w-full p-2 mt-1 text-sm text-gray-900 bg-gray-200 lg:font-bold sm:font-normal" />
     </div>
   </div>
 </div>

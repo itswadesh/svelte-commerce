@@ -1,5 +1,5 @@
 <script>
-  export let product = {};
+  export let product = {}
 </script>
 
 <style>

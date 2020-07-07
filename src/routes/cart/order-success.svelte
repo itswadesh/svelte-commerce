@@ -21,19 +21,18 @@
   <Nav home={true} />
   <div class="flex flex-wrap justify-center">
     {#await getOrderDetail()}
-      <div class="text-gray-700 font-bold text-xl mb-2">
+      <div class="mb-2 text-xl font-bold text-gray-700">
         Please wait. Order being processed.
       </div>
     {:then order}
       <!-- {JSON.stringify(order)} -->
-      <div class="xs:w-full lg:w-1/3 mt-10 px-2">
+      <div class="px-2 mt-10 xs:w-full lg:w-1/3">
         <div
-          class="px-28 py-16 rounded bg-green-600 text-white font-bold text-xl
-          mb-4 text-center">
+          class="py-16 mb-4 text-xl font-bold text-center text-white bg-green-600 rounded px-28">
           <i class="fa fa-check" />
           All done
         </div>
-        <div class="font-hairline text-lg">
+        <div class="text-lg font-hairline">
           Your Order number is
           <span class="font-semibold">{order.orderNo}</span>
         </div>
@@ -49,28 +48,27 @@
         <div class="flex justify-center">
           <button
             on:click={() => goto('/search')}
-            class="mt-2 py-3 px-12 tracking-wide primary tet-2xl font-bold
-            rounded">
+            class="px-12 py-3 mt-2 font-bold tracking-wide rounded primary tet-2xl">
             SHOP MORE
           </button>
         </div>
       </div>
-      <div class="lg:w-1/4 mt-2 lg:mt-10 w-full px-4">
-        <div class="4/5 right-0 pb-3 bb">
+      <div class="w-full px-4 mt-2 lg:w-1/4 lg:mt-10">
+        <div class="right-0 pb-3 4/5 bb">
           <div>
-            <p class="text-black font-normal text-sm">Price Summary</p>
+            <p class="text-sm font-normal text-black">Price Summary</p>
           </div>
         </div>
-        <div class="4/5 right-0 pb-10 pt-2 border-b border-gray-300">
+        <div class="right-0 pt-2 pb-10 border-b border-gray-300 4/5">
           <div class="flex justify-between mt-2 text-sm">
             <div class="w-1/2 font-bold text-left">Total</div>
-            <div class="ml-2 w-1/2 font-bold text-black-400 text-right">
+            <div class="w-1/2 ml-2 font-bold text-right text-black-400">
               {currency(order.amount.total)}
             </div>
           </div>
           <div class="flex justify-between mt-2 text-xs">
-            <div class=" text-left">Pay by {order.payment.method}</div>
-            <div class="text-black-400 text-right">
+            <div class="text-left ">Pay by {order.payment.method}</div>
+            <div class="text-right text-black-400">
               {currency(order.amount.total)}
             </div>
           </div>

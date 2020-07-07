@@ -29,15 +29,14 @@
     {:else}
       <div class="flex flex-wrap justify-between">
         <div class="lg:w-16 xs:w-0" />
-        <div class="w-full lg:w-2/4 px-2">
-          <div class="w-full hr-line justify-between pb-2">
-            <div class="w-full p-3 bg-white mt-3 flex flex-wrap">
+        <div class="w-full px-2 lg:w-2/4">
+          <div class="justify-between w-full pb-2 hr-line">
+            <div class="flex flex-wrap w-full p-3 mt-3 bg-white">
               <div
-                class="text-left headings text-3xl border-r border-gray-200
-                font-bold">
+                class="text-3xl font-bold text-left border-r border-gray-200 headings">
                 Checkout
               </div>
-              <span class="text-sm mx-4 text-gray-500">
+              <span class="mx-4 text-sm text-gray-500">
                 {$cart.qty} items
                 <br />
                 Total {currency($cart.total)}
