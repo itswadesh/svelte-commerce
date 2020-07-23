@@ -23,6 +23,7 @@ import {
 	GOOGLE_ANALYTICS_ID,
 	GOOGLE_CLIENT_ID,
 	DOMAIN,
+	WWW_URL,
 	HTTP_ENDPOINT
 } from '$lib/config'
 import { getBySid } from '$lib/utils'
@@ -55,8 +56,14 @@ export const handleError = async ({ error, event }) => {
 }
 export const handle: Handle = async ({ event, resolve }) => {
 	try {
-		const WWW_URL = new URL(event.request.url).origin
-		event.locals.origin = WWW_URL
+		const WWW_URL1 = new URL(event.request.url).origin
+		event.locals.origin = WWW_URL || WWW_URL1 // https not coming in coolify hence hard coded in .env
+		// console.log(
+		// 	'DOMAIN from .env, request url, final origin',
+		// 	WWW_URL,
+		// 	WWW_URL1,
+		// 	event.locals.origin
+		// )
 		const cookieStore = event.cookies.get('store')
 		const zip = event.cookies.get('zip')
 		if (zip) {
@@ -91,7 +98,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		if (!cookieStore || cookieStore === 'undefined') {
 			const url = new URL(event.request.url)
 			const storeRes = await getBySid(`init?domain=${DOMAIN || url.host}`)
-			const { storeOne } = storeRes
+			const { storeOne, settings } = storeRes
 			store = {
 				id: storeOne._id,
 				domain: storeOne.domain,
@@ -116,7 +123,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 				isFnb: storeOne.isFnb,
 				DOMAIN: storeOne.DOMAIN,
 				weightUnit: storeOne.weightUnit,
-				dimentionUnit: storeOne.dimentionUnit
+				dimentionUnit: storeOne.dimentionUnit,
+				adminUrl: settings.adminUrl
 			}
 			event.cookies.set('store', JSON.stringify(store), { path: '/' })
 		} else {
@@ -189,7 +197,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			<br/>ORIGIN: ${event.locals?.origin}
 			<br/>DOMAIN(env): ${DOMAIN}
 			<br/>HTTP_ENDPOINT(env): ${HTTP_ENDPOINT}`
-		console.log('Err at Hooks...', e)
+		// console.log('Err at Hooks...', e)
 		throw error(404, err)
 	}
 }
