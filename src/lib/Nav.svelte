@@ -319,7 +319,7 @@ const getSelectionLabel = (option) => option.name
 						class="absolute inset-y-0 right-0 h-full w-full border-l bg-white lg:max-w-xs">
 						<button
 							type="button"
-							class="absolute top-5 right-4 transform cursor-pointer text-gray-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-gray-800"
+							class="absolute top-5 right-4 transform cursor-pointer text-gray-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-gray-700"
 							on:click="{() => (showCartSidebar = false)}">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -415,7 +415,7 @@ const getSelectionLabel = (option) => option.name
 												{:else}
 													<button
 														type="button"
-														class="transform overflow-hidden rounded-full border p-1 text-gray-500 transition duration-300 focus:outline-none hover:scale-105 hover:border-gray-800 hover:text-gray-800"
+														class="transform overflow-hidden rounded-full border p-1 text-gray-500 transition duration-300 focus:outline-none hover:scale-105 hover:border-gray-800 hover:text-gray-700"
 														on:click="{() =>
 															removeItemFromCart({
 																pid: item.pid,
@@ -754,7 +754,7 @@ const getSelectionLabel = (option) => option.name
 
 			<button
 				type="button"
-				class="absolute top-5 right-4 transform cursor-pointer text-gray-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-gray-800"
+				class="absolute top-5 right-4 transform cursor-pointer text-gray-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-gray-700"
 				on:click="{() => (openSidebar = false)}">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"

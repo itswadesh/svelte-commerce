@@ -49,7 +49,7 @@ $: heroBanners =
 <!-- {JSON.stringify(home?.categories.data)} -->
 
 <div class="bg-opacity-25 bg-center bg-repeat">
-	<div class="mb-20">
+	<div class="mb-14 sm:mb-0">
 		<!-- CATEGORIES SLIDER MOBILE -->
 
 		{#await data.home then home}
@@ -86,6 +86,7 @@ $: heroBanners =
 										alt=""
 										width="375"
 										height="375"
+										aspect_ratio="1:1"
 										class="w-[47vw] object-contain sm:w-60" />
 								</a>
 							{/if}
@@ -104,6 +105,7 @@ $: heroBanners =
 									src="{category.img || category.img}"
 									alt=""
 									width="375"
+									aspect_ratio="1:1"
 									class="h-full w-full object-contain" />
 							</a>
 						{/if}
@@ -172,18 +174,20 @@ $: heroBanners =
 							POPULAR ON {$page.data.store?.websiteName}
 						</h1>
 
-						<div
-							class="px-3 sm:px-10 grid w-full grid-cols-2 items-start gap-3 sm:flex sm:flex-wrap sm:justify-between lg:mb-20 lg:gap-6">
+						<ul
+							class="sm:px-10 border-t sm:border-t-0 grid w-full grid-cols-2 items-start sm:gap-3 sm:flex sm:flex-wrap sm:justify-between lg:gap-6">
 							{#each home?.popular?.data as p}
-								<ProductCard product="{p}" />
+								<li>
+									<ProductCard product="{p}" />
+								</li>
 							{/each}
 
-							{#each { length: 8 } as _}
-								<div class="hidden sm:block">
+							{#each { length: 7 } as _}
+								<li class="hidden sm:block">
 									<DummyProductCard />
-								</div>
+								</li>
 							{/each}
-						</div>
+						</ul>
 					</div>
 				{/if}
 			{/if}
@@ -193,24 +197,26 @@ $: heroBanners =
 
 		{#await data.home then home}
 			{#if home?.trending?.length > 0}
-				<div class="mb-5 sm:mb-10">
+				<div>
 					<h1
 						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
 						TRENDING ON {$page.data.store?.websiteName}
 					</h1>
 
-					<div
-						class="px-3 sm:px-10 grid w-full grid-cols-2 items-start gap-3 sm:flex sm:flex-wrap sm:justify-between lg:mb-20 lg:gap-6">
+					<ul
+						class="sm:px-10 border-t sm:border-t-0 grid w-full grid-cols-2 items-start sm:gap-3 sm:flex sm:flex-wrap sm:justify-between lg:gap-6">
 						{#each home?.trending as p}
-							<ProductCard product="{p}" />
+							<li>
+								<ProductCard product="{p}" />
+							</li>
 						{/each}
 
 						{#each { length: 8 } as _}
-							<div class="hidden sm:block">
+							<li class="hidden sm:block">
 								<DummyProductCard />
-							</div>
+							</li>
 						{/each}
-					</div>
+					</ul>
 				</div>
 			{/if}
 		{/await}
