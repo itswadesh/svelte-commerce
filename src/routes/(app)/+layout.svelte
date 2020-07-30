@@ -49,7 +49,7 @@ let showCartSidebar = false
 							</h1>
 
 							<p class="font-semibold text-gray-500 sm:text-xl">
-								{$page.data.store?.closeMessage || `Sorry we're closed for the day`}
+								{$page.data.store?.closedMessage || `Sorry we're closed for the day`}
 							</p>
 						</div>
 					</div>

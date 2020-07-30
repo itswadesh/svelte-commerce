@@ -4,7 +4,7 @@ const SENTRY_DSN = SECRET_SENTRY_DSN
 import {
 	id,
 	address,
-	closeMessage,
+	closedMessage,
 	description,
 	domain,
 	DOMAIN,
@@ -46,14 +46,16 @@ export const handleFetch = async ({ event, request, fetch }) => {
 
 	return fetch(request)
 }
-/** @type {import('@sveltejs/kit').HandleServerError} */
-export const handleError = async ({ error, event }) => {
-	Sentry.captureException(error, { event })
-	return {
-		message: 'Whoops!',
-		code: error.code ?? 'UNKNOWN'
-	}
-}
+
+// /** @type {import('@sveltejs/kit').HandleServerError} */
+// export const handleError = async ({ error, event }) => {
+// 	Sentry.captureException(error, { event })
+// 	return {
+// 		message: 'Whoops!',
+// 		code: error.code ?? 'UNKNOWN'
+// 	}
+// }
+
 export const handle: Handle = async ({ event, resolve }) => {
 	try {
 		const WWW_URL1 = new URL(event.request.url).origin
@@ -75,7 +77,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		let store = {
 			id,
 			address,
-			closeMessage,
+			closedMessage,
 			description,
 			dimentionUnit: 'cm',
 			domain,
@@ -111,7 +113,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 				id: storeOne._id,
 				address: storeOne.address,
 				adminUrl: settings.adminUrl,
-				closeMessage: storeOne.closeMessage,
+				closedMessage: storeOne.closedMessage,
 				description: storeOne.description,
 				dimentionUnit: storeOne.dimentionUnit,
 				domain: storeOne.domain,
