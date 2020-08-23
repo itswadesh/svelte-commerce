@@ -35,8 +35,7 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 											<LazyImg
 												src="{banner.img}"
 												alt=""
-												width="375"
-												height="430"
+												height="375"
 												aspect_ratio="1:1"
 												class="h-full w-full object-cover object-center" />
 										</a>
@@ -68,10 +67,9 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 											<LazyImg
 												src="{banner.img}"
 												alt=""
-												width="375"
-												height="430"
+												height="375"
 												aspect_ratio="1:1"
-												class="w-[47vw] object-contain object-top sm:w-60" />
+												class="w-[47vw] object-cover sm:w-60" />
 										</a>
 									{/if}
 								{/each}
@@ -85,10 +83,9 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 										<LazyImg
 											src="{banner.img}"
 											alt=""
-											width="375"
-											height="430"
+											height="375"
 											aspect_ratio="1:1"
-											class="h-full w-full object-contain object-top" />
+											class="h-full w-full object-cover" />
 									</a>
 								{/if}
 							{/each}

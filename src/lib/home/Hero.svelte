@@ -44,7 +44,6 @@ onMount(async () => {
 						<LazyImg
 							src="{b.img}"
 							alt="{b.name}"
-							width="1500"
 							height="380"
 							aspect_ratio="4:1"
 							class="block h-auto w-full object-contain object-top" />
@@ -67,8 +66,8 @@ onMount(async () => {
 						<LazyImg
 							src="{b.img}"
 							alt="{b.name}"
-							width="360"
 							height="190"
+							aspect_ratio="4:1"
 							class="block h-auto w-full object-contain object-top" />
 					</a>
 				{/if}
