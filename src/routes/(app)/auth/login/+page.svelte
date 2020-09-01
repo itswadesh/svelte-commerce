@@ -8,17 +8,17 @@
 
 <script>
 import { browser } from '$app/environment'
+import { GOOGLE_CLIENT_ID } from '$lib/config'
+import { googleOneTap } from './google-one-tap'
 import { goto, invalidateAll } from '$app/navigation'
+import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { post } from '$lib/util/api'
 import Cookie from 'cookie-universal'
+import Error from '$lib/components/Error.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
-import Error from '$lib/components/Error.svelte'
-import { googleOneTap } from './google-one-tap'
-import { GOOGLE_CLIENT_ID } from '$lib/config'
-import { onMount } from 'svelte'
 
 const cookies = Cookie()
 
@@ -41,7 +41,7 @@ onMount(() => {
 			client_id: GOOGLE_CLIENT_ID
 		},
 		async (res) => {
-			const onetap = await post('auth/google/onetap', res)
+			const onetap = await post('auth/google/onetap', res, $page.data.origin)
 			const me = {
 				email: onetap.email,
 				phone: onetap.phone,
@@ -70,10 +70,14 @@ async function submit() {
 	try {
 		loading = true
 
-		const res = await post('login', {
-			email: email,
-			password: password
-		})
+		const res = await post(
+			'login',
+			{
+				email: email,
+				password: password
+			},
+			$page.data.origin
+		)
 
 		// console.log('zzzzzzzzzzzzzzzzzz', res)
 
@@ -121,7 +125,7 @@ async function submit() {
 				required
 				bind:value="{password}" />
 
-			<div
+			<button
 				class="absolute inset-y-0 right-2 flex cursor-pointer items-end justify-center pb-2"
 				on:click="{togglePassword}">
 				{#if showPassword}
@@ -157,7 +161,7 @@ async function submit() {
 							d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
 					</svg>
 				{/if}
-			</div>
+			</button>
 		</div>
 
 		<div class="flex justify-end">
@@ -175,7 +179,7 @@ async function submit() {
 	<div class="mx-auto mb-5 flex max-w-max flex-col gap-1 text-center text-sm">
 		<a
 			href="{`/auth/otp-login?ref=${$page.url.searchParams.get('ref') || '/'}`}"
-			aria-label="Click to login with email"
+			aria-label="Click to login with phone"
 			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
 			Login with Phone
 		</a>
@@ -189,7 +193,7 @@ async function submit() {
 
 		<a
 			href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store?.id}"
-			aria-label="Click to login with email"
+			aria-label="Click to login as vendor"
 			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
 			Join as Vendor
 		</a>
@@ -198,7 +202,7 @@ async function submit() {
 	<p class="text-center text-sm text-gray-500">
 		By clicking login you are accepting our
 		<a
-			href="/p/terms-conditions"
+			href="/terms-conditions"
 			aria-label="Click to route terms & conditions"
 			target="_blank"
 			rel="noopener noreferrer"
