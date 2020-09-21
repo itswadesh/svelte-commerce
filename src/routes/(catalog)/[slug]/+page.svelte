@@ -14,7 +14,7 @@
 </style>
 
 <script>
-import { dateOnly, toast } from '$lib/util'
+import { currency, dateOnly, toast } from '$lib/util'
 import { fade } from 'svelte/transition'
 import { getAPI } from '$lib/util/api'
 import { goto, invalidateAll } from '$app/navigation'
@@ -377,17 +377,20 @@ async function goCheckbox(item) {
 						</div>
 					</div>
 
-					{#if data.facets.all_aggs.tags?.all?.buckets?.length}
-						<div class="mb-5 flex flex-wrap gap-2 px-3 sm:px-0">
-							{#each data.facets.all_aggs.tags.all.buckets || [] as t}
-								{#if t}
-									<button
-										class="block rounded-full border bg-white py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none hover:border-primary-500 hover:text-primary-500"
-										on:click="{() => goCheckbox(t.key)}">
-										{t.key} ({t.doc_count})
-									</button>
-								{/if}
-							{/each}
+					{#if data.facets.all_aggs.style_tags?.all?.buckets?.length}
+						<div
+							class="w-screen overflow-x-auto scrollbar-none lg:mb-5 lg:w-full lg:overflow-x-hidden">
+							<div class="inline-flex gap-2 p-3 lg:flex lg:flex-wrap lg:p-0">
+								{#each data.facets.all_aggs.style_tags.all.buckets || [] as t}
+									{#if t}
+										<button
+											class="block whitespace-nowrap rounded-full border bg-white py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none hover:border-primary-500 hover:text-primary-500"
+											on:click="{() => goCheckbox(t.key)}">
+											{t.key} ({t.doc_count})
+										</button>
+									{/if}
+								{/each}
+							</div>
 						</div>
 					{/if}
 
@@ -518,7 +521,9 @@ async function goCheckbox(item) {
 										<a href="/product/{p.slug}" class="grid grid-cols-6 gap-5">
 											<span class="col-span-5 text-justify">{p.name}</span>
 
-											<span class="col-span-1 whitespace-nowrap">{p.formattedPrice}</span>
+											<span class="col-span-1 whitespace-nowrap">
+												{currency(p.price, $page.data?.store?.currencySymbol)}
+											</span>
 										</a>
 									</li>
 								{/if}
