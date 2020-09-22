@@ -4,6 +4,8 @@
 
 On sapper/svelte version bump do the following else it will show error while navigating on home page with carousel
 
+Whos knows whether this will work out of the box!
+
 `node_modules/svelte/internal/index.mjs`
 
 https://github.com/sveltejs/svelte/issues/2086
