@@ -89,7 +89,7 @@ function paymentMethodChanged(pm) {
 }
 
 async function submit(pm) {
-	console.log('pm = ', pm)
+	// console.log('pm = ', pm)
 
 	if (!pm || pm === undefined) {
 		disabled = true
