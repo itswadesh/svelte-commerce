@@ -124,3 +124,7 @@ If required change `src/config.js` according to your requirement
 - Storing tokens into cookie
 - Loader on route change with 100ms delay
 - Integrated Google Analytics
+
+If you like my work, please consider supporting me with your kind contribution. Thank you!!!
+
+[Paypal](https://paypal.me/itswadesh)
