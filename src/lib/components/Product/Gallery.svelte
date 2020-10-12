@@ -61,7 +61,8 @@ onMount(async () => {
 						rewind: true,
 						lazyLoad: true,
 						perPage: 1,
-						perMove: 1
+						perMove: 1,
+						arrows: false
 						// breakpoints: {
 						// 640: {
 						// 	perPage: 1,
