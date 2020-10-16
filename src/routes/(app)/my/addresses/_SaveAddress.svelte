@@ -1,9 +1,10 @@
 <script>
 import { createEventDispatcher, onMount } from 'svelte'
-import { getAPI, post } from '$lib/util/api'
+import { post } from '$lib/utils/api'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
-import { toast } from '$lib/util'
+import { toast } from '$lib/utils'
+import CtrlS from '$lib/components/CtrlS.svelte'
 import Error from '$lib/components/Error.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
@@ -16,13 +17,12 @@ let formChanged = false
 let loading = false
 
 export let address = {}
-export let countries = false
-export let states = false
+export let countries = []
+export let states = []
 
-function saveImage({ detail, field }) {
-	address[field] = detail
-	SaveAddress(address)
-}
+// console.log('address', address)
+// console.log('countries', countries)
+// console.log('states', states)
 
 async function SaveAddress(address) {
 	try {
@@ -61,11 +61,8 @@ async function SaveAddress(address) {
 	}
 }
 
-// onMount(async () => {})
-
 async function onCountryChange(country) {
 	// 	formChanged = true
-	// 	await getAPI('states', { limit: 300, page: 0, countryCode: country })
 }
 </script>
 
@@ -130,7 +127,7 @@ async function onCountryChange(country) {
 				</div>
 			</div>
 
-			{#if states?.count}
+			{#if states?.length > 0}
 				<div class="flex flex-wrap">
 					<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">State</h6>
 
@@ -139,10 +136,10 @@ async function onCountryChange(country) {
 							class="w-full rounded-md border border-gray-300 bg-white p-2 text-sm placeholder-gray-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-gray-50"
 							bind:value="{address.state}">
 							<option value="" selected>-- Select a State --</option>
-							{#each states?.data as c}
-								{#if c}
-									<option value="{c.name}">
-										{c.name}
+							{#each states as s}
+								{#if s}
+									<option value="{s.name}">
+										{s.name}
 									</option>
 								{/if}
 							{/each}
@@ -180,18 +177,6 @@ async function onCountryChange(country) {
 					<Textbox placeholder="Enter zip" bind:value="{address.zip}" />
 				</div>
 			</div>
-
-			<!-- <div class="flex flex-wrap">
-					<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">Active</h6>
-
-					<div class="mb-2 w-full max-w-md">
-						<ToggleSwitch
-							color="blue"
-							size="sm"
-							bind:checked="{address.active}"
-							 />
-					</div>
-				</div> -->
 		</div>
 
 		<PrimaryButton type="submit" loading="{loading}" class="w-60">Save Address</PrimaryButton>
