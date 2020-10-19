@@ -46,17 +46,16 @@
 <script lang="ts">
 import { applyAction, enhance } from '$app/forms'
 import { createEventDispatcher, onMount } from 'svelte'
-import { date, currency, delay, toast } from '$lib/util'
-import { fireGTagEvent } from '$lib/util/gTag'
+import { date, currency, delay, toast } from '$lib/utils'
+import { fireGTagEvent } from '$lib/utils/gTag'
 import { fly, slide, fade } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
-import { post, getAPI } from '$lib/util/api'
+import { post } from '$lib/utils/api'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
 import Breadcrumb from '$lib/components/Breadcrumb.svelte'
 import Checkbox from '$lib/ui/Checkbox.svelte'
 import CheckboxOfMultiProducts from '$lib/ui/CheckboxOfMultiProducts.svelte'
-import Cookie from 'cookie-universal'
 import DeliveryOptions from './_DeliveryOptions.svelte'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
 import FrequentlyBoughtProduct from './_FrequentlyBoughtProduct.svelte'
@@ -74,62 +73,39 @@ import SimilarProducts from '$lib/components/Product/SimilarProducts.svelte'
 import SocialSharingButtons from '$lib/components/SocialSharingButtons.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
-import UserForm from '$lib/components/Product/UserForm.svelte'
 import viewport from '$lib/actions/useViewPort'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
-
-let Konvas
-const dispatch = createEventDispatcher()
-
-const cookies = Cookie()
+import { fetchRelatedProducts } from '$lib/services/ProductService'
+import {  toggleWishlistService } from '$lib/services/WishlistService'
+import { fetchProductReviews } from '$lib/services/ReviewService'
 
 export let data
 
-// console.log('zzzzzzzzzzzzzzzzzz', data)
-
 let seoProps = {
-	// addressCountry: 'India',
-	// addressLocality: 'Semiliguda, Koraput',
-	// addressRegion: 'Odisha',
-	// alternateJsonHref: '',
-	// alternateXml: { title: '', href: '' },
 	brand: `${$page?.data?.store?.websiteName}`,
 	breadcrumbs: data.product?.categoryPool,
 	caption: `${$page?.data?.store?.websiteName}`,
 	category: data.product?.category?.name,
 	contentUrl: data.product?.img || $page?.data?.store?.logo,
 	createdAt: `${data.product?.createdAt || '_'}`,
-	// depth: { unitCode: '', value: '' },
 	email: `${$page?.data?.store?.email}`,
-	// entityMeta: '',
-	// facebookPage: '',
-	// gtin: '',
-	// height: '',
 	id: $page?.url?.href,
 	image: `${data.product?.img}`,
 	logo: $page?.data?.store?.logo,
-	// ogSquareImage: { url: 'https://lrnr.in/favicon.ico', width: 56, height: 56 },
 	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00'],
 	popularity: data.product?.popularity,
-	// postalCode: '764036',
 	price: data.product?.price,
 	priceRange: `${data.product?.price}-${data.product?.mrp}`,
 	ratingCount: 1,
 	ratingValue: +data.product?.ratings + 1,
 	sku: data.product?.sku,
-	// streetAddress: 'Padmajyoti Marg, Nandapur Road',
 	timeToRead: 0,
 	updatedAt: `${data.product?.updatedAt || '_'}`,
-	// weight: { unitCode: '', value: '' },
-	// width: { unitCode: '', value: '' },
-	// wlwmanifestXmlHref: '',
 	metadescription: data.product?.metaDescription,
-	// article: false,
 	canonical: `${$page?.url.href}`,
 	datePublished: `${data.product?.publishedAt || '_'}`,
 	description: ` ${data.product?.description}`,
 	dnsPrefetch: `//cdn.jsdelivr.net`,
-	// entityMeta: null,
 	featuredImage: {
 		url: `${data.product?.img}`,
 		width: 675,
@@ -149,7 +125,6 @@ let seoProps = {
 	productPriceAmount: `${data.product?.price}`,
 	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
 	slug: `${data.product?.slug}`,
-	// timeToRead: 0,
 	title: `${data.product?.name}`,
 	twitterImage: { url: `${data.product?.img}` }
 }
@@ -194,30 +169,29 @@ if (data.product?.size?.name === 'One Size') {
 onMount(async () => {
 	screenWidth = screen.width
 
-	try {
-		// console.log(' data.product?._id = ', data.product?._id)
-		const relatedProductsRes = await getAPI(
-			`es/products?store=${$page.data.store?.id}&categories=${data.product.category?.slug}`,
-			$page.data.origin
-		)
-		relatedProducts = relatedProductsRes?.data.filter((p) => {
-			return p._id !== data.product._id
-		})
-		productReview = await getAPI(
-			`reviews/product-reviews?pid=${data.product?._id}`,
-			$page.data.origin
-		)
-		isWislisted = await getAPI(
-			`wishlists/check?product=${data.product?._id}&variant=${data.product?._id}&store=${$page.data?.store?.id}`,
-			$page.data.origin
-		)
+	// try {
+	// 	isWislisted = await checkhWishlist({
+	// 		pid: data.product._id,
+	// 		vid: data.product._id,
+	// 		origin: $page?.data?.origin,
+	// 		storeId: $page?.data?.store?.id
+	// 	})
 
-		// console.log('productReview', productReview)
-		// console.log('isWislisted', isWislisted)
-	} catch (e) {
-		// toast(e, 'error')
-	} finally {
-	}
+	// 	productReview = await fetchProductReviews({
+	// 		pid: data.product._id,
+	// 		origin: $page?.data?.origin,
+	// 		storeId: $page?.data?.store?.id
+	// 	})
+
+	// 	relatedProducts = await fetchRelatedProducts({
+	// 		pid: data.product._id,
+	// 		categorySlug: data.product.category?.slug,
+	// 		origin: $page?.data?.origin,
+	// 		storeId: $page?.data?.store?.id
+	// 	})
+	// } catch (e) {
+	// } finally {
+	// }
 })
 
 function handleShowReviewsCount(showReviewsCount) {
@@ -232,100 +206,7 @@ function selectSize(s) {
 
 function handleSelectedLinkiedProducts(e) {
 	selectedLinkiedProducts = e.detail
-	// console.log('selectedLinkiedProducts', selectedLinkiedProducts)
 }
-
-// This is used only for customized product else cart?/add
-async function addToBag(p, customizedImg, customizedJson) {
-	loading = true
-	cartButtonText = 'Adding...'
-
-	try {
-		let cart = await post(
-			'carts/add-to-cart',
-			{
-				pid: p._id,
-				vid: p._id,
-				qty: 1,
-				options: selectedOptions,
-				customizedImg: customizedImg,
-				customizedData: customizedJson,
-				store: $page.data.store?.id
-			},
-			$page.data.origin
-		)
-		if (selectedLinkiedProducts?.length) {
-			for (const i of selectedLinkiedProducts) {
-				cart = await post(
-					'carts/add-to-cart',
-					{
-						pid: i,
-						vid: i,
-						qty: 1,
-						store: $page.data.store?.id
-					},
-					$page.data.origin
-				)
-			}
-		}
-		// console.log('selectedLinkiedProducts inside add to cart function =', selectedLinkiedProducts)
-		const response = await fetch('/server/cart')
-		cart = await response.json()
-		// console.error('Cart called after add to cart', cart.cart_id, cart.qty)
-		if (cart) {
-			const cookieCart = {
-				cartId: cart?.cart_id,
-				items: cart?.items,
-				qty: cart?.qty,
-				tax: cart?.tax,
-				subtotal: cart?.subtotal,
-				total: cart?.total,
-				currencySymbol: cart?.currencySymbol,
-				discount: cart?.discount,
-				savings: cart?.savings,
-				selfTakeout: cart?.selfTakeout,
-				shipping: cart?.shipping,
-				unavailableItems: cart?.unavailableItems,
-				formattedAmount: cart?.formattedAmount
-			}
-			cookies.set('cartId', cookieCart.cartId, { path: '/' })
-			cookies.set('cartQty', cookieCart.qty, { path: '/' })
-			// cookies.set('cart', JSON.stringify(cookieCart), { path: '/' })
-			// cartButtonText = 'Added To Cart'
-			bounceItemFromTop = true
-		}
-
-		await invalidateAll()
-
-		cartButtonText = 'Go to cart'
-		p.qty < 0 ? fireGTagEvent('remove_from_cart', cart) : fireGTagEvent('add_to_cart', cart)
-
-		// const res = await getAPI('carts/my')
-
-		// if (res) {
-
-		if (customizedImg) {
-			goto(`/checkout/address`)
-		}
-	} catch (e) {
-		toast(e, 'error')
-		cartButtonText = 'Error Add To Cart'
-	} finally {
-		loading = false
-		await delay(5000)
-		cartButtonText = 'Add to bag'
-		bounceItemFromTop = false
-	}
-}
-
-// let windowHeight
-// let cartButtonPosition = 0
-// onMount(() => {
-// 	let elem = document.getElementById('cartButton')
-// 	let rect = elem.getBoundingClientRect()
-// 	const ActualCartButtonPosition = rect.y
-// 	cartButtonPosition = ActualCartButtonPosition - windowHeight + 280
-// })
 
 function cartButtonEnterViewport() {
 	if (y > 0) {
@@ -343,21 +224,6 @@ function cartButtonExitViewport() {
 	}
 }
 
-function alertToSelectMandatoryOptions() {
-	// Raised by AddToCart Button at detail page
-	toast('Please select a size', 'error')
-
-	const el = document.getElementsByClassName('sizeSelector')[0]
-	if (el) {
-		el.scrollIntoView({ behavior: 'smooth' })
-	}
-
-	shake = true
-	setTimeout(() => {
-		shake = false
-	}, 3000)
-}
-
 $: {
 	const o1 = []
 	for (const i in selectedOptions) {
@@ -365,35 +231,22 @@ $: {
 		else o1.push({ option: i, values: [selectedOptions[i]] })
 	}
 
-	// console.log('oooooooooooooooooo', o)
-	// console.log('dddddddddddddd', o1)
-
-	//   if (!this.selectedOptions) this.selectedOptions = []
-	//   for (const i in o) {
-	//     this.selectedOptions.push({ option: i, values: [o[i]] })
-	//   }
-
-	//   console.log('occccccccccccccccccccccc', this.selectedOptions)
-	// },
-
-	// dateChanged(o) {
-	//   if (!this.selectedOptions) this.selectedOptions = []
-	//   this.selectedOptions.push(o)
 	selectedOptions1 = o1
 }
 
-async function toggleWishlist(id) {
+async function toggleWishlisted(id) {
 	if (!$page.data.me) {
 		goto(`${$page.data?.loginUrl || '/auth/login'}?ref=/my/wishlist/add/${id}`)
 	}
 
 	try {
 		loadingForWishlist = true
-		isWislisted = await post(
-			`wishlists/toggle`,
-			{ product: id, variant: id, store: $page.data.store?.id },
-			$page.data.origin
-		)
+		isWislisted = await toggleWishlistService({
+			pid: id,
+			vid: id,
+			storeId: $page.data.store?.id,
+			origin: $page.data.origin
+		})
 	} catch (e) {
 	} finally {
 		loadingForWishlist = false
@@ -403,12 +256,8 @@ async function toggleWishlist(id) {
 function scrollTo(elementId) {
 	let element
 	if (elementId.detail) {
-		// console.log('elementId = ', elementId.detail)
-
 		element = document.getElementById(elementId.detail)
 	} else {
-		// console.log('elementId = ', elementId)
-
 		element = document.getElementById(elementId)
 	}
 	window.scroll({
@@ -510,7 +359,7 @@ function handleMobileCanvas() {
 				{:else}
 					<div
 						class="flex h-screen w-full flex-col items-center justify-center gap-5 text-center sm:mx-auto sm:h-auto sm:w-auto">
-						<h1 class="text-xl font-semibold capitalize sm:text-2xl">Make your custom design</h1>
+						<h2 class="text-xl font-semibold capitalize sm:text-2xl">Make your custom design</h2>
 
 						<div
 							class="relative flex h-full w-full flex-col items-center justify-center gap-2 rounded-md border bg-gray-100 text-sm text-gray-500 sm:h-[570px] sm:w-[302px]">
@@ -538,16 +387,16 @@ function handleMobileCanvas() {
 				<!-- Brand -->
 
 				{#if data.product?.brand?.name}
-					<h1 class="mb-1 text-xl sm:text-2xl"><b>{data.product?.brand?.name}</b></h1>
+					<h2 class="mb-1 text-xl sm:text-2xl"><b>{data.product?.brand?.name}</b></h2>
 				{/if}
 
 				<!-- Name -->
 
 				{#if data.product?.name}
 					<div class="flex justify-between gap-2">
-						<h1 class="flex-1 text-gray-500 sm:text-lg">
+						<h2 class="flex-1 text-gray-500 sm:text-lg">
 							{data.product?.name}
-						</h1>
+						</h2>
 
 						{#if $page?.data?.store?.isFnb && data.product.foodType}
 							<div>
@@ -711,8 +560,8 @@ function handleMobileCanvas() {
 								type="button"
 								class="overflow-hidden rounded border py-1 px-3 text-sm font-medium uppercase transition duration-500 focus:outline-none
               				{data.product?.size?.name === selectedSize
-									? 'bg-primary-500 border-primary-500 text-white'
-									: 'bg-transparent border-gray-300 text-gray-500 hover:border-primary-500 hover:text-primary-500'}"
+									? 'border-primary-500 bg-primary-500 text-white'
+									: 'border-gray-300 bg-transparent text-gray-500 hover:border-primary-500 hover:text-primary-500'}"
 								on:click="{() => selectSize(data.product?.size)}">
 								{data.product?.size?.name}
 							</button>
@@ -889,7 +738,7 @@ function handleMobileCanvas() {
 								loadingringsize="sm"
 								loading="{loadingForWishlist}"
 								class="w-full text-sm"
-								on:click="{() => toggleWishlist(data.product?._id)}">
+								on:click="{() => toggleWishlisted(data.product?._id)}">
 								{#if isWislisted}
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
@@ -1210,7 +1059,7 @@ function handleMobileCanvas() {
 							<div class="tems-center flex">
 								<div
 									class="flex max-w-max flex-col items-center justify-center border-r border-gray-300 px-4 text-center">
-									<h1 class="mb-2 flex items-end gap-2">
+									<h2 class="mb-2 flex items-end gap-2">
 										<span class="text-4xl sm:text-5xl"> {productReview?.summary?.avg} </span>
 
 										<svg
@@ -1222,7 +1071,7 @@ function handleMobileCanvas() {
 												d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
 											></path>
 										</svg>
-									</h1>
+									</h2>
 
 									<p class="text-sm">{productReview?.summary?.count} Verified Buyers</p>
 								</div>
@@ -1379,10 +1228,10 @@ function handleMobileCanvas() {
 				</div>
 			{/if}
 
-			{#if data.product?.relatedProducts?.length}
+			{#if relatedProducts?.length}
 				<hr class="mb-5 w-full sm:mb-10" />
 
-				<SimilarProducts similarProducts="{data.product?.relatedProducts}" />
+				<SimilarProducts similarProducts="{relatedProducts}" />
 			{/if}
 		</div>
 	</div>
