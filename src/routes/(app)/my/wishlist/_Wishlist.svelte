@@ -15,7 +15,7 @@
 <script>
 import { applyAction, enhance } from '$app/forms'
 import { currency } from '$lib/utils'
-import { fetchWishlist } from '$lib/services/WishlistService'
+import { fetchWishlist, toggleWishlistService } from '$lib/services/WishlistService'
 import { fireGTagEvent } from '$lib/utils/gTag'
 import { invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
@@ -30,22 +30,17 @@ import WishlistSkeleton from './_WishlistSkeleton.svelte'
 export let wishlistedProducts,
 	loadingProduct = []
 
-// console.log('zzzzzzzzzzzzzzzzzz', wishlistedProducts)
-
 let bounceItemFromTop = false
 
 async function removeFromWishlist(id, wx) {
 	try {
 		loadingProduct[wx] = true
-		await post(
-			'wishlists/toggle',
-			{
-				product: id,
-				variant: id,
-				store: $page.data.store?.id
-			},
-			$page.data.origin
-		)
+		await toggleWishlistService({
+			pid: id,
+			vid: id,
+			storeId: $page.data.store?.id,
+			origin: $page.data.origin
+		})
 		await invalidateAll()
 		await getWishlistedProducts()
 	} catch (e) {
@@ -184,12 +179,12 @@ async function getWishlistedProducts() {
 														</span>
 
 														{#if w.product?.mrp > w.product?.price}
-															<strike class="whitespace-nowrap text-gray-500">
+															<span class="whitespace-nowrap text-gray-600 line-through">
 																{currency(w.product?.mrp, $page.data?.store?.currencySymbol)}
 															</strike>
 
 															{#if Math.floor(((w.product?.mrp - w.product?.price) / w.product?.mrp) * 100) > 0}
-																<span class="whitespace-nowrap text-primary-500">
+																<span class="whitespace-nowrap text-green-600">
 																	({Math.floor(
 																		((w.product?.mrp - w.product?.price) / w.product?.mrp) * 100
 																	)}% off)
