@@ -173,7 +173,7 @@ onMount(() => {
 											{#if item.mrp > item.price}
 												<span class="whitespace-nowrap text-gray-600 line-through">
 													{currency(item.mrp)}
-												</strike>
+												</span>
 
 												{#if Math.floor(((item.mrp - item.price) / item.mrp) * 100) > 0}
 													<span class="whitespace-nowrap text-green-600">
