@@ -1,16 +1,11 @@
-<h1>Sveltekit is stable now. We started implementing production apps using it.</h1>
+# What is Svelte Commerce?
 
-## To start Development
+- Svelte Commerce is a storefront for your existing eCommerce.
+- It is possible to connect with any eCommerce backend
+- No need to make a big leap or invest huge amount. Just take this opend source project and attach to existing backend.
+- Advanced Frontend Platform for eCommerce based on Sveltekit
 
-```
-git clone https://github.com/itswadesh/svelte-commerce.git
-cd svelte-commerce
-npm i
-cp .env.example .env    # You will need to update the values in this .env file
-npm run dev
-```
-
-<a href="https://litekart.in/">
+<a href="https://litekart.in/" aria-label="Click to browse litekart">
 <img src="https://repository-images.githubusercontent.com/213575283/f577b8bd-8edb-41ba-bfe5-36e65072e1f2" alt/>
 </a>
 
@@ -19,28 +14,25 @@ npm run dev
 ![Typescript](https://img.shields.io/badge/TS-Typescript-blue)
 <br />
 
-<!-- <a href="https://codenx.slack.com" target="blank">![Branch Develop](https://img.shields.io/badge/community%20chat-slack-FF1493.svg?style=for-the-badge&logo=Slack&logoColor=white)</a> -->
+<!-- <a href="https://codenx.slack.com" target="blank" rel="noopener noreferrer" aria-label="Click to browse codenx">![Branch Develop](https://img.shields.io/badge/community%20chat-slack-FF1493.svg?style=for-the-badge&logo=Slack&logoColor=white)</a> -->
 
-<a href="https://join.skype.com/invite/aBegFXZGdaPh" target="blank">![Branch Develop](https://img.shields.io/badge/Skype%20Message-%252300AFF0.svg?style=for-the-badge&logo=Skype&logoColor=white)</a>
-<a href="https://t.me/itswadesh" target="blank">![Branch Develop](https://img.shields.io/badge/Telegram%20Message-%2300AFF0.svg?style=for-the-badge&logo=Telegram&logoColor=white)</a>
+<a href="https://join.skype.com/invite/aBegFXZGdaPh" target="blank" rel="noopener noreferrer" aria-label="Click to invite on skype">![Branch Develop](https://img.shields.io/badge/Skype%20Message-%252300AFF0.svg?style=for-the-badge&logo=Skype&logoColor=white)</a>
+<a href="https://t.me/itswadesh" target="blank" rel="noopener noreferrer" aria-label="Click to browse twitter account">![Branch Develop](https://img.shields.io/badge/Telegram%20Message-%2300AFF0.svg?style=for-the-badge&logo=Telegram&logoColor=white)</a>
 ![Branch Develop](https://res.cloudinary.com/itswadesh/image/upload/v1656864555/open-to-work.svg)
 
-# Svelte Commerce?
-
-### Svelte Commerce is an advanced Frontend Platform for eCommerce based on Sveltekit
-
-- Demo <a href="https://demo.litekart.in/" target="blank">demo.litekart.in</a>
+- Demo <a href="https://demo.litekart.in/" target="blank" rel="noopener noreferrer">demo.litekart.in</a>
 - Svelte commerce in home made FNB sector https://food.misiki.in/ (https://github.com/itswadesh/homefood)
-- Svelte commerce in jewellery industry https://jewellery.litekart.in/ (https://github.com/KamalaJagan/misiki-commerce)
+- Svelte commerce in jewellery industry https://next.varnijewels.com/
 - Svelte commerce in fashion industry https://next.trialshot.com/
 - Svelte commerce in toys industry https://tablez.com/
 - Svelte commerce in mobile cover customization https://next.zapvi.in/
+
 - I can make your existing ecommerce fast and scalable with fastest possible time
 
-- Portfolio <a href="https://itswadesh.com/" target="blank">itswadesh.com</a>
+- Portfolio <a href="https://itswadesh.com/" target="blank" rel="noopener noreferrer" aria-label="Click to browse portfolio website">itswadesh.com</a>
   <br/>
 
-- 🛍️ Attach Svelte store front to <a href="https://admin.litekart.in/"> Litekart </a> and your complete ecommerce tech stack becomes free.
+- 🛍️ Attach Svelte store front to <a href="https://admin.litekart.in/" aria-label="Click to brouse svelte store front"> Litekart </a> and your complete ecommerce tech stack becomes free.
 - 👥 The demo uses litekart as backend
 - 👨🏻‍💻 Its both SSR and SPA
 - 🚀 Superfast
@@ -98,11 +90,14 @@ npm run dev
 
 Install - [NodeJS](https://nodejs.org/en/) - [Yarn](https://yarnpkg.com/en/) - [Git](https://git-scm.com/)
 
+## To start Development
+
 ```
 git clone https://github.com/itswadesh/svelte-commerce.git
 cd svelte-commerce
-yarn
-yarn dev
+npm i
+cp .env.example .env    # You will need to update the values in this .env file
+npm run dev
 ```
 
 Thats all !
@@ -117,7 +112,7 @@ If required change `config/index.ts` according to your requirement
 
 Click on the button to directly deploy to Netlify or Vercel. Zero configuration required.
 
-<a href="https://app.netlify.com/start/deploy?repository=https://github.com/itswadesh/svelte-commerce">
+<a href="https://app.netlify.com/start/deploy?repository=https://github.com/itswadesh/svelte-commerce" aria-label="Click to deploy into netlify">
 <img src="https://www.netlify.com/img/deploy/button.svg" alt="Deploy to netlify">
 </a>
 

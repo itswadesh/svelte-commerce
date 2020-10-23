@@ -57,26 +57,46 @@ interface Product {
 	specifications: Specification[]
 	description: string
 	terms: string
+	createdAt: string
+	modifiedAt: string
+	status: string
+	shortDescription: string
+	countryOfOrigin: string
+	varified: boolean
+	popularity: number
+	featured: boolean
 	linkedProducts: Product[]
 	longDescription: string
 	crossSells: Product[]
 }
 interface Brand {
+	_id: string
 	name: string
+	slug: string
+	active: boolean
 }
 
 interface Size {
+	_id: string
 	name: string
+	active: boolean
 }
 
 interface Specification {
+	_id: string
 	name: string
 	value: string
+	active: boolean
 }
 
 interface Category {
-	slug: string
+	_id: string
 	name: string
+	slug: string
+	link: string
+	active: boolean
+	new: boolean
+	position: number
 }
 
 interface Option {
@@ -95,6 +115,8 @@ interface Tag {
 	name: string
 	img: string
 	colorCode: string
+	position: number
+	active: boolean
 }
 
 interface ProductVote {

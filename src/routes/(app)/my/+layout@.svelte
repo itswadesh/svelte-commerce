@@ -10,7 +10,7 @@ import Footer from '$lib/Footer.svelte'
 import PageTransitions from '$lib/PageTransitions.svelte'
 import menu from '$lib/config/menu'
 import SidebarDashboard from './_SidebarDashboard.svelte'
-
+import { page } from '$app/stores'
 export let data
 
 $: ({ path, url, sort, isHome, q, currentPage, me, cart, store } = data)
@@ -37,16 +37,48 @@ let openSidebar = false
 				<a href="/my" aria-label="Click to route dashboard" data-sveltekit-preload-data>
 					<button
 						type="button"
-						class="w-full p-3 text-left text-sm text-gray-200 focus:outline-none">
+						class="w-full p-3 text-left text-xs text-gray-200 focus:outline-none">
 						Dashboard
 					</button>
 				</a>
 
 				<!-- Sidebar Data -->
 
-				{#each menu as s}
-					<SidebarDashboard me="{me}" sidebar="{s}" />
-				{/each}
+				<ul>
+					{#each menu as s}
+						<li>
+							<SidebarDashboard me="{me}" sidebar="{s}" />
+						</li>
+					{/each}
+
+					{#if $page.data.me?.role === 'vendor'}
+						<li>
+							<a
+								href="{$page.data.store?.adminUrl || '##'}"
+								target="_blank"
+								rel="external"
+								aria-label="Click to route admin panel of the store front"
+								class="ml-10 text-sm text-white">
+								Admin Panel
+							</a>
+						</li>
+					{/if}
+				</ul>
+
+				<hr class="border-primary-600" />
+
+				<!-- Change Password -->
+
+				<a
+					href="/auth/change-password"
+					aria-label="Click to route dashboard"
+					data-sveltekit-preload-data>
+					<button
+						type="button"
+						class="w-full p-3 text-left text-xs text-gray-200 focus:outline-none">
+						Change Password
+					</button>
+				</a>
 			</div>
 		{/if}
 

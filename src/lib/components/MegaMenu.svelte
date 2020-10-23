@@ -32,10 +32,11 @@
 
 <script>
 import { onMount } from 'svelte'
-import { getAPI } from '$lib/util/api'
-import { toast } from '$lib/util'
+import { toast } from '$lib/utils'
 import { page } from '$app/stores'
 import { browser } from '$app/environment'
+import { fetchMegamenuData } from '$lib/services/CategoryService'
+import { getAPI } from '$lib/utils/api'
 
 let megamenu = []
 let selectedCategory = ''
@@ -45,24 +46,24 @@ onMount(() => {
 })
 
 async function getMegaMenu() {
-	if (browser) {
+	if (browser && $page.data.isDesktop) {
 		try {
 			const localMegamenu = localStorage.getItem('megamenu')
 
-			if (!localMegamenu || localMegamenu === 'undefined') {
-				megamenu = await getAPI(
-					`categories/megamenu?megamenu=true&store=${$page.data?.store?.id}`,
-					$page.data.origin
-				)
-
-				// console.log('zzzzzzzzzzzzzzzzzz', megamenu)
-			} else {
+			if (!!localMegamenu && localMegamenu !== 'undefined') {
 				megamenu = JSON.parse(localMegamenu)
+			} else {
+				megamenu = await fetchMegamenuData({
+					storeId: $page?.data?.store?.id,
+					origin: $page.data?.origin
+				})
 			}
 		} catch (e) {
 			toast(e, 'error')
 		} finally {
 		}
+	} else {
+		megamenu = []
 	}
 }
 </script>
@@ -94,6 +95,7 @@ async function getMegaMenu() {
                     ">
 				<a
 					href="/{category.link || category.slug}"
+					aria-label="Click to route into category related products page"
 					data-sveltekit-reload
 					class="flex w-full items-center gap-1">
 					<!-- Root category -->
@@ -133,15 +135,16 @@ async function getMegaMenu() {
 						{#each category.children as c}
 							<li class="mb-2 w-1/4 flex-1 flex-shrink-0 flex-grow-0 p-6 pr-2 text-sm">
 								<a
-									data-sveltekit-reload
 									href="/{c.link || c.slug}"
+									aria-label="Click to route into category related products page"
+									data-sveltekit-reload
 									class="mb-2 block w-full
-                                    	{index % 6 == 0 ? 'text-yellow-500 ' : ''}
-                                    	{index % 6 == 1 ? 'text-purple-500 ' : ''}
-                                    	{index % 6 == 2 ? 'text-red-500 ' : ''}
-                                    	{index % 6 == 3 ? 'text-green-500 ' : ''}
-                                    	{index % 6 == 4 ? 'text-pink-500 ' : ''}
-                                    	{index % 6 == 5 ? 'text-blue-500 ' : ''}">
+									{index % 6 == 0 ? 'text-yellow-500 ' : ''}
+									{index % 6 == 1 ? 'text-purple-500 ' : ''}
+									{index % 6 == 2 ? 'text-red-500 ' : ''}
+                                    {index % 6 == 3 ? 'text-green-500 ' : ''}
+                                    {index % 6 == 4 ? 'text-pink-500 ' : ''}
+                                    {index % 6 == 5 ? 'text-blue-500 ' : ''}">
 									{c.name}
 								</a>
 
@@ -153,6 +156,8 @@ async function getMegaMenu() {
 											<li class="w-full">
 												<a
 													href="/{c1.link || c1.slug}"
+													aria-label="Click to route into category related products page"
+													data-sveltekit-reload
 													class="block w-full font-light hover:font-medium">
 													{c1.name}
 												</a>

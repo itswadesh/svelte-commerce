@@ -1,6 +1,4 @@
-import { provider } from '$lib/config'
-import type { Error, Product } from '$lib/types'
-import { mapBigcommerceProducts, mapMedusajsProducts, mapWoocommerceProducts } from '$lib/utils'
+import { error } from '@sveltejs/kit'
 import { getAPI } from '$lib/utils/api'
 import {
 	getBigCommerceApi,
@@ -9,8 +7,12 @@ import {
 	getWooCommerceApi,
 	postMedusajsApi
 } from '$lib/utils/server'
+import { mapBigcommerceProducts, mapMedusajsProducts, mapWoocommerceProducts } from '$lib/utils'
+import { provider } from '$lib/config'
 import { serializeNonPOJOs } from '$lib/utils/validations'
-import { error } from '@sveltejs/kit'
+import type { Error, Product } from '$lib/types'
+
+// Search product
 
 export const searchProducts = async ({
 	origin,
@@ -49,7 +51,6 @@ export const searchProducts = async ({
 				break
 			case 'medusajs':
 				res = await postMedusajsApi(`products/search`, { q: 'Shirt' })
-				console.log('zzzzzzzzzzzzzzzzzzzz', products)
 				products = res?.hits
 				count = res?.hits?.length
 				facets = res?.facets || []
@@ -67,6 +68,8 @@ export const searchProducts = async ({
 		throw error(e.status, e.data?.message || e.message)
 	}
 }
+
+// Fetch single product
 
 export const fetchProduct = async ({ origin, slug, id, server = false, sid = null }: any) => {
 	try {
@@ -100,6 +103,8 @@ export const fetchProduct = async ({ origin, slug, id, server = false, sid = nul
 	}
 }
 
+// Fetch all products
+
 export const fetchProducts = async ({ origin, storeId, server = false, sid = null }: Product[]) => {
 	try {
 		let res: Product | {} = {}
@@ -124,6 +129,8 @@ export const fetchProducts = async ({ origin, storeId, server = false, sid = nul
 		throw error(e.status, e.data?.message || e.message)
 	}
 }
+
+// Fetch products based on category
 
 export const fetchProductsOfCategory = async ({
 	origin,
@@ -185,6 +192,8 @@ export const fetchProductsOfCategory = async ({
 		throw error(e.status, e.data?.message || e.message)
 	}
 }
+
+// Fetch next product
 
 export const fetchNextPageProducts = async ({
 	origin,
@@ -252,6 +261,8 @@ export const fetchNextPageProducts = async ({
 		throw error(e.status, e.data?.message || e.message)
 	}
 }
+
+// Fetch related products
 
 export const fetchRelatedProducts = async ({
 	origin,
