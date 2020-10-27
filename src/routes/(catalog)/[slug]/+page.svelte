@@ -35,6 +35,7 @@ import { fetchNextPageProducts } from '$lib/services/ProductService'
 
 export let data
 
+// console.log('data = ', data)
 // console.log('data = ', data.category)
 // console.log('Products = ', products)
 // console.log('Count = ', count)
