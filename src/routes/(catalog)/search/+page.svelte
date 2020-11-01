@@ -14,10 +14,11 @@
 </style>
 
 <script>
-import { post } from '$lib/utils/api'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import { post } from '$lib/utils/api'
+import { savePopularSearch } from '$lib/services/PopularSearchService'
 import { sorts } from '$lib/config'
 import { toast } from '$lib/utils'
 import dayjs from 'dayjs'
@@ -31,11 +32,12 @@ import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
 import ProductNav from '$lib/ProductNav.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-import { savePopularSearch } from '$lib/services/PopularSearchService'
 
 let today = dayjs(new Date()).toISOString()
 
 export let data
+
+console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	brand: $page.data.store?.title,
@@ -86,15 +88,13 @@ $: if (data?.count === 0) {
 
 async function saveSearchData(searchData) {
 	try {
-		await savePopularSearch(
-			{
-				id: 'new',
-				// popularity: 0,
-				text: searchData,
-				storeId: $page.data.store?.id,
-				origin: $page.data.origin
-			},
-		)
+		await savePopularSearch({
+			id: 'new',
+			// popularity: 0,
+			text: searchData,
+			storeId: $page.data.store?.id,
+			origin: $page.data.origin
+		})
 	} catch (e) {
 	} finally {
 	}
@@ -162,7 +162,7 @@ async function goCheckbox(item) {
 		{/if}
 
 		<div class="w-full sm:px-10 lg:px-0">
-			{#if data.products?.length > 0}
+			{#if data.products?.length}
 				<div class="mb-5 w-full sm:mb-10 lg:mb-20">
 					<div
 						class="mb-5 hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex">
