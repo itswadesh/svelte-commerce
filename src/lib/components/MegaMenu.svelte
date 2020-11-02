@@ -94,7 +94,7 @@ async function getMegaMenu() {
                     {index % 6 == 5 && selectedCategory === category.name ? 'border-blue-500' : ''}
                     ">
 				<a
-					href="/{category.link || category.slug}"
+					href="/{category.slug}"
 					aria-label="Click to route into category related products page"
 					data-sveltekit-reload
 					class="flex w-full items-center gap-1">
@@ -135,7 +135,7 @@ async function getMegaMenu() {
 						{#each category.children as c}
 							<li class="mb-2 w-1/4 flex-1 flex-shrink-0 flex-grow-0 p-6 pr-2 text-sm">
 								<a
-									href="/{c.link || c.slug}"
+									href="/{c.slug}"
 									aria-label="Click to route into category related products page"
 									data-sveltekit-reload
 									class="mb-2 block w-full
@@ -155,7 +155,7 @@ async function getMegaMenu() {
 										{#each c.children as c1, ixx}
 											<li class="w-full">
 												<a
-													href="/{c1.link || c1.slug}"
+													href="/{c1.slug}"
 													aria-label="Click to route into category related products page"
 													data-sveltekit-reload
 													class="block w-full font-light hover:font-medium">
