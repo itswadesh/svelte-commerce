@@ -1,24 +1,25 @@
-<script>
-import { getAPI } from '$lib/util/api'
+<script lang="ts">
 import { goto } from '$app/navigation'
 import { createEventDispatcher, onMount } from 'svelte'
 import { page } from '$app/stores'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import { fetchAutocompleteData } from '$lib/services/AutocompleteService'
+import { fetchAllCategories } from './services/CategoryService'
 
 const dispatch = createEventDispatcher()
 
 export let show = false
 
 let popularSearches = null
-let searchInput = null
+let searchInput:any
 let q = ''
 let query = ''
 let product
-let categories = []
+let categories:any = []
 let trending = []
 let popular = []
-let autocomplete = null
-let typingTimer
+let autocomplete:{img:string, name:string}[] = []
+let typingTimer:any
 let err
 
 // console.log('popular = ', popular?.data?.length)
@@ -28,20 +29,20 @@ function submit() {
 	goto(`/search?q=${q}`)
 }
 
-function handleRouteToCategorySlug(link, slug) {
+function handleRouteToCategorySlug(link:string, slug:string) {
 	show = false
 	goto(`/${link || slug}`)
 }
 
-function onselect(v) {
+function onselect(v:any) {
 	if (v) goto(`/search?q=${encodeURIComponent(v.name)}`)
 }
 
-function fillValue(val) {
+function fillValue(val:string) {
 	product = val
 }
 
-async function getData(e) {
+async function getData(e:any) {
 	if (e) {
 		if (e.isComposing) {
 			if (e.target.value === '') {
@@ -57,13 +58,12 @@ async function getData(e) {
 	clearTimeout(typingTimer)
 
 	typingTimer = setTimeout(async () => {
-		let qry = `es/autocomplete?store=${$page.data.store?.id}&q=`
-		if (!!q && q !== 'undefined' && q !== 'null' && q !== '') {
-			qry = `es/autocomplete?store=${$page.data.store?.id}&q=${q}`
-		}
 		try {
-			const result = await getAPI(qry, $page.data.origin)
-			autocomplete = result.hits
+			autocomplete = await fetchAutocompleteData({
+				q: q,
+				origin: $page?.data?.origin,
+				storeId: $page?.data?.store?.id
+			})
 		} catch (e) {}
 	}, 200)
 }
@@ -75,18 +75,18 @@ function resetInput() {
 
 onMount(async () => {
 	searchInput.focus()
-
 	try {
-		categories = await getAPI(`categories?featured=true&store=${$page?.data?.store?.id}`)
+		categories = (
+			await fetchAllCategories({
+				featured: true,
+				storeId: $page?.data?.store?.id,
+				origin: $page.data.origin
+			})
+		).data
 	} catch (e) {
 		err = e
 	} finally {
 	}
-
-	// getData()
-	// const HOME = await getAPI(`home?store=${data.store?.id}`)
-	// popular = HOME.popular
-	// trending = HOME.trending
 })
 </script>
 
@@ -98,14 +98,16 @@ onMount(async () => {
 			<button
 				type="button"
 				class="absolute z-[102] my-auto mt-4 px-2 focus:outline-none"
-				on:click="{() => (show = false)}">
+				on:click="{() => (show = false)}"
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
 					viewBox="0 0 24 24"
 					stroke-width="1.5"
 					stroke="currentColor"
-					class="h-6 w-6">
+					class="h-6 w-6"
+				>
 					<path
 						stroke-linecap="round"
 						stroke-linejoin="round"
@@ -122,12 +124,14 @@ onMount(async () => {
 							<form
 								autocomplete="off"
 								class="flex w-full flex-row"
-								on:submit|preventDefault="{submit}">
+								on:submit|preventDefault="{submit}"
+							>
 								<input
 									bind:this="{searchInput}"
 									placeholder="{$page?.data?.store?.searchbarText || 'Search...'}"
 									class="text-normal relative h-14 w-full truncate border px-10 font-light focus:outline-none focus:ring-2 focus:ring-primary-500"
-									on:input="{getData}" />
+									on:input="{getData}"
+								/>
 
 								<div class=" flex h-full cursor-pointer justify-end">
 									<button on:click="{resetInput}" type="button">
@@ -136,7 +140,8 @@ onMount(async () => {
 												class="absolute my-auto mr-2 mt-4 flex h-6 w-6 justify-end text-sm text-gray-500"
 												xmlns="http://www.w3.org/2000/svg"
 												viewBox="0 0 20 20"
-												fill="currentColor">
+												fill="currentColor"
+											>
 												<path
 													fill-rule="evenodd"
 													d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
@@ -148,7 +153,8 @@ onMount(async () => {
 												xmlns="http://www.w3.org/2000/svg"
 												fill="none"
 												viewBox="0 0 24 24"
-												stroke="currentColor">
+												stroke="currentColor"
+											>
 												<path
 													stroke-linecap="round"
 													stroke-linejoin="round"
@@ -161,12 +167,14 @@ onMount(async () => {
 							</form>
 
 							<div
-								class="mt-1 w-full overflow-auto rounded border-gray-400 bg-white scrollbar-none">
-								{#each autocomplete || [] as v, i}
+								class="mt-1 w-full overflow-auto rounded border-gray-400 bg-white scrollbar-none"
+							>
+								{#each autocomplete || [] as v}
 									<button
 										type="button"
 										class="flex w-full cursor-pointer flex-row items-center justify-between border-b text-base font-light text-gray-500 hover:bg-gray-100"
-										on:click="{() => onselect(v)}">
+										on:click="{() => onselect(v)}"
+									>
 										<div class="flex w-10/12 flex-row">
 											{#if v.img}
 												<div class="my-auto w-1/6">
@@ -174,7 +182,8 @@ onMount(async () => {
 														src="{v.img}"
 														alt=""
 														height="40"
-														class="mx-auto my-auto h-10 object-contain" />
+														class="mx-auto my-auto h-10 object-contain"
+													/>
 												</div>
 											{/if}
 
@@ -215,14 +224,16 @@ onMount(async () => {
 							type="button"
 							aria-label="Click to browse category"
 							class="flex items-center gap-4 text-left"
-							on:click="{() => handleRouteToCategorySlug(c.link, c.slug)}">
+							on:click="{() => handleRouteToCategorySlug(c.link, c.slug)}"
+						>
 							{#if c.img}
 								<div class="my-auto w-1/6">
 									<LazyImg
 										src="{c.img}"
 										alt=""
 										height="40"
-										class="mx-auto my-auto h-10 object-contain" />
+										class="mx-auto my-auto h-10 object-contain"
+									/>
 								</div>
 							{/if}
 
@@ -238,9 +249,10 @@ onMount(async () => {
 
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
-								class="h-5 w-5 flex-shrink-0"
+								class="h-5 w-5 shrink-0"
 								viewBox="0 0 20 20"
-								fill="currentColor">
+								fill="currentColor"
+							>
 								<path
 									fill-rule="evenodd"
 									d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"

@@ -10,12 +10,12 @@
 </style>
 
 <script>
-import { currency, toast } from '$lib/util'
-import { fireGTagEvent } from '$lib/util/gTag'
+import { toast } from '$lib/utils'
+import { fireGTagEvent } from '$lib/utils/gTag'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { post } from '$lib/util/api'
+import { post } from '$lib/utils/api'
 import { stripePublishableKey } from '$lib/config'
 import CheckoutHeader from '$lib/components/CheckoutHeader.svelte'
 import Error from '$lib/components/Error.svelte'
@@ -25,6 +25,12 @@ import Pricesummary from '$lib/components/Pricesummary.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import Stripe from '$lib/Stripe.svelte'
+import {
+	cashfreeCheckout,
+	codCheckout,
+	razorpayCapture,
+	razorpayCheckout
+} from '$lib/services/OrdersService'
 
 const seoProps = {
 	title: 'Select Payment Option',
@@ -32,20 +38,6 @@ const seoProps = {
 }
 
 export let data
-
-// console.log('zzzzzzzzzzzzzzzzzz', data)
-
-// $: ({
-// 	loading,
-// 	err,
-// 	paymentMethods,
-// 	address,
-// 	me,
-// 	cart,
-// 	prescription,
-// 	addressId,
-// 	stripePublishableKey
-// } = data)
 
 let errorMessage = 'Select a Payment Method',
 	disabled = false,
@@ -102,32 +94,28 @@ async function submit(pm) {
 
 	if (paymentMethod === 'COD') {
 		try {
-			loading = true
-			const res = await post(
-				'orders/checkout/cod',
-				{
-					address: data.addressId,
-					paymentMethod: 'COD',
-					prescription: data.prescription?._id,
-					store: $page.data.store?.id
-				},
-				$page.data.origin
-			)
+			toast('Please wait...your order with COD is on process', 'warning')
+			const res = await codCheckout({
+				address: data.addressId,
+				paymentMethod: 'COD',
+				prescription: data.prescription?._id,
+				storeId: $page.data.store?.id,
+				origin: $page.data.origin
+			})
 
 			goto(`/payment/success?id=${res?._id}&status=PAYMENT_SUCCESS&provider=COD`)
 		} catch (e) {
 			toast(e, 'error')
 		} finally {
-			loading = false
 		}
 	} else if (paymentMethod === 'Cashfree') {
 		try {
 			loading = true
-			const res = await post(
-				`payments/checkout-cf`,
-				{ address: data.addressId, store: $page.data.store?.id },
-				$page.data.origin
-			)
+			const res = await cashfreeCheckout({
+				address: data.addressId,
+				storeId: $page.data.store?.id,
+				origin: $page.data.origin
+			})
 			if (res?.redirectUrl && res?.redirectUrl !== null) {
 				goto(`${res?.redirectUrl}`)
 			} else {
@@ -141,16 +129,11 @@ async function submit(pm) {
 	} else if (paymentMethod === 'Razorpay') {
 		try {
 			loading = true
-			const rp = await post(
-				`payments/checkout-rp`,
-				{
-					address: data.addressId,
-					store: $page.data.store?.id
-				},
-				$page.data.origin
-			)
-
-			// console.log('rp = ', rp)
+			const rp = await razorpayCheckout({
+				address: data.addressId,
+				storeId: $page.data.store?.id,
+				origin: $page.data.origin
+			})
 
 			const options = {
 				key: rp.keyId, // Enter the Key ID generated from the Dashboard
@@ -163,22 +146,15 @@ async function submit(pm) {
 					// console.log('response = ', response)
 
 					try {
-						const capture = await post(
-							`payments/capture-rp`,
-							{
-								rpPaymentId: response.razorpay_payment_id,
-								rpOrderId: response.razorpay_order_id,
-								store: $page.data.store?.id
-							},
-							$page.data.origin
-						)
-
-						// console.log('capture = ', capture)
-
+						const capture = await razorpayCapture({
+							rpPaymentId: response.razorpay_payment_id,
+							rpOrderId: response.razorpay_order_id,
+							storeId: $page.data.store?.id,
+							origin: $page.data.origin
+						})
 						toast('Payment success', 'success')
 						goto(`/payment/success?id=${capture._id}`)
 					} catch (e) {
-						// toast(e, 'error')
 						goto(`/payment/failure?ref=/checkout/payment-options?address=${data.addressId}`)
 					} finally {
 					}
@@ -251,7 +227,7 @@ function checkIfStripeCardValid({ detail }) {
 									<p class="mt-1 text-sm text-gray-500">{pm.text}</p>
 								</div>
 
-								<div class="flex-shrink-0">
+								<div class="shrink-0">
 									{#if pm.img}
 										<img
 											src="{pm.img}"
@@ -305,7 +281,7 @@ function checkIfStripeCardValid({ detail }) {
 				on:isStripeCardValid="{checkIfStripeCardValid}" />
 		</div>
 
-		<div class="w-full md:w-80 md:flex-shrink-0 md:flex-grow-0">
+		<div class="w-full md:w-80 md:shrink-0 md:grow-0">
 			<h2 class="text-xl font-bold capitalize tracking-wide sm:text-2xl">Cart Summary</h2>
 			{#if data.address}
 				<div class="mt-5 border-t pt-5">
@@ -313,7 +289,7 @@ function checkIfStripeCardValid({ detail }) {
 
 					<div class="text-sm font-light">
 						<div class="my-1 flex flex-row">
-							<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Name</h5>
+							<h5 class="mr-2 w-20 shrink-0 font-semibold tracking-wide">Name</h5>
 
 							<p>
 								{data.address.firstName}
@@ -322,7 +298,7 @@ function checkIfStripeCardValid({ detail }) {
 						</div>
 
 						<div class="flex flex-row">
-							<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Address</h5>
+							<h5 class="mr-2 w-20 shrink-0 font-semibold tracking-wide">Address</h5>
 
 							<p class="flex flex-wrap items-center">
 								{#if data.address.address}
@@ -348,19 +324,19 @@ function checkIfStripeCardValid({ detail }) {
 						</div>
 
 						<div class="my-1 flex flex-row">
-							<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Pin</h5>
+							<h5 class="mr-2 w-20 shrink-0 font-semibold tracking-wide">Pin</h5>
 
 							<h6>{data.address.zip}</h6>
 						</div>
 
 						<div class="my-1 flex flex-row">
-							<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Phone</h5>
+							<h5 class="mr-2 w-20 shrink-0 font-semibold tracking-wide">Phone</h5>
 
 							<h6>{data.address.phone}</h6>
 						</div>
 
 						<div class="my-1 flex flex-row flex-wrap">
-							<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Email</h5>
+							<h5 class="mr-2 w-20 shrink-0 font-semibold tracking-wide">Email</h5>
 
 							<h6>{data.address.email}</h6>
 						</div>
@@ -375,7 +351,7 @@ function checkIfStripeCardValid({ detail }) {
 					<div class="text-sm font-light">
 						{#if data.prescription.name}
 							<div class="my-1 flex flex-row">
-								<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Name</h5>
+								<h5 class="mr-2 w-20 shrink-0 font-semibold tracking-wide">Name</h5>
 
 								<p class="flex-1">
 									{data.prescription.name}
@@ -385,7 +361,7 @@ function checkIfStripeCardValid({ detail }) {
 
 						{#if data.prescription.description}
 							<div class="my-1 flex flex-row">
-								<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Note</h5>
+								<h5 class="mr-2 w-20 shrink-0 font-semibold tracking-wide">Note</h5>
 
 								<p class="flex-1">
 									{data.prescription.description}

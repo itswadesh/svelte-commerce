@@ -5,23 +5,24 @@
 }
 </style>
 
-<script>
+<script lang="ts">
+import type { Product } from '$lib/types'
 import { SplideSlide } from '@splidejs/svelte-splide'
 import { onMount } from 'svelte'
 import { slide } from 'svelte/transition'
 import LazyImg from '../Image/LazyImg.svelte'
 
 export let showPhotosModal = false
-export let product = {}
+export let product:Product|any = {}
 export let selectedImgIndex = 0
 
-let selectedimg
+let selectedimg:string
 
 $: if (product?.images) {
 	selectedimg = product?.images[selectedImgIndex]
 }
 
-let Carousel, Splide
+let Carousel, Splide:any
 onMount(async () => {
 	// const RTEmodule = await import('$lib/components/TwECarousel.svelte')
 	// Carousel = RTEmodule.default
@@ -32,18 +33,21 @@ onMount(async () => {
 
 {#if showPhotosModal}
 	<div
-		class="frosted-black fixed inset-0 z-50 flex h-screen w-screen items-center justify-center overflow-hidden sm:p-10 lg:p-20">
+		class="frosted-black fixed inset-0 z-50 flex h-screen w-screen items-center justify-center overflow-hidden sm:p-10 lg:p-20"
+	>
 		<button
 			type="button"
 			class="fixed top-2 right-2 transform cursor-pointer text-gray-200 transition duration-300 hover:scale-125 hover:text-white lg:top-5 lg:right-5"
-			on:click="{() => (showPhotosModal = false)}">
+			on:click="{() => (showPhotosModal = false)}"
+		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
 				viewBox="0 0 24 24"
 				stroke-width="1.5"
 				stroke="currentColor"
-				class="h-8 w-8">
+				class="h-8 w-8"
+			>
 				<path
 					stroke-linecap="round"
 					stroke-linejoin="round"
@@ -70,7 +74,8 @@ onMount(async () => {
 						// 	arrows: false
 						// }
 						// }
-					}}">
+					}}"
+				>
 					{#each product?.images as img}
 						{#if img}
 							<SplideSlide>
@@ -78,7 +83,8 @@ onMount(async () => {
 									<img
 										src="{img}"
 										alt=""
-										class="block h-full w-full object-contain object-center" />
+										class="block h-full w-full object-contain object-center"
+									/>
 								</div>
 							</SplideSlide>
 						{/if}
@@ -101,11 +107,13 @@ onMount(async () => {
 					<img
 						src="{product?.images && product?.images[0]}"
 						alt=""
-						class="block h-full object-contain" />
+						class="block h-full object-contain"
+					/>
 				</div>
 			{:else}
 				<div
-					class="flex max-h-screen w-full items-center justify-center text-center text-sm text-white">
+					class="flex max-h-screen w-full items-center justify-center text-center text-sm text-white"
+				>
 					Oops! No Image found
 				</div>
 			{/if}
@@ -114,10 +122,12 @@ onMount(async () => {
 		<!-- Desktop Gallery -->
 
 		<div
-			class="container relative mx-auto hidden h-full w-full items-center justify-between gap-4 overflow-hidden rounded-md bg-black lg:flex lg:flex-row">
+			class="container relative mx-auto hidden h-full w-full items-center justify-between gap-4 overflow-hidden rounded-md bg-black lg:flex lg:flex-row"
+		>
 			{#if selectedimg}
 				<div
-					class="flex h-full w-full flex-1 flex-shrink-0 items-center justify-center overflow-hidden px-5 sm:px-10">
+					class="flex h-full w-full flex-1 shrink-0 items-center justify-center overflow-hidden px-5 sm:px-10"
+				>
 					<LazyImg src="{selectedimg}" alt="" class="h-full w-full object-contain object-center" />
 				</div>
 			{/if}
@@ -131,23 +141,26 @@ onMount(async () => {
 					</div>
 
 					<div
-						class="grid grid-cols-3 gap-2 overflow-y-auto px-5 overflow-x-hidden scrollbar-thin scrollbar-thumb-slate-300 lg:max-h-[70vh] lg:grid-cols-2">
+						class="grid grid-cols-3 gap-2 overflow-y-auto px-5 overflow-x-hidden scrollbar-thin scrollbar-thumb-slate-300 lg:max-h-[70vh] lg:grid-cols-2"
+					>
 						{#each product?.images as img}
 							{#if img}
 								<button
 									type="button"
 									class="relative z-0 col-span-1 border bg-gray-100 focus:outline-none"
-									on:click="{() => (selectedimg = img)}">
+									on:click="{() => (selectedimg = img)}"
+								>
 									<LazyImg
 										src="{img}"
 										alt=""
 										height="240"
-										class="h-40 w-40 rounded-md object-contain object-center" />
+										class="h-40 w-40 rounded-md object-contain object-center"
+									/>
 
 									<div
 										class="absolute inset-0 z-10 h-full w-full bg-white  
-                                    {selectedimg === img ? 'bg-opacity-0' : 'bg-opacity-50'}">
-									</div>
+                                    {selectedimg === img ? 'bg-opacity-0' : 'bg-opacity-50'}"
+									></div>
 								</button>
 							{/if}
 						{/each}

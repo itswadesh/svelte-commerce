@@ -196,7 +196,7 @@ async function getCoupons() {
 												<a
 													href="{item?.slug}"
 													aria-label="Click to route product details"
-													class="flex-shrink-0 ">
+													class="shrink-0 ">
 													<img
 														src="{getCdnImageUrl(
 															item.isCustomizeditem ? item.customizedImg : item.img
@@ -262,7 +262,7 @@ async function getCoupons() {
 										<a
 											href="/product/{item?.slug}"
 											aria-label="Click to route product details"
-											class="flex-shrink-0 ">
+											class="shrink-0 ">
 											{#if item.isCustomized}
 												<img
 													src="{getCdnImageUrl(
@@ -440,7 +440,7 @@ async function getCoupons() {
 					</div>
 				</div>
 
-				<div class="w-full lg:w-80 lg:flex-shrink-0 lg:flex-grow-0">
+				<div class="w-full lg:w-80 lg:shrink-0 lg:grow-0">
 					<!-- Promo code section -->
 
 					{#if data.cart?.discount?.amount > 0}
@@ -534,7 +534,7 @@ async function getCoupons() {
 											loading="{loadingApplyCoupon}"
 											loadingringsize="sm"
 											disabled="{!selectedCouponCode}"
-											class="flex-shrink-0 text-sm uppercase">
+											class="shrink-0 text-sm uppercase">
 											Check
 										</PrimaryButton>
 									</form>

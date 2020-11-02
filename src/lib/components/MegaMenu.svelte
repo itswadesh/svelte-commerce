@@ -75,7 +75,7 @@ async function getMegaMenu() {
 			on:mouseenter="{() => (selectedCategory = category.name)}"
 			on:mouseleave="{() => (selectedCategory = '')}">
 			<div
-				class="itmes-center relative flex h-20 flex-shrink-0 justify-center whitespace-nowrap border-b-4 border-transparent p-2 font-medium uppercase
+				class="itmes-center relative flex h-20 shrink-0 justify-center whitespace-nowrap border-b-4 border-transparent p-2 font-medium uppercase
                     {index % 6 == 0 ? 'hover:border-yellow-500' : ''}
                     {index % 6 == 1 ? 'hover:border-purple-500' : ''}
                     {index % 6 == 2 ? 'hover:border-red-500' : ''}
@@ -109,7 +109,7 @@ async function getMegaMenu() {
 							xmlns="http://www.w3.org/2000/svg"
 							viewBox="0 0 20 20"
 							fill="currentColor"
-							class="h-4 w-4 flex-shrink-0 transition duration-300
+							class="h-4 w-4 shrink-0 transition duration-300
                             {selectedCategory === category.name ? 'transform -rotate-180' : ''}">
 							<path
 								fill-rule="evenodd"
@@ -133,7 +133,7 @@ async function getMegaMenu() {
 						<!-- 2nd level child category  -->
 
 						{#each category.children as c}
-							<li class="mb-2 w-1/4 flex-1 flex-shrink-0 flex-grow-0 p-6 pr-2 text-sm">
+							<li class="mb-2 w-1/4 flex-1 shrink-0 grow-0 p-6 pr-2 text-sm">
 								<a
 									href="/{c.slug}"
 									aria-label="Click to route into category related products page"
@@ -172,7 +172,7 @@ async function getMegaMenu() {
 
 						{#each { length: 10 } as _}
 							<li>
-								<div class="h-96 w-1/4 flex-1 flex-shrink-0 flex-grow-0 p-6"></div>
+								<div class="h-96 w-1/4 flex-1 shrink-0 grow-0 p-6"></div>
 							</li>
 						{/each}
 					</ul>

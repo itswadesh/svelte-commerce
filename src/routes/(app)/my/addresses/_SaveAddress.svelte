@@ -9,6 +9,7 @@ import Error from '$lib/components/Error.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
+import { saveAddress } from '$lib/services/AddressService'
 
 const dispatch = createEventDispatcher()
 
@@ -30,24 +31,21 @@ async function SaveAddress(address) {
 		loading = true
 		const { firstName, lastName, email, phone, locality, city, state, country, zip } = address
 		toast('Saving Address Info...', 'info')
-		const newAddress = await post(
-			'addresses',
-			{
-				id,
-				firstName,
-				lastName,
-				email,
-				phone,
-				address: address.address,
-				locality,
-				city,
-				state,
-				country,
-				zip,
-				store: $page.data.store?.id
-			},
-			$page.data.origin
-		)
+		const newAddress = await saveAddress({
+			id,
+			firstName,
+			lastName,
+			email,
+			phone,
+			address: address.address,
+			locality,
+			city,
+			state,
+			country,
+			zip,
+			storeId: $page.data.store?.id,
+			origin: $page.data.origin
+		})
 
 		toast('Address Info Saved.', 'success')
 		dispatch('saved')
@@ -72,7 +70,7 @@ async function onCountryChange(country) {
 	<form on:submit|preventDefault="{() => SaveAddress(address)}">
 		<div class="mb-5 flex flex-col gap-2 lg:mb-10">
 			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">First Name</h6>
+				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">First Name</h6>
 
 				<div class="mb-2 w-full max-w-md">
 					<Textbox type="text" placeholder="Enter First Name" bind:value="{address.firstName}" />
@@ -80,7 +78,7 @@ async function onCountryChange(country) {
 			</div>
 
 			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">Last Name</h6>
+				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">Last Name</h6>
 
 				<div class="mb-2 w-full max-w-md">
 					<Textbox placeholder="Enter Last Name" bind:value="{address.lastName}" />
@@ -88,7 +86,7 @@ async function onCountryChange(country) {
 			</div>
 
 			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">Email</h6>
+				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">Email</h6>
 
 				<div class="mb-2 w-full max-w-md">
 					<Textbox type="text" placeholder="Enter Email" bind:value="{address.email}" />
@@ -96,7 +94,7 @@ async function onCountryChange(country) {
 			</div>
 
 			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">Phone</h6>
+				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">Phone</h6>
 
 				<div class="mb-2 w-full max-w-md">
 					<Textbox type="text" placeholder="Enter Phone" bind:value="{address.phone}" />
@@ -104,7 +102,7 @@ async function onCountryChange(country) {
 			</div>
 
 			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">Address</h6>
+				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">Address</h6>
 
 				<div class="mb-2 w-full max-w-md">
 					<Textarea placeholder="Enter Address" bind:value="{address.address}" />
@@ -112,7 +110,7 @@ async function onCountryChange(country) {
 			</div>
 
 			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">Locality</h6>
+				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">Locality</h6>
 
 				<div class="mb-2 w-full max-w-md">
 					<Textbox placeholder="Enter Locality" bind:value="{address.locality}" />
@@ -120,7 +118,7 @@ async function onCountryChange(country) {
 			</div>
 
 			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">City</h6>
+				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">City</h6>
 
 				<div class="mb-2 w-full max-w-md">
 					<Textbox placeholder="Enter City" bind:value="{address.city}" />
@@ -129,12 +127,13 @@ async function onCountryChange(country) {
 
 			{#if states?.length > 0}
 				<div class="flex flex-wrap">
-					<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">State</h6>
+					<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">State</h6>
 
 					<div class="mb-2 w-full max-w-md">
 						<select
 							class="w-full rounded-md border border-gray-300 bg-white p-2 text-sm placeholder-gray-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-gray-50"
-							bind:value="{address.state}">
+							bind:value="{address.state}"
+						>
 							<option value="" selected>-- Select a State --</option>
 							{#each states as s}
 								{#if s}
@@ -149,14 +148,15 @@ async function onCountryChange(country) {
 			{/if}
 
 			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">Country</h6>
+				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">Country</h6>
 
 				<div class="mb-2 w-full max-w-md">
 					<select
 						disabled
 						class="w-full rounded-md border border-gray-300 bg-white p-2 text-sm placeholder-gray-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-gray-50"
 						bind:value="{address.country}"
-						on:change="{() => onCountryChange(address.country)}">
+						on:change="{() => onCountryChange(address.country)}"
+					>
 						{#if countries?.data?.length}
 							{#each countries.data as c}
 								{#if c}
@@ -171,7 +171,7 @@ async function onCountryChange(country) {
 			</div>
 
 			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">zip</h6>
+				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">zip</h6>
 
 				<div class="mb-2 w-full max-w-md">
 					<Textbox placeholder="Enter zip" bind:value="{address.zip}" />
