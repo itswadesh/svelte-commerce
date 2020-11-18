@@ -1,6 +1,6 @@
 <script>
 import { browser } from '$app/environment'
-import { constructURL2, toast } from '$lib/utils'
+import { constructURL2, currency, toast } from '$lib/utils'
 import { fetchMegamenuData } from '$lib/services/CategoryService'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
@@ -21,13 +21,25 @@ export let facets = {},
 let clazz
 export { clazz as class }
 
-let filteredStyleTags = []
-let filteredThemeTags = []
-let megamenu
 let selectedCategory
 let selectedCategory2
 let showSubCategory = []
 let showSubCategory2 = []
+// ----------------
+let megamenu
+let allAges = []
+let allBrands = []
+let allColors = []
+let allDiscount = []
+let allFeatures = []
+let allGenders = []
+let allPromotions = []
+let allSizes = []
+let allTypes = []
+let allVendors = []
+let filteredStyleTags = []
+let filteredThemeTags = []
+let priceRanges = []
 
 function clearFilters() {
 	fl = {}
@@ -55,23 +67,109 @@ onMount(async () => {
 			appliedFilters[key] = value
 	})
 
-	const style_tags_with_product = facets.all_aggs?.tags?.all?.buckets?.filter(
-		(t) => t.doc_count > 0
-	)
+	getFacetsWithProducts()
 
-	for (let st of style_tags) {
-		// console.log('zzzzzzzzzzzzzzzzzzzz', st.key)
-		filteredThemeTags = style_tags_with_product.filter((t) => t.key != st.key)
-		filteredStyleTags = style_tags_with_product.filter((t) => t.key == st.key)
+	if (facets.all_aggs?.tags?.all?.buckets?.length) {
+		const tags_with_product = facets.all_aggs?.tags?.all?.buckets?.filter((t) => t.doc_count > 0)
+
+		// console.log('tags_with_product', tags_with_product)
+		// console.log('style_tags', style_tags)
+
+		const abcd = style_tags.map((t) => {
+			return t._source?.name
+		})
+
+		// console.log('abcd', abcd)
+
+		const newStyleTags = new Set(abcd)
+
+		filteredThemeTags = tags_with_product.filter((stp) => {
+			return !newStyleTags.has(stp.key)
+		})
+
+		// console.log('filteredThemeTags', filteredThemeTags)
+
+		filteredStyleTags = tags_with_product.filter((stp) => {
+			return style_tags.some((st) => {
+				return st._source?.name === stp.key
+			})
+		})
+
+		// console.log('filteredStyleTags', filteredStyleTags)
 	}
 
-	// console.log('filteredThemeTags', filteredThemeTags)
-	// console.log('filteredStyleTags', filteredStyleTags)
+	if (facets.all_aggs?.price_stats?.max && facets.all_aggs?.price_stats?.min) {
+		getPriceRanges()
+	}
 
 	await getMegamenu()
 })
 
 // console.log('fl', fl)
+
+function getFacetsWithProducts() {
+	if (facets?.all_aggs?.age?.all?.buckets?.length) {
+		allAges = facets?.all_aggs?.age?.all?.buckets?.filter((t) => t.doc_count > 0)
+	}
+	if (facets?.all_aggs?.brands?.all?.buckets?.length) {
+		allBrands = facets?.all_aggs?.brands?.all?.buckets?.filter((t) => t.doc_count > 0)
+	}
+	if (facets?.all_aggs?.colors?.all?.buckets?.length) {
+		allColors = facets?.all_aggs?.colors?.all?.buckets?.filter((t) => t.doc_count > 0)
+	}
+	if (facets?.all_aggs?.discount?.all?.buckets?.length) {
+		allDiscount = facets?.all_aggs?.discount?.all?.buckets?.filter((t) => t.doc_count > 0)
+	}
+	if (facets?.all_aggs?.features?.all?.buckets?.length) {
+		allFeatures = facets?.all_aggs?.features?.all?.buckets?.filter((t) => t.doc_count > 0)
+	}
+	if (facets?.all_aggs?.genders?.all?.buckets?.length) {
+		allGenders = facets?.all_aggs?.genders?.all?.buckets?.filter((t) => t.doc_count > 0)
+	}
+	if (facets?.all_aggs?.promotions?.all?.buckets?.length) {
+		allPromotions = facets?.all_aggs?.promotions?.all?.buckets?.filter((t) => t.doc_count > 0)
+	}
+	if (facets?.all_aggs?.sizes?.all?.buckets?.length) {
+		allSizes = facets?.all_aggs?.sizes?.all?.buckets?.filter((t) => t.doc_count > 0)
+	}
+	if (facets?.all_aggs?.types?.all?.buckets?.length) {
+		allTypes = facets?.all_aggs?.types?.all?.buckets?.filter((t) => t.doc_count > 0)
+	}
+	if (facets?.all_aggs?.vendors?.all?.buckets?.length) {
+		allVendors = facets?.all_aggs?.vendors?.all?.buckets?.filter((t) => t.doc_count > 0)
+	}
+}
+
+function getPriceRanges() {
+	const difference = facets.all_aggs?.price_stats?.max - facets.all_aggs?.price_stats?.min
+	// console.log('min', facets.all_aggs?.price_stats?.min)
+	// console.log('max', facets.all_aggs?.price_stats?.max)
+	// console.log('difference', difference)
+	if (difference) {
+		const priceGap = difference / 4
+		// console.log('priceGap', priceGap)
+		if (priceGap) {
+			const price1 = facets.all_aggs?.price_stats?.min
+			const price2 = price1 + priceGap
+			const price3 = price2 + priceGap
+			const price4 = price3 + priceGap
+			const price5 = facets.all_aggs?.price_stats?.max
+
+			// console.log('price1,2,3,4,5', price1, price2, price3, price4, price5)
+
+			if (price1 && price2 && price3 && price4 && price5) {
+				priceRanges = [
+					{ from: price1, key: `From ${currency(price1)} to ${currency(price2)}`, to: price2 },
+					{ from: price2, key: `From ${currency(price2)} to ${currency(price3)}`, to: price3 },
+					{ from: price3, key: `From ${currency(price3)} to ${currency(price4)}`, to: price4 },
+					{ from: price4, key: `From ${currency(price4)} to ${currency(price5)}`, to: price5 }
+				]
+
+				// console.log('priceRanges', priceRanges)
+			}
+		}
+	}
+}
 
 async function getMegamenu() {
 	if (browser) {
@@ -173,7 +271,9 @@ function handleToggleSubCategory2(c, cx) {
 		{/if}
 	</div>
 
-	{#if megamenu}
+	<!-- Megamenu -->
+
+	{#if megamenu?.length}
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
@@ -288,29 +388,172 @@ function handleToggleSubCategory2(c, cx) {
 		</div>
 	{/if}
 
-	<!-- {#if facets?.all_aggs?.tags?.all?.buckets?.length > 0}
+	{#if allAges?.length > 0}
+		<div class="my-3">
+			<hr class="mb-3 w-full" />
+
+			<CheckboxEs
+				items="{allAges}"
+				model="age"
+				selectedItems="{fl.age || []}"
+				showSearchBox
+				on:go="{goCheckbox}" />
+		</div>
+	{/if}
+
+	{#if allBrands?.length > 0}
+		<div class="my-3">
+			<hr class="mb-3 w-full" />
+
+			<CheckboxEs
+				items="{allBrands}"
+				title="Brands"
+				model="brands"
+				selectedItems="{fl.brands || []}"
+				on:go="{goCheckbox}" />
+		</div>
+	{/if}
+
+	{#if allColors?.length > 0}
+		<div class="my-3">
+			<hr class="mb-3 w-full" />
+
+			<CheckboxEs
+				items="{allColors}"
+				title="Colors"
+				model="colors"
+				selectedItems="{fl.colors || []}"
+				on:go="{goCheckbox}" />
+		</div>
+	{/if}
+
+	{#if allDiscount?.length > 0}
+		<div class="my-3">
+			<hr class="mb-3 w-full" />
+
+			<RadioEs
+				items="{allDiscount}"
+				title="Discount"
+				model="discount"
+				selectedItems="{fl.discount || []}"
+				on:go="{goCheckbox}" />
+		</div>
+	{/if}
+
+	{#if allFeatures?.length > 0}
+		<div class="my-3">
+			<hr class="mb-3 w-full" />
+
+			<RadioEs
+				items="{allFeatures}"
+				title="Features"
+				model="features"
+				selectedItems="{fl.discount || []}"
+				on:go="{goCheckbox}" />
+		</div>
+	{/if}
+
+	{#if allGenders?.length > 0}
+		<div class="my-3">
+			<hr class="mb-3 w-full" />
+
+			<CheckboxEs
+				items="{allGenders}"
+				title="Genders"
+				model="genders"
+				selectedItems="{fl.genders || []}"
+				on:go="{goCheckbox}" />
+		</div>
+	{/if}
+
+	{#if allPromotions?.length > 0}
+		<div class="my-3">
+			<hr class="mb-3 w-full" />
+
+			<CheckboxEs
+				items="{allPromotions}"
+				title="Promotions"
+				model="promotions"
+				selectedItems="{fl.promotions || []}"
+				on:go="{goCheckbox}" />
+		</div>
+	{/if}
+
+	{#if allSizes?.length > 0}
+		<div class="my-3">
+			<hr class="mb-3 w-full" />
+
+			<CheckboxEs
+				items="{allSizes}"
+				title="Sizes"
+				model="sizes"
+				selectedItems="{fl.sizes || []}"
+				on:go="{goCheckbox}" />
+		</div>
+	{/if}
+
+	{#if allTypes?.length > 0}
+		<div class="my-3">
+			<hr class="mb-3 w-full" />
+
+			<CheckboxEs
+				items="{allTypes}"
+				title="types"
+				model="types"
+				selectedItems="{fl.types || []}"
+				on:go="{goCheckbox}" />
+		</div>
+	{/if}
+
+	{#if allVendors?.length > 0}
+		<div class="my-3">
+			<hr class="mb-3 w-full" />
+
+			<CheckboxEs
+				items="{allVendors}"
+				title="vendors"
+				model="vendors"
+				selectedItems="{fl.vendors || []}"
+				on:go="{goCheckbox}" />
+		</div>
+	{/if}
+
+	{#if filteredStyleTags?.length > 0}
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 			<CheckboxEs
-				items="{facets.all_aggs?.tags?.all?.buckets}"
-				title="Tags"
+				items="{filteredStyleTags}"
+				title="Styles"
 				model="tags"
 				selectedItems="{fl.tags || []}"
 				on:go="{goCheckbox}" />
 		</div>
-	{/if} -->
+	{/if}
 
-	<!-- {#if facets?.all_aggs?.style_tags?.all?.buckets?.length > 0}
+	{#if filteredThemeTags?.length > 0}
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 			<CheckboxEs
-				items="{facets.all_aggs?.style_tags?.all?.buckets}"
-				title="Style Tags"
-				model="style_tags"
+				items="{filteredThemeTags}"
+				title="Themes"
+				model="tags"
 				selectedItems="{fl.tags || []}"
 				on:go="{goCheckbox}" />
 		</div>
-	{/if} -->
+	{/if}
+
+	{#if priceRanges?.length > 0}
+		<div class="my-3">
+			<hr class="mb-3 w-full" />
+
+			<RadioEs
+				items="{priceRanges}"
+				title="Price"
+				model="price"
+				selectedItems="{fl.price || []}"
+				on:go="{goCheckbox}" />
+		</div>
+	{/if}
 
 	<!-- {#if facets?.all_aggs?.filter_tags?.all?.buckets?.length > 0}
 		<div class="my-3">
@@ -324,148 +567,7 @@ function handleToggleSubCategory2(c, cx) {
 		</div>
 	{/if} -->
 
-	{#if filteredThemeTags?.length > 0}
-		<div class="my-3">
-			<hr class="mb-3 w-full" />
-			<CheckboxEs
-				items="{filteredThemeTags}"
-				title="Themes"
-				model="themes"
-				selectedItems="{fl.themes || []}"
-				on:go="{goCheckbox}" />
-		</div>
-	{/if}
-
-	{#if filteredStyleTags?.length > 0}
-		<div class="my-3">
-			<hr class="mb-3 w-full" />
-			<CheckboxEs
-				items="{filteredStyleTags}"
-				title="Styles"
-				model="styles"
-				selectedItems="{fl.styles || []}"
-				on:go="{goCheckbox}" />
-		</div>
-	{/if}
-
-	{#if facets?.all_aggs?.brands?.all?.buckets?.length > 0}
-		<div class="my-3">
-			<hr class="mb-3 w-full" />
-
-			<CheckboxEs
-				items="{facets.all_aggs?.brands?.all?.buckets}"
-				title="Brands"
-				model="brands"
-				selectedItems="{fl.brands || []}"
-				on:go="{goCheckbox}" />
-		</div>
-	{/if}
-
-	{#if facets?.all_aggs?.genders?.all?.buckets?.length > 0}
-		<div class="my-3">
-			<hr class="mb-3 w-full" />
-
-			<CheckboxEs
-				items="{facets.all_aggs?.genders?.all?.buckets}"
-				title="Genders"
-				model="genders"
-				selectedItems="{fl.genders || []}"
-				on:go="{goCheckbox}" />
-		</div>
-	{/if}
-
-	{#if facets?.all_aggs?.sizes?.all?.buckets?.length > 0}
-		<div class="my-3">
-			<hr class="mb-3 w-full" />
-
-			<CheckboxEs
-				items="{facets.all_aggs?.sizes?.all?.buckets}"
-				title="Sizes"
-				model="sizes"
-				selectedItems="{fl.sizes || []}"
-				on:go="{goCheckbox}" />
-		</div>
-	{/if}
-
-	{#if facets?.all_aggs?.colors?.all?.buckets?.length > 0}
-		<div class="my-3">
-			<hr class="mb-3 w-full" />
-
-			<CheckboxEs
-				items="{facets.all_aggs?.colors?.all?.buckets}"
-				title="Colors"
-				model="colors"
-				selectedItems="{fl.colors || []}"
-				on:go="{goCheckbox}" />
-		</div>
-	{/if}
-
-	{#if facets?.all_aggs?.themes?.all?.buckets?.length > 0}
-		<div class="my-3">
-			<hr class="mb-3 w-full" />
-
-			<CheckboxEs
-				items="{facets.all_aggs?.themes?.all?.buckets}"
-				title="Themes"
-				model="themes"
-				selectedItems="{fl.themes || []}"
-				on:go="{goCheckbox}" />
-		</div>
-	{/if}
-
-	{#if facets?.all_aggs?.promotions?.all?.buckets?.length > 0}
-		<div class="my-3">
-			<hr class="mb-3 w-full" />
-
-			<CheckboxEs
-				items="{facets.all_aggs?.promotions?.all?.buckets}"
-				title="Promotions"
-				model="promotions"
-				selectedItems="{fl.promotions || []}"
-				on:go="{goCheckbox}" />
-		</div>
-	{/if}
-
-	{#if facets?.all_aggs?.types?.all?.buckets?.length > 0}
-		<div class="my-3">
-			<hr class="mb-3 w-full" />
-
-			<CheckboxEs
-				items="{facets.all_aggs?.types?.all?.buckets}"
-				title="types"
-				model="types"
-				selectedItems="{fl.types || []}"
-				on:go="{goCheckbox}" />
-		</div>
-	{/if}
-
-	{#if facets?.all_aggs?.categories?.all?.buckets?.length > 0}
-		<div class="my-3">
-			<hr class="mb-3 w-full" />
-
-			<CheckboxEs
-				items="{facets?.all_aggs?.categories?.all?.buckets}"
-				title="Categories"
-				model="categories"
-				selectedItems="{fl.categories || []}"
-				on:go="{goCheckbox}" />
-		</div>
-	{/if}
-
-	{#if facets?.vendors?.all?.buckets?.length > 0}
-		<div class="my-3">
-			<hr class="mb-3 w-full" />
-
-			<CheckboxEs
-				items="{facets?.vendors?.all?.buckets}"
-				title="vendors"
-				model="vendors"
-				selectedItems="{fl.vendors || []}"
-				on:go="{goCheckbox}" />
-		</div>
-	{/if}
-
-	{#if facets?.all_aggs?.price?.all?.buckets?.length > 0}
+	<!-- {#if facets?.all_aggs?.price?.all?.buckets?.length > 0}
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
@@ -476,18 +578,5 @@ function handleToggleSubCategory2(c, cx) {
 				selectedItems="{fl.price || []}"
 				on:go="{goCheckbox}" />
 		</div>
-	{/if}
-
-	{#if facets?.all_aggs?.discount?.all?.buckets?.length > 0}
-		<div class="my-3">
-			<hr class="mb-3 w-full" />
-
-			<RadioEs
-				items="{facets?.all_aggs?.discount?.all?.buckets}"
-				title="Discount"
-				model="discount"
-				selectedItems="{fl.discount || []}"
-				on:go="{goCheckbox}" />
-		</div>
-	{/if}
+	{/if} -->
 </div>
