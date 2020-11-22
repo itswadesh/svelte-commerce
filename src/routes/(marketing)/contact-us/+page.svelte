@@ -1,12 +1,12 @@
 <script>
 import { page } from '$app/stores'
-import { post } from '$lib/util/api'
-import { toast } from '$lib/util'
+import { toast } from '$lib/utils'
 import Error from '$lib/components/Error.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextareaFloating from '$lib/ui/TextareaFloating.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
+import { submitContactUsForm } from '$lib/services/ContactService'
 
 let seoProps = {
 	title: `Contact Us`,
@@ -25,18 +25,15 @@ async function submitContactInformation() {
 		err = null
 		loading = true
 
-		const res = await post(
-			`contact-us?store=${$page.data?.store?.id}`,
-			{
-				fullName: fullName,
-				email: email,
-				phone: phone,
-				subject: `Someone contact us from ${$page.data.store?.websiteName}`,
-				message: message,
-				store: $page.data.store?.id
-			},
-			$page.data.origin
-		)
+		await submitContactUsForm({
+			fullName,
+			email,
+			phone,
+			subject: `Someone contact us from ${$page.data.store?.websiteName}`,
+			message,
+			storeId: $page.data.store?.id,
+			origin: $page.data.origin
+		})
 
 		toast('You have successfully contacted with us', 'success')
 
@@ -45,8 +42,6 @@ async function submitContactInformation() {
 		phone = null
 		message = null
 	} catch (e) {
-		// console.log('error = ', e)
-
 		err = e
 	} finally {
 		loading = false
@@ -70,7 +65,7 @@ async function submitContactInformation() {
 			<div class="col-span-1 m-2 overflow-hidden rounded-xl bg-primary-500 p-5 text-white sm:p-10">
 				<h2 class="mb-2 text-xl font-semibold sm:text-2xl">Contact Information</h2>
 
-				<p class="mb-5 text-sm text-gray-400 sm:text-base">
+				<p class="mb-5 text-sm text-gray-200 sm:text-base">
 					Fill up teh form and our Team will get back to you within 24 hours.
 				</p>
 

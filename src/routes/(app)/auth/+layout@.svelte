@@ -28,11 +28,22 @@ let url
 						href="/"
 						aria-label="Click to route home"
 						class="relative z-10 flex h-20 items-center justify-center border-b bg-white">
-						<LazyImg
-							src="{$page.data.store?.logo}"
-							alt="{$page.data.store?.websiteName}"
-							height="80"
-							class="max-h-16 w-32 object-contain object-center" />
+						{#if $page.data.store?.logo}
+							<LazyImg
+								src="{$page.data.store?.logo}"
+								alt="{$page.data.store?.websiteName}"
+								height="80"
+								class="max-h-16 w-32 object-contain object-center" />
+						{:else}
+							<h1
+								class="bg-gradient-to-b from-primary-500 to-secondary-500 bg-clip-text text-2xl font-extrabold text-transparent sm:text-3xl">
+								{#if $page.data.store?.websiteName}
+									{$page.data.store?.websiteName}
+								{:else}
+									Litekart
+								{/if}
+							</h1>
+						{/if}
 					</a>
 
 					<div

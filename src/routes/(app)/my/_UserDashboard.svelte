@@ -1,6 +1,9 @@
 <script>
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import { fly } from 'svelte/transition'
+import dashboardMyOrders from '$lib/assets/dashboard/my-orders.png'
+import dashboardProfile from '$lib/assets/dashboard/profile.png'
+import dashboardReviews from '$lib/assets/dashboard/reviews.png'
+import dashboardWishlist from '$lib/assets/dashboard/wishlist.png'
 
 export let me, myOrders, myWishlist, myReviews
 </script>
@@ -32,10 +35,7 @@ export let me, myOrders, myWishlist, myReviews
 			</div>
 
 			<div class="absolute right-0 bottom-0 -m-5 overflow-hidden lg:-m-7">
-				<LazyImg
-					src="/dashboard/my-orders.png"
-					alt=" "
-					class="h-28 w-28 opacity-50 lg:h-32 lg:w-32" />
+				<img src="{dashboardMyOrders}" alt="" class="h-28 w-28 opacity-50 lg:h-32 lg:w-32" />
 			</div>
 		</a>
 
@@ -54,10 +54,7 @@ export let me, myOrders, myWishlist, myReviews
 			</div>
 
 			<div class="absolute right-0 bottom-0 -mr-2 -mb-5 overflow-hidden lg:-mb-7">
-				<LazyImg
-					src="/dashboard/wishlist.png"
-					alt=" "
-					class="h-28 w-28 opacity-50 lg:h-32 lg:w-32" />
+				<img src="{dashboardWishlist}" alt="" class="h-28 w-28 opacity-50 lg:h-32 lg:w-32" />
 			</div>
 		</a>
 	</div>
@@ -79,10 +76,7 @@ export let me, myOrders, myWishlist, myReviews
 			</div>
 
 			<div class="absolute right-0 bottom-0 -m-5 overflow-hidden lg:-m-7">
-				<LazyImg
-					src="/dashboard/reviews.png"
-					alt=" "
-					class="h-28 w-28 opacity-50 lg:h-32 lg:w-32" />
+				<img src="{dashboardReviews}" alt="" class="h-28 w-28 opacity-50 lg:h-32 lg:w-32" />
 			</div>
 		</a>
 
@@ -109,10 +103,10 @@ export let me, myOrders, myWishlist, myReviews
 			</div>
 
 			<div class="absolute right-0 bottom-0 -m-5 overflow-hidden lg:-m-7">
-				<LazyImg
-					src="/dashboard/profile.png"
-					alt=" "
-					class="h-28 w-28 object-contain object-center opacity-50 lg:h-32 lg:w-32" />
+				<img
+					src="{dashboardProfile}"
+					alt=""
+					class="h-28 w-28 opacity-50 lg:h-32 lg:w-32 object-contain object-center" />
 			</div>
 		</a>
 	</div>
