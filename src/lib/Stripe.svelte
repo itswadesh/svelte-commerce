@@ -1,19 +1,21 @@
-<script>
-import { currency, toast } from '$lib/util'
+<script lang="ts">
+import { currency, toast } from '$lib/utils'
 import { createEventDispatcher, onMount } from 'svelte'
 import { goto } from '$app/navigation'
 import GrnIndGradiantButton from './ui/GrnIndGradiantButton.svelte'
-import { post } from '$lib/util/api'
+import { post } from '$lib/utils/api'
 import { page } from '$app/stores'
+import { stripeCheckoutService } from './services/OrdersService'
+import type { Error, PaymentMethod } from './types'
 let stripeReady = false
 let mounted = false
 let loading = false
 let paySuccess = false
 let isCardValid = false
 let stripeCardMounting = true
-let card
-export let stripePublishableKey //process.env.VITE_STRIPE_PUBLISHABLE_KEY
-let stripe,
+let card: any
+export let stripePublishableKey: string //process.env.VITE_STRIPE_PUBLISHABLE_KEY
+let stripe: any,
 	errors,
 	errorMessage = { text: '', show: false }
 const dispatch = createEventDispatcher()
@@ -21,15 +23,13 @@ const dispatch = createEventDispatcher()
 export let address = '',
 	isStripeSelected = false
 
-async function payWithCard(clientSecret, orderId) {
-	// console.error('Stripe clientSecret.............', clientSecret)
+async function payWithCard(clientSecret: string, orderId: string) {
 	// This is for 3d authentication
 	try {
 		loading = true
 		const result = await stripe.confirmCardPayment(clientSecret, {
 			payment_method: { card: card }
 		})
-		// console.error('Confirm card pay...........', result)
 		if (result.error) {
 			errorMessage.show = true
 			errorMessage.text = result.error.message
@@ -48,28 +48,23 @@ async function payWithCard(clientSecret, orderId) {
 	}
 }
 
-const payWithStripe = async (pm) => {
+const payWithStripe = async (pm: PaymentMethod) => {
 	try {
 		loading = true
 		toast('Contacting Payment Server...', 'warning')
 		const paymentMethodId = pm.id
-		const resStripe = post(
-			'stripe',
-			{
-				paymentMethodId,
-				address,
-				store: $page.data.store?.id
-			},
-			$page.data.origin
-		)
+		const resStripe: any = stripeCheckoutService({
+			paymentMethodId,
+			address,
+			storeId: $page.data.store?.id,
+			origin: $page.data.origin
+		})
 		if (resStripe.errors) {
 			errorMessage = { show: true, text: resStripe.errors[0].message }
 			return
 		} else {
 			const res = resStripe.data?.stripe
 			if (!res.paid) {
-				// console.log('pay/stripe', res.paid) // Show 3d secure screen
-
 				await payWithCard(res.clientSecret, res?.orderId)
 			} else if (res) {
 				goto(
@@ -78,7 +73,7 @@ const payWithStripe = async (pm) => {
 				paySuccess = true
 			}
 		}
-	} catch (e) {
+	} catch (e: any) {
 		errorMessage = { show: true, text: e.toString() }
 	} finally {
 		loading = false
@@ -101,7 +96,7 @@ function stripeLoaded() {
 }
 function submit() {
 	loading = true
-	stripe.createPaymentMethod({ type: 'card', card }).then(async function (result) {
+	stripe.createPaymentMethod({ type: 'card', card }).then(async function (result: any) {
 		if (result.error) {
 			// Inform the customer that there was an error.
 			errorMessage.text = result.error.message
@@ -117,12 +112,13 @@ function submit() {
 }
 
 async function loadStripeElements() {
+	// @ts-ignore
 	stripe = Stripe(stripePublishableKey)
 	var elements = stripe.elements()
 	card = await elements.create('card', {})
 	await card.mount('#mount-point-for-stripe-elements')
 	stripeCardMounting = false
-	card.on('change', function (event) {
+	card.on('change', function (event: any) {
 		isCardValid = event.complete
 		dispatch('isStripeCardValid', isCardValid)
 		if (event.error) {
@@ -145,7 +141,8 @@ async function loadStripeElements() {
 		{errorMessage.text}
 	</div>
 {/if}
-{#if stripeLoaded}
+
+{#if stripeReady}
 	<form
 		on:submit|preventDefault="{submit}"
 		class="{!isStripeSelected ? 'hidden' : 'block'} my-4 rounded border px-8 py-4 shadow-lg">
@@ -172,5 +169,7 @@ async function loadStripeElements() {
 		<div id="error-message" role="alert" class="mt-4 text-sm text-red-500"></div>
 	</form>
 {:else}
-	<div class="rounded bg-green-200 text-blue-500 shadow">Pleae wait...</div>
+	<div class="rounded-md border border-yellow-200 bg-yellow-50 py-2 px-4 text-yellow-600">
+		Warn: Pleae wait...Stripe is getting ready .
+	</div>
 {/if}

@@ -18,6 +18,7 @@ let today = dayjs(new Date()).toISOString()
 
 export let data
 
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -120,8 +121,7 @@ $: heroBanners =
 		{#if data.home?.categories?.data?.length > 0}
 			<div class="mb-5 hidden sm:mb-10 sm:block">
 				<h2
-					class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl"
-				>
+					class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
 					TOP COLLECTIONS
 				</h2>
 
@@ -132,16 +132,14 @@ $: heroBanners =
 								<a
 									href="/{category.link || category.slug || '##'}"
 									aria-label="Click to get the category related products"
-									class="shrink-0"
-								>
+									class="shrink-0">
 									<LazyImg
 										src="{category.img || category.img}"
 										alt=""
 										width="375"
 										height="375"
 										aspect_ratio="1:1"
-										class="w-[47vw] object-contain sm:w-60"
-									/>
+										class="w-[47vw] object-contain sm:w-60" />
 								</a>
 							{/if}
 						{/each}
@@ -154,15 +152,13 @@ $: heroBanners =
 							<a
 								href="/{category.link || category.slug || '##'}"
 								aria-label="Click to get the category related products"
-								class="col-span-1"
-							>
+								class="col-span-1">
 								<LazyImg
 									src="{category.img || category.img}"
 									alt=""
 									width="375"
 									aspect_ratio="1:1"
-									class="h-full w-full object-contain"
-								/>
+									class="h-full w-full object-contain" />
 							</a>
 						{/if}
 					{/each}
@@ -188,8 +184,7 @@ $: heroBanners =
 			{#if heroBanners?.length > 0}
 				<div class="mb-5 sm:mb-10">
 					<h2
-						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase"
-					>
+						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
 						BEST OF {$page.data.store?.websiteName} EXCLUSIVE
 					</h2>
 
@@ -233,8 +228,7 @@ $: heroBanners =
 				{#each deals.data as deal}
 					<div class="mb-5 sm:mb-10">
 						<h2
-							class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase"
-						>
+							class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
 							{deal.name}
 						</h2>
 
@@ -251,14 +245,12 @@ $: heroBanners =
 				{#if home?.popular?.data?.length > 0}
 					<div class="mb-5 sm:mb-10">
 						<h2
-							class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase"
-						>
+							class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
 							POPULAR ON {$page.data.store?.websiteName}
 						</h2>
 
 						<ul
-							class="sm:px-10 border-t sm:border-t-0 grid w-full grid-cols-2 items-start sm:gap-3 sm:flex sm:flex-wrap sm:justify-between lg:gap-6"
-						>
+							class="sm:px-10 border-t sm:border-t-0 grid w-full grid-cols-2 items-start sm:gap-3 sm:flex sm:flex-wrap sm:justify-between lg:gap-6">
 							{#each home?.popular?.data as p}
 								<li>
 									<ProductCard product="{p}" />
@@ -282,14 +274,12 @@ $: heroBanners =
 			{#if home?.trending?.length > 0}
 				<div>
 					<h2
-						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase"
-					>
+						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
 						TRENDING ON {$page.data.store?.websiteName}
 					</h2>
 
 					<ul
-						class="sm:px-10 border-t sm:border-t-0 grid w-full grid-cols-2 items-start sm:gap-3 sm:flex sm:flex-wrap sm:justify-between lg:gap-6"
-					>
+						class="sm:px-10 border-t sm:border-t-0 grid w-full grid-cols-2 items-start sm:gap-3 sm:flex sm:flex-wrap sm:justify-between lg:gap-6">
 						{#each home?.trending as p}
 							<li>
 								<ProductCard product="{p}" />

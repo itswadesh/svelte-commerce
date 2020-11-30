@@ -1,7 +1,7 @@
 <script lang="ts">
 import { spring } from 'svelte/motion'
 import { createEventDispatcher } from 'svelte'
-import { currency } from '$lib/util'
+import { currency } from '$lib/utils'
 import { goto } from '$app/navigation'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 
@@ -14,8 +14,6 @@ export let cart,
 	disabled = false,
 	hideCheckoutButton = false,
 	showNextIcon = false
-
-// console.log('zzzzzzzzzzzzzzzzzz', cart)
 
 function modulo(n, m) {
 	// handle negative numbers
@@ -69,11 +67,13 @@ function submit() {
 				</h4>
 			</div>
 
-			<div class="mt-2 flex items-center justify-between font-medium">
-				<h4>Tax</h4>
+			{#if cart?.formattedAmount?.tax}
+				<div class="mt-2 flex items-center justify-between font-medium">
+					<h4>Tax</h4>
 
-				<h4>{cart?.formattedAmount?.tax || '-'}</h4>
-			</div>
+					<div>{cart?.formattedAmount?.tax}</div>
+				</div>
+			{/if}
 
 			<div class="mt-2 flex items-center justify-between font-medium">
 				<h4>Shipping</h4>
@@ -102,7 +102,6 @@ function submit() {
 				{cart.formattedAmount?.total}
 			</div>
 		{/if}
-
 		<div class="hidden md:block">
 			{#if cart.qty > 0 && !hideCheckoutButton}
 				{#if nextpage}
