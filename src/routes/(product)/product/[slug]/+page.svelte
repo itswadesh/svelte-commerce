@@ -44,7 +44,6 @@
 </style>
 
 <script lang="ts">
-
 // import UserForm from '$lib/components/Product/UserForm.svelte'
 import { applyAction, enhance } from '$app/forms'
 import { browser } from '$app/environment'
@@ -218,11 +217,11 @@ onMount(async () => {
 })
 
 const storeProductToLocatStorage = async () => {
-	const localRecentlyVieewed = localStorage.getItem('recentlyViewed')
-	// console.log('localRecentlyVieewed', localRecentlyVieewed)
+	const localRecentlyViewed = localStorage.getItem('recentlyViewed')
+	// console.log('localRecentlyViewed', localRecentlyViewed)
 
-	if (!!localRecentlyVieewed && localRecentlyVieewed !== 'undefined') {
-		recentlyViewed = JSON.parse(localRecentlyVieewed)
+	if (!!localRecentlyViewed && localRecentlyViewed !== 'undefined') {
+		recentlyViewed = JSON.parse(localRecentlyViewed)
 	}
 
 	if (JSON.stringify(recentlyViewed).includes(data?.product?.name)) {
@@ -239,8 +238,8 @@ const storeProductToLocatStorage = async () => {
 			slug: data?.product?.slug
 		}
 
-		if (localRecentlyVieewed?.length > 10) {
-			recentlyViewed.slice(0, -1)
+		if (recentlyViewed?.length > 10) {
+			recentlyViewed.shift()
 		}
 
 		const resvw = [...recentlyViewed]
