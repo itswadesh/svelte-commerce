@@ -1,22 +1,22 @@
 <script>
 import { browser } from '$app/environment'
+import { CategoryService } from '$lib/services'
 import { constructURL2, currency, toast } from '$lib/utils'
-import { fetchMegamenuData } from '$lib/services/CategoryService'
-import { goto } from '$app/navigation'
 import { createEventDispatcher, onMount } from 'svelte'
+import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import CheckboxEs from '$lib/ui/CheckboxEs.svelte'
 import RadioEs from '$lib/ui/RadioEs.svelte'
 
 const dispatch = createEventDispatcher()
 
-export let facets = {},
-	fl = {},
-	appliedFilters = {},
-	query, // Required because after loading finished then only we will initiate the price slider component
-	filterLength = 0,
-	mergedArr = [],
-	priceRange = []
+export let appliedFilters = {}
+export let filterLength = 0
+export let fl = {}
+export let mergedArr = []
+export let priceRange = []
+export let query // Required because after loading finished then only we will initiate the price slider component
+export let facets = {}
 
 // console.log('facets', facets)
 
@@ -117,7 +117,7 @@ async function getMegamenu() {
 		try {
 			const localmegamenu = localStorage.getItem('megamenu')
 			if (!localmegamenu || localmegamenu === 'undefined') {
-				megamenu = await fetchMegamenuData({
+				megamenu = await CategoryService.fetchMegamenuData({
 					origin: $page?.data?.origin,
 					storeId: $page?.data?.store?.id
 				})
@@ -389,7 +389,7 @@ function handleToggleSubCategory2(c, cx) {
 				items="{allFeatures}"
 				title="Features"
 				model="features"
-				selectedItems="{fl.discount || []}"
+				selectedItems="{fl.features || []}"
 				on:go="{goCheckbox}" />
 		</div>
 	{/if}

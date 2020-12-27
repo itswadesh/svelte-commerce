@@ -1,4 +1,4 @@
-import { searchProducts } from '$lib/services/ProductService'
+import { ProductService } from '$lib/services'
 import { generatePriceRange } from '$lib/utils'
 import { error } from '@sveltejs/kit'
 export const prerender = false
@@ -25,7 +25,7 @@ export async function load({ url, locals, cookies, parent }) {
 
 	try {
 		loading = true
-		const res = await searchProducts({
+		const res = await ProductService.searchProducts({
 			storeId: store?.id,
 			query: query.toString(),
 			searchData: searchData,
@@ -43,10 +43,12 @@ export async function load({ url, locals, cookies, parent }) {
 	} finally {
 		loading = false
 	}
+
 	let priceRange = []
-	if (facets.all_aggs?.price_stats?.max && facets.all_aggs?.price_stats?.min) {
+	if (facets.all_aggs?.price_stats?.max > 0 && facets.all_aggs?.price_stats?.min >= 0) {
 		priceRange = generatePriceRange(facets.all_aggs?.price_stats)
 	}
+
 	return {
 		loading,
 		err,
