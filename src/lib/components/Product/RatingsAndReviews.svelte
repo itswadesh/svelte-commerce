@@ -40,7 +40,7 @@ async function getGallery() {
 			origin: $page?.data?.origin
 		})
 
-		console.log('fetchProductReviews', res)
+		// console.log('fetchProductReviews', res)
 
 		gallery = res?.data
 			.map((item) => {
@@ -59,7 +59,7 @@ async function getGallery() {
 
 		// console.log('gallery', gallery)
 	} catch (e) {
-		console.log('error', e)
+		console.error('error', e)
 	} finally {
 		loadingForGallery = false
 	}
