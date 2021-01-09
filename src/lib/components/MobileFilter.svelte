@@ -13,7 +13,7 @@ import { createEventDispatcher, onMount } from 'svelte'
 import { fly } from 'svelte/transition'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
-import { provider, sorts } from '$lib/config'
+import { sorts } from '$lib/config'
 import CheckboxEs from '$lib/ui/CheckboxEs.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import RadioEs from '$lib/ui/RadioEs.svelte'
@@ -41,7 +41,6 @@ let showSubCategory = []
 let showSubCategory2 = []
 // ----------------
 let megamenu
-
 let allAges = []
 let allBrands = []
 let allColors = []
@@ -50,7 +49,6 @@ let allFeatures = []
 let allGenders = []
 let allPromotions = []
 let allSizes = []
-let allTags = []
 let allTypes = []
 let allVendors = []
 let priceRanges = []

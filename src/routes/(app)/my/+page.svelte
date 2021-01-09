@@ -24,7 +24,7 @@ export let data
 
 	<!-- MOBILE FOOTER -->
 
-	<div class="block sm:hidden">
+	<div class="block lg:hidden">
 		<MobileFooter />
 	</div>
 </div>

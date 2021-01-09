@@ -587,7 +587,7 @@ function handleMobileCanvas() {
 
 					<!-- Social share button -->
 
-					<div class="block lg:hidden">
+					<div class="block lg:hidden ml-auto">
 						<SocialSharingButtons
 							productName="{data.product?.name}"
 							productImage="{data.product?.img}"
@@ -663,7 +663,7 @@ function handleMobileCanvas() {
 						</div>
 
 						<span class="px-2 text-gray-500">
-							{data?.product?.reviews?.productReviews?.reviews?.length || 'No'} Reviews
+							{productReviewsProduct?.length || 'No'} Reviews
 						</span>
 					</button>
 				{/if}
@@ -1316,6 +1316,9 @@ function handleMobileCanvas() {
 				<ProductsGrid title="Recommended Products" products="{data.product?.relatedProducts}" />
 			{/if}
 		</div>
+
+		<!-- This is required for mobile bottom fixed wishlist and add to bag section -->
+		<div class="block md:hidden h-16 w-full"></div>
 	</div>
 </div>
 
