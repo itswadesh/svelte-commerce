@@ -121,7 +121,7 @@ async function submit(pm) {
 				toast('Something went wrong', 'error')
 			}
 		} catch (e) {
-			toast(e?.message, 'error')
+			toast(e?.body, 'error')
 		} finally {
 			loading = false
 		}

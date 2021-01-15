@@ -11,7 +11,7 @@ h1 {
 
 <script>
 import { page } from '$app/stores'
-import error404 from '$lib/assets/error/404.svg'
+import errAnimated from '$lib/assets/no/error.svg'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 </script>
 
@@ -19,7 +19,7 @@ import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 	{#if $page.status === 404}
 		<div class="container">
 			<div class="flex justify-center text-center">
-				<img src="{error404}" alt="" class="mb-5 h-auto w-60 object-contain" />
+				<img src="{errAnimated}" alt="" class="mb-5 max-h-60 w-auto object-contain object-bottom" />
 			</div>
 
 			<div class="layout">
@@ -34,7 +34,10 @@ import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 		<div class="container">
 			<div class="layout">
 				<div class="flex justify-center text-center">
-					<img src="{error404}" alt="" class="mb-5 h-auto w-60 object-contain" />
+					<img
+						src="{errAnimated}"
+						alt=""
+						class="mb-5 max-h-60 w-auto object-contain object-bottom" />
 				</div>
 
 				<div class="text-center">
@@ -48,7 +51,10 @@ import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 		<div class="container">
 			<div class="layout">
 				<div class="flex justify-center text-center">
-					<img src="{error404}" alt="" class="mb-5 h-auto w-60 object-contain" />
+					<img
+						src="{errAnimated}"
+						alt=""
+						class="mb-5 max-h-60 w-auto object-contain object-bottom" />
 				</div>
 
 				<div class="flex flex-col gap-5 text-center">
@@ -62,7 +68,10 @@ import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 		<div class="container">
 			<div class="layout">
 				<div class="flex justify-center text-center">
-					<img src="{error404}" alt="" class="mb-5 h-auto w-60 object-contain" />
+					<img
+						src="{errAnimated}"
+						alt=""
+						class="mb-5 max-h-60 w-auto object-contain object-bottom" />
 				</div>
 
 				<div class="flex flex-col gap-5 text-center">
