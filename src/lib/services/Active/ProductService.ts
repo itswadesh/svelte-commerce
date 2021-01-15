@@ -71,21 +71,14 @@ export const fetchProducts = async ({
 
 // Fetch single product
 
-export const fetchProduct = async ({
-	origin,
-	slug,
-	id,
-	server = false,
-	sid = null,
-	storeId
-}: any) => {
+export const fetchProduct = async ({ origin, slug, id, server = false, sid = null }: any) => {
 	try {
 		let res: Product | {} = {}
 
 		if (server) {
-			res = await getBySid(`es/products/${slug || id}`, sid)
+			res = await getBySid(`products/${slug}`, sid)
 		} else {
-			res = await getAPI(`es/products/${slug || id}`, origin)
+			res = await getAPI(`products/${slug}`, origin)
 		}
 
 		return res || {}

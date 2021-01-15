@@ -118,7 +118,7 @@ async function onSearchSubmit({ detail }) {
 		<!-- Mega menu -->
 
 		<div
-			class="hidden w-80 items-start justify-start overflow-auto scrollbar scrollbar-track-transparent scrollbar-thumb-gray-100 lg:flex xl:w-auto">
+			class="hidden w-80 items-start justify-start overflow-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-200 lg:flex xl:w-auto max-w-6xl">
 			<MegaMenu />
 		</div>
 
