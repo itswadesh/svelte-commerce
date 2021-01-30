@@ -1,12 +1,6 @@
-<style>
-.frosted {
-	background-image: url('/auth/login/bg-lighter.svg');
-	backdrop-filter: blur(15px);
-	background-color: hsla(0, 0%, 100%, 0.75);
-}
-</style>
-
 <script>
+import { page } from '$app/stores'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
@@ -18,9 +12,26 @@ const seoProps = {
 
 <SEO {...seoProps} />
 
-<div
-	class="frosted container mx-auto flex w-full max-w-sm flex-col rounded-2xl border bg-cover bg-center bg-no-repeat p-10 shadow-2xl"
-	style="background-image: url('/login/bg-lighter.svg');">
+<div class="flex w-full max-w-md flex-col rounded-2xl border bg-white p-10 shadow-2xl">
+	<a href="/" aria-label="Go to home" class="mx-auto mb-8 block max-w-max">
+		{#if $page.data.store?.logo}
+			<LazyImg
+				src="{$page.data.store?.logo}"
+				alt="{$page.data.store?.websiteName}"
+				height="80"
+				class="h-14 w-32 object-contain object-center" />
+		{:else}
+			<h1
+				class="bg-gradient-to-b from-primary-500 to-primary-700 bg-clip-text text-3xl font-extrabold text-transparent underline decoration-gray-800">
+				{#if $page.data.store?.websiteName}
+					{$page.data.store?.websiteName}
+				{:else}
+					Litekart
+				{/if}
+			</h1>
+		{/if}
+	</a>
+
 	<h1 class="mb-8 w-full text-center text-2xl font-bold text-primary-500">Forgot Success</h1>
 
 	<div class="mb-5 flex flex-col items-center justify-center gap-5 text-center">
@@ -40,16 +51,16 @@ const seoProps = {
 
 	<div class="mx-auto mb-5 flex max-w-max flex-col gap-1 text-center text-sm">
 		<a
-			href="https://mail.google.com"
 			target="_blank"
 			rel="noopener noreferrer"
+			href="https://mail.google.com"
 			aria-label="Click to check your mail"
 			class="max-w-max whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
 			Check your Email
 		</a>
 	</div>
 
-	<a href="/" aria-label="Click to route home">
+	<a href="/" aria-label="Home">
 		<PrimaryButton class="w-full">HOME</PrimaryButton>
 	</a>
 </div>

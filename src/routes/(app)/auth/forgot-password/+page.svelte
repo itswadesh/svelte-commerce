@@ -1,18 +1,10 @@
-<style>
-.frosted {
-	background-image: url('/auth/login/bg-lighter.svg');
-	backdrop-filter: blur(15px);
-	background-color: hsla(0, 0%, 100%, 0.75);
-}
-</style>
-
 <script>
 import { browser } from '$app/environment'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
-import { post } from '$lib/util/api'
-import { toast } from '$lib/util'
+import { UserService } from '$lib/services'
 import Error from '$lib/components/Error.svelte'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
@@ -26,18 +18,27 @@ let email
 let loading = false
 let err
 
+function protocol() {
+	// const protocol = window.location.protocol + '//'
+	const protocol = 'https://' //window.location.protocol + '//'
+	return protocol
+}
+
 async function submit() {
+	// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', {
+	// 	email: email,
+	// 	referrer: `${$page.data.origin}`
+	// })
+
 	try {
 		loading = true
 
-		const res = await post(
-			'users/forgot-password',
-			{
-				email: email,
-				referrer: 'https://litekart.in'
-			},
-			$page.data.origin
-		)
+		const res = await UserService.forgotPasswordService({
+			email: email,
+			referrer: $page.data.origin,
+			storeId: $page.data.store?.id,
+			origin: $page.data.origin
+		})
 
 		// console.log('zzzzzzzzzzzzzzzzzz', res)
 
@@ -54,9 +55,26 @@ async function submit() {
 
 <SEO {...seoProps} />
 
-<div
-	class="frosted container mx-auto flex w-full max-w-sm flex-col rounded-2xl border bg-cover bg-center bg-no-repeat p-10 shadow-2xl"
-	style="background-image: url('/login/bg-lighter.svg');">
+<div class="flex w-full max-w-md flex-col rounded-2xl border bg-white p-10 shadow-2xl">
+	<a href="/" aria-label="Go to home" class="mx-auto mb-8 block max-w-max">
+		{#if $page.data.store?.logo}
+			<LazyImg
+				src="{$page.data.store?.logo}"
+				alt="{$page.data.store?.websiteName}"
+				height="80"
+				class="h-14 w-32 object-contain object-center" />
+		{:else}
+			<h1
+				class="bg-gradient-to-b from-primary-500 to-primary-700 bg-clip-text text-3xl font-extrabold text-transparent underline decoration-gray-800">
+				{#if $page.data.store?.websiteName}
+					{$page.data.store?.websiteName}
+				{:else}
+					Litekart
+				{/if}
+			</h1>
+		{/if}
+	</a>
+
 	<h1 class="mb-8 w-full text-center text-2xl font-bold text-primary-500">Forgot Password</h1>
 
 	<Error err="{err}" />
