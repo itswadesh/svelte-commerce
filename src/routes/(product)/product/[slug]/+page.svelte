@@ -361,10 +361,10 @@ async function addToBag(p, customizedImg, customizedJson) {
 			bounceItemFromTop = true
 		}
 
-		await invalidateAll()
-
 		cartButtonText = 'Go to cart'
 		p.qty < 0 ? fireGTagEvent('remove_from_cart', cart) : fireGTagEvent('add_to_cart', cart)
+
+		await invalidateAll()
 
 		// const res = await getAPI('carts/my')
 
@@ -1000,27 +1000,30 @@ function handleMobileCanvas() {
 							<div class="col-span-3 md:col-span-1">
 								{#if data.product?.active && data.product?.hasStock}
 									{#if cartButtonText === 'Go to cart'}
-										<a
-											class="relative flex w-full transform items-center justify-center overflow-hidden rounded-md border border-primary-500 bg-primary-500 px-3 py-2 text-center text-sm font-semibold tracking-wider text-white shadow-md transition duration-700 focus:outline-none focus:ring-0 focus:ring-offset-0 hover:border-primary-700 hover:bg-primary-700"
-											href="/cart"
-											data-sveltekit-preload-data>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												class="h-5 w-5 shrink-0"
-												fill="none"
-												viewBox="0 0 24 24"
-												stroke="currentColor"
-												stroke-width="2">
-												<path
-													stroke-linecap="round"
-													stroke-linejoin="round"
-													d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
-												</path>
-											</svg>
+										<a class="block" href="/cart" data-sveltekit-preload-data>
+											<PrimaryButton
+												type="button"
+												hideLoading
+												class="w-full text-sm"
+												blackBackground>
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													class="h-5 w-5 shrink-0"
+													fill="none"
+													viewBox="0 0 24 24"
+													stroke="currentColor"
+													stroke-width="2">
+													<path
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
+													</path>
+												</svg>
 
-											<span>
-												{cartButtonText}
-											</span>
+												<span>
+													{cartButtonText}
+												</span>
+											</PrimaryButton>
 										</a>
 									{:else}
 										<form
@@ -1031,18 +1034,16 @@ function handleMobileCanvas() {
 													result?.data?.qty < 0
 														? fireGTagEvent('remove_from_cart', result?.data)
 														: fireGTagEvent('add_to_cart', result?.data)
-
-													// cartButtonText = 'Added To Cart'
+													cartButtonText = 'Added To Cart'
 													bounceItemFromTop = true
 													setTimeout(() => {
 														bounceItemFromTop = false
 													}, 3000)
-													// cartButtonText = 'Go to cart'
+													cartButtonText = 'Go to cart'
 													if (customizedImg) {
 														goto(`/checkout/address`)
 													}
 													invalidateAll()
-
 													await applyAction(result)
 												}
 											}}">
