@@ -1,21 +1,35 @@
 <script>
 import { date, toast } from '$lib/utils'
+import { ReviewService } from '$lib/services'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { ReviewService } from '$lib/services'
 import BackButton from '$lib/ui/BackButton.svelte'
 import dotsLoading from '$lib/assets/dots-loading.gif'
 import ProductNav from '$lib/ProductNav.svelte'
 import ReviewGallery from '$lib/components/Product/ReviewGallery.svelte'
 
 export let data
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 const { productReviews } = data
 
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 // console.log('$page', $page)
 
-let allReviews = productReviews?.data || []
-let count = productReviews?.count
+let brandId = $page.url.searchParams.get('brandId')
+let type = $page.url.searchParams.get('type')
+let allReviews = []
+let count = 0
+// console.log('type', type)
+$: if (type === 'product_review') {
+	allReviews = productReviews.product?.data
+	count = productReviews.product?.count
+	// console.log('allReviews', allReviews)
+	// console.log('count', count)
+} else {
+	allReviews = productReviews.brand?.data
+	count = productReviews.brand?.count
+	// console.log('allReviews', allReviews)
+	// console.log('count', count)
+}
 let currentPage = 1
 let loading = false
 let openReviewGallery = []
@@ -42,9 +56,9 @@ async function loadNextPage() {
 		try {
 			loading = true
 
-			const res = await ReviewService.fetchNextPageProductReviews({
+			const res = await ReviewService.fetchProductReviews({
 				page: nextPage,
-				type: 'brand',
+				brandIc: brandId,
 				pid: data.pid,
 				origin: $page?.data?.origin,
 				storeId: $page?.data?.store?.id
@@ -52,10 +66,22 @@ async function loadNextPage() {
 
 			// console.log('res', res)
 
-			if (res?.data?.length) {
-				allReviews = productReviews?.data.concat(res?.data)
-				count = res?.count
-				// console.log('allReviews', allReviews)
+			const isProduct = type === 'product_review' ? true : false
+
+			// console.log('isProduct', isProduct)
+
+			if (res?.product?.data?.length || res?.brand?.data?.length) {
+				if (isProduct && res?.product?.data?.length) {
+					allReviews = productReviews.product?.data.concat(res?.product?.data)
+					count = res.product?.count
+					// console.log('allReviews for next load', allReviews)
+					// console.log('count for next load', count)
+				} else if (res?.brand?.data?.length) {
+					allReviews = productReviews.brand?.data.concat(res?.brand?.data)
+					count = res.brand?.count
+					// console.log('allReviews for next load', allReviews)
+					// console.log('count for next load', count)
+				}
 			} else {
 				reachedLast = true
 			}
@@ -116,15 +142,15 @@ const handleSelectedProductGallery = (review, rx) => {
 	</div>
 </ProductNav>
 
-{#if count > 0}
+{#if count}
 	<div class="mt-14 sm:mt-20 lg:mt-0 p-3 py-5 sm:p-10">
 		<div class="container mx-auto max-w-6xl">
 			<!-- Name and count -->
 
 			<header class="mb-10 hidden lg:flex items-center justify-between flex-wrap-reverse gap-2">
 				<h1 class="flex flex-wrap items-center gap-2">
-					<span class="text-xl font-bold capitalize md:text-2xl">
-						{$page?.url?.searchParams.get('type') || ''} Reviews
+					<span class="text-xl font-bold md:text-2xl">
+						{type === 'product_review' ? 'Product' : 'Brand'} Reviews
 					</span>
 
 					-
