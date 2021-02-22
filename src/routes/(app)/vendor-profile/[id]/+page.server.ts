@@ -1,15 +1,25 @@
-import { gett } from '$lib/utils'
+import { VerndorService } from '$lib/services'
 import { error } from '@sveltejs/kit'
 
-export async function load({ params, parent, setHeaders }) {
+export async function load({ params, parent, locals, cookies }) {
 	const { store } = await parent()
 	let vendorId = params.id
 
-	const vendor = await gett(`vendors/${vendorId}?store=${store.id}`)
-	const vendorProducts = await gett(`products?vendors=${vendorId}&store=${store.id}`)
+	const vendor = await VerndorService.fetchVendor({
+		id: vendorId,
+		server: true,
+		sid: cookies.get('connect.sid')
+	})
+
+	const vendorsProduct = await VerndorService.fetchProductsOfVendor({
+		id: vendorId,
+		storeId: locals.store.id,
+		server: true,
+		sid: cookies.get('connect.sid')
+	})
 
 	if (vendor) {
-		return { vendor, vendorProducts }
+		return { vendor, vendorsProduct }
 	}
 
 	throw error(404, 'User not found')
