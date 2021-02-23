@@ -35,8 +35,9 @@ import { onMount } from 'svelte'
 import { toast } from '$lib/utils'
 import { page } from '$app/stores'
 import { browser } from '$app/environment'
-import { fetchMegamenuData } from '$lib/services/CategoryService'
-import { getAPI } from '$lib/utils/api'
+// import { CategoryService } from '$lib/services'
+import { provider } from '$lib/config'
+import { CategoryService } from '$lib/services'
 
 let megamenu = []
 let selectedCategory = ''
@@ -53,9 +54,9 @@ async function getMegaMenu() {
 			if (!!localMegamenu && localMegamenu !== 'undefined') {
 				megamenu = JSON.parse(localMegamenu)
 			} else {
-				megamenu = await fetchMegamenuData({
-					storeId: $page?.data?.store?.id,
-					origin: $page.data?.origin
+				megamenu = await CategoryService.fetchMegamenuData({
+					storeId: $page.data.store?.id,
+					origin: $page.data.origin
 				})
 			}
 		} catch (e) {
@@ -75,7 +76,7 @@ async function getMegaMenu() {
 			on:mouseenter="{() => (selectedCategory = category.name)}"
 			on:mouseleave="{() => (selectedCategory = '')}">
 			<div
-				class="itmes-center relative flex h-20 shrink-0 justify-center whitespace-nowrap border-b-4 border-transparent p-2 font-medium uppercase
+				class="items-center relative flex h-20 shrink-0 justify-center whitespace-nowrap border-b-4 border-transparent p-2 font-medium uppercase
                     {index % 6 == 0 ? 'hover:border-yellow-500' : ''}
                     {index % 6 == 1 ? 'hover:border-purple-500' : ''}
                     {index % 6 == 2 ? 'hover:border-red-500' : ''}

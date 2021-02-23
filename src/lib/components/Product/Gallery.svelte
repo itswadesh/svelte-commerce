@@ -73,7 +73,7 @@ onMount(async () => {
 					{#each product?.images as img}
 						{#if img}
 							<SplideSlide>
-								<div class="itmes-center jusrify-center flex h-full w-full">
+								<div class="items-center jusrify-center flex h-full w-full">
 									<LazyImg
 										src="{img}"
 										alt=""
