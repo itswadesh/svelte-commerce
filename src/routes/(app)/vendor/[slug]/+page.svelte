@@ -36,31 +36,31 @@ console.log('data', data)
 								{/if}
 							</div>
 
-							{#if data.vendor?.businessName || data.vendor?.name}
-								<ul class="flex flex-col gap-1 text-center">
+							<ul class="flex flex-col gap-1 text-center">
+								{#if data.vendor?.businessName || data.vendor?.name}
 									{#if data.vendor?.businessName}
 										<li class="text-xl font-semibold">
 											{data.vendor?.businessName}
 										</li>
 									{/if}
 
-									<!-- {#if data.vendor?.name}
+									{#if data.vendor?.name}
 										<li>{data.vendor?.name}</li>
-									{/if} -->
-								</ul>
-							{/if}
-
-							<ul class="flex flex-col gap-1">
-								{#if data.vendor?.storeName}
-									<li class="items-center flex gap-2">
-										<h6 class="w-28 font-semibold">Store</h6>
-
-										<span>:</span>
-
-										<span>{data.vendor?.storeName}</span>
-									</li>
+									{/if}
 								{/if}
 
+								<li>
+									<RatingStarDisplay
+										rating="{data.vendor?.ratings}"
+										ratingCount="{data.vendor?.ratings}"
+										reviewCount="{data.vendor?.reviews}"
+										class="flex flex-col items-center justify-center gap-2" />
+								</li>
+							</ul>
+
+							<!-- information list -->
+
+							<ul class="flex flex-col gap-1">
 								{#if data.vendor?.productSold}
 									<li class="items-center flex gap-2">
 										<h6 class="w-28 font-semibold">Product Sold</h6>
@@ -72,21 +72,41 @@ console.log('data', data)
 								{/if}
 
 								<li class="items-center flex gap-2">
-									<h6 class="w-28 shrink-0 font-semibold">Ratings</h6>
-
-									<span>:</span>
-
-									<RatingStarDisplay rating="{data.vendor?.ratings}" />
-								</li>
-
-								<li class="items-center flex gap-2">
 									<h6 class="w-28 font-semibold">Verified</h6>
 
 									<span>:</span>
 
-									<span class="{data.vendor?.verified ? 'text-green-500' : 'text-gray-300'}">
-										{#if data.vendor?.verified}Yes{:else}No{/if}
-									</span>
+									<p
+										class="flex items-center gap-1 
+										{data.vendor?.verified ? 'text-green-500' : 'text-gray-300'}">
+										{#if data.vendor?.verified}
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												viewBox="0 0 20 20"
+												fill="currentColor"
+												class="w-5 h-5">
+												<path
+													fill-rule="evenodd"
+													d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+													clip-rule="evenodd"></path>
+											</svg>
+
+											<span> Yes </span>
+										{:else}
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												viewBox="0 0 20 20"
+												fill="currentColor"
+												class="w-5 h-5">
+												<path
+													fill-rule="evenodd"
+													d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+													clip-rule="evenodd"></path>
+											</svg>
+
+											<span> No </span>
+										{/if}
+									</p>
 								</li>
 
 								{#if data.vendor?.createdAt}
@@ -113,6 +133,8 @@ console.log('data', data)
 									{/if}
 								</div>
 							{/if} -->
+
+							<!-- social media links -->
 
 							<ul class="flex flex-wrap items-center gap-1">
 								<!-- Facebook -->
