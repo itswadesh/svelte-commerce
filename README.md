@@ -1,5 +1,3 @@
-## The elastic search is down. Hence you may receive product not found error. Trying to get it up as early as possible
-
 <a href="https://www.litekart.in/">
 <img src="https://github.com/itswadesh/sapper-ecommerce/blob/master/static/litekart-banner.png?raw=true" alt/>
 </a>
