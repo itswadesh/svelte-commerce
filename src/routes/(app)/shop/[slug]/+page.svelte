@@ -1,19 +1,18 @@
 <script>
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
-import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { toast } from '$lib/utils'
 import CategoriesMobile from '$lib/home/CategoriesMobile.svelte'
 import dayjs from 'dayjs'
+import Fuse from 'fuse.js'
 import Hero from '$lib/home/Hero.svelte'
 import HeroBanners from '$lib/home/HeroBanners.svelte'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import MobileFooter from '$lib/MobileFooter.svelte'
 import PickedBanners from '$lib/home/PickedBanners.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+import Textbox from '$lib/ui/Textbox.svelte'
 
 let today = dayjs(new Date()).toISOString()
 
@@ -88,10 +87,6 @@ let seoProps = {
 	twitterImage: { url: $page.data.store?.logo }
 }
 
-let loading = false
-let megamenu = []
-let showChild = []
-let showChild2 = []
 let bgColors = [
 	'bg-fuchsia-200',
 	'bg-blue-200',
@@ -106,6 +101,17 @@ let bgColors = [
 	'bg-yellow-200',
 	'bg-gray-200'
 ]
+let loading = false
+let megamenu = []
+let searchCategoryValue = null
+let showChild = []
+let showChild2 = []
+let megamenuResult = []
+
+const options = {
+	keys: ['name', 'children.name', 'children.children.name'], // Search name and children's names
+	threshold: 0.4 // Require at least 40% match score
+}
 
 onMount(() => {
 	getMegaMenu()
@@ -131,6 +137,8 @@ async function getMegaMenu() {
 				return e.name !== 'New Arrivals'
 			})
 
+			megamenuResult = megamenu
+
 			// console.log('megamenu', megamenu)
 		} catch (e) {
 			toast(e, 'error')
@@ -139,6 +147,24 @@ async function getMegaMenu() {
 	}
 
 	loading = false
+}
+
+function searchCategories() {
+	// console.log('searchCategoryValue', searchCategoryValue)
+
+	const fuse = new Fuse(megamenu, options)
+
+	megamenuResult = fuse.search(searchCategoryValue)
+
+	megamenuResult = megamenuResult.map((m) => {
+		return m.item
+	})
+
+	if (!megamenuResult.length) {
+		megamenuResult = megamenu
+	}
+
+	// console.log('megamenuResult', megamenuResult)
 }
 
 function toggle(mx) {
@@ -224,17 +250,27 @@ function toggle2(cx) {
 			{/if}
 		{/await}
 
-		{#if megamenu.length}
+		{#if megamenuResult.length}
 			<div class="mt-5 sm:mt-10">
 				<h2
 					class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
 					Categories
 				</h2>
 
+				<div class="px-3 sm:px-10 mb-5 sm:mb-10">
+					<div class="w-full max-w-md mx-auto">
+						<Textbox
+							type="text"
+							bind:value="{searchCategoryValue}"
+							placeholder="Search category..."
+							on:input="{searchCategories}" />
+					</div>
+				</div>
+
 				<!-- 1st level categories -->
 
 				<ul class="flex flex-col divide-y-2 divide-white tracking-wider text-center">
-					{#each megamenu as m, mx}
+					{#each megamenuResult as m, mx}
 						{#if m}
 							<li>
 								{#if m.children?.length}
