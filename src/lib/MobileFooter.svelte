@@ -8,11 +8,11 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 
-let selectedItem = {}
+let selectedItem: any = {}
 $: selectedItem.link = $page?.url.pathname
 
 let footerItems = [
@@ -70,7 +70,7 @@ let footerItems = [
 	}
 ]
 
-function handleClick(item) {
+function handleClick(item: any) {
 	goto(item.link)
 	selectedItem = item
 }
@@ -83,7 +83,7 @@ function handleClick(item) {
 		<button
 			type="button"
 			class="col-span-1 flex flex-col items-center justify-center overflow-hidden focus:outline-none
-            {selectedItem.link === item.link ? 'text-primary-500' : 'text-gray-700'}"
+            {selectedItem.link === item.link ? 'text-primary-500' : 'text-zinc-800'}"
 			on:click="{() => handleClick(item)}">
 			<div>
 				{#if selectedItem.link === item.link}

@@ -26,7 +26,7 @@ function submit() {
 </script>
 
 {#if cart}
-	<section class="my-5 border-t  border-gray-200 py-5">
+	<section class="my-5 border-t  border-zinc-200 py-5">
 		<h5 class="text-xl font-bold capitalize tracking-wide">
 			<span>Price Summary</span>
 
@@ -36,7 +36,7 @@ function submit() {
 			</span>
 		</h5>
 
-		<h6 class="mt-1 text-xs tracking-wider text-gray-400">Includes all government taxes</h6>
+		<h6 class="mt-1 text-xs tracking-wider text-zinc-400">Includes all government taxes</h6>
 
 		<div class="mt-3">
 			<div class="mt-2 flex items-center justify-between font-medium">
@@ -87,13 +87,13 @@ function submit() {
 				</h4>
 			</div>
 
-			<!-- <p class="d mt-1 text-xs tracking-wider text-gray-400">
+			<!-- <p class="d mt-1 text-xs tracking-wider text-zinc-400">
 				Free shipping on orders of ₹999 or more. For first purchase,
 				<a href="##" aria-label="Click to see all available offers" class="underline hover:text-primary-500">See Offer</a>
 			</p> -->
 		</div>
 
-		<hr class="my-5 border-t border-dashed border-gray-200" />
+		<hr class="my-5 border-t border-dashed border-zinc-200" />
 
 		{#if cart.subtotal}
 			<div class="my-2 mb-5 flex items-center justify-between text-lg font-bold ">

@@ -6,15 +6,13 @@
 
 <script>
 import { browser } from '$app/environment'
-import { constructURL2, toast } from '$lib/util'
+import { constructURL2 } from '$lib/utils'
 import { goto } from '$app/navigation'
 import BlogPostGrid from './_BlogPostGrid.svelte'
 import Pagination from '$lib/components/Pagination.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
-
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 function scrollToTop() {
 	if (browser) {
@@ -28,7 +26,7 @@ function scrollToTop() {
 
 function changePage(e, p) {
 	let fl = { ...data.query }
-	delete fl.page
+	delete fl?.page
 	const url = constructURL2('/stores', fl)
 	let page = parseInt(e.detail || 1)
 	goto(`${url}page=${page}`)
@@ -83,7 +81,7 @@ const seoProps = {
 	<main class="min-h-screen">
 		<div class="gray-pattern mb-5 border-b shadow-md sm:mb-10">
 			<div class="container mx-auto p-4 md:p-10">
-				<h1 class="font-hairline my-2 items-center text-xl text-gray-700">
+				<h1 class="font-hairline my-2 items-center text-xl text-zinc-800">
 					<span class="text-3xl font-bold">{data.blogs?.length}</span>
 
 					<span>awesome collection articles</span>

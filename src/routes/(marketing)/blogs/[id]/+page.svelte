@@ -46,7 +46,7 @@ let seoProps = {
 								</h6>
 							{/if}
 
-							<p class="text-gray-500">{date(data.blog.createdAt)}</p>
+							<p class="text-zinc-500">{date(data.blog.createdAt)}</p>
 						</div>
 					</div>
 				{/if}
@@ -57,7 +57,7 @@ let seoProps = {
 							<LazyImg
 								aspect_ratio="2x1"
 								height="200"
-								class="h-full w-full rounded-md object-contain object-top"
+								class="h-full w-full rounded object-contain object-top"
 								src="{data.blog?.img}"
 								alt="" />
 						</div>
@@ -71,7 +71,7 @@ let seoProps = {
 						<ul class="flex flex-wrap gap-2 sm:gap-4">
 							{#each data.blog?.tags as f}
 								<button
-									class="rounded-full border bg-gray-100 px-4 py-2 text-xs shadow hover:bg-gray-200">
+									class="rounded-full border bg-zinc-100 px-4 py-2 text-xs shadow hover:bg-zinc-200">
 									{f}
 								</button>
 							{/each}
@@ -92,7 +92,7 @@ let seoProps = {
 									aria-label="Click to route blog details page"
 									data-sveltekit-preload-data
 									class="group flex items-start gap-4 py-4">
-									<div class="h-16 w-24 overflow-hidden rounded-md border">
+									<div class="h-16 w-24 overflow-hidden rounded border">
 										{#if blog.img}
 											<LazyImg
 												src="{blog.img}"
@@ -107,8 +107,8 @@ let seoProps = {
 										{/if}
 									</div>
 
-									<div class="flex flex-1 flex-col gap-1 text-xs text-gray-400">
-										<h6 class="text-base font-semibold text-gray-800 group-hover:underline">
+									<div class="flex flex-1 flex-col gap-1 text-xs text-zinc-400">
+										<h6 class="text-base font-semibold text-zinc-800 group-hover:underline">
 											{blog.title}
 										</h6>
 
@@ -120,7 +120,7 @@ let seoProps = {
 															<a
 																href="/blog/{tag.slug}"
 																aria-label="{tag.name || '##'}"
-																class="block max-w-max rounded-md bg-gray-100 py-0.5 px-2 text-center text-xs font-semibold uppercase text-gray-500 transition duration-300 hover:bg-gray-300 hover:text-gray-800">
+																class="block max-w-max rounded bg-zinc-100 py-0.5 px-2 text-center text-xs font-semibold uppercase text-zinc-500 transition duration-300 hover:bg-zinc-200 hover:text-zinc-800">
 																{tag.name}
 															</a>
 														</li>

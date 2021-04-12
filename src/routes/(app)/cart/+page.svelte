@@ -155,9 +155,9 @@ async function getCoupons() {
 								Cart
 							</h1>
 
-							<div class="mx-3 h-1 w-1 rounded-full bg-gray-500"></div>
+							<div class="mx-3 h-1 w-1 rounded-full bg-zinc-500"></div>
 
-							<h4 class="tracking-tighter text-gray-500 sm:text-xl">
+							<h4 class="tracking-tighter text-zinc-500 sm:text-xl">
 								{data.cart?.qty || ''}
 
 								{#if data.cart?.qty > 1}
@@ -205,7 +205,7 @@ async function getCoupons() {
 														)}?tr=w-auto,h-256,cm-pad_resize&sharpen=true"
 														alt=""
 														width="128"
-														class="w-16 cursor-pointer rounded-md object-contain sm:w-32" />
+														class="w-16 cursor-pointer rounded object-contain sm:w-32" />
 												</a>
 
 												<div class="w-full flex-1">
@@ -213,7 +213,7 @@ async function getCoupons() {
 														<a
 															href="/product/{item?.slug}"
 															aria-label="Click to route product details"
-															class="cart-item flex-1 cursor-pointer text-base font-medium text-gray-600 hover:underline sm:text-lg">
+															class="cart-item flex-1 cursor-pointer text-base font-medium text-zinc-500 hover:underline sm:text-lg">
 															{item?.name}
 														</a>
 
@@ -234,7 +234,7 @@ async function getCoupons() {
 														</span>
 
 														{#if item?.mrp > item?.price}
-															<span class="whitespace-nowrap text-gray-600 line-through">
+															<span class="whitespace-nowrap text-zinc-500 line-through">
 																{item?.formattedItemAmount?.mrp}
 															</span>
 
@@ -272,7 +272,7 @@ async function getCoupons() {
 													)}?tr=w-auto,h-256,cm-pad_resize&sharpen=true"
 													alt=""
 													width="128"
-													class="w-16 cursor-pointer rounded-md object-contain sm:w-32" />
+													class="w-16 cursor-pointer rounded object-contain sm:w-32" />
 											{:else}
 												<img
 													src="{getCdnImageUrl(
@@ -280,7 +280,7 @@ async function getCoupons() {
 													)}?tr=w-auto,h-256,cm-pad_resize&sharpen=true"
 													alt=""
 													width="128"
-													class="w-16 cursor-pointer rounded-md object-contain sm:w-32" />
+													class="w-16 cursor-pointer rounded object-contain sm:w-32" />
 											{/if}
 										</a>
 
@@ -289,7 +289,7 @@ async function getCoupons() {
 												<a
 													href="/product/{item?.slug}"
 													aria-label="Click to route product details"
-													class="flex-1 cursor-pointer text-base font-medium text-gray-600 hover:underline sm:text-lg">
+													class="flex-1 cursor-pointer text-base font-medium text-zinc-500 hover:underline sm:text-lg">
 													{item?.name}
 												</a>
 
@@ -310,7 +310,7 @@ async function getCoupons() {
 												</span>
 
 												{#if item?.mrp > item?.price}
-													<span class="whitespace-nowrap text-gray-600 line-through">
+													<span class="whitespace-nowrap text-zinc-500 line-through">
 														{item?.formattedItemAmount?.mrp}
 													</span>
 
@@ -355,7 +355,7 @@ async function getCoupons() {
 																customizedImg: item.customizedImg,
 																ix: ix
 															})}"
-														class="flex h-6 w-6 transform items-center justify-center rounded-full bg-gray-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8 
+														class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8 
 														{loading[ix]
 															? 'cursor-not-allowed opacity-80'
 															: 'cursor-pointer hover:opacity-80 active:scale-95'}">
@@ -365,7 +365,7 @@ async function getCoupons() {
 															viewBox="0 0 24 24"
 															stroke-width="1.5"
 															stroke="currentColor"
-															class="w-4 h-4 text-gray-500">
+															class="w-4 h-4 text-zinc-500">
 															<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15"
 															></path>
 														</svg>
@@ -397,7 +397,7 @@ async function getCoupons() {
 																customizedImg: item.customizedImg,
 																ix: ix
 															})}"
-														class="flex h-6 w-6 transform items-center justify-center rounded-full bg-gray-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8 
+														class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8 
 														{loading[ix]
 															? 'cursor-not-allowed opacity-80'
 															: 'cursor-pointer hover:opacity-80 active:scale-95'}">
@@ -407,7 +407,7 @@ async function getCoupons() {
 															viewBox="0 0 24 24"
 															stroke-width="1.5"
 															stroke="currentColor"
-															class="w-4 h-4 text-gray-500">
+															class="w-4 h-4 text-zinc-500">
 															<path
 																stroke-linecap="round"
 																stroke-linejoin="round"
@@ -429,7 +429,7 @@ async function getCoupons() {
 															ix: ix,
 															loadingType: 'delete'
 														})}"
-													class="flex h-6 w-6 transform items-center justify-center rounded-full bg-gray-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8 
+													class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8 
 														{loading[ix]
 														? 'cursor-not-allowed opacity-80'
 														: 'cursor-pointer hover:opacity-80 active:scale-95'}">
@@ -460,7 +460,7 @@ async function getCoupons() {
 															viewBox="0 0 24 24"
 															stroke-width="1.5"
 															stroke="currentColor"
-															class="w-4 h-4 text-gray-500">
+															class="w-4 h-4 text-zinc-500">
 															<path
 																stroke-linecap="round"
 																stroke-linejoin="round"
@@ -496,7 +496,7 @@ async function getCoupons() {
 								class="w-16 font-bold text-primary-500 focus:outline-none hover:text-primary-700"
 								on:click="{removeCouponCode}">
 								{#if loadingRemoveCoupon}
-									<span class="text-center text-gray-500"> ... </span>
+									<span class="text-center text-zinc-500"> ... </span>
 								{:else}
 									<span class="text-right hover:underline"> Remove </span>
 								{/if}
@@ -542,12 +542,12 @@ async function getCoupons() {
 						<div class="h-full w-full overflow-y-auto">
 							<div class="relative w-full sm:w-[25rem]">
 								<div
-									class="flex items-center justify-between gap-5 border-b border-gray-300 p-4 sm:gap-10">
+									class="flex items-center justify-between gap-5 border-b border-zinc-200 p-4 sm:gap-10">
 									<h2 class="text-lg font-bold">Apply Promo Code</h2>
 
 									<button
 										type="button"
-										class="transform cursor-pointer text-gray-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-gray-700"
+										class="transform cursor-pointer text-zinc-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-zinc-800"
 										on:click="{() => (openApplyPromoCodeModal = false)}">
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
@@ -640,7 +640,7 @@ async function getCoupons() {
 											{/each}
 										</ul>
 									{:else}
-										<div class="p-5 text-center text-sm text-gray-500">
+										<div class="p-5 text-center text-sm text-zinc-500">
 											Opps! No coupon available right now<br /> Try again later.
 										</div>
 									{/if}

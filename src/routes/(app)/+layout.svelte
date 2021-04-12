@@ -36,9 +36,9 @@ let showCartSidebar = false
 				<div class="flex h-[91.5vh] w-full items-center justify-center bg-primary-50 p-5 sm:p-10">
 					<div class="rounded-3xl border-8 border-primary-200 bg-white p-5 shadow-2xl sm:p-10">
 						<div class="flex items-center justify-between">
-							<div class="h-4 w-4 rounded-full bg-gray-500"></div>
+							<div class="h-4 w-4 rounded-full bg-zinc-500"></div>
 
-							<div class="h-4 w-4 rounded-full bg-gray-500"></div>
+							<div class="h-4 w-4 rounded-full bg-zinc-500"></div>
 						</div>
 
 						<div class="flex flex-col gap-5 p-5 text-center tracking-wider sm:gap-10 sm:p-10">
@@ -46,7 +46,7 @@ let showCartSidebar = false
 								Closed
 							</h1>
 
-							<p class="font-semibold text-gray-500 sm:text-xl">
+							<p class="font-semibold text-zinc-500 sm:text-xl">
 								{$page.data.store?.closedMessage || `Sorry we're closed for the day`}
 							</p>
 						</div>

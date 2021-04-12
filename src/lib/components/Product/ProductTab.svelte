@@ -1,9 +1,11 @@
-<script>
+<script lang="ts">
+import type { Product } from '$lib/types'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import ProductCard from '$lib/ProductCard.svelte'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
-import { fetchProducts } from '$lib/services/ProductService'
+import { provider } from '$lib/config'
+import { ProductService } from '$lib/services'
 
 let name = 'Product Tab'
 let allCoreCategories = [
@@ -27,12 +29,15 @@ let allCoreCategories = [
 
 let selectedCategory = 'new'
 let loading = false
-let products = []
+let products: Product[] = []
 
 onMount(async () => {
 	try {
 		loading = true
-		products = await fetchProducts({ origin: $page?.data?.origin, storeId: $page?.data?.store?.id })
+		products = await ProductService.fetchProducts({
+			origin: $page?.data?.origin,
+			storeId: $page?.data?.store?.id
+		})
 	} catch (e) {
 	} finally {
 		loading = false
@@ -41,7 +46,7 @@ onMount(async () => {
 	filterProducts('new')
 })
 
-function filterProducts(selectedCategory) {
+function filterProducts(selectedCategory: string) {
 	products = products?.filter((p) => {
 		// return p.tags?.name === selectedCategory
 		return p.new
@@ -53,11 +58,11 @@ function filterProducts(selectedCategory) {
 
 <div>
 	<div
-		class="mb-5 flex flex-wrap items-center justify-between gap-5 border-b-2 border-gray-200 p-3 py-5 pb-2 sm:mb-10 sm:px-10">
+		class="mb-5 flex flex-wrap items-center justify-between gap-5 border-b-2 border-zinc-200 p-3 py-5 pb-2 sm:mb-10 sm:px-10">
 		<h2 class="text-xl font-bold uppercase sm:text-2xl">Bracelets & Bangles</h2>
 
 		<ul
-			class="hidden max-w-max flex-wrap divide-x divide-gray-500 text-sm font-semibold uppercase leading-4 md:flex">
+			class="hidden max-w-max flex-wrap divide-x divide-zinc-500 text-sm font-semibold uppercase leading-4 md:flex">
 			{#each allCoreCategories as c}
 				<li class="relative">
 					<label
@@ -72,7 +77,7 @@ function filterProducts(selectedCategory) {
 							value="{c.value}"
 							on:click="{() => filterProducts(c.value)}" />
 
-						<span class="{selectedCategory === c.value ? 'text-gray-800' : 'text-gray-500'}">
+						<span class="{selectedCategory === c.value ? 'text-zinc-800' : 'text-zinc-500'}">
 							{c.title}
 						</span>
 					</label>
@@ -80,7 +85,7 @@ function filterProducts(selectedCategory) {
 					<div class="absolute inset-x-0 -bottom-5 hidden items-center justify-center sm:flex">
 						<div class="{selectedCategory === c.value ? 'opacity-100' : 'opacity-0'}">
 							<div class="inline-block w-6 overflow-hidden">
-								<div class="h-3 w-3 origin-bottom-left rotate-45 transform bg-gray-200"></div>
+								<div class="h-3 w-3 origin-bottom-left rotate-45 transform bg-zinc-200"></div>
 							</div>
 						</div>
 					</div>
@@ -94,7 +99,7 @@ function filterProducts(selectedCategory) {
 					<label
 						for="{c.value}"
 						class="flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap border p-2 px-3
-						{selectedCategory === c.value ? 'border-gray-800' : 'border-gray-500'}">
+						{selectedCategory === c.value ? 'border-zinc-800' : 'border-zinc-500'}">
 						<input
 							type="radio"
 							bind:group="{selectedCategory}"
@@ -104,7 +109,7 @@ function filterProducts(selectedCategory) {
 							value="{c.value}"
 							on:click="{() => filterProducts(c.value)}" />
 
-						<span class="{selectedCategory === c.value ? 'text-gray-800' : 'text-gray-500'}">
+						<span class="{selectedCategory === c.value ? 'text-zinc-800' : 'text-zinc-500'}">
 							{c.title}
 						</span>
 					</label>

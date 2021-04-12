@@ -145,7 +145,7 @@ async function loadStripeElements() {
 
 <section transition:fly="{{ y: 50, duration: 150 }}" class="flex flex-col gap-4">
 	{#if isStripeSelected && errorMessage.show}
-		<div class="rounded-md border border-red-500 bg-red-50 p-4 text-red-500 text-sm">
+		<div class="rounded border border-red-500 bg-red-50 p-4 text-red-500 text-sm">
 			{errorMessage.text}
 		</div>
 	{/if}
@@ -153,7 +153,7 @@ async function loadStripeElements() {
 	{#if stripeReady}
 		<form
 			on:submit|preventDefault="{submit}"
-			class="rounded-md border p-4 shadow-md flex flex-col gap-4
+			class="rounded border p-4 shadow-md flex flex-col gap-4
 			{isStripeSelected ? 'block' : 'hidden'}">
 			<script src="https://js.stripe.com/v3/"></script>
 
@@ -176,7 +176,7 @@ async function loadStripeElements() {
 			</PrimaryButton>
 		</form>
 	{:else}
-		<div class="rounded-md border border-yellow-500 bg-yellow-50 p-4 text-yellow-500 text-sm">
+		<div class="rounded border border-yellow-500 bg-yellow-50 p-4 text-yellow-500 text-sm">
 			Warn: Pleae wait...Stripe is getting ready .
 		</div>
 	{/if}

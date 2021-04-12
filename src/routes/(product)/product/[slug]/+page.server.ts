@@ -1,16 +1,18 @@
 import { error } from '@sveltejs/kit'
-import { fetchProduct } from '$lib/services/ProductService'
+import { ProductService } from '$lib/services'
 import type { Error, Product } from '$lib/types'
 
 export async function load({ params, parent, url, cookies, locals, request }) {
 	let zip = cookies.get('zip')
 	if (zip) zip = JSON.parse(zip)
-	const id = url.searchParams.get('id')
+
 	const { slug } = params
+	const id = url.searchParams.get('id')
+
 	let product: Product = {}
 
 	try {
-		product = await fetchProduct({
+		product = await ProductService.fetchProduct({
 			slug,
 			id,
 			server: true,

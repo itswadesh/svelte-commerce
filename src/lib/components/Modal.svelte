@@ -3,10 +3,6 @@
 	backdrop-filter: blur(12px);
 	background-color: hsla(0, 0%, 0%, 0.5);
 }
-
-.z-index {
-	z-index: 99999;
-}
 </style>
 
 <script>
@@ -21,11 +17,11 @@ export let show
 {#if show}
 	<div
 		transition:fly="{{ y: -400, duration: 500 }}"
-		class="z-index frosted-black fixed inset-0 flex h-screen w-screen items-center justify-center p-5 sm:p-10">
+		class="z-[100] frosted-black fixed inset-0 flex h-screen w-screen items-center justify-center p-5 sm:p-10">
 		<div class="container relative mx-auto max-w-max rounded-xl bg-white">
 			<button
 				type="button"
-				class="absolute top-4 right-4 z-10 transform text-gray-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-gray-700"
+				class="absolute top-4 right-4 z-10 transform text-zinc-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-zinc-800"
 				on:click="{() => dispatch('close')}">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
