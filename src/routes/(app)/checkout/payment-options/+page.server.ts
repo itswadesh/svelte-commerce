@@ -1,16 +1,22 @@
-import { error, redirect } from '@sveltejs/kit'
-import { getBySid, gett } from '$lib/utils'
-import razorpayIcon from '$lib/assets/razorpay-icon.jpg'
+import { redirect } from '@sveltejs/kit'
+import { AddressService, CartService, PaymentMethodService } from '$lib/services'
 
 export const prerender = false
 
 export async function load({ params, parent, locals, url, request, cookies }) {
 	const { me } = locals
+
 	if (!me) {
-		const redirectUrl = `${locals.data.loginUrl || '/auth/login'}?ref=${url?.pathname}`
+		const redirectUrl = `${locals.store?.loginUrl || '/auth/login'}?ref=${url?.pathname}`
 		throw redirect(307, redirectUrl)
 	}
-	const cartRes = await getBySid(`carts/refresh-cart?store=${locals.store?.id}`, cookies.get('sid'))
+
+	const cartRes: any = await CartService.fetchRefreshCart({
+		storeId: locals.store?.id,
+		server: true,
+		sid: cookies.get('connect.sid')
+	})
+
 	const cart = {
 		cartId: cartRes.cart_id,
 		items: cartRes.items,
@@ -26,59 +32,29 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 		unavailableItems: cartRes.unavailableItems,
 		formattedAmount: cartRes.formattedAmount
 	}
+
 	locals.cart = cart
+
 	try {
-		const addressId = url.searchParams.get('address')
+		const id = url.searchParams.get('address')
 
-		// const paymentMethods = [
-		// 	{
-		// 		active: true,
-		// 		name: 'Cash on Delivery',
-		// 		value: 'cod',
-		// 		img: 'https://cdn-icons-png.flaticon.com/512/2331/2331895.png',
-		// 		color: '',
-		// 		position: 1,
-		// 		key: '',
-		// 		text: 'Pay the full amount when item is delivered',
-		// 		type: 'cod'
-		// 	},
-		// 	{
-		// 		active: true,
-		// 		name: 'Online with Cashfree',
-		// 		value: 'cashfree',
-		// 		img: 'https://misiki.s3.ap-south-1.amazonaws.com/img/cashfree.jpg',
-		// 		color: '',
-		// 		position: 2,
-		// 		key: '',
-		// 		text: 'Pay the full amount with online / UPI / Wallets / Credit Cards / Debit Cards',
-		// 		type: 'pg'
-		// 	},
-		// 	{
-		// 		active: true,
-		// 		name: 'Online with Razorpay',
-		// 		value: 'razorpay',
-		// 		img: razorpayIcon,
-		// 		color: '',
-		// 		position: 3,
-		// 		key: '',
-		// 		text: 'Pay the full amount with online / UPI / Wallets / Credit Cards / Debit Cards',
-		// 		type: 'pg'
-		// 	}
-		// ]
+		const address = await AddressService.fetchAddress({
+			storeId: locals.store?.id,
+			server: true,
+			id,
+			sid: cookies.get('connect.sid')
+		})
 
-		const address = await gett(`addresses/${addressId}`, request.headers.get('cookie'))
-		const paymentMethods = (
-			await gett(`payment-methods?store=${locals.store?.id}`, request.headers.get('cookie'))
-		).data
+		const paymentMethods = await PaymentMethodService.fetchPaymentMethods({
+			storeId: locals.store.id,
+			server: true,
+			sid: cookies.get('connect.sid')
+		})
 
-		// if (paymentMethods) {
-
-		return { paymentMethods, address, addressId, me, cart }
-		// }
+		return { paymentMethods, address, addressId: id, me, cart }
 	} catch (e) {
 		if (e) {
 			throw redirect(307, '/checkout/address')
 		}
-		// throw error(e.status || 400, e?.message)
 	}
 }
