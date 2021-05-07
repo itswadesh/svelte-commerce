@@ -60,6 +60,3 @@ If required change `config/index.ts` according to your requirement
 - API calls
 - Skeletons
 - Responsive
-- filters: First, Date, Truncate, Currency
-- Generate production version files with css minified
-- PUT, POST, DELETE calls with Bearer Authorization
