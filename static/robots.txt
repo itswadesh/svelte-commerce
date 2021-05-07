@@ -1,4 +1,3 @@
+# https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Allow: /
-
-Sitemap: https://api.litekart.in/sitemap.xml
+Disallow:

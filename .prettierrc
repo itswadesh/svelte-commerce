@@ -1,10 +1,11 @@
 {
   "semi": false,
   "singleQuote": true,
-  "vetur.format.defaultFormatterOptions": {
-    "prettier": {
-      "singleQuote": true
-    }
-  },
-  "jsxSingleQuote": true
+  "svelteSortOrder": "options-styles-scripts-markup",
+  "svelteStrictMode": true,
+  "svelteBracketNewLine": false,
+  "svelteAllowShorthand": true,
+  "printWidth": 100,
+  "useTabs": true,
+  "svelteIndentScriptAndStyle": false
 }

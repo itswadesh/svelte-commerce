@@ -1,68 +1,48 @@
 <script>
-  import { lazyload } from '../../actions/lazyload'
-  import { currency } from './../../lib'
-  import { stores } from '@sapper/app'
-  const { session } = stores()
-  export let product = {}
+import ImageLoader from '$lib/Image/ImageLoader.svelte'
+import { CDN_URL } from './../../../config'
+export let p
 </script>
 
-<style>
-  @keyframes fadeInOpacity {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
-  .zoom {
-    transition: transform 0.7s;
-  }
-  .zoom:hover {
-    transform: scale(1.035);
-  }
-</style>
-
-<div class="flex justify-between w-1/2 p-2 lg:w-1/4 xl:w-1/5">
-  {#if product}
-    <a
-      href={'/' + product._source.slug + '?id=' + product._id}
-      rel="prefetch"
-      class="w-full">
-      <div>
-        {#if product._source.img}
-          <!-- for lazyloading to work src image needs to be low quality and should be about 3px by 3px 
-          data-src holds the high quality image -->
-          <img
-            use:lazyload
-            src={$session.settings.CDN_URL + product._source.img[0] + '?tr=w-3,h-2'}
-            data-src={$session.settings.CDN_URL + product._source.img[0] + '?tr=w-300,h-200'}
-            alt=""
-            class="w-full mb-3 zoom"
-            style="object-fit: contain; max-height:316px;" />
-        {/if}
-        <div class="p-1 text-start">
-          <div class="text-sm text-gray-900 lg:font-bold sm:font-normal">
-            {product._source.name}
-          </div>
-          <div class="text-gray-700">
-            {currency(product._source.specialPrice || product._source.price)}
-            <del>{currency(product._source.mrp)}</del>
-          </div>
-          <div class="text-sm font-thin text-black">
-            {product._source.color.name}
-          </div>
-          {#if product._source.keyFeatures}
-            <div class="text-sm font-thin text-black">
-              <ul>
-                {#each product._source.keyFeatures as f}
-                  <li>{f}</li>
-                {/each}
-              </ul>
-            </div>
-          {/if}
-        </div>
-      </div>
-    </a>
-  {/if}
-</div>
+{#if p}
+	<!-- 2nd product start  -->
+	<div class=" group">
+		<!-- Image section start  -->
+		<div class="bg-gray-200 rounded-lg">
+			<div class=" p-2 flex justify-between ">
+				<button
+					class="bg-white focus:outline-none px-2 hover:bg-gray-400 hover:text-white py-1 text-sm rounded-md font-semibold tracking-wide"
+					>NEW</button>
+				<button
+					class="bg-white focus:outline-none px-2 hover:bg-gray-400 py-1 text-sm  hover:text-white rounded-md font-semibold tracking-wide"
+					><svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-6 w-6"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+						></path>
+					</svg></button>
+			</div>
+			<div>
+				<img src="/addidas1.png" alt="" class="px-2 h-60 mx-auto" />
+			</div>
+		</div>
+		<!-- Image section end -->
+		<!-- Text section start  -->
+		<div class="mt-1 ">
+			<h2 class="font-semibold group-hover:underline">Addidas Originals</h2>
+			<h5 class="font-bold font-serif group-hover:underline">Have a good time...</h5>
+			<h5 class="text-sm font-semibold text-gray-400">$105.00</h5>
+			<h5 class="text-sm space-x-1  font-semibold text-gray-400">
+				<span>8.5</span> <span>9</span> <span>10</span>
+			</h5>
+		</div>
+	</div>
+	<!-- 2nd product end  -->
+{/if}
