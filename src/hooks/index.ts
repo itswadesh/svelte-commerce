@@ -15,6 +15,19 @@ export const handle: Handle = async ({ request, render }) => {
 	}
 	// me(token)
 	try {
+		const settings = (await get('settings')).data || {}
+		request.locals.settings = settings
+	} catch (e) {
+		request.locals.settings = {}
+	}
+	try {
+		let categories = (await get('categories/megamenu')).data || []
+		console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', categories)
+		request.locals.categories = categories
+	} catch (err) {
+		request.locals.categories = {}
+	}
+	try {
 		const user = (await get('users/me', null, token)) || { guest: true }
 		request.locals.user = user
 	} catch (e) {
@@ -35,11 +48,12 @@ export const handle: Handle = async ({ request, render }) => {
 }
 
 export function getSession({ locals }) {
-	const { user, token, cart } = locals
-	// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', user, cart)
+	const { user, token, categories, settings } = locals
 	return {
 		user,
 		token,
+		categories,
+		settings,
 		DEBUG_MODE: import.meta.env.VITE_DEBUG_MODE,
 	}
 }

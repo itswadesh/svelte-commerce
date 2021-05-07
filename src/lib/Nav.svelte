@@ -17,7 +17,6 @@ import { session } from '$app/stores'
 import Cookies from 'universal-cookie'
 const cookies = new Cookies()
 import { spring } from 'svelte/motion'
-
 import { cart } from '../../store/cart'
 export let section
 
@@ -50,36 +49,13 @@ async function logout() {
 	</a>
 	<div
 		class="flex items-center justify-center w-full ml-8 text-sm font-semibold tracking-wide uppercase xl:ml-10">
-		<a
-			href="{`/search?search=men`}"
-			class="mx-2 transform cursor-pointer hover:scale-95 whitespace-nowrap xl:mx-5">
-			men
-		</a>
-		<a
-			href="{`/search?search=women`}"
-			class="mx-2 transform cursor-pointer hover:scale-95 whitespace-nowrap xl:mx-5">
-			women
-		</a>
-		<a
-			href="{`/search?search=kids`}"
-			class="mx-2 transform cursor-pointer hover:scale-95 whitespace-nowrap xl:mx-5">
-			kids
-		</a>
-		<a
-			href="{`/search?search=indie`}"
-			class="mx-2 transform cursor-pointer hover:scale-95 whitespace-nowrap xl:mx-5">
-			indie
-		</a>
-		<a
-			href="{`/search?q=home & kitchen`}"
-			class="mx-2 transform cursor-pointer hover:scale-95 whitespace-nowrap xl:mx-5">
-			home & kitchen
-		</a>
-		<a
-			href="{`/search?search=new arrivals`}"
-			class="mx-2 transform cursor-pointer hover:scale-95 whitespace-nowrap xl:mx-5">
-			new arrivals
-		</a>
+		{#each $session.categories as c}
+			<a
+				href="{`/search?page=1`}"
+				class="mx-2 transform cursor-pointer hover:scale-95 whitespace-nowrap xl:mx-5">
+				{c.name}
+			</a>
+		{/each}
 	</div>
 	<div class="w-1/2 mx-5">
 		<label class="relative flex items-center">
