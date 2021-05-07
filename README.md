@@ -2,22 +2,6 @@
 <img src="https://github.com/itswadesh/sapper-ecommerce/blob/master/static/litekart-banner.png?raw=true" alt/>
 </a>
 
-On sapper/svelte version bump do the following else it will show error while navigating on home page with carousel
-
-Whos knows whether this will work out of the box!
-
-`node_modules/svelte/internal/index.mjs`
-
-https://github.com/sveltejs/svelte/issues/2086
-
-```
-function detach(node) {
-    if(node.parentNode){
-        node.parentNode.removeChild(node);
-    }
-}
-```
-
 # Svelte Commerce - Attach Svelte store front to any ecommerce API (e.g. <a href="https://www.litekart.in/"> Litekart</a>, <a href="https://magento.com/">Magento</a>, <a href="https://www.moltin.com/">Moltin</a>, <a href="https://www.shopify.com/">Shopify</a> ...)
 
 ![version](https://img.shields.io/badge/node-v12.x-blue.svg)
@@ -26,8 +10,8 @@ function detach(node) {
 <a href="https://codenx.slack.com" target="blank">![Branch Develop](https://img.shields.io/badge/community%20chat-slack-FF1493.svg)</a>
 
 |                                                                                                                     |                                                                                                                  |                                                                                                                  |
-| ------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| ![Home Page](https://github.com/itswadesh/sapper-ecommerce/blob/master/static/screenshots/home.png?raw=true)        | ![Detail Page](https://github.com/itswadesh/sapper-ecommerce/blob/master/static/screenshots/detail.png?raw=true) | ![Search Page](https://github.com/itswadesh/sapper-ecommerce/blob/master/static/screenshots/search.png?raw=true) |  |
+| ------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --- |
+| ![Home Page](https://github.com/itswadesh/sapper-ecommerce/blob/master/static/screenshots/home.png?raw=true)        | ![Detail Page](https://github.com/itswadesh/sapper-ecommerce/blob/master/static/screenshots/detail.png?raw=true) | ![Search Page](https://github.com/itswadesh/sapper-ecommerce/blob/master/static/screenshots/search.png?raw=true) |     |
 | ![Empty Cart](https://github.com/itswadesh/sapper-ecommerce/blob/master/static/screenshots/empty-cart.png?raw=true) | ![Login Page](https://github.com/itswadesh/sapper-ecommerce/blob/master/static/screenshots/login.png?raw=true)   | ![Filters](https://github.com/itswadesh/sapper-ecommerce/blob/master/static/screenshots/filters.png?raw=true)    |
 |                                                                                                                     |                                                                                                                  |                                                                                                                  |
 
@@ -55,8 +39,8 @@ function detach(node) {
 Install - [NodeJS](https://nodejs.org/en/) - [Yarn](https://yarnpkg.com/en/) - [Git](https://git-scm.com/)
 
 ```
-git clone https://github.com/itswadesh/sapper-ecommerce.git
-cd sapper-ecommerce
+git clone https://github.com/itswadesh/svelte-commerce.git
+cd svelte-commerce
 yarn
 yarn dev
 ```
@@ -69,7 +53,7 @@ Open http://localhost:4400 on chrome. Your app should be live
 
 ### Deploy to Netlify
 
-<a href="https://app.netlify.com/start/deploy?repository=https://github.com/itswadesh/sapper-ecommerce"><img src="https://www.netlify.com/img/deploy/button.svg" alt="Deploy to Netlify"></a>
+<a href="https://app.netlify.com/start/deploy?repository=https://github.com/itswadesh/svelte-commerce"><img src="https://www.netlify.com/img/deploy/button.svg" alt="Deploy to Netlify"></a>
 
 ### Setup devops/live.js (Change according to your hosting envirnoment)
 
