@@ -14,12 +14,12 @@
 </style>
 
 <script>
-import { currency, dateOnly, toast } from '$lib/utils'
+import { currency, dateOnly, generatePriceRange, toast } from '$lib/utils'
 import { fade } from 'svelte/transition'
-import { ProductService } from '$lib/services'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import { ProductService } from '$lib/services'
 import { sorts } from '$lib/config'
 import CatelogNav from '$lib/CatelogNav.svelte'
 import DesktopFilter from '$lib/components/DesktopFilter.svelte'
@@ -103,18 +103,29 @@ let seoProps = {
 	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
 	slug: `${data.category?.slug}`,
 	// timeToRead: 0,
-	title: `${data.category?.name}`,
+	title: `${data.category?.name || 'Buy online in - ' + $page.data.store?.websiteName}`,
 	twitterImage: { url: `${data.category?.img}` }
 }
 
 let currentPage = 1
 let hidden = true
+let priceRange = []
 let reachedLast = false
 let selectedFilter
 let showFilter = false
 let showOnPx = 600
 let showSort = false
 let y
+
+if (
+	data.products.facets.all_aggs?.price_stats?.max > 0 &&
+	data.products.facets.all_aggs?.price_stats?.min >= 0
+) {
+	priceRange = generatePriceRange(
+		data.products.facets.all_aggs?.price_stats,
+		data.store.currencySymbol
+	)
+}
 
 $: innerWidth = 0
 
@@ -176,7 +187,7 @@ async function loadNextPage() {
 			const nextPageData = res.nextPageData
 			data.products = data?.products?.concat(nextPageData)
 			data.count = res?.count
-			data.facets = res?.facets
+			data.products.facets = res?.facets
 			data.err = !res?.estimatedTotalHits ? 'No result Not Found' : null
 			currentPage = currentPage + 1
 
@@ -213,6 +224,7 @@ onMount(() => {
 	if (loadMoreDiv && !$page?.data?.isDesktop) {
 		observer.observe(loadMoreDiv)
 	}
+
 	// const intersectionObserver = new IntersectionObserver((entries) => {
 	// 	if (entries[0].intersectionRatio <= 0) return
 	// 	// load more content;
@@ -305,12 +317,14 @@ function handleFilterTags() {
 
 <CatelogNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page?.data?.store}">
 	<div class="flex max-w-max flex-col items-start gap-1">
-		<h2 class="w-28 truncate font-semibold capitalize leading-4">{data.category?.name || ''}</h2>
+		{#if data.category?.name}
+			<h2 class="w-28 truncate font-semibold capitalize leading-4">{data.category?.name}</h2>
+		{/if}
 
 		<p class="text-xs">
-			{#if data.count}
+			{#if data.products?.count}
 				<b>
-					{data.count}
+					{data.products?.count}
 				</b>
 
 				Items
@@ -324,15 +338,15 @@ function handleFilterTags() {
 <div class="h-full min-h-screen">
 	<!-- Style tags -->
 
-	{#if data.styleTags?.length}
+	{#if data.products.facets.all_aggs?.materials?.all?.buckets?.length}
 		<div
 			class="lg:hidden h-12 flex items-center justify-start px-3 sm:px-10 w-screen overflow-x-auto scrollbar-none fixed top-14 sm:top-20 bg-white z-40 shadow-md">
 			<div class="inline-flex gap-2">
-				{#each data.styleTags || [] as t}
+				{#each data.products.facets.all_aggs?.materials?.all?.buckets || [] as t}
 					{#if t?.key}
 						<button
 							class="whitespace-nowrap block rounded-full border py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none
-											{$page.url.searchParams.get('tags')?.includes(t?.key)
+											{$page.url.searchParams.get('styleTags')?.includes(t?.key)
 								? 'bg-primary-500 border-primary-500 text-white'
 								: 'bg-white hover:border-primary-500 hover:text-primary-500'}"
 							on:click="{() => goCheckbox(t?.key)}">
@@ -363,15 +377,15 @@ function handleFilterTags() {
 				></path>
 			</svg>
 
-			<span class="flex-1">{data.products?.length} / {data.count}</span>
+			<span class="flex-1">{data.products?.products?.length} / {data.products?.count}</span>
 		</button>
 	{/if}
 
 	<div class="mb-10 flex flex-col items-start sm:mb-20 lg:flex-row lg:gap-10 lg:p-10">
-		{#if data.facets}
+		{#if data.products.facets}
 			<DesktopFilter
-				facets="{data.facets}"
-				priceRange="{data.priceRange}"
+				facets="{data.products.facets}"
+				priceRange="{priceRange}"
 				query="{data.query}"
 				class="sticky top-24 hidden lg:block"
 				on:clearAll="{refreshData}" />
@@ -379,8 +393,8 @@ function handleFilterTags() {
 			<MobileFilter
 				bind:showFilter="{showFilter}"
 				bind:showSort="{showSort}"
-				facets="{data.facets}"
-				priceRange="{data.priceRange}"
+				facets="{data.products.facets}"
+				priceRange="{priceRange}"
 				selected="{selectedFilter}"
 				class="fixed bottom-0 border-t z-40 block lg:hidden"
 				on:clearAll="{refreshData}" />
@@ -388,159 +402,156 @@ function handleFilterTags() {
 
 		<div
 			class="w-full flex-1 sm:px-10 sm:pt-10 lg:pt-0 lg:px-0
-			{data.styleTags?.length ? 'mt-12 lg:mt-0' : 'mt-0'}">
-			{#if data.products?.length}
-				<div class="flex flex-col gap-5">
-					<div class="hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex">
-						<!-- Name and count -->
+			{data.products.facets.all_aggs?.materials?.all?.buckets?.length ? 'mt-12 lg:mt-0' : 'mt-0'}">
+			<div class="flex flex-col gap-5">
+				<div class="hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex">
+					<!-- Name and count -->
 
-						<h1 class="flex flex-wrap items-center gap-2">
-							{#if data.category?.name}
-								<span class="text-xl font-bold capitalize md:text-2xl">
-									{data.category?.name}
-								</span>
+					<h1 class="flex flex-wrap items-center gap-2">
+						{#if data.category?.name}
+							<span class="text-xl font-bold capitalize md:text-2xl"> {data.category?.name} </span>
 
-								-
-							{/if}
+							-
+						{/if}
 
-							<span>
-								<span class="font-bold text-2xl">
-									{data.count}
-								</span>
-
-								Items
+						<span>
+							<span class="font-bold text-2xl">
+								{data.products.count}
 							</span>
-						</h1>
 
-						<!-- Sort -->
+							Items
+						</span>
+					</h1>
 
-						<div class="flex flex-wrap items-center justify-between">
-							<label class="flex items-center gap-2">
-								<span>Sort : </span>
+					<!-- Sort -->
 
-								<select
-									bind:value="{data.sort}"
-									class="max-w-max border-b bg-transparent py-1 pr-2 font-semibold focus:border-primary-500 focus:outline-none hover:border-primary-500"
-									on:change="{() => sortNow(data.sort)}">
-									{#each sorts as s}
-										<option value="{s.val}">{s.name}</option>
-									{/each}
-								</select>
-							</label>
-						</div>
+					<div class="flex flex-wrap items-center justify-between">
+						<label class="flex items-center gap-2">
+							<span>Sort : </span>
+
+							<select
+								bind:value="{data.sort}"
+								class="max-w-max border-b bg-transparent py-1 pr-2 font-semibold focus:border-primary-500 focus:outline-none hover:border-primary-500"
+								on:change="{() => sortNow(data.sort)}">
+								{#each sorts as s}
+									<option value="{s.val}">{s.name}</option>
+								{/each}
+							</select>
+						</label>
 					</div>
+				</div>
 
-					<!-- Style tags -->
+				<!-- Style tags -->
 
-					{#if data.styleTags?.length}
-						<div class="hidden lg:flex flex-wrap items-center gap-2">
-							{#each data.styleTags || [] as t}
-								{#if t?.key}
-									<button
-										class="whitespace-nowrap block rounded-full border py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none
-											{$page.url.searchParams.get('tags')?.includes(t?.key)
-											? 'bg-primary-500 border-primary-500 text-white'
-											: 'bg-white hover:border-primary-500 hover:text-primary-500'}"
-										on:click="{() => goCheckbox(t?.key)}">
-										{t?.key}
-									</button>
-								{/if}
-							{/each}
-						</div>
-					{/if}
+				{#if data.products.facets.all_aggs?.materials?.all?.buckets?.length}
+					<div class="hidden lg:flex flex-wrap items-center gap-2">
+						{#each data.products.facets.all_aggs?.materials?.all?.buckets || [] as t}
+							{#if t?.key}
+								<button
+									class="whitespace-nowrap block rounded-full border py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none
+											{$page.url.searchParams.get('styleTags')?.includes(t?.key)
+										? 'bg-primary-500 border-primary-500 text-white'
+										: 'bg-white hover:border-primary-500 hover:text-primary-500'}"
+									on:click="{() => goCheckbox(t?.key)}">
+									{t?.key}
+								</button>
+							{/if}
+						{/each}
+					</div>
+				{/if}
 
-					<!-- Category top description -->
+				<!-- Category top description -->
 
-					{#if data.category?.topDescription && data.category?.topDescription?.length > 11}
-						<div class="prose prose-sm max-w-none px-3 text-justify sm:px-0">
-							{@html data.category?.topDescription}
-						</div>
-					{/if}
+				{#if data.category?.topDescription && data.category?.topDescription?.length > 11}
+					<div class="prose prose-sm max-w-none px-3 text-justify sm:px-0">
+						{@html data.category?.topDescription}
+					</div>
+				{/if}
+			</div>
 
-					<!-- Products -->
+			<!-- Products -->
 
-					<ul
-						class="grid grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6">
-						{#each data.products as p, ix}
-							<li>
-								<ProductCard product="{p}" />
-							</li>
+			{#if data.products?.products?.length}
+				<ul
+					class="lg:mt-5 grid grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6">
+					{#each data.products?.products as p, ix}
+						<li>
+							<ProductCard product="{p}" />
+						</li>
 
-							<!-- Filter by tags -->
+						<!-- Filter by tags -->
 
-							{#if ix % 40 === 39 && data.facets.all_aggs.tags?.all?.buckets?.length}
-								<div
-									class="col-span-2 block sm:hidden overflow-x-auto bg-primary-100 scrollbar-none">
-									<div class="w-full flex items-center gap-6 p-4">
-										<div class="shrink-0">
-											<span class="text-lg text-zinc-500">Filter by</span>
+						{#if ix % 40 === 39 && data.products.facets.all_aggs.tags?.all?.buckets?.length}
+							<div class="col-span-2 block sm:hidden overflow-x-auto bg-primary-100 scrollbar-none">
+								<div class="w-full flex items-center gap-6 p-4">
+									<div class="shrink-0">
+										<span class="text-lg text-zinc-500">Filter by</span>
 
-											<br />
+										<br />
 
-											<span class="text-2xl font-bold">Tags</span>
-										</div>
+										<span class="text-2xl font-bold">Tags</span>
+									</div>
 
-										<ul class="flex max-w-[40rem] shrink-0 flex-wrap gap-2">
-											{#each data.facets.all_aggs.tags.all.buckets || [] as t, tx}
-												{#if t && tx < 12}
-													<button
-														type="button"
-														class="capitalizefocus:outline-none max-w-max rounded bg-white py-2 px-4 text-sm font-semibold"
-														on:click="{() => goCheckbox(t.key)}">
-														{t.key}
-													</button>
-												{/if}
-											{/each}
-
-											{#if data.facets.all_aggs.tags.all.buckets?.length - 12 > 0}
+									<ul class="flex max-w-[40rem] shrink-0 flex-wrap gap-2">
+										{#each data.products.facets.all_aggs.tags.all.buckets || [] as t, tx}
+											{#if t && tx < 12}
 												<button
 													type="button"
-													class="font-semibold text-sm text-primary-500 focus:outline-none"
-													on:click="{handleFilterTags}">
-													+{data.facets.all_aggs.tags.all.buckets?.length - 12} more
+													class="capitalizefocus:outline-none max-w-max rounded bg-white py-2 px-4 text-sm font-semibold"
+													on:click="{() => goCheckbox(t.key)}">
+													{t.key}
 												</button>
 											{/if}
-										</ul>
-									</div>
+										{/each}
+
+										{#if data.products.facets.all_aggs.tags.all.buckets?.length - 12 > 0}
+											<button
+												type="button"
+												class="font-semibold text-sm text-primary-500 focus:outline-none"
+												on:click="{handleFilterTags}">
+												+{data.products.facets.all_aggs.tags.all.buckets?.length - 12} more
+											</button>
+										{/if}
+									</ul>
 								</div>
-							{/if}
-						{/each}
-
-						{#each { length: 7 } as _}
-							<li class="hidden sm:block">
-								<DummyProductCard />
-							</li>
-						{/each}
-					</ul>
-
-					{#if !$page?.data?.isDesktop}
-						<!-- <div class="more"> -->
-						<div bind:this="{loadMoreDiv}">
-							<!-- Dot loading gif -->
-							{#if data.isLoading}
-								<div class="flex items-center justify-center p-6">
-									<img
-										src="{dotsLoading}"
-										alt="loading"
-										class="h-auto w-5 object-contain object-center" />
-								</div>
-							{/if}
-						</div>
-
-						<!-- Reached last -->
-
-						{#if reachedLast}
-							<p class="text-zinc-500 p-4 text-center">
-								<i>~ You have seen all the products ~</i>
-							</p>
+							</div>
 						{/if}
-					{:else}
-						<Pagination
-							count="{Math.ceil((data?.count || 1) / data.pageSize)}"
-							current="{data?.currentPage || 1}"
-							providePaddingOnMobile />
+					{/each}
+
+					{#each { length: 7 } as _}
+						<li class="hidden sm:block">
+							<DummyProductCard />
+						</li>
+					{/each}
+				</ul>
+
+				{#if !$page?.data?.isDesktop}
+					<!-- <div class="more"> -->
+					<div bind:this="{loadMoreDiv}">
+						<!-- Dot loading gif -->
+						{#if data.isLoading}
+							<div class="flex items-center justify-center p-6">
+								<img
+									src="{dotsLoading}"
+									alt="loading"
+									class="h-auto w-5 object-contain object-center" />
+							</div>
+						{/if}
+					</div>
+
+					<!-- Reached last -->
+
+					{#if reachedLast}
+						<p class="text-zinc-500 p-4 text-center">
+							<i>~ You have seen all the products ~</i>
+						</p>
 					{/if}
-				</div>
+				{:else}
+					<Pagination
+						count="{Math.ceil((data?.count || 1) / data.pageSize)}"
+						current="{data?.currentPage || 1}"
+						providePaddingOnMobile />
+				{/if}
 			{:else}
 				<div class="flex items-center justify-center px-3 sm:px-0" style="height: 60vh;">
 					<div class="m-10 flex flex-col items-center justify-center text-center">

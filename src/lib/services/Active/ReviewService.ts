@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit'
 import { getAPI, post } from '$lib/utils/api'
 import { getBySid } from '$lib/utils/server'
-import type { ProductReview } from '$lib/types'
+import type { Error, ProductReview } from '$lib/types'
 
 export const fetchReviews = async ({
 	origin,
@@ -18,16 +18,12 @@ export const fetchReviews = async ({
 
 		if (server) {
 			res = await getBySid(
-				`es/reviews/${pid}?search=${
-					search || ''
-				}&sort=${sort}&page=${currentPage}&store=${storeId}`,
+				`es/reviews/${pid}?search=${search || ''}&sort=${sort}&page=${currentPage}&store=${storeId}`,
 				sid
 			)
 		} else {
 			res = await getAPI(
-				`es/reviews/${pid}?search=${
-					search || ''
-				}&sort=${sort}&page=${currentPage}&store=${storeId}`,
+				`es/reviews/${pid}?search=${search || ''}&sort=${sort}&page=${currentPage}&store=${storeId}`,
 				origin
 			)
 		}
@@ -47,10 +43,9 @@ export const fetchReviews = async ({
 // Fetch product reviews
 
 export const fetchProductReviews = async ({
-	brandId,
 	origin,
 	page,
-	pid,
+	slug,
 	server = false,
 	sid = null,
 	storeId
@@ -62,12 +57,12 @@ export const fetchProductReviews = async ({
 
 		if (server) {
 			productReviewsRes = await getBySid(
-				`reviews/product-reviews?pid=${pid}&brandId=${brandId}&page=${page}&sort=-createdAt&store=${storeId}`,
+				`reviews/product-reviews?slug=${slug}&page=${page}&sort=-createdAt&store=${storeId}`,
 				sid
 			)
 		} else {
 			productReviewsRes = await getAPI(
-				`reviews/product-reviews?pid=${pid}&brandId=${brandId}&page=${page}&sort=-createdAt&store=${storeId}`,
+				`reviews/product-reviews?slug=${slug}&page=${page}&sort=-createdAt&store=${storeId}`,
 				origin
 			)
 		}
@@ -76,7 +71,7 @@ export const fetchProductReviews = async ({
 
 		return productReviews || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		return []
 	}
 }
 
@@ -113,38 +108,3 @@ export const saveReview = async ({
 	}
 }
 
-// Fetch next page product reviews
-
-export const fetchNextPageProductReviews = async ({
-	origin,
-	storeId,
-	page,
-	type,
-	pid,
-	server = false,
-	sid = null
-}: any) => {
-	try {
-		let productReviewsRes: any = {}
-		// : ProductReviews[]
-		let nextPageData: ProductReview = []
-
-		if (server) {
-			productReviewsRes = await getBySid(
-				`reviews/product-reviews?pid=${pid}&page=${page}&type=${type}&store=${storeId}`,
-				sid
-			)
-		} else {
-			productReviewsRes = await getAPI(
-				`reviews/product-reviews?pid=${pid}&page=${page}&type=${type}&store=${storeId}`,
-				origin
-			)
-		}
-
-		nextPageData = productReviewsRes
-
-		return nextPageData || []
-	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
-	}
-}

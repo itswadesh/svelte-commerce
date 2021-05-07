@@ -193,7 +193,7 @@ function toggle2(cx) {
 
 <div class="bg-opacity-25 bg-center bg-repeat">
 	<div class="mb-14 sm:mb-0">
-		<!-- CATEGORIES SLIDER MOBILE -->
+		<!-- Categories slider mobile -->
 
 		{#await data then categories}
 			{#if data?.categories?.length}
@@ -203,9 +203,15 @@ function toggle2(cx) {
 			{/if}
 		{/await}
 
-		<Hero banners="{data.banners}" />
+		<!-- Main slider banner -->
 
-		<!-- HERO BANNERS -->
+		{#await data.banners}
+			<div class="h-96 w-full bg-zinc-200 animate-pulse"></div>
+		{:then banners}
+			<Hero banners="{banners}" />
+		{/await}
+
+		<!-- Hero banners -->
 
 		{#await data.heroBanners}
 			<div class="mt-5 sm:mt-10 grid grid-cols-2 items-center gap-2 md:grid-cols-4">
@@ -232,7 +238,7 @@ function toggle2(cx) {
 			{/if}
 		{/await}
 
-		<!-- PICKED BANNERS -->
+		<!-- Picked banners -->
 
 		{#await data.groupByBanner}
 			<div class="mt-5 sm:mt-10 grid grid-cols-2 items-center gap-2 md:grid-cols-4">

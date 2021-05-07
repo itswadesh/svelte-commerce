@@ -8,26 +8,27 @@ export let product
 export let reviewsSummary = {}
 export let reviews = {}
 
-// console.log('type', type)
-// console.log('product', product)
-// console.log('reviewsSummary', reviewsSummary)
-// console.log('reviews', reviews)
-
 let clazz = ''
 export { clazz as class }
 
+// console.log('product', product)
+// console.log('reviews', reviews)
+// console.log('reviewsSummary', reviewsSummary)
+// console.log('type', type)
+
+let gallery = reviews?.gallery?.data || []
+let openReviewImages = []
+let selectedProductGallery = []
 let selectedReviews = []
+let showGalleryModal = false
+
 $: if (type === 'product_review') {
 	selectedReviews = reviews.product?.data
 } else {
 	selectedReviews = reviews.brand?.data
 }
 // console.log('selectedReviews', selectedReviews)
-let gallery = reviews?.gallery?.data || []
 // console.log('gallery', gallery)
-let openReviewImages = []
-let selectedProductGallery = []
-let showGalleryModal = false
 
 const handleSelectedProductGallery = (review, rx) => {
 	// console.log('review, rx', review, rx)
@@ -220,7 +221,7 @@ const handleSelectedProductGallery = (review, rx) => {
 				<!-- View all reviews -->
 
 				{#if selectedReviews?.length > 5}
-					<a href="/all-reviews/{product?._id}?brandId={product?.brand?._id}&type={type}">
+					<a href="/all-reviews/{product?.slug}?brandId={product?.brand?._id}&type={type}">
 						<button
 							type="button"
 							class="border rounded-full py-1 px-4 text-xs text-primary-500 hover:bg-primary-500 hover:text-white transition duration-700 focus:outline-none">

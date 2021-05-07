@@ -87,6 +87,29 @@ export const fetchProduct = async ({ origin, slug, id, server = false, sid = nul
 	}
 }
 
+// Fetch products more requirements
+
+export const fetchProduct2 = async ({
+	origin,
+	slug,
+	storeId,
+	id,
+	server = false,
+	sid = null
+}: any) => {
+	try {
+		let res: Product | object = {}
+		if (server) {
+			res = await getBySid(`es/products2/${slug || id}?store=${storeId}`, sid)
+		} else {
+			res = await getAPI(`es/products2/${slug || id}?store=${storeId}`, origin)
+		}
+		return res || {}
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
+	}
+}
+
 // Fetch products based on category
 
 export const fetchProductsOfCategory = async ({
@@ -124,7 +147,7 @@ export const fetchProductsOfCategory = async ({
 
 		return { products, count, facets, pageSize, category, err }
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		return {}
 	}
 }
 
