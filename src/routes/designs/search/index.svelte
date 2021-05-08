@@ -10,9 +10,7 @@ import { get } from '../../../util/api'
 export async function load({ page: { host, path, params, query }, fetch }) {
 	let q = query.toString()
 	// 		query.forEach((v,k)=>{
-	// console.log('qqqqqqqqqqqqqqq',k,v);
 	// 		});
-	// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz',q);
 	const page = +query.get('page')
 	const products = await get(`products/es?${q}`)
 	const facets = products.facets.all_aggs
@@ -48,7 +46,6 @@ let showMobileFilter = false,
 	currentPage = 1,
 	loading = false,
 	searchQuery
-// console.log(query)
 // $: start = 1 + (page - 1) * PAGE_SIZE;
 // $: next = `/search?page=${+page + 1}`;
 // $: prev = `/search?page=${+page - 1}`;
@@ -72,7 +69,6 @@ function toggle(e) {
 // })
 
 // page.subscribe(page => {
-// 	console.log('page',p);
 // 	query = page.query
 // 	if (query.q == undefined) query.q = ''
 // 	getData(query)

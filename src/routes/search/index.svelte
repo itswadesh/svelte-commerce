@@ -44,7 +44,6 @@ let showMobileFilter = false,
 	currentPage = 1,
 	loading = false,
 	searchQuery
-// console.log(query)
 // $: start = 1 + (page - 1) * PAGE_SIZE;
 // $: next = `/search?page=${+page + 1}`;
 // $: prev = `/search?page=${+page - 1}`;
@@ -68,7 +67,6 @@ function toggle(e) {
 // })
 
 // page.subscribe(page => {
-// 	console.log('page',p);
 // 	query = page.query
 // 	if (query.q == undefined) query.q = ''
 // 	getData(query)

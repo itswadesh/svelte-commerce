@@ -9,13 +9,7 @@ export const cart = writable({
 	uid: null,
 	discount: 0,
 })
-
-// cart.subscribe((value) => {
-// 	console.log('ssssssssssssssssss', value)
-// })
-
 export const setCart = async (data) => {
-	// console.log('ssssssssscccccccccccc', data)
 	try {
 		cart.set(data)
 	} catch (e) {}
@@ -33,7 +27,6 @@ export const addToCart = async (payload) => {
 	try {
 		const data = await post('cart/add', payload)
 		cart.set(data)
-		// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', data)
 		return data
 	} catch (e) {
 		throw e.toString()
@@ -49,7 +42,6 @@ export const checkout = async ({ paymentMethod, address }) => {
 		cart.set(data)
 		return order
 	} catch (e) {
-		// console.log('err...', e.toString())
 		throw e
 	}
 }
