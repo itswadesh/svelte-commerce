@@ -6,7 +6,6 @@ import { addToCart, fetchCart, cart } from './../../store/cart'
 import { me } from './../../store/auth'
 
 export const handle: Handle = async ({ request, render }) => {
-	// console.log('Handle Called...............')
 	const cookies = cookie.parse(request.headers.cookie || '')
 	const token = cookies.token
 	request.locals.token = `${token}`
@@ -22,7 +21,6 @@ export const handle: Handle = async ({ request, render }) => {
 	}
 	try {
 		let categories = (await get('categories/megamenu')).data || []
-		console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', categories)
 		request.locals.categories = categories
 	} catch (err) {
 		request.locals.categories = {}

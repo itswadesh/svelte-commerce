@@ -60,7 +60,6 @@ function checkFeature(k) {
 	return features.includes(k)
 }
 // function stringToArray(v) {
-//   console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz',query[v.key]);
 //   let a = []
 //   if(query && query[v.key]){}
 //     a = (query[v.key].split(',')) || []

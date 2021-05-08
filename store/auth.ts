@@ -59,7 +59,6 @@ export const resetPassword = async (payload) => {
 	try {
 		const data = await post('/users/reset/' + payload.id, payload)
 		if (data) {
-			// console.log('info', data, { root=true })
 			// router.push('/')
 		}
 		return data

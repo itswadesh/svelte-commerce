@@ -31,7 +31,6 @@ async function getFeatured() {
 		const x = await get(`products?featured=true`)
 		return x
 	} catch (e) {
-		// console.log(e);
 	} finally {
 		loading = false
 	}
