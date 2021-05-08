@@ -17,7 +17,7 @@ function toggle() {
 }
 </script>
 
-<section class="relative w-full frosted">
+<nav class="relative w-full shadow-md frosted">
 	<div class="p-2 flex items-center justify-between">
 		<div on:click="{toggle}">
 			<svg
@@ -82,4 +82,4 @@ function toggle() {
 			</div>
 		</label>
 	</div> -->
-</section>
+</nav>

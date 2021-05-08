@@ -2,6 +2,7 @@
 import { CDN_URL } from './../../config'
 
 import { Swipe, SwipeItem } from 'svelte-swipe'
+import { expoIn } from 'svelte/easing';
 
 const swipeConfig = {
 	autoplay: false,
@@ -20,7 +21,15 @@ function prevSlide() {
 	SwipeComp.prevItem()
 }
 
-export let banners
+
+export  let banners=[
+	{
+		img:"/ecommerce-banner-1.png",
+	},
+	{
+		img:"/ETP-banner-for-ecommerce.jpg",
+	}
+]
 </script>
 
 <div class="relative h-36 md:h-48 lg:h-60 xl:h-96">
@@ -28,7 +37,8 @@ export let banners
 		{#each banners as b, i}
 			<SwipeItem>
 				<a href="/search" class="w-full">
-					<img src="{`${CDN_URL}/${b.img}`}" alt="" class="w-full" />
+					<!-- <img src="{`${CDN_URL}/${b.img}`}" alt="" class="w-full" /> -->
+					<img src="/ETP-banner-for-ecommerce.jpg" alt="" class="w-full xl:h-full object-cover" />
 				</a>
 			</SwipeItem>
 		{/each}

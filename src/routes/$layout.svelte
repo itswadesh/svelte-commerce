@@ -20,12 +20,12 @@ export let user
 
 <PageTransitions refresh="{$page.path}">
 	<div>
-		<div class="mb-28 lg:mb-20">
-			<div class="fixed top-0 z-50 block w-full mb-40 lg:mb-0 lg:hidden">
+		<div class="mb-12 lg:mb-20">
+			<div class="fixed top-0 z-50 block w-full md:hidden">
 				<MobNav user="{user}" />
 			</div>
 
-			<div class="fixed top-0 z-50 hidden w-full lg:block">
+			<div class="fixed top-0 z-50 hidden w-full md:block">
 				<Nav user="{user}" />
 			</div>
 		</div>

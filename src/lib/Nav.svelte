@@ -40,7 +40,7 @@ async function logout() {
 }
 </script>
 
-<nav class="flex justify-between p-4 border-b border-gray-100 frosted">
+<nav class="flex justify-between p-4 shadow-md border-gray-100 frosted">
 	<a href="/" class="flex items-center focus:outline-none max-w-max"
 		><img alt="" class="w-8 h-8" src="/logo.svg" />
 		<div class="">

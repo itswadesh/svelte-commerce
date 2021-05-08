@@ -22,7 +22,7 @@ function sort() {
 }
 </script>
 
-<div class="items-center justify-between flex-none px-2 py-2 text-sm lg:flex">
+<div class="items-center justify-between flex-none p-3  md:py-6 text-sm md:flex text-gray-800">
 	<div class="flex items-center justify-center p-1 ">
 		{#if !count && count != 0}
 			<div class="">Will just take a moment...</div>
@@ -33,7 +33,7 @@ function sort() {
 				{:else}
 					<span class="font-bold ">{count}</span>
 				{/if}
-				<span class="font-thin">products found</span>
+				<span class="font-thin">Products found</span>
 			</div>
 		{/if}
 	</div>
@@ -57,12 +57,12 @@ function sort() {
 		</div>
 	</div> -->
 </div>
-<div class="flex w-full py-4 mb-1 shadow-md md:hidden">
+<div class="flex w-full p-2 mb-1 shadow md:hidden text-gray-800">
 	<button
 		class="flex items-center flex-1 text-left text-primary"
 		on:click="{() => dispatch('hide', !showFilters)}">
-		<Icon src="{Adjustments}" class="w-4" />
-		Filter
+		<Icon src="{Adjustments}" class="w-5 text-gray-800" />
+		<span class="ml-2 font-medium tracking wide uppercase ">Filter</span>
 	</button>
 	<div class="hidden px-4 font-normal text-center text-gray-700 md:block">
 		{count} products
