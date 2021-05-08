@@ -1,6 +1,9 @@
-<script>
+<script lang="ts">
+import { goto } from '$app/navigation'
+import { session } from '$app/stores'
 let show
-function toggle() {
+function toggle(url) {
+	goto(url)
 	show = !show
 }
 let menuItem = [
@@ -180,16 +183,17 @@ let subMenu = [
 			<h5 class="text-sm pt-4 pb-0.5 pl-4">Shop by</h5>
 			<div class="bg-white rounded-lg mx-4 my-5 py-1 h-full overflow-y-auto">
 				<!-- Menu section start  -->
-				{#each menuItem as item, i}
-					<div on:click="{toggle}" class="px-4 ">
+				{#each $session.categories as item, i}
+					<button
+						on:click="{() => toggle(`/search?categories=${item.slug}`)}"
+						class="block w-full px-4 ">
 						<div class="border-b border-gray-100 py-3 flex items-center justify-between">
 							<div class="flex">
-								<div>{@html item.img}</div>
+								<!-- <img src="{item.img}" alt="" /> -->
 								<span class="ml-2"> {item.name} </span>
 							</div>
-							<div>{@html item.svg}</div>
 						</div>
-					</div>
+					</button>
 				{/each}
 				<!-- Menu section end -->
 				<!-- Submenu section start -->

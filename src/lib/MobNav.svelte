@@ -62,7 +62,7 @@ function toggle() {
 			</svg>
 		</div>
 	</div>
-	<div class="px-2 pt-2 pb-4">
+	<!-- <div class="px-2 pt-2 pb-4">
 		<label class="relative flex items-center">
 			<input
 				type="text"
@@ -81,5 +81,5 @@ function toggle() {
 				</svg>
 			</div>
 		</label>
-	</div>
+	</div> -->
 </section>

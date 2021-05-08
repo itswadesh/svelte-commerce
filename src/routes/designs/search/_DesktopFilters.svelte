@@ -1,7 +1,7 @@
 <script>
 import Checkbox from '$lib/ui/Checkbox.svelte'
 import Radio from '$lib/ui/Radio.svelte'
-import { constructURL2 } from '../../util'
+import { constructURL2 } from '../../../util'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { beforeUpdate, tick } from 'svelte'
