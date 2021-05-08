@@ -40,7 +40,7 @@ function modulo(n: number, m: number) {
 	</p>
 	<div class="relative flex items-center justify-between my-2 font-bold ">
 		<h4>Total</h4>
-		{currency(Math.floor($cart_total))}
+		{currency(Math.floor($cart_subtotal))}
 	</div>
 	{#if $cart.qty > 0}
 		<div>

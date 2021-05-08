@@ -18,6 +18,7 @@ import Cookies from 'universal-cookie'
 const cookies = new Cookies()
 import { spring } from 'svelte/motion'
 import { cart } from '../../store/cart'
+import Search from '$lib/Search.svelte'
 export let section
 
 const cart_qty = spring()
@@ -51,13 +52,14 @@ async function logout() {
 		class="flex items-center justify-center w-full ml-8 text-sm font-semibold tracking-wide uppercase xl:ml-10">
 		{#each $session.categories as c}
 			<a
-				href="{`/search?page=1`}"
+				href="{`/search?categories=${c.slug}&page=1`}"
 				class="mx-2 transform cursor-pointer hover:scale-95 whitespace-nowrap xl:mx-5">
 				{c.name}
 			</a>
 		{/each}
 	</div>
-	<div class="w-1/2 mx-5">
+	<!-- <Search /> -->
+	<!-- <div class="w-1/2 mx-5">
 		<label class="relative flex items-center">
 			<input
 				type="text"
@@ -76,7 +78,7 @@ async function logout() {
 				</svg>
 			</div>
 		</label>
-	</div>
+	</div> -->
 
 	<div class="flex items-center">
 		<a sveltekit:prefetch href="/cart" class:selected="{section === 'cart'}">

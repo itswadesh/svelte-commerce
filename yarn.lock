@@ -2854,6 +2854,11 @@ svelte-apollo@^0.4.0:
   resolved "https://registry.yarnpkg.com/svelte-apollo/-/svelte-apollo-0.4.0.tgz#9a518824806f70c570f7453cfcc1beb2c5c79829"
   integrity sha512-VbianysptRx9wy6vQPd2lIRBVKV0XPtrSvqcMctihc5xGl1TVffNp8qsiSlqx2jnOlvOGUSK8xl4GW7C6bzSjw==
 
+svelte-hero-icons@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/svelte-hero-icons/-/svelte-hero-icons-2.2.0.tgz#3e505a19ce858f3584e0443c438fc20187350737"
+  integrity sha512-JFoHwMBptg0Bu07DMTJGu7dHk+vkByvMUpmIIOT0cufg9g+NXu+lJ7pUYKGgS3hzl6wfsFuPuu/zMW/+JJOqjw==
+
 svelte-hmr@^0.14.2:
   version "0.14.3"
   resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.14.3.tgz#b6a6781bc923352e3c257ccd7d87d01821ea2d95"

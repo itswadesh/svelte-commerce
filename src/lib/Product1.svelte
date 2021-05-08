@@ -27,13 +27,13 @@ export let product = {}
 			style="" />
 		<div class="p-2 text-left md:p-4">
 			{#if product.brandName}
-				<h4 class="text-sm font-semibold group-hover:underline">
+				<h4 class="text-sm font-semibold ">
 					{product.brandName}
 				</h4>
 			{/if}
 			<h2
 				href="{'/' + product.slug + '?id=' + product._id}"
-				class="mt-1 font-medium leading-tight tracking-tight md:text-xl line-clamp-2 md:font-semibold group-hover:underline">
+				class="mt-1 font-medium leading-tight tracking-tight md:text-xl line-clamp-2 md:font-semibold ">
 				{product.name}
 			</h2>
 			<div class="flex flex-wrap items-center justify-start mt-1">

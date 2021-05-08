@@ -88,7 +88,7 @@ function stringToArray(v) {
 }
 </script>
 
-{#if facets}
+{#if facets && facets.length}
 	<div class="py-2\1 bg-white-800 shadow bg-white w-screen top-0 left-0 fixed
     h-screen max-w-lg">
 		<!-- Mobile version starts here -->

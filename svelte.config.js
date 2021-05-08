@@ -31,6 +31,9 @@ const config = {
 					'/api': 'https://api.litekart.in',
 				},
 			},
+			ssr: {
+				noExternal: ['svelte-hero-icons'],
+			},
 			//   alias: {
 			//     tslib: 'tslib/tslib.es6.js',
 			//   },

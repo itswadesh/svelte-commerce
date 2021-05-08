@@ -68,35 +68,34 @@ function checkFeature(k) {
 // }
 </script>
 
-<div class="hidden max-w-xs text-gray-800 lg:block md:pl-3 lg:pl-4 md:w-64">
-	<div class="">
+<div class="hidden max-w-xs md:block md:w-64">
+	<div class="py-6">
 		<div
 			class="flex items-center justify-between text-sm font-bold md:text-xs"
 			style="margin-top:1px;">
-			<div on:click="{toggle}" class="flex items-center cursor-pointer">
-				<h2 class="mr-1 font-serif text-xl font-bold tracking-wide">Refine By</h2>
-				{#if show}
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="w-4 h-4 mt-1"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"
-						></path>
-					</svg>
-				{:else}
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="w-4 h-4 mt-1"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"
-						></path>
-					</svg>
-				{/if}
-			</div>
+			<div on:click="{toggle}" class="flex items-center cursor-pointer"></div>
+			<h2 class="mr-1 font-serif text-xl font-bold tracking-wide">Refine By</h2>
+			{#if show}
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="w-4 h-4 mt-1"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"
+					></path>
+				</svg>
+			{:else}
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="w-4 h-4 mt-1"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"
+					></path>
+				</svg>
+			{/if}
 			<button
 				on:click="{clearFilters}"
 				class="text-right text-purple-500 cursor-pointer hover:underli hover:underline focus:outline-none">
@@ -104,7 +103,7 @@ function checkFeature(k) {
 			</button>
 		</div>
 		{#if show}
-			{#if facets.brands && facets.brands.all.buckets && facets.brands.all.buckets.length > 0}
+			{#if facets?.brands?.all?.buckets?.length > 0}
 				<Checkbox
 					items="{facets.brands.all.buckets}"
 					title="BRANDS"
@@ -112,7 +111,7 @@ function checkFeature(k) {
 					selectedItems="{fl.brands || []}"
 					on:go="{goCheckbox}" />
 			{/if}
-			{#if facets.Gender && facets.Gender.all.buckets && facets.Gender.all.buckets.length > 0}
+			{#if facets?.Gender?.all?.buckets?.length > 0}
 				<Checkbox
 					items="{facets.Gender.all.buckets}"
 					title="Gender"
@@ -140,9 +139,5 @@ function checkFeature(k) {
 				{/each}
 			{/if}
 		{/if}
-
-		<!-- -------------------------------------- -->
-
-		<!-- -------------------------------------- -->
 	</div>
 </div>

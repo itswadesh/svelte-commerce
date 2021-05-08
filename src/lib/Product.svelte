@@ -15,16 +15,16 @@ export let product = {}
 </script>
 
 <!-- w-full sm:w-60 xl:w-72 h-full  -->
-<div class="w-40 mx-auto mb-2 rounded-lg group md:mb-8 md:w-72">
+<div class="w-40 mx-auto mb-2 group md:mb-8 md:w-72">
 	<a
 		href="{'/' + product._source?.slug + '?id=' + product?._id}"
-		class="block overflow-hidden rounded-lg hover:shadow-lg">
+		class="block overflow-hidden hover:shadow-lg">
 		<img
 			alt=""
 			use:lazyload
 			src="{`${CDN_URL}/${product._source?.img && product._source?.img[0]}?tr=w-3,h-3`}"
 			data-src="{`${CDN_URL}/${product._source?.img && product._source?.img[0]}`}"
-			class="object-cover object-top w-full h-40 pt-2 rounded-lg hover:rounded-b-none md:h-72 zoom"
+			class="object-cover object-top w-full h-40 pt-2  md:h-72 zoom"
 			style="" />
 		<div class="p-2 text-left md:p-4">
 			{#if product._source?.brandName}

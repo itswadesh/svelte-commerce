@@ -35,8 +35,10 @@ export async function load({ page: { host, path, params, query }, fetch }) {
 me()
 import Footer from '$lib/MobFooter.svelte'
 export let product
-function addToBag() {
+let CartButtonText = 'Add To Cart'
+function addToBag(product) {
 	addToCart({ pid: product._id, vid: product.variants[0]._id, qty: 1 })
+	CartButtonText = 'Go To Cart'
 	// goto('/cart')
 }
 </script>
@@ -98,7 +100,7 @@ function addToBag() {
 					alt=""
 					class="object-cover object-top w-full mx-auto bg-white zoom md:h-auto" />
 			</div>
-			<div class="absolute flex items-center space-x-4 transform -translate-x-10 bottom-5 left-1/2">
+			<!-- <div class="absolute flex items-center space-x-4 transform -translate-x-10 bottom-5 left-1/2">
 				<div class="w-2 h-2 transform bg-black border rounded-full cursor-pointer hover:scale-150">
 				</div>
 				<div class="w-2 h-2 transform bg-white border rounded-full cursor-pointer hover:scale-150">
@@ -107,7 +109,7 @@ function addToBag() {
 				</div>
 				<div class="w-2 h-2 transform bg-white border rounded-full cursor-pointer hover:scale-150">
 				</div>
-			</div>
+			</div> -->
 		</div>
 		<!-- Image section end -->
 		<!-- Text section start  -->
@@ -247,11 +249,23 @@ function addToBag() {
 				</div>
 				<!-- Add to cart start -->
 				<div class="w-full my-5 xl:w-60">
-					<button
-						on:click="{() => addToBag(product)}"
-						class="w-full py-2 font-semibold tracking-wide text-white transform bg-gray-800 rounded-md hover:scale-105 focus:outline-none">
-						Add to Cart
-					</button>
+					{#if CartButtonText == 'Add To Cart'}
+						<button
+							on:click="{() => addToBag(product)}"
+							class="font-semibold tracking-wide text-white transform  rounded-md bg-gray-800 py-2 w-full hover:scale-105 focus:outline-none">
+							<span>
+								{CartButtonText}
+							</span>
+						</button>
+					{:else}
+						<a
+							href="/cart"
+							class="block text-center bg-purple-800 py-2 w-full font-semibold tracking-wide text-white transform  rounded-md hover:scale-105 focus:outline-none">
+							<span>
+								{CartButtonText}
+							</span>
+						</a>
+					{/if}
 				</div>
 				<!-- Add to cart end -->
 			</div>

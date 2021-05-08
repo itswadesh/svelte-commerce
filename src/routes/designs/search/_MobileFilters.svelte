@@ -21,7 +21,7 @@ ul > li {
 <script>
 import Checkbox from '$lib/ui/Checkbox.svelte'
 import Radio from '$lib/ui/Radio.svelte'
-import { constructURL, constructURL2 } from '../../util'
+import { constructURL, constructURL2 } from '../../../util'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { createEventDispatcher } from 'svelte'

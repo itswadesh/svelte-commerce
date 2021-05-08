@@ -45,6 +45,7 @@
     "siema": "^1.5.1",
     "svelte": "^3.34.0",
     "svelte-apollo": "^0.4.0",
+    "svelte-hero-icons": "^2.2.0",
     "svelte-preprocess": "^4.0.0",
     "svelte-swipe": "^1.8.0",
     "tailwindcss": "^2.0.3",
