@@ -1,9 +1,9 @@
 import { WishlistService } from '$lib/services'
-
 import { redirect } from '@sveltejs/kit'
 
 export async function load({ locals, cookies, params, request }) {
 	const pid = params.pid
+
 	const isExistInWishlist = await WishlistService.checkWishlist({
 		pid,
 		vid: pid,
@@ -20,5 +20,6 @@ export async function load({ locals, cookies, params, request }) {
 			sid: cookies.get('connect.sid')
 		})
 	}
+
 	throw redirect(307, '/my/wishlist')
 }

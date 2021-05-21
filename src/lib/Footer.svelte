@@ -108,6 +108,7 @@ async function getStoreData() {
 								<li class="flex max-w-max items-center">
 									<a
 										href="{itm.link}"
+										target="{item.target || 'self'}"
 										aria-label="Click to route this page"
 										class="link-underline link-underline-gray whitespace-pre-wrap">
 										{itm.title}
