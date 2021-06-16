@@ -9,27 +9,21 @@ import ProductNav from '$lib/ProductNav.svelte'
 import ReviewGallery from '$lib/components/Product/ReviewGallery.svelte'
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
+
 const { productReviews } = data
-
-// console.log('$page', $page)
-
 let brandId = $page.url.searchParams.get('brandId')
 let type = $page.url.searchParams.get('type')
 let allReviews = []
 let count = 0
-// console.log('type', type)
+
 $: if (type === 'product_review') {
 	allReviews = productReviews.product?.data
 	count = productReviews.product?.count
-	// console.log('allReviews', allReviews)
-	// console.log('count', count)
 } else {
 	allReviews = productReviews.brand?.data
 	count = productReviews.brand?.count
-	// console.log('allReviews', allReviews)
-	// console.log('count', count)
 }
+
 let currentPage = 1
 let loading = false
 let openReviewGallery = []
@@ -64,23 +58,15 @@ async function loadNextPage() {
 				storeId: $page?.data?.store?.id
 			})
 
-			// console.log('res', res)
-
 			const isProduct = type === 'product_review' ? true : false
-
-			// console.log('isProduct', isProduct)
 
 			if (res?.product?.data?.length || res?.brand?.data?.length) {
 				if (isProduct && res?.product?.data?.length) {
 					allReviews = productReviews.product?.data.concat(res?.product?.data)
 					count = res.product?.count
-					// console.log('allReviews for next load', allReviews)
-					// console.log('count for next load', count)
 				} else if (res?.brand?.data?.length) {
 					allReviews = productReviews.brand?.data.concat(res?.brand?.data)
 					count = res.brand?.count
-					// console.log('allReviews for next load', allReviews)
-					// console.log('count for next load', count)
 				}
 			} else {
 				reachedLast = true
@@ -98,8 +84,6 @@ async function loadNextPage() {
 }
 
 const handleSelectedProductGallery = (review, rx) => {
-	// console.log('review, rx', review, rx)
-
 	selectedProductGallery = review.images
 		.map((item) => {
 			return {
@@ -112,8 +96,6 @@ const handleSelectedProductGallery = (review, rx) => {
 			}
 		})
 		.flat()
-
-	// console.log('selectedProductGallery', selectedProductGallery)
 
 	openReviewImages[rx] = true
 }

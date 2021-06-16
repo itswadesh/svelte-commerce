@@ -28,9 +28,6 @@ export let items = [],
 	name = '',
 	required = false,
 	disabled = false
-
-// console.log('items', items)
-// console.log('selectedItems', selectedItems)
 </script>
 
 <ul class="flex flex-col gap-2">

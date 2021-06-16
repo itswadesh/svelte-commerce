@@ -2,7 +2,7 @@
 // import indiaFlag from '$lib/assets/flags/india.png'
 import { browser } from '$app/environment'
 import { fly, scale } from 'svelte/transition'
-import { GOOGLE_CLIENT_ID, IS_DEV, provider } from '$lib/config'
+import { GOOGLE_CLIENT_ID } from '$lib/config'
 import { googleOneTap } from './google-one-tap'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
@@ -15,12 +15,11 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import VerifyOtp from '../_VerifyOtp.svelte'
-
 const cookies = Cookie()
 
-export let data
+const IS_DEV = import.meta.env.DEV
 
-// console.log('zzzzzzzzzzzzzzzzzz', data)
+export let data
 
 const seoProps = {
 	title: 'Login with email/phone',
@@ -42,7 +41,7 @@ let selectedCountry = data.countries[0]
 let showDropDown = false
 let showPassword = false
 let type = 'password'
-let value = email ? email : IS_DEV ? 'admin@litekart.in' : null
+let value = email ? email : IS_DEV ? 'hi@litekart.in' : null
 
 onMount(() => {
 	googleOneTap(
@@ -102,8 +101,6 @@ const verifyIsMobileNum = () => {
 		isMobile = false
 		maxlength = null
 	}
-
-	// console.log('isMobile, isEmail', isMobile, isEmail)
 }
 
 async function submit() {
@@ -151,8 +148,6 @@ async function submit() {
 
 async function handleSendOTP({ detail }) {
 	phone = detail
-
-	// console.log('phone', phone)
 
 	try {
 		loading = true
@@ -260,7 +255,7 @@ function changeNumber() {
 					{/if}
 				</h6>
 
-				<div class="relative w-full rounded bg-white ">
+				<div class="relative w-full rounded bg-white">
 					<!-- Enter email or mobile number -->
 
 					<input
@@ -462,7 +457,7 @@ function changeNumber() {
 
 		<a
 			href="/terms-conditions"
-			aria-label="Click to route terms & conditions"
+			aria-label="Click to visit terms & conditions"
 			target="_blank"
 			rel="noopener noreferrer"
 			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">

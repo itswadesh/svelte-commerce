@@ -86,8 +86,6 @@ export const getStoreData = async ({
 		const uri = new URL(url)
 		storeRes = await fetchInit(uri.host)
 
-		// console.log('init called...', storeRes.megamenu)
-
 		store = {
 			id: storeRes.storeOne._id,
 			address: storeRes.storeOne.address,

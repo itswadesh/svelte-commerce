@@ -19,8 +19,6 @@ let today = dayjs(new Date()).toISOString()
 
 export let data
 
-// console.log('zzzzzzzzzzzzzzzzzz', data)
-
 let seoProps = {
 	// addressCountry: 'India',
 	// addressLocality: 'Semiliguda, Koraput',
@@ -136,13 +134,12 @@ async function getMegaMenu() {
 				megamenu = JSON.parse(localMegamenu)
 			}
 
-			megamenu = megamenu.filter((e) => {
-				return e.name !== 'New Arrivals'
-			})
-
+			if (megamenu?.length) {
+				megamenu = megamenu.filter((e) => {
+					return e.name !== 'New Arrivals'
+				})
+			}
 			megamenuResult = megamenu
-
-			// console.log('megamenu', megamenu)
 		} catch (e) {
 			toast(e, 'error')
 		} finally {
@@ -154,8 +151,6 @@ async function getMegaMenu() {
 }
 
 function searchCategories() {
-	// console.log('searchCategoryValue', searchCategoryValue)
-
 	const fuse = new Fuse(megamenu, options)
 
 	megamenuResult = fuse.search(searchCategoryValue)
@@ -167,8 +162,6 @@ function searchCategories() {
 	if (!megamenuResult.length) {
 		megamenuResult = megamenu
 	}
-
-	// console.log('megamenuResult', megamenuResult)
 }
 
 function toggle(mx) {
@@ -293,11 +286,11 @@ function toggle2(cx) {
 							<li>
 								{#if m.children?.length}
 									<div
-										class="flex h-24 gap-4 px-6 w-full items-center justify-between focus:outline-none 
+										class="flex h-24 gap-4 px-6 w-full items-center justify-between focus:outline-none
 										{bgColors[mx]}">
 										<a
 											href="/{m.link || m.slug}"
-											aria-label="Click to route {m.name || '##'}"
+											aria-label="Click to visit {m.name || '##'}"
 											class="block text-xl font-bold uppercase">
 											{m.name}
 										</a>
@@ -322,8 +315,8 @@ function toggle2(cx) {
 								{:else}
 									<a
 										href="/{m.link || m.slug}"
-										aria-label="Click to route {m.name || '##'}"
-										class="flex items-center h-24 w-full text-xl font-bold uppercase px-6 
+										aria-label="Click to visit {m.name || '##'}"
+										class="flex items-center h-24 w-full text-xl font-bold uppercase px-6
 										{bgColors[mx]}">
 										{m.name}
 									</a>
@@ -341,7 +334,7 @@ function toggle2(cx) {
 															class="flex w-full items-center justify-between gap-4 h-14 px-6 focus:outline-none">
 															<a
 																href="/{c.link || c.slug}"
-																aria-label="Click to route {c.name || '##'}"
+																aria-label="Click to visit {c.name || '##'}"
 																class="block">
 																{c.name}
 															</a>
@@ -367,7 +360,7 @@ function toggle2(cx) {
 													{:else}
 														<a
 															href="/{c.link || c.slug}"
-															aria-label="Click to route {c.name || '##'}"
+															aria-label="Click to visit {c.name || '##'}"
 															class="flex items-center h-14 px-6">
 															<h6>{c.name}</h6>
 														</a>
@@ -382,7 +375,7 @@ function toggle2(cx) {
 																	<li>
 																		<a
 																			href="/{cc.link || cc.slug}"
-																			aria-label="Click to route {cc.name || '##'}"
+																			aria-label="Click to visit {cc.name || '##'}"
 																			class="flex items-center h-14 px-6 text-sm">
 																			{cc.name}
 																		</a>

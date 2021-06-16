@@ -11,11 +11,6 @@ export let reviews = {}
 let clazz = ''
 export { clazz as class }
 
-// console.log('product', product)
-// console.log('reviews', reviews)
-// console.log('reviewsSummary', reviewsSummary)
-// console.log('type', type)
-
 let gallery = reviews?.gallery?.data || []
 let openReviewImages = []
 let selectedProductGallery = []
@@ -27,12 +22,8 @@ $: if (type === 'product_review') {
 } else {
 	selectedReviews = reviews.brand?.data
 }
-// console.log('selectedReviews', selectedReviews)
-// console.log('gallery', gallery)
 
 const handleSelectedProductGallery = (review, rx) => {
-	// console.log('review, rx', review, rx)
-
 	selectedProductGallery = review.images
 		.map((item) => {
 			return {
@@ -45,8 +36,6 @@ const handleSelectedProductGallery = (review, rx) => {
 			}
 		})
 		.flat()
-
-	// console.log('selectedProductGallery', selectedProductGallery)
 
 	openReviewImages[rx] = true
 }

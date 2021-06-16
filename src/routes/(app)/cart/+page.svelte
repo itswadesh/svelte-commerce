@@ -18,9 +18,10 @@ import productVeg from '$lib/assets/product/veg.png'
 import SEO from '$lib/components/SEO/index.svelte'
 import Skeleton from '$lib/ui/Skeleton.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
+import Cookie from 'cookie-universal'
+const cookies = Cookie()
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	title: `Cart`,
@@ -57,11 +58,12 @@ const addToCart = async ({ pid, qty, customizedImg, ix, loadingType }: any) => {
 		qty: qty,
 		customizedImg: customizedImg || null,
 		storeId: $page.data.store?.id,
-		origin: $page.data.origin
+		origin: $page.data.origin,
+		cookies
 	})
 
-	await invalidateAll()
-
+	await invalidateAll() // Has to be invalidateAll everywhere because cart is called on hooks.server.ts and any invalidation will trigger hooks.server.ts call
+	// Keep await here, else the loader will stop before updating the locals value
 	loading[ix] = false
 	selectedLoadingType = null
 }
@@ -195,11 +197,11 @@ async function getCoupons() {
 									</div>
 
 									<div class="flex flex-col divide-y">
-										{#each data.cart?.unavailableItems as item}
+										{#each data.cart?.unavailableItems as item (item.pid)}
 											<div class="flex w-full items-start gap-4 py-5">
 												<a
 													href="/product/{item?.slug}"
-													aria-label="Click to route product details"
+													aria-label="Click to visit product details"
 													class="block shrink-0 overflow-hidden">
 													<LazyImg
 														src="{item.isCustomizeditem ? item.customizedImg : item.img}"
@@ -214,7 +216,7 @@ async function getCoupons() {
 													<div class="mb-2 flex justify-between">
 														<a
 															href="/product/{item?.slug}"
-															aria-label="Click to route product details"
+															aria-label="Click to visit product details"
 															class="cart-item flex-1 cursor-pointer text-base font-medium text-zinc-500 hover:underline sm:text-lg">
 															{item?.name}
 														</a>
@@ -259,13 +261,15 @@ async function getCoupons() {
 
 						{#if data.cart?.items}
 							<div class="flex flex-col divide-y">
-								{#each data.cart?.items as item, ix}
+								{#each data.cart?.items as item, ix (item.pid)}
 									<!-- Product detail start -->
 
-									<div class="flex w-full items-start gap-4 py-5">
+									<div
+										out:fly="{{ x: -2400, duration: 2500 }}"
+										class="flex w-full items-start gap-4 py-5">
 										<a
 											href="/product/{item?.slug}"
-											aria-label="Click to route product details"
+											aria-label="Click to visit product details"
 											class="block shrink-0 overflow-hidden">
 											<LazyImg
 												src="{item.isCustomizeditem ? item.customizedImg : item.img}"
@@ -280,7 +284,7 @@ async function getCoupons() {
 											<div class="mb-2 flex justify-between">
 												<a
 													href="/product/{item?.slug}"
-													aria-label="Click to route product details"
+													aria-label="Click to visit product details"
 													class="flex-1 cursor-pointer text-base font-medium text-zinc-500 hover:underline sm:text-lg">
 													{item?.name}
 												</a>
@@ -347,7 +351,7 @@ async function getCoupons() {
 																customizedImg: item.customizedImg,
 																ix: ix
 															})}"
-														class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8 
+														class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8
 														{loading[ix]
 															? 'cursor-not-allowed opacity-80'
 															: 'cursor-pointer hover:opacity-80 active:scale-95'}">
@@ -366,7 +370,7 @@ async function getCoupons() {
 													<!-- Quantity indicator -->
 
 													<div
-														class="mx-2 flex h-6 w-6 items-center justify-center text-xs font-bold sm:h-8  sm:w-8  ">
+														class="mx-2 flex h-6 w-6 items-center justify-center text-xs font-bold sm:h-8 sm:w-8">
 														{#if selectedLoadingType !== 'delete' && loading[ix]}
 															<img
 																src="{dotsLoading}"
@@ -389,7 +393,7 @@ async function getCoupons() {
 																customizedImg: item.customizedImg,
 																ix: ix
 															})}"
-														class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8 
+														class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8
 														{loading[ix]
 															? 'cursor-not-allowed opacity-80'
 															: 'cursor-pointer hover:opacity-80 active:scale-95'}">
@@ -421,7 +425,7 @@ async function getCoupons() {
 															ix: ix,
 															loadingType: 'delete'
 														})}"
-													class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8 
+													class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8
 														{loading[ix]
 														? 'cursor-not-allowed opacity-80'
 														: 'cursor-pointer hover:opacity-80 active:scale-95'}">
@@ -658,7 +662,7 @@ async function getCoupons() {
 
 					<div
 						class="grid w-full grid-cols-2 items-end sm:flex sm:flex-wrap sm:justify-between sm:gap-10">
-						{#each products as p, px}
+						{#each products as p, px (p.id)}
 							{#if p && px < 10}
 								<ProductCard product="{p}" />
 							{/if}

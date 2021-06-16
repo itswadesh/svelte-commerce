@@ -4,9 +4,9 @@ const SENTRY_DSN = SECRET_SENTRY_DSN
 import * as SentryNode from '@sentry/node'
 import { nanoid } from 'nanoid'
 import { authenticateUser, fetchCart, fetchStoreData } from '$lib/server'
-import { DOMAIN, HTTP_ENDPOINT, IS_DEV, listOfPagesWithoutBackButton } from '$lib/config'
+import { DOMAIN, HTTP_ENDPOINT, listOfPagesWithoutBackButton } from '$lib/config'
 
-if (SENTRY_DSN) {
+if (SENTRY_DSN && SENTRY_DSN !== 'YOUR_SENTRY_DSN') {
 	SentryNode.init({
 		dsn: SENTRY_DSN
 	})
@@ -32,6 +32,7 @@ export const handleError: HandleServerError = ({ error, event }) => {
 }
 export const handle: Handle = async ({ event, resolve }) => {
 	try {
+		const IS_DEV = import.meta.env.DEV
 		const url = new URL(event.request.url)
 		event.locals.origin = !IS_DEV ? `https://${url.host}` : `http://${url.host}`
 		const isDesktop = event.request.headers.get('sec-ch-ua-mobile') === '?0'
@@ -39,19 +40,13 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.isDesktop = isDesktop
 		event.locals.isShowBackButton = isShowBackButton
 		// This calls init only when store data not present in browser cookies
-		// console.time('fetchStoreData..')
 		const { megamenu, storeOne } = await fetchStoreData(event)
-		// console.timeEnd('fetchStoreData..')
 		event.locals.store = storeOne
 		event.locals.megamenu = megamenu
 		// this simply gets data from cookie
-		// console.time('authenticateUser..')
 		event.locals.me = await authenticateUser(event)
-		// console.timeEnd('authenticateUser..')
 		// This makes a call to backend on every request
-		// console.time('fetchCart..')
 		event.locals.cart = await fetchCart(event)
-		// console.timeEnd('fetchCart..')
 		// const derivedSid: string = event.cookies.get('connect.sid') || ''
 		// event.locals.sid = derivedSid
 		// event.cookies.set('sid', derivedSid, { path: '/' })
@@ -73,12 +68,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 		return response
 	} catch (e) {
-		const err = `Store Not Found @Hook 
+		const err = `Store Not Found @Hook
 			<br/>ID: ${event.locals.store?.id}
 			<br/>ORIGIN: ${event.locals?.origin}
 			<br/>DOMAIN(env): ${DOMAIN}
 			<br/>HTTP_ENDPOINT(env): ${HTTP_ENDPOINT}`
-		// console.log('Err at Hooks...', e)
 		throw error(404, err)
 	}
 }

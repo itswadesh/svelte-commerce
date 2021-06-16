@@ -48,7 +48,6 @@ function changePincode() {
 		method="POST"
 		use:enhance="{() => {
 			return async ({ result }) => {
-				// console.log('bounceItemFromTop', result)
 				if (!result.pincode) {
 					toast('Please enter valid pincode', 'error')
 					return (deliveryDetails = null)
