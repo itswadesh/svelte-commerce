@@ -20,11 +20,11 @@ img:not([src]) {
 <script lang="ts">
 import { browser } from '$app/environment'
 import { getCdnImageUrl } from '$lib/utils'
-import { IMAGE_CDN_URL } from '$lib/config'
 import { onDestroy } from 'svelte'
 import { onMount } from 'svelte'
 import lazyload from 'vanilla-lazyload'
-
+import { page } from '$app/stores'
+import { fade } from 'svelte/transition'
 export let alt = ''
 export let aspect_ratio = '3:4'
 export let height = 'auto'
@@ -38,6 +38,7 @@ const h = height === 'auto' ? 'auto' : +height * 2
 const w = width === 'auto' ? 'auto' : +width * 2
 
 let lazyloadInstance: any
+const IMAGE_CDN_URL = $page.data.store.IMAGE_CDN_URL
 
 onMount(() => {
 	if (browser) {
@@ -60,11 +61,13 @@ onDestroy(() => {
 
 <img
 	alt="{alt}"
-	class="lazy {clazz}"
-	src="{`${getCdnImageUrl(src)}?tr=w-${aspect_ratio.split(':')[0]},h-${
+	class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" in:fade="{{ duration: 1000}}"
+	width="{w}"
+	height="{h}"
+	src="{`${getCdnImageUrl(src, IMAGE_CDN_URL)}?tr=w-1,h-1:w-${aspect_ratio.split(':')[0]},h-${
 		aspect_ratio.split(':')[1]
 	},ar-${aspect_ratio.replace(':', '-')}`}"
-	data-src="{`${getCdnImageUrl(src)}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(
+	data-src="{`${getCdnImageUrl(src, IMAGE_CDN_URL)}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(
 		':',
 		'-'
 	)},cm-pad_resize`}" />
