@@ -16,8 +16,15 @@
 
 <div align="center" width="60%" height="auto">
   <br>
-    <img src=".github/svelte-commerce.gif">
+    <img src="https://res.cloudinary.com/itswadesh/image/upload/v1678600224/litekart/free_for_developers_1.png">
 </div>
+<div align="center">
+  <br>
+    <img width="500" height="340" src=".github/svelte-commerce.gif" >
+    <img width="500" height="340" src=".github/svelte-commerce-demo.gif" hspace="5">
+</div>
+
+
 <br/>
 
 <p align="center">
@@ -41,7 +48,7 @@
     </picture>
   </a>
   <img src="assets/misc/transparent.png" height="1" width="5"/>
-  <a href="https://discord.gg/4G7zbcpt" target="_blank">
+  <a href="https://discord.gg/GgdAeccwDR" target="_blank">
     <picture>
       <source srcset="assets/social/macchiato_discord.svg" width="64" height="64" alt="Discord Logo" media="(prefers-color-scheme: dark)"/>
       <source srcset="assets/social/latte_discord.svg" width="64" height="64" alt="Discord Logo" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)"/>
@@ -74,30 +81,35 @@ Reach out to me with queries!
 
 <div align="center">
 
-### Live demos using `svelte-commerce`
+### Big Brands using `svelte-commerce`
 
 </div>
 <br/>
 <p align="center">
-  <a href="https://food.misiki.in/" target="_blank">
-    <img src="https://ik.imagekit.io/3wzatecz51w3i/img/logo-eiyrtowkfwnx.png?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="Misiki Logo">
+  <a href="https://tesoro.pk/" target="_blank">
+    <img src="https://res.cloudinary.com/itswadesh/image/upload/v1682424690/tesoro.png?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="Tesoro">
   </a>
   <img src="assets/misc/transparent.png" height="1" width="15"/>
   <a href="https://varnijewels.com/" target="_blank">
-    <img src="https://ik.imagekit.io/3n6cglxq6/img/varni-logo_1619291754__34835-qt10qx2uq90x.webp?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="Varni Jewels Logo">
+    <img src="https://ik.imagekit.io/3n6cglxq6/img/varni-logo_1619291754__34835-qt10qx2uq90x.webp?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="Varni Jewels">
   </a>
   <img src="assets/misc/transparent.png" height="1" width="15"/>
-  <a href="https://next.trialshot.com/" target="_blank">
-    <img src="https://ik.imagekit.io/3wzatecz51w3i/misiki/img/logo-infeip6oao61.png?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="Trialshot Logo">
+  <a href="https://lrnr.in/" target="_blank">
+    <img src="https://res.cloudinary.com/itswadesh/image/upload/v1682423814/logo-lrnr.png?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="LRNR">
   </a>
   <img src="assets/misc/transparent.png" height="1" width="15"/>
   <a href="https://tablez.com/" target="_blank">
-    <img src="https://tablez.com/icon.png" height="64" alt="Tablez Logo">
+    <img src="https://tablez.com/icon.png" height="64" alt="Tablez">
   </a>
   <img src="assets/misc/transparent.png" height="1" width="15"/>
-  <a href="https://next.zapvi.in/" target="_blank">
-    <img src="https://cdn.zapvi.in/img/Zapvi-Black-Logo-iKPQP43npcI2.svg?width=3&height=4&blur=25&aspect_ratio=3:4" height="64" alt="Misiki Logo">
+  <a href="https://b.zapvi.in/" target="_blank">
+    <img src="https://cdn.zapvi.in/img/Zapvi-Black-Logo-iKPQP43npcI2.svg?width=3&height=4&blur=25&aspect_ratio=3:4" height="64" alt="Misiki">
   </a>
+  <img src="assets/misc/transparent.png" height="1" width="15"/>
+  <div>
+    <img src="https://res.cloudinary.com/itswadesh/image/upload/v1682424327/clicky_logo-97724356932.png?width=3&height=4&blur=25&aspect_ratio=3:4" height="64" alt="Clicky">
+  </div>
+
 </p>
 <br/>
 <br/>
@@ -125,7 +137,6 @@ Reach out to me with queries!
 git clone https://github.com/itswadesh/svelte-commerce.git
 cd svelte-commerce
 npm i
-cp .env.example .env    # You will need to update the values in this .env file
 npm run dev
 ```
 
@@ -134,8 +145,16 @@ Thats all !
 Open http://localhost:3000 on chrome. Your app should be live with awesome sveltekit up and running
 
 ## Configuration
+There are 3 places to configure
 
-If required, change `config/index.ts` according to your requirement
+1. `src/lib/config/`
+All non secret and application wide configs are stored here, if required, change according to your requirement.
+
+2. `.env`
+All secrets stored here
+
+3. `src/lib/services/index.ts`
+This is used to define which service to use. Only 1 of the listed service can be active at a time. Valid values are `Litekart Medusa Bigcommerce Shopify Woocommerce`
 
 ## Deployment
 
