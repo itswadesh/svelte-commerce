@@ -5,7 +5,7 @@ import { get } from '../util/api'
 import { addToCart, fetchCart, cart } from './../../store/cart'
 import { me } from './../../store/auth'
 
-export const handle: Handle = async ({ request, render }) => {
+export const handle: Handle = async ({ request, resolve }) => {
 	const cookies = cookie.parse(request.headers.cookie || '')
 	const token = cookies.token
 	request.locals.token = `${token}`
@@ -33,7 +33,7 @@ export const handle: Handle = async ({ request, render }) => {
 	}
 	fetchCart(token) // Me will not throw error
 
-	const response = await render(request)
+	const response = await resolve(request)
 
 	// if (!cookies.cookie) {
 	// 	// if this is the first time the user has visited this app,

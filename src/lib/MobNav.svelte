@@ -1,7 +1,4 @@
 <style>
-.pdl {
-	padding-left: 3em;
-}
 .frosted {
 	backdrop-filter: blur(15px);
 	background-color: hsla(0, 0%, 100%, 0.75);
