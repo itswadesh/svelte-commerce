@@ -9,7 +9,7 @@ $: cart_total.set($cart.total)
 $: cart_subtotal.set($cart.subtotal)
 $: offset = modulo($cart_total, 1)
 
-function modulo(n: number, m: number) {
+function modulo(n, m) {
 	// handle negative numbers
 	return ((n % m) + m) % m
 }

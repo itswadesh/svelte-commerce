@@ -3,9 +3,6 @@
 	backdrop-filter: blur(15px);
 	background-color: hsla(0, 0%, 100%, 0.75);
 }
-.pdl {
-	padding-left: 3em;
-}
 .text-extrasmall {
 	font-size: 0.5rem;
 }
@@ -25,7 +22,7 @@ const cart_qty = spring()
 $: cart_qty.set($cart.qty)
 $: offset = modulo($cart_qty, 1)
 
-function modulo(n: number, m: number) {
+function modulo(n, m) {
 	// handle negative numbers
 	return ((n % m) + m) % m
 }
