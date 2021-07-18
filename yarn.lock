@@ -3064,6 +3064,11 @@ svelte-swipe@^1.8.1:
   resolved "https://registry.yarnpkg.com/svelte-swipe/-/svelte-swipe-1.8.1.tgz#0a8cc4c7ce0e8b3781c6054406deba4808b60f67"
   integrity sha512-pcQNU84NV9W3VGhS44k1qnd9P7pI46ohRdPvo+UNcwoGSMsf6A6OR4Wf0RS7s/V05nNAJkHEZcUsYDX+0NeNWg==
 
+svelte-toasts@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/svelte-toasts/-/svelte-toasts-1.1.2.tgz#6ba590d27a9eb4cf164ea2efe5a5f1afac6de008"
+  integrity sha512-m+yL4eEKXyJoyjTYaH1j1GFwF0Pi8YDqnVfwWPDmwi4712iZesv+TNCmToSNlav3R5Vkmc8ZBRkT8DOcu3sywQ==
+
 svelte@^3.38.3:
   version "3.38.3"
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.38.3.tgz#e15a1da98ee4b10162a6c8cb4c80aa86b2b589ed"

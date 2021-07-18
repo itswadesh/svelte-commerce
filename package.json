@@ -52,6 +52,7 @@
     "svelte-hero-icons": "^2.2.0",
     "svelte-preprocess": "^4.7.4",
     "svelte-swipe": "^1.8.1",
+    "svelte-toasts": "^1.1.2",
     "tailwindcss": "^2.2.4",
     "tailwindcss-rtl": "^0.7.3",
     "tslib": "^2.3.0",

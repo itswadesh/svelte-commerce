@@ -8,6 +8,7 @@
 </style>
 
 <script>
+import { toasts, ToastContainer, FlatToast }  from "svelte-toasts";
 import { goto } from '$app/navigation'
 import { session } from '$app/stores'
 import { post } from '../util/api'
@@ -23,10 +24,26 @@ async function submit(e) {
 		$session.token = res.token
 		goto('/')
 	} catch (e) {
+		showToast(e,'error')
 		console.log('Login Error...', e.toString())
 	}
 }
+const showToast = (title,type) => {
+		const toast = toasts.add({
+		title: title,
+		description:'',
+		duration: 5000, // 0 or negative to avoid auto-remove
+		type: type||'info',
+		theme: 'dark',
+		placement: 'top-center',
+		showProgress: false,
+		onClick: () => {},
+		onRemove: () => {},
+		// component: BootstrapToast, // allows to override toast component/template per toast
+		});
+	}
 </script>
+	<button on:click={showToast}>Show Toast</button>
 
 <div class="h-screen py-20 bg-gray-900 ">
 	<div class="flex justify-center mx-4">
@@ -61,7 +78,7 @@ async function submit(e) {
 		<div class="w-full bg-white rounded-lg shadow md:rounded-l-none md:w-96">
 			<div class="">
 				<div class=" h-7 w-7 ml-auto mr-2">
-					<button class="mt-2 p-1 hover:bg-gray-500 bg-gray-900 rounded-full focus:outline-none">
+					<a href="/" class="block mt-2 p-1 hover:bg-gray-500 bg-gray-900 rounded-full focus:outline-none">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							class="h-5 w-5 text-white "
@@ -74,7 +91,7 @@ async function submit(e) {
 								stroke-width="2"
 								d="M6 18L18 6M6 6l12 12"></path>
 						</svg>
-					</button>
+					</a>
 				</div>
 				<h1 class="text-3xl text-center font-bold tracking-tight text-gray-900 ">Sign in</h1>
 				<form
@@ -93,15 +110,16 @@ async function submit(e) {
 					<button
 						type="submit"
 						class="mt-8 py-2 bg-gray-900 text-lg uppercase text-white font-semibold rounded-full shadow-md zoom tracking-wider focus:outline-none"
-						>Login Now</button>
+						>
+						Login Now</button>
 				</form>
 			</div>
 			<div class="mx-4 mt-4">
 				<a
 					rel="external"
-					href="{`/auth/github`}"
+					href="{`/signup`}"
 					class="flex items-center justify-center py-2 font-semibold text-gray-900 border rounded-full shadow-md zoom hover:no-underline">
-					<svg
+					<!-- <svg
 						viewBox="0 0 16 16"
 						xmlns="http://www.w3.org/2000/svg"
 						width="20"
@@ -152,8 +170,8 @@ async function submit(e) {
                   13.021C15.4912 11.5938 16 9.98693 16 8.2C15.9996 6.7126 15.6418
                   5.34069 14.9269 4.08427Z"
 							fill="currentColor"></path>
-					</svg>
-					<div class="ml-4 text-lg font-semibold tracking-tight">Sign in with GitHub</div>
+					</svg> -->
+					<div class="ml-4 text-lg font-semibold tracking-tight">Sign up</div>
 				</a>
 				<div class=" mt-5 ">
 					<h5 class="text-sm max-w-max mx-auto  font-semibold cursor-pointer hover:underline">
@@ -170,3 +188,6 @@ async function submit(e) {
 		</div>
 	</div>
 </div>
+<ToastContainer let:data={data}>
+		<FlatToast {data}  />
+	</ToastContainer>

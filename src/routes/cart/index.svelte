@@ -25,7 +25,7 @@ function toggle() {
 			<div class="flex items-baseline">
 				<h2 class="text-4xl font-bold tracking-wide ">Cart</h2>
 				<div class="w-1 h-1 mx-3 bg-gray-200 rounded-full"></div>
-				<h4 class="text-xl tracking-tighter text-gray-300">{$cart?.qty} item</h4>
+				<h4 class="text-xl tracking-tighter text-gray-300">{$cart?.qty} items</h4>
 			</div>
 			<!-- Cart end  -->
 			<!-- Enter pincode for delivery start  -->
