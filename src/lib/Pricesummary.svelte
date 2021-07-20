@@ -8,7 +8,9 @@ const cart_total = spring(),
 $: cart_total.set($cart.total)
 $: cart_subtotal.set($cart.subtotal)
 $: offset = modulo($cart_total, 1)
-
+export const btnname=null
+export const nextpage=null
+export const cls=null
 function modulo(n, m) {
 	// handle negative numbers
 	return ((n % m) + m) % m
