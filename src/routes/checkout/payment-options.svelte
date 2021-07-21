@@ -15,6 +15,7 @@ import { onMount } from 'svelte'
 import { toasts } from 'svelte-toasts'
 import { del, get, post } from '../../util/api'
 import CheckoutHeader from './_CheckoutHeader.svelte'
+
 let loading = false
 let paymentMethod = null
 export let address
@@ -77,109 +78,75 @@ async function getAddress() {
 }
 </script>
 
-<div class="container mx-auto">
+<div class="container  w-full mx-auto max-w-6xl text-gray-500 pb-20">
 	<CheckoutHeader selected="payment" />
-	<div
-		class="
-        flex flex-col
-        max-w-full
-        pt-8
-        mx-auto
-        sm:pb-20
-        xl:container
-        lg:flex-row
-        md:pt-0
-      ">
-		<div class="w-full lg:w-2/3">
-			<div class="flex flex-col w-full">
-				<div
-					class="
-              hidden
-              pb-6
-              mt-5
-              text-2xl text-center text-gray-500
-              md:text-start
-              md:flex
-              lg:mt-0
-            ">
-					Payment Methods
-				</div>
-				<div
-					class="
-                  flex
-                  justify-between
-                  w-full
-                  px-6
-                  py-4
-                  my-2
-                  bg-white
-                  rounded
-                  shadow-lg
-                  cursor-pointer
-                ">
-					<div class="flex-1">
-						<h2 class="text-xl font-black">COD</h2>
+	<div class="mt-10 lg:flex lg:justify-center lg:space-x-10">
+		<div class="lg:w-3/5">
+			<h1 class="text-2xl text-center  lg:text-left font-semibold">Cart Summary</h1>
+
+			<div class="mt-5 p-6 mx-auto bg-white border rounded-lg shadow-lg">
+				<h5 class="capitalize font-semibold tracking-wide text-lg">Delivery Address:</h5>
+
+				{#if addressDetails}
+					<div class="px-5 py-2 font-light bg-white">
+						<h5 class="capitalize font-semibold tracking-wide text-lg">
+							{addressDetails.firstName}
+							{addressDetails.lastName}
+						</h5>
+
+						<div class="flex flex-row my-1 sm:w-2/3">
+							<h5 class="font-semibold tracking-wide me-2 w-20">Address:</h5>
+							<h6 class="flex flex-col">
+								<span>{addressDetails.address},</span><span
+									>{addressDetails.city}, {addressDetails.state}, {addressDetails.country}</span>
+							</h6>
+						</div>
+
+						<div class="flex flex-row my-1">
+							<h5 class="font-semibold tracking-wide me-2 w-20">Pin:</h5>
+							<h6>{addressDetails.zip}</h6>
+						</div>
+
+						<div class="flex flex-row my-1">
+							<h5 class="font-semibold tracking-wide me-2 w-20">Phone:</h5>
+							<h6>{addressDetails.phone}</h6>
+						</div>
+
+						<div class="flex flex-row flex-wrap my-1">
+							<h5 class="font-semibold tracking-wide me-2 w-20">Email:</h5>
+							<h6>{addressDetails.email}</h6>
+						</div>
 					</div>
-					<div class="flex items-center">
-						<img src="/cod-img.jpg" alt="COD" class="w-16 h-12 mx-4" />
-					</div>
-				</div>
+				{/if}
+			</div>
+			<Pricesummary
+				text="Confirm Order"
+				cls="bg-white rounded sm:hidden"
+				loading="{loading}"
+				on:submit="{submit}" />
+		</div>
+
+		<div class="lg:w-2/5">
+			<h1 class="text-2xl text-center  lg:text-left font-semibold">Payment Methods</h1>
+
+			<div
+				class="mt-5 p-6 mx-auto bg-white border rounded-lg shadow-lg flex items-center justify-between">
+				<h2 class="text-xl font-semibold">COD</h2>
+
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="h-6 w-6"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor">
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"
+					></path>
+				</svg>
 			</div>
 		</div>
 	</div>
-</div>
-<div class="container relative w-full mx-auto mt-6 lg:ms-4 lg:w-1/3 lg:mt-0">
-	<span
-		class="
-            hidden
-            pb-6
-            text-2xl text-center text-gray-500
-            lg:text-start
-            md:flex
-          ">
-		Cart Summary
-	</span>
-	<div class="shadow">
-		<Pricesummary
-			text="Confirm Order"
-			loading="{loading}"
-			cls="hidden font-light bg-white rounded sm:flex"
-			on:submit="{submit}" />
-		<h3
-			class="
-              pt-5
-              pl-5
-              my-auto
-              text-xl
-              font-medium
-              text-gray-600
-              bg-white
-              ps-5
-            ">
-			Delivery Address:
-		</h3>
-		{#if addressDetails}
-			<div class="p-5 font-light bg-white">
-				<strong class="capitalize"> {addressDetails.firstName} {addressDetails.lastName}</strong>
-				<div class="mt-1 capitalize">
-					{addressDetails.address}
-				</div>
-				<div class="capitalize">
-					{addressDetails.city}
-					{addressDetails.state}
-					{addressDetails.country}
-				</div>
-				<div><strong> Pin: </strong>{addressDetails.zip}</div>
-				<div class="flex flex-col pt-2">
-					<span> <strong> Phone: </strong> {addressDetails.phone}</span>
-					<span> <strong> Email: </strong> {addressDetails.email}</span>
-				</div>
-			</div>
-		{/if}
-	</div>
-	<Pricesummary
-		text="Confirm Order"
-		cls="bg-white rounded sm:hidden"
-		loading="{loading}"
-		on:submit="{submit}" />
 </div>
