@@ -8,7 +8,7 @@
 </style>
 
 <script>
-import { toasts, ToastContainer, FlatToast }  from "svelte-toasts";
+import { toasts, ToastContainer, FlatToast } from 'svelte-toasts'
 import { goto } from '$app/navigation'
 import { session } from '$app/stores'
 import { post } from '../util/api'
@@ -24,61 +24,60 @@ async function submit(e) {
 		$session.token = res.token
 		goto('/')
 	} catch (e) {
-		showToast(e,'error')
+		showToast(e, 'error')
 		console.log('Login Error...', e.toString())
 	}
 }
-const showToast = (title,type) => {
-		const toast = toasts.add({
+const showToast = (title, type) => {
+	const toast = toasts.add({
 		title: title,
-		description:'',
+		description: '',
 		duration: 5000, // 0 or negative to avoid auto-remove
-		type: type||'info',
+		type: type || 'info',
 		theme: 'dark',
 		placement: 'top-center',
 		showProgress: false,
 		onClick: () => {},
 		onRemove: () => {},
 		// component: BootstrapToast, // allows to override toast component/template per toast
-		});
-	}
+	})
+}
 </script>
-	<button on:click={showToast}>Show Toast</button>
 
 <div class="h-screen py-20 bg-gray-900 ">
 	<div class="flex justify-center mx-4">
 		<div class="hidden w-full px-8 bg-black rounded-lg rounded-r-none md:w-96 md:block">
-			<div class="py-6 mt-2 text-2xl font-bold text-white">
-				Join millions of people sharing their code
-			</div>
+			<div class="py-6 mt-2 text-2xl font-bold text-white">Sveltekit is awesome</div>
 			<div class="text-gray-500 ">
 				<div class="my-4">
 					<div class="text-lg font-semibold ">
 						<span class="mr-1 ">✓</span>
-						10959+ premium projects
+						Creating full ecommerce frontend using svelte is
 					</div>
-					<div class="text-xs ">Large collection of souce codes</div>
+					<div class="text-xs ">divine experience</div>
 				</div>
 				<div class="my-4">
 					<div class="text-lg font-semibold ">
 						<span class="mr-1 ">✓</span>
-						Showcase your project
+						Lets build it together
 					</div>
-					<div class="text-xs ">Instantly submit your project</div>
+					<div class="text-xs ">and make it awesome</div>
 				</div>
 				<div class="my-4">
 					<div class="text-lg font-semibold ">
 						<span class="mr-1 ">✓</span>
-						Hire programmers
+						Small contribution
 					</div>
-					<div class="text-xs ">Get top coders for your next project</div>
+					<div class="text-xs ">even 1 line of code will be appreciated</div>
 				</div>
 			</div>
 		</div>
 		<div class="w-full bg-white rounded-lg shadow md:rounded-l-none md:w-96">
 			<div class="">
 				<div class=" h-7 w-7 ml-auto mr-2">
-					<a href="/" class="block mt-2 p-1 hover:bg-gray-500 bg-gray-900 rounded-full focus:outline-none">
+					<a
+						href="/"
+						class="block mt-2 p-1 hover:bg-gray-500 bg-gray-900 rounded-full focus:outline-none">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							class="h-5 w-5 text-white "
@@ -109,8 +108,7 @@ const showToast = (title,type) => {
 						bind:value="{password}" />
 					<button
 						type="submit"
-						class="mt-8 py-2 bg-gray-900 text-lg uppercase text-white font-semibold rounded-full shadow-md zoom tracking-wider focus:outline-none"
-						>
+						class="mt-8 py-2 bg-gray-900 text-lg uppercase text-white font-semibold rounded-full shadow-md zoom tracking-wider focus:outline-none">
 						Login Now</button>
 				</form>
 			</div>
@@ -188,6 +186,3 @@ const showToast = (title,type) => {
 		</div>
 	</div>
 </div>
-<ToastContainer let:data={data}>
-		<FlatToast {data}  />
-	</ToastContainer>
