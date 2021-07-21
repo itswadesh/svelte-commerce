@@ -14,6 +14,7 @@ import MobFooter from '$lib/MobFooter.svelte'
 import { getStores, navigating, page } from '$app/stores'
 import { fetchCart } from './../../store/cart'
 import { me } from './../../store/auth'
+import { ToastContainer, FlatToast } from 'svelte-toasts'
 
 export let user
 </script>
@@ -39,3 +40,6 @@ export let user
 		</div>
 	</div>
 </PageTransitions>
+<ToastContainer let:data>
+	<FlatToast data="{data}" />
+</ToastContainer>

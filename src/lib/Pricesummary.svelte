@@ -8,9 +8,9 @@ const cart_total = spring(),
 $: cart_total.set($cart.total)
 $: cart_subtotal.set($cart.subtotal)
 $: offset = modulo($cart_total, 1)
-export const btnname=null
-export const nextpage=null
-export const cls=null
+export const btnname = null
+export let nextpage = null
+export const cls = null
 function modulo(n, m) {
 	// handle negative numbers
 	return ((n % m) + m) % m
@@ -44,12 +44,14 @@ function modulo(n, m) {
 		<h4>Total</h4>
 		{currency(Math.floor($cart_subtotal))}
 	</div>
+	{nextpage}
 	{#if $cart.qty > 0}
 		<div>
-			<button
-				class="w-full py-2 my-2 font-bold tracking-wider text-white uppercase bg-gray-700 rounded-md shadow-md hover:bg-gray-800">
+			<a
+				href="{nextpage}"
+				class="w-full block px-4 py-2 my-2 font-bold tracking-wider text-white uppercase bg-gray-700 shadow-md hover:bg-gray-800">
 				Proceed to checkout
-			</button>
+			</a>
 		</div>
 	{/if}
 </div>
