@@ -7,8 +7,7 @@
 <script>
 export const selected = null
 let className =
-	' flex items-center justify-center w-8 h-8 mx-auto font-normal text-center            bg-white            border            rounded-full            border-primary-500'
-className += selected === 'payment' ? 'bg-primary-500  text-white' : 'bg-white text-primary-500'
+	' flex items-center justify-center w-8 h-8 mx-auto font-normal text-center bg-white border rounded-full border-primary-500'
 </script>
 
 <div
@@ -101,8 +100,27 @@ className += selected === 'payment' ? 'bg-primary-500  text-white' : 'bg-white t
 			</a>
 		{/if}
 		<hr class="flex-1 mx-3 my-4 dashes text-primary-500" />
+
 		<div class="items-center text-center">
-			<div class="{className}">3</div>
+			<div
+				class="
+            flex
+            items-center
+            justify-center
+            w-8
+            h-8
+            mx-auto
+            
+            text-center
+            border
+            rounded-full
+            border-primary-500
+            {selected == 'payment'
+					? 'bg-white text-primary-500 font-normal'
+					: 'bg-primary-500  text-white font-semibold'}
+        ">
+				3
+			</div>
 			<span class="mt-1 text-center text-primary-500">Payment</span>
 		</div>
 	</div>

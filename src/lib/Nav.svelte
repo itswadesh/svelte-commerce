@@ -37,26 +37,27 @@ async function logout() {
 }
 </script>
 
-<nav class="flex justify-between p-4 shadow-md border-gray-100 frosted">
-	<a href="/" class="flex items-center focus:outline-none max-w-max"
-		><img alt="" class="w-8 h-8" src="/logo.svg" />
-		<div class="">
-			<h2 class="ml-2 text-xl font-bold tracking-wide">LITEKART</h2>
-			<div class="ml-auto h-0.5 w-10 bg-pink-700"></div>
+<nav class=" p-4 shadow-md border-gray-100 frosted">
+	<div class="flex items-center justify-between">
+		<a href="/" class="flex items-center focus:outline-none max-w-max"
+			><img alt="" class="w-8 h-8" src="/logo.svg" />
+			<div class="">
+				<h2 class="ml-2 text-xl font-bold tracking-wide">LITEKART</h2>
+				<div class="ml-auto h-0.5 w-10 bg-pink-700"></div>
+			</div>
+		</a>
+		<div
+			class="flex items-center justify-center w-full ml-8 text-sm font-semibold tracking-wide uppercase xl:ml-10">
+			{#each $session.categories as c}
+				<a
+					href="{`/search?categories=${c?.slug}&page=1`}"
+					class="mx-2  cursor-pointer hover:text-primary-500 whitespace-nowrap xl:mx-5 transition duration-300">
+					{c?.name}
+				</a>
+			{/each}
 		</div>
-	</a>
-	<div
-		class="flex items-center justify-center w-full ml-8 text-sm font-semibold tracking-wide uppercase xl:ml-10">
-		{#each $session.categories as c}
-			<a
-				href="{`/search?categories=${c?.slug}&page=1`}"
-				class="mx-2 transform cursor-pointer hover:scale-95 whitespace-nowrap xl:mx-5">
-				{c?.name}
-			</a>
-		{/each}
-	</div>
-	<!-- <Search /> -->
-	<!-- <div class="w-1/2 mx-5">
+		<!-- <Search /> -->
+		<!-- <div class="w-1/2 mx-5">
 		<label class="relative flex items-center">
 			<input
 				type="text"
@@ -77,32 +78,10 @@ async function logout() {
 		</label>
 	</div> -->
 
-	<div class="flex items-center">
-		<a sveltekit:prefetch href="/cart" class:selected="{section === 'cart'}">
-			<button
-				class="flex items-center mr-5 font-semibold transform focus:outline-none whitespace-nowrap hover:scale-95">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					class="w-5 h-5 mr-1"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke="currentColor">
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-				</svg>
-
-				<span
-					class="counter-digits absolute flex items-center justify-center p-0.5 text-extrasmall text-white bg-black rounded-full w-4 h-4 top-0 right-0 -mr-2 -mt-2"
-					style="transform: translate(0, {100 * offset}%)">{Math.floor($cart_qty)}</span>
-			</button>
-		</a>
-		{#if !$session.user || !$session.user.email}
-			<a class:selected="{section === 'login'}" sveltekit:prefetch href="/login">
+		<div class="flex flex-row items-center">
+			<a sveltekit:prefetch href="/cart" class:selected="{section === 'cart'}">
 				<button
-					class="flex items-center font-semibold transform focus:outline-none whitespace-nowrap hover:scale-95">
+					class="flex items-center mr-5 font-semibold transform focus:outline-none whitespace-nowrap active:scale-95 hover:text-primary-500 transition duration-300 group">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						class="w-5 h-5 mr-1"
@@ -113,16 +92,42 @@ async function logout() {
 							stroke-linecap="round"
 							stroke-linejoin="round"
 							stroke-width="2"
-							d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-						></path>
+							d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
 					</svg>
-					<span>LOGIN</span>
+
+					<span
+						class="counter-digits absolute flex items-center justify-center p-0.5 text-extrasmall text-white bg-black group-hover:bg-primary-500 transition duration-300 rounded-full w-4 h-4 top-0 right-0 -mr-2 -mt-2"
+						style="transform: translate(0, {100 * offset}%)">{Math.floor($cart_qty)}</span>
 				</button>
 			</a>
-		{:else}
-			<button on:click="{logout}">
-				{$session.user.email}
-			</button>
-		{/if}
+
+			<a
+				class:selected="{section === 'login'}"
+				sveltekit:prefetch
+				href="/my"
+				class="flex items-center mx-2 ">
+				<div class=" flex-1 text-xs font-semibold mr-2 whitespace-nowrap">
+					{#if !$session.user || !$session.user.email}
+						<span>Hellow! {$session.user.firstName}</span>
+					{:else}
+						<span>Hellow! User</span>
+					{/if}
+				</div>
+
+				<div class="flex-shrink-0">
+					{#if !$session.user || !$session.user.email}
+						<img
+							v-lazy="session.user.avatar"
+							alt=""
+							class="w-10 shadow h-10 bg-white rounded-full " />
+					{:else}
+						<img
+							src="leadership-profile.png"
+							alt="user"
+							class="w-10 shadow h-10  bg-white rounded-full " />
+					{/if}
+				</div>
+			</a>
+		</div>
 	</div>
 </nav>
