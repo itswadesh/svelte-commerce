@@ -50,7 +50,8 @@ function toggle() {
 						<p class="text-sm">Enter a pincode</p>
 						<div class="mt-2">
 							<Textbox label="Pincode" />
-							<button on:click="{toggle}"
+							<button
+								on:click="{toggle}"
 								class="w-full py-3 mt-3 font-bold tracking-wide text-white bg-gray-800 rounded-lg bg-opacity-80 hover:bg-opacity-100"
 								>CHECK</button>
 						</div>
@@ -86,7 +87,7 @@ function toggle() {
 				></path>
 			</svg>
 		</div>
-		<Pricesummary />
+		<Pricesummary nextpage="/checkout/address" text="Select Address" />
 	</div>
 	<!-- Promo code section end -->
 </section>

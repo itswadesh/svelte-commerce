@@ -49,9 +49,9 @@ async function logout() {
 		class="flex items-center justify-center w-full ml-8 text-sm font-semibold tracking-wide uppercase xl:ml-10">
 		{#each $session.categories as c}
 			<a
-				href="{`/search?categories=${c.slug}&page=1`}"
+				href="{`/search?categories=${c?.slug}&page=1`}"
 				class="mx-2 transform cursor-pointer hover:scale-95 whitespace-nowrap xl:mx-5">
-				{c.name}
+				{c?.name}
 			</a>
 		{/each}
 	</div>

@@ -10,7 +10,6 @@ function addToBag(item, qty) {
 	// goto('/cart')
 }
 </script>
-
 <!-- Product detail start  -->
 <div class="flex items-start py-5 my-5 border-b border-gray-200">
 	<img
@@ -27,12 +26,12 @@ function addToBag(item, qty) {
 			</a>
 			<h2 class="ml-5 text-lg whitespace-nowrap">Arrives in 4 days</h2>
 		</div>
-		<h5 class="text-gray-600">{item.product?.vendor_name}</h5>
-		<div class="flex items-center my-2">
+		<!-- <h5 class="text-gray-600">{item.product?.vendor_name}</h5> -->
+		<!-- <div class="flex items-center my-2">
 			<h5 class="text-sm">One size</h5>
 			<div class="w-1 h-1 mx-3 bg-gray-200 rounded-full"></div>
-			<span class="text-red-500">2 left</span>
-		</div>
+			<span class="text-red-500">{item?.product} left</span>
+		</div> -->
 		<div class="flex items-center">
 			<span class="text-xl font-bold">{currency(item?.variant?.price)}</span>
 			<span class="ml-2 font-light text-gray-400 ">
