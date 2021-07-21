@@ -44,8 +44,6 @@ const showToast = (title, type) => {
 }
 </script>
 
-<button on:click="{showToast}">Show Toast</button>
-
 <div class="h-screen py-20 bg-gray-900 ">
 	<div class="flex justify-center mx-4">
 		<div class="hidden w-full px-8 bg-black rounded-lg rounded-r-none md:w-96 md:block">

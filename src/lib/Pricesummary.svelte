@@ -2,7 +2,8 @@
 import { currency } from '../util'
 import { cart } from '../../store/cart'
 import { spring } from 'svelte/motion'
-
+import { createEventDispatcher } from 'svelte'
+const dispatch = createEventDispatcher()
 const cart_total = spring(),
 	cart_subtotal = spring()
 $: cart_total.set($cart.total)
@@ -10,10 +11,15 @@ $: cart_subtotal.set($cart.subtotal)
 $: offset = modulo($cart_total, 1)
 export const btnname = null
 export let nextpage = null
+export let text = 'Proceed to checkout'
 export const cls = null
+export const loading = !!false
 function modulo(n, m) {
 	// handle negative numbers
 	return ((n % m) + m) % m
+}
+function submit() {
+	dispatch('submit')
 }
 </script>
 
@@ -44,14 +50,21 @@ function modulo(n, m) {
 		<h4>Total</h4>
 		{currency(Math.floor($cart_subtotal))}
 	</div>
-	{nextpage}
 	{#if $cart.qty > 0}
 		<div>
-			<a
-				href="{nextpage}"
-				class="w-full block px-4 py-2 my-2 font-bold tracking-wider text-white uppercase bg-gray-700 shadow-md hover:bg-gray-800">
-				Proceed to checkout
-			</a>
+			{#if nextpage}
+				<a
+					href="{nextpage}"
+					class="w-full block px-4 py-2 my-2 font-bold tracking-wider text-white uppercase bg-gray-700 shadow-md hover:bg-gray-800">
+					{text}
+				</a>
+			{:else}
+				<button
+					on:click="{submit}"
+					class="w-full block px-4 py-2 my-2 font-bold tracking-wider text-white uppercase bg-gray-700 shadow-md hover:bg-gray-800">
+					{text}
+				</button>
+			{/if}
 		</div>
 	{/if}
 </div>

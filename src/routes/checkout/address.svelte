@@ -101,10 +101,10 @@ async function remove(id) {
 					</span>
 					<div class="">
 						<Pricesummary
-							nextpage="/checkout/payment-options"
+							text="Proceed"
+							nextpage="{`/checkout/payment-options?address=${selectedAddress}`}"
 							loading="{loading}"
-							selectedAddress="{selectedAddress}"
-							class="border-t rounded sm:border-t-0 sm:border sm:shadow" />
+							cls="border-t rounded sm:border-t-0 sm:border sm:shadow" />
 					</div>
 				</div>
 			</div>
