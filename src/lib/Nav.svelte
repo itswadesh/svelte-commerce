@@ -106,25 +106,23 @@ async function logout() {
 				sveltekit:prefetch
 				href="/my"
 				class="flex items-center mx-2 ">
-				<div class=" flex-1 text-xs font-semibold mr-2 whitespace-nowrap">
-					{#if !$session.user || !$session.user.email}
-						<span>Hellow! {$session.user.firstName}</span>
-					{:else}
-						<span>Hellow! User</span>
-					{/if}
-				</div>
+				{#if $session?.user?.firstName}
+					<div class=" flex-1 text-xs font-semibold mr-2 whitespace-nowrap">
+						<span>Hi {$session?.user?.firstName}</span>
+					</div>
+				{/if}
 
 				<div class="flex-shrink-0">
-					{#if !$session.user || !$session.user.email}
+					{#if $session?.user?.avatar}
 						<img
-							v-lazy="session.user.avatar"
+							src="{session?.user?.avatar}"
 							alt=""
 							class="w-10 shadow h-10 bg-white rounded-full " />
 					{:else}
 						<img
-							src="leadership-profile.png"
+							src="/leadership-profile.png"
 							alt="user"
-							class="w-10 shadow h-10  bg-white rounded-full " />
+							class="w-8 shadow h-8  bg-white rounded-full " />
 					{/if}
 				</div>
 			</a>

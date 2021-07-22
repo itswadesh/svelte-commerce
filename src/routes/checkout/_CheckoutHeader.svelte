@@ -79,7 +79,7 @@ let className =
 				<span class="mt-1 text-center text-primary-500">Address</span>
 			</div>
 		{:else}
-			<a href="checkout/address" class="flex flex-col items-center text-center">
+			<a href="/checkout/address" class="flex flex-col items-center text-center">
 				<div
 					class="
             flex
