@@ -1,6 +1,6 @@
-<section class="flex items-center justify-center my-8">
+<section class="grid grid-cols-3 justify-items-center gap-4  my-8">
 	<!-- 1st box start  -->
-	<div class="w-44 h-40 bg-gray-200 text-gray-600 rounded-lg px-6 py-8">
+	<div class="bg-gray-200 text-gray-600 rounded-lg p-4 sm:p-6">
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			class="h-6 w-6"
@@ -24,7 +24,7 @@
 	<!-- 1st box end  -->
 	<!-- 2nd box start  -->
 
-	<div class="ml-5 w-44 h-40 bg-gray-200 text-gray-600 rounded-lg px-6 py-8">
+	<div class="bg-gray-200 text-gray-600 rounded-lg p-4 sm:p-6">
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			class="h-6 w-6"
@@ -45,7 +45,7 @@
 
 	<!-- 3rd box start  -->
 
-	<div class="ml-5 w-44 h-40 bg-gray-200 text-gray-600 rounded-lg px-6 py-8">
+	<div class="bg-gray-200 text-gray-600 rounded-lg p-4 sm:p-6">
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			class="h-6 w-6"

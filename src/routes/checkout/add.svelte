@@ -11,52 +11,20 @@ console.log(user)
 if (!user || !user.email) goto('/login')
 </script>
 
-<div class="container relative mx-auto">
-	<div>
-		<CheckoutHeader selected="{'address'}" />
-		<div>
-			<div class="flex flex-col w-full mx-auto pb-14 sm:pb-20 lg:flex-row">
-				<div class="container w-full mx-auto lg:w-2/3">
-					<span
-						class="
-                hidden
-                mx-auto
-                my-4
-                text-2xl text-center text-gray-500
-                lg:text-start
-                sm:flex
-              ">
-						Billing Details
-					</span>
-					<EditAddress id="new" returnUrl="/checkout/address" />
-				</div>
-				<div
-					class="
-              container
-              relative
-              w-full
-              mx-auto
-              mt-6
-              lg:ms-4
-              lg:w-1/3
-              lg:mt-0
-            ">
-					<span
-						class="
-                hidden
-                mx-auto
-                my-4
-                text-2xl text-center text-gray-500
-                lg:text-start
-                sm:flex
-              ">
-						Cart Details
-					</span>
-					<div class="bg-white border rounded shadow">
-						<Pricesummary btnname="{'Continue'}" />
-					</div>
-				</div>
-			</div>
+<section
+	class="container  w-full mx-auto max-w-6xl px-4 sm:px-10 pb-10 py-5 md:py-10 text-gray-800 ">
+	<CheckoutHeader selected="address" />
+	<div class="mt-10 lg:flex lg:justify-center lg:space-x-20">
+		<div class="lg:w-2/3 ">
+			<h2 class="text-2xl md:text-3xl lg:text-4xl font-bold tracking-wide ">Billing Details</h2>
+
+			<EditAddress id="new" returnUrl="/checkout/address" />
+		</div>
+
+		<div class="mt-5 lg:mt-0 lg:w-1/3">
+			<h2 class="text-2xl md:text-3xl lg:text-4xl font-bold tracking-wide ">Cart Details</h2>
+
+			<Pricesummary btnname="{'Continue'}" />
 		</div>
 	</div>
-</div>
+</section>

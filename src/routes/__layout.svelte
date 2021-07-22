@@ -34,7 +34,7 @@ export let user
 			<slot />
 		</div>
 	</div>
-	<div class="mt-20 lg:mt-0 lg:hidden">
+	<div class="mt-20  md:hidden">
 		<div class="fixed bottom-0 w-full">
 			<MobFooter />
 		</div>

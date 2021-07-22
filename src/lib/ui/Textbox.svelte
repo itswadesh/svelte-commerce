@@ -24,7 +24,7 @@ label {
 	position: absolute;
 	pointer-events: none;
 	left: 8px;
-	top: 13px;
+	top: 11px;
 	transition: 0.2s ease all;
 	-moz-transition: 0.2s ease all;
 	-webkit-transition: 0.2s ease all;
