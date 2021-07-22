@@ -19,29 +19,23 @@ export const fetchCart = async (token?) => {
 		const data = (await get('cart', null, token)) || { qty: 0, items: [] }
 		cart.set(data)
 		return data
-	} catch (e) {
-		return {}
-	}
+	} catch (e) {}
 }
 export const addToCart = async (payload) => {
 	try {
 		const data = await post('cart/add', payload)
 		cart.set(data)
 		return data
-	} catch (e) {
-		throw e.toString()
-	}
+	} catch (e) {}
 }
 export const checkout = async ({ paymentMethod, address }) => {
 	try {
-		let order = await post('orders', {
+		const order = await post('orders', {
 			address,
 			paymentMethod: paymentMethod || 'COD',
 		})
 		const data = await fetchCart()
 		cart.set(data)
 		return order
-	} catch (e) {
-		throw e
-	}
+	} catch (e) {}
 }

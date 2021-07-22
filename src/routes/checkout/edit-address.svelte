@@ -12,7 +12,7 @@ export async function load({ page: { host, path, params, query }, fetch }) {
 <script lang="ts">
 import EditAddress from './_EditAddress.svelte'
 import Pricesummary from '$lib/Pricesummary.svelte'
-import CheckoutHeader from '/_CheckoutHeader.svelte'
+import CheckoutHeader from './_CheckoutHeader.svelte'
 export let id
 </script>
 

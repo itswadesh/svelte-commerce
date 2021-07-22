@@ -1,6 +1,5 @@
 <script>
 import Checkbox from '$lib/ui/Checkbox.svelte'
-import { sorts } from './../../../config'
 import { constructURL, constructURL2 } from '../../util'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
