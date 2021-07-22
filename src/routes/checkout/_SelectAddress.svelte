@@ -80,22 +80,23 @@ const showToast = (title, type) => {
 	{:else if addresses?.data?.length}
 		<div>
 			{#each addresses.data as a}
-				<div class="border-b py-4">
-					<label for="group" class="flex flex-row w-full px-4  sm:px-6">
+				<div class="border-b py-2 pb-4 sm:py-6">
+					<label for="group" class="flex flex-row w-full px-2 sm:px-6">
 						<input
 							type="radio"
 							value="{a._id}"
 							name="group"
 							class="mt-1.5"
 							on:change="{() => addressChanged(a._id)}" />
-						<div class="w-full font-light  text-gray-500 cursor-pointer ms-2">
-							<h5 class="capitalize font-semibold tracking-wide text-lg">
+						<div class="w-full font-light  text-gray-800 cursor-pointer ms-2">
+							<h5 class="capitalize font-semibold tracking-wide md:text-lg">
 								{a.firstName}
 								{a.lastName}
 							</h5>
 
-							<div class="flex items-start my-1 sm:w-2/3">
-								<h5 class="font-semibold tracking-wide me-2 w-20 flex items-center justify-between">
+							<div class="text-sm md:text-base flex items-start my-1 sm:w-2/3">
+								<h5
+									class="font-semibold tracking-wide me-2 w-16 sm:w-20 flex items-center justify-between">
 									<span>Address</span> <span>:</span>
 								</h5>
 
@@ -104,24 +105,27 @@ const showToast = (title, type) => {
 								</h6>
 							</div>
 
-							<div class="flex items-start my-1 sm:w-2/3">
-								<h5 class="font-semibold tracking-wide me-2 w-20 flex items-center justify-between">
+							<div class="text-sm md:text-base  flex items-start my-1 sm:w-2/3">
+								<h5
+									class="font-semibold tracking-wide me-2 w-16 sm:w-20 flex items-center justify-between">
 									<span>Pin</span> <span>:</span>
 								</h5>
 
 								<h6>{a.zip}</h6>
 							</div>
 
-							<div class="flex items-start my-1 sm:w-2/3">
-								<h5 class="font-semibold tracking-wide me-2 w-20 flex items-center justify-between">
+							<div class="text-sm md:text-base  flex items-start my-1 sm:w-2/3">
+								<h5
+									class="font-semibold tracking-wide me-2 w-16 sm:w-20 flex items-center justify-between">
 									<span>Phone</span> <span>:</span>
 								</h5>
 
 								<h6>{a.phone}</h6>
 							</div>
 
-							<div class="flex items-start my-1 sm:w-2/3">
-								<h5 class="font-semibold tracking-wide me-2 w-20 flex items-center justify-between">
+							<div class="text-sm md:text-base  flex items-start my-1 sm:w-2/3">
+								<h5
+									class="font-semibold tracking-wide me-2 w-16 sm:w-20 flex items-center justify-between">
 									<span>Email</span> <span>:</span>
 								</h5>
 
@@ -129,7 +133,8 @@ const showToast = (title, type) => {
 							</div>
 						</div>
 					</label>
-					<div class="mx-12 mt-5 flex items-center space-x-10">
+					<div
+						class="mx-8 sm:mx-10 mt-5 flex items-center text-sm sm:text-base space-x-5 sm:space-x-10">
 						<button
 							type="button"
 							class="py-2 px-4 rounded-md shadow-md border border-primary-500 hover:bg-primary-500 hover:text-white text-primary-500 focus:outline-none w-full transition duration-300 font-semibold tracking-wide"
