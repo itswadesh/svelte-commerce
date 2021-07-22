@@ -94,25 +94,37 @@ const showToast = (title, type) => {
 								{a.lastName}
 							</h5>
 
-							<div class="flex flex-row my-1 sm:w-2/3">
-								<h5 class="font-semibold tracking-wide me-2 w-20">Address:</h5>
+							<div class="flex items-start my-1 sm:w-2/3">
+								<h5 class="font-semibold tracking-wide me-2 w-20 flex items-center justify-between">
+									<span>Address</span> <span>:</span>
+								</h5>
+
 								<h6 class="flex flex-col">
 									<span>{a.address},</span><span>{a.city}, {a.state}, {a.country}</span>
 								</h6>
 							</div>
 
-							<div class="flex flex-row my-1">
-								<h5 class="font-semibold tracking-wide me-2 w-20">Pin:</h5>
+							<div class="flex items-start my-1 sm:w-2/3">
+								<h5 class="font-semibold tracking-wide me-2 w-20 flex items-center justify-between">
+									<span>Pin</span> <span>:</span>
+								</h5>
+
 								<h6>{a.zip}</h6>
 							</div>
 
-							<div class="flex flex-row my-1">
-								<h5 class="font-semibold tracking-wide me-2 w-20">Phone:</h5>
+							<div class="flex items-start my-1 sm:w-2/3">
+								<h5 class="font-semibold tracking-wide me-2 w-20 flex items-center justify-between">
+									<span>Phone</span> <span>:</span>
+								</h5>
+
 								<h6>{a.phone}</h6>
 							</div>
 
-							<div class="flex flex-row flex-wrap my-1">
-								<h5 class="font-semibold tracking-wide me-2 w-20">Email:</h5>
+							<div class="flex items-start my-1 sm:w-2/3">
+								<h5 class="font-semibold tracking-wide me-2 w-20 flex items-center justify-between">
+									<span>Email</span> <span>:</span>
+								</h5>
+
 								<h6>{a.email}</h6>
 							</div>
 						</div>
