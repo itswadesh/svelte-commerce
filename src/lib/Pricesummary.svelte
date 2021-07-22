@@ -59,17 +59,18 @@ function submit() {
 		{currency(Math.floor($cart_subtotal))}
 	</div>
 	{#if $cart.qty > 0}
-		<button
-			class="w-full block px-4 py-2 mt-5 font-bold tracking-wider text-white uppercase bg-gray-700 shadow-md transition duration-300 hover:bg-gray-800 focus:outline-none">
-			{#if nextpage}
-				<a href="{nextpage}">
-					{text}
-				</a>
-			{:else}
-				<button on:click="{submit}" class="focus:outline-none">
-					{text}
-				</button>
-			{/if}
-		</button>
+		{#if nextpage}
+			<a
+				href="{nextpage}"
+				class="w-full block px-4 py-2 mt-5 font-bold tracking-wider text-white uppercase bg-gray-700 shadow-md transition duration-300 hover:bg-gray-800 focus:outline-none">
+				{text}
+			</a>
+		{:else}
+			<button
+				on:click="{submit}"
+				class="w-full block px-4 py-2 mt-5 font-bold tracking-wider text-white uppercase bg-gray-700 shadow-md transition duration-300 hover:bg-gray-800 focus:outline-none ">
+				{text}
+			</button>
+		{/if}
 	{/if}
 </section>
