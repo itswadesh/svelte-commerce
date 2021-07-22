@@ -6,21 +6,17 @@
 
 <script>
 export let selected = null
-function className(i, selected) {
-	return `flex items-center justify-center w-8 h-8 mx-auto font-normal text-center bg-white border rounded-full border-primary-500 {selected==='cart' ? 'bg-primary-500  text-white' : 'bg-white text-primary-500'}`
-}
 </script>
 
-<div class=" flex flex-wrap justify-center p-2 px-5 md:mt-10 xl:mt-20 lg:px-8 lg:pb-4">
-	<div class="mt-2 order-0 lg:order-0"></div>
+<section class=" flex flex-wrap justify-center">
 	<div
-		class=" flex justify-between order-2 w-full pt-3 text-xs font-bold tracking-widest text-center text-gray-700 lg:order-1 lg:w-1/3">
+		class=" flex justify-between  w-full text-xs font-semibold tracking-widest text-center text-gray-700 md:w-2/3 lg:w-1/3">
 		<a href="/cart" class="flex flex-col mx-2">
 			<div
-				class="flex items-center justify-center w-8 h-8 mx-auto font-normal text-center bg-white border rounded-full border-primary-500 {selected ===
+				class="flex items-center justify-center w-8 h-8 mx-auto  text-center bg-white border rounded-full border-primary-500 {selected ===
 				'cart'
 					? 'bg-primary-500  text-white'
-					: 'bg-white text-primary-500'}">
+					: 'bg-white text-primary-500 '}">
 				1
 			</div>
 
@@ -29,13 +25,13 @@ function className(i, selected) {
 
 		<hr class="flex-1 mx-3 my-4 dashes text-primary-500" />
 
-		{#if selected == 'cart'}
+		{#if selected == 'address'}
 			<div class="flex flex-col items-center text-center">
 				<div
-					class="flex items-center justify-center w-8 h-8 mx-auto font-normal text-center bg-white border rounded-full border-primary-500 {selected ===
+					class="flex items-center justify-center w-8 h-8 mx-auto  text-center bg-white border rounded-full border-primary-500 {selected ===
 					'address'
 						? 'bg-primary-500  text-white'
-						: 'bg-white text-primary-500'}">
+						: 'bg-white text-primary-500  '}">
 					2
 				</div>
 
@@ -44,7 +40,7 @@ function className(i, selected) {
 		{:else}
 			<a href="/checkout/address" class="flex flex-col items-center text-center">
 				<div
-					class="flex items-center justify-center w-8 h-8 mx-auto font-normal text-center bg-white border rounded-full border-primary-500 {selected ===
+					class="flex items-center justify-center w-8 h-8 mx-auto  text-center bg-white border rounded-full border-primary-500 {selected ===
 					'address'
 						? 'bg-primary-500  text-white'
 						: 'bg-white text-primary-500'}">
@@ -57,16 +53,30 @@ function className(i, selected) {
 
 		<hr class="flex-1 mx-3 my-4 dashes text-primary-500" />
 
-		<div class="items-center text-center">
-			<div
-				class="flex items-center justify-center w-8 h-8 mx-auto font-normal text-center bg-white border rounded-full border-primary-500 {selected ===
-				'payment'
-					? 'bg-primary-500  text-white'
-					: 'bg-white text-primary-500'}">
-				3
-			</div>
+		{#if selected == 'payment'}
+			<div class="flex flex-col items-center text-center">
+				<div
+					class="flex items-center justify-center w-8 h-8 mx-auto  text-center bg-white border rounded-full border-primary-500 {selected ===
+					'payment'
+						? 'bg-primary-500  text-white '
+						: 'bg-white text-primary-500 '}">
+					3
+				</div>
 
-			<span class="mt-1 text-center text-primary-500">Payment</span>
-		</div>
+				<span class="mt-1 text-center text-primary-500">Payment</span>
+			</div>
+		{:else}
+			<a href="/checkout/payment-options" class="flex flex-col items-center text-center">
+				<div
+					class="flex items-center justify-center w-8 h-8 mx-auto  text-center bg-white border rounded-full border-primary-500 {selected ===
+					'payment'
+						? 'bg-primary-500  text-white'
+						: 'bg-white text-primary-500'}">
+					3
+				</div>
+
+				<span class="mt-1 text-center text-primary-500">Payment</span>
+			</a>
+		{/if}
 	</div>
-</div>
+</section>

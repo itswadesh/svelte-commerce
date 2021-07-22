@@ -48,13 +48,15 @@ async function remove(id) {
 }
 </script>
 
-<section class="container mx-auto max-w-6xl">
+<section
+	class="container  w-full mx-auto max-w-6xl px-4 sm:px-10 pb-10 py-5 md:py-10 text-gray-800 ">
 	<CheckoutHeader selected="address" />
-	<div class="mt-10 lg:flex lg:space-x-10">
-		<div class="lg:w-2/3 ">
-			<h1 class="text-2xl text-center text-gray-500 lg:text-left font-semibold">
+	<div class="mt-5 md:mt-10 lg:flex lg:justify-center lg:space-x-10 xl:space-x-20">
+		<div class="lg:w-1/2 xl:w-2/3 ">
+			<h2 class="text-2xl md:text-3xl lg:text-4xl font-bold tracking-wide ">
 				Select Delivery Address
-			</h1>
+			</h2>
+
 			<div class="mt-5 mx-auto bg-white border rounded-lg shadow-lg">
 				<SelectAddress
 					selectedAddress="{selectedAddress}"
@@ -63,33 +65,34 @@ async function remove(id) {
 					on:addressChanged="{addressChanged}" />
 			</div>
 
-			<div class="mt-10 max-w-max">
+			<div class="my-10 w-1/2">
 				<a
 					href="/checkout/add"
-					class="
-                  py-3 px-12 text-white font-semibold tracking-wide rounded-md shadow-md flex items-center space-x-1
-                  bg-primary-500 hover:bg-primary-700 transition duration-300
-                  focus:ring-primary-500 focus:ring-offset-1
-                  
-                ">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="h-6 w-6"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-					</svg>
-					<span> ADD NEW ADDRESS</span>
+					class="w-full h-40 sm:h-60 border border-gray-400 border-dashed rounded-md flex flex-col items-center justify-center hover:border-primary-500 group ">
+					<div
+						class="h-8 w-8 sm:h-10 sm:w-10 rounded-full border border-gray-400  flex items-center justify-center bg-gray-100 group-hover:border-primary-500">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="h-6 w-6 text-gray-600 group-hover:text-primary-500"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+						</svg>
+					</div>
+					<span
+						class="mt-2 text-gray-800 group-hover:text-primary-500 text-sm sm:text-base font-medium">
+						ADD NEW ADDRESS</span>
 				</a>
 			</div>
 		</div>
-		<div class="lg:w-1/3">
-			<h1 class="text-2xl text-center text-gray-500 lg:text-left font-semibold">Cart Summary</h1>
+
+		<div class="lg:w-1/2  xl:w-1/3">
+			<h2 class="text-2xl md:text-3xl lg:text-4xl font-bold tracking-wide ">Cart Summary</h2>
 
 			<Pricesummary
 				text="Proceed"

@@ -10,21 +10,22 @@ function addToBag(item, qty) {
 	// goto('/cart')
 }
 </script>
+
 <!-- Product detail start  -->
-<div class="flex items-start py-5 my-5 border-b border-gray-200">
+<div class="flex items-start py-5 sm:py-10 border-b border-gray-200">
 	<img
 		href="{`${item?.product?.slug}?id=${item?.product?._id}`}"
 		src="{`${CDN_URL}/${item.product?.img[0]}`}"
 		alt=""
-		class="w-32 h-32 bg-gray-100 rounded-lg cursor-pointer" />
-	<div class="w-full ml-4">
-		<div class="flex items-center justify-between">
+		class="w-20 sm:w-32 object-cover bg-gray-100 rounded-lg cursor-pointer" />
+	<div class="mx-4 ">
+		<div class="flex flex-wrap items-center justify-between">
 			<a
 				href="{`${item?.product?.slug}?id=${item?.product?._id}`}"
-				class="text-lg text-gray-600 truncate cursor-pointer w-72 hover:underline">
+				class="text-base font-medium sm:text-lg text-gray-600 truncate cursor-pointer w-72 hover:underline mr-5">
 				{item?.product?.name}
 			</a>
-			<h2 class="ml-5 text-lg whitespace-nowrap">Arrives in 4 days</h2>
+			<h2 class="text-base sm:text-lg whitespace-nowrap">Arrives in 4 days</h2>
 		</div>
 		<!-- <h5 class="text-gray-600">{item.product?.vendor_name}</h5> -->
 		<!-- <div class="flex items-center my-2">
@@ -32,22 +33,22 @@ function addToBag(item, qty) {
 			<div class="w-1 h-1 mx-3 bg-gray-200 rounded-full"></div>
 			<span class="text-red-500">{item?.product} left</span>
 		</div> -->
-		<div class="flex items-center">
-			<span class="text-xl font-bold">{currency(item?.variant?.price)}</span>
-			<span class="ml-2 font-light text-gray-400 ">
+		<div class="mt-2 flex items-center">
+			<span class="text-lg sm:text-xl font-bold">{currency(item?.variant?.price)}</span>
+			<span class="ml-2 text-sm sm:text-base font-light text-gray-400 ">
 				<span class="line-through">{currency(item?.variant?.mrp)}</span>
 			</span>
-			<span class="ml-2 text-green-500 "> {discount}% off </span>
+			<span class="ml-2 text-sm sm:text-base text-green-500 "> {discount}% off </span>
 		</div>
 		<div class="flex justify-between my-2">
 			<div class="flex items-center justify-center">
 				<button
 					on:click="{() => addToBag(item, -1)}"
 					type="button"
-					class="flex items-center justify-center w-8 h-8 text-xs bg-gray-200 rounded-full shadow hover:bg-gray-300 focus:outline-none hover:opacity-80">
+					class="flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8  bg-gray-200 rounded-full shadow  hover:bg-gray-300 focus:outline-none hover:opacity-80 transform active:scale-95 transition duration-300">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
-						class="w-4 h-4"
+						class="w-4 h-4 text-gray-600"
 						fill="none"
 						viewBox="0 0 24 24"
 						stroke="currentColor">
@@ -55,17 +56,19 @@ function addToBag(item, qty) {
 						></path>
 					</svg>
 				</button>
-				<button
-					class="flex items-center justify-center w-8 h-8 text-xs rounded-full focus:outline-none hover:opacity-80">
+
+				<div
+					class="mx-2 flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 text-xs  font-bold  ">
 					<span>{item?.qty}</span>
-				</button>
+				</div>
+
 				<button
 					on:click="{() => addToBag(item, 1)}"
 					type="button"
-					class="flex items-center justify-center w-8 h-8 text-xs bg-gray-200 rounded-full hover:bg-gray-300 focus:outline-none hover:opacity-80">
+					class="flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8  bg-gray-200 rounded-full shadow  hover:bg-gray-300 focus:outline-none hover:opacity-80 transform active:scale-95 transition duration-300">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
-						class="w-4 h-4"
+						class="w-4 h-4 text-gray-600"
 						fill="none"
 						viewBox="0 0 24 24"
 						stroke="currentColor">
@@ -80,10 +83,10 @@ function addToBag(item, qty) {
 			<div>
 				<button
 					on:click="{() => addToBag(item, -100000)}"
-					class="p-3 bg-gray-200 rounded-md hover:opacity-80 focus:outline-none">
+					class="flex items-center justify-center w-10 h-10 text-xs bg-gray-200 rounded-md shadow  hover:bg-gray-300 focus:outline-none hover:opacity-80 transform active:scale-95 transition duration-300">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
-						class="w-5 h-5 text-gray-500"
+						class="w-5 h-5 text-gray-600"
 						fill="none"
 						viewBox="0 0 24 24"
 						stroke="currentColor">

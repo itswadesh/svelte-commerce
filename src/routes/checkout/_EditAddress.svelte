@@ -101,7 +101,7 @@ async function submit() {
 
 <div class="flex flex-col">
 	<div v-if="address">
-		<form class="p-1 md:p-4" novalidate autocomplete="off" on:submit|preventDefault="{submit}">
+		<form class="my-4" novalidate autocomplete="off" on:submit|preventDefault="{submit}">
 			<!-- forms -->
 			<div
 				class="
@@ -113,61 +113,51 @@ async function submit() {
           ">
 				<div class="flex flex-col-reverse col-span-2 md:col-span-1">
 					<input type="text" bind:value="{address.firstName}" placeholder="" />
-					<span class="my-2">First Name</span>
+					<span class="my-2 font-semibold">First Name</span>
 				</div>
 
 				<div class="flex flex-col-reverse col-span-2 md:col-span-1">
 					<input type="text" bind:value="{address.lastName}" placeholder="" />
-					<span class="my-2">Last Name</span>
+					<span class="my-2 font-semibold">Last Name</span>
 				</div>
 
 				<div class="flex flex-col-reverse col-span-2 md:col-span-1">
 					<input type="text" bind:value="{address.phone}" placeholder="" />
-					<span class="my-2">Mobile number</span>
+					<span class="my-2 font-semibold">Mobile number</span>
 				</div>
 				<div class="flex flex-col-reverse col-span-2 md:col-span-1">
 					<!-- @input="$event.target.composing = false" -->
 					<input type="text" bind:value="{address.zip}" placeholder="" />
-					<span class="my-2">Pincode</span>
+					<span class="my-2 font-semibold">Pincode</span>
 				</div>
 
 				<div class="flex flex-col-reverse col-span-2">
 					<input type="text" bind:value="{address.address}" placeholder="" />
-					<span class="my-2">Address (Area and Street)</span>
+					<span class="my-2 font-semibold">Address (Area and Street)</span>
 				</div>
 
 				<div class="flex flex-col-reverse col-span-2 md:col-span-1">
 					<input type="text" bind:value="{address.city}" placeholder="" />
-					<span class="my-2">City/District/Town</span>
+					<span class="my-2 font-semibold">City/District/Town</span>
 				</div>
 
 				<div class="flex flex-col-reverse col-span-2 md:col-span-1">
 					<input type="text" bind:value="{address.state}" placeholder="" />
-					<span class="my-2">State</span>
+					<span class="my-2 font-semibold">State</span>
 				</div>
 
 				<div class="flex flex-col-reverse col-span-2 md:col-span-1">
 					<input type="text" bind:value="{address.country}" placeholder="" />
-					<span class="my-2">Country</span>
+					<span class="my-2 font-semibold">Country</span>
 				</div>
 
 				<div class="flex flex-col-reverse col-span-2 md:col-span-1">
 					<input type="text" bind:value="{address.email}" placeholder="" />
-					<span class="my-2">Email</span>
+					<span class="my-2 font-semibold">Email</span>
 				</div>
 			</div>
-			<div class="w-full mt-8">
-				<div
-					class="
-              flex flex-col
-              justify-between
-              w-full
-              my-auto
-              mb-0
-              md:flex-row
-            ">
-					<div class="w-full my-auto md:w-1/2">
-						<!-- <label class="flex flex-row">
+
+			<!-- <label class="flex flex-row">
                 <input
                   type="checkbox"
                   class="my-auto border-0 rounded-sm me-3 bg-gray-50 text-primary-500 ring-primary-500 ring-1 focus:ring-1 focus:ring-primary-500 focus:ring-offset-0"
@@ -176,46 +166,37 @@ async function submit() {
                   >Make this as a default address</span
                 >
               </label> -->
-					</div>
-					<div
-						class="
-                w-full
-                p-2
-                mt-4
-                bg-secondary-500
-                focus:ring-secondary-500
-                md:w-1/3
-                m:my-4
-              ">
-						<button type="submit">
-							{#if iconloading}
-								<div class="flex justify-center">
-									<svg
-										style="height: 20px; width: 20px"
-										class="text-white -ms-1 animate-spin"
-										xmlns="http://www.w3.org/2000/svg"
-										fill="none"
-										viewBox="0 0 24 24">
-										<circle
-											class="opacity-25"
-											cx="12"
-											cy="12"
-											r="10"
-											stroke="currentColor"
-											stroke-width="4"></circle>
-										<path
-											class="opacity-75"
-											fill="currentColor"
-											d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-										></path>
-									</svg>
-								</div>
-							{:else}
-								<span class="text-base"> SAVE ADDRESS</span>
-							{/if}
-						</button>
-					</div>
-				</div>
+
+			<div class="mt-10 pr-4 flex justify-start">
+				<button
+					type="submit"
+					class=" focus:outline-none py-2 w-1/2 rounded-md shadow-md font-semibold text-white bg-primary-500 hover:bg-primary-600  focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition duration-300 transform active:scale-95 ">
+					{#if iconloading}
+						<div class="flex justify-center">
+							<svg
+								style="height: 20px; width: 20px"
+								class="text-white -ms-1 animate-spin"
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24">
+								<circle
+									class="opacity-25"
+									cx="12"
+									cy="12"
+									r="10"
+									stroke="currentColor"
+									stroke-width="4"></circle>
+								<path
+									class="opacity-75"
+									fill="currentColor"
+									d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+								></path>
+							</svg>
+						</div>
+					{:else}
+						<span class="text-base"> SAVE ADDRESS</span>
+					{/if}
+				</button>
 			</div>
 		</form>
 	</div>
