@@ -1,7 +1,7 @@
 import { amp, browser, dev } from '$app/env'
-const API_URL = 'https://api.litekart.in/api'
-const WWW_URL = dev ? 'http://localhost:3000' : 'https://www.hopyshopy.com'
 const HTTP_ENDPOINT = 'https://api.litekart.in'
+const API_URL = 'https://api.litekart.in/api'
+const WWW_URL = dev ? 'http://localhost:3000' : 'https://svelte-commerce.litekart.in'
 const CDN_URL = 'https://ik.imagekit.io/3wzatecz51w3i/images'
 export const typingTimeout = 0 // After this delay the search api will be fired
 const currency = { symbol: '₹', code: 'INR' }
