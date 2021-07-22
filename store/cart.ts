@@ -10,38 +10,24 @@ export const cart = writable({
 	discount: 0,
 })
 export const setCart = async (data) => {
-	try {
-		cart.set(data)
-	} catch (e) {}
+	cart.set(data)
 }
 export const fetchCart = async (token?) => {
-	try {
-		const data = (await get('cart', null, token)) || { qty: 0, items: [] }
-		cart.set(data)
-		return data
-	} catch (e) {
-		return {}
-	}
+	const data = (await get('cart', null, token)) || { qty: 0, items: [] }
+	cart.set(data)
+	return data
 }
 export const addToCart = async (payload) => {
-	try {
-		const data = await post('cart/add', payload)
-		cart.set(data)
-		return data
-	} catch (e) {
-		throw e.toString()
-	}
+	const data = await post('cart/add', payload)
+	cart.set(data)
+	return data
 }
 export const checkout = async ({ paymentMethod, address }) => {
-	try {
-		let order = await post('orders', {
-			address,
-			paymentMethod: paymentMethod || 'COD',
-		})
-		const data = await fetchCart()
-		cart.set(data)
-		return order
-	} catch (e) {
-		throw e
-	}
+	const order = await post('orders', {
+		address,
+		paymentMethod: paymentMethod || 'COD',
+	})
+	const data = await fetchCart()
+	cart.set(data)
+	return order
 }

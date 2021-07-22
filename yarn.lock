@@ -21,10 +21,10 @@
     tslib "^1.10.0"
     zen-observable "^0.8.14"
 
-"@architect/parser@^2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@architect/parser/-/parser-2.3.0.tgz#ba4e9c6df6332e4ae6117be4f7d17a476fe70d24"
-  integrity sha512-5VnJNg4O49QSAW2hYPpG0pkgwBF5xGzQTn2fiNifztCynLrGNgyaloFrn1eVMIGDjq85+x6a5jai+zKN+dKUSA==
+"@architect/parser@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@architect/parser/-/parser-3.0.1.tgz#cb3cb62b1289cc8ab1f46cc9d2222c6fe0496664"
+  integrity sha512-mXn5Ha5a3tEOV5vkGHLdrDinSRfO8g9s72gKuOWA13HJtGcfI+jkYrEdQbLqe63gz0RPQN27h0e1IKc2kSzqHw==
 
 "@babel/code-frame@7.12.11":
   version "7.12.11"
@@ -93,6 +93,11 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.0.tgz#87de7af9c231826fdd68ac7258f77c429e0e5fcf"
   integrity sha512-wdppn25U8z/2yiaT6YGquE6X8sSv7hNMWSXYSSU1jGv/yd6XqjXgTDJ8KP4NgjTXfJ3GbRjeeb8RTV7a/VpM+w==
 
+"@iarna/toml@^2.2.5":
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/@iarna/toml/-/toml-2.2.5.tgz#b32366c89b43c6f8cefbdefac778b9c828e3ba8c"
+  integrity sha512-trnsAYxU3xnS1gPHPyU961coFyLkh4gAD/0zQ5mymY4yOZ+CYvsPqUbOFSw0aDM4y0tV7tiFxL/1XfXPNC6IPg==
+
 "@lukeed/csprng@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@lukeed/csprng/-/csprng-1.0.0.tgz#733a122382749d27e2e46ec38f8c71c9d53a9636"
@@ -134,20 +139,20 @@
     estree-walker "^2.0.1"
     picomatch "^2.2.2"
 
-"@sveltejs/adapter-begin@^1.0.0-next.0":
-  version "1.0.0-next.0"
-  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-begin/-/adapter-begin-1.0.0-next.0.tgz#050c0f7992d0ced9dab83ed36651ebd20e438f93"
-  integrity sha512-o2XryHwsbeiKbORoCc06kRnls97GvceAhozE531DPjWu/8x9ewP5QXnG3jTkD34BP1JU2WTWaIoog1JFZ5DNNQ==
+"@sveltejs/adapter-begin@^1.0.0-next.11":
+  version "1.0.0-next.11"
+  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-begin/-/adapter-begin-1.0.0-next.11.tgz#a3625b97f5ebf0ac729c91325986a8ead59d1554"
+  integrity sha512-D7HN5m5Gl7wmPUz/YJI6dcr7OPa2/V8A9ZQI2h4hoSzGGNSfrTtPtxAp7f6Tbrnzv3tInS3lUN6OZ94Zy2EoJQ==
   dependencies:
-    "@architect/parser" "^2.3.0"
-    "@sveltejs/app-utils" "1.0.0-next.0"
+    "@architect/parser" "^3.0.1"
 
-"@sveltejs/adapter-netlify@^1.0.0-next.0":
-  version "1.0.0-next.0"
-  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-netlify/-/adapter-netlify-1.0.0-next.0.tgz#c4d24d60b459e13f09d43f18569302a8fe6842e4"
-  integrity sha512-CxjWlGkNyQzEB9LsXN+MvF1Z+SHRb16cNZL8sy5bUcytDcf7ETjlgKdaxks7ygWBhI/wtx4Mcxr+uIt50p8vag==
+"@sveltejs/adapter-netlify@^1.0.0-next.25":
+  version "1.0.0-next.25"
+  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-netlify/-/adapter-netlify-1.0.0-next.25.tgz#801ee9da8bb979288341041a034b77d78b7f3ed3"
+  integrity sha512-EMKPbQOPbgBH95XRSxk9huz11hszERxMJdGBsVNfvo6zweNAMQ2RBfHbla0kr/6lmEYoFWm8gW+3JvCnAm8itA==
   dependencies:
-    toml "^3.0.0"
+    "@iarna/toml" "^2.2.5"
+    esbuild "^0.12.5"
 
 "@sveltejs/adapter-node@^1.0.0-next.0":
   version "1.0.0-next.0"
@@ -161,10 +166,12 @@
   resolved "https://registry.yarnpkg.com/@sveltejs/adapter-static/-/adapter-static-1.0.0-next.13.tgz#5cba8f2905a5a7b956c2663d73ac02f7eb6da7c4"
   integrity sha512-zaXJlWK9JfrjrE6nG5etB8kf4DSkbE3H8Ql6gmCk3WjdvpY85a60TMYBU9OK2iunkqpHnPYiMUGEnOGYmWlLYA==
 
-"@sveltejs/adapter-vercel@^1.0.0-next.0":
-  version "1.0.0-next.0"
-  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-vercel/-/adapter-vercel-1.0.0-next.0.tgz#5a82c4eab9df72e851b23161ace0f64beaa8cabf"
-  integrity sha512-dQf40/2vrgRfuQ++tIAlvEgjdGUkXJTSjO5syqJd5oH2HDbP3Shi+2AxWpKAqRFGyRbXDe9ej0MK1G2soZP4fQ==
+"@sveltejs/adapter-vercel@^1.0.0-next.26":
+  version "1.0.0-next.26"
+  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-vercel/-/adapter-vercel-1.0.0-next.26.tgz#3682ae914d8584061a8fc5ef151bec7d67b7834d"
+  integrity sha512-t1/Gl9GF62HV99VOmI0clguuSHdJvGD2t8/y7tv9N55tLAHWk4yRV/UOilBQhX+KKjCkPn40Oln2jTXPhlr/lA==
+  dependencies:
+    esbuild "^0.12.5"
 
 "@sveltejs/app-utils@1.0.0-next.0":
   version "1.0.0-next.0"
@@ -1061,7 +1068,7 @@ es-to-primitive@^1.2.1:
     is-date-object "^1.0.1"
     is-symbol "^1.0.2"
 
-esbuild@^0.12.8:
+esbuild@^0.12.5, esbuild@^0.12.8:
   version "0.12.15"
   resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.12.15.tgz#9d99cf39aeb2188265c5983e983e236829f08af0"
   integrity sha512-72V4JNd2+48eOVCXx49xoSWHgC3/cCy96e7mbXKY+WOWghN00cCmlGnwVLRhRHorvv0dgCyuMYBZlM2xDM5OQw==
@@ -3188,11 +3195,6 @@ to-regex-range@^5.0.1:
   integrity sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==
   dependencies:
     is-number "^7.0.0"
-
-toml@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/toml/-/toml-3.0.0.tgz#342160f1af1904ec9d204d03a5d61222d762c5ee"
-  integrity sha512-y/mWCZinnvxjTKYhJ+pYxwD0mRLVvOtdS2Awbgxln6iEnt4rk0yBxeSBHkGJcPucRiG0e55mwWp+g/05rsrd6w==
 
 tree-kill@^1.2.2:
   version "1.2.2"
