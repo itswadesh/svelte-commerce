@@ -8,11 +8,7 @@ const config = {
 	preprocess: preprocess(),
 	kit: {
 		target: '#svelte',
-		adapter: netlify({
-			pages: 'build',
-			assets: 'build',
-			fallback: null,
-		}),
+		adapter: node(),
 		// adapter: adapter({
 		// 	// default options are shown
 		// 	pages: 'build',

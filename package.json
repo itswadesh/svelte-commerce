@@ -7,7 +7,7 @@
     "preview": "svelte-kit preview",
     "lint": "prettier --check . && eslint --ignore-path .gitignore .",
     "format": "prettier --write .",
-    "start": "cross-env NODE_ENV=production node .svelte-kit/build/app",
+    "start": "cross-env NODE_ENV=production node .",
     "copy": "node devops/copy.js",
     "live": "run-s build copy liveS",
     "liveS": "node devops/live.js",
