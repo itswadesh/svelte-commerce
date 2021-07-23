@@ -37,19 +37,19 @@ let orders = [
 
 <section class="h-screen text-gray-800 bg-gray-200 overflow-hidden">
 	<div class=" bg-primary-500 text-white">
-		<h1 class="px-4 pt-4 uppercase font-medium  tracking-wide text-xl ">Orders</h1>
+		<h1 class="px-4 pt-4 uppercase font-bold  tracking-wide text-xl ">Orders</h1>
 
-		<div class="mt-4 grid grid-cols-3 text-sm font-medium">
+		<div class="mt-4 grid grid-cols-3 text-base xl:text-sm ">
 			<button
-				class="col-span-1 text-center pb-1 border-b-4 border-transparent hover:border-white focus:outline-none">
+				class="col-span-1 font-semibold text-center pb-1 border-b-4 border-white hover:border-white focus:outline-none">
 				New
 			</button>
 			<button
-				class="col-span-1 text-center pb-1 border-b-4 border-transparent hover:border-white focus:outline-none">
+				class="col-span-1 font-semibold text-center pb-1 border-b-4 border-transparent hover:border-white focus:outline-none">
 				Pending
 			</button>
 			<button
-				class="col-span-1 text-center pb-1 border-b-4 border-transparent hover:border-white focus:outline-none">
+				class="col-span-1 font-semibold text-center pb-1 border-b-4 border-transparent hover:border-white focus:outline-none">
 				Delivered
 			</button>
 		</div>
