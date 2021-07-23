@@ -71,7 +71,9 @@
     "@lukeed/uuid": "^2.0.0",
     "cookie": "^0.4.1",
     "cross-env": "^7.0.3",
+    "dayjs": "^1.10.6",
     "dotenv": "^10.0.0",
+    "hash-it": "^5.0.2",
     "node-fetch": "^2.6.1",
     "universal-cookie": "^4.0.4"
   }

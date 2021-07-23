@@ -1,8 +1,10 @@
 <script>
-import hash from 'object-hash'
+import { WWW_URL } from './../../../../config'
+import dayjs from 'dayjs'
+import hash from 'hash-it'
 export let article = false
 export let author
-export let breadcrumbs
+export let breadcrumbs = []
 export let datePublished
 export let entity
 export let lastUpdated
@@ -11,15 +13,30 @@ export let metadescription
 export let siteLanguage
 export let siteTitle
 export let siteTitleAlt
-export let siteUrl
+export let siteUrl = WWW_URL
 export let title
-export let url
+export let url = WWW_URL
 export let facebookPage
 export let githubPage
 export let linkedinProfile
 export let telegramUsername
 export let twitterUsername
+export let name
+export let description
+export let sku
+export let price = 1
+export let image
+export let gtin
+export let brand = 'Litekart'
+export let ratingCount = 1
+export let ratingValue = 5
+export let createdAt
+export let updatedAt
+export let slug
+export let id
+export let popularity = 1000
 export let entityMeta = null
+const nextWeek = dayjs().add(7, 'day')
 
 const entityHash = hash({ author }, { algorithm: 'md5' })
 
@@ -33,9 +50,9 @@ const schemaOrgEntity =
 					'@type': 'ImageObject',
 					'@id': `${siteUrl}/#personlogo`,
 					inLanguage: siteLanguage,
-					url: entityMeta.url,
-					width: entityMeta.faviconWidth,
-					height: entityMeta.faviconHeight,
+					url: entityMeta?.url,
+					width: entityMeta?.faviconWidth,
+					height: entityMeta?.faviconHeight,
 					caption: author,
 				},
 				logo: {
@@ -74,11 +91,11 @@ const schemaOrgImageObject = {
 	'@type': 'ImageObject',
 	'@id': `${url}#primaryimage`,
 	inLanguage: siteLanguage,
-	url: featuredImage.url,
-	contentUrl: featuredImage.url,
-	width: featuredImage.width,
-	height: featuredImage.height,
-	caption: featuredImage.caption,
+	url: featuredImage?.url,
+	contentUrl: featuredImage?.url,
+	width: featuredImage?.width,
+	height: featuredImage?.height,
+	caption: featuredImage?.caption,
 }
 
 const schemaOrgBreadcrumbList = {
@@ -174,9 +191,47 @@ const schemaOrgPublisher = {
 		`https://twitter.com/${twitterUsername}`,
 		`https://github.com/${githubPage}`,
 		`https://t.me/${telegramUsername}`,
-		`https://uk.linkedin.com/in/${linkedinProfile}`,
+		`https://linkedin.com/in/${linkedinProfile}`,
 		facebookPage,
 	],
+}
+const schemaOrgProduct = {
+	'@context': 'http://schema.org/',
+	'@type': 'Product',
+	name,
+	description,
+	sku,
+	image,
+	gtin,
+	brand,
+	aggregateRating: {
+		'@type': 'AggregateRating',
+		worstRating: 1,
+		bestRating: 5,
+		ratingCount,
+		ratingValue,
+	},
+	releaseDate: createdAt,
+	dateModified: updatedAt,
+	url: `${WWW_URL}/${slug}?id=${id}`,
+	interactionStatistic: {
+		'@type': 'InteractionCounter',
+		interactionType: 'http://schema.org/DownloadAction',
+		userInteractionCount: popularity + 1000,
+	},
+	offers: {
+		'@type': 'Offer',
+		availability: 'http://schema.org/InStock',
+		priceValidUntil: nextWeek.toISOString(),
+		url: `${WWW_URL}/${slug}?id=${id}`,
+		price: price < 1 ? '0.00' : price,
+		priceCurrency: 'INR',
+		seller: {
+			'@type': 'Organization',
+			name: 'Litekart',
+			url: WWW_URL,
+		},
+	},
 }
 
 const schemaOrgArray = [
@@ -186,6 +241,7 @@ const schemaOrgArray = [
 	schemaOrgWebPage,
 	schemaOrgBreadcrumbList,
 	schemaOrgPublisher,
+	schemaOrgProduct,
 ]
 const schemaOrgObject = {
 	'@context': 'https://schema.org',

@@ -1,4 +1,4 @@
-import { API_URL, WWW_URL } from '../../config'
+import { HTTP_ENDPOINT, WWW_URL } from '../../config'
 import Cookie from 'cookie-universal'
 const cookies = Cookie()
 let tkn = cookies.get('token')
@@ -20,7 +20,7 @@ const send = async ({ method, path, params, data, token, cookie }: any) => {
 	} else if (tkn) {
 		opts.headers['Authorization'] = `Bearer ${tkn}`
 	}
-	let uri = new URL(`${API_URL}/${path}`)
+	let uri = new URL(`${WWW_URL}/api/${path}`)
 	// console.log('ddddddddddddddddddddddddddddddddddd', uri)
 	if (params) {
 		Object.keys(params).forEach((key) => uri.searchParams.append(key, params[key]))

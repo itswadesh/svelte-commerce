@@ -24,6 +24,9 @@ const config = {
 			ssr: {
 				noExternal: ['svelte-hero-icons'],
 			},
+			optimizeDeps: {
+				include: ['svelte-hero-icons'],
+			},
 		},
 	},
 }

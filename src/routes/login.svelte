@@ -177,7 +177,7 @@ const showToast = (title, type) => {
 					</h5>
 				</div>
 				<div class="mx-4 mt-10 mb-10 text-xs tracking-widest text-center text-gray-500">
-					<h5 class="mb-1">By continuing, you agree to FrontendFun</h5>
+					<h5 class="mb-1">By continuing, you agree to Svelte Commerce</h5>
 					<a class="hover:underline text-gray-800" href="/legal/terms">Terms of Service</a>
 					,
 					<a class="hover:underline text-gray-800" href="/legal/privacy-policy">Privacy Policy</a>

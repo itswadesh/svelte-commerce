@@ -1,6 +1,5 @@
 import { amp, browser, dev } from '$app/env'
 const HTTP_ENDPOINT = 'https://api.litekart.in'
-const API_URL = 'https://api.litekart.in/api'
 const WWW_URL = dev ? 'http://localhost:3000' : 'https://svelte-commerce.litekart.in'
 const CDN_URL = 'https://ik.imagekit.io/3wzatecz51w3i/images'
 export const typingTimeout = 0 // After this delay the search api will be fired
@@ -25,17 +24,16 @@ const authorInfo = {
 	facebookAuthorPage: `https://www.facebook.com/codenx`,
 	facebookPage: `https://www.facebook.com/codenx`,
 	facebookPageName: 'codenx',
-	githubPage: 'https://github.com/itswadesh',
-	linkedinProfile: 'https://linkedin.com/itswadesh',
-	telegramUsername: 'https://t.me/itswadesh',
-	twitterUsername: 'https://twitter.com/itswadesh',
+	githubPage: 'itswadesh',
+	linkedinProfile: 'itswadesh',
+	telegramUsername: 'itswadesh',
+	twitterUsername: 'itswadesh',
 }
 export {
 	sorts,
 	CDN_URL,
 	currency,
 	tokenExpiry,
-	API_URL,
 	HTTP_ENDPOINT,
 	WWW_URL,
 	ANALYTICS_TRACKING_ID,

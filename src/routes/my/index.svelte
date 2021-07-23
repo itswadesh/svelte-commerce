@@ -17,7 +17,8 @@ import SummaryDashboard from './_SummaryDashboard.svelte'
 import OrdersDashboard from './_OrdersDashboard.svelte'
 </script>
 
-<section class="lg:h-screen bg-gray-100 lg:flex overflow-hidden md:pt-5 lg:pt-0 ">
+<section
+	class="container mx-auto justify-center flex lg:h-screen  overflow-hidden md:pt-5 lg:pt-0 ">
 	<div class="lg:h-screen lg:w-4/5 p-2 sm:p-6 flex items-start ">
 		<div>
 			<SidebarDashboard />
@@ -27,7 +28,7 @@ import OrdersDashboard from './_OrdersDashboard.svelte'
 			<SummaryDashboard />
 		</div>
 	</div>
-	<div class="lg:w-1/5">
+	<!-- <div class="lg:w-1/5">
 		<OrdersDashboard />
-	</div>
+	</div> -->
 </section>

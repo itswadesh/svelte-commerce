@@ -66,7 +66,7 @@ export let selected = null
 				<span class="mt-1 text-center text-primary-500">Payment</span>
 			</div>
 		{:else}
-			<a href="/checkout/payment-options" class="flex flex-col items-center text-center">
+			<div class="flex flex-col items-center text-center">
 				<div
 					class="flex items-center justify-center w-8 h-8 mx-auto  text-center bg-white border rounded-full border-primary-500 {selected ===
 					'payment'
@@ -76,7 +76,7 @@ export let selected = null
 				</div>
 
 				<span class="mt-1 text-center text-primary-500">Payment</span>
-			</a>
+			</div>
 		{/if}
 	</div>
 </section>
