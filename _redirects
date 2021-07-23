@@ -1,0 +1,3 @@
+/api/*  https://api.litekart.in/api/:splat  200
+/images/*  https://api.litekart.in/images/:splat  200
+/* /index.html 200
