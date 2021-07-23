@@ -1,13 +1,16 @@
-const shell = require('shelljs')
-require('dotenv').config()
+import shell from 'shelljs'
+import dotenv from 'dotenv'
+import fs from 'fs'
+import ssh2shell from 'ssh2shell'
+dotenv.config()
 
 // Start Config
 const PM2_NAME = 'h'
-const REMOTE_DIR = '/var/www/hopyshopy/dev'
+const REMOTE_DIR = '/var/www/svelte-commerce'
 const REMOTE_host = '139.59.42.129'
 const REMOTE_USER = 'root'
 const PRIVATE_KEY = process.env.LIVE_KEY
-const FILE_NAMES = '.svelte-kit package.json static'
+const FILE_NAMES = 'build .svelte-kit package.json static'
 // End Config
 
 // Zip and send file to remote server
@@ -32,7 +35,7 @@ var host = {
 		host: REMOTE_host,
 		port: 22,
 		userName: REMOTE_USER,
-		privateKey: require('fs').readFileSync(PRIVATE_KEY),
+		privateKey: fs.readFileSync(PRIVATE_KEY),
 	},
 	commands: [
 		'cd ' + REMOTE_DIR,
@@ -43,7 +46,7 @@ var host = {
 	],
 }
 
-var SSH2Shell = require('ssh2shell'),
+var SSH2Shell = ssh2shell,
 	//Create a new instance passing in the host object
 	SSH = new SSH2Shell(host),
 	//Use a callback function to process the full session text
