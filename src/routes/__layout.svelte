@@ -1,5 +1,6 @@
 <script context="module" lang="ts">
 export async function load({ session: { user, token } }) {
+	console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', token)
 	fetchCart(token)
 	return { props: { user } }
 }

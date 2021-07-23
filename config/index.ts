@@ -13,6 +13,23 @@ const sorts = [
 	{ name: 'Price low to high', val: 'localPrice' },
 	{ name: 'Price high to low', val: '-localPrice' },
 ]
+const authorInfo = {
+	author: 'Swadesh Behera',
+	entity: 'Misiki',
+	ogLanguage: 'en_US',
+	siteLanguage: 'en-US',
+	siteTitle: 'SvelteKit Based eCommerce store front',
+	siteShortTitle: 'SvelteKit Storefront', // used as SchemaOrg siteTitleAlt
+	siteUrl: 'https://svelte-commerce.litekart.in',
+	contactEmail: 'swadesh@litekart.in',
+	facebookAuthorPage: `https://www.facebook.com/codenx`,
+	facebookPage: `https://www.facebook.com/codenx`,
+	facebookPageName: 'codenx',
+	githubPage: 'https://github.com/itswadesh',
+	linkedinProfile: 'https://linkedin.com/itswadesh',
+	telegramUsername: 'https://t.me/itswadesh',
+	twitterUsername: 'https://twitter.com/itswadesh',
+}
 export {
 	sorts,
 	CDN_URL,
@@ -22,4 +39,5 @@ export {
 	HTTP_ENDPOINT,
 	WWW_URL,
 	ANALYTICS_TRACKING_ID,
+	authorInfo,
 }
