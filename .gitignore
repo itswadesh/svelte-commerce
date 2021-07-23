@@ -10,3 +10,5 @@ package-lock.json
 
 # Local Netlify folder
 .netlify
+
+.vercel_build_output
