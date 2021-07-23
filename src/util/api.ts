@@ -21,23 +21,20 @@ const send = async ({ method, path, params, data, token, cookie }: any) => {
 		opts.headers['Authorization'] = `Bearer ${tkn}`
 	}
 	let uri = new URL(`${WWW_URL}/api/${path}`)
+	console.log('ddddddddddddddddddddddddddddddddddd', uri)
 	if (params) {
 		Object.keys(params).forEach((key) => uri.searchParams.append(key, params[key]))
 	}
 	const url = uri.toString()
+	let response = await fetch(url, opts)
+	let json = await response.text()
+	if (!response.ok) {
+		throw json
+	}
 	try {
-		let response = await fetch(url, opts)
-		let json = await response.text()
-		if (!response.ok) {
-			throw json
-		}
-		try {
-			return JSON.parse(json)
-		} catch (e) {
-			return json
-		}
+		return JSON.parse(json)
 	} catch (e) {
-		throw e
+		return json
 	}
 }
 

@@ -21,7 +21,7 @@ export const fetchCart = async (token?) => {
 		cart.set(data)
 		return data
 	} catch (e) {
-		console.log('cccccccccccccccccccc', e)
+		// console.log('cccccccccccccccccccc', e)
 		return null
 	}
 }
