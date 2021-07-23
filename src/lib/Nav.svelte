@@ -123,12 +123,7 @@ async function logout() {
 					</div>
 				</a>
 			{:else}
-				<a href="/login">
-					<img
-						src="/leadership-profile.png"
-						alt="user"
-						class="w-8 shadow h-8  bg-white rounded-full " />
-				</a>
+				<a href="/login"> Login </a>
 			{/if}
 		</div>
 	</div>

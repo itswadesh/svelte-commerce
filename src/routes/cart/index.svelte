@@ -7,7 +7,7 @@ import Textbox from '$lib/ui/Textbox.svelte'
 import Cartlist from './_Cartlist.svelte'
 import Weprovides from '$lib/Weprovides.svelte'
 import Pricesummary from '$lib/Pricesummary.svelte'
-import { cart, fetchCart, addToCart } from '../../../store/cart'
+import { cart, addToCart } from '../../../store/cart'
 let show
 function toggle() {
 	show = !show
