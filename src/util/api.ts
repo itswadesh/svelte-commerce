@@ -20,7 +20,7 @@ const send = async ({ method, path, params, data, token, cookie }: any) => {
 	} else if (tkn) {
 		opts.headers['Authorization'] = `Bearer ${tkn}`
 	}
-	let uri = new URL(`${WWW_URL}/api/${path}`)
+	let uri = new URL(`https://api.litekart.in/api/${path}`)
 	console.log('ddddddddddddddddddddddddddddddddddd', uri)
 	if (params) {
 		Object.keys(params).forEach((key) => uri.searchParams.append(key, params[key]))
