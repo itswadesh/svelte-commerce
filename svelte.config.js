@@ -8,7 +8,7 @@ const config = {
 	preprocess: preprocess(),
 	kit: {
 		target: '#svelte',
-		adapter: netlify(),
+		adapter: vercel(),
 		// adapter: adapter({
 		// 	// default options are shown
 		// 	pages: 'build',
