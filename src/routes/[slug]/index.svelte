@@ -10,11 +10,12 @@
 <script context="module" lang="ts">
 import { get } from '../../util/api'
 import { lazyload } from './../../actions/lazyload'
-import { CDN_URL } from './../../../config'
+import { authorInfo, CDN_URL, WWW_URL } from './../../../config'
 import { currency } from '../../util'
 import { addToCart } from '../../../store/cart'
 import { me } from '../../../store/auth'
 import { goto } from '$app/navigation'
+import SEO from '$lib/components/SEO/index.svelte'
 export async function load({ page: { host, path, params, query }, fetch }) {
 	try {
 		const id = query.get('id')
@@ -35,18 +36,53 @@ export async function load({ page: { host, path, params, query }, fetch }) {
 me()
 import Footer from '$lib/MobFooter.svelte'
 export let product
+console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', product.slug)
 let CartButtonText = 'Add To Cart'
 function addToBag(product) {
 	addToCart({ pid: product._id, vid: product.variants[0]._id, qty: 1 })
 	CartButtonText = 'Go To Cart'
 	// goto('/cart')
 }
+const breadcrumbs = [
+	{
+		name: 'Home',
+		slug: product.slug,
+	},
+]
+const { author } = authorInfo
+const entityMeta = {
+	url: `${WWW_URL}/`,
+	faviconWidth: 512,
+	faviconHeight: 512,
+	caption: author,
+}
+const seoProps = {
+	entityMeta,
+	breadcrumbs,
+	title: product.name,
+	metadescription: product.metaDescription,
+	featuredImage: product.img,
+	ogImage: product.img,
+	ogSquareImage: product.img,
+	twitterImage: product.img,
+	name: product.name,
+	description: product.description,
+	price: product.price,
+	image: product.img,
+	createdAt: product.createdAt,
+	updatedAt: product.updatedAt,
+	sku: product.sku,
+	id: product._id,
+	slug: product.slug,
+	gtin: product.gtin,
+	brand: product.brand,
+	ratingCount: product.ratingCount,
+	ratingValue: product.ratingValue,
+	popularity: product.popularity,
+}
 </script>
 
-<svelte:head>
-	<title>{product?.name}</title>
-	<meta name="description" content="Latest Ecommerce Storefront using SvelteKit" />
-</svelte:head>
+<SEO {...seoProps} />
 
 <section class="min-h-screen bg-gray-100 cursor-default md:py-10 md:px-5 lg:px-10 xl:px-20">
 	<div class="px-8 pt-8 bg-white md:mx-10 md:flex md:space-x-5 lg:space-x-10 group">

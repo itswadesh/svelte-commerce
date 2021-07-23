@@ -1,5 +1,12 @@
+<script>
+import { session } from '$app/stores'
+</script>
+
 <section class="w-full h-full pl-2 sm:pl-8 sm:pr-2 text-gray-800 tracking-wide ">
-	<h1 class="uppercase font-bold text-gray-500 text-lg sm:text-xl ">Summery</h1>
+	<h1 class=" ">
+		<span class="font-bold text-gray-600 text-lg sm:text-xl">Hi!</span>
+		<span class="text-base text-gray-400">{$session?.user?.email}</span>
+	</h1>
 
 	<div
 		class="mt-2 md:mt-5 md:flex md:items-center md:justify-between space-y-4 md:space-y-0 md:space-x-8">
