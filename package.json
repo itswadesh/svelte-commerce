@@ -38,8 +38,6 @@
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-promise": "^5.1.0",
-    "eslint-plugin-react": "^7.24.0",
-    "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-svelte3": "^3.2.0",
     "graphql": "^15.5.1",
     "postcss": "^8.3.6",

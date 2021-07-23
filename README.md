@@ -7,6 +7,7 @@
 ![Typescript](https://img.shields.io/badge/TS-Typescript-blue)
 <a href="https://codenx.slack.com" target="blank">![Branch Develop](https://img.shields.io/badge/community%20chat-slack-FF1493.svg?style=for-the-badge&logo=Slack&logoColor=white)</a>
 <a href="https://join.skype.com/invite/aBegFXZGdaPh" target="blank">![Branch Develop](https://img.shields.io/badge/%3CDirect%20Message%3E-%2300AFF0.svg?style=for-the-badge&logo=Skype&logoColor=white)</a>
+<a href="https://t.me/itswadesh" target="blank">![Branch Develop](https://img.shields.io/badge/Telegram%20Message-%2300AFF0.svg?style=for-the-badge&logo=Telegram&logoColor=white)</a>
 
 # Svelte Commerce?
 
