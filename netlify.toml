@@ -2,3 +2,23 @@
   command = "npm run build"
   publish = "build/"
   functions = "functions/"
+
+[build.environment]
+  command = "echo 'build'"
+  HTTP_ENDPOINT = "https://api.litekart.in"
+
+[context.build]
+  command = "echo 'ctx.build'"
+  [context.build.environment]
+    command = "echo 'ctx.build.env'"
+    HTTP_ENDPOINT = "https://api.litekart.in"
+
+[[redirects]]
+  from = "/api/*"
+  to = "https://api.litekart.in/api/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
