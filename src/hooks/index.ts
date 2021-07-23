@@ -4,7 +4,7 @@ import type { Handle } from '@sveltejs/kit'
 import { get } from '../util/api'
 import { addToCart, fetchCart, cart } from './../../store/cart'
 import { me } from './../../store/auth'
-
+import { authorInfo } from './../../config'
 export const handle: Handle = async ({ request, resolve }) => {
 	const cookies = cookie.parse(request.headers.cookie || '')
 	const token = cookies.token
@@ -32,7 +32,7 @@ export const handle: Handle = async ({ request, resolve }) => {
 		request.locals.user = null
 	}
 	console.log('kkkkkkkkkkkkkkkkkkkkkkkkkk', token)
-	// fetchCart(token) // Me will not throw error
+	fetchCart(token) // Me will not throw error
 
 	const response = await resolve(request)
 
