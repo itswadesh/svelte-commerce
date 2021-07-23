@@ -1,7 +1,7 @@
 <script lang="ts">
 import { CDN_URL } from '../../../config'
 import { currency } from '../../util'
-import { cart, fetchCart, addToCart } from '../../../store/cart'
+import { cart, addToCart } from '../../../store/cart'
 export let item
 $: discount = Math.round(((item?.variant?.mrp - item?.variant?.price) * 100) / item?.variant?.mrp)
 
@@ -13,11 +13,12 @@ function addToBag(item, qty) {
 
 <!-- Product detail start  -->
 <div class="flex items-start py-5 sm:py-10 border-b border-gray-200">
-	<img
-		href="{`${item?.product?.slug}?id=${item?.product?._id}`}"
-		src="{`${CDN_URL}/${item.product?.img[0]}`}"
-		alt=""
-		class="w-20 sm:w-32 object-cover bg-gray-100 rounded-lg cursor-pointer" />
+	<a href="{`${item?.product?.slug}?id=${item?.product?._id}`}">
+		<img
+			src="{`${CDN_URL}/${item.product?.img[0]}`}"
+			alt=""
+			class="w-20 sm:w-32 object-cover bg-gray-100 rounded-lg cursor-pointer" />
+	</a>
 	<div class="mx-4 ">
 		<div class="flex flex-wrap items-center justify-between">
 			<a

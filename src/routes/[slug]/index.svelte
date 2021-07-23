@@ -12,7 +12,7 @@ import { get } from '../../util/api'
 import { lazyload } from './../../actions/lazyload'
 import { CDN_URL } from './../../../config'
 import { currency } from '../../util'
-import { addToCart, fetchCart } from '../../../store/cart'
+import { addToCart } from '../../../store/cart'
 import { me } from '../../../store/auth'
 import { goto } from '$app/navigation'
 export async function load({ page: { host, path, params, query }, fetch }) {

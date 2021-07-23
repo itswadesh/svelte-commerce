@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store'
 import { get, post } from '../src/util/api'
+
 export const cart = writable({
 	email: null,
 	items: [],
@@ -10,24 +11,39 @@ export const cart = writable({
 	discount: 0,
 })
 export const setCart = async (data) => {
-	cart.set(data)
+	try {
+		cart.set(data)
+	} catch (e) {}
 }
 export const fetchCart = async (token?) => {
-	const data = (await get('cart', null, token)) || { qty: 0, items: [] }
-	cart.set(data)
-	return data
+	try {
+		const data = (await get('cart', null, token)) || { qty: 0, items: [] }
+		cart.set(data)
+		return data
+	} catch (e) {
+		console.log('cccccccccccccccccccc', e)
+		return null
+	}
 }
 export const addToCart = async (payload) => {
-	const data = await post('cart/add', payload)
-	cart.set(data)
-	return data
+	try {
+		const data = await post('cart/add', payload)
+		cart.set(data)
+		return data
+	} catch (e) {
+		return null
+	}
 }
 export const checkout = async ({ paymentMethod, address }) => {
-	const order = await post('orders', {
-		address,
-		paymentMethod: paymentMethod || 'COD',
-	})
-	const data = await fetchCart()
-	cart.set(data)
-	return order
+	try {
+		const order = await post('orders', {
+			address,
+			paymentMethod: paymentMethod || 'COD',
+		})
+		const data = await fetchCart()
+		cart.set(data)
+		return order
+	} catch (e) {
+		return null
+	}
 }

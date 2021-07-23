@@ -1,6 +1,6 @@
-<script context="module">
-export async function load({ session: { user } }) {
-	fetchCart()
+<script context="module" lang="ts">
+export async function load({ session: { user, token } }) {
+	fetchCart(token)
 	return { props: { user } }
 }
 </script>

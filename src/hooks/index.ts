@@ -29,9 +29,10 @@ export const handle: Handle = async ({ request, resolve }) => {
 		const user = (await get('users/me', null, token)) || { guest: true }
 		request.locals.user = user
 	} catch (e) {
-		request.locals.user = {}
+		request.locals.user = null
 	}
-	fetchCart(token) // Me will not throw error
+	console.log('kkkkkkkkkkkkkkkkkkkkkkkkkk', token)
+	// fetchCart(token) // Me will not throw error
 
 	const response = await resolve(request)
 
@@ -45,7 +46,7 @@ export const handle: Handle = async ({ request, resolve }) => {
 	return response
 }
 
-export function getSession({ locals }) {
+export const getSession = ({ locals }) => {
 	const { user, token, categories, settings } = locals
 	return {
 		user,
@@ -55,3 +56,15 @@ export function getSession({ locals }) {
 		DEBUG_MODE: import.meta.env.VITE_DEBUG_MODE,
 	}
 }
+
+// export const serverFetch = async (request) => {
+// 	if (request.url.startsWith('https://api.yourapp.com/')) {
+// 		// clone the original request, but change the URL
+// 		request = new Request(
+// 			request.url.replace('https://api.yourapp.com/', 'http://localhost:9999/'),
+// 			request
+// 		)
+// 	}
+
+// 	return fetch(request)
+// }
