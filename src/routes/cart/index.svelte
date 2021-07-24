@@ -8,11 +8,18 @@ import Cartlist from './_Cartlist.svelte'
 import Weprovides from '$lib/Weprovides.svelte'
 import Pricesummary from '$lib/Pricesummary.svelte'
 import { cart, addToCart } from '../../../store/cart'
+import SEO from '$lib/components/SEO/index.svelte'
 let show
 function toggle() {
 	show = !show
 }
+const seoProps = {
+	title: 'Shopping Bag',
+	metadescription: 'Your items in shopping bag',
+}
 </script>
+
+<SEO {...seoProps} />
 
 <!-- Whole section start  -->
 <section

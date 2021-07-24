@@ -21,7 +21,7 @@ const send = async ({ method, path, params, data, token, cookie }: any) => {
 		opts.headers['Authorization'] = `Bearer ${tkn}`
 	}
 	let uri = new URL(`${WWW_URL}/api/${path}`)
-	console.log(uri)
+	// console.log(uri)
 	if (params) {
 		Object.keys(params).forEach((key) => uri.searchParams.append(key, params[key]))
 	}

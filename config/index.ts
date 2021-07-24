@@ -17,7 +17,7 @@ const authorInfo = {
 	entity: 'Misiki',
 	ogLanguage: 'en_US',
 	siteLanguage: 'en-US',
-	siteTitle: 'SvelteKit Based eCommerce store front',
+	siteTitle: 'SvelteKit based ecommerce store front',
 	siteShortTitle: 'SvelteKit Storefront', // used as SchemaOrg siteTitleAlt
 	contactEmail: 'swadesh@litekart.in',
 	facebookAuthorPage: `https://www.facebook.com/codenx`,

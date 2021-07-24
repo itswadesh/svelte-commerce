@@ -71,6 +71,9 @@ module.exports = {
 			spacing: {
 				108: '27rem',
 			},
+			fontFamily: {
+				sans: ['Inter'],
+			},
 		},
 	},
 	plugins: [

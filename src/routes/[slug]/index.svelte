@@ -57,10 +57,10 @@ const entityMeta = {
 	caption: author,
 }
 const seoProps = {
-	entityMeta,
-	breadcrumbs,
 	title: product.name,
 	metadescription: product.metaDescription,
+	entityMeta,
+	breadcrumbs,
 	featuredImage: product.img,
 	ogImage: product.img,
 	ogSquareImage: product.img,
