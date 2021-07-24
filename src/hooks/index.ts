@@ -31,7 +31,7 @@ export const handle: Handle = async ({ request, resolve }) => {
 	} catch (e) {
 		request.locals.user = null
 	}
-	console.log('kkkkkkkkkkkkkkkkkkkkkkkkkk', token)
+	// console.log('kkkkkkkkkkkkkkkkkkkkkkkkkk', token)
 	fetchCart(token) // Me will not throw error
 
 	const response = await resolve(request)

@@ -19,7 +19,6 @@ const authorInfo = {
 	siteLanguage: 'en-US',
 	siteTitle: 'SvelteKit Based eCommerce store front',
 	siteShortTitle: 'SvelteKit Storefront', // used as SchemaOrg siteTitleAlt
-	siteUrl: 'https://svelte-commerce.litekart.in',
 	contactEmail: 'swadesh@litekart.in',
 	facebookAuthorPage: `https://www.facebook.com/codenx`,
 	facebookPage: `https://www.facebook.com/codenx`,

@@ -5,7 +5,7 @@ import ssh2shell from 'ssh2shell'
 dotenv.config()
 
 // Start Config
-const PM2_NAME = 'h'
+const PM2_NAME = 'svelte-commerce'
 const REMOTE_DIR = '/var/www/svelte-commerce'
 const REMOTE_host = '139.59.42.129'
 const REMOTE_USER = 'root'
