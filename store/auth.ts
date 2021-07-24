@@ -32,39 +32,22 @@ export const signup = async (credentials) => {
 	}
 }
 export const logout = async () => {
-	try {
-		set({})
-		return response
-	} catch (e) {
-		set({})
-		throw e
-	}
+	set({})
+	return 'success'
 }
 export const forgotPassword = async (payload) => {
-	try {
-		return await post('/users/forgot', payload)
-	} catch (e) {
-		throw e
-	}
+	return await post('/users/forgot', payload)
 }
 export const changePassword = async (payload) => {
-	try {
-		const data = await put('/users/password', payload)
-		return data
-	} catch (e) {
-		throw e
-	}
+	const data = await put('/users/password', payload)
+	return data
 }
 export const resetPassword = async (payload) => {
-	try {
-		const data = await post('/users/reset/' + payload.id, payload)
-		if (data) {
-			// router.push('/')
-		}
-		return data
-	} catch (e) {
-		throw e
+	const data = await post('/users/reset/' + payload.id, payload)
+	if (data) {
+		// router.push('/')
 	}
+	return data
 }
 export const updateProfile = async ({
 	firstName,
@@ -77,23 +60,21 @@ export const updateProfile = async ({
 	dob,
 	language,
 	address,
+	country,
 }) => {
-	try {
-		const data = await put('/users/profile', {
-			firstName,
-			lastName,
-			state,
-			city,
-			zip,
-			avatar,
-			gender,
-			dob,
-			language,
-			address,
-		})
-		set(data)
-		return data
-	} catch (e) {
-		throw e
-	}
+	const data = await put('/users/profile', {
+		firstName,
+		lastName,
+		state,
+		city,
+		zip,
+		avatar,
+		gender,
+		dob,
+		language,
+		address,
+		country,
+	})
+	set(data)
+	return data
 }

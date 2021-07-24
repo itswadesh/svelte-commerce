@@ -1,7 +1,3 @@
-<style>
-@import url('https://fonts.googleapis.com/css?family=Inter&display=swap');
-</style>
-
 <script context="module" lang="ts">
 export async function load({ session: { user, token } }) {
 	// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', token)

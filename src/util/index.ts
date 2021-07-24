@@ -1,4 +1,19 @@
 import { currency as currencyConfig } from '../../config'
+import { toasts } from 'svelte-toasts'
+const showToast = (title, type) => {
+	const toast = toasts.add({
+		title: title,
+		description: '',
+		duration: 5000, // 0 or negative to avoid auto-remove
+		type: type || 'info',
+		theme: 'dark',
+		placement: 'top-center',
+		showProgress: false,
+		onClick: () => {},
+		onRemove: () => {},
+		// component: BootstrapToast, // allows to override toast component/template per toast
+	})
+}
 function constructQry(url, fl) {
 	url += '?'
 	Object.keys(fl).forEach((e) => {
@@ -54,4 +69,4 @@ function currency(value, currency?, decimals?) {
 	let sign = value < 0 ? '-' : ''
 	return sign + currency + ' ' + head + _int.slice(i).replace(digitsRE, '$1,') + _float
 }
-export { constructURL, constructQry, constructURL2, first, currency, date, truncate }
+export { constructURL, constructQry, constructURL2, first, currency, date, truncate, showToast }
