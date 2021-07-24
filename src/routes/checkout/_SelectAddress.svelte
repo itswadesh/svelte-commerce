@@ -83,13 +83,13 @@ const showToast = (title, type) => {
 				<div class="border-b py-2 pb-4 sm:py-6">
 					<label class="flex flex-row w-full px-2 sm:px-6 cursor-pointer">
 						<input
+							bind:group="{selectedAddress}"
 							type="radio"
 							value="{a._id}"
 							name="group"
-							class="mt-1.5 focus:outline-none focus:ring-0 focus:ring-offset-0"
-							on:change="{() => addressChanged(a._id)}" />
-
-						<div class="w-full font-light  text-gray-800  ms-2">
+							class="mt-1.5" />
+						<div class="w-full font-light  text-gray-800 cursor-pointer ms-2">
+							<!-- on:change="{() => addressChanged(a._id)}" /> -->
 							<h5 class="capitalize font-semibold tracking-wide md:text-lg">
 								{a.firstName}
 								{a.lastName}
