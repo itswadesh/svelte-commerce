@@ -20,8 +20,8 @@ const send = async ({ method, path, params, data, token, cookie }: any) => {
 	} else if (tkn) {
 		opts.headers['Authorization'] = `Bearer ${tkn}`
 	}
-	let uri = new URL(`${WWW_URL}/api/${path}`)
-	// console.log('ddddddddddddddddddddddddddddddddddd', uri)
+	let uri = new URL(`${HTTP_ENDPOINT}/api/${path}`)
+	console.log(uri)
 	if (params) {
 		Object.keys(params).forEach((key) => uri.searchParams.append(key, params[key]))
 	}

@@ -1,5 +1,5 @@
 <script>
-import { authorInfo } from './../../../../config'
+import { authorInfo, WWW_URL } from './../../../../config'
 import OpenGraph from './OpenGraph.svelte'
 import SchemaOrg from './SchemaOrg.svelte'
 import Twitter from './Twitter.svelte'
@@ -13,7 +13,6 @@ const {
 	siteLanguage,
 	siteShortTitle,
 	siteTitle,
-	siteUrl,
 	githubPage,
 	linkedinProfile,
 	telegramUsername,
@@ -51,7 +50,7 @@ export let twitterImage = {
 	url: '',
 	alt: defaultAlt,
 }
-const url = `${siteUrl}/${slug}`
+const url = `${WWW_URL}/${slug}`
 const pageTitle = `${title} ${siteTitle}`
 const openGraphProps = {
 	article,
@@ -79,7 +78,7 @@ const schemaOrgProps = {
 	siteLanguage,
 	siteTitle,
 	siteTitleAlt: siteShortTitle,
-	siteUrl,
+	siteUrl: WWW_URL,
 	title: pageTitle,
 	url,
 	facebookPage,

@@ -8,7 +8,7 @@ node_modules
 pnpm-lock.yaml
 package-lock.json
 /package
-
+/prod
 # Local Netlify folder
 .netlify
 
