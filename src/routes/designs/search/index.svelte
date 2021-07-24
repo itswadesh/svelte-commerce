@@ -7,6 +7,7 @@
 
 <script context="module">
 import { get } from '../../../util/api'
+
 export async function load({ page: { host, path, params, query }, fetch }) {
 	let q = query.toString()
 	// 		query.forEach((v,k)=>{
@@ -37,7 +38,10 @@ import HeaderBody from './_HeaderBody.svelte'
 import NoProduct from './_NoProduct.svelte'
 import DesktopFilters from './_DesktopFilters.svelte'
 import MobileFilters from './_MobileFilters.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
+
 export let page, products, facets, query
+
 const PAGE_SIZE = 30
 let showMobileFilter = false,
 	category = {},
@@ -73,7 +77,14 @@ function toggle(e) {
 // 	if (query.q == undefined) query.q = ''
 // 	getData(query)
 // })
+
+const seoProps = {
+	title: 'Search-Product',
+	metadescription: 'search what you want',
+}
 </script>
+
+<SEO {...seoProps} />
 
 <section class="w-full text-gray-800 lg:px-20 lg:my-32">
 	<!-- Nav bar start -->

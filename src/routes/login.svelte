@@ -13,6 +13,12 @@ import { goto } from '$app/navigation'
 import { session } from '$app/stores'
 import { post } from '../util/api'
 import Cookies from 'universal-cookie'
+import SEO from '$lib/components/SEO/index.svelte'
+
+const seoProps = {
+	title: 'Login',
+	metadescription: 'Log into the website',
+}
 const cookies = new Cookies()
 let email = '',
 	password = ''
@@ -43,6 +49,8 @@ const showToast = (title, type) => {
 	})
 }
 </script>
+
+<SEO {...seoProps} />
 
 <div class="h-screen py-20 bg-gray-900 ">
 	<div class="flex justify-center mx-4">

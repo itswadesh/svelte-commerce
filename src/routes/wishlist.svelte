@@ -1,3 +1,13 @@
+<script>
+import SEO from '$lib/components/SEO/index.svelte'
+
+const seoProps = {
+	title: 'Wishlist',
+	metadescription: 'Products you have wishlisted',
+}
+</script>
+
+<SEO {...seoProps} />
 
 <!-- Whole section start  -->
 <section
@@ -9,7 +19,6 @@
 				<div class="w-1 h-1 mx-3 bg-gray-200 rounded-full"></div>
 				<h4 class="text-xl tracking-tighter text-gray-300"></h4>
 			</div>
+		</div>
 	</div>
-    </div>
-    </section>
-
+</section>

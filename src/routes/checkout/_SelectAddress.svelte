@@ -87,7 +87,7 @@ const showToast = (title, type) => {
 							type="radio"
 							value="{a._id}"
 							name="group"
-							class="mt-1.5" />
+							class="mt-1.5 focus:outline-none focus:ring-0 focus:ring-offset-0" />
 						<div class="w-full font-light  text-gray-800 cursor-pointer ms-2">
 							<!-- on:change="{() => addressChanged(a._id)}" /> -->
 							<h5 class="capitalize font-semibold tracking-wide md:text-lg">

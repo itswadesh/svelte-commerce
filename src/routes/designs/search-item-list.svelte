@@ -1,6 +1,14 @@
 <script>
 import Footer from '$lib/Footer.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
+
+const seoProps = {
+	title: 'Search-Items-List',
+	metadescription: 'searched items list',
+}
 </script>
+
+<SEO {...seoProps} />
 
 <section class="mx-2 my-5 text-gray-800">
 	<div>

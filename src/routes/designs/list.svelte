@@ -1,6 +1,14 @@
 <script>
 import Footer from '$lib/Footer.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
+
+const seoProps = {
+	title: 'Product-List',
+	metadescription: 'The list of all products',
+}
 </script>
+
+<SEO {...seoProps} />
 
 <section class="mx-2 my-2 text-gray-900">
 	<!-- Search bar section start  -->

@@ -1,4 +1,6 @@
 <script context="module" lang="ts">
+import SEO from '$lib/components/SEO/index.svelte'
+
 export async function load({ page: { query }, fetch }) {
 	return { props: { id: query.get('id') } }
 }
@@ -26,7 +28,13 @@ async function refresh() {
 		loading = false
 	}
 }
+const seoProps = {
+	title: 'Payment-Success',
+	metadescription: 'Payment is successfully completed',
+}
 </script>
+
+<SEO {...seoProps} />
 
 <div class="container mx-auto bg-white rounded-lg">
 	<div class="h-full max-w-full p-2 sm:p-3 lg:p-8">

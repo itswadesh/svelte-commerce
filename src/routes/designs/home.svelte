@@ -5,6 +5,7 @@
 <script>
 // import Nav from '$lib/Nav.svelte';
 import Footer from '$lib/Footer.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
 
 let categories = [
 	{
@@ -32,7 +33,14 @@ let categories = [
 		img: '/kitchen.jpg',
 	},
 ]
+
+const seoProps = {
+	title: 'Home',
+	metadescription: 'search result of home',
+}
 </script>
+
+<SEO {...seoProps} />
 
 <section class="mx-2 my-2  text-gray-800 bg-white">
 	<!-- Search bar section start  -->
