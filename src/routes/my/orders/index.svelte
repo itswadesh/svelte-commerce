@@ -31,7 +31,7 @@ async function getOrders() {
 	{#if orders?.data?.length}
 		{#each orders?.data as order}
 			<div
-				class=" relative p-4 my-5 transition duration-300 bg-white border-t border-gray-300 rounded-md md:shadow-md border ">
+				class=" relative p-4 my-2 sm:my-5 transition duration-300 bg-white border-t border-gray-300 rounded-md md:shadow-md border ">
 				<div class="flex justify-between items-center">
 					<!-- Details section start  -->
 					<div class="sm:ml-4">
@@ -141,7 +141,7 @@ async function getOrders() {
 						</div>
 
 						<!-- Chevron right icon div start -->
-						<div class="my-auto">
+						<div class="hidden sm:block my-auto">
 							<a href="{`/orders/${order.id}`}">
 								<svg
 									class=" w-6 h-6 ml-4 text-gray-500 transform hover:text-primary-500 hover:translate-x-1"

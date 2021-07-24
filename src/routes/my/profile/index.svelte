@@ -34,11 +34,11 @@ function save(profile) {
 }
 </script>
 
-<section class="w-full h-full pl-2 sm:pl-8 sm:pr-2 text-gray-800 tracking-wide ">
+<section class="w-full h-full pb-20 pl-2 sm:pl-8 sm:pr-2 text-gray-800 tracking-wide ">
 	<h1 class="font-bold  text-lg sm:text-xl">Profiles</h1>
 
-	<div class="mt-8 text-gray-800 bg-gray-200 rounded-sm">
-		<h2 class="p-4 text-lg font-semibold tracking-wider border-b border-gray-50">
+	<div class="mt-2 sm:mt-5 text-gray-800 bg-gray-200 rounded-sm">
+		<h2 class="p-4 text-base sm:text-lg font-semibold tracking-wider border-b border-gray-50">
 			Edit your profile details
 		</h2>
 		<form on:submit|preventDefault="{() => save(profile)}" class="py-4">
@@ -96,8 +96,8 @@ function save(profile) {
 			<div class="items-center p-2 md:flex">
 				<div class="w-full text-sm md:px-4 md:w-3/12">Your email</div>
 				<div class="w-full md:w-9/12">
-					<div class="max-w-sm mt-2 md:mt-0">
-						<div>{profile.email}</div>
+					<div class="text-xs sm:text-base max-w-sm mt-2 md:mt-0">
+						{profile.email}
 					</div>
 				</div>
 			</div>
@@ -107,7 +107,7 @@ function save(profile) {
 				<div class="w-full md:w-9/12">
 					<div class="max-w-sm mt-2 md:mt-0 flex items-center justify-center">
 						<button
-							class=" justify-center text-center mt-8 px-6 py-2 bg-gray-800 uppercase text-white font-semibold rounded-full shadow-md zoom tracking-wider focus:outline-none opacity-80 hover:opacity-100 transition duration-300"
+							class="text-sm sm:text-base justify-center text-center sm:mt-8 px-6 py-2 bg-gray-800 uppercase text-white font-semibold rounded-full shadow-md zoom tracking-wider focus:outline-none opacity-80 hover:opacity-100 transition duration-300"
 							type="submit">Save Profile Details</button>
 					</div>
 				</div>
