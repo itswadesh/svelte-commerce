@@ -15,7 +15,7 @@ const config = {
 		// 	assets: 'build',
 		// 	fallback: null,
 		// }),
-		vite: {
+		vite: () => ({
 			server: {
 				proxy: {
 					'/api': 'https://api.litekart.in',
@@ -27,7 +27,7 @@ const config = {
 			optimizeDeps: {
 				include: ['svelte-hero-icons'],
 			},
-		},
+		}),
 	},
 }
 
