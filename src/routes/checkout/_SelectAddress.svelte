@@ -81,14 +81,15 @@ const showToast = (title, type) => {
 		<div>
 			{#each addresses.data as a}
 				<div class="border-b py-2 pb-4 sm:py-6">
-					<label for="group" class="flex flex-row w-full px-2 sm:px-6">
+					<label class="flex flex-row w-full px-2 sm:px-6 cursor-pointer">
 						<input
 							type="radio"
 							value="{a._id}"
 							name="group"
-							class="mt-1.5"
+							class="mt-1.5 focus:outline-none focus:ring-0 focus:ring-offset-0"
 							on:change="{() => addressChanged(a._id)}" />
-						<div class="w-full font-light  text-gray-800 cursor-pointer ms-2">
+
+						<div class="w-full font-light  text-gray-800  ms-2">
 							<h5 class="capitalize font-semibold tracking-wide md:text-lg">
 								{a.firstName}
 								{a.lastName}
@@ -133,6 +134,7 @@ const showToast = (title, type) => {
 							</div>
 						</div>
 					</label>
+
 					<div
 						class="mx-8 sm:mx-10 mt-5 flex items-center text-sm sm:text-base space-x-5 sm:space-x-10">
 						<button
