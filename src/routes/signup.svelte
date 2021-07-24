@@ -167,11 +167,11 @@ async function submit(e) {
 					</svg> -->
 					<div class="ml-4 text-lg font-semibold tracking-tight">Already registered? Login</div>
 				</a>
-				<div class=" mt-5 ">
+				<!-- <div class=" mt-5 ">
 					<h5 class="text-sm max-w-max mx-auto  font-semibold cursor-pointer hover:underline">
 						Reset Password
 					</h5>
-				</div>
+				</div> -->
 				<div class="mx-4 mt-10 mb-10 text-xs tracking-widest text-center text-gray-500">
 					<h5 class="mb-1">By continuing, you agree to Svelte Commerce</h5>
 					<a class="hover:underline text-gray-800" href="/">Terms of Service</a>
