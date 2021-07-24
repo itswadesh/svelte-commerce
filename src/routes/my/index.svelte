@@ -28,6 +28,7 @@ import OrdersDashboard from './_OrdersDashboard.svelte'
 			<SummaryDashboard />
 		</div>
 	</div>
+
 	<!-- <div class="lg:w-1/5">
 		<OrdersDashboard />
 	</div> -->
