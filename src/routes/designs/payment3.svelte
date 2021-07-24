@@ -1,3 +1,14 @@
+<script>
+import SEO from '$lib/components/SEO/index.svelte'
+
+const seoProps = {
+	title: 'Payment',
+	metadescription: 'Check payment status',
+}
+</script>
+
+<SEO {...seoProps} />
+
 <section class="mx-2 my-5 h-screen text-gray-800">
 	<!-- Heading start  -->
 	<div class="flex items-center">

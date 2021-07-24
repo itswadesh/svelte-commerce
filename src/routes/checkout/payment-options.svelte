@@ -15,6 +15,7 @@ import { onMount } from 'svelte'
 import { toasts } from 'svelte-toasts'
 import { del, get, post } from '../../util/api'
 import CheckoutHeader from './_CheckoutHeader.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
 
 let loading = false
 let paymentMethod = null
@@ -76,7 +77,14 @@ async function getAddress() {
 		loading = false
 	}
 }
+
+const seoProps = {
+	title: 'Payment-Methods',
+	metadescription: 'Choose your payment methods',
+}
 </script>
+
+<SEO {...seoProps} />
 
 <section
 	class="container  w-full mx-auto max-w-6xl px-4 sm:px-10 pb-10 py-5 md:py-10 text-gray-800 ">

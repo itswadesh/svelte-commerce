@@ -14,6 +14,11 @@ import { get } from '../util/api'
 import Hero from '$lib/Hero.svelte'
 import Product1 from '$lib/Product1.svelte'
 import { onMount } from 'svelte'
+import SEO from '$lib/components/SEO/index.svelte'
+const seoProps = {
+	title: 'Search-Products',
+	metadescription: 'Search your products',
+}
 export let banners,
 	featuredProducts = null,
 	hotProducts = null,
@@ -56,6 +61,8 @@ async function getShoppo() {
 	}
 }
 </script>
+
+<SEO {...seoProps} />
 
 <Hero banners="{banners}" />
 {#if featuredProducts}

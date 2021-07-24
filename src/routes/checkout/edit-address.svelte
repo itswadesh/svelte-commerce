@@ -13,8 +13,17 @@ export async function load({ page: { host, path, params, query }, fetch }) {
 import EditAddress from './_EditAddress.svelte'
 import Pricesummary from '$lib/Pricesummary.svelte'
 import CheckoutHeader from './_CheckoutHeader.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
+
 export let id
+
+const seoProps = {
+	title: 'Edit-Address',
+	metadescription: 'Edit your privious address',
+}
 </script>
+
+<SEO {...seoProps} />
 
 <div class="">
 	<div class="bg-gray-50">

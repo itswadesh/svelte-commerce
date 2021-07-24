@@ -15,7 +15,15 @@ export const load: Load = async ({ session }) => {
 import SidebarDashboard from './_SidebarDashboard.svelte'
 import SummaryDashboard from './_SummaryDashboard.svelte'
 import OrdersDashboard from './_OrdersDashboard.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
+
+const seoProps = {
+	title: 'Dashboard',
+	metadescription: 'Track your all process',
+}
 </script>
+
+<SEO {...seoProps} />
 
 <section
 	class="container mx-auto justify-center flex lg:h-screen  overflow-hidden md:pt-5 lg:pt-0 ">
