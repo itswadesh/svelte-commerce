@@ -4,12 +4,20 @@ import CheckoutHeader from './_CheckoutHeader.svelte'
 import Pricesummary from '$lib/Pricesummary.svelte'
 import { goto } from '$app/navigation'
 import { session } from '$app/stores'
+import SEO from '$lib/components/SEO/index.svelte'
 
 let address = null
 const user = $session.user
 console.log(user)
 if (!user || !user.email) goto('/login')
+
+const seoProps = {
+	title: 'Fill-Address',
+	metadescription: 'Add your delivery address',
+}
 </script>
+
+<SEO {...seoProps} />
 
 <section
 	class="container  w-full mx-auto max-w-6xl px-4 sm:px-10 pb-10 py-5 md:py-10 text-gray-800 ">
