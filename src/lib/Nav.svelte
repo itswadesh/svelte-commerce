@@ -6,11 +6,14 @@
 .text-extrasmall {
 	font-size: 0.5rem;
 }
+.active {
+	border-bottom: 2px solid black;
+}
 </style>
 
 <script lang="ts">
 import { goto } from '$app/navigation'
-import { session } from '$app/stores'
+import { page, session } from '$app/stores'
 import Cookies from 'universal-cookie'
 const cookies = new Cookies()
 import { spring } from 'svelte/motion'
@@ -51,7 +54,8 @@ async function logout() {
 			{#each $session.categories as c}
 				<a
 					href="{`/search?categories=${c?.slug}&page=1`}"
-					class="mx-2  cursor-pointer hover:text-primary-500 whitespace-nowrap xl:mx-5 transition duration-300">
+					class="mx-2  cursor-pointer hover:text-primary-500 whitespace-nowrap xl:mx-5 transition duration-300"
+					class:active="{$page.query == `categories=${c.slug}&page=1`}">
 					{c?.name}
 				</a>
 			{/each}
@@ -79,7 +83,7 @@ async function logout() {
 	</div> -->
 
 		<div class="flex flex-row items-center">
-			<a sveltekit:prefetch href="/cart" class:selected="{section === 'cart'}">
+			<a href="/cart" class:selected="{section === 'cart'}">
 				<button
 					class="flex items-center mr-5 font-semibold transform focus:outline-none whitespace-nowrap active:scale-95 hover:text-primary-500 transition duration-300 group">
 					<svg
@@ -100,34 +104,34 @@ async function logout() {
 						style="transform: translate(0, {100 * offset}%)">{Math.floor($cart_qty)}</span>
 				</button>
 			</a>
-
-			<a
-				class:selected="{section === 'login'}"
-				sveltekit:prefetch
-				href="/my"
-				class="flex items-center mx-2 ">
-				<div class=" flex-1 text-xs font-semibold mr-2 whitespace-nowrap">
-					{#if !$session.user || !$session.user.email}
-						<span>Hellow! {$session.user.firstName}</span>
-					{:else}
-						<span>Hellow! User</span>
+			{#if $session.user}
+				<a
+					class:selected="{section === 'login'}"
+					href="/my"
+					class="min-w-max flex items-center mx-2 ">
+					{#if $session?.user?.firstName}
+						<div class=" flex-1 text-xs font-semibold mr-2 whitespace-nowrap">
+							<span>Hi {$session?.user?.firstName}</span>
+						</div>
 					{/if}
-				</div>
 
-				<div class="flex-shrink-0">
-					{#if !$session.user || !$session.user.email}
-						<img
-							v-lazy="session.user.avatar"
-							alt=""
-							class="w-10 shadow h-10 bg-white rounded-full " />
-					{:else}
-						<img
-							src="leadership-profile.png"
-							alt="user"
-							class="w-10 shadow h-10  bg-white rounded-full " />
-					{/if}
-				</div>
-			</a>
+					<div class="flex-shrink-0">
+						{#if $session?.user?.avatar}
+							<img
+								src="{session?.user?.avatar}"
+								alt=""
+								class="w-10 shadow h-10 bg-white rounded-full " />
+						{:else}
+							<img
+								src="/leadership-profile.png"
+								alt="user"
+								class="w-8 shadow h-8  bg-white rounded-full " />
+						{/if}
+					</div>
+				</a>
+			{:else}
+				<a href="/login"> Login </a>
+			{/if}
 		</div>
 	</div>
 </nav>
