@@ -1,11 +1,11 @@
 <script>
-import { toasts, ToastContainer, FlatToast } from 'svelte-toasts'
 import { goto } from '$app/navigation'
 import { page, session } from '$app/stores'
 import { post } from '../../util/api'
 import Cookies from 'universal-cookie'
 const cookies = new Cookies()
 import Icon, { ChartPie, UserCircle, Truck, Logout } from 'svelte-hero-icons'
+import { toast } from './../../util'
 export let section
 
 async function logout() {
@@ -14,25 +14,11 @@ async function logout() {
 		$session.user = null
 		$session.token = null
 		goto('/')
-		showToast('Successfully loggedout', 'success')
+		toast('Successfully loggedout', 'success')
 	} catch (e) {
-		showToast(e, 'error')
+		toast(e, 'error')
 		console.log('Login Error...', e.toString())
 	}
-}
-const showToast = (title, type) => {
-	const toast = toasts.add({
-		title: title,
-		description: '',
-		duration: 5000, // 0 or negative to avoid auto-remove
-		type: type || 'info',
-		theme: 'dark',
-		placement: 'top-center',
-		showProgress: false,
-		onClick: () => {},
-		onRemove: () => {},
-		// component: BootstrapToast, // allows to override toast component/template per toast
-	})
 }
 </script>
 

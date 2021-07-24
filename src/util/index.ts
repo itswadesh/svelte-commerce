@@ -1,6 +1,6 @@
 import { currency as currencyConfig } from '../../config'
 import { toasts } from 'svelte-toasts'
-const showToast = (title, type) => {
+const toast = (title, type) => {
 	const toast = toasts.add({
 		title: title,
 		description: '',
@@ -69,4 +69,4 @@ function currency(value, currency?, decimals?) {
 	let sign = value < 0 ? '-' : ''
 	return sign + currency + ' ' + head + _int.slice(i).replace(digitsRE, '$1,') + _float
 }
-export { constructURL, constructQry, constructURL2, first, currency, date, truncate, showToast }
+export { constructURL, constructQry, constructURL2, first, currency, date, truncate, toast }

@@ -6,7 +6,7 @@ import AddressSkeleton from './_AddressSkeleton.svelte'
 import Radio from '$lib/ui/Radio.svelte'
 import { onMount } from 'svelte'
 import { del, get } from '../../util/api'
-import { toasts } from 'svelte-toasts'
+import { toast } from './../../util'
 const dispatch = createEventDispatcher()
 
 let id = null
@@ -50,27 +50,13 @@ async function remove(id) {
 			iconloading = true
 			await del(`addresses/${id}`)
 			await getAddress()
-			showToast('Address deleted successfully', 'success')
+			toast('Address deleted successfully', 'success')
 		} catch (e) {
-			showToast(e, 'error')
+			toast(e, 'error')
 		} finally {
 			iconloading = false
 		}
 	}
-}
-const showToast = (title, type) => {
-	const toast = toasts.add({
-		title: title,
-		description: '',
-		duration: 5000, // 0 or negative to avoid auto-remove
-		type: type || 'info',
-		theme: 'dark',
-		placement: 'top-center',
-		showProgress: false,
-		onClick: () => {},
-		onRemove: () => {},
-		// component: BootstrapToast, // allows to override toast component/template per toast
-	})
 }
 </script>
 
