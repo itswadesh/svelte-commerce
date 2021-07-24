@@ -17,7 +17,7 @@ import Submit from '$lib/ui/Button.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 import Button from '$lib/ui/Button.svelte'
 import { put, post, get } from '../../util/api'
-import { toasts } from 'svelte-toasts'
+import { toast } from './../../util'
 
 export let prev = ''
 export let id = 'new'
@@ -47,20 +47,7 @@ $: user = $session.user
 onMount(() => {
 	if (id !== 'new') getAddress()
 })
-const showToast = (title, type) => {
-	const toast = toasts.add({
-		title: title,
-		description: '',
-		duration: 5000, // 0 or negative to avoid auto-remove
-		type: type || 'info',
-		theme: 'dark',
-		placement: 'top-center',
-		showProgress: false,
-		onClick: () => {},
-		onRemove: () => {},
-		// component: BootstrapToast, // allows to override toast component/template per toast
-	})
-}
+
 async function getAddress() {
 	try {
 		address = await get(`address/?id=${id}`)
@@ -81,18 +68,18 @@ async function getAddress() {
 	}
 }
 async function submit() {
-	if (!address) return showToast('Please enter address', 'error')
-	if (!address.address) return showToast('Please enter address', 'error')
+	if (!address) return toast('Please enter address', 'error')
+	if (!address.address) return toast('Please enter address', 'error')
 	const msg = id === 'new' ? 'Address Added' : 'Address Updated'
 	try {
 		iconloading = true
 		if (!address?.id) address.id = 'new'
 		address = await post('addresses', address)
-		showToast(msg, 'success')
+		toast(msg, 'success')
 		if (prev) goto(`/${prev}`)
 		else goto(returnUrl)
 	} catch (e) {
-		showToast(e, null)
+		toast(e, null)
 	} finally {
 		iconloading = false
 	}

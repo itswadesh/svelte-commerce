@@ -6,7 +6,7 @@
 
 <script>
 import Textbox from '$lib/ui/Textbox.svelte'
-import { showToast } from './../../../util'
+import { toast } from './../../../util'
 import { me, updateProfile } from './../../../../store/auth'
 import { onMount } from 'svelte'
 import { goto } from '$app/navigation'
@@ -25,10 +25,10 @@ function save(profile) {
 		// delete profile.address
 		console.log(profile)
 		updateProfile(profile)
-		showToast('Profile saved successfullly', 'success')
+		toast('Profile saved successfullly', 'success')
 		// goto('/')
 	} catch (e) {
-		showToast(e, 'error')
+		toast(e, 'error')
 	} finally {
 	}
 }

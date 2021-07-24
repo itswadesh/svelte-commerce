@@ -14,6 +14,7 @@ import { session } from '$app/stores'
 import { post } from '../util/api'
 import Cookies from 'universal-cookie'
 import SEO from '$lib/components/SEO/index.svelte'
+import { toast } from './../util'
 
 const seoProps = {
 	title: 'Signup',
@@ -28,25 +29,12 @@ async function submit(e) {
 		cookies.set('token', res.token, { path: '/' })
 		$session.user = res.user
 		$session.token = res.token
+		toast('Welcome to svelte commerce', 'success')
 		goto('/')
 	} catch (e) {
-		showToast(e, 'error')
+		toast(e, 'error')
 		console.log('Login Error...', e.toString())
 	}
-}
-const showToast = (title, type) => {
-	const toast = toasts.add({
-		title: title,
-		description: '',
-		duration: 5000, // 0 or negative to avoid auto-remove
-		type: type || 'info',
-		theme: 'dark',
-		placement: 'top-center',
-		showProgress: false,
-		onClick: () => {},
-		onRemove: () => {},
-		// component: BootstrapToast, // allows to override toast component/template per toast
-	})
 }
 </script>
 

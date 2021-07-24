@@ -12,10 +12,10 @@ import Pricesummary from '$lib/Pricesummary.svelte'
 
 import Radio from '$lib/ui/Radio.svelte'
 import { onMount } from 'svelte'
-import { toasts } from 'svelte-toasts'
 import { del, get, post } from '../../util/api'
 import CheckoutHeader from './_CheckoutHeader.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+import { toast } from './../../util'
 
 let loading = false
 let paymentMethod = null
@@ -42,32 +42,19 @@ async function submit() {
 		loading = true
 		console.log('Checkout')
 		if (!address) {
-			showToast('Address not provided.', 'error')
+			toast('Address not provided.', 'error')
 			return
 		}
 		const order = await post('orders', { address: addressDetails, paymentMethod: 'COD' })
 		goto(`/payment/success?id=${order._id}&provider=COD`)
 	} catch (err) {
-		showToast(err, 'error')
+		toast(err, 'error')
 		goto(`/payment/failed?provider=COD`)
 	} finally {
 		loading = false
 	}
 }
-const showToast = (title, type) => {
-	const toast = toasts.add({
-		title: title,
-		description: '',
-		duration: 5000, // 0 or negative to avoid auto-remove
-		type: type || 'info',
-		theme: 'dark',
-		placement: 'top-center',
-		showProgress: false,
-		onClick: () => {},
-		onRemove: () => {},
-		// component: BootstrapToast, // allows to override toast component/template per toast
-	})
-}
+
 async function getAddress() {
 	try {
 		loading = true
