@@ -34,13 +34,13 @@ function save(profile) {
 }
 </script>
 
-<section class="px-2 py-12 bg-white lg:px-8">
+<section class="px-6 pb-12 bg-white lg:px-8">
 	<div>
 		<h1 class="text-xl font-bold text-gray-800 sm:text-2xl md:text-3xl">Profile</h1>
 	</div>
 	<div class="mt-8 text-gray-800 bg-gray-200 rounded-sm">
 		<h2 class="p-4 text-lg font-semibold tracking-wider border-b border-gray-50">
-			Profile name and credentials
+			Edit your profile details
 		</h2>
 		<form on:submit|preventDefault="{() => save(profile)}" class="py-4">
 			<div class="items-center p-2 md:flex">
@@ -102,7 +102,11 @@ function save(profile) {
 					</div>
 				</div>
 			</div>
-			<button type="submit">Save Profile Details</button>
+			<div class="flex justify-center">
+				<button
+					class=" justify-center text-center mt-8 px-6 py-2 bg-gray-900 text-lg uppercase text-white font-semibold rounded-full shadow-md zoom tracking-wider focus:outline-none"
+					type="submit">Save Profile Details</button>
+			</div>
 		</form>
 	</div>
 	<!-- Your password start  -->
