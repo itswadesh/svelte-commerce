@@ -162,7 +162,7 @@ async function refresh() {
 									<div class="flex flex-row justify-between w-full pb-6 lg:pb-0">
 										<div class="flex flex-row w-full my-3">
 											<a href="{`/${item?.slug}?id=${item?.pid}`}" class="">
-												<img src="item.img" alt="pro" class="object-cover border w-28" />
+												<img src="{item?.img[0]}" alt="" class="object-cover border w-28" />
 											</a>
 											<div class="relative flex flex-col w-4/5 ms-3 lg:w-10/12">
 												<a

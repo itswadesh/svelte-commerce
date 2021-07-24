@@ -1,3 +1,7 @@
+<style>
+@import url('https://fonts.googleapis.com/css?family=Inter&display=swap');
+</style>
+
 <script context="module" lang="ts">
 export async function load({ session: { user, token } }) {
 	// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', token)
@@ -21,7 +25,7 @@ export let user
 </script>
 
 <PageTransitions refresh="{$page.path}">
-	<div class="bg-gray-100">
+	<div class="bg-gray-50 font-sans antialiased">
 		<div class="mb-12 lg:mb-20">
 			<div class="fixed top-0 z-50 block w-full md:hidden">
 				<MobNav user="{user}" />

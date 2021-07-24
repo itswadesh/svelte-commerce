@@ -11,6 +11,7 @@ let addresses = null
 let selectedAddress = null
 let loading = false
 $: user = $session.user
+import SEO from '$lib/components/SEO/index.svelte'
 
 onMount(() => {
 	getAddress()
@@ -46,7 +47,13 @@ async function remove(id) {
 		}
 	}
 }
+const seoProps = {
+	title: 'Checkout - Address',
+	metadescription: 'Enter your address',
+}
 </script>
+
+<SEO {...seoProps} />
 
 <section
 	class="container  w-full mx-auto max-w-6xl px-4 sm:px-10 pb-10 py-5 md:py-10 text-gray-800 ">

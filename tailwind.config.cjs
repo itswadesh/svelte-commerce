@@ -72,6 +72,9 @@ module.exports = {
 				84: '21rem',
 				108: '27rem',
 			},
+			fontFamily: {
+				sans: ['Inter'],
+			},
 		},
 	},
 	plugins: [
