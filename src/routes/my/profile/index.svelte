@@ -34,10 +34,9 @@ function save(profile) {
 }
 </script>
 
-<section class="px-6 pb-12 bg-white lg:px-8">
-	<div>
-		<h1 class="text-xl font-bold text-gray-800 sm:text-2xl md:text-3xl">Profile</h1>
-	</div>
+<section class="w-full h-full pl-2 sm:pl-8 sm:pr-2 text-gray-800 tracking-wide ">
+	<h1 class="font-bold  text-lg sm:text-xl">Profiles</h1>
+
 	<div class="mt-8 text-gray-800 bg-gray-200 rounded-sm">
 		<h2 class="p-4 text-lg font-semibold tracking-wider border-b border-gray-50">
 			Edit your profile details
@@ -102,10 +101,16 @@ function save(profile) {
 					</div>
 				</div>
 			</div>
-			<div class="flex justify-center">
-				<button
-					class=" justify-center text-center mt-8 px-6 py-2 bg-gray-900 text-lg uppercase text-white font-semibold rounded-full shadow-md zoom tracking-wider focus:outline-none"
-					type="submit">Save Profile Details</button>
+
+			<div class="items-center p-2 md:flex pb-5">
+				<div class="w-full text-sm md:px-4 md:w-3/12"></div>
+				<div class="w-full md:w-9/12">
+					<div class="max-w-sm mt-2 md:mt-0 flex items-center justify-center">
+						<button
+							class=" justify-center text-center mt-8 px-6 py-2 bg-gray-800 uppercase text-white font-semibold rounded-full shadow-md zoom tracking-wider focus:outline-none opacity-80 hover:opacity-100 transition duration-300"
+							type="submit">Save Profile Details</button>
+					</div>
+				</div>
 			</div>
 		</form>
 	</div>

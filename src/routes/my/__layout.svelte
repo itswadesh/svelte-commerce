@@ -25,9 +25,8 @@ const seoProps = {
 
 <SEO {...seoProps} />
 
-<section
-	class="container mx-auto justify-center flex lg:h-screen  overflow-hidden md:pt-5 lg:pt-0 ">
-	<div class="lg:h-screen lg:w-4/5 p-2 sm:p-6 flex items-start ">
+<section class="container mx-auto max-w-6xl lg:h-screen md:pt-5 lg:pt-0">
+	<div class="w-full p-2 sm:p-6 flex items-start ">
 		<div>
 			<SidebarDashboard />
 		</div>
