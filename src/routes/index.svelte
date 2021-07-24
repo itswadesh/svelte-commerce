@@ -64,60 +64,62 @@ async function getShoppo() {
 
 <SEO {...seoProps} />
 
-<Hero banners="{banners}" />
+<div>
+	<Hero banners="{banners}" />
+</div>
 {#if featuredProducts}
-	<div class="my-3 max-w-max mx-auto">
-		<a href="/search" class="flex items-center">
-			<img src="https://img.icons8.com/plumpy/24/000000/geometry.png" alt="" />
-			<h1 class="font-bold text-xl mx-4 lg:text-3xl tracking-wider py-5 text-gray-800">
-				FEATURED PRODUCTS
-			</h1>
-			<img src="https://img.icons8.com/plumpy/24/000000/geometry.png" alt="" />
-		</a>
-	</div>
-	<div class="flex overflow-x-auto py-2 pl-2 md:pl-6">
-		{#each featuredProducts.data as p}
-			{#if p}
-				<Product1 product="{p}" />
-			{/if}
-		{/each}
+	<div class="px-2 pt-5">
+		<div class="flex flex-row items-center justify-between">
+			<a href="/search" class="font-bold text-lg lg:text-3xl tracking-wider text-gray-800">
+				Featured Products
+			</a>
+			<a href="##" class="text-sm text-gray-500">See all (45)</a>
+		</div>
+
+		<div class="w-full flex items-start justify-start overflow-x-auto mt-2">
+			{#each featuredProducts.data as p}
+				{#if p}
+					<Product1 product="{p}" />
+				{/if}
+			{/each}
+		</div>
 	</div>
 {/if}
 
 {#if hotProducts}
-	<div class="my-3 max-w-max mx-auto">
-		<a href="/search" class="flex items-center">
-			<img src="https://img.icons8.com/plumpy/24/000000/geometry.png" alt="" />
-			<h1 class="font-bold text-xl mx-4 lg:text-3xl tracking-wider py-5 text-gray-800">
-				HOT SELLING ITEMS
-			</h1>
-			<img src="https://img.icons8.com/plumpy/24/000000/geometry.png" alt="" />
-		</a>
-	</div>
-	<div class="flex overflow-x-auto py-2 pl-2 md:pl-6">
-		{#each hotProducts.data as p}
-			{#if p}
-				<Product1 product="{p}" />
-			{/if}
-		{/each}
+	<div class="px-2 pt-5">
+		<div class="flex flex-row items-center justify-between">
+			<a href="/search" class="font-bold text-lg lg:text-3xl tracking-wider text-gray-800">
+				Hot Selling Items
+			</a>
+			<a href="##" class="text-sm text-gray-500">See all (45)</a>
+		</div>
+
+		<div class="flex overflow-x-auto mt-2">
+			{#each hotProducts.data as p}
+				{#if p}
+					<Product1 product="{p}" />
+				{/if}
+			{/each}
+		</div>
 	</div>
 {/if}
 
 {#if shoppoProducts}
-	<div class="my-3 max-w-max mx-auto">
-		<a href="/search" class="flex items-center">
-			<img src="https://img.icons8.com/plumpy/24/000000/geometry.png" alt="" />
-			<h1 class="font-bold text-xl mx-4 lg:text-3xl tracking-wider py-5 text-gray-800">
-				ADDIDAS PRODUCTS
-			</h1>
-			<img src="https://img.icons8.com/plumpy/24/000000/geometry.png" alt="" />
-		</a>
-	</div>
-	<div class="flex overflow-x-auto py-2 pl-2 md:pl-6">
-		{#each shoppoProducts.data as p}
-			{#if p}
-				<Product1 product="{p}" />
-			{/if}
-		{/each}
+	<div class="px-2 pt-5">
+		<div class="flex flex-row items-center justify-between">
+			<a href="/search" class="font-bold text-lg lg:text-3xl tracking-wider text-gray-800">
+				Addidas Products
+			</a>
+			<a href="##" class="text-sm text-gray-500">See all (45)</a>
+		</div>
+
+		<div class="flex overflow-x-auto mt-2">
+			{#each shoppoProducts.data as p}
+				{#if p}
+					<Product1 product="{p}" />
+				{/if}
+			{/each}
+		</div>
 	</div>
 {/if}
