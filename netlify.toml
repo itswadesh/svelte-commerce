@@ -2,9 +2,3 @@
   command = "npm run build"
   publish = "build/"
   functions = "functions/"
-
-[[redirects]]
-  from = "/api"
-  to = "https://api.litekart.in"
-  status = 200
-  force = true # COMMENT: ensure that we always redirect
