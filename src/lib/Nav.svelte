@@ -105,7 +105,10 @@ async function logout() {
 				</button>
 			</a>
 			{#if $session.user}
-				<a class:selected="{section === 'login'}" href="/my" class="flex items-center mx-2 ">
+				<a
+					class:selected="{section === 'login'}"
+					href="/my"
+					class="min-w-max flex items-center mx-2 ">
 					{#if $session?.user?.firstName}
 						<div class=" flex-1 text-xs font-semibold mr-2 whitespace-nowrap">
 							<span>Hi {$session?.user?.firstName}</span>
