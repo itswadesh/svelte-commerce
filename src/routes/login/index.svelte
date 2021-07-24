@@ -11,25 +11,24 @@
 import { toasts, ToastContainer, FlatToast } from 'svelte-toasts'
 import { goto } from '$app/navigation'
 import { session } from '$app/stores'
-import { post } from '../util/api'
+import { post } from './../../util/api'
 import Cookies from 'universal-cookie'
 import SEO from '$lib/components/SEO/index.svelte'
-import { toast } from './../util'
+import { toast } from './../../util'
 
 const seoProps = {
-	title: 'Signup',
-	metadescription: 'Signup here',
+	title: 'Login',
+	metadescription: 'Login now - ',
 }
 const cookies = new Cookies()
 let email = '',
 	password = ''
 async function submit(e) {
 	try {
-		const res = await post('users', { email, password })
+		const res = await post('auth/local', { uid: email, password })
 		cookies.set('token', res.token, { path: '/' })
 		$session.user = res.user
 		$session.token = res.token
-		toast('Welcome to svelte commerce', 'success')
 		goto('/')
 	} catch (e) {
 		toast(e, 'error')
@@ -105,13 +104,13 @@ async function submit(e) {
 					<button
 						type="submit"
 						class="mt-8 py-2 bg-gray-900 text-lg uppercase text-white font-semibold rounded-full shadow-md zoom tracking-wider focus:outline-none">
-						Signup Now</button>
+						Login Now</button>
 				</form>
 			</div>
 			<div class="mx-4 mt-4">
 				<a
 					rel="external"
-					href="{`/login`}"
+					href="{`/signup`}"
 					class="flex items-center justify-center py-2 font-semibold text-gray-900 border rounded-full shadow-md zoom hover:no-underline">
 					<!-- <svg
 						viewBox="0 0 16 16"
@@ -165,13 +164,13 @@ async function submit(e) {
                   5.34069 14.9269 4.08427Z"
 							fill="currentColor"></path>
 					</svg> -->
-					<div class="ml-4 text-lg font-semibold tracking-tight">Already registered? Login</div>
+					<div class="ml-4 text-lg font-semibold tracking-tight">Sign up</div>
 				</a>
-				<!-- <div class=" mt-5 ">
+				<div class=" mt-5 ">
 					<h5 class="text-sm max-w-max mx-auto  font-semibold cursor-pointer hover:underline">
 						Reset Password
 					</h5>
-				</div> -->
+				</div>
 				<div class="mx-4 mt-10 mb-10 text-xs tracking-widest text-center text-gray-500">
 					<h5 class="mb-1">By continuing, you agree to Svelte Commerce</h5>
 					<a class="hover:underline text-gray-800" href="/">Terms of Service</a>
@@ -182,6 +181,3 @@ async function submit(e) {
 		</div>
 	</div>
 </div>
-<ToastContainer let:data>
-	<FlatToast data="{data}" />
-</ToastContainer>
