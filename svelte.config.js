@@ -8,14 +8,14 @@ const config = {
 	preprocess: preprocess(),
 	kit: {
 		target: '#svelte',
-		adapter: node(),
+		adapter: netlify(),
 		// adapter: adapter({
 		// 	// default options are shown
 		// 	pages: 'build',
 		// 	assets: 'build',
 		// 	fallback: null,
 		// }),
-		vite: () => ({
+		vite: {
 			server: {
 				proxy: {
 					'/api': 'https://api.litekart.in',
@@ -27,7 +27,7 @@ const config = {
 			optimizeDeps: {
 				include: ['svelte-hero-icons'],
 			},
-		}),
+		},
 	},
 }
 
