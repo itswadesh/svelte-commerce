@@ -126,8 +126,16 @@ function checkFeature(k) {
 					selectedItems="{fl.color || []}"
 					on:go="{goCheckbox}" />
 			{/if}
-			{#if facets.features && facets.features.name && facets.features.name.buckets && facets.features.name.buckets.length > 0}
-				{#each facets.features.name.buckets as v, k}
+			{#if facets?.sizes?.all?.buckets?.length > 0}
+				<Checkbox
+					items="{facets.sizes.all.buckets}"
+					title="SIZE"
+					model="sizes"
+					selectedItems="{fl.sizes || []}"
+					on:go="{goCheckbox}" />
+			{/if}
+			{#if facets?.features?.all?.buckets?.length > 0}
+				{#each facets.features.all.buckets as v, k}
 					{#if checkFeature(v.key) && v.val && v.val.buckets && v.val.buckets.length > 0}
 						<Checkbox
 							items="{v.val.buckets}"

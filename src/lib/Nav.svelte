@@ -6,11 +6,14 @@
 .text-extrasmall {
 	font-size: 0.5rem;
 }
+.active {
+	border-bottom: 2px solid black;
+}
 </style>
 
 <script lang="ts">
 import { goto } from '$app/navigation'
-import { session } from '$app/stores'
+import { page, session } from '$app/stores'
 import Cookies from 'universal-cookie'
 const cookies = new Cookies()
 import { spring } from 'svelte/motion'
@@ -51,7 +54,8 @@ async function logout() {
 			{#each $session.categories as c}
 				<a
 					href="{`/search?categories=${c?.slug}&page=1`}"
-					class="mx-2  cursor-pointer hover:text-primary-500 whitespace-nowrap xl:mx-5 transition duration-300">
+					class="mx-2  cursor-pointer hover:text-primary-500 whitespace-nowrap xl:mx-5 transition duration-300"
+					class:active="{$page.query == `categories=${c.slug}&page=1`}">
 					{c?.name}
 				</a>
 			{/each}

@@ -136,7 +136,7 @@ function selectallFilters() {}
 			</div>
 		{/if}
 	</div>
-	<ul class=" ml-6 filter-container">
+	<ul class=" ml-6 filter-container scrollbar">
 		{#each items as i (i.key)}
 			{#if (i.key, show)}
 				<li>
