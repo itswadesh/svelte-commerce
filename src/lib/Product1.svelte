@@ -1,5 +1,5 @@
 <style>
-.zoom {
+/* .zoom {
 	overflow: hidden;
 }
 .zoom img {
@@ -7,7 +7,7 @@
 }
 .zoom:hover img {
 	transform: scale(1.035);
-}
+} */
 .trans {
 	transition: width 0.3s;
 	overflow: hidden;
@@ -125,9 +125,9 @@ let avatar = [
 					</button>
 					<!-- Wishlist end-->
 					<!-- Size chart start-->
-					<div class="mt-1.5 flex items-center justify-start">
+					<div class="mt-1.5 flex items-baseline justify-start">
 						<h5 class="mr-1 text-sm">Sizes:</h5>
-						<h5 class="space-x-1 text-xs font-medium text-gray-500 flex items-center ">
+						<h5 class="space-x-1 text-xs font-medium text-gray-500 flex items-baseline ">
 							{#each product.variants as v, i}
 								<div>{v.size}</div>
 							{/each}

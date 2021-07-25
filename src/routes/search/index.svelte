@@ -96,7 +96,7 @@ function toggle(e) {
 			{:else if !products || !products.data || !products.data.length}
 				<NoProduct />
 			{:else if products && products.data && products.data.length > 0}
-				<div class="flex flex-wrap justify-center">
+				<div class="flex flex-wrap justify-between">
 					{#each products.data as p}
 						{#if p}
 							<Product product="{p}" />
