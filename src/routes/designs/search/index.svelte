@@ -32,7 +32,7 @@ import { goto } from '$app/navigation'
 import { constructQry, constructURL2 } from '../../../util'
 import { sorts } from '../../../../config'
 import Product from '$lib/Product.svelte'
-import Pagination from './_Pagination.svelte'
+// import Pagination from './_Pagination.svelte'
 import ProductSkeleton from './_ProductSkeleton.svelte'
 import HeaderBody from './_HeaderBody.svelte'
 import NoProduct from './_NoProduct.svelte'
@@ -174,10 +174,10 @@ const seoProps = {
 			</div>
 
 			<div class="mb-10">
-				<Pagination
+				<!-- <Pagination
 					count="{products.pageSize}"
 					current="{parseInt(page || 1)}"
-					on:change="{changePage}" />
+					on:change="{changePage}" /> -->
 			</div>
 
 			<!-- Result section end -->

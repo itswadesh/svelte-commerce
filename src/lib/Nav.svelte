@@ -42,12 +42,12 @@ async function logout() {
 
 <nav class=" p-4 shadow-md border-gray-100 frosted">
 	<div class="flex items-center justify-between">
-		<a href="/" class="flex items-center focus:outline-none max-w-max"
-			><img alt="" class="w-8 h-8" src="/logo.svg" />
-			<div class="">
+		<a href="/" class="flex items-center focus:outline-none max-w-max">
+			<img alt="" class="h-8" src="/logo.svg" />
+			<!-- <div class="">
 				<h2 class="ml-2 text-xl font-bold tracking-wide">LITEKART</h2>
 				<div class="ml-auto h-0.5 w-10 bg-pink-700"></div>
-			</div>
+			</div> -->
 		</a>
 		<div
 			class="flex items-center justify-center w-full ml-8 text-sm font-semibold tracking-wide uppercase xl:ml-10">
