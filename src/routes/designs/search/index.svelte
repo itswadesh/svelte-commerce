@@ -33,11 +33,11 @@ import { constructQry, constructURL2 } from '../../../util'
 import { sorts } from '../../../../config'
 import Product from '$lib/Product.svelte'
 // import Pagination from './_Pagination.svelte'
-import ProductSkeleton from './_ProductSkeleton.svelte'
-import HeaderBody from './_HeaderBody.svelte'
-import NoProduct from './_NoProduct.svelte'
-import DesktopFilters from './_DesktopFilters.svelte'
-import MobileFilters from './_MobileFilters.svelte'
+// import ProductSkeleton from './_ProductSkeleton.svelte'
+// import HeaderBody from './_HeaderBody.svelte'
+// import NoProduct from './_NoProduct.svelte'
+// import DesktopFilters from './_DesktopFilters.svelte'
+// import MobileFilters from './_MobileFilters.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let page, products, facets, query
@@ -123,7 +123,7 @@ const seoProps = {
 
 	<div class="flex w-full mt-24">
 		<div class="hidden mr-5 lg:block">
-			<DesktopFilters facets="{facets}" query="{query}" />
+			<!-- <DesktopFilters facets="{facets}" query="{query}" /> -->
 		</div>
 
 		<div class="w-full">
