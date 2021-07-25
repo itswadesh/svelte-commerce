@@ -9,10 +9,7 @@ function toggle(url) {
 let menuItem = [
 	{
 		name: 'Women',
-		img: ` <img
-                src="https://img.icons8.com/pastel-glyph/30/000000/user-female--v3.png"
-                alt=""
-              />`,
+		img: '/sidebar/female-user.png',
 		svg: `<svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-4 w-4"
@@ -30,8 +27,7 @@ let menuItem = [
 	},
 	{
 		name: 'Men',
-		img: `<img src="https://img.icons8.com/ios-glyphs/30/000000/cartoon-boy.png"
-                  alt="" /> `,
+		img: '/sidebar/user-male.png',
 		svg: `<svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-4 w-4"
@@ -49,10 +45,7 @@ let menuItem = [
 	},
 	{
 		name: 'Kids',
-		img: `<img
-                src="https://img.icons8.com/fluent-systems-filled/30/000000/children-faces.png"
-                alt=""
-              /> `,
+		img: '/sidebar/baby-face.png',
 		svg: `<svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-4 w-4"
@@ -70,10 +63,7 @@ let menuItem = [
 	},
 	{
 		name: 'Home and Kitchen',
-		img: `<img
-                src="https://img.icons8.com/material-outlined/30/000000/home--v2.png"
-                alt=""
-              /> `,
+		img: '/sidebar/home.png',
 		svg: `<svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-4 w-4"
@@ -91,42 +81,27 @@ let menuItem = [
 	},
 	{
 		name: 'Stores',
-		img: `<img
-                src="https://img.icons8.com/material-outlined/30/000000/home--v2.png"
-                alt=""
-              /> `,
+		img: '/sidebar/furniture-store.png',
 		svg: '',
 	},
 	{
 		name: 'Precious Jewellery',
-		img: ` <img
-              src="https://img.icons8.com/fluent-systems-regular/30/000000/necklace.png"
-              alt=""
-            /> `,
+		img: '/sidebar/acrobatic-rings.png',
 		svg: '',
 	},
 	{
 		name: 'Sneakerhood',
-		img: ` <img
-              src="https://img.icons8.com/fluent-systems-filled/30/000000/trainers.png"
-              alt=""
-            />`,
+		img: '/sidebar/sneakers.png',
 		svg: '',
 	},
 	{
 		name: 'Collections',
-		img: ` <img
-              src="https://img.icons8.com/fluent-systems-filled/30/000000/group-objects.png"
-              alt=""
-            />`,
+		img: '/sidebar/group-objects.png',
 		svg: '',
 	},
 	{
 		name: 'New Arrivals',
-		img: ` <img
-              src="https://img.icons8.com/windows/30/000000/new.png"
-              alt=""
-            />`,
+		img: '/sidebar/new.png',
 		svg: '',
 	},
 ]
@@ -189,7 +164,7 @@ let subMenu = [
 						class="block w-full px-4 ">
 						<div class="border-b border-gray-100 py-3 flex items-center justify-between">
 							<div class="flex">
-								<!-- <img src="{item.img}" alt="" /> -->
+								<img src="{item.img}" alt="" />
 								<span class="ml-2"> {item.name} </span>
 							</div>
 						</div>
