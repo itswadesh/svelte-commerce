@@ -86,7 +86,7 @@ let avatar = [
 			{#if show}
 				<div class="-mt-12">
 					<!-- View smilar button start-->
-					<a href="##" class="flex justify-end">
+					<a href="{`/search?brand=${product.brandName}`}" class="flex justify-end">
 						<div
 							class="flex items-center bg-white text-primary-500 h-7 w-7 rounded-full border border-primary-500 trans">
 							<svg
@@ -102,8 +102,7 @@ let avatar = [
 									d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
 								></path>
 							</svg>
-							<span class="ps-2 text-xs font-semibold whitespace-nowrap uppercase"
-								>view similar</span>
+							<span class="ps-2 text-xs whitespace-nowrap">View similar</span>
 						</div>
 					</a>
 					<!-- View smilar button end-->
@@ -128,9 +127,10 @@ let avatar = [
 					<!-- Size chart start-->
 					<div class="mt-1.5 flex items-center justify-start">
 						<h5 class="mr-1 text-sm">Sizes:</h5>
-						<h5 class="space-x-1 text-xs font-medium text-gray-500 ">
-							<span> XS </span> <span> S </span> <span> M </span> <span> L </span>
-							<span> XL </span><span> XXL </span>
+						<h5 class="space-x-1 text-xs font-medium text-gray-500 flex items-center ">
+							{#each product.variants as v, i}
+								<div>{v.size}</div>
+							{/each}
 						</h5>
 					</div>
 					<!-- Size chart end-->
