@@ -1,5 +1,6 @@
 <script>
 import { page } from '$app/stores'
+import Breadcrumb from '$lib/components/Breadcrumb.svelte'
 import landingPageMobileBox from '$lib/assets/landing-page-mobile-box.webp'
 import SEO from '$lib/components/SEO/index.svelte'
 
@@ -94,13 +95,13 @@ $: if (data.megamenu.length) {
 
 <div class="min-h-screen px-3 py-5 lg:p-10">
 	<div class="md:container md:mx-auto">
-		<!-- <div class="mb-5"> -->
-		<!-- Breadcrumb -->
+		<div class="mb-5">
+			<!-- Breadcrumb -->
 
-		<!-- <Breadcrumb
-				categoryPool="{data.product?.categoryPool}"
-				currentProductName="{data.product?.name}" /> -->
-		<!-- </div> -->
+			<Breadcrumb
+				categoryPool="{[{ slug: 'mobile-cover', name: 'Mobile Cover' }]}"
+				currentProductName="{data.category?.name}" />
+		</div>
 
 		<div class="bg-zinc-100 p-5 sm:p-10">
 			<header class="mb-10">
