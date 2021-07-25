@@ -71,12 +71,12 @@ async function getShoppo() {
 	<div class="px-2 pt-5">
 		<div class="flex flex-row items-center justify-between">
 			<a href="/search" class="font-bold text-lg lg:text-3xl tracking-wider text-gray-800">
-				Featured Products
+				Trending Products
 			</a>
-			<a href="##" class="text-sm text-gray-500">See all (45)</a>
+			<a href="##" class="text-sm text-gray-500 hover:text-primary-500 sm:mr-2">See all (45)</a>
 		</div>
 
-		<div class="w-full flex items-start justify-start overflow-x-auto mt-2">
+		<div class="w-full flex items-start justify-start overflow-x-auto mt-5">
 			{#each featuredProducts.data as p}
 				{#if p}
 					<Product1 product="{p}" />
@@ -87,15 +87,15 @@ async function getShoppo() {
 {/if}
 
 {#if hotProducts}
-	<div class="px-2 pt-5">
+	<div class="px-2 pt-1">
 		<div class="flex flex-row items-center justify-between">
 			<a href="/search" class="font-bold text-lg lg:text-3xl tracking-wider text-gray-800">
 				Hot Selling Items
 			</a>
-			<a href="##" class="text-sm text-gray-500">See all (45)</a>
+			<a href="##" class="text-sm text-gray-500 hover:text-primary-500 sm:mr-2">See all (45)</a>
 		</div>
 
-		<div class="flex overflow-x-auto mt-2">
+		<div class="flex overflow-x-auto mt-5">
 			{#each hotProducts.data as p}
 				{#if p}
 					<Product1 product="{p}" />
@@ -106,15 +106,15 @@ async function getShoppo() {
 {/if}
 
 {#if shoppoProducts}
-	<div class="px-2 pt-5">
+	<div class="px-2 pt-1">
 		<div class="flex flex-row items-center justify-between">
 			<a href="/search" class="font-bold text-lg lg:text-3xl tracking-wider text-gray-800">
 				Addidas Products
 			</a>
-			<a href="##" class="text-sm text-gray-500">See all (45)</a>
+			<a href="##" class="text-sm text-gray-500 hover:text-primary-500 sm:mr-2">See all (45)</a>
 		</div>
 
-		<div class="flex overflow-x-auto mt-2">
+		<div class="flex overflow-x-auto mt-5">
 			{#each shoppoProducts.data as p}
 				{#if p}
 					<Product1 product="{p}" />
