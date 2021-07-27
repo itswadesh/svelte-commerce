@@ -54,7 +54,7 @@ async function logout() {
 			{#each $session.categories as c}
 				<a
 					href="{`/search?categories=${c?.slug}&page=1`}"
-					class="mx-2  cursor-pointer hover:text-primary-500 whitespace-nowrap xl:mx-5 transition duration-300"
+					class="mx-2 cursor-pointer hover:text-primary-500 whitespace-nowrap xl:mx-5"
 					class:active="{$page.query == `categories=${c.slug}&page=1`}">
 					{c?.name}
 				</a>
@@ -85,7 +85,7 @@ async function logout() {
 		<div class="flex flex-row items-center">
 			<a href="/cart" class:selected="{section === 'cart'}">
 				<button
-					class="flex items-center mr-5 font-semibold transform focus:outline-none whitespace-nowrap active:scale-95 hover:text-primary-500 transition duration-300 group">
+					class="flex items-center mr-5 font-semibold transform focus:outline-none whitespace-nowrap active:scale-95 hover:text-primary-500 group">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						class="w-5 h-5 mr-1"
@@ -100,17 +100,37 @@ async function logout() {
 					</svg>
 
 					<span
-						class="counter-digits absolute flex items-center justify-center p-0.5 text-extrasmall text-white bg-black group-hover:bg-primary-500 transition duration-300 rounded-full w-4 h-4 top-0 right-0 -mr-2 -mt-2"
+						class="counter-digits absolute flex items-center justify-center p-0.5 text-extrasmall text-white bg-black group-hover:bg-primary-500 rounded-full w-4 h-4 top-0 right-0 -mr-2 -mt-2"
 						style="transform: translate(0, {100 * offset}%)">{Math.floor($cart_qty)}</span>
 				</button>
 			</a>
+
+			<a href="/wishlist">
+				<button
+					class="flex items-center mr-5  transform focus:outline-none whitespace-nowrap active:scale-95 hover:text-primary-500 group">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-6 w-6"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+						></path>
+					</svg>
+				</button>
+			</a>
+
 			{#if $session.user}
 				<a
 					class:selected="{section === 'login'}"
 					href="/my"
 					class="min-w-max flex items-center mx-2 ">
 					{#if $session?.user?.firstName}
-						<div class=" flex-1 text-xs font-semibold mr-2 whitespace-nowrap">
+						<div class=" flex-1 text-sm font-semibold mr-2 whitespace-nowrap">
 							<span>Hi {$session?.user?.firstName}</span>
 						</div>
 					{/if}
@@ -130,7 +150,9 @@ async function logout() {
 					</div>
 				</a>
 			{:else}
-				<a href="/login"> Login </a>
+				<a href="/login" class="text-sm font-semibold tracking-wide hover:text-primary-500">
+					LOGIN
+				</a>
 			{/if}
 		</div>
 	</div>
