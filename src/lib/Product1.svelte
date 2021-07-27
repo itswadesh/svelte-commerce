@@ -46,9 +46,7 @@ let avatar = [
 	class="flex-shrink-0 w-52 mb-4 mr-4 group  hover:bg-white hover:shadow-md text-gray-800"
 	on:mouseenter="{showitems}"
 	on:mouseleave="{hideitems}">
-	<a
-		href="{'/' + product.slug + '?id=' + product._id}"
-		class="block overflow-hidden hover:shadow-lg">
+	<a href="{'/' + product.slug + '?id=' + product._id}" class="block overflow-hidden ">
 		<div class="">
 			<img
 				alt=""
@@ -141,11 +139,11 @@ let avatar = [
 						{product.brandName || '_'}
 					</h4>
 
-					<h2
+					<h6
 						href="{'/' + product.slug + '?id=' + product._id}"
 						class="text-sm font-medium overflow-hidden whitespace-nowrap overflow-ellipsis">
 						{product.name}
-					</h2>
+					</h6>
 				</div>
 			{/if}
 

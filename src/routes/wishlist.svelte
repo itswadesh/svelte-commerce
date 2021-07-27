@@ -1,5 +1,6 @@
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
+import WishlistProducts from '$lib/WishlistProducts.svelte'
 
 const seoProps = {
 	title: 'Wishlist',
@@ -11,14 +12,12 @@ const seoProps = {
 
 <!-- Whole section start  -->
 <section
-	class="justify-center px-4 pb-10 my-10 text-gray-800 border-b border-gray-200 lg:my-28 min-w-max md:flex">
-	<div class="md:max-w-max">
-		<div class="flex items-center justify-between pb-3 ">
-			<div class="flex items-baseline">
-				<h2 class="text-4xl font-bold tracking-wide ">Wishlist</h2>
-				<div class="w-1 h-1 mx-3 bg-gray-200 rounded-full"></div>
-				<h4 class="text-xl tracking-tighter text-gray-300"></h4>
-			</div>
-		</div>
+	class="container min-h-screen w-full mx-auto max-w-6xl px-2 sm:px-10 pb-10 py-5 md:py-10 text-gray-800 ">
+	<div class="text-lg flex items-center space-x-2">
+		<h4 class="font-semibold ">My wishlist</h4>
+		<span>2 items</span>
+	</div>
+	<div class="mt-5">
+		<WishlistProducts />
 	</div>
 </section>

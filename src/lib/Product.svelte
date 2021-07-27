@@ -40,9 +40,7 @@ function hideitems() {
 	class="flex-shrink-0 w-52 mx-2 mb-2 md:mx-4 md:mb-4 group  hover:bg-white hover:shadow-md text-gray-800"
 	on:mouseenter="{showitems}"
 	on:mouseleave="{hideitems}">
-	<a
-		href="{'/' + product._source?.slug + '?id=' + product?._id}"
-		class="block overflow-hidden hover:shadow-lg">
+	<a href="{'/' + product._source?.slug + '?id=' + product?._id}" class="block overflow-hidden ">
 		<div class="">
 			<img
 				alt=""
