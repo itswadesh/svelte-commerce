@@ -36,7 +36,7 @@ export async function load({ page: { host, path, params, query }, fetch }) {
 me()
 import Footer from '$lib/MobFooter.svelte'
 export let product
-console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', product.slug)
+// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', product.slug)
 let CartButtonText = 'Add To Cart'
 function addToBag(product) {
 	addToCart({ pid: product._id, vid: product.variants[0]._id, qty: 1 })
@@ -305,8 +305,8 @@ const seoProps = {
 				</div>
 				<!-- Add to cart end -->
 			</div>
+			<button class="border px-6 py-2 hover:bg-gray-100">Add to wishlist</button>
 			<!-- Add to cart section end -->
-
 			<div class="hidden my-5 md:block">
 				<div class="pb-2 text-lg font-semibold ">Product Details -</div>
 				{@html product?.description}
