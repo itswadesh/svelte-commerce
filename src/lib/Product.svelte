@@ -99,9 +99,11 @@ function hideitems() {
 					<div class="mt-1.5 flex items-baseline justify-start">
 						<h5 class="mr-1 text-sm">Sizes:</h5>
 						<h5 class="space-x-1 text-xs font-medium text-gray-500 flex items-baseline ">
-							{#each product.variants as v, i}
-								<div>{v.size}</div>
-							{/each}
+							{#if product?.variants?.length}
+								{#each product?.variants as v, i}
+									<div>{v.size}</div>
+								{/each}
+							{/if}
 						</h5>
 					</div>
 					<!-- Size chart end-->

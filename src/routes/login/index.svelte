@@ -103,7 +103,7 @@ async function submit(e) {
 						bind:value="{password}" />
 					<button
 						type="submit"
-						class="mt-8 py-2 bg-gray-900 text-lg uppercase text-white font-semibold rounded-full shadow-md zoom tracking-wider focus:outline-none">
+						class="mt-8 py-2 bg-gray-900 text-lg text-white font-semibold rounded-full shadow-md zoom tracking-wider focus:outline-none">
 						Login Now</button>
 				</form>
 			</div>
