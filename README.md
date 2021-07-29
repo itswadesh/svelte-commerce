@@ -79,6 +79,7 @@ Click on the button to directly deploy to your netlify server. Zero configuratio
 - Stores
 - SEO optimized pages
 - Carousel (Slider)
+- Toasts (Notifications)
 - Loading Indicators
 - Componentized Checkbox, Radio, Textbox
 - Instant Search
@@ -91,15 +92,13 @@ Click on the button to directly deploy to your netlify server. Zero configuratio
 
 If you like the ideas behind Svelte Commerce and want to become a contributor - join github discussions, check the list of the active issues or contact me directly via swadesh@litekart.in
 
-# Support us!
+# Support me!
 
 Svelte Commerce is and always will be Open Source, released under MIT Licence.
 
-You can support us in various ways:
+You can support me in various ways:
 
-Contribute - Support this project by contributing some ideas or directing digging into the source code and improving it.
-Evangelize - Tweet about us, take some speaking slot at a tech conference, etc.
+- <b>Contribute</b> - Support this project by contributing some ideas or directing digging into the source code and improving it.
+- <b>Evangelize</b> - Tweet about the project, take some speaking slot at a tech conference, etc.
 
 <a href='https://ko-fi.com/itswadesh' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://cdn.ko-fi.com/cdn/kofi2.png?v=2' border='0' alt='Buy Me a Coffee' /></a>
-
-Svelte Commerce source code is completely free and released under the MIT License.
