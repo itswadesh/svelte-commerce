@@ -32,6 +32,10 @@
 - 👍 I have been supporting this project alone since 2019. Any little code contribution will be appreciated
 - ✨Demo is hosted at netlify USA server and without CDN. Hence you may experience little lag.
 
+<img width="200px" src="https://res.cloudinary.com/itswadesh/image/upload/f_auto,q_auto/v1627577152/sveltekit/svelte-commerce-home.png" alt=""/>
+<img width="200px" src="https://res.cloudinary.com/itswadesh/image/upload/f_auto,q_auto/v1627577152/sveltekit/svelte-commerce-detail.png" alt=""/>
+<img width="200px" src="https://res.cloudinary.com/itswadesh/image/upload/f_auto,q_auto/v1627577152/sveltekit/svelte-commerce-cart.png" alt=""/>
+
 # Latest Updates
 
 - 22-July-2021 - Integrated with netlify deployment
