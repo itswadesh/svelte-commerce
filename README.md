@@ -6,22 +6,29 @@
 ![Branch stable](https://img.shields.io/badge/stable%20branch-master-blue.svg)
 ![Typescript](https://img.shields.io/badge/TS-Typescript-blue)
 <br />
-<a href="https://codenx.slack.com" target="blank">![Branch Develop](https://img.shields.io/badge/community%20chat-slack-FF1493.svg?style=for-the-badge&logo=Slack&logoColor=white)</a>
-<a href="https://join.skype.com/invite/aBegFXZGdaPh" target="blank">![Branch Develop](https://img.shields.io/badge/%3CDirect%20Message%3E-%2300AFF0.svg?style=for-the-badge&logo=Skype&logoColor=white)</a>
+
+<!-- <a href="https://codenx.slack.com" target="blank">![Branch Develop](https://img.shields.io/badge/community%20chat-slack-FF1493.svg?style=for-the-badge&logo=Slack&logoColor=white)</a> -->
+
+<a href="https://join.skype.com/invite/aBegFXZGdaPh" target="blank">![Branch Develop](https://img.shields.io/badge/Skype%20Message-%252300AFF0.svg?style=for-the-badge&logo=Skype&logoColor=white)</a>
 <a href="https://t.me/itswadesh" target="blank">![Branch Develop](https://img.shields.io/badge/Telegram%20Message-%2300AFF0.svg?style=for-the-badge&logo=Telegram&logoColor=white)</a>
 
 # Svelte Commerce?
+
+### Svelte Commerce is an advanced Frontend Platform for eCommerce based on Sveltekit
+
+<a href="https://svelte-commerce.litekart.in/" target="blank">Demo</a>
+<br/>
 
 - 🛍️ Attach Svelte store front to any ecommerce API (e.g. <a href="https://www.litekart.in/"> Litekart</a>, <a href="https://magento.com/">Magento</a>, <a href="https://www.moltin.com/">Moltin</a>, <a href="https://www.shopify.com/">Shopify</a> ...)
 - 👥 The demo uses litekart as backend
 - 👨🏻‍💻 Its both SSR and SPA
 - 🚀 Superfast
 - 🔗 It is possible to connect with any eCommerce backend if the backend has Rest API
-- 🔓 Storefront is free and open source. Download and modify it the way you want
+- 🔓 Svelte Commerce is free and open source. Download and modify it the way you want
 - 🛒 Most of the essential features for ecommerce are already integrated
 - 🕒 Save hours of development time setting up an ecommerce store front
 - 💰 No need to make a big leap or invest huge amount. Just take this opend source project and attach to existing backend.
-- 🐛 If you find any bug or improvement please send me
+- 🐛 If you have discovered a bug or have feature suggestion, feel free to create/join a discussion on Github.
 - 👍 I have been supporting this project alone since 2019. Any little code contribution will be appreciated
 - ✨Demo is hosted at netlify USA server and without CDN. Hence you may experience little lag.
 
@@ -80,4 +87,19 @@ Click on the button to directly deploy to your netlify server. Zero configuratio
 - Skeletons
 - Responsive
 
+# Contributing
+
+If you like the ideas behind Svelte Commerce and want to become a contributor - join github discussions, check the list of the active issues or contact me directly via swadesh@litekart.in
+
+# Support us!
+
+Svelte Commerce is and always will be Open Source, released under MIT Licence.
+
+You can support us in various ways:
+
+Contribute - Support this project by contributing some ideas or directing digging into the source code and improving it.
+Evangelize - Tweet about us, take some speaking slot at a tech conference, etc.
+
 <a href='https://ko-fi.com/itswadesh' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://cdn.ko-fi.com/cdn/kofi2.png?v=2' border='0' alt='Buy Me a Coffee' /></a>
+
+Svelte Commerce source code is completely free and released under the MIT License.
