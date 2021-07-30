@@ -11,7 +11,7 @@
 import { get } from '../../util/api'
 import { lazyload } from './../../actions/lazyload'
 import { authorInfo, CDN_URL, WWW_URL } from './../../../config'
-import { currency } from '../../util'
+import { currency, toast } from '../../util'
 import { addToCart } from '../../../store/cart'
 import { me } from '../../../store/auth'
 import { goto } from '$app/navigation'
@@ -35,6 +35,7 @@ export async function load({ page: { host, path, params, query }, fetch }) {
 <script>
 me()
 import Footer from '$lib/MobFooter.svelte'
+import { post } from './../../util/api'
 export let product
 // console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', product.slug)
 let CartButtonText = 'Add To Cart'
@@ -79,6 +80,14 @@ const seoProps = {
 	ratingCount: product.ratingCount,
 	ratingValue: product.ratingValue,
 	popularity: product.popularity,
+}
+async function addToWishlist(product, variant) {
+	try {
+		await post('wishlists', { product, variant })
+		toast('Added to wishlist', 'success')
+	} catch (e) {
+		toast(`Error adding to wishlist ${e}`, 'error')
+	}
 }
 </script>
 
@@ -305,7 +314,11 @@ const seoProps = {
 				</div>
 				<!-- Add to cart end -->
 			</div>
-			<button class="border px-6 py-2 hover:bg-gray-100">Add to wishlist</button>
+			<button
+				class="border px-6 py-2 hover:bg-gray-100"
+				on:click="{() => addToWishlist(product, product.variants[0])}">
+				Add to wishlist
+			</button>
 			<!-- Add to cart section end -->
 			<div class="hidden my-5 md:block">
 				<div class="pb-2 text-lg font-semibold ">Product Details -</div>
