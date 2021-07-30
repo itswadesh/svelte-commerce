@@ -12,6 +12,7 @@ import MobNav from '$lib/MobNav.svelte'
 import MobFooter from '$lib/MobFooter.svelte'
 import { getStores, navigating, page } from '$app/stores'
 export let user
+import { ToastContainer, FlatToast } from 'svelte-toasts'
 </script>
 
 <PageTransitions refresh="{$page.path}">
@@ -35,3 +36,6 @@ export let user
 		</div>
 	</div>
 </PageTransitions>
+<ToastContainer let:data>
+	<FlatToast data="{data}" />
+</ToastContainer>

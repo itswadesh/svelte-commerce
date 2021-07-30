@@ -98,7 +98,7 @@ const seoProps = {
 			<!-- Cart section end -->
 
 			<!-- Promo code section start -->
-			<div class="lg:w-1/2  xl:w-1/3">
+			<div class="lg:w-1/2  xl:w-1/3 mb-12">
 				<div class="flex items-center justify-between mt-3 cursor-pointer group">
 					<h5 class="text-sm text-gray-500 group-hover:text-gray-800">Apply Promo Code</h5>
 					<svg
