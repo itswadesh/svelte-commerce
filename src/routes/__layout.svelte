@@ -36,7 +36,7 @@ export let user
 		</div>
 	</div>
 
-	<div class="pt-20 fixed bottom-0 z-50 w-full  md:hidden">
+	<div class=" fixed bottom-0 z-50 w-full  md:hidden">
 		<MobFooter />
 	</div>
 </PageTransitions>

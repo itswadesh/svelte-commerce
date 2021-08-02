@@ -37,7 +37,7 @@ function hideitems() {
 </script>
 
 <div
-	class="flex-shrink-0 w-52 mx-2 mb-2 md:mx-4 md:mb-4 group  hover:bg-white hover:shadow-md text-gray-800"
+	class="flex-shrink-0 w-1/2 border sm:border-0 sm:w-52 sm:mx-2 sm:mb-2 md:mx-4 md:mb-4 group  hover:bg-white hover:shadow-md text-gray-800"
 	on:mouseenter="{showitems}"
 	on:mouseleave="{hideitems}">
 	<a href="{'/' + product._source?.slug + '?id=' + product?._id}" class="block overflow-hidden ">
@@ -53,7 +53,9 @@ function hideitems() {
 
 		<div class="p-4 ">
 			{#if show}
-				<div class="-mt-12">
+				<!-- For view above 640px start -->
+
+				<div class="-mt-12 hidden sm:block">
 					<!-- View smilar button start-->
 					<a href="{`/search?brand=${product.brandName}`}" class="flex justify-end">
 						<div
@@ -106,15 +108,76 @@ function hideitems() {
 					</div>
 					<!-- Size chart end-->
 				</div>
-			{:else}
-				<div>
-					<h4 class="font-semibold mb-1.5">
-						{#if product._source?.brandName}
-							{product._source?.brandName}
+				<!-- For view above 640px end -->
+
+				<!-- For view below 640px start -->
+
+				<div class="sm:hidden">
+					<div class="flex items-center justify-between">
+						<h4 class="font-semibold mb-1.5">
+							{#if product._source?.brandName}
+								{product._source?.brandName}
+							{:else}
+								_
+							{/if}
+						</h4>
+
+						<div class="sm:hidden">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-5 w-5"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+								></path>
+							</svg>
+						</div>
+					</div>
+
+					<h2
+						href="{'/' + product._source?.slug + '?id=' + product._id}"
+						class="text-sm font-medium overflow-hidden whitespace-nowrap overflow-ellipsis">
+						{#if product._source?.name}
+							{product._source?.name}
 						{:else}
 							_
 						{/if}
-					</h4>
+					</h2>
+				</div>
+
+				<!-- For view below 640px end -->
+			{:else}
+				<div>
+					<div class="flex items-center justify-between">
+						<h4 class="font-semibold mb-1.5">
+							{#if product._source?.brandName}
+								{product._source?.brandName}
+							{:else}
+								_
+							{/if}
+						</h4>
+
+						<div class="sm:hidden">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-5 w-5"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+								></path>
+							</svg>
+						</div>
+					</div>
 
 					<h2
 						href="{'/' + product._source?.slug + '?id=' + product._id}"
@@ -128,19 +191,23 @@ function hideitems() {
 				</div>
 			{/if}
 
-			<div class="mt-2.5 mb-1.5 leading-4 flex items-baseline justify-start ">
-				<span class="mr-1 text-sm font-semibold whitespace-nowrap ">
+			<div class="mt-2.5 mb-1.5 leading-4 flex flex-wrap items-baseline justify-start ">
+				<span class="mr-1 text-xs sm:text-sm font-semibold whitespace-nowrap ">
 					{currency(product._source?.price)}
 				</span>
 
-				<span class="ml-1 text-xs text-gray-500 whitespace-nowrap line-through">
+				<span class="mr-1 text-xs text-gray-500 whitespace-nowrap line-through">
 					{currency(product._source?.mrp)}
 				</span>
 
 				{#if Math.floor(100 - (product._source?.price * 100) / product._source?.mrp) > 0}
-					<span class="ml-1 text-xs text-green-500 whitespace-nowrap">
-						( {Math.round((product._source?.price * 100) / product._source?.mrp)}% off )
-					</span>
+					<div class="mr-1 text-xs text-green-500 whitespace-nowrap">
+						<span class="hidden sm:block">
+							( {Math.round((product._source?.price * 100) / product._source?.mrp)}% off )</span>
+
+						<span class="sm:hidden">
+							{Math.round((product._source?.price * 100) / product._source?.mrp)}% off</span>
+					</div>
 				{/if}
 
 				{#if product._source?.stock < 1}
