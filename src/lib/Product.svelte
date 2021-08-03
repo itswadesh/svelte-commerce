@@ -43,12 +43,11 @@ function hideitems() {
 	<a href="{'/' + product._source?.slug + '?id=' + product?._id}" class="block overflow-hidden ">
 		<div class="">
 			<img
-				alt=""
 				use:lazyload
 				src="{`${CDN_URL}/${product._source?.img && product._source?.img[0]}?tr=w-3,h-3`}"
+				alt="{product._source?.name}"
 				data-src="{`${CDN_URL}/${product._source?.img && product._source?.img[0]}`}"
-				class="object-cover object-top w-full h-72  bg-black "
-				style="" />
+				class="object-cover object-top w-full h-72  bg-black " />
 		</div>
 
 		<div class="p-4 ">
@@ -98,13 +97,13 @@ function hideitems() {
 					<!-- Size chart start-->
 					<div class="mt-1.5 flex items-baseline justify-start">
 						<h5 class="mr-1 text-sm">Sizes:</h5>
-						<h5 class="space-x-1 text-xs font-medium text-gray-500 flex items-baseline ">
+						<h6 class="space-x-1 text-xs font-medium text-gray-500 flex items-baseline ">
 							{#if product?.variants?.length}
 								{#each product?.variants as v, i}
 									<div>{v.size}</div>
 								{/each}
 							{/if}
-						</h5>
+						</h6>
 					</div>
 					<!-- Size chart end-->
 				</div>
@@ -139,7 +138,7 @@ function hideitems() {
 						</div>
 					</div>
 
-					<h2
+					<h5
 						href="{'/' + product._source?.slug + '?id=' + product._id}"
 						class="text-sm font-medium overflow-hidden whitespace-nowrap overflow-ellipsis">
 						{#if product._source?.name}
@@ -147,7 +146,7 @@ function hideitems() {
 						{:else}
 							_
 						{/if}
-					</h2>
+					</h5>
 				</div>
 
 				<!-- For view below 640px end -->
@@ -179,7 +178,7 @@ function hideitems() {
 						</div>
 					</div>
 
-					<h2
+					<h5
 						href="{'/' + product._source?.slug + '?id=' + product._id}"
 						class="text-sm font-medium overflow-hidden whitespace-nowrap overflow-ellipsis">
 						{#if product._source?.name}
@@ -187,26 +186,28 @@ function hideitems() {
 						{:else}
 							_
 						{/if}
-					</h2>
+					</h5>
 				</div>
 			{/if}
 
 			<div class="mt-2.5 mb-1.5 leading-4 flex flex-wrap items-baseline justify-start ">
-				<span class="mr-1 text-xs sm:text-sm font-semibold whitespace-nowrap ">
+				<h6 class="mr-1 text-xs sm:text-sm font-semibold whitespace-nowrap ">
 					{currency(product._source?.price)}
-				</span>
+				</h6>
 
-				<span class="mr-1 text-xs text-gray-500 whitespace-nowrap line-through">
+				<h6 class="mr-1 text-xs text-gray-500 whitespace-nowrap line-through">
 					{currency(product._source?.mrp)}
-				</span>
+				</h6>
 
 				{#if Math.floor(100 - (product._source?.price * 100) / product._source?.mrp) > 0}
-					<div class="mr-1 text-xs text-green-500 whitespace-nowrap">
-						<span class="hidden sm:block">
-							( {Math.round((product._source?.price * 100) / product._source?.mrp)}% off )</span>
+					<div class="mr-1 text-xs text-primary-800 whitespace-nowrap">
+						<h6 class="hidden sm:block">
+							( {Math.round((product._source?.price * 100) / product._source?.mrp)}% off )
+						</h6>
 
-						<span class="sm:hidden">
-							{Math.round((product._source?.price * 100) / product._source?.mrp)}% off</span>
+						<h6 class="sm:hidden">
+							{Math.round((product._source?.price * 100) / product._source?.mrp)}% off
+						</h6>
 					</div>
 				{/if}
 
