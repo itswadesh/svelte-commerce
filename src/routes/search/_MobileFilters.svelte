@@ -101,8 +101,8 @@ function stringToArray(v) {
 </script>
 
 <div
-	class="py-2\1 bg-white-800 shadow bg-white w-screen top-0 left-0 fixed
-    h-screen max-w-lg">
+	class="fixed z-50 top-0 left-0 py-2\1 bg-white-800 shadow bg-white w-screen  
+    h-screen max-w-lg ">
 	<!-- Mobile version starts here -->
 
 	<div class="block h-full md:hidden">

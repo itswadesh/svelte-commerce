@@ -23,11 +23,11 @@ export let user
 <PageTransitions refresh="{$page.path}">
 	<div class="bg-gray-50 font-sans antialiased">
 		<div class="mb-12 lg:mb-20">
-			<div class="fixed top-0 z-50 block w-full md:hidden">
+			<div class="fixed top-0 z-40 block w-full md:hidden">
 				<MobNav user="{user}" />
 			</div>
 
-			<div class="fixed top-0 z-50 hidden w-full md:block">
+			<div class="fixed top-0 z-40 hidden w-full md:block">
 				<Nav user="{user}" />
 			</div>
 		</div>
@@ -36,7 +36,7 @@ export let user
 		</div>
 	</div>
 
-	<div class=" fixed bottom-0 z-50 w-full  md:hidden">
+	<div class=" fixed bottom-0 z-40 w-full  md:hidden">
 		<MobFooter />
 	</div>
 </PageTransitions>

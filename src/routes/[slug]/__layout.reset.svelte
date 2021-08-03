@@ -18,11 +18,11 @@ import { ToastContainer, FlatToast } from 'svelte-toasts'
 <PageTransitions refresh="{$page.path}">
 	<div>
 		<div class="hidden mb-28 lg:mb-20 lg:block">
-			<div class="fixed top-0 z-50 block w-full mb-40 lg:mb-0 lg:hidden">
+			<div class="fixed top-0 z-40 block w-full mb-40 lg:mb-0 lg:hidden">
 				<MobNav user="{user}" />
 			</div>
 
-			<div class="fixed top-0 z-50 hidden w-full lg:block">
+			<div class="fixed top-0 z-40 hidden w-full lg:block">
 				<Nav user="{user}" />
 			</div>
 		</div>
@@ -31,7 +31,7 @@ import { ToastContainer, FlatToast } from 'svelte-toasts'
 		</div>
 	</div>
 	<div class="mt-20 lg:mt-0 lg:hidden">
-		<div class="fixed bottom-0 w-full">
+		<div class="fixed z-40 bottom-0 w-full">
 			<MobFooter />
 		</div>
 	</div>

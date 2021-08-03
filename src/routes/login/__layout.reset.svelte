@@ -24,7 +24,7 @@ export let user
 		<slot />
 	</div>
 
-	<div class="fixed bottom-0 z-50 w-full  md:hidden">
+	<div class="fixed z-40 bottom-0 w-full  md:hidden">
 		<MobFooter />
 	</div>
 </PageTransitions>
