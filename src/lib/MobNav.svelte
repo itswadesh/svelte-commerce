@@ -37,12 +37,9 @@ function toggle() {
 		</div>
 
 		<a href="/" class="flex items-center max-w-max">
-			<img alt="" class=" h-8" src="/logo.svg" />
-			<!-- <div class="">
-				<h2 class="ml-2 text-xl font-bold tracking-wide">LITEKART</h2>
-				<div class="ml-auto h-0.5 w-10 bg-pink-700"></div>
-			</div> -->
+			<img alt="logo" class="h-8" src="/logo.svg" />
 		</a>
+
 		<div>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"

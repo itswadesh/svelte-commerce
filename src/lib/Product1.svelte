@@ -135,9 +135,9 @@ let avatar = [
 				</div>
 			{:else}
 				<div>
-					<h4 class="font-semibold mb-1.5">
+					<h5 class="font-semibold mb-1.5">
 						{product.brandName || '_'}
-					</h4>
+					</h5>
 
 					<h6
 						href="{'/' + product.slug + '?id=' + product._id}"
@@ -155,12 +155,12 @@ let avatar = [
 					{currency(product.mrp)}
 				</span>
 				{#if Math.floor(100 - (product.price * 100) / product.mrp) > 0}
-					<span class="ml-1 text-xs text-green-500 whitespace-nowrap">
+					<span class="ml-1 text-xs text-primary-800  whitespace-nowrap">
 						( {Math.floor(100 - (product.price * 100) / product.mrp)}% off )
 					</span>
 				{/if}
 				{#if product.stock < 1}
-					<div class="text-xs text-red-500">Out of stock</div>
+					<div class="text-xs text-red-500 ">Out of stock</div>
 				{/if}
 			</div>
 		</div>
