@@ -93,7 +93,7 @@ async function getStoreData() {
 <footer class="w-full justify-center bg-zinc-50 p-3 text-sm sm:p-10">
 	<div class="container mx-auto max-w-6xl">
 		<div
-			class="mb-4 flex w-full flex-col flex-wrap items-start justify-start gap-5 sm:mb-8 sm:gap-10 h-full sm:max-h-[35rem] xl:max-h-96 overflow-hidden">
+			class="mb-4 flex w-full flex-col flex-wrap items-start justify-start gap-5 sm:mb-8 sm:gap-10 h-full sm:max-h-[35rem] xl:max-h-80 overflow-hidden">
 			{#if footerItems?.length}
 				{#each footerItems as item}
 					<div>
@@ -484,7 +484,7 @@ async function getStoreData() {
 							<a
 								href="/search?q={p.text}"
 								aria-label="Click for the products related to this field"
-								class="link-underline link-underline-gray uppercase">
+								class="link-underline link-underline-gray capitalize">
 								{p.text}
 							</a>
 
