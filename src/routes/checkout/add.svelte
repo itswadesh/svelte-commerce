@@ -1,3 +1,16 @@
+<script context="module" lang="ts">
+import type { Load } from '@sveltejs/kit'
+export const load: Load = async ({ page: { path }, session: { user } }) => {
+	if (!user) {
+		return {
+			redirect: `/login?ref=${path}`,
+			status: 302,
+		}
+	}
+	return {}
+}
+</script>
+
 <script lang="ts">
 import EditAddress from './_EditAddress.svelte'
 import CheckoutHeader from './_CheckoutHeader.svelte'
@@ -7,9 +20,8 @@ import { session } from '$app/stores'
 import SEO from '$lib/components/SEO/index.svelte'
 
 let address = null
-const user = $session.user
-console.log(user)
-if (!user || !user.email) goto('/login')
+// const user = $session.user
+// if (!user || !user.email) goto('/login?ref=/checkout/add')
 
 const seoProps = {
 	title: 'Fill-Address',
