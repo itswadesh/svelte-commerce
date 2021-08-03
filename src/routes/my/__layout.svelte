@@ -1,9 +1,9 @@
 <script context="module" lang="ts">
 import type { Load } from '@sveltejs/kit'
-export const load: Load = async ({ session }) => {
-	if (!session.user) {
+export const load: Load = async ({ page: { path }, session: { user } }) => {
+	if (!user) {
 		return {
-			redirect: '/login',
+			redirect: `/login?ref=${path}`,
 			status: 302,
 		}
 	}

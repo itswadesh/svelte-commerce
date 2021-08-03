@@ -1,5 +1,11 @@
 <script context="module" lang="ts">
-export async function load({ page: { host, path, params, query }, fetch }) {
+export async function load({ page: { host, path, params, query }, session: { user } }) {
+	if (!user) {
+		return {
+			redirect: `/login?ref=${path}`,
+			status: 302,
+		}
+	}
 	let wishlist = []
 	try {
 		wishlist = await get(`wishlists/my`)

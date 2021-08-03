@@ -7,6 +7,14 @@
 }
 </style>
 
+<script context="module" lang="ts">
+import type { Load } from '@sveltejs/kit'
+export const load: Load = async ({ page: { query }, session: { user } }) => {
+	const ref = query.get('ref')
+	return { props: { ref } }
+}
+</script>
+
 <script>
 import { toasts, ToastContainer, FlatToast } from 'svelte-toasts'
 import { goto } from '$app/navigation'
@@ -15,7 +23,7 @@ import { post } from './../../util/api'
 import Cookies from 'universal-cookie'
 import SEO from '$lib/components/SEO/index.svelte'
 import { toast } from './../../util'
-
+export let ref
 const seoProps = {
 	title: 'Login',
 	metadescription: 'Login now - ',
@@ -29,7 +37,11 @@ async function submit(e) {
 		cookies.set('token', res.token, { path: '/' })
 		$session.user = res.user
 		$session.token = res.token
-		goto('/')
+		let r = ref || '/'
+		// if (!user.firstName) {
+		//   r = `/my/profile?ref=${r}`
+		// }
+		goto(r)
 	} catch (e) {
 		toast(e, 'error')
 		console.log('Login Error...', e.toString())
