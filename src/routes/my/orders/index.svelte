@@ -26,9 +26,11 @@ async function getOrders() {
 <SEO {...seoProps} />
 
 <section class="w-full h-full pl-2 sm:pl-8 sm:pr-2 text-gray-800 tracking-wide ">
-	<h1 class="font-bold  text-lg sm:text-xl">My orders</h1>
+	<h1 class="font-bold  text-lg sm:text-xl">
+		<span class="mr-1">My orders</span>( {orders?.count} )
+	</h1>
 
-	{#if orders?.data?.length}
+	{#if orders?.count > 0}
 		{#each orders?.data as order}
 			<div
 				class=" relative p-4 my-2 sm:my-5 transition duration-300 bg-white border-t border-gray-300 rounded-md md:shadow-md border ">
@@ -162,5 +164,15 @@ async function getOrders() {
 				</div>
 			</div>
 		{/each}
+	{:else}
+		<div class="my-10 flex flex-col items-center justify-center ">
+			<h4 class="font-semibold mb-5 text-center">There are no orders yet</h4>
+
+			<img src="/no/empty-animate.svg" alt="" class="h-80 md:h-96 mb-10" />
+
+			<button
+				class="bg-white hover:bg-primary-500 rounded-md shadow hover:shadow-md py-2 px-8 font-semibold text-sm text-primary-500 hover:text-white border hover:border-white border-primary-500 focus:outline-none mx-auto focus:ring-primary-500 ring-opacity-50"
+				>Shop Now</button>
+		</div>
 	{/if}
 </section>
