@@ -4,21 +4,20 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 export let selected = null
-// isPrescription = false
 </script>
 
 <section class=" flex flex-wrap justify-center">
 	<div
-		class=" flex w-full  justify-between text-center text-xs font-semibold tracking-widest text-zinc-800 md:w-2/3 lg:w-1/3">
+		class=" flex w-full justify-between text-center text-xs font-semibold tracking-widest text-zinc-800 md:w-2/3 lg:w-1/3">
 		<a
 			href="/cart"
 			aria-label="Click to go inside cart"
 			class="mx-2 flex flex-col"
 			data-sveltekit-preload-data>
 			<div
-				class="mx-auto flex h-8 w-8 items-center justify-center  rounded-full border border-primary-500 text-center {selected ===
+				class="mx-auto flex h-8 w-8 items-center justify-center rounded-full border border-primary-500 text-center {selected ===
 				'cart'
 					? 'bg-primary-500  text-white'
 					: 'bg-white text-primary-500 '}">
@@ -34,7 +33,7 @@ export let selected = null
 			{#if selected == 'prescription'}
 				<div class="flex flex-col items-center text-center">
 					<div
-						class="mx-auto flex h-8 w-8 items-center justify-center  rounded-full border border-primary-500 text-center 
+						class="mx-auto flex h-8 w-8 items-center justify-center  rounded-full border border-primary-500 text-center
 						{selected === 'prescription' ? 'bg-primary-500  text-white' : 'bg-white text-primary-500  '}">
 						2
 					</div>
@@ -59,7 +58,7 @@ export let selected = null
 		{#if selected == 'address'}
 			<div class="flex flex-col items-center text-center">
 				<div
-					class="mx-auto flex h-8 w-8 items-center justify-center  rounded-full border border-primary-500 text-center {selected ===
+					class="mx-auto flex h-8 w-8 items-center justify-center rounded-full border border-primary-500 text-center {selected ===
 					'address'
 						? 'bg-primary-500  text-white'
 						: 'bg-white text-primary-500  '}">
@@ -79,7 +78,7 @@ export let selected = null
 				aria-label="Click to go inside address"
 				class="flex flex-col items-center text-center">
 				<div
-					class="mx-auto flex h-8 w-8 items-center justify-center  rounded-full border border-primary-500 text-center {selected ===
+					class="mx-auto flex h-8 w-8 items-center justify-center rounded-full border border-primary-500 text-center {selected ===
 					'address'
 						? 'bg-primary-500  text-white'
 						: 'bg-white text-primary-500'}">
@@ -100,7 +99,7 @@ export let selected = null
 		{#if selected == 'payment'}
 			<div class="flex flex-col items-center text-center">
 				<div
-					class="mx-auto flex h-8 w-8 items-center justify-center  rounded-full border border-primary-500 text-center {selected ===
+					class="mx-auto flex h-8 w-8 items-center justify-center rounded-full border border-primary-500 text-center {selected ===
 					'payment'
 						? 'bg-primary-500  text-white '
 						: 'bg-white text-primary-500 '}">
@@ -117,7 +116,7 @@ export let selected = null
 		{:else}
 			<div class="flex flex-col items-center text-center">
 				<div
-					class="mx-auto flex h-8 w-8 items-center justify-center  rounded-full border border-primary-500 text-center {selected ===
+					class="mx-auto flex h-8 w-8 items-center justify-center rounded-full border border-primary-500 text-center {selected ===
 					'payment'
 						? 'bg-primary-500  text-white'
 						: 'bg-white text-primary-500'}">

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import '@splidejs/svelte-splide/css'
 import { Splide, SplideSlide } from '@splidejs/svelte-splide'
 

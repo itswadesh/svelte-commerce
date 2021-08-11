@@ -5,7 +5,7 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import { fly } from 'svelte/transition'
 import { createEventDispatcher } from 'svelte'
 

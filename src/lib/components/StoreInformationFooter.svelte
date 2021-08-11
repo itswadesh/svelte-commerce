@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 let items = [
 	{
 		icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-14 h-14">
