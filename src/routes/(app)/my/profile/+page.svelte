@@ -44,13 +44,17 @@ function removeImage(detail) {
 async function saveProfile() {
 	try {
 		loading = true
+
 		let e = { ...data.profile }
 		e.company = 1
 		e.store = data.store?.id
+
 		toast('Saving Profile Info...', 'warning')
+
 		if (e.dob) e.dob = dayjs(e.dob).format('YYYY-MM-DDTHH:mm')
 		else e.dob = null
-		delete e.phone
+		// delete e.phone
+
 		data.profile = await put('users/update-profile', e, $page.data.origin)
 
 		if (data.profile) {
@@ -60,6 +64,7 @@ async function saveProfile() {
 		}
 
 		await cookies.set('me', data.profile, { path: '/' })
+
 		// $page.data.me = data.profile
 		// refreshData()
 	} catch (e) {
@@ -137,7 +142,7 @@ async function saveProfile() {
 							</div>
 						</div>
 
-						<div class="flex flex-wrap gap-2">
+						<!-- <div class="flex flex-wrap gap-2">
 							<h6 class="w-52 shrink-0 font-medium">Date Of Birth</h6>
 
 							<div class="w-full max-w-md">
@@ -147,14 +152,13 @@ async function saveProfile() {
 									bind:value="{data.profile.dob}"
 									on:input="{() => (formChanged = true)}" />
 							</div>
-						</div>
+						</div> -->
 
 						<div class="flex flex-wrap gap-2">
 							<h6 class="w-52 shrink-0 font-medium">Phone</h6>
 
 							<div class="w-full max-w-md">
 								<Textbox
-									disabled
 									type="text"
 									placeholder="Eg: +91000000000"
 									bind:value="{data.profile.phone}"
