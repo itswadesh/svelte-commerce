@@ -18,7 +18,7 @@ const config = {
 		vite: {
 			server: {
 				proxy: {
-					'/api': 'https://api.litekart.in',
+					'/api': 'http://api.litekart.in',
 				},
 			},
 			ssr: {
