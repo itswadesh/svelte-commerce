@@ -88,7 +88,7 @@ function toggle(e) {
 				count="{products.count}"
 				on:hide="{() => (showMobileFilter = !showMobileFilter)}" />
 			{#if loading}
-				<div class="flex flex-wrap">
+				<div class="flex flex-wrap justify-between">
 					{#each { length: 15 } as _, i}
 						<ProductSkeleton />
 					{/each}
