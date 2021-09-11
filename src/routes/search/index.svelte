@@ -78,7 +78,7 @@ function toggle(e) {
 	<meta name="description" content="Latest Ecommerce Stack" />
 </svelte:head>
 {#if showMobileFilter}
-	<MobileFilters facets="{facets}" on:hide="{toggle}" />
+	<MobileFilters facets="{facets}" query="{query}" on:hide="{toggle}" />
 {:else}
 	<div class="flex ">
 		<DesktopFilters facets="{facets}" query="{query}" />
@@ -88,7 +88,7 @@ function toggle(e) {
 				count="{products.count}"
 				on:hide="{() => (showMobileFilter = !showMobileFilter)}" />
 			{#if loading}
-				<div class="flex flex-wrap">
+				<div class="flex flex-wrap justify-between">
 					{#each { length: 15 } as _, i}
 						<ProductSkeleton />
 					{/each}
