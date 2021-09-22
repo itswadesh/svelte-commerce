@@ -12,8 +12,6 @@ const seoProps = {
 export let data
 
 function redirectToCheckout({ detail }) {
-	// console.log('{detail}', { detail })
-
 	if (detail.id === 'new' && detail.newAddressId) {
 		goto(`/checkout/payment-options?address=${detail.newAddressId}`)
 	}
