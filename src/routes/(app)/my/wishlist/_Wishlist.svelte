@@ -15,17 +15,15 @@
 <script>
 import { applyAction, enhance } from '$app/forms'
 import { currency } from '$lib/utils'
-import { WishlistService } from '$lib/services'
 import { fireGTagEvent } from '$lib/utils/gTag'
 import { invalidateAll } from '$app/navigation'
+import { LazyImg, DummyProductCard } from '$lib/components'
 import { page } from '$app/stores'
 import { post } from '$lib/utils/api'
+import { PrimaryButton, BlackButton } from '$lib/ui'
+import { WishlistService } from '$lib/services'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
-import BlackButton from '$lib/ui/BlackButton.svelte'
-import DummyProductCard from '$lib/DummyProductCard.svelte'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import noEmptyWishlist from '$lib/assets//no/empty-wishlist.svg'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import noEmptyWishlist from '$lib/assets/no/empty-wishlist.svg'
 import WishlistSkeleton from './_WishlistSkeleton.svelte'
 
 export let wishlistedProducts,
@@ -251,7 +249,7 @@ async function getWishlistedProducts() {
 
 			<p class="mb-5 text-sm">There's no wishlisted product found, start adding items.</p>
 
-			<a href="/" aria-label="Click to route home" data-sveltekit-preload-data>
+			<a href="/" aria-label="Click to visit home" data-sveltekit-preload-data>
 				<PrimaryButton class="w-40 py-2 text-sm">Shop Now</PrimaryButton>
 			</a>
 		</div>

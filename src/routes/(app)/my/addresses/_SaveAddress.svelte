@@ -1,13 +1,11 @@
 <script>
-import { createEventDispatcher } from 'svelte'
 import { AddressService, CountryService } from '$lib/services'
+import { createEventDispatcher } from 'svelte'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { toast } from '$lib/utils'
-import Error from '$lib/components/Error.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import Textarea from '$lib/ui/Textarea.svelte'
-import Textbox from '$lib/ui/Textbox.svelte'
+import { Error } from '$lib/components'
+import { PrimaryButton, Textarea, Textbox } from '$lib/ui'
 
 const dispatch = createEventDispatcher()
 

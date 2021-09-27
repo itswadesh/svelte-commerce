@@ -1,15 +1,12 @@
 <script lang="ts">
-import { OrdersService } from '$lib/services'
 import { fireGTagEvent } from '$lib/utils/gTag'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
+import { OrdersService } from '$lib/services'
 import { page } from '$app/stores'
+import { Pricesummary, LazyImg, CheckoutHeader, Error } from '$lib/components'
 import { toast } from '$lib/utils'
-import CheckoutHeader from '$lib/components/CheckoutHeader.svelte'
-import Error from '$lib/components/Error.svelte'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import logo from '$lib/assets/logo.svg'
-import Pricesummary from '$lib/components/Pricesummary.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 const seoProps = {
@@ -18,6 +15,7 @@ const seoProps = {
 }
 
 export let data
+console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let bankPayment = { type: 'order', reference: '', remark: '', paymentMethodId: '', amount: 0 }
 let disabled = false
@@ -37,7 +35,7 @@ $: if (data.paymentMethods?.length === 1 && data.paymentMethods[0]?.type === 'pg
 let Stripe
 
 onMount(async () => {
-	const StripeModule = await import('$lib/Stripe.svelte')
+	const StripeModule = await import('$lib/components/Stripe.svelte')
 	Stripe = StripeModule.default
 
 	const razorpayScript = document.createElement('script')
@@ -76,6 +74,7 @@ async function submit(pm) {
 
 			goto(`/payment/success?id=${res?._id}&status=PAYMENT_SUCCESS&provider=COD`)
 		} catch (e) {
+			data.err = e
 			toast(e?.body?.message || e, 'error')
 		} finally {
 			loading = false
@@ -94,6 +93,7 @@ async function submit(pm) {
 				toast('Something went wrong', 'error')
 			}
 		} catch (e) {
+			data.err = e
 			toast(e?.body?.message || e, 'error')
 		} finally {
 			loading = false
@@ -124,6 +124,7 @@ async function submit(pm) {
 						toast('Payment success', 'success')
 						goto(`/payment/success?id=${capture._id}`)
 					} catch (e) {
+						data.err = e
 						goto(`/payment/failure?ref=/checkout/payment-options?address=${data.addressId}`)
 					} finally {
 					}
@@ -145,6 +146,7 @@ async function submit(pm) {
 			const rzp1 = new Razorpay(options)
 			rzp1.open()
 		} catch (e) {
+			data.err = e
 			toast(e?.message, 'error')
 		} finally {
 			loading = false
@@ -165,10 +167,12 @@ function checkIfStripeCardValid({ detail }) {
 
 <SEO {...seoProps} />
 
-<Error err="{data.err}" />
-
 <div class="container mx-auto min-h-screen w-full max-w-6xl p-3 py-5 sm:p-10">
 	<CheckoutHeader selected="payment" />
+
+	<div class="mt-5">
+		<Error err="{data.err}" />
+	</div>
 
 	<div class="mt-10 flex flex-col gap-10 md:flex-row md:justify-center xl:gap-20">
 		<div class="w-full flex-1">
@@ -177,56 +181,54 @@ function checkIfStripeCardValid({ detail }) {
 			{#if data.paymentMethods?.length}
 				<div class="flex w-full flex-col gap-4" class:wiggle="{paymentDenied}">
 					{#each data.paymentMethods as pm}
-						{#if pm._id}
-							<label
-								class="flex w-full cursor-pointer items-center gap-2 rounded border border-zinc-200 p-4 shadow-md transition duration-300 hover:bg-primary-50 sm:gap-4">
-								<input
-									bind:group="{selectedPaymentMethod}"
-									type="radio"
-									value="{pm}"
-									name="group"
-									class="h-4 w-4 focus:outline-none focus:ring-0 focus:ring-offset-0"
-									on:click="{() => paymentMethodChanged(pm)}" />
+						<label
+							class="flex w-full cursor-pointer items-center gap-2 rounded border border-zinc-200 p-4 shadow-md transition duration-300 hover:bg-primary-50 sm:gap-4">
+							<input
+								bind:group="{selectedPaymentMethod}"
+								type="radio"
+								value="{pm}"
+								name="group"
+								class="h-4 w-4 focus:outline-none focus:ring-0 focus:ring-offset-0"
+								on:click="{() => paymentMethodChanged(pm)}" />
 
-								<div class="flex w-full flex-1 items-center justify-between gap-4">
-									<div class="flex-1">
-										<h2 class="text-xl font-semibold" style="color:{pm.color}">
-											{pm.name || pm.value}
-										</h2>
+							<div class="flex w-full flex-1 items-center justify-between gap-4">
+								<div class="flex-1">
+									<h2 class="text-xl font-semibold" style="color:{pm.color}">
+										{pm.name || pm.value}
+									</h2>
 
-										{#if pm.text}
-											<p class="mt-1 text-sm text-zinc-500">{pm.text}</p>
-										{/if}
-									</div>
-
-									<div class="shrink-0">
-										{#if pm.img}
-											<img
-												src="{pm.img}"
-												alt="{pm.name}"
-												width="56"
-												height="56"
-												class="h-14 w-14 rounded-full border object-cover object-center text-xs" />
-										{:else}
-											<div
-												class="flex h-14 w-14 p-2 items-center justify-center rounded-full border bg-zinc-200 text-center text-xs uppercase">
-												<span class="w-full truncate">
-													{pm.name || pm.value}
-												</span>
-											</div>
-										{/if}
-									</div>
+									{#if pm.text}
+										<p class="mt-1 text-sm text-zinc-500">{pm.text}</p>
+									{/if}
 								</div>
-							</label>
 
-							{#if pm.value === 'Stripe'}
-								<svelte:component
-									this="{Stripe}"
-									address="{data.addressId}"
-									isStripeSelected="{selectedPaymentMethod.name === 'Stripe'}"
-									stripePublishableKey="{pm.app_id}"
-									on:isStripeCardValid="{checkIfStripeCardValid}" />
-							{/if}
+								<div class="shrink-0">
+									{#if pm.img}
+										<img
+											src="{pm.img}"
+											alt="{pm.name}"
+											width="56"
+											height="56"
+											class="h-14 w-14 rounded-full border object-cover object-center text-xs" />
+									{:else}
+										<div
+											class="flex h-14 w-14 p-2 items-center justify-center rounded-full border bg-zinc-200 text-center text-xs uppercase">
+											<span class="w-full truncate">
+												{pm.name || pm.value}
+											</span>
+										</div>
+									{/if}
+								</div>
+							</div>
+						</label>
+
+						{#if pm.value === 'Stripe'}
+							<svelte:component
+								this="{Stripe}"
+								address="{data.addressId}"
+								isStripeSelected="{selectedPaymentMethod.name === 'Stripe'}"
+								stripePublishableKey="{pm.app_id}"
+								on:isStripeCardValid="{checkIfStripeCardValid}" />
 						{/if}
 					{/each}
 				</div>
