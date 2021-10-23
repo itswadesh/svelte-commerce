@@ -1,4 +1,3 @@
-import AnimatedCartItem from './AnimatedCartItem.svelte'
 import Autocomplete from './Autocomplete/Autocomplete.svelte'
 import AutocompleteItem from './AutocompleteItem.svelte'
 import AutosuggestModal from './AutosuggestModal.svelte'
@@ -30,7 +29,6 @@ import Modal from './Modal.svelte'
 import Nav from './Nav.svelte'
 import PageIdPickedBanner from './PageIdPickedBanner.svelte'
 import PageTransitions from './PageTransitions.svelte'
-import Pagination from './Pagination.svelte'
 import PreloadingIndicator from './PreloadingIndicator.svelte'
 import Pricesummary from './Pricesummary.svelte'
 import ProductGridShowCase from './Varni/ProductGridShowCase.svelte'
@@ -51,13 +49,17 @@ import Stripe from './Stripe.svelte'
 import UserForm from './Product/UserForm.svelte'
 
 // Core components of svelte commerce
+import AnimatedCartItem from './AnimatedCartItem.svelte'
 import DesktopFilter from './DesktopFilter.svelte'
 import Footer from './Footer.svelte'
+import Pagination from './Pagination.svelte'
 import ProductCard from './ProductCard.svelte'
 
 // Varni components
+// import AnimatedCartItem from './Varni/AnimatedCartItem.svelte'
 // import DesktopFilter from './Varni/DesktopFilter.svelte'
 // import Footer from './Varni/Footer.svelte'
+// import Pagination from './Varni/Pagination.svelte'
 // import ProductCard from './Varni/ProductCard.svelte'
 
 export {
