@@ -2,11 +2,9 @@
 import { ContactService } from '$lib/services'
 import { page } from '$app/stores'
 import { toast } from '$lib/utils'
-import Error from '$lib/components/Error.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import { Error } from '$lib/components'
+import { TextboxFloating, TextareaFloating, PrimaryButton } from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
-import TextareaFloating from '$lib/ui/TextareaFloating.svelte'
-import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
 
 let seoProps = {
 	title: `Contact Us`,
@@ -124,16 +122,16 @@ async function submitContactInformation() {
 					</ul>
 				{/if}
 
-				{#if $page.data.store?.facebookUrl || $page.data.store?.instagramUrl || $page.data.store?.twitterUrl || $page.data.store?.email || $page.data.store?.linkedinUrl || $page.data.store?.pinterestUrl || $page.data.store?.youtubeUrl}
+				{#if $page.data.store?.socialSharingButtons || $page.data.store?.email}
 					<ul class="flex flex-wrap items-center gap-2">
 						<!-- Facebook -->
 
-						{#if $page.data.store?.facebookUrl}
+						{#if $page.data.store?.socialSharingButtons?.facebook?.val}
 							<li
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#4267B2]">
 								<a
-									href="{$page.data.store?.facebookUrl}"
-									aria-label="Click to route facebook page"
+									href="{$page.data.store?.socialSharingButtons?.facebook?.val}"
+									aria-label="Click to visit facebook page"
 									target="_blank"
 									rel="noopener noreferrer"
 									class="flex h-full w-full items-center justify-center">
@@ -157,12 +155,12 @@ async function submitContactInformation() {
 
 						<!-- Instagram -->
 
-						{#if $page.data.store?.instagramUrl}
+						{#if $page.data.store?.socialSharingButtons?.instagram?.val}
 							<li
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#C13584]">
 								<a
-									href="{$page.data.store?.instagramUrl}"
-									aria-label="Click to route instagram page"
+									href="{$page.data.store?.socialSharingButtons?.instagram?.val}"
+									aria-label="Click to visit instagram page"
 									target="_blank"
 									rel="noopener noreferrer"
 									class="flex h-full w-full items-center justify-center">
@@ -186,12 +184,12 @@ async function submitContactInformation() {
 
 						<!-- Twitter -->
 
-						{#if $page.data.store?.twitterUrl}
+						{#if $page.data.store?.socialSharingButtons?.twitter?.val}
 							<li
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#1DA1F2]">
 								<a
-									href="{$page.data.store?.twitterUrl}"
-									aria-label="Click to route twitter page"
+									href="{$page.data.store?.socialSharingButtons?.twitter?.val}"
+									aria-label="Click to visit twitter page"
 									target="_blank"
 									rel="noopener noreferrer"
 									class="flex h-full w-full items-center justify-center">
@@ -215,12 +213,12 @@ async function submitContactInformation() {
 
 						<!-- Linked in -->
 
-						{#if $page.data.store?.linkedinUrl}
+						{#if $page.data.store?.socialSharingButtons?.linkedin?.val}
 							<li
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#0077b5]">
 								<a
-									href="{$page.data.store?.linkedinUrl}"
-									aria-label="Click to route linkedin page"
+									href="{$page.data.store?.socialSharingButtons?.linkedin?.val}"
+									aria-label="Click to visit linkedin page"
 									target="_blank"
 									rel="noopener noreferrer"
 									class="flex h-full w-full items-center justify-center">
@@ -246,12 +244,12 @@ async function submitContactInformation() {
 
 						<!-- Pinterest -->
 
-						{#if $page.data.store?.pinterestUrl}
+						{#if $page.data.store?.socialSharingButtons?.pinterest?.val}
 							<li
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#D32D2D]">
 								<a
-									href="{$page.data.store?.pinterestUrl}"
-									aria-label="Click to route pinterest page"
+									href="{$page.data.store?.socialSharingButtons?.pinterest?.val}"
+									aria-label="Click to visit pinterest page"
 									target="_blank"
 									rel="noopener noreferrer"
 									class="flex h-full w-full items-center justify-center">
@@ -277,12 +275,12 @@ async function submitContactInformation() {
 
 						<!-- Youtube -->
 
-						{#if $page.data.store?.youtubeUrl}
+						{#if $page.data.store?.socialSharingButtons?.youtube?.val}
 							<li
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#FF0000]">
 								<a
-									href="{$page.data.store?.youtubeUrl}"
-									aria-label="Click to route youtube page"
+									href="{$page.data.store?.socialSharingButtons?.youtube?.val}"
+									aria-label="Click to visit youtube page"
 									target="_blank"
 									rel="noopener noreferrer"
 									class="flex h-full w-full items-center justify-center">
