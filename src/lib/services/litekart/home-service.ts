@@ -53,9 +53,10 @@ export const fetchHome = async ({
 			youMayLike: res?.youMayLike
 		}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.data?.message || e.message || e)
 	}
 }
+
 export const fetchCategoriesProducts = async ({ categories, origin, storeId, server = false, sid = null }) => {
 	let categoriesProducts
 
