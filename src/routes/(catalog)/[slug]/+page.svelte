@@ -4,20 +4,23 @@ import { fade } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import {
+	Pagination,
+	ProductCard,
+	CatelogNav,
+	DesktopFilter,
+	DummyProductCard,
+	MobileFilter
+} from '$lib/components'
+import { PrimaryButton } from '$lib/ui'
 import { ProductService } from '$lib/services'
 import { sorts } from '$lib/config'
-import CatelogNav from '$lib/CatelogNav.svelte'
-import DesktopFilter from '$lib/components/DesktopFilter.svelte'
 import dotsLoading from '$lib/assets/dots-loading.gif'
-import DummyProductCard from '$lib/DummyProductCard.svelte'
-import MobileFilter from '$lib/components/MobileFilter.svelte'
 import noDataAvailable from '$lib/assets/no/no-data-available.png'
-import Pagination from '$lib/components/Pagination.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import ProductCard from '$lib/ProductCard.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	brand: $page.data.store?.title,
@@ -62,6 +65,7 @@ let seoProps = {
 }
 
 let currentPage = 1
+let hellobar = $page.data.store?.hellobar || {}
 let hidden = true
 let priceRange = []
 let reachedLast = false
@@ -339,7 +343,8 @@ function handleFilterTags() {
 				facets="{data.products.facets}"
 				priceRange="{priceRange}"
 				query="{data.query}"
-				class="sticky top-24 hidden lg:block"
+				class="sticky hidden lg:block
+				{hellobar?.active?.val ? 'top-32' : 'top-24'}"
 				on:clearAll="{refreshData}" />
 
 			<MobileFilter
@@ -504,7 +509,7 @@ function handleFilterTags() {
 					{/if}
 				{:else}
 					<Pagination
-						count="{Math.ceil((data?.count || 1) / data.pageSize)}"
+						count="{Math.ceil((data.products?.count || 1) / data.products?.pageSize)}"
 						current="{data?.currentPage || 1}"
 						providePaddingOnMobile />
 				{/if}
