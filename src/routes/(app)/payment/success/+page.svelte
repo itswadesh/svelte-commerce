@@ -64,6 +64,8 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import productNonVeg from '$lib/assets/product/non-veg.png'
+import productVeg from '$lib/assets/product/veg.png'
 import SEO from '$lib/components/SEO/index.svelte'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
 
@@ -245,9 +247,9 @@ onMount(async () => {
 														{#if $page?.data?.store?.isFnb && item.foodType}
 															<div>
 																{#if item.foodType === 'veg'}
-																	<img src="/product/veg.png" alt="veg" class="h-5 w-5" />
+																	<img src="{productVeg}" alt="veg" class="h-5 w-5" />
 																{:else if item.foodType === 'nonveg'}
-																	<img src="/product/non-veg.png" alt="non veg" class="h-5 w-5" />
+																	<img src="{productNonVeg}" alt="non veg" class="h-5 w-5" />
 																{/if}
 															</div>
 														{/if}
@@ -398,8 +400,8 @@ onMount(async () => {
 									<div class="flex items-center">
 										<h6 class="mr-2 w-20">Subtotal</h6>
 
-										<span
-											>: &nbsp; {currency(
+										<span>
+											: &nbsp; {currency(
 												data.order?.amount.subtotal,
 												$page.data?.store?.currencySymbol
 											)}
@@ -411,8 +413,8 @@ onMount(async () => {
 									<div class="flex items-center">
 										<h6 class="mr-2 w-20">Discount</h6>
 
-										<span
-											>: &nbsp; {currency(
+										<span>
+											: &nbsp; {currency(
 												data.order?.amount.discount,
 												$page.data?.store?.currencySymbol
 											)}
@@ -424,8 +426,8 @@ onMount(async () => {
 									<div class="flex items-center">
 										<h6 class="mr-2 w-20">Shipping</h6>
 
-										<span
-											>: &nbsp; {currency(
+										<span>
+											: &nbsp; {currency(
 												data.order?.amount.shipping,
 												$page.data?.store?.currencySymbol
 											)}
@@ -439,8 +441,8 @@ onMount(async () => {
 									<div class="flex items-center text-base font-bold">
 										<h6 class="mr-2 w-20">Total</h6>
 
-										<span
-											>: &nbsp; {currency(
+										<span>
+											: &nbsp; {currency(
 												data.order?.amount.total,
 												$page.data?.store?.currencySymbol
 											)}
