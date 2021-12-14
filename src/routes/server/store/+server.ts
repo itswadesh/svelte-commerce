@@ -36,7 +36,6 @@ export async function GET({ cookies, request, locals }) {
 			isGDPR: storeRes.storeOne.isGDPR,
 			isProductReviewsAndRatings: storeRes.storeOne.isProductReviewsAndRatings,
 			isSecureCatalogue: storeRes.storeOne.isSecureCatalogue,
-			isWhatsappChatButton: storeRes.storeOne.isWhatsappChatButton,
 			isWishlist: storeRes.storeOne.isWishlist,
 			keywords: storeRes.storeOne.keywords,
 			loginUrl: storeRes.storeOne.otpLogin ? '/auth/otp-login' : '/auth/login',
@@ -49,6 +48,7 @@ export async function GET({ cookies, request, locals }) {
 			websiteLegalName: storeRes.storeOne.websiteLegalName,
 			websiteName: storeRes.storeOne.websiteName,
 			weightUnit: storeRes.storeOne.weightUnit,
+			whatsappChatButton: storeRes.storeOne.whatsappChatButton,
 
 		}
 		cookies.set('store', JSON.stringify(store), { path: '/' })
