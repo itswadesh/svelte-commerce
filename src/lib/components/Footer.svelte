@@ -25,6 +25,7 @@
 import { browser } from '$app/environment'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import { PageService } from '$lib/services'
 import appStore from '$lib/assets/app/app-store.svg'
 import googlePlay from '$lib/assets/app/google-play.png'
 import type { Category } from '$lib/types'
@@ -43,30 +44,30 @@ function getYear() {
 }
 
 let footerItems: any = [
-	{
-		heading: 'Company',
-		subMenu: [
-			{ title: 'About Us', link: '/about-us', new: false },
-			{ title: 'Privacy Policy', link: '/privacy-policy', new: false },
-			{
-				title: 'Terms & Conditions',
-				link: '/terms-conditions',
-				new: false
-			},
-			{
-				title: 'Payments & Returns',
-				link: '/payments-returns',
-				new: false
-			},
-			{ title: 'Blogs', link: '/blogs', new: false },
-			{
-				title: 'Join as Vendor',
-				link: `${$page.data.store?.adminUrl}?role=vendor&store=${$page.data.store?.id}`,
-				new: true,
-				target: '_blank'
-			}
-		]
-	},
+	// {
+	// 	heading: 'Company',
+	// 	subMenu: [
+	// 		{ title: 'About Us', link: '/about-us', new: false },
+	// 		{ title: 'Privacy Policy', link: '/privacy-policy', new: false },
+	// 		{
+	// 			title: 'Terms & Conditions',
+	// 			link: '/terms-conditions',
+	// 			new: false
+	// 		},
+	// 		{
+	// 			title: 'Payments & Returns',
+	// 			link: '/payments-returns',
+	// 			new: false
+	// 		},
+	// 		{ title: 'Blogs', link: '/blogs', new: false },
+	// 		{
+	// 			title: 'Join as Vendor',
+	// 			link: `${$page.data.store?.adminUrl}?role=vendor&store=${$page.data.store?.id}`,
+	// 			new: true,
+	// 			target: '_blank'
+	// 		}
+	// 	]
+	// },
 	{
 		heading: 'Customer service',
 		subMenu: [
@@ -75,20 +76,35 @@ let footerItems: any = [
 		]
 	}
 ]
+let pages = []
 
 onMount(async () => {
-	const res = await getStoreData()
-	store = res.storeOne
-	megamenu = res.megamenu1
-	popularSearches = res.popularSearches
+	const res1 = await getPages()
+	const res2 = await getStoreData()
+
+	store = res2.storeOne
+	megamenu = res2.megamenu1
+	popularSearches = res2.popularSearches
+
 	if (browser) {
 		localStorage.setItem('megamenu', JSON.stringify(megamenu))
 	}
 })
+
 async function getStoreData() {
-	const response = await fetch('/server/store')
-	const res = await response.json()
+	const response1 = await fetch('/server/store')
+	const res = await response1.json()
+
 	return res
+}
+
+async function getPages() {
+	pages = await PageService.fetchPages({
+		origin: $page.data.origin,
+		storeId: $page.data.store?.id
+	})
+
+	// console.log('pages', pages)
 }
 </script>
 
@@ -96,6 +112,33 @@ async function getStoreData() {
 	<div class="container mx-auto max-w-6xl">
 		<div
 			class="mb-4 flex w-full flex-col flex-wrap items-start justify-start gap-5 sm:mb-8 sm:gap-10 h-full sm:max-h-[35rem] xl:max-h-80 overflow-hidden">
+			{#if pages?.length}
+				<div>
+					<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Company</h5>
+
+					<ul class="flex flex-col gap-1 text-zinc-500">
+						{#each pages as page}
+							<li class="flex max-w-max items-center">
+								<a
+									href="/p/{page.slug}"
+									target="_blank"
+									aria-label="Click to visit this page"
+									class="link-underline link-underline-gray whitespace-pre-wrap">
+									{page.name}
+								</a>
+
+								{#if page.new}
+									<div
+										class="ml-2 max-w-max rounded bg-primary-500 py-[0.1rem] px-1 text-[0.5rem] font-semibold leading-3 tracking-wider text-white">
+										NEW
+									</div>
+								{/if}
+							</li>
+						{/each}
+					</ul>
+				</div>
+			{/if}
+
 			{#if footerItems?.length}
 				{#each footerItems as item}
 					<div>
@@ -104,17 +147,17 @@ async function getStoreData() {
 						</h5>
 
 						<ul class="flex flex-col gap-1 text-zinc-500">
-							{#each item?.subMenu as itm}
+							{#each item?.subMenu as item}
 								<li class="flex max-w-max items-center">
 									<a
-										href="{itm.link}"
+										href="{page.link}"
 										target="{item.target || 'self'}"
 										aria-label="Click to visit this page"
-										class="link-underline link-underline-gray whitespace-pre-wrap">
-										{itm.title}
+										class="link-underline link-underline-gray whitespace-pre-wrap capitalize">
+										{item.title}
 									</a>
 
-									{#if itm.new}
+									{#if item.new}
 										<div
 											class="ml-2 max-w-max rounded bg-primary-500 py-[0.1rem] px-1 text-[0.5rem] font-semibold leading-3 tracking-wider text-white">
 											NEW
