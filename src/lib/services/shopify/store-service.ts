@@ -65,6 +65,7 @@ export const getStoreData = async ({
 		logo,
 		otpLogin: false,
 		phone,
+		product_image_dimention: null,
 		searchbarText,
 		socialSharingButtons: {},
 		title: siteTitle,
@@ -115,6 +116,7 @@ export const getStoreData = async ({
 			logo: storeRes.storeOne.logo,
 			otpLogin: storeRes.storeOne.otpLogin || true,
 			phone: storeRes.storeOne.phone,
+			product_image_dimention: storeRes.storeOne.product_image_dimention,
 			searchbarText: storeRes.storeOne.searchbarText,
 			socialSharingButtons: storeRes.storeOne.socialSharingButtons,
 			title: storeRes.storeOne.title,
@@ -122,7 +124,6 @@ export const getStoreData = async ({
 			websiteName: storeRes.storeOne.websiteName,
 			weightUnit: storeRes.storeOne.weightUnit,
 			whatsappChatButton: storeRes.storeOne.whatsappChatButton,
-
 		}
 		megamenu = storeRes.megamenu
 		cookies.set('store', JSON.stringify(store), { path: '/' })
