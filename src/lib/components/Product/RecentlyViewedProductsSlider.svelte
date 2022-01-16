@@ -47,58 +47,63 @@ onMount(async () => {
 			}}">
 			{#each products as p, px}
 				<SplideSlide>
-					<a
-						href="/product/{p.slug}"
-						aria-label="Click to view the product details"
-						data-sveltekit-preload-data
-						class="flex flex-col w-48 shrink-0">
-						{#if p.new || p.tags?.length}
-							<div class="absolute top-1 left-1 flex flex-col gap-0.5">
-								{#if p.new}
-									<div
-										class="text-rem max-w-max bg-red-500 py-0.5 px-1.5 text-xs font-semibold uppercase text-white">
-										New
-									</div>
-								{/if}
+					{#if p.slug && p.img && p.price}
+						<a
+							href="/product/{p.slug}"
+							aria-label="Click to view the product details"
+							data-sveltekit-preload-data
+							class="flex flex-col w-48 shrink-0">
+							{#if p.new || p.tags?.length}
+								<div class="absolute top-1 left-1 flex flex-col gap-0.5">
+									{#if p.new}
+										<div
+											class="text-rem max-w-max bg-red-500 py-0.5 px-1.5 text-xs font-semibold uppercase text-white">
+											New
+										</div>
+									{/if}
 
-								{#if p.tags?.length}
-									{#each p.tags as tag}
-										{#if tag?.name && tag?.type === 'Ribbon'}
-											<div
-												class="text-rem max-w-max py-0.5 px-1.5 text-xs font-semibold uppercase text-white"
-												style="background-color: {tag.colorCode};">
-												{tag.name}
-											</div>
-										{/if}
-									{/each}
-								{/if}
-							</div>
-						{/if}
+									{#if p.tags?.length}
+										{#each p.tags as tag}
+											{#if tag?.name && tag?.type === 'Ribbon'}
+												<div
+													class="text-rem max-w-max py-0.5 px-1.5 text-xs font-semibold uppercase text-white"
+													style="background-color: {tag.colorCode};">
+													{tag.name}
+												</div>
+											{/if}
+										{/each}
+									{/if}
+								</div>
+							{/if}
 
-						<LazyImg
-							src="{p.img}"
-							alt="{p.name}"
-							aspect_ratio="3:4"
-							class="h-full w-full object-contain object-bottom" />
+							<LazyImg
+								src="{p.img}"
+								alt="{p.name}"
+								width="192"
+								height="192"
+								aspect_ratio="1:1"
+								class="h-48 w-48 object-contain object-bottom" />
 
-						<div class="p-2 flex flex-wrap items-baseline justify-start leading-4 text-xs gap-1.5">
-							<span class="font-bold text-sm sm:text-base whitespace-nowrap">
-								{currency(p.price, $page.data?.store?.currencySymbol)}
-							</span>
-
-							{#if p.mrp > p.price}
-								<span class="text-zinc-500 line-through whitespace-nowrap">
-									{currency(p.mrp, $page.data?.store?.currencySymbol)}
+							<div
+								class="p-2 flex flex-wrap items-baseline justify-start leading-4 text-xs gap-1.5">
+								<span class="font-bold text-sm sm:text-base whitespace-nowrap">
+									{currency(p.price, $page.data?.store?.currencySymbol)}
 								</span>
 
-								{#if Math.floor(((p.mrp - p.price) / p.mrp) * 100) > 0}
-									<span class="text-orange-500 sm:text-zinc-800 whitespace-nowrap">
-										({Math.floor(((p.mrp - p.price) / p.mrp) * 100)}% off)
+								{#if p.mrp > p.price}
+									<span class="text-zinc-500 line-through whitespace-nowrap">
+										{currency(p.mrp, $page.data?.store?.currencySymbol)}
 									</span>
+
+									{#if Math.floor(((p.mrp - p.price) / p.mrp) * 100) > 0}
+										<span class="text-orange-500 sm:text-zinc-800 whitespace-nowrap">
+											({Math.floor(((p.mrp - p.price) / p.mrp) * 100)}% off)
+										</span>
+									{/if}
 								{/if}
-							{/if}
-						</div>
-					</a>
+							</div>
+						</a>
+					{/if}
 				</SplideSlide>
 			{/each}
 		</svelte:component>

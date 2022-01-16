@@ -41,7 +41,6 @@ let allTags = []
 let allTypes = []
 let allVendors = []
 let megamenu
-let priceRanges = []
 
 onMount(async () => {
 	$page.url.searchParams.forEach(function (value, key) {
@@ -51,10 +50,6 @@ onMount(async () => {
 	})
 
 	getFacetsWithProducts()
-
-	if (facets.all_aggs?.price_stats?.max && facets.all_aggs?.price_stats?.min) {
-		getPriceRanges()
-	}
 
 	await getMegamenu()
 	await getSelected()
@@ -93,57 +88,6 @@ function getFacetsWithProducts() {
 	}
 	if (facets?.all_aggs?.vendors?.all?.buckets?.length) {
 		allVendors = facets?.all_aggs?.vendors?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
-}
-
-function getPriceRanges() {
-	const difference = facets.all_aggs?.price_stats?.max - facets.all_aggs?.price_stats?.min
-	if (difference) {
-		const priceGap = difference / 4
-		if (priceGap) {
-			const price1 = facets.all_aggs?.price_stats?.min
-			const price2 = price1 + priceGap
-			const price3 = price2 + priceGap
-			const price4 = price3 + priceGap
-			const price5 = facets.all_aggs?.price_stats?.max
-
-			if (price1 && price2 && price3 && price4 && price5) {
-				priceRanges = [
-					{
-						from: price1,
-						key: `From ${currency(price1, $page.data?.store?.currencySymbol)} to ${currency(
-							price2,
-							$page.data?.store?.currencySymbol
-						)}`,
-						to: price2
-					},
-					{
-						from: price2,
-						key: `From ${currency(price2, $page.data?.store?.currencySymbol)} to ${currency(
-							price3,
-							$page.data?.store?.currencySymbol
-						)}`,
-						to: price3
-					},
-					{
-						from: price3,
-						key: `From ${currency(price3, $page.data?.store?.currencySymbol)} to ${currency(
-							price4,
-							$page.data?.store?.currencySymbol
-						)}`,
-						to: price4
-					},
-					{
-						from: price4,
-						key: `From ${currency(price4, $page.data?.store?.currencySymbol)} to ${currency(
-							price5,
-							$page.data?.store?.currencySymbol
-						)}`,
-						to: price5
-					}
-				]
-			}
-		}
 	}
 }
 
@@ -796,9 +740,9 @@ $: {
 					<div
 						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
 						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
-						{#if priceRanges?.length > 0}
+						{#if priceRange?.length > 0}
 							<RadioEs
-								items="{priceRanges}"
+								items="{priceRange}"
 								model="price"
 								selectedItems="{fl.price || []}"
 								on:go="{goCheckbox}" />
