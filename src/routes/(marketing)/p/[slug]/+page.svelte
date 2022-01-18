@@ -25,7 +25,7 @@ let seoProps = {
 			{/if}
 
 			{#if data.page.content}
-				<div class="mb-10">
+				<div class="mb-10 prose prose-sm max-w-none">
 					{@html data.page.content}
 				</div>
 			{/if}
