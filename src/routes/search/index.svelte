@@ -78,7 +78,11 @@ function toggle(e) {
 	<meta name="description" content="Latest Ecommerce Stack" />
 </svelte:head>
 {#if showMobileFilter}
-	<MobileFilters facets="{facets}" query="{query}" on:hide="{toggle}" />
+	<MobileFilters
+		facets="{facets}"
+		showMobileFilter="{showMobileFilter}"
+		query="{query}"
+		on:hide="{toggle}" />
 {:else}
 	<div class="flex ">
 		<DesktopFilters facets="{facets}" query="{query}" />

@@ -1,8 +1,8 @@
 <style>
 .selected {
-	color: #da1c5f;
+	color: rgba(37, 128, 194);
 	background-color: white;
-	border-left: 4px solid #da1c5f;
+	border-color: rgba(37, 128, 194);
 }
 ul > li {
 	font: bold;
@@ -26,13 +26,17 @@ import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { createEventDispatcher } from 'svelte'
 import { onMount } from 'svelte'
+import { fly } from 'svelte/transition'
+
 const dispatch = createEventDispatcher()
 export let facets = {},
 	fl = {},
-	query
+	query,
+	showMobileFilter
+
 let selected = 'brands',
-	loadingPrice = true, // Required because after loading finished then only we will initiate the price slider component
-	showMobileFilter = true
+	loadingPrice = true // Required because after loading finished then only we will initiate the price slider component
+
 onMount(() => {
 	var searchParams = new URLSearchParams(query)
 	searchParams.forEach(function (value, key) {
@@ -100,34 +104,54 @@ function stringToArray(v) {
 }
 </script>
 
-<div
-	class="fixed z-50 top-0 left-0 py-2\1 bg-white-800 shadow bg-white w-screen  
-    h-screen max-w-lg ">
-	<!-- Mobile version starts here -->
+<!-- Mobile version starts here -->
+{#if showMobileFilter}
+	<div
+		transition:fly="{{ x: -50, duration: 300 }}"
+		class="fixed inset-0 z-50 bg-white w-screen h-screen">
+		<div
+			class="p-3 border-2 border-gray-300 shadow-md tracking-wide  flex items-center justify-between">
+			<button
+				type="button"
+				on:click="{() => (showMobileFilter = false)}"
+				class="text-primary-500 text-xs hover:underline focus:outline-none">
+				Cancle
+			</button>
 
-	<div class="block h-full md:hidden">
-		<div class="flex w-full py-4 bg-white shadow-md">
-			<div class="flex-1 text-left text-gray-700" on:click="{hide}">
-				<i class="ml-2 fa fa-times" aria-hidden="true"></i>
-			</div>
-			<div class="flex-1 font-bold text-center text-gray-700">FILTER</div>
-			<div class="flex-1 mr-2 text-right text-gray-700" on:click="{clearFilters}">Clear all</div>
+			<span class="font-bold">FILTER</span>
+
+			<button
+				type="button"
+				on:click="{clearFilters}"
+				class="text-primary-500 text-xs hover:underline focus:outline-none">
+				Clear All
+			</button>
 		</div>
-		<div class="flex w-full h-full mt-1">
-			<div class="w-2/5 overflow-y-scroll">
-				<ul class="h-full bg-gray-200">
+
+		<div class="flex w-full h-full">
+			<div class="w-2/5 bg-gray-200 h-full border-r border-gray-300 overflow-y-scroll">
+				<ul class=" divide-y divide-gray-300 border-b border-gray-300">
 					<!-- <li
               on:click="{()=>selected='categories'}"
               class:selected={selected=='categories'}
             >
               Category
             </li> -->
-					<li on:click="{() => (selected = 'brands')}" class:selected="{selected == 'brands'}">
+
+					<li
+						on:click="{() => (selected = 'brands')}"
+						class="border-l-4 border-gray-200"
+						class:selected="{selected == 'brands'}">
 						Brands
 					</li>
-					<li on:click="{() => (selected = 'colors')}" class:selected="{selected == 'colors'}">
+
+					<li
+						on:click="{() => (selected = 'colors')}"
+						class="border-l-4 border-gray-200"
+						class:selected="{selected == 'colors'}">
 						Colour
 					</li>
+
 					{#each facets.features && facets.features.name && facets.features.name.buckets && facets.features.name.buckets as f}
 						{#if checkFeature(f.key)}
 							<li on:click="{() => (selected = f.key)}" class:selected="{selected == f.key}">
@@ -135,6 +159,7 @@ function stringToArray(v) {
 							</li>
 						{/if}
 					{/each}
+
 					<!-- <li
               on:click="{()=>selected='Price'}"
               class:selected={selected=='Price'}
@@ -143,6 +168,7 @@ function stringToArray(v) {
             </li> -->
 				</ul>
 			</div>
+
 			<div class="w-full overflow-y-scroll">
 				{#if selected == 'categories' && facets?.categories?.all?.buckets?.length > 0}
 					<Checkbox
@@ -190,10 +216,14 @@ function stringToArray(v) {
 				{/if}
 			</div>
 		</div>
-		<div class="absolute bottom-0 w-full text-center primary">
-			<button class="w-full p-4 font-bold cursor-pointer focus:outline-none" on:click="{hide}">
+
+		<div class="absolute bottom-0 inset-x-0 w-full bg-primary-500 ">
+			<button
+				type="submit"
+				class="w-full p-3 text-white text-center tracking-wider font-bold cursor-pointer focus:outline-none"
+				on:click="{hide}">
 				APPLY
 			</button>
 		</div>
 	</div>
-</div>
+{/if}
