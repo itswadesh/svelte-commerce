@@ -28,7 +28,8 @@ async function refreshAddress() {
 	<CheckoutHeader selected="address" />
 	<!-- isPrescription="{cart.needPrescription}" -->
 
-	<div class="mt-5 md:mt-10 lg:flex lg:justify-center lg:gap-10 xl:gap-20">
+	<div
+		class="mb-14 lg:mb-0 mt-5 md:mt-10 flex flex-col lg:flex-row lg:justify-center gap-10 xl:gap-20">
 		<div class="w-full flex-1">
 			<h2
 				class="mb-5 h-6 sm:h-8 flex items-center text-xl font-bold capitalize tracking-wide sm:text-2xl">
@@ -36,7 +37,7 @@ async function refreshAddress() {
 			</h2>
 
 			{#if data.myAddresses?.data?.length}
-				<div class="mb-10 rounded-lg border bg-white shadow-lg">
+				<div class="mb-5 rounded-lg border bg-white shadow-lg">
 					{#each data.myAddresses.data as ads}
 						<SelectAddress
 							loading="{data.loading}"
