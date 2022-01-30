@@ -50,6 +50,7 @@ interface Product {
 	categoryPool: Category
 	countryOfOrigin: string
 	crossSells?: Product[]
+	deliveryDetails: string
 	description: string
 	discount: number
 	ean: string
@@ -63,7 +64,8 @@ interface Product {
 	img?: string
 	isCustomized?: boolean
 	isFnb?: boolean
-	layoutTemplateCdn?: string
+	isWishlisted: boolean
+	layoutTemplate?: string
 	length?: number
 	linkedProducts?: Product[]
 	longDescription?: string
@@ -295,9 +297,14 @@ interface Order {
 }
 
 interface User {
-	fullName: string
-	phone: string
+	_id: string
+	avatar: string
 	email: string
+	email: string
+	firstName: string
+	fullName: string
+	lastName: string
+	phone: string
 }
 
 interface Address {

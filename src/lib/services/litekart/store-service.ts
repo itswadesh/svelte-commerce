@@ -3,7 +3,6 @@ import {
 	address,
 	adminUrl,
 	alert,
-	closedMessage,
 	currencyCode,
 	currencySymbol,
 	description,
@@ -41,8 +40,7 @@ export const getStoreData = async ({
 		address,
 		adminUrl,
 		alert,
-		closed: false,
-		closedMessage,
+		close: {},
 		currencyCode,
 		currencySymbol,
 		description,
@@ -59,6 +57,7 @@ export const getStoreData = async ({
 		isDiscountCoupons: false,
 		isFnb: false,
 		isGDPR: false,
+		isIndianPincodes: false,
 		isMultiVendor: false,
 		isProductReviewsAndRatings: false,
 		isSecureCatalogue: false,
@@ -69,13 +68,15 @@ export const getStoreData = async ({
 		otpLogin: false,
 		phone,
 		product_image_dimention: null,
+		googleAnalytics: {},
+		facebookPixel: {},
 		searchbarText,
 		socialSharingButtons: {},
 		title: siteTitle,
 		websiteLegalName,
 		websiteName,
 		weightUnit,
-		whatsappChatButton: {},
+		whatsappChatButton: {}
 	}
 
 	let megamenu = null
@@ -89,14 +90,12 @@ export const getStoreData = async ({
 		const uri = new URL(url)
 		// console.log('URI..............', uri.host)
 		storeRes = await fetchInit(uri.host)
-
 		store = {
 			id: storeRes.storeOne._id,
 			address: storeRes.storeOne.address,
 			adminUrl: storeRes.storeOne.adminUrl || storeRes.settings.adminUrl, // storeRes.storeOne.adminUrl used for arialmall
 			alert: storeRes.storeOne.alert,
-			closed: storeRes.storeOne.closed,
-			closedMessage: storeRes.storeOne.closedMessage,
+			close: storeRes.storeOne.close,
 			currencyCode: storeRes.storeOne.storeCurrency?.isoCode || 'USD',
 			currencySymbol: storeRes.storeOne.storeCurrency?.symbol || '$',
 			description: storeRes.storeOne.description,
@@ -113,6 +112,7 @@ export const getStoreData = async ({
 			isDiscountCoupons: storeRes.storeOne.isDiscountCoupons,
 			isFnb: storeRes.storeOne.isFnb,
 			isGDPR: storeRes.storeOne.isGDPR,
+			isIndianPincodes: storeRes.storeOne.isIndianPincodes,
 			isMultiVendor: storeRes.storeOne.isMultiVendor,
 			isProductReviewsAndRatings: storeRes.storeOne.isProductReviewsAndRatings,
 			isSecureCatalogue: storeRes.storeOne.isSecureCatalogue,
@@ -123,13 +123,15 @@ export const getStoreData = async ({
 			otpLogin: storeRes.storeOne.otpLogin || true,
 			phone: storeRes.storeOne.phone,
 			product_image_dimention: storeRes.storeOne.product_image_dimention,
+			googleAnalytics: { active: true, id: 'G-BG3JKWLYPF' }, //storeRes.storeOne.googleAnalytics,
+			facebookPixel: { active: true, id: '931636488112724' }, //storeRes.storeOne.googleAnalytics,
 			searchbarText: storeRes.storeOne.searchbarText,
 			socialSharingButtons: storeRes.storeOne.socialSharingButtons,
 			title: storeRes.storeOne.title,
 			websiteLegalName: storeRes.storeOne.websiteLegalName,
 			websiteName: storeRes.storeOne.websiteName,
 			weightUnit: storeRes.storeOne.weightUnit,
-			whatsappChatButton: storeRes.storeOne.whatsappChatButton,
+			whatsappChatButton: storeRes.storeOne.whatsappChatButton
 		}
 
 		megamenu = storeRes.megamenu
