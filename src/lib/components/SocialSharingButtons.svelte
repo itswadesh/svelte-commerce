@@ -27,43 +27,43 @@ export let url
 let showDropDown = false
 
 let socialSharesList = [
-	{
-		icon: whatsappIcon,
-		title: 'Whatsapp',
-		dataAction: 'share/whatsapp/share',
-		href: `whatsapp://send?text=${productName} ${url}`
-	},
-	{
-		icon: telegramIcon,
-		title: 'Telegram',
-		href: `https://telegram.me/share/url?text=${productName}&url=${url}`
-	},
-	{
-		icon: facebookIcon,
-		title: 'Facebook',
-		href: `https://facebook.com/sharer/sharer.php?u=${url}&quote=${productName}`
-	},
-	{
-		icon: twitterIcon,
-		title: 'Twitter',
-		href: `https://twitter.com/intent/tweet/?text=${productName}&hashtags=${'litekart'}&via=${'litekart'}&related=${'mobile cover, mousepad, phone grips, t-shirt, keychain, mobile accessories'}&url=${url}`
-	},
-	{
-		icon: pinterestIcon,
-		title: 'Pinterest',
-		href: `https://pinterest.com/pin/create/button/?url=${url}&media=${productImage}&description=${productName}`
-	},
-	{
-		icon: linkedinIcon,
-		title: 'LInkedIn',
-		href: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`
-	},
-	{
-		icon: gmailIcon,
-		title: 'Gmail',
-		href: `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=${$page?.data?.store?.email}&su=Take a look at this ${productName}&body=${url}`
-	}
-]
+  {
+    icon: whatsappIcon,
+    title: 'Whatsapp',
+    href: `whatsapp://send?text=${encodeURIComponent(url)}`
+  },
+  {
+    icon: telegramIcon,
+    title: 'Telegram',
+    href: `tg://msg?text=${encodeURIComponent(productName)}%20${encodeURIComponent(url)}`
+  },
+  {
+    icon: facebookIcon,
+    title: 'Facebook',
+    href: `fb://share/?text=${encodeURIComponent(productName)}&u=${encodeURIComponent(url)}`
+  },
+  {
+    icon: twitterIcon,
+    title: 'Twitter',
+    href: `twitter://post?message=${encodeURIComponent(productName)}%20${encodeURIComponent(url)}`
+  },
+  {
+    icon: pinterestIcon,
+    title: 'Pinterest',
+    href: `pinterest://pin/create/bookmarklet/?url=${encodeURIComponent(url)}&description=${encodeURIComponent(productName)}`
+  },
+  {
+    icon: linkedinIcon,
+    title: 'LinkedIn',
+    href: `linkedin://shareArticle?url=${encodeURIComponent(url)}&title=${encodeURIComponent(productName)}&summary=${encodeURIComponent(productName)}&source=`
+  },
+  {
+    icon: gmailIcon,
+    title: 'Gmail',
+    href: `googlegmail:///co?subject=Take%20a%20look%20at%20this%20${encodeURIComponent(productName)}&body=${encodeURIComponent(url)}`
+  }
+];
+
 
 const copyToClipboard = (link) => {
 	navigator.clipboard.writeText(link)
