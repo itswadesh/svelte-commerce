@@ -134,8 +134,8 @@ function getSelected() {
 		selected = 'Types'
 	} else if (allVendors?.length > 0) {
 		selected = 'Vendors'
-	} else if (priceRange?.length > 0) {
-		selected = 'Prices'
+		// } else if (priceRange?.length > 0) {
+		// 	selected = 'Prices'
 	}
 }
 
@@ -521,7 +521,7 @@ $: {
 					<hr class="w-full" />
 				{/if}
 
-				{#if priceRange?.length > 0}
+				<!-- {#if priceRange?.length > 0}
 					<button
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
 						{selected === 'Prices'
@@ -536,7 +536,7 @@ $: {
 					</button>
 
 					<hr class="w-full" />
-				{/if}
+				{/if} -->
 
 				{#if megamenu?.length}
 					<button
@@ -736,7 +736,7 @@ $: {
 					</div>
 				{/if}
 
-				{#if selected === 'Prices'}
+				<!-- {#if selected === 'Prices'}
 					<div
 						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
 						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
@@ -748,7 +748,7 @@ $: {
 								on:go="{goCheckbox}" />
 						{/if}
 					</div>
-				{/if}
+				{/if} -->
 
 				{#if selected === 'Categories'}
 					<div

@@ -69,7 +69,7 @@ $: if (rating == 1.5) {
 			{#each { length: disableColorCount } as _}
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
-					class="text-zinc-200 {biggerSize ? 'h-5 w-5' : 'h-4 w-4'}"
+					class="text-zinc-400 {biggerSize ? 'h-5 w-5' : 'h-4 w-4'}"
 					viewBox="0 0 24 24"
 					stroke-width="2"
 					stroke="currentColor"
@@ -107,7 +107,7 @@ $: if (rating == 1.5) {
 			{#each { length: 5 - rating } as _}
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
-					class="text-zinc-200 {biggerSize ? 'h-5 w-5' : 'h-4 w-4'}"
+					class="text-zinc-400 {biggerSize ? 'h-5 w-5' : 'h-4 w-4'}"
 					viewBox="0 0 24 24"
 					stroke-width="2"
 					stroke="currentColor"
@@ -124,7 +124,7 @@ $: if (rating == 1.5) {
 		</div>
 	{/if}
 
-	<div class="flex felx-wrap items-center gap-2 whitespace-nowrap">
+	<div class="mt-1 flex felx-wrap items-center gap-2 whitespace-nowrap">
 		<span>
 			{#if ratingCount}
 				{ratingCount}
