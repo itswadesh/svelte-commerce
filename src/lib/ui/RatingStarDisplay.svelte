@@ -133,7 +133,7 @@ $: if (rating == 1.5) {
 			{/if}
 
 			{#if ratingCount > 1}
-				Review
+				Ratings
 			{:else}
 				Rating
 			{/if}
