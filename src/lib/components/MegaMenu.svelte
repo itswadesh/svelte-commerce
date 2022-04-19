@@ -81,7 +81,7 @@ async function getMegaMenu() {
 				on:mouseenter="{() => (selectedCategory = category.name)}"
 				on:mouseleave="{() => (selectedCategory = '')}">
 				<a
-					href="/{category.link || category.slug}?zips={pinCode || ''}"
+					href="/{category.link || category.slug}?zip={pinCode || ''}"
 					aria-label="Click to visit category related products page"
 					class="items-center relative flex h-20 shrink-0 justify-center gap-1 whitespace-nowrap border-b-4 border-transparent p-2 font-medium uppercase
                 	{index % 6 == 0 ? 'hover:border-yellow-500' : ''}
@@ -132,7 +132,7 @@ async function getMegaMenu() {
 							{#each category.children as c}
 								<li class="mb-2 w-1/4 flex-1 shrink-0 grow-0 p-6 pr-2 text-sm">
 									<a
-										href="/{c.link || c.slug}?zips={pinCode || ''}"
+										href="/{c.link || c.slug}?zip={pinCode || ''}"
 										aria-label="Click to visit category related products page"
 										class="mb-2 block w-full
 										{index % 6 == 0 ? 'text-yellow-500 ' : ''}
@@ -151,7 +151,7 @@ async function getMegaMenu() {
 											{#each c.children as c1, ixx}
 												<li class="w-full">
 													<a
-														href="/{c1.link || c1.slug}?zips={pinCode || ''}"
+														href="/{c1.link || c1.slug}?zip={pinCode || ''}"
 														aria-label="Click to visit category related products page"
 														class="block w-full font-light hover:font-medium">
 														{c1.name}
