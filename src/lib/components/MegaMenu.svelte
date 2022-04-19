@@ -38,10 +38,17 @@ import { page } from '$app/stores'
 import { toast } from '$lib/utils'
 
 let megamenu = $page.data.megamenu || []
+let pinCode = null
 let selectedCategory = ''
 
 onMount(() => {
 	getMegaMenu()
+
+	const pin = localStorage.getItem('pinCode')
+	// console.log('pin', pin)
+	if (pin && pin.length === 6) {
+		pinCode = pin
+	}
 })
 
 async function getMegaMenu() {
@@ -74,21 +81,21 @@ async function getMegaMenu() {
 				on:mouseenter="{() => (selectedCategory = category.name)}"
 				on:mouseleave="{() => (selectedCategory = '')}">
 				<a
-					href="/{category.link || category.slug}"
+					href="/{category.link || category.slug}?zips={pinCode || ''}"
 					aria-label="Click to visit category related products page"
 					class="items-center relative flex h-20 shrink-0 justify-center gap-1 whitespace-nowrap border-b-4 border-transparent p-2 font-medium uppercase
-                {index % 6 == 0 ? 'hover:border-yellow-500' : ''}
-                {index % 6 == 1 ? 'hover:border-purple-500' : ''}
-                {index % 6 == 2 ? 'hover:border-red-500' : ''}
-                {index % 6 == 3 ? 'hover:border-green-500' : ''}
-                {index % 6 == 4 ? 'hover:border-pink-500' : ''}
-                {index % 6 == 5 ? 'hover:border-blue-500' : ''}
-                {index % 6 == 0 && selectedCategory === category.name ? 'border-yellow-500' : ''}
-                {index % 6 == 1 && selectedCategory === category.name ? 'border-purple-500' : ''}
-                {index % 6 == 2 && selectedCategory === category.name ? 'border-red-500' : ''}
-                {index % 6 == 3 && selectedCategory === category.name ? 'border-green-500' : ''}
-                {index % 6 == 4 && selectedCategory === category.name ? 'border-pink-500' : ''}
-                {index % 6 == 5 && selectedCategory === category.name ? 'border-blue-500' : ''}">
+                	{index % 6 == 0 ? 'hover:border-yellow-500' : ''}
+                	{index % 6 == 1 ? 'hover:border-purple-500' : ''}
+                	{index % 6 == 2 ? 'hover:border-red-500' : ''}
+                	{index % 6 == 3 ? 'hover:border-green-500' : ''}
+                	{index % 6 == 4 ? 'hover:border-pink-500' : ''}
+                	{index % 6 == 5 ? 'hover:border-blue-500' : ''}
+                	{index % 6 == 0 && selectedCategory === category.name ? 'border-yellow-500' : ''}
+                	{index % 6 == 1 && selectedCategory === category.name ? 'border-purple-500' : ''}
+                	{index % 6 == 2 && selectedCategory === category.name ? 'border-red-500' : ''}
+                	{index % 6 == 3 && selectedCategory === category.name ? 'border-green-500' : ''}
+                	{index % 6 == 4 && selectedCategory === category.name ? 'border-pink-500' : ''}
+                	{index % 6 == 5 && selectedCategory === category.name ? 'border-blue-500' : ''}">
 					<!-- Root category -->
 
 					<span>{category.name}</span>
@@ -125,15 +132,15 @@ async function getMegaMenu() {
 							{#each category.children as c}
 								<li class="mb-2 w-1/4 flex-1 shrink-0 grow-0 p-6 pr-2 text-sm">
 									<a
-										href="/{c.link || c.slug}"
+										href="/{c.link || c.slug}?zips={pinCode || ''}"
 										aria-label="Click to visit category related products page"
 										class="mb-2 block w-full
-									{index % 6 == 0 ? 'text-yellow-500 ' : ''}
-									{index % 6 == 1 ? 'text-purple-500 ' : ''}
-									{index % 6 == 2 ? 'text-red-500 ' : ''}
-                                    {index % 6 == 3 ? 'text-green-500 ' : ''}
-                                    {index % 6 == 4 ? 'text-pink-500 ' : ''}
-                                    {index % 6 == 5 ? 'text-blue-500 ' : ''}">
+										{index % 6 == 0 ? 'text-yellow-500 ' : ''}
+										{index % 6 == 1 ? 'text-purple-500 ' : ''}
+										{index % 6 == 2 ? 'text-red-500 ' : ''}
+                                    	{index % 6 == 3 ? 'text-green-500 ' : ''}
+                                    	{index % 6 == 4 ? 'text-pink-500 ' : ''}
+                                    	{index % 6 == 5 ? 'text-blue-500 ' : ''}">
 										{c.name}
 									</a>
 
@@ -144,7 +151,7 @@ async function getMegaMenu() {
 											{#each c.children as c1, ixx}
 												<li class="w-full">
 													<a
-														href="/{c1.link || c1.slug}"
+														href="/{c1.link || c1.slug}?zips={pinCode || ''}"
 														aria-label="Click to visit category related products page"
 														class="block w-full font-light hover:font-medium">
 														{c1.name}

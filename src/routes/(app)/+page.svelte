@@ -8,7 +8,7 @@ import {
 	Deals,
 	Hero,
 	HeroBanners,
-	LocationInputBox
+	PinCodeInputBox
 } from '$lib/home'
 import {
 	CollectionsHome,
@@ -106,7 +106,7 @@ let seoProps = {
 
 <div class="bg-opacity-25 bg-center bg-repeat min-h-screen">
 	{#if $page.data.store?.isHyperlocal}
-		<LocationInputBox />
+		<PinCodeInputBox />
 	{/if}
 
 	<div class="mb-14 lg:mb-0">

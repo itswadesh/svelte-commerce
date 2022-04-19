@@ -3,8 +3,8 @@ import CategoriesMobile from './CategoriesMobile2.svelte'
 import CategoriesSlider from './CategoriesSlider.svelte'
 import Deals from './Deals.svelte'
 import Hero from './Hero.svelte'
-import LocationInputBox from './LocationInputBox.svelte'
 import PickedBanners from './PickedBanners.svelte'
+import PinCodeInputBox from './PinCodeInputBox.svelte'
 
 // Core components of svelte commerce
 import HeroBanners from './HeroBanners.svelte'
@@ -20,6 +20,6 @@ export {
 	Deals,
 	Hero,
 	HeroBanners,
-	LocationInputBox,
+	PinCodeInputBox,
 	PickedBanners
 }
