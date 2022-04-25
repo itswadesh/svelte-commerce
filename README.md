@@ -30,7 +30,7 @@
 - 💰 No need to make a big leap or invest huge amount. Just take this opend source project and attach to existing backend.
 - 🐛 If you have discovered a bug or have feature suggestion, feel free to create/join a discussion on Github.
 - 👍 I have been supporting this project alone since 2019. Any little code contribution will be appreciated
-- ✨Demo is hosted at netlify USA server and without CDN. Hence you may experience little lag.
+- ✨ Deployment to Netlify or Vercel with zero-configuration
 
 |                                                                                                                                           |                                                                                                                                             |                                                                                                                                           |
 | :---------------------------------------------------------------------------------------------------------------------------------------- | :-----------------------------------------------------------------------------------------------------------------------------------------: | ----------------------------------------------------------------------------------------------------------------------------------------: |
