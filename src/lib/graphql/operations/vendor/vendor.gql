@@ -1,0 +1,75 @@
+query vendor($id: ID) {
+  vendor(id: $id) {
+    id
+    slug
+    businessName
+    categories {
+      id
+    }
+    verified
+    bankAccountNo
+    bankName
+    bankIfsc
+    bankAccountHolderName
+    bankSwiftCode
+    banner
+    bannerCdn
+    commissionType
+    commissionValue
+    zips
+    freeShippingOn
+    meta
+    metaDescription
+    metaKeywords
+    metaTitle
+    productSold
+    ratings
+    reviews
+    shippingCharges
+    storeName
+    facebookUrl
+    githubUrl
+    googleUrl
+    twitterUrl
+    about
+    banners
+    bannersCdn
+    info {
+      public
+      store
+      storePhotos
+    }
+    country {
+      id
+      name
+    }
+    user {
+      id
+      avatar
+    }
+    address {
+      id
+      firstName
+      lastName
+      address
+      locality
+      city
+      state
+      country
+      zip
+      lat
+      lng
+    }
+    categories {
+      id
+      name
+    }
+    store {
+      id
+      name
+      email
+    }
+    createdAt
+    updatedAt
+  }
+}

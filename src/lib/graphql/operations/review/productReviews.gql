@@ -1,0 +1,30 @@
+query productReviews(
+  $page: Int
+  $search: String
+  $limit: Int
+  $pid: ID!
+  $active: Boolean
+) {
+  productReviews(
+    page: $page
+    search: $search
+    limit: $limit
+    pid: $pid
+    active: $active
+  ) {
+    count
+    page
+    pageSize
+    data {
+      id
+      rating
+      message
+      user {
+        firstName
+        lastName
+        avatar
+      }
+      active
+    }
+  }
+}

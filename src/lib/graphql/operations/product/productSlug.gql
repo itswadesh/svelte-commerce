@@ -1,0 +1,52 @@
+query productSlug($slug: String!) {
+	productSlug(slug: $slug) {
+		id
+		name
+		description
+		slug
+		img
+		imgCdn
+		images
+		imagesCdn
+		price
+		mrp
+		formattedPrice
+		formattedMrp
+		stock
+		isUnlimited
+		trackInventory
+		ratings
+		reviews
+		returnInfo
+		replaceValidityInDays
+		returnAllowed
+		replaceValidityInDays
+		replaceAllowed
+		color {
+			id
+			name
+		}
+		size {
+			id
+			name
+		}
+		brand {
+			id
+			name
+		}
+		vendor {
+			id
+			slug
+			businessName
+			banner
+			bannerCdn
+			ratings
+			reviews
+			info {
+				store
+				public
+				storePhotos
+			}
+		}
+	}
+}

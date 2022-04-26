@@ -10,33 +10,33 @@ import SEO from '$lib/components/SEO/index.svelte'
 let categories = [
 	{
 		name: 'Shirt',
-		img: '/nologo-navy-casual-shirt.jpg',
+		img: '/nologo-navy-casual-shirt.jpg'
 	},
 	{
 		name: 'Shoes',
-		img: '/shoe.webp',
+		img: '/shoe.webp'
 	},
 	{
 		name: 'Hoodies',
-		img: '/hoodie.webp',
+		img: '/hoodie.webp'
 	},
 	{
 		name: 'Pant',
-		img: '/pant.jpg',
+		img: '/pant.jpg'
 	},
 	{
 		name: 'Electronic',
-		img: '/electronic.webp',
+		img: '/electronic.webp'
 	},
 	{
 		name: 'Kitchen',
-		img: '/kitchen.jpg',
-	},
+		img: '/kitchen.jpg'
+	}
 ]
 
 const seoProps = {
 	title: 'Home',
-	metadescription: 'search result of home',
+	metadescription: 'search result of home'
 }
 </script>
 

@@ -7,9 +7,8 @@
 <script>
 import Textbox from '$lib/ui/Textbox.svelte'
 import { toast } from './../../../util'
-import { me, updateProfile } from './../../../../store/auth'
 import { onMount } from 'svelte'
-import { goto } from '$app/navigation'
+import { KQL_Me, KQL_UpdateProfile } from '$lib/graphql/_kitql/graphqlStores'
 
 let errors = {},
 	valid = true,
@@ -17,16 +16,13 @@ let errors = {},
 	user = null,
 	showImageModal = false
 onMount(async () => {
-	const userDetails = await me()
+	const userDetails = (await KQL_Me.query()).data?.me
 	profile = Object.assign({}, userDetails)
 })
 function save(profile) {
 	try {
-		// delete profile.address
-		console.log(profile)
-		updateProfile(profile)
+		KQL_UpdateProfile.mutate({ variables: profile })
 		toast('Profile saved successfullly', 'success')
-		// goto('/')
 	} catch (e) {
 		toast(e, 'error')
 	} finally {
@@ -35,7 +31,7 @@ function save(profile) {
 </script>
 
 <section class="w-full h-full pb-20 pl-2 sm:pl-8 sm:pr-2 text-gray-800 tracking-wide ">
-	<h1 class="font-bold  text-lg sm:text-xl">Profiles</h1>
+	<h1 class="font-bold  text-lg sm:text-xl">Profile</h1>
 
 	<div class="mt-2 sm:mt-5 text-gray-800 bg-gray-200 rounded-sm">
 		<h2 class="p-4 text-base sm:text-lg font-semibold tracking-wider border-b border-gray-50">

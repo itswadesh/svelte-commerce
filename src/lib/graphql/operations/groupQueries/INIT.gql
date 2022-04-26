@@ -1,0 +1,416 @@
+query INIT($domain: String) {
+	settings {
+		id
+		websiteName
+		websiteLegalName
+		liveCommerce
+		multilingual
+		closed
+		closedMessage
+		minimumOrderValue
+		title
+		alert
+		keywords
+		description
+		tax {
+			cgst
+			sgst
+			igst
+		}
+		demo
+		RAZORPAY_KEY_ID
+		GOOGLE_CLIENT_ID
+		LIVE_COMMERCE_URL
+		stripePublishableKey
+		brainTreePublicKey
+		enableStripe
+		enableRazorpay
+		currencyCode
+		currencySymbol
+		currencyDecimals
+		openGraphImage
+		shipping {
+			deliveryDays
+			charge
+			free
+			method
+			enabled
+			provider
+		}
+		userRoles
+		websiteEmail
+		shopPhone
+		shopAddress
+		country
+		countryDetails {
+			id
+			name
+			value
+			dialCode
+			code
+			img
+			imgCdn
+			flag
+			lang
+			active
+		}
+		currency
+		currencyDetails {
+			id
+			isoCode
+			name
+			symbol
+		}
+		logo
+		logoMobile
+		logoDark
+		logoMobileDark
+		favicon
+		CDN_URL
+		S3_URL
+		searchbarText
+		pageSize
+		returnReasons
+		orderStatuses {
+			status
+			title
+			body
+			icon
+			public
+			index
+		}
+		paymentStatuses
+		paymentMethods {
+			active
+			name
+			value
+			img
+			color
+			position
+			text
+		}
+		otpLogin
+		sms {
+			AUTO_VERIFICATION_ID
+			enabled
+			provider
+		}
+		email {
+			enabled
+			from
+			cc
+			bcc
+			printers
+		}
+		storage {
+			enabled
+			provider
+		}
+		review {
+			enabled
+			moderate
+		}
+		product {
+			moderate
+		}
+		customerOrderNotifications {
+			orderConfirmation
+			orderStatusChanged
+			orderShipped
+			orderIsReadyForPickup
+			downloadEGoods
+			giftCardPurchased
+		}
+		adminNotifications {
+			newOrderPlaced
+			lowStockNotification
+		}
+		ADMIN_PANEL_LINK
+		DOCS_LINK
+		storageProvider
+		googleMapsApi
+		facebook
+		twitter
+		google
+		instagram
+		linkedin
+		enableTax
+		locationExpiry
+		WWW_URL
+		referralBonus
+		joiningBonus
+		isMultiVendor
+		isMultiStore
+		isMegamenu
+		isSaas
+		isSearch
+		foodTypes {
+			name
+			val
+			img
+		}
+	}
+	storeOne(domain: $domain) {
+		id
+		active
+		featured
+		adminNotifications {
+			lowStockNotification
+			newOrderPlaced
+		}
+		address
+		alert
+		analyticsTrackingId
+		banners
+		closed
+		isWishlist
+		isCart
+		closedMessage
+		customerOrderNotifications {
+			downloadEGoods
+			giftCardPurchased
+			orderConfirmation
+			orderIsReadyForPickup
+			orderShipped
+			orderStatusChanged
+			orderConfirmationSms
+		}
+		vendorNotifications {
+			orderConfirmationSms
+		}
+		description
+		metaDescription
+		dimentionUnit
+		domain
+		email
+		facebook
+		facebookPixelId
+		facebookUrl
+		favicon
+		faviconCdn
+		firstName
+		freeShippingOn
+		gdpr
+		gdprCookieConsent
+		google
+		googleAdsTag
+		homeMeta1
+		homeMeta2
+		homeMeta3
+		homeMeta4
+		img
+		imgCdn
+		images
+		imagesCdn
+		bankAccountNo
+		bankAccountHolderName
+		bankIfscCode
+		bankSwiftCode
+		instagram
+		instagramUrl
+		isHideNilStock
+		isMegamenu
+		isOpen
+		isSearch
+		isHyperlocal
+		isFnb
+		isWishlist
+		isCart
+		keywords
+		lastName
+		lat
+		legalName
+		linkedin
+		lng
+		locality
+		logo
+		logoDark
+		logoMobile
+		logoMobileDark
+		logoCdn
+		logoDarkCdn
+		logoMobileCdn
+		logoMobileDarkCdn
+		minimumOrderValue
+		minOrderValue
+		name
+		openGraphImage
+		openGraphImageCdn
+		pageSize
+		phone
+		pinterestTag
+		pinterestUrl
+		qrCode
+		review {
+			enabled
+			moderate
+		}
+		searchbarText
+		shipping {
+			charge
+			deliveryDays
+			enabled
+			free
+			method
+			provider
+		}
+		shippingCharge
+		shopAddress
+		shopPhone
+		slug
+		snapChatPixel
+		state
+		storeId
+		timeZone
+		timing
+		title
+		twitter
+		twitterUrl
+		websiteEmail
+		websiteLegalName
+		websiteName
+		weightUnit
+		youtubeUrl
+		webmail
+		zip
+		timeDisplayFormat
+		priceDisplayFormat
+		createdAt
+		updatedAt
+		sms {
+			AUTO_VERIFICATION_ID
+		}
+		shippoToken
+		shipRocketEmail
+		shipRocketPassword
+		shipRocketChannelId
+		pickrrAuthToken
+		user {
+			firstName
+			lastName
+			email
+			phone
+		}
+		storeCountry {
+			id
+			default
+			active
+			name
+			code
+			country {
+				id
+				name
+				value
+				dialCode
+				code
+				img
+				imgCdn
+				flag
+				lang
+			}
+		}
+		storeCurrency {
+			id
+			default
+			active
+			isoCode
+			name
+			symbol
+			currency {
+				id
+				name
+				sort
+				isoCode
+				isoNumericCode
+				thousandsSeparator
+				decimalMark
+				symbolFirst
+				active
+				symbol
+				disambiguateSymbol
+				htmlEntity
+				subUnit
+				smallestDenomination
+				subunitToUnit
+			}
+		}
+		storeLanguage {
+			id
+			default
+			active
+			name
+			code
+			lang {
+				id
+				name
+				nativeName
+				code
+				phpLocaleCode
+				rtl
+				sort
+				active
+			}
+		}
+	}
+	megamenu(domain: $domain) {
+		id
+		name
+		slug
+		img
+		featured
+		children {
+			name
+			slug
+			img
+			featured
+			children {
+				name
+				slug
+				img
+				featured
+				children {
+					name
+					slug
+					img
+					featured
+					children {
+						name
+						slug
+						img
+						featured
+						children {
+							name
+							slug
+							img
+							featured
+							children {
+								name
+								slug
+								img
+								featured
+								children {
+									name
+									slug
+									img
+									featured
+									children {
+										name
+										slug
+										img
+										featured
+										children {
+											name
+											slug
+											img
+											featured
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,10 +1,10 @@
 <script context="module" lang="ts">
-export async function load({ page: { host, path, params, query }, fetch }) {
-	const prev = +query.get('prev')
+export async function load({ url, params, fetch }) {
+	const prev = +url.searchParams.get('prev')
 	return {
 		props: {
-			prev,
-		},
+			prev
+		}
 	}
 }
 </script>
@@ -16,8 +16,8 @@ import { onMount } from 'svelte'
 import Submit from '$lib/ui/Button.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 import Button from '$lib/ui/Button.svelte'
-import { put, post, get } from '../../util/api'
 import { toast } from './../../util'
+import { KQL_Address, KQL_SaveAddress } from '$lib/graphql/_kitql/graphqlStores'
 
 export let prev = ''
 export let id = 'new'
@@ -34,7 +34,7 @@ let address = {
 	country: null,
 	state: null,
 	zip: null,
-	phone: null,
+	phone: null
 }
 $: isDisabled =
 	!address.firstName ||
@@ -50,7 +50,7 @@ onMount(() => {
 
 async function getAddress() {
 	try {
-		address = await get(`address/?id=${id}`)
+		address = (await KQL_Address.query({ variables: { id } })).data?.address
 		if (!address) {
 			address.firstName = user.firstName
 			address.lastName = user.lastName
@@ -74,7 +74,7 @@ async function submit() {
 	try {
 		iconloading = true
 		if (!address?.id) address.id = 'new'
-		address = await post('addresses', address)
+		address = (await KQL_SaveAddress.mutate({ variables: address })).data?.saveAddress
 		toast(msg, 'success')
 		if (prev) goto(`/${prev}`)
 		else goto(returnUrl)

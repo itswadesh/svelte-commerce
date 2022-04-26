@@ -1,10 +1,10 @@
 <script context="module" lang="ts">
-export async function load({ page: { host, path, params, query }, fetch }) {
+export async function load({ url, params, fetch }) {
 	const q = +query.get('q')
 	return {
 		props: {
-			q,
-		},
+			q
+		}
 	}
 }
 </script>
@@ -13,7 +13,7 @@ export async function load({ page: { host, path, params, query }, fetch }) {
 import { goto } from '$app/navigation'
 import { createEventDispatcher } from 'svelte'
 const dispatch = createEventDispatcher()
-import Icon, { Search } from 'svelte-hero-icons'
+import { Icon, Search } from 'svelte-hero-icons'
 export let home = false,
 	q
 let searchInput

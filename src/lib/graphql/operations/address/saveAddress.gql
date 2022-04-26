@@ -1,0 +1,104 @@
+mutation saveAddress(
+  $id: String!
+  $firstName: String
+  $lastName: String
+  $type: String
+  $address: String
+  $locality: String
+  $town: String
+  $district: String
+  $city: String
+  $country: String
+  $state: String
+  $zip: String
+  $phone: String
+  $email: String
+  $lat: Float
+  $lng: Float
+  $store: ID
+  $isResidential: Boolean
+) {
+  saveAddress(
+    id: $id
+    firstName: $firstName
+    lastName: $lastName
+    type: $type
+    address: $address
+    locality: $locality
+    town: $town
+    district: $district
+    city: $city
+    country: $country
+    state: $state
+    zip: $zip
+    phone: $phone
+    email: $email
+    lat: $lat
+    lng: $lng
+    store: $store
+    isResidential: $isResidential
+  ) {
+    id
+    firstName
+    lastName
+    address
+    locality
+    town
+    district
+    city
+    type
+    country
+    state
+    zip
+    phone
+    email
+    lat
+    lng
+    isResidential
+    store
+  }
+}
+
+# {
+#   "id":"new",
+#   "firstName":"prj",
+#   "lastName":"jassi",
+#   "email": "prakashjayaswal62@gmail.com",
+#   "zip":"303012",
+#   "phone":"9898989898",
+#   "city": "bassi",
+#   "district": "jaipur",
+#   "state": "rajasthan",
+#   "country": "india",
+#   "lat": 22.222,
+#   "lng": 43.555,
+#   "address": "local street"
+# }
+
+# shippo servicable
+# {
+#   "id":"new",
+#   "firstName":"MISIKI",
+#   "lastName":"LLP",
+#   "zip":"90262",
+#   "phone":"9694039047",
+#   "city": "bassi",
+#   "district": "riverSide",
+#   "state": "riverSide",
+#   "country": "CA",
+#   "address": "local street"
+# }
+
+# {
+#   "id":"new",
+#   "firstName":"prj",
+#   "lastName":"Customer",
+#   "email": "prakashCustomer@gmail.com",
+#   "zip":"322201",
+#   "phone":"9898989898",
+#   "city": "gangapur city",
+#   "district": "sawait madhopur",
+#   "state": "rajasthan",
+#   "country": "india",
+#   "address": "shivpuri-b"
+# }

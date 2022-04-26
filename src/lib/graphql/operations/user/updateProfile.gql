@@ -1,0 +1,51 @@
+mutation updateProfile(
+	$address: AddressInput
+	$firstName: String
+	$lastName: String
+	$email: String
+	$avatar: String
+	$dob: String
+	$gender: String
+	# $state: String
+	# $city: String
+	$phone: String
+	$info: InputInfo
+	$shippingCharges: Int
+	$freeShippingOn: Int
+	$storeName: String
+	$banner: String
+) {
+	updateProfile(
+		firstName: $firstName
+		lastName: $lastName
+		email: $email
+		avatar: $avatar
+		phone: $phone
+		dob: $dob
+		gender: $gender
+		info: $info
+		address: $address
+		shippingCharges: $shippingCharges
+		freeShippingOn: $freeShippingOn
+		storeName: $storeName
+		banner: $banner
+	) {
+		firstName
+		lastName
+		email
+		phone
+		avatar
+		avatarCdn
+		role
+		gender
+		city
+		shippingCharges
+		freeShippingOn
+		storeName
+		banner
+		info {
+			public
+			store
+		}
+	}
+}

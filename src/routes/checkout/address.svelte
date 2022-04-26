@@ -1,5 +1,4 @@
 <script lang="ts">
-import { get, post, del } from '../../util/api'
 import { session } from '$app/stores'
 import { onMount } from 'svelte'
 import SelectAddress from './_SelectAddress.svelte'
@@ -12,6 +11,7 @@ let selectedAddress = null
 let loading = false
 $: user = $session.user
 import SEO from '$lib/components/SEO/index.svelte'
+import { KQL_DeleteAddress, KQL_MyAddresses } from '$lib/graphql/_kitql/graphqlStores'
 
 onMount(() => {
 	getAddress()
@@ -26,8 +26,8 @@ function addressChanged(e) {
 async function getAddress() {
 	try {
 		loading = true
-		addresses = await get('addresses/my')
-		selectedAddress = addresses?.data[0]['_id']
+		addresses = (await KQL_MyAddresses.query()).data?.myAddresses
+		selectedAddress = addresses?.data[0]['id']
 	} catch (e) {
 	} finally {
 		loading = false
@@ -37,7 +37,7 @@ async function remove(id) {
 	if (confirm('Are you sure to delete?')) {
 		try {
 			iconloading = true
-			await del(`address/delete/${id}`)
+			await KQL_DeleteAddress.mutate({ variables: { id } })
 			await getAddress()
 		} catch (e) {
 			console.log(e)
@@ -49,7 +49,7 @@ async function remove(id) {
 }
 const seoProps = {
 	title: 'Checkout - Address',
-	metadescription: 'Enter your address',
+	metadescription: 'Enter your address'
 }
 </script>
 

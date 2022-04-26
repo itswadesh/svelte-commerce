@@ -1,10 +1,10 @@
 <script context="module" lang="ts">
-export async function load({ page: { host, path, params, query }, fetch }) {
-	const id = +query.get('id')
+export async function load({ url, params, fetch }) {
+	const id = +url.searchParams.get('id')
 	return {
 		props: {
-			id,
-		},
+			id
+		}
 	}
 }
 </script>
@@ -19,7 +19,7 @@ export let id
 
 const seoProps = {
 	title: 'Edit-Address',
-	metadescription: 'Edit your privious address',
+	metadescription: 'Edit your privious address'
 }
 </script>
 

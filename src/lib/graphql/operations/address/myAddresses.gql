@@ -1,0 +1,27 @@
+query myAddresses($page: Int, $search: String, $limit: Int, $sort: String) {
+  myAddresses(page: $page, search: $search, limit: $limit, sort: $sort) {
+    count
+    page
+    pageSize
+    data {
+      id
+      email
+      firstName
+      lastName
+      address
+      locality
+      town
+      city
+      country
+      state
+      zip
+      phone
+      lat
+      lng
+      active
+      verified
+      createdAt
+      updatedAt
+    }
+  }
+}

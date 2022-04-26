@@ -2,29 +2,68 @@
 <style>
 </style>
 
+<script context="module" lang="ts">
+export async function load({ url, params, fetch }) {
+	let cart
+	try {
+		await KQL_Cart.resetCache()
+		cart = (await KQL_Cart.query({ fetch, variables: { store: store.id } })).data?.cart
+		return {
+			props: {
+				cart
+			}
+		}
+	} catch (e) {
+		throw Error(e)
+	}
+}
+</script>
+
 <script>
 import Textbox from '$lib/ui/Textbox.svelte'
 import Cartlist from './_Cartlist.svelte'
 import Weprovides from '$lib/Weprovides.svelte'
 import Pricesummary from '$lib/Pricesummary.svelte'
-import { cart, addToCart } from '../../../store/cart'
 import SEO from '$lib/components/SEO/index.svelte'
-let show
+import { KQL_AddToCart, KQL_Cart } from '$lib/graphql/_kitql/graphqlStores'
+import { store, toast } from './../../util'
+export let cart
+let show, addingToBag
+
 function toggle() {
 	show = !show
 }
 const seoProps = {
 	title: 'Shopping Bag',
-	metadescription: 'Your items in shopping bag',
+	metadescription: 'Your items in shopping bag'
+}
+async function refreshCart() {
+	await KQL_Cart.resetCache()
+	await KQL_Cart.query({ variables: { store: store.id } })
+}
+async function addToCart({ detail: { item, qty } }) {
+	try {
+		addingToBag = true
+		const addtocart = await KQL_AddToCart.mutate({
+			variables: { pid: item.pid, vid: item.pid, qty }
+		})
+		if (addtocart.errors) {
+			toast(addtocart.errors[0]?.message?.replace('UserInputError: ', ''), 'error')
+			return
+		}
+		cart = addtocart.data?.addToCart
+	} catch (e) {
+	} finally {
+		addingToBag = false
+	}
 }
 </script>
 
 <SEO {...seoProps} />
-
 <!-- Whole section start  -->
 <section
 	class="container w-full min-h-screen mx-auto max-w-6xl px-4 sm:px-10  py-2 text-gray-800 border-b sm:py-5 md:py-10 ">
-	{#if $cart?.qty > 0}
+	{#if cart?.qty > 0}
 		<div class="lg:flex lg:justify-center lg:space-x-10 xl:space-x-20">
 			<!-- Cart section start  -->
 
@@ -34,7 +73,7 @@ const seoProps = {
 					<div class="flex items-baseline mr-4">
 						<h2 class="text-4xl font-bold tracking-wide ">Cart</h2>
 						<div class="w-1 h-1 mx-3 bg-gray-200 rounded-full"></div>
-						<h4 class="text-xl tracking-tighter text-gray-300">{$cart?.qty} items</h4>
+						<h4 class="text-xl tracking-tighter text-gray-300">{cart.qty} items</h4>
 					</div>
 					<!-- Cart end  -->
 					<!-- Enter pincode for delivery start  -->
@@ -85,9 +124,13 @@ const seoProps = {
 					<!-- Enter pincode for delivery end  -->
 				</div>
 				<div class="border-t border-gray-200">
-					{#if $cart?.items}
-						{#each $cart.items as item}
-							<Cartlist item="{item}" />
+					{#if cart.items}
+						{#each cart.items as item}
+							<Cartlist
+								addingToBag="{addingToBag}"
+								item="{item}"
+								on:refreshCart="{refreshCart}"
+								on:addToCart="{addToCart}" />
 						{/each}
 					{/if}
 				</div>
@@ -131,8 +174,9 @@ const seoProps = {
 
 				<a
 					href="/"
-					class="inline-block px-6 py-2 my-5  bg-primary-500 hover:bg-primary-700 transition duration-300 transform active:scale-95 rounded-md shadow-md focus:ring-2  focus:ring-offset-2 focus:ring-primary-500 font-semibold text-white "
-					>Shop Now</a>
+					class="inline-block px-6 py-2 my-5  bg-primary-500 hover:bg-primary-700 transition duration-300 transform active:scale-95 rounded-md shadow-md focus:ring-2  focus:ring-offset-2 focus:ring-primary-500 font-semibold text-white ">
+					Shop Now
+				</a>
 			</div>
 		</div>
 	{/if}

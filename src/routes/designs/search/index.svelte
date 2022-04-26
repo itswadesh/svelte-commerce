@@ -6,13 +6,9 @@
 </style>
 
 <script context="module">
-import { get } from '../../../util/api'
-
-export async function load({ page: { host, path, params, query }, fetch }) {
-	let q = query.toString()
-	// 		query.forEach((v,k)=>{
-	// 		});
-	const page = +query.get('page')
+export async function load({ url, params, fetch }) {
+	let q = url.searchParams.gelAll().toString()
+	const page = +url.searchParams.get('page')
 	const products = await get(`products/es?${q}`)
 	const facets = products.facets.all_aggs
 
@@ -21,8 +17,8 @@ export async function load({ page: { host, path, params, query }, fetch }) {
 			page,
 			products,
 			facets,
-			query: q,
-		},
+			query: q
+		}
 	}
 }
 </script>
@@ -30,7 +26,7 @@ export async function load({ page: { host, path, params, query }, fetch }) {
 <script>
 import { goto } from '$app/navigation'
 import { constructQry, constructURL2 } from '../../../util'
-import { sorts } from '../../../../config'
+import { sorts } from '$lib/config'
 import Product from '$lib/Product.svelte'
 // import Pagination from './_Pagination.svelte'
 // import ProductSkeleton from './_ProductSkeleton.svelte'
@@ -80,7 +76,7 @@ function toggle(e) {
 
 const seoProps = {
 	title: 'Search-Product',
-	metadescription: 'search what you want',
+	metadescription: 'search what you want'
 }
 </script>
 

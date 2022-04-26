@@ -58,7 +58,7 @@ export let label = '',
 	<div class=" floating-label">
 		<input
 			bind:value
-			class="w-full bg-gray-100 border-b rounded floating-input hover:bg-gray-300 focus:outline-none focus:border-pink-500"
+			class="w-full bg-gray-100 border-b rounded floating-input focus:outline-none focus:border-pink-500"
 			placeholder="{placeholder}"
 			aria-label="{label}" />
 		<span class="highlight"></span>

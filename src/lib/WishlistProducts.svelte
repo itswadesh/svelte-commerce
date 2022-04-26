@@ -8,18 +8,16 @@
 <script>
 import { currency, toast } from './../util'
 import { lazyload } from './../actions/lazyload'
-import { CDN_URL } from './../../config'
-import { addToCart } from '../../store/cart'
-import { get, post, del } from './../util/api'
+import { KQL_AddToCart, KQL_MyWishlist, KQL_ToggleWishlist } from './graphql/_kitql/graphqlStores'
 let CartButtonText = 'MOVE TO BAG'
 
 function addToBag(product, variant) {
-	addToCart({ pid: product._id, vid: variant._id, qty: 1 })
+	KQL_AddToCart.mutate({ variables: { pid: product.id, vid: product.id, qty: 1 } })
 	CartButtonText = 'GO TO BAG'
 }
 async function removeFromWishlist(id) {
-	await del(`wishlists/my/${id}`)
-	wishlist = (await get(`wishlists/my`)).data
+	await KQL_ToggleWishlist.mutate({ variables: { product: id, variant: id } })
+	wishlist = (await KQL_MyWishlist.query()).data?.myWishlist
 	toast('Removed from wishlist', 'success')
 }
 export let wishlist
@@ -34,16 +32,16 @@ export let wishlist
 					class="flex-shrink-0 w-40 sm:w-60 mb-4 group bg-white shadow hover:shadow-md text-gray-800">
 					<div class="block overflow-hidden hover:shadow-lg">
 						<div class="relative">
-							<a href="{`/${w.product?.slug}?id=${w.product?._id}`}">
+							<a href="{`/${w.product?.slug}?id=${w.product?.id}`}">
 								<img
 									alt=""
 									use:lazyload
-									src="{`${CDN_URL}/${w.product?.img && w.product?.img[0]}?tr=w-3,h-3`}"
-									data-src="{`${CDN_URL}/${w.product?.img && w.product?.img[0]}`}"
+									src="{`${w.product?.imgCdn}?tr=w-3,h-3`}"
+									data-src="{`${w.product?.imgCdn}`}"
 									class="object-cover object-top w-full h-72  bg-gray-100 " />
 							</a>
 							<button
-								on:click="{() => removeFromWishlist(w._id)}"
+								on:click="{() => removeFromWishlist(w.id)}"
 								class="absolute top-0 right-0 m-2 h-6 w-6 rounded-full frosted flex items-center justify-center border border-gray-400 transform active:scale-95 ">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"

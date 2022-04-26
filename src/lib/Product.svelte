@@ -24,7 +24,7 @@
 <script>
 import { lazyload } from './../actions/lazyload'
 import { currency } from '../util'
-import { CDN_URL } from './../../config'
+import { CDN_URL } from '$lib/config'
 export let product = {}
 
 let show
@@ -44,9 +44,9 @@ function hideitems() {
 		<div class="">
 			<img
 				use:lazyload
-				src="{`${CDN_URL}/${product._source?.img && product._source?.img[0]}?tr=w-3,h-3`}"
+				src="{`${product._source?.img && product._source?.img[0]}?tr=w-3,h-3`}"
 				alt="{product._source?.name}"
-				data-src="{`${CDN_URL}/${product._source?.img && product._source?.img[0]}`}"
+				data-src="{`${product._source?.img && product._source?.img[0]}`}"
 				class="object-cover object-top w-full h-72  bg-black " />
 		</div>
 

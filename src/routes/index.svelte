@@ -1,23 +1,27 @@
 <script context="module" lang="ts">
-export async function load({ page: { host, path, params, query }, fetch }) {
+export async function load({ url, params, fetch }) {
 	let banners = []
-	try {
-		const settings = await get(`settings`)
-		banners = settings.data.banners.slider
-	} catch (e) {}
+	// try {
+	// const settings = await get(`settings`)
+	// 	banners = settings.data.banners.slider
+	// } catch (e) {}
 	return { props: { banners } }
 }
 </script>
 
 <script>
-import { get } from '../util/api'
 import Hero from '$lib/Hero.svelte'
-import Product1 from '$lib/Product1.svelte'
+// import SEO from '$lib/components/SEO/index.svelte'
+import { KQL_Home, KQL_Products } from '$lib/graphql/_kitql/graphqlStores'
 import { onMount } from 'svelte'
-import SEO from '$lib/components/SEO/index.svelte'
+import ProductCard from '$lib/components/_ProductCard.svelte'
+import { store } from './../util'
+import CategoriesHome from '$lib/components/_CategoriesHome.svelte'
+import Errors from '$lib/components/alerts/Errors.svelte'
+import HeroBanners from '$lib/HeroBanners.svelte'
 const seoProps = {
 	title: 'Search-Products',
-	metadescription: 'Search your products',
+	metadescription: 'Search your products'
 }
 export let banners,
 	featuredProducts = null,
@@ -25,87 +29,114 @@ export let banners,
 	shoppoProducts = null,
 	loading
 
+let heroBanners
+
 onMount(async () => {
-	featuredProducts = await getFeatured()
-	hotProducts = await getHot()
-	shoppoProducts = await getShoppo()
+	KQL_Home.query({ variables: { store: store.id } })
+	// featuredProducts = await getFeatured()
+	// hotProducts = await getHot()
+	// shoppoProducts = await getShoppo()
 })
-async function getFeatured() {
-	try {
-		loading = true
-		const x = await get(`products?featured=true`)
-		return x
-	} catch (e) {
-	} finally {
-		loading = false
-	}
-}
-async function getHot() {
-	try {
-		loading = true
-		return await get(`products?hot=true`)
-	} catch (e) {
-		console.log('err...', e.toString())
-	} finally {
-		loading = false
-	}
-}
-async function getShoppo() {
-	try {
-		loading = true
-		return await get(`products?brandName=Adidas`)
-	} catch (e) {
-		console.log('err...', e.toString())
-	} finally {
-		loading = false
-	}
-}
+// async function getFeatured() {
+// 	try {
+// 		loading = true
+// 		const x = (await KQL_Products.query({ variables: { popular: true } })).data.products
+// 		return x
+// 	} catch (e) {
+// 	} finally {
+// 		loading = false
+// 	}
+// }
+// async function getHot() {
+// 	try {
+// 		loading = true
+// 		return (await KQL_Products.query({ variables: { hot: true } })).data.products
+// 	} catch (e) {
+// 		console.log('err...', e.toString())
+// 	} finally {
+// 		loading = false
+// 	}
+// }
+// async function getShoppo() {
+// 	try {
+// 		loading = true
+// 		return (await KQL_Products.query({ variables: { q: 'shoppo' } })).data.products
+// 	} catch (e) {
+// 		console.log('err...', e.toString())
+// 	} finally {
+// 		loading = false
+// 	}
+// }
 </script>
 
-<SEO {...seoProps} />
-
+<!-- <SEO {...seoProps} /> -->
 <div>
-	<Hero banners="{banners}" />
+	<Hero banners="{$KQL_Home.data?.banners.data}" />
 </div>
-{#if featuredProducts}
+
+<!-- {JSON.stringify($KQL_Home.data?.categories.data)} -->
+
+<CategoriesHome loading="{$KQL_Home.isFetching}" categories="{$KQL_Home.data?.categories.data}" />
+<div class="px-3 py-5 sm:p-10 md:py-20 bg-white">
+	<div class="container mx-auto max-w-6xl">
+		{#if $KQL_Home?.isFetching}
+			<div class="grid grid-cols-2 md:grid-cols-4 items-center gap-2">
+				<div class="col-span-2 h-40 sm:h-60 bg-gray-300 rounded-md animate-pulse"></div>
+
+				<div class="col-span-2 h-40 sm:h-60 bg-gray-300 rounded-md animate-pulse"></div>
+
+				<div class="col-span-1 h-40 sm:h-60 bg-gray-300 rounded-md animate-pulse"></div>
+
+				<div class="col-span-1 h-40 sm:h-60 bg-gray-300 rounded-md animate-pulse"></div>
+
+				<div class="col-span-2 h-40 sm:h-60 bg-gray-300 rounded-md animate-pulse"></div>
+			</div>
+		{:else if $KQL_Home?.errors}
+			<Errors errors="{$KQL_Home?.errors}" />
+		{:else if $KQL_Home?.data?.banners.count > 0}
+			<HeroBanners heroBanners="{$KQL_Home?.data?.banners.data}" />
+		{/if}
+	</div>
+</div>
+{#if $KQL_Home.data?.popular}
 	<div class="px-2 pt-5">
 		<div class="flex flex-row items-center justify-between">
 			<a href="/search" class="font-bold text-lg lg:text-3xl tracking-wider text-gray-800">
-				Trending Products
+				Popular Products
 			</a>
-			<a href="##" class="text-sm text-gray-500 hover:text-primary-500 sm:mr-2">See all (45)</a>
+			<a href="##" class="text-sm text-gray-500 hover:text-primary-500 sm:mr-2">See all </a>
 		</div>
-
-		<div class="w-full flex items-start justify-start overflow-x-auto mt-5">
-			{#each featuredProducts.data as p}
+		<div
+			class="w-full flex items-start flex-wrap justify-start overflow-x-auto mt-5 container mx-auto">
+			{#each $KQL_Home.data?.popular?.data as p}
 				{#if p}
-					<Product1 product="{p}" />
+					<ProductCard product="{p}" class="w-1/2 md:w-1/3 lg:w-1/5 px-1 mb-2" />
 				{/if}
 			{/each}
 		</div>
 	</div>
 {/if}
 
-{#if hotProducts}
+<!-- {#if $KQL_Home.data?.trending}
 	<div class="px-2 pt-1">
 		<div class="flex flex-row items-center justify-between">
 			<a href="/search" class="font-bold text-lg lg:text-3xl tracking-wider text-gray-800">
-				Hot Selling Items
+				Trending Items
 			</a>
-			<a href="##" class="text-sm text-gray-500 hover:text-primary-500 sm:mr-2">See all (45)</a>
+			<a href="##" class="text-sm text-gray-500 hover:text-primary-500 sm:mr-2">See all </a>
 		</div>
 
 		<div class="flex overflow-x-auto mt-5">
-			{#each hotProducts.data as p}
+			{#each $KQL_Home.data?.trending.data as p}
 				{#if p}
-					<Product1 product="{p}" />
+					<ProductCard product="{p}" />
 				{/if}
 			{/each}
 		</div>
 	</div>
-{/if}
+{/if} -->
 
-{#if shoppoProducts}
+<!-- {#if shoppoProducts}
 	<div class="px-2 pt-1">
 		<div class="flex flex-row items-center justify-between">
 			<a href="/search" class="font-bold text-lg lg:text-3xl tracking-wider text-gray-800">
@@ -117,9 +148,9 @@ async function getShoppo() {
 		<div class="flex overflow-x-auto mt-5">
 			{#each shoppoProducts.data as p}
 				{#if p}
-					<Product1 product="{p}" />
+					<ProductCard product="{p}" />
 				{/if}
 			{/each}
 		</div>
 	</div>
-{/if}
+{/if} -->

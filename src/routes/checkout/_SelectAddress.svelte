@@ -5,8 +5,8 @@ import { goto } from '$app/navigation'
 import AddressSkeleton from './_AddressSkeleton.svelte'
 import Radio from '$lib/ui/Radio.svelte'
 import { onMount } from 'svelte'
-import { del, get } from '../../util/api'
 import { toast } from './../../util'
+import { KQL_MyAddresses } from '$lib/graphql/_kitql/graphqlStores'
 const dispatch = createEventDispatcher()
 
 let id = null
@@ -32,7 +32,7 @@ function addressChanged(e) {
 async function getAddress() {
 	try {
 		skeleton = true
-		addresses = await get('addresses/my')
+		addresses = (await KQL_MyAddresses.query()).data?.myAddresses
 		// Can not push automatically, because it creates bad user experience when user clicks on back to address list page
 		// if (addresses.count < 1) goto(addReturnUrl)
 		selectedAddress = addresses?.data[0]?.id
@@ -71,11 +71,11 @@ async function remove(id) {
 						<input
 							bind:group="{selectedAddress}"
 							type="radio"
-							value="{a._id}"
+							value="{a.id}"
 							name="group"
 							class="mt-1.5 focus:outline-none focus:ring-0 focus:ring-offset-0" />
 						<div class="w-full font-light  text-gray-800 cursor-pointer ms-2">
-							<!-- on:change="{() => addressChanged(a._id)}" /> -->
+							<!-- on:change="{() => addressChanged(a.id)}" /> -->
 							<h5 class="capitalize font-semibold tracking-wide md:text-lg">
 								{a.firstName}
 								{a.lastName}
@@ -132,7 +132,7 @@ async function remove(id) {
 						<button
 							type="button"
 							class="py-2 px-4 rounded-md hover:shadow-md border border-transparent hover:border-gray-500 bg-transparent hover:bg-gray-500 hover:text-white text-gray-500 focus:outline-none w-full transition duration-300 font-semibold tracking-wide"
-							on:click="{() => remove(a._id)}">
+							on:click="{() => remove(a.id)}">
 							{#if iconloading}
 								<div class="flex justify-center">
 									<svg

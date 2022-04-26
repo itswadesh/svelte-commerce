@@ -1,14 +1,9 @@
 <script lang="ts">
 import { currency } from '../util'
-import { cart } from '../../store/cart'
 import { spring } from 'svelte/motion'
 import { createEventDispatcher } from 'svelte'
+import { KQL_Cart } from './graphql/_kitql/graphqlStores'
 const dispatch = createEventDispatcher()
-const cart_total = spring(),
-	cart_subtotal = spring()
-$: cart_total.set($cart.total)
-$: cart_subtotal.set($cart.subtotal)
-$: offset = modulo($cart_total, 1)
 export const btnname = null
 export let nextpage = null
 export let text = 'Proceed to checkout'
@@ -31,13 +26,13 @@ function submit() {
 	<div class="mt-3">
 		<div class="flex items-center justify-between mt-2 font-medium">
 			<h4>Total item price</h4>
-			<h4>{currency(Math.floor($cart_subtotal))}</h4>
+			<h4>{currency(Math.floor($KQL_Cart.data?.cart.subtotal))}</h4>
 		</div>
 
-		{#if $cart?.discount > 0}
+		{#if $KQL_Cart.data?.cart.discount > 0}
 			<div class="flex items-center justify-between mt-2 font-medium">
 				<h4>Item discount</h4>
-				<h4>-{currency($cart?.discount)}</h4>
+				<h4>-{currency($KQL_Cart.data?.cart.discount)}</h4>
 			</div>
 		{/if}
 
@@ -48,7 +43,7 @@ function submit() {
 
 		<p class="mt-1 text-xs tracking-wider text-gray-400 d">
 			Free shipping on orders of ₹999 or more. For first purchase,
-			<a href="*" class="underline hover:text-primary-500">See Offer</a>
+			<a href="/" class="underline hover:text-primary-500">See Offer</a>
 		</p>
 	</div>
 
@@ -56,9 +51,9 @@ function submit() {
 
 	<div class=" flex items-center justify-between my-2 text-lg font-semibold ">
 		<h4>Total</h4>
-		{currency(Math.floor($cart_subtotal))}
+		{currency(Math.floor($KQL_Cart.data?.cart.subtotal))}
 	</div>
-	{#if $cart.qty > 0}
+	{#if $KQL_Cart.data?.cart.qty > 0}
 		{#if nextpage}
 			<a
 				href="{nextpage}"

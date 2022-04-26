@@ -1,0 +1,43 @@
+{
+  "short_name": "atoz",
+  "name": "atoz",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "logo_512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "background_color": "#3367D6",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#3367D6",
+  "shortcuts": [
+    {
+      "name": "Misiki",
+      "short_name": "AtoZ",
+      "description": "Misiki for business listing",
+      "url": "/today?source=pwa",
+      "icons": [
+        {
+          "src": "/icons/logo_192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Misiki",
+      "short_name": "AtoZ",
+      "description": "Misiki for business listing",
+      "url": "/tomorrow?source=pwa",
+      "icons": [
+        {
+          "src": "/icons/logo_192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "description": "Misiki for business listing"
+}
