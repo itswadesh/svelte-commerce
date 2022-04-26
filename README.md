@@ -1,4 +1,4 @@
-<a href="https://www.litekart.in/">
+<a href="https://misiki.in/">
 <img src="https://github.com/itswadesh/svelte-commerce/blob/master/static/litekart-banner.png?raw=true" alt/>
 </a>
 
@@ -19,7 +19,7 @@
 <a href="https://svelte-commerce.litekart.in/" target="blank">Demo</a>
 <br/>
 
-- 🛍️ Attach Svelte store front to any ecommerce API (e.g. <a href="https://www.litekart.in/"> Litekart</a>, <a href="https://magento.com/">Magento</a>, <a href="https://www.moltin.com/">Moltin</a>, <a href="https://www.shopify.com/">Shopify</a> ...)
+- 🛍️ Attach Svelte store front to any ecommerce API (e.g. <a href="https://misiki.in/"> Misiki SAAS </a>, <a href="https://magento.com/">Magento</a>, <a href="https://www.moltin.com/">Moltin</a>, <a href="https://www.shopify.com/">Shopify</a> ...)
 - 👥 The demo uses litekart as backend
 - 👨🏻‍💻 Its both SSR and SPA
 - 🚀 Superfast
@@ -38,6 +38,14 @@
 
 # Latest Updates
 
+## Massive Update 26-April-2022
+
+- 26-April-2022 - Attached to GraphQL backend
+- 26-April-2022 - Latest SvelteKit version
+- 26-April-2022 - Improved image lazy loading
+- 26-April-2022 - New Banners section
+- 26-April-2022 - New Authentication System
+- 26-April-2022 - New Blogs section
 - 24-April-2022 - Zero-configuration Vercel deployment
 - 22-July-2021 - Integrated with netlify deployment
 - 07-May-2021 - Completely Migrated to SvelteKit
@@ -98,6 +106,10 @@ Click on the button to directly deploy to Netlify or Vercel. Zero configuration 
 # Contributing
 
 If you like the ideas behind Svelte Commerce and want to become a contributor - join github discussions, check the list of the active issues or contact me directly via swadesh@litekart.in
+
+# Thank
+
+A big thank to jycouet for making sucha a wonderful package <a target="_blank" href="https://kitql.vercel.app/">KITQL</a>
 
 # Support me!
 

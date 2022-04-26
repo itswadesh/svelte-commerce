@@ -26,6 +26,8 @@ export function KQL__ResetAllCaches() {
 	KQL_Address.resetCache();
 	KQL_Addresses.resetCache();
 	KQL_MyAddresses.resetCache();
+	KQL_Blog.resetCache();
+	KQL_Blogs.resetCache();
 	KQL_Cart.resetCache();
 	KQL_Categories.resetCache();
 	KQL_Category.resetCache();
@@ -513,6 +515,346 @@ function KQL_SaveAddressStore() {
  * KitQL Svelte Store with the latest `SaveAddress` Operation
  */
 export const KQL_SaveAddress = KQL_SaveAddressStore();
+
+function KQL_BlogStore() {
+	const operationName = 'KQL_Blog';
+	const operationType = ResponseResultType.Query;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.BlogQuery, Types.BlogQueryVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function queryLocal(
+			params?: RequestQueryParameters<Types.BlogQueryVariables>
+		): Promise<RequestResult<Types.BlogQuery, Types.BlogQueryVariables>> {
+			let { fetch, variables, settings } = params ?? {};
+			let { cacheMs, policy } = settings ?? {};
+
+			const storedVariables = get(KQL_Blog).variables;
+			variables = variables ?? storedVariables;
+			policy = policy ?? kitQLClient.policy;
+
+			// Cache only in the browser for now. In SSR, we will need session identif to not mix peoples data
+			if (browser) {
+				if (policy !== 'network-only') {
+					// prettier-ignore
+					const cachedData = kitQLClient.requestCache<Types.BlogQuery, Types.BlogQueryVariables>({
+						variables, operationName, cacheMs,	browser
+					});
+					if (cachedData) {
+						const result = { ...cachedData, isFetching: false, status: RequestStatus.DONE };
+						if (policy === 'cache-first') {
+							set(result);
+							if (!result.isOutdated) {
+								return result;
+							}
+						} else if (policy === 'cache-only') {
+							set(result);
+							return result;
+						} else if (policy === 'cache-and-network') {
+							set(result);
+						}
+					}
+				}
+			}
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.BlogQuery, Types.BlogQueryVariables>({
+				skFetch: fetch,
+				document: Types.BlogDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		query: queryLocal,
+
+		/**
+		 * Ideal for SSR query. To be used in SvelteKit load function
+		 * @returns fill this store & the cache
+		 */
+		queryLoad: async (
+			params?: RequestQueryParameters<Types.BlogQueryVariables>
+		): Promise<void> => {
+			if (clientStarted) {
+				queryLocal(params); // No await in purpose, we are in a client navigation.
+			} else {
+				await queryLocal(params);
+			}
+		},
+
+		/**
+		 * Reset Cache
+		 */
+		resetCache(
+			variables: Types.BlogQueryVariables | null = null,
+			allOperationKey: boolean = true,
+			withResetStore: boolean = true
+		) {
+			kitQLClient.cacheRemove(operationName, { variables, allOperationKey });
+			if (withResetStore) {
+				set({ ...defaultStoreValue, operationName });
+			}
+		},
+
+		/**
+		 * Patch the store &&|| cache with some data.
+		 */
+		// prettier-ignore
+		patch(data: Types.BlogQuery, variables: Types.BlogQueryVariables | null = null, type: PatchType = 'cache-and-store'): void {
+			let updatedCacheStore = undefined;
+			if(type === 'cache-only' || type === 'cache-and-store') {
+				updatedCacheStore = kitQLClient.cacheUpdate<Types.BlogQuery, Types.BlogQueryVariables>(operationName, data, { variables });
+			}
+			if(type === 'store-only' ) {
+				let toReturn = { ...get(KQL_Blog), data, variables } ;
+				set(toReturn);
+			}
+			if(type === 'cache-and-store' ) {
+				set({...get(KQL_Blog), ...updatedCacheStore});
+			}
+			kitQLClient.logInfo(operationName, "patch", type);
+		}
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `Blog` Operation
+ */
+export const KQL_Blog = KQL_BlogStore();
+
+function KQL_BlogsStore() {
+	const operationName = 'KQL_Blogs';
+	const operationType = ResponseResultType.Query;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.BlogsQuery, Types.BlogsQueryVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function queryLocal(
+			params?: RequestQueryParameters<Types.BlogsQueryVariables>
+		): Promise<RequestResult<Types.BlogsQuery, Types.BlogsQueryVariables>> {
+			let { fetch, variables, settings } = params ?? {};
+			let { cacheMs, policy } = settings ?? {};
+
+			const storedVariables = get(KQL_Blogs).variables;
+			variables = variables ?? storedVariables;
+			policy = policy ?? kitQLClient.policy;
+
+			// Cache only in the browser for now. In SSR, we will need session identif to not mix peoples data
+			if (browser) {
+				if (policy !== 'network-only') {
+					// prettier-ignore
+					const cachedData = kitQLClient.requestCache<Types.BlogsQuery, Types.BlogsQueryVariables>({
+						variables, operationName, cacheMs,	browser
+					});
+					if (cachedData) {
+						const result = { ...cachedData, isFetching: false, status: RequestStatus.DONE };
+						if (policy === 'cache-first') {
+							set(result);
+							if (!result.isOutdated) {
+								return result;
+							}
+						} else if (policy === 'cache-only') {
+							set(result);
+							return result;
+						} else if (policy === 'cache-and-network') {
+							set(result);
+						}
+					}
+				}
+			}
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.BlogsQuery, Types.BlogsQueryVariables>({
+				skFetch: fetch,
+				document: Types.BlogsDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		query: queryLocal,
+
+		/**
+		 * Ideal for SSR query. To be used in SvelteKit load function
+		 * @returns fill this store & the cache
+		 */
+		queryLoad: async (
+			params?: RequestQueryParameters<Types.BlogsQueryVariables>
+		): Promise<void> => {
+			if (clientStarted) {
+				queryLocal(params); // No await in purpose, we are in a client navigation.
+			} else {
+				await queryLocal(params);
+			}
+		},
+
+		/**
+		 * Reset Cache
+		 */
+		resetCache(
+			variables: Types.BlogsQueryVariables | null = null,
+			allOperationKey: boolean = true,
+			withResetStore: boolean = true
+		) {
+			kitQLClient.cacheRemove(operationName, { variables, allOperationKey });
+			if (withResetStore) {
+				set({ ...defaultStoreValue, operationName });
+			}
+		},
+
+		/**
+		 * Patch the store &&|| cache with some data.
+		 */
+		// prettier-ignore
+		patch(data: Types.BlogsQuery, variables: Types.BlogsQueryVariables | null = null, type: PatchType = 'cache-and-store'): void {
+			let updatedCacheStore = undefined;
+			if(type === 'cache-only' || type === 'cache-and-store') {
+				updatedCacheStore = kitQLClient.cacheUpdate<Types.BlogsQuery, Types.BlogsQueryVariables>(operationName, data, { variables });
+			}
+			if(type === 'store-only' ) {
+				let toReturn = { ...get(KQL_Blogs), data, variables } ;
+				set(toReturn);
+			}
+			if(type === 'cache-and-store' ) {
+				set({...get(KQL_Blogs), ...updatedCacheStore});
+			}
+			kitQLClient.logInfo(operationName, "patch", type);
+		}
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `Blogs` Operation
+ */
+export const KQL_Blogs = KQL_BlogsStore();
+
+function KQL_DeleteBlogStore() {
+	const operationName = 'KQL_DeleteBlog';
+	const operationType = ResponseResultType.Mutation;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.DeleteBlogMutation, Types.DeleteBlogMutationVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function mutateLocal(
+			params?: RequestParameters<Types.DeleteBlogMutationVariables>
+		): Promise<RequestResult<Types.DeleteBlogMutation, Types.DeleteBlogMutationVariables>> {
+			let { fetch, variables } = params ?? {};
+
+			const storedVariables = get(KQL_DeleteBlog).variables;
+			variables = variables ?? storedVariables;
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.DeleteBlogMutation, Types.DeleteBlogMutationVariables>({
+				skFetch: fetch,
+				document: Types.DeleteBlogDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		mutate: mutateLocal,
+
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `DeleteBlog` Operation
+ */
+export const KQL_DeleteBlog = KQL_DeleteBlogStore();
+
+function KQL_SaveBlogStore() {
+	const operationName = 'KQL_SaveBlog';
+	const operationType = ResponseResultType.Mutation;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.SaveBlogMutation, Types.SaveBlogMutationVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function mutateLocal(
+			params?: RequestParameters<Types.SaveBlogMutationVariables>
+		): Promise<RequestResult<Types.SaveBlogMutation, Types.SaveBlogMutationVariables>> {
+			let { fetch, variables } = params ?? {};
+
+			const storedVariables = get(KQL_SaveBlog).variables;
+			variables = variables ?? storedVariables;
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.SaveBlogMutation, Types.SaveBlogMutationVariables>({
+				skFetch: fetch,
+				document: Types.SaveBlogDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		mutate: mutateLocal,
+
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `SaveBlog` Operation
+ */
+export const KQL_SaveBlog = KQL_SaveBlogStore();
 
 function KQL_AddToCartStore() {
 	const operationName = 'KQL_AddToCart';

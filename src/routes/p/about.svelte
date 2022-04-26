@@ -12,11 +12,11 @@
 </style>
 
 <script>
+import HeadingUnderline from '$lib/components/HeadingUnderline.svelte'
+
 import Image from '$lib/components/Image/Image.svelte'
 import ImageLoader from '$lib/components/Image/ImageLoader.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-import HeadingUnderline from '$lib/HeadingUnderline.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 
 const seoProps = {
 	title: 'About ',
@@ -267,7 +267,7 @@ const seoProps = {
 			</p>
 
 			<div class="relative max-w-max mx-auto">
-				<PrimaryButton type="submit">Apply Now</PrimaryButton>
+				<button type="submit">Apply Now</button>
 
 				<div class="absolute top-0 right-0 -m-0.5 bg-primary-500 animate-ping h-3 w-3 rounded-full">
 				</div>
