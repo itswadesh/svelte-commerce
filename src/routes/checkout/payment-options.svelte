@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
-export async function load({ page: { query }, fetch }) {
-	const address = query.get('address')
+export async function load({ url, params, fetch }) {
+	const address = url.searchParams.get('address')
 	return { props: { address } }
 }
 </script>
@@ -12,10 +12,10 @@ import Pricesummary from '$lib/Pricesummary.svelte'
 
 import Radio from '$lib/ui/Radio.svelte'
 import { onMount } from 'svelte'
-import { del, get, post } from '../../util/api'
 import CheckoutHeader from './_CheckoutHeader.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import { toast } from './../../util'
+import { KQL_Address, KQL_Checkout } from '$lib/graphql/_kitql/graphqlStores'
 
 let loading = false
 let paymentMethod = null
@@ -31,7 +31,7 @@ let addressDetails = {
 	country: '',
 	zip: '',
 	phone: '',
-	state: '',
+	state: ''
 }
 onMount(() => {
 	getAddress()
@@ -45,8 +45,12 @@ async function submit() {
 			toast('Address not provided.', 'error')
 			return
 		}
-		const order = await post('orders', { address: addressDetails, paymentMethod: 'COD' })
-		goto(`/payment/success?id=${order._id}&provider=COD`)
+		const order = (
+			await KQL_Checkout.mutate({
+				variables: { address: address, paymentMethod: 'COD' }
+			})
+		).data?.checkout
+		goto(`/payment/success?id=${order.id}&provider=COD`)
 	} catch (err) {
 		toast(err, 'error')
 		goto(`/payment/failed?provider=COD`)
@@ -58,7 +62,7 @@ async function submit() {
 async function getAddress() {
 	try {
 		loading = true
-		addressDetails = await get(`addresses/${address}`)
+		addressDetails = (await KQL_Address.query({ variables: { id: address } })).data.address
 	} catch (e) {
 	} finally {
 		loading = false
@@ -67,7 +71,7 @@ async function getAddress() {
 
 const seoProps = {
 	title: 'Payment-Methods',
-	metadescription: 'Choose your payment methods',
+	metadescription: 'Choose your payment methods'
 }
 </script>
 

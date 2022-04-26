@@ -1,6 +1,6 @@
 <script>
 import ImageLoader from '$lib/Image/ImageLoader.svelte'
-import { CDN_URL } from './../../../config'
+import { CDN_URL } from '$lib/config'
 export let p
 </script>
 

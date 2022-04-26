@@ -1,25 +1,22 @@
 <script context="module" lang="ts">
 export async function load({ session: { user, token } }) {
-	fetchCart(token)
+	// fetchCart(token)
 	return { props: { user } }
 }
 </script>
 
 <script>
-import './../../global.css'
 import PageTransitions from '$lib/PageTransitions.svelte'
 import Nav from '$lib/Nav.svelte'
 import MobNav from '$lib/MobNav.svelte'
 import MobFooter from '$lib/MobFooter.svelte'
 import { getStores, navigating, page } from '$app/stores'
-import { fetchCart } from './../../../store/cart'
-import { me } from './../../../store/auth'
 import { ToastContainer, FlatToast } from 'svelte-toasts'
 
 export let user
 </script>
 
-<PageTransitions refresh="{$page.path}">
+<PageTransitions refresh="{$page.url.pathname}">
 	<div class="bg-gray-50 font-sans antialiased">
 		<slot />
 	</div>

@@ -1,13 +1,12 @@
 <script lang="ts">
 import { onMount } from 'svelte'
-import { get } from '../../../util/api'
 import SEO from '$lib/components/SEO/index.svelte'
-import { each } from 'svelte/internal'
 import { date, currency } from './../../../util'
+import { KQL_MyOrders } from '$lib/graphql/_kitql/graphqlStores'
 
 const seoProps = {
 	title: 'Orders',
-	metadescription: 'All orders details',
+	metadescription: 'All orders details'
 }
 let orders
 let open = false
@@ -19,7 +18,7 @@ onMount(() => {
 	getOrders()
 })
 async function getOrders() {
-	orders = await get(`orders/my`)
+	orders = (await KQL_MyOrders.query()).data?.myOrders
 }
 </script>
 
@@ -37,7 +36,7 @@ async function getOrders() {
 				<div class="flex justify-between items-center">
 					<!-- Details section start  -->
 					<div class="sm:ml-4">
-						<a href="{`/orders/${order._id}`}" class="cursor-pointer">
+						<a href="{`/orders/${order.id}`}" class="cursor-pointer">
 							<span class="text-lg font-semibold tracking-wider md:text-2xl"> {order.orderNo}</span>
 						</a>
 						<div class="text-gray-400 text-sm">
@@ -97,8 +96,8 @@ async function getOrders() {
 								{#each order.items as item}
 									<div class="flex w-full text-xs">
 										<a href="{`/orders/${order.id}`}">
-											{#if item.img}
-												<img src="{item.img}" class="w-10 h-10" alt="" />
+											{#if item.imgCdn}
+												<img src="{item.imgCdn}" class="w-10 h-10" alt="" />
 											{/if}
 										</a>
 										<div class="flex-1 ml-2">
@@ -170,9 +169,11 @@ async function getOrders() {
 
 			<img src="/no/empty-animate.svg" alt="" class="h-80 md:h-96 mb-10" />
 
-			<button
-				class="bg-white hover:bg-primary-500 rounded-md shadow hover:shadow-md py-2 px-8 font-semibold text-sm text-primary-500 hover:text-white border hover:border-white border-primary-500 focus:outline-none mx-auto focus:ring-primary-500 ring-opacity-50"
-				>Shop Now</button>
+			<a
+				href="/"
+				class="bg-white hover:bg-primary-500 rounded-md shadow hover:shadow-md py-2 px-8 font-semibold text-sm text-primary-500 hover:text-white border hover:border-white border-primary-500 focus:outline-none mx-auto focus:ring-primary-500 ring-opacity-50">
+				Shop Now
+			</a>
 		</div>
 	{/if}
 </section>

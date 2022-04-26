@@ -1,18 +1,18 @@
 <script context="module" lang="ts">
 import SEO from '$lib/components/SEO/index.svelte'
 
-export async function load({ page: { query }, fetch }) {
-	return { props: { id: query.get('id') } }
+export async function load({ url, params, fetch }) {
+	return { props: { id: url.searchParams.get('id') } }
 }
 </script>
 
 <script>
 import { currency, date } from '../../util'
 import { onMount } from 'svelte'
-import { get } from '../../util/api'
 
 import OrderAddressDetails from './_OrderAddressDetails.svelte'
 import OrderSuccessSkeleton from './_OrderSuccessSkeleton.svelte'
+import { KQL_MyOrders, KQL_PaySuccessPageHit } from '$lib/graphql/_kitql/graphqlStores'
 export let id
 onMount(() => {
 	refresh()
@@ -22,7 +22,8 @@ let order = null,
 async function refresh() {
 	try {
 		loading = true
-		order = await get(`orders/my/${id}`)
+		order = (await KQL_PaySuccessPageHit.mutate({ variables: { orderId: id } })).data
+			.paySuccessPageHit
 	} catch (e) {
 	} finally {
 		loading = false
@@ -30,7 +31,7 @@ async function refresh() {
 }
 const seoProps = {
 	title: 'Payment-Success',
-	metadescription: 'Payment is successfully completed',
+	metadescription: 'Payment is successfully completed'
 }
 </script>
 
@@ -170,7 +171,7 @@ const seoProps = {
 									<div class="flex flex-row justify-between w-full pb-6 lg:pb-0">
 										<div class="flex flex-row w-full my-3">
 											<a href="{`/${item?.slug}?id=${item?.pid}`}" class="">
-												<img src="{item?.img[0]}" alt="" class="object-cover border w-28" />
+												<img src="{item?.imgCdn}" alt="" class="object-cover border w-28" />
 											</a>
 											<div class="relative flex flex-col w-4/5 ms-3 lg:w-10/12">
 												<a

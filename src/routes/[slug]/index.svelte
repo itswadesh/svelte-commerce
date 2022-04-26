@@ -8,23 +8,21 @@
 </style>
 
 <script context="module" lang="ts">
-import { get } from '../../util/api'
 import { lazyload } from './../../actions/lazyload'
-import { authorInfo, CDN_URL, WWW_URL } from './../../../config'
+import { authorInfo, CDN_URL, WWW_URL } from '$lib/config'
 import { currency, toast } from '../../util'
-import { addToCart } from '../../../store/cart'
-import { me } from '../../../store/auth'
 import { goto } from '$app/navigation'
 import SEO from '$lib/components/SEO/index.svelte'
-export async function load({ page: { host, path, params, query }, fetch }) {
+export async function load({ url, params, fetch }) {
 	try {
-		const id = query.get('id')
-		if (!id) throw Error('Invalid product id')
-		const product = await get(`products/${id}`)
+		const id = url.searchParams.get('id')
+		const slug = params.slug
+		if (!id && !slug) throw Error('Invalid product url')
+		const product = (await KQL_ProductSlug.query({ fetch, variables: { slug } })).data?.productSlug
 		return {
 			props: {
-				product,
-			},
+				product
+			}
 		}
 	} catch (e) {
 		throw Error(e)
@@ -33,57 +31,60 @@ export async function load({ page: { host, path, params, query }, fetch }) {
 </script>
 
 <script>
-me()
-import Footer from '$lib/MobFooter.svelte'
-import { post } from './../../util/api'
+KQL_Me.query()
+import {
+	KQL_AddToCart,
+	KQL_Me,
+	KQL_ProductSlug,
+	KQL_ToggleWishlist
+} from '$lib/graphql/_kitql/graphqlStores'
 export let product
-// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', product.slug)
 let CartButtonText = 'Add To Cart'
 function addToBag(product) {
-	addToCart({ pid: product._id, vid: product.variants[0]._id, qty: 1 })
+	KQL_AddToCart.mutate({ variables: { pid: product.id, vid: product.id, qty: 1 } })
 	CartButtonText = 'Go To Cart'
 	// goto('/cart')
 }
 const breadcrumbs = [
 	{
 		name: 'Home',
-		slug: product.slug,
-	},
+		slug: product?.slug
+	}
 ]
 const { author } = authorInfo
 const entityMeta = {
 	url: `${WWW_URL}/`,
 	faviconWidth: 512,
 	faviconHeight: 512,
-	caption: author,
+	caption: author
 }
 const seoProps = {
-	title: product.name,
-	metadescription: product.metaDescription,
+	title: product?.name,
+	metadescription: product?.metaDescription,
 	entityMeta,
 	breadcrumbs,
-	featuredImage: product.img,
-	ogImage: product.img,
-	ogSquareImage: product.img,
-	twitterImage: product.img,
-	name: product.name,
-	description: product.description,
-	price: product.price,
-	image: product.img,
-	createdAt: product.createdAt,
-	updatedAt: product.updatedAt,
-	sku: product.sku,
-	id: product._id,
-	slug: product.slug,
-	gtin: product.gtin,
-	brand: product.brand,
-	ratingCount: product.ratingCount,
-	ratingValue: product.ratingValue,
-	popularity: product.popularity,
+	featuredImage: product?.img,
+	ogImage: product?.img,
+	ogSquareImage: product?.img,
+	twitterImage: product?.img,
+	name: product?.name,
+	description: product?.description,
+	price: product?.price,
+	image: product?.img,
+	createdAt: product?.createdAt,
+	updatedAt: product?.updatedAt,
+	sku: product?.sku,
+	id: product?.id,
+	slug: product?.slug,
+	gtin: product?.gtin,
+	brand: product?.brand,
+	ratingCount: product?.ratingCount,
+	ratingValue: product?.ratingValue,
+	popularity: product?.popularity
 }
 async function addToWishlist(product, variant) {
 	try {
-		await post('wishlists', { product, variant })
+		await KQL_ToggleWishlist.mutate({ variables: { product, variant } })
 		toast('Added to wishlist', 'success')
 	} catch (e) {
 		toast(`Error adding to wishlist ${e}`, 'error')
@@ -140,8 +141,8 @@ async function addToWishlist(product, variant) {
 			<div>
 				<img
 					use:lazyload
-					src="{`${CDN_URL}/${product?.img && product?.img[0]}?tr=w-3,h-3`}"
-					data-src="{`${CDN_URL}/${product?.img && product?.img[0]}`}"
+					src="{`${product?.img}?tr=w-3,h-3`}"
+					data-src="{`${product?.img}`}"
 					alt=""
 					class="object-cover object-top w-full mx-auto bg-white zoom md:h-auto" />
 			</div>
@@ -163,7 +164,7 @@ async function addToWishlist(product, variant) {
 				<!-- Brand name start  -->
 
 				<h2 class="text-sm font-semibold md:text-xl">
-					{product?.vendor_name}
+					{product?.vendor?.businessName}
 				</h2>
 
 				<!-- Brand name end -->
@@ -198,22 +199,24 @@ async function addToWishlist(product, variant) {
 							<span>Low in Stock</span>
 						</div>
 					{/if}
-					<div class="flex items-center space-x-2">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							class="w-4 h-4"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor">
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M16 15v-1a4 4 0 00-4-4H8m0 0l3 3m-3-3l3-3m9 14V5a2 2 0 00-2-2H6a2 2 0 00-2 2v16l4-2 4 2 4-2 4 2z"
-							></path>
-						</svg>
-						<span>30 Days Return</span>
-					</div>
+					{#if product?.returnAllowed}
+						<div class="flex items-center space-x-2">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="w-4 h-4"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M16 15v-1a4 4 0 00-4-4H8m0 0l3 3m-3-3l3-3m9 14V5a2 2 0 00-2-2H6a2 2 0 00-2 2v16l4-2 4 2 4-2 4 2z"
+								></path>
+							</svg>
+							<span>{product?.replaceValidityInDays} Days Return</span>
+						</div>
+					{/if}
 				</div>
 			</div>
 			<!-- Product details start  -->
@@ -283,6 +286,15 @@ async function addToWishlist(product, variant) {
 						</div>
 					</div> -->
 
+					{#if product?.brand}
+						<div class="flex items-center my-2 space-x-1 md:justify-center">
+							<span class="text-sm font-medium md:text-base">Brand:</span>
+							<h2 class="ml-1 text-lg font-semibold whitespace-nowrap">
+								{product?.brand?.name}
+							</h2>
+						</div>
+					{/if}
+
 					{#if product?.color}
 						<div class="flex items-center my-2 space-x-1 md:justify-center">
 							<span class="text-sm font-medium md:text-base">Color:</span>
@@ -316,14 +328,16 @@ async function addToWishlist(product, variant) {
 			</div>
 			<button
 				class="border px-6 py-2 hover:bg-gray-100"
-				on:click="{() => addToWishlist(product, product.variants[0])}">
+				on:click="{() => addToWishlist(product, product.id)}">
 				Add to wishlist
 			</button>
 			<!-- Add to cart section end -->
-			<div class="hidden my-5 md:block">
-				<div class="pb-2 text-lg font-semibold ">Product Details -</div>
-				{@html product?.description}
-			</div>
+			{#if product?.description}
+				<div class="hidden my-5 md:block">
+					<div class="pb-2 text-lg font-semibold ">Product Details -</div>
+					{@html product?.description}
+				</div>
+			{/if}
 		</div>
 	</div>
 </section>

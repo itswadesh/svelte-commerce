@@ -3,7 +3,7 @@ import Checkbox from '$lib/ui/Checkbox.svelte'
 import { constructURL, constructURL2 } from '../../util'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
-import Icon, { ChevronDown, Adjustments, SortAscending } from 'svelte-hero-icons'
+import { Icon, ChevronDown, Adjustments, SortAscending } from 'svelte-hero-icons'
 import { createEventDispatcher } from 'svelte'
 const dispatch = createEventDispatcher()
 export let sortBy = null,
@@ -11,14 +11,15 @@ export let sortBy = null,
 	showFilters = false,
 	searchQuery
 let query = {}
-page.subscribe((page) => {
-	query = page.query
-})
-function sort() {
-	query.sort = sortBy
-	let url = constructURL2('/search', query)
-	goto(url)
-}
+// page.subscribe((page) => {
+// 	query = JSON.parse(page.url.searchParams.toString())
+// 	console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', query)
+// })
+// function sort() {
+// 	query.sort = sortBy
+// 	let url = constructURL2('/search', query)
+// 	goto(url)
+// }
 </script>
 
 <div class="items-center justify-between flex-none p-3  md:py-6 text-sm md:flex text-gray-800">

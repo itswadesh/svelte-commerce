@@ -1,0 +1,3 @@
+mutation toggleWishlist($product: ID!, $variant: ID!) {
+  toggleWishlist(product: $product, variant: $variant)
+}

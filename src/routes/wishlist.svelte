@@ -1,27 +1,28 @@
 <script context="module" lang="ts">
-export async function load({ page: { host, path, params, query }, session: { user } }) {
-	if (!user) {
+export async function load({ url, fetch }) {
+	const me = (await KQL_Me.query({ fetch })).data?.me
+	if (!me) {
 		return {
-			redirect: `/login?ref=${path}`,
-			status: 302,
+			redirect: `/login?ref=${url.pathname}`,
+			status: 302
 		}
 	}
-	let wishlist = []
+	let wishlist = {}
 	try {
-		wishlist = await get(`wishlists/my`)
+		wishlist = (await KQL_MyWishlist.query()).data?.myWishlist
 	} catch (e) {}
 	return { props: { wishlist } }
 }
 </script>
 
 <script>
-import { get } from '../util/api'
 import SEO from '$lib/components/SEO/index.svelte'
+import { KQL_Me, KQL_MyWishlist } from '$lib/graphql/_kitql/graphqlStores'
 import WishlistProducts from '$lib/WishlistProducts.svelte'
 export let wishlist
 const seoProps = {
 	title: 'Wishlist',
-	metadescription: 'Products you have wishlisted',
+	metadescription: 'Products you have wishlisted'
 }
 </script>
 

@@ -1,86 +1,81 @@
-const { tailwindExtractor } = require('tailwindcss/lib/lib/purgeUnusedStyles')
+const config = {
+	content: ['./src/**/*.{html,js,svelte,ts}'],
 
-module.exports = {
-	mode: 'jit',
-	purge: ['./src/**/*.svelte'],
-	darkMode: false, // or 'media' or 'class'
 	theme: {
 		extend: {
 			colors: {
 				primary: {
-					900: '#003e6b',
-					800: '#0a558c',
-					700: '#0f609b',
-					600: '#186faf',
-					500: '#2580c2',
-					400: '#4098d7',
-					300: '#62b0e8',
-					200: '#84c5f4',
-					100: '#b6e0fe',
-					50: '#dceefb',
+					50: '#e6f0fc' /* very very light blue */,
+					100: '#cee1fa' /* very light blue */,
+					200: '#b5d2f8' /* light blue */,
+					500: '#0a6ce8' /* blue */,
+					600: '#0961d0' /* dark blue */,
+					700: '#0856b9' /* more darker blue */
 				},
-				neutral: {
-					900: '#102a43',
-					800: '#243b53',
-					700: '#334e68',
-					600: '#486581',
-					500: '#627d98',
-					400: '#829ab1',
-					300: '#9fb3c8',
-					200: '#bcccdc',
-					100: '#d9e2ec',
-					50: '#f0f4f8',
+				secondary: {
+					100: '#cccccc' /* light gray */,
+					500: '#1F2937' /* gray-800 */,
+					600: '#000000' /* black */
 				},
-				success: {
-					900: '#004400',
-					800: '#016457',
-					700: '#048271',
-					600: '#079a82',
-					500: '#17b897',
-					400: '#2dcca7',
-					300: '#5fe3co',
-					200: '#8eedd1',
-					100: '#c6f7e9',
-					50: '#f0fcf9',
-				},
-				warning: {
-					900: '#513c06',
-					800: '#7c5e10',
-					700: '#a27c1a',
-					600: '#c99a2e',
-					500: '#e9b949',
-					400: '#f7d070',
-					300: '#f9da8b',
-					200: '#f8e3a3',
-					100: '#fcefc7',
-					50: '#fffaeb',
-				},
-				error: {
-					900: '#610404',
-					800: '#780a0a',
-					700: '#911111',
-					600: '#a61b1b',
-					500: '#ba2525',
-					400: '#d64545',
-					300: '#e66a6a',
-					200: '#f29b9b',
-					100: '#facdcd',
-					50: '#ffeeee',
-				},
+				accent: {
+					100: '#fee2e2' /* light-red */,
+					500: '#f59e0b' /* yellow-500 */,
+					900: '#eb0000;' // red
+				}
 			},
-			spacing: {
-				84: '21rem',
-				108: '27rem',
+
+			animation: {
+				float: 'float 6s linear infinite',
+				wiggle: 'wiggle 6s linear infinite',
+				scale: 'scale 6s ease-in infinite',
+				fade: 'fade 6s linear infinite',
+				dropdown: 'dropdown 0.3s linear',
+				slide: 'slide 0.3s ease-in-out'
+			},
+
+			keyframes: {
+				float: {
+					'0%': { transform: 'translateY(0px)' },
+					'100%': { transform: 'translateY(-100px)' }
+				},
+				wiggle: {
+					'0%': { transform: 'translateX(0px)' },
+					'100%': { transform: 'translateX(-20px)' }
+				},
+				scale: {
+					'0%': { transform: 'scale(1)' },
+					'90%': { transform: 'scale(1)' },
+					'100%': { transform: 'scale(0)' }
+				},
+				fade: {
+					'0%': { opacity: '1' },
+					'70%': { opacity: '1' },
+					'100%': { opacity: '0' }
+				},
+				dropdown: {
+					'0%': { transform: 'translateY(-10px)', opacity: '0' },
+					'50%': { transform: 'translateY(-5px)', opacity: '0.3' },
+					'100%': { transform: 'translateY(0px)', opacity: '1' }
+				},
+				slide: {
+					'0%': { transform: 'translateX(10px)', opacity: '0' },
+					'50%': { transform: 'translateX(5px)', opacity: '0.3' },
+					'100%': { transform: 'translateX(0px)', opacity: '1' }
+				}
 			},
 			fontFamily: {
-				sans: ['Inter'],
-			},
-		},
+				sans: ['Montserrat']
+			}
+		}
 	},
+
 	plugins: [
+		require('tailwind-scrollbar'),
 		require('@tailwindcss/line-clamp'),
 		require('@tailwindcss/forms'),
 		require('tailwindcss-rtl'),
-		require('@tailwindcss/typography'),
-	],
+		require('@tailwindcss/typography')
+	]
 }
+
+module.exports = config

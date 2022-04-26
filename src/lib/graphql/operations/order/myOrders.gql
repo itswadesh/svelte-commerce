@@ -1,0 +1,149 @@
+query myOrders(
+  $page: Int
+  $skip: Int
+  $limit: Int
+  $search: String
+  $sort: String
+  $status: String # Pending, Tracking, Delivered
+  $where: String
+  $store: ID
+) {
+  myOrders(
+    page: $page
+    skip: $skip
+    limit: $limit
+    search: $search
+    sort: $sort
+    status: $status
+    where: $where
+    store: $store
+  ) {
+    count
+    pageSize
+    page
+    data {
+      id
+      paySuccess
+      orderNo
+      otp
+      createdAt
+      updatedAt
+      codPaid
+      payment {
+        id
+        amountPaid
+      }
+      paymentMode
+      paymentStatus
+      paymentCurrency
+      paymentReferenceId
+      paymentOrderId
+      paymentReceipt
+      invoiceId
+      paymentGateway
+      codPaid
+      amountPaid
+      amountDue
+      paymentStatus
+      paymentMsg
+      paymentTime
+      paid
+      amount {
+        qty
+        subtotal
+        tax
+        discount
+        total
+        shipping
+      }
+      userFirstName
+      userLastName
+      userPhone
+      userEmail
+      address {
+        firstName
+        lastName
+        town
+        city
+        state
+        zip
+        address
+        lat
+        lng
+      }
+      store {
+        id
+        name
+        email
+      }
+      items {
+        id
+        pid
+        status
+        posInvoiceNo
+        itemOrderNo
+        name
+        barcode
+        img
+        imgCdn
+        foodType
+        slug
+        price
+        qty
+        shippingCharge
+        subtotal
+        total
+        tax
+        time
+        brandName
+        brandImg
+        brandImgCdn
+        vendorBusinessName
+
+        vendor {
+          id
+          slug
+          businessName
+          banner
+          bannerCdn
+        }
+        orderStatus {
+          id
+          event
+          tracking_id
+          courier_name
+        }
+      }
+      orderItems {
+        id
+        status
+        pid
+        posInvoiceNo
+        itemOrderNo
+        name
+        slug
+        img
+        imgCdn
+        qty
+        price
+        mrp
+        color
+        size
+        tracking
+        shippingCharge
+        tax
+        subtotal
+        total
+        brandName
+        brandImg
+        brandImgCdn
+        foodType
+        usedOptions {
+          name
+          val
+          dates
+        }
+      }
+    }
+  }
+}

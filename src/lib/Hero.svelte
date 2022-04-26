@@ -1,15 +1,13 @@
 <script>
-import { CDN_URL } from './../../config'
-
 import { Swipe, SwipeItem } from 'svelte-swipe'
-import { expoIn } from 'svelte/easing'
+import { onMount } from 'svelte'
 
 const swipeConfig = {
 	autoplay: false,
 	delay: 2000,
 	showIndicators: true,
 	transitionDuration: 1000,
-	defaultIndex: 0,
+	defaultIndex: 0
 }
 let SwipeComp
 
@@ -21,26 +19,27 @@ function prevSlide() {
 	SwipeComp.prevItem()
 }
 
-export let banners = [
-	{
-		img: '/ecommerce-banner-1.png',
-	},
-	{
-		img: '/ETP-banner-for-ecommerce.jpg',
-	},
-]
+export let banners = []
+
+let heroBanners = []
+
+onMount(async () => {
+	heroBanners = banners?.filter((b) => {
+		return b.type === 'slider'
+	})
+})
 </script>
 
 <div class="relative h-36 md:h-48 lg:h-60 xl:h-96">
 	<Swipe {...swipeConfig} bind:this="{SwipeComp}">
-		{#each banners as b, i}
+		{#each heroBanners as b, i}
 			<SwipeItem>
 				<a href="/search" class="w-full">
-					<!-- <img src="{`${CDN_URL}/${b.img}`}" alt="${CDN_URL}" class="w-full" /> -->
-					<img
+					<img src="{`${b.imgCdn}`}" alt="" class="w-full" />
+					<!-- <img
 						src="/ETP-banner-for-ecommerce.jpg"
 						alt="banner"
-						class="w-full xl:h-full object-cover" />
+						class="w-full xl:h-full object-cover" /> -->
 				</a>
 			</SwipeItem>
 		{/each}

@@ -1,0 +1,161 @@
+query settings {
+	settings {
+		id
+		websiteName
+		websiteLegalName
+		liveCommerce
+		multilingual
+		closed
+		closedMessage
+		minimumOrderValue
+		title
+		alert
+		keywords
+		description
+		tax {
+			cgst
+			sgst
+			igst
+		}
+		demo
+		RAZORPAY_KEY_ID
+		GOOGLE_CLIENT_ID
+		stripePublishableKey
+		brainTreePublicKey
+		enableStripe
+		enableSubsription
+		enableRazorpay
+		currencyCode
+		currencySymbol
+		currencyDecimals
+		openGraphImage
+		shipping {
+			deliveryDays
+			charge
+			free
+			method
+			enabled
+			provider
+		}
+		userRoles
+		websiteEmail
+		shopPhone
+		shopAddress
+		country
+		countryDetails {
+			id
+			name
+			value
+			dialCode
+			code
+			img
+			imgCdn
+			flag
+			lang
+			active
+		}
+		currency
+		currencyDetails {
+			id
+			isoCode
+			name
+			symbol
+		}
+		lang
+		langDetails {
+			id
+			name
+			nativeName
+			code
+		}
+		logo
+		logoMobile
+		logoDark
+		logoMobileDark
+		favicon
+		CDN_URL
+		S3_URL
+		LIVE_COMMERCE_URL
+		searchbarText
+		pageSize
+		returnReasons
+		orderStatuses {
+			status
+			title
+			body
+			icon
+			public
+			index
+		}
+		paymentStatuses
+		paymentMethods {
+			active
+			name
+			value
+			img
+			color
+			position
+			text
+		}
+		otpLogin
+		sms {
+			AUTO_VERIFICATION_ID
+			enabled
+			provider
+		}
+		email {
+			enabled
+			from
+			cc
+			bcc
+			printers
+		}
+		storage {
+			enabled
+			provider
+		}
+		review {
+			enabled
+			moderate
+		}
+		product {
+			moderate
+		}
+		customerOrderNotifications {
+			orderConfirmation
+			orderStatusChanged
+			orderShipped
+			orderIsReadyForPickup
+			downloadEGoods
+			giftCardPurchased
+		}
+		adminNotifications {
+			newOrderPlaced
+			lowStockNotification
+		}
+		ADMIN_PANEL_LINK
+		DOCS_LINK
+		storageProvider
+		googleMapsApi
+		facebook
+		twitter
+		google
+		instagram
+		linkedin
+		enableTax
+		locationExpiry
+		WWW_URL
+		referralBonus
+		joiningBonus
+		isMultiVendor
+		isMultiStore
+		isMegamenu
+		isSaas
+		isSearch
+		foodTypes {
+			name
+			val
+			img
+		}
+	}
+}

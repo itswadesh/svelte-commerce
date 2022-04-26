@@ -1,0 +1,63 @@
+query randomVendors($store: ID) {
+  randomVendors(store: $store) {
+    id
+    slug
+    businessName
+    description
+    verified
+    bankAccountNo
+    bankName
+    bankIfsc
+    bankAccountHolderName
+    bankSwiftCode
+    banner
+    bannerCdn
+    commissionType
+    commissionValue
+    zips
+    freeShippingOn
+    meta
+    metaDescription
+    metaKeywords
+    metaTitle
+    productSold
+    ratings
+    reviews
+    shippingCharges
+    storeName
+    facebookUrl
+    githubUrl
+    googleUrl
+    twitterUrl
+    user {
+      id
+      avatar
+      firstName
+      lastName
+    }
+    address {
+      id
+      email
+      firstName
+      lastName
+      address
+      locality
+      town
+      city
+      country
+      state
+      zip
+      phone
+      lat
+      lng
+    }
+    categories {
+      id
+      name
+      img
+      imgCdn
+    }
+    createdAt
+    updatedAt
+  }
+}

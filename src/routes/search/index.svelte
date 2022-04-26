@@ -6,20 +6,45 @@
 </style>
 
 <script context="module">
-import { get } from '../../util/api'
-export async function load({ page: { host, path, params, query }, fetch }) {
-	let q = query.toString()
-	const page = +query.get('page')
-	const products = await get(`products/es?${q}`)
-	const facets = products?.facets?.all_aggs
+import Cookie from 'cookie-universal'
+const cookies = Cookie()
 
+export async function load({ url, params, fetch, session, context, cookie }) {
+	let err, count, products, facets, currentLocation
+	let currentPage = url.searchParams.get('page') || 1
+	let sort = url.searchParams.get('sort')
+	let searchData = url.searchParams.get('q')
+	let location = url.searchParams.get('location')
+	let query = url.searchParams
+
+	const geo = cookies.get('geo') || session?.geo // when navigated from home page vs this page refreshed
+
+	// url.searchParams.set('lat', geo?.lat)
+	// url.searchParams.set('lng', geo?.lng)
+	url.searchParams.delete('location')
+	currentLocation = geo?.selectedPrediction
+	try {
+		const res = await get(`products/es?${query.toString()}`)
+		products = res?.data
+		count = +res?.count
+		facets = res?.facets.all_aggs
+		err = !products ? 'No result Not Found' : null
+	} catch (e) {
+	} finally {
+	}
 	return {
 		props: {
-			page,
+			err,
+			count,
 			products,
+			url,
+			currentPage,
+			sort,
 			facets,
-			query: q,
-		},
+			query,
+			searchData,
+			currentLocation
+		}
 	}
 }
 </script>
@@ -27,7 +52,7 @@ export async function load({ page: { host, path, params, query }, fetch }) {
 <script>
 import { goto } from '$app/navigation'
 import { constructQry, constructURL2 } from '../../util'
-import { sorts } from './../../../config'
+import { sorts } from '$lib/config'
 import Product from '$lib/Product.svelte'
 import Pagination from './_Pagination.svelte'
 import ProductSkeleton from './_ProductSkeleton.svelte'
@@ -35,7 +60,11 @@ import HeaderBody from './_HeaderBody.svelte'
 import NoProduct from './_NoProduct.svelte'
 import DesktopFilters from './_DesktopFilters.svelte'
 import MobileFilters from './_MobileFilters.svelte'
-export let page, products, facets, query
+import { stringify } from 'postcss'
+import ProductCard from '$lib/components/_ProductCard.svelte'
+import ProductCardEs from './_ProductCardEs.svelte'
+import { get } from './../../util/api'
+export let page, products, facets, query, count
 const PAGE_SIZE = 30
 let showMobileFilter = false,
 	category = {},
@@ -44,10 +73,6 @@ let showMobileFilter = false,
 	currentPage = 1,
 	loading = false,
 	searchQuery
-// $: start = 1 + (page - 1) * PAGE_SIZE;
-// $: next = `/search?page=${+page + 1}`;
-// $: prev = `/search?page=${+page - 1}`;
-//   $: noOfPages = Math.ceil(productCount / 24)
 function changePage(e, p) {
 	let fl = { ...query }
 	delete fl.page
@@ -59,18 +84,6 @@ function changePage(e, p) {
 function toggle(e) {
 	showMobileFilter = e.detail
 }
-// async function getData(query) {
-//   return await get(`electronics/es?page=${p}`);
-// }
-// onMount(async (s)=>{
-// 	products=await	getData()
-// })
-
-// page.subscribe(page => {
-// 	query = page.query
-// 	if (query.q == undefined) query.q = ''
-// 	getData(query)
-// })
 </script>
 
 <svelte:head>
@@ -85,38 +98,41 @@ function toggle(e) {
 		on:hide="{toggle}" />
 {:else}
 	<div class="flex ">
-		<DesktopFilters facets="{facets}" query="{query}" />
-		<div class="w-full">
-			<HeaderBody
-				searchQuery="{searchQuery}"
-				count="{products.count}"
-				on:hide="{() => (showMobileFilter = !showMobileFilter)}" />
-			{#if loading}
-				<div class="flex flex-wrap justify-between">
-					{#each { length: 15 } as _, i}
-						<ProductSkeleton />
-					{/each}
-				</div>
-			{:else if !products || !products.data || !products.data.length}
-				<NoProduct />
-			{:else if products && products.data && products.data.length > 0}
-				<div class="flex flex-wrap justify-between">
-					{#each products.data as p}
-						{#if p}
-							<Product product="{p}" />
-						{/if}
-					{/each}
-				</div>
-			{/if}
-			<Pagination
-				count="{products.pageSize}"
-				current="{parseInt(page || 1)}"
-				on:change="{changePage}" />
-		</div>
-		<div class="mt-20 lg:hidden">
-			<div class="fixed bottom-0 w-full py-2 text-center frosted">
-				<span class="font-bold ">{products.count}</span> products
+		{#if loading}
+			Loading Products...
+		{:else if products}
+			<DesktopFilters facets="{facets}" query="{query}" />
+			<div class="w-full">
+				<HeaderBody
+					searchQuery="{searchQuery}"
+					count="{products.count}"
+					on:hide="{() => (showMobileFilter = !showMobileFilter)}" />
+				{#if loading}
+					<div class="flex flex-wrap justify-between">
+						{#each { length: 15 } as _, i}
+							<ProductSkeleton />
+						{/each}
+					</div>
+				{:else if !products || !products.length}
+					<NoProduct />
+				{:else if products && products.length > 0}
+					<div class="flex flex-wrap">
+						{#each products as p}
+							{#if p}
+								<div class="w-1/2 lg:w-1/4">
+									<ProductCardEs product="{p}" />
+								</div>
+							{/if}
+						{/each}
+					</div>
+				{/if}
+				<Pagination count="{Math.ceil(count / 40)}" current="{+currentPage}" />
 			</div>
-		</div>
+			<div class="mt-20 lg:hidden">
+				<div class="fixed bottom-0 w-full py-2 text-center frosted">
+					<span class="font-bold ">{count}</span> products
+				</div>
+			</div>
+		{/if}
 	</div>
 {/if}

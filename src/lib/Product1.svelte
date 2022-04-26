@@ -24,7 +24,7 @@
 <script>
 import { lazyload } from './../actions/lazyload'
 import { currency } from '../util'
-import { CDN_URL } from './../../config'
+import { CDN_URL } from '$lib/config'
 export let product = {}
 
 let show
@@ -38,7 +38,7 @@ function hideitems() {
 let avatar = [
 	{ img: '/img/avatar-s-7.cb1b1e65.jpg' },
 	{ img: '/img/avatar-s-6.0f4533ab.jpg' },
-	{ img: '/img/avatar-s-20.32972323.jpg' },
+	{ img: '/img/avatar-s-20.32972323.jpg' }
 ]
 </script>
 

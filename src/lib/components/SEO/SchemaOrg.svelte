@@ -1,5 +1,5 @@
 <script>
-import { WWW_URL } from './../../../../config'
+import { WWW_URL } from '$lib/config'
 import dayjs from 'dayjs'
 import hash from 'hash-it'
 export let article = false
@@ -53,18 +53,18 @@ const schemaOrgEntity =
 					url: entityMeta?.url,
 					width: entityMeta?.faviconWidth,
 					height: entityMeta?.faviconHeight,
-					caption: author,
+					caption: author
 				},
 				logo: {
-					'@id': `${siteUrl}/#personlogo`,
+					'@id': `${siteUrl}/#personlogo`
 				},
 				sameAs: [
 					`https://twitter.com/${twitterUsername}`,
 					`https://github.com/${githubPage}`,
 					`https://t.me/${telegramUsername}`,
 					`https://linkedin.com/in/${linkedinProfile}`,
-					facebookPage,
-				],
+					facebookPage
+				]
 		  }
 		: null
 
@@ -75,16 +75,16 @@ const schemaOrgWebsite = {
 	name: siteTitle,
 	description: siteTitleAlt,
 	publisher: {
-		'@id': `${siteUrl}/#/schema/person/${entityHash}`,
+		'@id': `${siteUrl}/#/schema/person/${entityHash}`
 	},
 	potentialAction: [
 		{
 			'@type': 'SearchAction',
 			target: `${siteUrl}/?s={search_term_string}`,
-			'query-input': 'required name=search_term_string',
-		},
+			'query-input': 'required name=search_term_string'
+		}
 	],
-	inLanguage: siteLanguage,
+	inLanguage: siteLanguage
 }
 
 const schemaOrgImageObject = {
@@ -95,7 +95,7 @@ const schemaOrgImageObject = {
 	contentUrl: featuredImage?.url,
 	width: featuredImage?.width,
 	height: featuredImage?.height,
-	caption: featuredImage?.caption,
+	caption: featuredImage?.caption
 }
 
 const schemaOrgBreadcrumbList = {
@@ -108,9 +108,9 @@ const schemaOrgBreadcrumbList = {
 			'@type': 'WebPage',
 			'@id': `${siteUrl}/${element.slug}`,
 			url: `${siteUrl}/${element.slug}`,
-			name: element.name,
-		},
-	})),
+			name: element.name
+		}
+	}))
 }
 
 const schemaOrgWebPage = {
@@ -119,27 +119,27 @@ const schemaOrgWebPage = {
 	url,
 	name: title,
 	isPartOf: {
-		'@id': `${siteUrl}/#website`,
+		'@id': `${siteUrl}/#website`
 	},
 	primaryImageOfPage: {
-		'@id': `${url}#primaryimage`,
+		'@id': `${url}#primaryimage`
 	},
 	datePublished,
 	dateModified: lastUpdated,
 	author: {
-		'@id': `${siteUrl}/#/schema/person/${entityHash}`,
+		'@id': `${siteUrl}/#/schema/person/${entityHash}`
 	},
 	description: metadescription,
 	breadcrumb: {
-		'@id': `${url}#breadcrumb`,
+		'@id': `${url}#breadcrumb`
 	},
 	inLanguage: siteLanguage,
 	potentialAction: [
 		{
 			'@type': 'ReadAction',
-			target: [url],
-		},
-	],
+			target: [url]
+		}
+	]
 }
 
 let schemaOrgArticle = null
@@ -148,25 +148,25 @@ if (article) {
 		'@type': 'Article',
 		'@id': `${url}#article`,
 		isPartOf: {
-			'@id': `${url}#webpage`,
+			'@id': `${url}#webpage`
 		},
 		author: {
-			'@id': `${siteUrl}/#/schema/person/${entityHash}`,
+			'@id': `${siteUrl}/#/schema/person/${entityHash}`
 		},
 		headline: title,
 		datePublished,
 		dateModified: lastUpdated,
 		mainEntityOfPage: {
-			'@id': `${url}#webpage`,
+			'@id': `${url}#webpage`
 		},
 		publisher: {
-			'@id': `${siteUrl}/#/schema/person/${entityHash}`,
+			'@id': `${siteUrl}/#/schema/person/${entityHash}`
 		},
 		image: {
-			'@id': `${url}#primaryimage`,
+			'@id': `${url}#primaryimage`
 		},
 		articleSection: ['blog'],
-		inLanguage: siteLanguage,
+		inLanguage: siteLanguage
 	}
 }
 
@@ -182,18 +182,18 @@ const schemaOrgPublisher = {
 		contentUrl: `${siteUrl}/assets/logo.png`,
 		width: 512,
 		height: 512,
-		caption: entity,
+		caption: entity
 	},
 	logo: {
-		'@id': `${siteUrl}/#personlogo`,
+		'@id': `${siteUrl}/#personlogo`
 	},
 	sameAs: [
 		`https://twitter.com/${twitterUsername}`,
 		`https://github.com/${githubPage}`,
 		`https://t.me/${telegramUsername}`,
 		`https://linkedin.com/in/${linkedinProfile}`,
-		facebookPage,
-	],
+		facebookPage
+	]
 }
 const schemaOrgProduct = {
 	'@context': 'http://schema.org/',
@@ -209,7 +209,7 @@ const schemaOrgProduct = {
 		worstRating: 1,
 		bestRating: 5,
 		ratingCount,
-		ratingValue,
+		ratingValue
 	},
 	releaseDate: createdAt,
 	dateModified: updatedAt,
@@ -217,7 +217,7 @@ const schemaOrgProduct = {
 	interactionStatistic: {
 		'@type': 'InteractionCounter',
 		interactionType: 'http://schema.org/DownloadAction',
-		userInteractionCount: popularity + 1000,
+		userInteractionCount: popularity + 1000
 	},
 	offers: {
 		'@type': 'Offer',
@@ -229,9 +229,9 @@ const schemaOrgProduct = {
 		seller: {
 			'@type': 'Organization',
 			name: 'Litekart',
-			url: WWW_URL,
-		},
-	},
+			url: WWW_URL
+		}
+	}
 }
 
 const schemaOrgArray = [
@@ -241,11 +241,11 @@ const schemaOrgArray = [
 	schemaOrgWebPage,
 	schemaOrgBreadcrumbList,
 	schemaOrgPublisher,
-	schemaOrgProduct,
+	schemaOrgProduct
 ]
 const schemaOrgObject = {
 	'@context': 'https://schema.org',
-	'@graph': schemaOrgArray,
+	'@graph': schemaOrgArray
 }
 let jsonLdString = JSON.stringify(schemaOrgObject)
 let jsonLdScript = `

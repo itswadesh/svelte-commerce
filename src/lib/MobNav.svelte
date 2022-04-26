@@ -37,7 +37,7 @@ function toggle() {
 		</div>
 
 		<a href="/" class="flex items-center max-w-max">
-			<img alt="logo" class="h-8" src="/logo.svg" />
+			<img alt="logo" class="h-8" src="/logo.png" />
 		</a>
 
 		<div>

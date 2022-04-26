@@ -23,7 +23,7 @@ let menuItem = [
                   stroke-width="3"
                   d="M9 5l7 7-7 7"
                 />
-              </svg>`,
+              </svg>`
 	},
 	{
 		name: 'Men',
@@ -41,7 +41,7 @@ let menuItem = [
                   stroke-width="3"
                   d="M9 5l7 7-7 7"
                 />
-              </svg>`,
+              </svg>`
 	},
 	{
 		name: 'Kids',
@@ -59,7 +59,7 @@ let menuItem = [
                   stroke-width="3"
                   d="M9 5l7 7-7 7"
                 />
-              </svg>`,
+              </svg>`
 	},
 	{
 		name: 'Home and Kitchen',
@@ -77,33 +77,33 @@ let menuItem = [
                   stroke-width="3"
                   d="M9 5l7 7-7 7"
                 />
-              </svg>`,
+              </svg>`
 	},
 	{
 		name: 'Stores',
 		img: '/sidebar/furniture-store.png',
-		svg: '',
+		svg: ''
 	},
 	{
 		name: 'Precious Jewellery',
 		img: '/sidebar/acrobatic-rings.png',
-		svg: '',
+		svg: ''
 	},
 	{
 		name: 'Sneakerhood',
 		img: '/sidebar/sneakers.png',
-		svg: '',
+		svg: ''
 	},
 	{
 		name: 'Collections',
 		img: '/sidebar/group-objects.png',
-		svg: '',
+		svg: ''
 	},
 	{
 		name: 'New Arrivals',
 		img: '/sidebar/new.png',
-		svg: '',
-	},
+		svg: ''
+	}
 ]
 
 let subMenu = [
@@ -123,8 +123,8 @@ let subMenu = [
         </svg>
       `,
 
-		name: 'Kurtas & Kurtis',
-	},
+		name: 'Kurtas & Kurtis'
+	}
 ]
 </script>
 
@@ -146,7 +146,7 @@ let subMenu = [
 
 			<div class="max-w-max mx-auto">
 				<a href="/" class="flex items-center "
-					><img alt="" class="w-8 h-8" src="/logo.svg" />
+					><img alt="" class="w-8 h-8" src="/logo.png" />
 					<div class="">
 						<h2 class="ml-2 font-bold tracking-wide">Litekart</h2>
 						<div class="ml-auto h-0.5 w-10 bg-pink-700"></div>
@@ -164,7 +164,7 @@ let subMenu = [
 						class="block w-full px-4 ">
 						<div class="border-b border-gray-100 py-3 flex items-center justify-between">
 							<div class="flex">
-								<img src="{item.img}" alt="" />
+								<img src="{item.imgCdn}" alt="" />
 								<span class="ml-2"> {item.name} </span>
 							</div>
 						</div>

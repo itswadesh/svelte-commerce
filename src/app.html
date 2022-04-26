@@ -1,15 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="cupcake">
 	<head>
 		<meta charset="utf-8" />
+		<meta name="description" content="" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="manifest" crossorigin="use-credentials" href="manifest.json" />
 		%svelte.head%
 		<style>
-			@import url('https://fonts.googleapis.com/css?family=Inter&display=swap');
+			@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
 		</style>
 	</head>
 	<body>
 		<div id="svelte">%svelte.body%</div>
+		<!--Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-VBF1CPS8VD"></script>
+		<script>
+			window.dataLayer = window.dataLayer || []
+			function gtag() {
+				dataLayer.push(arguments)
+			}
+			gtag('js', new Date())
+
+			gtag('config', 'G-VBF1CPS8VD')
+		</script>
 	</body>
 </html>

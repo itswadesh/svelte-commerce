@@ -1,18 +1,19 @@
 <script>
 import { goto } from '$app/navigation'
 import { page, session } from '$app/stores'
-import { post } from '../../util/api'
 import Cookies from 'universal-cookie'
 const cookies = new Cookies()
-import Icon, { ChartPie, UserCircle, Truck, Logout } from 'svelte-hero-icons'
+import { Icon, ChartPie, UserCircle, Truck, Logout } from 'svelte-hero-icons'
 import { toast } from './../../util'
+import { signOut } from '$lib/services'
 export let section
 
 async function logout() {
 	try {
-		cookies.set('token', null, { path: '/' })
-		$session.user = null
-		$session.token = null
+		// cookies.set('token', null, { path: '/' })
+		// $session.user = null
+		// $session.token = null
+		await signOut()
 		goto('/')
 		toast('Successfully loggedout', 'success')
 	} catch (e) {
@@ -26,7 +27,7 @@ async function logout() {
 	class="overflow-hidden h-full w-20 sm:w-40 bg-white shadow-lg border py-4 sm:px-4  text-sm text-gray-800 flex flex-col items-center justify-around">
 	<a
 		href="/my"
-		class:bg-primary-100="{$page.path === '/my'}"
+		class:bg-primary-100="{$page.url.pathname === '/my'}"
 		class="flex flex-col items-center justify-center focus:outline-none w-full py-2 group">
 		<Icon
 			src="{ChartPie}"
@@ -38,7 +39,7 @@ async function logout() {
 
 	<a
 		href="/my/orders"
-		class:bg-primary-100="{$page.path === '/my/orders'}"
+		class:bg-primary-100="{$page.url.pathname === '/my/orders'}"
 		class="flex flex-col items-center justify-center focus:outline-none w-full py-2 group">
 		<Icon src="{Truck}" class="h-6 w-6 sm:h-8 sm:w-8 text-gray-500 group-hover:text-primary-500" />
 		<h6 class="mt-2 text-xs sm:text-base font-semibold group-hover:text-primary-500">My Orders</h6>
@@ -48,7 +49,7 @@ async function logout() {
 
 	<a
 		href="/my/profile"
-		class:bg-primary-100="{$page.path === '/my/profile'}"
+		class:bg-primary-100="{$page.url.pathname === '/my/profile'}"
 		class="flex flex-col items-center justify-center focus:outline-none w-full py-2 group">
 		<Icon
 			src="{UserCircle}"

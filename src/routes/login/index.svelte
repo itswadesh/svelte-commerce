@@ -9,8 +9,8 @@
 
 <script context="module" lang="ts">
 import type { Load } from '@sveltejs/kit'
-export const load: Load = async ({ page: { query }, session: { user } }) => {
-	const ref = query.get('ref')
+export const load: Load = async ({ url, session: { user } }) => {
+	const ref = url.searchParams.get('ref')
 	return { props: { ref } }
 }
 </script>
@@ -19,33 +19,27 @@ export const load: Load = async ({ page: { query }, session: { user } }) => {
 import { toasts, ToastContainer, FlatToast } from 'svelte-toasts'
 import { goto } from '$app/navigation'
 import { session } from '$app/stores'
-import { post } from './../../util/api'
 import Cookies from 'universal-cookie'
 import SEO from '$lib/components/SEO/index.svelte'
 import { toast } from './../../util'
+import { signIn } from '$lib/services'
+import { browser } from '$app/env'
+import { KQL_Login } from '$lib/graphql/_kitql/graphqlStores'
 export let ref
 const seoProps = {
 	title: 'Login',
-	metadescription: 'Login now - ',
+	metadescription: 'Login now - '
 }
 const cookies = new Cookies()
 let email = '',
 	password = ''
 async function submit(e) {
 	try {
-		const res = await post('auth/local', { uid: email, password })
-		cookies.set('token', res.token, { path: '/' })
-		$session.user = res.user
-		$session.token = res.token
-		let r = ref || '/'
-		// if (!user.firstName) {
-		//   r = `/my/profile?ref=${r}`
-		// }
-		goto(r)
-	} catch (e) {
-		toast(e, 'error')
-		console.log('Login Error...', e.toString())
-	}
+		const me = await signIn({ email, password })
+		$session.me = me
+		let r = ref || '/my'
+		if (browser) goto(r)
+	} catch (e) {}
 }
 </script>
 

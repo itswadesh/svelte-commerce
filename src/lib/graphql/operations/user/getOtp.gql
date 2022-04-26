@@ -1,0 +1,6 @@
+mutation getOtp($phone: String!, $role: String, $store: ID) {
+  getOtp(phone: $phone, role: $role, store: $store) {
+    otp
+    timer
+  }
+}
