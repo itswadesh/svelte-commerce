@@ -30,7 +30,7 @@
 - 💰 No need to make a big leap or invest huge amount. Just take this opend source project and attach to existing backend.
 - 🐛 If you have discovered a bug or have feature suggestion, feel free to create/join a discussion on Github.
 - 👍 I have been supporting this project alone since 2019. Any little code contribution will be appreciated
-- ✨Demo is hosted at netlify USA server and without CDN. Hence you may experience little lag.
+- ✨ Deployment to Netlify or Vercel with zero-configuration
 
 |                                                                                                                                           |                                                                                                                                             |                                                                                                                                           |
 | :---------------------------------------------------------------------------------------------------------------------------------------- | :-----------------------------------------------------------------------------------------------------------------------------------------: | ----------------------------------------------------------------------------------------------------------------------------------------: |
@@ -38,6 +38,7 @@
 
 # Latest Updates
 
+- 24-April-2022 - Zero-configuration Vercel deployment
 - 22-July-2021 - Integrated with netlify deployment
 - 07-May-2021 - Completely Migrated to SvelteKit
 
@@ -62,11 +63,13 @@ If required change `config/index.ts` according to your requirement
 
 # Deployment
 
-Click on the button to directly deploy to your netlify server. Zero configuration required.
+Click on the button to directly deploy to Netlify or Vercel. Zero configuration required.
 
 <a href="https://app.netlify.com/start/deploy?repository=https://github.com/itswadesh/svelte-commerce">
 <img src="https://www.netlify.com/img/deploy/button.svg" alt="Deploy to netlify">
 </a>
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fitswadesh%2Fsvelte-commerce&demo-title=SvelteKit%20Commerce)
 
 # Features
 
