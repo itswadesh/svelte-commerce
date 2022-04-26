@@ -6,7 +6,7 @@ export async function load({ url, params, fetch, session, context }) {
 		page = url.searchParams.get('page') || 1
 		sort = url.searchParams.get('sort')
 		query = url.searchParams.toString()
-		KQL_MyBlogs.query({ fetch, variables: { search, sort, page, store: store.id } })
+		KQL_Blogs.query({ fetch, variables: { search, sort, page } })
 		// count = res?.count
 		// console.log(res)
 	} catch (e) {
@@ -23,12 +23,11 @@ export async function load({ url, params, fetch, session, context }) {
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
 import { toast } from './../../../util'
-import Pagination from '$lib/Pagination.svelte'
 import ImageLoader from '$lib/components/Image/ImageLoader.svelte'
 import TimeAgo from 'svelte-timeago'
-import { KQL_MyBlogs } from '$lib/graphql/_kitql/graphqlStores'
-import Errors from '$lib/ui/Errors.svelte'
-import { store } from '$lib/store'
+import Errors from '$lib/components/alerts/Errors.svelte'
+import { KQL_Blogs } from '$lib/graphql/_kitql/graphqlStores'
+import Pagination from './../../search/_Pagination.svelte'
 
 const seoProps = {
 	title: 'Blogs ',
@@ -48,11 +47,11 @@ export let blogs, page, count
 			<hr class="border-t-4 border-primary-500 w-10" />
 		</div>
 
-		{#if $KQL_MyBlogs?.isFetching}
+		{#if $KQL_Blogs?.isFetching}
 			Loading...
-		{:else if $KQL_MyBlogs?.errors}
-			<Errors errors="{$KQL_MyBlogs.errors}" />
-		{:else if $KQL_MyBlogs.data?.myBlogs.count > 0}
+		{:else if $KQL_Blogs?.errors}
+			<Errors errors="{$KQL_Blogs.errors}" />
+		{:else if $KQL_Blogs.data?.blogs.count > 0}
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 				{#each blogs as b, i}
 					<a

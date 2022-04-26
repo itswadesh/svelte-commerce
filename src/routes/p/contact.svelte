@@ -78,14 +78,13 @@ export async function load({ url, params, fetch, session, context }) {
 
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
-import GradiantButton from '$lib/ui/GradiantButton.svelte'
-import TextareaFloating from '$lib/ui/TextareaFloating.svelte'
-import TextboxFloatingBorder from '$lib/ui/TextboxFloatingBorder.svelte'
 import { store } from '$lib/store'
 import { toast } from './../../util'
 import { goto } from '$app/navigation'
 import { KQL_Me } from '$lib/graphql/_kitql/graphqlStores'
-import HeadingUnderline from '$lib/HeadingUnderline.svelte'
+import HeadingUnderline from '$lib/components/HeadingUnderline.svelte'
+import Textbox from '$lib/ui/Textbox.svelte'
+import Textarea from '$lib/ui/Textarea.svelte'
 
 // console.log('store', store)
 
@@ -210,13 +209,9 @@ async function send(c) {
 					class="col-span-1 lg:col-span-2 flex flex-col space-y-4"
 					on:submit|preventDefault="{() => send(contact)}">
 					{#if me}
-						<TextboxFloatingBorder label="Email" type="text" required bind:value="{emailAddress}" />
+						<Textbox label="Email" type="text" required bind:value="{emailAddress}" />
 
-						<TextboxFloatingBorder
-							label="Full name"
-							type="text"
-							required
-							bind:value="{fullNameOfSender}" />
+						<Textbox label="Full name" required bind:value="{fullNameOfSender}" />
 					{/if}
 
 					<!-- <TextboxFloatingBorder
@@ -231,12 +226,9 @@ async function send(c) {
 					required
 					bind:value="{contact.description}" /> -->
 
-					<TextareaFloating
-						label="Go ahead, we are listening.."
-						required
-						bind:value="{contact.message}" />
+					<Textarea label="Go ahead, we are listening.." bind:value="{contact.message}" />
 
-					<GradiantButton type="submit" class="w-full max-w-xs">Send</GradiantButton>
+					<button type="submit" class="w-full max-w-xs">Send</button>
 				</form>
 			</div>
 		{:else}
@@ -255,7 +247,7 @@ async function send(c) {
 
 				<p class="mb-10 text-sm">Someone from our team will contact you soon.</p>
 
-				<GradiantButton roundedFull class="text-sm" on:click="{() => goto('/')}">
+				<button class="text-sm" on:click="{() => goto('/')}">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						class="h-5 w-5"
@@ -268,7 +260,7 @@ async function send(c) {
 					</svg>
 
 					<span>Back to Home</span>
-				</GradiantButton>
+				</button>
 			</div>
 		{/if}
 	</div>

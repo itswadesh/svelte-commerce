@@ -5601,6 +5601,11 @@ svelte-swipe@^1.8.2:
   resolved "https://registry.yarnpkg.com/svelte-swipe/-/svelte-swipe-1.8.2.tgz#87172f77d16f3b0e5932e4db918bc028dd47f97e"
   integrity sha512-hZDbxL23fVh0kkLZLNg0pWaITaW8SXpKplXQV/lXhO5TB7W8prBLp6OxzuQjJbgmL2LisOEX2KD1bLBejXly3A==
 
+svelte-timeago@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/svelte-timeago/-/svelte-timeago-0.1.2.tgz#a72ef17a5783b395e8bbbfb6633f54ff0db6cb21"
+  integrity sha512-+RcFlbbhrnPYdcp9hF5QbNasr2F8NRRLd6VmfK+c/l57WlCDEGI1rmOZQvxtLx2tYjevh/B9m/3RxfQT6X7Lqw==
+
 svelte-toasts@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/svelte-toasts/-/svelte-toasts-1.1.2.tgz#6ba590d27a9eb4cf164ea2efe5a5f1afac6de008"
@@ -5924,7 +5929,7 @@ value-or-promise@1.0.11, value-or-promise@^1.0.11:
   resolved "https://registry.yarnpkg.com/value-or-promise/-/value-or-promise-1.0.11.tgz#3e90299af31dd014fe843fe309cefa7c1d94b140"
   integrity sha512-41BrgH+dIbCFXClcSapVs5M6GkENd3gQOJpEfPDNa71LsUGMXDL0jMWpI/Rh7WhX+Aalfz2TTS3Zt5pUsbnhLg==
 
-vite@^2.9.0, vite@^2.9.5:
+vite@^2.9.0:
   version "2.9.5"
   resolved "https://registry.yarnpkg.com/vite/-/vite-2.9.5.tgz#08ef37ac7a6d879c96f328b791732c9a00ea25ea"
   integrity sha512-dvMN64X2YEQgSXF1lYabKXw3BbN6e+BL67+P3Vy4MacnY+UzT1AfkHiioFSi9+uiDUiaDy7Ax/LQqivk6orilg==
