@@ -35,13 +35,13 @@ async function getOrders() {
 				class=" relative p-4 my-2 sm:my-5 transition duration-300 bg-white border-t border-gray-300 rounded-md md:shadow-md border ">
 				<div class="flex justify-between items-center">
 					<div class="sm:ml-4">
-						<div class="cursor-pointer">
+						<div class="">
 							<span class="text-lg font-semibold tracking-wider md:text-2xl"> {order.orderNo}</span>
 						</div>
 						<div class="text-gray-400 text-sm">
 							{date(+order.createdAt)}
 						</div>
-						<div class="flex my-2 text-sm cursor-pointer item-center">
+						<div class="flex my-2 text-sm item-center">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								class="w-5 h-5 text-primary-500"
@@ -60,7 +60,7 @@ async function getOrders() {
 								<span class="font-semibold">{order.paymentMode}</span>
 							</span>
 						</div>
-						<div class="flex my-6 cursor-default">
+						<div class="flex my-6">
 							<div class="flex w-full text-xs">
 								{#each order.orderItems as item}
 									<div class="flex w-full text-xs">

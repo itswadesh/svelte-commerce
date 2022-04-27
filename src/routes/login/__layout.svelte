@@ -16,15 +16,15 @@ import { ToastContainer, FlatToast } from 'svelte-toasts'
 export let user
 </script>
 
-<PageTransitions refresh="{$page.url.pathname}">
-	<div class="bg-gray-50 font-sans antialiased">
-		<slot />
-	</div>
+<!-- <PageTransitions refresh="{$page.url.pathname}"> -->
+<div class="bg-gray-50 font-sans antialiased">
+	<slot />
+</div>
 
-	<div class="fixed z-40 bottom-0 w-full  md:hidden">
-		<MobFooter />
-	</div>
-</PageTransitions>
+<div class="fixed z-40 bottom-0 w-full  md:hidden">
+	<MobFooter />
+</div>
+<!-- </PageTransitions> -->
 <ToastContainer let:data>
 	<FlatToast data="{data}" />
 </ToastContainer>

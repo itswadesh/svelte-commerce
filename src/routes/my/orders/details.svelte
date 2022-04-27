@@ -3,8 +3,6 @@
 <script>
 import { onMount } from 'svelte'
 
-import dayjs from 'dayjs'
-import advancedFormat from 'dayjs/plugin/advancedFormat'
 import { currency, store, date } from '../../../util'
 import OrderTracking from './_OrderTracking.svelte'
 import { KQL_MyOrderItems, KQL_OrderItem } from '$lib/graphql/_kitql/graphqlStores'
@@ -12,6 +10,7 @@ import OrderListSkeleton from './_OrderListSkeleton.svelte'
 import { page } from '$app/stores'
 import PrimaryButtonRounded from '$lib/components/buttons/PrimaryButtonRounded.svelte'
 import TransparentButton from '$lib/components/buttons/TransparentButton.svelte'
+import dayjs from 'dayjs'
 
 let order,
 	deliveryBy = null,
@@ -29,7 +28,6 @@ function head() {
 
 onMount(() => {
 	getData()
-	dayjs.extend(advancedFormat)
 	deliveryBy = dayjs().add(7, 'day').format('dddd, MMM D, YYYY')
 	now = dayjs()
 })
