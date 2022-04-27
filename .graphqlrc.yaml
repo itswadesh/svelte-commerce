@@ -2,7 +2,7 @@
 projects:
   default:
     schema:
-      - ./src/lib/graphql/schema.json # or https://localhost:3777/graphql
+      - https://api.misiki.in/graphql
     documents:
       - '**/*.gql'
     extensions:
