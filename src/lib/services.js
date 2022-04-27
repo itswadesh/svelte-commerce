@@ -85,7 +85,7 @@ export async function signIn({ email, password }) {
 }
 export async function setStoreDetailsCookie() {
 	try {
-		const domain = $session.domain
+		const domain = session.domain
 		let uri = new URL(`${WWW_URL}/api/init?domain=${domain}`)
 		let res = await fetch(uri.toString(), { method: 'get' })
 		if (res.ok) {
@@ -132,7 +132,7 @@ export const signOut = async () => {
 	// if (session.settings.otpLogin) {
 	// 	go = `/auth/phone-login`
 	// }
-	goto($session.loginUrl)
+	goto('/')
 	return { data: logout, error }
 }
 
