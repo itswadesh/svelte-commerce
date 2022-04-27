@@ -72,7 +72,6 @@
     "cookie": "^0.5.0",
     "cross-env": "^7.0.3",
     "dayjs": "^1.11.1",
-    "fathom-client": "^3.4.1",
     "graphql": "16.3.0",
     "graphql-tag": "^2.12.6",
     "hash-it": "^5.0.2",
