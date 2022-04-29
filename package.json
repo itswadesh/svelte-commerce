@@ -2,7 +2,7 @@
   "name": "svelte-commerce",
   "version": "2022.04.29",
   "scripts": {
-    "dev": "svelte-kit dev",
+    "dev": "svelte-kit dev --host",
     "gen": "graphql-codegen --require dotenv/config",
     "build": "svelte-kit build",
     "package": "svelte-kit package",

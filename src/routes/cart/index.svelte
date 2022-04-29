@@ -39,7 +39,7 @@ const seoProps = {
 }
 async function refreshCart() {
 	await KQL_Cart.resetCache()
-	await KQL_Cart.query({ variables: { store: store.id } })
+	await KQL_Cart.query({ variables: { store: store.id }, settings: { policy: 'network-only' } })
 }
 async function addToCart({ detail: { item, qty } }) {
 	try {

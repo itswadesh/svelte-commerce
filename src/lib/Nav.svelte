@@ -26,7 +26,7 @@ import { store } from './../util'
 
 onMount(async () => {
 	await KQL_Me.query({})
-	await KQL_Cart.query({})
+	await KQL_Cart.query({ settings: { policy: 'network-only' } })
 })
 export let section
 
