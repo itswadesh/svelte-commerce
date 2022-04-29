@@ -1,9 +1,9 @@
 {
   "name": "svelte-commerce",
-  "version": "0.0.2",
+  "version": "2022.04.29",
   "scripts": {
     "dev": "svelte-kit dev",
-    "gen": "graphql-codegen --config ./.graphqlrc.yaml",
+    "gen": "graphql-codegen --require dotenv/config",
     "build": "svelte-kit build",
     "package": "svelte-kit package",
     "preview": "svelte-kit preview",
@@ -19,7 +19,6 @@
     "@sveltejs/adapter-auto": "next",
     "@sveltejs/kit": "next",
     "@tailwindcss/forms": "^0.5.0",
-    "@tailwindcss/jit": "^0.1.1",
     "@tailwindcss/line-clamp": "^0.3.1",
     "@tailwindcss/typography": "^0.5.2",
     "@typescript-eslint/eslint-plugin": "^5.21.0",

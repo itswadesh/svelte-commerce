@@ -4553,6 +4553,7 @@ export type OrderItem = {
   baseTotal?: Maybe<Scalars['Float']>;
   baseTotalAmountRefunded?: Maybe<Scalars['Float']>;
   baseTotalDiscount?: Maybe<Scalars['Float']>;
+  billingAddress?: Maybe<Address>;
   brand?: Maybe<Brand>;
   brandImg?: Maybe<Scalars['String']>;
   brandImgCdn?: Maybe<Scalars['String']>;

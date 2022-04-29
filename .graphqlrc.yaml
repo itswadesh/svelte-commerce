@@ -2,13 +2,13 @@
 projects:
   default:
     schema:
-      - https://api.misiki.in/graphql
+      - ${HTTP_ENDPOINT}/graphql
     documents:
       - '**/*.gql'
     extensions:
       endpoints:
         default:
-          url: https://localhost:3000/graphql
+          url: ${VITE_WWW_URL}/graphql
       codegen:
         generates:
           ./src/lib/graphql/_kitql/graphqlTypes.ts:
