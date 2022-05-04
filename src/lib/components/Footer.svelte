@@ -26,6 +26,7 @@ import { browser } from '$app/environment'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { PageService } from '$lib/services'
+import { PinCodeInputBox } from '$lib/home'
 import appStore from '$lib/assets/app/app-store.svg'
 import googlePlay from '$lib/assets/app/google-play.png'
 import type { Category } from '$lib/types'
@@ -44,6 +45,7 @@ function getYear() {
 }
 
 let pages = []
+let showModal = false
 
 onMount(async () => {
 	const res1 = await getPages()
@@ -159,6 +161,15 @@ async function getPages() {
 							</div>
 						</li>
 					{/if}
+
+						<li class="flex max-w-max items-center">
+						<button type="button" 
+							aria-label="Click to visit this page"
+							class="link-underline link-underline-gray whitespace-pre-wrap focus:outline-none"
+							on:click="{()=>showModal = true}">
+							Change Pincode
+						</button>
+					</li>
 				</ul>
 			</div>
 
@@ -579,3 +590,6 @@ async function getPages() {
 		</div>
 	</div>
 </footer>
+
+
+<PinCodeInputBox bind:showModal="{showModal}" />
