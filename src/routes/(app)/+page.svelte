@@ -7,8 +7,7 @@ import {
 	CategoriesSlider,
 	Deals,
 	Hero,
-	HeroBanners,
-	PinCodeInputBox
+	HeroBanners
 } from '$lib/home'
 import {
 	CollectionsHome,
@@ -29,6 +28,7 @@ import { page } from '$app/stores'
 import Cookie from 'cookie-universal'
 import dayjs from 'dayjs'
 import PickedBanners from '$lib/home/PickedBanners.svelte'
+import PincodeInputBox from '$lib/home/PincodeInputBox.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 const cookies = Cookie()
@@ -124,7 +124,7 @@ onMount(() => {
 
 <div class="bg-opacity-25 bg-center bg-repeat min-h-screen">
 	{#if $page.data.store?.isHyperlocal && showPinCodeEntryModal}
-		<PinCodeInputBox on:close="{() => (showPinCodeEntryModal = false)}" />
+		<PincodeInputBox on:close="{() => (showPinCodeEntryModal = false)}" />
 	{/if}
 
 	<div class="mb-14 lg:mb-0">
