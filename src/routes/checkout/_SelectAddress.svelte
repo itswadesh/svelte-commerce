@@ -5,7 +5,7 @@ import { goto } from '$app/navigation'
 import AddressSkeleton from './_AddressSkeleton.svelte'
 import Radio from '$lib/ui/Radio.svelte'
 import { onMount } from 'svelte'
-import { toast } from './../../util'
+import { toast } from '$lib/util'
 import { KQL_MyAddresses } from '$lib/graphql/_kitql/graphqlStores'
 const dispatch = createEventDispatcher()
 

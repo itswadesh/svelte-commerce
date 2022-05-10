@@ -22,31 +22,49 @@ import { Categories } from './graphql/_kitql/graphqlTypes'
 import { KQL_Cart, KQL_Init, KQL_Me } from './graphql/_kitql/graphqlStores'
 import { signOut } from './services'
 import { onMount } from 'svelte'
-import { store } from './../util'
+import { toast } from './util'
 
 onMount(async () => {
 	await KQL_Me.query({})
 	await KQL_Cart.query({ settings: { policy: 'network-only' } })
 })
-export let section
+export let q, me, store
 
 async function handleSignout() {
-	await signOut()
+	try {
+		await signOut()
+		$session.me = null
+		$session.token = null
+		$session.sid = null
+		toast('Signed Out...', 'success')
+		goto('/auth/login')
+	} catch (e) {
+		toast(e, 'error')
+	} finally {
+	}
 }
+
+onMount(async () => {
+	try {
+		await KQL_Cart.query({ variables: { store: store?.id }, settings: { cacheMs: 0 } })
+	} catch (e) {
+	} finally {
+	}
+})
 </script>
 
-<nav class=" p-4 shadow-md border-gray-100 frosted">
+<nav class=" frosted border-gray-100 p-4 shadow-md">
 	<div class="flex items-center justify-between">
-		<a href="/" class="flex items-center focus:outline-none max-w-max">
+		<a href="/" class="flex max-w-max items-center focus:outline-none">
 			<img alt="" class="h-8" src="/logo.png" />
 		</a>
 		{#if $KQL_Init.data?.megamenu}
 			<div
-				class="flex items-center justify-center w-full ml-8 text-sm font-semibold tracking-wide uppercase xl:ml-10">
+				class="ml-8 flex w-full items-center justify-center text-sm font-semibold uppercase tracking-wide xl:ml-10">
 				{#each $KQL_Init.data?.megamenu as c}
 					<a
 						href="{`/search?categories=${c?.slug}&page=1`}"
-						class="mx-2 cursor-pointer hover:text-primary-500 whitespace-nowrap xl:mx-5"
+						class="mx-2 cursor-pointer whitespace-nowrap hover:text-primary-500 xl:mx-5"
 						class:active="{$page.url.pathname == `categories=${c.slug}&page=1`}">
 						{c?.name}
 					</a>
@@ -54,13 +72,13 @@ async function handleSignout() {
 			</div>
 		{/if}
 		<div class="flex flex-row items-center">
-			<a href="/cart" class:selected="{section === 'cart'}">
+			<a href="/cart">
 				<button
 					type="button"
-					class="flex items-center mr-5 font-semibold transform focus:outline-none whitespace-nowrap active:scale-95 hover:text-primary-500 group">
+					class="group mr-5 flex transform items-center whitespace-nowrap font-semibold hover:text-primary-500 focus:outline-none active:scale-95">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
-						class="w-5 h-5 mr-1"
+						class="mr-1 h-5 w-5"
 						fill="none"
 						viewBox="0 0 24 24"
 						stroke="currentColor">
@@ -72,7 +90,7 @@ async function handleSignout() {
 					</svg>
 					{#if $KQL_Cart.data?.cart.qty}
 						<span
-							class="counter-digits absolute flex items-center justify-center p-0.5 text-extrasmall text-white bg-black group-hover:bg-primary-500 rounded-full w-4 h-4 top-0 right-0 -mr-2 -mt-2"
+							class="counter-digits text-extrasmall absolute top-0 right-0 -mr-2 -mt-2 flex h-4 w-4 items-center justify-center rounded-full bg-black p-0.5 text-white group-hover:bg-primary-500"
 							style="transform: translate(0, {100}%)">{Math.floor($KQL_Cart.data?.cart.qty)}</span>
 					{/if}
 				</button>
@@ -80,7 +98,7 @@ async function handleSignout() {
 
 			<a href="/wishlist">
 				<button
-					class="flex items-center mr-5  transform focus:outline-none whitespace-nowrap active:scale-95 hover:text-primary-500 group">
+					class="group mr-5 flex  transform items-center whitespace-nowrap hover:text-primary-500 focus:outline-none active:scale-95">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						class="h-6 w-6"
@@ -97,22 +115,16 @@ async function handleSignout() {
 				</button>
 			</a>
 			{#if !$KQL_Me.errors}
-				<a
-					class:selected="{section === 'login'}"
-					href="/my"
-					class="min-w-max flex items-center mx-2 ">
-					{#if $KQL_Me.data?.me?.firstName}
-						<div class=" flex-1 text-sm font-semibold mr-2 whitespace-nowrap">
-							<span>Hi {$KQL_Me.data?.me?.firstName}</span>
+				<a href="/my" class="mx-2 flex min-w-max items-center ">
+					{#if me?.firstName}
+						<div class=" mr-2 flex-1 whitespace-nowrap text-sm font-semibold">
+							<span>Hi {me?.firstName}</span>
 						</div>
 					{/if}
 
 					<div class="flex-shrink-0">
-						{#if $KQL_Me.data?.me?.avatar}
-							<img
-								src="{$KQL_Me.data?.me?.avatar}"
-								alt=""
-								class="w-10 shadow h-10 bg-white rounded-full " />
+						{#if me?.avatar}
+							<img src="{me?.avatar}" alt="" class="h-10 w-10 rounded-full bg-white shadow " />
 						{:else}
 							<img
 								src="/leadership-profile.png"

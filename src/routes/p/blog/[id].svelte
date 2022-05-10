@@ -2,7 +2,7 @@
 export async function load({ url, params, fetch, session, context }) {
 	let blog, err
 	try {
-		const blog = (await KQL_Blog.query({ fetch, variables: { id: params.id } })).data?.blog
+		await KQL_Blog.queryLoad({ fetch, variables: { id: params.id } })
 		// console.log(res)
 	} catch (e) {
 		err = e
@@ -10,14 +10,14 @@ export async function load({ url, params, fetch, session, context }) {
 	} finally {
 	}
 	return {
-		props: { err, blog }
+		props: { err }
 	}
 }
 </script>
 
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
-import { toast } from './../../../util'
+import { toast } from '$lib/util'
 import ImageLoader from '$lib/components/Image/ImageLoader.svelte'
 import TimeAgo from 'svelte-timeago'
 import { KQL_Blog, KQL_Blogs } from '$lib/graphql/_kitql/graphqlStores'
@@ -27,7 +27,9 @@ const seoProps = {
 	metadescription: 'My Blogs'
 }
 
-export let err, blog
+export let err
+
+$: blog = $KQL_Blog.data.blog
 </script>
 
 <SEO {...seoProps} />
@@ -35,11 +37,11 @@ export let err, blog
 {#if blog}
 	<div class="min-h-screen text-gray-800">
 		<div class="container mx-auto max-w-4xl p-3 py-5 sm:p-10">
-			<div class="mb-5 sm:mb-10 h-96 w-full rounded-3xl border overflow-hidden">
+			<div class="mb-5 h-96 w-full overflow-hidden rounded-3xl border sm:mb-10">
 				<ImageLoader src="{blog.imgCdn}" alt=" " class="h-full w-full object-cover" />
 			</div>
 
-			<h1 class="mb-2 text-2xl sm:text-3xl font-bold">
+			<h1 class="mb-2 text-2xl font-bold sm:text-3xl">
 				{blog.title}
 			</h1>
 

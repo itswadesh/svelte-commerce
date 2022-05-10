@@ -1,24 +1,23 @@
 <script context="module" lang="ts">
 import type { Load } from '@sveltejs/kit'
-export const load: Load = async ({ url, fetch }) => {
-	const me = (await KQL_Me.query({ fetch })).data?.me
+export const load: Load = async ({ url, fetch, session }) => {
+	let me = session.me
+	let store = session.store
 	if (!me) {
 		return {
 			redirect: `/login?ref=${url.pathname}`,
 			status: 302
 		}
 	}
-	return {}
+	return { me, store, q: '' }
 }
 </script>
 
 <script>
-import SidebarDashboard from './_SidebarDashboard.svelte'
-import SummaryDashboard from './_SummaryDashboard.svelte'
-import OrdersDashboard from './_OrdersDashboard.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-import { KQL_Me } from '$lib/graphql/_kitql/graphqlStores'
-
+import SidebarDashboard from './my/_SidebarDashboard.svelte'
+import Nav from '$lib/Nav.svelte'
+export let me, store, q
 const seoProps = {
 	title: 'Dashboard',
 	metadescription: 'Track your all process'
@@ -27,13 +26,15 @@ const seoProps = {
 
 <SEO {...seoProps} />
 
-<section class="w-full lg:min-h-screen md:pt-5 lg:pt-0">
-	<div class="w-full p-2 sm:p-6 flex items-start ">
+<section class="w-full md:pt-5 lg:min-h-screen lg:pt-0">
+	<div class="flex w-full items-start p-2 sm:p-6 ">
 		<div>
 			<SidebarDashboard />
 		</div>
 
 		<div class="w-full">
+			<Nav me="{me}" store="{store}" q="{q}" />
+
 			<slot />
 		</div>
 	</div>

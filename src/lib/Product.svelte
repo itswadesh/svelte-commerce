@@ -23,7 +23,7 @@
 
 <script>
 import { lazyload } from './../actions/lazyload'
-import { currency } from '../util'
+import { currency } from './util'
 import { CDN_URL } from '$lib/config'
 export let product = {}
 
@@ -37,7 +37,7 @@ function hideitems() {
 </script>
 
 <div
-	class="flex-shrink-0 w-1/2 border sm:border-0 sm:w-52 sm:mx-2 sm:mb-2 md:mx-4 md:mb-4 group  hover:bg-white hover:shadow-md text-gray-800"
+	class="group w-1/2 flex-shrink-0 border text-gray-800 hover:bg-white hover:shadow-md sm:mx-2 sm:mb-2 sm:w-52  sm:border-0 md:mx-4 md:mb-4"
 	on:mouseenter="{showitems}"
 	on:mouseleave="{hideitems}">
 	<a href="{'/' + product._source?.slug + '?id=' + product?._id}" class="block overflow-hidden ">
@@ -47,7 +47,7 @@ function hideitems() {
 				src="{`${product._source?.img && product._source?.img[0]}?tr=w-3,h-3`}"
 				alt="{product._source?.name}"
 				data-src="{`${product._source?.img && product._source?.img[0]}`}"
-				class="object-cover object-top w-full h-72  bg-black " />
+				class="h-72 w-full bg-black object-cover  object-top " />
 		</div>
 
 		<div class="p-4 ">
@@ -58,7 +58,7 @@ function hideitems() {
 					<!-- View smilar button start-->
 					<a href="{`/search?brand=${product.brandName}`}" class="flex justify-end">
 						<div
-							class="flex items-center bg-white text-primary-500 h-7 w-7 rounded-full border border-primary-500 trans">
+							class="trans flex h-7 w-7 items-center rounded-full border border-primary-500 bg-white text-primary-500">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								class="h-5 w-5 flex-shrink-0"
@@ -72,13 +72,13 @@ function hideitems() {
 									d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
 								></path>
 							</svg>
-							<span class="ps-2 text-xs whitespace-nowrap">View similar</span>
+							<span class="whitespace-nowrap text-xs ps-2">View similar</span>
 						</div>
 					</a>
 					<!-- View smilar button end-->
 					<!-- Wishlist start-->
 					<button
-						class="mt-3.5 py-1 w-full border border-gray-300  flex items-center justify-center space-x-2 focus:outline-none ">
+						class="mt-3.5 flex w-full items-center justify-center  space-x-2 border border-gray-300 py-1 focus:outline-none ">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							class="h-5 w-5 text-gray-500 "
@@ -97,7 +97,7 @@ function hideitems() {
 					<!-- Size chart start-->
 					<div class="mt-1.5 flex items-baseline justify-start">
 						<h5 class="mr-1 text-sm">Sizes:</h5>
-						<h6 class="space-x-1 text-xs font-medium text-gray-500 flex items-baseline ">
+						<h6 class="flex items-baseline space-x-1 text-xs font-medium text-gray-500 ">
 							{#if product?.variants?.length}
 								{#each product?.variants as v, i}
 									<div>{v.size}</div>
@@ -113,7 +113,7 @@ function hideitems() {
 
 				<div class="sm:hidden">
 					<div class="flex items-center justify-between">
-						<h4 class="font-semibold mb-1.5">
+						<h4 class="mb-1.5 font-semibold">
 							{#if product._source?.brandName}
 								{product._source?.brandName}
 							{:else}
@@ -140,7 +140,7 @@ function hideitems() {
 
 					<h5
 						href="{'/' + product._source?.slug + '?id=' + product._id}"
-						class="text-sm font-medium overflow-hidden whitespace-nowrap overflow-ellipsis">
+						class="overflow-hidden overflow-ellipsis whitespace-nowrap text-sm font-medium">
 						{#if product._source?.name}
 							{product._source?.name}
 						{:else}
@@ -190,17 +190,17 @@ function hideitems() {
 				</div>
 			{/if}
 
-			<div class="mt-2.5 mb-1.5 leading-4 flex flex-wrap items-baseline justify-start ">
-				<h6 class="mr-1 text-xs sm:text-sm font-semibold whitespace-nowrap ">
+			<div class="mt-2.5 mb-1.5 flex flex-wrap items-baseline justify-start leading-4 ">
+				<h6 class="mr-1 whitespace-nowrap text-xs font-semibold sm:text-sm ">
 					{currency(product._source?.price)}
 				</h6>
 
-				<h6 class="mr-1 text-xs text-gray-500 whitespace-nowrap line-through">
+				<h6 class="mr-1 whitespace-nowrap text-xs text-gray-500 line-through">
 					{currency(product._source?.mrp)}
 				</h6>
 
 				{#if Math.floor(100 - (product._source?.price * 100) / product._source?.mrp) > 0}
-					<div class="mr-1 text-xs text-primary-800 whitespace-nowrap">
+					<div class="text-primary-800 mr-1 whitespace-nowrap text-xs">
 						<h6 class="hidden sm:block">
 							( {Math.round((product._source?.price * 100) / product._source?.mrp)}% off )
 						</h6>

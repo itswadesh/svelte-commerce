@@ -1,4 +1,4 @@
-import { currency as currencyConfig } from '../lib/config'
+import { currency as currencyConfig } from '../config'
 import { toasts } from 'svelte-toasts'
 import { browser } from '$app/env'
 let allToasts
@@ -10,14 +10,15 @@ let storeDetails = cookies.get('store')
 export function delay(ms: number) {
 	return new Promise((resolve) => setTimeout(resolve, ms))
 }
+export function decideListingNavigation({ type, slug }) {
+	let finalLink = `/${slug}`
+	if (type === 'Restaurant') finalLink = `/restaurant/${slug}`
+	if (type === 'Saloon') finalLink = `/saloon/${slug}`
+	if (type === 'Pharmacy') finalLink = `/pharmacy/${slug}`
+	return finalLink
+}
 export async function requestLocationPermissionFromUser() {
 	try {
-		// Instead of requesting user for location permission we can use IP based location detection system
-		// const location = (await getLocation()).coords
-		// const lat = location.latitude,
-		// 	lng = location.longitude,
-		// 	accuracy = location.accuracy,
-		// 	speed = location.speed
 		if (!browser) return null
 		const res = await get(`ip`)
 		if (!res) return null

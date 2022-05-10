@@ -9,18 +9,6 @@
 }
 </style>
 
-<script context="module" lang="ts">
-// export async function load({ url, params, fetch, session, context }) {
-// 	let err
-// 	KQL_Megamenu.query({ fetch, variables: {} })
-// 	return {
-// 		props: {
-// 			err
-// 		}
-// 	}
-// }
-</script>
-
 <script>
 import Skeleton from '$lib/ui/Skeleton.svelte'
 import Error from '$lib/components/Error.svelte'
@@ -34,7 +22,7 @@ const seoProps = {
 	metadescription: 'Sitemap Details'
 }
 onMount(async () => {
-	await KQL_Megamenu.query({})
+	await KQL_Megamenu.queryLoad({})
 })
 export let err
 </script>
@@ -43,11 +31,11 @@ export let err
 
 <Error err="{err}" />
 
-<div class="bg-white min-h-screen">
+<div class="min-h-screen bg-white">
 	<div class="container mx-auto max-w-7xl p-3 py-5 sm:p-10">
 		<div
-			class="mb-5 sm:mb-10 text-gray-800 max-w-max mx-auto flex flex-col items-center justify-center">
-			<h1 class="mb-2 text-primary-500 text-xl sm:text-2xl lg:text-3xl font-bold">
+			class="mx-auto mb-5 flex max-w-max flex-col items-center justify-center text-gray-800 sm:mb-10">
+			<h1 class="mb-2 text-xl font-bold text-primary-500 sm:text-2xl lg:text-3xl">
 				All Categories
 			</h1>
 
@@ -63,7 +51,7 @@ export let err
 				<div class="flex flex-col flex-wrap content-center items-start h-rem">
 					{#each $KQL_Megamenu.data?.megamenu as m}
 						<div class="w-1/2 sm:w-1/4 lg:w-60 p-2.5 sm:mr-10 sm:mb-10">
-							<a href="/category/{m.slug}">
+							<a href="/search?q={m.slug}">
 								<div
 									class="mb-3 sm:text-lg font-medium
 									{m.children && m.children.length ? 'border-b border-gray-300 pb-3' : ''}">
@@ -74,7 +62,7 @@ export let err
 							{#if m && m.children}
 								<div class="flex flex-col space-y-2">
 									{#each m.children as mm}
-										<a href="/category/{mm.slug}">
+										<a href="/search?q={mm.slug}">
 											<div class="text-sm font-light">
 												{mm.name}
 											</div>

@@ -50,23 +50,23 @@ let categoryColors = [
 {#if loading}
 	<div class="px-3 py-5 sm:p-10">
 		<div class="container mx-auto max-w-6xl text-gray-800">
-			<div class="sm:hidden grid grid-cols-4 gap-4 items-start justify-items-center">
+			<div class="grid grid-cols-4 items-start justify-items-center gap-4 sm:hidden">
 				{#each { length: 8 } as _}
 					<div class="flex flex-col items-center">
-						<div class="mb-1 sm:mb-4 w-20 h-20 bg-gray-300 rounded-full animate-pulse"></div>
+						<div class="mb-1 h-20 w-20 animate-pulse rounded-full bg-gray-300 sm:mb-4"></div>
 
-						<div class="h-2 w-full bg-gray-300 rounded-full animate-pulse"></div>
+						<div class="h-2 w-full animate-pulse rounded-full bg-gray-300"></div>
 					</div>
 				{/each}
 			</div>
 
-			<div class="hidden sm:grid grid-cols-4 lg:grid-cols-6 gap-4 items-start justify-items-center">
+			<div class="hidden grid-cols-4 items-start justify-items-center gap-4 sm:grid lg:grid-cols-6">
 				{#each { length: 12 } as _}
 					<div class="flex flex-col items-center">
-						<div class="mb-4 w-32 h-32 lg:w-36 lg:h-36 bg-gray-300 rounded-full animate-pulse">
+						<div class="mb-4 h-32 w-32 animate-pulse rounded-full bg-gray-300 lg:h-36 lg:w-36">
 						</div>
 
-						<div class="h-4 w-full bg-gray-300 rounded-full animate-pulse"></div>
+						<div class="h-4 w-full animate-pulse rounded-full bg-gray-300"></div>
 					</div>
 				{/each}
 			</div>
@@ -110,7 +110,7 @@ let categoryColors = [
 							</a>
 						{:else}
 							<a
-								href="/category/{category.slug}"
+								href="/search?q={category.slug}"
 								class="w-20 flex flex-col items-center justify-center group">
 								<div
 									class="relative mb-1 sm:mb-4 h-20 w-20 rounded-full border-2 border-gray-300 group-hover:border-primary-500 flex-shrink-0 group-hover:shadow-xl overflow-hidden bg-no-repeat bg-center bg-cover
@@ -169,7 +169,7 @@ let categoryColors = [
 						{#if i < 12}
 							{#if category.img}
 								<a
-									href="{`/category/${category.slug}`}"
+									href="{`/search?q=${category.slug}`}"
 									class="w-32 lg:w-36 flex flex-col items-center justify-center group zoom-out">
 									<div
 										class="mb-4 w-32 h-32 lg:w-36 lg:h-36 rounded-full border-2 border-gray-300 group-hover:border-primary-500 flex-shrink-0 group-hover:shadow-xl overflow-hidden">
@@ -186,7 +186,7 @@ let categoryColors = [
 								</a>
 							{:else}
 								<a
-									href="/category/{category.slug}"
+									href="/search?q={category.slug}"
 									class="sm:w-32 lg:w-36 flex flex-col items-center justify-center group hover:text-primary-500">
 									<div
 										class="relative mb-1 sm:mb-4 sm:w-32 sm:h-32 lg:w-36 lg:h-36 rounded-full  border-2 border-gray-300 group-hover:border-primary-500 flex-shrink-0 group-hover:shadow-xl overflow-hidden bg-no-repeat bg-center bg-cover

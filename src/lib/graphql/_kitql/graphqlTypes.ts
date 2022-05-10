@@ -701,6 +701,7 @@ export type Deal = {
   __typename?: 'Deal';
   active?: Maybe<Scalars['Boolean']>;
   dealStatus?: Maybe<Scalars['Boolean']>;
+  description?: Maybe<Scalars['String']>;
   endTime?: Maybe<Scalars['String']>;
   endTimeISO?: Maybe<Scalars['String']>;
   id: Scalars['String'];
@@ -718,6 +719,7 @@ export type DealOne = {
   __typename?: 'DealOne';
   active?: Maybe<Scalars['Boolean']>;
   dealStatus?: Maybe<Scalars['Boolean']>;
+  description?: Maybe<Scalars['String']>;
   endTime?: Maybe<Scalars['String']>;
   endTimeISO?: Maybe<Scalars['String']>;
   id: Scalars['String'];
@@ -1219,7 +1221,7 @@ export type Mutation = {
   SyncProductsToGoogle?: Maybe<Scalars['Int']>;
   _?: Maybe<Scalars['String']>;
   addAddress?: Maybe<Address>;
-  addMoney?: Maybe<WalletOne>;
+  addMoney?: Maybe<OneWallet>;
   addToCart?: Maybe<Cart>;
   applyCoupon?: Maybe<Cart>;
   approveOrCancelReplacement?: Maybe<OrderItem>;
@@ -1228,6 +1230,7 @@ export type Mutation = {
   bookAppointment?: Maybe<OneAppointment>;
   braintreeMakePayment?: Maybe<Order>;
   braintreeToken?: Maybe<OnePayment>;
+  buyFreeSubscription?: Maybe<Subscribe>;
   buyShippingLabel?: Maybe<ShippoLabel>;
   capturePay?: Maybe<Order>;
   cashfreeCapturePay?: Maybe<Order>;
@@ -1242,6 +1245,7 @@ export type Mutation = {
   clearCart?: Maybe<Scalars['Boolean']>;
   collectPayment?: Maybe<Scalars['Boolean']>;
   commonShipments?: Maybe<Array<Maybe<CommonShipment>>>;
+  confirmStripeSubscription?: Maybe<Subscribe>;
   create?: Maybe<Order>;
   createBlobContainer?: Maybe<UploadedFileResponse>;
   createDeal?: Maybe<DealOne>;
@@ -1249,6 +1253,7 @@ export type Mutation = {
   createMigrationInStore?: Maybe<Scalars['Boolean']>;
   createOrder?: Maybe<Order>;
   createProduct?: Maybe<Product>;
+  createSubsciption?: Maybe<Subscribe>;
   deleteAddress?: Maybe<Scalars['Boolean']>;
   deleteAllCategories?: Maybe<Scalars['Int']>;
   deleteAllCustomerMessage?: Maybe<Scalars['Boolean']>;
@@ -1263,7 +1268,7 @@ export type Mutation = {
   deleteChannel?: Maybe<Scalars['Boolean']>;
   deleteCollection?: Maybe<Scalars['Boolean']>;
   deleteCountry?: Maybe<Scalars['Boolean']>;
-  deleteCoupon?: Maybe<Scalars['Boolean']>;
+  deleteCoupon?: Maybe<OneCoupon>;
   deleteCustomerMessage?: Maybe<Scalars['Boolean']>;
   deleteDiscount?: Maybe<Scalars['Boolean']>;
   deleteEvent?: Maybe<Scalars['Boolean']>;
@@ -1278,6 +1283,7 @@ export type Mutation = {
   deleteProduct?: Maybe<Scalars['Boolean']>;
   deleteProductViaBarcode?: Maybe<Scalars['Int']>;
   deletePromotion?: Maybe<Scalars['Boolean']>;
+  deleteReferral?: Maybe<OneReferral>;
   deleteRole?: Maybe<Scalars['Boolean']>;
   deleteScheduleDemo?: Maybe<Scalars['Boolean']>;
   deleteState?: Maybe<Scalars['Boolean']>;
@@ -1324,7 +1330,6 @@ export type Mutation = {
   populateDemoDataInStore?: Maybe<Scalars['Boolean']>;
   pushToNeteaseCDN?: Maybe<Scalars['Boolean']>;
   razorpay?: Maybe<OnePayment>;
-  referrelUser?: Maybe<User>;
   refreshCategorySlug?: Maybe<Scalars['Boolean']>;
   register?: Maybe<User>;
   removeAttribute?: Maybe<Scalars['Boolean']>;
@@ -1394,6 +1399,7 @@ export type Mutation = {
   savePopularSearch?: Maybe<OnePopularSearch>;
   saveProduct?: Maybe<OneProduct>;
   savePromotion?: Maybe<OnePromotion>;
+  saveReferral?: Maybe<OneReferral>;
   saveReview?: Maybe<OneReview>;
   saveRole?: Maybe<Role>;
   saveScheduleDemo?: Maybe<ScheduleDemo>;
@@ -1446,10 +1452,12 @@ export type Mutation = {
   updateShippoData?: Maybe<OrderItem>;
   updateStoreTiming?: Maybe<Store>;
   updateVisitorCount?: Maybe<Scalars['Int']>;
+  updateWithdrawal?: Maybe<OneWithdrawal>;
   uploadVideo?: Maybe<Array<Maybe<Video>>>;
   vendorVerification?: Maybe<Vendor>;
   verifyEmail?: Maybe<Scalars['Boolean']>;
   verifyOtp?: Maybe<User>;
+  withdrawalAmount?: Maybe<OneWithdrawal>;
 };
 
 
@@ -1629,6 +1637,11 @@ export type MutationCommonShipmentsArgs = {
 };
 
 
+export type MutationConfirmStripeSubscriptionArgs = {
+  subscribe: Scalars['ID'];
+};
+
+
 export type MutationCreateArgs = {
   body: Scalars['String'];
   id: Scalars['ID'];
@@ -1643,6 +1656,7 @@ export type MutationCreateBlobContainerArgs = {
 export type MutationCreateDealArgs = {
   active?: InputMaybe<Scalars['Boolean']>;
   dealStatus?: InputMaybe<Scalars['Boolean']>;
+  description?: InputMaybe<Scalars['String']>;
   endTime?: InputMaybe<Scalars['String']>;
   endTimeISO?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
@@ -1689,6 +1703,13 @@ export type MutationCreateProductArgs = {
   stock?: InputMaybe<Scalars['Int']>;
   time?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationCreateSubsciptionArgs = {
+  intervalType: Scalars['String'];
+  subscription: Scalars['ID'];
+  user: Scalars['ID'];
 };
 
 
@@ -1825,6 +1846,11 @@ export type MutationDeleteProductViaBarcodeArgs = {
 
 
 export type MutationDeletePromotionArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationDeleteReferralArgs = {
   id: Scalars['ID'];
 };
 
@@ -2097,12 +2123,6 @@ export type MutationRazorpayArgs = {
 };
 
 
-export type MutationReferrelUserArgs = {
-  phone?: InputMaybe<Scalars['String']>;
-  referralCode?: InputMaybe<Scalars['String']>;
-};
-
-
 export type MutationRegisterArgs = {
   email: Scalars['String'];
   firstName?: InputMaybe<Scalars['String']>;
@@ -2111,7 +2131,6 @@ export type MutationRegisterArgs = {
   passwordConfirmation: Scalars['String'];
   phone?: InputMaybe<Scalars['String']>;
   referralCode?: InputMaybe<Scalars['String']>;
-  referrer?: InputMaybe<Scalars['String']>;
   role?: InputMaybe<Scalars['String']>;
   store?: InputMaybe<Scalars['ID']>;
 };
@@ -2512,6 +2531,7 @@ export type MutationSaveCustomerMessageArgs = {
 export type MutationSaveDealArgs = {
   active?: InputMaybe<Scalars['Boolean']>;
   dealStatus?: InputMaybe<Scalars['Boolean']>;
+  description?: InputMaybe<Scalars['String']>;
   endTime?: InputMaybe<Scalars['String']>;
   endTimeISO?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['ID']>;
@@ -2745,7 +2765,9 @@ export type MutationSavePaymentMethodArgs = {
   key?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<Scalars['Int']>;
+  qrcode?: InputMaybe<Scalars['String']>;
   text?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<Scalars['String']>;
   value?: InputMaybe<Scalars['String']>;
 };
 
@@ -2876,6 +2898,16 @@ export type MutationSavePromotionArgs = {
 };
 
 
+export type MutationSaveReferralArgs = {
+  id: Scalars['String'];
+  referredFrom?: InputMaybe<Scalars['ID']>;
+  referredTo?: InputMaybe<Scalars['ID']>;
+  storeCreated?: InputMaybe<Scalars['Boolean']>;
+  subscribe?: InputMaybe<Scalars['ID']>;
+  subscriptionBought?: InputMaybe<Scalars['Boolean']>;
+};
+
+
 export type MutationSaveReviewArgs = {
   active?: InputMaybe<Scalars['Boolean']>;
   id: Scalars['String'];
@@ -2974,6 +3006,7 @@ export type MutationSaveSettingsArgs = {
   tax?: InputMaybe<TaxIp>;
   title?: InputMaybe<Scalars['String']>;
   twitter?: InputMaybe<Scalars['String']>;
+  walletThreshold?: InputMaybe<Scalars['Float']>;
   websiteEmail?: InputMaybe<Scalars['String']>;
   websiteLegalName?: InputMaybe<Scalars['String']>;
   websiteName?: InputMaybe<Scalars['String']>;
@@ -3239,6 +3272,8 @@ export type MutationSaveUserArgs = {
   roles?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   shippingCharges?: InputMaybe<Scalars['Int']>;
   state?: InputMaybe<Scalars['String']>;
+  storeCommissionType?: InputMaybe<Scalars['String']>;
+  storeCommissionValue?: InputMaybe<Scalars['Float']>;
   storeName?: InputMaybe<Scalars['String']>;
   verified?: InputMaybe<Scalars['Boolean']>;
   zip?: InputMaybe<Scalars['Int']>;
@@ -3436,6 +3471,7 @@ export type MutationUpdateAppointmentArgs = {
 export type MutationUpdateDealArgs = {
   active?: InputMaybe<Scalars['Boolean']>;
   dealStatus?: InputMaybe<Scalars['Boolean']>;
+  description?: InputMaybe<Scalars['String']>;
   endTime?: InputMaybe<Scalars['String']>;
   endTimeISO?: InputMaybe<Scalars['String']>;
   id: Scalars['ID'];
@@ -3516,6 +3552,13 @@ export type MutationUpdateVisitorCountArgs = {
 };
 
 
+export type MutationUpdateWithdrawalArgs = {
+  id: Scalars['ID'];
+  remark?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<Scalars['String']>;
+};
+
+
 export type MutationUploadVideoArgs = {
   files?: InputMaybe<Array<Scalars['Upload']>>;
   folder?: InputMaybe<Scalars['String']>;
@@ -3536,6 +3579,7 @@ export type MutationVerifyEmailArgs = {
   expires: Scalars['String'];
   id: Scalars['ID'];
   signature: Scalars['String'];
+  store?: InputMaybe<Scalars['ID']>;
   token: Scalars['String'];
 };
 
@@ -3543,6 +3587,11 @@ export type MutationVerifyEmailArgs = {
 export type MutationVerifyOtpArgs = {
   otp: Scalars['String'];
   phone: Scalars['String'];
+};
+
+
+export type MutationWithdrawalAmountArgs = {
+  amount: Scalars['Float'];
 };
 
 export type NameVal = {
@@ -3937,6 +3986,7 @@ export type OneProduct = {
   googleMerchantProductId?: Maybe<Scalars['String']>;
   group?: Maybe<Scalars['String']>;
   gtin?: Maybe<Scalars['String']>;
+  hasStock?: Maybe<Scalars['Boolean']>;
   height?: Maybe<Scalars['Float']>;
   hot?: Maybe<Scalars['Boolean']>;
   hsn?: Maybe<Scalars['String']>;
@@ -4042,6 +4092,20 @@ export type OnePromotion = {
   user?: Maybe<Scalars['ID']>;
   validFrom?: Maybe<Scalars['String']>;
   validTo?: Maybe<Scalars['String']>;
+};
+
+export type OneReferral = {
+  __typename?: 'OneReferral';
+  commissionAmount?: Maybe<Scalars['Float']>;
+  commissionSettled?: Maybe<Scalars['Boolean']>;
+  id: Scalars['ID'];
+  referredFrom?: Maybe<Scalars['ID']>;
+  referredTo?: Maybe<Scalars['ID']>;
+  storeCreated?: Maybe<Scalars['Boolean']>;
+  subscribe?: Maybe<Scalars['ID']>;
+  subscribeAmount?: Maybe<Scalars['Float']>;
+  subscriptionBought?: Maybe<Scalars['Boolean']>;
+  walletTransaction?: Maybe<Scalars['ID']>;
 };
 
 export type OneReview = {
@@ -4394,6 +4458,34 @@ export type OneVendor = {
   zips?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
+export type OneWallet = {
+  __typename?: 'OneWallet';
+  balance?: Maybe<Scalars['Float']>;
+  createdAt?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  updatedAt?: Maybe<Scalars['String']>;
+  user?: Maybe<Scalars['ID']>;
+};
+
+export type OneWalletTransaction = {
+  __typename?: 'OneWalletTransaction';
+  amount?: Maybe<Scalars['Float']>;
+  balanceAfter?: Maybe<Scalars['Float']>;
+  balanceBefore?: Maybe<Scalars['Float']>;
+  createdAt?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  purpose?: Maybe<Scalars['String']>;
+  reference?: Maybe<Scalars['String']>;
+  referenceId?: Maybe<Scalars['String']>;
+  referenceTable?: Maybe<Scalars['String']>;
+  summary?: Maybe<Scalars['String']>;
+  trnxSummary?: Maybe<Scalars['String']>;
+  trnxType?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['String']>;
+  user?: Maybe<Scalars['ID']>;
+  wallet?: Maybe<Scalars['ID']>;
+};
+
 export type OneWishlist = {
   __typename?: 'OneWishlist';
   active?: Maybe<Scalars['Boolean']>;
@@ -4404,6 +4496,18 @@ export type OneWishlist = {
   updatedAt?: Maybe<Scalars['String']>;
   user?: Maybe<Scalars['ID']>;
   variant?: Maybe<Product>;
+};
+
+export type OneWithdrawal = {
+  __typename?: 'OneWithdrawal';
+  amount?: Maybe<Scalars['Float']>;
+  createdAt?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  remark?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['String']>;
+  user?: Maybe<Scalars['ID']>;
+  wallet?: Maybe<Scalars['ID']>;
 };
 
 export type Option = {
@@ -4841,8 +4945,10 @@ export type PaymentMethod = {
   key?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   position?: Maybe<Scalars['Int']>;
+  qrcode?: Maybe<Scalars['String']>;
   store?: Maybe<Store>;
   text?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['String']>;
 };
 
@@ -4906,6 +5012,7 @@ export type Product = {
   googleMerchantProductId?: Maybe<Scalars['String']>;
   group?: Maybe<Scalars['String']>;
   gtin?: Maybe<Scalars['String']>;
+  hasStock?: Maybe<Scalars['Boolean']>;
   height?: Maybe<Scalars['Float']>;
   hot?: Maybe<Scalars['Boolean']>;
   hsn?: Maybe<Scalars['String']>;
@@ -5032,7 +5139,6 @@ export type Query = {
   allCategories?: Maybe<CategoryRes>;
   allOrders?: Maybe<OrderRes>;
   allScheduleDemos?: Maybe<ScheduleDemoRes>;
-  allTransactions?: Maybe<WalletRes>;
   allUsers?: Maybe<UserRes>;
   appointment?: Maybe<Appointment>;
   appointments?: Maybe<AppointmentRes>;
@@ -5146,14 +5252,17 @@ export type Query = {
   myAppointments?: Maybe<AppointmentRes>;
   myChannels?: Maybe<ChannelRes>;
   myCustomers?: Maybe<UserRes>;
+  myDeals?: Maybe<DealRes>;
   myOrderItems?: Maybe<OrderItemRes>;
   myOrders?: Maybe<OrderRes>;
   myProducts?: Maybe<SearchRes>;
+  myReferrals?: Maybe<ReferralRes>;
   myScheduleDemos?: Maybe<ScheduleDemoRes>;
   mySubscribes?: Maybe<SubscribeRes>;
   myTokens?: Maybe<FcmTokenRes>;
-  myTransactions?: Maybe<WalletRes>;
   myVideos?: Maybe<VideoRes>;
+  myWallet?: Maybe<OneWallet>;
+  myWalletTransactions?: Maybe<WalletTransactionRes>;
   myWishlist?: Maybe<WishlistRes>;
   neteaseToken?: Maybe<AppKeyAndToken>;
   nextProduct?: Maybe<OneProduct>;
@@ -5211,6 +5320,8 @@ export type Query = {
   randomVendors?: Maybe<Array<Maybe<Vendor>>>;
   razorpays?: Maybe<Payment>;
   recommended?: Maybe<Array<Maybe<Product>>>;
+  referral?: Maybe<Referral>;
+  referrals?: Maybe<ReferralRes>;
   returnReasons?: Maybe<Array<Scalars['String']>>;
   review?: Maybe<Review>;
   reviewSummary?: Maybe<ReviewSummary>;
@@ -5263,7 +5374,6 @@ export type Query = {
   timesList?: Maybe<Array<Scalars['String']>>;
   tokens?: Maybe<FcmTokenRes>;
   topVendors?: Maybe<Array<Maybe<Vendor>>>;
-  transaction?: Maybe<Wallet>;
   transcodeVideo?: Maybe<Scalars['String']>;
   trending?: Maybe<Array<Maybe<Product>>>;
   unit?: Maybe<Unit>;
@@ -5287,7 +5397,13 @@ export type Query = {
   video?: Maybe<Video>;
   videos?: Maybe<VideoRes>;
   videosByIds?: Maybe<Array<Maybe<Video>>>;
+  wallet?: Maybe<Wallet>;
+  walletTransaction?: Maybe<WalletTransaction>;
+  walletTransactions?: Maybe<WalletTransactionRes>;
+  wallets?: Maybe<WalletRes>;
   wishlists?: Maybe<WishlistRes>;
+  withdrawal?: Maybe<Withdrawal>;
+  withdrawals?: Maybe<WithdrawalRes>;
   worldCurrencies?: Maybe<Array<Scalars['String']>>;
   youMayLike?: Maybe<Array<Maybe<Product>>>;
   zego?: Maybe<Zego>;
@@ -5370,17 +5486,6 @@ export type QueryAllScheduleDemosArgs = {
   search?: InputMaybe<Scalars['String']>;
   skip?: InputMaybe<Scalars['Int']>;
   sort?: InputMaybe<Scalars['String']>;
-};
-
-
-export type QueryAllTransactionsArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  page?: InputMaybe<Scalars['Int']>;
-  q?: InputMaybe<Scalars['String']>;
-  search?: InputMaybe<Scalars['String']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  sort?: InputMaybe<Scalars['String']>;
-  store?: InputMaybe<Scalars['ID']>;
 };
 
 
@@ -6114,6 +6219,17 @@ export type QueryMyCustomersArgs = {
 };
 
 
+export type QueryMyDealsArgs = {
+  active?: InputMaybe<Scalars['Boolean']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  sort?: InputMaybe<Scalars['String']>;
+  store?: InputMaybe<Scalars['ID']>;
+};
+
+
 export type QueryMyOrderItemsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   page?: InputMaybe<Scalars['Int']>;
@@ -6166,6 +6282,14 @@ export type QueryMyProductsArgs = {
 };
 
 
+export type QueryMyReferralsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Scalars['String']>;
+};
+
+
 export type QueryMyScheduleDemosArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   page?: InputMaybe<Scalars['Int']>;
@@ -6192,16 +6316,6 @@ export type QueryMyTokensArgs = {
 };
 
 
-export type QueryMyTransactionsArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  page?: InputMaybe<Scalars['Int']>;
-  q?: InputMaybe<Scalars['String']>;
-  search?: InputMaybe<Scalars['String']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  sort?: InputMaybe<Scalars['String']>;
-};
-
-
 export type QueryMyVideosArgs = {
   category?: InputMaybe<Scalars['String']>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -6209,6 +6323,15 @@ export type QueryMyVideosArgs = {
   search?: InputMaybe<Scalars['String']>;
   sort?: InputMaybe<Scalars['String']>;
   subject?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryMyWalletTransactionsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  sort?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -6596,6 +6719,19 @@ export type QueryRecommendedArgs = {
 };
 
 
+export type QueryReferralArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryReferralsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Scalars['String']>;
+};
+
+
 export type QueryReviewArgs = {
   id: Scalars['ID'];
 };
@@ -6860,11 +6996,6 @@ export type QueryTopVendorsArgs = {
 };
 
 
-export type QueryTransactionArgs = {
-  transactionId: Scalars['ID'];
-};
-
-
 export type QueryTranscodeVideoArgs = {
   uri?: InputMaybe<Scalars['String']>;
 };
@@ -6977,6 +7108,34 @@ export type QueryVideosByIdsArgs = {
 };
 
 
+export type QueryWalletArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryWalletTransactionArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryWalletTransactionsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  sort?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryWalletsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  sort?: InputMaybe<Scalars['String']>;
+};
+
+
 export type QueryWishlistsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   page?: InputMaybe<Scalars['Int']>;
@@ -6986,8 +7145,36 @@ export type QueryWishlistsArgs = {
 };
 
 
+export type QueryWithdrawalArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryWithdrawalsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  sort?: InputMaybe<Scalars['String']>;
+};
+
+
 export type QueryYouMayLikeArgs = {
   store?: InputMaybe<Scalars['ID']>;
+};
+
+export type Referral = {
+  __typename?: 'Referral';
+  commissionAmount?: Maybe<Scalars['Float']>;
+  commissionSettled?: Maybe<Scalars['Boolean']>;
+  id: Scalars['ID'];
+  referredFrom?: Maybe<User>;
+  referredTo?: Maybe<User>;
+  storeCreated?: Maybe<Scalars['Boolean']>;
+  subscribe?: Maybe<Subscribe>;
+  subscribeAmount?: Maybe<Scalars['Float']>;
+  subscriptionBought?: Maybe<Scalars['Boolean']>;
+  walletTransaction?: Maybe<WalletTransaction>;
 };
 
 export type Refund = {
@@ -7220,6 +7407,7 @@ export type Setting = {
   title?: Maybe<Scalars['String']>;
   twitter?: Maybe<Scalars['String']>;
   userRoles?: Maybe<Array<Maybe<Scalars['String']>>>;
+  walletThreshold?: Maybe<Scalars['Float']>;
   websiteEmail?: Maybe<Scalars['String']>;
   websiteLegalName?: Maybe<Scalars['String']>;
   websiteName?: Maybe<Scalars['String']>;
@@ -7791,6 +7979,7 @@ export type User = {
   metaTitle?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   phone?: Maybe<Scalars['String']>;
+  phoneVerified?: Maybe<Scalars['Boolean']>;
   plan?: Maybe<Scalars['String']>;
   productSold?: Maybe<Scalars['Int']>;
   provider?: Maybe<Scalars['String']>;
@@ -7803,10 +7992,13 @@ export type User = {
   sid?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
   store?: Maybe<Store>;
+  storeCommissionType?: Maybe<Scalars['String']>;
+  storeCommissionValue?: Maybe<Scalars['Float']>;
   storeName?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
   vendor?: Maybe<Scalars['ID']>;
   verified?: Maybe<Scalars['Boolean']>;
+  verifiedAt?: Maybe<Scalars['String']>;
 };
 
 export type UserIp = {
@@ -7862,6 +8054,7 @@ export type UserOne = {
   metaKeywords?: Maybe<Scalars['String']>;
   metaTitle?: Maybe<Scalars['String']>;
   phone?: Maybe<Scalars['String']>;
+  phoneVerified?: Maybe<Scalars['Boolean']>;
   plan?: Maybe<Scalars['String']>;
   productSold?: Maybe<Scalars['Int']>;
   provider?: Maybe<Scalars['String']>;
@@ -7875,10 +8068,13 @@ export type UserOne = {
   sid?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
   store?: Maybe<Scalars['ID']>;
+  storeCommissionType?: Maybe<Scalars['String']>;
+  storeCommissionValue?: Maybe<Scalars['Float']>;
   storeName?: Maybe<Scalars['String']>;
   updatedAt: Scalars['String'];
   vendor?: Maybe<Scalars['ID']>;
   verified?: Maybe<Scalars['Boolean']>;
+  verifiedAt?: Maybe<Scalars['String']>;
 };
 
 export type ValueIp = {
@@ -8069,36 +8265,44 @@ export type Vote = {
 
 export type Wallet = {
   __typename?: 'Wallet';
-  amount?: Maybe<Scalars['Float']>;
   balance?: Maybe<Scalars['Float']>;
   createdAt?: Maybe<Scalars['String']>;
-  direction?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
-  referedUser?: Maybe<User>;
-  remark?: Maybe<Scalars['String']>;
-  store?: Maybe<Store>;
   updatedAt?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
-};
-
-export type WalletOne = {
-  __typename?: 'WalletOne';
-  amount?: Maybe<Scalars['Float']>;
-  balance?: Maybe<Scalars['Float']>;
-  createdAt?: Maybe<Scalars['String']>;
-  direction?: Maybe<Scalars['String']>;
-  id: Scalars['ID'];
-  referedUser?: Maybe<Scalars['ID']>;
-  remark?: Maybe<Scalars['String']>;
-  store?: Maybe<Scalars['ID']>;
-  updatedAt?: Maybe<Scalars['String']>;
-  user?: Maybe<Scalars['ID']>;
 };
 
 export type WalletRes = {
   __typename?: 'WalletRes';
   count?: Maybe<Scalars['Int']>;
-  data?: Maybe<Array<Maybe<WalletOne>>>;
+  data?: Maybe<Array<Maybe<Wallet>>>;
+  page?: Maybe<Scalars['Int']>;
+  pageSize?: Maybe<Scalars['Int']>;
+};
+
+export type WalletTransaction = {
+  __typename?: 'WalletTransaction';
+  amount?: Maybe<Scalars['Float']>;
+  balanceAfter?: Maybe<Scalars['Float']>;
+  balanceBefore?: Maybe<Scalars['Float']>;
+  createdAt?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  purpose?: Maybe<Scalars['String']>;
+  reference?: Maybe<Scalars['String']>;
+  referenceId?: Maybe<Scalars['String']>;
+  referenceTable?: Maybe<Scalars['String']>;
+  summary?: Maybe<Scalars['String']>;
+  trnxSummary?: Maybe<Scalars['String']>;
+  trnxType?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['String']>;
+  user?: Maybe<User>;
+  wallet?: Maybe<Wallet>;
+};
+
+export type WalletTransactionRes = {
+  __typename?: 'WalletTransactionRes';
+  count?: Maybe<Scalars['Int']>;
+  data?: Maybe<Array<Maybe<OneWalletTransaction>>>;
   page?: Maybe<Scalars['Int']>;
   pageSize?: Maybe<Scalars['Int']>;
 };
@@ -8113,6 +8317,26 @@ export type Wishlist = {
   updatedAt?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
   variant?: Maybe<Product>;
+};
+
+export type Withdrawal = {
+  __typename?: 'Withdrawal';
+  amount?: Maybe<Scalars['Float']>;
+  createdAt?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  remark?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['String']>;
+  user?: Maybe<User>;
+  wallet?: Maybe<Wallet>;
+};
+
+export type WithdrawalRes = {
+  __typename?: 'WithdrawalRes';
+  count?: Maybe<Scalars['Int']>;
+  data?: Maybe<Array<Maybe<Withdrawal>>>;
+  page?: Maybe<Scalars['Int']>;
+  pageSize?: Maybe<Scalars['Int']>;
 };
 
 export type Zego = {
@@ -8496,6 +8720,14 @@ export type PromotionRes = {
   __typename?: 'promotionRes';
   count?: Maybe<Scalars['Int']>;
   data?: Maybe<Array<Maybe<Promotion>>>;
+  page?: Maybe<Scalars['Int']>;
+  pageSize?: Maybe<Scalars['Int']>;
+};
+
+export type ReferralRes = {
+  __typename?: 'referralRes';
+  count?: Maybe<Scalars['Int']>;
+  data?: Maybe<Array<Maybe<Referral>>>;
   page?: Maybe<Scalars['Int']>;
   pageSize?: Maybe<Scalars['Int']>;
 };

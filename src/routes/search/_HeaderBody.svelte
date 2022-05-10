@@ -1,6 +1,6 @@
 <script>
 import Checkbox from '$lib/ui/Checkbox.svelte'
-import { constructURL, constructURL2 } from '../../util'
+import { constructURL, constructURL2 } from '$lib/util'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { Icon, ChevronDown, Adjustments, SortAscending } from 'svelte-hero-icons'
@@ -22,7 +22,7 @@ let query = {}
 // }
 </script>
 
-<div class="items-center justify-between flex-none p-3  md:py-6 text-sm md:flex text-gray-800">
+<div class="flex-none items-center justify-between p-3  text-sm text-gray-800 md:flex md:py-6">
 	<div class="flex items-center justify-center p-1 ">
 		{#if !count && count != 0}
 			<div class="">Will just take a moment...</div>
@@ -57,14 +57,14 @@ let query = {}
 		</div>
 	</div> -->
 </div>
-<div class="flex w-full p-2 mb-1 shadow md:hidden text-gray-800">
+<div class="mb-1 flex w-full p-2 text-gray-800 shadow md:hidden">
 	<button
-		class="flex items-center flex-1 text-left text-primary"
+		class="text-primary flex flex-1 items-center text-left"
 		on:click="{() => dispatch('hide', !showFilters)}">
 		<Icon src="{Adjustments}" class="w-5 text-gray-800" />
-		<span class="ml-2 font-medium tracking wide uppercase ">Filter</span>
+		<span class="tracking wide ml-2 font-medium uppercase ">Filter</span>
 	</button>
-	<div class="hidden px-4 font-normal text-center text-gray-700 md:block">
+	<div class="hidden px-4 text-center font-normal text-gray-700 md:block">
 		{count} products
 	</div>
 	<!-- <div class="px-4 text-center text-gray-700 flex">

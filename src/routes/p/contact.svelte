@@ -62,16 +62,9 @@
 <script context="module">
 export async function load({ url, params, fetch, session, context }) {
 	let me, err
-	try {
-		const me = (await KQL_Me.query({ fetch, settings: { cache: 0 } })).data?.me
-		// console.log(res)
-	} catch (e) {
-		err = e
-		toast(e, 'error')
-	} finally {
-	}
+
 	return {
-		props: { me, err }
+		props: { me: session.me, err }
 	}
 }
 </script>
@@ -79,9 +72,8 @@ export async function load({ url, params, fetch, session, context }) {
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
 import { store } from '$lib/store'
-import { toast } from './../../util'
+import { toast } from '$lib/util'
 import { goto } from '$app/navigation'
-import { KQL_Me } from '$lib/graphql/_kitql/graphqlStores'
 import HeadingUnderline from '$lib/components/HeadingUnderline.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
@@ -121,26 +113,26 @@ async function send(c) {
 </script>
 
 <SEO {...seoProps} />
-<div class="text-gray-800 bg-white min-h-screen">
+<div class="min-h-screen bg-white text-gray-800">
 	<div class="container mx-auto max-w-7xl p-3 py-5 sm:p-10">
 		<div
-			class="mb-5 sm:mb-10 text-gray-800 max-w-max mx-auto flex flex-col items-center justify-center">
-			<h1 class="mb-2 text-primary-500 text-xl sm:text-2xl lg:text-3xl font-bold">Contact Us</h1>
+			class="mx-auto mb-5 flex max-w-max flex-col items-center justify-center text-gray-800 sm:mb-10">
+			<h1 class="mb-2 text-xl font-bold text-primary-500 sm:text-2xl lg:text-3xl">Contact Us</h1>
 
 			<HeadingUnderline />
 		</div>
 
 		{#if !sendMessageSuccessfully}
-			<div class="flex flex-col-reverse lg:grid lg:grid-cols-3 gap-5 sm:gap-10">
+			<div class="flex flex-col-reverse gap-5 sm:gap-10 lg:grid lg:grid-cols-3">
 				<div
-					class="col-span-1 py-10 sm:py-0 grid grid-cols-1 gap-5 md:gap-10 justify-items-center lg:justify-items-start">
+					class="col-span-1 grid grid-cols-1 justify-items-center gap-5 py-10 sm:py-0 md:gap-10 lg:justify-items-start">
 					<div
-						class="flex flex-col lg:flex-row items-center lg:items-start justify-center lg:justify-start text-center lg:text-left space-y-5 lg:space-y-0 lg:space-x-5 max-w-xs">
+						class="flex max-w-xs flex-col items-center justify-center space-y-5 text-center lg:flex-row lg:items-start lg:justify-start lg:space-y-0 lg:space-x-5 lg:text-left">
 						<div
-							class="w-10 h-10 sm:w-14 sm:h-14 rounded-full border border-gray-800 flex items-center justify-center">
+							class="flex h-10 w-10 items-center justify-center rounded-full border border-gray-800 sm:h-14 sm:w-14">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
-								class="w-5 h-5 sm:w-7 sm:h-7 text-gray-800"
+								class="h-5 w-5 text-gray-800 sm:h-7 sm:w-7"
 								viewBox="0 0 20 20"
 								fill="currentColor">
 								<path
@@ -151,21 +143,21 @@ async function send(c) {
 						</div>
 
 						<div class="flex-1">
-							<h3 class="mb-2 text-base md:text-lg font-bold">Address</h3>
+							<h3 class="mb-2 text-base font-bold md:text-lg">Address</h3>
 
-							<h4 class="text-sm text-gray-500 flex flex-col">
+							<h4 class="flex flex-col text-sm text-gray-500">
 								<span>C/12, Kuarmunda, Sundergarh, Odisha, India </span><span>770039</span>
 							</h4>
 						</div>
 					</div>
 
 					<div
-						class="flex flex-col lg:flex-row items-center lg:items-start justify-center lg:justify-start text-center lg:text-left space-y-5 lg:space-y-0 lg:space-x-5 max-w-xs">
+						class="flex max-w-xs flex-col items-center justify-center space-y-5 text-center lg:flex-row lg:items-start lg:justify-start lg:space-y-0 lg:space-x-5 lg:text-left">
 						<div
-							class="w-10 h-10 sm:w-14 sm:h-14 rounded-full border border-gray-800 flex items-center justify-center">
+							class="flex h-10 w-10 items-center justify-center rounded-full border border-gray-800 sm:h-14 sm:w-14">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
-								class="w-5 h-5 sm:w-7 sm:h-7 text-gray-800"
+								class="h-5 w-5 text-gray-800 sm:h-7 sm:w-7"
 								viewBox="0 0 20 20"
 								fill="currentColor">
 								<path
@@ -175,19 +167,19 @@ async function send(c) {
 						</div>
 
 						<div class="flex-1">
-							<h3 class="mb-2 text-base md:text-lg font-bold">Phone</h3>
+							<h3 class="mb-2 text-base font-bold md:text-lg">Phone</h3>
 
 							<h4 class="text-sm text-gray-500">+855-</h4>
 						</div>
 					</div>
 
 					<div
-						class="flex flex-col lg:flex-row items-center lg:items-start justify-center lg:justify-start text-center lg:text-left space-y-5 lg:space-y-0 lg:space-x-5 max-w-xs">
+						class="flex max-w-xs flex-col items-center justify-center space-y-5 text-center lg:flex-row lg:items-start lg:justify-start lg:space-y-0 lg:space-x-5 lg:text-left">
 						<div
-							class="w-10 h-10 sm:w-14 sm:h-14 rounded-full border border-gray-800 flex items-center justify-center">
+							class="flex h-10 w-10 items-center justify-center rounded-full border border-gray-800 sm:h-14 sm:w-14">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
-								class="w-5 h-5 sm:w-7 sm:h-7 text-gray-800"
+								class="h-5 w-5 text-gray-800 sm:h-7 sm:w-7"
 								viewBox="0 0 20 20"
 								fill="currentColor">
 								<path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"
@@ -198,7 +190,7 @@ async function send(c) {
 						</div>
 
 						<div class="flex-1">
-							<h3 class="mb-2 text-base md:text-lg font-bold">Email</h3>
+							<h3 class="mb-2 text-base font-bold md:text-lg">Email</h3>
 
 							<h4 class="text-sm text-gray-500">hi@misiki.in</h4>
 						</div>
@@ -206,7 +198,7 @@ async function send(c) {
 				</div>
 
 				<form
-					class="col-span-1 lg:col-span-2 flex flex-col space-y-4"
+					class="col-span-1 flex flex-col space-y-4 lg:col-span-2"
 					on:submit|preventDefault="{() => send(contact)}">
 					{#if me}
 						<Textbox label="Email" type="text" required bind:value="{emailAddress}" />

@@ -6,7 +6,7 @@ export async function load({ url, params, fetch, session, context }) {
 		page = url.searchParams.get('page') || 1
 		sort = url.searchParams.get('sort')
 		query = url.searchParams.toString()
-		KQL_Blogs.query({ fetch, variables: { search, sort, page } })
+		KQL_Blogs.queryLoad({ fetch, variables: { search, sort, page } })
 		// count = res?.count
 		// console.log(res)
 	} catch (e) {
@@ -22,7 +22,7 @@ export async function load({ url, params, fetch, session, context }) {
 
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
-import { toast } from './../../../util'
+import { toast } from '$lib/util'
 import ImageLoader from '$lib/components/Image/ImageLoader.svelte'
 import TimeAgo from 'svelte-timeago'
 import Errors from '$lib/components/alerts/Errors.svelte'
@@ -39,12 +39,12 @@ export let blogs, page, count
 
 <SEO {...seoProps} />
 
-<div class="bg-white min-h-screen">
+<div class="min-h-screen bg-white">
 	<div class="container mx-auto max-w-7xl p-8 sm:p-10">
-		<div class="mb-5 sm:mb-10 text-gray-800 max-w-max mx-auto">
-			<h1 class="mb-1 text-primary-500 text-xl sm:text-2xl lg:text-3xl font-bold">Blogs</h1>
+		<div class="mx-auto mb-5 max-w-max text-gray-800 sm:mb-10">
+			<h1 class="mb-1 text-xl font-bold text-primary-500 sm:text-2xl lg:text-3xl">Blogs</h1>
 
-			<hr class="border-t-4 border-primary-500 w-10" />
+			<hr class="w-10 border-t-4 border-primary-500" />
 		</div>
 
 		{#if $KQL_Blogs?.isFetching}

@@ -14,7 +14,7 @@ import Radio from '$lib/ui/Radio.svelte'
 import { onMount } from 'svelte'
 import CheckoutHeader from './_CheckoutHeader.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-import { toast } from './../../util'
+import { toast } from '$lib/util'
 import { KQL_Address, KQL_Checkout } from '$lib/graphql/_kitql/graphqlStores'
 
 let loading = false
@@ -62,7 +62,7 @@ async function submit() {
 async function getAddress() {
 	try {
 		loading = true
-		addressDetails = (await KQL_Address.query({ variables: { id: address } })).data.address
+		addressDetails = (await KQL_Address.queryLoad({ variables: { id: address } })).data.address
 	} catch (e) {
 	} finally {
 		loading = false
@@ -78,14 +78,14 @@ const seoProps = {
 <SEO {...seoProps} />
 
 <section
-	class="container  w-full mx-auto max-w-6xl px-4 sm:px-10 pb-10 py-5 md:py-10 text-gray-800 ">
+	class="container  mx-auto w-full max-w-6xl px-4 py-5 pb-10 text-gray-800 sm:px-10 md:py-10 ">
 	<CheckoutHeader selected="payment" />
 	<div class="mt-10 md:flex md:justify-center md:space-x-10 xl:space-x-20">
 		<div class="md:w-2/5">
-			<h2 class="text-2xl md:text-3xl lg:text-4xl font-bold tracking-wide ">Payment Methods</h2>
+			<h2 class="text-2xl font-bold tracking-wide md:text-3xl lg:text-4xl ">Payment Methods</h2>
 
 			<div
-				class="mt-5 p-6 mx-auto bg-white border rounded-lg shadow-lg flex items-center justify-between">
+				class="mx-auto mt-5 flex items-center justify-between rounded-lg border bg-white p-6 shadow-lg">
 				<h2 class="text-xl font-semibold">COD</h2>
 
 				<svg
@@ -105,38 +105,38 @@ const seoProps = {
 		</div>
 
 		<div class="mt-5 md:mt-0 md:w-3/5">
-			<h2 class="text-2xl md:text-3xl lg:text-4xl font-bold tracking-wide ">Cart Summary</h2>
+			<h2 class="text-2xl font-bold tracking-wide md:text-3xl lg:text-4xl ">Cart Summary</h2>
 
-			<div class="mt-5 p-6 mx-auto bg-white border rounded-lg shadow-lg">
-				<h5 class="capitalize font-semibold tracking-wide text-lg">Delivery Address:</h5>
+			<div class="mx-auto mt-5 rounded-lg border bg-white p-6 shadow-lg">
+				<h5 class="text-lg font-semibold capitalize tracking-wide">Delivery Address:</h5>
 
 				{#if addressDetails}
-					<div class="px-5 py-2 font-light bg-white">
-						<h5 class="capitalize font-semibold tracking-wide text-lg">
+					<div class="bg-white px-5 py-2 font-light">
+						<h5 class="text-lg font-semibold capitalize tracking-wide">
 							{addressDetails.firstName}
 							{addressDetails.lastName}
 						</h5>
 
-						<div class="flex flex-row my-1 sm:w-2/3">
-							<h5 class="font-semibold tracking-wide me-2 w-20">Address:</h5>
+						<div class="my-1 flex flex-row sm:w-2/3">
+							<h5 class="w-20 font-semibold tracking-wide me-2">Address:</h5>
 							<h6 class="flex flex-col">
 								<span>{addressDetails.address},</span><span
 									>{addressDetails.city}, {addressDetails.state}, {addressDetails.country}</span>
 							</h6>
 						</div>
 
-						<div class="flex flex-row my-1">
-							<h5 class="font-semibold tracking-wide me-2 w-20">Pin:</h5>
+						<div class="my-1 flex flex-row">
+							<h5 class="w-20 font-semibold tracking-wide me-2">Pin:</h5>
 							<h6>{addressDetails.zip}</h6>
 						</div>
 
-						<div class="flex flex-row my-1">
-							<h5 class="font-semibold tracking-wide me-2 w-20">Phone:</h5>
+						<div class="my-1 flex flex-row">
+							<h5 class="w-20 font-semibold tracking-wide me-2">Phone:</h5>
 							<h6>{addressDetails.phone}</h6>
 						</div>
 
-						<div class="flex flex-row flex-wrap my-1">
-							<h5 class="font-semibold tracking-wide me-2 w-20">Email:</h5>
+						<div class="my-1 flex flex-row flex-wrap">
+							<h5 class="w-20 font-semibold tracking-wide me-2">Email:</h5>
 							<h6>{addressDetails.email}</h6>
 						</div>
 					</div>

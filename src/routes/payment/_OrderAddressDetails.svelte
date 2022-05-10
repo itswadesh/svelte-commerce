@@ -1,27 +1,27 @@
 <script lang="ts">
-import { currency } from '../../util'
+import { currency } from '$lib/util'
 
 export let order
 </script>
 
 <div
 	class="
-                flex flex-col
+                mt-6 flex
                 w-full
-                mt-6
+                flex-col
                 text-sm text-gray-500
                 lg:flex-row
               ">
 	{#if order && order.address}
-		<div class="w-full p-6 mt-6 me-2 shadow lg:mt-0 lg:w-1/2">
-			<div class="pb-2 text-lg font-medium border-b">Shipping Information</div>
+		<div class="mt-6 w-full p-6 shadow me-2 lg:mt-0 lg:w-1/2">
+			<div class="border-b pb-2 text-lg font-medium">Shipping Information</div>
 			<div class="my-4 text-base font-light">
 				<div>
 					<strong> Name:</strong>
 					{order.address.firstName}
 					{order.address.lastName}
 				</div>
-				<div class="w-2/3 my-2">
+				<div class="my-2 w-2/3">
 					<strong> Address:</strong>
 					{order.address.address},
 				</div>
@@ -44,8 +44,8 @@ export let order
 		</div>
 	{/if}
 	{#if order && order.amount}
-		<div class="w-full p-6 mt-6 shadow lg:mt-0 lg:w-1/2">
-			<div class="pb-2 text-lg font-medium border-b">Payment Information</div>
+		<div class="mt-6 w-full p-6 shadow lg:mt-0 lg:w-1/2">
+			<div class="border-b pb-2 text-lg font-medium">Payment Information</div>
 			<div class="my-4 text-base font-light">
 				{#if order.amount.subtotal}
 					<div>
@@ -54,7 +54,7 @@ export let order
 					</div>
 				{/if}
 				{#if order.amount.discount}
-					<div class="w-2/3 my-2">
+					<div class="my-2 w-2/3">
 						<strong> Discount:</strong>
 						{currency(order.amount.discount)},
 					</div>

@@ -1,4 +1,4 @@
-import { get } from './../util/api'
+import { get } from './util/api'
 import { writable } from 'svelte/store'
 
 import Cookie from 'cookie-universal'
