@@ -9,6 +9,7 @@ const dispatch = createEventDispatcher()
 
 export let item,
 	addingToBag = false
+
 $: discount = item.mrp ? Math.round(((item?.mrp - item?.price) * 100) / item?.mrp) : 0
 
 async function addToBag(item, qty) {

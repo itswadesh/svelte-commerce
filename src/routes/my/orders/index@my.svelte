@@ -8,7 +8,6 @@ const seoProps = {
 	title: 'Orders',
 	metadescription: 'All orders details'
 }
-let orders
 let open = false
 function toggle() {
 	open = !open
@@ -18,8 +17,9 @@ onMount(() => {
 	getOrders()
 })
 async function getOrders() {
-	orders = (await KQL_MyOrders.queryLoad({ variables: { store: store.id } })).data?.myOrders
+	await KQL_MyOrders.queryLoad({ variables: { store: store.id } })
 }
+$: orders = $KQL_MyOrders.data?.myOrders
 </script>
 
 <SEO {...seoProps} />

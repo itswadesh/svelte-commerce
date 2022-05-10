@@ -10,7 +10,8 @@ export async function load({ url, fetch, session }) {
 	try {
 		await KQL_MyWishlist.queryLoad({
 			fetch,
-			variables: { store: store.id }
+			variables: { store: store.id },
+			settings: { cacheMs: 0 }
 		})
 	} catch (e) {}
 	return { props: {} }
@@ -65,17 +66,17 @@ async function refreshData() {
 	<div class="mb-5 flex items-center space-x-2 text-lg sm:mb-10">
 		<h4 class="text-xl font-bold">Wishlist</h4>
 
-		<span class="text-sm">({myWishlist.count || 0}) Items</span>
+		<span class="text-sm">({myWishlist?.count || 0}) Items</span>
 	</div>
-
-	{#if myWishlist.count > 0}
-		<div class="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-5 md:grid-cols-4 lg:grid-cols-5">
-			{#each myWishlist.data as wishlist}
-				<WishlistProducts
-					wishlist="{wishlist.product}"
-					on:remove="{({ detail }) => toggleWishlist({ detail })}" />
-			{/each}
-		</div>
+	{#if myWishlist?.count > 0}
+		<!-- <div
+			class="grid w-full grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-5 md:grid-cols-4 lg:grid-cols-5"> -->
+		<!-- {#each myWishlist.data as wishlist} -->
+		<WishlistProducts
+			wishlist="{myWishlist?.data}"
+			on:remove="{({ detail }) => toggleWishlist({ detail })}" />
+		<!-- {/each} -->
+		<!-- </div> -->
 	{:else}
 		<div class="h-rem-empty flex flex-col items-center justify-center text-center">
 			<div>

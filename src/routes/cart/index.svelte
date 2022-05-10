@@ -25,6 +25,9 @@ import Pricesummary from '$lib/Pricesummary.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import { KQL_AddToCart, KQL_Cart } from '$lib/graphql/_kitql/graphqlStores'
 import { store, toast } from '$lib/util'
+import ProductDetailSkeleton from '../[slug]/_ProductDetailSkeleton.svelte'
+import Errors from '$lib/components/alerts/Errors.svelte'
+import Skeleton from '$lib/ui/Skeleton.svelte'
 let show, addingToBag
 function toggle() {
 	show = !show
@@ -59,7 +62,11 @@ $: cart = $KQL_Cart.data?.cart || {}
 <!-- Whole section start  -->
 <section
 	class="container mx-auto min-h-screen w-full max-w-6xl border-b px-4  py-2 text-gray-800 sm:px-10 sm:py-5 md:py-10 ">
-	{#if cart?.qty > 0}
+	{#if $KQL_Cart?.isFetching}
+		<Skeleton />
+	{:else if $KQL_Cart?.errors}
+		<Errors errors="{$KQL_Cart.errors}" />
+	{:else if cart?.qty > 0}
 		<div class="lg:flex lg:justify-center lg:space-x-10 xl:space-x-20">
 			<!-- Cart section start  -->
 

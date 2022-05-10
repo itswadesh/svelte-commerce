@@ -24,7 +24,7 @@ export let wishlist
 </script>
 
 <section class="sm:flex sm:items-start sm:justify-start sm:space-x-5 ">
-	{#if wishlist}
+	{#if wishlist?.length}
 		{#each wishlist as w}
 			<div
 				class="flex items-start justify-start space-x-5 overflow-x-auto md:flex-wrap md:overflow-x-hidden">
@@ -36,8 +36,8 @@ export let wishlist
 								<img
 									alt=""
 									use:lazyload
-									src="{`${w.product?.imgCdn}?tr=w-3,h-3`}"
-									data-src="{`${w.product?.imgCdn}`}"
+									src="{`${w.product?.img}?tr=w-3,h-3`}"
+									data-src="{`${w.product?.img}`}"
 									class="h-72 w-full bg-gray-100 object-cover  object-top " />
 							</a>
 							<button
@@ -63,13 +63,14 @@ export let wishlist
 
 							<div class="mt-2.5 mb-1.5 flex items-baseline justify-center leading-4 ">
 								<span class="mr-1 whitespace-nowrap text-sm font-semibold ">
-									{currency(w.variant?.price)}
+									{currency(w.product?.price)}
 								</span>
 								<span class="ml-1 whitespace-nowrap text-xs text-gray-500 line-through">
-									{w.variant?.price}
+									{w.product?.mrp}
 								</span>
 								<span class="ml-1 whitespace-nowrap text-xs text-green-500">
-									( {Math.round((w?.variant?.price * 100) / w?.variant?.mrp)}% off )
+									( {Math.round(((w?.product?.mrp - w?.product?.price) * 100) / w?.product?.mrp)}%
+									off )
 								</span>
 							</div>
 						</div>
@@ -77,7 +78,7 @@ export let wishlist
 						<div class="border">
 							{#if CartButtonText == 'MOVE TO BAG'}
 								<button
-									on:click="{() => addToBag(w.product, w.variant)}"
+									on:click="{() => addToBag(w.product, w.product)}"
 									class="frosted w-full p-3 text-sm font-semibold tracking-wide text-primary-500 focus:outline-none">
 									{CartButtonText}
 								</button>
