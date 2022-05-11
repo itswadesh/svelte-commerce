@@ -26,8 +26,8 @@ export async function load({ url, params, fetch, session, context }) {
 			url,
 			me,
 			isHome,
-			store: session.store
-		}
+			store: session.store,
+		},
 	}
 }
 </script>
@@ -41,10 +41,15 @@ import { getStores, navigating, page, session } from '$app/stores'
 import Footer from '$lib/Footer.svelte'
 import Nav from '$lib/Nav.svelte'
 import { loadingDelayed } from '$lib/store'
+import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 
 export let path, url, sort, me, isHome, store
 let q
 </script>
+
+{#if $navigating}
+	<PreloadingIndicator />
+{/if}
 
 <section class="minimum-width bg-gray-50 bg-cover bg-bottom font-sans antialiased">
 	<!-- <PageTransitions refresh="{page?.path}"> -->
