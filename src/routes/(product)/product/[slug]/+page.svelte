@@ -81,7 +81,7 @@ const cookies = Cookie()
 const isServer = import.meta.env.SSR
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
+console.log('zzzzzzzzzzzzzzzzzz', data)
 // console.log('$page', $page)
 
 let seoProps = {
@@ -573,7 +573,7 @@ function handleMobileCanvas() {
 
 				{#if $page?.data?.store?.isMultiVendor && data?.product?.vendor && data?.product?.vendor?.slug && data?.product?.vendor?.businessName}
 					<div class="mb-5 text-sm text-zinc-500">
-						By <a href="/vendor/{data?.product?.vendor?.slug}" class="underline hover:text-zinc-800"
+						By <a href="/store/{data?.product?.vendor?.slug}" class="underline hover:text-zinc-800"
 							>{data?.product?.vendor?.businessName}
 						</a>
 					</div>
