@@ -16,7 +16,7 @@
 
 ### Svelte Commerce is an advanced Frontend Platform for eCommerce based on Sveltekit
 
-<a href="https://svelte-commerce.litekart.in/" target="blank">Demo</a>
+Demo <a href="https://kitcommerce.tech/" target="blank">Kitcommerce.tech</a>
 <br/>
 
 - 🛍️ Attach Svelte store front to any ecommerce API (e.g. <a href="https://misiki.in/"> Misiki SAAS </a>, <a href="https://magento.com/">Magento</a>, <a href="https://www.moltin.com/">Moltin</a>, <a href="https://www.shopify.com/">Shopify</a> ...)
@@ -38,7 +38,7 @@
 
 # Latest Updates
 
-## Massive Update 26-April-2022
+## Update 26-April-2022
 
 - 26-April-2022 - Attached to GraphQL backend
 - 26-April-2022 - Latest SvelteKit version

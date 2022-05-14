@@ -3,7 +3,7 @@
 <script>
 import { onMount } from 'svelte'
 
-import { currency, store, date } from '../../../util'
+import { currency, store, date } from '$lib/util'
 import OrderTracking from './_OrderTracking.svelte'
 import { KQL_MyOrderItems, KQL_OrderItem } from '$lib/graphql/_kitql/graphqlStores'
 import OrderListSkeleton from './_OrderListSkeleton.svelte'

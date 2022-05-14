@@ -7,7 +7,7 @@ export async function load({ url, params, fetch }) {
 </script>
 
 <script>
-import { currency, date } from '../../util'
+import { currency, date } from '$lib/util'
 import { onMount } from 'svelte'
 
 import OrderAddressDetails from './_OrderAddressDetails.svelte'
@@ -37,7 +37,7 @@ const seoProps = {
 
 <SEO {...seoProps} />
 
-<div class="container mx-auto bg-white rounded-lg">
+<div class="container mx-auto rounded-lg bg-white">
 	<div class="h-full max-w-full p-2 sm:p-3 lg:p-8">
 		<div class="flex flex-col">
 			<div class="p-2 sm:p-4 lg:mt-12 lg:p-12">
@@ -45,7 +45,7 @@ const seoProps = {
 					<div class="flex items-center justify-center rounded-full lg:-mt-28">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
-							class="w-24 h-24 text-secondary-200 md:w-28 md:h-28"
+							class="text-secondary-200 h-24 w-24 md:h-28 md:w-28"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor">
@@ -58,16 +58,16 @@ const seoProps = {
 						</svg>
 					</div>
 					{#if order}
-						<h2 class="text-3xl font-bold text-center">
+						<h2 class="text-center text-3xl font-bold">
 							Paid:
 							{currency(order.amount.total)}
 						</h2>
 						<h3
 							class="
-                flex flex-row
+                pt:mt-0 flex
+                flex-row
                 justify-center
                 pt-4
-                pt:mt-0
                 lg:justify-between
               ">
 							<div class="text-2xl font-medium text-gray-700">Thanks for your Order!!</div>

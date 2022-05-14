@@ -7,11 +7,9 @@ export async function load({ url, params, fetch }) {
 	let cart
 	try {
 		await KQL_Cart.resetCache()
-		cart = (await KQL_Cart.query({ fetch, variables: { store: store.id } })).data?.cart
+		await KQL_Cart.queryLoad({ fetch, variables: { store: store.id } })
 		return {
-			props: {
-				cart
-			}
+			props: {}
 		}
 	} catch (e) {
 		throw Error(e)
@@ -26,10 +24,11 @@ import Weprovides from '$lib/Weprovides.svelte'
 import Pricesummary from '$lib/Pricesummary.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import { KQL_AddToCart, KQL_Cart } from '$lib/graphql/_kitql/graphqlStores'
-import { store, toast } from './../../util'
-export let cart
+import { store, toast } from '$lib/util'
+import ProductDetailSkeleton from '../[slug]/_ProductDetailSkeleton.svelte'
+import Errors from '$lib/components/alerts/Errors.svelte'
+import Skeleton from '$lib/ui/Skeleton.svelte'
 let show, addingToBag
-
 function toggle() {
 	show = !show
 }
@@ -38,41 +37,45 @@ const seoProps = {
 	metadescription: 'Your items in shopping bag'
 }
 async function refreshCart() {
-	await KQL_Cart.resetCache()
-	await KQL_Cart.query({ variables: { store: store.id } })
+	// await KQL_Cart.resetCache()
+	// await KQL_Cart.queryLoad({ variables: { store: store.id }, settings: { policy: 'network-only' } })
 }
-async function addToCart({ detail: { item, qty } }) {
-	try {
-		addingToBag = true
-		const addtocart = await KQL_AddToCart.mutate({
-			variables: { pid: item.pid, vid: item.pid, qty }
-		})
-		if (addtocart.errors) {
-			toast(addtocart.errors[0]?.message?.replace('UserInputError: ', ''), 'error')
-			return
-		}
-		cart = addtocart.data?.addToCart
-	} catch (e) {
-	} finally {
-		addingToBag = false
+async function addToCart({ detail }) {
+	const { pid, vid, options } = detail.item
+	const qty = detail.qty
+	const optiData = $KQL_Cart.data
+	optiData.cart.currencyCode = `Removing items...`
+	const addToCartRes = await KQL_AddToCart.mutate({
+		variables: { pid, qty, vid, options }
+	})
+	if (addToCartRes.errors) {
+		return toast(addToCartRes.errors[0].message.replace('UserInputError: ', ''), 'error')
 	}
+	if (qty < 1) toast('Removed from cart', 'success')
+	else toast('Added to the cart', 'success')
+	await KQL_Cart.queryLoad({ variables: { store: store.id }, settings: { policy: 'network-only' } })
 }
+$: cart = $KQL_Cart.data?.cart || {}
 </script>
 
 <SEO {...seoProps} />
 <!-- Whole section start  -->
 <section
-	class="container w-full min-h-screen mx-auto max-w-6xl px-4 sm:px-10  py-2 text-gray-800 border-b sm:py-5 md:py-10 ">
-	{#if cart?.qty > 0}
+	class="container mx-auto min-h-screen w-full max-w-6xl border-b px-4  py-2 text-gray-800 sm:px-10 sm:py-5 md:py-10 ">
+	{#if $KQL_Cart?.isFetching}
+		<Skeleton />
+	{:else if $KQL_Cart?.errors}
+		<Errors errors="{$KQL_Cart.errors}" />
+	{:else if cart?.qty > 0}
 		<div class="lg:flex lg:justify-center lg:space-x-10 xl:space-x-20">
 			<!-- Cart section start  -->
 
 			<div class="lg:w-1/2 xl:w-2/3 ">
-				<div class="sm:flex  items-center justify-between pb-3 ">
+				<div class="items-center  justify-between pb-3 sm:flex ">
 					<!-- Cart start  -->
-					<div class="flex items-baseline mr-4">
+					<div class="mr-4 flex items-baseline">
 						<h2 class="text-4xl font-bold tracking-wide ">Cart</h2>
-						<div class="w-1 h-1 mx-3 bg-gray-200 rounded-full"></div>
+						<div class="mx-3 h-1 w-1 rounded-full bg-gray-200"></div>
 						<h4 class="text-xl tracking-tighter text-gray-300">{cart.qty} items</h4>
 					</div>
 					<!-- Cart end  -->
@@ -80,12 +83,12 @@ async function addToCart({ detail: { item, qty } }) {
 					<div class="relative mt-2 sm:mt-0">
 						<div
 							on:click="{toggle}"
-							class="flex items-center px-2 sm:px-4 py-2 cursor-pointer hover:bg-gray-100">
+							class="flex cursor-pointer items-center px-2 py-2 hover:bg-gray-100 sm:px-4">
 							<span> Enter pincode for delivery</span>
 							{#if !show}
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
-									class="w-5 h-5 mt-1 ml-2 text-gray-800 transition duration-300"
+									class="mt-1 ml-2 h-5 w-5 text-gray-800 transition duration-300"
 									viewBox="0 0 20 20"
 									fill="currentColor">
 									<path
@@ -109,13 +112,13 @@ async function addToCart({ detail: { item, qty } }) {
 
 						{#if show}
 							<div
-								class="absolute z-10 left-0 md:right-0 flex flex-col p-4 md:p-6 mt-2 bg-white border rounded-lg shadow-xl w-72 md:w-96">
+								class="absolute left-0 z-10 mt-2 flex w-72 flex-col rounded-lg border bg-white p-4 shadow-xl md:right-0 md:w-96 md:p-6">
 								<p class="text-sm">Enter a pincode</p>
 								<div class="mt-2">
 									<Textbox label="Pincode" />
 									<button
 										on:click="{toggle}"
-										class="w-full py-3 mt-3 font-bold tracking-wide text-white bg-gray-800 rounded-lg bg-opacity-80 hover:bg-opacity-100"
+										class="mt-3 w-full rounded-lg bg-gray-800 bg-opacity-80 py-3 font-bold tracking-wide text-white hover:bg-opacity-100"
 										>CHECK</button>
 								</div>
 							</div>
@@ -141,12 +144,12 @@ async function addToCart({ detail: { item, qty } }) {
 			<!-- Cart section end -->
 
 			<!-- Promo code section start -->
-			<div class="lg:w-1/2  xl:w-1/3 mb-12">
-				<div class="flex items-center justify-between mt-3 cursor-pointer group">
+			<div class="mb-12  lg:w-1/2 xl:w-1/3">
+				<div class="group mt-3 flex cursor-pointer items-center justify-between">
 					<h5 class="text-sm text-gray-500 group-hover:text-gray-800">Apply Promo Code</h5>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
-						class="w-5 h-5 text-gray-500 group-hover:text-gray-800"
+						class="h-5 w-5 text-gray-500 group-hover:text-gray-800"
 						fill="none"
 						viewBox="0 0 24 24"
 						stroke="currentColor">

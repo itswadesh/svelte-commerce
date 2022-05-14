@@ -6,7 +6,7 @@
 
 <script>
 import Textbox from '$lib/ui/Textbox.svelte'
-import { toast } from './../../../util'
+import { toast } from '$lib/util'
 import { onMount } from 'svelte'
 import { KQL_Me, KQL_UpdateProfile } from '$lib/graphql/_kitql/graphqlStores'
 
@@ -30,52 +30,52 @@ function save(profile) {
 }
 </script>
 
-<section class="w-full h-full pb-20 pl-2 sm:pl-8 sm:pr-2 text-gray-800 tracking-wide ">
-	<h1 class="font-bold  text-lg sm:text-xl">Profile</h1>
+<section class="h-full w-full pb-20 pl-2 tracking-wide text-gray-800 sm:pl-8 sm:pr-2 ">
+	<h1 class="text-lg  font-bold sm:text-xl">Profile</h1>
 
-	<div class="mt-2 sm:mt-5 text-gray-800 bg-gray-200 rounded-sm">
-		<h2 class="p-4 text-base sm:text-lg font-semibold tracking-wider border-b border-gray-50">
+	<div class="mt-2 rounded-sm bg-gray-200 text-gray-800 sm:mt-5">
+		<h2 class="border-b border-gray-50 p-4 text-base font-semibold tracking-wider sm:text-lg">
 			Edit your profile details
 		</h2>
 		<form on:submit|preventDefault="{() => save(profile)}" class="py-4">
 			<div class="items-center p-2 md:flex">
-				<div class="w-full text-sm md:px-4 md:w-3/12">First Name</div>
+				<div class="w-full text-sm md:w-3/12 md:px-4">First Name</div>
 				<div class="w-full md:w-9/12">
-					<div class="max-w-sm mt-2 md:mt-0">
+					<div class="mt-2 max-w-sm md:mt-0">
 						<Textbox bind:value="{profile.firstName}" on:change="{() => save(profile)}" />
 					</div>
 				</div>
 			</div>
 			<div class="items-center p-2 md:flex">
-				<div class="w-full text-sm md:px-4 md:w-3/12">Last Name</div>
+				<div class="w-full text-sm md:w-3/12 md:px-4">Last Name</div>
 				<div class="w-full md:w-9/12">
-					<div class="max-w-sm mt-2 md:mt-0">
+					<div class="mt-2 max-w-sm md:mt-0">
 						<Textbox bind:value="{profile.lastName}" on:change="{() => save(profile)}" />
 					</div>
 				</div>
 			</div>
 			<div class="p-2 md:flex lg:items-center">
-				<div class="w-full text-sm md:px-4 md:w-3/12">State</div>
-				<div class="items-center w-full lg:flex md:w-9/12">
-					<div class="max-w-sm mt-2 md:w-96 md:mt-0">
+				<div class="w-full text-sm md:w-3/12 md:px-4">State</div>
+				<div class="w-full items-center md:w-9/12 lg:flex">
+					<div class="mt-2 max-w-sm md:mt-0 md:w-96">
 						<Textbox bind:value="{profile.state}" on:change="{() => save(profile)}" />
 					</div>
 					<!-- <h6 class="my-2 text-xs text-gray-600 lg:ml-5">Username for community forums</h6> -->
 				</div>
 			</div>
 			<div class="p-2 md:flex lg:items-center">
-				<div class="w-full text-sm md:px-4 md:w-3/12">City</div>
-				<div class="items-center w-full lg:flex md:w-9/12">
-					<div class="max-w-sm mt-2 md:w-96 md:mt-0">
+				<div class="w-full text-sm md:w-3/12 md:px-4">City</div>
+				<div class="w-full items-center md:w-9/12 lg:flex">
+					<div class="mt-2 max-w-sm md:mt-0 md:w-96">
 						<Textbox bind:value="{profile.city}" on:change="{() => save(profile)}" />
 					</div>
 					<!-- <h6 class="my-2 text-xs text-gray-600 lg:ml-5">Username for community forums</h6> -->
 				</div>
 			</div>
 			<div class="p-2 md:flex lg:items-center">
-				<div class="w-full text-sm md:px-4 md:w-3/12">Zip / Pincode</div>
-				<div class="items-center w-full lg:flex md:w-9/12">
-					<div class="max-w-sm mt-2 md:w-96 md:mt-0">
+				<div class="w-full text-sm md:w-3/12 md:px-4">Zip / Pincode</div>
+				<div class="w-full items-center md:w-9/12 lg:flex">
+					<div class="mt-2 max-w-sm md:mt-0 md:w-96">
 						<Textbox bind:value="{profile.zip}" on:change="{() => save(profile)}" />
 					</div>
 					<!-- <h6 class="my-2 text-xs text-gray-600 lg:ml-5">Username for community forums</h6> -->
@@ -90,20 +90,20 @@ function save(profile) {
 				</div>
 			</div> -->
 			<div class="items-center p-2 md:flex">
-				<div class="w-full text-sm md:px-4 md:w-3/12">Your email</div>
+				<div class="w-full text-sm md:w-3/12 md:px-4">Your email</div>
 				<div class="w-full md:w-9/12">
-					<div class="text-xs sm:text-base max-w-sm mt-2 md:mt-0">
+					<div class="mt-2 max-w-sm text-xs sm:text-base md:mt-0">
 						{profile.email}
 					</div>
 				</div>
 			</div>
 
-			<div class="items-center p-2 md:flex pb-5">
-				<div class="w-full text-sm md:px-4 md:w-3/12"></div>
+			<div class="items-center p-2 pb-5 md:flex">
+				<div class="w-full text-sm md:w-3/12 md:px-4"></div>
 				<div class="w-full md:w-9/12">
-					<div class="max-w-sm mt-2 md:mt-0 flex items-center justify-center">
+					<div class="mt-2 flex max-w-sm items-center justify-center md:mt-0">
 						<button
-							class="text-sm sm:text-base justify-center text-center sm:mt-8 px-6 py-2 bg-gray-800 uppercase text-white font-semibold rounded-full shadow-md zoom tracking-wider focus:outline-none opacity-80 hover:opacity-100 transition duration-300"
+							class="zoom justify-center rounded-full bg-gray-800 px-6 py-2 text-center text-sm font-semibold uppercase tracking-wider text-white opacity-80 shadow-md transition duration-300 hover:opacity-100 focus:outline-none sm:mt-8 sm:text-base"
 							type="submit">Save Profile Details</button>
 					</div>
 				</div>

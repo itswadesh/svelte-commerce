@@ -16,7 +16,7 @@ import { onMount } from 'svelte'
 import Submit from '$lib/ui/Button.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 import Button from '$lib/ui/Button.svelte'
-import { toast } from './../../util'
+import { toast } from '$lib/util'
 import { KQL_Address, KQL_SaveAddress } from '$lib/graphql/_kitql/graphqlStores'
 
 export let prev = ''
@@ -95,50 +95,50 @@ async function submit() {
             grid grid-cols-1
             gap-2
             text-sm text-primary-500
-            md:gap-4
             md:grid-cols-2
+            md:gap-4
           ">
-				<div class="flex flex-col-reverse col-span-2 md:col-span-1">
+				<div class="col-span-2 flex flex-col-reverse md:col-span-1">
 					<input type="text" bind:value="{address.firstName}" placeholder="" />
 					<span class="my-2 font-semibold">First Name</span>
 				</div>
 
-				<div class="flex flex-col-reverse col-span-2 md:col-span-1">
+				<div class="col-span-2 flex flex-col-reverse md:col-span-1">
 					<input type="text" bind:value="{address.lastName}" placeholder="" />
 					<span class="my-2 font-semibold">Last Name</span>
 				</div>
 
-				<div class="flex flex-col-reverse col-span-2 md:col-span-1">
+				<div class="col-span-2 flex flex-col-reverse md:col-span-1">
 					<input type="text" bind:value="{address.phone}" placeholder="" />
 					<span class="my-2 font-semibold">Mobile number</span>
 				</div>
-				<div class="flex flex-col-reverse col-span-2 md:col-span-1">
+				<div class="col-span-2 flex flex-col-reverse md:col-span-1">
 					<!-- @input="$event.target.composing = false" -->
 					<input type="text" bind:value="{address.zip}" placeholder="" />
 					<span class="my-2 font-semibold">Pincode</span>
 				</div>
 
-				<div class="flex flex-col-reverse col-span-2">
+				<div class="col-span-2 flex flex-col-reverse">
 					<input type="text" bind:value="{address.address}" placeholder="" />
 					<span class="my-2 font-semibold">Address (Area and Street)</span>
 				</div>
 
-				<div class="flex flex-col-reverse col-span-2 md:col-span-1">
+				<div class="col-span-2 flex flex-col-reverse md:col-span-1">
 					<input type="text" bind:value="{address.city}" placeholder="" />
 					<span class="my-2 font-semibold">City/District/Town</span>
 				</div>
 
-				<div class="flex flex-col-reverse col-span-2 md:col-span-1">
+				<div class="col-span-2 flex flex-col-reverse md:col-span-1">
 					<input type="text" bind:value="{address.state}" placeholder="" />
 					<span class="my-2 font-semibold">State</span>
 				</div>
 
-				<div class="flex flex-col-reverse col-span-2 md:col-span-1">
+				<div class="col-span-2 flex flex-col-reverse md:col-span-1">
 					<input type="text" bind:value="{address.country}" placeholder="" />
 					<span class="my-2 font-semibold">Country</span>
 				</div>
 
-				<div class="flex flex-col-reverse col-span-2 md:col-span-1">
+				<div class="col-span-2 flex flex-col-reverse md:col-span-1">
 					<input type="text" bind:value="{address.email}" placeholder="" />
 					<span class="my-2 font-semibold">Email</span>
 				</div>
@@ -154,15 +154,15 @@ async function submit() {
                 >
               </label> -->
 
-			<div class="mt-10 pr-4 flex justify-start">
+			<div class="mt-10 flex justify-start pr-4">
 				<button
 					type="submit"
-					class=" focus:outline-none py-2 w-1/2 rounded-md shadow-md font-semibold text-white bg-primary-500 hover:bg-primary-600  focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition duration-300 transform active:scale-95 ">
+					class=" w-1/2 transform rounded-md bg-primary-500 py-2 font-semibold text-white shadow-md transition  duration-300 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 active:scale-95 ">
 					{#if iconloading}
 						<div class="flex justify-center">
 							<svg
 								style="height: 20px; width: 20px"
-								class="text-white -ms-1 animate-spin"
+								class="animate-spin text-white -ms-1"
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"
 								viewBox="0 0 24 24">

@@ -12,9 +12,14 @@ import MobNav from '$lib/MobNav.svelte'
 import MobFooter from '$lib/MobFooter.svelte'
 import { getStores, navigating, page } from '$app/stores'
 import { ToastContainer, FlatToast } from 'svelte-toasts'
+import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 
 export let user
 </script>
+
+{#if $navigating}
+	<PreloadingIndicator />
+{/if}
 
 <!-- <PageTransitions refresh="{$page.url.pathname}"> -->
 <div class="bg-gray-50 font-sans antialiased">
