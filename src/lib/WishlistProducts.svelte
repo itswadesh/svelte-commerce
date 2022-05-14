@@ -6,7 +6,7 @@
 </style>
 
 <script>
-import { currency, toast } from './../util'
+import { currency, toast } from './util'
 import { lazyload } from './../actions/lazyload'
 import { KQL_AddToCart, KQL_MyWishlist, KQL_ToggleWishlist } from './graphql/_kitql/graphqlStores'
 let CartButtonText = 'MOVE TO BAG'
@@ -24,25 +24,25 @@ export let wishlist
 </script>
 
 <section class="sm:flex sm:items-start sm:justify-start sm:space-x-5 ">
-	{#if wishlist}
+	{#if wishlist?.length}
 		{#each wishlist as w}
 			<div
-				class="flex md:flex-wrap items-start space-x-5 justify-start overflow-x-auto md:overflow-x-hidden">
+				class="flex items-start justify-start space-x-5 overflow-x-auto md:flex-wrap md:overflow-x-hidden">
 				<div
-					class="flex-shrink-0 w-40 sm:w-60 mb-4 group bg-white shadow hover:shadow-md text-gray-800">
+					class="group mb-4 w-40 flex-shrink-0 bg-white text-gray-800 shadow hover:shadow-md sm:w-60">
 					<div class="block overflow-hidden hover:shadow-lg">
 						<div class="relative">
 							<a href="{`/${w.product?.slug}?id=${w.product?.id}`}">
 								<img
 									alt=""
 									use:lazyload
-									src="{`${w.product?.imgCdn}?tr=w-3,h-3`}"
-									data-src="{`${w.product?.imgCdn}`}"
-									class="object-cover object-top w-full h-72  bg-gray-100 " />
+									src="{`${w.product?.img}?tr=w-3,h-3`}"
+									data-src="{`${w.product?.img}`}"
+									class="h-72 w-full bg-gray-100 object-cover  object-top " />
 							</a>
 							<button
 								on:click="{() => removeFromWishlist(w.id)}"
-								class="absolute top-0 right-0 m-2 h-6 w-6 rounded-full frosted flex items-center justify-center border border-gray-400 transform active:scale-95 ">
+								class="frosted absolute top-0 right-0 m-2 flex h-6 w-6 transform items-center justify-center rounded-full border border-gray-400 active:scale-95 ">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									class="h-4 w-4 text-gray-600"
@@ -56,20 +56,21 @@ export let wishlist
 							</button>
 						</div>
 						<div class="p-4 ">
-							<h4 class="font-semibold mb-1.5">{''}</h4>
-							<h6 class="text-sm font-medium overflow-hidden whitespace-nowrap overflow-ellipsis">
+							<h4 class="mb-1.5 font-semibold">{''}</h4>
+							<h6 class="overflow-hidden overflow-ellipsis whitespace-nowrap text-sm font-medium">
 								{w.product?.name}
 							</h6>
 
-							<div class="mt-2.5 mb-1.5 leading-4 flex items-baseline justify-center ">
-								<span class="mr-1 text-sm font-semibold whitespace-nowrap ">
-									{currency(w.variant?.price)}
+							<div class="mt-2.5 mb-1.5 flex items-baseline justify-center leading-4 ">
+								<span class="mr-1 whitespace-nowrap text-sm font-semibold ">
+									{currency(w.product?.price)}
 								</span>
-								<span class="ml-1 text-xs text-gray-500 whitespace-nowrap line-through">
-									{w.variant?.price}
+								<span class="ml-1 whitespace-nowrap text-xs text-gray-500 line-through">
+									{w.product?.mrp}
 								</span>
-								<span class="ml-1 text-xs text-green-500 whitespace-nowrap">
-									( {Math.round((w?.variant?.price * 100) / w?.variant?.mrp)}% off )
+								<span class="ml-1 whitespace-nowrap text-xs text-green-500">
+									( {Math.round(((w?.product?.mrp - w?.product?.price) * 100) / w?.product?.mrp)}%
+									off )
 								</span>
 							</div>
 						</div>
@@ -77,8 +78,8 @@ export let wishlist
 						<div class="border">
 							{#if CartButtonText == 'MOVE TO BAG'}
 								<button
-									on:click="{() => addToBag(w.product, w.variant)}"
-									class="w-full p-3 frosted text-sm font-semibold text-primary-500 tracking-wide focus:outline-none">
+									on:click="{() => addToBag(w.product, w.product)}"
+									class="frosted w-full p-3 text-sm font-semibold tracking-wide text-primary-500 focus:outline-none">
 									{CartButtonText}
 								</button>
 							{:else}
@@ -145,11 +146,11 @@ export let wishlist
 			</div>
 		{/each}
 
-		<hr class="border-t-8 border-gray-200 my-2 sm:hidden" />
-		<div class="sm:hidden pt-2 flex items-center justify-between text-sm font-semibold ">
+		<hr class="my-2 border-t-8 border-gray-200 sm:hidden" />
+		<div class="flex items-center justify-between pt-2 text-sm font-semibold sm:hidden ">
 			<h5>Out of Stock Items</h5>
 			<button
-				class="focus:outline-none font-semibold border border-gray-400 py-1 px-2 tracking-wide "
+				class="border border-gray-400 py-1 px-2 font-semibold tracking-wide focus:outline-none "
 				>REMOVE ALL</button>
 		</div>
 		<!-- 

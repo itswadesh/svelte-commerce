@@ -3,6 +3,12 @@ query productSlug($slug: String!) {
 		id
 		name
 		description
+		metaDescription
+		createdAt
+		updatedAt
+		sku
+		hsn
+		popularity
 		slug
 		img
 		imgCdn
@@ -27,11 +33,9 @@ query productSlug($slug: String!) {
 			name
 		}
 		size {
-			id
 			name
 		}
 		brand {
-			id
 			name
 		}
 		vendor {

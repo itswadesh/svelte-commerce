@@ -22,12 +22,13 @@ const {
 export let article = false
 export let breadcrumbs = []
 export let entityMeta = null
-export let lastUpdated
-export let datePublished
-export let metadescription
-export let slug
+export let lastUpdated = null
+export let datePublished = null
+export let metadescription = ''
+export let slug = ''
 export let timeToRead = 0
-export let title
+export let title = ''
+export let keywords = ''
 
 const defaultAlt = ''
 
@@ -99,6 +100,7 @@ const twitterProps = {
 <svelte:head>
 	<title>{pageTitle}</title>
 	<meta name="description" content="{metadescription}" />
+	<meta name="keywords" content="{keywords}" />
 	<meta
 		name="robots"
 		content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />

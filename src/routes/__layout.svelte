@@ -20,13 +20,14 @@
 export async function load({ url, params, fetch, session, context }) {
 	const isHome = url.pathname === '/'
 	let me = session.me
-	KQL_Init.query({ fetch })
+	KQL_Init.queryLoad({ fetch })
 	return {
 		props: {
 			url,
 			me,
-			isHome
-		}
+			isHome,
+			store: session.store,
+		},
 	}
 }
 </script>
@@ -40,16 +41,21 @@ import { getStores, navigating, page, session } from '$app/stores'
 import Footer from '$lib/Footer.svelte'
 import Nav from '$lib/Nav.svelte'
 import { loadingDelayed } from '$lib/store'
+import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 
-export let path, url, sort, me, isHome
+export let path, url, sort, me, isHome, store
 let q
 </script>
 
-<section class="bg-gray-50 font-sans antialiased minimum-width bg-cover bg-bottom">
+{#if $navigating}
+	<PreloadingIndicator />
+{/if}
+
+<section class="minimum-width bg-gray-50 bg-cover bg-bottom font-sans antialiased">
 	<!-- <PageTransitions refresh="{page?.path}"> -->
-	<div class="relative bg-gray-50 font-sans antialiased minimum-width">
+	<div class="minimum-width relative bg-gray-50 font-sans antialiased">
 		{#if $loadingDelayed}
-			<div class="absolute z-50 inset-0 min-h-screen flex items-center justify-center frosted">
+			<div class="frosted absolute inset-0 z-50 flex min-h-screen items-center justify-center">
 				<div class="h-28 w-28">
 					<svg
 						version="1.1"
@@ -106,7 +112,7 @@ let q
 		{/if}
 
 		<div class="{$loadingDelayed ? 'h-screen overflow-hidden' : ''}">
-			<Nav q="{q}" me="{me}" />
+			<Nav q="{q}" me="{me}" store="{store}" />
 
 			<div class="{$page?.url?.pathname === '/' ? '' : 'mt-rem'}">
 				<slot />

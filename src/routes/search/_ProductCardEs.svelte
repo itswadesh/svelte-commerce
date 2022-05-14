@@ -14,23 +14,23 @@ export let product
 </script>
 
 <a
-	href="/{product._source.slug}?id={product.id}"
-	class="relative rounded-2xl shadow-md hover:shadow-xl transition duration-300 flex flex-col sm:flex-row lg:flex-col xl:flex-row bg-gray-50 hover:bg-gray-100 py-10 px-4">
+	href="/{product._source.slug}?id={product._id}"
+	class="relative flex flex-col rounded-2xl bg-gray-50 py-10 px-4 shadow-md transition duration-300 hover:bg-gray-100 hover:shadow-xl sm:flex-row lg:flex-col xl:flex-row">
 	{#if product._source.verified}
-		<div class="absolute z-10 top-2 left-2 transform -rotate-12">
+		<div class="absolute top-2 left-2 z-10 -rotate-12 transform">
 			<ImageLoader
 				src="/verified-badge.png"
 				alt="verified badge"
-				class="object-contain object-center h-10" />
+				class="h-10 object-contain object-center" />
 		</div>
 	{/if}
 
-	<div class="mb-2 w-28 h-28 sm:w-36 sm:h-36 rounded-full mx-auto zoom-out">
+	<div class="zoom-out mx-auto mb-2 h-28 w-28 rounded-full sm:h-36 sm:w-36">
 		{#if product._source.img}
 			<ImageLoader
 				src="{product._source.img}"
 				alt="{product._source.name}"
-				class="h-full w-full object-cover border text-xs mx-auto mb-4" />
+				class="mx-auto mb-4 h-full w-full border object-cover text-xs" />
 		{:else}
 			<div
 				class="h-full w-full flex items-center justify-center bg-gray-200 border text-gray-300 rounded-full mb-4">
@@ -53,7 +53,7 @@ export let product
 
 	{#if product._source.averageRating || product._source.totalReview}
 		<div
-			class="absolute top-0 right-0 bg-primary-500 text-white rounded-tr-2xl rounded-bl-2xl px-4 py-1 flex items-center justify-center">
+			class="absolute top-0 right-0 flex items-center justify-center rounded-tr-2xl rounded-bl-2xl bg-primary-500 px-4 py-1 text-white">
 			{#if product._source.averageRating > 0}
 				<div class="flex items-center space-x-1">
 					<span class="font-bold">
@@ -86,10 +86,10 @@ export let product
 	{/if}
 
 	<div
-		class="pl-0 sm:pl-4 lg:pl-0 xl:pl-4 flex-1 w-full flex flex-col first-letter:uppercase rounded-r-xl">
+		class="flex w-full flex-1 flex-col rounded-r-xl pl-0 first-letter:uppercase sm:pl-4 lg:pl-0 xl:pl-4">
 		<h2 class="mb-1 font-bold ">{product._source.name}</h2>
 
-		<p class="text-sm text-gray-500 leading-relaxed line-clamp-3">
+		<p class="text-sm leading-relaxed text-gray-500 line-clamp-3">
 			{@html product._source.description}
 		</p>
 

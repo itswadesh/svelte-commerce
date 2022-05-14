@@ -1,7 +1,7 @@
 <script>
 import Checkbox from '$lib/ui/Checkbox.svelte'
 import Radio from '$lib/ui/Radio.svelte'
-import { constructURL2 } from '../../util'
+import { constructURL2 } from '$lib/util'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { beforeUpdate, tick } from 'svelte'
@@ -50,7 +50,7 @@ let features = [
 	'Backlit Keyboard',
 	'NFC Support',
 	'Face Recognition',
-	'Optane Memory',
+	'Optane Memory'
 ]
 let show = true
 function toggle() {
@@ -72,7 +72,7 @@ function checkFeature(k) {
 		<div
 			class="flex items-center justify-between text-sm font-bold md:text-xs"
 			style="margin-top:1px;">
-			<div on:click="{toggle}" class="flex items-center cursor-pointer"></div>
+			<div on:click="{toggle}" class="flex cursor-pointer items-center"></div>
 			<h2 class="mr-1 font-serif text-xl font-bold tracking-wide">Refine By</h2>
 			<!-- {#if show}
 				<svg
@@ -97,7 +97,7 @@ function checkFeature(k) {
 			{/if} -->
 			<button
 				on:click="{clearFilters}"
-				class="text-right text-purple-500 cursor-pointer hover:underli hover:underline focus:outline-none">
+				class="hover:underli cursor-pointer text-right text-purple-500 hover:underline focus:outline-none">
 				CLEAR ALL
 			</button>
 		</div>

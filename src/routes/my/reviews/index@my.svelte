@@ -1,7 +1,7 @@
 <script lang="ts">
 import { onMount } from 'svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-import { date, currency } from './../../../util'
+import { date, currency } from '$lib/util'
 import { KQL_Reviews } from '$lib/graphql/_kitql/graphqlStores'
 
 const seoProps = {
@@ -24,38 +24,38 @@ async function getReviews() {
 
 <SEO {...seoProps} />
 
-<section class="w-full h-full pl-2 sm:pl-8 sm:pr-2 text-gray-800 tracking-wide ">
-	<h1 class="font-bold  text-lg sm:text-xl">
+<section class="h-full w-full pl-2 tracking-wide text-gray-800 sm:pl-8 sm:pr-2 ">
+	<h1 class="text-lg  font-bold sm:text-xl">
 		<span class="mr-1">My reviews</span>( {reviews?.count} )
 	</h1>
 
 	{#if reviews?.count > 0}
 		{#each reviews?.data as review}
 			<div
-				class=" relative p-4 my-2 sm:my-5 transition duration-300 bg-white breview-t breview-gray-300 rounded-md md:shadow-md breview ">
-				<div class="flex justify-between items-center">
+				class=" breview-t breview-gray-300 breview relative my-2 rounded-md bg-white p-4 transition duration-300 sm:my-5 md:shadow-md ">
+				<div class="flex items-center justify-between">
 					<!-- Details section start  -->
 					<div class="sm:ml-4">
 						<a href="{`/reviews/${review.id}`}" class="cursor-pointer">
 							<span class="text-lg font-semibold tracking-wider md:text-2xl">
 								{review.reviewNo}</span>
 						</a>
-						<div class="text-gray-400 text-sm">
+						<div class="text-sm text-gray-400">
 							{date(review.createdAt)}
 						</div>
 
-						<div class="mt-2 relative inline-block text-left">
-							<div on:click="{toggle}" class="font-semibold cursor-pointer">Review Status</div>
+						<div class="relative mt-2 inline-block text-left">
+							<div on:click="{toggle}" class="cursor-pointer font-semibold">Review Status</div>
 
 							{#if open}
 								<div
-									class="absolute left-0 mt-2 py-1 bg-white shadow-lg w-52 ring-1 ring-black ring-opacity-5 capitalize"
+									class="absolute left-0 mt-2 w-52 bg-white py-1 capitalize shadow-lg ring-1 ring-black ring-opacity-5"
 									role="menu"
 									aria-orientation="vertical"
 									aria-labelledby="menu-button"
 									tabindex="-1">
 									<div
-										class="py-1 px-2 cursor-pointer hover:bg-primary-50 transition duration-300"
+										class="cursor-pointer py-1 px-2 transition duration-300 hover:bg-primary-50"
 										role="none">
 										{reviews.status}
 									</div>
@@ -65,17 +65,17 @@ async function getReviews() {
 
 						<!-- Email div start  -->
 						<div v-if="review.user" class="my-1">
-							<span class=" text-sm text-primary-500 cursor-pointer hover:text-primary-700">
+							<span class=" cursor-pointer text-sm text-primary-500 hover:text-primary-700">
 								{review.usermail}
 							</span>
 						</div>
 						<!-- Email div end -->
 
 						<!-- Pay by case div srart  -->
-						<div class="flex my-2 text-sm cursor-pointer item-center">
+						<div class="item-center my-2 flex cursor-pointer text-sm">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
-								class="w-5 h-5 text-primary-500"
+								class="h-5 w-5 text-primary-500"
 								fill="none"
 								viewBox="0 0 24 24"
 								stroke="currentColor">
@@ -92,16 +92,16 @@ async function getReviews() {
 						</div>
 						<!-- Pay by case div end -->
 
-						<div class="flex my-6 cursor-default">
+						<div class="my-6 flex cursor-default">
 							<div class="flex w-full text-xs">
 								{#each review.items as item}
 									<div class="flex w-full text-xs">
 										<a href="{`/reviews/${review.id}`}">
 											{#if item.imgCdn}
-												<img src="{item.imgCdn}" class="w-10 h-10" alt="" />
+												<img src="{item.imgCdn}" class="h-10 w-10" alt="" />
 											{/if}
 										</a>
-										<div class="flex-1 ml-2">
+										<div class="ml-2 flex-1">
 											<div class="flex">
 												<a href="{`/reviews/${review.id}`}">
 													<h4 class="font-semibold text-gray-800">
@@ -109,7 +109,7 @@ async function getReviews() {
 													</h4>
 												</a>
 											</div>
-											<div class="flex my-1">
+											<div class="my-1 flex">
 												<h5 class="text-gray-500">
 													{item.status}:
 												</h5>
@@ -127,7 +127,7 @@ async function getReviews() {
 						<div>
 							<div class="xl:flex">
 								<div
-									class=" flex items-center justify-end mb-2 text-base font-bold text-gray-800 md:text-xl xl:mb-0">
+									class=" mb-2 flex items-center justify-end text-base font-bold text-gray-800 md:text-xl xl:mb-0">
 									<span class="text-gray-800"> </span>
 									{#if review && review.amount}
 										<span class="">
@@ -136,17 +136,17 @@ async function getReviews() {
 									{/if}
 								</div>
 
-								<div class="items-center hidden md:ml-4 sm:block md:flex">
+								<div class="hidden items-center sm:block md:ml-4 md:flex">
 									<div class="mb-2 md:mb-0"></div>
 								</div>
 							</div>
 						</div>
 
 						<!-- Chevron right icon div start -->
-						<div class="hidden sm:block my-auto">
+						<div class="my-auto hidden sm:block">
 							<a href="{`/reviews/${review.id}`}">
 								<svg
-									class=" w-6 h-6 ml-4 text-gray-500 transform hover:text-primary-500 hover:translate-x-1"
+									class=" ml-4 h-6 w-6 transform text-gray-500 hover:translate-x-1 hover:text-primary-500"
 									xmlns="http://www.w3.org/2000/svg"
 									fill="none"
 									viewBox="0 0 24 24"

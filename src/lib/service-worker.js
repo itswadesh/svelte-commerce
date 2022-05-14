@@ -1,6 +1,6 @@
-import { timestamp, build } from '$service-worker'
+import { version, build } from '$service-worker'
 
-const name = `cache-${timestamp}`
+const name = `cache-${version}`
 
 self.addEventListener('install', (event) => {
 	event.waitUntil(caches.open(name).then((cache) => cache.addAll(build)))
@@ -10,7 +10,7 @@ self.addEventListener('activate', (event) => {
 	event.waitUntil(
 		caches.keys().then(async (keys) => {
 			for (const key of keys) {
-				if (!key.includes(timestamp)) caches.delete(key)
+				if (!key.includes(version)) caches.delete(key)
 			}
 		})
 	)

@@ -21,7 +21,7 @@ ul > li {
 <script>
 import Checkbox from '$lib/ui/Checkbox.svelte'
 import Radio from '$lib/ui/Radio.svelte'
-import { constructURL, constructURL2 } from '../../util'
+import { constructURL, constructURL2 } from '$lib/util'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { createEventDispatcher } from 'svelte'
@@ -93,7 +93,7 @@ let features = [
 	'Backlit Keyboard',
 	'NFC Support',
 	'Face Recognition',
-	'Optane Memory',
+	'Optane Memory'
 ]
 function checkFeature(k) {
 	return features.includes(k)
@@ -108,13 +108,13 @@ function stringToArray(v) {
 {#if showMobileFilter}
 	<div
 		transition:fly="{{ x: -50, duration: 300 }}"
-		class="fixed inset-0 z-50 bg-white w-screen h-screen">
+		class="fixed inset-0 z-50 h-screen w-screen bg-white">
 		<div
-			class="p-3 border-2 border-gray-300 shadow-md tracking-wide  flex items-center justify-between">
+			class="flex items-center justify-between border-2 border-gray-300  p-3 tracking-wide shadow-md">
 			<button
 				type="button"
 				on:click="{() => (showMobileFilter = false)}"
-				class="text-primary-500 text-xs hover:underline focus:outline-none">
+				class="text-xs text-primary-500 hover:underline focus:outline-none">
 				Cancle
 			</button>
 
@@ -123,13 +123,13 @@ function stringToArray(v) {
 			<button
 				type="button"
 				on:click="{clearFilters}"
-				class="text-primary-500 text-xs hover:underline focus:outline-none">
+				class="text-xs text-primary-500 hover:underline focus:outline-none">
 				Clear All
 			</button>
 		</div>
 
-		<div class="flex w-full h-full">
-			<div class="w-2/5 bg-gray-200 h-full border-r border-gray-300 overflow-y-scroll">
+		<div class="flex h-full w-full">
+			<div class="h-full w-2/5 overflow-y-scroll border-r border-gray-300 bg-gray-200">
 				<ul class=" divide-y divide-gray-300 border-b border-gray-300">
 					<!-- <li
               on:click="{()=>selected='categories'}"
@@ -217,10 +217,10 @@ function stringToArray(v) {
 			</div>
 		</div>
 
-		<div class="absolute bottom-0 inset-x-0 w-full bg-primary-500 ">
+		<div class="absolute inset-x-0 bottom-0 w-full bg-primary-500 ">
 			<button
 				type="submit"
-				class="w-full p-3 text-white text-center tracking-wider font-bold cursor-pointer focus:outline-none"
+				class="w-full cursor-pointer p-3 text-center font-bold tracking-wider text-white focus:outline-none"
 				on:click="{hide}">
 				APPLY
 			</button>

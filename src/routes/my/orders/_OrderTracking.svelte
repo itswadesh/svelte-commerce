@@ -1,7 +1,7 @@
 <style></style>
 
 <script>
-import { date } from '../../../util'
+import { date } from '$lib/util'
 
 export let order
 </script>
@@ -11,21 +11,21 @@ export let order
 		<div
 			class="
           flex flex-col
-          xl:flex-row
-          space-y-16
-          xl:space-y-0 xl:items-center
-          justify-start
-          xl:justify-between
           flex-wrap
+          justify-start
+          space-y-16 xl:flex-row
+          xl:items-center
+          xl:justify-between
+          xl:space-y-0
         ">
 			{#each order.orderHistory as t, tx}
 				{#if t.index < 7 && t.public === true}
 					<div class="flex flex-col xl:items-center xl:justify-center">
 						{#if t.time}
-							<div class="relative h-10 w-10 bg-primary-500 rounded-full">
+							<div class="relative h-10 w-10 rounded-full bg-primary-500">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
-									class="absolute inset-0 text-white h-7 w-7 m-1.5"
+									class="absolute inset-0 m-1.5 h-7 w-7 text-white"
 									fill="none"
 									viewBox="0 0 24 24"
 									stroke="currentColor">
@@ -54,7 +54,7 @@ export let order
 						{/if}
 
 						<div
-							class="absolute xl:static left-12 xl:mt-2 xl:text-center {t.time
+							class="absolute left-12 xl:static xl:mt-2 xl:text-center {t.time
 								? 'opacity-100'
 								: 'opacity-40'} ">
 							<h4 class="font-medium">{t.status}</h4>
@@ -78,22 +78,22 @@ export let order
 	<div
 		class="
         absolute
-        z-0
         inset-0
         top-5
         left-5
         bottom-10
-        xl:bottom-0 xl:left-14 xl:right-14
         isolate
+        z-0 xl:bottom-0 xl:left-14
+        xl:right-14
       ">
 		<div
 			class="
-          w-1
           h-full
+          w-1
+          border-l-2 border-dotted
+          border-primary-500
           xl:h-1 xl:w-full
-          border-l-2
           xl:border-l-0 xl:border-t-2
-          border-dotted border-primary-500
         ">
 		</div>
 	</div>

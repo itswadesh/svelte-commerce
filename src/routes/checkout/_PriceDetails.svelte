@@ -2,7 +2,7 @@
 import { goto } from '$app/navigation'
 import { cart, addToCart } from '../../../store/cart'
 import Button from '$lib/ui/Button.svelte'
-import { currency } from './../../util'
+import { currency } from '$lib/util'
 import { spring } from 'svelte/motion'
 
 const cart_total = spring(),
@@ -36,7 +36,7 @@ function hideOffers() {
 </script>
 
 <div class="flex flex-col sm:p-1">
-	<div class="p-3 my-auto text-lg font-medium text-center text-gray-600">PRICE DETAILS</div>
+	<div class="my-auto p-3 text-center text-lg font-medium text-gray-600">PRICE DETAILS</div>
 	<div v-if="cart">
 		<div>
 			<button
@@ -44,13 +44,13 @@ function hideOffers() {
 				on:click="{() => (showOffers = !showOffers)}">
 				<span
 					class="
-              flex-shrink-0
-              text-sm
-              font-medium
-              cursor-pointer
-              ms-3
               text-secondary-200
               hover:text-secondary-400
+              flex-shrink-0
+              cursor-pointer
+              text-sm
+              font-medium
+              ms-3
             ">
 					See Available Offer
 				</span>
@@ -59,12 +59,12 @@ function hideOffers() {
 		<div
 			class="
           container
-          flex flex-row
-          justify-between
+          mx-auto flex
           flex-shrink-0
+          flex-row
+          justify-between
           p-2
           px-3
-          mx-auto
           text-base
           font-light
         ">
@@ -74,12 +74,12 @@ function hideOffers() {
 		<div
 			class="
           container
-          flex flex-row
-          justify-between
+          mx-auto flex
           flex-shrink-0
+          flex-row
+          justify-between
           p-2
           px-3
-          mx-auto
           text-base
           font-light
         ">
@@ -108,11 +108,11 @@ function hideOffers() {
 			<div
 				class="
           container
-          flex flex-row
+          mx-auto flex
+          flex-row
           justify-between
           p-2
           px-3
-          mx-auto
           text-base
           font-light
         ">
@@ -120,14 +120,14 @@ function hideOffers() {
 					href="/delivery-charges"
 					class="
             flex
-            font-light
-            hover:font-medium
-            text-gray-600
-            hover:text-primary-500
             cursor-pointer
+            font-light
+            text-gray-600
+            hover:font-medium
+            hover:text-primary-500
           ">
 					<h6>Delivery Charges</h6>
-					<h6 class="ml-1 my-auto">
+					<h6 class="my-auto ml-1">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							class="h-4 w-4"
@@ -148,11 +148,11 @@ function hideOffers() {
 		<div
 			class="
           container
-          flex flex-row
+          mx-auto flex
+          flex-row
           justify-between
           p-2
           px-3
-          mx-auto
           text-base
           font-semibold
           text-gray-600
@@ -166,11 +166,11 @@ function hideOffers() {
 			{#if nextpage}
 				<a href="{nextpage}">
 					<div
-						class="flex items-center justify-center w-full sm:px-3 p-3
+						class="flex w-full items-center justify-center bg-primary-500 p-3
                 text-white
-                sm:my-4
                 focus:ring-primary-500
-                bg-primary-500">
+                sm:my-4
+                sm:px-3">
 						<Button>
 							{btnname}
 						</Button>

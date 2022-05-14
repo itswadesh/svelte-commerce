@@ -1,15 +1,13 @@
 <script lang="ts">
 import { onMount } from 'svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-import { date, currency, store } from './../../../util'
+import { date, currency, store } from '$lib/util'
 import { KQL_MyOrders } from '$lib/graphql/_kitql/graphqlStores'
-import { stringify } from 'postcss'
 
 const seoProps = {
 	title: 'Orders',
 	metadescription: 'All orders details'
 }
-let orders
 let open = false
 function toggle() {
 	open = !open
@@ -19,32 +17,33 @@ onMount(() => {
 	getOrders()
 })
 async function getOrders() {
-	orders = (await KQL_MyOrders.query({ variables: { store: store.id } })).data?.myOrders
+	await KQL_MyOrders.queryLoad({ variables: { store: store.id } })
 }
+$: orders = $KQL_MyOrders.data?.myOrders
 </script>
 
 <SEO {...seoProps} />
 
-<section class="w-full h-full pl-2 sm:pl-8 sm:pr-2 text-gray-800 tracking-wide ">
-	<h1 class="font-bold  text-lg sm:text-xl">
+<section class="h-full w-full pl-2 tracking-wide text-gray-800 sm:pl-8 sm:pr-2 ">
+	<h1 class="text-lg  font-bold sm:text-xl">
 		<span class="mr-1">My orders</span>{#if orders?.count}( {orders?.count} ){/if}
 	</h1>
 	{#if !$KQL_MyOrders.isFetching && orders?.count > 0}
 		{#each orders?.data as order}
 			<div
-				class=" relative p-4 my-2 sm:my-5 transition duration-300 bg-white border-t border-gray-300 rounded-md md:shadow-md border ">
-				<div class="flex justify-between items-center">
+				class=" relative my-2 rounded-md border border-t border-gray-300 bg-white p-4 transition duration-300 sm:my-5 md:shadow-md ">
+				<div class="flex items-center justify-between">
 					<div class="sm:ml-4">
 						<div class="">
 							<span class="text-lg font-semibold tracking-wider md:text-2xl"> {order.orderNo}</span>
 						</div>
-						<div class="text-gray-400 text-sm">
+						<div class="text-sm text-gray-400">
 							{date(+order.createdAt)}
 						</div>
-						<div class="flex my-2 text-sm item-center">
+						<div class="item-center my-2 flex text-sm">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
-								class="w-5 h-5 text-primary-500"
+								class="h-5 w-5 text-primary-500"
 								fill="none"
 								viewBox="0 0 24 24"
 								stroke="currentColor">
@@ -60,16 +59,16 @@ async function getOrders() {
 								<span class="font-semibold">{order.paymentMode}</span>
 							</span>
 						</div>
-						<div class="flex my-6">
+						<div class="my-6 flex">
 							<div class="flex w-full text-xs">
 								{#each order.orderItems as item}
 									<div class="flex w-full text-xs">
 										<a href="{`/my/orders/details?itemId=${item.id}`}">
 											{#if item.imgCdn}
-												<img src="{item.imgCdn}" class="w-10 h-10" alt="" />
+												<img src="{item.imgCdn}" class="h-10 w-10" alt="" />
 											{/if}
 										</a>
-										<div class="flex-1 ml-2">
+										<div class="ml-2 flex-1">
 											<div class="flex">
 												<a href="{`/my/orders/details?itemId=${item.id}`}">
 													<h4 class="font-semibold text-gray-800">
@@ -77,7 +76,7 @@ async function getOrders() {
 													</h4>
 												</a>
 											</div>
-											<div class="flex my-1">
+											<div class="my-1 flex">
 												<h5 class="text-gray-500">
 													{item.status}:
 												</h5>
@@ -95,7 +94,7 @@ async function getOrders() {
 						<div>
 							<div class="xl:flex">
 								<div
-									class=" flex items-center justify-end mb-2 text-base font-bold text-gray-800 md:text-xl xl:mb-0">
+									class=" mb-2 flex items-center justify-end text-base font-bold text-gray-800 md:text-xl xl:mb-0">
 									<span class="text-gray-800"> </span>
 									{#if order && order.amount}
 										<span class="">
@@ -104,17 +103,17 @@ async function getOrders() {
 									{/if}
 								</div>
 
-								<div class="items-center hidden md:ml-4 sm:block md:flex">
+								<div class="hidden items-center sm:block md:ml-4 md:flex">
 									<div class="mb-2 md:mb-0"></div>
 								</div>
 							</div>
 						</div>
 
 						<!-- Chevron right icon div start -->
-						<div class="hidden sm:block my-auto">
-							<a href="{`/orders/${order.id}`}">
+						<div class="my-auto hidden sm:block">
+							<a href="{`/my/orders/details?itemId=${order.id}`}">
 								<svg
-									class=" w-6 h-6 ml-4 text-gray-500 transform hover:text-primary-500 hover:translate-x-1"
+									class=" ml-4 h-6 w-6 transform text-gray-500 hover:translate-x-1 hover:text-primary-500"
 									xmlns="http://www.w3.org/2000/svg"
 									fill="none"
 									viewBox="0 0 24 24"

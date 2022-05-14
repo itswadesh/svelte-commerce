@@ -51,7 +51,7 @@ export async function load({ url, params, fetch, session, context, cookie }) {
 
 <script>
 import { goto } from '$app/navigation'
-import { constructQry, constructURL2 } from '../../util'
+import { constructQry, constructURL2 } from '$lib/util'
 import { sorts } from '$lib/config'
 import Product from '$lib/Product.svelte'
 import Pagination from './_Pagination.svelte'
@@ -63,7 +63,7 @@ import MobileFilters from './_MobileFilters.svelte'
 import { stringify } from 'postcss'
 import ProductCard from '$lib/components/_ProductCard.svelte'
 import ProductCardEs from './_ProductCardEs.svelte'
-import { get } from './../../util/api'
+import { get } from '$lib/util/api'
 export let page, products, facets, query, count
 const PAGE_SIZE = 30
 let showMobileFilter = false,

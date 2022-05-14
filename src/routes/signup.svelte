@@ -13,7 +13,7 @@ import { goto } from '$app/navigation'
 import { session } from '$app/stores'
 import Cookies from 'universal-cookie'
 import SEO from '$lib/components/SEO/index.svelte'
-import { toast } from './../util'
+import { toast } from '$lib/util'
 import { signUp } from '$lib/services'
 let ref,
 	loading = false
@@ -40,26 +40,15 @@ async function submit(e) {
 	} finally {
 		loading = false
 	}
-	// try {
-	// 	const res = await post('users', { email, password })
-	// 	cookies.set('token', res.token, { path: '/' })
-	// 	$session.user = res.user
-	// 	$session.token = res.token
-	// 	toast('Welcome to svelte commerce', 'success')
-	// 	goto('/')
-	// } catch (e) {
-	// 	toast(e, 'error')
-	// 	console.log('Login Error...', e.toString())
-	// }
 }
 </script>
 
 <SEO {...seoProps} />
 
-<div class="h-screen py-20 bg-gray-900 ">
-	<div class="flex justify-center mx-4">
-		<div class="hidden w-full px-8 bg-black rounded-lg rounded-r-none md:w-96 md:block">
-			<div class="py-6 mt-2 text-2xl font-bold text-white">Sveltekit is awesome</div>
+<div class="h-screen bg-gray-900 py-20 ">
+	<div class="mx-4 flex justify-center">
+		<div class="hidden w-full rounded-lg rounded-r-none bg-black px-8 md:block md:w-96">
+			<div class="mt-2 py-6 text-2xl font-bold text-white">Sveltekit is awesome</div>
 			<div class="text-gray-500 ">
 				<div class="my-4">
 					<div class="text-lg font-semibold ">
@@ -84,12 +73,12 @@ async function submit(e) {
 				</div>
 			</div>
 		</div>
-		<div class="w-full bg-white rounded-lg shadow md:rounded-l-none md:w-96">
+		<div class="w-full rounded-lg bg-white shadow md:w-96 md:rounded-l-none">
 			<div class="">
-				<div class=" h-7 w-7 ml-auto mr-2">
+				<div class=" ml-auto mr-2 h-7 w-7">
 					<a
 						href="/"
-						class="block mt-2 p-1 hover:bg-gray-500 bg-gray-900 rounded-full focus:outline-none">
+						class="mt-2 block rounded-full bg-gray-900 p-1 hover:bg-gray-500 focus:outline-none">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							class="h-5 w-5 text-white "
@@ -104,23 +93,23 @@ async function submit(e) {
 						</svg>
 					</a>
 				</div>
-				<h1 class="text-3xl text-center font-bold tracking-tight text-gray-900 ">Sign up</h1>
+				<h1 class="text-center text-3xl font-bold tracking-tight text-gray-900 ">Sign up</h1>
 				<form
 					on:submit|preventDefault="{submit}"
-					class="mt-10 mx-4 flex flex-col text-sm text-gray-500">
+					class="mx-4 mt-10 flex flex-col text-sm text-gray-500">
 					<input
 						type="text"
 						placeholder="Email"
-						class="border border-gray-500 rounded-full py-2 px-5 focus:outline-none "
+						class="rounded-full border border-gray-500 py-2 px-5 focus:outline-none "
 						bind:value="{email}" />
 					<input
 						type="password"
 						placeholder="Password"
-						class="mt-3 border border-gray-500 rounded-full py-2 px-5 focus:outline-none "
+						class="mt-3 rounded-full border border-gray-500 py-2 px-5 focus:outline-none "
 						bind:value="{password}" />
 					<button
 						type="submit"
-						class="mt-8 py-2 bg-gray-900 text-lg uppercase text-white font-semibold rounded-full shadow-md zoom tracking-wider focus:outline-none">
+						class="zoom mt-8 rounded-full bg-gray-900 py-2 text-lg font-semibold uppercase tracking-wider text-white shadow-md focus:outline-none">
 						Signup Now
 					</button>
 				</form>
@@ -129,14 +118,14 @@ async function submit(e) {
 				<a
 					rel="external"
 					href="{`/login`}"
-					class="flex items-center justify-center py-2 font-semibold text-gray-900 border rounded-full shadow-md zoom hover:no-underline">
+					class="zoom flex items-center justify-center rounded-full border py-2 font-semibold text-gray-900 shadow-md hover:no-underline">
 					<div class="ml-4 text-lg font-semibold tracking-tight">Already registered? Login</div>
 				</a>
-				<div class="mx-4 mt-10 mb-10 text-xs tracking-widest text-center text-gray-500">
+				<div class="mx-4 mt-10 mb-10 text-center text-xs tracking-widest text-gray-500">
 					<h5 class="mb-1">By continuing, you agree to Svelte Commerce</h5>
-					<a class="hover:underline text-gray-800" href="/">Terms of Service</a>
+					<a class="text-gray-800 hover:underline" href="/">Terms of Service</a>
 					,
-					<a class="hover:underline text-gray-800" href="/">Privacy Policy</a>
+					<a class="text-gray-800 hover:underline" href="/">Privacy Policy</a>
 				</div>
 			</div>
 		</div>
