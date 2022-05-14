@@ -169,7 +169,7 @@ let categoryColors = [
 						{#if i < 12}
 							{#if category.img}
 								<a
-									href="{`/category/${category.slug}`}"
+									href="{`/search?q=${category.slug}`}"
 									class="w-32 lg:w-36 flex flex-col items-center justify-center group zoom-out">
 									<div
 										class="mb-4 w-32 h-32 lg:w-36 lg:h-36 rounded-full border-2 border-gray-300 group-hover:border-primary-500 flex-shrink-0 group-hover:shadow-xl overflow-hidden">
@@ -186,7 +186,7 @@ let categoryColors = [
 								</a>
 							{:else}
 								<a
-									href="/category/{category.slug}"
+									href="/search?q={category.slug}"
 									class="sm:w-32 lg:w-36 flex flex-col items-center justify-center group hover:text-primary-500">
 									<div
 										class="relative mb-1 sm:mb-4 sm:w-32 sm:h-32 lg:w-36 lg:h-36 rounded-full  border-2 border-gray-300 group-hover:border-primary-500 flex-shrink-0 group-hover:shadow-xl overflow-hidden bg-no-repeat bg-center bg-cover

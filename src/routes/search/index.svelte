@@ -28,7 +28,7 @@ export async function load({ url, params, fetch, session, context, cookie }) {
 		products = res?.data
 		count = +res?.count
 		facets = res?.facets.all_aggs
-		err = !products ? 'No result Not Found' : null
+		err = !products ? 'No result found' : null
 	} catch (e) {
 	} finally {
 	}
