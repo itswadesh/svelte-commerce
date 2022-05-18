@@ -16,20 +16,20 @@ export { clazz as class }
 		type="{type}"
 		class="
       relative
+      transform
+      items-center
+      justify-center
+      border-2
       px-4
       py-2
+      text-center
       font-semibold
       tracking-wider
       text-primary-500
       transition
       duration-300
-      transform
-      active:scale-95
-      items-center
-      justify-center
-      text-center
-      border-2
-      focus:outline-none focus:ring-0 focus:ring-offset-0
+      focus:outline-none
+      focus:ring-0 focus:ring-offset-0 active:scale-95
       {disabled ? 'bg-gray-400 cursor-not-allowed' : 'bg-transparent'}
       {rounded ? 'rounded-full ' : 'rounded-md'}
       {border
@@ -44,17 +44,17 @@ export { clazz as class }
 		{#if loading}
 			<div
 				class="
-        absolute
-        inset-0
-        bg-black bg-opacity-50
-        flex
-        items-center
-        justify-center
-        cursor-not-allowed
-        {rounded ? 'rounded-full' : 'rounded-md'}
-      ">
+						absolute
+						inset-0
+						flex cursor-not-allowed
+						items-center
+						justify-center
+						bg-black
+						bg-opacity-50
+						{rounded ? 'rounded-full' : 'rounded-md'}
+					">
 				<svg
-					class="text-white animate-spin {loadingringsize == 'xs'
+					class="animate-spin text-white {loadingringsize == 'xs'
 						? 'w-4 h-4'
 						: loadingringsize == 'sm'
 						? 'h-5 w-5'
