@@ -315,7 +315,7 @@ async function addToWishlist(product, variant) {
 						{/if}
 					</div>
 					<!-- Add to cart start -->
-					<div class="my-5 w-full xl:w-60">
+					<div class="my-5 w-full xl:w-full">
 						{#if CartButtonText == 'Add To Cart'}
 							<button
 								on:click="{() => addToBag(product)}"

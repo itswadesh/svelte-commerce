@@ -5883,7 +5883,7 @@ simple-svelte-autocomplete@^2.4.0:
   resolved "https://registry.yarnpkg.com/simple-svelte-autocomplete/-/simple-svelte-autocomplete-2.4.0.tgz#e5dbbfd813ea5e2b004132a2e0bd10abe984057f"
   integrity sha512-hiYaT04ZP/zTZxKqwG9MefXP5tCN2MjQojuh1JYMT1rRnXOG4yHK7s5nHy1A+xd5v/PAnyb7ohijTsJk2SyfnQ==
 
-"simply-reactive@github:vadimkorr/simply-reactive#1.0.2":
+simply-reactive@vadimkorr/simply-reactive#1.0.2:
   version "1.0.0"
   resolved "https://codeload.github.com/vadimkorr/simply-reactive/tar.gz/f403097d695030306bdfd0f849411fd28ad7d474"
   dependencies:
