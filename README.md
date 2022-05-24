@@ -17,6 +17,9 @@
 ### Svelte Commerce is an advanced Frontend Platform for eCommerce based on Sveltekit
 
 Demo <a href="https://kitcommerce.tech/" target="blank">Kitcommerce.tech</a>
+Svelte commerce in real world foodtech ecommerce https://food.misiki.in/
+Svelte commerce in home made FNB sector https://homefood.tech/ (https://github.com/itswadesh/homefood)
+
 <br/>
 
 - 🛍️ Attach Svelte store front to any ecommerce API (e.g. <a href="https://misiki.in/"> Misiki SAAS </a>, <a href="https://magento.com/">Magento</a>, <a href="https://www.moltin.com/">Moltin</a>, <a href="https://www.shopify.com/">Shopify</a> ...)
@@ -37,8 +40,6 @@ Demo <a href="https://kitcommerce.tech/" target="blank">Kitcommerce.tech</a>
 | <img src="https://res.cloudinary.com/itswadesh/image/upload/c_scale,f_auto,w_250/v1627577152/sveltekit/svelte-commerce-home.png" alt=""/> | <img src="https://res.cloudinary.com/itswadesh/image/upload/c_scale,f_auto,w_250/v1627577152/sveltekit/svelte-commerce-detail.png" alt=""/> | <img src="https://res.cloudinary.com/itswadesh/image/upload/c_scale,f_auto,w_250/v1627577154/sveltekit/svelte-commerce-cart.png" alt=""/> |
 
 # Latest Updates
-
-- New open source theme released for food eommerce / FNB sector https://github.com/itswadesh/homefood
 
 ## Update 26-April-2022
 
