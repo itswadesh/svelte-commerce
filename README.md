@@ -38,6 +38,8 @@ Demo <a href="https://kitcommerce.tech/" target="blank">Kitcommerce.tech</a>
 
 # Latest Updates
 
+- New open source theme released for food eommerce / FNB sector https://github.com/itswadesh/homefood
+
 ## Update 26-April-2022
 
 - 26-April-2022 - Attached to GraphQL backend
