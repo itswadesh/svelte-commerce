@@ -5,6 +5,10 @@
             "destination": "https://api.misiki.in/graphql"
         },
         {
+            "source": "/api/:path*",
+            "destination": "https://api.misiki.in/api/:path*"
+        },
+        {
             "source": "/images/:path*",
             "destination": "https://api.misiki.in/images/:path*"
         }
