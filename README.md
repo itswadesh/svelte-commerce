@@ -1,5 +1,5 @@
 <a href="https://misiki.in/">
-<img src="https://github.com/itswadesh/svelte-commerce/blob/master/static/litekart-banner.png?raw=true" alt/>
+<img src="https://repository-images.githubusercontent.com/213575283/f577b8bd-8edb-41ba-bfe5-36e65072e1f2" alt/>
 </a>
 
 ![version](https://img.shields.io/badge/node-v16.x-blue.svg)
@@ -16,9 +16,9 @@
 
 ### Svelte Commerce is an advanced Frontend Platform for eCommerce based on Sveltekit
 
-Demo <a href="https://kitcommerce.tech/" target="blank">Kitcommerce.tech</a>
-Svelte commerce in real world foodtech ecommerce https://food.misiki.in/
-Svelte commerce in home made FNB sector https://homefood.tech/ (https://github.com/itswadesh/homefood)
+- Demo <a href="https://kitcommerce.tech/" target="blank">Kitcommerce.tech</a>
+- Svelte commerce in real world foodtech ecommerce https://food.misiki.in/
+- Svelte commerce in home made FNB sector https://homefood.tech/ (https://github.com/itswadesh/homefood)
 
 <br/>
 
