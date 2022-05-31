@@ -13,9 +13,9 @@ import { createEventDispatcher } from 'svelte'
 import { fly } from 'svelte/transition'
 import { Gallery, LazyImg, RatingStarDisplayBig } from '$lib/components'
 import { onMount } from 'svelte'
+import { SplideSlide } from '@splidejs/svelte-splide'
 import dayjs from 'dayjs'
 import seamlessBusinessPatternBackground from '$lib/assets/seamless-business-pattern-background.png'
-import { SplideSlide } from '@splidejs/svelte-splide'
 
 const dispatch = createEventDispatcher()
 
