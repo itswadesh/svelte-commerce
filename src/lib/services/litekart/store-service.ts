@@ -20,6 +20,8 @@ import {
 	siteTitle,
 	websiteLegalName,
 	websiteName,
+	saasName,
+	saasDomain,
 	weightUnit,
 	IMAGE_CDN_URL
 } from '$lib/config'
@@ -70,13 +72,15 @@ export const getStoreData = async ({
 		logo,
 		otpLogin: false,
 		phone,
-		product_image_dimention: null,
+		product_image_dimension: null,
 		searchbarText,
 		socialSharingButtons: {},
 		storePromoVideo: {},
 		title: siteTitle,
 		websiteLegalName,
 		websiteName,
+		saasName,
+		saasDomain,
 		weightUnit,
 		whatsappChatButton: {}
 	}
@@ -132,13 +136,15 @@ export const getStoreData = async ({
 			logo: storeRes.storeOne.logo,
 			otpLogin: storeRes.storeOne.otpLogin || true,
 			phone: storeRes.storeOne.phone,
-			product_image_dimention: storeRes.storeOne.product_image_dimention,
+			product_image_dimension: storeRes.storeOne.product_image_dimension,
 			searchbarText: storeRes.storeOne.searchbarText,
 			socialSharingButtons: storeRes.storeOne.socialSharingButtons,
 			storePromoVideo: storeRes.storeOne.storePromoVideo,
 			title: storeRes.storeOne.title,
 			websiteLegalName: storeRes.storeOne.websiteLegalName,
 			websiteName: storeRes.storeOne.websiteName,
+			saasName: storeRes.settings.saasName,
+			saasDomain: storeRes.settings.saasDomain,
 			weightUnit: storeRes.storeOne.weightUnit,
 			whatsappChatButton: storeRes.storeOne.whatsappChatButton
 		}
