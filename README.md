@@ -111,7 +111,7 @@ If you like the ideas behind Svelte Commerce and want to become a contributor - 
 
 # Thank
 
-A big thank to jycouet for making sucha a wonderful package <a target="_blank" href="https://kitql.vercel.app/">KITQL</a>
+A big thank to <a target="_blank" href="https://twitter.com/jycouet">jycouet</a> for making sucha a wonderful package <a target="_blank" href="https://kitql.dev/">KitQL</a>
 
 # Support me!
 
