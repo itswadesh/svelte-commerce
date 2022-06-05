@@ -30,7 +30,7 @@ import { SplideSlide } from '@splidejs/svelte-splide'
 import { PrimaryButton, WhiteButton } from '$lib/ui'
 import { applyAction, enhance } from '$app/forms'
 import { fireGTagEvent } from '$lib/utils/gTagB'
-import { goto, invalidateAll } from '$app/navigation'
+import { goto } from '$app/navigation'
 
 export let data = {}
 // console.log('zzzzzzzzzzzzzzzzzz', data)

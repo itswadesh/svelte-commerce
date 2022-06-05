@@ -27,9 +27,10 @@
 </style>
 
 <script>
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import { LazyImg } from '$lib/components'
 
-export let loading, categories
+export let categories
+export let loading
 
 let categoryColors = [
 	'bg-fuchsia-900',
@@ -141,7 +142,7 @@ let categoryColors = [
 				<div class="sm:hidden">
 					<a
 						href="/sitemap"
-						aria-label="Click to route sitemap"
+						aria-label="Click to visit sitemap"
 						class="group flex w-20 flex-col items-center justify-center hover:text-primary-500">
 						<div
 							class="mb-1 flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full sm:mb-4">
@@ -223,7 +224,7 @@ let categoryColors = [
 				<div class="mt-5 flex w-full justify-center sm:mt-10">
 					<a
 						href="/sitemap"
-						aria-label="Click to route sitemap"
+						aria-label="Click to visit sitemap"
 						class="link font-medium hover:underline">
 						View All
 					</a>
@@ -269,7 +270,7 @@ let categoryColors = [
 							aria-label="Click to view related products of this category"
 							class="group flex flex-col items-center justify-center hover:text-primary-500 sm:w-24 lg:w-28">
 							<div
-								class="relative mb-2 shrink-0 overflow-hidden rounded-full border bg-cover bg-center bg-no-repeat group-hover:border-primary-500 group-hover:shadow-xl  h-24 w-24 lg:h-28 lg:w-28"
+								class="relative mb-2 shrink-0 overflow-hidden rounded-full border bg-cover bg-center bg-no-repeat group-hover:border-primary-500 group-hover:shadow-xl h-24 w-24 lg:h-28 lg:w-28"
 								style="background-image: url('/logo.svg');">
 								<div
 									class="absolute inset-0 flex items-center justify-center bg-opacity-70 text-center text-5xl font-bold text-white group-hover:font-bold

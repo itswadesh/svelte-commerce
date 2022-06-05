@@ -20,6 +20,7 @@ count = +count
 $: pages = +count > 50 ? 50 : +count
 $: startTab = 5 - current <= 5 && 5 - current >= 0 ? 1 : current - 4
 $: endTab = startTab + 9
+
 function changePage(e) {
 	current = e || '1'
 	// dispatch('change', current)
@@ -31,8 +32,6 @@ function changePage(e) {
 	window.scroll({ top: 0, behavior: 'smooth' })
 	// goto($page.url.pathname + $page.url.search)
 	// const r = $page.url.searchParams.get('r')
-
-	// console.log('rrrrrrrrrrrrrrr', r)
 
 	// if (r) $page.url.searchParams.delete('r')
 	// else $page.url.searchParams.set('r', Math.random().toString())

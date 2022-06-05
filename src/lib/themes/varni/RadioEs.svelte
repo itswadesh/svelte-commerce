@@ -83,18 +83,18 @@ import { createEventDispatcher } from 'svelte'
 
 const dispatch = createEventDispatcher()
 
-export let model,
-	items = [],
-	selectedItems = [],
-	color = 'none',
-	name = '',
-	required = false,
-	disabled = false,
-	title = ''
+export let color = 'none'
+export let disabled = false
+export let items = []
+export let model
+export let name = ''
+export let required = false
+export let selectedItems = []
+export let title = ''
 
-let showAllList = false,
-	noOfitems = 5,
-	showSearchBox = false
+let noOfitems = 5
+let showSearchBox = false
+let showAllList = false
 
 function toggleShowAllList() {
 	showAllList = !showAllList
@@ -104,7 +104,9 @@ function toggleShowAllList() {
 		noOfitems = items.length
 	}
 }
+
 let searchTerm
+
 $: filteredTerms = searchTerm
 	? items.filter(
 			(item) =>
