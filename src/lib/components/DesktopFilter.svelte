@@ -19,6 +19,8 @@ export let priceRange = []
 export let query // Required because after loading finished then only we will initiate the price slider component
 export let facets = {}
 
+// console.log('facets', facets)
+
 let clazz
 export { clazz as class }
 
@@ -66,9 +68,11 @@ function goCheckbox(e) {
 onMount(async () => {
 	$page.url.searchParams.forEach(function (value, key) {
 		fl[key] = value
-		if (key !== 'page' && key !== 'sort' && key !== 'lat' && key !== 'lng')
+		if (key !== 'lat' && key !== 'lng' && key !== 'page' && key !== 'sort')
 			appliedFilters[key] = value
 	})
+
+	// console.log('fl', fl)
 
 	getFacetsWithProducts()
 
@@ -353,16 +357,18 @@ function handleToggleSubCategory2(c, cx) {
 	{/if}
 
 	{#if allAttributes?.length > 0}
-		<div class="my-3">
-			<hr class="mb-3 w-full" />
+		{#each allAttributes as attribute}
+			<div class="my-3">
+				<hr class="mb-3 w-full" />
 
-			<CheckboxEs
-				items="{allAttributes}"
-				title="attributes"
-				model="attributes"
-				selectedItems="{fl.attributes || []}"
-				on:go="{goCheckbox}" />
-		</div>
+				<CheckboxEs
+					items="{attribute.value?.buckets}"
+					title="{attribute.key}"
+					model="{attribute.key.toLowerCase()}"
+					selectedItems="{fl[attribute.key.toLowerCase()] || []}"
+					on:go="{goCheckbox}" />
+			</div>
+		{/each}
 	{/if}
 
 	{#if allBrands?.length > 0}
