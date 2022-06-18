@@ -45,7 +45,6 @@ import Footer from './Footer.svelte'
 import HeroBannersCollage6 from './HeroBannersCollage6.svelte'
 import LegalFooterInformation from './LegalFooterInformation.svelte'
 import MobileFilter from './MobileFilter.svelte'
-import Nav from './Nav.svelte'
 import Pagination from './Pagination.svelte'
 import PopularProductsHome from './PopularProductsHome.svelte'
 import ProductGridShowCase from './ProductGridShowCase.svelte'
@@ -87,7 +86,6 @@ export {
 	MobileFilter,
 	MobileFooter,
 	Modal,
-	Nav,
 	PageIdPickedBanner,
 	PageTransitions,
 	Pagination,
