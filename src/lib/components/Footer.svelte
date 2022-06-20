@@ -46,33 +46,33 @@ function getYear() {
 let pages = []
 
 onMount(async () => {
-	const res1 = await getPages()
-	const res2 = await getStoreData()
+	// const res1 = await getPages()
+	// const res2 = await getStoreData()
 
-	store = res2.storeOne
-	megamenu = res2.megamenu1
-	popularSearches = res2.popularSearches
+	// store = res2.storeOne
+	// megamenu = res2.megamenu1
+	// popularSearches = res2.popularSearches
 
-	if (browser) {
-		localStorage.setItem('megamenu', JSON.stringify(megamenu))
-	}
+	// if (browser) {
+	// 	localStorage.setItem('megamenu', JSON.stringify(megamenu))
+	// }
 })
 
-async function getStoreData() {
-	const response1 = await fetch('/server/store')
-	const res = await response1.json()
+// async function getStoreData() {
+// 	const response1 = await fetch('/server/store')
+// 	const res = await response1.json()
 
-	return res
-}
+// 	return res
+// }
 
-async function getPages() {
-	pages = await PageService.fetchPages({
-		origin: $page.data.origin,
-		storeId: $page.data.store?.id
-	})
+// async function getPages() {
+// 	pages = await PageService.fetchPages({
+// 		origin: $page.data.origin,
+// 		storeId: $page.data.store?.id
+// 	})
 
-	// console.log('pages', pages)
-}
+// 	// console.log('pages', pages)
+// }
 </script>
 
 <footer class="w-full justify-center bg-zinc-50 p-3 text-sm sm:p-10">
@@ -244,45 +244,49 @@ async function getPages() {
 						</li>
 					{/if}
 
-					<li class="max-w-max">
-						<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke-width="1.5"
-								stroke="currentColor"
-								class="h-5 w-5 shrink-0">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"
-								></path>
-							</svg>
+					{#if $page.data.store?.guaranteed_response_time}
+						<li class="max-w-max">
+							<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke-width="1.5"
+									stroke="currentColor"
+									class="h-5 w-5 shrink-0">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"
+									></path>
+								</svg>
 
-							<span>Guaranteed Response Time</span>
-						</h6>
+								<span>Guaranteed Response Time</span>
+							</h6>
 
-						<p>Within 24 Hours</p>
-					</li>
+							<p>{$page.data.store?.guaranteed_response_time}</p>
+						</li>
+					{/if}
 
-					<li class="max-w-max">
-						<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke-width="1.5"
-								stroke="currentColor"
-								class="h-5 w-5 shrink-0">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-							</svg>
+					{#if $page.data.store?.store_timings}
+						<li class="max-w-max">
+							<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke-width="1.5"
+									stroke="currentColor"
+									class="h-5 w-5 shrink-0">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+								</svg>
 
-							<span>Working Days/Hours</span>
-						</h6>
+								<span>Working Days/Hours</span>
+							</h6>
 
-						<p>Mon – Sat / 7AM – 9PM</p>
-					</li>
+							<p>{@html $page.data.store?.store_timings}</p>
+						</li>
+					{/if}
 				</ul>
 			</div>
 

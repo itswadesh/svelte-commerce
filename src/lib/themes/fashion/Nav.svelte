@@ -159,7 +159,7 @@ async function getCategories() {
 						alt="logo"
 						height="64"
 						aspect_ratio="4:1"
-						class="max-h-10 sm:max-h-16 w-40 object-contain object-left" />
+						class="max-h-10 sm:max-h-16 max-w-[160px] object-contain object-left" />
 				{:else if $page?.data?.store?.websiteName}
 					<h2
 						class="bg-gradient-to-b from-primary-500 to-secondary-500 bg-clip-text text-2xl font-extrabold text-transparent sm:text-3xl truncate w-40 sm:w-auto sm:max-w-sm">
@@ -169,7 +169,7 @@ async function getCategories() {
 					<img
 						src="{logo}"
 						alt="logo"
-						class="max-h-10 sm:max-h-16 w-40 object-contain object-left" />
+						class="max-h-10 sm:max-h-16 max-w-[160px] object-contain object-left" />
 				{/if}
 			</a>
 		</div>
@@ -280,7 +280,8 @@ async function getCategories() {
 					href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page?.url
 						?.search}"
 					aria-label="Click to visit login"
-					data-sveltekit-preload-data>
+					data-sveltekit-preload-data
+					class="hidden lg:block">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"

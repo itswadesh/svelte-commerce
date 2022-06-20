@@ -59,7 +59,7 @@
 <script>
 import { Confetti } from 'svelte-confetti'
 import { currency, date } from '$lib/utils'
-import { fireGTagEvent } from '$lib/utils/gTag'
+import { fireGTagEvent } from '$lib/utils/gTagB'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
@@ -73,7 +73,7 @@ export let data
 
 const seoProps = {
 	title: 'Payment Success ',
-	metadescription: 'Payment Success '
+	metaDescription: 'Payment Success '
 }
 
 onMount(async () => {
@@ -256,19 +256,41 @@ onMount(async () => {
 													</div>
 												</div>
 
-												<div class="mb-2 flex w-full flex-wrap gap-4 text-sm">
-													<div class="flex items-center gap-2 whitespace-nowrap">
-														<span class="font-medium text-zinc-500">Qty :</span>
+												{#if item.qty || item.price || item.size || item.color}
+													<div class="mb-2 flex w-full flex-wrap gap-4 text-sm">
+														{#if item.qty}
+															<div class="flex items-center gap-2 whitespace-nowrap">
+																<span class="font-medium text-zinc-500">Qty :</span>
 
-														<b>{item.qty}</b>
+																<b>{item.qty}</b>
+															</div>
+														{/if}
+
+														{#if item.price}
+															<div class="flex items-center gap-2 whitespace-nowrap">
+																<span class="font-medium text-zinc-500">Price :</span>
+
+																<b>{currency(item.price, $page.data?.store?.currencySymbol)}</b>
+															</div>
+														{/if}
+
+														{#if item.size}
+															<div class="flex items-center gap-2 whitespace-nowrap">
+																<span class="font-medium text-zinc-500">Size :</span>
+
+																<b>{item.size}</b>
+															</div>
+														{/if}
+
+														{#if item.color}
+															<div class="flex items-center gap-2 whitespace-nowrap">
+																<span class="font-medium text-zinc-500">Color :</span>
+
+																<b>{item.color}</b>
+															</div>
+														{/if}
 													</div>
-
-													<div class="flex items-center gap-2 whitespace-nowrap">
-														<span class="font-medium text-zinc-500">Price :</span>
-
-														<b>{currency(item.price, $page.data?.store?.currencySymbol)}</b>
-													</div>
-												</div>
+												{/if}
 
 												<!-- Options -->
 

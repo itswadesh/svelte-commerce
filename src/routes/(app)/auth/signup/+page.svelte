@@ -2,7 +2,6 @@
 import { browser } from '$app/environment'
 import { fly } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
-import { IS_DEV } from '$lib/config'
 import { page } from '$app/stores'
 import { post } from '$lib/utils/api'
 import { toast } from '$lib/utils'
@@ -13,6 +12,7 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
+const IS_DEV = import.meta.env.DEV
 
 const cookies = Cookie()
 
@@ -120,7 +120,7 @@ async function submit(n) {
 				alt="logo"
 				height="64"
 				aspect_ratio="4:1"
-				class="max-h-16 w-40 object-contain object-center" />
+				class="max-h-16 max-w-[160px] object-contain object-center" />
 		{:else}
 			<h1
 				class="bg-gradient-to-b from-primary-500 to-primary-700 bg-clip-text text-3xl font-extrabold text-transparent underline decoration-zinc-800">
@@ -289,7 +289,7 @@ async function submit(n) {
 
 		<a
 			href="/terms-conditions"
-			aria-label="Click to route terms & conditions"
+			aria-label="Click to visit terms & conditions"
 			target="_blank"
 			rel="noopener noreferrer"
 			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">

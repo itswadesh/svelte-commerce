@@ -4,11 +4,10 @@ import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import { post } from '$lib/utils/api'
 import { UserService } from '$lib/services'
-import Error from '$lib/components/Error.svelte'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import { LazyImg, Error } from '$lib/components'
+
+import { TextboxFloating, PrimaryButton } from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
-import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
 
 const seoProps = {
 	title: 'Change Password',
@@ -59,8 +58,6 @@ async function submit(p) {
 			origin: $page.data.origin
 		})
 
-		// console.log('zzzzzzzzzzzzzzzzzz', res)
-
 		await invalidateAll()
 
 		if (browser) goto('/auth/change-success')
@@ -82,7 +79,7 @@ async function submit(p) {
 				alt="logo"
 				height="64"
 				aspect_ratio="4:1"
-				class="max-h-16 w-40 object-contain object-center" />
+				class="max-h-16 max-w-[160px] object-contain object-center" />
 		{:else}
 			<h1
 				class="bg-gradient-to-b from-primary-500 to-primary-700 bg-clip-text text-3xl font-extrabold text-transparent underline decoration-zinc-800">
