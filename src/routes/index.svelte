@@ -32,7 +32,7 @@ export let banners,
 let heroBanners
 
 onMount(async () => {
-	KQL_Home.queryLoad({ variables: { store: store.id } })
+	KQL_Home.queryLoad({ variables: { store: store?.id } })
 	// featuredProducts = await getFeatured()
 	// hotProducts = await getHot()
 	// shoppoProducts = await getShoppo()
