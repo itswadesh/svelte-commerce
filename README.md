@@ -113,6 +113,12 @@ If you like the ideas behind Svelte Commerce and want to become a contributor - 
 
 A big thank to <a target="_blank" href="https://twitter.com/jycouet">jycouet</a> for making sucha a wonderful package <a target="_blank" href="https://kitql.dev/">KitQL</a>
 
+# Support
+Twitter: @itswadesh
+Telegram: @itswadesh
+Email: swadesh@misiki.in
+Discord: [Invitation](https://discord.gg/VbXyQmUR)
+
 # Support me!
 
 Svelte Commerce is and always will be Open Source, released under MIT Licence.
