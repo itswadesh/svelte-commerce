@@ -1,0 +1,7 @@
+mutation cashfreePayNowNew($address: ID, $slot: ID) {
+  cashfreePayNowNew(address: $address, slot: $slot) {
+    orderId
+    token
+    redirectUrl
+  }
+}

@@ -41,10 +41,10 @@ function submit() {
 			<h4>FREE</h4>
 		</div>
 
-		<p class="d mt-1 text-xs tracking-wider text-gray-400">
-			Free shipping on orders of ₹999 or more. For first purchase,
+		<!-- <p class="d mt-1 text-xs tracking-wider text-gray-400">
+			Free shipping on orders of ₹899 or more. For first purchase,
 			<a href="/" class="underline hover:text-primary-500">See Offer</a>
-		</p>
+		</p> -->
 	</div>
 
 	<hr class="my-5 border-t border-dashed border-gray-200" />
@@ -57,13 +57,13 @@ function submit() {
 		{#if nextpage}
 			<a
 				href="{nextpage}"
-				class="mt-5 block w-full rounded-md bg-gray-700 px-4 py-2 text-center font-semibold uppercase tracking-wider text-white shadow-md transition duration-300 hover:bg-gray-800 ">
+				class="mt-5 block h-full w-full flex-1 rounded-md text-center font-semibold uppercase tracking-wider text-white shadow-md transition duration-300 ">
 				{text}
 			</a>
 		{:else}
 			<button
 				on:click="{submit}"
-				class="w-full block px-4 py-2 mt-5 font-semibold tracking-wider text-white uppercase bg-gray-700 rounded-md shadow-md transition duration-300 hover:bg-gray-800 focus:outline-none ">
+				class="w-full block px-4 py-2 mt-5 font-semibold tracking-wider text-white uppercase rounded-md shadow-md transition duration-300 focus:outline-none ">
 				{text}
 			</button>
 		{/if}

@@ -19,11 +19,11 @@ const cookies = new Cookies()
 import { spring } from 'svelte/motion'
 import Search from '$lib/Search.svelte'
 import { Categories } from './graphql/_kitql/graphqlTypes'
-import { KQL_Cart, KQL_Init, KQL_Me } from './graphql/_kitql/graphqlStores'
+import { KQL_Cart, KQL_Me } from './graphql/_kitql/graphqlStores'
 import { signOut } from './services'
 import { onMount } from 'svelte'
 import { toast } from './util'
-
+const loginUrl = '/auth/login'
 onMount(async () => {
 	await KQL_Me.query({})
 	await KQL_Cart.query({ settings: { policy: 'network-only' } })
@@ -56,7 +56,7 @@ onMount(async () => {
 <nav class=" frosted border-gray-100 p-4 shadow-md">
 	<div class="flex items-center justify-between">
 		<a href="/" class="flex max-w-max items-center focus:outline-none">
-			<img alt="" class="h-8" src="/logo.png" />
+			<img alt="" class="h-8" src="/logo_512.png" />
 		</a>
 		{#if $KQL_Init.data?.megamenu}
 			<div
@@ -114,7 +114,7 @@ onMount(async () => {
 					</svg>
 				</button>
 			</a>
-			{#if !$KQL_Me.errors}
+			{#if me?.active}
 				<a href="/my" class="mx-2 flex min-w-max items-center ">
 					{#if me?.firstName}
 						<div class=" mr-2 flex-1 whitespace-nowrap text-sm font-semibold">
@@ -124,7 +124,10 @@ onMount(async () => {
 
 					<div class="flex-shrink-0">
 						{#if me?.avatar}
-							<img src="{me?.avatar}" alt="" class="h-10 w-10 rounded-full bg-white shadow " />
+							<img
+								src="{me?.avatar}"
+								alt=""
+								class="h-10 w-10 rounded-full bg-white object-contain shadow " />
 						{:else}
 							<img
 								src="/leadership-profile.png"
@@ -134,7 +137,7 @@ onMount(async () => {
 					</div>
 				</a>
 			{:else}
-				<a href="/login" class="text-sm font-semibold tracking-wide hover:text-primary-500">
+				<a href="{loginUrl}" class="text-sm font-semibold tracking-wide hover:text-primary-500">
 					LOGIN
 				</a>
 			{/if}

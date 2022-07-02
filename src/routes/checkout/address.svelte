@@ -1,83 +1,89 @@
-<script lang="ts">
-import { session } from '$app/stores'
-import { onMount } from 'svelte'
-import SelectAddress from './_SelectAddress.svelte'
-import CartSummaryCheckout from './_CartSummaryCheckout.svelte'
-import CheckoutHeader from './_CheckoutHeader.svelte'
-import Pricesummary from '$lib/Pricesummary.svelte'
-let iconloading = false
-let addresses = null
-let selectedAddress = null
-let loading = false
-$: user = $session.user
-import SEO from '$lib/components/SEO/index.svelte'
-import { KQL_DeleteAddress, KQL_MyAddresses } from '$lib/graphql/_kitql/graphqlStores'
+<script context="module" lang="ts">
+export async function load({ url, params, fetch, session, context }) {
+	// console.log('url', url)
+	let loading, err, myAddresses, selectedAddress
+	let prescriptionId = url.searchParams.get('prescription')
 
-onMount(() => {
-	getAddress()
-})
-function selectFirstAddress(x) {
-	const selectedAddress = x?.addresses?.data[0]['id']
-	return selectedAddress
-}
-function addressChanged(e) {
-	selectedAddress = e.detail
-}
-async function getAddress() {
+	// const me = (await KQL_Me.query({ fetch, settings: { policy: 'cache-and-network' } })).data?.me
+	if (!session.me) {
+		return {
+			redirect: `${session.loginUrl}?ref=${url.pathname}`,
+			status: 302
+		}
+	}
+
 	try {
 		loading = true
-		addresses = (await KQL_MyAddresses.query()).data?.myAddresses
-		selectedAddress = addresses?.data[0]['id']
+		const myAddressesRes = await KQL_MyAddresses.query({ fetch, settings: { cacheMs: 0 } })
+		if (myAddressesRes.errors) err = myAddressesRes.errors[0].message
+		myAddresses = myAddressesRes.data?.myAddresses
+		selectedAddress = myAddresses?.data[0]?.id
+		// console.log('selectedAddress = ', selectedAddress)
 	} catch (e) {
+		err = e
 	} finally {
 		loading = false
 	}
-}
-async function remove(id) {
-	if (confirm('Are you sure to delete?')) {
-		try {
-			iconloading = true
-			await KQL_DeleteAddress.mutate({ variables: { id } })
-			await getAddress()
-		} catch (e) {
-			console.log(e)
-		} finally {
-			iconloading = false
-			console.log(false)
-		}
-	}
-}
-const seoProps = {
-	title: 'Checkout - Address',
-	metadescription: 'Enter your address'
+
+	return { props: { loading, myAddresses, err, prescriptionId, selectedAddress } }
 }
 </script>
 
-<SEO {...seoProps} />
+<script>
+import Pricesummary from '$lib/components/Pricesummary.svelte'
+import SelectAddress from './_SelectAddress.svelte'
+import { KQL_MyAddresses, KQL_Me, KQL_Cart } from '$lib/graphql/_kitql/graphqlStores'
+import Error from '$lib/Error.svelte'
+import CheckoutHeader from './_CheckoutHeader.svelte'
 
-<section
-	class="container  w-full mx-auto max-w-6xl px-4 sm:px-10 pb-10 py-5 md:py-10 text-gray-800 ">
+export let loading, myAddresses, err, prescriptionId, selectedAddress
+$: myAddresses = $KQL_MyAddresses.data?.myAddresses
+function addressChanged(detail) {
+	// console.log('detail = ', detail)
+	selectedAddress = detail.detail
+}
+async function refreshAddress() {
+	try {
+		await KQL_MyAddresses.query({ settings: { cacheMs: 0 } })
+	} catch (e) {
+		err = e
+	} finally {
+	}
+}
+</script>
+
+<div class="container mx-auto w-full max-w-6xl p-3 py-5 text-gray-800 sm:p-10">
+	<Error err="{err}" />
+
 	<CheckoutHeader selected="address" />
+
 	<div class="mt-5 md:mt-10 lg:flex lg:justify-center lg:space-x-10 xl:space-x-20">
-		<div class="lg:w-1/2 xl:w-2/3 ">
-			<h2 class="text-2xl md:text-3xl lg:text-4xl font-bold tracking-wide ">
+		<div class="w-full flex-1">
+			<h2 class="text-xl font-bold capitalize tracking-wide sm:text-2xl">
 				Select Delivery Address
 			</h2>
 
-			<div class="mt-5 mx-auto bg-white border rounded-lg shadow-lg">
-				<SelectAddress
-					selectedAddress="{selectedAddress}"
-					returnUrl="/checkout/edit-address"
-					addReturnUrl="/checkout/add"
-					on:addressChanged="{addressChanged}" />
-			</div>
+			{#if myAddresses?.count > 0}
+				<div class="mx-auto mt-5 rounded-lg border bg-white shadow-lg">
+					{#each myAddresses.data as ads}
+						<SelectAddress
+							loading="{loading}"
+							address="{ads}"
+							selectedAddress="{selectedAddress}"
+							on:deleteAddress="{refreshAddress}"
+							on:addressChanged="{({ detail }) => addressChanged({ detail })}" />
+					{/each}
+				</div>
+			{:else}
+				<hr class="mt-5" />
+			{/if}
 
 			<div class="my-10 w-1/2">
 				<a
-					href="/checkout/add"
-					class="w-full h-40 sm:h-60 border border-gray-400 border-dashed rounded-md flex flex-col items-center justify-center hover:border-primary-500 group ">
+					href="/checkout/add-address?id=new"
+					class="group flex h-40 w-full flex-col items-center justify-center rounded-md border border-dashed border-gray-400 hover:border-primary-500 sm:h-60 ">
 					<div
-						class="h-8 w-8 sm:h-10 sm:w-10 rounded-full border border-gray-400  flex items-center justify-center bg-gray-100 group-hover:border-primary-500">
+						class="flex h-8 w-8 items-center justify-center rounded-full border  border-gray-400 bg-gray-100 group-hover:border-primary-500 sm:h-10 sm:w-10">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							class="h-6 w-6 text-gray-600 group-hover:text-primary-500"
@@ -91,21 +97,28 @@ const seoProps = {
 								d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
 						</svg>
 					</div>
+
 					<span
-						class="mt-2 text-gray-800 group-hover:text-primary-500 text-sm sm:text-base font-medium">
-						ADD NEW ADDRESS</span>
+						class="mt-2 text-sm font-medium text-gray-800 group-hover:text-primary-500 sm:text-base">
+						ADD NEW ADDRESS
+					</span>
 				</a>
 			</div>
 		</div>
 
-		<div class="lg:w-1/2  xl:w-1/3">
-			<h2 class="text-2xl md:text-3xl lg:text-4xl font-bold tracking-wide ">Cart Summary</h2>
-
-			<Pricesummary
-				text="Proceed"
-				nextpage="{`/checkout/payment-options?address=${selectedAddress}`}"
-				loading="{loading}"
-				cls="border-t rounded sm:border-t-0 sm:border sm:shadow" />
+		<div class="w-full lg:w-80 lg:flex-shrink-0 lg:flex-grow-0">
+			<h2 class="text-xl font-bold capitalize tracking-wide sm:text-2xl">Cart Summary</h2>
+			{#if !selectedAddress}
+				<Pricesummary text="Please select address" loading="{loading}" />
+			{:else}
+				<Pricesummary
+					text="Proceed"
+					nextpage="
+				{prescriptionId
+						? `/checkout/payment-options?address=${selectedAddress}&prescription=${prescriptionId}`
+						: `/checkout/payment-options?address=${selectedAddress}`}"
+					loading="{loading}" />
+			{/if}
 		</div>
 	</div>
-</section>
+</div>

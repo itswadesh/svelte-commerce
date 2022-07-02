@@ -1,0 +1,31 @@
+query storeCountries($page: Int, $search: String, $limit: Int, $sort: String, $store: ID!) {
+	storeCountries(page: $page, search: $search, limit: $limit, sort: $sort, store: $store) {
+		count
+		page
+		pageSize
+		data {
+			id
+			default
+			active
+			name
+			code
+			country {
+				id
+				name
+				value
+				dialCode
+				code
+				img
+				imgCdn
+				flag
+				lang
+			}
+			user {
+				id
+				firstName
+				lastName
+				email
+			}
+		}
+	}
+}

@@ -28,7 +28,9 @@ $: orders = $KQL_MyOrders.data?.myOrders
 	<h1 class="text-lg  font-bold sm:text-xl">
 		<span class="mr-1">My orders</span>{#if orders?.count}( {orders?.count} ){/if}
 	</h1>
-	{#if !$KQL_MyOrders.isFetching && orders?.count > 0}
+	{#if $KQL_MyOrders.isFetching}
+		Finding your Orders...
+	{:else if orders?.count}
 		{#each orders?.data as order}
 			<div
 				class=" relative my-2 rounded-md border border-t border-gray-300 bg-white p-4 transition duration-300 sm:my-5 md:shadow-md ">
@@ -98,7 +100,7 @@ $: orders = $KQL_MyOrders.data?.myOrders
 									<span class="text-gray-800"> </span>
 									{#if order && order.amount}
 										<span class="">
-											{currency(order.amountotal)}
+											{currency(order.amount)}
 										</span>
 									{/if}
 								</div>
@@ -144,6 +146,6 @@ $: orders = $KQL_MyOrders.data?.myOrders
 			</a>
 		</div>
 	{:else}
-		Loading Orders
+		<div class="flex justify-center items-center">No order found.</div>
 	{/if}
 </section>

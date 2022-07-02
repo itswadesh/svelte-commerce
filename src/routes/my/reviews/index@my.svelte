@@ -26,7 +26,7 @@ async function getReviews() {
 
 <section class="h-full w-full pl-2 tracking-wide text-gray-800 sm:pl-8 sm:pr-2 ">
 	<h1 class="text-lg  font-bold sm:text-xl">
-		<span class="mr-1">My reviews</span>( {reviews?.count} )
+		<span class="mr-1">My reviews</span>( {reviews?.count || 0} )
 	</h1>
 
 	{#if reviews?.count > 0}
@@ -91,37 +91,38 @@ async function getReviews() {
 								<span class="font-semibold">{review.paymentMode}</span></span>
 						</div>
 						<!-- Pay by case div end -->
-
-						<div class="my-6 flex cursor-default">
-							<div class="flex w-full text-xs">
-								{#each review.items as item}
-									<div class="flex w-full text-xs">
-										<a href="{`/reviews/${review.id}`}">
-											{#if item.imgCdn}
-												<img src="{item.imgCdn}" class="h-10 w-10" alt="" />
-											{/if}
-										</a>
-										<div class="ml-2 flex-1">
-											<div class="flex">
-												<a href="{`/reviews/${review.id}`}">
-													<h4 class="font-semibold text-gray-800">
-														{item.name}
-													</h4>
-												</a>
+						{#if review?.items}
+							<div class="my-6 flex cursor-default">
+								<div class="flex w-full text-xs">
+									{#each review.items as item}
+										<div class="flex w-full text-xs">
+											<a href="{`/reviews/${review.id}`}">
+												{#if item.imgCdn}
+													<img src="{item.imgCdn}" class="h-10 w-10" alt="" />
+												{/if}
+											</a>
+											<div class="ml-2 flex-1">
+												<div class="flex">
+													<a href="{`/reviews/${review.id}`}">
+														<h4 class="font-semibold text-gray-800">
+															{item.name}
+														</h4>
+													</a>
+												</div>
+												<div class="my-1 flex">
+													<h5 class="text-gray-500">
+														{item.status}:
+													</h5>
+												</div>
+												<h6 class="my-1 text-gray-800">
+													{item.qty} × {currency(item.price)}
+												</h6>
 											</div>
-											<div class="my-1 flex">
-												<h5 class="text-gray-500">
-													{item.status}:
-												</h5>
-											</div>
-											<h6 class="my-1 text-gray-800">
-												{item.qty} × {currency(item.price)}
-											</h6>
 										</div>
-									</div>
-								{/each}
+									{/each}
+								</div>
 							</div>
-						</div>
+						{/if}
 					</div>
 					<div class="flex">
 						<div>

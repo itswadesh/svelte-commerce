@@ -16,7 +16,7 @@ export const fetchSettings = async () => {
 	try {
 		const data = (await KQL_Settings.query({ fetch })).data?.settings
 		settings.set(data)
-		if (data.otpLogin) loginUrl.set('/auth/otp-login')
+		if (data.otpLogin) loginUrl.set('/auth/login')
 	} catch (e) {
 		settings.set({})
 	}

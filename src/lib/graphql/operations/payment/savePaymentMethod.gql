@@ -1,0 +1,43 @@
+mutation savePaymentMethod(
+  $id: String!
+  $name: String
+  $value: String
+  $key: String
+  $color: String
+  $img: String
+  $qrcode: String
+  $type: String
+  $text: String
+  $instructions: String
+  $position: Int
+  $active: Boolean
+) {
+  savePaymentMethod(
+    id: $id
+    name: $name
+    value: $value
+    key: $key
+    color: $color
+    img: $img
+    qrcode: $qrcode
+    type: $type
+    text: $text
+    instructions: $instructions
+    position: $position
+    active: $active
+  ) {
+    id
+    name
+    key
+    color
+    img
+    qrcode
+    type
+    imgCdn
+    text
+    instructions
+    value
+    position
+    active
+  }
+}

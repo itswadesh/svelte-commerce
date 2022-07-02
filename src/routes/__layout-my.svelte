@@ -5,11 +5,13 @@ export const load: Load = async ({ url, fetch, session }) => {
 	let store = session.store
 	if (!me) {
 		return {
-			redirect: `/login?ref=${url.pathname}`,
-			status: 302,
+			redirect: `/auth/login?ref=${url.pathname}`,
+			status: 302
 		}
 	}
-	return { me, store, q: '' }
+	return {
+		props: { me, store, q: '' }
+	}
 }
 </script>
 
@@ -22,7 +24,7 @@ import { navigating } from '$app/stores'
 export let me, store, q
 const seoProps = {
 	title: 'Dashboard',
-	metadescription: 'Track your all process',
+	metadescription: 'Track your all process'
 }
 </script>
 
@@ -31,7 +33,6 @@ const seoProps = {
 {/if}
 
 <SEO {...seoProps} />
-
 <section class="w-full md:pt-5 lg:min-h-screen lg:pt-0">
 	<div class="flex w-full items-start p-2 sm:p-6 ">
 		<div>

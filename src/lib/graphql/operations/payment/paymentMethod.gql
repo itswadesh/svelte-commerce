@@ -1,0 +1,18 @@
+query paymentMethod($id: ID!) {
+  paymentMethod(id: $id) {
+    id
+    name
+    img
+    imgCdn
+    value
+    color
+    key
+    text
+    qrcode
+    type
+    instructions
+    position
+    active
+    isError
+  }
+}

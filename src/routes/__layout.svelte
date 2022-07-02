@@ -20,21 +20,20 @@
 export async function load({ url, params, fetch, session, context }) {
 	const isHome = url.pathname === '/'
 	let me = session.me
-	KQL_Init.queryLoad({ fetch })
 	return {
 		props: {
 			url,
 			me,
 			isHome,
-			store: session.store,
-		},
+			store: session.store
+		}
 	}
 }
 </script>
 
 <script>
 import '../app.css'
-import { KQL_Init, KQL__Init } from '$lib/graphql/_kitql/graphqlStores'
+import { KQL__Init } from '$lib/graphql/_kitql/graphqlStores'
 KQL__Init()
 import { ToastContainer, FlatToast } from 'svelte-toasts'
 import { getStores, navigating, page, session } from '$app/stores'
@@ -54,7 +53,7 @@ let q
 <section class="minimum-width bg-gray-50 bg-cover bg-bottom font-sans antialiased">
 	<!-- <PageTransitions refresh="{page?.path}"> -->
 	<div class="minimum-width relative bg-gray-50 font-sans antialiased">
-		{#if $loadingDelayed}
+		<!-- {#if $loadingDelayed}
 			<div class="frosted absolute inset-0 z-50 flex min-h-screen items-center justify-center">
 				<div class="h-28 w-28">
 					<svg
@@ -109,7 +108,7 @@ let q
 					</svg>
 				</div>
 			</div>
-		{/if}
+		{/if} -->
 
 		<div class="{$loadingDelayed ? 'h-screen overflow-hidden' : ''}">
 			<Nav q="{q}" me="{me}" store="{store}" />

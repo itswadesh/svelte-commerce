@@ -1,0 +1,22 @@
+mutation saveStoreCountry(
+  $id: String!
+  $country: ID
+  $default: Boolean
+  $active: Boolean
+) {
+  saveStoreCountry(
+    id: $id
+    country: $country
+    default: $default
+    active: $active
+  ) {
+    id
+    default
+    active
+    country
+    name
+    code
+    user
+    store
+  }
+}

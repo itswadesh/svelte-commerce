@@ -1,6 +1,5 @@
 <style>
 h1 {
-	@apply text-8xl;
 	line-height: 150px;
 	font-weight: 700;
 	color: #252932;
@@ -12,7 +11,7 @@ h1 {
 <script context="module" lang="ts">
 export function load({ error, status }) {
 	return {
-		props: { error, status },
+		props: { error, status }
 	}
 }
 </script>
@@ -34,18 +33,18 @@ const message = offline ? 'Find the internet and try again' : error.message
 	<title>{title}</title>
 </svelte:head>
 <section class="min-h-screen px-8 py-1">
-	<div class="pb-4 mx-auto font-bold text-center text-gray-800 border-b-4 border-gray-800 lg:w-1/2">
+	<div class="mx-auto border-b-4 border-gray-800 pb-4 text-center font-bold text-gray-800 lg:w-1/2">
 		<h1>Error {title}!</h1>
-		<div class="px-4 py-2 mt-3 text-red-500 bg-red-200 border border-red-300">
+		<div class="mt-3 border border-red-300 bg-red-200 px-4 py-2 text-red-500">
 			{message}
 		</div>
 	</div>
 	<div>
-		<a href="/" class="block px-4 py-2 mt-4 text-sm font-thin text-center text-gray-700 rounded">
-			Svelte Commerce
+		<a href="/" class="mt-4 block rounded px-4 py-2 text-center text-sm font-thin text-gray-700">
+			Misiki
 		</a>
 	</div>
-	<div class="text-white p-4 mt-4 bg-gray-800">
+	<div class="mt-4 bg-gray-800 p-4 text-white">
 		{#if dev && error?.stack}
 			<pre>{error.stack}</pre>
 		{:else if dev}
