@@ -111,12 +111,12 @@ If you like the ideas behind Svelte Commerce and want to become a contributor - 
 
 # Thank
 
-A big thank to <a target="_blank" href="https://twitter.com/jycouet">jycouet</a> for making sucha a wonderful package <a target="_blank" href="https://kitql.dev/">KitQL</a>
+A big thank to <a target="_blank" href="https://twitter.com/jycouet">jycouet</a> for making such a wonderful package <a target="_blank" href="https://kitql.dev/">KitQL</a>
 
 # Support
 - Twitter: [@itswadesh](https://twitter.com/itswadesh)
 - Telegram: [@itswadesh](https://t.me/itswadesh)
-- Email: swadesh@misiki.in
+- Email: swadesh@litekart.in
 - Discord: [Invitation](https://discord.gg/VbXyQmUR)
 
 # Support me!
