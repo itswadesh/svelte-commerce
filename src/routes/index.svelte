@@ -11,7 +11,6 @@ export async function load({ url, params, fetch }) {
 
 <script>
 import Hero from '$lib/Hero.svelte'
-// import SEO from '$lib/components/SEO/index.svelte'
 import { KQL_Home, KQL_Products } from '$lib/graphql/_kitql/graphqlStores'
 import { onMount } from 'svelte'
 import ProductCard from '$lib/components/_ProductCard.svelte'
@@ -19,9 +18,10 @@ import { store } from '$lib/util'
 import CategoriesHome from '$lib/components/_CategoriesHome.svelte'
 import Errors from '$lib/components/alerts/Errors.svelte'
 import HeroBanners from '$lib/HeroBanners.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
 const seoProps = {
-	title: 'Search-Products',
-	metadescription: 'Search your products'
+	title: 'Svelte Commerce',
+	metadescription: 'Svelte Commerce as frontend and Misiki.io in backend '
 }
 export let banners,
 	featuredProducts = null,
@@ -69,7 +69,8 @@ onMount(async () => {
 // }
 </script>
 
-<!-- <SEO {...seoProps} /> -->
+<SEO {...seoProps} />
+
 <div>
 	<Hero banners="{$KQL_Home.data?.banners.data}" />
 </div>
