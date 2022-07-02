@@ -23,7 +23,7 @@ import { KQL_Cart, KQL_Me } from './graphql/_kitql/graphqlStores'
 import { signOut } from './services'
 import { onMount } from 'svelte'
 import { toast } from './util'
-const loginUrl = '/auth/login'
+const loginUrl = '/auth/otp-login'
 onMount(async () => {
 	await KQL_Me.query({})
 	await KQL_Cart.query({ settings: { policy: 'network-only' } })
@@ -58,19 +58,6 @@ onMount(async () => {
 		<a href="/" class="flex max-w-max items-center focus:outline-none">
 			<img alt="" class="h-8" src="/logo_512.png" />
 		</a>
-		{#if $KQL_Init.data?.megamenu}
-			<div
-				class="ml-8 flex w-full items-center justify-center text-sm font-semibold uppercase tracking-wide xl:ml-10">
-				{#each $KQL_Init.data?.megamenu as c}
-					<a
-						href="{`/search?categories=${c?.slug}&page=1`}"
-						class="mx-2 cursor-pointer whitespace-nowrap hover:text-primary-500 xl:mx-5"
-						class:active="{$page.url.pathname == `categories=${c.slug}&page=1`}">
-						{c?.name}
-					</a>
-				{/each}
-			</div>
-		{/if}
 		<div class="flex flex-row items-center">
 			<a href="/cart">
 				<button
@@ -96,7 +83,7 @@ onMount(async () => {
 				</button>
 			</a>
 
-			<a href="/wishlist">
+			<!-- <a href="/wishlist">
 				<button
 					class="group mr-5 flex  transform items-center whitespace-nowrap hover:text-primary-500 focus:outline-none active:scale-95">
 					<svg
@@ -113,7 +100,7 @@ onMount(async () => {
 						></path>
 					</svg>
 				</button>
-			</a>
+			</a> -->
 			{#if me?.active}
 				<a href="/my" class="mx-2 flex min-w-max items-center ">
 					{#if me?.firstName}
