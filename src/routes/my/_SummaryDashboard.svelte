@@ -33,7 +33,7 @@ onMount(() => {
 				class="md:w-1/2 overflow-hidden  rounded-lg shadow-lg relative bg-gradient-to-r from-yellow-500 to-pink-500 p-6 text-white flex items-end justify-between">
 				<div class="font-semibold">
 					<h6 class="text-sm uppercase">My Orders</h6>
-					<h3 class="mt-2 font-bold text-2xl">$ {myOrderItems?.count}</h3>
+					<h3 class="mt-2 font-bold text-2xl">{myOrderItems?.count}</h3>
 					<div class="mt-2 flex items-center space-x-1"></div>
 				</div>
 

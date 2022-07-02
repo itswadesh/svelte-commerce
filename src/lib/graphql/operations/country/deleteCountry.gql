@@ -1,0 +1,3 @@
+mutation deleteCountry($id: ID!) {
+	deleteCountry(id: $id)
+}

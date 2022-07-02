@@ -1,0 +1,37 @@
+query paymentMethodsAdmin(
+  $page: Int
+  $search: String
+  $limit: Int
+  $sort: String
+  $active: Boolean
+  $store: ID
+) {
+  paymentMethodsAdmin(
+    page: $page
+    search: $search
+    limit: $limit
+    sort: $sort
+    active: $active
+    store: $store
+  ) {
+    count
+    page
+    pageSize
+    data {
+      id
+      name
+      img
+      imgCdn
+      value
+      color
+      key
+      text
+      qrcode
+      type
+      instructions
+      position
+      active
+      isError
+    }
+  }
+}

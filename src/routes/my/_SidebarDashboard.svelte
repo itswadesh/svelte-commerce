@@ -17,7 +17,6 @@ async function logout() {
 		toast('Successfully loggedout', 'success')
 		goto('/')
 	} catch (e) {
-		console.log('Login Error...', e.toString())
 		toast(e, 'error')
 	}
 }

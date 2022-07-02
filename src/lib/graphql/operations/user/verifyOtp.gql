@@ -1,5 +1,5 @@
-mutation verifyOtp($phone: String!, $otp: String!) {
-	verifyOtp(phone: $phone, otp: $otp) {
+mutation verifyOtp($phone: String!, $otp: String!, $store: ID) {
+	verifyOtp(phone: $phone, otp: $otp, store: $store) {
 		id
 		firstName
 		lastName

@@ -1,0 +1,25 @@
+query storeCountry($id: ID!) {
+  storeCountry(id: $id) {
+    id
+    default
+    active
+    name
+    code
+    country {
+      id
+      name
+      value
+      dialCode
+      code
+      img
+      imgCdn
+      flag
+      lang
+    }
+    user {
+      id
+      firstName
+      lastName
+    }
+  }
+}

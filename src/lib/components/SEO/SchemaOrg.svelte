@@ -3,37 +3,37 @@ import { WWW_URL } from '$lib/config'
 import dayjs from 'dayjs'
 import hash from 'hash-it'
 export let article = false
-export let author
+export let author = null
 export let breadcrumbs = []
-export let datePublished
-export let entity
-export let lastUpdated
-export let featuredImage
-export let metadescription
-export let siteLanguage
-export let siteTitle
-export let siteTitleAlt
+export let datePublished = null
+export let entity = null
+export let lastUpdated = null
+export let featuredImage = null
+export let metadescription = ''
+export let siteLanguage = null
+export let siteTitle = ''
+export let siteTitleAlt = ''
 export let siteUrl = WWW_URL
-export let title
+export let title = ''
 export let url = WWW_URL
-export let facebookPage
-export let githubPage
-export let linkedinProfile
-export let telegramUsername
-export let twitterUsername
-export let name
-export let description
-export let sku
+export let facebookPage = null
+export let githubPage = null
+export let linkedinProfile = null
+export let telegramUsername = null
+export let twitterUsername = null
+export let name = null
+export let description = null
+export let sku = null
 export let price = 1
-export let image
-export let gtin
+export let image = null
+export let gtin = null
 export let brand = 'Litekart'
 export let ratingCount = 1
 export let ratingValue = 5
-export let createdAt
-export let updatedAt
-export let slug
-export let id
+export let createdAt = null
+export let updatedAt = null
+export let slug = null
+export let id = null
 export let popularity = 1000
 export let entityMeta = null
 const nextWeek = dayjs().add(7, 'day')

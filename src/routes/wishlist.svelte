@@ -31,7 +31,6 @@ const seoProps = {
 }
 $: myWishlist = $KQL_MyWishlist.data?.myWishlist
 async function toggleWishlist(detail) {
-	console.log(detail)
 	const product = detail.detail
 
 	try {

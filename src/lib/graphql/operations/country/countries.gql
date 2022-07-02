@@ -1,0 +1,23 @@
+query countries($page: Int, $search: String, $limit: Int, $sort: String) {
+  countries(page: $page, search: $search, limit: $limit, sort: $sort) {
+    count
+    page
+    pageSize
+    data {
+      id
+      name
+      value
+      dialCode
+      code
+      img
+      imgCdn
+      flag
+      lang
+      states {
+        name
+      }
+      sort
+      active
+    }
+  }
+}

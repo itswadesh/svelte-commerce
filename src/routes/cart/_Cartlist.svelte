@@ -32,7 +32,7 @@ async function addToBag(item, qty) {
 				class="mr-5 w-72 cursor-pointer truncate text-base font-medium text-gray-600 hover:underline sm:text-lg">
 				{item?.name}
 			</a>
-			<h2 class="whitespace-nowrap text-base sm:text-lg">Arrives by {item.deliveryDetails}</h2>
+			<!-- <h2 class="whitespace-nowrap text-base sm:text-lg">Arrives by {item.deliveryDetails}</h2> -->
 		</div>
 
 		<div class="mb-1 {item.foodType ? 'flex items-start gap-2' : ''}">

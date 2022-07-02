@@ -1,97 +1,97 @@
 query cart($store: ID) {
-  cart(store: $store) {
-    id
-    storeCurrency
-    currencyCode
-    currencyName
-    currencySymbol
-    needAddress
-    items {
-      pid
-      barcode
-      tax
-      name
-      type
-      slug
-      qty
-      price
-      mrp
-      shippingCharge
-      img
-      imgCdn
-      tracking
-      brandName
-      vendor
-      vendorSlug
-      vendorBusinessName
-      deliveryDetails
-      foodType
-      usedOptions {
-        name
-        val
-        dates
-      }
-      options {
-        option
-        values
-      }
-      formattedItemAmount {
-        mrp
-        price
-        tax
-        shippingCharge
-      }
-    }
-    qty
-    tax
-    subtotal
-    total
-    discount {
-      code
-      value
-      text
-      amount
-    }
-    shipping {
-      charge
-    }
-    formattedAmount {
-      offer_total
-      tax
-      subtotal
-      total
-    }
-    unavailableItems {
-      status
-      msg
-      pid
-      barcode
-      tax
-      name
-      type
-      slug
-      qty
-      price
-      mrp
-      shippingCharge
-      img
-      imgCdn
-      tracking
-      brandName
-      vendor
-      vendorSlug
-      vendorBusinessName
-      deliveryDetails
-      foodType
-      usedOptions {
-        name
-        val
-        dates
-      }
-      options {
-        option
-        values
-      }
-    }
-  }
+	cart(store: $store) {
+		id
+		storeCurrency
+		currencyCode
+		currencyName
+		currencySymbol
+		needAddress
+		items {
+			pid
+			barcode
+			tax
+			name
+			type
+			slug
+			qty
+			price
+			mrp
+			shippingCharge
+			img
+			imgCdn
+			tracking
+			brandName
+			vendor
+			vendorSlug
+			vendorBusinessName
+			deliveryDetails
+			foodType
+			usedOptions {
+				name
+				val
+				dates
+			}
+			options {
+				option
+				values
+			}
+			formattedItemAmount {
+				mrp
+				price
+				tax
+				shippingCharge
+			}
+		}
+		qty
+		tax
+		subtotal
+		total
+		discount {
+			code
+			value
+			text
+			amount
+		}
+		shipping {
+			charge
+		}
+		formattedAmount {
+			offer_total
+			tax
+			subtotal
+			total
+		}
+		unavailableItems {
+			status
+			msg
+			pid
+			barcode
+			tax
+			name
+			type
+			slug
+			qty
+			price
+			mrp
+			shippingCharge
+			img
+			imgCdn
+			tracking
+			brandName
+			vendor
+			vendorSlug
+			vendorBusinessName
+			deliveryDetails
+			foodType
+			usedOptions {
+				name
+				val
+				dates
+			}
+			options {
+				option
+				values
+			}
+		}
+	}
 }

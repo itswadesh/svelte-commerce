@@ -23,6 +23,8 @@ if (browser) {
  * ResetAllCaches in One function!
  */
 export function KQL__ResetAllCaches() {
+	KQL_StoreCountries.resetCache();
+	KQL_StoreCountry.resetCache();
 	KQL_Address.resetCache();
 	KQL_Addresses.resetCache();
 	KQL_MyAddresses.resetCache();
@@ -32,11 +34,16 @@ export function KQL__ResetAllCaches() {
 	KQL_Categories.resetCache();
 	KQL_Category.resetCache();
 	KQL_Megamenu.resetCache();
+	KQL_Countries.resetCache();
+	KQL_Country.resetCache();
 	KQL_Init.resetCache();
 	KQL_Home.resetCache();
 	KQL_MyOrderItems.resetCache();
 	KQL_MyOrders.resetCache();
 	KQL_OrderItem.resetCache();
+	KQL_PaymentMethod.resetCache();
+	KQL_PaymentMethods.resetCache();
+	KQL_PaymentMethodsAdmin.resetCache();
 	KQL_Product.resetCache();
 	KQL_ProductSlug.resetCache();
 	KQL_Products.resetCache();
@@ -44,6 +51,7 @@ export function KQL__ResetAllCaches() {
 	KQL_Reviews.resetCache();
 	KQL_PopularSearches.resetCache();
 	KQL_Settings.resetCache();
+	KQL_States.resetCache();
 	KQL_Store.resetCache();
 	KQL_StoreOne.resetCache();
 	KQL_Me.resetCache();
@@ -56,6 +64,346 @@ export function KQL__ResetAllCaches() {
 }
  
 /* Operations 👇 */
+function KQL_RemoveStoreCountryStore() {
+	const operationName = 'KQL_RemoveStoreCountry';
+	const operationType = ResponseResultType.Mutation;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.RemoveStoreCountryMutation, Types.RemoveStoreCountryMutationVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function mutateLocal(
+			params?: RequestParameters<Types.RemoveStoreCountryMutationVariables>
+		): Promise<RequestResult<Types.RemoveStoreCountryMutation, Types.RemoveStoreCountryMutationVariables>> {
+			let { fetch, variables } = params ?? {};
+
+			const storedVariables = get(KQL_RemoveStoreCountry).variables;
+			variables = variables ?? storedVariables;
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.RemoveStoreCountryMutation, Types.RemoveStoreCountryMutationVariables>({
+				skFetch: fetch,
+				document: Types.RemoveStoreCountryDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		mutate: mutateLocal,
+
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `RemoveStoreCountry` Operation
+ */
+export const KQL_RemoveStoreCountry = KQL_RemoveStoreCountryStore();
+
+function KQL_SaveStoreCountryStore() {
+	const operationName = 'KQL_SaveStoreCountry';
+	const operationType = ResponseResultType.Mutation;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.SaveStoreCountryMutation, Types.SaveStoreCountryMutationVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function mutateLocal(
+			params?: RequestParameters<Types.SaveStoreCountryMutationVariables>
+		): Promise<RequestResult<Types.SaveStoreCountryMutation, Types.SaveStoreCountryMutationVariables>> {
+			let { fetch, variables } = params ?? {};
+
+			const storedVariables = get(KQL_SaveStoreCountry).variables;
+			variables = variables ?? storedVariables;
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.SaveStoreCountryMutation, Types.SaveStoreCountryMutationVariables>({
+				skFetch: fetch,
+				document: Types.SaveStoreCountryDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		mutate: mutateLocal,
+
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `SaveStoreCountry` Operation
+ */
+export const KQL_SaveStoreCountry = KQL_SaveStoreCountryStore();
+
+function KQL_StoreCountriesStore() {
+	const operationName = 'KQL_StoreCountries';
+	const operationType = ResponseResultType.Query;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.StoreCountriesQuery, Types.StoreCountriesQueryVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function queryLocal(
+			params?: RequestQueryParameters<Types.StoreCountriesQueryVariables>
+		): Promise<RequestResult<Types.StoreCountriesQuery, Types.StoreCountriesQueryVariables>> {
+			let { fetch, variables, settings } = params ?? {};
+			let { cacheMs, policy } = settings ?? {};
+
+			const storedVariables = get(KQL_StoreCountries).variables;
+			variables = variables ?? storedVariables;
+			policy = policy ?? kitQLClient.policy;
+
+			// Cache only in the browser for now. In SSR, we will need session identif to not mix peoples data
+			if (browser) {
+				if (policy !== 'network-only') {
+					// prettier-ignore
+					const cachedData = kitQLClient.requestCache<Types.StoreCountriesQuery, Types.StoreCountriesQueryVariables>({
+						variables, operationName, cacheMs,	browser
+					});
+					if (cachedData) {
+						const result = { ...cachedData, isFetching: false, status: RequestStatus.DONE };
+						if (policy === 'cache-first') {
+							set(result);
+							if (!result.isOutdated) {
+								return result;
+							}
+						} else if (policy === 'cache-only') {
+							set(result);
+							return result;
+						} else if (policy === 'cache-and-network') {
+							set(result);
+						}
+					}
+				}
+			}
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.StoreCountriesQuery, Types.StoreCountriesQueryVariables>({
+				skFetch: fetch,
+				document: Types.StoreCountriesDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		query: queryLocal,
+
+		/**
+		 * Ideal for SSR query. To be used in SvelteKit load function
+		 * @returns fill this store & the cache
+		 */
+		queryLoad: async (
+			params?: RequestQueryParameters<Types.StoreCountriesQueryVariables>
+		): Promise<void> => {
+			if (clientStarted) {
+				queryLocal(params); // No await in purpose, we are in a client navigation.
+			} else {
+				await queryLocal(params);
+			}
+		},
+
+		/**
+		 * Reset Cache
+		 */
+		resetCache(
+			variables: Types.StoreCountriesQueryVariables | null = null,
+			allOperationKey: boolean = true,
+			withResetStore: boolean = true
+		) {
+			kitQLClient.cacheRemove(operationName, { variables, allOperationKey });
+			if (withResetStore) {
+				set({ ...defaultStoreValue, operationName });
+			}
+		},
+
+		/**
+		 * Patch the store &&|| cache with some data.
+		 */
+		// prettier-ignore
+		patch(data: Types.StoreCountriesQuery, variables: Types.StoreCountriesQueryVariables | null = null, type: PatchType = 'cache-and-store'): void {
+			let updatedCacheStore = undefined;
+			if(type === 'cache-only' || type === 'cache-and-store') {
+				updatedCacheStore = kitQLClient.cacheUpdate<Types.StoreCountriesQuery, Types.StoreCountriesQueryVariables>(operationName, data, { variables });
+			}
+			if(type === 'store-only' ) {
+				let toReturn = { ...get(KQL_StoreCountries), data, variables } ;
+				set(toReturn);
+			}
+			if(type === 'cache-and-store' ) {
+				set({...get(KQL_StoreCountries), ...updatedCacheStore});
+			}
+			kitQLClient.logInfo(operationName, "patch", type);
+		}
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `StoreCountries` Operation
+ */
+export const KQL_StoreCountries = KQL_StoreCountriesStore();
+
+function KQL_StoreCountryStore() {
+	const operationName = 'KQL_StoreCountry';
+	const operationType = ResponseResultType.Query;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.StoreCountryQuery, Types.StoreCountryQueryVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function queryLocal(
+			params?: RequestQueryParameters<Types.StoreCountryQueryVariables>
+		): Promise<RequestResult<Types.StoreCountryQuery, Types.StoreCountryQueryVariables>> {
+			let { fetch, variables, settings } = params ?? {};
+			let { cacheMs, policy } = settings ?? {};
+
+			const storedVariables = get(KQL_StoreCountry).variables;
+			variables = variables ?? storedVariables;
+			policy = policy ?? kitQLClient.policy;
+
+			// Cache only in the browser for now. In SSR, we will need session identif to not mix peoples data
+			if (browser) {
+				if (policy !== 'network-only') {
+					// prettier-ignore
+					const cachedData = kitQLClient.requestCache<Types.StoreCountryQuery, Types.StoreCountryQueryVariables>({
+						variables, operationName, cacheMs,	browser
+					});
+					if (cachedData) {
+						const result = { ...cachedData, isFetching: false, status: RequestStatus.DONE };
+						if (policy === 'cache-first') {
+							set(result);
+							if (!result.isOutdated) {
+								return result;
+							}
+						} else if (policy === 'cache-only') {
+							set(result);
+							return result;
+						} else if (policy === 'cache-and-network') {
+							set(result);
+						}
+					}
+				}
+			}
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.StoreCountryQuery, Types.StoreCountryQueryVariables>({
+				skFetch: fetch,
+				document: Types.StoreCountryDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		query: queryLocal,
+
+		/**
+		 * Ideal for SSR query. To be used in SvelteKit load function
+		 * @returns fill this store & the cache
+		 */
+		queryLoad: async (
+			params?: RequestQueryParameters<Types.StoreCountryQueryVariables>
+		): Promise<void> => {
+			if (clientStarted) {
+				queryLocal(params); // No await in purpose, we are in a client navigation.
+			} else {
+				await queryLocal(params);
+			}
+		},
+
+		/**
+		 * Reset Cache
+		 */
+		resetCache(
+			variables: Types.StoreCountryQueryVariables | null = null,
+			allOperationKey: boolean = true,
+			withResetStore: boolean = true
+		) {
+			kitQLClient.cacheRemove(operationName, { variables, allOperationKey });
+			if (withResetStore) {
+				set({ ...defaultStoreValue, operationName });
+			}
+		},
+
+		/**
+		 * Patch the store &&|| cache with some data.
+		 */
+		// prettier-ignore
+		patch(data: Types.StoreCountryQuery, variables: Types.StoreCountryQueryVariables | null = null, type: PatchType = 'cache-and-store'): void {
+			let updatedCacheStore = undefined;
+			if(type === 'cache-only' || type === 'cache-and-store') {
+				updatedCacheStore = kitQLClient.cacheUpdate<Types.StoreCountryQuery, Types.StoreCountryQueryVariables>(operationName, data, { variables });
+			}
+			if(type === 'store-only' ) {
+				let toReturn = { ...get(KQL_StoreCountry), data, variables } ;
+				set(toReturn);
+			}
+			if(type === 'cache-and-store' ) {
+				set({...get(KQL_StoreCountry), ...updatedCacheStore});
+			}
+			kitQLClient.logInfo(operationName, "patch", type);
+		}
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `StoreCountry` Operation
+ */
+export const KQL_StoreCountry = KQL_StoreCountryStore();
+
 function KQL_AddressStore() {
 	const operationName = 'KQL_Address';
 	const operationType = ResponseResultType.Query;
@@ -1439,6 +1787,346 @@ function KQL_MegamenuStore() {
  */
 export const KQL_Megamenu = KQL_MegamenuStore();
 
+function KQL_CountriesStore() {
+	const operationName = 'KQL_Countries';
+	const operationType = ResponseResultType.Query;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.CountriesQuery, Types.CountriesQueryVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function queryLocal(
+			params?: RequestQueryParameters<Types.CountriesQueryVariables>
+		): Promise<RequestResult<Types.CountriesQuery, Types.CountriesQueryVariables>> {
+			let { fetch, variables, settings } = params ?? {};
+			let { cacheMs, policy } = settings ?? {};
+
+			const storedVariables = get(KQL_Countries).variables;
+			variables = variables ?? storedVariables;
+			policy = policy ?? kitQLClient.policy;
+
+			// Cache only in the browser for now. In SSR, we will need session identif to not mix peoples data
+			if (browser) {
+				if (policy !== 'network-only') {
+					// prettier-ignore
+					const cachedData = kitQLClient.requestCache<Types.CountriesQuery, Types.CountriesQueryVariables>({
+						variables, operationName, cacheMs,	browser
+					});
+					if (cachedData) {
+						const result = { ...cachedData, isFetching: false, status: RequestStatus.DONE };
+						if (policy === 'cache-first') {
+							set(result);
+							if (!result.isOutdated) {
+								return result;
+							}
+						} else if (policy === 'cache-only') {
+							set(result);
+							return result;
+						} else if (policy === 'cache-and-network') {
+							set(result);
+						}
+					}
+				}
+			}
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.CountriesQuery, Types.CountriesQueryVariables>({
+				skFetch: fetch,
+				document: Types.CountriesDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		query: queryLocal,
+
+		/**
+		 * Ideal for SSR query. To be used in SvelteKit load function
+		 * @returns fill this store & the cache
+		 */
+		queryLoad: async (
+			params?: RequestQueryParameters<Types.CountriesQueryVariables>
+		): Promise<void> => {
+			if (clientStarted) {
+				queryLocal(params); // No await in purpose, we are in a client navigation.
+			} else {
+				await queryLocal(params);
+			}
+		},
+
+		/**
+		 * Reset Cache
+		 */
+		resetCache(
+			variables: Types.CountriesQueryVariables | null = null,
+			allOperationKey: boolean = true,
+			withResetStore: boolean = true
+		) {
+			kitQLClient.cacheRemove(operationName, { variables, allOperationKey });
+			if (withResetStore) {
+				set({ ...defaultStoreValue, operationName });
+			}
+		},
+
+		/**
+		 * Patch the store &&|| cache with some data.
+		 */
+		// prettier-ignore
+		patch(data: Types.CountriesQuery, variables: Types.CountriesQueryVariables | null = null, type: PatchType = 'cache-and-store'): void {
+			let updatedCacheStore = undefined;
+			if(type === 'cache-only' || type === 'cache-and-store') {
+				updatedCacheStore = kitQLClient.cacheUpdate<Types.CountriesQuery, Types.CountriesQueryVariables>(operationName, data, { variables });
+			}
+			if(type === 'store-only' ) {
+				let toReturn = { ...get(KQL_Countries), data, variables } ;
+				set(toReturn);
+			}
+			if(type === 'cache-and-store' ) {
+				set({...get(KQL_Countries), ...updatedCacheStore});
+			}
+			kitQLClient.logInfo(operationName, "patch", type);
+		}
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `Countries` Operation
+ */
+export const KQL_Countries = KQL_CountriesStore();
+
+function KQL_CountryStore() {
+	const operationName = 'KQL_Country';
+	const operationType = ResponseResultType.Query;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.CountryQuery, Types.CountryQueryVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function queryLocal(
+			params?: RequestQueryParameters<Types.CountryQueryVariables>
+		): Promise<RequestResult<Types.CountryQuery, Types.CountryQueryVariables>> {
+			let { fetch, variables, settings } = params ?? {};
+			let { cacheMs, policy } = settings ?? {};
+
+			const storedVariables = get(KQL_Country).variables;
+			variables = variables ?? storedVariables;
+			policy = policy ?? kitQLClient.policy;
+
+			// Cache only in the browser for now. In SSR, we will need session identif to not mix peoples data
+			if (browser) {
+				if (policy !== 'network-only') {
+					// prettier-ignore
+					const cachedData = kitQLClient.requestCache<Types.CountryQuery, Types.CountryQueryVariables>({
+						variables, operationName, cacheMs,	browser
+					});
+					if (cachedData) {
+						const result = { ...cachedData, isFetching: false, status: RequestStatus.DONE };
+						if (policy === 'cache-first') {
+							set(result);
+							if (!result.isOutdated) {
+								return result;
+							}
+						} else if (policy === 'cache-only') {
+							set(result);
+							return result;
+						} else if (policy === 'cache-and-network') {
+							set(result);
+						}
+					}
+				}
+			}
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.CountryQuery, Types.CountryQueryVariables>({
+				skFetch: fetch,
+				document: Types.CountryDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		query: queryLocal,
+
+		/**
+		 * Ideal for SSR query. To be used in SvelteKit load function
+		 * @returns fill this store & the cache
+		 */
+		queryLoad: async (
+			params?: RequestQueryParameters<Types.CountryQueryVariables>
+		): Promise<void> => {
+			if (clientStarted) {
+				queryLocal(params); // No await in purpose, we are in a client navigation.
+			} else {
+				await queryLocal(params);
+			}
+		},
+
+		/**
+		 * Reset Cache
+		 */
+		resetCache(
+			variables: Types.CountryQueryVariables | null = null,
+			allOperationKey: boolean = true,
+			withResetStore: boolean = true
+		) {
+			kitQLClient.cacheRemove(operationName, { variables, allOperationKey });
+			if (withResetStore) {
+				set({ ...defaultStoreValue, operationName });
+			}
+		},
+
+		/**
+		 * Patch the store &&|| cache with some data.
+		 */
+		// prettier-ignore
+		patch(data: Types.CountryQuery, variables: Types.CountryQueryVariables | null = null, type: PatchType = 'cache-and-store'): void {
+			let updatedCacheStore = undefined;
+			if(type === 'cache-only' || type === 'cache-and-store') {
+				updatedCacheStore = kitQLClient.cacheUpdate<Types.CountryQuery, Types.CountryQueryVariables>(operationName, data, { variables });
+			}
+			if(type === 'store-only' ) {
+				let toReturn = { ...get(KQL_Country), data, variables } ;
+				set(toReturn);
+			}
+			if(type === 'cache-and-store' ) {
+				set({...get(KQL_Country), ...updatedCacheStore});
+			}
+			kitQLClient.logInfo(operationName, "patch", type);
+		}
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `Country` Operation
+ */
+export const KQL_Country = KQL_CountryStore();
+
+function KQL_DeleteCountryStore() {
+	const operationName = 'KQL_DeleteCountry';
+	const operationType = ResponseResultType.Mutation;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.DeleteCountryMutation, Types.DeleteCountryMutationVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function mutateLocal(
+			params?: RequestParameters<Types.DeleteCountryMutationVariables>
+		): Promise<RequestResult<Types.DeleteCountryMutation, Types.DeleteCountryMutationVariables>> {
+			let { fetch, variables } = params ?? {};
+
+			const storedVariables = get(KQL_DeleteCountry).variables;
+			variables = variables ?? storedVariables;
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.DeleteCountryMutation, Types.DeleteCountryMutationVariables>({
+				skFetch: fetch,
+				document: Types.DeleteCountryDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		mutate: mutateLocal,
+
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `DeleteCountry` Operation
+ */
+export const KQL_DeleteCountry = KQL_DeleteCountryStore();
+
+function KQL_SaveCountryStore() {
+	const operationName = 'KQL_SaveCountry';
+	const operationType = ResponseResultType.Mutation;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.SaveCountryMutation, Types.SaveCountryMutationVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function mutateLocal(
+			params?: RequestParameters<Types.SaveCountryMutationVariables>
+		): Promise<RequestResult<Types.SaveCountryMutation, Types.SaveCountryMutationVariables>> {
+			let { fetch, variables } = params ?? {};
+
+			const storedVariables = get(KQL_SaveCountry).variables;
+			variables = variables ?? storedVariables;
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.SaveCountryMutation, Types.SaveCountryMutationVariables>({
+				skFetch: fetch,
+				document: Types.SaveCountryDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		mutate: mutateLocal,
+
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `SaveCountry` Operation
+ */
+export const KQL_SaveCountry = KQL_SaveCountryStore();
+
 function KQL_InitStore() {
 	const operationName = 'KQL_Init';
 	const operationType = ResponseResultType.Query;
@@ -2092,6 +2780,565 @@ function KQL_PaySuccessPageHitStore() {
  * KitQL Svelte Store with the latest `PaySuccessPageHit` Operation
  */
 export const KQL_PaySuccessPageHit = KQL_PaySuccessPageHitStore();
+
+function KQL_CashfreePayNowNewStore() {
+	const operationName = 'KQL_CashfreePayNowNew';
+	const operationType = ResponseResultType.Mutation;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.CashfreePayNowNewMutation, Types.CashfreePayNowNewMutationVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function mutateLocal(
+			params?: RequestParameters<Types.CashfreePayNowNewMutationVariables>
+		): Promise<RequestResult<Types.CashfreePayNowNewMutation, Types.CashfreePayNowNewMutationVariables>> {
+			let { fetch, variables } = params ?? {};
+
+			const storedVariables = get(KQL_CashfreePayNowNew).variables;
+			variables = variables ?? storedVariables;
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.CashfreePayNowNewMutation, Types.CashfreePayNowNewMutationVariables>({
+				skFetch: fetch,
+				document: Types.CashfreePayNowNewDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		mutate: mutateLocal,
+
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `CashfreePayNowNew` Operation
+ */
+export const KQL_CashfreePayNowNew = KQL_CashfreePayNowNewStore();
+
+function KQL_DeletePaymentMethodStore() {
+	const operationName = 'KQL_DeletePaymentMethod';
+	const operationType = ResponseResultType.Mutation;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.DeletePaymentMethodMutation, Types.DeletePaymentMethodMutationVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function mutateLocal(
+			params?: RequestParameters<Types.DeletePaymentMethodMutationVariables>
+		): Promise<RequestResult<Types.DeletePaymentMethodMutation, Types.DeletePaymentMethodMutationVariables>> {
+			let { fetch, variables } = params ?? {};
+
+			const storedVariables = get(KQL_DeletePaymentMethod).variables;
+			variables = variables ?? storedVariables;
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.DeletePaymentMethodMutation, Types.DeletePaymentMethodMutationVariables>({
+				skFetch: fetch,
+				document: Types.DeletePaymentMethodDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		mutate: mutateLocal,
+
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `DeletePaymentMethod` Operation
+ */
+export const KQL_DeletePaymentMethod = KQL_DeletePaymentMethodStore();
+
+function KQL_PaymentMethodStore() {
+	const operationName = 'KQL_PaymentMethod';
+	const operationType = ResponseResultType.Query;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.PaymentMethodQuery, Types.PaymentMethodQueryVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function queryLocal(
+			params?: RequestQueryParameters<Types.PaymentMethodQueryVariables>
+		): Promise<RequestResult<Types.PaymentMethodQuery, Types.PaymentMethodQueryVariables>> {
+			let { fetch, variables, settings } = params ?? {};
+			let { cacheMs, policy } = settings ?? {};
+
+			const storedVariables = get(KQL_PaymentMethod).variables;
+			variables = variables ?? storedVariables;
+			policy = policy ?? kitQLClient.policy;
+
+			// Cache only in the browser for now. In SSR, we will need session identif to not mix peoples data
+			if (browser) {
+				if (policy !== 'network-only') {
+					// prettier-ignore
+					const cachedData = kitQLClient.requestCache<Types.PaymentMethodQuery, Types.PaymentMethodQueryVariables>({
+						variables, operationName, cacheMs,	browser
+					});
+					if (cachedData) {
+						const result = { ...cachedData, isFetching: false, status: RequestStatus.DONE };
+						if (policy === 'cache-first') {
+							set(result);
+							if (!result.isOutdated) {
+								return result;
+							}
+						} else if (policy === 'cache-only') {
+							set(result);
+							return result;
+						} else if (policy === 'cache-and-network') {
+							set(result);
+						}
+					}
+				}
+			}
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.PaymentMethodQuery, Types.PaymentMethodQueryVariables>({
+				skFetch: fetch,
+				document: Types.PaymentMethodDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		query: queryLocal,
+
+		/**
+		 * Ideal for SSR query. To be used in SvelteKit load function
+		 * @returns fill this store & the cache
+		 */
+		queryLoad: async (
+			params?: RequestQueryParameters<Types.PaymentMethodQueryVariables>
+		): Promise<void> => {
+			if (clientStarted) {
+				queryLocal(params); // No await in purpose, we are in a client navigation.
+			} else {
+				await queryLocal(params);
+			}
+		},
+
+		/**
+		 * Reset Cache
+		 */
+		resetCache(
+			variables: Types.PaymentMethodQueryVariables | null = null,
+			allOperationKey: boolean = true,
+			withResetStore: boolean = true
+		) {
+			kitQLClient.cacheRemove(operationName, { variables, allOperationKey });
+			if (withResetStore) {
+				set({ ...defaultStoreValue, operationName });
+			}
+		},
+
+		/**
+		 * Patch the store &&|| cache with some data.
+		 */
+		// prettier-ignore
+		patch(data: Types.PaymentMethodQuery, variables: Types.PaymentMethodQueryVariables | null = null, type: PatchType = 'cache-and-store'): void {
+			let updatedCacheStore = undefined;
+			if(type === 'cache-only' || type === 'cache-and-store') {
+				updatedCacheStore = kitQLClient.cacheUpdate<Types.PaymentMethodQuery, Types.PaymentMethodQueryVariables>(operationName, data, { variables });
+			}
+			if(type === 'store-only' ) {
+				let toReturn = { ...get(KQL_PaymentMethod), data, variables } ;
+				set(toReturn);
+			}
+			if(type === 'cache-and-store' ) {
+				set({...get(KQL_PaymentMethod), ...updatedCacheStore});
+			}
+			kitQLClient.logInfo(operationName, "patch", type);
+		}
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `PaymentMethod` Operation
+ */
+export const KQL_PaymentMethod = KQL_PaymentMethodStore();
+
+function KQL_PaymentMethodsStore() {
+	const operationName = 'KQL_PaymentMethods';
+	const operationType = ResponseResultType.Query;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.PaymentMethodsQuery, Types.PaymentMethodsQueryVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function queryLocal(
+			params?: RequestQueryParameters<Types.PaymentMethodsQueryVariables>
+		): Promise<RequestResult<Types.PaymentMethodsQuery, Types.PaymentMethodsQueryVariables>> {
+			let { fetch, variables, settings } = params ?? {};
+			let { cacheMs, policy } = settings ?? {};
+
+			const storedVariables = get(KQL_PaymentMethods).variables;
+			variables = variables ?? storedVariables;
+			policy = policy ?? kitQLClient.policy;
+
+			// Cache only in the browser for now. In SSR, we will need session identif to not mix peoples data
+			if (browser) {
+				if (policy !== 'network-only') {
+					// prettier-ignore
+					const cachedData = kitQLClient.requestCache<Types.PaymentMethodsQuery, Types.PaymentMethodsQueryVariables>({
+						variables, operationName, cacheMs,	browser
+					});
+					if (cachedData) {
+						const result = { ...cachedData, isFetching: false, status: RequestStatus.DONE };
+						if (policy === 'cache-first') {
+							set(result);
+							if (!result.isOutdated) {
+								return result;
+							}
+						} else if (policy === 'cache-only') {
+							set(result);
+							return result;
+						} else if (policy === 'cache-and-network') {
+							set(result);
+						}
+					}
+				}
+			}
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.PaymentMethodsQuery, Types.PaymentMethodsQueryVariables>({
+				skFetch: fetch,
+				document: Types.PaymentMethodsDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		query: queryLocal,
+
+		/**
+		 * Ideal for SSR query. To be used in SvelteKit load function
+		 * @returns fill this store & the cache
+		 */
+		queryLoad: async (
+			params?: RequestQueryParameters<Types.PaymentMethodsQueryVariables>
+		): Promise<void> => {
+			if (clientStarted) {
+				queryLocal(params); // No await in purpose, we are in a client navigation.
+			} else {
+				await queryLocal(params);
+			}
+		},
+
+		/**
+		 * Reset Cache
+		 */
+		resetCache(
+			variables: Types.PaymentMethodsQueryVariables | null = null,
+			allOperationKey: boolean = true,
+			withResetStore: boolean = true
+		) {
+			kitQLClient.cacheRemove(operationName, { variables, allOperationKey });
+			if (withResetStore) {
+				set({ ...defaultStoreValue, operationName });
+			}
+		},
+
+		/**
+		 * Patch the store &&|| cache with some data.
+		 */
+		// prettier-ignore
+		patch(data: Types.PaymentMethodsQuery, variables: Types.PaymentMethodsQueryVariables | null = null, type: PatchType = 'cache-and-store'): void {
+			let updatedCacheStore = undefined;
+			if(type === 'cache-only' || type === 'cache-and-store') {
+				updatedCacheStore = kitQLClient.cacheUpdate<Types.PaymentMethodsQuery, Types.PaymentMethodsQueryVariables>(operationName, data, { variables });
+			}
+			if(type === 'store-only' ) {
+				let toReturn = { ...get(KQL_PaymentMethods), data, variables } ;
+				set(toReturn);
+			}
+			if(type === 'cache-and-store' ) {
+				set({...get(KQL_PaymentMethods), ...updatedCacheStore});
+			}
+			kitQLClient.logInfo(operationName, "patch", type);
+		}
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `PaymentMethods` Operation
+ */
+export const KQL_PaymentMethods = KQL_PaymentMethodsStore();
+
+function KQL_PaymentMethodsAdminStore() {
+	const operationName = 'KQL_PaymentMethodsAdmin';
+	const operationType = ResponseResultType.Query;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.PaymentMethodsAdminQuery, Types.PaymentMethodsAdminQueryVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function queryLocal(
+			params?: RequestQueryParameters<Types.PaymentMethodsAdminQueryVariables>
+		): Promise<RequestResult<Types.PaymentMethodsAdminQuery, Types.PaymentMethodsAdminQueryVariables>> {
+			let { fetch, variables, settings } = params ?? {};
+			let { cacheMs, policy } = settings ?? {};
+
+			const storedVariables = get(KQL_PaymentMethodsAdmin).variables;
+			variables = variables ?? storedVariables;
+			policy = policy ?? kitQLClient.policy;
+
+			// Cache only in the browser for now. In SSR, we will need session identif to not mix peoples data
+			if (browser) {
+				if (policy !== 'network-only') {
+					// prettier-ignore
+					const cachedData = kitQLClient.requestCache<Types.PaymentMethodsAdminQuery, Types.PaymentMethodsAdminQueryVariables>({
+						variables, operationName, cacheMs,	browser
+					});
+					if (cachedData) {
+						const result = { ...cachedData, isFetching: false, status: RequestStatus.DONE };
+						if (policy === 'cache-first') {
+							set(result);
+							if (!result.isOutdated) {
+								return result;
+							}
+						} else if (policy === 'cache-only') {
+							set(result);
+							return result;
+						} else if (policy === 'cache-and-network') {
+							set(result);
+						}
+					}
+				}
+			}
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.PaymentMethodsAdminQuery, Types.PaymentMethodsAdminQueryVariables>({
+				skFetch: fetch,
+				document: Types.PaymentMethodsAdminDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		query: queryLocal,
+
+		/**
+		 * Ideal for SSR query. To be used in SvelteKit load function
+		 * @returns fill this store & the cache
+		 */
+		queryLoad: async (
+			params?: RequestQueryParameters<Types.PaymentMethodsAdminQueryVariables>
+		): Promise<void> => {
+			if (clientStarted) {
+				queryLocal(params); // No await in purpose, we are in a client navigation.
+			} else {
+				await queryLocal(params);
+			}
+		},
+
+		/**
+		 * Reset Cache
+		 */
+		resetCache(
+			variables: Types.PaymentMethodsAdminQueryVariables | null = null,
+			allOperationKey: boolean = true,
+			withResetStore: boolean = true
+		) {
+			kitQLClient.cacheRemove(operationName, { variables, allOperationKey });
+			if (withResetStore) {
+				set({ ...defaultStoreValue, operationName });
+			}
+		},
+
+		/**
+		 * Patch the store &&|| cache with some data.
+		 */
+		// prettier-ignore
+		patch(data: Types.PaymentMethodsAdminQuery, variables: Types.PaymentMethodsAdminQueryVariables | null = null, type: PatchType = 'cache-and-store'): void {
+			let updatedCacheStore = undefined;
+			if(type === 'cache-only' || type === 'cache-and-store') {
+				updatedCacheStore = kitQLClient.cacheUpdate<Types.PaymentMethodsAdminQuery, Types.PaymentMethodsAdminQueryVariables>(operationName, data, { variables });
+			}
+			if(type === 'store-only' ) {
+				let toReturn = { ...get(KQL_PaymentMethodsAdmin), data, variables } ;
+				set(toReturn);
+			}
+			if(type === 'cache-and-store' ) {
+				set({...get(KQL_PaymentMethodsAdmin), ...updatedCacheStore});
+			}
+			kitQLClient.logInfo(operationName, "patch", type);
+		}
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `PaymentMethodsAdmin` Operation
+ */
+export const KQL_PaymentMethodsAdmin = KQL_PaymentMethodsAdminStore();
+
+function KQL_SavePaymentMethodStore() {
+	const operationName = 'KQL_SavePaymentMethod';
+	const operationType = ResponseResultType.Mutation;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.SavePaymentMethodMutation, Types.SavePaymentMethodMutationVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function mutateLocal(
+			params?: RequestParameters<Types.SavePaymentMethodMutationVariables>
+		): Promise<RequestResult<Types.SavePaymentMethodMutation, Types.SavePaymentMethodMutationVariables>> {
+			let { fetch, variables } = params ?? {};
+
+			const storedVariables = get(KQL_SavePaymentMethod).variables;
+			variables = variables ?? storedVariables;
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.SavePaymentMethodMutation, Types.SavePaymentMethodMutationVariables>({
+				skFetch: fetch,
+				document: Types.SavePaymentMethodDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		mutate: mutateLocal,
+
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `SavePaymentMethod` Operation
+ */
+export const KQL_SavePaymentMethod = KQL_SavePaymentMethodStore();
+
+function KQL_StripeStore() {
+	const operationName = 'KQL_Stripe';
+	const operationType = ResponseResultType.Mutation;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.StripeMutation, Types.StripeMutationVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function mutateLocal(
+			params?: RequestParameters<Types.StripeMutationVariables>
+		): Promise<RequestResult<Types.StripeMutation, Types.StripeMutationVariables>> {
+			let { fetch, variables } = params ?? {};
+
+			const storedVariables = get(KQL_Stripe).variables;
+			variables = variables ?? storedVariables;
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.StripeMutation, Types.StripeMutationVariables>({
+				skFetch: fetch,
+				document: Types.StripeDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		mutate: mutateLocal,
+
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `Stripe` Operation
+ */
+export const KQL_Stripe = KQL_StripeStore();
 
 function KQL_ProductStore() {
 	const operationName = 'KQL_Product';
@@ -2940,6 +4187,127 @@ function KQL_SettingsStore() {
  */
 export const KQL_Settings = KQL_SettingsStore();
 
+function KQL_StatesStore() {
+	const operationName = 'KQL_States';
+	const operationType = ResponseResultType.Query;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.StatesQuery, Types.StatesQueryVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function queryLocal(
+			params?: RequestQueryParameters<Types.StatesQueryVariables>
+		): Promise<RequestResult<Types.StatesQuery, Types.StatesQueryVariables>> {
+			let { fetch, variables, settings } = params ?? {};
+			let { cacheMs, policy } = settings ?? {};
+
+			const storedVariables = get(KQL_States).variables;
+			variables = variables ?? storedVariables;
+			policy = policy ?? kitQLClient.policy;
+
+			// Cache only in the browser for now. In SSR, we will need session identif to not mix peoples data
+			if (browser) {
+				if (policy !== 'network-only') {
+					// prettier-ignore
+					const cachedData = kitQLClient.requestCache<Types.StatesQuery, Types.StatesQueryVariables>({
+						variables, operationName, cacheMs,	browser
+					});
+					if (cachedData) {
+						const result = { ...cachedData, isFetching: false, status: RequestStatus.DONE };
+						if (policy === 'cache-first') {
+							set(result);
+							if (!result.isOutdated) {
+								return result;
+							}
+						} else if (policy === 'cache-only') {
+							set(result);
+							return result;
+						} else if (policy === 'cache-and-network') {
+							set(result);
+						}
+					}
+				}
+			}
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.StatesQuery, Types.StatesQueryVariables>({
+				skFetch: fetch,
+				document: Types.StatesDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		query: queryLocal,
+
+		/**
+		 * Ideal for SSR query. To be used in SvelteKit load function
+		 * @returns fill this store & the cache
+		 */
+		queryLoad: async (
+			params?: RequestQueryParameters<Types.StatesQueryVariables>
+		): Promise<void> => {
+			if (clientStarted) {
+				queryLocal(params); // No await in purpose, we are in a client navigation.
+			} else {
+				await queryLocal(params);
+			}
+		},
+
+		/**
+		 * Reset Cache
+		 */
+		resetCache(
+			variables: Types.StatesQueryVariables | null = null,
+			allOperationKey: boolean = true,
+			withResetStore: boolean = true
+		) {
+			kitQLClient.cacheRemove(operationName, { variables, allOperationKey });
+			if (withResetStore) {
+				set({ ...defaultStoreValue, operationName });
+			}
+		},
+
+		/**
+		 * Patch the store &&|| cache with some data.
+		 */
+		// prettier-ignore
+		patch(data: Types.StatesQuery, variables: Types.StatesQueryVariables | null = null, type: PatchType = 'cache-and-store'): void {
+			let updatedCacheStore = undefined;
+			if(type === 'cache-only' || type === 'cache-and-store') {
+				updatedCacheStore = kitQLClient.cacheUpdate<Types.StatesQuery, Types.StatesQueryVariables>(operationName, data, { variables });
+			}
+			if(type === 'store-only' ) {
+				let toReturn = { ...get(KQL_States), data, variables } ;
+				set(toReturn);
+			}
+			if(type === 'cache-and-store' ) {
+				set({...get(KQL_States), ...updatedCacheStore});
+			}
+			kitQLClient.logInfo(operationName, "patch", type);
+		}
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `States` Operation
+ */
+export const KQL_States = KQL_StatesStore();
+
 function KQL_StoreStore() {
 	const operationName = 'KQL_Store';
 	const operationType = ResponseResultType.Query;
@@ -3499,6 +4867,55 @@ function KQL_MeStore() {
  */
 export const KQL_Me = KQL_MeStore();
 
+function KQL_ResendEmailStore() {
+	const operationName = 'KQL_ResendEmail';
+	const operationType = ResponseResultType.Mutation;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.ResendEmailMutation, Types.ResendEmailMutationVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function mutateLocal(
+			params?: RequestParameters<Types.ResendEmailMutationVariables>
+		): Promise<RequestResult<Types.ResendEmailMutation, Types.ResendEmailMutationVariables>> {
+			let { fetch, variables } = params ?? {};
+
+			const storedVariables = get(KQL_ResendEmail).variables;
+			variables = variables ?? storedVariables;
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.ResendEmailMutation, Types.ResendEmailMutationVariables>({
+				skFetch: fetch,
+				document: Types.ResendEmailDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		mutate: mutateLocal,
+
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `ResendEmail` Operation
+ */
+export const KQL_ResendEmail = KQL_ResendEmailStore();
+
 function KQL_SignOutStore() {
 	const operationName = 'KQL_SignOut';
 	const operationType = ResponseResultType.Mutation;
@@ -3717,6 +5134,55 @@ function KQL_UpdateProfileStore() {
  * KitQL Svelte Store with the latest `UpdateProfile` Operation
  */
 export const KQL_UpdateProfile = KQL_UpdateProfileStore();
+
+function KQL_VerifyEmailStore() {
+	const operationName = 'KQL_VerifyEmail';
+	const operationType = ResponseResultType.Mutation;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.VerifyEmailMutation, Types.VerifyEmailMutationVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function mutateLocal(
+			params?: RequestParameters<Types.VerifyEmailMutationVariables>
+		): Promise<RequestResult<Types.VerifyEmailMutation, Types.VerifyEmailMutationVariables>> {
+			let { fetch, variables } = params ?? {};
+
+			const storedVariables = get(KQL_VerifyEmail).variables;
+			variables = variables ?? storedVariables;
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.VerifyEmailMutation, Types.VerifyEmailMutationVariables>({
+				skFetch: fetch,
+				document: Types.VerifyEmailDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		mutate: mutateLocal,
+
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `VerifyEmail` Operation
+ */
+export const KQL_VerifyEmail = KQL_VerifyEmailStore();
 
 function KQL_VerifyOtpStore() {
 	const operationName = 'KQL_VerifyOtp';

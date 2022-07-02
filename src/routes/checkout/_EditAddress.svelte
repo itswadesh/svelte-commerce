@@ -23,45 +23,35 @@ export let prev = ''
 export let id = 'new'
 export let returnUrl = '/checkout/address'
 let iconloading = false
-let address = {
-	id: null,
-	email: null,
-	firstName: null,
-	lastName: null,
-	address: null,
-	town: null,
-	city: null,
-	country: null,
-	state: null,
-	zip: null,
-	phone: null
-}
+let address = {}
 $: isDisabled =
-	!address.firstName ||
-	!address.phone ||
-	!address.zip ||
-	!address.address ||
-	!address.city ||
-	!address.country
-$: user = $session.user
+	!address?.firstName ||
+	!address?.phone ||
+	!address?.zip ||
+	!address?.address ||
+	!address?.city ||
+	!address?.country
+$: user = $session.me
 onMount(() => {
 	if (id !== 'new') getAddress()
+	else
+		address = {
+			firstName: user?.firstName,
+			lastName: user?.lastName,
+			email: user?.email,
+			phone: user?.phone,
+			address: user?.address,
+			town: user?.town,
+			city: user?.city,
+			country: user?.country,
+			zip: user?.zip
+		}
 })
 
 async function getAddress() {
 	try {
 		address = (await KQL_Address.query({ variables: { id } })).data?.address
-		if (!address) {
-			address.firstName = user.firstName
-			address.lastName = user.lastName
-			address.email = user.email
-			address.phone = user.phone
-			address.address = user.address
-			address.town = user.town
-			address.city = user.city
-			address.country = user.country
-			address.zip = user.zip
-		}
+
 		// console.log(address)
 	} catch (e) {
 		// console.log(e)
@@ -74,7 +64,7 @@ async function submit() {
 	try {
 		iconloading = true
 		if (!address?.id) address.id = 'new'
-		address = (await KQL_SaveAddress.mutate({ variables: address })).data?.saveAddress
+		await KQL_SaveAddress.mutate({ variables: address })
 		toast(msg, 'success')
 		if (prev) goto(`/${prev}`)
 		else goto(returnUrl)
