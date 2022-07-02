@@ -30,7 +30,7 @@ const authorInfo = {
 	telegramUsername: 'itswadesh',
 	twitterUsername: 'itswadesh'
 }
-const host = 'https://misiki.in'
+const host = 'https://misiki.io'
 export {
 	sorts,
 	CDN_URL,

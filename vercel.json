@@ -2,21 +2,21 @@
     "rewrites": [
         {
             "source": "/graphql",
-            "destination": "https://api.misiki.in/graphql"
+            "destination": "https://api.misiki.io/graphql"
         },
         {
             "source": "/api/:path*",
-            "destination": "https://api.misiki.in/api/:path*"
+            "destination": "https://api.misiki.io/api/:path*"
         },
         {
             "source": "/images/:path*",
-            "destination": "https://api.misiki.in/images/:path*"
+            "destination": "https://api.misiki.io/images/:path*"
         }
     ],
     "env": {
-        "VITE_WWW_URL": "https://food.misiki.in",
-        "VITE_DOMAIN": "misiki.in",
-        "HTTP_ENDPOINT": "https://api.misiki.in",
+        "VITE_WWW_URL": "https://food.misiki.io",
+        "VITE_DOMAIN": "misiki.io",
+        "HTTP_ENDPOINT": "https://api.misiki.io",
         "NODE_OPTIONS": "--max-old-space-size=7680"
     }
 }

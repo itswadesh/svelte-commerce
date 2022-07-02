@@ -26,22 +26,22 @@ const seoProps = {
 </script>
 
 <SEO {...seoProps} />
-<div class="bg-white min-h-screen text-center">
+<div class="min-h-screen bg-white text-center">
 	<div class="container mx-auto max-w-7xl">
 		<div class="p-3 py-5 sm:p-10">
 			<div
-				class="mb-5 sm:mb-10 text-gray-800 max-w-max mx-auto flex flex-col items-center justify-center">
-				<h1 class="mb-2 text-primary-500 text-xl sm:text-2xl lg:text-3xl font-bold">About</h1>
+				class="mx-auto mb-5 flex max-w-max flex-col items-center justify-center text-gray-800 sm:mb-10">
+				<h1 class="mb-2 text-xl font-bold text-primary-500 sm:text-2xl lg:text-3xl">About</h1>
 
 				<HeadingUnderline />
 			</div>
 
-			<h2 class="text-lg sm:text-xl tracking-wide text-center font-semibold">
+			<h2 class="text-center text-lg font-semibold tracking-wide sm:text-xl">
 				Helping You Build An Online Brand
 			</h2>
 		</div>
 
-		<div class="mb-10 sm:mb-20 px-4 sm:px-10">
+		<div class="mb-10 px-4 sm:mb-20 sm:px-10">
 			<p class="mb-5">
 				Misiki is a product of India based Javascript e-commerce Solution. It offers an javascript
 				fullstack ecommerce website to startups to strengthen their footprints in the ecommerce
@@ -61,46 +61,46 @@ const seoProps = {
 			</p>
 		</div>
 
-		<div class="mb-10 sm:mb-20 grid grid-cols-1 sm:grid-cols-3 gap-5  px-4 sm:px-10">
-			<div class="col-span-1 bg-white text-center rounded-lg shadow-md">
+		<div class="mb-10 grid grid-cols-1 gap-5 px-4 sm:mb-20  sm:grid-cols-3 sm:px-10">
+			<div class="col-span-1 rounded-lg bg-white text-center shadow-md">
 				<div>
 					<ImageLoader
 						src="/about/about1.png"
 						alt="-"
-						class="h-44 lg:h-60 object-cover w-full rounded-t-lg" />
+						class="h-44 w-full rounded-t-lg object-cover lg:h-60" />
 				</div>
 
-				<p class="p-4 lg:p-6 text-sm text-gray-500">
+				<p class="p-4 text-sm text-gray-500 lg:p-6">
 					With a mission of “Amazing customer experience” Misiki aims to offer an easy ecommerce
 					enablement platform where small retailers and SME’s can start their online store with
 					their brand name, at the best prices.
 				</p>
 			</div>
 
-			<div class="col-span-1 bg-white text-center rounded-lg shadow-md">
+			<div class="col-span-1 rounded-lg bg-white text-center shadow-md">
 				<div>
 					<ImageLoader
 						src="/about/about2.png"
 						alt="-"
-						class="h-44 lg:h-60 object-cover w-full rounded-t-lg" />
+						class="h-44 w-full rounded-t-lg object-cover lg:h-60" />
 				</div>
 
-				<p class="p-4 lg:p-6 text-sm text-gray-500">
+				<p class="p-4 text-sm text-gray-500 lg:p-6">
 					To simplify administration, cart checkout and payments for merchants by offering the
 					complete ecommerce solution, so that they can easily come up with their online store and
 					start selling online.
 				</p>
 			</div>
 
-			<div class="col-span-1 bg-white text-center rounded-lg shadow-md">
+			<div class="col-span-1 rounded-lg bg-white text-center shadow-md">
 				<div>
 					<ImageLoader
 						src="/about/about3.png"
 						alt="-"
-						class="h-44 lg:h-60 object-cover w-full rounded-t-lg" />
+						class="h-44 w-full rounded-t-lg object-cover lg:h-60" />
 				</div>
 
-				<p class="p-4 lg:p-6 text-sm text-gray-500">
+				<p class="p-4 text-sm text-gray-500 lg:p-6">
 					Misiki wants to reduce ecommerce to its bare bones for small retailers. We bridge the gap
 					between technology and innovation by providing an easy yet powerful ecommerce enablement
 					platform
@@ -109,16 +109,16 @@ const seoProps = {
 		</div>
 	</div>
 
-	<div class="relative h-rem bg-gray-800 overflow-hidden">
-		<div class="w-full h-full">
-			<ImageLoader src="/mumbai.jpg" alt="mumbai" class="z-0 object-cover w-full h-full" />
+	<div class="h-rem relative overflow-hidden bg-gray-800">
+		<div class="h-full w-full">
+			<ImageLoader src="/mumbai.jpg" alt="mumbai" class="z-0 h-full w-full object-cover" />
 		</div>
 
 		<div
-			class="absolute top-0 left-0 right-0 bottom-0 z-10 text-white font-semibold"
+			class="absolute top-0 left-0 right-0 bottom-0 z-10 font-semibold text-white"
 			style="background-color: rgba(0, 0, 0,0.5);">
 			<div
-				class="container max-w-7xl mx-auto p-2 flex flex-col space-y-5 items-center justify-center tracking-wide h-full">
+				class="container mx-auto flex h-full max-w-7xl flex-col items-center justify-center space-y-5 p-2 tracking-wide">
 				<div class="mb-5">
 					<h1 class="mb-3 text-3xl sm:text-4xl">Misiki Technologies LLP</h1>
 
@@ -127,13 +127,13 @@ const seoProps = {
 					<h1 class="text-sm sm:text-base">770039</h1>
 				</div>
 
-				<div class="grid grid-cols-1 lg:grid-cols-5 gap-5 items-start justify-between px-5">
+				<div class="grid grid-cols-1 items-start justify-between gap-5 px-5 lg:grid-cols-5">
 					<!-- Address -->
 
 					<div class="col-span-1 flex flex-col items-center justify-center font-normal">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
-							class="mb-3 w-10 h-10"
+							class="mb-3 h-10 w-10"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor">
@@ -162,7 +162,7 @@ const seoProps = {
 							stroke-linejoin="round"
 							stroke-width="1.5"
 							viewBox="0 0 24 24"
-							class="mb-3 w-10 h-10">
+							class="mb-3 h-10 w-10">
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
@@ -191,7 +191,7 @@ const seoProps = {
 							stroke-linejoin="round"
 							stroke-width="1.5"
 							viewBox="0 0 24 24"
-							class="mb-3 w-10 h-10">
+							class="mb-3 h-10 w-10">
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
@@ -215,7 +215,7 @@ const seoProps = {
 							stroke-linejoin="round"
 							stroke-width="1.5"
 							viewBox="0 0 24 24"
-							class="mb-3 w-10 h-10">
+							class="mb-3 h-10 w-10">
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
@@ -234,7 +234,7 @@ const seoProps = {
 					<div class="col-span-1 flex flex-col items-center justify-center  font-normal">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
-							class="mb-3 w-10 h-10"
+							class="mb-3 h-10 w-10"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor">
@@ -248,7 +248,7 @@ const seoProps = {
 
 						<h3 class="mb-2 text-base md:text-lg">WebSite</h3>
 
-						<a href="https://misiki.in/" class="text-gray-200">misiki.in</a>
+						<a href="https://misiki.io/" class="text-gray-200">misiki.io</a>
 					</div>
 				</div>
 			</div>
@@ -256,20 +256,20 @@ const seoProps = {
 	</div>
 
 	<div class="p-3 py-5 sm:p-10 sm:py-20">
-		<div class="container max-w-7xl mx-auto">
-			<h2 class="text-2xl md:text-4xl font-medium text-center">Experience Work As A Innovator!</h2>
+		<div class="container mx-auto max-w-7xl">
+			<h2 class="text-center text-2xl font-medium md:text-4xl">Experience Work As A Innovator!</h2>
 
 			<p class="my-3 flex justify-center">----- ¤ ----- ¤ ----- ¤ -----</p>
 
-			<p class="mb-10 flex justify-center tracking-wide text-center">
+			<p class="mb-10 flex justify-center text-center tracking-wide">
 				At Misiki, we don’t just offer jobs, but a career. If you are crazy about work and party,
 				then we are waiting for you, eagerly!
 			</p>
 
-			<div class="relative max-w-max mx-auto">
+			<div class="relative mx-auto max-w-max">
 				<button type="submit">Apply Now</button>
 
-				<div class="absolute top-0 right-0 -m-0.5 bg-primary-500 animate-ping h-3 w-3 rounded-full">
+				<div class="absolute top-0 right-0 -m-0.5 h-3 w-3 animate-ping rounded-full bg-primary-500">
 				</div>
 			</div>
 		</div>

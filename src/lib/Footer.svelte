@@ -15,7 +15,7 @@ const cookies = Cookie()
 
 const d = new Date()
 const year = d.getFullYear()
-let selectedCountry = 'food.misiki.in'
+let selectedCountry = 'fashion.misiki.io'
 let store = cookies.get('store')
 onMount(async () => {
 	// try {
