@@ -1,4 +1,4 @@
-<a href="https://misiki.in/">
+<a href="https://misiki.io/">
 <img src="https://repository-images.githubusercontent.com/213575283/f577b8bd-8edb-41ba-bfe5-36e65072e1f2" alt/>
 </a>
 
@@ -21,7 +21,7 @@
 - I will keep on posting all the open source projects to our portfolio <a href="https://misiki.tech/" target="blank">misiki.tech</a>
 <br/>
 
-- 🛍️ Attach Svelte store front to any ecommerce API (e.g. <a href="https://misiki.in/"> Misiki SAAS </a>, <a href="https://magento.com/">Magento</a>, <a href="https://www.moltin.com/">Moltin</a>, <a href="https://www.shopify.com/">Shopify</a> ...)
+- 🛍️ Attach Svelte store front to any ecommerce API (e.g. <a href="https://misiki.io/"> Misiki SAAS </a>, <a href="https://magento.com/">Magento</a>, <a href="https://www.moltin.com/">Moltin</a>, <a href="https://www.shopify.com/">Shopify</a> ...)
 - 👥 The demo uses litekart as backend
 - 👨🏻‍💻 Its both SSR and SPA
 - 🚀 Superfast
