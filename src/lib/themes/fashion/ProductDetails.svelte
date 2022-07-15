@@ -33,6 +33,9 @@ onMount(() => {
 	storeRecentlyViewedToLocatStorage()
 })
 
+let currentVariantId = $page.url.searchParams?.get('variant') || ''
+let currentVariantPrice = data.product?.price || 0
+
 let seoProps = {
 	// addressCountry: 'India',
 	// addressLocality: 'Semiliguda, Koraput',
@@ -57,8 +60,8 @@ let seoProps = {
 	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00'],
 	popularity: data.product?.popularity,
 	// postalCode: '764036',
-	price: data.product?.price,
-	priceRange: `${data.product?.price}-${data.product?.mrp}`,
+	price: currentVariantId,
+	priceRange: `${currentVariantId}-${data.product?.mrp}`,
 	ratingCount: 1,
 	ratingValue: +data.product?.ratings + 1,
 	sku: data.product?.sku,
@@ -93,7 +96,7 @@ let seoProps = {
 	productAvailability: `${data.product?.stock}`,
 	productBrand: `${data.product?.brandName || `${$page?.data?.store?.websiteName}`}`,
 	productName: `${data.product?.name}`,
-	productPriceAmount: `${data.product?.price}`,
+	productPriceAmount: `${currentVariantId}`,
 	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
 	slug: `${data.product?.slug}`,
 	// timeToRead: 0,
@@ -103,8 +106,6 @@ let seoProps = {
 
 let bounceItemFromTop = false
 let cartButtonText = 'Add to Bag'
-let currentVariantId = $page.url.searchParams?.get('variant') || ''
-let currentVariantPrice = 0
 let customizedImg
 let recentlyViewed = []
 let selectedLinkiedProducts = []
@@ -175,7 +176,7 @@ function slideFade(node, params) {
 
 async function updateVariant(variant) {
 	$page.url.searchParams.set('variant', variant.id)
-	// currentVariantPrice = variant.price || data.product?.price
+	currentVariantPrice = variant.prices[0]?.amount || currentVariantPrice
 	await goto($page.url.toString())
 	await invalidateAll()
 }
@@ -263,7 +264,7 @@ async function updateVariant(variant) {
 
 				<div class="flex flex-wrap leading-3 gap-2">
 					<span class="text-lg text-secondary-500">
-						{currency(data.product?.price, $page.data?.store?.currencySymbol)}
+						{currency(currentVariantId, $page.data?.store?.currencySymbol)}
 					</span>
 
 					<span class="text-lg text-zinc-500">
