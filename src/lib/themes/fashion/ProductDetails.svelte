@@ -1,6 +1,6 @@
 <script lang="ts">
 import { applyAction, enhance } from '$app/forms'
-import { currency } from '$lib/utils'
+import { currency, toast } from '$lib/utils'
 import {
 	Email,
 	Facebook,
@@ -114,6 +114,7 @@ let selectedOptions1 = []
 let selectedSize
 let showdescription = false
 let showSizeChart = false
+let wiggleVariants = false
 
 if (data.product?.size?.name === 'One Size') {
 	selectedSize = 'One Size'
@@ -180,6 +181,20 @@ async function updateVariant(variant) {
 	currentVariantPrice = variant.prices[0]?.amount || currentVariantPrice
 	await goto($page.url.toString())
 	await invalidateAll()
+}
+
+function scrollTo(elementId) {
+	let element
+	if (elementId.detail) {
+		element = document.getElementById(elementId.detail)
+	} else {
+		element = document.getElementById(elementId)
+	}
+	window.scroll({
+		behavior: 'smooth',
+		left: 0,
+		top: element.offsetTop - 100
+	})
 }
 </script>
 
@@ -479,7 +494,7 @@ async function updateVariant(variant) {
 					<!-- Variant Products -->
 
 					{#if value?.variants?.length}
-						<div>
+						<div id="variants_list">
 							<div class="mb-2 flex items-center gap-2 uppercase">
 								<h5>Variant Products</h5>
 
@@ -498,7 +513,7 @@ async function updateVariant(variant) {
 								</svg>
 							</div>
 
-							<ul class="flex flex-wrap gap-3">
+							<ul class="flex flex-wrap gap-3" class:wiggle="{wiggleVariants}">
 								{#each value?.variants as v}
 									<li>
 										<button
@@ -521,83 +536,115 @@ async function updateVariant(variant) {
 					<Error err="{error}" />
 				{/await}
 
-				<form
-					action="/cart?/add"
-					method="POST"
-					use:enhance="{() => {
-						return async ({ result }) => {
-							result?.data?.qty < 0
-								? fireGTagEvent('remove_from_cart', result?.data)
-								: fireGTagEvent('add_to_cart', result?.data)
-							cartButtonText = 'Added To Cart'
-							bounceItemFromTop = true
-							setTimeout(() => {
-								bounceItemFromTop = false
-								cartButtonText = 'Add to Bag'
-							}, 3000)
-							cartButtonText = 'Go to Cart'
-							if (customizedImg) {
-								goto(`/checkout/address`)
-							}
-							invalidateAll()
-							await applyAction(result)
-						}
-					}}">
-					<input type="hidden" name="pid" value="{data?.product?._id}" />
-					<input type="hidden" name="vid" value="{currentVariantId || data?.product?._id}" />
-
-					<input
-						type="hidden"
-						name="linkedItems"
-						value="{JSON.stringify(selectedLinkiedProducts)}" />
-
-					<input type="hidden" name="qty" value="{1}" />
-
-					<input type="hidden" name="options" value="{JSON.stringify(selectedOptions1)}" />
-
-					<input type="hidden" name="customizedImg" value="{customizedImg}" />
-
-					<WhiteButton type="submit" loadingringsize="sm" class="w-full text-sm uppercase">
-						{cartButtonText}
-					</WhiteButton>
-				</form>
-
-				<form
-					action="/cart?/add"
-					method="POST"
-					use:enhance="{() => {
-						return async ({ result }) => {
-							result?.data?.qty < 0
-								? fireGTagEvent('remove_from_cart', result?.data)
-								: fireGTagEvent('add_to_cart', result?.data)
-							goto(`/checkout/address`)
-							await applyAction(result)
-						}
-					}}">
-					<input type="hidden" name="pid" value="{data?.product?._id}" />
-					<input type="hidden" name="vid" value="{currentVariantId || data?.product?._id}" />
-
-					<input
-						type="hidden"
-						name="linkedItems"
-						value="{JSON.stringify(selectedLinkiedProducts)}" />
-
-					<input type="hidden" name="qty" value="{1}" />
-
-					<input type="hidden" name="options" value="{JSON.stringify(selectedOptions1)}" />
-
-					<input type="hidden" name="customizedImg" value="{customizedImg}" />
-
-					<PrimaryButton type="submit" loadingringsize="sm" class="w-full text-sm uppercase">
-						Buy Now
-					</PrimaryButton>
-				</form>
-
 				{#await data.streamed?.moreProductDetails}
 					<div class="mb-5">
 						<Skeleton extraSmall />
 					</div>
 				{:then value}
+					<form
+						action="/cart?/add"
+						method="POST"
+						use:enhance="{() => {
+							return async ({ result }) => {
+								// console.log('result of add to cart', result);
+								if (result?.data === 'choose variant') {
+									scrollTo('variants_list')
+									toast('Please choose a variant', 'warning')
+									wiggleVariants = true
+
+									setTimeout(() => {
+										wiggleVariants = false
+									}, 820)
+									return
+								}
+								result?.data?.qty < 0
+									? fireGTagEvent('remove_from_cart', result?.data)
+									: fireGTagEvent('add_to_cart', result?.data)
+								cartButtonText = 'Added To Cart'
+								bounceItemFromTop = true
+								setTimeout(() => {
+									bounceItemFromTop = false
+									cartButtonText = 'Add to Bag'
+								}, 3000)
+								cartButtonText = 'Go to Cart'
+								if (customizedImg) {
+									goto(`/checkout/address`)
+								}
+								invalidateAll()
+								await applyAction(result)
+							}
+						}}">
+						<input type="hidden" name="pid" value="{data?.product?._id}" />
+
+						<input type="hidden" name="vid" value="{data?.product?._id}" />
+
+						<input type="hidden" name="variantsLength" value="{value?.variants?.length}" />
+
+						<input type="hidden" name="currentVariantId" value="{currentVariantId}" />
+
+						<input
+							type="hidden"
+							name="linkedItems"
+							value="{JSON.stringify(selectedLinkiedProducts)}" />
+
+						<input type="hidden" name="qty" value="{1}" />
+
+						<input type="hidden" name="options" value="{JSON.stringify(selectedOptions1)}" />
+
+						<input type="hidden" name="customizedImg" value="{customizedImg}" />
+
+						<WhiteButton type="submit" loadingringsize="sm" class="w-full text-sm uppercase">
+							{cartButtonText}
+						</WhiteButton>
+					</form>
+
+					<form
+						action="/cart?/add"
+						method="POST"
+						use:enhance="{() => {
+							return async ({ result }) => {
+								// console.log('result of add to cart', result);
+								if (result?.data === 'choose variant') {
+									scrollTo('variants_list')
+									toast('Please choose a variant', 'warning')
+									wiggleVariants = true
+
+									setTimeout(() => {
+										wiggleVariants = false
+									}, 820)
+									return
+								}
+								result?.data?.qty < 0
+									? fireGTagEvent('remove_from_cart', result?.data)
+									: fireGTagEvent('add_to_cart', result?.data)
+								goto(`/checkout/address`)
+								await applyAction(result)
+							}
+						}}">
+						<input type="hidden" name="pid" value="{data?.product?._id}" />
+
+						<input type="hidden" name="vid" value="{data?.product?._id}" />
+
+						<input type="hidden" name="variantsLength" value="{value?.variants?.length}" />
+
+						<input type="hidden" name="currentVariantId" value="{currentVariantId}" />
+
+						<input
+							type="hidden"
+							name="linkedItems"
+							value="{JSON.stringify(selectedLinkiedProducts)}" />
+
+						<input type="hidden" name="qty" value="{1}" />
+
+						<input type="hidden" name="options" value="{JSON.stringify(selectedOptions1)}" />
+
+						<input type="hidden" name="customizedImg" value="{customizedImg}" />
+
+						<PrimaryButton type="submit" loadingringsize="sm" class="w-full text-sm uppercase">
+							Buy Now
+						</PrimaryButton>
+					</form>
+
 					{#if value.longDescription}
 						<div class="mb-5 prose max-w-none">
 							{@html value.longDescription}
