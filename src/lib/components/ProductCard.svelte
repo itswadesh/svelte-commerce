@@ -1,8 +1,6 @@
 <style>
-@media (min-width: 640px) {
-	.shadow-effect:hover {
-		box-shadow: 0 2px 16px 4px rgba(40, 44, 63, 0.07);
-	}
+.shadow-effect:hover {
+	box-shadow: 0 2px 16px 4px rgba(40, 44, 63, 0.07);
 }
 /* .zoom {
 	overflow: hidden;
@@ -38,8 +36,6 @@ import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 
 export let product = {}
-// console.log('product', product)
-// console.log('$page', $page)
 
 if (product?._source) {
 	product = product?._source
@@ -47,9 +43,10 @@ if (product?._source) {
 
 let isWislisted = false
 let loadingForWishlist = false
+let product_image_dimension = $page.data.store.product_image_dimension || '3x4'
+let ribbonTags = []
 let show = false
 let showRelatedProducts = false
-let product_image_dimension = $page.data.store.product_image_dimension || '3x4'
 
 function showitems() {
 	show = true
@@ -58,11 +55,21 @@ function showitems() {
 function hideitems() {
 	show = false
 }
+
+// console.log('product', product)
+
+if (product?.tags?.length) {
+	ribbonTags = product?.tags.filter((tag) => {
+		return tag.type === 'Ribbon'
+	})
+
+	// console.log('Ribbon tags =', ribbonTags)
+}
 </script>
 
 {#if product}
 	<div
-		class="group relative col-span-1 block w-full sm:shrink-0 sm:rounded bg-white border sm:border-transparent shadow-effect overflow-hidden sm:overflow-visible
+		class="group relative col-span-1 block w-full sm:shrink-0 rounded bg-white shadow-effect overflow-hidden sm:overflow-visible
 		{product_image_dimension == '16x9' ? 'md:w-[420px]' : 'sm:w-[210px]'}"
 		on:mouseenter="{showitems}"
 		on:mouseleave="{hideitems}">
@@ -72,9 +79,10 @@ function hideitems() {
 			aria-label="Click to view the product details"
 			data-sveltekit-preload-data="tap"
 			class="flex flex-col items-center">
-			<!-- New -->
-			{#if product.new || product.tags?.length}
-				<div class="absolute top-1 left-1 flex flex-col gap-0.5">
+			<!-- New and Tags -->
+
+			{#if ribbonTags?.length || product?.new}
+				<div class="absolute z-10 top-1 left-1 flex flex-col gap-0.5">
 					{#if product.new}
 						<div
 							class="text-rem max-w-max bg-red-500 py-0.5 px-1.5 text-xs font-semibold uppercase text-white">
@@ -82,28 +90,26 @@ function hideitems() {
 						</div>
 					{/if}
 
-					{#if product.tags?.length}
-						{#each product.tags as tag}
-							{#if tag?.name && tag?.type === 'Ribbon'}
-								<div
-									class="text-rem max-w-max py-0.5 px-1.5 text-xs font-semibold uppercase text-white"
-									style="background-color: {tag.colorCode};">
-									{tag.name}
-								</div>
-							{/if}
+					{#if ribbonTags?.length}
+						{#each ribbonTags as tag}
+							<div
+								class="text-rem max-w-max py-0.5 px-1.5 text-xs font-semibold uppercase text-white"
+								style="background-color: {tag.colorCode || '#27272A'};">
+								{tag.name}
+							</div>
 						{/each}
 					{/if}
 				</div>
 			{/if}
 
 			{#if product_image_dimension == '1x1'}
-				{#if product.img}
+				{#if product.img || product.images[0]}
 					<LazyImg
-						src="{product.img}"
+						src="{product.img || product.images[0]}"
 						alt="{product.name}"
 						height="210"
 						aspect_ratio="1:1"
-						class="object-contain object-bottom w-[210px] h-[210px] text-xs" />
+						class="object-contain object-bottom w-[210px] h-[210px] text-xs rounded" />
 				{:else}
 					<div
 						class="w-[210px] h-[210px] bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center">
@@ -125,9 +131,9 @@ function hideitems() {
 					</div>
 				{/if}
 			{:else if product_image_dimension == '3x4'}
-				{#if product.img}
+				{#if product.img || product.images[0]}
 					<LazyImg
-						src="{product.img}"
+						src="{product.img || product.images[0]}"
 						alt="{product.name}"
 						height="280"
 						aspect_ratio="3:4"
@@ -153,9 +159,9 @@ function hideitems() {
 					</div>
 				{/if}
 			{:else if product_image_dimension == '4x3'}
-				{#if product.img}
+				{#if product.img || product.images[0]}
 					<LazyImg
-						src="{product.img}"
+						src="{product.img || product.images[0]}"
 						alt="{product.name}"
 						height="157"
 						aspect_ratio="4:3"
@@ -181,9 +187,9 @@ function hideitems() {
 					</div>
 				{/if}
 			{:else if product_image_dimension == '16x9'}
-				{#if product.img}
+				{#if product.img || product.images[0]}
 					<LazyImg
-						src="{product.img}"
+						src="{product.img || product.images[0]}"
 						alt="{product.name}"
 						height="236"
 						aspect_ratio="16:9"
@@ -209,9 +215,9 @@ function hideitems() {
 					</div>
 				{/if}
 			{:else if product_image_dimension == '9x16'}
-				{#if product.img}
+				{#if product.img || product.images[0]}
 					<LazyImg
-						src="{product.img}"
+						src="{product.img || product.images[0]}"
 						alt="{product.name}"
 						height="373"
 						aspect_ratio="9:16"
@@ -239,7 +245,7 @@ function hideitems() {
 			{/if}
 		</a>
 
-		<div class="p-2">
+		<div class="p-4">
 			<!-- View smilar button start-->
 
 			<!-- <div class="{product.relatedProducts?.length > 0 ? 'absolute bottom-24 right-4' : 'hidden'}">
@@ -419,10 +425,11 @@ function hideitems() {
 					aria-label="Click to view the product details"
 					data-sveltekit-preload-data>
 					<!-- <div class="mb-1.5 flex items-center justify-between"> -->
+
 					{#if product.brand?.name || product.brandName}
-						<h2 class="font-semibold">
+						<h3 class="text-xs sm:text-sm truncate">
 							{product.brand?.name || product.brandName}
-						</h2>
+						</h3>
 					{/if}
 
 					<!-- Wishlist -->
@@ -445,9 +452,10 @@ function hideitems() {
 					<!-- </div> -->
 
 					<div class="flex gap-2 justify-between">
-						<h3 class="flex-1 text-xs sm:text-sm truncate w-full group-hover:underline">
+						<h4
+							class="flex-1 text-xs sm:text-sm font-normal text-zinc-500 truncate w-full group-hover:underline">
 							{product.name || '_'}
-						</h3>
+						</h4>
 
 						{#if $page?.data?.store?.isFnb && product.foodType}
 							<div>
@@ -462,8 +470,12 @@ function hideitems() {
 				</a>
 
 				{#if $page?.data?.store?.isMultiVendor && product?.vendor && product?.vendor?.slug && product?.vendor?.businessName}
-					<div class="text-sm text-zinc-500">
-						By <a href="/store/{product?.vendor?.slug}" class="underline hover:text-zinc-800">
+					<div class="flex items-center gap-1 text-sm text-zinc-500">
+						<span> By </span>
+
+						<a
+							href="/store/{product?.vendor?.slug}"
+							class="block w-full truncate underline hover:text-zinc-800 capitalize">
 							{product?.vendor?.businessName}
 						</a>
 					</div>
@@ -476,25 +488,30 @@ function hideitems() {
 					href="/product/{product.slug}"
 					aria-label="Click to view the product details"
 					data-sveltekit-preload-data>
-					<div
-						class="{$page.data.store?.isSecureCatalogue && !$page.data?.me ? 'hidden' : 'flex'} 
-						mt-1 flex-wrap items-baseline justify-start leading-4 text-xs gap-1.5">
-						<span class="font-bold text-sm sm:text-base whitespace-nowrap">
-							{currency(product.price, $page.data?.store?.currencySymbol)}
-						</span>
+					<!-- Price, MRP and Discount -->
 
-						{#if product.mrp > product.price}
-							<span class="text-zinc-500 line-through whitespace-nowrap">
-								{currency(product.mrp, $page.data?.store?.currencySymbol)}
+					{#if product.price}
+						<div
+							class="{$page.data.store?.isSecureCatalogue && !$page.data?.me
+								? 'hidden'
+								: 'flex'} mt-1 flex-wrap items-baseline justify-start gap-1.5 text-xs leading-3">
+							<span class="text-base font-bold whitespace-nowrap leading-3">
+								{currency(product.price, $page.data?.store?.currencySymbol)}
 							</span>
 
-							{#if Math.floor(((product.mrp - product.price) / product.mrp) * 100) > 0}
-								<span class="text-orange-500 sm:text-zinc-800 whitespace-nowrap">
-									({Math.floor(((product.mrp - product.price) / product.mrp) * 100)}% off)
+							{#if product.mrp > product.price}
+								<span class="text-zinc-500 line-through whitespace-nowrap">
+									{currency(product.mrp, $page.data?.store?.currencySymbol)}
 								</span>
+
+								{#if Math.floor(((product.mrp - product.price) / product.mrp) * 100) > 0}
+									<span class="text-secondary-500 whitespace-nowrap">
+										({Math.floor(((product.mrp - product.price) / product.mrp) * 100)}% off)
+									</span>
+								{/if}
 							{/if}
-						{/if}
-					</div>
+						</div>
+					{/if}
 				</a>
 			{/if}
 		</div>
@@ -548,7 +565,7 @@ function hideitems() {
 
 									<div class="w-[210px] h-[280px] overflow-hidden">
 										<LazyImg
-											src="{product.img}"
+											src="{product.img || product.images[0]}"
 											alt="{product.name}"
 											height="280"
 											class="object-contain object-bottom w-[210px] h-[280px] text-xs" />

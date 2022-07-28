@@ -22,7 +22,8 @@ const cookies = Cookie()
 
 export let me: Me, cart: Cart, data, showCartSidebar: boolean, openSidebar: boolean, store
 
-// console.log('$page', $page)
+let clazz = ''
+export { clazz as class }
 
 let categories
 let hellobar = $page.data.store?.hellobar || {}
@@ -82,8 +83,6 @@ async function fetchCart() {
 				formattedAmount: res?.formattedAmount
 			}
 
-			console.log('cart', cart)
-
 			cookies.set('cartId', cart.cartId, { path: '/' })
 			cookies.set('cartQty', cart.qty, { path: '/' })
 			// cookies.set('cart', JSON.stringify(cart), { path: '/' })
@@ -102,8 +101,6 @@ async function getCategories() {
 			origin: $page.data.origin
 		})
 
-		// console.log('res1', res1)
-
 		categories = res1?.data.filter((c) => {
 			return c.img
 		})
@@ -114,12 +111,15 @@ async function getCategories() {
 </script>
 
 <nav
-	class="minimum-width-rem sticky inset-x-0 top-0 w-full border-b bg-white shadow-xs
-	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
+	class="{clazz} sticky inset-x-0 top-0 w-full border-b bg-white shadow-xs
+		{hellobar?.active?.val
+		? 'h-[96px] sm:h-[120px] lg:h-[168px]'
+		: 'h-[56px] sm:h-[80px] lg:h-[128px]'} 
+		{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
 	{#if hellobar?.active?.val}
 		<div
-			class="h-8 text-center tracking-wider flex items-center justify-center text-sm"
-			style="background-color: {hellobar?.bgColor?.val || '#27272a'};
+			class="h-10 text-center tracking-wider flex items-center justify-center text-xs"
+			style="background-color: {hellobar?.bgColor?.val || '#515151'};
 				 color: {hellobar?.textColor?.val || '#ffffff'};">
 			{@html hellobar.content?.val}
 		</div>
@@ -352,12 +352,10 @@ async function getCategories() {
 		</div>
 	</div>
 
-	<hr />
-
 	<!-- Mega menu -->
 
 	<div class="hidden lg:flex items-center justify-center overflow-auto scrollbar-none">
-		<MegaMenu />
+		<MegaMenu class="h-12 text-sm uppercase" />
 	</div>
 </nav>
 

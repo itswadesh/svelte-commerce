@@ -24,9 +24,6 @@
 	padding-left: 0px;
 	justify-content: center;
 }
-.text-rem {
-	font-size: 0.6rem;
-}
 </style>
 
 <script>
@@ -36,40 +33,49 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 
-// console.log('$page', $page)
-
 export let product = {}
-// console.log('product', product)
+
+let ribbonTags = []
 
 if (product?._source) {
 	product = product?._source
 }
+
+// console.log('product', product)
+
+if (product?.tags?.length) {
+	ribbonTags = product?.tags.filter((tag) => {
+		return tag.type === 'Ribbon'
+	})
+
+	// console.log('Ribbon tags =', ribbonTags)
+}
 </script>
 
 {#if product}
-	<div class="flex flex-col items-center text-center">
+	<div class="relative flex flex-col items-center text-center">
 		<a
 			href="/product/{product.slug}"
 			rel="noopener noreferrer"
 			aria-label="Click to view the product details"
 			data-sveltekit-preload-data="tap"
 			class="flex flex-col items-center">
-			<!-- New -->
-			{#if product.new || product.tags?.length}
-				<div class="absolute top-1 left-1 flex flex-col gap-0.5">
-					{#if product.new}
-						<div
-							class="text-rem max-w-max bg-red-500 py-0.5 px-1.5 text-xs font-semibold uppercase text-white">
-							New
-						</div>
+			<!-- New and Tags -->
+
+			{#if ribbonTags?.length || product?.new}
+				<div
+					class="absolute z-10 top-2 left-2 flex flex-col gap-0.5 text-xs tracking-wider uppercase">
+					{#if product?.new}
+						<div class="bg-accent-500 py-0.5 px-1.5 text-white">New</div>
 					{/if}
 
-					{#if product.tags?.length}
-						{#each product.tags as tag}
-							{#if tag?.name && tag?.type === 'Ribbon'}
+					{#if ribbonTags?.length}
+						{#each ribbonTags as tag}
+							{#if tag?.name}
 								<div
-									class="text-rem max-w-max py-0.5 px-1.5 text-xs font-semibold uppercase text-white"
-									style="background-color: {tag.colorCode};">
+									class="py-0.5 px-1.5
+									{tag.colorCode ? 'text-white' : 'text-zinc-800'}"
+									style="background-color: {tag.colorCode || 'white'};">
 									{tag.name}
 								</div>
 							{/if}
@@ -107,14 +113,14 @@ if (product?._source) {
 			{/if}
 		</a>
 
-		<div class="p-4 flex flex-col gap-2">
+		<div class="p-4 flex flex-col gap-2 text-xs sm:text-sm">
 			<div class="flex gap-2 justify-between">
 				<a
 					href="/product/{product.slug}"
 					rel="noopener noreferrer"
 					aria-label="Click to view the product details"
 					data-sveltekit-preload-data="tap"
-					class="block flex-1 text-xs sm:text-sm truncate group-hover:underline"
+					class="block flex-1 truncate group-hover:underline"
 					style="max-width: 20ch;">
 					{product.name || '_'}
 				</a>
@@ -130,9 +136,17 @@ if (product?._source) {
 				{/if}
 			</div>
 
-			<span>
-				{currency(product.price, $page.data?.store?.currencySymbol)}
-			</span>
+			<div class="flex flex-wrap items-center gap-2 leading-3">
+				<span class="text-secondary-500">
+					{currency(product.price, $page.data?.store?.currencySymbol)}
+				</span>
+
+				<span class="text-zinc-500">
+					<strike>
+						{currency(product.price, $page.data?.store?.currencySymbol)}
+					</strike>
+				</span>
+			</div>
 		</div>
 	</div>
 {/if}
