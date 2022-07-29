@@ -74,13 +74,13 @@ const main = async () => {
 
 		fs.writeFileSync(manifestFile, JSON.stringify(manifest, null, 2))
 	} catch (error) {
-		console.error(error)
+		// console.error(error)
 	}
 }
 
 fs.mkdir(iconsDirectory, { recursive: true }, (err) => {
 	if (err) {
-		// return console.error(err)
+		// return // console.error(err)
 	}
 })
 

@@ -5,7 +5,7 @@ import { SplideSlide } from '@splidejs/svelte-splide'
 // import '@splidejs/splide-extension-video/dist/css/splide-extension-video.min.css'
 
 // const videos = ['3GNQL3alB-Y', 'xLJ2QQDrN9k', 'cdz__ojQOuU', 'oS6N_ZBFDZE']
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import { LazyImg } from '$lib/components'
 import { currency } from '$lib/utils'
 import { currencySymbol } from '$lib/config'
 import { CartService } from '$lib/services'
@@ -25,18 +25,11 @@ const share = async ({ title, text, url }: any) => {
 				text: text,
 				url: url
 			})
-			console.log('Successfully shared.')
 		} catch (error) {
-			console.error('Error sharing:', error)
+			// console.error('Error sharing:', error)
 		}
 	} else {
-		console.log('Web Share API not supported.')
-		console.log('/')
-		console.log(title)
-		console.log('/')
-		console.log(text)
-		console.log('/')
-		console.log(url)
+		// console.log('Web Share API not supported.')
 	}
 }
 
@@ -55,7 +48,6 @@ let muted = true
 
 function toggleMute(product) {
 	product.muted = !product.muted
-	console.log(product.muted)
 }
 
 const addToCart = async ({ pid, qty, customizedImg, ix, loadingType }: any) => {

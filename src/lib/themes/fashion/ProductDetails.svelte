@@ -546,7 +546,7 @@ function scrollTo(elementId) {
 						method="POST"
 						use:enhance="{() => {
 							return async ({ result }) => {
-								// console.log('result of add to cart', result);
+								// console.log('result of add to cart', result)
 								if (result?.data === 'choose variant') {
 									scrollTo('variants_list')
 									toast('Please choose a variant', 'warning')
@@ -603,7 +603,7 @@ function scrollTo(elementId) {
 						method="POST"
 						use:enhance="{() => {
 							return async ({ result }) => {
-								// console.log('result of add to cart', result);
+								// console.log('result of add to cart', result)
 								if (result?.data === 'choose variant') {
 									scrollTo('variants_list')
 									toast('Please choose a variant', 'warning')

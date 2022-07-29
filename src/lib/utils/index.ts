@@ -34,13 +34,16 @@ export const delay = (delayInms: number) => {
 export const getCdnImageUrl = (src: string, IMAGE_CDN_URL: string) => {
 	if (src) {
 		if (
-			src.includes('https://s3.ap-south-1.amazonaws.com/litekart.in/') ||
-			src.includes('https://misiki.s3.ap-south-1.amazonaws.com/') ||
-			src.includes('https://varnijewels.s3.amazonaws.com/')
+			IMAGE_CDN_URL &&
+			(src.includes('https://s3.ap-south-1.amazonaws.com/litekart.in/') ||
+				src.includes('https://misiki.s3.ap-south-1.amazonaws.com/') ||
+				src.includes('https://cartflo.s3.me-central-1.amazonaws.com') ||
+				src.includes('https://varnijewels.s3.amazonaws.com/'))
 		) {
 			const originalImageUrl = src
 				.replace('https://s3.ap-south-1.amazonaws.com/litekart.in/', '/')
 				.replace('https://misiki.s3.ap-south-1.amazonaws.com/', '/misiki/')
+				.replace('https://cartflo.s3.me-central-1.amazonaws.com/', '/cartflo/')
 				.replace('https://varnijewels.s3.amazonaws.com/', '/')
 			return IMAGE_CDN_URL + originalImageUrl
 		} else {
@@ -108,7 +111,7 @@ export function currency(value: any, currency = '$', decimals?: number) {
 	const digitsRE = /(\d{3})(?=\d)/g
 	value = parseFloat(value)
 	if (!isFinite(value) || (!value && value !== 0)) return ''
-	currency = currency != null ? currency : currencyConfig.symbol
+	currency = currency != null ? currency.toUpperCase() : currencyConfig.symbol
 	decimals = decimals != null ? decimals : 2
 	const stringified = Math.abs(value).toFixed(decimals)
 	const _int = decimals ? stringified.slice(0, -1 - decimals) : stringified

@@ -1,8 +1,8 @@
 import { id } from '$lib/config'
 import { loadingDelayed } from '$lib/store'
-import Cookie from 'cookie-universal'
+// import Cookie from 'cookie-universal'
 
-const cookies = Cookie()
+// const cookies = Cookie()
 
 let typingTimer
 
@@ -44,7 +44,7 @@ const send = async ({ method, path, params, data, token, headers, origin }: any)
 	// const st = uri.searchParams.get('store')
 
 	// if (!storeId && !domain && !st) {
-	// 	console.error('store id not found in config', path)
+	// 	// console.error('store id not found in config', path)
 	// 	// throw 'Loading...'
 	// 	return
 	// }

@@ -26,75 +26,100 @@ function submit() {
 
 {#if cart}
 	<section>
-		<h5 class="text-xl font-bold capitalize tracking-wide">
-			<span>Price Summary</span>
+		<div class="flex items-center gap-2 capitalize">
+			<h5>Price Summary</h5>
 
-			<span class="text-sm font-medium">
+			<p>
 				({cart.qty}
 				{#if cart.qty > 1} items {:else} item {/if})
-			</span>
-		</h5>
+			</p>
+		</div>
 
-		<h6 class="mt-1 text-xs tracking-wider text-zinc-400">Includes all government taxes</h6>
+		<p class="mt-1">Includes all government taxes</p>
 
-		<div class="mt-3">
+		<div class="mt-3 text-sm">
 			<div class="mt-2 flex items-center justify-between font-medium">
-				<h4>Total</h4>
+				<span>Total</span>
 
-				<h4>{cart.formattedAmount?.subtotal || '-'}</h4>
+				<span>
+					{currency(
+						cart.formattedAmount?.subtotal?.value || cart.formattedAmount?.subtotal,
+						cart.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
+					)}
+				</span>
 			</div>
 
-			{#if cart?.savings > 0}
-				<div class="mt-2 flex items-center justify-between font-medium text-green-500">
-					<h4>You Saved</h4>
+			{#if cart?.formattedAmount?.savings?.value || cart?.savings}
+				<div class="mt-2 flex items-center justify-between font-medium text-brand-500">
+					<span>You Saved</span>
 
-					<h4>
-						{currency(cart?.savings, $page.data?.store?.currencySymbol)}
-					</h4>
+					<span>
+						{currency(
+							cart?.formattedAmount?.savings?.value || cart?.savings,
+							cart.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
+						)}
+					</span>
 				</div>
 			{/if}
 
-			<div class="mt-2 flex items-center justify-between font-medium">
-				<h4>Discount</h4>
-
-				<h4 class="text-green-500">
-					{#if cart?.discount?.amount > 0}
-						- {currency(cart?.discount?.amount, $page.data?.store?.currencySymbol)}
-					{:else}
-						0
-					{/if}
-				</h4>
-			</div>
-
-			{#if cart?.formattedAmount?.tax}
+			{#if cart?.discount?.value || cart?.discount?.amount}
 				<div class="mt-2 flex items-center justify-between font-medium">
-					<h4>Tax</h4>
+					<span>Discount</span>
 
-					<div>{cart?.formattedAmount?.tax}</div>
+					<span class="text-brand-500">
+						- {currency(
+							cart?.discount?.value || cart?.discount?.amount,
+							cart.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
+						)}
+					</span>
+				</div>
+			{/if}
+
+			{#if cart?.formattedAmount?.tax?.value || cart?.formattedAmount?.tax}
+				<div class="mt-2 flex items-center justify-between font-medium">
+					<span>Tax</span>
+
+					<span>
+						{currency(
+							cart?.formattedAmount?.tax?.value || cart?.formattedAmount?.tax,
+							cart.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
+						)}
+					</span>
 				</div>
 			{/if}
 
 			<div class="mt-2 flex items-center justify-between font-medium">
-				<h4>Shipping</h4>
+				<span>Shipping</span>
 
-				<h4>
-					{#if cart.shipping?.charge < 1}
-						<span class="text-green-500">Free</span>
+				<span>
+					{#if cart.formattedAmount?.shipping?.value < 1 || cart.shipping?.charge < 1}
+						<span
+							class="border border-accent-500 text-accent-500 uppercase px-1.5 py-0.5 rounded text-xs">
+							Free
+						</span>
 					{:else}
-						{currency(cart.shipping?.charge, $page.data?.store?.currencySymbol)}
+						{currency(
+							cart.formattedAmount?.shipping?.value || cart.shipping?.charge,
+							cart.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
+						)}
 					{/if}
-				</h4>
+				</span>
 			</div>
 		</div>
 
 		<hr class="my-5 border-t border-dashed border-zinc-200" />
 
-		{#if cart.subtotal}
-			<div class="my-2 mb-5 flex items-center justify-between text-lg font-bold">
-				<h4>Total Amount</h4>
+		{#if cart.formattedAmount?.total?.value || cart.subtotal}
+			<h5 class="my-2 mb-5 flex items-center justify-between">
+				<span>Total Amount</span>
 
-				{cart.formattedAmount?.total}
-			</div>
+				<span>
+					{currency(
+						cart.formattedAmount?.total?.value || cart.formattedAmount?.total,
+						cart.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
+					)}
+				</span>
+			</h5>
 		{/if}
 
 		<div class="hidden md:block">
