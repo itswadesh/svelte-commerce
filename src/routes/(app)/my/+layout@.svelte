@@ -29,7 +29,7 @@ let showCartSidebar = false
 	<div class="flex h-full w-full antialiased flex-1">
 		{#if menu?.length > 0}
 			<div
-				class="relative hidden w-44 shrink-0 overflow-y-auto overflow-x-hidden bg-primary-500 py-3 scrollbar-none sm:block">
+				class="relative hidden w-44 shrink-0 overflow-y-auto overflow-x-hidden bg-primary-500 py-3 scrollbar-none lg:block">
 				<!-- Dashboard -->
 
 				<a href="/my" aria-label="Click to visit dashboard" data-sveltekit-preload-data>
