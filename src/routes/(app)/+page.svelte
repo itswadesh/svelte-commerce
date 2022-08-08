@@ -20,20 +20,26 @@ import {
 	ProductGridShowCase,
 	ShopYourStone
 } from '$lib/components'
+import {
+	CollectionsHome,
+	CollectionsHome2,
+	CustomerFeedback,
+	TrendingProductsHome
+} from '$lib/theme-config'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { CollectionsHome, CollectionsHome2, TrendingProductsHome } from '$lib/theme-config'
+import { slide } from 'svelte/transition'
 import Cookie from 'cookie-universal'
 import dayjs from 'dayjs'
 import PincodeInputBox from '$lib/themes/misiki/PincodeInputBox.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+import Skeleton from '$lib/ui/Skeleton.svelte'
 
 const cookies = Cookie()
 let today = dayjs(new Date()).toISOString()
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
-// console.log('$page', $page)
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -102,6 +108,7 @@ let seoProps = {
 	twitterImage: { url: $page.data.store?.logo }
 }
 
+let showFooter = false
 let showPinCodeEntryModal = false
 
 onMount(() => {
@@ -112,8 +119,6 @@ onMount(() => {
 	} else {
 		showPinCodeEntryModal = true
 	}
-
-	// console.log('pin, showPinCodeEntryModal', pin, pin.toString()?.length, showPinCodeEntryModal)
 })
 </script>
 
@@ -127,7 +132,7 @@ onMount(() => {
 	<div class="mb-14 lg:mb-0">
 		<!-- Categories slider mobile -->
 
-		{#await data.streamed.home then home}
+		{#await data?.streamed?.home then home}
 			{#if home?.categories?.length}
 				<div class="block sm:hidden">
 					<CategoriesMobile loading="{home.isFetching}" categories="{home?.categories}" />
@@ -137,7 +142,7 @@ onMount(() => {
 
 		<!-- Main slider banner -->
 
-		{#await data.streamed.home}
+		{#await data?.streamed?.home}
 			<div class="h-96 w-full bg-zinc-200 animate-pulse"></div>
 		{:then home}
 			<Hero banners="{home.banners}" />
@@ -146,9 +151,9 @@ onMount(() => {
 
 		<!-- Alert message -->
 
-		{#if $page?.data.store.alert}
+		{#if $page?.data?.store?.alert}
 			<div class="p-3 py-5 sm:p-10 bg-primary-50">
-				<h1 class="container mx-auto text-center text-3xl font-bold sm:text-4xl md:text-5xl">
+				<h1 class="container mx-auto text-center">
 					{$page?.data.store.alert}
 				</h1>
 			</div>
@@ -156,7 +161,7 @@ onMount(() => {
 
 		<!-- top categories -->
 
-		{#await data.streamed.home}
+		{#await data?.streamed?.home}
 			<ul class="flex flex-wrap gap-3 justify-center p-3 py-5 md:py-10">
 				{#each { length: 10 } as _}
 					<li class="h-24 w-24 shrink-0 rounded-full lg:h-28 lg:w-28 bg-zinc-200 animate-pulse">
@@ -170,10 +175,7 @@ onMount(() => {
 
 					<CategoriesSlider title="Top Categories" categories="{home?.categories}" />
 
-					<!-- <h2
-						class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
-						TOP COLLECTIONS
-					</h2>
+					<!-- <h2 class="p-3 py-5 text-center uppercase sm:px-10 md:py-10">TOP COLLECTIONS</h2>
 
 					<div class="max-w-screen overflow-x-auto scrollbar-none lg:hidden">
 						<div class="flex flex-row">
@@ -219,7 +221,7 @@ onMount(() => {
 
 		<!-- Hero banners -->
 
-		{#await data.streamed.home}
+		{#await data?.streamed?.home}
 			<div class="p-3 py-5 md:py-10 grid grid-cols-2 items-center gap-2 md:grid-cols-4">
 				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 
@@ -232,21 +234,14 @@ onMount(() => {
 				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 			</div>
 		{:then home}
-			{#if home.heroBanners?.length}
-				<div>
-					<h2
-						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
-						BEST OF {$page.data.store?.websiteName} EXCLUSIVE
-					</h2>
-
-					<HeroBanners heroBanners="{home.heroBanners}" />
-				</div>
+			{#if home?.heroBanners?.length}
+				<HeroBanners heroBanners="{home.heroBanners}" />
 			{/if}
 		{/await}
 
 		<!-- Picked banners -->
 
-		{#await data.streamed.home}
+		{#await data?.streamed?.home}
 			<div class="grid grid-cols-2 items-center gap-2 md:grid-cols-4">
 				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 
@@ -259,35 +254,32 @@ onMount(() => {
 				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 			</div>
 		{:then home}
-			{#if home.groupByBanner?.length > 0}
+			{#if home?.groupByBanner?.length > 0}
 				<PickedBanners banners="{home.groupByBanner}" />
 			{/if}
 		{/await}
 
-		{#if $page.data.store?.isDeals}
-			{#await data.streamed.deals}
-				<div class="flex flex-wrap w-[98vw] items-start justify-start gap-3 overflow-x-auto">
-					{#each { length: 8 } as _}
-						<div class="w-52 h-60 animate-pulse rounded bg-zinc-200"></div>
-					{/each}
+		{#if $page.data?.store?.isDeals}
+			{#await data?.streamed?.deals}
+				<div class="p-3 py-5 md:py-10">
+					<Skeleton />
 				</div>
 			{:then deals}
-				{#if deals.data?.length > 0}
-					{#each deals.data as deal}
-						<div class="mb-5 sm:mb-10">
-							<h2
-								class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
-								{deal.name}
-							</h2>
-
-							<Deals deal="{deal}" />
-						</div>
-					{/each}
+				{#if deals?.data?.length}
+					<Deals deals="{deals.data}" />
 				{/if}
 			{/await}
 		{/if}
 
-		<CollectionsGeneral data="{data}" />
+		{#await data?.streamed?.collections}
+			<div class="p-3 py-5 md:py-10">
+				<Skeleton />
+			</div>
+		{:then collections}
+			{#if collections?.data?.length}
+				<CollectionsGeneral collections="{collections.data}" />
+			{/if}
+		{/await}
 
 		{#await data.streamed.home then home}
 			<HeroBannersCollage6 heroBanners="{home.heroBanners}" />
@@ -317,15 +309,46 @@ onMount(() => {
 
 		<ShopYourStone />
 
+		<!-- <ProductTab /> -->
+
+		<!-- Customer feedback -->
+
+		<CustomerFeedback data="{data}" />
+
 		<!-- Legal Footer Information -->
 
 		<LegalFooterInformation />
 
-		<!-- <ProductTab /> -->
-	</div>
+		<div class="h-10 sm:h-20 w-full"></div>
 
-	<div class="block lg:hidden mb-14 lg:mb-0">
-		<Footer me="{data.me}" />
+		<!-- Footer mobile show hide toggle -->
+
+		<div class="block lg:hidden">
+			<button
+				type="button"
+				class="p-3 sm:px-10 w-full flex items-center justify-between gap-4 text-sm focus:outline-none"
+				on:click="{() => (showFooter = !showFooter)}">
+				<span>More about {$page.data?.store?.websiteName || 'store'}</span>
+
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 20 20"
+					fill="currentColor"
+					class="w-5 h-5 transition duration-300
+					{showFooter ? 'transform rotate-180' : ''}">
+					<path
+						fill-rule="evenodd"
+						d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+						clip-rule="evenodd"></path>
+				</svg>
+			</button>
+
+			{#if showFooter}
+				<div transition:slide="{{ duration: 300 }}">
+					<Footer />
+				</div>
+			{/if}
+		</div>
 	</div>
 
 	<!-- MOBILE FOOTER -->
