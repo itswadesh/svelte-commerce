@@ -1,19 +1,21 @@
 <script>
 // import indiaFlag from '$lib/assets/flags/india.png'
+import { applyAction, enhance } from '$app/forms'
 import { browser } from '$app/environment'
 import { fly, scale } from 'svelte/transition'
 import { GOOGLE_CLIENT_ID } from '$lib/config'
 import { googleOneTap } from './google-one-tap'
 import { goto, invalidateAll } from '$app/navigation'
+import { LazyImg, Error } from '$lib/components'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import { PrimaryButton } from '$lib/ui'
 import { toast } from '$lib/utils'
 import { UserService } from '$lib/services'
 import Cookie from 'cookie-universal'
-import { LazyImg, Error } from '$lib/components'
-import { PrimaryButton } from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
 import VerifyOtp from '../_VerifyOtp.svelte'
+
 const cookies = Cookie()
 
 const IS_DEV = import.meta.env.DEV
@@ -238,7 +240,40 @@ function changeNumber() {
 	<Error err="{err}" />
 
 	{#if !otpRequestSend}
-		<form class="mb-8 flex flex-col gap-5" on:submit|preventDefault="{submit}">
+		<form
+			action="/auth/login?/login"
+			method="POST"
+			use:enhance="{() => {
+				return async ({ result }) => {
+					// console.log('result', result)
+
+					if (isEmail) {
+						if (result?.data) {
+							const me = {
+								email: result?.data?.email,
+								phone: result?.data?.phone,
+								firstName: result?.data?.firstName,
+								lastName: result?.data?.lastName,
+								avatar: result?.data?.avatar,
+								role: result?.data?.role,
+								verified: result?.data?.verified,
+								active: result?.data?.active
+							}
+
+							// console.log('me =', me)
+							await cookies.set('me', me, { path: '/' })
+						}
+
+						const r = ref || '/'
+						if (browser) goto(r)
+						await applyAction(result)
+					} else {
+						otpRequestSend = true
+					}
+				}
+			}}"
+			class="mb-8 flex flex-col gap-5">
+			<!-- on:submit|preventDefault="{submit}" -->
 			<!-- Email or mobile number -->
 
 			<label>
@@ -406,6 +441,12 @@ function changeNumber() {
 					</div>
 				</div>
 			{/if}
+
+			<input type="hidden" name="isEmail" value="{isEmail}" />
+
+			<input type="hidden" name="phoneOrEmail" value="{value}" />
+
+			<input type="hidden" name="password" value="{password}" />
 
 			<!-- Submit -->
 

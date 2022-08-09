@@ -1,15 +1,36 @@
-import { CountryService } from '$lib/services'
+import { UserService } from "$lib/services"
 
-export const prerender = false
+const login = async ({ request, cookies, locals }) => {
+	const data = await request.formData()
+	const isEmail = data.get('isEmail')
+	const phoneOrEmail = data.get('phoneOrEmail')
+	const password = data.get('password')
 
-export async function load({ cookies, locals, params, url }) {
-	let countries = []
+	let res
 
-	countries = await CountryService.fetchCountries({
-		storeId: locals.store?.id,
-		server: true,
-		sid: cookies.get('sid')
-	})
 
-	return { countries }
+	if (isEmail) {
+		res = await UserService.loginService({
+			email: phoneOrEmail,
+			password: password,
+			storeId: locals.store?.id,
+			server: true,
+			origin: locals.origin,
+		})
+
+		// console.log('res of email login = ', res);
+	} else {
+		res = await UserService.getOtpService({
+			phone: phoneOrEmail,
+			storeId: locals.store?.id,
+			server: true,
+			origin: locals.origin,
+		})
+
+		// console.log('res of phone login = ', res);
+	}
+
+	return res
 }
+
+export const actions = { login }
