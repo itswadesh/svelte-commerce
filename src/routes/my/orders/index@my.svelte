@@ -2,7 +2,7 @@
 import { onMount } from 'svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import { date, currency, store } from '$lib/util'
-import { KQL_MyOrders } from '$lib/graphql/_kitql/graphqlStores'
+import { GQL_myOrders } from '$houdini'
 
 const seoProps = {
 	title: 'Orders',
@@ -17,9 +17,9 @@ onMount(() => {
 	getOrders()
 })
 async function getOrders() {
-	await KQL_MyOrders.queryLoad({ variables: { store: store.id } })
+	await GQL_myOrders.fetch({ variables: { store: store.id } })
 }
-$: orders = $KQL_MyOrders.data?.myOrders
+$: orders = $GQL_myOrders.data?.myOrders
 </script>
 
 <SEO {...seoProps} />
@@ -28,7 +28,7 @@ $: orders = $KQL_MyOrders.data?.myOrders
 	<h1 class="text-lg  font-bold sm:text-xl">
 		<span class="mr-1">My orders</span>{#if orders?.count}( {orders?.count} ){/if}
 	</h1>
-	{#if $KQL_MyOrders.isFetching}
+	{#if $GQL_myOrders.isFetching}
 		Finding your Orders...
 	{:else if orders?.count}
 		{#each orders?.data as order}
@@ -135,17 +135,17 @@ $: orders = $KQL_MyOrders.data?.myOrders
 		{/each}
 	{:else if orders?.count < 1}
 		<div class="my-10 flex flex-col items-center justify-center ">
-			<h4 class="font-semibold mb-5 text-center">There are no orders yet</h4>
+			<h4 class="mb-5 text-center font-semibold">There are no orders yet</h4>
 
-			<img src="/no/empty-animate.svg" alt="" class="h-80 md:h-96 mb-10" />
+			<img src="/no/empty-animate.svg" alt="" class="mb-10 h-80 md:h-96" />
 
 			<a
 				href="/"
-				class="bg-white hover:bg-primary-500 rounded-md shadow hover:shadow-md py-2 px-8 font-semibold text-sm text-primary-500 hover:text-white border hover:border-white border-primary-500 focus:outline-none mx-auto focus:ring-primary-500 ring-opacity-50">
+				class="mx-auto rounded-md border border-primary-500 bg-white py-2 px-8 text-sm font-semibold text-primary-500 shadow ring-opacity-50 hover:border-white hover:bg-primary-500 hover:text-white hover:shadow-md focus:outline-none focus:ring-primary-500">
 				Shop Now
 			</a>
 		</div>
 	{:else}
-		<div class="flex justify-center items-center">No order found.</div>
+		<div class="flex items-center justify-center">No order found.</div>
 	{/if}
 </section>

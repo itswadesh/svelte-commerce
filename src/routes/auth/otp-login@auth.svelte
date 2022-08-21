@@ -32,7 +32,7 @@ import VerifyOtp from './_VerifyOtp.svelte'
 import SendOtp from './_SendOtp.svelte'
 import { page, session } from '$app/stores'
 import { browser } from '$app/env'
-import { KQL_GetOtp, KQL_StoreOne, KQL_VerifyOtp } from '$lib/graphql/_kitql/graphqlStores'
+import { GQL_getOtp, GQL_storeOne, GQL_verifyOtp } from '$houdini'
 import { onMount } from 'svelte'
 import Cookie from 'cookie-universal'
 const cookies = Cookie()
@@ -48,7 +48,7 @@ const seoProps = {
 // let store = cookies.get('store')
 
 onMount(async () => {
-	// await KQL_StoreOne.query({ variables: { id: store?.id } })
+	// await GQL_storeOne.fetch({ variables: { id: store?.id } })
 })
 
 let phone,
@@ -60,7 +60,7 @@ async function handleSendOTP(detail) {
 	try {
 		loading = true
 		phone = detail.detail
-		const { data } = await KQL_GetOtp.mutate({ variables: { phone, store: store.id } })
+		const { data } = await GQL_getOtp.mutate({ variables: { phone, store: store.id } })
 		resendAfter = data?.getOtp?.timer
 		otpRequestSend = true
 	} catch (e) {
@@ -75,9 +75,9 @@ async function handleVerifyOtp(detail) {
 		loading = true
 		// console.log(detail)
 		const otp = `${detail.detail}`
-		const data = (await KQL_VerifyOtp.mutate({ variables: { phone, otp, store: store.id } })).data
+		const data = (await GQL_verifyOtp.mutate({ variables: { phone, otp, store: store.id } })).data
 			?.verifyOtp
-		if ($KQL_VerifyOtp.errors) toast($KQL_VerifyOtp.errors[0].message, 'error')
+		if ($GQL_verifyOtp.errors) toast($GQL_verifyOtp.errors[0].message, 'error')
 		else {
 			const me = {
 				email: data.email,
@@ -121,7 +121,7 @@ function changeNumber() {
 				class="h-10 w-auto flex-shrink-0 object-contain object-center" />
 		{:else if store?.websiteName}
 			<h1
-				class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-secondary-500 to-primary-500">
+				class="bg-gradient-to-br from-secondary-500 to-primary-500 bg-clip-text text-4xl font-extrabold text-transparent">
 				{store?.websiteName}
 			</h1>
 		{/if}

@@ -8,7 +8,7 @@ export async function load({ url, fetch, session }) {
 	}
 
 	try {
-		await KQL_MyWishlist.queryLoad({
+		await GQL_myWishlist.fetch({
 			fetch,
 			variables: { store: store.id },
 			settings: { cacheMs: 0 }
@@ -20,21 +20,24 @@ export async function load({ url, fetch, session }) {
 
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
-import { KQL_MyWishlist, KQL_ToggleWishlist } from '$lib/graphql/_kitql/graphqlStores'
+import { GQL_myWishlist, GQL_toggleWishlist } from '$houdini'
 import WishlistProducts from '$lib/WishlistProducts.svelte'
 import { delay, store } from '$lib/util'
 import ImageLoader from '$lib/components/Image/ImageLoader.svelte'
+import { browser } from '$app/env'
 export let wishlist
 const seoProps = {
 	title: 'Wishlist',
 	metadescription: 'Products you have wishlisted'
 }
-$: myWishlist = $KQL_MyWishlist.data?.myWishlist
+$: browser && GQL_myWishlist.fetch()
+
+$: myWishlist = $GQL_myWishlist.data?.myWishlist
 async function toggleWishlist(detail) {
 	const product = detail.detail
 
 	try {
-		await KQL_ToggleWishlist.mutate({
+		await GQL_toggleWishlist.mutate({
 			variables: {
 				product: product.id,
 				variant: product.id
@@ -49,7 +52,7 @@ async function toggleWishlist(detail) {
 
 async function refreshData() {
 	try {
-		await KQL_MyWishlist.queryLoad({
+		await GQL_myWishlist.fetch({
 			fetch,
 			variables: { store: store.id },
 			settings: { cacheMs: 0 }
@@ -82,10 +85,10 @@ async function refreshData() {
 				<ImageLoader
 					src="/no/empty-wishlist.svg"
 					alt="empty room"
-					class="mb-10 object-contain h-80" />
+					class="mb-10 h-80 object-contain" />
 			</div>
 
-			<span class="mb-3 text-xl md:text-3xl font-medium">No Wishlist Item Found!!</span>
+			<span class="mb-3 text-xl font-medium md:text-3xl">No Wishlist Item Found!!</span>
 
 			<span class="mb-5 text-xs"> We didn't find any wishlist item, shop more </span>
 		</div>

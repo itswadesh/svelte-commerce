@@ -28,7 +28,7 @@ import SEO from '$lib/components/SEO/index.svelte'
 import ImageLoader from '$lib/components/Image/ImageLoader.svelte'
 import { post } from '$lib/util/api'
 import { loginUrl } from '$lib/store'
-import { KQL_ChangePassword, KQL_StoreOne } from '$lib/graphql/_kitql/graphqlStores'
+import { GQL_changePassword, GQL_storeOne } from '$houdini'
 import { onMount } from 'svelte'
 
 const seoProps = {
@@ -49,7 +49,7 @@ let confirmationPassowrdType = 'password'
 export let store, ref
 
 onMount(async () => {
-	// await KQL_StoreOne.query({ variables: { id: store?.id } })
+	// await GQL_storeOne.fetch({ variables: { id: store?.id } })
 })
 
 function toggleCurrentPassowrd() {
@@ -78,15 +78,15 @@ async function handleChangePassword(p) {
 		const { oldPassword, password, passwordConfirmation } = p
 		toast('Requesting change password...', 'info')
 		loading = true
-		await KQL_ChangePassword.mutate({
+		await GQL_changePassword.mutate({
 			variables: {
 				oldPassword,
 				password,
 				passwordConfirmation
 			}
 		})
-		if ($KQL_ChangePassword.errors) {
-			toast('Error: ' + $KQL_ChangePassword.errors[0].message, 'error')
+		if ($GQL_changePassword.errors) {
+			toast('Error: ' + $GQL_changePassword.errors[0].message, 'error')
 		} else {
 			toast('Password changed successfully.', 'success')
 			goto('/auth/change-success')
@@ -122,7 +122,7 @@ async function handleChangePassword(p) {
 				class="h-10 w-auto flex-shrink-0 object-contain object-center" />
 		{:else if store?.websiteName}
 			<h1
-				class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-secondary-500 to-primary-500">
+				class="bg-gradient-to-br from-secondary-500 to-primary-500 bg-clip-text text-4xl font-extrabold text-transparent">
 				{store?.websiteName}
 			</h1>
 		{/if}

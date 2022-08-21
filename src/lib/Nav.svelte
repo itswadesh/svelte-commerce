@@ -18,15 +18,14 @@ import Cookies from 'universal-cookie'
 const cookies = new Cookies()
 import { spring } from 'svelte/motion'
 import Search from '$lib/Search.svelte'
-import { Categories } from './graphql/_kitql/graphqlTypes'
-import { KQL_Cart, KQL_Me } from './graphql/_kitql/graphqlStores'
+import { GQL_cart, GQL_me } from '$houdini'
 import { signOut } from './services'
 import { onMount } from 'svelte'
 import { toast } from './util'
 const loginUrl = '/auth/otp-login'
 onMount(async () => {
-	await KQL_Me.query({})
-	await KQL_Cart.query({ settings: { policy: 'network-only' } })
+	await GQL_me.fetch({})
+	await GQL_cart.fetch({ settings: { policy: 'network-only' } })
 })
 export let q, me, store
 
@@ -46,7 +45,7 @@ async function handleSignout() {
 
 onMount(async () => {
 	try {
-		await KQL_Cart.query({ variables: { store: store?.id }, settings: { cacheMs: 0 } })
+		await GQL_cart.fetch({ variables: { store: store?.id }, settings: { cacheMs: 0 } })
 	} catch (e) {
 	} finally {
 	}
@@ -75,10 +74,10 @@ onMount(async () => {
 							stroke-width="2"
 							d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
 					</svg>
-					{#if $KQL_Cart.data?.cart.qty}
+					{#if $GQL_cart.data?.cart.qty}
 						<span
 							class="counter-digits text-extrasmall absolute top-0 right-0 -mr-2 -mt-2 flex h-4 w-4 items-center justify-center rounded-full bg-black p-0.5 text-white group-hover:bg-primary-500"
-							style="transform: translate(0, {100}%)">{Math.floor($KQL_Cart.data?.cart.qty)}</span>
+							style="transform: translate(0, {100}%)">{Math.floor($GQL_cart.data?.cart.qty)}</span>
 					{/if}
 				</button>
 			</a>
@@ -119,7 +118,7 @@ onMount(async () => {
 							<img
 								src="/leadership-profile.png"
 								alt="user"
-								class="w-8 shadow h-8  bg-white rounded-full " />
+								class="h-8 w-8 rounded-full  bg-white shadow " />
 						{/if}
 					</div>
 				</a>

@@ -3,8 +3,10 @@ projects:
   default:
     schema:
       - ${HTTP_ENDPOINT}/graphql
+      - ./$houdini/graphql/schema.graphql
     documents:
       - '**/*.gql'
+      - ./$houdini/graphql/documents.gql
     extensions:
       endpoints:
         default:
@@ -23,7 +25,7 @@ projects:
               - '@kitql/graphql-codegen'
             config:
               importBaseTypesFrom: $lib/graphql/_kitql/graphqlTypes
-              operationPrefix: 'KQL_'
+              operationPrefix: 'GQL_'
 
         config:
           useTypeImports: true

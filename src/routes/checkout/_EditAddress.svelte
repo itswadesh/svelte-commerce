@@ -17,7 +17,7 @@ import Submit from '$lib/ui/Button.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 import Button from '$lib/ui/Button.svelte'
 import { toast } from '$lib/util'
-import { KQL_Address, KQL_SaveAddress } from '$lib/graphql/_kitql/graphqlStores'
+import { GQL_address, GQL_saveAddress } from '$houdini'
 
 export let prev = ''
 export let id = 'new'
@@ -50,7 +50,7 @@ onMount(() => {
 
 async function getAddress() {
 	try {
-		address = (await KQL_Address.query({ variables: { id } })).data?.address
+		address = (await GQL_address.fetch({ variables: { id } })).data?.address
 
 		// console.log(address)
 	} catch (e) {
@@ -64,7 +64,7 @@ async function submit() {
 	try {
 		iconloading = true
 		if (!address?.id) address.id = 'new'
-		await KQL_SaveAddress.mutate({ variables: address })
+		await GQL_saveAddress.mutate({ variables: address })
 		toast(msg, 'success')
 		if (prev) goto(`/${prev}`)
 		else goto(returnUrl)

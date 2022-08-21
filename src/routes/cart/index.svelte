@@ -6,8 +6,8 @@
 export async function load({ url, params, fetch }) {
 	let cart
 	try {
-		await KQL_Cart.resetCache()
-		await KQL_Cart.queryLoad({ fetch, variables: { store: store.id } })
+		await GQL_cart.resetCache()
+		await GQL_cart.fetch({ fetch, variables: { store: store.id } })
 		return {
 			props: {}
 		}
@@ -23,12 +23,16 @@ import Cartlist from './_Cartlist.svelte'
 import Weprovides from '$lib/Weprovides.svelte'
 import Pricesummary from '$lib/Pricesummary.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-import { KQL_AddToCart, KQL_Cart } from '$lib/graphql/_kitql/graphqlStores'
+import { GQL_addToCart, GQL_cart } from '$houdini'
 import { store, toast } from '$lib/util'
 import ProductDetailSkeleton from '../[slug]/_ProductDetailSkeleton.svelte'
 import Errors from '$lib/components/alerts/Errors.svelte'
 import Skeleton from '$lib/ui/Skeleton.svelte'
+import { browser } from '$app/env'
 let show, addingToBag
+
+$: browser && GQL_cart.fetch()
+
 function toggle() {
 	show = !show
 }
@@ -37,15 +41,15 @@ const seoProps = {
 	metadescription: 'Your items in shopping bag'
 }
 async function refreshCart() {
-	// await KQL_Cart.resetCache()
-	// await KQL_Cart.queryLoad({ variables: { store: store.id }, settings: { policy: 'network-only' } })
+	// await GQL_cart.resetCache()
+	// await GQL_cart.fetch({ variables: { store: store.id }, settings: { policy: 'network-only' } })
 }
 async function addToCart({ detail }) {
 	const { pid, vid, options } = detail.item
 	const qty = detail.qty
-	const optiData = $KQL_Cart.data
+	const optiData = $GQL_cart.data
 	optiData.cart.currencyCode = `Removing items...`
-	const addToCartRes = await KQL_AddToCart.mutate({
+	const addToCartRes = await GQL_addToCart.mutate({
 		variables: { pid, qty, vid, options }
 	})
 	if (addToCartRes.errors) {
@@ -53,19 +57,19 @@ async function addToCart({ detail }) {
 	}
 	if (qty < 1) toast('Removed from cart', 'success')
 	else toast('Added to the cart', 'success')
-	await KQL_Cart.queryLoad({ variables: { store: store.id }, settings: { policy: 'network-only' } })
+	await GQL_cart.fetch({ variables: { store: store.id }, settings: { policy: 'network-only' } })
 }
-$: cart = $KQL_Cart.data?.cart || {}
+$: cart = $GQL_cart.data?.cart || {}
 </script>
 
 <SEO {...seoProps} />
 <!-- Whole section start  -->
 <section
 	class="container mx-auto min-h-screen w-full max-w-6xl border-b px-4  py-2 text-gray-800 sm:px-10 sm:py-5 md:py-10 ">
-	{#if $KQL_Cart?.isFetching}
+	{#if $GQL_cart?.isFetching}
 		<Skeleton />
-	{:else if $KQL_Cart?.errors}
-		<Errors errors="{$KQL_Cart.errors}" />
+	{:else if $GQL_cart?.errors}
+		<Errors errors="{$GQL_cart.errors}" />
 	{:else if cart?.qty > 0}
 		<div class="lg:flex lg:justify-center lg:space-x-10 xl:space-x-20">
 			<!-- Cart section start  -->
@@ -169,17 +173,17 @@ $: cart = $KQL_Cart.data?.cart || {}
 				<div class="flex justify-center pt-6">
 					<img
 						src="/emptycart.png"
-						class="h-72 w-80 md:h-84 md:w-96 oject-cover"
+						class="md:h-84 oject-cover h-72 w-80 md:w-96"
 						alt="Empty cart" />
 				</div>
 
-				<h6 class="flex justify-center px-6 text-base text-center text-gray-500">
+				<h6 class="flex justify-center px-6 text-center text-base text-gray-500">
 					Go ahead, order some essentials from the menu.
 				</h6>
 
 				<a
 					href="/"
-					class="inline-block px-6 py-2 my-5  bg-primary-500 hover:bg-primary-700 transition duration-300 transform active:scale-95 rounded-md shadow-md focus:ring-2  focus:ring-offset-2 focus:ring-primary-500 font-semibold text-white ">
+					class="my-5 inline-block transform rounded-md  bg-primary-500 px-6 py-2 font-semibold text-white shadow-md transition duration-300 hover:bg-primary-700  focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 active:scale-95 ">
 					Shop Now
 				</a>
 			</div>

@@ -17,6 +17,8 @@
 </style>
 
 <script context="module">
+import { houdiniClient } from '$graphql/client'
+houdiniClient.init()
 export async function load({ url, params, fetch, session, context }) {
 	const isHome = url.pathname === '/'
 	let me = session.me
@@ -33,8 +35,6 @@ export async function load({ url, params, fetch, session, context }) {
 
 <script>
 import '../app.css'
-import { KQL__Init } from '$lib/graphql/_kitql/graphqlStores'
-KQL__Init()
 import { ToastContainer, FlatToast } from 'svelte-toasts'
 import { getStores, navigating, page, session } from '$app/stores'
 import Footer from '$lib/Footer.svelte'

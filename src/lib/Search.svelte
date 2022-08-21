@@ -18,6 +18,11 @@ export let home = false,
 	q
 let searchInput
 import { onMount } from 'svelte'
+import { browser } from '$app/env'
+import { GQL_HOME } from '$houdini'
+
+$: browser && GQL_HOME.fetch()
+
 onMount(() => {
 	if (!home && q) setTimeout(() => searchInput.focus(), 0)
 })
@@ -33,7 +38,7 @@ function search() {
 </script>
 
 <form
-	class="w-full pb-2 text-center lg:w-1/2 md:pb-0"
+	class="w-full pb-2 text-center md:pb-0 lg:w-1/2"
 	novalidate
 	autocomplete="off"
 	on:submit|preventDefault="{search}">
@@ -44,13 +49,13 @@ function search() {
 		on:blur="{() => search()}"
 		bind:this="{searchInput}"
 		bind:value="{q}"
-		class="w-full bg-transparent py-1.5 pdl focus:outline-none rounded-full border border-gray-800"
+		class="pdl w-full rounded-full border border-gray-800 bg-transparent py-1.5 focus:outline-none"
 		placeholder="Search for products,brands and more"
 		name="search" />
 	<div class="absolute ml-4">
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
-			class="w-5 h-5 "
+			class="h-5 w-5 "
 			viewBox="0 0 20 20"
 			fill="currentColor">
 			<path

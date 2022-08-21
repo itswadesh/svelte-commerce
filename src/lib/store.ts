@@ -2,7 +2,7 @@ import { get } from './util/api'
 import { writable } from 'svelte/store'
 
 import Cookie from 'cookie-universal'
-import { KQL_Megamenu, KQL_Settings, KQL_StoreOne } from './graphql/_kitql/graphqlStores'
+import { GQL_megamenu, GQL_settings, GQL_storeOne } from '$houdini'
 const cookies = Cookie()
 
 export const settings = writable({})
@@ -14,7 +14,7 @@ export const loadingDelayed = writable(false)
 
 export const fetchSettings = async () => {
 	try {
-		const data = (await KQL_Settings.query({ fetch })).data?.settings
+		const data = (await GQL_settings.fetch({ fetch })).data?.settings
 		settings.set(data)
 		if (data.otpLogin) loginUrl.set('/auth/login')
 	} catch (e) {
@@ -26,8 +26,8 @@ export const fetchStore = async () => {
 		const storeOne = await cookies.get('store')
 		const data = { _id: storeOne.id } //await get('es/store?domain=atozzones.com')
 		store.set(data)
-		KQL_StoreOne.query({ fetch, variables: { id: storeOne.id } })
-		const data1 = (await KQL_Megamenu.query({ fetch, variables: { store: storeOne.id } })).data
+		GQL_storeOne.fetch({ fetch, variables: { id: storeOne.id } })
+		const data1 = (await GQL_megamenu.fetch({ fetch, variables: { store: storeOne.id } })).data
 			?.megamenu //get('es/categories/megamenu', { megamenu: true })
 		megamenu.set(data1)
 	} catch (e) {

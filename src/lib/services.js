@@ -4,7 +4,7 @@ import { page, session } from '$app/stores'
 import { delay, toast } from '$lib/util'
 import { WWW_URL } from './config'
 import Cookie from 'cookie-universal'
-import { KQL_Login, KQL_Me, KQL_SignOut } from './graphql/_kitql/graphqlStores'
+import { GQL_login, GQL_me, GQL_signOut } from '$houdini'
 const cookies = Cookie()
 
 export function getUser() {
@@ -55,7 +55,7 @@ export async function signIn({ email, password }) {
 	try {
 		toast('Signin In...', 'info')
 		loading = true
-		const data = (await KQL_Login.mutate({ variables: { email, password } })).data?.login // post('es/login', { email, password })
+		const data = (await GQL_login.mutate({ variables: { email, password } })).data?.login // post('es/login', { email, password })
 		if (!data) {
 			throw { message: 'Login failed' }
 		}
@@ -85,7 +85,7 @@ export async function signIn({ email, password }) {
 export const signOut = async () => {
 	let logout, error
 	try {
-		await KQL_SignOut.mutate() //post('es/logout')
+		await GQL_signOut.mutate() //post('es/logout')
 	} catch (e) {
 		error = e
 	} finally {

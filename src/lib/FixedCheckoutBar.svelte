@@ -113,9 +113,9 @@ profile .card-profile-image img {
 </style>
 
 <script>
-import { KQL_Cart } from './graphql/_kitql/graphqlStores'
+import { GQL_cart } from '$houdini'
 import { currency } from './util'
-$: cart = $KQL_Cart.data?.cart || {}
+$: cart = $GQL_cart.data?.cart || {}
 </script>
 
 <div>

@@ -35,7 +35,7 @@ import GradiantButton from '$lib/ui/GradiantButton.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import { page, session } from '$app/stores'
-import { KQL_StoreOne } from '$lib/graphql/_kitql/graphqlStores'
+import { GQL_storeOne } from '$houdini'
 import Cookie from 'cookie-universal'
 import { onMount } from 'svelte'
 
@@ -50,7 +50,7 @@ const cookies = Cookie()
 // let store = cookies.get('store')
 
 onMount(async () => {
-	// await KQL_StoreOne.query({ variables: { id: store?.id } })
+	// await GQL_storeOne.fetch({ variables: { id: store?.id } })
 })
 
 let loading = false
@@ -100,7 +100,7 @@ async function handleSignIn() {
 				class="h-10 w-auto flex-shrink-0 object-contain object-center" />
 		{:else if store?.websiteName}
 			<h1
-				class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-secondary-500 to-primary-500">
+				class="bg-gradient-to-br from-secondary-500 to-primary-500 bg-clip-text text-4xl font-extrabold text-transparent">
 				{store?.websiteName}
 			</h1>
 		{/if}
@@ -162,7 +162,7 @@ async function handleSignIn() {
 		<div class="mb-5 flex justify-end">
 			<a
 				href="/auth/forgot-password"
-				class="max-w-max text-xs font-light text-end hover:text-gray-800 hover:underline focus:outline-none">
+				class="max-w-max text-end text-xs font-light hover:text-gray-800 hover:underline focus:outline-none">
 				Forgot Password?
 			</a>
 		</div>
