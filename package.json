@@ -5,7 +5,7 @@
     "prepare": "svelte-kit sync && npm run gen",
     "dev": "vite dev --port 3000",
     "gen": "npm run gen:houdini",
-    "gen:houdini": "sudo houdini generate",
+    "gen:houdini": "houdini generate",
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=7680 NODE_ENV=production vite build",
     "copy": "node devops/copy",
     "liveS": "node devops/live",
