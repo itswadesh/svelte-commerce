@@ -1,3 +1,5 @@
+<h1>Because of major change in SvelteKit v-next-4.0.5, the repo is broken. But nothing to worry, it will be fixed in 1-2 days </h1>
+
 <a href="https://misiki.io/">
 <img src="https://repository-images.githubusercontent.com/213575283/f577b8bd-8edb-41ba-bfe5-36e65072e1f2" alt/>
 </a>
