@@ -6,39 +6,24 @@
 }
 </style>
 
-<script context="module" lang="ts">
-export async function load({ url, params, fetch, session, context }) {
-	const ref = url.searchParams.get('ref')
-	// let go = '/auth/login'
-	// if (session.settings.otpLogin) {
-	// 	go = `/auth/phone-login`
-	// }
-	return {
-		props: {
-			me: session.me,
-			store: session.store,
-			ref
-		}
-	}
-}
-</script>
-
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
 import ImageLoader from '$lib/components/Image/ImageLoader.svelte'
 import { toast } from '$lib/util'
 import { goto } from '$app/navigation'
-import VerifyOtp from './_VerifyOtp.svelte'
-import SendOtp from './_SendOtp.svelte'
+import VerifyOtp from '../_VerifyOtp.svelte'
+import SendOtp from '../_SendOtp.svelte'
 import { page, session } from '$app/stores'
 import { browser } from '$app/env'
 import { GQL_getOtp, GQL_storeOne, GQL_verifyOtp } from '$houdini'
 import { onMount } from 'svelte'
 import Cookie from 'cookie-universal'
 const cookies = Cookie()
-export let me, ref, store
 // let go = '/auth/login'
 
+export let data
+let { me, ref, store } = data
+$: ({ me, ref, store } = data)
 const seoProps = {
 	title: 'OTP Login ',
 	metadescription: 'OTP Login'

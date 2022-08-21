@@ -6,16 +6,6 @@
 }
 </style>
 
-<script context="module" lang="ts">
-export async function load({ url, params, fetch, session, context }) {
-	return {
-		props: {
-			store: session.store
-		}
-	}
-}
-</script>
-
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
 import ImageLoader from '$lib/components/Image/ImageLoader.svelte'
@@ -32,7 +22,9 @@ onMount(async () => {
 })
 
 let loading = false
-export let store
+export let data
+let { store } = data
+$: ({ store } = data)
 </script>
 
 <SEO {...seoProps} />

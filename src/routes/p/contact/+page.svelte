@@ -59,16 +59,6 @@
 }
 </style>
 
-<script context="module">
-export async function load({ url, params, fetch, session, context }) {
-	let me, err
-
-	return {
-		props: { me: session.me, err }
-	}
-}
-</script>
-
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
 import { store } from '$lib/store'
@@ -85,8 +75,9 @@ const seoProps = {
 	metadescription: ''
 }
 
-export let me = {},
-	err
+export let data
+let { me = {}, err } = data
+$: ({ me = {}, err } = data)
 
 let contact = {},
 	emailAddress = me?.email,
@@ -224,7 +215,7 @@ async function send(c) {
 				</form>
 			</div>
 		{:else}
-			<div class="col-span-1 lg:col-span-2 flex flex-col items-center justify-center text-center">
+			<div class="col-span-1 flex flex-col items-center justify-center text-center lg:col-span-2">
 				<div class="mb-2 sm:mb-10">
 					<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
 						<circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"></circle>
@@ -233,7 +224,7 @@ async function send(c) {
 					</svg>
 				</div>
 
-				<h1 class="mb-5 text-2xl sm:text-4xl font-bold">Thank You!</h1>
+				<h1 class="mb-5 text-2xl font-bold sm:text-4xl">Thank You!</h1>
 
 				<p class="text-sm">We've received your message.</p>
 

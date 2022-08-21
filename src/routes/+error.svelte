@@ -8,14 +8,6 @@ h1 {
 }
 </style>
 
-<script context="module" lang="ts">
-export function load({ error, status }) {
-	return {
-		props: { error, status }
-	}
-}
-</script>
-
 <script>
 import { dev } from '$app/env'
 import { session } from '$app/stores'

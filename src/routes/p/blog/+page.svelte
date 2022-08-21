@@ -1,25 +1,3 @@
-<script context="module">
-export async function load({ url, params, fetch, session, context }) {
-	let search, sort, query, blogs, err, page, count
-	try {
-		search = url.searchParams.get('search')
-		page = url.searchParams.get('page') || 1
-		sort = url.searchParams.get('sort')
-		query = url.searchParams.toString()
-		GQL_blogs.fetch({ fetch, variables: { search, sort, page } })
-		// count = res?.count
-		// console.log(res)
-	} catch (e) {
-		err = e
-		toast(e, 'error')
-	} finally {
-	}
-	return {
-		props: { err, blogs, page, count }
-	}
-}
-</script>
-
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
 import { toast } from '$lib/util'
@@ -34,7 +12,9 @@ const seoProps = {
 	metadescription: 'My Blogs'
 }
 
-export let blogs, page, count
+export let data
+let { blogs, page, count } = data
+$: ({ blogs, page, count } = data)
 </script>
 
 <SEO {...seoProps} />

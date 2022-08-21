@@ -5,45 +5,6 @@
 }
 </style>
 
-<script context="module" lang="ts">
-import Cookie from 'cookie-universal'
-import { houdiniClient } from '$graphql/client'
-const coookies = Cookie()
-houdiniClient.init()
-export async function load({ url, params, fetch, session, context }) {
-	const isHome = url.pathname === '/'
-	let currentPage = url.searchParams.get('page') || 1
-	let q = url.searchParams.get('q') || ''
-	const me = session.me
-	try {
-		const domain = session.domain
-		// let uri = new URL(`${process.env.VITE_WWW_URL}/api/init?domain=${domain}`)
-		// let res = await fetch(uri.toString(), { method: 'get' })
-		// if (res.ok) {
-		// 	let store = await res.json()
-		const storeOne = (await GQL_storeOne.fetch({ fetch, variables: { domain } })).data.storeOne
-		const { id, email, address, phone, websiteName, websiteLegalName } = storeOne
-		coookies.set(
-			'store',
-			JSON.stringify({ id, domain, address, phone, email, websiteName, websiteLegalName }),
-			{
-				path: '/'
-			}
-		)
-		// }
-	} catch (e) {}
-	return {
-		props: {
-			url,
-			currentPage,
-			q,
-			me,
-			isHome
-		}
-	}
-}
-</script>
-
 <script>
 // import '../app.css'
 import PageTransitions from '$lib/PageTransitions.svelte'

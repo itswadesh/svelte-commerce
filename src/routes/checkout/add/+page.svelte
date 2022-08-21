@@ -1,19 +1,6 @@
-<script context="module" lang="ts">
-import type { Load } from '@sveltejs/kit'
-export const load: Load = async ({ url, session }) => {
-	if (!session?.me) {
-		return {
-			redirect: `/${loginUrl}?ref=${url.pathname}`,
-			status: 302
-		}
-	}
-	return {}
-}
-</script>
-
 <script lang="ts">
-import EditAddress from './_EditAddress.svelte'
-import CheckoutHeader from './_CheckoutHeader.svelte'
+import EditAddress from '../_EditAddress.svelte'
+import CheckoutHeader from '../_CheckoutHeader.svelte'
 import Pricesummary from '$lib/Pricesummary.svelte'
 import { goto } from '$app/navigation'
 import { session } from '$app/stores'

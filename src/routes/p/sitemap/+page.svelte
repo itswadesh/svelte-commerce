@@ -24,7 +24,10 @@ const seoProps = {
 onMount(async () => {
 	await GQL_megamenu.fetch({})
 })
-export let err
+
+export let data
+let { err } = data
+$: ({ err } = data)
 </script>
 
 <SEO {...seoProps} />

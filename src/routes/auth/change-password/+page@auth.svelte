@@ -6,19 +6,6 @@
 }
 </style>
 
-<script context="module" lang="ts">
-export async function load({ url, params, fetch, session, context }) {
-	let ref = url.searchParams.get('ref')
-
-	return {
-		props: {
-			store: session.store,
-			ref
-		}
-	}
-}
-</script>
-
 <script>
 import { goto } from '$app/navigation'
 import GradiantButton from '$lib/ui/GradiantButton.svelte'
@@ -46,8 +33,9 @@ let newPassowrdType = 'password'
 let confirmationPassowrdType = 'password'
 // let go = '/auth/login'
 
-export let store, ref
-
+export let data
+let { store, ref } = data
+$: ({ store, ref } = data)
 onMount(async () => {
 	// await GQL_storeOne.fetch({ variables: { id: store?.id } })
 })

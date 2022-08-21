@@ -6,16 +6,6 @@
 }
 </style>
 
-<script context="module" lang="ts">
-export async function load({ url, params, fetch, session, context }) {
-	return {
-		props: {
-			store: session.store
-		}
-	}
-}
-</script>
-
 <script>
 import { goto } from '$app/navigation'
 import GradiantButton from '$lib/ui/GradiantButton.svelte'
@@ -27,7 +17,10 @@ import { post } from '$lib/util/api'
 import { GQL_emailPassword, GQL_storeOne } from '$houdini'
 import { loginUrl } from '$lib/store'
 import { onMount } from 'svelte'
-export let store
+
+export let data
+let { store } = data
+$: ({ store } = data)
 const seoProps = {
 	title: 'Forgot Password ',
 	metadescription: 'Forgot Password'

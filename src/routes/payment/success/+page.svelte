@@ -1,20 +1,20 @@
 <script context="module" lang="ts">
 import SEO from '$lib/components/SEO/index.svelte'
-
-export async function load({ url, params, fetch }) {
-	return { props: { id: url.searchParams.get('id') } }
-}
 </script>
 
 <script>
 import { currency, date } from '$lib/util'
 import { onMount } from 'svelte'
 
-import OrderAddressDetails from './_OrderAddressDetails.svelte'
-import OrderSuccessSkeleton from './_OrderSuccessSkeleton.svelte'
+import OrderAddressDetails from '../_OrderAddressDetails.svelte'
+import OrderSuccessSkeleton from '../_OrderSuccessSkeleton.svelte'
 import { GQL_myOrders, GQL_paySuccessPageHit } from '$houdini'
 import { browser } from '$app/env'
-export let id
+
+export let data
+let { id } = data
+$: ({ id } = data)
+
 $: browser && GQL_paySuccessPageHit.fetch()
 
 onMount(() => {

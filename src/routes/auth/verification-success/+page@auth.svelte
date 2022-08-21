@@ -6,22 +6,14 @@
 }
 </style>
 
-<script context="module" lang="ts">
-export async function load({ url, params, fetch, session, context }) {
-	return {
-		props: {
-			store: session.store
-		}
-	}
-}
-</script>
-
 <script>
 import { goto } from '$app/navigation'
 import ImageLoader from '$lib/components/Image/ImageLoader.svelte'
 import { loginUrl, settings } from '$lib/store'
 
-export let store
+export let data
+let { store } = data
+$: ({ store } = data)
 
 function gotoLogin() {
 	goto($loginUrl)
@@ -41,7 +33,7 @@ function gotoLogin() {
 				class="h-10 w-auto flex-shrink-0 object-contain object-center" />
 		{:else if store?.websiteName}
 			<h1
-				class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-secondary-500 to-primary-500">
+				class="bg-gradient-to-br from-secondary-500 to-primary-500 bg-clip-text text-4xl font-extrabold text-transparent">
 				{store?.websiteName}
 			</h1>
 		{/if}
@@ -65,7 +57,7 @@ function gotoLogin() {
 			<div class="mb-5 text-center font-bold uppercase">Account successfully verified</div>
 
 			<div class="flex items-center justify-center">
-				<a href="/" class="text-start max-w-max text-primary-500 hover:underline"> Back to Home </a>
+				<a href="/" class="max-w-max text-start text-primary-500 hover:underline"> Back to Home </a>
 			</div>
 		</div>
 	</div>

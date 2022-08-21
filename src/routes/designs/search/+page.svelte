@@ -5,24 +5,6 @@
 }
 </style>
 
-<script context="module">
-export async function load({ url, params, fetch }) {
-	let q = url.searchParams.gelAll().toString()
-	const page = +url.searchParams.get('page')
-	const products = await get(`products/es?${q}`)
-	const facets = products.facets.all_aggs
-
-	return {
-		props: {
-			page,
-			products,
-			facets,
-			query: q
-		}
-	}
-}
-</script>
-
 <script>
 import { goto } from '$app/navigation'
 import { constructQry, constructURL2 } from '$lib/util'
@@ -36,7 +18,9 @@ import Product from '$lib/Product.svelte'
 // import MobileFilters from './_MobileFilters.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
-export let page, products, facets, query
+export let data
+let { page, products, facets, query } = data
+$: ({ page, products, facets, query } = data)
 
 const PAGE_SIZE = 30
 let showMobileFilter = false,

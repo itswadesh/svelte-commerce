@@ -1,43 +1,15 @@
-<script context="module" lang="ts">
-export async function load({ url, params, fetch, session, context }) {
-	// console.log('url', url)
-	let loading, err, myAddresses, selectedAddress
-	let prescriptionId = url.searchParams.get('prescription')
-
-	// const me = (await GQL_me.fetch({ fetch, settings: { policy: 'cache-and-network' } })).data?.me
-	if (!session.me) {
-		return {
-			redirect: `${session.loginUrl}?ref=${url.pathname}`,
-			status: 302
-		}
-	}
-
-	try {
-		loading = true
-		const myAddressesRes = await GQL_myAddresses.fetch({ fetch, settings: { cacheMs: 0 } })
-		if (myAddressesRes.errors) err = myAddressesRes.errors[0].message
-		myAddresses = myAddressesRes.data?.myAddresses
-		selectedAddress = myAddresses?.data[0]?.id
-		// console.log('selectedAddress = ', selectedAddress)
-	} catch (e) {
-		err = e
-	} finally {
-		loading = false
-	}
-
-	return { props: { loading, myAddresses, err, prescriptionId, selectedAddress } }
-}
-</script>
-
 <script>
 import Pricesummary from '$lib/components/Pricesummary.svelte'
-import SelectAddress from './_SelectAddress.svelte'
+import SelectAddress from '../_SelectAddress.svelte'
 import { GQL_myAddresses, GQL_me, GQL_cart } from '$houdini'
 import Error from '$lib/Error.svelte'
-import CheckoutHeader from './_CheckoutHeader.svelte'
+import CheckoutHeader from '../_CheckoutHeader.svelte'
 import { browser } from '$app/env'
 
-export let loading, myAddresses, err, prescriptionId, selectedAddress
+export let data
+let { loading, myAddresses, err, prescriptionId, selectedAddress } = data
+$: ({ loading, myAddresses, err, prescriptionId, selectedAddress } = data)
+
 $: browser && GQL_myAddresses.fetch()
 
 $: myAddresses = $GQL_myAddresses.data?.myAddresses

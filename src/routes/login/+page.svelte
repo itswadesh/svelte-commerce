@@ -7,14 +7,6 @@
 }
 </style>
 
-<script context="module" lang="ts">
-import type { Load } from '@sveltejs/kit'
-export const load: Load = async ({ url, session: { user } }) => {
-	const ref = url.searchParams.get('ref')
-	return { props: { ref } }
-}
-</script>
-
 <script>
 import { toasts, ToastContainer, FlatToast } from 'svelte-toasts'
 import { goto } from '$app/navigation'
@@ -25,7 +17,11 @@ import { toast } from '$lib/util'
 import { signIn } from '$lib/services'
 import { browser } from '$app/env'
 import { GQL_login } from '$houdini'
-export let ref
+
+export let data
+let { ref } = data
+$: ({ ref } = data)
+
 const seoProps = {
 	title: 'Login',
 	metadescription: 'Login now - '
