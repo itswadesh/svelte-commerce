@@ -6,7 +6,7 @@
 }
 </style>
 
-
+<script lang="ts">
 import { browser } from '$app/env'
 import { goto } from '$app/navigation'
 import { getUser, signUp } from '$lib/services'
@@ -22,8 +22,8 @@ import Cookie from 'cookie-universal'
 import { onMount } from 'svelte'
 
 export let data
-let {   me, ref, role, store } = data
-$: ({   me, ref, role, store } = data)
+let { me, ref, role, store } = data
+$: ({ me, ref, role, store } = data)
 
 if (browser && me?.active) goto(`/my`)
 
