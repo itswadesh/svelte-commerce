@@ -6,6 +6,9 @@ import adapter from '@sveltejs/adapter-auto'
 const config = {
 	kit: {
 		adapter: adapter(),
+		prerender: {
+			enabled: false
+		},
 		alias: {
 			$houdini: path.resolve('.', '$houdini'),
 			$graphql: path.resolve('src', 'lib', 'graphql')
