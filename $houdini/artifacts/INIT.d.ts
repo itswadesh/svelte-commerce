@@ -85,15 +85,6 @@ export type INIT$result = {
             readonly index: number | null
         } | null)[] | null,
         readonly paymentStatuses: (string | null)[] | null,
-        readonly paymentMethods: ({
-            readonly active: boolean | null,
-            readonly name: string,
-            readonly value: string | null,
-            readonly img: string | null,
-            readonly color: string | null,
-            readonly position: number | null,
-            readonly text: string | null
-        } | null)[] | null,
         readonly otpLogin: boolean | null,
         readonly sms: {
             readonly AUTO_VERIFICATION_ID: string | null,

@@ -30,10 +30,6 @@ export type HOME$result = {
             readonly googleUrl: string | null,
             readonly active: boolean | null,
             readonly featured: boolean | null,
-            readonly parent: {
-                readonly id: string,
-                readonly name: string | null
-            } | null,
             readonly store: {
                 readonly id: string,
                 readonly name: string | null,
