@@ -12,7 +12,12 @@ const config = {
 			$graphql: path.resolve('src', 'lib', 'graphql')
 		}
 	},
-	preprocess: [preprocess(), houdini()]
+	preprocess: [
+		preprocess({
+			postcss: true
+		}),
+		houdini()
+	]
 }
 
 export default config
