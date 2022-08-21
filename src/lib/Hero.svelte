@@ -1,7 +1,6 @@
 <script>
 import { Swipe, SwipeItem } from 'svelte-swipe'
 import { onMount } from 'svelte'
-import { stringify } from 'postcss'
 
 const swipeConfig = {
 	autoplay: false,

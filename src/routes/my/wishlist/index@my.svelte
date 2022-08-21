@@ -2,8 +2,7 @@
 import { onMount } from 'svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import { date, currency } from '$lib/util'
-import { KQL_MyWishlist } from '$lib/graphql/_kitql/graphqlStores'
-import { stringify } from 'postcss'
+import { GQL_myWishlist } from '$houdini'
 import WishlistProducts from '$lib/WishlistProducts.svelte'
 
 const seoProps = {
@@ -20,7 +19,7 @@ onMount(() => {
 	getWishlists()
 })
 async function getWishlists() {
-	wishlists = (await KQL_MyWishlist.query()).data?.myWishlist
+	wishlists = (await GQL_myWishlist.fetch()).data?.myWishlist
 }
 </script>
 
@@ -40,13 +39,13 @@ async function getWishlists() {
 		<!-- {/each} -->
 	{:else}
 		<div class="my-10 flex flex-col items-center justify-center ">
-			<h4 class="font-semibold mb-5 text-center">There are no items in wishlist yet</h4>
+			<h4 class="mb-5 text-center font-semibold">There are no items in wishlist yet</h4>
 
-			<img src="/no/empty-animate.svg" alt="" class="h-80 md:h-96 mb-10" />
+			<img src="/no/empty-animate.svg" alt="" class="mb-10 h-80 md:h-96" />
 
 			<a
 				href="/"
-				class="bg-white hover:bg-primary-500 rounded-md shadow hover:shadow-md py-2 px-8 font-semibold text-sm text-primary-500 hover:text-white bwishlist hover:bwishlist-white bwishlist-primary-500 focus:outline-none mx-auto focus:ring-primary-500 ring-opacity-50">
+				class="bwishlist hover:bwishlist-white bwishlist-primary-500 mx-auto rounded-md bg-white py-2 px-8 text-sm font-semibold text-primary-500 shadow ring-opacity-50 hover:bg-primary-500 hover:text-white hover:shadow-md focus:outline-none focus:ring-primary-500">
 				Shop Now
 			</a>
 		</div>

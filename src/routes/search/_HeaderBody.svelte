@@ -13,7 +13,6 @@ export let sortBy = null,
 let query = {}
 // page.subscribe((page) => {
 // 	query = JSON.parse(page.url.searchParams.toString())
-// 	console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', query)
 // })
 // function sort() {
 // 	query.sort = sortBy

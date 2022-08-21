@@ -110,12 +110,12 @@ import { onMount } from 'svelte'
 
 import { elasticOut } from 'svelte/easing'
 import { tweened } from 'svelte/motion'
-import { KQL_Cart } from './graphql/_kitql/graphqlStores'
+import { GQL_cart } from '$houdini'
 import { currency } from './util'
 import { spring } from 'svelte/motion'
 import { fly } from 'svelte/transition'
 
-$: cart = $KQL_Cart.data?.cart || {}
+$: cart = $GQL_cart.data?.cart || {}
 
 const width = tweened(0, {
 	duration: 1000,
@@ -145,7 +145,7 @@ $: cart.qty && cartTotal.set(cart.total)
 						style="padding-left: 13px;"
 						in:fly="{{ y: -20, duration: 800, delay: 0 }}"
 						out:fly="{{ y: 20, duration: 400, delay: 0 }}">
-						{#if $KQL_Cart.isFetching}
+						{#if $GQL_cart.isFetching}
 							<span>Please wait...</span>
 						{:else}
 							<span>

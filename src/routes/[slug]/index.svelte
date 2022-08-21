@@ -18,7 +18,7 @@ export async function load({ url, params, fetch }) {
 		const id = url.searchParams.get('id')
 		const slug = params.slug
 		if (!id && !slug) throw Error('Invalid product url')
-		await KQL_ProductSlug.queryLoad({ fetch, variables: { slug } })
+		await GQL_productSlug.fetch({ fetch, variables: { slug } })
 		return {
 			props: {}
 		}
@@ -29,22 +29,19 @@ export async function load({ url, params, fetch }) {
 </script>
 
 <script>
-import {
-	KQL_AddToCart,
-	KQL_Cart,
-	KQL_ProductSlug,
-	KQL_ToggleWishlist
-} from '$lib/graphql/_kitql/graphqlStores'
-import { stringify } from 'postcss'
+import { GQL_addToCart, GQL_cart, GQL_productSlug, GQL_toggleWishlist } from '$houdini'
 import TransparentButton from '$lib/components/buttons/TransparentButton.svelte'
 import ProductDetailSkeleton from './_ProductDetailSkeleton.svelte'
 import Errors from '$lib/components/alerts/Errors.svelte'
+import { browser } from '$app/env'
+$: browser && GQL_productSlug.fetch()
+
 let CartButtonText = 'Add To Cart'
-$: product = $KQL_ProductSlug.data?.productSlug
+$: product = $GQL_productSlug.data?.productSlug
 async function addToBag(product) {
-	await KQL_AddToCart.mutate({ variables: { pid: product.id, vid: product.id, qty: 1 } })
+	await GQL_addToCart.mutate({ variables: { pid: product.id, vid: product.id, qty: 1 } })
 	CartButtonText = 'Go To Cart'
-	await KQL_Cart.query({
+	await GQL_cart.fetch({
 		variables: { store: store.id },
 		settings: { policy: 'network-only' }
 	})
@@ -89,7 +86,7 @@ const seoProps = {
 }
 async function addToWishlist(product, variant) {
 	try {
-		const { data, errors } = await KQL_ToggleWishlist.mutate({ variables: { product, variant } })
+		const { data, errors } = await GQL_toggleWishlist.mutate({ variables: { product, variant } })
 		if (errors) {
 			toast(errors[0]?.message, 'error')
 		} else {
@@ -103,10 +100,10 @@ async function addToWishlist(product, variant) {
 
 <SEO {...seoProps} />
 <section class="min-h-screen cursor-default bg-gray-100 md:py-10 md:px-5 lg:px-10 xl:px-20">
-	{#if $KQL_ProductSlug?.isFetching}
+	{#if $GQL_productSlug?.isFetching}
 		<ProductDetailSkeleton />
-	{:else if $KQL_ProductSlug?.errors}
-		<Errors errors="{$KQL_ProductSlug.errors}" />
+	{:else if $GQL_productSlug?.errors}
+		<Errors errors="{$GQL_productSlug.errors}" />
 	{:else if product}
 		<div class="group bg-white px-8 pt-8 md:mx-10 md:flex md:space-x-5 lg:space-x-10">
 			<!-- Image section start  -->
@@ -321,13 +318,13 @@ async function addToWishlist(product, variant) {
 								on:click="{() => addToBag(product)}"
 								class="w-full transform rounded-md bg-gray-800  py-2 font-semibold tracking-wide text-white hover:scale-105 focus:outline-none">
 								<span>
-									{$KQL_AddToCart.isFetching ? 'Adding...' : CartButtonText}
+									{$GQL_addToCart.isFetching ? 'Adding...' : CartButtonText}
 								</span>
 							</button>
 						{:else}
 							<a
 								href="/cart"
-								class="block text-center bg-purple-800 py-2 w-full font-semibold tracking-wide text-white transform  rounded-md hover:scale-105 focus:outline-none">
+								class="block w-full transform rounded-md bg-purple-800 py-2 text-center font-semibold tracking-wide  text-white hover:scale-105 focus:outline-none">
 								<span>
 									{CartButtonText}
 								</span>
@@ -337,7 +334,7 @@ async function addToWishlist(product, variant) {
 					<!-- Add to cart end -->
 				</div>
 				<TransparentButton
-					loading="{$KQL_ToggleWishlist.isFetching}"
+					loading="{$GQL_toggleWishlist.isFetching}"
 					class="border px-6 py-2 hover:bg-gray-100"
 					on:click="{() => addToWishlist(product.id, product.id)}">
 					Add to wishlist
