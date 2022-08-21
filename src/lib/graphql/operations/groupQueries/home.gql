@@ -25,6 +25,10 @@ query HOME($store: ID, $zip: String) {
 			googleUrl
 			active
 			featured
+			parent {
+				id
+				name
+			}
 			store {
 				id
 				name
