@@ -21,7 +21,7 @@ export async function load({ url, params, fetch, session, context }) {
 		// let res = await fetch(uri.toString(), { method: 'get' })
 		// if (res.ok) {
 		// 	let store = await res.json()
-		const storeOne = (await GQL_StoreOne.fetch({ fetch, variables: { domain } })).data.storeOne
+		const storeOne = (await GQL_storeOne.fetch({ fetch, variables: { domain } })).data.storeOne
 		const { id, email, address, phone, websiteName, websiteLegalName } = storeOne
 		coookies.set(
 			'store',
@@ -54,9 +54,9 @@ import { browser } from '$app/env'
 import { getStores, navigating, page, session } from '$app/stores'
 import Footer from '$lib/Footer.svelte'
 
-import { GQL_StoreOne } from '$houdini'
+import { GQL_storeOne } from '$houdini'
 
-$: browser && GQL_StoreOne.fetch()
+$: browser && GQL_storeOne.fetch()
 
 let url
 // redirect if not already logged in

@@ -19,7 +19,7 @@ export async function load({ url, params, fetch, session, context }) {
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
 import ImageLoader from '$lib/components/Image/ImageLoader.svelte'
-import { GQL_StoreOne } from '$houdini'
+import { GQL_storeOne } from '$houdini'
 import { loginUrl } from '$lib/store'
 import { onMount } from 'svelte'
 export let store
@@ -29,7 +29,7 @@ const seoProps = {
 }
 
 onMount(async () => {
-	// await GQL_StoreOne.fetch({ variables: { id: store?.id } })
+	// await GQL_storeOne.fetch({ variables: { id: store?.id } })
 })
 
 let loading = false
@@ -51,7 +51,7 @@ let loading = false
 				class="h-10 w-auto flex-shrink-0 object-contain object-center" />
 		{:else if store?.websiteName}
 			<h1
-				class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-secondary-500 to-primary-500">
+				class="bg-gradient-to-br from-secondary-500 to-primary-500 bg-clip-text text-4xl font-extrabold text-transparent">
 				{store?.websiteName}
 			</h1>
 		{/if}
@@ -74,7 +74,7 @@ let loading = false
 	<div class="flex items-center justify-center">
 		<a
 			href="{$loginUrl}?ref=registration-success"
-			class="text-start max-w-max text-primary-500 hover:underline">
+			class="max-w-max text-start text-primary-500 hover:underline">
 			Back to login
 		</a>
 	</div>

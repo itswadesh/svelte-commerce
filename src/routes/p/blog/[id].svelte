@@ -2,7 +2,7 @@
 export async function load({ url, params, fetch, session, context }) {
 	let blog, err
 	try {
-		await GQL_Blog.fetch({ fetch, variables: { id: params.id } })
+		await GQL_blog.fetch({ fetch, variables: { id: params.id } })
 		// console.log(res)
 	} catch (e) {
 		err = e
@@ -20,7 +20,7 @@ import SEO from '$lib/components/SEO/index.svelte'
 import { toast } from '$lib/util'
 import ImageLoader from '$lib/components/Image/ImageLoader.svelte'
 import TimeAgo from 'svelte-timeago'
-import { GQL_Blog, GQL_Blogs } from '$houdini'
+import { GQL_blog, GQL_blogs } from '$houdini'
 
 const seoProps = {
 	title: 'Blogs ',
@@ -29,7 +29,7 @@ const seoProps = {
 
 export let err
 
-$: blog = $GQL_Blog.data.blog
+$: blog = $GQL_blog.data.blog
 </script>
 
 <SEO {...seoProps} />

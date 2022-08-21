@@ -11,7 +11,7 @@ export async function load({ url, params, fetch }) {
 
 <script>
 import Hero from '$lib/Hero.svelte'
-import { GQL_HOME, GQL_Products } from '$houdini'
+import { GQL_HOME, GQL_products } from '$houdini'
 import { onMount } from 'svelte'
 import ProductCard from '$lib/components/_ProductCard.svelte'
 import { store } from '$lib/util'
@@ -40,7 +40,7 @@ onMount(async () => {
 // async function getFeatured() {
 // 	try {
 // 		loading = true
-// 		const x = (await GQL_Products.fetch({ variables: { popular: true } })).data.products
+// 		const x = (await GQL_products.fetch({ variables: { popular: true } })).data.products
 // 		return x
 // 	} catch (e) {
 // 	} finally {
@@ -50,7 +50,7 @@ onMount(async () => {
 // async function getHot() {
 // 	try {
 // 		loading = true
-// 		return (await GQL_Products.fetch({ variables: { hot: true } })).data.products
+// 		return (await GQL_products.fetch({ variables: { hot: true } })).data.products
 // 	} catch (e) {
 // 		console.log('err...', e.toString())
 // 	} finally {
@@ -60,7 +60,7 @@ onMount(async () => {
 // async function getShoppo() {
 // 	try {
 // 		loading = true
-// 		return (await GQL_Products.fetch({ variables: { q: 'shoppo' } })).data.products
+// 		return (await GQL_products.fetch({ variables: { q: 'shoppo' } })).data.products
 // 	} catch (e) {
 // 		console.log('err...', e.toString())
 // 	} finally {

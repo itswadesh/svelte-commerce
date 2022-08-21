@@ -12,9 +12,8 @@ import { onMount } from 'svelte'
 
 import OrderAddressDetails from './_OrderAddressDetails.svelte'
 import OrderSuccessSkeleton from './_OrderSuccessSkeleton.svelte'
-import { GQL_MyOrders, GQL_PaySuccessPageHit } from '$houdini'
+import { GQL_myOrders, GQL_paySuccessPageHit } from '$houdini'
 import { browser } from '$app/env'
-import { GQL_paySuccessPageHit } from '$houdini'
 export let id
 $: browser && GQL_paySuccessPageHit.fetch()
 
@@ -26,7 +25,7 @@ let order = null,
 async function refresh() {
 	try {
 		loading = true
-		order = (await GQL_PaySuccessPageHit.mutate({ variables: { orderId: id } })).data
+		order = (await GQL_paySuccessPageHit.mutate({ variables: { orderId: id } })).data
 			.paySuccessPageHit
 	} catch (e) {
 	} finally {

@@ -7,7 +7,7 @@ export async function load({ url, params, fetch, session, context }) {
 		ads = { id: 'new' }
 	} else {
 		ads = (
-			await GQL_Address.fetch({ fetch, variables: { id: addressId }, settings: { cacheMs: 0 } })
+			await GQL_address.fetch({ fetch, variables: { id: addressId }, settings: { cacheMs: 0 } })
 		).data?.address
 	}
 	return { props: { err, ads } }
@@ -18,7 +18,7 @@ export async function load({ url, params, fetch, session, context }) {
 import GradiantButton from '$lib/ui/GradiantButton.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 import BackButton from '$lib/ui/BackButton.svelte'
-import { GQL_Address, GQL_SaveAddress, GQL_States, GQL_StoreCountries } from '$houdini'
+import { GQL_address, GQL_saveAddress, GQL_states, GQL_storeCountries } from '$houdini'
 import Error from '$lib/Error.svelte'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
@@ -27,9 +27,9 @@ import AutoComplete from 'simple-svelte-autocomplete'
 import Select from 'svelte-select'
 import { browser } from '$app/env'
 
-$: browser && GQL_Address.fetch()
+$: browser && GQL_address.fetch()
 
-$: ads = $GQL_Address.data?.address || {}
+$: ads = $GQL_address.data?.address || {}
 let err,
 	loading = false,
 	formChanged = false,
@@ -53,7 +53,7 @@ async function save(ads) {
 	} = ads
 	try {
 		loading = true
-		const { data, errors } = await GQL_SaveAddress.mutate({
+		const { data, errors } = await GQL_saveAddress.mutate({
 			variables: {
 				id,
 				firstName,
@@ -80,14 +80,14 @@ async function save(ads) {
 	}
 }
 onMount(async () => {
-	await GQL_StoreCountries.fetch({ variables: { store: store?.id, page: 0, limit: 300 } })
+	await GQL_storeCountries.fetch({ variables: { store: store?.id, page: 0, limit: 300 } })
 	// selectedCountry = countries[0]
-	// await GQL_Cities.fetch({ variables: { limit: 300, page: 0, country: ads.country } })
-	await GQL_States.fetch({
+	// await GQL_cities.fetch({ variables: { limit: 300, page: 0, country: ads.country } })
+	await GQL_states.fetch({
 		variables: { limit: 300, page: 0, countryCode: ads?.country?.code || ads?.country }
 	})
 	selectedState = { name: ads?.state }
-	const adsCountryA = $GQL_StoreCountries.data?.storeCountries?.data.filter(
+	const adsCountryA = $GQL_storeCountries.data?.storeCountries?.data.filter(
 		(c) => c.code === ads.country
 	)
 	if (adsCountryA) {
@@ -97,14 +97,14 @@ onMount(async () => {
 
 async function onCountryChange() {
 	// selectedCountry = ads.country
-	// await GQL_Cities.fetch({
+	// await GQL_cities.fetch({
 	// 	variables: { limit: 300, page: 0, country: ads.country },
 	// 	settings: { policy: 'network-only' }
 	// })
 	if (adsCountry) {
 		ads.country = adsCountry.code ? adsCountry.code : adsCountry
 		formChanged = true
-		await GQL_States.fetch({
+		await GQL_states.fetch({
 			variables: { limit: 300, page: 0, countryCode: ads.country },
 			settings: { policy: 'network-only' }
 		})
@@ -116,8 +116,8 @@ const seoProps = {
 	metadescription: 'Add Address '
 }
 
-$: allCountries = $GQL_StoreCountries.data?.storeCountries
-$: allStates = $GQL_States.data?.states?.data
+$: allCountries = $GQL_storeCountries.data?.storeCountries
+$: allStates = $GQL_states.data?.states?.data
 let stateName = ads?.state
 function stateChanged({ detail }) {
 	console.log('state changed', detail)
@@ -196,8 +196,8 @@ function stateChanged({ detail }) {
 							bind:value="{ads.state}"
 							on:input="{() => (formChanged = true)}">
 							<option value="" selected>-- Select a State --</option>
-							{#if $GQL_States.data?.states.data && $GQL_States.data?.states.data.length}
-								{#each $GQL_States.data?.states.data as c}
+							{#if $GQL_states.data?.states.data && $GQL_states.data?.states.data.length}
+								{#each $GQL_states.data?.states.data as c}
 									{#if c}
 										<option value="{c.name}">
 											{c.name}
@@ -210,7 +210,7 @@ function stateChanged({ detail }) {
 				{/if} -->
 				<div>
 					<h6 class="mb-2 font-semibold">Country</h6>
-					{#if $GQL_StoreCountries.isFetching}
+					{#if $GQL_storeCountries.isFetching}
 						Loading Countries...
 					{:else if allCountries?.count}
 						<Select

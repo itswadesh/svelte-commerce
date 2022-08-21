@@ -8,7 +8,7 @@
 import Textbox from '$lib/ui/Textbox.svelte'
 import { toast } from '$lib/util'
 import { onMount } from 'svelte'
-import { GQL_Me, GQL_UpdateProfile } from '$houdini'
+import { GQL_me, GQL_updateProfile } from '$houdini'
 
 let errors = {},
 	valid = true,
@@ -16,12 +16,12 @@ let errors = {},
 	user = null,
 	showImageModal = false
 onMount(async () => {
-	const userDetails = (await GQL_Me.fetch()).data?.me
+	const userDetails = (await GQL_me.fetch()).data?.me
 	profile = Object.assign({}, userDetails)
 })
 function save(profile) {
 	try {
-		GQL_UpdateProfile.mutate({ variables: profile })
+		GQL_updateProfile.mutate({ variables: profile })
 		toast('Profile saved successfullly', 'success')
 	} catch (e) {
 		toast(e, 'error')

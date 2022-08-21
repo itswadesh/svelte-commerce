@@ -24,7 +24,7 @@ import SEO from '$lib/components/SEO/index.svelte'
 import { toast } from '$lib/util'
 import { signIn } from '$lib/services'
 import { browser } from '$app/env'
-import { GQL_Login } from '$houdini'
+import { GQL_login } from '$houdini'
 export let ref
 const seoProps = {
 	title: 'Login',

@@ -23,7 +23,7 @@ import Cartlist from './_Cartlist.svelte'
 import Weprovides from '$lib/Weprovides.svelte'
 import Pricesummary from '$lib/Pricesummary.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-import { GQL_AddToCart, GQL_cart } from '$houdini'
+import { GQL_addToCart, GQL_cart } from '$houdini'
 import { store, toast } from '$lib/util'
 import ProductDetailSkeleton from '../[slug]/_ProductDetailSkeleton.svelte'
 import Errors from '$lib/components/alerts/Errors.svelte'
@@ -49,7 +49,7 @@ async function addToCart({ detail }) {
 	const qty = detail.qty
 	const optiData = $GQL_cart.data
 	optiData.cart.currencyCode = `Removing items...`
-	const addToCartRes = await GQL_AddToCart.mutate({
+	const addToCartRes = await GQL_addToCart.mutate({
 		variables: { pid, qty, vid, options }
 	})
 	if (addToCartRes.errors) {

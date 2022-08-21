@@ -8,16 +8,16 @@
 <script>
 import { currency, toast } from './util'
 import { lazyload } from './../actions/lazyload'
-import { GQL_AddToCart, GQL_MyWishlist, GQL_ToggleWishlist } from '$houdini'
+import { GQL_addToCart, GQL_myWishlist, GQL_toggleWishlist } from '$houdini'
 let CartButtonText = 'MOVE TO BAG'
 
 function addToBag(product, variant) {
-	GQL_AddToCart.mutate({ variables: { pid: product.id, vid: product.id, qty: 1 } })
+	GQL_addToCart.mutate({ variables: { pid: product.id, vid: product.id, qty: 1 } })
 	CartButtonText = 'GO TO BAG'
 }
 async function removeFromWishlist(id) {
-	await GQL_ToggleWishlist.mutate({ variables: { product: id, variant: id } })
-	wishlist = (await GQL_MyWishlist.fetch()).data?.myWishlist
+	await GQL_toggleWishlist.mutate({ variables: { product: id, variant: id } })
+	wishlist = (await GQL_myWishlist.fetch()).data?.myWishlist
 	toast('Removed from wishlist', 'success')
 }
 export let wishlist

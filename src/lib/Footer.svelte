@@ -19,7 +19,7 @@ let selectedCountry = 'fashion.misiki.io'
 let store = cookies.get('store')
 onMount(async () => {
 	// try {
-	// 	await GQL_PopularSearches.fetch({ variables: { domain: store.domain } })
+	// 	await GQL_popularSearches.fetch({ variables: { domain: store.domain } })
 	// } catch (e) {}
 })
 function changeCountry() {

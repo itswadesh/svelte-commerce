@@ -18,11 +18,11 @@ export async function load({ url, params, fetch, session, context }) {
 	try {
 		loading = true
 
-		paymentMethods = (await GQL_PaymentMethods.fetch({ fetch, variables: { store: store?.id } }))
+		paymentMethods = (await GQL_paymentMethods.fetch({ fetch, variables: { store: store?.id } }))
 			.data?.paymentMethods.data
 
 		address = (
-			await GQL_Address.fetch({
+			await GQL_address.fetch({
 				fetch,
 				variables: {
 					id: addressId
@@ -41,11 +41,11 @@ export async function load({ url, params, fetch, session, context }) {
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
 import {
-	GQL_Address,
+	GQL_address,
 	GQL_cart,
-	GQL_CashfreePayNowNew,
-	GQL_Checkout,
-	GQL_PaymentMethods
+	GQL_cashfreePayNowNew,
+	GQL_checkout,
+	GQL_paymentMethods
 } from '$houdini'
 import { store, toast } from '$lib/util'
 import Error from '$lib/Error.svelte'
@@ -59,7 +59,7 @@ import Textbox from '$lib/ui/Textbox.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { browser } from '$app/env'
-$: browser && GQL_PaymentMethods.fetch()
+$: browser && GQL_paymentMethods.fetch()
 
 const seoProps = {
 	title: 'Payment-Methods',
@@ -112,7 +112,7 @@ async function submit(pm) {
 			loading = true
 
 			const res = (
-				await GQL_Checkout.mutate({
+				await GQL_checkout.mutate({
 					variables: {
 						address: address.id
 					}
@@ -134,7 +134,7 @@ async function submit(pm) {
 		try {
 			loading = true
 			const cashFreePayload = (
-				await GQL_CashfreePayNowNew.mutate({
+				await GQL_cashfreePayNowNew.mutate({
 					variables: { address: address.id }
 				})
 			).data.cashfreePayNowNew

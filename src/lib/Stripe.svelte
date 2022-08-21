@@ -5,7 +5,7 @@ import { post } from '$lib/util/api'
 
 import { onMount } from 'svelte'
 import GradiantButton from '$lib/ui/GradiantButton.svelte'
-import { GQL_Stripe } from '$houdini'
+import { GQL_stripe } from '$houdini'
 import { goto } from '$app/navigation'
 
 let stripeReady = false
@@ -53,7 +53,7 @@ const payWithStripe = async (pm) => {
 		loading = true
 		toast('Contacting Payment Server...', 'warning')
 		const paymentMethodId = pm.id
-		const resStripe = await GQL_Stripe.mutate({
+		const resStripe = await GQL_stripe.mutate({
 			variables: {
 				paymentMethodId,
 				address
@@ -211,5 +211,5 @@ function loadStripeElements() {
 		<div id="error-message" role="alert" class="mt-4 text-sm text-red-500"></div>
 	</form>
 {:else}
-	<div class="text-green-500 bg-green-200 rounded shadow">Payment Received</div>
+	<div class="rounded bg-green-200 text-green-500 shadow">Payment Received</div>
 {/if}

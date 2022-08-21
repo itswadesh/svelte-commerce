@@ -38,7 +38,7 @@ import SEO from '$lib/components/SEO/index.svelte'
 import { post } from '$lib/util/api'
 import { page, session } from '$app/stores'
 import ImageLoader from '$lib/components/Image/ImageLoader.svelte'
-import { GQL_StoreOne } from '$houdini'
+import { GQL_storeOne } from '$houdini'
 import Cookie from 'cookie-universal'
 import { onMount } from 'svelte'
 
@@ -55,7 +55,7 @@ const seoProps = {
 // let store = cookies.get('store')
 
 onMount(async () => {
-	// await GQL_StoreOne.fetch({ variables: { id: store?.id } })
+	// await GQL_storeOne.fetch({ variables: { id: store?.id } })
 })
 
 let email = ''
@@ -123,7 +123,7 @@ async function handleSignUp() {
 				class="h-10 w-auto flex-shrink-0 object-contain object-center" />
 		{:else if store?.websiteName}
 			<h1
-				class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-secondary-500 to-primary-500">
+				class="bg-gradient-to-br from-secondary-500 to-primary-500 bg-clip-text text-4xl font-extrabold text-transparent">
 				{store?.websiteName}
 			</h1>
 		{/if}
@@ -263,7 +263,7 @@ async function handleSignUp() {
 	</form>
 
 	<div class="mx-auto flex w-full max-w-sm flex-wrap items-center justify-center gap-4 leading-4">
-		<a href="/auth/login" class="max-w-max text-primary-500 text-start hover:underline"> SignIn </a>
+		<a href="/auth/login" class="max-w-max text-start text-primary-500 hover:underline"> SignIn </a>
 
 		<!-- <a
 					href="{`/auth/signup?role=vendor&store=${store?.id}&ref=${$page.url.searchParams.get('ref') || '/'}`}"

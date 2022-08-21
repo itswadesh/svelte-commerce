@@ -5,7 +5,7 @@ import { onMount } from 'svelte'
 
 import { currency, store, date } from '$lib/util'
 import OrderTracking from './_OrderTracking.svelte'
-import { GQL_MyOrderItems, GQL_OrderItem } from '$houdini'
+import { GQL_myOrderItems, GQL_orderItem } from '$houdini'
 import OrderListSkeleton from './_OrderListSkeleton.svelte'
 import { page } from '$app/stores'
 import PrimaryButtonRounded from '$lib/components/buttons/PrimaryButtonRounded.svelte'
@@ -36,7 +36,7 @@ async function getData() {
 	loading = true
 	try {
 		order = (
-			await GQL_OrderItem.fetch({
+			await GQL_orderItem.fetch({
 				variables: { id: $page.url.searchParams.get('itemId') }
 			})
 		).data?.orderItem
@@ -55,47 +55,47 @@ function isReplaceOrReturn() {
 </script>
 
 <div class="{clazz}">
-	{#if $GQL_OrderItem.isFetching}
+	{#if $GQL_orderItem.isFetching}
 		<OrderListSkeleton />
 	{:else if order}
 		<section class="text-gray-800">
 			<div
 				class="
 					mb-4
-					tracking-wide
-					bg-gray-200
-					px-4
-					pt-2
-					pb-1
-					flex flex-wrap
-					text-sm
+					flex
+					flex-wrap
 					items-center
-					justify-between">
+					justify-between
+					bg-gray-200
+					px-4 pt-2
+					pb-1
+					text-sm
+					tracking-wide">
 				<h5 class="pb-1 me-4"><b>Order No :</b> {order.orderNo}</h5>
 				<h5 class="pb-1"><b>Order Date </b>: {date(+order.createdAt)}</h5>
 			</div>
 
 			<!-- Order detail  -->
 
-			<div class="sm:flex sm:justify-between border-b border-gray-300 mb-4">
+			<div class="mb-4 border-b border-gray-300 sm:flex sm:justify-between">
 				<div
 					class="
-						sm:w-1/2 sm:border-r sm:border-gray-300
-						flex
-						space-x-2
-						sm:space-x-4 sm:pe-4
-						pb-4
+						flex space-x-2 pb-4
+						sm:w-1/2
+						sm:space-x-4
+						sm:border-r sm:border-gray-300
+						sm:pe-4
 						">
 					<a href="{`/${order.slug}`}">
 						<img
 							src="{`${order.imgCdn}?tr=w-160,fo-auto`}"
 							alt=""
-							class="w-14 sm:w-20 object-contain object-top" />
+							class="w-14 object-contain object-top sm:w-20" />
 					</a>
 
-					<div class="flex-1 w-full flex flex-col xl:pe-4 text-sm">
+					<div class="flex w-full flex-1 flex-col text-sm xl:pe-4">
 						{#if store.isFnb && order.vendor.businessName}
-							<div class="mb-1 font-semibold capitalize text-base">
+							<div class="mb-1 text-base font-semibold capitalize">
 								{order.vendor.businessName}
 							</div>
 						{:else if order.brandName}
@@ -107,7 +107,7 @@ function isReplaceOrReturn() {
 						<div class="mb-2 flex items-center justify-between">
 							<a
 								href="{`/${order.slug}`}"
-								class="me-3 text-gray-500 hover:text-primary-500 truncate">
+								class="truncate text-gray-500 me-3 hover:text-primary-500">
 								{order.name}
 							</a>
 							{#if store.isFnb}
@@ -152,14 +152,14 @@ function isReplaceOrReturn() {
 				<div
 					class="
           border-t border-dashed border-gray-300
-          sm:border-t-0
           py-5
-          sm:pt-0 sm:w-1/2 sm:px-5
+          sm:w-1/2
+          sm:border-t-0 sm:px-5 sm:pt-0
           lg:px-10
         ">
 					<h4 class="font-semibold">Delivery Address</h4>
 
-					<p class="mt-2 text-sm text-gray-500 font-light flex flex-col">
+					<p class="mt-2 flex flex-col text-sm font-light text-gray-500">
 						<span>
 							{order.userFirstName}
 							{order.userLastName},
@@ -179,7 +179,7 @@ function isReplaceOrReturn() {
 
 			<div>
 				{#if store.isFnb && order.status !== 'Delivered'}
-					<h4 class="xl:w-2/3 my-5 flex-1">
+					<h4 class="my-5 flex-1 xl:w-2/3">
 						<span class="font-medium">Expected Delivery Date : </span>
 
 						<span class="text-sm font-light text-gray-500">{+order.expectedDeliveryDate}</span>
@@ -190,10 +190,10 @@ function isReplaceOrReturn() {
 						<a
 							href="/rate-this-product?id=${order.pid}"
 							class="
-            text-primary-500
-            focus:outline-none
-            hover:underline
             whitespace-nowrap
+            text-primary-500
+            hover:underline
+            focus:outline-none
           ">
 							Rate & Review Product
 						</a>
@@ -232,14 +232,14 @@ function isReplaceOrReturn() {
 			<img
 				src="{`/no/empty-animate.svg?tr=h-320,fo-auto`}"
 				alt="empty orders"
-				class="mb-10 object-contain h-80" />
+				class="mb-10 h-80 object-contain" />
 
-			<span class="mb-3 text-xl md:text-3xl font-medium"> Your have't ordered yet !!</span>
+			<span class="mb-3 text-xl font-medium md:text-3xl"> Your have't ordered yet !!</span>
 
 			<span class="mb-4 text-xs">Add items to it now</span>
 
 			<a href="/)">
-				<PrimaryButtonRounded class="py-2 w-40 text-sm">Shop Now</PrimaryButtonRounded>
+				<PrimaryButtonRounded class="w-40 py-2 text-sm">Shop Now</PrimaryButtonRounded>
 			</a>
 		</div>
 	{/if}

@@ -8,7 +8,7 @@ export async function load({ url, fetch, session }) {
 	}
 
 	try {
-		await GQL_MyWishlist.fetch({
+		await GQL_myWishlist.fetch({
 			fetch,
 			variables: { store: store.id },
 			settings: { cacheMs: 0 }
@@ -20,7 +20,7 @@ export async function load({ url, fetch, session }) {
 
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
-import { GQL_MyWishlist, GQL_ToggleWishlist } from '$houdini'
+import { GQL_myWishlist, GQL_toggleWishlist } from '$houdini'
 import WishlistProducts from '$lib/WishlistProducts.svelte'
 import { delay, store } from '$lib/util'
 import ImageLoader from '$lib/components/Image/ImageLoader.svelte'
@@ -30,14 +30,14 @@ const seoProps = {
 	title: 'Wishlist',
 	metadescription: 'Products you have wishlisted'
 }
-$: browser && GQL_MyWishlist.fetch()
+$: browser && GQL_myWishlist.fetch()
 
-$: myWishlist = $GQL_MyWishlist.data?.myWishlist
+$: myWishlist = $GQL_myWishlist.data?.myWishlist
 async function toggleWishlist(detail) {
 	const product = detail.detail
 
 	try {
-		await GQL_ToggleWishlist.mutate({
+		await GQL_toggleWishlist.mutate({
 			variables: {
 				product: product.id,
 				variant: product.id
@@ -52,7 +52,7 @@ async function toggleWishlist(detail) {
 
 async function refreshData() {
 	try {
-		await GQL_MyWishlist.fetch({
+		await GQL_myWishlist.fetch({
 			fetch,
 			variables: { store: store.id },
 			settings: { cacheMs: 0 }

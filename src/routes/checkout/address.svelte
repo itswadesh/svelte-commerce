@@ -4,7 +4,7 @@ export async function load({ url, params, fetch, session, context }) {
 	let loading, err, myAddresses, selectedAddress
 	let prescriptionId = url.searchParams.get('prescription')
 
-	// const me = (await GQL_Me.fetch({ fetch, settings: { policy: 'cache-and-network' } })).data?.me
+	// const me = (await GQL_me.fetch({ fetch, settings: { policy: 'cache-and-network' } })).data?.me
 	if (!session.me) {
 		return {
 			redirect: `${session.loginUrl}?ref=${url.pathname}`,
@@ -14,7 +14,7 @@ export async function load({ url, params, fetch, session, context }) {
 
 	try {
 		loading = true
-		const myAddressesRes = await GQL_MyAddresses.fetch({ fetch, settings: { cacheMs: 0 } })
+		const myAddressesRes = await GQL_myAddresses.fetch({ fetch, settings: { cacheMs: 0 } })
 		if (myAddressesRes.errors) err = myAddressesRes.errors[0].message
 		myAddresses = myAddressesRes.data?.myAddresses
 		selectedAddress = myAddresses?.data[0]?.id
@@ -32,22 +32,22 @@ export async function load({ url, params, fetch, session, context }) {
 <script>
 import Pricesummary from '$lib/components/Pricesummary.svelte'
 import SelectAddress from './_SelectAddress.svelte'
-import { GQL_MyAddresses, GQL_Me, GQL_cart } from '$houdini'
+import { GQL_myAddresses, GQL_me, GQL_cart } from '$houdini'
 import Error from '$lib/Error.svelte'
 import CheckoutHeader from './_CheckoutHeader.svelte'
 import { browser } from '$app/env'
 
 export let loading, myAddresses, err, prescriptionId, selectedAddress
-$: browser && GQL_MyAddresses.fetch()
+$: browser && GQL_myAddresses.fetch()
 
-$: myAddresses = $GQL_MyAddresses.data?.myAddresses
+$: myAddresses = $GQL_myAddresses.data?.myAddresses
 function addressChanged(detail) {
 	// console.log('detail = ', detail)
 	selectedAddress = detail.detail
 }
 async function refreshAddress() {
 	try {
-		await GQL_MyAddresses.fetch({ settings: { cacheMs: 0 } })
+		await GQL_myAddresses.fetch({ settings: { cacheMs: 0 } })
 	} catch (e) {
 		err = e
 	} finally {
