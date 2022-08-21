@@ -19,7 +19,7 @@
 
 - Demo <a href="https://kitcommerce.tech/" target="blank">Kitcommerce.tech</a>
 - Svelte commerce in home made FNB sector https://homefood.tech/ (https://github.com/itswadesh/homefood)
-- I will keep on posting all the open source projects to our portfolio <a href="https://misiki.tech/" target="blank">misiki.tech</a>
+- I will keep on posting all the open source projects to my portfolio <a href="https://itswadesh.com/" target="blank">itswadesh.com</a>
 <br/>
 
 - 🛍️ Attach Svelte store front to <a href="https://misiki.io/"> Misiki </a> and your complete ecommerce tech stack becomes fre.
