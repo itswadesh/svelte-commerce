@@ -1189,6 +1189,13 @@
     "@kitql/all-in" "0.6.3"
     "@kitql/helper" "0.3.0"
 
+"@kitql/client@^0.5.12":
+  version "0.5.12"
+  resolved "https://registry.yarnpkg.com/@kitql/client/-/client-0.5.12.tgz#28cd73cdaab158ab6935a47b12baceed6b756403"
+  integrity sha512-U5QKEWRI/9k1BHCJX6o+OMz/v3Xw+wP7IYVE+10EdMiWd0rglhGCLakP5rQ3GeKl/YeIXTwixPtq8sAkun9S+g==
+  dependencies:
+    "@kitql/helper" "0.3.5"
+
 "@kitql/graphql-codegen@0.5.1":
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/@kitql/graphql-codegen/-/graphql-codegen-0.5.1.tgz#6c23661bbc47c6e885c8b25b93611574915f7a28"
@@ -1204,6 +1211,11 @@
   resolved "https://registry.yarnpkg.com/@kitql/helper/-/helper-0.3.0.tgz#0394418ec50d2876db110a0df431b9d80ba30b8c"
   integrity sha512-u90fEplmr6U+3c0lLbV8OqNF7fojV8xjKT4wOuowf2qFr+y1dwZWSHPiNO4jDKCH4SPo/u8iLjmxJ8BMz8wxPA==
 
+"@kitql/helper@0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@kitql/helper/-/helper-0.3.5.tgz#3754305b04728f48184ec5019d94de2ed4011f12"
+  integrity sha512-nq7naGKnSsQ3KudK5ENDYfGb62Yre6e7suKZxjsfBqIfeh3wkxRFFMpQu0buEKeKZlqwhevVTKqgN1TdKGRyZw==
+
 "@kitql/module-codegen@0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@kitql/module-codegen/-/module-codegen-0.3.0.tgz#9032da1f985659848da62362b31b787c6eb15ef9"
@@ -1218,6 +1230,14 @@
   integrity sha512-P9DVFagBKt6Z5pP2A3wk7O9P/YoeaMgrV0Kfp0xgbPonx53BZXm1Ac5Bu4gLG5JaKpnEJNqGer1AoNWbIoJIyQ==
   dependencies:
     "@kitql/helper" "0.3.0"
+    micromatch "4.0.5"
+
+"@kitql/vite-plugin-watch-and-run@^0.4.2":
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/@kitql/vite-plugin-watch-and-run/-/vite-plugin-watch-and-run-0.4.2.tgz#34efd9798999b8d8de7518401cb7215d4245183f"
+  integrity sha512-GKt6Hwp/qsMZVSNRGzckJZ7s7+k3QEpkVLpjSwqtW+6XVUsWPQr2k0Bi55imd4CgD8Rr7RkwAmnjcOo57DugPg==
+  dependencies:
+    "@kitql/helper" "0.3.5"
     micromatch "4.0.5"
 
 "@n1ru4l/graphql-live-query@^0.9.0":
@@ -2733,6 +2753,11 @@ dotenv@^16.0.0:
   version "16.0.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.0.0.tgz#c619001253be89ebb638d027b609c75c26e47411"
   integrity sha512-qD9WU0MPM4SWLPJy/r2Be+2WgQj8plChsyrCNQzW/0WjvcJQiKQJ9mH3ZgB3fxbUUxgc/11ZJ0Fi5KiimWGz2Q==
+
+dotenv@^16.0.1:
+  version "16.0.1"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.0.1.tgz#8f8f9d94876c35dac989876a5d3a82a267fdce1d"
+  integrity sha512-1K6hR6wtk2FviQ4kEiSjFiH5rpzEVi8WW0x96aztHVMhEspNpc4DVOUTEHtEva5VThQ8IaBX1Pe4gSzpVVUsKQ==
 
 dset@^3.1.0:
   version "3.1.2"
@@ -5715,6 +5740,13 @@ rimraf@^2.5.2, rimraf@^2.6.3:
   dependencies:
     glob "^7.1.3"
 
+"rollup@>=2.59.0 <2.78.0":
+  version "2.77.3"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.77.3.tgz#8f00418d3a2740036e15deb653bed1a90ee0cc12"
+  integrity sha512-/qxNTG7FbmefJWoeeYJFbHehJ2HNWnjkAFRKzWN/45eNBBF/r8lo992CwcJXEzyVxs5FmfId+vTSTQDb+bxA+g==
+  optionalDependencies:
+    fsevents "~2.3.2"
+
 rollup@^2.59.0:
   version "2.72.1"
   resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.72.1.tgz#861c94790537b10008f0ca0fbc60e631aabdd045"
@@ -6266,10 +6298,10 @@ svelte-tree-select@1.1.8:
   resolved "https://registry.yarnpkg.com/svelte-tree-select/-/svelte-tree-select-1.1.8.tgz#0c2fbc3e23cc3aff903d450a9370eea3f263f614"
   integrity sha512-6klCXipQ8KvBbzkV4Pl4Nn6br1DNKpR5Njr0ol5A9bXyvJX0GXwEuU+Kb7+ljUb6fzBma9OqXXxqOt/xGF+vXg==
 
-svelte@^3.47.0:
-  version "3.48.0"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.48.0.tgz#f98c866d45e155bad8e1e88f15f9c03cd28753d3"
-  integrity sha512-fN2YRm/bGumvjUpu6yI3BpvZnpIm9I6A7HR4oUNYd7ggYyIwSA/BX7DJ+UXXffLp6XNcUijyLvttbPVCYa/3xQ==
+svelte@^3.49.0:
+  version "3.49.0"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.49.0.tgz#5baee3c672306de1070c3b7888fc2204e36a4029"
+  integrity sha512-+lmjic1pApJWDfPCpUUTc1m8azDqYCG1JN9YEngrx/hUyIcFJo6VZhj0A1Ai0wqoHcEIuQy+e9tk+4uDgdtsFA==
 
 svgo@^2.7.0:
   version "2.8.0"
@@ -6583,6 +6615,18 @@ vite@^2.9.0:
     postcss "^8.4.13"
     resolve "^1.22.0"
     rollup "^2.59.0"
+  optionalDependencies:
+    fsevents "~2.3.2"
+
+vite@^2.9.14:
+  version "2.9.15"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-2.9.15.tgz#2858dd5b2be26aa394a283e62324281892546f0b"
+  integrity sha512-fzMt2jK4vQ3yK56te3Kqpkaeq9DkcZfBbzHwYpobasvgYmP2SoAr6Aic05CsB4CzCZbsDv4sujX3pkEGhLabVQ==
+  dependencies:
+    esbuild "^0.14.27"
+    postcss "^8.4.13"
+    resolve "^1.22.0"
+    rollup ">=2.59.0 <2.78.0"
   optionalDependencies:
     fsevents "~2.3.2"
 

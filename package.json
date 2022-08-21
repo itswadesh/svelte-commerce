@@ -48,7 +48,7 @@
     "shelljs": "0.8.5",
     "ssh2shell": "1.9.10",
     "supabase": "0.5.0",
-    "svelte": "^3.47.0",
+    "svelte": "^3.49.0",
     "svelte-calendar": "3.1.6",
     "svelte-carousel": "^1.0.17-rc4",
     "svelte-geolocation": "^0.3.0",
