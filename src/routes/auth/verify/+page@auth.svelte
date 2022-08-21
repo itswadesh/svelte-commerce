@@ -1,50 +1,3 @@
-<script context="module" lang="ts">
-import Cookie from 'cookie-universal'
-const coookies = Cookie()
-export async function load({ url, params, fetch, session, context }) {
-	let err
-	const isHome = url.pathname === '/'
-	let currentPage = +url.searchParams.get('page') || 1
-	let id = url.searchParams.get('id') || ''
-	let token = url.searchParams.get('token') || ''
-	let expires = url.searchParams.get('expires') || ''
-	let signature = url.searchParams.get('signature') || ''
-	const me = session.me
-	try {
-		const ve = await GQL_verifyEmail.mutate({
-			variables: {
-				id,
-				token,
-				signature,
-				expires,
-				store: session.store?.id
-			}
-		})
-		if (ve.errors) {
-			err = ve.errors[0].message
-			toast(err, 'error')
-		} else {
-			return {
-				status: 302,
-				redirect: `/auth/verification-success`
-			}
-		}
-	} catch (e) {
-		this.$store.commit('setErr', e)
-	}
-	return {
-		props: {
-			id,
-			token,
-			expires,
-			signature,
-			me,
-			err
-		}
-	}
-}
-</script>
-
 <script>
 import { goto } from '$app/navigation'
 import { GQL_resendEmail, GQL_verifyEmail } from '$houdini'
@@ -56,8 +9,9 @@ import { loginUrl } from '$lib/store'
 import { signOut } from '$lib/services'
 import { page, session } from '$app/stores'
 
-export let id, token, expires, signature, me, err
-
+export let data
+let { id, token, expires, signature, me, err } = data
+$: ({ id, token, expires, signature, me, err } = data)
 onMount(async () => {})
 function findEmailDomain(email) {
 	if (!email) return 'gmail.com'

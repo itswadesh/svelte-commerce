@@ -1,10 +1,3 @@
-<script context="module" lang="ts">
-export async function load({ session: { user, token } }) {
-	// fetchCart(token)
-	return { props: { user } }
-}
-</script>
-
 <script>
 import PageTransitions from '$lib/PageTransitions.svelte'
 import Nav from '$lib/Nav.svelte'
@@ -13,8 +6,9 @@ import MobFooter from '$lib/MobFooter.svelte'
 import { getStores, navigating, page } from '$app/stores'
 import { ToastContainer, FlatToast } from 'svelte-toasts'
 import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
-
-export let user
+export let data
+let { user } = data
+$: ({ user } = data)
 </script>
 
 {#if $navigating}
@@ -26,7 +20,7 @@ export let user
 	<slot />
 </div>
 
-<div class="fixed z-40 bottom-0 w-full  md:hidden">
+<div class="fixed bottom-0 z-40 w-full  md:hidden">
 	<MobFooter />
 </div>
 <!-- </PageTransitions> -->

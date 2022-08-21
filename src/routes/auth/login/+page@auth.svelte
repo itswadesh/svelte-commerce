@@ -6,26 +6,6 @@
 }
 </style>
 
-<script context="module" lang="ts">
-export async function load({ url, params, fetch, session, context }) {
-	const ref = url.searchParams.get('ref')
-	// if (session.me) {
-	// 	return {
-	// 		status: 302,
-	// 		redirect: ref || '/my'
-	// 	}
-	// }
-
-	return {
-		props: {
-			me: session.me,
-			store: session.store,
-			ref
-		}
-	}
-}
-</script>
-
 <script>
 import ImageLoader from '$lib/components/Image/ImageLoader.svelte'
 import { browser } from '$app/env'
@@ -39,7 +19,9 @@ import { GQL_storeOne } from '$houdini'
 import Cookie from 'cookie-universal'
 import { onMount } from 'svelte'
 
-export let me, ref, store
+export let data
+let { me, ref, store } = data
+$: ({ me, ref, store } = data)
 // if (me?.active && browser) goto(`/my`)
 const seoProps = {
 	title: 'Login ',

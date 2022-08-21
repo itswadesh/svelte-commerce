@@ -5,50 +5,6 @@
 }
 </style>
 
-<script context="module">
-import Cookie from 'cookie-universal'
-const cookies = Cookie()
-
-export async function load({ url, params, fetch, session, context, cookie }) {
-	let err, count, products, facets, currentLocation
-	let currentPage = url.searchParams.get('page') || 1
-	let sort = url.searchParams.get('sort')
-	let searchData = url.searchParams.get('q')
-	let location = url.searchParams.get('location')
-	let query = url.searchParams
-
-	const geo = cookies.get('geo') || session?.geo // when navigated from home page vs this page refreshed
-
-	// url.searchParams.set('lat', geo?.lat)
-	// url.searchParams.set('lng', geo?.lng)
-	url.searchParams.delete('location')
-	currentLocation = geo?.selectedPrediction
-	try {
-		const res = await get(`products/es?${query.toString()}`)
-		products = res?.data
-		count = +res?.count
-		facets = res?.facets.all_aggs
-		err = !products ? 'No result found' : null
-	} catch (e) {
-	} finally {
-	}
-	return {
-		props: {
-			err,
-			count,
-			products,
-			url,
-			currentPage,
-			sort,
-			facets,
-			query,
-			searchData,
-			currentLocation
-		}
-	}
-}
-</script>
-
 <script>
 import { goto } from '$app/navigation'
 import { constructQry, constructURL2 } from '$lib/util'
@@ -63,7 +19,11 @@ import MobileFilters from './_MobileFilters.svelte'
 import ProductCard from '$lib/components/_ProductCard.svelte'
 import ProductCardEs from './_ProductCardEs.svelte'
 import { get } from '$lib/util/api'
-export let page, products, facets, query, count
+
+export let data
+let { page, products, facets, query, count } = data
+$: ({ page, products, facets, query, count } = data)
+
 const PAGE_SIZE = 30
 let showMobileFilter = false,
 	category = {},
@@ -128,7 +88,7 @@ function toggle(e) {
 				<Pagination count="{Math.ceil(count / 40)}" current="{+currentPage}" />
 			</div>
 			<div class="mt-20 lg:hidden">
-				<div class="fixed bottom-0 w-full py-2 text-center frosted">
+				<div class="frosted fixed bottom-0 w-full py-2 text-center">
 					<span class="font-bold ">{count}</span> products
 				</div>
 			</div>

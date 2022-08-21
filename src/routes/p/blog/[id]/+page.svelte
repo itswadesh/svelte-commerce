@@ -1,20 +1,3 @@
-<script context="module">
-export async function load({ url, params, fetch, session, context }) {
-	let blog, err
-	try {
-		await GQL_blog.fetch({ fetch, variables: { id: params.id } })
-		// console.log(res)
-	} catch (e) {
-		err = e
-		toast(e, 'error')
-	} finally {
-	}
-	return {
-		props: { err }
-	}
-}
-</script>
-
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
 import { toast } from '$lib/util'
@@ -27,7 +10,9 @@ const seoProps = {
 	metadescription: 'My Blogs'
 }
 
-export let err
+export let data
+let { err } = data
+$: ({ err } = data)
 
 $: blog = $GQL_blog.data.blog
 </script>

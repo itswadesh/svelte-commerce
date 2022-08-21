@@ -16,23 +16,6 @@
 }
 </style>
 
-<script context="module">
-import { houdiniClient } from '$graphql/client'
-houdiniClient.init()
-export async function load({ url, params, fetch, session, context }) {
-	const isHome = url.pathname === '/'
-	let me = session.me
-	return {
-		props: {
-			url,
-			me,
-			isHome,
-			store: session.store
-		}
-	}
-}
-</script>
-
 <script>
 import '../app.css'
 import { ToastContainer, FlatToast } from 'svelte-toasts'
@@ -42,7 +25,10 @@ import Nav from '$lib/Nav.svelte'
 import { loadingDelayed } from '$lib/store'
 import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 
-export let path, url, sort, me, isHome, store
+export let data
+let { path, url, sort, me, isHome, store } = data
+$: ({ path, url, sort, me, isHome, store } = data)
+
 let q
 </script>
 

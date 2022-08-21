@@ -1,27 +1,14 @@
-<script context="module" lang="ts">
-import type { Load } from '@sveltejs/kit'
-export const load: Load = async ({ url, fetch, session }) => {
-	let me = session.me
-	let store = session.store
-	if (!me) {
-		return {
-			redirect: `/auth/login?ref=${url.pathname}`,
-			status: 302
-		}
-	}
-	return {
-		props: { me, store, q: '' }
-	}
-}
-</script>
-
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
 import SidebarDashboard from './my/_SidebarDashboard.svelte'
 import Nav from '$lib/Nav.svelte'
 import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 import { navigating } from '$app/stores'
-export let me, store, q
+
+export let data
+let { url, me, isHome, store } = data
+$: ({ url, me, isHome, store } = data)
+
 const seoProps = {
 	title: 'Dashboard',
 	metadescription: 'Track your all process'

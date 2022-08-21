@@ -4,9 +4,9 @@
 import { onMount } from 'svelte'
 
 import { currency, store, date } from '$lib/util'
-import OrderTracking from './_OrderTracking.svelte'
+import OrderTracking from '../_OrderTracking.svelte'
 import { GQL_myOrderItems, GQL_orderItem } from '$houdini'
-import OrderListSkeleton from './_OrderListSkeleton.svelte'
+import OrderListSkeleton from '../_OrderListSkeleton.svelte'
 import { page } from '$app/stores'
 import PrimaryButtonRounded from '$lib/components/buttons/PrimaryButtonRounded.svelte'
 import TransparentButton from '$lib/components/buttons/TransparentButton.svelte'

@@ -2,20 +2,7 @@
 <style>
 </style>
 
-<script context="module" lang="ts">
-export async function load({ url, params, fetch }) {
-	let cart
-	try {
-		await GQL_cart.resetCache()
-		await GQL_cart.fetch({ fetch, variables: { store: store.id } })
-		return {
-			props: {}
-		}
-	} catch (e) {
-		throw Error(e)
-	}
-}
-</script>
+
 
 <script>
 import Textbox from '$lib/ui/Textbox.svelte'

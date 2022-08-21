@@ -1,14 +1,3 @@
-<script context="module" lang="ts">
-export async function load({ url, params, fetch }) {
-	let banners = []
-	// try {
-	// const settings = await get(`settings`)
-	// 	banners = settings.data.banners.slider
-	// } catch (e) {}
-	return { props: { banners } }
-}
-</script>
-
 <script>
 import Hero from '$lib/Hero.svelte'
 import { GQL_HOME, GQL_products } from '$houdini'
@@ -23,11 +12,10 @@ const seoProps = {
 	title: 'Svelte Commerce',
 	metadescription: 'Svelte Commerce as frontend and Misiki.io in backend '
 }
-export let banners,
-	featuredProducts = null,
-	hotProducts = null,
-	shoppoProducts = null,
-	loading
+
+export let data
+let { banners, featuredProducts = null, hotProducts = null, shoppoProducts = null, loading } = data
+$: ({ banners, featuredProducts = null, hotProducts = null, shoppoProducts = null, loading } = data)
 
 let heroBanners
 

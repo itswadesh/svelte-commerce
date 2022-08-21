@@ -1,23 +1,3 @@
-<script context="module" lang="ts">
-export async function load({ url, fetch, session }) {
-	if (!session?.me) {
-		return {
-			redirect: `/login?ref=${url.pathname}`,
-			status: 302
-		}
-	}
-
-	try {
-		await GQL_myWishlist.fetch({
-			fetch,
-			variables: { store: store.id },
-			settings: { cacheMs: 0 }
-		})
-	} catch (e) {}
-	return { props: {} }
-}
-</script>
-
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
 import { GQL_myWishlist, GQL_toggleWishlist } from '$houdini'
@@ -25,7 +5,11 @@ import WishlistProducts from '$lib/WishlistProducts.svelte'
 import { delay, store } from '$lib/util'
 import ImageLoader from '$lib/components/Image/ImageLoader.svelte'
 import { browser } from '$app/env'
-export let wishlist
+
+export let data
+let { wishlist } = data
+$: ({ wishlist } = data)
+
 const seoProps = {
 	title: 'Wishlist',
 	metadescription: 'Products you have wishlisted'

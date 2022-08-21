@@ -6,28 +6,7 @@
 }
 </style>
 
-<script context="module" lang="ts">
-export async function load({ url, params, fetch, session, context }) {
-	let ref, role
-	try {
-		ref = url.searchParams.get('ref')
-		role = url.searchParams.get('role') || 'user'
-	} catch (e) {
-		toast(e, 'error')
-	} finally {
-	}
-	return {
-		props: {
-			me: session.me,
-			store: session.store,
-			ref,
-			role
-		}
-	}
-}
-</script>
 
-<script>
 import { browser } from '$app/env'
 import { goto } from '$app/navigation'
 import { getUser, signUp } from '$lib/services'
@@ -42,7 +21,9 @@ import { GQL_storeOne } from '$houdini'
 import Cookie from 'cookie-universal'
 import { onMount } from 'svelte'
 
-export let me, ref, role, store
+export let data
+let {   me, ref, role, store } = data
+$: ({   me, ref, role, store } = data)
 
 if (browser && me?.active) goto(`/my`)
 
