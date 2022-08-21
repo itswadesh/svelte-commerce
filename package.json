@@ -2,7 +2,6 @@
   "name": "svelte-commerce",
   "version": "2022.05.10",
   "scripts": {
-    "prepare": "svelte-kit sync && npm run gen",
     "dev": "vite dev --port 3000",
     "gen": "npm run gen:houdini",
     "gen:houdini": "houdini generate",
@@ -71,7 +70,6 @@
     "@kitql/all-in": "0.7.7",
     "cookie": "^0.5.0",
     "cross-env": "7.0.3",
-    "dayjs": "^1.11.1",
     "dotenv": "^16.0.1",
     "graphql": "16.5.0",
     "graphql-tag": "^2.12.6",
