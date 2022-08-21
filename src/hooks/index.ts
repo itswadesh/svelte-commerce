@@ -15,7 +15,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 	if (cookies.store) store = cookies.store && JSON.parse(cookies.store)
 	try {
 		const INIT = (await GQL_INIT.fetch({ event, fetch, variables: { domain } })).data
-		console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', INIT)
 		store = store = INIT?.storeOne
 		settings = INIT?.settings
 		megamenu = INIT?.megamenu
@@ -25,7 +24,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			token = cookies.token
 		}
 	} catch (e) {
-		console.log('eeeeeeeeeeeeeee', e)
+		console.log('hOOKS ERR...', e)
 	}
 	if (event.url.searchParams.has('_method')) {
 		event.method = event.url.searchParams.get('_method').toUpperCase()
