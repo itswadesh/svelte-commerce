@@ -24,7 +24,7 @@ async function refreshCart() {
 	// await GQL_cart.fetch({ variables: { store: store.id }, settings: { policy: 'network-only' } })
 }
 async function addToCart({ pid, vid, options, qty }) {
-	const optiData = $GQL_cart.data
+	const optiData = $GQL_cart?.data
 	optiData.cart.currencyCode = `Removing items...`
 	loading = true
 	const addToCartRes = await GQL_addToCart.mutate({

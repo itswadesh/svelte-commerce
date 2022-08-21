@@ -2,8 +2,6 @@
 <style>
 </style>
 
-
-
 <script>
 import Textbox from '$lib/ui/Textbox.svelte'
 import Cartlist from './_Cartlist.svelte'
@@ -34,7 +32,7 @@ async function refreshCart() {
 async function addToCart({ detail }) {
 	const { pid, vid, options } = detail.item
 	const qty = detail.qty
-	const optiData = $GQL_cart.data
+	const optiData = $GQL_cart?.data
 	optiData.cart.currencyCode = `Removing items...`
 	const addToCartRes = await GQL_addToCart.mutate({
 		variables: { pid, qty, vid, options }

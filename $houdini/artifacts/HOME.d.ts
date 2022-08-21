@@ -78,7 +78,6 @@ export type HOME$result = {
         readonly page: number | null,
         readonly pageSize: number | null,
         readonly data: ({
-            readonly id: string,
             readonly link: string | null,
             readonly heading: string | null,
             readonly img: string | null,

@@ -13,8 +13,10 @@ import TransparentButton from '$lib/components/buttons/TransparentButton.svelte'
 import ProductDetailSkeleton from './_ProductDetailSkeleton.svelte'
 import Errors from '$lib/components/alerts/Errors.svelte'
 import { browser } from '$app/env'
-$: browser && GQL_productSlug.fetch()
+import SEO from '$lib/components/SEO/index.svelte'
 
+$: browser && GQL_productSlug.fetch()
+export let data
 let CartButtonText = 'Add To Cart'
 $: product = $GQL_productSlug.data?.productSlug
 async function addToBag(product) {
@@ -32,9 +34,9 @@ const breadcrumbs = [
 		slug: product?.slug
 	}
 ]
-const { author } = authorInfo
+const { author } = data.authorInfo
 const entityMeta = {
-	url: `${WWW_URL}/`,
+	url: `${data.WWW_URL}/`,
 	faviconWidth: 512,
 	faviconHeight: 512,
 	caption: author
