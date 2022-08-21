@@ -11,7 +11,7 @@ export async function load({ url, params, fetch, session, context }) {
 	let signature = url.searchParams.get('signature') || ''
 	const me = session.me
 	try {
-		const ve = await KQL_VerifyEmail.mutate({
+		const ve = await GQL_VerifyEmail.mutate({
 			variables: {
 				id,
 				token,
@@ -47,7 +47,7 @@ export async function load({ url, params, fetch, session, context }) {
 
 <script>
 import { goto } from '$app/navigation'
-import { KQL_ResendEmail, KQL_VerifyEmail } from '$lib/graphql/_kitql/graphqlStores'
+import { GQL_ResendEmail, GQL_VerifyEmail } from '$houdini'
 import HeadingUnderline from '$lib/HeadingUnderline.svelte'
 import { onMount } from 'svelte'
 import { store, toast } from '$lib/util'
@@ -65,7 +65,7 @@ function findEmailDomain(email) {
 }
 async function resendEmail() {
 	try {
-		const data = await KQL_ResendEmail.mutate({
+		const data = await GQL_ResendEmail.mutate({
 			fetch,
 			variables: {
 				email: me?.email

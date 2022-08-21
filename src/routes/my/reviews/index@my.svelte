@@ -2,7 +2,7 @@
 import { onMount } from 'svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import { date, currency } from '$lib/util'
-import { KQL_Reviews } from '$lib/graphql/_kitql/graphqlStores'
+import { GQL_Reviews } from '$houdini'
 
 const seoProps = {
 	title: 'Reviews',
@@ -18,7 +18,7 @@ onMount(() => {
 	getReviews()
 })
 async function getReviews() {
-	reviews = (await KQL_Reviews.query()).data?.reviews
+	reviews = (await GQL_Reviews.fetch()).data?.reviews
 }
 </script>
 

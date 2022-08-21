@@ -1,6 +1,6 @@
 <script>
 import { goto } from '$app/navigation'
-import { KQL_DeleteAddress, KQL_MyAddresses } from '$lib/graphql/_kitql/graphqlStores'
+import { GQL_DeleteAddress, GQL_MyAddresses } from '$houdini'
 import AddressSkeleton from './_AddressSkeleton.svelte'
 import { createEventDispatcher } from 'svelte'
 
@@ -19,7 +19,7 @@ async function remove(id) {
 	if (confirm('Are you sure to delete?')) {
 		try {
 			removing = true
-			await KQL_DeleteAddress.mutate({
+			await GQL_DeleteAddress.mutate({
 				variables: {
 					id: id
 				}

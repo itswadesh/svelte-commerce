@@ -19,7 +19,7 @@ export async function load({ url, params, fetch, session, context }) {
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
 import ImageLoader from '$lib/components/Image/ImageLoader.svelte'
-import { KQL_StoreOne } from '$lib/graphql/_kitql/graphqlStores'
+import { GQL_StoreOne } from '$houdini'
 import { onMount } from 'svelte'
 
 const seoProps = {
@@ -28,7 +28,7 @@ const seoProps = {
 }
 
 onMount(async () => {
-	// await KQL_StoreOne.query({ variables: { id: store?.id } })
+	// await GQL_StoreOne.fetch({ variables: { id: store?.id } })
 })
 
 let loading = false

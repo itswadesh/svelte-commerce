@@ -8,7 +8,7 @@
 import Textbox from '$lib/ui/Textbox.svelte'
 import { toast } from '$lib/util'
 import { onMount } from 'svelte'
-import { KQL_Me, KQL_UpdateProfile } from '$lib/graphql/_kitql/graphqlStores'
+import { GQL_Me, GQL_UpdateProfile } from '$houdini'
 
 let errors = {},
 	valid = true,
@@ -16,12 +16,12 @@ let errors = {},
 	user = null,
 	showImageModal = false
 onMount(async () => {
-	const userDetails = (await KQL_Me.query()).data?.me
+	const userDetails = (await GQL_Me.fetch()).data?.me
 	profile = Object.assign({}, userDetails)
 })
 function save(profile) {
 	try {
-		KQL_UpdateProfile.mutate({ variables: profile })
+		GQL_UpdateProfile.mutate({ variables: profile })
 		toast('Profile saved successfullly', 'success')
 	} catch (e) {
 		toast(e, 'error')

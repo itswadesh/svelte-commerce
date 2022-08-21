@@ -2,15 +2,16 @@
   "name": "svelte-commerce",
   "version": "2022.05.10",
   "scripts": {
-    "dev": "svelte-kit dev --host",
-    "gen": "graphql-codegen --require dotenv/config",
-    "build": "cross-env NODE_OPTIONS=--max-old-space-size=7680 NODE_ENV=production svelte-kit build",
+    "prepare": "svelte-kit sync && npm run gen",
+    "dev": "vite dev --port 3000",
+    "gen": "pnpm gen:houdini",
+    "gen:houdini": "sudo houdini generate",
+    "build": "cross-env NODE_OPTIONS=--max-old-space-size=7680 NODE_ENV=production vite build",
     "copy": "node devops/copy",
     "liveS": "node devops/live",
     "prod": "run-s build copy",
     "live": "run-s build copy liveS",
     "start-node": "cross-env NODE_ENV=production node build/index.js",
-    "package": "svelte-kit package",
     "start": "cross-env HOST=0.0.0.0 svelte-kit preview --host -p 2020",
     "quality": "npm run quality:eslint && npm run quality:prettier && npm run quality:ts",
     "quality:fix": "prettier --ignore-path .gitignore --write --plugin-search-dir=. . && npm run quality:eslint --fix",
@@ -18,11 +19,10 @@
     "quality:prettier": "prettier --ignore-path .gitignore --check --plugin-search-dir=. .",
     "quality:ts": "svelte-check --tsconfig ./tsconfig.json",
     "quality:ts:w": "npm run quality:ts --watch",
-    "update": "npm exec -- npx ncu -u -p yarn"
+    "update": "npm exec -- npx npm-check-updates -u -p pnpm"
   },
   "devDependencies": {
     "@fontsource/fira-mono": "^4.5.8",
-    "@kitql/client": "^0.5.12",
     "@kitql/vite-plugin-watch-and-run": "^0.4.2",
     "@playwright/test": "^1.20.0",
     "@silintl/svelte-google-places-autocomplete": "1.1.6",
@@ -37,6 +37,7 @@
     "autoprefixer": "^10.4.5",
     "cl-editor": "^2.3.0",
     "cssnano": "^5.1.7",
+    "houdini": "0.15.9",
     "npm-run-all": "4.1.5",
     "postcss": "^8.4.12",
     "postcss-cli": "^9.1.0",
@@ -65,20 +66,19 @@
     "tslib": "^2.4.0",
     "typescript": "^4.6.3"
   },
-  "type": "module",
   "dependencies": {
     "@beyonk/async-script-loader": "^2.0.0",
     "@beyonk/svelte-googlemaps": "3.2.0",
-    "@kitql/all-in": "0.6.3",
+    "@kitql/all-in": "0.7.7",
     "@supabase/supabase-js": "1.35.2",
     "@sveltejs/adapter-node": "next",
-    "@sveltejs/kit": "1.0.0-next.324",
+    "@sveltejs/kit": "1.0.0-next.384",
     "cookie": "^0.5.0",
     "cookie-universal": "^2.1.5",
     "cross-env": "7.0.3",
     "dayjs": "^1.11.1",
     "dotenv": "^16.0.1",
-    "graphql": "16.3.0",
+    "graphql": "16.5.0",
     "graphql-tag": "^2.12.6",
     "hash-it": "^5.0.2",
     "leaflet": "^1.8.0",
@@ -87,6 +87,10 @@
     "svelte-preprocess": "^4.10.6",
     "universal-cookie": "^4.0.4",
     "uuid": "8.3.2",
-    "vite": "^2.9.14"
+    "vite": "^3.0.2"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=16.0.0"
   }
 }

@@ -9,7 +9,7 @@ img.loaded {
 }
 </style>
 
-<style>
+<script>
 export let src
 export let alt
 
@@ -23,6 +23,6 @@ onMount(() => {
 		loaded = true
 	}
 })
-</style>
+</script>
 
 <img src="{src}" alt="{alt}" class:loaded bind:this="{thisImage}" loading="lazy" />

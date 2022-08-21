@@ -7,7 +7,7 @@ export async function load({ url, params, fetch, session, context }) {
 		ads = { id: 'new' }
 	} else {
 		ads = (
-			await KQL_Address.query({ fetch, variables: { id: addressId }, settings: { cacheMs: 0 } })
+			await GQL_Address.fetch({ fetch, variables: { id: addressId }, settings: { cacheMs: 0 } })
 		).data?.address
 	}
 	return { props: { err, ads } }
@@ -18,21 +18,18 @@ export async function load({ url, params, fetch, session, context }) {
 import GradiantButton from '$lib/ui/GradiantButton.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 import BackButton from '$lib/ui/BackButton.svelte'
-import {
-	KQL_Address,
-	KQL_SaveAddress,
-	KQL_States,
-	KQL_StoreCountries
-} from '$lib/graphql/_kitql/graphqlStores'
+import { GQL_Address, GQL_SaveAddress, GQL_States, GQL_StoreCountries } from '$houdini'
 import Error from '$lib/Error.svelte'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { store, toast } from '$lib/util'
 import AutoComplete from 'simple-svelte-autocomplete'
 import Select from 'svelte-select'
-import { stringify } from 'postcss'
+import { browser } from '$app/env'
 
-$: ads = $KQL_Address.data?.address || {}
+$: browser && GQL_Address.fetch()
+
+$: ads = $GQL_Address.data?.address || {}
 let err,
 	loading = false,
 	formChanged = false,
@@ -56,7 +53,7 @@ async function save(ads) {
 	} = ads
 	try {
 		loading = true
-		const { data, errors } = await KQL_SaveAddress.mutate({
+		const { data, errors } = await GQL_SaveAddress.mutate({
 			variables: {
 				id,
 				firstName,
@@ -83,14 +80,14 @@ async function save(ads) {
 	}
 }
 onMount(async () => {
-	await KQL_StoreCountries.query({ variables: { store: store?.id, page: 0, limit: 300 } })
+	await GQL_StoreCountries.fetch({ variables: { store: store?.id, page: 0, limit: 300 } })
 	// selectedCountry = countries[0]
-	// await KQL_Cities.query({ variables: { limit: 300, page: 0, country: ads.country } })
-	await KQL_States.query({
+	// await GQL_Cities.fetch({ variables: { limit: 300, page: 0, country: ads.country } })
+	await GQL_States.fetch({
 		variables: { limit: 300, page: 0, countryCode: ads?.country?.code || ads?.country }
 	})
 	selectedState = { name: ads?.state }
-	const adsCountryA = $KQL_StoreCountries.data?.storeCountries?.data.filter(
+	const adsCountryA = $GQL_StoreCountries.data?.storeCountries?.data.filter(
 		(c) => c.code === ads.country
 	)
 	if (adsCountryA) {
@@ -100,14 +97,14 @@ onMount(async () => {
 
 async function onCountryChange() {
 	// selectedCountry = ads.country
-	// await KQL_Cities.query({
+	// await GQL_Cities.fetch({
 	// 	variables: { limit: 300, page: 0, country: ads.country },
 	// 	settings: { policy: 'network-only' }
 	// })
 	if (adsCountry) {
 		ads.country = adsCountry.code ? adsCountry.code : adsCountry
 		formChanged = true
-		await KQL_States.query({
+		await GQL_States.fetch({
 			variables: { limit: 300, page: 0, countryCode: ads.country },
 			settings: { policy: 'network-only' }
 		})
@@ -119,8 +116,8 @@ const seoProps = {
 	metadescription: 'Add Address '
 }
 
-$: allCountries = $KQL_StoreCountries.data?.storeCountries
-$: allStates = $KQL_States.data?.states?.data
+$: allCountries = $GQL_StoreCountries.data?.storeCountries
+$: allStates = $GQL_States.data?.states?.data
 let stateName = ads?.state
 function stateChanged({ detail }) {
 	console.log('state changed', detail)
@@ -199,8 +196,8 @@ function stateChanged({ detail }) {
 							bind:value="{ads.state}"
 							on:input="{() => (formChanged = true)}">
 							<option value="" selected>-- Select a State --</option>
-							{#if $KQL_States.data?.states.data && $KQL_States.data?.states.data.length}
-								{#each $KQL_States.data?.states.data as c}
+							{#if $GQL_States.data?.states.data && $GQL_States.data?.states.data.length}
+								{#each $GQL_States.data?.states.data as c}
 									{#if c}
 										<option value="{c.name}">
 											{c.name}
@@ -213,7 +210,7 @@ function stateChanged({ detail }) {
 				{/if} -->
 				<div>
 					<h6 class="mb-2 font-semibold">Country</h6>
-					{#if $KQL_StoreCountries.isFetching}
+					{#if $GQL_StoreCountries.isFetching}
 						Loading Countries...
 					{:else if allCountries?.count}
 						<Select

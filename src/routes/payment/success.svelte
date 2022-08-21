@@ -12,8 +12,12 @@ import { onMount } from 'svelte'
 
 import OrderAddressDetails from './_OrderAddressDetails.svelte'
 import OrderSuccessSkeleton from './_OrderSuccessSkeleton.svelte'
-import { KQL_MyOrders, KQL_PaySuccessPageHit } from '$lib/graphql/_kitql/graphqlStores'
+import { GQL_MyOrders, GQL_PaySuccessPageHit } from '$houdini'
+import { browser } from '$app/env'
+import { GQL_paySuccessPageHit } from '$houdini'
 export let id
+$: browser && GQL_paySuccessPageHit.fetch()
+
 onMount(() => {
 	refresh()
 })
@@ -22,7 +26,7 @@ let order = null,
 async function refresh() {
 	try {
 		loading = true
-		order = (await KQL_PaySuccessPageHit.mutate({ variables: { orderId: id } })).data
+		order = (await GQL_PaySuccessPageHit.mutate({ variables: { orderId: id } })).data
 			.paySuccessPageHit
 	} catch (e) {
 	} finally {
@@ -79,87 +83,87 @@ const seoProps = {
 						<div>
 							<h3
 								class="
-                  flex flex-row
+                  mt-1 flex
+                  flex-row
                   justify-center
-                  mt-1
                   font-medium
                   lg:justify-start
                 ">
 								<div class="text-gray-500 me-2">Order Number:</div>
-								<div class="underline text-secondary-500 underline-secondary-500">
+								<div class="underline-secondary-500 text-secondary-500 underline">
 									{order.orderNo}
 								</div>
 							</h3>
 							<div
 								class="
-                  flex flex-col
+                  flex w-full
+                  flex-col
                   justify-center
-                  w-full
-                  lg:justify-between
-                  lg:flex-row
                   py-7
+                  lg:flex-row
+                  lg:justify-between
                 ">
 								<div
 									class="
                     w-full
+                    text-center
                     text-sm
-                    font-light
-                    text-center text-gray-500
-                    lg:text-start
+                    font-light text-gray-500
                     lg:w-3/5
+                    lg:text-start
                   ">
 									Your Order was place on <b>{date(order.createdAt)}</b> . A Confirmation e-mail will
 									be sent to the e-mail Address(es) that you specified in Order details.
 								</div>
-								<div class="flex flex-row justify-center mt-6 text-sm lg:mt-0">
+								<div class="mt-6 flex flex-row justify-center text-sm lg:mt-0">
 									<a
 										href="/my/orders"
 										class="
-                        p-2
-                        text-white
-                        bg-primary-500
-                        border-primary-500 border
-                        rounded
-                        shadow
-                        px-4
-                        lg:px-3
-                        lg:p-2
-                        focus:outline-none
-                        duration-200
-                        hover:-translate-y-0.5
-                        transition
                         transform
+                        rounded
+                        border
+                        border-primary-500 bg-primary-500
+                        p-2
+                        px-4
+                        text-white
+                        shadow
+                        transition
+                        duration-200
                         ease-in-out
-                        focus:ring-opacity-50
+                        hover:-translate-y-0.5
+                        focus:outline-none
                         focus:ring
-                        focus:ring-offset-2
                         focus:ring-primary-500
+                        focus:ring-opacity-50
+                        focus:ring-offset-2
+                        lg:p-2
+                        lg:px-3
                       ">
 										View Order Details
 									</a>
 									<a
 										href="/"
 										class="
-                        p-2
-                        my-auto
-                        ms-4
                         text-secondary-200
-                        border border-secondary-200
-                        rounded
-                        shadow
-                        focus:outline-none
-                        md:py-2
-                        px-4
-                        lg:px-3
-                        lg:p-2
-                        duration-200
-                        hover:-translate-y-0.5
-                        transition
-                        transform
-                        ease-in-out
-                        focus:ring-opacity-50
+                        border-secondary-200
                         hover:opacity-8
-                        focus:ring focus:ring-offset-2 focus:ring-green-500
+                        my-auto
+                        transform rounded
+                        border
+                        p-2
+                        px-4
+                        shadow
+                        transition
+                        duration-200
+                        ease-in-out
+                        ms-4
+                        hover:-translate-y-0.5
+                        focus:outline-none
+                        focus:ring
+                        focus:ring-green-500
+                        focus:ring-opacity-50
+                        focus:ring-offset-2
+                        md:py-2 lg:p-2 lg:px-3
                       ">
 										Continue Shopping
 									</a>
@@ -168,24 +172,24 @@ const seoProps = {
 							<div>
 								<div class="my-4 font-medium text-gray-700">Item Details</div>
 								{#each order.items as item}
-									<div class="flex flex-row justify-between w-full pb-6 lg:pb-0">
-										<div class="flex flex-row w-full my-3">
+									<div class="flex w-full flex-row justify-between pb-6 lg:pb-0">
+										<div class="my-3 flex w-full flex-row">
 											<a href="{`/${item?.slug}?id=${item?.pid}`}" class="">
-												<img src="{item?.imgCdn}" alt="" class="object-cover border w-28" />
+												<img src="{item?.imgCdn}" alt="" class="w-28 border object-cover" />
 											</a>
-											<div class="relative flex flex-col w-4/5 ms-3 lg:w-10/12">
+											<div class="relative flex w-4/5 flex-col ms-3 lg:w-10/12">
 												<a
 													href="{`/${item?.slug}?id=${item?.pid}`}"
-													class="text-base font-normal text-gray-600 truncate">
+													class="truncate text-base font-normal text-gray-600">
 													{item?.name}
 												</a>
 												<div
 													class="
+                          mt-2
                           flex
+                          w-full
                           items-center
                           justify-start
-                          w-full
-                          mt-2
                           text-sm
                           font-medium
                           text-gray-500
@@ -194,9 +198,9 @@ const seoProps = {
 													<div
 														class="
                             flex flex-row
+                            justify-self-end
                             text-base
                             font-medium
-                            justify-self-end
                             md:my-auto
                           ">
 														<div class="font-light text-gray-400 me-1">Price:</div>

@@ -35,7 +35,7 @@ import GradiantButton from '$lib/ui/GradiantButton.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import { page, session } from '$app/stores'
-import { KQL_StoreOne } from '$lib/graphql/_kitql/graphqlStores'
+import { GQL_StoreOne } from '$houdini'
 import Cookie from 'cookie-universal'
 import { onMount } from 'svelte'
 
@@ -50,7 +50,7 @@ const cookies = Cookie()
 // let store = cookies.get('store')
 
 onMount(async () => {
-	// await KQL_StoreOne.query({ variables: { id: store?.id } })
+	// await GQL_StoreOne.fetch({ variables: { id: store?.id } })
 })
 
 let loading = false

@@ -8,16 +8,16 @@
 <script>
 import { currency, toast } from './util'
 import { lazyload } from './../actions/lazyload'
-import { KQL_AddToCart, KQL_MyWishlist, KQL_ToggleWishlist } from './graphql/_kitql/graphqlStores'
+import { GQL_AddToCart, GQL_MyWishlist, GQL_ToggleWishlist } from '$houdini'
 let CartButtonText = 'MOVE TO BAG'
 
 function addToBag(product, variant) {
-	KQL_AddToCart.mutate({ variables: { pid: product.id, vid: product.id, qty: 1 } })
+	GQL_AddToCart.mutate({ variables: { pid: product.id, vid: product.id, qty: 1 } })
 	CartButtonText = 'GO TO BAG'
 }
 async function removeFromWishlist(id) {
-	await KQL_ToggleWishlist.mutate({ variables: { product: id, variant: id } })
-	wishlist = (await KQL_MyWishlist.query()).data?.myWishlist
+	await GQL_ToggleWishlist.mutate({ variables: { product: id, variant: id } })
+	wishlist = (await GQL_MyWishlist.fetch()).data?.myWishlist
 	toast('Removed from wishlist', 'success')
 }
 export let wishlist
@@ -85,7 +85,7 @@ export let wishlist
 							{:else}
 								<a
 									href="/cart"
-									class="block text-center bg-purple-800 py-2 w-full font-semibold tracking-wide text-white transform  rounded-md hover:scale-105 focus:outline-none">
+									class="block w-full transform rounded-md bg-purple-800 py-2 text-center font-semibold tracking-wide  text-white hover:scale-105 focus:outline-none">
 									<span>
 										{CartButtonText}
 									</span>

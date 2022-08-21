@@ -7,7 +7,9 @@
 
 <script context="module" lang="ts">
 import Cookie from 'cookie-universal'
+import { houdiniClient } from '$graphql/client'
 const coookies = Cookie()
+houdiniClient.init()
 export async function load({ url, params, fetch, session, context }) {
 	const isHome = url.pathname === '/'
 	let currentPage = url.searchParams.get('page') || 1
@@ -19,7 +21,7 @@ export async function load({ url, params, fetch, session, context }) {
 		// let res = await fetch(uri.toString(), { method: 'get' })
 		// if (res.ok) {
 		// 	let store = await res.json()
-		const storeOne = (await KQL_StoreOne.query({ fetch, variables: { domain } })).data.storeOne
+		const storeOne = (await GQL_StoreOne.fetch({ fetch, variables: { domain } })).data.storeOne
 		const { id, email, address, phone, websiteName, websiteLegalName } = storeOne
 		coookies.set(
 			'store',
@@ -51,8 +53,10 @@ import { signOut, getUser } from '$lib/services'
 import { browser } from '$app/env'
 import { getStores, navigating, page, session } from '$app/stores'
 import Footer from '$lib/Footer.svelte'
-import { KQL_StoreOne, KQL__Init } from '$lib/graphql/_kitql/graphqlStores'
-KQL__Init()
+
+import { GQL_StoreOne } from '$houdini'
+
+$: browser && GQL_StoreOne.fetch()
 
 let url
 // redirect if not already logged in

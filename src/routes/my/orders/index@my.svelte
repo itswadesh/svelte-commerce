@@ -2,7 +2,7 @@
 import { onMount } from 'svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import { date, currency, store } from '$lib/util'
-import { KQL_MyOrders } from '$lib/graphql/_kitql/graphqlStores'
+import { GQL_MyOrders } from '$houdini'
 
 const seoProps = {
 	title: 'Orders',
@@ -17,9 +17,9 @@ onMount(() => {
 	getOrders()
 })
 async function getOrders() {
-	await KQL_MyOrders.queryLoad({ variables: { store: store.id } })
+	await GQL_MyOrders.fetch({ variables: { store: store.id } })
 }
-$: orders = $KQL_MyOrders.data?.myOrders
+$: orders = $GQL_MyOrders.data?.myOrders
 </script>
 
 <SEO {...seoProps} />
@@ -28,7 +28,7 @@ $: orders = $KQL_MyOrders.data?.myOrders
 	<h1 class="text-lg  font-bold sm:text-xl">
 		<span class="mr-1">My orders</span>{#if orders?.count}( {orders?.count} ){/if}
 	</h1>
-	{#if $KQL_MyOrders.isFetching}
+	{#if $GQL_MyOrders.isFetching}
 		Finding your Orders...
 	{:else if orders?.count}
 		{#each orders?.data as order}

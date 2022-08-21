@@ -5,7 +5,7 @@ import { onMount } from 'svelte'
 
 import { currency, store, date } from '$lib/util'
 import OrderTracking from './_OrderTracking.svelte'
-import { KQL_MyOrderItems, KQL_OrderItem } from '$lib/graphql/_kitql/graphqlStores'
+import { GQL_MyOrderItems, GQL_OrderItem } from '$houdini'
 import OrderListSkeleton from './_OrderListSkeleton.svelte'
 import { page } from '$app/stores'
 import PrimaryButtonRounded from '$lib/components/buttons/PrimaryButtonRounded.svelte'
@@ -36,7 +36,7 @@ async function getData() {
 	loading = true
 	try {
 		order = (
-			await KQL_OrderItem.query({
+			await GQL_OrderItem.fetch({
 				variables: { id: $page.url.searchParams.get('itemId') }
 			})
 		).data?.orderItem
@@ -55,7 +55,7 @@ function isReplaceOrReturn() {
 </script>
 
 <div class="{clazz}">
-	{#if $KQL_OrderItem.isFetching}
+	{#if $GQL_OrderItem.isFetching}
 		<OrderListSkeleton />
 	{:else if order}
 		<section class="text-gray-800">

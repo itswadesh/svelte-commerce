@@ -1,7 +1,7 @@
 import cookie, { serialize } from 'cookie'
 import type { Handle } from '@sveltejs/kit'
 import { DOMAIN } from '$lib/config'
-import { KQL_Init } from '$lib/graphql/_kitql/graphqlStores'
+import { GQL_INIT } from '$houdini'
 import { v4 as uuidv4 } from 'uuid'
 
 export const handle: Handle = async ({ event, resolve }) => {
@@ -13,7 +13,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	domain = DOMAIN || request.headers.get('host')
 	if (cookies.store) store = cookies.store && JSON.parse(cookies.store)
 	try {
-		const INIT = (await KQL_Init.query({ fetch, variables: { domain } })).data
+		const INIT = (await GQL_INIT.fetch({ fetch, variables: { domain } })).data
 		store = store = INIT?.storeOne
 		settings = INIT?.settings
 		megamenu = INIT?.megamenu

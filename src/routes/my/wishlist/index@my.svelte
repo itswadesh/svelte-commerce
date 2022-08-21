@@ -2,8 +2,7 @@
 import { onMount } from 'svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import { date, currency } from '$lib/util'
-import { KQL_MyWishlist } from '$lib/graphql/_kitql/graphqlStores'
-import { stringify } from 'postcss'
+import { GQL_MyWishlist } from '$houdini'
 import WishlistProducts from '$lib/WishlistProducts.svelte'
 
 const seoProps = {
@@ -20,7 +19,7 @@ onMount(() => {
 	getWishlists()
 })
 async function getWishlists() {
-	wishlists = (await KQL_MyWishlist.query()).data?.myWishlist
+	wishlists = (await GQL_MyWishlist.fetch()).data?.myWishlist
 }
 </script>
 

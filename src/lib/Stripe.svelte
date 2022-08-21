@@ -5,7 +5,7 @@ import { post } from '$lib/util/api'
 
 import { onMount } from 'svelte'
 import GradiantButton from '$lib/ui/GradiantButton.svelte'
-import { KQL_Stripe } from '$lib/graphql/_kitql/graphqlStores'
+import { GQL_Stripe } from '$houdini'
 import { goto } from '$app/navigation'
 
 let stripeReady = false
@@ -53,7 +53,7 @@ const payWithStripe = async (pm) => {
 		loading = true
 		toast('Contacting Payment Server...', 'warning')
 		const paymentMethodId = pm.id
-		const resStripe = await KQL_Stripe.mutate({
+		const resStripe = await GQL_Stripe.mutate({
 			variables: {
 				paymentMethodId,
 				address

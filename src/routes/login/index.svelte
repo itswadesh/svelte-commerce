@@ -24,7 +24,7 @@ import SEO from '$lib/components/SEO/index.svelte'
 import { toast } from '$lib/util'
 import { signIn } from '$lib/services'
 import { browser } from '$app/env'
-import { KQL_Login } from '$lib/graphql/_kitql/graphqlStores'
+import { GQL_Login } from '$houdini'
 export let ref
 const seoProps = {
 	title: 'Login',

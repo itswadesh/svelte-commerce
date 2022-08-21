@@ -2,7 +2,7 @@
 import ImageLoader from '$lib/components/Image/ImageLoader.svelte'
 
 import { CDN_URL } from '$lib/config'
-import { KQL_AddToCart, KQL_Cart } from '$lib/graphql/_kitql/graphqlStores'
+import { GQL_AddToCart, GQL_cart } from '$houdini'
 import { createEventDispatcher } from 'svelte'
 import { currency, store, toast } from '$lib/util'
 const dispatch = createEventDispatcher()
@@ -86,7 +86,7 @@ async function addToBag(item, qty) {
 
 				<div
 					class="mx-2 flex h-6 w-6 items-center justify-center text-xs font-bold sm:h-8  sm:w-8  ">
-					{#if $KQL_AddToCart?.isFetching || $KQL_Cart.isFetching}
+					{#if $GQL_AddToCart?.isFetching || $GQL_cart.isFetching}
 						<img
 							src="/dots-loading.gif"
 							alt="loading"

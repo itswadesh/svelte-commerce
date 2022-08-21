@@ -10,7 +10,7 @@ import { goto } from '$app/navigation'
 import ImageLoader from '$lib/components/Image/ImageLoader.svelte'
 import Cookie from 'cookie-universal'
 import { onMount } from 'svelte'
-import { KQL_PopularSearches } from './graphql/_kitql/graphqlStores'
+import { GQL_popularSearches } from '$houdini'
 const cookies = Cookie()
 
 const d = new Date()
@@ -19,7 +19,7 @@ let selectedCountry = 'fashion.misiki.io'
 let store = cookies.get('store')
 onMount(async () => {
 	// try {
-	// 	await KQL_PopularSearches.query({ variables: { domain: store.domain } })
+	// 	await GQL_PopularSearches.fetch({ variables: { domain: store.domain } })
 	// } catch (e) {}
 })
 function changeCountry() {

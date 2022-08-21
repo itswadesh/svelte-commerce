@@ -38,7 +38,7 @@ import SEO from '$lib/components/SEO/index.svelte'
 import { post } from '$lib/util/api'
 import { page, session } from '$app/stores'
 import ImageLoader from '$lib/components/Image/ImageLoader.svelte'
-import { KQL_StoreOne } from '$lib/graphql/_kitql/graphqlStores'
+import { GQL_StoreOne } from '$houdini'
 import Cookie from 'cookie-universal'
 import { onMount } from 'svelte'
 
@@ -55,7 +55,7 @@ const seoProps = {
 // let store = cookies.get('store')
 
 onMount(async () => {
-	// await KQL_StoreOne.query({ variables: { id: store?.id } })
+	// await GQL_StoreOne.fetch({ variables: { id: store?.id } })
 })
 
 let email = ''
