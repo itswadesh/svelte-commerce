@@ -8,7 +8,7 @@ async function fetchQuery({
 	session,
 	metadata
 }: RequestHandlerArgs) {
-	const url = import.meta.env.VITE_GRAPHQL_ENDPOINT || 'https://countries.trevorblades.com/graphql';
+	const url = import.meta.env.VITE_WWW_URL+'/graphql' || 'https://countries.trevorblades.com/graphql';
 
 	const result = await fetch(url, {
 		method: 'POST',

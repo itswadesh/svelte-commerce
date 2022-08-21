@@ -17,12 +17,10 @@ const config = {
 		fs: {
 			allow: ['.']
 		},
-		server: {
-			proxy: {
-				'/graphql': HTTP_ENDPOINT,
-				'/api': HTTP_ENDPOINT,
-				'/images': HTTP_ENDPOINT
-			}
+		proxy: {
+			'/graphql': HTTP_ENDPOINT,
+			'/api': HTTP_ENDPOINT,
+			'/images': HTTP_ENDPOINT
 		}
 	}
 }

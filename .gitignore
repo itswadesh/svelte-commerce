@@ -12,3 +12,6 @@ package-lock.json
 .netlify
 
 .vercel_build_output
+
+$houdini
+$kitql
