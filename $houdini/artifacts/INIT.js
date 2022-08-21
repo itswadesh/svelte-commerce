@@ -1,7 +1,7 @@
 export default {
     name: "INIT",
     kind: "HoudiniQuery",
-    hash: "439e6a25b51a503e55fc992b3a3e30ac6a4266dc0555a94dbeb8c61bd7eaa1e0",
+    hash: "2af9fc8bb701a6aaf407335fbfbddec7ef4f34dc501114a6593891872e08799a",
 
     raw: `query INIT($domain: String) {
   settings {
@@ -85,16 +85,6 @@ export default {
       index
     }
     paymentStatuses
-    paymentMethods {
-      active
-      name
-      value
-      img
-      color
-      position
-      text
-      id
-    }
     otpLogin
     sms {
       AUTO_VERIFICATION_ID
@@ -897,60 +887,6 @@ export default {
                     type: "String",
                     keyRaw: "paymentStatuses",
                     nullable: true
-                },
-
-                paymentMethods: {
-                    type: "PaymentMethod",
-                    keyRaw: "paymentMethods",
-                    nullable: true,
-
-                    fields: {
-                        active: {
-                            type: "Boolean",
-                            keyRaw: "active",
-                            nullable: true
-                        },
-
-                        name: {
-                            type: "String",
-                            keyRaw: "name"
-                        },
-
-                        value: {
-                            type: "String",
-                            keyRaw: "value",
-                            nullable: true
-                        },
-
-                        img: {
-                            type: "String",
-                            keyRaw: "img",
-                            nullable: true
-                        },
-
-                        color: {
-                            type: "String",
-                            keyRaw: "color",
-                            nullable: true
-                        },
-
-                        position: {
-                            type: "Int",
-                            keyRaw: "position",
-                            nullable: true
-                        },
-
-                        text: {
-                            type: "String",
-                            keyRaw: "text",
-                            nullable: true
-                        },
-
-                        id: {
-                            type: "String",
-                            keyRaw: "id"
-                        }
-                    }
                 },
 
                 otpLogin: {
@@ -2813,4 +2749,4 @@ export default {
     partial: false
 };
 
-"HoudiniHash=8c70da5aa6d53830eb4e42b828e8d4b111a4a9c784451c09421c7342ec559814";
+"HoudiniHash=35847a4bf7292db5a15ceaede0879628036a923c2d14621d13d0827d52415d2d";
