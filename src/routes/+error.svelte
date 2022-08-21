@@ -1,5 +1,6 @@
 <style>
 h1 {
+	font-size: 150px;
 	line-height: 150px;
 	font-weight: 700;
 	color: #252932;
@@ -9,37 +10,72 @@ h1 {
 </style>
 
 <script>
-import { dev } from '$app/env'
-
-export let status
-export let error
-
-const offline = typeof navigator !== 'undefined' && navigator.onLine === false
-
-const title = offline ? 'Offline' : status
-const message = offline ? 'Find the internet and try again' : error.message
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import { page } from '$app/stores'
 </script>
 
-<svelte:head>
-	<title>{title}</title>
-</svelte:head>
-<section class="min-h-screen px-8 py-1">
-	<div class="mx-auto border-b-4 border-gray-800 pb-4 text-center font-bold text-gray-800 lg:w-1/2">
-		<h1>Error {title}!</h1>
-		<div class="mt-3 border border-red-300 bg-red-200 px-4 py-2 text-red-500">
-			{message}
+<div class="flex h-[70vh] flex-col items-center justify-center text-center sm:h-[92vh]">
+	{#if $page.status === 404}
+		<div class="container">
+			<div class="flex justify-center text-center">
+				<img src="/error/404.svg" alt=" " width="240" class="mb-5 h-auto w-60 object-contain" />
+			</div>
+
+			<div class="layout">
+				<div class="flex flex-col items-center justify-center text-center">
+					<h1>404</h1>
+
+					<h2 class="headline my-3">Sorry, page not found</h2>
+				</div>
+			</div>
 		</div>
-	</div>
-	<div>
-		<a href="/" class="mt-4 block rounded px-4 py-2 text-center text-sm font-thin text-gray-700">
-			Misiki
+	{:else if $page.status === 403}
+		<div class="container">
+			<div class="layout">
+				<div class="flex justify-center text-center">
+					<img src="/error/404.svg" alt="" width="240" class="mb-5 h-auto w-60 object-contain" />
+				</div>
+
+				<div class="text-center">
+					<h1>403</h1>
+
+					<h2 class="headline my-3">Sorry, access denied.</h2>
+				</div>
+			</div>
+		</div>
+	{:else if $page.status === 500}
+		<div class="container">
+			<div class="layout">
+				<div class="flex justify-center text-center">
+					<img src="/error/404.svg" alt="" width="240" class="mb-5 h-auto w-60 object-contain" />
+				</div>
+
+				<div class="flex flex-col gap-5 text-center">
+					<h1>500</h1>
+
+					<h2 class="headline my-3">Sorry, the server is down.</h2>
+				</div>
+			</div>
+		</div>
+	{:else}
+		<div class="container">
+			<div class="layout">
+				<div class="flex justify-center text-center">
+					<img src="/error/404.svg" alt="" width="240" class="mb-5 h-auto w-60 object-contain" />
+				</div>
+
+				<div class="flex flex-col gap-5 text-center">
+					<h1>{$page.status || 500}</h1>
+
+					<h2 class="headline my-3">{$page.error?.message}</h2>
+				</div>
+			</div>
+		</div>
+	{/if}
+
+	<div class="mt-5 sm:mt-10">
+		<a href="/" aria-label="Click here to go back home">
+			<PrimaryButton class="px-10">Home</PrimaryButton>
 		</a>
 	</div>
-	<div class="mt-4 bg-gray-800 p-4 text-white">
-		{#if dev && error?.stack}
-			<pre>{error.stack}</pre>
-		{:else if dev}
-			<pre>{error}</pre>
-		{/if}
-	</div>
-</section>
+</div>

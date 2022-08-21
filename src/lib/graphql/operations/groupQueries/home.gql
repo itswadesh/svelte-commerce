@@ -73,7 +73,6 @@ query HOME($store: ID, $zip: String) {
 		page
 		pageSize
 		data {
-			id
 			link
 			heading
 			img
