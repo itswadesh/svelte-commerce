@@ -1,7 +1,7 @@
 export default {
     name: "HOME",
     kind: "HoudiniQuery",
-    hash: "1f224a4f55463ef57832477761c58f67727bb0494b6f005053c6c14f3fc11127",
+    hash: "5847b2405a290ab88fb9ad5c2cc39f334aa55b4e44cebd3b52327c7f1e374981",
 
     raw: `query HOME($store: ID, $zip: String) {
   brands(parent: null, limit: 30, page: 0, featured: true, store: $store) {
@@ -30,6 +30,10 @@ export default {
       googleUrl
       active
       featured
+      parent {
+        id
+        name
+      }
       store {
         id
         name
@@ -430,6 +434,25 @@ export default {
                             type: "Boolean",
                             keyRaw: "featured",
                             nullable: true
+                        },
+
+                        parent: {
+                            type: "Brand",
+                            keyRaw: "parent",
+                            nullable: true,
+
+                            fields: {
+                                id: {
+                                    type: "ID",
+                                    keyRaw: "id"
+                                },
+
+                                name: {
+                                    type: "String",
+                                    keyRaw: "name",
+                                    nullable: true
+                                }
+                            }
                         },
 
                         store: {
@@ -1770,4 +1793,4 @@ export default {
     partial: false
 };
 
-"HoudiniHash=1c04c832220461894ae9673e2a865ca2d1b8b2432df4a6cef9c9872a81912aa4";
+"HoudiniHash=70fc6ffa5efe628d4a535806875b080950270505dc1d6a0d6d32a48a45f656db";
