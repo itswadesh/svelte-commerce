@@ -25,7 +25,6 @@ function stopLoading() {
 }
 
 async function payWithCard(clientSecret, orderId) {
-	console.log('clientSecretzzzzzzzzzzzzzzzzzzzzzzzzzzz', clientSecret)
 	// This is for 3d authentication
 	try {
 		loading = true
@@ -143,7 +142,6 @@ function loadStripeElements() {
 	})
 	form.addEventListener('submit', function (event) {
 		loading = true
-		// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', form.elements['card'])
 		event.preventDefault()
 		// payWithStripe(card)
 		// var sourceData = {

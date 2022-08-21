@@ -1,5 +1,5 @@
-import type { RequestHandlerArgs } from '$houdini';
-import { HoudiniClient } from '$houdini';
+import type { RequestHandlerArgs } from '$houdini'
+import { HoudiniClient } from '$houdini'
 
 async function fetchQuery({
 	fetch,
@@ -8,8 +8,8 @@ async function fetchQuery({
 	session,
 	metadata
 }: RequestHandlerArgs) {
-	const url = import.meta.env.VITE_WWW_URL+'/graphql' || 'https://countries.trevorblades.com/graphql';
-
+	const url =
+		import.meta.env.VITE_WWW_URL + '/graphql' || 'https://countries.trevorblades.com/graphql'
 	const result = await fetch(url, {
 		method: 'POST',
 		headers: {
@@ -19,9 +19,8 @@ async function fetchQuery({
 			query: text,
 			variables
 		})
-	});
-
-	return await result.json();
+	})
+	return await result.json()
 }
 
-export const houdiniClient = new HoudiniClient(fetchQuery);
+export const houdiniClient = new HoudiniClient(fetchQuery)

@@ -1,7 +1,6 @@
 <script>
 import ImageLoader from './components/Image/ImageLoader.svelte'
 import { GQL_addToCart, GQL_cart } from '$houdini'
-import { cart } from '$houdini'
 import PrimaryButton from './ui/PrimaryButton.svelte'
 import { store, toast } from './util'
 import { fly } from 'svelte/transition'
