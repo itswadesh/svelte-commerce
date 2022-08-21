@@ -1,6 +1,6 @@
 import { get, post } from '$lib/util/api'
 import { goto } from '$app/navigation'
-import { page, session } from '$app/stores'
+import { page } from '$app/stores'
 import { delay, toast } from '$lib/util'
 import { WWW_URL } from './config'
 import Cookie from 'cookie-universal'
@@ -8,7 +8,7 @@ import { GQL_login, GQL_me, GQL_signOut } from '$houdini'
 const cookies = Cookie()
 
 export function getUser() {
-	return session.me
+	return user.me
 }
 
 export async function signUp({ email, password, firstName, lastName, confirmPassword, role }) {
@@ -99,7 +99,7 @@ export const signOut = async () => {
 
 export async function setStoreDetailsCookie() {
 	try {
-		const domain = session.domain
+		const domain = user.domain
 		let uri = new URL(`${WWW_URL}/api/init?domain=${domain}`)
 		let res = await fetch(uri.toString(), { method: 'get' })
 		if (res.ok) {

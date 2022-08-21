@@ -1,7 +1,6 @@
 import { WWW_URL } from '$lib/config'
 import { loadingDelayed } from '$lib/store'
 import { delay } from '.'
-import { session } from '$app/stores'
 let typingTimer
 import Cookie from 'cookie-universal'
 const cookies = Cookie()

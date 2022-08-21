@@ -15,7 +15,7 @@ import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
 import { toast } from '$lib/util'
 import SEO from '$lib/components/SEO/index.svelte'
 import { post } from '$lib/util/api'
-import { page, session } from '$app/stores'
+import { page } from '$app/stores'
 import ImageLoader from '$lib/components/Image/ImageLoader.svelte'
 import { GQL_storeOne } from '$houdini'
 import Cookie from 'cookie-universal'
@@ -78,7 +78,7 @@ async function handleSignUp() {
 			confirmPassword,
 			store: store?.id
 		})
-		$session.me = me
+		data.user.me = me
 		let r = ref || '/my'
 		if (browser) goto(r)
 	} catch (e) {

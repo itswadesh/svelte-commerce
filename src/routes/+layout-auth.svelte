@@ -12,7 +12,7 @@ import { ToastContainer, FlatToast } from 'svelte-toasts'
 import GoogleAnalytics from '$lib/components/GoogleAnalytics.svelte'
 import { signOut, getUser } from '$lib/services'
 import { browser } from '$app/env'
-import { getStores, navigating, page, session } from '$app/stores'
+import { getStores, navigating, page } from '$app/stores'
 import Footer from '$lib/Footer.svelte'
 
 import { GQL_storeOne } from '$houdini'

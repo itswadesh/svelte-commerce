@@ -10,7 +10,6 @@ export async function load({ url, params, fetch }) {
 </script>
 
 <script>
-import { session } from '$app/stores'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import Submit from '$lib/ui/Button.svelte'
@@ -31,7 +30,7 @@ $: isDisabled =
 	!address?.address ||
 	!address?.city ||
 	!address?.country
-$: user = $session.me
+$: user = user.me
 onMount(() => {
 	if (id !== 'new') getAddress()
 	else

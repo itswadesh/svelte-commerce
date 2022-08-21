@@ -7,7 +7,7 @@ import { store, toast } from '$lib/util'
 import GrnIndGradiantButton from '$lib/ui/GrnIndGradiantButton.svelte'
 import { loginUrl } from '$lib/store'
 import { signOut } from '$lib/services'
-import { page, session } from '$app/stores'
+import { page } from '$app/stores'
 
 export let data
 let { id, token, expires, signature, me, err } = data
@@ -38,9 +38,9 @@ async function resendEmail() {
 async function handleSignout() {
 	try {
 		await signOut()
-		$session.me = null
-		$session.token = null
-		$session.sid = null
+		$page.user.me = null
+		$page.user.token = null
+		$page.user.sid = null
 		toast('Signed Out...', 'success')
 		goto($loginUrl)
 	} catch (e) {

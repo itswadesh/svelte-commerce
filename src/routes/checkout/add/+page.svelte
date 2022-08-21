@@ -3,7 +3,6 @@ import EditAddress from '../_EditAddress.svelte'
 import CheckoutHeader from '../_CheckoutHeader.svelte'
 import Pricesummary from '$lib/Pricesummary.svelte'
 import { goto } from '$app/navigation'
-import { session } from '$app/stores'
 import SEO from '$lib/components/SEO/index.svelte'
 import { loginUrl } from '$lib/store'
 

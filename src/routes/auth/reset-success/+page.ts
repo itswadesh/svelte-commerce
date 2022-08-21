@@ -1,5 +1,7 @@
-export async function load({ url, params, fetch, session, context }) {
-return {
-	store: session.store
-}
+export async function load({ url, params, fetch, parent, context }) {
+	const { store } = await parent()
+
+	return {
+		store: store
+	}
 }

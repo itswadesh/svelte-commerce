@@ -1,6 +1,6 @@
 <script lang="ts">
 import { goto } from '$app/navigation'
-import { session } from '$app/stores'
+export let categories = []
 let show
 function toggle(url) {
 	goto(url)
@@ -128,9 +128,9 @@ let subMenu = [
 ]
 </script>
 
-<section class="w-96 h-screen text-gray-800">
-	<div class="bg-white w-4/5 h-full">
-		<div class="flex items-center shadow-md p-2">
+<section class="h-screen w-96 text-gray-800">
+	<div class="h-full w-4/5 bg-white">
+		<div class="flex items-center p-2 shadow-md">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="h-6 w-6 cursor-pointer"
@@ -144,9 +144,9 @@ let subMenu = [
 					d="M6 18L18 6M6 6l12 12"></path>
 			</svg>
 
-			<div class="max-w-max mx-auto">
+			<div class="mx-auto max-w-max">
 				<a href="/" class="flex items-center "
-					><img alt="" class="w-8 h-8" src="/logo.png" />
+					><img alt="" class="h-8 w-8" src="/logo.png" />
 					<div class="">
 						<h2 class="ml-2 font-bold tracking-wide">Litekart</h2>
 						<div class="ml-auto h-0.5 w-10 bg-pink-700"></div>
@@ -155,14 +155,14 @@ let subMenu = [
 			</div>
 		</div>
 		<div class="bg-gray-100">
-			<h5 class="text-sm pt-4 pb-0.5 pl-4">Shop by</h5>
-			<div class="bg-white rounded-lg mx-4 my-5 py-1 h-full overflow-y-auto">
+			<h5 class="pt-4 pb-0.5 pl-4 text-sm">Shop by</h5>
+			<div class="mx-4 my-5 h-full overflow-y-auto rounded-lg bg-white py-1">
 				<!-- Menu section start  -->
-				{#each $session.categories as item, i}
+				{#each data.categories as item, i}
 					<button
 						on:click="{() => toggle(`/search?categories=${item.slug}`)}"
 						class="block w-full px-4 ">
-						<div class="border-b border-gray-100 py-3 flex items-center justify-between">
+						<div class="flex items-center justify-between border-b border-gray-100 py-3">
 							<div class="flex">
 								<img src="{item.imgCdn}" alt="" />
 								<span class="ml-2"> {item.name} </span>
@@ -175,7 +175,7 @@ let subMenu = [
 				{#if show}
 					{#each subMenu as item, i}
 						<div class="px-4">
-							<div class="border-b border-gray-100 py-3 flex items-center justify-between">
+							<div class="flex items-center justify-between border-b border-gray-100 py-3">
 								<div class="flex">
 									<div>{@html item.svg}</div>
 									<div>{item.name}</div>
@@ -187,10 +187,10 @@ let subMenu = [
 				<!-- Submenu section end -->
 
 				<!-- Image with Quote section start -->
-				<div class="bg-black p-1 w-full flex items-center">
+				<div class="flex w-full items-center bg-black p-1">
 					<div class="flex items-center">
 						<img src="/make-up.jpg" alt="" class="h-16 w-16" />
-						<span class="text-xs text-white ml-2">
+						<span class="ml-2 text-xs text-white">
 							“ Fashion & Clothing is the one makes you look awesome and unique from others! ”
 						</span>
 					</div>

@@ -104,7 +104,7 @@ $: allCountries = $GQL_storeCountries.data?.storeCountries
 $: allStates = $GQL_states.data?.states?.data
 let stateName = ads?.state
 function stateChanged({ detail }) {
-	console.log('state changed', detail)
+	// console.log('state changed', detail)
 	ads.state = detail.name
 	// save({ ...ads, state: state.name })
 }

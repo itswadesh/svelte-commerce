@@ -10,7 +10,6 @@ h1 {
 
 <script>
 import { dev } from '$app/env'
-import { session } from '$app/stores'
 
 export let status
 export let error

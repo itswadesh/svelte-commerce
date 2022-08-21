@@ -10,7 +10,6 @@
 <script>
 import { toasts, ToastContainer, FlatToast } from 'svelte-toasts'
 import { goto } from '$app/navigation'
-import { session } from '$app/stores'
 import Cookies from 'universal-cookie'
 import SEO from '$lib/components/SEO/index.svelte'
 import { toast } from '$lib/util'
@@ -32,7 +31,7 @@ let email = '',
 async function submit(e) {
 	try {
 		const me = await signUp({ email, password, firstName, lastName, role, confirmPassword })
-		$session.me = me
+		$Page.user.me = me
 		let r = ref || '/my'
 		goto(r)
 	} catch (e) {
