@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  api:
+    build: ./
+    image: itswadesh/kitcommerce
+    container_name: kitcommerce
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    environment:
+      - VITE_WWW_URL=https://kitcommerce.tech
+      - HTTP_ENDPOINT=https://api.misiki.io
+      - VITE_DOMAIN=kitcommerce.tech
+      - NODE_ENV=production
+      - PORT=3000
+
