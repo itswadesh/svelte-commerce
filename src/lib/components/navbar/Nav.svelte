@@ -11,23 +11,10 @@ const klasses =
 onMount(() => {
 	user.useLocalStorage()
 })
-
-async function handleSignOut() {
-	// let sess = { jwt: $user.jwt }
-	// const { response, json } = await api.del($session.API_ENDPOINT, 'users/sign_out', {}, sess)
-	// if (response.status === 200) {
-	// 	user.set({})
-	// 	goto('/')
-	// } else if (response.status === 500) {
-	// 	errors = ['Oops, something went wrong! How embarrassing, try again soon.']
-	// } else {
-	// 	errors = ['Oops, something went wrong! How embarrassing, try again soon.']
-	// }
-}
 </script>
 
 <nav>
-	<div class="flex items-center h-16 px-2 mx-auto max-w-7xl sm:px-8">
+	<div class="mx-auto flex h-16 max-w-7xl items-center px-2 sm:px-8">
 		<div class="">
 			<a href="/" class="{klasses}">Home</a>
 			<a href="/about" class="{klasses} ml-1">About</a>

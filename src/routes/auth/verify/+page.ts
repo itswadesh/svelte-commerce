@@ -3,7 +3,7 @@ import { toast } from '$lib/util'
 import { redirect } from '@sveltejs/kit'
 import Cookie from 'cookie-universal'
 const coookies = Cookie()
-export async function load({ url, params, fetch, session, context }) {
+export async function load({ url, params, fetch, parent, context }) {
 	let err
 	const isHome = url.pathname === '/'
 	let currentPage = +url.searchParams.get('page') || 1
@@ -11,7 +11,9 @@ export async function load({ url, params, fetch, session, context }) {
 	let token = url.searchParams.get('token') || ''
 	let expires = url.searchParams.get('expires') || ''
 	let signature = url.searchParams.get('signature') || ''
-	const me = session.me
+	const { user, store } = await parent()
+
+	const me = user.me
 	try {
 		const ve = await GQL_verifyEmail.mutate({
 			variables: {
@@ -19,7 +21,7 @@ export async function load({ url, params, fetch, session, context }) {
 				token,
 				signature,
 				expires,
-				store: session.store?.id
+				store: store?.id
 			}
 		})
 		if (ve.errors) {

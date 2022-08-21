@@ -82,10 +82,6 @@ async function handleChangePassword(p) {
 	} catch (e) {
 		toast(e.message, 'error')
 		if (e.message === 'You must be logged in') {
-			// let go = '/auth/login'
-			// if ($session.settings.otpLogin) {
-			// 	go = `/auth/phone-login`
-			// }
 			const url = '/'
 			goto(`${$loginUrl}?ref=${url}`)
 		}

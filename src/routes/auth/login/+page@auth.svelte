@@ -14,7 +14,7 @@ import { signIn } from '$lib/services'
 import GradiantButton from '$lib/ui/GradiantButton.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-import { page, session } from '$app/stores'
+import { page } from '$app/stores'
 import { GQL_storeOne } from '$houdini'
 import Cookie from 'cookie-universal'
 import { onMount } from 'svelte'
@@ -57,7 +57,7 @@ async function handleSignIn() {
 		loading = true
 		const me = await signIn({ email, password })
 		// cookies.set('me', me, { path: '/' })
-		$session.me = me
+		data.user.me = me
 		let r = ref || '/my'
 		if (browser) goto(r)
 	} catch (e) {

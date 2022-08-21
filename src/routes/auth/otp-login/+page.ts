@@ -1,12 +1,8 @@
-export async function load({ url, params, fetch, session, context }) {
-const ref = url.searchParams.get('ref')
-// let go = '/auth/login'
-// if (session.settings.otpLogin) {
-// 	go = `/auth/phone-login`
-// }
-return {
-	me: session.me,
-	store: session.store,
-	ref
-}
+export async function load({ url, params, fetch, user, context }) {
+	const ref = url.searchParams.get('ref')
+	return {
+		me: user.me,
+		store: user.store,
+		ref
+	}
 }

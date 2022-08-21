@@ -1,8 +1,10 @@
-import { redirect } from '@sveltejs/kit';
-import type { PageLoad } from '@sveltejs/kit'
-export const load: PageLoad = async ({ url, session }) => {
-if (!session?.me) {
-	throw redirect(302, `/${loginUrl}?ref=${url.pathname}`);
-}
-return {}
+import { loginUrl } from '$lib/store'
+import { redirect } from '@sveltejs/kit'
+export const load = async ({ url, parent }) => {
+	const { user } = await parent()
+
+	if (!user?.me) {
+		throw redirect(302, `/${loginUrl}?ref=${url.pathname}`)
+	}
+	return {}
 }

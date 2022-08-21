@@ -1,13 +1,7 @@
 import type { RequestHandlerArgs } from '$houdini'
 import { HoudiniClient } from '$houdini'
 
-async function fetchQuery({
-	fetch,
-	text = '',
-	variables = {},
-	session,
-	metadata
-}: RequestHandlerArgs) {
+async function fetchQuery({ fetch, text = '', variables = {}, metadata }: RequestHandlerArgs) {
 	const url =
 		import.meta.env.VITE_WWW_URL + '/graphql' || 'https://countries.trevorblades.com/graphql'
 	const result = await fetch(url, {

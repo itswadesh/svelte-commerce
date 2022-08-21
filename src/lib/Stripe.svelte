@@ -31,7 +31,7 @@ async function payWithCard(clientSecret, orderId) {
 		const result = await stripe.confirmCardPayment(clientSecret, {
 			payment_method: { card: card }
 		})
-		console.log('Confirm card pay...........', result)
+		// console.log('Confirm card pay...........', result)
 		if (result.error) {
 			const errorMessage = result.error.message
 			toast(result.error.message, 'error')

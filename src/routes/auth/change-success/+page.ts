@@ -1,5 +1,6 @@
-export async function load({ url, params, fetch, session, context }) {
-return {
-	store: session.store
-}
+export async function load({ url, params, parent, fetch, context }) {
+	const { user } = await parent()
+	return {
+		store: user.store
+	}
 }

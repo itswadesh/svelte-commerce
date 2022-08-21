@@ -19,7 +19,7 @@
 <script>
 import '../app.css'
 import { ToastContainer, FlatToast } from 'svelte-toasts'
-import { getStores, navigating, page, session } from '$app/stores'
+import { getStores, navigating, page } from '$app/stores'
 import Footer from '$lib/Footer.svelte'
 import Nav from '$lib/Nav.svelte'
 import { loadingDelayed } from '$lib/store'

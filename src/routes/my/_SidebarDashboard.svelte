@@ -1,6 +1,6 @@
 <script>
 import { goto } from '$app/navigation'
-import { page, session } from '$app/stores'
+import { page } from '$app/stores'
 import Cookies from 'universal-cookie'
 const cookies = new Cookies()
 import { Icon, ChartPie, UserCircle, Truck, Logout } from 'svelte-hero-icons'
@@ -11,9 +11,9 @@ export let section
 async function logout() {
 	try {
 		await signOut()
-		$session.me = null
-		$session.token = null
-		$session.sid = null
+		$page.user.me = null
+		$page.user.token = null
+		$page.user.sid = null
 		toast('Successfully loggedout', 'success')
 		goto('/')
 	} catch (e) {

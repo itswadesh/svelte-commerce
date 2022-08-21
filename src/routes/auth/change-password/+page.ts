@@ -1,8 +1,9 @@
-export async function load({ url, params, fetch, session, context }) {
-let ref = url.searchParams.get('ref')
+export async function load({ url, params, parent, fetch, context }) {
+	let ref = url.searchParams.get('ref')
+	const { user } = await parent()
 
-return {
-	store: session.store,
-	ref
-}
+	return {
+		store: user.store,
+		ref
+	}
 }

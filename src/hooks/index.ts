@@ -3,7 +3,7 @@ import type { Handle } from '@sveltejs/kit'
 import { DOMAIN } from '$lib/config'
 import { GQL_INIT } from '$houdini'
 import { v4 as uuidv4 } from 'uuid'
-// import fetch from 'node-fetch'
+import fetch from 'node-fetch'
 
 export const handle: Handle = async ({ event, resolve }) => {
 	let store, cart, headers, serializedCookie, settings, megamenu, sid, token, domain, geo, me

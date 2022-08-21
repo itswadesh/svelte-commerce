@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { goto } from '$app/navigation'
-import { page, session } from '$app/stores'
+import { page } from '$app/stores'
 import Cookies from 'universal-cookie'
 const cookies = new Cookies()
 import { spring } from 'svelte/motion'
@@ -27,14 +27,14 @@ onMount(async () => {
 	await GQL_me.fetch({})
 	await GQL_cart.fetch({ settings: { policy: 'network-only' } })
 })
-export let q, me, store
+export let q, me, store, user
 
 async function handleSignout() {
 	try {
 		await signOut()
-		$session.me = null
-		$session.token = null
-		$session.sid = null
+		user.me = null
+		user.token = null
+		user.sid = null
 		toast('Signed Out...', 'success')
 		goto('/auth/login')
 	} catch (e) {
