@@ -1,11 +1,18 @@
 <script>
+import { fly } from 'svelte/transition'
 import { LazyImg, ProductCard } from '$lib/components'
 import { onMount } from 'svelte'
 import { SplideSlide } from '@splidejs/svelte-splide'
 
-export let data = {}
+export let collections = []
+// console.log('collections', collections)
 
-let Carousel, Splide
+let Splide
+$: innerWidth = 0
+let responsiveWidth = 0
+$: if (innerWidth >= 640) {
+	responsiveWidth = innerWidth - 17
+}
 
 onMount(async () => {
 	const SplideModule = await import('$lib/components/SplideJs.svelte')
@@ -13,54 +20,30 @@ onMount(async () => {
 })
 </script>
 
-{#await data.streamed.collections}
-	<div class="flex flex-wrap w-[98vw] items-start justify-start gap-3 overflow-x-auto">
-		{#each { length: 8 } as _}
-			<div class="w-52 h-60 animate-pulse rounded bg-zinc-200"></div>
-		{/each}
-	</div>
-{:then collections}
-	{#if collections.data?.length > 0}
-		{#each collections.data as collection}
-			<div class="mb-5 sm:mb-10">
-				<h2
-					class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
-					{collection.name}
-				</h2>
+<svelte:window bind:innerWidth="{innerWidth}" />
 
-				{#if collection}
-					<div class="hidden px-10 sm:block w-[99vw]">
+{#if collections.length}
+	<ul class="mb-5 sm:mb-10 p-0 list-none flex flex-col gap-5 sm:gap-10">
+		{#each collections as collection, cx}
+			{#if collection}
+				<li in:fly="{{ y: 20, duration: 700, delay: 100 * cx }}">
+					<h2 class="p-3 py-5 text-center uppercase sm:px-10 md:py-10">
+						{collection.name}
+					</h2>
+
+					<div class="hidden sm:block">
 						<svelte:component
 							this="{Splide}"
 							options="{{
-								gap: '24px',
+								// autoplay: true,
+								autoWidth: true,
+								gap: '12px',
 								lazyLoad: true,
+								padding: '40px',
 								pagination: false,
 								perMove: 1,
-								perPage: 7,
-								rewind: true,
-								breakpoints: {
-									1693: {
-										arrows: collection.products?.length <= 6 ? false : true,
-										perPage: 6
-									},
-									1459: {
-										arrows: collection.products?.length <= 5 ? false : true,
-										perPage: 5
-									},
-									1225: {
-										arrows: collection.products?.length <= 4 ? false : true,
-										perPage: 4
-									},
-									955: {
-										arrows: collection.products?.length <= 3 ? false : true,
-										perPage: 3
-									},
-									733: {
-										arrows: collection.products?.length <= 2 ? false : true,
-										perPage: 2
-									}
-								}
+								// type: 'loop',
+								width: responsiveWidth || '100%'
 							}}">
 							{#each collection.products as p}
 								{#if p}
@@ -84,8 +67,8 @@ onMount(async () => {
 							{/each}
 						</ul>
 					</div>
-				{/if}
-			</div>
+				</li>
+			{/if}
 		{/each}
-	{/if}
-{/await}
+	</ul>
+{/if}
