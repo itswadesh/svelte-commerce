@@ -36,7 +36,7 @@ onMount(async () => {
 			return c.dafault
 		})
 
-		// console.log('dafaultCountry', dafaultCountry);
+		// console.log('dafaultCountry', dafaultCountry)
 
 		if (dafaultCountry[0]) {
 			address.country = dafaultCountry[0].code
@@ -148,7 +148,7 @@ async function addressChanged(id) {
 				method="POST"
 				use:enhance="{() => {
 					return async ({ result }) => {
-						console.log('result', result)
+						// console.log('result', result)
 
 						if (result?.data) {
 							toast('Address deleted', 'success')
