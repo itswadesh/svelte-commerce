@@ -13,6 +13,7 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 
 	const cart = await CartService.fetchRefreshCart({
 		storeId: locals.store?.id,
+		sid: cookies.get('connect.sid'),
 		cookies
 	})
 
@@ -24,6 +25,7 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 		const id = url.searchParams.get('address')
 
 		const address = await AddressService.fetchAddress({
+			id,
 			storeId: locals.store?.id,
 			server: true,
 			sid: cookies.get('connect.sid')
@@ -37,6 +39,7 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 
 		return { paymentMethods, address, addressId: id, me, cart }
 	} catch (e) {
+		console.log('error at payment options zzzzzzzzzzzzzzzzzz', e);
 		if (e) {
 			throw redirect(307, '/checkout/address')
 		}
