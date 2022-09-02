@@ -17,6 +17,7 @@ import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 
 export let orders
+// console.log('zzzzzzzzzzzzzzzzzz', orders)
 
 let clazz = ''
 export { clazz as class }
@@ -26,15 +27,9 @@ export { clazz as class }
 	{#if orders.data?.length}
 		<div>
 			<header class="mb-5 flex flex-wrap items-start justify-between gap-4">
-				<div>
-					<div class="flex flex-wrap items-center gap-2">
-						<h2 class="text-2xl capitalize sm:text-3xl">
-							Orders {#if orders.count}({orders.count}){/if}
-						</h2>
-					</div>
-
-					<!-- <p class="mt-2 text-sm text-zinc-500"></p> -->
-				</div>
+				<h1>
+					Orders {#if orders.count}({orders.count}){/if}
+				</h1>
 
 				<!--  Back button -->
 
@@ -61,38 +56,37 @@ export { clazz as class }
 					</a>
 				</div>
 			</header>
-
 			<ul>
 				{#each orders.data as order}
 					<li class="mb-4 hidden sm:mb-10 xl:block">
-						<div class="mb-3 flex items-center justify-between text-sm text-zinc-500 sm:mb-4">
-							<h6>Order No : #{order.orderNo}</h6>
+						<div class="mb-3 flex items-center justify-between text-zinc-500 sm:mb-4">
+							<p>Order No : #{order.orderNo || order.id}</p>
 
-							<h6>Order Date : {date(order.createdAt)}</h6>
+							<p>Order Date : {date(order.createdAt || order.created_at)}</p>
 						</div>
 
 						<table
 							class="group min-w-full divide-y divide-zinc-200 rounded border border-zinc-200 text-zinc-500 shadow-md"
-							on:click="{() => goto(`/my/orders/${order._id}`)}">
+							on:click="{() => goto(`/my/orders/${order.id || order._id}`)}">
 							<thead class="whitespace-nowrap rounded-t-md bg-zinc-100 text-xs uppercase">
 								<tr>
-									<!-- <th class="px-5 py-3 font-medium tracking-wider text-zinc-500"> # </th> -->
+									<!-- <th class="px-5 py-3 text-zinc-500"> # </th> -->
 
-									<th class="p-3 font-medium tracking-wider text-zinc-500"> Image </th>
+									<th class="p-3 text-zinc-500"> Image </th>
 
-									<th class="p-3 font-medium tracking-wider text-zinc-500"> Vendor </th>
+									<th class="p-3 text-zinc-500"> Vendor </th>
 
-									<th class="p-3 font-medium tracking-wider text-zinc-500"> Name </th>
+									<th class="p-3 text-zinc-500"> Name </th>
 
-									<th class="p-3 font-medium tracking-wider text-zinc-500"> Qty </th>
+									<th class="p-3 text-zinc-500"> Qty </th>
 
-									<th class="p-3 font-medium tracking-wider text-zinc-500"> Price </th>
+									<th class="p-3 text-zinc-500"> Price </th>
 
-									<th class="p-3 font-medium tracking-wider text-zinc-500"> Shipping </th>
+									<th class="p-3 text-zinc-500"> Shipping </th>
 
-									<th class="p-3 font-medium tracking-wider text-zinc-500"> Total </th>
+									<th class="p-3 text-zinc-500"> Total </th>
 
-									<th class="p-3 font-medium tracking-wider text-zinc-500"> Status </th>
+									<th class="p-3 text-zinc-500"> Status </th>
 								</tr>
 							</thead>
 
@@ -108,9 +102,9 @@ export { clazz as class }
 														alt=" "
 														width="80"
 														class="h-auto w-20 object-contain object-top" />
-												{:else if item.img}
+												{:else if item.img || item.thumbnail}
 													<LazyImg
-														src="{item.img}"
+														src="{item.img || item.thumbnail}"
 														alt=" "
 														width="80"
 														class="h-auto w-20 object-contain object-top" />
@@ -138,12 +132,12 @@ export { clazz as class }
 										</td>
 
 										<td class="p-3">
-											{item.vendorBusinessName}
+											{item.vendorBusinessName || '_'}
 										</td>
 
 										<td class="p-3">
-											<div class="flex w-60 justify-center gap-2">
-												<span>{item.name}</span>
+											<div class="flex w-60 gap-2">
+												<span>{item.name || item.title || '_'}</span>
 
 												{#if $page?.data?.store?.isFnb && item.foodType}
 													<div class="shrink-0">
@@ -158,15 +152,18 @@ export { clazz as class }
 										</td>
 
 										<td class="whitespace-nowrap p-3">
-											{item.qty}
+											{item.qty || item.quantity || '_'}
 										</td>
 
 										<td class="whitespace-nowrap p-3">
-											{currency(item.price, $page.data?.store?.currencySymbol)}
+											{currency(item.price || item.unit_price, $page.data?.store?.currencySymbol)}
 										</td>
 
 										<td class="whitespace-nowrap p-3">
-											{currency(item.shippingCharge, $page.data?.store?.currencySymbol)}
+											{currency(
+												item.shippingCharge || item.shipping_total,
+												$page.data?.store?.currencySymbol
+											)}
 										</td>
 
 										<td class="whitespace-nowrap p-3">
@@ -175,7 +172,7 @@ export { clazz as class }
 
 										<td class="p-3">
 											<span class="whitespace-nowrap font-semibold uppercase text-primary-500">
-												{item.status}
+												{item.status || order.status || '_'}
 											</span>
 										</td></tr>
 								{/each}
@@ -183,25 +180,22 @@ export { clazz as class }
 						</table>
 					</li>
 
-					<li class="xl:hidden">
-						<div class="mb-3 flex items-center justify-between text-sm text-zinc-500 sm:mb-4">
-							<h6>
-								<span class="hidden sm:block">Order No :</span>
+					<li class="block xl:hidden text-zinc-500">
+						<div class="mb-3 flex items-center justify-between sm:mb-4">
+							<p>
+								Order No :
+								{order.orderNo || order.id}
+							</p>
 
-								{order.orderNo}
-							</h6>
-
-							<h6>
-								<span class="hidden sm:block">Order Date :</span>
-
-								{date(order.createdAt)}
-							</h6>
+							<p>
+								{date(order.createdAt || order.created_at)}
+							</p>
 						</div>
 
 						<a
-							href="/my/orders/{order._id}"
+							href="/my/orders/{order.id || order._id}"
 							aria-label="orders"
-							class="mb-4 block w-full divide-y divide-zinc-200 rounded border bg-white text-sm text-zinc-500 shadow-md transition duration-300 hover:bg-primary-50 sm:mb-10">
+							class="mb-4 block w-full divide-y rounded border bg-white text-sm shadow transition duration-300 hover:bg-primary-50 sm:mb-10">
 							{#each order.orderItems as item}
 								<div class="flex items-start gap-2 p-4 sm:gap-5">
 									<div class="shrink-0">
@@ -211,18 +205,37 @@ export { clazz as class }
 												alt=" "
 												width="56"
 												class="h-auto w-14 object-contain object-top" />
-										{:else}
+										{:else if item.img || item.thumbnail}
 											<LazyImg
-												src="{item.img}"
+												src="{item.img || item.thumbnail}"
 												alt=" "
 												width="56"
 												class="h-auto w-14 object-contain object-top" />
+										{:else}
+											<div
+												class="w-14 h-14 rounded bg-zinc-200 flex items-center flex-col justify-center p-2 text-center text-xs text-zinc-500">
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													fill="none"
+													viewBox="0 0 24 24"
+													stroke-width="1.5"
+													stroke="currentColor"
+													class="w-5 h-5">
+													<path
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
+													></path>
+												</svg>
+
+												<span>No Image</span>
+											</div>
 										{/if}
 									</div>
 
 									<div class="w-full flex-1">
 										<!-- {#if item.vendor}
-													<a href="/store/${item.vendor?.slug}" aria-label="Click to visit vendor's profile">
+													<a href="/vendor/${item.vendor?.slug}" aria-label="Click to visit vendor's profile">
 														 {#if store.isFnb && item.vendorBusinessName}
 															 <b class="mb-2">
 																 {item.vendorBusinessName}
@@ -231,8 +244,14 @@ export { clazz as class }
 													</a>
 												{/if} -->
 
+										{#if item.vendorBusinessName}
+											<h6 class="mb-1">
+												{item.vendorBusinessName}
+											</h6>
+										{/if}
+
 										<div class="mb-2 flex items-start justify-between">
-											<span class="flex-1">{item.name}</span>
+											<p class="flex-1">{item.name || item.title || '_'}</p>
 
 											{#if $page?.data?.store?.isFnb && item.foodType}
 												<div>
@@ -245,38 +264,44 @@ export { clazz as class }
 											{/if}
 										</div>
 
-										<div class="flex flex-wrap gap-2 text-sm">
+										<div class="flex flex-wrap gap-2">
 											<div class="flex items-center gap-2">
-												<h6>Price :</h6>
+												<p>Price :</p>
 
-												<b class="text-zinc-500">
-													{currency(item.price, $page.data?.store?.currencySymbol)}
+												<b>
+													{currency(
+														item.price || item.unit_price,
+														$page.data?.store?.currencySymbol
+													)}
 													*
-													{item.qty}
+													{item.qty || item.quantity || '_'}
 												</b>
 											</div>
 
 											<div class="flex items-center gap-2">
-												<h6>Delivery :</h6>
+												<p>Delivery :</p>
 
-												<b class="text-zinc-500">
-													{currency(item.shippingCharge, $page.data?.store?.currencySymbol)}
+												<b>
+													{currency(
+														item.shippingCharge || item.shipping_total,
+														$page.data?.store?.currencySymbol
+													)}
 												</b>
 											</div>
 
 											<div class="flex items-center gap-2">
-												<h6>Total :</h6>
+												<p>Total :</p>
 
-												<b class="text-zinc-500">
+												<b>
 													{currency(item.total, $page.data?.store?.currencySymbol)}
 												</b>
 											</div>
 
 											<div class="flex items-center gap-2">
-												<h6>Status :</h6>
+												<p>Status :</p>
 
-												<b class="uppercase text-primary-500">
-													{item.status}
+												<b class="uppercase text-zinc-800">
+													{item.status || order.status || '_'}
 												</b>
 											</div>
 										</div>
@@ -296,9 +321,9 @@ export { clazz as class }
 		<div class="flex h-[70vh] flex-col items-center justify-center text-center">
 			<img src="{noAddToCartAnimate}" alt="empty wishlist" class="mb-5 h-60 object-contain" />
 
-			<p class="mb-2 text-xl font-medium md:text-3xl">You have't Ordered Yet!!</p>
+			<h2 class="mb-2">You have't Ordered Yet!!</h2>
 
-			<p class="mb-5 text-sm">There's no order placed, start adding items to your cart.</p>
+			<p class="mb-5">There's no order placed, start adding items to your cart.</p>
 
 			<a href="/" aria-label="Click to visit home" data-sveltekit-preload-data>
 				<PrimaryButton class="w-40 py-2 text-sm">Shop Now</PrimaryButton>
