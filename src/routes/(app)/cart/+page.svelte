@@ -45,14 +45,15 @@ onMount(() => {
 	fireGTagEvent('view_cart', data.cart)
 })
 
-const addToCart = async ({ pid, qty, customizedImg, ix, loadingType }: any) => {
+const addToCart = async ({ pid, vid, qty, customizedImg, ix, loadingType }: any) => {
 	if (loadingType) {
 		selectedLoadingType = loadingType
 	}
 	loading[ix] = true
 	await CartService.addToCartService({
+		id: id,
 		pid: pid,
-		vid: pid,
+		vid: vid || pid,
 		qty: qty,
 		customizedImg: customizedImg || null,
 		storeId: $page.data.store?.id,
@@ -102,7 +103,6 @@ async function removeCouponCode() {
 		})
 
 		selectedCouponCode = ''
-
 		await invalidateAll()
 	} catch (e) {
 		couponErr = e
@@ -133,8 +133,6 @@ async function getCoupons() {
 			origin: $page?.data?.origin,
 			storeId: $page?.data?.store?.id
 		})
-
-		// console.log('zzzzzzzzzzzzzzzzzz', resC)
 
 		coupons = resC?.data
 	} catch (e) {
@@ -197,11 +195,11 @@ function moveAllUnavailableItemsToWishlist() {
 						<!-- Cart start  -->
 
 						<div class="mr-4 flex items-baseline">
-							<h1 class="font-serif text-2xl font-medium tracking-wider sm:text-3xl">Cart</h1>
+							<h1>Cart</h1>
 
 							<div class="mx-3 h-1 w-1 rounded-full bg-zinc-500"></div>
 
-							<h4 class="tracking-tighter text-zinc-500 sm:text-xl">
+							<p>
 								{data.cart?.qty || ''}
 
 								{#if data.cart?.qty > 1}
@@ -209,7 +207,7 @@ function moveAllUnavailableItemsToWishlist() {
 								{:else}
 									Item
 								{/if}
-							</h4>
+							</p>
 						</div>
 					</div>
 
@@ -222,7 +220,7 @@ function moveAllUnavailableItemsToWishlist() {
 									<div class="flex gap-4">
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
-											class="h-8 w-8 text-red-500"
+											class="h-8 w-8 text-accent-500"
 											viewBox="0 0 20 20"
 											fill="currentColor">
 											<path
@@ -232,7 +230,7 @@ function moveAllUnavailableItemsToWishlist() {
 										</svg>
 
 										<div class="flex-1">
-											<h6 class="text-lg font-semibold">Out of Stock</h6>
+											<h6>Out of Stock</h6>
 
 											<p>Please remove from bag, items will be added to wishlist</p>
 										</div>
@@ -242,13 +240,14 @@ function moveAllUnavailableItemsToWishlist() {
 										{#each data.cart?.unavailableItems as item (item.pid)}
 											<div class="flex w-full items-start gap-4 py-5">
 												<a
-													href="/product/{item?.slug}"
+													href="/product/{item?.slug || item?.name.replace(' ', '-').toLowerCase()}"
 													aria-label="Click to visit product details"
 													class="block shrink-0 overflow-hidden">
 													{#if item.customizedImg || item.img}
 														<LazyImg
 															src="{item.isCustomizeditem ? item.customizedImg : item.img}"
 															alt=" "
+															width="384"
 															height="512"
 															aspect_ratio="3:4"
 															class="object-contain object-top h-28 w-20 text-xs" />
@@ -275,11 +274,12 @@ function moveAllUnavailableItemsToWishlist() {
 												</a>
 
 												<div class="w-full flex-1">
-													<div class="mb-2 flex justify-between">
+													<div class="mb-1 flex justify-between">
 														<a
-															href="/product/{item?.slug}"
+															href="/product/{item?.slug ||
+																item?.name.replace(' ', '-').toLowerCase()}"
 															aria-label="Click to visit product details"
-															class="cart-item flex-1 cursor-pointer text-base font-medium text-zinc-500 hover:underline sm:text-lg">
+															class="cart-item flex-1 cursor-pointer text-zinc-500 hover:underline">
 															{item?.name}
 														</a>
 
@@ -294,20 +294,20 @@ function moveAllUnavailableItemsToWishlist() {
 														{/if}
 													</div>
 
-													<div class="mb-2 flex flex-wrap items-center gap-2 text-sm sm:text-base">
-														<span class="whitespace-nowrap text-lg font-bold sm:text-xl">
+													<div class="mb-1 flex flex-wrap items-center gap-2 text-sm sm:text-base">
+														<h5 class="whitespace-nowrap">
 															{item?.formattedItemAmount?.price}
-														</span>
+														</h5>
 
 														{#if item?.mrp > item?.price}
-															<span class="whitespace-nowrap text-zinc-500 line-through">
+															<h5 class="whitespace-nowrap text-zinc-500 line-through">
 																{item?.formattedItemAmount?.mrp}
-															</span>
+															</h5>
 
 															{#if Math.floor(((item.mrp - item.price) / item.mrp) * 100) > 0}
-																<span class="whitespace-nowrap text-green-600">
+																<h5 class="whitespace-nowrap text-secondary-500">
 																	({Math.floor(((item.mrp - item.price) / item.mrp) * 100)}% off)
-																</span>
+																</h5>
 															{/if}
 														{/if}
 													</div>
@@ -325,7 +325,7 @@ function moveAllUnavailableItemsToWishlist() {
 
 						{#if data.cart?.items}
 							<div class="flex flex-col divide-y">
-								{#each data.cart?.items as item, ix (item.pid)}
+								{#each data.cart?.items as item, ix (item.id || item.vid || item.pid)}
 									<!-- Product detail start -->
 
 									<div
@@ -333,13 +333,14 @@ function moveAllUnavailableItemsToWishlist() {
 										out:fly="{{ x: -800, duration: 300 }}"
 										class="flex w-full items-start gap-4 py-5">
 										<a
-											href="/product/{item?.slug}"
+											href="/product/{item?.slug || item?.name.replace(' ', '-').toLowerCase()}"
 											aria-label="Click to visit product details"
 											class="block shrink-0 overflow-hidden">
 											{#if item.customizedImg || item.img}
 												<LazyImg
 													src="{item.isCustomizeditem ? item.customizedImg : item.img}"
 													alt=" "
+													width="384"
 													height="512"
 													aspect_ratio="3:4"
 													class="object-contain object-top h-28 w-20 text-xs" />
@@ -366,11 +367,11 @@ function moveAllUnavailableItemsToWishlist() {
 										</a>
 
 										<div class="w-full flex-1">
-											<div class="mb-2 flex justify-between">
+											<div class="mb-1 flex justify-between">
 												<a
-													href="/product/{item?.slug}"
+													href="/product/{item?.slug || item?.name.replace(' ', '-').toLowerCase()}"
 													aria-label="Click to visit product details"
-													class="flex-1 cursor-pointer text-base font-medium text-zinc-500 hover:underline sm:text-lg">
+													class="flex-1 cursor-pointer text-zinc-500 hover:underline">
 													{item?.name}
 												</a>
 
@@ -385,8 +386,8 @@ function moveAllUnavailableItemsToWishlist() {
 												{/if}
 											</div>
 
-											<div class="mb-2 flex flex-wrap items-center gap-2 text-sm sm:text-base">
-												<span class="text-lg font-bold sm:text-xl">
+											<div class="mb-1 flex flex-wrap items-center gap-2 text-xs sm:text-sm">
+												<span class="text-sm sm:text-base font-bold whitespace-nowrap">
 													{item?.formattedItemAmount?.price}
 												</span>
 
@@ -396,7 +397,7 @@ function moveAllUnavailableItemsToWishlist() {
 													</span>
 
 													{#if Math.floor(((item.mrp - item.price) / item.mrp) * 100) > 0}
-														<span class="text-green-600">
+														<span class="whitespace-nowrap text-secondary-500">
 															({Math.floor(((item.mrp - item.price) / item.mrp) * 100)}% off)
 														</span>
 													{/if}
@@ -404,11 +405,12 @@ function moveAllUnavailableItemsToWishlist() {
 											</div>
 
 											{#if item?.usedOptions?.length}
-												<div class="mb-2 flex flex-col gap-2 text-sm">
+												<div class="mb-1 flex flex-col gap-2 text-sm">
 													{#each item?.usedOptions as option}
 														{#if option?.val?.length && option?.val !== undefined && option?.val != ''}
 															<div class="flex flex-wrap gap-2">
 																<h6>{option.name}:</h6>
+
 																{#each option.val as v}
 																	{#if v}
 																		<div class="font-bold">
@@ -422,7 +424,7 @@ function moveAllUnavailableItemsToWishlist() {
 												</div>
 											{/if}
 
-											<div class="mt-4 flex items-center justify-between">
+											<div class="mt-2 flex items-center justify-between">
 												<div class="flex items-center justify-center">
 													<!-- Minus icon -->
 
@@ -437,6 +439,8 @@ function moveAllUnavailableItemsToWishlist() {
 																loading[ix] = false
 															}
 														}}">
+														<input type="hidden" name="id" value="{item.id}" />
+														<input type="hidden" name="vid" value="{item.vid}" />
 														<input type="hidden" name="pid" value="{item.pid}" />
 														<input type="hidden" name="qty" value="{-1}" />
 														<input
@@ -447,7 +451,7 @@ function moveAllUnavailableItemsToWishlist() {
 														<button
 															type="submit"
 															disabled="{loading[ix]}"
-															class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8
+															class="flex transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none h-6 w-6
 															{loading[ix]
 																? 'cursor-not-allowed opacity-80'
 																: 'cursor-pointer hover:opacity-80 active:scale-95'}">
@@ -469,12 +473,12 @@ function moveAllUnavailableItemsToWishlist() {
 													<!-- Quantity indicator -->
 
 													<div
-														class="mx-2 flex h-6 w-6 items-center justify-center text-xs font-bold sm:h-8 sm:w-8">
+														class="mx-2 flex h-6 w-6 items-center justify-center text-xs font-bold">
 														{#if selectedLoadingType !== 'delete' && loading[ix]}
 															<img
 																src="{dotsLoading}"
 																alt="loading"
-																class="h-auto w-5 object-contain object-center" />
+																class="h-auto w-4 object-contain object-center" />
 														{:else}
 															<span>{item?.qty}</span>
 														{/if}
@@ -493,6 +497,8 @@ function moveAllUnavailableItemsToWishlist() {
 																loading[ix] = false
 															}
 														}}">
+														<input type="hidden" name="id" value="{item.id}" />
+														<input type="hidden" name="vid" value="{item.vid}" />
 														<input type="hidden" name="pid" value="{item.pid}" />
 														<input type="hidden" name="qty" value="{+1}" />
 														<input
@@ -502,7 +508,7 @@ function moveAllUnavailableItemsToWishlist() {
 														<button
 															type="submit"
 															disabled="{loading[ix]}"
-															class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8
+															class="flex transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none h-6 w-6
 															{loading[ix]
 																? 'cursor-not-allowed opacity-80'
 																: 'cursor-pointer hover:opacity-80 active:scale-95'}">
@@ -537,6 +543,8 @@ function moveAllUnavailableItemsToWishlist() {
 															loading[ix] = false
 														}
 													}}">
+													<input type="hidden" name="id" value="{item.id}" />
+													<input type="hidden" name="vid" value="{item.vid}" />
 													<input type="hidden" name="pid" value="{item.pid}" />
 													<input type="hidden" name="qty" value="{-9999999}" />
 													<input type="hidden" name="customizedImg" value="{item.customizedImg}" />
@@ -544,7 +552,7 @@ function moveAllUnavailableItemsToWishlist() {
 													<button
 														type="submit"
 														disabled="{loading[ix]}"
-														class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8
+														class="flex transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none h-6 w-6
 														{loading[ix]
 															? 'cursor-not-allowed opacity-80'
 															: 'cursor-pointer hover:opacity-80 active:scale-95'}">
@@ -605,7 +613,7 @@ function moveAllUnavailableItemsToWishlist() {
 						<div class="h-10 sm:h-14 flex items-center">
 							{#if data.cart?.discount?.amount > 0}
 								<div class="flex w-full items-center justify-between text-sm">
-									<h5 class="flex-1 truncate text-left font-semibold">
+									<h5 class="flex-1 truncate text-left">
 										Applied Coupon "{data.cart?.discount?.code}"
 									</h5>
 
@@ -626,7 +634,7 @@ function moveAllUnavailableItemsToWishlist() {
 									class="flex w-full items-center justify-between focus:outline-none hover:text-primary-500"
 									class:text-primary-500="{openApplyPromoCodeModal}"
 									on:click="{() => (openApplyPromoCodeModal = true)}">
-									<h5 class="text-sm font-semibold">Apply Promo Code</h5>
+									<h5>Apply Promo Code</h5>
 
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
@@ -643,9 +651,11 @@ function moveAllUnavailableItemsToWishlist() {
 								</button>
 							{/if}
 						</div>
-
-						<hr class="mb-5" />
+					{:else}
+						<h2 class="mb-5">Cart Summary</h2>
 					{/if}
+
+					<hr class="mb-5" />
 
 					<Pricesummary
 						cart="{data.cart}"
@@ -665,7 +675,7 @@ function moveAllUnavailableItemsToWishlist() {
 							<div class="relative w-full sm:w-[25rem]">
 								<div
 									class="flex items-center justify-between gap-5 border-b border-zinc-200 p-4 sm:gap-10">
-									<h2 class="text-lg font-bold">Apply Promo Code</h2>
+									<h5>Apply Promo Code</h5>
 
 									<button
 										type="button"
@@ -705,7 +715,7 @@ function moveAllUnavailableItemsToWishlist() {
 										</PrimaryButton>
 									</form>
 
-									<Error err="{couponErr}" />
+									<Error err="{couponErr}" class="mt-5" />
 
 									{#if loadingCoupon}
 										<div class="mt-5 flex flex-col gap-5">
@@ -719,16 +729,16 @@ function moveAllUnavailableItemsToWishlist() {
 
 											<Skeleton small />
 										</div>
-									{:else if coupons?.length}
+									{:else if coupons?.length > 0}
 										<ul class="flex flex-col divide-y">
 											{#each coupons as coupon}
 												<button
 													title="Click to apply the coupon"
 													on:click="{() => handleCouponCode(coupon.code)}"
-													class="group cursor-pointer py-5 text-left">
+													class="group text-left py-5">
 													<div class="mb-2 flex items-center gap-3">
 														<div
-															class="max-w-max rounded border border-dashed py-1 px-4 font-semibold
+															class="max-w-max rounded border border-zinc-500 border-dashed py-1 px-4 font-semibold tracking-wide
 															{data.cart?.discount?.code === coupon.code
 																? 'border-blue-500 text-blue-500'
 																: 'group-hover:border-blue-500 group-hover:text-blue-500'}">
@@ -738,7 +748,7 @@ function moveAllUnavailableItemsToWishlist() {
 														{#if data.cart?.discount?.code === coupon.code}
 															<svg
 																xmlns="http://www.w3.org/2000/svg"
-																class="h-5 w-5 text-green-500"
+																class="h-5 w-5 text-brand-500"
 																viewBox="0 0 20 20"
 																fill="currentColor">
 																<path
@@ -783,10 +793,7 @@ function moveAllUnavailableItemsToWishlist() {
 
 			{#if products?.length > 0}
 				<div class="w-full">
-					<h2
-						class="my-5 font-serif text-xl font-medium tracking-wider sm:my-10 sm:text-2xl md:text-3xl xl:text-4xl">
-						You May Like
-					</h2>
+					<h2 class="my-5 sm:my-10">You May Like</h2>
 
 					<div
 						class="grid w-full grid-cols-2 items-end sm:flex sm:flex-wrap sm:justify-between sm:gap-10">
