@@ -4,7 +4,7 @@
 ```
 git clone git@github.com:itswadesh/svelte-commerce.git
 npm i
-npm dev
+npm run dev
 ```
 
 ## To deploy
