@@ -1,10 +1,6 @@
 {
     "rewrites": [
         {
-            "source": "/graphql",
-            "destination": "https://api.misiki.io/graphql"
-        },
-        {
             "source": "/api/:path*",
             "destination": "https://api.misiki.io/api/:path*"
         },
@@ -14,9 +10,8 @@
         }
     ],
     "env": {
-        "VITE_WWW_URL": "https://food.misiki.io",
+        "VITE_WWW_URL": "https://kitcommerce.tech",
         "VITE_DOMAIN": "misiki.io",
         "HTTP_ENDPOINT": "https://api.misiki.io",
-        "NODE_OPTIONS": "--max-old-space-size=7680"
     }
 }
