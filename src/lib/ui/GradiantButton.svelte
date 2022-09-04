@@ -27,41 +27,58 @@ export let loading = false,
 // though it is a reserved word
 
 export { className as class }
+
+let localLoadingPeriod = false
+
+function handleClick() {
+	dispatch('click')
+	handleLoading()
+}
+
+function handleLoading() {
+	if (loading === false) {
+		localLoadingPeriod = true
+
+		setTimeout(() => {
+			localLoadingPeriod = false
+		}, 2000)
+	}
+}
 </script>
 
 <button
 	type="{type}"
 	class="
       relative
+      transform
+      items-center
+      justify-center
+      overflow-hidden
+      bg-white
       px-4
       py-2
+      text-center
       font-semibold
       tracking-wider
       text-white
-      transition
-      duration-300
-      transform
-      bg-white
       shadow-md
-      hover:shadow
-      items-center
-      justify-center
-      text-center
-      focus:outline-none focus:ring-0 focus:ring-offset-0 overflow-hidden
+      transition
+      duration-700
+      hover:shadow focus:outline-none focus:ring-0 focus:ring-offset-0
 	  {disabled ? 'bg-gray-400 cursor-not-allowed' : 'gradient active:scale-95'}
       {roundedFull ? 'rounded-full' : 'rounded-md'}
 	  {className}
     "
-	on:click="{() => dispatch('click')}">
-	<div class="flex items-center justify-center space-x-1">
+	on:click="{handleClick}">
+	<div class="flex items-center justify-center gap-1">
 		<slot />
 	</div>
 
-	{#if loading}
+	{#if loading || localLoadingPeriod}
 		<div
-			class="absolute inset-0 bg-black bg-opacity-70 flex items-center justify-center cursor-not-allowed">
+			class="absolute inset-0 flex cursor-not-allowed items-center justify-center bg-black bg-opacity-70">
 			<svg
-				class="mx-auto text-white animate-spin 
+				class="mx-auto animate-spin text-white 
 				{loadingringsize == 'xs' ? 'w-4 h-4' : ''}
 				{loadingringsize == 'sm' ? 'h-5 w-5' : ''}
 				{loadingringsize == 'base' ? 'h-6 w-6' : ''}

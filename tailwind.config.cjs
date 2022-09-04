@@ -71,7 +71,7 @@ const config = {
 
 	plugins: [
 		require('tailwind-scrollbar'),
-		require('@tailwindcss/line-clamp'),
+		require('daisyui'),
 		require('@tailwindcss/forms'),
 		require('tailwindcss-rtl'),
 		require('@tailwindcss/typography')

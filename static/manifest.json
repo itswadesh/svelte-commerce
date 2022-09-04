@@ -1,43 +1,116 @@
 {
-  "short_name": "atoz",
-  "name": "atoz",
-  "start_url": "/",
+  "short_name": "KitCommerce",
+  "name": "KitCommerce",
   "icons": [
     {
-      "src": "logo_512.png",
+      "src": "icons/icon-72x72.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "72x72",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-96x96.png",
+      "type": "image/png",
+      "sizes": "96x96",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-120x120.png",
+      "type": "image/png",
+      "sizes": "120x120",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-128x128.png",
+      "type": "image/png",
+      "sizes": "128x128",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-144x144.png",
+      "type": "image/png",
+      "sizes": "144x144",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-152x152.png",
+      "type": "image/png",
+      "sizes": "152x152",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-180x180.png",
+      "type": "image/png",
+      "sizes": "180x180",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-256x256.png",
+      "type": "image/png",
+      "sizes": "256x256",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-384x384.png",
+      "type": "image/png",
+      "sizes": "384x384",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
     }
   ],
-  "background_color": "#3367D6",
+  "start_url": "/",
+  "background_color": "#1b4079",
   "display": "standalone",
   "scope": "/",
-  "theme_color": "#3367D6",
+  "theme_color": "#d62828",
   "shortcuts": [
     {
-      "name": "Misiki",
-      "short_name": "AtoZ",
-      "description": "Misiki for business listing",
-      "url": "/today?source=pwa",
+      "name": "Buy Mobile covers",
+      "short_name": "Mobile",
+      "description": "Buy Modern Mobile Covers",
+      "url": "/mobile?source=pwa",
       "icons": [
         {
-          "src": "/icons/logo_192.png",
+          "src": "/category/mobile.png",
           "sizes": "192x192"
         }
       ]
     },
     {
-      "name": "Misiki",
-      "short_name": "AtoZ",
-      "description": "Misiki for business listing",
-      "url": "/tomorrow?source=pwa",
+      "name": "Print your mug",
+      "short_name": "Mug",
+      "description": "Print your photo on mug",
+      "url": "/mug?source=pwa",
       "icons": [
         {
-          "src": "/icons/logo_192.png",
+          "src": "/category/mug.png",
           "sizes": "192x192"
         }
       ]
     }
   ],
-  "description": "Misiki for business listing"
+  "description": "Customized Mobile Covers India: KitCommerce is the most beneficial customized mobile cover printing online store at which it is easy to design custom phone cases",
+  "screenshots": [
+    {
+      "src": "/screenshots/1.png",
+      "type": "image/png",
+      "sizes": "540x720"
+    },
+    {
+      "src": "/screenshots/2.jpg",
+      "type": "image/jpg",
+      "sizes": "540x720"
+    }
+  ]
 }

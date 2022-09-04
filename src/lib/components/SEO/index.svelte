@@ -1,18 +1,21 @@
 <script>
-import { authorInfo, WWW_URL } from '$lib/config'
+import {
+	authorInfo,
+	WWW_URL,
+	entity,
+	ogLanguage,
+	siteLanguage,
+	siteShortTitle,
+	siteTitle
+} from '$lib/config'
 import OpenGraph from './OpenGraph.svelte'
 import SchemaOrg from './SchemaOrg.svelte'
 import Twitter from './Twitter.svelte'
 
 const {
 	author,
-	entity,
 	facebookAuthorPage,
-	facebookPage,
-	ogLanguage,
-	siteLanguage,
-	siteShortTitle,
-	siteTitle,
+	facebookPageName,
 	githubPage,
 	linkedinProfile,
 	telegramUsername,
@@ -24,14 +27,13 @@ export let breadcrumbs = []
 export let entityMeta = null
 export let lastUpdated = null
 export let datePublished = null
-export let metadescription = ''
+export let description = ''
 export let slug = ''
 export let timeToRead = 0
 export let title = ''
 export let keywords = ''
 
 const defaultAlt = ''
-
 export let featuredImage = {
 	url: '',
 	alt: defaultAlt,
@@ -59,12 +61,12 @@ const openGraphProps = {
 	lastUpdated,
 	image: ogImage,
 	squareImage: ogSquareImage,
-	metadescription,
+	description,
 	ogLanguage,
 	pageTitle,
 	siteTitle,
 	url,
-	...(article ? { datePublished, lastUpdated, facebookPage, facebookAuthorPage } : {})
+	...(article ? { datePublished, lastUpdated, facebookPageName, facebookAuthorPage } : {})
 }
 const schemaOrgProps = {
 	article,
@@ -75,14 +77,14 @@ const schemaOrgProps = {
 	lastUpdated,
 	entityMeta,
 	featuredImage,
-	metadescription,
+	description,
 	siteLanguage,
 	siteTitle,
 	siteTitleAlt: siteShortTitle,
 	siteUrl: WWW_URL,
 	title: pageTitle,
 	url,
-	facebookPage,
+	facebookPageName,
 	githubPage,
 	linkedinProfile,
 	telegramUsername,
@@ -99,7 +101,7 @@ const twitterProps = {
 
 <svelte:head>
 	<title>{pageTitle}</title>
-	<meta name="description" content="{metadescription}" />
+	<meta name="description" content="{description}" />
 	<meta name="keywords" content="{keywords}" />
 	<meta
 		name="robots"

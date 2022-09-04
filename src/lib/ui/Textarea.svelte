@@ -1,67 +1,29 @@
-<style>
-.floating-label {
-	position: relative;
-}
-.floating-input {
-	font-size: 14px;
-	padding: 4px 4px;
-	display: block;
-	width: 100%;
-	padding: 14px 12px 0;
-	border: none;
-}
-
-.floating-input:focus {
-	outline: none;
-	border-bottom: 2px solid red;
-}
-
-label {
-	color: #999;
-	font-size: 16px;
-	font-weight: normal;
-	position: absolute;
-	pointer-events: none;
-	left: 8px;
-	top: 13px;
-	transition: 0.2s ease all;
-	-moz-transition: 0.2s ease all;
-	-webkit-transition: 0.2s ease all;
-}
-
-.floating-input:focus ~ label,
-.floating-input:not(:placeholder-shown) ~ label {
-	top: -1px;
-	font-size: 14px;
-	color: #555;
-}
-
-.floating-select:focus ~ label,
-.floating-select:not([value='']):valid ~ label {
-	top: -18px;
-	font-size: 14px;
-	color: #555;
-}
-</style>
-
 <script>
 import { createEventDispatcher } from 'svelte'
+
 const dispatch = createEventDispatcher()
-export let label = '',
-	value = '',
-	cls = '',
-	placeholder = ' '
+
+let clazz = ''
+
+export { clazz as class }
+
+export let value = '',
+	name = '',
+	id = '',
+	placeholder = ' ',
+	cols = 30,
+	rows = 4,
+	disabled = false
 </script>
 
-<div class="{cls}">
-	<div class="mb-10 floating-label">
-		<textarea
-			rows="4"
-			bind:value
-			class="w-full bg-gray-100 border-b rounded floating-input hover:bg-gray-300 focus:outline-none focus:border-pink-500"
-			placeholder="{placeholder}"
-			aria-label="{label}"></textarea>
-		<span class="highlight"></span>
-		<label>{label}</label>
-	</div>
-</div>
+<textarea
+	name="{name}"
+	id="{id}"
+	cols="{cols}"
+	rows="{rows}"
+	bind:value
+	placeholder="{placeholder}"
+	class="w-full rounded-md border border-gray-300 p-2 text-sm placeholder-gray-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 {clazz} 
+	{disabled ? 'cursor-not-allowed bg-gray-100' : 'bg-transparent hover:bg-gray-50'}"
+	aria-label="{placeholder}"
+	on:input="{() => dispatch('input')}"></textarea>

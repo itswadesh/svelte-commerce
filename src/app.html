@@ -1,28 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="cupcake">
+<html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<meta name="description" content="" />
-		<link rel="icon" href="/favicon.ico" />
+		<link rel="icon" href="%sveltekit.assets%/favicon.ico" />
+		<link rel="apple-touch-icon" href="%sveltekit.assets%/icons/icon-192x192.png" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<!-- <link rel="preload" href="some-fancy-font.ttf" as="font" type="font/woff2" crossorigin> -->
+		<!-- <link href="https://fonts.googleapis.com/css2?family=Karla&display=swap" rel="stylesheet" /> -->
+		<link rel="manifest" crossorigin="use-credentials" href="/manifest.json" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel="manifest" crossorigin="use-credentials" href="manifest.json" />
+		<meta name="theme-color" content="#FAE053" />
 		%sveltekit.head%
-		<style>
-			@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
-		</style>
 	</head>
-	<body>
-		<div id="svelte">%sveltekit.body%</div>
-		<!--Google Analytics -->
-		<script async src="https://www.googletagmanager.com/gtag/js?id=G-VBF1CPS8VD"></script>
-		<script>
-			window.dataLayer = window.dataLayer || []
-			function gtag() {
-				dataLayer.push(arguments)
-			}
-			gtag('js', new Date())
 
-			gtag('config', 'G-VBF1CPS8VD')
-		</script>
+	<body class="text-gray-800">
+		<div>%sveltekit.body%</div>
 	</body>
 </html>

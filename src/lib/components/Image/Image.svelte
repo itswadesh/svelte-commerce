@@ -9,6 +9,8 @@ img.loaded {
 </style>
 
 <script>
+import { IMAGE_CDN_URL } from '$lib/config'
+
 export let src
 export let alt
 export let clazz
@@ -18,6 +20,10 @@ let loaded = false
 let thisImage
 
 onMount(() => {
+	const originalImageUrl = src.replace('https://misiki.s3.ap-south-1.amazonaws.com/', '/')
+
+	if (src) src = IMAGE_CDN_URL + originalImageUrl
+
 	thisImage.onload = () => {
 		loaded = true
 	}

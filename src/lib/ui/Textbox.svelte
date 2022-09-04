@@ -1,67 +1,126 @@
 <style>
-.floating-label {
-	position: relative;
-}
-.floating-input {
-	font-size: 14px;
-	padding: 4px 4px;
-	display: block;
-	width: 100%;
-	height: 48px;
-	padding: 14px 12px 0;
-	border: none;
-}
-
-.floating-input:focus {
-	outline: none;
-	border-bottom: 2px solid black;
-}
-
-label {
-	color: #999;
-	font-size: 16px;
-	font-weight: normal;
-	position: absolute;
-	pointer-events: none;
-	left: 8px;
-	top: 11px;
-	transition: 0.2s ease all;
-	-moz-transition: 0.2s ease all;
-	-webkit-transition: 0.2s ease all;
-}
-
-.floating-input:focus ~ label,
-.floating-input:not(:placeholder-shown) ~ label {
-	top: 1px;
-	font-size: 14px;
-	color: #555;
-}
-
-.floating-select:focus ~ label,
-.floating-select:not([value='']):valid ~ label {
-	top: -18px;
-	font-size: 14px;
-	color: #555;
-}
 </style>
 
 <script>
 import { createEventDispatcher } from 'svelte'
+
 const dispatch = createEventDispatcher()
-export let label = '',
+
+let clazz = ''
+
+export { clazz as class }
+
+export let type = 'text',
+	id = '',
+	name = '',
+	placeholder = '',
 	value = '',
-	cls = '',
-	placeholder = ' '
+	required = false,
+	disabled = false
 </script>
 
-<div class="{cls}">
-	<div class=" floating-label">
-		<input
-			bind:value
-			class="w-full bg-gray-100 border-b rounded floating-input focus:outline-none focus:border-pink-500"
-			placeholder="{placeholder}"
-			aria-label="{label}" />
-		<span class="highlight"></span>
-		<label>{label}</label>
-	</div>
-</div>
+{#if type === 'text'}
+	<input
+		type="text"
+		bind:value
+		id="{id}"
+		name="{name}"
+		class="w-full rounded-md border border-gray-300 p-2 text-sm placeholder-gray-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 {clazz} 
+		{disabled ? 'cursor-not-allowed bg-gray-100' : 'bg-transparent hover:bg-gray-50'}"
+		placeholder="{placeholder}"
+		required="{required}"
+		disabled="{disabled}"
+		aria-label="{placeholder}"
+		on:input="{() => dispatch('input')}" />
+{:else if type === 'email'}
+	<input
+		type="email"
+		bind:value
+		id="{id}"
+		name="{name}"
+		class="w-full rounded-md border border-gray-300 p-2 text-sm placeholder-gray-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 {clazz} 
+		{disabled ? 'cursor-not-allowed bg-gray-100' : 'bg-transparent hover:bg-gray-50'}"
+		placeholder="{placeholder}"
+		required="{required}"
+		disabled="{disabled}"
+		aria-label="{placeholder}"
+		on:input="{() => dispatch('input')}" />
+{:else if type === 'password'}
+	<input
+		type="password"
+		bind:value
+		id="{id}"
+		name="{name}"
+		class="w-full rounded-md border border-gray-300 p-2 text-sm placeholder-gray-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 {clazz} 
+		{disabled ? 'cursor-not-allowed bg-gray-100' : 'bg-transparent hover:bg-gray-50'}"
+		placeholder="{placeholder}"
+		required="{required}"
+		disabled="{disabled}"
+		aria-label="{placeholder}"
+		on:input="{() => dispatch('input')}" />
+{:else if type === 'date'}
+	<input
+		type="date"
+		bind:value
+		id="{id}"
+		name="{name}"
+		class="w-full rounded-md border border-gray-300 p-2 text-sm placeholder-gray-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 {clazz} 
+		{disabled ? 'cursor-not-allowed bg-gray-100' : 'bg-transparent hover:bg-gray-50'}"
+		placeholder="{placeholder}"
+		required="{required}"
+		disabled="{disabled}"
+		aria-label="{placeholder}"
+		on:input="{() => dispatch('input')}" />
+{:else if type === 'time'}
+	<input
+		type="time"
+		bind:value
+		id="{id}"
+		name="{name}"
+		class="w-full rounded-md border border-gray-300 p-2 text-sm placeholder-gray-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 {clazz} 
+		{disabled ? 'cursor-not-allowed bg-gray-100' : 'bg-transparent hover:bg-gray-50'}"
+		placeholder="{placeholder}"
+		required="{required}"
+		disabled="{disabled}"
+		aria-label="{placeholder}"
+		on:input="{() => dispatch('input')}" />
+{:else if type === 'number'}
+	<input
+		type="number"
+		bind:value
+		id="{id}"
+		name="{name}"
+		class="w-full rounded-md border border-gray-300 p-2 text-sm placeholder-gray-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 {clazz} 
+		{disabled ? 'cursor-not-allowed bg-gray-100' : 'bg-transparent hover:bg-gray-50'}"
+		placeholder="{placeholder}"
+		required="{required}"
+		disabled="{disabled}"
+		aria-label="{placeholder}"
+		on:input="{() => dispatch('input')}" />
+{:else if type === 'tel'}
+	<input
+		type="tel"
+		bind:value
+		id="{id}"
+		name="{name}"
+		class="w-full rounded-md border border-gray-300 p-2 text-sm placeholder-gray-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 {clazz} 
+		{disabled ? 'cursor-not-allowed bg-gray-100' : 'bg-transparent hover:bg-gray-50'}"
+		placeholder="{placeholder}"
+		required="{required}"
+		disabled="{disabled}"
+		aria-label="{placeholder}"
+		on:input="{() => dispatch('input')}" />
+{:else if type === 'datetime-local'}
+	<input
+		type="datetime-local"
+		bind:value
+		id="{id}"
+		name="{name}"
+		class="w-full rounded-md border border-gray-300 p-2 text-sm placeholder-gray-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 {clazz} 
+		{disabled ? 'cursor-not-allowed bg-gray-100' : 'bg-transparent hover:bg-gray-50'}"
+		placeholder="{placeholder}"
+		required="{required}"
+		disabled="{disabled}"
+		aria-label="{placeholder}"
+		on:input="{() => dispatch('input')}" />
+{/if}

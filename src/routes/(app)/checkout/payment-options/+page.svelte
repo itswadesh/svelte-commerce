@@ -1,0 +1,364 @@
+<style>
+.frosted-black {
+	backdrop-filter: blur(12px);
+	background-color: hsla(0, 0%, 0%, 0.5);
+}
+
+.z-index {
+	z-index: 99999;
+}
+</style>
+
+<script>
+import SEO from '$lib/components/SEO/index.svelte'
+import { page } from '$app/stores'
+import { currency, toast } from '$lib/util'
+import Error from '$lib/components/Error.svelte'
+import Pricesummary from '$lib/components/Pricesummary.svelte'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import { goto } from '$app/navigation'
+import CheckoutHeader from '$lib/components/CheckoutHeader.svelte'
+// import Stripe from '$lib/Stripe.svelte'
+import { post } from '$lib/util/api'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import { onMount } from 'svelte'
+
+const seoProps = {
+	title: 'Select Payment Option',
+	metadescription: 'Choose your payment method'
+}
+
+export let data
+$: ({
+	loading,
+	err,
+	paymentMethods,
+	address,
+	me,
+	cart,
+	prescription,
+	addressId,
+	stripePublishableKey
+} = data)
+let errorMessage = 'Select a Payment Method',
+	disabled = false,
+	showPayWithBankTransfer = false,
+	bankPayment = {
+		type: 'order',
+		reference: '',
+		remark: '',
+		paymentMethodId: '',
+		amount: 0
+	},
+	selectedPaymentMethod = {
+		id: '',
+		name: '',
+		text: '',
+		instructions: '',
+		qrcode: '',
+		img: ''
+	},
+	paymentDenied = false,
+	razorpayReady = false
+
+onMount(async () => {
+	const razorpayScript = document.createElement('script')
+	razorpayScript.setAttribute('src', 'https://checkout.razorpay.com/v1/checkout.js')
+	document.head.appendChild(razorpayScript)
+	razorpayReady = true
+})
+
+function paymentMethodChanged(pm) {
+	selectedPaymentMethod = pm
+	errorMessage = null
+}
+
+async function submit(pm) {
+	// console.log('pm = ', pm)
+
+	if (!pm || pm === undefined) {
+		disabled = true
+		errorMessage = 'Please select a payment option'
+		toast('Please select a payment option', 'error')
+		return
+	}
+
+	const paymentMethod = pm.value
+
+	if (paymentMethod === 'cod') {
+		try {
+			loading = true
+			const res = await post('orders/checkout/cod', {
+				address: addressId,
+				paymentMethod: 'COD',
+				prescription: prescription?._id
+			})
+
+			goto(`/payment/success?id=${res?._id}&status=PAYMENT_SUCCESS&provider=COD`)
+		} catch (e) {
+			toast(e, 'error')
+		} finally {
+			loading = false
+		}
+	} else if (paymentMethod === 'cashfree') {
+		try {
+			loading = true
+			const res = await post(`payments/checkout-cf`, { address: addressId })
+			if (res?.redirectUrl && res?.redirectUrl !== null) {
+				goto(`${res?.redirectUrl}`)
+			} else {
+				toast('Something went wrong', 'error')
+			}
+		} catch (e) {
+			toast(e?.message, 'error')
+		} finally {
+			loading = false
+		}
+	} else if (paymentMethod === 'razorpay') {
+		try {
+			const rp = await post(`payments/checkout-rp`, {
+				address: addressId
+			})
+
+			// console.log('rp = ', rp)
+
+			const options = {
+				key: rp.keyId, // Enter the Key ID generated from the Dashboard
+				name: 'kitcommerce.tech',
+				description: 'Payment for Misiki',
+				image: '/icon.png',
+				amount: rp.amount,
+				order_id: rp.id,
+				async handler(response) {
+					// console.log('response = ', response)
+
+					try {
+						const capture = await post(`payments/capture-rp`, {
+							rpPaymentId: response.razorpay_payment_id,
+							rpOrderId: response.razorpay_order_id
+						})
+
+						// console.log('capture = ', capture)
+
+						toast('Payment success', 'success')
+						goto(`/payment/success?id=${capture._id}`)
+					} catch (e) {
+						// toast(e, 'error')
+						goto(`/payment/failure?ref=/checkout/payment-options?address=${addressId}`)
+					} finally {
+					}
+				},
+				prefill: {
+					name: `${me.firstName} ${me.lastName}`,
+					phone: me.phone,
+					email: me.email || 'help@kitcommerce.tech',
+					contact: me.phone
+				},
+				notes: {
+					address: '#22, Global Village, Rourkela, Odisha-769002, India'
+				},
+				theme: {
+					color: '#112D4E'
+				}
+			}
+
+			const rzp1 = new Razorpay(options)
+			rzp1.open()
+		} catch (e) {
+			toast(e?.message, 'error')
+		} finally {
+			loading = false
+		}
+	} else {
+		paymentDenied = true
+
+		setTimeout(() => {
+			paymentDenied = false
+		}, 820)
+	}
+}
+
+function checkIfStripeCardValid({ detail }) {
+	disabled = !detail
+}
+</script>
+
+<SEO {...seoProps} />
+
+<Error err="{err}" />
+
+<div class="container mx-auto min-h-screen w-full max-w-6xl p-3 py-5 sm:p-10">
+	<CheckoutHeader selected="payment" />
+
+	<div class="mt-10 flex flex-col gap-10 md:flex-row md:justify-center xl:gap-20">
+		<div class="w-full flex-1">
+			<h2 class="mb-5 text-xl font-bold capitalize tracking-wide sm:text-2xl">Payment Options</h2>
+
+			{#if paymentMethods}
+				<div class="flex w-full flex-col gap-4" class:wiggle="{paymentDenied}">
+					{#each paymentMethods as pm}
+						<label
+							class="flex w-full cursor-pointer items-center gap-2 rounded-md border border-gray-300 p-4 shadow-md transition duration-300 hover:bg-primary-50 sm:gap-4">
+							<input
+								bind:group="{selectedPaymentMethod}"
+								type="radio"
+								value="{pm}"
+								name="group"
+								class="h-4 w-4 focus:outline-none focus:ring-0 focus:ring-offset-0"
+								on:click="{() => paymentMethodChanged(pm)}" />
+
+							<div class="flex w-full flex-1 items-center justify-between gap-4">
+								<div>
+									<h2 class="text-xl font-semibold" style="color:{pm.color}">
+										{pm.name}
+									</h2>
+
+									<p class="mt-1 text-sm text-gray-500">{pm.text}</p>
+								</div>
+
+								<div>
+									<LazyImg
+										src="{pm.imgCdn}"
+										alt="{pm.name}"
+										width="56"
+										height="56"
+										class="h-14 w-14 rounded-full border object-cover object-center text-xs" />
+								</div>
+							</div>
+						</label>
+					{/each}
+				</div>
+			{:else}
+				<div
+					class="flex h-[50vh] items-center justify-center rounded-xl border bg-white p-4 shadow-xl">
+					<div class="mx-auto flex max-w-md flex-col items-center justify-center text-center">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="mb-5 h-10 w-10"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+							stroke-width="2">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+							></path>
+						</svg>
+
+						<p class="mb-2 font-bold capitalize">We are very sorry!!</p>
+
+						<p class="text-sm text-gray-500">
+							There's no payment methode is available. If you are an admin, then add a payment
+							methode as fast as possible
+						</p>
+					</div>
+				</div>
+			{/if}
+
+			<!-- <Stripe
+				address="{addressId}"
+				isStripeSelected="{selectedPaymentMethod.name === 'Stripe'}"
+				stripePublishableKey="{stripePublishableKey}"
+				on:isStripeCardValid="{checkIfStripeCardValid}" /> -->
+		</div>
+
+		<div class="w-full md:w-80 md:flex-shrink-0 md:flex-grow-0">
+			<h2 class="text-xl font-bold capitalize tracking-wide sm:text-2xl">Cart Summary</h2>
+			{#if address}
+				<div class="mt-5 border-t pt-5">
+					<h5 class="mb-2 text-xl font-bold capitalize tracking-wide">Delivery Address</h5>
+
+					<div class="text-sm font-light">
+						<div class="my-1 flex flex-row">
+							<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Name</h5>
+
+							<p>
+								{address.firstName}
+								{address.lastName}
+							</p>
+						</div>
+
+						<div class="flex flex-row">
+							<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Address</h5>
+
+							<p class="flex flex-wrap items-center">
+								{#if address.address}
+									{address.address}
+								{/if}
+
+								{#if address.locality}
+									, {address.locality}
+								{/if}
+
+								{#if address.city}
+									, {address.city}
+								{/if}
+
+								{#if address.state}
+									, {address.state}
+								{/if}
+
+								{#if address.country}
+									, {address.country}
+								{/if}
+							</p>
+						</div>
+
+						<div class="my-1 flex flex-row">
+							<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Pin</h5>
+
+							<h6>{address.zip}</h6>
+						</div>
+
+						<div class="my-1 flex flex-row">
+							<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Phone</h5>
+
+							<h6>{address.phone}</h6>
+						</div>
+
+						<div class="my-1 flex flex-row flex-wrap">
+							<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Email</h5>
+
+							<h6>{address.email}</h6>
+						</div>
+					</div>
+				</div>
+			{/if}
+
+			{#if prescription}
+				<div class="mt-5 border-t pt-5">
+					<h5 class="mb-2 text-xl font-bold capitalize tracking-wide">Prescription Detail</h5>
+
+					<div class="text-sm font-light">
+						<div class="my-1 flex flex-row">
+							<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Name</h5>
+
+							<p>
+								{prescription.name}
+							</p>
+						</div>
+
+						<div>
+							<LazyImg
+								src="{prescription.url}"
+								alt=""
+								height="80"
+								class="h-20 w-auto object-contain object-top text-xs" />
+						</div>
+					</div>
+				</div>
+			{/if}
+
+			<Pricesummary
+				cart="{cart}"
+				text="{errorMessage || 'Confirm Order'}"
+				loading="{loading}"
+				hideCheckoutButton="{selectedPaymentMethod.name === 'Stripe'}"
+				disabled="{!razorpayReady ||
+					!selectedPaymentMethod?.name ||
+					(selectedPaymentMethod?.name === 'Stripe' && disabled)}"
+				on:submit="{() => submit(selectedPaymentMethod)}" />
+		</div>
+	</div>
+</div>

@@ -4,13 +4,17 @@
 }
 .floating-input {
 	font-size: 14px;
+	color: black;
 	display: block;
 	width: 100%;
 	height: 46px;
 	padding: 12px 0 0 0;
-	border-bottom: 2px solid #0a6ce8;
+	border-bottom: 2px solid #e5e7eb;
 }
-
+.floating-input:focus {
+	outline: none;
+	border-bottom: 2px solid #112d4e;
+}
 label {
 	color: #1f2937;
 	font-size: 14px;
@@ -18,7 +22,7 @@ label {
 	position: absolute;
 	pointer-events: none;
 	left: 0px;
-	top: 16px;
+	top: 18px;
 	transition: 0.2s ease all;
 	-moz-transition: 0.2s ease all;
 	-webkit-transition: 0.2s ease all;
@@ -29,10 +33,6 @@ label {
 	top: 0px;
 	font-size: 12px;
 	color: #999;
-}
-
-.input-class {
-	@apply w-full bg-transparent focus:outline-none;
 }
 
 input:-webkit-autofill,
@@ -68,77 +68,84 @@ export { className as class }
 				bind:value
 				id="{id}"
 				name="{name}"
-				class="input-class floating-input"
+				class="floating-input w-full bg-transparent focus:outline-none"
 				placeholder="{placeholder}"
 				aria-label="{label}"
 				required="{required}"
-				on:input="{() => dispatch('input')}" />
+				on:input="{() => dispatch('input')}"
+				on:focus="{() => dispatch('focus')}" />
 		{:else if type === 'email'}
 			<input
 				type="email"
 				bind:value
 				id="{id}"
 				name="{name}"
-				class="input-class floating-input"
+				class="floating-input w-full bg-transparent focus:outline-none"
 				placeholder="{placeholder}"
 				aria-label="{label}"
 				required="{required}"
-				on:input="{() => dispatch('input')}" />
+				on:input="{() => dispatch('input')}"
+				on:focus="{() => dispatch('focus')}" />
 		{:else if type === 'password'}
 			<input
 				type="password"
 				bind:value
 				id="password"
 				name="password"
-				class="input-class floating-input"
+				class="floating-input w-full bg-transparent focus:outline-none"
 				placeholder="{placeholder}"
 				aria-label="{label}"
 				required="{required}"
-				on:input="{() => dispatch('input')}" />
+				on:input="{() => dispatch('input')}"
+				on:focus="{() => dispatch('focus')}" />
 		{:else if type === 'date'}
 			<input
 				type="date"
 				bind:value
 				id="{id}"
 				name="{name}"
-				class="input-class floating-input"
+				class="floating-input w-full bg-transparent focus:outline-none"
 				placeholder="{placeholder}"
 				aria-label="{label}"
 				required="{required}"
-				on:input="{() => dispatch('input')}" />
+				on:input="{() => dispatch('input')}"
+				on:focus="{() => dispatch('focus')}" />
 		{:else if type === 'time'}
 			<input
 				type="time"
 				bind:value
 				name="time"
 				id="time"
-				class="input-class floating-input"
+				class="floating-input w-full bg-transparent focus:outline-none"
 				placeholder="{placeholder}"
 				aria-label="{label}"
 				required="{required}"
-				on:input="{() => dispatch('input')}" />
+				on:input="{() => dispatch('input')}"
+				on:focus="{() => dispatch('focus')}" />
 		{:else if type === 'number'}
 			<input
 				type="number"
 				bind:value
 				id="{id}"
 				name="{name}"
-				class="input-class floating-input"
+				class="floating-input w-full bg-transparent focus:outline-none"
 				placeholder="{placeholder}"
 				aria-label="{label}"
 				required="{required}"
-				on:input="{() => dispatch('input')}" />
+				on:input="{() => dispatch('input')}"
+				on:focus="{() => dispatch('focus')}" />
 		{:else if type === 'tel'}
 			<input
 				type="tel"
 				bind:value
 				id="{id}"
 				name="{name}"
-				class="input-class floating-input"
+				class="floating-input w-full bg-transparent focus:outline-none"
 				placeholder="{placeholder}"
 				aria-label="{label}"
 				required="{required}"
-				on:input="{() => dispatch('input')}" />
+				on:input="{() => dispatch('input')}"
+				on:focus="{() => dispatch('focus')}" />
 		{/if}
 		<span class="highlight"></span>
 
