@@ -3,82 +3,30 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-	html {
-		--scrollbarBG: #cfd8dc;
-		--thumbBG: #90a4ae;
-	}
-	body::-webkit-scrollbar {
-		width: 11px;
-	}
-	body {
-		scrollbar-width: thin;
-		scrollbar-color: var(--thumbBG) var(--scrollbarBG);
-	}
-	body::-webkit-scrollbar-track {
-		background: var(--scrollbarBG);
-	}
-	body::-webkit-scrollbar-thumb {
-		background-color: var(--thumbBG);
-		border-radius: 6px;
-		border: 3px solid var(--scrollbarBG);
-	}
-	.scrollbar::-webkit-scrollbar {
-		width: 11px;
-	}
-	.scrollbar {
-		scrollbar-width: thin;
-		scrollbar-color: var(--thumbBG) var(--scrollbarBG);
-	}
-	.scrollbar::-webkit-scrollbar-track {
-		background: var(--scrollbarBG);
-	}
-	.scrollbar::-webkit-scrollbar-thumb {
-		background-color: var(--thumbBG);
-		border-radius: 6px;
-		border: 3px solid var(--scrollbarBG);
-	}
-
-	/* Demonstrate a "mostly customized" scrollbar
- 	* (won't be visible otherwise if width/height is specified) */
-	.mostly-customized-scrollbar::-webkit-scrollbar {
-		width: 5px;
-		height: 8px;
-		background-color: #cfd8dc; /* or add it to the track */
-	}
-
-	/* Add a thumb */
-	.mostly-customized-scrollbar::-webkit-scrollbar-thumb {
-		background: #90a4ae;
-	}
-}
 
 @layer components {
-	.link {
-		@apply text-indigo-500 hover:text-indigo-700;
-	}
-	.link-primary {
-		@apply text-primary-500 hover:text-primary-700;
-	}
-	.zoom-in {
-		overflow: hidden;
-	}
-	.zoom-in img {
-		width: 100%;
-		transition: 0.4s all ease-in-out;
-	}
-	.zoom-in:hover img {
-		transform: scale(1.05);
-	}
-	.zoom-out {
-		overflow: hidden;
-	}
-	.zoom-out img {
-		width: 100%;
-		transform: scale(1.05);
-		transition: 0.4s all ease-in-out;
-	}
-	.zoom-out:hover img {
-		transform: scale(1);
-	}
+    .wiggle {
+              animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+              transform: translate3d(0, 0, 0);
+              backface-visibility: hidden;
+              perspective: 1000px;
+    }
+
+    @keyframes shake {
+                10%, 90% {
+                    transform: translate3d(-1px, 0, 0);
+                }
+        
+                20%, 80% {
+                    transform: translate3d(2px, 0, 0);
+                }
+        
+                30%, 50%, 70% {
+                    transform: translate3d(-4px, 0, 0);
+                }
+        
+                40%, 60% {
+                    transform: translate3d(4px, 0, 0);
+                }
+    }
 }

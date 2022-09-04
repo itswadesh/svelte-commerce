@@ -1,52 +1,71 @@
+<style>
+.applyRoundedNone {
+	@apply rounded-none;
+}
+.applyroundedFull {
+	@apply rounded-full;
+}
+</style>
+
 <script>
 import { createEventDispatcher } from 'svelte'
+
 const dispatch = createEventDispatcher()
 
 export let loading = false,
 	loadingringsize = 'base',
 	disabled = false,
-	roundedfull = false,
+	roundedNone = false,
+	roundedFull = false,
+	hideLoading = false,
+	clickEffect = false,
 	type = 'button'
 
 // creates a `class` property, even
 // though it is a reserved word
-let clazz
+let clazz = ''
+let localLoadingPeriod = false
+
 export { clazz as class }
+
+function handleClick() {
+	dispatch('click')
+	if (!hideLoading) {
+		handleLoading()
+	}
+}
+
+function handleLoading() {
+	if (loading === false) {
+		localLoadingPeriod = true
+
+		setTimeout(() => {
+			localLoadingPeriod = false
+		}, 820)
+	}
+}
 </script>
 
 <button
 	type="{type}"
-	class="
-      relative
-      px-4
-      py-2
-      font-semibold
-      tracking-wider
-      text-white
-      transition
-      duration-300
-      transform
-      items-center
-      justify-center
-      text-center
-	  border
-      focus:outline-none focus:ring-0 focus:ring-offset-0 overflow-hidden {clazz}
-      {roundedfull ? 'rounded-full' : 'rounded-md'}
-	  {disabled
+	class="relative transform items-center justify-center overflow-hidden rounded-md border px-4 py-2 text-center font-semibold tracking-wider text-white shadow-md transition duration-700 focus:outline-none focus:ring-0 focus:ring-offset-0 {clazz}
+	{disabled
 		? 'bg-gray-400 border-gray-400 cursor-not-allowed'
-		: 'bg-primary-500 hover:bg-primary-700 border-primary-500 hover:border-primary-700 active:scale-95'}
-	  
+		: 'bg-primary-500 hover:bg-primary-700 border-primary-500 hover:border-primary-700'}	  
     "
-	on:click="{() => dispatch('click')}">
+	class:active:scale-95="{clickEffect}"
+	class:applyRoundedNone="{roundedNone}"
+	class:applyroundedFull="{roundedFull}"
+	on:click="{handleClick}">
 	<div class="flex items-center justify-center gap-2">
 		<slot />
 	</div>
 
-	{#if loading}
+	{#if loading || localLoadingPeriod}
 		<div
-			class="absolute inset-0 bg-black bg-opacity-70 flex items-center justify-center cursor-not-allowed">
+			class="absolute inset-0 flex cursor-not-allowed items-center justify-center bg-black bg-opacity-70">
 			<svg
-				class="mx-auto text-white animate-spin 
+				class="mx-auto animate-spin text-white 
 				{loadingringsize == 'xs' ? 'w-4 h-4' : ''}
 				{loadingringsize == 'sm' ? 'h-5 w-5' : ''}
 				{loadingringsize == 'base' ? 'h-6 w-6' : ''}

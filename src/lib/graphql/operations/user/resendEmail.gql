@@ -1,3 +1,0 @@
-mutation resendEmail($email: String) {
-  resendEmail(email: $email)
-}

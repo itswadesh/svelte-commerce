@@ -1,4 +1,17 @@
-<h1>Because of major change in SvelteKit v-next-4.0.5, the repo is broken. But nothing to worry, it will be fixed in 1-2 days </h1>
+<h1>We are changing with Sveltekit change. Right now we are at `kit:1.0.0-next.442`</h1>
+
+## To start Development
+```
+git clone git@github.com:itswadesh/svelte-commerce.git
+npm i
+npm dev
+```
+
+## To deploy
+
+```
+docker compose up
+```
 
 <a href="https://misiki.io/">
 <img src="https://repository-images.githubusercontent.com/213575283/f577b8bd-8edb-41ba-bfe5-36e65072e1f2" alt/>
@@ -45,7 +58,9 @@
 
 ## Update 26-April-2022
 
-- 26-April-2022 - Attached to GraphQL backend
+- 04-September-2022 - Zero-configuration Coolify deployment
+- 04-September-2022 - New fully working theme launched
+- 04-September-2022 - Attached to ReST API Backend, Migrated to new Sveltekit version
 - 26-April-2022 - Latest SvelteKit version
 - 26-April-2022 - Improved image lazy loading
 - 26-April-2022 - New Banners section

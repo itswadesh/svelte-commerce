@@ -1,3 +1,0 @@
-mutation removeStoreCountry($id: ID!) {
-  removeStoreCountry(id: $id)
-}

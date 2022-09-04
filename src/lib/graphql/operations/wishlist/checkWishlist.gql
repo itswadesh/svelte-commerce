@@ -1,3 +1,0 @@
-query checkWishlist($product: ID!, $variant: ID!) {
-  checkWishlist(product: $product, variant: $variant)
-}

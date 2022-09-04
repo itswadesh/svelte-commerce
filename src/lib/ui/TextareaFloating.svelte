@@ -4,27 +4,24 @@
 }
 .floating-input {
 	font-size: 14px;
-	padding: 4px 4px;
+	color: black;
 	display: block;
 	width: 100%;
-	padding: 20px 12px 0;
-	border: 1px solid #e5e7eb;
+	padding: 20px 0 0 0;
 	border-bottom: 2px solid #e5e7eb;
 }
-
 .floating-input:focus {
 	outline: none;
-	border-bottom: 2px solid #6366f1;
+	border-bottom: 2px solid #112d4e;
 }
-
 label {
 	color: #1f2937;
 	font-size: 14px;
 	font-weight: normal;
 	position: absolute;
 	pointer-events: none;
-	left: 12px;
-	top: 13px;
+	left: 0px;
+	top: 20px;
 	transition: 0.2s ease all;
 	-moz-transition: 0.2s ease all;
 	-webkit-transition: 0.2s ease all;
@@ -32,16 +29,16 @@ label {
 
 .floating-input:focus ~ label,
 .floating-input:not(:placeholder-shown) ~ label {
-	top: 4px;
+	top: 0px;
 	font-size: 12px;
-	color: #6366f1;
+	color: #999;
 }
 
-.floating-select:focus ~ label,
-.floating-select:not([value='']):valid ~ label {
-	top: -18px;
-	font-size: 14px;
-	color: #555;
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+	transition: background-color 5000s ease-in-out 0s;
 }
 </style>
 
@@ -67,11 +64,14 @@ export { className as class }
 			rows="{rows}"
 			required="{required}"
 			bind:value
-			class="floating-input w-full rounded border-b border-gray-300 bg-gray-50 text-sm hover:bg-white focus:outline-none "
+			class="floating-input w-full bg-transparent focus:outline-none"
 			placeholder="{placeholder}"
 			aria-label="{label}"
-			on:change="{() => dispatch('change')}"></textarea>
+			on:input="{() => dispatch('input')}"></textarea>
+
 		<span class="highlight"></span>
-		<label for="textarea">{label}</label>
+
+		<label for="textbox">{label}</label>
+		<slot />
 	</div>
 </div>

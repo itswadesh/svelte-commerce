@@ -213,7 +213,7 @@ const schemaOrgProduct = {
 	},
 	releaseDate: createdAt,
 	dateModified: updatedAt,
-	url: `${WWW_URL}/${slug}?id=${id}`,
+	url: `${WWW_URL}/biz/${slug}`,
 	interactionStatistic: {
 		'@type': 'InteractionCounter',
 		interactionType: 'http://schema.org/DownloadAction',
@@ -223,9 +223,9 @@ const schemaOrgProduct = {
 		'@type': 'Offer',
 		availability: 'http://schema.org/InStock',
 		priceValidUntil: nextWeek.toISOString(),
-		url: `${WWW_URL}/${slug}?id=${id}`,
+		url: `${WWW_URL}/biz/${slug}`,
 		price: price < 1 ? '0.00' : price,
-		priceCurrency: 'INR',
+		priceCurrency: 'USD',
 		seller: {
 			'@type': 'Organization',
 			name: 'Litekart',

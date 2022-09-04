@@ -1,10 +1,38 @@
+<!-- PageTransition.svelte -->
 <script>
-import { fly } from 'svelte/transition'
-// export let refresh = ''
+  import { quintOut } from 'svelte/easing'
+
+  import { fly, scale } from 'svelte/transition'
+  export let url = ''
+  const pageTransitionDuration = 500
 </script>
 
-<!-- {#key refresh} -->
-<div in:fly="{{ y: -50, duration: 250, delay: 300 }}" out:fly="{{ y: -50, duration: 250 }}">
-	<slot />
+<!-- in:fly={{
+        y: 50,
+        duration: pageTransitionDuration,
+        delay: pageTransitionDuration,
+      }}
+      out:fly={{ duration: pageTransitionDuration }} -->
+
+<div class="transition-outer">
+  {#key url}
+    <div
+      class="transition-inner"
+      transition:scale={{ delay: 0, duration: 100, easing: quintOut }}
+      style="flex flex-col items-center justify-center text-center"
+    >
+      <slot />
+    </div>
+  {/key}
 </div>
-<!-- {/key} -->
+
+<style>
+  .transition-outer {
+    display: grid;
+    grid-template: 1fr 1fr;
+  }
+  .transition-inner {
+    grid-row: 1;
+    grid-column: 1;
+  }
+</style>

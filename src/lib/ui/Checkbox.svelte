@@ -79,90 +79,95 @@ function changed() {
 	dispatch('change', model)
 }
 function clearFilters() {
-	let url = '/search'
+	let url = '/stores'
 	goto(url)
 }
 function selectallFilters() {}
 </script>
 
-<section class="my-2">
-	<div class="flex items-center justify-between">
-		<div on:click="{toggle}" on:mouseenter="{Showit}" class="flex items-center cursor-pointer">
-			{#if show}
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					class="mt-1 h-5 w-5"
-					viewBox="0 0 20 20"
-					fill="currentColor">
-					<path
-						fill-rule="evenodd"
-						d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z"
-						clip-rule="evenodd"></path>
-				</svg>
-			{:else}
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					class="h-5 w-5 mt-1"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke="currentColor">
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-				</svg>
-			{/if}
-			<h5 class="text-sm ml-1 font-semibold ">
-				{title}
-			</h5>
-		</div>
-		{#if showit}
-			<div>
-				<!-- <h5 class="text-xs flex items-center space-x-2">
-          <button
-            on:click={selectallFilters}
-            class="border-r pr-2 border-blue-500 hover:underli text-purple-500 cursor-pointer hover:underline focus:outline-none"
-          >
-            Select All
-          </button>
-          <button
-            on:click={clearFilters}
-            class="hover:underli text-purple-500 cursor-pointer hover:underline focus:outline-none"
-          >
-            Clear All
-          </button>
-        </h5> -->
+<div class="border-graey-300 border-b pl-3 pb-3">
+	{#if title}
+		<div class="flex items-center justify-between pr-3">
+			<div
+				on:click="{toggle}"
+				on:mouseenter="{Showit}"
+				class="flex w-full cursor-pointer items-center justify-between">
+				<h5 class="mr-2 text-sm font-semibold ">
+					{title}
+				</h5>
+
+				{#if show}
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-5 w-5"
+						viewBox="0 0 20 20"
+						fill="currentColor">
+						<path
+							fill-rule="evenodd"
+							d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z"
+							clip-rule="evenodd"></path>
+					</svg>
+				{:else}
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-5 w-5"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+					</svg>
+				{/if}
 			</div>
-		{/if}
-	</div>
-	<ul class=" ml-6 filter-container scrollbar">
-		{#each items as i (i.key)}
-			{#if (i.key, show)}
-				<li>
-					<label class="my-2 flex items-center">
-						<input
-							type="checkbox"
-							name="{name}"
-							disabled="{disabled}"
-							required="{required}"
-							color="{color}"
-							bind:group="{selectedItems}"
-							value="{i.key}"
-							on:change="{() => dispatch('go', { model, selectedItems })}"
-							class="focus:ring-0 focus:ring-offset-0 h-4 w-4" />
-						{#if color}
-							<!-- <span
-                data-colorhex="black"
-                class="colour-label colour-colorDisplay"
-                style.background-color={color}
-              /> -->
-						{/if}
-						<span class="ml-2 text-sm text-gray-800">{i.key}</span>
-						<span class="text-xs ml-1 text-gray-500">({i.doc_count})</span>
-					</label>
-				</li>
-			{/if}
-		{/each}
-	</ul>
-</section>
+
+			<!-- {#if showit}
+				<div>
+					<h5 class="text-xs flex items-center gap-2">
+        		  <button
+        		    on:click={selectallFilters}
+        		    class="border-r pr-2 border-blue-500 text-purple-500 cursor-pointer hover:underline focus:outline-none"
+        		  >
+        		    Select All
+        		  </button>
+        		  <button
+        		    on:click={clearFilters}
+        		    class="text-purple-500 cursor-pointer hover:underline focus:outline-none"
+        		  >
+        		    Clear All
+        		  </button>
+        		</h5> 
+				</div>
+			{/if} -->
+		</div>
+	{/if}
+
+	{#if show}
+		<ul class="filter-container mostly-customized-scrollbar mt-2 flex flex-col gap-2">
+			{#each items as i}
+				{#if i}
+					<li>
+						<label class="flex items-start gap-1">
+							<input
+								type="checkbox"
+								name="{name}"
+								disabled="{disabled}"
+								required="{required}"
+								color="{color}"
+								bind:group="{selectedItems}"
+								value="{i._source.slug}"
+								on:change="{() => dispatch('go', { model, selectedItems })}"
+								class="mt-0.5 h-4 w-4 flex-shrink-0 focus:ring-0 focus:ring-offset-0" />
+
+							<div class="flex flex-1 flex-wrap items-center">
+								<span class="flex-1 text-sm text-gray-800">{i._source.name}</span>
+							</div>
+						</label>
+					</li>
+				{/if}
+			{/each}
+		</ul>
+	{/if}
+</div>

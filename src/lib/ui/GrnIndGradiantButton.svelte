@@ -11,6 +11,8 @@
 </style>
 
 <script>
+import { createEventDispatcher } from 'svelte'
+
 export let loading = false,
 	disabled = false,
 	loadingringsize = 'base',
@@ -18,51 +20,71 @@ export let loading = false,
 	type = 'button'
 
 let clazz
+
 export { clazz as class }
-function go() {}
+
+const dispatch = createEventDispatcher()
+
+let localLoadingPeriod = false
+
+function handleClick() {
+	dispatch('click')
+	handleLoading()
+}
+
+function handleLoading() {
+	if (loading === false) {
+		localLoadingPeriod = true
+
+		setTimeout(() => {
+			localLoadingPeriod = false
+		}, 2000)
+	}
+}
 </script>
 
 <button
 	type="{type}"
 	class=" {clazz}
       relative
+      transform
+      items-center
+      justify-center
+      bg-white
       px-4
       py-2
+      text-center
       font-semibold
       tracking-wider
       text-white
-      transition
-      duration-300
-      transform
-      bg-white
       shadow-md
+      transition
+      duration-700
       hover:shadow
-      active:scale-95
-      items-center
-      justify-center
-      text-center
-      focus:outline-none focus:ring-0 focus:ring-offset-0
+      focus:outline-none
+      focus:ring-0 focus:ring-offset-0 active:scale-95
       {disabled ? 'bg-gray-400 cursor-not-allowed' : 'gradient'}
       {rounded ? 'rounded-full ' : 'rounded-md'}
     "
-	on:click="{go}">
-	<div class="flex items-center justify-center space-x-1">
+	on:click="{handleClick}">
+	<div class="flex items-center justify-center gap-1">
 		<slot />
 	</div>
-	{#if loading}
+
+	{#if loading || localLoadingPeriod}
 		<div
 			class="
         absolute
         inset-0
-        bg-black bg-opacity-70
-        flex
+        flex cursor-not-allowed
         items-center
         justify-center
-        cursor-not-allowed
+        bg-black
+        bg-opacity-70
         {rounded ? 'rounded-full' : 'rounded-md'}
       ">
 			<svg
-				class="text-white animate-spin {loadingringsize == 'xs'
+				class="animate-spin text-white {loadingringsize == 'xs'
 					? 'w-4 h-4'
 					: loadingringsize == 'sm'
 					? 'h-5 w-5'

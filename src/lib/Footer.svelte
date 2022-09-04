@@ -1,100 +1,443 @@
 <style>
-.margin {
-	margin-right: -2px;
-	margin-bottom: -1.5px;
+.link-underline {
+	border-bottom-width: 0;
+	background-image: linear-gradient(transparent, transparent),
+		linear-gradient(rgb(249 250 251), rgb(249 250 251));
+	background-size: 0 1px;
+	background-position: 0 100%;
+	background-repeat: no-repeat;
+	transition: background-size 0.5s ease-in-out;
+}
+
+.link-underline-gray {
+	background-image: linear-gradient(transparent, transparent),
+		linear-gradient(rgb(107 114 128), rgb(107 114 128));
+}
+
+.link-underline:hover {
+	background-size: 100% 1px;
+	background-position: 0 100%;
 }
 </style>
 
-<script>
-import { goto } from '$app/navigation'
-import ImageLoader from '$lib/components/Image/ImageLoader.svelte'
-import Cookie from 'cookie-universal'
+<script lang="ts">
+import { page } from '$app/stores'
+import { fly, slide } from 'svelte/transition'
+import LazyImg from './components/Image/LazyImg.svelte'
 import { onMount } from 'svelte'
-import { GQL_popularSearches } from '$houdini'
-const cookies = Cookie()
+import { getAPI } from './util/api'
+import { toast } from './util'
 
-const d = new Date()
-const year = d.getFullYear()
-let selectedCountry = 'fashion.misiki.io'
-let store = cookies.get('store')
+export let me, cart
+
+let clazz = ''
+
+export { clazz as class }
+
+let footerItems = [
+	{
+		heading: 'Company',
+		subMenu: [
+			{ title: 'About Us', link: '/about-us', new: false },
+			{ title: 'Privacy Policy', link: '/p/privacy-policy', new: false },
+			{ title: 'Terms & Conditions', link: '/p/terms-conditions', new: false },
+			{ title: 'Payments & Returns', link: '/p/payments-returns', new: false },
+			{
+				title: 'Printing Terms & Cancellation Policy',
+				link: '/p/printing-terms-cancellation-policy',
+				new: false
+			}
+		]
+	},
+	{
+		heading: 'Customer service',
+		subMenu: [
+			{ title: 'Track Your Order', link: '##', new: false },
+			{ title: 'Bulk Order Inquiry', link: '/bulk-order-inquiry', new: true }
+		]
+	}
+]
+
+let popularSearches, popularSearchesCount
+
+const items = [
+	{
+		label: 'Home',
+		link: '/',
+		icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h1"></path></svg>`
+	},
+	{
+		label: 'Cart',
+		link: '/cart',
+		icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>`
+	},
+	{
+		label: 'Categories',
+		link: '/c',
+		icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h1a2 2 0 012 2v2M7 7h10"></path></svg>`
+	},
+	{
+		label: 'Account',
+		link: me?.active ? '/my' : '/auth/otp-login',
+		icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`
+	}
+]
+
 onMount(async () => {
-	// try {
-	// 	await GQL_popularSearches.fetch({ variables: { domain: store.domain } })
-	// } catch (e) {}
+	try {
+		const res = await getAPI(`popular-search?store=${$page.data?.store?.id}`)
+		popularSearches = res?.data
+		popularSearchesCount = res?.count
+
+		// console.log('popular-search = ', popularSearches)
+	} catch (e) {
+		toast(e, 'error')
+	} finally {
+	}
 })
-function changeCountry() {
-	goto(`https://${selectedCountry}`)
-}
 </script>
 
-<div class="bg-gray-800">
-	<div
-		class="container mx-auto flex max-w-lg flex-col p-5 text-center tracking-wide text-white sm:p-10">
-		<h1 class="mb-2 text-lg font-bold uppercase">{store?.domain}</h1>
+<div class="bg-primary-500 p-3 text-center tracking-wide text-white sm:px-10">
+	<p class="mb-1 text-xl font-semibold uppercase">Truly Indian Brand</p>
 
-		<p class="mb-5 text-sm font-light text-gray-200">{store?.websiteLegalName}</p>
-
-		<div class="flex justify-center space-x-2">
-			<a href="https://github.com/itswadesh" target="blank">
-				<div
-					class="flex h-7 w-7 items-center justify-center rounded-full transition duration-300 hover:bg-black">
-					<div class="margin">
-						<ImageLoader src="/icons/github-white.png" alt="github" class="h-5 w-5" />
-					</div>
-				</div>
-			</a>
-
-			<a href="https://www.facebook.com/codenx2" target="blank">
-				<div
-					class="flex h-7 w-7 items-center justify-center rounded-full transition duration-300 hover:bg-blue-700">
-					<div class="margin">
-						<ImageLoader src="/icons/facebook-white.png" alt="facebook" class="h-5 w-5" />
-					</div>
-				</div>
-			</a>
-
-			<a href="https://twitter.com/itswadesh" target="blank">
-				<div
-					class="flex h-7 w-7 items-center justify-center rounded-full transition duration-300 hover:bg-blue-700">
-					<div class="margin">
-						<ImageLoader src="/icons/twitter-white.png" alt="twitter" class="h-5 w-5" />
-					</div>
-				</div>
-			</a>
-
-			<a href="https://www.instagram.com/misiki.official/" target="blank">
-				<div
-					class="flex h-7 w-7 items-center justify-center rounded-full transition duration-300 hover:bg-pink-700">
-					<div class="margin">
-						<ImageLoader src="/icons/instagram-white.png" alt="instagram" class="h-5 w-5" />
-					</div>
-				</div>
-			</a>
-
-			<a href="https://linkedin.com/in/itswadesh" target="blank">
-				<div
-					class="flex h-7 w-7 items-center justify-center rounded-full transition duration-300 hover:bg-indigo-600">
-					<div class="margin">
-						<ImageLoader src="/icons/linkedin-white.png" alt="linkedin" class="h-5 w-5" />
-					</div>
-				</div>
-			</a>
-		</div>
-	</div>
-
-	<div
-		class="flex flex-col items-center justify-center space-y-2 bg-black p-5 text-xs font-light text-white sm:flex-row sm:justify-between sm:space-y-0">
-		<div
-			class="flex flex-col items-center space-y-2 space-x-2 sm:w-1/2 sm:flex-row sm:space-y-0 md:w-2/3 md:space-x-0">
-			<p class="text-left md:w-1/2">©{year} {store?.websiteLegalName}</p>
-		</div>
-
-		<div class="flex flex-row items-center justify-end space-x-2 sm:w-1/2 md:w-1/3">
-			<a href="/" title="Home" class="hover:underline">Home</a>
-			<a href="/p/sitemap" title="Sitemap" class="hover:underline">Sitemap</a>
-			<a href="/p/about" title="About" class="hover:underline">About</a>
-			<a href="/p/contact" title="Contact" class="hover:underline">Contact</a>
-			<a href="/p/blog" title="Blog" class="hover:underline"> Blog </a>
-		</div>
-	</div>
+	<p>Over <span class="font-semibold">2 Million</span> Happy Customers</p>
 </div>
+
+<footer class="w-full justify-center bg-gray-50 p-3 text-sm  shadow-md sm:p-10">
+	<div class="container mx-auto max-w-6xl">
+		<div
+			class="mb-4 flex w-full flex-col flex-wrap items-start justify-start gap-5 sm:mb-8 sm:max-h-[30rem] sm:gap-10 lg:max-h-96 xl:max-h-60">
+			{#each footerItems as item}
+				<div>
+					<h1 class="mb-4 whitespace-nowrap font-semibold uppercase">{item.heading}</h1>
+
+					<ul class="flex flex-col gap-1 text-gray-500">
+						{#each item.subMenu as item}
+							<li class="flex max-w-max items-center">
+								<a
+									href="{item.link}"
+									aria-label="Click to route this page"
+									class="link-underline link-underline-gray whitespace-pre-wrap">
+									{item.title}
+								</a>
+
+								{#if item.new}
+									<div
+										class="ml-2 max-w-max rounded bg-primary-500 py-[0.1rem] px-1 text-[0.5rem] font-semibold leading-3 tracking-wider text-white">
+										NEW
+									</div>
+								{/if}
+							</li>
+						{/each}
+					</ul>
+				</div>
+			{/each}
+
+			<div>
+				<h1 class="mb-4 whitespace-nowrap font-semibold uppercase">Contact Us</h1>
+
+				<ul class="flex flex-col gap-2 text-gray-500">
+					<li class="max-w-max">
+						<h2 class="mb-0.5 flex items-center gap-1">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-5 w-5"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								stroke-width="2">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+								></path>
+							</svg>
+
+							<span class="font-semibold">Email</span>
+						</h2>
+
+						<p>help@misiki.in</p>
+					</li>
+
+					<li class="max-w-max">
+						<h1 class="mb-0.5 flex items-center gap-1">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-5 w-5"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								stroke-width="2">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+							</svg>
+
+							<span class="font-semibold">Guaranteed Response Time</span>
+						</h1>
+
+						<p>Within 3 to 6 Hours</p>
+					</li>
+
+					<li class="max-w-max">
+						<h2 class="mb-0.5 flex items-center gap-1">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-5 w-5"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								stroke-width="2">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+							</svg>
+
+							<span class="font-semibold">Working Days/Hours</span>
+						</h2>
+
+						<p>Mon – Sat / 9:30AM – 6:30PM</p>
+					</li>
+				</ul>
+			</div>
+
+			<div>
+				<h1 class="mb-4 whitespace-nowrap font-semibold uppercase">
+					Experience kitcommerce app on mobile
+				</h1>
+
+				<div class="flex items-center gap-1">
+					<a href="##" aria-label="Click for the app link on Google Play">
+						<LazyImg
+							src="/app/google-play.png"
+							alt=""
+							width="128"
+							class="h-auto w-32 object-contain object-left" />
+					</a>
+
+					<a href="##" aria-label="Click for the app link on App Store">
+						<LazyImg
+							src="/app/app-store.svg"
+							alt=""
+							width="128"
+							class="h-auto w-32 object-contain object-left p-1" />
+					</a>
+				</div>
+			</div>
+
+			<div>
+				<h1 class="mb-4 whitespace-nowrap font-semibold uppercase">Keep in touch</h1>
+
+				<ul class="flex flex-wrap gap-4 text-gray-500">
+					<!-- Facebook -->
+
+					<li class="max-w-max">
+						<a
+							href="https://www.facebook.com/kitcommerce.store/"
+							target="_blank"
+							rel="noopener noreferrer"
+							aria-label="Click for facebook link">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-5 w-5 transition duration-300	hover:text-[#4267B2]"
+								viewBox="0 0 24 24"
+								stroke-width="2"
+								stroke="currentColor"
+								fill="none"
+								stroke-linecap="round"
+								stroke-linejoin="round">
+								<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+								<path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3"
+								></path>
+							</svg>
+						</a>
+					</li>
+
+					<!-- Instagram -->
+
+					<li class="max-w-max">
+						<a
+							href="https://www.instagram.com/kitcommerce/"
+							target="_blank"
+							rel="noopener noreferrer"
+							aria-label="Click for instagram link">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-5 w-5 transition duration-300	hover:text-[#C13584]"
+								viewBox="0 0 24 24"
+								stroke-width="2"
+								stroke="currentColor"
+								fill="none"
+								stroke-linecap="round"
+								stroke-linejoin="round">
+								<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+								<rect x="4" y="4" width="16" height="16" rx="4"></rect>
+								<circle cx="12" cy="12" r="3"></circle>
+								<line x1="16.5" y1="7.5" x2="16.5" y2="7.501"></line>
+							</svg>
+						</a>
+					</li>
+
+					<!-- Twitter -->
+
+					<li class="max-w-max">
+						<a
+							href="https://twitter.com/itswadesh"
+							target="_blank"
+							rel="noopener noreferrer"
+							aria-label="Click for twitter link">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-5 w-5 transition duration-300	hover:text-[#1DA1F2]"
+								viewBox="0 0 24 24"
+								stroke-width="2"
+								stroke="currentColor"
+								fill="none"
+								stroke-linecap="round"
+								stroke-linejoin="round">
+								<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+								<path
+									d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z"
+								></path>
+							</svg>
+						</a>
+					</li>
+
+					<!-- Mail -->
+
+					<li class="max-w-max">
+						<a href="mailto:help@misiki.in" aria-label="Click to contact with mail id">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-5 w-5 transition duration-300	hover:text-[#c71610]"
+								viewBox="0 0 24 24"
+								stroke-width="2"
+								stroke="currentColor"
+								fill="none"
+								stroke-linecap="round"
+								stroke-linejoin="round">
+								<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+								<rect x="3" y="5" width="18" height="14" rx="2"></rect>
+								<polyline points="3 7 12 13 21 7"></polyline>
+							</svg>
+						</a>
+					</li>
+
+					<!-- Linked in -->
+
+					<li class="max-w-max">
+						<a
+							href="https://www.linkedin.com/company/misiki/"
+							target="_blank"
+							rel="noopener noreferrer"
+							aria-label="Click for linked in link">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-5 w-5 transition duration-300	hover:text-[#0077b5]"
+								viewBox="0 0 24 24"
+								stroke-width="2"
+								stroke="currentColor"
+								fill="none"
+								stroke-linecap="round"
+								stroke-linejoin="round">
+								<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+								<rect x="4" y="4" width="16" height="16" rx="2"></rect>
+								<line x1="8" y1="11" x2="8" y2="16"></line>
+								<line x1="8" y1="8" x2="8" y2="8.01"></line>
+								<line x1="12" y1="16" x2="12" y2="11"></line>
+								<path d="M16 16v-3a2 2 0 0 0 -4 0"></path>
+							</svg>
+						</a>
+					</li>
+
+					<!-- Youtube -->
+
+					<li class="max-w-max">
+						<a
+							href="https://www.youtube.com/channel/UCcb3eRHh-7qAiv9ea7jmTHQ"
+							target="_blank"
+							rel="noopener noreferrer"
+							aria-label="Click for youtube link">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-5 w-5 transition duration-300	hover:text-[#FF0000]"
+								viewBox="0 0 24 24"
+								stroke-width="2"
+								stroke="currentColor"
+								fill="none"
+								stroke-linecap="round"
+								stroke-linejoin="round">
+								<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+								<rect x="3" y="5" width="18" height="14" rx="4"></rect>
+								<path d="M10 9l5 3l-5 3z"></path>
+							</svg>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		{#if popularSearchesCount > 0}
+			<div class="mb-4 sm:mb-8">
+				<h1 class="mb-4 flex items-center gap-4 font-semibold">
+					<span class="flex-1 whitespace-nowrap uppercase"> Popular searches </span>
+
+					<hr class="w-full border-t" />
+				</h1>
+
+				<ul class="flex flex-wrap items-center text-gray-500">
+					{#each popularSearches as p, px}
+						<li class="max-w-max">
+							<a
+								href="/search?q={p.text}"
+								aria-label="Click for the products related to this field"
+								class="link-underline link-underline-gray capitalize">
+								{p.text}
+							</a>
+
+							{#if px < popularSearchesCount - 1}
+								<span class="px-2">|</span>
+							{/if}
+						</li>
+					{/each}
+				</ul>
+			</div>
+		{/if}
+
+		<hr class="mb-4 w-full border-t sm:mb-8" />
+
+		<div class="mb-4 sm:mb-8">
+			<h1 class="mb-4 whitespace-nowrap font-semibold uppercase">Registered Office Address</h1>
+
+			<p class="text-gray-500">
+				#22, <br />
+				Global Village, <br />
+				Rourkela, <br />
+				Odisha - 395006 <br />
+				India
+			</p>
+		</div>
+
+		<hr class="mb-4 w-full border-t sm:mb-8" />
+
+		<div
+			class="flex flex-wrap items-center justify-center gap-2 text-sm text-gray-500 sm:gap-5 md:justify-between">
+			<p>Copyright 2022 © Misiki Technologies Made with ❤️ in India</p>
+
+			<div class="flex items-center justify-center gap-4">
+				<a
+					href="/contact-us"
+					aria-label="Click to route this page"
+					class="font-bold uppercase text-primary-500 transition duration-300 hover:text-primary-700">
+					Contact Us
+				</a>
+
+				<a
+					href="/faqs"
+					aria-label="Click to route this page"
+					class="font-bold uppercase text-primary-500 transition duration-300 hover:text-primary-700">
+					Faqs
+				</a>
+			</div>
+		</div>
+	</div>
+</footer>

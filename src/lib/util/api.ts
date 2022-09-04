@@ -1,28 +1,59 @@
-import { WWW_URL } from '$lib/config'
 import { loadingDelayed } from '$lib/store'
-import { delay } from '.'
+import { id } from '$lib/config'
 let typingTimer
-import Cookie from 'cookie-universal'
-const cookies = Cookie()
+// import * as cookie from 'cookie'
+// import Cookie from 'cookie-universal'
+// const cookies = Cookie()
 // let tkn = cookies.get('token')
-const send = async ({ method, path, params, data, token, cookie }: any) => {
-	// if (path === 'es/listings/favicon.png') return
-	const store = await cookies.get('store')
-	if (!store) {
-		// console.log('Still loading cookie.........', path, params)
-		// throw 'Loading...'
+const send = async ({ method, path, params, data, token, headers }: any) => {
+	if (
+		path.includes('.png') ||
+		path.includes('.jpg') ||
+		path.includes('.svg') ||
+		path.includes('.json') ||
+		path.includes('.css')
+	)
 		return
+	const WWW_URL = import.meta.env.VITE_WWW_URL || 'https://kitcommerce.tech'
+	let origin = WWW_URL
+	let storeId = id // cookies.get('store')?.id
+
+	// console.log('sssssssssssssss', storeId, path)
+
+	if (headers && headers.get('cookie') && headers.get('cookie').includes('store')) {
+		origin = headers.get('origin') || headers.get('host')
+		if (origin === 'localhost:3000') origin = 'http://localhost:3000'
+		else origin = 'https://' + origin
+		// const cookie0 = headers.get('cookie')
+		// const cookies = cookie.parse(cookie0 || '')
+		// storeId = JSON.parse(cookies.store || '{}')?.id
+	} else {
 	}
-	const opts: any = {
-		method,
-		headers: {
-			// Accept: 'application/json, text/plain, */*',
-			// 'Content-Type': 'application/json',
-			Cache: 'no-cache'
+	let uri = new URL(path, WWW_URL)
+
+	if (!path.includes('/api/')) {
+		// When microservice path provided
+		uri = new URL('api/' + path, origin)
+	}
+	const domain = uri.searchParams.get('domain')
+	const st = uri.searchParams.get('store')
+	if (!storeId && !domain && !st) {
+		if (id) storeId = id
+		else {
+			console.error('store id not found in config', path)
+			// throw 'Loading...'
+			return
 		}
 	}
+
+	// console.log('store id not found.........', storeIdFromConfig)
+
+	const opts: any = {
+		method
+	}
+	opts.headers = headers ? headers : { Cache: 'no-cache' }
 	if (data) {
-		data.store = store.id //'6135b76e5dfeaf011301827d'
+		data.store = storeId //'6135b76e5dfeaf011301827d'
 		const contentType = data?.files && data?.files[0]?.type
 		if (
 			!(
@@ -58,10 +89,10 @@ const send = async ({ method, path, params, data, token, cookie }: any) => {
 	// else if (tkn) {
 	// 	opts.headers['Authorization'] = `Bearer ${tkn}`
 	// }
-	let uri = new URL(`${WWW_URL}/api/${path}`)
-	// console.log(uri)
+
 	if (!params) params = {}
-	params.store = store.id //'6135b76e5dfeaf011301827d'
+	// if (storeId) params.store = storeId //'6135b76e5dfeaf011301827d'
+
 	if (params) {
 		Object.keys(params).forEach((key) => uri.searchParams.append(key, params[key]))
 	}
@@ -71,31 +102,35 @@ const send = async ({ method, path, params, data, token, cookie }: any) => {
 		let response = await fetch(url, opts)
 		cancelDelayedLoadingIndicator()
 		const isJson = response.headers.get('content-type')?.includes('application/json')
-		const data = isJson ? await response.json() : await response.text()
-		if (!response.ok && data) {
-			throw { status: data.status, message: data.message }
+
+		const res = isJson ? await response.json() : await response.text()
+		if (res?.status > 399) {
+			throw { status: res.status, message: res }
+		} else if (response?.status > 399) {
+			throw { status: response.status, message: res }
+		} else {
+			return res
 		}
-		return data
 	} catch (e) {
 		// const err = JSON.parse(e)
 		throw e
 	}
 }
 
-export const get = (path, params?, token?) => {
-	return send({ method: 'GET', path, params, token })
+export const getAPI = (path, headers?) => {
+	return send({ method: 'GET', path, headers })
 }
 
-export const del = (path, data) => {
-	return send({ method: 'DELETE', path, data })
+export const del = (path, headers?) => {
+	return send({ method: 'DELETE', path, headers })
 }
 
-export const post = (path, data) => {
-	return send({ method: 'POST', path, data })
+export const post = (path, data, headers?) => {
+	return send({ method: 'POST', path, data, headers })
 }
 
-export const put = (path, data) => {
-	return send({ method: 'PUT', path, data })
+export const put = (path, data, headers?) => {
+	return send({ method: 'PUT', path, data, headers })
 }
 
 const startDelayedLoadingIndicator = async () => {

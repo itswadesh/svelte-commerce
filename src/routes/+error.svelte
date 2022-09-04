@@ -10,15 +10,16 @@ h1 {
 </style>
 
 <script>
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { page } from '$app/stores'
 </script>
 
 <div class="flex h-[70vh] flex-col items-center justify-center text-center sm:h-[92vh]">
-	{#if $page.status === 404}
+	{#if $page.error?.status === 404}
 		<div class="container">
 			<div class="flex justify-center text-center">
-				<img src="/error/404.svg" alt=" " width="240" class="mb-5 h-auto w-60 object-contain" />
+				<LazyImg src="/error/404.svg" alt=" " width="240" class="mb-5 h-auto w-60 object-contain" />
 			</div>
 
 			<div class="layout">
@@ -29,11 +30,15 @@ import { page } from '$app/stores'
 				</div>
 			</div>
 		</div>
-	{:else if $page.status === 403}
+	{:else if $page.error?.status === 403}
 		<div class="container">
 			<div class="layout">
 				<div class="flex justify-center text-center">
-					<img src="/error/404.svg" alt="" width="240" class="mb-5 h-auto w-60 object-contain" />
+					<LazyImg
+						src="/error/404.svg"
+						alt=""
+						width="240"
+						class="mb-5 h-auto w-60 object-contain" />
 				</div>
 
 				<div class="text-center">
@@ -43,11 +48,15 @@ import { page } from '$app/stores'
 				</div>
 			</div>
 		</div>
-	{:else if $page.status === 500}
+	{:else if $page.error?.status === 500}
 		<div class="container">
 			<div class="layout">
 				<div class="flex justify-center text-center">
-					<img src="/error/404.svg" alt="" width="240" class="mb-5 h-auto w-60 object-contain" />
+					<LazyImg
+						src="/error/404.svg"
+						alt=""
+						width="240"
+						class="mb-5 h-auto w-60 object-contain" />
 				</div>
 
 				<div class="flex flex-col gap-5 text-center">
@@ -61,11 +70,15 @@ import { page } from '$app/stores'
 		<div class="container">
 			<div class="layout">
 				<div class="flex justify-center text-center">
-					<img src="/error/404.svg" alt="" width="240" class="mb-5 h-auto w-60 object-contain" />
+					<LazyImg
+						src="/error/404.svg"
+						alt=""
+						width="240"
+						class="mb-5 h-auto w-60 object-contain" />
 				</div>
 
 				<div class="flex flex-col gap-5 text-center">
-					<h1>{$page.status || 500}</h1>
+					<h1>{$page.error?.status || 500}</h1>
 
 					<h2 class="headline my-3">{$page.error?.message}</h2>
 				</div>
@@ -74,7 +87,7 @@ import { page } from '$app/stores'
 	{/if}
 
 	<div class="mt-5 sm:mt-10">
-		<a href="/" aria-label="Click here to go back home">
+		<a href="/" aria-label="Click here to go back home" sveltekit:prefetch>
 			<PrimaryButton class="px-10">Home</PrimaryButton>
 		</a>
 	</div>
