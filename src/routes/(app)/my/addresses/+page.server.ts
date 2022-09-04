@@ -103,8 +103,7 @@ const deleteAddress = async ({ request, cookies, locals }) => {
 	const res = await AddressService.deleteAddress({
 		id,
 		storeId: locals.store?.id,
-		sid,
-		origin: locals.origin
+		sid
 	})
 
 	// console.log('res of save address = ', res)

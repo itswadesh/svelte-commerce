@@ -136,8 +136,7 @@ export const deleteAddress = async ({
 	sid = null
 }: any) => {
 	try {
-		del(`addresses/${id}?store=${storeId}`, null, sid)
-
+		const res = del(`addresses/${id}?store=${storeId}`, null, sid)
 	} catch (err) {
 		throw error(err.status || 400, err.message)
 	}

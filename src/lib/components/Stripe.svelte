@@ -4,9 +4,10 @@ import { fly } from 'svelte/transition'
 import { goto } from '$app/navigation'
 import { OrdersService } from './../services'
 import { page } from '$app/stores'
-import { toast } from '$lib/utils'
 import { PrimaryButton } from '$lib/ui'
-import type { Error, PaymentMethod } from './../types'
+import { toast } from '$lib/utils'
+import Error from './Error.svelte'
+import type { PaymentMethod } from './../types'
 
 const dispatch = createEventDispatcher()
 
@@ -42,7 +43,7 @@ async function payWithCard(clientSecret: string, orderId: string) {
 			errorMessage.show = false
 			errorMessage.text = ''
 			goto(
-				`/payment/success?payment_reference_id=${result.paymentIntent.id}&order_id=${orderId}&provider=Stripe`
+				`/payment/success?payment_reference_id=${result.paymentIntent.id}&id=${orderId}&provider=Stripe`
 			)
 		}
 	} catch (e) {
@@ -71,7 +72,7 @@ const payWithStripe = async (pm: PaymentMethod) => {
 				await payWithCard(res.clientSecret, res?.orderId)
 			} else if (res) {
 				goto(
-					`/payment/success?payment_reference_id=${res.referenceId}&order_id=${res?.orderId}&provider=Stripe`
+					`/payment/success?payment_reference_id=${res.referenceId}&id=${res?.orderId}&provider=Stripe`
 				)
 				paySuccess = true
 			}
@@ -142,41 +143,40 @@ async function loadStripeElements() {
 	<script src="https://js.stripe.com/v3/" on:load="{stripeLoaded}"></script>
 </svelte:head>
 
-<section transition:fly="{{ y: 50, duration: 150 }}" class="flex flex-col gap-4">
-	{#if isStripeSelected && errorMessage.show}
-		<div class="rounded border border-red-500 bg-red-50 p-4 text-red-500 text-sm">
-			{errorMessage.text}
+{#if stripeReady}
+	<form
+		transition:fly="{{ y: 50, duration: 150 }}"
+		on:submit|preventDefault="{submit}"
+		class="rounded border p-4 shadow-md flex flex-col gap-4
+		{isStripeSelected ? 'block' : 'hidden'}">
+		<script src="https://js.stripe.com/v3/"></script>
+
+		{#if errorMessage.show}
+			<Error err="{errorMessage.text}" />
+		{/if}
+
+		<label for="mount-point-for-stripe-elements" class="font-semibold">
+			{#if stripeCardMounting} Please wait... {:else} Enter Card Details {/if}
+		</label>
+
+		<div id="mount-point-for-stripe-elements">
+			<!-- A Stripe Element will be inserted here. -->
 		</div>
-	{/if}
 
-	{#if stripeReady}
-		<form
-			on:submit|preventDefault="{submit}"
-			class="rounded border p-4 shadow-md flex flex-col gap-4
-			{isStripeSelected ? 'block' : 'hidden'}">
-			<script src="https://js.stripe.com/v3/"></script>
+		<div id="error-message" role="alert" class="text-sm text-red-500"></div>
 
-			<label for="mount-point-for-stripe-elements" class="font-semibold text-lg">
-				{#if stripeCardMounting} Please wait... {:else} Enter Card Details {/if}
-			</label>
-
-			<div id="mount-point-for-stripe-elements">
-				<!-- A Stripe Element will be inserted here. -->
-			</div>
-
-			<div id="error-message" role="alert" class="text-sm text-red-500"></div>
-
-			<PrimaryButton
-				type="submit"
-				loading="{loading}"
-				disabled="{loading || !stripeReady || !isCardValid}"
-				class="w-60">
-				Make Payment
-			</PrimaryButton>
-		</form>
-	{:else}
-		<div class="rounded border border-yellow-500 bg-yellow-50 p-4 text-yellow-500 text-sm">
-			Warn: Pleae wait...Stripe is getting ready .
-		</div>
-	{/if}
-</section>
+		<PrimaryButton
+			type="submit"
+			loading="{loading}"
+			disabled="{loading || !stripeReady || !isCardValid}"
+			class="w-60">
+			Make Payment
+		</PrimaryButton>
+	</form>
+{:else}
+	<div
+		transition:fly="{{ y: 50, duration: 150 }}"
+		class="rounded border border-yellow-500 bg-yellow-50 p-4 text-yellow-500 text-sm">
+		Warn: Pleae wait...Stripe is getting ready .
+	</div>
+{/if}
