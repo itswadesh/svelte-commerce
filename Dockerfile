@@ -2,8 +2,7 @@
 FROM node:18 AS builder
 LABEL author="Swadesh Behera"
 WORKDIR /usr/app
-COPY package.json ./
-COPY yarn.lock ./
+COPY package*.json ./
 COPY .npmrc ./
 ENV PUPPETEER_SKIP_DOWNLOAD="true"
 RUN yarn install --force
