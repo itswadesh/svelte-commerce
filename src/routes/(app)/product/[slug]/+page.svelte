@@ -896,7 +896,7 @@ function scrollTo(elementId) {
 			<div class="mb-5">
 				<iframe
 					class="lazy h-[40vh] w-full"
-					data-src="https://www.youtube.com/embed/IZrF9BEFQC4"
+					data-src="https://www.youtube.com/embed/n95DT3K0Yac"
 					title="YouTube video player"
 					frameborder="0"
 					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
