@@ -11,6 +11,7 @@ import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 const seoProps = {
 	title: 'Dashboard - Addresses ',
@@ -84,15 +85,9 @@ async function remove(id, index) {
 
 <section>
 	<header class="mb-5 flex flex-wrap items-start justify-between gap-4">
-		<div>
-			<div class="flex flex-wrap items-center gap-2">
-				<h2 class="text-2xl capitalize sm:text-3xl">
-					Addresses {#if data.addresses.count}({data.addresses.count}){/if}
-				</h2>
-			</div>
-
-			<!-- <p class="mt-2 text-sm text-zinc-500"></p> -->
-		</div>
+		<h1>
+			Addresses {#if data.addresses.count}({data.addresses.count}){/if}
+		</h1>
 
 		<!--  Back button -->
 
@@ -165,7 +160,7 @@ async function remove(id, index) {
 
 						<div class="grid grid-cols-2 divide-x border-t">
 							<a
-								href="{`/my/addresses/${i._id}`}"
+								href="{`/my/addresses/${i._id || i.id}`}"
 								aria-label="Click to visit address details"
 								class="bg-transparent p-2 text-center font-semibold uppercase text-primary-500 transition duration-300 focus:outline-none hover:bg-zinc-100 hover:text-primary-700">
 								Edit
@@ -174,7 +169,7 @@ async function remove(id, index) {
 							<button
 								type="button"
 								class="bg-transparent p-2 text-center font-semibold uppercase text-primary-500 transition duration-300 focus:outline-none hover:bg-zinc-100 hover:text-primary-700"
-								on:click="{() => remove(i._id, index)}">
+								on:click="{() => remove(i._id || i.id, index)}">
 								{#if loadingOnDelete[index]}
 									Removing...
 								{:else}
@@ -194,9 +189,9 @@ async function remove(id, index) {
 		<div class="flex h-[70vh] flex-col items-center justify-center text-center">
 			<img src="{noEmptyAddress}" alt="empty wishlist" class="mb-5 h-60 object-contain" />
 
-			<p class="mb-2 text-xl font-medium md:text-3xl">Empty Address!!</p>
+			<h2 class="mb-2">Empty Address!!</h2>
 
-			<p class="mb-5 text-sm">
+			<p class="mb-5">
 				There's no address found, start adding address by clicking the add new address button above.
 			</p>
 

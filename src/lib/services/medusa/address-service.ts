@@ -1,12 +1,7 @@
 import { deleteMedusajsApi, getMedusajsApi, postMedusajsApi } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 
-export const fetchAddresses = async ({
-	origin,
-	storeId,
-	server = false,
-	sid = 's:rbsl8gACO6pZuNvSnQNo1LKTpxUKaQnl.3B6p9hkKCV4dQOGLNmCqA4fhj70AAhv2bSGRtCmom0I'
-}: any) => {
+export const fetchAddresses = async ({ origin, storeId, server = false, sid }: any) => {
 	try {
 		let res: any = {}
 		let selectedAddress = {}
@@ -16,9 +11,27 @@ export const fetchAddresses = async ({
 		myAddresses = res?.customer?.shipping_addresses
 		myAddresses.sort((a, b) => {
 			const da = new Date(a.updated_at),
-				db = new Date(b.updated_at);
+				db = new Date(b.updated_at)
 			return db - da
-		});
+		})
+
+		myAddresses = myAddresses.map((add) => {
+			return {
+				address: add.address_1,
+				city: add.city,
+				company: add.company,
+				country: add.country || add.country_code,
+				email: add.email,
+				firstName: add.first_name,
+				id: add.id || add._id,
+				lastName: add.last_name,
+				locality: add.address_2,
+				phone: add.phone,
+				state: add.province,
+				zip: add.postal_code,
+			}
+		})
+
 		if (myAddresses?.length) {
 			selectedAddress = myAddresses[0]?._id || myAddresses[0]?.id
 		}
@@ -28,7 +41,15 @@ export const fetchAddresses = async ({
 	}
 }
 
-export const fetchAddress = async ({ cartId, origin, storeId, server = false, sid = null }: any) => { return }
+export const fetchAddress = async ({
+	cartId,
+	origin,
+	storeId,
+	server = false,
+	sid = null
+}: any) => {
+	return
+}
 
 export const saveAddress = async ({
 	id,
@@ -120,15 +141,10 @@ export const editAddress = async ({
 	}
 }
 
-export const deleteAddress = async ({
-	id,
-	storeId,
-	origin,
-	sid = null
-}: any) => {
+export const deleteAddress = async ({ id, storeId, origin, sid = null }: any) => {
 	try {
 		deleteMedusajsApi(`customers/me/addresses/${id}`, sid)
 	} catch (err) {
 		throw error(err.status || 400, err.message)
 	}
-} 
+}

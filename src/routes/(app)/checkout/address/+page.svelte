@@ -7,7 +7,7 @@ import SelectAddress from '../_SelectAddress.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
-console.log('zzzzzzzzzzzzzzzzzz', data)
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 const seoProps = {
 	title: 'Address ',
@@ -76,6 +76,7 @@ async function refreshAddress() {
 						<SelectAddress
 							address="{ads}"
 							loading="{data.loading}"
+							countries="{data.countries}"
 							selectedAddress="{data.selectedAddress}"
 							on:deleteAddress="{refreshAddress}"
 							on:addressChanged="{({ detail }) => addressChanged({ detail })}" />
