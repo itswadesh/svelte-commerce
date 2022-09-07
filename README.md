@@ -101,7 +101,7 @@ Click on the button to directly deploy to Netlify or Vercel. Zero configuration 
 
 # Features
 
-- Awesome shiny new SvelteKit
+- Awesome shiny new SvelteKit V-
 - Typescript for rock solid app
 - TailwindCSS Integrated
 - Server Rendered
@@ -137,20 +137,3 @@ A big thank to <a target="_blank" href="https://twitter.com/jycouet">jycouet</a>
 - Email: swadesh@litekart.in
 - Discord: [Invitation](https://discord.gg/VbXyQmUR)
 
-# Support me!
-
-Svelte Commerce is and always will be Open Source, released under MIT Licence.
-
-You can support me in various ways:
-
-- <b>Contribute</b> - Support this project by contributing some ideas or directing digging into the source code and improving it.
-- <b>Evangelize</b> - Tweet about the project, take some speaking slot at a tech conference, etc.
-
-<a href='https://ko-fi.com/itswadesh' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://cdn.ko-fi.com/cdn/kofi2.png?v=2' border='0' alt='Buy Me a Coffee' /></a>
-
-## Migration to KitQL 0.7.7
-find
-GQL([-_][a-z])
-
-replace
-GQL\L$1
