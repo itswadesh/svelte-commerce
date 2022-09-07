@@ -21,16 +21,15 @@ export const searchProducts = async ({
 		let pageSize = 0
 		let category = ''
 		let err = ''
-
-		res = await postMedusajsApi(`products/search?q=${searchData}`, {})
-		products = res?.products
-		count = res?.count
+		res = await postMedusajsApi(`products/search?q=${searchData}`, { q: searchData })
+		products = res?.hits
+		count = res?.count || 0
 		facets = res?.facets || []
 		pageSize = res?.pageSize || 25
 
 		return { products, count, facets, pageSize, err }
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 
@@ -45,40 +44,42 @@ export const fetchProducts = async ({ origin, slug, id, server = false, sid = nu
 
 		return res?.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 
 // Fetch single product
 
 export const fetchProduct = async ({ origin, slug, id, server = false, sid = null }: any) => {
-	
 	try {
 		let res: Product | {} = {}
-
-		const med = (await getMedusajsApi(`products/${slug}`)).product
-		res = mapMedusajsProduct(med)	
-		
+		const med = await getMedusajsApi(
+			`products?handle=${slug}&expand=categories,variants,variants.prices,images&currency_code=usd`
+		)
+		const productArray = med?.products || [] // fetch the products array value from the med variable
+		res = await mapMedusajsProduct(productArray[0]) // assuming we only want the first product in the array
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
-
 
 // Fetch other single product
 
 export const fetchProduct2 = async ({ origin, slug, id, server = false, sid = null }: any) => {
-	
 	try {
 		let res: Product | {} = {}
+		const med = await getMedusajsApi(
+			`products?handle=${slug}&expand=categories,variants,variants.prices,images`
+		)
 
-		const med = (await getMedusajsApi(`products/${slug}`)).product
-		res = mapMedusajsProduct(med)	
-		
+		const productArray = med.products || [] // fetch the products array value from the med variable
+
+		res = mapMedusajsProduct(productArray[0]) // assuming we only want the first product in the array
+
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 
@@ -100,15 +101,14 @@ export const fetchProductsOfCategory = async ({
 		let pageSize = 0
 		let category = ''
 		let err = ''
-
-		res = await getMedusajsApi(`products`)
+		res = await getMedusajsApi(`products?category_id[]=${categorySlug}`)
 		count = res?.count
 		products = res?.products.map((p) => mapMedusajsProduct(p))
 		const offset = res?.offset
 		const limit = res?.limit
 		return { products, count, facets, pageSize, category, err }
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 
@@ -136,7 +136,7 @@ export const fetchNextPageProducts = async ({
 			facets: res.facets
 		}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 
@@ -158,6 +158,6 @@ export const fetchRelatedProducts = async ({
 
 		return relatedProducts || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
