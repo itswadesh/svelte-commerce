@@ -11,7 +11,6 @@ export async function GET({ cookies, request, locals }) {
 		settings = storeRes.settings
 		popularSearches = storeRes.popularSearches
 		megamenu = storeRes.megamenu
-
 		store = {
 			id: storeRes.storeOne._id,
 			address: storeRes.storeOne.address,
@@ -26,11 +25,13 @@ export async function GET({ cookies, request, locals }) {
 			DOMAIN: storeRes.storeOne.DOMAIN,
 			email: storeRes.storeOne.websiteEmail,
 			facebookPixel: { active: storeRes.storeOne?.facebookPixel?.active?.val, id: storeRes.storeOne?.facebookPixel?.id?.val || '' },
+			favicon: storeRes.storeOne.favicon,
 			GOOGLE_ANALYTICS_ID: storeRes.storeOne.GOOGLE_ANALYTICS_ID,
 			GOOGLE_CLIENT_ID: storeRes.storeOne.GOOGLE_CLIENT_ID,
 			googleAnalytics: { active: storeRes.storeOne?.googleAnalytics?.active?.val, id: storeRes.storeOne?.googleAnalytics?.id?.val || '' },
 			guaranteed_response_time: storeRes.storeOne.guaranteed_response_time,
 			hellobar: storeRes.storeOne.hellobar,
+			homePageSliderBannerImageHeight: storeRes.storeOne.homePageSliderBannerImageHeight,
 			IMAGE_CDN_URL: storeRes.storeOne.IMAGE_CDN_URL,
 			isBulkOrder: storeRes.storeOne.isBulkOrder,
 			isDeals: storeRes.storeOne.isDeals,
