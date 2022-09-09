@@ -26,6 +26,7 @@ import {
 	CustomerFeedback,
 	TrendingProductsHome
 } from '$lib/theme-config'
+// import { navigateToProperPath } from '$lib/utils/index.js'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { slide } from 'svelte/transition'
@@ -39,7 +40,7 @@ const cookies = Cookie()
 let today = dayjs(new Date()).toISOString()
 
 export let data
-console.log('zzzzzzzzzzzzzzzzzz', data)
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -182,7 +183,7 @@ onMount(() => {
 							{#each data.home?.categories as category}
 								{#if category?.img || category?.img}
 									<a
-										href="/{category.link || category.slug || '##'}"
+										href="{navigateToProperPath(category.link || category.slug)}"
 										aria-label="Click to get the category related products"
 										class="shrink-0">
 										<LazyImg
@@ -202,7 +203,7 @@ onMount(() => {
 						{#each data.home?.categories as category}
 							{#if category?.img || category?.img}
 								<a
-									href="/{category.link || category.slug || '##'}"
+									href="{navigateToProperPath(category.link || category.slug)}"
 									aria-label="Click to get the category related products"
 									class="col-span-1">
 									<LazyImg

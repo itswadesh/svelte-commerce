@@ -1,6 +1,7 @@
 <script lang="ts">
-import { page } from '$app/stores'
 import { fly } from 'svelte/transition'
+import { navigateToProperPath } from '$lib/utils'
+import { page } from '$app/stores'
 
 let showDropdownMegaMenu = []
 </script>
@@ -48,7 +49,9 @@ let showDropdownMegaMenu = []
 								class="absolute top-20 left-0 z-[100] flex min-w-max flex-col rounded-b border bg-white p-2 text-sm uppercase shadow-inner">
 								{#each m.children as c}
 									<li class="h-auto w-full flex-1">
-										<a href="{c.link}" aria-label="Click to visit this page">
+										<a
+											href="{navigateToProperPath(c.link || c.slug)}"
+											aria-label="Click to visit this page">
 											<h6
 												class="w-full cursor-pointer rounded py-2 px-4 text-left transition duration-300 focus:outline-none hover:bg-primary-50">
 												{c.name}

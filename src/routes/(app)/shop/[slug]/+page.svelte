@@ -1,12 +1,13 @@
 <script>
+// import { getMegamenuFromStore } from '$lib/store/megamenu'
 import { browser } from '$app/environment'
-import { CategoryService } from '$lib/services'
 import { CategoriesMobile, Hero, HeroBanners, PickedBanners } from '$lib/theme-config'
-import { MobileFooter } from '$lib/components'
+import { CategoryService } from '$lib/services'
+import { Footer, MobileFooter } from '$lib/components'
+import { navigateToProperPath, toast } from '$lib/utils'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { Skeleton, Textbox } from '$lib/ui'
-import { toast } from '$lib/utils'
 import dayjs from 'dayjs'
 import Fuse from 'fuse.js'
 import SEO from '$lib/components/SEO/index.svelte'
@@ -51,7 +52,7 @@ let seoProps = {
 	// weight: { unitCode: '', value: '' },
 	// width: { unitCode: '', value: '' },
 	// wlwmanifestXmlHref: '',
-	metaDescription: $page.data.store?.metaDescription,
+	metaDescription: $page.data.store?.description,
 	// article: false,
 	canonical: `${$page?.url.href}`,
 	datePublished: today,
@@ -103,6 +104,7 @@ let megamenuResult = []
 let searchCategoryValue = null
 let showChild = []
 let showChild2 = []
+let showFooter = false
 
 const options = {
 	keys: ['name', 'children.name', 'children.children.name'], // Search name and children's names
@@ -118,13 +120,22 @@ async function getMegaMenu() {
 
 	if (browser) {
 		try {
+			// megamenu = await getMegamenuFromStore({
+			// 	sid: null,
+			// 	storeId: $page?.data?.store?.id,
+			// 	isCors: $page?.data?.store?.isCors,
+			// 	origin: $page.data.origin
+			// })
+
 			loadingForMegamenu = true
+
 			const localMegamenu = localStorage.getItem('megamenu')
 
 			if (!localMegamenu || localMegamenu === 'undefined') {
 				megamenu = await CategoryService.fetchMegamenuData({
 					origin: $page.data.origin,
-					storeId: $page.data.store?.id
+					storeId: $page.data.store?.id,
+					isCors: $page.data.store?.isCors
 				})
 			} else {
 				megamenu = JSON.parse(localMegamenu)
@@ -217,8 +228,7 @@ function toggle2(cx) {
 		{:then heroBanners}
 			{#if data.heroBanners?.length}
 				<div class="mt-5 sm:mt-10">
-					<h2
-						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
+					<h2 class="p-3 py-5 text-center sm:px-10 md:py-10 uppercase">
 						BEST OF {$page.data.store?.websiteName} EXCLUSIVE
 					</h2>
 
@@ -259,10 +269,7 @@ function toggle2(cx) {
 			</ul>
 		{:else if megamenuResult.length}
 			<div class="mt-5 sm:mt-10">
-				<h2
-					class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
-					Categories
-				</h2>
+				<h2 class="p-3 py-5 text-center sm:px-10 md:py-10 uppercase">Categories</h2>
 
 				<div class="px-3 sm:px-10 mb-5 sm:mb-10">
 					<div class="w-full max-w-md mx-auto">
@@ -285,7 +292,7 @@ function toggle2(cx) {
 										class="flex h-24 gap-4 px-6 w-full items-center justify-between focus:outline-none
 										{bgColors[mx]}">
 										<a
-											href="/{m.link || m.slug}"
+											href="{navigateToProperPath(m.link || m.slug)}"
 											aria-label="Click to visit {m.name || '##'}"
 											class="block text-xl font-bold uppercase">
 											{m.name}
@@ -310,7 +317,7 @@ function toggle2(cx) {
 									</div>
 								{:else}
 									<a
-										href="/{m.link || m.slug}"
+										href="{navigateToProperPath(m.link || m.slug)}"
 										aria-label="Click to visit {m.name || '##'}"
 										class="flex items-center h-24 w-full text-xl font-bold uppercase px-6
 										{bgColors[mx]}">
@@ -329,7 +336,7 @@ function toggle2(cx) {
 														<div
 															class="flex w-full items-center justify-between gap-4 h-14 px-6 focus:outline-none">
 															<a
-																href="/{c.link || c.slug}"
+																href="{navigateToProperPath(c.link || c.slug)}"
 																aria-label="Click to visit {c.name || '##'}"
 																class="block">
 																{c.name}
@@ -355,7 +362,7 @@ function toggle2(cx) {
 														</div>
 													{:else}
 														<a
-															href="/{c.link || c.slug}"
+															href="{navigateToProperPath(c.link || c.slug)}"
 															aria-label="Click to visit {c.name || '##'}"
 															class="flex items-center h-14 px-6">
 															<h6>{c.name}</h6>
@@ -370,7 +377,7 @@ function toggle2(cx) {
 																{#each c.children as cc}
 																	<li>
 																		<a
-																			href="/{cc.link || cc.slug}"
+																			href="{navigateToProperPath(cc.link || cc.slug)}"
 																			aria-label="Click to visit {cc.name || '##'}"
 																			class="flex items-center h-14 px-6 text-sm">
 																			{cc.name}
@@ -397,6 +404,31 @@ function toggle2(cx) {
 				{@html data.html}
 			</div>
 		{/if}
+
+		<!-- Footer show hide toggle -->
+
+		<button
+			type="button"
+			class="lg:hidden p-3 sm:px-10 w-full flex items-center justify-between gap-4 text-sm focus:outline-none"
+			on:click="{() => (showFooter = !showFooter)}">
+			<span>More about {$page.data.store?.websiteName || 'store'}</span>
+
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 20 20"
+				fill="currentColor"
+				class="w-5 h-5 transition duration-300
+				{showFooter ? 'transform rotate-180' : ''}">
+				<path
+					fill-rule="evenodd"
+					d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+					clip-rule="evenodd"></path>
+			</svg>
+		</button>
+
+		<div class="{showFooter ? 'block' : 'hidden'}">
+			<Footer />
+		</div>
 	</div>
 
 	<!-- MOBILE FOOTER -->

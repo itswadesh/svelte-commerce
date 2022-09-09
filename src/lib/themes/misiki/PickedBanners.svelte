@@ -1,5 +1,6 @@
 <script>
 import { LazyImg } from '$lib/components'
+import { navigateToProperPath } from '$lib/utils'
 
 export let banners
 
@@ -13,21 +14,25 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 </script>
 
 <div>
+	<!-- Picked Banners For Deals -->
+
 	{#if pickedBannersForDeals?.length}
-		<div>
+		<ul class="mb-5 sm:mb-10 p-0 list-none flex flex-col gap-5 sm:gap-10">
 			{#each pickedBannersForDeals as b}
-				<div>
-					<h2
-						class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
+				<li>
+					<h2 class="p-3 py-5 text-center sm:px-10 md:py-10 uppercase">
 						{b._id?.title}
 					</h2>
 
 					{#if b.data?.length}
-						<div class="w-screen overflow-x-auto scrollbar-none lg:hidden">
-							<div role="banner" class="flex flex-row items-start">
+						<div role="banner" class="w-[97vw] overflow-x-auto scrollbar-none lg:hidden">
+							<div class="flex flex-row items-start">
 								{#each b.data as banner, bx}
 									{#if banner.img}
-										<a href="{banner.link}" class="block shrink-0" data-sveltekit-preload-data>
+										<a
+											href="{navigateToProperPath(banner.link || banner.slug)}"
+											class="block shrink-0"
+											data-sveltekit-preload-data>
 											<LazyImg
 												src="{banner.img}"
 												alt="banner{bx}"
@@ -43,7 +48,10 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 						<div role="banner" class="hidden grid-cols-7 lg:grid">
 							{#each b.data as banner, bx}
 								{#if banner.img}
-									<a href="{banner.link}" class="col-span-1" data-sveltekit-preload-data>
+									<a
+										href="{navigateToProperPath(banner.link || banner.slug)}"
+										class="col-span-1"
+										data-sveltekit-preload-data>
 										<LazyImg
 											src="{banner.img}"
 											alt="banner{bx}"
@@ -55,26 +63,30 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 							{/each}
 						</div>
 					{/if}
-				</div>
+				</li>
 			{/each}
-		</div>
+		</ul>
 	{/if}
 
+	<!-- Picked Banners -->
+
 	{#if pickedBanners?.length}
-		<div>
+		<ul class="mb-5 sm:mb-10 p-0 list-none flex flex-col gap-5 sm:gap-10">
 			{#each pickedBanners as b}
-				<div>
-					<h2
-						class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
+				<li>
+					<h2 class="p-3 py-5 text-center sm:px-10 md:py-10 uppercase">
 						{b._id?.title}
 					</h2>
 
 					{#if b.data?.length}
-						<div class="w-screen overflow-x-auto scrollbar-none lg:hidden">
-							<div role="banner" class="flex flex-row items-start">
+						<div role="banner" class="w-[97vw] overflow-x-auto scrollbar-none lg:hidden">
+							<div class="flex flex-row items-start">
 								{#each b.data as banner, bx}
 									{#if banner.img}
-										<a href="{banner.link}" class="block shrink-0" data-sveltekit-preload-data>
+										<a
+											href="{navigateToProperPath(banner.link || banner.slug)}"
+											class="block shrink-0"
+											data-sveltekit-preload-data>
 											<LazyImg
 												src="{banner.img}"
 												alt="banner{bx}"
@@ -90,7 +102,10 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 						<div role="banner" class="hidden grid-cols-7 lg:grid">
 							{#each b.data as banner, bx}
 								{#if banner.img}
-									<a href="{banner.link}" class="col-span-1" data-sveltekit-preload-data>
+									<a
+										href="{navigateToProperPath(banner.link || banner.slug)}"
+										class="col-span-1"
+										data-sveltekit-preload-data>
 										<LazyImg
 											src="{banner.img}"
 											alt="banner{bx}"
@@ -102,8 +117,8 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 							{/each}
 						</div>
 					{/if}
-				</div>
+				</li>
 			{/each}
-		</div>
+		</ul>
 	{/if}
 </div>

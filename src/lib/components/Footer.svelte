@@ -22,15 +22,14 @@
 
 <script lang="ts">
 // import { fetchFooterCategories } from './services/CategoryService'
+// import appStore from '$lib/assets/app/app-store.svg'
+// import googlePlay from '$lib/assets/app/google-play.png'
 import { browser } from '$app/environment'
+import { navigateToProperPath } from '$lib/utils'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { PageService } from '$lib/services'
-// import appStore from '$lib/assets/app/app-store.svg'
-// import googlePlay from '$lib/assets/app/google-play.png'
 import type { Category } from '$lib/types'
-
-// console.log('$page', $page)
 
 export let me
 export let store = {}
@@ -46,33 +45,31 @@ function getYear() {
 let pages = []
 
 onMount(async () => {
-	// const res1 = await getPages()
-	// const res2 = await getStoreData()
+	const res1 = await getPages()
+	const res2 = await getStoreData()
 
-	// store = res2.storeOne
-	// megamenu = res2.megamenu1
-	// popularSearches = res2.popularSearches
+	store = res2.storeOne
+	megamenu = res2.megamenu1
+	popularSearches = res2.popularSearches
 
-	// if (browser) {
-	// 	localStorage.setItem('megamenu', JSON.stringify(megamenu))
-	// }
+	if (browser) {
+		localStorage.setItem('megamenu', JSON.stringify(megamenu))
+	}
 })
 
-// async function getStoreData() {
-// 	const response1 = await fetch('/server/store')
-// 	const res = await response1.json()
+async function getStoreData() {
+	const response1 = await fetch('/server/store')
+	const res = await response1.json()
 
-// 	return res
-// }
+	return res
+}
 
-// async function getPages() {
-// 	pages = await PageService.fetchPages({
-// 		origin: $page.data.origin,
-// 		storeId: $page.data.store?.id
-// 	})
-
-// 	// console.log('pages', pages)
-// }
+async function getPages() {
+	pages = await PageService.fetchPages({
+		origin: $page.data.origin,
+		storeId: $page.data.store?.id
+	})
+}
 </script>
 
 <footer class="w-full justify-center bg-zinc-50 p-3 text-sm sm:p-10">
@@ -81,9 +78,9 @@ onMount(async () => {
 			class="mb-4 flex w-full flex-col flex-wrap items-start justify-start gap-5 sm:mb-8 sm:gap-10 h-full sm:max-h-[35rem] xl:max-h-80 overflow-hidden">
 			{#if $page.data.store?.description}
 				<div>
-					<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">
+					<h6 class="mb-4 whitespace-nowrap uppercase">
 						About {$page.data.store?.websiteName}
-					</h5>
+					</h6>
 
 					<p class="max-w-xs text-zinc-500">
 						{@html $page.data.store?.description}
@@ -92,7 +89,7 @@ onMount(async () => {
 			{/if}
 
 			<div>
-				<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Customer Service</h5>
+				<h6 class="mb-4 whitespace-nowrap uppercase">Customer Service</h6>
 
 				<ul class="flex flex-col gap-1 text-zinc-500">
 					{#if pages?.length}
@@ -101,7 +98,7 @@ onMount(async () => {
 								<a
 									href="/p/{page.link || page.slug}"
 									aria-label="Click to visit this page"
-									class="link-underline link-underline-gray whitespace-pre-wrap">
+									class="capitalize link-underline link-underline-gray whitespace-pre-wrap">
 									{page.name}
 								</a>
 
@@ -164,13 +161,13 @@ onMount(async () => {
 
 			{#if megamenu?.length}
 				<div>
-					<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Collections</h5>
+					<h6 class="mb-4 whitespace-nowrap uppercase">Collections</h6>
 
 					<ul class="flex flex-col gap-1 text-zinc-500">
 						{#each megamenu as category}
 							<li class="flex max-w-max items-center">
 								<a
-									href="/{category.link || category.slug}"
+									href="{navigateToProperPath(category.link || category.slug)}"
 									aria-label="Click to visit this page"
 									class="link-underline link-underline-gray whitespace-pre-wrap">
 									{category.name}
@@ -189,13 +186,13 @@ onMount(async () => {
 			{/if}
 
 			<div>
-				<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Contact Us</h5>
+				<h6 class="mb-4 whitespace-nowrap uppercase">Contact Us</h6>
 
 				<ul class="flex flex-col gap-2 text-zinc-500">
 					{#if $page.data.store?.email}
 						<li class="max-w-max">
 							<a href="mailto:{$page.data.store?.email}" class="group flex items-center gap-2">
-								<h6 class="w-16 flex items-center gap-1 font-semibold">
+								<h6 class="w-16 flex items-center gap-1">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										fill="none"
@@ -221,7 +218,7 @@ onMount(async () => {
 					{#if $page.data.store?.phone}
 						<li class="max-w-max">
 							<a href="tel:+{$page.data.store?.phone}" class="group flex items-center gap-2">
-								<h6 class="w-16 flex items-center gap-1 font-semibold">
+								<h6 class="w-16 flex items-center gap-1">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										fill="none"
@@ -246,7 +243,7 @@ onMount(async () => {
 
 					{#if $page.data.store?.guaranteed_response_time}
 						<li class="max-w-max">
-							<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
+							<h6 class="mb-0.5 flex items-center gap-1">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									fill="none"
@@ -267,7 +264,7 @@ onMount(async () => {
 
 					{#if $page.data.store?.store_timings}
 						<li class="max-w-max">
-							<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
+							<h6 class="mb-0.5 flex items-center gap-1">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									fill="none"
@@ -291,9 +288,9 @@ onMount(async () => {
 			</div>
 
 			<!-- <div>
-				<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">
+				<h6 class="mb-4 whitespace-nowrap uppercase">
 					Experience {$page.data.store?.websiteName} app on mobile
-				</h5>
+				</h6>
 
 				<div class="flex items-center gap-1">
 					<a
@@ -314,9 +311,9 @@ onMount(async () => {
 				</div>
 			</div> -->
 
-			{#if $page.data.store?.socialSharingButtons || $page.data.store?.email}
+			{#if ($page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.facebook?.val) || ($page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.instagram?.val) || ($page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.telegram?.val) || ($page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.twitter?.val) || ($page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.reddit?.val) || ($page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.linkedin?.val) || ($page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.pinterest?.val) || ($page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.youtube?.val)}
 				<div>
-					<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Keep in touch</h5>
+					<h6 class="mb-4 whitespace-nowrap uppercase">Keep in touch</h6>
 
 					<ul class="flex flex-wrap gap-4 text-zinc-500">
 						<!-- Facebook -->
@@ -373,6 +370,31 @@ onMount(async () => {
 							</li>
 						{/if}
 
+						<!-- Telegram -->
+
+						{#if $page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.telegram?.val}
+							<li class="max-w-max">
+								<a
+									href="{$page.data.store?.socialSharingButtons?.telegram?.val}"
+									target="_blank"
+									rel="noopener noreferrer"
+									aria-label="Click for telegram link">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										class="h-5 w-5 transition duration-300 hover:text-[#229ED9]"
+										viewBox="0 0 24 24"
+										stroke-width="1.5"
+										stroke="currentColor"
+										fill="none"
+										stroke-linecap="round"
+										stroke-linejoin="round">
+										<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+										<path d="M15 10l-4 4l6 6l4 -16l-18 7l4 2l2 6l3 -4"></path>
+									</svg>
+								</a>
+							</li>
+						{/if}
+
 						<!-- Twitter -->
 
 						{#if $page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.twitter?.val}
@@ -400,16 +422,20 @@ onMount(async () => {
 							</li>
 						{/if}
 
-						<!-- Mail -->
+						<!-- Reddit -->
 
-						{#if $page.data.store?.email}
+						{#if $page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.reddit?.val}
 							<li class="max-w-max">
 								<a
-									href="mailto:{$page.data.store?.email}"
-									aria-label="Click to contact with mail id">
+									href="{$page.data.store?.socialSharingButtons?.reddit?.val}"
+									target="_blank"
+									rel="noopener noreferrer"
+									aria-label="Click for reddit link">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 transition duration-300 hover:text-[#c71610]"
+										class="h-5 w-5 transition duration-300 hover:text-[#FF5700]"
+										width="44"
+										height="44"
 										viewBox="0 0 24 24"
 										stroke-width="1.5"
 										stroke="currentColor"
@@ -417,8 +443,14 @@ onMount(async () => {
 										stroke-linecap="round"
 										stroke-linejoin="round">
 										<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-										<rect x="3" y="5" width="18" height="14" rx="2"></rect>
-										<polyline points="3 7 12 13 21 7"></polyline>
+										<path
+											d="M12 8c2.648 0 5.028 .826 6.675 2.14a2.5 2.5 0 0 1 2.326 4.36c0 3.59 -4.03 6.5 -9 6.5c-4.875 0 -8.845 -2.8 -9 -6.294l-1 -.206a2.5 2.5 0 0 1 2.326 -4.36c1.646 -1.313 4.026 -2.14 6.674 -2.14z"
+										></path>
+										<path d="M12 8l1 -5l6 1"></path>
+										<path d="M19 4m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+										<circle cx="9" cy="13" r=".5" fill="currentColor"></circle>
+										<circle cx="15" cy="13" r=".5" fill="currentColor"></circle>
+										<path d="M10 17c.667 .333 1.333 .5 2 .5s1.333 -.167 2 -.5"></path>
 									</svg>
 								</a>
 							</li>
@@ -514,11 +546,11 @@ onMount(async () => {
 
 		{#if popularSearches?.count > 0}
 			<div class="mb-4 sm:mb-8">
-				<h2 class="mb-4 flex items-center gap-4 font-semibold">
-					<span class="flex-1 whitespace-nowrap uppercase"> Popular searches </span>
+				<div class="mb-4 flex items-center gap-4 font-semibold">
+					<h6 class="flex-1 whitespace-nowrap uppercase">Popular searches</h6>
 
 					<hr class="w-full border-t" />
-				</h2>
+				</div>
 
 				<ul class="flex flex-wrap items-center text-zinc-500">
 					{#each popularSearches.data as p, px}
@@ -543,9 +575,9 @@ onMount(async () => {
 			<hr class="mb-4 w-full border-t sm:mb-8" />
 
 			<div class="mb-4 sm:mb-8">
-				<h2 class="mb-4 whitespace-nowrap font-semibold uppercase">Registered Office Address</h2>
+				<h6 class="mb-4 whitespace-nowrap uppercase">Registered Office Address</h6>
 
-				<p class="text-zinc-500">
+				<p>
 					{@html $page.data.store?.address}
 				</p>
 			</div>
@@ -561,11 +593,11 @@ onMount(async () => {
 				</span>
 				<span>
 					Powered by <a
-						href="{$page.data.store?.saasDomain}"
+						href="{$page.data.store?.saasDomain || 'https://litekart.in'}"
 						rel="external"
 						class="hover:underline"
 						target="_blank">
-						{$page.data.store?.saasName}
+						{$page.data.store?.saasName || 'Litekart'}
 					</a>
 				</span>
 			</p>
@@ -574,14 +606,14 @@ onMount(async () => {
 				<a
 					href="/contact-us"
 					aria-label="Click to visit this page"
-					class="font-bold uppercase text-primary-500 transition duration-300 hover:text-primary-700">
+					class="font-bold uppercase text-zinc-500 transition duration-300 hover:text-zinc-800">
 					Contact Us
 				</a>
 
 				<a
 					href="/faqs"
 					aria-label="Click to visit this page"
-					class="font-bold uppercase text-primary-500 transition duration-300 hover:text-primary-700">
+					class="font-bold uppercase text-zinc-500 transition duration-300 hover:text-zinc-800">
 					Faqs
 				</a>
 			</div>

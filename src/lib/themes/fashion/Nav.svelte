@@ -7,8 +7,8 @@ import { getAPI } from '$lib/utils/api'
 import { invalidateAll } from '$app/navigation'
 import { logo } from '$lib/config'
 import { MegaMenu, LazyImg, AutosuggestModal } from '$lib/components'
+import { navigateToProperPath, toast } from '$lib/utils'
 import { page } from '$app/stores'
-import { toast } from '$lib/utils'
 import { WhiteButton, PrimaryButton, Skeleton } from '$lib/ui'
 import Cookie from 'cookie-universal'
 import dotsLoading from '$lib/assets/dots-loading.gif'
@@ -676,7 +676,7 @@ async function getCategories() {
 						<div class="grid grid-cols-3">
 							{#each categories as c}
 								<a
-									href="{c.link || `/${c.slug}`}"
+									href="{navigateToProperPath(c.link || c.slug)}"
 									aria-label="Click to visit category related products page"
 									class="col-span-1 block transform border transition duration-500 hover:-translate-y-2 hover:shadow-lg">
 									<LazyImg

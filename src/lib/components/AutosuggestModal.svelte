@@ -2,6 +2,7 @@
 import { AutocompleteService, CategoryService } from '$lib/services'
 import { createEventDispatcher, onMount } from 'svelte'
 import { goto } from '$app/navigation'
+import { navigateToProperPath } from '$lib/utils'
 import { page } from '$app/stores'
 import { slide } from 'svelte/transition'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
@@ -34,7 +35,7 @@ function submit() {
 
 function handleRouteToCategorySlug(link: string, slug: string) {
 	show = false
-	goto(`/${link || slug}`)
+	goto(navigateToProperPath(link || slug))
 }
 
 function onselect(v: any) {

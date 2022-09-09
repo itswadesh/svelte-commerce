@@ -1,8 +1,9 @@
 <script>
+import { navigateToProperPath } from '$lib/utils'
+
 // import { LazyImg } from '$lib/components'
 
 export let heroBanners
-// console.log('heroBanners', heroBanners)
 </script>
 
 {#if heroBanners?.length}
@@ -17,7 +18,7 @@ export let heroBanners
 					<!-- Banner 0 -->
 
 					<a
-						href="{heroBanners[0]?.link || '##'}"
+						href="{navigateToProperPath(heroBanners[0].link || heroBanners[0].slug)}"
 						aria-label="Click here to view the banner's related products"
 						class="block col-span-1">
 						<!-- <LazyImg
@@ -39,7 +40,7 @@ export let heroBanners
 					<!-- Banner 1 -->
 
 					<a
-						href="{heroBanners[1]?.link || '##'}"
+						href="{navigateToProperPath(heroBanners[1].link || heroBanners[1].slug)}"
 						aria-label="Click here to view the banner's related products"
 						class="block col-span-1">
 						<!-- <LazyImg
@@ -61,7 +62,7 @@ export let heroBanners
 					<!-- Banner 2 -->
 
 					<a
-						href="{heroBanners[2]?.link || '##'}"
+						href="{navigateToProperPath(heroBanners[2].link || heroBanners[2].slug)}"
 						aria-label="Click here to view the banner's related products"
 						class="block col-span-1">
 						<!-- <LazyImg
@@ -83,7 +84,7 @@ export let heroBanners
 					<!-- Banner 3 -->
 
 					<a
-						href="{heroBanners[3]?.link || '##'}"
+						href="{navigateToProperPath(heroBanners[3].link || heroBanners[3].slug)}"
 						aria-label="Click here to view the banner's related products"
 						class="block col-span-1">
 						<!-- <LazyImg
@@ -105,7 +106,7 @@ export let heroBanners
 					<!-- Banner 4 -->
 
 					<a
-						href="{heroBanners[4]?.link || '##'}"
+						href="{navigateToProperPath(heroBanners[4].link || heroBanners[4].slug)}"
 						aria-label="Click here to view the banner's related products"
 						class="block col-span-1 md:col-span-2">
 						<!-- <LazyImg
@@ -130,7 +131,7 @@ export let heroBanners
 				<!-- Banner 5 -->
 
 				<a
-					href="{heroBanners[5]?.link || '##'}"
+					href="{navigateToProperPath(heroBanners[5].link || heroBanners[5].slug)}"
 					aria-label="Click here to view the banner's related products"
 					class="block col-span-1">
 					<!-- <LazyImg

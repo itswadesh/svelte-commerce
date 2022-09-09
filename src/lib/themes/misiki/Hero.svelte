@@ -1,5 +1,6 @@
 <script>
 import { LazyImg } from '$lib/components'
+import { navigateToProperPath } from '$lib/utils'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { SplideSlide } from '@splidejs/svelte-splide'
@@ -88,7 +89,7 @@ $: if (innerWidth < 640) {
 	{#each sliderBanners as b, ix}
 		{#if b.img}
 			<a
-				href="{b.link || '##'}"
+				href="{navigateToProperPath(b.link || b.slug)}"
 				aria-label="Click to visit banner related products page"
 				data-sveltekit-preload-data
 				class="carousel-item relative float-left h-auto w-full {ix == 0 ? 'active' : ''}">
@@ -124,7 +125,7 @@ $: if (innerWidth < 640) {
 				{#if b.img}
 					<SplideSlide key="{b._id || b.id}">
 						<a
-							href="{b.link || '##'}"
+							href="{navigateToProperPath(b.link || b.slug)}"
 							aria-label="Click to visit banner related products page"
 							class="block h-full"
 							data-sveltekit-preload-data>
@@ -163,7 +164,7 @@ $: if (innerWidth < 640) {
 				{#if b.img}
 					<SplideSlide key="{b._id || b.id}">
 						<a
-							href="{b.link || '##'}"
+							href="{navigateToProperPath(b.link || b.slug)}"
 							aria-label="Click to visit banner related products page"
 							class="block h-full"
 							data-sveltekit-preload-data>
@@ -200,7 +201,7 @@ $: if (innerWidth < 640) {
 				{#if b.img}
 					<SplideSlide key="{b._id || b.id}">
 						<a
-							href="{b.link || '##'}"
+							href="{navigateToProperPath(b.link || b.slug)}"
 							aria-label="Click to visit banner related products page"
 							class="block"
 							data-sveltekit-preload-data>
