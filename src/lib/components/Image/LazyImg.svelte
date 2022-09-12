@@ -34,5 +34,5 @@ onDestroy(() => {
 <img
 	alt="{alt}"
 	class="lazy {clazz}"
-	src="{`${src}?tr=h-1,w-1:w-${w},h-${h}`}"
+	src="{`${src}?tr=h-1.43,w-1:w-${w},h-${h}`}"
 	data-src="{`${src}?tr=w-${w},h-${h}:w-${w},h-${h}`}" />
