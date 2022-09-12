@@ -115,7 +115,7 @@ function handleToggleSubCategory(m, mx) {
 			</span>
 
 			<span>
-				{filterLength > 1 ? 'filters' : 'filter'}
+				{filterLength > 1 ? 'Filters' : 'Filter'}
 			</span>
 		</h6>
 
@@ -158,19 +158,18 @@ function handleToggleSubCategory(m, mx) {
 
 								<button
 									type="button"
-									class="overflow-hidden rounded-full border bg-white p-1 focus:outline-none"
+									class="overflow-hidden p-1 focus:outline-none"
 									on:click="{() => handleToggleSubCategory(m, mx)}">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 flex-shrink-0 transition duration-300
-										{showSubCategory[mx] ? 'transform -rotate-180' : ''}"
 										viewBox="0 0 20 20"
-										fill="currentColor">
+										fill="currentColor"
+										class="h-5 w-5 flex-shrink-0 transition duration-300
+										{showSubCategory[mx] ? 'transform rotate-90' : ''}">
 										<path
 											fill-rule="evenodd"
-											d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-											clip-rule="evenodd">
-										</path>
+											d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+											clip-rule="evenodd"></path>
 									</svg>
 								</button>
 							</div>
