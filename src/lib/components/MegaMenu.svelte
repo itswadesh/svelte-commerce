@@ -45,11 +45,7 @@ onMount(() => {
 
 async function getMegaMenu() {
 	try {
-		const res = await getAPI(`categories/megamenu?megamenu=true&store=${$page.data?.store?.id}`)
-
-		// console.log('zzzzzzzzzzzzzzzzzz', res)
-
-		megaMenu = res
+		megaMenu = await getAPI(`categories/megamenu?megamenu=true&store=${$page.data?.store?.id}`)
 	} catch (e) {
 		toast(e, 'error')
 	} finally {

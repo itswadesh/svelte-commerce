@@ -2,7 +2,7 @@ import { getAPI } from '$lib/util/api'
 import { error } from '@sveltejs/kit'
 export const prerender = false
 
-export async function load({ url,params, setHeaders, parent }) {
+export async function load({ url, params, setHeaders, parent }) {
 	const { store } = await parent()
 	let loading = false,
 		err,
@@ -34,7 +34,7 @@ export async function load({ url,params, setHeaders, parent }) {
 		})
 		count = res1?.count
 		facets = res1?.facets
-		err = !res1?.estimatedTotalHits ? 'No result Not Found' : null
+		err = !res1?.count ? 'No result Not Found' : null
 	} catch (e) {
 		err = e
 		throw error(400, e?.message || e || 'No results found')
@@ -42,13 +42,12 @@ export async function load({ url,params, setHeaders, parent }) {
 		loading = false
 	}
 
-
 	try {
 		loading = true
 		const res2 = await getAPI(`categories/${params.slug}?store=${store.id}`)
 		// console.log('zzzzzzzzzzzzzzzzzz', res2)
 		category = res2
-	}catch (e) {
+	} catch (e) {
 		err = e
 	} finally {
 		loading = false

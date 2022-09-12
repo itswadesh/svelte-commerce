@@ -304,24 +304,26 @@ function scrollTo(elementId) {
 
 	<div class="mb-5 grid grid-cols-1 items-start gap-5 sm:mb-10 sm:gap-10 lg:grid-cols-5">
 		<!-- Images -->
-		<div class="col-span-1 h-auto lg:col-span-3">
-			<div class="flex w-full grid-cols-2 flex-row gap-2 overflow-x-scroll scrollbar-none md:grid">
-				{#each data.product?.imagesCdn as imgCdn}
-					<button
-						type="button"
-						class="h-60 w-52 flex-shrink-0 cursor-zoom-in overflow-hidden rounded md:h-full md:w-full md:flex-shrink"
-						on:click="{() => (showPhotosModal = true)}">
-						<LazyImg
-							src="{imgCdn}"
-							alt="{data.product?.name}"
-							width="416"
-							height="600"
-							class="h-full w-full transform object-contain object-center transition duration-700 hover:scale-125" />
-					</button>
-				{/each}
+		{#if data.product?.imagesCdn?.length}
+			<div class="col-span-1 h-auto lg:col-span-3">
+				<div
+					class="flex w-full grid-cols-2 flex-row gap-2 overflow-x-scroll scrollbar-none md:grid">
+					{#each data.product?.imagesCdn as imgCdn}
+						<button
+							type="button"
+							class="h-60 w-52 flex-shrink-0 cursor-zoom-in overflow-hidden rounded md:h-full md:w-full md:flex-shrink"
+							on:click="{() => (showPhotosModal = true)}">
+							<LazyImg
+								src="{imgCdn}"
+								alt="{data.product?.name}"
+								width="416"
+								height="600"
+								class="h-full w-full transform object-contain object-center transition duration-700 hover:scale-125" />
+						</button>
+					{/each}
+				</div>
 			</div>
-		</div>
-
+		{/if}
 		<div class="col-span-1 lg:col-span-2">
 			<!-- Brand -->
 
