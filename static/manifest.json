@@ -101,16 +101,5 @@
     }
   ],
   "description": "Customized Mobile Covers India: KitCommerce is the most beneficial customized mobile cover printing online store at which it is easy to design custom phone cases",
-  "screenshots": [
-    {
-      "src": "/screenshots/1.png",
-      "type": "image/png",
-      "sizes": "540x720"
-    },
-    {
-      "src": "/screenshots/2.jpg",
-      "type": "image/jpg",
-      "sizes": "540x720"
-    }
-  ]
+  "screenshots": []
 }

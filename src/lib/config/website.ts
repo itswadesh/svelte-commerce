@@ -42,14 +42,14 @@ export const shortcuts = [
 	}
 ]
 export const screenshots = [
-	{
-		src: '/screenshots/1.png',
-		type: 'image/png',
-		sizes: '540x720'
-	},
-	{
-		src: '/screenshots/2.jpg',
-		type: 'image/jpg',
-		sizes: '540x720'
-	}
+	// {
+	// 	src: '/screenshots/1.png',
+	// 	type: 'image/png',
+	// 	sizes: '540x720'
+	// },
+	// {
+	// 	src: '/screenshots/2.jpg',
+	// 	type: 'image/jpg',
+	// 	sizes: '540x720'
+	// }
 ]
