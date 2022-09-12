@@ -11,7 +11,8 @@ const send = async ({ method, path, params, data, token, headers }: any) => {
 		path.includes('.jpg') ||
 		path.includes('.svg') ||
 		path.includes('.json') ||
-		path.includes('.css')
+		path.includes('.css') ||
+		path.includes('undefined')
 	)
 		return
 	const WWW_URL = import.meta.env.VITE_WWW_URL || 'https://kitcommerce.tech'
@@ -30,7 +31,6 @@ const send = async ({ method, path, params, data, token, headers }: any) => {
 	} else {
 	}
 	let uri = new URL(path, WWW_URL)
-
 	if (!path.includes('/api/')) {
 		// When microservice path provided
 		uri = new URL('api/' + path, origin)

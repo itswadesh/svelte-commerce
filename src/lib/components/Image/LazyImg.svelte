@@ -13,12 +13,12 @@ const w = width === 'auto' ? 'auto' : +width * 2
 const h = height === 'auto' ? 'auto' : +height * 2
 let clazz
 export { clazz as class }
-function getImageUrl(src, tr) {
-	if (src) {
-		const originalImageUrl = src
-		return originalImageUrl + tr
-	}
-}
+// function getImageUrl(src, tr) {
+// 	if (src) {
+// 		const originalImageUrl = src
+// 		return originalImageUrl + tr
+// 	}
+// }
 
 let lazyloadInstance
 onMount(() => {

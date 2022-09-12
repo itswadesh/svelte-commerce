@@ -33,7 +33,7 @@ export async function load({ url, setHeaders, parent }) {
 		})
 		count = res?.count
 		facets = res?.facets
-		err = !res?.estimatedTotalHits ? 'No result Not Found' : null
+		err = !res?.count ? 'No result Not Found' : null
 	} catch (e) {
 		err = e
 		throw error(400, e?.message || e || 'No results found')
