@@ -18,12 +18,7 @@ const dispatch = createEventDispatcher()
 
 let showFilter = false
 let showSort = false
-let filterOptions = [
-	{ name: 'Categories' },
-	{ name: 'States' },
-	{ name: 'Cities' },
-	{ name: 'Amenities' }
-]
+let filterOptions = [{ name: 'Categories' }]
 let selected = 'Categories'
 let clazz = ''
 export { clazz as class }
@@ -167,19 +162,6 @@ $: {
 			</div>
 
 			<div class="w-4/6">
-				<!-- {#if selected === 'Countries'}
-					<div
-						class="h-full w-full overflow-y-auto"
-						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
-						{#if facets?.countries?.all?.buckets?.length > 0}
-							<CheckboxEs
-								items="{facets?.countries?.all?.buckets}"
-								model="countries"
-								selectedItems="{fl.countries || []}"
-								on:go="{goCheckbox}" />
-						{/if}
-					</div>
-				{/if} -->
 				{#if selected === 'Categories'}
 					<div
 						class="h-full w-full overflow-y-auto"
@@ -189,47 +171,6 @@ $: {
 								items="{facets?.categories?.all?.buckets}"
 								model="categories"
 								selectedItems="{fl.categories || []}"
-								on:go="{goCheckbox}" />
-						{/if}
-					</div>
-				{/if}
-				{#if selected === 'States'}
-					<div
-						class="h-full w-full overflow-y-auto"
-						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
-						{#if facets?.states?.all?.buckets?.length > 0}
-							<CheckboxEs
-								items="{facets?.states?.all?.buckets}"
-								model="states"
-								selectedItems="{fl.states || []}"
-								on:go="{goCheckbox}" />
-						{/if}
-					</div>
-				{/if}
-
-				{#if selected === 'Cities'}
-					<div
-						class="h-full w-full overflow-y-auto"
-						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
-						{#if facets?.cities?.all?.buckets?.length > 0}
-							<CheckboxEs
-								items="{facets?.cities?.all?.buckets}"
-								model="cities"
-								selectedItems="{fl.cities || []}"
-								on:go="{goCheckbox}" />
-						{/if}
-					</div>
-				{/if}
-
-				{#if selected === 'Amenities'}
-					<div
-						class="h-full w-full overflow-y-auto"
-						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
-						{#if facets?.amenities?.all?.buckets?.length > 0}
-							<CheckboxEs
-								items="{facets?.amenities?.all?.buckets}"
-								model="amenities"
-								selectedItems="{fl.amenities || []}"
 								on:go="{goCheckbox}" />
 						{/if}
 					</div>

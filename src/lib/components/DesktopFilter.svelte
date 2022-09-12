@@ -202,17 +202,6 @@ function handleToggleSubCategory(m, mx) {
 		</div>
 	{/if}
 
-	<!-- {#if facets?.all_aggs?.countries?.all?.all?.buckets?.length > 0}
-			<div>
-				<CheckboxEs
-					items="{facets?.all_aggs?.countries?.all?.all?.buckets}"
-					title="countries"
-					model="countries"
-					selectedItems="{fl.countries || []}"
-					on:go="{goCheckbox}" />
-			</div>
-	{/if} -->
-
 	{#if facets?.all_aggs?.brands?.all?.buckets?.length > 0}
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
@@ -226,46 +215,7 @@ function handleToggleSubCategory(m, mx) {
 		</div>
 	{/if}
 
-	{#if facets?.all_aggs?.categories?.all?.all?.buckets?.length > 0}
-		<div class="my-3">
-			<hr class="mb-3 w-full" />
-
-			<CheckboxEs
-				items="{facets?.all_aggs?.categories?.all?.all?.buckets}"
-				title="Categories"
-				model="categories"
-				selectedItems="{fl.categories || []}"
-				on:go="{goCheckbox}" />
-		</div>
-	{/if}
-
-	{#if facets?.all_aggs?.states?.all?.all?.buckets?.length > 0}
-		<div class="my-3">
-			<hr class="mb-3 w-full" />
-
-			<CheckboxEs
-				items="{facets?.all_aggs?.states?.all?.all?.buckets}"
-				title="States"
-				model="states"
-				selectedItems="{fl.states || []}"
-				on:go="{goCheckbox}" />
-		</div>
-	{/if}
-
-	{#if facets?.all_aggs?.cities?.all?.all?.buckets?.length > 0}
-		<div class="my-3">
-			<hr class="mb-3 w-full" />
-
-			<CheckboxEs
-				items="{facets?.all_aggs?.cities?.all?.all?.buckets}"
-				title="Cities"
-				model="cities"
-				selectedItems="{fl.cities || []}"
-				on:go="{goCheckbox}" />
-		</div>
-	{/if}
-
-	<!-- {#if facets?.vendors?.all?.all?.buckets?.length > 0}
+	{#if facets?.vendors?.all?.all?.buckets?.length > 0}
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
@@ -276,22 +226,9 @@ function handleToggleSubCategory(m, mx) {
 				selectedItems="{fl.vendors || []}"
 				on:go="{goCheckbox}" />
 		</div>
-	{/if} -->
-
-	{#if facets?.all_aggs?.amenities?.all?.all?.buckets?.length > 0}
-		<div class="my-3">
-			<hr class="mb-3 w-full" />
-
-			<CheckboxEs
-				items="{facets?.all_aggs?.amenities?.all?.all?.buckets}"
-				title="Amenities"
-				model="amenities"
-				selectedItems="{fl.amenities || []}"
-				on:go="{goCheckbox}" />
-		</div>
 	{/if}
 
-	<!-- {#if facets?.all_aggs?.price?.all?.all?.buckets?.length > 0}
+	{#if facets?.all_aggs?.price?.all?.all?.buckets?.length > 0}
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
@@ -315,5 +252,5 @@ function handleToggleSubCategory(m, mx) {
 				selectedItems="{fl.discount || []}"
 				on:go="{goCheckbox}" />
 		</div>
-	{/if} -->
+	{/if}
 </div>
