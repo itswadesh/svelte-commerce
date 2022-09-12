@@ -4,6 +4,7 @@ import { goto } from '$app/navigation'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import { getAPI } from '$lib/util/api'
 import { onMount } from 'svelte'
+import { page } from '$app/stores'
 
 export let data
 
@@ -47,9 +48,9 @@ async function getData(e) {
 	}
 	clearTimeout(typingTimer)
 	typingTimer = setTimeout(async () => {
-		let qry = `es/autocomplete?q=`
+		let qry = `es/autocomplete?store=${$page.data.store?.id}&q=`
 		if (!!q && q !== 'undefined' && q !== 'null' && q !== '') {
-			qry = `es/autocomplete?q=${q}`
+			qry = `es/autocomplete?store=${$page.data.store?.id}&q=${q}`
 		}
 		try {
 			const result = await getAPI(qry)
