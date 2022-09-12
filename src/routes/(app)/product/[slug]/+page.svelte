@@ -145,9 +145,7 @@ async function addToBag(p) {
 			options: p.options
 		})
 
-		// console.log('zzzzzzzzzzzzzzzzzz',);
-
-		await invalidate($page.url.toString())
+		await invalidate()
 		cartButtonText = 'Go to cart'
 
 		// const res = await getAPI('carts/my')
@@ -172,7 +170,7 @@ async function addToBag(p) {
 		// 	bounceItemFromTop = true
 		// }
 	} catch (e) {
-		cartButtonText = 'Error adding To Cart'
+		cartButtonText = 'Error Add To Cart'
 	} finally {
 		loading = false
 		await delay(5000)
@@ -299,16 +297,13 @@ function scrollTo(elementId) {
 		<Breadcrumb
 			data="{[
 				{ label: 'Home', link: '/' },
-
 				{ label: 'Products', link: '/search' },
-
 				{ label: data.product?.name }
 			]}" />
 	</div>
 
 	<div class="mb-5 grid grid-cols-1 items-start gap-5 sm:mb-10 sm:gap-10 lg:grid-cols-5">
 		<!-- Images -->
-
 		<div class="col-span-1 h-auto lg:col-span-3">
 			<div class="flex w-full grid-cols-2 flex-row gap-2 overflow-x-scroll scrollbar-none md:grid">
 				{#each data.product?.imagesCdn as imgCdn}
@@ -319,8 +314,8 @@ function scrollTo(elementId) {
 						<LazyImg
 							src="{imgCdn}"
 							alt="{data.product?.name}"
-							width="208"
-							height="240"
+							width="416"
+							height="600"
 							class="h-full w-full transform object-contain object-center transition duration-700 hover:scale-125" />
 					</button>
 				{/each}
@@ -374,13 +369,17 @@ function scrollTo(elementId) {
 			<div class="mb-2 flex items-center gap-4">
 				<span class="text-xl sm:text-2xl"><b>{data.product?.formattedPrice}</b></span>
 
-				<span class="text-lg text-gray-500 sm:text-xl">
-					<strike>{data.product?.formattedMrp}</strike>
-				</span>
+				{#if data.product?.formattedMrp > data.product?.formattedPrice}
+					<span class="text-lg text-gray-500 sm:text-xl">
+						<strike>{data.product?.formattedMrp}</strike>
+					</span>
+				{/if}
 
-				<span class="text-lg font-semibold text-primary-500 sm:text-xl">
-					({data.product?.discount}% OFF)
-				</span>
+				{#if data.product?.discount > 0}
+					<span class="text-lg font-semibold text-primary-500 sm:text-xl">
+						({data.product?.discount}% OFF)
+					</span>
+				{/if}
 			</div>
 
 			<p class="mb-5 text-sm font-semibold text-green-600">Inclusive of all taxes</p>
@@ -575,7 +574,7 @@ function scrollTo(elementId) {
 			</div>
 
 			<div
-				class="box-shadow itmes-center fixed inset-x-0 bottom-0 z-50 grid w-full max-w-sm grid-cols-5 gap-2 border-t bg-white p-2 uppercase md:static md:mb-5 md:grid-cols-1 md:border-t-0 md:bg-transparent md:p-0 lg:grid-cols-2">
+				class="box-shadow itmes-center fixed inset-x-0 bottom-0 z-50 grid w-full grid-cols-5 gap-2 border-t bg-white p-2 uppercase md:static md:mb-5 md:grid-cols-2 md:border-t-0 md:bg-transparent md:p-0 lg:max-w-sm">
 				<div class="col-span-2 md:col-span-1">
 					<WhiteButton
 						type="button"
@@ -922,28 +921,32 @@ function scrollTo(elementId) {
 		</div>
 	{/if}
 
-	<hr class="mb-5 w-full sm:mb-10" />
+	{#if data.product?.relatedProducts?.length}
+		<hr class="mb-5 w-full sm:mb-10" />
 
-	<SimilarProducts similarProducts="{data.product?.relatedProducts}" />
+		<SimilarProducts similarProducts="{data.product?.relatedProducts}" />
+	{/if}
 </div>
 
 {#if showPhotosModal}
 	<div
 		class="frosted-black overflow-hiddentext-gray-800 fixed inset-0 z-[60] flex h-screen w-screen items-center justify-center sm:p-10 lg:p-20"
-		transition:fade>
+		transition:slide="{{ duration: 200 }}">
 		<button
 			type="button"
 			class="fixed top-2 right-2 transform cursor-pointer text-gray-200 transition duration-300 hover:scale-125 hover:text-white lg:top-5 lg:right-5"
 			on:click="{() => (showPhotosModal = false)}">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
-				class="h-5 w-5"
-				viewBox="0 0 20 20"
-				fill="currentColor">
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke-width="1.5"
+				stroke="currentColor"
+				class="h-8 w-8">
 				<path
-					fill-rule="evenodd"
-					d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-					clip-rule="evenodd"></path>
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
 			</svg>
 		</button>
 
@@ -970,7 +973,7 @@ function scrollTo(elementId) {
 				</div>
 			{/if}
 
-			<div class=" w-full flex-shrink-0 bg-white py-5 lg:h-full lg:w-auto">
+			<div class="w-full flex-1 bg-white py-5 md:max-w-lg lg:h-full">
 				<div class="mb-2 px-5">
 					<h1 class="mb-1 font-bold sm:text-lg">Photos for {data.product?.name}</h1>
 
@@ -978,24 +981,22 @@ function scrollTo(elementId) {
 				</div>
 
 				<div
-					class=" grid grid-cols-3 gap-2 overflow-y-auto overflow-x-hidden px-5 scrollbar-thin scrollbar-thumb-slate-300 lg:max-h-[70vh] lg:grid-cols-2">
+					class="grid grid-cols-3 gap-2 overflow-y-auto overflow-x-hidden px-5 scrollbar-thin scrollbar-thumb-slate-300 lg:max-h-[70vh] lg:grid-cols-2">
 					{#each data.product?.imagesCdn as imgCdn}
 						{#if imgCdn}
 							<button
 								type="button"
-								class="relative z-0 col-span-1 focus:outline-none"
+								class="relative z-0 col-span-1 border bg-gray-100 focus:outline-none"
 								on:click="{() => (selectedImgCdn = imgCdn)}">
 								<LazyImg
 									src="{imgCdn}"
 									alt=""
 									height="240"
-									class="h-40 w-full rounded-md object-cover object-center sm:h-60" />
+									class="max-w-60 h-40 w-full rounded-md object-contain object-center sm:h-60" />
 
 								<div
 									class="absolute inset-0 z-10 h-full w-full bg-white  
-                                        {selectedImgCdn === imgCdn
-										? 'bg-opacity-0'
-										: 'bg-opacity-50'}">
+                                    {selectedImgCdn === imgCdn ? 'bg-opacity-0' : 'bg-opacity-50'}">
 								</div>
 							</button>
 						{/if}
