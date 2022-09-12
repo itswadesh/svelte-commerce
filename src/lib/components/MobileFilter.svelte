@@ -14,6 +14,7 @@ import CheckboxEs from '$lib/ui/CheckboxEs.svelte'
 import { createEventDispatcher, onMount } from 'svelte'
 import { page } from '$app/stores'
 import { sorts } from '$lib/config'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 const dispatch = createEventDispatcher()
 
 let showFilter = false
@@ -135,14 +136,46 @@ $: {
 		transition:fly="{{ x: -50, duration: 300 }}"
 		class="fixed inset-0 z-[100] h-screen w-screen bg-white">
 		<div
-			class="relative border-2 border-gray-300 p-3 text-center text-lg font-bold tracking-wide shadow-md">
-			<span>Filter</span>
+			class="relative grid grid-cols-3 items-center gap-3 p-3 text-center text-lg font-bold tracking-wide shadow-md">
+			<div class="col-span-1 flex items-center justify-self-start">
+				<button type="button" class="focus:outline-none" on:click="{() => (showFilter = false)}">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke-width="1.5"
+						stroke="currentColor"
+						class="h-6 w-6">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+					</svg>
+				</button>
 
-			<button
+				<span class="mx-2 h-6 w-[2px] border-l-2 border-gray-300"></span>
+
+				<button
+					on:click="{clearFilters}"
+					class="text-xs text-primary-500 hover:underline focus:outline-none">
+					Clear All
+				</button>
+			</div>
+
+			<h5 class="col-span-1 justify-self-center">Filter</h5>
+
+			<PrimaryButton
+				type="button"
+				loadingringsize="xs"
+				roundedFull
+				class="col-span-1 justify-self-end text-xs"
+				on:click="{() => (showFilter = false)}">APPLY</PrimaryButton>
+
+			<!-- <button
 				on:click="{clearFilters}"
 				class="absolute inset-y-0 right-4 text-right text-xs text-primary-500 hover:underline focus:outline-none">
 				Clear All
-			</button>
+			</button> -->
 		</div>
 
 		<div class="flex h-full items-start">
@@ -178,20 +211,22 @@ $: {
 			</div>
 		</div>
 
-		<div
+		<!-- <div
 			class="absolute inset-x-0 bottom-0 z-[100] flex items-center divide-x-2 divide-gray-300 border-2 border-gray-300 bg-white">
 			<button
+				type="button"
 				class="w-1/2 p-3 text-center font-bold tracking-wide focus:outline-none"
 				on:click="{() => (showFilter = false)}">
 				Cancel
 			</button>
 
 			<button
+				type="button"
 				class="w-1/2 p-3 text-center font-bold tracking-wide focus:outline-none"
 				on:click="{() => (showFilter = false)}">
 				Apply
 			</button>
-		</div>
+		</div> -->
 	</div>
 {/if}
 
