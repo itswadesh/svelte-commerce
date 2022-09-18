@@ -12,6 +12,6 @@
     "env": {
         "VITE_WWW_URL": "https://kitcommerce.tech",
         "VITE_DOMAIN": "misiki.io",
-        "HTTP_ENDPOINT": "https://api.misiki.io",
+        "HTTP_ENDPOINT": "https://api.misiki.io"
     }
 }
