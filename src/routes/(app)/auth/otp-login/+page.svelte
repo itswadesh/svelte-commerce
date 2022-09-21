@@ -17,7 +17,7 @@ import { page } from '$app/stores'
 import { onMount } from 'svelte'
 import Cookie from 'cookie-universal'
 import { post } from '$lib/util/api'
-import { browser } from '$app/env'
+import { browser } from '$app/enviroment'
 
 const cookies = Cookie()
 

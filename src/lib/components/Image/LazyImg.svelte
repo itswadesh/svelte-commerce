@@ -3,7 +3,7 @@ import { onMount } from 'svelte'
 import { IMAGE_CDN_URL } from '$lib/config'
 import lazyload from 'vanilla-lazyload'
 import { onDestroy } from 'svelte'
-import { browser } from '$app/env'
+import { browser } from '$app/envirnoment'
 
 export let src
 export let alt = ''
