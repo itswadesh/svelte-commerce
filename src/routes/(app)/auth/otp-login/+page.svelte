@@ -17,7 +17,6 @@ import { page } from '$app/stores'
 import { onMount } from 'svelte'
 import Cookie from 'cookie-universal'
 import { post } from '$lib/util/api'
-import { browser } from '$app/enviroment'
 
 const cookies = Cookie()
 
@@ -68,7 +67,7 @@ async function handleVerifyOtp({ detail }) {
 		// $page.data.me = me
 		await invalidate()
 		let r = data.ref || '/'
-		if (browser) goto(r)
+		goto(r)
 	} catch (e) {
 		toast(e, 'error')
 	} finally {
