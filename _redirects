@@ -1,2 +1,2 @@
-/api/_ https://api.zapvi.in/api/:splat 200
-/images/_ https://api.zapvi.in/images/:splat 200
+/api/_ https://api.misiki.io/api/:splat 200
+/images/_ https://api.misiki.io/images/:splat 200
