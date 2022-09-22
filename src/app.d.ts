@@ -5,4 +5,16 @@
 declare namespace App {
 	// interface Platform {}
 	// interface Stuff {}
+	interface Locals {}
+
+	interface Platform {
+		context: {
+			waitUntil(promise: Promise<any>): void
+		}
+		caches: CacheStorage & { default: Cache }
+	}
+
+	interface Session {}
+
+	interface Stuff {}
 }
