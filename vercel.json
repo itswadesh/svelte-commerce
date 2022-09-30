@@ -2,16 +2,16 @@
     "rewrites": [
         {
             "source": "/api/:path*",
-            "destination": "https://api.misiki.io/api/:path*"
+            "destination": "https://staging.zapvi.in/api/:path*"
         },
         {
             "source": "/images/:path*",
-            "destination": "https://api.misiki.io/images/:path*"
+            "destination": "https://staging.zapvi.in/images/:path*"
         }
     ],
     "env": {
         "VITE_WWW_URL": "https://kitcommerce.tech",
-        "VITE_DOMAIN": "misiki.io",
-        "HTTP_ENDPOINT": "https://api.misiki.io"
+        "VITE_DOMAIN": "zapvi.in",
+        "HTTP_ENDPOINT": "https://staging.zapvi.in"
     }
 }
