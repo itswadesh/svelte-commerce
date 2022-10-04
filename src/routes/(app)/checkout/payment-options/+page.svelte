@@ -22,6 +22,7 @@ import CheckoutHeader from '$lib/components/CheckoutHeader.svelte'
 import { post } from '$lib/util/api'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { onMount } from 'svelte'
+import { fireGTagEvent } from '$lib/util/gTag'
 
 const seoProps = {
 	title: 'Select Payment Option',
@@ -61,11 +62,17 @@ let errorMessage = 'Select a Payment Method',
 	paymentDenied = false,
 	razorpayReady = false
 
+$: if (paymentMethods?.length === 1 && paymentMethods[0]?.type === 'pg') {
+	const pm = paymentMethods[0]
+	submit(pm)
+}
+
 onMount(async () => {
 	const razorpayScript = document.createElement('script')
 	razorpayScript.setAttribute('src', 'https://checkout.razorpay.com/v1/checkout.js')
 	document.head.appendChild(razorpayScript)
 	razorpayReady = true
+	fireGTagEvent('begin_checkout', cart)
 })
 
 function paymentMethodChanged(pm) {
@@ -217,8 +224,8 @@ function checkIfStripeCardValid({ detail }) {
 								</div>
 
 								<div>
-									<LazyImg
-										src="{pm.imgCdn}"
+									<img
+										src="{pm.img}"
 										alt="{pm.name}"
 										width="56"
 										height="56"

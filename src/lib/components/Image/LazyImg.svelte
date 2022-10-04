@@ -1,3 +1,21 @@
+<style>
+img.lazy {
+	opacity: 0;
+}
+img:not(.initial) {
+	transition: opacity 1s;
+}
+img.initial,
+img.loaded,
+img.error {
+	opacity: 1;
+}
+
+img:not([src]) {
+	visibility: hidden;
+}
+</style>
+
 <script>
 import { onMount } from 'svelte'
 import { IMAGE_CDN_URL } from '$lib/config'
@@ -13,17 +31,21 @@ const w = width === 'auto' ? 'auto' : +width * 2
 const h = height === 'auto' ? 'auto' : +height * 2
 let clazz
 export { clazz as class }
-// function getImageUrl(src, tr) {
-// 	if (src) {
-// 		const originalImageUrl = src
-// 		return originalImageUrl + tr
-// 	}
-// }
+function getImageUrl(src, tr) {
+	if (src) {
+		const originalImageUrl = src
+			.replace('https://kitcommerce.s3.ap-south-1.amazonaws.com/', '/')
+			.replace('https://ik.imagekit.io/3wzatecz51w3i/kitcommerce/', '/')
+		return IMAGE_CDN_URL + originalImageUrl
+	}
+}
 
 let lazyloadInstance
 onMount(() => {
 	if (browser) {
-		lazyloadInstance = new lazyload()
+		lazyloadInstance = new lazyload({
+			thresholds: '50px 10%'
+		})
 	}
 })
 onDestroy(() => {
@@ -34,5 +56,5 @@ onDestroy(() => {
 <img
 	alt="{alt}"
 	class="lazy {clazz}"
-	src="{`${src}?tr=h-1.43,w-1:w-${w},h-${h}`}"
-	data-src="{`${src}?tr=w-${w},h-${h}:w-${w},h-${h}`}" />
+	src="{`${getImageUrl(src)}?tr=h-2,w-1:w-${w},h-${h}`}"
+	data-src="{`${getImageUrl(src)}?tr=w-${w},h-${h}:w-${w},h-${h}`}" />

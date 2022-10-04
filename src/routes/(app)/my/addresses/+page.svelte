@@ -21,6 +21,7 @@ import { page } from '$app/stores'
 import ToggleSwitch from '$lib/ui/ToggleSwitch.svelte'
 import SearchBox from '$lib/ui/SearchBox.svelte'
 import Pagination from '$lib/components/Pagination.svelte'
+import { gett } from '$lib/utils'
 
 const seoProps = {
 	title: 'Dashboard - Addresses ',
@@ -79,7 +80,7 @@ async function remove(id) {
 
 async function refreshData() {
 	try {
-		const res = await getAPI('addresses', { search, page: currentPage, sort })
+		const res = await gett('addresses', { search, page: currentPage, sort })
 		addresses = res?.data
 	} catch (e) {
 		err = e
@@ -92,12 +93,12 @@ async function refreshData() {
 
 <div class="text-gray-800">
 	<div class="mb-5 flex items-center justify-between gap-4 sm:gap-6">
-		<SearchBox
+		<!-- <SearchBox
 			placeholder="Search addresses name, title, content and status..."
 			bind:value="{search}"
-			on:change="{() => callSearch(search)}" />
+			on:change="{() => callSearch(search)}" /> -->
 
-		<a href="/my/addresses/new" aria-label="Click to route new address" sveltekit:prefetch>
+		<a href="/my/addresses/new" aria-label="Click to route new address" data-sveltekit-prefetch>
 			<PrimaryButton
 				roundedFull="{true}"
 				class="flex h-10 w-10 transform items-center justify-center shadow shadow-primary-500/30 hover:scale-110 hover:shadow-lg md:h-12 md:w-12">
@@ -188,7 +189,7 @@ async function refreshData() {
 								<td class="whitespace-nowrap px-6 py-3">
 									<div class="flex items-center gap-5 text-sm text-gray-500">
 										<a
-											href="{`/my/addresses/${i.id}`}"
+											href="{`/my/addresses/${i._id}`}"
 											aria-label="Click to route edit address"
 											class="w-9 rounded-full bg-gray-100 p-2 text-xs text-gray-500 transition duration-300 hover:bg-gray-200">
 											<svg

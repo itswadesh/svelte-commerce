@@ -1,23 +1,23 @@
 import { getAPI } from '$lib/util/api'
+import { gett } from '$lib/utils'
 import { error } from '@sveltejs/kit'
-
-export async function load({ params, parent, setHeaders }) {
-	const { store } = await parent()
+import cookie from 'cookie'
+export async function load({ params, parent, cookies, locals, request }) {
+	const ck = request.headers.get('cookie')
+	const c = cookie.parse(ck || '')
+	if (c.cart) locals.cart = JSON.parse(c.cart)
 	const { slug } = params
 	let product = null
-	let relatedProducts = []
+	// let relatedProducts = []
 
 	try {
-		product = await getAPI(`products/${slug}`)
-		relatedProducts = await getAPI(
-			`products/frequently-bought-together?store=${store?.id}&groupId=${product?.groupId}`
-		)
+		product = await gett(`products/${slug}`)
+
 		if (!product) throw error(404, 'Product not found')
-		setHeaders({
-			'cache-control': 'public, max-age=300'
-		})
+		// cookies.set('cache-control', 'public, max-age=200')
+		return { product }
 	} catch (e) {
-	} finally {
-		return { product, relatedProducts }
+		// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', e)
+		return { product }
 	}
 }

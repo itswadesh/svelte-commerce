@@ -18,7 +18,6 @@
 import { createEventDispatcher } from 'svelte'
 import { post, del } from './util/api'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import { VITE_IMAGE_UPLOAD_API } from './config'
 import { toast } from './util'
 
 const dispatch = createEventDispatcher()
@@ -82,25 +81,6 @@ const handleSubmit = async (e) => {
 		loading = false
 	}
 }
-
-// async function uploadBanner(files) {
-// 	if (files) {
-// 		try {
-// 			uploading = true
-// 			const res = await post(`${VITE_IMAGE_UPLOAD_API}/api/file-upload`, { files, folder })
-
-// 			images = res.map((o) => o.url)
-// 			if (!multi) {
-// 				dispatch('save', images[0])
-// 			} else {
-// 				dispatch('save', images)
-// 			}
-// 		} catch (error) {
-// 		} finally {
-// 			uploading = false
-// 		}
-// 	}
-// }
 </script>
 
 <div
@@ -114,7 +94,7 @@ const handleSubmit = async (e) => {
 		<button
 			type="button"
 			title="delete"
-			class="hover:text-graey-800 absolute right-0 top-0 z-20 -m-2 hidden rounded-full border bg-white p-1 text-gray-500 shadow-md transition duration-300 hover:bg-gray-200 focus:outline-none group-hover:flex"
+			class="hover:text-graey-800 absolute right-0 top-0 z-20 -m-2 hidden rounded-full border bg-white p-1 text-gray-500 shadow-md transition duration-300 focus:outline-none group-hover:flex hover:bg-gray-200"
 			on:click="{() => remove(images)}">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"

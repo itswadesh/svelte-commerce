@@ -15,10 +15,10 @@
 
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
-import { goto, invalidate } from '$app/navigation'
+import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import { toast } from '$lib/util'
+import { dateOnly, toast } from '$lib/util'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { sorts } from '$lib/config'
 import { getAPI } from '$lib/util/api'
@@ -27,13 +27,11 @@ import DesktopFilter from '$lib/components/DesktopFilter.svelte'
 import MobileFilter from '$lib/components/MobileFilter.svelte'
 import MobileFooter from '$lib/MobileFooter.svelte'
 import Pagination from '$lib/components/Pagination.svelte'
+import { onMount } from 'svelte'
+import DummyProductCard from '$lib/DummyProductCard.svelte'
+import { gett } from '$lib/utils'
 
 export let data
-
-// console.log('ressss = ', data.ressss)
-// console.log('Products = ', products)
-// console.log('Count = ', count)
-// console.log('Facets = ', facets)
 
 let seoProps = {
 	title: `Find best ${data.searchData || ' '}`,
@@ -41,31 +39,47 @@ let seoProps = {
 }
 
 async function sortNow(s) {
+	let u = new URL($page.url)
+
 	if (s == 'null' || s == null || s == undefined || s == 'undefined') {
-		$page.url.searchParams.delete('sort')
+		u.searchParams.delete('sort')
 	} else {
-		await $page.url.searchParams.set('sort', s)
+		await u.searchParams.set('sort', s)
 	}
-	await goto(`/search?${$page.url.searchParams.toString()}`)
-	await invalidate()
+	// await invalidateAll()
+	goto(u.toString())
+	window.scroll({ top: 0, behavior: 'smooth' })
+
+	// await goto(`/search?${$page.url.searchParams.toString()}`)
+}
+let currentPage = 1
+async function loadNextPage() {
+	let nextPage = currentPage + 1
+	try {
+		const res = await gett(`products?${data.query.toString()}&page=${nextPage}`)
+		// console.log('refresh res = ', res)
+		data.products = data.products.concat(res?.data)
+		data.count = res?.count
+		data.facets = res?.facets?.all_aggs
+		data.err = !data.products ? 'No result Not Found' : null
+		currentPage = currentPage + 1
+	} catch (e) {
+		toast(e, 'error')
+	} finally {
+	}
 }
 
-async function refreshData() {
-	await invalidate()
-	// try {
-	// 	const res = await getAPI(`products?${data.query.toString()}`)
+async function refreshData() {}
 
-	// 	// console.log('refresh res = ', res)
-
-	// 	data.products = res?.data
-	// 	data.count = res?.count
-	// 	data.facets = res?.facets?.all_aggs
-	// 	data.err = !data.products ? 'No result Not Found' : null
-	// } catch (e) {
-	// 	toast(e, 'error')
-	// } finally {
-	// }
-}
+onMount(() => {
+	if ($page?.data?.isDesktop) return
+	const intersectionObserver = new IntersectionObserver((entries) => {
+		if (entries[0].intersectionRatio <= 0) return
+		// load more content;
+		loadNextPage()
+	})
+	intersectionObserver.observe(document.querySelector('.more'))
+})
 </script>
 
 <SEO {...seoProps} />
@@ -81,14 +95,14 @@ async function refreshData() {
 
 			<MobileFilter
 				facets="{data.facets}"
-				class="sticky top-[5rem] z-50 block lg:hidden"
+				class="sticky top-[5rem] z-40 block lg:hidden"
 				on:clearAll="{refreshData}" />
 		{/if}
 
 		<div class="flex w-full px-3 sm:px-10 lg:px-0">
 			{#if data.products}
 				<div class="w-full">
-					{#if data.products.length > 0}
+					{#if data.products?.length > 0}
 						<h1 class="mb-5 text-xl font-bold capitalize md:text-2xl">
 							Showing results
 
@@ -116,12 +130,21 @@ async function refreshData() {
 
 						<div
 							class="mb-5 grid w-full grid-cols-2 items-start gap-3 sm:mb-10 sm:flex sm:flex-wrap sm:justify-between lg:mb-20 lg:gap-6">
-							{#each data.products as p, lx}
+							{#each data.products as p}
 								<ProductCard product="{p}" />
 							{/each}
-						</div>
 
-						<Pagination count="{Math.ceil(data.count / 40)}" current="{data.currentPage}" />
+							{#each { length: 7 } as _}
+								<div class="hidden sm:block">
+									<DummyProductCard />
+								</div>
+							{/each}
+						</div>
+						{#if !$page?.data?.isDesktop}
+							<div class="more">loading</div>
+						{:else}
+							<Pagination count="{Math.ceil(data.count / 40)}" current="{data.currentPage}" />
+						{/if}
 					{:else}
 						<div class="flex items-center justify-center" style="height: 60vh;">
 							<div class="m-10 flex flex-col items-center justify-center text-center">
@@ -154,11 +177,50 @@ async function refreshData() {
 	<!-- CATEGORY DESCRIPTION -->
 
 	{#if data.category?.description}
-		<div class="w-full justify-center bg-gray-50 p-3 text-sm sm:p-10">
-			<div class="container mx-auto max-w-6xl">
-				<p class="prose text-gray-500">
-					{@html data.category?.description}
-				</p>
+		<div class="w-full justify-center bg-gray-50 px-3 py-10 text-sm sm:px-10 sm:py-20">
+			<div
+				class="container mx-auto grid max-w-6xl grid-cols-1 gap-10 text-sm sm:gap-20 md:grid-cols-6">
+				<div class="col-span-1 text-gray-500 md:col-span-3 lg:col-span-4">
+					<h1 class="mb-5 text-center text-base font-bold uppercase tracking-wide">
+						Buy {data.category?.name}
+					</h1>
+
+					<div class="prose-sm prose text-justify">
+						{@html data.category?.description}
+					</div>
+				</div>
+
+				<div class="col-span-1 text-gray-500 md:col-span-3 lg:col-span-2">
+					<h1 class="mb-5 text-center text-base font-bold uppercase tracking-wide">
+						{data.category?.name} price list
+					</h1>
+
+					<ul class="flex flex-col gap-2">
+						<li class="grid grid-cols-6 items-center gap-5 font-semibold uppercase">
+							<span class="col-span-5">{data.category?.name}</span>
+
+							<span class="col-span-1">Price <br /> (Rs)</span>
+						</li>
+
+						{#each data.products as p, px}
+							{#if p && px < 10}
+								<li>
+									<a href="/product/{p.slug}" class="grid grid-cols-6 gap-5">
+										<span class="col-span-5 text-justify">{p.name}</span>
+
+										<span class="col-span-1 whitespace-nowrap">{p.formattedPrice}</span>
+									</a>
+								</li>
+							{/if}
+						{/each}
+
+						{#if data.products && data.products[0] && data.products[0]?.updatedAt}
+							<li class="font-semibold">
+								<i>Data last updated on {dateOnly(data.products[0]?.updatedAt)}</i>
+							</li>
+						{/if}
+					</ul>
+				</div>
 			</div>
 		</div>
 	{/if}

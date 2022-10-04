@@ -1,5 +1,5 @@
 <script>
-	import SEO from '$lib/components/SEO/index.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
 import { toast } from '$lib/util'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
@@ -33,7 +33,7 @@ let information = [
 
 let review = {
 	id: 'new',
-	product: data.product._id,
+	pid: data.product?._id,
 	message: '',
 	rating: null
 }
@@ -51,8 +51,10 @@ async function saveReviewproduct(review) {
 		toast('Sending your business rating and review', 'info')
 
 		await post('reviews', review)
-		if (data.product) goto(`${data.ref}#ratings-and-reviews`)
+
 		toast('Successfully saved.', 'success')
+
+		if (data.product) goto(`${data.ref}#ratings-and-reviews`)
 	} catch (e) {
 		toast(e, 'error')
 	} finally {
@@ -75,16 +77,16 @@ async function saveReviewproduct(review) {
 				href="{data.ref}"
 				aria-label="Click to view the product details"
 				class="mb-2 flex max-w-max flex-row items-center gap-4 text-sm text-gray-500 lg:flex-row-reverse">
-				<div class="h-12 w-12 rounded-md border shadow-md">
+				<div>
 					<LazyImg
-						src="{data.product.img}"
+						src="{data.product?.img}"
 						alt="Business img"
 						width="48"
 						height="48"
-						class="h-full w-full object-contain object-center text-xs" />
+						class="h-12 w-auto object-contain object-center text-xs" />
 				</div>
 
-				<span>{data.product.name}</span>
+				<span>{data.product?.name}</span>
 			</a>
 		{/if}
 	</div>

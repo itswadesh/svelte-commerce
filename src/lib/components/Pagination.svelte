@@ -52,7 +52,7 @@ function changePage(e) {
 					on:click="{() => changePage(+current - 1)}">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
-						class="h-5 w-5 sm:mr-2"
+						class="h-4 w-4 sm:mr-2"
 						fill="none"
 						viewBox="0 0 24 24"
 						stroke="currentColor">
@@ -88,7 +88,7 @@ function changePage(e) {
 
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
-						class="h-5 w-5 sm:ml-2"
+						class="h-4 w-4 sm:ml-2"
 						fill="none"
 						viewBox="0 0 24 24"
 						stroke="currentColor">

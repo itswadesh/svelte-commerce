@@ -1,3 +1,10 @@
+import {
+	PUBLIC_DOMAIN,
+	PUBLIC_HTTP_ENDPOINT,
+	PUBLIC_PINCODES_API,
+	PUBLIC_WWW_URL
+} from '$env/static/public'
+
 export const authorInfo = {
 	author: 'Swadesh Behera',
 	facebookAuthorPage: `https://www.facebook.com/codenx`,
@@ -27,18 +34,18 @@ export const mediaqueries = {
 	noanimations: '(prefers-reduced-motion: reduce)'
 }
 export const currency = { symbol: '₹', code: 'INR' }
-export const WWW_URL = import.meta.env.VITE_WWW_URL || 'https://kitcommerce.tech'
-export const HTTP_ENDPOINT = import.meta.env.VITE_HTTP_ENDPOINT || 'https://api.misiki.in'
+export const WWW_URL = PUBLIC_WWW_URL || 'https://kitcommerce.tech'
+export const HTTP_ENDPOINT = PUBLIC_HTTP_ENDPOINT || 'https://api.misiki.in'
 export const IMAGE_CDN_URL = 'https://ik.imagekit.io/3wzatecz51w3i/misiki'
 export const host = '' //'https://atozzones.com'
-export const DOMAIN = import.meta.env.VITE_DOMAIN
+export const DOMAIN = PUBLIC_DOMAIN
 export const pageSize = 20
 export const stripePublishableKey =
-	import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY ||
 	'pk_test_51HXxXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXq'
-export const VITE_IMAGE_UPLOAD_API = import.meta.env.VITE_IMAGE_UPLOAD_API
-export const VITE_IMAGE_UPLOAD_TOKEN = import.meta.env.VITE_IMAGE_UPLOAD_TOKEN
 export const contactEmail = 'swadesh@misiki.in'
 export const facebookPage = `https://www.facebook.com/codenx`
-export const VITE_PINCODES_API = import.meta.env.VITE_PINCODES_API
+export const PINCODES_API = PUBLIC_PINCODES_API
+export const GOOGLE_CLIENT_ID =
+	'414060469322-n4raqj2rdbjhegvrtdk6mhbdm4sd0oc7.apps.googleusercontent.com'
+export const GOOGLE_ANALYTICS_ID = 'G-ZMZXZWG90W'
 export * from './website'

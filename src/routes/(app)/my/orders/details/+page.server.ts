@@ -1,13 +1,17 @@
 import { getAPI } from '$lib/util/api'
+import { gett } from '$lib/utils'
 import { error } from '@sveltejs/kit'
 export const prerender = false
 
-export async function load({ params, url, parent, request }) {
-	const { store } = await parent()
+export async function load({ params, url, locals, parent, request }) {
+	const { store } = locals
 	const { slug } = params
-	let orderId = url.searchParams.get('orderId')
-	let itemId = url.searchParams.get('itemId')
-	const order = await getAPI(`orders/order-items/${orderId}?store=${store?.id}`, request.headers)
+	const orderId = url.searchParams.get('orderId')
+	const itemId = url.searchParams.get('itemId')
+	const order = await gett(
+		`orders/order-items/${orderId}?store=${store?.id}`,
+		request.headers.get('cookie')
+	)
 
 	// console.log('order = ', order)
 

@@ -29,7 +29,7 @@ $: sliderBannersMobile = banners?.filter((b) => {
 			{#each sliderBanners as b, bx}
 				<div id="{`slide${bx}`}" role="banner" class="carousel-item relative h-auto w-full">
 					{#if b.imgCdn}
-						<a href="{b.link}" sveltekit:prefetch>
+						<a href="{b.link}" sveltekit:prefetch class="h-auto w-full">
 							<LazyImg
 								src="{b.imgCdn}"
 								alt="{b.name}"
@@ -91,7 +91,7 @@ $: sliderBannersMobile = banners?.filter((b) => {
 				{#each sliderBannersMobile as b, bx}
 					<div id="{`slide${bx}`}" role="banner" class="carousel-item h-auto w-full">
 						{#if b.imgCdn}
-							<a href="{b.link}" class="h-auto w-full" sveltekit:prefetch>
+							<a href="{b.link}" class="h-auto w-full" data-sveltekit-prefetch>
 								<LazyImg
 									src="{b.imgCdn}"
 									alt="{b.alt || ''}"

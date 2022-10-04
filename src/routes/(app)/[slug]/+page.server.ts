@@ -1,9 +1,12 @@
-import { getAPI } from '$lib/util/api'
+import { gett } from '$lib/utils'
 import { error } from '@sveltejs/kit'
 export const prerender = false
 
-export async function load({ url, params, setHeaders, parent }) {
+export async function load({ url, params, cookies, parent, setHeaders }) {
+	const d1 = new Date()
 	const { store } = await parent()
+	const d2 = new Date()
+	console.log('Got data from Layout page (ms): ', d2.getTime() - d1.getTime())
 	let loading = false,
 		err,
 		count,
@@ -12,50 +15,50 @@ export async function load({ url, params, setHeaders, parent }) {
 		ressss,
 		fl = {},
 		category
-	let currentPage = +url.searchParams.get('page') || 1
-	let sort = url.searchParams.get('sort')
-	let searchData = url.searchParams.get('q')
-	let query = url.searchParams
+	const currentPage = +url.searchParams.get('page') || 1
+	const sort = url.searchParams.get('sort')
+	const searchData = url.searchParams.get('q')
+	const query = url.searchParams
+	const categorySlug = params.slug
 
 	query.forEach(function (value, key) {
 		fl[key] = value
 	})
 
+	let res, categoryRes
 	try {
 		loading = true
-		const res1 = await getAPI(`es/products?${query.toString()}&store=${store?.id}`)
-		ressss = res1
-		products = res1?.data
-		products = products.map((p) => {
-			let p1
-			p1 = { ...p._source }
-			p1.id = p._id
-			return p1
-		})
-		count = res1?.count
-		facets = res1?.facets
-		err = !res1?.count ? 'No result Not Found' : null
+		res = await Promise.allSettled([
+			gett(`es/products?q=${params?.slug}&store=${store?.id}&${query.toString()}`),
+			gett(`categories/${categorySlug}?store=${store.id}`)
+		])
+		ressss = res[0]
+		if (ressss.status === 'fulfilled') {
+			products = ressss.value?.data.map((p) => {
+				let p1
+				p1 = { ...p._source }
+				p1.id = p._id
+				return p1
+			})
+
+			count = ressss.value?.count
+			facets = ressss.value?.facets
+			err = !ressss.value?.estimatedTotalHits ? 'No result Not Found' : null
+		}
+		if (res[1].status === 'fulfilled') categoryRes = res[1].value
 	} catch (e) {
 		err = e
 		throw error(400, e?.message || e || 'No results found')
 	} finally {
 		loading = false
 	}
+	const d3 = new Date()
+	console.log('Product listing page loading complete (ms): ', d3.getTime() - d2.getTime())
 
-	try {
-		loading = true
-		const res2 = await getAPI(`categories/${params.slug}?store=${store.id}`)
-		// console.log('zzzzzzzzzzzzzzzzzz', res2)
-		category = res2
-	} catch (e) {
-		err = e
-	} finally {
-		loading = false
-	}
+	// setHeaders({
+	// 	'cache-control': 'public, max-age=7200, must-revalidate'
+	// })
 
-	setHeaders({
-		'cache-control': 'public, max-age=300'
-	})
 	return {
 		loading,
 		err,
@@ -68,6 +71,6 @@ export async function load({ url, params, setHeaders, parent }) {
 		searchData,
 		fl,
 		ressss,
-		category
+		category: categoryRes?.value
 	}
 }

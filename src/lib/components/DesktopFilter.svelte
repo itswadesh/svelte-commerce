@@ -60,22 +60,7 @@ onMount(async () => {
 		if (key !== 'page' && key !== 'sort' && key !== 'lat' && key !== 'lng')
 			appliedFilters[key] = value
 	})
-
-	getMegaMenu()
 })
-
-async function getMegaMenu() {
-	try {
-		const res = await getAPI(`categories/megamenu?megamenu=true&store=${$page.data?.store?.id}`)
-
-		// console.log('megaMenu = ', res)
-
-		megaMenu = res
-	} catch (e) {
-		toast(e, 'error')
-	} finally {
-	}
-}
 
 $: {
 	filterLength = 0
@@ -210,6 +195,19 @@ function handleToggleSubCategory(m, mx) {
 				title="Brands"
 				model="brands"
 				selectedItems="{fl.brands || []}"
+				on:go="{goCheckbox}" />
+		</div>
+	{/if}
+
+	{#if facets?.all_aggs?.categories?.all?.all?.buckets?.length > 0}
+		<div class="my-3">
+			<hr class="mb-3 w-full" />
+
+			<CheckboxEs
+				items="{facets?.all_aggs?.categories?.all?.all?.buckets}"
+				title="Categories"
+				model="categories"
+				selectedItems="{fl.categories || []}"
 				on:go="{goCheckbox}" />
 		</div>
 	{/if}

@@ -1,9 +1,9 @@
 <script lang="ts">
 import SEO from '$lib/components/SEO/index.svelte'
-import { post, getAPI, del } from '$lib/util/api'
+import { post, del } from '$lib/util/api'
 import { page } from '$app/stores'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import { goto, invalidate } from '$app/navigation'
+import { goto, invalidate, invalidateAll } from '$app/navigation'
 import { currency, date } from '$lib/util'
 import Pricesummary from '$lib/components/Pricesummary.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
@@ -14,6 +14,10 @@ import { onMount } from 'svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import Error from '$lib/components/Error.svelte'
 import cookie from 'cookie'
+import { fireGTagEvent } from '$lib/util/gTag'
+import Cookie from 'cookie-universal'
+import { gett } from '$lib/utils'
+const cookies = Cookie()
 
 export let data
 
@@ -41,22 +45,25 @@ let couponErr
 onMount(() => {
 	getProducts()
 	getCoupons()
+	fireGTagEvent('view_cart', data.cart)
 })
 
 // console.log('cart', cart)
 
-const addToCart = async ({ pid, vid, qty, options, ix }: any) => {
+const addToCart = async ({ pid, qty, customizedImg, ix }: any) => {
 	loading[ix] = true
 	const res = await post('carts/add-to-cart', {
-		pid,
-		vid,
-		qty,
-		options
+		pid: pid,
+		qty: qty,
+		customizedImg: customizedImg || null
 	})
+
 	// cart = res
 	// $page.data.cart = res
 	// await refreshCart()
-	await invalidate()
+
+	await invalidateAll()
+
 	loading[ix] = false
 }
 
@@ -70,7 +77,7 @@ async function applyCouponCode(selectedCouponCode: string) {
 		loadingApplyCoupon = true
 		const resAC = await post('apply-coupon', { code: selectedCouponCode })
 		appliedCouponInfo = resAC
-		await invalidate()
+		// await invalidateAll()
 		// await refreshCart()
 		openApplyPromoCodeModal = false
 	} catch (e) {
@@ -85,7 +92,7 @@ async function removeCouponCode() {
 		loadingRemoveCoupon = true
 		await del('remove-coupon')
 		selectedCouponCode = ''
-		await invalidate()
+		// await invalidateAll()
 		await refreshCart()
 	} catch (e) {
 		couponErr = e
@@ -97,7 +104,7 @@ async function removeCouponCode() {
 async function getProducts() {
 	try {
 		loadingProducts = true
-		const resP = await getAPI(`es/products?store=${$page.data?.store?.id}`)
+		const resP = await gett(`es/products?store=${$page.data?.store?.id}`)
 		products = resP?.hits
 	} catch (e) {
 	} finally {
@@ -108,7 +115,7 @@ async function getProducts() {
 async function getCoupons() {
 	try {
 		loadingCoupon = true
-		const resC = await getAPI(`coupons?store=${$page.data?.store?.id}`)
+		const resC = await gett(`coupons?store=${$page.data?.store?.id}`)
 		coupons = resC?.data
 
 		// console.log('coupons = ', coupons)
@@ -120,7 +127,7 @@ async function getCoupons() {
 
 async function refreshCart() {
 	try {
-		const res = await getAPI('carts/refresh-cart')
+		const res = await gett('carts/refresh-cart')
 		if (res) {
 			const cookieCart = {
 				items: res?.items,
@@ -135,9 +142,9 @@ async function refreshCart() {
 				unavailableItems: res?.unavailableItems,
 				formattedAmount: res?.formattedAmount
 			}
-			const str = cookie.serialize('cart', JSON.stringify(cookieCart), { path: '/' })
+			// const str = cookie.serialize('cart', JSON.stringify(cookieCart), { path: '/' })
 
-			console.log('zzzzzzzzzzzzzzzzzzcookieCart', cookieCart)
+			cookies.set('cart', JSON.stringify(cookieCart), { path: '/' })
 
 			data.cart = cookieCart
 		}
@@ -266,7 +273,7 @@ async function refreshCart() {
 													aria-label="Click to route product details"
 													class="flex-shrink-0 ">
 													<LazyImg
-														src="{item.imgCdn}"
+														src="{item.isCustomizeditem ? item.customizedImg : item.imgCdn}"
 														alt=""
 														width="128"
 														class="w-16 cursor-pointer rounded-md object-contain sm:w-32" />
@@ -285,9 +292,11 @@ async function refreshCart() {
 															{item?.formattedItemAmount.price}
 														</span>
 
-														<span class="ml-2 text-sm font-light text-gray-400 sm:text-base ">
-															<span class="line-through">{item?.formattedItemAmount.mrp}</span>
-														</span>
+														{#if item?.formattedItemAmount.mrp > item?.formattedItemAmount.price}
+															<span class="ml-2 text-sm font-light text-gray-400 sm:text-base ">
+																<span class="line-through">{item?.formattedItemAmount.mrp}</span>
+															</span>
+														{/if}
 
 														{#if Math.round(((item?.mrp - item?.price) * 100) / item?.mrp) > 0}
 															<span class="ml-2 text-sm text-green-500 sm:text-base ">
@@ -315,11 +324,19 @@ async function refreshCart() {
 											href="/product/{item?.slug}"
 											aria-label="Click to route product details"
 											class="flex-shrink-0 ">
-											<LazyImg
-												src="{item.img}"
-												alt=""
-												width="128"
-												class="w-16 cursor-pointer rounded-md object-contain sm:w-32" />
+											{#if item.isCustomized}
+												<LazyImg
+													src="{item.customizedImg}"
+													alt=""
+													width="128"
+													class="w-16 cursor-pointer rounded-md object-contain sm:w-32" />
+											{:else}
+												<LazyImg
+													src="{item.imgCdn}"
+													alt=""
+													width="128"
+													class="w-16 cursor-pointer rounded-md object-contain sm:w-32" />
+											{/if}
 										</a>
 
 										<div class="w-full flex-1">
@@ -347,9 +364,11 @@ async function refreshCart() {
 													{item?.formattedItemAmount.price}
 												</span>
 
-												<span class="ml-2 text-sm font-light text-gray-400 sm:text-base ">
-													<span class="line-through">{item?.formattedItemAmount.mrp}</span>
-												</span>
+												{#if item?.formattedItemAmount.mrp > item?.formattedItemAmount.price}
+													<span class="ml-2 text-sm font-light text-gray-400 sm:text-base ">
+														<span class="line-through">{item?.formattedItemAmount.mrp}</span>
+													</span>
+												{/if}
 
 												{#if Math.round(((item?.mrp - item?.price) * 100) / item?.mrp) > 0}
 													<span class="ml-2 text-sm text-green-500 sm:text-base ">
@@ -365,9 +384,8 @@ async function refreshCart() {
 														on:click="{() =>
 															addToCart({
 																pid: item.pid,
-																vid: item.vid,
 																qty: -1,
-																options: [],
+																customizedImg: item.customizedImg,
 																ix: ix
 															})}"
 														type="button"
@@ -389,7 +407,7 @@ async function refreshCart() {
 													<div
 														class="mx-2 flex h-6 w-6 items-center justify-center text-xs font-bold sm:h-8  sm:w-8  ">
 														{#if loading[ix]}
-															<LazyImg
+															<img
 																src="/dots-loading.gif"
 																alt="loading"
 																width="20"
@@ -404,9 +422,8 @@ async function refreshCart() {
 														on:click="{() =>
 															addToCart({
 																pid: item.pid,
-																vid: item.vid,
 																qty: +1,
-																options: [],
+																customizedImg: item.customizedImg,
 																ix: ix
 															})}"
 														type="button"
@@ -430,9 +447,8 @@ async function refreshCart() {
 													on:click="{() =>
 														addToCart({
 															pid: item.pid,
-															vid: item.vid,
 															qty: -999999,
-															options: [],
+															customizedImg: item.customizedImg,
 															ix: ix
 														})}"
 													class="flex h-6 w-6 transform items-center justify-center rounded-full bg-gray-200 shadow transition  duration-300 hover:bg-gray-300 hover:opacity-80 focus:outline-none active:scale-95 sm:h-8 sm:w-8">

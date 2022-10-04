@@ -1,19 +1,18 @@
-import { getAPI, post } from '$lib/util/api'
-import { error, redirect } from '@sveltejs/kit'
-// import Cookie from 'cookie-universal'
-import cookie from 'cookie'
-export async function load({ url, request, setHeaders }) {
-	// console.log('Load of cart..........')
+import { invalidateAll } from '$app/navigation'
+import { fireGTagEvent } from '$lib/util/gTag'
+import { gett, post } from '$lib/utils'
+import { error, invalid, redirect } from '@sveltejs/kit'
+import type { Action, Actions, PageServerLoad } from './$types'
+
+export const load: PageServerLoad = async ({ url, request, locals, cookies }) => {
 	// const cookies = Cookie()
-	let cart,
-		loading = false
+	let loading = false
+	let cart
 	try {
 		loading = true
-		const res = await getAPI('carts/refresh-cart', request.headers)
-
-		
+		const res = await gett('carts/refresh-cart', request.headers.get('cookie'))
 		if (res) {
-			const cookieCart = {
+			cart = {
 				items: res?.items,
 				qty: +res?.qty,
 				tax: +res?.tax,
@@ -26,18 +25,10 @@ export async function load({ url, request, setHeaders }) {
 				unavailableItems: res?.unavailableItems,
 				formattedAmount: res?.formattedAmount
 			}
-			
-			const str = cookie.serialize('cart', JSON.stringify(cookieCart), { path: '/' })
-			
-			setHeaders({ 'set-cookie': str })
-			// await cookies.set('cart', cookieCart, { path: '/' })
-			
-			// console.log('zzzzzzzzzzzzzzzzzzcookieCart', cookieCart);
-
-			cart = cookieCart
+			cookies.set('cart', JSON.stringify(cart), { path: '/' })
+			locals.cart = cart
 		}
 	} catch (e) {
-		console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', e)
 		if (e?.status === 401) {
 			throw redirect(307, '/auth/otp-login')
 		}
@@ -46,9 +37,55 @@ export async function load({ url, request, setHeaders }) {
 		loading = false
 	}
 
-	setHeaders({
-		'cache-control': 'public, max-age=200'
-	})
+	// cookies.set('cache-control', 'public, max-age=200')
 
 	return { loadingCart: loading, cart }
 }
+
+const add: Action = async ({ request, cookies }) => {
+	const data = await request.formData()
+	const pid = data.get('pid')
+	const vid = data.get('vid')
+	const qty = 1
+	const options = JSON.parse(data.get('options'))
+	const customizedImg = data.get('customizedImg')
+	if (typeof pid !== 'string' || !pid) {
+		return invalid(400, { invalid: true })
+	}
+	try {
+		const cart = await post(
+			'carts/add-to-cart',
+			{
+				pid,
+				vid,
+				qty: 1,
+				options,
+				customizedImg
+			},
+			cookies
+		)
+		if (cart) {
+			const cookieCart = {
+				items: cart?.items,
+				qty: cart?.qty,
+				tax: cart?.tax,
+				subtotal: cart?.subtotal,
+				total: cart?.total,
+				currencySymbol: cart?.currencySymbol,
+				discount: cart?.discount,
+				selfTakeout: cart?.selfTakeout,
+				shipping: cart?.shipping,
+				unavailableItems: cart?.unavailableItems,
+				formattedAmount: cart?.formattedAmount
+			}
+			cookies.set('cart', JSON.stringify(cookieCart), { path: '/' })
+		}
+
+		return cart
+	} catch (e) {
+		console.log('err', e)
+		return {}
+	}
+}
+
+export const actions: Actions = { add }

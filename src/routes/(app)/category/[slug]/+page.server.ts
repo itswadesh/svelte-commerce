@@ -1,15 +1,14 @@
-import { getAPI } from '$lib/util/api'
+import { gett } from '$lib/utils'
 import { error } from '@sveltejs/kit'
 
-export async function load({ params, parent, setHeaders }) {
+export async function load({ params, parent, cookies }) {
 	const { store } = await parent()
 	try {
 		const { slug } = params
-		const category = await getAPI(`categories/${slug}`)
+		const category = await gett(`categories/${slug}`)
 		if (category) {
-			setHeaders({
-				'cache-control': 'public, max-age=300'
-			})
+			// cookies.set('cache-control', 'public, max-age=200')
+
 			return { category }
 		}
 	} catch (e) {

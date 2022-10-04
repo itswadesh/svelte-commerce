@@ -7,32 +7,31 @@ import ProductCard from '$lib/ProductCard.svelte'
 import PickedBanners from '$lib/home/PickedBanners.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import MobileFooter from '$lib/MobileFooter.svelte'
+import DummyProductCard from '$lib/DummyProductCard.svelte'
 
 export let data
 
-// console.log('zzzzzzzzzzzzzzzzzz', data)
-
 const seoProps = {
-	title: 'Custom Printed Mobile Back Cover and Cases Online @Rs. 99 - Misiki',
+	title: 'Custom Printed Mobile Back Cover and Cases Online @Rs. 99 - kitcommerce',
 	description:
-		'Customised Mobile Covers - Buy Custom Photo Printed Mobile Back Cover And Cases Online For All Stylish Phone Models @Rs.99 On Misiki Store. 100% Easy Returns.',
+		'Customised Mobile Covers - Buy Custom Photo Printed Mobile Back Cover And Cases Online For All Stylish Phone Models @Rs.99 On kitcommerce Store. 100% Easy Returns.',
 	slug: '/',
 	keywords:
-		'Customised Mobile Covers, Buy Custom Photo Printed Mobile Back Cover,Misiki Store,100% Easy Returns ',
+		'Customised Mobile Covers, Buy Custom Photo Printed Mobile Back Cover,kitcommerce Store,100% Easy Returns ',
 	featuredImage: {
-		url: '/logo.png',
+		url: '/logo.svg',
 		width: 672,
 		height: 448,
 		caption: 'Home page'
 	},
 	ogImage: {
-		url: '/logo.png'
+		url: '/logo.svg'
 	},
 	ogSquareImage: {
-		url: '/logo.png'
+		url: '/logo.svg'
 	},
 	twitterImage: {
-		url: '/logo.png'
+		url: '/logo.svg'
 	}
 }
 
@@ -68,7 +67,7 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 					TOP CATEGORIES
 				</h1>
 
-				<div class="max-w-screen overflow-x-auto scrollbar-none lg:hidden">
+				<div class="w-60 overflow-x-auto scrollbar-none lg:hidden">
 					<div class="flex flex-row">
 						{#each data.home?.categories?.data as category}
 							{#if category?.imgCdn}
@@ -166,52 +165,20 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 					</h1>
 
 					<div
-						class="grid w-full grid-cols-2 items-end sm:flex sm:flex-wrap sm:justify-center sm:gap-10">
-						{#each home?.popular?.data as p, px}
-							{#if p}
-								<ProductCard product="{p}" />
-							{/if}
+						class="px-3 sm:px-10 grid w-full grid-cols-2 items-start gap-3 sm:flex sm:flex-wrap sm:justify-between lg:mb-20 lg:gap-6">
+						{#each home?.popular?.data as p}
+							<ProductCard product="{p}" />
+						{/each}
+
+						{#each { length: 8 } as _}
+							<div class="hidden sm:block">
+								<DummyProductCard />
+							</div>
 						{/each}
 					</div>
 				</div>
 			{/if}
 		{/await}
-
-		<!-- TRENDING ITEMS -->
-
-		<!-- {#if home.data?.trending}
-			<div class="px-2 pt-1">
-				<div class="flex flex-row items-center justify-between">
-					<h1
-						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
-						TRENDING ITEMS
-					</h1>
-
-					<a
-						href="##"
-						aria-label="Click to get the trending products list"
-						class="text-sm text-gray-500 hover:text-primary-500 sm:mr-2">
-						See All
-					</a>
-				</div>
-
-				<div class="mt-5 flex overflow-x-auto">
-					{#each home?.trending.data as p}
-						{#if p}
-							<ProductCard product="{p}" />
-						{/if}
-					{/each}
-				</div>
-			</div>
-		{/if} -->
-
-		<!-- {home.banners}
-      {home.brands}
-      {home.categories}
-      {home.groupByBanner}
-      {home.popular}
-      {home.trending}
-    	{home.youMayLike} -->
 	</div>
 
 	<!-- MOBILE FOOTER -->

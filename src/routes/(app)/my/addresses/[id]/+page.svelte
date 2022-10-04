@@ -18,7 +18,7 @@ export let data
 <div class="text-gray-800">
 	<header class="mb-3 flex flex-col-reverse items-start justify-between md:flex-row">
 		<h1 class="line-clamp-2 mb-2 mr-5 text-xl font-bold md:text-2xl">
-			{#if data.params.id === 'new'}
+			{#if data.id === 'new'}
 				<span> Add New Address </span>
 			{:else if !data.address?.title}
 				<span>Address Details</span>
@@ -32,5 +32,5 @@ export let data
 		</div>
 	</header>
 
-	<SaveAddress address="{data.address}" />
+	<SaveAddress address="{data.address}" countries="{data.countries}" states="{data.states}" />
 </div>

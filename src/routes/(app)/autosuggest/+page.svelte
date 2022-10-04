@@ -5,6 +5,7 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import { getAPI } from '$lib/util/api'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import { gett } from '$lib/utils'
 
 export let data
 
@@ -53,7 +54,7 @@ async function getData(e) {
 			qry = `es/autocomplete?store=${$page.data.store?.id}&q=${q}`
 		}
 		try {
-			const result = await getAPI(qry)
+			const result = await gett(qry)
 			autocomplete = result.hits
 		} catch (e) {}
 	}, 200)
@@ -65,7 +66,7 @@ function resetInput() {
 onMount(async () => {
 	searchInput.focus()
 	// getData()
-	const HOME = await getAPI(`home?store=${data.store?.id}`)
+	const HOME = await gett(`home?store=${data.store?.id}`)
 	popular = HOME.popular
 	trending = HOME.trending
 })
@@ -76,7 +77,7 @@ onMount(async () => {
 <main class="w-ful h-screen">
 	<div class="fixed inset-x-0 top-0">
 		<div class="absolute z-20 my-auto mt-4 px-1">
-			<a href="/" aria-label="Click to search" sveltekit:prefetch>
+			<a href="/" aria-label="Click to search" data-sveltekit-prefetch>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					class="my-auto h-6 w-8 text-gray-500"
@@ -103,9 +104,7 @@ onMount(async () => {
 							<input
 								bind:this="{searchInput}"
 								placeholder="{'Search for products, brands...'}"
-								value="{q}"
-								class="text-normal relative h-14 w-full truncate border px-10 font-light focus:outline-none focus:ring-2 
-              focus:ring-primary-500"
+								class="text-normal relative h-14 w-full truncate border px-10 font-light focus:outline-none focus:ring-2 focus:ring-primary-500"
 								on:input="{getData}" />
 
 							<div class=" flex h-full cursor-pointer justify-end">
@@ -177,84 +176,47 @@ onMount(async () => {
 		</div>
 	</div>
 
-	{#if trending?.data?.length}
+	<!-- Categories -->
+
+	{#if data && data.categories && data.categories?.data?.length}
 		<div class="mt-16 px-4">
-			<h6 class="mb-2 text-sm font-semibold uppercase tracking-wide text-gray-600">
-				Trending on {data.store.websiteName}
+			<h6 class="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-600">
+				Categories on {data.store?.websiteName}
 			</h6>
 
 			<div class="flex flex-col gap-4">
-				{#each trending?.data as s}
-					<a
-						href="/product/{s.slug}"
-						aria-label="Click to route product details"
-						class="flex items-start gap-4">
-						<LazyImg src="{s.imgCdn}" alt="{s.name}" width="56" class="w-14" />
-
-						<div class="flex flex-1 items-center gap-4">
-							<div class="w-full flex-1 text-sm">
-								{#if s.brand}
-									<h6 class="font-medium">{s.brand}</h6>
-								{/if}
-
-								{#if s.name}
-									<p>{s.name}</p>
-								{/if}
+				{#each data.categories?.data as c}
+					<a href="/{c.link}" aria-label="Click to route category" class="flex items-center gap-4">
+						{#if c.imgCdn}
+							<div class="my-auto w-1/6">
+								<LazyImg
+									src="{c.imgCdn}"
+									alt=""
+									height="40"
+									class="mx-auto my-auto h-10 object-contain" />
 							</div>
+						{/if}
 
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="h-5 w-5 flex-shrink-0"
-								viewBox="0 0 20 20"
-								fill="currentColor">
-								<path
-									fill-rule="evenodd"
-									d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-									clip-rule="evenodd"></path>
-							</svg>
+						<div class="w-full flex-1 text-sm">
+							{#if c.brand}
+								<h6 class="font-medium">{c.brand}</h6>
+							{/if}
+
+							{#if c.name}
+								<p>{c.name}</p>
+							{/if}
 						</div>
-					</a>
-				{/each}
-			</div>
-		</div>
-	{/if}
 
-	{#if popular?.data?.length}
-		<div class="mt-16 px-4">
-			<h6 class="mb-2 text-sm font-semibold uppercase tracking-wide text-gray-600">
-				Popular on {data.store.websiteName}
-			</h6>
-
-			<div class="flex flex-col gap-4">
-				{#each popular?.data as s}
-					<a
-						href="/product/{s.slug}"
-						aria-label="Click to route product details"
-						class="flex items-start gap-4">
-						<LazyImg src="{s.imgCdn}" alt="{s.name}" width="56" class="w-14" />
-
-						<div class="flex flex-1 items-center gap-4">
-							<div class="w-full flex-1 text-sm">
-								{#if s.brand}
-									<h6 class="font-medium">{s.brand}</h6>
-								{/if}
-
-								{#if s.name}
-									<p>{s.name}</p>
-								{/if}
-							</div>
-
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="h-5 w-5 flex-shrink-0"
-								viewBox="0 0 20 20"
-								fill="currentColor">
-								<path
-									fill-rule="evenodd"
-									d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-									clip-rule="evenodd"></path>
-							</svg>
-						</div>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="h-5 w-5 flex-shrink-0"
+							viewBox="0 0 20 20"
+							fill="currentColor">
+							<path
+								fill-rule="evenodd"
+								d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+								clip-rule="evenodd"></path>
+						</svg>
 					</a>
 				{/each}
 			</div>

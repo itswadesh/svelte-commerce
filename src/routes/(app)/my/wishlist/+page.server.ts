@@ -1,10 +1,9 @@
-import { getAPI } from '$lib/util/api'
+import { gett } from '$lib/utils'
 import { error, redirect } from '@sveltejs/kit'
 
 export async function load({ request }) {
 	try {
-		const wishlistedProducts = await getAPI(`wishlists/my`, request.headers)
-
+		const wishlistedProducts = await gett(`wishlists/my`, request.headers.get('cookie'))
 		if (wishlistedProducts) {
 			return { wishlistedProducts }
 		}

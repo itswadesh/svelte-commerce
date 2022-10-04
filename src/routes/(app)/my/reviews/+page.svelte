@@ -21,6 +21,7 @@ import SearchBox from '$lib/ui/SearchBox.svelte'
 import { page } from '$app/stores'
 import Pagination from '$lib/components/Pagination.svelte'
 import { loginUrl } from '$lib/store'
+import { gett } from '$lib/utils'
 
 const seoProps = {
 	title: 'Dashboard - Reviews ',
@@ -71,7 +72,7 @@ async function remove(id) {
 
 async function refreshData() {
 	try {
-		await getAPI('reviews', { search: data.search, sort: data.sort, page: data.currentPage })
+		await gett('reviews', { search: data.search, sort: data.sort, page: data.currentPage })
 	} catch (e) {
 	} finally {
 	}
@@ -211,7 +212,7 @@ async function refreshData() {
 
 			<span class="mb-5 text-xs"> We didn't find any review against your listing. </span>
 
-			<a href="/" aria-label="Click to route home" sveltekit:prefetch>
+			<a href="/" aria-label="Click to route home" data-sveltekit-prefetch>
 				<PrimaryButton class="w-40 py-2 text-sm">BROWSE ITEMS</PrimaryButton>
 			</a>
 		</div>

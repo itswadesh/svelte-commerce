@@ -6,6 +6,7 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import Cookie from 'cookie-universal'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import { gett } from '$lib/utils'
 
 const cookies = Cookie()
 
@@ -32,7 +33,7 @@ function handlePinCode() {
 async function submit() {
 	try {
 		loading = true
-		deleveryDetails = await getAPI(`https://indian-pincodes.vercel.app/api/pincodes/${pincode}`)
+		deleveryDetails = await gett(`https://indian-pincodes.vercel.app/api/pincodes/${pincode}`)
 		await cookies.set('zip', pincode, { path: '/' })
 		$page.data.zip = pincode
 	} catch (e) {

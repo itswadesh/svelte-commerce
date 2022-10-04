@@ -13,7 +13,7 @@ let seoProps = {
 	description: `Categories`
 }
 
-$: megaMenu = data?.megaMenu.filter((e) => {
+$: megaMenu = data?.megamenu.filter((e) => {
 	return e.name !== 'New Arrivals'
 })
 

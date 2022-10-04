@@ -10,13 +10,14 @@
 import SEO from '$lib/components/SEO/index.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import { toast } from '$lib/util'
-import { goto, invalidate } from '$app/navigation'
+import { goto, invalidateAll } from '$app/navigation'
 import VerifyOtp from '../_VerifyOtp.svelte'
 import SendOtp from '../_SendOtp.svelte'
 import { page } from '$app/stores'
 import { onMount } from 'svelte'
 import Cookie from 'cookie-universal'
 import { post } from '$lib/util/api'
+import { browser } from '$app/environment'
 
 const cookies = Cookie()
 
@@ -65,9 +66,9 @@ async function handleVerifyOtp({ detail }) {
 		}
 		await cookies.set('me', me, { path: '/' })
 		// $page.data.me = me
-		await invalidate()
+		await invalidateAll()
 		let r = data.ref || '/'
-		goto(r)
+		if (browser) goto(r)
 	} catch (e) {
 		toast(e, 'error')
 	} finally {
@@ -84,25 +85,9 @@ function changeNumber() {
 <SEO {...seoProps} />
 
 <div
-	class="frosted container mx-auto flex w-full max-w-sm flex-col rounded-2xl border bg-cover bg-center bg-no-repeat px-4 py-10 shadow-2xl sm:px-8"
+	class="frosted container mx-auto flex w-full max-w-sm flex-col rounded-2xl border bg-cover bg-center bg-no-repeat p-10 shadow-2xl"
 	style="background-image: url('/login/bg-lighter.svg');">
-	<!-- Store logo/name  -->
-	<a href="/" aria-label="Click to route home" class="mx-auto mb-5 max-w-max" sveltekit:prefetch>
-		{#if data.store?.logo}
-			<div>
-				<LazyImg
-					src="{data.store?.logo}"
-					alt="{data.store?.name} logo"
-					height="40"
-					class="h-10 w-auto flex-shrink-0 object-contain object-center" />
-			</div>
-		{:else if data.store?.websiteName}
-			<h1
-				class="bg-gradient-to-br from-secondary-500 to-primary-500 bg-clip-text text-4xl font-extrabold text-transparent">
-				{data.store?.websiteName}
-			</h1>
-		{/if}
-	</a>
+	<h1 class="mb-5 w-full  pb-4 text-center text-2xl font-bold text-primary-500">Login/Register</h1>
 
 	{#if !otpRequestSend}
 		<SendOtp
@@ -119,26 +104,14 @@ function changeNumber() {
 			on:changeNumber="{changeNumber}" />
 	{/if}
 
-	<!-- <div
-    class="mx-auto mb-5 flex w-full max-w-sm flex-wrap items-center justify-center gap-4 leading-4"
-  >
-    <a
-      href={`/auth/login?ref=${$page.url.searchParams.get('ref') || '/'}`}
-	  aria-label="Click to login with email"
-      class="link max-w-max whitespace-nowrap hover:underline"
-    >
-      Login with email
-    </a>
-  </div> -->
-
 	<p class="text-center text-sm text-gray-500">
 		By clicking send OTP you are accepting our
 		<a
-			href="/p/terms"
+			href="/p/terms-conditions"
 			aria-label="Click to route terms & conditions"
 			target="_blank"
 			rel="noopener noreferrer"
-			class="link whitespace-nowrap">
+			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
 			<b>Terms & Conditions</b>
 		</a>
 	</p>

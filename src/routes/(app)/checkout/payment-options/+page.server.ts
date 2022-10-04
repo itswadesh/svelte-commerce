@@ -1,4 +1,5 @@
 import { getAPI } from '$lib/util/api'
+import { gett } from '$lib/utils'
 import { error } from '@sveltejs/kit'
 export const prerender = false
 
@@ -45,7 +46,7 @@ export async function load({ params, parent, url, request }) {
 				imgCdn: '/razorpay-icon.jpg'
 			}
 		]
-		const address = await getAPI(`addresses/${addressId}`, request.headers)
+		const address = await gett(`addresses/${addressId}`, request.headers)
 
 		if (paymentMethods) {
 			return { paymentMethods, address, addressId, me, cart }

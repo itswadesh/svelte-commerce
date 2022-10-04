@@ -3,23 +3,26 @@ import { createEventDispatcher } from 'svelte'
 
 const dispatch = createEventDispatcher()
 
-export let value, checked, id
+export let modelValue, value
 
-function updateInput() {
-	dispatch('change', value)
+let checked = false
+
+if (modelValue === value) {
+	checked = true
 }
 </script>
 
-<label class="flex cursor-pointer items-start">
+<label class="flex items-center gap-2">
 	<input
-		id="{id}"
 		type="radio"
-		checked="{checked}"
+		bind:group="{modelValue}"
+		name="{value}"
 		value="{value}"
-		class="mr-2 mt-0.5 h-4 w-4 cursor-pointer bg-transparent text-primary-500 focus:ring-0 focus:ring-offset-0"
-		on:change="{updateInput}" />
+		checked="{checked}"
+		class="mt-0.5 h-4 w-4 text-primary-500 focus:ring-0 focus:ring-offset-0"
+		on:change="{() => dispatch('change', value)}" />
 
-	<span class="text-sm">
+	<span class="max-w-max text-sm">
 		<slot />
 	</span>
 </label>

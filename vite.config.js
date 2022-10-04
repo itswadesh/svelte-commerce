@@ -1,33 +1,11 @@
 import { sveltekit } from '@sveltejs/kit/vite'
-import { HTTP_ENDPOINT } from './src/lib/config/env.js'
-import svg from '@poppanator/sveltekit-svg'
-
-const svgPlugin = svg({
-	svgoOptions: {
-		plugins: [
-			{
-				name: 'preset-default',
-				params: {
-					overrides: {
-						removeViewBox: false
-					}
-				}
-			},
-			'removeDimensions'
-		]
-	}
-})
-
-// console.log('HTTP_ENDPOINT................', HTTP_ENDPOINT)
-
+const PUBLIC_HTTP_ENDPOINT = 'http://localhost:7000'
 /** @type {import('vite').UserConfig} */
 const config = {
-	plugins: [sveltekit(), svgPlugin],
+	plugins: [sveltekit()],
 	server: {
 		proxy: {
-			'/graphql': HTTP_ENDPOINT,
-			'/api': HTTP_ENDPOINT,
-			'/images': HTTP_ENDPOINT
+			'/api': PUBLIC_HTTP_ENDPOINT
 		}
 	}
 }
