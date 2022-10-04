@@ -1,5 +1,5 @@
 import { sveltekit } from '@sveltejs/kit/vite'
-const PUBLIC_HTTP_ENDPOINT = 'http://localhost:7000'
+const PUBLIC_HTTP_ENDPOINT = 'https://staging.zapvi.in'
 /** @type {import('vite').UserConfig} */
 const config = {
 	plugins: [sveltekit()],
