@@ -94,7 +94,7 @@ const items = [
 
 onMount(async () => {
 	try {
-		const res = await gett(`popular-search?store=${$page.data?.store?.id}`)
+		const res = await getAPI(`popular-search?store=${$page.data?.store?.id}`)
 		popularSearches = res?.data
 		popularSearchesCount = res?.count
 
@@ -113,7 +113,7 @@ async function getMegamenu() {
 	let megamenu = []
 	const d = new Date()
 	try {
-		megamenu = await gett(`categories/megamenu?megamenu=true&store=${$page.data?.store?.id}`)
+		megamenu = await getAPI(`categories/megamenu?megamenu=true&store=${$page.data?.store?.id}`)
 	} catch (e) {
 		console.log('eeeeeeeeeeeeee', e)
 	}

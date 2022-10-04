@@ -66,9 +66,9 @@ function resetInput() {
 onMount(async () => {
 	searchInput.focus()
 	// getData()
-	const HOME = await gett(`home?store=${data.store?.id}`)
-	popular = HOME.popular
-	trending = HOME.trending
+	// const HOME = await getAPI(`home?store=${data.store?.id}`)
+	// popular = HOME.popular
+	// trending = HOME.trending
 })
 </script>
 

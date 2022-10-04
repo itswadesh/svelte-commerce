@@ -1,6 +1,6 @@
 <script lang="ts">
 import SEO from '$lib/components/SEO/index.svelte'
-import { post, del } from '$lib/util/api'
+import { post, del, getAPI } from '$lib/util/api'
 import { page } from '$app/stores'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { goto, invalidate, invalidateAll } from '$app/navigation'
@@ -104,7 +104,7 @@ async function removeCouponCode() {
 async function getProducts() {
 	try {
 		loadingProducts = true
-		const resP = await gett(`es/products?store=${$page.data?.store?.id}`)
+		const resP = await getAPI(`es/products?store=${$page.data?.store?.id}`)
 		products = resP?.hits
 	} catch (e) {
 	} finally {
@@ -115,7 +115,7 @@ async function getProducts() {
 async function getCoupons() {
 	try {
 		loadingCoupon = true
-		const resC = await gett(`coupons?store=${$page.data?.store?.id}`)
+		const resC = await getAPI(`coupons?store=${$page.data?.store?.id}`)
 		coupons = resC?.data
 
 		// console.log('coupons = ', coupons)

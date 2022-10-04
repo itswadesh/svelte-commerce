@@ -100,7 +100,7 @@ function slideFade(node, params) {
 
 async function onSearch(filterText) {
 	try {
-		const res = await gett(`es/autocomplete?q=${filterText}&store=${$page.data.store?.id}`)
+		const res = await getAPI(`es/autocomplete?q=${filterText}&store=${$page.data.store?.id}`)
 		return res?.data || []
 	} catch (e) {}
 }
@@ -130,7 +130,7 @@ function handleShowCartSidebar() {
 
 async function getCategories() {
 	try {
-		const res1 = await gett('categories')
+		const res1 = await getAPI('categories')
 		categories = res1?.data.filter((c) => {
 			return c.imgCdn
 		})
