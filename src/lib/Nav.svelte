@@ -41,25 +41,25 @@ let categories
 // console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', cart)
 // if (cart) cart = JSON.parse(cart)
 
-export const signOut = async () => {
-	let logout, error
+// export const signOut = async () => {
+// 	let logout, error
 
-	try {
-		await post('logout', {})
-	} catch (e) {
-		error = e
-	} finally {
-	}
+// 	try {
+// 		await post('logout', {})
+// 	} catch (e) {
+// 		error = e
+// 	} finally {
+// 	}
 
-	await cookies.set('me', null, { path: '/' })
-	await cookies.set('cart', null, { path: '/' })
-	await cookies.remove('token')
-	await cookies.remove('sid')
-	await cookies.remove('me')
-	await invalidateAll()
+// 	await cookies.set('me', null, { path: '/' })
+// 	await cookies.set('cart', null, { path: '/' })
+// 	await cookies.remove('token')
+// 	await cookies.remove('sid')
+// 	await cookies.remove('me')
+// 	await invalidateAll()
 
-	return { data: logout, error }
-}
+// 	return { data: logout, error }
+// }
 
 onMount(() => {
 	q = $page.url.searchParams.get('q')
@@ -74,17 +74,17 @@ onMount(() => {
 //   faces.display(id, face)
 // }
 
-async function handleSignout() {
-	try {
-		await signOut()
-		toast('Signed Out...', 'success')
-		goto('/auth/otp-login')
-	} catch (e) {
-		console.log(e)
-		toast(e, 'error')
-	} finally {
-	}
-}
+// async function handleSignout() {
+// 	try {
+// 		await signOut()
+// 		toast('Signed Out...', 'success')
+// 		goto('/auth/otp-login')
+// 	} catch (e) {
+// 		console.log(e)
+// 		toast(e, 'error')
+// 	} finally {
+// 	}
+// }
 
 function slideFade(node, params) {
 	const existingTransform = getComputedStyle(node).transform.replace('none', '')
@@ -611,12 +611,13 @@ const getSelectionLabel = (option) => option.key
 							{/each}
 
 							<li>
-								<button
-									type="button"
-									on:click="{handleSignout}"
-									class="w-full cursor-pointer rounded py-2 px-4 text-left transition duration-300 focus:outline-none hover:bg-primary-50">
-									Logout
-								</button>
+								<form action="/auth/logout" method="POST">
+									<button
+										type="submit"
+										class="w-full cursor-pointer rounded py-2 px-4 text-left transition duration-300 focus:outline-none hover:bg-primary-50">
+										Logout
+									</button>
+								</form>
 							</li>
 						</ul>
 					{/if}
@@ -776,28 +777,26 @@ const getSelectionLabel = (option) => option.key
 					<!-- Log Out -->
 
 					<li>
-						<button
-							type="button"
-							aria-label="Logout"
-							class="flex w-full items-center gap-2 py-2"
-							on:click="{handleSignout}">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								viewBox="0 0 20 20"
-								fill="currentColor"
-								class="h-5 w-5">
-								<path
-									fill-rule="evenodd"
-									d="M3 4.25A2.25 2.25 0 015.25 2h5.5A2.25 2.25 0 0113 4.25v2a.75.75 0 01-1.5 0v-2a.75.75 0 00-.75-.75h-5.5a.75.75 0 00-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 00.75-.75v-2a.75.75 0 011.5 0v2A2.25 2.25 0 0110.75 18h-5.5A2.25 2.25 0 013 15.75V4.25z"
-									clip-rule="evenodd"></path>
-								<path
-									fill-rule="evenodd"
-									d="M6 10a.75.75 0 01.75-.75h9.546l-1.048-.943a.75.75 0 111.004-1.114l2.5 2.25a.75.75 0 010 1.114l-2.5 2.25a.75.75 0 11-1.004-1.114l1.048-.943H6.75A.75.75 0 016 10z"
-									clip-rule="evenodd"></path>
-							</svg>
+						<form action="/auth/logout" method="POST">
+							<button type="submit" aria-label="Logout" class="flex w-full items-center gap-2 py-2">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 0 20 20"
+									fill="currentColor"
+									class="h-5 w-5">
+									<path
+										fill-rule="evenodd"
+										d="M3 4.25A2.25 2.25 0 015.25 2h5.5A2.25 2.25 0 0113 4.25v2a.75.75 0 01-1.5 0v-2a.75.75 0 00-.75-.75h-5.5a.75.75 0 00-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 00.75-.75v-2a.75.75 0 011.5 0v2A2.25 2.25 0 0110.75 18h-5.5A2.25 2.25 0 013 15.75V4.25z"
+										clip-rule="evenodd"></path>
+									<path
+										fill-rule="evenodd"
+										d="M6 10a.75.75 0 01.75-.75h9.546l-1.048-.943a.75.75 0 111.004-1.114l2.5 2.25a.75.75 0 010 1.114l-2.5 2.25a.75.75 0 11-1.004-1.114l1.048-.943H6.75A.75.75 0 016 10z"
+										clip-rule="evenodd"></path>
+								</svg>
 
-							<span>Log Out</span>
-						</button>
+								<span>Log Out</span>
+							</button>
+						</form>
 					</li>
 				</ul>
 			{:else}
