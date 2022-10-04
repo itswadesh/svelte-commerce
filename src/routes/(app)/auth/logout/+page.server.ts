@@ -10,7 +10,15 @@ export const load: PageServerLoad = async () => {
 export const actions: Actions = {
 	default({ cookies }) {
 		// eat the cookie
+		cookies.set('session', '', {
+			path: '/',
+			expires: new Date(0)
+		})
 		cookies.set('me', '', {
+			path: '/',
+			expires: new Date(0)
+		})
+		cookies.set('sid', '', {
 			path: '/',
 			expires: new Date(0)
 		})
