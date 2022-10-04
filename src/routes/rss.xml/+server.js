@@ -2,9 +2,10 @@ import { json } from '@sveltejs/kit'
 import { getAPI } from '$lib/util/api'
 import { websiteName, description, domain, id } from '$lib/config'
 import { date } from '$lib/util'
+import { gett } from '$lib/utils'
 
 export async function GET() {
-	const resP = await getAPI(`es/products?store=${id}`)
+	const resP = await gett(`es/products?store=${id}`)
 	const products = resP?.data?.map((product) => {
 		product = {
 			name: product._source.name.replace('&', ''),

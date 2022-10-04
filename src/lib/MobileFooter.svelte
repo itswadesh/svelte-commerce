@@ -1,4 +1,8 @@
 <style>
+.minimum-width-rem {
+	min-width: 360px;
+}
+
 .text-rem {
 	font-size: x-small;
 }
@@ -157,7 +161,7 @@ function handleClick(item) {
 </script>
 
 <div
-	class="fixed inset-x-0 bottom-0 z-50 flex h-14 w-full items-center justify-between gap-2 bg-white px-4"
+	class="minimum-width-rem fixed inset-x-0 bottom-0 z-40 flex h-14 w-full items-center justify-between gap-2 bg-white px-4"
 	style="box-shadow: 0px -4px 10px rgba(50, 50, 50, 0.2);">
 	{#each footerItems as item}
 		<button

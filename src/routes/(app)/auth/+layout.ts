@@ -1,3 +1,4 @@
+export const ssr = false
 import { getAPI } from '$lib/util/api'
 import { DOMAIN, HTTP_ENDPOINT } from '$lib/config'
 import cookie from 'cookie'
@@ -11,15 +12,16 @@ import {
 	websiteName,
 	websiteLegalName
 } from '$lib/config'
+import { gett } from '$lib/utils'
 export const prerender = false
 
-export async function load({ url, request, setHeaders }) {
+export async function load({ url, request, cookies }) {
 	const isHome = url.pathname === '/'
 	let currentPage = +url.searchParams.get('page') || 1
 	let q = url.searchParams.get('q') || ''
 	let cart, store, serializedCart, serializedStore
 	try {
-		const res = await getAPI('carts/my', request.headers)
+		const res = await gett('carts/my', request.headers)
 
 		if (res) {
 			const cookieCart = {
@@ -47,7 +49,7 @@ export async function load({ url, request, setHeaders }) {
 		const cookieStore = {
 			id,
 			domain: DOMAIN,
-			logo: `/logo.png?tr=w-auto,h-56:w-auto,h-56`,
+			logo: `/logo.svg?tr=w-auto,h-56:w-auto,h-56`,
 			address,
 			phone,
 			email,
@@ -63,9 +65,10 @@ export async function load({ url, request, setHeaders }) {
 	} catch (e) {
 	} finally {
 	}
-
-	setHeaders({ cart: serializedCart })
-	setHeaders({ store: serializedStore })
+	if (cookies) {
+		cookies.set(serializedCart)
+		cookies.set(serializedStore)
+	}
 	return {
 		url: url.href,
 		currentPage,

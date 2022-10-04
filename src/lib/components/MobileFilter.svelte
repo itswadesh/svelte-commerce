@@ -6,7 +6,7 @@
 </style>
 
 <script>
-import { goto, invalidate } from '$app/navigation'
+import { goto, invalidateAll } from '$app/navigation'
 import Checkbox from '$lib/ui/Checkbox.svelte'
 import { constructURL2 } from '$lib/util'
 import { fly } from 'svelte/transition'
@@ -52,14 +52,18 @@ function goCheckbox(e) {
 }
 
 async function sortNow(s) {
+	let u = new URL($page.url)
+
 	if (s == 'null' || s == null || s == undefined || s == 'undefined') {
-		$page.url.searchParams.delete('sort')
+		u.searchParams.delete('sort')
 	} else {
-		await $page.url.searchParams.set('sort', s)
+		await u.searchParams.set('sort', s)
 	}
-	await goto(`/search?${$page.url.searchParams.toString()}`)
-	await invalidate()
+	// await invalidateAll()
+	goto(u.toString())
+	window.scroll({ top: 0, behavior: 'smooth' })
 }
+
 onMount(() => {
 	$page.url.searchParams.forEach(function (value, key) {
 		fl[key] = value
@@ -84,7 +88,7 @@ $: {
 </script>
 
 <div
-	class="{clazz} grid w-full grid-cols-2 divide-x divide-gray-300 border-t border-b bg-white font-medium shadow-md">
+	class="{clazz} grid w-full grid-cols-2 divide-x divide-gray-300 border-b bg-white font-medium shadow-md">
 	<!-- Filter -->
 
 	<button
@@ -153,13 +157,15 @@ $: {
 					</svg>
 				</button>
 
-				<span class="mx-2 h-6 w-[2px] border-l-2 border-gray-300"></span>
+				{#if filterLength > 0}
+					<span class="mx-2 h-6 w-[2px] border-l-2 border-gray-300"></span>
 
-				<button
-					on:click="{clearFilters}"
-					class="text-xs text-primary-500 hover:underline focus:outline-none">
-					Clear All
-				</button>
+					<button
+						on:click="{clearFilters}"
+						class="text-xs text-primary-500 hover:underline focus:outline-none">
+						Clear All
+					</button>
+				{/if}
 			</div>
 
 			<h5 class="col-span-1 justify-self-center">Filter</h5>
@@ -197,7 +203,7 @@ $: {
 			<div class="w-4/6">
 				{#if selected === 'Categories'}
 					<div
-						class="h-full w-full overflow-y-auto"
+						class="h-full w-full overflow-y-auto overflow-x-hidden p-4"
 						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
 						{#if facets?.categories?.all?.buckets?.length > 0}
 							<CheckboxEs

@@ -1,6 +1,6 @@
 <script>
 import { post } from '$lib/util/api'
-import { invalidate } from '$app/navigation'
+import { invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import { date, currency, delay, toast } from '$lib/util'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
@@ -24,32 +24,8 @@ async function addToBag(p) {
 			options: p.options
 		})
 
-		// console.log('zzzzzzzzzzzzzzzzzz',);
-
-		await invalidate($page.url.toString())
+		await invalidateAll() //$page.url.toString()
 		cartButtonText = 'Go to cart'
-
-		// const res = await getAPI('carts/my')
-
-		// if (res) {
-		// 	const cookieCart = {
-		// 		items: res?.items,
-		// 		qty: res?.qty,
-		// 		tax: res?.tax,
-		// 		subtotal: res?.subtotal,
-		// 		total: res?.total,
-		// 		currencySymbol: res?.currencySymbol,
-		// 		discount: res?.discount,
-		// 		selfTakeout: res?.selfTakeout,
-		// 		shipping: res?.shipping,
-		// 		unavailableItems: res?.unavailableItems,
-		// 		formattedAmount: res?.formattedAmount
-		// 	}
-		// 	await cookies.set('cart', cookieCart, { path: '/' })
-		// 	$page.data.cart = cookieCart
-		// 	cartButtonText = 'Added To Cart'
-		// 	bounceItemFromTop = true
-		// }
 	} catch (e) {
 		cartButtonText = 'Error adding To Cart'
 	} finally {
@@ -61,10 +37,10 @@ async function addToBag(p) {
 }
 </script>
 
-<div class="group w-40 flex-shrink-0">
-	<a href="/product/{product.slug}?id={product._id}" target="_blank" rel="noopener noreferrer">
+<div class="group relative col-span-1 block w-full overflow-hidden sm:w-48 sm:flex-shrink-0">
+	<a href="/product/{product.slug}" target="_blank" rel="noopener noreferrer">
 		<div class="mb-2 h-40 overflow-hidden">
-			<LazyImg
+			<img
 				src="{product.imgCdn}"
 				alt="{product.name}"
 				width="208"
@@ -93,13 +69,17 @@ async function addToBag(p) {
 			<div class="flex items-center gap-2">
 				<span class="text-sm"><b>{product.formattedPrice}</b></span>
 
-				<span class="text-xs">
-					<strike>{product.formattedMrp}</strike>
-				</span>
+				{#if product.formattedMrp > product.formattedPrice}
+					<span class="text-xs">
+						<strike>{product.formattedMrp}</strike>
+					</span>
+				{/if}
 
-				<span class="text-xs">
-					({product.discount}% OFF)
-				</span>
+				{#if ((product.formattedMrp - product.formattedPrice) / product.formattedMrp) * 100 > 0}
+					<span class="text-xs">
+						({((product.formattedMrp - product.formattedPrice) / product.formattedMrp) * 100}%)
+					</span>
+				{/if}
 			</div>
 		</div>
 	</a>
@@ -109,7 +89,7 @@ async function addToBag(p) {
 			<a
 				class="relative flex w-full transform items-center justify-center overflow-hidden rounded-full border border-primary-500 bg-primary-500 px-4 py-2 text-center text-xs font-semibold tracking-wider text-white shadow-md transition duration-700 hover:border-primary-700 hover:bg-primary-700 focus:outline-none focus:ring-0 focus:ring-offset-0"
 				href="/cart"
-				sveltekit:prefetch>
+				data-sveltekit-prefetch>
 				{cartButtonText}
 			</a>
 		{:else}

@@ -1,8 +1,8 @@
-import { getAPI } from '$lib/util/api'
+import { gett } from '$lib/utils'
 import { error } from '@sveltejs/kit'
 export const prerender = false
 
-export async function load({ url, setHeaders, parent }) {
+export async function load({ url, cookies, parent }) {
 	const { store } = await parent()
 	let loading = false,
 		err,
@@ -11,10 +11,10 @@ export async function load({ url, setHeaders, parent }) {
 		facets,
 		ressss,
 		fl = {}
-	let currentPage = +url.searchParams.get('page') || 1
-	let sort = url.searchParams.get('sort')
-	let searchData = url.searchParams.get('q')
-	let query = url.searchParams
+	const currentPage = +url.searchParams.get('page') || 1
+	const sort = url.searchParams.get('sort')
+	const searchData = url.searchParams.get('q')
+	const query = url.searchParams
 
 	query.forEach(function (value, key) {
 		fl[key] = value
@@ -22,7 +22,7 @@ export async function load({ url, setHeaders, parent }) {
 
 	try {
 		loading = true
-		const res = await getAPI(`es/products?${query.toString()}&store=${store?.id}`)
+		const res = await gett(`es/products?${query.toString()}&store=${store?.id}`)
 		ressss = res
 		products = res?.data
 		products = products.map((p) => {
@@ -33,16 +33,15 @@ export async function load({ url, setHeaders, parent }) {
 		})
 		count = res?.count
 		facets = res?.facets
-		err = !res?.count ? 'No result Not Found' : null
+		err = !res?.estimatedTotalHits ? 'No result Not Found' : null
 	} catch (e) {
 		err = e
 		throw error(400, e?.message || e || 'No results found')
 	} finally {
 		loading = false
 	}
-	setHeaders({
-		'cache-control': 'public, max-age=300'
-	})
+	// cookies.set('cache-control', 'public, max-age=200')
+
 	return {
 		loading,
 		err,

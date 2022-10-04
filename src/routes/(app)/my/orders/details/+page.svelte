@@ -13,11 +13,11 @@ import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import { getAPI } from '$lib/util/api'
 
-let deliveryBy = null,
-	now = null,
-	selectedProduct = null,
-	showDemoScheduler = false,
-	loading = false
+// let deliveryBy = null
+let now = null
+let selectedProduct = null
+let showDemoScheduler = false
+let loading = false
 
 export let data
 
@@ -49,23 +49,24 @@ onMount(() => {
 	{#if loading}
 		<OrderListSkeleton />
 	{:else if data.order}
-		<section class="text-gray-800">
+		<section>
 			<BackButton to="/my/orders?sort=-updatedAt" class="mb-2" />
 
-			<div class="border">
+			<div class="mb-5 overflow-hidden rounded-md border sm:mb-10">
 				<div
-					class="flex flex-wrap items-center justify-between bg-gray-200 px-4 pt-2 pb-1 text-sm tracking-wide">
-					<h5 class="mr-4 pb-1"><b>Order No :</b> #{data.order?.orderNo}</h5>
+					class="flex flex-wrap items-center justify-between border-b bg-gray-200 px-5 py-2 text-sm">
+					<h5><b>Order No :</b> #{data.order?.orderNo}</h5>
 
-					<h5 class="pb-1"><b>Order Date </b>: {date(data.order?.createdAt)}</h5>
+					<h5><b>Order Date </b>: {date(data.order?.createdAt)}</h5>
 				</div>
 
 				<!-- Order detail  -->
 
-				<div class="mb-4 grid grid-cols-1 lg:grid-cols-2 lg:divide-x">
-					<div class="col-span-1 flex gap-2 py-5 lg:gap-4 lg:pr-5">
+				<div
+					class="grid grid-cols-1 divide-y-2 divide-dashed lg:grid-cols-2 lg:divide-y-0 lg:divide-x-2">
+					<div class="col-span-1 flex gap-2 p-5 lg:gap-5">
 						<a
-							href="{`/products/${data.order?.slug}`}"
+							href="{`/product/${data.order?.slug}`}"
 							aria-label="Click to view the product details"
 							class="flex-shrink-0">
 							<LazyImg
@@ -78,12 +79,11 @@ onMount(() => {
 						<div class="flex w-full flex-1 flex-col text-sm xl:pr-4">
 							<div class="mb-1 flex justify-between gap-2 sm:gap-4">
 								<a
-									href="{`/products/${data.order?.slug}`}"
+									href="{`/product/${data.order?.slug}`}"
 									aria-label="Click to view the product details"
 									class="flex-1 text-base font-semibold hover:underline">
 									{data.order?.name}
 								</a>
-
 								{#if data.order?.foodType}
 									<div>
 										{#if data.order?.foodType === 'V'}
@@ -163,20 +163,22 @@ onMount(() => {
 									</span>
 								{/if}
 
-								{#if data.order?.discount > 0}
+								{#if ((data.order?.formattedMrp - data.order?.formattedPrice) / data.order?.formattedMrp) * 100 > 0}
 									<span class="text-green-500">
-										({data.order?.discount}%)
+										({((data.order?.formattedMrp - data.order?.formattedPrice) /
+											data.order?.formattedMrp) *
+											100}%)
 									</span>
 								{/if}
 							</div>
 						</div>
 					</div>
 
-					<div class="col-span-1 border-t border-dashed border-gray-300 py-5 lg:border-t-0 lg:px-5">
-						<div class="mb-4">
-							<h4 class="font-semibold">Delivery Address</h4>
+					<div class="col-span-1 flex flex-col gap-5 p-5">
+						<div>
+							<h4 class="mb-2 font-semibold">Delivery Address :</h4>
 
-							<p class="mt-2 flex flex-col text-sm font-light text-gray-500">
+							<p class="flex flex-col text-sm font-light text-gray-500">
 								<span>
 									{data.order?.userFirstName}
 
@@ -196,10 +198,10 @@ onMount(() => {
 							{/if}
 						</div>
 
-						<div class="mb-4">
-							<h4 class="font-semibold">Billing Address</h4>
+						<div>
+							<h4 class="mb-2 font-semibold">Billing Address :</h4>
 
-							<p class="mt-2 flex flex-col text-sm font-light text-gray-500">
+							<p class="flex flex-col text-sm font-light text-gray-500">
 								<span>
 									{data.order?.billingAddress.firstName}
 
@@ -220,10 +222,10 @@ onMount(() => {
 							{/if}
 						</div>
 
-						<div class="mb-4">
-							<h4 class="font-semibold">Vendor Details</h4>
+						<div>
+							<h4 class="mb-2 font-semibold">Vendor Details :</h4>
 
-							<p class="mt-2 flex flex-col text-sm font-light text-gray-500">
+							<p class="flex flex-col text-sm font-light text-gray-500">
 								<span>
 									{data.order?.vendorBusinessName},
 
@@ -248,7 +250,7 @@ onMount(() => {
 
 			<div>
 				{#if !!data.order?.foodType && data.order?.status !== 'Delivered' && data.order?.expectedDeliveryDate}
-					<h4 class="my-5 flex-1 xl:w-2/3">
+					<h4 class="mb-5">
 						<span class="font-medium">Expected Delivery Date : </span>
 
 						<span class="text-sm font-light text-gray-500">
@@ -257,12 +259,18 @@ onMount(() => {
 					</h4>
 				{/if}
 
+				<h4 class="mb-5">
+					<span class="font-medium">Expected Delivery Date : </span>
+
+					<span class="text-sm font-light text-gray-500"> 10.02.2022 </span>
+				</h4>
+
 				{#if data.order?.status === 'Delivered'}
 					<div class="mt-2 xl:mt-0 xl:w-1/3">
 						<a
-							href="/rate-this-product?id=${data.order?.pid}"
+							href="/my/reviews/create?product={data.order?.pid}&ref=/product/{data.order?.slug}"
 							aria-label="Click to route rate & review product"
-							class="whitespace-nowrap text-primary-500 hover:underline focus:outline-none">
+							class="whitespace-nowrap font-semibold text-indigo-500 hover:underline focus:outline-none">
 							Rate & Review Product
 						</a>
 					</div>
@@ -320,7 +328,7 @@ onMount(() => {
 
 			<span class="mb-4 text-xs">Add items to it now</span>
 
-			<a href="/" aria-label="Click to route home" sveltekit:prefetch>
+			<a href="/" aria-label="Click to route home" data-sveltekit-prefetch>
 				<PrimaryButton class="w-40 py-2 text-sm">Shop Now</PrimaryButton>
 			</a>
 		</div>

@@ -35,8 +35,10 @@ import { onMount } from 'svelte'
 import { getAPI } from '$lib/util/api'
 import { toast } from '$lib/util'
 import { page } from '$app/stores'
+import { browser } from '$app/environment'
+import { gett } from '$lib/utils'
 
-let megaMenu = []
+let megamenu = []
 let selectedCategory = ''
 
 onMount(() => {
@@ -44,17 +46,25 @@ onMount(() => {
 })
 
 async function getMegaMenu() {
-	try {
-		megaMenu = await getAPI(`categories/megamenu?megamenu=true&store=${$page.data?.store?.id}`)
-	} catch (e) {
-		toast(e, 'error')
-	} finally {
+	if (browser) {
+		try {
+			const localMegamenu = localStorage.getItem('megamenu')
+			if (!localMegamenu) {
+				const res = await gett(`categories/megamenu?megamenu=true&store=${$page.data?.store?.id}`)
+				megamenu = res
+			} else {
+				megamenu = JSON.parse(localMegamenu)
+			}
+		} catch (e) {
+			toast(e, 'error')
+		} finally {
+		}
 	}
 }
 </script>
 
-<ul class="flex flex-row items-center justify-center font-semibold tracking-wide">
-	{#each megaMenu as category, index}
+<ul class="flex flex-1 flex-row items-center justify-center whitespace-nowrap font-semibold">
+	{#each megamenu as category, index}
 		<li
 			class="hoverable mx-1"
 			on:mouseenter="{() => (selectedCategory = category.name)}"
@@ -78,10 +88,10 @@ async function getMegaMenu() {
                     {index % 6 == 4 && selectedCategory === category.name ? 'border-pink-500' : ''}
                     {index % 6 == 5 && selectedCategory === category.name ? 'border-blue-500' : ''}
                     ">
-				<a href="{category.link}" class="flex items-center gap-1">
+				<a href="/{category.link}" class="flex items-center gap-1">
 					<!-- Root category -->
 
-					<span>{category.name}</span>
+					<span class="flex-1">{category.name}</span>
 
 					<!-- Down icon -->
 
@@ -90,7 +100,7 @@ async function getMegaMenu() {
 							xmlns="http://www.w3.org/2000/svg"
 							viewBox="0 0 20 20"
 							fill="currentColor"
-							class="h-4 w-4 transition duration-300
+							class="h-4 w-4 flex-shrink-0 transition duration-300
                             {selectedCategory === category.name ? 'transform -rotate-180' : ''}">
 							<path
 								fill-rule="evenodd"
@@ -108,7 +118,7 @@ async function getMegaMenu() {
 
 						{#each category.children as c}
 							<div class="mb-2 w-64 flex-1 flex-shrink-0 flex-grow-0 pr-2 text-sm">
-								<a href="{`${c.link}`}" class="flex">
+								<a href="/{`${c.link}`}" class="flex">
 									<h1
 										class="mb-2
                                                 {index % 6 == 0 ? 'text-yellow-500 ' : ''}
@@ -126,7 +136,7 @@ async function getMegaMenu() {
 										<!-- 3rd level child category  -->
 
 										{#each c.children as c1, ixx}
-											<a href="{c1.link}">
+											<a href="/{c1.link}">
 												<h2 class="min-w-full font-light hover:font-medium">
 													{c1.name}
 												</h2>

@@ -1,9 +1,10 @@
 import { getAPI } from '$lib/util/api'
+import { gett } from '$lib/utils'
 import { error, redirect } from '@sveltejs/kit'
 
 export async function load({ request }) {
 	try {
-		const reviews = await getAPI(`reviews/my`, request.headers)
+		const reviews = await gett(`reviews/my`, request.headers.get('cookie'))
 		if (reviews) {
 			return { reviews: reviews.data }
 		}

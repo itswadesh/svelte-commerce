@@ -1,6 +1,7 @@
 import { getAPI } from '$lib/util/api'
+import { gett } from '$lib/utils'
 
-export async function load({ url, params, fetch, parent, setHeaders }) {
+export async function load({ url, params, fetch, parent, cookies }) {
 	const { store } = await parent()
 	let loading = false,
 		err,
@@ -9,10 +10,7 @@ export async function load({ url, params, fetch, parent, setHeaders }) {
 
 	try {
 		loading = true
-		const res = await getAPI(`faqs?store=${store?.id}`)
-
-		// console.log('res = ', res)
-
+		const res = await gett(`faqs?store=${store?.id}`)
 		faqs = res?.data
 		count = res?.count
 	} catch (e) {
@@ -20,8 +18,7 @@ export async function load({ url, params, fetch, parent, setHeaders }) {
 	} finally {
 		loading = false
 	}
-	setHeaders({
-		'cache-control': 'public, max-age=300'
-	})
+	// cookies.set('cache-control', 'public, max-age=200')
+
 	return { loading, err, faqs, count }
 }

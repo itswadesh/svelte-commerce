@@ -93,7 +93,7 @@ let categoryColors = [
 					{#if i <= 6}
 						{#if category.imgCdn}
 							<a
-								href="/search?q={category.slug}"
+								href="/{category.slug}"
 								aria-label="Click to view related products of this category"
 								class="group flex w-20 flex-col items-center justify-center">
 								<div
@@ -113,7 +113,7 @@ let categoryColors = [
 							</a>
 						{:else}
 							<a
-								href="/search?q={category.slug}"
+								href="/{category.slug}"
 								aria-label="Click to view related products of this category"
 								class="group flex w-20 flex-col items-center justify-center">
 								<div
@@ -174,7 +174,7 @@ let categoryColors = [
 						{#if i < 12}
 							{#if category.img}
 								<a
-									href="{`/search?q=${category.slug}`}"
+									href="{`/${category.slug}`}"
 									aria-label="Click to view related products of this category"
 									class="zoom-out group flex w-32 flex-col items-center justify-center lg:w-36">
 									<div
@@ -194,7 +194,7 @@ let categoryColors = [
 								</a>
 							{:else}
 								<a
-									href="/search?q={category.slug}"
+									href="/{category.slug}"
 									aria-label="Click to view related products of this category"
 									class="group flex flex-col items-center justify-center hover:text-primary-500 sm:w-32 lg:w-36">
 									<div

@@ -30,6 +30,15 @@ let loading = false
 let formChanged = false
 let err = ''
 
+function saveImage(detail) {
+	data.profile.avatar = detail
+	saveProfile()
+}
+
+function removeImage(detail) {
+	data.profile.avatar = ''
+	saveProfile()
+}
 
 async function saveProfile() {
 	try {
@@ -80,9 +89,7 @@ async function saveProfile() {
 					<div
 						class="frosted flex flex-col gap-2 rounded-lg border border-gray-300 p-4 shadow-lg md:p-6">
 						<div class="flex flex-wrap items-center">
-							<div class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">
-							
-							</div>
+							<div class="mb-1 mr-5 w-52 flex-shrink-0 font-medium"></div>
 
 							<div class="mb-2 w-full max-w-md">
 								<span class="mb-1 text-sm font-medium sm:text-lg lg:text-xl">

@@ -1,8 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap');
 /* Write your global styles here, in PostCSS syntax */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+    html {
+        font-family: DM Sans, system-ui, sans-serif;
+    }
+}
 
 @layer components {
     .wiggle {

@@ -22,7 +22,7 @@ $: paymentUrl = $page?.url?.searchParams.get('ref')
 
 		<h1 class="text-xl font-bold sm:text-2xl md:text-3xl">Payment Failed!</h1>
 
-		<a href="{paymentUrl}" aria-label="Click to go back to payment methode" sveltekit:prefetch>
+		<a href="{paymentUrl}" aria-label="Click to go back to payment methode" data-sveltekit-prefetch>
 			<PrimaryButton class="uppercase">Pay Again</PrimaryButton>
 		</a>
 	</div>

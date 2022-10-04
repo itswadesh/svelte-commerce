@@ -1,21 +1,17 @@
 import { loadingDelayed } from '$lib/store'
 import { id } from '$lib/config'
+import { PUBLIC_WWW_URL } from '$env/static/public'
 let typingTimer
-// import * as cookie from 'cookie'
-// import Cookie from 'cookie-universal'
-// const cookies = Cookie()
-// let tkn = cookies.get('token')
 const send = async ({ method, path, params, data, token, headers }: any) => {
 	if (
 		path.includes('.png') ||
 		path.includes('.jpg') ||
 		path.includes('.svg') ||
 		path.includes('.json') ||
-		path.includes('.css') ||
-		path.includes('undefined')
+		path.includes('.css')
 	)
 		return
-	const WWW_URL = import.meta.env.VITE_WWW_URL || 'https://kitcommerce.tech'
+	const WWW_URL = PUBLIC_WWW_URL || 'http://localhost:3000'
 	let origin = WWW_URL
 	let storeId = id // cookies.get('store')?.id
 

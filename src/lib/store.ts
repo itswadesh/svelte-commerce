@@ -1,6 +1,6 @@
-import { getAPI } from '$lib/util/api'
 import { writable } from 'svelte/store'
 import Cookie from 'cookie-universal'
+import { gett } from './utils'
 const cookies = Cookie()
 
 export const geoLocation = writable({
@@ -50,7 +50,7 @@ export const fetchLocation = async () => {
 }
 export const fetchSettings = async () => {
 	try {
-		const data = (await getAPI('settings')).data?.settings
+		const data = (await gett('settings')).data?.settings
 		settings.set(data)
 		if (data.otpLogin) loginUrl.set('/auth/otp-login')
 	} catch (e) {
@@ -62,8 +62,8 @@ export const fetchStore = async () => {
 		const storeOne = await cookies.get('store')
 		const data = { _id: storeOne.id } //await get('store?domain=atozzones.com')
 		store.set(data)
-		await getAPI('store-one?id=' + storeOne.id)
-		const data1 = (await getAPI('megamenu?store=' + storeOne.id)).data?.megamenu //get('categories/megamenu', { megamenu: true })
+		await gett('store-one?id=' + storeOne.id)
+		const data1 = (await gett('megamenu?store=' + storeOne.id)).data?.megamenu //get('categories/megamenu', { megamenu: true })
 		megamenu.set(data1)
 	} catch (e) {
 		store.set({})
@@ -77,7 +77,7 @@ export const fetchMegamenu = async () => {
 }
 export const fetchUser = async () => {
 	try {
-		const data = await getAPI('users/me')
+		const data = await gett('users/me')
 		me.set(data)
 	} catch (e) {
 		me.set({})

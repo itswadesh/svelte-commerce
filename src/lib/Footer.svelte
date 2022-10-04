@@ -27,7 +27,8 @@ import LazyImg from './components/Image/LazyImg.svelte'
 import { onMount } from 'svelte'
 import { getAPI } from './util/api'
 import { toast } from './util'
-
+import { browser } from '$app/environment'
+import { gett } from './utils'
 export let me, cart
 
 let clazz = ''
@@ -40,8 +41,16 @@ let footerItems = [
 		subMenu: [
 			{ title: 'About Us', link: '/about-us', new: false },
 			{ title: 'Privacy Policy', link: '/p/privacy-policy', new: false },
-			{ title: 'Terms & Conditions', link: '/p/terms-conditions', new: false },
-			{ title: 'Payments & Returns', link: '/p/payments-returns', new: false },
+			{
+				title: 'Terms & Conditions',
+				link: '/p/terms-conditions',
+				new: false
+			},
+			{
+				title: 'Payments & Returns',
+				link: '/p/payments-returns',
+				new: false
+			},
 			{
 				title: 'Printing Terms & Cancellation Policy',
 				link: '/p/printing-terms-cancellation-policy',
@@ -85,7 +94,7 @@ const items = [
 
 onMount(async () => {
 	try {
-		const res = await getAPI(`popular-search?store=${$page.data?.store?.id}`)
+		const res = await gett(`popular-search?store=${$page.data?.store?.id}`)
 		popularSearches = res?.data
 		popularSearchesCount = res?.count
 
@@ -94,7 +103,24 @@ onMount(async () => {
 		toast(e, 'error')
 	} finally {
 	}
+
+	if (browser) {
+		const megamenu = await getMegamenu()
+		localStorage.setItem('megamenu', JSON.stringify(megamenu))
+	}
 })
+async function getMegamenu() {
+	let megamenu = []
+	const d = new Date()
+	try {
+		megamenu = await gett(`categories/megamenu?megamenu=true&store=${$page.data?.store?.id}`)
+	} catch (e) {
+		console.log('eeeeeeeeeeeeee', e)
+	}
+	const d3 = new Date()
+	console.log('Megamenu loaded at hook: ', d3.getTime() - d.getTime())
+	return megamenu
+}
 </script>
 
 <div class="bg-primary-500 p-3 text-center tracking-wide text-white sm:px-10">
@@ -109,7 +135,9 @@ onMount(async () => {
 			class="mb-4 flex w-full flex-col flex-wrap items-start justify-start gap-5 sm:mb-8 sm:max-h-[30rem] sm:gap-10 lg:max-h-96 xl:max-h-60">
 			{#each footerItems as item}
 				<div>
-					<h1 class="mb-4 whitespace-nowrap font-semibold uppercase">{item.heading}</h1>
+					<h1 class="mb-4 whitespace-nowrap font-semibold uppercase">
+						{item.heading}
+					</h1>
 
 					<ul class="flex flex-col gap-1 text-gray-500">
 						{#each item.subMenu as item}

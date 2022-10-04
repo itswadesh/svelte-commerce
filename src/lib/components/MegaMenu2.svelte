@@ -7,29 +7,12 @@ import { fly } from 'svelte/transition'
 
 let megaMenu = []
 let showDropdownMegaMenu = []
-
-onMount(() => {
-	getMegaMenu()
-})
-
-async function getMegaMenu() {
-	try {
-		const res = await getAPI(`categories/megamenu?megamenu=true&store=${$page.data?.store?.id}`)
-
-		// console.log('zzzzzzzzzzzzzzzzzz', res)
-
-		megaMenu = res
-	} catch (e) {
-		toast(e, 'error')
-	} finally {
-	}
-}
 </script>
 
-{#if megaMenu?.length}
+{#if $page.data.megamenu?.length}
 	<div class="hidden lg:flex">
 		<ul class="flex flex-row items-center justify-center font-semibold uppercase tracking-wide">
-			{#each megaMenu as m, mx}
+			{#each $page.data.megamenu as m, mx}
 				<li
 					class="relative"
 					on:mouseenter="{() => (showDropdownMegaMenu[mx] = true)}"

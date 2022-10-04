@@ -4,7 +4,7 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import Breadcrumb from '$lib/components/Breadcrumb.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import MobileFooter from '$lib/MobileFooter.svelte'
-import { goto, invalidate } from '$app/navigation'
+import { goto, invalidateAll } from '$app/navigation'
 import Pagination from '$lib/components/Pagination.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
 import MobileFilter from '$lib/components/MobileFilter.svelte'
@@ -14,6 +14,7 @@ import { getAPI } from '$lib/util/api'
 import { toast } from '$lib/util'
 import { onMount } from 'svelte'
 import { sorts } from '$lib/config'
+import { gett } from '$lib/utils'
 
 export let data
 
@@ -30,7 +31,7 @@ let query = $page?.url?.searchParams
 
 onMount(async () => {
 	try {
-		const res = await getAPI(
+		const res = await gett(
 			`products?categories=${data.category?._id}&store=${$page.data?.store?.id}`
 		)
 
@@ -54,12 +55,12 @@ async function sortNow(s) {
 		await $page.url.searchParams.set('sort', s)
 	}
 	await goto(`/search?${$page.url.searchParams.toString()}`)
-	await invalidate()
+	await invalidateAll()
 }
 
 async function refreshData() {
 	try {
-		const res = await getAPI(`categories/${$page?.params?.slug}?${data.query.toString()}`)
+		const res = await gett(`categories/${$page?.params?.slug}?${data.query.toString()}`)
 
 		// console.log('refresh res = ', res)
 
@@ -90,7 +91,7 @@ async function refreshData() {
 
 			<MobileFilter
 				facets="{facets}"
-				class="sticky top-[5rem] z-50 block lg:hidden"
+				class="sticky top-[4.9rem] z-50 block lg:hidden"
 				on:clearAll="{refreshData}" />
 		{/if}
 

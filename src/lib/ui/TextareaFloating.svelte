@@ -71,7 +71,12 @@ export { className as class }
 
 		<span class="highlight"></span>
 
-		<label for="textbox">{label}</label>
+		<label for="textbox">
+			{label}
+
+			{#if required}<span class="text-red-500">*</span>{/if}
+		</label>
+
 		<slot />
 	</div>
 </div>

@@ -16,7 +16,6 @@ let loading = false
 let formChanged = false
 export let states = false
 export let countries = false
-
 export let address = {}
 function saveImage({ detail, field }) {
 	address[field] = detail
@@ -29,27 +28,23 @@ async function SaveAddress(address) {
 		loading = true
 		const { firstName, lastName, email, phone, locality, city, state, country, zip } = address
 		toast('Saving Address Info...', 'info')
-		const newAddress = (
-			await post('addresses', {
-				id,
-				firstName,
-				lastName,
-				email,
-				phone,
-				address: address.address,
-				locality,
-				city,
-				state,
-				country,
-				zip
-			})
-		).data?.saveAddress
-
-		// console.log(newAddress)
+		const newAddress = await post('addresses', {
+			id,
+			firstName,
+			lastName,
+			email,
+			phone,
+			address: address.address,
+			locality,
+			city,
+			state,
+			country,
+			zip
+		})
 
 		toast('Address Info Saved.', 'success')
 		dispatch('saved')
-		if (id === 'new') goto(`/my/addresses/${newAddress.id}`)
+		if (id === 'new') goto(`/my/addresses/${newAddress._id}`)
 	} catch (e) {
 		err = e
 		toast(e, 'error')
@@ -58,10 +53,10 @@ async function SaveAddress(address) {
 		formChanged = false
 	}
 }
-onMount(async () => {})
+// onMount(async () => {})
 async function onCountryChange(country) {
-	formChanged = true
-	await getAPI('states', { limit: 300, page: 0, countryCode: country })
+	// 	formChanged = true
+	// 	await getAPI('states', { limit: 300, page: 0, countryCode: country })
 }
 </script>
 
@@ -149,7 +144,7 @@ async function onCountryChange(country) {
 							on:input="{() => (formChanged = true)}" />
 					</div>
 				</div>
-				{#if address?.country && states.data?.length}
+				{#if states?.length}
 					<div>
 						<h6 class="mb-2 font-semibold">State</h6>
 						<select
@@ -157,7 +152,7 @@ async function onCountryChange(country) {
 							bind:value="{address.state}"
 							on:input="{() => (formChanged = true)}">
 							<option value="" selected>-- Select a State --</option>
-							{#each states.data as c}
+							{#each states as c}
 								{#if c}
 									<option value="{c.name}">
 										{c.name}
@@ -171,15 +166,15 @@ async function onCountryChange(country) {
 				<div>
 					<h6 class="mb-2 font-semibold">Country</h6>
 					<select
+						disabled
 						class="w-full rounded-md border border-gray-300 bg-gray-50 p-2 text-sm placeholder-gray-400  transition duration-300 placeholder:font-normal hover:bg-white focus:outline-none focus:ring-1 focus:ring-primary-500"
 						bind:value="{address.country}"
 						on:change="{() => onCountryChange(address.country)}">
-						<option value="" selected>-- Select a Country --</option>
 						{#if countries?.data?.length}
 							{#each countries.data as c}
-								{#if c?.country}
-									<option value="{c.country?.code}">
-										{c.country?.name}
+								{#if c}
+									<option value="{c.code}">
+										{c.name}
 									</option>
 								{/if}
 							{/each}

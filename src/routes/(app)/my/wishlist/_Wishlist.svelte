@@ -19,6 +19,7 @@ import { getAPI, post } from '$lib/util/api'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import { page } from '$app/stores'
 import BlackButton from '$lib/ui/BlackButton.svelte'
+import { gett } from '$lib/utils'
 
 export let wishlistedProducts,
 	loadingProduct = []
@@ -39,7 +40,7 @@ async function toggleWishlist(id, wx) {
 
 async function getWishlistedProducts() {
 	try {
-		wishlistedProducts = getAPI(`wishlists/my?store=${$page.data?.store?.id}`)
+		wishlistedProducts = gett(`wishlists/my?store=${$page.data?.store?.id}`)
 	} catch (e) {
 	} finally {
 	}
@@ -68,7 +69,7 @@ async function getWishlistedProducts() {
 
 				<span class="mb-5 text-sm"> You have no items in your Wishlist. Start adding</span>
 
-				<a href="/" aria-label="Click to route home" sveltekit:prefetch>
+				<a href="/" aria-label="Click to route home" data-sveltekit-prefetch>
 					<PrimaryButton class="w-40 py-2 text-sm">Shop Now</PrimaryButton>
 				</a>
 			</div>
@@ -103,7 +104,7 @@ async function getWishlistedProducts() {
 									</BlackButton>
 
 									<a
-										href="/product/{w.product?.slug}?id={w.product?._id}"
+										href="/product/{w.product?.slug}"
 										aria-label="Click to view the product details">
 										<div
 											class="w-full  max-w-xs items-center overflow-hidden rounded-lg bg-white p-4">
@@ -170,8 +171,12 @@ async function getWishlistedProducts() {
 														</strike>
 													{/if}
 
-													{#if w.product?.discount > 0}
-														<div class="text-primary-500">({w.product?.discount}% off)</div>
+													{#if ((w.product?.formattedMrp - w.product?.formattedPrice) / w.product?.formattedMrp) * 100 > 0}
+														<div class="text-primary-500">
+															({((w.product?.formattedMrp - w.product?.formattedPrice) /
+																w.product?.formattedMrp) *
+																100}%)
+														</div>
 													{/if}
 												</div>
 											</div>

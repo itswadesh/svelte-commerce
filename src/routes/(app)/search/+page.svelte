@@ -15,22 +15,24 @@
 
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
-import { goto, invalidate } from '$app/navigation'
+import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import { toast } from '$lib/util'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { sorts } from '$lib/config'
-import { getAPI } from '$lib/util/api'
+import { getAPI, post } from '$lib/util/api'
 import ProductCard from '$lib/ProductCard.svelte'
 import DesktopFilter from '$lib/components/DesktopFilter.svelte'
 import MobileFilter from '$lib/components/MobileFilter.svelte'
 import MobileFooter from '$lib/MobileFooter.svelte'
 import Pagination from '$lib/components/Pagination.svelte'
+import { onMount } from 'svelte'
+import DummyProductCard from '$lib/DummyProductCard.svelte'
 
 export let data
 
-// console.log('ressss = ', data.ressss)
+// console.log('data = ', data)
 // console.log('Products = ', products)
 // console.log('Count = ', count)
 // console.log('Facets = ', facets)
@@ -40,6 +42,24 @@ let seoProps = {
 	metadescription: `Find best ${data.searchData || ' '}`
 }
 
+$: if (data?.count === 0) {
+	saveSearchData(data?.searchData)
+}
+
+async function saveSearchData(searchData) {
+	try {
+		const res = await post('popular-search', {
+			id: 'new',
+			// popularity: 0,
+			text: searchData
+		})
+
+		// console.log('zzzzzzzzzzzzzzzzzz', res)
+	} catch (e) {
+	} finally {
+	}
+}
+
 async function sortNow(s) {
 	if (s == 'null' || s == null || s == undefined || s == 'undefined') {
 		$page.url.searchParams.delete('sort')
@@ -47,24 +67,11 @@ async function sortNow(s) {
 		await $page.url.searchParams.set('sort', s)
 	}
 	await goto(`/search?${$page.url.searchParams.toString()}`)
-	await invalidate()
+	await invalidateAll()
 }
 
 async function refreshData() {
-	await invalidate()
-	// try {
-	// 	const res = await getAPI(`products?${data.query.toString()}`)
-
-	// 	// console.log('refresh res = ', res)
-
-	// 	data.products = res?.data
-	// 	data.count = res?.count
-	// 	data.facets = res?.facets?.all_aggs
-	// 	data.err = !data.products ? 'No result Not Found' : null
-	// } catch (e) {
-	// 	toast(e, 'error')
-	// } finally {
-	// }
+	await invalidateAll()
 }
 </script>
 
@@ -81,7 +88,7 @@ async function refreshData() {
 
 			<MobileFilter
 				facets="{data.facets}"
-				class="sticky top-[5rem] z-50 block lg:hidden"
+				class="sticky top-[5rem] z-40 block lg:hidden"
 				on:clearAll="{refreshData}" />
 		{/if}
 
@@ -89,22 +96,22 @@ async function refreshData() {
 			{#if data.products}
 				<div class="w-full">
 					{#if data.products.length > 0}
-						<h1 class="mb-5 text-xl font-bold capitalize md:text-2xl">
-							Showing results
+						<div class="mb-5 flex flex-wrap items-center justify-between gap-5">
+							<h1 class="text-xl font-bold capitalize md:text-2xl">
+								Showing results
 
-							{#if data.searchData}
-								for "{data.searchData}"
-							{/if}
+								{#if data.searchData}
+									for "{data.searchData}"
+								{/if}
 
-							({data.count})
-						</h1>
+								({data.count})
+							</h1>
 
-						<div class="mb-4 hidden flex-wrap items-center justify-between md:flex">
-							<label class="flex items-center gap-2">
+							<label class="hidden items-center gap-2 lg:flex">
 								<span>Sort : </span>
 
 								<select
-									class="bg-transparent px-2 py-1 font-semibold hover:underline focus:outline-none"
+									class="border-b-2 bg-transparent py-1 font-semibold focus:outline-none"
 									bind:value="{data.sort}"
 									on:change="{() => sortNow(data.sort)}">
 									{#each sorts as s}
@@ -116,8 +123,14 @@ async function refreshData() {
 
 						<div
 							class="mb-5 grid w-full grid-cols-2 items-start gap-3 sm:mb-10 sm:flex sm:flex-wrap sm:justify-between lg:mb-20 lg:gap-6">
-							{#each data.products as p, lx}
+							{#each data.products as p}
 								<ProductCard product="{p}" />
+							{/each}
+
+							{#each { length: 7 } as _}
+								<div class="hidden sm:block">
+									<DummyProductCard />
+								</div>
 							{/each}
 						</div>
 

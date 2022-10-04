@@ -1,11 +1,8 @@
-import { getAPI } from '$lib/util/api'
+import { gett } from '$lib/utils'
 import { error } from '@sveltejs/kit'
-export async function load({ params, query, parent, setHeaders }) {
-	const { store } = await parent()
-	const home = await getAPI(`home?store=${store?.id}`)
-	setHeaders({
-		'cache-control': 'public, max-age=300'
-	})
+export async function load({ params, query, locals, parent, cookies }) {
+	const { store } = locals
+	const home = await gett(`home?store=${store?.id}`)
 
 	if (home) {
 		return { home: home }

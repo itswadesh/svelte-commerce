@@ -1,13 +1,14 @@
 import { getAPI } from '$lib/util/api'
+import { gett } from '$lib/utils'
 export const prerender = false
 export async function load({ url }) {
 	let ads = {}
-	let addressId = url.searchParams.get('id')
-	let prescriptionId = url.searchParams.get('prescription')
+	const addressId = url.searchParams.get('id')
+	const prescriptionId = url.searchParams.get('prescription')
 	if (addressId === 'new') {
 		ads = { id: 'new' }
 	} else {
-		ads = await getAPI(`addresses/${addressId}`)
+		ads = await gett(`addresses/${addressId}`)
 	}
 
 	return {

@@ -48,11 +48,11 @@ function handleOnScroll() {
 	<button
 		transition:fly="{{ y: -200, duration: 500 }}"
 		aria-label="Click to go to top"
-		class="back-to-top focus:outline-none"
+		class="back-to-top overflow-hidden rounded-full focus:outline-none"
 		on:click="{goTop}">
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
-			class="h-10 w-10 text-primary-500"
+			class="h-8 w-8 text-primary-500"
 			viewBox="0 0 20 20"
 			fill="currentColor">
 			<path

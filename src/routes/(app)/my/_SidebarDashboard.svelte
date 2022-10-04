@@ -33,7 +33,7 @@ function close() {
 						<!-- submenu is present -->
 
 						<a
-							sveltekit:prefetch
+							data-sveltekit-prefetch
 							on:click="{() => (sidebar.hidden = '')}"
 							href="{sidebar.url}"
 							aria-label="Click to route this page"
@@ -73,7 +73,7 @@ function close() {
 						<!-- Theres no submenu -->
 					{:else if sidebar.hidden !== ''}
 						<a
-							sveltekit:prefetch
+							data-sveltekit-prefetch
 							on:click="{() => close()}"
 							href="{sidebar.url}"
 							aria-label="Click to route this page"
@@ -116,7 +116,7 @@ function close() {
 						{#each sidebar.subItems as subItems}
 							<li>
 								<a
-									sveltekit:prefetch
+									data-sveltekit-prefetch
 									on:click="{() => close()}"
 									href="{subItems.url}"
 									aria-label="Click to route this page"

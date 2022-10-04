@@ -1,20 +1,29 @@
-/// <reference types="@sveltejs/kit" />
-
-// See https://kit.svelte.dev/docs/types#the-app-namespace
+// See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
+// and what to do when importing types
 declare namespace App {
-	// interface Platform {}
-	// interface Stuff {}
-	interface Locals {}
-
-	interface Platform {
-		context: {
-			waitUntil(promise: Promise<any>): void
+	interface Locals {
+		me: {
+			email: string
+			phone: string
+			firstName: string
+			lastName: string
+			avatar: string
+			role: string
+			verified: string
+			active: string
 		}
-		caches: CacheStorage & { default: Cache }
+		user: {
+			name: string
+			role: string
+		}
+		cart: any
+		megamenu: any
+		store: any
+		session: string
 	}
 
-	interface Session {}
+	// interface PageData {}
 
-	interface Stuff {}
+	// interface Platform {}
 }

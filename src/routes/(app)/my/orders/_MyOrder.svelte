@@ -38,7 +38,7 @@ $: store = $page.store
 				</a>
 			</div>
 
-			{#if orders?.data?.length > 0}
+			{#if orders.data?.length > 0}
 				<div>
 					{#each orders.data as order}
 						<div class="mb-4 hidden sm:mb-10 xl:block">
@@ -52,7 +52,7 @@ $: store = $page.store
 								class="min-w-full divide-y divide-gray-200 rounded-md border border-gray-200 text-center text-gray-500 shadow-md">
 								<thead class="whitespace-nowrap rounded-t-md bg-gray-100 text-xs uppercase">
 									<tr>
-										<th class="px-5 py-3 font-medium tracking-wider text-gray-500"> # </th>
+										<!-- <th class="px-5 py-3 font-medium tracking-wider text-gray-500"> # </th> -->
 
 										<th class="p-3 font-medium tracking-wider text-gray-500"> Image </th>
 
@@ -102,22 +102,22 @@ $: store = $page.store
 												{:else if order.foodType === 'N' || order.foodType === 'E'}
 													<LazyImg src="/product/non-veg.png" alt="Non veg" width="20" height="20" class="h-5 w-5" />
 												{/if}
-											</td> -->
+										</td> -->
 
 										<td class="whitespace-nowrap p-3">
-											{order.qty}
+											{currency(order.qty)}
 										</td>
 
 										<td class="whitespace-nowrap p-3">
-											{order.price}
+											{currency(order.price)}
 										</td>
 
 										<td class="whitespace-nowrap p-3">
-											{order.shippingCharge}
+											{currency(order.shippingCharge)}
 										</td>
 
 										<td class="whitespace-nowrap p-3">
-											{order.total}
+											{currency(order.total)}
 										</td>
 
 										<td class="p-3">
@@ -188,9 +188,9 @@ $: store = $page.store
 													<h6>Price :</h6>
 
 													<b class="text-gray-500">
-														{order.price}
-
-														* {order.qty}
+														{currency(order.price)}
+														*
+														{order.qty}
 													</b>
 												</div>
 
@@ -198,7 +198,7 @@ $: store = $page.store
 													<h6>Delivery :</h6>
 
 													<b class="text-gray-500">
-														{order.shippingCharge}
+														{currency(order.shippingCharge)}
 													</b>
 												</div>
 
@@ -206,7 +206,7 @@ $: store = $page.store
 													<h6>Total :</h6>
 
 													<b class="text-gray-500">
-														{order.total}
+														{currency(order.total)}
 													</b>
 												</div>
 
@@ -240,7 +240,7 @@ $: store = $page.store
 
 			<span class="mb-4 text-xs">Add items to it now</span>
 
-			<a href="/" aria-label="Click to route home" sveltekit:prefetch>
+			<a href="/" aria-label="Click to route home" data-sveltekit-prefetch>
 				<PrimaryButton class="w-40 py-2 text-sm">Shop Now</PrimaryButton>
 			</a>
 		</div>
