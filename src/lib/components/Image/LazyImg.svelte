@@ -34,8 +34,8 @@ export { clazz as class }
 function getImageUrl(src, tr) {
 	if (src) {
 		const originalImageUrl = src
-			.replace('https://kitcommerce.s3.ap-south-1.amazonaws.com/', '/')
-			.replace('https://ik.imagekit.io/3wzatecz51w3i/kitcommerce/', '/')
+			.replace('https://zapvi.s3.ap-south-1.amazonaws.com/', '/')
+			.replace('https://ik.imagekit.io/3wzatecz51w3i/zapvi/', '/')
 		return IMAGE_CDN_URL + originalImageUrl
 	}
 }
