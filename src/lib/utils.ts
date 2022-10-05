@@ -11,6 +11,10 @@ export async function post(endpoint: string, data: any, ck?: any) {
 			cookie: `sid=${ck.get('sid')}`
 		}
 	})
+	const sid = response.headers.get('set-cookie')
+	const sidCookie = cookie.parse(sid)
+	console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', sidCookie)
+	ck.set('sid', sidCookie.sid)
 	const isJson = response.headers.get('content-type')?.includes('application/json')
 
 	const res = isJson ? await response.json() : await response.text()

@@ -10,8 +10,9 @@
         }
     ],
     "env": {
-        "VITE_WWW_URL": "https://kitcommerce.tech",
-        "VITE_DOMAIN": "zapvi.in",
-        "HTTP_ENDPOINT": "https://staging.zapvi.in"
+        "PUBLIC_WWW_URL": "https://kitcommerce.tech",
+        "PUBLIC_DOMAIN": "zapvi.in",
+        "PUBLIC_HTTP_ENDPOINT": "https://staging.zapvi.in",
+        "NODE_OPTIONS": "--max-old-space-size=7680"
     }
 }
