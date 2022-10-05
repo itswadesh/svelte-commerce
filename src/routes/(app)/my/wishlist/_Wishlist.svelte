@@ -40,7 +40,7 @@ async function toggleWishlist(id, wx) {
 
 async function getWishlistedProducts() {
 	try {
-		wishlistedProducts = gett(`wishlists/my?store=${$page.data?.store?.id}`)
+		wishlistedProducts = getAPI(`wishlists/my?store=${$page.data?.store?.id}`)
 	} catch (e) {
 	} finally {
 	}

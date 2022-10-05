@@ -58,7 +58,7 @@ async function saveProfile() {
 		}
 
 		await cookies.set('me', data.profile, { path: '/' })
-		$page.data.me = data.profile
+		// $page.data.me = data.profile
 		// refreshData()
 	} catch (e) {
 		err = e

@@ -33,7 +33,7 @@ function handlePinCode() {
 async function submit() {
 	try {
 		loading = true
-		deleveryDetails = await gett(`https://indian-pincodes.vercel.app/api/pincodes/${pincode}`)
+		deleveryDetails = await getAPI(`https://indian-pincodes.vercel.app/api/pincodes/${pincode}`)
 		await cookies.set('zip', pincode, { path: '/' })
 		$page.data.zip = pincode
 	} catch (e) {

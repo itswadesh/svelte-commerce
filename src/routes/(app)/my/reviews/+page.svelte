@@ -72,7 +72,7 @@ async function remove(id) {
 
 async function refreshData() {
 	try {
-		await gett('reviews', { search: data.search, sort: data.sort, page: data.currentPage })
+		await getAPI(`reviews?search=${data.search}&sort=${data.sort}&page=${data.currentPage}`)
 	} catch (e) {
 	} finally {
 	}

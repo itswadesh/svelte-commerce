@@ -3,10 +3,10 @@ import { gett } from '$lib/utils'
 import { error } from '@sveltejs/kit'
 export const prerender = false
 
-export async function load({ params, parent, url, request }) {
-	const { me, cart } = await parent()
+export async function load({ params, parent, locals, url, request }) {
+	const { me, cart } = locals
 	try {
-		let addressId = url.searchParams.get('address')
+		const addressId = url.searchParams.get('address')
 
 		const paymentMethods = [
 			{
@@ -46,7 +46,7 @@ export async function load({ params, parent, url, request }) {
 				imgCdn: '/razorpay-icon.jpg'
 			}
 		]
-		const address = await gett(`addresses/${addressId}`, request.headers)
+		const address = await gett(`addresses/${addressId}`, request.headers.get('cookie'))
 
 		if (paymentMethods) {
 			return { paymentMethods, address, addressId, me, cart }

@@ -21,7 +21,7 @@ export async function load({ url, request, cookies }) {
 	let q = url.searchParams.get('q') || ''
 	let cart, store, serializedCart, serializedStore
 	try {
-		const res = await gett('carts/my', request.headers)
+		const res = await getAPI('carts/my', request.headers)
 
 		if (res) {
 			const cookieCart = {

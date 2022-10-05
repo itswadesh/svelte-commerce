@@ -127,7 +127,7 @@ async function getCoupons() {
 
 async function refreshCart() {
 	try {
-		const res = await gett('carts/refresh-cart')
+		const res = await getAPI('carts/refresh-cart')
 		if (res) {
 			const cookieCart = {
 				items: res?.items,
@@ -389,7 +389,7 @@ async function refreshCart() {
 																ix: ix
 															})}"
 														type="button"
-														class="flex h-6 w-6 transform items-center justify-center rounded-full  bg-gray-200 shadow transition  duration-300 hover:bg-gray-300 hover:opacity-80 focus:outline-none active:scale-95 sm:h-8 sm:w-8">
+														class="flex h-6 w-6 transform items-center justify-center rounded-full  bg-gray-200 shadow transition  duration-300 focus:outline-none hover:bg-gray-300 hover:opacity-80 active:scale-95 sm:h-8 sm:w-8">
 														<svg
 															xmlns="http://www.w3.org/2000/svg"
 															class="h-4 w-4 text-gray-600"
@@ -427,7 +427,7 @@ async function refreshCart() {
 																ix: ix
 															})}"
 														type="button"
-														class="flex h-6 w-6 transform items-center justify-center rounded-full  bg-gray-200 shadow transition  duration-300 hover:bg-gray-300 hover:opacity-80 focus:outline-none active:scale-95 sm:h-8 sm:w-8">
+														class="flex h-6 w-6 transform items-center justify-center rounded-full  bg-gray-200 shadow transition  duration-300 focus:outline-none hover:bg-gray-300 hover:opacity-80 active:scale-95 sm:h-8 sm:w-8">
 														<svg
 															xmlns="http://www.w3.org/2000/svg"
 															class="h-4 w-4 text-gray-600"
@@ -451,7 +451,7 @@ async function refreshCart() {
 															customizedImg: item.customizedImg,
 															ix: ix
 														})}"
-													class="flex h-6 w-6 transform items-center justify-center rounded-full bg-gray-200 shadow transition  duration-300 hover:bg-gray-300 hover:opacity-80 focus:outline-none active:scale-95 sm:h-8 sm:w-8">
+													class="flex h-6 w-6 transform items-center justify-center rounded-full bg-gray-200 shadow transition  duration-300 focus:outline-none hover:bg-gray-300 hover:opacity-80 active:scale-95 sm:h-8 sm:w-8">
 													<svg
 														xmlns="http://www.w3.org/2000/svg"
 														class="h-4 w-4 text-gray-600"
@@ -490,7 +490,7 @@ async function refreshCart() {
 
 							<button
 								type="button"
-								class="w-16 font-bold text-primary-500 hover:text-primary-700 focus:outline-none"
+								class="w-16 font-bold text-primary-500 focus:outline-none hover:text-primary-700"
 								on:click="{removeCouponCode}">
 								{#if loadingRemoveCoupon}
 									<span class="text-center text-gray-500"> ... </span>
@@ -502,7 +502,7 @@ async function refreshCart() {
 					{:else}
 						<button
 							type="button"
-							class="mt-3 flex w-full items-center justify-between hover:text-primary-500 focus:outline-none"
+							class="mt-3 flex w-full items-center justify-between focus:outline-none hover:text-primary-500"
 							class:text-primary-500="{openApplyPromoCodeModal}"
 							on:click="{() => (openApplyPromoCodeModal = true)}">
 							<h5 class="text-sm font-semibold">Apply Promo Code</h5>
@@ -544,7 +544,7 @@ async function refreshCart() {
 
 									<button
 										type="button"
-										class="transform cursor-pointer text-gray-500 transition duration-300 hover:scale-125 hover:text-gray-800 focus:outline-none"
+										class="transform cursor-pointer text-gray-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-gray-800"
 										on:click="{() => (openApplyPromoCodeModal = false)}">
 										<svg
 											xmlns="http://www.w3.org/2000/svg"

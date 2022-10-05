@@ -65,7 +65,6 @@ import SEO from '$lib/components/SEO/index.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { currency, date } from '$lib/util'
-import { post } from '$lib/util/api'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
 import { Confetti } from 'svelte-confetti'
 import { fireGTagEvent } from '$lib/util/gTag'
@@ -240,8 +239,7 @@ onMount(async () => {
 														class="text-sm text-gray-500 group-hover:underline">
 														{item.name}
 													</a>
-
-													{#if store.isFnb}
+													<!-- {#if $page.data.store.isFnb}
 														<div>
 															{#if item.foodType === 'V'}
 																<LazyImg
@@ -266,18 +264,18 @@ onMount(async () => {
 																	class="h-5 w-5" />
 															{/if}
 														</div>
-													{/if}
+													{/if} -->
 												</div>
 
 												<div class="mb-2 flex w-full items-center gap-4 text-sm">
 													<div class="me-4">
-														<span class="font-medium text-gray-500 me-2">Qty :</span>
+														<span class="me-2 font-medium text-gray-500">Qty :</span>
 
 														<b>{item.qty}</b>
 													</div>
 
 													<div>
-														<span class="font-medium text-gray-500 me-2">Price :</span>
+														<span class="me-2 font-medium text-gray-500">Price :</span>
 
 														<b>{currency(item.price)}</b>
 													</div>
@@ -289,7 +287,7 @@ onMount(async () => {
 													<div class="mb-2 flex flex-col gap-2 text-sm sm:mb-4">
 														{#each item.usedOptions as o}
 															<div class="flex flex-col items-start sm:flex-row">
-																<h6 class="mb-1 w-full sm:mb-0 sm:w-52 sm:me-5">
+																<h6 class="sm:me-5 mb-1 w-full sm:mb-0 sm:w-52">
 																	{o.name}
 																</h6>
 
