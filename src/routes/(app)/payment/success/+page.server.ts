@@ -1,16 +1,15 @@
-import { post } from '$lib/util/api'
+import { post } from '$lib/utils'
 import { error, redirect } from '@sveltejs/kit'
 export const prerender = false
 
-export async function load({ url, request }) {
-	let orderId = url.searchParams.get('id')
-	let status = url.searchParams.get('status')
-	let paymentMode = url.searchParams.get('provider')
+export async function load({ url, request, cookies }) {
+	const orderId = url.searchParams.get('id')
+	const status = url.searchParams.get('status')
+	const paymentMode = url.searchParams.get('provider')
 	let loading, err, order
-
 	try {
 		loading = true
-		request.headers.set('content-type', 'application/json')
+		// request.headers.set('content-type', 'application/json')
 
 		const res = await post(
 			`orders/pay-sucess-page-hit`,
@@ -19,7 +18,7 @@ export async function load({ url, request }) {
 				status: status,
 				orderId: orderId
 			},
-			request.headers
+			cookies
 		)
 
 		order = res

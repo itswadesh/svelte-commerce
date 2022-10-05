@@ -5,12 +5,12 @@ export const prerender = false
 export async function load({ request, url }) {
 	try {
 		let err
-		const myAddresses = await gett('addresses/my', request.headers)
+		const myAddresses = await gett('addresses/my', request.headers.get('cookie'))
 		const selectedAddress = myAddresses?.data[0]?._id
 		const currentPage = +url.searchParams.get('page') || 1
 		const q = url.searchParams.get('q') || ''
 
-		const cart = await gett('carts/refresh-cart', request.headers)
+		const cart = await gett('carts/refresh-cart', request.headers.get('cookie'))
 		if (myAddresses?.data?.length) {
 			return {
 				cart,

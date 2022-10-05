@@ -24,7 +24,7 @@ function addressChanged(detail) {
 
 async function refreshAddress() {
 	try {
-		myAddresses = await gett('addresses/my')
+		myAddresses = await getAPI('addresses/my')
 		selectedAddress = myAddresses?.data[0]?._id
 	} catch (e) {
 		err = e

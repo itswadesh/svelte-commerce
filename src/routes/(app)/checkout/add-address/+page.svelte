@@ -19,7 +19,7 @@ const seoProps = {
 }
 
 async function save(ads) {
-	const id = data.ads.id || 'new'
+	const id = data.ads._id || 'new'
 	const {
 		firstName,
 		lastName,

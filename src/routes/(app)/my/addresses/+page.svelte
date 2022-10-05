@@ -80,7 +80,7 @@ async function remove(id) {
 
 async function refreshData() {
 	try {
-		const res = await gett('addresses', { search, page: currentPage, sort })
+		const res = await getAPI(`addresses?search=${search}&page${currentPage}&sort=${sort}`)
 		addresses = res?.data
 	} catch (e) {
 		err = e
