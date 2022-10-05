@@ -8,6 +8,8 @@ import PickedBanners from '$lib/home/PickedBanners.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import MobileFooter from '$lib/MobileFooter.svelte'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
+import { browser } from '$app/environment'
+
 
 export let data
 
@@ -34,6 +36,14 @@ const seoProps = {
 		url: '/logo.svg'
 	}
 }
+if(browser){
+	const homedata = JSON.stringify(data);
+	localStorage.setItem('homedata', homedata);
+	if(homedata){
+		data = JSON.parse(homedata);
+	}
+} 
+
 
 $: heroBanners = data.home?.banners?.data.filter((b) => {
 	return b.type === 'hero'
