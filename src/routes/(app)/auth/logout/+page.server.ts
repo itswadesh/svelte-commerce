@@ -18,10 +18,10 @@ export const actions: Actions = {
 			path: '/',
 			expires: new Date(0)
 		})
-		cookies.set('sid', '', {
-			path: '/',
-			expires: new Date(0)
-		})
+		// cookies.set('sid', '', {
+		// 	path: '/',
+		// 	expires: new Date(0)
+		// })
 
 		//redirect the user
 		throw redirect(302, '/auth/otp-login')
