@@ -29,7 +29,7 @@ export async function load({ url, params, cookies, parent, setHeaders }) {
 	try {
 		loading = true
 		res = await Promise.allSettled([
-			gett(`es/products?q=${params?.slug}&store=${store?.id}&${query.toString()}`),
+			gett(`es/products?categories=${params?.slug}&store=${store?.id}&${query.toString()}`),
 			gett(`categories/${categorySlug}?store=${store.id}`)
 		])
 		ressss = res[0]

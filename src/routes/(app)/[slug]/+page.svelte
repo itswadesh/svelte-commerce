@@ -56,7 +56,7 @@ let currentPage = 1
 async function loadNextPage() {
 	let nextPage = currentPage + 1
 	try {
-		const res = await gett(`products?${data.query.toString()}&page=${nextPage}`)
+		const res = await getAPI(`products?${data.query.toString()}&page=${nextPage}`)
 		// console.log('refresh res = ', res)
 		data.products = data.products.concat(res?.data)
 		data.count = res?.count

@@ -3,19 +3,16 @@ import SEO from '$lib/components/SEO/index.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import MobileFooter from '$lib/MobileFooter.svelte'
 import { goto } from '$app/navigation'
-
-export let data
-
-// console.log('zzzzzzzzzzzzzzzzzz', data)
+import { onMount } from 'svelte'
+import { browser } from '$app/environment'
+import { getAPI } from '$lib/util/api'
+import { toast } from '$lib/util'
+import { page } from '$app/stores'
 
 let seoProps = {
 	title: `Categories`,
 	description: `Categories`
 }
-
-$: megaMenu = data?.megamenu.filter((e) => {
-	return e.name !== 'New Arrivals'
-})
 
 let bgColors = [
 	'bg-fuchsia-200',
@@ -51,15 +48,40 @@ function toggle(mx) {
 		showChild[mx] = true
 	}
 }
+let loading = false
+onMount(() => {
+	getMegaMenu()
+})
+let megamenu = []
+async function getMegaMenu() {
+	loading = true
+	if (browser) {
+		try {
+			const localMegamenu = localStorage.getItem('megamenu')
+			if (!localMegamenu) {
+				megamenu = await getAPI(`categories/megamenu?megamenu=true&store=${$page.data?.store?.id}`)
+			} else {
+				megamenu = JSON.parse(localMegamenu)
+			}
+			megamenu = megamenu.filter((e) => {
+				return e.name !== 'New Arrivals'
+			})
+		} catch (e) {
+			toast(e, 'error')
+		} finally {
+		}
+	}
+	loading = false
+}
 </script>
 
 <SEO {...seoProps} />
 
 <div>
 	<div class="mb-20">
-		{#if megaMenu.length}
+		{#if megamenu.length}
 			<ul class="flex flex-col divide-y-2 divide-white tracking-wider">
-				{#each megaMenu as m, mx}
+				{#each megamenu as m, mx}
 					{#if m}
 						<li>
 							{#if m.children?.length}
@@ -149,8 +171,8 @@ function toggle(mx) {
 					{/if}
 				{/each}
 			</ul>
-		{:else}
-			<div>No categories found</div>
+			<!-- {:else if !loading}
+			<div>No categories found</div> -->
 		{/if}
 	</div>
 

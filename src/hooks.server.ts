@@ -13,14 +13,21 @@ import {
 import { gett, post } from '$lib/utils'
 // import Cookie from 'cookie-universal'
 /** @type {import('@sveltejs/kit').HandleFetch} */
-export async function handleFetch({ event, request, fetch }) {
-	// if (request.url.startsWith('https://staging.zapvi.in/')) {
+export const handleFetch = async ({ event, request, fetch }) => {
 	request.headers.set('cookie', event.request.headers.get('cookie'))
-	// }
 
 	return fetch(request)
 }
+/** @type {import('@sveltejs/kit').HandleServerError} */
+export const handleError = async ({ error, event }) => {
+	console.log('Server handleError', error)
+	//   Sentry.captureException(error, { event });
 
+	return {
+		message: 'Whoops!',
+		code: error.code ?? 'UNKNOWN'
+	}
+}
 export const handle: Handle = async ({ event, resolve }) => {
 	// const st = localStore('megamenu', { children: [], total: 0 })
 

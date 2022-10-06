@@ -16,9 +16,13 @@ export const authorInfo = {
 }
 export const sorts = [
 	{ name: 'Recomended', val: null },
-	{ name: 'Latest First', val: '-updatedAt' },
-	{ name: 'Highest Rated', val: '-ratings' },
-	{ name: 'Most Viewed', val: '-views' }
+	{ name: `What's New`, val: '-updatedAt' },
+	{ name: 'Price: High to Low ', val: '-price' },
+	{ name: 'Price: Low to High ', val: 'price' },
+	{ name: 'Discount: High to Low ', val: '-discount' },
+	{ name: 'Discount: Low to High ', val: 'discount' },
+	{ name: `Name: Asc`, val: 'name' },
+	{ name: `Name: Desc`, val: '-name' }
 ]
 
 export const mediaqueries = {
