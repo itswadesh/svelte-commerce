@@ -3,8 +3,8 @@ import { gett } from '$lib/utils'
 import { error } from '@sveltejs/kit'
 export const prerender = false
 
-export async function load({ url, cookies, parent }) {
-	const { store } = await parent()
+export async function load({ url, locals, cookies, parent }) {
+	const { store } = locals
 	let loading = false,
 		err,
 		count,

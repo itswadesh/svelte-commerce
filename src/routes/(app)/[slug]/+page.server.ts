@@ -2,9 +2,9 @@ import { gett } from '$lib/utils'
 import { error } from '@sveltejs/kit'
 export const prerender = false
 
-export async function load({ url, params, cookies, parent, setHeaders }) {
+export async function load({ url, params, locals, cookies, parent, setHeaders }) {
 	const d1 = new Date()
-	const { store } = await parent()
+	const { store } = locals
 	const d2 = new Date()
 	console.log('Got data from Layout page (ms): ', d2.getTime() - d1.getTime())
 	let loading = false,

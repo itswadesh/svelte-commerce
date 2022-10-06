@@ -5,9 +5,9 @@ import { gett } from '$lib/utils'
 import { error } from '@sveltejs/kit'
 export const prerender = false
 
-export async function load({ parent, url, params, cookies }) {
+export async function load({ parent, url, locals, params, cookies }) {
 	try {
-		const { store } = await parent()
+		const { store } = locals
 
 		const banners = await gett(`banners?pageId=${params.slug}&store=${store.id}`)
 		const groupByBanners = await gett(`banners/group?pageId=${params.slug}&store=${store.id}`)

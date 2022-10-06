@@ -46,11 +46,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 	event.locals.store = store
 
-	const me1: any = event.cookies.get('me')
-	if (!me1) {
+	let me: any = event.cookies.get('me')
+	if (!me) {
 		try {
 			const session: string = event.cookies.get('session')
-			const me = await gett(`users/token?token=${session}`)
 			if (me) {
 				event.locals.me = {
 					email: me.email,
@@ -67,7 +66,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			console.log('eeeeeeeeeeeeee', e)
 		}
 	} else {
-		const me = JSON.parse(me1)
+		me = JSON.parse(me)
 		event.locals.me = {
 			email: me.email,
 			phone: me.phone,

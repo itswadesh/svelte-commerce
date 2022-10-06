@@ -1,8 +1,8 @@
 import { gett } from '$lib/utils'
 import { error } from '@sveltejs/kit'
 
-export async function load({ params, parent, cookies }) {
-	const { store } = await parent()
+export async function load({ params, parent, locals, cookies }) {
+	const { store } = locals
 	try {
 		const { slug } = params
 		const category = await gett(`categories/${slug}`)
