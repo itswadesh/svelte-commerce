@@ -3,12 +3,14 @@ import { onMount } from 'svelte'
 import Konva from 'konva'
 
 let container
+let json = `{"attrs":{"width":400,"height":400},"className":"Stage","children":[{"attrs":{},"className":"Layer","children":[{"attrs":{"x":71.020453858611,"y":60.88098560536032,"width":100,"height":90,"fill":"red","name":"rect","stroke":"black","draggable":true,"scaleX":1.8809856053602876,"scaleY":1.8809856053602882},"className":"Rect"},{"attrs":{"x":260,"y":160,"width":100,"height":90,"fill":"blue","name":"rect","stroke":"green","draggable":true},"className":"Rect"},{"attrs":{"x":5,"y":5,"fill":"black","text":"x: 71.020453858611\ny: 60.88098560536032\nrotation: 0\nwidth: 100\nheight: 90\nscaleX: 1.8809856053602876\nscaleY: 1.8809856053602882"},"className":"Text"},{"attrs":{},"className":"Transformer"},{"attrs":{},"className":"Transformer"}]}]}`
 onMount(() => {
 	const stage = new Konva.Stage({
 		container: container,
 		width: 400,
 		height: 400
 	})
+
 	const layer = new Konva.Layer()
 	var rect = new Konva.Rect({
 		x: 160,
@@ -63,6 +65,7 @@ onMount(() => {
 
 	rect.on('transformend', function () {
 		console.log('transform end')
+		json = stage.toJSON()
 	})
 
 	function updateText() {
@@ -80,6 +83,16 @@ onMount(() => {
 
 	stage.add(layer)
 })
+function toJSON() {
+	console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', json)
+}
 </script>
 
 <div bind:this="{container}"></div>
+<button on:click="{toJSON}">export</button>
+<br />
+<br />
+<br />
+<code class="code">
+	{json}
+</code>
