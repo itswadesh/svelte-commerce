@@ -1,8 +1,8 @@
 import { getAPI } from '$lib/util/api'
 import { gett } from '$lib/utils'
 
-export async function load({ url, params, fetch, parent, cookies }) {
-	const { store } = await parent()
+export async function load({ url, params, locals, fetch, parent, cookies }) {
+	const { store } = locals
 	let loading = false,
 		err,
 		faqs,

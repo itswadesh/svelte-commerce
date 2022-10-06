@@ -1,8 +1,8 @@
 import { gett } from '$lib/utils'
 import { redirect } from '@sveltejs/kit'
 
-export async function load({ request, parent, url }) {
-	const { me, store } = await parent()
+export async function load({ request, parent, url, locals }) {
+	const { me, store } = locals
 	try {
 		const myOrders = await gett(`orders/my?store=${store?.id}`, request.headers.get('cookie'))
 		const myWishlist = await gett(`wishlists/my?store=${store?.id}`, request.headers.get('cookie'))
