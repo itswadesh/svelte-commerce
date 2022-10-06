@@ -15,11 +15,13 @@ import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { page } from '$app/stores'
 </script>
 
+{JSON.stringify($page)}
+
 <div class="flex h-[70vh] flex-col items-center justify-center text-center sm:h-[92vh]">
 	{#if $page.error?.status === 404}
 		<div class="container">
 			<div class="flex justify-center text-center">
-				<LazyImg src="/error/404.svg" alt=" " width="240" class="mb-5 h-auto w-60 object-contain" />
+				<img src="/error/404.svg" alt=" " class="mb-5 h-auto w-60 object-contain" />
 			</div>
 
 			<div class="layout">
@@ -34,11 +36,7 @@ import { page } from '$app/stores'
 		<div class="container">
 			<div class="layout">
 				<div class="flex justify-center text-center">
-					<LazyImg
-						src="/error/404.svg"
-						alt=""
-						width="240"
-						class="mb-5 h-auto w-60 object-contain" />
+					<img src="/error/404.svg" alt="" width="240" class="mb-5 h-auto w-60 object-contain" />
 				</div>
 
 				<div class="text-center">
@@ -52,11 +50,7 @@ import { page } from '$app/stores'
 		<div class="container">
 			<div class="layout">
 				<div class="flex justify-center text-center">
-					<LazyImg
-						src="/error/404.svg"
-						alt=""
-						width="240"
-						class="mb-5 h-auto w-60 object-contain" />
+					<img src="/error/404.svg" alt="" width="240" class="mb-5 h-auto w-60 object-contain" />
 				</div>
 
 				<div class="flex flex-col gap-5 text-center">
@@ -70,11 +64,7 @@ import { page } from '$app/stores'
 		<div class="container">
 			<div class="layout">
 				<div class="flex justify-center text-center">
-					<LazyImg
-						src="/error/404.svg"
-						alt=""
-						width="240"
-						class="mb-5 h-auto w-60 object-contain" />
+					<img src="/error/404.svg" alt="" width="240" class="mb-5 h-auto w-60 object-contain" />
 				</div>
 
 				<div class="flex flex-col gap-5 text-center">

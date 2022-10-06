@@ -17,7 +17,6 @@ export async function load({ params, parent, cookies, locals, request }) {
 		// cookies.set('cache-control', 'public, max-age=200')
 		return { product }
 	} catch (e) {
-		// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', e)
-		return { product }
+		throw error(e.status, e.message)
 	}
 }
