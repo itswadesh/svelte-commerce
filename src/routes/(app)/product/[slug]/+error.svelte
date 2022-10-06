@@ -15,10 +15,8 @@ import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { page } from '$app/stores'
 </script>
 
-{JSON.stringify($page)}
-
 <div class="flex h-[70vh] flex-col items-center justify-center text-center sm:h-[92vh]">
-	{#if $page.error?.status === 404}
+	{#if $page.status === 404}
 		<div class="container">
 			<div class="flex justify-center text-center">
 				<img src="/error/404.svg" alt=" " class="mb-5 h-auto w-60 object-contain" />
@@ -28,11 +26,11 @@ import { page } from '$app/stores'
 				<div class="flex flex-col items-center justify-center text-center">
 					<h1>404</h1>
 
-					<h2 class="headline my-3">Sorry, page not found</h2>
+					<h2 class="headline my-3">Sorry, product not found</h2>
 				</div>
 			</div>
 		</div>
-	{:else if $page.error?.status === 403}
+	{:else if $page.status === 403}
 		<div class="container">
 			<div class="layout">
 				<div class="flex justify-center text-center">
@@ -46,7 +44,7 @@ import { page } from '$app/stores'
 				</div>
 			</div>
 		</div>
-	{:else if $page.error?.status === 500}
+	{:else if $page.status === 500}
 		<div class="container">
 			<div class="layout">
 				<div class="flex justify-center text-center">
@@ -68,7 +66,7 @@ import { page } from '$app/stores'
 				</div>
 
 				<div class="flex flex-col gap-5 text-center">
-					<h1>{$page.error?.status || 500}</h1>
+					<h1>{$page.status || 500}</h1>
 
 					<h2 class="headline my-3">{$page.error?.message}</h2>
 				</div>
