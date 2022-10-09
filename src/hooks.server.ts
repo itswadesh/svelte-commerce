@@ -12,12 +12,14 @@ import {
 } from '$lib/config'
 import { gett, post } from '$lib/utils'
 // import Cookie from 'cookie-universal'
+
 /** @type {import('@sveltejs/kit').HandleFetch} */
 export const handleFetch = async ({ event, request, fetch }) => {
 	request.headers.set('cookie', event.request.headers.get('cookie'))
 
 	return fetch(request)
 }
+
 /** @type {import('@sveltejs/kit').HandleServerError} */
 export const handleError = async ({ error, event }) => {
 	console.log('Server handleError', error)
