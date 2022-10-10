@@ -37,7 +37,7 @@ docker compose up
 - I will keep on posting all the open source projects to my portfolio <a href="https://itswadesh.com/" target="blank">itswadesh.com</a>
 <br/>
 
-- 🛍️ Attach Svelte store front to <a href="https://misiki.io/"> Misiki </a> and your complete ecommerce tech stack becomes fre.
+- 🛍️ Attach Svelte store front to <a href="https://misiki.io/"> Misiki </a> and your complete ecommerce tech stack becomes free.
 - 👥 The demo uses litekart as backend
 - 👨🏻‍💻 Its both SSR and SPA
 - 🚀 Superfast
