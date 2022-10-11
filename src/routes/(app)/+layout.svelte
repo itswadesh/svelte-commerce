@@ -17,7 +17,7 @@ let openSidebar = false
 		bind:openSidebar />
 
 	<PageTransitions url="{data.url}">
-		<div class="mt-20 w-full flex-1">
+		<div class="mt-14 sm:mt-20 w-full flex-1">
 			<slot />
 		</div>
 	</PageTransitions>
