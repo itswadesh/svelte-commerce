@@ -136,7 +136,7 @@ async function toggleWishlist(id) {
 				href="/product/{product.slug}"
 				aria-label="Click to view the product details"
 				data-sveltekit-prefetch>
-				<h2 class="line-clamp-2 text-sm group-hover:underline">
+				<h2 class="text-sm line-clamp-2 group-hover:underline">
 					{#if product.name}
 						{product.name}
 					{:else}
@@ -197,7 +197,7 @@ async function toggleWishlist(id) {
 			class="absolute inset-y-0 right-0 z-[101] h-full max-w-max border-l bg-white">
 			<button
 				type="button"
-				class="absolute top-5 right-4 transform cursor-pointer text-gray-500 transition duration-300 hover:scale-125 hover:text-gray-800 focus:outline-none"
+				class="absolute top-5 right-4 transform cursor-pointer text-gray-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-gray-800"
 				on:click="{() => (showRelatedProducts = false)}">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"

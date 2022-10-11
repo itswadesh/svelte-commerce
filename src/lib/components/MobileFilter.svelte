@@ -162,7 +162,7 @@ $: {
 
 					<button
 						on:click="{clearFilters}"
-						class="text-xs text-primary-500 hover:underline focus:outline-none">
+						class="text-xs text-primary-500 focus:outline-none hover:underline">
 						Clear All
 					</button>
 				{/if}

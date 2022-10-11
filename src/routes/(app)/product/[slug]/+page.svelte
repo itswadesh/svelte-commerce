@@ -66,6 +66,8 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import SimilarProducts from '$lib/components/Product/SimilarProducts.svelte'
 import FrequentlyBoughtProduct from './_FrequentlyBoughtProduct.svelte'
 import { fireGTagEvent } from '$lib/util/gTag'
+import UserForm from '$lib/components/Product/UserForm.svelte'
+import Gallery from '$lib/components/Product/Gallery.svelte'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
 import { applyAction, enhance } from '$app/forms'
 import { gett } from '$lib/utils'
@@ -121,12 +123,22 @@ if (data.product?.size?.name === 'One Size') {
 }
 
 onMount(async () => {
+	screenWidth = screen.width
+
+	const canvasEmodule = await import('$lib/components/ProductDesigner/Konvas.svelte')
+	Konvas = canvasEmodule.default
 	try {
+		// console.log(' data.product?._id = ', data.product?._id)
+
 		productReview = await getAPI(`reviews/product-reviews?pid=${data.product?._id}`)
 		isWislisted = await getAPI(
 			`wishlists/check?product=${data.product?._id}&variant=${data.product?._id}&store=${$page.data?.store?.id}`
 		)
+
+		// console.log('productReview', productReview)
+		// console.log('isWislisted', isWislisted)
 	} catch (e) {
+		// toast(e, 'error')
 	} finally {
 	}
 })
@@ -140,6 +152,68 @@ function handleShowReviewsCount(showReviewsCount) {
 function selectSize(s) {
 	selectedSize = s.name
 }
+
+async function addToBag(p) {
+	loading = true
+	cartButtonText = 'Adding...'
+
+	try {
+		const cart = await post('carts/add-to-cart', {
+			pid: p._id,
+			vid: p._id,
+			qty: 1,
+			options: p.options,
+			customizedImg: customizedImg
+		})
+		if (cart) {
+			const cookieCart = {
+				items: cart?.items,
+				qty: cart?.qty,
+				tax: cart?.tax,
+				subtotal: cart?.subtotal,
+				total: cart?.total,
+				currencySymbol: cart?.currencySymbol,
+				discount: cart?.discount,
+				selfTakeout: cart?.selfTakeout,
+				shipping: cart?.shipping,
+				unavailableItems: cart?.unavailableItems,
+				formattedAmount: cart?.formattedAmount
+			}
+			cookies.set('cart', JSON.stringify(cookieCart), { path: '/' })
+			cartButtonText = 'Added To Cart'
+			bounceItemFromTop = true
+		}
+		await invalidateAll()
+
+		cartButtonText = 'Go to cart'
+		p.qty < 0 ? fireGTagEvent('remove_from_cart', cart) : fireGTagEvent('add_to_cart', cart)
+
+		// const res = await getAPI('carts/my')
+
+		// if (res) {
+
+		if (customizedImg) {
+			goto(`/checkout/address`)
+		}
+	} catch (e) {
+		toast(e, 'error')
+		cartButtonText = 'Error Add To Cart'
+	} finally {
+		loading = false
+		await delay(5000)
+		cartButtonText = 'Add to bag'
+		bounceItemFromTop = false
+	}
+}
+
+// let windowHeight
+// let cartButtonPosition = 0
+// onMount(() => {
+// 	let elem = document.getElementById('cartButton')
+// 	let rect = elem.getBoundingClientRect()
+// 	const ActualCartButtonPosition = rect.y
+// 	cartButtonPosition = ActualCartButtonPosition - windowHeight + 280
+// })
 
 function cartButtonEnterViewport() {
 	if (y > 0) {
@@ -157,13 +231,45 @@ function cartButtonExitViewport() {
 	}
 }
 
+function alertToSelectMandatoryOptions() {
+	// Raised by AddToCart Button at detail page
+	toast('Please select a size', 'error')
+
+	const el = document.getElementsByClassName('sizeSelector')[0]
+	if (el) {
+		el.scrollIntoView({ behavior: 'smooth' })
+	}
+
+	shake = true
+	setTimeout(() => {
+		shake = false
+	}, 3000)
+}
+
 function optionChanged(o) {
 	const o1 = []
 	for (const i in o) {
 		if (Array.isArray(o[i])) o1.push({ option: i, values: o[i] })
 		else o1.push({ option: i, values: [o[i]] })
 	}
+
+	// console.log('oooooooooooooooooo', o)
+	// console.log('dddddddddddddd', o1)
+
 	this.selectedOptions = o1
+	//   if (!this.selectedOptions) this.selectedOptions = []
+	//   for (const i in o) {
+	//     this.selectedOptions.push({ option: i, values: [o[i]] })
+	//   }
+
+	//   console.log('occccccccccccccccccccccc', this.selectedOptions)
+	// },
+
+	// dateChanged(o) {
+	//   if (!this.selectedOptions) this.selectedOptions = []
+	//   this.selectedOptions.push(o)
+
+	//   console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', this.selectedOptions)
 }
 
 async function toggleWishlist(id) {
@@ -182,8 +288,12 @@ async function toggleWishlist(id) {
 function scrollTo(elementId) {
 	let element
 	if (elementId.detail) {
+		// console.log('elementId = ', elementId.detail)
+
 		element = document.getElementById(elementId.detail)
 	} else {
+		// console.log('elementId = ', elementId)
+
 		element = document.getElementById(elementId)
 	}
 	window.scroll({
@@ -227,58 +337,84 @@ function handleMobileCanvas() {
 			<!-- Images -->
 
 			<div class="col-span-1 h-auto lg:col-span-3">
-				<div
-					class="flex w-full grid-cols-2 flex-row gap-2 overflow-x-scroll scrollbar-none md:grid">
-					{#if data?.product?.imagesCdn?.length}
-						{#each data.product?.imagesCdn as imgCdn}
+				{#if !data.product?.isCustomized}
+					<div
+						class="flex w-full grid-cols-2 flex-row gap-2 overflow-x-scroll scrollbar-none md:grid">
+						{#if data?.product?.imagesCdn?.length}
+							{#each data.product?.imagesCdn as imgCdn}
+								<button
+									type="button"
+									class="w-full flex-shrink-0 cursor-zoom-in overflow-hidden rounded md:h-full md:w-full md:flex-shrink"
+									on:click="{() => handleGallery(imgCdn)}">
+									<LazyImg
+										src="{imgCdn}"
+										alt="{data.product?.name}"
+										width="416"
+										height="600"
+										class="h-full w-full transform object-contain object-center transition duration-700" />
+								</button>
+							{/each}
+						{/if}
+					</div>
+				{:else if data.product?.layoutTemplateCdn}
+					<div
+						transition:fade="{{ duration: 200 }}"
+						class="{showEditor
+							? 'fixed inset-0 z-[100] h-screen w-full bg-white sm:static sm:z-0 sm:h-auto sm:bg-transparent'
+							: ''}">
+						{#if showEditor}
 							<button
 								type="button"
-								class="w-full flex-shrink-0 cursor-zoom-in overflow-hidden rounded md:h-full md:w-full md:flex-shrink"
-								on:click="{() => handleGallery(imgCdn)}">
-								<LazyImg
-									src="{imgCdn}"
-									alt="{data.product?.name}"
-									width="416"
-									height="600"
-									class="h-full w-full transform object-contain object-center transition duration-700" />
+								class="absolute top-3 right-3 z-[70] text-white"
+								on:click="{() => (showEditor = false)}">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke-width="1.5"
+									stroke="currentColor"
+									class="h-6 w-6">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+								</svg>
 							</button>
-						{/each}
-					{/if}
-				</div>
+						{/if}
 
-				<div
-					transition:fade="{{ duration: 200 }}"
-					class="{showEditor
-						? 'fixed inset-0 z-[100] h-screen w-full bg-white sm:static sm:z-0 sm:h-auto sm:bg-transparent'
-						: ''}">
-					{#if showEditor}
-						<button
-							type="button"
-							class="absolute top-3 right-3 z-[70] text-white"
-							on:click="{() => (showEditor = false)}">
+						<button type="button" on:click="{handleMobileCanvas}" class="h-full w-full">
+							<svelte:component
+								this="{Konvas}"
+								product="{data.product}"
+								bind:customizedImg
+								on:saveAndAddToCart="{() => addToBag(data.product)}" />
+						</button>
+					</div>
+				{:else}
+					<div
+						class="flex h-screen w-full flex-col items-center justify-center gap-5 text-center sm:mx-auto sm:h-auto sm:w-auto">
+						<h1 class="text-xl font-semibold capitalize sm:text-2xl">Make your custom design</h1>
+
+						<div
+							class="relative flex h-full w-full flex-col items-center justify-center gap-2 rounded-md border bg-gray-100 text-sm text-gray-500 sm:h-[570px] sm:w-[302px]">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"
 								viewBox="0 0 24 24"
 								stroke-width="1.5"
 								stroke="currentColor"
-								class="h-6 w-6">
+								class="h-10 w-10">
 								<path
 									stroke-linecap="round"
 									stroke-linejoin="round"
-									d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+									d="M15.182 16.318A4.486 4.486 0 0012.016 15a4.486 4.486 0 00-3.198 1.318M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"
+								></path>
 							</svg>
-						</button>
-					{/if}
 
-					<button type="button" on:click="{handleMobileCanvas}" class="h-full w-full">
-						<svelte:component
-							this="{Konvas}"
-							product="{data.product}"
-							bind:customizedImg
-							on:saveAndAddToCart="{() => addToBag(data.product)}" />
-					</button>
-				</div>
+							<span> Opps! layout template not found </span>
+						</div>
+					</div>
+				{/if}
 			</div>
 
 			<div class="col-span-1 lg:col-span-2">
@@ -401,6 +537,22 @@ function handleMobileCanvas() {
 					</div>
 				{/if}
 
+				<!-- {#if moreOptions?.length > 0}
+				<div class="mb-5 flex flex-col gap-2">
+					{#each moreOptions as option}
+						<label for="{option.title}" class="flex items-center gap-2 text-sm font-medium">
+							{#if option.type === 'checkbox'}
+								<input type="checkbox" name="{option.title}" id="{option.title}" class="h-4 w-4" />
+							{/if}
+
+							<span>
+								{option.title}
+							</span>
+						</label>
+					{/each}
+				</div>
+			{/if} -->
+
 				<!-- select options  -->
 
 				{#if data.product?.options?.length > 0}
@@ -416,7 +568,7 @@ function handleMobileCanvas() {
 								{#if o.inputType == 'dropdown'}
 									<select
 										bind:value="{selectedOptions[o.id]}"
-										class="w-full max-w-xs flex-1 rounded-md border border-gray-300 py-1.5 text-sm font-light placeholder-gray-400 transition duration-300 hover:bg-white focus:outline-none"
+										class="w-full max-w-xs flex-1 rounded-md border border-gray-300 py-1.5 text-sm font-light placeholder-gray-400 transition duration-300 focus:outline-none hover:bg-white"
 										on:change="{() => optionChanged(selectedOptions)}">
 										{#each o.values as i}
 											<option value="{i.id}">
@@ -463,7 +615,7 @@ function handleMobileCanvas() {
 									<div class="flex flex-wrap">
 										{#each o.values as i}
 											<label
-												class="rouned-md mr-2 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border-2 text-gray-500 hover:border-primary-500 hover:font-bold hover:text-primary-500 focus:outline-none focus:ring-0 focus:ring-offset-0
+												class="rouned-md mr-2 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border-2 text-gray-500 focus:outline-none focus:ring-0 focus:ring-offset-0 hover:border-primary-500 hover:font-bold hover:text-primary-500
 											{selectedOptions[o.id] == i.id
 													? ` border-primary-500 bg-primary-500 text-white`
 													: `bg-gray-100 border-gray-400`}">
@@ -485,7 +637,7 @@ function handleMobileCanvas() {
 									<div class="flex flex-wrap">
 										{#each o.values as i}
 											<label
-												class="mr-2 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border-2 hover:font-bold focus:outline-none focus:ring-0 focus:ring-offset-0 first-letter:{selectedOptions[
+												class="mr-2 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border-2 focus:outline-none focus:ring-0 focus:ring-offset-0 hover:font-bold first-letter:{selectedOptions[
 													o.id
 												] == i.id
 													? `border-primary-500 text-white`
@@ -584,8 +736,8 @@ function handleMobileCanvas() {
 						<div class="col-span-3 md:col-span-1">
 							{#if cartButtonText === 'Go to cart'}
 								<a
-									class="relative flex w-full transform items-center justify-center overflow-hidden rounded-md border border-primary-500 bg-primary-500 px-4 py-2 text-center text-sm font-semibold tracking-wider text-white shadow-md transition duration-700 hover:border-primary-700
-								hover:bg-primary-700 focus:outline-none focus:ring-0 focus:ring-offset-0"
+									class="relative flex w-full transform items-center justify-center overflow-hidden rounded-md border border-primary-500 bg-primary-500 px-4 py-2 text-center text-sm font-semibold tracking-wider text-white shadow-md transition duration-700 focus:outline-none
+								focus:ring-0 focus:ring-offset-0 hover:border-primary-700 hover:bg-primary-700"
 									href="/cart"
 									data-sveltekit-prefetch>
 									<svg
@@ -871,14 +1023,14 @@ function handleMobileCanvas() {
 									{#if !isLastReview}
 										<button
 											type="button"
-											class="text-sm font-semibold text-primary-500 transition duration-300 hover:text-primary-700 focus:outline-none"
+											class="text-sm font-semibold text-primary-500 transition duration-300 focus:outline-none hover:text-primary-700"
 											on:click="{() => handleShowReviewsCount(showReviewsCount)}">
 											Show More
 										</button>
 									{:else}
 										<button
 											type="button"
-											class="text-sm font-semibold text-primary-500 transition duration-300 hover:text-primary-700 focus:outline-none"
+											class="text-sm font-semibold text-primary-500 transition duration-300 focus:outline-none hover:text-primary-700"
 											on:click="{() => (showReviewsCount = 1)}">
 											Show Less
 										</button>
@@ -894,7 +1046,7 @@ function handleMobileCanvas() {
 
 					<button
 						type="button"
-						class="group flex items-center gap-1 text-sm font-bold text-primary-500 hover:text-primary-700 focus:outline-none"
+						class="group flex items-center gap-1 text-sm font-bold text-primary-500 focus:outline-none hover:text-primary-700"
 						on:click="{() =>
 							goto(
 								`/my/reviews/create?product=${data.product?._id}&ref=/product/${data.product?.slug}`
@@ -961,6 +1113,9 @@ function handleMobileCanvas() {
 		{/if}
 	</div>
 </div>
+
+<Gallery bind:showPhotosModal product="{data.product}" />
+
 {#if bounceItemFromTop}
 	<AnimatedCartItem img="{data.product?.imgCdn}" />
 {/if}

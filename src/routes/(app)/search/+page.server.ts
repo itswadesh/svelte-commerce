@@ -23,7 +23,7 @@ export async function load({ url, locals, cookies, parent }) {
 
 	try {
 		loading = true
-		const res = await getAPI(`es/products?${query.toString()}&store=${store?.id}`)
+		const res = await gett(`es/products?${query.toString()}&store=${store?.id}`)
 		ressss = res
 		products = res?.data
 		products = products.map((p) => {

@@ -1,6 +1,7 @@
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import { domain, websiteName } from '$lib/config'
 
 let seoProps = {
 	title: `About Us`,
@@ -18,13 +19,13 @@ let seoProps = {
 		<h1 class="font-serif text-2xl font-medium md:text-3xl lg:text-4xl">About Us</h1>
 
 		<p class="text-gray-500">
-			Misiki is the best place to shop online in India. Misiki is a well-established brand in the
-			personalized gifts segment. Choose from a wide range of mobile covers, t-shirts, photo mugs,
+			{websiteName} is the best place to shop online in India. {websiteName} is a well-established brand
+			in the personalized gifts segment. Choose from a wide range of mobile covers, t-shirts, photo mugs,
 			key-chains, 3D-crystals, photo clocks, picture frames and hundreds of other gifts.
 		</p>
 
 		<p class="text-gray-500">
-			Misiki has been delivering Mobile Cover‘s Orders since we opened in 2018. Our goal is to
+			{websiteName} has been delivering Mobile Cover‘s Orders since we opened in 2018. Our goal is to
 			provide both a superior customer experience and tremendous value for our customers.
 		</p>
 
@@ -39,7 +40,7 @@ let seoProps = {
 				</div>
 
 				<div class="flex-1">
-					<h2 class="mb-1 text-xl font-semibold">Misiki.in is</h2>
+					<h2 class="mb-1 text-xl font-semibold">{domain} is</h2>
 
 					<p class="text-gray-500">
 						Distinctive fashion for the contemporary Indian with In-house capabilities in design,
@@ -77,7 +78,7 @@ let seoProps = {
 
 					<p class="text-gray-500">
 						We’ve built an active and extensive online store that sparks much of our innovation –
-						we’re always finding new ways to engage with customers and share the joy of Misiki.in.
+						we’re always finding new ways to engage with customers and share the joy of {domain}.
 						So, stop wandering and begin exploring. Experience an innovation to make your memories
 						lasts longer.
 					</p>
@@ -112,11 +113,11 @@ let seoProps = {
 
 			<div
 				class="absolute left-40 top-20 flex w-60 flex-col items-center justify-center gap-4 bg-gray-100 p-4 text-center text-sm text-gray-500">
-				<h3 class="text-lg font-bold text-gray-800">Misiki</h3>
+				<h3 class="text-lg font-bold text-gray-800">{websiteName}</h3>
 
 				<p class="text-gray-500">
-					Misiki is the best place to shop online in India. Misiki is a well-established brand in
-					the personalized gifts segment.
+					{websiteName} is the best place to shop online in India. {websiteName} is a well-established
+					brand in the personalized gifts segment.
 				</p>
 
 				<p class="text-gray-500">
@@ -126,7 +127,7 @@ let seoProps = {
 
 				<button
 					class="max-w-max rounded-md bg-gray-400 py-2 px-10 font-bold uppercase tracking-wider text-gray-800 focus:outline-none">
-					Misiki
+					{websiteName}
 				</button>
 			</div>
 		</div>
@@ -143,7 +144,9 @@ let seoProps = {
 				<div class="p-4">
 					<h6 class="mb-1 font-bold">Brian Anderson</h6>
 
-					<p class="text-sm text-gray-500">Misiki has been delivering Mobile Cover‘s Orders</p>
+					<p class="text-sm text-gray-500">
+						{websiteName} has been delivering Mobile Cover‘s Orders
+					</p>
 				</div>
 			</div>
 
@@ -158,7 +161,9 @@ let seoProps = {
 				<div class="p-4">
 					<h6 class="mb-1 font-bold">Jennifer Cameron</h6>
 
-					<p class="text-sm text-gray-500">Misiki has been delivering Mobile Cover‘s Orders</p>
+					<p class="text-sm text-gray-500">
+						{websiteName} has been delivering Mobile Cover‘s Orders
+					</p>
 				</div>
 			</div>
 
@@ -173,7 +178,9 @@ let seoProps = {
 				<div class="p-4">
 					<h6 class="mb-1 font-bold">Katherine Lambert</h6>
 
-					<p class="text-sm text-gray-500">Misiki has been delivering Mobile Cover‘s Orders</p>
+					<p class="text-sm text-gray-500">
+						{websiteName} has been delivering Mobile Cover‘s Orders
+					</p>
 				</div>
 			</div>
 
@@ -188,7 +195,9 @@ let seoProps = {
 				<div class="p-4">
 					<h6 class="mb-1 font-bold">Eric Martin</h6>
 
-					<p class="text-sm text-gray-500">Misiki has been delivering Mobile Cover‘s Orders</p>
+					<p class="text-sm text-gray-500">
+						{websiteName} has been delivering Mobile Cover‘s Orders
+					</p>
 				</div>
 			</div>
 		</div>

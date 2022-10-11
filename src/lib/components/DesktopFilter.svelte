@@ -117,7 +117,7 @@ function handleToggleSubCategory(m, mx) {
 		{#if filterLength}
 			<button
 				type="button"
-				class="text-xs text-primary-500 transition duration-300 hover:underline focus:outline-none"
+				class="text-xs text-primary-500 transition duration-300 focus:outline-none hover:underline"
 				on:click="{clearFilters}">
 				Clear All
 			</button>
@@ -161,7 +161,7 @@ function handleToggleSubCategory(m, mx) {
 						{:else}
 							<a
 								href="/{m.slug}"
-								class="flex w-full items-center justify-between gap-2 py-1 text-left  hover:text-blue-600 focus:outline-none">
+								class="flex w-full items-center justify-between gap-2 py-1 text-left  focus:outline-none hover:text-blue-600">
 								{m.name}
 							</a>
 						{/if}
@@ -173,7 +173,7 @@ function handleToggleSubCategory(m, mx) {
 										<a
 											href="/{c.slug}"
 											type="button"
-											class="flex w-full items-center justify-between gap-2 py-1 text-left hover:text-blue-600  focus:outline-none">
+											class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none  hover:text-blue-600">
 											{c.name}
 										</a>
 									</li>

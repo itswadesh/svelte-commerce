@@ -1,5 +1,6 @@
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
+import { domain, email, websiteName } from '$lib/config'
 
 let seoProps = {
 	title: `Payments returns`,
@@ -22,7 +23,7 @@ let seoProps = {
 				<h6 class="mb-5 font-semibold">PAYMENTS</h6>
 
 				<p class="text-gray-500">
-					Misiki accepts Debit Cards, Credit Cards, NetBanking & Wallets for payments.
+					{websiteName} accepts Debit Cards, Credit Cards, NetBanking & Wallets for payments.
 				</p>
 			</li>
 
@@ -30,16 +31,16 @@ let seoProps = {
 				<h6 class="mb-5 font-semibold">SHIPPING</h6>
 
 				<p class="text-gray-500">
-					Misiki offers to ship to cities all over India. Customers usually receive their orders
-					within 7-8 working days. The customer is responsible for any import duty that may be
-					levied upon their order. <br /> <br />
+					{websiteName} offers to ship to cities all over India. Customers usually receive their orders
+					within 7-8 working days. The customer is responsible for any import duty that may be levied
+					upon their order. <br /> <br />
 
 					If you have any questions about the expected delivery period for your address, please
-					email us at help@Misiki.in <br /> <br />
+					email us at {email} <br /> <br />
 
-					Once your Misiki.in order ships it must go to the address provided at the time you place
-					your order. If you cannot receive or pick up your order after three attempts by the
-					courier, it will come back to our warehouse. <br /> <br />
+					Once your {domain} order ships it must go to the address provided at the time you place your
+					order. If you cannot receive or pick up your order after three attempts by the courier, it
+					will come back to our warehouse. <br /> <br />
 
 					Any refund against RTO orders will be not initiated, You can Request Us to Re-Ship it with
 					New Actual Address & Contact Details. We will reship it on next working Day.
@@ -50,11 +51,11 @@ let seoProps = {
 				<h6 class="mb-5 font-semibold">RETURNS</h6>
 
 				<div class="text-gray-500">
-					Misiki offers a replacement guarantee only if the product received is damaged/defective.
-					Please get in touch with us at help@Misiki.in within 3 days of receiving your order if you
-					would like to have it replaced. We will provide a shipping address that you can ship your
-					order back to. Misiki will dispatch a replacement as soon as we receive your returned
-					order.<br /> <br />
+					{websiteName} offers a replacement guarantee only if the product received is damaged/defective.
+					Please get in touch with us at {email} within 3 days of receiving your order if you would like
+					to have it replaced. We will provide a shipping address that you can ship your order back to.
+					{websiteName} will dispatch a replacement as soon as we receive your returned order.<br />
+					<br />
 
 					We do not exchange products if the customer has ordered a wrong item. <br /> <br />
 
@@ -87,7 +88,7 @@ let seoProps = {
 
 						<li>
 							Item received is different from their description on the product detail page on
-							Misiki.in;
+							{domain};
 						</li>
 
 						<li>

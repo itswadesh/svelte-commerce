@@ -48,7 +48,7 @@ function changePage(e) {
 		<div class="flex items-center justify-center gap-2 text-center xl:mx-2">
 			{#if +current > 1}
 				<button
-					class="inline-flex items-center rounded border border-gray-300 p-0.5 font-bold tracking-wide text-gray-800 hover:border-gray-800 focus:outline-none sm:p-2 lg:py-2 lg:px-4"
+					class="inline-flex items-center rounded border border-gray-300 p-0.5 font-bold tracking-wide text-gray-800 focus:outline-none hover:border-gray-800 sm:p-2 lg:py-2 lg:px-4"
 					on:click="{() => changePage(+current - 1)}">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -71,7 +71,7 @@ function changePage(e) {
 				{#each { length: pages } as _, i}
 					{#if startTab <= i + 1 && endTab - 1 >= i}
 						<button
-							class="mx-auto h-5 w-5 rounded border-gray-800 text-xs hover:border hover:border-gray-800 focus:outline-none sm:h-8 sm:w-8 sm:text-base"
+							class="mx-auto h-5 w-5 rounded border-gray-800 text-xs focus:outline-none hover:border hover:border-gray-800 sm:h-8 sm:w-8 sm:text-base"
 							class:active="{+current === i + 1}"
 							on:click="{() => changePage(i + 1)}">
 							{i + 1}
@@ -82,7 +82,7 @@ function changePage(e) {
 
 			{#if +current < count}
 				<button
-					class="inline-flex items-center rounded border border-gray-300 p-0.5 text-center font-bold tracking-wide text-gray-800 hover:border-gray-800  focus:outline-none sm:p-2 lg:py-2 lg:px-4"
+					class="inline-flex items-center rounded border border-gray-300 p-0.5 text-center font-bold tracking-wide text-gray-800 focus:outline-none  hover:border-gray-800 sm:p-2 lg:py-2 lg:px-4"
 					on:click="{() => changePage(+current + 1)}">
 					<span class="hidden text-xs sm:block">Next</span>
 

@@ -57,7 +57,7 @@ async function sortNow(sort) {
 async function remove(id) {
 	try {
 		toast('Removing the selected review please wait...', 'info')
-		await del('reviews', { id })
+		await del(`reviews?id=${id}`, $page.data.origin)
 		toast('Removed the review successfully', 'success')
 		await refreshData()
 	} catch (e) {
@@ -72,7 +72,10 @@ async function remove(id) {
 
 async function refreshData() {
 	try {
-		await getAPI(`reviews?search=${data.search}&sort=${data.sort}&page=${data.currentPage}`)
+		await getAPI(
+			`reviews?search=${data.search}&sort=${data.sort}&page=${data.currentPage}`,
+			$page.data.origin
+		)
 	} catch (e) {
 	} finally {
 	}
@@ -201,10 +204,9 @@ async function refreshData() {
 	{:else}
 		<div class="flex h-full flex-col items-center justify-center text-center">
 			<div>
-				<LazyImg
+				<img
 					src="/no/online-review-animate.svg"
 					alt="empty reviews"
-					height="240"
 					class="mb-5 h-60 object-contain" />
 			</div>
 

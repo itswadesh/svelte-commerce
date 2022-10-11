@@ -29,12 +29,12 @@ export async function load({ url, params, locals, cookies, parent, setHeaders })
 	try {
 		loading = true
 		res = await Promise.allSettled([
-			gett(`es/products?categories=${params?.slug}&store=${store?.id}&${query.toString()}`),
+			gett(`es/products?categories=${categorySlug}&store=${store?.id}&${query.toString()}`),
 			gett(`categories/${categorySlug}?store=${store.id}`)
 		])
 		ressss = res[0]
 		if (ressss.status === 'fulfilled') {
-			products = ressss.value?.data.map((p) => {
+			products = ressss.value?.data?.map((p) => {
 				let p1
 				p1 = { ...p._source }
 				p1.id = p._id
@@ -71,6 +71,6 @@ export async function load({ url, params, locals, cookies, parent, setHeaders })
 		searchData,
 		fl,
 		ressss,
-		category: categoryRes?.value
+		category: categoryRes
 	}
 }

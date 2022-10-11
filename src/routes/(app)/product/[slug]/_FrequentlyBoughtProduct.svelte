@@ -87,7 +87,7 @@ async function addToBag(p) {
 	<div class="mx-auto mt-2 max-w-max">
 		{#if cartButtonText === 'Go to cart'}
 			<a
-				class="relative flex w-full transform items-center justify-center overflow-hidden rounded-full border border-primary-500 bg-primary-500 px-4 py-2 text-center text-xs font-semibold tracking-wider text-white shadow-md transition duration-700 hover:border-primary-700 hover:bg-primary-700 focus:outline-none focus:ring-0 focus:ring-offset-0"
+				class="relative flex w-full transform items-center justify-center overflow-hidden rounded-full border border-primary-500 bg-primary-500 px-4 py-2 text-center text-xs font-semibold tracking-wider text-white shadow-md transition duration-700 focus:outline-none focus:ring-0 focus:ring-offset-0 hover:border-primary-700 hover:bg-primary-700"
 				href="/cart"
 				data-sveltekit-prefetch>
 				{cartButtonText}
