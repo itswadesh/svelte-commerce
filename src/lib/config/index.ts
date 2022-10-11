@@ -1,4 +1,4 @@
-import { PUBLIC_DOMAIN, PUBLIC_HTTP_ENDPOINT, PUBLIC_PINCODES_API } from '$env/static/public'
+import { PUBLIC_HTTP_ENDPOINT, PUBLIC_PINCODES_API } from '$env/static/public'
 
 export const authorInfo = {
 	author: 'Swadesh Behera',
@@ -37,7 +37,6 @@ export const currency = { symbol: '₹', code: 'INR' }
 export const HTTP_ENDPOINT = PUBLIC_HTTP_ENDPOINT || 'https://api.misiki.in'
 export const IMAGE_CDN_URL = 'https://ik.imagekit.io/3wzatecz51w3i/zapvi'
 export const host = 'food.misiki.in'
-export const DOMAIN = PUBLIC_DOMAIN
 export const pageSize = 20
 export const stripePublishableKey =
 	'pk_test_51HXxXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXq'
