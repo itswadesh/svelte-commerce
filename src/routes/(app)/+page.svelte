@@ -13,15 +13,14 @@ import { page } from '$app/stores'
 import { browser } from '$app/environment'
 import { toast } from '$lib/util'
 import { onMount } from 'svelte'
-import { websiteName } from '$lib/config'
 
 export let data
 
 const seoProps = {
-	title: `Custom Printed Mobile Back Cover and Cases Online @Rs. 99 - ${websiteName}`,
-	description: `Customised Mobile Covers - Buy Custom Photo Printed Mobile Back Cover And Cases Online For All Stylish Phone Models @Rs.99 On ${websiteName} Store. 100% Easy Returns.`,
+	title: `Custom Printed Mobile Back Cover and Cases Online @Rs. 99 - ${$page.data.store.websiteName}`,
+	description: `Customised Mobile Covers - Buy Custom Photo Printed Mobile Back Cover And Cases Online For All Stylish Phone Models @Rs.99 On ${$page.data.store.websiteName} Store. 100% Easy Returns.`,
 	slug: '/',
-	keywords: `Customised Mobile Covers, Buy Custom Photo Printed Mobile Back Cover, ${websiteName} Store,100% Easy Returns `,
+	keywords: `Customised Mobile Covers, Buy Custom Photo Printed Mobile Back Cover, ${$page.data.store.websiteName} Store,100% Easy Returns `,
 	featuredImage: {
 		url: '/logo.svg',
 		width: 672,
@@ -150,7 +149,7 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 				<div class="mb-5 sm:mb-10">
 					<h1
 						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 md:py-10 sm:text-2xl md:text-3xl xl:text-4xl">
-						BEST OF {websiteName} EXCLUSIVE
+						BEST OF {$page.data.store.websiteName} EXCLUSIVE
 					</h1>
 
 					<HeroBanners heroBanners="{heroBanners}" />

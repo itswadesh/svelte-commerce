@@ -16,7 +16,6 @@ import { onMount } from 'svelte'
 // import Cookie from 'cookie-universal'
 import { post } from '$lib/util/api'
 import { browser } from '$app/environment'
-import { GOOGLE_CLIENT_ID } from '$lib/config'
 // import Partytown from 'partytown-sveltekit/Partytown.svelte'
 
 // const cookies = Cookie()
@@ -31,7 +30,7 @@ const seoProps = {
 onMount(async () => {
 	const { googleOneTap } = await import('./google-one-tap')
 	const options = {
-		client_id: GOOGLE_CLIENT_ID, // required
+		client_id: $page.data.store.GOOGLE_CLIENT_ID, // required
 		auto_select: false, // optional
 		cancel_on_tap_outside: false, // optional
 		context: 'signin' // optional

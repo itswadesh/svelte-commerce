@@ -1,10 +1,9 @@
 <script lang="ts">
 import { page } from '$app/stores'
-import { GOOGLE_ANALYTICS_ID } from '$lib/config'
 
 $: {
 	if (typeof gtag !== 'undefined') {
-		gtag('config', GOOGLE_ANALYTICS_ID, {
+		gtag('config', $page.data.store.GOOGLE_ANALYTICS_ID, {
 			page_title: document.title,
 			page_path: $page.url.pathname
 		})

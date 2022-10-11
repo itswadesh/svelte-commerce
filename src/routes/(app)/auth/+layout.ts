@@ -1,17 +1,7 @@
 export const ssr = false
 import { getAPI } from '$lib/util/api'
-import { domain, HTTP_ENDPOINT } from '$lib/config'
 import cookie from 'cookie'
-import {
-	stripePublishableKey,
-	id,
-	email,
-	address,
-	phone,
-	websiteName,
-	websiteLegalName
-} from '$lib/config'
-import { gett } from '$lib/utils'
+
 export const prerender = false
 
 export async function load({ url, request, cookies }) {
@@ -44,29 +34,29 @@ export async function load({ url, request, cookies }) {
 	} catch (e) {
 	} finally {
 	}
-	try {
-		const cookieStore = {
-			id,
-			domain,
-			logo: `/logo.svg?tr=w-auto,h-56:w-auto,h-56`,
-			address,
-			phone,
-			email,
-			websiteName,
-			websiteLegalName,
-			stripePublishableKey
-		}
+	// try {
+	// 	const cookieStore = {
+	// 		id,
+	// 		domain,
+	// 		logo: `/logo.svg?tr=w-auto,h-56:w-auto,h-56`,
+	// 		address,
+	// 		phone,
+	// 		email,
+	// 		websiteName,
+	// 		websiteLegalName,
+	// 		stripePublishableKey
+	// 	}
 
-		store = cookieStore
-		serializedStore = cookie.serialize('store', JSON.stringify(cookieStore) || '', {
-			path: '/'
-		})
-	} catch (e) {
-	} finally {
-	}
+	// 	store = cookieStore
+	// 	serializedStore = cookie.serialize('store', JSON.stringify(cookieStore) || '', {
+	// 		path: '/'
+	// 	})
+	// } catch (e) {
+	// } finally {
+	// }
 	if (cookies) {
 		cookies.set(serializedCart)
-		cookies.set(serializedStore)
+		// cookies.set(serializedStore)
 	}
 	return {
 		url: url.href,

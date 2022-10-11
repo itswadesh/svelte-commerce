@@ -1,5 +1,5 @@
 import { loadingDelayed } from '$lib/store'
-import { id } from '$lib/config'
+
 let typingTimer
 
 const send = async ({ method, path, params, data, token, headers, origin }: any) => {
@@ -34,12 +34,9 @@ const send = async ({ method, path, params, data, token, headers, origin }: any)
 	const domain = uri.searchParams.get('domain')
 	const st = uri.searchParams.get('store')
 	if (!storeId && !domain && !st) {
-		if (id) storeId = id
-		else {
-			console.error('store id not found in config', path)
-			// throw 'Loading...'
-			return
-		}
+		console.error('store id not found in config', path)
+		// throw 'Loading...'
+		return
 	}
 
 	// console.log('store id not found.........', storeIdFromConfig)
