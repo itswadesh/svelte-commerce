@@ -10,8 +10,10 @@ export let similarProducts = []
 
 		<div
 			class="mb-5 grid w-full grid-cols-2 items-start gap-3 sm:mb-10 sm:flex sm:flex-wrap lg:mb-20 lg:gap-6">
-			{#each similarProducts as p}
-				<ProductCard product="{p}" />
+			{#each similarProducts as p, px}
+				{#if px < 10}
+					<ProductCard product="{p._source}" />
+				{/if}
 			{/each}
 		</div>
 	</div>

@@ -201,7 +201,7 @@ function handleSearchBox() {
 		</div>
 	{/if}
 
-	<ul class="flex flex-col">
+	<ul class="lg:flex flex-col hidden">
 		{#each filteredTerms as i, ix}
 			{#if ix + 1 <= noOfitems}
 				{#if i.key}
@@ -247,5 +247,35 @@ function handleSearchBox() {
 				Close
 			</button>
 		{/if}
+	</ul>
+
+	<ul class="flex flex-col lg:hidden">
+		{#each filteredTerms as i, ix}
+			{#if i.key && i.doc_count > 0}
+				<li>
+					<label class="inline-flex items-center">
+						<input
+							type="checkbox"
+							name="{name}"
+							id="{i.key}"
+							disabled="{disabled}"
+							required="{required}"
+							color="{color}"
+							bind:group="{selectedItems}"
+							value="{i.key}"
+							on:change="{() => dispatch('go', { model, selectedItems })}"
+							class="input-checkbox h-3.5 w-3.5 rounded-md border border-gray-200 bg-transparent text-primary-500" />
+
+						<!-- {`${selectedItems.toString().search(i.key) === i.key}` ? 'font-medium' : 'font-normal'} -->
+
+						<div class="ml-2 flex-1 text-sm leading-tight first-letter:uppercase">
+							<span>{i.key}</span>
+
+							<span class="text-xs text-gray-500">({i.doc_count})</span>
+						</div>
+					</label>
+				</li>
+			{/if}
+		{/each}
 	</ul>
 </div>

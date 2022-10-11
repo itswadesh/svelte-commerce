@@ -17,12 +17,16 @@ async function addToBag(p) {
 	cartButtonText = 'Adding...'
 
 	try {
-		await post('carts/add-to-cart', {
-			pid: p._id,
-			vid: p._id,
-			qty: 1,
-			options: p.options
-		})
+		await post(
+			'carts/add-to-cart',
+			{
+				pid: p._id,
+				vid: p._id,
+				qty: 1,
+				options: p.options
+			},
+			$page.data.origin
+		)
 
 		await invalidateAll() //$page.url.toString()
 		cartButtonText = 'Go to cart'
@@ -52,7 +56,7 @@ async function addToBag(p) {
 			<!-- Brand -->
 
 			{#if product.brand?.name}
-				<h6 class="ext-lg sm:text-xl"><b>{product.brand?.name}</b></h6>
+				<h6 class="text-center text-lg uppercase"><b>{product.brand?.name}</b></h6>
 			{/if}
 
 			<!-- Name -->
@@ -66,19 +70,19 @@ async function addToBag(p) {
 
 			<!-- prices -->
 
-			<div class="flex items-center gap-2">
-				<span class="text-sm"><b>{product.formattedPrice}</b></span>
+			<div class="flex flex-wrap items-center gap-2 max-w-max mx-auto">
+				<span class="text-sm whitespace-nowrap"><b>{product.formattedPrice}</b></span>
 
-				{#if product.formattedMrp > product.formattedPrice}
-					<span class="text-xs">
+				{#if product.mrp > product.price}
+					<span class="text-xs whitespace-nowrap">
 						<strike>{product.formattedMrp}</strike>
 					</span>
-				{/if}
 
-				{#if ((product.formattedMrp - product.formattedPrice) / product.formattedMrp) * 100 > 0}
-					<span class="text-xs">
-						({((product.formattedMrp - product.formattedPrice) / product.formattedMrp) * 100}%)
-					</span>
+					{#if Math.floor(((product.mrp - product.price) / product.mrp) * 100) > 0}
+						<span class="text-xs whitespace-nowrap">
+							({Math.floor(((product.mrp - product.price) / product.mrp) * 100)}%)
+						</span>
+					{/if}
 				{/if}
 			</div>
 		</div>

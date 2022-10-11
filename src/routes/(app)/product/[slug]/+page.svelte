@@ -1058,10 +1058,10 @@ function handleMobileCanvas() {
 			</div>
 		{/if}
 
-		{#if data.product?.relatedProducts?.length}
+		{#if data.relatedProducts?.data?.length}
 			<hr class="mb-5 w-full sm:mb-10" />
 
-			<SimilarProducts similarProducts="{data.product?.relatedProducts}" />
+			<SimilarProducts similarProducts="{data.relatedProducts?.data}" />
 		{/if}
 	</div>
 </div>

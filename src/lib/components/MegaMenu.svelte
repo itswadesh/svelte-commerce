@@ -49,9 +49,14 @@ async function getMegaMenu() {
 	if (browser) {
 		try {
 			const localMegamenu = localStorage.getItem('megamenu')
+
 			if (!localMegamenu) {
-				const res = await getAPI(`categories/megamenu?megamenu=true&store=${$page.data?.store?.id}`)
-				megamenu = res
+				megamenu = await getAPI(
+					`categories/megamenu?megamenu=true&store=${$page.data?.store?.id}`,
+					$page.data.origin
+				)
+
+				// console.log('zzzzzzzzzzzzzzzzzz', megamenu)
 			} else {
 				megamenu = JSON.parse(localMegamenu)
 			}
@@ -63,14 +68,14 @@ async function getMegaMenu() {
 }
 </script>
 
-<ul class="flex flex-1 flex-row items-center justify-center whitespace-nowrap font-semibold">
+<ul class="flex flex-row items-center justify-center font-semibold tracking-wide">
 	{#each megamenu as category, index}
 		<li
 			class="hoverable mx-1"
 			on:mouseenter="{() => (selectedCategory = category.name)}"
 			on:mouseleave="{() => (selectedCategory = '')}">
 			<div
-				class="itmes-center relative flex h-20 flex-shrink-0 justify-center border-b-4 border-transparent p-2 font-medium uppercase
+				class="itmes-center relative flex h-20 flex-shrink-0 justify-center whitespace-nowrap border-b-4 border-transparent p-2 font-medium uppercase
                     {index % 6 == 0 ? 'hover:border-yellow-500' : ''}
                     {index % 6 == 1 ? 'hover:border-purple-500' : ''}
                     {index % 6 == 2 ? 'hover:border-red-500' : ''}
@@ -88,10 +93,10 @@ async function getMegaMenu() {
                     {index % 6 == 4 && selectedCategory === category.name ? 'border-pink-500' : ''}
                     {index % 6 == 5 && selectedCategory === category.name ? 'border-blue-500' : ''}
                     ">
-				<a href="/{category.link}" class="flex items-center gap-1">
+				<a href="/{category.link || category.slug}" class="flex items-center gap-1 w-full">
 					<!-- Root category -->
 
-					<span class="flex-1">{category.name}</span>
+					<span>{category.name}</span>
 
 					<!-- Down icon -->
 
@@ -112,41 +117,49 @@ async function getMegaMenu() {
 			</div>
 
 			{#if category.children?.length}
-				<div class="mega-menu border-b bg-white shadow-2xl">
-					<div class="flex max-h-[50vh] flex-col flex-wrap items-start gap-1 p-6 shadow-inner">
+				<div class="mega-menu relative border-b bg-white shadow-2xl">
+					<div class="absolute inset-0 z-0 grid w-full grid-cols-4">
+						{#each { length: 4 } as _, ix}
+							<div class="{ix % 2 === 0 ? 'bg-white' : 'bg-gray-50'}"></div>
+						{/each}
+					</div>
+
+					<ul
+						class="relative z-10 flex max-h-[75vh] min-h-[50vh] flex-col flex-wrap items-start shadow-inner">
 						<!-- 2nd level child category  -->
 
 						{#each category.children as c}
-							<div class="mb-2 w-64 flex-1 flex-shrink-0 flex-grow-0 pr-2 text-sm">
-								<a href="/{`${c.link}`}" class="flex">
-									<h1
-										class="mb-2
-                                                {index % 6 == 0 ? 'text-yellow-500 ' : ''}
-                                                {index % 6 == 1 ? 'text-purple-500 ' : ''}
-                                                {index % 6 == 2 ? 'text-red-500 ' : ''}
-                                                {index % 6 == 3 ? 'text-green-500 ' : ''}
-                                                {index % 6 == 4 ? 'text-pink-500 ' : ''}
-                                                {index % 6 == 5 ? 'text-blue-500 ' : ''}">
-										{c.name}
-									</h1>
+							<li class="mb-2 w-1/4 flex-1 flex-shrink-0 flex-grow-0 p-6 pr-2 text-sm">
+								<a
+									href="/{c.link || c.slug}"
+									class="block w-full mb-2
+                                    {index % 6 == 0 ? 'text-yellow-500 ' : ''}
+                                    {index % 6 == 1 ? 'text-purple-500 ' : ''}
+                                    {index % 6 == 2 ? 'text-red-500 ' : ''}
+                                    {index % 6 == 3 ? 'text-green-500 ' : ''}
+                                    {index % 6 == 4 ? 'text-pink-500 ' : ''}
+                                    {index % 6 == 5 ? 'text-blue-500 ' : ''}">
+									{c.name}
 								</a>
 
 								{#if c && c.children}
-									<div class="flex flex-col flex-wrap items-start gap-0.5">
+									<ul class="flex flex-col flex-wrap items-start gap-0.5">
 										<!-- 3rd level child category  -->
 
 										{#each c.children as c1, ixx}
-											<a href="/{c1.link}">
-												<h2 class="min-w-full font-light hover:font-medium">
+											<li class="w-full">
+												<a
+													href="/{c1.link || c1.slug}"
+													class="block w-full font-light hover:font-medium">
 													{c1.name}
-												</h2>
-											</a>
+												</a>
+											</li>
 										{/each}
-									</div>
+									</ul>
 								{/if}
-							</div>
+							</li>
 						{/each}
-					</div>
+					</ul>
 				</div>
 			{/if}
 		</li>
