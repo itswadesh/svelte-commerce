@@ -21,6 +21,9 @@ declare namespace App {
 		megamenu: any
 		store: any
 		session: string
+		origin: string
+		cartId: string
+		cartQty: number
 	}
 
 	// interface PageData {}

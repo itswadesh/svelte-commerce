@@ -1,6 +1,5 @@
 import type { Handle } from '@sveltejs/kit'
 // import { getAPI } from '$lib/util/api'
-import { domain } from '$lib/config'
 import {
 	stripePublishableKey,
 	id,
@@ -9,9 +8,21 @@ import {
 	address,
 	phone,
 	websiteName,
-	websiteLegalName
+	websiteLegalName,
+	domain,
+	description,
+	keywords,
+	siteTitle,
+	facebookPage,
+	linkedinPage,
+	instagramPage,
+	twitterPage,
+	pinterestPage,
+	youtubeChannel,
+	GOOGLE_ANALYTICS_ID,
+	GOOGLE_CLIENT_ID
 } from '$lib/config'
-import { gett, post } from '$lib/utils'
+import { gett } from '$lib/utils'
 // import Cookie from 'cookie-universal'
 
 /** @type {import('@sveltejs/kit').HandleFetch} */
@@ -21,7 +32,7 @@ export const handleFetch = async ({ event, request, fetch }) => {
 	return fetch(request)
 }
 /** @type {import('@sveltejs/kit').HandleServerError} */
-export const handleError = async ({ error, event }) => {
+export const handleError = async ({ error }) => {
 	return {
 		message: 'Whoops!',
 		code: error.code ?? 'UNKNOWN'
@@ -30,21 +41,59 @@ export const handleError = async ({ error, event }) => {
 export const handle: Handle = async ({ event, resolve }) => {
 	const WWW_URL = new URL(event.request.url).origin
 	event.locals.origin = WWW_URL
-	// const st = localStore('megamenu', { children: [], total: 0 })
-
-	// const d = new Date()
-	const store = {
+	const cookieStore = event.cookies.get('store')
+	let store = {
 		id,
 		domain,
 		logo,
+		email,
 		address,
 		phone,
-		email,
 		websiteName,
 		websiteLegalName,
+		title: siteTitle,
+		description,
+		keywords,
+		facebookPage,
+		instagramPage,
+		twitterPage,
+		linkedinPage,
+		pinterestPage,
+		youtubeChannel,
+		GOOGLE_CLIENT_ID,
+		GOOGLE_ANALYTICS_ID,
 		stripePublishableKey
-		// kitqlCartId: event.locals['kitqlCartId'],
 	}
+	if (!cookieStore) {
+		const storeRes = await gett(`init?domain=${domain}`)
+		const { storeOne } = storeRes
+		store = {
+			id: storeOne._id,
+			domain: storeOne.domain,
+			email: storeOne.email,
+			address: storeOne.address,
+			phone: storeOne.phone,
+			websiteLegalName: storeOne.websiteLegalName,
+			websiteName: storeOne.websiteName,
+			title: storeOne.title,
+			description: storeOne.description,
+			keywords: storeOne.keywords,
+			stripePublishableKey: storeOne.stripePublishableKey,
+			logo: storeOne.logo,
+			facebookPage: storeOne.facebookPage,
+			instagramPage: storeOne.instagramPage,
+			twitterPage: storeOne.twitterPage,
+			linkedinPage: storeOne.linkedinPage,
+			pinterestPage: storeOne.pinterestPage,
+			youtubeChannel: storeOne.youtubeChannel,
+			GOOGLE_CLIENT_ID: storeOne.GOOGLE_CLIENT_ID,
+			GOOGLE_ANALYTICS_ID: storeOne.GOOGLE_ANALYTICS_ID
+		}
+		event.cookies.set('store', JSON.stringify(store))
+	} else {
+		store = JSON.parse(cookieStore)
+	}
+
 	event.locals.store = store
 
 	let me: any = event.cookies.get('me')

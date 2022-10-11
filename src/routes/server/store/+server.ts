@@ -1,60 +1,31 @@
 import { domain } from '$lib/config'
 import { gett } from '$lib/utils'
 
-export async function GET({ request, locals, cookies }) {
-	let init: any = {}
-	const d = new Date()
-	init = await gett(`init?domain=${domain}`, request.headers.get('cookie'))
-	const { storeOne, settings, popularSearches } = init
-	console.log('storeOne...........', storeOne)
-	// console.log('settings...........', settings)
-	// console.log('popularSearches...........', popularSearches)
-	const d3 = new Date()
-	console.log('INIT loaded at Footer: ', d3.getTime() - d.getTime())
-	const {
-		_id,
-		stripePublishableKey,
-		logo,
-		email,
-		address,
-		phone,
-		websiteName,
-		websiteLegalName,
-		domain,
-		description,
-		entity,
-		siteTitle,
-		siteShortTitle,
-		ogLanguage,
-		siteLanguage,
-		icon,
-		backgroundColor,
-		themeColor,
-		shortcuts,
-		screenshots
-	} = storeOne
-	locals.store = {
-		id: _id,
-		logo,
-		email,
-		address,
-		phone,
-		websiteName,
-		websiteLegalName,
-		stripePublishableKey,
-		domain,
-		description,
-		entity,
-		siteTitle,
-		siteShortTitle,
-		ogLanguage,
-		siteLanguage,
-		icon,
-		backgroundColor,
-		themeColor,
-		shortcuts,
-		screenshots
+export async function GET({ cookies }) {
+	const storeRes = await gett(`init?domain=${domain}`)
+	const { storeOne, settings, popularSearches, megamenu } = storeRes
+	const store = {
+		id: storeOne._id,
+		domain: storeOne.domain,
+		email: storeOne.email,
+		address: storeOne.address,
+		phone: storeOne.phone,
+		websiteLegalName: storeOne.websiteLegalName,
+		websiteName: storeOne.websiteName,
+		title: storeOne.title,
+		description: storeOne.description,
+		keywords: storeOne.keywords,
+		stripePublishableKey: storeOne.stripePublishableKey,
+		logo: storeOne.logo,
+		facebookPage: storeOne.facebookPage,
+		instagramPage: storeOne.instagramPage,
+		twitterPage: storeOne.twitterPage,
+		linkedinPage: storeOne.linkedinPage,
+		pinterestPage: storeOne.pinterestPage,
+		youtubeChannel: storeOne.youtubeChannel,
+		GOOGLE_CLIENT_ID: storeOne.GOOGLE_CLIENT_ID,
+		GOOGLE_ANALYTICS_ID: storeOne.GOOGLE_ANALYTICS_ID
 	}
-	cookies.set('store', JSON.stringify(locals.store), { path: '/' })
-	return new Response(JSON.stringify({ storeOne, settings, popularSearches }))
+	cookies.set('store', JSON.stringify(store))
+	return new Response(JSON.stringify({ storeOne, settings: {}, popularSearches, megamenu }))
 }

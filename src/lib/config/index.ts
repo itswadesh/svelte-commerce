@@ -34,22 +34,11 @@ export const mediaqueries = {
 	noanimations: '(prefers-reduced-motion: reduce)'
 }
 export const currency = { symbol: '₹', code: 'INR' }
-export const HTTP_ENDPOINT = PUBLIC_HTTP_ENDPOINT || 'https://api.misiki.in'
+export const HTTP_ENDPOINT = PUBLIC_HTTP_ENDPOINT || 'https://api.misiki.io'
 export const IMAGE_CDN_URL = 'https://ik.imagekit.io/3wzatecz51w3i/zapvi'
-export const host = 'food.misiki.in'
-export const pageSize = 20
-export const stripePublishableKey =
-	'pk_test_51HXxXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXq'
-export const contactEmail = 'hi@misiki.in'
-export const logo = '/logo.png'
-export const facebookPage = 'https://www.facebook.com/misiki/'
-export const instagramPage = 'https://www.instagram.com/misiki/'
-export const twitterPage = 'https://twitter.com/MisikiOfficial'
-export const linkedinPage = 'https://www.linkedin.com/company/misiki/'
-export const pinterestPage = 'https://www.pinterest.com/company/misiki/'
-export const youtubeChannel = 'https://www.youtube.com/channel/UCcb3eRHh-7qAiv9ea7jmTHQ'
 export const PINCODES_API = PUBLIC_PINCODES_API
-export const GOOGLE_CLIENT_ID =
-	'414060469322-n4raqj2rdbjhegvrtdk6mhbdm4sd0oc7.apps.googleusercontent.com'
-export const GOOGLE_ANALYTICS_ID = 'G-ZMZXZWG90W'
+
+export const entity = 'KitCommerce'
+export const siteTitle = 'KitCommerce'
+export const siteShortTitle = 'KitCommerce' // used as SchemaOrg siteTitleAlt
 export * from './website'
