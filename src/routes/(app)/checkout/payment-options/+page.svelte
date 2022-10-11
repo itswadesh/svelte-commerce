@@ -23,7 +23,6 @@ import { post } from '$lib/util/api'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { onMount } from 'svelte'
 import { fireGTagEvent } from '$lib/util/gTag'
-import { domain, email, logo, websiteName, address as storeAddress } from '$lib/config'
 
 const seoProps = {
 	title: 'Select Payment Option',
@@ -31,17 +30,19 @@ const seoProps = {
 }
 
 export let data
-$: ({
-	loading,
-	err,
-	paymentMethods,
-	address,
-	me,
-	cart,
-	prescription,
-	addressId,
-	stripePublishableKey
-} = data)
+
+// $: ({
+// 	loading,
+// 	err,
+// 	paymentMethods,
+// 	address,
+// 	me,
+// 	cart,
+// 	prescription,
+// 	addressId,
+// 	stripePublishableKey
+// } = data)
+
 let errorMessage = 'Select a Payment Method',
 	disabled = false,
 	showPayWithBankTransfer = false,
@@ -63,8 +64,11 @@ let errorMessage = 'Select a Payment Method',
 	paymentDenied = false,
 	razorpayReady = false
 
-$: if (paymentMethods?.length === 1 && paymentMethods[0]?.type === 'pg') {
-	const pm = paymentMethods[0]
+$: if (data.paymentMethods?.length === 1 && data.paymentMethods[0]?.type === 'pg') {
+	// console.log('zzzzzzzzzzzzzzzzzz', data.paymentMethods[0])
+
+	const pm = data.paymentMethods[0]
+
 	submit(pm)
 }
 
@@ -73,7 +77,7 @@ onMount(async () => {
 	razorpayScript.setAttribute('src', 'https://checkout.razorpay.com/v1/checkout.js')
 	document.head.appendChild(razorpayScript)
 	razorpayReady = true
-	fireGTagEvent('begin_checkout', cart)
+	fireGTagEvent('begin_checkout', data.cart)
 })
 
 function paymentMethodChanged(pm) {
@@ -95,23 +99,27 @@ async function submit(pm) {
 
 	if (paymentMethod === 'cod') {
 		try {
-			loading = true
-			const res = await post('orders/checkout/cod', {
-				address: addressId,
-				paymentMethod: 'COD',
-				prescription: prescription?._id
-			})
+			data.loading = true
+			const res = await post(
+				'orders/checkout/cod',
+				{
+					address: data.addressId,
+					paymentMethod: 'COD',
+					prescription: data.prescription?._id
+				},
+				$page.data.origin
+			)
 
 			goto(`/payment/success?id=${res?._id}&status=PAYMENT_SUCCESS&provider=COD`)
 		} catch (e) {
 			toast(e, 'error')
 		} finally {
-			loading = false
+			data.loading = false
 		}
 	} else if (paymentMethod === 'cashfree') {
 		try {
-			loading = true
-			const res = await post(`payments/checkout-cf`, { address: addressId })
+			data.loading = true
+			const res = await post(`payments/checkout-cf`, { address: data.addressId }, $page.data.origin)
 			if (res?.redirectUrl && res?.redirectUrl !== null) {
 				goto(`${res?.redirectUrl}`)
 			} else {
@@ -120,31 +128,39 @@ async function submit(pm) {
 		} catch (e) {
 			toast(e?.message, 'error')
 		} finally {
-			loading = false
+			data.loading = false
 		}
 	} else if (paymentMethod === 'razorpay') {
 		try {
-			const rp = await post(`payments/checkout-rp`, {
-				address: addressId
-			})
+			const rp = await post(
+				`payments/checkout-rp`,
+				{
+					address: data.addressId
+				},
+				$page.data.origin
+			)
 
 			// console.log('rp = ', rp)
 
 			const options = {
 				key: rp.keyId, // Enter the Key ID generated from the Dashboard
-				name: domain,
-				description: `Payment for ${websiteName}`,
-				image: logo,
+				name: 'Zapvi.in',
+				description: 'Payment for Zapvi',
+				image: '/logo.svg',
 				amount: rp.amount,
 				order_id: rp.id,
 				async handler(response) {
 					// console.log('response = ', response)
 
 					try {
-						const capture = await post(`payments/capture-rp`, {
-							rpPaymentId: response.razorpay_payment_id,
-							rpOrderId: response.razorpay_order_id
-						})
+						const capture = await post(
+							`payments/capture-rp`,
+							{
+								rpPaymentId: response.razorpay_payment_id,
+								rpOrderId: response.razorpay_order_id
+							},
+							$page.data.origin
+						)
 
 						// console.log('capture = ', capture)
 
@@ -152,18 +168,18 @@ async function submit(pm) {
 						goto(`/payment/success?id=${capture._id}`)
 					} catch (e) {
 						// toast(e, 'error')
-						goto(`/payment/failure?ref=/checkout/payment-options?address=${addressId}`)
+						goto(`/payment/failure?ref=/checkout/payment-options?address=${data.addressId}`)
 					} finally {
 					}
 				},
 				prefill: {
-					name: `${me.firstName} ${me.lastName}`,
-					phone: me.phone,
-					email: me.email || email,
-					contact: me.phone
+					name: `${data.me.firstName} ${data.me.lastName}`,
+					phone: data.me.phone,
+					email: data.me.email || 'help@zapvi.in',
+					contact: data.me.phone
 				},
 				notes: {
-					address: storeAddress
+					address: 'Padmajyoti Marg, Semiliguda, Odisha 764036'
 				},
 				theme: {
 					color: '#112D4E'
@@ -175,7 +191,7 @@ async function submit(pm) {
 		} catch (e) {
 			toast(e?.message, 'error')
 		} finally {
-			loading = false
+			data.loading = false
 		}
 	} else {
 		paymentDenied = true
@@ -193,7 +209,7 @@ function checkIfStripeCardValid({ detail }) {
 
 <SEO {...seoProps} />
 
-<Error err="{err}" />
+<Error err="{data.err}" />
 
 <div class="container mx-auto min-h-screen w-full max-w-6xl p-3 py-5 sm:p-10">
 	<CheckoutHeader selected="payment" />
@@ -202,9 +218,9 @@ function checkIfStripeCardValid({ detail }) {
 		<div class="w-full flex-1">
 			<h2 class="mb-5 text-xl font-bold capitalize tracking-wide sm:text-2xl">Payment Options</h2>
 
-			{#if paymentMethods}
+			{#if data.paymentMethods}
 				<div class="flex w-full flex-col gap-4" class:wiggle="{paymentDenied}">
-					{#each paymentMethods as pm}
+					{#each data.paymentMethods as pm}
 						<label
 							class="flex w-full cursor-pointer items-center gap-2 rounded-md border border-gray-300 p-4 shadow-md transition duration-300 hover:bg-primary-50 sm:gap-4">
 							<input
@@ -273,7 +289,7 @@ function checkIfStripeCardValid({ detail }) {
 
 		<div class="w-full md:w-80 md:flex-shrink-0 md:flex-grow-0">
 			<h2 class="text-xl font-bold capitalize tracking-wide sm:text-2xl">Cart Summary</h2>
-			{#if address}
+			{#if data.address}
 				<div class="mt-5 border-t pt-5">
 					<h5 class="mb-2 text-xl font-bold capitalize tracking-wide">Delivery Address</h5>
 
@@ -282,8 +298,8 @@ function checkIfStripeCardValid({ detail }) {
 							<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Name</h5>
 
 							<p>
-								{address.firstName}
-								{address.lastName}
+								{data.address.firstName}
+								{data.address.lastName}
 							</p>
 						</div>
 
@@ -291,24 +307,24 @@ function checkIfStripeCardValid({ detail }) {
 							<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Address</h5>
 
 							<p class="flex flex-wrap items-center">
-								{#if address.address}
-									{address.address}
+								{#if data.address.address}
+									{data.address.address}
 								{/if}
 
-								{#if address.locality}
-									, {address.locality}
+								{#if data.address.locality}
+									, {data.address.locality}
 								{/if}
 
-								{#if address.city}
-									, {address.city}
+								{#if data.address.city}
+									, {data.address.city}
 								{/if}
 
-								{#if address.state}
-									, {address.state}
+								{#if data.address.state}
+									, {data.address.state}
 								{/if}
 
-								{#if address.country}
-									, {address.country}
+								{#if data.address.country}
+									, {data.address.country}
 								{/if}
 							</p>
 						</div>
@@ -316,25 +332,25 @@ function checkIfStripeCardValid({ detail }) {
 						<div class="my-1 flex flex-row">
 							<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Pin</h5>
 
-							<h6>{address.zip}</h6>
+							<h6>{data.address.zip}</h6>
 						</div>
 
 						<div class="my-1 flex flex-row">
 							<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Phone</h5>
 
-							<h6>{address.phone}</h6>
+							<h6>{data.address.phone}</h6>
 						</div>
 
 						<div class="my-1 flex flex-row flex-wrap">
 							<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Email</h5>
 
-							<h6>{address.email}</h6>
+							<h6>{data.address.email}</h6>
 						</div>
 					</div>
 				</div>
 			{/if}
 
-			{#if prescription}
+			{#if data.prescription}
 				<div class="mt-5 border-t pt-5">
 					<h5 class="mb-2 text-xl font-bold capitalize tracking-wide">Prescription Detail</h5>
 
@@ -343,13 +359,13 @@ function checkIfStripeCardValid({ detail }) {
 							<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Name</h5>
 
 							<p>
-								{prescription.name}
+								{data.prescription.name}
 							</p>
 						</div>
 
 						<div>
 							<LazyImg
-								src="{prescription.url}"
+								src="{data.prescription.url}"
 								alt=""
 								height="80"
 								class="h-20 w-auto object-contain object-top text-xs" />
@@ -359,9 +375,9 @@ function checkIfStripeCardValid({ detail }) {
 			{/if}
 
 			<Pricesummary
-				cart="{cart}"
+				cart="{data.cart}"
 				text="{errorMessage || 'Confirm Order'}"
-				loading="{loading}"
+				loading="{data.loading}"
 				hideCheckoutButton="{selectedPaymentMethod.name === 'Stripe'}"
 				disabled="{!razorpayReady ||
 					!selectedPaymentMethod?.name ||

@@ -1,15 +1,7 @@
 // import { getAPI } from '$lib/util/api'
 import cookie from 'cookie'
 export const prerender = false
-import {
-	stripePublishableKey,
-	id,
-	email,
-	address,
-	phone,
-	websiteName,
-	websiteLegalName
-} from '$lib/config'
+
 import { gett } from '$lib/utils'
 
 export async function load({ url, request, locals, cookies }) {

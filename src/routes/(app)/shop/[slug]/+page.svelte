@@ -7,8 +7,7 @@ import { goto } from '$app/navigation'
 import Hero from '$lib/home/Hero.svelte'
 import HeroBanners from '$lib/home/HeroBanners.svelte'
 import PageIdPickedBanner from '$lib/components/PageIdBanners/PageIdPickedBanner.svelte'
-import { websiteName } from '$lib/config'
-
+import { page } from '$app/stores'
 export let data
 
 // console.log('zzzzzzzzzzzzzzzzzz', data)
@@ -112,7 +111,7 @@ let seoProps = {
 							<div>
 								<h1
 									class="uppercase p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 md:py-10 sm:text-2xl md:text-3xl xl:text-4xl">
-									BEST OF {websiteName} EXCLUSIVE
+									BEST OF {$page.data.store.websiteName} EXCLUSIVE
 								</h1>
 
 								<HeroBanners heroBanners="{heroBanners}" />

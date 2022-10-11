@@ -7,16 +7,6 @@ import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
 import { toast } from '$lib/util'
 import { post } from '$lib/util/api'
 import { page } from '$app/stores'
-import {
-	address,
-	facebookPage,
-	instagramPage,
-	linkedinPage,
-	pinterestPage,
-	twitterPage,
-	websiteName,
-	youtubeChannel
-} from '$lib/config'
 
 let seoProps = {
 	title: `Contact Us`,
@@ -39,7 +29,7 @@ async function submitContactInformation() {
 				fullName: fullName,
 				email: email,
 				phone: phone,
-				subject: `Someone contact us from ${websiteName}`,
+				subject: `Someone contact us from ${$page.data.store.websiteName}`,
 				message: message
 			},
 			$page.data.origin
@@ -123,7 +113,7 @@ async function submitContactInformation() {
 						</svg>
 
 						<span class="flex-1">
-							{address}
+							{$page.data.store.address}
 						</span>
 					</li>
 				</ul>
@@ -134,7 +124,7 @@ async function submitContactInformation() {
 					<li
 						class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#4267B2]">
 						<a
-							href="{facebookPage}"
+							href="{$page.data.store.facebookPage}"
 							aria-label="Click to route facebook page"
 							target="_blank"
 							rel="noopener noreferrer"
@@ -160,7 +150,7 @@ async function submitContactInformation() {
 					<li
 						class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#C13584]">
 						<a
-							href="{instagramPage}"
+							href="{$page.data.store.instagramPage}"
 							aria-label="Click to route instagram page"
 							target="_blank"
 							rel="noopener noreferrer"
@@ -187,7 +177,7 @@ async function submitContactInformation() {
 					<li
 						class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#1DA1F2]">
 						<a
-							href="{twitterPage}"
+							href="{$page.data.store.twitterPage}"
 							aria-label="Click to route twitter page"
 							target="_blank"
 							rel="noopener noreferrer"
@@ -214,7 +204,7 @@ async function submitContactInformation() {
 					<li
 						class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#D32D2D]">
 						<a
-							href="{pinterestPage}"
+							href="{$page.data.store.pinterestPage}"
 							aria-label="Click to route pinterest page"
 							target="_blank"
 							rel="noopener noreferrer"
@@ -243,7 +233,7 @@ async function submitContactInformation() {
 					<li
 						class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#0077b5]">
 						<a
-							href="{linkedinPage}"
+							href="{$page.data.store.linkedinPage}"
 							aria-label="Click to route linkedin page"
 							target="_blank"
 							rel="noopener noreferrer"
@@ -272,7 +262,7 @@ async function submitContactInformation() {
 					<li
 						class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#FF0000]">
 						<a
-							href="{youtubeChannel}"
+							href="{$page.data.store.youtubeChannel}"
 							aria-label="Click to route youtube page"
 							target="_blank"
 							rel="noopener noreferrer"
