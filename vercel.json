@@ -10,7 +10,6 @@
         }
     ],
     "env": {
-        "PUBLIC_DOMAIN": "zapvi.in",
         "PUBLIC_HTTP_ENDPOINT": "https://staging.zapvi.in",
         "NODE_OPTIONS": "--max-old-space-size=7680"
     }
