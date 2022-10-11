@@ -270,7 +270,7 @@ onMount(() => {
 						<a
 							href="/my/reviews/create?product={data.order?.pid}&ref=/product/{data.order?.slug}"
 							aria-label="Click to route rate & review product"
-							class="whitespace-nowrap font-semibold text-indigo-500 hover:underline focus:outline-none">
+							class="whitespace-nowrap font-semibold text-indigo-500 focus:outline-none hover:underline">
 							Rate & Review Product
 						</a>
 					</div>

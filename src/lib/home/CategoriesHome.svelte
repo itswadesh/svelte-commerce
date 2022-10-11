@@ -107,7 +107,7 @@ let categoryColors = [
 								</div>
 
 								<h6
-									class="line-clamp-2 w-full overflow-ellipsis text-center text-xs capitalize tracking-tighter text-gray-500 group-hover:font-medium group-hover:text-primary-500">
+									class="w-full overflow-ellipsis text-center text-xs capitalize tracking-tighter text-gray-500 line-clamp-2 group-hover:font-medium group-hover:text-primary-500">
 									{category.name}
 								</h6>
 							</a>
@@ -128,7 +128,7 @@ let categoryColors = [
 								</div>
 
 								<h6
-									class="line-clamp-2 w-full overflow-ellipsis text-center text-xs capitalize tracking-tighter text-gray-500 group-hover:font-medium group-hover:text-primary-500">
+									class="w-full overflow-ellipsis text-center text-xs capitalize tracking-tighter text-gray-500 line-clamp-2 group-hover:font-medium group-hover:text-primary-500">
 									{category.name}
 								</h6>
 							</a>
@@ -159,7 +159,7 @@ let categoryColors = [
 						</div>
 
 						<h6
-							class="line-clamp-2 w-full overflow-ellipsis text-center text-xs capitalize tracking-tighter text-gray-500 group-hover:font-medium group-hover:text-primary-500">
+							class="w-full overflow-ellipsis text-center text-xs capitalize tracking-tighter text-gray-500 line-clamp-2 group-hover:font-medium group-hover:text-primary-500">
 							More
 						</h6>
 					</a>
@@ -188,7 +188,7 @@ let categoryColors = [
 									</div>
 
 									<h6
-										class="line-clamp-2 w-full overflow-ellipsis text-center text-xs font-medium capitalize text-gray-500 group-hover:font-semibold sm:text-base">
+										class="w-full overflow-ellipsis text-center text-xs font-medium capitalize text-gray-500 line-clamp-2 group-hover:font-semibold sm:text-base">
 										{category.name}
 									</h6>
 								</a>
@@ -209,7 +209,7 @@ let categoryColors = [
 									</div>
 
 									<h6
-										class="line-clamp-2 w-full overflow-ellipsis text-center text-xs font-medium capitalize text-gray-500 group-hover:font-semibold sm:text-base">
+										class="w-full overflow-ellipsis text-center text-xs font-medium capitalize text-gray-500 line-clamp-2 group-hover:font-semibold sm:text-base">
 										{category.name}
 									</h6>
 								</a>

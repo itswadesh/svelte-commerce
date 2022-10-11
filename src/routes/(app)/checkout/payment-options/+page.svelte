@@ -23,6 +23,7 @@ import { post } from '$lib/util/api'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { onMount } from 'svelte'
 import { fireGTagEvent } from '$lib/util/gTag'
+import { domain, email, logo, websiteName, address as storeAddress } from '$lib/config'
 
 const seoProps = {
 	title: 'Select Payment Option',
@@ -131,9 +132,9 @@ async function submit(pm) {
 
 			const options = {
 				key: rp.keyId, // Enter the Key ID generated from the Dashboard
-				name: 'kitcommerce.tech',
-				description: 'Payment for Misiki',
-				image: '/icon.png',
+				name: domain,
+				description: `Payment for ${websiteName}`,
+				image: logo,
 				amount: rp.amount,
 				order_id: rp.id,
 				async handler(response) {
@@ -158,11 +159,11 @@ async function submit(pm) {
 				prefill: {
 					name: `${me.firstName} ${me.lastName}`,
 					phone: me.phone,
-					email: me.email || 'help@kitcommerce.tech',
+					email: me.email || email,
 					contact: me.phone
 				},
 				notes: {
-					address: '#22, Global Village, Rourkela, Odisha-769002, India'
+					address: storeAddress
 				},
 				theme: {
 					color: '#112D4E'

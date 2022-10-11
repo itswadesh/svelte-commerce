@@ -1,5 +1,6 @@
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
+import { domain } from '$lib/config'
 
 let seoProps = {
 	title: `Printing terms cancellation`,
@@ -18,8 +19,8 @@ let seoProps = {
 		</h1>
 
 		<p class="mb-5 text-sm text-gray-500 sm:text-base">
-			The following Terms and Conditions apply to all transactions on the misiki.in web site. Please
-			scroll through this screen, read them carefully and print a copy for future reference.
+			The following Terms and Conditions apply to all transactions on the {domain} web site. Please scroll
+			through this screen, read them carefully and print a copy for future reference.
 		</p>
 
 		<ul class="flex flex-col gap-5 text-sm sm:text-base">
@@ -49,12 +50,12 @@ let seoProps = {
 					You may request to cancel your order for a refund, up to 2 hours after the date and time
 					of the order. All cancellation requests will be accepted within 2 hours and we will
 					initiate a refund to your original payment method. In that we deduct Rs. 60 as processing
-					fee for any amount of orders you place on misiki.in.
+					fee for any amount of orders you place on {domain}.
 				</p>
 
 				<p class="text-gray-500">
 					Cancellations after 2 hours will not be accepted. When you buy service and products from
-					misiki.in, you agree to these terms.
+					{domain}, you agree to these terms.
 				</p>
 			</li>
 

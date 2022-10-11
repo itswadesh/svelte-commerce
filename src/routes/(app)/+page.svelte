@@ -8,16 +8,20 @@ import PickedBanners from '$lib/home/PickedBanners.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import MobileFooter from '$lib/MobileFooter.svelte'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
+import { getAPI } from '$lib/util/api'
+import { page } from '$app/stores'
+import { browser } from '$app/environment'
+import { toast } from '$lib/util'
+import { onMount } from 'svelte'
+import { websiteName } from '$lib/config'
 
 export let data
 
 const seoProps = {
-	title: 'Custom Printed Mobile Back Cover and Cases Online @Rs. 99 - kitcommerce',
-	description:
-		'Customised Mobile Covers - Buy Custom Photo Printed Mobile Back Cover And Cases Online For All Stylish Phone Models @Rs.99 On kitcommerce Store. 100% Easy Returns.',
+	title: `Custom Printed Mobile Back Cover and Cases Online @Rs. 99 - ${websiteName}`,
+	description: `Customised Mobile Covers - Buy Custom Photo Printed Mobile Back Cover And Cases Online For All Stylish Phone Models @Rs.99 On ${websiteName} Store. 100% Easy Returns.`,
 	slug: '/',
-	keywords:
-		'Customised Mobile Covers, Buy Custom Photo Printed Mobile Back Cover,kitcommerce Store,100% Easy Returns ',
+	keywords: `Customised Mobile Covers, Buy Custom Photo Printed Mobile Back Cover, ${websiteName} Store,100% Easy Returns `,
 	featuredImage: {
 		url: '/logo.svg',
 		width: 672,
@@ -35,9 +39,31 @@ const seoProps = {
 	}
 }
 
+onMount(async () => {
+	// await getHome()
+})
+
 $: heroBanners = data.home?.banners?.data.filter((b) => {
 	return b.type === 'hero'
 })
+
+// let home
+// async function getHome() {
+// 	if (browser) {
+// 		try {
+// 			const localHome = localStorage.getItem('home')
+// 			if (!localHome) {
+// 				const res = await getAPI(`home?store=${$page.data?.store?.id}`)
+// 				home = res
+// 			} else {
+// 				home = JSON.parse(localHome)
+// 			}
+// 		} catch (e) {
+// 			toast(e, 'error')
+// 		} finally {
+// 		}
+// 	}
+// }
 </script>
 
 <SEO {...seoProps} />
@@ -67,16 +93,16 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 					TOP CATEGORIES
 				</h1>
 
-				<div class="w-60 overflow-x-auto scrollbar-none lg:hidden">
+				<div class="max-w-screen overflow-x-auto scrollbar-none lg:hidden">
 					<div class="flex flex-row">
 						{#each data.home?.categories?.data as category}
-							{#if category?.imgCdn}
+							{#if category?.imgCdn || category?.img}
 								<a
 									href="{category.link}"
 									aria-label="Click to get the category related products"
 									class="flex-shrink-0">
 									<LazyImg
-										src="{category.imgCdn}"
+										src="{category.imgCdn || category.img}"
 										alt=""
 										width="375"
 										class="w-[47vw] object-contain sm:w-60" />
@@ -88,13 +114,13 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 
 				<div class="hidden grid-cols-7 lg:grid">
 					{#each data.home?.categories?.data as category}
-						{#if category?.imgCdn}
+						{#if category?.imgCdn || category?.img}
 							<a
 								href="{category.link}"
 								aria-label="Click to get the category related products"
 								class="col-span-1">
 								<LazyImg
-									src="{category.imgCdn}"
+									src="{category.imgCdn || category.img}"
 									alt=""
 									width="375"
 									class="h-full w-full object-contain" />
@@ -124,7 +150,7 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 				<div class="mb-5 sm:mb-10">
 					<h1
 						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 md:py-10 sm:text-2xl md:text-3xl xl:text-4xl">
-						BEST OF MISIKI EXCLUSIVE
+						BEST OF {websiteName} EXCLUSIVE
 					</h1>
 
 					<HeroBanners heroBanners="{heroBanners}" />

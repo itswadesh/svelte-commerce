@@ -1,6 +1,6 @@
 import { getAPI } from '$lib/util/api'
 import { gett } from '$lib/utils'
-
+import { page } from '$app/stores'
 export async function load({ url, params, locals, fetch, parent, cookies }) {
 	const { store } = locals
 
@@ -14,13 +14,13 @@ export async function load({ url, params, locals, fetch, parent, cookies }) {
 	try {
 		loading = true
 
-		const res1 = await getAPI(`categories/megamenu?store=${store?.id}`)
+		const res1 = await gett(`categories/megamenu?store=${store?.id}`)
 
 		newArrivals = res1.filter((m) => {
 			return m.name === 'New Arrivals'
 		})
 
-		const res2 = await getAPI(`products?categories=${newArrivals[0]?._id}&store=${store?.id}`)
+		const res2 = await gett(`products?categories=${newArrivals[0]?._id}&store=${store?.id}`)
 		products = res2?.data
 		productsCount = res2?.count
 

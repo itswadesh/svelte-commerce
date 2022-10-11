@@ -118,7 +118,7 @@ onMount(() => {
 								<span>Sort : </span>
 
 								<select
-									class="bg-transparent px-2 py-1 font-semibold hover:underline focus:outline-none"
+									class="bg-transparent px-2 py-1 font-semibold focus:outline-none hover:underline"
 									bind:value="{data.sort}"
 									on:change="{() => sortNow(data.sort)}">
 									{#each sorts as s}

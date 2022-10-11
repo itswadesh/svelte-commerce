@@ -54,7 +54,7 @@ let showDropdownMegaMenu = []
 									<li class="h-auto w-full flex-1">
 										<a href="{c.link}" aria-label="Click to route this page">
 											<h6
-												class="w-full cursor-pointer rounded py-2 px-4 text-left transition duration-300 hover:bg-primary-50 focus:outline-none">
+												class="w-full cursor-pointer rounded py-2 px-4 text-left transition duration-300 focus:outline-none hover:bg-primary-50">
 												{c.name}
 											</h6>
 										</a>

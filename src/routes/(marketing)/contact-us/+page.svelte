@@ -1,26 +1,63 @@
 <script>
+import Error from '$lib/components/Error.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import TextareaFloating from '$lib/ui/TextareaFloating.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
+import { toast } from '$lib/util'
+import { post } from '$lib/util/api'
+import { page } from '$app/stores'
+import {
+	address,
+	facebookPage,
+	instagramPage,
+	linkedinPage,
+	pinterestPage,
+	twitterPage,
+	websiteName,
+	youtubeChannel
+} from '$lib/config'
 
 let seoProps = {
 	title: `Contact Us`,
 	description: `Contact Us`
 }
 
-let contactPerson = {
-	firstName: '',
-	lastName: '',
-	email: '',
-	phone: '',
-	message: ''
-}
+let fullName = ''
+let email = ''
+let phone
+let message = ''
+let loading = false
+let err
 
-function submitContactInformation(contactPerson) {
-	alert(
-		`This is not dynamic | filled datas are :- ${contactPerson.firstName}, ${contactPerson.lastName}, ${contactPerson.email}, ${contactPerson.phone}, ${contactPerson.message}`
-	)
+async function submitContactInformation() {
+	try {
+		loading = true
+		const res = await post(
+			`contact-us?store=${$page.data?.store?.id}`,
+			{
+				fullName: fullName,
+				email: email,
+				phone: phone,
+				subject: `Someone contact us from ${websiteName}`,
+				message: message
+			},
+			$page.data.origin
+		)
+
+		toast('You have successfully contacted with us', 'success')
+
+		fullName = ''
+		email = ''
+		phone
+		message = ''
+	} catch (e) {
+		// console.log('error = ', e)
+
+		err = e
+	} finally {
+		loading = false
+	}
 }
 </script>
 
@@ -37,7 +74,7 @@ function submitContactInformation(contactPerson) {
 		</div>
 
 		<div class="grid grid-cols-1 rounded-xl border shadow-lg xl:grid-cols-3">
-			<div class="col-span-1 m-2 overflow-hidden rounded-xl bg-primary-500 p-5 text-white sm:p-10">
+			<div class="col-span-1 m-2 overflow-hidden rounded-xl bg-gray-800 p-5 text-white sm:p-10">
 				<h2 class="mb-2 text-xl font-semibold sm:text-2xl">Contact Information</h2>
 
 				<p class="mb-5 text-sm text-gray-400 sm:text-base">
@@ -48,7 +85,7 @@ function submitContactInformation(contactPerson) {
 					<li class="flex gap-4">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
-							class="mt-0.5 h-6 w-6 text-cyan-500"
+							class="mt-0.5 h-6 w-6"
 							viewBox="0 0 20 20"
 							fill="currentColor">
 							<path
@@ -56,13 +93,13 @@ function submitContactInformation(contactPerson) {
 							></path>
 						</svg>
 
-						<span class="flex-1 text-white"> +91 9876543210 (Wrong No.) </span>
+						<span class="flex-1"> +91 6370248486 </span>
 					</li>
 
 					<li class="flex gap-4">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
-							class="mt-0.5 h-6 w-6 text-cyan-500"
+							class="mt-0.5 h-6 w-6"
 							viewBox="0 0 20 20"
 							fill="currentColor">
 							<path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"
@@ -70,13 +107,13 @@ function submitContactInformation(contactPerson) {
 							<path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
 						</svg>
 
-						<span class="flex-1 text-white"> help@misiki.in </span>
+						<span class="flex-1"> contact@lrnr.in </span>
 					</li>
 
 					<li class="flex gap-4">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
-							class="mt-0.5 h-6 w-6 text-cyan-500"
+							class="mt-0.5 h-6 w-6"
 							viewBox="0 0 20 20"
 							fill="currentColor">
 							<path
@@ -85,8 +122,8 @@ function submitContactInformation(contactPerson) {
 								clip-rule="evenodd"></path>
 						</svg>
 
-						<span class="flex-1 text-white">
-							#22, Global Village, Rourkela, Odisha - 769002, India
+						<span class="flex-1">
+							{address}
 						</span>
 					</li>
 				</ul>
@@ -95,9 +132,9 @@ function submitContactInformation(contactPerson) {
 					<!-- Facebook -->
 
 					<li
-						class="duraton-300 h-10 w-10 overflow-hidden rounded-full text-white transition hover:bg-[#4267B2]">
+						class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#4267B2]">
 						<a
-							href="https://www.facebook.com/misiki.store/"
+							href="{facebookPage}"
 							aria-label="Click to route facebook page"
 							target="_blank"
 							rel="noopener noreferrer"
@@ -121,9 +158,9 @@ function submitContactInformation(contactPerson) {
 					<!-- Instagram -->
 
 					<li
-						class="duraton-300 h-10 w-10 overflow-hidden rounded-full text-white transition hover:bg-[#C13584]">
+						class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#C13584]">
 						<a
-							href="https://www.instagram.com/misiki/"
+							href="{instagramPage}"
 							aria-label="Click to route instagram page"
 							target="_blank"
 							rel="noopener noreferrer"
@@ -148,9 +185,9 @@ function submitContactInformation(contactPerson) {
 					<!-- Twitter -->
 
 					<li
-						class="duraton-300 h-10 w-10 overflow-hidden rounded-full text-white transition hover:bg-[#1DA1F2]">
+						class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#1DA1F2]">
 						<a
-							href="https://twitter.com/misikiofficial"
+							href="{twitterPage}"
 							aria-label="Click to route twitter page"
 							target="_blank"
 							rel="noopener noreferrer"
@@ -172,12 +209,41 @@ function submitContactInformation(contactPerson) {
 						</a>
 					</li>
 
+					<!-- Pinterest -->
+
+					<li
+						class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#D32D2D]">
+						<a
+							href="{pinterestPage}"
+							aria-label="Click to route pinterest page"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="flex h-full w-full items-center justify-center">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-5 w-5"
+								viewBox="0 0 24 24"
+								stroke-width="2"
+								stroke="currentColor"
+								fill="none"
+								stroke-linecap="round"
+								stroke-linejoin="round">
+								<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+								<line x1="8" y1="20" x2="12" y2="11"></line>
+								<path
+									d="M10.7 14c.437 1.263 1.43 2 2.55 2c2.071 0 3.75 -1.554 3.75 -4a5 5 0 1 0 -9.7 1.7"
+								></path>
+								<circle cx="12" cy="12" r="9"></circle>
+							</svg>
+						</a>
+					</li>
+
 					<!-- Linked in -->
 
 					<li
-						class="duraton-300 h-10 w-10 overflow-hidden rounded-full text-white transition hover:bg-[#0077b5]">
+						class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#0077b5]">
 						<a
-							href="https://www.linkedin.com/company/misiki/"
+							href="{linkedinPage}"
 							aria-label="Click to route linkedin page"
 							target="_blank"
 							rel="noopener noreferrer"
@@ -204,9 +270,9 @@ function submitContactInformation(contactPerson) {
 					<!-- Youtube -->
 
 					<li
-						class="duraton-300 h-10 w-10 overflow-hidden rounded-full text-white transition hover:bg-[#FF0000]">
+						class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#FF0000]">
 						<a
-							href="https://www.youtube.com/channel/UCcb3eRHh-7qAiv9ea7jmTHQ"
+							href="{youtubeChannel}"
 							aria-label="Click to route youtube page"
 							target="_blank"
 							rel="noopener noreferrer"
@@ -230,43 +296,43 @@ function submitContactInformation(contactPerson) {
 			</div>
 
 			<form
-				on:submit|preventDefault="{() => submitContactInformation(contactPerson)}"
+				on:submit|preventDefault="{submitContactInformation}"
 				class="col-span-1 flex flex-col gap-5 p-5 sm:p-10 xl:col-span-2">
-				<div class="grid grid-cols-2 gap-5">
-					<TextboxFloating
-						type="text"
-						label="First Name"
-						class="col-span-1 w-full"
-						bind:value="{contactPerson.firstName}" />
+				<Error err="{err}" />
 
-					<TextboxFloating
-						type="text"
-						label="Last Name"
-						class="col-span-1 w-full"
-						bind:value="{contactPerson.lastName}" />
-				</div>
+				<TextboxFloating
+					type="text"
+					label="Full Name"
+					required
+					class="col-span-1 w-full"
+					bind:value="{fullName}" />
 
 				<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
 					<TextboxFloating
 						type="text"
 						label="Email"
+						required
 						class="col-span-1 w-full"
-						bind:value="{contactPerson.email}" />
+						bind:value="{email}" />
 
 					<TextboxFloating
-						type="text"
+						type="tel"
 						label="Phone"
+						required
 						class="col-span-1 w-full"
-						bind:value="{contactPerson.phone}" />
+						bind:value="{phone}" />
 				</div>
 
 				<TextareaFloating
 					label="Write your message here..."
 					class="w-full"
-					bind:value="{contactPerson.message}" />
+					required
+					bind:value="{message}" />
 
 				<div class="flex justify-end">
-					<PrimaryButton type="submit" class="px-10 uppercase">submit</PrimaryButton>
+					<PrimaryButton type="submit" loading="{loading}" class="px-10 uppercase" blackBackground>
+						submit
+					</PrimaryButton>
 				</div>
 			</form>
 		</div>

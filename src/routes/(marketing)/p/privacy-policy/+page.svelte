@@ -1,5 +1,6 @@
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
+import { domain, websiteName } from '$lib/config'
 
 let seoProps = {
 	title: `Privacy Policy`,
@@ -19,9 +20,9 @@ let seoProps = {
 
 		<ul class="flex flex-col gap-5 text-sm text-gray-500 sm:text-base">
 			<li>
-				Your privacy is important to us. It is Misiki’s policy to respect your privacy regarding any
-				information we may collect from you across our website, https://misiki.in, and other sites
-				we own and operate.
+				Your privacy is important to us. It is {websiteName}’s policy to respect your privacy
+				regarding any information we may collect from you across our website, https://{domain}, and
+				other sites we own and operate.
 			</li>
 
 			<li>

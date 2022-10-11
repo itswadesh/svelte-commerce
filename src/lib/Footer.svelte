@@ -29,11 +29,21 @@ import { getAPI } from './util/api'
 import { toast } from './util'
 import { browser } from '$app/environment'
 import { gett } from './utils'
+import { address, email, facebookPage, instagramPage, linkedinPage, twitterPage, websiteName } from './config'
 export let me, cart
 
 let clazz = ''
 
+export { clazz as class 
+let clazz = ''
+
 export { clazz as class }
+
+function getYear(){
+	const d = new Date();
+	let year = d.getFullYear();
+	return year
+}
 
 let footerItems = [
 	{
@@ -94,7 +104,7 @@ const items = [
 
 onMount(async () => {
 	try {
-		const res = await getAPI(`popular-search?store=${$page.data?.store?.id}`)
+		const res = await getAPI(`popular-search?store=${$page.data?.store?.id}`, $page.data.origin)
 		popularSearches = res?.data
 		popularSearchesCount = res?.count
 
@@ -107,19 +117,33 @@ onMount(async () => {
 	if (browser) {
 		const megamenu = await getMegamenu()
 		localStorage.setItem('megamenu', JSON.stringify(megamenu))
+		const home = await getHome()
+		localStorage.setItem('home', JSON.stringify(home))
 	}
 })
 async function getMegamenu() {
 	let megamenu = []
 	const d = new Date()
 	try {
-		megamenu = await getAPI(`categories/megamenu?megamenu=true&store=${$page.data?.store?.id}`)
+		megamenu = await getAPI(`categories/megamenu?megamenu=true&store=${$page.data?.store?.id}`, $page.data.origin)
 	} catch (e) {
 		console.log('eeeeeeeeeeeeee', e)
 	}
 	const d3 = new Date()
 	console.log('Megamenu loaded at hook: ', d3.getTime() - d.getTime())
 	return megamenu
+}
+async function getHome() {
+	let home = []
+	const d = new Date()
+	try {
+		home = await getAPI(`home?store=${$page.data?.store?.id}`, $page.data.origin)
+	} catch (e) {
+		console.log('eeeeeeeeeeeeee', e)
+	}
+	const d3 = new Date()
+	console.log('home loaded at hook: ', d3.getTime() - d.getTime())
+	return home
 }
 </script>
 
@@ -184,7 +208,7 @@ async function getMegamenu() {
 							<span class="font-semibold">Email</span>
 						</h2>
 
-						<p>help@misiki.in</p>
+						<p>{email}</p>
 					</li>
 
 					<li class="max-w-max">
@@ -230,7 +254,7 @@ async function getMegamenu() {
 
 			<div>
 				<h1 class="mb-4 whitespace-nowrap font-semibold uppercase">
-					Experience kitcommerce app on mobile
+					Experience {websiteName} app on mobile
 				</h1>
 
 				<div class="flex items-center gap-1">
@@ -260,7 +284,7 @@ async function getMegamenu() {
 
 					<li class="max-w-max">
 						<a
-							href="https://www.facebook.com/kitcommerce.store/"
+							href="${facebookPage}"
 							target="_blank"
 							rel="noopener noreferrer"
 							aria-label="Click for facebook link">
@@ -284,7 +308,7 @@ async function getMegamenu() {
 
 					<li class="max-w-max">
 						<a
-							href="https://www.instagram.com/kitcommerce/"
+							href="{instagramPage}"
 							target="_blank"
 							rel="noopener noreferrer"
 							aria-label="Click for instagram link">
@@ -309,7 +333,7 @@ async function getMegamenu() {
 
 					<li class="max-w-max">
 						<a
-							href="https://twitter.com/itswadesh"
+							href="{twitterPage}"
 							target="_blank"
 							rel="noopener noreferrer"
 							aria-label="Click for twitter link">
@@ -333,7 +357,7 @@ async function getMegamenu() {
 					<!-- Mail -->
 
 					<li class="max-w-max">
-						<a href="mailto:help@misiki.in" aria-label="Click to contact with mail id">
+						<a href="mailto:{email}" aria-label="Click to contact with mail id">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								class="h-5 w-5 transition duration-300	hover:text-[#c71610]"
@@ -354,7 +378,7 @@ async function getMegamenu() {
 
 					<li class="max-w-max">
 						<a
-							href="https://www.linkedin.com/company/misiki/"
+							href="{linkedinPage}"
 							target="_blank"
 							rel="noopener noreferrer"
 							aria-label="Click for linked in link">
@@ -437,11 +461,7 @@ async function getMegamenu() {
 			<h1 class="mb-4 whitespace-nowrap font-semibold uppercase">Registered Office Address</h1>
 
 			<p class="text-gray-500">
-				#22, <br />
-				Global Village, <br />
-				Rourkela, <br />
-				Odisha - 395006 <br />
-				India
+				{address}
 			</p>
 		</div>
 
@@ -449,7 +469,7 @@ async function getMegamenu() {
 
 		<div
 			class="flex flex-wrap items-center justify-center gap-2 text-sm text-gray-500 sm:gap-5 md:justify-between">
-			<p>Copyright 2022 © Misiki Technologies Made with ❤️ in India</p>
+			<p>Copyright {getYear()} © {websiteName} Made with ❤️ in India</p>
 
 			<div class="flex items-center justify-center gap-4">
 				<a
