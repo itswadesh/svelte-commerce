@@ -1,7 +1,6 @@
 <script>
 import {
 	authorInfo,
-	WWW_URL,
 	entity,
 	ogLanguage,
 	siteLanguage,
@@ -11,7 +10,7 @@ import {
 import OpenGraph from './OpenGraph.svelte'
 import SchemaOrg from './SchemaOrg.svelte'
 import Twitter from './Twitter.svelte'
-
+import { page } from '$app/stores'
 const {
 	author,
 	facebookAuthorPage,
@@ -53,7 +52,7 @@ export let twitterImage = {
 	url: '',
 	alt: defaultAlt
 }
-const url = `${WWW_URL}/${slug}`
+const url = `${$page.data.origin}/${slug}`
 const pageTitle = `${title} ${siteTitle}`
 const openGraphProps = {
 	article,
@@ -81,7 +80,7 @@ const schemaOrgProps = {
 	siteLanguage,
 	siteTitle,
 	siteTitleAlt: siteShortTitle,
-	siteUrl: WWW_URL,
+	siteUrl: $page.data.origin,
 	title: pageTitle,
 	url,
 	facebookPageName,

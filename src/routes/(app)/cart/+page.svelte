@@ -17,6 +17,7 @@ import cookie from 'cookie'
 import { fireGTagEvent } from '$lib/util/gTag'
 import Cookie from 'cookie-universal'
 import { gett } from '$lib/utils'
+
 const cookies = Cookie()
 
 export let data
@@ -52,11 +53,15 @@ onMount(() => {
 
 const addToCart = async ({ pid, qty, customizedImg, ix }: any) => {
 	loading[ix] = true
-	const res = await post('carts/add-to-cart', {
-		pid: pid,
-		qty: qty,
-		customizedImg: customizedImg || null
-	})
+	const res = await post(
+		'carts/add-to-cart',
+		{
+			pid: pid,
+			qty: qty,
+			customizedImg: customizedImg || null
+		},
+		$page.data.origin
+	)
 
 	// cart = res
 	// $page.data.cart = res
@@ -75,7 +80,7 @@ function handleCouponCode(couponCode: string) {
 async function applyCouponCode(selectedCouponCode: string) {
 	try {
 		loadingApplyCoupon = true
-		const resAC = await post('apply-coupon', { code: selectedCouponCode })
+		const resAC = await post('apply-coupon', { code: selectedCouponCode }, $page.data.origin)
 		appliedCouponInfo = resAC
 		// await invalidateAll()
 		// await refreshCart()
@@ -90,7 +95,7 @@ async function applyCouponCode(selectedCouponCode: string) {
 async function removeCouponCode() {
 	try {
 		loadingRemoveCoupon = true
-		await del('remove-coupon')
+		await del('remove-coupon', $page.data.origin)
 		selectedCouponCode = ''
 		// await invalidateAll()
 		await refreshCart()
@@ -104,7 +109,7 @@ async function removeCouponCode() {
 async function getProducts() {
 	try {
 		loadingProducts = true
-		const resP = await getAPI(`es/products?store=${$page.data?.store?.id}`)
+		const resP = await getAPI(`es/products?store=${$page.data?.store?.id}`, $page.data.origin)
 		products = resP?.hits
 	} catch (e) {
 	} finally {
@@ -115,7 +120,7 @@ async function getProducts() {
 async function getCoupons() {
 	try {
 		loadingCoupon = true
-		const resC = await getAPI(`coupons?store=${$page.data?.store?.id}`)
+		const resC = await getAPI(`coupons?store=${$page.data?.store?.id}`, $page.data.origin)
 		coupons = resC?.data
 
 		// console.log('coupons = ', coupons)
@@ -127,9 +132,10 @@ async function getCoupons() {
 
 async function refreshCart() {
 	try {
-		const res = await getAPI('carts/refresh-cart')
+		const res = await getAPI('carts/refresh-cart', $page.data.origin)
 		if (res) {
 			const cookieCart = {
+				cartId: res?.cart_id,
 				items: res?.items,
 				qty: +res?.qty,
 				tax: +res?.tax,
@@ -144,9 +150,10 @@ async function refreshCart() {
 			}
 			// const str = cookie.serialize('cart', JSON.stringify(cookieCart), { path: '/' })
 
-			cookies.set('cart', JSON.stringify(cookieCart), { path: '/' })
+			cookies.set('cartId', cookieCart.cartId, { path: '/' })
+			cookies.set('cartQty', cookieCart.qty, { path: '/' })
 
-			data.cart = cookieCart
+			// data.cart = cookieCart
 		}
 	} catch (e) {
 	} finally {
@@ -287,21 +294,21 @@ async function refreshCart() {
 														{item?.name}
 													</a>
 
-													<div class="mb-2 flex items-center">
-														<span class="text-lg font-bold sm:text-xl">
-															{item?.formattedItemAmount.price}
+													<div class="mb-2 flex flex-wrap items-center gap-2 text-sm sm:text-base">
+														<span class="text-lg font-bold sm:text-xl whitespace-nowrap">
+															{item?.formattedItemAmount?.price}
 														</span>
 
-														{#if item?.formattedItemAmount.mrp > item?.formattedItemAmount.price}
-															<span class="ml-2 text-sm font-light text-gray-400 sm:text-base ">
-																<span class="line-through">{item?.formattedItemAmount.mrp}</span>
+														{#if item?.mrp > item?.price}
+															<span class="font-light text-gray-400 line-through whitespace-nowrap">
+																{item?.formattedItemAmount?.mrp}
 															</span>
-														{/if}
 
-														{#if Math.round(((item?.mrp - item?.price) * 100) / item?.mrp) > 0}
-															<span class="ml-2 text-sm text-green-500 sm:text-base ">
-																({Math.round(((item?.mrp - item?.price) * 100) / item?.mrp)}% off)
-															</span>
+															{#if Math.floor(((item.mrp - item.price) / item.mrp) * 100) > 0}
+																<span class="text-green-500 whitespace-nowrap">
+																	({Math.floor(((item.mrp - item.price) / item.mrp) * 100)}% off)
+																</span>
+															{/if}
 														{/if}
 													</div>
 												</div>
@@ -359,21 +366,21 @@ async function refreshCart() {
 											<span class="text-red-500">{item?.product} left</span>
 										</div> -->
 
-											<div class="mb-2 flex items-center">
+											<div class="mb-2 flex flex-wrap items-center gap-2 text-sm sm:text-base">
 												<span class="text-lg font-bold sm:text-xl">
-													{item?.formattedItemAmount.price}
+													{item?.formattedItemAmount?.price}
 												</span>
 
-												{#if item?.formattedItemAmount.mrp > item?.formattedItemAmount.price}
-													<span class="ml-2 text-sm font-light text-gray-400 sm:text-base ">
-														<span class="line-through">{item?.formattedItemAmount.mrp}</span>
+												{#if item?.mrp > item?.price}
+													<span class="font-light text-gray-400 line-through">
+														{item?.formattedItemAmount?.mrp}
 													</span>
-												{/if}
 
-												{#if Math.round(((item?.mrp - item?.price) * 100) / item?.mrp) > 0}
-													<span class="ml-2 text-sm text-green-500 sm:text-base ">
-														({Math.round(((item?.mrp - item?.price) * 100) / item?.mrp)}% off)
-													</span>
+													{#if Math.floor(((item.mrp - item.price) / item.mrp) * 100) > 0}
+														<span class="text-green-500">
+															({Math.floor(((item.mrp - item.price) / item.mrp) * 100)}% off)
+														</span>
+													{/if}
 												{/if}
 											</div>
 
@@ -410,7 +417,6 @@ async function refreshCart() {
 															<img
 																src="/dots-loading.gif"
 																alt="loading"
-																width="20"
 																class="h-auto w-5 object-contain object-center" />
 														{:else}
 															<span>{item?.qty}</span>
@@ -674,10 +680,9 @@ async function refreshCart() {
 		{:else}
 			<div class="flex h-[70vh] flex-col items-center justify-center text-center">
 				<div>
-					<LazyImg
+					<img
 						src="/no/add-to-cart-animate.svg"
 						alt="empty listing"
-						height="240"
 						class="mb-5 h-60 object-contain" />
 				</div>
 

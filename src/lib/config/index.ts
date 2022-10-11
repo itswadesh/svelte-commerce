@@ -1,9 +1,4 @@
-import {
-	PUBLIC_DOMAIN,
-	PUBLIC_HTTP_ENDPOINT,
-	PUBLIC_PINCODES_API,
-	PUBLIC_WWW_URL
-} from '$env/static/public'
+import { PUBLIC_DOMAIN, PUBLIC_HTTP_ENDPOINT, PUBLIC_PINCODES_API } from '$env/static/public'
 
 export const authorInfo = {
 	author: 'Swadesh Behera',
@@ -39,21 +34,20 @@ export const mediaqueries = {
 	noanimations: '(prefers-reduced-motion: reduce)'
 }
 export const currency = { symbol: '₹', code: 'INR' }
-export const WWW_URL = PUBLIC_WWW_URL || 'https://zapvi.itswadesh.com'
-export const HTTP_ENDPOINT = PUBLIC_HTTP_ENDPOINT || 'https://api.atozzones.com'
-// export const IMAGE_CDN_URL = 'https://ik.imagekit.io/3wzatecz51w3i/zapvi'
-export const IMAGE_CDN_URL = 'https://zapvi.b-cdn.net'
-export const host = '' //'https://atozzones.com'
+export const HTTP_ENDPOINT = PUBLIC_HTTP_ENDPOINT || 'https://api.misiki.in'
+export const IMAGE_CDN_URL = 'https://ik.imagekit.io/3wzatecz51w3i/zapvi'
+export const host = 'food.misiki.in'
 export const DOMAIN = PUBLIC_DOMAIN
 export const pageSize = 20
 export const stripePublishableKey =
 	'pk_test_51HXxXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXq'
-export const contactEmail = 'swadesh@misiki.in'
-export const facebookPage = 'https://www.facebook.com/zapvi.store/'
-export const instagramPage = 'https://www.instagram.com/zapvi/'
-export const twitterPage = 'https://twitter.com/Zapviofficial'
-export const linkedinPage = 'https://www.linkedin.com/company/zapvi/'
-export const pinterestPage = 'https://www.linkedin.com/company/zapvi/'
+export const contactEmail = 'hi@misiki.in'
+export const logo = '/logo.png'
+export const facebookPage = 'https://www.facebook.com/misiki/'
+export const instagramPage = 'https://www.instagram.com/misiki/'
+export const twitterPage = 'https://twitter.com/MisikiOfficial'
+export const linkedinPage = 'https://www.linkedin.com/company/misiki/'
+export const pinterestPage = 'https://www.pinterest.com/company/misiki/'
 export const youtubeChannel = 'https://www.youtube.com/channel/UCcb3eRHh-7qAiv9ea7jmTHQ'
 export const PINCODES_API = PUBLIC_PINCODES_API
 export const GOOGLE_CLIENT_ID =

@@ -2,10 +2,6 @@
 .minimum-width-rem {
 	min-width: 360px;
 }
-
-.text-rem {
-	font-size: xx-small;
-}
 </style>
 
 <script lang="ts">
@@ -17,7 +13,7 @@ import Cookie from 'cookie-universal'
 import { fade, fly, slide } from 'svelte/transition'
 import { cubicOut } from 'svelte/easing'
 import { createEventDispatcher, getContext, onMount } from 'svelte'
-import { WWW_URL } from './config'
+// import { WWW_URL } from './config'
 import Select from 'svelte-select'
 // import 'svelte-select/tailwind.css'
 import Item from '$lib/AutocompleteItem.svelte'
@@ -26,7 +22,8 @@ import LazyImg from './components/Image/LazyImg.svelte'
 import MegaMenu from './components/MegaMenu.svelte'
 import WhiteButton from './ui/WhiteButton.svelte'
 import menu from '$lib/config/menu'
-import { gett } from './utils'
+import { settings } from './store'
+import { logo } from './config'
 
 const dispatch = createEventDispatcher()
 const cookies = Cookie()
@@ -38,7 +35,6 @@ let typingTimer
 let showDropdownAccount = false
 let loadingForDeleteItemFromCart = []
 let categories
-// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', cart)
 // if (cart) cart = JSON.parse(cart)
 
 // export const signOut = async () => {
@@ -61,8 +57,10 @@ let categories
 // 	return { data: logout, error }
 // }
 
-onMount(() => {
+onMount(async () => {
 	q = $page.url.searchParams.get('q')
+	// const response = await fetch('/server/cart')
+	// cart = await response.json()
 })
 
 // onMount(() => {
@@ -100,7 +98,10 @@ function slideFade(node, params) {
 
 async function onSearch(filterText) {
 	try {
-		const res = await getAPI(`es/autocomplete?q=${filterText}&store=${$page.data.store?.id}`)
+		const res = await getAPI(
+			`es/autocomplete?q=${filterText}&store=${$page.data.store?.id}`,
+			$page.data.origin
+		)
 		return res?.data || []
 	} catch (e) {}
 }
@@ -112,7 +113,7 @@ function enterPressedOnSearch() {
 async function onSearchSubmit({ detail }) {
 	// console.log('onSearchSubmit..............')
 
-	let u = new URL('/search', WWW_URL)
+	let u = new URL('/search', $page.data.origin)
 	u.searchParams.set('q', detail?.key)
 	let newUrl = u.toString() + '&sort=price'
 	goto(newUrl)
@@ -130,7 +131,7 @@ function handleShowCartSidebar() {
 
 async function getCategories() {
 	try {
-		const res1 = await getAPI('categories')
+		const res1 = await getAPI('categories', $page.data.origin)
 		categories = res1?.data.filter((c) => {
 			return c.imgCdn
 		})
@@ -144,19 +145,24 @@ async function getCategories() {
 const removeItemFromCart = async ({ pid, qty, customizedImg, ix }: any) => {
 	try {
 		loadingForDeleteItemFromCart[ix] = true
-		const res = await post('carts/add-to-cart', {
-			pid: pid,
-			qty: qty,
-			customizedImg: customizedImg || null
-		})
+		const res = await post(
+			'carts/add-to-cart',
+			{
+				pid: pid,
+				qty: qty,
+				customizedImg: customizedImg || null
+			},
+			$page.data.origin
+		)
 
 		// cart = res
 		// $page.data.cart = res
 
 		// await refreshCart()
-
+		// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', res)
 		await invalidateAll()
 	} catch (e) {
+		// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', e)
 	} finally {
 		loadingForDeleteItemFromCart[ix] = false
 	}
@@ -168,34 +174,39 @@ const getSelectionLabel = (option) => option.key
 </script>
 
 <nav
-	class="minimum-width-rem fixed inset-x-0 top-0 h-20 w-full justify-center border-b bg-white px-3 shadow-md sm:px-10
+	class="minimum-width-rem fixed inset-x-0 top-0 h-14 sm:h-20 w-full flex items-center justify-center border-b bg-white px-3 shadow-md sm:px-10
 	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
-	<div class="flex w-full items-center justify-between gap-4">
+	<div class="flex w-full items-center justify-between gap-4 lg:gap-8">
 		<div class="flex items-center gap-4">
 			<!-- Back button -->
 
 			{#if $page?.data?.isShowBackButton}
 				<button
 					type="button"
-					class="block focus:outline-none sm:hidden"
+					class="block focus:outline-none sm:hidden flex-shrink-0"
 					on:click="{() => window.history.go(-1)}">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
-						class="h-6 w-6"
 						fill="none"
 						viewBox="0 0 24 24"
+						stroke-width="1.5"
 						stroke="currentColor"
-						stroke-width="2">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"
-						></path>
+						class="w-6 h-6">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"></path>
 					</svg>
 				</button>
 			{/if}
 
 			<!-- Logo -->
 
-			<a class="flex-shrink-0 py-3 " href="/" aria-label="Click to route home">
-				<LazyImg src="/logo.svg" alt="" width="112" class="w-28 object-contain object-center" />
+			<a class="block flex-shrink-0" href="/" aria-label="Click to route home">
+				<img
+					src="{logo}"
+					alt=" "
+					class="h-auto max-h-10 sm:max-h-16 w-32 object-contain object-center" />
 			</a>
 		</div>
 
@@ -230,31 +241,33 @@ const getSelectionLabel = (option) => option.key
 			<Select
 				appendListTarget="{selectTarget}"
 				loadOptions="{onSearch}"
-				on:select="{onSearchSubmit}"
 				optionIdentifier="{optionIdentifier}"
 				getSelectionLabel="{getSelectionLabel}"
 				getOptionLabel="{getOptionLabel}"
 				Item="{Item}"
+				hideEmptyState
 				placeholder="Search for covers, cases, accessories..."
-				inputStyles="cursor: text" />
+				inputStyles="cursor: text"
+				on:select="{onSearchSubmit}" />
+
 			<!-- padding-left: 40px; -->
 		</form>
 
-		<div class="flex items-center">
+		<div class="flex items-center gap-4 lg:gap-8">
 			<!-- Search -->
 
 			<a
 				data-sveltekit-prefetch
 				href="/autosuggest"
 				aria-label="Click to search quizzes, videos, notes etc..."
-				class="flex h-20 flex-col items-center justify-center gap-1 border-b-4 border-transparent px-2 focus:outline-none sm:px-4 lg:hidden">
+				class="block focus:outline-none lg:hidden">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
 					viewBox="0 0 24 24"
-					stroke-width="2"
+					stroke-width="1.5"
 					stroke="currentColor"
-					class="h-6 w-6">
+					class="w-6 h-6">
 					<path
 						stroke-linecap="round"
 						stroke-linejoin="round"
@@ -263,27 +276,31 @@ const getSelectionLabel = (option) => option.key
 			</a>
 
 			<!-- Cart -->
+
 			<button
-				class="relative h-20 gap-1 border-b-4 border-transparent px-2 focus:outline-none sm:px-4"
+				class="relative gap-1 lg:border-b-4 lg:border-transparent focus:outline-none flex flex-col items-center justify-center"
 				aria-label="Click to route cart"
 				on:click="{handleShowCartSidebar}">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
-					class="h-6 w-6 flex-shrink-0"
 					fill="none"
 					viewBox="0 0 24 24"
+					stroke-width="1.5"
 					stroke="currentColor"
-					stroke-width="2">
+					class="w-6 h-6">
 					<path
 						stroke-linecap="round"
 						stroke-linejoin="round"
-						d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+						d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
+					></path>
 				</svg>
+
 				<span class="hidden text-center text-xs font-semibold tracking-wider lg:block"> Cart </span>
-				{#if cart?.qty > 0}
+
+				{#if $page.data.cartQty > 0}
 					<div
-						class="absolute top-3.5 right-0 flex items-center justify-center rounded-full bg-primary-500 py-0.5 px-2 text-center text-xs font-bold uppercase text-white sm:right-2 lg:top-2">
-						{cart?.qty}
+						class="absolute -top-2 -right-1.5 flex items-center justify-center rounded-full bg-primary-500 py-[0.8px] px-[5px] text-center text-xs font-bold uppercase text-white">
+						{$page.data.cartQty}
 					</div>
 				{/if}
 			</button>
@@ -319,9 +336,9 @@ const getSelectionLabel = (option) => option.key
 							<h1 class="border-b p-4 text-center font-bold uppercase sm:text-lg">Cart</h1>
 
 							<div class="h-full overflow-y-auto overflow-x-hidden p-4 pb-20">
-								{#if cart?.qty > 0}
+								{#if $page.data.cartQty > 0}
 									<div class="mb-5 flex flex-col gap-5">
-										{#each cart.items as item, ix}
+										{#each cart?.items || [] as item, ix}
 											<div class="flex items-start justify-between gap-4">
 												<a
 													href="/product/{item.slug}"
@@ -361,7 +378,7 @@ const getSelectionLabel = (option) => option.key
 													</div>
 												</div>
 
-												{#if loadingForDeleteItemFromCart[ix]}
+												<!-- {#if loadingForDeleteItemFromCart[ix]}
 													<div>...</div>
 												{:else}
 													<button
@@ -388,13 +405,13 @@ const getSelectionLabel = (option) => option.key
 															></path>
 														</svg>
 													</button>
-												{/if}
+												{/if} -->
 											</div>
 										{/each}
 									</div>
 
 									<div class="mb-10 flex flex-col gap-2">
-										<a href="/cart" class="block w-full" sveltekit:prefetch>
+										<a href="/cart" class="block w-full" data-sveltekit-prefetch>
 											<WhiteButton
 												type="button"
 												class="w-full text-xs uppercase"
@@ -404,7 +421,7 @@ const getSelectionLabel = (option) => option.key
 											</WhiteButton>
 										</a>
 
-										<a href="/checkout/address" class="block w-full" sveltekit:prefetch>
+										<a href="/checkout/address" class="block w-full" data-sveltekit-prefetch>
 											<PrimaryButton
 												type="button"
 												class="w-full text-xs uppercase"
@@ -418,10 +435,9 @@ const getSelectionLabel = (option) => option.key
 								{:else}
 									<div class="mb-10 flex flex-col items-center text-center">
 										<div>
-											<LazyImg
+											<img
 												src="/no/add-to-cart-animate.svg"
 												alt="empty listing"
-												height="160"
 												class="mb-5 h-40 object-contain" />
 										</div>
 
@@ -530,24 +546,28 @@ const getSelectionLabel = (option) => option.key
 			<!-- Profile -->
 
 			{#if me?.active}
+				<!-- Profile -->
+
 				<div
 					class="relative hidden lg:block"
 					on:mouseenter="{() => (showDropdownAccount = true)}"
 					on:mouseleave="{() => (showDropdownAccount = false)}">
 					<button
-						class="h-20 gap-1 border-b-4 px-2 focus:outline-none sm:px-4
+						aria-label="/"
+						class="gap-1 h-20 border-b-4 focus:outline-none flex flex-col items-center justify-center
 						{showDropdownAccount ? 'border-primary-500' : 'border-transparent'}">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
-							class="mx-auto h-6 w-6"
 							fill="none"
 							viewBox="0 0 24 24"
+							stroke-width="1.5"
 							stroke="currentColor"
-							stroke-width="2">
+							class="w-6 h-6">
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
-								d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+								d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+							></path>
 						</svg>
 
 						<span class="hidden text-center text-xs font-semibold tracking-wider lg:block">
@@ -558,7 +578,7 @@ const getSelectionLabel = (option) => option.key
 					{#if showDropdownAccount}
 						<ul
 							transition:fly="{{ y: 5, duration: 700 }}"
-							class="absolute top-20 right-0 z-[100] flex min-w-max flex-col rounded-b border bg-white p-2 text-sm font-semibold  shadow-inner">
+							class="absolute top-20 right-0 flex min-w-max flex-col rounded-b border bg-white p-2 text-sm font-semibold  shadow-inner">
 							<li class="mb-2 border-b py-2 px-4">
 								<a
 									href="/my/profile"
@@ -572,11 +592,10 @@ const getSelectionLabel = (option) => option.key
 												width="40"
 												class="object-cover object-top" />
 										{:else}
-											<LazyImg
+											<img
 												src="/user-empty-profile.png"
 												alt=""
-												width="40"
-												class="object-cover object-top" />
+												class="h-full w-full object-cover object-top" />
 										{/if}
 									</div>
 
@@ -622,26 +641,46 @@ const getSelectionLabel = (option) => option.key
 						</ul>
 					{/if}
 				</div>
-			{/if}
 
-			{#if !$page.data.me?.active}
+				<!-- Menu -->
+
+				<button
+					aria-label="Sidebar"
+					type="button"
+					class="focus:outline-none lg:hidden"
+					on:click="{() => (openSidebar = true)}">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke-width="1.5"
+						stroke="currentColor"
+						class="w-6 h-6">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+					</svg>
+				</button>
+			{:else}
 				<!-- Login -->
 
 				<a href="/auth/otp-login" aria-label="Click to route login" data-sveltekit-prefetch>
 					<button
-						class="h-20 gap-1 border-b-4 border-transparent px-2 focus:outline-none sm:px-4"
+						class="gap-1 lg:border-b-4 lg:border-transparent focus:outline-none flex flex-col items-center justify-center"
 						aria-label="/">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
-							class="mx-auto h-6 w-6"
 							fill="none"
 							viewBox="0 0 24 24"
+							stroke-width="1.5"
 							stroke="currentColor"
-							stroke-width="2">
+							class="w-6 h-6">
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
-								d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+								d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+							></path>
 						</svg>
 
 						<span class="hidden text-center text-xs font-semibold tracking-wider lg:block">
@@ -649,28 +688,6 @@ const getSelectionLabel = (option) => option.key
 						</span>
 					</button>
 				</a>
-			{:else}
-				<!-- Menu -->
-
-				<button
-					aria-label="Sidebar"
-					type="button"
-					class="flex h-20 flex-col items-center justify-center gap-1 px-4 focus:outline-none lg:hidden"
-					on:click="{() => (openSidebar = true)}">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="h-6 w-6"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-						stroke-width="2">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
-					</svg>
-
-					<span class="hidden text-center text-xs font-semibold tracking-wider lg:block">
-						Menu
-					</span>
-				</button>
 			{/if}
 		</div>
 	</div>
@@ -729,12 +746,10 @@ const getSelectionLabel = (option) => option.key
 										height="80"
 										class="object-cover object-top" />
 								{:else}
-									<LazyImg
+									<img
 										src="/user-empty-profile.png"
 										alt=""
-										width="80"
-										height="80"
-										class="object-cover object-top" />
+										class="h-full w-full object-cover object-top" />
 								{/if}
 							</div>
 
