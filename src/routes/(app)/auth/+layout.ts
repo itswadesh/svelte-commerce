@@ -1,8 +1,7 @@
 export const ssr = false
 import { getAPI } from '$lib/util/api'
-import { DOMAIN, HTTP_ENDPOINT } from '$lib/config'
+import { domain, HTTP_ENDPOINT } from '$lib/config'
 import cookie from 'cookie'
-
 import {
 	stripePublishableKey,
 	id,
@@ -17,11 +16,11 @@ export const prerender = false
 
 export async function load({ url, request, cookies }) {
 	const isHome = url.pathname === '/'
-	let currentPage = +url.searchParams.get('page') || 1
-	let q = url.searchParams.get('q') || ''
+	const currentPage = +url.searchParams.get('page') || 1
+	const q = url.searchParams.get('q') || ''
 	let cart, store, serializedCart, serializedStore
 	try {
-		const res = await getAPI('carts/my', request.headers)
+		const res = await getAPI('carts/my', $page.data.origin, request.headers)
 
 		if (res) {
 			const cookieCart = {
@@ -48,7 +47,7 @@ export async function load({ url, request, cookies }) {
 	try {
 		const cookieStore = {
 			id,
-			domain: DOMAIN,
+			domain,
 			logo: `/logo.svg?tr=w-auto,h-56:w-auto,h-56`,
 			address,
 			phone,
