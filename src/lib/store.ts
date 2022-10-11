@@ -60,7 +60,7 @@ export const fetchSettings = async () => {
 export const fetchStore = async () => {
 	try {
 		const storeOne = await cookies.get('store')
-		const data = { _id: storeOne.id } //await get('store?domain=atozzones.com')
+		const data = { _id: storeOne.id } //await get('store?domain=misiki.io')
 		store.set(data)
 		await gett('store-one?id=' + storeOne.id)
 		const data1 = (await gett('megamenu?store=' + storeOne.id)).data?.megamenu //get('categories/megamenu', { megamenu: true })
