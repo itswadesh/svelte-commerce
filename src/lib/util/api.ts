@@ -1,6 +1,5 @@
 import { loadingDelayed } from '$lib/store'
 import { id } from '$lib/config'
-// import { PUBLIC_WWW_URL } from '$env/static/public'
 let typingTimer
 
 const send = async ({ method, path, params, data, token, headers, origin }: any) => {
