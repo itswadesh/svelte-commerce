@@ -29,19 +29,24 @@ import { getAPI } from './util/api'
 import { toast } from './util'
 import { browser } from '$app/environment'
 import { gett } from './utils'
-import { address, email, facebookPage, instagramPage, linkedinPage, twitterPage, websiteName } from './config'
+import {
+	address,
+	email,
+	facebookPage,
+	instagramPage,
+	linkedinPage,
+	twitterPage,
+	websiteName
+} from './config'
 export let me, cart
 
 let clazz = ''
 
-export { clazz as class 
-let clazz = ''
-
 export { clazz as class }
 
-function getYear(){
-	const d = new Date();
-	let year = d.getFullYear();
+function getYear() {
+	const d = new Date()
+	let year = d.getFullYear()
 	return year
 }
 
@@ -125,7 +130,10 @@ async function getMegamenu() {
 	let megamenu = []
 	const d = new Date()
 	try {
-		megamenu = await getAPI(`categories/megamenu?megamenu=true&store=${$page.data?.store?.id}`, $page.data.origin)
+		megamenu = await getAPI(
+			`categories/megamenu?megamenu=true&store=${$page.data?.store?.id}`,
+			$page.data.origin
+		)
 	} catch (e) {
 		console.log('eeeeeeeeeeeeee', e)
 	}
