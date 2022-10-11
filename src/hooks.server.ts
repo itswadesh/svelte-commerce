@@ -1,9 +1,10 @@
 import type { Handle } from '@sveltejs/kit'
 // import { getAPI } from '$lib/util/api'
-import { DOMAIN } from '$lib/config'
+import { domain } from '$lib/config'
 import {
 	stripePublishableKey,
 	id,
+	logo,
 	email,
 	address,
 	phone,
@@ -19,25 +20,23 @@ export const handleFetch = async ({ event, request, fetch }) => {
 
 	return fetch(request)
 }
-
 /** @type {import('@sveltejs/kit').HandleServerError} */
 export const handleError = async ({ error, event }) => {
-	console.log('Server handleError', error)
-	//   Sentry.captureException(error, { event });
-
 	return {
 		message: 'Whoops!',
 		code: error.code ?? 'UNKNOWN'
 	}
 }
 export const handle: Handle = async ({ event, resolve }) => {
+	const WWW_URL = new URL(event.request.url).origin
+	event.locals.origin = WWW_URL
 	// const st = localStore('megamenu', { children: [], total: 0 })
 
-	const d = new Date()
+	// const d = new Date()
 	const store = {
 		id,
-		domain: DOMAIN,
-		logo: `/logo.svg?tr=w-auto,h-56:w-auto,h-56`,
+		domain,
+		logo,
 		address,
 		phone,
 		email,
@@ -48,11 +47,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 	event.locals.store = store
 
-	const me1: any = event.cookies.get('me')
-	if (!me1) {
+	let me: any = event.cookies.get('me')
+	if (!me) {
 		try {
-			const session: string = event.cookies.get('session')
-			const me = await gett(`users/token?token=${session}`)
 			if (me) {
 				event.locals.me = {
 					email: me.email,
@@ -69,7 +66,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			console.log('eeeeeeeeeeeeee', e)
 		}
 	} else {
-		const me = JSON.parse(me1)
+		me = JSON.parse(me)
 		event.locals.me = {
 			email: me.email,
 			phone: me.phone,
@@ -81,12 +78,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 			active: me.active
 		}
 	}
-	const d2 = new Date()
-	const cart: any = event.cookies.get('cart')
-	if (cart) {
-		event.locals.cart = JSON.parse(cart)
-	}
-	const d4 = new Date()
+	const cartId: string = event.cookies.get('cartId')
+	const cartQty: string = event.cookies.get('cartQty')
+	// const cart: any = event.cookies.get('cart') || '{}'
+	event.locals.cartId = cartId
+	event.locals.cartQty = +cartQty
+	// event.locals.cart = JSON.parse(cart)
 	// load page as normal
 	event.request.headers.delete('connection')
 	return await resolve(event)
