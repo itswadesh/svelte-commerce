@@ -6,6 +6,7 @@ import CheckboxEs from '$lib/ui/CheckboxEs.svelte'
 import { page } from '$app/stores'
 import { createEventDispatcher } from 'svelte'
 import { getAPI } from '$lib/util/api'
+import { browser } from '$app/environment'
 
 const dispatch = createEventDispatcher()
 
@@ -21,9 +22,11 @@ export let facets = {},
 let clazz
 export { clazz as class }
 
-let megaMenu = []
+let megamenu
 let selectedCategory
 let showSubCategory = []
+let selectedCategory2
+let showSubCategory2 = []
 
 function clearFilters() {
 	fl = {}
@@ -60,7 +63,31 @@ onMount(async () => {
 		if (key !== 'page' && key !== 'sort' && key !== 'lat' && key !== 'lng')
 			appliedFilters[key] = value
 	})
+
+	getMegamenu()
 })
+
+async function getMegamenu() {
+	if (browser) {
+		try {
+			const localmegamenu = localStorage.getItem('megamenu')
+
+			if (!localmegamenu) {
+				megamenu = await getAPI(
+					`categories/megamenu?megamenu=true&store=${$page.data?.store?.id}`,
+					$page.data.origin
+				)
+
+				// console.log('zzzzzzzzzzzzzzzzzz', megamenu)
+			} else {
+				megamenu = JSON.parse(localmegamenu)
+			}
+		} catch (e) {
+			toast(e, 'error')
+		} finally {
+		}
+	}
+}
 
 $: {
 	filterLength = 0
@@ -86,6 +113,19 @@ function handleToggleSubCategory(m, mx) {
 			showSubCategory[mx] = false
 		} else {
 			showSubCategory[mx] = true
+		}
+	}
+}
+
+function handleToggleSubCategory2(c, cx) {
+	selectedCategory2 = c.name
+
+	if (c.children?.length > 0) {
+		if (showSubCategory2[cx] === true) {
+			selectedCategory2 = ''
+			showSubCategory2[cx] = false
+		} else {
+			showSubCategory2[cx] = true
 		}
 	}
 }
@@ -124,14 +164,16 @@ function handleToggleSubCategory(m, mx) {
 		{/if}
 	</div>
 
-	{#if megaMenu.length}
+	{#if megamenu}
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
 			<h6 class="mb-3 font-bold tracking-wide">Categories</h6>
 
+			<!-- 1st level categories -->
+
 			<ul class="flex w-full cursor-pointer flex-col text-sm">
-				{#each megaMenu as m, mx}
+				{#each megamenu as m, mx}
 					<li>
 						{#if m.children?.length}
 							<div
@@ -166,16 +208,58 @@ function handleToggleSubCategory(m, mx) {
 							</a>
 						{/if}
 
+						<!-- 2nd level categories -->
+
 						{#if showSubCategory[mx]}
 							<ul class="ml-2">
-								{#each m.children as c}
+								{#each m.children as c, cx}
 									<li>
-										<a
-											href="/{c.slug}"
-											type="button"
-											class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none  hover:text-blue-600">
-											{c.name}
-										</a>
+										{#if c.children?.length}
+											<div
+												class="flex w-full items-center justify-between gap-2
+												{selectedCategory2 === c.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
+												<a href="/{c.slug}" class="flex-1">
+													{c.name}
+												</a>
+
+												<button
+													type="button"
+													class="overflow-hidden p-1 focus:outline-none"
+													on:click="{() => handleToggleSubCategory2(c, cx)}">
+													<svg
+														xmlns="http://www.w3.org/2000/svg"
+														viewBox="0 0 20 20"
+														fill="currentColor"
+														class="h-5 w-5 flex-shrink-0 transition duration-300
+														{showSubCategory2[cx] ? 'transform rotate-90' : ''}">
+														<path
+															fill-rule="evenodd"
+															d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+															clip-rule="evenodd"></path>
+													</svg>
+												</button>
+											</div>
+										{:else}
+											<a
+												href="/{c.slug}"
+												class="flex w-full items-center justify-between gap-2 py-1 text-left  focus:outline-none hover:text-blue-600">
+												{c.name}
+											</a>
+										{/if}
+
+										<!-- 3rd level categories -->
+
+										{#if showSubCategory2[cx]}
+											<ul class="ml-4">
+												{#each c.children as cc}
+													<a
+														href="/{cc.slug}"
+														class="flex w-full items-center justify-between gap-2 py-1 text-left  focus:outline-none hover:text-blue-600">
+														{cc.name}
+													</a>
+												{/each}
+											</ul>
+										{/if}
 									</li>
 								{/each}
 							</ul>
@@ -199,12 +283,12 @@ function handleToggleSubCategory(m, mx) {
 		</div>
 	{/if}
 
-	{#if facets?.all_aggs?.categories?.all?.all?.buckets?.length > 0}
+	{#if facets?.all_aggs?.categories?.all?.buckets?.length > 0}
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
 			<CheckboxEs
-				items="{facets?.all_aggs?.categories?.all?.all?.buckets}"
+				items="{facets?.all_aggs?.categories?.all?.buckets}"
 				title="Categories"
 				model="categories"
 				selectedItems="{fl.categories || []}"
@@ -212,12 +296,12 @@ function handleToggleSubCategory(m, mx) {
 		</div>
 	{/if}
 
-	{#if facets?.vendors?.all?.all?.buckets?.length > 0}
+	{#if facets?.vendors?.all?.buckets?.length > 0}
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
 			<CheckboxEs
-				items="{facets?.vendors?.all?.all?.buckets}"
+				items="{facets?.vendors?.all?.buckets}"
 				title="vendors"
 				model="vendors"
 				selectedItems="{fl.vendors || []}"
@@ -225,12 +309,12 @@ function handleToggleSubCategory(m, mx) {
 		</div>
 	{/if}
 
-	{#if facets?.all_aggs?.price?.all?.all?.buckets?.length > 0}
+	{#if facets?.all_aggs?.price?.all?.buckets?.length > 0}
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
 			<CheckboxEs
-				items="{facets?.all_aggs?.price?.all?.all?.buckets}"
+				items="{facets?.all_aggs?.price?.all?.buckets}"
 				title="PRICE"
 				model="price"
 				selectedItems="{fl.price || []}"
@@ -238,12 +322,12 @@ function handleToggleSubCategory(m, mx) {
 		</div>
 	{/if}
 
-	{#if facets?.all_aggs?.discount?.all?.all?.buckets?.length > 0}
+	{#if facets?.all_aggs?.discount?.all?.buckets?.length > 0}
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
 			<CheckboxEs
-				items="{facets?.all_aggs?.discount?.all?.all?.buckets}"
+				items="{facets?.all_aggs?.discount?.all?.buckets}"
 				title="DISCOUNT"
 				model="discount"
 				selectedItems="{fl.discount || []}"

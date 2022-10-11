@@ -131,7 +131,7 @@ onMount(async () => {
 	// popularSearchesCount = res?.count
 })
 async function getStoreData() {
-	const response = await fetch('server/store')
+	const response = await fetch('/server/store')
 	const res = await response.json()
 	return res
 }

@@ -102,6 +102,9 @@ async function onSearch(filterText) {
 			`es/autocomplete?q=${filterText}&store=${$page.data.store?.id}`,
 			$page.data.origin
 		)
+
+		// console.log('zzzzzzzzzzzzzzzzzz', res?.data)
+
 		return res?.data || []
 	} catch (e) {}
 }
@@ -111,7 +114,7 @@ function enterPressedOnSearch() {
 }
 
 async function onSearchSubmit({ detail }) {
-	// console.log('onSearchSubmit..............')
+	// console.log('onSearchSubmit..............', detail)
 
 	let u = new URL('/search', $page.data.origin)
 	u.searchParams.set('q', detail?.key)

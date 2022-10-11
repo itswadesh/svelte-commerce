@@ -38,6 +38,9 @@ let seoProps = {
 	metadescription: `Find best ${data.searchData || ' '}`
 }
 
+let showFilter = false
+let showSort = false
+
 async function sortNow(s) {
 	let u = new URL($page.url)
 
@@ -84,7 +87,7 @@ onMount(() => {
 
 <SEO {...seoProps} />
 
-<div>
+<div class="{showFilter || showSort ? 'h-[93vh] overflow-hidden' : 'h-full'}">
 	<div class="mb-20 flex w-full flex-col gap-5 lg:flex-row lg:gap-10 lg:p-10">
 		{#if data.facets}
 			<DesktopFilter
@@ -95,6 +98,8 @@ onMount(() => {
 
 			<MobileFilter
 				facets="{data.facets}"
+				bind:showFilter
+				bind:showSort
 				class="sticky top-[5rem] z-40 block lg:hidden"
 				on:clearAll="{refreshData}" />
 		{/if}
