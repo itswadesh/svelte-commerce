@@ -13,8 +13,9 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies }) =>
 		const res = await gett('carts/refresh-cart', request.headers.get('cookie'))
 		if (res) {
 			cart = {
+				cartId: res?.cart_id,
 				items: res?.items,
-				qty: +res?.qty,
+				qty: res?.qty,
 				tax: +res?.tax,
 				subtotal: +res?.subtotal,
 				total: +res?.total,
@@ -25,7 +26,12 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies }) =>
 				unavailableItems: res?.unavailableItems,
 				formattedAmount: res?.formattedAmount
 			}
-			cookies.set('cart', JSON.stringify(cart), { path: '/' })
+
+			cookies.set('cartId', cart.cartId, { path: '/' })
+			cookies.set('cartQty', cart.qty, { path: '/' })
+			// cookies.set('cart', JSON.stringify(cart), { path: '/' })
+			locals.cartId = cart.cartId
+			locals.cartQty = cart.qty
 			locals.cart = cart
 		}
 	} catch (e) {
@@ -42,7 +48,7 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies }) =>
 	return { loadingCart: loading, cart }
 }
 
-const add: Action = async ({ request, cookies }) => {
+const add: Action = async ({ request, cookies, locals }) => {
 	const data = await request.formData()
 	const pid = data.get('pid')
 	const vid = data.get('vid')
@@ -66,6 +72,7 @@ const add: Action = async ({ request, cookies }) => {
 		)
 		if (cart) {
 			const cookieCart = {
+				cartId: cart?.cart_id,
 				items: cart?.items,
 				qty: cart?.qty,
 				tax: cart?.tax,
@@ -78,9 +85,14 @@ const add: Action = async ({ request, cookies }) => {
 				unavailableItems: cart?.unavailableItems,
 				formattedAmount: cart?.formattedAmount
 			}
-			cookies.set('cart', JSON.stringify(cookieCart), { path: '/' })
+			locals.cart = cookieCart
+			locals.cartId = cart.cartId
+			locals.cartQty = cart.qty
+			cookies.set('cartId', cookieCart.cartId, { path: '/' })
+			cookies.set('cartQty', cookieCart.qty, { path: '/' })
+			// cookies.set('cart', JSON.stringify(cookieCart), { path: '/' })
 		}
-
+		// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', cart)
 		return cart
 	} catch (e) {
 		console.log('err', e)

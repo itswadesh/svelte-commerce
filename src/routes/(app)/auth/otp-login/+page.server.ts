@@ -18,7 +18,7 @@ const getOtp: Action = async ({ request }) => {
 		return invalid(400, { invalid: true })
 	}
 	try {
-		const data = await post(`get-otp`, { phone })
+		const data = await post(`get-otp`, { phone }, $page.data.origin)
 		// const data = { timer: 1 }
 		return {
 			phone: phone,
@@ -43,7 +43,7 @@ const verifyOtp: Action = async ({ cookies, request, locals }) => {
 		return invalid(400, { invalid: true })
 	}
 	try {
-		const user = await post(`verify-otp`, { phone, otp })
+		const user = await post(`verify-otp`, { phone, otp }, $page.data.origin)
 		if (!user) {
 			return invalid(400, { credentials: true })
 		}
@@ -80,6 +80,7 @@ const verifyOtp: Action = async ({ cookies, request, locals }) => {
 		try {
 			const cartRes = await gett('carts/my', request.headers.get('cookie'))
 			const cart = {
+				cartId: cartRes.cart_id,
 				items: cartRes.items,
 				qty: cartRes.qty,
 				tax: cartRes.tax,
@@ -94,12 +95,15 @@ const verifyOtp: Action = async ({ cookies, request, locals }) => {
 			}
 			if (cart) {
 				// locals.cart = cart
-				cookies.set('cart', JSON.stringify(cart), {
-					path: '/'
-				})
+				locals.cartId = cart.cartId
+				locals.cartQty = cart.qty
+				locals.cart = cart
+				cookies.set('cartId', cart.cartId, { path: '/' })
+				cookies.set('cartQty', cart.qty, { path: '/' })
+				// cookies.set('cart', JSON.stringify(cart), { path: '/' })
 			}
 		} catch (e) {
-			console.log('eeeeeeeeeeeeee', e)
+			console.log('zzzzzzzzzzzzzzzzzz', e)
 		}
 		// redirect the user
 		redirect(302, '/')

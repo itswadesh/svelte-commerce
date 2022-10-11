@@ -1,7 +1,7 @@
 <script>
-import { WWW_URL } from '$lib/config'
 import dayjs from 'dayjs'
 import hash from 'hash-it'
+import { page } from '$app/stores'
 export let article = false
 export let author = null
 export let breadcrumbs = []
@@ -13,9 +13,9 @@ export let metadescription = ''
 export let siteLanguage = null
 export let siteTitle = ''
 export let siteTitleAlt = ''
-export let siteUrl = WWW_URL
+export let siteUrl = $page.data.origin
 export let title = ''
-export let url = WWW_URL
+export let url = $page.data.origin
 export let facebookPage = null
 export let githubPage = null
 export let linkedinProfile = null
@@ -213,7 +213,7 @@ const schemaOrgProduct = {
 	},
 	releaseDate: createdAt,
 	dateModified: updatedAt,
-	url: `${WWW_URL}/biz/${slug}`,
+	url: `${$page.data.origin}/biz/${slug}`,
 	interactionStatistic: {
 		'@type': 'InteractionCounter',
 		interactionType: 'http://schema.org/DownloadAction',
@@ -223,13 +223,13 @@ const schemaOrgProduct = {
 		'@type': 'Offer',
 		availability: 'http://schema.org/InStock',
 		priceValidUntil: nextWeek.toISOString(),
-		url: `${WWW_URL}/biz/${slug}`,
+		url: `${$page.data.origin}/biz/${slug}`,
 		price: price < 1 ? '0.00' : price,
 		priceCurrency: 'USD',
 		seller: {
 			'@type': 'Organization',
 			name: 'Litekart',
-			url: WWW_URL
+			url: $page.data.origin
 		}
 	}
 }

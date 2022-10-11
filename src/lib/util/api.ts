@@ -1,8 +1,9 @@
 import { loadingDelayed } from '$lib/store'
 import { id } from '$lib/config'
-import { PUBLIC_WWW_URL } from '$env/static/public'
+// import { PUBLIC_WWW_URL } from '$env/static/public'
 let typingTimer
-const send = async ({ method, path, params, data, token, headers }: any) => {
+
+const send = async ({ method, path, params, data, token, headers, origin }: any) => {
 	if (
 		path.includes('.png') ||
 		path.includes('.jpg') ||
@@ -11,8 +12,7 @@ const send = async ({ method, path, params, data, token, headers }: any) => {
 		path.includes('.css')
 	)
 		return
-	const WWW_URL = PUBLIC_WWW_URL || 'http://localhost:3000'
-	let origin = WWW_URL
+	origin = origin || 'http://localhost:3000'
 	let storeId = id // cookies.get('store')?.id
 
 	// console.log('sssssssssssssss', storeId, path)
@@ -26,7 +26,8 @@ const send = async ({ method, path, params, data, token, headers }: any) => {
 		// storeId = JSON.parse(cookies.store || '{}')?.id
 	} else {
 	}
-	let uri = new URL(path, WWW_URL)
+	let uri = new URL(path, origin)
+
 	if (!path.includes('/api/')) {
 		// When microservice path provided
 		uri = new URL('api/' + path, origin)
@@ -113,20 +114,20 @@ const send = async ({ method, path, params, data, token, headers }: any) => {
 	}
 }
 
-export const getAPI = (path, headers?) => {
-	return send({ method: 'GET', path, headers })
+export const getAPI = (path, origin, headers?) => {
+	return send({ method: 'GET', path, origin, headers })
 }
 
-export const del = (path, headers?) => {
-	return send({ method: 'DELETE', path, headers })
+export const del = (path, origin, headers?) => {
+	return send({ method: 'DELETE', path, origin, headers })
 }
 
-export const post = (path, data, headers?) => {
-	return send({ method: 'POST', path, data, headers })
+export const post = (path, data, origin, headers?) => {
+	return send({ method: 'POST', path, data, origin, headers })
 }
 
-export const put = (path, data, headers?) => {
-	return send({ method: 'PUT', path, data, headers })
+export const put = (path, data, origin, headers?) => {
+	return send({ method: 'PUT', path, data, origin, headers })
 }
 
 const startDelayedLoadingIndicator = async () => {

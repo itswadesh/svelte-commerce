@@ -1,4 +1,4 @@
-import { currency as currencyConfig } from '../config'
+import { currency as currencyConfig, IMAGE_CDN_URL } from '../config'
 import { toasts } from 'svelte-toasts'
 let allToasts
 export function constructURL2(url, fl) {
@@ -17,6 +17,19 @@ export const delay = (delayInms) => {
 		}, delayInms)
 	})
 }
+
+export const getCdnImageUrl = (src, tr) => {
+	if (src) {
+		const originalImageUrl = src
+			.replace('https://zapvi.s3.ap-south-1.amazonaws.com/', '/')
+			.replace('https://zapvi.b-cdn.net/', '/')
+			.replace('https://ik.imagekit.io/3wzatecz51w3i/zapvi/', '/')
+		// .replace('https://chachhi.com/wp-content/uploads/images/', '/')
+		return IMAGE_CDN_URL + originalImageUrl
+		// return originalImageUrl + tr
+	}
+}
+
 const toast = (title, type) => {
 	if (title?.message) title = title?.message
 	allToasts?.remove()
@@ -72,11 +85,11 @@ export function currency(value, currency = '₹', decimals?) {
 	if (!isFinite(value) || (!value && value !== 0)) return ''
 	currency = currency != null ? currency : currencyConfig.symbol
 	decimals = decimals != null ? decimals : 0
-	let stringified = Math.abs(value).toFixed(decimals)
-	let _int = decimals ? stringified.slice(0, -1 - decimals) : stringified
-	let i = _int.length % 3
-	let head = i > 0 ? _int.slice(0, i) + (_int.length > 3 ? ',' : '') : ''
-	let _float = decimals ? stringified.slice(-1 - decimals) : ''
-	let sign = value < 0 ? '-' : ''
+	const stringified = Math.abs(value).toFixed(decimals)
+	const _int = decimals ? stringified.slice(0, -1 - decimals) : stringified
+	const i = _int.length % 3
+	const head = i > 0 ? _int.slice(0, i) + (_int.length > 3 ? ',' : '') : ''
+	const _float = decimals ? stringified.slice(-1 - decimals) : ''
+	const sign = value < 0 ? '-' : ''
 	return sign + currency + ' ' + head + _int.slice(i).replace(digitsRE, '$1,') + _float
 }

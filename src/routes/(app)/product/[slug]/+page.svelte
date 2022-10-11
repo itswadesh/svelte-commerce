@@ -66,14 +66,8 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import SimilarProducts from '$lib/components/Product/SimilarProducts.svelte'
 import FrequentlyBoughtProduct from './_FrequentlyBoughtProduct.svelte'
 import { fireGTagEvent } from '$lib/util/gTag'
-import UserForm from '$lib/components/Product/UserForm.svelte'
-import Gallery from '$lib/components/Product/Gallery.svelte'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
 import { applyAction, enhance } from '$app/forms'
-import { gett } from '$lib/utils'
-// import Konvas from '$lib/components/ProductDesigner/Konvas.svelte'
-
-let Konvas
 
 const dispatch = createEventDispatcher()
 
@@ -123,16 +117,16 @@ if (data.product?.size?.name === 'One Size') {
 }
 
 onMount(async () => {
-	screenWidth = screen.width
-
-	const canvasEmodule = await import('$lib/components/ProductDesigner/Konvas.svelte')
-	Konvas = canvasEmodule.default
 	try {
 		// console.log(' data.product?._id = ', data.product?._id)
 
-		productReview = await getAPI(`reviews/product-reviews?pid=${data.product?._id}`)
+		productReview = await getAPI(
+			`reviews/product-reviews?pid=${data.product?._id}`,
+			$page.data.origin
+		)
 		isWislisted = await getAPI(
-			`wishlists/check?product=${data.product?._id}&variant=${data.product?._id}&store=${$page.data?.store?.id}`
+			`wishlists/check?product=${data.product?._id}&variant=${data.product?._id}&store=${$page.data?.store?.id}`,
+			$page.data.origin
 		)
 
 		// console.log('productReview', productReview)
@@ -152,21 +146,31 @@ function handleShowReviewsCount(showReviewsCount) {
 function selectSize(s) {
 	selectedSize = s.name
 }
-
-async function addToBag(p) {
+// This is used only for customized product else cart?/add
+async function addToBag(p, customizedImg, customizedJson) {
+	const parsedJsonData = JSON.parse(customizedJson)
+	if (p.isCustomized && parsedJsonData?.children[0].children.length < 3) {
+		return toast('Please select the design.', 'error')
+	}
 	loading = true
 	cartButtonText = 'Adding...'
 
 	try {
-		const cart = await post('carts/add-to-cart', {
-			pid: p._id,
-			vid: p._id,
-			qty: 1,
-			options: p.options,
-			customizedImg: customizedImg
-		})
+		const cart = await post(
+			'carts/add-to-cart',
+			{
+				pid: p._id,
+				vid: p._id,
+				qty: 1,
+				options: p.options,
+				customizedImg: customizedImg,
+				customizedData: customizedJson
+			},
+			$page.data.origin
+		)
 		if (cart) {
 			const cookieCart = {
+				cartId: cart?.cart_id,
 				items: cart?.items,
 				qty: cart?.qty,
 				tax: cart?.tax,
@@ -179,10 +183,13 @@ async function addToBag(p) {
 				unavailableItems: cart?.unavailableItems,
 				formattedAmount: cart?.formattedAmount
 			}
-			cookies.set('cart', JSON.stringify(cookieCart), { path: '/' })
-			cartButtonText = 'Added To Cart'
+			cookies.set('cartId', cookieCart.cartId, { path: '/' })
+			cookies.set('cartQty', cookieCart.qty, { path: '/' })
+			// cookies.set('cart', JSON.stringify(cookieCart), { path: '/' })
+			// cartButtonText = 'Added To Cart'
 			bounceItemFromTop = true
 		}
+
 		await invalidateAll()
 
 		cartButtonText = 'Go to cart'
@@ -278,7 +285,7 @@ async function toggleWishlist(id) {
 	}
 	try {
 		loadingForWishlist = true
-		isWislisted = await post(`wishlists/toggle`, { product: id, variant: id })
+		isWislisted = await post(`wishlists/toggle`, { product: id, variant: id }, $page.data.origin)
 	} catch (e) {
 	} finally {
 		loadingForWishlist = false
@@ -337,84 +344,24 @@ function handleMobileCanvas() {
 			<!-- Images -->
 
 			<div class="col-span-1 h-auto lg:col-span-3">
-				{#if !data.product?.isCustomized}
-					<div
-						class="flex w-full grid-cols-2 flex-row gap-2 overflow-x-scroll scrollbar-none md:grid">
-						{#if data?.product?.imagesCdn?.length}
-							{#each data.product?.imagesCdn as imgCdn}
-								<button
-									type="button"
-									class="w-full flex-shrink-0 cursor-zoom-in overflow-hidden rounded md:h-full md:w-full md:flex-shrink"
-									on:click="{() => handleGallery(imgCdn)}">
-									<LazyImg
-										src="{imgCdn}"
-										alt="{data.product?.name}"
-										width="416"
-										height="600"
-										class="h-full w-full transform object-contain object-center transition duration-700" />
-								</button>
-							{/each}
-						{/if}
-					</div>
-				{:else if data.product?.layoutTemplateCdn}
-					<div
-						transition:fade="{{ duration: 200 }}"
-						class="{showEditor
-							? 'fixed inset-0 z-[100] h-screen w-full bg-white sm:static sm:z-0 sm:h-auto sm:bg-transparent'
-							: ''}">
-						{#if showEditor}
+				<div
+					class="flex w-full grid-cols-2 flex-row gap-2 overflow-x-scroll scrollbar-none md:grid">
+					{#if data?.product?.imagesCdn?.length}
+						{#each data.product?.imagesCdn as imgCdn}
 							<button
 								type="button"
-								class="absolute top-3 right-3 z-[70] text-white"
-								on:click="{() => (showEditor = false)}">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke-width="1.5"
-									stroke="currentColor"
-									class="h-6 w-6">
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-								</svg>
+								class="w-full flex-shrink-0 cursor-zoom-in overflow-hidden rounded md:h-full md:w-full md:flex-shrink"
+								on:click="{() => handleGallery(imgCdn)}">
+								<LazyImg
+									src="{imgCdn}"
+									alt="{data.product?.name}"
+									width="416"
+									height="600"
+									class="h-full w-full transform object-contain object-center transition duration-700" />
 							</button>
-						{/if}
-
-						<button type="button" on:click="{handleMobileCanvas}" class="h-full w-full">
-							<svelte:component
-								this="{Konvas}"
-								product="{data.product}"
-								bind:customizedImg
-								on:saveAndAddToCart="{() => addToBag(data.product)}" />
-						</button>
-					</div>
-				{:else}
-					<div
-						class="flex h-screen w-full flex-col items-center justify-center gap-5 text-center sm:mx-auto sm:h-auto sm:w-auto">
-						<h1 class="text-xl font-semibold capitalize sm:text-2xl">Make your custom design</h1>
-
-						<div
-							class="relative flex h-full w-full flex-col items-center justify-center gap-2 rounded-md border bg-gray-100 text-sm text-gray-500 sm:h-[570px] sm:w-[302px]">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke-width="1.5"
-								stroke="currentColor"
-								class="h-10 w-10">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="M15.182 16.318A4.486 4.486 0 0012.016 15a4.486 4.486 0 00-3.198 1.318M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"
-								></path>
-							</svg>
-
-							<span> Opps! layout template not found </span>
-						</div>
-					</div>
-				{/if}
+						{/each}
+					{/if}
+				</div>
 			</div>
 
 			<div class="col-span-1 lg:col-span-2">
@@ -461,21 +408,22 @@ function handleMobileCanvas() {
 
 				<!-- prices -->
 
-				<div class="mb-2 flex items-center gap-4">
-					<span class="text-xl sm:text-2xl"><b>{data.product?.formattedPrice}</b></span>
+				<div class="mb-2 flex flex-wrap items-center gap-4">
+					<span class="text-xl sm:text-2xl whitespace-nowrap"
+						><b>{data.product?.formattedPrice}</b></span>
 
-					{#if data.product?.formattedMrp > data.product?.formattedPrice}
-						<span class="text-lg text-gray-500 sm:text-xl">
+					{#if data.product?.mrp > data.product?.price}
+						<span class="text-lg text-gray-500 sm:text-xl whitespace-nowrap">
 							<strike>{data.product?.formattedMrp}</strike>
 						</span>
-					{/if}
 
-					{#if ((data.product?.formattedMrp - data.product?.formattedPrice) / data.product?.formattedMrp) * 100 > 0}
-						<span class="text-lg font-semibold text-primary-500 sm:text-xl">
-							({((data.product?.formattedMrp - data.product?.formattedPrice) /
-								data.order?.formattedMrp) *
-								100}%)
-						</span>
+						{#if Math.floor(((data.product?.mrp - data.product?.price) / data.product?.mrp) * 100) > 0}
+							<span class="text-lg font-semibold text-primary-500 sm:text-xl whitespace-nowrap">
+								({Math.floor(
+									((data.product?.mrp - data.product?.price) / data.product?.mrp) * 100
+								)}% off)
+							</span>
+						{/if}
 					{/if}
 				</div>
 
@@ -767,14 +715,18 @@ function handleMobileCanvas() {
 											result.data.qty < 0
 												? fireGTagEvent('remove_from_cart', result.data)
 												: fireGTagEvent('add_to_cart', result.data)
-											cartButtonText = 'Added To Cart'
-											bounceItemFromTop = true
-											// cartButtonText = 'Go to cart'
 
+											// cartButtonText = 'Added To Cart'
+											bounceItemFromTop = true
+											setTimeout(() => {
+												bounceItemFromTop = false
+											}, 3000)
+											// cartButtonText = 'Go to cart'
 											if (customizedImg) {
 												goto(`/checkout/address`)
 											}
 											invalidateAll()
+
 											await applyAction(result)
 										}
 									}}">
@@ -837,7 +789,7 @@ function handleMobileCanvas() {
 							</svg>
 						</h6>
 
-						<div class="prose text-sm">
+						<div class="prose text-sm overflow-hidden">
 							{@html data.product?.description}
 						</div>
 					</div>
@@ -865,7 +817,7 @@ function handleMobileCanvas() {
 							</svg>
 						</h6>
 
-						<div class="prose text-sm">
+						<div class="prose text-sm overflow-hidden">
 							{@html data.product?.longDescription}
 						</div>
 					</div>
@@ -1113,11 +1065,3 @@ function handleMobileCanvas() {
 		{/if}
 	</div>
 </div>
-
-<Gallery bind:showPhotosModal product="{data.product}" />
-
-{#if bounceItemFromTop}
-	<AnimatedCartItem img="{data.product?.imgCdn}" />
-{/if}
-
-<!-- <UserForm showUserInputForm="{showUserInputForm}" /> -->

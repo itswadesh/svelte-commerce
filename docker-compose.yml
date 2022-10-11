@@ -9,7 +9,6 @@ services:
     ports:
       - '3000:3000'
     environment:
-      - VITE_WWW_URL=https://kitcommerce.tech
       - HTTP_ENDPOINT=https://api.misiki.io
       - VITE_DOMAIN=kitcommerce.tech
       - NODE_ENV=production
