@@ -1065,3 +1065,7 @@ function handleMobileCanvas() {
 		{/if}
 	</div>
 </div>
+
+{#if bounceItemFromTop}
+	<AnimatedCartItem img="{data.product?.imgCdn}" />
+{/if}
