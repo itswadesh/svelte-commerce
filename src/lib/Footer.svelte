@@ -29,20 +29,18 @@ import { getAPI } from './util/api'
 import { toast } from './util'
 import { browser } from '$app/environment'
 import { gett } from './utils'
-import {
-	address,
-	email,
-	facebookPage,
-	instagramPage,
-	linkedinPage,
-	twitterPage,
-	websiteName
-} from './config'
-export let me, cart
-
-let clazz = ''
-
+// import {
+// 	address,
+// 	email,
+// 	facebookPage,
+// 	instagramPage,
+// 	linkedinPage,
+// 	twitterPage,
+// 	websiteName
+// } from './config'
+export let me, cart, store, popularSearches, megamenu
 export { clazz as class }
+let clazz = ''
 
 function getYear() {
 	const d = new Date()
@@ -82,7 +80,7 @@ let footerItems = [
 	}
 ]
 
-let popularSearches, popularSearchesCount
+// let popularSearches, popularSearchesCount
 
 const items = [
 	{
@@ -108,51 +106,62 @@ const items = [
 ]
 
 onMount(async () => {
-	try {
-		const res = await getAPI(`popular-search?store=${$page.data?.store?.id}`, $page.data.origin)
-		popularSearches = res?.data
-		popularSearchesCount = res?.count
+	const res = await getStoreData()
+	// try {
+	// const res = await getAPI(`popular-search?store=${$page.data?.store?.id}`, $page.data.origin)
+	// popularSearches = res?.data
+	// popularSearchesCount = res?.count
 
-		// console.log('popular-search = ', popularSearches)
-	} catch (e) {
-		toast(e, 'error')
-	} finally {
-	}
+	// console.log('popular-search = ', popularSearches)
+	// } catch (e) {
+	// 	toast(e, 'error')
+	// } finally {
+	// }
 
+	store = res.storeOne
+	megamenu = res.megamenu
+	popularSearches = res.popularSearches
 	if (browser) {
-		const megamenu = await getMegamenu()
+		// const megamenu = await getMegamenu()
 		localStorage.setItem('megamenu', JSON.stringify(megamenu))
-		const home = await getHome()
-		localStorage.setItem('home', JSON.stringify(home))
+		// const home = await getHome()
+		// localStorage.setItem('home', JSON.stringify(home))
 	}
+	// popularSearches = res
+	// popularSearchesCount = res?.count
 })
-async function getMegamenu() {
-	let megamenu = []
-	const d = new Date()
-	try {
-		megamenu = await getAPI(
-			`categories/megamenu?megamenu=true&store=${$page.data?.store?.id}`,
-			$page.data.origin
-		)
-	} catch (e) {
-		console.log('eeeeeeeeeeeeee', e)
-	}
-	const d3 = new Date()
-	console.log('Megamenu loaded at hook: ', d3.getTime() - d.getTime())
-	return megamenu
+async function getStoreData() {
+	const response = await fetch('server/store')
+	const res = await response.json()
+	return res
 }
-async function getHome() {
-	let home = []
-	const d = new Date()
-	try {
-		home = await getAPI(`home?store=${$page.data?.store?.id}`, $page.data.origin)
-	} catch (e) {
-		console.log('eeeeeeeeeeeeee', e)
-	}
-	const d3 = new Date()
-	console.log('home loaded at hook: ', d3.getTime() - d.getTime())
-	return home
-}
+// async function getMegamenu() {
+// 	let megamenu = []
+// 	const d = new Date()
+// 	try {
+// 		megamenu = await getAPI(
+// 			`categories/megamenu?megamenu=true&store=${$page.data?.store?.id}`,
+// 			$page.data.origin
+// 		)
+// 	} catch (e) {
+// 		console.log('eeeeeeeeeeeeee', e)
+// 	}
+// 	const d3 = new Date()
+// 	console.log('Megamenu loaded at hook: ', d3.getTime() - d.getTime())
+// 	return megamenu
+// }
+// async function getHome() {
+// 	let home = []
+// 	const d = new Date()
+// 	try {
+// 		home = await getAPI(`home?store=${$page.data?.store?.id}`, $page.data.origin)
+// 	} catch (e) {
+// 		console.log('eeeeeeeeeeeeee', e)
+// 	}
+// 	const d3 = new Date()
+// 	console.log('home loaded at hook: ', d3.getTime() - d.getTime())
+// 	return home
+// }
 </script>
 
 <div class="bg-primary-500 p-3 text-center tracking-wide text-white sm:px-10">
@@ -172,7 +181,7 @@ async function getHome() {
 					</h1>
 
 					<ul class="flex flex-col gap-1 text-gray-500">
-						{#each item.subMenu as item}
+						{#each item?.subMenu as item}
 							<li class="flex max-w-max items-center">
 								<a
 									href="{item.link}"
@@ -216,7 +225,7 @@ async function getHome() {
 							<span class="font-semibold">Email</span>
 						</h2>
 
-						<p>{email}</p>
+						<p>{store?.email}</p>
 					</li>
 
 					<li class="max-w-max">
@@ -262,7 +271,7 @@ async function getHome() {
 
 			<div>
 				<h1 class="mb-4 whitespace-nowrap font-semibold uppercase">
-					Experience {websiteName} app on mobile
+					Experience {store?.websiteName} app on mobile
 				</h1>
 
 				<div class="flex items-center gap-1">
@@ -276,7 +285,7 @@ async function getHome() {
 
 					<a href="##" aria-label="Click for the app link on App Store">
 						<LazyImg
-							src="/app/app-store.svg"
+							src="/app/app-store?.svg"
 							alt=""
 							width="128"
 							class="h-auto w-32 object-contain object-left p-1" />
@@ -292,7 +301,7 @@ async function getHome() {
 
 					<li class="max-w-max">
 						<a
-							href="${facebookPage}"
+							href="${store?.facebookPage}"
 							target="_blank"
 							rel="noopener noreferrer"
 							aria-label="Click for facebook link">
@@ -316,7 +325,7 @@ async function getHome() {
 
 					<li class="max-w-max">
 						<a
-							href="{instagramPage}"
+							href="{store?.instagramPage}"
 							target="_blank"
 							rel="noopener noreferrer"
 							aria-label="Click for instagram link">
@@ -341,7 +350,7 @@ async function getHome() {
 
 					<li class="max-w-max">
 						<a
-							href="{twitterPage}"
+							href="{store?.twitterPage}"
 							target="_blank"
 							rel="noopener noreferrer"
 							aria-label="Click for twitter link">
@@ -365,7 +374,7 @@ async function getHome() {
 					<!-- Mail -->
 
 					<li class="max-w-max">
-						<a href="mailto:{email}" aria-label="Click to contact with mail id">
+						<a href="mailto:{store?.email}" aria-label="Click to contact with mail id">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								class="h-5 w-5 transition duration-300	hover:text-[#c71610]"
@@ -386,7 +395,7 @@ async function getHome() {
 
 					<li class="max-w-max">
 						<a
-							href="{linkedinPage}"
+							href="{store?.linkedinPage}"
 							target="_blank"
 							rel="noopener noreferrer"
 							aria-label="Click for linked in link">
@@ -413,7 +422,7 @@ async function getHome() {
 
 					<li class="max-w-max">
 						<a
-							href="https://www.youtube.com/channel/UCcb3eRHh-7qAiv9ea7jmTHQ"
+							href="{store?.youtubeChannel}"
 							target="_blank"
 							rel="noopener noreferrer"
 							aria-label="Click for youtube link">
@@ -435,8 +444,7 @@ async function getHome() {
 				</ul>
 			</div>
 		</div>
-
-		{#if popularSearchesCount > 0}
+		{#if popularSearches?.count > 0}
 			<div class="mb-4 sm:mb-8">
 				<h1 class="mb-4 flex items-center gap-4 font-semibold">
 					<span class="flex-1 whitespace-nowrap uppercase"> Popular searches </span>
@@ -445,7 +453,7 @@ async function getHome() {
 				</h1>
 
 				<ul class="flex flex-wrap items-center text-gray-500">
-					{#each popularSearches as p, px}
+					{#each popularSearches.data as p, px}
 						<li class="max-w-max">
 							<a
 								href="/search?q={p.text}"
@@ -454,7 +462,7 @@ async function getHome() {
 								{p.text}
 							</a>
 
-							{#if px < popularSearchesCount - 1}
+							{#if px < popularSearches.count - 1}
 								<span class="px-2">|</span>
 							{/if}
 						</li>
@@ -469,7 +477,7 @@ async function getHome() {
 			<h1 class="mb-4 whitespace-nowrap font-semibold uppercase">Registered Office Address</h1>
 
 			<p class="text-gray-500">
-				{address}
+				{@html store?.address}
 			</p>
 		</div>
 
@@ -477,7 +485,7 @@ async function getHome() {
 
 		<div
 			class="flex flex-wrap items-center justify-center gap-2 text-sm text-gray-500 sm:gap-5 md:justify-between">
-			<p>Copyright {getYear()} © {websiteName} Made with ❤️ in India</p>
+			<p>Copyright {getYear()} © {store?.websiteName} Made with ❤️ in India</p>
 
 			<div class="flex items-center justify-center gap-4">
 				<a
