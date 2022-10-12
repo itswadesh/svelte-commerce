@@ -13,7 +13,6 @@ import Cookie from 'cookie-universal'
 import { fade, fly, slide } from 'svelte/transition'
 import { cubicOut } from 'svelte/easing'
 import { createEventDispatcher, getContext, onMount } from 'svelte'
-// import { WWW_URL } from './config'
 import Select from 'svelte-select'
 // import 'svelte-select/tailwind.css'
 import Item from '$lib/AutocompleteItem.svelte'
@@ -102,11 +101,17 @@ async function onSearch(filterText) {
 			`es/autocomplete?q=${filterText}&store=${$page.data.store?.id}`,
 			$page.data.origin
 		)
-
-		// console.log('zzzzzzzzzzzzzzzzzz', res?.data)
-
-		return res?.data || []
-	} catch (e) {}
+		const hits = res?.data?.hits?.hits
+		let data = []
+		if (hits) {
+			data = hits.map((h) => {
+				return { name: h._source.name, slug: h._source.slug, type: h._source.type }
+			})
+		}
+		return data || []
+	} catch (e) {
+		console.log('err....', e)
+	}
 }
 
 function enterPressedOnSearch() {
@@ -114,10 +119,11 @@ function enterPressedOnSearch() {
 }
 
 async function onSearchSubmit({ detail }) {
-	// console.log('onSearchSubmit..............', detail)
-
 	let u = new URL('/search', $page.data.origin)
-	u.searchParams.set('q', detail?.key)
+	if (detail.type === 'category') {
+		u = new URL(`/${detail.slug}`, $page.data.origin)
+	}
+	u.searchParams.set('q', detail?.name)
 	let newUrl = u.toString() + '&sort=price'
 	goto(newUrl)
 	dispatch('search', detail)
@@ -171,9 +177,9 @@ const removeItemFromCart = async ({ pid, qty, customizedImg, ix }: any) => {
 	}
 }
 
-const optionIdentifier = 'key'
-const getOptionLabel = (option) => option.key
-const getSelectionLabel = (option) => option.key
+const optionIdentifier = 'name'
+const getOptionLabel = (option) => option.name
+const getSelectionLabel = (option) => option.name
 </script>
 
 <nav
@@ -668,7 +674,10 @@ const getSelectionLabel = (option) => option.key
 			{:else}
 				<!-- Login -->
 
-				<a href="/auth/otp-login" aria-label="Click to route login" data-sveltekit-prefetch>
+				<a
+					href="/auth/otp-login?ref={$page?.url?.pathname}{$page?.url?.search}"
+					aria-label="Click to route login"
+					data-sveltekit-prefetch>
 					<button
 						class="gap-1 lg:border-b-4 lg:border-transparent focus:outline-none flex flex-col items-center justify-center"
 						aria-label="/">
@@ -822,7 +831,7 @@ const getSelectionLabel = (option) => option.key
 
 				<a
 					data-sveltekit-prefetch
-					href="/auth/otp-login"
+					href="/auth/otp-login?ref={$page?.url?.pathname}{$page?.url?.search}"
 					aria-label="Click to route login"
 					class="flex items-center gap-2 py-2"
 					on:click="{() => (openSidebar = false)}">

@@ -149,26 +149,22 @@ onMount(() => {
 							{/if}
 
 							<div class="flex flex-wrap items-center gap-2">
-								<span class="text-base">
-									<b>
-										{data.order?.formattedPrice}
-									</b>
+								<span class="text-base font-bold whitespace-nowrap">
+									{data.order?.formattedPrice}
 								</span>
 
-								{#if data.order?.formattedMrp > data.order?.formattedPrice}
-									<span class="text-gray-500">
-										<strike>
-											{data.order?.formattedMrp}
-										</strike>
+								{#if data.order?.mrp > data.order?.price}
+									<span class="text-gray-500 line-through whitespace-nowrap">
+										{data.order?.formattedMrp}
 									</span>
-								{/if}
 
-								{#if ((data.order?.formattedMrp - data.order?.formattedPrice) / data.order?.formattedMrp) * 100 > 0}
-									<span class="text-green-500">
-										({((data.order?.formattedMrp - data.order?.formattedPrice) /
-											data.order?.formattedMrp) *
-											100}%)
-									</span>
+									{#if Math.floor(((data.order?.mrp - data.order?.price) / data.order?.mrp) * 100) > 0}
+										<span class="text-green-600 whitespace-nowrap">
+											({Math.floor(
+												((data.order?.mrp - data.order?.price) / data.order?.mrp) * 100
+											)}% off)
+										</span>
+									{/if}
 								{/if}
 							</div>
 						</div>
@@ -318,11 +314,7 @@ onMount(() => {
 		</section>
 	{:else}
 		<div class="flex flex-col items-center justify-center text-center">
-			<LazyImg
-				src="/no/add-to-cart-animate.svg"
-				alt="empty cart"
-				height="240"
-				class="mb-5 h-60 object-contain" />
+			<img src="/no/add-to-cart-animate.svg" alt="empty cart" class="mb-5 h-60 object-contain" />
 
 			<span class="mb-3 text-xl font-medium md:text-3xl"> Your have't ordered yet !!</span>
 

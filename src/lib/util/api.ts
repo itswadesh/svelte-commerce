@@ -1,5 +1,5 @@
+import { id } from '$lib/config'
 import { loadingDelayed } from '$lib/store'
-
 let typingTimer
 
 const send = async ({ method, path, params, data, token, headers, origin }: any) => {
@@ -12,10 +12,7 @@ const send = async ({ method, path, params, data, token, headers, origin }: any)
 	)
 		return
 	origin = origin || 'http://localhost:3000'
-	let storeId = id // cookies.get('store')?.id
-
-	// console.log('sssssssssssssss', storeId, path)
-
+	const storeId = id // cookies.get('store')?.id
 	if (headers && headers.get('cookie') && headers.get('cookie').includes('store')) {
 		origin = headers.get('origin') || headers.get('host')
 		if (origin === 'localhost:3000') origin = 'http://localhost:3000'
