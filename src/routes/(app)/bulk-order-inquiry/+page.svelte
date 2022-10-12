@@ -69,7 +69,7 @@ import Textarea from '$lib/ui/Textarea.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 import { post } from '$lib/util/api'
 import { Confetti } from 'svelte-confetti'
-
+import { page } from '$app/stores'
 let seoProps = {
 	title: `Bulk order inquiry`,
 	description: `Bulk order inquiry`
@@ -112,15 +112,20 @@ async function submit() {
 	try {
 		// console.log('zzzzzzzzzzzzzzzzzz', blukOrder)
 
-		const res = await post('bulk-order-enquiry', {
-			name: blukOrder.name,
-			companayName: blukOrder.companayName,
-			email: blukOrder.email,
-			phone: blukOrder.phone,
-			interestedProducts: blukOrder.interestedProducts,
-			minQty: blukOrder.minQty,
-			message: blukOrder.message
-		})
+		const res = await post(
+			'bulk-order-enquiry',
+			{
+				name: blukOrder.name,
+				companayName: blukOrder.companayName,
+				email: blukOrder.email,
+				phone: blukOrder.phone,
+				interestedProducts: blukOrder.interestedProducts,
+				minQty: blukOrder.minQty,
+				message: blukOrder.message,
+				store: $page.data.store?.id
+			},
+			$page.data.origin
+		)
 
 		// console.log('zzzzzzzzzzzzzzzzzz', res)
 		contactSuccess = true

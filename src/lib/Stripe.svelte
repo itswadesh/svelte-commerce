@@ -4,7 +4,7 @@ import { createEventDispatcher, onMount } from 'svelte'
 import { goto } from '$app/navigation'
 import GrnIndGradiantButton from './ui/GrnIndGradiantButton.svelte'
 import { post } from '$lib/util/api'
-
+import { page } from '$app/stores'
 let stripeReady = false
 let mounted = false
 let loading = false
@@ -55,7 +55,8 @@ const payWithStripe = async (pm) => {
 		const paymentMethodId = pm.id
 		const resStripe = post('stripe', {
 			paymentMethodId,
-			address
+			address,
+			store: $page.data.store?.id
 		})
 		if (resStripe.errors) {
 			errorMessage = { show: true, text: resStripe.errors[0].message }

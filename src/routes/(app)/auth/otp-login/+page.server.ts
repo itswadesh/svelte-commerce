@@ -3,7 +3,6 @@ import { gett } from '$lib/utils'
 import { invalid, redirect } from '@sveltejs/kit'
 // import { post } from '$lib/utils'
 import type { Action, Actions, PageServerLoad } from './$types'
-
 export const load: PageServerLoad = async ({ locals }) => {
 	// redirect user if logged in
 	if (locals.session) {
@@ -11,14 +10,14 @@ export const load: PageServerLoad = async ({ locals }) => {
 	}
 }
 
-const getOtp: Action = async ({ request }) => {
+const getOtp: Action = async ({ request, locals }) => {
 	const data = await request.formData()
 	const phone = data.get('phone')
 	if (typeof phone !== 'string' || !phone) {
 		return invalid(400, { invalid: true })
 	}
 	try {
-		const data = await post(`get-otp`, { phone }, $page.data.origin)
+		const data = await post(`get-otp`, { phone, store: locals.store?.id }, locals.origin)
 		// const data = { timer: 1 }
 		return {
 			phone: phone,
@@ -43,7 +42,7 @@ const verifyOtp: Action = async ({ cookies, request, locals }) => {
 		return invalid(400, { invalid: true })
 	}
 	try {
-		const user = await post(`verify-otp`, { phone, otp }, $page.data.origin)
+		const user = await post(`verify-otp`, { phone, otp, store: locals.store?.id }, locals.origin)
 		if (!user) {
 			return invalid(400, { credentials: true })
 		}

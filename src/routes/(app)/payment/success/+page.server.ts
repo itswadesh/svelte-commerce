@@ -1,12 +1,14 @@
-import { post } from '$lib/utils'
+import { gett, post } from '$lib/utils'
 import { error, redirect } from '@sveltejs/kit'
+
 export const prerender = false
 
-export async function load({ url, request, cookies }) {
+export async function load({ url, request, locals, cookies }) {
 	const orderId = url.searchParams.get('id')
 	const status = url.searchParams.get('status')
 	const paymentMode = url.searchParams.get('provider')
-	let loading, err, order
+	let loading, err, order, cart
+	// const getPaySuccessPageHit = async () => {
 	try {
 		loading = true
 		// request.headers.set('content-type', 'application/json')
@@ -16,7 +18,8 @@ export async function load({ url, request, cookies }) {
 			{
 				paymentMode: paymentMode,
 				status: status,
-				orderId: orderId
+				orderId: orderId,
+				store: locals.store?.id
 			},
 			cookies
 		)
@@ -35,5 +38,34 @@ export async function load({ url, request, cookies }) {
 	} finally {
 		loading = false
 	}
-	return { loading, status, paymentMode, order, err }
+	// }
+
+	// const refreshCart = async () => {
+	try {
+		cart = await gett('carts/refresh-cart', request.headers.get('cookie'))
+		if (cart) {
+			const cookieCart = {
+				cartId: cart?.cart_id,
+				items: cart?.items,
+				qty: cart?.qty,
+				tax: cart?.tax,
+				subtotal: cart?.subtotal,
+				total: cart?.total,
+				currencySymbol: cart?.currencySymbol,
+				discount: cart?.discount,
+				selfTakeout: cart?.selfTakeout,
+				shipping: cart?.shipping,
+				unavailableItems: cart?.unavailableItems,
+				formattedAmount: cart?.formattedAmount
+			}
+			locals.cartId = cart.cartId
+			locals.cartQty = cart.qty
+			locals.cart = cookieCart
+			cookies.set('cartId', cookieCart.cartId, { path: '/' })
+			cookies.set('cartQty', cookieCart.qty, { path: '/' })
+		}
+	} catch (e) {}
+
+	// }
+	return { loading, status, paymentMode, order, err, cart }
 }

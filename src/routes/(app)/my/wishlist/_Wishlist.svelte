@@ -27,10 +27,15 @@ export let wishlistedProducts,
 async function toggleWishlist(id, wx) {
 	try {
 		loadingProduct[wx] = true
-		await post('wishlists/toggle', {
-			product: id,
-			variant: id
-		})
+		await post(
+			'wishlists/toggle',
+			{
+				product: id,
+				variant: id,
+				store: $page.data.store?.id
+			},
+			$page.data.origin
+		)
 		await getWishlistedProducts()
 	} catch (e) {
 	} finally {
@@ -40,7 +45,7 @@ async function toggleWishlist(id, wx) {
 
 async function getWishlistedProducts() {
 	try {
-		wishlistedProducts = getAPI(`wishlists/my?store=${$page.data?.store?.id}`)
+		wishlistedProducts = getAPI(`wishlists/my?store=${$page.data?.store?.id}`, $page.data.origin)
 	} catch (e) {
 	} finally {
 	}
@@ -59,11 +64,7 @@ async function getWishlistedProducts() {
 	<div>
 		{#if wishlistedProducts?.count === 0}
 			<div class="flex h-[70vh] flex-col items-center justify-center text-center">
-				<LazyImg
-					src="/no/empty-wishlist.svg"
-					alt="empty wishlist"
-					height="240"
-					class="mb-5 h-60 object-contain" />
+				<img src="/no/empty-wishlist.svg" alt="empty wishlist" class="mb-5 h-60 object-contain" />
 
 				<!-- <span class="mb-3 text-xl font-medium md:text-3xl"> Empty Wishlist !!</span> -->
 
@@ -160,23 +161,22 @@ async function getWishlistedProducts() {
 												</div>
 
 												<div
-													class="flex flex-wrap items-center justify-center overflow-hidden overflow-ellipsis whitespace-nowrap">
-													<div class="mr-2">
-														<b>{w.product?.formattedPrice}</b>
-													</div>
+													class="flex flex-wrap items-center justify-center overflow-hidden overflow-ellipsis gap-2 text-xs">
+													<span class="text-base font-bold whitespace-nowrap"
+														>{w.product?.formattedPrice}</span>
 
 													{#if w.product?.formattedMrp > w.product?.formattedPrice}
-														<strike class="mr-2 text-gray-500">
+														<strike class="text-gray-500 whitespace-nowrap">
 															{w.product?.formattedMrp}
 														</strike>
-													{/if}
 
-													{#if ((w.product?.formattedMrp - w.product?.formattedPrice) / w.product?.formattedMrp) * 100 > 0}
-														<div class="text-primary-500">
-															({((w.product?.formattedMrp - w.product?.formattedPrice) /
-																w.product?.formattedMrp) *
-																100}%)
-														</div>
+														{#if Math.floor(((w.product?.mrp - w.product?.price) / w.product?.mrp) * 100) > 0}
+															<span class="text-primary-500 whitespace-nowrap">
+																({Math.floor(
+																	((w.product?.mrp - w.product?.price) / w.product?.mrp) * 100
+																)}% off)
+															</span>
+														{/if}
 													{/if}
 												</div>
 											</div>

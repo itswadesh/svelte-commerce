@@ -105,7 +105,8 @@ async function submit(pm) {
 				{
 					address: data.addressId,
 					paymentMethod: 'COD',
-					prescription: data.prescription?._id
+					prescription: data.prescription?._id,
+					store: $page.data.store?.id
 				},
 				$page.data.origin
 			)
@@ -119,7 +120,11 @@ async function submit(pm) {
 	} else if (paymentMethod === 'cashfree') {
 		try {
 			data.loading = true
-			const res = await post(`payments/checkout-cf`, { address: data.addressId }, $page.data.origin)
+			const res = await post(
+				`payments/checkout-cf`,
+				{ address: data.addressId, store: $page.data.store?.id },
+				$page.data.origin
+			)
 			if (res?.redirectUrl && res?.redirectUrl !== null) {
 				goto(`${res?.redirectUrl}`)
 			} else {
@@ -135,7 +140,8 @@ async function submit(pm) {
 			const rp = await post(
 				`payments/checkout-rp`,
 				{
-					address: data.addressId
+					address: data.addressId,
+					store: $page.data.store?.id
 				},
 				$page.data.origin
 			)
@@ -157,7 +163,8 @@ async function submit(pm) {
 							`payments/capture-rp`,
 							{
 								rpPaymentId: response.razorpay_payment_id,
-								rpOrderId: response.razorpay_order_id
+								rpOrderId: response.razorpay_order_id,
+								store: $page.data.store?.id
 							},
 							$page.data.origin
 						)

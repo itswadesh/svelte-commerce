@@ -66,7 +66,8 @@ const add: Action = async ({ request, cookies, locals }) => {
 				vid,
 				qty: 1,
 				options,
-				customizedImg
+				customizedImg,
+				store: locals.store?.id
 			},
 			cookies
 		)

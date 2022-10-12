@@ -58,7 +58,8 @@ const addToCart = async ({ pid, qty, customizedImg, ix }: any) => {
 		{
 			pid: pid,
 			qty: qty,
-			customizedImg: customizedImg || null
+			customizedImg: customizedImg || null,
+			store: $page.data.store?.id
 		},
 		$page.data.origin
 	)
@@ -80,7 +81,11 @@ function handleCouponCode(couponCode: string) {
 async function applyCouponCode(selectedCouponCode: string) {
 	try {
 		loadingApplyCoupon = true
-		const resAC = await post('apply-coupon', { code: selectedCouponCode }, $page.data.origin)
+		const resAC = await post(
+			'apply-coupon',
+			{ code: selectedCouponCode, store: $page.data.store?.id },
+			$page.data.origin
+		)
 		appliedCouponInfo = resAC
 		// await invalidateAll()
 		// await refreshCart()
@@ -95,7 +100,7 @@ async function applyCouponCode(selectedCouponCode: string) {
 async function removeCouponCode() {
 	try {
 		loadingRemoveCoupon = true
-		await del('remove-coupon', $page.data.origin)
+		await del(`remove-coupon?store=${$page.data.store?.id}`, $page.data.origin)
 		selectedCouponCode = ''
 		// await invalidateAll()
 		await refreshCart()
@@ -132,7 +137,7 @@ async function getCoupons() {
 
 async function refreshCart() {
 	try {
-		const res = await getAPI('carts/refresh-cart', $page.data.origin)
+		const res = await getAPI(`carts/refresh-cart?store=${$page.data.store?.id}`, $page.data.origin)
 		if (res) {
 			const cookieCart = {
 				cartId: res?.cart_id,

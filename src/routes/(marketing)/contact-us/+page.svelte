@@ -30,7 +30,8 @@ async function submitContactInformation() {
 				email: email,
 				phone: phone,
 				subject: `Someone contact us from ${$page.data.store.websiteName}`,
-				message: message
+				message: message,
+				store: $page.data.store.id
 			},
 			$page.data.origin
 		)
