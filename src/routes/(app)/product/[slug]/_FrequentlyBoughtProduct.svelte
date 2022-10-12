@@ -23,13 +23,38 @@ async function addToBag(p) {
 				pid: p._id,
 				vid: p._id,
 				qty: 1,
-				options: p.options
+				options: p.options,
+				store: $page.data.store.id
 			},
 			$page.data.origin
 		)
 
+		// console.log('zzzzzzzzzzzzzzzzzz',);
+
 		await invalidateAll() //$page.url.toString()
 		cartButtonText = 'Go to cart'
+
+		// const res = await getAPI('carts/my')
+
+		// if (res) {
+		// 	const cookieCart = {
+		// 		items: res?.items,
+		// 		qty: res?.qty,
+		// 		tax: res?.tax,
+		// 		subtotal: res?.subtotal,
+		// 		total: res?.total,
+		// 		currencySymbol: res?.currencySymbol,
+		// 		discount: res?.discount,
+		// 		selfTakeout: res?.selfTakeout,
+		// 		shipping: res?.shipping,
+		// 		unavailableItems: res?.unavailableItems,
+		// 		formattedAmount: res?.formattedAmount
+		// 	}
+		// 	await cookies.set('cart', cookieCart, { path: '/' })
+		// 	$page.data.cart = cookieCart
+		// 	cartButtonText = 'Added To Cart'
+		// 	bounceItemFromTop = true
+		// }
 	} catch (e) {
 		cartButtonText = 'Error adding To Cart'
 	} finally {

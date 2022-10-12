@@ -68,6 +68,7 @@ import FrequentlyBoughtProduct from './_FrequentlyBoughtProduct.svelte'
 import { fireGTagEvent } from '$lib/util/gTag'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
 import { applyAction, enhance } from '$app/forms'
+import { gett } from '$lib/utils'
 
 const dispatch = createEventDispatcher()
 
@@ -164,7 +165,8 @@ async function addToBag(p, customizedImg, customizedJson) {
 				qty: 1,
 				options: p.options,
 				customizedImg: customizedImg,
-				customizedData: customizedJson
+				customizedData: customizedJson,
+				store: $page.data.store.id
 			},
 			$page.data.origin
 		)
@@ -285,7 +287,11 @@ async function toggleWishlist(id) {
 	}
 	try {
 		loadingForWishlist = true
-		isWislisted = await post(`wishlists/toggle`, { product: id, variant: id }, $page.data.origin)
+		isWislisted = await post(
+			`wishlists/toggle`,
+			{ product: id, variant: id, store: $page.data.store.id },
+			$page.data.origin
+		)
 	} catch (e) {
 	} finally {
 		loadingForWishlist = false
@@ -1066,6 +1072,10 @@ function handleMobileCanvas() {
 	</div>
 </div>
 
+<Gallery bind:showPhotosModal product="{data.product}" />
+
 {#if bounceItemFromTop}
 	<AnimatedCartItem img="{data.product?.imgCdn}" />
 {/if}
+
+<!-- <UserForm showUserInputForm="{showUserInputForm}" /> -->

@@ -15,7 +15,6 @@
 import SEO from '$lib/components/SEO/index.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { post, del, getAPI } from '$lib/util/api'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import ToggleSwitch from '$lib/ui/ToggleSwitch.svelte'
@@ -56,7 +55,7 @@ async function sortNow(sort) {
 async function saveAddress(e) {
 	const { _id: id, active } = e
 	try {
-		await post('addresses', { id })
+		await post('addresses', { id, store: $page.data.store?.id }, $page.data.origin)
 		refreshData()
 	} catch (e) {
 		err = e
@@ -68,7 +67,7 @@ async function saveAddress(e) {
 
 async function remove(id) {
 	try {
-		await del('addresses', { id })
+		await del(`addresses?id=${id}&store=${$page.data.store?.id}`, $page.data.origin)
 		refreshData()
 	} catch (e) {
 		err = e
@@ -80,7 +79,10 @@ async function remove(id) {
 
 async function refreshData() {
 	try {
-		const res = await getAPI(`addresses?search=${search}&page${currentPage}&sort=${sort}`)
+		const res = await getAPI(
+			`addresses?search=${search}&page=${currentPage}&sort=${sort}`,
+			$page.data.origin
+		)
 		addresses = res?.data
 	} catch (e) {
 		err = e
@@ -92,32 +94,6 @@ async function refreshData() {
 <SEO {...seoProps} />
 
 <div class="text-gray-800">
-	<div class="mb-5 flex items-center justify-between gap-4 sm:gap-6">
-		<!-- <SearchBox
-			placeholder="Search addresses name, title, content and status..."
-			bind:value="{search}"
-			on:change="{() => callSearch(search)}" /> -->
-
-		<a href="/my/addresses/new" aria-label="Click to route new address" data-sveltekit-prefetch>
-			<PrimaryButton
-				roundedFull="{true}"
-				class="flex h-10 w-10 transform items-center justify-center shadow shadow-primary-500/30 hover:scale-110 hover:shadow-lg md:h-12 md:w-12">
-				<svg
-					class="h-6 w-6 md:h-8 md:w-8"
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke="currentColor">
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-				</svg>
-			</PrimaryButton>
-		</a>
-	</div>
-
 	{#if addresses?.isFetching}
 		Loading....
 	{:else if addresses?.errors}
@@ -144,39 +120,88 @@ async function refreshData() {
 			</label>
 		</header>
 
-		<div class="overflow-hidden border-b border-gray-200 shadow-md sm:rounded-lg">
-			<table class="min-w-full divide-y divide-gray-200 text-left text-sm tracking-wider">
-				<thead class="whitespace-nowrap bg-primary-500 text-xs font-medium uppercase text-white">
+		<div class="mb-5 flex items-center justify-between gap-4 sm:gap-6">
+			<!-- <SearchBox
+			placeholder="Search addresses name, title, content and status..."
+			bind:value="{search}"
+			on:change="{() => callSearch(search)}" /> -->
+
+			<a href="/my/addresses/new" aria-label="Click to route new address" data-sveltekit-prefetch>
+				<PrimaryButton class="text-sm">
+					<svg
+						class="h-5 w-5"
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+					</svg>
+
+					<span>Add New Address</span>
+				</PrimaryButton>
+			</a>
+		</div>
+
+		<div
+			class="max-h-[68vh] overflow-hidden rounded-md border bg-white shadow-md scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
+			<table class="relative min-h-full min-w-full divide-y whitespace-nowrap text-left text-sm">
+				<thead class="sticky top-0 z-20 bg-white uppercase shadow-md">
 					<tr>
 						<th scope="col" class="px-6 py-3"> First Name </th>
+
 						<th scope="col" class="px-6 py-3"> Last Name </th>
+
 						<th scope="col" class="px-6 py-3"> Email </th>
+
 						<th scope="col" class="px-6 py-3"> Phone </th>
+
 						<th scope="col" class="px-6 py-3"> Address </th>
+
 						<th scope="col" class="px-6 py-3"> Locality </th>
+
 						<th scope="col" class="px-6 py-3"> City </th>
+
 						<th scope="col" class="px-6 py-3"> State </th>
+
 						<th scope="col" class="px-6 py-3"> Country </th>
+
 						<th scope="col" class="px-6 py-3"> Zip </th>
+
 						<th scope="col" class="px-6 py-3"> Active </th>
+
 						<th scope="col" class="px-6 py-3"> Actions </th>
 					</tr>
 				</thead>
 
-				<tbody class="divide-y divide-gray-200">
-					{#each addresses.data as i, ix}
+				<tbody class="divide-y">
+					{#each addresses.data as i, index}
 						{#if i}
-							<tr>
-								<td class="whitespace-pre-line px-6 py-3">{i.firstName}</td>
-								<td class="whitespace-pre-line px-6 py-3">{i.lastName}</td>
-								<td class="whitespace-pre-line px-6 py-3">{i.email}</td>
-								<td class="whitespace-pre-line px-6 py-3">{i.phone}</td>
-								<td class="whitespace-pre-line px-6 py-3">{i.address}</td>
-								<td class="whitespace-pre-line px-6 py-3">{i.locality}</td>
-								<td class="whitespace-pre-line px-6 py-3">{i.city}</td>
-								<td class="whitespace-pre-line px-6 py-3">{i.state}</td>
-								<td class="whitespace-pre-line px-6 py-3">{i.country}</td>
-								<td class="whitespace-pre-line px-6 py-3">{i.zip}</td>
+							<tr
+								class="cursor-default transition duration-300 hover:bg-primary-50 
+								{index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}">
+								<td class="whitespace-pre-line px-6 py-3">{i.firstName || '_'}</td>
+
+								<td class="whitespace-pre-line px-6 py-3">{i.lastName || '_'}</td>
+
+								<td class="whitespace-pre-line px-6 py-3">{i.email || '_'}</td>
+
+								<td class="whitespace-pre-line px-6 py-3">{i.phone || '_'}</td>
+
+								<td class="whitespace-pre-line px-6 py-3">{i.address || '_'}</td>
+
+								<td class="whitespace-pre-line px-6 py-3">{i.locality || '_'}</td>
+
+								<td class="whitespace-pre-line px-6 py-3">{i.city || '_'}</td>
+
+								<td class="whitespace-pre-line px-6 py-3">{i.state || '_'}</td>
+
+								<td class="whitespace-pre-line px-6 py-3">{i.country || '_'}</td>
+
+								<td class="whitespace-pre-line px-6 py-3">{i.zip || '_'}</td>
 
 								<td class="whitespace-nowrap px-6 py-3">
 									<ToggleSwitch
@@ -187,41 +212,43 @@ async function refreshData() {
 								</td>
 
 								<td class="whitespace-nowrap px-6 py-3">
-									<div class="flex items-center gap-5 text-sm text-gray-500">
+									<div class="flex items-center gap-3 text-sm text-gray-500">
 										<a
 											href="{`/my/addresses/${i._id}`}"
+											title="Click to edit"
 											aria-label="Click to route edit address"
-											class="w-9 rounded-full bg-gray-100 p-2 text-xs text-gray-500 transition duration-300 hover:bg-gray-200">
+											class="relative z-10 flex h-8 w-8 transform items-center justify-center rounded-full bg-gray-200 text-xs text-gray-500 transition duration-300 hover:bg-gray-300 hover:text-gray-800 active:scale-90">
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
-												class="h-5 w-5"
 												fill="none"
 												viewBox="0 0 24 24"
+												stroke-width="1.5"
 												stroke="currentColor"
-												stroke-width="2">
+												class="h-4 w-4">
 												<path
 													stroke-linecap="round"
 													stroke-linejoin="round"
-													d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+													d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
 												></path>
 											</svg>
 										</a>
 
 										<button
 											type="button"
-											class="w-9 rounded-full bg-gray-100 p-2 text-xs text-gray-500 transition duration-300 hover:bg-gray-200"
+											title="Click to delete"
+											class="relative z-10 flex h-8 w-8 transform items-center justify-center rounded-full bg-gray-200 text-xs text-gray-500 transition duration-300 hover:bg-gray-300 hover:text-gray-800 active:scale-90"
 											on:click="{() => remove(i.id)}">
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
-												class="h-5 w-5"
 												fill="none"
 												viewBox="0 0 24 24"
+												stroke-width="1.5"
 												stroke="currentColor"
-												stroke-width="2">
+												class="h-4 w-4">
 												<path
 													stroke-linecap="round"
 													stroke-linejoin="round"
-													d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+													d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
 												></path>
 											</svg>
 										</button>
@@ -242,11 +269,7 @@ async function refreshData() {
 	{:else}
 		<div class="h-rem-empty flex flex-col items-center justify-center text-center">
 			<div>
-				<LazyImg
-					src="/no/empty-address.svg"
-					alt="empty address"
-					height="240"
-					class="mb-5 h-60 object-contain" />
+				<img src="/no/empty-address.svg" alt="empty address" class="mb-5 h-60 object-contain" />
 			</div>
 
 			<span class="mb-3 text-xl font-medium md:text-3xl">Empty Addresses!!</span>

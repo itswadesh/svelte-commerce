@@ -1,8 +1,10 @@
-import { domain } from '$lib/config'
 import { gett } from '$lib/utils'
-
-export async function GET({ cookies }) {
-	const storeRes = await gett(`init?domain=${domain}`)
+import * as dotenv from 'dotenv'
+dotenv.config()
+export async function GET({ request, cookies }) {
+	const HOST = process.env.PUBLIC_DOMAIN
+	const url = new URL(request.url)
+	const storeRes = await gett(`init?domain=${HOST || url.host}`)
 	const { storeOne, settings, popularSearches, megamenu } = storeRes
 	const store = {
 		id: storeOne._id,

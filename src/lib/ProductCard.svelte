@@ -51,7 +51,11 @@ function hideitems() {
 async function toggleWishlist(id) {
 	try {
 		loadingForWishlist = true
-		isWislisted = await post(`wishlists/toggle`, { product: id, variant: id })
+		isWislisted = await post(`wishlists/toggle`, {
+			product: id,
+			variant: id,
+			store: $page.data.store.id
+		})
 	} catch (e) {
 		if (e.message === 'You must be logged in') {
 			const url = '/'
@@ -150,29 +154,21 @@ async function toggleWishlist(id) {
 			href="/product/{product.slug}"
 			aria-label="Click to view the product details"
 			data-sveltekit-prefetch>
-			<div class="mt-2.5 flex flex-wrap items-baseline justify-start leading-4 ">
-				<span class="mr-1 whitespace-nowrap text-xs font-semibold sm:text-sm ">
+			<div class="mt-2.5 flex flex-wrap items-baseline justify-start leading-4 text-xs gap-1.5">
+				<span class="font-semibold sm:text-sm whitespace-nowrap">
 					{product.formattedPrice}
 				</span>
 
-				{#if product.formattedMrp > product.formattedPrice}
-					<span class="mr-1 whitespace-nowrap text-xs text-gray-500 line-through">
+				{#if product.mrp > product.price}
+					<span class="text-gray-500 line-through whitespace-nowrap">
 						{product.formattedMrp}
 					</span>
-				{/if}
 
-				{#if ((product.formattedMrp - product.formattedPrice) / product.formattedMrp) * 100 > 0}
-					<div class=" mr-1 whitespace-nowrap text-xs">
-						<span class="hidden sm:block">
-							({((product.formattedMrp - product.formattedPrice) / product.formattedMrp) * 100}%
-							off)
+					{#if Math.floor(((product.mrp - product.price) / product.mrp) * 100) > 0}
+						<span class="text-green-600 sm:text-gray-800 whitespace-nowrap">
+							({Math.floor(((product.mrp - product.price) / product.mrp) * 100)}% off)
 						</span>
-
-						<span class="text-green-600 sm:hidden">
-							({((product.formattedMrp - product.formattedPrice) / product.formattedMrp) * 100}%
-							off)
-						</span>
-					</div>
+					{/if}
 				{/if}
 			</div>
 
@@ -256,21 +252,24 @@ async function toggleWishlist(id) {
 										{/if}
 									</h2>
 
-									<div class="mt-2.5 flex flex-wrap items-baseline justify-start leading-4">
-										<span class="mr-1 whitespace-nowrap text-xs font-semibold sm:text-sm">
+									<div
+										class="mt-2.5 flex flex-wrap items-baseline justify-start leading-4 text-xs gap-1.5">
+										<span class="font-semibold sm:text-sm whitespace-nowrap">
 											{relatedProduct.formattedPrice}
 										</span>
 
-										<span class="mr-1 whitespace-nowrap text-xs text-gray-500 line-through">
-											{relatedProduct.formattedMrp}
-										</span>
+										{#if relatedProduct.mrp > relatedProduct.price}
+											<span class="text-gray-500 line-through whitespace-nowrap">
+												{relatedProduct.formattedMrp}
+											</span>
 
-										{#if ((relatedProduct.formattedMrp - relatedProduct.formattedPrice) / relatedProduct.formattedMrp) * 100 > 0}
-											<div class=" mr-1 whitespace-nowrap text-xs">
-												({((relatedProduct.formattedMrp - relatedProduct.formattedPrice) /
-													relatedProduct.formattedMrp) *
-													100}% off)
-											</div>
+											{#if Math.floor(((relatedProduct.mrp - relatedProduct.price) / relatedProduct.mrp) * 100) > 0}
+												<span class="text-green-600 sm:text-gray-800 whitespace-nowrap">
+													({Math.floor(
+														((relatedProduct.mrp - relatedProduct.price) / relatedProduct.mrp) * 100
+													)}% off)
+												</span>
+											{/if}
 										{/if}
 									</div>
 								</div>

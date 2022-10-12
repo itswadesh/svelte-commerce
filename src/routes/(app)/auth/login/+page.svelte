@@ -36,8 +36,8 @@ onMount(async () => {
 		context: 'signin' // optional
 	}
 	googleOneTap(options, async (response) => {
-		console.log('rrrrrrrrrrrrrrrr', response)
-		const onetap = await post('/api/auth/google/onetap', response)
+		response.store = $page.data.store?.id
+		const onetap = await post('/api/auth/google/onetap', response, $page.data.origin)
 	})
 })
 
@@ -50,7 +50,7 @@ async function handleSendOTP({ detail }) {
 	phone = detail
 	try {
 		loading = true
-		const data = await post('get-otp', { phone })
+		const data = await post('get-otp', { phone, store: $page.data.store?.id }, $page.data.origin)
 		resendAfter = data?.timer
 		otpRequestSend = true
 	} catch (e) {
@@ -64,7 +64,11 @@ async function handleVerifyOtp({ detail }) {
 	try {
 		loading = true
 		const otp = detail
-		const data = await post('verify-otp', { phone, otp })
+		const data = await post(
+			'verify-otp',
+			{ phone, otp, store: $page.data.store?.id },
+			$page.data.origin
+		)
 		const me = {
 			email: data.email,
 			phone: data.phone,

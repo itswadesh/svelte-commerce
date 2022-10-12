@@ -8,6 +8,7 @@ import Errors from '$lib/ui/Errors.svelte'
 import BackButton from '$lib/ui/BackButton.svelte'
 import { getAPI, post } from '$lib/util/api'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import { page } from '$app/stores'
 
 const seoProps = {
 	title: 'Reviews Details',
@@ -49,8 +50,8 @@ function onSelect(i) {
 async function saveReviewproduct(review) {
 	try {
 		toast('Sending your business rating and review', 'info')
-
-		await post('reviews', review)
+		review.store = $page.data.store?.id
+		await post('reviews', review, $page.data.origin)
 
 		toast('Successfully saved.', 'success')
 

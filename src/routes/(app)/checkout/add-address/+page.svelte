@@ -7,7 +7,7 @@ import { goto } from '$app/navigation'
 import { toast } from '$lib/util'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { post } from '$lib/util/api'
-
+import { page } from '$app/stores'
 export let data
 
 let err,
@@ -35,20 +35,25 @@ async function save(ads) {
 	} = ads
 	try {
 		loading = true
-		const { data, errors } = await post('addresses', {
-			id,
-			firstName,
-			lastName,
-			email,
-			phone,
-			address,
-			locality,
-			city,
-			district,
-			state,
-			country,
-			zip
-		})
+		const { data, errors } = await post(
+			'addresses',
+			{
+				id,
+				firstName,
+				lastName,
+				email,
+				phone,
+				address,
+				locality,
+				city,
+				district,
+				state,
+				country,
+				zip,
+				store: $page.data.store?.id
+			},
+			$page.data.origin
+		)
 		goto(`/checkout/address`)
 	} catch (e) {
 		toast(err, 'error')

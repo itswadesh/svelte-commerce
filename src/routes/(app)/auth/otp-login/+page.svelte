@@ -42,7 +42,7 @@ async function handleSendOTP({ detail }) {
 	phone = detail
 	try {
 		loading = true
-		const data = await post('get-otp', { phone }, $page.data.origin)
+		const data = await post('get-otp', { phone, store: $page.data.store?.id }, $page.data.origin)
 		resendAfter = data?.timer
 		otpRequestSend = true
 	} catch (e) {
@@ -56,7 +56,11 @@ async function handleVerifyOtp({ detail }) {
 	try {
 		loading = true
 		const otp = detail
-		const data = await post('verify-otp', { phone, otp }, $page.data.origin)
+		const data = await post(
+			'verify-otp',
+			{ phone, otp, store: $page.data.store?.id },
+			$page.data.origin
+		)
 		const me = {
 			email: data.email,
 			phone: data.phone,

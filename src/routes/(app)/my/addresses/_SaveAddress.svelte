@@ -8,7 +8,7 @@ import { goto } from '$app/navigation'
 import { createEventDispatcher, onMount } from 'svelte'
 import ToggleSwitch from '$lib/ui/ToggleSwitch.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
-
+import { page } from '$app/stores'
 const dispatch = createEventDispatcher()
 
 let err = null
@@ -28,19 +28,24 @@ async function SaveAddress(address) {
 		loading = true
 		const { firstName, lastName, email, phone, locality, city, state, country, zip } = address
 		toast('Saving Address Info...', 'info')
-		const newAddress = await post('addresses', {
-			id,
-			firstName,
-			lastName,
-			email,
-			phone,
-			address: address.address,
-			locality,
-			city,
-			state,
-			country,
-			zip
-		})
+		const newAddress = await post(
+			'addresses',
+			{
+				id,
+				firstName,
+				lastName,
+				email,
+				phone,
+				address: address.address,
+				locality,
+				city,
+				state,
+				country,
+				zip,
+				store: $page.data.store?.id
+			},
+			$page.data.origin
+		)
 
 		toast('Address Info Saved.', 'success')
 		dispatch('saved')
@@ -134,6 +139,7 @@ async function onCountryChange(country) {
 							on:input="{() => (formChanged = true)}" />
 					</div>
 				</div>
+
 				<div class="flex flex-wrap">
 					<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">City</h6>
 
@@ -144,43 +150,49 @@ async function onCountryChange(country) {
 							on:input="{() => (formChanged = true)}" />
 					</div>
 				</div>
-				{#if states?.length}
-					<div>
-						<h6 class="mb-2 font-semibold">State</h6>
-						<select
-							class="w-full rounded-md border border-gray-300 bg-gray-50 p-2 text-sm placeholder-gray-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-white"
-							bind:value="{address.state}"
-							on:input="{() => (formChanged = true)}">
-							<option value="" selected>-- Select a State --</option>
-							{#each states as c}
-								{#if c}
-									<option value="{c.name}">
-										{c.name}
-									</option>
-								{/if}
-							{/each}
-						</select>
-						<!-- <Textbox type="text" bind:value="{address.state}" placeholder="Enter State" required /> -->
+
+				{#if states?.count}
+					<div class="flex flex-wrap">
+						<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">State</h6>
+
+						<div class="mb-2 w-full max-w-md">
+							<select
+								class="w-full rounded-md border border-gray-300 bg-white p-2 text-sm placeholder-gray-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-gray-50"
+								bind:value="{address.state}"
+								on:input="{() => (formChanged = true)}">
+								<option value="" selected>-- Select a State --</option>
+								{#each states?.data as c}
+									{#if c}
+										<option value="{c.name}">
+											{c.name}
+										</option>
+									{/if}
+								{/each}
+							</select>
+						</div>
 					</div>
 				{/if}
-				<div>
-					<h6 class="mb-2 font-semibold">Country</h6>
-					<select
-						disabled
-						class="w-full rounded-md border border-gray-300 bg-gray-50 p-2 text-sm placeholder-gray-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-white"
-						bind:value="{address.country}"
-						on:change="{() => onCountryChange(address.country)}">
-						{#if countries?.data?.length}
-							{#each countries.data as c}
-								{#if c}
-									<option value="{c.code}">
-										{c.name}
-									</option>
-								{/if}
-							{/each}
-						{/if}
-					</select>
-					<!-- <Textbox type="text" bind:value="{address.country}" placeholder="Enter Country" required /> -->
+
+				<div class="flex flex-wrap">
+					<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">Country</h6>
+
+					<div class="mb-2 w-full max-w-md">
+						<select
+							disabled
+							class="w-full rounded-md border border-gray-300 bg-white p-2 text-sm placeholder-gray-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-gray-50"
+							bind:value="{address.country}"
+							on:change="{() => onCountryChange(address.country)}">
+							{#if countries?.data?.length}
+								{#each countries.data as c}
+									{#if c}
+										<option value="{c.code}">
+											{c.name}
+										</option>
+									{/if}
+								{/each}
+							{/if}
+						</select>
+					</div>
 				</div>
 
 				<div class="flex flex-wrap">
@@ -194,7 +206,7 @@ async function onCountryChange(country) {
 					</div>
 				</div>
 
-				<div class="flex flex-wrap">
+				<!-- <div class="flex flex-wrap">
 					<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">Active</h6>
 
 					<div class="mb-2 w-full max-w-md">
@@ -204,7 +216,7 @@ async function onCountryChange(country) {
 							bind:checked="{address.active}"
 							on:input="{() => (formChanged = true)}" />
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</form>
 	</div>

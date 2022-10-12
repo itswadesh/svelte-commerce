@@ -57,7 +57,7 @@ async function sortNow(sort) {
 async function remove(id) {
 	try {
 		toast('Removing the selected review please wait...', 'info')
-		await del(`reviews?id=${id}`, $page.data.origin)
+		await del(`reviews?id=${id}&store=${$page.data.store?.id}`, $page.data.origin)
 		toast('Removed the review successfully', 'success')
 		await refreshData()
 	} catch (e) {
@@ -73,7 +73,7 @@ async function remove(id) {
 async function refreshData() {
 	try {
 		await getAPI(
-			`reviews?search=${data.search}&sort=${data.sort}&page=${data.currentPage}`,
+			`reviews?search=${data.search}&sort=${data.sort}&page=${data.currentPage}&store=${$page.data.store?.id}`,
 			$page.data.origin
 		)
 	} catch (e) {

@@ -17,7 +17,6 @@
 import SEO from '$lib/components/SEO/index.svelte'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import { toast } from '$lib/util'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { sorts } from '$lib/config'
@@ -51,11 +50,16 @@ $: if (data?.count === 0) {
 
 async function saveSearchData(searchData) {
 	try {
-		const res = await post('popular-search', {
-			id: 'new',
-			// popularity: 0,
-			text: searchData
-		})
+		const res = await post(
+			'popular-search',
+			{
+				id: 'new',
+				// popularity: 0,
+				text: searchData,
+				store: $page.data.store.id
+			},
+			$page.data.origin
+		)
 
 		// console.log('zzzzzzzzzzzzzzzzzz', res)
 	} catch (e) {
@@ -86,14 +90,14 @@ async function refreshData() {
 			<DesktopFilter
 				facets="{data.facets}"
 				query="{data.query}"
-				class="sticky top-[7.5rem] hidden lg:top-[5.5rem] lg:block"
+				class="sticky hidden top-24 lg:block"
 				on:clearAll="{refreshData}" />
 
 			<MobileFilter
 				facets="{data.facets}"
 				bind:showFilter
 				bind:showSort
-				class="sticky top-[5rem] z-40 block lg:hidden"
+				class="sticky top-14 sm:top-20 z-40 block lg:hidden"
 				on:clearAll="{refreshData}" />
 		{/if}
 
@@ -148,12 +152,10 @@ async function refreshData() {
 								</h1>
 
 								<div class="mb-5">
-									<LazyImg
+									<img
 										src="/no/no-data-availible.png"
 										alt="no data availible"
-										width="80"
-										height="80"
-										class="h-20 w-20 text-xs" />
+										class="h-20 w-20 text-xs object-contain" />
 								</div>
 
 								<p class="mb-5 text-center text-gray-500">No data found</p>

@@ -12,7 +12,7 @@ const send = async ({ method, path, params, data, token, headers, origin }: any)
 	)
 		return
 	origin = origin || 'http://localhost:3000'
-	const storeId = id // cookies.get('store')?.id
+	// const storeId = id // cookies.get('store')?.id
 	if (headers && headers.get('cookie') && headers.get('cookie').includes('store')) {
 		origin = headers.get('origin') || headers.get('host')
 		if (origin === 'localhost:3000') origin = 'http://localhost:3000'
@@ -30,11 +30,11 @@ const send = async ({ method, path, params, data, token, headers, origin }: any)
 	}
 	const domain = uri.searchParams.get('domain')
 	const st = uri.searchParams.get('store')
-	if (!storeId && !domain && !st) {
-		console.error('store id not found in config', path)
-		// throw 'Loading...'
-		return
-	}
+	// if (!storeId && !domain && !st) {
+	// 	console.error('store id not found in config', path)
+	// 	// throw 'Loading...'
+	// 	return
+	// }
 
 	// console.log('store id not found.........', storeIdFromConfig)
 
@@ -43,7 +43,7 @@ const send = async ({ method, path, params, data, token, headers, origin }: any)
 	}
 	opts.headers = headers ? headers : { Cache: 'no-cache' }
 	if (data) {
-		data.store = storeId //'6135b76e5dfeaf011301827d'
+		// data.store = storeId //'6135b76e5dfeaf011301827d'
 		const contentType = data?.files && data?.files[0]?.type
 		if (
 			!(

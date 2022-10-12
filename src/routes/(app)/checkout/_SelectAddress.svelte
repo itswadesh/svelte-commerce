@@ -4,7 +4,7 @@ import Error from '$lib/components/Error.svelte'
 import AddressSkeleton from './_AddressSkeleton.svelte'
 import { createEventDispatcher } from 'svelte'
 import { del } from '$lib/util/api'
-
+import { page } from '$app/stores'
 const dispatch = createEventDispatcher()
 
 export let address, selectedAddress, loading
@@ -16,7 +16,7 @@ async function remove(id) {
 	if (confirm('Are you sure to delete?')) {
 		try {
 			removing = true
-			await del(`addresses/${id}`)
+			await del(`addresses/${id}?store=${$page.data.store?.id}`, $page.data.origin)
 			await dispatch('deleteAddress', id)
 		} catch (e) {
 			err = e
