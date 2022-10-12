@@ -276,7 +276,7 @@ async function getStoreData() {
 
 				<div class="flex items-center gap-1">
 					<a href="##" aria-label="Click for the app link on Google Play">
-						<LazyImg
+						<img
 							src="/app/google-play.png"
 							alt=""
 							width="128"
@@ -284,8 +284,8 @@ async function getStoreData() {
 					</a>
 
 					<a href="##" aria-label="Click for the app link on App Store">
-						<LazyImg
-							src="/app/app-store?.svg"
+						<img
+							src="/app/app-store.svg"
 							alt=""
 							width="128"
 							class="h-auto w-32 object-contain object-left p-1" />

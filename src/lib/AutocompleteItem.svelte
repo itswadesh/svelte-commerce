@@ -62,5 +62,5 @@ $: {
 </script>
 
 <div class="customItem {itemClasses}">
-	<div>{item.key}</div>
+	<div>{item.name}</div>
 </div>
