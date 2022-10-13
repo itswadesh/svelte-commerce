@@ -53,11 +53,15 @@ const payWithStripe = async (pm) => {
 		loading = true
 		toast('Contacting Payment Server...', 'warning')
 		const paymentMethodId = pm.id
-		const resStripe = post('stripe', {
-			paymentMethodId,
-			address,
-			store: $page.data.store?.id
-		})
+		const resStripe = post(
+			'stripe',
+			{
+				paymentMethodId,
+				address,
+				store: $page.data.store?.id
+			},
+			$page.data.store.origin
+		)
 		if (resStripe.errors) {
 			errorMessage = { show: true, text: resStripe.errors[0].message }
 			return
