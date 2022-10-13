@@ -1072,8 +1072,6 @@ function handleMobileCanvas() {
 	</div>
 </div>
 
-<Gallery bind:showPhotosModal product="{data.product}" />
-
 {#if bounceItemFromTop}
 	<AnimatedCartItem img="{data.product?.imgCdn}" />
 {/if}

@@ -1,4 +1,4 @@
-import { id } from '$lib/config'
+// import { id } from '$lib/config'
 import { loadingDelayed } from '$lib/store'
 let typingTimer
 
