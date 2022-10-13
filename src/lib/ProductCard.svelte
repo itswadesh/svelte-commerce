@@ -51,11 +51,15 @@ function hideitems() {
 async function toggleWishlist(id) {
 	try {
 		loadingForWishlist = true
-		isWislisted = await post(`wishlists/toggle`, {
-			product: id,
-			variant: id,
-			store: $page.data.store.id
-		})
+		isWislisted = await post(
+			`wishlists/toggle`,
+			{
+				product: id,
+				variant: id,
+				store: $page.data.store.id
+			},
+			$page.data.store.origin
+		)
 	} catch (e) {
 		if (e.message === 'You must be logged in') {
 			const url = '/'
