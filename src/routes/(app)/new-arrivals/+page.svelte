@@ -1,9 +1,5 @@
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
-import { onMount } from 'svelte'
-import { getAPI } from '$lib/util/api'
-import { page } from '$app/stores'
-import { toast } from '$lib/util'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
@@ -11,8 +7,6 @@ import { goto } from '$app/navigation'
 import MobileFooter from '$lib/MobileFooter.svelte'
 
 export let data
-
-// console.log('data = ', data)
 
 let seoProps = {
 	title: `New arrivals`,
@@ -107,12 +101,10 @@ let showItemCount = 10
 						</h1>
 
 						<div class="mb-5">
-							<LazyImg
+							<img
 								src="/no/no-data-availible.png"
 								alt="no data availible"
-								width="80"
-								height="80"
-								class="h-20 w-20 text-xs" />
+								class="h-20 w-20 text-xs object-contain" />
 						</div>
 
 						<p class="mb-5 text-center text-gray-500">No data found</p>
@@ -137,12 +129,10 @@ let showItemCount = 10
 			</h1>
 
 			<div class="mb-5">
-				<LazyImg
+				<img
 					src="/no/no-data-availible.png"
 					alt="no data availible"
-					width="80"
-					height="80"
-					class="h-20 w-20 text-xs" />
+					class="h-20 w-20 text-xs object-contain" />
 			</div>
 
 			<p class="mb-5 text-center text-gray-500">No data found</p>

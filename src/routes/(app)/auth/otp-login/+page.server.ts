@@ -8,6 +8,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.session) {
 		throw redirect(302, '/')
 	}
+	return { store: locals.store, origin: locals.origin }
 }
 
 const getOtp: Action = async ({ request, locals }) => {

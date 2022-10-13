@@ -28,8 +28,6 @@ const seoProps = {
 	description: 'OTP Login'
 }
 
-// console.log('zzzzzzzzzzzzzzzzzz', $page)
-
 onMount(async () => {})
 
 let phone
@@ -42,8 +40,8 @@ async function handleSendOTP({ detail }) {
 	phone = detail
 	try {
 		loading = true
-		const data = await post('get-otp', { phone, store: $page.data.store?.id }, $page.data.origin)
-		resendAfter = data?.timer
+		const res = await post('get-otp', { phone, store: data.store?.id }, data.origin)
+		resendAfter = res?.timer
 		otpRequestSend = true
 	} catch (e) {
 		toast(e, 'error')
@@ -56,20 +54,16 @@ async function handleVerifyOtp({ detail }) {
 	try {
 		loading = true
 		const otp = detail
-		const data = await post(
-			'verify-otp',
-			{ phone, otp, store: $page.data.store?.id },
-			$page.data.origin
-		)
+		const res = await post('verify-otp', { phone, otp, store: data.store?.id }, data.origin)
 		const me = {
-			email: data.email,
-			phone: data.phone,
-			firstName: data.firstName,
-			lastName: data.lastName,
-			avatar: data.avatar,
-			role: data.role,
-			verified: data.verified,
-			active: data.active
+			email: res.email,
+			phone: res.phone,
+			firstName: res.firstName,
+			lastName: res.lastName,
+			avatar: res.avatar,
+			role: res.role,
+			verified: res.verified,
+			active: res.active
 		}
 		await cookies.set('me', me, { path: '/' })
 		// $page.data.me = me
