@@ -17,7 +17,6 @@
 import SEO from '$lib/components/SEO/index.svelte'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import { dateOnly, toast } from '$lib/util'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { sorts } from '$lib/config'
@@ -59,7 +58,10 @@ let currentPage = 1
 async function loadNextPage() {
 	let nextPage = currentPage + 1
 	try {
-		const res = await getAPI(`products?${data.query.toString()}&page=${nextPage}`)
+		const res = await getAPI(
+			`products?${data.query.toString()}&store=${data.store?.id}&page=${nextPage}`,
+			data.origin
+		)
 		// console.log('refresh res = ', res)
 		data.products = data.products.concat(res?.data)
 		data.count = res?.count
@@ -93,14 +95,14 @@ onMount(() => {
 			<DesktopFilter
 				facets="{data.facets}"
 				query="{data.query}"
-				class="sticky top-[7.5rem] hidden lg:top-[5.5rem] lg:block"
+				class="sticky hidden top-24 lg:block"
 				on:clearAll="{refreshData}" />
 
 			<MobileFilter
 				facets="{data.facets}"
 				bind:showFilter
 				bind:showSort
-				class="sticky top-[5rem] z-40 block lg:hidden"
+				class="sticky top-14 sm:top-20 z-40 block lg:hidden"
 				on:clearAll="{refreshData}" />
 		{/if}
 
@@ -158,12 +160,10 @@ onMount(() => {
 								</h1>
 
 								<div class="mb-5">
-									<LazyImg
+									<img
 										src="/no/no-data-availible.png"
 										alt="no data availible"
-										width="80"
-										height="80"
-										class="h-20 w-20 text-xs" />
+										class="h-20 w-20 text-xs object-contain" />
 								</div>
 
 								<p class="mb-5 text-center text-gray-500">No data found</p>

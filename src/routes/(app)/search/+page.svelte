@@ -31,7 +31,6 @@ import DummyProductCard from '$lib/DummyProductCard.svelte'
 
 export let data
 
-// console.log('data = ', data)
 // console.log('Products = ', products)
 // console.log('Count = ', count)
 // console.log('Facets = ', facets)

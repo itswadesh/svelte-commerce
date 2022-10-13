@@ -71,6 +71,8 @@ export async function load({ url, params, locals, cookies, parent, setHeaders })
 		searchData,
 		fl,
 		ressss,
-		category: categoryRes
+		category: categoryRes,
+		store,
+		origin: locals.origin
 	}
 }
