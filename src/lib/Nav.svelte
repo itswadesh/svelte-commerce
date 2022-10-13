@@ -22,7 +22,7 @@ import MegaMenu from './components/MegaMenu.svelte'
 import WhiteButton from './ui/WhiteButton.svelte'
 import menu from '$lib/config/menu'
 import { settings } from './store'
-import { logo } from './config'
+// import { store.logo } from './config'
 
 const dispatch = createEventDispatcher()
 const cookies = Cookie()
@@ -214,7 +214,7 @@ const getSelectionLabel = (option) => option.name
 
 			<a class="block flex-shrink-0" href="/" aria-label="Click to route home">
 				<img
-					src="{logo}"
+					src="{$page.data.store.logo}"
 					alt=" "
 					class="h-auto max-h-10 sm:max-h-16 w-32 object-contain object-center" />
 			</a>
