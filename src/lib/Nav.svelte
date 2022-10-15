@@ -211,9 +211,8 @@ const getSelectionLabel = (option) => option.name
 			{/if}
 
 			<!-- Logo -->
-
 			<a class="block flex-shrink-0" href="/" aria-label="Click to route home">
-				<img
+				<LazyImg
 					src="{$page.data.store.logo}"
 					alt=" "
 					class="h-auto max-h-10 sm:max-h-16 w-32 object-contain object-center" />

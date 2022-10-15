@@ -24,7 +24,7 @@ export const getCdnImageUrl = (src, tr) => {
 			.replace('https://zapvi.s3.ap-south-1.amazonaws.com/', '/')
 			.replace('https://zapvi.b-cdn.net/', '/')
 			.replace('https://ik.imagekit.io/3wzatecz51w3i/zapvi/', '/')
-		// .replace('https://chachhi.com/wp-content/uploads/images/', '/')
+			.replace('https://ik.imagekit.io/3wzatecz51w3i/', '/')
 		return IMAGE_CDN_URL + originalImageUrl
 		// return originalImageUrl + tr
 	}

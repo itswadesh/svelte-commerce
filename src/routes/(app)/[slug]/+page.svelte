@@ -207,7 +207,7 @@ onMount(() => {
 							<span class="col-span-1">Price <br /> (Rs)</span>
 						</li>
 
-						{#each data.products as p, px}
+						{#each data?.products || [] as p, px}
 							{#if p && px < 10}
 								<li>
 									<a href="/product/{p.slug}" class="grid grid-cols-6 gap-5">
