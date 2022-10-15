@@ -66,8 +66,8 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import SimilarProducts from '$lib/components/Product/SimilarProducts.svelte'
 import FrequentlyBoughtProduct from './_FrequentlyBoughtProduct.svelte'
 import { fireGTagEvent } from '$lib/util/gTag'
-import UserForm from '$lib/components/Product/UserForm.svelte'
-import Gallery from '$lib/components/Product/Gallery.svelte'
+<!-- import UserForm from '$lib/components/Product/UserForm.svelte'
+import Gallery from '$lib/components/Product/Gallery.svelte' -->
 import DummyProductCard from '$lib/DummyProductCard.svelte'
 import { applyAction, enhance } from '$app/forms'
 import { gett } from '$lib/utils'
@@ -1140,7 +1140,7 @@ function handleMobileCanvas() {
 	</div>
 </div>
 
-<Gallery bind:showPhotosModal product="{data.product}" />
+<!-- <Gallery bind:showPhotosModal product="{data.product}" /> -->
 
 {#if bounceItemFromTop}
 	<AnimatedCartItem img="{data.product?.imgCdn}" />
