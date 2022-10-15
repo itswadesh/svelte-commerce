@@ -1,7 +1,7 @@
 import type { Handle } from '@sveltejs/kit'
 // import { getAPI } from '$lib/util/api'
-import * as dotenv from 'dotenv'
-dotenv.config()
+// @ts-ignore
+import { PUBLIC_DOMAIN } from '$env/static/public'
 import {
 	stripePublishableKey,
 	id,
@@ -67,7 +67,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		stripePublishableKey
 	}
 	if (!cookieStore) {
-		const HOST = process.env.PUBLIC_DOMAIN
+		const HOST = PUBLIC_DOMAIN
 		const url = new URL(event.request.url)
 		const storeRes = await gett(`init?domain=${HOST || url.host}`)
 		const { storeOne } = storeRes
