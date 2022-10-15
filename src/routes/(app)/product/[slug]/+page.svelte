@@ -66,14 +66,10 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import SimilarProducts from '$lib/components/Product/SimilarProducts.svelte'
 import FrequentlyBoughtProduct from './_FrequentlyBoughtProduct.svelte'
 import { fireGTagEvent } from '$lib/util/gTag'
-<!-- import UserForm from '$lib/components/Product/UserForm.svelte'
-import Gallery from '$lib/components/Product/Gallery.svelte' -->
 import DummyProductCard from '$lib/DummyProductCard.svelte'
 import { applyAction, enhance } from '$app/forms'
 import { gett } from '$lib/utils'
 // import Konvas from '$lib/components/ProductDesigner/Konvas.svelte'
-
-let Konvas
 
 const dispatch = createEventDispatcher()
 
@@ -121,10 +117,6 @@ if (data.product?.size?.name === 'One Size') {
 }
 
 onMount(async () => {
-	screenWidth = screen.width
-
-	const canvasEmodule = await import('$lib/components/ProductDesigner/Konvas.svelte')
-	Konvas = canvasEmodule.default
 	try {
 		// console.log(' data.product?._id = ', data.product?._id)
 
@@ -401,15 +393,6 @@ function handleMobileCanvas() {
 								</svg>
 							</button>
 						{/if}
-
-						<button type="button" on:click="{handleMobileCanvas}" class="h-full w-full">
-							<svelte:component
-								this="{Konvas}"
-								product="{data.product}"
-								bind:customizedImg
-								on:saveAndAddToCart="{({ detail }) =>
-									addToBag(data.product, detail.customizedImg, detail.customizedJson)}" />
-						</button>
 					</div>
 				{:else}
 					<div
