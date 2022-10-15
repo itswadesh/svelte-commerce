@@ -1,8 +1,8 @@
 import { gett } from '$lib/utils'
-import * as dotenv from 'dotenv'
-dotenv.config()
+// @ts-ignore
+import { PUBLIC_DOMAIN } from '$env/static/public'
 export async function GET({ request, cookies }) {
-	const HOST = process.env.PUBLIC_DOMAIN
+	const HOST = PUBLIC_DOMAIN
 	const url = new URL(request.url)
 	const storeRes = await gett(`init?domain=${HOST || url.host}`)
 	const { storeOne, settings, popularSearches, megamenu } = storeRes
