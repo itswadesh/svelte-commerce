@@ -93,7 +93,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			GOOGLE_CLIENT_ID: storeOne.GOOGLE_CLIENT_ID,
 			GOOGLE_ANALYTICS_ID: storeOne.GOOGLE_ANALYTICS_ID
 		}
-		event.cookies.set('store', JSON.stringify(store))
+		event.cookies.set('store', JSON.stringify(store), { path: '/' })
 	} else {
 		store = JSON.parse(cookieStore)
 	}

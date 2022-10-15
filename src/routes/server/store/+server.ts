@@ -28,6 +28,6 @@ export async function GET({ request, cookies }) {
 		GOOGLE_CLIENT_ID: storeOne.GOOGLE_CLIENT_ID,
 		GOOGLE_ANALYTICS_ID: storeOne.GOOGLE_ANALYTICS_ID
 	}
-	cookies.set('store', JSON.stringify(store))
+	cookies.set('store', JSON.stringify(store), { path: '/' })
 	return new Response(JSON.stringify({ storeOne, settings: {}, popularSearches, megamenu }))
 }
