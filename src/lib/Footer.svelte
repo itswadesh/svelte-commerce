@@ -225,7 +225,7 @@ async function getStoreData() {
 							<span class="font-semibold">Email</span>
 						</h2>
 
-						<p>{store?.email}</p>
+						<p>{$page.data.store?.email}</p>
 					</li>
 
 					<li class="max-w-max">
@@ -271,7 +271,7 @@ async function getStoreData() {
 
 			<div>
 				<h1 class="mb-4 whitespace-nowrap font-semibold uppercase">
-					Experience {store?.websiteName} app on mobile
+					Experience {$page.data.store?.websiteName} app on mobile
 				</h1>
 
 				<div class="flex items-center gap-1">
@@ -301,7 +301,7 @@ async function getStoreData() {
 
 					<li class="max-w-max">
 						<a
-							href="${store?.facebookPage}"
+							href="${$page.data.store?.facebookPage}"
 							target="_blank"
 							rel="noopener noreferrer"
 							aria-label="Click for facebook link">
@@ -325,7 +325,7 @@ async function getStoreData() {
 
 					<li class="max-w-max">
 						<a
-							href="{store?.instagramPage}"
+							href="{$page.data.store?.instagramPage}"
 							target="_blank"
 							rel="noopener noreferrer"
 							aria-label="Click for instagram link">
@@ -350,7 +350,7 @@ async function getStoreData() {
 
 					<li class="max-w-max">
 						<a
-							href="{store?.twitterPage}"
+							href="{$page.data.store?.twitterPage}"
 							target="_blank"
 							rel="noopener noreferrer"
 							aria-label="Click for twitter link">
@@ -374,7 +374,7 @@ async function getStoreData() {
 					<!-- Mail -->
 
 					<li class="max-w-max">
-						<a href="mailto:{store?.email}" aria-label="Click to contact with mail id">
+						<a href="mailto:{$page.data.store?.email}" aria-label="Click to contact with mail id">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								class="h-5 w-5 transition duration-300	hover:text-[#c71610]"
@@ -395,7 +395,7 @@ async function getStoreData() {
 
 					<li class="max-w-max">
 						<a
-							href="{store?.linkedinPage}"
+							href="{$page.data.store?.linkedinPage}"
 							target="_blank"
 							rel="noopener noreferrer"
 							aria-label="Click for linked in link">
@@ -422,7 +422,7 @@ async function getStoreData() {
 
 					<li class="max-w-max">
 						<a
-							href="{store?.youtubeChannel}"
+							href="{$page.data.store?.youtubeChannel}"
 							target="_blank"
 							rel="noopener noreferrer"
 							aria-label="Click for youtube link">
@@ -477,7 +477,7 @@ async function getStoreData() {
 			<h1 class="mb-4 whitespace-nowrap font-semibold uppercase">Registered Office Address</h1>
 
 			<p class="text-gray-500">
-				{@html store?.address}
+				{@html $page.data.store?.address}
 			</p>
 		</div>
 
@@ -485,7 +485,7 @@ async function getStoreData() {
 
 		<div
 			class="flex flex-wrap items-center justify-center gap-2 text-sm text-gray-500 sm:gap-5 md:justify-between">
-			<p>Copyright {getYear()} © {store?.websiteName} Made with ❤️ in India</p>
+			<p>Copyright {getYear()} © {$page.data.store?.websiteName} Made with ❤️ in India</p>
 
 			<div class="flex items-center justify-center gap-4">
 				<a
