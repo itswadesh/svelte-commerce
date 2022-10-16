@@ -119,6 +119,7 @@ function enterPressedOnSearch() {
 }
 
 async function onSearchSubmit({ detail }) {
+	// console.log('on search submit................')
 	let u = new URL('/search', $page.data.origin)
 	if (detail.type === 'category') {
 		u = new URL(`/${detail.slug}`, $page.data.origin)
