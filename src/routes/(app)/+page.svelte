@@ -185,8 +185,8 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 			{#if home?.popular}
 				<div class="mb-5 sm:mb-10">
 					<h1
-						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 md:py-10 sm:text-2xl md:text-3xl xl:text-4xl">
-						POPULAR PRODUCTS
+						class="p-3 py-5 text-center font-serif text-xl uppercase font-medium tracking-wider sm:px-10 md:py-10 sm:text-2xl md:text-3xl xl:text-4xl">
+						POPULAR ON {$page.data.store.websiteName}
 					</h1>
 
 					<div
