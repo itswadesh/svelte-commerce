@@ -68,7 +68,7 @@ async function getMegaMenu() {
 }
 </script>
 
-<ul class="flex flex-row items-center justify-center font-semibold tracking-wide">
+<ul class="flex flex-row items-center justify-center font-semibold tracking-wide overflow-hidden">
 	{#each megamenu as category, index}
 		<li
 			class="hoverable mx-1"
