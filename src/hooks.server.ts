@@ -29,7 +29,7 @@ import { gett } from '$lib/utils'
 
 /** @type {import('@sveltejs/kit').HandleFetch} */
 export const handleFetch = async ({ event, request, fetch }) => {
-	request.headers.set('cookie', event.request.headers.get('cookie'))
+	request.headers.set('cookie', event.request.headers.get('cookie'), { path: '/' })
 
 	return fetch(request)
 }
