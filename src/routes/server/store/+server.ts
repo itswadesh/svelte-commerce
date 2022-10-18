@@ -12,6 +12,7 @@ export async function GET({ request, cookies }) {
 		email: storeOne.email,
 		address: storeOne.address,
 		phone: storeOne.phone,
+		otpLogin: storeOne.otpLogin,
 		websiteLegalName: storeOne.websiteLegalName,
 		websiteName: storeOne.websiteName,
 		title: storeOne.title,
