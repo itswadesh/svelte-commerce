@@ -24,7 +24,7 @@ function saveImage({ detail, field }) {
 
 async function SaveAddress(address) {
 	try {
-		let id = address.id || 'new'
+		let id = address._id || address.id || 'new'
 		loading = true
 		const { firstName, lastName, email, phone, locality, city, state, country, zip } = address
 		toast('Saving Address Info...', 'info')

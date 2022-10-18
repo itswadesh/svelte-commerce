@@ -74,9 +74,11 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 		<!-- CATEGORIES SLIDER MOBILE -->
 
 		{#await data.home then home}
-			<div class="block sm:hidden">
-				<CategoriesMobile loading="{home.isFetching}" categories="{home?.categories?.data ?? []}" />
-			</div>
+			{#if home?.categories?.data?.length > 0}
+				<div class="block sm:hidden">
+					<CategoriesMobile loading="{home.isFetching}" categories="{home?.categories?.data}" />
+				</div>
+			{/if}
 		{/await}
 
 		<div class="mb-5 sm:mb-10">
@@ -88,7 +90,7 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 		{#if data.home?.categories?.data?.length > 0}
 			<div class="mb-5 sm:mb-10">
 				<h1
-					class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
+					class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
 					TOP CATEGORIES
 				</h1>
 
@@ -145,10 +147,10 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
 			</div>
 		{:then home}
-			{#if heroBanners.length}
+			{#if heroBanners.length > 0}
 				<div class="mb-5 sm:mb-10">
 					<h1
-						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 md:py-10 sm:text-2xl md:text-3xl xl:text-4xl">
+						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
 						BEST OF {$page.data.store.websiteName} EXCLUSIVE
 					</h1>
 
@@ -183,25 +185,27 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 
 		{#await data.home then home}
 			{#if home?.popular}
-				<div class="mb-5 sm:mb-10">
-					<h1
-						class="p-3 py-5 text-center font-serif text-xl uppercase font-medium tracking-wider sm:px-10 md:py-10 sm:text-2xl md:text-3xl xl:text-4xl">
-						POPULAR ON {$page.data.store.websiteName}
-					</h1>
+				{#if home?.popular?.data?.length > 0}
+					<div class="mb-5 sm:mb-10">
+						<h1
+							class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
+							POPULAR ON {$page.data.store.websiteName}
+						</h1>
 
-					<div
-						class="px-3 sm:px-10 grid w-full grid-cols-2 items-start gap-3 sm:flex sm:flex-wrap sm:justify-between lg:mb-20 lg:gap-6">
-						{#each home?.popular?.data as p}
-							<ProductCard product="{p}" />
-						{/each}
+						<div
+							class="px-3 sm:px-10 grid w-full grid-cols-2 items-start gap-3 sm:flex sm:flex-wrap sm:justify-between lg:mb-20 lg:gap-6">
+							{#each home?.popular?.data as p}
+								<ProductCard product="{p}" />
+							{/each}
 
-						{#each { length: 8 } as _}
-							<div class="hidden sm:block">
-								<DummyProductCard />
-							</div>
-						{/each}
+							{#each { length: 8 } as _}
+								<div class="hidden sm:block">
+									<DummyProductCard />
+								</div>
+							{/each}
+						</div>
 					</div>
-				</div>
+				{/if}
 			{/if}
 		{/await}
 	</div>

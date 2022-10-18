@@ -13,20 +13,22 @@ export let ref = null
 // })
 </script>
 
-<form class="mb-8" on:submit|preventDefault="{() => dispatch('send', phone)}">
-	<div class="flex items-baseline gap-1">
-		<span class="text-sm"> +91 </span>
+<form class="mb-5 flex flex-col gap-5" on:submit|preventDefault="{() => dispatch('send', phone)}">
+	<div>
+		<div class="mb-1 flex items-baseline gap-1">
+			<span class="text-sm"> +91 </span>
 
-		<TextboxFloating
-			bind:this="{ref}"
-			type="tel"
-			label="Mobile Number"
-			class="mb-1 w-full"
-			required
-			bind:value="{phone}" />
+			<TextboxFloating
+				bind:this="{ref}"
+				type="tel"
+				label="Mobile Number"
+				class="w-full"
+				required
+				bind:value="{phone}" />
+		</div>
+
+		<p class="text-sm font-light text-gray-500">Ex. 9XXXXXXXXX</p>
 	</div>
-
-	<p class="mb-5 text-sm font-light text-gray-500">Ex. 9XXXXXXXXX</p>
 
 	<PrimaryButton loading="{loading}" class="w-full" type="submit">SEND OTP</PrimaryButton>
 </form>

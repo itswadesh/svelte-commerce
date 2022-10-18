@@ -88,7 +88,7 @@ function changeNumber() {
 <div
 	class="frosted container mx-auto flex w-full max-w-sm flex-col rounded-2xl border bg-cover bg-center bg-no-repeat p-10 shadow-2xl"
 	style="background-image: url('/login/bg-lighter.svg');">
-	<h1 class="mb-5 w-full  pb-4 text-center text-2xl font-bold text-primary-500">Login/Register</h1>
+	<h1 class="mb-8 w-full text-center text-2xl font-bold text-primary-500">Login/Register</h1>
 
 	{#if !otpRequestSend}
 		<SendOtp
@@ -105,15 +105,21 @@ function changeNumber() {
 			on:changeNumber="{changeNumber}" />
 	{/if}
 
-	<!-- <div
-		class="mx-auto mb-5 flex w-full max-w-sm flex-wrap items-center justify-center gap-4 leading-4">
+	<div class="mb-5 flex flex-col text-center max-w-max mx-auto gap-1 text-sm">
 		<a
 			href="{`/auth/login?ref=${$page.url.searchParams.get('ref') || '/'}`}"
 			aria-label="Click to login with email"
-			class="max-w-max whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline hover:underline">
-			Login with email
+			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
+			Login with Email
 		</a>
-	</div> -->
+
+		<a
+			href="{`/auth/signup?ref=${$page.url.searchParams.get('ref') || '/'}`}"
+			aria-label="Click to login with email"
+			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
+			Signup
+		</a>
+	</div>
 
 	<p class="text-center text-sm text-gray-500">
 		By clicking send OTP you are accepting our
