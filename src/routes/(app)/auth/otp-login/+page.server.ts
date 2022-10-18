@@ -1,7 +1,6 @@
 import { post } from '$lib/util/api'
 import { gett } from '$lib/utils'
 import { invalid, redirect } from '@sveltejs/kit'
-// import { post } from '$lib/utils'
 import type { Action, Actions, PageServerLoad } from './$types'
 export const load: PageServerLoad = async ({ locals }) => {
 	// redirect user if logged in

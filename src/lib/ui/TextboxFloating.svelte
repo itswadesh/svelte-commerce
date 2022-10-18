@@ -90,8 +90,8 @@ export { className as class }
 			<input
 				type="password"
 				bind:value
-				id="password"
-				name="password"
+				id="{id}"
+				name="{name}"
 				class="floating-input w-full bg-transparent focus:outline-none"
 				placeholder="{placeholder}"
 				aria-label="{label}"
@@ -114,8 +114,8 @@ export { className as class }
 			<input
 				type="time"
 				bind:value
-				name="time"
-				id="time"
+				id="{id}"
+				name="{name}"
 				class="floating-input w-full bg-transparent focus:outline-none"
 				placeholder="{placeholder}"
 				aria-label="{label}"
@@ -147,7 +147,6 @@ export { className as class }
 				on:input="{() => dispatch('input')}"
 				on:focus="{() => dispatch('focus')}" />
 		{/if}
-		<span class="highlight"></span>
 
 		<label for="textbox">
 			{label}

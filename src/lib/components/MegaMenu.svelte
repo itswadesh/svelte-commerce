@@ -68,7 +68,7 @@ async function getMegaMenu() {
 }
 </script>
 
-<ul class="flex flex-row items-center justify-center font-semibold tracking-wide overflow-hidden">
+<ul class="flex flex-row items-center justify-center font-semibold tracking-wide">
 	{#each megamenu as category, index}
 		<li
 			class="hoverable mx-1"
@@ -117,7 +117,7 @@ async function getMegaMenu() {
 			</div>
 
 			{#if category.children?.length}
-				<div class="mega-menu relative border-b bg-white shadow-2xl">
+				<div class="mega-menu relative border-b bg-white shadow-2xl overflow-hidden">
 					<div class="absolute inset-0 z-0 grid w-full grid-cols-4">
 						{#each { length: 4 } as _, ix}
 							<div class="{ix % 2 === 0 ? 'bg-white' : 'bg-gray-50'}"></div>
