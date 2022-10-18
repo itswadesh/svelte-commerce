@@ -53,7 +53,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 	const pid = data.get('pid')
 	const vid = data.get('vid')
 	const qty = 1
-	const options = JSON.parse(data.get('options'))
+	const options = JSON.parse(data.get('options') || '{}')
 	const customizedImg = data.get('customizedImg')
 	if (typeof pid !== 'string' || !pid) {
 		return invalid(400, { invalid: true })

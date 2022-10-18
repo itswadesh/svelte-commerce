@@ -67,7 +67,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		GOOGLE_ANALYTICS_ID,
 		stripePublishableKey
 	}
-	if (!cookieStore) {
+	if (!cookieStore || cookieStore === 'undefined') {
 		const HOST = PUBLIC_DOMAIN
 		const url = new URL(event.request.url)
 		const storeRes = await gett(`init?domain=${HOST || url.host}`)
