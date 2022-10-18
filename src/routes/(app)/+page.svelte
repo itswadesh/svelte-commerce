@@ -151,7 +151,7 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 				<div class="mb-5 sm:mb-10">
 					<h1
 						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
-						BEST OF {$page.data.store.websiteName} EXCLUSIVE
+						BEST OF {$page.data.store?.websiteName} EXCLUSIVE
 					</h1>
 
 					<HeroBanners heroBanners="{heroBanners}" />
