@@ -50,7 +50,7 @@ async function getMegaMenu() {
 		try {
 			const localMegamenu = localStorage.getItem('megamenu')
 
-			if (!localMegamenu) {
+			if (!localMegamenu || localMegamenu === 'undefined') {
 				megamenu = await getAPI(
 					`categories/megamenu?megamenu=true&store=${$page.data?.store?.id}`,
 					$page.data.origin

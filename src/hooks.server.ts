@@ -41,6 +41,7 @@ export const handleError = async ({ error }) => {
 	}
 }
 export const handle: Handle = async ({ event, resolve }) => {
+	let initRes
 	const WWW_URL = new URL(event.request.url).origin
 	event.locals.origin = WWW_URL
 	const cookieStore = event.cookies.get('store')
@@ -70,8 +71,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 	if (!cookieStore || cookieStore === 'undefined') {
 		const HOST = PUBLIC_DOMAIN
 		const url = new URL(event.request.url)
-		const storeRes = await gett(`init?domain=${HOST || url.host}`)
-		const { storeOne } = storeRes
+		initRes = await gett(`init?domain=${HOST || url.host}`)
+		const { storeOne } = initRes
 		store = {
 			id: storeOne._id,
 			domain: storeOne.domain,
@@ -101,6 +102,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 
 	event.locals.store = store
+	// event.locals.megamenu = initRes.megamenu
 
 	let me: any = event.cookies.get('me')
 	if (!me) {
