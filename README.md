@@ -3,6 +3,7 @@
 ## To start Development
 ```
 git clone git@github.com:itswadesh/svelte-commerce.git
+cd svelte-commerce
 npm i
 npm run dev
 ```
