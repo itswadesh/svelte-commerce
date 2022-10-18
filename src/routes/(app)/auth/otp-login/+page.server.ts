@@ -2,10 +2,14 @@ import { post } from '$lib/util/api'
 import { gett } from '$lib/utils'
 import { invalid, redirect } from '@sveltejs/kit'
 import type { Action, Actions, PageServerLoad } from './$types'
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, url }) => {
 	// redirect user if logged in
 	if (locals.session) {
 		throw redirect(302, '/')
+	}
+	if (!locals.store.otpLogin) {
+		const ref = url.searchParams.get('ref') || '/'
+		throw redirect(302, `/auth/login?ref=${ref}`)
 	}
 	return { store: locals.store, origin: locals.origin }
 }
