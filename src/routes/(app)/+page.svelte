@@ -82,7 +82,7 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 		{/await}
 
 		<div class="mb-5 sm:mb-10">
-			<Hero banners="{data.home.banners?.data}" />
+			<Hero banners="{data.home?.banners?.data}" />
 		</div>
 
 		<!-- TOP CATEGORIES -->
