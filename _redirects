@@ -1,2 +1,1 @@
-/api/* https://staging.zapvi.in/api/:splat 200
-/images/* https://staging.zapvi.in/images/:splat 200
+/api/* https://api.litekart.in/api/:splat 200
