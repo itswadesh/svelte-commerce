@@ -1,3 +1,4 @@
+// @ts-ignore
 import { PUBLIC_HTTP_ENDPOINT, PUBLIC_DOMAIN } from '$env/static/public'
 
 export const authorInfo = {
@@ -35,7 +36,7 @@ export const mediaqueries = {
 }
 export const currency = { symbol: '₹', code: 'INR' }
 export const HTTP_ENDPOINT = PUBLIC_HTTP_ENDPOINT || 'https://api.litekart.in'
-export const DOMAIN = PUBLIC_DOMAIN || 'kitcommerce.tech'
+export const DOMAIN = PUBLIC_DOMAIN || null
 export const IMAGE_CDN_URL = 'https://ik.imagekit.io/3wzatecz51w3i/zapvi'
 
 export const entity = 'KitCommerce'
