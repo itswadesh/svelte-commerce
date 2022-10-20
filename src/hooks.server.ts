@@ -1,7 +1,6 @@
 import type { Handle } from '@sveltejs/kit'
 // import { getAPI } from '$lib/util/api'
 // @ts-ignore
-import { PUBLIC_DOMAIN } from '$env/static/public'
 import {
 	stripePublishableKey,
 	id,
@@ -22,7 +21,8 @@ import {
 	pinterestPage,
 	youtubeChannel,
 	GOOGLE_ANALYTICS_ID,
-	GOOGLE_CLIENT_ID
+	GOOGLE_CLIENT_ID,
+	DOMAIN
 } from '$lib/config'
 import { gett } from '$lib/utils'
 // import Cookie from 'cookie-universal'
@@ -66,12 +66,13 @@ export const handle: Handle = async ({ event, resolve }) => {
 		youtubeChannel,
 		GOOGLE_CLIENT_ID,
 		GOOGLE_ANALYTICS_ID,
-		stripePublishableKey
+		stripePublishableKey,
+		DOMAIN,
+		isFnb: false
 	}
 	if (!cookieStore || cookieStore === 'undefined') {
-		const HOST = PUBLIC_DOMAIN
 		const url = new URL(event.request.url)
-		initRes = await gett(`init?domain=${HOST || url.host}`)
+		initRes = await gett(`init?domain=${DOMAIN || url.host}`)
 		const { storeOne } = initRes
 		store = {
 			id: storeOne._id,
@@ -94,7 +95,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 			pinterestPage: storeOne.pinterestPage,
 			youtubeChannel: storeOne.youtubeChannel,
 			GOOGLE_CLIENT_ID: storeOne.GOOGLE_CLIENT_ID,
-			GOOGLE_ANALYTICS_ID: storeOne.GOOGLE_ANALYTICS_ID
+			GOOGLE_ANALYTICS_ID: storeOne.GOOGLE_ANALYTICS_ID,
+			isFnb: storeOne.isFnb,
+			DOMAIN: storeOne.DOMAIN
 		}
 		event.cookies.set('store', JSON.stringify(store), { path: '/' })
 	} else {

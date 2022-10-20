@@ -1,7 +1,7 @@
-import { PUBLIC_HTTP_ENDPOINT } from '$env/static/public'
 import cookie from 'cookie'
+import { HTTP_ENDPOINT } from './config'
 export async function post(endpoint: string, data: any, ck?: any) {
-	const ep = PUBLIC_HTTP_ENDPOINT + '/api/' + endpoint
+	const ep = HTTP_ENDPOINT + '/api/' + endpoint
 	const response = await fetch(ep, {
 		method: 'POST',
 		credentials: 'include',
@@ -27,7 +27,7 @@ export async function post(endpoint: string, data: any, ck?: any) {
 }
 export async function gett(endpoint: string, ck?: any) {
 	const ck1 = cookie.parse(ck || '')
-	const ep = PUBLIC_HTTP_ENDPOINT + '/api/' + endpoint
+	const ep = HTTP_ENDPOINT + '/api/' + endpoint
 	const response = await fetch(ep, {
 		method: 'GET',
 		credentials: 'include',

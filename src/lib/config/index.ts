@@ -1,4 +1,4 @@
-import { PUBLIC_HTTP_ENDPOINT } from '$env/static/public'
+import { PUBLIC_HTTP_ENDPOINT, PUBLIC_DOMAIN } from '$env/static/public'
 
 export const authorInfo = {
 	author: 'Swadesh Behera',
@@ -35,6 +35,7 @@ export const mediaqueries = {
 }
 export const currency = { symbol: '₹', code: 'INR' }
 export const HTTP_ENDPOINT = PUBLIC_HTTP_ENDPOINT || 'https://api.misiki.io'
+export const DOMAIN = PUBLIC_DOMAIN || 'kitcommerce.tech'
 export const IMAGE_CDN_URL = 'https://ik.imagekit.io/3wzatecz51w3i/zapvi'
 
 export const entity = 'KitCommerce'
