@@ -8,13 +8,7 @@ let openSidebar = false
 </script>
 
 <div class="{showCartSidebar || openSidebar ? 'h-screen overflow-hidden' : 'h-full'}">
-	<Nav
-		me="{data.me}"
-		cart="{data.cart}"
-		store="{data.store}"
-		q="{data.q}"
-		bind:showCartSidebar
-		bind:openSidebar />
+	<Nav me="{data.me}" cart="{data.cart}" bind:showCartSidebar bind:openSidebar />
 
 	<PageTransitions url="{data.url}">
 		<div class="mt-14 sm:mt-20 w-full flex-1">
@@ -23,6 +17,6 @@ let openSidebar = false
 	</PageTransitions>
 
 	<div class="hidden sm:block">
-		<Footer me="{data.me}" cart="{data.cart}" />
+		<Footer me="{data.me}" />
 	</div>
 </div>

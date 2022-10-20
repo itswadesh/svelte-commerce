@@ -27,7 +27,7 @@ import { settings } from './store'
 const dispatch = createEventDispatcher()
 const cookies = Cookie()
 
-export let me, cart, data, showCartSidebar, openSidebar
+export let me, cart, showCartSidebar, openSidebar
 let selectTarget = null
 let q = ''
 let typingTimer
