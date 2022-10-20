@@ -105,7 +105,7 @@ const twitterProps = {
 	<meta
 		name="robots"
 		content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-	<html lang="{siteLanguage}"></html>
+	<!-- <html lang="{siteLanguage}"></html> --- This is breaking Tailwindcss in dev -->
 </svelte:head>
 <Twitter {...twitterProps} />
 <OpenGraph {...openGraphProps} />
