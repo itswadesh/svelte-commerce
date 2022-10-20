@@ -1,6 +1,6 @@
 import { error, type Handle } from '@sveltejs/kit'
-import { SECRET_SENTRY_DSN } from '$env/static/private'
-const SENTRY_DSN = SECRET_SENTRY_DSN
+import * as env from '$env/static/private'
+const SENTRY_DSN = env.SECRET_SENTRY_DSN
 import {
 	stripePublishableKey,
 	id,
