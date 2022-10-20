@@ -1,5 +1,4 @@
 // import { getAPI } from '$lib/util/api'
-import cookie from 'cookie'
 export const prerender = false
 
 import { gett } from '$lib/utils'
