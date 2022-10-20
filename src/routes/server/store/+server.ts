@@ -1,10 +1,9 @@
+import { DOMAIN } from '$lib/config'
 import { gett } from '$lib/utils'
 // @ts-ignore
-import { PUBLIC_DOMAIN } from '$env/static/public'
 export async function GET({ request, cookies }) {
-	const HOST = PUBLIC_DOMAIN
 	const url = new URL(request.url)
-	const storeRes = await gett(`init?domain=${HOST || url.host}`)
+	const storeRes = await gett(`init?domain=${DOMAIN || url.host}`)
 	const { storeOne, settings, popularSearches, megamenu } = storeRes
 	const store = {
 		id: storeOne._id,
@@ -27,7 +26,8 @@ export async function GET({ request, cookies }) {
 		pinterestPage: storeOne.pinterestPage,
 		youtubeChannel: storeOne.youtubeChannel,
 		GOOGLE_CLIENT_ID: storeOne.GOOGLE_CLIENT_ID,
-		GOOGLE_ANALYTICS_ID: storeOne.GOOGLE_ANALYTICS_ID
+		GOOGLE_ANALYTICS_ID: storeOne.GOOGLE_ANALYTICS_ID,
+		DOMAIN: storeOne.DOMAIN
 	}
 	cookies.set('store', JSON.stringify(store), { path: '/' })
 	return new Response(JSON.stringify({ storeOne, settings: {}, popularSearches, megamenu }))
