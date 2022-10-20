@@ -36,7 +36,7 @@ export const mediaqueries = {
 }
 export const currency = { symbol: '₹', code: 'INR' }
 export const HTTP_ENDPOINT = PUBLIC_HTTP_ENDPOINT || 'https://api.litekart.in'
-export const DOMAIN = PUBLIC_DOMAIN || null
+export const DOMAIN = PUBLIC_DOMAIN || 'kitcommerce.tech'
 export const IMAGE_CDN_URL = 'https://ik.imagekit.io/3wzatecz51w3i/zapvi'
 
 export const entity = 'KitCommerce'
