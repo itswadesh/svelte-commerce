@@ -159,7 +159,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.cartQty = +cartQty
 		// event.locals.cart = JSON.parse(cart)
 		// load page as normal
-		event.request.headers.delete('connection')
+		// event.request.headers.delete('connection')
 		return await resolve(event)
 	} catch (e) {
 		const err = `Store Not Found @Hook 
