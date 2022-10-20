@@ -5,11 +5,10 @@
 </style>
 
 <script lang="ts">
-import './../app.css'
+import '../app.css'
 import { ToastContainer, FlatToast } from 'svelte-toasts'
 import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 import BackToTop from '$lib/components/BackToTop.svelte'
-import PageTransitions from '$lib/PageTransitions.svelte'
 import GoogleAnalytics from '$lib/components/GoogleAnalytics.svelte'
 import { navigating } from '$app/stores'
 </script>

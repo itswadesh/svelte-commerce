@@ -38,9 +38,10 @@ import { gett } from './utils'
 // 	twitterPage,
 // 	websiteName
 // } from './config'
-export let me, cart, store, popularSearches, megamenu
+export let me
 export { clazz as class }
 let clazz = ''
+let store, megamenu, popularSearches
 
 function getYear() {
 	const d = new Date()
