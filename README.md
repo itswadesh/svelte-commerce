@@ -1,17 +1,15 @@
-<h1>We are changing with Sveltekit change. Right now we are at `kit:1.0.0-next.442`</h1>
+<h1>We are changing with Sveltekit change. Right now we are at `1.0.0-next.520`</h1>
 
 ## To start Development
 ```
-git clone git@github.com:itswadesh/svelte-commerce.git
+git clone https://github.com/itswadesh/svelte-commerce.git
 cd svelte-commerce
 npm i
+```
+Make a copy of .env.example and rename to .env
+
+```
 npm run dev
-```
-
-## To deploy
-
-```
-docker compose up
 ```
 
 <a href="https://misiki.io/">
