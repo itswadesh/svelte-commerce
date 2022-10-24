@@ -1,4 +1,5 @@
 import shell from 'shelljs'
+// const shell = require('shelljs')
 
 shell.rm('-Rf', 'prod')
 shell.mkdir('prod')
