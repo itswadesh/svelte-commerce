@@ -21,8 +21,6 @@ let loading = false
 
 export let data
 
-// console.log('zzzzzzzzzzzzzzzzzz', data)
-
 let clazz
 export { clazz as class }
 
@@ -62,30 +60,30 @@ onMount(() => {
 
 				<!-- Order detail  -->
 
-				<div
-					class="grid grid-cols-1 divide-y-2 divide-dashed lg:grid-cols-2 lg:divide-y-0 lg:divide-x-2">
-					<div class="col-span-1 flex gap-2 p-5 lg:gap-5">
+				<div class="grid grid-cols-1 divide-y lg:grid-cols-2 lg:divide-y-0 lg:divide-x">
+					<div class="col-span-1 flex flex-col divide-y divide-dashed">
 						{#each data.order?.items as item}
-							<a
-								href="{`/product/${item.slug}`}"
-								aria-label="Click to view the product details"
-								class="flex-shrink-0">
-								<LazyImg
-									src="{item.imgCdn}"
-									alt=""
-									width="144"
-									class="w-24 object-contain object-top sm:w-36" />
-							</a>
+							<div class="flex gap-2 p-5 lg:gap-5">
+								<a
+									href="{`/product/${item.slug}`}"
+									aria-label="Click to view the product details"
+									class="flex-shrink-0">
+									<LazyImg
+										src="{item.imgCdn}"
+										alt=""
+										width="96"
+										class="w-24 object-contain object-top" />
+								</a>
 
-							<div class="flex w-full flex-1 flex-col text-sm xl:pr-4">
-								<div class="mb-1 flex justify-between gap-2 sm:gap-4">
-									<a
-										href="{`/product/${item.slug}`}"
-										aria-label="Click to view the product details"
-										class="flex-1 text-base font-semibold hover:underline">
-										{item.name}
-									</a>
-									<!-- {#if item.foodType}
+								<div class="flex w-full flex-1 flex-col text-sm xl:pr-4">
+									<div class="mb-1 flex justify-between gap-2 sm:gap-4">
+										<a
+											href="{`/product/${item.slug}`}"
+											aria-label="Click to view the product details"
+											class="flex-1 text-base font-semibold hover:underline">
+											{item.name}
+										</a>
+										<!-- {#if item.foodType}
 									<div>
 										{#if item.foodType === 'V'}
 											<LazyImg
@@ -111,68 +109,69 @@ onMount(() => {
 										{/if}
 									</div>
 								{/if} -->
-								</div>
+									</div>
 
-								{#if item.brandName}
-									<h4 class="mb-2 capitalize">
-										{item.brandName}
-									</h4>
-								{/if}
-
-								<div class="flex flex-wrap items-center whitespace-nowrap">
-									{#if item.size}
-										<h6 class="mr-4 mb-2">
-											Size :
-
-											<span class="font-medium">{item.size}</span>
-										</h6>
+									{#if item.brandName}
+										<h4 class="mb-2 capitalize">
+											{item.brandName}
+										</h4>
 									{/if}
 
-									{#if item.color}
+									<div class="flex flex-wrap items-center whitespace-nowrap">
+										{#if item.size}
+											<h6 class="mr-4 mb-2">
+												Size :
+
+												<span class="font-medium">{item.size}</span>
+											</h6>
+										{/if}
+
+										{#if item.color}
+											<h6 class="mb-2">
+												Color :
+
+												<span class="font-medium">{item.color}</span>
+											</h6>
+										{/if}
+									</div>
+
+									{#if item.vendor}
 										<h6 class="mb-2">
-											Color :
-
-											<span class="font-medium">{item.color}</span>
+											Seller :
+											<a
+												href="{`/vendor/${item.vendor?.id}`}"
+												aria-label="Click to view the vendor's profile"
+												class="font-medium">
+												{item.vendor?.businessName}
+											</a>
 										</h6>
 									{/if}
-								</div>
 
-								{#if item.vendor}
-									<h6 class="mb-2">
-										Seller :
-										<a
-											href="{`/vendor/${item.vendor?.id}`}"
-											aria-label="Click to view the vendor's profile"
-											class="font-medium">
-											{item.vendor?.businessName}
-										</a>
-									</h6>
-								{/if}
-
-								<div class="flex flex-wrap items-center gap-2">
-									<span class="text-base font-bold whitespace-nowrap">
-										{currency(item.price)}
-									</span>
-
-									{#if item.mrp > item.price}
-										<span class="text-gray-500 line-through whitespace-nowrap">
-											{currency(item.mrp)}
+									<div class="flex flex-wrap items-center gap-2">
+										<span class="text-base font-bold whitespace-nowrap">
+											{currency(item.price)}
 										</span>
 
-										{#if Math.floor(((item.mrp - item.price) / item.mrp) * 100) > 0}
-											<span class="text-green-600 whitespace-nowrap">
-												({Math.floor(((item.mrp - item.price) / item.mrp) * 100)}% off)
+										{#if item.mrp > item.price}
+											<span class="text-gray-500 line-through whitespace-nowrap">
+												{currency(item.mrp)}
 											</span>
+
+											{#if Math.floor(((item.mrp - item.price) / item.mrp) * 100) > 0}
+												<span class="text-green-600 whitespace-nowrap">
+													({Math.floor(((item.mrp - item.price) / item.mrp) * 100)}% off)
+												</span>
+											{/if}
 										{/if}
-									{/if}
+									</div>
 								</div>
 							</div>
 						{/each}
 					</div>
 
-					<div class="col-span-1 flex flex-col gap-5 p-5">
+					<div class="col-span-1 flex flex-col gap-5 lg:gap-10 p-5">
 						<div>
-							<h4 class="mb-2 font-semibold">Delivery Address :</h4>
+							<h4 class="mb-2 font-semibold">Delivery Address</h4>
 
 							<p class="flex flex-col text-sm font-light text-gray-500">
 								<span>
@@ -189,13 +188,13 @@ onMount(() => {
 
 							{#if data.order?.userPhone}
 								<h6 class="mt-2 text-sm">
-									Phone number: <span> {data.order?.userPhone}</span>
+									Phone No: <span> {data.order?.userPhone}</span>
 								</h6>
 							{/if}
 						</div>
 
 						<div>
-							<h4 class="mb-2 font-semibold">Billing Address :</h4>
+							<h4 class="mb-2 font-semibold">Billing Address</h4>
 
 							<p class="flex flex-col text-sm font-light text-gray-500">
 								<span>
@@ -213,7 +212,7 @@ onMount(() => {
 
 							{#if data.order?.userPhone}
 								<h6 class="mt-2 text-sm">
-									Phone number: <span> {data.order?.userPhone}</span>
+									Phone No: <span> {data.order?.userPhone}</span>
 								</h6>
 							{/if}
 						</div>

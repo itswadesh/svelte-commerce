@@ -66,8 +66,7 @@ async function handleVerifyOtp({ detail }) {
 			active: res.active
 		}
 		await cookies.set('me', me, { path: '/' })
-		// $page.data.me = me
-		await invalidateAll()
+		// await invalidateAll()
 		let r = ref || '/'
 		if (browser) goto(r)
 	} catch (e) {

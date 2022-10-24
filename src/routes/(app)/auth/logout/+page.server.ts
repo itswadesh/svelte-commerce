@@ -1,3 +1,4 @@
+import { post } from '$lib/utils'
 import { redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
 
@@ -8,7 +9,8 @@ export const load: PageServerLoad = async () => {
 }
 
 export const actions: Actions = {
-	default({ cookies }) {
+	async default({ cookies }) {
+		await post('logout', {}, cookies)
 		// eat the cookie
 		cookies.set('session', '', {
 			path: '/',

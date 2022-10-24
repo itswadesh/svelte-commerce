@@ -1,7 +1,5 @@
-import { getAPI } from '$lib/util/api'
 import { gett } from '$lib/utils'
 import { error } from '@sveltejs/kit'
-import cookie from 'cookie'
 
 export async function load({ params, parent, cookies, locals, request }) {
 	// const ck = request.headers.get('cookie')

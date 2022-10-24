@@ -19,7 +19,7 @@ export let currentPage, orders
 let clazz = ''
 export { clazz as class }
 
-$: store = $page.store
+// console.log('zzzzzzzzzzzzzzzzzz', orders)
 </script>
 
 <div class="w-full text-gray-800 {clazz}">
@@ -49,7 +49,8 @@ $: store = $page.store
 							</div>
 
 							<table
-								class="min-w-full divide-y divide-gray-200 rounded-md border border-gray-200 text-center text-gray-500 shadow-md">
+								class="min-w-full divide-y divide-gray-200 rounded-md border border-gray-200 text-center text-gray-500 shadow-md"
+								on:click="{() => goto(`/my/orders/${order._id}`)}">
 								<thead class="whitespace-nowrap rounded-t-md bg-gray-100 text-xs uppercase">
 									<tr>
 										<!-- <th class="px-5 py-3 font-medium tracking-wider text-gray-500"> # </th> -->
@@ -75,56 +76,56 @@ $: store = $page.store
 								</thead>
 
 								<tbody class="divide-y divide-gray-200 rounded-b-md bg-white text-sm">
-									<tr
-										class="cursor-pointer bg-white transition duration-300 hover:bg-primary-50"
-										on:click="{() => goto(`/my/orders/details?orderId=${order._id}`)}">
-										<td class="p-3">
-											<div class="mx-auto max-w-max">
-												<LazyImg
-													src="{order.imgCdn}"
-													alt=" "
-													width="80"
-													class="h-auto w-20 object-contain object-center" />
-											</div>
-										</td>
+									{#each order.orderItems as item}
+										<tr class="cursor-pointer bg-white transition duration-300 hover:bg-primary-50">
+											<td class="p-3">
+												<div class="mx-auto max-w-max">
+													<LazyImg
+														src="{item.imgCdn}"
+														alt=" "
+														width="80"
+														class="h-auto w-20 object-contain object-center" />
+												</div>
+											</td>
 
-										<td class="p-3">
-											{order.vendorBusinessName}
-										</td>
+											<td class="p-3">
+												{item.vendorBusinessName}
+											</td>
 
-										<td class="p-3">
-											{order.name}
-										</td>
+											<td class="p-3">
+												{item.name}
+											</td>
 
-										<!-- <td class="p-3">
-												{#if order.foodType === 'V'}
+											<!-- <td class="p-3">
+												{#if item.foodType === 'V'}
 													<LazyImg src="/product/veg.png" alt="Veg" width="20" height="20" class="h-5 w-5" />
-												{:else if order.foodType === 'N' || order.foodType === 'E'}
+												{:else if item.foodType === 'N' || item.foodType === 'E'}
 													<LazyImg src="/product/non-veg.png" alt="Non veg" width="20" height="20" class="h-5 w-5" />
 												{/if}
 										</td> -->
 
-										<td class="whitespace-nowrap p-3">
-											{currency(order.qty)}
-										</td>
+											<td class="whitespace-nowrap p-3">
+												{item.qty}
+											</td>
 
-										<td class="whitespace-nowrap p-3">
-											{currency(order.price)}
-										</td>
+											<td class="whitespace-nowrap p-3">
+												{currency(item.price)}
+											</td>
 
-										<td class="whitespace-nowrap p-3">
-											{currency(order.shippingCharge)}
-										</td>
+											<td class="whitespace-nowrap p-3">
+												{currency(item.shippingCharge)}
+											</td>
 
-										<td class="whitespace-nowrap p-3">
-											{currency(order.total)}
-										</td>
+											<td class="whitespace-nowrap p-3">
+												{currency(item.total)}
+											</td>
 
-										<td class="p-3">
-											<span class="whitespace-nowrap font-semibold text-primary-500">
-												{order.status}
-											</span>
-										</td></tr>
+											<td class="p-3">
+												<span class="whitespace-nowrap font-semibold text-primary-500">
+													{item.status}
+												</span>
+											</td></tr>
+									{/each}
 								</tbody>
 							</table>
 						</div>
@@ -144,37 +145,39 @@ $: store = $page.store
 								</h6>
 							</div>
 
-							<div
+							<a
+								href="/my/orders/{order._id}"
+								aria-label="orders"
 								class="mb-4 w-full divide-y divide-gray-200 rounded-md border bg-white text-sm text-gray-600 shadow-md sm:mb-10">
-								<div on:click="{() => goto(`/my/orders/details?orderId=${order._id}`)}">
+								{#each order.orderItems as item}
 									<div class="flex items-start gap-2 p-4 sm:gap-5">
 										<div class="flex-shrink-0">
 											<LazyImg
-												src="{order.imgCdn}"
+												src="{item.imgCdn}"
 												alt=""
 												width="64"
 												class="h-auto w-16 object-contain object-top" />
 										</div>
 
 										<div class="w-full flex-1">
-											<!-- {#if order.vendor}
-													<a href="/vendor/${order.vendor?.slug}?id=${order.vendor?.id}" aria-label="Click to route vendor's profile">
-														 {#if store.isFnb && order.vendorBusinessName}
+											<!-- {#if item.vendor}
+													<a href="/vendor/${item.vendor?.slug}?id=${item.vendor?.id}" aria-label="Click to route vendor's profile">
+														 {#if store.isFnb && item.vendorBusinessName}
 															 <b class="mb-2">
-																 {order.vendorBusinessName}
+																 {item.vendorBusinessName}
 															</b>
 														{/if}
 													</a>
 												{/if} -->
 
 											<div class="mb-2 flex items-start justify-between">
-												<span class="flex-1">{order.name}</span>
+												<span class="flex-1">{item.name}</span>
 
 												<!-- {#if store.isFnb}
 														<div class="ms-2 sm:ms-5">
-															{#if order.foodType === 'V'}
+															{#if item.foodType === 'V'}
 																<LazyImg src="`/product/veg.png`" alt="veg" width="20" height="20" class="h-5 w-5" />
-															{:else if order.foodType === 'N' || order.foodType === 'E'}
+															{:else if item.foodType === 'N' || item.foodType === 'E'}
 																<LazyImg src="`/product/non-veg.png`" alt="non veg" width="20" height="20" class="h-5 w-5" />
 															{:else}
 																<LazyImg src="`/product/other.png`" alt="other" width="20" height="20" class="h-5 w-5" />
@@ -188,9 +191,9 @@ $: store = $page.store
 													<h6>Price :</h6>
 
 													<b class="text-gray-500">
-														{currency(order.price)}
+														{currency(item.price)}
 														*
-														{order.qty}
+														{item.qty}
 													</b>
 												</div>
 
@@ -198,7 +201,7 @@ $: store = $page.store
 													<h6>Delivery :</h6>
 
 													<b class="text-gray-500">
-														{currency(order.shippingCharge)}
+														{currency(item.shippingCharge)}
 													</b>
 												</div>
 
@@ -206,7 +209,7 @@ $: store = $page.store
 													<h6>Total :</h6>
 
 													<b class="text-gray-500">
-														{currency(order.total)}
+														{currency(item.total)}
 													</b>
 												</div>
 
@@ -214,27 +217,24 @@ $: store = $page.store
 													<h6>Status :</h6>
 
 													<b class="text-primary-500">
-														{order.status}
+														{item.status}
 													</b>
 												</div>
 											</div>
 										</div>
 									</div>
-								</div>
-							</div>
+								{/each}
+							</a>
 						</div>
 					{/each}
 				</div>
 			{/if}
 		</div>
+
 		<Pagination count="{Math.ceil(orders.count / orders.pageSize)}" current="{+currentPage}" />
 	{:else if orders.count === 0}
 		<div class="flex flex-col items-center justify-center text-center">
-			<LazyImg
-				src="/no/add-to-cart-animate.svg"
-				alt="empty cart"
-				height="240"
-				class="mb-5 h-60 object-contain" />
+			<img src="/no/add-to-cart-animate.svg" alt="empty cart" class="mb-5 h-60 object-contain" />
 
 			<span class="mb-3 text-xl font-medium md:text-3xl"> Your have't ordered yet !!</span>
 

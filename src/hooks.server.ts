@@ -41,7 +41,7 @@ if (SENTRY_DSN) {
 
 /** @type {import('@sveltejs/kit').HandleFetch} */
 export const handleFetch = async ({ event, request, fetch }) => {
-	request.headers.set('cookie', event.request.headers.get('cookie'), { path: '/' })
+	request.headers.set('cookie', event.request.headers.get('cookie'))
 
 	return fetch(request)
 }
@@ -55,7 +55,6 @@ export const handleError = async ({ error, event }) => {
 }
 export const handle: Handle = async ({ event, resolve }) => {
 	try {
-		let initRes
 		const WWW_URL = new URL(event.request.url).origin
 		event.locals.origin = WWW_URL
 		const cookieStore = event.cookies.get('store')
@@ -66,7 +65,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 			email,
 			address,
 			phone,
-			otpLogin: false,
 			websiteName,
 			websiteLegalName,
 			title: siteTitle,
@@ -86,15 +84,14 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 		if (!cookieStore || cookieStore === 'undefined') {
 			const url = new URL(event.request.url)
-			initRes = await gett(`init?domain=${DOMAIN || url.host}`)
-			const { storeOne } = initRes
+			const storeRes = await gett(`init?domain=${DOMAIN || url.host}`)
+			const { storeOne } = storeRes
 			store = {
 				id: storeOne._id,
 				domain: storeOne.domain,
 				email: storeOne.email,
 				address: storeOne.address,
 				phone: storeOne.phone,
-				otpLogin: storeOne.otpLogin,
 				websiteLegalName: storeOne.websiteLegalName,
 				websiteName: storeOne.websiteName,
 				title: storeOne.title,
@@ -117,28 +114,29 @@ export const handle: Handle = async ({ event, resolve }) => {
 		} else {
 			store = JSON.parse(cookieStore)
 		}
+
 		event.locals.store = store
-		// event.locals.megamenu = initRes.megamenu
 
 		let me: any = event.cookies.get('me')
-		if (!me) {
-			try {
-				if (me) {
-					event.locals.me = {
-						email: me.email,
-						phone: me.phone,
-						firstName: me.firstName,
-						lastName: me.lastName,
-						avatar: me.avatar,
-						role: me.role,
-						verified: me.verified,
-						active: me.active
-					}
-				}
-			} catch (e) {
-				console.log('eeeeeeeeeeeeee', e)
-			}
-		} else {
+		// if (!me) {
+		// 	try {
+		// 		if (me) {
+		// 			event.locals.me = {
+		// 				email: me.email,
+		// 				phone: me.phone,
+		// 				firstName: me.firstName,
+		// 				lastName: me.lastName,
+		// 				avatar: me.avatar,
+		// 				role: me.role,
+		// 				verified: me.verified,
+		// 				active: me.active
+		// 			}
+		// 		}
+		// 	} catch (e) {
+		// 		console.log('eeeeeeeeeeeeee', e)
+		// 	}
+		// } else {
+		if (me) {
 			me = JSON.parse(me)
 			event.locals.me = {
 				email: me.email,
@@ -151,7 +149,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 				active: me.active
 			}
 		}
-
 		const cartId: string = event.cookies.get('cartId')
 		const cartQty: string = event.cookies.get('cartQty')
 		// const cart: any = event.cookies.get('cart') || '{}'

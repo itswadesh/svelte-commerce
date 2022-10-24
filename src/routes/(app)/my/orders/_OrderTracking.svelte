@@ -8,7 +8,52 @@ import { date } from '$lib/util'
 export let order
 </script>
 
-{#if order.orderHistory?.length > 0}
+<div>
+	<h1 class="mb-4 text-xl font-semibold sm:text-2xl">Timeline</h1>
+
+	<div class="flex flex-col gap-2">
+		{#each order.data as o}
+			<div>
+				<div class="mb-2 flex items-start gap-4">
+					<div class="h-5 w-5 flex-shrink-0 overflow-hidden rounded-full">
+						{#if o.icon}
+							<LazyImg
+								src="{o.icon}"
+								width="20"
+								height="20"
+								alt=" "
+								class="h-full w-full bg-gray-100 object-contain object-center" />
+						{:else}
+							<div class="h-full w-full bg-gray-200"></div>
+						{/if}
+					</div>
+
+					<div class="flex-1 gap-1 text-sm font-semibold capitalize">
+						{o.title}
+					</div>
+				</div>
+
+				<div class="flex gap-4">
+					<!-- This is required for gray straight line -->
+
+					<div class="flex w-5 items-center justify-center">
+						<div class="h-full min-h-[24px] w-[2px] bg-gray-200"></div>
+					</div>
+
+					<div class="flex flex-1 flex-col gap-1">
+						<span class="text-xs text-gray-500">{date(o.time)}</span>
+
+						<p class="text-xs first-letter:uppercase">
+							{o.comment}
+						</p>
+					</div>
+				</div>
+			</div>
+		{/each}
+	</div>
+</div>
+
+<!-- {#if order.orderHistory?.length > 0}
 	<div class="xl:w-2/3">
 		<div class="relative z-10">
 			<div
@@ -73,4 +118,4 @@ export let order
 			</div>
 		</div>
 	</div>
-{/if}
+{/if} -->
