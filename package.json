@@ -14,7 +14,10 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"partytown": "partytown copylib static/~partytown",
-		"gen:manifest": "node ./generate-manifest.js"
+		"gen:manifest": "node ./generate-manifest.js",
+		"copy": "node devops/copy",
+		"liveS": "node devops/deploy",
+		"live": "run-s build copy liveS"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "1.0.0-next.84",
@@ -49,6 +52,10 @@
 		"tslib": "^2.4.0",
 		"typescript": "~4.8.4",
 		"vanilla-lazyload": "^17.8.3",
+		"fs": "0.0.1-security",
+		"npm-run-all": "4.1.5",
+		"shelljs": "0.8.5",
+		"ssh2shell": "2.0.6",
 		"vite": "^3.1.8"
 	},
 	"dependencies": {
