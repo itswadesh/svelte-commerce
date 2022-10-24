@@ -1,7 +1,7 @@
 import { DOMAIN } from '$lib/config'
 import { gett } from '$lib/utils'
 // @ts-ignore
-export async function GET({ request, cookies }) {
+export async function GET({ request, cookies, locals }) {
 	const url = new URL(request.url)
 	const storeRes = await gett(`init?domain=${DOMAIN || url.host}`)
 	const { storeOne, settings, popularSearches, megamenu } = storeRes
@@ -11,7 +11,7 @@ export async function GET({ request, cookies }) {
 		email: storeOne.email,
 		address: storeOne.address,
 		phone: storeOne.phone,
-		otpLogin: storeOne.otpLogin,
+		otpLogin: storeOne.otpLogin || '/auth/login',
 		websiteLegalName: storeOne.websiteLegalName,
 		websiteName: storeOne.websiteName,
 		title: storeOne.title,
@@ -27,8 +27,12 @@ export async function GET({ request, cookies }) {
 		youtubeChannel: storeOne.youtubeChannel,
 		GOOGLE_CLIENT_ID: storeOne.GOOGLE_CLIENT_ID,
 		GOOGLE_ANALYTICS_ID: storeOne.GOOGLE_ANALYTICS_ID,
-		DOMAIN: storeOne.DOMAIN
+		DOMAIN: storeOne.DOMAIN,
+		closed: storeOne.closed,
+		closeMessage: storeOne.closeMessage,
+		isFnb: storeOne.isFnb
 	}
+	locals.store = store
 	cookies.set('store', JSON.stringify(store), { path: '/' })
 	return new Response(JSON.stringify({ storeOne, settings: {}, popularSearches, megamenu }))
 }

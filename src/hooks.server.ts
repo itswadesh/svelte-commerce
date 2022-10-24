@@ -65,6 +65,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			email,
 			address,
 			phone,
+			otpLogin: '/auth/login',
 			websiteName,
 			websiteLegalName,
 			title: siteTitle,
@@ -79,6 +80,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 			GOOGLE_CLIENT_ID,
 			GOOGLE_ANALYTICS_ID,
 			stripePublishableKey,
+			closed: false,
+			closeMessage: '',
 			DOMAIN,
 			isFnb: false
 		}
@@ -91,6 +94,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 				domain: storeOne.domain,
 				email: storeOne.email,
 				address: storeOne.address,
+				otpLogin: storeOne.otpLogin,
 				phone: storeOne.phone,
 				websiteLegalName: storeOne.websiteLegalName,
 				websiteName: storeOne.websiteName,
@@ -98,6 +102,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 				description: storeOne.description,
 				keywords: storeOne.keywords,
 				stripePublishableKey: storeOne.stripePublishableKey,
+				closed: storeOne.closed,
+				closeMessage: storeOne.closeMessage,
 				logo: storeOne.logo,
 				facebookPage: storeOne.facebookPage,
 				instagramPage: storeOne.instagramPage,

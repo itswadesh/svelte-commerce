@@ -2,6 +2,7 @@
 import Nav from '$lib/Nav.svelte'
 import Footer from '$lib/Footer.svelte'
 import PageTransitions from '$lib/PageTransitions.svelte'
+import { page } from '$app/stores'
 export let data
 let showCartSidebar = false
 let openSidebar = false
@@ -12,7 +13,11 @@ let openSidebar = false
 
 	<PageTransitions url="{data.url}">
 		<div class="mt-14 sm:mt-20 w-full flex-1">
-			<slot />
+			{#if $page.data.store.closed}
+				{$page.data.store.closeMessage || 'We are closed for the day'}
+			{:else}
+				<slot />
+			{/if}
 		</div>
 	</PageTransitions>
 
