@@ -18,7 +18,15 @@
 import { fly } from 'svelte/transition'
 
 export let showOnPx = 150
+
 let hidden = true
+let y
+
+$: if (y === y) {
+	setTimeout(() => {
+		hidden = true
+	}, 10000)
+}
 
 function goTop() {
 	// scroll to the top
@@ -42,7 +50,7 @@ function handleOnScroll() {
 }
 </script>
 
-<svelte:window on:scroll="{handleOnScroll}" />
+<svelte:window bind:scrollY="{y}" on:scroll="{handleOnScroll}" />
 
 {#if !hidden}
 	<button

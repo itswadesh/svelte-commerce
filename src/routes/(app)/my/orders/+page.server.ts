@@ -5,10 +5,7 @@ import { error } from '@sveltejs/kit'
 export async function load({ params, parent, request, locals, cookies }) {
 	const { store } = locals
 	try {
-		const orders = await gett(
-			`orders/order-items/my?store=${store?.id}`,
-			request.headers.get('cookie')
-		)
+		const orders = await gett(`orders/my?store=${store?.id}`, request.headers.get('cookie'))
 
 		// console.log('orders = ', orders)
 

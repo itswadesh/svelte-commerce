@@ -72,6 +72,8 @@ import { onMount } from 'svelte'
 
 export let data
 
+// console.log('zzzzzzzzzzzzzzzzzz', data)
+
 const seoProps = {
 	title: 'Success ',
 	metadescription: 'Success '
@@ -207,7 +209,9 @@ onMount(async () => {
 
 							<div class="itmes-start flex flex-col">
 								{#each data.order?.items as item, ix}
+									<!-- data-sveltekit-reload added because in production it does not work-->
 									<a
+										data-sveltekit-reload
 										href="/product/{item.slug}"
 										aria-label="Click to view the product details"
 										class="group flex w-full flex-row justify-between py-4
@@ -233,7 +237,9 @@ onMount(async () => {
 											{/if} -->
 
 												<div class="mb-2 flex items-start gap-2">
+													<!-- data-sveltekit-reload added because in production it does not work-->
 													<a
+														data-sveltekit-reload
 														href="/product/{item.slug}"
 														aria-label="Click to view the product details"
 														class="text-sm text-gray-500 group-hover:underline">
@@ -267,15 +273,15 @@ onMount(async () => {
 													{/if} -->
 												</div>
 
-												<div class="mb-2 flex w-full items-center gap-4 text-sm">
-													<div class="me-4">
-														<span class="me-2 font-medium text-gray-500">Qty :</span>
+												<div class="mb-2 flex w-full gap-4 text-sm flex-wrap">
+													<div class="whitespace-nowrap flex items-center gap-2">
+														<span class="font-medium text-gray-500">Qty :</span>
 
 														<b>{item.qty}</b>
 													</div>
 
-													<div>
-														<span class="me-2 font-medium text-gray-500">Price :</span>
+													<div class="whitespace-nowrap flex items-center gap-2">
+														<span class="font-medium text-gray-500">Price :</span>
 
 														<b>{currency(item.price)}</b>
 													</div>

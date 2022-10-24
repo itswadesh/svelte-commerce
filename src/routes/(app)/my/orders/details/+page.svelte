@@ -21,7 +21,7 @@ let loading = false
 
 export let data
 
-// console.log('data', data)
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let clazz
 export { clazz as class }
@@ -38,7 +38,7 @@ function head() {
 }
 
 onMount(() => {
-	deliveryBy = dayjs().add(7, 'day').format('dddd, MMM D, YYYY')
+	// deliveryBy = dayjs().add(7, 'day').format('dddd, MMM D, YYYY')
 	now = dayjs()
 })
 </script>
@@ -65,35 +65,36 @@ onMount(() => {
 				<div
 					class="grid grid-cols-1 divide-y-2 divide-dashed lg:grid-cols-2 lg:divide-y-0 lg:divide-x-2">
 					<div class="col-span-1 flex gap-2 p-5 lg:gap-5">
-						<a
-							href="{`/product/${data.order?.slug}`}"
-							aria-label="Click to view the product details"
-							class="flex-shrink-0">
-							<LazyImg
-								src="{data.order?.imgCdn}"
-								alt=""
-								width="144"
-								class="w-24 object-contain object-top sm:w-36" />
-						</a>
+						{#each data.order?.items as item}
+							<a
+								href="{`/product/${item.slug}`}"
+								aria-label="Click to view the product details"
+								class="flex-shrink-0">
+								<LazyImg
+									src="{item.imgCdn}"
+									alt=""
+									width="144"
+									class="w-24 object-contain object-top sm:w-36" />
+							</a>
 
-						<div class="flex w-full flex-1 flex-col text-sm xl:pr-4">
-							<div class="mb-1 flex justify-between gap-2 sm:gap-4">
-								<a
-									href="{`/product/${data.order?.slug}`}"
-									aria-label="Click to view the product details"
-									class="flex-1 text-base font-semibold hover:underline">
-									{data.order?.name}
-								</a>
-								{#if data.order?.foodType}
+							<div class="flex w-full flex-1 flex-col text-sm xl:pr-4">
+								<div class="mb-1 flex justify-between gap-2 sm:gap-4">
+									<a
+										href="{`/product/${item.slug}`}"
+										aria-label="Click to view the product details"
+										class="flex-1 text-base font-semibold hover:underline">
+										{item.name}
+									</a>
+									<!-- {#if item.foodType}
 									<div>
-										{#if data.order?.foodType === 'V'}
+										{#if item.foodType === 'V'}
 											<LazyImg
 												src="/product/veg.png"
 												alt="veg"
 												width="20"
 												height="20"
 												class="h-5 w-5" />
-										{:else if data.order?.foodType === 'N' || data.order?.foodType === 'E'}
+										{:else if item.foodType === 'N' || item.foodType === 'E'}
 											<LazyImg
 												src="/product/non-veg.png"
 												alt="non veg"
@@ -109,65 +110,64 @@ onMount(() => {
 												class="h-5 w-5" />
 										{/if}
 									</div>
-								{/if}
-							</div>
+								{/if} -->
+								</div>
 
-							{#if data.order?.brandName}
-								<h4 class="mb-2 capitalize">
-									{data.order?.brandName}
-								</h4>
-							{/if}
-
-							<div class="flex flex-wrap items-center whitespace-nowrap">
-								{#if data.order?.size}
-									<h6 class="mr-4 mb-2">
-										Size :
-
-										<span class="font-medium">{data.order?.size}</span>
-									</h6>
+								{#if item.brandName}
+									<h4 class="mb-2 capitalize">
+										{item.brandName}
+									</h4>
 								{/if}
 
-								{#if data.order?.color}
+								<div class="flex flex-wrap items-center whitespace-nowrap">
+									{#if item.size}
+										<h6 class="mr-4 mb-2">
+											Size :
+
+											<span class="font-medium">{item.size}</span>
+										</h6>
+									{/if}
+
+									{#if item.color}
+										<h6 class="mb-2">
+											Color :
+
+											<span class="font-medium">{item.color}</span>
+										</h6>
+									{/if}
+								</div>
+
+								{#if item.vendor}
 									<h6 class="mb-2">
-										Color :
-
-										<span class="font-medium">{data.order?.color}</span>
+										Seller :
+										<a
+											href="{`/vendor/${item.vendor?.id}`}"
+											aria-label="Click to view the vendor's profile"
+											class="font-medium">
+											{item.vendor?.businessName}
+										</a>
 									</h6>
 								{/if}
-							</div>
 
-							{#if data.order?.vendor}
-								<h6 class="mb-2">
-									Seller :
-									<a
-										href="{`/vendor/${data.order?.vendor?.id}`}"
-										aria-label="Click to view the vendor's profile"
-										class="font-medium">
-										{data.order?.vendor?.businessName}
-									</a>
-								</h6>
-							{/if}
-
-							<div class="flex flex-wrap items-center gap-2">
-								<span class="text-base font-bold whitespace-nowrap">
-									{data.order?.formattedPrice}
-								</span>
-
-								{#if data.order?.mrp > data.order?.price}
-									<span class="text-gray-500 line-through whitespace-nowrap">
-										{data.order?.formattedMrp}
+								<div class="flex flex-wrap items-center gap-2">
+									<span class="text-base font-bold whitespace-nowrap">
+										{currency(item.price)}
 									</span>
 
-									{#if Math.floor(((data.order?.mrp - data.order?.price) / data.order?.mrp) * 100) > 0}
-										<span class="text-green-600 whitespace-nowrap">
-											({Math.floor(
-												((data.order?.mrp - data.order?.price) / data.order?.mrp) * 100
-											)}% off)
+									{#if item.mrp > item.price}
+										<span class="text-gray-500 line-through whitespace-nowrap">
+											{currency(item.mrp)}
 										</span>
+
+										{#if Math.floor(((item.mrp - item.price) / item.mrp) * 100) > 0}
+											<span class="text-green-600 whitespace-nowrap">
+												({Math.floor(((item.mrp - item.price) / item.mrp) * 100)}% off)
+											</span>
+										{/if}
 									{/if}
-								{/if}
+								</div>
 							</div>
-						</div>
+						{/each}
 					</div>
 
 					<div class="col-span-1 flex flex-col gap-5 p-5">
@@ -218,7 +218,7 @@ onMount(() => {
 							{/if}
 						</div>
 
-						<div>
+						<!-- <div>
 							<h4 class="mb-2 font-semibold">Vendor Details :</h4>
 
 							<p class="flex flex-col text-sm font-light text-gray-500">
@@ -237,7 +237,7 @@ onMount(() => {
 									Phone number: <span> {data.order?.vendorPhone}</span>
 								</h6>
 							{/if}
-						</div>
+						</div> -->
 					</div>
 				</div>
 			</div>
@@ -273,11 +273,14 @@ onMount(() => {
 				{/if}
 
 				<div class="mt-5 sm:mt-10 xl:flex xl:items-center xl:justify-between">
-					{#if !data.order?.isReplaceOrReturn}
-						<OrderTracking order="{data.order}" />
+					{#if data.orderTracking?.data?.length}
+						<OrderTracking order="{data.orderTracking}" />
+					{/if}
+
+					<!-- {#if !data.order?.isReplaceOrReturn}
 					{:else}
 						<ReturnTracking order="{data.order}" />
-					{/if}
+					{/if} -->
 
 					<div class="mt-10 mb-4 xl:mb-0 xl:mt-0 xl:w-1/3">
 						<div class="flex flex-col xl:items-center xl:justify-center">
@@ -300,13 +303,13 @@ onMount(() => {
 								</a>
 							{/if}
 
-							{#if data.order?.returnValidTill != null && now <= data.order?.returnValidTill && !data.order?.isReplaceOrReturn}
+							<!-- {#if data.order?.returnValidTill != null && now <= data.order?.returnValidTill && !data.order?.isReplaceOrReturn}
 								<a
 									href="/my/return?orderId=${data.order?.orderId}&itemId=${data.order?.itemId}"
 									aria-label="Click to route return">
 									<TransparentButton class="w-48" type="button" border>Return</TransparentButton>
 								</a>
-							{/if}
+							{/if} -->
 						</div>
 					</div>
 				</div>

@@ -35,8 +35,7 @@ export async function load({ url, params, locals, cookies, parent, setHeaders })
 		ressss = res[0]
 		if (ressss.status === 'fulfilled') {
 			products = ressss.value?.data?.map((p) => {
-				let p1
-				p1 = { ...p._source }
+				const p1 = { ...p._source }
 				p1.id = p._id
 				return p1
 			})
