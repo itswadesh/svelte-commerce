@@ -9,6 +9,7 @@ import { WhiteButton } from '$lib/ui'
 import noEmptyAddress from '$lib/assets/no/empty-address.svg'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+import { applyAction, enhance } from '$app/forms'
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
@@ -162,11 +163,11 @@ async function remove(id, index) {
 							<a
 								href="{`/my/addresses/${i._id || i.id}`}"
 								aria-label="Click to visit address details"
-								class="bg-transparent p-2 text-center font-semibold uppercase text-primary-500 transition duration-300 focus:outline-none hover:bg-zinc-100 hover:text-primary-700">
+								class="w-full bg-transparent p-2 text-center font-semibold uppercase text-primary-500 transition duration-300 focus:outline-none hover:bg-zinc-100 hover:text-primary-700">
 								Edit
 							</a>
 
-							<button
+							<!-- <button
 								type="button"
 								class="bg-transparent p-2 text-center font-semibold uppercase text-primary-500 transition duration-300 focus:outline-none hover:bg-zinc-100 hover:text-primary-700"
 								on:click="{() => remove(i._id || i.id, index)}">
@@ -175,7 +176,29 @@ async function remove(id, index) {
 								{:else}
 									Remove
 								{/if}
-							</button>
+							</button> -->
+
+							<form
+								action="/my/addresses?/deleteAddress"
+								method="POST"
+								use:enhance="{() => {
+									return async ({ result }) => {
+										// console.log('result', result)
+
+										toast('Address deleted', 'success')
+										await invalidateAll()
+										await applyAction(result)
+									}
+								}}"
+								class="w-full">
+								<input type="hidden" name="id" value="{i._id || i.id}" />
+
+								<button
+									type="submit"
+									class="w-full bg-transparent p-2 text-center font-semibold uppercase text-primary-500 transition duration-300 focus:outline-none hover:bg-zinc-100 hover:text-primary-700">
+									REMOVE
+								</button>
+							</form>
 						</div>
 					</li>
 				{/if}

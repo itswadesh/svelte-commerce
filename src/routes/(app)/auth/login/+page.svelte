@@ -55,6 +55,7 @@ onMount(() => {
 				origin: $page.data.origin
 			})
 			const me = {
+				id: onetap.id,
 				email: onetap.email,
 				phone: onetap.phone,
 				firstName: onetap.firstName,
@@ -104,6 +105,7 @@ const verifyIsMobileNum = () => {
 	}
 }
 
+
 async function submit() {
 	err = null
 
@@ -123,6 +125,7 @@ async function submit() {
 			})
 
 			const me = {
+				id: res.id,
 				email: res.email,
 				phone: res.phone,
 				firstName: res.firstName,
@@ -184,6 +187,7 @@ async function handleVerifyOtp({ detail }) {
 		})
 
 		const me = {
+			id: res.id,
 			email: res.email,
 			phone: res.phone,
 			firstName: res.firstName,
@@ -246,10 +250,11 @@ function changeNumber() {
 			use:enhance="{() => {
 				return async ({ result }) => {
 					// console.log('result', result)
-
-					if (isEmail) {
-						if (result?.data) {
+					resendAfter = 0
+					if (result?.data) {
+						if (isEmail) {
 							const me = {
+								id: result?.data?.id,
 								email: result?.data?.email,
 								phone: result?.data?.phone,
 								firstName: result?.data?.firstName,
@@ -262,13 +267,13 @@ function changeNumber() {
 
 							// console.log('me =', me)
 							await cookies.set('me', me, { path: '/' })
+							const r = ref || '/'
+							if (browser) goto(r)
+							await applyAction(result)
+						} else {
+							otpRequestSend = true
+							resendAfter = result?.data?.timer
 						}
-
-						const r = ref || '/'
-						if (browser) goto(r)
-						await applyAction(result)
-					} else {
-						otpRequestSend = true
 					}
 				}
 			}}"
