@@ -1,5 +1,5 @@
 import { error, type Handle } from '@sveltejs/kit'
-import * as env from '$env/static/private'
+import { env } from '$env/dynamic/private'
 const SENTRY_DSN = env.SECRET_SENTRY_DSN
 import {
 	stripePublishableKey,
@@ -65,7 +65,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			email,
 			address,
 			phone,
-			otpLogin: '/auth/login',
+			otpLogin: true,
 			websiteName,
 			websiteLegalName,
 			title: siteTitle,
@@ -92,7 +92,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			store = {
 				id: storeOne._id,
 				domain: storeOne.domain,
-				email: storeOne.email,
+				email: storeOne.websiteEmail,
 				address: storeOne.address,
 				otpLogin: storeOne.otpLogin,
 				phone: storeOne.phone,

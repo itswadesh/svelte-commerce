@@ -241,7 +241,7 @@ let seoProps = {
 				<p class="text-gray-500">
 					Questions regarding our Conditions of Usage, Privacy Policy, or other policy related
 					material can be directed to our support staff by clicking on the “Contact Us” link in the
-					side menu or in the footer. Or you can email us at: {$page.data.store.email}
+					side menu or in the footer. Or you can email us at: {$page.data.store.websiteEmail}
 				</p>
 			</li>
 		</ul>

@@ -14,7 +14,7 @@ export async function load({ url, params, locals, fetch, parent, cookies }) {
 	try {
 		loading = true
 
-		const res1 = await gett(`categories/megamenu?store=${store?.id}`)
+		const res1 = await gett(`categories/megamenu?megamenu=true&store=${store?.id}`)
 
 		newArrivals = res1.filter((m) => {
 			return m.name === 'New Arrivals'

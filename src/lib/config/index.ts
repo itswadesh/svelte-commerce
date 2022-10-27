@@ -1,4 +1,4 @@
-import * as env from '$env/static/public'
+import { env } from '$env/dynamic/public'
 export const authorInfo = {
 	author: 'Swadesh Behera',
 	facebookAuthorPage: `https://www.facebook.com/codenx`,
