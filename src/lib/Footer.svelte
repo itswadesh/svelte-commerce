@@ -226,7 +226,7 @@ async function getStoreData() {
 							<span class="font-semibold">Email</span>
 						</h2>
 
-						<p>{$page.data.store?.email}</p>
+						<p>{$page.data.store?.websiteEmail}</p>
 					</li>
 
 					<li class="max-w-max">
@@ -375,7 +375,9 @@ async function getStoreData() {
 					<!-- Mail -->
 
 					<li class="max-w-max">
-						<a href="mailto:{$page.data.store?.email}" aria-label="Click to contact with mail id">
+						<a
+							href="mailto:{$page.data.store?.websiteEmail}"
+							aria-label="Click to contact with mail id">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								class="h-5 w-5 transition duration-300	hover:text-[#c71610]"

@@ -8,10 +8,10 @@ export async function GET({ request, cookies, locals }) {
 	const store = {
 		id: storeOne._id,
 		domain: storeOne.domain,
-		email: storeOne.email,
+		email: storeOne.websiteEmail,
 		address: storeOne.address,
 		phone: storeOne.phone,
-		otpLogin: storeOne.otpLogin || '/auth/login',
+		otpLogin: storeOne.otpLogin || true,
 		websiteLegalName: storeOne.websiteLegalName,
 		websiteName: storeOne.websiteName,
 		title: storeOne.title,

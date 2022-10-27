@@ -62,8 +62,8 @@ export const fetchStore = async () => {
 		const storeOne = await cookies.get('store')
 		const data = { _id: storeOne.id } //await get('store?domain=misiki.io')
 		store.set(data)
-		await gett('store-one?id=' + storeOne.id)
-		const data1 = (await gett('megamenu?store=' + storeOne.id)).data?.megamenu //get('categories/megamenu', { megamenu: true })
+		// await gett('store-one?id=' + storeOne.id)
+		const data1 = (await gett('categories/megamenu?store=' + storeOne.id)).data?.megamenu //get('categories/megamenu', { megamenu: true })
 		megamenu.set(data1)
 	} catch (e) {
 		store.set({})

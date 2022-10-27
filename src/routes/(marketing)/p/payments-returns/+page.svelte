@@ -37,7 +37,7 @@ let seoProps = {
 					may be levied upon their order. <br /> <br />
 
 					If you have any questions about the expected delivery period for your address, please
-					email us at {$page.data.store.email} <br /> <br />
+					email us at {$page.data.store.websiteEmail} <br /> <br />
 
 					Once your {$page.data.store.domain} order ships it must go to the address provided at the time
 					you place your order. If you cannot receive or pick up your order after three attempts by the
@@ -53,7 +53,7 @@ let seoProps = {
 
 				<div class="text-gray-500">
 					{$page.data.store.websiteName} offers a replacement guarantee only if the product received
-					is damaged/defective. Please get in touch with us at {$page.data.store.email} within 3 days
+					is damaged/defective. Please get in touch with us at {$page.data.store.websiteEmail} within 3 days
 					of receiving your order if you would like to have it replaced. We will provide a shipping address
 					that you can ship your order back to.
 					{$page.data.store.websiteName} will dispatch a replacement as soon as we receive your returned
