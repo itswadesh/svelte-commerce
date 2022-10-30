@@ -88,7 +88,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 			stripePublishableKey,
 			closed: false,
 			closeMessage: '',
-			DOMAIN,
 			isFnb: false
 		}
 		if (!cookieStore || cookieStore === 'undefined') {
@@ -119,8 +118,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 				youtubeChannel: storeOne.youtubeChannel,
 				GOOGLE_CLIENT_ID: storeOne.GOOGLE_CLIENT_ID,
 				GOOGLE_ANALYTICS_ID: storeOne.GOOGLE_ANALYTICS_ID,
-				isFnb: storeOne.isFnb,
-				DOMAIN: storeOne.DOMAIN
+				isFnb: storeOne.isFnb
 			}
 			event.cookies.set('store', JSON.stringify(store), { path: '/' })
 		} else {

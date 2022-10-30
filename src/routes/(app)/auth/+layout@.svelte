@@ -24,7 +24,10 @@ let url
 			<div class="{$navigating ? 'h-screen' : ''}">
 				<section class="fixed inset-0 h-screen w-full bg-gradient-to-b from-primary-50">
 					<a href="/" class="relative z-10 flex h-20 items-center justify-center border-b bg-white">
-						<LazyImg src="/logo.svg" alt=" " class="h-auto w-32 object-contain object-center" />
+						<LazyImg
+							src="{$page.data.store?.logo}"
+							alt=" "
+							class="h-auto w-32 object-contain object-center" />
 					</a>
 
 					<div
