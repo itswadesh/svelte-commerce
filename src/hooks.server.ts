@@ -55,7 +55,13 @@ export const handleError = async ({ error, event }) => {
 }
 export const handle: Handle = async ({ event, resolve }) => {
 	try {
-		const WWW_URL = new URL(event.request.url).origin
+		// const IS_PROD = process.env.NODE_ENV === 'production'
+		const url = new URL(event.request.url)
+		let WWW_URL = url.origin
+		if (url.hostname !== 'localhost') {
+			WWW_URL = WWW_URL.replace('http://', 'https://')
+		}
+		// console.log('Origin..............', WWW_URL)
 		event.locals.origin = WWW_URL
 		const cookieStore = event.cookies.get('store')
 		let store = {
