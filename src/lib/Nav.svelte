@@ -186,7 +186,7 @@ const getSelectionLabel = (option) => option.name
 
 <nav
 	class="minimum-width-rem fixed inset-x-0 top-0 h-14 sm:h-20 w-full flex items-center justify-center border-b bg-white px-3 shadow-md sm:px-10
-	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
+{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
 	<div class="flex w-full items-center justify-between gap-4 lg:gap-8">
 		<div class="flex items-center gap-4">
 			<!-- Back button -->
@@ -210,7 +210,6 @@ const getSelectionLabel = (option) => option.name
 					</svg>
 				</button>
 			{/if}
-
 			<!-- Logo -->
 			<a class="block flex-shrink-0" href="/" aria-label="Click to route home">
 				<LazyImg

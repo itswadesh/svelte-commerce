@@ -20,11 +20,7 @@ export const delay = (delayInms) => {
 
 export const getCdnImageUrl = (src, tr) => {
 	if (src) {
-		const originalImageUrl = src
-			.replace('https://zapvi.s3.ap-south-1.amazonaws.com/', '/')
-			.replace('https://zapvi.b-cdn.net/', '/')
-			.replace('https://ik.imagekit.io/3wzatecz51w3i/zapvi/', '/')
-			.replace('https://ik.imagekit.io/3wzatecz51w3i/', '/')
+		const originalImageUrl = src.replace('https://s3.ap-south-1.amazonaws.com/litekart.in/', '/')
 		return IMAGE_CDN_URL + originalImageUrl
 		// return originalImageUrl + tr
 	}
