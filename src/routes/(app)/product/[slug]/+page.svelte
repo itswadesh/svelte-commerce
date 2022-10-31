@@ -352,8 +352,8 @@ function handleMobileCanvas() {
 				{#if !data.product?.isCustomized}
 					<div
 						class="flex w-full grid-cols-2 flex-row gap-2 overflow-x-scroll scrollbar-none md:grid">
-						{#if data?.product?.imagesCdn?.length}
-							{#each data.product?.imagesCdn as imgCdn}
+						{#if data?.product?.images?.length}
+							{#each data.product?.images as imgCdn}
 								<button
 									type="button"
 									class="w-full flex-shrink-0 cursor-zoom-in overflow-hidden rounded md:h-full md:w-full md:flex-shrink"
@@ -1136,7 +1136,7 @@ function handleMobileCanvas() {
 <!-- <Gallery bind:showPhotosModal product="{data.product}" /> -->
 
 {#if bounceItemFromTop}
-	<AnimatedCartItem img="{data.product?.imgCdn}" />
+	<AnimatedCartItem img="{data.product?.img}" />
 {/if}
 
 <!-- <UserForm showUserInputForm="{showUserInputForm}" /> -->

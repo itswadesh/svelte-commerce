@@ -117,12 +117,9 @@ function toggle2(cx) {
 										</button>
 									</div>
 
-									{#if m.imgCdn || m.img}
+									{#if m.img}
 										<div class="flex-shrink-0">
-											<img
-												src="{m.imgCdn || m.img}"
-												alt=""
-												class="h-auto w-20 object-contain object-bottom" />
+											<img src="{m.img}" alt="" class="h-auto w-20 object-contain object-bottom" />
 										</div>
 									{/if}
 								</button>
@@ -136,12 +133,9 @@ function toggle2(cx) {
 										</h1>
 									</div>
 
-									{#if m.imgCdn || m.img}
+									{#if m.img}
 										<div class="flex-shrink-0">
-											<img
-												src="{m.imgCdn || m.img}"
-												alt=""
-												class="h-auto w-20 object-contain object-bottom" />
+											<img src="{m.img}" alt="" class="h-auto w-20 object-contain object-bottom" />
 										</div>
 									{/if}
 								</a>
