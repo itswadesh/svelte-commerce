@@ -1,4 +1,3 @@
-import { getAPI } from '$lib/util/api'
 import { gett } from '$lib/utils'
 import { page } from '$app/stores'
 export async function load({ url, params, locals, fetch, parent, cookies }) {
