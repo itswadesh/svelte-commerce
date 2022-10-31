@@ -254,7 +254,7 @@ const getSelectionLabel = (option) => option.name
 				getOptionLabel="{getOptionLabel}"
 				Item="{Item}"
 				hideEmptyState
-				placeholder="{$page.data.store.searchbarText}"
+				placeholder="{$page?.data?.store?.searchbarText || 'Search...'}"
 				inputStyles="cursor: text"
 				on:select="{onSearchSubmit}" />
 
