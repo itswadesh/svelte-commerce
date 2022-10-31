@@ -246,7 +246,6 @@ const getSelectionLabel = (option) => option.name
 						clip-rule="evenodd"></path>
 				</svg>
 			</button> -->
-
 			<Select
 				appendListTarget="{selectTarget}"
 				loadOptions="{onSearch}"
@@ -255,7 +254,7 @@ const getSelectionLabel = (option) => option.name
 				getOptionLabel="{getOptionLabel}"
 				Item="{Item}"
 				hideEmptyState
-				placeholder="Search for covers, cases, accessories..."
+				placeholder="{$page.data.store.searchbarText}"
 				inputStyles="cursor: text"
 				on:select="{onSearchSubmit}" />
 

@@ -40,4 +40,5 @@ export const IMAGE_CDN_URL = 'https://ik.imagekit.io/3wzatecz51w3i'
 export const entity = 'KitCommerce'
 export const siteTitle = 'KitCommerce'
 export const siteShortTitle = 'KitCommerce' // used as SchemaOrg siteTitleAlt
+export const searchbarText = 'Search for brands categories & more'
 export * from './website'
