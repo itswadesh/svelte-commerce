@@ -30,7 +30,8 @@ export async function GET({ request, cookies, locals }) {
 		DOMAIN: storeOne.DOMAIN,
 		closed: storeOne.closed,
 		closeMessage: storeOne.closeMessage,
-		isFnb: storeOne.isFnb
+		isFnb: storeOne.isFnb,
+		searchbarText: storeOne.searchbarText
 	}
 	locals.store = store
 	cookies.set('store', JSON.stringify(store), { path: '/' })

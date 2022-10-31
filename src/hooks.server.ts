@@ -23,7 +23,8 @@ import {
 	GOOGLE_ANALYTICS_ID,
 	GOOGLE_CLIENT_ID,
 	DOMAIN,
-	HTTP_ENDPOINT
+	HTTP_ENDPOINT,
+	searchbarText
 } from '$lib/config'
 import { gett } from '$lib/utils'
 // import Cookie from 'cookie-universal'
@@ -88,7 +89,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 			stripePublishableKey,
 			closed: false,
 			closeMessage: '',
-			isFnb: false
+			isFnb: false,
+			searchbarText
 		}
 		if (!cookieStore || cookieStore === 'undefined') {
 			const url = new URL(event.request.url)
@@ -118,7 +120,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 				youtubeChannel: storeOne.youtubeChannel,
 				GOOGLE_CLIENT_ID: storeOne.GOOGLE_CLIENT_ID,
 				GOOGLE_ANALYTICS_ID: storeOne.GOOGLE_ANALYTICS_ID,
-				isFnb: storeOne.isFnb
+				isFnb: storeOne.isFnb,
+				searchbarText: storeOne.searchbarText
 			}
 			event.cookies.set('store', JSON.stringify(store), { path: '/' })
 		} else {
