@@ -76,7 +76,12 @@ let footerItems = [
 		heading: 'Customer service',
 		subMenu: [
 			{ title: 'Track Your Order', link: '##', new: false },
-			{ title: 'Bulk Order Inquiry', link: '/bulk-order-inquiry', new: true }
+			{ title: 'Bulk Order Inquiry', link: '/bulk-order-inquiry', new: false },
+			{
+				title: 'Join as Vendor',
+				link: `https://admin.litekart.in/auth/otp-login?role=vendor&store=${$page.data.store.id}`,
+				new: true
+			}
 		]
 	}
 ]
