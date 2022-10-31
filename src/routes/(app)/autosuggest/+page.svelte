@@ -103,7 +103,7 @@ onMount(async () => {
 							on:submit|preventDefault="{submit}">
 							<input
 								bind:this="{searchInput}"
-								placeholder="{$page.data.store.searchbarText}"
+								placeholder="{$page?.data?.store?.searchbarText || 'Search...'}"
 								class="text-normal relative h-14 w-full truncate border px-10 font-light focus:outline-none focus:ring-2 focus:ring-primary-500"
 								on:input="{getData}" />
 
