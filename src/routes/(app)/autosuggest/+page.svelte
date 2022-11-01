@@ -54,7 +54,7 @@ async function getData(e) {
 			qry = `es/autocomplete?store=${$page.data.store?.id}&q=${q}`
 		}
 		try {
-			const result = await gett(qry)
+			const result = await getAPI(qry, $page.data.origin)
 			autocomplete = result.hits
 		} catch (e) {}
 	}, 200)

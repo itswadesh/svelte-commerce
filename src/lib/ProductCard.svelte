@@ -234,7 +234,7 @@ async function toggleWishlist(id) {
 
 								<div class="h-auto w-full">
 									<LazyImg
-										src="{relatedProduct.imgCdn}"
+										src="{relatedProduct.img}"
 										alt="{relatedProduct.name}"
 										width="192"
 										class="h-full w-full object-contain object-bottom" />
