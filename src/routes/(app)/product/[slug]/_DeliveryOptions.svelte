@@ -9,7 +9,7 @@ import { applyAction, enhance } from '$app/forms'
 export let product, data
 
 let deliveryDetails = $page.data.zip || {}
-let pincode = deliveryDetails.pincode
+let pincode = deliveryDetails.pincode ?? ''
 let validPin = !!pincode
 let loading = false
 
