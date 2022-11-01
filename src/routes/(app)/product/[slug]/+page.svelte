@@ -571,11 +571,11 @@ function handleMobileCanvas() {
 
 								{#if o.inputType == 'dropdown'}
 									<select
-										bind:value="{selectedOptions[o.id]}"
+										bind:value="{selectedOptions[o._id]}"
 										class="w-full max-w-xs flex-1 rounded-md border border-gray-300 py-1.5 text-sm font-light placeholder-gray-400 transition duration-300 focus:outline-none hover:bg-white"
 										on:change="{() => optionChanged(selectedOptions)}">
 										{#each o.values as i}
-											<option value="{i.id}">
+											<option value="{i._id}">
 												{i.name}
 											</option>
 										{/each}
@@ -584,7 +584,7 @@ function handleMobileCanvas() {
 									<!-- textbox -->
 								{:else if o.inputType == 'textbox'}
 									<Textbox
-										bind:value="{selectedOptions[o.id]}"
+										bind:value="{selectedOptions[o._id]}"
 										type="text"
 										on:change="{() => optionChanged(selectedOptions)}" />
 
@@ -592,7 +592,7 @@ function handleMobileCanvas() {
 								{:else if o.inputType == 'date'}
 									<Textbox
 										id="start"
-										bind:value="{selectedOptions[o.id]}"
+										bind:value="{selectedOptions[o._id]}"
 										type="date"
 										on:change="{() => optionChanged(selectedOptions)}" />
 
@@ -611,7 +611,7 @@ function handleMobileCanvas() {
 									<!-- textarea -->
 								{:else if o.inputType == 'textarea'}
 									<Textarea
-										bind:value="{selectedOptions[o.id]}"
+										bind:value="{selectedOptions[o._id]}"
 										on:change="{() => optionChanged(selectedOptions)}" />
 
 									<!-- size -->
@@ -620,7 +620,7 @@ function handleMobileCanvas() {
 										{#each o.values as i}
 											<label
 												class="rouned-md mr-2 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border-2 text-gray-500 focus:outline-none focus:ring-0 focus:ring-offset-0 hover:border-primary-500 hover:font-bold hover:text-primary-500
-											{selectedOptions[o.id] == i.id
+											{selectedOptions[o._id] == i._id
 													? ` border-primary-500 bg-primary-500 text-white`
 													: `bg-gray-100 border-gray-400`}">
 												<div class="text-xs uppercase sm:text-sm">
@@ -628,7 +628,7 @@ function handleMobileCanvas() {
 												</div>
 
 												<input
-													bind:value="{selectedOptions[o.id]}"
+													bind:value="{selectedOptions[o._id]}"
 													type="radio"
 													class="hidden"
 													on:change="{() => optionChanged(selectedOptions)}" />
@@ -642,15 +642,17 @@ function handleMobileCanvas() {
 										{#each o.values as i}
 											<label
 												class="mr-2 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border-2 focus:outline-none focus:ring-0 focus:ring-offset-0 hover:font-bold first-letter:{selectedOptions[
-													o.id
-												] == i.id
+													o._id
+												] == i._id
 													? `border-primary-500 text-white`
 													: `border-gray-300 text-black`}"
-												style="{selectedOptions[o.id] == i.id ? `background-color:${i.name}` : ``}">
+												style="{selectedOptions[o._id] == i._id
+													? `background-color:${i.name}`
+													: ``}">
 												<div class="text-xs">{i.name}</div>
 
 												<input
-													bind:value="{selectedOptions[o.id]}"
+													bind:value="{selectedOptions[o._id]}"
 													type="radio"
 													class="hidden"
 													on:change="{() => optionChanged(selectedOptions)}" />
@@ -663,8 +665,8 @@ function handleMobileCanvas() {
 									<div class="flex flex-wrap gap-2">
 										{#each o.values as v}
 											<Radio
-												id="{v.id}"
-												bind:value="{selectedOptions[o.id]}"
+												value="{v._id}"
+												bind:modelValue="{selectedOptions[o._id]}"
 												on:change="{() => dispatch('optionChanged', selectedOptions)}">
 												<span class="text-gray-500">{v.name}</span>
 											</Radio>
@@ -675,7 +677,7 @@ function handleMobileCanvas() {
 								{:else if o.inputType == 'checkbox'}
 									<div class="flex flex-wrap gap-2">
 										{#each o.values as v, i}
-											<Checkbox name="{v.id}" bind:selectedItems="{selectedOptions[o.id]}">
+											<Checkbox name="{v._id}" bind:selectedItems="{selectedOptions[o._id]}">
 												{v.name}
 											</Checkbox>
 										{/each}
