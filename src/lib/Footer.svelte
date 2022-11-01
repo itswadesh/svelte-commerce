@@ -22,13 +22,8 @@
 
 <script lang="ts">
 import { page } from '$app/stores'
-import { fly, slide } from 'svelte/transition'
-import LazyImg from './components/Image/LazyImg.svelte'
 import { onMount } from 'svelte'
-import { getAPI } from './util/api'
-import { toast } from './util'
 import { browser } from '$app/environment'
-import { gett } from './utils'
 // import {
 // 	address,
 // 	email,

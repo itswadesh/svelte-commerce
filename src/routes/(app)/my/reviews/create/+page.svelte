@@ -6,7 +6,7 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import { goto } from '$app/navigation'
 import Errors from '$lib/ui/Errors.svelte'
 import BackButton from '$lib/ui/BackButton.svelte'
-import { getAPI, post } from '$lib/util/api'
+import { post } from '$lib/util/api'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { page } from '$app/stores'
 

@@ -33,7 +33,7 @@ function handlePinCode() {
 async function submit() {
 	try {
 		loading = true
-		deleveryDetails = await getAPI(`pincodes/${pincode}`)
+		deleveryDetails = await getAPI(`pincodes/${pincode}`, $page.data.origin)
 		await cookies.set('zip', pincode, { path: '/' })
 		$page.data.zip = pincode
 	} catch (e) {

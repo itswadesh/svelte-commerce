@@ -11,7 +11,6 @@ import { page } from '$app/stores'
 import BackButton from '$lib/ui/BackButton.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import { getAPI } from '$lib/util/api'
 
 // let deliveryBy = null
 let now = null

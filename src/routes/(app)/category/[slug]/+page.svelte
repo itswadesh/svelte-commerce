@@ -10,11 +10,10 @@ import ProductCard from '$lib/ProductCard.svelte'
 import MobileFilter from '$lib/components/MobileFilter.svelte'
 import DesktopFilter from '$lib/components/DesktopFilter.svelte'
 import { page } from '$app/stores'
-import { getAPI } from '$lib/util/api'
 import { toast } from '$lib/util'
 import { onMount } from 'svelte'
 import { sorts } from '$lib/config'
-import { gett } from '$lib/utils'
+import { getAPI } from '$lib/util/api'
 
 export let data
 
@@ -31,8 +30,9 @@ let query = $page?.url?.searchParams
 
 onMount(async () => {
 	try {
-		const res = await gett(
-			`products?categories=${data.category?._id}&store=${$page.data?.store?.id}`
+		const res = await getAPI(
+			`products?categories=${data.category?._id}&store=${$page.data?.store?.id}`,
+			$page.data.origin
 		)
 
 		// console.log('res = ', res)

@@ -13,10 +13,8 @@ import ProductCard from '$lib/ProductCard.svelte'
 import { onMount } from 'svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import Error from '$lib/components/Error.svelte'
-import cookie from 'cookie'
 import { fireGTagEvent } from '$lib/util/gTag'
 import Cookie from 'cookie-universal'
-import { gett } from '$lib/utils'
 
 const cookies = Cookie()
 
