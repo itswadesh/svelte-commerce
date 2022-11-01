@@ -65,6 +65,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// console.log('Origin..............', WWW_URL)
 		event.locals.origin = WWW_URL
 		const cookieStore = event.cookies.get('store')
+		const zip = event.cookies.get('zip')
+		if (zip) {
+			event.locals.zip = JSON.parse(zip)
+		}
 		let store = {
 			id,
 			domain,

@@ -158,7 +158,8 @@ const navigateList = (e) => {
 }
 </script>
 
-<svelte:window on:keydown="{navigateList}" />
+<!-- Can not enable it because it will trigger the function on any Enterpress including zip input form at product details page -->
+<!-- <svelte:window on:keydown="{navigateList}" /> -->
 
 <form autocomplete="off" on:submit|preventDefault="{submitValue}">
 	<div class="autocomplete">

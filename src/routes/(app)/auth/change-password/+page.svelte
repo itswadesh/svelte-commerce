@@ -11,14 +11,10 @@ import { browser } from '$app/environment'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import { post } from '$lib/util/api'
-import { toast } from '$lib/util'
-import Cookie from 'cookie-universal'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
 import Error from '$lib/components/Error.svelte'
-
-const cookies = Cookie()
 
 const seoProps = {
 	title: 'Change Password',
@@ -61,30 +57,16 @@ async function submit(p) {
 	try {
 		loading = true
 		const { oldPassword, password, passwordConfirmation } = p
+
 		const res = await post('users/change-password', {
 			oldPassword: oldPassword,
 			password: password,
 			passwordConfirmation: passwordConfirmation
 		})
 
-		// console.log('zzzzzzzzzzzzzzzzzz', res)
-
-		const me = {
-			email: res.email,
-			phone: res.phone,
-			firstName: res.firstName,
-			lastName: res.lastName,
-			avatar: res.avatar,
-			role: res.role,
-			verified: res.verified,
-			active: res.active
-		}
-
-		await cookies.set('me', me, { path: '/' })
-		// $page.data.me = me
 		await invalidateAll()
-		let r = ref || '/'
-		if (browser) goto(r)
+
+		if (browser) goto('/auth/change-success')
 	} catch (e) {
 		err = e
 	} finally {
@@ -111,7 +93,8 @@ async function submit(p) {
 				required
 				bind:value="{password.oldPassword}" />
 
-			<div
+			<button
+				type="button"
 				class="absolute inset-y-0 right-2 flex items-end pb-2 cursor-pointer justify-center"
 				on:click="{() => toggleCurrentPassowrd()}">
 				{#if showOldPassword}
@@ -147,7 +130,7 @@ async function submit(p) {
 							d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
 					</svg>
 				{/if}
-			</div>
+			</button>
 		</div>
 
 		<div class="relative">
@@ -158,7 +141,8 @@ async function submit(p) {
 				required
 				bind:value="{password.password}" />
 
-			<div
+			<button
+				type="button"
 				class="absolute inset-y-0 right-2 flex items-end pb-2 cursor-pointer justify-center"
 				on:click="{() => toggleNewPassowrd()}">
 				{#if showNewPassword}
@@ -194,7 +178,7 @@ async function submit(p) {
 							d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
 					</svg>
 				{/if}
-			</div>
+			</button>
 		</div>
 
 		<div class="relative">
@@ -205,7 +189,8 @@ async function submit(p) {
 				required
 				bind:value="{password.passwordConfirmation}" />
 
-			<div
+			<button
+				type="button "
 				class="absolute inset-y-0 right-2 flex items-end pb-2 cursor-pointer justify-center"
 				on:click="{() => toggleConfirmationPassowrd()}">
 				{#if showConfirmationPassword}
@@ -241,7 +226,7 @@ async function submit(p) {
 							d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
 					</svg>
 				{/if}
-			</div>
+			</button>
 		</div>
 
 		<PrimaryButton type="submit" loading="{loading}" class="w-full">UPDATE PASSWORD</PrimaryButton>

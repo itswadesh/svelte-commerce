@@ -22,6 +22,7 @@ declare namespace App {
 		store: any
 		session: string
 		origin: string
+		zip: string
 		cartId: string
 		cartQty: number
 	}
