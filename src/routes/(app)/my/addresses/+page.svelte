@@ -17,10 +17,7 @@ import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { post, del, getAPI } from '$lib/util/api'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
-import ToggleSwitch from '$lib/ui/ToggleSwitch.svelte'
-import SearchBox from '$lib/ui/SearchBox.svelte'
 import Pagination from '$lib/components/Pagination.svelte'
-import { gett } from '$lib/utils'
 
 const seoProps = {
 	title: 'Dashboard - Addresses ',
@@ -28,8 +25,6 @@ const seoProps = {
 }
 
 export let data
-
-console.log('zzzzzzzzzzzzzzzzzz', data)
 
 $: ({ search, sort, err, addresses, count, query, currentPage } = data)
 

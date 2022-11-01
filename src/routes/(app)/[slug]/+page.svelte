@@ -28,7 +28,6 @@ import MobileFooter from '$lib/MobileFooter.svelte'
 import Pagination from '$lib/components/Pagination.svelte'
 import { onMount } from 'svelte'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
-import { gett } from '$lib/utils'
 
 export let data
 

@@ -5,7 +5,6 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import { getAPI } from '$lib/util/api'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { gett } from '$lib/utils'
 
 export let data
 

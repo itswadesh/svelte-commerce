@@ -68,7 +68,6 @@ import FrequentlyBoughtProduct from './_FrequentlyBoughtProduct.svelte'
 import { fireGTagEvent } from '$lib/util/gTag'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
 import { applyAction, enhance } from '$app/forms'
-import { gett } from '$lib/utils'
 // import Konvas from '$lib/components/ProductDesigner/Konvas.svelte'
 
 const dispatch = createEventDispatcher()

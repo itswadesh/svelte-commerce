@@ -21,7 +21,6 @@ import SearchBox from '$lib/ui/SearchBox.svelte'
 import { page } from '$app/stores'
 import Pagination from '$lib/components/Pagination.svelte'
 import { loginUrl } from '$lib/store'
-import { gett } from '$lib/utils'
 
 const seoProps = {
 	title: 'Dashboard - Reviews ',

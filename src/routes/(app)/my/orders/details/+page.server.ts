@@ -8,7 +8,10 @@ export async function load({ params, url, locals, parent, request }) {
 	const { id } = params
 
 	const order = await gett(`orders/${id}?store=${store?.id}`, request.headers.get('cookie'))
-	const orderTracking = await gett(`order-tracking?order=${id}&store=${store?.id}`)
+	const orderTracking = await gett(
+		`order-tracking?order=${id}&store=${store?.id}`,
+		request.headers.get('cookie')
+	)
 
 	// console.log('order = ', order)
 

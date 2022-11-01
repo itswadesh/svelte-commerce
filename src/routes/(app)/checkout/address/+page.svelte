@@ -6,7 +6,6 @@ import Error from '$lib/components/Error.svelte'
 import CheckoutHeader from '$lib/components/CheckoutHeader.svelte'
 import { getAPI } from '$lib/util/api'
 import { page } from '$app/stores'
-import { gett } from '$lib/utils'
 
 export let data
 $: ({ cart, loading, myAddresses, err, prescriptionId, selectedAddress } = data)
@@ -24,7 +23,7 @@ function addressChanged(detail) {
 
 async function refreshAddress() {
 	try {
-		myAddresses = await getAPI('addresses/my')
+		myAddresses = await getAPI('addresses/my', $page.data.origin)
 		selectedAddress = myAddresses?.data[0]?._id
 	} catch (e) {
 		err = e

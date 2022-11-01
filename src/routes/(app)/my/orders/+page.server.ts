@@ -1,4 +1,3 @@
-import { getAPI } from '$lib/util/api'
 import { gett } from '$lib/utils'
 import { error } from '@sveltejs/kit'
 
