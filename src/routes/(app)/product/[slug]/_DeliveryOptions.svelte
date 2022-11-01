@@ -4,25 +4,14 @@ import { getAPI } from '$lib/util/api'
 import dayjs from 'dayjs'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import Cookie from 'cookie-universal'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import { gett } from '$lib/utils'
+import { applyAction, enhance } from '$app/forms'
 
-const cookies = Cookie()
+export let product, data
 
-export let product
-
-let pincode,
-	validPin = false,
-	deleveryDetails,
-	loading = false
-
-onMount(() => {
-	if ($page.data.zip) {
-		pincode = $page.data.zip
-		validPin = true
-	}
-})
+let deliveryDetails = $page.data.zip || {}
+let pincode = deliveryDetails.pincode
+let validPin = !!pincode
+let loading = false
 
 function handlePinCode() {
 	if (pincode.toString().length === 6) {
@@ -30,29 +19,38 @@ function handlePinCode() {
 	}
 }
 
-async function submit() {
-	try {
-		loading = true
-		deleveryDetails = await getAPI(`pincodes/${pincode}`, $page.data.origin)
-		await cookies.set('zip', pincode, { path: '/' })
-		$page.data.zip = pincode
-	} catch (e) {
-	} finally {
-		loading = false
-	}
-}
+// async function submit() {
+// 	try {
+// 		loading = true
+// 		deliveryDetails = await getAPI(`pincodes/${pincode}`, $page.data.origin)
+// 		await cookies.set('zip', pincode, { path: '/' })
+// 		$page.data.zip = pincode
+// 	} catch (e) {
+// 	} finally {
+// 		loading = false
+// 	}
+// }
 </script>
 
 <div class="mb-4">
 	<form
-		on:submit|preventDefault="{submit}"
+		action="/server/verify-zip"
+		method="POST"
+		use:enhance="{() => {
+			return async ({ result }) => {
+				console.log('bounceItemFromTop', result)
+				deliveryDetails = result
+				await applyAction(result)
+			}
+		}}"
 		class="relative w-full max-w-sm overflow-hidden rounded-md border
         {validPin ? 'border-primary-500' : 'border-gray-400'}">
 		<input
+			name="zip"
 			type="tel"
-			bind:value="{pincode}"
+			value="{pincode}"
 			maxlength="6"
-			placeholder="Enter a PIN code"
+			placeholder="Please enter pincode"
 			class="w-full rounded-md bg-transparent py-3 px-4 pr-24 text-sm font-semibold focus:outline-none"
 			on:input="{handlePinCode}" />
 
@@ -91,33 +89,28 @@ async function submit() {
 				</li>
 			{/each}
 		</ul>
-	{:else if deleveryDetails}
+	{:else if deliveryDetails}
 		<ul class="mt-4 flex flex-col gap-2">
 			<li class="flex items-center gap-4">
 				<div class="flex h-auto w-8 items-center justify-end overflow-hidden">
-					<LazyImg
+					<img
 						src="/product/delivery.png"
 						alt=""
-						width="32"
 						class="h-full w-full object-contain object-center" />
 				</div>
 
 				<span>
-					Get it by {dayjs().add(deleveryDetails.deliveryDays, 'day').format('dddd, MMM D, YYYY')}
+					Get it by {dayjs().add(deliveryDetails.deliveryDays, 'day').format('dddd, MMM D, YYYY')}
 				</span>
 			</li>
 
 			<li class="flex items-center gap-4">
 				<div class="flex h-auto w-8 items-center justify-end overflow-hidden">
-					<LazyImg
-						src="/product/cod.png"
-						alt=""
-						width="32"
-						class="h-full w-full object-contain object-center" />
+					<img src="/product/cod.png" alt="" class="h-full w-full object-contain object-center" />
 				</div>
 
 				<span>
-					{#if deleveryDetails.hasCOD}
+					{#if deliveryDetails.hasCOD}
 						Pay on delivery available
 					{:else}
 						Pay on delivery not available
@@ -128,10 +121,9 @@ async function submit() {
 			{#if product.replaceAllowed || product.returnAllowed}
 				<li class="flex items-center gap-4">
 					<div class="flex h-auto w-8 items-center justify-end overflow-hidden">
-						<LazyImg
+						<img
 							src="/product/opposite-arrows.png"
 							alt=""
-							width="32"
 							class="h-full w-full object-contain object-center" />
 					</div>
 
