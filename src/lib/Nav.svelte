@@ -9,7 +9,6 @@ import { getAPI, post } from '$lib/util/api'
 import { currency, toast } from '$lib/util'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
-import Cookie from 'cookie-universal'
 import { fade, fly, slide } from 'svelte/transition'
 import { cubicOut } from 'svelte/easing'
 import { createEventDispatcher, getContext, onMount } from 'svelte'
@@ -25,7 +24,6 @@ import { settings } from './store'
 // import { store.logo } from './config'
 
 const dispatch = createEventDispatcher()
-const cookies = Cookie()
 
 export let me, cart, showCartSidebar, openSidebar
 let selectTarget = null
