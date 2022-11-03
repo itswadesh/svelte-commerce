@@ -97,7 +97,7 @@ let moreOptions = [
 let showReviewsCount = 1
 let isLastReview = false
 let shake = false
-let selectedOptions = {}
+let selectedOptions = []
 let showPhotosModal = false
 let loadingForWishlist = false
 let isWislisted = false
@@ -161,7 +161,7 @@ async function addToBag(p, customizedImg, customizedJson) {
 				pid: p._id,
 				vid: p._id,
 				qty: 1,
-				options: p.options,
+				options: selectedOptions,
 				customizedImg: customizedImg,
 				customizedData: customizedJson,
 				store: $page.data.store.id
@@ -263,7 +263,6 @@ function optionChanged(o) {
 	// console.log('oooooooooooooooooo', o)
 	// console.log('dddddddddddddd', o1)
 
-	this.selectedOptions = o1
 	//   if (!this.selectedOptions) this.selectedOptions = []
 	//   for (const i in o) {
 	//     this.selectedOptions.push({ option: i, values: [o[i]] })
@@ -275,8 +274,9 @@ function optionChanged(o) {
 	// dateChanged(o) {
 	//   if (!this.selectedOptions) this.selectedOptions = []
 	//   this.selectedOptions.push(o)
+	selectedOptions = o1
 
-	//   console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', this.selectedOptions)
+	// console.log('zzzzzzzzzzzzzzzzzz', data.product.options)
 }
 
 async function toggleWishlist(id) {
@@ -351,8 +351,8 @@ function handleMobileCanvas() {
 				{#if !data.product?.isCustomized}
 					<div
 						class="flex w-full grid-cols-2 flex-row gap-2 overflow-x-scroll scrollbar-none md:grid">
-						{#if data?.product?.images?.length}
-							{#each data.product?.images as imgCdn}
+						{#if data?.product?.imagesCdn?.length}
+							{#each data.product?.imagesCdn as imgCdn}
 								<button
 									type="button"
 									class="w-full flex-shrink-0 cursor-zoom-in overflow-hidden rounded md:h-full md:w-full md:flex-shrink"
@@ -430,9 +430,21 @@ function handleMobileCanvas() {
 				<!-- Name -->
 
 				{#if data.product?.name}
-					<p class="mb-2 text-lg text-gray-500">
-						{data.product?.name}
-					</p>
+					<div class="mb-2 flex justify-between gap-2">
+						<h1 class="flex-1 text-lg text-gray-500">
+							{data.product?.name}
+						</h1>
+
+						{#if $page?.data?.store?.isFnb && data.product.foodType}
+							<div>
+								{#if data.product.foodType === 'veg'}
+									<img src="/product/veg.png" alt="veg" class="h-5 w-5" />
+								{:else if data.product.foodType === 'nonveg' || data.product.foodType === 'E'}
+									<img src="/product/non-veg.png" alt="non veg" class="h-5 w-5" />
+								{/if}
+							</div>
+						{/if}
+					</div>
 				{/if}
 
 				<!-- ratings -->
@@ -465,16 +477,16 @@ function handleMobileCanvas() {
 				<!-- prices -->
 
 				<div class="mb-2 flex flex-wrap items-center gap-4">
-					<span class="text-xl sm:text-2xl whitespace-nowrap"
+					<span class="whitespace-nowrap text-xl sm:text-2xl"
 						><b>{data.product?.formattedPrice}</b></span>
 
 					{#if data.product?.mrp > data.product?.price}
-						<span class="text-lg text-gray-500 sm:text-xl whitespace-nowrap">
+						<span class="whitespace-nowrap text-lg text-gray-500 sm:text-xl">
 							<strike>{data.product?.formattedMrp}</strike>
 						</span>
 
 						{#if Math.floor(((data.product?.mrp - data.product?.price) / data.product?.mrp) * 100) > 0}
-							<span class="text-lg font-semibold text-primary-500 sm:text-xl whitespace-nowrap">
+							<span class="whitespace-nowrap text-lg font-semibold text-primary-500 sm:text-xl">
 								({Math.floor(
 									((data.product?.mrp - data.product?.price) / data.product?.mrp) * 100
 								)}% off)
@@ -527,7 +539,7 @@ function handleMobileCanvas() {
 							</svg>
 						</h6>
 
-						<div class="flex flex-wrap gap-2">
+						<div class="flex flex-wrap gap-4">
 							<button
 								type="button"
 								class="overflow-hidden rounded border py-1 px-3 text-sm font-medium uppercase transition duration-500 focus:outline-none
@@ -560,7 +572,9 @@ function handleMobileCanvas() {
 				<!-- select options  -->
 
 				{#if data.product?.options?.length > 0}
-					<div class="sizeSelector mb-5 items-center gap-3 text-sm" class:shake-animation="{shake}">
+					<div
+						class="sizeSelector mb-5 flex flex-col gap-3 text-sm"
+						class:shake-animation="{shake}">
 						{#each data.product?.options as o}
 							<div class="flex flex-col items-start sm:flex-row">
 								<h6 class="mb-1 w-full flex-shrink-0 font-medium sm:mb-0 sm:w-52">
@@ -638,10 +652,10 @@ function handleMobileCanvas() {
 
 									<!-- color -->
 								{:else if o.inputType == 'color'}
-									<div class="flex flex-wrap">
+									<div class="flex flex-wrap gap-4">
 										{#each o.values as i}
 											<label
-												class="mr-2 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border-2 focus:outline-none focus:ring-0 focus:ring-offset-0 hover:font-bold first-letter:{selectedOptions[
+												class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border-2 focus:outline-none focus:ring-0 focus:ring-offset-0 hover:font-bold first-letter:{selectedOptions[
 													o._id
 												] == i._id
 													? `border-primary-500 text-white`
@@ -662,12 +676,12 @@ function handleMobileCanvas() {
 
 									<!-- radio -->
 								{:else if o.inputType == 'radio'}
-									<div class="flex flex-wrap gap-2">
+									<div class="flex flex-wrap gap-4">
 										{#each o.values as v}
 											<Radio
 												value="{v._id}"
 												bind:modelValue="{selectedOptions[o._id]}"
-												on:change="{() => dispatch('optionChanged', selectedOptions)}">
+												on:change="{() => optionChanged(selectedOptions)}">
 												<span class="text-gray-500">{v.name}</span>
 											</Radio>
 										{/each}
@@ -675,10 +689,13 @@ function handleMobileCanvas() {
 
 									<!-- checkbox -->
 								{:else if o.inputType == 'checkbox'}
-									<div class="flex flex-wrap gap-2">
+									<div class="flex flex-wrap gap-4">
 										{#each o.values as v, i}
-											<Checkbox name="{v._id}" bind:selectedItems="{selectedOptions[o._id]}">
-												{v.name}
+											<Checkbox
+												value="{v._id}"
+												bind:modelValue="{selectedOptions[o._id]}"
+												on:change="{() => optionChanged(selectedOptions)}">
+												<span class="text-gray-500">{v.name}</span>
 											</Checkbox>
 										{/each}
 									</div>
@@ -864,9 +881,8 @@ function handleMobileCanvas() {
 				{/if}
 
 				<!-- Description -->
-
 				{#if data.product?.longDescription}
-					<div class="mb-5">
+					<div class="mb-5 prose">
 						<h6 class="mb-5 flex items-center gap-2 font-semibold uppercase">
 							<span> Description </span>
 
@@ -1137,7 +1153,7 @@ function handleMobileCanvas() {
 <!-- <Gallery bind:showPhotosModal product="{data.product}" /> -->
 
 {#if bounceItemFromTop}
-	<AnimatedCartItem img="{data.product?.img}" />
+	<AnimatedCartItem img="{customizedImg || data.product?.img}" />
 {/if}
 
 <!-- <UserForm showUserInputForm="{showUserInputForm}" /> -->

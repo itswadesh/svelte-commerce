@@ -1,12 +1,16 @@
 import { DOMAIN, HTTP_ENDPOINT } from '$lib/config'
 import { gett } from '$lib/utils'
 import { error } from '@sveltejs/kit'
+
 export async function load({ params, query, locals, parent, cookies, request }) {
 	const { store } = locals
+
 	try {
 		const home = await gett(`home?store=${store?.id}`, request.headers.get('cookie'))
+		// const deals = await gett(`deals?store=${store?.id}`, request.headers.get('cookie'))
 		if (home) {
 			return { home: home }
+			// deals: deals
 		}
 	} catch (e) {
 		throw error(

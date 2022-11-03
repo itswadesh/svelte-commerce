@@ -24,7 +24,7 @@ let categoryColors = [
 
 <div class="{clazz} max-w-screen">
 	{#if loading}
-		<div class="overflow-x-auto p-3 py-5 scrollbar-none sm:px-10">
+		<div class="overflow-x-auto p-3 py-5 scrollbar-none sm:px-10 w-screen">
 			<div class="container mx-auto flex items-start justify-start gap-4">
 				{#each { length: 8 } as _}
 					<div class="flex flex-col items-center">
@@ -36,19 +36,19 @@ let categoryColors = [
 			</div>
 		</div>
 	{:else if categories && categories.length}
-		<div class="overflow-x-auto py-5 scrollbar-none sm:px-10">
+		<div class="overflow-x-auto py-5 scrollbar-none sm:px-10 w-screen">
 			<div class="flex items-center pl-3">
 				{#each categories as category}
-					{#if category.imgCdn}
+					{#if category.imgCdn || category.img}
 						<div class="pr-3">
 							<a
-								href="/{category.slug}"
+								href="/{category.link || category.slug}"
 								aria-label="Click to view related products of this category"
 								class="group flex w-16 flex-col items-center justify-center">
 								<div
 									class="mb-1 h-16 w-16 flex-shrink-0 overflow-hidden rounded-full shadow-md group-hover:border-primary-500 group-hover:shadow-xl sm:mb-4">
 									<LazyImg
-										src="{category.imgCdn}"
+										src="{category.imgCdn || category.img}"
 										alt="{category.name}"
 										width="64"
 										height="64"

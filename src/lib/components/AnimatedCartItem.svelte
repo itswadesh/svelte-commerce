@@ -10,9 +10,13 @@ export let img = ''
 	<span
 		in:fly="{{ y: -200, delay: 0, duration: 1500, easing: elasticInOut }}"
 		out:fade="{{ delay: 0, duration: 500 }}"
-		class="flex w-56 items-center justify-start rounded bg-gray-800 px-4 py-3 text-center text-sm text-white shadow">
-		<LazyImg src="{img}" alt="" width="32" height="32" class="mr-1 h-8 w-8 rounded object-cover" />
+		class="flex max-w-max items-center ounded bg-gray-800 px-4 py-3 text-center text-sm text-white rounded-md shadow-md">
+		<LazyImg
+			src="{img}"
+			alt=""
+			height="56"
+			class="h-14 w-auto rounded-md object-contain object-center" />
 
-		<div class="w-full">Added to bag</div>
+		<div class="flex-1 px-5">Added to Bag</div>
 	</span>
 </div>

@@ -5,18 +5,24 @@ import dayjs from 'dayjs'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { applyAction, enhance } from '$app/forms'
+import { toast } from '$lib/util'
 
-export let product, data
+export let product
 
 let deliveryDetails = $page.data.zip || {}
-let pincode = deliveryDetails.pincode ?? ''
-let validPin = !!pincode
+let pincode = deliveryDetails.pincode ?? null
 let loading = false
+let changingPincode = false
+let disabled = false
 
-function handlePinCode() {
-	if (pincode.toString().length === 6) {
-		validPin = true
-	}
+if (pincode && pincode.toString().length === 6) {
+	disabled = true
+}
+
+function changePincode() {
+	pincode = null
+	disabled = false
+	changingPincode = true
 }
 
 // async function submit() {
@@ -32,6 +38,8 @@ function handlePinCode() {
 // }
 </script>
 
+<!-- {JSON.stringify(deliveryDetails)} -->
+
 <div class="mb-4">
 	<form
 		action="/server/verify-zip"
@@ -39,48 +47,90 @@ function handlePinCode() {
 		use:enhance="{() => {
 			return async ({ result }) => {
 				console.log('bounceItemFromTop', result)
+				if (!result['Pincode']) {
+					toast('Please enter valid pincode', 'error')
+					return (deliveryDetails = {})
+				}
 				deliveryDetails = result
 				await applyAction(result)
+				disabled = true
+				changingPincode = false
 			}
 		}}"
 		class="relative w-full max-w-sm overflow-hidden rounded-md border
-        {validPin ? 'border-primary-500' : 'border-gray-400'}">
+        {disabled ? 'border-gray-400' : 'border-primary-500'}">
 		<input
 			name="zip"
 			type="tel"
-			value="{pincode}"
+			bind:value="{pincode}"
 			maxlength="6"
-			placeholder="Please enter pincode"
-			class="w-full rounded-md bg-transparent py-3 px-4 pr-24 text-sm font-semibold focus:outline-none"
-			on:input="{handlePinCode}" />
+			placeholder="Enter pincode"
+			disabled="{disabled}"
+			class="w-full rounded-md bg-transparent py-3 px-4 pr-24 text-sm font-semibold placeholder:font-normal focus:outline-none" />
 
-		<button
-			type="submit"
-			class="absolute inset-y-0 right-0 z-10 flex w-20 items-center justify-center text-right text-sm font-bold uppercase 
-            {validPin ? 'bg-primary-500 text-white' : 'bg-gray-100 text-gray-300'}">
-			{#if loading}
-				<div
-					class="absolute inset-0 flex cursor-not-allowed items-center justify-center bg-black bg-opacity-70">
-					<svg
-						class="mx-auto h-4 w-4 animate-spin text-white"
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24">
-						<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
-						></circle>
-						<path
-							class="opacity-75"
-							fill="currentColor"
-							d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-						></path>
-					</svg>
-				</div>
-			{/if}
+		{#if changingPincode}
+			<button
+				type="submit"
+				class="absolute inset-y-0 right-0 z-10 flex w-20 text-primary-500 items-center justify-center text-right text-sm font-bold">
+				{#if loading}
+					<div
+						class="absolute inset-0 flex cursor-not-allowed items-center justify-center bg-black bg-opacity-70">
+						<svg
+							class="mx-auto h-4 w-4 animate-spin text-white"
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24">
+							<circle
+								class="opacity-25"
+								cx="12"
+								cy="12"
+								r="10"
+								stroke="currentColor"
+								stroke-width="4"></circle>
+							<path
+								class="opacity-75"
+								fill="currentColor"
+								d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+							></path>
+						</svg>
+					</div>
+				{/if}
 
-			<span> Check </span>
-		</button>
+				<span> Check </span>
+			</button>
+		{:else}
+			<button
+				type="button"
+				class="absolute inset-y-0 right-0 z-10 flex w-20 text-primary-500 items-center justify-center text-right text-sm font-bold"
+				on:click="{changePincode}">
+				{#if loading}
+					<div
+						class="absolute inset-0 flex cursor-not-allowed items-center justify-center bg-black bg-opacity-70">
+						<svg
+							class="mx-auto h-4 w-4 animate-spin text-white"
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24">
+							<circle
+								class="opacity-25"
+								cx="12"
+								cy="12"
+								r="10"
+								stroke="currentColor"
+								stroke-width="4"></circle>
+							<path
+								class="opacity-75"
+								fill="currentColor"
+								d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+							></path>
+						</svg>
+					</div>
+				{/if}
+
+				<span> Change </span>
+			</button>
+		{/if}
 	</form>
-
 	{#if loading}
 		<ul class="mt-4 flex flex-col gap-4">
 			{#each { length: 2 } as _}
@@ -89,7 +139,7 @@ function handlePinCode() {
 				</li>
 			{/each}
 		</ul>
-	{:else if deliveryDetails}
+	{:else if deliveryDetails['Pincode']}
 		<ul class="mt-4 flex flex-col gap-2">
 			<li class="flex items-center gap-4">
 				<div class="flex h-auto w-8 items-center justify-end overflow-hidden">
@@ -148,7 +198,7 @@ function handlePinCode() {
 				</li>
 			{/if}
 		</ul>
-	{:else}
+	{:else if !deliveryDetails['Pincode']}
 		<div class="mt-2">
 			<p class="text-xs text-gray-500">
 				Please enter PIN code to check delivery time & Pay on Delivery Availability

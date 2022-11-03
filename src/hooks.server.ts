@@ -94,7 +94,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 			closed: false,
 			closeMessage: '',
 			isFnb: false,
-			searchbarText
+			searchbarText,
+			weightUnit: 'g',
+			dimentionUnit: 'cm'
 		}
 		if (!cookieStore || cookieStore === 'undefined') {
 			const url = new URL(event.request.url)
@@ -125,7 +127,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 				GOOGLE_CLIENT_ID: storeOne.GOOGLE_CLIENT_ID,
 				GOOGLE_ANALYTICS_ID: storeOne.GOOGLE_ANALYTICS_ID,
 				isFnb: storeOne.isFnb,
-				searchbarText: storeOne.searchbarText
+				searchbarText: storeOne.searchbarText,
+				weightUnit: storeOne.weightUnit,
+				dimentionUnit: storeOne.dimentionUnit
 			}
 			event.cookies.set('store', JSON.stringify(store), { path: '/' })
 		} else {

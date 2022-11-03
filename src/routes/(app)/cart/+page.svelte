@@ -20,8 +20,6 @@ const cookies = Cookie()
 
 export let data
 
-// console.log('zzzzzzzzzzzzzzzzzz', data)
-
 // $: ({ loadingCart, cart = {} } = data)
 
 let seoProps = {
@@ -290,12 +288,24 @@ async function refreshCart() {
 												</a>
 
 												<div class="w-full flex-1">
-													<a
-														href="{`${item?.slug}`}"
-														aria-label="Click to route product details"
-														class="mb-2 cursor-pointer text-base font-medium text-gray-600 hover:underline sm:text-lg">
-														{item?.name}
-													</a>
+													<div class="flex mb-2 justify-between">
+														<a
+															href="/product/{item?.slug}"
+															aria-label="Click to route product details"
+															class="flex-1 cursor-pointer text-base font-medium text-gray-600 hover:underline sm:text-lg">
+															{item?.name}
+														</a>
+
+														{#if $page?.data?.store?.isFnb && item.foodType}
+															<div>
+																{#if item.foodType === 'veg'}
+																	<img src="/product/veg.png" alt="veg" class="h-5 w-5" />
+																{:else if item.foodType === 'nonveg'}
+																	<img src="/product/non-veg.png" alt="non veg" class="h-5 w-5" />
+																{/if}
+															</div>
+														{/if}
+													</div>
 
 													<div class="mb-2 flex flex-wrap items-center gap-2 text-sm sm:text-base">
 														<span class="text-lg font-bold sm:text-xl whitespace-nowrap">
@@ -350,15 +360,23 @@ async function refreshCart() {
 										</a>
 
 										<div class="w-full flex-1">
-											<div class="flex flex-wrap items-center justify-between">
+											<div class="flex mb-2 justify-between">
 												<a
 													href="/product/{item?.slug}"
 													aria-label="Click to route product details"
-													class="mb-2 cursor-pointer text-base font-medium text-gray-600 hover:underline sm:text-lg">
+													class="flex-1 cursor-pointer text-base font-medium text-gray-600 hover:underline sm:text-lg">
 													{item?.name}
 												</a>
 
-												<!-- <h2 class="text-base sm:text-lg whitespace-nowrap">Arrives in 4 days</h2> -->
+												{#if $page?.data?.store?.isFnb && item.foodType}
+													<div>
+														{#if item.foodType === 'veg'}
+															<img src="/product/veg.png" alt="veg" class="h-5 w-5" />
+														{:else if item.foodType === 'nonveg'}
+															<img src="/product/non-veg.png" alt="non veg" class="h-5 w-5" />
+														{/if}
+													</div>
+												{/if}
 											</div>
 
 											<!-- <h5 class="text-gray-600">{item.product?.vendor_name}</h5> -->
