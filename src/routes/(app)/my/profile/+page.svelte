@@ -16,6 +16,7 @@ import { put } from '$lib/util/api'
 import CtrlS from '$lib/components/CtrlS.svelte'
 import Cookie from 'cookie-universal'
 import { page } from '$app/stores'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 
 export let data
 
@@ -49,7 +50,7 @@ async function saveProfile() {
 		if (e.dob) e.dob = dayjs(e.dob).format('YYYY-MM-DDTHH:mm')
 		else e.dob = null
 		delete e.phone
-		data.profile = await put('users/update-profile', e)
+		data.profile = await put('users/update-profile', e, $page.data.origin)
 
 		if (data.profile) {
 			data.profile.dob = data.profile.dob ? dayjs(data.profile.dob).format('YYYY-MM-DD') : null
@@ -153,6 +154,12 @@ async function saveProfile() {
 					</div>
 				</div>
 			</form>
+
+			{#if data.profile.email}
+				<a href="/auth/change-password?ref=/my/profile">
+					<PrimaryButton>Change Password</PrimaryButton>
+				</a>
+			{/if}
 		</div>
 	{/if}
 </div>

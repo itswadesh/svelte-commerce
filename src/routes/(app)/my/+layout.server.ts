@@ -1,9 +1,11 @@
+// import { invalidateAll } from '$app/navigation'
 import { redirect } from '@sveltejs/kit'
 
+// import Cookie from 'cookie-universal'
+// const cookies = Cookie()
 export const prerender = false
-export async function load({ url, params, parent, locals }) {
-	const { me, cart, store } = await parent()
-
+export async function load({ url, params, locals, parent }) {
+	const { me, cart, store } = locals
 	if (!me) {
 		throw redirect(302, `/auth/otp-login?ref=${url.pathname}${url.search}`)
 	}

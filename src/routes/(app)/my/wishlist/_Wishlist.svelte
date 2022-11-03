@@ -13,18 +13,18 @@
 </style>
 
 <script>
-import WishlistSkeleton from './_WishlistSkeleton.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import { invalidateAll } from '$app/navigation'
 import { getAPI, post } from '$lib/util/api'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import { page } from '$app/stores'
 import BlackButton from '$lib/ui/BlackButton.svelte'
-import { gett } from '$lib/utils'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import WishlistSkeleton from './_WishlistSkeleton.svelte'
 
 export let wishlistedProducts,
 	loadingProduct = []
 
-async function toggleWishlist(id, wx) {
+async function removeFromWishlist(id, wx) {
 	try {
 		loadingProduct[wx] = true
 		await post(
@@ -36,6 +36,7 @@ async function toggleWishlist(id, wx) {
 			},
 			$page.data.origin
 		)
+		await invalidateAll()
 		await getWishlistedProducts()
 	} catch (e) {
 	} finally {
@@ -46,6 +47,8 @@ async function toggleWishlist(id, wx) {
 async function getWishlistedProducts() {
 	try {
 		wishlistedProducts = getAPI(`wishlists/my?store=${$page.data?.store?.id}`, $page.data.origin)
+
+		await invalidateAll()
 	} catch (e) {
 	} finally {
 	}
@@ -89,7 +92,7 @@ async function getWishlistedProducts() {
 									<BlackButton
 										type="button"
 										class="absolute top-2 right-2 z-10"
-										on:click="{() => toggleWishlist(w.product?._id, wx)}">
+										on:click="{() => removeFromWishlist(w.product?._id, wx)}">
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
 											class="h-6 w-6"
@@ -132,29 +135,13 @@ async function getWishlistedProducts() {
 													<h6 class="flex-1 truncate font-medium">
 														{w.product?.name}
 													</h6>
-													{#if $page.data?.store?.isFnb}
-														<div class="ms-2">
-															{#if w.product?.foodType === 'V'}
-																<LazyImg
-																	src="{`/product/veg.png`}"
-																	alt="veg"
-																	width="20"
-																	height="20"
-																	class="h-5 w-5" />
-															{:else if w.product?.foodType === 'N' || w.product?.foodType === 'E'}
-																<LazyImg
-																	src="{`/product/non-veg.png`}"
-																	alt="non veg"
-																	width="20"
-																	height="20"
-																	class="h-5 w-5" />
-															{:else}
-																<LazyImg
-																	src="{`/product/other.png`}"
-																	alt="other"
-																	width="20"
-																	height="20"
-																	class="h-5 w-5" />
+
+													{#if $page?.data?.store?.isFnb && w.product.foodType}
+														<div>
+															{#if w.product.foodType === 'veg'}
+																<img src="/product/veg.png" alt="veg" class="h-5 w-5" />
+															{:else if w.product.foodType === 'nonveg'}
+																<img src="/product/non-veg.png" alt="non veg" class="h-5 w-5" />
 															{/if}
 														</div>
 													{/if}

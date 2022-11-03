@@ -82,32 +82,16 @@ onMount(() => {
 											class="flex-1 text-base font-semibold hover:underline">
 											{item.name}
 										</a>
-										<!-- {#if item.foodType}
-									<div>
-										{#if item.foodType === 'V'}
-											<LazyImg
-												src="/product/veg.png"
-												alt="veg"
-												width="20"
-												height="20"
-												class="h-5 w-5" />
-										{:else if item.foodType === 'N' || item.foodType === 'E'}
-											<LazyImg
-												src="/product/non-veg.png"
-												alt="non veg"
-												width="20"
-												height="20"
-												class="h-5 w-5" />
-										{:else}
-											<LazyImg
-												src="/product/other.png"
-												alt="other"
-												width="20"
-												height="20"
-												class="h-5 w-5" />
+
+										{#if $page?.data?.store?.isFnb && item.foodType}
+											<div>
+												{#if item.foodType === 'veg'}
+													<img src="/product/veg.png" alt="veg" class="h-5 w-5" />
+												{:else if item.foodType === 'nonveg'}
+													<img src="/product/non-veg.png" alt="non veg" class="h-5 w-5" />
+												{/if}
+											</div>
 										{/if}
-									</div>
-								{/if} -->
 									</div>
 
 									{#if item.brandName}

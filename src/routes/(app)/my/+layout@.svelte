@@ -28,7 +28,7 @@ let openSidebar = false
 		bind:showCartSidebar
 		bind:openSidebar />
 
-	<div class="mt-20 flex h-full w-full">
+	<div class="mt-14 sm:mt-20 flex h-full w-full">
 		{#if menu?.length > 0}
 			<div
 				class="relative hidden w-44 flex-shrink-0 overflow-y-auto overflow-x-hidden bg-primary-500 py-3 scrollbar-none sm:block">
