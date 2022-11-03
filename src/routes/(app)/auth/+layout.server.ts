@@ -1,5 +1,3 @@
-export const ssr = false
-import { getAPI } from '$lib/util/api'
 import { gett } from '$lib/utils'
 import cookie from 'cookie'
 export const prerender = false
@@ -8,7 +6,7 @@ export async function load({ url, locals, request, cookies }) {
 	const isHome = url.pathname === '/'
 	const currentPage = +url.searchParams.get('page') || 1
 	const q = url.searchParams.get('q') || ''
-	let cart, store, serializedCart, serializedStore
+	let cart, serializedCart, serializedStore
 	try {
 		const res = await gett(`carts/my?store=${locals.store?.id}`, request.headers)
 
@@ -66,7 +64,9 @@ export async function load({ url, locals, request, cookies }) {
 		// token,
 		// sid,
 		cart,
-		store
+		store: locals.store,
+		settings: locals.settings
+
 		// isHome
 	}
 }

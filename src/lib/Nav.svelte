@@ -141,7 +141,7 @@ const removeItemFromCart = async ({ pid, qty, customizedImg, ix }: any) => {
 				pid: pid,
 				qty: qty,
 				customizedImg: customizedImg || null,
-				store: $page.data.store.id
+				store: $page.data.store?.id
 			},
 			$page.data.origin
 		)
@@ -634,9 +634,8 @@ const getSelectionLabel = (option) => option.name
 				</button>
 			{:else}
 				<!-- Login -->
-
 				<a
-					href="/auth/otp-login?ref={$page?.url?.pathname}{$page?.url?.search}"
+					href="{$page.data.store?.loginUrl}?ref={$page?.url?.pathname}{$page?.url?.search}"
 					aria-label="Click to route login"
 					data-sveltekit-prefetch>
 					<button
@@ -655,7 +654,6 @@ const getSelectionLabel = (option) => option.name
 								d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
 							></path>
 						</svg>
-
 						<span class="hidden text-center text-xs font-semibold tracking-wider lg:block">
 							Login
 						</span>
@@ -789,10 +787,9 @@ const getSelectionLabel = (option) => option.name
 				</ul>
 			{:else}
 				<!-- Login -->
-
 				<a
 					data-sveltekit-prefetch
-					href="/auth/otp-login?ref={$page?.url?.pathname}{$page?.url?.search}"
+					href="{$page.data.store?.loginUrl}?ref={$page?.url?.pathname}{$page?.url?.search}"
 					aria-label="Click to route login"
 					class="flex items-center gap-2 py-2"
 					on:click="{() => (openSidebar = false)}">

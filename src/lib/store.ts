@@ -52,7 +52,7 @@ export const fetchSettings = async () => {
 	try {
 		const data = (await gett('settings')).data?.settings
 		settings.set(data)
-		if (data.otpLogin) loginUrl.set('/auth/otp-login')
+		if (data.otpLogin) loginUrl.set(locals.store?.loginUrl)
 	} catch (e) {
 		settings.set({})
 	}

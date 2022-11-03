@@ -2,7 +2,7 @@ import { gett } from '$lib/utils'
 import { error, redirect } from '@sveltejs/kit'
 export const prerender = false
 
-export async function load({ request, url }) {
+export async function load({ request, url, locals }) {
 	try {
 		let err
 		const myAddresses = await gett('addresses/my', request.headers.get('cookie'))
@@ -34,7 +34,7 @@ export async function load({ request, url }) {
 		}
 	} catch (e) {
 		if (e.status === 401) {
-			throw redirect(307, `/auth/otp-login?ref=${url?.pathname}`)
+			throw redirect(307, `${locals.store?.loginUrl}?ref=${url?.pathname}`)
 		} else {
 			// return {
 			// 	status: 500,

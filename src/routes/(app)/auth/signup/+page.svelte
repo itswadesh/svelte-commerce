@@ -128,7 +128,7 @@ async function submit(n) {
 
 			<p class="text-xs">
 				Do not have email?
-				<a href="/auth/otp-login" class="text-primary-500 hover:underline">
+				<a href="{$page.data.store?.loginUrl}" class="text-primary-500 hover:underline">
 					Sign up using phone number
 				</a>
 			</p>
@@ -233,7 +233,7 @@ async function submit(n) {
 
 	<div class="mb-5 flex flex-col text-center max-w-max mx-auto gap-1">
 		<a
-			href="{`/auth/otp-login?ref=${$page.url.searchParams.get('ref') || '/'}`}"
+			href="{`${$page.data.store?.loginUrl}?ref=${$page.url.searchParams.get('ref') || '/'}`}"
 			aria-label="Click to signin"
 			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
 			Signin

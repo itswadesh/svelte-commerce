@@ -56,9 +56,9 @@ async function toggleWishlist(id) {
 			{
 				product: id,
 				variant: id,
-				store: $page.data.store.id
+				store: $page.data.store?.id
 			},
-			$page.data.store.origin
+			$page.data.store?.origin
 		)
 	} catch (e) {
 		if (e.message === 'You must be logged in') {

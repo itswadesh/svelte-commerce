@@ -17,14 +17,14 @@ let seoProps = {
 		<h1 class="font-serif text-2xl font-medium md:text-3xl lg:text-4xl">About Us</h1>
 
 		<p class="text-gray-500">
-			{$page.data.store.websiteName} is the best place to shop online in India. {$page.data.store
+			{$page.data.store?.websiteName} is the best place to shop online in India. {$page.data.store
 				.websiteName} is a well-established brand in the personalized gifts segment. Choose from a wide
 			range of mobile covers, t-shirts, photo mugs, key-chains, 3D-crystals, photo clocks, picture frames
 			and hundreds of other gifts.
 		</p>
 
 		<p class="text-gray-500">
-			{$page.data.store.websiteName} has been delivering Mobile Cover‘s Orders since we opened in 2018.
+			{$page.data.store?.websiteName} has been delivering Mobile Cover‘s Orders since we opened in 2018.
 			Our goal is to provide both a superior customer experience and tremendous value for our customers.
 		</p>
 
@@ -35,7 +35,7 @@ let seoProps = {
 				</div>
 
 				<div class="flex-1">
-					<h2 class="mb-1 text-xl font-semibold">{$page.data.store.domain} is</h2>
+					<h2 class="mb-1 text-xl font-semibold">{$page.data.store?.domain} is</h2>
 
 					<p class="text-gray-500">
 						Distinctive fashion for the contemporary Indian with In-house capabilities in design,
@@ -100,10 +100,10 @@ let seoProps = {
 
 			<div
 				class="absolute left-40 top-20 flex w-60 flex-col items-center justify-center gap-4 bg-gray-100 p-4 text-center text-sm text-gray-500">
-				<h3 class="text-lg font-bold text-gray-800">{$page.data.store.websiteName}</h3>
+				<h3 class="text-lg font-bold text-gray-800">{$page.data.store?.websiteName}</h3>
 
 				<p class="text-gray-500">
-					{$page.data.store.websiteName} is the best place to shop online in India. {$page.data
+					{$page.data.store?.websiteName} is the best place to shop online in India. {$page.data
 						.websiteName} is a well-established brand in the personalized gifts segment.
 				</p>
 
@@ -114,7 +114,7 @@ let seoProps = {
 
 				<button
 					class="max-w-max rounded-md bg-gray-400 py-2 px-10 font-bold uppercase tracking-wider text-gray-800 focus:outline-none">
-					{$page.data.store.websiteName}
+					{$page.data.store?.websiteName}
 				</button>
 			</div>
 		</div>
@@ -127,7 +127,7 @@ let seoProps = {
 					<h6 class="mb-1 font-bold">Brian Anderson</h6>
 
 					<p class="text-sm text-gray-500">
-						{$page.data.store.websiteName} has been delivering Mobile Cover‘s Orders
+						{$page.data.store?.websiteName} has been delivering Mobile Cover‘s Orders
 					</p>
 				</div>
 			</div>
@@ -139,7 +139,7 @@ let seoProps = {
 					<h6 class="mb-1 font-bold">Jennifer Cameron</h6>
 
 					<p class="text-sm text-gray-500">
-						{$page.data.store.websiteName} has been delivering Mobile Cover‘s Orders
+						{$page.data.store?.websiteName} has been delivering Mobile Cover‘s Orders
 					</p>
 				</div>
 			</div>
@@ -151,7 +151,7 @@ let seoProps = {
 					<h6 class="mb-1 font-bold">Katherine Lambert</h6>
 
 					<p class="text-sm text-gray-500">
-						{$page.data.store.websiteName} has been delivering Mobile Cover‘s Orders
+						{$page.data.store?.websiteName} has been delivering Mobile Cover‘s Orders
 					</p>
 				</div>
 			</div>
@@ -163,7 +163,7 @@ let seoProps = {
 					<h6 class="mb-1 font-bold">Eric Martin</h6>
 
 					<p class="text-sm text-gray-500">
-						{$page.data.store.websiteName} has been delivering Mobile Cover‘s Orders
+						{$page.data.store?.websiteName} has been delivering Mobile Cover‘s Orders
 					</p>
 				</div>
 			</div>

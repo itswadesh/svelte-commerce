@@ -54,7 +54,7 @@ let seoProps = {
 							<div>
 								<h1
 									class="uppercase p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 md:py-10 sm:text-2xl md:text-3xl xl:text-4xl">
-									BEST OF {$page.data.store.websiteName} EXCLUSIVE
+									BEST OF {$page.data.store?.websiteName} EXCLUSIVE
 								</h1>
 
 								<HeroBanners heroBanners="{heroBanners}" />

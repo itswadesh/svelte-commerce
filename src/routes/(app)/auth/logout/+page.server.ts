@@ -9,7 +9,7 @@ export const load: PageServerLoad = async () => {
 }
 
 export const actions: Actions = {
-	async default({ cookies }) {
+	async default({ cookies, locals }) {
 		await post('logout', {}, cookies)
 		// eat the cookie
 		cookies.set('session', '', {
@@ -26,6 +26,6 @@ export const actions: Actions = {
 		// })
 
 		//redirect the user
-		throw redirect(302, '/auth/otp-login')
+		throw redirect(302, locals.store?.loginUrl)
 	}
 }

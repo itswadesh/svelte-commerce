@@ -27,7 +27,7 @@ export async function load({ url, request, locals, cookies }) {
 		order = res
 	} catch (e) {
 		if (e.status === 401) {
-			throw redirect(307, '/auth/otp-login')
+			throw redirect(307, locals.store?.loginUrl)
 		}
 		err = e
 		throw error(400, e?.message || e)

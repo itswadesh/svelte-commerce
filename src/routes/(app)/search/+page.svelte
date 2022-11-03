@@ -55,7 +55,7 @@ async function saveSearchData(searchData) {
 				id: 'new',
 				// popularity: 0,
 				text: searchData,
-				store: $page.data.store.id
+				store: $page.data.store?.id
 			},
 			$page.data.origin
 		)

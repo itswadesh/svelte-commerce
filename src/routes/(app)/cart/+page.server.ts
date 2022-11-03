@@ -36,7 +36,7 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies }) =>
 		}
 	} catch (e) {
 		if (e?.status === 401) {
-			throw redirect(307, '/auth/otp-login')
+			throw redirect(307, locals.store?.loginUrl)
 		}
 		throw error(400, e?.message || e)
 	} finally {
