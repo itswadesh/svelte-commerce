@@ -32,8 +32,8 @@ function clearFilters() {
 	fl = {}
 	appliedFilters = {}
 	let url = $page?.url?.pathname
-	goto(url)
-	dispatch('clearAll')
+	goto(`${url}?page=1`)
+	// dispatch('clearAll')
 }
 
 function goCheckbox(e) {
