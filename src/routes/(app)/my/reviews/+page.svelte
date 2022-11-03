@@ -126,12 +126,24 @@ async function refreshData() {
 							</div>
 
 							<div class="relative flex h-auto w-full flex-1 flex-col">
-								<a
-									href="{`/product/${review.listing?.slug}`}"
-									aria-label="Click to view the product details"
-									class="mb-2 font-semibold">
-									{review.listing?.name}
-								</a>
+								<div class="mb-2 flex gap-2">
+									<a
+										href="{`/product/${review.listing?.slug}`}"
+										aria-label="Click to view the product details"
+										class="flex-1 font-semibold">
+										{review.listing?.name}
+									</a>
+
+									{#if $page?.data?.store?.isFnb && review.listing?.foodType}
+										<div>
+											{#if review.listing?.foodType === 'veg'}
+												<img src="/product/veg.png" alt="veg" class="h-5 w-5" />
+											{:else if review.listing?.foodType === 'nonveg'}
+												<img src="/product/non-veg.png" alt="non veg" class="h-5 w-5" />
+											{/if}
+										</div>
+									{/if}
+								</div>
 
 								<div class="mb-2 flex flex-row items-center">
 									<div

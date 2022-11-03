@@ -18,8 +18,6 @@ export let currentPage, orders
 
 let clazz = ''
 export { clazz as class }
-
-// console.log('zzzzzzzzzzzzzzzzzz', orders)
 </script>
 
 <div class="w-full text-gray-800 {clazz}">
@@ -61,8 +59,6 @@ export { clazz as class }
 
 										<th class="p-3 font-medium tracking-wider text-gray-500"> Name </th>
 
-										<!-- <th class="p-3 font-medium tracking-wider text-gray-500"> Veg/NonVeg </th> -->
-
 										<th class="p-3 font-medium tracking-wider text-gray-500"> Qty </th>
 
 										<th class="p-3 font-medium tracking-wider text-gray-500"> Price </th>
@@ -93,16 +89,20 @@ export { clazz as class }
 											</td>
 
 											<td class="p-3">
-												{item.name}
-											</td>
+												<div class="flex justify-center gap-2">
+													<span>{item.name}</span>
 
-											<!-- <td class="p-3">
-												{#if item.foodType === 'V'}
-													<LazyImg src="/product/veg.png" alt="Veg" width="20" height="20" class="h-5 w-5" />
-												{:else if item.foodType === 'N' || item.foodType === 'E'}
-													<LazyImg src="/product/non-veg.png" alt="Non veg" width="20" height="20" class="h-5 w-5" />
-												{/if}
-										</td> -->
+													{#if $page?.data?.store?.isFnb && item.foodType}
+														<div class="flex-shrink-0">
+															{#if item.foodType === 'veg'}
+																<img src="/product/veg.png" alt="veg" class="h-5 w-5" />
+															{:else if item.foodType === 'nonveg'}
+																<img src="/product/non-veg.png" alt="non veg" class="h-5 w-5" />
+															{/if}
+														</div>
+													{/if}
+												</div>
+											</td>
 
 											<td class="whitespace-nowrap p-3">
 												{item.qty}
@@ -173,17 +173,15 @@ export { clazz as class }
 											<div class="mb-2 flex items-start justify-between">
 												<span class="flex-1">{item.name}</span>
 
-												<!-- {#if store.isFnb}
-														<div class="ms-2 sm:ms-5">
-															{#if item.foodType === 'V'}
-																<LazyImg src="`/product/veg.png`" alt="veg" width="20" height="20" class="h-5 w-5" />
-															{:else if item.foodType === 'N' || item.foodType === 'E'}
-																<LazyImg src="`/product/non-veg.png`" alt="non veg" width="20" height="20" class="h-5 w-5" />
-															{:else}
-																<LazyImg src="`/product/other.png`" alt="other" width="20" height="20" class="h-5 w-5" />
-															{/if}
-														</div>
-													{/if} -->
+												{#if $page?.data?.store?.isFnb && item.foodType}
+													<div>
+														{#if item.foodType === 'veg'}
+															<img src="/product/veg.png" alt="veg" class="h-5 w-5" />
+														{:else if item.foodType === 'nonveg'}
+															<img src="/product/non-veg.png" alt="non veg" class="h-5 w-5" />
+														{/if}
+													</div>
+												{/if}
 											</div>
 
 											<div class="flex flex-wrap gap-2 text-sm">

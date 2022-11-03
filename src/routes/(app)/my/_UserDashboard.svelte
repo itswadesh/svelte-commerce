@@ -35,8 +35,6 @@ export let me, myOrders, myWishlist, myReviews
 				<LazyImg
 					src="/dashboard/my-orders.png"
 					alt=" "
-					width="128"
-					height="128"
 					class="h-28 w-28 opacity-50 lg:h-32 lg:w-32" />
 			</div>
 		</a>
@@ -59,8 +57,6 @@ export let me, myOrders, myWishlist, myReviews
 				<LazyImg
 					src="/dashboard/wishlist.png"
 					alt=" "
-					width="128"
-					height="128"
 					class="h-28 w-28 opacity-50 lg:h-32 lg:w-32" />
 			</div>
 		</a>
@@ -86,8 +82,6 @@ export let me, myOrders, myWishlist, myReviews
 				<LazyImg
 					src="/dashboard/reviews.png"
 					alt=" "
-					width="128"
-					height="128"
 					class="h-28 w-28 opacity-50 lg:h-32 lg:w-32" />
 			</div>
 		</a>
@@ -118,9 +112,7 @@ export let me, myOrders, myWishlist, myReviews
 				<LazyImg
 					src="/dashboard/profile.png"
 					alt=" "
-					width="128"
-					height="128"
-					class="h-28 w-28 opacity-50 lg:h-32 lg:w-32" />
+					class="h-28 w-28 opacity-50 lg:h-32 lg:w-32 object-contain object-center" />
 			</div>
 		</a>
 	</div>
