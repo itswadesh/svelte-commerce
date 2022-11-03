@@ -29,9 +29,9 @@ async function submitContactInformation() {
 				fullName: fullName,
 				email: email,
 				phone: phone,
-				subject: `Someone contact us from ${$page.data.store.websiteName}`,
+				subject: `Someone contact us from ${$page.data.store?.websiteName}`,
 				message: message,
-				store: $page.data.store.id
+				store: $page.data.store?.id
 			},
 			$page.data.origin
 		)
@@ -114,7 +114,7 @@ async function submitContactInformation() {
 						</svg>
 
 						<span class="flex-1">
-							{$page.data.store.address}
+							{$page.data.store?.address}
 						</span>
 					</li>
 				</ul>
@@ -125,7 +125,7 @@ async function submitContactInformation() {
 					<li
 						class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#4267B2]">
 						<a
-							href="{$page.data.store.facebookPage}"
+							href="{$page.data.store?.facebookPage}"
 							aria-label="Click to route facebook page"
 							target="_blank"
 							rel="noopener noreferrer"
@@ -151,7 +151,7 @@ async function submitContactInformation() {
 					<li
 						class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#C13584]">
 						<a
-							href="{$page.data.store.instagramPage}"
+							href="{$page.data.store?.instagramPage}"
 							aria-label="Click to route instagram page"
 							target="_blank"
 							rel="noopener noreferrer"
@@ -178,7 +178,7 @@ async function submitContactInformation() {
 					<li
 						class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#1DA1F2]">
 						<a
-							href="{$page.data.store.twitterPage}"
+							href="{$page.data.store?.twitterPage}"
 							aria-label="Click to route twitter page"
 							target="_blank"
 							rel="noopener noreferrer"
@@ -205,7 +205,7 @@ async function submitContactInformation() {
 					<li
 						class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#D32D2D]">
 						<a
-							href="{$page.data.store.pinterestPage}"
+							href="{$page.data.store?.pinterestPage}"
 							aria-label="Click to route pinterest page"
 							target="_blank"
 							rel="noopener noreferrer"
@@ -234,7 +234,7 @@ async function submitContactInformation() {
 					<li
 						class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#0077b5]">
 						<a
-							href="{$page.data.store.linkedinPage}"
+							href="{$page.data.store?.linkedinPage}"
 							aria-label="Click to route linkedin page"
 							target="_blank"
 							rel="noopener noreferrer"
@@ -263,7 +263,7 @@ async function submitContactInformation() {
 					<li
 						class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#FF0000]">
 						<a
-							href="{$page.data.store.youtubeChannel}"
+							href="{$page.data.store?.youtubeChannel}"
 							aria-label="Click to route youtube page"
 							target="_blank"
 							rel="noopener noreferrer"

@@ -12,6 +12,7 @@ export async function GET({ request, cookies, locals }) {
 		address: storeOne.address,
 		phone: storeOne.phone,
 		otpLogin: storeOne.otpLogin || true,
+		loginUrl: storeOne.otpLogin ? '/auth/otp-login' : '/auth/login',
 		websiteLegalName: storeOne.websiteLegalName,
 		websiteName: storeOne.websiteName,
 		title: storeOne.title,

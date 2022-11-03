@@ -17,24 +17,24 @@ import { onMount } from 'svelte'
 export let data
 
 const seoProps = {
-	title: $page.data.store.title,
-	description: $page.data.store.description,
+	title: $page.data.store?.title,
+	description: $page.data.store?.description,
 	slug: '/',
-	keywords: $page.data.store.keywords,
+	keywords: $page.data.store?.keywords,
 	featuredImage: {
-		url: $page.data.store.logo,
+		url: $page.data.store?.logo,
 		width: 672,
 		height: 448,
 		caption: 'Home page'
 	},
 	ogImage: {
-		url: $page.data.store.logo
+		url: $page.data.store?.logo
 	},
 	ogSquareImage: {
-		url: $page.data.store.logo
+		url: $page.data.store?.logo
 	},
 	twitterImage: {
-		url: $page.data.store.logo
+		url: $page.data.store?.logo
 	}
 }
 
@@ -167,7 +167,7 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 					<div class="mb-5 sm:mb-10">
 						<h1
 							class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
-							POPULAR ON {$page.data.store.websiteName}
+							POPULAR ON {$page.data.store?.websiteName}
 						</h1>
 
 						<div
@@ -192,7 +192,7 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 					<div class="mb-5 sm:mb-10">
 						<h1
 							class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
-							TRENDING ON {$page.data.store.websiteName}
+							TRENDING ON {$page.data.store?.websiteName}
 						</h1>
 
 						<div

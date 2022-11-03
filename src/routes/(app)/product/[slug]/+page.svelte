@@ -164,7 +164,7 @@ async function addToBag(p, customizedImg, customizedJson) {
 				options: selectedOptions,
 				customizedImg: customizedImg,
 				customizedData: customizedJson,
-				store: $page.data.store.id
+				store: $page.data.store?.id
 			},
 			$page.data.origin
 		)
@@ -281,13 +281,13 @@ function optionChanged(o) {
 
 async function toggleWishlist(id) {
 	if (!$page.data.me) {
-		goto('/auth/otp-login')
+		goto($page.data.store?.loginUrl)
 	}
 	try {
 		loadingForWishlist = true
 		isWislisted = await post(
 			`wishlists/toggle`,
-			{ product: id, variant: id, store: $page.data.store.id },
+			{ product: id, variant: id, store: $page.data.store?.id },
 			$page.data.origin
 		)
 	} catch (e) {

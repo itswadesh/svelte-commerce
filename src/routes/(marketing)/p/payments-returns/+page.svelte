@@ -23,7 +23,7 @@ let seoProps = {
 				<h6 class="mb-5 font-semibold">PAYMENTS</h6>
 
 				<p class="text-gray-500">
-					{$page.data.store.websiteName} accepts Debit Cards, Credit Cards, NetBanking & Wallets for
+					{$page.data.store?.websiteName} accepts Debit Cards, Credit Cards, NetBanking & Wallets for
 					payments.
 				</p>
 			</li>
@@ -32,16 +32,16 @@ let seoProps = {
 				<h6 class="mb-5 font-semibold">SHIPPING</h6>
 
 				<p class="text-gray-500">
-					{$page.data.store.websiteName} offers to ship to cities all over India. Customers usually receive
-					their orders within 7-8 working days. The customer is responsible for any import duty that
-					may be levied upon their order. <br /> <br />
+					{$page.data.store?.websiteName} offers to ship to cities all over India. Customers usually
+					receive their orders within 7-8 working days. The customer is responsible for any import duty
+					that may be levied upon their order. <br /> <br />
 
 					If you have any questions about the expected delivery period for your address, please
-					email us at {$page.data.store.websiteEmail} <br /> <br />
+					email us at {$page.data.store?.websiteEmail} <br /> <br />
 
-					Once your {$page.data.store.domain} order ships it must go to the address provided at the time
-					you place your order. If you cannot receive or pick up your order after three attempts by the
-					courier, it will come back to our warehouse. <br /> <br />
+					Once your {$page.data.store?.domain} order ships it must go to the address provided at the
+					time you place your order. If you cannot receive or pick up your order after three attempts
+					by the courier, it will come back to our warehouse. <br /> <br />
 
 					Any refund against RTO orders will be not initiated, You can Request Us to Re-Ship it with
 					New Actual Address & Contact Details. We will reship it on next working Day.
@@ -52,11 +52,11 @@ let seoProps = {
 				<h6 class="mb-5 font-semibold">RETURNS</h6>
 
 				<div class="text-gray-500">
-					{$page.data.store.websiteName} offers a replacement guarantee only if the product received
-					is damaged/defective. Please get in touch with us at {$page.data.store.websiteEmail} within 3 days
-					of receiving your order if you would like to have it replaced. We will provide a shipping address
-					that you can ship your order back to.
-					{$page.data.store.websiteName} will dispatch a replacement as soon as we receive your returned
+					{$page.data.store?.websiteName} offers a replacement guarantee only if the product received
+					is damaged/defective. Please get in touch with us at {$page.data.store?.websiteEmail} within
+					3 days of receiving your order if you would like to have it replaced. We will provide a shipping
+					address that you can ship your order back to.
+					{$page.data.store?.websiteName} will dispatch a replacement as soon as we receive your returned
 					order.<br />
 					<br />
 
@@ -91,7 +91,7 @@ let seoProps = {
 
 						<li>
 							Item received is different from their description on the product detail page on
-							{$page.data.store.domain};
+							{$page.data.store?.domain};
 						</li>
 
 						<li>

@@ -13,8 +13,8 @@ let openSidebar = false
 
 	<PageTransitions url="{data.url}">
 		<div class="mt-14 sm:mt-20 w-full flex-1">
-			{#if $page.data.store.closed}
-				{$page.data.store.closeMessage || 'We are closed for the day'}
+			{#if $page.data.store?.closed}
+				{$page.data.store?.closeMessage || 'We are closed for the day'}
 			{:else}
 				<slot />
 			{/if}

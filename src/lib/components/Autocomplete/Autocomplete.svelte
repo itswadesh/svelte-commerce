@@ -1,37 +1,3 @@
-<style>
-div.autocomplete {
-	/*the container must be positioned relative:*/
-	position: relative;
-	display: inline-block;
-	width: 300px;
-}
-input {
-	border: 1px solid transparent;
-	background-color: #f1f1f1;
-	padding: 10px;
-	font-size: 16px;
-	margin: 0;
-}
-input[type='text'] {
-	background-color: #f1f1f1;
-	width: 100%;
-}
-input[type='submit'] {
-	background-color: DodgerBlue;
-	color: #fff;
-}
-
-#autocomplete-items-list {
-	position: relative;
-	margin: 0;
-	padding: 0;
-	top: 0;
-	width: 297px;
-	border: 1px solid #ddd;
-	background-color: #ddd;
-}
-</style>
-
 <script>
 import { getAPI } from '$lib/util/api'
 import { createEventDispatcher, onMount } from 'svelte'
@@ -70,18 +36,20 @@ const getAutocompleteData = async (filterText = '') => {
 let filteredData = []
 // $: console.log(filteredData)
 
-const filterData = () => {
-	let storageArr = []
-	if (inputValue) {
-		data.forEach((d) => {
-			if (d?.name.toLowerCase().startsWith(inputValue.toLowerCase())) {
-				// TODO
-				// storageArr = [...storageArr, makeMatchBold(d)]
-				storageArr = [...storageArr, d]
-			}
-		})
-	}
-	filteredData = storageArr
+const filterData = async (e) => {
+	const data = await getAutocompleteData(e.target.value)
+	// let storageArr = []
+	// console.log('333333333', data, inputValue)
+	// if (inputValue) {
+	// 	data.forEach((d) => {
+	// 		if (d?.name.toLowerCase().startsWith(inputValue.toLowerCase())) {
+	// 			// TODO
+	// 			// storageArr = [...storageArr, makeMatchBold(d)]
+	// 			storageArr = [...storageArr, d]
+	// 		}
+	// 	})
+	// }
+	filteredData = data
 	if (!filteredData.length) {
 		inputObject = null
 	}
@@ -112,6 +80,7 @@ const setInputVal = (d) => {
 	inputValue = d?.name || d
 	filteredData = []
 	hiLiteIndex = null
+	submitValue()
 	// document.querySelector('#data-input').focus()
 }
 
@@ -161,22 +130,38 @@ const navigateList = (e) => {
 <!-- Can not enable it because it will trigger the function on any Enterpress including zip input form at product details page -->
 <!-- <svelte:window on:keydown="{navigateList}" /> -->
 
-<form autocomplete="off" on:submit|preventDefault="{submitValue}">
-	<div class="autocomplete">
+<form autocomplete="off" on:submit|preventDefault="{submitValue}" class="relative">
+	<div class="relative">
 		<input
 			id="data-input"
 			type="text"
 			placeholder="{placeholder}"
 			bind:this="{searchInput}"
 			bind:value="{inputValue}"
-			on:input="{filterData}" />
+			on:input="{filterData}"
+			class="py-2 pl-4 pr-12 rounded-md w-full bg-white transition duration-300 border focus:outline-none focus:border-gray-400 text-sm font-light placeholder:text-gray-500" />
+
+		<button
+			type="submit"
+			aria-label="Click here to search input data"
+			class="absolute inset-y-0 right-0 z-10 hidden h-full w-10 flex-shrink-0 cursor-default items-center justify-center focus:outline-none sm:flex">
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				class="h-5 w-5 text-gray-500"
+				viewBox="0 0 20 20"
+				fill="currentColor">
+				<path
+					fill-rule="evenodd"
+					d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+					clip-rule="evenodd"></path>
+			</svg>
+		</button>
 	</div>
 
-	<input type="submit" />
-
 	<!-- FILTERED LIST OF DATA -->
+
 	{#if filteredData.length > 0}
-		<ul id="autocomplete-items-list">
+		<ul class="absolute top-12 w-full border-l border-r border-t shadow-xl bg-white">
 			{#each filteredData as d, i}
 				<AutocompleteItem
 					itemLabel="{d.name}"
