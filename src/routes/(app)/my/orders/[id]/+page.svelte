@@ -68,7 +68,7 @@ onMount(() => {
 									aria-label="Click to view the product details"
 									class="flex-shrink-0">
 									<LazyImg
-										src="{item.imgCdn}"
+										src="{item.img}"
 										alt=""
 										width="96"
 										class="w-24 object-contain object-top" />

@@ -281,7 +281,7 @@ async function refreshCart() {
 													aria-label="Click to route product details"
 													class="flex-shrink-0 ">
 													<LazyImg
-														src="{item.isCustomizeditem ? item.customizedImg : item.imgCdn}"
+														src="{item.isCustomizeditem ? item.customizedImg : item.img}"
 														alt=""
 														width="128"
 														class="w-16 cursor-pointer rounded-md object-contain sm:w-32" />
@@ -352,7 +352,7 @@ async function refreshCart() {
 													class="w-16 cursor-pointer rounded-md object-contain sm:w-32" />
 											{:else}
 												<LazyImg
-													src="{item.imgCdn}"
+													src="{item.img}"
 													alt=""
 													width="128"
 													class="w-16 cursor-pointer rounded-md object-contain sm:w-32" />

@@ -153,10 +153,10 @@ onMount(async () => {
 									class="flex w-full cursor-pointer flex-row items-center justify-between border-b text-base font-light text-gray-500 hover:bg-gray-100"
 									on:click="{() => onselect(v)}">
 									<div class="flex w-10/12 flex-row">
-										{#if v.imgCdn}
+										{#if v.img}
 											<div class="my-auto w-1/6">
 												<LazyImg
-													src="{v.imgCdn}"
+													src="{v.img}"
 													alt=""
 													height="40"
 													class="mx-auto my-auto h-10 object-contain" />
@@ -197,10 +197,10 @@ onMount(async () => {
 			<div class="flex flex-col gap-4">
 				{#each data.categories?.data as c}
 					<a href="/{c.link}" aria-label="Click to browse category" class="flex items-center gap-4">
-						{#if c.imgCdn}
+						{#if c.img}
 							<div class="my-auto w-1/6">
 								<LazyImg
-									src="{c.imgCdn}"
+									src="{c.img}"
 									alt=""
 									height="40"
 									class="mx-auto my-auto h-10 object-contain" />

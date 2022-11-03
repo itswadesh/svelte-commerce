@@ -114,7 +114,7 @@ async function getWishlistedProducts() {
 											class="w-full  max-w-xs items-center overflow-hidden rounded-lg bg-white p-4">
 											<div>
 												<LazyImg
-													src="{w.product?.imgCdn}"
+													src="{w.product?.img}"
 													alt="mobile"
 													height="224"
 													class="h-48 w-full object-contain object-center sm:h-56" />

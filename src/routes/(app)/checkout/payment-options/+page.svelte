@@ -150,8 +150,8 @@ async function submit(pm) {
 
 			const options = {
 				key: rp.keyId, // Enter the Key ID generated from the Dashboard
-				name: 'Zapvi.in',
-				description: 'Payment for Zapvi',
+				name: 'Litekart.in',
+				description: 'Payment for Litekart',
 				image: '/logo.svg',
 				amount: rp.amount,
 				order_id: rp.id,
@@ -182,7 +182,7 @@ async function submit(pm) {
 				prefill: {
 					name: `${data.me.firstName} ${data.me.lastName}`,
 					phone: data.me.phone,
-					email: data.me.email || 'help@zapvi.in',
+					email: data.me.email || 'help@litekart.in',
 					contact: data.me.phone
 				},
 				notes: {

@@ -71,7 +71,7 @@ let bounceItemFromTop = false
 	<a href="/product/{product.slug}" target="_blank" rel="noopener noreferrer">
 		<div class="mb-2 h-40 overflow-hidden">
 			<img
-				src="{product.imgCdn}"
+				src="{product.img}"
 				alt="{product.name}"
 				width="208"
 				height="240"
@@ -176,5 +176,5 @@ let bounceItemFromTop = false
 </div>
 
 {#if bounceItemFromTop}
-	<AnimatedCartItem img="{product?.imgCdn}" />
+	<AnimatedCartItem img="{product?.img}" />
 {/if}

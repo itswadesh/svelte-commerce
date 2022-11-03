@@ -220,7 +220,7 @@ onMount(async () => {
 										<div class="flex w-full flex-row gap-4">
 											<div>
 												<LazyImg
-													src="{item.isCustomized ? item.customizedImg : item.imgCdn}"
+													src="{item.isCustomized ? item.customizedImg : item.img}"
 													alt=""
 													width="80"
 													class="h-auto w-20 object-contain" />

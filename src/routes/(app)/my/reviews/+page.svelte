@@ -119,7 +119,7 @@ async function refreshData() {
 						<div class="mb-2 flex w-full">
 							<div class="mr-2 w-20 sm:mr-5 sm:w-32">
 								<LazyImg
-									src="{review.listing?.imgCdn}"
+									src="{review.listing?.img}"
 									alt="{review.listing?.name || ''}"
 									width="128"
 									class="h-full w-full object-contain object-top" />

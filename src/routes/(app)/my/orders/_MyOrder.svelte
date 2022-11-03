@@ -77,7 +77,7 @@ export { clazz as class }
 											<td class="p-3">
 												<div class="mx-auto max-w-max">
 													<LazyImg
-														src="{item.imgCdn}"
+														src="{item.img}"
 														alt=" "
 														width="80"
 														class="h-auto w-20 object-contain object-center" />
@@ -153,7 +153,7 @@ export { clazz as class }
 									<div class="flex items-start gap-2 p-4 sm:gap-5">
 										<div class="flex-shrink-0">
 											<LazyImg
-												src="{item.imgCdn}"
+												src="{item.img}"
 												alt=""
 												width="64"
 												class="h-auto w-16 object-contain object-top" />
