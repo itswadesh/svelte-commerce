@@ -11,7 +11,7 @@ export let heroBanners
 				href="{heroBanners[0]?.link || '/'}"
 				aria-label="Click here to view the banner's related products">
 				<LazyImg
-					src="{heroBanners[0]?.imgCdn}"
+					src="{heroBanners[0]?.img}"
 					alt=""
 					width="760"
 					height="390"
@@ -22,7 +22,7 @@ export let heroBanners
 				href="{heroBanners[1]?.link || '/'}"
 				aria-label="Click here to view the banner's related products">
 				<LazyImg
-					src="{heroBanners[1]?.imgCdn}"
+					src="{heroBanners[1]?.img}"
 					alt=""
 					width="760"
 					height="390"
@@ -36,7 +36,7 @@ export let heroBanners
 					href="{heroBanners[2]?.link || '/'}"
 					aria-label="Click here to view the banner's related products">
 					<LazyImg
-						src="{heroBanners[2]?.imgCdn}"
+						src="{heroBanners[2]?.img}"
 						alt=""
 						width="370"
 						height="390"
@@ -47,7 +47,7 @@ export let heroBanners
 					href="{heroBanners[2]?.link || '/'}"
 					aria-label="Click here to view the banner's related products">
 					<LazyImg
-						src="{heroBanners[3]?.imgCdn}"
+						src="{heroBanners[3]?.img}"
 						alt=""
 						width="370"
 						height="390"
@@ -60,7 +60,7 @@ export let heroBanners
 					href="{heroBanners[4]?.link || '/'}"
 					aria-label="Click here to view the banner's related products">
 					<LazyImg
-						src="{heroBanners[4]?.imgCdn}"
+						src="{heroBanners[4]?.img}"
 						alt=""
 						width="760"
 						height="390"

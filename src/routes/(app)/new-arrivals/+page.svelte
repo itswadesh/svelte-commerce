@@ -38,7 +38,7 @@ let showItemCount = 10
 			<div class="relative mb-4">
 				<div class="h-[25vh] overflow-hidden">
 					<LazyImg
-						src="{data.newArrivals[0].imgCdn}"
+						src="{data.newArrivals[0].img}"
 						alt=" "
 						height="190"
 						class="h-full w-full object-cover object-top" />

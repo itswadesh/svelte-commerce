@@ -153,10 +153,10 @@ function toggle2(cx) {
 														type="button"
 														class="flex items-center gap-4 py-3 px-8 font-medium w-full text-left focus:outline-none">
 														<a href="/{c.slug}" class="flex items-center gap-4 flex-1">
-															{#if c.imgCdn}
+															{#if c.img}
 																<div class="h-12 w-12 flex-shrink-0 overflow-hidden rounded-full">
 																	<LazyImg
-																		src="{c.imgCdn}"
+																		src="{c.img}"
 																		alt=""
 																		width="48"
 																		height="48"
@@ -192,10 +192,10 @@ function toggle2(cx) {
 													</button>
 												{:else}
 													<a href="/{c.slug}" class="flex items-center gap-4 py-3 px-8 font-medium">
-														{#if c.imgCdn}
+														{#if c.img}
 															<div class="h-12 w-12 flex-shrink-0 overflow-hidden rounded-full">
 																<LazyImg
-																	src="{c.imgCdn}"
+																	src="{c.img}"
 																	alt=""
 																	width="48"
 																	height="48"

@@ -32,7 +32,7 @@ async function submit() {
 
 		const res = await post('users/forgot-password', {
 			email: email,
-			referrer: 'https://zapvi.in'
+			referrer: 'https://litekart.in'
 		})
 
 		// console.log('zzzzzzzzzzzzzzzzzz', res)

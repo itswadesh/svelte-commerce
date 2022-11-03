@@ -91,7 +91,7 @@ let categoryColors = [
 			<div class="grid grid-cols-4 items-start justify-items-center gap-4 sm:hidden">
 				{#each categories as category, i}
 					{#if i <= 6}
-						{#if category.imgCdn}
+						{#if category.img}
 							<a
 								href="/{category.slug}"
 								aria-label="Click to view related products of this category"
@@ -99,7 +99,7 @@ let categoryColors = [
 								<div
 									class="mb-1 h-20 w-20 flex-shrink-0 overflow-hidden rounded-full border-2 border-gray-300 group-hover:border-primary-500 group-hover:shadow-xl sm:mb-4">
 									<LazyImg
-										src="{category.imgCdn}"
+										src="{category.img}"
 										alt="{category.name}"
 										width="80"
 										height="80"

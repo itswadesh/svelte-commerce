@@ -39,7 +39,7 @@ let categoryColors = [
 		<div class="overflow-x-auto py-5 scrollbar-none sm:px-10 w-screen">
 			<div class="flex items-center pl-3">
 				{#each categories as category}
-					{#if category.imgCdn || category.img}
+					{#if category.img}
 						<div class="pr-3">
 							<a
 								href="/{category.link || category.slug}"
@@ -48,7 +48,7 @@ let categoryColors = [
 								<div
 									class="mb-1 h-16 w-16 flex-shrink-0 overflow-hidden rounded-full shadow-md group-hover:border-primary-500 group-hover:shadow-xl sm:mb-4">
 									<LazyImg
-										src="{category.imgCdn || category.img}"
+										src="{category.img}"
 										alt="{category.name}"
 										width="64"
 										height="64"

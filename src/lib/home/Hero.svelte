@@ -34,13 +34,13 @@ onMount(async () => {
 	<div class="relative mt-20 mx-auto hidden h-auto w-full overflow-hidden bg-white sm:block">
 		<svelte:component this="{Carousel}">
 			{#each sliderBanners as b, ix}
-				{#if b.imgCdn}
+				{#if b.img}
 					<a
 						href="{b.link}"
 						data-sveltekit-prefetch
 						class="h-auto carousel-item  relative float-left w-full {ix == 0 ? 'active' : ''}">
 						<img
-							src="{b.imgCdn}"
+							src="{b.img}"
 							alt="{b.name}"
 							class="block h-auto w-full object-contain object-top" />
 					</a>
@@ -54,12 +54,12 @@ onMount(async () => {
 	<div class="mx-auto block h-auto w-full overflow-hidden bg-white sm:hidden">
 		<svelte:component this="{Carousel}">
 			{#each sliderBannersMobile as b, ix}
-				{#if b.imgCdn}
+				{#if b.img}
 					<a
 						href="{b.link}"
 						class="h-auto carousel-item  relative float-left w-full {ix == 0 ? 'active' : ''}">
 						<img
-							src="{b.imgCdn}"
+							src="{b.img}"
 							alt="{b.name}"
 							class="block h-auto w-full object-contain object-top" />
 					</a>

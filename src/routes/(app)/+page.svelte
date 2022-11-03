@@ -75,13 +75,13 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 				<div class="max-w-screen overflow-x-auto scrollbar-none lg:hidden">
 					<div class="flex flex-row">
 						{#each data.home?.categories?.data as category}
-							{#if category?.imgCdn || category?.img}
+							{#if category?.img || category?.img}
 								<a
 									href="/{category.link || category.slug}"
 									aria-label="Click to get the category related products"
 									class="flex-shrink-0">
 									<LazyImg
-										src="{category.imgCdn || category.img}"
+										src="{category.img || category.img}"
 										alt=""
 										width="375"
 										class="w-[47vw] object-contain sm:w-60" />
@@ -93,13 +93,13 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 
 				<div class="hidden grid-cols-7 lg:grid">
 					{#each data.home?.categories?.data as category}
-						{#if category?.imgCdn || category?.img}
+						{#if category?.img || category?.img}
 							<a
 								href="/{category.link || category.slug}"
 								aria-label="Click to get the category related products"
 								class="col-span-1">
 								<LazyImg
-									src="{category.imgCdn || category.img}"
+									src="{category.img || category.img}"
 									alt=""
 									width="375"
 									class="h-full w-full object-contain" />

@@ -2,15 +2,15 @@
     "rewrites": [
         {
             "source": "/api/:path*",
-            "destination": "https://staging.zapvi.in/api/:path*"
+            "destination": "https://api.litekart.in/api/:path*"
         },
         {
             "source": "/images/:path*",
-            "destination": "https://staging.zapvi.in/images/:path*"
+            "destination": "https://api.litekart.in/images/:path*"
         }
     ],
     "env": {
-        "PUBLIC_HTTP_ENDPOINT": "https://staging.zapvi.in",
+        "PUBLIC_HTTP_ENDPOINT": "https://api.litekart.in",
         "NODE_OPTIONS": "--max-old-space-size=7680"
     }
 }

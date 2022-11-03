@@ -33,64 +33,7 @@ let seoProps = {
 		<div class="bg-opacity-25 bg-center bg-repeat" style="background-image:url('/gray-dot.png') ;">
 			<div class="mb-20 sm:mb-0">
 				<div class="flex flex-col gap-5 sm:gap-10">
-					<!-- CATEGORIES SLIDER MOBILE -->
-
-					<!-- {#await data.banner then banner}
-					<div class="block sm:hidden">
-						<CategoriesMobile
-							loading="{banner.isFetching}"
-							categories="{banner?.categories?.data ?? []}" />
-					</div>
-					{/await} -->
-
 					<Hero banners="{data.banners?.data}" />
-
-					<!-- TOP CATEGORIES -->
-
-					<!-- {#if data.banner?.categories?.data?.length > 0}
-					<div>
-						<h1
-							class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
-							TOP CATEGORIES
-						</h1>
-
-						<div class="max-w-screen overflow-x-auto scrollbar-none lg:hidden">
-							<div class="flex flex-row">
-								{#each data.banner?.categories?.data as category}
-									{#if category.imgCdn}
-										<a
-											href="{category.link}"
-											aria-label="Click to get the category related products"
-											class="flex-shrink-0">
-											<LazyImg
-												src="{category.imgCdn}"
-												alt=""
-												width="375"
-												class="w-[47vw] object-contain sm:w-60" />
-										</a>
-									{/if}
-								{/each}
-							</div>
-						</div>
-
-						<div class="hidden grid-cols-7 lg:grid">
-							{#each data.banner?.categories?.data as category}
-								{#if category.imgCdn}
-									<a
-										href="{category.link}"
-										aria-label="Click to get the category related products"
-										class="col-span-1">
-										<LazyImg
-											src="{category.imgCdn}"
-											alt=""
-											width="375"
-											class="h-full w-full object-contain" />
-									</a>
-								{/if}
-							{/each}
-						</div>
-					</div>
-					{/if} -->
 
 					<!-- HERO BANNERS -->
 

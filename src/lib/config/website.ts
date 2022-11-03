@@ -1,6 +1,6 @@
 // All bellow data will be replaced by Footer.svelte after the server/store call and saved to cookie
 export const id = '62b00e15c4899dc7b1f78cb1'
-export const domain = 'zapvi.in'
+export const domain = 'litekart.in'
 export const email = 'hi@misiki.in'
 export const address = `#22, Global Village, Rourkela,<br/> Odisha - 769002, India`
 export const description =
