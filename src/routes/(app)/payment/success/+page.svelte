@@ -61,14 +61,15 @@
 </style>
 
 <script>
-import SEO from '$lib/components/SEO/index.svelte'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import { currency, date } from '$lib/util'
-import WhiteButton from '$lib/ui/WhiteButton.svelte'
 import { Confetti } from 'svelte-confetti'
+import { currency, date } from '$lib/util'
 import { fireGTagEvent } from '$lib/util/gTag'
 import { onMount } from 'svelte'
+import { page } from '$app/stores'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
+import WhiteButton from '$lib/ui/WhiteButton.svelte'
 
 export let data
 
@@ -219,7 +220,7 @@ onMount(async () => {
 										<div class="flex w-full flex-row gap-4">
 											<div>
 												<LazyImg
-													src="{item.isCustomizeditem ? item.customizedImg : item.imgCdn}"
+													src="{item.isCustomized ? item.customizedImg : item.imgCdn}"
 													alt=""
 													width="80"
 													class="h-auto w-20 object-contain" />
@@ -238,39 +239,25 @@ onMount(async () => {
 
 												<div class="mb-2 flex items-start gap-2">
 													<!-- data-sveltekit-reload added because in production it does not work-->
-													<a
-														data-sveltekit-reload
-														href="/product/{item.slug}"
-														aria-label="Click to view the product details"
-														class="text-sm text-gray-500 group-hover:underline">
-														{item.name}
-													</a>
-													<!-- {#if $page.data.store.isFnb}
-														<div>
-															{#if item.foodType === 'V'}
-																<LazyImg
-																	src="/product/veg.png"
-																	alt="veg"
-																	width="20"
-																	height="20"
-																	class="h-5 w-5" />
-															{:else if item.foodType === 'N' || item.foodType === 'E'}
-																<LazyImg
-																	src="/product/non-veg.png"
-																	alt="veg"
-																	width="20"
-																	height="20"
-																	class="h-5 w-5" />
-															{:else}
-																<LazyImg
-																	src="/product/other.png"
-																	alt="veg"
-																	width="20"
-																	height="20"
-																	class="h-5 w-5" />
-															{/if}
-														</div>
-													{/if} -->
+													<div class="flex justify-between gap-2 w-full">
+														<a
+															data-sveltekit-reload
+															href="/product/{item.slug}"
+															aria-label="Click to view the product details"
+															class="flex-1 text-sm text-gray-500 group-hover:underline">
+															{item.name}
+														</a>
+
+														{#if $page?.data?.store?.isFnb && item.foodType}
+															<div>
+																{#if item.foodType === 'veg'}
+																	<img src="/product/veg.png" alt="veg" class="h-5 w-5" />
+																{:else if item.foodType === 'nonveg'}
+																	<img src="/product/non-veg.png" alt="non veg" class="h-5 w-5" />
+																{/if}
+															</div>
+														{/if}
+													</div>
 												</div>
 
 												<div class="mb-2 flex w-full gap-4 text-sm flex-wrap">

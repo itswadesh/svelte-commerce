@@ -82,17 +82,29 @@ let bounceItemFromTop = false
 			<!-- Brand -->
 
 			{#if product.brand?.name}
-				<h6 class="text-center text-lg uppercase"><b>{product.brand?.name}</b></h6>
+				<h1 class="text-center text-lg uppercase"><b>{product.brand?.name}</b></h1>
 			{/if}
 
 			<!-- Name -->
 
-			{#if product.name}
-				<p
-					class="truncate text-sm text-gray-500 group-hover:text-blue-600 group-hover:underline sm:text-base">
-					{product.name}
-				</p>
-			{/if}
+			<div class="flex gap-2 justify-between">
+				{#if product.name}
+					<h2
+						class="flex-1 truncate text-sm text-gray-500 group-hover:text-blue-600 group-hover:underline sm:text-base">
+						{product.name}
+					</h2>
+
+					{#if $page?.data?.store?.isFnb && product.foodType}
+						<div>
+							{#if product.foodType === 'veg'}
+								<img src="/product/veg.png" alt="veg" class="h-5 w-5" />
+							{:else if product.foodType === 'nonveg'}
+								<img src="/product/non-veg.png" alt="non veg" class="h-5 w-5" />
+							{/if}
+						</div>
+					{/if}
+				{/if}
+			</div>
 
 			<!-- prices -->
 
