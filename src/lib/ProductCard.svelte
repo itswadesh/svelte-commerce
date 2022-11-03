@@ -108,7 +108,7 @@ async function toggleWishlist(id) {
 
 		<div class="h-auto w-full">
 			<LazyImg
-				src="{product.img}"
+				src="{product.imgCdn || product.img}"
 				alt="{product.name}"
 				width="192"
 				class="h-full w-full object-contain object-bottom text-xs" />
@@ -144,13 +144,21 @@ async function toggleWishlist(id) {
 				href="/product/{product.slug}"
 				aria-label="Click to view the product details"
 				data-sveltekit-prefetch>
-				<h2 class="text-sm line-clamp-2 group-hover:underline">
-					{#if product.name}
-						{product.name}
-					{:else}
-						_
+				<div class="flex gap-2 justify-between">
+					<h2 class="flex-1 text-sm line-clamp-2 group-hover:underline">
+						{product.name || '_'}
+					</h2>
+
+					{#if $page?.data?.store?.isFnb && product.foodType}
+						<div>
+							{#if product.foodType === 'veg'}
+								<img src="/product/veg.png" alt="veg" class="h-5 w-5" />
+							{:else if product.foodType === 'nonveg'}
+								<img src="/product/non-veg.png" alt="non veg" class="h-5 w-5" />
+							{/if}
+						</div>
 					{/if}
-				</h2>
+				</div>
 			</a>
 		</div>
 
@@ -159,7 +167,7 @@ async function toggleWishlist(id) {
 			aria-label="Click to view the product details"
 			data-sveltekit-prefetch>
 			<div class="mt-2.5 flex flex-wrap items-baseline justify-start leading-4 text-xs gap-1.5">
-				<span class="font-semibold sm:text-sm whitespace-nowrap">
+				<span class="font-bold text-sm sm:text-base whitespace-nowrap">
 					{product.formattedPrice}
 				</span>
 
@@ -234,7 +242,7 @@ async function toggleWishlist(id) {
 
 								<div class="h-auto w-full">
 									<LazyImg
-										src="{relatedProduct.img}"
+										src="{relatedProduct.imgCdn}"
 										alt="{relatedProduct.name}"
 										width="192"
 										class="h-full w-full object-contain object-bottom" />

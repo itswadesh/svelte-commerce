@@ -38,31 +38,9 @@ const seoProps = {
 	}
 }
 
-onMount(async () => {
-	// await getHome()
-})
-
 $: heroBanners = data.home?.banners?.data.filter((b) => {
 	return b.type === 'hero'
 })
-
-// let home
-// async function getHome() {
-// 	if (browser) {
-// 		try {
-// 			const localHome = localStorage.getItem('home')
-// 			if (!localHome) {
-// 				const res = await getAPI(`home?store=${$page.data?.store?.id}`)
-// 				home = res
-// 			} else {
-// 				home = JSON.parse(localHome)
-// 			}
-// 		} catch (e) {
-// 			toast(e, 'error')
-// 		} finally {
-// 		}
-// 	}
-// }
 </script>
 
 <SEO {...seoProps} />
@@ -88,7 +66,7 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 		<!-- TOP CATEGORIES -->
 
 		{#if data.home?.categories?.data?.length > 0}
-			<div class="mb-5 sm:mb-10">
+			<div class="mb-5 sm:mb-10 hidden sm:block">
 				<h1
 					class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
 					TOP CATEGORIES
@@ -97,13 +75,13 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 				<div class="max-w-screen overflow-x-auto scrollbar-none lg:hidden">
 					<div class="flex flex-row">
 						{#each data.home?.categories?.data as category}
-							{#if category?.img}
+							{#if category?.imgCdn || category?.img}
 								<a
-									href="{category.link}"
+									href="/{category.link || category.slug}"
 									aria-label="Click to get the category related products"
 									class="flex-shrink-0">
 									<LazyImg
-										src="{category.img}"
+										src="{category.imgCdn || category.img}"
 										alt=""
 										width="375"
 										class="w-[47vw] object-contain sm:w-60" />
@@ -115,13 +93,13 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 
 				<div class="hidden grid-cols-7 lg:grid">
 					{#each data.home?.categories?.data as category}
-						{#if category?.img}
+						{#if category?.imgCdn || category?.img}
 							<a
-								href="{category.link}"
+								href="/{category.link || category.slug}"
 								aria-label="Click to get the category related products"
 								class="col-span-1">
 								<LazyImg
-									src="{category.img}"
+									src="{category.imgCdn || category.img}"
 									alt=""
 									width="375"
 									class="h-full w-full object-contain" />

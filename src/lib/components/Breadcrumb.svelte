@@ -39,7 +39,7 @@ export { clazz as class }
 	{#each categoryPool as d}
 		<li class="flex items-center">
 			<a
-				href="/{d.slug}&sort=-createdAt"
+				href="/{d.slug}?sort=-createdAt"
 				aria-label="Click to go inside this page"
 				class="first-letter:uppercase hover:text-primary-500 hover:underline">
 				{d.name}

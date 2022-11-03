@@ -5,33 +5,34 @@
 </style>
 
 <script lang="ts">
-import { getAPI, post } from '$lib/util/api'
-import { currency, toast } from '$lib/util'
-import { goto, invalidateAll } from '$app/navigation'
-import { page } from '$app/stores'
-import { fade, fly, slide } from 'svelte/transition'
-import { cubicOut } from 'svelte/easing'
 import { createEventDispatcher, getContext, onMount } from 'svelte'
-import Select from 'svelte-select'
-// import 'svelte-select/tailwind.css'
+import { cubicOut } from 'svelte/easing'
+import { currency, toast } from '$lib/util'
+import { fade, fly, slide } from 'svelte/transition'
+import { getAPI, post } from '$lib/util/api'
+import { goto, invalidateAll } from '$app/navigation'
+import { logo } from './config'
+import { page } from '$app/stores'
+import { settings } from './store'
+import Autocomplete from '$lib/components/Autocomplete/Autocomplete.svelte'
+import Cookie from 'cookie-universal'
 import Item from '$lib/AutocompleteItem.svelte'
-import PrimaryButton from './ui/PrimaryButton.svelte'
 import LazyImg from './components/Image/LazyImg.svelte'
 import MegaMenu from './components/MegaMenu.svelte'
-import WhiteButton from './ui/WhiteButton.svelte'
 import menu from '$lib/config/menu'
-import { settings } from './store'
-// import { store.logo } from './config'
+import PrimaryButton from './ui/PrimaryButton.svelte'
+import WhiteButton from './ui/WhiteButton.svelte'
 
 const dispatch = createEventDispatcher()
+const cookies = Cookie()
 
-export let me, cart, showCartSidebar, openSidebar
-let selectTarget = null
+export let me, cart, data, showCartSidebar, openSidebar, store
+
 let q = ''
-let typingTimer
 let showDropdownAccount = false
 let loadingForDeleteItemFromCart = []
 let categories
+
 // if (cart) cart = JSON.parse(cart)
 
 // export const signOut = async () => {
@@ -93,37 +94,18 @@ function slideFade(node, params) {
 	}
 }
 
-async function onSearch(filterText) {
-	try {
-		const res = await getAPI(
-			`es/autocomplete?q=${filterText}&store=${$page.data.store?.id}`,
-			$page.data.origin
-		)
-		const hits = res?.data?.hits?.hits
-		let data = []
-		if (hits) {
-			data = hits.map((h) => {
-				return { name: h._source.name, slug: h._source.slug, type: h._source.type }
-			})
-		}
-		return data || []
-	} catch (e) {
-		console.log('err....', e)
-	}
-}
-
-function enterPressedOnSearch() {
-	// console.log('enterPressedOnSearch.................')
-}
-
 async function onSearchSubmit({ detail }) {
-	// console.log('on search submit................')
-	let u = new URL('/search', $page.data.origin)
+	let newUrl
+
 	if (detail.type === 'category') {
-		u = new URL(`/${detail.slug}`, $page.data.origin)
+		const u = new URL(`/${detail.slug}`, $page.data.origin)
+		newUrl = u.toString()
+	} else {
+		const u = new URL('/search', $page.data.origin)
+		u.searchParams.set('q', detail?.name)
+		newUrl = u.toString() + '&sort=price'
 	}
-	u.searchParams.set('q', detail?.name)
-	let newUrl = u.toString() + '&sort=price'
+
 	goto(newUrl)
 	dispatch('search', detail)
 }
@@ -168,10 +150,8 @@ const removeItemFromCart = async ({ pid, qty, customizedImg, ix }: any) => {
 		// $page.data.cart = res
 
 		// await refreshCart()
-		// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', res)
 		await invalidateAll()
 	} catch (e) {
-		// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', e)
 	} finally {
 		loadingForDeleteItemFromCart[ix] = false
 	}
@@ -184,7 +164,7 @@ const getSelectionLabel = (option) => option.name
 
 <nav
 	class="minimum-width-rem fixed inset-x-0 top-0 h-14 sm:h-20 w-full flex items-center justify-center border-b bg-white px-3 shadow-md sm:px-10
-{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
+	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
 	<div class="flex w-full items-center justify-between gap-4 lg:gap-8">
 		<div class="flex items-center gap-4">
 			<!-- Back button -->
@@ -210,8 +190,8 @@ const getSelectionLabel = (option) => option.name
 			{/if}
 			<!-- Logo -->
 			<a class="block flex-shrink-0" href="/" aria-label="Click to route home">
-				<LazyImg
-					src="{$page.data.store?.logo}"
+				<img
+					src="{logo}"
 					alt=" "
 					class="h-auto max-h-10 sm:max-h-16 w-32 object-contain object-center" />
 			</a>
@@ -225,39 +205,11 @@ const getSelectionLabel = (option) => option.name
 
 		<!-- Search box -->
 
-		<form
-			class="form-control relative z-50 hidden w-full min-w-min max-w-4xl flex-1 lg:block"
-			on:submit|preventDefault="{enterPressedOnSearch}"
-			bind:this="{selectTarget}">
-			<!-- <button
-				type="submit"
-				aria-label="Click here to search input data"
-				class="absolute inset-y-0 left-0 z-[60] hidden h-full w-10 flex-shrink-0 cursor-default items-center justify-center focus:outline-none sm:flex">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					class="h-5 w-5 text-gray-500"
-					viewBox="0 0 20 20"
-					fill="currentColor">
-					<path
-						fill-rule="evenodd"
-						d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-						clip-rule="evenodd"></path>
-				</svg>
-			</button> -->
-			<Select
-				appendListTarget="{selectTarget}"
-				loadOptions="{onSearch}"
-				optionIdentifier="{optionIdentifier}"
-				getSelectionLabel="{getSelectionLabel}"
-				getOptionLabel="{getOptionLabel}"
-				Item="{Item}"
-				hideEmptyState
+		<div class="hidden w-full min-w-min max-w-4xl flex-1 lg:block">
+			<Autocomplete
 				placeholder="{$page?.data?.store?.searchbarText || 'Search...'}"
-				inputStyles="cursor: text"
-				on:select="{onSearchSubmit}" />
-
-			<!-- padding-left: 40px; -->
-		</form>
+				on:search="{onSearchSubmit}" />
+		</div>
 
 		<div class="flex items-center gap-4 lg:gap-8">
 			<!-- Search -->
@@ -366,10 +318,22 @@ const getSelectionLabel = (option) => option.name
 												</a>
 
 												<div class="flex flex-1 flex-col gap-1">
-													<a
-														href="/product/{item.slug}"
-														class="text-sm leading-4"
-														on:click="{() => (showCartSidebar = false)}">{item.name}</a>
+													<div class="flex gap-2 justify-between">
+														<a
+															href="/product/{item.slug}"
+															class="flex-1 text-sm leading-4"
+															on:click="{() => (showCartSidebar = false)}">{item.name}</a>
+
+														{#if $page?.data?.store?.isFnb && item.foodType}
+															<div>
+																{#if item.foodType === 'veg'}
+																	<img src="/product/veg.png" alt="veg" class="h-5 w-5" />
+																{:else if item.foodType === 'nonveg'}
+																	<img src="/product/non-veg.png" alt="non veg" class="h-5 w-5" />
+																{/if}
+															</div>
+														{/if}
+													</div>
 
 													<div class="flex flex-wrap items-center gap-1">
 														<span>
