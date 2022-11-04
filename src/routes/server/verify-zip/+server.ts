@@ -2,8 +2,9 @@ import { gett } from '$lib/utils'
 export async function POST({ request, cookies, locals }) {
 	const formData = Object.fromEntries(await request.formData())
 	const res = await gett(`pincodes/${formData.zip}`, request.headers.get('cookie'))
+	let zip
 	if (res) {
-		const zip = {
+		zip = {
 			hasReturnExchange: res.hasReturnExchange,
 			deliveryDays: res.deliveryDays,
 			pincode: res['Pincode'],
@@ -12,5 +13,5 @@ export async function POST({ request, cookies, locals }) {
 		locals.zip = zip
 		cookies.set('zip', JSON.stringify(zip), { path: '/' })
 	}
-	return new Response(JSON.stringify(res))
+	return new Response(JSON.stringify(zip))
 }

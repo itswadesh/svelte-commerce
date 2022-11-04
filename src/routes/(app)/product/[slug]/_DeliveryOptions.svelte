@@ -1,18 +1,16 @@
 <script>
 import Skeleton from '$lib/ui/Skeleton.svelte'
-import { getAPI } from '$lib/util/api'
 import dayjs from 'dayjs'
-import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { applyAction, enhance } from '$app/forms'
 import { toast } from '$lib/util'
+import { onMount } from 'svelte'
 
-export let product
+export let product, deliveryDetails
 
-let deliveryDetails = $page.data.zip || {}
-let pincode = deliveryDetails.pincode ?? null
+// let deliveryDetails = $page.data.zip || {}
+let pincode = deliveryDetails?.pincode ?? null
 let loading = false
-let changingPincode = false
 let disabled = false
 
 if (pincode && pincode.toString().length === 6) {
@@ -22,9 +20,12 @@ if (pincode && pincode.toString().length === 6) {
 function changePincode() {
 	pincode = null
 	disabled = false
-	changingPincode = true
+	deliveryDetails = null
 }
 
+// onMount(() => {
+// 	enableTextbox = !!deliveryDetails?.pincode
+// })
 // async function submit() {
 // 	try {
 // 		loading = true
@@ -38,37 +39,34 @@ function changePincode() {
 // }
 </script>
 
-<!-- {JSON.stringify(deliveryDetails)} -->
-
 <div class="mb-4">
 	<form
 		action="/server/verify-zip"
 		method="POST"
 		use:enhance="{() => {
 			return async ({ result }) => {
-				console.log('bounceItemFromTop', result)
-				if (!result['Pincode']) {
+				// console.log('bounceItemFromTop', result)
+				if (!result.pincode) {
 					toast('Please enter valid pincode', 'error')
-					return (deliveryDetails = {})
+					return (deliveryDetails = null)
 				}
 				deliveryDetails = result
 				await applyAction(result)
 				disabled = true
-				changingPincode = false
 			}
 		}}"
 		class="relative w-full max-w-sm overflow-hidden rounded-md border
         {disabled ? 'border-gray-400' : 'border-primary-500'}">
 		<input
-			name="zip"
 			type="tel"
+			name="zip"
 			bind:value="{pincode}"
 			maxlength="6"
 			placeholder="Enter pincode"
 			disabled="{disabled}"
-			class="w-full rounded-md bg-transparent py-3 px-4 pr-24 text-sm font-semibold placeholder:font-normal focus:outline-none" />
+			class="w-full rounded-md disabled:bg-gray-100 bg-transparent py-3 px-4 pr-24 text-sm font-semibold placeholder:font-normal focus:outline-none" />
 
-		{#if changingPincode}
+		{#if !deliveryDetails}
 			<button
 				type="submit"
 				class="absolute inset-y-0 right-0 z-10 flex w-20 text-primary-500 items-center justify-center text-right text-sm font-bold">
@@ -139,7 +137,7 @@ function changePincode() {
 				</li>
 			{/each}
 		</ul>
-	{:else if deliveryDetails['Pincode']}
+	{:else if deliveryDetails?.pincode}
 		<ul class="mt-4 flex flex-col gap-2">
 			<li class="flex items-center gap-4">
 				<div class="flex h-auto w-8 items-center justify-end overflow-hidden">
@@ -150,7 +148,7 @@ function changePincode() {
 				</div>
 
 				<span>
-					Get it by {dayjs().add(deliveryDetails.deliveryDays, 'day').format('dddd, MMM D, YYYY')}
+					Get it by {dayjs().add(deliveryDetails?.deliveryDays, 'day').format('dddd, MMM D, YYYY')}
 				</span>
 			</li>
 
@@ -160,7 +158,7 @@ function changePincode() {
 				</div>
 
 				<span>
-					{#if deliveryDetails.hasCOD}
+					{#if deliveryDetails?.hasCOD}
 						Pay on delivery available
 					{:else}
 						Pay on delivery not available
@@ -198,7 +196,7 @@ function changePincode() {
 				</li>
 			{/if}
 		</ul>
-	{:else if !deliveryDetails['Pincode']}
+	{:else if !deliveryDetails?.pincode}
 		<div class="mt-2">
 			<p class="text-xs text-gray-500">
 				Please enter PIN code to check delivery time & Pay on Delivery Availability

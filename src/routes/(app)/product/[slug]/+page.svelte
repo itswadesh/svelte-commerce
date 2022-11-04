@@ -930,7 +930,7 @@ function handleMobileCanvas() {
 						</svg>
 					</h6>
 
-					<DeliveryOptions product="{data.product}" />
+					<DeliveryOptions product="{data.product}" deliveryDetails="{data.deliveryDetails}"  />
 				</div>
 
 				<hr class="mb-5 w-full border-t border-gray-300" />
