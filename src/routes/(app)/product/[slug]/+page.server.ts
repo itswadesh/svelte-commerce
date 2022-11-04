@@ -4,7 +4,9 @@ import { error } from '@sveltejs/kit'
 export async function load({ params, parent, cookies, locals, request }) {
 	// const ck = request.headers.get('cookie')
 	// const c = cookie.parse(ck || '')
-	// if (c.cart) locals.cart = JSON.parse(c.cart)
+	let zip = cookies.get('zip')
+	if (zip) zip = JSON.parse(zip)
+
 	const { store } = locals
 	const { slug } = params
 	let product = null
@@ -18,9 +20,25 @@ export async function load({ params, parent, cookies, locals, request }) {
 
 		if (!product) throw error(404, 'Product not found')
 		// cookies.set('cache-control', 'public, max-age=200')
-
-		return { product, relatedProducts }
+		return { product, relatedProducts, deliveryDetails: zip }
 	} catch (e) {
 		throw error(e.status, e.message)
 	}
 }
+
+// export const actions = {
+// 	default: async ({ request, locals }) => {
+// 		const formData = Object.fromEntries(await request.formData())
+// 		try {
+// 			const data = await gett(`pincodes/${formData.zip}`, request.headers.get('cookie'))
+// 			console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', {
+// 				data: data
+// 			})
+// 			return {
+// 				data: data
+// 			}
+// 		} catch (e) {
+// 			return {}
+// 		}
+// 	}
+// }
