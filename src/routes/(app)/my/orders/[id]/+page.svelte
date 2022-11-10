@@ -67,11 +67,19 @@ onMount(() => {
 									href="{`/product/${item.slug}`}"
 									aria-label="Click to view the product details"
 									class="flex-shrink-0">
-									<LazyImg
-										src="{item.img}"
-										alt=""
-										width="96"
-										class="w-24 object-contain object-top" />
+									{#if item.isCustomized}
+										<LazyImg
+											src="{item.customizedImg}"
+											alt=" "
+											width="96"
+											class="h-auto w-24 object-contain object-top" />
+									{:else}
+										<LazyImg
+											src="{item.imgCdn}"
+											alt=" "
+											width="96"
+											class="h-auto w-24 object-contain object-top" />
+									{/if}
 								</a>
 
 								<div class="flex w-full flex-1 flex-col text-sm xl:pr-4">
@@ -128,6 +136,25 @@ onMount(() => {
 												{item.vendor?.businessName}
 											</a>
 										</h6>
+									{/if}
+
+									{#if item?.usedOptions?.length}
+										<div class="mt-2 flex flex-col gap-2 text-xs">
+											{#each item?.usedOptions as option}
+												{#if option?.val?.length && option?.val !== undefined && option?.val != ''}
+													<div class="flex flex-wrap gap-2">
+														<h6>{option.name}:</h6>
+														{#each option.val as v}
+															{#if v}
+																<div class="font-bold">
+																	{v}
+																</div>
+															{/if}
+														{/each}
+													</div>
+												{/if}
+											{/each}
+										</div>
 									{/if}
 
 									<div class="flex flex-wrap items-center gap-2">
@@ -236,12 +263,6 @@ onMount(() => {
 						</span>
 					</h4>
 				{/if}
-
-				<h4 class="mb-5">
-					<span class="font-medium">Expected Delivery Date : </span>
-
-					<span class="text-sm font-light text-gray-500"> 10.02.2022 </span>
-				</h4>
 
 				{#if data.order?.status === 'Delivered'}
 					<div class="mt-2 xl:mt-0 xl:w-1/3">

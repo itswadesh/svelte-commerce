@@ -213,7 +213,7 @@ const schemaOrgProduct = {
 	},
 	releaseDate: createdAt,
 	dateModified: updatedAt,
-	url: `${$page.data.origin}/biz/${slug}`,
+	url: `${$page.data.origin}/product/${slug}`,
 	interactionStatistic: {
 		'@type': 'InteractionCounter',
 		interactionType: 'http://schema.org/DownloadAction',
@@ -223,7 +223,7 @@ const schemaOrgProduct = {
 		'@type': 'Offer',
 		availability: 'http://schema.org/InStock',
 		priceValidUntil: nextWeek.toISOString(),
-		url: `${$page.data.origin}/biz/${slug}`,
+		url: `${$page.data.origin}/product/${slug}`,
 		price: price < 1 ? '0.00' : price,
 		priceCurrency: 'USD',
 		seller: {

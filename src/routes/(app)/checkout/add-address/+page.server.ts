@@ -1,4 +1,3 @@
-import { getAPI } from '$lib/util/api'
 import { gett } from '$lib/utils'
 export const prerender = false
 export async function load({ url, request }) {

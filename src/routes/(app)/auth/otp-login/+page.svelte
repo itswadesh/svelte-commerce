@@ -18,6 +18,8 @@ import { onMount } from 'svelte'
 import Cookie from 'cookie-universal'
 import { post } from '$lib/util/api'
 import { browser } from '$app/environment'
+import { GOOGLE_CLIENT_ID } from '$lib/config'
+import { googleOneTap } from '../login/google-one-tap'
 
 const cookies = Cookie()
 
@@ -28,13 +30,35 @@ const seoProps = {
 	description: 'OTP Login'
 }
 
-onMount(async () => {})
-
 let phone
 let loading = false
 let otpRequestSend = false
 let resendAfter = 0
 let ref = $page?.url?.searchParams.get('ref')
+
+onMount(() => {
+	googleOneTap(
+		{
+			client_id: GOOGLE_CLIENT_ID
+		},
+		async (res) => {
+			const onetap = await post('auth/google/onetap', res)
+			const me = {
+				email: onetap.email,
+				phone: onetap.phone,
+				firstName: onetap.firstName,
+				lastName: onetap.lastName,
+				avatar: onetap.avatar,
+				role: onetap.role,
+				verified: onetap.verified,
+				active: onetap.active
+			}
+			await cookies.set('me', me, { path: '/' })
+			let r = ref || '/'
+			if (browser) goto(r)
+		}
+	)
+})
 
 async function handleSendOTP({ detail }) {
 	phone = detail

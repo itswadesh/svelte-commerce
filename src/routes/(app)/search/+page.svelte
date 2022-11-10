@@ -59,8 +59,6 @@ async function saveSearchData(searchData) {
 			},
 			$page.data.origin
 		)
-
-		// console.log('zzzzzzzzzzzzzzzzzz', res)
 	} catch (e) {
 	} finally {
 	}
@@ -89,14 +87,14 @@ async function refreshData() {
 			<DesktopFilter
 				facets="{data.facets}"
 				query="{data.query}"
-				class="sticky hidden top-24 lg:block"
+				class="sticky top-24 hidden lg:block"
 				on:clearAll="{refreshData}" />
 
 			<MobileFilter
 				facets="{data.facets}"
 				bind:showFilter
 				bind:showSort
-				class="sticky top-14 sm:top-20 z-40 block lg:hidden"
+				class="sticky top-14 z-40 block sm:top-20 lg:hidden"
 				on:clearAll="{refreshData}" />
 		{/if}
 
@@ -154,7 +152,7 @@ async function refreshData() {
 									<img
 										src="/no/no-data-availible.png"
 										alt="no data availible"
-										class="h-20 w-20 text-xs object-contain" />
+										class="h-20 w-20 object-contain text-xs" />
 								</div>
 
 								<p class="mb-5 text-center text-gray-500">No data found</p>

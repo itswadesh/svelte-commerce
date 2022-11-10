@@ -137,6 +137,7 @@ async function submit(pm) {
 		}
 	} else if (paymentMethod === 'razorpay') {
 		try {
+			data.loading = true
 			const rp = await post(
 				`payments/checkout-rp`,
 				{

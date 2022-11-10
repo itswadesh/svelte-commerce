@@ -5,11 +5,11 @@ import type { Action, Actions, PageServerLoad } from './$types'
 export const load: PageServerLoad = async ({ locals, url }) => {
 	// redirect user if logged in
 	if (locals.session) {
-		throw redirect(302, '/')
+		throw redirect(307, '/')
 	}
 	if (!locals.store.otpLogin) {
 		const ref = url.searchParams.get('ref') || '/'
-		throw redirect(302, `/auth/login?ref=${ref}`)
+		throw redirect(307, `/auth/login?ref=${ref}`)
 	}
 	return { store: locals.store, origin: locals.origin }
 }
@@ -109,7 +109,7 @@ const verifyOtp: Action = async ({ cookies, request, locals }) => {
 			console.log('zzzzzzzzzzzzzzzzzz', e)
 		}
 		// redirect the user
-		redirect(302, '/')
+		redirect(307, '/')
 		return {}
 	} catch (e) {
 		return invalid(e.status, { message: e.message, credentials: true })

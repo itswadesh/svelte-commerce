@@ -196,8 +196,11 @@ onMount(async () => {
 
 			<div class="flex flex-col gap-4">
 				{#each data.categories?.data as c}
-					<a href="/{c.link}" aria-label="Click to browse category" class="flex items-center gap-4">
-						{#if c.img}
+					<a
+						href="/{c.link || c.slug}"
+						aria-label="Click to browse category"
+						class="flex items-center gap-4">
+						{#if c.imgCdn}
 							<div class="my-auto w-1/6">
 								<LazyImg
 									src="{c.img}"
