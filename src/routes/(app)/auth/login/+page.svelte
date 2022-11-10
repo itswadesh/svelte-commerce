@@ -16,6 +16,9 @@ import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
 import Error from '$lib/components/Error.svelte'
+import { googleOneTap } from './google-one-tap'
+import { GOOGLE_CLIENT_ID } from '$lib/config'
+import { onMount } from 'svelte'
 
 const cookies = Cookie()
 
@@ -31,6 +34,30 @@ let loading = false
 let showPassword = false
 let type = 'password'
 let err
+
+onMount(() => {
+	googleOneTap(
+		{
+			client_id: GOOGLE_CLIENT_ID
+		},
+		async (res) => {
+			const onetap = await post('auth/google/onetap', res)
+			const me = {
+				email: onetap.email,
+				phone: onetap.phone,
+				firstName: onetap.firstName,
+				lastName: onetap.lastName,
+				avatar: onetap.avatar,
+				role: onetap.role,
+				verified: onetap.verified,
+				active: onetap.active
+			}
+			await cookies.set('me', me, { path: '/' })
+			let r = ref || '/'
+			if (browser) goto(r)
+		}
+	)
+})
 
 function togglePassword() {
 	showPassword = !showPassword

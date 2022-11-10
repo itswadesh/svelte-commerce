@@ -58,7 +58,7 @@ export { clazz as class }
 	{/each}
 
 	{#if currentProductName}
-		<li class="w-auto truncate text-gray-400 first-letter:uppercase">
+		<li class="w-60 sm:w-96 truncate text-gray-400 first-letter:uppercase">
 			{currentProductName}
 		</li>
 	{/if}

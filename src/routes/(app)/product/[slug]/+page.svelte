@@ -44,31 +44,35 @@
 </style>
 
 <script lang="ts">
-import SEO from '$lib/components/SEO/index.svelte'
-import { post, getAPI } from '$lib/util/api'
-import { page } from '$app/stores'
-import Cookie from 'cookie-universal'
-import { date, currency, delay, toast } from '$lib/util'
-import { fly, slide, fade } from 'svelte/transition'
-import Breadcrumb from '$lib/components/Breadcrumb.svelte'
-import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import Checkbox from '$lib/ui/Checkbox.svelte'
-import viewport from '$lib/actions/useViewPort'
-import Textbox from '$lib/ui/Textbox.svelte'
-import Textarea from '$lib/ui/Textarea.svelte'
-import Radio from '$lib/ui/Radio.svelte'
-import { createEventDispatcher, onMount } from 'svelte'
-import { goto, invalidateAll } from '$app/navigation'
-import DeliveryOptions from './_DeliveryOptions.svelte'
-import WhiteButton from '$lib/ui/WhiteButton.svelte'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import SimilarProducts from '$lib/components/Product/SimilarProducts.svelte'
-import FrequentlyBoughtProduct from './_FrequentlyBoughtProduct.svelte'
-import { fireGTagEvent } from '$lib/util/gTag'
-import DummyProductCard from '$lib/DummyProductCard.svelte'
 import { applyAction, enhance } from '$app/forms'
-// import Konvas from '$lib/components/ProductDesigner/Konvas.svelte'
+import { createEventDispatcher, onMount } from 'svelte'
+import { date, currency, delay, toast } from '$lib/util'
+import { fireGTagEvent } from '$lib/util/gTag'
+import { fly, slide, fade } from 'svelte/transition'
+import { goto, invalidateAll } from '$app/navigation'
+import { page } from '$app/stores'
+import { post, getAPI } from '$lib/util/api'
+import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
+import Breadcrumb from '$lib/components/Breadcrumb.svelte'
+import Checkbox from '$lib/ui/Checkbox.svelte'
+import CheckboxOfMultiProducts from '$lib/ui/CheckboxOfMultiProducts.svelte'
+import Cookie from 'cookie-universal'
+import DeliveryOptions from './_DeliveryOptions.svelte'
+import DummyProductCard from '$lib/DummyProductCard.svelte'
+import FrequentlyBoughtProduct from './_FrequentlyBoughtProduct.svelte'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import Radio from '$lib/ui/Radio.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
+import SimilarProducts from '$lib/components/Product/SimilarProducts.svelte'
+import Textarea from '$lib/ui/Textarea.svelte'
+import Textbox from '$lib/ui/Textbox.svelte'
+import viewport from '$lib/actions/useViewPort'
+import WhiteButton from '$lib/ui/WhiteButton.svelte'
+import RadioSize from '$lib/ui/RadioSize.svelte'
+import RadioColor from '$lib/ui/RadioColor.svelte'
+
+let Konvas
 
 const dispatch = createEventDispatcher()
 
@@ -106,6 +110,8 @@ let showUserInputForm = false
 let y
 let showStickyCartButton = true
 let screenWidth
+let selectedLinkiedProducts = []
+let selectedOptions1 = []
 
 $: if (y > 500) {
 	showUserInputForm = true
@@ -145,6 +151,11 @@ function handleShowReviewsCount(showReviewsCount) {
 function selectSize(s) {
 	selectedSize = s.name
 }
+
+function handleSelectedLinkiedProducts(e) {
+	selectedLinkiedProducts = e.detail
+}
+
 // This is used only for customized product else cart?/add
 async function addToBag(p, customizedImg, customizedJson) {
 	const parsedJsonData = JSON.parse(customizedJson)
@@ -253,30 +264,14 @@ function alertToSelectMandatoryOptions() {
 	}, 3000)
 }
 
-function optionChanged(o) {
+$: {
 	const o1 = []
-	for (const i in o) {
-		if (Array.isArray(o[i])) o1.push({ option: i, values: o[i] })
-		else o1.push({ option: i, values: [o[i]] })
+	for (const i in selectedOptions) {
+		if (Array.isArray(selectedOptions[i])) o1.push({ option: i, values: o[i] })
+		else o1.push({ option: i, values: [selectedOptions[i]] })
 	}
 
-	// console.log('oooooooooooooooooo', o)
-	// console.log('dddddddddddddd', o1)
-
-	//   if (!this.selectedOptions) this.selectedOptions = []
-	//   for (const i in o) {
-	//     this.selectedOptions.push({ option: i, values: [o[i]] })
-	//   }
-
-	//   console.log('occccccccccccccccccccccc', this.selectedOptions)
-	// },
-
-	// dateChanged(o) {
-	//   if (!this.selectedOptions) this.selectedOptions = []
-	//   this.selectedOptions.push(o)
-	selectedOptions = o1
-
-	// console.log('zzzzzzzzzzzzzzzzzz', data.product.options)
+	selectedOptions1 = o1
 }
 
 async function toggleWishlist(id) {
@@ -371,7 +366,7 @@ function handleMobileCanvas() {
 					<div
 						transition:fade="{{ duration: 200 }}"
 						class="{showEditor
-							? 'fixed inset-0 z-[100] h-screen w-full bg-white sm:static sm:z-0 sm:h-auto sm:bg-transparent'
+							? 'fixed inset-0 top-0 z-[100] h-[90vh] w-full bg-white sm:static sm:z-0 sm:h-auto sm:bg-transparent'
 							: ''}">
 						{#if showEditor}
 							<button
@@ -553,24 +548,6 @@ function handleMobileCanvas() {
 					</div>
 				{/if}
 
-				<!-- {#if moreOptions?.length > 0}
-				<div class="mb-5 flex flex-col gap-2">
-					{#each moreOptions as option}
-						<label for="{option.title}" class="flex items-center gap-2 text-sm font-medium">
-							{#if option.type === 'checkbox'}
-								<input type="checkbox" name="{option.title}" id="{option.title}" class="h-4 w-4" />
-							{/if}
-
-							<span>
-								{option.title}
-							</span>
-						</label>
-					{/each}
-				</div>
-			{/if} -->
-
-				<!-- select options  -->
-
 				{#if data.product?.options?.length > 0}
 					<div
 						class="sizeSelector mb-5 flex flex-col gap-3 text-sm"
@@ -582,12 +559,10 @@ function handleMobileCanvas() {
 								</h6>
 
 								<!-- dropdown -->
-
 								{#if o.inputType == 'dropdown'}
 									<select
 										bind:value="{selectedOptions[o._id]}"
-										class="w-full max-w-xs flex-1 rounded-md border border-gray-300 py-1.5 text-sm font-light placeholder-gray-400 transition duration-300 focus:outline-none hover:bg-white"
-										on:change="{() => optionChanged(selectedOptions)}">
+										class="w-full max-w-xs flex-1 rounded-md border border-gray-300 py-1.5 text-sm font-light placeholder-gray-400 transition duration-300 focus:outline-none hover:bg-white">
 										{#each o.values as i}
 											<option value="{i._id}">
 												{i.name}
@@ -597,22 +572,15 @@ function handleMobileCanvas() {
 
 									<!-- textbox -->
 								{:else if o.inputType == 'textbox'}
-									<Textbox
-										bind:value="{selectedOptions[o._id]}"
-										type="text"
-										on:change="{() => optionChanged(selectedOptions)}" />
+									<Textbox bind:value="{selectedOptions[o._id]}" type="text" />
 
 									<!-- date -->
 								{:else if o.inputType == 'date'}
-									<Textbox
-										id="start"
-										bind:value="{selectedOptions[o._id]}"
-										type="date"
-										on:change="{() => optionChanged(selectedOptions)}" />
+									<Textbox id="start" bind:value="{selectedOptions[o._id]}" type="date" />
 
 									<!-- daterange -->
-								{:else if o.inputType == 'daterange'}
-									<span>Date range picker is not found</span>
+									<!-- {:else if o.inputType == 'daterange'}
+									<span>Date range picker is not found</span> -->
 
 									<!-- <date-picker
 									bind:value="{selectedOptions[o.id]}"
@@ -624,64 +592,32 @@ function handleMobileCanvas() {
 
 									<!-- textarea -->
 								{:else if o.inputType == 'textarea'}
-									<Textarea
-										bind:value="{selectedOptions[o._id]}"
-										on:change="{() => optionChanged(selectedOptions)}" />
+									<Textarea bind:value="{selectedOptions[o._id]}" />
 
 									<!-- size -->
 								{:else if o.inputType == 'size'}
 									<div class="flex flex-wrap">
-										{#each o.values as i}
-											<label
-												class="rouned-md mr-2 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border-2 text-gray-500 focus:outline-none focus:ring-0 focus:ring-offset-0 hover:border-primary-500 hover:font-bold hover:text-primary-500
-											{selectedOptions[o._id] == i._id
-													? ` border-primary-500 bg-primary-500 text-white`
-													: `bg-gray-100 border-gray-400`}">
-												<div class="text-xs uppercase sm:text-sm">
-													{i.name}
-												</div>
-
-												<input
-													bind:value="{selectedOptions[o._id]}"
-													type="radio"
-													class="hidden"
-													on:change="{() => optionChanged(selectedOptions)}" />
-											</label>
+										{#each o.values as v}
+											<RadioSize value="{v._id}" bind:modelValue="{selectedOptions[o._id]}">
+												<span class="text-gray-500">{v.name}</span>
+											</RadioSize>
 										{/each}
 									</div>
 
 									<!-- color -->
 								{:else if o.inputType == 'color'}
 									<div class="flex flex-wrap gap-4">
-										{#each o.values as i}
-											<label
-												class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border-2 focus:outline-none focus:ring-0 focus:ring-offset-0 hover:font-bold first-letter:{selectedOptions[
-													o._id
-												] == i._id
-													? `border-primary-500 text-white`
-													: `border-gray-300 text-black`}"
-												style="{selectedOptions[o._id] == i._id
-													? `background-color:${i.name}`
-													: ``}">
-												<div class="text-xs">{i.name}</div>
-
-												<input
-													bind:value="{selectedOptions[o._id]}"
-													type="radio"
-													class="hidden"
-													on:change="{() => optionChanged(selectedOptions)}" />
-											</label>
+										{#each o.values as v}
+											<RadioColor value="{v._id}" bind:modelValue="{selectedOptions[o._id]}">
+												<span class="text-gray-500">{v.name}</span>
+											</RadioColor>
 										{/each}
 									</div>
-
 									<!-- radio -->
 								{:else if o.inputType == 'radio'}
 									<div class="flex flex-wrap gap-4">
 										{#each o.values as v}
-											<Radio
-												value="{v._id}"
-												bind:modelValue="{selectedOptions[o._id]}"
-												on:change="{() => optionChanged(selectedOptions)}">
+											<Radio value="{v._id}" bind:modelValue="{selectedOptions[o._id]}">
 												<span class="text-gray-500">{v.name}</span>
 											</Radio>
 										{/each}
@@ -691,10 +627,7 @@ function handleMobileCanvas() {
 								{:else if o.inputType == 'checkbox'}
 									<div class="flex flex-wrap gap-4">
 										{#each o.values as v, i}
-											<Checkbox
-												value="{v._id}"
-												bind:modelValue="{selectedOptions[o._id]}"
-												on:change="{() => optionChanged(selectedOptions)}">
+											<Checkbox value="{v._id}" bind:modelValue="{selectedOptions[o._id]}">
 												<span class="text-gray-500">{v.name}</span>
 											</Checkbox>
 										{/each}
@@ -715,7 +648,7 @@ function handleMobileCanvas() {
 
 				{#if !data.product?.isCustomized}
 					<div
-						class="box-shadow itmes-center fixed inset-x-0 bottom-0 z-50 grid w-full grid-cols-5 gap-2 border-t bg-white p-2 uppercase md:static md:mb-5 md:grid-cols-2 md:border-t-0 md:bg-transparent md:p-0 lg:max-w-sm">
+						class="box-shadow itmes-center fixed inset-x-0 bottom-0 z-10 grid w-full grid-cols-5 gap-2 border-t bg-white p-2 uppercase md:static md:mb-5 md:grid-cols-2 md:border-t-0 md:bg-transparent md:p-0 lg:max-w-sm">
 						<div class="col-span-2 md:col-span-1">
 							<WhiteButton
 								type="button"
@@ -726,7 +659,7 @@ function handleMobileCanvas() {
 								{#if isWislisted}
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 text-red-500"
+										class="h-5 w-5 text-red-500 flex-shrink-0"
 										viewBox="0 0 20 20"
 										fill="currentColor">
 										<path
@@ -777,7 +710,7 @@ function handleMobileCanvas() {
 											</path>
 										</svg>
 
-										<span class="ml-2">
+										<span>
 											{cartButtonText}
 										</span>
 									</a>
@@ -806,15 +739,19 @@ function handleMobileCanvas() {
 											}
 										}}">
 										<input type="hidden" name="pid" value="{data?.product?._id}" />
-
 										<input type="hidden" name="vid" value="{data?.product?._id}" />
+
+										<input
+											type="hidden"
+											name="linkedItems"
+											value="{JSON.stringify(selectedLinkiedProducts)}" />
 
 										<input type="hidden" name="qty" value="{1}" />
 
 										<input
 											type="hidden"
 											name="options"
-											value="{JSON.stringify(data?.product?.options)}" />
+											value="{JSON.stringify(selectedOptions1)}" />
 
 										<input type="hidden" name="customizedImg" value="{customizedImg}" />
 
@@ -880,6 +817,37 @@ function handleMobileCanvas() {
 					</div>
 				{/if}
 
+				<!-- Linked Products -->
+
+				{#if data.product?.linkedProducts?.length}
+					<div class="mb-5">
+						<h6 class="mb-5 flex items-center gap-2 font-semibold uppercase">
+							<span> Linked Products </span>
+
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke-width="1"
+								stroke="currentColor"
+								class="w-5 h-5">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 01-1.125-1.125v-3.75zM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-8.25zM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-2.25z"
+								></path>
+							</svg>
+						</h6>
+
+						<div class="flex flex-col gap-4">
+							<CheckboxOfMultiProducts
+								items="{data.product?.linkedProducts}"
+								selectedItems="{selectedLinkiedProducts || []}"
+								on:change="{handleSelectedLinkiedProducts}" />
+						</div>
+					</div>
+				{/if}
+
 				<!-- Description -->
 				{#if data.product?.longDescription}
 					<div class="mb-5 prose">
@@ -930,7 +898,7 @@ function handleMobileCanvas() {
 						</svg>
 					</h6>
 
-					<DeliveryOptions product="{data.product}" deliveryDetails="{data.deliveryDetails}"  />
+					<DeliveryOptions product="{data.product}" deliveryDetails="{data.deliveryDetails}" />
 				</div>
 
 				<hr class="mb-5 w-full border-t border-gray-300" />
@@ -1119,7 +1087,7 @@ function handleMobileCanvas() {
 			</div>
 		</div>
 
-		{#if data.product?.crossSells?.length > 0}
+		{#if data.product?.crossSells?.length}
 			<hr class="mb-5 w-full sm:mb-10" />
 
 			<div class="mb-5 sm:mb-10">
@@ -1142,10 +1110,10 @@ function handleMobileCanvas() {
 			</div>
 		{/if}
 
-		{#if data.relatedProducts?.data?.length}
+		{#if data.product?.relatedProducts?.length}
 			<hr class="mb-5 w-full sm:mb-10" />
 
-			<SimilarProducts similarProducts="{data.relatedProducts?.data}" />
+			<SimilarProducts similarProducts="{data.product?.relatedProducts}" />
 		{/if}
 	</div>
 </div>

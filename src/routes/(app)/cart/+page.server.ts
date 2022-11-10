@@ -53,13 +53,14 @@ const add: Action = async ({ request, cookies, locals }) => {
 	const pid = data.get('pid')
 	const vid = data.get('vid')
 	const qty = 1
-	const options = JSON.parse(data.get('options') || '{}')
+	const options = JSON.parse(data.get('options') || '[]') //data.get('options') //
+	const linkedItems = JSON.parse(data.get('linkedItems'))
 	const customizedImg = data.get('customizedImg')
 	if (typeof pid !== 'string' || !pid) {
 		return invalid(400, { invalid: true })
 	}
 	try {
-		const cart = await post(
+		let cart = await post(
 			'carts/add-to-cart',
 			{
 				pid,
@@ -71,6 +72,18 @@ const add: Action = async ({ request, cookies, locals }) => {
 			},
 			cookies
 		)
+		for (const i of linkedItems) {
+			cart = await post(
+				'carts/add-to-cart',
+				{
+					pid: i,
+					vid: i,
+					qty: 1,
+					store: locals.store?.id
+				},
+				cookies
+			)
+		}
 		if (cart) {
 			const cookieCart = {
 				cartId: cart?.cart_id,
@@ -93,7 +106,6 @@ const add: Action = async ({ request, cookies, locals }) => {
 			cookies.set('cartQty', cookieCart.qty, { path: '/' })
 			// cookies.set('cart', JSON.stringify(cookieCart), { path: '/' })
 		}
-		// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', cart)
 		return cart
 	} catch (e) {
 		console.log('err', e)

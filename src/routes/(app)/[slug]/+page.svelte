@@ -88,51 +88,59 @@ onMount(() => {
 
 <SEO {...seoProps} />
 
-<div class="{showFilter || showSort ? 'h-[93vh] overflow-hidden' : 'h-full'}">
-	<div class="mb-20 flex w-full flex-col gap-5 lg:flex-row lg:gap-10 lg:p-10">
-		{#if data.facets}
-			<DesktopFilter
-				facets="{data.facets}"
-				query="{data.query}"
-				class="sticky hidden top-24 lg:block"
-				on:clearAll="{refreshData}" />
+<div class="{showFilter || showSort ? 'h-[93vh] overflow-hidden' : 'min-h-screen h-full'}">
+	{#if data.products?.length > 0}
+		<div class="mb-20 flex w-full flex-col gap-5 lg:flex-row lg:gap-10 lg:p-10">
+			{#if data.facets}
+				<DesktopFilter
+					facets="{data.facets}"
+					query="{data.query}"
+					class="sticky hidden top-24 lg:block"
+					on:clearAll="{refreshData}" />
 
-			<MobileFilter
-				facets="{data.facets}"
-				bind:showFilter
-				bind:showSort
-				class="sticky top-14 sm:top-20 z-40 block lg:hidden"
-				on:clearAll="{refreshData}" />
-		{/if}
+				<MobileFilter
+					facets="{data.facets}"
+					bind:showFilter
+					bind:showSort
+					class="sticky top-14 sm:top-20 z-40 block lg:hidden"
+					on:clearAll="{refreshData}" />
+			{/if}
 
-		<div class="flex w-full px-3 sm:px-10 lg:px-0">
-			{#if data.products}
-				<div class="w-full">
-					{#if data.products?.length > 0}
-						<h1 class="mb-5 text-xl font-bold capitalize md:text-2xl">
-							Showing results
+			<div class="flex w-full px-3 sm:px-10 lg:px-0">
+				{#if data.products}
+					<div class="w-full">
+						<div class="flex items-center gap-4 flex-wrap mb-5 justify-between">
+							<h1 class="text-xl font-bold capitalize md:text-2xl">
+								Showing results
 
-							{#if data.searchData}
-								for "{data.searchData}"
-							{/if}
+								{#if data.searchData}
+									for "{data.searchData}"
+								{/if}
 
-							({data.count})
-						</h1>
+								({data.count})
+							</h1>
 
-						<div class="mb-4 hidden flex-wrap items-center justify-between md:flex">
-							<label class="flex items-center gap-2">
-								<span>Sort : </span>
+							<div class="hidden flex-wrap items-center justify-between md:flex">
+								<label class="flex items-center gap-2">
+									<span>Sort : </span>
 
-								<select
-									class="bg-transparent px-2 py-1 font-semibold focus:outline-none hover:underline"
-									bind:value="{data.sort}"
-									on:change="{() => sortNow(data.sort)}">
-									{#each sorts as s}
-										<option value="{s.val}">{s.name}</option>
-									{/each}
-								</select>
-							</label>
+									<select
+										class="bg-transparent px-2 py-1 font-semibold focus:outline-none hover:underline"
+										bind:value="{data.sort}"
+										on:change="{() => sortNow(data.sort)}">
+										{#each sorts as s}
+											<option value="{s.val}">{s.name}</option>
+										{/each}
+									</select>
+								</label>
+							</div>
 						</div>
+
+						{#if data.category?.topDescription}
+							<div class="mb-5 prose max-w-none">
+								{@html data.category?.topDescription}
+							</div>
+						{/if}
 
 						<div
 							class="mb-5 grid w-full grid-cols-2 items-start gap-3 sm:mb-10 sm:flex sm:flex-wrap sm:justify-between lg:mb-20 lg:gap-6">
@@ -151,80 +159,78 @@ onMount(() => {
 						{:else}
 							<Pagination count="{Math.ceil(data.count / 40)}" current="{data.currentPage}" />
 						{/if}
-					{:else}
-						<div class="flex items-center justify-center" style="height: 60vh;">
-							<div class="m-10 flex flex-col items-center justify-center text-center">
-								<h1 class="mb-10 text-xl capitalize sm:text-2xl lg:text-3xl">
-									Oops!!, No result found {#if data.searchData} for "{data.searchData}"{/if}
-								</h1>
-
-								<div class="mb-5">
-									<img
-										src="/no/no-data-availible.png"
-										alt="no data availible"
-										class="h-20 w-20 text-xs object-contain" />
-								</div>
-
-								<p class="mb-5 text-center text-gray-500">No data found</p>
-
-								<PrimaryButton class="text-sm" on:click="{() => goto('/')}">
-									Back to Home
-								</PrimaryButton>
-							</div>
-						</div>
-					{/if}
-				</div>
-			{/if}
-		</div>
-	</div>
-
-	<!-- CATEGORY DESCRIPTION -->
-
-	{#if data.category?.description}
-		<div class="w-full justify-center bg-gray-50 px-3 py-10 text-sm sm:px-10 sm:py-20">
-			<div
-				class="container mx-auto grid max-w-6xl grid-cols-1 gap-10 text-sm sm:gap-20 md:grid-cols-6">
-				<div class="col-span-1 text-gray-500 md:col-span-3 lg:col-span-4">
-					<h1 class="mb-5 text-center text-base font-bold uppercase tracking-wide">
-						Buy {data.category?.name}
-					</h1>
-
-					<div class="prose-sm prose text-justify">
-						{@html data.category?.description}
 					</div>
-				</div>
+				{/if}
+			</div>
+		</div>
 
-				<div class="col-span-1 text-gray-500 md:col-span-3 lg:col-span-2">
-					<h1 class="mb-5 text-center text-base font-bold uppercase tracking-wide">
-						{data.category?.name} price list
-					</h1>
+		<!-- CATEGORY DESCRIPTION -->
 
-					<ul class="flex flex-col gap-2">
-						<li class="grid grid-cols-6 items-center gap-5 font-semibold uppercase">
-							<span class="col-span-5">{data.category?.name}</span>
+		{#if data.category?.description}
+			<div class="w-full justify-center bg-gray-50 px-3 py-10 text-sm sm:px-10 sm:py-20">
+				<div
+					class="container mx-auto grid max-w-6xl grid-cols-1 gap-10 text-sm sm:gap-20 md:grid-cols-6">
+					<div class="col-span-1 text-gray-500 md:col-span-3 lg:col-span-4">
+						<h1 class="mb-5 text-center text-base font-bold uppercase tracking-wide">
+							Buy {data.category?.name}
+						</h1>
 
-							<span class="col-span-1">Price <br /> (Rs)</span>
-						</li>
+						<div class="prose-sm prose text-justify">
+							{@html data.category?.description}
+						</div>
+					</div>
 
-						{#each data?.products || [] as p, px}
-							{#if p && px < 10}
-								<li>
-									<a href="/product/{p.slug}" class="grid grid-cols-6 gap-5">
-										<span class="col-span-5 text-justify">{p.name}</span>
+					<div class="col-span-1 text-gray-500 md:col-span-3 lg:col-span-2">
+						<h1 class="mb-5 text-center text-base font-bold uppercase tracking-wide">
+							{data.category?.name} price list
+						</h1>
 
-										<span class="col-span-1 whitespace-nowrap">{p.formattedPrice}</span>
-									</a>
+						<ul class="flex flex-col gap-2">
+							<li class="grid grid-cols-6 items-center gap-5 font-semibold uppercase">
+								<span class="col-span-5">{data.category?.name}</span>
+
+								<span class="col-span-1">Price <br /> (Rs)</span>
+							</li>
+
+							{#each data.products as p, px}
+								{#if p && px < 10}
+									<li>
+										<a href="/product/{p.slug}" class="grid grid-cols-6 gap-5">
+											<span class="col-span-5 text-justify">{p.name}</span>
+
+											<span class="col-span-1 whitespace-nowrap">{p.formattedPrice}</span>
+										</a>
+									</li>
+								{/if}
+							{/each}
+
+							{#if data.products && data.products[0] && data.products[0]?.updatedAt}
+								<li class="font-semibold">
+									<i>Data last updated on {dateOnly(data.products[0]?.updatedAt)}</i>
 								</li>
 							{/if}
-						{/each}
-
-						{#if data.products && data.products[0] && data.products[0]?.updatedAt}
-							<li class="font-semibold">
-								<i>Data last updated on {dateOnly(data.products[0]?.updatedAt)}</i>
-							</li>
-						{/if}
-					</ul>
+						</ul>
+					</div>
 				</div>
+			</div>
+		{/if}
+	{:else}
+		<div class="flex items-center justify-center" style="height: 60vh;">
+			<div class="m-10 flex flex-col items-center justify-center text-center">
+				<h1 class="mb-10 text-xl capitalize sm:text-2xl lg:text-3xl">
+					Oops!!, No result found {#if data.searchData} for "{data.searchData}"{/if}
+				</h1>
+
+				<div class="mb-5">
+					<img
+						src="/no/no-data-availible.png"
+						alt="no data availible"
+						class="h-20 w-20 text-xs object-contain" />
+				</div>
+
+				<p class="mb-5 text-center text-gray-500">No data found</p>
+
+				<PrimaryButton class="text-sm" on:click="{() => goto('/')}">Back to Home</PrimaryButton>
 			</div>
 		</div>
 	{/if}

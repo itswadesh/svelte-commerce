@@ -16,8 +16,6 @@
 
 <script>
 import { createEventDispatcher } from 'svelte'
-import { post, del } from './util/api'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import { toast } from './util'
 
 const dispatch = createEventDispatcher()
@@ -85,7 +83,7 @@ const handleSubmit = async (e) => {
 
 <div
 	class="{clazz} group relative h-36 w-36 flex-shrink-0 flex-grow-0 bg-gray-50 transition duration-300 hover:bg-white">
-	{#if !uploading && !deleting && images != ''}
+	{#if !uploading && !deleting && images != '' && images !== undefined}
 		<div
 			class="slowtransition absolute inset-0 z-0 hidden items-center justify-center bg-black bg-opacity-50 text-center group-hover:flex">
 			<span class="font-medium text-white">Click to Update</span>
@@ -126,7 +124,7 @@ const handleSubmit = async (e) => {
 					{/if}
 				</div>
 			</div>
-		{:else if images != ''}
+		{:else if images != '' && images != undefined}
 			<div class="h-36 w-36 border-2 border-gray-300 bg-white text-xs">
 				<embed
 					src="{images}"
@@ -137,13 +135,18 @@ const handleSubmit = async (e) => {
 					class="object-contain object-center" />
 			</div>
 		{:else if avatar}
-			<div>
-				<LazyImg
-					src="/profile.png"
-					alt="upload avatar"
-					width="144"
-					height="144"
-					class="h-36 w-36 border-2 border-gray-300 bg-gray-100 object-contain object-center" />
+			<div
+				class="flex items-center justify-center h-36 w-36 border-2 p-1 border-gray-300 bg-gray-100">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 24 24"
+					fill="currentColor"
+					class="w-full h-full text-gray-300">
+					<path
+						fill-rule="evenodd"
+						d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z"
+						clip-rule="evenodd"></path>
+				</svg>
 			</div>
 		{:else}
 			<div

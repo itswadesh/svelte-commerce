@@ -5,7 +5,7 @@ import type { Actions, PageServerLoad } from './$types'
 export const load: PageServerLoad = async () => {
 	// we only use this endpoint for the api
 	// and don't need to see the page
-	throw redirect(302, '/')
+	throw redirect(307, '/')
 }
 
 export const actions: Actions = {
@@ -26,6 +26,6 @@ export const actions: Actions = {
 		// })
 
 		//redirect the user
-		throw redirect(302, locals.store?.loginUrl)
+		throw redirect(307, locals.store?.loginUrl)
 	}
 }

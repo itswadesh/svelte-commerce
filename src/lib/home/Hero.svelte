@@ -39,7 +39,7 @@ onMount(async () => {
 						href="{b.link}"
 						data-sveltekit-prefetch
 						class="h-auto carousel-item  relative float-left w-full {ix == 0 ? 'active' : ''}">
-						<img
+						<LazyImg
 							src="{b.img}"
 							alt="{b.name}"
 							class="block h-auto w-full object-contain object-top" />
@@ -58,7 +58,7 @@ onMount(async () => {
 					<a
 						href="{b.link}"
 						class="h-auto carousel-item  relative float-left w-full {ix == 0 ? 'active' : ''}">
-						<img
+						<LazyImg
 							src="{b.img}"
 							alt="{b.name}"
 							class="block h-auto w-full object-contain object-top" />

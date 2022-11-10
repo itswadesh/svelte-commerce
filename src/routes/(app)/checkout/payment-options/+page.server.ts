@@ -1,10 +1,14 @@
 import { getAPI } from '$lib/util/api'
 import { gett } from '$lib/utils'
-import { error } from '@sveltejs/kit'
+import { error, redirect } from '@sveltejs/kit'
 export const prerender = false
 
 export async function load({ params, parent, locals, url, request }) {
 	const { me, cart } = locals
+	if (!me) {
+		const redirectUrl = `/auth/otp-login?ref=${url?.pathname}`
+		throw redirect(307, redirectUrl)
+	}
 	try {
 		const addressId = url.searchParams.get('address')
 

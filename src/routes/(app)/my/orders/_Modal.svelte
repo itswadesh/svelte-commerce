@@ -34,42 +34,13 @@ function emitConfirm() {
 	<transition name="{trnsitionName}">
 		{#if isVisible}
 			<div
-				class="
-				frosted
-				fixed
-				inset-0
-				z-50
-				flex
-				h-screen
-				w-screen flex-col
-				items-center
-				justify-center
-				p-3
-				sm:p-10
-			">
+				class="frosted fixed inset-0 z-50 flex h-screen w-screen flex-col items-center justify-center p-3 sm:p-10">
 				<div
-					class="
-					flex
-					max-w-max flex-col
-					overflow-hidden
-					rounded-lg
-					border
-					bg-white
-					align-middle
-					shadow-lg
-					">
+					class="flex max-w-max flex-col overflow-hidden rounded-lg border bg-white align-middle shadow-lg">
 					<!-- header-->
 
 					<div
-						class="
-						flex
-						items-center
-						justify-between
-						border-b
-						border-gray-200
-						p-3
-						text-gray-800 sm:px-6
-					">
+						class="flex items-center justify-between border-b border-gray-200 p-3 text-gray-800 sm:px-6">
 						<h3 class="mr-4 text-lg font-semibold">
 							<slot name="title" />
 						</h3>
@@ -104,19 +75,12 @@ function emitConfirm() {
 					<!-- footer-->
 
 					<slot name="footer">
-						<div
-							class="
-              flex
-              items-center
-              justify-end border-t
-              border-gray-200
-              p-3
-              sm:px-6
-            ">
+						<div class="flex items-center justify-end border-t border-gray-200 p-3 sm:px-6">
 							<button on:click="{emitCancel}">
-								<slot name="cancel-button"><button class="btn-outline">Cancel</button></slot
-								></button
-							><button class="ms-4" on:click="{emitConfirm}">
+								<slot name="cancel-button"><button class="btn-outline">Cancel</button></slot>
+							</button>
+
+							<button class="ms-4" on:click="{emitConfirm}">
 								<slot name="confirm-button"><button class="btn">Confirm</button></slot>
 							</button>
 						</div>

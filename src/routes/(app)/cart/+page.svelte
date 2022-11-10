@@ -405,7 +405,26 @@ async function refreshCart() {
 												{/if}
 											</div>
 
-											<div class="flex items-center justify-between">
+											{#if item?.usedOptions?.length}
+												<div class="mb-2 flex flex-col gap-2 text-sm">
+													{#each item?.usedOptions as option}
+														{#if option?.val?.length && option?.val !== undefined && option?.val != ''}
+															<div class="flex flex-wrap gap-2">
+																<h6>{option.name}:</h6>
+																{#each option.val as v}
+																	{#if v}
+																		<div class="font-bold">
+																			{v}
+																		</div>
+																	{/if}
+																{/each}
+															</div>
+														{/if}
+													{/each}
+												</div>
+											{/if}
+
+											<div class="mt-4 flex items-center justify-between">
 												<div class="flex items-center justify-center">
 													<button
 														disabled="{loading[ix]}"

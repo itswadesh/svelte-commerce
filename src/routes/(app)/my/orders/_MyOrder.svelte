@@ -47,7 +47,7 @@ export { clazz as class }
 							</div>
 
 							<table
-								class="min-w-full divide-y divide-gray-200 rounded-md border border-gray-200 text-center text-gray-500 shadow-md"
+								class="min-w-full group divide-y divide-gray-200 rounded-md border border-gray-200 text-center text-gray-500 shadow-md"
 								on:click="{() => goto(`/my/orders/${order._id}`)}">
 								<thead class="whitespace-nowrap rounded-t-md bg-gray-100 text-xs uppercase">
 									<tr>
@@ -71,16 +71,25 @@ export { clazz as class }
 									</tr>
 								</thead>
 
-								<tbody class="divide-y divide-gray-200 rounded-b-md bg-white text-sm">
+								<tbody
+									class="divide-y divide-gray-200 rounded-b-md bg-white text-sm cursor-pointer bg-white transition duration-300 group-hover:bg-primary-50">
 									{#each order.orderItems as item}
-										<tr class="cursor-pointer bg-white transition duration-300 hover:bg-primary-50">
+										<tr>
 											<td class="p-3">
 												<div class="mx-auto max-w-max">
-													<LazyImg
-														src="{item.img}"
-														alt=" "
-														width="80"
-														class="h-auto w-20 object-contain object-center" />
+													{#if item.isCustomized}
+														<LazyImg
+															src="{item.customizedImg}"
+															alt=" "
+															width="80"
+															class="h-auto w-20 object-contain object-top" />
+													{:else}
+														<LazyImg
+															src="{item.imgCdn}"
+															alt=" "
+															width="80"
+															class="h-auto w-20 object-contain object-top" />
+													{/if}
 												</div>
 											</td>
 
@@ -121,7 +130,7 @@ export { clazz as class }
 											</td>
 
 											<td class="p-3">
-												<span class="whitespace-nowrap font-semibold text-primary-500">
+												<span class="whitespace-nowrap font-semibold text-primary-500 uppercase">
 													{item.status}
 												</span>
 											</td></tr>
@@ -148,15 +157,23 @@ export { clazz as class }
 							<a
 								href="/my/orders/{order._id}"
 								aria-label="orders"
-								class="mb-4 w-full divide-y divide-gray-200 rounded-md border bg-white text-sm text-gray-600 shadow-md sm:mb-10">
+								class="mb-4 w-full divide-y divide-gray-200 rounded-md border block bg-white hover:bg-primary-50 transition duration-300 text-sm text-gray-600 shadow-md sm:mb-10">
 								{#each order.orderItems as item}
 									<div class="flex items-start gap-2 p-4 sm:gap-5">
 										<div class="flex-shrink-0">
-											<LazyImg
-												src="{item.img}"
-												alt=""
-												width="64"
-												class="h-auto w-16 object-contain object-top" />
+											{#if item.isCustomized}
+												<LazyImg
+													src="{item.customizedImg}"
+													alt=" "
+													width="56"
+													class="h-auto w-14 object-contain object-top" />
+											{:else}
+												<LazyImg
+													src="{item.imgCdn}"
+													alt=" "
+													width="56"
+													class="h-auto w-14 object-contain object-top" />
+											{/if}
 										</div>
 
 										<div class="w-full flex-1">
@@ -214,7 +231,7 @@ export { clazz as class }
 												<div class="flex items-center gap-2">
 													<h6>Status :</h6>
 
-													<b class="text-primary-500">
+													<b class="text-primary-500 uppercase">
 														{item.status}
 													</b>
 												</div>

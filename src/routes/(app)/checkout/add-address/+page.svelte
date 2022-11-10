@@ -1,17 +1,56 @@
 <script>
-import SEO from '$lib/components/SEO/index.svelte'
-import Textbox from '$lib/ui/Textbox.svelte'
+import { goto } from '$app/navigation'
+import { onMount } from 'svelte'
+import { page } from '$app/stores'
+import { getAPI, post } from '$lib/util/api'
+import { toast } from '$lib/util'
 import BackButton from '$lib/ui/BackButton.svelte'
 import Error from '$lib/components/Error.svelte'
-import { goto } from '$app/navigation'
-import { toast } from '$lib/util'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import { post } from '$lib/util/api'
-import { page } from '$app/stores'
+import SEO from '$lib/components/SEO/index.svelte'
+import Textbox from '$lib/ui/Textbox.svelte'
+
 export let data
 
-let err,
-	loading = false
+// console.log('zzzzzzzzzzzzzzzzzz', data)
+
+let err
+let loading = false
+let countries
+let states
+
+onMount(async () => {
+	await getCountries()
+	await getStates('IN')
+})
+
+if (data && data.ads && !data.ads.country) {
+	data.ads.country = 'IN'
+}
+
+async function onCountryChange(country) {}
+
+async function getCountries() {
+	try {
+		countries = await getAPI(
+			`countries?limit=300&page=0&store=${$page?.data?.store?.id}`,
+			$page.data.origin
+		)
+
+		// console.log('countries', countries)
+	} catch (e) {}
+}
+
+async function getStates(countryCode) {
+	try {
+		states = await getAPI(
+			`states?&countryCode=${countryCode}&limit=300&page=0&store=${$page?.data?.store?.id}`,
+			$page.data.origin
+		)
+
+		// console.log('states', states)
+	} catch (e) {}
+}
 
 const seoProps = {
 	title: 'Add Address ',
@@ -21,16 +60,16 @@ const seoProps = {
 async function save(ads) {
 	const id = data.ads._id || 'new'
 	const {
+		address,
+		city,
+		country,
+		district,
+		email,
 		firstName,
 		lastName,
-		email,
-		phone,
-		address,
 		locality,
-		city,
-		district,
+		phone,
 		state,
-		country,
 		zip
 	} = ads
 	try {
@@ -39,16 +78,16 @@ async function save(ads) {
 			'addresses',
 			{
 				id,
+				address,
+				city,
+				country,
+				district,
+				email,
 				firstName,
 				lastName,
-				email,
-				phone,
-				address,
 				locality,
-				city,
-				district,
+				phone,
 				state,
-				country,
 				zip,
 				store: $page.data.store?.id
 			},
@@ -101,9 +140,9 @@ async function save(ads) {
 				</div>
 
 				<div>
-					<h6 class="mb-2 font-semibold">Email <span class="text-red-500">*</span></h6>
+					<h6 class="mb-2 font-semibold">Email</h6>
 
-					<Textbox type="text" bind:value="{data.ads.email}" placeholder="Enter Email" required />
+					<Textbox type="text" bind:value="{data.ads.email}" placeholder="Enter Email" />
 				</div>
 
 				<div>
@@ -124,13 +163,9 @@ async function save(ads) {
 				</div>
 
 				<div>
-					<h6 class="mb-2 font-semibold">Landmark <span class="text-red-500">*</span></h6>
+					<h6 class="mb-2 font-semibold">Landmark</h6>
 
-					<Textbox
-						type="text"
-						bind:value="{data.ads.locality}"
-						placeholder="Enter Landmark"
-						required />
+					<Textbox type="text" bind:value="{data.ads.locality}" placeholder="Enter Landmark" />
 				</div>
 
 				<div>
@@ -140,20 +175,48 @@ async function save(ads) {
 				</div>
 
 				<div>
-					<h6 class="mb-2 font-semibold">State <span class="text-red-500">*</span></h6>
-
-					<Textbox type="text" bind:value="{data.ads.state}" placeholder="Enter State" required />
-				</div>
-
-				<div>
 					<h6 class="mb-2 font-semibold">Country <span class="text-red-500">*</span></h6>
 
-					<Textbox
-						type="text"
-						bind:value="{data.ads.country}"
-						placeholder="Enter Country"
-						required />
+					{#if countries?.data?.length}
+						<select
+							bind:value="{data.ads.country}"
+							required
+							class="w-full rounded-md border border-gray-300 bg-white p-2 text-sm placeholder-gray-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-gray-50"
+							on:change="{() => onCountryChange(data.ads.country)}"
+							disabled>
+							{#if countries?.data?.length}
+								{#each countries.data as c}
+									{#if c}
+										<option value="{c.code}">
+											{c.name}
+										</option>
+									{/if}
+								{/each}
+							{/if}
+						</select>
+					{/if}
 				</div>
+
+				{#if data.ads.country}
+					<div>
+						<h6 class="mb-2 font-semibold">State <span class="text-red-500">*</span></h6>
+
+						{#if states?.data?.length}
+							<select
+								bind:value="{data.ads.state}"
+								required
+								class="w-full rounded-md border border-gray-300 bg-white p-2 text-sm placeholder-gray-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-gray-50">
+								{#each states?.data as s}
+									{#if s}
+										<option value="{s.name}">
+											{s.name}
+										</option>
+									{/if}
+								{/each}
+							</select>
+						{/if}
+					</div>
+				{/if}
 
 				<div>
 					<h6 class="mb-2 font-semibold">Pincode / Zip <span class="text-red-500">*</span></h6>

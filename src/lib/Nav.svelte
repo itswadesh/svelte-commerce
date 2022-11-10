@@ -318,7 +318,7 @@ const getSelectionLabel = (option) => option.name
 												</a>
 
 												<div class="flex flex-1 flex-col gap-1">
-													<div class="flex gap-2 justify-between">
+													<div class="mb-2 font-bold  flex gap-2 justify-between">
 														<a
 															href="/product/{item.slug}"
 															class="flex-1 text-sm leading-4"
@@ -334,6 +334,24 @@ const getSelectionLabel = (option) => option.name
 															</div>
 														{/if}
 													</div>
+													{#if item?.usedOptions?.length}
+														<div class="mt-2 flex flex-col gap-2 text-xs">
+															{#each item?.usedOptions as option}
+																{#if option?.val?.length && option?.val !== undefined && option?.val != ''}
+																	<div class="flex flex-wrap gap-2">
+																		<h6>{option.name}:</h6>
+																		{#each option.val as v}
+																			{#if v}
+																				<div class="font-bold">
+																					{v}
+																				</div>
+																			{/if}
+																		{/each}
+																	</div>
+																{/if}
+															{/each}
+														</div>
+													{/if}
 
 													<div class="flex flex-wrap items-center gap-1">
 														<span>

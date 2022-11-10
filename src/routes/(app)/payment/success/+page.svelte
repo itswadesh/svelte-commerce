@@ -276,34 +276,21 @@ onMount(async () => {
 
 												<!-- Options -->
 
-												{#if item.usedOptions}
-													<div class="mb-2 flex flex-col gap-2 text-sm sm:mb-4">
-														{#each item.usedOptions as o}
-															<div class="flex flex-col items-start sm:flex-row">
-																<h6 class="sm:me-5 mb-1 w-full sm:mb-0 sm:w-52">
-																	{o.name}
-																</h6>
-
-																{#if o.val && o.val.length}
-																	<span class="font-medium">
-																		{o.val[0]}
-																	</span>
-																{/if}
-
-																<div class="flex flex-col gap-1 font-medium">
-																	{#if o.dates && o.dates[0]}
-																		<span>
-																			{o.dates[0]}
-																		</span>
-																	{/if}
-
-																	{#if o.dates && o.dates[1]}
-																		<span>
-																			{o.dates[1]}
-																		</span>
-																	{/if}
+												{#if item?.usedOptions?.length}
+													<div class="mt-2 flex flex-col gap-2 text-xs">
+														{#each item?.usedOptions as option}
+															{#if option?.val?.length && option?.val !== undefined && option?.val != ''}
+																<div class="flex flex-wrap gap-2">
+																	<h6>{option.name}:</h6>
+																	{#each option.val as v}
+																		{#if v}
+																			<div class="font-bold">
+																				{v}
+																			</div>
+																		{/if}
+																	{/each}
 																</div>
-															</div>
+															{/if}
 														{/each}
 													</div>
 												{/if}

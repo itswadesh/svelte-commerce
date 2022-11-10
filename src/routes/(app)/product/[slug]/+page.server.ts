@@ -10,13 +10,17 @@ export async function load({ params, parent, cookies, locals, request }) {
 	const { store } = locals
 	const { slug } = params
 	let product = null
-	let relatedProducts
+	let relatedProducts = []
 
 	try {
 		product = await gett(`products/${slug}`)
-		relatedProducts = await gett(
+		const relatedProductsRes = await gett(
 			`es/products?store=${store?.id}&categories=${product.category?.slug}`
 		)
+
+		relatedProducts = relatedProductsRes?.data.filter((p) => {
+			return p._id !== product._id
+		})
 
 		if (!product) throw error(404, 'Product not found')
 		// cookies.set('cache-control', 'public, max-age=200')

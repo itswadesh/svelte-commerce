@@ -30,7 +30,7 @@ export async function load({ url, params, locals, cookies, parent, setHeaders })
 		loading = true
 		res = await Promise.allSettled([
 			gett(`es/products?categories=${categorySlug}&store=${store?.id}&${query.toString()}`),
-			gett(`categories/${categorySlug}?store=${store.id}`)
+			gett(`categories/${categorySlug}?store=${store?.id}`)
 		])
 		ressss = res[0]
 		if (ressss.status === 'fulfilled') {
