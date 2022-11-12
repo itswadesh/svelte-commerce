@@ -1,6 +1,6 @@
 <script>
 import { CartService } from '$lib/services'
-import { CheckoutHeader, Error, Pricesummary } from '$lib/components'
+import { CheckoutHeader, Error, Pricesummary, TrustBaggeContainer } from '$lib/components'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import SelectAddress from '../_SelectAddress.svelte'
@@ -117,7 +117,7 @@ async function refreshAddress() {
 			</div>
 		</div>
 
-		<div class="w-full lg:w-80 lg:shrink-0 lg:grow-0">
+		<div class="w-full lg:w-96 lg:shrink-0 lg:grow-0">
 			<h2 class="mb-5">Cart Summary</h2>
 
 			<hr class="mb-5" />
@@ -136,6 +136,8 @@ async function refreshAddress() {
 					disabled="{true}"
 					loading="{data.loading}" />
 			{/if}
+
+			<TrustBaggeContainer class="mt-5" />
 		</div>
 	</div>
 </div>
