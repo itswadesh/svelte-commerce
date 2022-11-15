@@ -143,7 +143,7 @@ async function submit(n) {
 				bind:value="{newResistration.password}" />
 
 			<div
-				class="absolute inset-y-0 right-2 flex items-end pb-2 cursor-pointer justify-center"
+				class="absolute inset-y-0 right-2 flex cursor-pointer items-end justify-center pb-2"
 				on:click="{togglePassword}">
 				{#if showPassword}
 					<svg
@@ -152,7 +152,7 @@ async function submit(n) {
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="w-5 h-5">
+						class="h-5 w-5">
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -166,7 +166,7 @@ async function submit(n) {
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="w-5 h-5">
+						class="h-5 w-5">
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -190,7 +190,7 @@ async function submit(n) {
 				bind:value="{newResistration.passwordConfirmation}" />
 
 			<div
-				class="absolute inset-y-0 right-2 flex items-end pb-2 cursor-pointer justify-center"
+				class="absolute inset-y-0 right-2 flex cursor-pointer items-end justify-center pb-2"
 				on:click="{toggleConfirmPassword}">
 				{#if showConfirmPassword}
 					<svg
@@ -199,7 +199,7 @@ async function submit(n) {
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="w-5 h-5">
+						class="h-5 w-5">
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -213,7 +213,7 @@ async function submit(n) {
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="w-5 h-5">
+						class="h-5 w-5">
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -231,12 +231,20 @@ async function submit(n) {
 		<PrimaryButton type="submit" loading="{loading}" class="w-full">SUMBIT</PrimaryButton>
 	</form>
 
-	<div class="mb-5 flex flex-col text-center max-w-max mx-auto gap-1">
+	<div class="mx-auto mb-5 flex max-w-max flex-col gap-1 text-center text-sm">
 		<a
 			href="{`${$page.data.store?.loginUrl}?ref=${$page.url.searchParams.get('ref') || '/'}`}"
 			aria-label="Click to signin"
 			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
 			Signin
+		</a>
+
+		<a
+			href="https://admin.litekart.in/{$page.data.store?.loginUrl}?role=vendor&store={$page.data
+				.store?.id}"
+			aria-label="Click to login with email"
+			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
+			Join as Vendor
 		</a>
 	</div>
 

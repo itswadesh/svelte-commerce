@@ -128,7 +128,7 @@ function changeNumber() {
 			on:changeNumber="{changeNumber}" />
 	{/if}
 
-	<div class="mb-5 flex flex-col text-center max-w-max mx-auto gap-1 text-sm">
+	<div class="mx-auto mb-5 flex max-w-max flex-col gap-1 text-center text-sm">
 		<a
 			href="{`/auth/login?ref=${$page.url.searchParams.get('ref') || '/'}`}"
 			aria-label="Click to login with email"
@@ -141,6 +141,14 @@ function changeNumber() {
 			aria-label="Click to login with email"
 			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
 			Signup
+		</a>
+
+		<a
+			href="https://admin.litekart.in/{$page.data.store?.loginUrl}?role=vendor&store={$page.data
+				.store?.id}"
+			aria-label="Click to login with email"
+			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
+			Join as Vendor
 		</a>
 	</div>
 
