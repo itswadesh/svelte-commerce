@@ -50,7 +50,7 @@ const filterData = async (e) => {
 	// 	})
 	// }
 	filteredData = data
-	if (!filteredData.length) {
+	if (!filteredData?.length) {
 		inputObject = null
 	}
 }
@@ -108,13 +108,13 @@ const removeBold = (str) => {
 /* NAVIGATING OVER THE LIST OF DATA W HIGHLIGHTING */
 let hiLiteIndex = null
 //$: console.log(hiLiteIndex);
-$: hiLitedData = filteredData[hiLiteIndex]
+// $: hiLitedData = filteredData[hiLiteIndex]
 
 const navigateList = (e) => {
-	if (e.key === 'ArrowDown' && hiLiteIndex <= filteredData.length - 1) {
+	if (e.key === 'ArrowDown' && hiLiteIndex <= filteredData?.length - 1) {
 		hiLiteIndex === null ? (hiLiteIndex = 0) : (hiLiteIndex += 1)
 	} else if (e.key === 'ArrowUp' && hiLiteIndex !== null) {
-		hiLiteIndex === 0 ? (hiLiteIndex = filteredData.length - 1) : (hiLiteIndex -= 1)
+		hiLiteIndex === 0 ? (hiLiteIndex = filteredData?.length - 1) : (hiLiteIndex -= 1)
 	} else if (e.key === 'Enter') {
 		if (hiLiteIndex !== null) {
 			setInputVal(filteredData[hiLiteIndex])
@@ -139,7 +139,7 @@ const navigateList = (e) => {
 			bind:this="{searchInput}"
 			bind:value="{inputValue}"
 			on:input="{filterData}"
-			class="py-2 pl-4 pr-12 rounded-md w-full bg-white transition duration-300 border focus:outline-none focus:border-gray-400 text-sm font-light placeholder:text-gray-500" />
+			class="w-full rounded-md border bg-white py-2 pl-4 pr-12 text-sm font-light transition duration-300 placeholder:text-gray-500 focus:border-gray-400 focus:outline-none" />
 
 		<button
 			type="submit"
@@ -160,8 +160,8 @@ const navigateList = (e) => {
 
 	<!-- FILTERED LIST OF DATA -->
 
-	{#if filteredData.length > 0}
-		<ul class="absolute top-12 w-full border-l border-r border-t shadow-xl bg-white">
+	{#if filteredData?.length > 0}
+		<ul class="absolute top-12 w-full border-l border-r border-t bg-white shadow-xl">
 			{#each filteredData as d, i}
 				<AutocompleteItem
 					itemLabel="{d.name}"

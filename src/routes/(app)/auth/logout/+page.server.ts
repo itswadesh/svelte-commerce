@@ -20,6 +20,7 @@ export const actions: Actions = {
 			path: '/',
 			expires: new Date(0)
 		})
+		locals.session = null
 		// cookies.set('sid', '', {
 		// 	path: '/',
 		// 	expires: new Date(0)

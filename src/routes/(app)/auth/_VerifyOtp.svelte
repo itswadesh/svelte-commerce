@@ -139,7 +139,7 @@ function onInput(e) {
 
 			<button
 				type="button"
-				class="font-bold text-blue-600 hover:text-blue-800 focus:outline-none"
+				class="font-bold text-blue-600 focus:outline-none hover:text-blue-800"
 				on:click="{() => dispatch('changeNumber')}">
 				Change
 			</button>
@@ -185,7 +185,7 @@ function onInput(e) {
 
 		<div class="otp-input-wrapper mx-auto mb-5 max-w-max">
 			<input
-				type="text"
+				type="tel"
 				bind:value="{otp}"
 				maxlength="4"
 				pattern="[0-9]*"
@@ -230,7 +230,7 @@ function onInput(e) {
 			{:else}
 				<button
 					type="button"
-					class="font-bold text-primary-500 hover:text-primary-700 focus:outline-none"
+					class="font-bold text-primary-500 focus:outline-none hover:text-primary-700"
 					on:click="{handleResendOtp}">
 					RESEND OTP
 				</button>
