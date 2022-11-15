@@ -60,6 +60,7 @@ import Cookie from 'cookie-universal'
 import DeliveryOptions from './_DeliveryOptions.svelte'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
 import FrequentlyBoughtProduct from './_FrequentlyBoughtProduct.svelte'
+import Gallery from '$lib/components/Product/Gallery.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import Radio from '$lib/ui/Radio.svelte'
@@ -72,15 +73,15 @@ import WhiteButton from '$lib/ui/WhiteButton.svelte'
 import RadioSize from '$lib/ui/RadioSize.svelte'
 import RadioColor from '$lib/ui/RadioColor.svelte'
 
-let Konvas
-
 const dispatch = createEventDispatcher()
 
 const cookies = Cookie()
 
 export let data
 
-let selectedImg
+// console.log('zzzzzzzzzzzzzzzzzz', data)
+
+let selectedImgCdn
 let seoProps = {
 	title: `Details of product ${data.product?.name}`,
 	description: `Details of product ${data.product?.name}`
@@ -154,14 +155,11 @@ function selectSize(s) {
 
 function handleSelectedLinkiedProducts(e) {
 	selectedLinkiedProducts = e.detail
+	// console.log('selectedLinkiedProducts', selectedLinkiedProducts)
 }
 
 // This is used only for customized product else cart?/add
-async function addToBag(p, customizedImg, customizedJson) {
-	const parsedJsonData = JSON.parse(customizedJson)
-	if (p.isCustomized && parsedJsonData?.children[0].children.length < 3) {
-		return toast('Please select the design.', 'error')
-	}
+async function addToBag(p) {
 	loading = true
 	cartButtonText = 'Adding...'
 
@@ -173,12 +171,13 @@ async function addToBag(p, customizedImg, customizedJson) {
 				vid: p._id,
 				qty: 1,
 				options: selectedOptions,
-				customizedImg: customizedImg,
-				customizedData: customizedJson,
 				store: $page.data.store?.id
 			},
 			$page.data.origin
 		)
+
+		console.log('selectedLinkiedProducts inside add to cart function =', selectedLinkiedProducts)
+
 		if (cart) {
 			const cookieCart = {
 				cartId: cart?.cart_id,
@@ -266,6 +265,7 @@ function alertToSelectMandatoryOptions() {
 
 $: {
 	const o1 = []
+	// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', selectedOptions)
 	for (const i in selectedOptions) {
 		if (Array.isArray(selectedOptions[i])) o1.push({ option: i, values: o[i] })
 		else o1.push({ option: i, values: [selectedOptions[i]] })
@@ -276,8 +276,9 @@ $: {
 
 async function toggleWishlist(id) {
 	if (!$page.data.me) {
-		goto($page.data.store?.loginUrl)
+		goto('/auth/otp-login')
 	}
+
 	try {
 		loadingForWishlist = true
 		isWislisted = await post(
@@ -310,7 +311,7 @@ function scrollTo(elementId) {
 }
 
 function handleGallery(img) {
-	selectedImg = img
+	selectedImgCdn = img
 	showPhotosModal = true
 }
 
@@ -346,14 +347,14 @@ function handleMobileCanvas() {
 				{#if !data.product?.isCustomized}
 					<div
 						class="flex w-full grid-cols-2 flex-row gap-2 overflow-x-scroll scrollbar-none md:grid">
-						{#if data?.product?.images?.length}
-							{#each data.product?.images as img}
+						{#if data?.product?.imagesCdn?.length}
+							{#each data.product?.imagesCdn as imgCdn}
 								<button
 									type="button"
 									class="w-full flex-shrink-0 cursor-zoom-in overflow-hidden rounded md:h-full md:w-full md:flex-shrink"
-									on:click="{() => handleGallery(img)}">
+									on:click="{() => handleGallery(imgCdn)}">
 									<LazyImg
-										src="{img}"
+										src="{imgCdn}"
 										alt="{data.product?.name}"
 										width="416"
 										height="600"
@@ -548,6 +549,8 @@ function handleMobileCanvas() {
 					</div>
 				{/if}
 
+				<!-- select options  -->
+
 				{#if data.product?.options?.length > 0}
 					<div
 						class="sizeSelector mb-5 flex flex-col gap-3 text-sm"
@@ -659,7 +662,7 @@ function handleMobileCanvas() {
 								{#if isWislisted}
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 text-red-500 flex-shrink-0"
+										class="h-5 w-5 flex-shrink-0 text-red-500"
 										viewBox="0 0 20 20"
 										fill="currentColor">
 										<path
@@ -811,7 +814,7 @@ function handleMobileCanvas() {
 							</svg>
 						</h6>
 
-						<div class="prose text-sm overflow-hidden">
+						<div class="prose overflow-hidden text-sm">
 							{@html data.product?.description}
 						</div>
 					</div>
@@ -830,7 +833,7 @@ function handleMobileCanvas() {
 								viewBox="0 0 24 24"
 								stroke-width="1"
 								stroke="currentColor"
-								class="w-5 h-5">
+								class="h-5 w-5">
 								<path
 									stroke-linecap="round"
 									stroke-linejoin="round"
@@ -849,8 +852,9 @@ function handleMobileCanvas() {
 				{/if}
 
 				<!-- Description -->
+
 				{#if data.product?.longDescription}
-					<div class="mb-5 prose">
+					<div class="prose mb-5">
 						<h6 class="mb-5 flex items-center gap-2 font-semibold uppercase">
 							<span> Description </span>
 
@@ -869,7 +873,7 @@ function handleMobileCanvas() {
 							</svg>
 						</h6>
 
-						<div class="prose text-sm overflow-hidden">
+						<div class="prose overflow-hidden text-sm">
 							{@html data.product?.longDescription}
 						</div>
 					</div>
@@ -1069,21 +1073,6 @@ function handleMobileCanvas() {
 						</svg>
 					</button>
 				</div>
-
-				<hr class="mb-5 w-full" />
-
-				<!-- YouTube video player -->
-
-				<div class="mb-5">
-					<iframe
-						class="h-[40vh] w-full"
-						data-src="https://www.youtube.com/embed/IZrF9BEFQC4"
-						title="YouTube video player"
-						frameborder="0"
-						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-						allowfullscreen>
-					</iframe>
-				</div>
 			</div>
 		</div>
 
@@ -1118,7 +1107,7 @@ function handleMobileCanvas() {
 	</div>
 </div>
 
-<!-- <Gallery bind:showPhotosModal product="{data.product}" /> -->
+<Gallery bind:showPhotosModal product="{data.product}" />
 
 {#if bounceItemFromTop}
 	<AnimatedCartItem img="{customizedImg || data.product?.img}" />

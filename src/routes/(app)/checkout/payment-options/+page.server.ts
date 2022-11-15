@@ -52,11 +52,16 @@ export async function load({ params, parent, locals, url, request }) {
 		]
 		const address = await gett(`addresses/${addressId}`, request.headers.get('cookie'))
 
-		if (paymentMethods) {
-			return { paymentMethods, address, addressId, me, cart }
+		// if (paymentMethods) {
+		if (!address || !addressId) {
+			throw redirect(307, '/checkout/address')
 		}
+		return { paymentMethods, address, addressId, me, cart }
+		// }
 	} catch (e) {
-		throw error(400, e?.message)
+		if (e) {
+			throw redirect(307, '/checkout/address')
+		}
+		// throw error(e.status || 400, e?.message)
 	}
-	throw error(500, 'Internal Server Error')
 }

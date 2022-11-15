@@ -1,6 +1,6 @@
 import { error, type Handle } from '@sveltejs/kit'
-import { env } from '$env/dynamic/private'
-const SENTRY_DSN = env.SECRET_SENTRY_DSN
+import { SECRET_SENTRY_DSN } from '$env/static/private'
+const SENTRY_DSN = SECRET_SENTRY_DSN
 import {
 	stripePublishableKey,
 	id,
@@ -23,10 +23,9 @@ import {
 	GOOGLE_ANALYTICS_ID,
 	GOOGLE_CLIENT_ID,
 	DOMAIN,
-	HTTP_ENDPOINT,
-	searchbarText
+	HTTP_ENDPOINT
 } from '$lib/config'
-import { gett } from '$lib/utils'
+import { getBySid } from '$lib/utils'
 // import Cookie from 'cookie-universal'
 
 import * as Sentry from '@sentry/svelte'
@@ -56,13 +55,7 @@ export const handleError = async ({ error, event }) => {
 }
 export const handle: Handle = async ({ event, resolve }) => {
 	try {
-		// const IS_PROD = process.env.NODE_ENV === 'production'
-		const url = new URL(event.request.url)
-		let WWW_URL = url.origin
-		if (url.hostname !== 'localhost') {
-			WWW_URL = WWW_URL.replace('http://', 'https://')
-		}
-		// console.log('Origin..............', WWW_URL)
+		const WWW_URL = new URL(event.request.url).origin
 		event.locals.origin = WWW_URL
 		const cookieStore = event.cookies.get('store')
 		const zip = event.cookies.get('zip')
@@ -76,8 +69,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 			email,
 			address,
 			phone,
-			otpLogin: true,
-			loginUrl: '/auth/login',
 			websiteName,
 			websiteLegalName,
 			title: siteTitle,
@@ -92,24 +83,20 @@ export const handle: Handle = async ({ event, resolve }) => {
 			GOOGLE_CLIENT_ID,
 			GOOGLE_ANALYTICS_ID,
 			stripePublishableKey,
-			closed: false,
-			closeMessage: '',
+			DOMAIN,
 			isFnb: false,
-			searchbarText,
 			weightUnit: 'g',
 			dimentionUnit: 'cm'
 		}
 		if (!cookieStore || cookieStore === 'undefined') {
 			const url = new URL(event.request.url)
-			const storeRes = await gett(`init?domain=${DOMAIN || url.host}`)
+			const storeRes = await getBySid(`init?domain=${DOMAIN || url.host}`)
 			const { storeOne } = storeRes
 			store = {
 				id: storeOne._id,
 				domain: storeOne.domain,
 				email: storeOne.websiteEmail,
 				address: storeOne.address,
-				otpLogin: storeOne.otpLogin,
-				loginUrl: storeOne.otpLogin ? '/auth/otp-login' : '/auth/login',
 				phone: storeOne.phone,
 				websiteLegalName: storeOne.websiteLegalName,
 				websiteName: storeOne.websiteName,
@@ -117,8 +104,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 				description: storeOne.description,
 				keywords: storeOne.keywords,
 				stripePublishableKey: storeOne.stripePublishableKey,
-				closed: storeOne.closed,
-				closeMessage: storeOne.closeMessage,
 				logo: storeOne.logo,
 				facebookPage: storeOne.facebookPage,
 				instagramPage: storeOne.instagramPage,
@@ -129,7 +114,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 				GOOGLE_CLIENT_ID: storeOne.GOOGLE_CLIENT_ID,
 				GOOGLE_ANALYTICS_ID: storeOne.GOOGLE_ANALYTICS_ID,
 				isFnb: storeOne.isFnb,
-				searchbarText: storeOne.searchbarText,
+				DOMAIN: storeOne.DOMAIN,
 				weightUnit: storeOne.weightUnit,
 				dimentionUnit: storeOne.dimentionUnit
 			}
@@ -178,6 +163,23 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.cartId = cartId
 		event.locals.cartQty = +cartQty
 		// event.locals.cart = JSON.parse(cart)
+		const sid = event.cookies.get('sid')
+		const cartRes = await getBySid('carts/my', sid)
+		const cart = {
+			cartId: cartRes.cart_id,
+			items: cartRes.items,
+			qty: cartRes.qty,
+			tax: cartRes.tax,
+			subtotal: cartRes.subtotal,
+			total: cartRes.total,
+			currencySymbol: cartRes.currencySymbol,
+			discount: cartRes.discount,
+			selfTakeout: cartRes.selfTakeout,
+			shipping: cartRes.shipping,
+			unavailableItems: cartRes.unavailableItems,
+			formattedAmount: cartRes.formattedAmount
+		}
+		event.locals.cart = cart
 		// load page as normal
 		event.request.headers.delete('connection')
 		return await resolve(event)
@@ -187,7 +189,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			<br/>ORIGIN: ${event.locals?.origin}
 			<br/>DOMAIN(env): ${DOMAIN}
 			<br/>HTTP_ENDPOINT(env): ${HTTP_ENDPOINT}`
-		console.log('Err at Hooks...', err)
+		console.log('Err at Hooks...', e)
 		throw error(404, err)
 	}
 }

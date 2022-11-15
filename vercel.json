@@ -12,5 +12,8 @@
     "env": {
         "PUBLIC_HTTP_ENDPOINT": "https://api.litekart.in",
         "NODE_OPTIONS": "--max-old-space-size=7680"
-    }
+       },
+    "regions": [
+        "bom1"
+    ]
 }

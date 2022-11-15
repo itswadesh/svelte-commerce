@@ -163,7 +163,7 @@ const getSelectionLabel = (option) => option.name
 </script>
 
 <nav
-	class="minimum-width-rem fixed inset-x-0 top-0 h-14 sm:h-20 w-full flex items-center justify-center border-b bg-white px-3 shadow-md sm:px-10
+	class="minimum-width-rem fixed inset-x-0 top-0 flex h-14 w-full items-center justify-center border-b bg-white px-3 shadow-md sm:h-20 sm:px-10
 	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
 	<div class="flex w-full items-center justify-between gap-4 lg:gap-8">
 		<div class="flex items-center gap-4">
@@ -172,7 +172,7 @@ const getSelectionLabel = (option) => option.name
 			{#if $page?.data?.isShowBackButton}
 				<button
 					type="button"
-					class="block focus:outline-none sm:hidden flex-shrink-0"
+					class="block flex-shrink-0 focus:outline-none sm:hidden"
 					on:click="{() => window.history.go(-1)}">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -180,7 +180,7 @@ const getSelectionLabel = (option) => option.name
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="w-6 h-6">
+						class="h-6 w-6">
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -188,12 +188,14 @@ const getSelectionLabel = (option) => option.name
 					</svg>
 				</button>
 			{/if}
+
 			<!-- Logo -->
+
 			<a class="block flex-shrink-0" href="/" aria-label="Click to route home">
 				<img
 					src="{logo}"
 					alt=" "
-					class="h-auto max-h-10 sm:max-h-16 w-32 object-contain object-center" />
+					class="h-auto max-h-10 w-32 object-contain object-center sm:max-h-16" />
 			</a>
 		</div>
 
@@ -225,7 +227,7 @@ const getSelectionLabel = (option) => option.name
 					viewBox="0 0 24 24"
 					stroke-width="1.5"
 					stroke="currentColor"
-					class="w-6 h-6">
+					class="h-6 w-6">
 					<path
 						stroke-linecap="round"
 						stroke-linejoin="round"
@@ -236,7 +238,7 @@ const getSelectionLabel = (option) => option.name
 			<!-- Cart -->
 
 			<button
-				class="relative gap-1 lg:border-b-4 lg:border-transparent focus:outline-none flex flex-col items-center justify-center"
+				class="relative flex flex-col items-center justify-center gap-1 focus:outline-none lg:border-b-4 lg:border-transparent"
 				aria-label="Click to route cart"
 				on:click="{handleShowCartSidebar}">
 				<svg
@@ -245,7 +247,7 @@ const getSelectionLabel = (option) => option.name
 					viewBox="0 0 24 24"
 					stroke-width="1.5"
 					stroke="currentColor"
-					class="w-6 h-6">
+					class="h-6 w-6">
 					<path
 						stroke-linecap="round"
 						stroke-linejoin="round"
@@ -293,7 +295,7 @@ const getSelectionLabel = (option) => option.name
 						<div class="h-full flex-shrink-0">
 							<h1 class="border-b p-4 text-center font-bold uppercase sm:text-lg">Cart</h1>
 
-							<div class="h-full overflow-y-auto overflow-x-hidden p-4 pb-20">
+							<div class="h-full overflow-y-auto p-4 pb-20 overflow-x-hidden">
 								{#if $page.data.cartQty > 0}
 									<div class="mb-5 flex flex-col gap-5">
 										{#each cart?.items || [] as item, ix}
@@ -306,19 +308,19 @@ const getSelectionLabel = (option) => option.name
 														<LazyImg
 															src="{item.customizedImg}"
 															alt=""
-															height="96"
-															class="h-24 w-auto object-contain object-left" />
+															width="64"
+															class="h-auto w-16 object-contain object-left" />
 													{:else}
 														<LazyImg
 															src="{item.imgCdn}"
 															alt=""
-															height="96"
-															class="h-24 w-auto object-contain object-left" />
+															width="64"
+															class="h-auto w-16 object-contain object-left" />
 													{/if}
 												</a>
 
 												<div class="flex flex-1 flex-col gap-1">
-													<div class="mb-2 font-bold  flex gap-2 justify-between">
+													<div class="mb-2 flex justify-between gap-2">
 														<a
 															href="/product/{item.slug}"
 															class="flex-1 text-sm leading-4"
@@ -334,6 +336,7 @@ const getSelectionLabel = (option) => option.name
 															</div>
 														{/if}
 													</div>
+
 													{#if item?.usedOptions?.length}
 														<div class="mt-2 flex flex-col gap-2 text-xs">
 															{#each item?.usedOptions as option}
@@ -542,7 +545,7 @@ const getSelectionLabel = (option) => option.name
 					on:mouseleave="{() => (showDropdownAccount = false)}">
 					<button
 						aria-label="/"
-						class="gap-1 h-20 border-b-4 focus:outline-none flex flex-col items-center justify-center
+						class="flex h-20 flex-col items-center justify-center gap-1 border-b-4 focus:outline-none
 						{showDropdownAccount ? 'border-primary-500' : 'border-transparent'}">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -550,7 +553,7 @@ const getSelectionLabel = (option) => option.name
 							viewBox="0 0 24 24"
 							stroke-width="1.5"
 							stroke="currentColor"
-							class="w-6 h-6">
+							class="h-6 w-6">
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
@@ -643,7 +646,7 @@ const getSelectionLabel = (option) => option.name
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="w-6 h-6">
+						class="h-6 w-6">
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -652,12 +655,13 @@ const getSelectionLabel = (option) => option.name
 				</button>
 			{:else}
 				<!-- Login -->
+
 				<a
-					href="{$page.data.store?.loginUrl}?ref={$page?.url?.pathname}{$page?.url?.search}"
+					href="/auth/otp-login?ref={$page?.url?.pathname}{$page?.url?.search}"
 					aria-label="Click to route login"
 					data-sveltekit-prefetch>
 					<button
-						class="gap-1 lg:border-b-4 lg:border-transparent focus:outline-none flex flex-col items-center justify-center"
+						class="flex flex-col items-center justify-center gap-1 focus:outline-none lg:border-b-4 lg:border-transparent"
 						aria-label="/">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -665,13 +669,14 @@ const getSelectionLabel = (option) => option.name
 							viewBox="0 0 24 24"
 							stroke-width="1.5"
 							stroke="currentColor"
-							class="w-6 h-6">
+							class="h-6 w-6">
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
 								d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
 							></path>
 						</svg>
+
 						<span class="hidden text-center text-xs font-semibold tracking-wider lg:block">
 							Login
 						</span>
@@ -696,7 +701,7 @@ const getSelectionLabel = (option) => option.name
 
 		<div
 			transition:slideFade="{{ duration: 500 }}"
-			class="relative z-[60] h-full w-full overflow-y-auto overflow-x-hidden bg-white p-6">
+			class="relative z-[60] h-full w-full overflow-y-auto bg-white p-6 overflow-x-hidden">
 			<!--  w-72 -->
 
 			<button
@@ -805,9 +810,10 @@ const getSelectionLabel = (option) => option.name
 				</ul>
 			{:else}
 				<!-- Login -->
+
 				<a
 					data-sveltekit-prefetch
-					href="{$page.data.store?.loginUrl}?ref={$page?.url?.pathname}{$page?.url?.search}"
+					href="/auth/otp-login?ref={$page?.url?.pathname}{$page?.url?.search}"
 					aria-label="Click to route login"
 					class="flex items-center gap-2 py-2"
 					on:click="{() => (openSidebar = false)}">

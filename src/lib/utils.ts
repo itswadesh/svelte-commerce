@@ -44,3 +44,21 @@ export async function gett(endpoint: string, ck?: any) {
 		return res
 	}
 }
+export async function getBySid(endpoint: string, sid?: any) {
+	const ep = HTTP_ENDPOINT + '/api/' + endpoint
+	const response = await fetch(ep, {
+		method: 'GET',
+		credentials: 'include',
+		headers: { cookie: `sid=${sid}` }
+	})
+	const isJson = response.headers.get('content-type')?.includes('application/json')
+
+	const res = isJson ? await response.json() : await response.text()
+	if (res?.status > 399) {
+		throw { status: res.status, message: res }
+	} else if (response?.status > 399) {
+		throw { status: response.status, message: res }
+	} else {
+		return res
+	}
+}

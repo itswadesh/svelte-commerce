@@ -72,17 +72,19 @@ const add: Action = async ({ request, cookies, locals }) => {
 			},
 			cookies
 		)
-		for (const i of linkedItems) {
-			cart = await post(
-				'carts/add-to-cart',
-				{
-					pid: i,
-					vid: i,
-					qty: 1,
-					store: locals.store?.id
-				},
-				cookies
-			)
+		if (linkedItems?.length) {
+			for (const i of linkedItems) {
+				cart = await post(
+					'carts/add-to-cart',
+					{
+						pid: i,
+						vid: i,
+						qty: 1,
+						store: locals.store?.id
+					},
+					cookies
+				)
+			}
 		}
 		if (cart) {
 			const cookieCart = {
@@ -99,14 +101,17 @@ const add: Action = async ({ request, cookies, locals }) => {
 				unavailableItems: cart?.unavailableItems,
 				formattedAmount: cart?.formattedAmount
 			}
+
 			locals.cart = cookieCart
-			locals.cartId = cart.cartId
-			locals.cartQty = cart.qty
+			locals.cartId = cookieCart.cartId
+			locals.cartQty = cookieCart.qty
 			cookies.set('cartId', cookieCart.cartId, { path: '/' })
 			cookies.set('cartQty', cookieCart.qty, { path: '/' })
 			// cookies.set('cart', JSON.stringify(cookieCart), { path: '/' })
+			return cookieCart
+		} else {
+			return {}
 		}
-		return cart
 	} catch (e) {
 		console.log('err', e)
 		return {}
