@@ -352,7 +352,7 @@ function moveAllUnavailableItemsToWishlist() {
 											class="block shrink-0 overflow-hidden">
 											{#if item.customizedImg || item.img}
 												<LazyImg
-													src="{item.isCustomizeditem ? item.customizedImg : item.img}"
+													src="https://jkjkjkjkjkjkjkjkjkjk.com/images/hjjhkjkjkjk.png"
 													alt=" "
 													width="384"
 													height="512"
