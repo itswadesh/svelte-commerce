@@ -181,6 +181,7 @@ async function handleVerifyOtp({ detail }) {
 		const res = await UserService.verifyOtpService({
 			phone,
 			otp,
+			cartId: cookies.get('cartId'),
 			storeId: data.store?.id,
 			origin: data.origin
 		})
