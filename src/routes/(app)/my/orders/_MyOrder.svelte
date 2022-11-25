@@ -85,7 +85,7 @@ export { clazz as class }
 															class="h-auto w-20 object-contain object-top" />
 													{:else}
 														<LazyImg
-															src="{item.imgCdn}"
+															src="{item.img}"
 															alt=" "
 															width="80"
 															class="h-auto w-20 object-contain object-top" />
@@ -169,7 +169,7 @@ export { clazz as class }
 													class="h-auto w-14 object-contain object-top" />
 											{:else}
 												<LazyImg
-													src="{item.imgCdn}"
+													src="{item.img}"
 													alt=" "
 													width="56"
 													class="h-auto w-14 object-contain object-top" />

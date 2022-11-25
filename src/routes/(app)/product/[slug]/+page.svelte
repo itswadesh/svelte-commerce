@@ -81,7 +81,7 @@ export let data
 
 // console.log('zzzzzzzzzzzzzzzzzz', data)
 
-let selectedImgCdn
+let selectedImg
 let seoProps = {
 	title: `Details of product ${data.product?.name}`,
 	description: `Details of product ${data.product?.name}`
@@ -311,7 +311,7 @@ function scrollTo(elementId) {
 }
 
 function handleGallery(img) {
-	selectedImgCdn = img
+	selectedImg = img
 	showPhotosModal = true
 }
 
@@ -347,14 +347,14 @@ function handleMobileCanvas() {
 				{#if !data.product?.isCustomized}
 					<div
 						class="flex w-full grid-cols-2 flex-row gap-2 overflow-x-scroll scrollbar-none md:grid">
-						{#if data?.product?.imagesCdn?.length}
-							{#each data.product?.imagesCdn as imgCdn}
+						{#if data?.product?.images?.length}
+							{#each data.product?.images as img}
 								<button
 									type="button"
 									class="w-full flex-shrink-0 cursor-zoom-in overflow-hidden rounded md:h-full md:w-full md:flex-shrink"
-									on:click="{() => handleGallery(imgCdn)}">
+									on:click="{() => handleGallery(img)}">
 									<LazyImg
-										src="{imgCdn}"
+										src="{img}"
 										alt="{data.product?.name}"
 										width="416"
 										height="600"

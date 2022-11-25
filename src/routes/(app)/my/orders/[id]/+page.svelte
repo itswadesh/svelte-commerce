@@ -75,7 +75,7 @@ onMount(() => {
 											class="h-auto w-24 object-contain object-top" />
 									{:else}
 										<LazyImg
-											src="{item.imgCdn}"
+											src="{item.img}"
 											alt=" "
 											width="96"
 											class="h-auto w-24 object-contain object-top" />

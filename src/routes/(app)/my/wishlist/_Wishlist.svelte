@@ -137,7 +137,7 @@ async function getWishlistedProducts() {
 												class="w-full sm:w-48 items-center overflow-hidden rounded-lg bg-white p-4">
 												<div class="h-auto w-full">
 													<LazyImg
-														src="{w.product?.imgCdn}"
+														src="{w.product?.img}"
 														alt="{w.name}"
 														width="192"
 														class="h-full w-full object-contain object-bottom text-xs" />
@@ -237,7 +237,7 @@ async function getWishlistedProducts() {
 									</form>
 
 									{#if bounceItemFromTop}
-										<AnimatedCartItem img="{w.product?.imgCdn}" />
+										<AnimatedCartItem img="{w.product?.img}" />
 									{/if}
 								{/if}
 							{/each}
