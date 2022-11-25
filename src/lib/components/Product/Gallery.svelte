@@ -19,10 +19,10 @@ onMount(async () => {
 	Carousel = RTEmodule.default
 })
 
-let selectedImgCdn
+let selectedImg
 
 if (product) {
-	selectedImgCdn = product?.imagesCdn[0]
+	selectedImg = product?.images[0]
 }
 </script>
 
@@ -50,16 +50,13 @@ if (product) {
 
 		<div class="relative md:hidden block">
 			<svelte:component this="{Carousel}">
-				{#each product?.imagesCdn as imgCdn, ix}
-					{#if imgCdn}
+				{#each product?.images as img, ix}
+					{#if img}
 						<div
 							data-sveltekit-prefetch
 							class="max-h-screen carousel-item relative float-left w-full 
 							{ix == 0 ? 'active' : ''}">
-							<LazyImg
-								src="{imgCdn}"
-								alt=" "
-								class="block h-full w-full object-contain object-top" />
+							<LazyImg src="{img}" alt=" " class="block h-full w-full object-contain object-top" />
 						</div>
 					{/if}
 				{/each}
@@ -68,41 +65,41 @@ if (product) {
 
 		<div
 			class="container relative mx-auto hidden h-full w-full flex-col items-center justify-between gap-4 overflow-hidden rounded-md bg-black md:flex lg:flex-row">
-			{#if selectedImgCdn}
+			{#if selectedImg}
 				<div
 					class="flex h-full w-full flex-1 items-center justify-center overflow-hidden px-5 sm:px-10">
 					<LazyImg
-						src="{selectedImgCdn}"
+						src="{selectedImg}"
 						alt=" "
 						width="1000"
 						class="h-full w-full object-contain object-center" />
 				</div>
 			{/if}
-			{#if product?.imagesCdn?.length}
+			{#if product?.images?.length}
 				<div class="w-full flex-1 bg-white py-5 md:max-w-lg lg:h-full">
 					<div class="mb-2 px-5">
 						<h1 class="mb-1 font-bold sm:text-lg">Photos for {product?.name}</h1>
 
-						<p class="text-sm">{product?.imagesCdn?.length} photos available</p>
+						<p class="text-sm">{product?.images?.length} photos available</p>
 					</div>
 
 					<div
 						class="grid grid-cols-3 gap-2 overflow-y-auto overflow-x-hidden px-5 scrollbar-thin scrollbar-thumb-slate-300 lg:max-h-[70vh] lg:grid-cols-2">
-						{#each product?.imagesCdn as imgCdn}
-							{#if imgCdn}
+						{#each product?.images as img}
+							{#if img}
 								<button
 									type="button"
 									class="relative z-0 col-span-1 border bg-gray-100 focus:outline-none"
-									on:click="{() => (selectedImgCdn = imgCdn)}">
+									on:click="{() => (selectedImg = img)}">
 									<LazyImg
-										src="{imgCdn}"
+										src="{img}"
 										alt=""
 										height="240"
 										class="max-w-60 h-40 w-full rounded-md object-contain object-center sm:h-60" />
 
 									<div
 										class="absolute inset-0 z-10 h-full w-full bg-white  
-                                    {selectedImgCdn === imgCdn ? 'bg-opacity-0' : 'bg-opacity-50'}">
+                                    {selectedImg === img ? 'bg-opacity-0' : 'bg-opacity-50'}">
 									</div>
 								</button>
 							{/if}

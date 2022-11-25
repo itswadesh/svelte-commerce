@@ -123,7 +123,7 @@ async function getCategories() {
 	try {
 		const res1 = await getAPI(`categories?store=${$page.data.store?.id}`, $page.data.origin)
 		categories = res1?.data.filter((c) => {
-			return c.imgCdn
+			return c.img
 		})
 		// console.log('res1', res1)
 		// console.log('categories', categories)
@@ -312,7 +312,7 @@ const getSelectionLabel = (option) => option.name
 															class="h-auto w-16 object-contain object-left" />
 													{:else}
 														<LazyImg
-															src="{item.imgCdn}"
+															src="{item.img}"
 															alt=""
 															width="64"
 															class="h-auto w-16 object-contain object-left" />
@@ -459,7 +459,7 @@ const getSelectionLabel = (option) => option.name
 												rel="noopener noreferrer"
 												class="col-span-1 block transform border transition duration-500 hover:-translate-y-2 hover:shadow-lg">
 												<LazyImg
-													src="{c.imgCdn}"
+													src="{c.img}"
 													class="aspect-square w-full object-cover object-center" />
 											</a>
 										{/each}

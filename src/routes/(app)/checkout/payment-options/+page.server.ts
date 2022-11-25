@@ -23,7 +23,7 @@ export async function load({ params, parent, locals, url, request }) {
 				key: '',
 				text: 'Pay the full amount when item is delivered',
 				type: 'cod',
-				imgCdn: 'https://cdn-icons-png.flaticon.com/512/2331/2331895.png'
+				img: 'https://cdn-icons-png.flaticon.com/512/2331/2331895.png'
 			},
 			{
 				active: true,
@@ -35,7 +35,7 @@ export async function load({ params, parent, locals, url, request }) {
 				key: '',
 				text: 'Pay the full amount with online / UPI / Wallets / Credit Cards / Debit Cards',
 				type: 'pg',
-				imgCdn: 'https://ik.imagekit.io/3wzatecz51w3i/s3/img/cashfree.jpg'
+				img: 'https://ik.imagekit.io/3wzatecz51w3i/s3/img/cashfree.jpg'
 			},
 			{
 				active: true,
@@ -47,7 +47,7 @@ export async function load({ params, parent, locals, url, request }) {
 				key: '',
 				text: 'Pay the full amount with online / UPI / Wallets / Credit Cards / Debit Cards',
 				type: 'pg',
-				imgCdn: '/razorpay-icon.jpg'
+				img: '/razorpay-icon.jpg'
 			}
 		]
 		const address = await gett(`addresses/${addressId}`, request.headers.get('cookie'))

@@ -200,7 +200,7 @@ onMount(async () => {
 						href="/{c.link || c.slug}"
 						aria-label="Click to browse category"
 						class="flex items-center gap-4">
-						{#if c.imgCdn}
+						{#if c.img}
 							<div class="my-auto w-1/6">
 								<LazyImg
 									src="{c.img}"

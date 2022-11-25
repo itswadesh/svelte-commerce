@@ -49,7 +49,7 @@ export let items = [],
 						on:change="{() => dispatch('change', selectedItems)}" />
 
 					<div class="flex-1 text-sm first-letter:uppercase flex items-center gap-2">
-						<LazyImg src="{i.imgCdn}" alt=" " class="w-8 h-auto object-contain object-center" />
+						<LazyImg src="{i.img}" alt=" " class="w-8 h-auto object-contain object-center" />
 
 						<span class="flex-1">
 							{i.name} at
