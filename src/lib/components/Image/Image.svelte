@@ -9,10 +9,15 @@ img.loaded {
 </style>
 
 <script>
-import { IMAGE_CDN_URL } from '$lib/config'
+import { getCdnImageUrl } from '$lib/util'
 
 export let src
 export let alt
+export let width = 'auto'
+export let height = 'auto'
+const w = width === 'auto' ? 'auto' : +width * 2
+const h = height === 'auto' ? 'auto' : +height * 2
+export let noLazy = false // Dont add lazy to images that are on viewport
 export let clazz
 import { onMount } from 'svelte'
 
@@ -20,10 +25,6 @@ let loaded = false
 let thisImage
 
 onMount(() => {
-	const originalImageUrl = src.replace('https://misiki.s3.ap-south-1.amazonaws.com/', '/')
-
-	if (src) src = IMAGE_CDN_URL + originalImageUrl
-
 	thisImage.onload = () => {
 		loaded = true
 	}
@@ -31,9 +32,13 @@ onMount(() => {
 </script>
 
 <img
-	src="{src}"
+	loading="lazy"
+	width="{width}px"
+	height="{height}px"
+	src="{!loaded
+		? `${getCdnImageUrl(src)}?width=2&height=4`
+		: `${getCdnImageUrl(src)}?width=${w}&height=${h}`}"
 	alt="{alt}"
 	class:loaded
 	class="{clazz} whitespace-pre-line"
-	bind:this="{thisImage}"
-	loading="lazy" />
+	bind:this="{thisImage}" />
