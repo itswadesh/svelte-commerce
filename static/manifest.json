@@ -74,32 +74,7 @@
   "display": "standalone",
   "scope": "/",
   "theme_color": "#d62828",
-  "shortcuts": [
-    {
-      "name": "Buy Mobile covers",
-      "short_name": "Mobile",
-      "description": "Buy Modern Mobile Covers",
-      "url": "/mobile?source=pwa",
-      "icons": [
-        {
-          "src": "/category/mobile.png",
-          "sizes": "192x192"
-        }
-      ]
-    },
-    {
-      "name": "Print your mug",
-      "short_name": "Mug",
-      "description": "Print your photo on mug",
-      "url": "/mug?source=pwa",
-      "icons": [
-        {
-          "src": "/category/mug.png",
-          "sizes": "192x192"
-        }
-      ]
-    }
-  ],
+  "shortcuts": [],
   "description": "Customized Mobile Covers India: KitCommerce is the most beneficial customized mobile cover printing online store at which it is easy to design custom phone cases",
   "screenshots": []
 }

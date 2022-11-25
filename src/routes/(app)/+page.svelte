@@ -1,40 +1,38 @@
 <script>
-import SEO from '$lib/components/SEO/index.svelte'
-import Hero from '$lib/home/Hero.svelte'
-import CategoriesMobile from '$lib/home/CategoriesMobile.svelte'
-import HeroBanners from '$lib/home/HeroBanners.svelte'
-import ProductCard from '$lib/ProductCard.svelte'
-import PickedBanners from '$lib/home/PickedBanners.svelte'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import MobileFooter from '$lib/MobileFooter.svelte'
-import DummyProductCard from '$lib/DummyProductCard.svelte'
-import { getAPI } from '$lib/util/api'
 import { page } from '$app/stores'
-import { browser } from '$app/environment'
-import { toast } from '$lib/util'
-import { onMount } from 'svelte'
+import CategoriesMobile from '$lib/home/CategoriesMobile.svelte'
+import DummyProductCard from '$lib/DummyProductCard.svelte'
+import grayDot from '$lib/assets/gray-dot.png'
+import Hero from '$lib/home/Hero.svelte'
+import HeroBanners from '$lib/home/HeroBanners.svelte'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import logo from '$lib/assets/logo.svg'
+import MobileFooter from '$lib/MobileFooter.svelte'
+import PickedBanners from '$lib/home/PickedBanners.svelte'
+import ProductCard from '$lib/ProductCard.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
 
 const seoProps = {
-	title: $page.data.store?.title,
-	description: $page.data.store?.description,
+	title: `Custom Printed Mobile Back Cover and Cases Online @Rs. 99 - ${$page.data.store?.websiteName}`,
+	description: `Customised Mobile Covers - Buy Custom Photo Printed Mobile Back Cover And Cases Online For All Stylish Phone Models @Rs.99 On ${$page.data.store?.websiteName} Store. 100% Easy Returns.`,
 	slug: '/',
-	keywords: $page.data.store?.keywords,
+	keywords: `Customised Mobile Covers, Buy Custom Photo Printed Mobile Back Cover, ${$page.data.store?.websiteName} Store,100% Easy Returns `,
 	featuredImage: {
-		url: $page.data.store?.logo,
+		url: logo,
 		width: 672,
 		height: 448,
 		caption: 'Home page'
 	},
 	ogImage: {
-		url: $page.data.store?.logo
+		url: logo
 	},
 	ogSquareImage: {
-		url: $page.data.store?.logo
+		url: logo
 	},
 	twitterImage: {
-		url: $page.data.store?.logo
+		url: logo
 	}
 }
 
@@ -47,7 +45,7 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 
 <!-- {JSON.stringify(home?.categories.data)} -->
 
-<div class="bg-opacity-25 bg-center bg-repeat" style="background-image:url('/gray-dot.png') ;">
+<div class="bg-opacity-25 bg-center bg-repeat" style="background-image:url({grayDot}) ;">
 	<div class="mb-20">
 		<!-- CATEGORIES SLIDER MOBILE -->
 
@@ -60,7 +58,7 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 		{/await}
 
 		<div class="mb-5 sm:mb-10">
-			<Hero banners="{data.home?.banners?.data}" />
+			<Hero banners="{data.home.banners?.data}" />
 		</div>
 
 		<!-- TOP CATEGORIES -->
@@ -84,6 +82,7 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 										src="{category.img || category.img}"
 										alt=""
 										width="375"
+										height="375"
 										class="w-[47vw] object-contain sm:w-60" />
 								</a>
 							{/if}
@@ -173,31 +172,6 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 						<div
 							class="px-3 sm:px-10 grid w-full grid-cols-2 items-start gap-3 sm:flex sm:flex-wrap sm:justify-between lg:mb-20 lg:gap-6">
 							{#each home?.popular?.data as p}
-								<ProductCard product="{p}" />
-							{/each}
-
-							{#each { length: 8 } as _}
-								<div class="hidden sm:block">
-									<DummyProductCard />
-								</div>
-							{/each}
-						</div>
-					</div>
-				{/if}
-			{/if}
-
-			<!-- TRENDING PRODUCTS -->
-			{#if home?.trending}
-				{#if home?.trending?.length > 0}
-					<div class="mb-5 sm:mb-10">
-						<h1
-							class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
-							TRENDING ON {$page.data.store?.websiteName}
-						</h1>
-
-						<div
-							class="px-3 sm:px-10 grid w-full grid-cols-2 items-start gap-3 sm:flex sm:flex-wrap sm:justify-between lg:mb-20 lg:gap-6">
-							{#each home?.trending as p}
 								<ProductCard product="{p}" />
 							{/each}
 

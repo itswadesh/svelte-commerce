@@ -30,30 +30,30 @@ export const icon = 'static/icon.png'
 export const backgroundColor = '#1b4079'
 export const themeColor = '#d62828'
 export const shortcuts = [
-	{
-		name: 'Buy Mobile covers',
-		short_name: 'Mobile',
-		description: 'Buy Modern Mobile Covers',
-		url: '/mobile?source=pwa',
-		icons: [
-			{
-				src: '/category/mobile.png',
-				sizes: '192x192'
-			}
-		]
-	},
-	{
-		name: 'Print your mug',
-		short_name: 'Mug',
-		description: 'Print your photo on mug',
-		url: '/mug?source=pwa',
-		icons: [
-			{
-				src: '/category/mug.png',
-				sizes: '192x192'
-			}
-		]
-	}
+	// {
+	// 	name: 'Buy Mobile covers',
+	// 	short_name: 'Mobile',
+	// 	description: 'Buy Modern Mobile Covers',
+	// 	url: '/mobile?source=pwa',
+	// 	icons: [
+	// 		{
+	// 			src: '/category/mobile.png',
+	// 			sizes: '192x192'
+	// 		}
+	// 	]
+	// },
+	// {
+	// 	name: 'Print your mug',
+	// 	short_name: 'Mug',
+	// 	description: 'Print your photo on mug',
+	// 	url: '/mug?source=pwa',
+	// 	icons: [
+	// 		{
+	// 			src: '/category/mug.png',
+	// 			sizes: '192x192'
+	// 		}
+	// 	]
+	// }
 ]
 export const screenshots = [
 	// {

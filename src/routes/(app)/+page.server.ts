@@ -8,9 +8,9 @@ export async function load({ params, query, setHeaders, locals, parent, cookies,
 	try {
 		const home = await gett(`home?store=${store?.id}`, request.headers.get('cookie'))
 		// const deals = await gett(`deals?store=${store?.id}`, request.headers.get('cookie'))
-		setHeaders({
-			'cache-control': 'public, max-age=3600'
-		})
+		// setHeaders({
+		// 	'cache-control': 'public, max-age=3600'
+		// })
 		if (home) {
 			return { home: home }
 			// deals: deals
