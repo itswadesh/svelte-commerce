@@ -22,11 +22,11 @@ export let showOnPx = 150
 let hidden = true
 let y
 
-$: if (y === y) {
-	setTimeout(() => {
-		hidden = true
-	}, 10000)
-}
+// $: if (y === y) {
+// 	setTimeout(() => {
+// 		hidden = true
+// 	}, 10000)
+// }
 
 function goTop() {
 	// scroll to the top
@@ -56,7 +56,7 @@ function handleOnScroll() {
 	<button
 		transition:fly="{{ y: -200, duration: 500 }}"
 		aria-label="Click to go to top"
-		class="back-to-top overflow-hidden rounded-full focus:outline-none bg-white"
+		class="back-to-top overflow-hidden rounded-full bg-white focus:outline-none"
 		on:click="{goTop}">
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
