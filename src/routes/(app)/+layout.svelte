@@ -26,7 +26,7 @@ let openSidebar = false
 
 	<PageTransitions url="{data.url}">
 		<div class="mt-14 w-full flex-1 sm:mt-20">
-			{#if $page.data.store?.closed}
+			{#if !$page.data.store?.closed}
 				<div class="flex h-[91.5vh] w-full items-center justify-center bg-primary-50 p-5 sm:p-10">
 					<div class="rounded-3xl border-8 border-primary-200 bg-white p-5 shadow-2xl sm:p-10">
 						<div class="flex items-center justify-between">
@@ -36,9 +36,11 @@ let openSidebar = false
 						</div>
 
 						<div class="flex flex-col gap-5 p-5 text-center tracking-wider sm:gap-10 sm:p-10">
-							<h1 class="longShadow text-6xl font-extrabold uppercase text-primary-500">Closed</h1>
+							<h1 class="longShadow text-5xl font-extrabold uppercase text-primary-500 sm:text-6xl">
+								Closed
+							</h1>
 
-							<p class="text-xl font-semibold text-gray-500">
+							<p class="font-semibold text-gray-500 sm:text-xl">
 								{$page.data.store?.closeMessage || `Sorry we're closed for the day`}
 							</p>
 						</div>
