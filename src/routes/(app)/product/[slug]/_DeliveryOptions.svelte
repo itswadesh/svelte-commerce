@@ -1,10 +1,13 @@
 <script>
-import Skeleton from '$lib/ui/Skeleton.svelte'
-import dayjs from 'dayjs'
-import { page } from '$app/stores'
 import { applyAction, enhance } from '$app/forms'
-import { toast } from '$lib/util'
 import { onMount } from 'svelte'
+import { page } from '$app/stores'
+import { toast } from '$lib/util'
+import dayjs from 'dayjs'
+import productCod from '$lib/assets/product/cod.png'
+import productDelivery from '$lib/assets/product/delivery.png'
+import productOppositeArrows from '$lib/assets/product/opposite-arrows.png'
+import Skeleton from '$lib/ui/Skeleton.svelte'
 
 export let product, deliveryDetails
 
@@ -64,12 +67,12 @@ function changePincode() {
 			maxlength="6"
 			placeholder="Enter pincode"
 			disabled="{disabled}"
-			class="w-full rounded-md disabled:bg-gray-100 bg-transparent py-3 px-4 pr-24 text-sm font-semibold placeholder:font-normal focus:outline-none" />
+			class="w-full rounded-md bg-transparent py-3 px-4 pr-24 text-sm font-semibold placeholder:font-normal focus:outline-none disabled:bg-gray-100" />
 
 		{#if !deliveryDetails}
 			<button
 				type="submit"
-				class="absolute inset-y-0 right-0 z-10 flex w-20 text-primary-500 items-center justify-center text-right text-sm font-bold">
+				class="absolute inset-y-0 right-0 z-10 flex w-20 items-center justify-center text-right text-sm font-bold text-primary-500">
 				{#if loading}
 					<div
 						class="absolute inset-0 flex cursor-not-allowed items-center justify-center bg-black bg-opacity-70">
@@ -99,7 +102,7 @@ function changePincode() {
 		{:else}
 			<button
 				type="button"
-				class="absolute inset-y-0 right-0 z-10 flex w-20 text-primary-500 items-center justify-center text-right text-sm font-bold"
+				class="absolute inset-y-0 right-0 z-10 flex w-20 items-center justify-center text-right text-sm font-bold text-primary-500"
 				on:click="{changePincode}">
 				{#if loading}
 					<div
@@ -141,10 +144,7 @@ function changePincode() {
 		<ul class="mt-4 flex flex-col gap-2">
 			<li class="flex items-center gap-4">
 				<div class="flex h-auto w-8 items-center justify-end overflow-hidden">
-					<img
-						src="/product/delivery.png"
-						alt=""
-						class="h-full w-full object-contain object-center" />
+					<img src="{productDelivery}" alt="" class="h-full w-full object-contain object-center" />
 				</div>
 
 				<span>
@@ -154,7 +154,7 @@ function changePincode() {
 
 			<li class="flex items-center gap-4">
 				<div class="flex h-auto w-8 items-center justify-end overflow-hidden">
-					<img src="/product/cod.png" alt="" class="h-full w-full object-contain object-center" />
+					<img src="{productCod}" alt="" class="h-full w-full object-contain object-center" />
 				</div>
 
 				<span>
@@ -170,7 +170,7 @@ function changePincode() {
 				<li class="flex items-center gap-4">
 					<div class="flex h-auto w-8 items-center justify-end overflow-hidden">
 						<img
-							src="/product/opposite-arrows.png"
+							src="{productOppositeArrows}"
 							alt=""
 							class="h-full w-full object-contain object-center" />
 					</div>
@@ -204,12 +204,9 @@ function changePincode() {
 
 			<ul class="mt-4 ml-4 flex list-disc flex-col gap-1 text-sm">
 				<li>100% Original Products</li>
-
 				<li>Pay on delivery might be available</li>
-
-				<li>Easy 30 days returns and exchanges</li>
-
-				<li>Try & Buy might be available</li>
+				<!-- <li>Easy 30 days returns and exchanges</li>
+				<li>Try & Buy might be available</li> -->
 			</ul>
 		</div>
 	{/if}

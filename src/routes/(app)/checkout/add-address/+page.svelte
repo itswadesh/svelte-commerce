@@ -12,8 +12,6 @@ import Textbox from '$lib/ui/Textbox.svelte'
 
 export let data
 
-// console.log('zzzzzzzzzzzzzzzzzz', data)
-
 let err
 let loading = false
 let countries
@@ -44,7 +42,7 @@ async function getCountries() {
 async function getStates(countryCode) {
 	try {
 		states = await getAPI(
-			`states?&countryCode=${countryCode}&limit=300&page=0&store=${$page?.data?.store?.id}`,
+			`states?&countryCode=${countryCode}&limit=300&page=0&sort=name&store=${$page?.data?.store?.id}`,
 			$page.data.origin
 		)
 
@@ -95,7 +93,7 @@ async function save(ads) {
 		)
 		goto(`/checkout/address`)
 	} catch (e) {
-		toast(err, 'error')
+		// toast(err, 'error')
 		err = e
 	} finally {
 		loading = false

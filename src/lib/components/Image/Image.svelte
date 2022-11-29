@@ -10,16 +10,17 @@ img.loaded {
 
 <script>
 import { getCdnImageUrl } from '$lib/util'
+import { onMount } from 'svelte'
 
+export let noLazy = false // Dont add lazy to images that are on viewport
+export let clazz
 export let src
 export let alt
 export let width = 'auto'
 export let height = 'auto'
+
 const w = width === 'auto' ? 'auto' : +width * 2
 const h = height === 'auto' ? 'auto' : +height * 2
-export let noLazy = false // Dont add lazy to images that are on viewport
-export let clazz
-import { onMount } from 'svelte'
 
 let loaded = false
 let thisImage

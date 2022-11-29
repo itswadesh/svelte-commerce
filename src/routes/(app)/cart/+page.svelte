@@ -1,26 +1,29 @@
 <script lang="ts">
-import SEO from '$lib/components/SEO/index.svelte'
-import { post, del, getAPI } from '$lib/util/api'
-import { page } from '$app/stores'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import { goto, invalidate, invalidateAll } from '$app/navigation'
 import { currency, date } from '$lib/util'
-import Pricesummary from '$lib/components/Pricesummary.svelte'
-import Textbox from '$lib/ui/Textbox.svelte'
-import Skeleton from '$lib/ui/Skeleton.svelte'
-import { fly } from 'svelte/transition'
-import ProductCard from '$lib/ProductCard.svelte'
-import { onMount } from 'svelte'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import Error from '$lib/components/Error.svelte'
 import { fireGTagEvent } from '$lib/util/gTag'
+import { fly } from 'svelte/transition'
+import { goto, invalidate, invalidateAll } from '$app/navigation'
+import { onMount } from 'svelte'
+import { page } from '$app/stores'
+import { post, del, getAPI } from '$lib/util/api'
 import Cookie from 'cookie-universal'
+import cookie from 'cookie'
+import dotsLoading from '$lib/assets/dots-loading.gif'
+import Error from '$lib/components/Error.svelte'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
+import Pricesummary from '$lib/components/Pricesummary.svelte'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import ProductCard from '$lib/ProductCard.svelte'
+import productNonVeg from '$lib/assets/product/non-veg.png'
+import productVeg from '$lib/assets/product/veg.png'
+import SEO from '$lib/components/SEO/index.svelte'
+import Skeleton from '$lib/ui/Skeleton.svelte'
+import Textbox from '$lib/ui/Textbox.svelte'
 
 const cookies = Cookie()
 
 export let data
-
-// $: ({ loadingCart, cart = {} } = data)
 
 let seoProps = {
 	title: `Cart`,
@@ -53,6 +56,7 @@ const addToCart = async ({ pid, qty, customizedImg, ix }: any) => {
 		'carts/add-to-cart',
 		{
 			pid: pid,
+			vid: pid,
 			qty: qty,
 			customizedImg: customizedImg || null,
 			store: $page.data.store?.id
@@ -132,10 +136,11 @@ async function getCoupons() {
 }
 
 async function refreshCart() {
+	// Works for remove coupon
 	try {
 		const res = await getAPI(`carts/refresh-cart?store=${$page.data.store?.id}`, $page.data.origin)
 		if (res) {
-			const cookieCart = {
+			const cartObj = {
 				cartId: res?.cart_id,
 				items: res?.items,
 				qty: +res?.qty,
@@ -144,17 +149,19 @@ async function refreshCart() {
 				total: +res?.total,
 				currencySymbol: res?.currencySymbol,
 				discount: res?.discount,
+				savings: res?.savings,
 				selfTakeout: res?.selfTakeout,
 				shipping: res?.shipping,
 				unavailableItems: res?.unavailableItems,
 				formattedAmount: res?.formattedAmount
 			}
-			// const str = cookie.serialize('cart', JSON.stringify(cookieCart), { path: '/' })
+			// const str = cookie.serialize('cart', JSON.stringify(cartObj), { path: '/' })
+			console.error('Refresh Cart called cart/+page.svelte...', res.cart_id, res.qty)
 
-			cookies.set('cartId', cookieCart.cartId, { path: '/' })
-			cookies.set('cartQty', cookieCart.qty, { path: '/' })
+			cookies.set('cartId', cartObj.cartId, { path: '/' })
+			cookies.set('cartQty', cartObj.qty, { path: '/' })
 
-			// data.cart = cookieCart
+			// data.cart = cartObj
 		}
 	} catch (e) {
 	} finally {
@@ -288,7 +295,7 @@ async function refreshCart() {
 												</a>
 
 												<div class="w-full flex-1">
-													<div class="flex mb-2 justify-between">
+													<div class="mb-2 flex justify-between">
 														<a
 															href="/product/{item?.slug}"
 															aria-label="Click to route product details"
@@ -299,26 +306,26 @@ async function refreshCart() {
 														{#if $page?.data?.store?.isFnb && item.foodType}
 															<div>
 																{#if item.foodType === 'veg'}
-																	<img src="/product/veg.png" alt="veg" class="h-5 w-5" />
+																	<img src="{productVeg}" alt="veg" class="h-5 w-5" />
 																{:else if item.foodType === 'nonveg'}
-																	<img src="/product/non-veg.png" alt="non veg" class="h-5 w-5" />
+																	<img src="{productNonVeg}" alt="non veg" class="h-5 w-5" />
 																{/if}
 															</div>
 														{/if}
 													</div>
 
 													<div class="mb-2 flex flex-wrap items-center gap-2 text-sm sm:text-base">
-														<span class="text-lg font-bold sm:text-xl whitespace-nowrap">
+														<span class="whitespace-nowrap text-lg font-bold sm:text-xl">
 															{item?.formattedItemAmount?.price}
 														</span>
 
 														{#if item?.mrp > item?.price}
-															<span class="font-light text-gray-400 line-through whitespace-nowrap">
+															<span class="whitespace-nowrap font-light text-gray-400 line-through">
 																{item?.formattedItemAmount?.mrp}
 															</span>
 
 															{#if Math.floor(((item.mrp - item.price) / item.mrp) * 100) > 0}
-																<span class="text-green-500 whitespace-nowrap">
+																<span class="whitespace-nowrap text-green-500">
 																	({Math.floor(((item.mrp - item.price) / item.mrp) * 100)}% off)
 																</span>
 															{/if}
@@ -360,7 +367,7 @@ async function refreshCart() {
 										</a>
 
 										<div class="w-full flex-1">
-											<div class="flex mb-2 justify-between">
+											<div class="mb-2 flex justify-between">
 												<a
 													href="/product/{item?.slug}"
 													aria-label="Click to route product details"
@@ -371,9 +378,9 @@ async function refreshCart() {
 												{#if $page?.data?.store?.isFnb && item.foodType}
 													<div>
 														{#if item.foodType === 'veg'}
-															<img src="/product/veg.png" alt="veg" class="h-5 w-5" />
+															<img src="{productVeg}" alt="veg" class="h-5 w-5" />
 														{:else if item.foodType === 'nonveg'}
-															<img src="/product/non-veg.png" alt="non veg" class="h-5 w-5" />
+															<img src="{productNonVeg}" alt="non veg" class="h-5 w-5" />
 														{/if}
 													</div>
 												{/if}
@@ -455,7 +462,7 @@ async function refreshCart() {
 														class="mx-2 flex h-6 w-6 items-center justify-center text-xs font-bold sm:h-8  sm:w-8  ">
 														{#if loading[ix]}
 															<img
-																src="/dots-loading.gif"
+																src="{dotsLoading}"
 																alt="loading"
 																class="h-auto w-5 object-contain object-center" />
 														{:else}
@@ -490,6 +497,7 @@ async function refreshCart() {
 												</div>
 
 												<button
+													type="button"
 													on:click="{() =>
 														addToCart({
 															pid: item.pid,
@@ -641,7 +649,7 @@ async function refreshCart() {
 									{:else if coupons?.length > 0}
 										<ul class="flex flex-col divide-y">
 											{#each coupons as coupon}
-												<li
+												<button
 													title="Click to apply the coupon"
 													on:click="{() => handleCouponCode(coupon.code)}"
 													class="group cursor-pointer py-5 tracking-wide">
@@ -679,11 +687,11 @@ async function refreshCart() {
 															{/if}
 														</div>
 													{/if}
-												</li>
+												</button>
 											{/each}
 										</ul>
 									{:else}
-										<div class="text-center text-sm text-gray-500">
+										<div class="p-5 text-center text-sm text-gray-500">
 											Opps! You have a bad luck. <br /> There's no coupon is available now
 										</div>
 									{/if}
@@ -720,10 +728,7 @@ async function refreshCart() {
 		{:else}
 			<div class="flex h-[70vh] flex-col items-center justify-center text-center">
 				<div>
-					<img
-						src="/no/add-to-cart-animate.svg"
-						alt="empty listing"
-						class="mb-5 h-60 object-contain" />
+					<img src="{noAddToCartAnimate}" alt="empty listing" class="mb-5 h-60 object-contain" />
 				</div>
 
 				<span class="mb-3 text-xl font-medium md:text-3xl">Empty Cart!!</span>

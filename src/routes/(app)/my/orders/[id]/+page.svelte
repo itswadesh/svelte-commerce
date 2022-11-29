@@ -1,16 +1,19 @@
 <script>
-import SEO from '$lib/components/SEO/index.svelte'
-import { onMount } from 'svelte'
-import dayjs from 'dayjs'
 import { currency, date } from '$lib/util'
-import OrderTracking from '../_OrderTracking.svelte'
-import ReturnTracking from '../_ReturnTracking.svelte'
-import TransparentButton from '../_TransparentButton.svelte'
-import OrderListSkeleton from '../_OrderListSkeleton.svelte'
+import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import BackButton from '$lib/ui/BackButton.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import dayjs from 'dayjs'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
+import OrderListSkeleton from '../_OrderListSkeleton.svelte'
+import OrderTracking from '../_OrderTracking.svelte'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import productNonVeg from '$lib/assets/product/non-veg.png'
+import productVeg from '$lib/assets/product/veg.png'
+import ReturnTracking from '../_ReturnTracking.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
+import TransparentButton from '../_TransparentButton.svelte'
 
 // let deliveryBy = null
 let now = null
@@ -19,6 +22,8 @@ let showDemoScheduler = false
 let loading = false
 
 export let data
+
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let clazz
 export { clazz as class }
@@ -70,13 +75,13 @@ onMount(() => {
 									{#if item.isCustomized}
 										<LazyImg
 											src="{item.customizedImg}"
-											alt=" "
+											alt=""
 											width="96"
 											class="h-auto w-24 object-contain object-top" />
 									{:else}
 										<LazyImg
 											src="{item.img}"
-											alt=" "
+											alt=""
 											width="96"
 											class="h-auto w-24 object-contain object-top" />
 									{/if}
@@ -94,9 +99,9 @@ onMount(() => {
 										{#if $page?.data?.store?.isFnb && item.foodType}
 											<div>
 												{#if item.foodType === 'veg'}
-													<img src="/product/veg.png" alt="veg" class="h-5 w-5" />
+													<img src="{productVeg}" alt="veg" class="h-5 w-5" />
 												{:else if item.foodType === 'nonveg'}
-													<img src="/product/non-veg.png" alt="non veg" class="h-5 w-5" />
+													<img src="{productNonVeg}" alt="non veg" class="h-5 w-5" />
 												{/if}
 											</div>
 										{/if}
@@ -158,17 +163,17 @@ onMount(() => {
 									{/if}
 
 									<div class="flex flex-wrap items-center gap-2">
-										<span class="text-base font-bold whitespace-nowrap">
+										<span class="whitespace-nowrap text-base font-bold">
 											{currency(item.price)}
 										</span>
 
 										{#if item.mrp > item.price}
-											<span class="text-gray-500 line-through whitespace-nowrap">
+											<span class="whitespace-nowrap text-gray-500 line-through">
 												{currency(item.mrp)}
 											</span>
 
 											{#if Math.floor(((item.mrp - item.price) / item.mrp) * 100) > 0}
-												<span class="text-green-600 whitespace-nowrap">
+												<span class="whitespace-nowrap text-green-600">
 													({Math.floor(((item.mrp - item.price) / item.mrp) * 100)}% off)
 												</span>
 											{/if}
@@ -179,25 +184,28 @@ onMount(() => {
 						{/each}
 					</div>
 
-					<div class="col-span-1 flex flex-col gap-5 lg:gap-10 p-5">
+					<div class="col-span-1 flex flex-col gap-5 p-5 lg:gap-10">
 						<div>
 							<h4 class="mb-2 font-semibold">Delivery Address</h4>
 
 							<p class="flex flex-col text-sm font-light text-gray-500">
 								<span>
 									{data.order?.userFirstName}
+									{data.order?.userLastName}
 
-									{data.order?.userLastName},
+									<br />
 
-									{data.order?.address?.address}, {data.order?.address?.town},
+									{data.order?.address?.address}, {data.order?.address?.city},
+									{data.order?.address?.country}, {data.order?.address?.state}
 
-									{data.order?.address?.city}, {data.order?.address?.state}</span>
+									<br />
 
-								<span>{data.order?.address?.zip}</span>
+									{data.order?.address?.zip}
+								</span>
 							</p>
 
 							{#if data.order?.userPhone}
-								<h6 class="mt-2 text-sm">
+								<h6 class="mt-1 text-sm">
 									Phone No: <span> {data.order?.userPhone}</span>
 								</h6>
 							{/if}
@@ -208,20 +216,22 @@ onMount(() => {
 
 							<p class="flex flex-col text-sm font-light text-gray-500">
 								<span>
-									{data.order?.billingAddress.firstName}
+									{data.order?.billingAddress?.firstName}
+									{data.order?.billingAddress?.lastName}
 
-									{data.order?.billingAddress.lastName},
+									<br />
 
-									{data.order?.billingAddress.address}, {data.order?.billingAddress.town},
+									{data.order?.billingAddress?.address}, {data.order?.billingAddress?.city},
+									{data.order?.billingAddress?.country}, {data.order?.billingAddress?.state}
 
-									{data.order?.billingAddress.city}, {data.order?.billingAddress.state}
+									<br />
+
+									{data.order?.billingAddress?.zip}
 								</span>
-
-								<span>{data.order?.billingAddress.zip}</span>
 							</p>
 
 							{#if data.order?.userPhone}
-								<h6 class="mt-2 text-sm">
+								<h6 class="mt-1 text-sm">
 									Phone No: <span> {data.order?.userPhone}</span>
 								</h6>
 							{/if}
@@ -320,7 +330,7 @@ onMount(() => {
 		</section>
 	{:else}
 		<div class="flex flex-col items-center justify-center text-center">
-			<img src="/no/add-to-cart-animate.svg" alt="empty cart" class="mb-5 h-60 object-contain" />
+			<img src="{noAddToCartAnimate}" alt="empty cart" class="mb-5 h-60 object-contain" />
 
 			<span class="mb-3 text-xl font-medium md:text-3xl"> Your have't ordered yet !!</span>
 

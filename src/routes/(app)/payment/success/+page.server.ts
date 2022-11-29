@@ -1,4 +1,4 @@
-import { gett, post } from '$lib/utils'
+import { getBySid, gett, post } from '$lib/utils'
 import { error, redirect } from '@sveltejs/kit'
 
 export const prerender = false
@@ -27,7 +27,7 @@ export async function load({ url, request, locals, cookies }) {
 		order = res
 	} catch (e) {
 		if (e.status === 401) {
-			throw redirect(307, locals.store?.loginUrl)
+			throw redirect(307, '/auth/otp-login')
 		}
 		err = e
 		throw error(400, e?.message || e)
@@ -42,9 +42,9 @@ export async function load({ url, request, locals, cookies }) {
 
 	// const refreshCart = async () => {
 	try {
-		cart = await gett('carts/refresh-cart', request.headers.get('cookie'))
+		cart = await getBySid(`carts/refresh-cart?store=${locals.store?.id}`, cookies.get('sid'))
 		if (cart) {
-			const cookieCart = {
+			const cartObj = {
 				cartId: cart?.cart_id,
 				items: cart?.items,
 				qty: cart?.qty,
@@ -53,6 +53,7 @@ export async function load({ url, request, locals, cookies }) {
 				total: cart?.total,
 				currencySymbol: cart?.currencySymbol,
 				discount: cart?.discount,
+				savings: cart?.savings,
 				selfTakeout: cart?.selfTakeout,
 				shipping: cart?.shipping,
 				unavailableItems: cart?.unavailableItems,
@@ -60,9 +61,9 @@ export async function load({ url, request, locals, cookies }) {
 			}
 			locals.cartId = cart.cartId
 			locals.cartQty = cart.qty
-			locals.cart = cookieCart
-			cookies.set('cartId', cookieCart.cartId, { path: '/' })
-			cookies.set('cartQty', cookieCart.qty, { path: '/' })
+			locals.cart = cartObj
+			cookies.set('cartId', cartObj.cartId, { path: '/' })
+			cookies.set('cartQty', cartObj.qty, { path: '/' })
 		}
 	} catch (e) {}
 
