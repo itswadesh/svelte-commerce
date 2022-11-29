@@ -7,6 +7,7 @@ import { page } from '$app/stores'
 import { createEventDispatcher } from 'svelte'
 import { getAPI } from '$lib/util/api'
 import { browser } from '$app/environment'
+import RadioEs from '$lib/ui/RadioEs.svelte'
 
 const dispatch = createEventDispatcher()
 
@@ -313,7 +314,7 @@ function handleToggleSubCategory2(c, cx) {
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
-			<CheckboxEs
+			<RadioEs
 				items="{facets?.all_aggs?.price?.all?.buckets}"
 				title="PRICE"
 				model="price"
@@ -326,7 +327,7 @@ function handleToggleSubCategory2(c, cx) {
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
-			<CheckboxEs
+			<RadioEs
 				items="{facets?.all_aggs?.discount?.all?.buckets}"
 				title="DISCOUNT"
 				model="discount"

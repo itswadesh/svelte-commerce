@@ -208,7 +208,7 @@ function handleSearchBox() {
 					<li>
 						<label class="inline-flex items-center">
 							<input
-								type="checkbox"
+								type="radio"
 								name="{name}"
 								id="{i.key}"
 								disabled="{disabled}"
