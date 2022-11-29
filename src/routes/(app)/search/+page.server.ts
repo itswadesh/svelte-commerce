@@ -10,6 +10,7 @@ export async function load({ url, locals, cookies, parent }) {
 		count,
 		products,
 		facets,
+		pageSize,
 		ressss,
 		fl = {}
 	const currentPage = +url.searchParams.get('page') || 1
@@ -34,6 +35,7 @@ export async function load({ url, locals, cookies, parent }) {
 		})
 		count = res?.count
 		facets = res?.facets
+		pageSize = res?.pageSize
 		err = !res?.estimatedTotalHits ? 'No result Not Found' : null
 	} catch (e) {
 		err = e
@@ -51,6 +53,7 @@ export async function load({ url, locals, cookies, parent }) {
 		products,
 		count,
 		facets,
+		pageSize,
 		query: query.toString(),
 		searchData,
 		fl,

@@ -1,4 +1,4 @@
-import { gett } from '$lib/utils'
+import { getBySid, gett } from '$lib/utils'
 import cookie from 'cookie'
 export const prerender = false
 
@@ -8,7 +8,7 @@ export async function load({ url, locals, request, cookies }) {
 	const q = url.searchParams.get('q') || ''
 	let cart, serializedCart, serializedStore
 	try {
-		const res = await gett(`carts/my?store=${locals.store?.id}`, request.headers)
+		const res = await getBySid(`carts/my?store=${locals.store?.id}`, cookies.get('sid'))
 
 		if (res) {
 			const cookieCart = {
@@ -19,6 +19,7 @@ export async function load({ url, locals, request, cookies }) {
 				total: res?.total,
 				currencySymbol: res?.currencySymbol,
 				discount: res?.discount,
+				savings: res?.savings,
 				selfTakeout: res?.selfTakeout,
 				shipping: res?.shipping,
 				unavailableItems: res?.unavailableItems,
@@ -66,7 +67,5 @@ export async function load({ url, locals, request, cookies }) {
 		cart,
 		store: locals.store,
 		settings: locals.settings
-
-		// isHome
 	}
 }

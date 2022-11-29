@@ -1,16 +1,23 @@
 import { invalidateAll } from '$app/navigation'
 import { fireGTagEvent } from '$lib/util/gTag'
-import { gett, post } from '$lib/utils'
+import { getBySid, gett, post } from '$lib/utils'
 import { error, invalid, redirect } from '@sveltejs/kit'
 import type { Action, Actions, PageServerLoad } from './$types'
 
 export const load: PageServerLoad = async ({ url, request, locals, cookies }) => {
 	// const cookies = Cookie()
 	let loading = false
-	let cart
+	let cart = locals.cart
 	try {
 		loading = true
-		const res = await gett('carts/refresh-cart', request.headers.get('cookie'))
+		const res = await getBySid(`carts/refresh-cart?store=${locals.store?.id}`, cookies.get('sid'))
+		console.error(
+			'Refresh cart called at cart.server page...',
+			res.cart_id,
+			res.qty,
+			res.items.length
+		)
+
 		if (res) {
 			cart = {
 				cartId: res?.cart_id,
@@ -21,6 +28,7 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies }) =>
 				total: +res?.total,
 				currencySymbol: res?.currencySymbol,
 				discount: res?.discount,
+				savings: res?.savings,
 				selfTakeout: res?.selfTakeout,
 				shipping: res?.shipping,
 				unavailableItems: res?.unavailableItems,
@@ -35,15 +43,14 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies }) =>
 			locals.cart = cart
 		}
 	} catch (e) {
+		console.log('Error at /cart/+page.server.ts page.....', e)
 		if (e?.status === 401) {
-			throw redirect(307, locals.store?.loginUrl)
+			throw redirect(307, '/auth/otp-login')
 		}
 		throw error(400, e?.message || e)
 	} finally {
 		loading = false
 	}
-
-	// cookies.set('cache-control', 'public, max-age=200')
 
 	return { loadingCart: loading, cart }
 }
@@ -51,10 +58,9 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies }) =>
 const add: Action = async ({ request, cookies, locals }) => {
 	const data = await request.formData()
 	const pid = data.get('pid')
-	const vid = data.get('vid')
-	const qty = 1
-	const options = JSON.parse(data.get('options') || '[]') //data.get('options') //
+	const vid = data.get('pid')
 	const linkedItems = JSON.parse(data.get('linkedItems'))
+	const options = JSON.parse(data.get('options')) //data.get('options') //
 	const customizedImg = data.get('customizedImg')
 	if (typeof pid !== 'string' || !pid) {
 		return invalid(400, { invalid: true })
@@ -87,7 +93,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 			}
 		}
 		if (cart) {
-			const cookieCart = {
+			const cartObj = {
 				cartId: cart?.cart_id,
 				items: cart?.items,
 				qty: cart?.qty,
@@ -96,24 +102,24 @@ const add: Action = async ({ request, cookies, locals }) => {
 				total: cart?.total,
 				currencySymbol: cart?.currencySymbol,
 				discount: cart?.discount,
+				savings: cart?.savings,
 				selfTakeout: cart?.selfTakeout,
 				shipping: cart?.shipping,
 				unavailableItems: cart?.unavailableItems,
 				formattedAmount: cart?.formattedAmount
 			}
-
-			locals.cart = cookieCart
-			locals.cartId = cookieCart.cartId
-			locals.cartQty = cookieCart.qty
-			cookies.set('cartId', cookieCart.cartId, { path: '/' })
-			cookies.set('cartQty', cookieCart.qty, { path: '/' })
-			// cookies.set('cart', JSON.stringify(cookieCart), { path: '/' })
-			return cookieCart
+			locals.cart = cartObj
+			locals.cartId = cartObj.cartId
+			locals.cartQty = cartObj.qty
+			cookies.set('cartId', cartObj.cartId, { path: '/' })
+			cookies.set('cartQty', cartObj.qty, { path: '/' })
+			// cookies.set('cart', JSON.stringify(cartObj), { path: '/' })
+			return cartObj
 		} else {
 			return {}
 		}
 	} catch (e) {
-		console.log('err', e)
+		// console.log('err', e)
 		return {}
 	}
 }

@@ -10,19 +10,20 @@
 </style>
 
 <script>
-import SEO from '$lib/components/SEO/index.svelte'
-import { page } from '$app/stores'
-import { currency, toast } from '$lib/util'
-import Error from '$lib/components/Error.svelte'
-import Pricesummary from '$lib/components/Pricesummary.svelte'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import { goto } from '$app/navigation'
-import CheckoutHeader from '$lib/components/CheckoutHeader.svelte'
 // import Stripe from '$lib/Stripe.svelte'
-import { post } from '$lib/util/api'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import { onMount } from 'svelte'
+import { currency, toast } from '$lib/util'
 import { fireGTagEvent } from '$lib/util/gTag'
+import { goto } from '$app/navigation'
+import { onMount } from 'svelte'
+import { page } from '$app/stores'
+import { post } from '$lib/util/api'
+import CheckoutHeader from '$lib/components/CheckoutHeader.svelte'
+import Error from '$lib/components/Error.svelte'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import logo from '$lib/assets/logo.svg'
+import Pricesummary from '$lib/components/Pricesummary.svelte'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
 
 const seoProps = {
 	title: 'Select Payment Option',
@@ -65,8 +66,6 @@ let errorMessage = 'Select a Payment Method',
 	razorpayReady = false
 
 $: if (data.paymentMethods?.length === 1 && data.paymentMethods[0]?.type === 'pg') {
-	// console.log('zzzzzzzzzzzzzzzzzz', data.paymentMethods[0])
-
 	const pm = data.paymentMethods[0]
 
 	submit(pm)
@@ -153,7 +152,7 @@ async function submit(pm) {
 				key: rp.keyId, // Enter the Key ID generated from the Dashboard
 				name: 'Litekart.in',
 				description: 'Payment for Litekart',
-				image: '/logo.svg',
+				image: logo,
 				amount: rp.amount,
 				order_id: rp.id,
 				async handler(response) {
