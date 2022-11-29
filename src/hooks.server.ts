@@ -23,6 +23,7 @@ import {
 	GOOGLE_ANALYTICS_ID,
 	GOOGLE_CLIENT_ID,
 	DOMAIN,
+	WWW_URL,
 	HTTP_ENDPOINT
 } from '$lib/config'
 import { getBySid } from '$lib/utils'
@@ -55,8 +56,14 @@ export const handleError = async ({ error, event }) => {
 }
 export const handle: Handle = async ({ event, resolve }) => {
 	try {
-		const WWW_URL = new URL(event.request.url).origin
-		event.locals.origin = WWW_URL
+		const WWW_URL1 = new URL(event.request.url).origin
+		event.locals.origin = WWW_URL || WWW_URL1 // https not coming in coolify hence hard coded in .env
+		// console.log(
+		// 	'DOMAIN from .env, request url, final origin',
+		// 	WWW_URL,
+		// 	WWW_URL1,
+		// 	event.locals.origin
+		// )
 		const cookieStore = event.cookies.get('store')
 		const zip = event.cookies.get('zip')
 		if (zip) {
