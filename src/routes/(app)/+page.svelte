@@ -36,9 +36,11 @@ const seoProps = {
 	}
 }
 
-$: heroBanners = data.home?.banners?.data.filter((b) => {
-	return b.type === 'hero'
-})
+$: heroBanners =
+	data.home?.banners?.data &&
+	data.home?.banners?.data.filter((b) => {
+		return b.type === 'hero'
+	})
 </script>
 
 <SEO {...seoProps} />
@@ -64,9 +66,9 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 		<!-- TOP CATEGORIES -->
 
 		{#if data.home?.categories?.data?.length > 0}
-			<div class="mb-5 sm:mb-10 hidden sm:block">
+			<div class="mb-5 hidden sm:mb-10 sm:block">
 				<h1
-					class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
+					class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
 					TOP CATEGORIES
 				</h1>
 
@@ -124,7 +126,7 @@ $: heroBanners = data.home?.banners?.data.filter((b) => {
 				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
 			</div>
 		{:then home}
-			{#if heroBanners.length > 0}
+			{#if heroBanners?.length > 0}
 				<div class="mb-5 sm:mb-10">
 					<h1
 						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">

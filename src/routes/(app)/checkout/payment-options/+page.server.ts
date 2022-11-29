@@ -1,14 +1,32 @@
-import { getAPI } from '$lib/util/api'
-import { gett } from '$lib/utils'
 import { error, redirect } from '@sveltejs/kit'
+import { getBySid, gett } from '$lib/utils'
+import razorpayIcon from '$lib/assets/razorpay-icon.jpg'
+
 export const prerender = false
 
-export async function load({ params, parent, locals, url, request }) {
-	const { me, cart } = locals
+export async function load({ params, parent, locals, url, request, cookies }) {
+	const { me } = locals
 	if (!me) {
 		const redirectUrl = `/auth/otp-login?ref=${url?.pathname}`
 		throw redirect(307, redirectUrl)
 	}
+	const cartRes = await getBySid(`carts/refresh-cart?store=${locals.store?.id}`, cookies.get('sid'))
+	const cart = {
+		cartId: cartRes.cart_id,
+		items: cartRes.items,
+		qty: cartRes.qty,
+		tax: cartRes.tax,
+		subtotal: cartRes.subtotal,
+		total: cartRes.total,
+		currencySymbol: cartRes.currencySymbol,
+		discount: cartRes.discount,
+		savings: cartRes.savings,
+		selfTakeout: cartRes.selfTakeout,
+		shipping: cartRes.shipping,
+		unavailableItems: cartRes.unavailableItems,
+		formattedAmount: cartRes.formattedAmount
+	}
+	locals.cart = cart
 	try {
 		const addressId = url.searchParams.get('address')
 
@@ -22,8 +40,7 @@ export async function load({ params, parent, locals, url, request }) {
 				position: 1,
 				key: '',
 				text: 'Pay the full amount when item is delivered',
-				type: 'cod',
-				img: 'https://cdn-icons-png.flaticon.com/512/2331/2331895.png'
+				type: 'cod'
 			},
 			{
 				active: true,
@@ -34,28 +51,24 @@ export async function load({ params, parent, locals, url, request }) {
 				position: 2,
 				key: '',
 				text: 'Pay the full amount with online / UPI / Wallets / Credit Cards / Debit Cards',
-				type: 'pg',
-				img: 'https://ik.imagekit.io/3wzatecz51w3i/s3/img/cashfree.jpg'
+				type: 'pg'
 			},
 			{
 				active: true,
 				name: 'Online with Razorpay',
 				value: 'razorpay',
-				img: '/razorpay-icon.jpg',
+				img: razorpayIcon,
 				color: '',
 				position: 3,
 				key: '',
 				text: 'Pay the full amount with online / UPI / Wallets / Credit Cards / Debit Cards',
-				type: 'pg',
-				img: '/razorpay-icon.jpg'
+				type: 'pg'
 			}
 		]
 		const address = await gett(`addresses/${addressId}`, request.headers.get('cookie'))
 
 		// if (paymentMethods) {
-		if (!address || !addressId) {
-			throw redirect(307, '/checkout/address')
-		}
+
 		return { paymentMethods, address, addressId, me, cart }
 		// }
 	} catch (e) {

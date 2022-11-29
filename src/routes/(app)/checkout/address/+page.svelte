@@ -104,7 +104,11 @@ async function refreshAddress() {
 						: `/checkout/payment-options?address=${selectedAddress}`}"
 					loading="{loading}" />
 			{:else}
-				<Pricesummary cart="{cart}" text="Please select address" loading="{loading}" />
+				<Pricesummary
+					cart="{cart}"
+					text="Please select address"
+					disabled="{true}"
+					loading="{loading}" />
 			{/if}
 		</div>
 	</div>

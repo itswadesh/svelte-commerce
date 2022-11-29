@@ -45,6 +45,16 @@ function submit() {
 				<h4>{cart.formattedAmount?.subtotal || '-'}</h4>
 			</div>
 
+			{#if cart?.savings > 0}
+				<div class="mt-2 flex items-center justify-between font-medium text-green-500">
+					<h4>You Saved</h4>
+
+					<h4>
+						{currency(cart?.savings)}
+					</h4>
+				</div>
+			{/if}
+
 			<div class="mt-2 flex items-center justify-between font-medium">
 				<h4>Discount</h4>
 

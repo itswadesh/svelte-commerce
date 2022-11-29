@@ -39,7 +39,7 @@ export { clazz as class }
 	{#each categoryPool as d}
 		<li class="flex items-center">
 			<a
-				href="/{d.slug}?sort=-createdAt"
+				href="/{d.slug}?sort=-updatedAt"
 				aria-label="Click to go inside this page"
 				class="first-letter:uppercase hover:text-primary-500 hover:underline">
 				{d.name}
@@ -58,7 +58,7 @@ export { clazz as class }
 	{/each}
 
 	{#if currentProductName}
-		<li class="w-60 sm:w-96 truncate text-gray-400 first-letter:uppercase">
+		<li class="max-w-[16rem] truncate text-gray-400 first-letter:uppercase">
 			{currentProductName}
 		</li>
 	{/if}
