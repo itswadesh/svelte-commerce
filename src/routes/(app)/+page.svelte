@@ -2,7 +2,6 @@
 import { page } from '$app/stores'
 import CategoriesMobile from '$lib/home/CategoriesMobile.svelte'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
-import grayDot from '$lib/assets/gray-dot.png'
 import Hero from '$lib/home/Hero.svelte'
 import HeroBanners from '$lib/home/HeroBanners.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
@@ -47,7 +46,7 @@ $: heroBanners =
 
 <!-- {JSON.stringify(home?.categories.data)} -->
 
-<div class="bg-opacity-25 bg-center bg-repeat" style="background-image:url({grayDot}) ;">
+<div class="bg-opacity-25 bg-center bg-repeat">
 	<div class="mb-20">
 		<!-- CATEGORIES SLIDER MOBILE -->
 
