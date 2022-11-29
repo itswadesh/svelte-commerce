@@ -92,7 +92,10 @@ async function getMegaMenu() {
                     {index % 6 == 4 && selectedCategory === category.name ? 'border-pink-500' : ''}
                     {index % 6 == 5 && selectedCategory === category.name ? 'border-blue-500' : ''}
                     ">
-				<a href="/{category.link || category.slug}" class="flex items-center gap-1 w-full">
+				<a
+					href="/{category.link || category.slug}"
+					data-sveltekit-reload
+					class="flex items-center gap-1 w-full">
 					<!-- Root category -->
 
 					<span>{category.name}</span>
@@ -130,6 +133,7 @@ async function getMegaMenu() {
 						{#each category.children as c}
 							<li class="mb-2 w-1/4 flex-1 flex-shrink-0 flex-grow-0 p-6 pr-2 text-sm">
 								<a
+									data-sveltekit-reload
 									href="/{c.link || c.slug}"
 									class="block w-full mb-2
                                     {index % 6 == 0 ? 'text-yellow-500 ' : ''}
