@@ -15,12 +15,12 @@ import SEO from '$lib/components/SEO/index.svelte'
 export let data
 
 const seoProps = {
-	title: `Custom Printed Mobile Back Cover and Cases Online @Rs. 99 - ${$page.data.store?.websiteName}`,
-	description: `Customised Mobile Covers - Buy Custom Photo Printed Mobile Back Cover And Cases Online For All Stylish Phone Models @Rs.99 On ${$page.data.store?.websiteName} Store. 100% Easy Returns.`,
+	title: $page.data.store?.title,
+	description: $page.data.store?.description,
 	slug: '/',
-	keywords: `Customised Mobile Covers, Buy Custom Photo Printed Mobile Back Cover, ${$page.data.store?.websiteName} Store,100% Easy Returns `,
+	keywords: $page.data.store?.keywords,
 	featuredImage: {
-		url: logo,
+		url: $page.data.store?.logo,
 		width: 672,
 		height: 448,
 		caption: 'Home page'
@@ -29,10 +29,10 @@ const seoProps = {
 		url: logo
 	},
 	ogSquareImage: {
-		url: logo
+		url: $page.data.store?.logo
 	},
 	twitterImage: {
-		url: logo
+		url: $page.data.store?.logo
 	}
 }
 

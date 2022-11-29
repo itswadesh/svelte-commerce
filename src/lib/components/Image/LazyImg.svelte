@@ -51,14 +51,8 @@ onDestroy(() => {
 })
 </script>
 
-<!-- <img
-	alt="{alt}"
-	class="lazy {clazz}"
-	src="{`${getImageUrl(src)}?tr=h-2,w-1:w-${w},h-${h}`}"
-	data-src="{`${getImageUrl(src)}?tr=w-${w},h-${h}:w-${w},h-${h}`}" /> -->
-
 <img
 	alt="{alt}"
 	class="lazy {clazz}"
-	src="{`${getCdnImageUrl(src)}?width=2&blur=25&aspect_ratio=2:3`}"
-	data-src="{`${getCdnImageUrl(src)}?width=${w}&height=${h}&sharpen=true`}" />
+	src="{`${getCdnImageUrl(src)}?tr=h-2,w-1:w-${w},h-${h}`}"
+	data-src="{`${getCdnImageUrl(src)}?tr=w-${w},h-${h}:w-${w},h-${h}`}" />
