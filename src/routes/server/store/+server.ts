@@ -32,9 +32,10 @@ export async function GET({ request, cookies, locals }) {
 		closed: storeOne.closed,
 		closeMessage: storeOne.closeMessage,
 		isFnb: storeOne.isFnb,
-		searchbarText: storeOne.searchbarText
+		searchbarText: storeOne.searchbarText,
+		adminUrl: settings.adminUrl
 	}
 	locals.store = store
 	cookies.set('store', JSON.stringify(store), { path: '/' })
-	return new Response(JSON.stringify({ storeOne, settings: {}, popularSearches, megamenu }))
+	return new Response(JSON.stringify({ storeOne, settings, popularSearches, megamenu }))
 }

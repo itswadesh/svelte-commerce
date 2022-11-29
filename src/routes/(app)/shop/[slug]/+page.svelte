@@ -30,7 +30,7 @@ let seoProps = {
 
 <div>
 	{#if data.banners?.count > 0 || data.groupByBanners?.count > 0}
-		<div class="bg-opacity-25 bg-center bg-repeat" style="background-image:url('/gray-dot.png') ;">
+		<div class="bg-opacity-25 bg-center bg-repeat">
 			<div class="mb-20 sm:mb-0">
 				<div class="flex flex-col gap-5 sm:gap-10">
 					<Hero banners="{data.banners?.data}" />

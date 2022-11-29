@@ -98,7 +98,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		if (!cookieStore || cookieStore === 'undefined') {
 			const url = new URL(event.request.url)
 			const storeRes = await getBySid(`init?domain=${DOMAIN || url.host}`)
-			const { storeOne } = storeRes
+			const { storeOne, settings } = storeRes
 			store = {
 				id: storeOne._id,
 				domain: storeOne.domain,
@@ -123,7 +123,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 				isFnb: storeOne.isFnb,
 				DOMAIN: storeOne.DOMAIN,
 				weightUnit: storeOne.weightUnit,
-				dimentionUnit: storeOne.dimentionUnit
+				dimentionUnit: storeOne.dimentionUnit,
+				adminUrl: settings.adminUrl
 			}
 			event.cookies.set('store', JSON.stringify(store), { path: '/' })
 		} else {
