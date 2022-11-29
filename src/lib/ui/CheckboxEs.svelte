@@ -215,7 +215,7 @@ function handleSearchBox() {
 								required="{required}"
 								color="{color}"
 								bind:group="{selectedItems}"
-								value="{i.key}"
+								value="{i.from + ',' + i.to || i.key}"
 								on:change="{() => dispatch('go', { model, selectedItems })}"
 								class="input-checkbox h-3.5 w-3.5 rounded-md border border-gray-200 bg-transparent text-primary-500" />
 

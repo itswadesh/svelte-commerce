@@ -1,6 +1,6 @@
 <style>
 img.lazy {
-	opacity: 0.25;
+	opacity: 0.95;
 	transition: opacity 1200ms ease-out;
 }
 img:not(.initial) {
