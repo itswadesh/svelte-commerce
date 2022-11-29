@@ -84,7 +84,7 @@ export let data
 
 // console.log('zzzzzzzzzzzzzzzzzz', data)
 
-let selectedimg
+let selectedImg
 let seoProps = {
 	title: `Details of product ${data.product?.title}` || ' ',
 	description: data.product?.metaDescription || ' ',
@@ -345,7 +345,7 @@ function scrollTo(elementId) {
 }
 
 function handleGallery(img) {
-	selectedimg = img
+	selectedImg = img
 	showPhotosModal = true
 }
 
@@ -612,8 +612,8 @@ function handleMobileCanvas() {
 										href="/product/{gp.slug}"
 										class="block overflow-hidden rounded-full border p-0.5 transition duration-300 hover:border-primary-500">
 										<LazyImg
-											src="{gp.imgCdn}"
-											alt="{gp.imgCdn}"
+											src="{gp.img}"
+											alt="{gp.img}"
 											width="56"
 											height="56"
 											class="h-14 w-14 object-contain object-center" />
