@@ -1,12 +1,12 @@
 <script>
-import { goto } from '$app/navigation'
-import { onMount } from 'svelte'
+import { browser } from '$app/environment'
 import { constructURL2, toast } from '$lib/util'
-import CheckboxEs from '$lib/ui/CheckboxEs.svelte'
-import { page } from '$app/stores'
 import { createEventDispatcher } from 'svelte'
 import { getAPI } from '$lib/util/api'
-import { browser } from '$app/environment'
+import { goto } from '$app/navigation'
+import { onMount } from 'svelte'
+import { page } from '$app/stores'
+import CheckboxEs from '$lib/ui/CheckboxEs.svelte'
 import RadioEs from '$lib/ui/RadioEs.svelte'
 
 const dispatch = createEventDispatcher()

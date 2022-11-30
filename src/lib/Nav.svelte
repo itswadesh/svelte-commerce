@@ -237,10 +237,15 @@ const getSelectionLabel = (option) => option.name
 
 			<!-- Cart -->
 
-			<button
+			<!-- <button
 				class="relative flex flex-col items-center justify-center gap-1 focus:outline-none lg:border-b-4 lg:border-transparent"
 				aria-label="Click to route cart"
-				on:click="{handleShowCartSidebar}">
+				on:click="{handleShowCartSidebar}"> -->
+			<a
+				href="/cart"
+				class="relative flex flex-col items-center justify-center gap-1 focus:outline-none lg:border-b-4 lg:border-transparent"
+				aria-label="Click to route cart"
+				data-sveltekit-prefetch>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
@@ -263,7 +268,8 @@ const getSelectionLabel = (option) => option.name
 						{$page.data.cartQty}
 					</div>
 				{/if}
-			</button>
+			</a>
+			<!-- </button> -->
 
 			{#if showCartSidebar}
 				<div class="fixed inset-0 z-[100] h-screen w-full">
