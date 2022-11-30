@@ -13,9 +13,9 @@ module.exports = {
 					700: '#03080e' /* more darker blue */
 				},
 				secondary: {
-					100: '#cccccc' /* light gray */,
-					500: '#1F2937' /* gray-800 */,
-					600: '#000000' /* black */
+					100: '#daffda' /* light green */,
+					500: '#1a6b1a' /* green */,
+					600: '#165c16' /* dark green */
 				},
 				accent: {
 					100: '#ffffd8' /* light-yellow */,

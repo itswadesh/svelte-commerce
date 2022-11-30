@@ -144,8 +144,7 @@ function changeNumber() {
 		</a>
 
 		<a
-			href="https://admin.litekart.in/{$page.data.store?.loginUrl}?role=vendor&store={$page.data
-				.store?.id}"
+			href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store?.id}"
 			aria-label="Click to login with email"
 			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
 			Join as Vendor
