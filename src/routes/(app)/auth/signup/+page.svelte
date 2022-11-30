@@ -142,7 +142,7 @@ async function submit(n) {
 				required
 				bind:value="{newResistration.password}" />
 
-			<div
+			<button
 				class="absolute inset-y-0 right-2 flex cursor-pointer items-end justify-center pb-2"
 				on:click="{togglePassword}">
 				{#if showPassword}
@@ -178,7 +178,7 @@ async function submit(n) {
 							d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
 					</svg>
 				{/if}
-			</div>
+			</button>
 		</div>
 
 		<div class="relative">
@@ -189,7 +189,7 @@ async function submit(n) {
 				required
 				bind:value="{newResistration.passwordConfirmation}" />
 
-			<div
+			<button
 				class="absolute inset-y-0 right-2 flex cursor-pointer items-end justify-center pb-2"
 				on:click="{toggleConfirmPassword}">
 				{#if showConfirmPassword}
@@ -225,7 +225,7 @@ async function submit(n) {
 							d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
 					</svg>
 				{/if}
-			</div>
+			</button>
 		</div>
 
 		<PrimaryButton type="submit" loading="{loading}" class="w-full">SUMBIT</PrimaryButton>
@@ -241,7 +241,7 @@ async function submit(n) {
 
 		<a
 			href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store?.id}"
-			aria-label="Click to login with email"
+			aria-label="Click to login as vendor"
 			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
 			Join as Vendor
 		</a>

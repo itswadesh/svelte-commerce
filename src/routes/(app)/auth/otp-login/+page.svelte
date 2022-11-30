@@ -145,7 +145,7 @@ function changeNumber() {
 
 		<a
 			href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store?.id}"
-			aria-label="Click to login with email"
+			aria-label="Click to login as vendor"
 			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
 			Join as Vendor
 		</a>
