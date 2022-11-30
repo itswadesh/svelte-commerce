@@ -123,7 +123,7 @@ async function getCategories() {
 	try {
 		const res1 = await getAPI(`categories?store=${$page.data.store?.id}`, $page.data.origin)
 		categories = res1?.data.filter((c) => {
-			return c.imgCdn
+			return c.img
 		})
 		// console.log('res1', res1)
 		// console.log('categories', categories)
@@ -237,10 +237,15 @@ const getSelectionLabel = (option) => option.name
 
 			<!-- Cart -->
 
-			<button
+			<!-- <button
 				class="relative flex flex-col items-center justify-center gap-1 focus:outline-none lg:border-b-4 lg:border-transparent"
 				aria-label="Click to route cart"
-				on:click="{handleShowCartSidebar}">
+				on:click="{handleShowCartSidebar}"> -->
+			<a
+				href="/cart"
+				class="relative flex flex-col items-center justify-center gap-1 focus:outline-none lg:border-b-4 lg:border-transparent"
+				aria-label="Click to route cart"
+				data-sveltekit-prefetch>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
@@ -263,7 +268,8 @@ const getSelectionLabel = (option) => option.name
 						{$page.data.cartQty}
 					</div>
 				{/if}
-			</button>
+			</a>
+			<!-- </button> -->
 
 			{#if showCartSidebar}
 				<div class="fixed inset-0 z-[100] h-screen w-full">
@@ -312,7 +318,7 @@ const getSelectionLabel = (option) => option.name
 															class="h-auto w-16 object-contain object-left" />
 													{:else}
 														<LazyImg
-															src="{item.imgCdn}"
+															src="{item.img}"
 															alt=""
 															width="64"
 															class="h-auto w-16 object-contain object-left" />
@@ -459,7 +465,7 @@ const getSelectionLabel = (option) => option.name
 												rel="noopener noreferrer"
 												class="col-span-1 block transform border transition duration-500 hover:-translate-y-2 hover:shadow-lg">
 												<LazyImg
-													src="{c.imgCdn}"
+													src="{c.img}"
 													class="aspect-square w-full object-cover object-center" />
 											</a>
 										{/each}
