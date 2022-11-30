@@ -84,7 +84,7 @@ export let data
 
 // console.log('zzzzzzzzzzzzzzzzzz', data)
 
-let selectedImg
+let selectedImgIndex
 let seoProps = {
 	title: `Details of product ${data.product?.title}` || ' ',
 	description: data.product?.metaDescription || ' ',
@@ -344,8 +344,8 @@ function scrollTo(elementId) {
 	})
 }
 
-function handleGallery(img) {
-	selectedImg = img
+function handleGallery(index) {
+	selectedImgIndex = index
 	showPhotosModal = true
 }
 
@@ -382,16 +382,14 @@ function handleMobileCanvas() {
 					<div
 						class="flex w-full grid-cols-2 flex-row gap-2 overflow-x-scroll scrollbar-none md:grid">
 						{#if data?.product?.images?.length}
-							{#each data.product?.images as img}
+							{#each data.product?.images as img, index}
 								<button
 									type="button"
-									class="w-full flex-shrink-0 cursor-zoom-in overflow-hidden rounded md:h-full md:w-full md:flex-shrink"
-									style="min-height:{600}px"
-									on:click="{() => handleGallery(img)}">
+									class="h-auto w-full flex-shrink-0 cursor-zoom-in overflow-hidden rounded md:flex-shrink"
+									on:click="{() => handleGallery(index)}">
 									<LazyImg
 										src="{img}"
 										alt="{data.product?.name}"
-										width="416"
 										height="600"
 										class="h-full w-full transform object-contain object-center transition duration-700" />
 								</button>
@@ -610,13 +608,12 @@ function handleMobileCanvas() {
 								<li>
 									<a
 										href="/product/{gp.slug}"
-										class="block overflow-hidden rounded-full border p-0.5 transition duration-300 hover:border-primary-500">
+										class="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border transition duration-300 hover:border-primary-500">
 										<LazyImg
 											src="{gp.img}"
 											alt="{gp.img}"
-											width="56"
 											height="56"
-											class="h-14 w-14 object-contain object-center" />
+											class="h-14 w-auto object-contain object-center" />
 									</a>
 								</li>
 							{/each}
@@ -1202,7 +1199,10 @@ function handleMobileCanvas() {
 	</div>
 </div>
 
-<Gallery bind:showPhotosModal product="{data.product}" />
+<Gallery
+	bind:selectedImgIndex="{selectedImgIndex}"
+	bind:showPhotosModal="{showPhotosModal}"
+	product="{data.product}" />
 
 {#if bounceItemFromTop}
 	<AnimatedCartItem img="{customizedImg || data.product?.img}" />

@@ -10,20 +10,21 @@ import { slide } from 'svelte/transition'
 import LazyImg from '../Image/LazyImg.svelte'
 import { onMount } from 'svelte'
 
-export let showPhotosModal = false,
-	product = {}
+export let showPhotosModal = false
+export let product = {}
+export let selectedImgIndex = 0
+
+let selectedimg
+
+$: if (product) {
+	selectedimg = product?.images[selectedImgIndex]
+}
 
 let Carousel
 onMount(async () => {
 	const RTEmodule = await import('$lib/components/TwECarousel.svelte')
 	Carousel = RTEmodule.default
 })
-
-let selectedImg
-
-if (product) {
-	selectedImg = product?.images[0]
-}
 </script>
 
 {#if showPhotosModal}
@@ -48,15 +49,15 @@ if (product) {
 			</svg>
 		</button>
 
-		<div class="relative md:hidden block">
+		<div class="relative block md:hidden">
 			<svelte:component this="{Carousel}">
 				{#each product?.images as img, ix}
 					{#if img}
 						<div
 							data-sveltekit-prefetch
-							class="max-h-screen carousel-item relative float-left w-full 
+							class="carousel-item relative float-left max-h-screen w-full 
 							{ix == 0 ? 'active' : ''}">
-							<LazyImg src="{img}" alt=" " class="block h-full w-full object-contain object-top" />
+							<img src="{img}" alt="" class="block h-full object-contain" />
 						</div>
 					{/if}
 				{/each}
@@ -65,16 +66,13 @@ if (product) {
 
 		<div
 			class="container relative mx-auto hidden h-full w-full flex-col items-center justify-between gap-4 overflow-hidden rounded-md bg-black md:flex lg:flex-row">
-			{#if selectedImg}
+			{#if selectedimg}
 				<div
 					class="flex h-full w-full flex-1 items-center justify-center overflow-hidden px-5 sm:px-10">
-					<LazyImg
-						src="{selectedImg}"
-						alt=" "
-						width="1000"
-						class="h-full w-full object-contain object-center" />
+					<img src="{selectedimg}" alt="" class="h-full object-contain object-center" />
 				</div>
 			{/if}
+
 			{#if product?.images?.length}
 				<div class="w-full flex-1 bg-white py-5 md:max-w-lg lg:h-full">
 					<div class="mb-2 px-5">
@@ -84,13 +82,13 @@ if (product) {
 					</div>
 
 					<div
-						class="grid grid-cols-3 gap-2 overflow-y-auto overflow-x-hidden px-5 scrollbar-thin scrollbar-thumb-slate-300 lg:max-h-[70vh] lg:grid-cols-2">
+						class="grid grid-cols-3 gap-2 overflow-y-auto px-5 overflow-x-hidden scrollbar-thin scrollbar-thumb-slate-300 lg:max-h-[70vh] lg:grid-cols-2">
 						{#each product?.images as img}
 							{#if img}
 								<button
 									type="button"
 									class="relative z-0 col-span-1 border bg-gray-100 focus:outline-none"
-									on:click="{() => (selectedImg = img)}">
+									on:click="{() => (selectedimg = img)}">
 									<LazyImg
 										src="{img}"
 										alt=""
@@ -99,7 +97,7 @@ if (product) {
 
 									<div
 										class="absolute inset-0 z-10 h-full w-full bg-white  
-                                    {selectedImg === img ? 'bg-opacity-0' : 'bg-opacity-50'}">
+                                    {selectedimg === img ? 'bg-opacity-0' : 'bg-opacity-50'}">
 									</div>
 								</button>
 							{/if}
