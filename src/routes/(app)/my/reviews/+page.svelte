@@ -12,10 +12,10 @@
 <script>
 import SEO from '$lib/components/SEO/index.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import TimeAgo from 'svelte-timeago'
+// import TimeAgo from 'svelte-timeago'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { del, getAPI, post } from '$lib/util/api'
-import { delay, toast } from '$lib/util'
+import { date, delay, toast } from '$lib/util'
 import { goto } from '$app/navigation'
 import SearchBox from '$lib/ui/SearchBox.svelte'
 import { page } from '$app/stores'
@@ -181,7 +181,9 @@ async function refreshData() {
 								</p>
 
 								<div class="text-xs">
-									<TimeAgo date="{+review.updatedAt}" />
+									<!-- <TimeAgo date="{+review.updatedAt}" /> -->
+
+									{date(review.updatedAt)}
 								</div>
 							</div>
 						</div>
@@ -213,20 +215,18 @@ async function refreshData() {
 			)}"
 			current="{+data.currentPage}" />
 	{:else}
-		<div class="flex h-full flex-col items-center justify-center text-center">
-			<div>
-				<img
-					src="/no/online-review-animate.svg"
-					alt="empty reviews"
-					class="mb-5 h-60 object-contain" />
-			</div>
+		<div class="flex h-[70vh] flex-col items-center justify-center text-center">
+			<img
+				src="/no/online-review-animate.svg"
+				alt="empty reviews"
+				class="mb-5 h-60 object-contain" />
 
-			<span class="mb-3 text-xl font-medium md:text-3xl">Empty Reviews !!</span>
+			<span class="mb-3 text-xl font-medium md:text-3xl"> Empty Reviews !!</span>
 
-			<span class="mb-5 text-xs"> We didn't find any review against your listing. </span>
+			<span class="mb-5 text-sm"> We didn't find any review against your listing</span>
 
 			<a href="/" aria-label="Click to route home" data-sveltekit-prefetch>
-				<PrimaryButton class="w-40 py-2 text-sm">BROWSE ITEMS</PrimaryButton>
+				<PrimaryButton class="w-40 py-2 text-sm">Shop Now</PrimaryButton>
 			</a>
 		</div>
 	{/if}

@@ -75,7 +75,7 @@ async function getWishlistedProducts() {
 			<div class="flex h-[70vh] flex-col items-center justify-center text-center">
 				<img src="/no/empty-wishlist.svg" alt="empty wishlist" class="mb-5 h-60 object-contain" />
 
-				<!-- <span class="mb-3 text-xl font-medium md:text-3xl"> Empty Wishlist !!</span> -->
+				<span class="mb-3 text-xl font-medium md:text-3xl"> Empty Wishlist !!</span>
 
 				<span class="mb-5 text-sm"> You have no items in your Wishlist. Start adding</span>
 
@@ -91,7 +91,7 @@ async function getWishlistedProducts() {
 					</h1>
 					{#if wishlistedProducts?.data?.length}
 						<div
-							class="grid w-full grid-cols-2 sm:flex sm:flex-wrap gap-3 sm:justify-between lg:mb-20">
+							class="grid w-full grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-between lg:mb-20">
 							{#each wishlistedProducts.data as w, wx}
 								{#if w.product}
 									<form
@@ -111,7 +111,7 @@ async function getWishlistedProducts() {
 												await applyAction(result)
 											}
 										}}"
-										class="cols-span-1 relative border flex flex-col justify-between">
+										class="cols-span-1 relative flex flex-col justify-between border">
 										<BlackButton
 											type="button"
 											class="absolute top-2 right-2 z-10"
@@ -134,7 +134,7 @@ async function getWishlistedProducts() {
 											href="/product/{w.product?.slug}"
 											aria-label="Click to view the product details">
 											<div
-												class="w-full sm:w-48 items-center overflow-hidden rounded-lg bg-white p-4">
+												class="w-full items-center overflow-hidden rounded-lg bg-white p-4 sm:w-48">
 												<div class="h-auto w-full">
 													<LazyImg
 														src="{w.product?.img}"
@@ -171,17 +171,17 @@ async function getWishlistedProducts() {
 													</div>
 
 													<div
-														class="flex flex-wrap items-center justify-center overflow-hidden overflow-ellipsis gap-2 text-xs">
-														<span class="text-base font-bold whitespace-nowrap"
+														class="flex flex-wrap items-center justify-center gap-2 overflow-hidden overflow-ellipsis text-xs">
+														<span class="whitespace-nowrap text-base font-bold"
 															>{w.product?.formattedPrice}</span>
 
 														{#if w.product?.formattedMrp > w.product?.formattedPrice}
-															<strike class="text-gray-500 whitespace-nowrap">
+															<strike class="whitespace-nowrap text-gray-500">
 																{w.product?.formattedMrp}
 															</strike>
 
 															{#if Math.floor(((w.product?.mrp - w.product?.price) / w.product?.mrp) * 100) > 0}
-																<span class="text-primary-500 whitespace-nowrap">
+																<span class="whitespace-nowrap text-primary-500">
 																	({Math.floor(
 																		((w.product?.mrp - w.product?.price) / w.product?.mrp) * 100
 																	)}% off)
@@ -207,7 +207,7 @@ async function getWishlistedProducts() {
 										<input type="hidden" name="customizedImg" value="{'undefined'}" />
 										<button
 											type="submit"
-											class="w-full p-2 text-primary-500 focus:outline-none border-t font-semibold uppercase tracking-wide hover:bg-primary-50 transition duration-300">
+											class="w-full border-t p-2 font-semibold uppercase tracking-wide text-primary-500 transition duration-300 focus:outline-none hover:bg-primary-50">
 											Move To Bag
 										</button>
 

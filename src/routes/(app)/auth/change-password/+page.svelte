@@ -1,6 +1,5 @@
 <style>
 .frosted {
-	background-image: url('/auth/login/bg-lighter.svg');
 	backdrop-filter: blur(15px);
 	background-color: hsla(0, 0%, 100%, 0.75);
 }
@@ -11,17 +10,17 @@ import { browser } from '$app/environment'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import { post } from '$lib/util/api'
+import Error from '$lib/components/Error.svelte'
+import loginBgLighter from '$lib/assets/login/bg-lighter.svg'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
-import Error from '$lib/components/Error.svelte'
 
 const seoProps = {
 	title: 'Change Password',
 	description: 'Change Password'
 }
 
-let ref = $page?.url?.searchParams.get('ref')
 let loading = false
 let password = {}
 let showOldPassword = false
@@ -79,7 +78,7 @@ async function submit(p) {
 
 <div
 	class="frosted container mx-auto flex w-full max-w-sm flex-col rounded-2xl border bg-cover bg-center bg-no-repeat p-10 shadow-2xl"
-	style="background-image: url('/login/bg-lighter.svg');">
+	style="background-image: url({loginBgLighter});">
 	<h1 class="mb-8 w-full text-center text-2xl font-bold text-primary-500">Change Password</h1>
 
 	<Error err="{err}" />
@@ -93,9 +92,8 @@ async function submit(p) {
 				required
 				bind:value="{password.oldPassword}" />
 
-			<button
-				type="button"
-				class="absolute inset-y-0 right-2 flex items-end pb-2 cursor-pointer justify-center"
+			<div
+				class="absolute inset-y-0 right-2 flex cursor-pointer items-end justify-center pb-2"
 				on:click="{() => toggleCurrentPassowrd()}">
 				{#if showOldPassword}
 					<svg
@@ -104,7 +102,7 @@ async function submit(p) {
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="w-5 h-5">
+						class="h-5 w-5">
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -118,7 +116,7 @@ async function submit(p) {
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="w-5 h-5">
+						class="h-5 w-5">
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -130,7 +128,7 @@ async function submit(p) {
 							d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
 					</svg>
 				{/if}
-			</button>
+			</div>
 		</div>
 
 		<div class="relative">
@@ -141,9 +139,8 @@ async function submit(p) {
 				required
 				bind:value="{password.password}" />
 
-			<button
-				type="button"
-				class="absolute inset-y-0 right-2 flex items-end pb-2 cursor-pointer justify-center"
+			<div
+				class="absolute inset-y-0 right-2 flex cursor-pointer items-end justify-center pb-2"
 				on:click="{() => toggleNewPassowrd()}">
 				{#if showNewPassword}
 					<svg
@@ -152,7 +149,7 @@ async function submit(p) {
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="w-5 h-5">
+						class="h-5 w-5">
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -166,7 +163,7 @@ async function submit(p) {
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="w-5 h-5">
+						class="h-5 w-5">
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -178,7 +175,7 @@ async function submit(p) {
 							d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
 					</svg>
 				{/if}
-			</button>
+			</div>
 		</div>
 
 		<div class="relative">
@@ -189,9 +186,8 @@ async function submit(p) {
 				required
 				bind:value="{password.passwordConfirmation}" />
 
-			<button
-				type="button "
-				class="absolute inset-y-0 right-2 flex items-end pb-2 cursor-pointer justify-center"
+			<div
+				class="absolute inset-y-0 right-2 flex cursor-pointer items-end justify-center pb-2"
 				on:click="{() => toggleConfirmationPassowrd()}">
 				{#if showConfirmationPassword}
 					<svg
@@ -200,7 +196,7 @@ async function submit(p) {
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="w-5 h-5">
+						class="h-5 w-5">
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -214,7 +210,7 @@ async function submit(p) {
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="w-5 h-5">
+						class="h-5 w-5">
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -226,13 +222,13 @@ async function submit(p) {
 							d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
 					</svg>
 				{/if}
-			</button>
+			</div>
 		</div>
 
 		<PrimaryButton type="submit" loading="{loading}" class="w-full">UPDATE PASSWORD</PrimaryButton>
 	</form>
 
-	<div class="flex flex-col text-center max-w-max mx-auto gap-1 text-sm">
+	<div class="mx-auto flex max-w-max flex-col gap-1 text-center text-sm">
 		<a
 			href="{`${$page.url.searchParams.get('ref') || '/'}`}"
 			aria-label="Click to back into login"

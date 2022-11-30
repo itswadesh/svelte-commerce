@@ -32,11 +32,15 @@ let formChanged = false
 let err = ''
 
 function saveImage(detail) {
+	// console.log('detail = ', detail)
+
 	data.profile.avatar = detail
 	saveProfile()
 }
 
 function removeImage(detail) {
+	// console.log('detail = ', detail)
+
 	data.profile.avatar = ''
 	saveProfile()
 }
@@ -88,11 +92,20 @@ async function saveProfile() {
 			<form class="mb-5 flex flex-col gap-4 sm:mb-10" on:submit|preventDefault="{saveProfile}">
 				<div>
 					<div
-						class="frosted flex flex-col gap-2 rounded-lg border border-gray-300 p-4 shadow-lg md:p-6">
-						<div class="flex flex-wrap items-center">
-							<div class="mb-1 mr-5 w-52 flex-shrink-0 font-medium"></div>
+						class="frosted flex flex-col gap-4 rounded-lg border border-gray-300 p-4 shadow-lg md:p-6">
+						<div class="flex flex-wrap items-center gap-2">
+							<div class="w-52 flex-shrink-0 font-medium">
+								<SingleImageUpload
+									class=""
+									avatar
+									folder="avatar/{data.profile?.phone?.replace('+', '')}"
+									images="{data.profile.avatar}"
+									loading="{loading}"
+									on:save="{({ detail }) => saveImage(detail)}"
+									on:remove="{({ detail }) => removeImage(detail)}" />
+							</div>
 
-							<div class="mb-2 w-full max-w-md">
+							<div class="w-full max-w-md">
 								<span class="mb-1 text-sm font-medium sm:text-lg lg:text-xl">
 									{data.profile.email || ''} <br />
 								</span>
@@ -103,10 +116,10 @@ async function saveProfile() {
 							</div>
 						</div>
 
-						<div class="flex flex-wrap">
-							<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">First Name</h6>
+						<div class="flex flex-wrap gap-2">
+							<h6 class="w-52 flex-shrink-0 font-medium">First Name</h6>
 
-							<div class="mb-2 w-full max-w-md">
+							<div class="w-full max-w-md">
 								<Textbox
 									type="text"
 									placeholder="Enter First Name"
@@ -115,10 +128,10 @@ async function saveProfile() {
 							</div>
 						</div>
 
-						<div class="flex flex-wrap">
-							<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">Last Name</h6>
+						<div class="flex flex-wrap gap-2">
+							<h6 class="w-52 flex-shrink-0 font-medium">Last Name</h6>
 
-							<div class="mb-2 w-full max-w-md">
+							<div class="w-full max-w-md">
 								<Textbox
 									type="text"
 									placeholder="Enter Last Name"
@@ -127,10 +140,10 @@ async function saveProfile() {
 							</div>
 						</div>
 
-						<div class="flex flex-wrap">
-							<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">Date Of Birth</h6>
+						<div class="flex flex-wrap gap-2">
+							<h6 class="w-52 flex-shrink-0 font-medium">Date Of Birth</h6>
 
-							<div class="mb-2 w-full max-w-md">
+							<div class="w-full max-w-md">
 								<Textbox
 									type="date"
 									placeholder="Enter Date Of Birth"
@@ -139,10 +152,10 @@ async function saveProfile() {
 							</div>
 						</div>
 
-						<div class="flex flex-wrap">
-							<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">Phone</h6>
+						<div class="flex flex-wrap gap-2">
+							<h6 class="w-52 flex-shrink-0 font-medium">Phone</h6>
 
-							<div class="mb-2 w-full max-w-md">
+							<div class="w-full max-w-md">
 								<Textbox
 									disabled
 									type="text"

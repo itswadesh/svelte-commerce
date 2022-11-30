@@ -79,7 +79,7 @@ let footerItems = [
 			{ title: 'Bulk Order Inquiry', link: '/bulk-order-inquiry', new: true },
 			{
 				title: 'Join as Vendor',
-				link: `${$page.data.store?.adminUrl}?role=vendor&store=${$page.data.store?.id}`,
+				link: `{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store?.id}`,
 				new: true,
 				target: '_blank'
 			}
@@ -171,7 +171,8 @@ async function getStoreData() {
 // }
 </script>
 
-<div class="bg-primary-500 p-3 text-center tracking-wide text-white sm:px-10">
+<div
+	class="bg-gradient-to-r from-primary-500 to-secondary-500 p-3 text-center tracking-wide text-white sm:px-10">
 	<p class="mb-1 text-xl font-semibold uppercase">Truly Indian Brand</p>
 
 	<p>Over <span class="font-semibold">2 Million</span> Happy Customers</p>
