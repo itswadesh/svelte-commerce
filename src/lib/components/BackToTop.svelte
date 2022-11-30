@@ -15,7 +15,7 @@
 </style>
 
 <script>
-import { fly } from 'svelte/transition'
+import { fade, fly } from 'svelte/transition'
 
 export let showOnPx = 150
 
@@ -54,7 +54,7 @@ function handleOnScroll() {
 
 {#if !hidden}
 	<button
-		transition:fly="{{ y: -200, duration: 500 }}"
+		transition:fade="{{ duration: 500 }}"
 		aria-label="Click to go to top"
 		class="back-to-top overflow-hidden rounded-full bg-white focus:outline-none"
 		on:click="{goTop}">
