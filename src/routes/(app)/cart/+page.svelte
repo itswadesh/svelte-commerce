@@ -87,8 +87,7 @@ async function applyCouponCode(selectedCouponCode: string) {
 			$page.data.origin
 		)
 		appliedCouponInfo = resAC
-		// await invalidateAll()
-		// await refreshCart()
+		await invalidateAll()
 		openApplyPromoCodeModal = false
 	} catch (e) {
 		couponErr = e
@@ -102,8 +101,7 @@ async function removeCouponCode() {
 		loadingRemoveCoupon = true
 		await del(`remove-coupon?store=${$page.data.store?.id}`, $page.data.origin)
 		selectedCouponCode = ''
-		// await invalidateAll()
-		await refreshCart()
+		await invalidateAll()
 	} catch (e) {
 		couponErr = e
 	} finally {
@@ -132,39 +130,6 @@ async function getCoupons() {
 	} catch (e) {
 	} finally {
 		loadingCoupon = false
-	}
-}
-
-async function refreshCart() {
-	// Works for remove coupon
-	try {
-		const res = await getAPI(`carts/refresh-cart?store=${$page.data.store?.id}`, $page.data.origin)
-		if (res) {
-			const cartObj = {
-				cartId: res?.cart_id,
-				items: res?.items,
-				qty: +res?.qty,
-				tax: +res?.tax,
-				subtotal: +res?.subtotal,
-				total: +res?.total,
-				currencySymbol: res?.currencySymbol,
-				discount: res?.discount,
-				savings: res?.savings,
-				selfTakeout: res?.selfTakeout,
-				shipping: res?.shipping,
-				unavailableItems: res?.unavailableItems,
-				formattedAmount: res?.formattedAmount
-			}
-			// const str = cookie.serialize('cart', JSON.stringify(cartObj), { path: '/' })
-			console.error('Refresh Cart called cart/+page.svelte...', res.cart_id, res.qty)
-
-			cookies.set('cartId', cartObj.cartId, { path: '/' })
-			cookies.set('cartQty', cartObj.qty, { path: '/' })
-
-			// data.cart = cartObj
-		}
-	} catch (e) {
-	} finally {
 	}
 }
 </script>
