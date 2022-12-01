@@ -85,7 +85,7 @@ onMount(async () => {
 
 	<div class="fixed inset-x-0 top-0">
 		<div class="absolute z-20 my-auto mt-4 px-1">
-			<a href="/" aria-label="Click to search" data-sveltekit-prefetch>
+			<a href="/" aria-label="Click to search" data-sveltekit-preload-data>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					class="my-auto h-6 w-8 text-gray-500"

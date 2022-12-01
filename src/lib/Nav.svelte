@@ -232,7 +232,7 @@ const getSelectionLabel = (option) => option.name
 			<!-- Search -->
 
 			<!-- <a
-				data-sveltekit-prefetch
+				data-sveltekit-preload-data
 				href="/autosuggest"
 				aria-label="Click to search quizzes, videos, notes etc..."
 				class="block focus:outline-none lg:hidden">
@@ -280,7 +280,7 @@ const getSelectionLabel = (option) => option.name
 				href="/cart"
 				class="relative flex flex-col items-center justify-center gap-1 focus:outline-none lg:border-b-4 lg:border-transparent"
 				aria-label="Click to route cart"
-				data-sveltekit-prefetch>
+				data-sveltekit-preload-data>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
@@ -443,7 +443,7 @@ const getSelectionLabel = (option) => option.name
 									</div>
 
 									<div class="mb-10 flex flex-col gap-2">
-										<a href="/cart" class="block w-full" data-sveltekit-prefetch>
+										<a href="/cart" class="block w-full" data-sveltekit-preload-data>
 											<WhiteButton
 												type="button"
 												class="w-full text-xs uppercase"
@@ -453,7 +453,7 @@ const getSelectionLabel = (option) => option.name
 											</WhiteButton>
 										</a>
 
-										<a href="/checkout/address" class="block w-full" data-sveltekit-prefetch>
+										<a href="/checkout/address" class="block w-full" data-sveltekit-preload-data>
 											<PrimaryButton
 												type="button"
 												class="w-full text-xs uppercase"
@@ -565,7 +565,7 @@ const getSelectionLabel = (option) => option.name
 								href="/cart"
 								aria-label="Click to route cart"
 								class="w-full"
-								data-sveltekit-prefetch>
+								data-sveltekit-preload-data>
 								<PrimaryButton loadingringsize="sm" class="w-full text-sm uppercase">
 									View cart
 								</PrimaryButton>
@@ -652,7 +652,10 @@ const getSelectionLabel = (option) => option.name
 
 							{#each menu as m}
 								<li class="h-auto w-full flex-1">
-									<a href="{m.url}" aria-label="Click to route {m.name}" data-sveltekit-prefetch>
+									<a
+										href="{m.url}"
+										aria-label="Click to route {m.name}"
+										data-sveltekit-preload-data>
 										<h6
 											class="w-full cursor-pointer rounded py-2 px-4 text-left transition duration-300 focus:outline-none hover:bg-primary-50">
 											{m.name}
@@ -700,7 +703,7 @@ const getSelectionLabel = (option) => option.name
 				<a
 					href="/auth/otp-login?ref={$page?.url?.pathname}{$page?.url?.search}"
 					aria-label="Click to route login"
-					data-sveltekit-prefetch>
+					data-sveltekit-preload-data>
 					<button
 						class="flex flex-col items-center justify-center gap-1 focus:outline-none lg:border-b-4 lg:border-transparent"
 						aria-label="/">
@@ -771,7 +774,7 @@ const getSelectionLabel = (option) => option.name
 
 					<li>
 						<a
-							data-sveltekit-prefetch
+							data-sveltekit-preload-data
 							href="/my/profile"
 							aria-label="Click to route profile"
 							class="mb-4 flex flex-col gap-2 border-b pb-4"
@@ -816,7 +819,7 @@ const getSelectionLabel = (option) => option.name
 					{#each menu as m}
 						<li>
 							<a
-								data-sveltekit-prefetch
+								data-sveltekit-preload-data
 								href="{m.url}"
 								aria-label="Click to route account"
 								class="flex items-center gap-2 py-2"
@@ -857,7 +860,7 @@ const getSelectionLabel = (option) => option.name
 				<!-- Login -->
 
 				<a
-					data-sveltekit-prefetch
+					data-sveltekit-preload-data
 					href="/auth/otp-login?ref={$page?.url?.pathname}{$page?.url?.search}"
 					aria-label="Click to route login"
 					class="flex items-center gap-2 py-2"

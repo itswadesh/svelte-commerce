@@ -101,7 +101,7 @@ async function refreshData() {
 			bind:value="{search}"
 			on:change="{() => callSearch(search)}" /> -->
 
-		<a href="/my/addresses/new" aria-label="Click to route new address" data-sveltekit-prefetch>
+		<a href="/my/addresses/new" aria-label="Click to route new address" data-sveltekit-preload-data>
 			<PrimaryButton class="text-sm">
 				<svg
 					class="h-5 w-5"

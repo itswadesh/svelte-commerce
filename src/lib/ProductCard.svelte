@@ -82,7 +82,7 @@ async function toggleWishlist(id) {
 		target="{$page?.data?.isDesktop ? '_blank' : ''}"
 		rel="noopener noreferrer"
 		aria-label="Click to view the product details"
-		data-sveltekit-prefetch>
+		data-sveltekit-preload-data>
 		<!-- New -->
 
 		{#if product.new || product.tags?.length}
@@ -246,7 +246,7 @@ async function toggleWishlist(id) {
 					target="_blank"
 					rel="noopener noreferrer"
 					aria-label="Click to view the product details"
-					data-sveltekit-prefetch>
+					data-sveltekit-preload-data>
 					<div class="flex items-center justify-between">
 						<h1 class="mb-1.5 font-semibold">
 							{#if product.brandName}
@@ -293,7 +293,7 @@ async function toggleWishlist(id) {
 			<a
 				href="/product/{product.slug}"
 				aria-label="Click to view the product details"
-				data-sveltekit-prefetch>
+				data-sveltekit-preload-data>
 				<!-- <div class="mb-1.5 flex items-center justify-between"> -->
 				<!-- {#if product.brand?.name || product.brandName}
 						<h1 class="font-semibold">
@@ -342,7 +342,7 @@ async function toggleWishlist(id) {
 		<a
 			href="/product/{product.slug}"
 			aria-label="Click to view the product details"
-			data-sveltekit-prefetch>
+			data-sveltekit-preload-data>
 			<div class="mt-2.5 flex flex-wrap items-baseline justify-start gap-1.5 text-xs leading-4">
 				<span class="whitespace-nowrap text-sm font-bold sm:text-base">
 					{product.formattedPrice}

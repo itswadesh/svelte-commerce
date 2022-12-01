@@ -225,7 +225,7 @@ async function refreshData() {
 
 			<span class="mb-5 text-sm"> We didn't find any review against your listing</span>
 
-			<a href="/" aria-label="Click to route home" data-sveltekit-prefetch>
+			<a href="/" aria-label="Click to route home" data-sveltekit-preload-data>
 				<PrimaryButton class="w-40 py-2 text-sm">Shop Now</PrimaryButton>
 			</a>
 		</div>
