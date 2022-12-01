@@ -162,12 +162,12 @@ async function getStoreData() {
 // }
 </script>
 
-<div
+<!-- <div
 	class="bg-gradient-to-r from-primary-500 to-secondary-500 p-3 text-center tracking-wide text-white sm:px-10">
 	<p class="mb-1 text-xl font-semibold uppercase">Truly Indian Brand</p>
 
-	<!-- <p>Over <span class="font-semibold">2 Million</span> Happy Customers</p> -->
-</div>
+	<p>Over <span class="font-semibold">2 Million</span> Happy Customers</p>
+</div> -->
 
 <footer class="w-full justify-center bg-gray-50 p-3 text-sm sm:p-10">
 	<div class="container mx-auto max-w-6xl">
