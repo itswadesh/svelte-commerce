@@ -52,14 +52,17 @@ onMount(async () => {
 			{/each}
 		</svelte:component>
 	</div>
-{:else if sliderBannersMobile?.length > 0}
+{/if}
+
+{#if sliderBannersMobile?.length > 0}
 	<div class="mx-auto block h-auto w-full overflow-hidden bg-white sm:hidden">
 		<svelte:component this="{Carousel}">
 			{#each sliderBannersMobile as b, ix}
 				{#if b.img}
 					<a
 						href="{b.link}"
-						class="carousel-item relative  float-left h-auto w-full {ix == 0 ? 'active' : ''}">
+						data-sveltekit-prefetch
+						class="carousel-item relative float-left h-auto w-full {ix == 0 ? 'active' : ''}">
 						<LazyImg
 							src="{b.img}"
 							alt="{b.name}"

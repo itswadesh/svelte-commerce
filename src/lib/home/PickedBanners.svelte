@@ -59,14 +59,15 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 
 					{#if b.data?.length}
 						<div class="max-w-screen overflow-x-auto scrollbar-none lg:hidden">
-							<div role="banner" class="flex flex-row">
+							<div role="banner" class="flex flex-row items-start">
 								{#each b.data as banner}
 									{#if banner.img}
-										<a href="{banner.link}" class="flex-shrink-0" data-sveltekit-prefetch>
+										<a href="{banner.link}" class="block flex-shrink-0" data-sveltekit-prefetch>
 											<LazyImg
 												src="{banner.img}"
 												alt=""
 												width="375"
+												height="430"
 												class="w-[47vw] object-contain object-top sm:w-60" />
 										</a>
 									{/if}
