@@ -18,7 +18,7 @@ let seoProps = {
 			Payments & Returns
 		</h1>
 
-		<ul class="flex flex-col gap-5 text-sm sm:text-base">
+		<ul class="flex flex-col gap-5 text-justify text-sm sm:text-base">
 			<li>
 				<h6 class="mb-5 font-semibold">PAYMENTS</h6>
 

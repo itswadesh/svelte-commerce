@@ -17,7 +17,7 @@ let seoProps = {
 			Privacy Policy
 		</h1>
 
-		<ul class="flex flex-col gap-5 text-sm text-gray-500 sm:text-base">
+		<ul class="flex flex-col gap-5 text-justify text-sm sm:text-base text-gray-500">
 			<li>
 				Your privacy is important to us. It is {$page.data.store?.websiteName}’s policy to respect
 				your privacy regarding any information we may collect from you across our website, https://{$page

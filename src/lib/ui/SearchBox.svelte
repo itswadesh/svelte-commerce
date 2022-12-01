@@ -5,6 +5,7 @@ const dispatch = createEventDispatcher()
 
 export let value = '',
 	placeholder = ''
+
 let clazz = ''
 export { clazz as class }
 </script>
@@ -13,8 +14,8 @@ export { clazz as class }
 	<input
 		type="search"
 		placeholder="{placeholder}"
-		class="w-full rounded-full border border-gray-300 bg-gray-50 py-2 pl-4 pr-14 text-sm font-semibold placeholder-gray-400  transition duration-300 placeholder:font-normal hover:bg-white focus:outline-none focus:ring-1 focus:ring-primary-500"
-		bind:value
+		class="w-full rounded-full border  bg-gray-50 py-2 pl-4 pr-14 text-sm font-semibold placeholder-gray-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-white"
+		bind:value="{value}"
 		on:change="{() => dispatch('change', value)}" />
 
 	<button

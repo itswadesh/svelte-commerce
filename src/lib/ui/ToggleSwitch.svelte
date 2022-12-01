@@ -32,6 +32,8 @@ input:checked ~ .black {
 import { onMount } from 'svelte'
 import { createEventDispatcher } from 'svelte'
 
+const dispatch = createEventDispatcher()
+
 export let id = ''
 export let color = 'green'
 export let checked
@@ -43,10 +45,7 @@ export let size = 'sm'
 export let onText = ''
 export let offText = ''
 
-const dispatch = createEventDispatcher()
-
 let clazz = ''
-
 export { clazz as class }
 
 onMount(() => {
@@ -82,8 +81,8 @@ function genId() {
 				disabled="{disabled}"
 				required="{required}"
 				class="hidden"
-				bind:checked
-				on:change="{() => dispatch('input')}" />
+				bind:checked="{checked}"
+				on:change="{() => dispatch('change')}" />
 
 			<!-- line -->
 
@@ -127,7 +126,7 @@ function genId() {
       		{color == 'purple' && checked === true ? 'text-purple-500' : 'text-gray-400'}
       		{color == 'yellow' && checked === true ? 'text-yellow-500' : 'text-gray-400'}
       		{color == 'indigo' && checked === true ? 'text-indigo-500' : 'text-gray-400'}
-      		{color == 'black' && checked === true ? '' : 'text-gray-400'}
+      		{color == 'black' && checked === true ? 'text-black' : 'text-gray-400'}
 			{size == 'xs' ? 'text-sm' : ''}
             {size == 'sm' ? 'text-base' : ''}
             {size == 'md' ? 'text-xl' : ''}

@@ -17,7 +17,8 @@ export let loading = false,
 	disabled = false,
 	loadingringsize = 'base',
 	rounded = false,
-	type = 'button'
+	type = 'button',
+	title = ''
 
 let clazz
 
@@ -45,27 +46,11 @@ function handleLoading() {
 
 <button
 	type="{type}"
-	class=" {clazz}
-      relative
-      transform
-      items-center
-      justify-center
-      bg-white
-      px-4
-      py-2
-      text-center
-      font-semibold
-      tracking-wider
-      text-white
-      shadow-md
-      transition
-      duration-700
-      hover:shadow
-      focus:outline-none
-      focus:ring-0 focus:ring-offset-0 active:scale-95
-      {disabled ? 'bg-gray-400 cursor-not-allowed' : 'gradient'}
-      {rounded ? 'rounded-full ' : 'rounded-md'}
-    "
+	title="{title}"
+	disabled="{disabled}"
+	class="{clazz} relative transform items-center justify-center bg-white px-4 py-2 text-center font-semibold tracking-wider text-white shadow-md transition duration-700 focus:outline-none focus:ring-0 focus:ring-offset-0 hover:shadow active:scale-95
+    {disabled ? 'bg-gray-400 cursor-not-allowed' : 'gradient'}
+    {rounded ? 'rounded-full ' : 'rounded-md'}"
 	on:click="{handleClick}">
 	<div class="flex items-center justify-center gap-1">
 		<slot />
@@ -73,31 +58,19 @@ function handleLoading() {
 
 	{#if loading || localLoadingPeriod}
 		<div
-			class="
-        absolute
-        inset-0
-        flex cursor-not-allowed
-        items-center
-        justify-center
-        bg-black
-        bg-opacity-70
-        {rounded ? 'rounded-full' : 'rounded-md'}
-      ">
+			class="absolute inset-0 flex cursor-not-allowed items-center justify-center bg-black bg-opacity-70
+        	{rounded ? 'rounded-full' : 'rounded-md'}">
 			<svg
-				class="animate-spin text-white {loadingringsize == 'xs'
-					? 'w-4 h-4'
-					: loadingringsize == 'sm'
-					? 'h-5 w-5'
-					: loadingringsize == 'base'
-					? 'h-6 w-6'
-					: loadingringsize == 'lg'
-					? 'h-7 w-7'
-					: 'h-7 w-7'} "
+				class="animate-spin text-white 
+				{loadingringsize == 'xs' ? 'w-4 h-4' : ''}
+				{loadingringsize == 'sm' ? 'h-5 w-5' : ''}
+				{loadingringsize == 'base' ? 'h-6 w-6' : ''}
+				{loadingringsize == 'lg' ? 'h-7 w-7' : ''}"
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
 				viewBox="0 0 24 24">
-				<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
-				></circle>
+				<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+				</circle>
 				<path
 					class="opacity-75"
 					fill="currentColor"

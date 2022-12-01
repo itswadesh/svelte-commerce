@@ -55,7 +55,9 @@ export let label = '',
 	name = '',
 	className = '',
 	placeholder = ' ',
-	required = false
+	required = false,
+	tabindex = 0,
+	maxlength
 
 export { className as class }
 </script>
@@ -65,95 +67,105 @@ export { className as class }
 		{#if type === 'text'}
 			<input
 				type="text"
-				bind:value
+				bind:value="{value}"
 				id="{id}"
 				name="{name}"
 				class="floating-input w-full bg-transparent focus:outline-none"
 				placeholder="{placeholder}"
 				aria-label="{label}"
 				required="{required}"
+				tabindex="{tabindex}"
+				maxlength="{maxlength}"
 				on:input="{() => dispatch('input')}"
 				on:focus="{() => dispatch('focus')}" />
 		{:else if type === 'email'}
 			<input
 				type="email"
-				bind:value
+				bind:value="{value}"
 				id="{id}"
 				name="{name}"
 				class="floating-input w-full bg-transparent focus:outline-none"
 				placeholder="{placeholder}"
 				aria-label="{label}"
 				required="{required}"
+				tabindex="{tabindex}"
+				maxlength="{maxlength}"
 				on:input="{() => dispatch('input')}"
 				on:focus="{() => dispatch('focus')}" />
 		{:else if type === 'password'}
 			<input
 				type="password"
-				bind:value
-				id="{id}"
-				name="{name}"
+				bind:value="{value}"
+				id="password"
+				name="password"
 				class="floating-input w-full bg-transparent focus:outline-none"
 				placeholder="{placeholder}"
 				aria-label="{label}"
 				required="{required}"
+				tabindex="{tabindex}"
+				maxlength="{maxlength}"
 				on:input="{() => dispatch('input')}"
 				on:focus="{() => dispatch('focus')}" />
 		{:else if type === 'date'}
 			<input
 				type="date"
-				bind:value
+				bind:value="{value}"
 				id="{id}"
 				name="{name}"
 				class="floating-input w-full bg-transparent focus:outline-none"
 				placeholder="{placeholder}"
 				aria-label="{label}"
 				required="{required}"
+				tabindex="{tabindex}"
+				maxlength="{maxlength}"
 				on:input="{() => dispatch('input')}"
 				on:focus="{() => dispatch('focus')}" />
 		{:else if type === 'time'}
 			<input
 				type="time"
-				bind:value
-				id="{id}"
-				name="{name}"
+				bind:value="{value}"
+				name="time"
+				id="time"
 				class="floating-input w-full bg-transparent focus:outline-none"
 				placeholder="{placeholder}"
 				aria-label="{label}"
 				required="{required}"
+				tabindex="{tabindex}"
+				maxlength="{maxlength}"
 				on:input="{() => dispatch('input')}"
 				on:focus="{() => dispatch('focus')}" />
 		{:else if type === 'number'}
 			<input
 				type="number"
-				bind:value
+				bind:value="{value}"
 				id="{id}"
 				name="{name}"
 				class="floating-input w-full bg-transparent focus:outline-none"
 				placeholder="{placeholder}"
 				aria-label="{label}"
 				required="{required}"
+				tabindex="{tabindex}"
+				maxlength="{maxlength}"
 				on:input="{() => dispatch('input')}"
 				on:focus="{() => dispatch('focus')}" />
 		{:else if type === 'tel'}
 			<input
 				type="tel"
-				bind:value
+				bind:value="{value}"
 				id="{id}"
 				name="{name}"
 				class="floating-input w-full bg-transparent focus:outline-none"
 				placeholder="{placeholder}"
 				aria-label="{label}"
 				required="{required}"
+				tabindex="{tabindex}"
+				maxlength="{maxlength}"
 				on:input="{() => dispatch('input')}"
 				on:focus="{() => dispatch('focus')}" />
 		{/if}
+		<span class="highlight"></span>
 
-		<label for="textbox">
-			{label}
-
-			{#if required}<span class="text-red-500">*</span>{/if}
-		</label>
-
+		<label for="textbox">{label}</label>
 		<slot />
 	</div>
 </div>

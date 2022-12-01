@@ -7,7 +7,7 @@
 	color: black;
 	display: block;
 	width: 100%;
-	padding: 20px 0 0 0;
+	padding: 12px 0 0 0;
 	border-bottom: 2px solid #e5e7eb;
 }
 .floating-input:focus {
@@ -21,7 +21,7 @@ label {
 	position: absolute;
 	pointer-events: none;
 	left: 0px;
-	top: 20px;
+	top: 18px;
 	transition: 0.2s ease all;
 	-moz-transition: 0.2s ease all;
 	-webkit-transition: 0.2s ease all;
@@ -47,36 +47,45 @@ import { createEventDispatcher } from 'svelte'
 
 const dispatch = createEventDispatcher()
 
-export let label = '',
-	value = '',
-	className = '',
-	placeholder = ' ',
-	rows = 4,
-	required = false
+export let id = 'textarea'
+export let maxlength
+export let name = ''
+export let placeholder = ' '
+export let required = false
+export let rows = 4
+export let tabindex = 0
+export let value = ''
+export let label = ''
 
+export let className = ''
 export { className as class }
 </script>
 
 <div class="{className}">
 	<div class="floating-label">
 		<textarea
-			name="textarea"
+			bind:value="{value}"
+			id="{id}"
+			name="{name}"
 			rows="{rows}"
-			required="{required}"
-			bind:value
 			class="floating-input w-full bg-transparent focus:outline-none"
 			placeholder="{placeholder}"
 			aria-label="{label}"
-			on:input="{() => dispatch('input')}"></textarea>
+			required="{required}"
+			tabindex="{tabindex}"
+			maxlength="{maxlength}"
+			on:input="{() => dispatch('input')}"
+			on:focus="{() => dispatch('focus')}"></textarea>
 
 		<span class="highlight"></span>
 
-		<label for="textbox">
+		<label for="{id}">
 			{label}
 
-			{#if required}<span class="text-red-500">*</span>{/if}
+			{#if required}
+				<span class="text-red-500">*</span>
+			{/if}
 		</label>
-
 		<slot />
 	</div>
 </div>
