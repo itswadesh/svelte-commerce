@@ -54,5 +54,5 @@ onDestroy(() => {
 <img
 	alt="{alt}"
 	class="lazy {clazz}"
-	src="{`${getCdnImageUrl(src)}?tr=h-2,w-1:w-${w},h-${h}`}"
+	src="{`${getCdnImageUrl(src)}?tr=h-1.5,w-1:w-${w},h-${h}`}"
 	data-src="{`${getCdnImageUrl(src)}?tr=w-${w},h-${h}:w-${w},h-${h}`}" />
