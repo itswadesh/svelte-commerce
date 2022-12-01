@@ -31,7 +31,7 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 									<div
 										role="banner"
 										class="h-[40vw] w-[40vw] overflow-hidden rounded-full shadow-md sm:h-[30vw] sm:w-[30vw] lg:h-[20vw] lg:w-[20vw] xl:h-[15vw] xl:w-[15vw]">
-										<a href="{banner.link}" data-sveltekit-prefetch>
+										<a href="{banner.link}" data-sveltekit-preload-data>
 											<LazyImg
 												src="{banner.img}"
 												alt=""
@@ -62,7 +62,7 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 							<div role="banner" class="flex flex-row items-start">
 								{#each b.data as banner}
 									{#if banner.img}
-										<a href="{banner.link}" class="block flex-shrink-0" data-sveltekit-prefetch>
+										<a href="{banner.link}" class="block flex-shrink-0" data-sveltekit-preload-data>
 											<LazyImg
 												src="{banner.img}"
 												alt=""
@@ -78,7 +78,7 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 						<div role="banner" class="hidden grid-cols-7 lg:grid">
 							{#each b.data as banner}
 								{#if banner.img}
-									<a href="{banner.link}" class="col-span-1" data-sveltekit-prefetch>
+									<a href="{banner.link}" class="col-span-1" data-sveltekit-preload-data>
 										<LazyImg
 											src="{banner.img}"
 											alt=""

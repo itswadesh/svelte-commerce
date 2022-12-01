@@ -255,7 +255,7 @@ export { clazz as class }
 
 			<span class="mb-4 text-xs">Add items to it now</span>
 
-			<a href="/" aria-label="Click to route home" data-sveltekit-prefetch>
+			<a href="/" aria-label="Click to route home" data-sveltekit-preload-data>
 				<PrimaryButton class="w-40 py-2 text-sm">Shop Now</PrimaryButton>
 			</a>
 		</div>

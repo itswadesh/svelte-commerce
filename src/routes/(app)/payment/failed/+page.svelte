@@ -20,7 +20,7 @@ $: paymentUrl = $page?.url?.searchParams.get('ref')
 		</div>
 
 		<h1 class="text-xl font-bold sm:text-2xl md:text-3xl">Payment Failed!</h1>
-		<a href="/cart" aria-label="Click to go back to payment method" data-sveltekit-prefetch>
+		<a href="/cart" aria-label="Click to go back to payment method" data-sveltekit-preload-data>
 			<PrimaryButton class="uppercase">Pay Again</PrimaryButton>
 		</a>
 	</div>

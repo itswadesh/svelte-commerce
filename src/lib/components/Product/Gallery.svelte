@@ -54,7 +54,7 @@ onMount(async () => {
 				{#each product?.images as img, ix}
 					{#if img}
 						<div
-							data-sveltekit-prefetch
+							data-sveltekit-preload-data
 							class="carousel-item relative float-left max-h-screen w-full 
 							{ix == 0 ? 'active' : ''}">
 							<img src="{img}" alt="" class="block h-full object-contain" />

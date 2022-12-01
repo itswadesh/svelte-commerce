@@ -25,8 +25,8 @@ let openSidebar = false
 		cart="{data.cart}"
 		store="{data.store}"
 		q="{data.q}"
-		bind:showCartSidebar
-		bind:openSidebar />
+		bind:showCartSidebar="{showCartSidebar}"
+		bind:openSidebar="{openSidebar}" />
 
 	<div class="mt-14 sm:mt-20 flex h-full w-full">
 		{#if menu?.length > 0}
@@ -34,7 +34,7 @@ let openSidebar = false
 				class="relative hidden w-44 flex-shrink-0 overflow-y-auto overflow-x-hidden bg-primary-500 py-3 scrollbar-none sm:block">
 				<!-- Dashboard -->
 
-				<a href="/my" aria-label="Click to route dashboard" data-sveltekit-prefetch>
+				<a href="/my" aria-label="Click to route dashboard" data-sveltekit-preload-data>
 					<button
 						type="button"
 						class="w-full p-3 text-left text-sm text-gray-400 focus:outline-none">

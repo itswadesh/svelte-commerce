@@ -16,7 +16,7 @@ export let selected = null
 			href="/cart"
 			aria-label="Click to go inside cart"
 			class="mx-2 flex flex-col"
-			data-sveltekit-prefetch>
+			data-sveltekit-preload-data>
 			<div
 				class="mx-auto flex h-8 w-8 items-center justify-center  rounded-full border border-primary-500 text-center {selected ===
 				'cart'
