@@ -12,17 +12,23 @@
 </style>
 
 <script lang="ts">
-import Nav from '$lib/Nav.svelte'
-import Footer from '$lib/Footer.svelte'
-import PageTransitions from '$lib/PageTransitions.svelte'
 import { page } from '$app/stores'
+import Footer from '$lib/Footer.svelte'
+import Nav from '$lib/Nav.svelte'
+import PageTransitions from '$lib/PageTransitions.svelte'
+
 export let data
-let showCartSidebar = false
+
 let openSidebar = false
+let showCartSidebar = false
 </script>
 
 <div class="{showCartSidebar || openSidebar ? 'h-screen overflow-hidden' : 'h-full'}">
-	<Nav me="{data.me}" cart="{data.cart}" bind:showCartSidebar bind:openSidebar />
+	<Nav
+		me="{data.me}"
+		cart="{data.cart}"
+		bind:showCartSidebar="{showCartSidebar}"
+		bind:openSidebar="{openSidebar}" />
 
 	<PageTransitions url="{data.url}">
 		<div class="mt-14 w-full flex-1 sm:mt-20">
