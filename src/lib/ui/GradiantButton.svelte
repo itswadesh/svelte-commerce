@@ -1,7 +1,7 @@
 <style>
 .gradient {
 	display: flex;
-	background: linear-gradient(120deg, #1f2937, #0a6ce8, #1f2937, #0a6ce8, #1f2937);
+	background: linear-gradient(120deg, #112d4e, #1a6b1a, #112d4e, #1a6b1a, #112d4e);
 	background-size: 300%;
 	transition: 0.8s;
 }
@@ -21,7 +21,8 @@ export let loading = false,
 	disabled = false,
 	className,
 	roundedFull = false,
-	type = 'button'
+	type = 'button',
+	title = ''
 
 // creates a `class` property, even
 // though it is a reserved word
@@ -48,27 +49,12 @@ function handleLoading() {
 
 <button
 	type="{type}"
-	class="
-      relative
-      transform
-      items-center
-      justify-center
-      overflow-hidden
-      bg-white
-      px-4
-      py-2
-      text-center
-      font-semibold
-      tracking-wider
-      text-white
-      shadow-md
-      transition
-      duration-700
-      hover:shadow focus:outline-none focus:ring-0 focus:ring-offset-0
-	  {disabled ? 'bg-gray-400 cursor-not-allowed' : 'gradient active:scale-95'}
-      {roundedFull ? 'rounded-full' : 'rounded-md'}
-	  {className}
-    "
+	title="{title}"
+	disabled="{disabled}"
+	class="relative transform items-center justify-center overflow-hidden bg-white px-4 py-2 text-center font-semibold tracking-wider text-white shadow-md transition duration-700 focus:outline-none focus:ring-0 focus:ring-offset-0 hover:shadow
+	{disabled ? 'bg-gray-400 cursor-not-allowed' : 'gradient active:scale-95'}
+    {roundedFull ? 'rounded-full' : 'rounded-md'}
+	{className}"
 	on:click="{handleClick}">
 	<div class="flex items-center justify-center gap-1">
 		<slot />

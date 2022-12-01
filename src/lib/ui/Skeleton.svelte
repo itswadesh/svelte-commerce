@@ -1,56 +1,27 @@
-<style>
-.small-box {
-	@apply h-14 w-14 sm:h-20 sm:w-20;
-}
-.extra-small-box {
-	@apply h-7 w-7 sm:h-14 sm:w-14;
-}
-.small-gaping {
-	@apply gap-2 sm:gap-3;
-}
-.extra-small-gaping {
-	@apply gap-1 sm:gap-2;
-}
-.small-line {
-	@apply h-2 sm:h-3;
-}
-.extra-small-line {
-	@apply h-1 sm:h-1.5;
-}
-</style>
-
 <script>
-export let small = false,
-	extraSmall = false
+export let small = false
 </script>
 
-<div class="flex w-full animate-pulse gap-5" class:gap-3="{small}" class:gap-2="{extraSmall}">
+<div class="flex w-full animate-pulse gap-5">
 	<div
-		class="h-24 w-24 rounded-md bg-gray-200 sm:h-40 sm:w-40"
-		class:small-box="{small}"
-		class:extra-small-box="{extraSmall}">
+		class="rounded-md bg-gray-200  
+		{small ? 'w-14 h-14 sm:w-20 sm:h-20' : 'w-24 h-24 sm:w-40 sm:h-40'}">
 	</div>
 
-	<div
-		class="flex w-full flex-1 flex-col gap-3 sm:gap-4"
-		class:small-gaping="{small}"
-		class:extra-small-gaping="{extraSmall}">
+	<div class="flex w-full flex-1 flex-col {small ? 'gap-2 sm:gap-3' : 'gap-3 sm:gap-4'}">
 		<div
-			class="h-3 w-4/5 rounded-md bg-gray-200 sm:h-5"
-			class:small-line="{small}"
-			class:extra-small-line="{extraSmall}">
+			class="w-4/5 rounded-md bg-gray-200
+			{small ? 'h-2 sm:h-3' : 'h-3 sm:h-5'}">
 		</div>
 
 		<div
-			class="h-3 w-3/5 rounded-md bg-gray-200 sm:h-5"
-			class:small-line="{small}"
-			class:extra-small-line="{extraSmall}">
+			class="w-3/5 rounded-md bg-gray-200
+			{small ? 'h-2 sm:h-3' : 'h-3 sm:h-5'}">
 		</div>
 
 		<div
-			class="h-3 w-2/6 rounded-md bg-gray-200 sm:h-5"
-			class:small-line="{small}"
-			class:extra-small-line="{extraSmall}">
+			class="w-2/6 rounded-md bg-gray-200
+			{small ? 'h-2 sm:h-3' : 'h-3 sm:h-5'}">
 		</div>
 	</div>
 </div>

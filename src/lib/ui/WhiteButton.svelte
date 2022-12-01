@@ -9,7 +9,6 @@
 
 <script>
 import { createEventDispatcher } from 'svelte'
-
 const dispatch = createEventDispatcher()
 
 export let loading = false,
@@ -18,14 +17,15 @@ export let loading = false,
 	roundedNone = false,
 	roundedFull = false,
 	hideLoading = false,
-	type = 'button'
+	type = 'button',
+	title = ''
 
 // creates a `class` property, even
 // though it is a reserved word
 let clazz = ''
-let localLoadingPeriod = false
-
 export { clazz as class }
+
+let localLoadingPeriod = false
 
 function handleClick() {
 	dispatch('click')
@@ -47,6 +47,8 @@ function handleLoading() {
 
 <button
 	type="{type}"
+	title="{title}"
+	disabled="{disabled}"
 	class="relative transform items-center justify-center overflow-hidden rounded-md border px-4 py-2 text-center font-semibold tracking-wider text-gray-800 shadow-md transition duration-700 focus:outline-none focus:ring-0 focus:ring-offset-0 {clazz}
 	{disabled
 		? 'bg-gray-400 border-gray-400 cursor-not-allowed'

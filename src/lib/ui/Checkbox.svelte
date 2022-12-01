@@ -56,8 +56,15 @@
 
 <script>
 import { createEventDispatcher } from 'svelte'
+
 const dispatch = createEventDispatcher()
-export let model,
+
+let clazz = ''
+export { clazz as class }
+
+export let id,
+	group,
+	model,
 	items = [],
 	selectedItems = [],
 	color = 'none',
@@ -68,24 +75,30 @@ export let model,
 
 let show = true
 let showit = true
+
 function goto(url) {}
+
 function toggle() {
 	show = !show
 }
+
 function Showit() {
 	showit
 }
+
 function changed() {
 	dispatch('change', model)
 }
+
 function clearFilters() {
 	let url = '/stores'
 	goto(url)
 }
+
 function selectallFilters() {}
 </script>
 
-<div class="border-graey-300 border-b pl-3 pb-3">
+<div class="{clazz} border-graey-300 border-b pl-3 pb-3">
 	{#if title}
 		<div class="flex items-center justify-between pr-3">
 			<div
@@ -152,6 +165,7 @@ function selectallFilters() {}
 						<label class="flex items-start gap-1">
 							<input
 								type="checkbox"
+								id="{id}"
 								name="{name}"
 								disabled="{disabled}"
 								required="{required}"

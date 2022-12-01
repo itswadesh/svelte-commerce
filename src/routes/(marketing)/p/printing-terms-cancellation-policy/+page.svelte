@@ -23,7 +23,7 @@ let seoProps = {
 			web site. Please scroll through this screen, read them carefully and print a copy for future reference.
 		</p>
 
-		<ul class="flex flex-col gap-5 text-sm sm:text-base">
+		<ul class="flex flex-col gap-5 text-justify text-sm sm:text-base">
 			<li>
 				<h6 class="mb-5 font-semibold">IMAGES</h6>
 

@@ -22,6 +22,7 @@ export let ref = null
 				bind:this="{ref}"
 				type="tel"
 				label="Mobile Number"
+				maxlength="10"
 				class="w-full"
 				required
 				bind:value="{phone}" />
