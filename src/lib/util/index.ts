@@ -23,6 +23,7 @@ export const getCdnImageUrl = (src, tr) => {
 		const originalImageUrl = src
 			.replace('https://s3.ap-south-1.amazonaws.com/litekart.in/', '/')
 			.replace('https://misiki.s3.ap-south-1.amazonaws.com/', '/misiki/')
+			.replace('https://varnijewels.s3.amazonaws.com/', '/')
 		return IMAGE_CDN_URL + originalImageUrl
 		// return originalImageUrl + tr
 	}
