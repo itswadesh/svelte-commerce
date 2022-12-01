@@ -20,6 +20,7 @@ import MegaMenu from './components/MegaMenu.svelte'
 import menu from '$lib/config/menu'
 import PrimaryButton from './ui/PrimaryButton.svelte'
 import WhiteButton from './ui/WhiteButton.svelte'
+import AutosuggestModal from './AutosuggestModal.svelte'
 
 const dispatch = createEventDispatcher()
 const cookies = Cookie()
@@ -30,6 +31,7 @@ console.log('page', $page)
 
 let q = ''
 let showDropdownAccount = false
+let show = false
 let loadingForDeleteItemFromCart = []
 let categories
 
@@ -229,7 +231,7 @@ const getSelectionLabel = (option) => option.name
 		<div class="flex items-center gap-4 lg:gap-8">
 			<!-- Search -->
 
-			<a
+			<!-- <a
 				data-sveltekit-prefetch
 				href="/autosuggest"
 				aria-label="Click to search quizzes, videos, notes etc..."
@@ -246,7 +248,27 @@ const getSelectionLabel = (option) => option.name
 						stroke-linejoin="round"
 						d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path>
 				</svg>
-			</a>
+			</a> -->
+
+			<button
+				type="button"
+				aria-label="Click to search quizzes, videos, notes etc..."
+				class="block focus:outline-none lg:hidden"
+				on:click="{() => (show = true)}">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke-width="1.5"
+					stroke="currentColor"
+					class="h-6 w-6">
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z">
+					</path>
+				</svg>
+			</button>
 
 			<!-- Cart -->
 
@@ -705,6 +727,10 @@ const getSelectionLabel = (option) => option.name
 		</div>
 	</div>
 </nav>
+
+{#if show}
+	<AutosuggestModal bind:show="{show}" />
+{/if}
 
 <!-- Sidebar -->
 
