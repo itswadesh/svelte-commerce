@@ -106,12 +106,14 @@ async function saveProfile() {
 							</div>
 
 							<div class="w-full max-w-md">
-								<span class="mb-1 text-sm font-medium sm:text-lg lg:text-xl">
-									{data.profile.email || ''} <br />
-								</span>
+								{#if data.profile.email}
+									<span class="mb-1 text-sm font-medium sm:text-lg lg:text-xl">
+										{data.profile.email} <br />
+									</span>
+								{/if}
 
 								<span class="text-xs capitalize sm:text-sm">
-									Role : <b>{data.profile.role || ''}</b>
+									Role : <b>{data.profile.role || '_'}</b>
 								</span>
 							</div>
 						</div>
