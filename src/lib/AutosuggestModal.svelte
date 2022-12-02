@@ -24,7 +24,13 @@ let err
 // console.log('popular = ', popular?.data?.length)
 
 function submit() {
+	show = false
 	goto(`/search?q=${q}`)
+}
+
+function handleRouteToCategorySlug(link, slug) {
+	show = false
+	goto(`/${link || slug}`)
 }
 
 function onselect(v) {
@@ -198,17 +204,18 @@ onMount(async () => {
 		<!-- Categories -->
 
 		{#if categories && categories?.data?.length}
-			<div class="mt-16 px-4">
+			<div class="mt-20 px-4">
 				<h6 class="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-600">
 					Categories on {$page?.data?.store?.websiteName}
 				</h6>
 
 				<div class="flex flex-col gap-4">
 					{#each categories?.data as c}
-						<a
-							href="/{c.link || c.slug}"
+						<button
+							type="button"
 							aria-label="Click to browse category"
-							class="flex items-center gap-4">
+							class="flex items-center gap-4 text-left"
+							on:click="{() => handleRouteToCategorySlug(c.link, c.slug)}">
 							{#if c.img}
 								<div class="my-auto w-1/6">
 									<LazyImg
@@ -239,7 +246,7 @@ onMount(async () => {
 									d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
 									clip-rule="evenodd"></path>
 							</svg>
-						</a>
+						</button>
 					{/each}
 				</div>
 			</div>
