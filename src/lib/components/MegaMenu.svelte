@@ -95,7 +95,7 @@ async function getMegaMenu() {
 				<a
 					href="/{category.link || category.slug}"
 					data-sveltekit-reload
-					class="flex items-center gap-1 w-full">
+					class="flex w-full items-center gap-1">
 					<!-- Root category -->
 
 					<span>{category.name}</span>
@@ -119,7 +119,7 @@ async function getMegaMenu() {
 			</div>
 
 			{#if category.children?.length}
-				<div class="mega-menu relative border-b bg-white shadow-2xl overflow-hidden">
+				<div class="mega-menu relative overflow-hidden border-b bg-white shadow-2xl">
 					<div class="absolute inset-0 z-0 grid w-full grid-cols-4">
 						{#each { length: 4 } as _, ix}
 							<div class="{ix % 2 === 0 ? 'bg-white' : 'bg-gray-50'}"></div>
@@ -135,13 +135,13 @@ async function getMegaMenu() {
 								<a
 									data-sveltekit-reload
 									href="/{c.link || c.slug}"
-									class="block w-full mb-2
-                                    {index % 6 == 0 ? 'text-yellow-500 ' : ''}
-                                    {index % 6 == 1 ? 'text-purple-500 ' : ''}
-                                    {index % 6 == 2 ? 'text-red-500 ' : ''}
-                                    {index % 6 == 3 ? 'text-green-500 ' : ''}
-                                    {index % 6 == 4 ? 'text-pink-500 ' : ''}
-                                    {index % 6 == 5 ? 'text-blue-500 ' : ''}">
+									class="mb-2 block w-full
+                                    	{index % 6 == 0 ? 'text-yellow-500 ' : ''}
+                                    	{index % 6 == 1 ? 'text-purple-500 ' : ''}
+                                    	{index % 6 == 2 ? 'text-red-500 ' : ''}
+                                    	{index % 6 == 3 ? 'text-green-500 ' : ''}
+                                    	{index % 6 == 4 ? 'text-pink-500 ' : ''}
+                                    	{index % 6 == 5 ? 'text-blue-500 ' : ''}">
 									{c.name}
 								</a>
 
@@ -160,6 +160,12 @@ async function getMegaMenu() {
 										{/each}
 									</ul>
 								{/if}
+							</li>
+						{/each}
+
+						{#each { length: 10 } as _}
+							<li>
+								<div class="h-96 w-1/4 flex-1 flex-shrink-0 flex-grow-0 p-6"></div>
 							</li>
 						{/each}
 					</ul>
