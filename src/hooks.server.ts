@@ -58,6 +58,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 	try {
 		const WWW_URL1 = new URL(event.request.url).origin
 		event.locals.origin = WWW_URL || WWW_URL1 // https not coming in coolify hence hard coded in .env
+		if (event.locals.origin.includes('.')) {
+			event.locals.origin = event.locals.origin.replace('http://', 'https://')
+		}
 		// console.log(
 		// 	'DOMAIN from .env, request url, final origin',
 		// 	WWW_URL,
