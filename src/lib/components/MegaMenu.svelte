@@ -163,6 +163,8 @@ async function getMegaMenu() {
 							</li>
 						{/each}
 
+						<!-- This dummy divs are required for proper alignment of child elements -->
+
 						{#each { length: 10 } as _}
 							<li>
 								<div class="h-96 w-1/4 flex-1 flex-shrink-0 flex-grow-0 p-6"></div>
