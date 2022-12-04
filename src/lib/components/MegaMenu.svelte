@@ -151,7 +151,7 @@ async function getMegaMenu() {
 
 										{#each c.children as c1, ixx}
 											<li class="w-full">
-												<a
+												<a data-sveltekit-reload
 													href="/{c1.link || c1.slug}"
 													class="block w-full font-light hover:font-medium">
 													{c1.name}
