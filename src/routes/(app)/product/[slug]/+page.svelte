@@ -197,7 +197,7 @@ async function addToBag(p) {
 		// console.log('selectedLinkiedProducts inside add to cart function =', selectedLinkiedProducts)
 		const response = await fetch('/server/cart')
 		cart = await response.json()
-		console.error('Cart called after add to cart', cart.cart_id, cart.qty)
+		// console.error('Cart called after add to cart', cart.cart_id, cart.qty)
 		if (cart) {
 			const cookieCart = {
 				cartId: cart?.cart_id,
@@ -790,7 +790,7 @@ function handleMobileCanvas() {
 									<a
 										class="relative flex w-full transform items-center justify-center overflow-hidden rounded-md border border-primary-500 bg-primary-500 px-4 py-2 text-center text-sm font-semibold tracking-wider text-white shadow-md transition duration-700 focus:outline-none focus:ring-0 focus:ring-offset-0 hover:border-primary-700 hover:bg-primary-700"
 										href="/cart"
-										data-sveltekit-prefetch>
+										data-sveltekit-preload-data>
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
 											class="h-5 w-5 flex-shrink-0"
@@ -1139,9 +1139,7 @@ function handleMobileCanvas() {
 							</div>
 						{/if}
 					{:else}
-						<div class="mb-5 text-sm">
-							No reviews yet, be the first one to review the data.product?.
-						</div>
+						<div class="mb-5 text-sm">No reviews yet, be the first one to review the product.</div>
 					{/if}
 
 					<button
