@@ -6,7 +6,7 @@ export default (event: FetchEvent): void => {
 				// console.info(`fetching from cache: ${event.request.url}`)
 				return cacheResponse
 			}
-			console.info(`trying to fetch from server: ${event.request.url}`)
+			// console.info(`trying to fetch from server: ${event.request.url}`)
 			return fetch(event.request)
 				.then(async (fetchResponse): Promise<Response | undefined> => {
 					if (event.request.url.indexOf('http') !== -1) {
@@ -57,7 +57,7 @@ export default (event: FetchEvent): void => {
 							// 	)
 							// }
 						} catch (error) {
-							console.error(error)
+							// console.error(error)
 						}
 						return fetchResponse
 					}
@@ -65,7 +65,7 @@ export default (event: FetchEvent): void => {
 					return undefined
 				})
 				.catch((error) => {
-					console.error(`"${error}: ${event.request.url}`)
+					// console.error(`"${error}: ${event.request.url}`)
 					return error
 				})
 		})

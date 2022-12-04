@@ -11,12 +11,12 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies }) =>
 	try {
 		loading = true
 		const res = await getBySid(`carts/refresh-cart?store=${locals.store?.id}`, cookies.get('sid'))
-		console.error(
-			'Refresh cart called at cart.server page...',
-			res.cart_id,
-			res.qty,
-			res.items.length
-		)
+		// console.error(
+		// 	'Refresh cart called at cart.server page...',
+		// 	res.cart_id,
+		// 	res.qty,
+		// 	res.items.length
+		// )
 
 		if (res) {
 			cart = {
@@ -43,7 +43,7 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies }) =>
 			locals.cart = cart
 		}
 	} catch (e) {
-		console.log('Error at /cart/+page.server.ts page.....', e)
+		// console.log('Error at /cart/+page.server.ts page.....', e)
 		if (e?.status === 401) {
 			throw redirect(307, '/auth/otp-login')
 		}

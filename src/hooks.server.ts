@@ -197,7 +197,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			<br/>ORIGIN: ${event.locals?.origin}
 			<br/>DOMAIN(env): ${DOMAIN}
 			<br/>HTTP_ENDPOINT(env): ${HTTP_ENDPOINT}`
-		console.log('Err at Hooks...', e)
+		// console.log('Err at Hooks...', e)
 		throw error(404, err)
 	}
 }

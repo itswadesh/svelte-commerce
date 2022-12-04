@@ -197,7 +197,7 @@ async function addToBag(p) {
 		// console.log('selectedLinkiedProducts inside add to cart function =', selectedLinkiedProducts)
 		const response = await fetch('/server/cart')
 		cart = await response.json()
-		console.error('Cart called after add to cart', cart.cart_id, cart.qty)
+		// console.error('Cart called after add to cart', cart.cart_id, cart.qty)
 		if (cart) {
 			const cookieCart = {
 				cartId: cart?.cart_id,
@@ -1139,9 +1139,7 @@ function handleMobileCanvas() {
 							</div>
 						{/if}
 					{:else}
-						<div class="mb-5 text-sm">
-							No reviews yet, be the first one to review the data.product?.
-						</div>
+						<div class="mb-5 text-sm">No reviews yet, be the first one to review the product.</div>
 					{/if}
 
 					<button

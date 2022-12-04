@@ -8,7 +8,7 @@ export async function GET({ request, locals, cookies }) {
 	// page.update('cart', cart)
 	// console.log('cart...........', cart)
 	const d3 = new Date()
-	console.log('cart loaded at Footer: ', d3.getTime() - d.getTime())
+	// console.log('cart loaded at Footer: ', d3.getTime() - d.getTime())
 	locals.cartId = cart.cart_id
 	locals.cartQty = cart.qty
 	locals.cart = cart
