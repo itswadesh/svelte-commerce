@@ -61,7 +61,7 @@ async function submit(n) {
 			passwordConfirmation: passwordConfirmation
 		})
 
-		console.log('zzzzzzzzzzzzzzzzzz', res)
+		// console.log('zzzzzzzzzzzzzzzzzz', res)
 
 		const me = {
 			email: res.email,

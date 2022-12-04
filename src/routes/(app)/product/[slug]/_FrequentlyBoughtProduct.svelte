@@ -87,7 +87,7 @@ let bounceItemFromTop = false
 
 			<!-- Name -->
 
-			<div class="flex gap-2 justify-between">
+			<div class="flex justify-between gap-2">
 				{#if product.name}
 					<h2
 						class="flex-1 truncate text-sm text-gray-500 group-hover:text-blue-600 group-hover:underline sm:text-base">
@@ -108,16 +108,16 @@ let bounceItemFromTop = false
 
 			<!-- prices -->
 
-			<div class="flex flex-wrap items-center gap-2 max-w-max mx-auto">
-				<span class="text-sm whitespace-nowrap"><b>{product.formattedPrice}</b></span>
+			<div class="mx-auto flex max-w-max flex-wrap items-center gap-2">
+				<span class="whitespace-nowrap text-sm"><b>{product.formattedPrice}</b></span>
 
 				{#if product.mrp > product.price}
-					<span class="text-xs whitespace-nowrap">
+					<span class="whitespace-nowrap text-xs">
 						<strike>{product.formattedMrp}</strike>
 					</span>
 
 					{#if Math.floor(((product.mrp - product.price) / product.mrp) * 100) > 0}
-						<span class="text-xs whitespace-nowrap">
+						<span class="whitespace-nowrap text-xs">
 							({Math.floor(((product.mrp - product.price) / product.mrp) * 100)}%)
 						</span>
 					{/if}
@@ -144,7 +144,7 @@ let bounceItemFromTop = false
 							result.data.qty < 0
 								? fireGTagEvent('remove_from_cart', result.data)
 								: fireGTagEvent('add_to_cart', result.data)
-							console.log('bounceItemFromTop')
+							// console.log('bounceItemFromTop')
 							bounceItemFromTop = true
 							setTimeout(() => {
 								bounceItemFromTop = false

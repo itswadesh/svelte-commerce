@@ -27,7 +27,7 @@ const cookies = Cookie()
 
 export let me, cart, data, showCartSidebar, openSidebar, store
 
-console.log('page', $page)
+// console.log('page', $page)
 
 let q = ''
 let showDropdownAccount = false

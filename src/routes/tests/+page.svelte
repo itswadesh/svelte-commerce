@@ -1,7 +1,7 @@
 <script>
 import Autocomplete from '$lib/components/Autocomplete/Autocomplete.svelte'
 const search = ({ detail }) => {
-	console.error('Autocomplete result', detail)
+	// console.error('Autocomplete result', detail)
 }
 </script>
 

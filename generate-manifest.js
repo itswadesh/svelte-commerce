@@ -29,7 +29,7 @@ const resizeIcon = async ({ size, path }) => {
 		})
 		.toFile(path, (err) => {
 			if (err) {
-				console.error(err)
+				// console.error(err)
 			}
 		})
 }
@@ -74,7 +74,7 @@ const main = async () => {
 
 		fs.writeFileSync(manifestFile, JSON.stringify(manifest, null, 2))
 	} catch (error) {
-		console.error(error)
+		// console.error(error)
 	}
 }
 
@@ -82,7 +82,8 @@ const main = async () => {
 
 fs.mkdir(iconsDirectory, { recursive: true }, (err) => {
 	if (err) {
-		return console.error(err)
+		return
+		// console.error(err)
 	}
 })
 
