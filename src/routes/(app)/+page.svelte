@@ -13,6 +13,8 @@ import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
 
+// console.log('zzzzzzzzzzzzzzzzzz', data)
+
 const seoProps = {
 	title: $page.data.store?.title,
 	description: $page.data.store?.description,
@@ -184,6 +186,32 @@ $: heroBanners =
 						</div>
 					</div>
 				{/if}
+			{/if}
+		{/await}
+
+		<!-- TRENDING PRODUCTS -->
+
+		{#await data.home then home}
+			{#if home?.trending?.length > 0}
+				<div class="mb-5 sm:mb-10">
+					<h1
+						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
+						TRENDING ON {$page.data.store?.websiteName}
+					</h1>
+
+					<div
+						class="px-3 sm:px-10 grid w-full grid-cols-2 items-start gap-3 sm:flex sm:flex-wrap sm:justify-between lg:mb-20 lg:gap-6">
+						{#each home?.trending as p}
+							<ProductCard product="{p}" />
+						{/each}
+
+						{#each { length: 8 } as _}
+							<div class="hidden sm:block">
+								<DummyProductCard />
+							</div>
+						{/each}
+					</div>
+				</div>
 			{/if}
 		{/await}
 	</div>
