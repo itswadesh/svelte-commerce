@@ -77,7 +77,10 @@ onMount(async () => {
 	searchInput.focus()
 
 	try {
-		categories = await getAPI(`categories?featured=true&store=${$page?.data?.store?.id}`)
+		categories = await getAPI(
+			`categories?featured=true&store=${$page?.data?.store?.id}`,
+			$page.data.origin
+		)
 	} catch (e) {
 		err = e
 	} finally {
