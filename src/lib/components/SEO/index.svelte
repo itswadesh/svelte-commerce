@@ -53,7 +53,7 @@ export let twitterImage = {
 	alt: defaultAlt
 }
 const url = `${$page.data.origin}/${slug}`
-const pageTitle = `${title} ${siteTitle}`
+const pageTitle = `${title}`
 const openGraphProps = {
 	article,
 	datePublished,
