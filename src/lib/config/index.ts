@@ -1,4 +1,6 @@
 import { env } from '$env/dynamic/public'
+
+export * from './website'
 export const authorInfo = {
 	author: 'Swadesh Behera',
 	facebookAuthorPage: `https://www.facebook.com/codenx`,
@@ -8,18 +10,11 @@ export const authorInfo = {
 	telegramUsername: 'itswadesh',
 	twitterUsername: 'itswadesh'
 }
-export const sorts = [
-	{ name: 'Recomended', val: null },
-	{ name: `What's New`, val: '-updatedAt' },
-	{ name: 'Price: High to Low ', val: '-price' },
-	{ name: 'Price: Low to High ', val: 'price' },
-	{ name: 'Discount: High to Low ', val: '-discount' },
-	{ name: 'Discount: Low to High ', val: 'discount' },
-	{ name: `Name: Asc`, val: 'name' },
-	{ name: `Name: Desc`, val: '-name' }
-	// { name: 'Most Viewed', val: '-views' }
-]
-
+export const currency = { symbol: '₹', code: 'INR' }
+export const DOMAIN = env.PUBLIC_DOMAIN
+export const entity = 'KitCommerce'
+export const HTTP_ENDPOINT = env.PUBLIC_HTTP_ENDPOINT || 'https://api.litekart.in'
+export const IMAGE_CDN_URL = 'https://ik.imagekit.io/3wzatecz51w3i'
 export const mediaqueries = {
 	xs: '(min-width: 480px)',
 	sm: '(min-width: 640px)',
@@ -32,14 +27,17 @@ export const mediaqueries = {
 	dark: '(prefers-color-scheme: dark)',
 	noanimations: '(prefers-reduced-motion: reduce)'
 }
-export const currency = { symbol: '₹', code: 'INR' }
-export const HTTP_ENDPOINT = env.PUBLIC_HTTP_ENDPOINT || 'https://api.litekart.in'
-export const DOMAIN = env.PUBLIC_DOMAIN
-export const WWW_URL = env.PUBLIC_WWW_URL
-export const IMAGE_CDN_URL = 'https://ik.imagekit.io/3wzatecz51w3i'
-
-export const entity = 'KitCommerce'
-export const siteTitle = 'KitCommerce'
-export const siteShortTitle = 'KitCommerce' // used as SchemaOrg siteTitleAlt
 export const searchbarText = 'Search for brands categories & more'
-export * from './website'
+export const siteShortTitle = 'KitCommerce' // used as SchemaOrg siteTitleAlt
+export const siteTitle = 'KitCommerce'
+export const sorts = [
+	{ name: 'Recomended', val: null },
+	{ name: `What's New`, val: '-updatedAt' },
+	{ name: 'Price: High to Low ', val: '-price' },
+	{ name: 'Price: Low to High ', val: 'price' },
+	{ name: 'Discount: High to Low ', val: '-discount' },
+	{ name: 'Discount: Low to High ', val: 'discount' },
+	{ name: `Name: Asc`, val: 'name' },
+	{ name: `Name: Desc`, val: '-name' } // { name: 'Most Viewed', val: '-views' }
+]
+export const WWW_URL = env.PUBLIC_WWW_URL

@@ -17,6 +17,8 @@ import Footer from '$lib/Footer.svelte'
 import Nav from '$lib/Nav.svelte'
 import PageTransitions from '$lib/PageTransitions.svelte'
 
+// console.log('zzzzzzzzzzzzzzzzzz', $page)
+
 export let data
 
 let openSidebar = false
