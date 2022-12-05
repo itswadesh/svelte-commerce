@@ -3,8 +3,7 @@ export const id = '62b00e15c4899dc7b1f78cb1'
 export const domain = 'litekart.in'
 export const email = 'hi@misiki.in'
 export const address = `#22, Global Village, Rourkela,<br/> Odisha - 769002, India`
-export const description =
-	'Customized Mobile Covers India: KitCommerce is the most beneficial customized mobile cover printing online store at which it is easy to design custom phone cases'
+export const description = ''
 export const keywords = 'mobile covers, iphone covers, low price covers'
 export const phone = '+91-8249028220'
 export const websiteLegalName = 'Misiki Technologies'
