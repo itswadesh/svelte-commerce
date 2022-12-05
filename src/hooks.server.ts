@@ -2,33 +2,33 @@ import { error, type Handle } from '@sveltejs/kit'
 import { SECRET_SENTRY_DSN } from '$env/static/private'
 const SENTRY_DSN = SECRET_SENTRY_DSN
 import {
-	stripePublishableKey,
 	id,
-	logo,
-	email,
 	address,
-	phone,
-	websiteName,
-	websiteLegalName,
-	domain,
+	closeMessage,
 	description,
-	keywords,
-	siteTitle,
+	domain,
+	DOMAIN,
+	email,
 	facebookPage,
-	linkedinPage,
-	instagramPage,
-	twitterPage,
-	pinterestPage,
-	youtubeChannel,
 	GOOGLE_ANALYTICS_ID,
 	GOOGLE_CLIENT_ID,
-	DOMAIN,
+	HTTP_ENDPOINT,
+	instagramPage,
+	keywords,
+	linkedinPage,
+	logo,
+	phone,
+	pinterestPage,
+	siteTitle,
+	stripePublishableKey,
+	twitterPage,
+	websiteLegalName,
+	websiteName,
 	WWW_URL,
-	HTTP_ENDPOINT
+	youtubeChannel
 } from '$lib/config'
 import { getBySid } from '$lib/utils'
 // import Cookie from 'cookie-universal'
-
 import * as Sentry from '@sentry/svelte'
 import { BrowserTracing } from '@sentry/tracing'
 
@@ -74,60 +74,66 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 		let store = {
 			id,
-			domain,
-			logo,
-			email,
 			address,
-			phone,
-			websiteName,
-			websiteLegalName,
-			title: siteTitle,
+			closeMessage,
 			description,
-			keywords,
-			facebookPage,
-			instagramPage,
-			twitterPage,
-			linkedinPage,
-			pinterestPage,
-			youtubeChannel,
-			GOOGLE_CLIENT_ID,
-			GOOGLE_ANALYTICS_ID,
-			stripePublishableKey,
+			dimentionUnit: 'cm',
+			domain,
 			DOMAIN,
+			email,
+			facebookPage,
+			GOOGLE_ANALYTICS_ID,
+			GOOGLE_CLIENT_ID,
+			instagramPage,
 			isFnb: false,
+			keywords,
+			linkedinPage,
+			logo,
+			phone,
+			pinterestPage,
+			stripePublishableKey,
+			title: siteTitle,
+			twitterPage,
+			websiteLegalName,
+			websiteName,
 			weightUnit: 'g',
-			dimentionUnit: 'cm'
+			youtubeChannel
 		}
 		if (!cookieStore || cookieStore === 'undefined') {
 			const url = new URL(event.request.url)
 			const storeRes = await getBySid(`init?domain=${DOMAIN || url.host}`)
+
+			console.log('storeRes', storeRes)
+
 			const { storeOne, settings } = storeRes
+
 			store = {
 				id: storeOne._id,
-				domain: storeOne.domain,
-				email: storeOne.websiteEmail,
 				address: storeOne.address,
+				adminUrl: settings.adminUrl,
+				closeMessage: storeOne.closeMessage,
+				description: storeOne.description,
+				dimentionUnit: storeOne.dimentionUnit,
+				domain: storeOne.domain,
+				DOMAIN: storeOne.DOMAIN,
+				email: storeOne.websiteEmail,
+				facebookPage: storeOne.facebookPage,
+				GOOGLE_ANALYTICS_ID: storeOne.GOOGLE_ANALYTICS_ID,
+				GOOGLE_CLIENT_ID: storeOne.GOOGLE_CLIENT_ID,
+				instagramPage: storeOne.instagramPage,
+				isFnb: storeOne.isFnb,
+				keywords: storeOne.keywords,
+				linkedinPage: storeOne.linkedinPage,
+				logo: storeOne.logo,
 				phone: storeOne.phone,
+				pinterestPage: storeOne.pinterestPage,
+				stripePublishableKey: storeOne.stripePublishableKey,
+				title: storeOne.title,
+				twitterPage: storeOne.twitterPage,
 				websiteLegalName: storeOne.websiteLegalName,
 				websiteName: storeOne.websiteName,
-				title: storeOne.title,
-				description: storeOne.description,
-				keywords: storeOne.keywords,
-				stripePublishableKey: storeOne.stripePublishableKey,
-				logo: storeOne.logo,
-				facebookPage: storeOne.facebookPage,
-				instagramPage: storeOne.instagramPage,
-				twitterPage: storeOne.twitterPage,
-				linkedinPage: storeOne.linkedinPage,
-				pinterestPage: storeOne.pinterestPage,
-				youtubeChannel: storeOne.youtubeChannel,
-				GOOGLE_CLIENT_ID: storeOne.GOOGLE_CLIENT_ID,
-				GOOGLE_ANALYTICS_ID: storeOne.GOOGLE_ANALYTICS_ID,
-				isFnb: storeOne.isFnb,
-				DOMAIN: storeOne.DOMAIN,
 				weightUnit: storeOne.weightUnit,
-				dimentionUnit: storeOne.dimentionUnit,
-				adminUrl: settings.adminUrl
+				youtubeChannel: storeOne.youtubeChannel
 			}
 			event.cookies.set('store', JSON.stringify(store), { path: '/' })
 		} else {
@@ -158,14 +164,14 @@ export const handle: Handle = async ({ event, resolve }) => {
 		if (me) {
 			me = JSON.parse(me)
 			event.locals.me = {
+				active: me.active,
+				avatar: me.avatar,
 				email: me.email,
-				phone: me.phone,
 				firstName: me.firstName,
 				lastName: me.lastName,
-				avatar: me.avatar,
+				phone: me.phone,
 				role: me.role,
-				verified: me.verified,
-				active: me.active
+				verified: me.verified
 			}
 		}
 		const cartId: string = event.cookies.get('cartId')
