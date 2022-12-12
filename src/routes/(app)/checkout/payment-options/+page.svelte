@@ -36,9 +36,12 @@ import { OrdersService } from '$lib/services'
 import { page } from '$app/stores'
 import { Pricesummary, LazyImg, CheckoutHeader, Error, TrustBaggeContainer } from '$lib/components'
 import { slide } from 'svelte/transition'
+import lightning from '$lib/assets/payment-processing/lightning.gif'
+import list from '$lib/assets/payment-processing/list.gif'
 import logo from '$lib/assets/logo.svg'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
+import tick from '$lib/assets/payment-processing/tick.gif'
 
 const seoProps = {
 	title: 'Select Payment Option',
@@ -48,9 +51,9 @@ const seoProps = {
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
 
-let bankPayment = { type: 'order', reference: '', remark: '', paymentMethodId: '', amount: 0 }
 let cashfreeReady = false
 let comment = ''
+let commentMissing = false
 let disabled = false
 let errorMessage = 'Select a Payment Method'
 let loading = false
@@ -58,7 +61,6 @@ let paymentDenied = false
 let paymentProcessingStep = 1
 let razorpayReady = false
 let selectedPaymentMethod = { id: '', name: '', text: '', instructions: '', qrcode: '', img: '' }
-let showPayWithBankTransfer = false
 
 $: if (data.paymentMethods?.length === 1 && data.paymentMethods[0]?.type === 'pg') {
 	const pm = data.paymentMethods[0]
@@ -81,6 +83,7 @@ onMount(async () => {
 	cashfreeScript.setAttribute('src', 'https://sdk.cashfree.com/js/v3/cashfree.js')
 	document.head.appendChild(cashfreeScript)
 	cashfreeReady = true
+
 	fireGTagEvent('begin_checkout', data.cart)
 })
 
@@ -90,6 +93,15 @@ function paymentMethodChanged(pm) {
 }
 
 async function submit(pm) {
+	if (!data?.cart?.qty) {
+		goto('/my/orders?sort=-updatedAt')
+		return
+	}
+
+	// console.log('started')
+
+	fireGTagEvent('add_payment_info', data?.cart)
+
 	if (!pm || pm === undefined) {
 		disabled = true
 		errorMessage = 'Please select a payment option'
@@ -117,7 +129,6 @@ async function submit(pm) {
 				address: data.addressId,
 				cartId: data?.cartId,
 				paymentMethod: 'COD',
-				paymentProviderId: paymentMethod,
 				prescription: data.prescription?._id,
 				origin: $page.data.origin,
 				storeId: $page.data.store?.id
@@ -149,7 +160,6 @@ async function submit(pm) {
 					cartId: data?.cartId,
 					comment,
 					paymentMethod: 'COD',
-					paymentProviderId: paymentMethod,
 					prescription: data.prescription?._id,
 					origin: $page.data.origin,
 					storeId: $page.data.store?.id
@@ -167,6 +177,12 @@ async function submit(pm) {
 			}
 		} else {
 			toast('Please enter your transaction id to place your order', 'info')
+
+			commentMissing = true
+
+			setTimeout(() => {
+				commentMissing = false
+			}, 820)
 		}
 	} else if (paymentMethod === 'Cashfree') {
 		try {
@@ -208,6 +224,7 @@ async function submit(pm) {
 			// }
 		} catch (e) {
 			data.err = e
+			goto(`/payment/failed?id=${data.addressId}&status=PAYMENT_PENDING&provider=Cashfree`)
 		} finally {
 			loading = false
 		}
@@ -307,6 +324,7 @@ async function submit(pm) {
 							origin: $page.data.origin,
 							storeId: $page.data.store?.id
 						})
+
 						toast('Payment success', 'success')
 						goto(`/payment/process?pg=razorpay&order_no=${capture.order_no}`)
 					} catch (e) {
@@ -328,6 +346,7 @@ async function submit(pm) {
 					color: '#112D4E'
 				}
 			}
+
 			const rzp1 = new Razorpay(options)
 			rzp1.open()
 		} catch (e) {
@@ -373,15 +392,15 @@ function checkIfStripeCardValid({ detail }) {
 								class="h-4 w-4 focus:outline-none focus:ring-0 focus:ring-offset-0"
 								on:click="{() => paymentMethodChanged(pm)}" />
 
-							<div class="w-full flex-1 flex flex-col gap-4">
+							<div class="w-full flex-1 flex flex-col gap-2">
 								<div class="flex justify-between gap-4">
 									<div class="flex-1">
-										<h3 style="color:{pm.color}" class="leading-3 capitalize">
+										<h4 style="color:{pm.color}" class="leading-3 capitalize">
 											{pm.name || pm.value || pm.id}
-										</h3>
+										</h4>
 
 										{#if pm.text}
-											<p class="mt-1">{@html pm.text}</p>
+											<p class="mt-2">{@html pm.text}</p>
 										{/if}
 									</div>
 
@@ -392,10 +411,10 @@ function checkIfStripeCardValid({ detail }) {
 												alt="{pm.name}"
 												width="48"
 												height="48"
-												class="h-12 w-12 rounded-full border object-cover object-center text-xs" />
+												class="h-10 w-10 rounded-full border object-cover object-center text-xs" />
 										{:else}
 											<div
-												class="flex h-12 w-12 p-2 items-center justify-center rounded-full border bg-zinc-200 text-center text-xs uppercase">
+												class="flex h-10 w-10 p-2 items-center justify-center rounded-full border bg-zinc-200 text-center text-xs uppercase">
 												<span class="w-full truncate">
 													{pm.name || pm.value || pm.id}
 												</span>
@@ -405,7 +424,7 @@ function checkIfStripeCardValid({ detail }) {
 								</div>
 
 								{#if pm.value === 'BankTransfer' && selectedPaymentMethod.value === 'BankTransfer'}
-									<div transition:slide="{{ duration: 300 }}">
+									<div transition:slide="{{ duration: 300 }}" class:wiggle="{commentMissing}">
 										<TextboxFloating bind:value="{comment}" label="Transaction ID" />
 									</div>
 								{/if}
@@ -445,7 +464,7 @@ function checkIfStripeCardValid({ detail }) {
 						<span> Payment method is not setup yet, </span>
 
 						<a href="/contact-us" class="block underline hover:text-zinc-800">
-							Please contact the store admin
+							Please contact the store admin.
 						</a>
 					</p>
 				</div>
@@ -469,10 +488,6 @@ function checkIfStripeCardValid({ detail }) {
 
 						{#if data.address.address}
 							{data.address.address}
-						{/if}
-
-						{#if data.address.locality}
-							, {data.address.locality}
 						{/if}
 
 						{#if data.address.city}
@@ -603,6 +618,7 @@ function checkIfStripeCardValid({ detail }) {
 				loading="{loading}"
 				hideCheckoutButton="{selectedPaymentMethod.name === 'Stripe'}"
 				on:submit="{() => submit(selectedPaymentMethod)}" />
+
 			<!-- disabled="{!razorpayReady ||
 					(!selectedPaymentMethod?.name && !selectedPaymentMethod?.value) ||
 					(selectedPaymentMethod?.name === 'Stripe' && disabled)}" -->
@@ -617,34 +633,26 @@ function checkIfStripeCardValid({ detail }) {
 		{#if paymentProcessingStep === 1}
 			<div
 				class="h-60 w-60 bg-white p-4 flex flex-col gap-4 items-center justify-center text-center font-semibold rounded transform translate-x-full animate-slide-in-left">
-				<img
-					src="/payment-processing/lightning.gif"
-					alt=""
-					class="h-8 w-auto object-contain object-center" />
+				<img src="{lightning}" alt="" class="h-8 w-auto object-contain object-center" />
 
 				<span> Fetching your order info </span>
 			</div>
 		{:else if paymentProcessingStep === 2}
 			<div
 				class="h-60 w-60 bg-white p-4 flex flex-col gap-4 items-center justify-center text-center font-semibold rounded transform animate-bounce">
-				<img
-					src="/payment-processing/list.gif"
-					alt=""
-					class="h-8 w-auto object-contain object-center" />
+				<img src="{list}" alt="" class="h-8 w-auto object-contain object-center" />
 
 				<span>Filling your information</span>
 			</div>
 		{:else}
 			<div
 				class="h-60 w-60 bg-white p-4 flex flex-col gap-4 items-center justify-center text-center font-semibold rounded transform animate-bounce">
-				<img
-					src="/payment-processing/tick.gif"
-					alt=""
-					class="h-8 w-auto object-contain object-center" />
+				<img src="{tick}" alt="" class="h-8 w-auto object-contain object-center" />
 
 				<span>All set</span>
 			</div>
 		{/if}
 	</div>
 {/if}
+
 <iframe name="cashfreeFrame" title="Cashfree" class="absolute" allow="payment"></iframe>
