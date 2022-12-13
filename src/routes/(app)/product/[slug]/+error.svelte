@@ -54,7 +54,7 @@ import { page } from '$app/stores'
 				<div class="flex flex-col gap-5 text-center">
 					<h1>500</h1>
 
-					<h2 class="headline my-3">Sorry, the server is down.</h2>
+					<h2 class="headline my-3">{$page.error?.message || 'Sorry, the server is down.'}</h2>
 				</div>
 			</div>
 		</div>
