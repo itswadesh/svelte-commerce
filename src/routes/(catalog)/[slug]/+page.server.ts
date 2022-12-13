@@ -14,8 +14,9 @@ export async function load({ url, params, locals, cookies, parent, setHeaders })
 		facets,
 		ressss,
 		pageSize,
-		fl = {},
 		category
+
+	const fl = {}
 	const currentPage = +url.searchParams.get('page') || 1
 	const sort = url.searchParams.get('sort')
 	const searchData = url.searchParams.get('q')
@@ -26,27 +27,23 @@ export async function load({ url, params, locals, cookies, parent, setHeaders })
 		fl[key] = value
 	})
 
-	let res, categoryRes
+	let res
 	try {
 		loading = true
-		res = await Promise.allSettled([
-			gett(`es/products?categories=${categorySlug}&store=${store?.id}&${query.toString()}`),
-			gett(`categories/${categorySlug}?store=${store?.id}`)
-		])
-		ressss = res[0]
-		if (ressss.status === 'fulfilled') {
-			products = ressss.value?.data?.map((p) => {
-				const p1 = { ...p._source }
-				p1.id = p._id
-				return p1
-			})
+		res = await gett(
+			`es/products?categories=${categorySlug}&store=${store?.id}&${query.toString()}`
+		)
+		products = res?.data?.map((p) => {
+			const p1 = { ...p._source }
+			p1.id = p._id
+			return p1
+		})
 
-			count = ressss.value?.count
-			facets = ressss.value?.facets
-			pageSize = ressss.value?.pageSize
-			err = !ressss.value?.estimatedTotalHits ? 'No result Not Found' : null
-		}
-		if (res[1].status === 'fulfilled') categoryRes = res[1].value
+		count = res?.count
+		facets = res?.facets
+		pageSize = res?.pageSize
+		category = res?.category
+		err = !res?.estimatedTotalHits ? 'No result Not Found' : null
 	} catch (e) {
 		err = e
 		throw error(400, e?.message || e || 'No results found')
@@ -72,7 +69,7 @@ export async function load({ url, params, locals, cookies, parent, setHeaders })
 		searchData,
 		fl,
 		ressss,
-		category: categoryRes,
+		category: category,
 		store,
 		categorySlug,
 		origin: locals.origin

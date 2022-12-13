@@ -28,7 +28,7 @@ function submit() {
 </script>
 
 {#if cart}
-	<section class="my-5 border-t  border-gray-200 py-5 text-gray-800">
+	<section class="my-5 border-t  border-gray-200 py-5">
 		<h5 class="text-xl font-bold capitalize tracking-wide">
 			<span>Price Summary</span>
 

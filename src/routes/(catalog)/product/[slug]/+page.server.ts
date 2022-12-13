@@ -7,24 +7,15 @@ export async function load({ params, parent, cookies, locals, request }) {
 	let zip = cookies.get('zip')
 	if (zip) zip = JSON.parse(zip)
 
-	const { store } = locals
 	const { slug } = params
 	let product = null
-	let relatedProducts = []
 
 	try {
 		product = await gett(`products/${slug}`)
-		const relatedProductsRes = await gett(
-			`es/products?store=${store?.id}&categories=${product.category?.slug}`
-		)
-
-		relatedProducts = relatedProductsRes?.data.filter((p) => {
-			return p._id !== product._id
-		})
 
 		if (!product) throw error(404, 'Product not found')
 		// cookies.set('cache-control', 'public, max-age=200')
-		return { product, relatedProducts, deliveryDetails: zip }
+		return { product, deliveryDetails: zip }
 	} catch (e) {
 		throw error(e.status, e.message)
 	}

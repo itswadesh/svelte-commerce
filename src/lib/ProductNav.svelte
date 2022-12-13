@@ -7,27 +7,32 @@
 <script lang="ts">
 import { createEventDispatcher, getContext, onMount } from 'svelte'
 import { cubicOut } from 'svelte/easing'
-import { fade, fly } from 'svelte/transition'
+import { currency, toast } from '$lib/util'
+import { enhance } from '$app/forms'
+import { fade, fly, slide } from 'svelte/transition'
 import { getAPI, post } from '$lib/util/api'
 import { goto, invalidateAll } from '$app/navigation'
 import { logo } from './config'
 import { page } from '$app/stores'
+import { settings } from './store'
 import Autocomplete from '$lib/components/Autocomplete/Autocomplete.svelte'
+import AutosuggestModal from './AutosuggestModal.svelte'
 import Cookie from 'cookie-universal'
 import Item from '$lib/AutocompleteItem.svelte'
 import LazyImg from './components/Image/LazyImg.svelte'
 import MegaMenu from './components/MegaMenu.svelte'
 import menu from '$lib/config/menu'
+import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import PrimaryButton from './ui/PrimaryButton.svelte'
+import productNonVeg from '$lib/assets/product/non-veg.png'
+import productVeg from '$lib/assets/product/veg.png'
+import userEmptyProfile from '$lib/assets/user-empty-profile.png'
 import WhiteButton from './ui/WhiteButton.svelte'
-import AutosuggestModal from './AutosuggestModal.svelte'
 
 const dispatch = createEventDispatcher()
 const cookies = Cookie()
 
 export let me, cart, data, showCartSidebar, openSidebar, store
-
-// console.log('page', $page)
 
 let q = ''
 let showDropdownAccount = false
@@ -165,7 +170,7 @@ const getSelectionLabel = (option) => option.name
 </script>
 
 <nav
-	class="minimum-width-rem fixed inset-x-0 top-0 flex h-14 w-full items-center justify-center border-b bg-white px-3 shadow-md sm:h-20 sm:px-10
+	class="lg:hidden minimum-width-rem fixed inset-x-0 top-0 flex h-14 w-full items-center justify-center border-b bg-white px-3 shadow-md sm:h-20 sm:px-10
 	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
 	<div class="flex w-full items-center justify-between gap-4 lg:gap-8">
 		<div class="flex items-center gap-4">
@@ -174,7 +179,7 @@ const getSelectionLabel = (option) => option.name
 			{#if $page?.data?.isShowBackButton}
 				<button
 					type="button"
-					class="block flex-shrink-0 focus:outline-none sm:hidden"
+					class="block flex-shrink-0 focus:outline-none lg:hidden"
 					on:click="{() => window.history.go(-1)}">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -193,25 +198,7 @@ const getSelectionLabel = (option) => option.name
 
 			<!-- Website Logo/Name -->
 
-			<a class="block flex-shrink-0" href="/" aria-label="Click to route home">
-				{#if $page?.data?.store?.logo}
-					<LazyImg
-						src="{$page?.data?.store?.logo}"
-						alt=" "
-						height="40"
-						class="h-auto max-h-10 w-32 object-contain object-center sm:max-h-16" />
-				{:else if $page?.data?.store?.websiteName}
-					<h1
-						class="bg-gradient-to-b from-primary-500 to-secondary-500 bg-clip-text text-2xl font-extrabold text-transparent sm:text-3xl">
-						{$page?.data?.store?.websiteName}
-					</h1>
-				{:else}
-					<img
-						src="{logo}"
-						alt=" "
-						class="h-auto max-h-10 w-32 object-contain object-center sm:max-h-16" />
-				{/if}
-			</a>
+			<slot />
 		</div>
 
 		<!-- Mega menu -->
@@ -370,9 +357,9 @@ const getSelectionLabel = (option) => option.name
 														{#if $page?.data?.store?.isFnb && item.foodType}
 															<div>
 																{#if item.foodType === 'veg'}
-																	<img src="/product/veg.png" alt="veg" class="h-5 w-5" />
+																	<img src="{productVeg}" alt="veg" class="h-5 w-5" />
 																{:else if item.foodType === 'nonveg'}
-																	<img src="/product/non-veg.png" alt="non veg" class="h-5 w-5" />
+																	<img src="{productNonVeg}" alt="non veg" class="h-5 w-5" />
 																{/if}
 															</div>
 														{/if}
@@ -468,7 +455,7 @@ const getSelectionLabel = (option) => option.name
 									<div class="mb-10 flex flex-col items-center text-center">
 										<div>
 											<img
-												src="/no/add-to-cart-animate.svg"
+												src="{noAddToCartAnimate}"
 												alt="empty listing"
 												class="mb-5 h-40 object-contain" />
 										</div>
@@ -625,7 +612,7 @@ const getSelectionLabel = (option) => option.name
 												class="object-cover object-top" />
 										{:else}
 											<img
-												src="/user-empty-profile.png"
+												src="{userEmptyProfile}"
 												alt=""
 												class="h-full w-full object-cover object-top" />
 										{/if}
@@ -665,7 +652,7 @@ const getSelectionLabel = (option) => option.name
 							{/each}
 
 							<li>
-								<form action="/auth/logout" method="POST">
+								<form action="/auth/logout" method="POST" use:enhance>
 									<button
 										type="submit"
 										class="w-full cursor-pointer rounded py-2 px-4 text-left transition duration-300 focus:outline-none hover:bg-primary-50">
@@ -789,7 +776,7 @@ const getSelectionLabel = (option) => option.name
 										class="object-cover object-top" />
 								{:else}
 									<img
-										src="/user-empty-profile.png"
+										src="{userEmptyProfile}"
 										alt=""
 										class="h-full w-full object-cover object-top" />
 								{/if}

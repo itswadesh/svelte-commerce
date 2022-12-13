@@ -15,9 +15,9 @@ export let data
 
 <SEO {...seoProps} />
 
-<div class="text-gray-800">
+<div>
 	<header class="mb-3 flex flex-col-reverse items-start justify-between md:flex-row">
-		<h1 class="line-clamp-2 mb-2 mr-5 text-xl font-bold md:text-2xl">
+		<h1 class="mb-2 mr-5 text-xl font-bold line-clamp-2 md:text-2xl">
 			{#if data.id === 'new'}
 				<span> Add New Address </span>
 			{:else if !data.address?.title}

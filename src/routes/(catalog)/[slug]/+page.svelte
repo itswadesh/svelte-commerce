@@ -21,6 +21,7 @@ import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { sorts } from '$lib/config'
+import Breadcrumb from '$lib/components/Breadcrumb.svelte'
 import DesktopFilter from '$lib/components/DesktopFilter.svelte'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
 import MobileFilter from '$lib/components/MobileFilter.svelte'
@@ -30,7 +31,7 @@ import Pagination from '$lib/components/Pagination.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-import Breadcrumb from '$lib/components/Breadcrumb.svelte'
+import ProductNav from '$lib/ProductNav.svelte'
 
 export let data
 
@@ -50,6 +51,7 @@ let showSort = false
 let hidden = true
 let showOnPx = 600
 let y
+
 $: innerWidth = 0
 
 function goTop() {
@@ -87,7 +89,9 @@ async function sortNow(s) {
 
 	// await goto(`/search?${$page.url.searchParams.toString()}`)
 }
+
 let currentPage = 1
+
 async function loadNextPage() {
 	let nextPage = currentPage + 1
 	$page.url.searchParams.delete('page')
@@ -138,7 +142,9 @@ onMount(() => {
 		// load more content;
 		loadNextPage()
 	})
+
 	// start observing
+
 	intersectionObserver.observe(document.querySelector('.more'))
 	// // @ts-ignore
 	// gtag('event', 'view_item', {
@@ -168,6 +174,7 @@ onMount(() => {
 	// 		}
 	// 	]
 	// })
+
 	// // @ts-ignore
 	// gtag('event', 'view_item_list', {
 	// 	item_list_id: 'related_products',
@@ -197,18 +204,45 @@ onMount(() => {
 	// 	]
 	// })
 })
+
+async function goCheckbox(item) {
+	if (item === $page.url.searchParams.get('tags')) {
+		$page.url.searchParams.set('tags', '')
+	} else {
+		$page.url.searchParams.set('tags', item)
+		$page.url.searchParams.set('page', '1')
+	}
+	await goto($page.url.toString())
+	await invalidateAll()
+}
 </script>
 
 <SEO {...seoProps} />
 
-<svelte:window bind:scrollY="{y}" bind:innerWidth on:scroll="{handleOnScroll}" />
+<svelte:window bind:scrollY="{y}" bind:innerWidth="{innerWidth}" on:scroll="{handleOnScroll}" />
+
+<ProductNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page?.data?.store}">
+	<div class="flex flex-col gap-1 items-start max-w-max">
+		<h1 class="font-semibold leading-4 capitalize truncate w-28">{data.category?.name}</h1>
+
+		<p class="text-xs">
+			{data.count}
+
+			{#if data.count > 1}
+				Items
+			{:else}
+				Item
+			{/if}
+		</p>
+	</div>
+</ProductNav>
 
 <div class="{showFilter || showSort ? 'h-[93vh] overflow-hidden' : 'min-h-screen h-full'}">
 	{#if !hidden && innerWidth <= 1024}
 		<button
 			transition:fade="{{ duration: 500 }}"
 			aria-label="Click to go to top"
-			class="fixed top-28 left-[50%] z-40 -ml-14 flex w-28 transform items-center justify-center gap-1 rounded-full bg-black bg-opacity-60 py-1 px-3 text-xs uppercase text-white transition duration-300 focus:outline-none hover:bg-opacity-80 active:scale-90 sm:top-36"
+			class="fixed z-40 top-28 sm:top-36 left-[50%] -ml-14 bg-black bg-opacity-60 flex items-center justify-center gap-1 w-28 py-1 px-3 rounded-full text-white text-xs uppercase focus:outline-none hover:bg-opacity-80 transform active:scale-90 transition duration-300"
 			on:click="{goTop}">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -216,7 +250,7 @@ onMount(() => {
 				viewBox="0 0 24 24"
 				stroke-width="2"
 				stroke="currentColor"
-				class="h-3 w-3">
+				class="w-3 h-3">
 				<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"
 				></path>
 			</svg>
@@ -225,7 +259,7 @@ onMount(() => {
 		</button>
 	{/if}
 
-	<div class="mb-20 flex w-full flex-col gap-5 lg:flex-row lg:gap-10 lg:p-10">
+	<div class="mb-10 sm:mb-20 flex w-full flex-col lg:flex-row lg:gap-10 lg:p-10">
 		{#if data.facets}
 			<DesktopFilter
 				facets="{data.facets}"
@@ -235,17 +269,18 @@ onMount(() => {
 
 			<MobileFilter
 				facets="{data.facets}"
-				bind:showFilter
-				bind:showSort
-				class="sticky top-14 z-40 block sm:top-20 lg:hidden"
+				bind:showFilter="{showFilter}"
+				bind:showSort="{showSort}"
+				class="sticky top-14 sm:top-20 z-40 lg:hidden block"
 				on:clearAll="{refreshData}" />
 		{/if}
 
-		<div class="w-full px-3 sm:px-10 lg:px-0">
+		<div class="w-full sm:px-10 lg:px-0">
 			{#if data.products?.length > 0}
-				<div class="mb-5 w-full sm:mb-10 lg:mb-20">
-					<div class="mb-5 flex flex-wrap items-center justify-between gap-4">
-						<h1 class="flex flex-wrap items-center gap-2">
+				<div class="mb-5 sm:mb-10 lg:mb-20 w-full">
+					<div
+						class="px-3 sm:px-0 hidden lg:flex items-center gap-4 flex-wrap mb-5 justify-between">
+						<h1 class="flex items-center gap-2 flex-wrap">
 							<span class="text-xl font-bold capitalize md:text-2xl"> {data.category?.name} </span>
 
 							-
@@ -265,13 +300,13 @@ onMount(() => {
 							</p>
 						</h1>
 
-						<div class="hidden flex-wrap items-center justify-between md:flex">
+						<div class="flex-wrap items-center justify-between flex">
 							<label class="flex items-center gap-2">
 								<span>Sort : </span>
 
 								<select
-									class="bg-transparent px-2 py-1 font-semibold focus:outline-none hover:underline"
 									bind:value="{data.sort}"
+									class="max-w-max border-b bg-transparent py-1 pr-2 font-semibold focus:border-primary-500 focus:outline-none hover:border-primary-500"
 									on:change="{() => sortNow(data.sort)}">
 									{#each sorts as s}
 										<option value="{s.val}">{s.name}</option>
@@ -281,28 +316,85 @@ onMount(() => {
 						</div>
 					</div>
 
+					{#if data.facets.all_aggs.tags?.all?.buckets?.length}
+						<div class="px-3 sm:px-0 mb-5 flex flex-wrap gap-2">
+							{#each data.facets.all_aggs.tags.all.buckets || [] as t}
+								{#if t}
+									<button
+										class="block rounded-full border bg-white py-1 px-3 text-xs font-medium uppercase transition duration-300 hover:border-primary-500 hover:text-primary-500 focus:outline-none"
+										on:click="{() => goCheckbox(t.key)}">
+										{t.key} ({t.doc_count})
+									</button>
+								{/if}
+							{/each}
+						</div>
+					{/if}
+
 					{#if data.category?.topDescription}
-						<div class="prose-sm prose mb-5 max-w-none text-justify">
+						<div class="px-3 sm:px-0 mb-5 prose-sm prose text-justify max-w-none">
 							{@html data.category?.topDescription}
 						</div>
 					{/if}
 
-					<div
-						class="grid w-full grid-cols-2 items-start gap-3 sm:flex sm:flex-wrap sm:justify-between lg:gap-6">
-						{#each data.products as p}
-							<ProductCard product="{p}" />
+					<ul
+						class="border-t sm:border-t-0 grid w-full grid-cols-2 items-start sm:gap-3 sm:flex sm:flex-wrap sm:justify-between lg:gap-6">
+						{#each data.products as p, ix}
+							<li>
+								<ProductCard product="{p}" />
+							</li>
+
+							{#if ix % 40 === 39 && data.facets.all_aggs.tags?.all?.buckets?.length}
+								<div class="col-span-2 w-screen overflow-x-auto scrollbar-none bg-primary-100">
+									<div class="p-4 flex items-center gap-6">
+										<div class="flex-shrink-0">
+											<span class="text-lg text-gray-500">Filter by</span>
+
+											<br />
+
+											<span class="text-2xl font-bold">Tags</span>
+										</div>
+
+										<ul class="flex flex-wrap gap-2 w-[40rem] flex-shrink-0">
+											{#each data.facets.all_aggs.tags.all.buckets || [] as t}
+												{#if t}
+													<button
+														class="bg-white rounded-md font-semibold text-sm py-2 px-4 max-w-max capitalizefocus:outline-none"
+														on:click="{() => goCheckbox(t.key)}">
+														{t.key}
+													</button>
+												{/if}
+											{/each}
+
+											<!-- <li class="flex items-center whitespace-nowrap">
+										<span>More Options</span>
+
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											viewBox="0 0 20 20"
+											fill="currentColor"
+											class="w-5 h-5">
+											<path
+												fill-rule="evenodd"
+												d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+												clip-rule="evenodd"></path>
+										</svg>
+									</li> -->
+										</ul>
+									</div>
+								</div>
+							{/if}
 						{/each}
 
 						{#each { length: 7 } as _}
-							<div class="hidden sm:block">
+							<li class="hidden sm:block">
 								<DummyProductCard />
-							</div>
+							</li>
 						{/each}
-					</div>
+					</ul>
 				</div>
 			{:else}
 				<div
-					class="mb-5 flex w-full items-center justify-center sm:mb-10 lg:mb-20"
+					class="px-3 sm:px-0 mb-5 sm:mb-10 lg:mb-20 flex items-center justify-center w-full"
 					style="height: 60vh;">
 					<div class="m-10 flex flex-col items-center justify-center text-center">
 						<h1 class="mb-10 text-xl capitalize sm:text-2xl lg:text-3xl">
@@ -313,7 +405,7 @@ onMount(() => {
 							<img
 								src="{noNoDataAvailable}"
 								alt="no data availible"
-								class="h-20 w-20 object-contain text-xs" />
+								class="h-20 w-20 text-xs object-contain" />
 						</div>
 
 						<h2>We couldn't find any matches!</h2>
@@ -343,7 +435,7 @@ onMount(() => {
 		<div class="w-full justify-center bg-gray-50 px-3 py-10 sm:px-10 sm:py-20">
 			<div
 				class="container mx-auto grid max-w-6xl grid-cols-1 gap-10 text-sm sm:gap-20 md:grid-cols-6">
-				<div class="prose-sm prose col-span-1 max-w-none text-justify md:col-span-3 lg:col-span-4">
+				<div class="col-span-1 md:col-span-3 lg:col-span-4 prose-sm prose text-justify max-w-none">
 					{@html data.category?.description}
 				</div>
 
@@ -358,20 +450,21 @@ onMount(() => {
 
 							<span class="col-span-1">Price <br /> (Rs)</span>
 						</li>
+						{#if data?.products}
+							{#each data.products as p, px}
+								{#if p && px < 10}
+									<li>
+										<a href="/product/{p.slug}" class="grid grid-cols-6 gap-5">
+											<span class="col-span-5 text-justify">{p.name}</span>
 
-						{#each data.products as p, px}
-							{#if p && px < 10}
-								<li>
-									<a href="/product/{p.slug}" class="grid grid-cols-6 gap-5">
-										<span class="col-span-5 text-justify">{p.name}</span>
+											<span class="col-span-1 whitespace-nowrap">{p.formattedPrice}</span>
+										</a>
+									</li>
+								{/if}
+							{/each}
+						{/if}
 
-										<span class="col-span-1 whitespace-nowrap">{p.formattedPrice}</span>
-									</a>
-								</li>
-							{/if}
-						{/each}
-
-						{#if data.products && data.products[0] && data.products[0]?.updatedAt}
+						{#if data?.products && data?.products[0] && data?.products[0]?.updatedAt}
 							<li class="font-semibold">
 								<i>Data last updated on {dateOnly(data.products[0]?.updatedAt)}</i>
 							</li>

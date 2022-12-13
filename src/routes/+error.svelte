@@ -119,7 +119,7 @@ onMount(async () => {
 		{/if}
 
 		<div class="mt-5 sm:mt-10">
-			<a href="/" aria-label="Click here to go back home" data-sveltekit-prefetch>
+			<a href="/" aria-label="Click here to go back home" data-sveltekit-preload-data>
 				<PrimaryButton class="px-10">Home</PrimaryButton>
 			</a>
 		</div>

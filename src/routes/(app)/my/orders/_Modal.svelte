@@ -39,8 +39,7 @@ function emitConfirm() {
 					class="flex max-w-max flex-col overflow-hidden rounded-lg border bg-white align-middle shadow-lg">
 					<!-- header-->
 
-					<div
-						class="flex items-center justify-between border-b border-gray-200 p-3 text-gray-800 sm:px-6">
+					<div class="flex items-center justify-between border-b border-gray-200 p-3 sm:px-6">
 						<h3 class="mr-4 text-lg font-semibold">
 							<slot name="title" />
 						</h3>
@@ -68,7 +67,7 @@ function emitConfirm() {
 
 					<!-- body-->
 
-					<div class="height overflow-y-auto p-3 py-3 text-gray-800 sm:px-6">
+					<div class="height overflow-y-auto p-3 py-3 sm:px-6">
 						<slot />
 					</div>
 

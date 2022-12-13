@@ -59,7 +59,8 @@ function changePincode() {
 			}
 		}}"
 		class="relative w-full max-w-sm overflow-hidden rounded-md border
-        {disabled ? 'border-gray-400' : 'border-primary-500'}">
+        {disabled ? 'border-gray-300' : ''}
+		{pincode && pincode.toString().length === 6 ? 'border-primary-500' : 'border-gray-300'}">
 		<input
 			type="tel"
 			name="zip"
@@ -72,7 +73,8 @@ function changePincode() {
 		{#if !deliveryDetails}
 			<button
 				type="submit"
-				class="absolute inset-y-0 right-0 z-10 flex w-20 items-center justify-center text-right text-sm font-bold text-primary-500">
+				class="absolute inset-y-0 right-0 z-10 flex w-20 items-center justify-center text-right text-sm font-bold
+				{pincode && pincode.toString().length === 6 ? 'text-primary-500' : 'text-gray-300'}">
 				{#if loading}
 					<div
 						class="absolute inset-0 flex cursor-not-allowed items-center justify-center bg-black bg-opacity-70">
@@ -132,6 +134,7 @@ function changePincode() {
 			</button>
 		{/if}
 	</form>
+
 	{#if loading}
 		<ul class="mt-4 flex flex-col gap-4">
 			{#each { length: 2 } as _}

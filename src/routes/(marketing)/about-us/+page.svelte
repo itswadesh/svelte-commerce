@@ -100,7 +100,7 @@ let seoProps = {
 
 			<div
 				class="absolute left-40 top-20 flex w-60 flex-col items-center justify-center gap-4 bg-gray-100 p-4 text-center text-sm text-gray-500">
-				<h3 class="text-lg font-bold text-gray-800">{$page.data.store?.websiteName}</h3>
+				<h3 class="text-lg font-bold text-gray-700">{$page.data.store?.websiteName}</h3>
 
 				<p class="text-gray-500">
 					{$page.data.store?.websiteName} is the best place to shop online in India. {$page.data
@@ -113,7 +113,7 @@ let seoProps = {
 				</p>
 
 				<button
-					class="max-w-max rounded-md bg-gray-400 py-2 px-10 font-bold uppercase tracking-wider text-gray-800 focus:outline-none">
+					class="max-w-max rounded-md bg-gray-400 py-2 px-10 font-bold uppercase tracking-wider text-gray-700 focus:outline-none">
 					{$page.data.store?.websiteName}
 				</button>
 			</div>

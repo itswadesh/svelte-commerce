@@ -76,7 +76,7 @@ async function saveProfile() {
 
 <SEO {...seoProps} />
 
-<div class="max-w-3xl text-gray-800">
+<div class="max-w-3xl">
 	<header class="mb-5">
 		<h1 class="font-serif text-2xl font-medium md:text-3xl lg:text-4xl">Profile Details</h1>
 	</header>

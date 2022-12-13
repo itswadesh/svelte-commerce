@@ -25,7 +25,7 @@ export let show
 		<div class="container relative mx-auto max-w-max rounded-xl bg-white">
 			<button
 				type="button"
-				class="absolute top-4 right-4 z-10 transform text-gray-500 transition duration-300 hover:scale-125 hover:text-gray-800 focus:outline-none"
+				class="absolute top-4 right-4 z-10 transform text-gray-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-gray-700"
 				on:click="{() => dispatch('close')}">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"

@@ -176,7 +176,7 @@ function selectallFilters() {}
 								class="mt-0.5 h-4 w-4 flex-shrink-0 focus:ring-0 focus:ring-offset-0" />
 
 							<div class="flex flex-1 flex-wrap items-center">
-								<span class="flex-1 text-sm text-gray-800">{i._source.name}</span>
+								<span class="flex-1 text-sm">{i._source.name}</span>
 							</div>
 						</label>
 					</li>

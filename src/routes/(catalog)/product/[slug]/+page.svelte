@@ -44,6 +44,7 @@
 </style>
 
 <script lang="ts">
+// import Konvas from '$lib/components/ProductDesigner/Konvas.svelte'
 import { applyAction, enhance } from '$app/forms'
 import { createEventDispatcher, onMount } from 'svelte'
 import { date, currency, delay, toast } from '$lib/util'
@@ -75,7 +76,9 @@ import Textbox from '$lib/ui/Textbox.svelte'
 import UserForm from '$lib/components/Product/UserForm.svelte'
 import viewport from '$lib/actions/useViewPort'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
+import ProductNav from '$lib/ProductNav.svelte'
 
+let Konvas
 const dispatch = createEventDispatcher()
 
 const cookies = Cookie()
@@ -117,6 +120,7 @@ let showStickyCartButton = true
 let screenWidth
 let selectedLinkiedProducts = []
 let selectedOptions1 = []
+let relatedProducts = []
 
 $: if (y > 500) {
 	showUserInputForm = true
@@ -127,9 +131,20 @@ if (data.product?.size?.name === 'One Size') {
 }
 
 onMount(async () => {
+	screenWidth = screen.width
+
+	const canvasEmodule = await import('$lib/components/ProductDesigner/Konvas.svelte')
+	Konvas = canvasEmodule.default
+
 	try {
 		// console.log(' data.product?._id = ', data.product?._id)
-
+		const relatedProductsRes = await getAPI(
+			`es/products?store=${$page.data.store?.id}&categories=${data.product.category?.slug}`,
+			$page.data.origin
+		)
+		relatedProducts = relatedProductsRes?.data.filter((p) => {
+			return p._id !== data.product._id
+		})
 		productReview = await getAPI(
 			`reviews/product-reviews?pid=${data.product?._id}`,
 			$page.data.origin
@@ -163,7 +178,7 @@ function handleSelectedLinkiedProducts(e) {
 }
 
 // This is used only for customized product else cart?/add
-async function addToBag(p) {
+async function addToBag(p, customizedImg, customizedJson) {
 	loading = true
 	cartButtonText = 'Adding...'
 
@@ -175,7 +190,8 @@ async function addToBag(p) {
 				vid: p._id,
 				qty: 1,
 				options: selectedOptions,
-
+				customizedImg: customizedImg,
+				customizedData: customizedJson,
 				store: $page.data.store?.id
 			},
 			$page.data.origin
@@ -197,7 +213,7 @@ async function addToBag(p) {
 		// console.log('selectedLinkiedProducts inside add to cart function =', selectedLinkiedProducts)
 		const response = await fetch('/server/cart')
 		cart = await response.json()
-		// console.error('Cart called after add to cart', cart.cart_id, cart.qty)
+		console.error('Cart called after add to cart', cart.cart_id, cart.qty)
 		if (cart) {
 			const cookieCart = {
 				cartId: cart?.cart_id,
@@ -364,11 +380,17 @@ function handleMobileCanvas() {
 	<title>{data.product?.name}</title>
 </svelte:head>
 
-<div class="mb-20 min-h-screen p-3 sm:mb-0 sm:p-10">
-	<div class="container mx-auto">
+<ProductNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page?.data?.store}">
+	<h1 class="w-28 truncate font-semibold capitalize leading-4">
+		{data.product?.brandName || `${$page?.data?.store?.websiteName}`}
+	</h1>
+</ProductNav>
+
+<div class="mb-20 min-h-screen sm:mb-0 md:p-10">
+	<div class="md:container md:mx-auto">
 		<!-- Breadcrumb -->
 
-		<div class="mb-5">
+		<div class="mb-5 hidden lg:block">
 			<Breadcrumb
 				categoryPool="{data.product?.categoryPool}"
 				currentProductName="{data.product?.name}" />
@@ -385,13 +407,14 @@ function handleMobileCanvas() {
 							{#each data.product?.images as img, index}
 								<button
 									type="button"
-									class="h-auto w-full flex-shrink-0 cursor-zoom-in overflow-hidden rounded md:flex-shrink"
+									class="flex h-auto w-full flex-shrink-0 cursor-zoom-in items-center justify-center overflow-hidden rounded md:flex-shrink"
 									on:click="{() => handleGallery(index)}">
 									<LazyImg
 										src="{img}"
 										alt="{data.product?.name}"
-										height="600"
-										class="h-full w-full transform object-contain object-center transition duration-700" />
+										width="360"
+										height="480"
+										class="h-[480px] w-[360px] object-contain object-center text-xs" />
 								</button>
 							{/each}
 						{/if}
@@ -421,6 +444,15 @@ function handleMobileCanvas() {
 								</svg>
 							</button>
 						{/if}
+
+						<!-- <button type="button" on:click="{handleMobileCanvas}" class="h-full w-full"> -->
+						<svelte:component
+							this="{Konvas}"
+							product="{data.product}"
+							bind:customizedImg="{customizedImg}"
+							on:saveAndAddToCart="{({ detail }) =>
+								addToBag(data.product, detail.customizedImg, detail.customizedJson)}" />
+						<!-- </button> -->
 					</div>
 				{:else}
 					<div
@@ -449,7 +481,7 @@ function handleMobileCanvas() {
 				{/if}
 			</div>
 
-			<div class="col-span-1 lg:col-span-2">
+			<div class="col-span-1 px-4 sm:px-10 md:px-0 lg:col-span-2">
 				<!-- Brand -->
 
 				{#if data.product?.brand?.name}
@@ -459,8 +491,8 @@ function handleMobileCanvas() {
 				<!-- Name -->
 
 				{#if data.product?.name}
-					<div class="mb-2 flex justify-between gap-2">
-						<h1 class="flex-1 text-lg text-gray-500">
+					<div class="flex justify-between gap-2">
+						<h1 class="flex-1 text-gray-500 sm:text-lg">
 							{data.product?.name}
 						</h1>
 
@@ -476,12 +508,36 @@ function handleMobileCanvas() {
 					</div>
 				{/if}
 
+				<!-- prices mobile -->
+
+				<div class="mt-2 block sm:hidden">
+					<div class="mb-2 flex flex-wrap items-center gap-2">
+						<span class="whitespace-nowrap">
+							<b>{data.product?.formattedPrice}</b>
+						</span>
+
+						{#if data.product?.mrp > data.product?.price}
+							<span class="whitespace-nowrap text-gray-400">
+								MRP <strike>{data.product?.formattedMrp}</strike>
+							</span>
+
+							{#if data.product?.discount > 0}
+								<span class="whitespace-nowrap font-semibold text-[#ff5a5a]">
+									({data.product?.discount}% off)
+								</span>
+							{/if}
+						{/if}
+					</div>
+
+					<p class="text-sm font-semibold text-green-700">Inclusive of all taxes</p>
+				</div>
+
 				<!-- ratings -->
 
 				{#if productReview?.summary?.avg > 0}
 					<button
 						type="button"
-						class="mb-5 flex max-w-max items-center divide-x-2 divide-gray-300 border border-gray-300 py-1 text-sm focus:outline-none"
+						class="mt-2 flex max-w-max items-center divide-x-2 divide-gray-300 border border-gray-300 py-1 text-sm focus:outline-none"
 						on:click="{() => scrollTo('ratings-and-reviews')}">
 						<div class="flex items-center gap-1 px-2 font-semibold">
 							<span> {productReview?.summary?.avg} </span>
@@ -501,30 +557,55 @@ function handleMobileCanvas() {
 					</button>
 				{/if}
 
-				<hr class="mb-5 w-full border-t border-gray-300" />
+				<hr class="my-5 block w-full border-t border-gray-300 sm:hidden lg:block" />
 
-				<!-- prices -->
+				<!-- Delivery Options Mobile -->
 
-				<div class="mb-2 flex flex-wrap items-center gap-4">
-					<span class="whitespace-nowrap text-xl sm:text-2xl">
-						<b>{data.product?.formattedPrice}</b>
-					</span>
+				<div class="mb-5 block sm:hidden">
+					<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
+						<span> Delivery Options </span>
 
-					{#if data.product?.mrp > data.product?.price}
-						<span class="whitespace-nowrap text-lg text-gray-500 sm:text-xl">
-							<strike>{data.product?.formattedMrp}</strike>
-						</span>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1"
+							stroke="currentColor"
+							class="h-5 w-5">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"
+							></path>
+						</svg>
+					</h6>
 
-						{#if data.product?.discount > 0}
-							<span class="whitespace-nowrap text-lg font-semibold text-amber-500 sm:text-xl">
-								({data.product?.discount}% off)
-							</span>
-						{/if}
-					{/if}
+					<DeliveryOptions product="{data.product}" deliveryDetails="{data.deliveryDetails}" />
 				</div>
 
-				<p class="mb-5 text-sm font-semibold text-green-700">Inclusive of all taxes</p>
+				<!-- prices desktop -->
 
+				<div class="hidden sm:block">
+					<div class="mb-2 flex flex-wrap items-center gap-4">
+						<span class="whitespace-nowrap text-xl sm:text-2xl">
+							<b>{data.product?.formattedPrice}</b>
+						</span>
+
+						{#if data.product?.mrp > data.product?.price}
+							<span class="whitespace-nowrap text-lg text-gray-500 sm:text-xl">
+								<strike>{data.product?.formattedMrp}</strike>
+							</span>
+
+							{#if data.product?.discount > 0}
+								<span class="whitespace-nowrap text-lg font-semibold text-amber-500 sm:text-xl">
+									({data.product?.discount}% off)
+								</span>
+							{/if}
+						{/if}
+					</div>
+
+					<p class="mb-5 text-sm font-semibold text-green-700">Inclusive of all taxes</p>
+				</div>
 				<!-- New and Tags -->
 
 				{#if data.product?.tags?.length || data.product?.new}
@@ -535,11 +616,13 @@ function handleMobileCanvas() {
 
 						{#if data.product?.tags?.length}
 							{#each data.product?.tags as tag}
-								<div
-									class="py-1 px-2 text-xs font-semibold uppercase text-white"
-									style="background-color: {tag.colorCode};">
-									{tag.name}
-								</div>
+								{#if tag?.name && tag?.type === 'Ribbon'}
+									<div
+										class="py-1 px-2 text-xs font-semibold uppercase text-white"
+										style="background-color: {tag.colorCode};">
+										{tag.name}
+									</div>
+								{/if}
 							{/each}
 						{/if}
 					</div>
@@ -549,7 +632,7 @@ function handleMobileCanvas() {
 
 				{#if data.product?.size}
 					<div class="mb-5">
-						<h6 class="mb-5 flex items-center gap-2 font-semibold uppercase">
+						<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
 							<span> Select Size </span>
 
 							<svg
@@ -585,7 +668,7 @@ function handleMobileCanvas() {
 
 				{#if data.product?.groupProduct?.length}
 					<div class="mb-5">
-						<h6 class="mb-5 flex items-center gap-2 font-semibold uppercase">
+						<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
 							<span> Similar Products </span>
 
 							<svg
@@ -888,7 +971,7 @@ function handleMobileCanvas() {
 
 				{#if data.product?.description}
 					<div class="mb-5">
-						<h6 class="mb-5 flex items-center gap-2 font-semibold uppercase">
+						<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
 							<span> Product Details </span>
 
 							<svg
@@ -916,7 +999,7 @@ function handleMobileCanvas() {
 
 				{#if data.product?.linkedProducts?.length}
 					<div class="mb-5">
-						<h6 class="mb-5 flex items-center gap-2 font-semibold uppercase">
+						<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
 							<span> Linked Products </span>
 
 							<svg
@@ -947,7 +1030,7 @@ function handleMobileCanvas() {
 
 				{#if data.product?.longDescription}
 					<div class="prose mb-5">
-						<h6 class="mb-5 flex items-center gap-2 font-semibold uppercase">
+						<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
 							<span> Description </span>
 
 							<svg
@@ -971,12 +1054,12 @@ function handleMobileCanvas() {
 					</div>
 				{/if}
 
-				<hr class="mb-5 w-full border-t border-gray-300" />
+				<hr class="mb-5 hidden w-full border-t border-gray-300 sm:block" />
 
-				<!-- Delivery Options -->
+				<!-- Delivery Options Desktop -->
 
-				<div class="mb-5">
-					<h6 class="mb-5 flex items-center gap-2 font-semibold uppercase">
+				<div class="mb-5 hidden sm:block">
+					<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
 						<span> Delivery Options </span>
 
 						<svg
@@ -1002,7 +1085,7 @@ function handleMobileCanvas() {
 				<!-- Ratings & Reviews -->
 
 				<div id="ratings-and-reviews" class="mb-5">
-					<h6 class="mb-5 flex items-center gap-2 font-semibold uppercase">
+					<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
 						<span> Ratings </span>
 
 						<svg
@@ -1139,7 +1222,9 @@ function handleMobileCanvas() {
 							</div>
 						{/if}
 					{:else}
-						<div class="mb-5 text-sm">No reviews yet, be the first one to review the product.</div>
+						<div class="mb-5 text-sm">
+							No reviews yet, be the first one to review the data.product?.
+						</div>
 					{/if}
 
 					<button
@@ -1166,34 +1251,36 @@ function handleMobileCanvas() {
 			</div>
 		</div>
 
-		{#if data.product?.crossSells?.length}
-			<hr class="mb-5 w-full sm:mb-10" />
+		<div class="px-4 sm:px-10 md:px-0">
+			{#if data.product?.crossSells?.length}
+				<hr class="mb-5 w-full sm:mb-10" />
 
-			<div class="mb-5 sm:mb-10">
-				<h2 class="mb-5 text-lg font-bold capitalize sm:text-xl md:text-2xl">
-					Frequently bought together
-				</h2>
+				<div class="mb-5 sm:mb-10">
+					<h2 class="mb-5 text-lg font-bold capitalize sm:text-xl md:text-2xl">
+						Frequently bought together
+					</h2>
 
-				<div
-					class="mb-5 grid w-full grid-cols-2 items-start gap-3 sm:mb-10 sm:flex sm:flex-wrap sm:justify-between lg:mb-20 lg:gap-6">
-					{#each data.product?.crossSells as csp}
-						<FrequentlyBoughtProduct product="{csp}" />
-					{/each}
+					<div
+						class="mb-5 grid w-full grid-cols-2 items-start gap-3 sm:mb-10 sm:flex sm:flex-wrap sm:justify-between lg:mb-20 lg:gap-6">
+						{#each data.product?.crossSells as csp}
+							<FrequentlyBoughtProduct product="{csp}" />
+						{/each}
 
-					{#each { length: 7 } as _}
-						<div class="hidden sm:block">
-							<DummyProductCard />
-						</div>
-					{/each}
+						{#each { length: 7 } as _}
+							<div class="hidden sm:block">
+								<DummyProductCard />
+							</div>
+						{/each}
+					</div>
 				</div>
-			</div>
-		{/if}
+			{/if}
 
-		{#if data.product?.relatedProducts?.length}
-			<hr class="mb-5 w-full sm:mb-10" />
+			{#if data.product?.relatedProducts?.length}
+				<hr class="mb-5 w-full sm:mb-10" />
 
-			<SimilarProducts similarProducts="{data.product?.relatedProducts}" />
-		{/if}
+				<SimilarProducts similarProducts="{data.product?.relatedProducts}" />
+			{/if}
+		</div>
 	</div>
 </div>
 

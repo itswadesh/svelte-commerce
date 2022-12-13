@@ -18,9 +18,9 @@ export default (event: FetchEvent): void => {
 							// })
 							// console.log('To check images', event.request.headers.get('accept'))
 							if (
-								url.includes('/_app/immutable/') ||
-								url.includes('https://www.googletagmanager.com/gtag/') ||
-								url.includes('https://www.google-analytics.com/g/collect') ||
+								// url.includes('/_app/immutable/') ||
+								// url.includes('https://www.googletagmanager.com/gtag/') ||
+								// url.includes('https://www.google-analytics.com/g/collect') ||
 								url.includes('https://fonts.googleapis.com/') ||
 								url.includes('https://fonts.gstatic.com/s/') ||
 								url.includes('.png') ||

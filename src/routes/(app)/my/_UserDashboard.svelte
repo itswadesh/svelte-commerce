@@ -5,7 +5,7 @@ import { fly } from 'svelte/transition'
 export let me, myOrders, myWishlist, myReviews
 </script>
 
-<section class="h-full w-full tracking-wide text-gray-800">
+<section class="h-full w-full tracking-wide">
 	<div class="mb-5 flex items-end">
 		<h1 class="mr-1 text-xl font-semibold sm:text-3xl">Hi</h1>
 
@@ -112,7 +112,7 @@ export let me, myOrders, myWishlist, myReviews
 				<LazyImg
 					src="/dashboard/profile.png"
 					alt=" "
-					class="h-28 w-28 opacity-50 lg:h-32 lg:w-32 object-contain object-center" />
+					class="h-28 w-28 object-contain object-center opacity-50 lg:h-32 lg:w-32" />
 			</div>
 		</a>
 	</div>

@@ -49,7 +49,7 @@ let categoryColors = [
 
 {#if loading}
 	<div class="px-3 py-5 sm:p-10">
-		<div class="container mx-auto max-w-6xl text-gray-800">
+		<div class="container mx-auto max-w-6xl">
 			<div class="grid grid-cols-4 items-start justify-items-center gap-4 sm:hidden">
 				{#each { length: 8 } as _}
 					<div class="flex flex-col items-center">
@@ -74,7 +74,7 @@ let categoryColors = [
 	</div>
 {:else if categories && categories.length}
 	<div class="px-3 py-5 sm:p-10">
-		<div class="container mx-auto max-w-6xl text-gray-800">
+		<div class="container mx-auto max-w-6xl">
 			<div class="flex items-center justify-center space-x-2 pb-5 lg:pb-10">
 				<hr class="h-1 flex-1 border-gray-300" />
 
@@ -176,7 +176,7 @@ let categoryColors = [
 								<a
 									href="{`/${category.slug}`}"
 									aria-label="Click to view related products of this category"
-									class="zoom-out group flex w-32 flex-col items-center justify-center lg:w-36">
+									class="group zoom-out flex w-32 flex-col items-center justify-center lg:w-36">
 									<div
 										class="mb-4 h-32 w-32 flex-shrink-0 overflow-hidden rounded-full border-2 border-gray-300 group-hover:border-primary-500 group-hover:shadow-xl lg:h-36 lg:w-36">
 										<LazyImg

@@ -83,7 +83,7 @@ async function refreshData() {
 
 <SEO {...seoProps} />
 
-<div class="w-full text-gray-800">
+<div class="w-full">
 	{#if data.reviews?.isFetching}
 		Loading....
 	{:else if data.reviews?.errors}

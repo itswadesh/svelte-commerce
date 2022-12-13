@@ -1,13 +1,15 @@
 <script>
-import { post } from '$lib/util/api'
+import { applyAction, enhance } from '$app/forms'
+import { date, currency, delay, toast } from '$lib/util'
+import { fireGTagEvent } from '$lib/util/gTag'
 import { invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
-import { date, currency, delay, toast } from '$lib/util'
+import { post } from '$lib/util/api'
+import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import { applyAction, enhance } from '$app/forms'
-import { fireGTagEvent } from '$lib/util/gTag'
-import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
+import productNonVeg from '$lib/assets/product/non-veg.png'
+import productVeg from '$lib/assets/product/veg.png'
 
 export let product = {}
 
@@ -87,7 +89,7 @@ let bounceItemFromTop = false
 
 			<!-- Name -->
 
-			<div class="flex justify-between gap-2">
+			<div class="flex gap-2 justify-between">
 				{#if product.name}
 					<h2
 						class="flex-1 truncate text-sm text-gray-500 group-hover:text-blue-600 group-hover:underline sm:text-base">
@@ -97,9 +99,9 @@ let bounceItemFromTop = false
 					{#if $page?.data?.store?.isFnb && product.foodType}
 						<div>
 							{#if product.foodType === 'veg'}
-								<img src="/product/veg.png" alt="veg" class="h-5 w-5" />
+								<img src="{productVeg}" alt="veg" class="h-5 w-5" />
 							{:else if product.foodType === 'nonveg'}
-								<img src="/product/non-veg.png" alt="non veg" class="h-5 w-5" />
+								<img src="{productNonVeg}" alt="non veg" class="h-5 w-5" />
 							{/if}
 						</div>
 					{/if}
@@ -108,16 +110,16 @@ let bounceItemFromTop = false
 
 			<!-- prices -->
 
-			<div class="mx-auto flex max-w-max flex-wrap items-center gap-2">
-				<span class="whitespace-nowrap text-sm"><b>{product.formattedPrice}</b></span>
+			<div class="flex flex-wrap items-center gap-2 max-w-max mx-auto">
+				<span class="text-sm whitespace-nowrap"><b>{product.formattedPrice}</b></span>
 
 				{#if product.mrp > product.price}
-					<span class="whitespace-nowrap text-xs">
+					<span class="text-xs whitespace-nowrap">
 						<strike>{product.formattedMrp}</strike>
 					</span>
 
 					{#if Math.floor(((product.mrp - product.price) / product.mrp) * 100) > 0}
-						<span class="whitespace-nowrap text-xs">
+						<span class="text-xs whitespace-nowrap">
 							({Math.floor(((product.mrp - product.price) / product.mrp) * 100)}%)
 						</span>
 					{/if}
