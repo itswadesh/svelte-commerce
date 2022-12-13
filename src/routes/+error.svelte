@@ -94,7 +94,7 @@ onMount(async () => {
 					<div class="flex flex-col gap-5 text-center">
 						<h1>500</h1>
 
-						<h2 class="headline my-3">Sorry, the server is down.</h2>
+						<h2 class="headline my-3">{$page.error?.message || 'Sorry, the server is down.'}</h2>
 					</div>
 				</div>
 			</div>
@@ -119,7 +119,7 @@ onMount(async () => {
 		{/if}
 
 		<div class="mt-5 sm:mt-10">
-			<a href="/" aria-label="Click here to go back home" data-sveltekit-prefetch>
+			<a href="/" aria-label="Click here to go back home" data-sveltekit-preload-data>
 				<PrimaryButton class="px-10">Home</PrimaryButton>
 			</a>
 		</div>

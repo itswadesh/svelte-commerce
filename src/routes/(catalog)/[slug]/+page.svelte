@@ -1,0 +1,481 @@
+<style>
+@media (min-width: 1024px) {
+	.top-rem-map {
+		top: 85px;
+	}
+}
+.frosted-black {
+	backdrop-filter: blur(5px);
+	background-color: hsla(0, 0%, 0%, 0.8);
+}
+.height {
+	max-height: 85vh;
+}
+</style>
+
+<script>
+import { dateOnly, toast } from '$lib/util'
+import { fade } from 'svelte/transition'
+import { getAPI } from '$lib/util/api'
+import { goto, invalidateAll } from '$app/navigation'
+import { onMount } from 'svelte'
+import { page } from '$app/stores'
+import { sorts } from '$lib/config'
+import Breadcrumb from '$lib/components/Breadcrumb.svelte'
+import DesktopFilter from '$lib/components/DesktopFilter.svelte'
+import DummyProductCard from '$lib/DummyProductCard.svelte'
+import MobileFilter from '$lib/components/MobileFilter.svelte'
+import MobileFooter from '$lib/MobileFooter.svelte'
+import noNoDataAvailable from '$lib/assets/no/no-data-availible.png'
+import Pagination from '$lib/components/Pagination.svelte'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import ProductCard from '$lib/ProductCard.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
+import ProductNav from '$lib/ProductNav.svelte'
+
+export let data
+
+// console.log('data = ', data)
+// console.log('Products = ', products)
+// console.log('Count = ', count)
+// console.log('Facets = ', facets)
+
+let seoProps = {
+	title: `Find best ${data.category?.title || data.category?.name || ' '}`,
+	metadescription: `Find best ${data.category?.metaDescription || ' '}`,
+	keywords: `Find best ${data.category?.keywords || ' '}`
+}
+
+let showFilter = false
+let showSort = false
+let hidden = true
+let showOnPx = 600
+let y
+
+$: innerWidth = 0
+
+function goTop() {
+	// scroll to the top
+	window.scroll({ top: 0, behavior: 'smooth' })
+}
+
+function scrollContainer() {
+	return document.documentElement || document.body
+}
+
+function handleOnScroll() {
+	if (!scrollContainer()) {
+		return
+	}
+
+	if (scrollContainer().scrollTop > showOnPx) {
+		hidden = false
+	} else {
+		hidden = true
+	}
+}
+
+async function sortNow(s) {
+	let u = new URL($page.url)
+
+	if (s == 'null' || s == null || s == undefined || s == 'undefined') {
+		u.searchParams.delete('sort')
+	} else {
+		await u.searchParams.set('sort', s)
+	}
+	// await invalidateAll()
+	goto(u.toString())
+	window.scroll({ top: 0, behavior: 'smooth' })
+
+	// await goto(`/search?${$page.url.searchParams.toString()}`)
+}
+
+let currentPage = 1
+
+async function loadNextPage() {
+	let nextPage = currentPage + 1
+	$page.url.searchParams.delete('page')
+	const searchParams = $page.url.searchParams.toString()
+	try {
+		data.isLoading = true
+		const res = await getAPI(
+			`es/products?categories=${data.categorySlug}&store=${data.store?.id}&page=${nextPage}&${searchParams}`,
+			data.origin
+		)
+		// console.log('refresh res = ', res)
+		const nextPageData = res?.data?.map((p) => {
+			const p1 = { ...p._source }
+			p1.id = p._id
+			return p1
+		})
+		data.products = data?.products?.concat(nextPageData)
+		data.count = res?.count
+		data.facets = res?.facets
+		data.err = !res?.estimatedTotalHits ? 'No result Not Found' : null
+		currentPage = currentPage + 1
+	} catch (e) {
+		toast(e, 'error')
+	} finally {
+		data.isLoading = false
+	}
+}
+
+async function refreshData() {
+	// await invalidateAll()
+	// try {
+	// 	const res = await getAPI(`products?${data.query.toString()}`)
+	// 	// console.log('refresh res = ', res)
+	// 	data.products = res?.data
+	// 	data.count = res?.count
+	// 	data.facets = res?.facets?.all_aggs
+	// 	data.err = !data.products ? 'No result Not Found' : null
+	// } catch (e) {
+	// 	toast(e, 'error')
+	// } finally {
+	// }
+}
+
+onMount(() => {
+	if ($page?.data?.isDesktop) return
+	const intersectionObserver = new IntersectionObserver((entries) => {
+		if (entries[0].intersectionRatio <= 0) return
+		// load more content;
+		loadNextPage()
+	})
+
+	// start observing
+
+	intersectionObserver.observe(document.querySelector('.more'))
+	// // @ts-ignore
+	// gtag('event', 'view_item', {
+	// 	currency: 'USD',
+	// 	value: 7.77,
+	// 	items: [
+	// 		{
+	// 			item_id: 'SKU_12345',
+	// 			item_name: 'Stan and Friends Tee',
+	// 			affiliation: 'Google Merchandise Store',
+	// 			coupon: 'SUMMER_FUN',
+	// 			currency: 'USD',
+	// 			discount: 2.22,
+	// 			index: 0,
+	// 			item_brand: 'Google',
+	// 			item_category: 'Apparel',
+	// 			item_category2: 'Adult',
+	// 			item_category3: 'Shirts',
+	// 			item_category4: 'Crew',
+	// 			item_category5: 'Short sleeve',
+	// 			item_list_id: 'related_products',
+	// 			item_list_name: 'Related Products',
+	// 			item_variant: 'green',
+	// 			location_id: 'ChIJIQBpAG2ahYAR_6128GcTUEo',
+	// 			price: 9.99,
+	// 			quantity: 1
+	// 		}
+	// 	]
+	// })
+
+	// // @ts-ignore
+	// gtag('event', 'view_item_list', {
+	// 	item_list_id: 'related_products',
+	// 	item_list_name: 'Related products',
+	// 	items: [
+	// 		{
+	// 			item_id: 'SKU_12345',
+	// 			item_name: 'Stan and Friends Tee',
+	// 			affiliation: 'Google Merchandise Store',
+	// 			coupon: 'SUMMER_FUN',
+	// 			currency: 'USD',
+	// 			discount: 2.22,
+	// 			index: 0,
+	// 			item_brand: 'Google',
+	// 			item_category: 'Apparel',
+	// 			item_category2: 'Adult',
+	// 			item_category3: 'Shirts',
+	// 			item_category4: 'Crew',
+	// 			item_category5: 'Short sleeve',
+	// 			item_list_id: 'related_products',
+	// 			item_list_name: 'Related Products',
+	// 			item_variant: 'green',
+	// 			location_id: 'ChIJIQBpAG2ahYAR_6128GcTUEo',
+	// 			price: 9.99,
+	// 			quantity: 1
+	// 		}
+	// 	]
+	// })
+})
+
+async function goCheckbox(item) {
+	if (item === $page.url.searchParams.get('tags')) {
+		$page.url.searchParams.set('tags', '')
+	} else {
+		$page.url.searchParams.set('tags', item)
+		$page.url.searchParams.set('page', '1')
+	}
+	await goto($page.url.toString())
+	await invalidateAll()
+}
+</script>
+
+<SEO {...seoProps} />
+
+<svelte:window bind:scrollY="{y}" bind:innerWidth="{innerWidth}" on:scroll="{handleOnScroll}" />
+
+<ProductNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page?.data?.store}">
+	<div class="flex flex-col gap-1 items-start max-w-max">
+		<h1 class="font-semibold leading-4 capitalize truncate w-28">{data.category?.name}</h1>
+
+		<p class="text-xs">
+			{data.count}
+
+			{#if data.count > 1}
+				Items
+			{:else}
+				Item
+			{/if}
+		</p>
+	</div>
+</ProductNav>
+
+<div class="{showFilter || showSort ? 'h-[93vh] overflow-hidden' : 'min-h-screen h-full'}">
+	{#if !hidden && innerWidth <= 1024}
+		<button
+			transition:fade="{{ duration: 500 }}"
+			aria-label="Click to go to top"
+			class="fixed z-40 top-28 sm:top-36 left-[50%] -ml-14 bg-black bg-opacity-60 flex items-center justify-center gap-1 w-28 py-1 px-3 rounded-full text-white text-xs uppercase focus:outline-none hover:bg-opacity-80 transform active:scale-90 transition duration-300"
+			on:click="{goTop}">
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke-width="2"
+				stroke="currentColor"
+				class="w-3 h-3">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"
+				></path>
+			</svg>
+
+			<span class="flex-1">{data.products?.length} / {data.count}</span>
+		</button>
+	{/if}
+
+	<div class="mb-10 sm:mb-20 flex w-full flex-col lg:flex-row lg:gap-10 lg:p-10">
+		{#if data.facets}
+			<DesktopFilter
+				facets="{data.facets}"
+				query="{data.query}"
+				class="sticky top-24 hidden lg:block"
+				on:clearAll="{refreshData}" />
+
+			<MobileFilter
+				facets="{data.facets}"
+				bind:showFilter="{showFilter}"
+				bind:showSort="{showSort}"
+				class="sticky top-14 sm:top-20 z-40 lg:hidden block"
+				on:clearAll="{refreshData}" />
+		{/if}
+
+		<div class="w-full sm:px-10 lg:px-0">
+			{#if data.products?.length > 0}
+				<div class="mb-5 sm:mb-10 lg:mb-20 w-full">
+					<div
+						class="px-3 sm:px-0 hidden lg:flex items-center gap-4 flex-wrap mb-5 justify-between">
+						<h1 class="flex items-center gap-2 flex-wrap">
+							<span class="text-xl font-bold capitalize md:text-2xl"> {data.category?.name} </span>
+
+							-
+
+							<p>
+								<span class="text-xl font-bold capitalize md:text-2xl">
+									{data.count}
+								</span>
+
+								<span>
+									{#if data.count > 1}
+										Items
+									{:else}
+										Item
+									{/if}
+								</span>
+							</p>
+						</h1>
+
+						<div class="flex-wrap items-center justify-between flex">
+							<label class="flex items-center gap-2">
+								<span>Sort : </span>
+
+								<select
+									bind:value="{data.sort}"
+									class="max-w-max border-b bg-transparent py-1 pr-2 font-semibold focus:border-primary-500 focus:outline-none hover:border-primary-500"
+									on:change="{() => sortNow(data.sort)}">
+									{#each sorts as s}
+										<option value="{s.val}">{s.name}</option>
+									{/each}
+								</select>
+							</label>
+						</div>
+					</div>
+
+					{#if data.facets.all_aggs.tags?.all?.buckets?.length}
+						<div class="px-3 sm:px-0 mb-5 flex flex-wrap gap-2">
+							{#each data.facets.all_aggs.tags.all.buckets || [] as t}
+								{#if t}
+									<button
+										class="block rounded-full border bg-white py-1 px-3 text-xs font-medium uppercase transition duration-300 hover:border-primary-500 hover:text-primary-500 focus:outline-none"
+										on:click="{() => goCheckbox(t.key)}">
+										{t.key} ({t.doc_count})
+									</button>
+								{/if}
+							{/each}
+						</div>
+					{/if}
+
+					{#if data.category?.topDescription}
+						<div class="px-3 sm:px-0 mb-5 prose-sm prose text-justify max-w-none">
+							{@html data.category?.topDescription}
+						</div>
+					{/if}
+
+					<ul
+						class="border-t sm:border-t-0 grid w-full grid-cols-2 items-start sm:gap-3 sm:flex sm:flex-wrap sm:justify-between lg:gap-6">
+						{#each data.products as p, ix}
+							<li>
+								<ProductCard product="{p}" />
+							</li>
+
+							{#if ix % 40 === 39 && data.facets.all_aggs.tags?.all?.buckets?.length}
+								<div class="col-span-2 w-screen overflow-x-auto scrollbar-none bg-primary-100">
+									<div class="p-4 flex items-center gap-6">
+										<div class="flex-shrink-0">
+											<span class="text-lg text-gray-500">Filter by</span>
+
+											<br />
+
+											<span class="text-2xl font-bold">Tags</span>
+										</div>
+
+										<ul class="flex flex-wrap gap-2 w-[40rem] flex-shrink-0">
+											{#each data.facets.all_aggs.tags.all.buckets || [] as t}
+												{#if t}
+													<button
+														class="bg-white rounded-md font-semibold text-sm py-2 px-4 max-w-max capitalizefocus:outline-none"
+														on:click="{() => goCheckbox(t.key)}">
+														{t.key}
+													</button>
+												{/if}
+											{/each}
+
+											<!-- <li class="flex items-center whitespace-nowrap">
+										<span>More Options</span>
+
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											viewBox="0 0 20 20"
+											fill="currentColor"
+											class="w-5 h-5">
+											<path
+												fill-rule="evenodd"
+												d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+												clip-rule="evenodd"></path>
+										</svg>
+									</li> -->
+										</ul>
+									</div>
+								</div>
+							{/if}
+						{/each}
+
+						{#each { length: 7 } as _}
+							<li class="hidden sm:block">
+								<DummyProductCard />
+							</li>
+						{/each}
+					</ul>
+				</div>
+			{:else}
+				<div
+					class="px-3 sm:px-0 mb-5 sm:mb-10 lg:mb-20 flex items-center justify-center w-full"
+					style="height: 60vh;">
+					<div class="m-10 flex flex-col items-center justify-center text-center">
+						<h1 class="mb-10 text-xl capitalize sm:text-2xl lg:text-3xl">
+							{#if data.searchData}You searched for "{data.searchData}"{/if}
+						</h1>
+
+						<div class="mb-5">
+							<img
+								src="{noNoDataAvailable}"
+								alt="no data availible"
+								class="h-20 w-20 text-xs object-contain" />
+						</div>
+
+						<h2>We couldn't find any matches!</h2>
+
+						<p class="mb-5 text-center text-xs text-gray-500">
+							Please check the spelling or try searching something else
+						</p>
+
+						<PrimaryButton class="text-sm" on:click="{() => goto('/')}">Back to Home</PrimaryButton>
+					</div>
+				</div>
+			{/if}
+
+			{#if !$page?.data?.isDesktop}
+				<div class="more">{data.isLoading ? 'loading...' : ''}</div>
+			{:else}
+				<Pagination
+					count="{Math.ceil((data?.count || 1) / data.pageSize)}"
+					current="{data?.currentPage || 1}" />
+			{/if}
+		</div>
+	</div>
+
+	<!-- CATEGORY DESCRIPTION -->
+
+	{#if data.category?.description}
+		<div class="w-full justify-center bg-gray-50 px-3 py-10 sm:px-10 sm:py-20">
+			<div
+				class="container mx-auto grid max-w-6xl grid-cols-1 gap-10 text-sm sm:gap-20 md:grid-cols-6">
+				<div class="col-span-1 md:col-span-3 lg:col-span-4 prose-sm prose text-justify max-w-none">
+					{@html data.category?.description}
+				</div>
+
+				<div class="col-span-1 md:col-span-3 lg:col-span-2">
+					<h1 class="mb-5 text-center text-base font-bold uppercase tracking-wide">
+						{data.category?.name} price list
+					</h1>
+
+					<ul class="flex flex-col gap-2">
+						<li class="grid grid-cols-6 items-center gap-5 font-semibold uppercase">
+							<span class="col-span-5">{data.category?.name}</span>
+
+							<span class="col-span-1">Price <br /> (Rs)</span>
+						</li>
+						{#if data?.products}
+							{#each data.products as p, px}
+								{#if p && px < 10}
+									<li>
+										<a href="/product/{p.slug}" class="grid grid-cols-6 gap-5">
+											<span class="col-span-5 text-justify">{p.name}</span>
+
+											<span class="col-span-1 whitespace-nowrap">{p.formattedPrice}</span>
+										</a>
+									</li>
+								{/if}
+							{/each}
+						{/if}
+
+						{#if data?.products && data?.products[0] && data?.products[0]?.updatedAt}
+							<li class="font-semibold">
+								<i>Data last updated on {dateOnly(data.products[0]?.updatedAt)}</i>
+							</li>
+						{/if}
+					</ul>
+				</div>
+			</div>
+		</div>
+	{/if}
+
+	<div class="block sm:hidden">
+		<MobileFooter />
+	</div>
+</div>

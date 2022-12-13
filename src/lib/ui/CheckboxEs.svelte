@@ -182,7 +182,7 @@ function handleSearchBox() {
 							<!-- {`${selectedItems.toString().search(i.key) === i.key}` ? 'font-medium' : 'font-normal'} -->
 
 							<div class="ml-2 flex-1 text-sm leading-tight">
-								<span class="text-gray-800">{i.key}</span>
+								<span>{i.key}</span>
 
 								<span class="text-gray-500">({i.doc_count})</span>
 							</div>
