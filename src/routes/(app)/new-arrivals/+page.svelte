@@ -62,7 +62,7 @@ let showItemCount = 10
 									class="mr-2 whitespace-nowrap rounded-full border-2 px-4 py-1 text-sm font-semibold focus:outline-none
                             {selectedCategory.name === c.name
 										? 'border-primary-500 bg-primary-500 text-white'
-										: 'text-gray-800 border-gray-200 bg-transparent'}"
+										: 'text-gray-700 border-gray-200 bg-transparent'}"
 									on:click="{() => (selectedCategory = c)}">
 									{c.name}
 								</button>
@@ -104,7 +104,7 @@ let showItemCount = 10
 							<img
 								src="/no/no-data-availible.png"
 								alt="no data availible"
-								class="h-20 w-20 text-xs object-contain" />
+								class="h-20 w-20 object-contain text-xs" />
 						</div>
 
 						<p class="mb-5 text-center text-gray-500">No data found</p>
@@ -132,7 +132,7 @@ let showItemCount = 10
 				<img
 					src="/no/no-data-availible.png"
 					alt="no data availible"
-					class="h-20 w-20 text-xs object-contain" />
+					class="h-20 w-20 object-contain text-xs" />
 			</div>
 
 			<p class="mb-5 text-center text-gray-500">No data found</p>

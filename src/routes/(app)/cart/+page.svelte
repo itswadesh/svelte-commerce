@@ -181,7 +181,7 @@ async function getCoupons() {
 							{#if !show}
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
-									class="w-5 h-5 mt-1 ml-2 text-gray-800 transition duration-300"
+									class="w-5 h-5 mt-1 ml-2 text-gray-700 transition duration-300"
 									viewBox="0 0 20 20"
 									fill="currentColor">
 									<path
@@ -192,7 +192,7 @@ async function getCoupons() {
 							{:else}
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
-									class="w-5 h-5 mt-1 ml-2 text-gray-800  transform rotate-180 transition duration-300"
+									class="w-5 h-5 mt-1 ml-2 text-gray-700  transform rotate-180 transition duration-300"
 									viewBox="0 0 20 20"
 									fill="currentColor">
 									<path
@@ -563,7 +563,7 @@ async function getCoupons() {
 
 									<button
 										type="button"
-										class="transform cursor-pointer text-gray-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-gray-800"
+										class="transform cursor-pointer text-gray-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-gray-700"
 										on:click="{() => (openApplyPromoCodeModal = false)}">
 										<svg
 											xmlns="http://www.w3.org/2000/svg"

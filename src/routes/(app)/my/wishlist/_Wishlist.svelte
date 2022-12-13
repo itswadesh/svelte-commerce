@@ -61,7 +61,7 @@ async function getWishlistedProducts() {
 }
 </script>
 
-<div class="w-full text-gray-800">
+<div class="w-full">
 	{#if wishlistedProducts?.isFetching}
 		<div class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
 			{#each Array(10) as p, ix}

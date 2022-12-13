@@ -65,7 +65,7 @@ async function saveReviewproduct(review) {
 
 <SEO {...seoProps} />
 
-<div class="text-gray-800">
+<div>
 	<BackButton to="{data.ref}" class="mb-2" />
 
 	<div class="mb-3 flex flex-col justify-between lg:flex-row lg:items-center">

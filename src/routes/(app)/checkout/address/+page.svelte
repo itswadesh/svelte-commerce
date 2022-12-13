@@ -83,7 +83,7 @@ async function refreshAddress() {
 					</div>
 
 					<span
-						class="mt-2 text-sm font-medium text-gray-800 group-hover:text-blue-500 sm:text-base">
+						class="mt-2 text-sm font-medium text-gray-700 group-hover:text-blue-500 sm:text-base">
 						ADD NEW ADDRESS
 					</span>
 				</a>

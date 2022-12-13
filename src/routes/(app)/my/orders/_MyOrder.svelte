@@ -20,7 +20,7 @@ let clazz = ''
 export { clazz as class }
 </script>
 
-<div class="w-full text-gray-800 {clazz}">
+<div class="w-full {clazz}">
 	{#if orders.count > 0}
 		<div>
 			<div class="mb-4 flex w-full flex-row items-center justify-between">
@@ -47,7 +47,7 @@ export { clazz as class }
 							</div>
 
 							<table
-								class="min-w-full group divide-y divide-gray-200 rounded-md border border-gray-200 text-center text-gray-500 shadow-md"
+								class="group min-w-full divide-y divide-gray-200 rounded-md border border-gray-200 text-center text-gray-500 shadow-md"
 								on:click="{() => goto(`/my/orders/${order._id}`)}">
 								<thead class="whitespace-nowrap rounded-t-md bg-gray-100 text-xs uppercase">
 									<tr>
@@ -72,7 +72,7 @@ export { clazz as class }
 								</thead>
 
 								<tbody
-									class="divide-y divide-gray-200 rounded-b-md bg-white text-sm cursor-pointer bg-white transition duration-300 group-hover:bg-primary-50">
+									class="cursor-pointer divide-y divide-gray-200 rounded-b-md bg-white bg-white text-sm transition duration-300 group-hover:bg-primary-50">
 									{#each order.orderItems as item}
 										<tr>
 											<td class="p-3">
@@ -130,7 +130,7 @@ export { clazz as class }
 											</td>
 
 											<td class="p-3">
-												<span class="whitespace-nowrap font-semibold text-primary-500 uppercase">
+												<span class="whitespace-nowrap font-semibold uppercase text-primary-500">
 													{item.status}
 												</span>
 											</td></tr>
@@ -157,7 +157,7 @@ export { clazz as class }
 							<a
 								href="/my/orders/{order._id}"
 								aria-label="orders"
-								class="mb-4 w-full divide-y divide-gray-200 rounded-md border block bg-white hover:bg-primary-50 transition duration-300 text-sm text-gray-600 shadow-md sm:mb-10">
+								class="mb-4 block w-full divide-y divide-gray-200 rounded-md border bg-white text-sm text-gray-600 shadow-md transition duration-300 hover:bg-primary-50 sm:mb-10">
 								{#each order.orderItems as item}
 									<div class="flex items-start gap-2 p-4 sm:gap-5">
 										<div class="flex-shrink-0">
@@ -231,7 +231,7 @@ export { clazz as class }
 												<div class="flex items-center gap-2">
 													<h6>Status :</h6>
 
-													<b class="text-primary-500 uppercase">
+													<b class="uppercase text-primary-500">
 														{item.status}
 													</b>
 												</div>
