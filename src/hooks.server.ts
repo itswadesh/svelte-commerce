@@ -46,14 +46,16 @@ export const handleFetch = async ({ event, request, fetch }) => {
 
 	return fetch(request)
 }
-/** @type {import('@sveltejs/kit').HandleServerError} */
-export const handleError = async ({ error, event }) => {
-	Sentry.captureException(error, { event })
-	return {
-		message: 'Whoops!',
-		code: error.code ?? 'UNKNOWN'
-	}
-}
+
+// /** @type {import('@sveltejs/kit').HandleServerError} */
+// export const handleError = async ({ error, event }) => {
+// 	Sentry.captureException(error, { event })
+// 	return {
+// 		message: 'Whoops!',
+// 		code: error.code ?? 'UNKNOWN'
+// 	}
+// }
+
 export const handle: Handle = async ({ event, resolve }) => {
 	try {
 		const WWW_URL1 = new URL(event.request.url).origin
