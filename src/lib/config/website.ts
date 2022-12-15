@@ -3,7 +3,7 @@ import Logo from '$lib/assets/logo.svg'
 // All bellow data will be replaced by Footer.svelte after the server/store call and saved to cookie
 export const id = '62b00e15c4899dc7b1f78cb1'
 export const address = `#22, Global Village, Rourkela,<br/> Odisha - 769002, India`
-export const closeMessage = `Sorry we're closed for the day`
+export const closedMessage = `Sorry we're closed for the day`
 export const description = ''
 export const domain = 'litekart.in'
 export const email = 'hi@misiki.in'

@@ -4,7 +4,7 @@ const SENTRY_DSN = SECRET_SENTRY_DSN
 import {
 	id,
 	address,
-	closeMessage,
+	closedMessage,
 	description,
 	domain,
 	DOMAIN,
@@ -77,7 +77,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		let store = {
 			id,
 			address,
-			closeMessage,
+			closedMessage,
 			description,
 			dimentionUnit: 'cm',
 			domain,
@@ -113,7 +113,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 				id: storeOne._id,
 				address: storeOne.address,
 				adminUrl: settings.adminUrl,
-				closeMessage: storeOne.closeMessage,
+				closedMessage: storeOne.closedMessage,
 				description: storeOne.description,
 				dimentionUnit: storeOne.dimentionUnit,
 				domain: storeOne.domain,
