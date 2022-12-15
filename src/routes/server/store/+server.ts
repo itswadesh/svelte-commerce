@@ -30,7 +30,7 @@ export async function GET({ request, cookies, locals }) {
 		GOOGLE_ANALYTICS_ID: storeOne.GOOGLE_ANALYTICS_ID,
 		DOMAIN: storeOne.DOMAIN,
 		closed: storeOne.closed,
-		closeMessage: storeOne.closeMessage,
+		closedMessage: storeOne.closedMessage,
 		isFnb: storeOne.isFnb,
 		searchbarText: storeOne.searchbarText,
 		adminUrl: settings.adminUrl
