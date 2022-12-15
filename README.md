@@ -1,4 +1,4 @@
-<h1>We are changing with Sveltekit change. Right now we are at `1.0.0-next.520`</h1>
+<h1>Sveltekit is stable now. We started implementing production apps using it.</h1>
 
 ## To start Development
 ```
@@ -12,7 +12,7 @@ Make a copy of .env.example and rename to .env
 npm run dev
 ```
 
-<a href="https://misiki.io/">
+<a href="https://litekart.in/">
 <img src="https://repository-images.githubusercontent.com/213575283/f577b8bd-8edb-41ba-bfe5-36e65072e1f2" alt/>
 </a>
 
@@ -31,12 +31,18 @@ npm run dev
 
 ### Svelte Commerce is an advanced Frontend Platform for eCommerce based on Sveltekit
 
-- Demo <a href="https://kitcommerce.tech/" target="blank">Kitcommerce.tech</a>
-- Svelte commerce in home made FNB sector https://homefood.tech/ (https://github.com/itswadesh/homefood)
-- I will keep on posting all the open source projects to my portfolio <a href="https://itswadesh.com/" target="blank">itswadesh.com</a>
+- Demo <a href="https://demo.litekart.in/" target="blank">demo.litekart.in</a>
+- Svelte commerce in home made FNB sector https://food.misiki.in/ (https://github.com/itswadesh/homefood)
+- Svelte commerce in jewellery industry https://jewellery.litekart.in/ (https://github.com/KamalaJagan/misiki-commerce)
+- Svelte commerce in fashion industry https://next.trialshot.com/
+- Svelte commerce in toys industry https://tablez.com/
+- Svelte commerce in mobile cover customization https://next.zapvi.in/
+- I can make your existing ecommerce fast and scalable with fastest possible time
+
+- Portfolio <a href="https://itswadesh.com/" target="blank">itswadesh.com</a>
 <br/>
 
-- 🛍️ Attach Svelte store front to <a href="https://misiki.io/"> Misiki </a> and your complete ecommerce tech stack becomes free.
+- 🛍️ Attach Svelte store front to <a href="https://admin.litekart.in/"> Litekart </a> and your complete ecommerce tech stack becomes free.
 - 👥 The demo uses litekart as backend
 - 👨🏻‍💻 Its both SSR and SPA
 - 🚀 Superfast
