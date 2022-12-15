@@ -63,6 +63,7 @@ npm run dev
 
 ## Update 15-December-2022
 
+- 15-December-2022 - Sveltekit 1.0 - Finally.
 - 29-November-2022 - Added Price and Discount filters to product catalog
 - 10-November-2022 - Product options introduced
 - 04-November-2022 - Added verify pincode / zip
