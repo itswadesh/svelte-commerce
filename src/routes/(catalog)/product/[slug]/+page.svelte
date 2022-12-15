@@ -44,7 +44,6 @@
 </style>
 
 <script lang="ts">
-// import Konvas from '$lib/components/ProductDesigner/Konvas.svelte'
 import { applyAction, enhance } from '$app/forms'
 import { createEventDispatcher, onMount } from 'svelte'
 import { date, currency, delay, toast } from '$lib/util'
@@ -132,9 +131,6 @@ if (data.product?.size?.name === 'One Size') {
 
 onMount(async () => {
 	screenWidth = screen.width
-
-	const canvasEmodule = await import('$lib/components/ProductDesigner/Konvas.svelte')
-	Konvas = canvasEmodule.default
 
 	try {
 		// console.log(' data.product?._id = ', data.product?._id)
@@ -444,15 +440,6 @@ function handleMobileCanvas() {
 								</svg>
 							</button>
 						{/if}
-
-						<!-- <button type="button" on:click="{handleMobileCanvas}" class="h-full w-full"> -->
-						<svelte:component
-							this="{Konvas}"
-							product="{data.product}"
-							bind:customizedImg="{customizedImg}"
-							on:saveAndAddToCart="{({ detail }) =>
-								addToBag(data.product, detail.customizedImg, detail.customizedJson)}" />
-						<!-- </button> -->
 					</div>
 				{:else}
 					<div
