@@ -154,7 +154,7 @@ function changeNumber() {
 	<p class="text-center text-sm text-gray-500">
 		By clicking send OTP you are accepting our
 		<a
-			href="/p/terms-conditions"
+			href="/terms-conditions"
 			aria-label="Click to route terms & conditions"
 			target="_blank"
 			rel="noopener noreferrer"

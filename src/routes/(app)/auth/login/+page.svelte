@@ -198,7 +198,7 @@ async function submit() {
 	<p class="text-center text-sm text-gray-500">
 		By clicking login you are accepting our
 		<a
-			href="/p/terms-conditions"
+			href="/terms-conditions"
 			aria-label="Click to route terms & conditions"
 			target="_blank"
 			rel="noopener noreferrer"

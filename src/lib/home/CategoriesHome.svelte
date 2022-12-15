@@ -138,7 +138,7 @@ let categoryColors = [
 
 				<div class="sm:hidden">
 					<a
-						href="/p/sitemap"
+						href="/sitemap"
 						aria-label="Click to route sitemap"
 						class="group flex w-20 flex-col items-center justify-center hover:text-primary-500">
 						<div
@@ -220,7 +220,7 @@ let categoryColors = [
 
 				<div class="mt-5 flex w-full justify-center sm:mt-10">
 					<a
-						href="/p/sitemap"
+						href="/sitemap"
 						aria-label="Click to route sitemap"
 						class="link font-medium hover:underline">
 						View All

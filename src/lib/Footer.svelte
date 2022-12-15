@@ -45,20 +45,20 @@ let footerItems = [
 		heading: 'Company',
 		subMenu: [
 			{ title: 'About Us', link: '/about-us', new: false },
-			{ title: 'Privacy Policy', link: '/p/privacy-policy', new: false },
+			{ title: 'Privacy Policy', link: '/privacy-policy', new: false },
 			{
 				title: 'Terms & Conditions',
-				link: '/p/terms-conditions',
+				link: '/terms-conditions',
 				new: false
 			},
 			{
 				title: 'Payments & Returns',
-				link: '/p/payments-returns',
+				link: '/payments-returns',
 				new: false
 			},
 			{
 				title: 'Printing Terms & Cancellation Policy',
-				link: '/p/printing-terms-cancellation-policy',
+				link: '/printing-terms-cancellation-policy',
 				new: false
 			}
 		]
