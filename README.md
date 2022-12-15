@@ -61,8 +61,28 @@ npm run dev
 
 # Latest Updates
 
-## Update 26-April-2022
+## Update 15-December-2022
 
+- 29-November-2022 - Added Price and Discount filters to product catalog
+- 10-November-2022 - Product options introduced
+- 04-November-2022 - Added verify pincode / zip
+- 03-November-2022 - New slider added for more control over design
+- 02-November-2022 - Cleanup unused packages
+- 31-October-2022 - Dynamic searchbat text
+- 31-October-2022 - Added title, description, keywords
+- 24-October-2022 - fix: login, order success, failed payment, frequently bought together
+- 20-October-2022 - Sentry added
+- 11-October-2022 - Add to cart animation
+- 04-September-2022 - Service worker added
+- 04-September-2022 - Added Trending Products section
+- 04-September-2022 - Fixed: Coupon apply and remove, Added: Back to top fade animation
+- 04-September-2022 - Improved image lazy loading technique
+- 04-September-2022 - Preload data on link hover
+- 04-September-2022 - Modal based mobile device search instead of page based
+- 04-September-2022 - Improved megamenu layout
+- 04-September-2022 - fix: Close message
+- 04-September-2022 - SEO attributes Added
+- 04-September-2022 - Product schema Added
 - 04-September-2022 - Zero-configuration Coolify deployment
 - 04-September-2022 - New fully working theme launched
 - 04-September-2022 - Attached to ReST API Backend, Migrated to new Sveltekit version
@@ -106,7 +126,7 @@ Click on the button to directly deploy to Netlify or Vercel. Zero configuration 
 
 # Features
 
-- Awesome shiny new SvelteKit V-
+- Awesome shiny new SvelteKit
 - Typescript for rock solid app
 - TailwindCSS Integrated
 - Server Rendered
@@ -131,10 +151,6 @@ Click on the button to directly deploy to Netlify or Vercel. Zero configuration 
 # Contributing
 
 If you like the ideas behind Svelte Commerce and want to become a contributor - join github discussions, check the list of the active issues or contact me directly via swadesh@litekart.in
-
-# Thank
-
-A big thank to <a target="_blank" href="https://twitter.com/jycouet">jycouet</a> for making such a wonderful package <a target="_blank" href="https://kitql.dev/">KitQL</a>
 
 # Support
 - Twitter: [@itswadesh](https://twitter.com/itswadesh)
