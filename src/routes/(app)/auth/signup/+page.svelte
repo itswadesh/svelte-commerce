@@ -13,10 +13,10 @@ import { page } from '$app/stores'
 import { post } from '$lib/util/api'
 import { toast } from '$lib/util'
 import Cookie from 'cookie-universal'
+import Error from '$lib/components/Error.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
-import Error from '$lib/components/Error.svelte'
 
 const cookies = Cookie()
 

@@ -12,10 +12,10 @@ import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import { post } from '$lib/util/api'
 import { toast } from '$lib/util'
+import Error from '$lib/components/Error.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
-import Error from '$lib/components/Error.svelte'
 
 const seoProps = {
 	title: 'Forgot Password',
@@ -62,7 +62,7 @@ async function submit() {
 
 		<PrimaryButton type="submit" loading="{loading}" class="w-full">SEND EMAIL</PrimaryButton>
 
-		<div class="flex flex-col text-center max-w-max mx-auto gap-1 text-sm">
+		<div class="mx-auto flex max-w-max flex-col gap-1 text-center text-sm">
 			<a
 				href="{`/auth/login?ref=${$page.url.searchParams.get('ref') || '/'}`}"
 				aria-label="Click to login with phone number"

@@ -8,17 +8,17 @@
 
 <script>
 import { browser } from '$app/environment'
+import { GOOGLE_CLIENT_ID } from '$lib/config'
+import { googleOneTap } from './google-one-tap'
 import { goto, invalidateAll } from '$app/navigation'
+import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { post } from '$lib/util/api'
 import Cookie from 'cookie-universal'
+import Error from '$lib/components/Error.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
-import Error from '$lib/components/Error.svelte'
-import { googleOneTap } from './google-one-tap'
-import { GOOGLE_CLIENT_ID } from '$lib/config'
-import { onMount } from 'svelte'
 
 const cookies = Cookie()
 

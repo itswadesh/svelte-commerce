@@ -1,13 +1,13 @@
 <script>
-import SEO from '$lib/components/SEO/index.svelte'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import MobileFooter from '$lib/MobileFooter.svelte'
-import { goto } from '$app/navigation'
-import { onMount } from 'svelte'
 import { browser } from '$app/environment'
 import { getAPI } from '$lib/util/api'
-import { toast } from '$lib/util'
+import { goto } from '$app/navigation'
+import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import { toast } from '$lib/util'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import MobileFooter from '$lib/MobileFooter.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
 
 let seoProps = {
 	title: `Categories`,
@@ -94,8 +94,8 @@ function toggle2(cx) {
 									type="button"
 									class="flex h-24 w-full items-end justify-between focus:outline-none 
 									{bgColors[mx]}">
-									<div class="flex h-full w-full flex-1 items-center px-6 gap-2">
-										<a href="/{m.slug}" class="text-xl font-bold uppercase flex-1 text-left">
+									<div class="flex h-full w-full flex-1 items-center gap-2 px-6">
+										<a href="/{m.slug}" class="flex-1 text-left text-xl font-bold uppercase">
 											{m.name}
 										</a>
 
@@ -151,8 +151,8 @@ function toggle2(cx) {
 												{#if c.children?.length}
 													<button
 														type="button"
-														class="flex items-center gap-4 py-3 px-8 font-medium w-full text-left focus:outline-none">
-														<a href="/{c.slug}" class="flex items-center gap-4 flex-1">
+														class="flex w-full items-center gap-4 py-3 px-8 text-left font-medium focus:outline-none">
+														<a href="/{c.slug}" class="flex flex-1 items-center gap-4">
 															{#if c.img}
 																<div class="h-12 w-12 flex-shrink-0 overflow-hidden rounded-full">
 																	<LazyImg

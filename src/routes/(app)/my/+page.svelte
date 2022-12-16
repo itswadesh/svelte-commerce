@@ -1,6 +1,6 @@
 <script>
-import SEO from '$lib/components/SEO/index.svelte'
 import MobileFooter from '$lib/MobileFooter.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
 import UserDashboard from './_UserDashboard.svelte'
 
 const seoProps = {

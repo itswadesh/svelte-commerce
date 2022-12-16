@@ -1,6 +1,7 @@
 <script>
-import SEO from '$lib/components/SEO/index.svelte'
 import { page } from '$app/stores'
+import SEO from '$lib/components/SEO/index.svelte'
+
 let seoProps = {
 	title: `Terms and conditions`,
 	description: `Terms and conditions`

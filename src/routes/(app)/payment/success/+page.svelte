@@ -76,8 +76,8 @@ export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
 
 const seoProps = {
-	title: 'Success ',
-	metadescription: 'Success '
+	title: 'Payment Success ',
+	metadescription: 'Payment Success '
 }
 
 onMount(async () => {
@@ -239,7 +239,7 @@ onMount(async () => {
 
 												<div class="mb-2 flex items-start gap-2">
 													<!-- data-sveltekit-reload added because in production it does not work-->
-													<div class="flex justify-between gap-2 w-full">
+													<div class="flex w-full justify-between gap-2">
 														<a
 															data-sveltekit-reload
 															href="/product/{item.slug}"
@@ -260,14 +260,14 @@ onMount(async () => {
 													</div>
 												</div>
 
-												<div class="mb-2 flex w-full gap-4 text-sm flex-wrap">
-													<div class="whitespace-nowrap flex items-center gap-2">
+												<div class="mb-2 flex w-full flex-wrap gap-4 text-sm">
+													<div class="flex items-center gap-2 whitespace-nowrap">
 														<span class="font-medium text-gray-500">Qty :</span>
 
 														<b>{item.qty}</b>
 													</div>
 
-													<div class="whitespace-nowrap flex items-center gap-2">
+													<div class="flex items-center gap-2 whitespace-nowrap">
 														<span class="font-medium text-gray-500">Price :</span>
 
 														<b>{currency(item.price)}</b>

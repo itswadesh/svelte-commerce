@@ -1,14 +1,14 @@
 <script>
+import { goto } from '$app/navigation'
+import { page } from '$app/stores'
+import { post } from '$lib/util/api'
+import { toast } from '$lib/util'
+import BackButton from '$lib/ui/BackButton.svelte'
+import Errors from '$lib/ui/Errors.svelte'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
-import { toast } from '$lib/util'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import { goto } from '$app/navigation'
-import Errors from '$lib/ui/Errors.svelte'
-import BackButton from '$lib/ui/BackButton.svelte'
-import { post } from '$lib/util/api'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import { page } from '$app/stores'
 
 const seoProps = {
 	title: 'Reviews Details',

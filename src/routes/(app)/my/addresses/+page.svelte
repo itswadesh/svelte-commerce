@@ -12,12 +12,12 @@
 </style>
 
 <script>
-import SEO from '$lib/components/SEO/index.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import { post, del, getAPI } from '$lib/util/api'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
+import { post, del, getAPI } from '$lib/util/api'
 import Pagination from '$lib/components/Pagination.svelte'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
 
 const seoProps = {
 	title: 'Dashboard - Addresses ',
@@ -126,14 +126,14 @@ async function refreshData() {
 	{:else if addresses?.errors}
 		{addresses}
 	{:else if addresses.count > 0}
-		<ul class="flex flex-col gap-4 w-full max-w-xl">
+		<ul class="flex w-full max-w-xl flex-col gap-4">
 			{#each addresses.data as i, index}
 				{#if i}
 					<li
-						class="bg-white rounded-md shadow-md border overflow-hidden hover:shadow-md transition duration-300">
-						<div class="p-4 sm:p-6 flex gap-3 items-start">
-							<div class="flex-1 flex flex-col gap-1 text-sm">
-								<span class="font-semibold text-base">
+						class="overflow-hidden rounded-md border bg-white shadow-md transition duration-300 hover:shadow-md">
+						<div class="flex items-start gap-3 p-4 sm:p-6">
+							<div class="flex flex-1 flex-col gap-1 text-sm">
+								<span class="text-base font-semibold">
 									{i.firstName || '_'}
 									{i.lastName || '_'}
 								</span>
@@ -157,7 +157,7 @@ async function refreshData() {
 
 							{#if i.isHome}
 								<div
-									class="flex-shrink-0 border-2 bg-gray-100 font-bold tracking-wide border-gray-300 text-xs uppercase py-0.5 px-4 rounded-full">
+									class="flex-shrink-0 rounded-full border-2 border-gray-300 bg-gray-100 py-0.5 px-4 text-xs font-bold uppercase tracking-wide">
 									Home
 								</div>
 							{/if}
@@ -166,13 +166,13 @@ async function refreshData() {
 						<div class="grid grid-cols-2 divide-x border-t">
 							<a
 								href="{`/my/addresses/${i._id}`}"
-								class="p-2 font-semibold uppercase text-primary-500 hover:text-primary-700 transition duration-300 bg-transparent hover:bg-gray-100 focus:outline-none text-center">
+								class="bg-transparent p-2 text-center font-semibold uppercase text-primary-500 transition duration-300 focus:outline-none hover:bg-gray-100 hover:text-primary-700">
 								Edit
 							</a>
 
 							<button
 								type="button"
-								class="p-2 font-semibold uppercase text-primary-500 hover:text-primary-700 transition duration-300 bg-transparent hover:bg-gray-100 focus:outline-none text-center"
+								class="bg-transparent p-2 text-center font-semibold uppercase text-primary-500 transition duration-300 focus:outline-none hover:bg-gray-100 hover:text-primary-700"
 								on:click="{() => remove(i._id)}">
 								Remove
 							</button>

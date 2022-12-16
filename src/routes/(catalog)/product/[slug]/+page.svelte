@@ -63,6 +63,7 @@ import FrequentlyBoughtProduct from './_FrequentlyBoughtProduct.svelte'
 import Gallery from '$lib/components/Product/Gallery.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import ProductNav from '$lib/ProductNav.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 import Radio from '$lib/ui/Radio.svelte'
@@ -75,7 +76,6 @@ import Textbox from '$lib/ui/Textbox.svelte'
 import UserForm from '$lib/components/Product/UserForm.svelte'
 import viewport from '$lib/actions/useViewPort'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
-import ProductNav from '$lib/ProductNav.svelte'
 
 let Konvas
 const dispatch = createEventDispatcher()
@@ -85,15 +85,75 @@ const cookies = Cookie()
 export let data
 
 // console.log('zzzzzzzzzzzzzzzzzz', data)
-
-let selectedImgIndex
 let seoProps = {
-	title: `Details of product ${data.product?.title}` || ' ',
-	description: data.product?.metaDescription || ' ',
-	keywords: data.product?.keywords || ' '
+	// addressCountry: 'India',
+	// addressLocality: 'Semiliguda, Koraput',
+	// addressRegion: 'Odisha',
+	// alternateJsonHref: '',
+	// alternateXml: { title: '', href: '' },
+	brand: `${$page?.data?.store?.websiteName}`,
+	breadcrumbs: data.product?.categoryPool,
+	caption: `${$page?.data?.store?.websiteName}`,
+	category: data.product?.category?.name,
+	contentUrl: data.product?.img || $page?.data?.store?.logo,
+	createdAt: `${data.product?.createdAt || '_'}`,
+	// depth: { unitCode: '', value: '' },
+	email: `${$page?.data?.store?.email}`,
+	// entityMeta: '',
+	// facebookPage: '',
+	// gtin: '',
+	// height: '',
+	id: $page?.url?.href,
+	image: `${data.product?.img}`,
+	logo: $page?.data?.store?.logo,
+	// ogSquareImage: { url: 'https://lrnr.in/favicon.ico', width: 56, height: 56 },
+	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00'],
+	popularity: data.product?.popularity,
+	// postalCode: '764036',
+	price: data.product?.price,
+	priceRange: `${data.product?.price}-${data.product?.mrp}`,
+	ratingCount: 1,
+	ratingValue: +data.product?.ratings + 1,
+	sku: data.product?.sku,
+	// streetAddress: 'Padmajyoti Marg, Nandapur Road',
+	timeToRead: 0,
+	updatedAt: `${data.product?.updatedAt || '_'}`,
+	// weight: { unitCode: '', value: '' },
+	// width: { unitCode: '', value: '' },
+	// wlwmanifestXmlHref: '',
+	metadescription: data.product?.metaDescription,
+	// article: false,
+	canonical: `${$page?.url.href}`,
+	datePublished: `${data.product?.publishedAt || '_'}`,
+	description: ` ${data.product?.description}`,
+	dnsPrefetch: `//cdn.jsdelivr.net`,
+	// entityMeta: null,
+	featuredImage: {
+		url: `${data.product?.img}`,
+		width: 675,
+		height: 380,
+		caption: data.product?.name
+	},
+	keywords: data.product?.keywords,
+	lastUpdated: `${data.product?.updatedAt || '_'}`,
+	msapplicationTileImage: `${data.product?.img}`,
+	ogImage: { url: $page?.data?.store?.logo, width: 128, height: 56 },
+	ogImageSecureUrl: `${$page?.data?.store?.logo}`,
+	ogImageType: 'image/jpeg',
+	ogSiteName: `${$page.data.origin}/sitemap/sitemap.xml`,
+	productAvailability: `${data.product?.stock}`,
+	productBrand: `${data.product?.brandName || `${$page?.data?.store?.websiteName}`}`,
+	productName: `${data.product?.name}`,
+	productPriceAmount: `${data.product?.price}`,
+	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
+	slug: `${data.product?.slug}`,
+	// timeToRead: 0,
+	title: `${data.product?.name}`,
+	twitterImage: { url: `${data.product?.img}` }
 }
-let wishlisted = false,
-	productReview = {}
+let selectedImgIndex
+let wishlisted = false
+let productReview = {}
 let loading = false
 let bounceItemFromTop = false
 let showEditor = false

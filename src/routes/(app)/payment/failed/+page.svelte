@@ -1,11 +1,11 @@
 <script>
-import SEO from '$lib/components/SEO/index.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { page } from '$app/stores'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
 
 let seoProps = {
-	title: `Failure`,
-	description: `Failure`
+	title: `Payment Failure`,
+	description: `Payment Failure`
 }
 
 $: paymentUrl = $page?.url?.searchParams.get('ref')

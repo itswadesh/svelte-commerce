@@ -61,15 +61,16 @@
 </style>
 
 <script>
-import Error from '$lib/components/Error.svelte'
-import SEO from '$lib/components/SEO/index.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import Radio from '$lib/ui/Radio.svelte'
-import Textarea from '$lib/ui/Textarea.svelte'
-import Textbox from '$lib/ui/Textbox.svelte'
-import { post } from '$lib/util/api'
 import { Confetti } from 'svelte-confetti'
 import { page } from '$app/stores'
+import { post } from '$lib/util/api'
+import Error from '$lib/components/Error.svelte'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import Radio from '$lib/ui/Radio.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
+import Textarea from '$lib/ui/Textarea.svelte'
+import Textbox from '$lib/ui/Textbox.svelte'
+
 let seoProps = {
 	title: `Bulk order inquiry`,
 	description: `Bulk order inquiry`
