@@ -26,6 +26,7 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import appStore from '$lib/assets/app/app-store.svg'
 import googlePlay from '$lib/assets/app/google-play.png'
+import StoreInformationFooter from './components/StoreInformationFooter.svelte'
 
 export let me, store, popularSearches, megamenu
 
@@ -168,6 +169,8 @@ async function getStoreData() {
 
 	<p>Over <span class="font-semibold">2 Million</span> Happy Customers</p>
 </div> -->
+
+<StoreInformationFooter />
 
 <footer class="w-full justify-center bg-gray-50 p-3 text-sm sm:p-10">
 	<div class="container mx-auto max-w-6xl">
