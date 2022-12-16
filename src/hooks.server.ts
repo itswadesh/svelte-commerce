@@ -105,7 +105,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			const url = new URL(event.request.url)
 			const storeRes = await getBySid(`init?domain=${DOMAIN || url.host}`)
 
-			console.log('storeRes', storeRes)
+			// console.log('storeRes', storeRes)
 
 			const { storeOne, settings } = storeRes
 
