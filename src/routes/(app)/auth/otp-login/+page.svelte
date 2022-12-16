@@ -7,19 +7,19 @@
 </style>
 
 <script>
-import SEO from '$lib/components/SEO/index.svelte'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import { toast } from '$lib/util'
-import { goto, invalidateAll } from '$app/navigation'
-import VerifyOtp from '../_VerifyOtp.svelte'
-import SendOtp from '../_SendOtp.svelte'
-import { page } from '$app/stores'
-import { onMount } from 'svelte'
-import Cookie from 'cookie-universal'
-import { post } from '$lib/util/api'
 import { browser } from '$app/environment'
 import { GOOGLE_CLIENT_ID } from '$lib/config'
 import { googleOneTap } from '../login/google-one-tap'
+import { goto, invalidateAll } from '$app/navigation'
+import { onMount } from 'svelte'
+import { page } from '$app/stores'
+import { post } from '$lib/util/api'
+import { toast } from '$lib/util'
+import Cookie from 'cookie-universal'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import SendOtp from '../_SendOtp.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
+import VerifyOtp from '../_VerifyOtp.svelte'
 
 const cookies = Cookie()
 

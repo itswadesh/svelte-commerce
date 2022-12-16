@@ -1,8 +1,8 @@
 <script>
+import { getAPI, post } from '$lib/util/api'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { getAPI, post } from '$lib/util/api'
 import { toast } from '$lib/util'
 import BackButton from '$lib/ui/BackButton.svelte'
 import Error from '$lib/components/Error.svelte'

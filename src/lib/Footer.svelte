@@ -26,6 +26,8 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import appStore from '$lib/assets/app/app-store.svg'
 import googlePlay from '$lib/assets/app/google-play.png'
+import StoreInformationFooter from './components/StoreInformationFooter.svelte'
+import { getAPI } from './util/api'
 
 export let me, store, popularSearches, megamenu
 
@@ -33,6 +35,25 @@ export let me, store, popularSearches, megamenu
 
 export { clazz as class }
 let clazz = ''
+
+let categories
+
+onMount(async () => {
+	await getCategories()
+})
+
+async function getCategories() {
+	try {
+		categories = await getAPI(
+			`categories/megamenu?store=${$page?.data?.store?.id}`,
+			$page?.data?.origin
+		)
+
+		// console.log('categories', categories)
+	} catch (e) {
+	} finally {
+	}
+}
 
 function getYear() {
 	const d = new Date()
@@ -42,7 +63,7 @@ function getYear() {
 
 let footerItems = [
 	{
-		heading: 'Company',
+		heading: 'Store Info',
 		subMenu: [
 			{ title: 'About Us', link: '/about-us', new: false },
 			{ title: 'Privacy Policy', link: '/privacy-policy', new: false },
@@ -60,12 +81,7 @@ let footerItems = [
 				title: 'Printing Terms & Cancellation Policy',
 				link: '/printing-terms-cancellation-policy',
 				new: false
-			}
-		]
-	},
-	{
-		heading: 'Customer service',
-		subMenu: [
+			},
 			{ title: 'Track Your Order', link: '/my/orders?sort=-updatedAt', new: false },
 			{ title: 'Bulk Order Inquiry', link: '/bulk-order-inquiry', new: true },
 			{
@@ -169,6 +185,8 @@ async function getStoreData() {
 	<p>Over <span class="font-semibold">2 Million</span> Happy Customers</p>
 </div> -->
 
+<StoreInformationFooter />
+
 <footer class="w-full justify-center bg-gray-50 p-3 text-sm sm:p-10">
 	<div class="container mx-auto max-w-6xl">
 		<div
@@ -200,6 +218,32 @@ async function getStoreData() {
 					</ul>
 				</div>
 			{/each}
+
+			{#if categories}
+				<div>
+					<h1 class="mb-4 whitespace-nowrap font-semibold uppercase">Collections</h1>
+
+					<ul class="flex flex-col gap-1 text-gray-500">
+						{#each categories as category}
+							<li class="flex max-w-max items-center">
+								<a
+									href="/{category.link || category.slug}"
+									aria-label="Click to route this page"
+									class="link-underline link-underline-gray whitespace-pre-wrap">
+									{category.name}
+								</a>
+
+								{#if category.new}
+									<div
+										class="ml-2 max-w-max rounded bg-primary-500 py-[0.1rem] px-1 text-[0.5rem] font-semibold leading-3 tracking-wider text-white">
+										NEW
+									</div>
+								{/if}
+							</li>
+						{/each}
+					</ul>
+				</div>
+			{/if}
 
 			<div>
 				<h1 class="mb-4 whitespace-nowrap font-semibold uppercase">Contact Us</h1>

@@ -10,6 +10,7 @@ import MobileFooter from '$lib/MobileFooter.svelte'
 import PickedBanners from '$lib/home/PickedBanners.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+import ProductTab from '$lib/components/Product/ProductTab.svelte'
 
 export let data
 
@@ -220,6 +221,8 @@ $: heroBanners =
 				</div>
 			{/if}
 		{/await}
+
+		<ProductTab />
 	</div>
 
 	<!-- MOBILE FOOTER -->

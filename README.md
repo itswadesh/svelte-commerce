@@ -86,7 +86,7 @@ npm run dev
 - 04-September-2022 - Product schema Added
 - 04-September-2022 - Zero-configuration Coolify deployment
 - 04-September-2022 - New fully working theme launched
-- 04-September-2022 - Attached to ReST API Backend, Migrated to new Sveltekit version
+- 04-September-2022 - Attached to ResT API Backend, Migrated to new Sveltekit version
 - 26-April-2022 - Latest SvelteKit version
 - 26-April-2022 - Improved image lazy loading
 - 26-April-2022 - New Banners section

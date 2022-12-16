@@ -1,19 +1,19 @@
 <script lang="ts">
-import SEO from '$lib/components/SEO/index.svelte'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import Breadcrumb from '$lib/components/Breadcrumb.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import MobileFooter from '$lib/MobileFooter.svelte'
-import { goto, invalidateAll } from '$app/navigation'
-import Pagination from '$lib/components/Pagination.svelte'
-import ProductCard from '$lib/ProductCard.svelte'
-import MobileFilter from '$lib/components/MobileFilter.svelte'
-import DesktopFilter from '$lib/components/DesktopFilter.svelte'
-import { page } from '$app/stores'
-import { toast } from '$lib/util'
-import { onMount } from 'svelte'
-import { sorts } from '$lib/config'
 import { getAPI } from '$lib/util/api'
+import { goto, invalidateAll } from '$app/navigation'
+import { onMount } from 'svelte'
+import { page } from '$app/stores'
+import { sorts } from '$lib/config'
+import { toast } from '$lib/util'
+import Breadcrumb from '$lib/components/Breadcrumb.svelte'
+import DesktopFilter from '$lib/components/DesktopFilter.svelte'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import MobileFilter from '$lib/components/MobileFilter.svelte'
+import MobileFooter from '$lib/MobileFooter.svelte'
+import Pagination from '$lib/components/Pagination.svelte'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import ProductCard from '$lib/ProductCard.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
 
@@ -107,7 +107,7 @@ async function refreshData() {
 							<span>Sort : </span>
 
 							<select
-								class="bg-transparent px-2 py-1 font-semibold hover:underline focus:outline-none"
+								class="bg-transparent px-2 py-1 font-semibold focus:outline-none hover:underline"
 								bind:value="{data.sort}"
 								on:change="{() => sortNow(data.sort)}">
 								{#each sorts as s}

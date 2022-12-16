@@ -1,41 +1,59 @@
 <script>
+import { page } from '$app/stores'
 import dayjs from 'dayjs'
 import hash from 'hash-it'
-import { page } from '$app/stores'
+
+export let addressCountry = ''
+export let addressLocality = ''
+export let addressRegion = ''
 export let article = false
 export let author = null
+export let brand = 'LRNR'
 export let breadcrumbs = []
+export let caption = ''
+export let category = ''
+export let contentUrl = ''
+export let createdAt = null
 export let datePublished = null
+export let depth = { unitCode: '', value: '' }
+export let description = null
+export let email = ''
 export let entity = null
-export let lastUpdated = null
+export let entityMeta = null
+export let facebookPage = null
 export let featuredImage = null
+export let githubPage = null
+export let gtin = null
+export let height = { unitCode: '', value: '' }
+export let id = null
+export let image = null
+export let lastUpdated = null
+export let linkedinProfile = null
+export let logo = ''
 export let metadescription = ''
+export let name = null
+export let openingHours = ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00']
+export let popularity = 1000
+export let postalCode = ''
+export let price = 1
+export let priceRange = ''
+export let ratingCount = 1
+export let ratingValue = 5
 export let siteLanguage = null
 export let siteTitle = ''
 export let siteTitleAlt = ''
 export let siteUrl = $page.data.origin
-export let title = ''
-export let url = $page.data.origin
-export let facebookPage = null
-export let githubPage = null
-export let linkedinProfile = null
-export let telegramUsername = null
-export let twitterUsername = null
-export let name = null
-export let description = null
 export let sku = null
-export let price = 1
-export let image = null
-export let gtin = null
-export let brand = 'Litekart'
-export let ratingCount = 1
-export let ratingValue = 5
-export let createdAt = null
-export let updatedAt = null
 export let slug = null
-export let id = null
-export let popularity = 1000
-export let entityMeta = null
+export let streetAddress = ''
+export let telegramUsername = null
+export let title = ''
+export let twitterUsername = null
+export let updatedAt = null
+export let url = $page.data.origin
+export let weight = { unitCode: '', value: '' }
+export let width = { unitCode: '', value: '' }
+
 const nextWeek = dayjs().add(7, 'day')
 
 const entityHash = hash({ author }, { algorithm: 'md5' })
@@ -43,12 +61,22 @@ const entityHash = hash({ author }, { algorithm: 'md5' })
 const schemaOrgEntity =
 	entityMeta !== null
 		? {
-				'@type': ['Person', 'Organization'],
-				'@id': `${siteUrl}/#/schema/person/${entityHash}`,
-				name: author,
+				'@type': ['Store', 'Organization'],
+				'@id': `${$page?.data?.store?.domain}/${entityHash}`,
+				name: `${$page?.data?.store?.websiteName}`,
+				url: siteUrl,
+				email,
+				address: {
+					'@type': 'PostalAddress',
+					streetAddress,
+					addressLocality,
+					addressRegion,
+					postalCode,
+					addressCountry
+				},
 				image: {
 					'@type': 'ImageObject',
-					'@id': `${siteUrl}/#personlogo`,
+					'@id': `${siteUrl}/#logo`,
 					inLanguage: siteLanguage,
 					url: entityMeta?.url,
 					width: entityMeta?.faviconWidth,
@@ -56,14 +84,28 @@ const schemaOrgEntity =
 					caption: author
 				},
 				logo: {
-					'@id': `${siteUrl}/#personlogo`
+					'@type': 'ImageObject',
+					'@id': `${siteUrl}/#logo`,
+					url: logo,
+					contentUrl,
+					caption,
+					inLanguage: siteLanguage,
+					width: '200',
+					height: '83'
+				},
+				priceRange,
+				openingHours,
+				location: {
+					'@id': location
 				},
 				sameAs: [
-					`https://twitter.com/${twitterUsername}`,
-					`https://github.com/${githubPage}`,
-					`https://t.me/${telegramUsername}`,
-					`https://linkedin.com/in/${linkedinProfile}`,
-					facebookPage
+					`${$page?.data?.store?.twitterPage}`,
+					`${$page?.data?.store?.facebookPage}`,
+					`${$page?.data?.store?.instagramPage}`,
+					`${$page?.data?.store?.linkedinPage}`,
+					`${$page?.data?.store?.youtubeChannel}`
+					// `https://github.com/${githubPage}`,
+					// `https://t.me/${telegramUsername}`
 				]
 		  }
 		: null
@@ -75,7 +117,7 @@ const schemaOrgWebsite = {
 	name: siteTitle,
 	description: siteTitleAlt,
 	publisher: {
-		'@id': `${siteUrl}/#/schema/person/${entityHash}`
+		'@id': `${$page?.url?.href}/${entityHash}`
 	},
 	potentialAction: [
 		{
@@ -127,7 +169,7 @@ const schemaOrgWebPage = {
 	datePublished,
 	dateModified: lastUpdated,
 	author: {
-		'@id': `${siteUrl}/#/schema/person/${entityHash}`
+		'@id': `${$page?.url?.href}/${entityHash}`
 	},
 	description: metadescription,
 	breadcrumb: {
@@ -151,7 +193,7 @@ if (article) {
 			'@id': `${url}#webpage`
 		},
 		author: {
-			'@id': `${siteUrl}/#/schema/person/${entityHash}`
+			'@id': `${$page?.url?.href}/${entityHash}`
 		},
 		headline: title,
 		datePublished,
@@ -160,7 +202,7 @@ if (article) {
 			'@id': `${url}#webpage`
 		},
 		publisher: {
-			'@id': `${siteUrl}/#/schema/person/${entityHash}`
+			'@id': `${$page?.url?.href}/${entityHash}`
 		},
 		image: {
 			'@id': `${url}#primaryimage`
@@ -172,7 +214,7 @@ if (article) {
 
 const schemaOrgPublisher = {
 	'@type': ['Person', 'Organization'],
-	'@id': `${siteUrl}/#/schema/person/${entityHash}`,
+	'@id': `${$page?.url?.href}/${entityHash}`,
 	name: entity,
 	image: {
 		'@type': 'ImageObject',
@@ -188,22 +230,33 @@ const schemaOrgPublisher = {
 		'@id': `${siteUrl}/#personlogo`
 	},
 	sameAs: [
-		`https://twitter.com/${twitterUsername}`,
-		`https://github.com/${githubPage}`,
-		`https://t.me/${telegramUsername}`,
-		`https://linkedin.com/in/${linkedinProfile}`,
-		facebookPage
+		`${$page?.data?.store?.twitterPage}`,
+		`${$page?.data?.store?.facebookPage}`,
+		`${$page?.data?.store?.instagramPage}`,
+		`${$page?.data?.store?.linkedinPage}`,
+		`${$page?.data?.store?.youtubeChannel}`
+		// `https://github.com/${githubPage}`,
+		// `https://t.me/${telegramUsername}`
 	]
 }
 const schemaOrgProduct = {
 	'@context': 'http://schema.org/',
 	'@type': 'Product',
+	'@id': `${siteUrl}/#product`,
+	image: { '@id': `${featuredImage?.url}` },
 	name,
 	description,
 	sku,
-	image,
 	gtin,
 	brand,
+	category,
+	mainEntityOfPage: {
+		'@id': `${url}#webpage`
+	},
+	weight: { '@type': 'QuantitativeValue', unitCode: weight.unitCode, value: weight.value },
+	height: { '@type': 'QuantitativeValue', unitCode: height.unitCode, value: height.value },
+	width: { '@type': 'QuantitativeValue', unitCode: width.unitCode, value: width.value },
+	depth: { '@type': 'QuantitativeValue', unitCode: depth.unitCode, value: depth.value },
 	aggregateRating: {
 		'@type': 'AggregateRating',
 		worstRating: 1,
@@ -226,12 +279,31 @@ const schemaOrgProduct = {
 		url: `${$page.data.origin}/product/${slug}`,
 		price: price < 1 ? '0.00' : price,
 		priceCurrency: 'USD',
+		itemCondition: 'NewCondition',
 		seller: {
 			'@type': 'Organization',
+			'@id': `${siteUrl}`,
 			name: 'Litekart',
-			url: $page.data.origin
+			url: $page.data.origin,
+			logo
 		}
 	}
+}
+
+const schemaItemPage = {
+	'@type': 'ItemPage',
+	'@id': `${$page?.url?.href}/#webpage`,
+	url: `${$page.data.origin}/product/${slug}`,
+	name: name,
+	datePublished: datePublished,
+	dateModified: lastUpdated,
+	isPartOf: {
+		'@id': `${siteUrl}/#website`
+	},
+	primaryImageOfPage: {
+		'@id': `${url}#primaryimage`
+	},
+	inLanguage: siteLanguage
 }
 
 const schemaOrgArray = [
@@ -241,7 +313,8 @@ const schemaOrgArray = [
 	schemaOrgWebPage,
 	schemaOrgBreadcrumbList,
 	schemaOrgPublisher,
-	schemaOrgProduct
+	schemaOrgProduct,
+	schemaItemPage
 ]
 const schemaOrgObject = {
 	'@context': 'https://schema.org',

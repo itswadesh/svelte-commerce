@@ -10,9 +10,9 @@ h1 {
 </style>
 
 <script>
+import { page } from '$app/stores'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import { page } from '$app/stores'
 </script>
 
 <div class="flex h-[70vh] flex-col items-center justify-center text-center sm:h-[92vh]">

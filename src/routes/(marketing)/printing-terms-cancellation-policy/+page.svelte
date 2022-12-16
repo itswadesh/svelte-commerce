@@ -1,6 +1,6 @@
 <script>
-import SEO from '$lib/components/SEO/index.svelte'
 import { page } from '$app/stores'
+import SEO from '$lib/components/SEO/index.svelte'
 
 let seoProps = {
 	title: `Printing terms cancellation`,
