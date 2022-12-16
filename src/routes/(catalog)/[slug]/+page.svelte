@@ -30,8 +30,8 @@ import noNoDataAvailable from '$lib/assets/no/no-data-availible.png'
 import Pagination from '$lib/components/Pagination.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
-import SEO from '$lib/components/SEO/index.svelte'
 import ProductNav from '$lib/ProductNav.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
 
@@ -222,8 +222,8 @@ async function goCheckbox(item) {
 <svelte:window bind:scrollY="{y}" bind:innerWidth="{innerWidth}" on:scroll="{handleOnScroll}" />
 
 <ProductNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page?.data?.store}">
-	<div class="flex flex-col gap-1 items-start max-w-max">
-		<h1 class="font-semibold leading-4 capitalize truncate w-28">{data.category?.name}</h1>
+	<div class="flex max-w-max flex-col items-start gap-1">
+		<h1 class="w-28 truncate font-semibold capitalize leading-4">{data.category?.name}</h1>
 
 		<p class="text-xs">
 			{data.count}
@@ -242,7 +242,7 @@ async function goCheckbox(item) {
 		<button
 			transition:fade="{{ duration: 500 }}"
 			aria-label="Click to go to top"
-			class="fixed z-40 top-28 sm:top-36 left-[50%] -ml-14 bg-black bg-opacity-60 flex items-center justify-center gap-1 w-28 py-1 px-3 rounded-full text-white text-xs uppercase focus:outline-none hover:bg-opacity-80 transform active:scale-90 transition duration-300"
+			class="fixed top-28 left-[50%] z-40 -ml-14 flex w-28 transform items-center justify-center gap-1 rounded-full bg-black bg-opacity-60 py-1 px-3 text-xs uppercase text-white transition duration-300 focus:outline-none hover:bg-opacity-80 active:scale-90 sm:top-36"
 			on:click="{goTop}">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -250,7 +250,7 @@ async function goCheckbox(item) {
 				viewBox="0 0 24 24"
 				stroke-width="2"
 				stroke="currentColor"
-				class="w-3 h-3">
+				class="h-3 w-3">
 				<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"
 				></path>
 			</svg>
@@ -259,7 +259,7 @@ async function goCheckbox(item) {
 		</button>
 	{/if}
 
-	<div class="mb-10 sm:mb-20 flex w-full flex-col lg:flex-row lg:gap-10 lg:p-10">
+	<div class="mb-10 flex w-full flex-col sm:mb-20 lg:flex-row lg:gap-10 lg:p-10">
 		{#if data.facets}
 			<DesktopFilter
 				facets="{data.facets}"
@@ -271,16 +271,16 @@ async function goCheckbox(item) {
 				facets="{data.facets}"
 				bind:showFilter="{showFilter}"
 				bind:showSort="{showSort}"
-				class="sticky top-14 sm:top-20 z-40 lg:hidden block"
+				class="sticky top-14 z-40 block sm:top-20 lg:hidden"
 				on:clearAll="{refreshData}" />
 		{/if}
 
 		<div class="w-full sm:px-10 lg:px-0">
 			{#if data.products?.length > 0}
-				<div class="mb-5 sm:mb-10 lg:mb-20 w-full">
+				<div class="mb-5 w-full sm:mb-10 lg:mb-20">
 					<div
-						class="px-3 sm:px-0 hidden lg:flex items-center gap-4 flex-wrap mb-5 justify-between">
-						<h1 class="flex items-center gap-2 flex-wrap">
+						class="mb-5 hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex">
+						<h1 class="flex flex-wrap items-center gap-2">
 							<span class="text-xl font-bold capitalize md:text-2xl"> {data.category?.name} </span>
 
 							-
@@ -300,7 +300,7 @@ async function goCheckbox(item) {
 							</p>
 						</h1>
 
-						<div class="flex-wrap items-center justify-between flex">
+						<div class="flex flex-wrap items-center justify-between">
 							<label class="flex items-center gap-2">
 								<span>Sort : </span>
 
@@ -317,11 +317,11 @@ async function goCheckbox(item) {
 					</div>
 
 					{#if data.facets.all_aggs.tags?.all?.buckets?.length}
-						<div class="px-3 sm:px-0 mb-5 flex flex-wrap gap-2">
+						<div class="mb-5 flex flex-wrap gap-2 px-3 sm:px-0">
 							{#each data.facets.all_aggs.tags.all.buckets || [] as t}
 								{#if t}
 									<button
-										class="block rounded-full border bg-white py-1 px-3 text-xs font-medium uppercase transition duration-300 hover:border-primary-500 hover:text-primary-500 focus:outline-none"
+										class="block rounded-full border bg-white py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none hover:border-primary-500 hover:text-primary-500"
 										on:click="{() => goCheckbox(t.key)}">
 										{t.key} ({t.doc_count})
 									</button>
@@ -331,21 +331,21 @@ async function goCheckbox(item) {
 					{/if}
 
 					{#if data.category?.topDescription}
-						<div class="px-3 sm:px-0 mb-5 prose-sm prose text-justify max-w-none">
+						<div class="prose prose-sm mb-5 max-w-none px-3 text-justify sm:px-0">
 							{@html data.category?.topDescription}
 						</div>
 					{/if}
 
 					<ul
-						class="border-t sm:border-t-0 grid w-full grid-cols-2 items-start sm:gap-3 sm:flex sm:flex-wrap sm:justify-between lg:gap-6">
+						class="grid w-full grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6">
 						{#each data.products as p, ix}
 							<li>
 								<ProductCard product="{p}" />
 							</li>
 
 							{#if ix % 40 === 39 && data.facets.all_aggs.tags?.all?.buckets?.length}
-								<div class="col-span-2 w-screen overflow-x-auto scrollbar-none bg-primary-100">
-									<div class="p-4 flex items-center gap-6">
+								<div class="col-span-2 w-screen overflow-x-auto bg-primary-100 scrollbar-none">
+									<div class="flex items-center gap-6 p-4">
 										<div class="flex-shrink-0">
 											<span class="text-lg text-gray-500">Filter by</span>
 
@@ -354,11 +354,11 @@ async function goCheckbox(item) {
 											<span class="text-2xl font-bold">Tags</span>
 										</div>
 
-										<ul class="flex flex-wrap gap-2 w-[40rem] flex-shrink-0">
+										<ul class="flex w-[40rem] flex-shrink-0 flex-wrap gap-2">
 											{#each data.facets.all_aggs.tags.all.buckets || [] as t}
 												{#if t}
 													<button
-														class="bg-white rounded-md font-semibold text-sm py-2 px-4 max-w-max capitalizefocus:outline-none"
+														class="capitalizefocus:outline-none max-w-max rounded-md bg-white py-2 px-4 text-sm font-semibold"
 														on:click="{() => goCheckbox(t.key)}">
 														{t.key}
 													</button>
@@ -394,7 +394,7 @@ async function goCheckbox(item) {
 				</div>
 			{:else}
 				<div
-					class="px-3 sm:px-0 mb-5 sm:mb-10 lg:mb-20 flex items-center justify-center w-full"
+					class="mb-5 flex w-full items-center justify-center px-3 sm:mb-10 sm:px-0 lg:mb-20"
 					style="height: 60vh;">
 					<div class="m-10 flex flex-col items-center justify-center text-center">
 						<h1 class="mb-10 text-xl capitalize sm:text-2xl lg:text-3xl">
@@ -405,7 +405,7 @@ async function goCheckbox(item) {
 							<img
 								src="{noNoDataAvailable}"
 								alt="no data availible"
-								class="h-20 w-20 text-xs object-contain" />
+								class="h-20 w-20 object-contain text-xs" />
 						</div>
 
 						<h2>We couldn't find any matches!</h2>
@@ -435,7 +435,7 @@ async function goCheckbox(item) {
 		<div class="w-full justify-center bg-gray-50 px-3 py-10 sm:px-10 sm:py-20">
 			<div
 				class="container mx-auto grid max-w-6xl grid-cols-1 gap-10 text-sm sm:gap-20 md:grid-cols-6">
-				<div class="col-span-1 md:col-span-3 lg:col-span-4 prose-sm prose text-justify max-w-none">
+				<div class="prose prose-sm col-span-1 max-w-none text-justify md:col-span-3 lg:col-span-4">
 					{@html data.category?.description}
 				</div>
 

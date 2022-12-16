@@ -1,6 +1,6 @@
 <script>
-import SEO from '$lib/components/SEO/index.svelte'
 import MyOrder from './_MyOrder.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
 
 const seoProps = {
 	title: 'Orders ',

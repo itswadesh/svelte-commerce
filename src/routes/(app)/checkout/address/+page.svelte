@@ -1,11 +1,11 @@
 <script>
-import SEO from '$lib/components/SEO/index.svelte'
-import Pricesummary from '$lib/components/Pricesummary.svelte'
-import SelectAddress from '../_SelectAddress.svelte'
-import Error from '$lib/components/Error.svelte'
-import CheckoutHeader from '$lib/components/CheckoutHeader.svelte'
 import { getAPI } from '$lib/util/api'
 import { page } from '$app/stores'
+import CheckoutHeader from '$lib/components/CheckoutHeader.svelte'
+import Error from '$lib/components/Error.svelte'
+import Pricesummary from '$lib/components/Pricesummary.svelte'
+import SelectAddress from '../_SelectAddress.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
 $: ({ cart, loading, myAddresses, err, prescriptionId, selectedAddress } = data)
