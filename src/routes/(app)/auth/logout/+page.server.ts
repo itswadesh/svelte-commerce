@@ -21,12 +21,12 @@ export const actions: Actions = {
 			expires: new Date(0)
 		})
 		locals.session = null
+		locals.me = null
 		// cookies.set('sid', '', {
 		// 	path: '/',
 		// 	expires: new Date(0)
 		// })
-
 		//redirect the user
-		throw redirect(307, locals.store?.loginUrl)
+		throw redirect(307, locals.store?.loginUrl || '/auth/otp-login')
 	}
 }
