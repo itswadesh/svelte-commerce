@@ -10,10 +10,7 @@ const config = {
 		})
 	],
 	kit: {
-		adapter: adapter(),
-		methodOverride: {
-			allowed: ['POST']
-		}
+		adapter: adapter()
 	}
 	// vitePlugin: {
 	// 	experimental: {
