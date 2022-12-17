@@ -10,7 +10,7 @@ export const load: PageServerLoad = async () => {
 
 export const actions: Actions = {
 	async default({ cookies, locals }) {
-		await post('logout', {}, cookies)
+		// await post('logout', {}, cookies)
 		// eat the cookie
 		cookies.set('session', '', {
 			path: '/',
