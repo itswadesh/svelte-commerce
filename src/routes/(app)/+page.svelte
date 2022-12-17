@@ -222,7 +222,7 @@ $: heroBanners =
 			{/if}
 		{/await}
 
-		<ProductTab />
+		<!-- <ProductTab /> -->
 	</div>
 
 	<!-- MOBILE FOOTER -->
