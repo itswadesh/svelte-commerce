@@ -11,8 +11,8 @@ const config = {
 	],
 	kit: {
 		adapter: adapter(),
-		csrf: {
-			checkOrigin: false
+		methodOverride: {
+			allowed: ['POST']
 		}
 	}
 	// vitePlugin: {
