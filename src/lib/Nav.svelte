@@ -835,7 +835,7 @@ const getSelectionLabel = (option) => option.name
 					<!-- Log Out -->
 
 					<li>
-						<form action="/auth/logout" method="POST">
+						<form action="/auth/logout" method="POST" use:enhance>
 							<button type="submit" aria-label="Logout" class="flex w-full items-center gap-2 py-2">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"

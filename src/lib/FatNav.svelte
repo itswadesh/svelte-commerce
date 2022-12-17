@@ -21,6 +21,7 @@ import menu from '$lib/config/menu'
 import PrimaryButton from './ui/PrimaryButton.svelte'
 import WhiteButton from './ui/WhiteButton.svelte'
 import AutosuggestModal from './AutosuggestModal.svelte'
+import { enhance } from '$app/forms'
 
 const dispatch = createEventDispatcher()
 const cookies = Cookie()
@@ -659,7 +660,7 @@ const getSelectionLabel = (option) => option.name
 							{/each}
 
 							<li>
-								<form action="/auth/logout" method="POST">
+								<form action="/auth/logout" method="POST" use:enhance>
 									<button
 										type="submit"
 										class="w-full cursor-pointer rounded py-2 px-4 text-left transition duration-300 focus:outline-none hover:bg-primary-50">
@@ -834,7 +835,7 @@ const getSelectionLabel = (option) => option.name
 					<!-- Log Out -->
 
 					<li>
-						<form action="/auth/logout" method="POST">
+						<form action="/auth/logout" method="POST" use:enhance>
 							<button type="submit" aria-label="Logout" class="flex w-full items-center gap-2 py-2">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
