@@ -185,7 +185,7 @@ async function getStoreData() {
 	<p>Over <span class="font-semibold">2 Million</span> Happy Customers</p>
 </div> -->
 
-<StoreInformationFooter />
+<!-- <StoreInformationFooter /> -->
 
 <footer class="w-full justify-center bg-gray-50 p-3 text-sm sm:p-10">
 	<div class="container mx-auto max-w-6xl">
