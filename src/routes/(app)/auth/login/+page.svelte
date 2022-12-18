@@ -175,7 +175,7 @@ async function submit() {
 	<div class="mx-auto mb-5 flex max-w-max flex-col gap-1 text-center text-sm">
 		<a
 			href="{`/auth/otp-login?ref=${$page.url.searchParams.get('ref') || '/'}`}"
-			aria-label="Click to login with email"
+			aria-label="Click to login with phone"
 			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
 			Login with Phone
 		</a>

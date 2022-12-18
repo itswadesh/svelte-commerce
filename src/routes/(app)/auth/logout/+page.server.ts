@@ -26,7 +26,6 @@ export const actions: Actions = {
 		// 	path: '/',
 		// 	expires: new Date(0)
 		// })
-		console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', locals.store?.loginUrl)
 		//redirect the user
 		throw redirect(307, locals.store?.loginUrl || '/auth/otp-login')
 	}
