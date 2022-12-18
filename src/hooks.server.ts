@@ -77,6 +77,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		let store = {
 			id,
 			address,
+			adminUrl: 'https://admin.litekart.in',
 			closedMessage,
 			description,
 			dimentionUnit: 'cm',
@@ -99,6 +100,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 			websiteLegalName,
 			websiteName,
 			weightUnit: 'g',
+			currencyCode: 'USD',
+			currencySymbol: '$',
 			youtubeChannel
 		}
 		if (!cookieStore || cookieStore === 'undefined') {
@@ -135,7 +138,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 				websiteLegalName: storeOne.websiteLegalName,
 				websiteName: storeOne.websiteName,
 				weightUnit: storeOne.weightUnit,
-				youtubeChannel: storeOne.youtubeChannel
+				youtubeChannel: storeOne.youtubeChannel,
+				currencyCode: storeOne.currencyCode,
+				currencySymbol: storeOne.currencySymbol
 			}
 			event.cookies.set('store', JSON.stringify(store), { path: '/' })
 		} else {
