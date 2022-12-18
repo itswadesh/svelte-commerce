@@ -71,7 +71,7 @@ $: heroBanners =
 			<div class="mb-5 hidden sm:mb-10 sm:block">
 				<h1
 					class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
-					TOP CATEGORIES
+					TOP COLLECTIONS
 				</h1>
 
 				<div class="max-w-screen overflow-x-auto scrollbar-none lg:hidden">

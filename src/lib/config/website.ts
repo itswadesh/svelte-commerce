@@ -20,8 +20,8 @@ export const pinterestPage = 'https://www.pinterest.com/company/misiki/'
 export const stripePublishableKey =
 	'pk_test_51HXxXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXq'
 export const twitterPage = 'https://twitter.com/MisikiOfficial'
-export const websiteLegalName = 'Misiki Technologies'
-export const websiteName = 'KitCommerce'
+export const websiteLegalName = 'Misiki Technologies LLP'
+export const websiteName = 'Litekart'
 export const youtubeChannel = 'https://www.youtube.com/channel/UCcb3eRHh-7qAiv9ea7jmTHQ'
 // All above data will be replaced by Footer.svelte after the server/store call and saved to cookie
 

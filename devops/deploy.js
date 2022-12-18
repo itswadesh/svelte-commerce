@@ -8,7 +8,7 @@ import fs from 'fs'
 // Start Config
 const PM2_NAME = 'litekart-www:3000'
 const REMOTE_DIR = '/var/www/litekart/www'
-const REMOTE_HOST = '65.20.67.103'
+const REMOTE_HOST = '139.59.42.129'
 const REMOTE_USER = 'root'
 const PRIVATE_KEY = 'D:/ssh/node-server.pem'
 const FILE_NAMES =
