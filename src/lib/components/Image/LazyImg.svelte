@@ -57,7 +57,7 @@ onDestroy(() => {
 <img
 	alt="{alt}"
 	class="lazy {clazz}"
-	src="{`${getCdnImageUrl(src)}?width=${aspect_ratio.split(':')[0]}&height=${
+	src="{`${getCdnImageUrl(src)}?tr=w-${aspect_ratio.split(':')[0]},h-${
 		aspect_ratio.split(':')[1]
 	}&blur=25&aspect_ratio=${aspect_ratio}`}"
-	data-src="{`${getCdnImageUrl(src)}?width=${w}&height=${h}&sharpen=true`}" />
+	data-src="{`${getCdnImageUrl(src)}?tr=w-${w},h-${h}&sharpen=true`}" />
