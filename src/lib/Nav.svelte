@@ -21,6 +21,7 @@ import menu from '$lib/config/menu'
 import PrimaryButton from './ui/PrimaryButton.svelte'
 import WhiteButton from './ui/WhiteButton.svelte'
 import AutosuggestModal from './AutosuggestModal.svelte'
+import { enhance } from '$app/forms'
 
 const dispatch = createEventDispatcher()
 const cookies = Cookie()
@@ -199,7 +200,7 @@ const getSelectionLabel = (option) => option.name
 						src="{$page?.data?.store?.logo}"
 						alt=" "
 						height="40"
-						class="h-auto max-h-10 w-32 object-contain object-center sm:max-h-16" />
+						class="h-auto max-h-10 w-32 object-contain object-left sm:max-h-16" />
 				{:else if $page?.data?.store?.websiteName}
 					<h1
 						class="bg-gradient-to-b from-primary-500 to-secondary-500 bg-clip-text text-2xl font-extrabold text-transparent sm:text-3xl">
@@ -209,7 +210,7 @@ const getSelectionLabel = (option) => option.name
 					<img
 						src="{logo}"
 						alt=" "
-						class="h-auto max-h-10 w-32 object-contain object-center sm:max-h-16" />
+						class="h-auto max-h-10 w-32 object-contain object-left sm:max-h-16" />
 				{/if}
 			</a>
 		</div>
@@ -665,7 +666,7 @@ const getSelectionLabel = (option) => option.name
 							{/each}
 
 							<li>
-								<form action="/auth/logout" method="POST">
+								<form action="/auth/logout" method="POST" use:enhance>
 									<button
 										type="submit"
 										class="w-full cursor-pointer rounded py-2 px-4 text-left transition duration-300 focus:outline-none hover:bg-primary-50">
@@ -701,7 +702,8 @@ const getSelectionLabel = (option) => option.name
 				<!-- Login -->
 
 				<a
-					href="/auth/otp-login?ref={$page?.url?.pathname}{$page?.url?.search}"
+					href="{$page.data.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page?.url
+						?.search}"
 					aria-label="Click to route login"
 					data-sveltekit-preload-data>
 					<button
@@ -834,7 +836,7 @@ const getSelectionLabel = (option) => option.name
 					<!-- Log Out -->
 
 					<li>
-						<form action="/auth/logout" method="POST">
+						<form action="/auth/logout" method="POST" use:enhance>
 							<button type="submit" aria-label="Logout" class="flex w-full items-center gap-2 py-2">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -861,7 +863,8 @@ const getSelectionLabel = (option) => option.name
 
 				<a
 					data-sveltekit-preload-data
-					href="/auth/otp-login?ref={$page?.url?.pathname}{$page?.url?.search}"
+					href="{$page.data.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page?.url
+						?.search}"
 					aria-label="Click to route login"
 					class="flex items-center gap-2 py-2"
 					on:click="{() => (openSidebar = false)}">
