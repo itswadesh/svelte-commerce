@@ -37,6 +37,12 @@ import productVeg from '$lib/assets/product/veg.png'
 
 export let product = {}
 
+let images = [
+	'https://s3.ap-south-1.amazonaws.com/litekart.in/stores/6356502aca4ff28ed596cb1b/product/6045f9ae120e71405f1767d3/fancy-0235-888-fancymart-original-imafhez6qfja6jza-vjkatenzjzyw.jpeg',
+	'https://s3.ap-south-1.amazonaws.com/litekart.in/stores/6356502aca4ff28ed596cb1b/product/6045f9ae120e71405f1767d3/ohdbaf-1287-decorebugs-original-imaem5qy9pus7vfk-beflo8mcngxe.jpeg',
+	'https://s3.ap-south-1.amazonaws.com/litekart.in/stores/6356502aca4ff28ed596cb1b/product/6045f9ae120e71405f1767d3/ohdbaf-1288-decorebugs-original-imaem5qyq8f6vtyy-q27lkebwlah0.jpeg'
+]
+
 // console.log('zzzzzzzzzzzzzzzzzz', product)
 
 let show,
@@ -73,10 +79,22 @@ async function toggleWishlist(id) {
 		loadingForWishlist = false
 	}
 }
+
+let showcaseImg = images[0]
+
+function selectSecondImage() {
+	if (images?.length > 1) {
+		showcaseImg = images[1]
+	}
+}
+
+function selectPrimaryImage() {
+	showcaseImg = images[0]
+}
 </script>
 
 <div
-	class="group relative col-span-1 block w-full overflow-hidden sm:w-52 sm:flex-shrink-0 sm:rounded-md border sm:border-transparent sm:hover:border-gray-200 sm:hover:bg-white sm:hover:shadow-lg bg-white"
+	class="group relative col-span-1 block w-full overflow-hidden border bg-white sm:w-52 sm:flex-shrink-0 sm:rounded-md sm:border-transparent sm:hover:border-gray-200 sm:hover:bg-white sm:hover:shadow-lg"
 	on:mouseenter="{showitems}"
 	on:mouseleave="{hideitems}">
 	<a
@@ -110,14 +128,16 @@ async function toggleWishlist(id) {
 			</div>
 		{/if}
 
-		<div class="w-[210px] h-[280px] overflow-hidden">
+		<!-- on:mouseenter="{selectSecondImage}" on:mouseleave="{selectPrimaryImage}"
+		showcaseImg -->
+		<button type="button" class="h-[280px] w-[210px] overflow-hidden">
 			<LazyImg
 				src="{product.img}"
 				alt="{product.name}"
 				width="210"
 				height="280"
-				class="object-contain object-bottom w-[210px] h-[280px] text-xs" />
-		</div>
+				class="h-[280px] w-[210px] object-contain object-bottom text-xs" />
+		</button>
 	</a>
 
 	<div class="p-4">
@@ -323,7 +343,7 @@ async function toggleWishlist(id) {
 					</div> -->
 				<!-- </div> -->
 
-				<div class="flex gap-2 justify-between">
+				<div class="flex justify-between gap-2">
 					<h2 class="flex-1 text-sm line-clamp-2 group-hover:underline">
 						{product.name || '_'}
 					</h2>
@@ -346,18 +366,18 @@ async function toggleWishlist(id) {
 			href="/product/{product.slug}"
 			aria-label="Click to view the product details"
 			data-sveltekit-preload-data>
-			<div class="mt-2.5 flex flex-wrap items-baseline justify-start leading-4 text-xs gap-1.5">
-				<span class="font-bold text-sm sm:text-base whitespace-nowrap">
+			<div class="mt-2.5 flex flex-wrap items-baseline justify-start gap-1.5 text-xs leading-4">
+				<span class="whitespace-nowrap text-sm font-bold sm:text-base">
 					{product.formattedPrice}
 				</span>
 
 				{#if product.mrp > product.price}
-					<span class="text-gray-500 line-through whitespace-nowrap">
+					<span class="whitespace-nowrap text-gray-500 line-through">
 						{product.formattedMrp}
 					</span>
 
 					{#if Math.floor(((product.mrp - product.price) / product.mrp) * 100) > 0}
-						<span class="text-orange-500 sm:text-gray-900 whitespace-nowrap">
+						<span class="whitespace-nowrap text-orange-500 sm:text-gray-900">
 							({Math.floor(((product.mrp - product.price) / product.mrp) * 100)}% off)
 						</span>
 					{/if}
@@ -402,7 +422,7 @@ async function toggleWishlist(id) {
 			<div class="h-full flex-shrink-0">
 				<h1 class="border-b p-4 text-center font-bold uppercase sm:text-lg">Similar Products</h1>
 
-				<div class="h-full overflow-y-auto overflow-x-hidden p-4 pb-16">
+				<div class="h-full overflow-y-auto p-4 pb-16 overflow-x-hidden">
 					<div class="grid grid-cols-2 sm:gap-4">
 						{#each product.relatedProducts as relatedProduct}
 							<a
@@ -445,18 +465,18 @@ async function toggleWishlist(id) {
 									</h2>
 
 									<div
-										class="mt-2.5 flex flex-wrap items-baseline justify-start leading-4 text-xs gap-1.5">
-										<span class="font-semibold sm:text-sm whitespace-nowrap">
+										class="mt-2.5 flex flex-wrap items-baseline justify-start gap-1.5 text-xs leading-4">
+										<span class="whitespace-nowrap font-semibold sm:text-sm">
 											{relatedProduct.formattedPrice}
 										</span>
 
 										{#if relatedProduct.mrp > relatedProduct.price}
-											<span class="text-gray-500 line-through whitespace-nowrap">
+											<span class="whitespace-nowrap text-gray-500 line-through">
 												{relatedProduct.formattedMrp}
 											</span>
 
 											{#if Math.floor(((relatedProduct.mrp - relatedProduct.price) / relatedProduct.mrp) * 100) > 0}
-												<span class="text-green-600 sm:text-gray-700 whitespace-nowrap">
+												<span class="whitespace-nowrap text-green-600 sm:text-gray-700">
 													({Math.floor(
 														((relatedProduct.mrp - relatedProduct.price) / relatedProduct.mrp) * 100
 													)}% off)
