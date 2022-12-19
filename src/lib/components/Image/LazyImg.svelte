@@ -59,7 +59,7 @@ onDestroy(() => {
 	class="lazy {clazz}"
 	src="{`${getCdnImageUrl(src)}?tr=w-${aspect_ratio.split(':')[0]},h-${
 		aspect_ratio.split(':')[1]
-	}&blur=25&aspect_ratio=${aspect_ratio}`}"
+	},ar-${aspect_ratio.replace(':', '-')}`}"
 	data-src="{`${getCdnImageUrl(src)}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(
 		':',
 		'-'
