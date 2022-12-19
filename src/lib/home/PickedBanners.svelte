@@ -36,6 +36,8 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 												src="{banner.img}"
 												alt=""
 												width="375"
+												height="430"
+												aspect_ratio="1:1"
 												class="h-full w-full object-cover object-center" />
 										</a>
 									</div>
@@ -68,6 +70,7 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 												alt=""
 												width="375"
 												height="430"
+												aspect_ratio="1:1"
 												class="w-[47vw] object-contain object-top sm:w-60" />
 										</a>
 									{/if}
@@ -83,6 +86,8 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 											src="{banner.img}"
 											alt=""
 											width="375"
+											height="430"
+											aspect_ratio="1:1"
 											class="h-full w-full object-contain object-top" />
 									</a>
 								{/if}

@@ -15,6 +15,7 @@ export let heroBanners
 					alt=""
 					width="760"
 					height="390"
+					aspect_ratio="2:1"
 					class="col-span-1 h-full w-full" />
 			</a>
 
@@ -26,6 +27,7 @@ export let heroBanners
 					alt=""
 					width="760"
 					height="390"
+					aspect_ratio="2:1"
 					class="col-span-1 h-full w-full" />
 			</a>
 		</div>
@@ -40,6 +42,7 @@ export let heroBanners
 						alt=""
 						width="370"
 						height="390"
+						aspect_ratio="1:1"
 						class="col-span-1 h-full w-full" />
 				</a>
 
@@ -51,6 +54,7 @@ export let heroBanners
 						alt=""
 						width="370"
 						height="390"
+						aspect_ratio="1:1"
 						class="col-span-1 h-full w-full" />
 				</a>
 			</div>
@@ -64,6 +68,7 @@ export let heroBanners
 						alt=""
 						width="760"
 						height="390"
+						aspect_ratio="2:1"
 						class="col-span-1 h-full w-full" />
 				</a>
 			</div>
