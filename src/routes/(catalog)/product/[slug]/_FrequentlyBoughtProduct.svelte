@@ -13,6 +13,8 @@ import productVeg from '$lib/assets/product/veg.png'
 
 export let product = {}
 
+// console.log('zzzzzzzzzzzzzzzzzz', product)
+
 let loading = false
 let cartButtonText = 'Add to Bag'
 let bounceItemFromTop = false
@@ -71,13 +73,13 @@ let bounceItemFromTop = false
 
 <div class="group relative col-span-1 block w-full overflow-hidden sm:w-48 sm:flex-shrink-0">
 	<a href="/product/{product.slug}" target="_blank" rel="noopener noreferrer">
-		<div class="mb-2 h-40 overflow-hidden">
-			<img
+		<div class="mb-2 h-[280px] w-[210px] overflow-hidden">
+			<LazyImg
 				src="{product.img}"
 				alt="{product.name}"
-				width="208"
-				height="240"
-				class="h-full w-full object-contain object-bottom" />
+				width="210"
+				height="280"
+				class="h-[280px] w-[210px] object-contain object-bottom text-xs" />
 		</div>
 
 		<div class="flex flex-col gap-1">
@@ -89,7 +91,7 @@ let bounceItemFromTop = false
 
 			<!-- Name -->
 
-			<div class="flex gap-2 justify-between">
+			<div class="flex justify-between gap-2">
 				{#if product.name}
 					<h2
 						class="flex-1 truncate text-sm text-gray-500 group-hover:text-blue-600 group-hover:underline sm:text-base">
@@ -110,17 +112,17 @@ let bounceItemFromTop = false
 
 			<!-- prices -->
 
-			<div class="flex flex-wrap items-center gap-2 max-w-max mx-auto">
-				<span class="text-sm whitespace-nowrap"><b>{product.formattedPrice}</b></span>
+			<div class="mx-auto flex max-w-max flex-wrap items-center gap-2">
+				<span class="whitespace-nowrap text-sm"><b>{product.formattedPrice}</b></span>
 
 				{#if product.mrp > product.price}
-					<span class="text-xs whitespace-nowrap">
+					<span class="whitespace-nowrap text-xs">
 						<strike>{product.formattedMrp}</strike>
 					</span>
 
-					{#if Math.floor(((product.mrp - product.price) / product.mrp) * 100) > 0}
-						<span class="text-xs whitespace-nowrap">
-							({Math.floor(((product.mrp - product.price) / product.mrp) * 100)}%)
+					{#if product.discount > 0}
+						<span class="whitespace-nowrap text-xs">
+							({product.discount}%)
 						</span>
 					{/if}
 				{/if}
