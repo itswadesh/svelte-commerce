@@ -20,6 +20,7 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { sorts } from '$lib/config'
 import { toast } from '$lib/util'
+import dayjs from 'dayjs'
 import DesktopFilter from '$lib/components/DesktopFilter.svelte'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
 import MobileFilter from '$lib/components/MobileFilter.svelte'
@@ -31,6 +32,8 @@ import ProductCard from '$lib/ProductCard.svelte'
 import ProductNav from '$lib/ProductNav.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
+let today = dayjs(new Date()).toISOString()
+
 export let data
 
 // console.log('data = ', data)
@@ -39,8 +42,70 @@ export let data
 // console.log('Facets = ', facets)
 
 let seoProps = {
-	title: `Find best ${data.searchData || ' '}`,
-	metadescription: `Find best ${data.searchData || ' '}`
+	// addressCountry: 'India',
+	// addressLocality: 'Semiliguda, Koraput',
+	// addressRegion: 'Odisha',
+	// alternateJsonHref: '',
+	// alternateXml: { title: '', href: '' },
+	brand: $page.data.store?.title,
+	// breadcrumbs: '',
+	caption: $page.data.store?.title,
+	category: data.searchData,
+	contentUrl: $page.data.store?.logo,
+	createdAt: today,
+	// depth: { unitCode: '', value: '' },
+	email: `${$page?.data?.store?.email}`,
+	// entityMeta: '',
+	// facebookPage: '',
+	// gtin: '',
+	// height: '',
+	id: $page?.url?.href,
+	image: $page.data.store?.logo,
+	logo: $page.data.store?.logo,
+	ogSquareImage: { url: '', width: 56, height: 56 },
+	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00'],
+	// popularity: product.popularity,
+	// postalCode: '764036',
+	// price: product.price,
+	// priceRange: `${product.price}-${product.mrp}`,
+	// ratingCount: 1,
+	// ratingValue: +product.ratings + 1,
+	// sku: product.sku,
+	// streetAddress: 'Padmajyoti Marg, Nandapur Road',
+	timeToRead: 0,
+	updatedAt: today,
+	// weight: { unitCode: '', value: '' },
+	// width: { unitCode: '', value: '' },
+	// wlwmanifestXmlHref: '',
+	metadescription: $page.data.store?.description,
+	// article: false,
+	canonical: `${$page?.url.href}`,
+	datePublished: today,
+	description: $page.data.store?.description,
+	dnsPrefetch: `//cdn.jsdelivr.net`,
+	// entityMeta: null,
+	featuredImage: {
+		url: $page.data.store?.logo,
+		width: 675,
+		height: 380,
+		caption: $page.data.store?.title
+	},
+	keywords: $page.data.store?.keywords,
+	lastUpdated: today,
+	msapplicationTileImage: $page.data.store?.logo,
+	ogImage: { url: $page.data.store?.logo, width: 128, height: 56 },
+	ogImageSecureUrl: `${$page?.data?.store?.logo}`,
+	ogImageType: 'image/jpeg',
+	ogSiteName: `${$page.data.origin}/sitemap/sitemap.xml`,
+	// productAvailability: `${product.stock}`,
+	productBrand: data.searchData,
+	productName: data.searchData,
+	// productPriceAmount: `${product.price}`,
+	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
+	slug: `/`,
+	// timeToRead: 0,
+	title: data.searchData,
+	twitterImage: { url: $page.data.store?.logo }
 }
 
 let showFilter = false
