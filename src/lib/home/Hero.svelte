@@ -46,7 +46,7 @@ onMount(async () => {
 							alt="{b.name}"
 							width="1500"
 							height="380"
-							aspect_ratio="10:2"
+							aspect_ratio="4:1"
 							class="block h-auto w-full object-contain object-top" />
 					</a>
 				{/if}
