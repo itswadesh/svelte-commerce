@@ -1,6 +1,7 @@
 <script>
 import { page } from '$app/stores'
 import CategoriesMobile from '$lib/home/CategoriesMobile.svelte'
+import dayjs from 'dayjs'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
 import Hero from '$lib/home/Hero.svelte'
 import HeroBanners from '$lib/home/HeroBanners.svelte'
@@ -9,32 +10,80 @@ import logo from '$lib/assets/logo.svg'
 import MobileFooter from '$lib/MobileFooter.svelte'
 import PickedBanners from '$lib/home/PickedBanners.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
+import ProductTab from '$lib/components/Product/ProductTab.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+
+let today = dayjs(new Date()).toISOString()
 
 export let data
 
 // console.log('zzzzzzzzzzzzzzzzzz', data)
 
-const seoProps = {
-	title: $page.data.store?.title,
+let seoProps = {
+	// addressCountry: 'India',
+	// addressLocality: 'Semiliguda, Koraput',
+	// addressRegion: 'Odisha',
+	// alternateJsonHref: '',
+	// alternateXml: { title: '', href: '' },
+	brand: $page.data.store?.title,
+	// breadcrumbs: '',
+	caption: $page.data.store?.title,
+	category: $page.data.store?.title,
+	contentUrl: $page.data.store?.logo,
+	createdAt: today,
+	// depth: { unitCode: '', value: '' },
+	email: `${$page?.data?.store?.email}`,
+	// entityMeta: '',
+	// facebookPage: '',
+	// gtin: '',
+	// height: '',
+	id: $page?.url?.href,
+	image: $page.data.store?.logo,
+	logo: $page.data.store?.logo,
+	ogSquareImage: { url: '', width: 56, height: 56 },
+	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00'],
+	// popularity: product.popularity,
+	// postalCode: '764036',
+	// price: product.price,
+	// priceRange: `${product.price}-${product.mrp}`,
+	// ratingCount: 1,
+	// ratingValue: +product.ratings + 1,
+	// sku: product.sku,
+	// streetAddress: 'Padmajyoti Marg, Nandapur Road',
+	timeToRead: 0,
+	updatedAt: today,
+	// weight: { unitCode: '', value: '' },
+	// width: { unitCode: '', value: '' },
+	// wlwmanifestXmlHref: '',
+	metadescription: $page.data.store?.description,
+	// article: false,
+	canonical: `${$page?.url.href}`,
+	datePublished: today,
 	description: $page.data.store?.description,
-	slug: '/',
-	keywords: $page.data.store?.keywords,
+	dnsPrefetch: `//cdn.jsdelivr.net`,
+	// entityMeta: null,
 	featuredImage: {
 		url: $page.data.store?.logo,
-		width: 672,
-		height: 448,
-		caption: 'Home page'
+		width: 675,
+		height: 380,
+		caption: $page.data.store?.title
 	},
-	ogImage: {
-		url: logo
-	},
-	ogSquareImage: {
-		url: $page.data.store?.logo
-	},
-	twitterImage: {
-		url: $page.data.store?.logo
-	}
+	keywords: $page.data.store?.keywords,
+	lastUpdated: today,
+	msapplicationTileImage: $page.data.store?.logo,
+	ogImage: { url: $page.data.store?.logo, width: 128, height: 56 },
+	ogImageSecureUrl: `${$page?.data?.store?.logo}`,
+	ogImageType: 'image/jpeg',
+	ogSiteName: `${$page.data.origin}/sitemap/sitemap.xml`,
+	// productAvailability: `${product.stock}`,
+	productBrand: $page.data.store?.title,
+	productName: $page.data.store?.title,
+	// productPriceAmount: `${product.price}`,
+	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
+	slug: `/`,
+	// timeToRead: 0,
+	title: $page.data.store?.title,
+	twitterImage: { url: $page.data.store?.logo }
 }
 
 $: heroBanners =
@@ -70,7 +119,7 @@ $: heroBanners =
 			<div class="mb-5 hidden sm:mb-10 sm:block">
 				<h1
 					class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
-					TOP CATEGORIES
+					TOP COLLECTIONS
 				</h1>
 
 				<div class="max-w-screen overflow-x-auto scrollbar-none lg:hidden">
@@ -220,6 +269,8 @@ $: heroBanners =
 				</div>
 			{/if}
 		{/await}
+
+		<!-- <ProductTab /> -->
 	</div>
 
 	<!-- MOBILE FOOTER -->
