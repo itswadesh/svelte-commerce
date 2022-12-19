@@ -13,10 +13,9 @@ export let heroBanners
 				<LazyImg
 					src="{heroBanners[0]?.img}"
 					alt=""
-					width="760"
 					height="390"
 					aspect_ratio="2:1"
-					class="col-span-1 h-full w-full" />
+					class="col-span-1 h-full w-full object-cover" />
 			</a>
 
 			<a
@@ -25,10 +24,9 @@ export let heroBanners
 				<LazyImg
 					src="{heroBanners[1]?.img}"
 					alt=""
-					width="760"
 					height="390"
 					aspect_ratio="2:1"
-					class="col-span-1 h-full w-full" />
+					class="col-span-1 h-full w-full object-cover" />
 			</a>
 		</div>
 
@@ -40,10 +38,9 @@ export let heroBanners
 					<LazyImg
 						src="{heroBanners[2]?.img}"
 						alt=""
-						width="370"
 						height="390"
 						aspect_ratio="1:1"
-						class="col-span-1 h-full w-full" />
+						class="col-span-1 h-full w-full object-cover" />
 				</a>
 
 				<a
@@ -52,10 +49,9 @@ export let heroBanners
 					<LazyImg
 						src="{heroBanners[3]?.img}"
 						alt=""
-						width="370"
 						height="390"
 						aspect_ratio="1:1"
-						class="col-span-1 h-full w-full" />
+						class="col-span-1 h-full w-full object-cover" />
 				</a>
 			</div>
 
@@ -66,10 +62,9 @@ export let heroBanners
 					<LazyImg
 						src="{heroBanners[4]?.img}"
 						alt=""
-						width="760"
 						height="390"
 						aspect_ratio="2:1"
-						class="col-span-1 h-full w-full" />
+						class="col-span-1 h-full w-full object-cover" />
 				</a>
 			</div>
 		</div>
