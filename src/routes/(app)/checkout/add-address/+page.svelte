@@ -134,7 +134,7 @@ async function save(ads) {
 				<div>
 					<h6 class="mb-2 font-semibold">Last Name</h6>
 
-					<Textbox type="text" bind:value="{data.ads.lastName}" placeholder="Enter First Name" />
+					<Textbox type="text" bind:value="{data.ads.lastName}" placeholder="Enter Last Name" />
 				</div>
 
 				<div>
