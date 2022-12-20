@@ -5,11 +5,12 @@
 </style>
 
 <script lang="ts">
-import PageTransitions from '$lib/PageTransitions.svelte'
-import { ToastContainer, FlatToast } from 'svelte-toasts'
 import { navigating, page } from '$app/stores'
-import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
+import { ToastContainer, FlatToast } from 'svelte-toasts'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import PageTransitions from '$lib/PageTransitions.svelte'
+import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
+
 let url
 </script>
 
@@ -26,8 +27,9 @@ let url
 					<a href="/" class="relative z-10 flex h-20 items-center justify-center border-b bg-white">
 						<LazyImg
 							src="{$page.data.store?.logo}"
-							alt=" "
-							class="h-auto w-32 object-contain object-center" />
+							alt="{$page.data.store?.websiteName}"
+							height="80"
+							class="max-h-16 w-32 object-contain object-center" />
 					</a>
 
 					<div
