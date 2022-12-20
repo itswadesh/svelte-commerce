@@ -13,10 +13,10 @@ import { page } from '$app/stores'
 import { post } from '$lib/util/api'
 import { toast } from '$lib/util'
 import Cookie from 'cookie-universal'
+import Error from '$lib/components/Error.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
-import Error from '$lib/components/Error.svelte'
 
 const cookies = Cookie()
 
@@ -52,14 +52,19 @@ async function submit(n) {
 	try {
 		loading = true
 		const { firstName, lastName, phone, email, password, passwordConfirmation } = n
-		const res = await post('signup', {
-			firstName: firstName,
-			lastName: lastName,
-			phone: phone,
-			email: email,
-			password: password,
-			passwordConfirmation: passwordConfirmation
-		})
+
+		const res = await post(
+			'signup',
+			{
+				firstName: firstName,
+				lastName: lastName,
+				phone: phone,
+				email: email,
+				password: password,
+				passwordConfirmation: passwordConfirmation
+			},
+			$page.data.origin
+		)
 
 		// console.log('zzzzzzzzzzzzzzzzzz', res)
 
@@ -250,7 +255,7 @@ async function submit(n) {
 	<p class="text-center text-sm text-gray-500">
 		By clicking login you are accepting our
 		<a
-			href="/p/terms-conditions"
+			href="/terms-conditions"
 			aria-label="Click to route terms & conditions"
 			target="_blank"
 			rel="noopener noreferrer"
