@@ -30,8 +30,8 @@ let showItemCount = 10
 
 <SEO {...seoProps} />
 
-{#if data.newArrivals && data.newArrivals[0]}
-	<div>
+<div>
+	{#if data.newArrivals && data.newArrivals[0]}
 		<div class="mb-20">
 			<!-- BANNER -->
 
@@ -114,30 +114,30 @@ let showItemCount = 10
 				</div>
 			{/if}
 		</div>
+	{:else}
+		<div class="flex h-[70vh] items-center justify-center">
+			<div class="m-10 flex flex-col items-center justify-center text-center">
+				<h1 class="mb-10 text-xl font-semibold capitalize sm:text-2xl lg:text-3xl">
+					Oops!!, No products there
+				</h1>
 
-		<!-- MOBILE FOOTER -->
+				<div class="mb-5">
+					<img
+						src="/no/no-data-availible.png"
+						alt="no data availible"
+						class="h-20 w-20 object-contain text-xs" />
+				</div>
 
-		<div class="block sm:hidden">
-			<MobileFooter />
-		</div>
-	</div>
-{:else}
-	<div class="flex h-[70vh] items-center justify-center">
-		<div class="m-10 flex flex-col items-center justify-center text-center">
-			<h1 class="mb-10 text-xl font-semibold capitalize sm:text-2xl lg:text-3xl">
-				Oops!!, No products there
-			</h1>
+				<p class="mb-5 text-center text-gray-500">No data found</p>
 
-			<div class="mb-5">
-				<img
-					src="/no/no-data-availible.png"
-					alt="no data availible"
-					class="h-20 w-20 object-contain text-xs" />
+				<PrimaryButton class="text-sm" on:click="{() => goto('/')}">Back to Home</PrimaryButton>
 			</div>
-
-			<p class="mb-5 text-center text-gray-500">No data found</p>
-
-			<PrimaryButton class="text-sm" on:click="{() => goto('/')}">Back to Home</PrimaryButton>
 		</div>
+	{/if}
+
+	<!-- MOBILE FOOTER -->
+
+	<div class="block sm:hidden">
+		<MobileFooter />
 	</div>
-{/if}
+</div>
