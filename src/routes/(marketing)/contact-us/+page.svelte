@@ -25,14 +25,18 @@ async function submitContactInformation() {
 		err = null
 		loading = true
 
-		const res = await post(`contact-us?store=${$page.data?.store?.id}`, {
-			fullName: fullName,
-			email: email,
-			phone: phone,
-			subject: `Someone contact us from ${$page.data.store?.websiteName}`,
-			message: message,
-			store: $page.data.store?.id
-		})
+		const res = await post(
+			`contact-us?store=${$page.data?.store?.id}`,
+			{
+				fullName: fullName,
+				email: email,
+				phone: phone,
+				subject: `Someone contact us from ${$page.data.store?.websiteName}`,
+				message: message,
+				store: $page.data.store?.id
+			},
+			$page.data.origin
+		)
 
 		toast('You have successfully contacted with us', 'success')
 
