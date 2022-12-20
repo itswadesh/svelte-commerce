@@ -60,7 +60,7 @@ const payWithStripe = async (pm) => {
 				address,
 				store: $page.data.store?.id
 			},
-			$page.data.store?.origin
+			$page.data.origin
 		)
 		if (resStripe.errors) {
 			errorMessage = { show: true, text: resStripe.errors[0].message }

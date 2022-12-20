@@ -57,11 +57,15 @@ async function submit(p) {
 		loading = true
 		const { oldPassword, password, passwordConfirmation } = p
 
-		const res = await post('users/change-password', {
-			oldPassword: oldPassword,
-			password: password,
-			passwordConfirmation: passwordConfirmation
-		})
+		const res = await post(
+			'users/change-password',
+			{
+				oldPassword: oldPassword,
+				password: password,
+				passwordConfirmation: passwordConfirmation
+			},
+			$page.data.origin
+		)
 
 		await invalidateAll()
 

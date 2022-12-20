@@ -30,10 +30,14 @@ async function submit() {
 	try {
 		loading = true
 
-		const res = await post('users/forgot-password', {
-			email: email,
-			referrer: 'https://litekart.in'
-		})
+		const res = await post(
+			'users/forgot-password',
+			{
+				email: email,
+				referrer: 'https://litekart.in'
+			},
+			$page.data.origin
+		)
 
 		// console.log('zzzzzzzzzzzzzzzzzz', res)
 
