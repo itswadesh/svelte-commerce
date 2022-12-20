@@ -75,7 +75,7 @@ async function getMegamenu() {
 
 			if (!localmegamenu || localmegamenu === 'undefined') {
 				megamenu = await getAPI(
-					`categories/megamenu?megamenu=true&store=${$page.data?.store?.id}`,
+					`categories/megamenu?store=${$page.data?.store?.id}`,
 					$page.data.origin
 				)
 
