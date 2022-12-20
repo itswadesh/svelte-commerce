@@ -41,7 +41,7 @@ onMount(() => {
 			client_id: GOOGLE_CLIENT_ID
 		},
 		async (res) => {
-			const onetap = await post('auth/google/onetap', res)
+			const onetap = await post('auth/google/onetap', res, $page.data.origin)
 			const me = {
 				email: onetap.email,
 				phone: onetap.phone,
@@ -70,10 +70,14 @@ async function submit() {
 	try {
 		loading = true
 
-		const res = await post('login', {
-			email: email,
-			password: password
-		})
+		const res = await post(
+			'login',
+			{
+				email: email,
+				password: password
+			},
+			$page.data.origin
+		)
 
 		// console.log('zzzzzzzzzzzzzzzzzz', res)
 
