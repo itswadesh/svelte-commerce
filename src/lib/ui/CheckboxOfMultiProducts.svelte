@@ -18,8 +18,9 @@ input[type='search']::-webkit-search-cancel-button {
 
 <script>
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import { currency } from '$lib/util'
 import { createEventDispatcher } from 'svelte'
-
+import { page } from '$app/stores'
 const dispatch = createEventDispatcher()
 
 export let items = [],
@@ -53,7 +54,7 @@ export let items = [],
 
 						<span class="flex-1">
 							{i.name} at
-							{i.formattedPrice}
+							{currency(i.price, $page.data?.store?.currencySymbol)}
 						</span>
 					</div>
 				</label>

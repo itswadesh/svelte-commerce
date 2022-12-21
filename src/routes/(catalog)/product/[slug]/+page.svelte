@@ -561,12 +561,14 @@ function handleMobileCanvas() {
 				<div class="mt-2 block sm:hidden">
 					<div class="mb-2 flex flex-wrap items-center gap-2">
 						<span class="whitespace-nowrap">
-							<b>{data.product?.formattedPrice}</b>
+							<b>
+								{currency(data.product.price, $page.data?.store?.currencySymbol)}
+							</b>
 						</span>
 
 						{#if data.product?.mrp > data.product?.price}
 							<span class="whitespace-nowrap text-gray-400">
-								MRP <strike>{data.product?.formattedMrp}</strike>
+								MRP <strike>{data.product?.mrp}</strike>
 							</span>
 
 							{#if data.product?.discount > 0}
@@ -636,12 +638,12 @@ function handleMobileCanvas() {
 				<div class="hidden sm:block">
 					<div class="mb-2 flex flex-wrap items-center gap-4">
 						<span class="whitespace-nowrap text-xl sm:text-2xl">
-							<b>{data.product?.formattedPrice}</b>
+							<b>{currency(data.product.price, $page.data?.store?.currencySymbol)}</b>
 						</span>
 
 						{#if data.product?.mrp > data.product?.price}
 							<span class="whitespace-nowrap text-lg text-gray-500 sm:text-xl">
-								<strike>{data.product?.formattedMrp}</strike>
+								<strike>{currency(data.product.mrp, $page.data?.store?.currencySymbol)}</strike>
 							</span>
 
 							{#if data.product?.discount > 0}

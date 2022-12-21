@@ -24,6 +24,7 @@ import DummyProductCard from '$lib/DummyProductCard.svelte'
 import { applyAction, enhance } from '$app/forms'
 import { fireGTagEvent } from '$lib/util/gTag'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
+import { currency } from '$lib/util'
 
 export let wishlistedProducts,
 	loadingProduct = []
@@ -172,12 +173,13 @@ async function getWishlistedProducts() {
 
 													<div
 														class="flex flex-wrap items-center justify-center gap-2 overflow-hidden overflow-ellipsis text-xs">
-														<span class="whitespace-nowrap text-base font-bold"
-															>{w.product?.formattedPrice}</span>
+														<span class="whitespace-nowrap text-base font-bold">
+															{currency(w.product.price, $page.data?.store?.currencySymbol)}
+														</span>
 
-														{#if w.product?.formattedMrp > w.product?.formattedPrice}
+														{#if w.product?.mrp > w.product?.price}
 															<strike class="whitespace-nowrap text-gray-500">
-																{w.product?.formattedMrp}
+																{currency(w.product?.mrp, $page.data?.store?.currencySymbol)}
 															</strike>
 
 															{#if Math.floor(((w.product?.mrp - w.product?.price) / w.product?.mrp) * 100) > 0}

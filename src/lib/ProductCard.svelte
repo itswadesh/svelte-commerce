@@ -361,19 +361,18 @@ function selectPrimaryImage() {
 			</a>
 		</div>
 		<!-- {/if} -->
-
 		<a
 			href="/product/{product.slug}"
 			aria-label="Click to view the product details"
 			data-sveltekit-preload-data>
 			<div class="mt-2.5 flex flex-wrap items-baseline justify-start gap-1.5 text-xs leading-4">
 				<span class="whitespace-nowrap text-sm font-bold sm:text-base">
-					{product.formattedPrice}
+					{currency(product.price, $page.data?.store?.currencySymbol)}
 				</span>
 
 				{#if product.mrp > product.price}
 					<span class="whitespace-nowrap text-gray-500 line-through">
-						{product.formattedMrp}
+						{currency(product.mrp, $page.data?.store?.currencySymbol)}
 					</span>
 
 					{#if Math.floor(((product.mrp - product.price) / product.mrp) * 100) > 0}
@@ -467,12 +466,12 @@ function selectPrimaryImage() {
 									<div
 										class="mt-2.5 flex flex-wrap items-baseline justify-start gap-1.5 text-xs leading-4">
 										<span class="whitespace-nowrap font-semibold sm:text-sm">
-											{relatedProduct.formattedPrice}
+											{currency(relatedProduct.price, $page.data?.store?.currencySymbol)}
 										</span>
 
 										{#if relatedProduct.mrp > relatedProduct.price}
 											<span class="whitespace-nowrap text-gray-500 line-through">
-												{relatedProduct.formattedMrp}
+												{currency(relatedProduct.mrp, $page.data?.store?.currencySymbol)}
 											</span>
 
 											{#if Math.floor(((relatedProduct.mrp - relatedProduct.price) / relatedProduct.mrp) * 100) > 0}

@@ -14,7 +14,7 @@
 </style>
 
 <script>
-import { dateOnly, toast } from '$lib/util'
+import { currency, dateOnly, toast } from '$lib/util'
 import { fade } from 'svelte/transition'
 import { getAPI } from '$lib/util/api'
 import { goto, invalidateAll } from '$app/navigation'
@@ -518,7 +518,9 @@ async function goCheckbox(item) {
 										<a href="/product/{p.slug}" class="grid grid-cols-6 gap-5">
 											<span class="col-span-5 text-justify">{p.name}</span>
 
-											<span class="col-span-1 whitespace-nowrap">{p.formattedPrice}</span>
+											<span class="col-span-1 whitespace-nowrap">
+												{currency(p.price, $page.data?.store?.currencySymbol)}
+											</span>
 										</a>
 									</li>
 								{/if}
