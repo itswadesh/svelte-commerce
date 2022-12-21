@@ -33,7 +33,9 @@ export async function GET({ request, cookies, locals }) {
 		closedMessage: storeOne.closedMessage,
 		isFnb: storeOne.isFnb,
 		searchbarText: storeOne.searchbarText,
-		adminUrl: settings.adminUrl
+		adminUrl: settings.adminUrl,
+		currencySymbol: storeOne.storeCurrency?.symbol || '$',
+		currencyCode: storeOne.storeCurrency?.isoCode || 'USD'
 	}
 	locals.store = store
 	cookies.set('store', JSON.stringify(store), { path: '/' })

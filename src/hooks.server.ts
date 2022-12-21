@@ -154,8 +154,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 				websiteName: storeOne.websiteName,
 				weightUnit: storeOne.weightUnit,
 				youtubeChannel: storeOne.youtubeChannel,
-				currencyCode: storeOne.currencyCode,
-				currencySymbol: storeOne.currencySymbol
+				currencySymbol: storeOne.storeCurrency?.symbol || '$',
+				currencyCode: storeOne.storeCurrency?.isoCode || 'USD'
 			}
 			event.cookies.set('store', JSON.stringify(store), { path: '/' })
 		} else {

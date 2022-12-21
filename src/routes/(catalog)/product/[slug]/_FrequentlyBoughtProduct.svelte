@@ -113,11 +113,15 @@ let bounceItemFromTop = false
 			<!-- prices -->
 
 			<div class="mx-auto flex max-w-max flex-wrap items-center gap-2">
-				<span class="whitespace-nowrap text-sm"><b>{product.formattedPrice}</b></span>
+				<span class="whitespace-nowrap text-sm">
+					<b>
+						{currency(product.price, $page.data?.store?.currencySymbol)}
+					</b>
+				</span>
 
 				{#if product.mrp > product.price}
 					<span class="whitespace-nowrap text-xs">
-						<strike>{product.formattedMrp}</strike>
+						<strike>{currency(product.mrp, $page.data?.store?.currencySymbol)}</strike>
 					</span>
 
 					{#if product.discount > 0}
