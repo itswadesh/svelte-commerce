@@ -1,11 +1,13 @@
 <h1>Sveltekit is stable now. We started implementing production apps using it.</h1>
 
 ## To start Development
+
 ```
 git clone https://github.com/itswadesh/svelte-commerce.git
 cd svelte-commerce
 npm i
 ```
+
 Make a copy of .env.example and rename to .env
 
 ```
@@ -40,7 +42,7 @@ npm run dev
 - I can make your existing ecommerce fast and scalable with fastest possible time
 
 - Portfolio <a href="https://itswadesh.com/" target="blank">itswadesh.com</a>
-<br/>
+  <br/>
 
 - 🛍️ Attach Svelte store front to <a href="https://admin.litekart.in/"> Litekart </a> and your complete ecommerce tech stack becomes free.
 - 👥 The demo uses litekart as backend
@@ -64,29 +66,29 @@ npm run dev
 ## Update 15-December-2022
 
 - 15-December-2022 - Sveltekit 1.0 - Finally.
+- 05-December-2022 - fix: Close message
+- 30-November-2022 - Fixed: Coupon apply and remove, Added: Back to top fade animation
+- 29-November-2022 - Improved image lazy loading technique
 - 29-November-2022 - Added Price and Discount filters to product catalog
+- 29-November-2022 - Preload data on link hover
+- 25-November-2022 - Service worker added
 - 10-November-2022 - Product options introduced
 - 04-November-2022 - Added verify pincode / zip
 - 03-November-2022 - New slider added for more control over design
 - 02-November-2022 - Cleanup unused packages
 - 31-October-2022 - Dynamic searchbat text
 - 31-October-2022 - Added title, description, keywords
+- 27-October-2022 - Improved megamenu layout
 - 24-October-2022 - fix: login, order success, failed payment, frequently bought together
 - 20-October-2022 - Sentry added
+- 20-October-2022 - Zero-configuration Coolify deployment
+- 16-October-2022 - SEO attributes Added
 - 11-October-2022 - Add to cart animation
-- 04-September-2022 - Service worker added
-- 04-September-2022 - Added Trending Products section
-- 04-September-2022 - Fixed: Coupon apply and remove, Added: Back to top fade animation
-- 04-September-2022 - Improved image lazy loading technique
-- 04-September-2022 - Preload data on link hover
-- 04-September-2022 - Modal based mobile device search instead of page based
-- 04-September-2022 - Improved megamenu layout
-- 04-September-2022 - fix: Close message
-- 04-September-2022 - SEO attributes Added
+- 30-September-2022 - Attached to ResT API Backend, Migrated to new Sveltekit version
+- 12-September-2022 - Modal based mobile device search instead of page based
+- 12-September-2022 - New fully working theme launched
 - 04-September-2022 - Product schema Added
-- 04-September-2022 - Zero-configuration Coolify deployment
-- 04-September-2022 - New fully working theme launched
-- 04-September-2022 - Attached to ResT API Backend, Migrated to new Sveltekit version
+- 26-August-2022 - Added Trending Products section
 - 26-April-2022 - Latest SvelteKit version
 - 26-April-2022 - Improved image lazy loading
 - 26-April-2022 - New Banners section
@@ -154,8 +156,8 @@ Click on the button to directly deploy to Netlify or Vercel. Zero configuration 
 If you like the ideas behind Svelte Commerce and want to become a contributor - join github discussions, check the list of the active issues or contact me directly via swadesh@litekart.in
 
 # Support
+
 - Twitter: [@itswadesh](https://twitter.com/itswadesh)
 - Telegram: [@itswadesh](https://t.me/itswadesh)
 - Email: swadesh@litekart.in
 - Discord: [Invitation](https://discord.gg/VbXyQmUR)
-
