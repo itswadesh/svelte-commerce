@@ -568,7 +568,7 @@ function handleMobileCanvas() {
 
 						{#if data.product?.mrp > data.product?.price}
 							<span class="whitespace-nowrap text-gray-400">
-								MRP <strike>{data.product?.mrp}</strike>
+								MRP <strike>{currency(data.product.mrp, $page.data?.store?.currencySymbol)}</strike>
 							</span>
 
 							{#if data.product?.discount > 0}
