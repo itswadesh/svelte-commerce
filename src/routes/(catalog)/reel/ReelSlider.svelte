@@ -187,7 +187,7 @@ onMount(async () => {
 							</div>
 						</div>
 					</div>
-					<div class="btn-group absolute inset-y-0 right-0 top-20">
+					<div class="btn-group absolute inset-y-0 right-40 top-20">
 						<ul class="btn-group">
 							<li>
 								<button
