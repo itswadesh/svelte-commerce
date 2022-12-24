@@ -6,17 +6,17 @@
 </style>
 
 <script>
-import SEO from '$lib/components/SEO/index.svelte'
-import { toast } from '$lib/util'
-import SingleImageUpload from '$lib/SingleImageUpload.svelte'
-import Textbox from '$lib/ui/Textbox.svelte'
-import Skeleton from '$lib/ui/Skeleton.svelte'
-import dayjs from 'dayjs'
-import { put } from '$lib/util/api'
-import CtrlS from '$lib/components/CtrlS.svelte'
-import Cookie from 'cookie-universal'
 import { page } from '$app/stores'
+import { put } from '$lib/util/api'
+import { toast } from '$lib/util'
+import Cookie from 'cookie-universal'
+import CtrlS from '$lib/components/CtrlS.svelte'
+import dayjs from 'dayjs'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
+import SingleImageUpload from '$lib/SingleImageUpload.svelte'
+import Skeleton from '$lib/ui/Skeleton.svelte'
+import Textbox from '$lib/ui/Textbox.svelte'
 
 export let data
 
@@ -160,8 +160,9 @@ async function saveProfile() {
 							<div class="w-full max-w-md">
 								<Textbox
 									disabled
-									type="text"
-									placeholder="Eg: +91000000000"
+									type="tel"
+									maxlength="10"
+									placeholder="Eg:xxxxxxxxxx"
 									bind:value="{data.profile.phone}"
 									on:input="{() => (formChanged = true)}" />
 							</div>
