@@ -59,7 +59,9 @@
 		"tslib": "^2.4.1",
 		"tw-elements": "1.0.0-alpha13",
 		"typescript": "~4.9.4",
-		"vanilla-lazyload": "^17.8.3",
+		"vanilla-lazyload": "^17.8.3"
+	},
+	"dependencies": {
 		"vite": "^4.0.2"
 	},
 	"type": "module",
