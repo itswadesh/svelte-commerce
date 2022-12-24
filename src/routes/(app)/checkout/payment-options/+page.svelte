@@ -10,13 +10,13 @@
 </style>
 
 <script>
-// import Stripe from '$lib/Stripe.svelte'
 import { currency, toast } from '$lib/util'
 import { fireGTagEvent } from '$lib/util/gTag'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { post } from '$lib/util/api'
+import { stripePublishableKey } from '$lib/config'
 import CheckoutHeader from '$lib/components/CheckoutHeader.svelte'
 import Error from '$lib/components/Error.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
@@ -24,6 +24,7 @@ import logo from '$lib/assets/logo.svg'
 import Pricesummary from '$lib/components/Pricesummary.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+import Stripe from '$lib/Stripe.svelte'
 
 const seoProps = {
 	title: 'Select Payment Option',
@@ -63,7 +64,8 @@ let errorMessage = 'Select a Payment Method',
 		img: ''
 	},
 	paymentDenied = false,
-	razorpayReady = false
+	razorpayReady = false,
+	loading = false
 
 $: if (data.paymentMethods?.length === 1 && data.paymentMethods[0]?.type === 'pg') {
 	const pm = data.paymentMethods[0]
@@ -98,7 +100,7 @@ async function submit(pm) {
 
 	if (paymentMethod === 'cod') {
 		try {
-			data.loading = true
+			loading = true
 			const res = await post(
 				'orders/checkout/cod',
 				{
@@ -114,11 +116,11 @@ async function submit(pm) {
 		} catch (e) {
 			toast(e, 'error')
 		} finally {
-			data.loading = false
+			loading = false
 		}
 	} else if (paymentMethod === 'cashfree') {
 		try {
-			data.loading = true
+			loading = true
 			const res = await post(
 				`payments/checkout-cf`,
 				{ address: data.addressId, store: $page.data.store?.id },
@@ -132,11 +134,11 @@ async function submit(pm) {
 		} catch (e) {
 			toast(e?.message, 'error')
 		} finally {
-			data.loading = false
+			loading = false
 		}
 	} else if (paymentMethod === 'razorpay') {
 		try {
-			data.loading = true
+			loading = true
 			const rp = await post(
 				`payments/checkout-rp`,
 				{
@@ -198,7 +200,7 @@ async function submit(pm) {
 		} catch (e) {
 			toast(e?.message, 'error')
 		} finally {
-			data.loading = false
+			loading = false
 		}
 	} else {
 		paymentDenied = true
@@ -287,11 +289,11 @@ function checkIfStripeCardValid({ detail }) {
 				</div>
 			{/if}
 
-			<!-- <Stripe
-				address="{addressId}"
+			<Stripe
+				address="{data.addressId}"
 				isStripeSelected="{selectedPaymentMethod.name === 'Stripe'}"
 				stripePublishableKey="{stripePublishableKey}"
-				on:isStripeCardValid="{checkIfStripeCardValid}" /> -->
+				on:isStripeCardValid="{checkIfStripeCardValid}" />
 		</div>
 
 		<div class="w-full md:w-80 md:flex-shrink-0 md:flex-grow-0">
@@ -359,24 +361,38 @@ function checkIfStripeCardValid({ detail }) {
 
 			{#if data.prescription}
 				<div class="mt-5 border-t pt-5">
-					<h5 class="mb-2 text-xl font-bold capitalize tracking-wide">Prescription Detail</h5>
+					<h5 class="mb-2 text-xl font-bold capitalize tracking-wide">Prescription</h5>
 
 					<div class="text-sm font-light">
-						<div class="my-1 flex flex-row">
-							<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Name</h5>
+						{#if data.prescription.name}
+							<div class="my-1 flex flex-row">
+								<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Name</h5>
 
-							<p>
-								{data.prescription.name}
-							</p>
-						</div>
+								<p class="flex-1">
+									{data.prescription.name}
+								</p>
+							</div>
+						{/if}
 
-						<div>
-							<LazyImg
-								src="{data.prescription.url}"
-								alt=""
-								height="80"
-								class="h-20 w-auto object-contain object-top text-xs" />
-						</div>
+						{#if data.prescription.description}
+							<div class="my-1 flex flex-row">
+								<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Note</h5>
+
+								<p class="flex-1">
+									{data.prescription.description}
+								</p>
+							</div>
+						{/if}
+
+						{#if data.prescription.url}
+							<div>
+								<LazyImg
+									src="{data.prescription.url}"
+									alt=""
+									height="80"
+									class="h-20 w-auto object-contain object-top text-xs" />
+							</div>
+						{/if}
 					</div>
 				</div>
 			{/if}
@@ -384,7 +400,7 @@ function checkIfStripeCardValid({ detail }) {
 			<Pricesummary
 				cart="{data.cart}"
 				text="{errorMessage || 'Confirm Order'}"
-				loading="{data.loading}"
+				loading="{loading}"
 				hideCheckoutButton="{selectedPaymentMethod.name === 'Stripe'}"
 				disabled="{!razorpayReady ||
 					!selectedPaymentMethod?.name ||
@@ -393,3 +409,10 @@ function checkIfStripeCardValid({ detail }) {
 		</div>
 	</div>
 </div>
+
+{#if loading}
+	<div
+		class="fixed inset-0 z-[100] flex h-screen w-screen items-center justify-center gap-5 bg-black bg-opacity-75 p-5 text-center text-white sm:p-10">
+		Please wait... your payment is currently being processed
+	</div>
+{/if}

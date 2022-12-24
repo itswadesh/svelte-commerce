@@ -146,8 +146,13 @@ async function save(ads) {
 				<div>
 					<h6 class="mb-2 font-semibold">Mobile number <span class="text-red-500">*</span></h6>
 
-					<Textbox type="text" bind:value="{data.ads.phone}" placeholder="Enter Phone No" />
+					<Textbox
+						type="text"
+						maxlength="10"
+						bind:value="{data.ads.phone}"
+						placeholder="Enter Phone No" />
 				</div>
+
 				<div>
 					<h6 class="mb-2 font-semibold">
 						Address (Area and Street) <span class="text-red-500">*</span>

@@ -160,8 +160,9 @@ async function saveProfile() {
 							<div class="w-full max-w-md">
 								<Textbox
 									disabled
-									type="text"
-									placeholder="Eg: +91000000000"
+									type="tel"
+									maxlength="10"
+									placeholder="Eg:xxxxxxxxxx"
 									bind:value="{data.profile.phone}"
 									on:input="{() => (formChanged = true)}" />
 							</div>
