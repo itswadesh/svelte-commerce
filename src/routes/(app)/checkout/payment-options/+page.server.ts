@@ -30,42 +30,46 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 	try {
 		const addressId = url.searchParams.get('address')
 
-		const paymentMethods = [
-			// {
-			// 	active: true,
-			// 	name: 'Cash on Delivery',
-			// 	value: 'cod',
-			// 	img: 'https://cdn-icons-png.flaticon.com/512/2331/2331895.png',
-			// 	color: '',
-			// 	position: 1,
-			// 	key: '',
-			// 	text: 'Pay the full amount when item is delivered',
-			// 	type: 'cod'
-			// },
-			{
-				active: true,
-				name: 'Online with Cashfree',
-				value: 'cashfree',
-				img: 'https://misiki.s3.ap-south-1.amazonaws.com/img/cashfree.jpg',
-				color: '',
-				position: 2,
-				key: '',
-				text: 'Pay the full amount with online / UPI / Wallets / Credit Cards / Debit Cards',
-				type: 'pg'
-			}
-			// {
-			// 	active: true,
-			// 	name: 'Online with Razorpay',
-			// 	value: 'razorpay',
-			// 	img: razorpayIcon,
-			// 	color: '',
-			// 	position: 3,
-			// 	key: '',
-			// 	text: 'Pay the full amount with online / UPI / Wallets / Credit Cards / Debit Cards',
-			// 	type: 'pg'
-			// }
-		]
+		// const paymentMethods = [
+		// 	{
+		// 		active: true,
+		// 		name: 'Cash on Delivery',
+		// 		value: 'cod',
+		// 		img: 'https://cdn-icons-png.flaticon.com/512/2331/2331895.png',
+		// 		color: '',
+		// 		position: 1,
+		// 		key: '',
+		// 		text: 'Pay the full amount when item is delivered',
+		// 		type: 'cod'
+		// 	},
+		// 	{
+		// 		active: true,
+		// 		name: 'Online with Cashfree',
+		// 		value: 'cashfree',
+		// 		img: 'https://misiki.s3.ap-south-1.amazonaws.com/img/cashfree.jpg',
+		// 		color: '',
+		// 		position: 2,
+		// 		key: '',
+		// 		text: 'Pay the full amount with online / UPI / Wallets / Credit Cards / Debit Cards',
+		// 		type: 'pg'
+		// 	},
+		// 	{
+		// 		active: true,
+		// 		name: 'Online with Razorpay',
+		// 		value: 'razorpay',
+		// 		img: razorpayIcon,
+		// 		color: '',
+		// 		position: 3,
+		// 		key: '',
+		// 		text: 'Pay the full amount with online / UPI / Wallets / Credit Cards / Debit Cards',
+		// 		type: 'pg'
+		// 	}
+		// ]
+
 		const address = await gett(`addresses/${addressId}`, request.headers.get('cookie'))
+		const paymentMethods = (
+			await gett(`payment-methods?store=${locals.store?.id}`, request.headers.get('cookie'))
+		).data
 
 		// if (paymentMethods) {
 

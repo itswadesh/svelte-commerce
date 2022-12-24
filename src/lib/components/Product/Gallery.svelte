@@ -6,9 +6,9 @@
 </style>
 
 <script>
+import { onMount } from 'svelte'
 import { slide } from 'svelte/transition'
 import LazyImg from '../Image/LazyImg.svelte'
-import { onMount } from 'svelte'
 
 export let showPhotosModal = false
 export let product = {}
@@ -29,8 +29,7 @@ onMount(async () => {
 
 {#if showPhotosModal}
 	<div
-		class="frosted-black fixed inset-0 z-[60] flex h-screen w-screen items-center justify-center overflow-hidden sm:p-10 lg:p-20"
-		transition:slide="{{ duration: 200 }}">
+		class="frosted-black fixed inset-0 z-50 flex h-screen w-screen items-center justify-center overflow-hidden sm:p-10 lg:p-20">
 		<button
 			type="button"
 			class="fixed top-2 right-2 transform cursor-pointer text-gray-200 transition duration-300 hover:scale-125 hover:text-white lg:top-5 lg:right-5"
@@ -49,20 +48,35 @@ onMount(async () => {
 			</svg>
 		</button>
 
+		<!-- Mobile slider -->
+
 		<div class="relative block md:hidden">
-			<svelte:component this="{Carousel}">
-				{#each product?.images as img, ix}
-					{#if img}
-						<div
-							data-sveltekit-preload-data
-							class="carousel-item relative float-left max-h-screen w-full 
+			{#if product?.images?.length > 1}
+				<svelte:component this="{Carousel}">
+					{#each product?.images as img, ix}
+						{#if img}
+							<div
+								data-sveltekit-preload-data
+								class="carousel-item relative float-left max-h-screen w-full 
 							{ix == 0 ? 'active' : ''}">
-							<img src="{img}" alt="" class="block h-full object-contain" />
-						</div>
-					{/if}
-				{/each}
-			</svelte:component>
+								<img src="{img}" alt="" class="block h-full object-contain" />
+							</div>
+						{/if}
+					{/each}
+				</svelte:component>
+			{:else if product?.images?.length === 1}
+				<div data-sveltekit-preload-data class="max-h-screen w-full">
+					<img src="{product?.images[0]}" alt="" class="block h-full object-contain" />
+				</div>
+			{:else}
+				<div
+					class="max-h-screen w-full flex items-center justify-center text-center text-white text-sm">
+					Oops! No Image found
+				</div>
+			{/if}
 		</div>
+
+		<!-- Desktop Gallery -->
 
 		<div
 			class="container relative mx-auto hidden h-full w-full flex-col items-center justify-between gap-4 overflow-hidden rounded-md bg-black md:flex lg:flex-row">
