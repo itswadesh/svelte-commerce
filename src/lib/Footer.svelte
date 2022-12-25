@@ -45,11 +45,9 @@ onMount(async () => {
 async function getCategories() {
 	try {
 		categories = await getAPI(
-			`categories/megamenu?store=${$page?.data?.store?.id}`,
+			`categories?store=${$page?.data?.store?.id}&megamenu=true&limit=6&page=0&level=0`,
 			$page?.data?.origin
 		)
-
-		// console.log('categories', categories)
 	} catch (e) {
 	} finally {
 	}
@@ -219,12 +217,12 @@ async function getStoreData() {
 				</div>
 			{/each}
 
-			{#if categories}
+			{#if categories?.data}
 				<div>
 					<h1 class="mb-4 whitespace-nowrap font-semibold uppercase">Collections</h1>
 
 					<ul class="flex flex-col gap-1 text-gray-500">
-						{#each categories as category}
+						{#each categories.data as category}
 							<li class="flex max-w-max items-center">
 								<a
 									href="/{category.link || category.slug}"

@@ -63,7 +63,9 @@ export const fetchStore = async () => {
 		const data = { _id: storeOne.id } //await get('store?domain=misiki.io')
 		store.set(data)
 		// await gett('store-one?id=' + storeOne.id)
-		const data1 = (await gett('categories/megamenu?store=' + storeOne.id)).data?.megamenu //get('categories/megamenu', { megamenu: true })
+		const data1 = (
+			await gett(`categories?store=${storeOne.id}&megamenu=true&limit=6&page=0&level=0`)
+		).data
 		megamenu.set(data1)
 	} catch (e) {
 		store.set({})
