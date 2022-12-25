@@ -45,7 +45,7 @@ onMount(async () => {
 async function getCategories() {
 	try {
 		categories = await getAPI(
-			`categories/megamenu?store=${$page?.data?.store?.id}`,
+			`categories?megamenu=true&store=${$page?.data?.store?.id}`,
 			$page?.data?.origin
 		)
 
