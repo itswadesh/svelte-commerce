@@ -33,7 +33,7 @@ export async function GET({ request, cookies, locals }) {
 		closedMessage: storeOne.closedMessage,
 		isFnb: storeOne.isFnb,
 		searchbarText: storeOne.searchbarText,
-		adminUrl: settings.adminUrl,
+		adminUrl: storeOne.adminUrl || settings.adminUrl, // storeOne.adminUrl used for arialmall
 		currencySymbol: storeOne.storeCurrency?.symbol || '$',
 		currencyCode: storeOne.storeCurrency?.isoCode || 'USD'
 	}

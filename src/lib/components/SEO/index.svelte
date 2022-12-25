@@ -90,7 +90,7 @@ export let width = { unitCode: '', value: '' }
 export let wlwmanifestXmlHref = ''
 
 const url = `${WWW_URL}/${slug}`
-const pageTitle = `${title} ${siteTitle}`
+const pageTitle = `${title}`
 const openGraphProps = {
 	article,
 	datePublished,

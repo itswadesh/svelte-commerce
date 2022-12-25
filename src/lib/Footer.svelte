@@ -84,7 +84,7 @@ let footerItems = [
 			{ title: 'Bulk Order Inquiry', link: '/bulk-order-inquiry', new: true },
 			{
 				title: 'Join as Vendor',
-				link: `{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store?.id}`,
+				link: `${$page.data.store?.adminUrl}?role=vendor&store=${$page.data.store?.id}`,
 				new: true,
 				target: '_blank'
 			}
@@ -145,6 +145,7 @@ onMount(async () => {
 async function getStoreData() {
 	const response = await fetch('/server/store')
 	const res = await response.json()
+	console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', res)
 	return res
 }
 // async function getMegamenu() {

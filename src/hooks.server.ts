@@ -127,7 +127,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 				id: storeOne._id,
 				address: storeOne.address,
 				searchbarText: storeOne.searchbarText,
-				adminUrl: settings.adminUrl,
+				adminUrl: storeOne.adminUrl || settings.adminUrl, // storeOne.adminUrl used for arialmall
 				closed: storeOne.closed,
 				closedMessage: storeOne.closedMessage,
 				description: storeOne.description,
