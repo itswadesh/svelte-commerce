@@ -58,6 +58,9 @@ async function getMegaMenu() {
 				// console.log('zzzzzzzzzzzzzzzzzz', megamenu)
 			} else {
 				megamenu = JSON.parse(localMegamenu)
+				if (browser) {
+					localStorage.setItem('megamenu', JSON.stringify(megamenu))
+				}
 			}
 		} catch (e) {
 			toast(e, 'error')
@@ -151,7 +154,8 @@ async function getMegaMenu() {
 
 										{#each c.children as c1, ixx}
 											<li class="w-full">
-												<a data-sveltekit-reload
+												<a
+													data-sveltekit-reload
 													href="/{c1.link || c1.slug}"
 													class="block w-full font-light hover:font-medium">
 													{c1.name}
