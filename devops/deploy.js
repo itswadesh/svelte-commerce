@@ -45,7 +45,7 @@ const host = {
 		'cd ' + REMOTE_DIR,
 		'sudo tar xf arialshop.tar.gz -C ' + REMOTE_DIR,
 		'sudo rm arialshop.tar.gz',
-		'sudo npm install --production --force',
+		'sudo npm install --force',
 		`sudo pm2 start pm2.config.js`,
 		'sudo pm2 reload ' + PM2_NAME
 	]
