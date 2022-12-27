@@ -17,8 +17,6 @@ import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
 
-// console.log('zzzzzzzzzzzzzzzzzz', data)
-
 let seoProps = {
 	title: `Category`,
 	description: `Category`

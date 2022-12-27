@@ -14,7 +14,6 @@ export default (event: FetchEvent): void => {
 						try {
 							const url = event.request.url
 							// event.request.headers.forEach((value, key, parent) => {
-							// 	console.log('zzzzzzzzzzzzzzzzzz', event.request.url, key, value)
 							// })
 							// console.log('To check images', event.request.headers.get('accept'))
 							if (

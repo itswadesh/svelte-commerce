@@ -10,8 +10,6 @@ import PageIdPickedBanner from '$lib/components/PageIdBanners/PageIdPickedBanner
 import { page } from '$app/stores'
 export let data
 
-// console.log('zzzzzzzzzzzzzzzzzz', data)
-
 $: heroBanners = data.banners?.data.filter((b) => {
 	return b.type === 'hero'
 })

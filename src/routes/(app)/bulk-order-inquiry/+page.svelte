@@ -111,8 +111,6 @@ function updateQuantity(detail) {
 
 async function submit() {
 	try {
-		// console.log('zzzzzzzzzzzzzzzzzz', blukOrder)
-
 		const res = await post(
 			'bulk-order-enquiry',
 			{
@@ -128,7 +126,6 @@ async function submit() {
 			$page.data.origin
 		)
 
-		// console.log('zzzzzzzzzzzzzzzzzz', res)
 		contactSuccess = true
 	} catch (e) {
 		err = e
