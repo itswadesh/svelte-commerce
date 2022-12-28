@@ -33,6 +33,8 @@ const seoProps = {
 
 export let data
 
+// console.log('zzzzzzzzzzzzzzzzzz', data)
+
 // $: ({
 // 	loading,
 // 	err,
@@ -87,7 +89,7 @@ function paymentMethodChanged(pm) {
 }
 
 async function submit(pm) {
-	// console.log('pm = ', pm)
+	console.log('pm = ', pm)
 
 	if (!pm || pm === undefined) {
 		disabled = true
@@ -98,7 +100,7 @@ async function submit(pm) {
 
 	const paymentMethod = pm.value
 
-	if (paymentMethod === 'cod') {
+	if (paymentMethod === 'COD') {
 		try {
 			loading = true
 			const res = await post(
@@ -118,7 +120,7 @@ async function submit(pm) {
 		} finally {
 			loading = false
 		}
-	} else if (paymentMethod === 'cashfree') {
+	} else if (paymentMethod === 'Cashfree') {
 		try {
 			loading = true
 			const res = await post(
@@ -136,7 +138,7 @@ async function submit(pm) {
 		} finally {
 			loading = false
 		}
-	} else if (paymentMethod === 'razorpay') {
+	} else if (paymentMethod === 'Razorpay') {
 		try {
 			loading = true
 			const rp = await post(
@@ -241,7 +243,7 @@ function checkIfStripeCardValid({ detail }) {
 								on:click="{() => paymentMethodChanged(pm)}" />
 
 							<div class="flex w-full flex-1 items-center justify-between gap-4">
-								<div>
+								<div class="flex-1">
 									<h2 class="text-xl font-semibold" style="color:{pm.color}">
 										{pm.name}
 									</h2>
@@ -249,13 +251,20 @@ function checkIfStripeCardValid({ detail }) {
 									<p class="mt-1 text-sm text-gray-500">{pm.text}</p>
 								</div>
 
-								<div>
-									<img
-										src="{pm.img}"
-										alt="{pm.name}"
-										width="56"
-										height="56"
-										class="h-14 w-14 rounded-full border object-cover object-center text-xs" />
+								<div class="flex-shrink-0">
+									{#if pm.img}
+										<img
+											src="{pm.img}"
+											alt="{pm.name}"
+											width="56"
+											height="56"
+											class="h-14 w-14 rounded-full border object-cover object-center text-xs" />
+									{:else}
+										<div
+											class="flex h-14 w-14 items-center justify-center rounded-full border bg-gray-200 text-center text-xs uppercase">
+											{pm.name}
+										</div>
+									{/if}
 								</div>
 							</div>
 						</label>
