@@ -1039,7 +1039,7 @@ function handleMobileCanvas() {
 							</svg>
 						</h6>
 
-						<div class="prose overflow-hidden text-sm">
+						<div class="prose max-w-none text-justify text-sm">
 							{@html data.product?.description}
 						</div>
 					</div>
