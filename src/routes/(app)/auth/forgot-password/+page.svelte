@@ -39,8 +39,6 @@ async function submit() {
 			$page.data.origin
 		)
 
-		// console.log('zzzzzzzzzzzzzzzzzz', res)
-
 		await invalidateAll()
 
 		if (browser) goto('/auth/forgot-success')

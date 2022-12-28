@@ -13,18 +13,18 @@
 </style>
 
 <script>
-import { invalidateAll } from '$app/navigation'
+import { applyAction, enhance } from '$app/forms'
+import { currency } from '$lib/util'
+import { fireGTagEvent } from '$lib/util/gTag'
 import { getAPI, post } from '$lib/util/api'
+import { invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
+import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
 import BlackButton from '$lib/ui/BlackButton.svelte'
+import DummyProductCard from '$lib/DummyProductCard.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import WishlistSkeleton from './_WishlistSkeleton.svelte'
-import DummyProductCard from '$lib/DummyProductCard.svelte'
-import { applyAction, enhance } from '$app/forms'
-import { fireGTagEvent } from '$lib/util/gTag'
-import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
-import { currency } from '$lib/util'
 
 export let wishlistedProducts,
 	loadingProduct = []

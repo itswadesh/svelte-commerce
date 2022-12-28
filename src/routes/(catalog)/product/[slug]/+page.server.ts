@@ -26,9 +26,6 @@ export async function load({ params, parent, cookies, locals, request }) {
 // 		const formData = Object.fromEntries(await request.formData())
 // 		try {
 // 			const data = await gett(`pincodes/${formData.zip}`, request.headers.get('cookie'))
-// 			console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', {
-// 				data: data
-// 			})
 // 			return {
 // 				data: data
 // 			}

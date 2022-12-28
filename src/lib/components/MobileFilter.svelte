@@ -31,8 +31,6 @@ export let facets = {},
 	showFilter = false,
 	showSort = false
 
-// console.log('zzzzzzzzzzzzzzzzzz', facets)
-
 let selected
 let megamenu
 let selectedCategory
@@ -61,8 +59,6 @@ async function getMegamenu() {
 					`categories/megamenu?store=${$page.data?.store?.id}`,
 					$page.data.origin
 				)
-
-				// console.log('zzzzzzzzzzzzzzzzzz', megamenu)
 			} else {
 				megamenu = JSON.parse(localmegamenu)
 			}

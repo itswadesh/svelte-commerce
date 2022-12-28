@@ -22,9 +22,6 @@ export async function load({ url, params, locals, fetch, parent, cookies }) {
 		const res2 = await gett(`products?categories=${newArrivals[0]?._id}&store=${store?.id}`)
 		products = res2?.data
 		productsCount = res2?.count
-
-		// console.log('zzzzzzzzzzzzzzzzzz', res1)
-		// console.log('zzzzzzzzzzzzzzzzzz', res2)
 	} catch (e) {
 		err = e
 	} finally {

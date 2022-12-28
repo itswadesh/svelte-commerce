@@ -18,7 +18,7 @@ export const delay = (delayInms) => {
 	})
 }
 
-export const getCdnImageUrl = (src, tr) => {
+export const getCdnImageUrl = (src) => {
 	if (src) {
 		const originalImageUrl = src
 			.replace('https://s3.ap-south-1.amazonaws.com/litekart.in/', '/')
