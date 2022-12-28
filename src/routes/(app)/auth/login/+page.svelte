@@ -79,8 +79,6 @@ async function submit() {
 			$page.data.origin
 		)
 
-		// console.log('zzzzzzzzzzzzzzzzzz', res)
-
 		const me = {
 			email: res.email,
 			phone: res.phone,

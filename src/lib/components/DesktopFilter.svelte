@@ -78,8 +78,6 @@ async function getMegamenu() {
 					`categories/megamenu?store=${$page.data?.store?.id}`,
 					$page.data.origin
 				)
-
-				// console.log('zzzzzzzzzzzzzzzzzz', megamenu)
 			} else {
 				megamenu = JSON.parse(localmegamenu)
 			}

@@ -26,7 +26,9 @@ if (data && data.ads && !data.ads.country) {
 	data.ads.country = 'IN'
 }
 
-async function onCountryChange(country) {}
+async function onCountryChange(country) {
+	getStates(country)
+}
 
 async function getCountries() {
 	try {
@@ -185,8 +187,7 @@ async function save(ads) {
 							bind:value="{data.ads.country}"
 							required
 							class="w-full rounded-md border border-gray-300 bg-white p-2 text-sm placeholder-gray-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-gray-50"
-							on:change="{() => onCountryChange(data.ads.country)}"
-							disabled>
+							on:change="{() => onCountryChange(data.ads.country)}">
 							{#if countries?.data?.length}
 								{#each countries.data as c}
 									{#if c}

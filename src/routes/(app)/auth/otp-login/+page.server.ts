@@ -105,9 +105,7 @@ const verifyOtp: Action = async ({ cookies, request, locals }) => {
 				cookies.set('cartQty', cart.qty, { path: '/' })
 				// cookies.set('cart', JSON.stringify(cart), { path: '/' })
 			}
-		} catch (e) {
-			// console.log('zzzzzzzzzzzzzzzzzz', e)
-		}
+		} catch (e) {}
 		// redirect the user
 		redirect(307, '/')
 		return {}

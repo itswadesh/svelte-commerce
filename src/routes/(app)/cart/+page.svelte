@@ -1,5 +1,5 @@
 <script lang="ts">
-import { currency, date } from '$lib/util'
+import { currency, date, getCdnImageUrl } from '$lib/util'
 import { fireGTagEvent } from '$lib/util/gTag'
 import { fly } from 'svelte/transition'
 import { goto, invalidate, invalidateAll } from '$app/navigation'
@@ -252,8 +252,10 @@ async function getCoupons() {
 													href="{item?.slug}"
 													aria-label="Click to route product details"
 													class="flex-shrink-0 ">
-													<LazyImg
-														src="{item.isCustomizeditem ? item.customizedImg : item.img}"
+													<img
+														src="{getCdnImageUrl(
+															item.isCustomizeditem ? item.customizedImg : item.img
+														)}?tr=w-auto,h-256,cm-pad_resize&sharpen=true"
 														alt=""
 														width="128"
 														class="w-16 cursor-pointer rounded-md object-contain sm:w-32" />
@@ -317,14 +319,18 @@ async function getCoupons() {
 											aria-label="Click to route product details"
 											class="flex-shrink-0 ">
 											{#if item.isCustomized}
-												<LazyImg
-													src="{item.customizedImg}"
+												<img
+													src="{getCdnImageUrl(
+														item.customizedImg
+													)}?tr=w-auto,h-256,cm-pad_resize&sharpen=true"
 													alt=""
 													width="128"
 													class="w-16 cursor-pointer rounded-md object-contain sm:w-32" />
 											{:else}
-												<LazyImg
-													src="{item.img}"
+												<img
+													src="{getCdnImageUrl(
+														item.img
+													)}?tr=w-auto,h-256,cm-pad_resize&sharpen=true"
 													alt=""
 													width="128"
 													class="w-16 cursor-pointer rounded-md object-contain sm:w-32" />

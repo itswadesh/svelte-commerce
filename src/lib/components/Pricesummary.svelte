@@ -15,8 +15,6 @@ export let cart,
 	hideCheckoutButton = false,
 	showNextIcon = false
 
-// console.log('zzzzzzzzzzzzzzzzzz', cart)
-
 function modulo(n, m) {
 	// handle negative numbers
 	return ((n % m) + m) % m

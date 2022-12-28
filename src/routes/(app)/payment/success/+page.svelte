@@ -73,8 +73,6 @@ import WhiteButton from '$lib/ui/WhiteButton.svelte'
 
 export let data
 
-// console.log('zzzzzzzzzzzzzzzzzz', data)
-
 const seoProps = {
 	title: 'Payment Success ',
 	metadescription: 'Payment Success '

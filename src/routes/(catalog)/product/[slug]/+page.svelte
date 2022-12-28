@@ -84,8 +84,6 @@ const cookies = Cookie()
 
 export let data
 
-// console.log('zzzzzzzzzzzzzzzzzz', data)
-
 let seoProps = {
 	// addressCountry: 'India',
 	// addressLocality: 'Semiliguda, Koraput',

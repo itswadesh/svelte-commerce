@@ -377,9 +377,9 @@ async function goCheckbox(item) {
 						</div>
 					</div>
 
-					{#if data.facets.all_aggs.tags?.all?.buckets?.length}
+					{#if data.facets.all_aggs.style_tags?.all?.buckets?.length}
 						<div class="mb-5 flex flex-wrap gap-2 px-3 sm:px-0">
-							{#each data.facets.all_aggs.tags.all.buckets || [] as t}
+							{#each data.facets.all_aggs.style_tags.all.buckets || [] as t}
 								{#if t}
 									<button
 										class="block rounded-full border bg-white py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none hover:border-primary-500 hover:text-primary-500"

@@ -52,7 +52,6 @@ async function submit(n) {
 	try {
 		loading = true
 		const { firstName, lastName, phone, email, password, passwordConfirmation } = n
-
 		const res = await post(
 			'signup',
 			{
@@ -65,8 +64,6 @@ async function submit(n) {
 			},
 			$page.data.origin
 		)
-
-		// console.log('zzzzzzzzzzzzzzzzzz', res)
 
 		const me = {
 			email: res.email,
