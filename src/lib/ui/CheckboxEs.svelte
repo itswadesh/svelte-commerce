@@ -177,7 +177,7 @@ function handleSearchBox() {
 								bind:group="{selectedItems}"
 								value="{i.key}"
 								on:change="{() => dispatch('go', { model, selectedItems })}"
-								class="input-checkbox h-5 w-5 rounded-md border border-gray-200 text-primary-500" />
+								class="input-checkbox h-3.5 w-3.5 rounded-md border border-gray-200 text-primary-500" />
 
 							<!-- {`${selectedItems.toString().search(i.key) === i.key}` ? 'font-medium' : 'font-normal'} -->
 
