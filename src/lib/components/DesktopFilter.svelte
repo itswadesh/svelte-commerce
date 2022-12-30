@@ -202,7 +202,7 @@ function handleToggleSubCategory2(c, cx) {
 						{:else}
 							<a
 								href="/{m.slug}"
-								class="flex w-full items-center justify-between gap-2 py-1 text-left  focus:outline-none hover:text-blue-600">
+								class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 								{m.name}
 							</a>
 						{/if}
@@ -241,7 +241,7 @@ function handleToggleSubCategory2(c, cx) {
 										{:else}
 											<a
 												href="/{c.slug}"
-												class="flex w-full items-center justify-between gap-2 py-1 text-left  focus:outline-none hover:text-blue-600">
+												class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 												{c.name}
 											</a>
 										{/if}
@@ -253,7 +253,7 @@ function handleToggleSubCategory2(c, cx) {
 												{#each c.children as cc}
 													<a
 														href="/{cc.slug}"
-														class="flex w-full items-center justify-between gap-2 py-1 text-left  focus:outline-none hover:text-blue-600">
+														class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 														{cc.name}
 													</a>
 												{/each}
@@ -278,6 +278,84 @@ function handleToggleSubCategory2(c, cx) {
 				title="Brands"
 				model="brands"
 				selectedItems="{fl.brands || []}"
+				on:go="{goCheckbox}" />
+		</div>
+	{/if}
+
+	{#if facets?.all_aggs?.genders?.all?.buckets?.length > 0}
+		<div class="my-3">
+			<hr class="mb-3 w-full" />
+
+			<CheckboxEs
+				items="{facets.all_aggs?.genders?.all?.buckets}"
+				title="Genders"
+				model="genders"
+				selectedItems="{fl.genders || []}"
+				on:go="{goCheckbox}" />
+		</div>
+	{/if}
+
+	{#if facets?.all_aggs?.sizes?.all?.buckets?.length > 0}
+		<div class="my-3">
+			<hr class="mb-3 w-full" />
+
+			<CheckboxEs
+				items="{facets.all_aggs?.sizes?.all?.buckets}"
+				title="Sizes"
+				model="sizes"
+				selectedItems="{fl.sizes || []}"
+				on:go="{goCheckbox}" />
+		</div>
+	{/if}
+
+	{#if facets?.all_aggs?.colors?.all?.buckets?.length > 0}
+		<div class="my-3">
+			<hr class="mb-3 w-full" />
+
+			<CheckboxEs
+				items="{facets.all_aggs?.colors?.all?.buckets}"
+				title="Colors"
+				model="colors"
+				selectedItems="{fl.colors || []}"
+				on:go="{goCheckbox}" />
+		</div>
+	{/if}
+
+	{#if facets?.all_aggs?.themes?.all?.buckets?.length > 0}
+		<div class="my-3">
+			<hr class="mb-3 w-full" />
+
+			<CheckboxEs
+				items="{facets.all_aggs?.themes?.all?.buckets}"
+				title="Themes"
+				model="themes"
+				selectedItems="{fl.themes || []}"
+				on:go="{goCheckbox}" />
+		</div>
+	{/if}
+
+	{#if facets?.all_aggs?.promotions?.all?.buckets?.length > 0}
+		<div class="my-3">
+			<hr class="mb-3 w-full" />
+
+			<CheckboxEs
+				items="{facets.all_aggs?.promotions?.all?.buckets}"
+				title="Promotions"
+				model="promotions"
+				selectedItems="{fl.promotions || []}"
+				on:go="{goCheckbox}" />
+		</div>
+	{/if}
+
+	{#if facets?.all_aggs?.types?.all?.buckets?.length > 0}
+		<div class="my-3">
+			<hr class="mb-3 w-full" />
+
+			<CheckboxEs
+				items="{facets.all_aggs?.types?.all?.buckets}"
+				title="types"
+				model="types"
+				selectedItems="{fl.types || []}"
 				on:go="{goCheckbox}" />
 		</div>
 	{/if}

@@ -378,16 +378,19 @@ async function goCheckbox(item) {
 					</div>
 
 					{#if data.facets.all_aggs.style_tags?.all?.buckets?.length}
-						<div class="mb-5 flex flex-wrap gap-2 px-3 sm:px-0">
-							{#each data.facets.all_aggs.style_tags.all.buckets || [] as t}
-								{#if t}
-									<button
-										class="block rounded-full border bg-white py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none hover:border-primary-500 hover:text-primary-500"
-										on:click="{() => goCheckbox(t.key)}">
-										{t.key} ({t.doc_count})
-									</button>
-								{/if}
-							{/each}
+						<div
+							class="w-screen overflow-x-auto scrollbar-none lg:mb-5 lg:w-full lg:overflow-x-hidden">
+							<div class="inline-flex gap-2 p-3 lg:flex lg:flex-wrap lg:p-0">
+								{#each data.facets.all_aggs.style_tags.all.buckets || [] as t}
+									{#if t}
+										<button
+											class="block whitespace-nowrap rounded-full border bg-white py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none hover:border-primary-500 hover:text-primary-500"
+											on:click="{() => goCheckbox(t.key)}">
+											{t.key} ({t.doc_count})
+										</button>
+									{/if}
+								{/each}
+							</div>
 						</div>
 					{/if}
 

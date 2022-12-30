@@ -222,8 +222,8 @@ $: {
 		transition:fly="{{ x: -50, duration: 300 }}"
 		class="fixed inset-0 z-[100] h-screen w-screen bg-white">
 		<header
-			class="relative grid grid-cols-3 items-center gap-3 p-3 text-center text-lg font-bold tracking-wide shadow-md">
-			<div class="col-span-1 flex items-center justify-self-start">
+			class="relative grid items-center grid-cols-3 gap-3 p-3 text-lg font-bold tracking-wide text-center shadow-md">
+			<div class="flex items-center col-span-1 justify-self-start">
 				<button type="button" class="focus:outline-none" on:click="{() => (showFilter = false)}">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -256,20 +256,20 @@ $: {
 				type="button"
 				loadingringsize="xs"
 				roundedFull
-				class="col-span-1 justify-self-end text-xs"
+				class="col-span-1 text-xs justify-self-end"
 				on:click="{() => (showFilter = false)}">APPLY</PrimaryButton>
 
 			<!-- <button
 				on:click="{clearFilters}"
-				class="absolute inset-y-0 right-4 text-right text-xs text-primary-500 hover:underline focus:outline-none">
+				class="absolute inset-y-0 text-xs text-right right-4 text-primary-500 hover:underline focus:outline-none">
 				Clear All
 			</button> -->
 		</header>
 
-		<div class="flex h-full items-start">
+		<div class="flex items-start h-full">
 			<!-- Left Section -->
 
-			<div class="flex h-full w-2/6 flex-col border-r border-b bg-gray-100">
+			<div class="flex flex-col w-2/6 h-full bg-gray-100 border-b border-r">
 				{#if facets?.all_aggs?.age?.all?.buckets?.length > 0}
 					<button
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide focus:outline-none 
@@ -291,6 +291,71 @@ $: {
 							: 'border-gray-100 bg-transparent'}"
 						on:click="{() => (selected = 'Brands')}">
 						Brands
+					</button>
+
+					<hr class="w-full" />
+				{/if}
+
+				{#if facets?.all_aggs?.genders?.all?.buckets?.length > 0}
+					<button
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide focus:outline-none 
+						{selected === 'genders'
+							? 'text-primary-500 border-primary-500 bg-white'
+							: 'border-gray-100 bg-transparent'}"
+						on:click="{() => (selected = 'genders')}">
+						Genders
+					</button>
+
+					<hr class="w-full" />
+				{/if}
+
+				{#if facets?.all_aggs?.sizes?.all?.buckets?.length > 0}
+					<button
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide focus:outline-none 
+						{selected === 'sizes'
+							? 'text-primary-500 border-primary-500 bg-white'
+							: 'border-gray-100 bg-transparent'}"
+						on:click="{() => (selected = 'sizes')}">
+						Sizes
+					</button>
+
+					<hr class="w-full" />
+				{/if}
+
+				{#if facets?.all_aggs?.themes?.all?.buckets?.length > 0}
+					<button
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide focus:outline-none 
+						{selected === 'themes'
+							? 'text-primary-500 border-primary-500 bg-white'
+							: 'border-gray-100 bg-transparent'}"
+						on:click="{() => (selected = 'themes')}">
+						Themes
+					</button>
+
+					<hr class="w-full" />
+				{/if}
+
+				{#if facets?.all_aggs?.promotions?.all?.buckets?.length > 0}
+					<button
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide focus:outline-none 
+						{selected === 'promotions'
+							? 'text-primary-500 border-primary-500 bg-white'
+							: 'border-gray-100 bg-transparent'}"
+						on:click="{() => (selected = 'promotions')}">
+						Promotions
+					</button>
+
+					<hr class="w-full" />
+				{/if}
+
+				{#if facets?.all_aggs?.types?.all?.buckets?.length > 0}
+					<button
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide focus:outline-none 
+						{selected === 'types'
+							? 'text-primary-500 border-primary-500 bg-white'
+							: 'border-gray-100 bg-transparent'}"
+						on:click="{() => (selected = 'types')}">
+						Types
 					</button>
 
 					<hr class="w-full" />
@@ -507,11 +572,11 @@ $: {
 					<div
 						class="h-[93vh] w-full overflow-y-auto overflow-x-hidden p-4"
 						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
-						<ul class="flex cursor-pointer flex-col text-sm">
+						<ul class="flex flex-col text-sm cursor-pointer">
 							{#if megamenu}
 								<!-- 1st level categories -->
 
-								<ul class="flex w-full cursor-pointer flex-col text-sm">
+								<ul class="flex flex-col w-full text-sm cursor-pointer">
 									{#each megamenu as m, mx}
 										<li>
 											{#if m.children?.length}
@@ -524,7 +589,7 @@ $: {
 
 													<button
 														type="button"
-														class="overflow-hidden p-1 focus:outline-none"
+														class="p-1 overflow-hidden focus:outline-none"
 														on:click="{() => handleToggleSubCategory(m, mx)}">
 														<svg
 															xmlns="http://www.w3.org/2000/svg"
@@ -542,7 +607,7 @@ $: {
 											{:else}
 												<a
 													href="/{m.slug}"
-													class="flex w-full items-center justify-between gap-2 py-1 text-left  focus:outline-none hover:text-blue-600">
+													class="flex items-center justify-between w-full gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 													{m.name}
 												</a>
 											{/if}
@@ -563,7 +628,7 @@ $: {
 
 																	<button
 																		type="button"
-																		class="overflow-hidden p-1 focus:outline-none"
+																		class="p-1 overflow-hidden focus:outline-none"
 																		on:click="{() => handleToggleSubCategory2(c, cx)}">
 																		<svg
 																			xmlns="http://www.w3.org/2000/svg"
@@ -581,7 +646,7 @@ $: {
 															{:else}
 																<a
 																	href="/{c.slug}"
-																	class="flex w-full items-center justify-between gap-2 py-1 text-left  focus:outline-none hover:text-blue-600">
+																	class="flex items-center justify-between w-full gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 																	{c.name}
 																</a>
 															{/if}
@@ -593,7 +658,7 @@ $: {
 																	{#each c.children as cc}
 																		<a
 																			href="/{cc.slug}"
-																			class="flex w-full items-center justify-between gap-2 py-1 text-left  focus:outline-none hover:text-blue-600">
+																			class="flex items-center justify-between w-full gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 																			{cc.name}
 																		</a>
 																	{/each}
@@ -617,14 +682,14 @@ $: {
 			class="absolute inset-x-0 bottom-0 z-[100] flex items-center divide-x-2 divide-gray-300 border-2 border-gray-300 bg-white">
 			<button
 				type="button"
-				class="w-1/2 p-3 text-center font-bold tracking-wide focus:outline-none"
+				class="w-1/2 p-3 font-bold tracking-wide text-center focus:outline-none"
 				on:click="{() => (showFilter = false)}">
 				Cancel
 			</button>
 
 			<button
 				type="button"
-				class="w-1/2 p-3 text-center font-bold tracking-wide focus:outline-none"
+				class="w-1/2 p-3 font-bold tracking-wide text-center focus:outline-none"
 				on:click="{() => (showFilter = false)}">
 				Apply
 			</button>
@@ -636,19 +701,19 @@ $: {
 	<div class="fixed inset-0 z-[100] flex h-screen w-screen items-end bg-black bg-opacity-50">
 		<button
 			type="button"
-			class="fixed inset-0 h-screen w-screen focus:outline-none"
+			class="fixed inset-0 w-screen h-screen focus:outline-none"
 			on:click="{() => (showSort = false)}"></button>
 
 		<div
 			transition:fly="{{ y: 626, duration: 300 }}"
-			class="relative z-10 max-h-max w-full rounded-t-lg bg-white">
-			<div class="flex items-center justify-between gap-5 border-b  border-gray-300 p-3 text-sm">
+			class="relative z-10 w-full bg-white rounded-t-lg max-h-max">
+			<div class="flex items-center justify-between gap-5 p-3 text-sm border-b border-gray-300">
 				<span>Sort</span>
 
 				<button type="button" class="focus:outline-none" on:click="{() => (showSort = false)}">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
-						class="h-4 w-4 text-gray-500"
+						class="w-4 h-4 text-gray-500"
 						viewBox="0 0 20 20"
 						fill="currentColor">
 						<path
@@ -664,7 +729,7 @@ $: {
 					<li>
 						<button
 							type="button"
-							class="text-left text-sm w-full font-semibold tracking-wide focus:outline-none"
+							class="w-full text-sm font-semibold tracking-wide text-left focus:outline-none"
 							on:click="{() => sortNow(s.val) && (showSort = false)}">
 							{s.name}
 						</button>
