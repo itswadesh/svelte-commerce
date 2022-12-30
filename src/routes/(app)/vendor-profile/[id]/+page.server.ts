@@ -6,11 +6,10 @@ export async function load({ params, parent, setHeaders }) {
 	let vendorId = params.id
 
 	const vendor = await gett(`vendors/${vendorId}?store=${store.id}`)
-	// const vendorContents = await gett(`products?vendors=${vendorId}&store=${store.id}`)
+	const vendorProducts = await gett(`products?vendors=${vendorId}&store=${store.id}`)
 
 	if (vendor) {
-		// vendorContents
-		return { vendor }
+		return { vendor, vendorProducts }
 	}
 
 	throw error(404, 'User not found')
