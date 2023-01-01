@@ -8,7 +8,7 @@ export const description = ''
 export const domain = 'litekart.in'
 export const email = 'hi@misiki.in'
 export const facebookPage = 'https://www.facebook.com/misiki/'
-export const GOOGLE_ANALYTICS_ID = 'G-ZMZXZWG90W'
+export const GOOGLE_ANALYTICS_ID = 'G-BG3JKWLYPF'
 export const GOOGLE_CLIENT_ID =
 	'414060469322-n4raqj2rdbjhegvrtdk6mhbdm4sd0oc7.apps.googleusercontent.com'
 export const instagramPage = 'https://www.instagram.com/misiki/'
