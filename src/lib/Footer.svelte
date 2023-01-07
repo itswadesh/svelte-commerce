@@ -145,7 +145,7 @@ onMount(async () => {
 async function getStoreData() {
 	const response = await fetch('/server/store')
 	const res = await response.json()
-	console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', res)
+	// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', res)
 	return res
 }
 // async function getMegamenu() {
