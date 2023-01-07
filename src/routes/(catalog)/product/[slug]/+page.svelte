@@ -268,7 +268,7 @@ async function addToBag(p, customizedImg, customizedJson) {
 		// console.log('selectedLinkiedProducts inside add to cart function =', selectedLinkiedProducts)
 		const response = await fetch('/server/cart')
 		cart = await response.json()
-		console.error('Cart called after add to cart', cart.cart_id, cart.qty)
+		// console.error('Cart called after add to cart', cart.cart_id, cart.qty)
 		if (cart) {
 			const cookieCart = {
 				cartId: cart?.cart_id,
