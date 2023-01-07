@@ -5,17 +5,17 @@ module.exports = {
 		extend: {
 			colors: {
 				primary: {
-					50: '#ecf3fb' /* very very light blue */,
-					100: '#ccdef4' /* very light blue */,
-					200: '#accaed' /* light blue */,
-					500: '#112D4E' /* blue */,
-					600: '#0a1a2e' /* dark blue */,
-					700: '#03080e' /* more darker blue */
+					50: '#f8f1f2' /* very very light rose gold */,
+					100: '#f2e4e6' /* very light rose gold */,
+					200: '#ebd7da' /* light rose gold */,
+					500: '#b76e79' /* rose gold */,
+					600: '#b0616d' /* dark rose gold */,
+					700: '#aa5461' /* more darker rose gold */
 				},
 				secondary: {
-					100: '#daffda' /* light green */,
-					500: '#1a6b1a' /* green */,
-					600: '#165c16' /* dark green */
+					100: '#f8e2ff' /* light purple */,
+					500: '#df80ff' /* purple */,
+					600: '#da6cff' /* dark purple */
 				},
 				accent: {
 					100: '#ffffd8' /* light-yellow */,
