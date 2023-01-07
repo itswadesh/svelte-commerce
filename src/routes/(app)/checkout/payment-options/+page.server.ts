@@ -68,7 +68,10 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 
 		const address = await gett(`addresses/${addressId}`, request.headers.get('cookie'))
 		const paymentMethods = (
-			await gett(`payment-methods?store=${locals.store?.id}`, request.headers.get('cookie'))
+			await gett(
+				`payment-methods?store=${locals.store?.id}&active=true`,
+				request.headers.get('cookie')
+			)
 		).data
 
 		// if (paymentMethods) {
