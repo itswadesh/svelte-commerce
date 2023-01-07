@@ -26,6 +26,8 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import appStore from '$lib/assets/app/app-store.svg'
 import googlePlay from '$lib/assets/app/google-play.png'
+import StoreInformationFooter from './components/StoreInformationFooter.svelte'
+import { getAPI } from './util/api'
 
 export let me, store, popularSearches, megamenu
 
@@ -33,6 +35,23 @@ export let me, store, popularSearches, megamenu
 
 export { clazz as class }
 let clazz = ''
+
+let categories
+
+onMount(async () => {
+	await getCategories()
+})
+
+async function getCategories() {
+	try {
+		categories = await getAPI(
+			`categories?store=${$page?.data?.store?.id}&megamenu=true&limit=6&page=0&level=0`,
+			$page?.data?.origin
+		)
+	} catch (e) {
+	} finally {
+	}
+}
 
 function getYear() {
 	const d = new Date()
@@ -42,35 +61,30 @@ function getYear() {
 
 let footerItems = [
 	{
-		heading: 'Company',
+		heading: 'Store Info',
 		subMenu: [
 			{ title: 'About Us', link: '/about-us', new: false },
-			{ title: 'Privacy Policy', link: '/p/privacy-policy', new: false },
+			{ title: 'Privacy Policy', link: '/privacy-policy', new: false },
 			{
 				title: 'Terms & Conditions',
-				link: '/p/terms-conditions',
+				link: '/terms-conditions',
 				new: false
 			},
 			{
 				title: 'Payments & Returns',
-				link: '/p/payments-returns',
+				link: '/payments-returns',
 				new: false
 			},
 			{
 				title: 'Printing Terms & Cancellation Policy',
-				link: '/p/printing-terms-cancellation-policy',
+				link: '/printing-terms-cancellation-policy',
 				new: false
-			}
-		]
-	},
-	{
-		heading: 'Customer service',
-		subMenu: [
+			},
 			{ title: 'Track Your Order', link: '/my/orders?sort=-updatedAt', new: false },
 			{ title: 'Bulk Order Inquiry', link: '/bulk-order-inquiry', new: true },
 			{
 				title: 'Join as Vendor',
-				link: `{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store?.id}`,
+				link: `${$page.data.store?.adminUrl}?role=vendor&store=${$page.data.store?.id}`,
 				new: true,
 				target: '_blank'
 			}
@@ -98,7 +112,7 @@ const items = [
 	},
 	{
 		label: 'Account',
-		link: me?.active ? '/my' : '/auth/otp-login',
+		link: me?.active ? '/my' : $page.data.loginUrl || '/auth/login',
 		icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`
 	}
 ]
@@ -131,6 +145,7 @@ onMount(async () => {
 async function getStoreData() {
 	const response = await fetch('/server/store')
 	const res = await response.json()
+	// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', res)
 	return res
 }
 // async function getMegamenu() {
@@ -162,12 +177,14 @@ async function getStoreData() {
 // }
 </script>
 
-<div
+<!-- <div
 	class="bg-gradient-to-r from-primary-500 to-secondary-500 p-3 text-center tracking-wide text-white sm:px-10">
 	<p class="mb-1 text-xl font-semibold uppercase">Truly Indian Brand</p>
 
-	<!-- <p>Over <span class="font-semibold">2 Million</span> Happy Customers</p> -->
-</div>
+	<p>Over <span class="font-semibold">2 Million</span> Happy Customers</p>
+</div> -->
+
+<!-- <StoreInformationFooter /> -->
 
 <footer class="w-full justify-center bg-gray-50 p-3 text-sm sm:p-10">
 	<div class="container mx-auto max-w-6xl">
@@ -200,6 +217,32 @@ async function getStoreData() {
 					</ul>
 				</div>
 			{/each}
+
+			{#if categories?.data}
+				<div>
+					<h1 class="mb-4 whitespace-nowrap font-semibold uppercase">Collections</h1>
+
+					<ul class="flex flex-col gap-1 text-gray-500">
+						{#each categories.data as category}
+							<li class="flex max-w-max items-center">
+								<a
+									href="/{category.link || category.slug}"
+									aria-label="Click to route this page"
+									class="link-underline link-underline-gray whitespace-pre-wrap">
+									{category.name}
+								</a>
+
+								{#if category.new}
+									<div
+										class="ml-2 max-w-max rounded bg-primary-500 py-[0.1rem] px-1 text-[0.5rem] font-semibold leading-3 tracking-wider text-white">
+										NEW
+									</div>
+								{/if}
+							</li>
+						{/each}
+					</ul>
+				</div>
+			{/if}
 
 			<div>
 				<h1 class="mb-4 whitespace-nowrap font-semibold uppercase">Contact Us</h1>
