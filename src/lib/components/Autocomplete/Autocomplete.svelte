@@ -1,12 +1,15 @@
 <script>
-import { getAPI } from '$lib/util/api'
 import { createEventDispatcher, onMount } from 'svelte'
-import AutocompleteItem from './AutocompleteItem.svelte'
+import { getAPI } from '$lib/util/api'
 import { page } from '$app/stores'
+import AutocompleteItem from './AutocompleteItem.svelte'
 
 export let placeholder = 'Search Products'
-let inputObject = null
+
 let data
+let inputObject = null
+let showSuggestionOptions = false
+
 const dispatch = createEventDispatcher()
 
 onMount(async () => {
@@ -131,7 +134,10 @@ const navigateList = (e) => {
 <!-- <svelte:window on:keydown="{navigateList}" /> -->
 
 <form autocomplete="off" on:submit|preventDefault="{submitValue}" class="relative">
-	<div class="relative">
+	<button
+		type="button"
+		class="relative w-full focus:outline-none"
+		on:click="{() => (showSuggestionOptions = !showSuggestionOptions)}">
 		<input
 			id="data-input"
 			type="text"
@@ -156,12 +162,12 @@ const navigateList = (e) => {
 					clip-rule="evenodd"></path>
 			</svg>
 		</button>
-	</div>
+	</button>
 
 	<!-- FILTERED LIST OF DATA -->
 
-	{#if filteredData?.length > 0}
-		<ul class="absolute top-12 w-full border-l border-r border-t bg-white shadow-xl">
+	{#if filteredData?.length > 0 && showSuggestionOptions}
+		<ul class="absolute top-12 z-40 w-full border-t border-l border-r bg-white shadow-xl">
 			{#each filteredData as d, i}
 				<AutocompleteItem
 					itemLabel="{d.name}"
