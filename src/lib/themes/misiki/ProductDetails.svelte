@@ -679,7 +679,7 @@ async function updateVariant(variant) {
 
 				<!-- Delivery Options Mobile -->
 
-				{#if data.product?.deliveryDetails || $page.data.store?.isIndianPincodes}
+				{#if data.product?.handling_time_when_stock || data.product?.handling_time_when_nis || $page.data.store?.isIndianPincodes}
 					<div class="sm:hidden block">
 						<div class="mb-2 flex items-center gap-2 uppercase">
 							<h5>Delivery Options</h5>
@@ -699,13 +699,23 @@ async function updateVariant(variant) {
 							</svg>
 						</div>
 
-						{#if data.product?.deliveryDetails}
-							<span class="text-sm bg-yellow-300 px-2 py-1 max-w-max">
-								{data.product?.deliveryDetails}
-							</span>
-						{:else if $page.data.store?.isIndianPincodes}
-							<DeliveryOptions product="{data.product}" deliveryDetails="{data.deliveryDetails}" />
-						{/if}
+						<div class="flex flex-col gap-5">
+							{#if data.product?.hasStock && data.product?.handling_time_when_stock}
+								<span class="text-sm bg-yellow-300 px-2 py-1 max-w-max">
+									{data.product?.handling_time_when_stock}
+								</span>
+							{:else if !data.product?.hasStock && data.product?.handling_time_when_nis}
+								<span class="text-sm bg-yellow-300 px-2 py-1 max-w-max">
+									{data.product?.handling_time_when_nis}
+								</span>
+							{/if}
+
+							{#if $page.data.store?.isIndianPincodes}
+								<DeliveryOptions
+									product="{data.product}"
+									deliveryDetails="{data.deliveryDetails}" />
+							{/if}
+						</div>
 					</div>
 				{/if}
 
@@ -1215,7 +1225,7 @@ async function updateVariant(variant) {
 					</div>
 				{/if}
 
-				{#if $page?.data?.store?.allowBackOrder}
+				{#if $page?.data?.store?.allowBackOrder || data.product?.allow_back_order}
 					<form
 						id="create_back_order"
 						in:fade="{{ duration: 300 }}"
@@ -1224,13 +1234,9 @@ async function updateVariant(variant) {
 						use:enhance="{() => {
 							return async ({ result }) => {
 								// console.log('result of add to cart', result)
-								result?.data?.qty < 0
-									? fireGTagEvent('remove_from_cart', result?.data)
-									: fireGTagEvent('add_to_cart', result?.data)
-								bounceItemFromTop = true
-								setTimeout(() => {
-									bounceItemFromTop = false
-								}, 3000)
+
+								toast('Your back order is created successfully', 'success')
+
 								await invalidateAll()
 								await applyAction(result)
 							}
@@ -1526,7 +1532,7 @@ async function updateVariant(variant) {
 
 				<!-- Delivery Options Desktop -->
 
-				{#if data.product?.deliveryDetails || $page.data.store?.isIndianPincodes}
+				{#if data.product?.handling_time_when_stock || data.product?.handling_time_when_nis || $page.data.store?.isIndianPincodes}
 					<div class="hidden sm:block">
 						<div class="mb-2 flex items-center gap-2 uppercase">
 							<h5>Delivery Options</h5>
@@ -1546,16 +1552,24 @@ async function updateVariant(variant) {
 							</svg>
 						</div>
 
-						{#if data.product?.deliveryDetails}
-							<div class="text-sm bg-yellow-300 px-2 py-1 max-w-max">
-								{data.product?.deliveryDetails}
-							</div>
-						{:else if $page.data.store?.isIndianPincodes}
-							<DeliveryOptions product="{data.product}" deliveryDetails="{data.deliveryDetails}" />
-						{/if}
-					</div>
+						<div class="flex flex-col gap-5">
+							{#if data.product?.hasStock && data.product?.handling_time_when_stock}
+								<span class="text-sm bg-yellow-300 px-2 py-1 max-w-max">
+									{data.product?.handling_time_when_stock}
+								</span>
+							{:else if !data.product?.hasStock && data.product?.handling_time_when_nis}
+								<span class="text-sm bg-yellow-300 px-2 py-1 max-w-max">
+									{data.product?.handling_time_when_nis}
+								</span>
+							{/if}
 
-					<hr class="hidden sm:block" />
+							{#if $page.data.store?.isIndianPincodes}
+								<DeliveryOptions
+									product="{data.product}"
+									deliveryDetails="{data.deliveryDetails}" />
+							{/if}
+						</div>
+					</div>
 				{/if}
 
 				<!-- Ratings & Reviews -->
