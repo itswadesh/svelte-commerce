@@ -71,6 +71,7 @@ import RadioColor from '$lib/ui/RadioColor.svelte'
 import RadioSize from '$lib/ui/RadioSize.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import SimilarProducts from '$lib/components/Product/SimilarProducts.svelte'
+import SocialSharingButtons from '$lib/components/SocialSharingButtons.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 import UserForm from '$lib/components/Product/UserForm.svelte'
@@ -83,6 +84,8 @@ const dispatch = createEventDispatcher()
 const cookies = Cookie()
 
 export let data
+
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -443,12 +446,16 @@ function handleMobileCanvas() {
 
 <div class="mb-20 min-h-screen sm:mb-0 md:p-10">
 	<div class="md:container md:mx-auto">
-		<!-- Breadcrumb -->
+		<div class="mb-5 flex flex-wrap items-start justify-between gap-4">
+			<!-- Breadcrumb -->
 
-		<div class="mb-5 hidden lg:block">
 			<Breadcrumb
 				categoryPool="{data.product?.categoryPool}"
 				currentProductName="{data.product?.name}" />
+
+			<!-- Social Share -->
+
+			<SocialSharingButtons product="{data.product}" />
 		</div>
 
 		<div class="mb-5 grid grid-cols-1 items-start gap-5 sm:mb-10 sm:gap-10 lg:grid-cols-5">
@@ -667,7 +674,7 @@ function handleMobileCanvas() {
 								{#if tag?.name && tag?.type === 'Ribbon'}
 									<div
 										class="py-1 px-2 text-xs font-semibold uppercase text-white"
-										style="background-color: {tag.colorCode};">
+										style="background-color: {tag.colorCode || '#000000'};">
 										{tag.name}
 									</div>
 								{/if}

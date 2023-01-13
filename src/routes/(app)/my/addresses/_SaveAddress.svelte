@@ -1,22 +1,25 @@
 <script>
-import CtrlS from '$lib/components/CtrlS.svelte'
-import Error from '$lib/components/Error.svelte'
-import Textbox from '$lib/ui/Textbox.svelte'
-import { toast } from '$lib/util'
+import { createEventDispatcher, onMount } from 'svelte'
 import { getAPI, post } from '$lib/util/api'
 import { goto } from '$app/navigation'
-import { createEventDispatcher, onMount } from 'svelte'
-import ToggleSwitch from '$lib/ui/ToggleSwitch.svelte'
-import Textarea from '$lib/ui/Textarea.svelte'
 import { page } from '$app/stores'
+import { toast } from '$lib/util'
+import CtrlS from '$lib/components/CtrlS.svelte'
+import Error from '$lib/components/Error.svelte'
+import Textarea from '$lib/ui/Textarea.svelte'
+import Textbox from '$lib/ui/Textbox.svelte'
+import ToggleSwitch from '$lib/ui/ToggleSwitch.svelte'
+
 const dispatch = createEventDispatcher()
 
 let err = null
-let loading = false
 let formChanged = false
-export let states = false
-export let countries = false
+let loading = false
+
 export let address = {}
+export let countries = false
+export let states = false
+
 function saveImage({ detail, field }) {
 	address[field] = detail
 	SaveAddress(address)
@@ -58,7 +61,9 @@ async function SaveAddress(address) {
 		formChanged = false
 	}
 }
+
 // onMount(async () => {})
+
 async function onCountryChange(country) {
 	// 	formChanged = true
 	// 	await getAPI('states', { limit: 300, page: 0, countryCode: country })
