@@ -384,7 +384,7 @@ function selectPrimaryImage() {
 			</div>
 
 			{#if !product.hasStock && !show}
-				<p class="absolute inset-x-0 bottom-[5.8rem] text-center text-xs text-red-500">
+				<p class="absolute inset-x-0 bottom-[5.5rem] text-center text-xs text-red-500">
 					Out of Stock
 				</p>
 			{/if}
