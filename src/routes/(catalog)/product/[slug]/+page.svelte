@@ -587,6 +587,10 @@ function handleMobileCanvas() {
 					<p class="text-sm font-semibold text-green-700">Inclusive of all taxes</p>
 				</div>
 
+				{#if data.product?.term}
+					<p class="prose mt-2">{@html data.product?.term}</p>
+				{/if}
+
 				<!-- ratings -->
 
 				{#if productReview?.summary?.avg > 0}
