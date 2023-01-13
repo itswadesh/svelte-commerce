@@ -5,12 +5,12 @@ module.exports = {
 		extend: {
 			colors: {
 				primary: {
-					50: '#f8f1f2' /* very very light rose gold */,
-					100: '#f2e4e6' /* very light rose gold */,
-					200: '#ebd7da' /* light rose gold */,
-					500: '#b76e79' /* rose gold */,
-					600: '#b0616d' /* dark rose gold */,
-					700: '#aa5461' /* more darker rose gold */
+					50: '#f8efed' /* very very light rose gold */,
+					100: '#f3e3df' /* very light rose gold */,
+					200: '#edd6d1' /* light rose gold */,
+					500: '#ddb1a6' /* rose gold */,
+					600: '#d8a598' /* dark rose gold */,
+					700: '#d2988a' /* more darker rose gold */
 				},
 				secondary: {
 					100: '#f8e2ff' /* light purple */,
