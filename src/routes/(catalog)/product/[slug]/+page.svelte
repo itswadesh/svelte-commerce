@@ -384,7 +384,7 @@ $: {
 
 async function toggleWishlist(id) {
 	if (!$page.data.me) {
-		goto(`${$page.data.loginUrl || '/auth/login'}?ref=/my/wishlist/add/${id}`)
+		goto(`${$page.data?.loginUrl || '/auth/login'}?ref=/my/wishlist/add/${id}`)
 	}
 
 	try {
