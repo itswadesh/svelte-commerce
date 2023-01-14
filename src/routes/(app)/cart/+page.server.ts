@@ -126,6 +126,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 		if (cart) {
 			const cartObj = {
 				cartId: cart?.cart_id,
+				codCharges: res?.codCharges,
 				currencySymbol: cart?.currencySymbol,
 				discount: cart?.discount,
 				formattedAmount: cart?.formattedAmount,
