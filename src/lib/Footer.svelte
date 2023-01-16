@@ -82,6 +82,7 @@ let footerItems = [
 			},
 			{ title: 'Track Your Order', link: '/my/orders?sort=-updatedAt', new: false },
 			{ title: 'Bulk Order Inquiry', link: '/bulk-order-inquiry', new: true },
+			{ title: 'Blogs', link: '/blogs', new: false },
 			{
 				title: 'Join as Vendor',
 				link: `${$page.data.store?.adminUrl}?role=vendor&store=${$page.data.store?.id}`,
