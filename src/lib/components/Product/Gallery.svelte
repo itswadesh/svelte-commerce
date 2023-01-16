@@ -6,6 +6,7 @@
 </style>
 
 <script>
+import { SplideSlide } from '@splidejs/svelte-splide'
 import { onMount } from 'svelte'
 import { slide } from 'svelte/transition'
 import LazyImg from '../Image/LazyImg.svelte'
@@ -20,10 +21,12 @@ $: if (product) {
 	selectedimg = product?.images[selectedImgIndex]
 }
 
-let Carousel
+let Carousel, Splide
 onMount(async () => {
-	const RTEmodule = await import('$lib/components/TwECarousel.svelte')
-	Carousel = RTEmodule.default
+	// const RTEmodule = await import('$lib/components/TwECarousel.svelte')
+	// Carousel = RTEmodule.default
+	const SplideModule = await import('$lib/components/SplideJs.svelte')
+	Splide = SplideModule.default
 })
 </script>
 
@@ -50,27 +53,55 @@ onMount(async () => {
 
 		<!-- Mobile slider -->
 
-		<div class="relative block md:hidden">
+		<div class="relative block lg:hidden">
 			{#if product?.images?.length > 1}
-				<svelte:component this="{Carousel}">
+				<svelte:component
+					this="{Splide}"
+					options="{{
+						rewind: true,
+						lazyLoad: true,
+						perPage: 1,
+						perMove: 1
+						// breakpoints: {
+						// 640: {
+						// 	perPage: 1,
+						// 	perMove: 1,
+						// 	arrows: false
+						// }
+						// }
+					}}">
+					{#each product?.images as img}
+						{#if img}
+							<SplideSlide>
+								<div class="itmes-center jusrify-center flex h-full w-full p-2 sm:p-5">
+									<img
+										src="{img}"
+										alt=""
+										class="block h-full w-full object-contain object-center" />
+								</div>
+							</SplideSlide>
+						{/if}
+					{/each}
+				</svelte:component>
+
+				<!-- <svelte:component this="{Carousel}">
 					{#each product?.images as img, ix}
 						{#if img}
 							<div
-								data-sveltekit-preload-data
 								class="carousel-item relative float-left max-h-screen w-full 
 							{ix == 0 ? 'active' : ''}">
 								<img src="{img}" alt="" class="block h-full object-contain" />
 							</div>
 						{/if}
 					{/each}
-				</svelte:component>
+				</svelte:component> -->
 			{:else if product?.images?.length === 1}
 				<div data-sveltekit-preload-data class="max-h-screen w-full">
 					<img src="{product?.images[0]}" alt="" class="block h-full object-contain" />
 				</div>
 			{:else}
 				<div
-					class="max-h-screen w-full flex items-center justify-center text-center text-white text-sm">
+					class="flex max-h-screen w-full items-center justify-center text-center text-sm text-white">
 					Oops! No Image found
 				</div>
 			{/if}
@@ -79,11 +110,11 @@ onMount(async () => {
 		<!-- Desktop Gallery -->
 
 		<div
-			class="container relative mx-auto hidden h-full w-full flex-col items-center justify-between gap-4 overflow-hidden rounded-md bg-black md:flex lg:flex-row">
+			class="container relative mx-auto hidden h-full w-full items-center justify-between gap-4 overflow-hidden rounded-md bg-black lg:flex lg:flex-row">
 			{#if selectedimg}
 				<div
-					class="flex h-full w-full flex-1 items-center justify-center overflow-hidden px-5 sm:px-10">
-					<img src="{selectedimg}" alt="" class="h-full object-contain object-center" />
+					class="flex h-full w-full flex-1 flex-shrink-0 items-center justify-center overflow-hidden px-5 sm:px-10">
+					<LazyImg src="{selectedimg}" alt="" class="h-full w-full object-contain object-center" />
 				</div>
 			{/if}
 
@@ -107,7 +138,7 @@ onMount(async () => {
 										src="{img}"
 										alt=""
 										height="240"
-										class="max-w-60 h-40 w-full rounded-md object-contain object-center sm:h-60" />
+										class="h-40 w-40 rounded-md object-contain object-center" />
 
 									<div
 										class="absolute inset-0 z-10 h-full w-full bg-white  
