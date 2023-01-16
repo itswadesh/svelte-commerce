@@ -688,7 +688,7 @@ const getSelectionLabel = (option) => option.name
 				<!-- Login -->
 
 				<a
-					href="{$page.data.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page?.url
+					href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page?.url
 						?.search}"
 					aria-label="Click to route login"
 					data-sveltekit-preload-data>
@@ -849,7 +849,7 @@ const getSelectionLabel = (option) => option.name
 
 				<a
 					data-sveltekit-preload-data
-					href="{$page.data.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page?.url
+					href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page?.url
 						?.search}"
 					aria-label="Click to route login"
 					class="flex items-center gap-2 py-2"

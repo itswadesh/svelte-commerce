@@ -7,7 +7,7 @@ export const prerender = false
 export async function load({ params, parent, locals, url, request, cookies }) {
 	const { me } = locals
 	if (!me) {
-		const redirectUrl = `${locals.data.loginUrl || '/auth/login'}?ref=${url?.pathname}`
+		const redirectUrl = `${locals.store?.loginUrl || '/auth/login'}?ref=${url?.pathname}`
 		throw redirect(307, redirectUrl)
 	}
 	const cartRes = await getBySid(`carts/refresh-cart?store=${locals.store?.id}`, cookies.get('sid'))

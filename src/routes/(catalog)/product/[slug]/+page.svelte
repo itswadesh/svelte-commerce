@@ -384,7 +384,7 @@ $: {
 
 async function toggleWishlist(id) {
 	if (!$page.data.me) {
-		goto(`${$page.data.loginUrl || '/auth/login'}?ref=/my/wishlist/add/${id}`)
+		goto(`${$page.data?.loginUrl || '/auth/login'}?ref=/my/wishlist/add/${id}`)
 	}
 
 	try {
@@ -586,10 +586,6 @@ function handleMobileCanvas() {
 
 					<p class="text-sm font-semibold text-green-700">Inclusive of all taxes</p>
 				</div>
-
-				{#if data.product?.term}
-					<p class="prose mt-2">{@html data.product?.term}</p>
-				{/if}
 
 				<!-- ratings -->
 
@@ -1052,6 +1048,10 @@ function handleMobileCanvas() {
 							{@html data.product?.description}
 						</div>
 					</div>
+				{/if}
+
+				{#if data.product?.terms}
+					<p class="prose mt-2 text-gray-700">{@html data.product?.terms}</p>
 				{/if}
 
 				<!-- Linked Products -->
