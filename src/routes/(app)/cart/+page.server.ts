@@ -45,7 +45,7 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies }) =>
 	} catch (e) {
 		// console.log('Error at /cart/+page.server.ts page.....', e)
 		if (e?.status === 401) {
-			throw redirect(307, locals.data?.loginUrl || '/auth/login')
+			throw redirect(307, locals.store?.loginUrl || '/auth/login')
 		}
 		throw error(400, e?.message || e)
 	} finally {
