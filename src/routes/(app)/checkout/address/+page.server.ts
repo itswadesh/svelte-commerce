@@ -1,3 +1,5 @@
+import { fetchAddress, fetchAddresses } from '$lib/services/AddressService'
+import { refreshCartData } from '$lib/services/CartService'
 import { gett } from '$lib/utils/server'
 import { error, redirect } from '@sveltejs/kit'
 export const prerender = false
@@ -5,12 +7,10 @@ export const prerender = false
 export async function load({ request, url, locals }) {
 	try {
 		let err
-		const myAddresses = await gett('addresses/my', request.headers.get('cookie'))
-		const selectedAddress = myAddresses?.data[0]?._id
+		const {myAddresses, selectedAddress} = await fetchAddresses({storeId:locals.store?.id, server:true})
 		const currentPage = +url.searchParams.get('page') || 1
 		const q = url.searchParams.get('q') || ''
-
-		const cart = await gett('carts/refresh-cart', request.headers.get('cookie'))
+		const cart = await refreshCartData({storeId:locals.store?.id, server:true})
 		if (myAddresses?.data?.length) {
 			return {
 				cart,

@@ -1,14 +1,11 @@
-import { gett } from '$lib/utils/server'
+import { fetchCategory } from '$lib/services/CategoryService'
 import { error } from '@sveltejs/kit'
 
 export async function load({ params, parent, locals, cookies }) {
-	const { store } = locals
 	try {
 		const { slug } = params
-		const category = await gett(`categories/${slug}`)
+		const category = await fetchCategory({id:slug,server:true})
 		if (category) {
-			// cookies.set('cache-control', 'public, max-age=200')
-
 			return { category }
 		}
 	} catch (e) {

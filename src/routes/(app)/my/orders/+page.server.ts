@@ -1,13 +1,10 @@
+import { fetchOrders } from '$lib/services/OrdersService'
 import { gett } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 
 export async function load({ params, parent, request, locals, cookies }) {
-	const { store } = locals
 	try {
-		const orders = await gett(`orders/my?store=${store?.id}`, request.headers.get('cookie'))
-
-		// console.log('orders = ', orders)
-
+		const orders = await fetchOrders({storeId:locals.store?.id, server:true,sid:cookies.get('sid')})
 		if (orders) {
 			return { orders: orders }
 		}

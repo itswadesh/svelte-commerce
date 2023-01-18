@@ -1,21 +1,17 @@
-import { gett } from '$lib/utils/server'
+import { fetchBlogs } from '$lib/services/BlogService'
 
-export async function load({ url, params, fetch, parent, cookies }) {
-	const { store } = await parent()
-	let loading = false,
-		err,
+export async function load({ url, params, fetch, locals, cookies }) {
+	let	err,
 		blogs,
 		count
 
 	try {
-		loading = true
-		const res = await gett(`blogs?store=${store?.id}`)
+		const res = await fetchBlogs({storeId:locals.store?.id})
 		blogs = res?.data
 		count = res?.count
 	} catch (e) {
 		err = e
 	} finally {
-		loading = false
 	}
-	return { loading, err, blogs, count }
+	return { err, blogs, count }
 }

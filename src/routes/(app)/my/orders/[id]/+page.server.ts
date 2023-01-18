@@ -1,17 +1,12 @@
-import { gett } from '$lib/utils/server'
+import { fetchOrder, trackOrder } from '$lib/services/OrdersService'
 import { error } from '@sveltejs/kit'
 export const prerender = false
 
-export async function load({ params, url, locals, parent, request }) {
+export async function load({ params, url, locals, cookies, request }) {
 	const { store } = locals
 	const { id } = params
-
-	const order = await gett(`orders/${id}?store=${store?.id}`, request.headers.get('cookie'))
-	const orderTracking = await gett(
-		`order-tracking?order=${id}&store=${store?.id}`,
-		request.headers.get('cookie')
-	)
-
+	const order = await fetchOrder({storeId:locals.store?.id, id, server:true,sid:cookies.get('sid')})
+	const orderTracking = await trackOrder({id,store:store?.id})
 	if (order) {
 		return { order, orderTracking }
 	} else {

@@ -1,12 +1,12 @@
-import { gett } from '$lib/utils/server'
+import { fetchBlog, fetchLatestBlogs } from '$lib/services/BlogService'
 import { error } from '@sveltejs/kit'
 
 export async function load({ params }) {
 	const { id } = params
 
-	const blog = await gett(`blogs/${id}`)
+	const blog = await fetchBlog({id})
 
-	const latestBlogs = await gett(`blogs?sort=-updatedAt&limit=10`)
+	const latestBlogs = await fetchLatestBlogs({})
 
 	if (blog) {
 		return { blog, latestBlogs }

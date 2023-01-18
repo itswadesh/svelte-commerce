@@ -1,16 +1,13 @@
 import { DOMAIN, HTTP_ENDPOINT } from '$lib/config'
-import { gett } from '$lib/utils/server'
+import { fetchDeals } from '$lib/services/DealsService'
+import { fetchHome } from '$lib/services/HomeService'
 import { error } from '@sveltejs/kit'
 
 export async function load({ params, query, setHeaders, locals, parent, cookies, request }) {
 	const { store } = locals
-
 	try {
-		const home = await gett(`home?store=${store?.id}`, request.headers.get('cookie'))
-		const deals = await gett(`deals?store=${store?.id}`, request.headers.get('cookie'))
-		// setHeaders({
-		// 	'cache-control': 'public, max-age=3600'
-		// })
+		const home = await fetchHome({storeId:store?.id,server:true})
+		const deals = await fetchDeals({storeId:store?.id,server:true})
 		if (home) {
 			return { home: home, deals: deals || {} }
 		}

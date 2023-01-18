@@ -1,5 +1,7 @@
 import { error, redirect } from '@sveltejs/kit'
 import { getBySid, gett } from '$lib/utils/server'
+import { fetchAddress } from '$lib/services/AddressService'
+import { fetchPaymentMethods } from '$lib/services/PaymentMethodService'
 
 export const prerender = false
 
@@ -29,14 +31,9 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 	try {
 		const addressId = url.searchParams.get('address')
 
-		const address = await gett(`addresses/${addressId}`, request.headers.get('cookie'))
-		const paymentMethods = (
-			await gett(
-				`payment-methods?store=${locals.store?.id}&active=true`,
-				request.headers.get('cookie')
-			)
-		).data
-
+		const address = await fetchAddress({storeId:locals.store?.id, server:true})
+		const paymentMethods =
+			await fetchPaymentMethods({storeId:locals.store.id,server:true})
 		return { paymentMethods, address, addressId, me, cart }
 	} catch (e) {
 		if (e) {

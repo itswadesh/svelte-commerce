@@ -11,7 +11,7 @@ import MobileFooter from '$lib/MobileFooter.svelte'
 import Pagination from '$lib/components/Pagination.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
-import { fetchAllCategories } from '$lib/services/CategoryService'
+import { fetchAllCategories, fetchCategory } from '$lib/services/CategoryService'
 
 export let data
 
@@ -27,11 +27,11 @@ let query = $page?.url?.searchParams
 onMount(async () => {
 	try {
 		const res = await fetchAllCategories({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
-		products = res?.data
-		productsCount = res?.count
-		currentPage = res?.page
-		facets = res?.facets?.all_aggs
-		err = !products ? 'No result Not Found' : null
+		products = res.products
+		productsCount = res.productsCount
+		currentPage = res.currentPage
+		facets = res.facets
+		err = res.err
 	} catch (e) {
 		toast(e, 'error')
 	} finally {
@@ -50,7 +50,7 @@ async function sortNow(s) {
 
 async function refreshData() {
 	try {
-		const res = await gett(`categories/${$page?.params?.slug}?${data.query.toString()}`)
+		const res = await fetchCategory({id:$page?.params?.slug, origin:origin })
 		data.category = res?.data
 		data.count = res?.count
 		data.err = !data.category ? 'No result Not Found' : null

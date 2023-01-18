@@ -1,12 +1,12 @@
-import { gett } from '$lib/utils/server'
+import { fetchMeData } from '$lib/services/UserService'
 import { error, redirect } from '@sveltejs/kit'
 import dayjs from 'dayjs'
 
-export async function load({ request, locals }) {
+export async function load({ cookies, locals }) {
 	const { me, store } = locals
 	let profile = {}
 	try {
-		const data = await gett(`users/me`, request.headers.get('cookie'))
+		const data = await fetchMeData({storeId:locals.store?.id, server:true,sid:cookies.get('sid')})
 		data.dob = data.dob ? dayjs(data.dob).format('YYYY-MM-DD') : null
 		profile = data || {
 			email: me.email,

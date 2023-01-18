@@ -1,9 +1,10 @@
+import { fetchReviews } from '$lib/services/ReviewService'
 import { gett } from '$lib/utils/server'
 import { error, redirect } from '@sveltejs/kit'
 
-export async function load({ request, locals }) {
+export async function load({ cookies, locals }) {
 	try {
-		const reviews = await gett(`reviews/my`, request.headers.get('cookie'))
+		const reviews = await fetchReviews({storeId:locals.store?.id, server:true,sid:cookies.get('sid')})
 		if (reviews) {
 			return { reviews: reviews.data }
 		}

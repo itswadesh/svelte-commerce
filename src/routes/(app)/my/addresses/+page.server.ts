@@ -1,8 +1,8 @@
-import { gett } from '$lib/utils/server'
+import { fetchAddress, fetchAddresses } from '$lib/services/AddressService'
 import { error } from '@sveltejs/kit'
 
-export async function load({ params, request }) {
-	const addresses = await gett(`addresses/my`, request.headers.get('cookie'))
+export async function load({ cookies, locals }) {
+	const addresses = await fetchAddresses({storeId:locals.store?.id, server:true,sid:cookies.get('sid')})
 	if (addresses) {
 		return { addresses: addresses }
 	}

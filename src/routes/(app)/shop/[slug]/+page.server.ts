@@ -1,19 +1,13 @@
-// This is category specific page
-
-import { gett } from '$lib/utils/server'
+import { fetchBanners, fetchBannersGroup } from '$lib/services/BannersService'
 import { error } from '@sveltejs/kit'
 export const prerender = false
 
 export async function load({ parent, url, locals, params, cookies }) {
 	try {
-		const { store } = locals
-
-		const banners = await gett(`banners?pageId=${params.slug}&store=${store.id}`)
-		const groupByBanners = await gett(`banners/group?pageId=${params.slug}&store=${store.id}`)
+		const banners = await fetchBanners({pageId:params.slug,storeId:locals.store?.id,server:true,sid:cookies.get('sid')})
+		const groupByBanners = await fetchBannersGroup({pageId:params.slug,storeId:locals.store?.id,server:true,sid:cookies.get('sid')})
 
 		if (banners || groupByBanners) {
-			// cookies.set('cache-control', 'public, max-age=200')
-
 			return { banners, groupByBanners }
 		}
 	} catch (e) {
