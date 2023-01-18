@@ -15,11 +15,12 @@ export let deal
 {#if deal}
 	<div class="flex w-[98vw] items-start justify-start gap-3 overflow-x-auto">
 		{#if deal.img}
-			<div class="max-w-max flex-shrink-0">
-				<img
+			<div class="flex-shrink-0">
+				<LazyImg
 					src="{deal.img}"
 					alt="{deal.name}"
-					class="h-full w-full object-contain object-center text-xs" />
+					height="380"
+					class="h-[380px] w-auto object-contain object-center text-xs" />
 			</div>
 		{/if}
 
