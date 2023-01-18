@@ -6,11 +6,7 @@
 git clone https://github.com/itswadesh/svelte-commerce.git
 cd svelte-commerce
 npm i
-```
-
-Make a copy of .env.example and rename to .env
-
-```
+cp .env.example .env    # You will need to update the values in this .env file
 npm run dev
 ```
 
