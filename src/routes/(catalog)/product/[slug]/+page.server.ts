@@ -1,3 +1,4 @@
+import { fetchProduct } from '$lib/services/ProductService'
 import { gett } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 
@@ -9,8 +10,7 @@ export async function load({ params, parent, cookies, locals, request }) {
 	let product = null
 
 	try {
-		product = await gett(`products/${slug}`)
-
+		product = await fetchProduct({id:slug,server:true})
 		if (!product) throw error(404, 'Product not found')
 		// cookies.set('cache-control', 'public, max-age=200')
 		return { product, deliveryDetails: zip }
