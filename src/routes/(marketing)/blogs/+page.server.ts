@@ -1,4 +1,4 @@
-import { gett } from '$lib/utils'
+import { gett } from '$lib/utils/server'
 
 export async function load({ url, params, fetch, parent, cookies }) {
 	const { store } = await parent()
@@ -17,7 +17,5 @@ export async function load({ url, params, fetch, parent, cookies }) {
 	} finally {
 		loading = false
 	}
-	// cookies.set('cache-control', 'public, max-age=200')
-
 	return { loading, err, blogs, count }
 }

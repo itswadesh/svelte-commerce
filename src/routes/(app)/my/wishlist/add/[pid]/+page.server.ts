@@ -1,4 +1,4 @@
-import { gett, post } from '$lib/utils'
+import { gett, post } from '$lib/utils/server'
 import { redirect } from '@sveltejs/kit'
 
 export async function load({ locals, cookies, params, request }) {

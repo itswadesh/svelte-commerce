@@ -1,4 +1,4 @@
-import { getBySid, gett } from '$lib/utils'
+import { getBySid } from '$lib/utils/server'
 import cookie from 'cookie'
 export const prerender = false
 
@@ -33,37 +33,14 @@ export async function load({ url, locals, request, cookies }) {
 	} catch (e) {
 	} finally {
 	}
-	// try {
-	// 	const cookieStore = {
-	// 		id,
-	// 		domain,
-	// 		logo: `/logo.svg?tr=w-auto,h-56:w-auto,h-56`,
-	// 		address,
-	// 		phone,
-	// 		email,
-	// 		websiteName,
-	// 		websiteLegalName,
-	// 		stripePublishableKey
-	// 	}
-
-	// 	store = cookieStore
-	// 	serializedStore = cookie.serialize('store', JSON.stringify(cookieStore) || '', {
-	// 		path: '/'
-	// 	})
-	// } catch (e) {
-	// } finally {
-	// }
+	
 	if (cookies) {
 		cookies.set(serializedCart)
-		// cookies.set(serializedStore)
 	}
 	return {
 		url: url.href,
 		currentPage,
 		q,
-		// me,
-		// token,
-		// sid,
 		cart,
 		store: locals.store,
 		settings: locals.settings

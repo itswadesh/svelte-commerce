@@ -1,15 +1,12 @@
 <script>
 import { browser } from '$app/environment'
-import { constructURL2, toast } from '$lib/util'
-import { createEventDispatcher } from 'svelte'
-import { getAPI } from '$lib/util/api'
+import { constructURL2, toast } from '$lib/utils'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import CheckboxEs from '$lib/ui/CheckboxEs.svelte'
 import RadioEs from '$lib/ui/RadioEs.svelte'
-
-const dispatch = createEventDispatcher()
+import { fetchMegamenuData } from '$lib/services/CategoryService'
 
 export let facets = {},
 	fl = {},
@@ -17,8 +14,6 @@ export let facets = {},
 	query, // Required because after loading finished then only we will initiate the price slider component
 	filterLength = 0,
 	mergedArr = []
-
-// console.log('facets inside desktop filter = ', facets)
 
 let clazz
 export { clazz as class }
@@ -34,29 +29,19 @@ function clearFilters() {
 	appliedFilters = {}
 	let url = $page?.url?.pathname
 	goto(`${url}?page=1`)
-	// dispatch('clearAll')
 }
 
 function goCheckbox(e) {
 	fl[e.detail.model] = e.detail.selectedItems
 	fl.q = $page.url.searchParams.get('q')
 	let url = constructURL2(`${$page.url.pathname}`, fl)
-	// const nU = new URL('http://localhost' + url)
-	// const splitedAtAmp = url?.split('?', 2)[1]?.split('&')
 	appliedFilters = { ...fl }
 	delete appliedFilters.page
 	delete appliedFilters.sort
 	delete appliedFilters.lat
 	delete appliedFilters.lng
-	// for (const property of splitedAtAmp) {
-	// 	filterLength += property.split(',').length
-	// }
-	// appliedFilters = appliedFilters
-	// invalidate(`${url}page=1`)
 	goto(`${url}page=1`)
 }
-
-function filterChanged(op) {}
 
 onMount(async () => {
 	$page.url.searchParams.forEach(function (value, key) {
@@ -72,12 +57,8 @@ async function getMegamenu() {
 	if (browser) {
 		try {
 			const localmegamenu = localStorage.getItem('megamenu')
-
 			if (!localmegamenu || localmegamenu === 'undefined') {
-				megamenu = await getAPI(
-					`categories/megamenu?store=${$page.data?.store?.id}`,
-					$page.data.origin
-				)
+				megamenu = await fetchMegamenuData({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
 			} else {
 				megamenu = JSON.parse(localmegamenu)
 			}

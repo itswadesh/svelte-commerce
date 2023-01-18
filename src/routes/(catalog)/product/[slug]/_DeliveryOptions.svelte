@@ -1,8 +1,6 @@
 <script>
 import { applyAction, enhance } from '$app/forms'
-import { onMount } from 'svelte'
-import { page } from '$app/stores'
-import { toast } from '$lib/util'
+import { toast } from '$lib/utils'
 import dayjs from 'dayjs'
 import productCod from '$lib/assets/product/cod.png'
 import productDelivery from '$lib/assets/product/delivery.png'
@@ -26,20 +24,6 @@ function changePincode() {
 	deliveryDetails = null
 }
 
-// onMount(() => {
-// 	enableTextbox = !!deliveryDetails?.pincode
-// })
-// async function submit() {
-// 	try {
-// 		loading = true
-// 		deliveryDetails = await getAPI(`pincodes/${pincode}`, $page.data.origin)
-// 		await cookies.set('zip', pincode, { path: '/' })
-// 		$page.data.zip = pincode
-// 	} catch (e) {
-// 	} finally {
-// 		loading = false
-// 	}
-// }
 </script>
 
 <div class="mb-4">

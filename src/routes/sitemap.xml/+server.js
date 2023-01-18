@@ -1,7 +1,5 @@
-import { json } from '@sveltejs/kit'
-import { getAPI } from '$lib/util/api'
 import { domain, id } from '$lib/config'
-import { gett } from '$lib/utils'
+import { gett } from '$lib/utils/server'
 export async function GET() {
 	const resP = await gett(`es/products?store=${id}`)
 	const products = resP?.data?.map((product) => {
@@ -30,10 +28,6 @@ export async function GET() {
 		'Cache-Control': 'max-age=0, s-maxage=3600',
 		'Content-Type': 'application/xml'
 	}
-	// Suggestion (check for correctness before using):
-	// return json(body, {
-	// 	headers: headers
-	// });
 	return {
 		headers,
 		body

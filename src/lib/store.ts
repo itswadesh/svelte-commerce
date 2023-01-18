@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store'
 import Cookie from 'cookie-universal'
-import { gett } from './utils'
+import { gett } from './utils/server'
 const cookies = Cookie()
 
 export const geoLocation = writable({

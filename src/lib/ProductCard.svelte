@@ -25,12 +25,12 @@
 </style>
 
 <script>
-import { currency } from './util'
+import { currency } from './utils'
 import { fly } from 'svelte/transition'
 import { goto } from '$app/navigation'
 import { loginUrl } from '$lib/store'
 import { page } from '$app/stores'
-import { post } from './util/api'
+import { post } from './utils/api'
 import LazyImg from './components/Image/LazyImg.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'

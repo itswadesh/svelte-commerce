@@ -1,5 +1,4 @@
-import { getAPI } from '$lib/util/api'
-import { gett } from '$lib/utils'
+import { gett } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 
 export async function load({ params, request }) {
@@ -8,8 +7,4 @@ export async function load({ params, request }) {
 		return { addresses: addresses }
 	}
 	throw error(404, 'Addresses not found')
-	// return {
-	// 	status: 500,
-	// 	errors: new Error('Internal Server Error')
-	// }
 }

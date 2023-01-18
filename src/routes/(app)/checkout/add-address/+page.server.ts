@@ -1,4 +1,4 @@
-import { gett } from '$lib/utils'
+import { fetchAddress } from '$lib/services/AddressService'
 export const prerender = false
 export async function load({ url, request }) {
 	let ads = {}
@@ -7,9 +7,8 @@ export async function load({ url, request }) {
 	if (addressId === 'new') {
 		ads = { id: 'new' }
 	} else {
-		ads = await gett(`addresses/${addressId}`, request.headers.get('cookie'))
+		ads = await fetchAddress({addressId,sid: request.cookies.get('sid')})
 	}
-
 	return {
 		ads
 	}

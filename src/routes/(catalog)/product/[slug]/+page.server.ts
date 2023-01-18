@@ -1,9 +1,7 @@
-import { gett } from '$lib/utils'
+import { gett } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 
 export async function load({ params, parent, cookies, locals, request }) {
-	// const ck = request.headers.get('cookie')
-	// const c = cookie.parse(ck || '')
 	let zip = cookies.get('zip')
 	if (zip) zip = JSON.parse(zip)
 

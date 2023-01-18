@@ -26,17 +26,14 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import appStore from '$lib/assets/app/app-store.svg'
 import googlePlay from '$lib/assets/app/google-play.png'
-import StoreInformationFooter from './components/StoreInformationFooter.svelte'
-import { getAPI } from './util/api'
+import { fetchFooterCategories, getFooterCategories } from './services/CategoryService'
 
 export let me, store, popularSearches, megamenu
-
-// console.log('$page', $page)
 
 export { clazz as class }
 let clazz = ''
 
-let categories
+let categories=[]
 
 onMount(async () => {
 	await getCategories()
@@ -44,10 +41,7 @@ onMount(async () => {
 
 async function getCategories() {
 	try {
-		categories = await getAPI(
-			`categories?store=${$page?.data?.store?.id}&megamenu=true&limit=6&page=0&level=0`,
-			$page?.data?.origin
-		)
+		categories = await fetchFooterCategories({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
 	} catch (e) {
 	} finally {
 	}
@@ -93,99 +87,21 @@ let footerItems = [
 	}
 ]
 
-// let popularSearches, popularSearchesCount
-
-const items = [
-	{
-		label: 'Home',
-		link: '/',
-		icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h1"></path></svg>`
-	},
-	{
-		label: 'Cart',
-		link: '/cart',
-		icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>`
-	},
-	{
-		label: 'Categories',
-		link: '/c',
-		icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h1a2 2 0 012 2v2M7 7h10"></path></svg>`
-	},
-	{
-		label: 'Account',
-		link: me?.active ? '/my' : $page.data?.loginUrl || '/auth/login',
-		icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`
-	}
-]
-
 onMount(async () => {
 	const res = await getStoreData()
-	// try {
-	// const res = await getAPI(`popular-search?store=${$page.data?.store?.id}`, $page.data.origin)
-	// popularSearches = res?.data
-	// popularSearchesCount = res?.count
-
-	// console.log('popular-search = ', popularSearches)
-	// } catch (e) {
-	// 	toast(e, 'error')
-	// } finally {
-	// }
-
 	store = res.storeOne
 	megamenu = res.megamenu
 	popularSearches = res.popularSearches
 	if (browser) {
-		// const megamenu = await getMegamenu()
 		localStorage.setItem('megamenu', JSON.stringify(megamenu))
-		// const home = await getHome()
-		// localStorage.setItem('home', JSON.stringify(home))
 	}
-	// popularSearches = res
-	// popularSearchesCount = res?.count
 })
 async function getStoreData() {
 	const response = await fetch('/server/store')
 	const res = await response.json()
-	// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', res)
 	return res
 }
-// async function getMegamenu() {
-// 	let megamenu = []
-// 	const d = new Date()
-// 	try {
-// 		megamenu = await getAPI(
-// 			`categories/megamenu?megamenu=true&store=${$page.data?.store?.id}`,
-// 			$page.data.origin
-// 		)
-// 	} catch (e) {
-// 		console.log('eeeeeeeeeeeeee', e)
-// 	}
-// 	const d3 = new Date()
-// 	console.log('Megamenu loaded at hook: ', d3.getTime() - d.getTime())
-// 	return megamenu
-// }
-// async function getHome() {
-// 	let home = []
-// 	const d = new Date()
-// 	try {
-// 		home = await getAPI(`home?store=${$page.data?.store?.id}`, $page.data.origin)
-// 	} catch (e) {
-// 		console.log('eeeeeeeeeeeeee', e)
-// 	}
-// 	const d3 = new Date()
-// 	console.log('home loaded at hook: ', d3.getTime() - d.getTime())
-// 	return home
-// }
 </script>
-
-<!-- <div
-	class="bg-gradient-to-r from-primary-500 to-secondary-500 p-3 text-center tracking-wide text-white sm:px-10">
-	<p class="mb-1 text-xl font-semibold uppercase">Truly Indian Brand</p>
-
-	<p>Over <span class="font-semibold">2 Million</span> Happy Customers</p>
-</div> -->
-
-<!-- <StoreInformationFooter /> -->
 
 <footer class="w-full justify-center bg-gray-50 p-3 text-sm sm:p-10">
 	<div class="container mx-auto max-w-6xl">

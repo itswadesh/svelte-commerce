@@ -1,4 +1,4 @@
-import { getBySid, gett, post } from '$lib/utils'
+import { getBySid, gett, post } from '$lib/utils/server'
 import { error, redirect } from '@sveltejs/kit'
 
 export const prerender = false

@@ -47,3 +47,11 @@ export const sorts = [
 	{ name: `Name: Desc`, val: '-name' } // { name: 'Most Viewed', val: '-views' }
 ]
 export const WWW_URL = env.PUBLIC_WWW_URL
+export const listOfPagesWithoutBackButton = [
+			'/',
+			'/categories',
+			'/new-arrivals',
+			'/my/wishlist',
+			'/my',
+			'/payment/success'
+		]

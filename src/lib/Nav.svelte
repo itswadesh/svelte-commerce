@@ -5,16 +5,13 @@
 </style>
 
 <script lang="ts">
-import { createEventDispatcher, getContext, onMount } from 'svelte'
+import { createEventDispatcher, onMount } from 'svelte'
 import { cubicOut } from 'svelte/easing'
 import { fade, fly } from 'svelte/transition'
-import { getAPI, post } from '$lib/util/api'
-import { goto, invalidateAll } from '$app/navigation'
+import { goto } from '$app/navigation'
 import { logo } from './config'
 import { page } from '$app/stores'
 import Autocomplete from '$lib/components/Autocomplete/Autocomplete.svelte'
-import Cookie from 'cookie-universal'
-import Item from '$lib/AutocompleteItem.svelte'
 import LazyImg from './components/Image/LazyImg.svelte'
 import MegaMenu from './components/MegaMenu.svelte'
 import menu from '$lib/config/menu'
@@ -24,11 +21,8 @@ import AutosuggestModal from './AutosuggestModal.svelte'
 import { enhance } from '$app/forms'
 
 const dispatch = createEventDispatcher()
-const cookies = Cookie()
 
 export let me, cart, data, showCartSidebar, openSidebar, store
-
-// console.log('page', $page)
 
 let q = ''
 let showDropdownAccount = false
@@ -36,54 +30,9 @@ let show = false
 let loadingForDeleteItemFromCart = []
 let categories
 
-// if (cart) cart = JSON.parse(cart)
-
-// export const signOut = async () => {
-// 	let logout, error
-
-// 	try {
-// 		await post('logout', {})
-// 	} catch (e) {
-// 		error = e
-// 	} finally {
-// 	}
-
-// 	await cookies.set('me', null, { path: '/' })
-// 	await cookies.set('cart', null, { path: '/' })
-// 	await cookies.remove('token')
-// 	await cookies.remove('sid')
-// 	await cookies.remove('me')
-// 	await invalidateAll()
-
-// 	return { data: logout, error }
-// }
-
 onMount(async () => {
 	q = $page.url.searchParams.get('q')
-	// const response = await fetch('/server/cart')
-	// cart = await response.json()
 })
-
-// onMount(() => {
-//   getFace(`face`)
-// })
-
-// function getFace(id) {
-//   const face = faces.generate(null, { race: 'white' })
-//   faces.display(id, face)
-// }
-
-// async function handleSignout() {
-// 	try {
-// 		await signOut()
-// 		toast('Signed Out...', 'success')
-// 		goto('/auth/otp-login')
-// 	} catch (e) {
-// 		console.log(e)
-// 		toast(e, 'error')
-// 	} finally {
-// 	}
-// }
 
 function slideFade(node, params) {
 	const existingTransform = getComputedStyle(node).transform.replace('none', '')
@@ -113,56 +62,6 @@ async function onSearchSubmit({ detail }) {
 	dispatch('search', detail)
 }
 
-function handleShowCartSidebar() {
-	if ($page?.url?.pathname !== '/cart') {
-		showCartSidebar = true
-		getCategories()
-	}
-
-	return
-}
-
-async function getCategories() {
-	try {
-		const res1 = await getAPI(`categories?store=${$page.data.store?.id}`, $page.data.origin)
-		categories = res1?.data.filter((c) => {
-			return c.img
-		})
-		// console.log('res1', res1)
-		// console.log('categories', categories)
-	} catch (e) {
-	} finally {
-	}
-}
-
-const removeItemFromCart = async ({ pid, qty, customizedImg, ix }: any) => {
-	try {
-		loadingForDeleteItemFromCart[ix] = true
-		const res = await post(
-			'carts/add-to-cart',
-			{
-				pid: pid,
-				qty: qty,
-				customizedImg: customizedImg || null,
-				store: $page.data.store?.id
-			},
-			$page.data.origin
-		)
-
-		// cart = res
-		// $page.data.cart = res
-
-		// await refreshCart()
-		await invalidateAll()
-	} catch (e) {
-	} finally {
-		loadingForDeleteItemFromCart[ix] = false
-	}
-}
-
-const optionIdentifier = 'name'
-const getOptionLabel = (option) => option.name
-const getSelectionLabel = (option) => option.name
 </script>
 
 <nav
@@ -230,27 +129,7 @@ const getSelectionLabel = (option) => option.name
 		</div>
 
 		<div class="flex items-center gap-4 lg:gap-8">
-			<!-- Search -->
-
-			<!-- <a
-				data-sveltekit-preload-data
-				href="/autosuggest"
-				aria-label="Click to search quizzes, videos, notes etc..."
-				class="block focus:outline-none lg:hidden">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke-width="1.5"
-					stroke="currentColor"
-					class="h-6 w-6">
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path>
-				</svg>
-			</a> -->
-
+			
 			<button
 				type="button"
 				aria-label="Click to search quizzes, videos, notes etc..."
@@ -271,12 +150,6 @@ const getSelectionLabel = (option) => option.name
 				</svg>
 			</button>
 
-			<!-- Cart -->
-
-			<!-- <button
-				class="relative flex flex-col items-center justify-center gap-1 focus:outline-none lg:border-b-4 lg:border-transparent"
-				aria-label="Click to route cart"
-				on:click="{handleShowCartSidebar}"> -->
 			<a
 				href="/cart"
 				class="relative flex flex-col items-center justify-center gap-1 focus:outline-none lg:border-b-4 lg:border-transparent"
@@ -305,7 +178,6 @@ const getSelectionLabel = (option) => option.name
 					</div>
 				{/if}
 			</a>
-			<!-- </button> -->
 
 			{#if showCartSidebar}
 				<div class="fixed inset-0 z-[100] h-screen w-full">
@@ -411,34 +283,6 @@ const getSelectionLabel = (option) => option.name
 													</div>
 												</div>
 
-												<!-- {#if loadingForDeleteItemFromCart[ix]}
-													<div>...</div>
-												{:else}
-													<button
-														type="button"
-														class="transform overflow-hidden rounded-full border p-1 text-gray-500 transition duration-300 focus:outline-none hover:scale-105 hover:border-gray-800 hover:text-gray-700"
-														on:click="{() =>
-															removeItemFromCart({
-																pid: item.pid,
-																qty: -999999,
-																customizedImg: item.customizedImg,
-																ix: ix
-															})}">
-														<svg
-															xmlns="http://www.w3.org/2000/svg"
-															fill="none"
-															viewBox="0 0 24 24"
-															stroke-width="1.5"
-															stroke="currentColor"
-															class="h-4 w-4">
-															<path
-																stroke-linecap="round"
-																stroke-linejoin="round"
-																d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-															></path>
-														</svg>
-													</button>
-												{/if} -->
 											</div>
 										{/each}
 									</div>
@@ -513,74 +357,7 @@ const getSelectionLabel = (option) => option.name
 				</div>
 			{/if}
 
-			<!-- <div class="dropdown-end dropdown">
-				<button
-					title="Cart"
-					tabindex="0"
-					class="flex h-20 flex-col items-center justify-center gap-1 border-b-4 border-transparent px-2 focus:outline-none sm:px-4"
-					aria-label="Cart">
-					<div class="indicator">
-						<div>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="h-6 w-6 flex-shrink-0"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor"
-								stroke-width="2">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-							</svg>
-
-							<span class="hidden text-center text-xs font-semibold tracking-wider lg:block">
-								Bag
-							</span>
-						</div>
-
-						{#if cart?.qty}
-							<span class="badge indicator-item badge-sm" transition:slide|local>
-								{#key cart?.qty}
-									<span in:fly="{{ y: -20 }}">
-										{cart?.qty || 0}
-									</span>
-								{/key}
-							</span>
-						{/if}
-					</div>
-				</button>
-
-				<div
-					tabindex="0"
-					class="card dropdown-content card-compact mt-3 w-52 border bg-white  shadow-md">
-					<div class="card-body">
-						<span class="text-lg font-bold">{cart?.qty || 0} Items</span>
-
-						<span class="font-medium text-primary-500">
-							Subtotal: {currency(cart?.total || 0)}
-						</span>
-
-						<div class="card-actions">
-							<a
-								href="/cart"
-								aria-label="Click to route cart"
-								class="w-full"
-								data-sveltekit-preload-data>
-								<PrimaryButton loadingringsize="sm" class="w-full text-sm uppercase">
-									View cart
-								</PrimaryButton>
-							</a>
-						</div>
-					</div>
-				</div>
-			</div> -->
-
-			<!-- Profile -->
-
 			{#if me?.active}
-				<!-- Profile -->
-
 				<div
 					class="relative hidden lg:block"
 					on:mouseenter="{() => (showDropdownAccount = true)}"

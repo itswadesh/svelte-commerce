@@ -1,7 +1,7 @@
 <script lang="ts">
 import { spring } from 'svelte/motion'
 import { createEventDispatcher } from 'svelte'
-import { currency } from '$lib/util'
+import { currency } from '$lib/utils'
 import { goto } from '$app/navigation'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 

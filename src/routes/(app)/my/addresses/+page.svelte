@@ -14,10 +14,11 @@
 <script>
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
-import { post, del, getAPI } from '$lib/util/api'
+import { post, del } from '$lib/utils/api'
 import Pagination from '$lib/components/Pagination.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+import { fetchAddresses } from '$lib/services/AddressService'
 
 const seoProps = {
 	title: 'Dashboard - Addresses ',
@@ -66,20 +67,16 @@ async function saveAddress(e) {
 async function remove(id) {
 	try {
 		await del(`addresses/${id}`, $page.data.origin)
-		// &store=${$page.data.store?.id}
 		refreshData()
 	} catch (e) {
 		err = e
-		// toast(e, 'error')
 	} finally {
-		// loading = false
 	}
 }
 
 async function refreshData() {
 	try {
-		const res = await getAPI(`addresses/my`, $page.data.origin)
-
+		const res = await fetchAddresses({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
 		addresses = res?.data
 	} catch (e) {
 		err = e
@@ -96,11 +93,7 @@ async function refreshData() {
 	</h1>
 
 	<div class="mb-5 flex items-center justify-between gap-4 sm:gap-6">
-		<!-- <SearchBox
-			placeholder="Search addresses name, title, content and status..."
-			bind:value="{search}"
-			on:change="{() => callSearch(search)}" /> -->
-
+	
 		<a href="/my/addresses/new" aria-label="Click to route new address" data-sveltekit-preload-data>
 			<PrimaryButton class="text-sm">
 				<svg

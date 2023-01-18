@@ -1,5 +1,4 @@
-import { getAPI } from '$lib/util/api'
-import { gett } from '$lib/utils'
+import { gett } from '$lib/utils/server'
 
 export async function load({ url, params, fetch, parent, cookies }) {
 	const { store } = await parent()

@@ -1,4 +1,4 @@
-import { gett } from '$lib/utils'
+import { gett } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 export const prerender = false
 
@@ -12,16 +12,9 @@ export async function load({ params, url, locals, parent, request }) {
 		request.headers.get('cookie')
 	)
 
-	// console.log('order = ', order)
-
 	if (order) {
 		return { order, orderTracking }
 	} else {
 		throw error(404, 'Order not found')
-
-		// return {
-		// 	status: 404,
-		// 	errors: 'Order not found'
-		// }
 	}
 }

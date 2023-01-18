@@ -1,5 +1,4 @@
-import { getAPI } from '$lib/util/api'
-import { gett } from '$lib/utils'
+import { gett } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 
 export async function load({ locals, params, parent, request }) {
@@ -11,7 +10,6 @@ export async function load({ locals, params, parent, request }) {
 	} else {
 		address = await gett(`addresses/${id}`, request.headers.get('cookie'))
 	}
-	// const countries = await gett('countries', { store: store.id })
 	const countries = { data: [{ code: 'IN', name: 'India' }] }
 	const states = await gett('states?limit=300&page=0&countryCode=IN')
 
@@ -19,8 +17,4 @@ export async function load({ locals, params, parent, request }) {
 		return { address, countries, states }
 	}
 	throw error(404, 'Address not found')
-	// return {
-	// 	status: 500,
-	// 	errors: new Error('Internal Server Error')
-	// }
 }

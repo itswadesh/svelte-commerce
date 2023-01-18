@@ -16,7 +16,7 @@
 
 <script>
 import { createEventDispatcher } from 'svelte'
-import { toast } from './util'
+import { toast } from './utils'
 
 const dispatch = createEventDispatcher()
 

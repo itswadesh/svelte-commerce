@@ -1,5 +1,5 @@
 import { DOMAIN } from '$lib/config'
-import { gett } from '$lib/utils'
+import { gett } from '$lib/utils/server'
 // @ts-ignore
 export async function GET({ request, cookies, locals }) {
 	const url = new URL(request.url)

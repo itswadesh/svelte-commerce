@@ -1,7 +1,6 @@
 // This is category specific page
 
-import { getAPI } from '$lib/util/api'
-import { gett } from '$lib/utils'
+import { gett } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 export const prerender = false
 

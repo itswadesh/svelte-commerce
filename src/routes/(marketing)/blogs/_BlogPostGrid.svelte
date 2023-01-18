@@ -24,19 +24,10 @@ img {
 .zoom:hover img {
 	transform: scale(1.035);
 }
-/* .download {
-    @apply bg-gray-200 rounded-full flex items-center p-1 transition-transform duration-300 ease-in-out transform;
-  }
-  .download:hover {
-    @apply -translate-y-px shadow;
-  }
-  .download:focus {
-    @apply outline-none;
-  } */
 </style>
 
 <script>
-import { date } from '$lib/util'
+import { date } from '$lib/utils'
 import { page } from '$app/stores'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'
 

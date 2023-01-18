@@ -10,24 +10,21 @@
 </style>
 
 <script>
-// import TimeAgo from 'svelte-timeago'
-import { date, delay, toast } from '$lib/util'
-import { del, getAPI, post } from '$lib/util/api'
+import { date, toast } from '$lib/utils'
+import { del } from '$lib/utils/api'
 import { goto } from '$app/navigation'
 import { loginUrl } from '$lib/store'
 import { page } from '$app/stores'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import Pagination from '$lib/components/Pagination.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import SearchBox from '$lib/ui/SearchBox.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+import { fetchReviews } from '$lib/services/ReviewService'
 
 const seoProps = {
 	title: 'Dashboard - Reviews ',
 	description: 'My Reviews'
 }
-
-// reviews, search, currentPage, count, sort, query
 
 export let data
 
@@ -71,10 +68,7 @@ async function remove(id) {
 
 async function refreshData() {
 	try {
-		await getAPI(
-			`reviews?search=${data.search}&sort=${data.sort}&page=${data.currentPage}&store=${$page.data.store?.id}`,
-			$page.data.origin
-		)
+await fetchReviews({pid:data.product._id, search:data.search,sort:data.sort,currentPage:data.currentPage,origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
 	} catch (e) {
 	} finally {
 	}

@@ -1,5 +1,4 @@
-import { getAPI } from '$lib/util/api'
-import { gett } from '$lib/utils'
+import { gett } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 export const prerender = false
 
@@ -43,7 +42,6 @@ export async function load({ url, locals, cookies, parent }) {
 	} finally {
 		loading = false
 	}
-	// cookies.set('cache-control', 'public, max-age=200')
 
 	return {
 		loading,

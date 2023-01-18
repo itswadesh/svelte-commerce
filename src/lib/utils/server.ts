@@ -1,5 +1,5 @@
 import cookie from 'cookie'
-import { HTTP_ENDPOINT } from './config'
+import { HTTP_ENDPOINT } from '../config'
 export async function post(endpoint: string, data: any, ck?: any) {
 	const ep = HTTP_ENDPOINT + '/api/' + endpoint
 	const response = await fetch(ep, {

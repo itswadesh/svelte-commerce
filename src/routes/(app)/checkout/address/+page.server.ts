@@ -1,4 +1,4 @@
-import { gett } from '$lib/utils'
+import { gett } from '$lib/utils/server'
 import { error, redirect } from '@sveltejs/kit'
 export const prerender = false
 
@@ -36,10 +36,6 @@ export async function load({ request, url, locals }) {
 		if (e.status === 401) {
 			throw redirect(307, `${locals.store?.loginUrl}?ref=${url?.pathname}`)
 		} else {
-			// return {
-			// 	status: 500,
-			// 	errors: new Error(e?.message)
-			// }
 			throw error(500, e?.message)
 		}
 	}

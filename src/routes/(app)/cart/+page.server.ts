@@ -1,22 +1,13 @@
-import { invalidateAll } from '$app/navigation'
-import { fireGTagEvent } from '$lib/util/gTag'
-import { getBySid, gett, post } from '$lib/utils'
-import { error, invalid, redirect } from '@sveltejs/kit'
+import { getBySid,  post } from '$lib/utils/server'
+import { error,  redirect } from '@sveltejs/kit'
 import type { Action, Actions, PageServerLoad } from './$types'
 
 export const load: PageServerLoad = async ({ url, request, locals, cookies }) => {
-	// const cookies = Cookie()
 	let loading = false
 	let cart = locals.cart
 	try {
 		loading = true
 		const res = await getBySid(`carts/refresh-cart?store=${locals.store?.id}`, cookies.get('sid'))
-		// console.error(
-		// 	'Refresh cart called at cart.server page...',
-		// 	res.cart_id,
-		// 	res.qty,
-		// 	res.items.length
-		// )
 
 		if (res) {
 			cart = {
@@ -113,13 +104,11 @@ const add: Action = async ({ request, cookies, locals }) => {
 			locals.cartQty = cartObj.qty
 			cookies.set('cartId', cartObj.cartId, { path: '/' })
 			cookies.set('cartQty', cartObj.qty, { path: '/' })
-			// cookies.set('cart', JSON.stringify(cartObj), { path: '/' })
 			return cartObj
 		} else {
 			return {}
 		}
 	} catch (e) {
-		// console.log('err', e)
 		return {}
 	}
 }

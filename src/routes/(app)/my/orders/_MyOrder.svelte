@@ -7,7 +7,7 @@
 
 <script>
 import { goto } from '$app/navigation'
-import { currency, date } from '$lib/util'
+import { currency, date } from '$lib/utils'
 import OrderListSkeleton from './_OrderListSkeleton.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'

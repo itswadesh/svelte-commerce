@@ -1,5 +1,5 @@
 <script>
-import { getAPI } from '$lib/util/api'
+import { getAPI } from '$lib/utils/api'
 import { page } from '$app/stores'
 import CheckoutHeader from '$lib/components/CheckoutHeader.svelte'
 import Error from '$lib/components/Error.svelte'
@@ -16,8 +16,6 @@ const seoProps = {
 }
 
 function addressChanged(detail) {
-	// console.log('detail = ', detail)
-
 	selectedAddress = detail.detail
 }
 

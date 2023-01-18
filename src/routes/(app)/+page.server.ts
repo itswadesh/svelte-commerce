@@ -1,5 +1,5 @@
 import { DOMAIN, HTTP_ENDPOINT } from '$lib/config'
-import { gett } from '$lib/utils'
+import { gett } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 
 export async function load({ params, query, setHeaders, locals, parent, cookies, request }) {

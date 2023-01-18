@@ -1,4 +1,4 @@
-import { gett } from '$lib/utils'
+import { gett } from '$lib/utils/server'
 export async function POST({ request, cookies, locals }) {
 	const formData = Object.fromEntries(await request.formData())
 	const res = await gett(`pincodes/${formData.zip}`, request.headers.get('cookie'))

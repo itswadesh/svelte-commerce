@@ -1,5 +1,6 @@
 import { currency as currencyConfig, IMAGE_CDN_URL } from '../config'
 import { toasts } from 'svelte-toasts'
+
 let allToasts
 export function constructURL2(url, fl) {
 	url += '?'
@@ -25,7 +26,6 @@ export const getCdnImageUrl = (src) => {
 			.replace('https://misiki.s3.ap-south-1.amazonaws.com/', '/misiki/')
 			.replace('https://varnijewels.s3.amazonaws.com/', '/')
 		return IMAGE_CDN_URL + originalImageUrl
-		// return originalImageUrl + tr
 	}
 }
 
@@ -42,7 +42,6 @@ const toast = (title, type) => {
 		showProgress: false,
 		onClick: () => {},
 		onRemove: () => {}
-		// component: BootstrapToast, // allows to override toast component/template per toast
 	})
 }
 const removeToasts = (toast) => {

@@ -14,9 +14,9 @@
 
 <script>
 import { applyAction, enhance } from '$app/forms'
-import { currency } from '$lib/util'
-import { fireGTagEvent } from '$lib/util/gTag'
-import { getAPI, post } from '$lib/util/api'
+import { currency } from '$lib/utils'
+import { fireGTagEvent } from '$lib/utils/gTag'
+import {  post } from '$lib/utils/api'
 import { invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
@@ -25,6 +25,7 @@ import DummyProductCard from '$lib/DummyProductCard.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import WishlistSkeleton from './_WishlistSkeleton.svelte'
+import { fetchWishlist } from '$lib/services/WishlistService'
 
 export let wishlistedProducts,
 	loadingProduct = []
@@ -53,8 +54,7 @@ async function removeFromWishlist(id, wx) {
 
 async function getWishlistedProducts() {
 	try {
-		wishlistedProducts = getAPI(`wishlists/my?store=${$page.data?.store?.id}`, $page.data.origin)
-
+		wishlistedProducts = fetchWishlist({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
 		await invalidateAll()
 	} catch (e) {
 	} finally {

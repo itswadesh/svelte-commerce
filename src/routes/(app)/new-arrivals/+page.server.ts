@@ -1,4 +1,4 @@
-import { gett } from '$lib/utils'
+import { gett } from '$lib/utils/server'
 import { page } from '$app/stores'
 export async function load({ url, params, locals, fetch, parent, cookies }) {
 	const { store } = locals
