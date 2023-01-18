@@ -9,19 +9,24 @@ export const fetchReviews = async ({origin,storeId,pid, search,sort,currentPage,
 		let	res:any={}
 		if(server){
 			res = await getBySid(`reviews/${pid}?search=${search}&sort=${sort}&page=${currentPage}&store=${storeId}`, sid)
-	}else{
-				res = await getAPI(`reviews/${pid}?search=${search}&sort=${sort}&page=${currentPage}&store=${storeId}`, origin)
+		}else{
+			res = await getAPI(`reviews/${pid}?search=${search}&sort=${sort}&page=${currentPage}&store=${storeId}`, origin)
 		}
-		return res?.data||{};
+		return res?.data||[];
 	} catch (err) {
 		const e = err as Error;
 		throw error(e.status, e.data.message);
 	}
 };
 
-export const fetchProductReviews = async ({origin,storeId,pid}:any) => {
+export const fetchProductReviews = async ({origin,storeId,pid,server=false,sid=null}:any) => {
 	try {
-		const	res = await getAPI(`reviews/product-reviews?pid=${pid}&store=${storeId}`, origin)
+		let	res:any={}
+		if(server){
+			res = await getBySid(`reviews/product-reviews?pid=${pid}&store=${storeId}`, sid)
+		}else{
+			res = await getAPI(`reviews/product-reviews?pid=${pid}&store=${storeId}`, origin)
+		}
 		return res?.data||[];
 	} catch (err) {
 		const e = err as Error;

@@ -12,7 +12,7 @@ export const fetchFaqs = async ({origin, storeId,server=false,sid=null}:any) => 
 		}else{
 			res = await getAPI(`faq?store${storeId}`, origin)
 		}
-		return res.data||{}
+		return res.data||[]
 	} catch (err) {
 		const e = err as Error;
 		throw error(e.status, e.data.message);

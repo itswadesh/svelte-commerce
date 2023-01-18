@@ -26,7 +26,7 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import appStore from '$lib/assets/app/app-store.svg'
 import googlePlay from '$lib/assets/app/google-play.png'
-import { fetchFooterCategories, getFooterCategories } from './services/CategoryService'
+import { fetchFooterCategories } from './services/CategoryService'
 
 export let me, store, popularSearches, megamenu
 

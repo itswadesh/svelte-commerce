@@ -12,7 +12,7 @@ export const fetchOrders = async ({origin, storeId,server=false,sid=null}:any) =
 		}else{
 			res = await getAPI(`orders/my?store=${storeId}&active=true`, origin)
 		}
-		return res.data||{}
+		return res.data||[]
 	} catch (err) {
 		const e = err as Error;
 		throw error(e.status, e.data.message);
@@ -27,7 +27,7 @@ export const fetchOrder = async ({origin, storeId,id,server=false,sid=null}:any)
 		}else{
 			res = await getAPI(`orders/${id}?store=${storeId}`, origin)
 		}
-		return res.data||{}
+		return res.data||[]
 	} catch (err) {
 		const e = err as Error;
 		throw error(e.status, e.data.message);
@@ -42,7 +42,7 @@ export const trackOrder = async ({origin, storeId,id,server=false,sid=null}:any)
 		}else{
 			res = await getAPI(`order-tracking?order=${id}&store=${storeId}`, origin)
 		}
-		return res.data||{}
+		return res.data||[]
 	} catch (err) {
 		const e = err as Error;
 		throw error(e.status, e.data.message);

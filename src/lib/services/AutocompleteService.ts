@@ -1,4 +1,4 @@
-import type { Comment, CommentActionData, CommentVote, Error, Project, ReplyActionData } from '$lib/types';
+import type { Error} from '$lib/types';
 import { getAPI, post } from '$lib/utils/api';
 import { serializeNonPOJOs } from '$lib/utils/validations';
 import { error } from '@sveltejs/kit';
@@ -23,45 +23,45 @@ export const fetchAutocompleteData = async ({origin, storeId,filterText}:any) =>
 	}
 };
 
-export const createComment = async (
-	projectId: string
-): Promise<CommentActionData> => {
-	try {
-		await post('comments',{})
-		return {
-			success: true
-		};
-	} catch (err) {
-		console.log('Error:', err);
+// export const createComment = async (
+// 	projectId: string
+// ): Promise<CommentActionData> => {
+// 	try {
+// 		await post('comments',{})
+// 		return {
+// 			success: true
+// 		};
+// 	} catch (err) {
+// 		console.log('Error:', err);
 
-		const e = err as Error;
+// 		const e = err as Error;
 
-		throw error(e.status, e.data.message);
-	}
-};
+// 		throw error(e.status, e.data.message);
+// 	}
+// };
 
-export const updateComment = async (
-): Promise<CommentActionData> => {
-	try {
-		await post('comments',{})
-		return {
-			success: true
-		};
-	} catch (err) {
-		console.log('Error:', err);
-		const e = err as Error;
-		throw error(e.status, e.data.message);
-	}
-};
+// export const updateComment = async (
+// ): Promise<CommentActionData> => {
+// 	try {
+// 		await post('comments',{})
+// 		return {
+// 			success: true
+// 		};
+// 	} catch (err) {
+// 		console.log('Error:', err);
+// 		const e = err as Error;
+// 		throw error(e.status, e.data.message);
+// 	}
+// };
 
-export const deleteComment = async (locals: App.Locals, id: string) => {
-	try {
-		await delete('comments','id')
-	} catch (err) {
-		if (err instanceof Error) {
-			throw error(err.status, err.data.message);
-		} else {
-			throw error(500, 'Something went wrong while deleting your comment.');
-		}
-	}
-};
+// export const deleteComment = async (locals: App.Locals, id: string) => {
+// 	try {
+// 		await delete('comments','id')
+// 	} catch (err) {
+// 		if (err instanceof Error) {
+// 			throw error(err.status, err.data.message);
+// 		} else {
+// 			throw error(500, 'Something went wrong while deleting your comment.');
+// 		}
+// 	}
+// };

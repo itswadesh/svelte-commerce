@@ -86,9 +86,14 @@ export const fetchProductsOfCategory = async ({origin, storeId,query,categorySlu
 	}
 };
 
-export const fetchNextPageProducts = async ({origin, storeId,categorySlug}:any) => {
+export const fetchNextPageProducts = async ({origin, storeId,categorySlug,server=false,sid=null}:any) => {
 	try {
-		const	res = await getAPI(`es/products?categories=${categorySlug}&store=${storeId}`, origin)
+		let	res:any={}
+		if(server){
+			res = await getBySid(`es/products?categories=${categorySlug}&store=${storeId}`, sid)
+		}else{
+			res = await getAPI(`es/products?categories=${categorySlug}&store=${storeId}`, origin)
+		}
 		const nextPageData = res?.data?.map((p) => {
 			const p1 = { ...p._source }
 			p1.id = p._id
@@ -101,9 +106,14 @@ export const fetchNextPageProducts = async ({origin, storeId,categorySlug}:any) 
 	}
 };
 
-export const fetchRelatedProducts = async ({origin, storeId,categorySlug,pid}:any) => {
+export const fetchRelatedProducts = async ({origin, storeId,categorySlug,pid,server=false,sid=null}:any) => {
 	try {
-		const	relatedProductsRes = await getAPI(`es/products?categories=${categorySlug}&store=${storeId}`, origin)
+				let	relatedProductsRes:any={}
+		if(server){
+		relatedProductsRes = await getBySid(`es/products?categories=${categorySlug}&store=${storeId}`, sid)
+		}else{
+
+		}
 		const relatedProducts = relatedProductsRes?.data.filter((p) => {
 			return p._id !== pid
 		})

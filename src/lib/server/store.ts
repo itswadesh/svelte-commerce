@@ -8,7 +8,8 @@ export const fetchStoreData = async (event: RequestEvent) => {
 		if (zip) {
 			event.locals.zip = JSON.parse(zip)
 		}
-		getStoreData({url:event.request.url,cookies:event.cookies,cookieStore})
+		const r = await getStoreData({url:event.request.url,cookies:event.cookies,cookieStore})
+		return r
 	} catch (e) {
 		return null
 	}

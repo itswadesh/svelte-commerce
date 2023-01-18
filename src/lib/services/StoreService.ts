@@ -32,7 +32,7 @@ import {
 	WWW_URL,
 	youtubeChannel
 } from '$lib/config'
-export const getStoreData=async ({cookieStore,url,cookies}:any)=>{
+export const getStoreData=async ({cookieStore,url,cookies,server=false,sid=null}:any) => {
     let store = {
 			id,
 			address,

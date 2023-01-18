@@ -3,8 +3,8 @@ import { fetchDeals } from '$lib/services/DealsService'
 import { fetchHome } from '$lib/services/HomeService'
 import { error } from '@sveltejs/kit'
 
-export async function load({ params, query, setHeaders, locals, parent, cookies, request }) {
-	const { store } = locals
+export async function load({  locals }) {
+	const { store,origin } = locals
 	try {
 		const home = await fetchHome({storeId:store?.id,server:true})
 		const deals = await fetchDeals({storeId:store?.id,server:true})
@@ -15,8 +15,8 @@ export async function load({ params, query, setHeaders, locals, parent, cookies,
 		throw error(
 			404,
 			`Store Not Found @Page 
-			<br/>ID: ${locals.store.id}
-			<br/>ORIGIN: ${locals.origin}
+			<br/>ID: ${store.id}
+			<br/>ORIGIN: ${origin}
 			<br/>DOMAIN(env):${DOMAIN}
 			<br/>HTTP_ENDPOINT(env):${HTTP_ENDPOINT}`
 		)

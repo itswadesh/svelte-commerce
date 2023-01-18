@@ -12,7 +12,7 @@ export const fetchVendor = async ({origin,id, storeId,server=false,sid=null}:any
 		}else{
 			res = await getAPI(`vendors/${id}`, origin)
 		}
-		return res.data||{}
+		return res.data||[]
 	} catch (err) {
 		const e = err as Error;
 		throw error(e.status, e.data.message);
@@ -27,7 +27,7 @@ export const fetchProductsOfVendor = async ({origin,id, storeId,server=false,sid
 		}else{
 			res = await getAPI(`products?vendors=${id}&store=${storeId}`, origin)
 		}
-		return res.data||{}
+		return res.data||[]
 	} catch (err) {
 		const e = err as Error;
 		throw error(e.status, e.data.message);
