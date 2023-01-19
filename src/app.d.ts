@@ -29,5 +29,11 @@ declare namespace App {
 
 	// interface PageData {}
 
-	// interface Platform {}
+	interface Platform {
+		env?: {
+				PUBLIC_HTTP_ENDPOINT: string;
+				SECRET_SENTRY_DSN: string;
+				PUBLIC_DOMAIN: string;
+			}
+	}
 }
