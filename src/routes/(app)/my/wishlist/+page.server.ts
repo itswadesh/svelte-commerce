@@ -3,7 +3,11 @@ import { error, redirect } from '@sveltejs/kit'
 
 export async function load({ cookies, locals }) {
 	try {
-		const wishlistedProducts = await fetchWishlist({storeId:locals.store?.id, server:true,sid:cookies.get('sid')})
+		const wishlistedProducts = await fetchWishlist({
+			storeId: locals.store?.id,
+			server: true,
+			sid: cookies.get('sid')
+		})
 		if (wishlistedProducts) {
 			return { wishlistedProducts }
 		}

@@ -170,10 +170,29 @@ if (data.product?.size?.name === 'One Size') {
 
 onMount(async () => {
 	screenWidth = screen.width
+
 	try {
-		const relatedProductsRes = await fetchRelatedProducts({pid:data.product._id, categorySlug:data.product.category?.slug,origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
-		isWislisted = await checkhWishlist({pid:data.product._id,vid:data.product._id,origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
-	productReview	 = await fetchProductReviews({pid:data.product._id,origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
+		isWislisted = await checkhWishlist({
+			pid: data.product._id,
+			vid: data.product._id,
+			origin: $page?.data?.origin,
+			storeId: $page?.data?.store?.id
+		})
+
+		productReview = await fetchProductReviews({
+			pid: data.product._id,
+			origin: $page?.data?.origin,
+			storeId: $page?.data?.store?.id
+		})
+
+		relatedProducts = await fetchRelatedProducts({
+			pid: data.product._id,
+			categorySlug: data.product.category?.slug,
+			origin: $page?.data?.origin,
+			storeId: $page?.data?.store?.id
+		})
+
+		console.log('zzzzzzzzzzzzzzzzzz', relatedProducts)
 	} catch (e) {
 	} finally {
 	}
@@ -1212,10 +1231,10 @@ function handleMobileCanvas() {
 				</div>
 			{/if}
 
-			{#if data.product?.relatedProducts?.length}
+			{#if relatedProducts?.length}
 				<hr class="mb-5 w-full sm:mb-10" />
 
-				<SimilarProducts similarProducts="{data.product?.relatedProducts}" />
+				<SimilarProducts similarProducts="{relatedProducts}" />
 			{/if}
 		</div>
 	</div>

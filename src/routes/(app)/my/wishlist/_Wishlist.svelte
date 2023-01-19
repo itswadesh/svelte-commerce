@@ -16,7 +16,7 @@
 import { applyAction, enhance } from '$app/forms'
 import { currency } from '$lib/utils'
 import { fireGTagEvent } from '$lib/utils/gTag'
-import {  post } from '$lib/utils/api'
+import { post } from '$lib/utils/api'
 import { invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
@@ -54,7 +54,10 @@ async function removeFromWishlist(id, wx) {
 
 async function getWishlistedProducts() {
 	try {
-		wishlistedProducts = fetchWishlist({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
+		wishlistedProducts = fetchWishlist({
+			origin: $page?.data?.origin,
+			storeId: $page?.data?.store?.id
+		})
 		await invalidateAll()
 	} catch (e) {
 	} finally {
@@ -72,7 +75,7 @@ async function getWishlistedProducts() {
 	{/if}
 
 	<div>
-		{#if wishlistedProducts?.count === 0}
+		{#if wishlistedProducts?.length === 0}
 			<div class="flex h-[70vh] flex-col items-center justify-center text-center">
 				<img src="/no/empty-wishlist.svg" alt="empty wishlist" class="mb-5 h-60 object-contain" />
 
@@ -88,12 +91,13 @@ async function getWishlistedProducts() {
 			<div class="relative">
 				<div>
 					<h1 class="mb-5 font-serif text-2xl font-medium md:text-3xl lg:text-4xl">
-						My Wishlist ({wishlistedProducts?.count || 0})
+						My Wishlist ({wishlistedProducts?.length || 0})
 					</h1>
-					{#if wishlistedProducts?.data?.length}
+
+					{#if wishlistedProducts?.length}
 						<div
 							class="grid w-full grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-between lg:mb-20">
-							{#each wishlistedProducts.data as w, wx}
+							{#each wishlistedProducts as w, wx}
 								{#if w.product}
 									<form
 										action="/cart?/add"
