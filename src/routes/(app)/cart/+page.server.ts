@@ -1,5 +1,5 @@
 import { getBySid,  post } from '$lib/utils/server'
-import { error,  redirect } from '@sveltejs/kit'
+import { error,  fail,  redirect } from '@sveltejs/kit'
 import type { Action, Actions, PageServerLoad } from './$types'
 
 export const load: PageServerLoad = async ({ url, request, locals, cookies }) => {
@@ -54,7 +54,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 	const options = JSON.parse(data.get('options')) //data.get('options') //
 	const customizedImg = data.get('customizedImg')
 	if (typeof pid !== 'string' || !pid) {
-		return invalid(400, { invalid: true })
+		return fail(400, { invalid: true })
 	}
 	try {
 		let cart = await post(
