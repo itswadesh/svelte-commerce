@@ -1,5 +1,5 @@
-import { error, redirect } from '@sveltejs/kit'
-import { getBySid, gett } from '$lib/utils/server'
+import { redirect } from '@sveltejs/kit'
+import { getBySid } from '$lib/utils/server'
 import { fetchAddress } from '$lib/services/AddressService'
 import { fetchPaymentMethods } from '$lib/services/PaymentMethodService'
 

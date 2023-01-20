@@ -1,9 +1,9 @@
 import { websiteName, description, domain, id } from '$lib/config'
 import { date } from '$lib/utils'
-import { gett } from '$lib/utils/server'
+import { getBySid } from '$lib/utils/server'
 
 export async function GET() {
-	const resP = await gett(`es/products?store=${id}`)
+	const resP = await getBySid(`es/products?store=${id}`)
 	const products = resP?.data?.map((product) => {
 		product = {
 			name: product._source.name.replace('&', ''),

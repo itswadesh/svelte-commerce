@@ -5,25 +5,25 @@ import { differenceInDays, formatDistanceToNowStrict } from 'date-fns'
 import cookie from 'cookie'
 import { HTTP_ENDPOINT } from '$lib/config'
 
-export async function gett(endpoint: string, ck?: any) {
-	const ck1 = cookie.parse(ck || '')
-	const ep = HTTP_ENDPOINT + '/api/' + endpoint
-	const response = await fetch(ep, {
-		method: 'GET',
-		credentials: 'include',
-		headers: { cookie: `sid=${ck1.sid}` }
-	})
-	const isJson = response.headers.get('content-type')?.includes('application/json')
+// export async function gett(endpoint: string, ck?: any) {
+// 	const ck1 = cookie.parse(ck || '')
+// 	const ep = HTTP_ENDPOINT + '/api/' + endpoint
+// 	const response = await fetch(ep, {
+// 		method: 'GET',
+// 		credentials: 'include',
+// 		headers: { cookie: `sid=${ck1.sid}` }
+// 	})
+// 	const isJson = response.headers.get('content-type')?.includes('application/json')
 
-	const res = isJson ? await response.json() : await response.text()
-	if (res?.status > 399) {
-		throw { status: res.status, message: res }
-	} else if (response?.status > 399) {
-		throw { status: response.status, message: res }
-	} else {
-		return res
-	}
-}
+// 	const res = isJson ? await response.json() : await response.text()
+// 	if (res?.status > 399) {
+// 		throw { status: res.status, message: res }
+// 	} else if (response?.status > 399) {
+// 		throw { status: response.status, message: res }
+// 	} else {
+// 		return res
+// 	}
+// }
 export const serializeNonPOJOs = <T>(obj: T): T => {
 	return structuredClone(obj)
 }

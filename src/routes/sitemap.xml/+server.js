@@ -1,7 +1,7 @@
 import { domain, id } from '$lib/config'
-import { gett } from '$lib/utils/server'
+import { getBySid } from '$lib/utils/server'
 export async function GET() {
-	const resP = await gett(`es/products?store=${id}`)
+	const resP = await getBySid(`es/products?store=${id}`)
 	const products = resP?.data?.map((product) => {
 		product = {
 			name: product._source.name.replace('&', ''),
@@ -11,7 +11,7 @@ export async function GET() {
 		}
 		return product
 	})
-	const resPages = await gett(`pages?store=${id}`)
+	const resPages = await getBySid(`pages?store=${id}`)
 	const pages = resPages?.data?.map((page) => {
 		page = {
 			name: page._source.name.replace('&', ''),

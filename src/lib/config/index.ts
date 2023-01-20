@@ -48,10 +48,28 @@ export const sorts = [
 ]
 export const WWW_URL = env.PUBLIC_WWW_URL
 export const listOfPagesWithoutBackButton = [
-			'/',
-			'/categories',
-			'/new-arrivals',
-			'/my/wishlist',
-			'/my',
-			'/payment/success'
-		]
+	'/',
+	'/categories',
+	'/new-arrivals',
+	'/my/wishlist',
+	'/my',
+	'/payment/success'
+]
+
+export const {
+	BIG_COMMERCE_CLIENT_ID = 'nybaukoetx98bdjo5vshh0edr3xsz42',
+	BIG_COMMERCE_CLIENT_SECRET = '09c194121a7dbf059735671991015c2e208cb7d8dfa1f74f63edc9b2353e9720',
+	BIG_COMMERCE_ACCESS_TOKEN = 'evgagyg76wcxcg9uauodegpc1eybfzx',
+	BIG_COMMERCE_STORE_HASH = 'ftelcymxrh',
+} = process.env
+
+export const bigcommerceHeaders = {
+  'X-Auth-Token': BIG_COMMERCE_ACCESS_TOKEN,
+  'Content-Type': 'application/json',
+  Accept: 'application/json',
+}
+
+export const BIG_COMMERCE_BASE_URL = `https://api.bigcommerce.com/stores/${BIG_COMMERCE_STORE_HASH}/v3/catalog`
+// export const provider = 'litekart' 
+// export const provider = 'woocommerce' 
+export const provider:string = 'bigcommerce'
