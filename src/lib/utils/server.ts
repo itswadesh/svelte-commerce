@@ -1,7 +1,8 @@
 import cookie from 'cookie'
 import { BIG_COMMERCE_BASE_URL, HTTP_ENDPOINT, bigcommerceHeaders, provider } from '../config'
 
-import WooCommerceRestApi from '@woocommerce/woocommerce-rest-api'
+import pkg from '@woocommerce/woocommerce-rest-api'
+const WooCommerceRestApi = pkg.default
 import { WOO_COMMERCE_STORE_LINK, WOO_COMMERCE_KEY, WOO_COMMERCE_SECRET } from '../config'
 import { serialize } from '.'
 
