@@ -66,7 +66,7 @@ export const getBySid = async (endpoint: string, sid?: any) => {
 	})
 	const isJson = response.headers.get('content-type')?.includes('application/json')
 	const res = isJson ? await response.json() : await response.text()
-	console.log(res)
+	// console.log(res)
 	if (res?.status > 399) {
 		throw { status: res.status, message: res }
 	} else if (response?.status > 399) {
@@ -77,7 +77,7 @@ export const getBySid = async (endpoint: string, sid?: any) => {
 }
 
 export const getBigCommerceApi = async (endpoint: string, query: any, sid?: any) => {
-	console.log(BIG_COMMERCE_BASE_URL + '/' + endpoint)
+	// console.log(BIG_COMMERCE_BASE_URL + '/' + endpoint)
 	const response = await fetch(BIG_COMMERCE_BASE_URL + '/' + endpoint + '?' + serialize(query), {
 		headers: bigcommerceHeaders
 	})
@@ -86,7 +86,7 @@ export const getBigCommerceApi = async (endpoint: string, query: any, sid?: any)
 
 	const isJson = response.headers.get('content-type')?.includes('application/json')
 	const res = isJson ? await response.json() : await response.text()
-	console.log(res)
+	// console.log(res)
 	if (res?.status > 399) {
 		throw { status: res.status, message: res }
 	} else if (response?.status > 399) {
@@ -100,7 +100,7 @@ export const getWooCommerceApi = async (endpoint: string, query: any, sid?: any)
 	const response = await WooCommerce.get(endpoint + '?' + serialize(query))
 	const isJson = response.headers.get('content-type')?.includes('application/json')
 	const res = isJson ? await response.json() : await response.text()
-	console.log(res)
+	// console.log(res)
 	if (res?.status > 399) {
 		throw { status: res.status, message: res }
 	} else if (response?.status > 399) {

@@ -75,7 +75,7 @@ export const checkhWishlist = async ({
 				res = await getWooCommerceApi(`wishlists/check`, {}, sid)
 				break
 		}
-		return res?.data || []
+		return res
 	} catch (err) {
 		const e = err as Error
 		throw error(e.status, e.data.message)

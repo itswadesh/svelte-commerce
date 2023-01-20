@@ -192,7 +192,6 @@ onMount(async () => {
 			storeId: $page?.data?.store?.id
 		})
 
-		console.log('zzzzzzzzzzzzzzzzzz', relatedProducts)
 	} catch (e) {
 	} finally {
 	}
