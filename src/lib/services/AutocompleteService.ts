@@ -1,27 +1,39 @@
-import type { Error} from '$lib/types';
-import { getAPI, post } from '$lib/utils/api';
-import { serializeNonPOJOs } from '$lib/utils/validations';
-import { error } from '@sveltejs/kit';
+import { provider } from '$lib/config'
+import type { Error } from '$lib/types'
+import { getAPI, post } from '$lib/utils/api'
+import { getBigCommerceApi, getWooCommerceApi } from '$lib/utils/server'
+import { serializeNonPOJOs } from '$lib/utils/validations'
+import { error } from '@sveltejs/kit'
 
-export const fetchAutocompleteData = async ({origin, storeId,filterText}:any) => {
+export const fetchAutocompleteData = async ({ origin, storeId, filterText }: any) => {
 	try {
-		const	res = await getAPI(
-			`es/autocomplete?q=${filterText}&store=${storeId}`,origin
-		)
-		const hits = res?.data?.hits?.hits
+		let res: any = {}
 		let data = []
-		if (hits) {
-			data = hits.map((h) => {
-				return { name: h._source.name, slug: h._source.slug, type: h._source.type }
-			})
+		switch (provider) {
+			case 'litekart':
+				res = await getAPI(`es/autocomplete?q=${filterText}&store=${storeId}`, origin)
+				const hits = res?.data?.hits?.hits
+				if (hits) {
+					data = hits.map((h) => {
+						return { name: h._source.name, slug: h._source.slug, type: h._source.type }
+					})
+				}
+				break
+			case 'bigcommerce':
+				res = await getBigCommerceApi(`es/autocomplete?q=${filterText}&store=${storeId}`, {})
+				data = res
+				break
+			case 'woocommerce':
+				res = await getWooCommerceApi(`es/autocomplete?q=${filterText}&store=${storeId}`, {})
+				break
 		}
 		// must return name:string, slug:string type:string
 		return data || []
 	} catch (err) {
-		const e = err as Error;
-		throw error(e.status, e.data.message);
+		const e = err as Error
+		throw error(e.status, e.data.message)
 	}
-};
+}
 
 // export const createComment = async (
 // 	projectId: string

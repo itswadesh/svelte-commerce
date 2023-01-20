@@ -1,11 +1,14 @@
 import { DOMAIN, HTTP_ENDPOINT } from '$lib/config'
 import { fetchDeals } from '$lib/services/DealsService'
 import { fetchHome } from '$lib/services/HomeService'
+import { fetchProducts } from '$lib/services/ProductService'
 import { error } from '@sveltejs/kit'
 
 export async function load({  locals }) {
 	const { store,origin } = locals
 	try {
+		const p = await fetchProducts({storeId:store?.id,server:true})
+		console.log(p)
 		const home = await fetchHome({storeId:store?.id,server:true})
 		const deals = await fetchDeals({storeId:store?.id,server:true})
 		if (home) {

@@ -1,6 +1,7 @@
+import { provider } from '$lib/config'
 import type { Error } from '$lib/types'
 import { getAPI } from '$lib/utils/api'
-import { getBySid } from '$lib/utils/server'
+import { getBigCommerceApi, getBySid, getWooCommerceApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
@@ -16,16 +17,30 @@ export const fetchReviews = async ({
 }: any) => {
 	try {
 		let res: any = {}
-		if (server) {
-			res = await getBySid(
-				`reviews/${pid}?search=${search || ''}&sort=${sort}&page=${currentPage}&store=${storeId}`,
-				sid
-			)
-		} else {
-			res = await getAPI(
-				`reviews/${pid}?search=${search || ''}&sort=${sort}&page=${currentPage}&store=${storeId}`,
-				origin
-			)
+		switch (provider) {
+			case 'litekart':
+				if (server) {
+					res = await getBySid(
+						`reviews/${pid}?search=${
+							search || ''
+						}&sort=${sort}&page=${currentPage}&store=${storeId}`,
+						sid
+					)
+				} else {
+					res = await getAPI(
+						`reviews/${pid}?search=${
+							search || ''
+						}&sort=${sort}&page=${currentPage}&store=${storeId}`,
+						origin
+					)
+				}
+				break
+			case 'bigcommerce':
+				res = await getBigCommerceApi(`reviews/${pid}`, {}, sid)
+				break
+			case 'woocommerce':
+				res = await getWooCommerceApi(`reviews/${pid}`, {}, sid)
+				break
 		}
 		return res?.data || []
 	} catch (err) {
@@ -43,10 +58,20 @@ export const fetchProductReviews = async ({
 }: any) => {
 	try {
 		let res: any = {}
-		if (server) {
-			res = await getBySid(`reviews/product-reviews?pid=${pid}&store=${storeId}`, sid)
-		} else {
-			res = await getAPI(`reviews/product-reviews?pid=${pid}&store=${storeId}`, origin)
+		switch (provider) {
+			case 'litekart':
+				if (server) {
+					res = await getBySid(`reviews/product-reviews?pid=${pid}&store=${storeId}`, sid)
+				} else {
+					res = await getAPI(`reviews/product-reviews?pid=${pid}&store=${storeId}`, origin)
+				}
+				break
+			case 'bigcommerce':
+				res = await getBigCommerceApi(`reviews/product-reviews?pid=${pid}`, {}, sid)
+				break
+			case 'woocommerce':
+				res = await getWooCommerceApi(`reviews/product-reviews?pid=${pid}`, {}, sid)
+				break
 		}
 		return res?.data || []
 	} catch (err) {

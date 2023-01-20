@@ -1,5 +1,17 @@
 import cookie from 'cookie'
 import { BIG_COMMERCE_BASE_URL, HTTP_ENDPOINT, bigcommerceHeaders, provider } from '../config'
+
+import WooCommerceRestApi from '@woocommerce/woocommerce-rest-api'
+import { WOO_COMMERCE_STORE_LINK, WOO_COMMERCE_KEY, WOO_COMMERCE_SECRET } from '../config'
+import { serialize } from '.'
+
+const WooCommerce = new WooCommerceRestApi({
+	url: WOO_COMMERCE_STORE_LINK,
+	consumerKey: WOO_COMMERCE_KEY,
+	consumerSecret: WOO_COMMERCE_SECRET,
+	version: 'wc/v3'
+})
+
 export async function post(endpoint: string, data: any, ck?: any) {
 	const ep = HTTP_ENDPOINT + '/api/' + endpoint
 	const response = await fetch(ep, {
@@ -46,27 +58,49 @@ export async function gett(endpoint: string, ck?: any) {
 		return res
 	}
 }
-export async function getBySid(endpoint: string, sid?: any) {
-	let response
-	switch(provider){
-		case 'litekart':
-			response = await fetch( HTTP_ENDPOINT + '/api/' + endpoint, {
-			method: 'GET',
-			credentials: 'include',
-			headers: { cookie: `sid=${sid}` }
-		})
-		break
-		case 'bigcommerce':
-			response = await fetch(BIG_COMMERCE_BASE_URL + '/' + endpoint, { headers:bigcommerceHeaders })
-			// const totalPages = res?.meta?.pagination?.total_pages
-			// const totalItems = res?.meta?.pagination?.total
-		break
-		case 'woocommerce':
-			response = await fetch(BIG_COMMERCE_BASE_URL + '/' + endpoint, { headers:bigcommerceHeaders })
-		break
-	}
+export const getBySid = async (endpoint: string, sid?: any) => {
+	const response = await fetch(HTTP_ENDPOINT + '/api/' + endpoint, {
+		method: 'GET',
+		credentials: 'include',
+		headers: { cookie: `sid=${sid}` }
+	})
 	const isJson = response.headers.get('content-type')?.includes('application/json')
 	const res = isJson ? await response.json() : await response.text()
+	console.log(res)
+	if (res?.status > 399) {
+		throw { status: res.status, message: res }
+	} else if (response?.status > 399) {
+		throw { status: response.status, message: res }
+	} else {
+		return res
+	}
+}
+
+export const getBigCommerceApi = async (endpoint: string, query: any, sid?: any) => {
+	console.log(BIG_COMMERCE_BASE_URL + '/' + endpoint)
+	const response = await fetch(BIG_COMMERCE_BASE_URL + '/' + endpoint + '?' + serialize(query), {
+		headers: bigcommerceHeaders
+	})
+	// const totalPages = res?.meta?.pagination?.total_pages
+	// const totalItems = res?.meta?.pagination?.total
+
+	const isJson = response.headers.get('content-type')?.includes('application/json')
+	const res = isJson ? await response.json() : await response.text()
+	console.log(res)
+	if (res?.status > 399) {
+		throw { status: res.status, message: res }
+	} else if (response?.status > 399) {
+		throw { status: response.status, message: res }
+	} else {
+		return res
+	}
+}
+
+export const getWooCommerceApi = async (endpoint: string, query: any, sid?: any) => {
+	const response = await WooCommerce.get(endpoint + '?' + serialize(query))
+	const isJson = response.headers.get('content-type')?.includes('application/json')
+	const res = isJson ? await response.json() : await response.text()
+	console.log(res)
 	if (res?.status > 399) {
 		throw { status: res.status, message: res }
 	} else if (response?.status > 399) {

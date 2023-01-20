@@ -70,6 +70,14 @@ export const bigcommerceHeaders = {
 }
 
 export const BIG_COMMERCE_BASE_URL = `https://api.bigcommerce.com/stores/${BIG_COMMERCE_STORE_HASH}/v3/catalog`
+
+export const {
+	WOO_COMMERCE_KEY='ck_22a412b11bc3045bders7ederrda24d5b6d5245',
+	WOO_COMMERCE_SECRET='cs_98fcss4a9feaf84908197d1fdere30786c38749',
+	WOO_COMMERCE_STORE_LINK='https://test.litekart.in'
+} = process.env
+
+
 // export const provider = 'litekart' 
 // export const provider = 'woocommerce' 
 export const provider:string = 'bigcommerce'

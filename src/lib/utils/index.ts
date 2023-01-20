@@ -91,3 +91,11 @@ export function currency(value, currency = '₹', decimals?) {
 	const sign = value < 0 ? '-' : ''
 	return sign + currency + ' ' + head + _int.slice(i).replace(digitsRE, '$1,') + _float
 }
+export const serialize = (obj)=> {
+  var str = [];
+  for (var p in obj)
+    if (obj.hasOwnProperty(p)) {
+      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+    }
+  return str.join("&");
+}
