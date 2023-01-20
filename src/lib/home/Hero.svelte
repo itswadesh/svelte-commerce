@@ -2,6 +2,7 @@
 import { onMount } from 'svelte'
 import { SplideSlide } from '@splidejs/svelte-splide'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
+
 export let banners = []
 
 $: sliderBanners = banners?.filter((b) => {
@@ -13,9 +14,11 @@ $: sliderBannersMobile = banners?.filter((b) => {
 })
 
 let Carousel, Splide
+
 onMount(async () => {
 	// const RTEmodule = await import('$lib/components/TwECarousel.svelte')
 	// Carousel = RTEmodule.default
+
 	const SplideModule = await import('$lib/components/SplideJs.svelte')
 	Splide = SplideModule.default
 })
