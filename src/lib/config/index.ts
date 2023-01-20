@@ -56,28 +56,30 @@ export const listOfPagesWithoutBackButton = [
 	'/payment/success'
 ]
 
-export const {
-	BIG_COMMERCE_CLIENT_ID = 'nybaukoetx98bdjo5vshh0edr3xsz42',
-	BIG_COMMERCE_CLIENT_SECRET = '09c194121a7dbf059735671991015c2e208cb7d8dfa1f74f63edc9b2353e9720',
-	BIG_COMMERCE_ACCESS_TOKEN = 'evgagyg76wcxcg9uauodegpc1eybfzx',
-	BIG_COMMERCE_STORE_HASH = 'ftelcymxrh',
-} = process.env
+export const BIG_COMMERCE_CLIENT_ID =
+	env.PUBLIC_BIG_COMMERCE_CLIENT_ID || 'nybaukoetx98bdjo5vshh0edr3xsz42'
+export const BIG_COMMERCE_CLIENT_SECRET =
+	env.PUBLIC_BIG_COMMERCE_CLIENT_SECRET ||
+	'09c194121a7dbf059735671991015c2e208cb7d8dfa1f74f63edc9b2353e9720'
+export const BIG_COMMERCE_ACCESS_TOKEN =
+	env.PUBLIC_BIG_COMMERCE_ACCESS_TOKEN || 'evgagyg76wcxcg9uauodegpc1eybfzx'
+export const BIG_COMMERCE_STORE_HASH = env.PUBLIC_BIG_COMMERCE_STORE_HASH || 'ftelcymxrh'
 
 export const bigcommerceHeaders = {
-  'X-Auth-Token': BIG_COMMERCE_ACCESS_TOKEN,
-  'Content-Type': 'application/json',
-  Accept: 'application/json',
+	'X-Auth-Token': BIG_COMMERCE_ACCESS_TOKEN,
+	'Content-Type': 'application/json',
+	Accept: 'application/json'
 }
 
 export const BIG_COMMERCE_BASE_URL = `https://api.bigcommerce.com/stores/${BIG_COMMERCE_STORE_HASH}/v3/catalog`
 
-export const {
-	WOO_COMMERCE_KEY='ck_22a412b11bc3045bders7ederrda24d5b6d5245',
-	WOO_COMMERCE_SECRET='cs_98fcss4a9feaf84908197d1fdere30786c38749',
-	WOO_COMMERCE_STORE_LINK='https://test.litekart.in'
-} = process.env
+export const WOO_COMMERCE_KEY =
+	env.PUBLIC_WOO_COMMERCE_KEY || 'ck_22a412b11bc3045bders7ederrda24d5b6d5245'
+export const WOO_COMMERCE_SECRET =
+	env.PUBLIC_WOO_COMMERCE_SECRET || 'cs_98fcss4a9feaf84908197d1fdere30786c38749'
+export const WOO_COMMERCE_STORE_LINK =
+	env.PUBLIC_WOO_COMMERCE_STORE_LINK || 'https://test.litekart.in'
 
-
-// export const provider = 'litekart' 
-// export const provider = 'woocommerce' 
-export const provider:string = 'bigcommerce'
+export const provider: string = 'litekart'
+// export const provider: string = 'woocommerce'
+// export const provider: string = 'bigcommerce'

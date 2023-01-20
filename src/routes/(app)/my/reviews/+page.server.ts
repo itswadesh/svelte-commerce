@@ -1,5 +1,4 @@
 import { fetchReviews } from '$lib/services/ReviewService'
-import { gett } from '$lib/utils/server'
 import { error, redirect } from '@sveltejs/kit'
 
 export async function load({ cookies, locals }) {

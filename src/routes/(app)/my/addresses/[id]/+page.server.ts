@@ -1,6 +1,5 @@
 import { fetchAddresses } from '$lib/services/AddressService'
 import { fetchStates } from '$lib/services/CountryService'
-import { gett } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 
 export async function load({ locals, params, parent, cookies }) {

@@ -1,5 +1,4 @@
 import { fetchOrders } from '$lib/services/OrdersService'
-import { gett } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 
 export async function load({ params, parent, request, locals, cookies }) {

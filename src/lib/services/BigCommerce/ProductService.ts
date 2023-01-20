@@ -1,6 +1,6 @@
 import type { Error } from '$lib/types'
 import { getAPI } from '$lib/utils/api'
-import { getBySid, gett } from '$lib/utils/server'
+import { getBySid } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 

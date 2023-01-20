@@ -1,5 +1,4 @@
 import { searchProducts } from '$lib/services/ProductService'
-import { gett } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 export const prerender = false
 
@@ -24,7 +23,7 @@ export async function load({ url, locals, cookies, parent }) {
 
 	try {
 		loading = true
-		const res = await searchProducts({storeId:store?.id,query:query.toString(),server:true})
+		const res = await searchProducts({ storeId: store?.id, query: query.toString(), server: true })
 		ressss = res
 		products = res.products
 		count = res.count

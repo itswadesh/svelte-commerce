@@ -1,5 +1,4 @@
 import { fetchProduct } from '$lib/services/ProductService'
-import { gett } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 
 export async function load({ params, parent, cookies, locals, request }) {
