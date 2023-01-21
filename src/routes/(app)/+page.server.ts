@@ -7,7 +7,7 @@ import { error } from '@sveltejs/kit'
 export async function load({ locals }) {
 	const { store, origin } = locals
 	try {
-		// const p = await fetchProducts({storeId:store?.id,server:true})
+		// const p = await fetchProducts({ storeId: store?.id, server: true })
 		// console.log(p)
 		const home = await fetchHome({ storeId: store?.id, server: true })
 		const deals = await fetchDeals({ storeId: store?.id, server: true })

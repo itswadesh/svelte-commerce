@@ -98,7 +98,7 @@ function selectPrimaryImage() {
 	on:mouseenter="{showitems}"
 	on:mouseleave="{hideitems}">
 	<a
-		href="/product/{product.slug}"
+		href="/product/{product.slug}?id=${product.id}"
 		target="{$page?.data?.isDesktop ? '_blank' : ''}"
 		rel="noopener noreferrer"
 		aria-label="Click to view the product details"

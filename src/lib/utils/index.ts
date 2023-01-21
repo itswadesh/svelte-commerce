@@ -21,11 +21,19 @@ export const delay = (delayInms) => {
 
 export const getCdnImageUrl = (src) => {
 	if (src) {
-		const originalImageUrl = src
-			.replace('https://s3.ap-south-1.amazonaws.com/litekart.in/', '/')
-			.replace('https://misiki.s3.ap-south-1.amazonaws.com/', '/misiki/')
-			.replace('https://varnijewels.s3.amazonaws.com/', '/')
-		return IMAGE_CDN_URL + originalImageUrl
+		if (
+			src.includes('https://s3.ap-south-1.amazonaws.com/litekart.in/') ||
+			src.includes('https://misiki.s3.ap-south-1.amazonaws.com/') ||
+			src.includes('https://varnijewels.s3.amazonaws.com/')
+		) {
+			const originalImageUrl = src
+				.replace('https://s3.ap-south-1.amazonaws.com/litekart.in/', '/')
+				.replace('https://misiki.s3.ap-south-1.amazonaws.com/', '/misiki/')
+				.replace('https://varnijewels.s3.amazonaws.com/', '/')
+			return IMAGE_CDN_URL + originalImageUrl
+		} else {
+			return src
+		}
 	}
 }
 
@@ -91,11 +99,11 @@ export function currency(value, currency = '₹', decimals?) {
 	const sign = value < 0 ? '-' : ''
 	return sign + currency + ' ' + head + _int.slice(i).replace(digitsRE, '$1,') + _float
 }
-export const serialize = (obj)=> {
-  var str = [];
-  for (var p in obj)
-    if (obj.hasOwnProperty(p)) {
-      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-    }
-  return str.join("&");
+export const serialize = (obj) => {
+	var str = []
+	for (var p in obj)
+		if (obj.hasOwnProperty(p)) {
+			str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]))
+		}
+	return str.join('&')
 }

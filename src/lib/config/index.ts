@@ -80,6 +80,12 @@ export const WOO_COMMERCE_SECRET =
 export const WOO_COMMERCE_STORE_LINK =
 	env.PUBLIC_WOO_COMMERCE_STORE_LINK || 'https://test.litekart.in'
 
-export const provider: string = 'litekart'
-// export const provider: string = 'woocommerce'
+export const woocommerceHeaders = {
+	username: WOO_COMMERCE_KEY,
+	password: WOO_COMMERCE_SECRET,
+	'Content-Type': 'application/json',
+	Accept: 'application/json'
+}
+// export const provider: string = 'litekart'
+export const provider: string = 'woocommerce'
 // export const provider: string = 'bigcommerce'

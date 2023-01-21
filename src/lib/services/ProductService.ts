@@ -54,22 +54,65 @@ export const searchProducts = async ({
 	}
 }
 
-export const fetchProduct = async ({ origin, id, server = false, sid = null }: any) => {
+export const fetchProduct = async ({ origin, slug, id, server = false, sid = null }: any) => {
 	try {
 		let res: any = {}
 		switch (provider) {
 			case 'litekart':
 				if (server) {
-					res = await getBySid(`products/${id}`, sid)
+					res = await getBySid(`products/${slug}`, sid)
 				} else {
-					res = await getAPI(`products/${id}`, origin)
+					res = await getAPI(`products/${slug}`, origin)
 				}
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`products/${id}`, {}, sid)
 				break
 			case 'woocommerce':
-				res = await getWooCommerceApi(`products/${id}`, {}, sid)
+				const p = (await getWooCommerceApi(`products/${id}`, {}, sid)).data
+				if (p) {
+					res = {
+						id: p.id,
+						name: p.name,
+						slug: p.slug,
+						createdAt: p.date_created,
+						modifiedAt: p.date_modified,
+						type: p.type,
+						status: p.status,
+						featured: p.featured,
+						active: p.catalog_visibility,
+						description: p.description,
+						short_description: p.short_description,
+						sku: p.sku,
+						price: p.price,
+						mrp: p.regular_price,
+						sale_price: p.sale_price,
+						on_sale: p.on_sale,
+						varified: p.purchasable,
+						popularity: p.total_sales,
+						digital: p.virtual,
+						link: p.external_url,
+						stock: p.stock_quantity,
+						low_stock_amount: p.low_stock_amount,
+						weight: p.weight,
+						dimensions: p.dimensions,
+						averageRating: p.average_rating,
+						ratingRount: p.rating_count,
+						categories: p.categories,
+						tags: p.tags,
+						attributes: p.attributes,
+						default_attributes: p.default_attributes,
+						variations: p.variations,
+						grouped_products: p.grouped_products,
+						related_products: p.related_ids,
+						stock_status: p.stock_status,
+						has_options: p.has_options,
+						images: p.images.map((i) => {
+							if (i) return i.src
+						})
+					}
+					res.img = res.images[0]
+				}
 				break
 		}
 		return res || {}

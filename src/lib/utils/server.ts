@@ -1,5 +1,11 @@
 import cookie from 'cookie'
-import { BIG_COMMERCE_BASE_URL, HTTP_ENDPOINT, bigcommerceHeaders, provider } from '../config'
+import {
+	BIG_COMMERCE_BASE_URL,
+	HTTP_ENDPOINT,
+	bigcommerceHeaders,
+	provider,
+	woocommerceHeaders
+} from '../config'
 
 import WooCommerceRestApi from '@woocommerce/woocommerce-rest-api' // node v-18
 // const WooCommerceRestApi = pkg.default // node v-16
@@ -98,15 +104,22 @@ export const getBigCommerceApi = async (endpoint: string, query: any, sid?: any)
 }
 
 export const getWooCommerceApi = async (endpoint: string, query: any, sid?: any) => {
-	const response = await WooCommerce.get(endpoint + '?' + serialize(query))
-	const isJson = response.headers.get('content-type')?.includes('application/json')
-	const res = isJson ? await response.json() : await response.text()
-	// console.log(res)
-	if (res?.status > 399) {
-		throw { status: res.status, message: res }
-	} else if (response?.status > 399) {
-		throw { status: response.status, message: res }
-	} else {
-		return res
+	try {
+		const res = await WooCommerce.get(endpoint + '?' + serialize(query))
+		// const response = await fetch(
+		// 	`${WOO_COMMERCE_STORE_LINK}/wp-json/wc/v3/${endpoint + '?' + serialize(query)}`,
+		// 	{
+		// 		headers: woocommerceHeaders
+		// 	}
+		// )
+		// const isJson = response.headers.get('content-type')?.includes('application/json')
+		// console.log(res)
+		if (res?.status > 399) {
+			throw { status: res.status, message: res }
+		} else {
+			return res
+		}
+	} catch (e) {
+		// console.log('eeeeeeeeeeeeee', e.message)
 	}
 }
