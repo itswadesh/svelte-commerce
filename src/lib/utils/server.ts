@@ -73,7 +73,6 @@ export const getBySid = async (endpoint: string, sid?: any) => {
 	})
 	const isJson = response.headers.get('content-type')?.includes('application/json')
 	const res = isJson ? await response.json() : await response.text()
-	// console.log(res)
 	if (res?.status > 399) {
 		throw { status: res.status, message: res }
 	} else if (response?.status > 399) {

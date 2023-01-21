@@ -159,7 +159,7 @@ export const fetchProduct = async ({ origin, slug, id, server = false, sid = nul
 		return res || {}
 	} catch (err) {
 		const e = err as Error
-		throw error(e.status, e.data.message)
+		throw error(e.status, e.data?.message || 'Not found')
 	}
 }
 

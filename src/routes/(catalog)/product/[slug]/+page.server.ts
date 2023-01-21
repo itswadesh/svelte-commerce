@@ -14,7 +14,7 @@ export async function load({ params, parent, url, cookies, locals, request }) {
 		// cookies.set('cache-control', 'public, max-age=200')
 		return { product, deliveryDetails: zip }
 	} catch (e) {
-		throw error(e.status, e.message)
+		throw error(e.status, e.message || 'Not found')
 	}
 }
 
