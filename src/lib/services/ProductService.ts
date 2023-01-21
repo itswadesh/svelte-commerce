@@ -66,7 +66,48 @@ export const fetchProduct = async ({ origin, slug, id, server = false, sid = nul
 				}
 				break
 			case 'bigcommerce':
-				res = await getBigCommerceApi(`products/${id}`, {}, sid)
+				const b = (await getBigCommerceApi(`products/${id}`, {}, sid)).data
+				let images = (await getBigCommerceApi(`products/${id}/images`, {}, sid)).data
+				if (b) {
+					images = images.map((i) => i.url_standard)
+					res = {
+						id: b.id,
+						name: b.name,
+						type: b.type,
+						sku: b.sku,
+						description: b.description,
+						images,
+						weight: b.weight,
+						width: b.width,
+						depth: b.depth,
+						height: b.height,
+						price: b.price,
+						mrp: b.cost_price,
+						categories: b.categories,
+						brandId: b.brand_id,
+						stock: b.inventory_level,
+						averageRating: b.reviews_rating_sum,
+						totalReviews: b.reviews_count,
+						approved: b.is_visible,
+						featured: b.is_featured,
+						related_products: b.related_products,
+						warranty: b.warranty,
+						upc: b.upc,
+						mpn: b.mpn,
+						gtin: b.gtin,
+						keywords: b.keywords,
+						availability: b.availability,
+						sort: b.sort_order,
+						condition: b.condition,
+						title: b.page_title,
+						metaKeywords: b.meta_keywords,
+						metaDescription: b.meta_description,
+						createdAt: b.date_created,
+						updatedAt: b.date_modified,
+						popularity: b.view_count
+					}
+					res.img = res.images[0]
+				}
 				break
 			case 'woocommerce':
 				const p = (await getWooCommerceApi(`products/${id}`, {}, sid)).data
