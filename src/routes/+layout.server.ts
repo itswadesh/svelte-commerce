@@ -2,7 +2,7 @@ export const prerender = false
 import { DOMAIN, HTTP_ENDPOINT, listOfPagesWithoutBackButton } from '$lib/config'
 import { error } from '@sveltejs/kit'
 
-export async function load({ url, request, locals, cookies }) {
+export async function load({ url, request, locals, cookies, setHeaders }) {
 	try {
 		const isDesktop = request.headers.get('sec-ch-ua-mobile') === '?0'
 		const isShowBackButton = !listOfPagesWithoutBackButton.includes(url?.pathname)
@@ -14,6 +14,9 @@ export async function load({ url, request, locals, cookies }) {
 		locals.q = q
 		locals.isDesktop = isDesktop
 		locals.isShowBackButton = isShowBackButton
+		setHeaders({
+			'cache-control': 'public, max-age=604800'
+		})
 		return locals
 	} catch (e) {
 		throw error(
