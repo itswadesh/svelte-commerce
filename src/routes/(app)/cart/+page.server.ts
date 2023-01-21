@@ -1,5 +1,5 @@
 import { fetchRefreshCart } from '$lib/services/CartService'
-import { getBySid, post } from '$lib/utils/server'
+import { post } from '$lib/utils/server'
 import { error, fail, redirect } from '@sveltejs/kit'
 import type { Action, Actions, PageServerLoad } from './$types'
 
@@ -8,7 +8,6 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies }) =>
 	let cart = locals.cart
 	try {
 		loading = true
-		// const res = await getBySid(`carts/refresh-cart?store=${locals.store?.id}`, cookies.get('sid'))
 		const res = await fetchRefreshCart({
 			storeId: locals.store?.id,
 			sid: cookies.get('sid'),

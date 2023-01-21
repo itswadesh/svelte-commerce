@@ -1,4 +1,5 @@
-import { getBySid, post } from '$lib/utils/server'
+import { fetchRefreshCart } from '$lib/services/CartService'
+import { post } from '$lib/utils/server'
 import { error, redirect } from '@sveltejs/kit'
 
 export const prerender = false
@@ -8,11 +9,8 @@ export async function load({ url, request, locals, cookies }) {
 	const status = url.searchParams.get('status')
 	const paymentMode = url.searchParams.get('provider')
 	let loading, err, order, cart
-	// const getPaySuccessPageHit = async () => {
 	try {
 		loading = true
-		// request.headers.set('content-type', 'application/json')
-
 		const res = await post(
 			`orders/pay-sucess-page-hit`,
 			{
@@ -38,11 +36,9 @@ export async function load({ url, request, locals, cookies }) {
 	} finally {
 		loading = false
 	}
-	// }
 
-	// const refreshCart = async () => {
 	try {
-		cart = await getBySid(`carts/refresh-cart?store=${locals.store?.id}`, cookies.get('sid'))
+		cart = fetchRefreshCart({ storeId: locals.store?.id, server: true, sid: cookies.get('sid') })
 		if (cart) {
 			const cartObj = {
 				cartId: cart?.cart_id,
@@ -66,7 +62,5 @@ export async function load({ url, request, locals, cookies }) {
 			cookies.set('cartQty', cartObj.qty, { path: '/' })
 		}
 	} catch (e) {}
-
-	// }
 	return { loading, status, paymentMode, order, err, cart }
 }

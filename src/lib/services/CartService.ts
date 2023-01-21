@@ -55,3 +55,29 @@ export const fetchRefreshCart = async ({ origin, storeId, server = false, sid = 
 		throw error(e.status, e.data?.message)
 	}
 }
+
+export const fetchMyCart = async ({ origin, storeId, server = false, sid = null }: any) => {
+	try {
+		let res: any = {}
+		switch (provider) {
+			case 'litekart':
+				if (server) {
+					res = await getBySid(`carts/my?store=${storeId}`, sid)
+					// res = await getBySid(`carts/my?store=${storeId}`, sid)
+				} else {
+					res = await getAPI(`carts/my?store=${storeId}`, origin)
+				}
+				break
+			case 'bigcommerce':
+				res = await getBigCommerceApi(`carts/my`, {}, sid)
+				break
+			case 'woocommerce':
+				res = await getWooCommerceApi(`carts/my`, {}, sid)
+				break
+		}
+		return res || {}
+	} catch (err) {
+		const e = err as Error
+		throw error(e.status, e.data?.message)
+	}
+}

@@ -1,4 +1,4 @@
-import { getBySid } from '$lib/utils/server'
+import { fetchMyCart } from '$lib/services/CartService'
 import cookie from 'cookie'
 export const prerender = false
 
@@ -8,7 +8,11 @@ export async function load({ url, locals, request, cookies }) {
 	const q = url.searchParams.get('q') || ''
 	let cart, serializedCart, serializedStore
 	try {
-		const res = await getBySid(`carts/my?store=${locals.store?.id}`, cookies.get('sid'))
+		const res: any = fetchMyCart({
+			storeId: locals.store?.id,
+			server: true,
+			sid: cookies.get('sid')
+		})
 
 		if (res) {
 			const cookieCart = {
