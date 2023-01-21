@@ -5,8 +5,13 @@ export const prerender = false
 export async function load({ params, url, locals, cookies, request }) {
 	const { store } = locals
 	const { id } = params
-	const order = await fetchOrder({storeId:locals.store?.id, id, server:true,sid:cookies.get('sid')})
-	const orderTracking = await trackOrder({id,store:store?.id})
+	const order = await fetchOrder({
+		storeId: locals.store?.id,
+		id,
+		server: true,
+		sid: cookies.get('sid')
+	})
+	const orderTracking = await trackOrder({ id, store: store?.id })
 	if (order) {
 		return { order, orderTracking }
 	} else {

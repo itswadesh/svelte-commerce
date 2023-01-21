@@ -3,12 +3,13 @@ import { refreshCartData } from '$lib/services/CartService'
 import { error, redirect } from '@sveltejs/kit'
 export const prerender = false
 
-export async function load({ request, url, locals }) {
+export async function load({ request, url, locals, cookies }) {
 	try {
 		let err
 		const { myAddresses, selectedAddress } = await fetchAddresses({
 			storeId: locals.store?.id,
-			server: true
+			server: true,
+			sid: cookies.get('sid')
 		})
 		const currentPage = +url.searchParams.get('page') || 1
 		const q = url.searchParams.get('q') || ''

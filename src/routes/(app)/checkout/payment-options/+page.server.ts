@@ -31,9 +31,12 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 	try {
 		const addressId = url.searchParams.get('address')
 
-		const address = await fetchAddress({storeId:locals.store?.id, server:true})
-		const paymentMethods =
-			await fetchPaymentMethods({storeId:locals.store.id,server:true})
+		const address = await fetchAddress({
+			storeId: locals.store?.id,
+			server: true,
+			sid: cookies.get('sid')
+		})
+		const paymentMethods = await fetchPaymentMethods({ storeId: locals.store.id, server: true })
 		return { paymentMethods, address, addressId, me, cart }
 	} catch (e) {
 		if (e) {

@@ -3,7 +3,11 @@ import { error } from '@sveltejs/kit'
 
 export async function load({ params, parent, request, locals, cookies }) {
 	try {
-		const orders = await fetchOrders({storeId:locals.store?.id, server:true,sid:cookies.get('sid')})
+		const orders = await fetchOrders({
+			storeId: locals.store?.id,
+			server: true,
+			sid: cookies.get('sid')
+		})
 		if (orders) {
 			return { orders: orders }
 		}

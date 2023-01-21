@@ -9,10 +9,19 @@ export async function load({ locals, params, parent, cookies }) {
 	if (id === 'new') {
 		address = { id: 'new' }
 	} else {
-		address = await fetchAddresses({storeId:locals.store?.id, server:true,sid:cookies.get('sid')})
+		address = await fetchAddresses({
+			storeId: locals.store?.id,
+			server: true,
+			sid: cookies.get('sid')
+		})
 	}
 	const countries = { data: [{ code: 'IN', name: 'India' }] }
-	const states = await fetchStates({storeId:locals.store?.id, server:true,sid:cookies.get('sid'),countryCode:'IN'})
+	const states = await fetchStates({
+		storeId: locals.store?.id,
+		server: true,
+		sid: cookies.get('sid'),
+		countryCode: 'IN'
+	})
 
 	if (address) {
 		return { address, countries, states }

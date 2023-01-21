@@ -6,7 +6,11 @@ export async function load({ cookies, locals }) {
 	const { me, store } = locals
 	let profile = {}
 	try {
-		const data = await fetchMeData({storeId:locals.store?.id, server:true,sid:cookies.get('sid')})
+		const data = await fetchMeData({
+			storeId: locals.store?.id,
+			server: true,
+			sid: cookies.get('sid')
+		})
 		data.dob = data.dob ? dayjs(data.dob).format('YYYY-MM-DD') : null
 		profile = data || {
 			email: me.email,
