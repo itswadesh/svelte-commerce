@@ -127,10 +127,10 @@ function goCheckbox(e) {
 	fl.q = $page.url.searchParams.get('q')
 	let url = constructURL2(`${$page.url.pathname}`, fl)
 	appliedFilters = { ...fl }
-	delete appliedFilters.page
-	delete appliedFilters.sort
-	delete appliedFilters.lat
-	delete appliedFilters.lng
+	delete appliedFilters?.page
+	delete appliedFilters?.sort
+	delete appliedFilters?.lat
+	delete appliedFilters?.lng
 	goto(`${url}page=1`)
 }
 

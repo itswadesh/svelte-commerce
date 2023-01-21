@@ -26,7 +26,7 @@ function scrollToTop() {
 
 function changePage(e, p) {
 	let fl = { ...data.query }
-	delete fl.page
+	delete fl?.page
 	const url = constructURL2('/stores', fl)
 	let page = parseInt(e.detail || 1)
 	goto(`${url}page=${page}`)

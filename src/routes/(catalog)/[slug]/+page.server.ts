@@ -27,13 +27,18 @@ export async function load({ url, params, locals, cookies, parent, setHeaders })
 	let res
 	try {
 		loading = true
-	res = await 	fetchProductsOfCategory({storeId:store?.id,query:query.toString(),categorySlug,server:true})
-		products = res.products
-		count = res.count
-		facets = res.facets
-		pageSize = res.pageSize
-		category = res.category
-		err = res.err
+		res = await fetchProductsOfCategory({
+			storeId: store?.id,
+			query: query.toString(),
+			categorySlug,
+			server: true
+		})
+		products = res?.products
+		count = res?.count
+		facets = res?.facets
+		pageSize = res?.pageSize
+		category = res?.category
+		err = res?.err
 	} catch (e) {
 		err = e
 		throw error(400, e?.message || e || 'No results found')

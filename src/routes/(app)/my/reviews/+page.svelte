@@ -205,7 +205,7 @@ await fetchReviews({pid:data.product._id, search:data.search,sort:data.sort,curr
 
 		<Pagination
 			count="{Math.ceil(
-				data.reviews.data?.myReviews.count / data.reviews.data?.myReviews.pageSize
+				data.reviews.data?.myReviews.count / data.reviews.data?.myReviews?.pageSize
 			)}"
 			current="{+data.currentPage}" />
 	{:else}
