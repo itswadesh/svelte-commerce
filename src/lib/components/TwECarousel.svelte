@@ -1,12 +1,12 @@
 <script>
 // import 'tw-elements'
-import { browser } from '$app/environment'
+// import { browser } from '$app/environment'
 import { nanoid } from 'nanoid'
-import { onMount } from 'svelte'
+// import { onMount } from 'svelte'
 
-onMount(async () => {
-	if (browser) await import('tw-elements/dist/src/js/index.js')
-})
+// onMount(async () => {
+// 	if (browser) await import('tw-elements/dist/src/js/index.js')
+// })
 const r = nanoid()
 </script>
 

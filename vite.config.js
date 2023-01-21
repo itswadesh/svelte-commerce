@@ -12,9 +12,6 @@ export default defineConfig(({ command, mode }) => {
 			proxy: {
 				'/api': HTTP_ENDPOINT
 			}
-		},
-		define: {
-			global: {}
 		}
 	}
 })

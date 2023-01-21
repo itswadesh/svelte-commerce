@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-	content: ['./src/**/*.{html,js,svelte,ts}', './node_modules/tw-elements/dist/js/**/*.js'],
+	content: ['./src/**/*.{html,js,svelte,ts}'],
 	theme: {
 		extend: {
 			colors: {
@@ -62,7 +62,6 @@ module.exports = {
 		}
 	},
 	plugins: [
-		require('tw-elements/dist/plugin'),
 		require('tailwind-scrollbar'),
 		require('@tailwindcss/typography'),
 		require('@tailwindcss/line-clamp')

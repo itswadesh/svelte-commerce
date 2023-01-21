@@ -7,17 +7,17 @@ import {
 	woocommerceHeaders
 } from '../config'
 
-import WooCommerceRestApi from '@woocommerce/woocommerce-rest-api' // node v-18
+// import pkg from '@woocommerce/woocommerce-rest-api' // node v-18
 // const WooCommerceRestApi = pkg.default // node v-16
 import { WOO_COMMERCE_STORE_LINK, WOO_COMMERCE_KEY, WOO_COMMERCE_SECRET } from '../config'
 import { serialize } from '.'
 
-const WooCommerce = new WooCommerceRestApi({
-	url: WOO_COMMERCE_STORE_LINK,
-	consumerKey: WOO_COMMERCE_KEY,
-	consumerSecret: WOO_COMMERCE_SECRET,
-	version: 'wc/v3'
-})
+// const WooCommerce = new WooCommerceRestApi({
+// 	url: WOO_COMMERCE_STORE_LINK,
+// 	consumerKey: WOO_COMMERCE_KEY,
+// 	consumerSecret: WOO_COMMERCE_SECRET,
+// 	version: 'wc/v3'
+// })
 
 export async function post(endpoint: string, data: any, ck?: any) {
 	const ep = HTTP_ENDPOINT + '/api/' + endpoint
@@ -105,7 +105,7 @@ export const getBigCommerceApi = async (endpoint: string, query: any, sid?: any)
 
 export const getWooCommerceApi = async (endpoint: string, query: any, sid?: any) => {
 	try {
-		const res = await WooCommerce.get(endpoint + '?' + serialize(query))
+		// const res = await WooCommerce.get(endpoint + '?' + serialize(query))
 		// const response = await fetch(
 		// 	`${WOO_COMMERCE_STORE_LINK}/wp-json/wc/v3/${endpoint + '?' + serialize(query)}`,
 		// 	{
@@ -114,11 +114,11 @@ export const getWooCommerceApi = async (endpoint: string, query: any, sid?: any)
 		// )
 		// const isJson = response.headers.get('content-type')?.includes('application/json')
 		// console.log(res)
-		if (res?.status > 399) {
-			throw { status: res.status, message: res }
-		} else {
-			return res
-		}
+		// if (res?.status > 399) {
+		// 	throw { status: res.status, message: res }
+		// } else {
+		// 	return res
+		// }
 	} catch (e) {
 		// console.log('eeeeeeeeeeeeee', e.message)
 	}

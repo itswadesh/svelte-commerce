@@ -33,7 +33,7 @@ export async function load({ url, locals, request, cookies }) {
 	} catch (e) {
 	} finally {
 	}
-	
+
 	if (cookies) {
 		cookies.set(serializedCart)
 	}

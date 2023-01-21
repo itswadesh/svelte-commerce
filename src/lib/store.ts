@@ -50,9 +50,9 @@ export const fetchLocation = async () => {
 }
 export const fetchSettings = async () => {
 	try {
-		const data = (await gett('settings')).data?.settings
+		const data = (await getBySid('settings')).data?.settings
 		settings.set(data)
-		if (data.otpLogin) loginUrl.set(locals.store?.loginUrl)
+		// if (data.otpLogin) loginUrl.set(locals.store?.loginUrl)
 	} catch (e) {
 		settings.set({})
 	}
