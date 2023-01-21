@@ -21,15 +21,16 @@ export const fetchAddresses = async ({ origin, storeId, server = false, sid = nu
 				myAddresses = res.data || []
 				break
 			case 'bigcommerce':
-				myAddresses = await getBigCommerceApi(`addresses/my`, {}, sid)
+				myAddresses = (await getBigCommerceApi(`addresses/my`, {}, sid)).data
 				selectedAddress = myAddresses[0]?._id
 				break
 			case 'woocommerce':
-				myAddresses = await getWooCommerceApi(`addresses/my`, {}, sid)
+				myAddresses = (await getWooCommerceApi(`addresses/my`, {}, sid)).data
 				selectedAddress = myAddresses[0]?._id
 				break
 		}
-		return { myAddresses, selectedAddress }
+		console.log('xxxxxxxxxxxxxxxxxxx', myAddresses)
+		return { myAddresses: { data: myAddresses }, selectedAddress, count: res.count }
 	} catch (err) {
 		const e = err as Error
 		throw error(e.status, e.data.message)

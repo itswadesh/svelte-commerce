@@ -6,34 +6,34 @@ import Error from '$lib/components/Error.svelte'
 import Pricesummary from '$lib/components/Pricesummary.svelte'
 import SelectAddress from '../_SelectAddress.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+import { invalidateAll } from '$app/navigation'
 
 export let data
-$: ({ cart, loading, myAddresses, err, prescriptionId, selectedAddress } = data)
-
 const seoProps = {
 	title: 'Address ',
 	metadescription: 'Address'
 }
 
 function addressChanged(detail) {
-	selectedAddress = detail.detail
+	data.selectedAddress = detail.detail
 }
 
 async function refreshAddress() {
-	try {
-		myAddresses = await getAPI('addresses/my', $page.data.origin)
-		selectedAddress = myAddresses?.data[0]?._id
-	} catch (e) {
-		err = e
-	} finally {
-	}
+	invalidateAll()
+	// try {
+	// 	myAddresses = await getAPI('addresses/my', $page.data.origin)
+	// 	selectedAddress = myAddresses?.data[0]?._id
+	// } catch (e) {
+	// 	err = e
+	// } finally {
+	// }
 }
 </script>
 
 <SEO {...seoProps} />
 
 <div class="container mx-auto min-h-screen w-full max-w-6xl p-3 py-5 sm:p-10">
-	<Error err="{err}" />
+	<Error err="{data.err}" />
 
 	<CheckoutHeader selected="address" />
 	<!-- isPrescription="{cart.needPrescription}" -->
@@ -44,13 +44,13 @@ async function refreshAddress() {
 				Select Delivery Address
 			</h1>
 
-			{#if myAddresses?.count > 0}
+			{#if data.myAddresses?.data?.length > 0}
 				<div class="mx-auto mt-5 rounded-lg border bg-white shadow-lg">
-					{#each myAddresses.data as ads}
+					{#each data.myAddresses.data as ads}
 						<SelectAddress
-							loading="{loading}"
+							loading="{data.loading}"
 							address="{ads}"
-							selectedAddress="{selectedAddress}"
+							selectedAddress="{data.selectedAddress}"
 							on:deleteAddress="{refreshAddress}"
 							on:addressChanged="{({ detail }) => addressChanged({ detail })}" />
 					{/each}
@@ -91,22 +91,22 @@ async function refreshAddress() {
 		<div class="w-full lg:w-80 lg:flex-shrink-0 lg:flex-grow-0">
 			<h2 class="text-xl font-bold capitalize tracking-wide sm:text-2xl">Cart Summary</h2>
 
-			{#if selectedAddress}
+			{#if data.selectedAddress}
 				<Pricesummary
-					cart="{cart}"
+					cart="{data.cart}"
 					text="Proceed"
 					showNextIcon
 					nextpage="
-				    {prescriptionId
-						? `/checkout/payment-options?address=${selectedAddress}&prescription=${prescriptionId}`
-						: `/checkout/payment-options?address=${selectedAddress}`}"
-					loading="{loading}" />
+				    {data.prescriptionId
+						? `/checkout/payment-options?address=${data.selectedAddress}&prescription=${prescriptionId}`
+						: `/checkout/payment-options?address=${data.selectedAddress}`}"
+					loading="{data.loading}" />
 			{:else}
 				<Pricesummary
-					cart="{cart}"
+					cart="{data.cart}"
 					text="Please select address"
 					disabled="{true}"
-					loading="{loading}" />
+					loading="{data.loading}" />
 			{/if}
 		</div>
 	</div>

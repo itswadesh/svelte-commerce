@@ -18,26 +18,14 @@ export async function load({ request, url, locals, cookies }) {
 			server: true,
 			sid: cookies.get('sid')
 		})
-		if (myAddresses?.data?.length) {
-			return {
-				cart,
-				myAddresses,
-				selectedAddress,
-				url: url.href,
-				currentPage,
-				q,
-				err
-			}
-		} else {
-			return {
-				cart,
-				myAddresses: [],
-				selectedAddress,
-				url: url.href,
-				currentPage,
-				q,
-				err
-			}
+		return {
+			cart,
+			myAddresses,
+			selectedAddress,
+			url: url.href,
+			currentPage,
+			q,
+			err
 		}
 	} catch (e) {
 		if (e.status === 401) {
