@@ -75,7 +75,7 @@ export const getBySid = async (endpoint: string, sid?: any) => {
 	const res = isJson ? await response.json() : await response.text()
 	// console.log('aaaaaaaaaaaaaaaaaa', endpoint, response.status, res)
 	if (response?.status > 399) {
-		throw { status: response.status, message: response.text }
+		throw { status: response.status, message: response.statusText }
 	} else {
 		return res
 	}

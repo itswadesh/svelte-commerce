@@ -29,15 +29,16 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 	}
 	locals.cart = cart
 	try {
-		const addressId = url.searchParams.get('address')
+		const id = url.searchParams.get('address')
 
 		const address = await fetchAddress({
 			storeId: locals.store?.id,
 			server: true,
+			id,
 			sid: cookies.get('sid')
 		})
 		const paymentMethods = await fetchPaymentMethods({ storeId: locals.store.id, server: true })
-		return { paymentMethods, address, addressId, me, cart }
+		return { paymentMethods, address, addressId: id, me, cart }
 	} catch (e) {
 		if (e) {
 			throw redirect(307, '/checkout/address')

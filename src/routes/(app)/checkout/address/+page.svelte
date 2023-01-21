@@ -90,7 +90,6 @@ async function refreshAddress() {
 
 		<div class="w-full lg:w-80 lg:flex-shrink-0 lg:flex-grow-0">
 			<h2 class="text-xl font-bold capitalize tracking-wide sm:text-2xl">Cart Summary</h2>
-
 			{#if data.selectedAddress}
 				<Pricesummary
 					cart="{data.cart}"
@@ -98,7 +97,7 @@ async function refreshAddress() {
 					showNextIcon
 					nextpage="
 				    {data.prescriptionId
-						? `/checkout/payment-options?address=${data.selectedAddress}&prescription=${prescriptionId}`
+						? `/checkout/payment-options?address=${data.selectedAddress}&prescription=${data.prescriptionId}`
 						: `/checkout/payment-options?address=${data.selectedAddress}`}"
 					loading="{data.loading}" />
 			{:else}
