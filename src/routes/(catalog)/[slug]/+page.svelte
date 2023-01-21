@@ -35,7 +35,7 @@ import { fetchNextPageProducts } from '$lib/services/ProductService'
 
 export let data
 
-// console.log('data = ', data)
+// console.log('data = ', data.category)
 // console.log('Products = ', products)
 // console.log('Count = ', count)
 // console.log('Facets = ', facets)
@@ -159,12 +159,14 @@ async function loadNextPage() {
 	const searchParams = $page.url.searchParams.toString()
 	try {
 		data.isLoading = true
-		const res = await fetchNextPageProducts({categorySlug:data.product.category?.slug,origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
-		const nextPageData = res?.data?.map((p) => {
-			const p1 = { ...p._source }
-			p1.id = p._id
-			return p1
+		const res = await fetchNextPageProducts({
+			categorySlug: data.category?.slug,
+			origin: $page?.data?.origin,
+			storeId: $page?.data?.store?.id,
+			nextPage,
+			searchParams
 		})
+		const nextPageData = res.nextPageData
 		data.products = data?.products?.concat(nextPageData)
 		data.count = res?.count
 		data.facets = res?.facets
@@ -177,20 +179,17 @@ async function loadNextPage() {
 	}
 }
 
-async function refreshData() {
-}
+async function refreshData() {}
 
 onMount(() => {
-	if ($page?.data?.isDesktop) return
-	const intersectionObserver = new IntersectionObserver((entries) => {
-		if (entries[0].intersectionRatio <= 0) return
-		// load more content;
-		loadNextPage()
-	})
-
-	// start observing
-
-	intersectionObserver.observe(document.querySelector('.more'))
+	if (!$page?.data?.isDesktop) {
+		const intersectionObserver = new IntersectionObserver((entries) => {
+			if (entries[0].intersectionRatio <= 0) return
+			// load more content;
+			loadNextPage()
+		})
+		intersectionObserver.observe(document.querySelector('.more'))
+	}
 })
 
 async function goCheckbox(item) {
@@ -225,7 +224,7 @@ async function goCheckbox(item) {
 	</div>
 </ProductNav>
 
-<div class="{showFilter || showSort ? 'h-[93vh] overflow-hidden' : 'min-h-screen h-full'}">
+<div class="{showFilter || showSort ? 'h-[93vh] overflow-hidden' : 'h-full min-h-screen'}">
 	{#if !hidden && innerWidth <= 1024}
 		<button
 			transition:fade="{{ duration: 500 }}"

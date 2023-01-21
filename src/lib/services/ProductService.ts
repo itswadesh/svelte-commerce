@@ -177,6 +177,8 @@ export const fetchNextPageProducts = async ({
 	storeId,
 	categorySlug,
 	server = false,
+	nextPage,
+	searchParams = {},
 	sid = null
 }: any) => {
 	try {
@@ -185,9 +187,15 @@ export const fetchNextPageProducts = async ({
 		switch (provider) {
 			case 'litekart':
 				if (server) {
-					res = await getBySid(`es/products?categories=${categorySlug}&store=${storeId}`, sid)
+					res = await getBySid(
+						`es/products?categories=${categorySlug}&store=${storeId}&page=${nextPage}&${searchParams}`,
+						sid
+					)
 				} else {
-					res = await getAPI(`es/products?categories=${categorySlug}&store=${storeId}`, origin)
+					res = await getAPI(
+						`es/products?categories=${categorySlug}&store=${storeId}&page=${nextPage}&${searchParams}`,
+						origin
+					)
 				}
 				nextPageData = res?.data?.map((p) => {
 					const p1 = { ...p._source }
@@ -196,7 +204,11 @@ export const fetchNextPageProducts = async ({
 				})
 				break
 			case 'bigcommerce':
-				res = await getBigCommerceApi(`products?categories=${categorySlug}`, {}, sid)
+				res = await getBigCommerceApi(
+					`products?categories=${categorySlug}&page=${nextPage}&${searchParams}`,
+					{},
+					sid
+				)
 				nextPageData = res?.data?.map((p) => {
 					const p1 = { ...p._source }
 					p1.id = p._id
@@ -204,7 +216,11 @@ export const fetchNextPageProducts = async ({
 				})
 				break
 			case 'woocommerce':
-				res = await getWooCommerceApi(`products?categories=${categorySlug}`, {}, sid)
+				res = await getWooCommerceApi(
+					`products?categories=${categorySlug}&page=${nextPage}&${searchParams}`,
+					{},
+					sid
+				)
 				nextPageData = res?.data?.map((p) => {
 					const p1 = { ...p._source }
 					p1.id = p._id
@@ -212,7 +228,12 @@ export const fetchNextPageProducts = async ({
 				})
 				break
 		}
-		return nextPageData || []
+		return {
+			nextPageData: nextPageData || [],
+			count: res.count,
+			estimatedTotalHits: res.estimatedTotalHits,
+			facets: res.facets
+		}
 	} catch (err) {
 		const e = err as Error
 		throw error(e.status, e.data.message)

@@ -3,7 +3,7 @@ import { SECRET_SENTRY_DSN } from '$env/static/private'
 const SENTRY_DSN = SECRET_SENTRY_DSN
 import * as Sentry from '@sentry/svelte'
 import { BrowserTracing } from '@sentry/tracing'
-import { DOMAIN, HTTP_ENDPOINT, WWW_URL } from '$lib/config'
+import { DOMAIN, HTTP_ENDPOINT, listOfPagesWithoutBackButton, WWW_URL } from '$lib/config'
 import { fetchStoreData, authenticateUser, fetchCart } from '$lib/server'
 
 if (SENTRY_DSN) {
@@ -28,6 +28,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 		if (event.locals.origin.includes('.')) {
 			event.locals.origin = event.locals.origin.replace('http://', 'https://')
 		}
+		const isDesktop = event.request.headers.get('sec-ch-ua-mobile') === '?0'
+		event.locals.isDesktop = isDesktop
+		const isShowBackButton = !listOfPagesWithoutBackButton.includes(event.request.url?.pathname)
+		event.locals.isShowBackButton = isShowBackButton
 		event.locals.store = await fetchStoreData(event)
 		event.locals.me = await authenticateUser(event)
 		event.locals.cart = await fetchCart(event)

@@ -189,7 +189,6 @@ onMount(async () => {
 			origin: $page?.data?.origin,
 			storeId: $page?.data?.store?.id
 		})
-
 	} catch (e) {
 	} finally {
 	}
@@ -560,8 +559,8 @@ function handleMobileCanvas() {
 								type="button"
 								class="overflow-hidden rounded border py-1 px-3 text-sm font-medium uppercase transition duration-500 focus:outline-none
               				{data.product?.size?.name === selectedSize
-									? 'bg-primary-500 border-primary-500 text-white'
-									: 'bg-transparent border-gray-300 text-gray-500 hover:border-primary-500 hover:text-primary-500'}"
+									? 'border-primary-500 bg-primary-500 text-white'
+									: 'border-gray-300 bg-transparent text-gray-500 hover:border-primary-500 hover:text-primary-500'}"
 								on:click="{() => selectSize(data.product?.size)}">
 								{data.product?.size?.name}
 							</button>
