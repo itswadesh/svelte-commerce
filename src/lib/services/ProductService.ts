@@ -1,5 +1,6 @@
 import { provider } from '$lib/config'
 import type { Error } from '$lib/types'
+import { mapBigcommerceProducts, mapWoocommerceProducts } from '$lib/utils'
 import { getAPI } from '$lib/utils/api'
 import { getBigCommerceApi, getBySid, getWooCommerceApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
@@ -67,93 +68,13 @@ export const fetchProduct = async ({ origin, slug, id, server = false, sid = nul
 				break
 			case 'bigcommerce':
 				const b = (await getBigCommerceApi(`products/${id}`, {}, sid)).data
-				let images = (await getBigCommerceApi(`products/${id}/images`, {}, sid)).data
-				if (b) {
-					images = images.map((i) => i.url_standard)
-					res = {
-						id: b.id,
-						name: b.name,
-						type: b.type,
-						sku: b.sku,
-						description: b.description,
-						images,
-						weight: b.weight,
-						width: b.width,
-						depth: b.depth,
-						height: b.height,
-						price: b.price,
-						mrp: b.cost_price,
-						categories: b.categories,
-						brandId: b.brand_id,
-						stock: b.inventory_level,
-						averageRating: b.reviews_rating_sum,
-						totalReviews: b.reviews_count,
-						approved: b.is_visible,
-						featured: b.is_featured,
-						related_products: b.related_products,
-						warranty: b.warranty,
-						upc: b.upc,
-						mpn: b.mpn,
-						gtin: b.gtin,
-						keywords: b.keywords,
-						availability: b.availability,
-						sort: b.sort_order,
-						condition: b.condition,
-						title: b.page_title,
-						metaKeywords: b.meta_keywords,
-						metaDescription: b.meta_description,
-						createdAt: b.date_created,
-						updatedAt: b.date_modified,
-						popularity: b.view_count
-					}
-					res.img = res.images[0]
-				}
+				const images = (await getBigCommerceApi(`products/${id}/images`, {}, sid)).data
+				b.images = images
+				res = mapBigcommerceProducts(b)
 				break
 			case 'woocommerce':
 				const p = (await getWooCommerceApi(`products/${id}`, {}, sid)).data
-				if (p) {
-					res = {
-						id: p.id,
-						name: p.name,
-						slug: p.slug,
-						createdAt: p.date_created,
-						modifiedAt: p.date_modified,
-						type: p.type,
-						status: p.status,
-						featured: p.featured,
-						active: p.catalog_visibility,
-						description: p.description,
-						short_description: p.short_description,
-						sku: p.sku,
-						price: p.price,
-						mrp: p.regular_price,
-						sale_price: p.sale_price,
-						on_sale: p.on_sale,
-						varified: p.purchasable,
-						popularity: p.total_sales,
-						digital: p.virtual,
-						link: p.external_url,
-						stock: p.stock_quantity,
-						low_stock_amount: p.low_stock_amount,
-						weight: p.weight,
-						dimensions: p.dimensions,
-						averageRating: p.average_rating,
-						ratingRount: p.rating_count,
-						categories: p.categories,
-						tags: p.tags,
-						attributes: p.attributes,
-						default_attributes: p.default_attributes,
-						variations: p.variations,
-						grouped_products: p.grouped_products,
-						related_products: p.related_ids,
-						stock_status: p.stock_status,
-						has_options: p.has_options,
-						images: p.images.map((i) => {
-							if (i) return i.src
-						})
-					}
-					res.img = res.images[0]
-				}
+				res = mapWoocommerceProducts(p)
 				break
 		}
 		return res || {}
