@@ -64,122 +64,126 @@ onMount(() => {
 
 				<div class="grid grid-cols-1 divide-y lg:grid-cols-2 lg:divide-y-0 lg:divide-x">
 					<div class="col-span-1 flex flex-col divide-y divide-dashed">
-						{#each data.order?.items as item}
-							<div class="flex gap-2 p-5 lg:gap-5">
-								<a
-									href="{`/product/${item.slug}`}"
-									aria-label="Click to view the product details"
-									class="flex-shrink-0">
-									{#if item.isCustomized}
-										<LazyImg
-											src="{item.customizedImg}"
-											alt=""
-											width="96"
-											class="h-auto w-24 object-contain object-top" />
-									{:else}
-										<LazyImg
-											src="{item.img}"
-											alt=""
-											width="96"
-											class="h-auto w-24 object-contain object-top" />
-									{/if}
-								</a>
+						{#if data.order?.items}
+							{#each data.order?.items as item}
+								<div class="flex gap-2 p-5 lg:gap-5">
+									<a
+										href="{`/product/${item.slug}`}"
+										aria-label="Click to view the product details"
+										class="flex-shrink-0">
+										{#if item.isCustomized}
+											<LazyImg
+												src="{item.customizedImg}"
+												alt=""
+												width="96"
+												class="h-auto w-24 object-contain object-top" />
+										{:else}
+											<LazyImg
+												src="{item.img}"
+												alt=""
+												width="96"
+												class="h-auto w-24 object-contain object-top" />
+										{/if}
+									</a>
 
-								<div class="flex w-full flex-1 flex-col text-sm xl:pr-4">
-									<div class="mb-1 flex justify-between gap-2 sm:gap-4">
-										<a
-											href="{`/product/${item.slug}`}"
-											aria-label="Click to view the product details"
-											class="flex-1 text-base font-semibold hover:underline">
-											{item.name}
-										</a>
+									<div class="flex w-full flex-1 flex-col text-sm xl:pr-4">
+										<div class="mb-1 flex justify-between gap-2 sm:gap-4">
+											<a
+												href="{`/product/${item.slug}`}"
+												aria-label="Click to view the product details"
+												class="flex-1 text-base font-semibold hover:underline">
+												{item.name}
+											</a>
 
-										{#if $page?.data?.store?.isFnb && item.foodType}
-											<div>
-												{#if item.foodType === 'veg'}
-													<img src="{productVeg}" alt="veg" class="h-5 w-5" />
-												{:else if item.foodType === 'nonveg'}
-													<img src="{productNonVeg}" alt="non veg" class="h-5 w-5" />
-												{/if}
+											{#if $page?.data?.store?.isFnb && item.foodType}
+												<div>
+													{#if item.foodType === 'veg'}
+														<img src="{productVeg}" alt="veg" class="h-5 w-5" />
+													{:else if item.foodType === 'nonveg'}
+														<img src="{productNonVeg}" alt="non veg" class="h-5 w-5" />
+													{/if}
+												</div>
+											{/if}
+										</div>
+
+										{#if item.brandName}
+											<h4 class="mb-2 capitalize">
+												{item.brandName}
+											</h4>
+										{/if}
+
+										<div class="flex flex-wrap items-center whitespace-nowrap">
+											{#if item.size}
+												<h6 class="mr-4 mb-2">
+													Size :
+
+													<span class="font-medium">{item.size}</span>
+												</h6>
+											{/if}
+
+											{#if item.color}
+												<h6 class="mb-2">
+													Color :
+
+													<span class="font-medium">{item.color}</span>
+												</h6>
+											{/if}
+										</div>
+
+										{#if item.vendor}
+											<h6 class="mb-2">
+												Seller :
+												<a
+													href="{`/vendor/${item.vendor?.id}`}"
+													aria-label="Click to view the vendor's profile"
+													class="font-medium">
+													{item.vendor?.businessName}
+												</a>
+											</h6>
+										{/if}
+
+										{#if item?.usedOptions?.length}
+											<div class="mt-2 flex flex-col gap-2 text-xs">
+												{#each item?.usedOptions as option}
+													{#if option?.val?.length && option?.val !== undefined && option?.val != ''}
+														<div class="flex flex-wrap gap-2">
+															<h6>{option.name}:</h6>
+															{#if option.val}
+																{#each option.val as v}
+																	{#if v}
+																		<div class="font-bold">
+																			{v}
+																		</div>
+																	{/if}
+																{/each}
+															{/if}
+														</div>
+													{/if}
+												{/each}
 											</div>
 										{/if}
-									</div>
 
-									{#if item.brandName}
-										<h4 class="mb-2 capitalize">
-											{item.brandName}
-										</h4>
-									{/if}
-
-									<div class="flex flex-wrap items-center whitespace-nowrap">
-										{#if item.size}
-											<h6 class="mr-4 mb-2">
-												Size :
-
-												<span class="font-medium">{item.size}</span>
-											</h6>
-										{/if}
-
-										{#if item.color}
-											<h6 class="mb-2">
-												Color :
-
-												<span class="font-medium">{item.color}</span>
-											</h6>
-										{/if}
-									</div>
-
-									{#if item.vendor}
-										<h6 class="mb-2">
-											Seller :
-											<a
-												href="{`/vendor/${item.vendor?.id}`}"
-												aria-label="Click to view the vendor's profile"
-												class="font-medium">
-												{item.vendor?.businessName}
-											</a>
-										</h6>
-									{/if}
-
-									{#if item?.usedOptions?.length}
-										<div class="mt-2 flex flex-col gap-2 text-xs">
-											{#each item?.usedOptions as option}
-												{#if option?.val?.length && option?.val !== undefined && option?.val != ''}
-													<div class="flex flex-wrap gap-2">
-														<h6>{option.name}:</h6>
-														{#each option.val as v}
-															{#if v}
-																<div class="font-bold">
-																	{v}
-																</div>
-															{/if}
-														{/each}
-													</div>
-												{/if}
-											{/each}
-										</div>
-									{/if}
-
-									<div class="flex flex-wrap items-center gap-2">
-										<span class="whitespace-nowrap text-base font-bold">
-											{currency(item.price)}
-										</span>
-
-										{#if item.mrp > item.price}
-											<span class="whitespace-nowrap text-gray-500 line-through">
-												{currency(item.mrp)}
+										<div class="flex flex-wrap items-center gap-2">
+											<span class="whitespace-nowrap text-base font-bold">
+												{currency(item.price)}
 											</span>
 
-											{#if Math.floor(((item.mrp - item.price) / item.mrp) * 100) > 0}
-												<span class="whitespace-nowrap text-green-600">
-													({Math.floor(((item.mrp - item.price) / item.mrp) * 100)}% off)
+											{#if item.mrp > item.price}
+												<span class="whitespace-nowrap text-gray-500 line-through">
+													{currency(item.mrp)}
 												</span>
+
+												{#if Math.floor(((item.mrp - item.price) / item.mrp) * 100) > 0}
+													<span class="whitespace-nowrap text-green-600">
+														({Math.floor(((item.mrp - item.price) / item.mrp) * 100)}% off)
+													</span>
+												{/if}
 											{/if}
-										{/if}
+										</div>
 									</div>
 								</div>
-							</div>
-						{/each}
+							{/each}
+						{/if}
 					</div>
 
 					<div class="col-span-1 flex flex-col gap-5 p-5 lg:gap-10">

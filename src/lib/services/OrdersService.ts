@@ -48,7 +48,7 @@ export const fetchOrder = async ({ origin, storeId, id, server = false, sid = nu
 				res = await getWooCommerceApi(`orders/${id}`, {}, sid)
 				break
 		}
-		return res.data || []
+		return res || {}
 	} catch (err) {
 		const e = err as Error
 		throw error(e.status, e.data.message)
