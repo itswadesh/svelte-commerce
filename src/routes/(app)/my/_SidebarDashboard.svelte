@@ -1,9 +1,9 @@
 <style>
 .active {
-	@apply bg-secondary-500;
+	@apply bg-primary-700;
 }
 .active-submenu {
-	@apply text-secondary-500 hover:text-white;
+	@apply text-primary-700 hover:text-white;
 }
 </style>
 
