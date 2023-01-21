@@ -25,7 +25,6 @@ const seoProps = {
 }
 
 export let data
-console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', data.addresses)
 
 let typingTimer,
 	loading = false

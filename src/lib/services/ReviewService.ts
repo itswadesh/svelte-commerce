@@ -42,7 +42,13 @@ export const fetchReviews = async ({
 				res = await getWooCommerceApi(`reviews/${pid}`, {}, sid)
 				break
 		}
-		return res?.data || []
+		return {
+			data: res.data || [],
+			count: res.count,
+			pageSize: res.pageSize,
+			noOfPage: res.noOfPage,
+			page: res.page
+		}
 	} catch (err) {
 		const e = err as Error
 		throw error(e.status, e.data.message)

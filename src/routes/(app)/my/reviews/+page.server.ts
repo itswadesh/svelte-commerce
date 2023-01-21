@@ -3,13 +3,13 @@ import { error, redirect } from '@sveltejs/kit'
 
 export async function load({ cookies, locals }) {
 	try {
-		const reviews = await fetchReviews({
+		const res = await fetchReviews({
 			storeId: locals.store?.id,
 			server: true,
 			sid: cookies.get('sid')
 		})
-		if (reviews) {
-			return { reviews: reviews.data }
+		if (res) {
+			return res
 		}
 		throw error(404, 'Reviews not found')
 	} catch (e) {

@@ -14,13 +14,13 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import { page } from '$app/stores'
 import Pagination from '$lib/components/Pagination.svelte'
 
-export let currentPage, orders
+export let orders
 let clazz = ''
 export { clazz as class }
 </script>
 
 <div class="w-full {clazz}">
-	{#if orders.length > 0}
+	{#if orders.data?.length}
 		<div>
 			<div class="mb-4 flex w-full flex-row items-center justify-between">
 				<h1 class="font-serif text-2xl font-medium md:text-3xl lg:text-4xl">
@@ -35,9 +35,9 @@ export { clazz as class }
 				</a>
 			</div>
 
-			{#if orders?.length > 0}
+			{#if orders?.data?.length > 0}
 				<div>
-					{#each orders as order}
+					{#each orders.data as order}
 						<div class="mb-4 hidden sm:mb-10 xl:block">
 							<div class="mb-3 flex items-center justify-between text-sm text-gray-500 sm:mb-4">
 								<h6>Order No : #{order.orderNo}</h6>
@@ -245,7 +245,9 @@ export { clazz as class }
 			{/if}
 		</div>
 
-		<Pagination count="{Math.ceil(orders.count / orders.pageSize)}" current="{+currentPage}" />
+		<Pagination
+			count="{Math.ceil(orders.count / orders.pageSize)}"
+			current="{+orders.currentPage}" />
 	{:else if orders.count === 0}
 		<div class="flex flex-col items-center justify-center text-center">
 			<img src="/no/add-to-cart-animate.svg" alt="empty cart" class="mb-5 h-60 object-contain" />
