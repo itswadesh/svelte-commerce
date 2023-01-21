@@ -15,13 +15,12 @@ import { page } from '$app/stores'
 import Pagination from '$lib/components/Pagination.svelte'
 
 export let currentPage, orders
-
 let clazz = ''
 export { clazz as class }
 </script>
 
 <div class="w-full {clazz}">
-	{#if orders.count > 0}
+	{#if orders.length > 0}
 		<div>
 			<div class="mb-4 flex w-full flex-row items-center justify-between">
 				<h1 class="font-serif text-2xl font-medium md:text-3xl lg:text-4xl">
@@ -36,9 +35,9 @@ export { clazz as class }
 				</a>
 			</div>
 
-			{#if orders.data?.length > 0}
+			{#if orders?.length > 0}
 				<div>
-					{#each orders.data as order}
+					{#each orders as order}
 						<div class="mb-4 hidden sm:mb-10 xl:block">
 							<div class="mb-3 flex items-center justify-between text-sm text-gray-500 sm:mb-4">
 								<h6>Order No : #{order.orderNo}</h6>

@@ -9,7 +9,7 @@ export async function load({ params, parent, request, locals, cookies }) {
 			sid: cookies.get('sid')
 		})
 		if (orders) {
-			return { orders: orders }
+			return { orders: orders, currentPage: 1 }
 		}
 	} catch (e) {
 		throw error(400, e?.message)
