@@ -30,13 +30,14 @@ export const fetchCartData = async ({ origin, storeId, server = false, sid = nul
 	}
 }
 
-export const refreshCartData = async ({ origin, storeId, server = false, sid = null }: any) => {
+export const fetchRefreshCart = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {
 		let res: any = {}
 		switch (provider) {
 			case 'litekart':
 				if (server) {
 					res = await getBySid(`carts/refresh-cart?store=${storeId}`, sid)
+					// res = await getBySid(`carts/my?store=${storeId}`, sid)
 				} else {
 					res = await getAPI(`carts/refresh-cart?store=${storeId}`, origin)
 				}
@@ -51,6 +52,6 @@ export const refreshCartData = async ({ origin, storeId, server = false, sid = n
 		return res || {}
 	} catch (err) {
 		const e = err as Error
-		throw error(e.status, e.data.message)
+		throw error(e.status, e.data?.message)
 	}
 }

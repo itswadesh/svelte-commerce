@@ -4,9 +4,9 @@ import { error } from '@sveltejs/kit'
 export async function load({ params, locals }) {
 	const { id } = params
 
-	const blog = await fetchBlog({ id })
+	const blog = await fetchBlog({ id, server: true })
 
-	const latestBlogs = await fetchLatestBlogs({ storeId: locals.store?.id })
+	const latestBlogs = await fetchLatestBlogs({ storeId: locals.store?.id, server: true })
 
 	if (blog) {
 		return { blog, latestBlogs }

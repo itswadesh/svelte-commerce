@@ -8,7 +8,7 @@ export async function load({ locals }) {
 
 	try {
 		loading = true
-		const res = await fetchFaqs({ store: locals.store.id })
+		const res = await fetchFaqs({ storeId: locals.store.id })
 		faqs = res?.data
 		count = res?.count
 	} catch (e) {

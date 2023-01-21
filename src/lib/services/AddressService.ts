@@ -13,7 +13,6 @@ export const fetchAddresses = async ({ origin, storeId, server = false, sid = nu
 		switch (provider) {
 			case 'litekart':
 				if (server) {
-					console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', `addresses/my?store=${storeId}`, sid)
 					res = await getBySid(`addresses/my?store=${storeId}`, sid)
 				} else {
 					res = await getAPI(`addresses/my?store=${storeId}`, origin)

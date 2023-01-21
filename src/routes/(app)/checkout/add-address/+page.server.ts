@@ -7,7 +7,12 @@ export async function load({ url, cookies, locals }) {
 	if (addressId === 'new') {
 		ads = { id: 'new' }
 	} else {
-		ads = await fetchAddress({ storeId: locals.store?.id, addressId, sid: cookies.get('sid') })
+		ads = await fetchAddress({
+			storeId: locals.store?.id,
+			addressId,
+			sid: cookies.get('sid'),
+			server: true
+		})
 	}
 	return {
 		ads

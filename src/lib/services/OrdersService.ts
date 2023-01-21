@@ -55,7 +55,7 @@ export const fetchOrder = async ({ origin, storeId, id, server = false, sid = nu
 	}
 }
 
-export const trackOrder = async ({ origin, storeId, id, server = false, sid = null }: any) => {
+export const fetchTrackOrder = async ({ origin, storeId, id, server = false, sid = null }: any) => {
 	try {
 		let res: any = {}
 		switch (provider) {
