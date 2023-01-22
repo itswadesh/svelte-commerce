@@ -1,5 +1,5 @@
 <script>
-import { date } from '$lib/util'
+import { date } from '$lib/utils'
 import { page } from '$app/stores'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
@@ -11,8 +11,6 @@ let seoProps = {
 	title: `Blog Detail`,
 	description: `Blog Detail`
 }
-
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 </script>
 
 <SEO {...seoProps} />

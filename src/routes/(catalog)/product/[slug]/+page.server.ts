@@ -1,23 +1,20 @@
-import { gett } from '$lib/utils'
+import { fetchProduct } from '$lib/services/ProductService'
 import { error } from '@sveltejs/kit'
 
-export async function load({ params, parent, cookies, locals, request }) {
-	// const ck = request.headers.get('cookie')
-	// const c = cookie.parse(ck || '')
+export async function load({ params, parent, url, cookies, locals, request }) {
 	let zip = cookies.get('zip')
 	if (zip) zip = JSON.parse(zip)
-
+	const id = url.searchParams.get('id')
 	const { slug } = params
 	let product = null
 
 	try {
-		product = await gett(`products/${slug}`)
-
+		product = await fetchProduct({ slug, id, server: true })
 		if (!product) throw error(404, 'Product not found')
 		// cookies.set('cache-control', 'public, max-age=200')
 		return { product, deliveryDetails: zip }
 	} catch (e) {
-		throw error(e.status, e.message)
+		throw error(e.status, e.message || 'Not found')
 	}
 }
 

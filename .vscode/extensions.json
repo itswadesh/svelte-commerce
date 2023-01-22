@@ -1,11 +1,9 @@
 {
   "recommendations": [
-    "kumar-harsh.graphql-for-vscode",
     "esbenp.prettier-vscode",
     "ms-vscode.sublime-keybindings",
     "bradlc.vscode-tailwindcss",
     "wayou.vscode-todo-highlight",
-    "svelte.svelte-vscode",
-    "heybourn.headwind"
+    "svelte.svelte-vscode"
   ]
 }

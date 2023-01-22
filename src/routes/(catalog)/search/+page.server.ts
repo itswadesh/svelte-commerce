@@ -1,5 +1,4 @@
-import { getAPI } from '$lib/util/api'
-import { gett } from '$lib/utils'
+import { searchProducts } from '$lib/services/ProductService'
 import { error } from '@sveltejs/kit'
 export const prerender = false
 
@@ -24,26 +23,19 @@ export async function load({ url, locals, cookies, parent }) {
 
 	try {
 		loading = true
-		const res = await gett(`es/products?${query.toString()}&store=${store?.id}`)
+		const res = await searchProducts({ storeId: store?.id, query: query.toString(), server: true })
 		ressss = res
-		products = res?.data
-		products = products.map((p) => {
-			let p1
-			p1 = { ...p._source }
-			p1.id = p._id
-			return p1
-		})
-		count = res?.count
-		facets = res?.facets
-		pageSize = res?.pageSize
-		err = !res?.estimatedTotalHits ? 'No result Not Found' : null
+		products = res.products
+		count = res.count
+		facets = res.facets
+		pageSize = res.pageSize
+		err = res.err
 	} catch (e) {
 		err = e
 		throw error(400, e?.message || e || 'No results found')
 	} finally {
 		loading = false
 	}
-	// cookies.set('cache-control', 'public, max-age=200')
 
 	return {
 		loading,

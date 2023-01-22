@@ -9,7 +9,7 @@ img.loaded {
 </style>
 
 <script>
-import { getCdnImageUrl } from '$lib/util'
+import { getCdnImageUrl } from '$lib/utils'
 import { onMount } from 'svelte'
 
 export let noLazy = false // Dont add lazy to images that are on viewport

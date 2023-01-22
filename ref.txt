@@ -1,0 +1,2 @@
+https://woocommerce.github.io/woocommerce-rest-api-docs/?javascript#products
+https://developer.bigcommerce.com/api-reference/6fe995bba597e-get-a-product

@@ -1,4 +1,4 @@
-import { getBySid } from '$lib/utils'
+import { getBySid } from '$lib/utils/server'
 import type { RequestEvent } from '@sveltejs/kit'
 
 export const fetchCart = async (event: RequestEvent) => {

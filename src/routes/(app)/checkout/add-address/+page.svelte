@@ -1,14 +1,14 @@
 <script>
-import { getAPI, post } from '$lib/util/api'
+import {  post } from '$lib/utils/api'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { toast } from '$lib/util'
 import BackButton from '$lib/ui/BackButton.svelte'
 import Error from '$lib/components/Error.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
+import { fetchCountries, fetchStates } from '$lib/services/CountryService'
 
 export let data
 
@@ -32,23 +32,13 @@ async function onCountryChange(country) {
 
 async function getCountries() {
 	try {
-		countries = await getAPI(
-			`countries?limit=300&page=0&store=${$page?.data?.store?.id}`,
-			$page.data.origin
-		)
-
-		// console.log('countries', countries)
+		countries = await fetchCountries({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
 	} catch (e) {}
 }
 
 async function getStates(countryCode) {
 	try {
-		states = await getAPI(
-			`states?&countryCode=${countryCode}&limit=300&page=0&sort=name&store=${$page?.data?.store?.id}`,
-			$page.data.origin
-		)
-
-		// console.log('states', states)
+		states = await fetchStates({countryCode,origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
 	} catch (e) {}
 }
 
@@ -95,7 +85,6 @@ async function save(ads) {
 		)
 		goto(`/checkout/address`)
 	} catch (e) {
-		// toast(err, 'error')
 		err = e
 	} finally {
 		loading = false

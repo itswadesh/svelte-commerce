@@ -1,9 +1,9 @@
 <script>
-import { currency, toast } from '$lib/util'
+import { currency, toast } from '$lib/utils'
 import { createEventDispatcher, onMount } from 'svelte'
 import { goto } from '$app/navigation'
 import GrnIndGradiantButton from './ui/GrnIndGradiantButton.svelte'
-import { post } from '$lib/util/api'
+import { post } from '$lib/utils/api'
 import { page } from '$app/stores'
 let stripeReady = false
 let mounted = false
@@ -22,14 +22,12 @@ export let address = '',
 	isStripeSelected = false
 
 async function payWithCard(clientSecret, orderId) {
-	// console.error('Stripe clientSecret.............', clientSecret)
 	// This is for 3d authentication
 	try {
 		loading = true
 		const result = await stripe.confirmCardPayment(clientSecret, {
 			payment_method: { card: card }
 		})
-		// console.error('Confirm card pay...........', result)
 		if (result.error) {
 			errorMessage.show = true
 			errorMessage.text = result.error.message

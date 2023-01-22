@@ -1,8 +1,6 @@
-import { getAPI } from '$lib/util/api'
-import { gett } from '$lib/utils'
+import { fetchFaqs } from '$lib/services/FaqService'
 
-export async function load({ url, params, fetch, parent, cookies }) {
-	const { store } = await parent()
+export async function load({ locals }) {
 	let loading = false,
 		err,
 		faqs,
@@ -10,7 +8,7 @@ export async function load({ url, params, fetch, parent, cookies }) {
 
 	try {
 		loading = true
-		const res = await gett(`faqs?store=${store?.id}`)
+		const res = await fetchFaqs({ storeId: locals.store.id })
 		faqs = res?.data
 		count = res?.count
 	} catch (e) {
@@ -18,7 +16,5 @@ export async function load({ url, params, fetch, parent, cookies }) {
 	} finally {
 		loading = false
 	}
-	// cookies.set('cache-control', 'public, max-age=200')
-
 	return { loading, err, faqs, count }
 }

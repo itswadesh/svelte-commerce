@@ -9,7 +9,7 @@
 import { browser } from '$app/environment'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
-import { post } from '$lib/util/api'
+import { post } from '$lib/utils/api'
 import Error from '$lib/components/Error.svelte'
 import loginBgLighter from '$lib/assets/login/bg-lighter.svg'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'

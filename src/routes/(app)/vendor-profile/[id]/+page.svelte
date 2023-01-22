@@ -1,5 +1,5 @@
 <script>
-import { dateOnly } from '$lib/util'
+import { dateOnly } from '$lib/utils'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import RatingStarDisplay from '$lib/ui/RatingStarDisplay.svelte'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'

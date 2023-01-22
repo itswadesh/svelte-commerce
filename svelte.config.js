@@ -1,3 +1,4 @@
+// import adapter from '@sveltejs/adapter-vercel'
 import adapter from '@sveltejs/adapter-auto'
 import preprocess from 'svelte-preprocess'
 
@@ -10,7 +11,7 @@ const config = {
 		})
 	],
 	kit: {
-		adapter: adapter(),
+		adapter: adapter({ edge: true }),
 		csrf: {
 			checkOrigin: false
 		}

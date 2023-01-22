@@ -1,11 +1,9 @@
 <script lang="ts">
-import { getAPI } from '$lib/util/api'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { sorts } from '$lib/config'
-import { toast } from '$lib/util'
-import Breadcrumb from '$lib/components/Breadcrumb.svelte'
+import { toast } from '$lib/utils'
 import DesktopFilter from '$lib/components/DesktopFilter.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import MobileFilter from '$lib/components/MobileFilter.svelte'
@@ -13,7 +11,7 @@ import MobileFooter from '$lib/MobileFooter.svelte'
 import Pagination from '$lib/components/Pagination.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
-import SEO from '$lib/components/SEO/index.svelte'
+import { fetchAllCategories, fetchCategory } from '$lib/services/CategoryService'
 
 export let data
 
@@ -28,18 +26,12 @@ let query = $page?.url?.searchParams
 
 onMount(async () => {
 	try {
-		const res = await getAPI(
-			`products?categories=${data.category?._id}&store=${$page.data?.store?.id}`,
-			$page.data.origin
-		)
-
-		// console.log('res = ', res)
-
-		products = res?.data
-		productsCount = res?.count
-		currentPage = res?.page
-		facets = res?.facets?.all_aggs
-		err = !products ? 'No result Not Found' : null
+		const res = await fetchAllCategories({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
+		products = res.products
+		productsCount = res.productsCount
+		currentPage = res.currentPage
+		facets = res.facets
+		err = res.err
 	} catch (e) {
 		toast(e, 'error')
 	} finally {
@@ -58,10 +50,7 @@ async function sortNow(s) {
 
 async function refreshData() {
 	try {
-		const res = await gett(`categories/${$page?.params?.slug}?${data.query.toString()}`)
-
-		// console.log('refresh res = ', res)
-
+		const res = await fetchCategory({id:$page?.params?.slug, origin:origin })
 		data.category = res?.data
 		data.count = res?.count
 		data.err = !data.category ? 'No result Not Found' : null

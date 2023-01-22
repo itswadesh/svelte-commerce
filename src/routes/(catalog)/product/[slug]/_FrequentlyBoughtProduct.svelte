@@ -1,10 +1,9 @@
 <script>
 import { applyAction, enhance } from '$app/forms'
-import { date, currency, delay, toast } from '$lib/util'
-import { fireGTagEvent } from '$lib/util/gTag'
+import {  currency } from '$lib/utils'
+import { fireGTagEvent } from '$lib/utils/gTag'
 import { invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
-import { post } from '$lib/util/api'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
@@ -13,62 +12,10 @@ import productVeg from '$lib/assets/product/veg.png'
 
 export let product = {}
 
-// console.log('zzzzzzzzzzzzzzzzzz', product)
-
 let loading = false
 let cartButtonText = 'Add to Bag'
 let bounceItemFromTop = false
 
-// async function addToBag(p) {
-// 	loading = true
-// 	cartButtonText = 'Adding...'
-
-// 	try {
-// 		await post(
-// 			'carts/add-to-cart',
-// 			{
-// 				pid: p._id,
-// 				vid: p._id,
-// 				qty: 1,
-// 				options: p.options,
-// 				store: $page.data.store?.id
-// 			},
-// 			$page.data.origin
-// 		)
-
-// 		await invalidateAll() //$page.url.toString()
-// 		cartButtonText = 'Go to cart'
-
-// 		// const res = await getAPI('carts/my')
-
-// 		// if (res) {
-// 		// 	const cookieCart = {
-// 		// 		items: res?.items,
-// 		// 		qty: res?.qty,
-// 		// 		tax: res?.tax,
-// 		// 		subtotal: res?.subtotal,
-// 		// 		total: res?.total,
-// 		// 		currencySymbol: res?.currencySymbol,
-// 		// 		discount: res?.discount,
-// 		// 		selfTakeout: res?.selfTakeout,
-// 		// 		shipping: res?.shipping,
-// 		// 		unavailableItems: res?.unavailableItems,
-// 		// 		formattedAmount: res?.formattedAmount
-// 		// 	}
-// 		// 	await cookies.set('cart', cookieCart, { path: '/' })
-// 		// 	$page.data.cart = cookieCart
-// 		// 	cartButtonText = 'Added To Cart'
-// 		// 	bounceItemFromTop = true
-// 		// }
-// 	} catch (e) {
-// 		cartButtonText = 'Error adding To Cart'
-// 	} finally {
-// 		loading = false
-// 		await delay(5000)
-// 		cartButtonText = 'Add to bag'
-// 		bounceItemFromTop = false
-// 	}
-// }
 </script>
 
 <div class="group relative col-span-1 block w-full overflow-hidden sm:w-48 sm:flex-shrink-0">
@@ -152,7 +99,6 @@ let bounceItemFromTop = false
 							result.data.qty < 0
 								? fireGTagEvent('remove_from_cart', result.data)
 								: fireGTagEvent('add_to_cart', result.data)
-							// console.log('bounceItemFromTop')
 							bounceItemFromTop = true
 							setTimeout(() => {
 								bounceItemFromTop = false

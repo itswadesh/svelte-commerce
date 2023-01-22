@@ -23,7 +23,7 @@ import { IMAGE_CDN_URL } from '$lib/config'
 import lazyload from 'vanilla-lazyload'
 import { onDestroy } from 'svelte'
 import { browser } from '$app/environment'
-import { getCdnImageUrl } from '$lib/util'
+import { getCdnImageUrl } from '$lib/utils'
 
 export let src
 export let alt = ''

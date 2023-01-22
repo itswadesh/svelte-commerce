@@ -62,8 +62,8 @@
 
 <script>
 import { Confetti } from 'svelte-confetti'
-import { currency, date } from '$lib/util'
-import { fireGTagEvent } from '$lib/util/gTag'
+import { currency, date } from '$lib/utils'
+import { fireGTagEvent } from '$lib/utils/gTag'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'

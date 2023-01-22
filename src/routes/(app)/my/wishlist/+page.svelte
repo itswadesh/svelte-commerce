@@ -5,6 +5,8 @@ import Wishlist from './_Wishlist.svelte'
 
 export let data
 
+// console.log('zzzzzzzzzzzzzzzzzz', data)
+
 let seoProps = {
 	title: `Wishlist`,
 	description: `Wishlist`

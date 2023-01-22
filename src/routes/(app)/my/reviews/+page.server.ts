@@ -1,12 +1,15 @@
-import { getAPI } from '$lib/util/api'
-import { gett } from '$lib/utils'
+import { fetchReviews } from '$lib/services/ReviewService'
 import { error, redirect } from '@sveltejs/kit'
 
-export async function load({ request, locals }) {
+export async function load({ cookies, locals }) {
 	try {
-		const reviews = await gett(`reviews/my`, request.headers.get('cookie'))
-		if (reviews) {
-			return { reviews: reviews.data }
+		const res = await fetchReviews({
+			storeId: locals.store?.id,
+			server: true,
+			sid: cookies.get('sid')
+		})
+		if (res) {
+			return res
 		}
 		throw error(404, 'Reviews not found')
 	} catch (e) {

@@ -1,9 +1,10 @@
 <script>
 import { createEventDispatcher, onMount } from 'svelte'
-import { getAPI, post } from '$lib/util/api'
+import {  post } from '$lib/utils/api'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
-import { toast } from '$lib/util'
+import { toast } from '$lib/utils'
+import CtrlS from '$lib/components/CtrlS.svelte'
 import Error from '$lib/components/Error.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
@@ -18,11 +19,6 @@ let loading = false
 export let address = {}
 export let countries = false
 export let states = false
-
-function saveImage({ detail, field }) {
-	address[field] = detail
-	SaveAddress(address)
-}
 
 async function SaveAddress(address) {
 	try {
@@ -61,11 +57,8 @@ async function SaveAddress(address) {
 	}
 }
 
-// onMount(async () => {})
-
 async function onCountryChange(country) {
 	// 	formChanged = true
-	// 	await getAPI('states', { limit: 300, page: 0, countryCode: country })
 }
 </script>
 
@@ -180,19 +173,11 @@ async function onCountryChange(country) {
 					<Textbox placeholder="Enter zip" bind:value="{address.zip}" />
 				</div>
 			</div>
+			</div>
+		</form>
+	</div>
+</div>
 
-			<!-- <div class="flex flex-wrap">
-					<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">Active</h6>
-
-					<div class="mb-2 w-full max-w-md">
-						<ToggleSwitch
-							color="blue"
-							size="sm"
-							bind:checked="{address.active}"
-							 />
-					</div>
-				</div> -->
-		</div>
 
 		<PrimaryButton type="submit" loading="{loading}" class="w-60">Save Address</PrimaryButton>
 	</form>

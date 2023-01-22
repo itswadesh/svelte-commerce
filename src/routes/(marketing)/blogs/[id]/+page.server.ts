@@ -1,19 +1,14 @@
-import { gett } from '$lib/utils'
+import { fetchBlog, fetchLatestBlogs } from '$lib/services/BlogService'
 import { error } from '@sveltejs/kit'
 
-export async function load({ params, parent, setHeaders }) {
-	const { store } = await parent()
+export async function load({ params, locals }) {
 	const { id } = params
 
-	const blog = await gett(`blogs/${id}`)
+	const blog = await fetchBlog({ id, server: true })
 
-	const latestBlogs = await gett(`blogs?sort=-updatedAt&limit=10`)
+	const latestBlogs = await fetchLatestBlogs({ storeId: locals.store?.id, server: true })
 
 	if (blog) {
-		// setHeaders({
-		// 	'cache-control': 'public, max-age=300'
-		// })
-
 		return { blog, latestBlogs }
 	}
 

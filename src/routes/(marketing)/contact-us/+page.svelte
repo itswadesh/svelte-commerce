@@ -1,7 +1,7 @@
 <script>
 import { page } from '$app/stores'
-import { post } from '$lib/util/api'
-import { toast } from '$lib/util'
+import { post } from '$lib/utils/api'
+import { toast } from '$lib/utils'
 import Error from '$lib/components/Error.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'

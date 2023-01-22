@@ -14,9 +14,8 @@
 </style>
 
 <script>
-import { currency, dateOnly, toast } from '$lib/util'
+import { currency, dateOnly, toast } from '$lib/utils'
 import { fade } from 'svelte/transition'
-import { getAPI } from '$lib/util/api'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
@@ -32,10 +31,11 @@ import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
 import ProductNav from '$lib/ProductNav.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+import { fetchNextPageProducts } from '$lib/services/ProductService'
 
 export let data
 
-// console.log('data = ', data)
+// console.log('data = ', data.category)
 // console.log('Products = ', products)
 // console.log('Count = ', count)
 // console.log('Facets = ', facets)
@@ -159,16 +159,14 @@ async function loadNextPage() {
 	const searchParams = $page.url.searchParams.toString()
 	try {
 		data.isLoading = true
-		const res = await getAPI(
-			`es/products?categories=${data.categorySlug}&store=${data.store?.id}&page=${nextPage}&${searchParams}`,
-			data.origin
-		)
-		// console.log('refresh res = ', res)
-		const nextPageData = res?.data?.map((p) => {
-			const p1 = { ...p._source }
-			p1.id = p._id
-			return p1
+		const res = await fetchNextPageProducts({
+			categorySlug: data.category?.slug,
+			origin: $page?.data?.origin,
+			storeId: $page?.data?.store?.id,
+			nextPage,
+			searchParams
 		})
+		const nextPageData = res.nextPageData
 		data.products = data?.products?.concat(nextPageData)
 		data.count = res?.count
 		data.facets = res?.facets
@@ -181,89 +179,17 @@ async function loadNextPage() {
 	}
 }
 
-async function refreshData() {
-	// await invalidateAll()
-	// try {
-	// 	const res = await getAPI(`products?${data.query.toString()}`)
-	// 	// console.log('refresh res = ', res)
-	// 	data.products = res?.data
-	// 	data.count = res?.count
-	// 	data.facets = res?.facets?.all_aggs
-	// 	data.err = !data.products ? 'No result Not Found' : null
-	// } catch (e) {
-	// 	toast(e, 'error')
-	// } finally {
-	// }
-}
+async function refreshData() {}
 
 onMount(() => {
-	if ($page?.data?.isDesktop) return
-	const intersectionObserver = new IntersectionObserver((entries) => {
-		if (entries[0].intersectionRatio <= 0) return
-		// load more content;
-		loadNextPage()
-	})
-
-	// start observing
-
-	intersectionObserver.observe(document.querySelector('.more'))
-	// // @ts-ignore
-	// gtag('event', 'view_item', {
-	// 	currency: 'USD',
-	// 	value: 7.77,
-	// 	items: [
-	// 		{
-	// 			item_id: 'SKU_12345',
-	// 			item_name: 'Stan and Friends Tee',
-	// 			affiliation: 'Google Merchandise Store',
-	// 			coupon: 'SUMMER_FUN',
-	// 			currency: 'USD',
-	// 			discount: 2.22,
-	// 			index: 0,
-	// 			item_brand: 'Google',
-	// 			item_category: 'Apparel',
-	// 			item_category2: 'Adult',
-	// 			item_category3: 'Shirts',
-	// 			item_category4: 'Crew',
-	// 			item_category5: 'Short sleeve',
-	// 			item_list_id: 'related_products',
-	// 			item_list_name: 'Related Products',
-	// 			item_variant: 'green',
-	// 			location_id: 'ChIJIQBpAG2ahYAR_6128GcTUEo',
-	// 			price: 9.99,
-	// 			quantity: 1
-	// 		}
-	// 	]
-	// })
-
-	// // @ts-ignore
-	// gtag('event', 'view_item_list', {
-	// 	item_list_id: 'related_products',
-	// 	item_list_name: 'Related products',
-	// 	items: [
-	// 		{
-	// 			item_id: 'SKU_12345',
-	// 			item_name: 'Stan and Friends Tee',
-	// 			affiliation: 'Google Merchandise Store',
-	// 			coupon: 'SUMMER_FUN',
-	// 			currency: 'USD',
-	// 			discount: 2.22,
-	// 			index: 0,
-	// 			item_brand: 'Google',
-	// 			item_category: 'Apparel',
-	// 			item_category2: 'Adult',
-	// 			item_category3: 'Shirts',
-	// 			item_category4: 'Crew',
-	// 			item_category5: 'Short sleeve',
-	// 			item_list_id: 'related_products',
-	// 			item_list_name: 'Related Products',
-	// 			item_variant: 'green',
-	// 			location_id: 'ChIJIQBpAG2ahYAR_6128GcTUEo',
-	// 			price: 9.99,
-	// 			quantity: 1
-	// 		}
-	// 	]
-	// })
+	if (!$page?.data?.isDesktop) {
+		const intersectionObserver = new IntersectionObserver((entries) => {
+			if (entries[0].intersectionRatio <= 0) return
+			// load more content;
+			loadNextPage()
+		})
+		intersectionObserver.observe(document.querySelector('.more'))
+	}
 })
 
 async function goCheckbox(item) {
@@ -298,7 +224,7 @@ async function goCheckbox(item) {
 	</div>
 </ProductNav>
 
-<div class="{showFilter || showSort ? 'h-[93vh] overflow-hidden' : 'min-h-screen h-full'}">
+<div class="{showFilter || showSort ? 'h-[93vh] overflow-hidden' : 'h-full min-h-screen'}">
 	{#if !hidden && innerWidth <= 1024}
 		<button
 			transition:fade="{{ duration: 500 }}"

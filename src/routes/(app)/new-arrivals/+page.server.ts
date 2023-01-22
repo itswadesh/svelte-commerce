@@ -1,8 +1,7 @@
-import { gett } from '$lib/utils'
-import { page } from '$app/stores'
-export async function load({ url, params, locals, fetch, parent, cookies }) {
-	const { store } = locals
+import { fetchMegamenuData } from '$lib/services/CategoryService'
+import { fetchProductsOfCategory } from '$lib/services/ProductService'
 
+export async function load({ locals, cookies }) {
 	let loading = false,
 		err,
 		newArrivals,
@@ -13,22 +12,29 @@ export async function load({ url, params, locals, fetch, parent, cookies }) {
 	try {
 		loading = true
 
-		const res1 = await gett(`categories/megamenu?store=${store?.id}`)
+		const res1 = await fetchMegamenuData({
+			storeId: locals.store?.id,
+			server: true,
+			sid: cookies.get('sid')
+		})
 
-		newArrivals = res1.filter((m) => {
+		newArrivals = res1.filter((m: any) => {
 			return m.name === 'New Arrivals'
 		})
 
-		const res2 = await gett(`products?categories=${newArrivals[0]?._id}&store=${store?.id}`)
-		products = res2?.data
-		productsCount = res2?.count
+		const res2 = await fetchProductsOfCategory({
+			categoryId: newArrivals[0].slug,
+			storeId: locals.store?.id,
+			server: true,
+			sid: cookies.get('sid')
+		})
+		products = res2.products
+		productsCount = res2.count
 	} catch (e) {
 		err = e
 	} finally {
 		loading = false
 	}
-
-	// cookies.set('cache-control', 'public, max-age=200')
 
 	return { newArrivals, products, productsCount }
 }

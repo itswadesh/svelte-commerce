@@ -6,15 +6,13 @@
 
 <script>
 import { browser } from '$app/environment'
-import { constructURL2, toast } from '$lib/util'
+import { constructURL2 } from '$lib/utils'
 import { goto } from '$app/navigation'
 import BlogPostGrid from './_BlogPostGrid.svelte'
 import Pagination from '$lib/components/Pagination.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
-
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 function scrollToTop() {
 	if (browser) {
@@ -28,7 +26,7 @@ function scrollToTop() {
 
 function changePage(e, p) {
 	let fl = { ...data.query }
-	delete fl.page
+	delete fl?.page
 	const url = constructURL2('/stores', fl)
 	let page = parseInt(e.detail || 1)
 	goto(`${url}page=${page}`)

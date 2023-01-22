@@ -1,9 +1,9 @@
 <script>
-import { getAPI } from '$lib/util/api'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import ProductCard from '$lib/ProductCard.svelte'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
+import { fetchProducts } from '$lib/services/ProductService'
 
 let name = 'Product Tab'
 let allCoreCategories = [
@@ -32,9 +32,7 @@ let products = []
 onMount(async () => {
 	try {
 		loading = true
-		const res = await getAPI(`products?store=${$page?.data?.store?.id}`, $page?.data?.origin)
-
-		products = res?.data
+		products =await fetchProducts({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
 	} catch (e) {
 	} finally {
 		loading = false

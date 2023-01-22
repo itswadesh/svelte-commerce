@@ -3,7 +3,7 @@ import { goto } from '$app/navigation'
 import Error from '$lib/components/Error.svelte'
 import AddressSkeleton from './_AddressSkeleton.svelte'
 import { createEventDispatcher } from 'svelte'
-import { del } from '$lib/util/api'
+import { del } from '$lib/utils/api'
 import { page } from '$app/stores'
 const dispatch = createEventDispatcher()
 

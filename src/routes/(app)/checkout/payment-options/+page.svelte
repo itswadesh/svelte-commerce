@@ -10,12 +10,12 @@
 </style>
 
 <script>
-import { currency, toast } from '$lib/util'
-import { fireGTagEvent } from '$lib/util/gTag'
+import {  toast } from '$lib/utils'
+import { fireGTagEvent } from '$lib/utils/gTag'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { post } from '$lib/util/api'
+import { post } from '$lib/utils/api'
 import { stripePublishableKey } from '$lib/config'
 import CheckoutHeader from '$lib/components/CheckoutHeader.svelte'
 import Error from '$lib/components/Error.svelte'
@@ -32,20 +32,6 @@ const seoProps = {
 }
 
 export let data
-
-// console.log('zzzzzzzzzzzzzzzzzz', data)
-
-// $: ({
-// 	loading,
-// 	err,
-// 	paymentMethods,
-// 	address,
-// 	me,
-// 	cart,
-// 	prescription,
-// 	addressId,
-// 	stripePublishableKey
-// } = data)
 
 let errorMessage = 'Select a Payment Method',
 	disabled = false,

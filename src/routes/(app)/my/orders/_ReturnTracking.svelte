@@ -3,7 +3,7 @@
 <script>
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 
-import { date } from '$lib/util'
+import { date } from '$lib/utils'
 
 export let order
 </script>

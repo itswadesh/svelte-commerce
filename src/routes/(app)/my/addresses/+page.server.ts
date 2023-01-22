@@ -1,15 +1,15 @@
-import { getAPI } from '$lib/util/api'
-import { gett } from '$lib/utils'
+import { fetchAddresses } from '$lib/services/AddressService'
 import { error } from '@sveltejs/kit'
 
-export async function load({ params, request }) {
-	const addresses = await gett(`addresses/my`, request.headers.get('cookie'))
-	if (addresses) {
-		return { addresses: addresses }
+export async function load({ cookies, locals }) {
+	const { myAddresses, selectedAddress, count } = await fetchAddresses({
+		storeId: locals.store?.id,
+		server: true,
+		sid: cookies.get('sid')
+	})
+	myAddresses.count = count
+	if (myAddresses) {
+		return { addresses: myAddresses, selectedAddress }
 	}
 	throw error(404, 'Addresses not found')
-	// return {
-	// 	status: 500,
-	// 	errors: new Error('Internal Server Error')
-	// }
 }

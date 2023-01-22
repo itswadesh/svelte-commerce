@@ -32,10 +32,10 @@
 
 <script>
 import { onMount } from 'svelte'
-import { getAPI } from '$lib/util/api'
-import { toast } from '$lib/util'
+import { toast } from '$lib/utils'
 import { page } from '$app/stores'
 import { browser } from '$app/environment'
+import { fetchMegamenuData } from '$lib/services/CategoryService'
 
 let megamenu = []
 let selectedCategory = ''
@@ -50,12 +50,7 @@ async function getMegaMenu() {
 			const localMegamenu = localStorage.getItem('megamenu')
 
 			if (!localMegamenu || localMegamenu === 'undefined') {
-				megamenu = await getAPI(
-					`categories/megamenu?megamenu=true&store=${$page.data?.store?.id}`,
-					$page.data.origin
-				)
-
-				// console.log('zzzzzzzzzzzzzzzzzz', megamenu)
+				megamenu = await fetchMegamenuData({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
 			} else {
 				megamenu = JSON.parse(localMegamenu)
 				if (browser) {

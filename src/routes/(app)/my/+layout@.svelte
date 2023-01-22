@@ -10,7 +10,7 @@ import Footer from '$lib/Footer.svelte'
 import PageTransitions from '$lib/PageTransitions.svelte'
 import menu from '$lib/config/menu'
 import SidebarDashboard from './_SidebarDashboard.svelte'
-
+import {page} from '$app/stores'
 export let data
 
 $: ({ path, url, sort, isHome, q, currentPage, me, cart, store } = data)
@@ -47,6 +47,9 @@ let openSidebar = false
 				{#each menu as s}
 					<SidebarDashboard me="{me}" sidebar="{s}" />
 				{/each}
+				{#if $page.data.me?.role === 'vendor'}
+				<a class="ml-10 text-sm text-white" target="_blank" rel="external" href="{$page.data.store?.adminUrl}">Admin Panel</a>
+				{/if}
 			</div>
 		{/if}
 

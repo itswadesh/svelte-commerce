@@ -7,11 +7,11 @@ import { store } from '$lib/store'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { page } from '$app/stores'
 import dayjs from 'dayjs'
-import { toast } from '$lib/util'
+import { toast } from '$lib/utils'
 import { onMount } from 'svelte'
 import Modal from './_Modal.svelte'
 import { createEventDispatcher } from 'svelte'
-import { post } from '$lib/util/api'
+import { post } from '$lib/utils/api'
 const dispatch = createEventDispatcher()
 
 export let product,

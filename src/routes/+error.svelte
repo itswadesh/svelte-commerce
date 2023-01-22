@@ -10,13 +10,14 @@ h1 {
 </style>
 
 <script>
-import { getAPI } from '$lib/util/api'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import Footer from '$lib/Footer.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import Nav from '$lib/Nav.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import { fetchCartData } from '$lib/services/CartService'
+import { fetchMeData } from '$lib/services/UserService'
 
 let openSidebar = false
 let showCartSidebar = false
@@ -25,11 +26,8 @@ let cart = []
 
 onMount(async () => {
 	try {
-		me = await getAPI('me', $page?.data?.store?.id)
-		cart = await getAPI('cart', $page?.data?.store?.id)
-
-		// console.log('me', me)
-		// console.log('cart', cart)
+		me = await fetchMeData({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
+		cart = await fetchCartData({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
 	} catch (e) {
 	} finally {
 	}

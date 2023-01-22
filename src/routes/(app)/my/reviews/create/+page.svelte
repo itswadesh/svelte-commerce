@@ -1,8 +1,8 @@
 <script>
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
-import { post } from '$lib/util/api'
-import { toast } from '$lib/util'
+import { post } from '$lib/utils/api'
+import { toast } from '$lib/utils'
 import BackButton from '$lib/ui/BackButton.svelte'
 import Errors from '$lib/ui/Errors.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'

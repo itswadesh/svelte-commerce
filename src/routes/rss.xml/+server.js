@@ -1,11 +1,9 @@
-import { json } from '@sveltejs/kit'
-import { getAPI } from '$lib/util/api'
 import { websiteName, description, domain, id } from '$lib/config'
-import { date } from '$lib/util'
-import { gett } from '$lib/utils'
+import { date } from '$lib/utils'
+import { getBySid } from '$lib/utils/server'
 
 export async function GET() {
-	const resP = await gett(`es/products?store=${id}`)
+	const resP = await getBySid(`es/products?store=${id}`)
 	const products = resP?.data?.map((product) => {
 		product = {
 			name: product._source.name.replace('&', ''),
@@ -22,10 +20,6 @@ export async function GET() {
 		'Cache-Control': 'max-age=0, s-maxage=3600',
 		'Content-Type': 'application/xml'
 	}
-	// Suggestion (check for correctness before using):
-	// return json(body, {
-	// 	headers: headers
-	// });
 	return {
 		headers,
 		body

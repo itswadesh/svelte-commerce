@@ -1,11 +1,7 @@
 <script>
-import { onMount } from 'svelte'
-import { getAPI } from '$lib/util/api'
-import { toast } from '$lib/util'
 import { page } from '$app/stores'
 import { fly } from 'svelte/transition'
 
-let megaMenu = []
 let showDropdownMegaMenu = []
 </script>
 
