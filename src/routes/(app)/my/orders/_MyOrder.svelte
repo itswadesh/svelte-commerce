@@ -12,11 +12,7 @@ import OrderListSkeleton from './_OrderListSkeleton.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import { page } from '$app/stores'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import OrderListSkeleton from './_OrderListSkeleton.svelte'
 import Pagination from '$lib/components/Pagination.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-
 export let orders
 let clazz = ''
 export { clazz as class }
