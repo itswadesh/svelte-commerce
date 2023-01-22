@@ -10,9 +10,9 @@ export async function load({ url, request, locals, cookies, setHeaders }) {
 		locals.url = url.href
 		locals.currentPage = currentPage
 		locals.q = q
-		setHeaders({
-			'cache-control': 'public, max-age=300'
-		})
+		// setHeaders({
+		// 	'cache-control': 'public, max-age=300'
+		// })
 		return locals
 	} catch (e) {
 		throw error(
