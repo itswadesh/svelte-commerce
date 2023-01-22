@@ -1,4 +1,4 @@
-import { fetchAddresses } from '$lib/services/AddressService'
+import { fetchAddress, fetchAddresses } from '$lib/services/AddressService'
 import { fetchStates } from '$lib/services/CountryService'
 import { error } from '@sveltejs/kit'
 
@@ -9,7 +9,8 @@ export async function load({ locals, params, parent, cookies }) {
 	if (id === 'new') {
 		address = { id: 'new' }
 	} else {
-		address = await fetchAddresses({
+		address = await fetchAddress({
+			id,
 			storeId: locals.store?.id,
 			server: true,
 			sid: cookies.get('sid')
