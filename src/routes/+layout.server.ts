@@ -11,7 +11,7 @@ export async function load({ url, request, locals, cookies, setHeaders }) {
 		locals.currentPage = currentPage
 		locals.q = q
 		setHeaders({
-			'cache-control': 'public, max-age=604800'
+			'cache-control': 'public, max-age=300'
 		})
 		return locals
 	} catch (e) {
