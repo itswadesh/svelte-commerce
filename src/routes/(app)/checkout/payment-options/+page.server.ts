@@ -11,7 +11,7 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 		const redirectUrl = `${locals.store?.loginUrl || '/auth/login'}?ref=${url?.pathname}`
 		throw redirect(307, redirectUrl)
 	}
-	const cartRes: any = fetchRefreshCart({
+	const cartRes: any = await fetchRefreshCart({
 		storeId: locals.store?.id,
 		server: true,
 		sid: cookies.get('sid')

@@ -100,7 +100,6 @@ function submit() {
 				{cart.formattedAmount?.total}
 			</div>
 		{/if}
-
 		<div class="hidden md:block">
 			{#if cart.qty > 0 && !hideCheckoutButton}
 				{#if nextpage}
