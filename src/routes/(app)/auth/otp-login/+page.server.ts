@@ -1,6 +1,6 @@
-import { post } from '$lib/util/api'
-import { gett } from '$lib/utils'
-import { invalid, redirect } from '@sveltejs/kit'
+import { fetchMyCart } from '$lib/services/CartService'
+import { post } from '$lib/utils/api'
+import { fail, redirect } from '@sveltejs/kit'
 import type { Action, Actions, PageServerLoad } from './$types'
 export const load: PageServerLoad = async ({ locals, url }) => {
 	// redirect user if logged in
@@ -18,7 +18,7 @@ const getOtp: Action = async ({ request, locals }) => {
 	const data = await request.formData()
 	const phone = data.get('phone')
 	if (typeof phone !== 'string' || !phone) {
-		return invalid(400, { invalid: true })
+		return fail(400, { invalid: true })
 	}
 	try {
 		const data = await post(`get-otp`, { phone, store: locals.store?.id }, locals.origin)
@@ -39,16 +39,16 @@ const verifyOtp: Action = async ({ cookies, request, locals }) => {
 	const otp = data.get('otp')
 
 	if (typeof phone !== 'string' || !phone) {
-		return invalid(400, { invalid: true })
+		return fail(400, { invalid: true })
 	}
 
 	if (typeof otp !== 'string' || !otp) {
-		return invalid(400, { invalid: true })
+		return fail(400, { invalid: true })
 	}
 	try {
 		const user = await post(`verify-otp`, { phone, otp, store: locals.store?.id }, locals.origin)
 		if (!user) {
-			return invalid(400, { credentials: true })
+			return fail(400, { credentials: true })
 		}
 		const me = {
 			email: user.email,
@@ -81,7 +81,11 @@ const verifyOtp: Action = async ({ cookies, request, locals }) => {
 			maxAge: 60 * 60 * 24 * 30
 		})
 		try {
-			const cartRes = await gett('carts/my', request.headers.get('cookie'))
+			const cartRes = fetchMyCart({
+				storeId: locals.store?.id,
+				server: true,
+				sid: cookies.get('sid')
+			})
 			const cart = {
 				cartId: cartRes.cart_id,
 				items: cartRes.items,
@@ -110,7 +114,7 @@ const verifyOtp: Action = async ({ cookies, request, locals }) => {
 		redirect(307, '/')
 		return {}
 	} catch (e) {
-		return invalid(e.status, { message: e.message, credentials: true })
+		return fail(e.status, { message: e.message, credentials: true })
 	}
 }
 

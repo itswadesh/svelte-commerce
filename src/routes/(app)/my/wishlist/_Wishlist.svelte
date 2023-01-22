@@ -14,9 +14,9 @@
 
 <script>
 import { applyAction, enhance } from '$app/forms'
-import { currency } from '$lib/util'
-import { fireGTagEvent } from '$lib/util/gTag'
-import { getAPI, post } from '$lib/util/api'
+import { currency } from '$lib/utils'
+import { fireGTagEvent } from '$lib/utils/gTag'
+import { post } from '$lib/utils/api'
 import { invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
@@ -25,6 +25,7 @@ import DummyProductCard from '$lib/DummyProductCard.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import WishlistSkeleton from './_WishlistSkeleton.svelte'
+import { fetchWishlist } from '$lib/services/WishlistService'
 
 export let wishlistedProducts,
 	loadingProduct = []
@@ -53,8 +54,10 @@ async function removeFromWishlist(id, wx) {
 
 async function getWishlistedProducts() {
 	try {
-		wishlistedProducts = getAPI(`wishlists/my?store=${$page.data?.store?.id}`, $page.data.origin)
-
+		wishlistedProducts = fetchWishlist({
+			origin: $page?.data?.origin,
+			storeId: $page?.data?.store?.id
+		})
 		await invalidateAll()
 	} catch (e) {
 	} finally {
@@ -72,7 +75,7 @@ async function getWishlistedProducts() {
 	{/if}
 
 	<div>
-		{#if wishlistedProducts?.count === 0}
+		{#if wishlistedProducts?.length === 0}
 			<div class="flex h-[70vh] flex-col items-center justify-center text-center">
 				<img src="/no/empty-wishlist.svg" alt="empty wishlist" class="mb-5 h-60 object-contain" />
 
@@ -86,9 +89,51 @@ async function getWishlistedProducts() {
 			</div>
 		{:else}
 			<div class="relative">
-				<h1 class="mb-5 font-serif text-2xl font-medium md:text-3xl lg:text-4xl">
-					My Wishlist ({wishlistedProducts?.count || 0})
-				</h1>
+				<div>
+					<h1 class="mb-5 font-serif text-2xl font-medium md:text-3xl lg:text-4xl">
+						My Wishlist ({wishlistedProducts?.length || 0})
+					</h1>
+
+					{#if wishlistedProducts?.length}
+						<div
+							class="grid w-full grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-between lg:mb-20">
+							{#each wishlistedProducts as w, wx}
+								{#if w.product}
+									<form
+										action="/cart?/add"
+										method="POST"
+										use:enhance="{() => {
+											return async ({ result }) => {
+												result.data.qty < 0
+													? fireGTagEvent('remove_from_cart', result.data)
+													: fireGTagEvent('add_to_cart', result.data)
+												bounceItemFromTop = true
+												setTimeout(() => {
+													bounceItemFromTop = false
+												}, 3000)
+												removeFromWishlist(w.product?._id, wx)
+												invalidateAll()
+												await applyAction(result)
+											}
+										}}"
+										class="cols-span-1 relative flex flex-col justify-between border">
+										<BlackButton
+											type="button"
+											class="absolute top-2 right-2 z-10"
+											on:click="{() => removeFromWishlist(w.product?._id, wx)}">
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												class="h-6 w-6"
+												fill="none"
+												viewBox="0 0 24 24"
+												stroke="currentColor">
+												<path
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													stroke-width="2"
+													d="M6 18L18 6M6 6l12 12"></path>
+											</svg>
+										</BlackButton>
 
 				{#if wishlistedProducts?.data?.length}
 					<div

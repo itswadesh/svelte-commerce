@@ -6,9 +6,8 @@
 </style>
 
 <script>
-import { goto, invalidateAll } from '$app/navigation'
-import Checkbox from '$lib/ui/Checkbox.svelte'
-import { constructURL2, toast } from '$lib/util'
+import { goto } from '$app/navigation'
+import { constructURL2 } from '$lib/utils'
 import { fly } from 'svelte/transition'
 import CheckboxEs from '$lib/ui/CheckboxEs.svelte'
 import { createEventDispatcher, onMount } from 'svelte'
@@ -16,7 +15,7 @@ import { page } from '$app/stores'
 import { sorts } from '$lib/config'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { browser } from '$app/environment'
-import { getAPI } from '$lib/util/api'
+import { fetchMegamenuData } from '$lib/services/CategoryService'
 
 const dispatch = createEventDispatcher()
 
@@ -55,10 +54,7 @@ async function getMegamenu() {
 			const localmegamenu = localStorage.getItem('megamenu')
 
 			if (!localmegamenu || localmegamenu === 'undefined') {
-				megamenu = await getAPI(
-					`categories/megamenu?store=${$page.data?.store?.id}`,
-					$page.data.origin
-				)
+				megamenu = await fetchMegamenuData({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
 			} else {
 				megamenu = JSON.parse(localmegamenu)
 			}
@@ -131,10 +127,10 @@ function goCheckbox(e) {
 	fl.q = $page.url.searchParams.get('q')
 	let url = constructURL2(`${$page.url.pathname}`, fl)
 	appliedFilters = { ...fl }
-	delete appliedFilters.page
-	delete appliedFilters.sort
-	delete appliedFilters.lat
-	delete appliedFilters.lng
+	delete appliedFilters?.page
+	delete appliedFilters?.sort
+	delete appliedFilters?.lat
+	delete appliedFilters?.lng
 	goto(`${url}page=1`)
 }
 

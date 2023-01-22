@@ -63,7 +63,7 @@
 <script>
 import { Confetti } from 'svelte-confetti'
 import { page } from '$app/stores'
-import { post } from '$lib/util/api'
+import { post } from '$lib/utils/api'
 import Error from '$lib/components/Error.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import Radio from '$lib/ui/Radio.svelte'

@@ -6,22 +6,24 @@
 </style>
 
 <script>
-import { currency, date } from '$lib/util'
 import { goto } from '$app/navigation'
+import { currency, date } from '$lib/utils'
+import OrderListSkeleton from './_OrderListSkeleton.svelte'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import { page } from '$app/stores'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import OrderListSkeleton from './_OrderListSkeleton.svelte'
 import Pagination from '$lib/components/Pagination.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 
-export let currentPage, orders
-
+export let orders
 let clazz = ''
 export { clazz as class }
 </script>
 
 <div class="w-full {clazz}">
-	{#if orders.count > 0}
+	{#if orders.data?.length}
 		<div>
 			<div class="mb-4 flex w-full flex-row items-center justify-between">
 				<h1 class="font-serif text-2xl font-medium md:text-3xl lg:text-4xl">
@@ -40,7 +42,7 @@ export { clazz as class }
 				</a>
 			</div>
 
-			{#if orders.data?.length > 0}
+			{#if orders?.data?.length > 0}
 				<ul>
 					{#each orders.data as order}
 						<li class="mb-4 hidden sm:mb-10 xl:block">
@@ -256,7 +258,9 @@ export { clazz as class }
 			{/if}
 		</div>
 
-		<Pagination count="{Math.ceil(orders.count / orders.pageSize)}" current="{+currentPage}" />
+		<Pagination
+			count="{Math.ceil(orders.count / orders.pageSize)}"
+			current="{+orders.currentPage}" />
 	{:else if orders.count === 0}
 		<div class="flex flex-col items-center justify-center text-center">
 			<img src="/no/add-to-cart-animate.svg" alt="empty cart" class="mb-5 h-60 object-contain" />

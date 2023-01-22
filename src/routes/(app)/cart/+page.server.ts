@@ -1,23 +1,18 @@
-import { invalidateAll } from '$app/navigation'
-import { fireGTagEvent } from '$lib/util/gTag'
-import { getBySid, gett, post } from '$lib/utils'
-import { error, invalid, redirect } from '@sveltejs/kit'
+import { fetchRefreshCart } from '$lib/services/CartService'
+import { post } from '$lib/utils/server'
+import { error, fail, redirect } from '@sveltejs/kit'
 import type { Action, Actions, PageServerLoad } from './$types'
 
 export const load: PageServerLoad = async ({ url, request, locals, cookies }) => {
-	// const cookies = Cookie()
 	let loading = false
 	let cart = locals.cart
 	try {
 		loading = true
-		const res = await getBySid(`carts/refresh-cart?store=${locals.store?.id}`, cookies.get('sid'))
-		// console.error(
-		// 	'Refresh cart called at cart.server page...',
-		// 	res.cart_id,
-		// 	res.qty,
-		// 	res.items.length
-		// )
-
+		const res = await fetchRefreshCart({
+			storeId: locals.store?.id,
+			sid: cookies.get('sid'),
+			server: true
+		})
 		if (res) {
 			cart = {
 				cartId: res?.cart_id,
@@ -63,7 +58,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 	const options = JSON.parse(data.get('options')) //data.get('options') //
 	const customizedImg = data.get('customizedImg')
 	if (typeof pid !== 'string' || !pid) {
-		return invalid(400, { invalid: true })
+		return fail(400, { invalid: true })
 	}
 	try {
 		let cart = await post(
@@ -113,13 +108,11 @@ const add: Action = async ({ request, cookies, locals }) => {
 			locals.cartQty = cartObj.qty
 			cookies.set('cartId', cartObj.cartId, { path: '/' })
 			cookies.set('cartQty', cartObj.qty, { path: '/' })
-			// cookies.set('cart', JSON.stringify(cartObj), { path: '/' })
 			return cartObj
 		} else {
 			return {}
 		}
 	} catch (e) {
-		// console.log('err', e)
 		return {}
 	}
 }

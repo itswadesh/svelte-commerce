@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store'
 import Cookie from 'cookie-universal'
-import { gett } from './utils'
+import { getBySid } from './utils/server'
 const cookies = Cookie()
 
 export const geoLocation = writable({
@@ -50,9 +50,9 @@ export const fetchLocation = async () => {
 }
 export const fetchSettings = async () => {
 	try {
-		const data = (await gett('settings')).data?.settings
+		const data = (await getBySid('settings')).data?.settings
 		settings.set(data)
-		if (data.otpLogin) loginUrl.set(locals.store?.loginUrl)
+		// if (data.otpLogin) loginUrl.set(locals.store?.loginUrl)
 	} catch (e) {
 		settings.set({})
 	}
@@ -64,7 +64,7 @@ export const fetchStore = async () => {
 		store.set(data)
 		// await gett('store-one?id=' + storeOne.id)
 		const data1 = (
-			await gett(`categories?store=${storeOne.id}&megamenu=true&limit=6&page=0&level=0`)
+			await getBySid(`categories?store=${storeOne.id}&megamenu=true&limit=6&page=0&level=0`)
 		).data
 		megamenu.set(data1)
 	} catch (e) {
@@ -79,7 +79,7 @@ export const fetchMegamenu = async () => {
 }
 export const fetchUser = async () => {
 	try {
-		const data = await gett('users/me')
+		const data = await getBySid('users/me')
 		me.set(data)
 	} catch (e) {
 		me.set({})

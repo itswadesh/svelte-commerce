@@ -42,7 +42,7 @@ let seoProps = {
 	image: $page.data.store?.logo,
 	logo: $page.data.store?.logo,
 	ogSquareImage: { url: '', width: 56, height: 56 },
-	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00'],
+	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 08:00-13:00'],
 	// popularity: product.popularity,
 	// postalCode: '764036',
 	// price: product.price,

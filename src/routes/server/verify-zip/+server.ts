@@ -1,7 +1,7 @@
-import { gett } from '$lib/utils'
+import { getBySid } from '$lib/utils/server'
 export async function POST({ request, cookies, locals }) {
 	const formData = Object.fromEntries(await request.formData())
-	const res = await gett(`pincodes/${formData.zip}`, request.headers.get('cookie'))
+	const res = await getBySid(`pincodes/${formData.zip}`, cookies.get('sid'))
 	let zip
 	if (res) {
 		zip = {

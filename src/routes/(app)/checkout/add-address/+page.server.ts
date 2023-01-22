@@ -1,15 +1,19 @@
-import { gett } from '$lib/utils'
+import { fetchAddress } from '$lib/services/AddressService'
 export const prerender = false
-export async function load({ url, request }) {
+export async function load({ url, cookies, locals }) {
 	let ads = {}
-	const addressId = url.searchParams.get('id')
+	const id = url.searchParams.get('id')
 	const prescriptionId = url.searchParams.get('prescription')
-	if (addressId === 'new') {
+	if (id === 'new') {
 		ads = { id: 'new' }
 	} else {
-		ads = await gett(`addresses/${addressId}`, request.headers.get('cookie'))
+		ads = await fetchAddress({
+			storeId: locals.store?.id,
+			id,
+			sid: cookies.get('sid'),
+			server: true
+		})
 	}
-
 	return {
 		ads
 	}

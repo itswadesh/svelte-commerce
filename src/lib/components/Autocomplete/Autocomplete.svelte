@@ -1,8 +1,8 @@
 <script>
 import { createEventDispatcher, onMount } from 'svelte'
-import { getAPI } from '$lib/util/api'
 import { page } from '$app/stores'
 import AutocompleteItem from './AutocompleteItem.svelte'
+import { fetchAutocompleteData } from '$lib/services/AutocompleteService'
 
 export let placeholder = 'Search Products'
 
@@ -18,47 +18,22 @@ onMount(async () => {
 
 const getAutocompleteData = async (filterText = '') => {
 	try {
-		const res = await getAPI(
-			`es/autocomplete?q=${filterText}&store=${$page.data.store?.id}`,
-			$page.data.origin
-		)
-		const hits = res?.data?.hits?.hits
-		let data = []
-		if (hits) {
-			data = hits.map((h) => {
-				return { name: h._source.name, slug: h._source.slug, type: h._source.type }
-			})
-		}
-		return data || []
+		return await fetchAutocompleteData({filterText,origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
 	} catch (e) {
 		console.log('err....', e)
 	}
 }
 
-/* FILTERING countres DATA BASED ON INPUT */
 let filteredData = []
-// $: console.log(filteredData)
 
 const filterData = async (e) => {
 	const data = await getAutocompleteData(e.target.value)
-	// let storageArr = []
-	// console.log('333333333', data, inputValue)
-	// if (inputValue) {
-	// 	data.forEach((d) => {
-	// 		if (d?.name.toLowerCase().startsWith(inputValue.toLowerCase())) {
-	// 			// TODO
-	// 			// storageArr = [...storageArr, makeMatchBold(d)]
-	// 			storageArr = [...storageArr, d]
-	// 		}
-	// 	})
-	// }
 	filteredData = data
 	if (!filteredData?.length) {
 		inputObject = null
 	}
 }
 
-/* HANDLING THE INPUT */
 let searchInput // use with bind:this to focus element
 let inputValue = ''
 
@@ -75,16 +50,10 @@ const clearInput = () => {
 
 const setInputVal = (d) => {
 	inputObject = d
-	// if (!inputObject) {
-	// 	inputObject = { name: d.name, slug: undefined, type: 'product' }
-	// }
-	// TODO
-	// inputValue = removeBold(d)
 	inputValue = d?.name || d
 	filteredData = []
 	hiLiteIndex = null
 	submitValue()
-	// document.querySelector('#data-input').focus()
 }
 
 const submitValue = () => {
@@ -95,7 +64,6 @@ const submitValue = () => {
 }
 
 const makeMatchBold = (str) => {
-	// replace part of (data name === inputValue) with strong tags
 	let matched = str.name.substring(0, inputValue.length)
 	let makeBold = `<strong>${matched}</strong>`
 	str.boldedMatch = str.name.replace(matched, makeBold)
@@ -103,15 +71,10 @@ const makeMatchBold = (str) => {
 }
 
 const removeBold = (str) => {
-	//replace < and > all characters between
 	return str.replace(/<(.)*?>/g, '')
-	// return str.replace(/<(strong)>/g, "").replace(/<\/(strong)>/g, "");
 }
 
-/* NAVIGATING OVER THE LIST OF DATA W HIGHLIGHTING */
 let hiLiteIndex = null
-//$: console.log(hiLiteIndex);
-// $: hiLitedData = filteredData[hiLiteIndex]
 
 const navigateList = (e) => {
 	if (e.key === 'ArrowDown' && hiLiteIndex <= filteredData?.length - 1) {
@@ -129,9 +92,6 @@ const navigateList = (e) => {
 	}
 }
 </script>
-
-<!-- Can not enable it because it will trigger the function on any Enterpress including zip input form at product details page -->
-<!-- <svelte:window on:keydown="{navigateList}" /> -->
 
 <form autocomplete="off" on:submit|preventDefault="{submitValue}" class="relative">
 	<button
@@ -163,8 +123,6 @@ const navigateList = (e) => {
 			</svg>
 		</button>
 	</button>
-
-	<!-- FILTERED LIST OF DATA -->
 
 	{#if filteredData?.length > 0 && showSuggestionOptions}
 		<ul class="absolute top-12 z-40 w-full border-t border-l border-r bg-white shadow-xl">

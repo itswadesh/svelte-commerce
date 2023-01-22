@@ -1,5 +1,5 @@
 <script>
-import { getAPI } from '$lib/util/api'
+import { getAPI } from '$lib/utils/api'
 import { goto } from '$app/navigation'
 import { createEventDispatcher, onMount } from 'svelte'
 import { page } from '$app/stores'

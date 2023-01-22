@@ -25,6 +25,8 @@ declare namespace App {
 		zip: string
 		cartId: string
 		cartQty: number
+		isDesktop: boolean
+		isShowBackButton: boolean
 	}
 
 	// interface PageData {}

@@ -17,7 +17,7 @@ export let selectedImgIndex = 0
 
 let selectedimg
 
-$: if (product) {
+$: if (product?.images) {
 	selectedimg = product?.images[selectedImgIndex]
 }
 
@@ -98,7 +98,7 @@ onMount(async () => {
 				</svelte:component> -->
 			{:else if product?.images?.length === 1}
 				<div data-sveltekit-preload-data class="max-h-screen w-full">
-					<img src="{product?.images[0]}" alt="" class="block h-full object-contain" />
+					<img src="{product?.images && product?.images[0]}" alt="" class="block h-full object-contain" />
 				</div>
 			{:else}
 				<div

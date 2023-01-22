@@ -18,7 +18,7 @@ input[type='search']::-webkit-search-cancel-button {
 
 <script>
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import { currency } from '$lib/util'
+import { currency } from '$lib/utils'
 import { createEventDispatcher } from 'svelte'
 import { page } from '$app/stores'
 const dispatch = createEventDispatcher()

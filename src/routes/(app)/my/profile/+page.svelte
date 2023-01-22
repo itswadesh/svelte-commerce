@@ -7,8 +7,8 @@
 
 <script>
 import { page } from '$app/stores'
-import { put } from '$lib/util/api'
-import { toast } from '$lib/util'
+import { put } from '$lib/utils/api'
+import { toast } from '$lib/utils'
 import Cookie from 'cookie-universal'
 import CtrlS from '$lib/components/CtrlS.svelte'
 import dayjs from 'dayjs'

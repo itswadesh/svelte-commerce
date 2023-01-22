@@ -1,9 +1,13 @@
-import { gett } from '$lib/utils'
+import { fetchWishlist } from '$lib/services/WishlistService'
 import { error, redirect } from '@sveltejs/kit'
 
-export async function load({ request, locals }) {
+export async function load({ cookies, locals }) {
 	try {
-		const wishlistedProducts = await gett(`wishlists/my`, request.headers.get('cookie'))
+		const wishlistedProducts = await fetchWishlist({
+			storeId: locals.store?.id,
+			server: true,
+			sid: cookies.get('sid')
+		})
 		if (wishlistedProducts) {
 			return { wishlistedProducts }
 		}
