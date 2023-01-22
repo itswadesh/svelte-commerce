@@ -95,7 +95,11 @@ async function remove(id) {
 		<header class="mb-3 flex flex-wrap items-center justify-between">
 			{#if data.reviews.count > 0}
 				<h1 class="mb-2 text-xl font-bold md:text-2xl ">
-					Reviews ({data.reviews.count})
+					Reviews
+
+					{#if data.reviews.count}
+						({data.reviews.count})
+					{/if}
 				</h1>
 
 				<label class="mb-2">

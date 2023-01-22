@@ -12,7 +12,10 @@ import OrderListSkeleton from './_OrderListSkeleton.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import { page } from '$app/stores'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import OrderListSkeleton from './_OrderListSkeleton.svelte'
 import Pagination from '$lib/components/Pagination.svelte'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 
 export let orders
 let clazz = ''
@@ -24,7 +27,11 @@ export { clazz as class }
 		<div>
 			<div class="mb-4 flex w-full flex-row items-center justify-between">
 				<h1 class="font-serif text-2xl font-medium md:text-3xl lg:text-4xl">
-					Orders <span class="text-lg md:text-xl lg:text-2xl">({orders.count})</span>
+					Orders
+
+					{#if orders.count}
+						({orders.count})
+					{/if}
 				</h1>
 
 				<a
@@ -36,9 +43,9 @@ export { clazz as class }
 			</div>
 
 			{#if orders?.data?.length > 0}
-				<div>
+				<ul>
 					{#each orders.data as order}
-						<div class="mb-4 hidden sm:mb-10 xl:block">
+						<li class="mb-4 hidden sm:mb-10 xl:block">
 							<div class="mb-3 flex items-center justify-between text-sm text-gray-500 sm:mb-4">
 								<h6>Order No : #{order.orderNo}</h6>
 
@@ -136,9 +143,9 @@ export { clazz as class }
 									{/each}
 								</tbody>
 							</table>
-						</div>
+						</li>
 
-						<div class="xl:hidden">
+						<li class="xl:hidden">
 							<div class="mb-3 flex items-center justify-between text-sm text-gray-500 sm:mb-4">
 								<h6>
 									<span class="hidden sm:block">Order No :</span>
@@ -239,8 +246,14 @@ export { clazz as class }
 									</div>
 								{/each}
 							</a>
-						</div>
+						</li>
 					{/each}
+				</ul>
+			{:else}
+				<div class="my-10 flex w-full flex-col items-center justify-center">
+					<img src="/no/empty-order.svg" alt="" class="mb-10 h-80 md:h-96" />
+
+					<h4 class="text-xl font-semibold sm:mb-10 sm:text-2xl">Oops!, There's no Orders Yet</h4>
 				</div>
 			{/if}
 		</div>

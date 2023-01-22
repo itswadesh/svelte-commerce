@@ -92,6 +92,11 @@ async function remove(id) {
 <div>
 	<h1 class="mb-5 text-xl font-bold md:text-2xl">
 		Saved Addresses ({data.addresses.count})
+
+		{#if addresses.count}
+			({addresses.count})
+		{/if}
+
 	</h1>
 
 	<div class="mb-5 flex items-center justify-between gap-4 sm:gap-6">
