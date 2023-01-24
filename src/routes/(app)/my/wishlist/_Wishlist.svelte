@@ -4,6 +4,7 @@
 		height: 55%;
 	}
 }
+
 @media (min-width: 768px) {
 	.height {
 		height: 60%;
@@ -14,20 +15,25 @@
 <script>
 import { applyAction, enhance } from '$app/forms'
 import { currency } from '$lib/utils'
+import { fetchWishlist } from '$lib/services/WishlistService'
 import { fireGTagEvent } from '$lib/utils/gTag'
-import { post } from '$lib/utils/api'
 import { invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
+import { post } from '$lib/utils/api'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
 import BlackButton from '$lib/ui/BlackButton.svelte'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import WishlistSkeleton from './_WishlistSkeleton.svelte'
-import { fetchWishlist } from '$lib/services/WishlistService'
+
 export let wishlistedProducts,
 	loadingProduct = []
+
+// console.log('zzzzzzzzzzzzzzzzzz', wishlistedProducts)
+
 let bounceItemFromTop = false
+
 async function removeFromWishlist(id, wx) {
 	try {
 		loadingProduct[wx] = true
@@ -47,6 +53,7 @@ async function removeFromWishlist(id, wx) {
 		loadingProduct[wx] = false
 	}
 }
+
 async function getWishlistedProducts() {
 	try {
 		wishlistedProducts = fetchWishlist({
@@ -68,12 +75,16 @@ async function getWishlistedProducts() {
 			{/each}
 		</div>
 	{/if}
+
 	<div>
 		{#if wishlistedProducts?.length === 0}
 			<div class="flex h-[70vh] flex-col items-center justify-center text-center">
 				<img src="/no/empty-wishlist.svg" alt="empty wishlist" class="mb-5 h-60 object-contain" />
+
 				<span class="mb-3 text-xl font-medium md:text-3xl"> Empty Wishlist !!</span>
+
 				<span class="mb-5 text-sm"> You have no items in your Wishlist. Start adding</span>
+
 				<a href="/" aria-label="Click to route home" data-sveltekit-preload-data>
 					<PrimaryButton class="w-40 py-2 text-sm">Shop Now</PrimaryButton>
 				</a>
@@ -84,7 +95,8 @@ async function getWishlistedProducts() {
 					<h1 class="mb-5 font-serif text-2xl font-medium md:text-3xl lg:text-4xl">
 						My Wishlist ({wishlistedProducts?.length || 0})
 					</h1>
-					{#if wishlistedProducts?.length}
+
+					{#if wishlistedProducts.length}
 						<div
 							class="grid w-full grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-between lg:mb-20">
 							{#each wishlistedProducts as w, wx}
@@ -101,8 +113,8 @@ async function getWishlistedProducts() {
 												setTimeout(() => {
 													bounceItemFromTop = false
 												}, 3000)
-												removeFromWishlist(w.product?._id, wx)
-												invalidateAll()
+												await removeFromWishlist(w.product?._id, wx)
+												await invalidateAll()
 												await applyAction(result)
 											}
 										}}"
@@ -124,6 +136,7 @@ async function getWishlistedProducts() {
 													d="M6 18L18 6M6 6l12 12"></path>
 											</svg>
 										</BlackButton>
+
 										<a
 											href="/product/{w.product?.slug}"
 											aria-label="Click to view the product details">
@@ -136,6 +149,7 @@ async function getWishlistedProducts() {
 														width="192"
 														class="h-full w-full object-contain object-bottom text-xs" />
 												</div>
+
 												<div class="mx-auto p-2 text-center text-sm sm:p-4">
 													{#if $page.data?.store?.isFnb && w.product?.vendor?.businessName}
 														<h4 class="mb-2 font-semibold">
@@ -146,10 +160,12 @@ async function getWishlistedProducts() {
 															{w.product?.brand.name}
 														</h4>
 													{/if}
+
 													<div class="mb-2 flex items-start justify-center">
 														<h6 class="flex-1 truncate font-medium">
 															{w.product?.name}
 														</h6>
+
 														{#if $page?.data?.store?.isFnb && w.product.foodType}
 															<div>
 																{#if w.product.foodType === 'veg'}
@@ -160,15 +176,18 @@ async function getWishlistedProducts() {
 															</div>
 														{/if}
 													</div>
+
 													<div
 														class="flex flex-wrap items-center justify-center gap-2 overflow-hidden overflow-ellipsis text-xs">
 														<span class="whitespace-nowrap text-base font-bold">
 															{currency(w.product.price, $page.data?.store?.currencySymbol)}
 														</span>
+
 														{#if w.product?.mrp > w.product?.price}
 															<strike class="whitespace-nowrap text-gray-500">
 																{currency(w.product?.mrp, $page.data?.store?.currencySymbol)}
 															</strike>
+
 															{#if Math.floor(((w.product?.mrp - w.product?.price) / w.product?.mrp) * 100) > 0}
 																<span class="whitespace-nowrap text-primary-500">
 																	({Math.floor(
@@ -181,19 +200,26 @@ async function getWishlistedProducts() {
 												</div>
 											</div>
 										</a>
+
 										<input type="hidden" name="pid" value="{w.product?._id}" />
+
 										<input type="hidden" name="vid" value="{w.product?._id}" />
+
 										<input type="hidden" name="qty" value="{1}" />
+
 										<input
 											type="hidden"
 											name="options"
 											value="{JSON.stringify(w.product?.options)}" />
+
 										<input type="hidden" name="customizedImg" value="{'undefined'}" />
+
 										<button
 											type="submit"
 											class="w-full border-t p-2 font-semibold uppercase tracking-wide text-primary-500 transition duration-300 focus:outline-none hover:bg-primary-50">
 											Move To Bag
 										</button>
+
 										{#if loadingProduct[wx]}
 											<div
 												class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -218,11 +244,13 @@ async function getWishlistedProducts() {
 											</div>
 										{/if}
 									</form>
+
 									{#if bounceItemFromTop}
 										<AnimatedCartItem img="{w.product?.img}" />
 									{/if}
 								{/if}
 							{/each}
+
 							{#each { length: 8 } as _}
 								<div class="hidden sm:block">
 									<DummyProductCard />

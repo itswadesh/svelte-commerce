@@ -26,6 +26,8 @@ export let data
 let clazz
 export { clazz as class }
 
+console.log('zzzzzzzzzzzzzzzzzz', data)
+
 const seoProps = {
 	title: 'Details ',
 	metadescription: 'Details '
@@ -288,8 +290,8 @@ onMount(() => {
 				{/if}
 
 				<div class="mt-5 sm:mt-10 xl:flex xl:items-center xl:justify-between">
-					{#if data.orderTracking?.data?.length}
-						<OrderTracking order="{data.orderTracking}" />
+					{#if data.orderTracking?.length}
+						<OrderTracking tracks="{data.orderTracking}" />
 					{/if}
 
 					<!-- {#if !data.order?.isReplaceOrReturn}
