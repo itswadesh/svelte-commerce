@@ -1,7 +1,7 @@
 <script>
-import SEO from '$lib/components/SEO/index.svelte'
-import SaveAddress from '../_SaveAddress.svelte'
 import BackButton from '$lib/ui/BackButton.svelte'
+import SaveAddress from '../_SaveAddress.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
 
 const seoProps = {
 	title: 'Address Details ',
@@ -10,7 +10,7 @@ const seoProps = {
 
 export let data
 
-// console.log(address)
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 </script>
 
 <SEO {...seoProps} />

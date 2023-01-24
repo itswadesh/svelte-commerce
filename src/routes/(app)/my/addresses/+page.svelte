@@ -12,9 +12,10 @@
 </style>
 
 <script>
-import { goto } from '$app/navigation'
+// import { fetchAddresses } from '$lib/services/AddressService'
+import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
-import { post, del, getAPI } from '$lib/util/api'
+import { post, del } from '$lib/utils/api'
 import Pagination from '$lib/components/Pagination.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
@@ -26,10 +27,8 @@ const seoProps = {
 
 export let data
 
-$: ({ search, sort, err, addresses, count, query, currentPage } = data)
-
-let typingTimer,
-	loading = false
+let typingTimer
+let loadingOnDelete = []
 
 function callSearch(search) {
 	clearTimeout(typingTimer)
@@ -54,38 +53,43 @@ async function saveAddress(e) {
 	const { _id: id, active } = e
 	try {
 		await post('addresses', { id, store: $page.data.store?.id }, $page.data.origin)
-		refreshData()
+		// refreshData()
+		await invalidateAll()
 	} catch (e) {
-		err = e
+		data.err = e
 		// toast(e, 'error')
 	} finally {
 		// loading = false
 	}
 }
 
-async function remove(id) {
+async function remove(id, index) {
 	try {
+		loadingOnDelete[index] = true
+
 		await del(`addresses/${id}`, $page.data.origin)
-		// &store=${$page.data.store?.id}
-		refreshData()
+
+		// refreshData()
+		await invalidateAll()
 	} catch (e) {
-		err = e
-		// toast(e, 'error')
+		data.err = e
 	} finally {
-		// loading = false
+		loadingOnDelete[index] = false
 	}
 }
 
-async function refreshData() {
-	try {
-		const res = await getAPI(`addresses/my`, $page.data.origin)
-
-		addresses = res?.data
-	} catch (e) {
-		err = e
-	} finally {
-	}
-}
+// async function refreshData() {
+// 	try {
+// 		const res = await fetchAddresses({
+// 			origin: $page?.data?.origin,
+// 			storeId: $page?.data?.store?.id
+// 		})
+// 		data.addresses = res?.data
+// 	} catch (e) {
+// 		data.err = e
+// 	} finally {
+// 	}
+// }
 </script>
 
 <SEO {...seoProps} />
@@ -94,17 +98,12 @@ async function refreshData() {
 	<h1 class="mb-5 text-xl font-bold md:text-2xl">
 		Saved Addresses
 
-		{#if addresses.count}
-			({addresses.count})
+		{#if data.addresses.count}
+			({data.addresses.count})
 		{/if}
 	</h1>
 
 	<div class="mb-5 flex items-center justify-between gap-4 sm:gap-6">
-		<!-- <SearchBox
-			placeholder="Search addresses name, title, content and status..."
-			bind:value="{search}"
-			on:change="{() => callSearch(search)}" /> -->
-
 		<a href="/my/addresses/new" aria-label="Click to route new address" data-sveltekit-preload-data>
 			<PrimaryButton class="text-sm">
 				<svg
@@ -125,13 +124,13 @@ async function refreshData() {
 		</a>
 	</div>
 
-	{#if addresses?.isFetching}
+	{#if data.addresses?.isFetching}
 		Loading....
-	{:else if addresses?.errors}
-		{addresses}
-	{:else if addresses.count > 0}
-		<ul class="flex w-full max-w-xl flex-col gap-4">
-			{#each addresses.data as i, index}
+	{:else if data.addresses?.errors}
+		{data.addresses?.errors}
+	{:else if data.addresses.data.length > 0}
+		<ul class="mb-5 flex w-full max-w-xl flex-col gap-4">
+			{#each data.addresses.data as i, index}
 				{#if i}
 					<li
 						class="overflow-hidden rounded-md border bg-white shadow-md transition duration-300 hover:shadow-md">
@@ -177,20 +176,20 @@ async function refreshData() {
 							<button
 								type="button"
 								class="bg-transparent p-2 text-center font-semibold uppercase text-primary-500 transition duration-300 focus:outline-none hover:bg-gray-100 hover:text-primary-700"
-								on:click="{() => remove(i._id)}">
-								Remove
+								on:click="{() => remove(i._id, index)}">
+								{#if loadingOnDelete[index]}
+									Removing...
+								{:else}
+									Remove
+								{/if}
 							</button>
 						</div>
 					</li>
 				{/if}
-			{:else}
-				<div class="px-6 py-3 text-sm text-gray-500 whitespace-nowrap">
-					No address found, Please add address by clicking add new address button above.
-				</div>
 			{/each}
 		</ul>
 
-		<Pagination count="{Math.ceil(count / 40)}" current="{currentPage}" />
+		<Pagination count="{Math.ceil(data.count / 40)}" current="{data.currentPage}" />
 	{:else}
 		<div class="h-rem-empty flex flex-col items-center justify-center text-center">
 			<div>
@@ -200,7 +199,7 @@ async function refreshData() {
 			<span class="mb-3 text-xl font-medium md:text-3xl">Empty Addresses!!</span>
 
 			<span class="mb-5 text-xs">
-				We didn't find any address, Add a address by clicking the plus icon
+				We didn't find any address, Please add address by clicking add new address button above.
 			</span>
 		</div>
 	{/if}
