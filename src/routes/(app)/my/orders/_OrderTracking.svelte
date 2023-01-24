@@ -5,20 +5,20 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 
 import { date } from '$lib/utils'
 
-export let order
+export let tracks
 </script>
 
 <div>
 	<h1 class="mb-4 text-xl font-semibold sm:text-2xl">Timeline</h1>
 
 	<div class="flex flex-col gap-2">
-		{#each order.data as o}
+		{#each tracks as t}
 			<div>
 				<div class="mb-2 flex items-start gap-4">
 					<div class="h-5 w-5 flex-shrink-0 overflow-hidden rounded-full">
-						{#if o.icon}
+						{#if t.icon}
 							<LazyImg
-								src="{o.icon}"
+								src="{t.icon}"
 								width="20"
 								height="20"
 								alt=" "
@@ -29,7 +29,7 @@ export let order
 					</div>
 
 					<div class="flex-1 gap-1 text-sm font-semibold capitalize">
-						{o.title}
+						{t.title}
 					</div>
 				</div>
 
@@ -41,11 +41,13 @@ export let order
 					</div>
 
 					<div class="flex flex-1 flex-col gap-1">
-						<span class="text-xs text-gray-500">{date(o.time)}</span>
+						<span class="text-xs text-gray-500">{date(t.time)}</span>
 
-						<p class="text-xs first-letter:uppercase">
-							{o.comment}
-						</p>
+						{#if t.comment}
+							<p class="text-xs first-letter:uppercase">
+								{t.comment}
+							</p>
+						{/if}
 					</div>
 				</div>
 			</div>
