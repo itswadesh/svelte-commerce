@@ -67,7 +67,52 @@ export const fetchCategory = async ({ origin, id, server = false, sid = null }: 
 	}
 }
 
-export const fetchAllCategories = async ({ origin, storeId, server = false, sid = null }: any) => {
+export const fetchAllCategories = async ({
+	origin,
+	storeId,
+	server = false,
+	sid = null,
+	featured = false
+}: any) => {
+	try {
+		let res: any = {}
+		let data, pageSize, currentPage
+		switch (provider) {
+			case 'litekart':
+				let catQ = `categories?store=${storeId}`
+				if (featured) {
+					catQ += `${catQ}&featured=true`
+				}
+				if (server) {
+					res = await getBySid(catQ, sid)
+				} else {
+					res = await getAPI(catQ, origin)
+				}
+				data = res.data
+				pageSize = res.pageSize
+				currentPage = res.currentPage
+				break
+			case 'bigcommerce':
+				res = await getBigCommerceApi(`categories`, {}, sid)
+				break
+			case 'woocommerce':
+				res = await getWooCommerceApi(`categories`, {}, sid)
+				break
+		}
+		return { data, pageSize, currentPage }
+	} catch (err) {
+		const e = err as Error
+		throw error(e.status, e.data.message)
+	}
+}
+
+export const fetchAllProductsOfCategories = async ({
+	origin,
+	storeId,
+	server = false,
+	sid = null,
+	featured = false
+}: any) => {
 	try {
 		let res: any = {}
 		let products = []
@@ -77,10 +122,14 @@ export const fetchAllCategories = async ({ origin, storeId, server = false, sid 
 		let err = null
 		switch (provider) {
 			case 'litekart':
+				let catQ = `categories?store=${storeId}`
+				if (featured) {
+					catQ += `catQ&featured=true`
+				}
 				if (server) {
-					res = await getBySid(`categories?store=${storeId}`, sid)
+					res = await getBySid(catQ, sid)
 				} else {
-					res = await getAPI(`categories?store=${storeId}`, origin)
+					res = await getAPI(catQ, origin)
 				}
 				products = res?.data || []
 				productsCount = res?.count

@@ -5,13 +5,17 @@ import { getBigCommerceApi, getWooCommerceApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
-export const fetchAutocompleteData = async ({ origin, storeId, filterText }: any) => {
+export const fetchAutocompleteData = async ({ origin, storeId, q }: any) => {
 	try {
 		let res: any = {}
 		let data = []
 		switch (provider) {
 			case 'litekart':
-				res = await getAPI(`es/autocomplete?q=${filterText}&store=${storeId}`, origin)
+				let filterText = `es/autocomplete?store=${storeId}&q=`
+				if (!!q && q !== 'undefined' && q !== 'null' && q !== '') {
+					filterText = `es/autocomplete?store=${storeId}&q=${q}`
+				}
+				res = await getAPI(filterText, origin)
 				const hits = res?.data?.hits?.hits
 				if (hits) {
 					data = hits.map((h) => {
