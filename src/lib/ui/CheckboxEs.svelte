@@ -77,16 +77,16 @@ export let model,
 	name = '',
 	required = false,
 	disabled = false,
-	title = ''
+	title = '',
+	showSearchBox = false
 
 let showAllList = false,
-	noOfitems = 3,
-	showSearchBox = false
+	noOfitems = 5
 
 function toggleShowAllList() {
 	showAllList = !showAllList
 	if (showAllList === false) {
-		noOfitems = 3
+		noOfitems = 5
 	} else {
 		noOfitems = items.length
 	}
@@ -113,58 +113,63 @@ function handleSearchBox() {
 </script>
 
 <div>
-	<div class="relative mb-3 flex items-center justify-between gap-4">
-		{#if title}
-			<h6 class="relative z-0 font-bold tracking-wide">
-				{title}
+	{#if filteredTerms?.length >= 5 || title}
+		<div class="relative mb-3 flex items-center justify-between gap-4">
+			<h6
+				class="relative z-0 font-bold capitalize tracking-wide
+		{title ? 'opacity-100' : 'opacity-0'}">
+				{title || '_'}
 			</h6>
-		{/if}
 
-		<div class="absolute inset-x-0 right-0 z-10 flex h-8 justify-end">
-			<div class="relative mb-3 h-8 rounded-full bg-gray-100 {showSearchBox ? 'w-full' : 'w-8'}">
-				<input
-					type="search"
-					id="{title}searchText"
-					placeholder="Search for {title}"
-					class="h-8 w-full truncate rounded-full bg-transparent py-2 pl-4 pr-10 text-sm focus:outline-none"
-					bind:value="{searchTerm}" />
+			{#if filteredTerms?.length >= 5}
+				<div class="absolute inset-x-0 right-0 z-10 flex h-8 justify-end">
+					<div
+						class="relative mb-3 h-8 rounded-full bg-gray-100 {showSearchBox ? 'w-full' : 'w-8'}">
+						<input
+							type="search"
+							id="{title}searchText"
+							placeholder="Search for {title}"
+							class="h-8 w-full truncate rounded-full bg-transparent py-2 pl-4 pr-10 text-sm focus:outline-none"
+							bind:value="{searchTerm}" />
 
-				<button
-					type="button"
-					class="absolute inset-y-0 right-2 z-20 flex items-center justify-center text-gray-500 focus:outline-none"
-					on:click="{handleSearchBox}">
-					{#if !showSearchBox}
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							class="h-4 w-4"
-							viewBox="0 0 20 20"
-							fill="currentColor">
-							<path
-								fill-rule="evenodd"
-								d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-								clip-rule="evenodd"></path>
-						</svg>
-					{:else}
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							class="h-4 w-4"
-							viewBox="0 0 20 20"
-							fill="currentColor">
-							<path
-								fill-rule="evenodd"
-								d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-								clip-rule="evenodd"></path>
-						</svg>
-					{/if}
-				</button>
-			</div>
+						<button
+							type="button"
+							class="absolute inset-y-0 right-2 z-20 flex items-center justify-center text-gray-500 focus:outline-none"
+							on:click="{handleSearchBox}">
+							{#if !showSearchBox}
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="h-4 w-4"
+									viewBox="0 0 20 20"
+									fill="currentColor">
+									<path
+										fill-rule="evenodd"
+										d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+										clip-rule="evenodd"></path>
+								</svg>
+							{:else}
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="h-4 w-4"
+									viewBox="0 0 20 20"
+									fill="currentColor">
+									<path
+										fill-rule="evenodd"
+										d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+										clip-rule="evenodd"></path>
+								</svg>
+							{/if}
+						</button>
+					</div>
+				</div>
+			{/if}
 		</div>
-	</div>
+	{/if}
 
 	<ul class="flex flex-col">
 		{#each filteredTerms as i, ix}
 			{#if ix <= noOfitems}
-				{#if i.key}
+				{#if i.key && i.doc_count > 0}
 					<li>
 						<label class="inline-flex items-center">
 							<input
@@ -192,7 +197,7 @@ function handleSearchBox() {
 			{/if}
 		{/each}
 
-		{#if filteredTerms.length > 3}
+		{#if filteredTerms.length >= noOfitems}
 			<button
 				type="button"
 				class="text-left text-sm font-semibold text-primary-500 focus:outline-none hover:underline"

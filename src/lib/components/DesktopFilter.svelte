@@ -1,12 +1,12 @@
 <script>
 import { browser } from '$app/environment'
 import { constructURL2, toast } from '$lib/utils'
+import { fetchMegamenuData } from '$lib/services/CategoryService'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import CheckboxEs from '$lib/ui/CheckboxEs.svelte'
 import RadioEs from '$lib/ui/RadioEs.svelte'
-import { fetchMegamenuData } from '$lib/services/CategoryService'
 
 export let facets = {},
 	fl = {},
