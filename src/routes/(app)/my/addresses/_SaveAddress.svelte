@@ -9,6 +9,7 @@ import Error from '$lib/components/Error.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
+import { saveAddress } from '$lib/services/AddressService'
 
 const dispatch = createEventDispatcher()
 
@@ -30,8 +31,7 @@ async function SaveAddress(address) {
 		loading = true
 		const { firstName, lastName, email, phone, locality, city, state, country, zip } = address
 		toast('Saving Address Info...', 'info')
-		const newAddress = await post(
-			'addresses',
+		const newAddress = await saveAddress(
 			{
 				id,
 				firstName,
@@ -44,9 +44,9 @@ async function SaveAddress(address) {
 				state,
 				country,
 				zip,
-				store: $page.data.store?.id
+				store: $page.data.store?.id,
+				origin:$page.data.origin
 			},
-			$page.data.origin
 		)
 
 		toast('Address Info Saved.', 'success')

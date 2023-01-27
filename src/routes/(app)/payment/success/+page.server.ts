@@ -1,4 +1,5 @@
 import { fetchRefreshCart } from '$lib/services/CartService'
+import { paySuccessPageHit } from '$lib/services/OrdersService'
 import { post } from '$lib/utils/server'
 import { error, redirect } from '@sveltejs/kit'
 
@@ -11,18 +12,13 @@ export async function load({ url, request, locals, cookies }) {
 	let loading, err, order, cart
 	try {
 		loading = true
-		const res = await post(
-			`orders/pay-sucess-page-hit`,
-			{
-				paymentMode: paymentMode,
-				status: status,
-				orderId: orderId,
-				store: locals.store?.id
-			},
-			cookies
-		)
-
-		order = res
+		order = await paySuccessPageHit({
+			paymentMode,
+			status,
+			orderId,
+			store: locals.store?.id,
+			sid: cookies.get('sid')
+		})
 	} catch (e) {
 		if (e.status === 401) {
 			throw redirect(307, locals.store?.loginUrl)

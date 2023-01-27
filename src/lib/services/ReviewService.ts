@@ -1,7 +1,14 @@
 import { provider } from '$lib/config'
 import type { Error } from '$lib/types'
 import { getAPI } from '$lib/utils/api'
-import { getBigCommerceApi, getBySid, getWooCommerceApi } from '$lib/utils/server'
+import {
+	getBigCommerceApi,
+	getBySid,
+	getWooCommerceApi,
+	post,
+	postBigCommerceApi,
+	postWooCommerceApi
+} from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
@@ -80,6 +87,46 @@ export const fetchProductReviews = async ({
 				break
 		}
 		return res?.data || []
+	} catch (err) {
+		const e = err as Error
+		throw error(e.status, e.data.message)
+	}
+}
+
+export const saveReview = async ({
+	storeId,
+	id,
+	pid,
+	message,
+	rating,
+	origin,
+	server = false,
+	sid = null
+}: any) => {
+	try {
+		let res: any = {}
+		switch (provider) {
+			case 'litekart':
+				res = await post(
+					`reviews`,
+					{
+						id,
+						pid,
+						message,
+						rating,
+						store: storeId
+					},
+					origin
+				)
+				break
+			case 'bigcommerce':
+				res = await postBigCommerceApi(`reviews`, {})
+				break
+			case 'woocommerce':
+				res = await postWooCommerceApi(`reviews`, {})
+				break
+		}
+		return res
 	} catch (err) {
 		const e = err as Error
 		throw error(e.status, e.data.message)

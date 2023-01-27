@@ -19,6 +19,7 @@ import Skeleton from '$lib/ui/Skeleton.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 import { fetchProducts } from '$lib/services/ProductService'
 import { fetchCoupons } from '$lib/services/CouponService'
+import { addToCartService, applyCouponService, ApplyCouponService, removeCouponService } from '$lib/services/CartService'
 
 export let data
 
@@ -48,16 +49,15 @@ onMount(() => {
 
 const addToCart = async ({ pid, qty, customizedImg, ix }: any) => {
 	loading[ix] = true
-	await post(
-		'carts/add-to-cart',
+	await addToCartService(
 		{
 			pid: pid,
 			vid: pid,
 			qty: qty,
 			customizedImg: customizedImg || null,
-			store: $page.data.store?.id
+			storeId: $page.data.store?.id,
+			origin:$page.data.origin
 		},
-		$page.data.origin
 	)
 
 
@@ -74,10 +74,9 @@ function handleCouponCode(couponCode: string) {
 async function applyCouponCode(selectedCouponCode: string) {
 	try {
 		loadingApplyCoupon = true
-		const resAC = await post(
-			'apply-coupon',
-			{ code: selectedCouponCode, store: $page.data.store?.id },
-			$page.data.origin
+		const resAC = await applyCouponService(
+			{ code: selectedCouponCode, storeId: $page.data.store?.id , origin:
+			$page.data.origin}
 		)
 		appliedCouponInfo = resAC
 		await invalidateAll()
@@ -92,7 +91,7 @@ async function applyCouponCode(selectedCouponCode: string) {
 async function removeCouponCode() {
 	try {
 		loadingRemoveCoupon = true
-		await del(`remove-coupon?store=${$page.data.store?.id}`, $page.data.origin)
+		await removeCouponService({storeId:$page.data.store?.id, origin: $page.data.origin})
 		selectedCouponCode = ''
 		await invalidateAll()
 	} catch (e) {

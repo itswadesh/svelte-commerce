@@ -76,7 +76,7 @@ import Textbox from '$lib/ui/Textbox.svelte'
 import viewport from '$lib/actions/useViewPort'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
 import { fetchRelatedProducts } from '$lib/services/ProductService'
-import { checkhWishlist } from '$lib/services/WishlistService'
+import { checkhWishlist, toggleWishlist } from '$lib/services/WishlistService'
 import { fetchProductReviews } from '$lib/services/ReviewService'
 
 export let data
@@ -234,17 +234,15 @@ $: {
 	selectedOptions1 = o1
 }
 
-async function toggleWishlist(id) {
+async function toggleWishlisted(id) {
 	if (!$page.data.me) {
 		goto(`${$page.data?.loginUrl || '/auth/login'}?ref=/my/wishlist/add/${id}`)
 	}
 
 	try {
 		loadingForWishlist = true
-		isWislisted = await post(
-			`wishlists/toggle`,
-			{ product: id, variant: id, store: $page.data.store?.id },
-			$page.data.origin
+		isWislisted = await toggleWishlistService(
+			{ pid: id, vid: id, storeId: $page.data.store?.id,origin:$page.data.origin },
 		)
 	} catch (e) {
 	} finally {
@@ -737,7 +735,7 @@ function handleMobileCanvas() {
 								loadingringsize="sm"
 								loading="{loadingForWishlist}"
 								class="w-full text-sm"
-								on:click="{() => toggleWishlist(data.product?._id)}">
+								on:click="{() => toggleWishlisted(data.product?._id)}">
 								{#if isWislisted}
 									<svg
 										xmlns="http://www.w3.org/2000/svg"

@@ -1,4 +1,4 @@
-import { fetchRefreshCart } from '$lib/services/CartService'
+import { addToCartService, fetchRefreshCart } from '$lib/services/CartService'
 import { post } from '$lib/utils/server'
 import { error, fail, redirect } from '@sveltejs/kit'
 import type { Action, Actions, PageServerLoad } from './$types'
@@ -61,30 +61,24 @@ const add: Action = async ({ request, cookies, locals }) => {
 		return fail(400, { invalid: true })
 	}
 	try {
-		let cart = await post(
-			'carts/add-to-cart',
-			{
-				pid,
-				vid,
-				qty: 1,
-				options,
-				customizedImg,
-				store: locals.store?.id
-			},
-			cookies
-		)
+		let cart = await addToCartService({
+			pid,
+			vid,
+			qty: 1,
+			options,
+			customizedImg,
+			storeId: locals.store?.id,
+			sid: cookies.get('sid')
+		})
 		if (linkedItems?.length) {
 			for (const i of linkedItems) {
-				cart = await post(
-					'carts/add-to-cart',
-					{
-						pid: i,
-						vid: i,
-						qty: 1,
-						store: locals.store?.id
-					},
-					cookies
-				)
+				cart = await addToCartService({
+					pid: i,
+					vid: i,
+					qty: 1,
+					storeId: locals.store?.id,
+					sid: cookies.get('sid')
+				})
 			}
 		}
 		if (cart) {

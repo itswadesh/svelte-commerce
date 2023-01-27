@@ -1,7 +1,14 @@
 import { provider } from '$lib/config'
 import type { Error } from '$lib/types'
 import { getAPI } from '$lib/utils/api'
-import { getBigCommerceApi, getBySid, getWooCommerceApi } from '$lib/utils/server'
+import {
+	getBigCommerceApi,
+	getBySid,
+	getWooCommerceApi,
+	post,
+	postBigCommerceApi,
+	postWooCommerceApi
+} from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
@@ -58,5 +65,59 @@ export const fetchAddress = async ({ origin, storeId, server = false, sid = null
 	} catch (err) {
 		const e = err as Error
 		throw error(e.status, e.data?.message)
+	}
+}
+
+export const saveAddress = async ({
+	storeId,
+	id,
+	firstName,
+	lastName,
+	email,
+	phone,
+	locality,
+	address,
+	city,
+	state,
+	country,
+	zip,
+	origin,
+	server = false,
+	sid = null
+}: any) => {
+	try {
+		let res: any = {}
+		switch (provider) {
+			case 'litekart':
+				res = await post(
+					`address`,
+					{
+						id,
+						firstName,
+						lastName,
+						email,
+						phone,
+						address,
+						locality,
+						city,
+						state,
+						country,
+						zip,
+						store: storeId
+					},
+					origin
+				)
+				break
+			case 'bigcommerce':
+				res = await postBigCommerceApi(`address`, {})
+				break
+			case 'woocommerce':
+				res = await postWooCommerceApi(`address`, {})
+				break
+		}
+		return res
+	} catch (err) {
+		const e = err as Error
+		throw error(e.status, e.data.message)
 	}
 }

@@ -9,6 +9,7 @@ import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 import { fetchCountries, fetchStates } from '$lib/services/CountryService'
+import { saveAddress } from '$lib/services/AddressService'
 
 export let data
 
@@ -64,8 +65,7 @@ async function save(ads) {
 	} = ads
 	try {
 		loading = true
-		const { data, errors } = await post(
-			'addresses',
+		await saveAddress(
 			{
 				id,
 				address,
@@ -79,9 +79,9 @@ async function save(ads) {
 				phone,
 				state,
 				zip,
-				store: $page.data.store?.id
+				storeId: $page.data.store?.id,
+				origin:	$page.data.origin
 			},
-			$page.data.origin
 		)
 		goto(`/checkout/address`)
 	} catch (e) {

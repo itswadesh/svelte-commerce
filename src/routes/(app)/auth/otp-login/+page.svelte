@@ -20,6 +20,7 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import SendOtp from '../_SendOtp.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import VerifyOtp from '../_VerifyOtp.svelte'
+import { getOtpService, googleOneTapLoginService, verifyOtpService } from '$lib/services/UserService'
 
 const cookies = Cookie()
 
@@ -42,7 +43,7 @@ onMount(() => {
 			client_id: GOOGLE_CLIENT_ID
 		},
 		async (res) => {
-			const onetap = await post('auth/google/onetap', res)
+			const onetap = await googleOneTapLoginService( {data:res, origin:$page.data.origin})
 			const me = {
 				email: onetap.email,
 				phone: onetap.phone,
@@ -64,7 +65,7 @@ async function handleSendOTP({ detail }) {
 	phone = detail
 	try {
 		loading = true
-		const res = await post('get-otp', { phone, store: data.store?.id }, data.origin)
+		const res = await getOtpService({ phone, storeId: data.store?.id, origin:  data.origin})
 		resendAfter = res?.timer
 		otpRequestSend = true
 	} catch (e) {
@@ -78,7 +79,7 @@ async function handleVerifyOtp({ detail }) {
 	try {
 		loading = true
 		const otp = detail
-		const res = await post('verify-otp', { phone, otp, store: data.store?.id }, data.origin)
+		const res = await verifyOtpService( { phone, otp, storeId: data.store?.id ,origin: data.origin})
 		const me = {
 			email: res.email,
 			phone: res.phone,
