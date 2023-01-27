@@ -6,16 +6,16 @@
 </style>
 
 <script>
-import { goto } from '$app/navigation'
+import { browser } from '$app/environment'
 import { constructURL2 } from '$lib/utils'
-import { fly } from 'svelte/transition'
-import CheckboxEs from '$lib/ui/CheckboxEs.svelte'
 import { createEventDispatcher, onMount } from 'svelte'
+import { fetchMegamenuData } from '$lib/services/CategoryService'
+import { fly } from 'svelte/transition'
+import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { sorts } from '$lib/config'
+import CheckboxEs from '$lib/ui/CheckboxEs.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import { browser } from '$app/environment'
-import { fetchMegamenuData } from '$lib/services/CategoryService'
 
 const dispatch = createEventDispatcher()
 
@@ -54,7 +54,10 @@ async function getMegamenu() {
 			const localmegamenu = localStorage.getItem('megamenu')
 
 			if (!localmegamenu || localmegamenu === 'undefined') {
-				megamenu = await fetchMegamenuData({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
+				megamenu = await fetchMegamenuData({
+					origin: $page?.data?.origin,
+					storeId: $page?.data?.store?.id
+				})
 			} else {
 				megamenu = JSON.parse(localmegamenu)
 			}
@@ -179,7 +182,7 @@ $: {
 			viewBox="0 0 24 24"
 			stroke-width="1.5"
 			stroke="currentColor"
-			class="w-5 h-5">
+			class="h-5 w-5">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -202,7 +205,7 @@ $: {
 			viewBox="0 0 24 24"
 			stroke-width="1.5"
 			stroke="currentColor"
-			class="w-5 h-5">
+			class="h-5 w-5">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -218,8 +221,8 @@ $: {
 		transition:fly="{{ x: -50, duration: 300 }}"
 		class="fixed inset-0 z-[100] h-screen w-screen bg-white">
 		<header
-			class="relative grid items-center grid-cols-3 gap-3 p-3 text-lg font-bold tracking-wide text-center shadow-md">
-			<div class="flex items-center col-span-1 justify-self-start">
+			class="relative grid grid-cols-3 items-center gap-3 p-3 text-center text-lg font-bold tracking-wide shadow-md">
+			<div class="col-span-1 flex items-center justify-self-start">
 				<button type="button" class="focus:outline-none" on:click="{() => (showFilter = false)}">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -227,7 +230,7 @@ $: {
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="w-6 h-6">
+						class="h-6 w-6">
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -252,7 +255,7 @@ $: {
 				type="button"
 				loadingringsize="xs"
 				roundedFull
-				class="col-span-1 text-xs justify-self-end"
+				class="col-span-1 justify-self-end text-xs"
 				on:click="{() => (showFilter = false)}">APPLY</PrimaryButton>
 
 			<!-- <button
@@ -262,10 +265,10 @@ $: {
 			</button> -->
 		</header>
 
-		<div class="flex items-start h-full">
+		<div class="flex h-full items-start">
 			<!-- Left Section -->
 
-			<div class="flex flex-col w-2/6 h-full bg-gray-100 border-b border-r">
+			<div class="flex h-full w-2/6 flex-col border-b border-r bg-gray-100">
 				{#if facets?.all_aggs?.age?.all?.buckets?.length > 0}
 					<button
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide focus:outline-none 
@@ -451,16 +454,17 @@ $: {
 
 			<!-- Right Section -->
 
-			<div class="w-4/6 h-full">
+			<div class="h-full w-4/6">
 				{#if selected === 'Age'}
 					<div
-						class="h-[93vh] w-full overflow-y-auto overflow-x-hidden p-4"
+						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
 						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
 						{#if facets?.all_aggs?.age?.all?.buckets?.length > 0}
 							<CheckboxEs
 								items="{facets?.all_aggs?.age?.all?.buckets}"
 								model="age"
 								selectedItems="{fl.age || []}"
+								showSearchBox
 								on:go="{goCheckbox}" />
 						{/if}
 					</div>
@@ -468,13 +472,14 @@ $: {
 
 				{#if selected === 'Brands'}
 					<div
-						class="h-[93vh] w-full overflow-y-auto overflow-x-hidden p-4"
+						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
 						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
 						{#if facets?.all_aggs?.brands?.all?.buckets?.length > 0}
 							<CheckboxEs
 								items="{facets?.all_aggs?.brands?.all?.buckets}"
 								model="brands"
 								selectedItems="{fl.brands || []}"
+								showSearchBox
 								on:go="{goCheckbox}" />
 						{/if}
 					</div>
@@ -482,13 +487,14 @@ $: {
 
 				{#if selected === 'Colors'}
 					<div
-						class="h-[93vh] w-full overflow-y-auto overflow-x-hidden p-4"
+						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
 						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
 						{#if facets?.all_aggs?.colors?.all?.buckets?.length > 0}
 							<CheckboxEs
 								items="{facets?.all_aggs?.colors?.all?.buckets}"
 								model="colors"
 								selectedItems="{fl.colors || []}"
+								showSearchBox
 								on:go="{goCheckbox}" />
 						{/if}
 					</div>
@@ -496,13 +502,14 @@ $: {
 
 				{#if selected === 'Discount'}
 					<div
-						class="h-[93vh] w-full overflow-y-auto overflow-x-hidden p-4"
+						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
 						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
 						{#if facets?.all_aggs?.discount?.all?.buckets?.length > 0}
 							<CheckboxEs
 								items="{facets?.all_aggs?.discount?.all?.buckets}"
 								model="discount"
 								selectedItems="{fl.discount || []}"
+								showSearchBox
 								on:go="{goCheckbox}" />
 						{/if}
 					</div>
@@ -510,13 +517,14 @@ $: {
 
 				{#if selected === 'Features'}
 					<div
-						class="h-[93vh] w-full overflow-y-auto overflow-x-hidden p-4"
+						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
 						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
 						{#if facets?.all_aggs?.features?.all?.buckets?.length > 0}
 							<CheckboxEs
 								items="{facets?.all_aggs?.features?.all?.buckets}"
 								model="features"
 								selectedItems="{fl.features || []}"
+								showSearchBox
 								on:go="{goCheckbox}" />
 						{/if}
 					</div>
@@ -524,13 +532,14 @@ $: {
 
 				{#if selected === 'Genders'}
 					<div
-						class="h-[93vh] w-full overflow-y-auto overflow-x-hidden p-4"
+						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
 						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
 						{#if facets?.all_aggs?.genders?.all?.buckets?.length > 0}
 							<CheckboxEs
 								items="{facets?.all_aggs?.genders?.all?.buckets}"
 								model="genders"
 								selectedItems="{fl.genders || []}"
+								showSearchBox
 								on:go="{goCheckbox}" />
 						{/if}
 					</div>
@@ -538,13 +547,14 @@ $: {
 
 				{#if selected === 'Price'}
 					<div
-						class="h-[93vh] w-full overflow-y-auto overflow-x-hidden p-4"
+						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
 						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
 						{#if facets?.all_aggs?.price?.all?.buckets?.length > 0}
 							<CheckboxEs
 								items="{facets?.all_aggs?.price?.all?.buckets}"
 								model="price"
 								selectedItems="{fl.price || []}"
+								showSearchBox
 								on:go="{goCheckbox}" />
 						{/if}
 					</div>
@@ -552,13 +562,14 @@ $: {
 
 				{#if selected === 'Sizes'}
 					<div
-						class="h-[93vh] w-full overflow-y-auto overflow-x-hidden p-4"
+						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
 						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
 						{#if facets?.all_aggs?.sizes?.all?.buckets?.length > 0}
 							<CheckboxEs
 								items="{facets?.all_aggs?.sizes?.all?.buckets}"
 								model="sizes"
 								selectedItems="{fl.sizes || []}"
+								showSearchBox
 								on:go="{goCheckbox}" />
 						{/if}
 					</div>
@@ -566,13 +577,13 @@ $: {
 
 				{#if selected === 'Categories'}
 					<div
-						class="h-[93vh] w-full overflow-y-auto overflow-x-hidden p-4"
+						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
 						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
-						<ul class="flex flex-col text-sm cursor-pointer">
+						<ul class="flex cursor-pointer flex-col text-sm">
 							{#if megamenu}
 								<!-- 1st level categories -->
 
-								<ul class="flex flex-col w-full text-sm cursor-pointer">
+								<ul class="flex w-full cursor-pointer flex-col text-sm">
 									{#each megamenu as m, mx}
 										<li>
 											{#if m.children?.length}
@@ -585,7 +596,7 @@ $: {
 
 													<button
 														type="button"
-														class="p-1 overflow-hidden focus:outline-none"
+														class="overflow-hidden p-1 focus:outline-none"
 														on:click="{() => handleToggleSubCategory(m, mx)}">
 														<svg
 															xmlns="http://www.w3.org/2000/svg"
@@ -603,7 +614,7 @@ $: {
 											{:else}
 												<a
 													href="/{m.slug}"
-													class="flex items-center justify-between w-full gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
+													class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 													{m.name}
 												</a>
 											{/if}
@@ -624,7 +635,7 @@ $: {
 
 																	<button
 																		type="button"
-																		class="p-1 overflow-hidden focus:outline-none"
+																		class="overflow-hidden p-1 focus:outline-none"
 																		on:click="{() => handleToggleSubCategory2(c, cx)}">
 																		<svg
 																			xmlns="http://www.w3.org/2000/svg"
@@ -642,7 +653,7 @@ $: {
 															{:else}
 																<a
 																	href="/{c.slug}"
-																	class="flex items-center justify-between w-full gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
+																	class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 																	{c.name}
 																</a>
 															{/if}
@@ -654,7 +665,7 @@ $: {
 																	{#each c.children as cc}
 																		<a
 																			href="/{cc.slug}"
-																			class="flex items-center justify-between w-full gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
+																			class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 																			{cc.name}
 																		</a>
 																	{/each}
@@ -697,19 +708,19 @@ $: {
 	<div class="fixed inset-0 z-[100] flex h-screen w-screen items-end bg-black bg-opacity-50">
 		<button
 			type="button"
-			class="fixed inset-0 w-screen h-screen focus:outline-none"
+			class="fixed inset-0 h-screen w-screen focus:outline-none"
 			on:click="{() => (showSort = false)}"></button>
 
 		<div
 			transition:fly="{{ y: 626, duration: 300 }}"
-			class="relative z-10 w-full bg-white rounded-t-lg max-h-max">
-			<div class="flex items-center justify-between gap-5 p-3 text-sm border-b border-gray-300">
+			class="relative z-10 max-h-max w-full rounded-t-lg bg-white">
+			<div class="flex items-center justify-between gap-5 border-b border-gray-300 p-3 text-sm">
 				<span>Sort</span>
 
 				<button type="button" class="focus:outline-none" on:click="{() => (showSort = false)}">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
-						class="w-4 h-4 text-gray-500"
+						class="h-4 w-4 text-gray-500"
 						viewBox="0 0 20 20"
 						fill="currentColor">
 						<path
@@ -725,7 +736,7 @@ $: {
 					<li>
 						<button
 							type="button"
-							class="w-full text-sm font-semibold tracking-wide text-left focus:outline-none"
+							class="w-full text-left text-sm font-semibold tracking-wide focus:outline-none"
 							on:click="{() => sortNow(s.val) && (showSort = false)}">
 							{s.name}
 						</button>
