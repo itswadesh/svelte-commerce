@@ -1,6 +1,4 @@
 <script>
-import { getAPI } from '$lib/utils/api'
-import { page } from '$app/stores'
 import CheckoutHeader from '$lib/components/CheckoutHeader.svelte'
 import Error from '$lib/components/Error.svelte'
 import Pricesummary from '$lib/components/Pricesummary.svelte'
@@ -20,13 +18,6 @@ function addressChanged(detail) {
 
 async function refreshAddress() {
 	invalidateAll()
-	// try {
-	// 	myAddresses = await getAPI('addresses/my', $page.data.origin)
-	// 	selectedAddress = myAddresses?.data[0]?._id
-	// } catch (e) {
-	// 	err = e
-	// } finally {
-	// }
 }
 </script>
 

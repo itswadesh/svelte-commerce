@@ -11,7 +11,7 @@ import MobileFooter from '$lib/MobileFooter.svelte'
 import Pagination from '$lib/components/Pagination.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
-import { fetchAllCategories, fetchCategory } from '$lib/services/CategoryService'
+import { fetchAllProductsOfCategories, fetchCategory } from '$lib/services/CategoryService'
 
 export let data
 
@@ -26,7 +26,7 @@ let query = $page?.url?.searchParams
 
 onMount(async () => {
 	try {
-		const res = await fetchAllCategories({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
+		const res = await fetchAllProductsOfCategories({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
 		products = res.products
 		productsCount = res.productsCount
 		currentPage = res.currentPage

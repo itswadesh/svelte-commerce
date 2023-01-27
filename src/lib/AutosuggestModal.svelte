@@ -1,9 +1,10 @@
 <script>
-import { getAPI } from '$lib/utils/api'
 import { goto } from '$app/navigation'
 import { createEventDispatcher, onMount } from 'svelte'
 import { page } from '$app/stores'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import { fetchAutocompleteData } from '$lib/services/AutocompleteService'
+import { fetchAllCategories } from './services/CategoryService'
 
 const dispatch = createEventDispatcher()
 
@@ -57,13 +58,8 @@ async function getData(e) {
 	clearTimeout(typingTimer)
 
 	typingTimer = setTimeout(async () => {
-		let qry = `es/autocomplete?store=${$page.data.store?.id}&q=`
-		if (!!q && q !== 'undefined' && q !== 'null' && q !== '') {
-			qry = `es/autocomplete?store=${$page.data.store?.id}&q=${q}`
-		}
 		try {
-			const result = await getAPI(qry, $page.data.origin)
-			autocomplete = result.hits
+			autocomplete = await fetchAutocompleteData({q:q,origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
 		} catch (e) {}
 	}, 200)
 }
@@ -75,21 +71,16 @@ function resetInput() {
 
 onMount(async () => {
 	searchInput.focus()
-
 	try {
-		categories = await getAPI(
-			`categories?featured=true&store=${$page?.data?.store?.id}`,
-			$page.data.origin
-		)
+		categories = (await fetchAllCategories({
+			featured:true,
+			storeId:$page?.data?.store?.id,
+			origin:	$page.data.origin
+		})).data
 	} catch (e) {
 		err = e
 	} finally {
 	}
-
-	// getData()
-	// const HOME = await getAPI(`home?store=${data.store?.id}`)
-	// popular = HOME.popular
-	// trending = HOME.trending
 })
 </script>
 
