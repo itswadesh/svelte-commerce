@@ -1,4 +1,7 @@
-<h1>Sveltekit is stable now. We started implementing production apps using it.</h1>
+# What is Svelte Commerce?
+- Svelte Commerce is a storefront for your existing eCommerce.
+- It is possible to connect with any eCommerce backend
+- No need to make a big leap or invest huge amount. Just take this opend source project and attach to existing backend.
 
 ## To start Development
 
