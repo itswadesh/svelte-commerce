@@ -44,7 +44,7 @@ async function SaveAddress(address) {
 				state,
 				country,
 				zip,
-				store: $page.data.store?.id,
+				storeId: $page.data.store?.id,
 				origin:$page.data.origin
 			},
 		)

@@ -47,7 +47,7 @@ const verifyOtp: Action = async ({ cookies, request, locals }) => {
 		return fail(400, { invalid: true })
 	}
 	try {
-		const user = await verifyOtpService({ phone, otp, store: locals.store?.id ,origin: locals.origin})
+		const user = await verifyOtpService({ phone, otp, storeId: locals.store?.id ,origin: locals.origin})
 		if (!user) {
 			return fail(400, { credentials: true })
 		}

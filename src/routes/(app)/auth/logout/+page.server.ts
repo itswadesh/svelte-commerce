@@ -11,7 +11,7 @@ export const load: PageServerLoad = async () => {
 
 export const actions: Actions = {
 	async default({ cookies, locals }) {
-		await logoutService({ store: locals.store?.id, sid: cookies.get('sid') })
+		await logoutService({ storeId: locals.store?.id, sid: cookies.get('sid') })
 		// eat the cookie
 		cookies.set('session', '', {
 			path: '/',

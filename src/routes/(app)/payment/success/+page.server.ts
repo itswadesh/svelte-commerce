@@ -16,7 +16,7 @@ export async function load({ url, request, locals, cookies }) {
 			paymentMode,
 			status,
 			orderId,
-			store: locals.store?.id,
+			storeId: locals.store?.id,
 			sid: cookies.get('sid')
 		})
 	} catch (e) {
