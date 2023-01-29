@@ -6,7 +6,7 @@ import { error } from '@sveltejs/kit'
 
 export async function load({ locals, setHeaders }) {
 	const { store, origin } = locals
-	console.log('Store ID.............', locals.store?.id)
+	// console.log('Store ID.............', locals.store?.id)
 	try {
 		let home
 		// const cached = await redis.get(`home-www-${locals.store?.id}`)
