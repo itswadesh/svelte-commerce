@@ -15,6 +15,7 @@ import loginBgLighter from '$lib/assets/login/bg-lighter.svg'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
+import { changePasswordService } from '$lib/services/UserService'
 
 const seoProps = {
 	title: 'Change Password',
@@ -57,14 +58,14 @@ async function submit(p) {
 		loading = true
 		const { oldPassword, password, passwordConfirmation } = p
 
-		const res = await post(
-			'users/change-password',
+		const res = await changePasswordService(
 			{
 				oldPassword: oldPassword,
 				password: password,
-				passwordConfirmation: passwordConfirmation
+				passwordConfirmation: passwordConfirmation,
+				storeId: $page.data.store?.id,
+				origin:$page.data.origin
 			},
-			$page.data.origin
 		)
 
 		await invalidateAll()

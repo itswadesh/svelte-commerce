@@ -1,7 +1,14 @@
 import { provider } from '$lib/config'
 import type { Error } from '$lib/types'
-import { getAPI } from '$lib/utils/api'
-import { getBigCommerceApi, getBySid, getWooCommerceApi } from '$lib/utils/server'
+import { getAPI, post } from '$lib/utils/api'
+import {
+	postBigCommerceApi,
+	postWooCommerceApi,
+	getBigCommerceApi,
+	getBySid,
+	getWooCommerceApi,
+	postBySid
+} from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
@@ -73,6 +80,38 @@ export const checkhWishlist = async ({
 				break
 			case 'woocommerce':
 				res = await getWooCommerceApi(`wishlists/check`, {}, sid)
+				break
+		}
+		return res
+	} catch (err) {
+		const e = err as Error
+		throw error(e.status, e.data.message)
+	}
+}
+
+export const toggleWishlistService = async ({
+	storeId,
+	pid,
+	vid,
+	origin,
+	server = false,
+	sid = null
+}: any) => {
+	try {
+		let res: any = {}
+		switch (provider) {
+			case 'litekart':
+				if (server) {
+					res = await postBySid(`wishlists/toggle`, { pid, vid, store: storeId }, sid)
+				} else {
+					res = await post(`wishlists/toggle`, { pid, vid, store: storeId }, origin)
+				}
+				break
+			case 'bigcommerce':
+				res = await postBigCommerceApi(`wishlists/toggle`, {})
+				break
+			case 'woocommerce':
+				res = await postWooCommerceApi(`wishlists/toggle`, {})
 				break
 		}
 		return res

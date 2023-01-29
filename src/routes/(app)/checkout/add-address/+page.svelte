@@ -1,5 +1,5 @@
 <script>
-import {  post } from '$lib/utils/api'
+import { post } from '$lib/utils/api'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
@@ -9,6 +9,8 @@ import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 import { fetchCountries, fetchStates } from '$lib/services/CountryService'
+import { saveAddress } from '$lib/services/AddressService'
+import { toast } from '$lib/utils'
 
 export let data
 
@@ -32,13 +34,20 @@ async function onCountryChange(country) {
 
 async function getCountries() {
 	try {
-		countries = await fetchCountries({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
+		countries = await fetchCountries({
+			origin: $page?.data?.origin,
+			storeId: $page?.data?.store?.id
+		})
 	} catch (e) {}
 }
 
 async function getStates(countryCode) {
 	try {
-		states = await fetchStates({countryCode,origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
+		states = await fetchStates({
+			countryCode,
+			origin: $page?.data?.origin,
+			storeId: $page?.data?.store?.id
+		})
 	} catch (e) {}
 }
 
@@ -64,28 +73,26 @@ async function save(ads) {
 	} = ads
 	try {
 		loading = true
-		const { data, errors } = await post(
-			'addresses',
-			{
-				id,
-				address,
-				city,
-				country,
-				district,
-				email,
-				firstName,
-				lastName,
-				locality,
-				phone,
-				state,
-				zip,
-				store: $page.data.store?.id
-			},
-			$page.data.origin
-		)
+		await saveAddress({
+			id,
+			address,
+			city,
+			country,
+			district,
+			email,
+			firstName,
+			lastName,
+			locality,
+			phone,
+			state,
+			zip,
+			storeId: $page.data.store?.id,
+			origin: $page.data.origin
+		})
 		goto(`/checkout/address`)
 	} catch (e) {
 		err = e
+		toast(e?.body?.message || e, 'error')
 	} finally {
 		loading = false
 	}

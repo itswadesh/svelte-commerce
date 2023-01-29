@@ -1,8 +1,8 @@
 <script lang="ts">
-import {  date, getCdnImageUrl } from '$lib/utils'
+import { date, getCdnImageUrl } from '$lib/utils'
 import { fireGTagEvent } from '$lib/utils/gTag'
 import { fly } from 'svelte/transition'
-import { goto,  invalidateAll } from '$app/navigation'
+import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { post, del } from '$lib/utils/api'
@@ -19,6 +19,11 @@ import Skeleton from '$lib/ui/Skeleton.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 import { fetchProducts } from '$lib/services/ProductService'
 import { fetchCoupons } from '$lib/services/CouponService'
+import {
+	addToCartService,
+	applyCouponService,
+	removeCouponService
+} from '$lib/services/CartService'
 
 export let data
 
@@ -45,21 +50,16 @@ onMount(() => {
 	fireGTagEvent('view_cart', data.cart)
 })
 
-
 const addToCart = async ({ pid, qty, customizedImg, ix }: any) => {
 	loading[ix] = true
-	await post(
-		'carts/add-to-cart',
-		{
-			pid: pid,
-			vid: pid,
-			qty: qty,
-			customizedImg: customizedImg || null,
-			store: $page.data.store?.id
-		},
-		$page.data.origin
-	)
-
+	await addToCartService({
+		pid: pid,
+		vid: pid,
+		qty: qty,
+		customizedImg: customizedImg || null,
+		storeId: $page.data.store?.id,
+		origin: $page.data.origin
+	})
 
 	await invalidateAll()
 
@@ -74,11 +74,11 @@ function handleCouponCode(couponCode: string) {
 async function applyCouponCode(selectedCouponCode: string) {
 	try {
 		loadingApplyCoupon = true
-		const resAC = await post(
-			'apply-coupon',
-			{ code: selectedCouponCode, store: $page.data.store?.id },
-			$page.data.origin
-		)
+		const resAC = await applyCouponService({
+			code: selectedCouponCode,
+			storeId: $page.data.store?.id,
+			origin: $page.data.origin
+		})
 		appliedCouponInfo = resAC
 		await invalidateAll()
 		openApplyPromoCodeModal = false
@@ -92,7 +92,7 @@ async function applyCouponCode(selectedCouponCode: string) {
 async function removeCouponCode() {
 	try {
 		loadingRemoveCoupon = true
-		await del(`remove-coupon?store=${$page.data.store?.id}`, $page.data.origin)
+		await removeCouponService({ storeId: $page.data.store?.id, origin: $page.data.origin })
 		selectedCouponCode = ''
 		await invalidateAll()
 	} catch (e) {
@@ -105,7 +105,10 @@ async function removeCouponCode() {
 async function getProducts() {
 	try {
 		loadingProducts = true
-		const resP = await fetchProducts({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
+		const resP = await fetchProducts({
+			origin: $page?.data?.origin,
+			storeId: $page?.data?.store?.id
+		})
 		products = resP?.hits
 	} catch (e) {
 	} finally {
@@ -116,7 +119,10 @@ async function getProducts() {
 async function getCoupons() {
 	try {
 		loadingCoupon = true
-		const resC = await fetchCoupons({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
+		const resC = await fetchCoupons({
+			origin: $page?.data?.origin,
+			storeId: $page?.data?.store?.id
+		})
 		coupons = resC?.data
 	} catch (e) {
 	} finally {
@@ -159,7 +165,6 @@ async function getCoupons() {
 								{/if}
 							</h4>
 						</div>
-
 					</div>
 
 					<div class="border-t pt-5">
@@ -594,7 +599,7 @@ async function getCoupons() {
 										</ul>
 									{:else}
 										<div class="p-5 text-center text-sm text-gray-500">
-											Opps! You have a bad luck. <br /> There's no coupon is available now
+											Opps! No coupon available right now<br /> Try again later.
 										</div>
 									{/if}
 								</div>

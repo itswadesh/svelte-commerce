@@ -1,7 +1,13 @@
 import { provider } from '$lib/config'
 import type { Error } from '$lib/types'
-import { getAPI } from '$lib/utils/api'
-import { getBigCommerceApi, getBySid, getWooCommerceApi } from '$lib/utils/server'
+import { getAPI, post } from '$lib/utils/api'
+import {
+	getBigCommerceApi,
+	getBySid,
+	getWooCommerceApi,
+	postBigCommerceApi,
+	postWooCommerceApi
+} from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
@@ -25,7 +31,7 @@ export const fetchAddresses = async ({ origin, storeId, server = false, sid = nu
 				selectedAddress = myAddresses[0]?._id
 				break
 			case 'woocommerce':
-				myAddresses = (await getWooCommerceApi(`addresses/my`, {}, sid)).data
+				myAddresses = (await getWooCommerceApi(`addresses/my`, {}, sid))?.data
 				selectedAddress = myAddresses[0]?._id
 				break
 		}
@@ -58,5 +64,58 @@ export const fetchAddress = async ({ origin, storeId, server = false, sid = null
 	} catch (err) {
 		const e = err as Error
 		throw error(e.status, e.data?.message)
+	}
+}
+
+export const saveAddress = async ({
+	storeId,
+	id,
+	firstName,
+	lastName,
+	email,
+	phone,
+	locality,
+	address,
+	city,
+	state,
+	country,
+	zip,
+	origin,
+	server = false,
+	sid = null
+}: any) => {
+	try {
+		let res: any = {}
+		switch (provider) {
+			case 'litekart':
+				res = await post(
+					`addresses`,
+					{
+						id,
+						firstName,
+						lastName,
+						email,
+						phone,
+						address,
+						locality,
+						city,
+						state,
+						country,
+						zip,
+						store: storeId
+					},
+					origin
+				)
+				break
+			case 'bigcommerce':
+				res = await postBigCommerceApi(`address`, {})
+				break
+			case 'woocommerce':
+				res = await postWooCommerceApi(`address`, {})
+				break
+		}
+		return res
+	} catch (err) {
+		throw error(err.status, err.message)
 	}
 }
