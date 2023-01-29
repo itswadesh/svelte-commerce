@@ -1,12 +1,12 @@
 <script>
 import { page } from '$app/stores'
-import { post } from '$lib/utils/api'
 import { toast } from '$lib/utils'
 import Error from '$lib/components/Error.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextareaFloating from '$lib/ui/TextareaFloating.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
+import { submitContactUsForm } from '$lib/services/ContactService'
 
 let seoProps = {
 	title: `Contact Us`,
@@ -25,17 +25,17 @@ async function submitContactInformation() {
 		err = null
 		loading = true
 
-		const res = await post(
-			`contact-us?store=${$page.data?.store?.id}`,
+		await submitContactUsForm(
 			{
-				fullName: fullName,
-				email: email,
-				phone: phone,
+				fullName,
+				email,
+				phone,
 				subject: `Someone contact us from ${$page.data.store?.websiteName}`,
-				message: message,
-				store: $page.data.store?.id
+				message,
+				storeId: $page.data.store?.id,
+				origin:$page.data.origin
 			},
-			$page.data.origin
+			
 		)
 
 		toast('You have successfully contacted with us', 'success')
@@ -45,8 +45,6 @@ async function submitContactInformation() {
 		phone = null
 		message = null
 	} catch (e) {
-		// console.log('error = ', e)
-
 		err = e
 	} finally {
 		loading = false

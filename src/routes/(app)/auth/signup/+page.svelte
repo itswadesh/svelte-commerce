@@ -17,6 +17,7 @@ import Error from '$lib/components/Error.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
+import { signupService } from '$lib/services/UserService'
 
 const cookies = Cookie()
 
@@ -52,17 +53,17 @@ async function submit(n) {
 	try {
 		loading = true
 		const { firstName, lastName, phone, email, password, passwordConfirmation } = n
-		const res = await post(
-			'signup',
+		const res = await signupService(
 			{
 				firstName: firstName,
 				lastName: lastName,
 				phone: phone,
 				email: email,
 				password: password,
-				passwordConfirmation: passwordConfirmation
+				passwordConfirmation: passwordConfirmation,
+				storeId: $page.data.store.id,
+				origin:$page.data.origin
 			},
-			$page.data.origin
 		)
 
 		const me = {

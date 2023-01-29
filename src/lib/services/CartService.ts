@@ -1,7 +1,7 @@
 import { provider } from '$lib/config'
 import type { Error } from '$lib/types'
-import { getAPI } from '$lib/utils/api'
-import { getBigCommerceApi, getBySid, getWooCommerceApi } from '$lib/utils/server'
+import { del, getAPI, post } from '$lib/utils/api'
+import { getBigCommerceApi, getBySid, getWooCommerceApi, postBySid } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
@@ -73,6 +73,128 @@ export const fetchMyCart = async ({ origin, storeId, server = false, sid = null 
 				break
 			case 'woocommerce':
 				res = await getWooCommerceApi(`carts/my`, {}, sid)
+				break
+		}
+		return res || {}
+	} catch (err) {
+		const e = err as Error
+		throw error(e.status, e.data?.message)
+	}
+}
+
+export const addToCartService = async ({
+	pid,
+	vid,
+	qty,
+	customizedImg,
+	origin,
+	storeId,
+	server = false,
+	sid = null
+}: any) => {
+	try {
+		let res: any = {}
+		switch (provider) {
+			case 'litekart':
+				if (server) {
+					res = await postBySid(
+						`carts/add-to-cart`,
+						{
+							pid,
+							vid,
+							qty,
+							customizedImg,
+							store: storeId
+						},
+						sid
+					)
+				} else {
+					res = await post(
+						`carts/add-to-cart`,
+						{
+							pid,
+							vid,
+							qty,
+							customizedImg,
+							store: storeId
+						},
+						origin
+					)
+				}
+				break
+			case 'bigcommerce':
+				res = await getBigCommerceApi(`carts/add-to-cart`, {})
+				break
+			case 'woocommerce':
+				res = await getWooCommerceApi(`carts/add-to-cart`, {})
+				break
+		}
+		return res || {}
+	} catch (err) {
+		const e = err as Error
+		throw error(e.status, e.data?.message)
+	}
+}
+
+export const applyCouponService = async ({
+	code,
+	origin,
+	storeId,
+	server = false,
+	sid = null
+}: any) => {
+	try {
+		let res: any = {}
+		switch (provider) {
+			case 'litekart':
+				res = await post(
+					`apply-coupon`,
+					{
+						code,
+						store: storeId
+					},
+					origin
+				)
+				break
+			case 'bigcommerce':
+				res = await getBigCommerceApi(`apply-coupon`, {})
+				break
+			case 'woocommerce':
+				res = await getWooCommerceApi(`apply-coupon`, {})
+				break
+		}
+		return res || {}
+	} catch (err) {
+		const e = err as Error
+		throw error(e.status, e.data?.message)
+	}
+}
+
+export const removeCouponService = async ({
+	code,
+	origin,
+	storeId,
+	server = false,
+	sid = null
+}: any) => {
+	try {
+		let res: any = {}
+		switch (provider) {
+			case 'litekart':
+				res = await del(
+					`remove-coupon`,
+					{
+						code,
+						store: storeId
+					},
+					origin
+				)
+				break
+			case 'bigcommerce':
+				res = await getBigCommerceApi(`remove-coupon`, {})
+				break
+			case 'woocommerce':
+				res = await getWooCommerceApi(`remove-coupon`, {})
 				break
 		}
 		return res || {}

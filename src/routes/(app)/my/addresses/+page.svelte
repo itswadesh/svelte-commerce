@@ -19,6 +19,7 @@ import { post, del } from '$lib/utils/api'
 import Pagination from '$lib/components/Pagination.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+import { saveAddress } from '$lib/services/AddressService'
 
 const seoProps = {
 	title: 'Dashboard - Addresses ',
@@ -49,17 +50,14 @@ async function sortNow(sort) {
 	goto(u.toString())
 }
 
-async function saveAddress(e) {
+async function saveAddr(e) {
 	const { _id: id, active } = e
 	try {
-		await post('addresses', { id, store: $page.data.store?.id }, $page.data.origin)
-		// refreshData()
+		await saveAddress({ id, storeId: $page.data.store?.id ,origin: $page.data.origin})
 		await invalidateAll()
 	} catch (e) {
 		data.err = e
-		// toast(e, 'error')
 	} finally {
-		// loading = false
 	}
 }
 

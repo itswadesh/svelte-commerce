@@ -19,6 +19,7 @@ import Error from '$lib/components/Error.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
+import { googleOneTapLoginService, loginService } from '$lib/services/UserService'
 
 const cookies = Cookie()
 
@@ -41,7 +42,7 @@ onMount(() => {
 			client_id: GOOGLE_CLIENT_ID
 		},
 		async (res) => {
-			const onetap = await post('auth/google/onetap', res, $page.data.origin)
+			const onetap = await googleOneTapLoginService({data:res, origin:$page.data.origin})
 			const me = {
 				email: onetap.email,
 				phone: onetap.phone,
@@ -70,13 +71,13 @@ async function submit() {
 	try {
 		loading = true
 
-		const res = await post(
-			'login',
+		const res = await loginService(
 			{
 				email: email,
-				password: password
+				password: password,
+				storeId: $page.data.store?.id,
+				origin: $page.data.origin
 			},
-			$page.data.origin
 		)
 
 		const me = {

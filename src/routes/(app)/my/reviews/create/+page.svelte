@@ -9,6 +9,7 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
+import { saveReview } from '$lib/services/ReviewService'
 
 const seoProps = {
 	title: 'Reviews Details',
@@ -51,7 +52,7 @@ async function saveReviewproduct(review) {
 	try {
 		toast('Sending your business rating and review', 'info')
 		review.store = $page.data.store?.id
-		await post('reviews', review, $page.data.origin)
+		await saveReview({ id:review.id,pid:review.pid,message:review.message,rating:review.rating, storeId:$page.data.store?.id,  origin:$page.data.origin})
 
 		toast('Successfully saved.', 'success')
 

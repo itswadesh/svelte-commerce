@@ -31,6 +31,7 @@ import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
 import ProductNav from '$lib/ProductNav.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+import { savePopularSearch } from '$lib/services/PopularSearchService'
 
 let today = dayjs(new Date()).toISOString()
 
@@ -85,15 +86,14 @@ $: if (data?.count === 0) {
 
 async function saveSearchData(searchData) {
 	try {
-		const res = await post(
-			'popular-search',
+		await savePopularSearch(
 			{
 				id: 'new',
 				// popularity: 0,
 				text: searchData,
-				store: $page.data.store?.id
+				storeId: $page.data.store?.id,
+				origin: $page.data.origin
 			},
-			$page.data.origin
 		)
 	} catch (e) {
 	} finally {

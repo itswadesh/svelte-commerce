@@ -70,6 +70,7 @@ import Radio from '$lib/ui/Radio.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
+import { bulkOrderEnquiry } from '$lib/services/ContactService'
 
 let seoProps = {
 	title: `Bulk order inquiry`,
@@ -111,8 +112,7 @@ function updateQuantity(detail) {
 
 async function submit() {
 	try {
-		const res = await post(
-			'bulk-order-enquiry',
+		const res = await bulkOrderEnquiry(
 			{
 				name: blukOrder.name,
 				companayName: blukOrder.companayName,
@@ -121,9 +121,9 @@ async function submit() {
 				interestedProducts: blukOrder.interestedProducts,
 				minQty: blukOrder.minQty,
 				message: blukOrder.message,
-				store: $page.data.store?.id
+				store: $page.data.store?.id,
+				origin:$page.data.origin
 			},
-			$page.data.origin
 		)
 
 		contactSuccess = true

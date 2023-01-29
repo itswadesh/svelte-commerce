@@ -34,6 +34,7 @@ import { post } from './utils/api'
 import LazyImg from './components/Image/LazyImg.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
+import { toggleWishlistService } from './services/WishlistService'
 
 export let product = {}
 
@@ -61,14 +62,13 @@ function hideitems() {
 async function toggleWishlist(id) {
 	try {
 		loadingForWishlist = true
-		isWislisted = await post(
-			`wishlists/toggle`,
+		isWislisted = await toggleWishlistService(
 			{
 				product: id,
 				variant: id,
-				store: $page.data.store?.id
-			},
-			$page.data.store?.origin
+				storeId: $page.data.store?.id,
+				origin: $page.data.store?.origin
+			}
 		)
 	} catch (e) {
 		if (e.message === 'You must be logged in') {

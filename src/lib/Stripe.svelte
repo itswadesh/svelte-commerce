@@ -5,6 +5,7 @@ import { goto } from '$app/navigation'
 import GrnIndGradiantButton from './ui/GrnIndGradiantButton.svelte'
 import { post } from '$lib/utils/api'
 import { page } from '$app/stores'
+import { stripeCheckoutService } from './services/OrdersService'
 let stripeReady = false
 let mounted = false
 let loading = false
@@ -51,14 +52,13 @@ const payWithStripe = async (pm) => {
 		loading = true
 		toast('Contacting Payment Server...', 'warning')
 		const paymentMethodId = pm.id
-		const resStripe = post(
-			'stripe',
+		const resStripe = stripeCheckoutService(
 			{
 				paymentMethodId,
 				address,
-				store: $page.data.store?.id
+				storeId: $page.data.store?.id,
+				origin: $page.data.origin
 			},
-			$page.data.origin
 		)
 		if (resStripe.errors) {
 			errorMessage = { show: true, text: resStripe.errors[0].message }
@@ -66,8 +66,6 @@ const payWithStripe = async (pm) => {
 		} else {
 			const res = resStripe.data?.stripe
 			if (!res.paid) {
-				// console.log('pay/stripe', res.paid) // Show 3d secure screen
-
 				await payWithCard(res.clientSecret, res?.orderId)
 			} else if (res) {
 				goto(

@@ -15,7 +15,7 @@
 <script>
 import { applyAction, enhance } from '$app/forms'
 import { currency } from '$lib/utils'
-import { fetchWishlist } from '$lib/services/WishlistService'
+import { fetchWishlist, toggleWishlistService } from '$lib/services/WishlistService'
 import { fireGTagEvent } from '$lib/utils/gTag'
 import { invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
@@ -30,21 +30,18 @@ import WishlistSkeleton from './_WishlistSkeleton.svelte'
 export let wishlistedProducts,
 	loadingProduct = []
 
-// console.log('zzzzzzzzzzzzzzzzzz', wishlistedProducts)
-
 let bounceItemFromTop = false
 
 async function removeFromWishlist(id, wx) {
 	try {
 		loadingProduct[wx] = true
-		await post(
-			'wishlists/toggle',
+		await toggleWishlistService(
 			{
-				product: id,
-				variant: id,
-				store: $page.data.store?.id
-			},
-			$page.data.origin
+				pid: id,
+				vid: id,
+				storeId: $page.data.store?.id,
+				origin:$page.data.origin
+			}
 		)
 		await invalidateAll()
 		await getWishlistedProducts()
