@@ -23,14 +23,15 @@ export const handleFetch = async ({ event, request, fetch }) => {
 
 export const handle: Handle = async ({ event, resolve }) => {
 	try {
-		const WWW_URL1 = new URL(event.request.url).origin
+		const url = new URL(event.request.url)
+		const WWW_URL1 = url.origin
 		event.locals.origin = WWW_URL || WWW_URL1 // https not coming in coolify hence hard coded in .env
 		if (event.locals.origin.includes('.')) {
 			event.locals.origin = event.locals.origin.replace('http://', 'https://')
 		}
 		const isDesktop = event.request.headers.get('sec-ch-ua-mobile') === '?0'
 		event.locals.isDesktop = isDesktop
-		const isShowBackButton = !listOfPagesWithoutBackButton.includes(event.request.url?.pathname)
+		const isShowBackButton = !listOfPagesWithoutBackButton.includes(url?.pathname)
 		event.locals.isShowBackButton = isShowBackButton
 		event.locals.store = await fetchStoreData(event)
 		event.locals.me = await authenticateUser(event)
