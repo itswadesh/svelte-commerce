@@ -4,6 +4,7 @@ import { getBySid } from '$lib/utils/server'
 export async function GET({ request, cookies, locals }) {
 	const url = new URL(request.url)
 	const DOMAIN_NAME = DOMAIN || url.host
+	console.log('iNIT dOMAIN.....', DOMAIN_NAME)
 	const storeRes = await getBySid(`init?domain=${DOMAIN_NAME}`)
 	const { storeOne, settings, popularSearches, megamenu } = storeRes
 	const store = {
