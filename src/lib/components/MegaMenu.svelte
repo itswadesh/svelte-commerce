@@ -45,22 +45,20 @@ onMount(() => {
 })
 
 async function getMegaMenu() {
-	if (browser) {
+	if (browser && $page.data.isDesktop) {
 		try {
 			const localMegamenu = localStorage.getItem('megamenu')
 
-			if (!localMegamenu || localMegamenu === 'undefined') {
-				megamenu = await fetchMegamenuData({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
-			} else {
+			if (!!localMegamenu && localMegamenu !== 'unpdefined') {
 				megamenu = JSON.parse(localMegamenu)
-				if (browser) {
-					localStorage.setItem('megamenu', JSON.stringify(megamenu))
-				}
 			}
+			megamenu = await getAPI(`categories/megamenu?megamenu=true&store=${$page.data?.store?.id}`)
 		} catch (e) {
 			toast(e, 'error')
 		} finally {
 		}
+	} else {
+		megamenu = []
 	}
 }
 </script>
