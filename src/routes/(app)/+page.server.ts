@@ -6,19 +6,19 @@ import { error } from '@sveltejs/kit'
 
 export async function load({ locals, setHeaders }) {
 	const { store, origin } = locals
-	console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', locals.store?.id)
+	console.log('Store ID.............', locals.store?.id)
 	try {
 		let home
-		const cached = await redis.get(`home-www-${locals.store?.id}`)
-		if (cached) {
-			console.log('Cache hit!')
-			home = JSON.parse(cached)
-		} else {
-			console.log('Cache miss!')
-			home = await fetchHome({ storeId: store?.id, server: true })
-			setHeaders({ 'cache-control': 'max-age: 600' })
-			redis.set(`home-www-${locals.store?.id}`, JSON.stringify(home), 'EX', 600)
-		}
+		// const cached = await redis.get(`home-www-${locals.store?.id}`)
+		// if (cached) {
+		// 	console.log('Cache hit!')
+		// 	home = JSON.parse(cached)
+		// } else {
+		// console.log('Cache miss!')
+		home = await fetchHome({ storeId: store?.id, server: true })
+		// setHeaders({ 'cache-control': 'max-age: 600' })
+		// redis.set(`home-www-${locals.store?.id}`, JSON.stringify(home), 'EX', 600)
+		// }
 		const deals = await fetchDeals({ storeId: store?.id, server: true })
 		if (home) {
 			return { home: home, deals: deals || {} }
