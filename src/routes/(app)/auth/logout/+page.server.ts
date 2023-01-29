@@ -1,5 +1,4 @@
 import { logoutService } from '$lib/services/UserService'
-import { post } from '$lib/utils/server'
 import { redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
 

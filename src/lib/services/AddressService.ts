@@ -1,11 +1,10 @@
 import { provider } from '$lib/config'
 import type { Error } from '$lib/types'
-import { getAPI } from '$lib/utils/api'
+import { getAPI, post } from '$lib/utils/api'
 import {
 	getBigCommerceApi,
 	getBySid,
 	getWooCommerceApi,
-	post,
 	postBigCommerceApi,
 	postWooCommerceApi
 } from '$lib/utils/server'
@@ -32,7 +31,7 @@ export const fetchAddresses = async ({ origin, storeId, server = false, sid = nu
 				selectedAddress = myAddresses[0]?._id
 				break
 			case 'woocommerce':
-				myAddresses = (await getWooCommerceApi(`addresses/my`, {}, sid)).data
+				myAddresses = (await getWooCommerceApi(`addresses/my`, {}, sid))?.data
 				selectedAddress = myAddresses[0]?._id
 				break
 		}

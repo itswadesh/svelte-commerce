@@ -1,7 +1,8 @@
 import { provider } from '$lib/config'
-import { post, postBigCommerceApi, postWooCommerceApi } from '$lib/utils/server'
+import { postBigCommerceApi, postWooCommerceApi } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 import type { Error } from '$lib/types'
+import { post } from '$lib/utils/api'
 
 export const saveScheduleDemo = async ({
 	storeId,

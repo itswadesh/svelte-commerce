@@ -1,11 +1,10 @@
 import { provider } from '$lib/config'
 import type { Error } from '$lib/types'
-import { getAPI, put } from '$lib/utils/api'
+import { del, getAPI, post, put } from '$lib/utils/api'
 import {
 	getBigCommerceApi,
 	getBySid,
 	getWooCommerceApi,
-	post,
 	postBigCommerceApi,
 	postWooCommerceApi
 } from '$lib/utils/server'

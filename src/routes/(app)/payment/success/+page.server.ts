@@ -1,6 +1,5 @@
 import { fetchRefreshCart } from '$lib/services/CartService'
 import { paySuccessPageHit } from '$lib/services/OrdersService'
-import { post } from '$lib/utils/server'
 import { error, redirect } from '@sveltejs/kit'
 
 export const prerender = false

@@ -1,11 +1,10 @@
 import { provider } from '$lib/config'
 import type { Error } from '$lib/types'
-import { getAPI } from '$lib/utils/api'
+import { getAPI, post } from '$lib/utils/api'
 import {
 	getBigCommerceApi,
 	getBySid,
 	getWooCommerceApi,
-	post,
 	postBigCommerceApi,
 	postWooCommerceApi
 } from '$lib/utils/server'
@@ -106,14 +105,17 @@ export const paySuccessPageHit = async ({
 		let res: any = {}
 		switch (provider) {
 			case 'litekart':
-				res = await post(`orders/pay-sucess-page-hit`, {
-					paymentMode,
-					status,
-					orderId,
-					store: storeId,
-					sid,
+				res = await post(
+					`orders/pay-sucess-page-hit`,
+					{
+						paymentMode,
+						status,
+						orderId,
+						store: storeId,
+						sid
+					},
 					origin
-				})
+				)
 				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`orders/pay-sucess-page-hit`, {}, sid)
@@ -142,14 +144,17 @@ export const codCheckout = async ({
 		let res: any = {}
 		switch (provider) {
 			case 'litekart':
-				res = await post(`orders/checkout/cod`, {
-					address,
-					paymentMethod,
-					prescription,
-					store: storeId,
-					sid,
+				res = await post(
+					`orders/checkout/cod`,
+					{
+						address,
+						paymentMethod,
+						prescription,
+						store: storeId,
+						sid
+					},
 					origin
-				})
+				)
 				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`orders/checkout/cod`, {}, sid)
@@ -178,14 +183,17 @@ export const cashfreeCheckout = async ({
 		let res: any = {}
 		switch (provider) {
 			case 'litekart':
-				res = await post(`payments/checkout-cf`, {
-					address,
-					paymentMethod,
-					prescription,
-					store: storeId,
-					sid,
+				res = await post(
+					`payments/checkout-cf`,
+					{
+						address,
+						paymentMethod,
+						prescription,
+						store: storeId,
+						sid
+					},
 					origin
-				})
+				)
 				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`payments/checkout-cf`, {}, sid)
@@ -214,14 +222,17 @@ export const razorpayCheckout = async ({
 		let res: any = {}
 		switch (provider) {
 			case 'litekart':
-				res = await post(`payments/checkout-rp`, {
-					address,
-					paymentMethod,
-					prescription,
-					store: storeId,
-					sid,
+				res = await post(
+					`payments/checkout-rp`,
+					{
+						address,
+						paymentMethod,
+						prescription,
+						store: storeId,
+						sid
+					},
 					origin
-				})
+				)
 				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`payments/checkout-rp`, {}, sid)
@@ -249,13 +260,16 @@ export const razorpayCapture = async ({
 		let res: any = {}
 		switch (provider) {
 			case 'litekart':
-				res = await post(`payments/capture-rp`, {
-					rpPaymentId,
-					rpOrderId,
-					store: storeId,
-					sid,
+				res = await post(
+					`payments/capture-rp`,
+					{
+						rpPaymentId,
+						rpOrderId,
+						store: storeId,
+						sid
+					},
 					origin
-				})
+				)
 				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`payments/capture-rp`, {}, sid)
@@ -283,13 +297,16 @@ export const stripeCheckoutService = async ({
 		let res: any = {}
 		switch (provider) {
 			case 'litekart':
-				res = await post(`stripe`, {
-					paymentMethodId,
-					address,
-					store: storeId,
-					sid,
+				res = await post(
+					`stripe`,
+					{
+						paymentMethodId,
+						address,
+						store: storeId,
+						sid
+					},
 					origin
-				})
+				)
 				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`stripe`, {}, sid)

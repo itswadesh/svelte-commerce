@@ -19,7 +19,7 @@ import Skeleton from '$lib/ui/Skeleton.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 import { fetchProducts } from '$lib/services/ProductService'
 import { fetchCoupons } from '$lib/services/CouponService'
-import { addToCartService, applyCouponService, ApplyCouponService, removeCouponService } from '$lib/services/CartService'
+import { addToCartService, applyCouponService, removeCouponService } from '$lib/services/CartService'
 
 export let data
 

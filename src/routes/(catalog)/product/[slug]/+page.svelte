@@ -76,7 +76,7 @@ import Textbox from '$lib/ui/Textbox.svelte'
 import viewport from '$lib/actions/useViewPort'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
 import { fetchRelatedProducts } from '$lib/services/ProductService'
-import { checkhWishlist, toggleWishlist } from '$lib/services/WishlistService'
+import {  toggleWishlistService } from '$lib/services/WishlistService'
 import { fetchProductReviews } from '$lib/services/ReviewService'
 
 export let data
@@ -169,29 +169,29 @@ if (data.product?.size?.name === 'One Size') {
 onMount(async () => {
 	screenWidth = screen.width
 
-	try {
-		isWislisted = await checkhWishlist({
-			pid: data.product._id,
-			vid: data.product._id,
-			origin: $page?.data?.origin,
-			storeId: $page?.data?.store?.id
-		})
+	// try {
+	// 	isWislisted = await checkhWishlist({
+	// 		pid: data.product._id,
+	// 		vid: data.product._id,
+	// 		origin: $page?.data?.origin,
+	// 		storeId: $page?.data?.store?.id
+	// 	})
 
-		productReview = await fetchProductReviews({
-			pid: data.product._id,
-			origin: $page?.data?.origin,
-			storeId: $page?.data?.store?.id
-		})
+	// 	productReview = await fetchProductReviews({
+	// 		pid: data.product._id,
+	// 		origin: $page?.data?.origin,
+	// 		storeId: $page?.data?.store?.id
+	// 	})
 
-		relatedProducts = await fetchRelatedProducts({
-			pid: data.product._id,
-			categorySlug: data.product.category?.slug,
-			origin: $page?.data?.origin,
-			storeId: $page?.data?.store?.id
-		})
-	} catch (e) {
-	} finally {
-	}
+	// 	relatedProducts = await fetchRelatedProducts({
+	// 		pid: data.product._id,
+	// 		categorySlug: data.product.category?.slug,
+	// 		origin: $page?.data?.origin,
+	// 		storeId: $page?.data?.store?.id
+	// 	})
+	// } catch (e) {
+	// } finally {
+	// }
 })
 
 function handleShowReviewsCount(showReviewsCount) {
@@ -241,9 +241,12 @@ async function toggleWishlisted(id) {
 
 	try {
 		loadingForWishlist = true
-		isWislisted = await toggleWishlistService(
-			{ pid: id, vid: id, storeId: $page.data.store?.id,origin:$page.data.origin },
-		)
+		isWislisted = await toggleWishlistService({
+			pid: id,
+			vid: id,
+			storeId: $page.data.store?.id,
+			origin: $page.data.origin
+		})
 	} catch (e) {
 	} finally {
 		loadingForWishlist = false
