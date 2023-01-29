@@ -31,23 +31,21 @@ async function SaveAddress(address) {
 		loading = true
 		const { firstName, lastName, email, phone, locality, city, state, country, zip } = address
 		toast('Saving Address Info...', 'info')
-		const newAddress = await saveAddress(
-			{
-				id,
-				firstName,
-				lastName,
-				email,
-				phone,
-				address: address.address,
-				locality,
-				city,
-				state,
-				country,
-				zip,
-				storeId: $page.data.store?.id,
-				origin:$page.data.origin
-			},
-		)
+		const newAddress = await saveAddress({
+			id,
+			firstName,
+			lastName,
+			email,
+			phone,
+			address: address.address,
+			locality,
+			city,
+			state,
+			country,
+			zip,
+			storeId: $page.data.store?.id,
+			origin: $page.data.origin
+		})
 
 		toast('Address Info Saved.', 'success')
 		dispatch('saved')

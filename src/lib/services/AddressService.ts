@@ -89,7 +89,7 @@ export const saveAddress = async ({
 		switch (provider) {
 			case 'litekart':
 				res = await post(
-					`address`,
+					`addresses`,
 					{
 						id,
 						firstName,
@@ -116,7 +116,6 @@ export const saveAddress = async ({
 		}
 		return res
 	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+		throw error(err.status, err.message)
 	}
 }

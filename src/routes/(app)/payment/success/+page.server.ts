@@ -16,6 +16,7 @@ export async function load({ url, request, locals, cookies }) {
 			status,
 			orderId,
 			storeId: locals.store?.id,
+			server: true,
 			sid: cookies.get('sid')
 		})
 	} catch (e) {

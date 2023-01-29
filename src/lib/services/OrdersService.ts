@@ -6,6 +6,7 @@ import {
 	getBySid,
 	getWooCommerceApi,
 	postBigCommerceApi,
+	postBySid,
 	postWooCommerceApi
 } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
@@ -97,6 +98,7 @@ export const paySuccessPageHit = async ({
 	paymentMode,
 	orderId,
 	storeId,
+	status,
 	id,
 	server = false,
 	sid = null
@@ -105,17 +107,29 @@ export const paySuccessPageHit = async ({
 		let res: any = {}
 		switch (provider) {
 			case 'litekart':
-				res = await post(
-					`orders/pay-sucess-page-hit`,
-					{
-						paymentMode,
-						status,
-						orderId,
-						store: storeId,
+				if (server) {
+					res = await postBySid(
+						`orders/pay-sucess-page-hit`,
+						{
+							paymentMode,
+							status,
+							orderId,
+							store: storeId
+						},
 						sid
-					},
-					origin
-				)
+					)
+				} else {
+					res = await post(
+						`orders/pay-sucess-page-hit`,
+						{
+							paymentMode,
+							status,
+							orderId,
+							store: storeId
+						},
+						origin
+					)
+				}
 				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`orders/pay-sucess-page-hit`, {}, sid)
@@ -127,7 +141,8 @@ export const paySuccessPageHit = async ({
 		return res.data || []
 	} catch (err) {
 		const e = err as Error
-		throw error(e.status, e.data.message)
+		console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', e)
+		throw error(e.status, e.data?.message)
 	}
 }
 
@@ -150,8 +165,7 @@ export const codCheckout = async ({
 						address,
 						paymentMethod,
 						prescription,
-						store: storeId,
-						sid
+						store: storeId
 					},
 					origin
 				)
@@ -163,7 +177,7 @@ export const codCheckout = async ({
 				res = await postWooCommerceApi(`orders/checkout/cod`, {}, sid)
 				break
 		}
-		return res.data || []
+		return res || {}
 	} catch (err) {
 		const e = err as Error
 		throw error(e.status, e.data.message)

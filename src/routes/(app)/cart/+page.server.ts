@@ -68,6 +68,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 			options,
 			customizedImg,
 			storeId: locals.store?.id,
+			server: true,
 			sid: cookies.get('sid')
 		})
 		if (linkedItems?.length) {
@@ -77,6 +78,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 					vid: i,
 					qty: 1,
 					storeId: locals.store?.id,
+					server: true,
 					sid: cookies.get('sid')
 				})
 			}

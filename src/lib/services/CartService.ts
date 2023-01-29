@@ -1,7 +1,7 @@
 import { provider } from '$lib/config'
 import type { Error } from '$lib/types'
 import { del, getAPI, post } from '$lib/utils/api'
-import { getBigCommerceApi, getBySid, getWooCommerceApi } from '$lib/utils/server'
+import { getBigCommerceApi, getBySid, getWooCommerceApi, postBySid } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
@@ -96,17 +96,31 @@ export const addToCartService = async ({
 		let res: any = {}
 		switch (provider) {
 			case 'litekart':
-				res = await post(
-					`carts/add-to-cart`,
-					{
-						pid,
-						vid,
-						qty,
-						customizedImg,
-						store: storeId
-					},
-					origin
-				)
+				if (server) {
+					res = await postBySid(
+						`carts/add-to-cart`,
+						{
+							pid,
+							vid,
+							qty,
+							customizedImg,
+							store: storeId
+						},
+						sid
+					)
+				} else {
+					res = await post(
+						`carts/add-to-cart`,
+						{
+							pid,
+							vid,
+							qty,
+							customizedImg,
+							store: storeId
+						},
+						origin
+					)
+				}
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`carts/add-to-cart`, {})

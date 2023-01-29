@@ -6,7 +6,8 @@ import {
 	postWooCommerceApi,
 	getBigCommerceApi,
 	getBySid,
-	getWooCommerceApi
+	getWooCommerceApi,
+	postBySid
 } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
@@ -100,7 +101,11 @@ export const toggleWishlistService = async ({
 		let res: any = {}
 		switch (provider) {
 			case 'litekart':
-				res = await post(`wishlists/toggle`, { pid, vid, store: storeId }, origin)
+				if (server) {
+					res = await postBySid(`wishlists/toggle`, { pid, vid, store: storeId }, sid)
+				} else {
+					res = await post(`wishlists/toggle`, { pid, vid, store: storeId }, origin)
+				}
 				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`wishlists/toggle`, {})
