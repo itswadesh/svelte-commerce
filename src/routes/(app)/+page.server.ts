@@ -12,12 +12,12 @@ export async function load({ locals, setHeaders }) {
 		if (cached) {
 			console.log('Cache hit!')
 			home = JSON.parse(cached)
+		} else {
+			console.log('Cache miss!')
+			home = await fetchHome({ storeId: store?.id, server: true })
+			setHeaders({ 'cache-control': 'max-age: 600' })
+			redis.set('home-www', JSON.stringify(home), 'EX', 600)
 		}
-
-		console.log('Cache miss!')
-		home = await fetchHome({ storeId: store?.id, server: true })
-		setHeaders({ 'cache-control': 'max-age: 600' })
-		redis.set('home-www', JSON.stringify(home), 'EX', 600)
 		const deals = await fetchDeals({ storeId: store?.id, server: true })
 		if (home) {
 			return { home: home, deals: deals || {} }
