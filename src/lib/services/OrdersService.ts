@@ -138,10 +138,9 @@ export const paySuccessPageHit = async ({
 				res = await postWooCommerceApi(`orders/pay-sucess-page-hit`, {}, sid)
 				break
 		}
-		return res.data || []
+		return res || {}
 	} catch (err) {
 		const e = err as Error
-		console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', e)
 		throw error(e.status, e.data?.message)
 	}
 }
