@@ -3,7 +3,8 @@ import { getBySid } from '$lib/utils/server'
 // @ts-ignore
 export async function GET({ request, cookies, locals }) {
 	const url = new URL(request.url)
-	const storeRes = await getBySid(`init?domain=${DOMAIN || url.host}`)
+	const DOMAIN_NAME = DOMAIN || url.host
+	const storeRes = await getBySid(`init?domain=${DOMAIN_NAME}`)
 	const { storeOne, settings, popularSearches, megamenu } = storeRes
 	const store = {
 		id: storeOne._id,
