@@ -36,6 +36,7 @@ import { toast } from '$lib/utils'
 import { page } from '$app/stores'
 import { browser } from '$app/environment'
 import { fetchMegamenuData } from '$lib/services/CategoryService'
+import { getAPI } from '$lib/utils/api'
 
 let megamenu = []
 let selectedCategory = ''

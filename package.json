@@ -22,6 +22,7 @@
 	"devDependencies": {
 		"@sentry/svelte": "7.30.0",
 		"@sentry/tracing": "7.30.0",
+		"@splidejs/svelte-splide": "0.2.9",
 		"@sveltejs/adapter-auto": "1.0.0",
 		"@sveltejs/adapter-vercel": "1.0.5",
 		"@sveltejs/kit": "1.1.0",
@@ -44,6 +45,7 @@
 		"eslint-config-prettier": "^8.6.0",
 		"eslint-plugin-svelte3": "^4.0.0",
 		"hash-it": "^6.0.0",
+		"ioredis": "5.3.0",
 		"minio": "7.0.32",
 		"npm-run-all": "4.1.5",
 		"postcss": "^8.4.21",
@@ -66,9 +68,7 @@
 		"vanilla-lazyload": "^17.8.3",
 		"vite": "^4.0.4",
 		"zod": "3.20.2",
-		"@splidejs/svelte-splide": "0.2.9",
 		"zod-form-data": "1.2.4"
 	},
-	"dependencies": {},
 	"type": "module"
 }
