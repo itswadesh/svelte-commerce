@@ -202,8 +202,7 @@ export const cashfreeCheckout = async ({
 						address,
 						paymentMethod,
 						prescription,
-						store: storeId,
-						sid
+						store: storeId
 					},
 					origin
 				)
@@ -241,8 +240,7 @@ export const razorpayCheckout = async ({
 						address,
 						paymentMethod,
 						prescription,
-						store: storeId,
-						sid
+						store: storeId
 					},
 					origin
 				)
@@ -279,7 +277,6 @@ export const razorpayCapture = async ({
 						rpPaymentId,
 						rpOrderId,
 						store: storeId,
-						sid
 					},
 					origin
 				)
@@ -316,7 +313,6 @@ export const stripeCheckoutService = async ({
 						paymentMethodId,
 						address,
 						store: storeId,
-						sid
 					},
 					origin
 				)

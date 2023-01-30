@@ -11,16 +11,16 @@ export const fetchFaqs = async ({ origin, storeId, server = false, sid = null }:
 		switch (provider) {
 			case 'litekart':
 				if (server) {
-					res = await getBySid(`faq?store${storeId}`, sid)
+					res = await getBySid(`faqs?store${storeId}`, sid)
 				} else {
-					res = await getAPI(`faq?store${storeId}`, origin)
+					res = await getAPI(`faqs?store${storeId}`, origin)
 				}
 				break
 			case 'bigcommerce':
-				res = await getBigCommerceApi(`faq`, {}, sid)
+				res = await getBigCommerceApi(`faqs`, {}, sid)
 				break
 			case 'woocommerce':
-				res = await getWooCommerceApi(`faq`, {}, sid)
+				res = await getWooCommerceApi(`faqs`, {}, sid)
 				break
 		}
 		return res.data || []
