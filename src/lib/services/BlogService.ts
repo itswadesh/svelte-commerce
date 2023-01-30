@@ -24,9 +24,8 @@ export const fetchBlogs = async ({ origin, storeId, server = false, sid = null }
 				break
 		}
 		return res.data || []
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -49,9 +48,8 @@ export const fetchLatestBlogs = async ({ origin, storeId, server = false, sid = 
 				break
 		}
 		return res.data || []
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -74,8 +72,7 @@ export const fetchBlog = async ({ origin, id, storeId, server = false, sid = nul
 				break
 		}
 		return res.data || []
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }

@@ -18,11 +18,14 @@ export async function load({ cookies, locals }) {
 			lastName: me.lastName || ''
 		}
 	} catch (e) {
+		if (e.status === 401) {
+			throw redirect(307, store.loginUrl)
+		}
 		throw error(e.status, e.message)
 	} finally {
 	}
 	if (profile) {
 		return { profile, store: store }
 	}
-	throw redirect(307, 'Please login again')
+	throw redirect(307, store.loginUrl)
 }

@@ -49,9 +49,8 @@ export const searchProducts = async ({
 				break
 		}
 		return { products, count, facets, pageSize, err }
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -78,9 +77,8 @@ export const fetchProduct = async ({ origin, slug, id, server = false, sid = nul
 				break
 		}
 		return res || {}
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data?.message || 'Not found')
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -104,9 +102,8 @@ export const fetchProducts = async ({ origin, storeId, server = false, sid = nul
 		}
 
 		return res?.data || []
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -166,9 +163,8 @@ export const fetchProductsOfCategory = async ({
 				break
 		}
 		return { products, count, facets, pageSize, category, err }
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -234,9 +230,8 @@ export const fetchNextPageProducts = async ({
 			estimatedTotalHits: res.estimatedTotalHits,
 			facets: res.facets
 		}
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -277,8 +272,7 @@ export const fetchRelatedProducts = async ({
 				break
 		}
 		return relatedProducts || []
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }

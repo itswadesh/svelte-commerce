@@ -36,9 +36,8 @@ export const fetchFooterCategories = async ({
 				break
 		}
 		return data || {}
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -61,9 +60,8 @@ export const fetchCategory = async ({ origin, id, server = false, sid = null }: 
 				break
 		}
 		return res || {}
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -100,9 +98,8 @@ export const fetchAllCategories = async ({
 				break
 		}
 		return { data, pageSize, currentPage }
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -146,9 +143,8 @@ export const fetchAllProductsOfCategories = async ({
 				break
 		}
 		return { products, productsCount, currentPage, facets, err }
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -172,8 +168,7 @@ export const fetchMegamenuData = async ({ origin, storeId, server = false, sid =
 				break
 		}
 		return data || []
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }

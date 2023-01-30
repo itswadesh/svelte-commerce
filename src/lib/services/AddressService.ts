@@ -36,9 +36,8 @@ export const fetchAddresses = async ({ origin, storeId, server = false, sid = nu
 				break
 		}
 		return { myAddresses: { data: myAddresses }, selectedAddress, count: res.count }
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -61,9 +60,8 @@ export const fetchAddress = async ({ origin, storeId, server = false, sid = null
 				break
 		}
 		return res || {}
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data?.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
