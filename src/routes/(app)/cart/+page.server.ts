@@ -69,7 +69,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 			customizedImg,
 			storeId: locals.store?.id,
 			server: true,
-			sid: cookies.get('sid')
+			sid: cookies // This is a special case to pass complete cookie
 		})
 		if (linkedItems?.length) {
 			for (const i of linkedItems) {
@@ -79,7 +79,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 					qty: 1,
 					storeId: locals.store?.id,
 					server: true,
-					sid: cookies.get('sid')
+					sid: cookies
 				})
 			}
 		}
