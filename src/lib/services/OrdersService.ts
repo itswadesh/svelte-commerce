@@ -37,9 +37,8 @@ export const fetchOrders = async ({ origin, storeId, server = false, sid = null 
 			noOfPage: res.noOfPage,
 			page: res.page
 		}
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -62,9 +61,8 @@ export const fetchOrder = async ({ origin, storeId, id, server = false, sid = nu
 				break
 		}
 		return res || {}
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -87,9 +85,8 @@ export const fetchTrackOrder = async ({ origin, storeId, id, server = false, sid
 				break
 		}
 		return res.data || []
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -139,9 +136,8 @@ export const paySuccessPageHit = async ({
 				break
 		}
 		return res || {}
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data?.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -177,9 +173,8 @@ export const codCheckout = async ({
 				break
 		}
 		return res || {}
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -215,9 +210,8 @@ export const cashfreeCheckout = async ({
 				break
 		}
 		return res.data || []
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -253,9 +247,8 @@ export const razorpayCheckout = async ({
 				break
 		}
 		return res.data || []
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -276,7 +269,7 @@ export const razorpayCapture = async ({
 					{
 						rpPaymentId,
 						rpOrderId,
-						store: storeId,
+						store: storeId
 					},
 					origin
 				)
@@ -289,9 +282,8 @@ export const razorpayCapture = async ({
 				break
 		}
 		return res.data || []
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -312,7 +304,7 @@ export const stripeCheckoutService = async ({
 					{
 						paymentMethodId,
 						address,
-						store: storeId,
+						store: storeId
 					},
 					origin
 				)
@@ -325,8 +317,7 @@ export const stripeCheckoutService = async ({
 				break
 		}
 		return res.data || []
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }

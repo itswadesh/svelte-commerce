@@ -130,9 +130,8 @@ export const addToCartService = async ({
 				break
 		}
 		return res || {}
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data?.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -164,9 +163,8 @@ export const applyCouponService = async ({
 				break
 		}
 		return res || {}
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data?.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -198,8 +196,7 @@ export const removeCouponService = async ({
 				break
 		}
 		return res || {}
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data?.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }

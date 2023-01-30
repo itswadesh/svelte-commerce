@@ -55,9 +55,8 @@ export const fetchReviews = async ({
 			noOfPage: res.noOfPage,
 			page: res.page
 		}
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -86,9 +85,8 @@ export const fetchProductReviews = async ({
 				break
 		}
 		return res?.data || []
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -126,8 +124,7 @@ export const saveReview = async ({
 				break
 		}
 		return res
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }

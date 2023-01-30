@@ -30,9 +30,8 @@ export const fetchMeData = async ({ origin, storeId, server = false, sid = null 
 				break
 		}
 		return res || {}
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -74,9 +73,8 @@ export const signupService = async ({
 				break
 		}
 		return res
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -101,9 +99,8 @@ export const googleOneTapLoginService = async ({
 				break
 		}
 		return res
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -137,9 +134,8 @@ export const loginService = async ({
 				break
 		}
 		return res
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -173,9 +169,8 @@ export const forgotPasswordService = async ({
 				break
 		}
 		return res
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -211,9 +206,8 @@ export const changePasswordService = async ({
 				break
 		}
 		return res
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -250,9 +244,8 @@ export const getOtpService = async ({
 				break
 		}
 		return res
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -286,9 +279,8 @@ export const verifyOtpService = async ({
 				break
 		}
 		return res
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -313,9 +305,8 @@ export const logoutService = async ({ storeId, origin, server = false, sid = nul
 				break
 		}
 		return res
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -340,8 +331,7 @@ export const updateProfileService = async ({
 				break
 		}
 		return res
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }

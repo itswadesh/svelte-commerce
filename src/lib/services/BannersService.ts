@@ -30,9 +30,8 @@ export const fetchBanners = async ({
 				break
 		}
 		return res.data || []
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -61,8 +60,7 @@ export const fetchBannersGroup = async ({
 				break
 		}
 		return res.data || []
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data.message)
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
