@@ -195,7 +195,6 @@ export const cashfreeCheckout = async ({
 					`payments/checkout-cf`,
 					{
 						address,
-						paymentMethod,
 						prescription,
 						store: storeId
 					},
@@ -209,7 +208,7 @@ export const cashfreeCheckout = async ({
 				res = await postWooCommerceApi(`payments/checkout-cf`, {}, sid)
 				break
 		}
-		return res.data || []
+		return res || {}
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)
 	}
