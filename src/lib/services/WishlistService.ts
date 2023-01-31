@@ -100,9 +100,17 @@ export const toggleWishlistService = async ({
 		switch (provider) {
 			case 'litekart':
 				if (server) {
-					res = await postBySid(`wishlists/toggle`, { pid, vid, store: storeId }, sid)
+					res = await postBySid(
+						`wishlists/toggle`,
+						{ product: pid, variant: vid, store: storeId },
+						sid
+					)
 				} else {
-					res = await post(`wishlists/toggle`, { pid, vid, store: storeId }, origin)
+					res = await post(
+						`wishlists/toggle`,
+						{ product: pid, variant: vid, store: storeId },
+						origin
+					)
 				}
 				break
 			case 'bigcommerce':
