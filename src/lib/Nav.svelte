@@ -173,7 +173,7 @@ async function onSearchSubmit({ detail }) {
 
 				{#if $page.data.cartQty > 0}
 					<div
-						class="absolute -top-2 -right-1.5 flex items-center justify-center rounded-full bg-primary-500 py-[0.8px] px-[5px] text-center text-xs font-bold uppercase text-white">
+						class="cart absolute -top-2 -right-1.5 flex items-center justify-center rounded-full bg-primary-500 py-[0.8px] px-[5px] text-center text-xs font-bold uppercase text-white">
 						{$page.data.cartQty}
 					</div>
 				{/if}
