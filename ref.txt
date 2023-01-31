@@ -1,6 +1,3 @@
 https://woocommerce.github.io/woocommerce-rest-api-docs/?javascript#products
 https://developer.bigcommerce.com/api-reference/6fe995bba597e-get-a-product
 
-https://www.captaincodeman.com/speed-up-sveltekit-pages-with-a-redis-cache
-automatic blog post from videos dev.to
-
