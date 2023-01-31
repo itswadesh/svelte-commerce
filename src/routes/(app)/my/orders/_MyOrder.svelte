@@ -51,7 +51,7 @@ export { clazz as class }
 							</div>
 
 							<table
-								class="group min-w-full divide-y divide-gray-200 rounded-md border border-gray-200 text-center text-gray-500 shadow-md"
+								class="group min-w-full divide-y divide-gray-200 rounded-md border border-gray-200 text-gray-500 shadow-md"
 								on:click="{() => goto(`/my/orders/${order._id}`)}">
 								<thead class="whitespace-nowrap rounded-t-md bg-gray-100 text-xs uppercase">
 									<tr>
@@ -80,7 +80,7 @@ export { clazz as class }
 									{#each order.orderItems as item}
 										<tr>
 											<td class="p-3">
-												<div class="mx-auto max-w-max">
+												<div class="flex-shrink-0">
 													{#if item.isCustomized}
 														<LazyImg
 															src="{item.customizedImg}"
@@ -102,7 +102,7 @@ export { clazz as class }
 											</td>
 
 											<td class="p-3">
-												<div class="flex justify-center gap-2">
+												<div class="flex w-60 justify-center gap-2">
 													<span>{item.name}</span>
 
 													{#if $page?.data?.store?.isFnb && item.foodType}

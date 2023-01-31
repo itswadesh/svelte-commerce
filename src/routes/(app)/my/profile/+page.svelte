@@ -26,9 +26,7 @@ const seoProps = {
 }
 
 const cookies = Cookie()
-
 let loading = false
-let formChanged = false
 let err = ''
 
 function saveImage(detail) {
@@ -58,7 +56,7 @@ async function saveProfile() {
 
 		if (data.profile) {
 			data.profile.dob = data.profile.dob ? dayjs(data.profile.dob).format('YYYY-MM-DD') : null
-			formChanged = false
+
 			toast('Profile Info Saved.', 'success')
 		}
 
@@ -69,7 +67,6 @@ async function saveProfile() {
 		err = e
 		toast(e, 'error')
 	} finally {
-		// loading = false
 	}
 }
 </script>
@@ -125,8 +122,7 @@ async function saveProfile() {
 								<Textbox
 									type="text"
 									placeholder="Enter First Name"
-									bind:value="{data.profile.firstName}"
-									on:input="{() => (formChanged = true)}" />
+									bind:value="{data.profile.firstName}" />
 							</div>
 						</div>
 
@@ -137,8 +133,7 @@ async function saveProfile() {
 								<Textbox
 									type="text"
 									placeholder="Enter Last Name"
-									bind:value="{data.profile.lastName}"
-									on:input="{() => (formChanged = true)}" />
+									bind:value="{data.profile.lastName}" />
 							</div>
 						</div>
 
@@ -149,8 +144,7 @@ async function saveProfile() {
 								<Textbox
 									type="date"
 									placeholder="Enter Date Of Birth"
-									bind:value="{data.profile.dob}"
-									on:input="{() => (formChanged = true)}" />
+									bind:value="{data.profile.dob}" />
 							</div>
 						</div>
 
@@ -163,25 +157,14 @@ async function saveProfile() {
 									type="tel"
 									maxlength="10"
 									placeholder="Eg:xxxxxxxxxx"
-									bind:value="{data.profile.phone}"
-									on:input="{() => (formChanged = true)}" />
+									bind:value="{data.profile.phone}" />
 							</div>
 						</div>
 					</div>
 				</div>
-			</form>
 
-			{#if data.profile.email}
-				<a href="/auth/change-password?ref=/my/profile">
-					<PrimaryButton>Change Password</PrimaryButton>
-				</a>
-			{/if}
+				<PrimaryButton type="submit" class="w-60">Save Profile</PrimaryButton>
+			</form>
 		</div>
 	{/if}
 </div>
-
-<CtrlS
-	loading="{loading}"
-	loadingMessage="Updating Profile"
-	formChanged="{formChanged}"
-	on:save="{() => saveProfile()}" />

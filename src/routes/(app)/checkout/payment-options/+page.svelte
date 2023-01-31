@@ -10,7 +10,7 @@
 </style>
 
 <script>
-import {  toast } from '$lib/utils'
+import { toast } from '$lib/utils'
 import { fireGTagEvent } from '$lib/utils/gTag'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
@@ -25,7 +25,12 @@ import Pricesummary from '$lib/components/Pricesummary.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import Stripe from '$lib/Stripe.svelte'
-import { cashfreeCheckout, codCheckout, razorpayCapture, razorpayCheckout } from '$lib/services/OrdersService'
+import {
+	cashfreeCheckout,
+	codCheckout,
+	razorpayCapture,
+	razorpayCheckout
+} from '$lib/services/OrdersService'
 
 const seoProps = {
 	title: 'Select Payment Option',
@@ -89,30 +94,28 @@ async function submit(pm) {
 
 	if (paymentMethod === 'COD') {
 		try {
-			loading = true
-			const res = await codCheckout(
-				{
-					address: data.addressId,
-					paymentMethod: 'COD',
-					prescription: data.prescription?._id,
-					storeId: $page.data.store?.id,
-					origin:	$page.data.origin
-				},
-			)
+			toast('Please wait...your order with COD is on process', 'warning')
+			const res = await codCheckout({
+				address: data.addressId,
+				paymentMethod: 'COD',
+				prescription: data.prescription?._id,
+				storeId: $page.data.store?.id,
+				origin: $page.data.origin
+			})
 
 			goto(`/payment/success?id=${res?._id}&status=PAYMENT_SUCCESS&provider=COD`)
 		} catch (e) {
 			toast(e, 'error')
 		} finally {
-			loading = false
 		}
 	} else if (paymentMethod === 'Cashfree') {
 		try {
 			loading = true
-			const res = await cashfreeCheckout(
-				{ address: data.addressId, storeId: $page.data.store?.id ,
-				origin:$page.data.origin}
-			)
+			const res = await cashfreeCheckout({
+				address: data.addressId,
+				storeId: $page.data.store?.id,
+				origin: $page.data.origin
+			})
 			if (res?.redirectUrl && res?.redirectUrl !== null) {
 				goto(`${res?.redirectUrl}`)
 			} else {
@@ -126,13 +129,11 @@ async function submit(pm) {
 	} else if (paymentMethod === 'Razorpay') {
 		try {
 			loading = true
-			const rp = await razorpayCheckout(
-				{
-					address: data.addressId,
-					storeId: $page.data.store?.id,
-					origin:	$page.data.origin
-				},
-			)
+			const rp = await razorpayCheckout({
+				address: data.addressId,
+				storeId: $page.data.store?.id,
+				origin: $page.data.origin
+			})
 
 			const options = {
 				key: rp.keyId, // Enter the Key ID generated from the Dashboard
@@ -145,14 +146,12 @@ async function submit(pm) {
 					// console.log('response = ', response)
 
 					try {
-						const capture = await razorpayCapture(
-							{
-								rpPaymentId: response.razorpay_payment_id,
-								rpOrderId: response.razorpay_order_id,
-								storeId: $page.data.store?.id,
-								origin:	$page.data.origin
-							},
-						)
+						const capture = await razorpayCapture({
+							rpPaymentId: response.razorpay_payment_id,
+							rpOrderId: response.razorpay_order_id,
+							storeId: $page.data.store?.id,
+							origin: $page.data.origin
+						})
 						toast('Payment success', 'success')
 						goto(`/payment/success?id=${capture._id}`)
 					} catch (e) {

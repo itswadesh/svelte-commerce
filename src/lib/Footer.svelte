@@ -33,7 +33,7 @@ export let me, store, popularSearches, megamenu
 export { clazz as class }
 let clazz = ''
 
-let categories=[]
+let categories = []
 
 onMount(async () => {
 	await getCategories()
@@ -41,7 +41,10 @@ onMount(async () => {
 
 async function getCategories() {
 	try {
-		categories = await fetchFooterCategories({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
+		categories = await fetchFooterCategories({
+			origin: $page?.data?.origin,
+			storeId: $page?.data?.store?.id
+		})
 	} catch (e) {
 	} finally {
 	}
@@ -109,9 +112,9 @@ async function getStoreData() {
 			class="mb-4 flex w-full flex-col flex-wrap items-start justify-start gap-5 sm:mb-8 sm:max-h-[30rem] sm:gap-10 lg:max-h-96 xl:max-h-60">
 			{#each footerItems as item}
 				<div>
-					<h1 class="mb-4 whitespace-nowrap font-semibold uppercase">
+					<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">
 						{item.heading}
-					</h1>
+					</h5>
 
 					<ul class="flex flex-col gap-1 text-gray-500">
 						{#each item?.subMenu as item}
@@ -137,7 +140,7 @@ async function getStoreData() {
 
 			{#if categories?.data}
 				<div>
-					<h1 class="mb-4 whitespace-nowrap font-semibold uppercase">Collections</h1>
+					<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Collections</h5>
 
 					<ul class="flex flex-col gap-1 text-gray-500">
 						{#each categories.data as category}
@@ -162,68 +165,93 @@ async function getStoreData() {
 			{/if}
 
 			<div>
-				<h1 class="mb-4 whitespace-nowrap font-semibold uppercase">Contact Us</h1>
+				<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Contact Us</h5>
 
 				<ul class="flex flex-col gap-2 text-gray-500">
 					{#if $page.data.store?.email}
 						<li class="max-w-max">
-							<h2 class="mb-0.5 flex items-center gap-1">
+							<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
-									class="h-5 w-5"
 									fill="none"
 									viewBox="0 0 24 24"
+									stroke-width="1.5"
 									stroke="currentColor"
-									stroke-width="1.5">
+									class="h-5 w-5 flex-shrink-0">
 									<path
 										stroke-linecap="round"
 										stroke-linejoin="round"
-										d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+										d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
 									></path>
 								</svg>
 
-								<span class="font-semibold">Email</span>
-							</h2>
+								<span>Email</span>
+							</h6>
 
-							<p>{$page.data.store?.email}</p>
+							<a href="mailto:{$page.data.store?.email}">{$page.data.store?.email}</a>
+						</li>
+					{/if}
+
+					{#if $page.data.store?.phone}
+						<li class="max-w-max">
+							<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke-width="1.5"
+									stroke="currentColor"
+									class="h-5 w-5 flex-shrink-0">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"
+									></path>
+								</svg>
+
+								<span>Phone</span>
+							</h6>
+
+							<a href="tel:+{$page.data.store?.phone}"> {$page.data.store?.phone} </a>
 						</li>
 					{/if}
 
 					<li class="max-w-max">
-						<h1 class="mb-0.5 flex items-center gap-1">
+						<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
-								class="h-5 w-5"
 								fill="none"
 								viewBox="0 0 24 24"
+								stroke-width="1.5"
 								stroke="currentColor"
-								stroke-width="1.5">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+								class="h-5 w-5 flex-shrink-0">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"
+								></path>
 							</svg>
 
-							<span class="font-semibold">Guaranteed Response Time</span>
-						</h1>
+							<span>Guaranteed Response Time</span>
+						</h6>
 
 						<p>Within 24 Hours</p>
 					</li>
 
 					<li class="max-w-max">
-						<h2 class="mb-0.5 flex items-center gap-1">
+						<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
-								class="h-5 w-5"
 								fill="none"
 								viewBox="0 0 24 24"
+								stroke-width="1.5"
 								stroke="currentColor"
-								stroke-width="1.5">
+								class="h-5 w-5 flex-shrink-0">
 								<path
 									stroke-linecap="round"
 									stroke-linejoin="round"
-									d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+									d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
 							</svg>
 
-							<span class="font-semibold">Working Days/Hours</span>
-						</h2>
+							<span>Working Days/Hours</span>
+						</h6>
 
 						<p>Mon – Sat / 7AM – 9PM</p>
 					</li>
@@ -231,9 +259,9 @@ async function getStoreData() {
 			</div>
 
 			<div>
-				<h1 class="mb-4 whitespace-nowrap font-semibold uppercase">
+				<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">
 					Experience {$page.data.store?.websiteName} app on mobile
-				</h1>
+				</h5>
 
 				<div class="flex items-center gap-1">
 					<a
@@ -256,7 +284,7 @@ async function getStoreData() {
 
 			{#if $page.data.store?.facebookPage || $page.data.store?.instagramPage || $page.data.store?.twitterPage || $page.data.store?.email || $page.data.store?.linkedinPage || $page.data.store?.pinterestPage || $page.data.store?.youtubeChannel}
 				<div>
-					<h1 class="mb-4 whitespace-nowrap font-semibold uppercase">Keep in touch</h1>
+					<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Keep in touch</h5>
 
 					<ul class="flex flex-wrap gap-4 text-gray-500">
 						<!-- Facebook -->
@@ -454,11 +482,11 @@ async function getStoreData() {
 
 		{#if popularSearches?.count > 0}
 			<div class="mb-4 sm:mb-8">
-				<h1 class="mb-4 flex items-center gap-4 font-semibold">
+				<h2 class="mb-4 flex items-center gap-4 font-semibold">
 					<span class="flex-1 whitespace-nowrap uppercase"> Popular searches </span>
 
 					<hr class="w-full border-t" />
-				</h1>
+				</h2>
 
 				<ul class="flex flex-wrap items-center text-gray-500">
 					{#each popularSearches.data as p, px}
@@ -483,7 +511,7 @@ async function getStoreData() {
 			<hr class="mb-4 w-full border-t sm:mb-8" />
 
 			<div class="mb-4 sm:mb-8">
-				<h1 class="mb-4 whitespace-nowrap font-semibold uppercase">Registered Office Address</h1>
+				<h2 class="mb-4 whitespace-nowrap font-semibold uppercase">Registered Office Address</h2>
 
 				<p class="text-gray-500">
 					{@html $page.data.store?.address}
