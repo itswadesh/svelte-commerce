@@ -4,7 +4,8 @@ import {
 	HTTP_ENDPOINT,
 	bigcommerceHeaders,
 	provider,
-	woocommerceHeaders
+	woocommerceHeaders,
+	MEDUSAJS_BASE_URL
 } from '../config'
 
 // import pkg from '@woocommerce/woocommerce-rest-api' // node v-18
@@ -96,6 +97,23 @@ export const getBySid = async (endpoint: string, sid?: any) => {
 	const res = isJson ? await response.json() : await response.text()
 	if (response?.status > 399) {
 		throw { status: response.status, message: response.statusText }
+	} else {
+		return res
+	}
+}
+
+export const getMedusajsApi = async (endpoint: string, query: any, sid?: any) => {
+	const response = await fetch(MEDUSAJS_BASE_URL + '/' + endpoint + '?' + serialize(query))
+	// const totalPages = res?.meta?.pagination?.total_pages
+	// const totalItems = res?.meta?.pagination?.total
+
+	const isJson = response.headers.get('content-type')?.includes('application/json')
+	const res = isJson ? await response.json() : await response.text()
+	// console.log(res)
+	if (res?.status > 399) {
+		throw { status: res.status, message: res }
+	} else if (response?.status > 399) {
+		throw { status: response.status, message: res }
 	} else {
 		return res
 	}

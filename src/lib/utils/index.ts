@@ -154,6 +154,49 @@ export const mapBigcommerceProducts = (b) => {
 	}
 }
 
+export const mapMedusajsProducts = (p) => {
+	if (p) {
+		const prod: any = {
+			id: p.id,
+			name: p.title,
+			description: p.description,
+			slug: p.handle,
+			createdAt: p.created_at,
+			modifiedAt: p.updated_at,
+			img: p.thumbnail,
+			// type: p.type,
+			status: p.status,
+			featured: p.featured,
+			active: p.catalog_visibility,
+			short_description: p.short_description,
+			country_of_origin: p.origin_country,
+			varified: p.purchasable,
+			popularity: p.total_sales,
+			digital: p.virtual,
+			link: p.external_url,
+			price: p.variants[0].prices[0].amount,
+			stock: p.variants[0].inventory_quantity,
+			sku: p.variants[0].sku,
+			allow_backorder: p.variants[0].allow_backorder,
+			manage_inventory: p.variants[0].manage_inventory,
+			hsn: p.variants[0].hs_code,
+			weight: p.weight,
+			length: p.length,
+			height: p.height,
+			width: p.width,
+			categories: p.collection,
+			tags: p.tags,
+			variations: p.variants,
+			images: p.images.map((i) => {
+				if (i) return i.url
+			})
+		}
+		return prod
+	} else {
+		return {}
+	}
+}
+
 export const mapWoocommerceProducts = (p) => {
 	if (p) {
 		const prod: any = {

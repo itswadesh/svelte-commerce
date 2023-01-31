@@ -72,6 +72,7 @@ export const bigcommerceHeaders = {
 }
 
 export const BIG_COMMERCE_BASE_URL = `https://api.bigcommerce.com/stores/${BIG_COMMERCE_STORE_HASH}/v3/catalog`
+export const MEDUSAJS_BASE_URL = `${env.PUBLIC_MEDUSAJS_API_URL}/store`
 
 export const WOO_COMMERCE_KEY =
 	env.PUBLIC_WOO_COMMERCE_KEY || 'ck_22a412b11bc3045bders7ederrda24d5b6d5245'
@@ -86,6 +87,7 @@ export const woocommerceHeaders = {
 	'Content-Type': 'application/json',
 	Accept: 'application/json'
 }
-export const provider: string = 'litekart'
+// export const provider: string = 'litekart'
+export const provider: string = 'medusajs'
 // export const provider: string = 'woocommerce'
 // export const provider: string = 'bigcommerce'
