@@ -279,7 +279,9 @@ function handleFilterTags() {
 <CatelogNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page?.data?.store}">
 	<div class="flex max-w-max flex-col items-start gap-1">
 		{#if data.products?.category?.name}
-			<h5 class="w-28 truncate capitalize leading-4 text-left">{data.products?.category?.name}</h5>
+			<h5 class="w-40 shrink-0 truncate capitalize leading-4 text-left">
+				{data.products?.category?.name}
+			</h5>
 		{/if}
 
 		<p>
