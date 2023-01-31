@@ -359,7 +359,7 @@ function handleMobileCanvas() {
 				{:else}
 					<div
 						class="flex h-screen w-full flex-col items-center justify-center gap-5 text-center sm:mx-auto sm:h-auto sm:w-auto">
-						<h1 class="text-xl font-semibold capitalize sm:text-2xl">Make your custom design</h1>
+						<h2 class="text-xl font-semibold capitalize sm:text-2xl">Make your custom design</h2>
 
 						<div
 							class="relative flex h-full w-full flex-col items-center justify-center gap-2 rounded-md border bg-gray-100 text-sm text-gray-500 sm:h-[570px] sm:w-[302px]">
@@ -387,16 +387,16 @@ function handleMobileCanvas() {
 				<!-- Brand -->
 
 				{#if data.product?.brand?.name}
-					<h1 class="mb-1 text-xl sm:text-2xl"><b>{data.product?.brand?.name}</b></h1>
+					<h2 class="mb-1 text-xl sm:text-2xl"><b>{data.product?.brand?.name}</b></h2>
 				{/if}
 
 				<!-- Name -->
 
 				{#if data.product?.name}
 					<div class="flex justify-between gap-2">
-						<h1 class="flex-1 text-gray-500 sm:text-lg">
+						<h2 class="flex-1 text-gray-500 sm:text-lg">
 							{data.product?.name}
-						</h1>
+						</h2>
 
 						{#if $page?.data?.store?.isFnb && data.product.foodType}
 							<div>
@@ -1059,7 +1059,7 @@ function handleMobileCanvas() {
 							<div class="tems-center flex">
 								<div
 									class="flex max-w-max flex-col items-center justify-center border-r border-gray-300 px-4 text-center">
-									<h1 class="mb-2 flex items-end gap-2">
+									<h2 class="mb-2 flex items-end gap-2">
 										<span class="text-4xl sm:text-5xl"> {productReview?.summary?.avg} </span>
 
 										<svg
@@ -1071,7 +1071,7 @@ function handleMobileCanvas() {
 												d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
 											></path>
 										</svg>
-									</h1>
+									</h2>
 
 									<p class="text-sm">{productReview?.summary?.count} Verified Buyers</p>
 								</div>

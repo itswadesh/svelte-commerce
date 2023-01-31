@@ -32,7 +32,7 @@ let products = []
 onMount(async () => {
 	try {
 		loading = true
-		products =await fetchProducts({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
+		products = await fetchProducts({ origin: $page?.data?.origin, storeId: $page?.data?.store?.id })
 	} catch (e) {
 	} finally {
 		loading = false
@@ -54,7 +54,7 @@ function filterProducts(selectedCategory) {
 <div>
 	<div
 		class="mb-5 flex flex-wrap items-center justify-between gap-5 border-b-2 border-gray-200 p-3 py-5 pb-2 sm:mb-10 sm:px-10">
-		<h1 class="text-xl font-bold uppercase sm:text-2xl">Bracelets & Bangles</h1>
+		<h2 class="text-xl font-bold uppercase sm:text-2xl">Bracelets & Bangles</h2>
 
 		<ul
 			class="hidden max-w-max flex-wrap divide-x divide-gray-500 text-sm font-semibold uppercase leading-4 md:flex">

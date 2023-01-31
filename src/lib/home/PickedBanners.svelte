@@ -19,10 +19,10 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 		<div class="flex flex-col gap-5 sm:gap-10">
 			{#each pickedBannersForDeals as b}
 				<div class="flex flex-col gap-5 sm:gap-10">
-					<h1
+					<h2
 						class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
 						{b._id?.title}
-					</h1>
+					</h2>
 
 					{#if b.data?.length}
 						<div class="flex flex-wrap items-center justify-center gap-5 sm:gap-10 xl:gap-20">
@@ -53,10 +53,10 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 		<div class="flex flex-col gap-5 sm:gap-10">
 			{#each pickedBanners as b}
 				<div>
-					<h1
+					<h2
 						class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
 						{b._id?.title}
-					</h1>
+					</h2>
 
 					{#if b.data?.length}
 						<div class="max-w-screen overflow-x-auto scrollbar-none lg:hidden">

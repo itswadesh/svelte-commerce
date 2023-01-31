@@ -264,9 +264,7 @@ export let data
 
 					<div class="col-span-1 hidden flex-col gap-5 sm:flex lg:col-span-4">
 						<div class="flex items-center justify-between gap-5">
-							<h1 class="text-xl font-bold sm:text-2xl md:text-3xl">
-								<h1 class="text-xl font-bold sm:text-2xl md:text-3xl">Vendor Products</h1>
-							</h1>
+							<h2 class="text-xl font-bold sm:text-2xl md:text-3xl">Vendor Products</h2>
 
 							<!-- <a
 							href="/{data.vendor?.slug}?sort=-updatedAt"

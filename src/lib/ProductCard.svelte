@@ -243,7 +243,7 @@ function selectPrimaryImage() {
 		<!-- Size chart start-->
 
 		<!-- <div class="mt-1.5 flex items-baseline justify-start">
-					<h1 class="mr-1 text-sm">Sizes:</h1>
+					<h2 class="mr-1 text-sm">Sizes:</h2>
 
 					<h2 class="flex items-baseline gap-1 text-xs font-medium text-gray-500 ">
 						{#if product.variants?.length}
@@ -271,13 +271,13 @@ function selectPrimaryImage() {
 					aria-label="Click to view the product details"
 					data-sveltekit-preload-data>
 					<div class="flex items-center justify-between">
-						<h1 class="mb-1.5 font-semibold">
+						<h2 class="mb-1.5 font-semibold">
 							{#if product.brandName}
 								{product.brandName}
 							{:else}
 								_
 							{/if}
-						</h1>
+						</h2>
 
 						<div class="sm:hidden">
 							<svg
@@ -319,9 +319,9 @@ function selectPrimaryImage() {
 				data-sveltekit-preload-data>
 				<!-- <div class="mb-1.5 flex items-center justify-between"> -->
 				<!-- {#if product.brand?.name || product.brandName}
-						<h1 class="font-semibold">
+						<h2 class="font-semibold">
 							{product.brand?.name || product.brandName}
-						</h1>
+						</h2>
 					{/if} -->
 
 				<!-- Wishlist -->
@@ -419,7 +419,7 @@ function selectPrimaryImage() {
 			</button>
 
 			<div class="h-full flex-shrink-0">
-				<h1 class="border-b p-4 text-center font-bold uppercase sm:text-lg">Similar Products</h1>
+				<h2 class="border-b p-4 text-center font-bold uppercase sm:text-lg">Similar Products</h2>
 
 				<div class="h-full overflow-y-auto p-4 pb-16 overflow-x-hidden">
 					<div class="grid grid-cols-2 sm:gap-4">
@@ -449,9 +449,9 @@ function selectPrimaryImage() {
 
 								<div class="p-4">
 									{#if relatedProduct.brand?.name}
-										<h1 class="mb-1.5 font-semibold">
+										<h2 class="mb-1.5 font-semibold">
 											{relatedProduct.brand?.name}
-										</h1>
+										</h2>
 									{/if}
 
 									<h2

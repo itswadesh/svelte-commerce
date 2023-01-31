@@ -101,10 +101,10 @@ async function onSearchSubmit({ detail }) {
 						height="40"
 						class="h-auto max-h-10 w-32 object-contain object-left sm:max-h-16" />
 				{:else if $page?.data?.store?.websiteName}
-					<h1
+					<h2
 						class="bg-gradient-to-b from-primary-500 to-secondary-500 bg-clip-text text-2xl font-extrabold text-transparent sm:text-3xl">
 						{$page?.data?.store?.websiteName}
-					</h1>
+					</h2>
 				{:else}
 					<img
 						src="{logo}"
@@ -207,7 +207,7 @@ async function onSearchSubmit({ detail }) {
 						</button>
 
 						<div class="h-full flex-shrink-0">
-							<h1 class="border-b p-4 text-center font-bold uppercase sm:text-lg">Cart</h1>
+							<h2 class="border-b p-4 text-center font-bold uppercase sm:text-lg">Cart</h2>
 
 							<div class="h-full overflow-y-auto p-4 pb-20 overflow-x-hidden">
 								{#if $page.data.cartQty > 0}
