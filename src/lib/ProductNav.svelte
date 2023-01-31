@@ -70,7 +70,7 @@ async function onSearchSubmit({ detail }) {
 </script>
 
 <nav
-	class="lg:hidden minimum-width-rem fixed inset-x-0 top-0 flex h-14 w-full items-center justify-center border-b bg-white px-3 shadow-md sm:h-20 sm:px-10
+	class="minimum-width-rem fixed inset-x-0 top-0 flex h-14 w-full items-center justify-center border-b bg-white px-3 shadow-md sm:h-20 sm:px-10 lg:hidden
 	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
 	<div class="flex w-full items-center justify-between gap-4 lg:gap-8">
 		<div class="flex items-center gap-4">
@@ -116,7 +116,6 @@ async function onSearchSubmit({ detail }) {
 		</div>
 
 		<div class="flex items-center gap-4 lg:gap-8">
-		
 			<button
 				type="button"
 				aria-label="Click to search quizzes, videos, notes etc..."
@@ -194,7 +193,7 @@ async function onSearchSubmit({ detail }) {
 						</button>
 
 						<div class="h-full flex-shrink-0">
-							<h1 class="border-b p-4 text-center font-bold uppercase sm:text-lg">Cart</h1>
+							<h2 class="border-b p-4 text-center font-bold uppercase sm:text-lg">Cart</h2>
 
 							<div class="h-full overflow-y-auto p-4 pb-20 overflow-x-hidden">
 								{#if $page.data.cartQty > 0}
@@ -269,7 +268,6 @@ async function onSearchSubmit({ detail }) {
 														</span>
 													</div>
 												</div>
-
 											</div>
 										{/each}
 									</div>

@@ -501,7 +501,7 @@ async function getCoupons() {
 							<div class="relative w-full sm:w-[25rem]">
 								<div
 									class="flex items-center justify-between gap-5 border-b border-gray-300 p-4 sm:gap-10">
-									<h1 class="text-lg font-bold">Apply Promo Code</h1>
+									<h2 class="text-lg font-bold">Apply Promo Code</h2>
 
 									<button
 										type="button"
@@ -617,10 +617,10 @@ async function getCoupons() {
 
 			{#if products?.length > 0}
 				<div class="w-full">
-					<h1
+					<h2
 						class="my-5 font-serif text-xl font-medium tracking-wider sm:my-10 sm:text-2xl md:text-3xl xl:text-4xl">
 						You May Like
-					</h1>
+					</h2>
 
 					<div
 						class="grid w-full grid-cols-2 items-end sm:flex sm:flex-wrap sm:justify-between sm:gap-10">

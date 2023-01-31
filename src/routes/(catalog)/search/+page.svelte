@@ -166,7 +166,7 @@ async function goCheckbox(item) {
 				<div class="mb-5 w-full sm:mb-10 lg:mb-20">
 					<div
 						class="mb-5 hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex">
-						<h1 class="flex flex-wrap items-center gap-2">
+						<h2 class="flex flex-wrap items-center gap-2">
 							<span class="text-xl font-bold capitalize md:text-2xl">
 								Showing results {#if data.searchData}
 									for "{data.searchData}"
@@ -188,7 +188,7 @@ async function goCheckbox(item) {
 									{/if}
 								</span>
 							</p>
-						</h1>
+						</h2>
 
 						<div class="hidden flex-wrap items-center justify-between md:flex">
 							<label class="flex items-center gap-2">
@@ -269,9 +269,9 @@ async function goCheckbox(item) {
 					class="mb-5 flex w-full items-center justify-center px-3 sm:mb-10 sm:px-0 lg:mb-20"
 					style="height: 60vh;">
 					<div class="m-10 flex flex-col items-center justify-center text-center">
-						<h1 class="mb-10 text-xl capitalize sm:text-2xl lg:text-3xl">
+						<h2 class="mb-10 text-xl capitalize sm:text-2xl lg:text-3xl">
 							{#if data.searchData}You searched for "{data.searchData}"{/if}
-						</h1>
+						</h2>
 
 						<div class="mb-5">
 							<img

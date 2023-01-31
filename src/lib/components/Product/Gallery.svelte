@@ -98,7 +98,10 @@ onMount(async () => {
 				</svelte:component> -->
 			{:else if product?.images?.length === 1}
 				<div data-sveltekit-preload-data class="max-h-screen w-full">
-					<img src="{product?.images && product?.images[0]}" alt="" class="block h-full object-contain" />
+					<img
+						src="{product?.images && product?.images[0]}"
+						alt=""
+						class="block h-full object-contain" />
 				</div>
 			{:else}
 				<div
@@ -122,7 +125,7 @@ onMount(async () => {
 			{#if product?.images?.length}
 				<div class="w-full flex-1 bg-white py-5 md:max-w-lg lg:h-full">
 					<div class="mb-2 px-5">
-						<h1 class="mb-1 font-bold sm:text-lg">Photos for {product?.name}</h1>
+						<h2 class="mb-1 font-bold sm:text-lg">Photos for {product?.name}</h2>
 
 						<p class="text-sm">{product?.images?.length} photos available</p>
 					</div>

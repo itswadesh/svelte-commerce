@@ -210,7 +210,7 @@ async function goCheckbox(item) {
 
 <ProductNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page?.data?.store}">
 	<div class="flex max-w-max flex-col items-start gap-1">
-		<h1 class="w-28 truncate font-semibold capitalize leading-4">{data.category?.name}</h1>
+		<h2 class="w-28 truncate font-semibold capitalize leading-4">{data.category?.name}</h2>
 
 		<p class="text-xs">
 			{data.count}
@@ -387,9 +387,9 @@ async function goCheckbox(item) {
 					class="mb-5 flex w-full items-center justify-center px-3 sm:mb-10 sm:px-0 lg:mb-20"
 					style="height: 60vh;">
 					<div class="m-10 flex flex-col items-center justify-center text-center">
-						<h1 class="mb-10 text-xl capitalize sm:text-2xl lg:text-3xl">
+						<h2 class="mb-10 text-xl capitalize sm:text-2xl lg:text-3xl">
 							{#if data.searchData}You searched for "{data.searchData}"{/if}
-						</h1>
+						</h2>
 
 						<div class="mb-5">
 							<img
@@ -430,9 +430,9 @@ async function goCheckbox(item) {
 				</div>
 
 				<div class="col-span-1 md:col-span-3 lg:col-span-2">
-					<h1 class="mb-5 text-center text-base font-bold uppercase tracking-wide">
+					<h2 class="mb-5 text-center text-base font-bold uppercase tracking-wide">
 						{data.category?.name} price list
-					</h1>
+					</h2>
 
 					<ul class="flex flex-col gap-2">
 						<li class="grid grid-cols-6 items-center gap-5 font-semibold uppercase">

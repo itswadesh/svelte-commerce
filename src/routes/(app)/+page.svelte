@@ -111,7 +111,9 @@ $: heroBanners =
 		<div class="mb-5 sm:mb-10">
 			<Hero banners="{data.home.banners?.data}" />
 		</div>
+
 		<h1 class="text-center text-3xl font-bold">Welcome to Svelte Commerce</h1>
+
 		<!-- TOP CATEGORIES -->
 
 		{#if data.home?.categories?.data?.length > 0}
