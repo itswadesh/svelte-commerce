@@ -78,7 +78,7 @@ import WhiteButton from '$lib/ui/WhiteButton.svelte'
 import { fetchRelatedProducts } from '$lib/services/ProductService'
 import { toggleWishlistService } from '$lib/services/WishlistService'
 import { fetchProductReviews } from '$lib/services/ReviewService'
-import { checkhWishlist } from 'src/lib/services/WishlistService'
+import { checkhWishlist } from '$lib/services/WishlistService'
 
 export let data
 
