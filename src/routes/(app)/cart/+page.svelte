@@ -1,16 +1,13 @@
 <script lang="ts">
-import { currency, date } from '$lib/util'
-import { fireGTagEvent } from '$lib/util/gTag'
+import { date, getCdnImageUrl } from '$lib/utils'
+import { fireGTagEvent } from '$lib/utils/gTag'
 import { fly } from 'svelte/transition'
-import { goto, invalidate, invalidateAll } from '$app/navigation'
+import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { post, del, getAPI } from '$lib/util/api'
-import Cookie from 'cookie-universal'
-import cookie from 'cookie'
+import { post, del } from '$lib/utils/api'
 import dotsLoading from '$lib/assets/dots-loading.gif'
 import Error from '$lib/components/Error.svelte'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import Pricesummary from '$lib/components/Pricesummary.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
@@ -20,8 +17,13 @@ import productVeg from '$lib/assets/product/veg.png'
 import SEO from '$lib/components/SEO/index.svelte'
 import Skeleton from '$lib/ui/Skeleton.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
-
-const cookies = Cookie()
+import { fetchProducts } from '$lib/services/ProductService'
+import { fetchCoupons } from '$lib/services/CouponService'
+import {
+	addToCartService,
+	applyCouponService,
+	removeCouponService
+} from '$lib/services/CartService'
 
 export let data
 
@@ -48,25 +50,16 @@ onMount(() => {
 	fireGTagEvent('view_cart', data.cart)
 })
 
-// console.log('cart', cart)
-
 const addToCart = async ({ pid, qty, customizedImg, ix }: any) => {
 	loading[ix] = true
-	const res = await post(
-		'carts/add-to-cart',
-		{
-			pid: pid,
-			vid: pid,
-			qty: qty,
-			customizedImg: customizedImg || null,
-			store: $page.data.store?.id
-		},
-		$page.data.origin
-	)
-
-	// cart = res
-	// $page.data.cart = res
-	// await refreshCart()
+	await addToCartService({
+		pid: pid,
+		vid: pid,
+		qty: qty,
+		customizedImg: customizedImg || null,
+		storeId: $page.data.store?.id,
+		origin: $page.data.origin
+	})
 
 	await invalidateAll()
 
@@ -81,11 +74,11 @@ function handleCouponCode(couponCode: string) {
 async function applyCouponCode(selectedCouponCode: string) {
 	try {
 		loadingApplyCoupon = true
-		const resAC = await post(
-			'apply-coupon',
-			{ code: selectedCouponCode, store: $page.data.store?.id },
-			$page.data.origin
-		)
+		const resAC = await applyCouponService({
+			code: selectedCouponCode,
+			storeId: $page.data.store?.id,
+			origin: $page.data.origin
+		})
 		appliedCouponInfo = resAC
 		await invalidateAll()
 		openApplyPromoCodeModal = false
@@ -99,7 +92,7 @@ async function applyCouponCode(selectedCouponCode: string) {
 async function removeCouponCode() {
 	try {
 		loadingRemoveCoupon = true
-		await del(`remove-coupon?store=${$page.data.store?.id}`, $page.data.origin)
+		await removeCouponService({ storeId: $page.data.store?.id, origin: $page.data.origin })
 		selectedCouponCode = ''
 		await invalidateAll()
 	} catch (e) {
@@ -112,7 +105,10 @@ async function removeCouponCode() {
 async function getProducts() {
 	try {
 		loadingProducts = true
-		const resP = await getAPI(`es/products?store=${$page.data?.store?.id}`, $page.data.origin)
+		const resP = await fetchProducts({
+			origin: $page?.data?.origin,
+			storeId: $page?.data?.store?.id
+		})
 		products = resP?.hits
 	} catch (e) {
 	} finally {
@@ -123,10 +119,11 @@ async function getProducts() {
 async function getCoupons() {
 	try {
 		loadingCoupon = true
-		const resC = await getAPI(`coupons?store=${$page.data?.store?.id}`, $page.data.origin)
+		const resC = await fetchCoupons({
+			origin: $page?.data?.origin,
+			storeId: $page?.data?.store?.id
+		})
 		coupons = resC?.data
-
-		// console.log('coupons = ', coupons)
 	} catch (e) {
 	} finally {
 		loadingCoupon = false
@@ -168,58 +165,6 @@ async function getCoupons() {
 								{/if}
 							</h4>
 						</div>
-
-						<!-- Cart end  -->
-
-						<!-- Enter pincode for delivery start  -->
-
-						<!-- <div class="relative mt-2 sm:mt-0">
-						<div
-							on:click="{toggle}"
-							class="flex items-center px-2 sm:px-4 py-2 cursor-pointer hover:bg-gray-100">
-							<span> Enter pincode for delivery</span>
-							{#if !show}
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="w-5 h-5 mt-1 ml-2 text-gray-700 transition duration-300"
-									viewBox="0 0 20 20"
-									fill="currentColor">
-									<path
-										fill-rule="evenodd"
-										d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-										clip-rule="evenodd"></path>
-								</svg>
-							{:else}
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="w-5 h-5 mt-1 ml-2 text-gray-700  transform rotate-180 transition duration-300"
-									viewBox="0 0 20 20"
-									fill="currentColor">
-									<path
-										fill-rule="evenodd"
-										d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-										clip-rule="evenodd"></path>
-								</svg>
-							{/if}
-						</div>
-
-						{#if show}
-							<div
-								class="absolute z-10 left-0 md:right-0 flex flex-col p-4 md:p-6 mt-2 bg-white border rounded-lg shadow-xl w-72 md:w-96">
-								<p class="text-sm">Enter a pincode / Zip</p>
-								<div class="mt-2">
-									<Textbox label="Pincode / Zip" />
-									<button
-										on:click="{toggle}"
-										class="w-full py-3 mt-3 font-bold tracking-wide text-white bg-gray-800 rounded-lg bg-opacity-80 hover:bg-opacity-100"
-										>CHECK</button>
-								</div>
-							</div>
-						{/if}
-						
-					</div> -->
-
-						<!-- Enter pincode for delivery end  -->
 					</div>
 
 					<div class="border-t pt-5">
@@ -252,8 +197,10 @@ async function getCoupons() {
 													href="{item?.slug}"
 													aria-label="Click to route product details"
 													class="flex-shrink-0 ">
-													<LazyImg
-														src="{item.isCustomizeditem ? item.customizedImg : item.img}"
+													<img
+														src="{getCdnImageUrl(
+															item.isCustomizeditem ? item.customizedImg : item.img
+														)}?tr=w-auto,h-256,cm-pad_resize&sharpen=true"
 														alt=""
 														width="128"
 														class="w-16 cursor-pointer rounded-md object-contain sm:w-32" />
@@ -264,7 +211,7 @@ async function getCoupons() {
 														<a
 															href="/product/{item?.slug}"
 															aria-label="Click to route product details"
-															class="flex-1 cursor-pointer text-base font-medium text-gray-600 hover:underline sm:text-lg">
+															class="cart-item flex-1 cursor-pointer text-base font-medium text-gray-600 hover:underline sm:text-lg">
 															{item?.name}
 														</a>
 
@@ -317,14 +264,18 @@ async function getCoupons() {
 											aria-label="Click to route product details"
 											class="flex-shrink-0 ">
 											{#if item.isCustomized}
-												<LazyImg
-													src="{item.customizedImg}"
+												<img
+													src="{getCdnImageUrl(
+														item.customizedImg
+													)}?tr=w-auto,h-256,cm-pad_resize&sharpen=true"
 													alt=""
 													width="128"
 													class="w-16 cursor-pointer rounded-md object-contain sm:w-32" />
 											{:else}
-												<LazyImg
-													src="{item.img}"
+												<img
+													src="{getCdnImageUrl(
+														item.img
+													)}?tr=w-auto,h-256,cm-pad_resize&sharpen=true"
 													alt=""
 													width="128"
 													class="w-16 cursor-pointer rounded-md object-contain sm:w-32" />
@@ -350,15 +301,6 @@ async function getCoupons() {
 													</div>
 												{/if}
 											</div>
-
-											<!-- <h5 class="text-gray-600">{item.product?.vendor_name}</h5> -->
-
-											<!-- <div class="my-2 flex items-center">
-											<h5 class="text-sm">One size</h5>
-											<div class="mx-3 h-1 w-1 rounded-full bg-gray-200"></div>
-											<span class="text-red-500">{item?.product} left</span>
-										</div> -->
-
 											<div class="mb-2 flex flex-wrap items-center gap-2 text-sm sm:text-base">
 												<span class="text-lg font-bold sm:text-xl">
 													{item?.formattedItemAmount?.price}
@@ -445,7 +387,7 @@ async function getCoupons() {
 																ix: ix
 															})}"
 														type="button"
-														class="flex h-6 w-6 transform items-center justify-center rounded-full  bg-gray-200 shadow transition  duration-300 focus:outline-none hover:bg-gray-300 hover:opacity-80 active:scale-95 sm:h-8 sm:w-8">
+														class="addItemToCart flex h-6 w-6 transform items-center justify-center rounded-full  bg-gray-200 shadow transition  duration-300 focus:outline-none hover:bg-gray-300 hover:opacity-80 active:scale-95 sm:h-8 sm:w-8">
 														<svg
 															xmlns="http://www.w3.org/2000/svg"
 															class="h-4 w-4 text-gray-600"
@@ -559,7 +501,7 @@ async function getCoupons() {
 							<div class="relative w-full sm:w-[25rem]">
 								<div
 									class="flex items-center justify-between gap-5 border-b border-gray-300 p-4 sm:gap-10">
-									<h1 class="text-lg font-bold">Apply Promo Code</h1>
+									<h2 class="text-lg font-bold">Apply Promo Code</h2>
 
 									<button
 										type="button"
@@ -657,7 +599,7 @@ async function getCoupons() {
 										</ul>
 									{:else}
 										<div class="p-5 text-center text-sm text-gray-500">
-											Opps! You have a bad luck. <br /> There's no coupon is available now
+											Opps! No coupon available right now<br /> Try again later.
 										</div>
 									{/if}
 								</div>
@@ -675,10 +617,10 @@ async function getCoupons() {
 
 			{#if products?.length > 0}
 				<div class="w-full">
-					<h1
+					<h2
 						class="my-5 font-serif text-xl font-medium tracking-wider sm:my-10 sm:text-2xl md:text-3xl xl:text-4xl">
 						You May Like
-					</h1>
+					</h2>
 
 					<div
 						class="grid w-full grid-cols-2 items-end sm:flex sm:flex-wrap sm:justify-between sm:gap-10">

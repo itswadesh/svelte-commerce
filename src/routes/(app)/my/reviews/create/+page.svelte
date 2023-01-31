@@ -1,14 +1,15 @@
 <script>
+import { goto } from '$app/navigation'
+import { page } from '$app/stores'
+import { post } from '$lib/utils/api'
+import { toast } from '$lib/utils'
+import BackButton from '$lib/ui/BackButton.svelte'
+import Errors from '$lib/ui/Errors.svelte'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
-import { toast } from '$lib/util'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import { goto } from '$app/navigation'
-import Errors from '$lib/ui/Errors.svelte'
-import BackButton from '$lib/ui/BackButton.svelte'
-import { post } from '$lib/util/api'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import { page } from '$app/stores'
+import { saveReview } from '$lib/services/ReviewService'
 
 const seoProps = {
 	title: 'Reviews Details',
@@ -51,7 +52,14 @@ async function saveReviewproduct(review) {
 	try {
 		toast('Sending your business rating and review', 'info')
 		review.store = $page.data.store?.id
-		await post('reviews', review, $page.data.origin)
+		await saveReview({
+			id: review.id,
+			pid: review.pid,
+			message: review.message,
+			rating: review.rating,
+			storeId: $page.data.store?.id,
+			origin: $page.data.origin
+		})
 
 		toast('Successfully saved.', 'success')
 
@@ -114,7 +122,7 @@ async function saveReviewproduct(review) {
 		<div class="h-full w-full">
 			<div class="flex flex-col rounded-md border bg-white p-4 shadow-md">
 				<div class="mb-2 flex flex-wrap items-center">
-					<h1 class="mb-2 mr-4 text-lg font-semibold capitalize">Rate this business</h1>
+					<h2 class="mb-2 mr-4 text-lg font-semibold capitalize">Rate this business</h2>
 
 					<div class="mb-2">
 						<div class="flex items-center gap-4">
@@ -162,7 +170,7 @@ async function saveReviewproduct(review) {
 				</div>
 
 				<div>
-					<h1 class="mb-2 mr-4 text-lg font-semibold capitalize">Reviews this business</h1>
+					<h2 class="mb-2 mr-4 text-lg font-semibold capitalize">Reviews this business</h2>
 
 					<form on:submit|preventDefault="{() => saveReviewproduct(review)}">
 						<div class="mb-4">

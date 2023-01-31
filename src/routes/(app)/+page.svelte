@@ -42,7 +42,7 @@ let seoProps = {
 	image: $page.data.store?.logo,
 	logo: $page.data.store?.logo,
 	ogSquareImage: { url: '', width: 56, height: 56 },
-	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00'],
+	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 08:00-13:00'],
 	// popularity: product.popularity,
 	// postalCode: '764036',
 	// price: product.price,
@@ -112,14 +112,16 @@ $: heroBanners =
 			<Hero banners="{data.home.banners?.data}" />
 		</div>
 
+		<h1 class="text-center text-3xl font-bold">Welcome to Svelte Commerce</h1>
+
 		<!-- TOP CATEGORIES -->
 
 		{#if data.home?.categories?.data?.length > 0}
 			<div class="mb-5 hidden sm:mb-10 sm:block">
-				<h1
+				<h2
 					class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
 					TOP COLLECTIONS
-				</h1>
+				</h2>
 
 				<div class="max-w-screen overflow-x-auto scrollbar-none lg:hidden">
 					<div class="flex flex-row">
@@ -179,10 +181,10 @@ $: heroBanners =
 		{:then home}
 			{#if heroBanners?.length > 0}
 				<div class="mb-5 sm:mb-10">
-					<h1
+					<h2
 						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
 						BEST OF {$page.data.store?.websiteName} EXCLUSIVE
-					</h1>
+					</h2>
 
 					<HeroBanners heroBanners="{heroBanners}" />
 				</div>
@@ -223,10 +225,10 @@ $: heroBanners =
 			{#if deals.data?.length > 0}
 				{#each deals.data as deal}
 					<div class="mb-5 sm:mb-10">
-						<h1
+						<h2
 							class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
 							{deal.name}
-						</h1>
+						</h2>
 
 						<Deals deal="{deal}" />
 					</div>
@@ -240,10 +242,10 @@ $: heroBanners =
 			{#if home?.popular}
 				{#if home?.popular?.data?.length > 0}
 					<div class="mb-5 sm:mb-10">
-						<h1
+						<h2
 							class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
 							POPULAR ON {$page.data.store?.websiteName}
-						</h1>
+						</h2>
 
 						<ul
 							class="sm:px-10 border-t sm:border-t-0 grid w-full grid-cols-2 items-start sm:gap-3 sm:flex sm:flex-wrap sm:justify-between lg:gap-6">
@@ -269,10 +271,10 @@ $: heroBanners =
 		{#await data.home then home}
 			{#if home?.trending?.length > 0}
 				<div>
-					<h1
+					<h2
 						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
 						TRENDING ON {$page.data.store?.websiteName}
-					</h1>
+					</h2>
 
 					<ul
 						class="sm:px-10 border-t sm:border-t-0 grid w-full grid-cols-2 items-start sm:gap-3 sm:flex sm:flex-wrap sm:justify-between lg:gap-6">

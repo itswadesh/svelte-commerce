@@ -14,12 +14,12 @@
 </style>
 
 <script>
-import { getAPI, post } from '$lib/util/api'
+import { post } from '$lib/utils/api'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { sorts } from '$lib/config'
-import { toast } from '$lib/util'
+import { toast } from '$lib/utils'
 import dayjs from 'dayjs'
 import DesktopFilter from '$lib/components/DesktopFilter.svelte'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
@@ -31,59 +31,31 @@ import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
 import ProductNav from '$lib/ProductNav.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+import { savePopularSearch } from '$lib/services/PopularSearchService'
 
 let today = dayjs(new Date()).toISOString()
 
 export let data
 
-// console.log('data = ', data)
-// console.log('Products = ', products)
-// console.log('Count = ', count)
-// console.log('Facets = ', facets)
-
 let seoProps = {
-	// addressCountry: 'India',
-	// addressLocality: 'Semiliguda, Koraput',
-	// addressRegion: 'Odisha',
-	// alternateJsonHref: '',
-	// alternateXml: { title: '', href: '' },
 	brand: $page.data.store?.title,
-	// breadcrumbs: '',
 	caption: $page.data.store?.title,
 	category: data.searchData,
 	contentUrl: $page.data.store?.logo,
 	createdAt: today,
-	// depth: { unitCode: '', value: '' },
 	email: `${$page?.data?.store?.email}`,
-	// entityMeta: '',
-	// facebookPage: '',
-	// gtin: '',
-	// height: '',
 	id: $page?.url?.href,
 	image: $page.data.store?.logo,
 	logo: $page.data.store?.logo,
 	ogSquareImage: { url: '', width: 56, height: 56 },
 	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00'],
-	// popularity: product.popularity,
-	// postalCode: '764036',
-	// price: product.price,
-	// priceRange: `${product.price}-${product.mrp}`,
-	// ratingCount: 1,
-	// ratingValue: +product.ratings + 1,
-	// sku: product.sku,
-	// streetAddress: 'Padmajyoti Marg, Nandapur Road',
 	timeToRead: 0,
 	updatedAt: today,
-	// weight: { unitCode: '', value: '' },
-	// width: { unitCode: '', value: '' },
-	// wlwmanifestXmlHref: '',
 	metadescription: $page.data.store?.description,
-	// article: false,
 	canonical: `${$page?.url.href}`,
 	datePublished: today,
 	description: $page.data.store?.description,
 	dnsPrefetch: `//cdn.jsdelivr.net`,
-	// entityMeta: null,
 	featuredImage: {
 		url: $page.data.store?.logo,
 		width: 675,
@@ -97,14 +69,11 @@ let seoProps = {
 	ogImageSecureUrl: `${$page?.data?.store?.logo}`,
 	ogImageType: 'image/jpeg',
 	ogSiteName: `${$page.data.origin}/sitemap/sitemap.xml`,
-	// productAvailability: `${product.stock}`,
 	productBrand: data.searchData,
 	productName: data.searchData,
-	// productPriceAmount: `${product.price}`,
 	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
 	slug: `/`,
-	// timeToRead: 0,
-	title: data.searchData || 'Search',
+	title: data.searchData || 'Buy online in - ' + $page.data.store?.websiteName,
 	twitterImage: { url: $page.data.store?.logo }
 }
 
@@ -116,42 +85,15 @@ $: if (data?.count === 0) {
 }
 
 async function saveSearchData(searchData) {
-	// try {
-	// 	const res1 = await getAPI(`popular-search?store=${$page.data?.store?.id}`)
-	// 	// console.log('res1', res1)
-	// 	const newArray = res1?.data.map((s) => {
-	// 		return s.text
-	// 	})
-	// 	// console.log('newArray', newArray)
-	// 	const isSearchedDataPresent = newArray.includes(searchData)
-	// 	// console.log('isSearchedDataPresent', isSearchedDataPresent)
-
-	// 	if (!isSearchedDataPresent) {
-	// 		try {
-	// 			const res = await post('popular-search', {
-	// 				id: 'new',
-	// 				popularity: 0,
-	// 				text: searchData
-	// 			})
-
-	// 		} catch (e) {
-	// 		} finally {
-	// 		}
-	// 	} else return
-	// } catch (e) {
-	// } finally {
-	// }
-
 	try {
-		const res = await post(
-			'popular-search',
+		await savePopularSearch(
 			{
 				id: 'new',
 				// popularity: 0,
 				text: searchData,
-				store: $page.data.store?.id
+				storeId: $page.data.store?.id,
+				origin: $page.data.origin
 			},
-			$page.data.origin
 		)
 	} catch (e) {
 	} finally {
@@ -170,19 +112,6 @@ async function sortNow(s) {
 
 async function refreshData() {
 	await invalidateAll()
-	// try {
-	// 	const res = await getAPI(`products?${data.query.toString()}`)
-
-	// 	// console.log('refresh res = ', res)
-
-	// 	data.products = res?.data
-	// 	data.count = res?.count
-	// 	data.facets = res?.facets?.all_aggs
-	// 	data.err = !data.products ? 'No result Not Found' : null
-	// } catch (e) {
-	// 	toast(e, 'error')
-	// } finally {
-	// }
 }
 
 async function goCheckbox(item) {
@@ -237,7 +166,7 @@ async function goCheckbox(item) {
 				<div class="mb-5 w-full sm:mb-10 lg:mb-20">
 					<div
 						class="mb-5 hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex">
-						<h1 class="flex flex-wrap items-center gap-2">
+						<h2 class="flex flex-wrap items-center gap-2">
 							<span class="text-xl font-bold capitalize md:text-2xl">
 								Showing results {#if data.searchData}
 									for "{data.searchData}"
@@ -259,7 +188,7 @@ async function goCheckbox(item) {
 									{/if}
 								</span>
 							</p>
-						</h1>
+						</h2>
 
 						<div class="hidden flex-wrap items-center justify-between md:flex">
 							<label class="flex items-center gap-2">
@@ -322,21 +251,6 @@ async function goCheckbox(item) {
 													</button>
 												{/if}
 											{/each}
-
-											<!-- <li class="flex items-center whitespace-nowrap">
-										<span>More Options</span>
-
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 20 20"
-											fill="currentColor"
-											class="w-5 h-5">
-											<path
-												fill-rule="evenodd"
-												d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-												clip-rule="evenodd"></path>
-										</svg>
-									</li> -->
 										</ul>
 									</div>
 								</div>
@@ -355,9 +269,9 @@ async function goCheckbox(item) {
 					class="mb-5 flex w-full items-center justify-center px-3 sm:mb-10 sm:px-0 lg:mb-20"
 					style="height: 60vh;">
 					<div class="m-10 flex flex-col items-center justify-center text-center">
-						<h1 class="mb-10 text-xl capitalize sm:text-2xl lg:text-3xl">
+						<h2 class="mb-10 text-xl capitalize sm:text-2xl lg:text-3xl">
 							{#if data.searchData}You searched for "{data.searchData}"{/if}
-						</h1>
+						</h2>
 
 						<div class="mb-5">
 							<img
