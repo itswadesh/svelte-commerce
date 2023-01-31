@@ -1,8 +1,8 @@
 import { provider } from '$lib/config'
 import type { Error } from '$lib/types'
-import { mapBigcommerceProducts, mapWoocommerceProducts } from '$lib/utils'
+import { mapBigcommerceProducts, mapMedusajsProducts, mapWoocommerceProducts } from '$lib/utils'
 import { getAPI } from '$lib/utils/api'
-import { getBigCommerceApi, getBySid, getWooCommerceApi } from '$lib/utils/server'
+import { getBigCommerceApi, getBySid, getMedusajsApi, getWooCommerceApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
@@ -41,6 +41,9 @@ export const searchProducts = async ({
 				pageSize = res?.pageSize
 				err = !res?.estimatedTotalHits ? 'No result Not Found' : null
 				break
+			case 'medusajs':
+				res = await getBigCommerceApi(`store/products?${query}`, {}, sid)
+				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`products?${query}`, {}, sid)
 				break
@@ -65,15 +68,19 @@ export const fetchProduct = async ({ origin, slug, id, server = false, sid = nul
 					res = await getAPI(`products/${slug}`, origin)
 				}
 				break
+			case 'medusajs':
+				const me = (await getMedusajsApi(`products/${id}`, {}, sid)).product
+				res = mapMedusajsProducts(me)
+				break
 			case 'bigcommerce':
-				const b = (await getBigCommerceApi(`products/${id}`, {}, sid)).data
+				const bi = (await getBigCommerceApi(`products/${id}`, {}, sid)).data
 				const images = (await getBigCommerceApi(`products/${id}/images`, {}, sid)).data
-				b.images = images
-				res = mapBigcommerceProducts(b)
+				bi.images = images
+				res = mapBigcommerceProducts(bi)
 				break
 			case 'woocommerce':
-				const p = (await getWooCommerceApi(`products/${id}`, {}, sid)).data
-				res = mapWoocommerceProducts(p)
+				const wo = (await getWooCommerceApi(`products/${id}`, {}, sid)).data
+				res = mapWoocommerceProducts(wo)
 				break
 		}
 		return res || {}
