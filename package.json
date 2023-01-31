@@ -11,6 +11,7 @@
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"test": "playwright test",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"partytown": "partytown copylib static/~partytown",
@@ -20,6 +21,7 @@
 		"live": "run-s build copy liveS"
 	},
 	"devDependencies": {
+		"@playwright/test": "1.30.0",
 		"@sentry/svelte": "7.30.0",
 		"@sentry/tracing": "7.30.0",
 		"@splidejs/svelte-splide": "0.2.9",
@@ -48,6 +50,7 @@
 		"ioredis": "5.3.0",
 		"minio": "7.0.32",
 		"npm-run-all": "4.1.5",
+		"playwright": "1.30.0",
 		"postcss": "^8.4.21",
 		"prettier": "^2.8.3",
 		"prettier-plugin-svelte": "^2.9.0",

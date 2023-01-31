@@ -211,7 +211,7 @@ async function getCoupons() {
 														<a
 															href="/product/{item?.slug}"
 															aria-label="Click to route product details"
-															class="flex-1 cursor-pointer text-base font-medium text-gray-600 hover:underline sm:text-lg">
+															class="cart-item flex-1 cursor-pointer text-base font-medium text-gray-600 hover:underline sm:text-lg">
 															{item?.name}
 														</a>
 
@@ -387,7 +387,7 @@ async function getCoupons() {
 																ix: ix
 															})}"
 														type="button"
-														class="flex h-6 w-6 transform items-center justify-center rounded-full  bg-gray-200 shadow transition  duration-300 focus:outline-none hover:bg-gray-300 hover:opacity-80 active:scale-95 sm:h-8 sm:w-8">
+														class="addItemToCart flex h-6 w-6 transform items-center justify-center rounded-full  bg-gray-200 shadow transition  duration-300 focus:outline-none hover:bg-gray-300 hover:opacity-80 active:scale-95 sm:h-8 sm:w-8">
 														<svg
 															xmlns="http://www.w3.org/2000/svg"
 															class="h-4 w-4 text-gray-600"

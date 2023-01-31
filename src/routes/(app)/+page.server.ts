@@ -1,5 +1,5 @@
 import { DOMAIN, HTTP_ENDPOINT } from '$lib/config'
-import { redis } from '$lib/server/redis'
+// import { redis } from '$lib/server/redis'
 import { fetchDeals } from '$lib/services/DealsService'
 import { fetchHome } from '$lib/services/HomeService'
 import { error } from '@sveltejs/kit'
