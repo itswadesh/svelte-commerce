@@ -2,7 +2,7 @@ import { provider } from '$lib/config'
 import type { Error } from '$lib/types'
 import { mapBigcommerceProducts, mapMedusajsProducts, mapWoocommerceProducts } from '$lib/utils'
 import { getAPI } from '$lib/utils/api'
-import { getBigCommerceApi, getBySid, getMedusajsApi, getWooCommerceApi } from '$lib/utils/server'
+import { getBigCommerceApi, getBySid, getMedusajsApi, getWooCommerceApi, postMedusajsApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
@@ -42,7 +42,12 @@ export const searchProducts = async ({
 				err = !res?.estimatedTotalHits ? 'No result Not Found' : null
 				break
 			case 'medusajs':
-				res = await getBigCommerceApi(`store/products?${query}`, {}, sid)
+				res = await postMedusajsApi(`products/search`, { q: 'Shirt' })
+				console.log('zzzzzzzzzzzzzzzzzzzz', products)
+				products = res?.hits
+				count = res?.hits?.length
+				facets = res?.facets || []
+				pageSize = res?.pageSize || 25
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`products?${query}`, {}, sid)
