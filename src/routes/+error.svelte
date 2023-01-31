@@ -24,14 +24,14 @@ let showCartSidebar = false
 let me = []
 let cart = []
 
-onMount(async () => {
-	try {
-		// me = await fetchMeData({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
-		// cart = await fetchCartData({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
-	} catch (e) {
-	} finally {
-	}
-})
+// onMount(async () => {
+// 	try {
+// 		// me = await fetchMeData({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
+// 		// cart = await fetchCartData({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
+// 	} catch (e) {
+// 	} finally {
+// 	}
+// })
 </script>
 
 <div class="{showCartSidebar || openSidebar ? 'h-screen overflow-hidden' : 'h-full'}">
