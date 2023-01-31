@@ -1,28 +1,25 @@
 <script>
-import { post } from '$lib/utils/api'
+import { fetchCountries, fetchStates } from '$lib/services/CountryService'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import { post } from '$lib/utils/api'
+import { saveAddress } from '$lib/services/AddressService'
+import { toast } from '$lib/utils'
 import BackButton from '$lib/ui/BackButton.svelte'
 import Error from '$lib/components/Error.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
-import { fetchCountries, fetchStates } from '$lib/services/CountryService'
-import { saveAddress } from '$lib/services/AddressService'
-import { toast } from '$lib/utils'
 
 export let data
+
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let err
 let loading = false
 let countries
 let states
-
-onMount(async () => {
-	await getCountries()
-	await getStates('IN')
-})
 
 if (data && data.ads && !data.ads.country) {
 	data.ads.country = 'IN'
@@ -30,15 +27,6 @@ if (data && data.ads && !data.ads.country) {
 
 async function onCountryChange(country) {
 	getStates(country)
-}
-
-async function getCountries() {
-	try {
-		countries = await fetchCountries({
-			origin: $page?.data?.origin,
-			storeId: $page?.data?.store?.id
-		})
-	} catch (e) {}
 }
 
 async function getStates(countryCode) {
@@ -175,38 +163,17 @@ async function save(ads) {
 					<Textbox type="text" bind:value="{data.ads.city}" placeholder="Enter City" required />
 				</div>
 
-				<div>
-					<h6 class="mb-2 font-semibold">Country <span class="text-red-500">*</span></h6>
-
-					{#if countries?.data?.length}
-						<select
-							bind:value="{data.ads.country}"
-							required
-							class="w-full rounded-md border border-gray-300 bg-white p-2 text-sm placeholder-gray-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-gray-50"
-							on:change="{() => onCountryChange(data.ads.country)}">
-							{#if countries?.data?.length}
-								{#each countries.data as c}
-									{#if c}
-										<option value="{c.code}">
-											{c.name}
-										</option>
-									{/if}
-								{/each}
-							{/if}
-						</select>
-					{/if}
-				</div>
-
 				{#if data.ads.country}
 					<div>
 						<h6 class="mb-2 font-semibold">State <span class="text-red-500">*</span></h6>
 
-						{#if states?.data?.length}
+						{#if data.states?.length}
 							<select
 								bind:value="{data.ads.state}"
 								required
 								class="w-full rounded-md border border-gray-300 bg-white p-2 text-sm placeholder-gray-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-gray-50">
-								{#each states?.data as s}
+								<option disabled selected>-- Select a State --</option>
+								{#each data.states as s}
 									{#if s}
 										<option value="{s.name}">
 											{s.name}
@@ -217,6 +184,27 @@ async function save(ads) {
 						{/if}
 					</div>
 				{/if}
+
+				<div>
+					<h6 class="mb-2 font-semibold">Country <span class="text-red-500">*</span></h6>
+
+					{#if data.countries?.length}
+						<select
+							disabled
+							bind:value="{data.ads.country}"
+							required
+							class="w-full rounded-md border border-gray-300 bg-white p-2 text-sm placeholder-gray-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-gray-50"
+							on:change="{() => onCountryChange(data.ads.country)}">
+							{#each data.countries as c}
+								{#if c}
+									<option value="{c.code}">
+										{c.name}
+									</option>
+								{/if}
+							{/each}
+						</select>
+					{/if}
+				</div>
 
 				<div>
 					<h6 class="mb-2 font-semibold">Pincode / Zip <span class="text-red-500">*</span></h6>

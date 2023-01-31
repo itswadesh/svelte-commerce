@@ -1,6 +1,6 @@
+import { error } from '@sveltejs/kit'
 import { fetchAddress } from '$lib/services/AddressService'
 import { fetchStates } from '$lib/services/CountryService'
-import { error } from '@sveltejs/kit'
 
 export async function load({ locals, params, parent, cookies }) {
 	const { store } = locals

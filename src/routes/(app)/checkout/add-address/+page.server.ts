@@ -1,9 +1,13 @@
 import { fetchAddress } from '$lib/services/AddressService'
+import { fetchStates } from '$lib/services/CountryService'
+
 export const prerender = false
+
 export async function load({ url, cookies, locals }) {
 	let ads = {}
 	const id = url.searchParams.get('id')
 	const prescriptionId = url.searchParams.get('prescription')
+
 	if (id === 'new') {
 		ads = { id: 'new' }
 	} else {
@@ -14,7 +18,15 @@ export async function load({ url, cookies, locals }) {
 			server: true
 		})
 	}
-	return {
-		ads
-	}
+
+	const countries = [{ code: 'IN', name: 'India' }]
+
+	const states = await fetchStates({
+		storeId: locals.store?.id,
+		server: true,
+		sid: cookies.get('sid'),
+		countryCode: 'IN'
+	})
+
+	return { ads, countries, states }
 }
