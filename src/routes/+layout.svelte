@@ -10,10 +10,67 @@ import { ToastContainer, FlatToast } from 'svelte-toasts'
 import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 import BackToTop from '$lib/components/BackToTop.svelte'
 import GoogleAnalytics from '$lib/components/GoogleAnalytics.svelte'
-import { navigating } from '$app/stores'
+import { navigating, page } from '$app/stores'
+  import { onMount } from 'svelte'
+import { partytownSnippet } from '@builder.io/partytown/integration'
+  // Add the Partytown script to the DOM head
+  let scriptEl
+  onMount(
+    () => {
+      if (scriptEl) {
+        scriptEl.textContent = partytownSnippet()
+      }
+    }
+  )
 </script>
 
-<GoogleAnalytics />
+<svelte:head>
+  <!-- Config options -->
+  <script>
+    // Forward the necessary functions to the web worker layer
+    partytown = {
+      forward: ['dataLayer.push'],
+	  resolveUrl: (url) => {
+      const siteUrl = $page.data?.origin
+
+      if (url.hostname === 'www.googletagmanager.com') {
+        const proxyUrl = new URL(`${siteUrl}/gtm`)
+
+        const gtmId = new URL(url).searchParams.get('id')
+        gtmId && proxyUrl.searchParams.append('id', gtmId)
+
+        return proxyUrl
+      } else if (url.hostname === 'www.google-analytics.com') {
+        const proxyUrl = new URL(`${siteUrl}/ga`)
+
+        return proxyUrl
+      }
+
+      return url
+    }
+    }
+  </script>
+
+  <!-- `partytownSnippet` is inserted here -->
+  <script bind:this={scriptEl}></script>
+   <!-- GTM script + config -->
+  <script
+    type="text/partytown"
+    src="https://www.googletagmanager.com/gtag/js?id=G-BG3JKWLYPF"></script>
+  <script type="text/partytown">
+    window.dataLayer = window.dataLayer || []
+
+    function gtag() {
+      dataLayer.push(arguments)
+    }
+
+    gtag('js', new Date())
+    gtag('config', 'G-BG3JKWLYPF', {
+      page_path: window.location.pathname
+    })
+  </script>
+</svelte:head>
+<!-- <GoogleAnalytics /> -->
 
 {#if $navigating}
 	<PreloadingIndicator />

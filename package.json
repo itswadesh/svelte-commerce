@@ -21,6 +21,7 @@
 		"live": "run-s build copy liveS"
 	},
 	"devDependencies": {
+		"@builder.io/partytown": "0.7.5",
 		"@playwright/test": "1.30.0",
 		"@sentry/svelte": "7.34.0",
 		"@sentry/tracing": "7.34.0",
