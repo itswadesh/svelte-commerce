@@ -1,6 +1,6 @@
 {
 	"name": "svelte-commerce",
-	"version": "2022.11.29",
+	"version": "2023.02.01",
 	"private": true,
 	"scripts": {
 		"dev": "vite dev --host --port 3000",
