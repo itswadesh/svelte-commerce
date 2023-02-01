@@ -29,7 +29,7 @@ onMount(async () => {
 					alt="{deal.name}"
 					height="380"
 					width="380"
-					class="h-[380px] w-auto object-contain object-center text-xs" />
+					class="h-[380px] w-[380px] object-contain object-center text-xs" />
 			</div>
 		{/if}
 

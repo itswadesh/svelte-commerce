@@ -35,14 +35,12 @@ let bounceItemFromTop = false
 async function removeFromWishlist(id, wx) {
 	try {
 		loadingProduct[wx] = true
-		await toggleWishlistService(
-			{
-				pid: id,
-				vid: id,
-				storeId: $page.data.store?.id,
-				origin:$page.data.origin
-			}
-		)
+		await toggleWishlistService({
+			pid: id,
+			vid: id,
+			storeId: $page.data.store?.id,
+			origin: $page.data.origin
+		})
 		await invalidateAll()
 		await getWishlistedProducts()
 	} catch (e) {
@@ -181,12 +179,12 @@ async function getWishlistedProducts() {
 														</span>
 
 														{#if w.product?.mrp > w.product?.price}
-															<strike class="whitespace-nowrap text-gray-500">
+															<span class="whitespace-nowrap text-gray-600 line-through">
 																{currency(w.product?.mrp, $page.data?.store?.currencySymbol)}
 															</strike>
 
 															{#if Math.floor(((w.product?.mrp - w.product?.price) / w.product?.mrp) * 100) > 0}
-																<span class="whitespace-nowrap text-primary-500">
+																<span class="whitespace-nowrap text-green-600">
 																	({Math.floor(
 																		((w.product?.mrp - w.product?.price) / w.product?.mrp) * 100
 																	)}% off)

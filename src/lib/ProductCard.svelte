@@ -62,14 +62,12 @@ function hideitems() {
 async function toggleWishlist(id) {
 	try {
 		loadingForWishlist = true
-		isWislisted = await toggleWishlistService(
-			{
-				product: id,
-				variant: id,
-				storeId: $page.data.store?.id,
-				origin: $page.data.store?.origin
-			}
-		)
+		isWislisted = await toggleWishlistService({
+			product: id,
+			variant: id,
+			storeId: $page.data.store?.id,
+			origin: $page.data.store?.origin
+		})
 	} catch (e) {
 		if (e.message === 'You must be logged in') {
 			const url = '/'
@@ -94,7 +92,7 @@ function selectPrimaryImage() {
 </script>
 
 <div
-	class="group relative col-span-1 block w-full overflow-hidden border bg-white sm:w-52 sm:flex-shrink-0 sm:rounded-md sm:border-transparent sm:hover:border-gray-200 sm:hover:bg-white sm:hover:shadow-lg"
+	class="group relative col-span-1 block w-full overflow-hidden border bg-white sm:w-52 sm:flex-shrink-0 sm:rounded-md sm:border-transparent sm:hover:border-gray-200 sm:hover:shadow-lg"
 	on:mouseenter="{showitems}"
 	on:mouseleave="{hideitems}">
 	<a
@@ -130,14 +128,14 @@ function selectPrimaryImage() {
 
 		<!-- on:mouseenter="{selectSecondImage}" on:mouseleave="{selectPrimaryImage}"
 		showcaseImg -->
-		<button type="button" class="h-[280px] w-[210px] overflow-hidden">
-			<LazyImg
-				src="{product.img}"
-				alt="{product.name}"
-				width="210"
-				height="280"
-				class="h-[280px] w-[210px] object-contain object-bottom text-xs" />
-		</button>
+		<!-- <button type="button" class="h-[280px] w-[210px] overflow-hidden"> -->
+		<LazyImg
+			src="{product.img}"
+			alt="{product.name}"
+			width="210"
+			height="280"
+			class="h-[280px] w-[210px] object-contain object-bottom text-xs" />
+		<!-- </button> -->
 	</a>
 
 	<div class="p-4">
@@ -360,7 +358,9 @@ function selectPrimaryImage() {
 				</div>
 			</a>
 		</div>
+
 		<!-- {/if} -->
+
 		<a
 			href="/product/{product.slug}"
 			aria-label="Click to view the product details"
@@ -371,12 +371,12 @@ function selectPrimaryImage() {
 				</span>
 
 				{#if product.mrp > product.price}
-					<span class="whitespace-nowrap text-gray-500 line-through">
+					<span class="whitespace-nowrap text-gray-600 line-through">
 						{currency(product.mrp, $page.data?.store?.currencySymbol)}
 					</span>
 
 					{#if Math.floor(((product.mrp - product.price) / product.mrp) * 100) > 0}
-						<span class="whitespace-nowrap text-orange-500 sm:text-gray-900">
+						<span class="whitespace-nowrap text-[#ff5a5a] sm:text-gray-900">
 							({Math.floor(((product.mrp - product.price) / product.mrp) * 100)}% off)
 						</span>
 					{/if}
@@ -470,7 +470,7 @@ function selectPrimaryImage() {
 										</span>
 
 										{#if relatedProduct.mrp > relatedProduct.price}
-											<span class="whitespace-nowrap text-gray-500 line-through">
+											<span class="whitespace-nowrap text-gray-600 line-through">
 												{currency(relatedProduct.mrp, $page.data?.store?.currencySymbol)}
 											</span>
 

@@ -61,7 +61,6 @@ async function onSearchSubmit({ detail }) {
 	goto(newUrl)
 	dispatch('search', detail)
 }
-
 </script>
 
 <nav
@@ -97,9 +96,10 @@ async function onSearchSubmit({ detail }) {
 				{#if $page?.data?.store?.logo}
 					<LazyImg
 						src="{$page?.data?.store?.logo}"
-						alt=" "
+						alt="logo"
 						height="40"
-						class="h-auto max-h-10 w-32 object-contain object-left sm:max-h-16" />
+						width="128"
+						class="h-10 w-32 object-contain object-left sm:h-16" />
 				{:else if $page?.data?.store?.websiteName}
 					<h2
 						class="bg-gradient-to-b from-primary-500 to-secondary-500 bg-clip-text text-2xl font-extrabold text-transparent sm:text-3xl">
@@ -129,7 +129,6 @@ async function onSearchSubmit({ detail }) {
 		</div>
 
 		<div class="flex items-center gap-4 lg:gap-8">
-			
 			<button
 				type="button"
 				aria-label="Click to search quizzes, videos, notes etc..."
@@ -282,7 +281,6 @@ async function onSearchSubmit({ detail }) {
 														</span>
 													</div>
 												</div>
-
 											</div>
 										{/each}
 									</div>

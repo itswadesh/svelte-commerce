@@ -26,7 +26,7 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 
 					{#if b.data?.length}
 						<div class="flex flex-wrap items-center justify-center gap-5 sm:gap-10 xl:gap-20">
-							{#each b.data as banner}
+							{#each b.data as banner, bx}
 								{#if banner.img}
 									<div
 										role="banner"
@@ -34,10 +34,10 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 										<a href="{banner.link}" data-sveltekit-preload-data>
 											<LazyImg
 												src="{banner.img}"
-												alt=""
-												height="375"
-												aspect_ratio="1:1"
-												class="h-full w-full object-cover object-center" />
+												alt="banner{bx}"
+												height="430"
+												width="375"
+												class="h-[430px] w-[375px] object-cover object-center" />
 										</a>
 									</div>
 								{/if}
@@ -61,15 +61,15 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 					{#if b.data?.length}
 						<div class="max-w-screen overflow-x-auto scrollbar-none lg:hidden">
 							<div role="banner" class="flex flex-row items-start">
-								{#each b.data as banner}
+								{#each b.data as banner, bx}
 									{#if banner.img}
 										<a href="{banner.link}" class="block flex-shrink-0" data-sveltekit-preload-data>
 											<LazyImg
 												src="{banner.img}"
-												alt=""
-												height="375"
-												aspect_ratio="1:1"
-												class="w-[47vw] object-cover sm:w-60" />
+												alt="banner{bx}"
+												height="430"
+												width="375"
+												class="h-[430px] w-[375px] object-cover" />
 										</a>
 									{/if}
 								{/each}
@@ -77,15 +77,15 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 						</div>
 
 						<div role="banner" class="hidden grid-cols-7 lg:grid">
-							{#each b.data as banner}
+							{#each b.data as banner, bx}
 								{#if banner.img}
 									<a href="{banner.link}" class="col-span-1" data-sveltekit-preload-data>
 										<LazyImg
 											src="{banner.img}"
-											alt=""
-											height="375"
-											aspect_ratio="1:1"
-											class="h-full w-full object-cover" />
+											alt="banner{bx}"
+											height="430"
+											width="375"
+											class="h-[430px] w-[375px] object-cover" />
 									</a>
 								{/if}
 							{/each}
