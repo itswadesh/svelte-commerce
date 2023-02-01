@@ -26,7 +26,7 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import appStore from '$lib/assets/app/app-store.svg'
 import googlePlay from '$lib/assets/app/google-play.png'
-import { fetchFooterCategories } from './services/CategoryService'
+import { fetchFooterCategories, fetchMegamenuData } from './services/CategoryService'
 
 export let me, store, popularSearches, megamenu
 
@@ -41,10 +41,15 @@ onMount(async () => {
 
 async function getCategories() {
 	try {
-		categories = await fetchFooterCategories({
+		categories= await fetchFooterCategories({
 			origin: $page?.data?.origin,
 			storeId: $page?.data?.store?.id
 		})
+		const megamenu2 = await fetchMegamenuData({
+			storeId: $page?.data?.store?.id,
+			origin: $page.data?.origin
+		})
+		localStorage.setItem('megamenu', JSON.stringify(megamenu2))
 	} catch (e) {
 	} finally {
 	}
