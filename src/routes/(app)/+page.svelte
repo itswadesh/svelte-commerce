@@ -112,7 +112,7 @@ $: heroBanners =
 			<Hero banners="{data.home.banners?.data}" />
 		</div>
 
-		<h1 class="text-center text-3xl font-bold">Welcome to Svelte Commerce</h1>
+		<h1 class="text-center text-3xl font-bold">The high performance and scalable ecommerce</h1>
 
 		<!-- TOP CATEGORIES -->
 

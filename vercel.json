@@ -7,6 +7,14 @@
         {
             "source": "/images/:path*",
             "destination": "https://api.litekart.in/images/:path*"
+        },
+        {
+            "source": "/proxytown/gtm",
+            "destination": "https://www.googletagmanager.com/gtag/js"
+        },
+        {
+            "source": "/proxytown/ga",
+            "destination": "https://www.google-analytics.com/analytics.js"
         }
     ],
     "env": {
