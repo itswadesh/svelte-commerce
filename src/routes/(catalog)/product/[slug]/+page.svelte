@@ -45,13 +45,17 @@
 
 <script lang="ts">
 import { applyAction, enhance } from '$app/forms'
+import { checkhWishlist } from '$lib/services/WishlistService'
 import { createEventDispatcher, onMount } from 'svelte'
 import { date, currency, delay, toast } from '$lib/utils'
+import { fetchProductReviews } from '$lib/services/ReviewService'
+import { fetchRelatedProducts } from '$lib/services/ProductService'
 import { fireGTagEvent } from '$lib/utils/gTag'
 import { fly, slide, fade } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import { post } from '$lib/utils/api'
+import { toggleWishlistService } from '$lib/services/WishlistService'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
 import Breadcrumb from '$lib/components/Breadcrumb.svelte'
 import Checkbox from '$lib/ui/Checkbox.svelte'
@@ -75,10 +79,6 @@ import Textarea from '$lib/ui/Textarea.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 import viewport from '$lib/actions/useViewPort'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
-import { fetchRelatedProducts } from '$lib/services/ProductService'
-import { toggleWishlistService } from '$lib/services/WishlistService'
-import { fetchProductReviews } from '$lib/services/ReviewService'
-import { checkhWishlist } from '$lib/services/WishlistService'
 
 export let data
 
@@ -421,12 +421,12 @@ function handleMobileCanvas() {
 						</span>
 
 						{#if data.product?.mrp > data.product?.price}
-							<span class="whitespace-nowrap text-gray-400">
-								MRP <strike>{currency(data.product.mrp, $page.data?.store?.currencySymbol)}</strike>
-							</span>
+							<span class="whitespace-nowrap text-gray-600 line-through">
+								{currency(data.product.mrp, $page.data?.store?.currencySymbol)}
+							</strike>
 
 							{#if data.product?.discount > 0}
-								<span class="whitespace-nowrap font-semibold text-[#ff5a5a]">
+								<span class="whitespace-nowrap text-green-600">
 									({data.product?.discount}% off)
 								</span>
 							{/if}
@@ -496,12 +496,12 @@ function handleMobileCanvas() {
 						</span>
 
 						{#if data.product?.mrp > data.product?.price}
-							<span class="whitespace-nowrap text-lg text-gray-500 sm:text-xl">
-								<strike>{currency(data.product.mrp, $page.data?.store?.currencySymbol)}</strike>
+							<span class="whitespace-nowrap text-lg text-gray-600 line-through sm:text-xl">
+								{currency(data.product.mrp, $page.data?.store?.currencySymbol)}
 							</span>
 
 							{#if data.product?.discount > 0}
-								<span class="whitespace-nowrap text-lg font-semibold text-amber-500 sm:text-xl">
+								<span class="whitespace-nowrap text-lg font-semibold text-[#ff5a5a] sm:text-xl">
 									({data.product?.discount}% off)
 								</span>
 							{/if}

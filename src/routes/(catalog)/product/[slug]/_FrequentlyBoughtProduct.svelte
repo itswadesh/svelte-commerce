@@ -1,6 +1,6 @@
 <script>
 import { applyAction, enhance } from '$app/forms'
-import {  currency } from '$lib/utils'
+import { currency } from '$lib/utils'
 import { fireGTagEvent } from '$lib/utils/gTag'
 import { invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
@@ -15,7 +15,6 @@ export let product = {}
 let loading = false
 let cartButtonText = 'Add to Bag'
 let bounceItemFromTop = false
-
 </script>
 
 <div class="group relative col-span-1 block w-full overflow-hidden sm:w-48 sm:flex-shrink-0">
@@ -59,7 +58,7 @@ let bounceItemFromTop = false
 
 			<!-- prices -->
 
-			<div class="mx-auto flex max-w-max flex-wrap items-center gap-2">
+			<div class="mx-auto flex max-w-max flex-wrap items-center gap-2 text-xs">
 				<span class="whitespace-nowrap text-sm">
 					<b>
 						{currency(product.price, $page.data?.store?.currencySymbol)}
@@ -67,12 +66,12 @@ let bounceItemFromTop = false
 				</span>
 
 				{#if product.mrp > product.price}
-					<span class="whitespace-nowrap text-xs">
-						<strike>{currency(product.mrp, $page.data?.store?.currencySymbol)}</strike>
+					<span class="whitespace-nowrap text-gray-600 line-through">
+						{currency(product.mrp, $page.data?.store?.currencySymbol)}
 					</span>
 
 					{#if product.discount > 0}
-						<span class="whitespace-nowrap text-xs">
+						<span class="whitespace-nowrap text-green-600">
 							({product.discount}%)
 						</span>
 					{/if}
