@@ -26,34 +26,34 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import appStore from '$lib/assets/app/app-store.svg'
 import googlePlay from '$lib/assets/app/google-play.png'
-import { fetchFooterCategories, fetchMegamenuData } from './services/CategoryService'
+// import { fetchFooterCategories } from './services/CategoryService'
 
 export let me, store, popularSearches, megamenu
 
 export { clazz as class }
 let clazz = ''
 
-let categories = []
+// let categories = []
 
-onMount(async () => {
-	await getCategories()
-})
+// onMount(async () => {
+	// await getCategories()
+// })
 
-async function getCategories() {
-	try {
-		categories= await fetchFooterCategories({
-			origin: $page?.data?.origin,
-			storeId: $page?.data?.store?.id
-		})
-		const megamenu2 = await fetchMegamenuData({
-			storeId: $page?.data?.store?.id,
-			origin: $page.data?.origin
-		})
-		localStorage.setItem('megamenu', JSON.stringify(megamenu2))
-	} catch (e) {
-	} finally {
-	}
-}
+// async function getCategories() {
+// 	try {
+		// categories= await fetchFooterCategories({
+		// 	origin: $page?.data?.origin,
+		// 	storeId: $page?.data?.store?.id
+		// })
+		// const megamenu2 = await fetchMegamenuData({
+		// 	storeId: $page?.data?.store?.id,
+		// 	origin: $page.data?.origin
+		// })
+		// localStorage.setItem('megamenu', JSON.stringify(megamenu2))
+// 	} catch (e) {
+// 	} finally {
+// 	}
+// }
 
 function getYear() {
 	const d = new Date()
@@ -143,12 +143,12 @@ async function getStoreData() {
 				</div>
 			{/each}
 
-			{#if categories?.data}
+			{#if megamenu}
 				<div>
 					<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Collections</h5>
 
 					<ul class="flex flex-col gap-1 text-gray-500">
-						{#each categories.data as category}
+						{#each megamenu as category}
 							<li class="flex max-w-max items-center">
 								<a
 									href="/{category.link || category.slug}"

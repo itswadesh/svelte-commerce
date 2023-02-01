@@ -32,82 +32,89 @@ import {
 	WWW_URL,
 	youtubeChannel
 } from '$lib/config'
-export const getStoreData=async ({cookieStore,url,cookies,server=false,sid=null}:any) => {
-    let store = {
-			id,
-			address,
-			searchbarText,
-			adminUrl,
-			closed: false,
-			closedMessage,
-			description,
-			dimentionUnit,
-			domain,
-			DOMAIN,
-			email,
-			facebookPage,
-			GOOGLE_ANALYTICS_ID,
-			GOOGLE_CLIENT_ID,
-			instagramPage,
-			otpLogin: false,
-			loginUrl,
-			isFnb: false,
-			keywords,
-			linkedinPage,
-			logo,
-			phone,
-			pinterestPage,
-			stripePublishableKey,
-			title: siteTitle,
-			twitterPage,
-			websiteLegalName,
-			websiteName,
-			weightUnit,
-			currencyCode,
-			currencySymbol,
-			youtubeChannel
+export const getStoreData = async ({
+	cookieStore,
+	url,
+	cookies,
+	server = false,
+	sid = null
+}: any) => {
+	let storeRes: any = {}
+	let store = {
+		id,
+		address,
+		searchbarText,
+		adminUrl,
+		closed: false,
+		closedMessage,
+		description,
+		dimentionUnit,
+		domain,
+		DOMAIN,
+		email,
+		facebookPage,
+		GOOGLE_ANALYTICS_ID,
+		GOOGLE_CLIENT_ID,
+		instagramPage,
+		otpLogin: false,
+		loginUrl,
+		isFnb: false,
+		keywords,
+		linkedinPage,
+		logo,
+		phone,
+		pinterestPage,
+		stripePublishableKey,
+		title: siteTitle,
+		twitterPage,
+		websiteLegalName,
+		websiteName,
+		weightUnit,
+		currencyCode,
+		currencySymbol,
+		youtubeChannel
+	}
+	if (!cookieStore || cookieStore === 'undefined') {
+		const uri = new URL(url)
+		storeRes = await getBySid(`init?domain=${DOMAIN || uri.host}`)
+		store = {
+			id: storeRes.storeOne._id,
+			address: storeRes.storeOne.address,
+			searchbarText: storeRes.storeOne.searchbarText,
+			adminUrl: storeRes.storeOne.adminUrl || storeRes.settings.adminUrl, // storeRes.storeOne.adminUrl used for arialmall
+			closed: storeRes.storeOne.closed,
+			closedMessage: storeRes.storeOne.closedMessage,
+			description: storeRes.storeOne.description,
+			dimentionUnit: storeRes.storeOne.dimentionUnit,
+			domain: storeRes.storeOne.domain,
+			DOMAIN: storeRes.storeOne.DOMAIN,
+			email: storeRes.storeOne.websiteEmail,
+			otpLogin: storeRes.storeOne.otpLogin || true,
+			loginUrl: storeRes.storeOne.otpLogin ? '/auth/otp-login' : '/auth/login',
+			facebookPage: storeRes.storeOne.facebookPage,
+			GOOGLE_ANALYTICS_ID: storeRes.storeOne.GOOGLE_ANALYTICS_ID,
+			GOOGLE_CLIENT_ID: storeRes.storeOne.GOOGLE_CLIENT_ID,
+			instagramPage: storeRes.storeOne.instagramPage,
+			isFnb: storeRes.storeOne.isFnb,
+			keywords: storeRes.storeOne.keywords,
+			linkedinPage: storeRes.storeOne.linkedinPage,
+			logo: storeRes.storeOne.logo,
+			phone: storeRes.storeOne.phone,
+			pinterestPage: storeRes.storeOne.pinterestPage,
+			stripePublishableKey: storeRes.storeOne.stripePublishableKey,
+			title: storeRes.storeOne.title,
+			twitterPage: storeRes.storeOne.twitterPage,
+			websiteLegalName: storeRes.storeOne.websiteLegalName,
+			websiteName: storeRes.storeOne.websiteName,
+			weightUnit: storeRes.storeOne.weightUnit,
+			youtubeChannel: storeRes.storeOne.youtubeChannel,
+			currencySymbol: storeRes.storeOne.storeCurrency?.symbol || '$',
+			currencyCode: storeRes.storeOne.storeCurrency?.isoCode || 'USD'
 		}
-		if (!cookieStore || cookieStore === 'undefined') {
-			const uri = new URL(url)
-			const storeRes = await getBySid(`init?domain=${DOMAIN || uri.host}`)
-			const { storeOne, settings } = storeRes
-			store = {
-				id: storeOne._id,
-				address: storeOne.address,
-				searchbarText: storeOne.searchbarText,
-				adminUrl: storeOne.adminUrl || settings.adminUrl, // storeOne.adminUrl used for arialmall
-				closed: storeOne.closed,
-				closedMessage: storeOne.closedMessage,
-				description: storeOne.description,
-				dimentionUnit: storeOne.dimentionUnit,
-				domain: storeOne.domain,
-				DOMAIN: storeOne.DOMAIN,
-				email: storeOne.websiteEmail,
-				otpLogin: storeOne.otpLogin || true,
-				loginUrl: storeOne.otpLogin ? '/auth/otp-login' : '/auth/login',
-				facebookPage: storeOne.facebookPage,
-				GOOGLE_ANALYTICS_ID: storeOne.GOOGLE_ANALYTICS_ID,
-				GOOGLE_CLIENT_ID: storeOne.GOOGLE_CLIENT_ID,
-				instagramPage: storeOne.instagramPage,
-				isFnb: storeOne.isFnb,
-				keywords: storeOne.keywords,
-				linkedinPage: storeOne.linkedinPage,
-				logo: storeOne.logo,
-				phone: storeOne.phone,
-				pinterestPage: storeOne.pinterestPage,
-				stripePublishableKey: storeOne.stripePublishableKey,
-				title: storeOne.title,
-				twitterPage: storeOne.twitterPage,
-				websiteLegalName: storeOne.websiteLegalName,
-				websiteName: storeOne.websiteName,
-				weightUnit: storeOne.weightUnit,
-				youtubeChannel: storeOne.youtubeChannel,
-				currencySymbol: storeOne.storeCurrency?.symbol || '$',
-				currencyCode: storeOne.storeCurrency?.isoCode || 'USD'
-			}
-			cookies.set('store', JSON.stringify(store), { path: '/' })
-		} else {
-			store = JSON.parse(cookieStore)
-		}
-		return store
+		cookies.set('store', JSON.stringify(store), { path: '/' })
+	} else {
+		store = JSON.parse(cookieStore)
+	}
+	storeRes.storeOne = store
+	return storeRes
 }
