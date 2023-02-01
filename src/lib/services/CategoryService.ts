@@ -35,7 +35,7 @@ export const fetchFooterCategories = async ({
 				data = await getWooCommerceApi(`categories`, {}, sid)
 				break
 		}
-		return data || {}
+		return data || []
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)
 	}
