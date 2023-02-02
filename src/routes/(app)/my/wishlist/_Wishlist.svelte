@@ -181,7 +181,7 @@ async function getWishlistedProducts() {
 														{#if w.product?.mrp > w.product?.price}
 															<span class="whitespace-nowrap text-gray-600 line-through">
 																{currency(w.product?.mrp, $page.data?.store?.currencySymbol)}
-															</strike>
+															</span>
 
 															{#if Math.floor(((w.product?.mrp - w.product?.price) / w.product?.mrp) * 100) > 0}
 																<span class="whitespace-nowrap text-green-600">
