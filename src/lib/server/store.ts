@@ -13,7 +13,7 @@ export const fetchStoreData = async (event: RequestEvent) => {
 			cookieStore,
 			server: true
 		})
-		return r
+		return r.storeOne
 	} catch (e) {
 		return null
 	}
