@@ -234,7 +234,7 @@ async function getCoupons() {
 														{#if item?.mrp > item?.price}
 															<span class="whitespace-nowrap text-gray-600 line-through">
 																{item?.formattedItemAmount?.mrp}
-															</strike>
+															</span>
 
 															{#if Math.floor(((item.mrp - item.price) / item.mrp) * 100) > 0}
 																<span class="whitespace-nowrap text-green-600">
@@ -309,7 +309,7 @@ async function getCoupons() {
 												{#if item?.mrp > item?.price}
 													<span class="whitespace-nowrap text-gray-600 line-through">
 														{item?.formattedItemAmount?.mrp}
-													</strike>
+													</span>
 
 													{#if Math.floor(((item.mrp - item.price) / item.mrp) * 100) > 0}
 														<span class="text-green-600">

@@ -71,7 +71,7 @@ function changePage(e) {
 				{#each { length: pages } as _, i}
 					{#if startTab <= i + 1 && endTab - 1 >= i}
 						<button
-							class="mx-auto h-5 w-5 rounded border-gray-800 text-xs focus:outline-none hover:border hover:border-gray-800 sm:h-8 sm:w-8 sm:text-base"
+							class="mx-auto h-5 w-5 rounded border border-transparent text-xs focus:outline-none hover:border-gray-800 sm:h-8 sm:w-8 sm:text-base"
 							class:active="{+current === i + 1}"
 							on:click="{() => changePage(i + 1)}">
 							{i + 1}
