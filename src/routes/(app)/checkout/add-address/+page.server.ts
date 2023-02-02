@@ -1,5 +1,5 @@
 import { fetchAddress } from '$lib/services/AddressService'
-import { fetchStates } from '$lib/services/CountryService'
+import { fetchCountries, fetchStates } from '$lib/services/CountryService'
 
 export const prerender = false
 
@@ -19,7 +19,11 @@ export async function load({ url, cookies, locals }) {
 		})
 	}
 
-	const countries = [{ code: 'IN', name: 'India' }]
+	const countries = await fetchCountries({
+		storeId: locals.store?.id,
+		server: true,
+		sid: cookies.get('sid')
+	})
 
 	const states = await fetchStates({
 		storeId: locals.store?.id,
