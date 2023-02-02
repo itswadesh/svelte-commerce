@@ -42,7 +42,7 @@ onMount(() => {
 			client_id: GOOGLE_CLIENT_ID
 		},
 		async (res) => {
-			const onetap = await googleOneTapLoginService({data:res, origin:$page.data.origin})
+			const onetap = await googleOneTapLoginService({ data: res, origin: $page.data.origin })
 			const me = {
 				email: onetap.email,
 				phone: onetap.phone,
@@ -71,14 +71,12 @@ async function submit() {
 	try {
 		loading = true
 
-		const res = await loginService(
-			{
-				email: email,
-				password: password,
-				storeId: $page.data.store?.id,
-				origin: $page.data.origin
-			},
-		)
+		const res = await loginService({
+			email: email,
+			password: password,
+			storeId: $page.data.store?.id,
+			origin: $page.data.origin
+		})
 
 		const me = {
 			email: res.email,
