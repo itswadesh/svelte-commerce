@@ -21,10 +21,6 @@ let loading = false
 let countries
 let states
 
-if (data && data.ads && !data.ads.country) {
-	data.ads.country = 'IN'
-}
-
 async function onCountryChange(country) {
 	getStates(country)
 }
@@ -190,11 +186,11 @@ async function save(ads) {
 
 					{#if data.countries?.length}
 						<select
-							disabled
 							bind:value="{data.ads.country}"
 							required
 							class="w-full rounded-md border border-gray-300 bg-white p-2 text-sm placeholder-gray-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-gray-50"
 							on:change="{() => onCountryChange(data.ads.country)}">
+							<option disabled selected>-- Select a Country --</option>
 							{#each data.countries as c}
 								{#if c}
 									<option value="{c.code}">
