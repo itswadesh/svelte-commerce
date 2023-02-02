@@ -8,10 +8,10 @@ export default defineConfig(({ command, mode }) => {
 	const HTTP_ENDPOINT = env.PUBLIC_HTTP_ENDPOINT || 'https://api.litekart.in'
 	return {
 		plugins: [
-			sveltekit(),
-			partytownVite({
-				dest: join(process.cwd(), 'static', '~partytown')
-			})
+			sveltekit()
+			// partytownVite({
+			// 	dest: join(process.cwd(), 'static', '~partytown')
+			// })
 		],
 		server: {
 			host: true,
