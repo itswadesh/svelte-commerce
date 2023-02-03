@@ -29,7 +29,7 @@ interface Me {
 interface Product {
 	name: string
 	slug: string
-	img?: string | undefined
+	img?: string
 	images?: string[]
 	description: string
 	expand: {
@@ -42,7 +42,7 @@ interface Product {
 	published: boolean
 }
 
-interface ProductVote extends Record {
+interface ProductVote {
 	user: string
 	product: string
 	expand: {
@@ -50,12 +50,12 @@ interface ProductVote extends Record {
 	}
 }
 
-interface ReviewVote extends Record {
+interface ReviewVote {
 	user: string
 	review: string
 }
 
-interface Review extends Record {
+interface Review {
 	user: string
 	product: string
 	content: string
