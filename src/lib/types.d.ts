@@ -27,19 +27,92 @@ interface Me {
 }
 
 interface Product {
+	_id: string
+	active: boolean
 	name: string
 	slug: string
-	img?: string
-	images?: string[]
-	description: string
-	expand: {
-		'product_votes(product)': ProductVote[]
-		'products_technologies(product)': Technology[]
-		'products_topics(product)': Topic[]
-		'reviews(product)': Review[]
+	brandName: string
+	categoryPool: {
+		slug: string
+		name: string
 	}
-	user: string
-	published: boolean
+	isCustomized: boolean
+	images?: string[]
+	img?: string
+	layoutTemplateCdn?: string
+	description: string
+	brand: {
+		name: string
+	}
+	isFnb: boolean
+	foodType: string
+	price: number
+	mrp: number
+	discount: number
+	replaceAllowed: boolean
+	returnAllowed: boolean
+	returnValidityInDays: number
+	replaceValidityInDays: number
+	tags: {
+		name: string
+		img: string
+		colorCode: string
+	}[]
+	new: boolean
+	size: {
+		name: string
+	}
+	groupProduct: {
+		slug: string
+		img: string
+	}[]
+	options: {
+		_id: string
+		name: string
+		inputType: string
+		values: {
+			_id: string
+			name: string
+		}[]
+	}[]
+	hasStock: boolean
+	specifications: {
+		name: string
+		value: string
+	}[]
+	description: string
+	terms: string
+	linkedProducts: {
+		_id: string
+		img: string
+		name: string
+		price: number
+	}[]
+	longDescription: string
+	crossSells: {
+		_id: string
+		active: string
+		slug: string
+		img: string
+		name: string
+		brand: {
+			name: string
+		}
+		foodType: string
+		price: number
+		mrp: number
+		discount: number
+		hasStock: boolean
+		options: {
+			_id: string
+			name: string
+			inputType: string
+			values: {
+				_id: string
+				name: string
+			}[]
+		}[]
+	}[]
 }
 
 interface ProductVote {
