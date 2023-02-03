@@ -1,3 +1,4 @@
+import type Product from '$lib/components/SEO/Product.svelte'
 import { fetchProduct } from '$lib/services/ProductService'
 import { error } from '@sveltejs/kit'
 
@@ -6,7 +7,7 @@ export async function load({ params, parent, url, cookies, locals, request }) {
 	if (zip) zip = JSON.parse(zip)
 	const id = url.searchParams.get('id')
 	const { slug } = params
-	let product = null
+	let product: Product | null = null
 
 	try {
 		product = await fetchProduct({ slug, id, server: true })

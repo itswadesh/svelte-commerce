@@ -1,8 +1,14 @@
 import { provider } from '$lib/config'
-import type { Error } from '$lib/types'
+import type { Error, Product } from '$lib/types'
 import { mapBigcommerceProducts, mapMedusajsProducts, mapWoocommerceProducts } from '$lib/utils'
 import { getAPI } from '$lib/utils/api'
-import { getBigCommerceApi, getBySid, getMedusajsApi, getWooCommerceApi, postMedusajsApi } from '$lib/utils/server'
+import {
+	getBigCommerceApi,
+	getBySid,
+	getMedusajsApi,
+	getWooCommerceApi,
+	postMedusajsApi
+} from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
@@ -15,7 +21,7 @@ export const searchProducts = async ({
 }: any) => {
 	try {
 		let res: any = {}
-		let products: any = []
+		let products: Product[] = []
 		let count = 0
 		let facets = ''
 		let pageSize = 0
@@ -28,7 +34,7 @@ export const searchProducts = async ({
 				} else {
 					res = await getAPI(`es/products?${query}&store=${storeId}`, origin)
 				}
-				res = res || []
+				res = res || {}
 				let products = []
 				products = res.data.map((p) => {
 					let p1
@@ -64,7 +70,7 @@ export const searchProducts = async ({
 
 export const fetchProduct = async ({ origin, slug, id, server = false, sid = null }: any) => {
 	try {
-		let res: any = {}
+		let res: Product | {} = {}
 		switch (provider) {
 			case 'litekart':
 				if (server) {
@@ -94,9 +100,9 @@ export const fetchProduct = async ({ origin, slug, id, server = false, sid = nul
 	}
 }
 
-export const fetchProducts = async ({ origin, storeId, server = false, sid = null }: any) => {
+export const fetchProducts = async ({ origin, storeId, server = false, sid = null }: Product[]) => {
 	try {
-		let res: any = {}
+		let res: Product | {} = {}
 		switch (provider) {
 			case 'litekart':
 				if (server) {
@@ -129,7 +135,7 @@ export const fetchProductsOfCategory = async ({
 }: any) => {
 	try {
 		let res: any = {}
-		let products: any = []
+		let products: Product[] = []
 		let count = 0
 		let facets = ''
 		let pageSize = 0
@@ -257,7 +263,7 @@ export const fetchRelatedProducts = async ({
 }: any) => {
 	try {
 		let relatedProductsRes: any = {}
-		let relatedProducts: any = []
+		let relatedProducts: Product[] = []
 		switch (provider) {
 			case 'litekart':
 				if (server) {
