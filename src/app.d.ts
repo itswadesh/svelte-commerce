@@ -3,29 +3,10 @@
 // and what to do when importing types
 declare namespace App {
 	interface Locals {
-		me: {
-			email: string
-			phone: string
-			firstName: string
-			lastName: string
-			avatar: string
-			role: string
-			verified: string
-			active: string
-		}
+		me: Me | null
 		user: {
 			name: string
 			role: string
-		}
-		me: {
-			active: boolean
-			avatar: string
-			email: string
-			firstName: string
-			lastName: string
-			phone: string
-			role: string
-			verified: boolean
 		}
 		cart: any
 		megamenu: any
