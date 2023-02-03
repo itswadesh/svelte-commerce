@@ -82,6 +82,8 @@ import WhiteButton from '$lib/ui/WhiteButton.svelte'
 
 export let data
 
+console.log('zzzzzzzzzzzzzzzzzz', data)
+
 let seoProps = {
 	brand: `${$page?.data?.store?.websiteName}`,
 	breadcrumbs: data.product?.categoryPool,
