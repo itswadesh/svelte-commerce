@@ -32,18 +32,13 @@ interface Product {
 	name: string
 	slug: string
 	brandName: string
-	categoryPool: {
-		slug: string
-		name: string
-	}
+	categoryPool: Category
 	isCustomized: boolean
 	images?: string[]
 	img?: string
 	layoutTemplateCdn?: string
 	description: string
-	brand: {
-		name: string
-	}
+	brand: Brand
 	isFnb: boolean
 	foodType: string
 	price: number
@@ -53,66 +48,53 @@ interface Product {
 	returnAllowed: boolean
 	returnValidityInDays: number
 	replaceValidityInDays: number
-	tags: {
-		name: string
-		img: string
-		colorCode: string
-	}[]
+	tags: Tag[]
 	new: boolean
-	size: {
-		name: string
-	}
-	groupProduct: {
-		slug: string
-		img: string
-	}[]
-	options: {
-		_id: string
-		name: string
-		inputType: string
-		values: {
-			_id: string
-			name: string
-		}[]
-	}[]
+	size: Size
+	groupProduct: Product[]
+	options: Option[]
 	hasStock: boolean
-	specifications: {
-		name: string
-		value: string
-	}[]
+	specifications: Specification[]
 	description: string
 	terms: string
-	linkedProducts: {
-		_id: string
-		img: string
-		name: string
-		price: number
-	}[]
+	linkedProducts: Product[]
 	longDescription: string
-	crossSells: {
-		_id: string
-		active: string
-		slug: string
-		img: string
-		name: string
-		brand: {
-			name: string
-		}
-		foodType: string
-		price: number
-		mrp: number
-		discount: number
-		hasStock: boolean
-		options: {
-			_id: string
-			name: string
-			inputType: string
-			values: {
-				_id: string
-				name: string
-			}[]
-		}[]
-	}[]
+	crossSells: Product[]
+}
+interface Brand {
+	name: string
+}
+
+interface Size {
+	name: string
+}
+
+interface Specification {
+	name: string
+	value: string
+}
+
+interface Category {
+	slug: string
+	name: string
+}
+
+interface Option {
+	_id: string
+	name: string
+	inputType: string
+	values: OptionValue[]
+}
+
+interface OptionValue {
+	_id: string
+	name: string
+}
+
+interface Tag {
+	name: string
+	img: string
+	colorCode: string
 }
 
 interface ProductVote {
