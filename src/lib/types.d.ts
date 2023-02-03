@@ -26,10 +26,11 @@ interface Me {
 	verified?: boolean
 }
 
-interface Product extends Record {
+interface Product {
 	name: string
-	tagline: string
-	thumbnail?: string | undefined
+	slug: string
+	img?: string | undefined
+	images?: string[]
 	description: string
 	expand: {
 		'product_votes(product)': ProductVote[]
@@ -37,7 +38,6 @@ interface Product extends Record {
 		'products_topics(product)': Topic[]
 		'reviews(product)': Review[]
 	}
-	images?: string[]
 	user: string
 	published: boolean
 }
