@@ -18,7 +18,9 @@ import { fade } from 'svelte/transition'
 export let products = []
 export let title = ''
 
-let showMuteButton = []
+let showMuteButton = true
+let isMuted = true
+let paused = false
 let loadingg = false
 
 // share button function
@@ -50,7 +52,7 @@ let selectedLoadingType = null
 
 let isAddedtoBag = false
 
-let muted = []
+
 
 function toggleMute(product) {
 	product.muted = !product.muted
@@ -124,18 +126,9 @@ onMount(async () => {
 })
 
 function handleMuted(e, ix) {
-	//    muted[ix] = !muted[ix]
+	showMuteButton = !showMuteButton
+	isMuted = !isMuted
 
-	//    console.log(muted[ix]);
-
-	const vID = document.querySelector(`#active${ix}`)
-
-	// console.log(vID)
-
-	if (vID) {
-		showMuteButton[ix] = !showMuteButton[ix]
-		vID.muted = !vID.muted
-	}
 }
 
 function handleClick(e) {
@@ -157,19 +150,23 @@ function handleMove(e){
 	const preIX = e.detail.prev
 	const vID = document.querySelector(`#active${ix}`)
 	const vID2 = document.querySelector(`#active${preIX}`)
+	
 
 	if (vID) {
-		vID.muted = false
-		showMuteButton[ix] = true
+		vID.play()
+		// showMuteButton[ix] = true
 		
 	}
 
+	// console.log(vID.paused);
+	
+
 	if(vID2){
-		vID2.muted = true
-		showMuteButton[preIX] = false
+		vID2.pause()
+		// showMuteButton[preIX] = false
 	}
 	
-	console.log('Show Mute Button', vID, vID2, showMuteButton);
+	console.log('Paused video',vID, 'Played Video', vID2, showMuteButton);
 	
 }
 </script>
@@ -183,7 +180,7 @@ function handleMove(e){
 				<SplideSlide>
 					<div class="w-full h-full flex">
 						<!-- svelte-ignore a11y-media-has-caption -->
-						<video autoplay id="active{ix}" class="detail w-full" loop muted>
+						<video autoplay  id="active{ix}" class="detail w-full" muted={isMuted} loop>
 							<source src="{product.video}" type="video/mp4" />
 							Your browser does not support the video tag.
 						</video>
@@ -323,7 +320,7 @@ function handleMove(e){
 								<button
 									class="btn-group-fb my-2 py-4 px-4 mx-3 bg-current rounded-full h-13 w-13"
 									on:click="{(e) => handleMuted(e, ix)}">
-									{#if showMuteButton[ix]}
+									{#if !showMuteButton}
 										<svg
 											height="28px"
 											width="28px"
