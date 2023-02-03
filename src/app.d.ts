@@ -17,6 +17,16 @@ declare namespace App {
 			name: string
 			role: string
 		}
+		me: {
+			active: boolean
+			avatar: string
+			email: string
+			firstName: string
+			lastName: string
+			phone: string
+			role: string
+			verified: boolean
+		}
 		cart: any
 		megamenu: any
 		store: any
