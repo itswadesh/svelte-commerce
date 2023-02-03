@@ -15,16 +15,15 @@ import {
 } from '$lib/schemas'
 import { createReplyDto } from './schemas'
 
-interface User extends Record {
-	id: string
-	name: string
+interface Me {
+	active?: boolean
 	avatar?: string
-	username: string
-	bio?: string
-	website?: string
-	twitter?: string
-	youtube?: string
-	github?: string
+	email?: string
+	firstName?: string
+	lastName?: string
+	phone?: string
+	role?: string
+	verified?: boolean
 }
 
 interface Product extends Record {
@@ -68,21 +67,6 @@ interface Review extends Record {
 	}
 }
 
-interface ReviewReply extends Record {
-	review: string
-	reply: string
-	expand: {
-		reply: Review
-	}
-}
-
-interface Technology extends Record {
-	name: string
-}
-
-interface Topic extends Record {
-	name: string
-}
 interface Error {
 	status: number
 	data: { message: string }
