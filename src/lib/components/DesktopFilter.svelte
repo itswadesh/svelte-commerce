@@ -58,7 +58,10 @@ async function getMegamenu() {
 		try {
 			const localmegamenu = localStorage.getItem('megamenu')
 			if (!localmegamenu || localmegamenu === 'undefined') {
-				megamenu = await fetchMegamenuData({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
+				megamenu = await fetchMegamenuData({
+					origin: $page?.data?.origin,
+					storeId: $page?.data?.store?.id
+				})
 			} else {
 				megamenu = JSON.parse(localmegamenu)
 			}
@@ -159,7 +162,7 @@ function handleToggleSubCategory2(c, cx) {
 							<div
 								class="flex w-full items-center justify-between gap-2
 								{selectedCategory === m.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
-								<a href="/{m.slug}" class="flex-1">
+								<a href="/{m.slug}" aria-label="Click to route into category related products page" class="flex-1">
 									{m.name}
 								</a>
 
@@ -183,6 +186,7 @@ function handleToggleSubCategory2(c, cx) {
 						{:else}
 							<a
 								href="/{m.slug}"
+								aria-label="Click to route into category related products page"
 								class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 								{m.name}
 							</a>
@@ -198,7 +202,10 @@ function handleToggleSubCategory2(c, cx) {
 											<div
 												class="flex w-full items-center justify-between gap-2
 												{selectedCategory2 === c.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
-												<a href="/{c.slug}" class="flex-1">
+												<a
+													href="/{c.slug}"
+													aria-label="Click to route into category related products page"
+													class="flex-1">
 													{c.name}
 												</a>
 
@@ -222,6 +229,7 @@ function handleToggleSubCategory2(c, cx) {
 										{:else}
 											<a
 												href="/{c.slug}"
+												aria-label="Click to route into category related products page"
 												class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 												{c.name}
 											</a>
@@ -234,6 +242,7 @@ function handleToggleSubCategory2(c, cx) {
 												{#each c.children as cc}
 													<a
 														href="/{cc.slug}"
+														aria-label="Click to route into category related products page"
 														class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 														{cc.name}
 													</a>

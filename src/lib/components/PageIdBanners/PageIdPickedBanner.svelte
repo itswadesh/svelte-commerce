@@ -18,7 +18,7 @@ export let pickedBanners
 						<div role="banner" class="flex flex-row">
 							{#each b.data as banner}
 								{#if banner.img}
-									<a href="{banner.link}" class="flex-shrink-0">
+									<a href="{banner.link || '##'}" aria-label="Click to route into banner related products page" class="flex-shrink-0">
 										<LazyImg
 											src="{banner.img}"
 											alt=""
@@ -33,7 +33,10 @@ export let pickedBanners
 					<div role="banner" class="hidden grid-cols-7 lg:grid">
 						{#each b.data as banner}
 							{#if banner.img}
-								<a href="{banner.link}" class="col-span-1">
+								<a
+									href="{banner.link || '##'}"
+									aria-label="Click to route into banner related products page"
+									class="col-span-1">
 									<LazyImg
 										src="{banner.img}"
 										alt=""

@@ -36,20 +36,20 @@ let clazz = ''
 // let categories = []
 
 // onMount(async () => {
-	// await getCategories()
+// await getCategories()
 // })
 
 // async function getCategories() {
 // 	try {
-		// categories= await fetchFooterCategories({
-		// 	origin: $page?.data?.origin,
-		// 	storeId: $page?.data?.store?.id
-		// })
-		// const megamenu2 = await fetchMegamenuData({
-		// 	storeId: $page?.data?.store?.id,
-		// 	origin: $page.data?.origin
-		// })
-		// localStorage.setItem('megamenu', JSON.stringify(megamenu2))
+// categories= await fetchFooterCategories({
+// 	origin: $page?.data?.origin,
+// 	storeId: $page?.data?.store?.id
+// })
+// const megamenu2 = await fetchMegamenuData({
+// 	storeId: $page?.data?.store?.id,
+// 	origin: $page.data?.origin
+// })
+// localStorage.setItem('megamenu', JSON.stringify(megamenu2))
 // 	} catch (e) {
 // 	} finally {
 // 	}
@@ -193,7 +193,9 @@ async function getStoreData() {
 								<span>Email</span>
 							</h6>
 
-							<a href="mailto:{$page.data.store?.email}">{$page.data.store?.email}</a>
+							<a href="mailto:{$page.data.store?.email}" aria-label="Click to send email">
+								{$page.data.store?.email}
+							</a>
 						</li>
 					{/if}
 
@@ -217,7 +219,9 @@ async function getStoreData() {
 								<span>Phone</span>
 							</h6>
 
-							<a href="tel:+{$page.data.store?.phone}"> {$page.data.store?.phone} </a>
+							<a href="tel:+{$page.data.store?.phone}" aria-label="Click to make phone call">
+								{$page.data.store?.phone}
+							</a>
 						</li>
 					{/if}
 

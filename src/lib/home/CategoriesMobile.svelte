@@ -42,11 +42,11 @@ let categoryColors = [
 					{#if category.img}
 						<div class="pr-3">
 							<a
-								href="/{category.link || category.slug}"
+								href="/{category.link || category.slug || '##'}"
 								aria-label="Click to view related products of this category"
 								class="group flex w-16 flex-col items-center justify-center">
 								<div
-									class="mb-1 h-16 w-16 flex-shrink-0 overflow-hidden border rounded-full shadow-md group-hover:border-primary-500 group-hover:shadow-xl sm:mb-4">
+									class="mb-1 h-16 w-16 flex-shrink-0 overflow-hidden rounded-full border shadow-md group-hover:border-primary-500 group-hover:shadow-xl sm:mb-4">
 									<LazyImg
 										src="{category.img}"
 										alt="{category.name}"

@@ -32,12 +32,12 @@ function close() {
 					<!-- submenu is present -->
 
 					<a
-						data-sveltekit-preload-data
-						on:click="{() => (sidebar.hidden = '')}"
-						href="{sidebar.url}"
+						href="{sidebar.url || '##'}"
 						aria-label="Click to route this page"
 						class:active="{$page.url.pathname === sidebar.pathName}"
-						class="flex w-full items-center justify-start gap-2 p-3 text-white">
+						class="flex w-full items-center justify-start gap-2 p-3 text-white"
+						data-sveltekit-preload-data
+						on:click="{() => (sidebar.hidden = '')}">
 						<div
 							class="dutaion-500 flex flex-1 transform items-center gap-2 transition hover:translate-x-2">
 							<div>
@@ -72,12 +72,12 @@ function close() {
 					<!-- Theres no submenu -->
 				{:else if sidebar.hidden !== ''}
 					<a
-						data-sveltekit-preload-data
-						on:click="{() => close()}"
-						href="{sidebar.url}"
+						href="{sidebar.url || '##'}"
 						aria-label="Click to route this page"
 						class:active="{$page.url.pathname === sidebar.pathName}"
-						class="flex w-full items-center justify-start gap-2 p-3 text-white">
+						class="flex w-full items-center justify-start gap-2 p-3 text-white"
+						data-sveltekit-preload-data
+						on:click="{() => close()}">
 						<div
 							class="dutaion-500 flex flex-1 transform items-center gap-2 transition hover:translate-x-2">
 							<div>
@@ -115,11 +115,11 @@ function close() {
 					{#each sidebar.subItems as subItems}
 						<li>
 							<a
+								href="{subItems.url || '##'}"
 								data-sveltekit-preload-data
-								on:click="{() => close()}"
-								href="{subItems.url}"
 								aria-label="Click to route this page"
-								class:active-submenu="{$page.url?.pathname === subItems.pathName}">
+								class:active-submenu="{$page.url?.pathname === subItems.pathName}"
+								on:click="{() => close()}">
 								<div class="px-3 py-2 capitalize text-white">
 									{subItems.name}
 								</div>

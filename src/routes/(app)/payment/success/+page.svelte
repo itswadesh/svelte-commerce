@@ -210,9 +210,9 @@ onMount(async () => {
 								{#each data.order?.items as item, ix}
 									<!-- data-sveltekit-reload added because in production it does not work-->
 									<a
-										data-sveltekit-reload
 										href="/product/{item.slug}"
 										aria-label="Click to view the product details"
+										data-sveltekit-reload
 										class="group flex w-full flex-row justify-between py-4
 										{ix != data.order?.items.length - 1 ? 'border-b' : ''}">
 										<div class="flex w-full flex-row gap-4">
@@ -239,9 +239,9 @@ onMount(async () => {
 													<!-- data-sveltekit-reload added because in production it does not work-->
 													<div class="flex w-full justify-between gap-2">
 														<a
-															data-sveltekit-reload
 															href="/product/{item.slug}"
 															aria-label="Click to view the product details"
+															data-sveltekit-reload
 															class="flex-1 text-sm text-gray-500 group-hover:underline">
 															{item.name}
 														</a>

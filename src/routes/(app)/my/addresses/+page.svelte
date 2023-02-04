@@ -53,7 +53,7 @@ async function sortNow(sort) {
 async function saveAddr(e) {
 	const { _id: id, active } = e
 	try {
-		await saveAddress({ id, storeId: $page.data.store?.id ,origin: $page.data.origin})
+		await saveAddress({ id, storeId: $page.data.store?.id, origin: $page.data.origin })
 		await invalidateAll()
 	} catch (e) {
 		data.err = e
@@ -167,6 +167,7 @@ async function remove(id, index) {
 						<div class="grid grid-cols-2 divide-x border-t">
 							<a
 								href="{`/my/addresses/${i._id}`}"
+								aria-label="Click to route address details"
 								class="bg-transparent p-2 text-center font-semibold uppercase text-primary-500 transition duration-300 focus:outline-none hover:bg-gray-100 hover:text-primary-700">
 								Edit
 							</a>

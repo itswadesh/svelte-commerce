@@ -4,7 +4,12 @@ import { getBySid } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
-export const BigcommerceFetchProducts = async ({ origin, storeId, server = false, sid = null }: any) => {
+export const BigcommerceFetchProducts = async ({
+	origin,
+	storeId,
+	server = false,
+	sid = null
+}: any) => {
 	try {
 		let res: any = {}
 		if (server) {
@@ -14,7 +19,7 @@ export const BigcommerceFetchProducts = async ({ origin, storeId, server = false
 		}
 		return res?.data || []
 	} catch (err) {
-		console.log(err)
+		// console.log(err)
 		const e = err as Error
 		throw error(e.status, e.data.message)
 	}

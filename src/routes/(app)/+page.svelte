@@ -130,7 +130,7 @@ $: heroBanners =
 						{#each data.home?.categories?.data as category}
 							{#if category?.img || category?.img}
 								<a
-									href="/{category.link || category.slug}"
+									href="/{category.link || category.slug || '##'}"
 									aria-label="Click to get the category related products"
 									class="flex-shrink-0">
 									<LazyImg
@@ -150,7 +150,7 @@ $: heroBanners =
 					{#each data.home?.categories?.data as category}
 						{#if category?.img || category?.img}
 							<a
-								href="/{category.link || category.slug}"
+								href="/{category.link || category.slug || '##'}"
 								aria-label="Click to get the category related products"
 								class="col-span-1">
 								<LazyImg

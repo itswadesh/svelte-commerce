@@ -138,8 +138,8 @@ async function onSearchSubmit({ detail }) {
 
 			<a
 				href="/cart"
+				aria-label="Click to route cart page"
 				class="relative flex flex-col items-center justify-center gap-1 focus:outline-none lg:border-b-4 lg:border-transparent"
-				aria-label="Click to route cart"
 				data-sveltekit-preload-data>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -202,6 +202,7 @@ async function onSearchSubmit({ detail }) {
 											<div class="flex items-start justify-between gap-4">
 												<a
 													href="/product/{item.slug}"
+													aria-label="Click to route product detail page"
 													class="flex-shrink-0"
 													on:click="{() => (showCartSidebar = false)}">
 													{#if item.isCustomized}
@@ -223,6 +224,7 @@ async function onSearchSubmit({ detail }) {
 													<div class="mb-2 flex justify-between gap-2">
 														<a
 															href="/product/{item.slug}"
+															aria-label="Click to route product details page"
 															class="flex-1 text-sm leading-4"
 															on:click="{() => (showCartSidebar = false)}">{item.name}</a>
 
@@ -273,7 +275,11 @@ async function onSearchSubmit({ detail }) {
 									</div>
 
 									<div class="mb-10 flex flex-col gap-2">
-										<a href="/cart" class="block w-full" data-sveltekit-preload-data>
+										<a
+											href="/cart"
+											aria-label="Click to route cart page"
+											class="block w-full"
+											data-sveltekit-preload-data>
 											<WhiteButton
 												type="button"
 												class="w-full text-xs uppercase"
@@ -283,7 +289,11 @@ async function onSearchSubmit({ detail }) {
 											</WhiteButton>
 										</a>
 
-										<a href="/checkout/address" class="block w-full" data-sveltekit-preload-data>
+										<a
+											href="/checkout/address"
+											aria-label="Click to route address of checkout"
+											class="block w-full"
+											data-sveltekit-preload-data>
 											<PrimaryButton
 												type="button"
 												class="w-full text-xs uppercase"
@@ -328,6 +338,7 @@ async function onSearchSubmit({ detail }) {
 												href="/{c.link}"
 												target="_blank"
 												rel="noopener noreferrer"
+												aria-label="Click to route into category related products page"
 												class="col-span-1 block transform border transition duration-500 hover:-translate-y-2 hover:shadow-lg">
 												<LazyImg
 													src="{c.img}"
@@ -540,10 +551,10 @@ async function onSearchSubmit({ detail }) {
 
 					<li>
 						<a
-							data-sveltekit-preload-data
 							href="/my/profile"
 							aria-label="Click to route profile"
 							class="mb-4 flex flex-col gap-2 border-b pb-4"
+							data-sveltekit-preload-data
 							on:click="{() => (openSidebar = false)}">
 							<div class="h-20 w-20 overflow-hidden rounded-md border">
 								{#if me.avatar}
@@ -585,10 +596,10 @@ async function onSearchSubmit({ detail }) {
 					{#each menu as m}
 						<li>
 							<a
-								data-sveltekit-preload-data
 								href="{m.url}"
 								aria-label="Click to route account"
 								class="flex items-center gap-2 py-2"
+								data-sveltekit-preload-data
 								on:click="{() => (openSidebar = false)}">
 								{@html m.svg}
 
@@ -626,10 +637,10 @@ async function onSearchSubmit({ detail }) {
 				<!-- Login -->
 
 				<a
-					data-sveltekit-preload-data
 					href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page?.url
 						?.search}"
 					aria-label="Click to route login"
+					data-sveltekit-preload-data
 					class="flex items-center gap-2 py-2"
 					on:click="{() => (openSidebar = false)}">
 					<svg

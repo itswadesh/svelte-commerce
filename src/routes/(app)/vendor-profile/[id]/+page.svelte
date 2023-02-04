@@ -268,6 +268,7 @@ export let data
 
 							<!-- <a
 							href="/{data.vendor?.slug}?sort=-updatedAt"
+							aria-label="click to route vendor details page"
 							class="text-xs font-medium text-primary-500 hover:text-primary-700 hover:underline sm:text-sm">
 							View All
 						</a> -->
@@ -305,6 +306,7 @@ export let data
 
 			<!-- <a
 				href="/{data.vendor?.slug}?sort=-updatedAt"
+				aria-label="Click to route vendor details page"
 				class="text-xs font-medium text-primary-500 hover:text-primary-700 hover:underline sm:text-sm">
 				View All
 			</a> -->

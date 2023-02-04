@@ -3,10 +3,10 @@ import type { RequestEvent } from '@sveltejs/kit'
 
 export const fetchCart = async (event: RequestEvent) => {
 	try {
-		const cartId: string = event.cookies.get('cartId')
-		const cartQty: string = event.cookies.get('cartQty')
-		event.locals.cartId = cartId
-		event.locals.cartQty = +cartQty
+		const cartId: string | undefined = event.cookies.get('cartId')
+		const cartQty: string | undefined = event.cookies.get('cartQty')
+		if (cartId) event.locals.cartId = cartId
+		if (cartQty) event.locals.cartQty = +cartQty
 		const sid = event.cookies.get('sid')
 		const cartRes = await getBySid('carts/my', sid)
 		const cart = {

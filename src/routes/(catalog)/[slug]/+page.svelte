@@ -444,7 +444,10 @@ async function goCheckbox(item) {
 							{#each data.products as p, px}
 								{#if p && px < 10}
 									<li>
-										<a href="/product/{p.slug}" class="grid grid-cols-6 gap-5">
+										<a
+											href="/product/{p.slug}"
+											aria-label="Click to route product details page"
+											class="grid grid-cols-6 gap-5">
 											<span class="col-span-5 text-justify">{p.name}</span>
 
 											<span class="col-span-1 whitespace-nowrap">

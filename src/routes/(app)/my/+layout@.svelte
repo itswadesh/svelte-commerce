@@ -54,10 +54,13 @@ let openSidebar = false
 					{#if $page.data.me?.role === 'vendor'}
 						<li>
 							<a
-								class="ml-10 text-sm text-white"
+								href="{$page.data.store?.adminUrl || '##'}"
 								target="_blank"
 								rel="external"
-								href="{$page.data.store?.adminUrl}">Admin Panel</a>
+								aria-label="Click to route admin panel of the store front"
+								class="ml-10 text-sm text-white">
+								Admin Panel
+							</a>
 						</li>
 					{/if}
 				</ul>

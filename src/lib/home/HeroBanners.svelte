@@ -8,7 +8,7 @@ export let heroBanners
 	<div>
 		<div class="grid grid-cols-1 sm:grid-cols-2">
 			<a
-				href="{heroBanners[0]?.link || '/'}"
+				href="{heroBanners[0]?.link || '##'}"
 				aria-label="Click here to view the banner's related products">
 				<LazyImg
 					src="{heroBanners[0]?.img}"
@@ -19,7 +19,7 @@ export let heroBanners
 			</a>
 
 			<a
-				href="{heroBanners[1]?.link || '/'}"
+				href="{heroBanners[1]?.link || '##'}"
 				aria-label="Click here to view the banner's related products">
 				<LazyImg
 					src="{heroBanners[1]?.img}"
@@ -33,7 +33,7 @@ export let heroBanners
 		<div class="grid grid-cols-1 sm:grid-cols-2">
 			<div class="grid grid-cols-2">
 				<a
-					href="{heroBanners[2]?.link || '/'}"
+					href="{heroBanners[2]?.link || '##'}"
 					aria-label="Click here to view the banner's related products">
 					<LazyImg
 						src="{heroBanners[2]?.img}"
@@ -44,7 +44,7 @@ export let heroBanners
 				</a>
 
 				<a
-					href="{heroBanners[2]?.link || '/'}"
+					href="{heroBanners[2]?.link || '##'}"
 					aria-label="Click here to view the banner's related products">
 					<LazyImg
 						src="{heroBanners[3]?.img}"
@@ -57,7 +57,7 @@ export let heroBanners
 
 			<div>
 				<a
-					href="{heroBanners[4]?.link || '/'}"
+					href="{heroBanners[4]?.link || '##'}"
 					aria-label="Click here to view the banner's related products">
 					<LazyImg
 						src="{heroBanners[4]?.img}"

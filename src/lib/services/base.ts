@@ -1,4 +1,4 @@
-import { error, redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit'
 
 export const deleteRecord = async (
 	locals: App.Locals,
@@ -9,8 +9,8 @@ export const deleteRecord = async (
 	try {
 		// await delete(collectionName, recordId)
 	} catch (e) {
-		console.log('Error:', e);
-		throw error(e.status, e.data.message);
+		// console.log('Error:', e);
+		throw error(e.status, e.data.message)
 	}
-	throw redirect(303, redirectTo);
-};
+	throw redirect(303, redirectTo)
+}

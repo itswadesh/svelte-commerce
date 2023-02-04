@@ -589,8 +589,11 @@ $: {
 											{#if m.children?.length}
 												<div
 													class="flex w-full items-center justify-between gap-2
-														{selectedCategory === m.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
-													<a href="/{m.slug}" class="flex-1">
+													{selectedCategory === m.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
+													<a
+														href="/{m.slug}"
+														aria-label="Click to route into category related products page"
+														class="flex-1">
 														{m.name}
 													</a>
 
@@ -614,6 +617,7 @@ $: {
 											{:else}
 												<a
 													href="/{m.slug}"
+													aria-label="Click to route into category related products page"
 													class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 													{m.name}
 												</a>
@@ -628,8 +632,11 @@ $: {
 															{#if c.children?.length}
 																<div
 																	class="flex w-full items-center justify-between gap-2
-																		{selectedCategory2 === c.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
-																	<a href="/{c.slug}" class="flex-1">
+																	{selectedCategory2 === c.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
+																	<a
+																		href="/{c.slug}"
+																		aria-label="Click to route into category related products page"
+																		class="flex-1">
 																		{c.name}
 																	</a>
 
@@ -653,6 +660,7 @@ $: {
 															{:else}
 																<a
 																	href="/{c.slug}"
+																	aria-label="Click to route into category related products page"
 																	class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 																	{c.name}
 																</a>
@@ -665,6 +673,7 @@ $: {
 																	{#each c.children as cc}
 																		<a
 																			href="/{cc.slug}"
+																			aria-label="Click to route into category related products page"
 																			class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 																			{cc.name}
 																		</a>

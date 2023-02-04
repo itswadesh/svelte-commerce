@@ -31,10 +31,10 @@ import { goto } from '$app/navigation'
 import { loginUrl } from '$lib/store'
 import { page } from '$app/stores'
 import { post } from './utils/api'
+import { toggleWishlistService } from './services/WishlistService'
 import LazyImg from './components/Image/LazyImg.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
-import { toggleWishlistService } from './services/WishlistService'
 
 export let product = {}
 
@@ -314,6 +314,7 @@ function selectPrimaryImage() {
 			<a
 				href="/product/{product.slug}"
 				aria-label="Click to view the product details"
+				class="block"
 				data-sveltekit-preload-data>
 				<!-- <div class="mb-1.5 flex items-center justify-between"> -->
 				<!-- {#if product.brand?.name || product.brandName}
@@ -364,7 +365,8 @@ function selectPrimaryImage() {
 		<a
 			href="/product/{product.slug}"
 			aria-label="Click to view the product details"
-			data-sveltekit-preload-data>
+			data-sveltekit-preload-data
+			class="block">
 			<div class="mt-2.5 flex flex-wrap items-baseline justify-start gap-1.5 text-xs leading-4">
 				<span class="whitespace-nowrap text-sm font-bold sm:text-base">
 					{currency(product.price, $page.data?.store?.currencySymbol)}
@@ -376,7 +378,7 @@ function selectPrimaryImage() {
 					</span>
 
 					{#if Math.floor(((product.mrp - product.price) / product.mrp) * 100) > 0}
-						<span class="whitespace-nowrap text-[#ff5a5a] sm:text-gray-900">
+						<span class="whitespace-nowrap text-primary-700">
 							({Math.floor(((product.mrp - product.price) / product.mrp) * 100)}% off)
 						</span>
 					{/if}
@@ -428,6 +430,7 @@ function selectPrimaryImage() {
 								href="/product/{relatedProduct.slug}"
 								target="_blank"
 								rel="noopener noreferrer"
+								aria-label="Click to route product details page"
 								class="group relative w-full sm:w-48"
 								on:click="{() => (showRelatedProducts = false)}">
 								<!-- New -->
