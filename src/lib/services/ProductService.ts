@@ -7,7 +7,12 @@ import {
 	getWooCommerceApi,
 	postMedusajsApi
 } from '$lib/utils/server'
-import { mapBigcommerceProducts, mapMedusajsProducts, mapWoocommerceProducts } from '$lib/utils'
+import {
+	mapBigcommerceProducts,
+	mapMedusajsProduct,
+	mapMedusajsAllProducts,
+	mapWoocommerceProducts
+} from '$lib/utils'
 import { provider } from '$lib/config'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import type { Error, Product } from '$lib/types'
@@ -69,6 +74,37 @@ export const searchProducts = async ({
 	}
 }
 
+// Fetch all products
+
+export const fetchProducts = async ({ origin, slug, id, server = false, sid = null }: any) => {
+	try {
+		let res: Product | {} = {}
+		switch (provider) {
+			case 'litekart':
+				if (server) {
+					res = await getBySid(`products?store=${storeId}`, sid)
+				} else {
+					res = await getAPI(`products?store=${storeId}`, origin)
+				}
+				break
+			case 'medusajs':
+				const med = (await getMedusajsApi(`products`, {}, sid)).product
+				res = mapMedusajsAllProducts(med)
+				break
+			case 'bigcommerce':
+				res = await getBigCommerceApi(`products`, {}, sid)
+				break
+			case 'woocommerce':
+				res = await getWooCommerceApi(`products`, {}, sid)
+				break
+		}
+
+		return res?.data || []
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
+	}
+}
+
 // Fetch single product
 
 export const fetchProduct = async ({ origin, slug, id, server = false, sid = null }: any) => {
@@ -83,8 +119,8 @@ export const fetchProduct = async ({ origin, slug, id, server = false, sid = nul
 				}
 				break
 			case 'medusajs':
-				const me = (await getMedusajsApi(`products/${id}`, {}, sid)).product
-				res = mapMedusajsProducts(me)
+				const med = (await getMedusajsApi(`products/${id}`, {}, sid)).product
+				res = mapMedusajsProduct(med)
 				break
 			case 'bigcommerce':
 				const bi = (await getBigCommerceApi(`products/${id}`, {}, sid)).data
@@ -98,33 +134,6 @@ export const fetchProduct = async ({ origin, slug, id, server = false, sid = nul
 				break
 		}
 		return res || {}
-	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
-	}
-}
-
-// Fetch all products
-
-export const fetchProducts = async ({ origin, storeId, server = false, sid = null }: Product[]) => {
-	try {
-		let res: Product | {} = {}
-		switch (provider) {
-			case 'litekart':
-				if (server) {
-					res = await getBySid(`products?store=${storeId}`, sid)
-				} else {
-					res = await getAPI(`products?store=${storeId}`, origin)
-				}
-				break
-			case 'bigcommerce':
-				res = await getBigCommerceApi(`products`, {}, sid)
-				break
-			case 'woocommerce':
-				res = await getWooCommerceApi(`products`, {}, sid)
-				break
-		}
-
-		return res?.data || []
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)
 	}

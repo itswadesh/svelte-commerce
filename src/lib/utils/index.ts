@@ -1,8 +1,9 @@
 import { currency as currencyConfig, IMAGE_CDN_URL } from '../config'
 import { toasts } from 'svelte-toasts'
-import type { Product } from '$lib/types'
+import type { AllProducts, Product } from '$lib/types'
 
 let allToasts
+
 export function constructURL2(url, fl) {
 	url += '?'
 	Object.keys(fl).forEach((e) => {
@@ -12,6 +13,7 @@ export function constructURL2(url, fl) {
 	})
 	return url
 }
+
 export const delay = (delayInms) => {
 	return new Promise((resolve) => {
 		setTimeout(() => {
@@ -53,10 +55,13 @@ const toast = (title, type) => {
 		onRemove: () => {}
 	})
 }
+
 const removeToasts = (toast) => {
 	allToasts.remove()
 }
+
 export { toast, removeToasts }
+
 export function date(value) {
 	const date = new Date(value)
 	return date.toLocaleString(['en-US'], {
@@ -67,6 +72,7 @@ export function date(value) {
 		minute: '2-digit'
 	})
 }
+
 export function dateOnly(value) {
 	const date = new Date(value)
 	return date.toLocaleString(['en-US'], {
@@ -75,6 +81,7 @@ export function dateOnly(value) {
 		year: 'numeric'
 	})
 }
+
 export function time(value) {
 	const date = new Date(value)
 	return date.toLocaleString(['en-US'], {
@@ -82,10 +89,12 @@ export function time(value) {
 		minute: '2-digit'
 	})
 }
+
 export function truncate(text, stop, clamp) {
 	if (text) return text.slice(0, stop) + (stop < text.length ? clamp || '...' : '')
 	else return ''
 }
+
 export function currency(value, currency = '₹', decimals?) {
 	const digitsRE = /(\d{3})(?=\d)/g
 	value = parseFloat(value)
@@ -100,6 +109,7 @@ export function currency(value, currency = '₹', decimals?) {
 	const sign = value < 0 ? '-' : ''
 	return sign + currency + ' ' + head + _int.slice(i).replace(digitsRE, '$1,') + _float
 }
+
 export const serialize = (obj: any) => {
 	var str = []
 	for (var p in obj)
@@ -155,42 +165,83 @@ export const mapBigcommerceProducts = (b) => {
 	}
 }
 
-export const mapMedusajsProducts = (p: any) => {
+export const mapMedusajsAllProducts = (p: any) => {
+	if (p) {
+		const allProd: AllProducts = {
+			count: p.count,
+			// currentPage: p.count,
+			// pageSize: p.count,
+			limit: p.limit,
+			products: p.products.forEach(mapMedusajsProduct)
+		}
+		return allProd
+	} else {
+		return {}
+	}
+}
+
+export const mapMedusajsProduct = (p: any) => {
 	if (p) {
 		const prod: Product = {
 			_id: p.id,
 			name: p.title,
-			description: p.description,
 			slug: p.handle,
-			createdAt: p.created_at,
-			modifiedAt: p.updated_at,
-			img: p.thumbnail,
-			// type: p.type,
+			description: p.description,
 			status: p.status,
-			featured: p.featured,
-			active: p.catalog_visibility,
-			shortDescription: p.short_description,
-			countryOfOrigin: p.origin_country,
-			varified: p.purchasable,
-			popularity: p.total_sales,
-			digital: p.virtual,
-			link: p.external_url,
-			price: p.variants[0].prices[0].amount,
-			stock: p.variants[0].inventory_quantity,
-			sku: p.variants[0].sku,
-			allow_backorder: p.variants[0].allow_backorder,
-			manage_inventory: p.variants[0].manage_inventory,
-			hsn: p.variants[0].hs_code,
-			weight: p.weight,
-			length: p.length,
-			height: p.height,
-			width: p.width,
-			categories: p.collection,
-			tags: p.tags,
-			variations: p.variants,
 			images: p.images.map((i: any) => {
 				if (i) return i.url
+			}),
+			img: p.thumbnail,
+			// variants: p.variants,
+			sku: p.variants[0].sku,
+			barcode: p.variants[0].barcode,
+			ean: p.variants[0].ean,
+			stock: p.variants[0].inventory_quantity,
+			// allow_backorder: p.variants[0].allow_backorder,
+			hsn: p.variants[0].hs_code,
+			countryOfOrigin: p.variants[0].origin_country,
+			// mid_code: p.mid_code,
+			// material: p.material,
+			weight: p.variants[0].weight,
+			height: p.variants[0].height,
+			width: p.variants[0].width,
+			length: p.variants[0].length,
+			// options: p.variants[0].map((i: any) => {
+			// 	if (i)
+			// 		return {
+			// 			name: i.title
+			// 		}
+			// }),
+			// created_at: p.variants[0].created_at,
+			// updated_at: p.variants[0].updated_at,
+			// deleted_at: p.variants[0].deleted_at,
+			// metaTitle: p.variants[0].metadata.title,
+			// metaDescription: p.variants[0].metadata.description,
+			// metaKeywords: p.variants[0].metadata.keywords,
+			// price_without_tax: p.variants[0].original_price,
+			// mrp_without_tax: p.variants[0].calculated_price,
+			price: p.variants[0].calculated_price_incl_tax,
+			mrp: p.variants[0].original_price_incl_tax,
+			discount: p.variants[0].prices[0].discount,
+			// original_tax: p.variants[0].prices[0].original_tax,
+			// calculated_tax: p.variants[0].prices[0].calculated_tax,
+			// tax_rates: p.variants[0].prices[0].tax_rates,
+			// profile_id: p.profile_id,
+			// profile: p.profile,
+			// collection_id: p.collection_id,
+			categoryPool: p.collection,
+			// type_id: p.type_id,
+			// type: p.type,
+			tags: p.tags.map((i: any) => {
+				if (i)
+					return {
+						type: 'Ribbon',
+						name: i.value
+					}
 			})
+			// discountable: p.discountable,
+			// external_id: p.external_id,
+			// sales_channels: p.sales_channels,
 		}
 		return prod
 	} else {
