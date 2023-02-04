@@ -18,9 +18,13 @@ onMount(async () => {
 
 const getAutocompleteData = async (filterText = '') => {
 	try {
-		return await fetchAutocompleteData({q:filterText,origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
+		return await fetchAutocompleteData({
+			q: filterText,
+			origin: $page?.data?.origin,
+			storeId: $page?.data?.store?.id
+		})
 	} catch (e) {
-		console.log('err....', e)
+		// console.log('err....', e)
 	}
 }
 

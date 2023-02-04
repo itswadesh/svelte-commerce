@@ -1,5 +1,6 @@
 import { currency as currencyConfig, IMAGE_CDN_URL } from '../config'
 import { toasts } from 'svelte-toasts'
+import type { Product } from '$lib/types'
 
 let allToasts
 export function constructURL2(url, fl) {
@@ -99,7 +100,7 @@ export function currency(value, currency = '₹', decimals?) {
 	const sign = value < 0 ? '-' : ''
 	return sign + currency + ' ' + head + _int.slice(i).replace(digitsRE, '$1,') + _float
 }
-export const serialize = (obj) => {
+export const serialize = (obj: any) => {
 	var str = []
 	for (var p in obj)
 		if (obj.hasOwnProperty(p)) {
@@ -154,10 +155,10 @@ export const mapBigcommerceProducts = (b) => {
 	}
 }
 
-export const mapMedusajsProducts = (p) => {
+export const mapMedusajsProducts = (p: any) => {
 	if (p) {
-		const prod: any = {
-			id: p.id,
+		const prod: Product = {
+			_id: p.id,
 			name: p.title,
 			description: p.description,
 			slug: p.handle,
@@ -168,8 +169,8 @@ export const mapMedusajsProducts = (p) => {
 			status: p.status,
 			featured: p.featured,
 			active: p.catalog_visibility,
-			short_description: p.short_description,
-			country_of_origin: p.origin_country,
+			shortDescription: p.short_description,
+			countryOfOrigin: p.origin_country,
 			varified: p.purchasable,
 			popularity: p.total_sales,
 			digital: p.virtual,
@@ -187,7 +188,7 @@ export const mapMedusajsProducts = (p) => {
 			categories: p.collection,
 			tags: p.tags,
 			variations: p.variants,
-			images: p.images.map((i) => {
+			images: p.images.map((i: any) => {
 				if (i) return i.url
 			})
 		}

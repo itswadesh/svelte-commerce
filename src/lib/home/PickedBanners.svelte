@@ -31,13 +31,16 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 									<div
 										role="banner"
 										class="h-[40vw] w-[40vw] overflow-hidden rounded-full shadow-md sm:h-[30vw] sm:w-[30vw] lg:h-[20vw] lg:w-[20vw] xl:h-[15vw] xl:w-[15vw]">
-										<a href="{banner.link}" data-sveltekit-preload-data>
+										<a
+											href="{banner.link || '##'}"
+											aria-label="Click to route into banner related products page"
+											data-sveltekit-preload-data>
 											<LazyImg
 												src="{banner.img}"
 												alt="banner{bx}"
 												height="430"
 												width="375"
-												class="h-[430px] w-[375px] object-cover object-center" />
+												class="h-auto w-[375px] object-contain" />
 										</a>
 									</div>
 								{/if}
@@ -63,13 +66,17 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 							<div role="banner" class="flex flex-row items-start">
 								{#each b.data as banner, bx}
 									{#if banner.img}
-										<a href="{banner.link}" class="block flex-shrink-0" data-sveltekit-preload-data>
+										<a
+											href="{banner.link || '##'}"
+											aria-label="Click to route into banner related products page"
+											class="block flex-shrink-0"
+											data-sveltekit-preload-data>
 											<LazyImg
 												src="{banner.img}"
 												alt="banner{bx}"
 												height="430"
 												width="375"
-												class="h-[430px] w-[375px] object-cover" />
+												class="h-auto w-[375px] object-contain" />
 										</a>
 									{/if}
 								{/each}
@@ -79,13 +86,17 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 						<div role="banner" class="hidden grid-cols-7 lg:grid">
 							{#each b.data as banner, bx}
 								{#if banner.img}
-									<a href="{banner.link}" class="col-span-1" data-sveltekit-preload-data>
+									<a
+										href="{banner.link || '##'}"
+										aria-label="Click to route banner related products page"
+										class="col-span-1"
+										data-sveltekit-preload-data>
 										<LazyImg
 											src="{banner.img}"
 											alt="banner{bx}"
 											height="430"
 											width="375"
-											class="h-[430px] w-[375px] object-cover" />
+											class="h-auto w-[375px] object-contain" />
 									</a>
 								{/if}
 							{/each}

@@ -42,7 +42,10 @@ async function getMegaMenu() {
 		try {
 			const localMegamenu = localStorage.getItem('megamenu')
 			if (!localMegamenu || localMegamenu === 'undefined') {
-				megamenu = await fetchMegamenuData({origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
+				megamenu = await fetchMegamenuData({
+					origin: $page?.data?.origin,
+					storeId: $page?.data?.store?.id
+				})
 			} else {
 				megamenu = JSON.parse(localMegamenu)
 			}
@@ -91,7 +94,7 @@ function toggle2(cx) {
 									class="flex h-24 w-full items-end justify-between focus:outline-none 
 									{bgColors[mx]}">
 									<div class="flex h-full w-full flex-1 items-center gap-2 px-6">
-										<a href="/{m.slug}" class="flex-1 text-left text-xl font-bold uppercase">
+										<a href="/{m.slug}" aria-label="Click to route {m.name || '##'}" class="flex-1 text-left text-xl font-bold uppercase">
 											{m.name}
 										</a>
 
@@ -122,6 +125,7 @@ function toggle2(cx) {
 							{:else}
 								<a
 									href="/{m.slug}"
+									aria-label="Click to route {m.name || '##'}"
 									class="flex h-24 w-full items-end justify-between {bgColors[mx]}">
 									<div class="flex h-full w-full flex-1 items-center px-6">
 										<h1 class="flex-1 text-xl font-bold uppercase">
@@ -148,7 +152,10 @@ function toggle2(cx) {
 													<button
 														type="button"
 														class="flex w-full items-center gap-4 py-3 px-8 text-left font-medium focus:outline-none">
-														<a href="/{c.slug}" class="flex flex-1 items-center gap-4">
+														<a
+															href="/{c.slug}"
+															aria-label="Click to route {c.name || '##'}"
+															class="flex flex-1 items-center gap-4">
 															{#if c.img}
 																<div class="h-12 w-12 flex-shrink-0 overflow-hidden rounded-full">
 																	<LazyImg
@@ -187,7 +194,10 @@ function toggle2(cx) {
 														</button>
 													</button>
 												{:else}
-													<a href="/{c.slug}" class="flex items-center gap-4 py-3 px-8 font-medium">
+													<a
+														href="/{c.slug}"
+														aria-label="Click to route {c.name || '##'}"
+														class="flex items-center gap-4 py-3 px-8 font-medium">
 														{#if c.img}
 															<div class="h-12 w-12 flex-shrink-0 overflow-hidden rounded-full">
 																<LazyImg
@@ -216,6 +226,7 @@ function toggle2(cx) {
 																<li>
 																	<a
 																		href="/{cc.slug}"
+																		aria-label="Click to route {cc.name || '##'}"
 																		class="flex w-full items-center gap-4 py-3 px-8 font-medium">
 																		{cc.name}
 																	</a>

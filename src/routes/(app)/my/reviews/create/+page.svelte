@@ -83,7 +83,7 @@ async function saveReviewproduct(review) {
 
 		{#if data.product}
 			<a
-				href="{data.ref}"
+				href="{data.ref || '##'}"
 				aria-label="Click to view the product details"
 				class="mb-2 flex max-w-max flex-row items-center gap-4 text-sm text-gray-500 lg:flex-row-reverse">
 				<div>

@@ -17,7 +17,7 @@ let showDropdownMegaMenu = []
 						href="/{m.slug}"
 						aria-label="Click to route this page"
 						class="flex h-20 items-center gap-1 border-b-4 px-4 uppercase focus:outline-none
-									{showDropdownMegaMenu[mx] ? 'border-primary-500' : 'border-white'}">
+						{showDropdownMegaMenu[mx] ? 'border-primary-500' : 'border-white'}">
 						<span>{m.name}</span>
 
 						{#if m.children?.length}

@@ -8,7 +8,7 @@ export const findByCity = async (locals: App.Locals, q: string): Promise<Product
 		const data = serializeNonPOJOs<Product>((await getBySid(`pincodes?${q}`)).data)
 		return data
 	} catch (err) {
-		console.log(err)
+		// console.log(err)
 		const e = err as Error
 		throw error(e.status, e.data.message)
 	}
@@ -19,7 +19,7 @@ export const groupByCity = async (locals: App.Locals, id: string): Promise<Produ
 		const data = serializeNonPOJOs<Product>((await getBySid(`pincodes/group-by-city`)).data)
 		return data
 	} catch (err) {
-		console.log(err)
+		// console.log(err)
 		const e = err as Error
 		throw error(e.status, e.data.message)
 	}

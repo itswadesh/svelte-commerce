@@ -53,18 +53,16 @@ async function submit(n) {
 	try {
 		loading = true
 		const { firstName, lastName, phone, email, password, passwordConfirmation } = n
-		const res = await signupService(
-			{
-				firstName: firstName,
-				lastName: lastName,
-				phone: phone,
-				email: email,
-				password: password,
-				passwordConfirmation: passwordConfirmation,
-				storeId: $page.data.store.id,
-				origin:$page.data.origin
-			},
-		)
+		const res = await signupService({
+			firstName: firstName,
+			lastName: lastName,
+			phone: phone,
+			email: email,
+			password: password,
+			passwordConfirmation: passwordConfirmation,
+			storeId: $page.data.store.id,
+			origin: $page.data.origin
+		})
 
 		const me = {
 			email: res.email,
@@ -131,7 +129,10 @@ async function submit(n) {
 
 			<p class="text-xs">
 				Do not have email?
-				<a href="{$page.data.store?.loginUrl}" class="text-primary-500 hover:underline">
+				<a
+					href="{$page.data.store?.loginUrl}"
+					aria-label="Click to login using phone number"
+					class="text-primary-500 hover:underline">
 					Sign up using phone number
 				</a>
 			</p>

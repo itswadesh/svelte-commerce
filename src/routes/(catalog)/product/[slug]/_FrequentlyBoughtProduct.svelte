@@ -18,7 +18,11 @@ let bounceItemFromTop = false
 </script>
 
 <div class="group relative col-span-1 block w-full overflow-hidden sm:w-48 sm:flex-shrink-0">
-	<a href="/product/{product.slug}" target="_blank" rel="noopener noreferrer">
+	<a
+		href="/product/{product.slug}"
+		target="_blank"
+		rel="noopener noreferrer"
+		aria-label="Click to route product details page">
 		<div class="mb-2 h-[280px] w-[210px] overflow-hidden">
 			<LazyImg
 				src="{product.img}"
@@ -84,8 +88,9 @@ let bounceItemFromTop = false
 		{#if product.active && product.hasStock}
 			{#if cartButtonText === 'Go to cart'}
 				<a
-					class="relative flex w-full transform items-center justify-center overflow-hidden rounded-full border border-primary-500 bg-primary-500 px-4 py-2 text-center text-xs font-semibold tracking-wider text-white shadow-md transition duration-700 focus:outline-none focus:ring-0 focus:ring-offset-0 hover:border-primary-700 hover:bg-primary-700"
 					href="/cart"
+					aria-label="cart"
+					class="relative flex w-full transform items-center justify-center overflow-hidden rounded-full border border-primary-500 bg-primary-500 px-4 py-2 text-center text-xs font-semibold tracking-wider text-white shadow-md transition duration-700 focus:outline-none focus:ring-0 focus:ring-offset-0 hover:border-primary-700 hover:bg-primary-700"
 					data-sveltekit-preload-data>
 					{cartButtonText}
 				</a>

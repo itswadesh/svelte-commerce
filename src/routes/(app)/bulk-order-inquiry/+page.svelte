@@ -112,19 +112,17 @@ function updateQuantity(detail) {
 
 async function submit() {
 	try {
-		const res = await bulkOrderEnquiry(
-			{
-				name: blukOrder.name,
-				companayName: blukOrder.companayName,
-				email: blukOrder.email,
-				phone: blukOrder.phone,
-				interestedProducts: blukOrder.interestedProducts,
-				minQty: blukOrder.minQty,
-				message: blukOrder.message,
-				store: $page.data.store?.id,
-				origin:$page.data.origin
-			},
-		)
+		const res = await bulkOrderEnquiry({
+			name: blukOrder.name,
+			companayName: blukOrder.companayName,
+			email: blukOrder.email,
+			phone: blukOrder.phone,
+			interestedProducts: blukOrder.interestedProducts,
+			minQty: blukOrder.minQty,
+			message: blukOrder.message,
+			store: $page.data.store?.id,
+			origin: $page.data.origin
+		})
 
 		contactSuccess = true
 	} catch (e) {
@@ -434,7 +432,7 @@ async function submit() {
 					</ul>
 				</div>
 
-				<a href="/" class="mx-auto block max-w-max">
+				<a href="/" aria-label="Click to route home" class="mx-auto block max-w-max">
 					<PrimaryButton class="px-10">Go to Home</PrimaryButton>
 				</a>
 			</div>

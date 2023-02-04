@@ -85,11 +85,12 @@ let seoProps = {
 					<h3 class="mb-1 text-3xl font-bold underline sm:mb-6">Latest Blogs</h3>
 
 					<ul class="flex flex-col divide-y">
-						{#each data.latestBlogs?.data as blog}
+						{#each data.latestBlogs?.data as blog, index}
 							<li>
 								<a
-									rel="prefetch"
 									href="/blogs/{blog._id}"
+									aria-label="Click to route blog details page"
+									data-sveltekit-preload-data
 									class="group flex items-start gap-4 py-4">
 									<div class="h-16 w-24 overflow-hidden rounded-md border">
 										{#if blog.img}
@@ -118,6 +119,7 @@ let seoProps = {
 														<li>
 															<a
 																href="/blog/{tag.slug}"
+																aria-label="{tag.name || '##'}"
 																class="block max-w-max rounded-md bg-gray-100 py-0.5 px-2 text-center text-xs font-semibold uppercase text-gray-500 transition duration-300 hover:bg-gray-300 hover:text-gray-800">
 																{tag.name}
 															</a>
