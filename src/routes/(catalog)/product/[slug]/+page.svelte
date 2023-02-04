@@ -82,7 +82,7 @@ import WhiteButton from '$lib/ui/WhiteButton.svelte'
 
 export let data
 
-console.log('zzzzzzzzzzzzzzzzzz', data)
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	brand: `${$page?.data?.store?.websiteName}`,
@@ -503,7 +503,7 @@ function handleMobileCanvas() {
 							</span>
 
 							{#if data.product?.discount > 0}
-								<span class="whitespace-nowrap text-lg font-semibold text-[#ff5a5a] sm:text-xl">
+								<span class="whitespace-nowrap text-lg font-semibold text-primary-700 sm:text-xl">
 									({data.product?.discount}% off)
 								</span>
 							{/if}
@@ -598,6 +598,7 @@ function handleMobileCanvas() {
 								<li>
 									<a
 										href="/product/{gp.slug}"
+										aria-label="/product/{gp.slug || '##'}"
 										class="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border transition duration-300 hover:border-primary-500">
 										<LazyImg
 											src="{gp.img}"
@@ -778,8 +779,9 @@ function handleMobileCanvas() {
 							{#if data.product?.active && data.product?.hasStock}
 								{#if cartButtonText === 'Go to cart'}
 									<a
-										class="relative flex w-full transform items-center justify-center overflow-hidden rounded-md border border-primary-500 bg-primary-500 px-4 py-2 text-center text-sm font-semibold tracking-wider text-white shadow-md transition duration-700 focus:outline-none focus:ring-0 focus:ring-offset-0 hover:border-primary-700 hover:bg-primary-700"
 										href="/cart"
+										aria-label="Click to route cart page"
+										class="relative flex w-full transform items-center justify-center overflow-hidden rounded-md border border-primary-500 bg-primary-500 px-4 py-2 text-center text-sm font-semibold tracking-wider text-white shadow-md transition duration-700 focus:outline-none focus:ring-0 focus:ring-offset-0 hover:border-primary-700 hover:bg-primary-700"
 										data-sveltekit-preload-data>
 										<svg
 											xmlns="http://www.w3.org/2000/svg"

@@ -24,7 +24,10 @@ let url
 
 			<div class="{$navigating ? 'h-screen' : ''}">
 				<section class="fixed inset-0 h-screen w-full bg-gradient-to-b from-primary-50">
-					<a href="/" class="relative z-10 flex h-20 items-center justify-center border-b bg-white">
+					<a
+						href="/"
+						aria-label="Click to route home"
+						class="relative z-10 flex h-20 items-center justify-center border-b bg-white">
 						<LazyImg
 							src="{$page.data.store?.logo}"
 							alt="{$page.data.store?.websiteName}"

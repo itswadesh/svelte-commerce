@@ -93,7 +93,7 @@ let categoryColors = [
 					{#if i <= 6}
 						{#if category.img}
 							<a
-								href="/{category.slug}"
+								href="/{category.slug || '##'}"
 								aria-label="Click to view related products of this category"
 								class="group flex w-20 flex-col items-center justify-center">
 								<div
@@ -113,7 +113,7 @@ let categoryColors = [
 							</a>
 						{:else}
 							<a
-								href="/{category.slug}"
+								href="/{category.slug || '##'}"
 								aria-label="Click to view related products of this category"
 								class="group flex w-20 flex-col items-center justify-center">
 								<div
@@ -138,7 +138,7 @@ let categoryColors = [
 
 				<div class="sm:hidden">
 					<a
-						href="/p/sitemap"
+						href="/sitemap"
 						aria-label="Click to route sitemap"
 						class="group flex w-20 flex-col items-center justify-center hover:text-primary-500">
 						<div
@@ -174,9 +174,9 @@ let categoryColors = [
 						{#if i < 12}
 							{#if category.img}
 								<a
-									href="{`/${category.slug}`}"
+									href="{`/${category.slug || '##'}`}"
 									aria-label="Click to view related products of this category"
-									class="group zoom-out flex w-32 flex-col items-center justify-center lg:w-36">
+									class="zoom-out group flex w-32 flex-col items-center justify-center lg:w-36">
 									<div
 										class="mb-4 h-32 w-32 flex-shrink-0 overflow-hidden rounded-full border-2 border-gray-300 group-hover:border-primary-500 group-hover:shadow-xl lg:h-36 lg:w-36">
 										<LazyImg
@@ -194,7 +194,7 @@ let categoryColors = [
 								</a>
 							{:else}
 								<a
-									href="/{category.slug}"
+									href="/{category.slug || '##'}"
 									aria-label="Click to view related products of this category"
 									class="group flex flex-col items-center justify-center hover:text-primary-500 sm:w-32 lg:w-36">
 									<div
@@ -220,7 +220,7 @@ let categoryColors = [
 
 				<div class="mt-5 flex w-full justify-center sm:mt-10">
 					<a
-						href="/p/sitemap"
+						href="/sitemap"
 						aria-label="Click to route sitemap"
 						class="link font-medium hover:underline">
 						View All
