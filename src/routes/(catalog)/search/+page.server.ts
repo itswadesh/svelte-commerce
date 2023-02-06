@@ -23,12 +23,17 @@ export async function load({ url, locals, cookies, parent }) {
 
 	try {
 		loading = true
-		const res = await searchProducts({ storeId: store?.id, query: query.toString(), server: true })
+		const res = await searchProducts({
+			storeId: store?.id,
+			query: query.toString(),
+			searchData: searchData,
+			server: true
+		})
 		ressss = res
 		products = res.products
 		count = res.count
-		facets = res.facets
-		pageSize = res.pageSize
+		facets = res.facets || []
+		pageSize = res.pageSize || 40
 		err = res.err
 	} catch (e) {
 		err = e

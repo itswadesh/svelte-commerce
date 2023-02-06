@@ -15,19 +15,20 @@ import {
 } from '$lib/utils'
 import { provider } from '$lib/config'
 import { serializeNonPOJOs } from '$lib/utils/validations'
-import type { Error, Product } from '$lib/types'
+import type { AllProducts, Error, Product } from '$lib/types'
 
 // Search product
 
 export const searchProducts = async ({
 	origin,
 	query,
+	searchData,
 	storeId,
 	server = false,
 	sid = null
 }: any) => {
 	try {
-		let res: any = {}
+		let res: AllProducts | {} = {}
 		let products: Product[] = []
 		let count = 0
 		let facets = ''
@@ -55,9 +56,9 @@ export const searchProducts = async ({
 				err = !res?.estimatedTotalHits ? 'No result Not Found' : null
 				break
 			case 'medusajs':
-				res = await postMedusajsApi(`products/search`, { q: 'Shirt' })
-				products = res?.hits
-				count = res?.hits?.length
+				res = await postMedusajsApi(`products/search?q=${searchData}`, {}, sid)
+				products = res?.products
+				count = res?.count
 				facets = res?.facets || []
 				pageSize = res?.pageSize || 25
 				break
@@ -78,7 +79,7 @@ export const searchProducts = async ({
 
 export const fetchProducts = async ({ origin, slug, id, server = false, sid = null }: any) => {
 	try {
-		let res: Product | {} = {}
+		let res: AllProducts | {} = {}
 		switch (provider) {
 			case 'litekart':
 				if (server) {

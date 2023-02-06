@@ -32,7 +32,10 @@ interface AllProducts {
 	pageSize: number
 	limit: number
 	products: Product[]
+	facets: Facet[]
 }
+
+interface Facet {}
 
 interface Product {
 	_id: string
@@ -79,6 +82,7 @@ interface Product {
 	stock: number
 	tags: Tag[]
 	terms: string
+	upc: string
 	varified: boolean
 	weight: number
 	width: number
@@ -134,6 +138,239 @@ interface Tag {
 	active: boolean
 }
 
+interface AllOrders {
+	count: number
+	currentPage: number
+	pageSize: number
+	limit: number
+	data: Order[]
+}
+
+interface Order {
+	_id: string
+	status: string
+	paymentStatus: string
+	display_id: 2
+	cartId: string
+	cart: {}
+	customer: Customer
+	userEmail: string
+	addressId: string
+	address: Address
+	billingAddress: Address
+	amount: Amount
+	payment: Payment
+	items: Item[]
+	needAddress: boolean
+	needPrescription: boolean
+	orderItems: Item[]
+	orderNo: string
+	otp: string
+	paid: boolean
+	paySuccess: number
+	payment: Payment
+	paymentCurrency: string
+	paymentMode: string
+	paymentNotes: PaymentNote
+	paymentOrderId: string
+	paymentReceipt: string
+	paymentStatus: string
+	refunds: Refund
+	selfTakeout: boolean
+	shippingSync: boolean
+	status: string
+	store: string
+	totalAmountRefunded: number
+	updatedAt: string
+	user: string
+	userEmail: string
+	userFirstName: string
+	userLastName: string
+	userPhone: string
+}
+
+interface Customer {
+	fullName: string
+}
+
+interface Address {
+	active: boolean
+	address: string
+	city: string
+	country: string
+	district: string
+	email: string
+	firstName: string
+	isResidential: boolean
+	lastName: string
+	phone: string
+	state: string
+	zip: number
+}
+
+interface Amount {
+	currency: string
+	discount: number
+	qty: number
+	shipping: number
+	subtotal: number
+	tax: number
+	total: number
+}
+
+interface Item {
+	vendorAddress: VendorAddress
+	amount: Amount
+	baseAmount: BaseAmount
+	formattedAmount: Amount
+	address: Address
+	billingAddress: Address
+	_id: string
+	itemOrderNo: string
+	status: string
+	orderNo: string
+	cartId: string
+	needAddress: boolean
+	selfTakeout: boolean
+	needPrescription: boolean
+	name: string
+	qty: number
+	slug: string
+	description: string
+	foodType: string
+	img: string
+	pid: string
+	isCustomized: boolean
+	customizedImg: string
+	unit: string
+	dimensionUnit: string
+	price: number
+	mrp: number
+	subtotal: number
+	discount: number
+	tax: number
+	shippingCharge: number
+	total: number
+	paid: boolean
+	paySuccess: number
+	amountRefunded: number
+	amountDue: number
+	amountPaid: number
+	codPaid: number
+	totalDiscount: number
+	totalAmountRefunded: number
+	baseShippingCharge: number
+	baseTax: number
+	baseTotalDiscount: boolean
+	baseCodPaid: boolean
+	baseDiscount: boolean
+	basePaymentAmount: boolean
+	baseAmountRefunded: boolean
+	baseTotalAmountRefunded: boolean
+	orderHistory: OrderHistory[]
+	orderStatus: OrderStatus[]
+	refunds: Refund[]
+	isReplacement: boolean
+	reviewed: boolean
+	vendor: string
+	vendorBusinessName: string
+	vendorPhone: string
+	vendorEmail: string
+	days: number
+	usedOptions: Option[]
+	options: Option[]
+	active: true
+	coupon: Coupon
+	otp: string
+	paymentAmount: number
+	paymentCurrency: string
+	paymentMode: string
+	paymentStatus: string
+	store: string
+	type: string
+	user: string
+	userEmail: string
+	userFirstName: string
+	userLastName: string
+	userPhone: string
+	addressId: string
+	isCloned: boolean
+	afterOrder: boolean
+	createdAt: string
+	updatedAt: string
+	formattedSubtotal: string
+	formattedMrp: string
+	formattedPrice: string
+	formattedTotal: string
+	formattedPaymentAmount: string
+	orderId: string
+	invoiceId: string
+	payment: string
+	paymentNotes: PaymentNote
+	paymentOrderId: string
+	paymentReceipt: string
+	formattedAmountDue: string
+}
+
+interface VendorAddress {
+	active: boolean
+	isResidential: boolean
+}
+
+interface BaseAmount {
+	tax: number
+}
+
+interface Payment {
+	_id: string
+	amountDue: number
+	amountPaid: number
+	contact: string
+	createdAt: string
+	currency: string
+	customerName: string
+	email: string
+	for: string
+	invoiceId: string
+	orderId: string
+	paid: boolean
+	paymentMode: string
+	receipt: string
+	status: string
+	store: string
+	totalAmountRefunded: number
+	updatedAt: string
+}
+
+interface OrderHistory {
+	_id: string
+	body: string
+	icon: string
+	index: number
+	public: boolean
+	status: string
+	time: string
+	title: string
+}
+
+interface OrderStatus {
+	title: string
+}
+
+interface Refund {
+	amount: number
+}
+
+interface Coupon {
+	amount: number
+	code: string
+}
+
+interface PaymentNote {
+	phone: string
+	purpose: string
+}
+
 interface ProductVote {
 	user: string
 	product: string
@@ -163,6 +400,7 @@ interface Error {
 	status: number
 	data: { message: string }
 }
+
 type ProductDto = z.infer<productDto>
 type UpdateReviewDto = z.infer<updateReviewDto>
 type CreateReviewDto = z.infer<createReviewDto>

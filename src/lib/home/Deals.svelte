@@ -41,7 +41,7 @@ onMount(async () => {
 					rewind: true,
 					perMove: 1,
 					keyboard: true,
-					gap: '3em',
+					gap: '12px',
 					pagination: false,
 					autoWidth: true,
 					width: innerWidth - 410,

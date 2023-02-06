@@ -1,5 +1,4 @@
-import { provider } from '$lib/config'
-import type { Error } from '$lib/types'
+import { error } from '@sveltejs/kit'
 import { getAPI, post } from '$lib/utils/api'
 import {
 	getBigCommerceApi,
@@ -7,14 +6,17 @@ import {
 	getWooCommerceApi,
 	postBigCommerceApi,
 	postBySid,
-	postWooCommerceApi
+	postWooCommerceApi,
+	getMedusajsApi
 } from '$lib/utils/server'
+import { provider } from '$lib/config'
 import { serializeNonPOJOs } from '$lib/utils/validations'
-import { error } from '@sveltejs/kit'
+import type { AllOrders, Error } from '$lib/types'
+import { mapMedusajsOrder, mapMedusajsAllOrders } from '$lib/utils'
 
 export const fetchOrders = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {
-		let res: any = {}
+		let res: AllOrders | {} = {}
 		switch (provider) {
 			case 'litekart':
 				if (server) {
@@ -23,6 +25,10 @@ export const fetchOrders = async ({ origin, storeId, server = false, sid = null 
 					res = await getAPI(`orders/my?store=${storeId}&active=true`, origin)
 				}
 				break
+			case 'medusajs':
+				const med = (await getMedusajsApi(`products`, {}, sid)).product
+				res = mapMedusajsAllOrders(med)
+				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`orders/my`, {}, sid)
 				break
@@ -30,6 +36,7 @@ export const fetchOrders = async ({ origin, storeId, server = false, sid = null 
 				res = await getWooCommerceApi(`orders/my`, {}, sid)
 				break
 		}
+
 		return {
 			data: res.data || [],
 			count: res.count,
@@ -52,6 +59,10 @@ export const fetchOrder = async ({ origin, storeId, id, server = false, sid = nu
 				} else {
 					res = await getAPI(`orders/${id}?store=${storeId}`, origin)
 				}
+				break
+			case 'medusajs':
+				const med = (await getMedusajsApi(`products`, {}, sid)).product
+				res = mapMedusajsOrder(med)
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`orders/${id}`, {}, sid)
