@@ -1,8 +1,9 @@
-<script>
+<script lang="ts">
+	import type { EsProduct, Product } from '$lib/types'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
 
-export let similarProducts = []
+export let similarProducts:EsProduct[] = []
 </script>
 
 {#if similarProducts}

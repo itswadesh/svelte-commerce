@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import { goto } from '$app/navigation'
 import { createEventDispatcher, onMount } from 'svelte'
 import { page } from '$app/stores'
@@ -11,15 +11,15 @@ const dispatch = createEventDispatcher()
 export let show = false
 
 let popularSearches = null
-let searchInput = null
+let searchInput:any
 let q = ''
 let query = ''
 let product
-let categories = []
+let categories:any = []
 let trending = []
 let popular = []
-let autocomplete = null
-let typingTimer
+let autocomplete:{img:string, name:string}[] = []
+let typingTimer:any
 let err
 
 // console.log('popular = ', popular?.data?.length)
@@ -29,20 +29,20 @@ function submit() {
 	goto(`/search?q=${q}`)
 }
 
-function handleRouteToCategorySlug(link, slug) {
+function handleRouteToCategorySlug(link:string, slug:string) {
 	show = false
 	goto(`/${link || slug}`)
 }
 
-function onselect(v) {
+function onselect(v:any) {
 	if (v) goto(`/search?q=${encodeURIComponent(v.name)}`)
 }
 
-function fillValue(val) {
+function fillValue(val:string) {
 	product = val
 }
 
-async function getData(e) {
+async function getData(e:any) {
 	if (e) {
 		if (e.isComposing) {
 			if (e.target.value === '') {
@@ -169,7 +169,7 @@ onMount(async () => {
 							<div
 								class="mt-1 w-full overflow-auto rounded border-gray-400 bg-white scrollbar-none"
 							>
-								{#each autocomplete || [] as v, i}
+								{#each autocomplete || [] as v}
 									<button
 										type="button"
 										class="flex w-full cursor-pointer flex-row items-center justify-between border-b text-base font-light text-gray-500 hover:bg-gray-100"

@@ -24,7 +24,8 @@
 }
 </style>
 
-<script>
+<script lang="ts">
+
 import { currency } from './utils'
 import { fly } from 'svelte/transition'
 import { goto } from '$app/navigation'
@@ -35,8 +36,9 @@ import { toggleWishlistService } from './services/WishlistService'
 import LazyImg from './components/Image/LazyImg.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
+import type { Product } from './types'
 
-export let product = {}
+export let product:Product
 
 let images = [
 	'https://s3.ap-south-1.amazonaws.com/litekart.in/stores/6356502aca4ff28ed596cb1b/product/6045f9ae120e71405f1767d3/fancy-0235-888-fancymart-original-imafhez6qfja6jza-vjkatenzjzyw.jpeg',
@@ -46,7 +48,7 @@ let images = [
 
 // console.log('zzzzzzzzzzzzzzzzzz', product)
 
-let show,
+let show=false,
 	showRelatedProducts = false,
 	isWislisted = false,
 	loadingForWishlist = false
@@ -57,25 +59,6 @@ function showitems() {
 
 function hideitems() {
 	show = false
-}
-
-async function toggleWishlist(id) {
-	try {
-		loadingForWishlist = true
-		isWislisted = await toggleWishlistService({
-			product: id,
-			variant: id,
-			storeId: $page.data.store?.id,
-			origin: $page.data.store?.origin
-		})
-	} catch (e) {
-		if (e.message === 'You must be logged in') {
-			const url = '/'
-			goto(`${$loginUrl}?ref=${url}`)
-		}
-	} finally {
-		loadingForWishlist = false
-	}
 }
 
 let showcaseImg = images[0]
@@ -134,7 +117,7 @@ function selectPrimaryImage() {
 		showcaseImg -->
 		<!-- <button type="button" class="h-[280px] w-[210px] overflow-hidden"> -->
 		<LazyImg
-			src="{product.img}"
+			src="{product.img||''}"
 			alt="{product.name}"
 			width="210"
 			height="280"

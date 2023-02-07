@@ -57,7 +57,7 @@ export let label = '',
 	placeholder = ' ',
 	required = false,
 	tabindex = 0,
-	maxlength
+	maxlength=4000
 
 export { className as class }
 </script>

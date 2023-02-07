@@ -22,7 +22,7 @@ import { serialize } from '.'
 
 export async function postt(endpoint: string, data: any, ck?: any) {
 	const ep = HTTP_ENDPOINT + '/api/' + endpoint
-	const response = await fetch(ep, {
+	const response: any = await fetch(ep, {
 		method: 'POST',
 		credentials: 'include',
 		body: JSON.stringify(data || {}),
@@ -31,11 +31,13 @@ export async function postt(endpoint: string, data: any, ck?: any) {
 			cookie: `sid=${ck.get('sid')}`
 		}
 	})
-	const sid = response.headers.get('set-cookie')
-	const sidCookie = cookie.parse(sid)
-	ck.set('sid', sidCookie.sid, {
-		path: '/'
-	})
+	const sid: string | null = response.headers.get('set-cookie')
+	if (sid) {
+		const sidCookie: any = cookie.parse(sid)
+		ck.set('sid', sidCookie.sid, {
+			path: '/'
+		})
+	}
 	const isJson = response.headers.get('content-type')?.includes('application/json')
 
 	const res = isJson ? await response.json() : await response.text()

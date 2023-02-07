@@ -7,7 +7,7 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import { createEventDispatcher } from 'svelte'
 const dispatch = createEventDispatcher()
 
@@ -17,7 +17,7 @@ export let loading = false,
 	roundedNone = false,
 	roundedFull = false,
 	hideLoading = false,
-	type = 'button',
+	type:"button" | "submit" | "reset" | null | undefined = 'button',
 	title = ''
 
 // creates a `class` property, even

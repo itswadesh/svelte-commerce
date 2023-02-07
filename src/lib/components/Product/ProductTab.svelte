@@ -1,4 +1,5 @@
-<script>
+<script lang="ts">
+	import type { Product } from '$lib/types'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import ProductCard from '$lib/ProductCard.svelte'
@@ -27,7 +28,7 @@ let allCoreCategories = [
 
 let selectedCategory = 'new'
 let loading = false
-let products = []
+let products:Product[] = []
 
 onMount(async () => {
 	try {
@@ -41,7 +42,7 @@ onMount(async () => {
 	filterProducts('new')
 })
 
-function filterProducts(selectedCategory) {
+function filterProducts(selectedCategory:string) {
 	products = products?.filter((p) => {
 		// return p.tags?.name === selectedCategory
 		return p.new

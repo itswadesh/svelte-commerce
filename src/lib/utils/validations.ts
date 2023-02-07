@@ -107,44 +107,44 @@ interface SafeParseImages {
 	}
 }
 
-export const validateImages = async <T extends z.ZodTypeAny>(
-	formData: FormData,
-	schema: T
-): Promise<{ formData: FormData; errors: z.inferFlattenedErrors<typeof schema> | null }> => {
-	const body = zfd
-		.formData({
-			images: zfd.repeatableOfType(ZOD.instanceof(Blob))
-		})
-		.safeParse(formData) as SafeParseImages
+// export const validateImages = async <T extends z.ZodTypeAny>(
+// 	formData: FormData,
+// 	schema: T
+// ): Promise<{ formData: FormData; errors: z.inferFlattenedErrors<typeof schema> | null }> => {
+// 	const body = zfd
+// 		.formData({
+// 			images: zfd.repeatableOfType(ZOD.instanceof(Blob))
+// 		})
+// 		.safeParse(formData) as SafeParseImages
 
-	let images = body?.data?.images
+// 	let images = body?.data?.images
 
-	// const parsedImages = updateProjectImagesDto.safeParse({
-	// 	images: body?.data?.images
-	// }) as SafeParseImages
+// 	const parsedImages = updateProjectImagesDto.safeParse({
+// 		images: body?.data?.images
+// 	}) as SafeParseImages
 
-	if (!parsedImages.success) {
-		const badIndexes = parsedImages.error?.issues.map((issue) => {
-			return issue.path[1]
-		})
+// 	if (!parsedImages.success) {
+// 		const badIndexes = parsedImages.error?.issues.map((issue) => {
+// 			return issue.path[1]
+// 		})
 
-		if (badIndexes) {
-			for (let i = badIndexes.length - 1; i >= 0; i--) {
-				images?.splice(badIndexes[i] as number, 1)
-			}
-		}
-	}
+// 		if (badIndexes) {
+// 			for (let i = badIndexes.length - 1; i >= 0; i--) {
+// 				images?.splice(badIndexes[i] as number, 1)
+// 			}
+// 		}
+// 	}
 
-	const imageFormData = new FormData()
-	images?.forEach((image) => {
-		imageFormData.append('images', image)
-	})
+// 	const imageFormData = new FormData()
+// 	images?.forEach((image) => {
+// 		imageFormData.append('images', image)
+// 	})
 
-	return {
-		formData: imageFormData,
-		errors: parsedImages.error?.flatten() ?? null
-	}
-}
+// 	return {
+// 		formData: imageFormData,
+// 		errors: parsedImages.error?.flatten() ?? null
+// 	}
+// }
 
 export const generateRelativeDate = (date: Date) => {
 	const options = {
@@ -164,32 +164,32 @@ interface CreateDelete {
 	toCreate: string[]
 }
 
-export const generateCreateDeleteLists = <T extends Record>(
-	current: T[],
-	updated: string[],
-	type: string
-): CreateDelete => {
-	const toDelete: string[] = []
-	const toCreate: string[] = []
+// export const generateCreateDeleteLists = <T extends Record>(
+// 	current: T[],
+// 	updated: string[],
+// 	type: string
+// ): CreateDelete => {
+// 	const toDelete: string[] = []
+// 	const toCreate: string[] = []
 
-	current.forEach((record) => {
-		if (!updated.includes(record[type])) {
-			toDelete.push(record.id)
-		}
-	})
+// 	current.forEach((record) => {
+// 		if (!updated.includes(record[type])) {
+// 			toDelete.push(record.id)
+// 		}
+// 	})
 
-	const currentIDs = current.map((record) => {
-		return record[type]
-	})
+// 	const currentIDs = current.map((record) => {
+// 		return record[type]
+// 	})
 
-	updated.forEach((item) => {
-		if (!currentIDs.includes(item)) {
-			toCreate.push(item)
-		}
-	})
+// 	updated.forEach((item) => {
+// 		if (!currentIDs.includes(item)) {
+// 			toCreate.push(item)
+// 		}
+// 	})
 
-	return {
-		toDelete,
-		toCreate
-	}
-}
+// 	return {
+// 		toDelete,
+// 		toCreate
+// 	}
+// }

@@ -5,23 +5,24 @@
 }
 </style>
 
-<script>
+<script lang="ts">
+import type { Product } from '$lib/types'
 import { SplideSlide } from '@splidejs/svelte-splide'
 import { onMount } from 'svelte'
 import { slide } from 'svelte/transition'
 import LazyImg from '../Image/LazyImg.svelte'
 
 export let showPhotosModal = false
-export let product = {}
+export let product:Product|any = {}
 export let selectedImgIndex = 0
 
-let selectedimg
+let selectedimg:string
 
 $: if (product?.images) {
 	selectedimg = product?.images[selectedImgIndex]
 }
 
-let Carousel, Splide
+let Carousel, Splide:any
 onMount(async () => {
 	// const RTEmodule = await import('$lib/components/TwECarousel.svelte')
 	// Carousel = RTEmodule.default

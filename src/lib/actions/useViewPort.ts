@@ -1,4 +1,4 @@
-let intersectionObserver
+let intersectionObserver: any
 
 function ensureIntersectionObserver() {
 	if (intersectionObserver) return
@@ -11,7 +11,7 @@ function ensureIntersectionObserver() {
 	})
 }
 
-export default function viewport(element) {
+export default function viewport(element: any) {
 	ensureIntersectionObserver()
 
 	intersectionObserver.observe(element)
