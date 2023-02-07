@@ -39,7 +39,7 @@ export async function load({ url, locals, request, cookies }) {
 	}
 
 	if (cookies) {
-		cookies.set(serializedCart)
+		// cookies.set(serializedCart)
 	}
 	return {
 		url: url.href,
