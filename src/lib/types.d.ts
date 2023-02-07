@@ -565,40 +565,55 @@ interface NavigationItem {
 interface PaymentMethod {
 	id: string
 	for: string
-	amountDue: number
-	amountPaid: number
-	approvalUrl: string
-	totalAmountRefunded: number
-	captured: boolean
 	clientSecret: string
-	contact: string
-	currency: string
-	customerName: string
-	description: string
-	email: string
-	errorCode: string
-	errorDescription: string
-	fee: number
-	invoiceId: string
-	notes: string
-	orderId: string
-	paid: boolean
 	paymentGateway: string
 	paymentMode: string
-	paymentOrderId: string
-	q: string
-	receipt: string
-	referenceId: string
-	refundStatus: string
 	status: string
-	store: StoreDocument['_id']
-	tax: number
-	token: string
-	txMsg: string
-	txTime: string
-	subscribe: SubscribeDocument['_id']
-	customerId: string
-	redirectUrl: string
-	signature: string
-	keyId: string
+}
+
+interface Address {
+	active: boolean
+	address: string
+	city: string
+	company: string
+	country: string
+	deliveryInstructions: string
+	district: string
+	email: string
+	firstName: string
+	fullName: string
+	isResidential: boolean
+	lastName: string
+	lat: number
+	lng: number
+	locality: string
+	phone: string
+	state: string
+	town: string
+	type: string
+	store: string
+	user: string
+	verified: boolean
+	zip: string
+}
+
+interface Review {
+	active: boolean
+	message: string
+	listing: string
+	pid: string
+	rating: number
+	store: string
+	user: string
+	variant: string
+	vendor: string
+}
+interface Wishlist {
+	active: boolean
+	listing: string
+	product: string
+	status: string
+	store: string
+	user: string
+	variant: string
 }
