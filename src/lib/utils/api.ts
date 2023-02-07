@@ -1,5 +1,5 @@
 import { loadingDelayed } from '$lib/store'
-let typingTimer
+let typingTimer:any
 
 const send = async ({ method, path, params, data, token, headers, origin }: any) => {
 	if (
@@ -87,19 +87,19 @@ const send = async ({ method, path, params, data, token, headers, origin }: any)
 	}
 }
 
-export const getAPI = (path, origin, headers?) => {
+export const getAPI = (path: string, origin: string, headers?: any) => {
 	return send({ method: 'GET', path, origin, headers })
 }
 
-export const del = (path, origin, headers?) => {
+export const del = (path: string, origin: string, headers?: any) => {
 	return send({ method: 'DELETE', path, origin, headers })
 }
 
-export const post = (path, data, origin, headers?) => {
+export const post = (path: string, data: any, origin: string, headers?: any) => {
 	return send({ method: 'POST', path, data, origin, headers })
 }
 
-export const put = (path, data, origin, headers?) => {
+export const put = (path: string, data: any, origin: string, headers?: any) => {
 	return send({ method: 'PUT', path, data, origin, headers })
 }
 

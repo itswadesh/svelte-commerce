@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import { currency, toast } from '$lib/utils'
 import { createEventDispatcher, onMount } from 'svelte'
 import { goto } from '$app/navigation'
@@ -6,15 +6,16 @@ import GrnIndGradiantButton from './ui/GrnIndGradiantButton.svelte'
 import { post } from '$lib/utils/api'
 import { page } from '$app/stores'
 import { stripeCheckoutService } from './services/OrdersService'
+import type { Error, PaymentMethod } from './types'
 let stripeReady = false
 let mounted = false
 let loading = false
 let paySuccess = false
 let isCardValid = false
 let stripeCardMounting = true
-let card
-export let stripePublishableKey //process.env.VITE_STRIPE_PUBLISHABLE_KEY
-let stripe,
+let card:any
+export let stripePublishableKey:string //process.env.VITE_STRIPE_PUBLISHABLE_KEY
+let stripe:any,
 	errors,
 	errorMessage = { text: '', show: false }
 const dispatch = createEventDispatcher()
@@ -22,7 +23,7 @@ const dispatch = createEventDispatcher()
 export let address = '',
 	isStripeSelected = false
 
-async function payWithCard(clientSecret, orderId) {
+async function payWithCard(clientSecret:string, orderId:string) {
 	// This is for 3d authentication
 	try {
 		loading = true
@@ -47,12 +48,12 @@ async function payWithCard(clientSecret, orderId) {
 	}
 }
 
-const payWithStripe = async (pm) => {
+const payWithStripe = async (pm:PaymentMethod) => {
 	try {
 		loading = true
 		toast('Contacting Payment Server...', 'warning')
 		const paymentMethodId = pm.id
-		const resStripe = stripeCheckoutService({
+		const resStripe:any = stripeCheckoutService({
 			paymentMethodId,
 			address,
 			storeId: $page.data.store?.id,
@@ -72,7 +73,7 @@ const payWithStripe = async (pm) => {
 				paySuccess = true
 			}
 		}
-	} catch (e) {
+	} catch (e:any) {
 		errorMessage = { show: true, text: e.toString() }
 	} finally {
 		loading = false
@@ -95,7 +96,7 @@ function stripeLoaded() {
 }
 function submit() {
 	loading = true
-	stripe.createPaymentMethod({ type: 'card', card }).then(async function (result) {
+	stripe.createPaymentMethod({ type: 'card', card }).then(async function (result:any) {
 		if (result.error) {
 			// Inform the customer that there was an error.
 			errorMessage.text = result.error.message
@@ -111,12 +112,13 @@ function submit() {
 }
 
 async function loadStripeElements() {
+	// @ts-ignore
 	stripe = Stripe(stripePublishableKey)
 	var elements = stripe.elements()
 	card = await elements.create('card', {})
 	await card.mount('#mount-point-for-stripe-elements')
 	stripeCardMounting = false
-	card.on('change', function (event) {
+	card.on('change', function (event:any) {
 		isCardValid = event.complete
 		dispatch('isStripeCardValid', isCardValid)
 		if (event.error) {
@@ -139,7 +141,7 @@ async function loadStripeElements() {
 		{errorMessage.text}
 	</div>
 {/if}
-{#if stripeLoaded}
+{#if stripeReady}
 	<form
 		on:submit|preventDefault="{submit}"
 		class="{!isStripeSelected ? 'hidden' : 'block'} my-4 rounded border px-8 py-4 shadow-lg"

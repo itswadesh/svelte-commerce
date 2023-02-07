@@ -17,7 +17,7 @@ img:not([src]) {
 }
 </style>
 
-<script>
+<script lang="ts">
 import { onMount } from 'svelte'
 import { IMAGE_CDN_URL } from '$lib/config'
 import lazyload from 'vanilla-lazyload'
@@ -25,7 +25,7 @@ import { onDestroy } from 'svelte'
 import { browser } from '$app/environment'
 import { getCdnImageUrl } from '$lib/utils'
 
-export let src
+export let src:string
 export let alt = ''
 export let width = 'auto'
 export let height = 'auto'
@@ -33,9 +33,9 @@ export let aspect_ratio = '3:4'
 const w = width === 'auto' ? 'auto' : +width * 2
 const h = height === 'auto' ? 'auto' : +height * 2
 
-let clazz
+let clazz:string
 export { clazz as class }
-let lazyloadInstance
+let lazyloadInstance:any
 onMount(() => {
 	if (browser) {
 		lazyloadInstance = new lazyload({

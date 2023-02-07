@@ -14,30 +14,30 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import { createEventDispatcher } from 'svelte'
 import { toast } from './utils'
 
 const dispatch = createEventDispatcher()
 
-export let images,
+export let images:string[]=[],
 	title = 'Upload File',
 	folder = 'img',
-	maxSize = null,
+	maxSize = 10 * 1000 * 1000,
 	multi = false,
 	avatar = false,
 	accept = 'image/*',
 	loading = false
 
 let uploading = false,
-	files,
+	files:string[]=[],
 	deleting = false
 
 let clazz = ''
 
 export { clazz as class }
 
-async function remove(img) {
+async function remove(img:string[]) {
 	try {
 		deleting = true
 		const response = await fetch('/server/files/delete', {
@@ -56,7 +56,7 @@ async function remove(img) {
 	}
 }
 
-const handleSubmit = async (e) => {
+const handleSubmit = async (e:any) => {
 	var isOk = true
 	const maxSize = 10 * 1000 * 1000 // 2MB
 	const file = e //e.target.files[0]
@@ -84,7 +84,7 @@ const handleSubmit = async (e) => {
 <div
 	class="{clazz} group relative h-36 w-36 flex-shrink-0 flex-grow-0 bg-gray-50 transition duration-300 hover:bg-white"
 >
-	{#if !uploading && !deleting && images != '' && images !== undefined}
+	{#if !uploading && !deleting && images !== undefined}
 		<div
 			class="slowtransition absolute inset-0 z-0 hidden items-center justify-center bg-black bg-opacity-50 text-center group-hover:flex"
 		>
@@ -130,11 +130,11 @@ const handleSubmit = async (e) => {
 					{/if}
 				</div>
 			</div>
-		{:else if images != '' && images != undefined}
+		{:else if images != undefined}
 			<div class="h-36 w-36 border-2 border-gray-300 bg-white text-xs">
 				<embed
-					src="{images}"
-					frameBorder="0"
+					src="{images[0]}"
+					frameBorder="{0}"
 					scrolling="auto"
 					height="100%"
 					width="100%"

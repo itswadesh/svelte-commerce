@@ -36,7 +36,7 @@ const dispatch = createEventDispatcher()
 
 export let id = ''
 export let color = 'green'
-export let checked
+export let checked=false
 export let name = ''
 export let required = false
 export let disabled = false
@@ -52,7 +52,7 @@ onMount(() => {
 	genId()
 })
 
-let uniqueId
+let uniqueId=''
 
 function genId() {
 	if (id === undefined || typeof String) {

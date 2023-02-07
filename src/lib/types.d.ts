@@ -28,62 +28,66 @@ interface Me {
 
 interface AllProducts {
 	count: number
-	currentPage: number
-	pageSize: number
+	currentPage?: number
+	pageSize?: number
 	limit: number
 	products: Product[]
 	facets: Facet[]
 }
 
 interface Facet {}
+interface EsProduct {
+	_source: Product
+}
 
 interface Product {
+	id?: string
 	_id: string
-	active: boolean
+	active?: boolean
 	barcode: string
-	brand: Brand
-	brandName: string
+	brand?: Brand
+	brandName?: string
 	categoryPool: Category
 	countryOfOrigin: string
-	crossSells: Product[]
+	crossSells?: Product[]
 	description: string
 	discount: number
 	ean: string
-	featured: boolean
-	foodType: string
-	groupProduct: Product[]
-	hasStock: boolean
+	featured?: boolean
+	foodType?: string
+	groupProduct?: Product[]
+	hasStock?: boolean
 	height: number
 	hsn: string
 	images?: string[]
 	img?: string
-	isCustomized: boolean
-	isFnb: boolean
+	isCustomized?: boolean
+	isFnb?: boolean
 	layoutTemplateCdn?: string
-	length: number
-	linkedProducts: Product[]
-	longDescription: string
+	length?: number
+	linkedProducts?: Product[]
+	longDescription?: string
 	mrp: number
 	name: string
-	new: boolean
-	options: Option[]
-	popularity: number
+	new?: boolean
+	options?: Option[]
+	popularity?: number
 	price: number
-	replaceAllowed: boolean
-	replaceValidityInDays: number
-	returnAllowed: boolean
-	returnValidityInDays: number
-	shortDescription: string
-	size: Size
+	replaceAllowed?: boolean
+	replaceValidityInDays?: number
+	returnAllowed?: boolean
+	returnValidityInDays?: number
+	shortDescription?: string
+	size?: Size
 	sku: string
 	slug: string
-	specifications: Specification[]
+	specifications?: Specification[]
 	status: string
 	stock: number
 	tags: Tag[]
-	terms: string
-	upc: string
-	varified: boolean
+	terms?: string
+	upc?: string
+	varified?: boolean
 	weight: number
 	width: number
 }
@@ -133,6 +137,7 @@ interface OptionValue {
 interface Tag {
 	name: string
 	img: string
+	type: string
 	colorCode: string
 	position: number
 	active: boolean
@@ -140,57 +145,149 @@ interface Tag {
 
 interface AllOrders {
 	count: number
-	currentPage: number
-	pageSize: number
+	currentPage?: number
+	pageSize?: number
 	limit: number
 	data: Order[]
+}
+
+interface CartItem {
+	pid: ID
+	vid: ID
+	barcode: string
+	name: string
+	img: string
+	imgCdn: string
+	slug: string
+	price: Float
+	mrp: Float
+	customizedImg: string
+	isCustomized: boolean
+	shippingCharge: Float
+	orderStatus: [OrderStatusRes]
+	tracking: string
+	qty: Int
+	time: string
+	options: [Option1]
+	usedOptions: [UsedOption]
+	brand: Brand
+	tax: Float
+	brandName: string
+	type: string
+	formattedItemAmount: CartItemAmount
+	vendor: ID
+	vendorSlug: string
+	vendorBusinessName: string
+	foodType: string
+	deliveryDetails: string
+	status: string
+	msg: string
+}
+
+interface CartItemAmount {
+	mrp: string
+	price: string
+	shippingCharge: string
+	tax: string
+}
+
+interface CartAmount {
+	subtotal: string
+	total: string
+	tax: string
+	offer_total: string
+}
+
+interface cartRes {
+	data: [Cart]
+	count: Int
+	pageSize: Int
+	page: Int
+}
+
+interface Cart {
+	id: ID
+	uid: User
+	cart_id: Cart
+	store: Store
+	storeCurrency: ID
+	qty: Int
+	currencyCode: string
+	currencyName: string
+	currencySymbol: string
+	discount: CartDiscount
+	subtotal: Float
+	shipping: Shipping
+	tax: Float
+	total: Float
+	offer_total: Float
+	items: [CartItem]
+	unavailableItems: [CartItem]
+	active: Boolean
+	sid: string
+	formattedAmount: CartAmount
+	needAddress: Boolean
+	needPrescription: Boolean
+	selfTakeout: Boolean
+	codAvailable: Boolean
+	createdAt: string!
+	updatedAt: string!
+}
+
+interface CartDiscount {
+	code: string
+	value: Float
+	text: string
+	amount: Float
 }
 
 interface Order {
 	_id: string
 	status: string
-	paymentStatus: string
-	display_id: 2
-	cartId: string
-	cart: {}
-	customer: Customer
+	paymentStatus?: string
+	display_id?: 2
+	cartId?: string
+	cart: Cart
+	customer: User
 	userEmail: string
-	addressId: string
+	addressId?: string
 	address: Address
-	billingAddress: Address
+	billingAddress?: Address
 	amount: Amount
-	payment: Payment
+	payment?: Payment
 	items: Item[]
-	needAddress: boolean
-	needPrescription: boolean
+	needAddress?: boolean
+	needPrescription?: boolean
 	orderItems: Item[]
 	orderNo: string
-	otp: string
-	paid: boolean
-	paySuccess: number
-	payment: Payment
-	paymentCurrency: string
-	paymentMode: string
-	paymentNotes: PaymentNote
-	paymentOrderId: string
-	paymentReceipt: string
-	paymentStatus: string
-	refunds: Refund
-	selfTakeout: boolean
-	shippingSync: boolean
-	status: string
-	store: string
-	totalAmountRefunded: number
+	otp?: string
+	paid?: boolean
+	paySuccess?: number
+	payment?: Payment
+	paymentCurrency?: string
+	paymentMode?: string
+	paymentNotes?: PaymentNote
+	paymentOrderId?: string
+	paymentReceipt?: string
+	paymentStatus?: string
+	refunds?: Refund
+	selfTakeout?: boolean
+	shippingSync?: boolean
+	status?: string
+	store?: string
+	totalAmountRefunded?: number
 	updatedAt: string
 	user: string
-	userEmail: string
-	userFirstName: string
-	userLastName: string
-	userPhone: string
+	userEmail?: string
+	userFirstName?: string
+	userLastName?: string
+	userPhone?: string
 }
 
-interface Customer {
+interface User {
 	fullName: string
+	phone: string
+	email: string
 }
 
 interface Address {
@@ -463,4 +560,45 @@ interface UpdateAccountActionData {
 interface NavigationItem {
 	title: string
 	href: string
+}
+
+interface PaymentMethod {
+	id: string
+	for: string
+	amountDue: number
+	amountPaid: number
+	approvalUrl: string
+	totalAmountRefunded: number
+	captured: boolean
+	clientSecret: string
+	contact: string
+	currency: string
+	customerName: string
+	description: string
+	email: string
+	errorCode: string
+	errorDescription: string
+	fee: number
+	invoiceId: string
+	notes: string
+	orderId: string
+	paid: boolean
+	paymentGateway: string
+	paymentMode: string
+	paymentOrderId: string
+	q: string
+	receipt: string
+	referenceId: string
+	refundStatus: string
+	status: string
+	store: StoreDocument['_id']
+	tax: number
+	token: string
+	txMsg: string
+	txTime: string
+	subscribe: SubscribeDocument['_id']
+	customerId: string
+	redirectUrl: string
+	signature: string
+	keyId: string
 }

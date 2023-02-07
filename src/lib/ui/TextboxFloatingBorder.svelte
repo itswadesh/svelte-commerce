@@ -37,7 +37,7 @@ label {
 }
 </style>
 
-<script>
+<script lang="ts">
 import { createEventDispatcher } from 'svelte'
 
 const dispatch = createEventDispatcher()
@@ -48,7 +48,7 @@ export { clazz as class }
 export let label = '',
 	type = 'text',
 	value = '',
-	name,
+	name:string,
 	placeholder = ' ',
 	disabled = false,
 	required = false

@@ -26,12 +26,10 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import appStore from '$lib/assets/app/app-store.svg'
 import googlePlay from '$lib/assets/app/google-play.png'
+import type { Category, Me } from './types'
 // import { fetchFooterCategories } from './services/CategoryService'
 
-export let me, store, popularSearches, megamenu
-
-export { clazz as class }
-let clazz = ''
+export let store, popularSearches:{ took: 0, count: 0, data: [] }, megamenu:Category[]
 
 // let categories = []
 
@@ -61,7 +59,7 @@ function getYear() {
 	return year
 }
 
-let footerItems = [
+let footerItems:any = [
 	{
 		heading: 'Store Info',
 		subMenu: [
@@ -123,17 +121,17 @@ async function getStoreData() {
 					</h5>
 
 					<ul class="flex flex-col gap-1 text-gray-500">
-						{#each item?.subMenu as item}
+						{#each item?.subMenu as itm}
 							<li class="flex max-w-max items-center">
 								<a
-									href="{item.link}"
+									href="{itm.link}"
 									aria-label="Click to route this page"
 									class="link-underline link-underline-gray whitespace-pre-wrap"
 								>
-									{item.title}
+									{itm.title}
 								</a>
 
-								{#if item.new}
+								{#if itm.new}
 									<div
 										class="ml-2 max-w-max rounded bg-primary-500 py-[0.1rem] px-1 text-[0.5rem] font-semibold leading-3 tracking-wider text-white"
 									>

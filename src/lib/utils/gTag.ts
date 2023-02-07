@@ -1,6 +1,6 @@
-export const fireGTagEvent = (event_name, data) => {
+export const fireGTagEvent = (event_name: string, data: any) => {
 	data.items = data.items || []
-	const items = data.items.map((item) => {
+	const items = data.items.map((item:any) => {
 		item.discount = item.discount || item.coupon || {}
 		return {
 			item_id: item._id,

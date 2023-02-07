@@ -19,12 +19,13 @@ import PrimaryButton from './ui/PrimaryButton.svelte'
 import WhiteButton from './ui/WhiteButton.svelte'
 import AutosuggestModal from './AutosuggestModal.svelte'
 import { enhance } from '$app/forms'
+import type { Cart, Me } from './types'
 
 const dispatch = createEventDispatcher()
 
-export let me, cart, data, showCartSidebar, openSidebar, store
+export let me:Me, cart:Cart, data, showCartSidebar=false, openSidebar=false, store
 
-let q = ''
+let q:string|null = ''
 let showDropdownAccount = false
 let show = false
 let categories
@@ -33,14 +34,14 @@ onMount(async () => {
 	q = $page.url.searchParams.get('q')
 })
 
-function slideFade(node, params) {
+function slideFade(node:any, params:any) {
 	const existingTransform = getComputedStyle(node).transform.replace('none', '')
 
 	return {
 		delay: params.delay || 0,
 		duration: params.duration || 400,
 		easing: params.easing || cubicOut,
-		css: (t, u) =>
+		css: (t:number, u:number) =>
 			`transform-origin: top right; transform: ${existingTransform} scaleX(${t}); opacity: ${t};`
 	}
 }
