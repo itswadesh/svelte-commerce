@@ -1,12 +1,10 @@
 node_modules
-
 dist
-
 data
-
 tsconfig.json
-
 .svelte-kit/**
 static/**
 build/**
+devops/**
+.env
 node_modules/**

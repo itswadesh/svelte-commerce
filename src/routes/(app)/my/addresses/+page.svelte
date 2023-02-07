@@ -109,7 +109,8 @@ async function remove(id, index) {
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
 					viewBox="0 0 24 24"
-					stroke="currentColor">
+					stroke="currentColor"
+				>
 					<path
 						stroke-linecap="round"
 						stroke-linejoin="round"
@@ -131,7 +132,8 @@ async function remove(id, index) {
 			{#each data.addresses.data as i, index}
 				{#if i}
 					<li
-						class="overflow-hidden rounded-md border bg-white shadow-md transition duration-300 hover:shadow-md">
+						class="overflow-hidden rounded-md border bg-white shadow-md transition duration-300 hover:shadow-md"
+					>
 						<div class="flex items-start gap-3 p-4 sm:p-6">
 							<div class="flex flex-1 flex-col gap-1 text-sm">
 								<span class="text-base font-semibold">
@@ -158,7 +160,8 @@ async function remove(id, index) {
 
 							{#if i.isHome}
 								<div
-									class="flex-shrink-0 rounded-full border-2 border-gray-300 bg-gray-100 py-0.5 px-4 text-xs font-bold uppercase tracking-wide">
+									class="flex-shrink-0 rounded-full border-2 border-gray-300 bg-gray-100 py-0.5 px-4 text-xs font-bold uppercase tracking-wide"
+								>
 									Home
 								</div>
 							{/if}
@@ -168,14 +171,16 @@ async function remove(id, index) {
 							<a
 								href="{`/my/addresses/${i._id}`}"
 								aria-label="Click to route address details"
-								class="bg-transparent p-2 text-center font-semibold uppercase text-primary-500 transition duration-300 focus:outline-none hover:bg-gray-100 hover:text-primary-700">
+								class="bg-transparent p-2 text-center font-semibold uppercase text-primary-500 transition duration-300 focus:outline-none hover:bg-gray-100 hover:text-primary-700"
+							>
 								Edit
 							</a>
 
 							<button
 								type="button"
 								class="bg-transparent p-2 text-center font-semibold uppercase text-primary-500 transition duration-300 focus:outline-none hover:bg-gray-100 hover:text-primary-700"
-								on:click="{() => remove(i._id, index)}">
+								on:click="{() => remove(i._id, index)}"
+							>
 								{#if loadingOnDelete[index]}
 									Removing...
 								{:else}

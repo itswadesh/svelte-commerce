@@ -35,7 +35,8 @@ export { clazz as class }
 				<a
 					href="/"
 					aria-label="Click to route home"
-					class="text-sm text-blue-400 underline lg:hidden">
+					class="text-sm text-blue-400 underline lg:hidden"
+				>
 					Shop More
 				</a>
 			</div>
@@ -52,7 +53,8 @@ export { clazz as class }
 
 							<table
 								class="group min-w-full divide-y divide-gray-200 rounded-md border border-gray-200 text-gray-500 shadow-md"
-								on:click="{() => goto(`/my/orders/${order._id}`)}">
+								on:click="{() => goto(`/my/orders/${order._id}`)}"
+							>
 								<thead class="whitespace-nowrap rounded-t-md bg-gray-100 text-xs uppercase">
 									<tr>
 										<!-- <th class="px-5 py-3 font-medium tracking-wider text-gray-500"> # </th> -->
@@ -76,7 +78,8 @@ export { clazz as class }
 								</thead>
 
 								<tbody
-									class="cursor-pointer divide-y divide-gray-200 rounded-b-md bg-white bg-white text-sm transition duration-300 group-hover:bg-primary-50">
+									class="cursor-pointer divide-y divide-gray-200 rounded-b-md bg-white bg-white text-sm transition duration-300 group-hover:bg-primary-50"
+								>
 									{#each order.orderItems as item}
 										<tr>
 											<td class="p-3">
@@ -86,13 +89,15 @@ export { clazz as class }
 															src="{item.customizedImg}"
 															alt=" "
 															width="80"
-															class="h-auto w-20 object-contain object-top" />
+															class="h-auto w-20 object-contain object-top"
+														/>
 													{:else}
 														<LazyImg
 															src="{item.img}"
 															alt=" "
 															width="80"
-															class="h-auto w-20 object-contain object-top" />
+															class="h-auto w-20 object-contain object-top"
+														/>
 													{/if}
 												</div>
 											</td>
@@ -137,7 +142,8 @@ export { clazz as class }
 												<span class="whitespace-nowrap font-semibold uppercase text-primary-500">
 													{item.status}
 												</span>
-											</td></tr>
+											</td></tr
+										>
 									{/each}
 								</tbody>
 							</table>
@@ -161,7 +167,8 @@ export { clazz as class }
 							<a
 								href="/my/orders/{order._id}"
 								aria-label="orders"
-								class="mb-4 block w-full divide-y divide-gray-200 rounded-md border bg-white text-sm text-gray-600 shadow-md transition duration-300 hover:bg-primary-50 sm:mb-10">
+								class="mb-4 block w-full divide-y divide-gray-200 rounded-md border bg-white text-sm text-gray-600 shadow-md transition duration-300 hover:bg-primary-50 sm:mb-10"
+							>
 								{#each order.orderItems as item}
 									<div class="flex items-start gap-2 p-4 sm:gap-5">
 										<div class="flex-shrink-0">
@@ -170,13 +177,15 @@ export { clazz as class }
 													src="{item.customizedImg}"
 													alt=" "
 													width="56"
-													class="h-auto w-14 object-contain object-top" />
+													class="h-auto w-14 object-contain object-top"
+												/>
 											{:else}
 												<LazyImg
 													src="{item.img}"
 													alt=" "
 													width="56"
-													class="h-auto w-14 object-contain object-top" />
+													class="h-auto w-14 object-contain object-top"
+												/>
 											{/if}
 										</div>
 
@@ -258,7 +267,8 @@ export { clazz as class }
 
 		<Pagination
 			count="{Math.ceil(orders.count / orders.pageSize)}"
-			current="{+orders.currentPage}" />
+			current="{+orders.currentPage}"
+		/>
 	{:else if orders.count === 0}
 		<div class="flex flex-col items-center justify-center text-center">
 			<img src="/no/add-to-cart-animate.svg" alt="empty cart" class="mb-5 h-60 object-contain" />

@@ -34,9 +34,11 @@ function emitConfirm() {
 	<transition name="{trnsitionName}">
 		{#if isVisible}
 			<div
-				class="frosted fixed inset-0 z-50 flex h-screen w-screen flex-col items-center justify-center p-3 sm:p-10">
+				class="frosted fixed inset-0 z-50 flex h-screen w-screen flex-col items-center justify-center p-3 sm:p-10"
+			>
 				<div
-					class="flex max-w-max flex-col overflow-hidden rounded-lg border bg-white align-middle shadow-lg">
+					class="flex max-w-max flex-col overflow-hidden rounded-lg border bg-white align-middle shadow-lg"
+				>
 					<!-- header-->
 
 					<div class="flex items-center justify-between border-b border-gray-200 p-3 sm:px-6">
@@ -48,13 +50,15 @@ function emitConfirm() {
 							<BlackButton
 								type="button"
 								class="{hideCloseButton ? 'hidden' : 'block'}"
-								on:click="{emitCancel}">
+								on:click="{emitCancel}"
+							>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									class="h-6 w-6"
 									fill="none"
 									viewBox="0 0 24 24"
-									stroke="currentColor">
+									stroke="currentColor"
+								>
 									<path
 										stroke-linecap="round"
 										stroke-linejoin="round"

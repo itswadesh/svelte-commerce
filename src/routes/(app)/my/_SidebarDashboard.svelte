@@ -27,7 +27,8 @@ function close() {
 			<div
 				aria-controls="dropdown-example"
 				data-collapse-toggle="dropdown-example"
-				class="w-full whitespace-pre-wrap text-left text-sm tracking-wider">
+				class="w-full whitespace-pre-wrap text-left text-sm tracking-wider"
+			>
 				{#if sidebar.hidden === 'hidden' && sidebar.downArrow !== '' && sidebar?.subItems && sidebar?.subItems[0]?.name !== ''}
 					<!-- submenu is present -->
 
@@ -37,9 +38,11 @@ function close() {
 						class:active="{$page.url.pathname === sidebar.pathName}"
 						class="flex w-full items-center justify-start gap-2 p-3 text-white"
 						data-sveltekit-preload-data
-						on:click="{() => (sidebar.hidden = '')}">
+						on:click="{() => (sidebar.hidden = '')}"
+					>
 						<div
-							class="dutaion-500 flex flex-1 transform items-center gap-2 transition hover:translate-x-2">
+							class="dutaion-500 flex flex-1 transform items-center gap-2 transition hover:translate-x-2"
+						>
 							<div>
 								{@html sidebar.svg}
 							</div>
@@ -59,7 +62,8 @@ function close() {
 									{sidebar.hidden === 'hidden' ? '' : 'transform -rotate-180'}"
 								fill="currentColor"
 								viewBox="0 0 20 20"
-								xmlns="http://www.w3.org/2000/svg">
+								xmlns="http://www.w3.org/2000/svg"
+							>
 								<path
 									fill-rule="evenodd"
 									d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 
@@ -77,9 +81,11 @@ function close() {
 						class:active="{$page.url.pathname === sidebar.pathName}"
 						class="flex w-full items-center justify-start gap-2 p-3 text-white"
 						data-sveltekit-preload-data
-						on:click="{() => close()}">
+						on:click="{() => close()}"
+					>
 						<div
-							class="dutaion-500 flex flex-1 transform items-center gap-2 transition hover:translate-x-2">
+							class="dutaion-500 flex flex-1 transform items-center gap-2 transition hover:translate-x-2"
+						>
 							<div>
 								{@html sidebar.svg}
 							</div>
@@ -99,7 +105,8 @@ function close() {
 									{sidebar.hidden === 'hidden' ? '' : 'transform -rotate-180'}"
 								fill="currentColor"
 								viewBox="0 0 20 20"
-								xmlns="http://www.w3.org/2000/svg">
+								xmlns="http://www.w3.org/2000/svg"
+							>
 								<path
 									fill-rule="evenodd"
 									d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -119,7 +126,8 @@ function close() {
 								data-sveltekit-preload-data
 								aria-label="Click to route this page"
 								class:active-submenu="{$page.url?.pathname === subItems.pathName}"
-								on:click="{() => close()}">
+								on:click="{() => close()}"
+							>
 								<div class="px-3 py-2 capitalize text-white">
 									{subItems.name}
 								</div>

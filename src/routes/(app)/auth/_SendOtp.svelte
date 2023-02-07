@@ -25,7 +25,8 @@ export let ref = null
 				maxlength="10"
 				class="w-full"
 				required
-				bind:value="{phone}" />
+				bind:value="{phone}"
+			/>
 		</div>
 
 		<p class="text-sm font-light text-gray-500">Ex. 9XXXXXXXXX</p>

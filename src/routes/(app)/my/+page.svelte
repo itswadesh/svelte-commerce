@@ -19,7 +19,8 @@ export let data
 			me="{data.me}"
 			myOrders="{data.myOrders}"
 			myWishlist="{data.myWishlist}"
-			myReviews="{data.myReviews}" />
+			myReviews="{data.myReviews}"
+		/>
 	</div>
 
 	<!-- MOBILE FOOTER -->

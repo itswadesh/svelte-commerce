@@ -39,6 +39,7 @@ export let timeToRead = 0
 
 		<meta
 			name="twitter:data2"
-			content="{timeToRead !== 1 ? `${timeToRead} minutes` : '1 minute'}" />
+			content="{timeToRead !== 1 ? `${timeToRead} minutes` : '1 minute'}"
+		/>
 	{/if}
 </svelte:head>

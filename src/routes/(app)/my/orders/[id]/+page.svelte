@@ -56,7 +56,8 @@ onMount(() => {
 
 			<div class="mb-5 overflow-hidden rounded-md border sm:mb-10">
 				<div
-					class="flex flex-wrap items-center justify-between border-b bg-gray-200 px-5 py-2 text-sm">
+					class="flex flex-wrap items-center justify-between border-b bg-gray-200 px-5 py-2 text-sm"
+				>
 					<h5><b>Order No :</b> #{data.order?.orderNo}</h5>
 
 					<h5><b>Order Date </b>: {date(data.order?.createdAt)}</h5>
@@ -72,19 +73,22 @@ onMount(() => {
 									<a
 										href="{`/product/${item.slug}`}"
 										aria-label="Click to view the product details"
-										class="flex-shrink-0">
+										class="flex-shrink-0"
+									>
 										{#if item.isCustomized}
 											<LazyImg
 												src="{item.customizedImg}"
 												alt=""
 												width="96"
-												class="h-auto w-24 object-contain object-top" />
+												class="h-auto w-24 object-contain object-top"
+											/>
 										{:else}
 											<LazyImg
 												src="{item.img}"
 												alt=""
 												width="96"
-												class="h-auto w-24 object-contain object-top" />
+												class="h-auto w-24 object-contain object-top"
+											/>
 										{/if}
 									</a>
 
@@ -93,7 +97,8 @@ onMount(() => {
 											<a
 												href="{`/product/${item.slug}`}"
 												aria-label="Click to view the product details"
-												class="flex-1 text-base font-semibold hover:underline">
+												class="flex-1 text-base font-semibold hover:underline"
+											>
 												{item.name}
 											</a>
 
@@ -138,7 +143,8 @@ onMount(() => {
 												<a
 													href="{`/vendor/${item.vendor?.id}`}"
 													aria-label="Click to view the vendor's profile"
-													class="font-medium">
+													class="font-medium"
+												>
 													{item.vendor?.businessName}
 												</a>
 											</h6>
@@ -283,7 +289,8 @@ onMount(() => {
 						<a
 							href="/my/reviews/create?product={data.order?.pid}&ref=/product/{data.order?.slug}"
 							aria-label="Click to route rate & review product"
-							class="whitespace-nowrap font-semibold text-indigo-500 focus:outline-none hover:underline">
+							class="whitespace-nowrap font-semibold text-indigo-500 focus:outline-none hover:underline"
+						>
 							Rate & Review Product
 						</a>
 					</div>
@@ -306,7 +313,8 @@ onMount(() => {
 									href="{data.order?.invoiceLink}"
 									aria-label="Click to download invoice"
 									target="blank"
-									class="mb-4">
+									class="mb-4"
+								>
 									<PrimaryButton class="w-48" type="button">Download Invoice</PrimaryButton>
 								</a>
 							{/if}
@@ -315,7 +323,8 @@ onMount(() => {
 								<a
 									href="/my/exchange?orderId=${data.order?.orderId}&itemId=${data.order?.itemId}"
 									aria-label="Click to route exchange"
-									class="mb-4">
+									class="mb-4"
+								>
 									<TransparentButton class="w-48" type="button" border>Exchange</TransparentButton>
 								</a>
 							{/if}

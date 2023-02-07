@@ -115,7 +115,8 @@ function handleToggleSubCategory2(c, cx) {
 </script>
 
 <div
-	class="{clazz} flex h-[85vh] w-56 flex-shrink-0 flex-col items-start overflow-x-auto pr-6 overflow-x-hidden scrollbar-thin scrollbar-thumb-slate-200">
+	class="{clazz} flex h-[85vh] w-56 flex-shrink-0 flex-col items-start overflow-x-auto pr-6 overflow-x-hidden scrollbar-thin scrollbar-thumb-slate-200"
+>
 	<div class="flex flex-col items-start gap-1">
 		<h6 class="font-bold tracking-wide">
 			<span>
@@ -141,7 +142,8 @@ function handleToggleSubCategory2(c, cx) {
 			<button
 				type="button"
 				class="text-xs text-primary-500 transition duration-300 focus:outline-none hover:underline"
-				on:click="{clearFilters}">
+				on:click="{clearFilters}"
+			>
 				Clear All
 			</button>
 		{/if}
@@ -161,21 +163,28 @@ function handleToggleSubCategory2(c, cx) {
 						{#if m.children?.length}
 							<div
 								class="flex w-full items-center justify-between gap-2
-								{selectedCategory === m.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
-								<a href="/{m.slug}" aria-label="Click to route into category related products page" class="flex-1">
+								{selectedCategory === m.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}"
+							>
+								<a
+									href="/{m.slug}"
+									aria-label="Click to route into category related products page"
+									class="flex-1"
+								>
 									{m.name}
 								</a>
 
 								<button
 									type="button"
 									class="overflow-hidden p-1 focus:outline-none"
-									on:click="{() => handleToggleSubCategory(m, mx)}">
+									on:click="{() => handleToggleSubCategory(m, mx)}"
+								>
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										viewBox="0 0 20 20"
 										fill="currentColor"
 										class="h-5 w-5 flex-shrink-0 transition duration-300
-										{showSubCategory[mx] ? 'transform rotate-90' : ''}">
+										{showSubCategory[mx] ? 'transform rotate-90' : ''}"
+									>
 										<path
 											fill-rule="evenodd"
 											d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
@@ -187,7 +196,8 @@ function handleToggleSubCategory2(c, cx) {
 							<a
 								href="/{m.slug}"
 								aria-label="Click to route into category related products page"
-								class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
+								class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600"
+							>
 								{m.name}
 							</a>
 						{/if}
@@ -201,24 +211,28 @@ function handleToggleSubCategory2(c, cx) {
 										{#if c.children?.length}
 											<div
 												class="flex w-full items-center justify-between gap-2
-												{selectedCategory2 === c.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
+												{selectedCategory2 === c.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}"
+											>
 												<a
 													href="/{c.slug}"
 													aria-label="Click to route into category related products page"
-													class="flex-1">
+													class="flex-1"
+												>
 													{c.name}
 												</a>
 
 												<button
 													type="button"
 													class="overflow-hidden p-1 focus:outline-none"
-													on:click="{() => handleToggleSubCategory2(c, cx)}">
+													on:click="{() => handleToggleSubCategory2(c, cx)}"
+												>
 													<svg
 														xmlns="http://www.w3.org/2000/svg"
 														viewBox="0 0 20 20"
 														fill="currentColor"
 														class="h-5 w-5 flex-shrink-0 transition duration-300
-														{showSubCategory2[cx] ? 'transform rotate-90' : ''}">
+														{showSubCategory2[cx] ? 'transform rotate-90' : ''}"
+													>
 														<path
 															fill-rule="evenodd"
 															d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
@@ -230,7 +244,8 @@ function handleToggleSubCategory2(c, cx) {
 											<a
 												href="/{c.slug}"
 												aria-label="Click to route into category related products page"
-												class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
+												class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600"
+											>
 												{c.name}
 											</a>
 										{/if}
@@ -243,7 +258,8 @@ function handleToggleSubCategory2(c, cx) {
 													<a
 														href="/{cc.slug}"
 														aria-label="Click to route into category related products page"
-														class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
+														class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600"
+													>
 														{cc.name}
 													</a>
 												{/each}
@@ -268,7 +284,8 @@ function handleToggleSubCategory2(c, cx) {
 				title="Brands"
 				model="brands"
 				selectedItems="{fl.brands || []}"
-				on:go="{goCheckbox}" />
+				on:go="{goCheckbox}"
+			/>
 		</div>
 	{/if}
 
@@ -281,7 +298,8 @@ function handleToggleSubCategory2(c, cx) {
 				title="Genders"
 				model="genders"
 				selectedItems="{fl.genders || []}"
-				on:go="{goCheckbox}" />
+				on:go="{goCheckbox}"
+			/>
 		</div>
 	{/if}
 
@@ -294,7 +312,8 @@ function handleToggleSubCategory2(c, cx) {
 				title="Sizes"
 				model="sizes"
 				selectedItems="{fl.sizes || []}"
-				on:go="{goCheckbox}" />
+				on:go="{goCheckbox}"
+			/>
 		</div>
 	{/if}
 
@@ -307,7 +326,8 @@ function handleToggleSubCategory2(c, cx) {
 				title="Colors"
 				model="colors"
 				selectedItems="{fl.colors || []}"
-				on:go="{goCheckbox}" />
+				on:go="{goCheckbox}"
+			/>
 		</div>
 	{/if}
 
@@ -320,7 +340,8 @@ function handleToggleSubCategory2(c, cx) {
 				title="Themes"
 				model="themes"
 				selectedItems="{fl.themes || []}"
-				on:go="{goCheckbox}" />
+				on:go="{goCheckbox}"
+			/>
 		</div>
 	{/if}
 
@@ -333,7 +354,8 @@ function handleToggleSubCategory2(c, cx) {
 				title="Promotions"
 				model="promotions"
 				selectedItems="{fl.promotions || []}"
-				on:go="{goCheckbox}" />
+				on:go="{goCheckbox}"
+			/>
 		</div>
 	{/if}
 
@@ -346,7 +368,8 @@ function handleToggleSubCategory2(c, cx) {
 				title="types"
 				model="types"
 				selectedItems="{fl.types || []}"
-				on:go="{goCheckbox}" />
+				on:go="{goCheckbox}"
+			/>
 		</div>
 	{/if}
 
@@ -359,7 +382,8 @@ function handleToggleSubCategory2(c, cx) {
 				title="Categories"
 				model="categories"
 				selectedItems="{fl.categories || []}"
-				on:go="{goCheckbox}" />
+				on:go="{goCheckbox}"
+			/>
 		</div>
 	{/if}
 
@@ -372,7 +396,8 @@ function handleToggleSubCategory2(c, cx) {
 				title="vendors"
 				model="vendors"
 				selectedItems="{fl.vendors || []}"
-				on:go="{goCheckbox}" />
+				on:go="{goCheckbox}"
+			/>
 		</div>
 	{/if}
 
@@ -385,7 +410,8 @@ function handleToggleSubCategory2(c, cx) {
 				title="PRICE"
 				model="price"
 				selectedItems="{fl.price || []}"
-				on:go="{goCheckbox}" />
+				on:go="{goCheckbox}"
+			/>
 		</div>
 	{/if}
 
@@ -398,7 +424,8 @@ function handleToggleSubCategory2(c, cx) {
 				title="DISCOUNT"
 				model="discount"
 				selectedItems="{fl.discount || []}"
-				on:go="{goCheckbox}" />
+				on:go="{goCheckbox}"
+			/>
 		</div>
 	{/if}
 </div>

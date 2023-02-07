@@ -101,7 +101,8 @@ const navigateList = (e) => {
 	<button
 		type="button"
 		class="relative w-full focus:outline-none"
-		on:click="{() => (showSuggestionOptions = !showSuggestionOptions)}">
+		on:click="{() => (showSuggestionOptions = !showSuggestionOptions)}"
+	>
 		<input
 			id="data-input"
 			type="text"
@@ -109,17 +110,20 @@ const navigateList = (e) => {
 			bind:this="{searchInput}"
 			bind:value="{inputValue}"
 			on:input="{filterData}"
-			class="w-full rounded-md border bg-white py-2 pl-4 pr-12 text-sm font-light transition duration-300 placeholder:text-gray-500 focus:border-gray-400 focus:outline-none" />
+			class="w-full rounded-md border bg-white py-2 pl-4 pr-12 text-sm font-light transition duration-300 placeholder:text-gray-500 focus:border-gray-400 focus:outline-none"
+		/>
 
 		<button
 			type="submit"
 			aria-label="Click here to search input data"
-			class="absolute inset-y-0 right-0 z-10 hidden h-full w-10 flex-shrink-0 cursor-default items-center justify-center focus:outline-none sm:flex">
+			class="absolute inset-y-0 right-0 z-10 hidden h-full w-10 flex-shrink-0 cursor-default items-center justify-center focus:outline-none sm:flex"
+		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="h-5 w-5 text-gray-500"
 				viewBox="0 0 20 20"
-				fill="currentColor">
+				fill="currentColor"
+			>
 				<path
 					fill-rule="evenodd"
 					d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
@@ -134,7 +138,8 @@ const navigateList = (e) => {
 				<AutocompleteItem
 					itemLabel="{d.name}"
 					highlighted="{i === hiLiteIndex}"
-					on:click="{() => setInputVal(d)}" />
+					on:click="{() => setInputVal(d)}"
+				/>
 			{/each}
 		</ul>
 	{/if}

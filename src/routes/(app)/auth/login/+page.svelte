@@ -106,7 +106,8 @@ async function submit() {
 
 <div
 	class="frosted container mx-auto flex w-full max-w-sm flex-col rounded-2xl border bg-cover bg-center bg-no-repeat p-10 shadow-2xl"
-	style="background-image: url('/login/bg-lighter.svg');">
+	style="background-image: url('/login/bg-lighter.svg');"
+>
 	<h1 class="mb-8 w-full text-center text-2xl font-bold text-primary-500">Login</h1>
 
 	<Error err="{err}" />
@@ -120,11 +121,13 @@ async function submit() {
 				label="Password"
 				class="w-full"
 				required
-				bind:value="{password}" />
+				bind:value="{password}"
+			/>
 
 			<button
 				class="absolute inset-y-0 right-2 flex cursor-pointer items-end justify-center pb-2"
-				on:click="{togglePassword}">
+				on:click="{togglePassword}"
+			>
 				{#if showPassword}
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -132,7 +135,8 @@ async function submit() {
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="h-5 w-5">
+						class="h-5 w-5"
+					>
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -146,7 +150,8 @@ async function submit() {
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="h-5 w-5">
+						class="h-5 w-5"
+					>
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -165,7 +170,8 @@ async function submit() {
 			<a
 				href="{`/auth/forgot-password?ref=${$page.url.searchParams.get('ref') || '/'}`}"
 				aria-label="Click to route terms & conditions"
-				class="whitespace-nowrap text-xs text-gray-500 hover:underline">
+				class="whitespace-nowrap text-xs text-gray-500 hover:underline"
+			>
 				Forgot Password
 			</a>
 		</div>
@@ -177,21 +183,24 @@ async function submit() {
 		<a
 			href="{`/auth/otp-login?ref=${$page.url.searchParams.get('ref') || '/'}`}"
 			aria-label="Click to login with phone"
-			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
+			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline"
+		>
 			Login with Phone
 		</a>
 
 		<a
 			href="{`/auth/signup?ref=${$page.url.searchParams.get('ref') || '/'}`}"
 			aria-label="Click to login with email"
-			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
+			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline"
+		>
 			Signup
 		</a>
 
 		<a
 			href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store?.id}"
 			aria-label="Click to login as vendor"
-			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
+			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline"
+		>
 			Join as Vendor
 		</a>
 	</div>
@@ -203,7 +212,8 @@ async function submit() {
 			aria-label="Click to route terms & conditions"
 			target="_blank"
 			rel="noopener noreferrer"
-			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
+			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline"
+		>
 			<b>Terms & Conditions</b>
 		</a>
 	</p>

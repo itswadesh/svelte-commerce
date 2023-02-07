@@ -49,13 +49,15 @@ function changePage(e) {
 			{#if +current > 1}
 				<button
 					class="inline-flex items-center rounded border border-gray-300 p-0.5 font-bold tracking-wide text-gray-700 focus:outline-none hover:border-gray-800 sm:p-2 lg:py-2 lg:px-4"
-					on:click="{() => changePage(+current - 1)}">
+					on:click="{() => changePage(+current - 1)}"
+				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						class="h-4 w-4 sm:mr-2"
 						fill="none"
 						viewBox="0 0 24 24"
-						stroke="currentColor">
+						stroke="currentColor"
+					>
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -73,7 +75,8 @@ function changePage(e) {
 						<button
 							class="mx-auto h-5 w-5 rounded border border-transparent text-xs focus:outline-none hover:border-gray-800 sm:h-8 sm:w-8 sm:text-base"
 							class:active="{+current === i + 1}"
-							on:click="{() => changePage(i + 1)}">
+							on:click="{() => changePage(i + 1)}"
+						>
 							{i + 1}
 						</button>
 					{/if}
@@ -83,7 +86,8 @@ function changePage(e) {
 			{#if +current < count}
 				<button
 					class="inline-flex items-center rounded border border-gray-300 p-0.5 text-center font-bold tracking-wide text-gray-700 focus:outline-none  hover:border-gray-800 sm:p-2 lg:py-2 lg:px-4"
-					on:click="{() => changePage(+current + 1)}">
+					on:click="{() => changePage(+current + 1)}"
+				>
 					<span class="hidden text-xs sm:block">Next</span>
 
 					<svg
@@ -91,7 +95,8 @@ function changePage(e) {
 						class="h-4 w-4 sm:ml-2"
 						fill="none"
 						viewBox="0 0 24 24"
-						stroke="currentColor">
+						stroke="currentColor"
+					>
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"
 						></path>
 					</svg>

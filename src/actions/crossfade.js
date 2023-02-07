@@ -12,9 +12,9 @@ const [send, receive] = crossfade({
 			css: (t) => `
                 transform: ${transform} scale(${t});
                 opacity: ${t}
-            `,
+            `
 		}
-	},
+	}
 })
 
 export { send, receive }

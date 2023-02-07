@@ -132,7 +132,8 @@ async function onCountryChange(country) {
 					<div class="mb-2 w-full max-w-md">
 						<select
 							class="w-full rounded-md border border-gray-300 bg-white p-2 text-sm placeholder-gray-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-gray-50"
-							bind:value="{address.state}">
+							bind:value="{address.state}"
+						>
 							<option value="" selected>-- Select a State --</option>
 							{#each states as s}
 								{#if s}
@@ -154,7 +155,8 @@ async function onCountryChange(country) {
 						disabled
 						class="w-full rounded-md border border-gray-300 bg-white p-2 text-sm placeholder-gray-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-gray-50"
 						bind:value="{address.country}"
-						on:change="{() => onCountryChange(address.country)}">
+						on:change="{() => onCountryChange(address.country)}"
+					>
 						{#if countries?.data?.length}
 							{#each countries.data as c}
 								{#if c}

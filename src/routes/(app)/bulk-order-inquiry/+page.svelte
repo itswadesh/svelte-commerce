@@ -147,7 +147,8 @@ async function submit() {
 
 			<div>
 				<h1
-					class="mb-5 text-center font-serif text-2xl font-medium sm:mb-10 md:text-3xl lg:text-4xl">
+					class="mb-5 text-center font-serif text-2xl font-medium sm:mb-10 md:text-3xl lg:text-4xl"
+				>
 					Contact for Bulk Orders
 				</h1>
 
@@ -189,7 +190,8 @@ async function submit() {
 											type="checkbox"
 											class="h-4 w-4 border-2"
 											bind:checked="{mobileCover}"
-											on:change="{() => handleInterestedProduct(mobileCover, 'Mobile Cover')}" />
+											on:change="{() => handleInterestedProduct(mobileCover, 'Mobile Cover')}"
+										/>
 
 										<span>Mobile Cover</span>
 									</label>
@@ -201,7 +203,8 @@ async function submit() {
 											type="checkbox"
 											class="h-4 w-4 border-2"
 											bind:checked="{keychain}"
-											on:change="{() => handleInterestedProduct(keychain, 'Keychain')}" />
+											on:change="{() => handleInterestedProduct(keychain, 'Keychain')}"
+										/>
 
 										<span>Keychain</span>
 									</label>
@@ -213,7 +216,8 @@ async function submit() {
 											type="checkbox"
 											class="h-4 w-4 border-2"
 											bind:checked="{tShirt}"
-											on:change="{() => handleInterestedProduct(tShirt, 'T-Shirt')}" />
+											on:change="{() => handleInterestedProduct(tShirt, 'T-Shirt')}"
+										/>
 
 										<span>T-Shirt</span>
 									</label>
@@ -225,7 +229,8 @@ async function submit() {
 											type="checkbox"
 											class="h-4 w-4 border-2"
 											bind:checked="{popSocket}"
-											on:change="{() => handleInterestedProduct(popSocket, 'Pop Socket')}" />
+											on:change="{() => handleInterestedProduct(popSocket, 'Pop Socket')}"
+										/>
 
 										<span>Pop Socket</span>
 									</label>
@@ -237,7 +242,8 @@ async function submit() {
 											type="checkbox"
 											class="h-4 w-4 border-2"
 											bind:checked="{coffeeMug}"
-											on:change="{() => handleInterestedProduct(coffeeMug, 'Coffee Mug')}" />
+											on:change="{() => handleInterestedProduct(coffeeMug, 'Coffee Mug')}"
+										/>
 
 										<span>Coffee Mug</span>
 									</label>
@@ -249,7 +255,8 @@ async function submit() {
 											type="checkbox"
 											class="h-4 w-4 border-2"
 											bind:checked="{mousePad}"
-											on:change="{() => handleInterestedProduct(mousePad, 'Mouse Pad')}" />
+											on:change="{() => handleInterestedProduct(mousePad, 'Mouse Pad')}"
+										/>
 
 										<span>Mouse Pad</span>
 									</label>
@@ -271,7 +278,8 @@ async function submit() {
 									<Radio
 										bind:modelValue="{blukOrder.minQty}"
 										value="50+"
-										on:change="{({ detail }) => updateQuantity(detail)}">
+										on:change="{({ detail }) => updateQuantity(detail)}"
+									>
 										<span class="text-sm font-semibold"> 50+ </span>
 									</Radio>
 								</li>
@@ -280,7 +288,8 @@ async function submit() {
 									<Radio
 										bind:modelValue="{blukOrder.minQty}"
 										value="100+"
-										on:change="{({ detail }) => updateQuantity(detail)}">
+										on:change="{({ detail }) => updateQuantity(detail)}"
+									>
 										<span class="text-sm font-semibold"> 100+ </span>
 									</Radio>
 								</li>
@@ -289,7 +298,8 @@ async function submit() {
 									<Radio
 										bind:modelValue="{blukOrder.minQty}"
 										value="200+"
-										on:change="{({ detail }) => updateQuantity(detail)}">
+										on:change="{({ detail }) => updateQuantity(detail)}"
+									>
 										<span class="text-sm font-semibold"> 200+ </span>
 									</Radio>
 								</li>
@@ -298,7 +308,8 @@ async function submit() {
 									<Radio
 										bind:modelValue="{blukOrder.minQty}"
 										value="500+"
-										on:change="{({ detail }) => updateQuantity(detail)}">
+										on:change="{({ detail }) => updateQuantity(detail)}"
+									>
 										<span class="text-sm font-semibold"> 500+ </span>
 									</Radio>
 								</li>
@@ -307,7 +318,8 @@ async function submit() {
 									<Radio
 										bind:modelValue="{blukOrder.minQty}"
 										value="More than 1000+"
-										on:change="{({ detail }) => updateQuantity(detail)}">
+										on:change="{({ detail }) => updateQuantity(detail)}"
+									>
 										<span class="text-sm font-semibold"> More than 1000+ </span>
 									</Radio>
 								</li>
@@ -320,7 +332,8 @@ async function submit() {
 							<Textarea
 								placeholder="We are happy to listen you, write your note..."
 								bind:value="{blukOrder.message}"
-								required />
+								required
+							/>
 						</li>
 					</ul>
 
@@ -438,14 +451,16 @@ async function submit() {
 			</div>
 
 			<div
-				style="position: fixed; top: -50px; left: 0; height: 100vh; width: 100vw; display: flex; justify-content: center; overflow: hidden; pointer-events: none;">
+				style="position: fixed; top: -50px; left: 0; height: 100vh; width: 100vw; display: flex; justify-content: center; overflow: hidden; pointer-events: none;"
+			>
 				<Confetti
 					x="{[-5, 5]}"
 					y="{[0, 0.1]}"
 					delay="{[50, 2000]}"
 					duration="2000"
 					amount="500"
-					fallDistance="100vh" />
+					fallDistance="100vh"
+				/>
 			</div>
 		{/if}
 	</div>

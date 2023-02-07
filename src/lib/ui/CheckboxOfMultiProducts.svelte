@@ -47,7 +47,8 @@ export let items = [],
 						bind:group="{selectedItems}"
 						value="{i._id}"
 						class="inputcheckbox h-3.5 w-3.5 rounded-md border border-gray-200 bg-transparent text-primary-500"
-						on:change="{() => dispatch('change', selectedItems)}" />
+						on:change="{() => dispatch('change', selectedItems)}"
+					/>
 
 					<div class="flex-1 text-sm first-letter:uppercase flex items-center gap-2">
 						<LazyImg src="{i.img}" alt=" " class="w-8 h-auto object-contain object-center" />

@@ -85,14 +85,16 @@ async function saveReviewproduct(review) {
 			<a
 				href="{data.ref || '##'}"
 				aria-label="Click to view the product details"
-				class="mb-2 flex max-w-max flex-row items-center gap-4 text-sm text-gray-500 lg:flex-row-reverse">
+				class="mb-2 flex max-w-max flex-row items-center gap-4 text-sm text-gray-500 lg:flex-row-reverse"
+			>
 				<div>
 					<LazyImg
 						src="{data.product?.img}"
 						alt="Business img"
 						width="48"
 						height="48"
-						class="h-12 w-auto object-contain object-center text-xs" />
+						class="h-12 w-auto object-contain object-center text-xs"
+					/>
 				</div>
 
 				<span>{data.product?.name}</span>
@@ -131,13 +133,15 @@ async function saveReviewproduct(review) {
 									<button
 										type="button"
 										class="focus:outline-none focus:ring-0 focus:ring-offset-0"
-										on:click="{() => onSelect(i)}">
+										on:click="{() => onSelect(i)}"
+									>
 										<svg
 											class="block h-8 w-8
         									{select >= i && select != null ? 'text-primary-500' : 'text-gray-300'}"
 											fill="currentColor"
 											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 20 20">
+											viewBox="0 0 20 20"
+										>
 											<path
 												d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"
 											></path>

@@ -30,7 +30,8 @@ const pageTransitionDuration = 500
 		<div
 			class="transition-inner"
 			transition:scale="{{ delay: 0, duration: 100, easing: quintOut }}"
-			style="flex flex-col items-center justify-center text-center">
+			style="flex flex-col items-center justify-center text-center"
+		>
 			<slot />
 		</div>
 	{/key}

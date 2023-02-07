@@ -104,7 +104,8 @@ function selectallFilters() {}
 			<div
 				on:click="{toggle}"
 				on:mouseenter="{Showit}"
-				class="flex w-full cursor-pointer items-center justify-between">
+				class="flex w-full cursor-pointer items-center justify-between"
+			>
 				<h5 class="mr-2 text-sm font-semibold ">
 					{title}
 				</h5>
@@ -114,7 +115,8 @@ function selectallFilters() {}
 						xmlns="http://www.w3.org/2000/svg"
 						class="h-5 w-5"
 						viewBox="0 0 20 20"
-						fill="currentColor">
+						fill="currentColor"
+					>
 						<path
 							fill-rule="evenodd"
 							d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z"
@@ -126,7 +128,8 @@ function selectallFilters() {}
 						class="h-5 w-5"
 						fill="none"
 						viewBox="0 0 24 24"
-						stroke="currentColor">
+						stroke="currentColor"
+					>
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -173,7 +176,8 @@ function selectallFilters() {}
 								bind:group="{selectedItems}"
 								value="{i._source.slug}"
 								on:change="{() => dispatch('go', { model, selectedItems })}"
-								class="mt-0.5 h-4 w-4 flex-shrink-0 focus:ring-0 focus:ring-offset-0" />
+								class="mt-0.5 h-4 w-4 flex-shrink-0 focus:ring-0 focus:ring-offset-0"
+							/>
 
 							<div class="flex flex-1 flex-wrap items-center">
 								<span class="flex-1 text-sm">{i._source.name}</span>

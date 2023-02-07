@@ -41,11 +41,13 @@ let showItemCount = 10
 						src="{data.newArrivals[0].img}"
 						alt=" "
 						height="190"
-						class="h-full w-full object-cover object-top" />
+						class="h-full w-full object-cover object-top"
+					/>
 				</div>
 
 				<div
-					class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-center text-3xl font-bold tracking-wider text-white">
+					class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-center text-3xl font-bold tracking-wider text-white"
+				>
 					{data.newArrivals[0].name}
 				</div>
 			</div>
@@ -74,7 +76,8 @@ let showItemCount = 10
 				<!-- PRODUCTS -->
 
 				<div
-					class="mb-5 grid w-full grid-cols-2 items-start gap-3 sm:mb-10 sm:flex sm:flex-wrap sm:justify-between lg:mb-20 lg:gap-6">
+					class="mb-5 grid w-full grid-cols-2 items-start gap-3 sm:mb-10 sm:flex sm:flex-wrap sm:justify-between lg:mb-20 lg:gap-6"
+				>
 					{#each data.products as p, px}
 						{#if showItemCount >= px + 1}
 							<ProductCard product="{p}" />
@@ -88,7 +91,8 @@ let showItemCount = 10
 							type="button"
 							loadingringsize="sm"
 							class="text-sm"
-							on:click="{() => (showItemCount = showItemCount + 1)}">
+							on:click="{() => (showItemCount = showItemCount + 1)}"
+						>
 							Show More
 						</PrimaryButton>
 					</div>
@@ -104,7 +108,8 @@ let showItemCount = 10
 							<img
 								src="/no/no-data-availible.png"
 								alt="no data availible"
-								class="h-20 w-20 object-contain text-xs" />
+								class="h-20 w-20 object-contain text-xs"
+							/>
 						</div>
 
 						<p class="mb-5 text-center text-gray-500">No data found</p>
@@ -125,7 +130,8 @@ let showItemCount = 10
 					<img
 						src="/no/no-data-availible.png"
 						alt="no data availible"
-						class="h-20 w-20 object-contain text-xs" />
+						class="h-20 w-20 object-contain text-xs"
+					/>
 				</div>
 
 				<p class="mb-5 text-center text-gray-500">No data found</p>

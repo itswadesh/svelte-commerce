@@ -1,12 +1,12 @@
 {
-  "html.format.endWithNewline": true,
-  "git.ignoreLimitWarning": true,
-  "editor.formatOnSave": true,
-  "editor.formatOnPaste": true,
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "git.confirmEmptyCommits": false,
-  "git.confirmSync": false,
-  "git.enableSmartCommit": true
+	"html.format.endWithNewline": true,
+	"git.ignoreLimitWarning": true,
+	"editor.formatOnSave": true,
+	"editor.formatOnPaste": true,
+	"[javascript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"git.confirmEmptyCommits": false,
+	"git.confirmSync": false,
+	"git.enableSmartCommit": true
 }

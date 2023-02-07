@@ -32,6 +32,7 @@ let nativeLoading = false
 			src="{src}"
 			width="{width}"
 			height="{height}"
-			clazz="{clazz}" />
+			clazz="{clazz}"
+		/>
 	{/if}
 </IntersectionObserver>

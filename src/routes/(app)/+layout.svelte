@@ -30,7 +30,8 @@ let showCartSidebar = false
 		me="{data.me}"
 		cart="{data.cart}"
 		bind:showCartSidebar="{showCartSidebar}"
-		bind:openSidebar="{openSidebar}" />
+		bind:openSidebar="{openSidebar}"
+	/>
 
 	<PageTransitions url="{data.url}">
 		<div class="mt-14 w-full flex-1 sm:mt-20">

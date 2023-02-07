@@ -17,7 +17,8 @@ let openSidebar = false
 			store="{data.store}"
 			q="{data.q}"
 			bind:showCartSidebar="{showCartSidebar}"
-			bind:openSidebar="{openSidebar}" />
+			bind:openSidebar="{openSidebar}"
+		/>
 	</div>
 
 	<PageTransitions url="{data.url}">

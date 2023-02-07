@@ -20,7 +20,11 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import SendOtp from '../_SendOtp.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import VerifyOtp from '../_VerifyOtp.svelte'
-import { getOtpService, googleOneTapLoginService, verifyOtpService } from '$lib/services/UserService'
+import {
+	getOtpService,
+	googleOneTapLoginService,
+	verifyOtpService
+} from '$lib/services/UserService'
 
 const cookies = Cookie()
 
@@ -43,7 +47,7 @@ onMount(() => {
 			client_id: GOOGLE_CLIENT_ID
 		},
 		async (res) => {
-			const onetap = await googleOneTapLoginService( {data:res, origin:$page.data.origin})
+			const onetap = await googleOneTapLoginService({ data: res, origin: $page.data.origin })
 			const me = {
 				email: onetap.email,
 				phone: onetap.phone,
@@ -65,7 +69,7 @@ async function handleSendOTP({ detail }) {
 	phone = detail
 	try {
 		loading = true
-		const res = await getOtpService({ phone, storeId: data.store?.id, origin:  data.origin})
+		const res = await getOtpService({ phone, storeId: data.store?.id, origin: data.origin })
 		resendAfter = res?.timer
 		otpRequestSend = true
 	} catch (e) {
@@ -79,7 +83,7 @@ async function handleVerifyOtp({ detail }) {
 	try {
 		loading = true
 		const otp = detail
-		const res = await verifyOtpService( { phone, otp, storeId: data.store?.id ,origin: data.origin})
+		const res = await verifyOtpService({ phone, otp, storeId: data.store?.id, origin: data.origin })
 		const me = {
 			email: res.email,
 			phone: res.phone,
@@ -111,14 +115,16 @@ function changeNumber() {
 
 <div
 	class="frosted container mx-auto flex w-full max-w-sm flex-col rounded-2xl border bg-cover bg-center bg-no-repeat p-10 shadow-2xl"
-	style="background-image: url('/login/bg-lighter.svg');">
+	style="background-image: url('/login/bg-lighter.svg');"
+>
 	<h1 class="mb-8 w-full text-center text-2xl font-bold text-primary-500">Login/Register</h1>
 
 	{#if !otpRequestSend}
 		<SendOtp
 			loading="{loading}"
 			phone="{phone}"
-			on:send="{({ detail }) => handleSendOTP({ detail })}" />
+			on:send="{({ detail }) => handleSendOTP({ detail })}"
+		/>
 	{:else}
 		<VerifyOtp
 			loading="{loading}"
@@ -126,28 +132,32 @@ function changeNumber() {
 			resendAfter="{resendAfter}"
 			on:verifyOtp="{({ detail }) => handleVerifyOtp({ detail })}"
 			on:resend="{({ detail }) => handleSendOTP({ detail })}"
-			on:changeNumber="{changeNumber}" />
+			on:changeNumber="{changeNumber}"
+		/>
 	{/if}
 
 	<div class="mx-auto mb-5 flex max-w-max flex-col gap-1 text-center text-sm">
 		<a
 			href="{`/auth/login?ref=${$page.url.searchParams.get('ref') || '/'}`}"
 			aria-label="Click to login with email"
-			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
+			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline"
+		>
 			Login with Email
 		</a>
 
 		<a
 			href="{`/auth/signup?ref=${$page.url.searchParams.get('ref') || '/'}`}"
 			aria-label="Click to login with email"
-			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
+			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline"
+		>
 			Signup
 		</a>
 
 		<a
 			href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store?.id}"
 			aria-label="Click to login as vendor"
-			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
+			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline"
+		>
 			Join as Vendor
 		</a>
 	</div>
@@ -159,7 +169,8 @@ function changeNumber() {
 			aria-label="Click to route terms & conditions"
 			target="_blank"
 			rel="noopener noreferrer"
-			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
+			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline"
+		>
 			<b>Terms & Conditions</b>
 		</a>
 	</p>

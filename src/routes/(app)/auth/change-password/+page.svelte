@@ -58,15 +58,13 @@ async function submit(p) {
 		loading = true
 		const { oldPassword, password, passwordConfirmation } = p
 
-		const res = await changePasswordService(
-			{
-				oldPassword: oldPassword,
-				password: password,
-				passwordConfirmation: passwordConfirmation,
-				storeId: $page.data.store?.id,
-				origin:$page.data.origin
-			},
-		)
+		const res = await changePasswordService({
+			oldPassword: oldPassword,
+			password: password,
+			passwordConfirmation: passwordConfirmation,
+			storeId: $page.data.store?.id,
+			origin: $page.data.origin
+		})
 
 		await invalidateAll()
 
@@ -83,7 +81,8 @@ async function submit(p) {
 
 <div
 	class="frosted container mx-auto flex w-full max-w-sm flex-col rounded-2xl border bg-cover bg-center bg-no-repeat p-10 shadow-2xl"
-	style="background-image: url({loginBgLighter});">
+	style="background-image: url({loginBgLighter});"
+>
 	<h1 class="mb-8 w-full text-center text-2xl font-bold text-primary-500">Change Password</h1>
 
 	<Error err="{err}" />
@@ -95,11 +94,13 @@ async function submit(p) {
 				label="Old Password"
 				class="w-full"
 				required
-				bind:value="{password.oldPassword}" />
+				bind:value="{password.oldPassword}"
+			/>
 
 			<div
 				class="absolute inset-y-0 right-2 flex cursor-pointer items-end justify-center pb-2"
-				on:click="{() => toggleCurrentPassowrd()}">
+				on:click="{() => toggleCurrentPassowrd()}"
+			>
 				{#if showOldPassword}
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -107,7 +108,8 @@ async function submit(p) {
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="h-5 w-5">
+						class="h-5 w-5"
+					>
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -121,7 +123,8 @@ async function submit(p) {
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="h-5 w-5">
+						class="h-5 w-5"
+					>
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -142,11 +145,13 @@ async function submit(p) {
 				label="New Password"
 				class="w-full"
 				required
-				bind:value="{password.password}" />
+				bind:value="{password.password}"
+			/>
 
 			<div
 				class="absolute inset-y-0 right-2 flex cursor-pointer items-end justify-center pb-2"
-				on:click="{() => toggleNewPassowrd()}">
+				on:click="{() => toggleNewPassowrd()}"
+			>
 				{#if showNewPassword}
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -154,7 +159,8 @@ async function submit(p) {
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="h-5 w-5">
+						class="h-5 w-5"
+					>
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -168,7 +174,8 @@ async function submit(p) {
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="h-5 w-5">
+						class="h-5 w-5"
+					>
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -189,11 +196,13 @@ async function submit(p) {
 				label="Confirm Password"
 				class="w-full"
 				required
-				bind:value="{password.passwordConfirmation}" />
+				bind:value="{password.passwordConfirmation}"
+			/>
 
 			<div
 				class="absolute inset-y-0 right-2 flex cursor-pointer items-end justify-center pb-2"
-				on:click="{() => toggleConfirmationPassowrd()}">
+				on:click="{() => toggleConfirmationPassowrd()}"
+			>
 				{#if showConfirmationPassword}
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -201,7 +210,8 @@ async function submit(p) {
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="h-5 w-5">
+						class="h-5 w-5"
+					>
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -215,7 +225,8 @@ async function submit(p) {
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="h-5 w-5">
+						class="h-5 w-5"
+					>
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -237,7 +248,8 @@ async function submit(p) {
 		<a
 			href="{`${$page.url.searchParams.get('ref') || '/'}`}"
 			aria-label="Click to back into login"
-			class="max-w-max whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
+			class="max-w-max whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline"
+		>
 			Back
 		</a>
 	</div>

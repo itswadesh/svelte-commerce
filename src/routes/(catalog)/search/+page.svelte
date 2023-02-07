@@ -151,21 +151,24 @@ async function goCheckbox(item) {
 				facets="{data.facets}"
 				query="{data.query}"
 				class="sticky top-24 hidden lg:block"
-				on:clearAll="{refreshData}" />
+				on:clearAll="{refreshData}"
+			/>
 
 			<MobileFilter
 				facets="{data.facets}"
 				bind:showFilter="{showFilter}"
 				bind:showSort="{showSort}"
 				class="sticky top-14 z-40 block sm:top-20 lg:hidden"
-				on:clearAll="{refreshData}" />
+				on:clearAll="{refreshData}"
+			/>
 		{/if}
 
 		<div class="w-full sm:px-10 lg:px-0">
 			{#if data.products?.length}
 				<div class="mb-5 w-full sm:mb-10 lg:mb-20">
 					<div
-						class="mb-5 hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex">
+						class="mb-5 hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex"
+					>
 						<h2 class="flex flex-wrap items-center gap-2">
 							<span class="text-xl font-bold capitalize md:text-2xl">
 								Showing results {#if data.searchData}
@@ -197,7 +200,8 @@ async function goCheckbox(item) {
 								<select
 									bind:value="{data.sort}"
 									class="max-w-max border-b bg-transparent py-1 pr-2 font-semibold focus:border-primary-500 focus:outline-none hover:border-primary-500"
-									on:change="{() => sortNow(data.sort)}">
+									on:change="{() => sortNow(data.sort)}"
+								>
 									{#each sorts as s}
 										<option value="{s.val}">{s.name}</option>
 									{/each}
@@ -208,13 +212,15 @@ async function goCheckbox(item) {
 
 					{#if data.facets.all_aggs.style_tags?.all?.buckets?.length}
 						<div
-							class="w-screen overflow-x-auto scrollbar-none lg:mb-5 lg:w-full lg:overflow-x-hidden">
+							class="w-screen overflow-x-auto scrollbar-none lg:mb-5 lg:w-full lg:overflow-x-hidden"
+						>
 							<div class="inline-flex gap-2 p-3 lg:flex lg:flex-wrap lg:p-0">
 								{#each data.facets.all_aggs.style_tags.all.buckets || [] as t}
 									{#if t}
 										<button
 											class="block whitespace-nowrap rounded-full border bg-white py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none hover:border-primary-500 hover:text-primary-500"
-											on:click="{() => goCheckbox(t.key)}">
+											on:click="{() => goCheckbox(t.key)}"
+										>
 											{t.key} ({t.doc_count})
 										</button>
 									{/if}
@@ -224,7 +230,8 @@ async function goCheckbox(item) {
 					{/if}
 
 					<ul
-						class="grid w-full grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6">
+						class="grid w-full grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6"
+					>
 						{#each data.products as p, ix}
 							<li>
 								<ProductCard product="{p}" />
@@ -246,7 +253,8 @@ async function goCheckbox(item) {
 												{#if t}
 													<button
 														class="capitalizefocus:outline-none max-w-max rounded-md bg-white py-2 px-4 text-sm font-semibold"
-														on:click="{() => goCheckbox(t.key)}">
+														on:click="{() => goCheckbox(t.key)}"
+													>
 														{t.key}
 													</button>
 												{/if}
@@ -267,7 +275,8 @@ async function goCheckbox(item) {
 			{:else}
 				<div
 					class="mb-5 flex w-full items-center justify-center px-3 sm:mb-10 sm:px-0 lg:mb-20"
-					style="height: 60vh;">
+					style="height: 60vh;"
+				>
 					<div class="m-10 flex flex-col items-center justify-center text-center">
 						<h2 class="mb-10 text-xl capitalize sm:text-2xl lg:text-3xl">
 							{#if data.searchData}You searched for "{data.searchData}"{/if}
@@ -277,7 +286,8 @@ async function goCheckbox(item) {
 							<img
 								src="{noNoDataAvailable}"
 								alt="no data availible"
-								class="h-20 w-20 object-contain text-xs" />
+								class="h-20 w-20 object-contain text-xs"
+							/>
 						</div>
 
 						<h2>We couldn't find any matches!</h2>
@@ -296,7 +306,8 @@ async function goCheckbox(item) {
 			{:else}
 				<Pagination
 					count="{Math.ceil((data?.count || 1) / data.pageSize)}"
-					current="{data?.currentPage || 1}" />
+					current="{data?.currentPage || 1}"
+				/>
 			{/if}
 		</div>
 	</div>
