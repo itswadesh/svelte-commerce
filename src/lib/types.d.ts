@@ -116,10 +116,10 @@ interface Category {
 	_id: string
 	name: string
 	slug: string
-	link: string
-	active: boolean
-	new: boolean
-	position: number
+	link?: string
+	active?: boolean
+	new?: boolean
+	position?: number
 }
 
 interface Option {

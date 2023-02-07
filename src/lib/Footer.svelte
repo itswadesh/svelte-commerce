@@ -29,7 +29,7 @@ import googlePlay from '$lib/assets/app/google-play.png'
 import type { Category, Me } from './types'
 // import { fetchFooterCategories } from './services/CategoryService'
 
-export let store, popularSearches:{ took: 0, count: 0, data: [] }, megamenu:Category[]
+export let store={}, popularSearches:{ took: 0, count: 0, data: [] }, megamenu:Category[]
 
 // let categories = []
 
