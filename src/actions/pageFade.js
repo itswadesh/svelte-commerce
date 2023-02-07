@@ -9,11 +9,11 @@ export const fadeIn = (_) => ({
 	duration,
 	delay,
 	easing: sineOut,
-	css: (t) => `opacity: ${t}`,
+	css: (t) => `opacity: ${t}`
 })
 export const fadeOut = (_) => ({
 	duration,
 	delayZero,
 	easing: sineOut,
-	css: (t) => `opacity: ${t}`,
+	css: (t) => `opacity: ${t}`
 })

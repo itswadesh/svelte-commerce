@@ -22,14 +22,16 @@ let bounceItemFromTop = false
 		href="/product/{product.slug}"
 		target="_blank"
 		rel="noopener noreferrer"
-		aria-label="Click to route product details page">
+		aria-label="Click to route product details page"
+	>
 		<div class="mb-2 h-[280px] w-[210px] overflow-hidden">
 			<LazyImg
 				src="{product.img}"
 				alt="{product.name}"
 				width="210"
 				height="280"
-				class="h-[280px] w-[210px] object-contain object-bottom text-xs" />
+				class="h-[280px] w-[210px] object-contain object-bottom text-xs"
+			/>
 		</div>
 
 		<div class="flex flex-col gap-1">
@@ -44,7 +46,8 @@ let bounceItemFromTop = false
 			<div class="flex justify-between gap-2">
 				{#if product.name}
 					<h2
-						class="flex-1 truncate text-sm text-gray-500 group-hover:text-blue-600 group-hover:underline sm:text-base">
+						class="flex-1 truncate text-sm text-gray-500 group-hover:text-blue-600 group-hover:underline sm:text-base"
+					>
 						{product.name}
 					</h2>
 
@@ -91,7 +94,8 @@ let bounceItemFromTop = false
 					href="/cart"
 					aria-label="cart"
 					class="relative flex w-full transform items-center justify-center overflow-hidden rounded-full border border-primary-500 bg-primary-500 px-4 py-2 text-center text-xs font-semibold tracking-wider text-white shadow-md transition duration-700 focus:outline-none focus:ring-0 focus:ring-offset-0 hover:border-primary-700 hover:bg-primary-700"
-					data-sveltekit-preload-data>
+					data-sveltekit-preload-data
+				>
 					{cartButtonText}
 				</a>
 			{:else}
@@ -110,7 +114,8 @@ let bounceItemFromTop = false
 							invalidateAll()
 							await applyAction(result)
 						}
-					}}">
+					}}"
+				>
 					<input type="hidden" name="pid" value="{product?._id}" />
 					<input type="hidden" name="vid" value="{product?._id}" />
 					<input type="hidden" name="qty" value="{1}" />
@@ -122,7 +127,8 @@ let bounceItemFromTop = false
 						loading="{loading}"
 						loadingringsize="xs"
 						roundedFull
-						class="text-xs">
+						class="text-xs"
+					>
 						{cartButtonText}
 					</PrimaryButton>
 				</form>

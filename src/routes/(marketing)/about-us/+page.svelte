@@ -12,7 +12,8 @@ let seoProps = {
 
 <section class="min-h-screen p-3 sm:p-10">
 	<div
-		class="container mx-auto flex w-full max-w-6xl flex-col items-center gap-5 text-center text-sm sm:gap-10 sm:text-base">
+		class="container mx-auto flex w-full max-w-6xl flex-col items-center gap-5 text-center text-sm sm:gap-10 sm:text-base"
+	>
 		<!-- About Us -->
 
 		<h1 class="font-serif text-2xl font-medium md:text-3xl lg:text-4xl">About Us</h1>
@@ -100,7 +101,8 @@ let seoProps = {
 			</div>
 
 			<div
-				class="absolute left-40 top-20 flex w-60 flex-col items-center justify-center gap-4 bg-gray-100 p-4 text-center text-sm text-gray-500">
+				class="absolute left-40 top-20 flex w-60 flex-col items-center justify-center gap-4 bg-gray-100 p-4 text-center text-sm text-gray-500"
+			>
 				<h3 class="text-lg font-bold text-gray-700">{$page.data.store?.websiteName}</h3>
 
 				<p class="text-gray-500">
@@ -114,7 +116,8 @@ let seoProps = {
 				</p>
 
 				<button
-					class="max-w-max rounded-md bg-gray-400 py-2 px-10 font-bold uppercase tracking-wider text-gray-700 focus:outline-none">
+					class="max-w-max rounded-md bg-gray-400 py-2 px-10 font-bold uppercase tracking-wider text-gray-700 focus:outline-none"
+				>
 					{$page.data.store?.websiteName}
 				</button>
 			</div>

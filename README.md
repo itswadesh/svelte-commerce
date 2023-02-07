@@ -53,6 +53,8 @@
 
 ## Update 15-December-2022
 
+- 07-February-2023 - Prettified.
+- 06-February-2023 - Sveltekit 1.5
 - 15-December-2022 - Sveltekit 1.0 - Finally.
 - 05-December-2022 - fix: Close message
 - 30-November-2022 - Fixed: Coupon apply and remove, Added: Back to top fade animation

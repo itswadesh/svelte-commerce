@@ -44,19 +44,23 @@ let categoryColors = [
 							<a
 								href="/{category.link || category.slug || '##'}"
 								aria-label="Click to view related products of this category"
-								class="group flex w-16 flex-col items-center justify-center">
+								class="group flex w-16 flex-col items-center justify-center"
+							>
 								<div
-									class="mb-1 h-16 w-16 flex-shrink-0 overflow-hidden rounded-full border shadow-md group-hover:border-primary-500 group-hover:shadow-xl sm:mb-4">
+									class="mb-1 h-16 w-16 flex-shrink-0 overflow-hidden rounded-full border shadow-md group-hover:border-primary-500 group-hover:shadow-xl sm:mb-4"
+								>
 									<LazyImg
 										src="{category.img}"
 										alt="{category.name}"
 										width="64"
 										height="64"
-										class="h-full w-full scale-100 transform object-cover text-xs transition-all duration-300 group-hover:scale-105" />
+										class="h-full w-full scale-100 transform object-cover text-xs transition-all duration-300 group-hover:scale-105"
+									/>
 								</div>
 
 								<h6
-									class="w-full truncate overflow-ellipsis text-center text-xs capitalize tracking-tighter text-gray-500 group-hover:font-medium group-hover:text-primary-500">
+									class="w-full truncate overflow-ellipsis text-center text-xs capitalize tracking-tighter text-gray-500 group-hover:font-medium group-hover:text-primary-500"
+								>
 									{category.name}
 								</h6>
 							</a>

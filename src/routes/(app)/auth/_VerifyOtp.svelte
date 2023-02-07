@@ -140,7 +140,8 @@ function onInput(e) {
 			<button
 				type="button"
 				class="font-bold text-blue-600 focus:outline-none hover:text-blue-800"
-				on:click="{() => dispatch('changeNumber')}">
+				on:click="{() => dispatch('changeNumber')}"
+			>
 				Change
 			</button>
 		</div>
@@ -192,7 +193,8 @@ function onInput(e) {
 				autocomplete="off"
 				autofocus="{true}"
 				on:input="{checkLength}"
-				on:keypress="{onKeyPress}" />
+				on:keypress="{onKeyPress}"
+			/>
 
 			<svg viewBox="0 0 240 1" xmlns="http://www.w3.org/2000/svg">
 				<line
@@ -231,7 +233,8 @@ function onInput(e) {
 				<button
 					type="button"
 					class="font-bold text-primary-500 focus:outline-none hover:text-primary-700"
-					on:click="{handleResendOtp}">
+					on:click="{handleResendOtp}"
+				>
 					RESEND OTP
 				</button>
 			{/if}

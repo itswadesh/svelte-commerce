@@ -51,7 +51,8 @@ let seoProps = {
 						{#if heroBanners.length > 0}
 							<div>
 								<h1
-									class="uppercase p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 md:py-10 sm:text-2xl md:text-3xl xl:text-4xl">
+									class="uppercase p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 md:py-10 sm:text-2xl md:text-3xl xl:text-4xl"
+								>
 									BEST OF {$page.data.store?.websiteName} EXCLUSIVE
 								</h1>
 
@@ -101,7 +102,8 @@ let seoProps = {
 					<img
 						src="/no/no-data-availible.png"
 						alt="no data availible"
-						class="h-20 w-20 text-xs object-contain" />
+						class="h-20 w-20 text-xs object-contain"
+					/>
 				</div>
 
 				<p class="mb-5 text-center text-gray-500">No data found</p>

@@ -40,6 +40,7 @@ onMount(() => {
 		? `${getCdnImageUrl(src)}?width=2&height=4`
 		: `${getCdnImageUrl(src)}?width=${w}&height=${h}`}"
 	alt="{alt}"
-	class:loaded
+	class:loaded="{loaded}"
 	class="{clazz} whitespace-pre-line"
-	bind:this="{thisImage}" />
+	bind:this="{thisImage}"
+/>

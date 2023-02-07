@@ -73,7 +73,8 @@ async function getMegaMenu() {
 		<li
 			class="hoverable mx-1"
 			on:mouseenter="{() => (selectedCategory = category.name)}"
-			on:mouseleave="{() => (selectedCategory = '')}">
+			on:mouseleave="{() => (selectedCategory = '')}"
+		>
 			<div
 				class="itmes-center relative flex h-20 flex-shrink-0 justify-center whitespace-nowrap border-b-4 border-transparent p-2 font-medium uppercase
                     {index % 6 == 0 ? 'hover:border-yellow-500' : ''}
@@ -92,12 +93,14 @@ async function getMegaMenu() {
                     {index % 6 == 3 && selectedCategory === category.name ? 'border-green-500' : ''}
                     {index % 6 == 4 && selectedCategory === category.name ? 'border-pink-500' : ''}
                     {index % 6 == 5 && selectedCategory === category.name ? 'border-blue-500' : ''}
-                    ">
+                    "
+			>
 				<a
 					href="/{category.link || category.slug}"
 					aria-label="Click to route into category related products page"
 					data-sveltekit-reload
-					class="flex w-full items-center gap-1">
+					class="flex w-full items-center gap-1"
+				>
 					<!-- Root category -->
 
 					<span>{category.name}</span>
@@ -110,7 +113,8 @@ async function getMegaMenu() {
 							viewBox="0 0 20 20"
 							fill="currentColor"
 							class="h-4 w-4 flex-shrink-0 transition duration-300
-                            {selectedCategory === category.name ? 'transform -rotate-180' : ''}">
+                            {selectedCategory === category.name ? 'transform -rotate-180' : ''}"
+						>
 							<path
 								fill-rule="evenodd"
 								d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
@@ -129,7 +133,8 @@ async function getMegaMenu() {
 					</div>
 
 					<ul
-						class="relative z-10 flex max-h-[75vh] min-h-[50vh] flex-col flex-wrap items-start shadow-inner">
+						class="relative z-10 flex max-h-[75vh] min-h-[50vh] flex-col flex-wrap items-start shadow-inner"
+					>
 						<!-- 2nd level child category  -->
 
 						{#each category.children as c}
@@ -144,7 +149,8 @@ async function getMegaMenu() {
 									{index % 6 == 2 ? 'text-red-500 ' : ''}
                                     {index % 6 == 3 ? 'text-green-500 ' : ''}
                                     {index % 6 == 4 ? 'text-pink-500 ' : ''}
-                                    {index % 6 == 5 ? 'text-blue-500 ' : ''}">
+                                    {index % 6 == 5 ? 'text-blue-500 ' : ''}"
+								>
 									{c.name}
 								</a>
 
@@ -158,7 +164,8 @@ async function getMegaMenu() {
 													href="/{c1.link || c1.slug}"
 													aria-label="Click to route into category related products page"
 													data-sveltekit-reload
-													class="block w-full font-light hover:font-medium">
+													class="block w-full font-light hover:font-medium"
+												>
 													{c1.name}
 												</a>
 											</li>

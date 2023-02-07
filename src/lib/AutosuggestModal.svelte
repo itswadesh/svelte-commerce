@@ -59,7 +59,11 @@ async function getData(e) {
 
 	typingTimer = setTimeout(async () => {
 		try {
-			autocomplete = await fetchAutocompleteData({q:q,origin:$page?.data?.origin, storeId:$page?.data?.store?.id})
+			autocomplete = await fetchAutocompleteData({
+				q: q,
+				origin: $page?.data?.origin,
+				storeId: $page?.data?.store?.id
+			})
 		} catch (e) {}
 	}, 200)
 }
@@ -72,11 +76,13 @@ function resetInput() {
 onMount(async () => {
 	searchInput.focus()
 	try {
-		categories = (await fetchAllCategories({
-			featured:true,
-			storeId:$page?.data?.store?.id,
-			origin:	$page.data.origin
-		})).data
+		categories = (
+			await fetchAllCategories({
+				featured: true,
+				storeId: $page?.data?.store?.id,
+				origin: $page.data.origin
+			})
+		).data
 	} catch (e) {
 		err = e
 	} finally {
@@ -92,14 +98,16 @@ onMount(async () => {
 			<button
 				type="button"
 				class="absolute z-[102] my-auto mt-4 px-2 focus:outline-none"
-				on:click="{() => (show = false)}">
+				on:click="{() => (show = false)}"
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
 					viewBox="0 0 24 24"
 					stroke-width="1.5"
 					stroke="currentColor"
-					class="h-6 w-6">
+					class="h-6 w-6"
+				>
 					<path
 						stroke-linecap="round"
 						stroke-linejoin="round"
@@ -116,12 +124,14 @@ onMount(async () => {
 							<form
 								autocomplete="off"
 								class="flex w-full flex-row"
-								on:submit|preventDefault="{submit}">
+								on:submit|preventDefault="{submit}"
+							>
 								<input
 									bind:this="{searchInput}"
 									placeholder="{$page?.data?.store?.searchbarText || 'Search...'}"
 									class="text-normal relative h-14 w-full truncate border px-10 font-light focus:outline-none focus:ring-2 focus:ring-primary-500"
-									on:input="{getData}" />
+									on:input="{getData}"
+								/>
 
 								<div class=" flex h-full cursor-pointer justify-end">
 									<button on:click="{resetInput}" type="button">
@@ -130,7 +140,8 @@ onMount(async () => {
 												class="absolute my-auto mr-2 mt-4 flex h-6 w-6 justify-end text-sm text-gray-500"
 												xmlns="http://www.w3.org/2000/svg"
 												viewBox="0 0 20 20"
-												fill="currentColor">
+												fill="currentColor"
+											>
 												<path
 													fill-rule="evenodd"
 													d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
@@ -142,7 +153,8 @@ onMount(async () => {
 												xmlns="http://www.w3.org/2000/svg"
 												fill="none"
 												viewBox="0 0 24 24"
-												stroke="currentColor">
+												stroke="currentColor"
+											>
 												<path
 													stroke-linecap="round"
 													stroke-linejoin="round"
@@ -155,12 +167,14 @@ onMount(async () => {
 							</form>
 
 							<div
-								class="mt-1 w-full overflow-auto rounded border-gray-400 bg-white scrollbar-none">
+								class="mt-1 w-full overflow-auto rounded border-gray-400 bg-white scrollbar-none"
+							>
 								{#each autocomplete || [] as v, i}
 									<button
 										type="button"
 										class="flex w-full cursor-pointer flex-row items-center justify-between border-b text-base font-light text-gray-500 hover:bg-gray-100"
-										on:click="{() => onselect(v)}">
+										on:click="{() => onselect(v)}"
+									>
 										<div class="flex w-10/12 flex-row">
 											{#if v.img}
 												<div class="my-auto w-1/6">
@@ -168,7 +182,8 @@ onMount(async () => {
 														src="{v.img}"
 														alt=""
 														height="40"
-														class="mx-auto my-auto h-10 object-contain" />
+														class="mx-auto my-auto h-10 object-contain"
+													/>
 												</div>
 											{/if}
 
@@ -209,14 +224,16 @@ onMount(async () => {
 							type="button"
 							aria-label="Click to browse category"
 							class="flex items-center gap-4 text-left"
-							on:click="{() => handleRouteToCategorySlug(c.link, c.slug)}">
+							on:click="{() => handleRouteToCategorySlug(c.link, c.slug)}"
+						>
 							{#if c.img}
 								<div class="my-auto w-1/6">
 									<LazyImg
 										src="{c.img}"
 										alt=""
 										height="40"
-										class="mx-auto my-auto h-10 object-contain" />
+										class="mx-auto my-auto h-10 object-contain"
+									/>
 								</div>
 							{/if}
 
@@ -234,7 +251,8 @@ onMount(async () => {
 								xmlns="http://www.w3.org/2000/svg"
 								class="h-5 w-5 flex-shrink-0"
 								viewBox="0 0 20 20"
-								fill="currentColor">
+								fill="currentColor"
+							>
 								<path
 									fill-rule="evenodd"
 									d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"

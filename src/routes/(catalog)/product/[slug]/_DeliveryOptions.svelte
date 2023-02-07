@@ -23,7 +23,6 @@ function changePincode() {
 	disabled = false
 	deliveryDetails = null
 }
-
 </script>
 
 <div class="mb-4">
@@ -44,7 +43,8 @@ function changePincode() {
 		}}"
 		class="relative w-full max-w-sm overflow-hidden rounded-md border
         {disabled ? 'border-gray-300' : ''}
-		{pincode && pincode.toString().length === 6 ? 'border-primary-500' : 'border-gray-300'}">
+		{pincode && pincode.toString().length === 6 ? 'border-primary-500' : 'border-gray-300'}"
+	>
 		<input
 			type="tel"
 			name="zip"
@@ -52,21 +52,25 @@ function changePincode() {
 			maxlength="6"
 			placeholder="Enter pincode"
 			disabled="{disabled}"
-			class="w-full rounded-md bg-transparent py-3 px-4 pr-24 text-sm font-semibold placeholder:font-normal focus:outline-none disabled:bg-gray-100" />
+			class="w-full rounded-md bg-transparent py-3 px-4 pr-24 text-sm font-semibold placeholder:font-normal focus:outline-none disabled:bg-gray-100"
+		/>
 
 		{#if !deliveryDetails}
 			<button
 				type="submit"
 				class="absolute inset-y-0 right-0 z-10 flex w-20 items-center justify-center text-right text-sm font-bold
-				{pincode && pincode.toString().length === 6 ? 'text-primary-500' : 'text-gray-300'}">
+				{pincode && pincode.toString().length === 6 ? 'text-primary-500' : 'text-gray-300'}"
+			>
 				{#if loading}
 					<div
-						class="absolute inset-0 flex cursor-not-allowed items-center justify-center bg-black bg-opacity-70">
+						class="absolute inset-0 flex cursor-not-allowed items-center justify-center bg-black bg-opacity-70"
+					>
 						<svg
 							class="mx-auto h-4 w-4 animate-spin text-white"
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
-							viewBox="0 0 24 24">
+							viewBox="0 0 24 24"
+						>
 							<circle
 								class="opacity-25"
 								cx="12"
@@ -89,15 +93,18 @@ function changePincode() {
 			<button
 				type="button"
 				class="absolute inset-y-0 right-0 z-10 flex w-20 items-center justify-center text-right text-sm font-bold text-primary-500"
-				on:click="{changePincode}">
+				on:click="{changePincode}"
+			>
 				{#if loading}
 					<div
-						class="absolute inset-0 flex cursor-not-allowed items-center justify-center bg-black bg-opacity-70">
+						class="absolute inset-0 flex cursor-not-allowed items-center justify-center bg-black bg-opacity-70"
+					>
 						<svg
 							class="mx-auto h-4 w-4 animate-spin text-white"
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
-							viewBox="0 0 24 24">
+							viewBox="0 0 24 24"
+						>
 							<circle
 								class="opacity-25"
 								cx="12"
@@ -159,7 +166,8 @@ function changePincode() {
 						<img
 							src="{productOppositeArrows}"
 							alt=""
-							class="h-full w-full object-contain object-center" />
+							class="h-full w-full object-contain object-center"
+						/>
 					</div>
 
 					<div>

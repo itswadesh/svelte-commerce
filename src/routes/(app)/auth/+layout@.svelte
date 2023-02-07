@@ -27,16 +27,19 @@ let url
 					<a
 						href="/"
 						aria-label="Click to route home"
-						class="relative z-10 flex h-20 items-center justify-center border-b bg-white">
+						class="relative z-10 flex h-20 items-center justify-center border-b bg-white"
+					>
 						<LazyImg
 							src="{$page.data.store?.logo}"
 							alt="{$page.data.store?.websiteName}"
 							height="80"
-							class="max-h-16 w-32 object-contain object-center" />
+							class="max-h-16 w-32 object-contain object-center"
+						/>
 					</a>
 
 					<div
-						class="mx-auto h-[91.5vh] overflow-y-auto p-5 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-400 sm:p-10 md:p-20">
+						class="mx-auto h-[91.5vh] overflow-y-auto p-5 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-400 sm:p-10 md:p-20"
+					>
 						<slot />
 					</div>
 				</section>

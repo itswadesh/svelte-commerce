@@ -38,19 +38,22 @@ export let blog = {}
 	<a
 		href="/blogs/{blog._id}"
 		aria-label="Click to route blog details page"
-		class="group w-full overflow-hidden rounded-md border shadow-md transition duration-300 hover:shadow-xl">
+		class="group w-full overflow-hidden rounded-md border shadow-md transition duration-300 hover:shadow-xl"
+	>
 		<div class="overflow-hidden">
 			{#if blog.img}
 				<img
 					src="{blog.img}"
 					alt=""
-					class="aspect-video w-full transform object-contain object-center transition duration-1000 group-hover:scale-105" />
+					class="aspect-video w-full transform object-contain object-center transition duration-1000 group-hover:scale-105"
+				/>
 			{:else}
 				<div class="aspect-video h-auto w-full p-5">
 					<img
 						src="{$page.data.store?.logo}"
 						alt=""
-						class="h-full w-full transform object-contain object-center transition duration-1000 group-hover:scale-105" />
+						class="h-full w-full transform object-contain object-center transition duration-1000 group-hover:scale-105"
+					/>
 				</div>
 			{/if}
 		</div>
@@ -62,7 +65,8 @@ export let blog = {}
 				<ul class="mb-2 flex flex-wrap items-center gap-2">
 					{#each blog.tags as t}
 						<li
-							class="rounded-full bg-gray-100 py-1 px-3 text-xs font-semibold uppercase text-gray-400">
+							class="rounded-full bg-gray-100 py-1 px-3 text-xs font-semibold uppercase text-gray-400"
+						>
 							{t}
 						</li>
 					{/each}
@@ -77,12 +81,14 @@ export let blog = {}
 						<img
 							src="{blog?.user?.avatar}"
 							alt=" "
-							class="h-10 w-10 rounded-full border-2 border-primary-500 text-xs" />
+							class="h-10 w-10 rounded-full border-2 border-primary-500 text-xs"
+						/>
 					{:else}
 						<img
 							src="{userEmptyProfile}"
 							alt=""
-							class="h-10 w-10 rounded-full border-2 border-gray-500 text-xs" />
+							class="h-10 w-10 rounded-full border-2 border-gray-500 text-xs"
+						/>
 					{/if}
 				</div>
 
@@ -104,7 +110,8 @@ export let blog = {}
 			</div>
 
 			<div
-				class="max-w-max bg-gray-200 py-1 px-3 text-sm font-semibold text-gray-500 transition duration-300 group-hover:bg-primary-500 group-hover:text-white">
+				class="max-w-max bg-gray-200 py-1 px-3 text-sm font-semibold text-gray-500 transition duration-300 group-hover:bg-primary-500 group-hover:text-white"
+			>
 				Read More
 			</div>
 		</div>

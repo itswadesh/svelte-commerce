@@ -302,7 +302,8 @@ function handleMobileCanvas() {
 
 			<Breadcrumb
 				categoryPool="{data.product?.categoryPool}"
-				currentProductName="{data.product?.name}" />
+				currentProductName="{data.product?.name}"
+			/>
 
 			<!-- Social Share -->
 
@@ -315,19 +316,22 @@ function handleMobileCanvas() {
 			<div class="col-span-1 h-auto lg:col-span-3">
 				{#if !data.product?.isCustomized}
 					<div
-						class="flex w-full grid-cols-2 flex-row gap-2 overflow-x-scroll scrollbar-none md:grid">
+						class="flex w-full grid-cols-2 flex-row gap-2 overflow-x-scroll scrollbar-none md:grid"
+					>
 						{#if data?.product?.images?.length}
 							{#each data.product?.images as img, index}
 								<button
 									type="button"
 									class="flex h-auto w-full flex-shrink-0 cursor-zoom-in items-center justify-center overflow-hidden rounded md:flex-shrink"
-									on:click="{() => handleGallery(index)}">
+									on:click="{() => handleGallery(index)}"
+								>
 									<LazyImg
 										src="{img}"
 										alt="{data.product?.name}"
 										width="360"
 										height="480"
-										class="h-[480px] w-[360px] object-contain object-center text-xs" />
+										class="h-[480px] w-[360px] object-contain object-center text-xs"
+									/>
 								</button>
 							{/each}
 						{/if}
@@ -337,19 +341,22 @@ function handleMobileCanvas() {
 						transition:fade="{{ duration: 200 }}"
 						class="{showEditor
 							? 'fixed inset-0 top-0 z-[100] h-[90vh] w-full bg-white sm:static sm:z-0 sm:h-auto sm:bg-transparent'
-							: ''}">
+							: ''}"
+					>
 						{#if showEditor}
 							<button
 								type="button"
 								class="absolute top-3 right-3 z-[70] text-white"
-								on:click="{() => (showEditor = false)}">
+								on:click="{() => (showEditor = false)}"
+							>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									fill="none"
 									viewBox="0 0 24 24"
 									stroke-width="1.5"
 									stroke="currentColor"
-									class="h-6 w-6">
+									class="h-6 w-6"
+								>
 									<path
 										stroke-linecap="round"
 										stroke-linejoin="round"
@@ -360,18 +367,21 @@ function handleMobileCanvas() {
 					</div>
 				{:else}
 					<div
-						class="flex h-screen w-full flex-col items-center justify-center gap-5 text-center sm:mx-auto sm:h-auto sm:w-auto">
+						class="flex h-screen w-full flex-col items-center justify-center gap-5 text-center sm:mx-auto sm:h-auto sm:w-auto"
+					>
 						<h2 class="text-xl font-semibold capitalize sm:text-2xl">Make your custom design</h2>
 
 						<div
-							class="relative flex h-full w-full flex-col items-center justify-center gap-2 rounded-md border bg-gray-100 text-sm text-gray-500 sm:h-[570px] sm:w-[302px]">
+							class="relative flex h-full w-full flex-col items-center justify-center gap-2 rounded-md border bg-gray-100 text-sm text-gray-500 sm:h-[570px] sm:w-[302px]"
+						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"
 								viewBox="0 0 24 24"
 								stroke-width="1.5"
 								stroke="currentColor"
-								class="h-10 w-10">
+								class="h-10 w-10"
+							>
 								<path
 									stroke-linecap="round"
 									stroke-linejoin="round"
@@ -444,7 +454,8 @@ function handleMobileCanvas() {
 					<button
 						type="button"
 						class="mt-2 flex max-w-max items-center divide-x-2 divide-gray-300 border border-gray-300 py-1 text-sm focus:outline-none"
-						on:click="{() => scrollTo('ratings-and-reviews')}">
+						on:click="{() => scrollTo('ratings-and-reviews')}"
+					>
 						<div class="flex items-center gap-1 px-2 font-semibold">
 							<span> {productReview?.summary?.avg} </span>
 
@@ -452,9 +463,11 @@ function handleMobileCanvas() {
 								xmlns="http://www.w3.org/2000/svg"
 								class="h-4 w-4 text-primary-500"
 								viewBox="0 0 20 20"
-								fill="currentColor">
+								fill="currentColor"
+							>
 								<path
-									d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+									d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+								>
 								</path>
 							</svg>
 						</div>
@@ -477,7 +490,8 @@ function handleMobileCanvas() {
 							viewBox="0 0 24 24"
 							stroke-width="1"
 							stroke="currentColor"
-							class="h-5 w-5">
+							class="h-5 w-5"
+						>
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
@@ -526,7 +540,8 @@ function handleMobileCanvas() {
 								{#if tag?.name && tag?.type === 'Ribbon'}
 									<div
 										class="py-1 px-2 text-xs font-semibold uppercase text-white"
-										style="background-color: {tag.colorCode || '#000000'};">
+										style="background-color: {tag.colorCode || '#000000'};"
+									>
 										{tag.name}
 									</div>
 								{/if}
@@ -548,7 +563,8 @@ function handleMobileCanvas() {
 								fill="none"
 								viewBox="0 0 24 24"
 								stroke="currentColor"
-								stroke-width="1">
+								stroke-width="1"
+							>
 								<path
 									stroke-linecap="round"
 									stroke-linejoin="round"
@@ -564,7 +580,8 @@ function handleMobileCanvas() {
               				{data.product?.size?.name === selectedSize
 									? 'border-primary-500 bg-primary-500 text-white'
 									: 'border-gray-300 bg-transparent text-gray-500 hover:border-primary-500 hover:text-primary-500'}"
-								on:click="{() => selectSize(data.product?.size)}">
+								on:click="{() => selectSize(data.product?.size)}"
+							>
 								{data.product?.size?.name}
 							</button>
 						</div>
@@ -584,7 +601,8 @@ function handleMobileCanvas() {
 								viewBox="0 0 24 24"
 								stroke-width="1.5"
 								stroke="currentColor"
-								class="h-5 w-5">
+								class="h-5 w-5"
+							>
 								<path
 									stroke-linecap="round"
 									stroke-linejoin="round"
@@ -599,12 +617,14 @@ function handleMobileCanvas() {
 									<a
 										href="/product/{gp.slug}"
 										aria-label="/product/{gp.slug || '##'}"
-										class="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border transition duration-300 hover:border-primary-500">
+										class="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border transition duration-300 hover:border-primary-500"
+									>
 										<LazyImg
 											src="{gp.img}"
 											alt="{gp.img}"
 											height="56"
-											class="h-14 w-auto object-contain object-center" />
+											class="h-14 w-auto object-contain object-center"
+										/>
 									</a>
 								</li>
 							{/each}
@@ -637,7 +657,8 @@ function handleMobileCanvas() {
 				{#if data.product?.options?.length > 0}
 					<div
 						class="sizeSelector mb-5 flex flex-col gap-3 text-sm"
-						class:shake-animation="{shake}">
+						class:shake-animation="{shake}"
+					>
 						{#each data.product?.options as o}
 							<div class="flex flex-col items-start sm:flex-row">
 								<h6 class="mb-1 w-full flex-shrink-0 font-medium sm:mb-0 sm:w-52">
@@ -648,7 +669,8 @@ function handleMobileCanvas() {
 								{#if o.inputType == 'dropdown'}
 									<select
 										bind:value="{selectedOptions[o._id]}"
-										class="w-full max-w-xs flex-1 rounded-md border border-gray-300 py-1.5 text-sm font-light placeholder-gray-400 transition duration-300 focus:outline-none hover:bg-white">
+										class="w-full max-w-xs flex-1 rounded-md border border-gray-300 py-1.5 text-sm font-light placeholder-gray-400 transition duration-300 focus:outline-none hover:bg-white"
+									>
 										{#each o.values as i}
 											<option value="{i._id}">
 												{i.name}
@@ -729,25 +751,28 @@ function handleMobileCanvas() {
 				<div
 					use:viewport
 					on:enterViewport="{cartButtonEnterViewport}"
-					on:exitViewport="{cartButtonExitViewport}">
-				</div>
+					on:exitViewport="{cartButtonExitViewport}"
+				></div>
 
 				{#if !data.product?.isCustomized}
 					<div
-						class="box-shadow itmes-center fixed inset-x-0 bottom-0 z-10 grid w-full grid-cols-5 gap-2 border-t bg-white p-2 uppercase md:static md:mb-5 md:grid-cols-2 md:border-t-0 md:bg-transparent md:p-0 lg:max-w-sm">
+						class="box-shadow itmes-center fixed inset-x-0 bottom-0 z-10 grid w-full grid-cols-5 gap-2 border-t bg-white p-2 uppercase md:static md:mb-5 md:grid-cols-2 md:border-t-0 md:bg-transparent md:p-0 lg:max-w-sm"
+					>
 						<div class="col-span-2 md:col-span-1">
 							<WhiteButton
 								type="button"
 								loadingringsize="sm"
 								loading="{loadingForWishlist}"
 								class="w-full text-sm"
-								on:click="{() => toggleWishlisted(data.product?._id)}">
+								on:click="{() => toggleWishlisted(data.product?._id)}"
+							>
 								{#if isWislisted}
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										class="h-5 w-5 flex-shrink-0 text-red-500"
 										viewBox="0 0 20 20"
-										fill="currentColor">
+										fill="currentColor"
+									>
 										<path
 											fill-rule="evenodd"
 											d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
@@ -762,7 +787,8 @@ function handleMobileCanvas() {
 										fill="none"
 										viewBox="0 0 24 24"
 										stroke="currentColor"
-										stroke-width="2">
+										stroke-width="2"
+									>
 										<path
 											stroke-linecap="round"
 											stroke-linejoin="round"
@@ -782,18 +808,21 @@ function handleMobileCanvas() {
 										href="/cart"
 										aria-label="Click to route cart page"
 										class="relative flex w-full transform items-center justify-center overflow-hidden rounded-md border border-primary-500 bg-primary-500 px-4 py-2 text-center text-sm font-semibold tracking-wider text-white shadow-md transition duration-700 focus:outline-none focus:ring-0 focus:ring-offset-0 hover:border-primary-700 hover:bg-primary-700"
-										data-sveltekit-preload-data>
+										data-sveltekit-preload-data
+									>
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
 											class="h-5 w-5 flex-shrink-0"
 											fill="none"
 											viewBox="0 0 24 24"
 											stroke="currentColor"
-											stroke-width="2">
+											stroke-width="2"
+										>
 											<path
 												stroke-linecap="round"
 												stroke-linejoin="round"
-												d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
+												d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+											>
 											</path>
 										</svg>
 
@@ -824,21 +853,24 @@ function handleMobileCanvas() {
 
 												await applyAction(result)
 											}
-										}}">
+										}}"
+									>
 										<input type="hidden" name="pid" value="{data?.product?._id}" />
 										<input type="hidden" name="vid" value="{data?.product?._id}" />
 
 										<input
 											type="hidden"
 											name="linkedItems"
-											value="{JSON.stringify(selectedLinkiedProducts)}" />
+											value="{JSON.stringify(selectedLinkiedProducts)}"
+										/>
 
 										<input type="hidden" name="qty" value="{1}" />
 
 										<input
 											type="hidden"
 											name="options"
-											value="{JSON.stringify(selectedOptions1)}" />
+											value="{JSON.stringify(selectedOptions1)}"
+										/>
 
 										<input type="hidden" name="customizedImg" value="{customizedImg}" />
 
@@ -846,18 +878,21 @@ function handleMobileCanvas() {
 											type="submit"
 											loading="{loading}"
 											loadingringsize="sm"
-											class="w-full text-sm">
+											class="w-full text-sm"
+										>
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
 												class="h-5 w-5 flex-shrink-0"
 												fill="none"
 												viewBox="0 0 24 24"
 												stroke="currentColor"
-												stroke-width="2">
+												stroke-width="2"
+											>
 												<path
 													stroke-linecap="round"
 													stroke-linejoin="round"
-													d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
+													d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+												>
 												</path>
 											</svg>
 
@@ -889,7 +924,8 @@ function handleMobileCanvas() {
 								viewBox="0 0 24 24"
 								stroke-width="1"
 								stroke="currentColor"
-								class="h-5 w-5 flex-shrink-0">
+								class="h-5 w-5 flex-shrink-0"
+							>
 								<path
 									stroke-linecap="round"
 									stroke-linejoin="round"
@@ -929,7 +965,8 @@ function handleMobileCanvas() {
 								fill="none"
 								viewBox="0 0 24 24"
 								stroke="currentColor"
-								stroke-width="1">
+								stroke-width="1"
+							>
 								<path
 									stroke-linecap="round"
 									stroke-linejoin="round"
@@ -963,7 +1000,8 @@ function handleMobileCanvas() {
 								viewBox="0 0 24 24"
 								stroke-width="1"
 								stroke="currentColor"
-								class="h-5 w-5">
+								class="h-5 w-5"
+							>
 								<path
 									stroke-linecap="round"
 									stroke-linejoin="round"
@@ -976,7 +1014,8 @@ function handleMobileCanvas() {
 							<CheckboxOfMultiProducts
 								items="{data.product?.linkedProducts}"
 								selectedItems="{selectedLinkiedProducts || []}"
-								on:change="{handleSelectedLinkiedProducts}" />
+								on:change="{handleSelectedLinkiedProducts}"
+							/>
 						</div>
 					</div>
 				{/if}
@@ -994,7 +1033,8 @@ function handleMobileCanvas() {
 								viewBox="0 0 24 24"
 								stroke-width="1"
 								stroke="currentColor"
-								class="h-5 w-5">
+								class="h-5 w-5"
+							>
 								<path
 									stroke-linecap="round"
 									stroke-linejoin="round"
@@ -1023,7 +1063,8 @@ function handleMobileCanvas() {
 							viewBox="0 0 24 24"
 							stroke-width="1"
 							stroke="currentColor"
-							class="h-5 w-5">
+							class="h-5 w-5"
+						>
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
@@ -1049,7 +1090,8 @@ function handleMobileCanvas() {
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
-							stroke-width="1">
+							stroke-width="1"
+						>
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
@@ -1062,7 +1104,8 @@ function handleMobileCanvas() {
 						<div class="mb-5">
 							<div class="tems-center flex">
 								<div
-									class="flex max-w-max flex-col items-center justify-center border-r border-gray-300 px-4 text-center">
+									class="flex max-w-max flex-col items-center justify-center border-r border-gray-300 px-4 text-center"
+								>
 									<h2 class="mb-2 flex items-end gap-2">
 										<span class="text-4xl sm:text-5xl"> {productReview?.summary?.avg} </span>
 
@@ -1070,7 +1113,8 @@ function handleMobileCanvas() {
 											xmlns="http://www.w3.org/2000/svg"
 											class="h-6 w-6 text-primary-500"
 											viewBox="0 0 20 20"
-											fill="currentColor">
+											fill="currentColor"
+										>
 											<path
 												d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
 											></path>
@@ -1089,7 +1133,8 @@ function handleMobileCanvas() {
 													xmlns="http://www.w3.org/2000/svg"
 													class="h-4 w-4 text-gray-300"
 													viewBox="0 0 20 20"
-													fill="currentColor">
+													fill="currentColor"
+												>
 													<path
 														d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
 													></path>
@@ -1099,8 +1144,8 @@ function handleMobileCanvas() {
 											<div class="relative h-1 w-full rounded-full bg-gray-300">
 												<div
 													class="absolute inset-y-0 left-0 rounded-full bg-green-500"
-													style="width: {r.percent}%">
-												</div>
+													style="width: {r.percent}%"
+												></div>
 											</div>
 
 											<span class="w-8 text-right text-gray-500">
@@ -1122,7 +1167,8 @@ function handleMobileCanvas() {
 									{#if rx + 1 <= showReviewsCount}
 										<div class="mb-5 flex items-start gap-4">
 											<div
-												class="flex max-w-max items-center gap-0.5 rounded bg-primary-500 px-1.5 py-0.5 text-xs font-semibold text-white">
+												class="flex max-w-max items-center gap-0.5 rounded bg-primary-500 px-1.5 py-0.5 text-xs font-semibold text-white"
+											>
 												<span>
 													{review.rating}
 												</span>
@@ -1131,7 +1177,8 @@ function handleMobileCanvas() {
 													xmlns="http://www.w3.org/2000/svg"
 													class="h-3 w-3"
 													viewBox="0 0 20 20"
-													fill="currentColor">
+													fill="currentColor"
+												>
 													<path
 														d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
 													></path>
@@ -1162,14 +1209,16 @@ function handleMobileCanvas() {
 										<button
 											type="button"
 											class="text-sm font-semibold text-primary-500 transition duration-300 focus:outline-none hover:text-primary-700"
-											on:click="{() => handleShowReviewsCount(showReviewsCount)}">
+											on:click="{() => handleShowReviewsCount(showReviewsCount)}"
+										>
 											Show More
 										</button>
 									{:else}
 										<button
 											type="button"
 											class="text-sm font-semibold text-primary-500 transition duration-300 focus:outline-none hover:text-primary-700"
-											on:click="{() => (showReviewsCount = 1)}">
+											on:click="{() => (showReviewsCount = 1)}"
+										>
 											Show Less
 										</button>
 									{/if}
@@ -1188,14 +1237,16 @@ function handleMobileCanvas() {
 						on:click="{() =>
 							goto(
 								`/my/reviews/create?product=${data.product?._id}&ref=/product/${data.product?.slug}`
-							)}">
+							)}"
+					>
 						<span>Add Your Review</span>
 
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							class="h-5 w-5 transform transition duration-500 group-hover:translate-x-2"
 							viewBox="0 0 20 20"
-							fill="currentColor">
+							fill="currentColor"
+						>
 							<path
 								fill-rule="evenodd"
 								d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
@@ -1218,7 +1269,8 @@ function handleMobileCanvas() {
 					</h2>
 
 					<div
-						class="mb-5 grid w-full grid-cols-2 items-start gap-3 sm:mb-10 sm:flex sm:flex-wrap sm:justify-between lg:mb-20 lg:gap-6">
+						class="mb-5 grid w-full grid-cols-2 items-start gap-3 sm:mb-10 sm:flex sm:flex-wrap sm:justify-between lg:mb-20 lg:gap-6"
+					>
 						{#each data.product?.crossSells as csp}
 							<FrequentlyBoughtProduct product="{csp}" />
 						{/each}
@@ -1244,7 +1296,8 @@ function handleMobileCanvas() {
 <Gallery
 	bind:selectedImgIndex="{selectedImgIndex}"
 	bind:showPhotosModal="{showPhotosModal}"
-	product="{data.product}" />
+	product="{data.product}"
+/>
 
 {#if bounceItemFromTop}
 	<AnimatedCartItem img="{customizedImg || data.product?.img}" />

@@ -43,7 +43,8 @@ async function refreshAddress() {
 							address="{ads}"
 							selectedAddress="{data.selectedAddress}"
 							on:deleteAddress="{refreshAddress}"
-							on:addressChanged="{({ detail }) => addressChanged({ detail })}" />
+							on:addressChanged="{({ detail }) => addressChanged({ detail })}"
+						/>
 					{/each}
 				</div>
 			{:else}
@@ -54,15 +55,18 @@ async function refreshAddress() {
 				<a
 					href="/checkout/add-address?id=new"
 					aria-label="Click to route add address"
-					class="group flex h-40 w-full flex-col items-center justify-center rounded-md border border-dashed border-gray-400 hover:border-blue-500 sm:h-60 ">
+					class="group flex h-40 w-full flex-col items-center justify-center rounded-md border border-dashed border-gray-400 hover:border-blue-500 sm:h-60 "
+				>
 					<div
-						class="flex h-8 w-8 items-center justify-center rounded-full border  border-gray-400 bg-gray-50 group-hover:border-blue-500 sm:h-10 sm:w-10">
+						class="flex h-8 w-8 items-center justify-center rounded-full border  border-gray-400 bg-gray-50 group-hover:border-blue-500 sm:h-10 sm:w-10"
+					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							class="h-6 w-6 text-gray-600 group-hover:text-blue-500"
 							fill="none"
 							viewBox="0 0 24 24"
-							stroke="currentColor">
+							stroke="currentColor"
+						>
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
@@ -72,7 +76,8 @@ async function refreshAddress() {
 					</div>
 
 					<span
-						class="mt-2 text-sm font-medium text-gray-700 group-hover:text-blue-500 sm:text-base">
+						class="mt-2 text-sm font-medium text-gray-700 group-hover:text-blue-500 sm:text-base"
+					>
 						ADD NEW ADDRESS
 					</span>
 				</a>
@@ -90,13 +95,15 @@ async function refreshAddress() {
 				    {data.prescriptionId
 						? `/checkout/payment-options?address=${data.selectedAddress}&prescription=${data.prescriptionId}`
 						: `/checkout/payment-options?address=${data.selectedAddress}`}"
-					loading="{data.loading}" />
+					loading="{data.loading}"
+				/>
 			{:else}
 				<Pricesummary
 					cart="{data.cart}"
 					text="Please select address"
 					disabled="{true}"
-					loading="{data.loading}" />
+					loading="{data.loading}"
+				/>
 			{/if}
 		</div>
 	</div>

@@ -20,7 +20,8 @@ export let wlwmanifestXmlHref
 		rel="alternate"
 		type="application/rss+xml"
 		title="{alternateXml.title}"
-		href="{alternateXml.href}" />
+		href="{alternateXml.href}"
+	/>
 
 	<link rel="alternate" type="application/json" href="{alternateJsonHref}" />
 

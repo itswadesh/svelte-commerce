@@ -177,7 +177,8 @@ onMount(async () => {
 						<a
 							href="/my/orders?page=1#BusTickets"
 							rel="noopener"
-							aria-label="Click to view the booking details">
+							aria-label="Click to view the booking details"
+						>
 							<PrimaryButton type="button">View Booking Details</PrimaryButton>
 						</a>
 					{:else}
@@ -185,7 +186,8 @@ onMount(async () => {
 							href="/my/orders"
 							rel="noopener"
 							aria-label="Click to view the order details"
-							data-sveltekit-preload-data>
+							data-sveltekit-preload-data
+						>
 							<PrimaryButton type="button">View Order Details</PrimaryButton>
 						</a>
 					{/if}
@@ -197,12 +199,14 @@ onMount(async () => {
 			</div>
 
 			<div
-				class="mx-auto max-w-7xl gap-5 sm:flex sm:items-start sm:justify-center sm:gap-10 md:gap-20">
+				class="mx-auto max-w-7xl gap-5 sm:flex sm:items-start sm:justify-center sm:gap-10 md:gap-20"
+			>
 				<div class="sm:w-1/2">
 					{#if data.order?.items?.length > 0}
 						<div class="mb-5">
 							<h6
-								class="border-b border-dashed border-gray-400 pb-2 text-base font-bold sm:text-lg">
+								class="border-b border-dashed border-gray-400 pb-2 text-base font-bold sm:text-lg"
+							>
 								Item Details
 							</h6>
 
@@ -214,14 +218,16 @@ onMount(async () => {
 										aria-label="Click to view the product details"
 										data-sveltekit-reload
 										class="group flex w-full flex-row justify-between py-4
-										{ix != data.order?.items.length - 1 ? 'border-b' : ''}">
+										{ix != data.order?.items.length - 1 ? 'border-b' : ''}"
+									>
 										<div class="flex w-full flex-row gap-4">
 											<div>
 												<LazyImg
 													src="{item.isCustomized ? item.customizedImg : item.img}"
 													alt=""
 													width="80"
-													class="h-auto w-20 object-contain" />
+													class="h-auto w-20 object-contain"
+												/>
 											</div>
 
 											<div class="w-4/5 flex-1 lg:w-10/12">
@@ -242,7 +248,8 @@ onMount(async () => {
 															href="/product/{item.slug}"
 															aria-label="Click to view the product details"
 															data-sveltekit-reload
-															class="flex-1 text-sm text-gray-500 group-hover:underline">
+															class="flex-1 text-sm text-gray-500 group-hover:underline"
+														>
 															{item.name}
 														</a>
 
@@ -303,7 +310,8 @@ onMount(async () => {
 					{#if data.order?.seats?.length > 0}
 						<div class="mb-5">
 							<h6
-								class="mb-4 border-b border-dashed border-gray-400 pb-2 text-base font-semibold sm:text-lg">
+								class="mb-4 border-b border-dashed border-gray-400 pb-2 text-base font-semibold sm:text-lg"
+							>
 								Booking Details
 							</h6>
 
@@ -332,7 +340,8 @@ onMount(async () => {
 					{#if data.order && data.order?.address}
 						<div class="text-sm">
 							<h6
-								class="mb-4 border-b border-dashed border-gray-400 pb-2 text-base font-semibold sm:text-lg">
+								class="mb-4 border-b border-dashed border-gray-400 pb-2 text-base font-semibold sm:text-lg"
+							>
 								Shipping Information
 							</h6>
 
@@ -393,7 +402,8 @@ onMount(async () => {
 					{#if data.order && data.order?.amount}
 						<div class="text-sm">
 							<h6
-								class="mb-4 border-b border-dashed border-gray-400 pb-2 text-base font-semibold sm:text-lg">
+								class="mb-4 border-b border-dashed border-gray-400 pb-2 text-base font-semibold sm:text-lg"
+							>
 								Payment Information
 							</h6>
 
@@ -441,12 +451,14 @@ onMount(async () => {
 {/if}
 
 <div
-	style="position: fixed; top: -50px; left: 0; height: 100vh; width: 100vw; display: flex; justify-content: center; overflow: hidden; pointer-events: none;">
+	style="position: fixed; top: -50px; left: 0; height: 100vh; width: 100vw; display: flex; justify-content: center; overflow: hidden; pointer-events: none;"
+>
 	<Confetti
 		x="{[-5, 5]}"
 		y="{[0, 0.1]}"
 		delay="{[50, 2000]}"
 		duration="2000"
 		amount="500"
-		fallDistance="100vh" />
+		fallDistance="100vh"
+	/>
 </div>

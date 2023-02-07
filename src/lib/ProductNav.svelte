@@ -71,7 +71,8 @@ async function onSearchSubmit({ detail }) {
 
 <nav
 	class="minimum-width-rem fixed inset-x-0 top-0 flex h-14 w-full items-center justify-center border-b bg-white px-3 shadow-md sm:h-20 sm:px-10 lg:hidden
-	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
+	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}"
+>
 	<div class="flex w-full items-center justify-between gap-4 lg:gap-8">
 		<div class="flex items-center gap-4">
 			<!-- Back button -->
@@ -80,14 +81,16 @@ async function onSearchSubmit({ detail }) {
 				<button
 					type="button"
 					class="block flex-shrink-0 focus:outline-none lg:hidden"
-					on:click="{() => window.history.go(-1)}">
+					on:click="{() => window.history.go(-1)}"
+				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="h-6 w-6">
+						class="h-6 w-6"
+					>
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -112,7 +115,8 @@ async function onSearchSubmit({ detail }) {
 		<div class="hidden w-full min-w-min max-w-4xl flex-1 lg:block">
 			<Autocomplete
 				placeholder="{$page?.data?.store?.searchbarText || 'Search...'}"
-				on:search="{onSearchSubmit}" />
+				on:search="{onSearchSubmit}"
+			/>
 		</div>
 
 		<div class="flex items-center gap-4 lg:gap-8">
@@ -120,18 +124,21 @@ async function onSearchSubmit({ detail }) {
 				type="button"
 				aria-label="Click to search quizzes, videos, notes etc..."
 				class="block focus:outline-none lg:hidden"
-				on:click="{() => (show = true)}">
+				on:click="{() => (show = true)}"
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
 					viewBox="0 0 24 24"
 					stroke-width="1.5"
 					stroke="currentColor"
-					class="h-6 w-6">
+					class="h-6 w-6"
+				>
 					<path
 						stroke-linecap="round"
 						stroke-linejoin="round"
-						d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z">
+						d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+					>
 					</path>
 				</svg>
 			</button>
@@ -140,14 +147,16 @@ async function onSearchSubmit({ detail }) {
 				href="/cart"
 				aria-label="Click to route cart page"
 				class="relative flex flex-col items-center justify-center gap-1 focus:outline-none lg:border-b-4 lg:border-transparent"
-				data-sveltekit-preload-data>
+				data-sveltekit-preload-data
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
 					viewBox="0 0 24 24"
 					stroke-width="1.5"
 					stroke="currentColor"
-					class="h-6 w-6">
+					class="h-6 w-6"
+				>
 					<path
 						stroke-linecap="round"
 						stroke-linejoin="round"
@@ -159,7 +168,8 @@ async function onSearchSubmit({ detail }) {
 
 				{#if $page.data.cartQty > 0}
 					<div
-						class="absolute -top-2 -right-1.5 flex items-center justify-center rounded-full bg-primary-500 py-[0.8px] px-[5px] text-center text-xs font-bold uppercase text-white">
+						class="absolute -top-2 -right-1.5 flex items-center justify-center rounded-full bg-primary-500 py-[0.8px] px-[5px] text-center text-xs font-bold uppercase text-white"
+					>
 						{$page.data.cartQty}
 					</div>
 				{/if}
@@ -170,21 +180,25 @@ async function onSearchSubmit({ detail }) {
 					<button
 						transition:fade="{{ duration: 500 }}"
 						class="absolute inset-0 cursor-default bg-black bg-opacity-50 focus:outline-none"
-						on:click="{() => (showCartSidebar = false)}">
+						on:click="{() => (showCartSidebar = false)}"
+					>
 					</button>
 
 					<div
 						transition:slideFade="{{ duration: 500 }}"
-						class="absolute inset-y-0 right-0 h-full w-full border-l bg-white lg:max-w-xs">
+						class="absolute inset-y-0 right-0 h-full w-full border-l bg-white lg:max-w-xs"
+					>
 						<button
 							type="button"
 							class="absolute top-5 right-4 transform cursor-pointer text-gray-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-gray-700"
-							on:click="{() => (showCartSidebar = false)}">
+							on:click="{() => (showCartSidebar = false)}"
+						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								class="h-5 w-5"
 								viewBox="0 0 20 20"
-								fill="currentColor">
+								fill="currentColor"
+							>
 								<path
 									fill-rule="evenodd"
 									d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
@@ -204,19 +218,22 @@ async function onSearchSubmit({ detail }) {
 													href="/product/{item.slug}"
 													aria-label="Click to route product detail page"
 													class="flex-shrink-0"
-													on:click="{() => (showCartSidebar = false)}">
+													on:click="{() => (showCartSidebar = false)}"
+												>
 													{#if item.isCustomized}
 														<LazyImg
 															src="{item.customizedImg}"
 															alt=""
 															width="64"
-															class="h-auto w-16 object-contain object-left" />
+															class="h-auto w-16 object-contain object-left"
+														/>
 													{:else}
 														<LazyImg
 															src="{item.img}"
 															alt=""
 															width="64"
-															class="h-auto w-16 object-contain object-left" />
+															class="h-auto w-16 object-contain object-left"
+														/>
 													{/if}
 												</a>
 
@@ -226,7 +243,8 @@ async function onSearchSubmit({ detail }) {
 															href="/product/{item.slug}"
 															aria-label="Click to route product details page"
 															class="flex-1 text-sm leading-4"
-															on:click="{() => (showCartSidebar = false)}">{item.name}</a>
+															on:click="{() => (showCartSidebar = false)}">{item.name}</a
+														>
 
 														{#if $page?.data?.store?.isFnb && item.foodType}
 															<div>
@@ -279,12 +297,14 @@ async function onSearchSubmit({ detail }) {
 											href="/cart"
 											aria-label="Click to route cart page"
 											class="block w-full"
-											data-sveltekit-preload-data>
+											data-sveltekit-preload-data
+										>
 											<WhiteButton
 												type="button"
 												class="w-full text-xs uppercase"
 												loadingringsize="xs"
-												on:click="{() => (showCartSidebar = false)}">
+												on:click="{() => (showCartSidebar = false)}"
+											>
 												View Cart
 											</WhiteButton>
 										</a>
@@ -293,13 +313,15 @@ async function onSearchSubmit({ detail }) {
 											href="/checkout/address"
 											aria-label="Click to route address of checkout"
 											class="block w-full"
-											data-sveltekit-preload-data>
+											data-sveltekit-preload-data
+										>
 											<PrimaryButton
 												type="button"
 												class="w-full text-xs uppercase"
 												loadingringsize="xs"
 												clickEffect
-												on:click="{() => (showCartSidebar = false)}">
+												on:click="{() => (showCartSidebar = false)}"
+											>
 												Checkout
 											</PrimaryButton>
 										</a>
@@ -310,7 +332,8 @@ async function onSearchSubmit({ detail }) {
 											<img
 												src="{noAddToCartAnimate}"
 												alt="empty listing"
-												class="mb-5 h-40 object-contain" />
+												class="mb-5 h-40 object-contain"
+											/>
 										</div>
 
 										<span class="mb-3 text-xl font-medium md:text-3xl">Empty Cart!!</span>
@@ -324,7 +347,8 @@ async function onSearchSubmit({ detail }) {
 
 								{#if categories?.length}
 									<div
-										class="mb-5 flex items-center gap-2 whitespace-nowrap text-center font-bold uppercase sm:text-lg">
+										class="mb-5 flex items-center gap-2 whitespace-nowrap text-center font-bold uppercase sm:text-lg"
+									>
 										<hr class="w-full" />
 
 										<span>Our Categories</span>
@@ -339,10 +363,12 @@ async function onSearchSubmit({ detail }) {
 												target="_blank"
 												rel="noopener noreferrer"
 												aria-label="Click to route into category related products page"
-												class="col-span-1 block transform border transition duration-500 hover:-translate-y-2 hover:shadow-lg">
+												class="col-span-1 block transform border transition duration-500 hover:-translate-y-2 hover:shadow-lg"
+											>
 												<LazyImg
 													src="{c.img}"
-													class="aspect-square w-full object-cover object-center" />
+													class="aspect-square w-full object-cover object-center"
+												/>
 											</a>
 										{/each}
 									</div>
@@ -359,18 +385,21 @@ async function onSearchSubmit({ detail }) {
 				<div
 					class="relative hidden lg:block"
 					on:mouseenter="{() => (showDropdownAccount = true)}"
-					on:mouseleave="{() => (showDropdownAccount = false)}">
+					on:mouseleave="{() => (showDropdownAccount = false)}"
+				>
 					<button
 						aria-label="/"
 						class="flex h-20 flex-col items-center justify-center gap-1 border-b-4 focus:outline-none
-						{showDropdownAccount ? 'border-primary-500' : 'border-transparent'}">
+						{showDropdownAccount ? 'border-primary-500' : 'border-transparent'}"
+					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke-width="1.5"
 							stroke="currentColor"
-							class="h-6 w-6">
+							class="h-6 w-6"
+						>
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
@@ -386,24 +415,28 @@ async function onSearchSubmit({ detail }) {
 					{#if showDropdownAccount}
 						<ul
 							transition:fly="{{ y: 5, duration: 700 }}"
-							class="absolute top-20 right-0 flex min-w-max flex-col rounded-b border bg-white p-2 text-sm font-semibold  shadow-inner">
+							class="absolute top-20 right-0 flex min-w-max flex-col rounded-b border bg-white p-2 text-sm font-semibold  shadow-inner"
+						>
 							<li class="mb-2 border-b py-2 px-4">
 								<a
 									href="/my/profile"
 									aria-label="Click to route profile"
-									class="flex items-center gap-2">
+									class="flex items-center gap-2"
+								>
 									<div class="h-10 w-10 overflow-hidden rounded-full border">
 										{#if me.avatar}
 											<LazyImg
 												src="{me.avatar}"
 												alt=""
 												width="40"
-												class="object-cover object-top" />
+												class="object-cover object-top"
+											/>
 										{:else}
 											<img
 												src="{userEmptyProfile}"
 												alt=""
-												class="h-full w-full object-cover object-top" />
+												class="h-full w-full object-cover object-top"
+											/>
 										{/if}
 									</div>
 
@@ -431,9 +464,11 @@ async function onSearchSubmit({ detail }) {
 									<a
 										href="{m.url}"
 										aria-label="Click to route {m.name}"
-										data-sveltekit-preload-data>
+										data-sveltekit-preload-data
+									>
 										<h6
-											class="w-full cursor-pointer rounded py-2 px-4 text-left transition duration-300 focus:outline-none hover:bg-primary-50">
+											class="w-full cursor-pointer rounded py-2 px-4 text-left transition duration-300 focus:outline-none hover:bg-primary-50"
+										>
 											{m.name}
 										</h6>
 									</a>
@@ -444,7 +479,8 @@ async function onSearchSubmit({ detail }) {
 								<form action="/auth/logout" method="POST" use:enhance>
 									<button
 										type="submit"
-										class="w-full cursor-pointer rounded py-2 px-4 text-left transition duration-300 focus:outline-none hover:bg-primary-50">
+										class="w-full cursor-pointer rounded py-2 px-4 text-left transition duration-300 focus:outline-none hover:bg-primary-50"
+									>
 										Logout
 									</button>
 								</form>
@@ -459,14 +495,16 @@ async function onSearchSubmit({ detail }) {
 					aria-label="Sidebar"
 					type="button"
 					class="focus:outline-none lg:hidden"
-					on:click="{() => (openSidebar = true)}">
+					on:click="{() => (openSidebar = true)}"
+				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="h-6 w-6">
+						class="h-6 w-6"
+					>
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -480,17 +518,20 @@ async function onSearchSubmit({ detail }) {
 					href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page?.url
 						?.search}"
 					aria-label="Click to route login"
-					data-sveltekit-preload-data>
+					data-sveltekit-preload-data
+				>
 					<button
 						class="flex flex-col items-center justify-center gap-1 focus:outline-none lg:border-b-4 lg:border-transparent"
-						aria-label="/">
+						aria-label="/"
+					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke-width="1.5"
 							stroke="currentColor"
-							class="h-6 w-6">
+							class="h-6 w-6"
+						>
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
@@ -521,23 +562,27 @@ async function onSearchSubmit({ detail }) {
 			aria-label="Sidebar"
 			type="button"
 			class="absolute inset-0 bg-black bg-opacity-50 focus:outline-none"
-			on:click="{() => (openSidebar = false)}">
+			on:click="{() => (openSidebar = false)}"
+		>
 		</button>
 
 		<div
 			transition:slideFade="{{ duration: 500 }}"
-			class="relative z-[60] h-full w-full overflow-y-auto bg-white p-6 overflow-x-hidden">
+			class="relative z-[60] h-full w-full overflow-y-auto bg-white p-6 overflow-x-hidden"
+		>
 			<!--  w-72 -->
 
 			<button
 				type="button"
 				class="absolute top-5 right-4 transform cursor-pointer text-gray-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-gray-700"
-				on:click="{() => (openSidebar = false)}">
+				on:click="{() => (openSidebar = false)}"
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					class="h-5 w-5"
 					viewBox="0 0 20 20"
-					fill="currentColor">
+					fill="currentColor"
+				>
 					<path
 						fill-rule="evenodd"
 						d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
@@ -555,7 +600,8 @@ async function onSearchSubmit({ detail }) {
 							aria-label="Click to route profile"
 							class="mb-4 flex flex-col gap-2 border-b pb-4"
 							data-sveltekit-preload-data
-							on:click="{() => (openSidebar = false)}">
+							on:click="{() => (openSidebar = false)}"
+						>
 							<div class="h-20 w-20 overflow-hidden rounded-md border">
 								{#if me.avatar}
 									<LazyImg
@@ -563,12 +609,14 @@ async function onSearchSubmit({ detail }) {
 										alt=""
 										width="80"
 										height="80"
-										class="object-cover object-top" />
+										class="object-cover object-top"
+									/>
 								{:else}
 									<img
 										src="{userEmptyProfile}"
 										alt=""
-										class="h-full w-full object-cover object-top" />
+										class="h-full w-full object-cover object-top"
+									/>
 								{/if}
 							</div>
 
@@ -600,7 +648,8 @@ async function onSearchSubmit({ detail }) {
 								aria-label="Click to route account"
 								class="flex items-center gap-2 py-2"
 								data-sveltekit-preload-data
-								on:click="{() => (openSidebar = false)}">
+								on:click="{() => (openSidebar = false)}"
+							>
 								{@html m.svg}
 
 								{m.name}
@@ -617,7 +666,8 @@ async function onSearchSubmit({ detail }) {
 									xmlns="http://www.w3.org/2000/svg"
 									viewBox="0 0 20 20"
 									fill="currentColor"
-									class="h-5 w-5">
+									class="h-5 w-5"
+								>
 									<path
 										fill-rule="evenodd"
 										d="M3 4.25A2.25 2.25 0 015.25 2h5.5A2.25 2.25 0 0113 4.25v2a.75.75 0 01-1.5 0v-2a.75.75 0 00-.75-.75h-5.5a.75.75 0 00-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 00.75-.75v-2a.75.75 0 011.5 0v2A2.25 2.25 0 0110.75 18h-5.5A2.25 2.25 0 013 15.75V4.25z"
@@ -642,12 +692,14 @@ async function onSearchSubmit({ detail }) {
 					aria-label="Click to route login"
 					data-sveltekit-preload-data
 					class="flex items-center gap-2 py-2"
-					on:click="{() => (openSidebar = false)}">
+					on:click="{() => (openSidebar = false)}"
+				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						viewBox="0 0 20 20"
 						fill="currentColor"
-						class="h-5 w-5">
+						class="h-5 w-5"
+					>
 						<path
 							fill-rule="evenodd"
 							d="M3 4.25A2.25 2.25 0 015.25 2h5.5A2.25 2.25 0 0113 4.25v2a.75.75 0 01-1.5 0v-2a.75.75 0 00-.75-.75h-5.5a.75.75 0 00-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 00.75-.75v-2a.75.75 0 011.5 0v2A2.25 2.25 0 0110.75 18h-5.5A2.25 2.25 0 013 15.75V4.25z"

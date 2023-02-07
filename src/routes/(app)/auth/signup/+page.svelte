@@ -92,7 +92,8 @@ async function submit(n) {
 
 <div
 	class="frosted container mx-auto flex w-full max-w-sm flex-col rounded-2xl border bg-cover bg-center bg-no-repeat p-10 shadow-2xl"
-	style="background-image: url('/login/bg-lighter.svg');">
+	style="background-image: url('/login/bg-lighter.svg');"
+>
 	<h1 class="mb-8 w-full text-center text-2xl font-bold text-primary-500">Signup</h1>
 
 	<Error err="{err}" />
@@ -103,21 +104,24 @@ async function submit(n) {
 			label="First Name"
 			class="w-full"
 			required
-			bind:value="{newResistration.firstName}" />
+			bind:value="{newResistration.firstName}"
+		/>
 
 		<TextboxFloating
 			type="text"
 			label="Last Name"
 			class="w-full"
 			required
-			bind:value="{newResistration.lastName}" />
+			bind:value="{newResistration.lastName}"
+		/>
 
 		<TextboxFloating
 			type="tel"
 			label="Phone"
 			class="w-full"
 			required
-			bind:value="{newResistration.phone}" />
+			bind:value="{newResistration.phone}"
+		/>
 
 		<div>
 			<TextboxFloating
@@ -125,14 +129,16 @@ async function submit(n) {
 				label="Email"
 				class="mb-1 w-full"
 				required
-				bind:value="{newResistration.email}" />
+				bind:value="{newResistration.email}"
+			/>
 
 			<p class="text-xs">
 				Do not have email?
 				<a
 					href="{$page.data.store?.loginUrl}"
 					aria-label="Click to login using phone number"
-					class="text-primary-500 hover:underline">
+					class="text-primary-500 hover:underline"
+				>
 					Sign up using phone number
 				</a>
 			</p>
@@ -144,11 +150,13 @@ async function submit(n) {
 				label="Password"
 				class="w-full"
 				required
-				bind:value="{newResistration.password}" />
+				bind:value="{newResistration.password}"
+			/>
 
 			<button
 				class="absolute inset-y-0 right-2 flex cursor-pointer items-end justify-center pb-2"
-				on:click="{togglePassword}">
+				on:click="{togglePassword}"
+			>
 				{#if showPassword}
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -156,7 +164,8 @@ async function submit(n) {
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="h-5 w-5">
+						class="h-5 w-5"
+					>
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -170,7 +179,8 @@ async function submit(n) {
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="h-5 w-5">
+						class="h-5 w-5"
+					>
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -191,11 +201,13 @@ async function submit(n) {
 				label="Confirm Password"
 				class="w-full"
 				required
-				bind:value="{newResistration.passwordConfirmation}" />
+				bind:value="{newResistration.passwordConfirmation}"
+			/>
 
 			<button
 				class="absolute inset-y-0 right-2 flex cursor-pointer items-end justify-center pb-2"
-				on:click="{toggleConfirmPassword}">
+				on:click="{toggleConfirmPassword}"
+			>
 				{#if showConfirmPassword}
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -203,7 +215,8 @@ async function submit(n) {
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="h-5 w-5">
+						class="h-5 w-5"
+					>
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -217,7 +230,8 @@ async function submit(n) {
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="h-5 w-5">
+						class="h-5 w-5"
+					>
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -239,14 +253,16 @@ async function submit(n) {
 		<a
 			href="{`${$page.data.store?.loginUrl}?ref=${$page.url.searchParams.get('ref') || '/'}`}"
 			aria-label="Click to signin"
-			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
+			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline"
+		>
 			Signin
 		</a>
 
 		<a
 			href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store?.id}"
 			aria-label="Click to login as vendor"
-			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
+			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline"
+		>
 			Join as Vendor
 		</a>
 	</div>
@@ -258,7 +274,8 @@ async function submit(n) {
 			aria-label="Click to route terms & conditions"
 			target="_blank"
 			rel="noopener noreferrer"
-			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
+			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline"
+		>
 			<b>Terms & Conditions</b>
 		</a>
 	</p>

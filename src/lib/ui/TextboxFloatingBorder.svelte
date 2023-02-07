@@ -69,7 +69,8 @@ export let label = '',
 			aria-label="{label}"
 			disabled="{disabled}"
 			on:input="{() => dispatch('input')}"
-			on:change="{() => dispatch('change')}" />
+			on:change="{() => dispatch('change')}"
+		/>
 	{:else if type === 'email'}
 		<input
 			required="{required}"
@@ -84,7 +85,8 @@ export let label = '',
 			aria-label="{label}"
 			disabled="{disabled}"
 			on:input="{() => dispatch('input')}"
-			on:change="{() => dispatch('change')}" />
+			on:change="{() => dispatch('change')}"
+		/>
 	{:else if type === 'password'}
 		<input
 			required="{required}"
@@ -99,7 +101,8 @@ export let label = '',
 			aria-label="{label}"
 			disabled="{disabled}"
 			on:input="{() => dispatch('input')}"
-			on:change="{() => dispatch('change')}" />
+			on:change="{() => dispatch('change')}"
+		/>
 	{:else if type === 'date'}
 		<input
 			required="{required}"
@@ -114,7 +117,8 @@ export let label = '',
 			aria-label="{label}"
 			disabled="{disabled}"
 			on:input="{() => dispatch('input')}"
-			on:change="{() => dispatch('change')}" />
+			on:change="{() => dispatch('change')}"
+		/>
 	{:else if type === 'time'}
 		<input
 			required="{required}"
@@ -129,7 +133,8 @@ export let label = '',
 			aria-label="{label}"
 			disabled="{disabled}"
 			on:input="{() => dispatch('input')}"
-			on:change="{() => dispatch('change')}" />
+			on:change="{() => dispatch('change')}"
+		/>
 	{:else if type === 'number'}
 		<input
 			required="{required}"
@@ -144,7 +149,8 @@ export let label = '',
 			aria-label="{label}"
 			disabled="{disabled}"
 			on:input="{() => dispatch('input')}"
-			on:change="{() => dispatch('change')}" />
+			on:change="{() => dispatch('change')}"
+		/>
 	{:else if type === 'tel'}
 		<input
 			required="{required}"
@@ -159,7 +165,8 @@ export let label = '',
 			aria-label="{label}"
 			disabled="{disabled}"
 			on:input="{() => dispatch('input')}"
-			on:change="{() => dispatch('change')}" />
+			on:change="{() => dispatch('change')}"
+		/>
 	{:else if type === 'datetime-local'}
 		<input
 			required="{required}"
@@ -174,7 +181,8 @@ export let label = '',
 			aria-label="{label}"
 			disabled="{disabled}"
 			on:input="{() => dispatch('input')}"
-			on:change="{() => dispatch('change')}" />
+			on:change="{() => dispatch('change')}"
+		/>
 	{/if}
 
 	<label for="textbox">{label}</label>

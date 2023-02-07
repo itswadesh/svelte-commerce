@@ -93,7 +93,8 @@ async function getWishlistedProducts() {
 
 					{#if wishlistedProducts.length}
 						<div
-							class="grid w-full grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-between lg:mb-20">
+							class="grid w-full grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-between lg:mb-20"
+						>
 							{#each wishlistedProducts as w, wx}
 								{#if w.product}
 									<form
@@ -113,17 +114,20 @@ async function getWishlistedProducts() {
 												await applyAction(result)
 											}
 										}}"
-										class="cols-span-1 relative flex flex-col justify-between border">
+										class="cols-span-1 relative flex flex-col justify-between border"
+									>
 										<BlackButton
 											type="button"
 											class="absolute top-2 right-2 z-10"
-											on:click="{() => removeFromWishlist(w.product?._id, wx)}">
+											on:click="{() => removeFromWishlist(w.product?._id, wx)}"
+										>
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
 												class="h-6 w-6"
 												fill="none"
 												viewBox="0 0 24 24"
-												stroke="currentColor">
+												stroke="currentColor"
+											>
 												<path
 													stroke-linecap="round"
 													stroke-linejoin="round"
@@ -134,15 +138,18 @@ async function getWishlistedProducts() {
 
 										<a
 											href="/product/{w.product?.slug}"
-											aria-label="Click to view the product details">
+											aria-label="Click to view the product details"
+										>
 											<div
-												class="w-full items-center overflow-hidden rounded-lg bg-white p-4 sm:w-48">
+												class="w-full items-center overflow-hidden rounded-lg bg-white p-4 sm:w-48"
+											>
 												<div class="h-auto w-full">
 													<LazyImg
 														src="{w.product?.img}"
 														alt="{w.name}"
 														width="192"
-														class="h-full w-full object-contain object-bottom text-xs" />
+														class="h-full w-full object-contain object-bottom text-xs"
+													/>
 												</div>
 
 												<div class="mx-auto p-2 text-center text-sm sm:p-4">
@@ -173,7 +180,8 @@ async function getWishlistedProducts() {
 													</div>
 
 													<div
-														class="flex flex-wrap items-center justify-center gap-2 overflow-hidden overflow-ellipsis text-xs">
+														class="flex flex-wrap items-center justify-center gap-2 overflow-hidden overflow-ellipsis text-xs"
+													>
 														<span class="whitespace-nowrap text-base font-bold">
 															{currency(w.product.price, $page.data?.store?.currencySymbol)}
 														</span>
@@ -205,24 +213,28 @@ async function getWishlistedProducts() {
 										<input
 											type="hidden"
 											name="options"
-											value="{JSON.stringify(w.product?.options)}" />
+											value="{JSON.stringify(w.product?.options)}"
+										/>
 
 										<input type="hidden" name="customizedImg" value="{'undefined'}" />
 
 										<button
 											type="submit"
-											class="w-full border-t p-2 font-semibold uppercase tracking-wide text-primary-500 transition duration-300 focus:outline-none hover:bg-primary-50">
+											class="w-full border-t p-2 font-semibold uppercase tracking-wide text-primary-500 transition duration-300 focus:outline-none hover:bg-primary-50"
+										>
 											Move To Bag
 										</button>
 
 										{#if loadingProduct[wx]}
 											<div
-												class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+												class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50"
+											>
 												<svg
 													class="mx-auto h-5 w-5 animate-spin text-white"
 													xmlns="http://www.w3.org/2000/svg"
 													fill="none"
-													viewBox="0 0 24 24">
+													viewBox="0 0 24 24"
+												>
 													<circle
 														class="opacity-25"
 														cx="12"
@@ -233,7 +245,8 @@ async function getWishlistedProducts() {
 													<path
 														class="opacity-75"
 														fill="currentColor"
-														d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+														d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+													>
 													</path>
 												</svg>
 											</div>

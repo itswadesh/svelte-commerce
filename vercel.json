@@ -1,27 +1,25 @@
 {
-    "rewrites": [
-        {
-            "source": "/api/:path*",
-            "destination": "https://api.litekart.in/api/:path*"
-        },
-        {
-            "source": "/images/:path*",
-            "destination": "https://api.litekart.in/images/:path*"
-        },
-        {
-            "source": "/proxytown/gtm",
-            "destination": "https://www.googletagmanager.com/gtag/js"
-        },
-        {
-            "source": "/proxytown/ga",
-            "destination": "https://www.google-analytics.com/analytics.js"
-        }
-    ],
-    "env": {
-        "PUBLIC_HTTP_ENDPOINT": "https://api.litekart.in",
-        "NODE_OPTIONS": "--max-old-space-size=7680"
-       },
-    "regions": [
-        "bom1"
-    ]
+	"rewrites": [
+		{
+			"source": "/api/:path*",
+			"destination": "https://api.litekart.in/api/:path*"
+		},
+		{
+			"source": "/images/:path*",
+			"destination": "https://api.litekart.in/images/:path*"
+		},
+		{
+			"source": "/proxytown/gtm",
+			"destination": "https://www.googletagmanager.com/gtag/js"
+		},
+		{
+			"source": "/proxytown/ga",
+			"destination": "https://www.google-analytics.com/analytics.js"
+		}
+	],
+	"env": {
+		"PUBLIC_HTTP_ENDPOINT": "https://api.litekart.in",
+		"NODE_OPTIONS": "--max-old-space-size=7680"
+	},
+	"regions": ["bom1"]
 }

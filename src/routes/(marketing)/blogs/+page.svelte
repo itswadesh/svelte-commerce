@@ -104,6 +104,7 @@ const seoProps = {
 		<Pagination
 			count="{Math.ceil(data.blogs.length)}"
 			current="{parseInt(data?.page || 1)}"
-			on:change="{changePage}" />
+			on:change="{changePage}"
+		/>
 	</main>
 {/if}

@@ -73,7 +73,8 @@ export let data
 
 <main
 	data-sveltekit-preload-data
-	class="minimum-width-rem relative flex min-h-screen flex-col bg-white antialiased">
+	class="minimum-width-rem relative flex min-h-screen flex-col bg-white antialiased"
+>
 	<div class="h-rem w-full flex-1">
 		<slot />
 	</div>

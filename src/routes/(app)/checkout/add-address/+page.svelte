@@ -110,7 +110,8 @@ async function save(ads) {
 						type="text"
 						bind:value="{data.ads.firstName}"
 						placeholder="Enter First Name"
-						required />
+						required
+					/>
 				</div>
 
 				<div>
@@ -132,7 +133,8 @@ async function save(ads) {
 						type="text"
 						maxlength="10"
 						bind:value="{data.ads.phone}"
-						placeholder="Enter Phone No" />
+						placeholder="Enter Phone No"
+					/>
 				</div>
 
 				<div>
@@ -144,7 +146,8 @@ async function save(ads) {
 						type="text"
 						bind:value="{data.ads.address}"
 						placeholder="Enter Address"
-						required />
+						required
+					/>
 				</div>
 
 				<div>
@@ -167,7 +170,8 @@ async function save(ads) {
 							<select
 								bind:value="{data.ads.state}"
 								required
-								class="w-full rounded-md border border-gray-300 bg-white p-2 text-sm placeholder-gray-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-gray-50">
+								class="w-full rounded-md border border-gray-300 bg-white p-2 text-sm placeholder-gray-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-gray-50"
+							>
 								<option disabled selected>-- Select a State --</option>
 								{#each data.states as s}
 									{#if s}
@@ -189,7 +193,8 @@ async function save(ads) {
 							bind:value="{data.ads.country}"
 							required
 							class="w-full rounded-md border border-gray-300 bg-white p-2 text-sm placeholder-gray-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-gray-50"
-							on:change="{() => onCountryChange(data.ads.country)}">
+							on:change="{() => onCountryChange(data.ads.country)}"
+						>
 							<option disabled selected>-- Select a Country --</option>
 							{#each data.countries as c}
 								{#if c}
@@ -209,7 +214,8 @@ async function save(ads) {
 						type="text"
 						bind:value="{data.ads.zip}"
 						placeholder="Enter Pincode / Zip"
-						required />
+						required
+					/>
 				</div>
 			</div>
 

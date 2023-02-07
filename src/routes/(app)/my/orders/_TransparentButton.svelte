@@ -36,7 +36,8 @@ export { clazz as class }
 			? ' border-primary-500 hover:border-primary-700 hover:text-primary-700 shadow-md hover:shadow'
 			: 'border-transparent hover:bg-gray-500 hover:text-white '}
     "
-		on:click>
+		on:click
+	>
 		<div class="flex items-center justify-center gap-1">
 			<slot />
 		</div>
@@ -52,7 +53,8 @@ export { clazz as class }
         bg-black
         bg-opacity-50
         {rounded ? 'rounded-full' : 'rounded-md'}
-      ">
+      "
+			>
 				<svg
 					class="animate-spin text-white {loadingringsize == 'xs'
 						? 'w-4 h-4'
@@ -65,7 +67,8 @@ export { clazz as class }
 						: 'h-7 w-7'} "
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
-					viewBox="0 0 24 24">
+					viewBox="0 0 24 24"
+				>
 					<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
 					></circle>
 					<path

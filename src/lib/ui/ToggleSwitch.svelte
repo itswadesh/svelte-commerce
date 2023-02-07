@@ -70,7 +70,8 @@ function genId() {
 		for="{uniqueId}"
 		class="group flex max-w-max cursor-pointer items-center
 		{textFirst ? 'flex-row-reverse' : 'flex-row'}
-		{disabled ? 'opacity-40 cursor-not-allowed' : 'opacity-100'}">
+		{disabled ? 'opacity-40 cursor-not-allowed' : 'opacity-100'}"
+	>
 		<!-- toggle -->
 
 		<div class="relative mr-2">
@@ -82,7 +83,8 @@ function genId() {
 				required="{required}"
 				class="hidden"
 				bind:checked="{checked}"
-				on:change="{() => dispatch('change')}" />
+				on:change="{() => dispatch('change')}"
+			/>
 
 			<!-- line -->
 
@@ -100,8 +102,8 @@ function genId() {
                 {color == 'yellow' ? 'yellow' : ''}
                 {color == 'indigo' ? 'indigo' : ''}
                 {color == 'black' ? 'black' : ''}
-      			">
-			</div>
+      			"
+			></div>
 
 			<!-- dot -->
 
@@ -110,8 +112,8 @@ function genId() {
                 {size == 'xs' ? 'h-3 w-3' : ''}
                 {size == 'sm' ? 'h-4 w-4' : ''}
                 {size == 'md' ? 'h-7 w-7' : ''}
-       			">
-			</div>
+       			"
+			></div>
 		</div>
 
 		<slot>
@@ -130,7 +132,8 @@ function genId() {
 			{size == 'xs' ? 'text-sm' : ''}
             {size == 'sm' ? 'text-base' : ''}
             {size == 'md' ? 'text-xl' : ''}
-     		">
+     		"
+			>
 				{#if checked === true && onText}
 					{onText}
 				{:else if offText}

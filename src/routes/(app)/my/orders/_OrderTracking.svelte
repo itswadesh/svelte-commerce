@@ -22,7 +22,8 @@ export let tracks
 								width="20"
 								height="20"
 								alt=" "
-								class="h-full w-full bg-gray-100 object-contain object-center" />
+								class="h-full w-full bg-gray-100 object-contain object-center"
+							/>
 						{:else}
 							<div class="h-full w-full bg-gray-200"></div>
 						{/if}

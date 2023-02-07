@@ -31,14 +31,12 @@ async function submit() {
 	try {
 		loading = true
 
-		const res = await forgotPasswordService(
-			{
-				email: email,
-				referrer: $page.data.origin,
-				storeId: $page.data.store?.id,
-				origin: $page.data.origin
-			},
-		)
+		const res = await forgotPasswordService({
+			email: email,
+			referrer: $page.data.origin,
+			storeId: $page.data.store?.id,
+			origin: $page.data.origin
+		})
 
 		await invalidateAll()
 
@@ -55,7 +53,8 @@ async function submit() {
 
 <div
 	class="frosted container mx-auto flex w-full max-w-sm flex-col rounded-2xl border bg-cover bg-center bg-no-repeat p-10 shadow-2xl"
-	style="background-image: url('/login/bg-lighter.svg');">
+	style="background-image: url('/login/bg-lighter.svg');"
+>
 	<h1 class="mb-8 w-full text-center text-2xl font-bold text-primary-500">Forgot Password</h1>
 
 	<Error err="{err}" />
@@ -69,7 +68,8 @@ async function submit() {
 			<a
 				href="{`/auth/login?ref=${$page.url.searchParams.get('ref') || '/'}`}"
 				aria-label="Click to login with phone number"
-				class="max-w-max whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
+				class="max-w-max whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline"
+			>
 				Back to Login
 			</a>
 		</div>

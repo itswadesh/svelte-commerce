@@ -52,14 +52,12 @@ const payWithStripe = async (pm) => {
 		loading = true
 		toast('Contacting Payment Server...', 'warning')
 		const paymentMethodId = pm.id
-		const resStripe = stripeCheckoutService(
-			{
-				paymentMethodId,
-				address,
-				storeId: $page.data.store?.id,
-				origin: $page.data.origin
-			},
-		)
+		const resStripe = stripeCheckoutService({
+			paymentMethodId,
+			address,
+			storeId: $page.data.store?.id,
+			origin: $page.data.origin
+		})
 		if (resStripe.errors) {
 			errorMessage = { show: true, text: resStripe.errors[0].message }
 			return
@@ -144,7 +142,8 @@ async function loadStripeElements() {
 {#if stripeLoaded}
 	<form
 		on:submit|preventDefault="{submit}"
-		class="{!isStripeSelected ? 'hidden' : 'block'} my-4 rounded border px-8 py-4 shadow-lg">
+		class="{!isStripeSelected ? 'hidden' : 'block'} my-4 rounded border px-8 py-4 shadow-lg"
+	>
 		<div class="form-row">
 			<label for="mount-point-for-stripe-elements" class="mb-3 text-lg font-bold tracking-wide">
 				{#if stripeCardMounting} Please wait... {:else} Enter Card Details {/if}
@@ -161,7 +160,8 @@ async function loadStripeElements() {
 			loading="{loading}"
 			disabled="{loading || !stripeReady || !isCardValid}"
 			type="submit"
-			class="mt-5 py-3 px-9">
+			class="mt-5 py-3 px-9"
+		>
 			Make Payment
 		</GrnIndGradiantButton>
 

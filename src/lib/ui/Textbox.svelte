@@ -54,7 +54,8 @@ function handleInput() {
 			disabled="{disabled}"
 			aria-label="{placeholder}"
 			on:input="{handleInput}"
-			on:blur="{() => dispatch('blur')}" />
+			on:blur="{() => dispatch('blur')}"
+		/>
 	{:else if type === 'email'}
 		<input
 			type="email"
@@ -72,7 +73,8 @@ function handleInput() {
 			disabled="{disabled}"
 			aria-label="{placeholder}"
 			on:input="{handleInput}"
-			on:blur="{() => dispatch('blur')}" />
+			on:blur="{() => dispatch('blur')}"
+		/>
 	{:else if type === 'password'}
 		<input
 			type="password"
@@ -90,7 +92,8 @@ function handleInput() {
 			disabled="{disabled}"
 			aria-label="{placeholder}"
 			on:input="{handleInput}"
-			on:blur="{() => dispatch('blur')}" />
+			on:blur="{() => dispatch('blur')}"
+		/>
 	{:else if type === 'date'}
 		<input
 			type="date"
@@ -108,7 +111,8 @@ function handleInput() {
 			disabled="{disabled}"
 			aria-label="{placeholder}"
 			on:input="{handleInput}"
-			on:blur="{() => dispatch('blur')}" />
+			on:blur="{() => dispatch('blur')}"
+		/>
 	{:else if type === 'time'}
 		<input
 			type="time"
@@ -126,7 +130,8 @@ function handleInput() {
 			disabled="{disabled}"
 			aria-label="{placeholder}"
 			on:input="{handleInput}"
-			on:blur="{() => dispatch('blur')}" />
+			on:blur="{() => dispatch('blur')}"
+		/>
 	{:else if type === 'number'}
 		<input
 			type="number"
@@ -144,7 +149,8 @@ function handleInput() {
 			disabled="{disabled}"
 			aria-label="{placeholder}"
 			on:input="{handleInput}"
-			on:blur="{() => dispatch('blur')}" />
+			on:blur="{() => dispatch('blur')}"
+		/>
 	{:else if type === 'tel'}
 		<input
 			type="tel"
@@ -162,7 +168,8 @@ function handleInput() {
 			disabled="{disabled}"
 			aria-label="{placeholder}"
 			on:input="{handleInput}"
-			on:blur="{() => dispatch('blur')}" />
+			on:blur="{() => dispatch('blur')}"
+		/>
 	{:else if type === 'datetime-local'}
 		<input
 			type="datetime-local"
@@ -180,7 +187,8 @@ function handleInput() {
 			disabled="{disabled}"
 			aria-label="{placeholder}"
 			on:input="{handleInput}"
-			on:blur="{() => dispatch('blur')}" />
+			on:blur="{() => dispatch('blur')}"
+		/>
 	{/if}
 
 	{#if alphaNumeric && error}

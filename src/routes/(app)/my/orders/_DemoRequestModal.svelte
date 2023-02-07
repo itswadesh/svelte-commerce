@@ -44,9 +44,7 @@ async function submit() {
 	const msg = 'Schedule Done !'
 	loading = true
 	try {
-		await saveScheduleDemo(
-			{ schedule, storeId: $page.data.store?.id, origin:$page.data.origin },
-		)
+		await saveScheduleDemo({ schedule, storeId: $page.data.store?.id, origin: $page.data.origin })
 		toast(msg, 'success')
 		goto(`/my/demo-requests`)
 	} catch (e) {
@@ -74,7 +72,8 @@ function hide(e) {
 		}}"
 		on:confirm="{() => {
 			show = false
-		}}">
+		}}"
+	>
 		<p>Schedule Live Demo</p>
 
 		{#if minDate}
@@ -103,7 +102,8 @@ function hide(e) {
 					transition
 					duration-300 hover:bg-white
 					focus:outline-none focus:ring-0 focus:ring-offset-0
-					" />
+					"
+				/>
 
 				<PrimaryButton disabled="{isDisabled}" loading="{loading}" class="w-full" type="submit">
 					Schedule

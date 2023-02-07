@@ -12,7 +12,7 @@ export const authenticateUser = (event: RequestEvent) => {
 			lastName: me.lastName,
 			phone: me.phone,
 			role: me.role,
-			verified: me.verified,
+			verified: me.verified
 		}
 	} else {
 		return null

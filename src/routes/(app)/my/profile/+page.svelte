@@ -89,7 +89,8 @@ async function saveProfile() {
 			<form class="mb-5 flex flex-col gap-4 sm:mb-10" on:submit|preventDefault="{saveProfile}">
 				<div>
 					<div
-						class="frosted flex flex-col gap-4 rounded-lg border border-gray-300 p-4 shadow-lg md:p-6">
+						class="frosted flex flex-col gap-4 rounded-lg border border-gray-300 p-4 shadow-lg md:p-6"
+					>
 						<div class="flex flex-wrap items-center gap-2">
 							<div class="w-52 flex-shrink-0 font-medium">
 								<SingleImageUpload
@@ -99,7 +100,8 @@ async function saveProfile() {
 									images="{data.profile.avatar}"
 									loading="{loading}"
 									on:save="{({ detail }) => saveImage(detail)}"
-									on:remove="{({ detail }) => removeImage(detail)}" />
+									on:remove="{({ detail }) => removeImage(detail)}"
+								/>
 							</div>
 
 							<div class="w-full max-w-md">
@@ -122,7 +124,8 @@ async function saveProfile() {
 								<Textbox
 									type="text"
 									placeholder="Enter First Name"
-									bind:value="{data.profile.firstName}" />
+									bind:value="{data.profile.firstName}"
+								/>
 							</div>
 						</div>
 
@@ -133,7 +136,8 @@ async function saveProfile() {
 								<Textbox
 									type="text"
 									placeholder="Enter Last Name"
-									bind:value="{data.profile.lastName}" />
+									bind:value="{data.profile.lastName}"
+								/>
 							</div>
 						</div>
 
@@ -144,7 +148,8 @@ async function saveProfile() {
 								<Textbox
 									type="date"
 									placeholder="Enter Date Of Birth"
-									bind:value="{data.profile.dob}" />
+									bind:value="{data.profile.dob}"
+								/>
 							</div>
 						</div>
 
@@ -157,7 +162,8 @@ async function saveProfile() {
 									type="tel"
 									maxlength="10"
 									placeholder="Eg:xxxxxxxxxx"
-									bind:value="{data.profile.phone}" />
+									bind:value="{data.profile.phone}"
+								/>
 							</div>
 						</div>
 					</div>

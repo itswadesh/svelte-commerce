@@ -77,7 +77,8 @@ export { className as class }
 				tabindex="{tabindex}"
 				maxlength="{maxlength}"
 				on:input="{() => dispatch('input')}"
-				on:focus="{() => dispatch('focus')}" />
+				on:focus="{() => dispatch('focus')}"
+			/>
 		{:else if type === 'email'}
 			<input
 				type="email"
@@ -91,7 +92,8 @@ export { className as class }
 				tabindex="{tabindex}"
 				maxlength="{maxlength}"
 				on:input="{() => dispatch('input')}"
-				on:focus="{() => dispatch('focus')}" />
+				on:focus="{() => dispatch('focus')}"
+			/>
 		{:else if type === 'password'}
 			<input
 				type="password"
@@ -105,7 +107,8 @@ export { className as class }
 				tabindex="{tabindex}"
 				maxlength="{maxlength}"
 				on:input="{() => dispatch('input')}"
-				on:focus="{() => dispatch('focus')}" />
+				on:focus="{() => dispatch('focus')}"
+			/>
 		{:else if type === 'date'}
 			<input
 				type="date"
@@ -119,7 +122,8 @@ export { className as class }
 				tabindex="{tabindex}"
 				maxlength="{maxlength}"
 				on:input="{() => dispatch('input')}"
-				on:focus="{() => dispatch('focus')}" />
+				on:focus="{() => dispatch('focus')}"
+			/>
 		{:else if type === 'time'}
 			<input
 				type="time"
@@ -133,7 +137,8 @@ export { className as class }
 				tabindex="{tabindex}"
 				maxlength="{maxlength}"
 				on:input="{() => dispatch('input')}"
-				on:focus="{() => dispatch('focus')}" />
+				on:focus="{() => dispatch('focus')}"
+			/>
 		{:else if type === 'number'}
 			<input
 				type="number"
@@ -147,7 +152,8 @@ export { className as class }
 				tabindex="{tabindex}"
 				maxlength="{maxlength}"
 				on:input="{() => dispatch('input')}"
-				on:focus="{() => dispatch('focus')}" />
+				on:focus="{() => dispatch('focus')}"
+			/>
 		{:else if type === 'tel'}
 			<input
 				type="tel"
@@ -161,7 +167,8 @@ export { className as class }
 				tabindex="{tabindex}"
 				maxlength="{maxlength}"
 				on:input="{() => dispatch('input')}"
-				on:focus="{() => dispatch('focus')}" />
+				on:focus="{() => dispatch('focus')}"
+			/>
 		{/if}
 		<span class="highlight"></span>
 

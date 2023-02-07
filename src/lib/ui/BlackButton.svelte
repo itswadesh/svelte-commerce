@@ -56,6 +56,7 @@ export { clazz as class }
 	title="{title}"
 	class="{clazz} focus:outline-none 
 	{reverseColor ? 'bg-center-to-corner-reverse-color' : 'bg-center-to-corner'}"
-	on:click="{() => dispatch('click')}">
+	on:click="{() => dispatch('click')}"
+>
 	<slot />
 </button>

@@ -59,7 +59,8 @@ let seoProps = {
 								height="200"
 								class="h-full w-full rounded-md object-contain object-top"
 								src="{data.blog?.img}"
-								alt="" />
+								alt=""
+							/>
 						</div>
 					{/if}
 
@@ -71,7 +72,8 @@ let seoProps = {
 						<ul class="flex flex-wrap gap-2 sm:gap-4">
 							{#each data.blog?.tags as f}
 								<button
-									class="rounded-full border bg-gray-100 px-4 py-2 text-xs shadow hover:bg-gray-200">
+									class="rounded-full border bg-gray-100 px-4 py-2 text-xs shadow hover:bg-gray-200"
+								>
 									{f}
 								</button>
 							{/each}
@@ -91,19 +93,22 @@ let seoProps = {
 									href="/blogs/{blog._id}"
 									aria-label="Click to route blog details page"
 									data-sveltekit-preload-data
-									class="group flex items-start gap-4 py-4">
+									class="group flex items-start gap-4 py-4"
+								>
 									<div class="h-16 w-24 overflow-hidden rounded-md border">
 										{#if blog.img}
 											<LazyImg
 												src="{blog.img}"
 												height="64"
 												alt=""
-												class="h-16 w-full object-cover object-center" />
+												class="h-16 w-full object-cover object-center"
+											/>
 										{:else}
 											<img
 												src="{$page.data.store?.logo}"
 												alt=""
-												class="h-16 w-24 object-contain object-center p-2" />
+												class="h-16 w-24 object-contain object-center p-2"
+											/>
 										{/if}
 									</div>
 
@@ -120,7 +125,8 @@ let seoProps = {
 															<a
 																href="/blog/{tag.slug}"
 																aria-label="{tag.name || '##'}"
-																class="block max-w-max rounded-md bg-gray-100 py-0.5 px-2 text-center text-xs font-semibold uppercase text-gray-500 transition duration-300 hover:bg-gray-300 hover:text-gray-800">
+																class="block max-w-max rounded-md bg-gray-100 py-0.5 px-2 text-center text-xs font-semibold uppercase text-gray-500 transition duration-300 hover:bg-gray-300 hover:text-gray-800"
+															>
 																{tag.name}
 															</a>
 														</li>

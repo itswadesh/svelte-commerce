@@ -11,17 +11,20 @@ export let selected = null
 
 <section class=" flex flex-wrap justify-center">
 	<div
-		class=" flex w-full  justify-between text-center text-xs font-semibold tracking-widest text-gray-700 md:w-2/3 lg:w-1/3">
+		class=" flex w-full  justify-between text-center text-xs font-semibold tracking-widest text-gray-700 md:w-2/3 lg:w-1/3"
+	>
 		<a
 			href="/cart"
 			aria-label="Click to go inside cart"
 			class="mx-2 flex flex-col"
-			data-sveltekit-preload-data>
+			data-sveltekit-preload-data
+		>
 			<div
 				class="mx-auto flex h-8 w-8 items-center justify-center  rounded-full border border-primary-500 text-center {selected ===
 				'cart'
 					? 'bg-primary-500  text-white'
-					: 'bg-white text-primary-500 '}">
+					: 'bg-white text-primary-500 '}"
+			>
 				1
 			</div>
 
@@ -62,7 +65,8 @@ export let selected = null
 					class="mx-auto flex h-8 w-8 items-center justify-center  rounded-full border border-primary-500 text-center {selected ===
 					'address'
 						? 'bg-primary-500  text-white'
-						: 'bg-white text-primary-500  '}">
+						: 'bg-white text-primary-500  '}"
+				>
 					<!-- {#if isPrescription}
 						3
 					{:else}
@@ -77,12 +81,14 @@ export let selected = null
 			<a
 				href="/checkout/address"
 				aria-label="Click to go inside address"
-				class="flex flex-col items-center text-center">
+				class="flex flex-col items-center text-center"
+			>
 				<div
 					class="mx-auto flex h-8 w-8 items-center justify-center  rounded-full border border-primary-500 text-center {selected ===
 					'address'
 						? 'bg-primary-500  text-white'
-						: 'bg-white text-primary-500'}">
+						: 'bg-white text-primary-500'}"
+				>
 					<!-- {#if isPrescription}
 						3
 					{:else}
@@ -103,7 +109,8 @@ export let selected = null
 					class="mx-auto flex h-8 w-8 items-center justify-center  rounded-full border border-primary-500 text-center {selected ===
 					'payment'
 						? 'bg-primary-500  text-white '
-						: 'bg-white text-primary-500 '}">
+						: 'bg-white text-primary-500 '}"
+				>
 					<!-- {#if isPrescription}
 						4
 					{:else}
@@ -120,7 +127,8 @@ export let selected = null
 					class="mx-auto flex h-8 w-8 items-center justify-center  rounded-full border border-primary-500 text-center {selected ===
 					'payment'
 						? 'bg-primary-500  text-white'
-						: 'bg-white text-primary-500'}">
+						: 'bg-white text-primary-500'}"
+				>
 					<!-- {#if isPrescription}
 						4
 					{:else}

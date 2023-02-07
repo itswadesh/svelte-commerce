@@ -55,14 +55,16 @@ function handleLoading() {
 		: 'bg-white hover:bg-primary-50 hover:border-primary-50 active:scale-95'}"
 	class:applyRoundedNone="{roundedNone}"
 	class:applyroundedFull="{roundedFull}"
-	on:click="{handleClick}">
+	on:click="{handleClick}"
+>
 	<div class="flex items-center justify-center gap-2">
 		<slot />
 	</div>
 
 	{#if loading || localLoadingPeriod}
 		<div
-			class="absolute inset-0 flex cursor-not-allowed items-center justify-center bg-black bg-opacity-70">
+			class="absolute inset-0 flex cursor-not-allowed items-center justify-center bg-black bg-opacity-70"
+		>
 			<svg
 				class="mx-auto animate-spin text-white 
 				{loadingringsize == 'xs' ? 'w-4 h-4' : ''}
@@ -71,7 +73,8 @@ function handleLoading() {
 				{loadingringsize == 'lg' ? 'h-7 w-7' : ''}"
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
-				viewBox="0 0 24 24">
+				viewBox="0 0 24 24"
+			>
 				<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
 				></circle>
 				<path

@@ -39,7 +39,8 @@ let cart = []
 		me="{me}"
 		cart="{cart}"
 		bind:showCartSidebar="{showCartSidebar}"
-		bind:openSidebar="{openSidebar}" />
+		bind:openSidebar="{openSidebar}"
+	/>
 
 	<div class="flex h-screen flex-col items-center justify-center text-center">
 		{#if $page.error?.status === 404}
@@ -49,7 +50,8 @@ let cart = []
 						src="/error/404.svg"
 						alt=" "
 						width="240"
-						class="mb-5 h-auto w-60 object-contain" />
+						class="mb-5 h-auto w-60 object-contain"
+					/>
 				</div>
 
 				<div class="layout">
@@ -68,7 +70,8 @@ let cart = []
 							src="/error/404.svg"
 							alt=""
 							width="240"
-							class="mb-5 h-auto w-60 object-contain" />
+							class="mb-5 h-auto w-60 object-contain"
+						/>
 					</div>
 
 					<div class="text-center">
@@ -86,7 +89,8 @@ let cart = []
 							src="/error/404.svg"
 							alt=""
 							width="240"
-							class="mb-5 h-auto w-60 object-contain" />
+							class="mb-5 h-auto w-60 object-contain"
+						/>
 					</div>
 
 					<div class="flex flex-col gap-5 text-center">
@@ -104,7 +108,8 @@ let cart = []
 							src="/error/404.svg"
 							alt=""
 							width="240"
-							class="mb-5 h-auto w-60 object-contain" />
+							class="mb-5 h-auto w-60 object-contain"
+						/>
 					</div>
 
 					<div class="flex flex-col gap-5 text-center">
