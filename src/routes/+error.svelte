@@ -9,7 +9,7 @@ h1 {
 }
 </style>
 
-<script>
+<script lang="ts">
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import Footer from '$lib/Footer.svelte'
@@ -18,11 +18,12 @@ import Nav from '$lib/Nav.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 // import { fetchCartData } from '$lib/services/CartService'
 import { fetchMeData } from '$lib/services/UserService'
+import type { Cart, Me } from '$lib/types'
 
 let openSidebar = false
 let showCartSidebar = false
-let me = []
-let cart = []
+let me:Me = {}
+let cart:Cart
 
 // onMount(async () => {
 // 	try {
@@ -129,6 +130,6 @@ let cart = []
 	</div>
 
 	<div class="hidden sm:block">
-		<Footer me="{me}" />
+		<Footer me="{me}" popularSearches="{[]}" megamenu="{{}}" />
 	</div>
 </div>

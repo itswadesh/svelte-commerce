@@ -1,15 +1,21 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
+
+import type { Cart, Category } from '$lib/types'
+
 // and what to do when importing types
 declare namespace App {
 	interface Locals {
 		me: Me | null
+		q: string
+		url: string
+		currentPage: number
 		user: {
 			name: string
 			role: string
 		}
-		cart: any
-		megamenu: any
+		cart: Cart
+		megamenu: Category
 		store: any
 		session: string
 		origin: string
