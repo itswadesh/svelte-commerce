@@ -22,7 +22,7 @@
 
 - Demo <a href="https://demo.litekart.in/" target="blank" rel="noopener noreferrer">demo.litekart.in</a>
 - Svelte commerce in home made FNB sector https://food.misiki.in/ (https://github.com/itswadesh/homefood)
-- Svelte commerce in jewellery industry https://next.varnijewels.com/
+- Svelte commerce in jewellery industry https://varnijewels.com/
 - Svelte commerce in fashion industry https://next.trialshot.com/
 - Svelte commerce in toys industry https://tablez.com/
 - Svelte commerce in mobile cover customization https://next.zapvi.in/
