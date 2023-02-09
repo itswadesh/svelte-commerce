@@ -2,11 +2,11 @@ import { fetchMyCart } from '$lib/services/CartService'
 import cookie from 'cookie'
 export const prerender = false
 
-export async function load({ url, locals, request, cookies }) {
-	const isHome = url.pathname === '/'
+export async function load({ url, locals, cookies }) {
 	const currentPage = +url.searchParams.get('page') || 1
 	const q = url.searchParams.get('q') || ''
-	let cart, serializedCart, serializedStore
+	let cart
+	// let serializedCart
 	try {
 		const res: any = fetchMyCart({
 			storeId: locals.store?.id,
@@ -30,9 +30,9 @@ export async function load({ url, locals, request, cookies }) {
 				formattedAmount: res?.formattedAmount
 			}
 			cart = cookieCart
-			serializedCart = cookie.serialize('cart', JSON.stringify(cookieCart) || '', {
-				path: '/'
-			})
+			// serializedCart = cookie.serialize('cart', JSON.stringify(cookieCart) || '', {
+			// 	path: '/'
+			// })
 		}
 	} catch (e) {
 	} finally {
