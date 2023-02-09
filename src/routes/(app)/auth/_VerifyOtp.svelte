@@ -54,35 +54,6 @@ setInterval(() => {
 $: minutes = Math.floor($timer / 60)
 $: seconds = Math.floor($timer - minutes * 60)
 
-// const callMyCount = () => {
-// 	var myTimer = setInterval(startTimer, 1000)
-
-// 	function startTimer() {
-// 		var presentTime = resendAfter
-// 		var timeArray = presentTime.split(/[:]+/)
-// 		var m = parseInt(timeArray[0])
-// 		var s = checkSecond(parseInt(timeArray[1]) - 1)
-// 		if (s == 59) {
-// 			m = m - 1
-// 		}
-// 		if (m < 0 && s == 59) {
-// 			alert('Timeout for otp')
-// 			clearTimeout(myTimer)
-// 		}
-// 		resendAfterInMinutes = m + ':' + s
-// 	}
-
-// 	function checkSecond(sec) {
-// 		if (sec < 10 && sec >= 0) {
-// 			sec = '0' + sec
-// 		}
-// 		if (sec < 0) {
-// 			sec = '59'
-// 		}
-// 		return sec
-// 	}
-// }
-
 let otp1 = '',
 	otp2 = '',
 	otp3 = '',
@@ -148,42 +119,6 @@ function onInput(e) {
 	</div>
 
 	<form class="mb-8 flex flex-col text-center" on:submit|preventDefault="{handleOtp}">
-		<!-- <div class="mb-5 flex items-center justify-center gap-5"> -->
-		<!-- <div class="flex items-center justify-center gap-2">
-				<input
-					bind:value="{otp1}"
-					type="tel"
-					id="first"
-					maxlength="1"
-					class="flex h-12 w-12 items-center justify-center rounded-md border bg-white text-center text-xl font-semibold shadow-md ring-2 ring-white ring-transparent focus:outline-none focus:ring-primary-500"
-					on:keyup="{() => clickEvent('first', 'second')}" />
-
-				<input
-					bind:value="{otp2}"
-					type="tel"
-					id="second"
-					maxlength="1"
-					class="flex h-12 w-12 items-center justify-center rounded-md border bg-white text-center text-xl font-semibold shadow-md ring-2 ring-white ring-transparent focus:outline-none focus:ring-primary-500"
-					on:keyup="{() => clickEvent('second', 'third')}" />
-
-				<input
-					bind:value="{otp3}"
-					type="tel"
-					id="third"
-					maxlength="1"
-					class="flex h-12 w-12 items-center justify-center rounded-md border bg-white text-center text-xl font-semibold shadow-md ring-2 ring-white ring-transparent focus:outline-none focus:ring-primary-500"
-					on:keyup="{() => clickEvent('third', 'fourth')}" />
-
-				<input
-					bind:value="{otp4}"
-					type="tel"
-					id="fourth"
-					maxlength="1"
-					class="flex h-12 w-12 items-center justify-center rounded-md border bg-white text-center text-xl font-semibold shadow-md ring-2 ring-white ring-transparent focus:outline-none focus:ring-primary-500"
-					on:keyup="{() => clickEvent('fourth', '')}" />
-			</div> -->
-		<!-- </div> -->
-
 		<div class="otp-input-wrapper mx-auto mb-5 max-w-max">
 			<input
 				type="tel"
