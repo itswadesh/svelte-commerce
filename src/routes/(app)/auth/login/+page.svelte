@@ -20,6 +20,7 @@ import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
 import { googleOneTapLoginService, loginService } from '$lib/services/UserService'
+import { toast } from '$lib/utils'
 
 const cookies = Cookie()
 
@@ -29,35 +30,35 @@ const seoProps = {
 }
 
 let ref = $page?.url?.searchParams.get('ref')
-let email
-let password
+let email = '' //'admin@medusa.com'
+let password = '' //'medusa'
 let loading = false
 let showPassword = false
 let type = 'password'
 let err
 
 onMount(() => {
-	googleOneTap(
-		{
-			client_id: GOOGLE_CLIENT_ID
-		},
-		async (res) => {
-			const onetap = await googleOneTapLoginService({ data: res, origin: $page.data.origin })
-			const me = {
-				email: onetap.email,
-				phone: onetap.phone,
-				firstName: onetap.firstName,
-				lastName: onetap.lastName,
-				avatar: onetap.avatar,
-				role: onetap.role,
-				verified: onetap.verified,
-				active: onetap.active
-			}
-			await cookies.set('me', me, { path: '/' })
-			let r = ref || '/'
-			if (browser) goto(r)
-		}
-	)
+	// googleOneTap(
+	// 	{
+	// 		client_id: GOOGLE_CLIENT_ID
+	// 	},
+	// 	async (res) => {
+	// 		const onetap = await googleOneTapLoginService({ data: res, origin: $page.data.origin })
+	// 		const me = {
+	// 			email: onetap.email,
+	// 			phone: onetap.phone,
+	// 			firstName: onetap.firstName,
+	// 			lastName: onetap.lastName,
+	// 			avatar: onetap.avatar,
+	// 			role: onetap.role,
+	// 			verified: onetap.verified,
+	// 			active: onetap.active
+	// 		}
+	// 		await cookies.set('me', me, { path: '/' })
+	// 		let r = ref || '/'
+	// 		if (browser) goto(r)
+	// 	}
+	// )
 })
 
 function togglePassword() {
@@ -77,7 +78,7 @@ async function submit() {
 			storeId: $page.data.store?.id,
 			origin: $page.data.origin
 		})
-
+console.log('zzzzzzzzzzzzzzzzzzzz',res)
 		const me = {
 			email: res.email,
 			phone: res.phone,
@@ -95,7 +96,8 @@ async function submit() {
 		let r = ref || '/'
 		if (browser) goto(r)
 	} catch (e) {
-		err = e
+		toast(e.body,'error')
+		err = e?.body || body
 	} finally {
 		loading = false
 	}

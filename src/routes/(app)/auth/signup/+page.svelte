@@ -27,7 +27,14 @@ const seoProps = {
 }
 
 let ref = $page?.url?.searchParams.get('ref')
-let newResistration = {}
+let newResistration = {
+	// firstName:'Medusa',
+	// lastName:'Admin',
+	// phone:'8249824982',
+	// email:'admin@medusa.com',
+	// password:'medusa',
+	// passwordConfirmation:'medusa',
+}
 let loading = false
 let showPassword = false
 let passwordType = 'password'
