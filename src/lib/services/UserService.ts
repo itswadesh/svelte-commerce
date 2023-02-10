@@ -4,8 +4,10 @@ import { del, getAPI, post, put } from '$lib/utils/api'
 import {
 	getBigCommerceApi,
 	getBySid,
+	getMedusajsApi,
 	getWooCommerceApi,
 	postBigCommerceApi,
+	postMedusajsApi,
 	postWooCommerceApi
 } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
@@ -21,6 +23,12 @@ export const fetchMeData = async ({ origin, storeId, server = false, sid = null 
 				} else {
 					res = await getAPI(`users/me?store=${storeId}`, origin)
 				}
+				break
+			case 'medusajs':
+				const response = await getMedusajsApi(`auth`, null, sid)
+				res.firstName = response.first_name
+				res.lastName = response.last_name
+				res.active = res.has_account
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`users/me`, {}, sid)
@@ -64,6 +72,15 @@ export const signupService = async ({
 					},
 					origin
 				)
+				break
+			case 'medusajs':
+				res = await postMedusajsApi(`customers`, {
+					first_name: firstName,
+					last_name: lastName,
+					phone,
+					email,
+					password
+				})
 				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`signup`, {})
@@ -126,6 +143,16 @@ export const loginService = async ({
 					origin
 				)
 				break
+			case 'medusajs':
+				const response = await postMedusajsApi(`auth`, {
+					email,
+					password
+				})
+				res = response.customer
+				res.firstName = res.first_name
+				res.lastName = res.last_name
+				res.active = res.has_account
+				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`signup`, {})
 				break
@@ -135,6 +162,7 @@ export const loginService = async ({
 		}
 		return res
 	} catch (e) {
+		if (e.status === 401) e.message = 'email or password is invalid'
 		throw error(e.status, e.data?.message || e.message)
 	}
 }
@@ -289,13 +317,10 @@ export const logoutService = async ({ storeId, origin, server = false, sid = nul
 		let res: any = {}
 		switch (provider) {
 			case 'litekart':
-				res = await del(
-					`logout`,
-					{
-						store: storeId
-					},
-					origin
-				)
+				res = await del(`logout?store=${storeId}`, origin)
+				break
+			case 'medusajs':
+				res = await del(`auth`, origin)
 				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`signup`, {})
