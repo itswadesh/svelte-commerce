@@ -31,20 +31,21 @@
 </style>
 
 <script lang="ts">
-// import { getMegamenuFromStore } from '$lib/store/megamenu'
+// import { getMegamenuFromStore } from '$lib/store/megamenu-old'
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
-import { navigateToProperPath, toast } from '$lib/utils'
 import { getContext, onMount } from 'svelte'
+import { navigateToProperPath, toast } from '$lib/utils'
 import { page } from '$app/stores'
 import Cookie from 'cookie-universal'
+import MegamenuStore from '$lib/store/megamenu'
 
 let clazz = ''
 export { clazz as class }
 
 const cookies = Cookie()
 
-let megamenu = $page.data.megamenu || []
+let menuItems = []
 let pincode = null
 let selectedCategory = ''
 
@@ -58,44 +59,46 @@ onMount(() => {
 	}
 })
 
+MegamenuStore.subscribe((data) => {
+	menuItems = data
+})
 
 //get megamenu from context
 
-let megamenuList = getContext('megamenu') 
+let megamenuList = getContext('megamenu')
 
+// async function getMegaMenu() {
+// 	if (browser && $page.data.isDesktop) {
+// 		try {
+// 			// megamenu = await getMegamenuFromStore({
+// 			// 	sid: null,
+// 			// 	storeId: $page?.data?.store?.id,
+// 			// 	isCors: $page?.data?.store?.isCors,
+// 			// 	origin: $page.data.origin
+// 			// })
 
-async function getMegaMenu() {
-	if (browser && $page.data.isDesktop) {
-		try {
-			// megamenu = await getMegamenuFromStore({
-			// 	sid: null,
-			// 	storeId: $page?.data?.store?.id,
-			// 	isCors: $page?.data?.store?.isCors,
-			// 	origin: $page.data.origin
-			// })
+// 			const localMegamenu = localStorage.getItem('megamenu')
 
-			const localMegamenu = localStorage.getItem('megamenu')
-
-			if (!!localMegamenu && localMegamenu !== 'undefined') {
-				megamenu = JSON.parse(localMegamenu)
-			} else {
-				megamenu = await CategoryService.fetchMegamenuData({
-					storeId: $page.data.store?.id,
-					origin: $page.data.origin
-				})
-			}
-		} catch (e) {
-			toast(e, 'error')
-		} finally {
-		}
-	} else {
-	}
-}
+// 			if (!!localMegamenu && localMegamenu !== 'undefined') {
+// 				megamenu = JSON.parse(localMegamenu)
+// 			} else {
+// 				megamenu = await CategoryService.fetchMegamenuData({
+// 					storeId: $page.data.store?.id,
+// 					origin: $page.data.origin
+// 				})
+// 			}
+// 		} catch (e) {
+// 			toast(e, 'error')
+// 		} finally {
+// 		}
+// 	} else {
+// 	}
+// }
 </script>
 
-{#if $megamenuList?.length}
+{#if menuItems?.length}
 	<ul class="flex flex-row items-center justify-center">
-		{#each $megamenuList as category, index}
+		{#each menuItems as category, index}
 			<li
 				class="hoverable mx-1"
 				on:mouseenter="{() => (selectedCategory = category.name)}"

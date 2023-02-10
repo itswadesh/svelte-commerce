@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { Autocomplete, MegaMenu } from '$lib/components'
-import { createEventDispatcher, getContext, onMount } from 'svelte'
+import { createEventDispatcher, onMount } from 'svelte'
 import { cubicOut } from 'svelte/easing'
 import { enhance } from '$app/forms'
 import { fade, fly } from 'svelte/transition'
