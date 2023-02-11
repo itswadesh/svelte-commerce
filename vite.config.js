@@ -14,6 +14,8 @@ export default defineConfig(({ command, mode }) => {
 				registerType: 'autoUpdate',
 				srcDir: './src',
 				mode: 'development',
+				scope: '/',
+				base: '/',
 				devOptions: {
 					enabled: true,
 					type: 'module',
