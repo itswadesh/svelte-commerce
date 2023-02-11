@@ -142,7 +142,6 @@ export const postBigCommerceApi = async (endpoint: string, query: any, sid?: any
 }
 
 export const getMedusajsApi = async (endpoint: string, query: any, sid?: any) => {
-	console.log('zzzzzzzzzzzzzzzzzzzz', sid)
 	const response = await fetch(MEDUSAJS_BASE_URL + '/' + endpoint, {
 		method: 'GET',
 		credentials: 'include',
@@ -170,9 +169,6 @@ export const postMedusajsApi = async (endpoint: string, data: any, sid?: any) =>
 			cookie: `connect.sid=${sid}`
 		}
 	})
-	const sid0 = response.headers.entries()
-	const s = response.headers.get('cookie')
-	console.log('zzzzzzzzzzzzzzzzzzzz', sid0, s)
 	const isJson = response.headers.get('content-type')?.includes('application/json')
 	const res = isJson ? await response.json() : await response.text()
 	if (res?.status > 399) {

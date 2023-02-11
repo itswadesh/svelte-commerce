@@ -8,6 +8,7 @@ declare namespace App {
 	interface Locals {
 		me: Me | null
 		q: string
+		sid: string
 		url: string
 		currentPage: number
 		user: {

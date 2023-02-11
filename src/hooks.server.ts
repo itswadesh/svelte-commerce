@@ -36,6 +36,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.store = await fetchStoreData(event)
 		event.locals.me = await authenticateUser(event)
 		event.locals.cart = await fetchCart(event)
+		// Bellow conversion is for medusajs
+		const derivedSid:string|null = event.cookies.get('sid') || event.cookies.get('connect.sid') || null
+		event.locals.sid = derivedSid
+		event.cookies.set('sid', derivedSid)
 		// event.request.headers.delete('connection')
 		return await resolve(event)
 	} catch (e) {
