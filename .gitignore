@@ -11,7 +11,7 @@ package-lock.json
 /prod
 # Local Netlify folder
 .netlify
-
+dev-dist
 .vercel_build_output
 
 $houdini

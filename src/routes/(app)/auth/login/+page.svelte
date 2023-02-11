@@ -31,7 +31,7 @@ const seoProps = {
 
 let ref = $page?.url?.searchParams.get('ref')
 let email = IS_DEV ? 'hi@litekart.in': ''
-let password = IS_DEV ? 'litekart.in': ''
+let password = IS_DEV ? 'litekart': ''
 let loading = false
 let showPassword = false
 let type = 'password'
