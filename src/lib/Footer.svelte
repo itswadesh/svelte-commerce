@@ -114,36 +114,37 @@ async function getStoreData() {
 		<div
 			class="mb-4 flex w-full flex-col flex-wrap items-start justify-start gap-5 sm:mb-8 sm:max-h-[30rem] sm:gap-10 lg:max-h-96 xl:max-h-60"
 		>
-			{#each footerItems as item}
-				<div>
-					<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">
-						{item.heading}
-					</h5>
+			{#if footerItems?.length}	
+				{#each footerItems as item}
+					<div>
+						<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">
+							{item.heading}
+						</h5>
 
-					<ul class="flex flex-col gap-1 text-gray-500">
-						{#each item?.subMenu as itm}
-							<li class="flex max-w-max items-center">
-								<a
-									href="{itm.link}"
-									aria-label="Click to route this page"
-									class="link-underline link-underline-gray whitespace-pre-wrap"
-								>
-									{itm.title}
-								</a>
-
-								{#if itm.new}
-									<div
-										class="ml-2 max-w-max rounded bg-primary-500 py-[0.1rem] px-1 text-[0.5rem] font-semibold leading-3 tracking-wider text-white"
+						<ul class="flex flex-col gap-1 text-gray-500">
+							{#each item?.subMenu as itm}
+								<li class="flex max-w-max items-center">
+									<a
+										href="{itm.link}"
+										aria-label="Click to route this page"
+										class="link-underline link-underline-gray whitespace-pre-wrap"
 									>
-										NEW
-									</div>
-								{/if}
-							</li>
-						{/each}
-					</ul>
-				</div>
-			{/each}
+										{itm.title}
+									</a>
 
+									{#if itm.new}
+										<div
+											class="ml-2 max-w-max rounded bg-primary-500 py-[0.1rem] px-1 text-[0.5rem] font-semibold leading-3 tracking-wider text-white"
+										>
+											NEW
+										</div>
+									{/if}
+								</li>
+							{/each}
+						</ul>
+					</div>
+				{/each}
+			{/if}
 			{#if megamenu}
 				<div>
 					<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Collections</h5>
