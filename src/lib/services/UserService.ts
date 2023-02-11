@@ -74,13 +74,17 @@ export const signupService = async ({
 				)
 				break
 			case 'medusajs':
-				res = await postMedusajsApi(`customers`, {
+				const response = await postMedusajsApi(`customers`, {
 					first_name: firstName,
 					last_name: lastName,
 					phone,
 					email,
 					password
 				})
+				res = response.customer
+				res.firstName = res.first_name
+				res.lastName = res.last_name
+				res.active = res.has_account
 				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`signup`, {})

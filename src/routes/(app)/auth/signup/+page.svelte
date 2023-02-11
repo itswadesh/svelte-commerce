@@ -18,6 +18,7 @@ import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
 import { signupService } from '$lib/services/UserService'
+import { IS_DEV } from '$lib/config'
 
 const cookies = Cookie()
 
@@ -28,12 +29,12 @@ const seoProps = {
 
 let ref = $page?.url?.searchParams.get('ref')
 let newResistration = {
-	// firstName:'Medusa',
-	// lastName:'Admin',
-	// phone:'8249824982',
-	// email:'admin@medusa.com',
-	// password:'medusa',
-	// passwordConfirmation:'medusa',
+	firstName: IS_DEV ? 'Litekart': '',
+	lastName: IS_DEV ? 'User': '',
+	phone: IS_DEV ? '+918249028220': '',
+	email: IS_DEV ? 'hi@litekart.in': '',
+	password: IS_DEV ? 'litekart': '',
+	passwordConfirmation: IS_DEV ? 'litekart': '',
 }
 let loading = false
 let showPassword = false

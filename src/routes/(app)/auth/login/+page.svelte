@@ -8,7 +8,7 @@
 
 <script>
 import { browser } from '$app/environment'
-import { GOOGLE_CLIENT_ID } from '$lib/config'
+import { GOOGLE_CLIENT_ID, IS_DEV } from '$lib/config'
 import { googleOneTap } from './google-one-tap'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
@@ -30,8 +30,8 @@ const seoProps = {
 }
 
 let ref = $page?.url?.searchParams.get('ref')
-let email = '' //'admin@medusa.com'
-let password = '' //'medusa'
+let email = IS_DEV ? 'hi@litekart.in': ''
+let password = IS_DEV ? 'litekart.in': ''
 let loading = false
 let showPassword = false
 let type = 'password'
@@ -78,7 +78,6 @@ async function submit() {
 			storeId: $page.data.store?.id,
 			origin: $page.data.origin
 		})
-console.log('zzzzzzzzzzzzzzzzzzzz',res)
 		const me = {
 			email: res.email,
 			phone: res.phone,
