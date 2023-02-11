@@ -12,7 +12,6 @@
 <!-- PageTransition.svelte -->
 <script>
 import { quintOut } from 'svelte/easing'
-
 import { fly, scale } from 'svelte/transition'
 export let url = ''
 const pageTransitionDuration = 500
