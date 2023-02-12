@@ -16,7 +16,7 @@ if (SENTRY_DSN) {
 
 /** @type {import('@sveltejs/kit').HandleFetch} */
 export const handleFetch = async ({ event, request, fetch }) => {
-	request.headers.set('cookie', event.request.headers.get('cookie'))
+	request.headers.set('cookie', event.request.headers.get('cookie'), { path: '/' })
 
 	return fetch(request)
 }
@@ -37,9 +37,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.me = await authenticateUser(event)
 		event.locals.cart = await fetchCart(event)
 		// Bellow conversion is for medusajs
-		const derivedSid:string|null = event.cookies.get('sid') || event.cookies.get('connect.sid') || null
+		const derivedSid: string | null =
+			event.cookies.get('sid') || event.cookies.get('connect.sid') || null
 		event.locals.sid = derivedSid
-		event.cookies.set('sid', derivedSid)
+		event.cookies.set('sid', derivedSid, { path: '/' })
 		// event.request.headers.delete('connection')
 		return await resolve(event)
 	} catch (e) {
