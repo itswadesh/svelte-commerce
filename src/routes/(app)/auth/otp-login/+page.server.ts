@@ -90,7 +90,7 @@ const verifyOtp: Action = async ({ cookies, request, locals }) => {
 			const cartRes = fetchMyCart({
 				storeId: locals.store?.id,
 				server: true,
-				sid: cookies.get('sid')
+				sid: cookies.get('connect.sid')
 			})
 			const cart = {
 				cartId: cartRes.cart_id,

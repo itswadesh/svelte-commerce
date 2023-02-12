@@ -9,14 +9,14 @@ export async function load({ request, url, locals, cookies }) {
 		const { myAddresses, selectedAddress } = await fetchAddresses({
 			storeId: locals.store?.id,
 			server: true,
-			sid: cookies.get('sid')
+			sid: cookies.get('connect.sid')
 		})
 		const currentPage = +url.searchParams.get('page') || 1
 		const q = url.searchParams.get('q') || ''
 		const cart = await fetchRefreshCart({
 			storeId: locals.store?.id,
 			server: true,
-			sid: cookies.get('sid')
+			sid: cookies.get('connect.sid')
 		})
 		return {
 			cart,

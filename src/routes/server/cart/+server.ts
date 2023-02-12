@@ -6,7 +6,7 @@ export async function GET({ request, locals, cookies }) {
 	cart = await fetchMyCart({
 		storeId: locals.store?.id,
 		server: true,
-		sid: cookies.get('sid')
+		sid: cookies.get('connect.sid')
 	})
 	const d3 = new Date()
 	locals.cartId = cart.cart_id

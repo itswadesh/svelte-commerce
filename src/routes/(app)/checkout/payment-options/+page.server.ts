@@ -14,7 +14,7 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 	const cartRes: any = await fetchRefreshCart({
 		storeId: locals.store?.id,
 		server: true,
-		sid: cookies.get('sid')
+		sid: cookies.get('connect.sid')
 	})
 	const cart = {
 		cartId: cartRes.cart_id,
@@ -39,7 +39,7 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 			storeId: locals.store?.id,
 			server: true,
 			id,
-			sid: cookies.get('sid')
+			sid: cookies.get('connect.sid')
 		})
 		const paymentMethods = await fetchPaymentMethods({ storeId: locals.store.id, server: true })
 		return { paymentMethods, address, addressId: id, me, cart }

@@ -5,7 +5,7 @@ export async function load({ cookies, locals }) {
 	const { myAddresses, selectedAddress, count } = await fetchAddresses({
 		storeId: locals.store?.id,
 		server: true,
-		sid: cookies.get('sid')
+		sid: cookies.get('connect.sid')
 	})
 	myAddresses.count = count
 	if (myAddresses) {

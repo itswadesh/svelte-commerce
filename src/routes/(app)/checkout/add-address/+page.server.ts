@@ -14,7 +14,7 @@ export async function load({ url, cookies, locals }) {
 		ads = await fetchAddress({
 			storeId: locals.store?.id,
 			id,
-			sid: cookies.get('sid'),
+			sid: cookies.get('connect.sid'),
 			server: true
 		})
 	}
@@ -22,13 +22,13 @@ export async function load({ url, cookies, locals }) {
 	const countries = await fetchCountries({
 		storeId: locals.store?.id,
 		server: true,
-		sid: cookies.get('sid')
+		sid: cookies.get('connect.sid')
 	})
 
 	const states = await fetchStates({
 		storeId: locals.store?.id,
 		server: true,
-		sid: cookies.get('sid'),
+		sid: cookies.get('connect.sid'),
 		countryCode: 'IN'
 	})
 

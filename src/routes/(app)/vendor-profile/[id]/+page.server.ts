@@ -9,13 +9,13 @@ export async function load({ params, parent, locals, cookies }) {
 		id: vendorId,
 		storeId: locals.store.id,
 		server: true,
-		sid: cookies.get('sid')
+		sid: cookies.get('connect.sid')
 	})
 	const vendorProducts = await fetchProductsOfVendor({
 		id: vendorId,
 		storeId: locals.store.id,
 		server: true,
-		sid: cookies.get('sid')
+		sid: cookies.get('connect.sid')
 	})
 
 	if (vendor) {

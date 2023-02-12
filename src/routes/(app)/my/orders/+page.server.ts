@@ -6,7 +6,7 @@ export async function load({ params, parent, request, locals, cookies }) {
 		const res = await fetchOrders({
 			storeId: locals.store?.id,
 			server: true,
-			sid: cookies.get('sid')
+			sid: cookies.get('connect.sid')
 		})
 		if (res) {
 			return res

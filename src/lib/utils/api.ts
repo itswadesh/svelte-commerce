@@ -1,5 +1,5 @@
 import { loadingDelayed } from '$lib/store'
-let typingTimer:any
+let typingTimer: any
 
 const send = async ({ method, path, params, data, token, headers, origin }: any) => {
 	if (
@@ -7,7 +7,8 @@ const send = async ({ method, path, params, data, token, headers, origin }: any)
 		path.includes('.jpg') ||
 		path.includes('.svg') ||
 		path.includes('.json') ||
-		path.includes('.css')
+		path.includes('.css') ||
+		path.includes('dev-sw')
 	)
 		return
 	origin = origin || 'http://localhost:3000'
