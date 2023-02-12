@@ -6,7 +6,7 @@ export async function load({ cookies, locals }) {
 		const res = await fetchReviews({
 			storeId: locals.store?.id,
 			server: true,
-			sid: cookies.get('sid')
+			sid: cookies.get('connect.sid')
 		})
 		if (res) {
 			return res

@@ -8,13 +8,13 @@ export async function load({ parent, url, locals, params, cookies }) {
 			pageId: params.slug,
 			storeId: locals.store?.id,
 			server: true,
-			sid: cookies.get('sid')
+			sid: cookies.get('connect.sid')
 		})
 		const groupByBanners = await fetchBannersGroup({
 			pageId: params.slug,
 			storeId: locals.store?.id,
 			server: true,
-			sid: cookies.get('sid')
+			sid: cookies.get('connect.sid')
 		})
 
 		if (banners || groupByBanners) {

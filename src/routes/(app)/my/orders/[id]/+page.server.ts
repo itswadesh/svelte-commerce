@@ -9,7 +9,7 @@ export async function load({ params, url, locals, cookies, request }) {
 		storeId: locals.store?.id,
 		id,
 		server: true,
-		sid: cookies.get('sid')
+		sid: cookies.get('connect.sid')
 	})
 	const orderTracking = await fetchTrackOrder({ id, storeId: store?.id, server: true })
 	if (order) {

@@ -7,7 +7,7 @@ export const fetchCart = async (event: RequestEvent) => {
 		const cartQty: string | undefined = event.cookies.get('cartQty')
 		if (cartId) event.locals.cartId = cartId
 		if (cartQty) event.locals.cartQty = +cartQty
-		const sid = event.cookies.get('sid')
+		const sid = event.cookies.get('connect.sid')
 		const cartRes = await getBySid('carts/my', sid)
 		const cart = {
 			cartId: cartRes.cart_id,

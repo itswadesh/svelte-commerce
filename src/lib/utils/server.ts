@@ -28,13 +28,13 @@ export async function postt(endpoint: string, data: any, ck?: any) {
 		body: JSON.stringify(data || {}),
 		headers: {
 			'Content-Type': 'application/json',
-			cookie: `sid=${ck.get('sid')}`
+			cookie: `connect.sid=${ck.get('connect.sid')}`
 		}
 	})
 	const sid: string | null = response.headers.get('set-cookie')
 	if (sid) {
 		const sidCookie: any = cookie.parse(sid)
-		ck.set('sid', sidCookie.sid, {
+		ck.set('connect.sid', sidCookie.sid, {
 			path: '/'
 		})
 	}
@@ -57,7 +57,7 @@ export async function postBySid(endpoint: string, data: any, sid?: string) {
 		body: JSON.stringify(data || {}),
 		headers: {
 			'Content-Type': 'application/json',
-			cookie: `sid=${sid}`
+			cookie: `connect.sid=${sid}`
 		}
 	})
 	const isJson = response.headers.get('content-type')?.includes('application/json')
@@ -76,7 +76,7 @@ export async function gett(endpoint: string, ck?: any) {
 	const response = await fetch(ep, {
 		method: 'GET',
 		credentials: 'include',
-		headers: { cookie: `sid=${ck1.sid}` }
+		headers: { cookie: `connect.sid=${ck1['connect.sid']}` }
 	})
 	const isJson = response.headers.get('content-type')?.includes('application/json')
 
@@ -93,7 +93,7 @@ export const getBySid = async (endpoint: string, sid?: any) => {
 	const response = await fetch(HTTP_ENDPOINT + '/api/' + endpoint, {
 		method: 'GET',
 		credentials: 'include',
-		headers: { cookie: `sid=${sid}` }
+		headers: { cookie: `connect.sid=${sid}` }
 	})
 	const isJson = response.headers.get('content-type')?.includes('application/json')
 	const res = isJson ? await response.json() : await response.text()

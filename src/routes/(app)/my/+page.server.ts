@@ -9,17 +9,17 @@ export async function load({ request, locals, parent, cookies }) {
 		const myOrders = await fetchOrders({
 			storeId: locals.store?.id,
 			server: true,
-			sid: cookies.get('sid')
+			sid: cookies.get('connect.sid')
 		})
 		const myWishlist = await fetchWishlist({
 			storeId: locals.store?.id,
 			server: true,
-			sid: cookies.get('sid')
+			sid: cookies.get('connect.sid')
 		})
 		const myReviews = await fetchReviews({
 			storeId: locals.store?.id,
 			server: true,
-			sid: cookies.get('sid')
+			sid: cookies.get('connect.sid')
 		})
 		return { me: me, myOrders, myWishlist, myReviews }
 	} catch (e) {

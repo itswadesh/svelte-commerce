@@ -10,7 +10,7 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies }) =>
 		loading = true
 		const res = await fetchRefreshCart({
 			storeId: locals.store?.id,
-			sid: cookies.get('sid'),
+			sid: cookies.get('connect.sid'),
 			server: true
 		})
 		if (res) {

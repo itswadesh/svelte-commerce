@@ -11,7 +11,7 @@ export async function load({ url, locals, cookies }) {
 		const res: any = fetchMyCart({
 			storeId: locals.store?.id,
 			server: true,
-			sid: cookies.get('sid')
+			sid: cookies.get('connect.sid')
 		})
 
 		if (res) {

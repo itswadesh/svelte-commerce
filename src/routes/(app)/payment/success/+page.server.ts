@@ -17,7 +17,7 @@ export async function load({ url, request, locals, cookies }) {
 			orderId,
 			storeId: locals.store?.id,
 			server: true,
-			sid: cookies.get('sid')
+			sid: cookies.get('connect.sid')
 		})
 	} catch (e) {
 		if (e.status === 401) {
@@ -34,7 +34,11 @@ export async function load({ url, request, locals, cookies }) {
 	}
 
 	try {
-		cart = fetchRefreshCart({ storeId: locals.store?.id, server: true, sid: cookies.get('sid') })
+		cart = fetchRefreshCart({
+			storeId: locals.store?.id,
+			server: true,
+			sid: cookies.get('connect.sid')
+		})
 		if (cart) {
 			const cartObj = {
 				cartId: cart?.cart_id,

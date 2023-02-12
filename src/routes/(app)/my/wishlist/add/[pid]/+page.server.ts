@@ -9,7 +9,7 @@ export async function load({ locals, cookies, params, request }) {
 		vid: pid,
 		storeId: locals.store?.id,
 		server: true,
-		sid: cookies.get('sid')
+		sid: cookies.get('connect.sid')
 	})
 
 	if (!isExistInWishlist) {
@@ -17,7 +17,7 @@ export async function load({ locals, cookies, params, request }) {
 			pid: pid,
 			vid: pid,
 			storeId: locals.store?.id,
-			sid: cookies.get('sid')
+			sid: cookies.get('connect.sid')
 		})
 	}
 	throw redirect(307, '/my/wishlist')
