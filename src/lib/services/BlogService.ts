@@ -1,7 +1,7 @@
 import { provider } from '$lib/config'
 import type { Error } from '$lib/types'
 import { getAPI } from '$lib/utils/api'
-import { getBigCommerceApi, getBySid, getWooCommerceApi } from '$lib/utils/server'
+import { getBigCommerceApi, getBySid, getMedusajsApi, getWooCommerceApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
@@ -15,6 +15,9 @@ export const fetchBlogs = async ({ origin, storeId, server = false, sid = null }
 				} else {
 					res = await getAPI(`blogs?store${storeId}`, origin)
 				}
+				break
+			case 'medusajs':
+				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`blogs`, {}, sid)
@@ -40,6 +43,9 @@ export const fetchLatestBlogs = async ({ origin, storeId, server = false, sid = 
 					res = await getAPI(`blogs?sort=-updatedAt&limit=10&store=${storeId}`, origin)
 				}
 				break
+			case 'medusajs':
+				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`blogs?sort=-updatedAt&limit=10`, {}, sid)
 				break
@@ -63,6 +69,9 @@ export const fetchBlog = async ({ origin, id, storeId, server = false, sid = nul
 				} else {
 					res = await getAPI(`blogs/${id}`, origin)
 				}
+				break
+			case 'medusajs':
+				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`blogs/${id}`, {}, sid)

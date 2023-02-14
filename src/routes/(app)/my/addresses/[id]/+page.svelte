@@ -10,7 +10,6 @@ const seoProps = {
 
 export let data
 
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 </script>
 
 <SEO {...seoProps} />

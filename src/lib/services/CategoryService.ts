@@ -1,7 +1,7 @@
 import { provider } from '$lib/config'
 import type { Error } from '$lib/types'
 import { getAPI } from '$lib/utils/api'
-import { getBigCommerceApi, getBySid, getWooCommerceApi } from '$lib/utils/server'
+import { getBigCommerceApi, getBySid, getMedusajsApi, getWooCommerceApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
@@ -28,6 +28,9 @@ export const fetchFooterCategories = async ({
 				}
 				// must return link:string, slug:string(optional) name:string, new:boolean
 				break
+			case 'medusajs':
+				data = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				break
 			case 'bigcommerce':
 				data = await getBigCommerceApi(`categories`, {}, sid)
 				break
@@ -51,6 +54,9 @@ export const fetchCategory = async ({ origin, id, server = false, sid = null }: 
 				} else {
 					res = await getAPI(`category/${id}`, origin)
 				}
+				break
+			case 'medusajs':
+				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`categories`, {}, sid)
@@ -89,6 +95,9 @@ export const fetchAllCategories = async ({
 				data = res.data
 				pageSize = res.pageSize
 				currentPage = res.currentPage
+				break
+			case 'medusajs':
+				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`categories`, {}, sid)
@@ -135,6 +144,9 @@ export const fetchAllProductsOfCategories = async ({
 				err = !products ? 'No result Not Found' : null
 				// must return link:string, slug:string(optional) name:string, new:boolean
 				break
+				case 'medusajs':
+				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`categories`, {}, sid)
 				break
@@ -159,6 +171,9 @@ export const fetchMegamenuData = async ({ origin, storeId, server = false, sid =
 					data = await getAPI(`categories/megamenu?megamenu=true&store=${storeId}`, origin)
 				}
 				// must return link:string, slug:string(optional) name:string, new:boolean
+				break
+			case 'medusajs':
+				data = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
 				break
 			case 'bigcommerce':
 				data = await getBigCommerceApi(`banners`, {}, sid)

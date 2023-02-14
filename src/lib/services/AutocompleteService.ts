@@ -1,7 +1,7 @@
 import { provider } from '$lib/config'
 import type { Error } from '$lib/types'
 import { getAPI, post } from '$lib/utils/api'
-import { getBigCommerceApi, getWooCommerceApi } from '$lib/utils/server'
+import { getBigCommerceApi, getMedusajsApi, getWooCommerceApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
@@ -22,6 +22,9 @@ export const fetchAutocompleteData = async ({ origin, storeId, q }: any) => {
 						return { name: h._source.name, slug: h._source.slug, type: h._source.type }
 					})
 				}
+				break
+			case 'medusajs':
+				res = (await getMedusajsApi(`customers/me`, {})).customer.shipping_address
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`es/autocomplete?q=${filterText}&store=${storeId}`, {})

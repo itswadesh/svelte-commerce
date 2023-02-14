@@ -37,6 +37,9 @@ export const fetchWishlist = async ({
 					)
 				}
 				break
+			case 'medusajs':
+				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`wishlists/my`, {}, sid)
 				break
@@ -73,6 +76,9 @@ export const checkhWishlist = async ({
 						origin
 					)
 				}
+				break
+			case 'medusajs':
+				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`wishlists/check`, {}, sid)
@@ -112,6 +118,9 @@ export const toggleWishlistService = async ({
 						origin
 					)
 				}
+				break
+			case 'medusajs':
+				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
 				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`wishlists/toggle`, {})

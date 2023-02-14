@@ -352,6 +352,9 @@ export const updateProfileService = async ({
 			case 'litekart':
 				res = await put(`users/update-profile`, e, origin)
 				break
+			case 'medusajs':
+				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`users/update-profile`, {})
 				break

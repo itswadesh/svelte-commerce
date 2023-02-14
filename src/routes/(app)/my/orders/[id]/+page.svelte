@@ -26,7 +26,6 @@ export let data
 let clazz
 export { clazz as class }
 
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 const seoProps = {
 	title: 'Details ',
