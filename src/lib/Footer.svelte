@@ -145,7 +145,7 @@ async function getStoreData() {
 					</div>
 				{/each}
 			{/if}
-			{#if megamenu}
+			{#if megamenu?.length}
 				<div>
 					<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Collections</h5>
 
