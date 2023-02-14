@@ -33,7 +33,7 @@ export const submitContactUsForm = async ({
 				)
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`contact-us`, {})
@@ -82,7 +82,7 @@ export const bulkOrderEnquiry = async ({
 				)
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`bulk-order-enquiry`, {})

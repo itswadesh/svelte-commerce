@@ -7,7 +7,8 @@ import {
 	getBigCommerceApi,
 	getBySid,
 	getWooCommerceApi,
-	postBySid
+	postBySid,
+	getMedusajsApi
 } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
@@ -38,7 +39,7 @@ export const fetchWishlist = async ({
 				}
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`wishlists/my`, {}, sid)
@@ -78,7 +79,7 @@ export const checkhWishlist = async ({
 				}
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`wishlists/check`, {}, sid)
@@ -120,7 +121,7 @@ export const toggleWishlistService = async ({
 				}
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`wishlists/toggle`, {})

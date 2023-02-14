@@ -25,7 +25,7 @@ export const saveScheduleDemo = async ({
 				)
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`saveScheduleDemo`, {})

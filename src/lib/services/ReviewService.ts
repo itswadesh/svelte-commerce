@@ -42,7 +42,7 @@ export const fetchReviews = async ({
 				}
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`reviews/${pid}`, {}, sid)
@@ -81,7 +81,7 @@ export const fetchProductReviews = async ({
 				}
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`reviews/product-reviews?pid=${pid}`, {}, sid)
@@ -123,7 +123,7 @@ export const saveReview = async ({
 				)
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`reviews`, {})

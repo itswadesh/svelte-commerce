@@ -113,9 +113,11 @@ interface Specification {
 }
 
 interface Category {
-	_id: string
+	_id?: string
+	id?: string
 	name: string
 	slug: string
+	children: [Category]
 	link?: string
 	active?: boolean
 	new?: boolean

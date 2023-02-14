@@ -1,6 +1,6 @@
 import { currency as currencyConfig, IMAGE_CDN_URL } from '../config'
 import { toasts } from 'svelte-toasts'
-import type { AllOrders, AllProducts, Order, Product } from '$lib/types'
+import type { AllOrders, AllProducts, Category, Order, Product } from '$lib/types'
 import type { ToastProps, ToastType } from 'svelte-toasts/types/common'
 
 let allToasts: any
@@ -251,6 +251,22 @@ export const mapMedusajsProduct = (p: any) => {
 			// sales_channels: p.sales_channels,
 		}
 		return prod
+	} else {
+		return {}
+	}
+}
+
+export const mapMedusajsCategory = (c: any) => {
+	if (c) {
+		const r: Category = {
+			id: c.id,
+			name: c.name,
+			slug: c.handle,
+			children: c.category_children.map((i: any) => {
+				if (i) return mapMedusajsCategory(i)
+			})
+		}
+		return r
 	} else {
 		return {}
 	}

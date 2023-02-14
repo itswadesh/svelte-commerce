@@ -17,7 +17,7 @@ export const fetchPaymentMethods = async ({ origin, storeId, server = false, sid
 				}
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`payment-methods`, {}, sid)

@@ -17,7 +17,7 @@ export const fetchBlogs = async ({ origin, storeId, server = false, sid = null }
 				}
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`blogs`, {}, sid)
@@ -44,7 +44,7 @@ export const fetchLatestBlogs = async ({ origin, storeId, server = false, sid = 
 				}
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`blogs?sort=-updatedAt&limit=10`, {}, sid)
@@ -71,7 +71,7 @@ export const fetchBlog = async ({ origin, id, storeId, server = false, sid = nul
 				}
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`blogs/${id}`, {}, sid)

@@ -17,7 +17,7 @@ export const fetchVendor = async ({ origin, id, storeId, server = false, sid = n
 				}
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`vendors/${id}`, {}, sid)
@@ -50,7 +50,7 @@ export const fetchProductsOfVendor = async ({
 				}
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`products`, {}, sid)

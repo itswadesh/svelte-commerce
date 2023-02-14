@@ -24,7 +24,7 @@ export const fetchCartData = async ({ origin, storeId, server = false, sid = nul
 				}
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`cart`, {}, sid)
@@ -53,7 +53,7 @@ export const fetchRefreshCart = async ({ origin, storeId, server = false, sid = 
 				}
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`carts/refresh-cart`, {}, sid)
@@ -82,7 +82,7 @@ export const fetchMyCart = async ({ origin, storeId, server = false, sid = null 
 				}
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`carts/my`, {}, sid)
@@ -139,7 +139,7 @@ export const addToCartService = async ({
 				}
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`carts/add-to-cart`, {})
@@ -175,7 +175,7 @@ export const applyCouponService = async ({
 				)
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`apply-coupon`, {})
@@ -204,7 +204,7 @@ export const removeCouponService = async ({
 				res = await del(`remove-coupon?code=${code}&store=${storeId}`, origin)
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`remove-coupon`, {})
