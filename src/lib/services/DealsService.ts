@@ -17,7 +17,7 @@ export const fetchDeals = async ({ origin, query, storeId, server = false, sid =
 				}
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`products`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`deals`, {}, sid)

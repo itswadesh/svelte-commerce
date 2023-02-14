@@ -72,7 +72,7 @@ async function getWishlistedProducts() {
 	{/if}
 
 	<div>
-		{#if wishlistedProducts?.length === 0}
+		{#if wishlistedProducts?.length}
 			<div class="flex h-[70vh] flex-col items-center justify-center text-center">
 				<img src="/no/empty-wishlist.svg" alt="empty wishlist" class="mb-5 h-60 object-contain" />
 
@@ -91,7 +91,7 @@ async function getWishlistedProducts() {
 						My Wishlist ({wishlistedProducts?.length || 0})
 					</h1>
 
-					{#if wishlistedProducts.length}
+					{#if wishlistedProducts?.length}
 						<div
 							class="grid w-full grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-between lg:mb-20"
 						>
@@ -265,6 +265,8 @@ async function getWishlistedProducts() {
 								</div>
 							{/each}
 						</div>
+						{:else}
+						<h1>No products in wishlist</h1>
 					{/if}
 				</div>
 			</div>
