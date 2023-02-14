@@ -21,7 +21,8 @@
 		offlineReady.set(false)
 		needRefresh.set(false)
 	}
-	$: toast = $offlineReady || $needRefresh
+	// $: toast = $offlineReady || $needRefresh
+	$: toast = $needRefresh
 </script>
 
 {#if toast}
