@@ -7,8 +7,8 @@
 
 <script>
 import { page } from '$app/stores'
-import { put } from '$lib/util/api'
-import { toast } from '$lib/util'
+import { put } from '$lib/utils/api'
+import { toast } from '$lib/utils'
 import Cookie from 'cookie-universal'
 import CtrlS from '$lib/components/CtrlS.svelte'
 import dayjs from 'dayjs'
@@ -26,9 +26,7 @@ const seoProps = {
 }
 
 const cookies = Cookie()
-
 let loading = false
-let formChanged = false
 let err = ''
 
 function saveImage(detail) {
@@ -58,7 +56,7 @@ async function saveProfile() {
 
 		if (data.profile) {
 			data.profile.dob = data.profile.dob ? dayjs(data.profile.dob).format('YYYY-MM-DD') : null
-			formChanged = false
+
 			toast('Profile Info Saved.', 'success')
 		}
 
@@ -69,7 +67,6 @@ async function saveProfile() {
 		err = e
 		toast(e, 'error')
 	} finally {
-		// loading = false
 	}
 }
 </script>
@@ -92,9 +89,10 @@ async function saveProfile() {
 			<form class="mb-5 flex flex-col gap-4 sm:mb-10" on:submit|preventDefault="{saveProfile}">
 				<div>
 					<div
-						class="frosted flex flex-col gap-4 rounded-lg border border-gray-300 p-4 shadow-lg md:p-6">
+						class="frosted flex flex-col gap-4 rounded-lg border border-gray-300 p-4 shadow-lg md:p-6"
+					>
 						<div class="flex flex-wrap items-center gap-2">
-							<div class="w-52 flex-shrink-0 font-medium">
+							<div class="w-52 shrink-0 font-medium">
 								<SingleImageUpload
 									class=""
 									avatar
@@ -102,7 +100,8 @@ async function saveProfile() {
 									images="{data.profile.avatar}"
 									loading="{loading}"
 									on:save="{({ detail }) => saveImage(detail)}"
-									on:remove="{({ detail }) => removeImage(detail)}" />
+									on:remove="{({ detail }) => removeImage(detail)}"
+								/>
 							</div>
 
 							<div class="w-full max-w-md">
@@ -119,43 +118,43 @@ async function saveProfile() {
 						</div>
 
 						<div class="flex flex-wrap gap-2">
-							<h6 class="w-52 flex-shrink-0 font-medium">First Name</h6>
+							<h6 class="w-52 shrink-0 font-medium">First Name</h6>
 
 							<div class="w-full max-w-md">
 								<Textbox
 									type="text"
 									placeholder="Enter First Name"
 									bind:value="{data.profile.firstName}"
-									on:input="{() => (formChanged = true)}" />
+								/>
 							</div>
 						</div>
 
 						<div class="flex flex-wrap gap-2">
-							<h6 class="w-52 flex-shrink-0 font-medium">Last Name</h6>
+							<h6 class="w-52 shrink-0 font-medium">Last Name</h6>
 
 							<div class="w-full max-w-md">
 								<Textbox
 									type="text"
 									placeholder="Enter Last Name"
 									bind:value="{data.profile.lastName}"
-									on:input="{() => (formChanged = true)}" />
+								/>
 							</div>
 						</div>
 
 						<div class="flex flex-wrap gap-2">
-							<h6 class="w-52 flex-shrink-0 font-medium">Date Of Birth</h6>
+							<h6 class="w-52 shrink-0 font-medium">Date Of Birth</h6>
 
 							<div class="w-full max-w-md">
 								<Textbox
 									type="date"
 									placeholder="Enter Date Of Birth"
 									bind:value="{data.profile.dob}"
-									on:input="{() => (formChanged = true)}" />
+								/>
 							</div>
 						</div>
 
 						<div class="flex flex-wrap gap-2">
-							<h6 class="w-52 flex-shrink-0 font-medium">Phone</h6>
+							<h6 class="w-52 shrink-0 font-medium">Phone</h6>
 
 							<div class="w-full max-w-md">
 								<Textbox
@@ -164,24 +163,14 @@ async function saveProfile() {
 									maxlength="10"
 									placeholder="Eg:xxxxxxxxxx"
 									bind:value="{data.profile.phone}"
-									on:input="{() => (formChanged = true)}" />
+								/>
 							</div>
 						</div>
 					</div>
 				</div>
-			</form>
 
-			{#if data.profile.email}
-				<a href="/auth/change-password?ref=/my/profile">
-					<PrimaryButton>Change Password</PrimaryButton>
-				</a>
-			{/if}
+				<PrimaryButton type="submit" class="w-60">Save Profile</PrimaryButton>
+			</form>
 		</div>
 	{/if}
 </div>
-
-<CtrlS
-	loading="{loading}"
-	loadingMessage="Updating Profile"
-	formChanged="{formChanged}"
-	on:save="{() => saveProfile()}" />

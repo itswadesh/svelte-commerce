@@ -24,7 +24,8 @@
 }
 </style>
 
-<script>
+<script lang="ts">
+
 import { currency } from './utils'
 import { fly } from 'svelte/transition'
 import { goto } from '$app/navigation'
@@ -35,8 +36,9 @@ import { toggleWishlistService } from './services/WishlistService'
 import LazyImg from './components/Image/LazyImg.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
+import type { Product } from './types'
 
-export let product = {}
+export let product:Product
 
 let images = [
 	'https://s3.ap-south-1.amazonaws.com/litekart.in/stores/6356502aca4ff28ed596cb1b/product/6045f9ae120e71405f1767d3/fancy-0235-888-fancymart-original-imafhez6qfja6jza-vjkatenzjzyw.jpeg',
@@ -44,9 +46,8 @@ let images = [
 	'https://s3.ap-south-1.amazonaws.com/litekart.in/stores/6356502aca4ff28ed596cb1b/product/6045f9ae120e71405f1767d3/ohdbaf-1288-decorebugs-original-imaem5qyq8f6vtyy-q27lkebwlah0.jpeg'
 ]
 
-// console.log('zzzzzzzzzzzzzzzzzz', product)
 
-let show,
+let show=false,
 	showRelatedProducts = false,
 	isWislisted = false,
 	loadingForWishlist = false
@@ -57,25 +58,6 @@ function showitems() {
 
 function hideitems() {
 	show = false
-}
-
-async function toggleWishlist(id) {
-	try {
-		loadingForWishlist = true
-		isWislisted = await toggleWishlistService({
-			product: id,
-			variant: id,
-			storeId: $page.data.store?.id,
-			origin: $page.data.store?.origin
-		})
-	} catch (e) {
-		if (e.message === 'You must be logged in') {
-			const url = '/'
-			goto(`${$loginUrl}?ref=${url}`)
-		}
-	} finally {
-		loadingForWishlist = false
-	}
 }
 
 let showcaseImg = images[0]
@@ -92,22 +74,25 @@ function selectPrimaryImage() {
 </script>
 
 <div
-	class="group relative col-span-1 block w-full overflow-hidden border bg-white sm:w-52 sm:flex-shrink-0 sm:rounded-md sm:border-transparent sm:hover:border-gray-200 sm:hover:shadow-lg"
+	class="group relative col-span-1 block w-full overflow-hidden border bg-white sm:w-52 sm:shrink-0 sm:rounded-md sm:border-transparent sm:hover:border-gray-200 sm:hover:shadow-lg"
 	on:mouseenter="{showitems}"
-	on:mouseleave="{hideitems}">
+	on:mouseleave="{hideitems}"
+>
 	<a
 		href="/product/{product.slug}?id={product.id}"
 		target="{$page?.data?.isDesktop ? '_blank' : ''}"
 		rel="noopener noreferrer"
 		aria-label="Click to view the product details"
 		data-sveltekit-preload-data
-		class="flex flex-col items-center">
+		class="flex flex-col items-center"
+	>
 		<!-- New -->
 		{#if product.new || product.tags?.length}
 			<div class="absolute top-1 left-1 flex flex-col gap-0.5">
 				{#if product.new}
 					<div
-						class="text-rem max-w-max bg-red-500 py-0.5 px-1.5 text-xs font-semibold uppercase text-white">
+						class="text-rem max-w-max bg-red-500 py-0.5 px-1.5 text-xs font-semibold uppercase text-white"
+					>
 						New
 					</div>
 				{/if}
@@ -117,7 +102,8 @@ function selectPrimaryImage() {
 						{#if tag?.name && tag?.type === 'Ribbon'}
 							<div
 								class="text-rem max-w-max py-0.5 px-1.5 text-xs font-semibold uppercase text-white"
-								style="background-color: {tag.colorCode};">
+								style="background-color: {tag.colorCode};"
+							>
 								{tag.name}
 							</div>
 						{/if}
@@ -130,11 +116,12 @@ function selectPrimaryImage() {
 		showcaseImg -->
 		<!-- <button type="button" class="h-[280px] w-[210px] overflow-hidden"> -->
 		<LazyImg
-			src="{product.img}"
+			src="{product.img||''}"
 			alt="{product.name}"
 			width="210"
 			height="280"
-			class="h-[280px] w-[210px] object-contain object-bottom text-xs" />
+			class="h-[280px] w-[210px] object-contain object-bottom text-xs"
+		/>
 		<!-- </button> -->
 	</a>
 
@@ -147,7 +134,7 @@ function selectPrimaryImage() {
 					class="trans flex h-7 w-7 items-center rounded-full border border-primary-500 bg-white text-primary-500">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
-						class="h-5 w-5 flex-shrink-0"
+						class="h-5 w-5 shrink-0"
 						fill="none"
 						viewBox="0 0 24 24"
 						stroke="currentColor">
@@ -180,7 +167,7 @@ function selectPrimaryImage() {
 							class="trans flex h-7 w-7 items-center rounded-full border border-primary-500 bg-white text-primary-500">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
-								class="h-5 w-5 flex-shrink-0"
+								class="h-5 w-5 shrink-0"
 								fill="none"
 								viewBox="0 0 24 24"
 								stroke="currentColor">
@@ -220,7 +207,7 @@ function selectPrimaryImage() {
 					{:else}
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
-							class="h-5 w-5 flex-shrink-0"
+							class="h-5 w-5 shrink-0"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
@@ -315,7 +302,8 @@ function selectPrimaryImage() {
 				href="/product/{product.slug}"
 				aria-label="Click to view the product details"
 				class="block"
-				data-sveltekit-preload-data>
+				data-sveltekit-preload-data
+			>
 				<!-- <div class="mb-1.5 flex items-center justify-between"> -->
 				<!-- {#if product.brand?.name || product.brandName}
 						<h2 class="font-semibold">
@@ -366,7 +354,8 @@ function selectPrimaryImage() {
 			href="/product/{product.slug}"
 			aria-label="Click to view the product details"
 			data-sveltekit-preload-data
-			class="block">
+			class="block"
+		>
 			<div class="mt-2.5 flex flex-wrap items-baseline justify-start gap-1.5 text-xs leading-4">
 				<span class="whitespace-nowrap text-sm font-bold sm:text-base">
 					{currency(product.price, $page.data?.store?.currencySymbol)}
@@ -398,21 +387,25 @@ function selectPrimaryImage() {
 	<div class="fixed inset-0 z-[100] h-screen w-full">
 		<button
 			class="absolute inset-0 cursor-default bg-black bg-opacity-50 focus:outline-none"
-			on:click="{() => (showRelatedProducts = false)}">
+			on:click="{() => (showRelatedProducts = false)}"
+		>
 		</button>
 
 		<div
 			transition:fly="{{ x: 400, duration: 500 }}"
-			class="absolute inset-y-0 right-0 z-[101] h-full max-w-max border-l bg-white">
+			class="absolute inset-y-0 right-0 z-[101] h-full max-w-max border-l bg-white"
+		>
 			<button
 				type="button"
 				class="absolute top-5 right-4 transform cursor-pointer text-gray-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-gray-700"
-				on:click="{() => (showRelatedProducts = false)}">
+				on:click="{() => (showRelatedProducts = false)}"
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					class="h-5 w-5"
 					viewBox="0 0 20 20"
-					fill="currentColor">
+					fill="currentColor"
+				>
 					<path
 						fill-rule="evenodd"
 						d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
@@ -420,7 +413,7 @@ function selectPrimaryImage() {
 				</svg>
 			</button>
 
-			<div class="h-full flex-shrink-0">
+			<div class="h-full shrink-0">
 				<h2 class="border-b p-4 text-center font-bold uppercase sm:text-lg">Similar Products</h2>
 
 				<div class="h-full overflow-y-auto p-4 pb-16 overflow-x-hidden">
@@ -432,12 +425,14 @@ function selectPrimaryImage() {
 								rel="noopener noreferrer"
 								aria-label="Click to route product details page"
 								class="group relative w-full sm:w-48"
-								on:click="{() => (showRelatedProducts = false)}">
+								on:click="{() => (showRelatedProducts = false)}"
+							>
 								<!-- New -->
 
 								{#if relatedProduct.new}
 									<div
-										class="text-rem absolute top-2 left-2 max-w-max rounded bg-red-500 py-0.5 px-1.5 text-center uppercase tracking-wider text-white">
+										class="text-rem absolute top-2 left-2 max-w-max rounded bg-red-500 py-0.5 px-1.5 text-center uppercase tracking-wider text-white"
+									>
 										NEW
 									</div>
 								{/if}
@@ -447,7 +442,8 @@ function selectPrimaryImage() {
 										src="{relatedProduct.img}"
 										alt="{relatedProduct.name}"
 										aspect_ratio="3:4"
-										class="h-full w-full object-contain object-bottom" />
+										class="h-full w-full object-contain object-bottom"
+									/>
 								</div>
 
 								<div class="p-4">
@@ -458,7 +454,8 @@ function selectPrimaryImage() {
 									{/if}
 
 									<h2
-										class="overflow-hidden overflow-ellipsis whitespace-nowrap text-sm group-hover:underline">
+										class="overflow-hidden overflow-ellipsis whitespace-nowrap text-sm group-hover:underline"
+									>
 										{#if relatedProduct.name}
 											{relatedProduct.name}
 										{:else}
@@ -467,7 +464,8 @@ function selectPrimaryImage() {
 									</h2>
 
 									<div
-										class="mt-2.5 flex flex-wrap items-baseline justify-start gap-1.5 text-xs leading-4">
+										class="mt-2.5 flex flex-wrap items-baseline justify-start gap-1.5 text-xs leading-4"
+									>
 										<span class="whitespace-nowrap font-semibold sm:text-sm">
 											{currency(relatedProduct.price, $page.data?.store?.currencySymbol)}
 										</span>

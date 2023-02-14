@@ -15,14 +15,15 @@ export let tracks
 		{#each tracks as t}
 			<div>
 				<div class="mb-2 flex items-start gap-4">
-					<div class="h-5 w-5 flex-shrink-0 overflow-hidden rounded-full">
+					<div class="h-5 w-5 shrink-0 overflow-hidden rounded-full">
 						{#if t.icon}
 							<LazyImg
 								src="{t.icon}"
 								width="20"
 								height="20"
 								alt=" "
-								class="h-full w-full bg-gray-100 object-contain object-center" />
+								class="h-full w-full bg-gray-100 object-contain object-center"
+							/>
 						{:else}
 							<div class="h-full w-full bg-gray-200"></div>
 						{/if}
