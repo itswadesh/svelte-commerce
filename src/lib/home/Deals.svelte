@@ -23,7 +23,7 @@ onMount(async () => {
 {#if deal}
 	<div class="hidden items-start justify-start gap-3 lg:flex">
 		{#if deal.img}
-			<div class="flex-shrink-0">
+			<div class="shrink-0">
 				<LazyImg
 					src="{deal.img}"
 					alt="{deal.name}"
@@ -62,7 +62,7 @@ onMount(async () => {
 
 	<div class="flex w-[98vw] items-start justify-start gap-3 overflow-x-auto lg:hidden">
 		{#if deal.img}
-			<div class="flex-shrink-0">
+			<div class="shrink-0">
 				<LazyImg
 					src="{deal.img}"
 					alt="{deal.name}"

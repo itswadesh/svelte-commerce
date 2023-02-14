@@ -126,7 +126,7 @@ onMount(async () => {
 		>
 			{#if selectedimg}
 				<div
-					class="flex h-full w-full flex-1 flex-shrink-0 items-center justify-center overflow-hidden px-5 sm:px-10"
+					class="flex h-full w-full flex-1 shrink-0 items-center justify-center overflow-hidden px-5 sm:px-10"
 				>
 					<LazyImg src="{selectedimg}" alt="" class="h-full w-full object-contain object-center" />
 				</div>

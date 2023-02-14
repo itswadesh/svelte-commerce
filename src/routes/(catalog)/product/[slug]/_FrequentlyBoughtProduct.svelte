@@ -17,7 +17,7 @@ let cartButtonText = 'Add to Bag'
 let bounceItemFromTop = false
 </script>
 
-<div class="group relative col-span-1 block w-full overflow-hidden sm:w-48 sm:flex-shrink-0">
+<div class="group relative col-span-1 block w-full overflow-hidden sm:w-48 sm:shrink-0">
 	<a
 		href="/product/{product.slug}"
 		target="_blank"

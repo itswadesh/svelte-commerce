@@ -22,7 +22,7 @@ export let pickedBanners
 									<a
 										href="{banner.link || '##'}"
 										aria-label="Click to route into banner related products page"
-										class="flex-shrink-0"
+										class="shrink-0"
 									>
 										<LazyImg
 											src="{banner.img}"

@@ -114,7 +114,7 @@ onMount(async () => {
 
 				<ul class="mx-auto mb-5 flex max-w-max flex-col gap-2 sm:mb-10">
 					<li class="flex items-start gap-2 text-sm">
-						<h6 class="flex w-36 flex-shrink-0 items-center justify-between gap-1">
+						<h6 class="flex w-36 shrink-0 items-center justify-between gap-1">
 							<span>Order No</span> <span>:</span>
 						</h6>
 
@@ -124,7 +124,7 @@ onMount(async () => {
 					</li>
 
 					<li class="flex items-start gap-2 text-sm">
-						<h6 class="flex w-36 flex-shrink-0 items-center justify-between gap-1">
+						<h6 class="flex w-36 shrink-0 items-center justify-between gap-1">
 							<span>Order placed on</span> <span>:</span>
 						</h6>
 
@@ -134,7 +134,7 @@ onMount(async () => {
 					</li>
 
 					<li class="flex items-start gap-2 text-sm">
-						<h6 class="flex w-36 flex-shrink-0 items-center justify-between gap-1">
+						<h6 class="flex w-36 shrink-0 items-center justify-between gap-1">
 							<span>Payment Status</span> <span>:</span>
 						</h6>
 
@@ -146,7 +146,7 @@ onMount(async () => {
 					</li>
 
 					<li class="flex items-start gap-2 text-sm">
-						<h6 class="flex w-36 flex-shrink-0 items-center justify-between gap-1">
+						<h6 class="flex w-36 shrink-0 items-center justify-between gap-1">
 							<span>Payment Mode</span> <span>:</span>
 						</h6>
 
@@ -159,7 +159,7 @@ onMount(async () => {
 
 					{#if data.order?.paymentGateway}
 						<li class="flex items-start gap-2 text-sm">
-							<h6 class="flex w-36 flex-shrink-0 items-center justify-between gap-1">
+							<h6 class="flex w-36 shrink-0 items-center justify-between gap-1">
 								<span>Payment Gateway</span> <span>:</span>
 							</h6>
 

@@ -149,8 +149,7 @@ async function getCoupons() {
 
 						<div class="mr-4 flex items-baseline">
 							<h1
-								class="font-serif text-xl font-medium tracking-wider sm:text-2xl md:text-3xl xl:text-4xl"
-							>
+								class="font-serif text-xl font-medium tracking-wider sm:text-2xl md:text-3xl xl:text-4xl">
 								Cart
 							</h1>
 
@@ -177,8 +176,7 @@ async function getCoupons() {
 											xmlns="http://www.w3.org/2000/svg"
 											class="h-8 w-8 text-red-500"
 											viewBox="0 0 20 20"
-											fill="currentColor"
-										>
+											fill="currentColor">
 											<path
 												fill-rule="evenodd"
 												d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
@@ -198,16 +196,14 @@ async function getCoupons() {
 												<a
 													href="{item?.slug}"
 													aria-label="Click to route product details"
-													class="flex-shrink-0 "
-												>
+													class="shrink-0 ">
 													<img
 														src="{getCdnImageUrl(
 															item.isCustomizeditem ? item.customizedImg : item.img
 														)}?tr=w-auto,h-256,cm-pad_resize&sharpen=true"
 														alt=""
 														width="128"
-														class="w-16 cursor-pointer rounded-md object-contain sm:w-32"
-													/>
+														class="w-16 cursor-pointer rounded-md object-contain sm:w-32" />
 												</a>
 
 												<div class="w-full flex-1">
@@ -215,8 +211,7 @@ async function getCoupons() {
 														<a
 															href="/product/{item?.slug}"
 															aria-label="Click to route product details"
-															class="cart-item flex-1 cursor-pointer text-base font-medium text-gray-600 hover:underline sm:text-lg"
-														>
+															class="cart-item flex-1 cursor-pointer text-base font-medium text-gray-600 hover:underline sm:text-lg">
 															{item?.name}
 														</a>
 
@@ -267,8 +262,7 @@ async function getCoupons() {
 										<a
 											href="/product/{item?.slug}"
 											aria-label="Click to route product details"
-											class="flex-shrink-0 "
-										>
+											class="shrink-0 ">
 											{#if item.isCustomized}
 												<img
 													src="{getCdnImageUrl(
@@ -276,8 +270,7 @@ async function getCoupons() {
 													)}?tr=w-auto,h-256,cm-pad_resize&sharpen=true"
 													alt=""
 													width="128"
-													class="w-16 cursor-pointer rounded-md object-contain sm:w-32"
-												/>
+													class="w-16 cursor-pointer rounded-md object-contain sm:w-32" />
 											{:else}
 												<img
 													src="{getCdnImageUrl(
@@ -285,8 +278,7 @@ async function getCoupons() {
 													)}?tr=w-auto,h-256,cm-pad_resize&sharpen=true"
 													alt=""
 													width="128"
-													class="w-16 cursor-pointer rounded-md object-contain sm:w-32"
-												/>
+													class="w-16 cursor-pointer rounded-md object-contain sm:w-32" />
 											{/if}
 										</a>
 
@@ -295,8 +287,7 @@ async function getCoupons() {
 												<a
 													href="/product/{item?.slug}"
 													aria-label="Click to route product details"
-													class="flex-1 cursor-pointer text-base font-medium text-gray-600 hover:underline sm:text-lg"
-												>
+													class="flex-1 cursor-pointer text-base font-medium text-gray-600 hover:underline sm:text-lg">
 													{item?.name}
 												</a>
 
@@ -359,15 +350,13 @@ async function getCoupons() {
 																ix: ix
 															})}"
 														type="button"
-														class="flex h-6 w-6 transform items-center justify-center rounded-full  bg-gray-200 shadow transition  duration-300 focus:outline-none hover:bg-gray-300 hover:opacity-80 active:scale-95 sm:h-8 sm:w-8"
-													>
+														class="flex h-6 w-6 transform items-center justify-center rounded-full  bg-gray-200 shadow transition  duration-300 focus:outline-none hover:bg-gray-300 hover:opacity-80 active:scale-95 sm:h-8 sm:w-8">
 														<svg
 															xmlns="http://www.w3.org/2000/svg"
 															class="h-4 w-4 text-gray-600"
 															fill="none"
 															viewBox="0 0 24 24"
-															stroke="currentColor"
-														>
+															stroke="currentColor">
 															<path
 																stroke-linecap="round"
 																stroke-linejoin="round"
@@ -377,14 +366,12 @@ async function getCoupons() {
 													</button>
 
 													<div
-														class="mx-2 flex h-6 w-6 items-center justify-center text-xs font-bold sm:h-8  sm:w-8  "
-													>
+														class="mx-2 flex h-6 w-6 items-center justify-center text-xs font-bold sm:h-8  sm:w-8  ">
 														{#if loading[ix]}
 															<img
 																src="{dotsLoading}"
 																alt="loading"
-																class="h-auto w-5 object-contain object-center"
-															/>
+																class="h-auto w-5 object-contain object-center" />
 														{:else}
 															<span>{item?.qty}</span>
 														{/if}
@@ -400,15 +387,13 @@ async function getCoupons() {
 																ix: ix
 															})}"
 														type="button"
-														class="addItemToCart flex h-6 w-6 transform items-center justify-center rounded-full  bg-gray-200 shadow transition  duration-300 focus:outline-none hover:bg-gray-300 hover:opacity-80 active:scale-95 sm:h-8 sm:w-8"
-													>
+														class="addItemToCart flex h-6 w-6 transform items-center justify-center rounded-full  bg-gray-200 shadow transition  duration-300 focus:outline-none hover:bg-gray-300 hover:opacity-80 active:scale-95 sm:h-8 sm:w-8">
 														<svg
 															xmlns="http://www.w3.org/2000/svg"
 															class="h-4 w-4 text-gray-600"
 															fill="none"
 															viewBox="0 0 24 24"
-															stroke="currentColor"
-														>
+															stroke="currentColor">
 															<path
 																stroke-linecap="round"
 																stroke-linejoin="round"
@@ -427,15 +412,13 @@ async function getCoupons() {
 															customizedImg: item.customizedImg,
 															ix: ix
 														})}"
-													class="flex h-6 w-6 transform items-center justify-center rounded-full bg-gray-200 shadow transition  duration-300 focus:outline-none hover:bg-gray-300 hover:opacity-80 active:scale-95 sm:h-8 sm:w-8"
-												>
+													class="flex h-6 w-6 transform items-center justify-center rounded-full bg-gray-200 shadow transition  duration-300 focus:outline-none hover:bg-gray-300 hover:opacity-80 active:scale-95 sm:h-8 sm:w-8">
 													<svg
 														xmlns="http://www.w3.org/2000/svg"
 														class="h-4 w-4 text-gray-600"
 														fill="none"
 														viewBox="0 0 24 24"
-														stroke="currentColor"
-													>
+														stroke="currentColor">
 														<path
 															stroke-linecap="round"
 															stroke-linejoin="round"
@@ -457,7 +440,7 @@ async function getCoupons() {
 					</div>
 				</div>
 
-				<div class="w-full lg:w-80 lg:flex-shrink-0 lg:flex-grow-0">
+				<div class="w-full lg:w-80 lg:shrink-0 lg:grow-0">
 					<!-- Promo code section -->
 
 					{#if data.cart?.discount?.amount > 0}
@@ -469,8 +452,7 @@ async function getCoupons() {
 							<button
 								type="button"
 								class="w-16 font-bold text-primary-500 focus:outline-none hover:text-primary-700"
-								on:click="{removeCouponCode}"
-							>
+								on:click="{removeCouponCode}">
 								{#if loadingRemoveCoupon}
 									<span class="text-center text-gray-500"> ... </span>
 								{:else}
@@ -483,8 +465,7 @@ async function getCoupons() {
 							type="button"
 							class="mt-3 flex w-full items-center justify-between focus:outline-none hover:text-primary-500"
 							class:text-primary-500="{openApplyPromoCodeModal}"
-							on:click="{() => (openApplyPromoCodeModal = true)}"
-						>
+							on:click="{() => (openApplyPromoCodeModal = true)}">
 							<h5 class="text-sm font-semibold">Apply Promo Code</h5>
 
 							<svg
@@ -492,8 +473,7 @@ async function getCoupons() {
 								class="h-5 w-5"
 								fill="none"
 								viewBox="0 0 24 24"
-								stroke="currentColor"
-							>
+								stroke="currentColor">
 								<path
 									stroke-linecap="round"
 									stroke-linejoin="round"
@@ -507,8 +487,7 @@ async function getCoupons() {
 						cart="{data.cart}"
 						nextpage="/checkout/address"
 						text="Select Address"
-						showNextIcon
-					/>
+						showNextIcon />
 				</div>
 			</div>
 
@@ -517,26 +496,22 @@ async function getCoupons() {
 					<div
 						transition:fly="{{ x: 400, duration: 500 }}"
 						class="absolute inset-y-0 right-0 z-[101] max-w-max border-l bg-white"
-						style="box-shadow: -2px 0px 20px 0px #D3D3D3;"
-					>
+						style="box-shadow: -2px 0px 20px 0px #D3D3D3;">
 						<div class="h-full w-full overflow-y-auto">
 							<div class="relative w-full sm:w-[25rem]">
 								<div
-									class="flex items-center justify-between gap-5 border-b border-gray-300 p-4 sm:gap-10"
-								>
+									class="flex items-center justify-between gap-5 border-b border-gray-300 p-4 sm:gap-10">
 									<h2 class="text-lg font-bold">Apply Promo Code</h2>
 
 									<button
 										type="button"
 										class="transform cursor-pointer text-gray-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-gray-700"
-										on:click="{() => (openApplyPromoCodeModal = false)}"
-									>
+										on:click="{() => (openApplyPromoCodeModal = false)}">
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
 											class="h-5 w-5"
 											viewBox="0 0 20 20"
-											fill="currentColor"
-										>
+											fill="currentColor">
 											<path
 												fill-rule="evenodd"
 												d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
@@ -548,21 +523,18 @@ async function getCoupons() {
 								<div class="flex flex-col p-5">
 									<form
 										on:submit|preventDefault="{() => applyCouponCode(selectedCouponCode)}"
-										class="flex items-center justify-between gap-2"
-									>
+										class="flex items-center justify-between gap-2">
 										<Textbox
 											placeholder="Write your coupon code here..."
 											class="w-full"
-											bind:value="{selectedCouponCode}"
-										/>
+											bind:value="{selectedCouponCode}" />
 
 										<PrimaryButton
 											type="submit"
 											loading="{loadingApplyCoupon}"
 											loadingringsize="sm"
 											disabled="{!selectedCouponCode}"
-											class="flex-shrink-0 text-sm uppercase"
-										>
+											class="shrink-0 text-sm uppercase">
 											Check
 										</PrimaryButton>
 									</form>
@@ -587,15 +559,13 @@ async function getCoupons() {
 												<button
 													title="Click to apply the coupon"
 													on:click="{() => handleCouponCode(coupon.code)}"
-													class="group cursor-pointer py-5 tracking-wide"
-												>
+													class="group cursor-pointer py-5 tracking-wide">
 													<div class="mb-2 flex items-center gap-3">
 														<div
 															class="max-w-max rounded border border-dashed py-1 px-4 font-semibold
 															{data.cart?.discount?.code === coupon.code
 																? 'border-blue-500 text-blue-500'
-																: 'group-hover:border-blue-500 group-hover:text-blue-500'}"
-														>
+																: 'group-hover:border-blue-500 group-hover:text-blue-500'}">
 															{coupon.code}
 														</div>
 
@@ -604,8 +574,7 @@ async function getCoupons() {
 																xmlns="http://www.w3.org/2000/svg"
 																class="h-5 w-5 text-green-500"
 																viewBox="0 0 20 20"
-																fill="currentColor"
-															>
+																fill="currentColor">
 																<path
 																	fill-rule="evenodd"
 																	d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -641,8 +610,7 @@ async function getCoupons() {
 					<button
 						type="button"
 						class="absolute inset-0 h-full w-full cursor-default bg-black bg-opacity-0 focus:outline-none"
-						on:click="{() => (openApplyPromoCodeModal = false)}"
-					>
+						on:click="{() => (openApplyPromoCodeModal = false)}">
 					</button>
 				</div>
 			{/if}
@@ -650,14 +618,12 @@ async function getCoupons() {
 			{#if products?.length > 0}
 				<div class="w-full">
 					<h2
-						class="my-5 font-serif text-xl font-medium tracking-wider sm:my-10 sm:text-2xl md:text-3xl xl:text-4xl"
-					>
+						class="my-5 font-serif text-xl font-medium tracking-wider sm:my-10 sm:text-2xl md:text-3xl xl:text-4xl">
 						You May Like
 					</h2>
 
 					<div
-						class="grid w-full grid-cols-2 items-end sm:flex sm:flex-wrap sm:justify-between sm:gap-10"
-					>
+						class="grid w-full grid-cols-2 items-end sm:flex sm:flex-wrap sm:justify-between sm:gap-10">
 						{#each products as p, px}
 							{#if p && px < 10}
 								<ProductCard product="{p}" />

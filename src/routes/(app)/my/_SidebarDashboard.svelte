@@ -58,7 +58,7 @@ function close() {
 							<svg
 								on:click="{() => close()}"
 								data-accordion-icon=""
-								class="h-5 w-5 flex-shrink-0 
+								class="h-5 w-5 shrink-0 
 									{sidebar.hidden === 'hidden' ? '' : 'transform -rotate-180'}"
 								fill="currentColor"
 								viewBox="0 0 20 20"
@@ -101,7 +101,7 @@ function close() {
 							<svg
 								on:click="{() => close()}"
 								data-accordion-icon=""
-								class="h-5 w-5 flex-shrink-0 
+								class="h-5 w-5 shrink-0 
 									{sidebar.hidden === 'hidden' ? '' : 'transform -rotate-180'}"
 								fill="currentColor"
 								viewBox="0 0 20 20"

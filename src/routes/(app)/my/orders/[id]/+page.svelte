@@ -72,7 +72,7 @@ onMount(() => {
 									<a
 										href="{`/product/${item.slug}`}"
 										aria-label="Click to view the product details"
-										class="flex-shrink-0"
+										class="shrink-0"
 									>
 										{#if item.isCustomized}
 											<LazyImg

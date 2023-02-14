@@ -321,7 +321,7 @@ function handleMobileCanvas() {
 							{#each data.product?.images as img, index}
 								<button
 									type="button"
-									class="flex h-auto w-full flex-shrink-0 cursor-zoom-in items-center justify-center overflow-hidden rounded md:flex-shrink"
+									class="flex h-auto w-full shrink-0 cursor-zoom-in items-center justify-center overflow-hidden rounded md:flex-shrink"
 									on:click="{() => handleGallery(index)}"
 								>
 									<LazyImg
@@ -660,7 +660,7 @@ function handleMobileCanvas() {
 					>
 						{#each data.product?.options as o}
 							<div class="flex flex-col items-start sm:flex-row">
-								<h6 class="mb-1 w-full flex-shrink-0 font-medium sm:mb-0 sm:w-52">
+								<h6 class="mb-1 w-full shrink-0 font-medium sm:mb-0 sm:w-52">
 									{o.name}
 								</h6>
 
@@ -768,7 +768,7 @@ function handleMobileCanvas() {
 								{#if isWislisted}
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 flex-shrink-0 text-red-500"
+										class="h-5 w-5 shrink-0 text-red-500"
 										viewBox="0 0 20 20"
 										fill="currentColor"
 									>
@@ -782,7 +782,7 @@ function handleMobileCanvas() {
 								{:else}
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 flex-shrink-0"
+										class="h-5 w-5 shrink-0"
 										fill="none"
 										viewBox="0 0 24 24"
 										stroke="currentColor"
@@ -811,7 +811,7 @@ function handleMobileCanvas() {
 									>
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
-											class="h-5 w-5 flex-shrink-0"
+											class="h-5 w-5 shrink-0"
 											fill="none"
 											viewBox="0 0 24 24"
 											stroke="currentColor"
@@ -881,7 +881,7 @@ function handleMobileCanvas() {
 										>
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
-												class="h-5 w-5 flex-shrink-0"
+												class="h-5 w-5 shrink-0"
 												fill="none"
 												viewBox="0 0 24 24"
 												stroke="currentColor"
@@ -923,7 +923,7 @@ function handleMobileCanvas() {
 								viewBox="0 0 24 24"
 								stroke-width="1"
 								stroke="currentColor"
-								class="h-5 w-5 flex-shrink-0"
+								class="h-5 w-5 shrink-0"
 							>
 								<path
 									stroke-linecap="round"

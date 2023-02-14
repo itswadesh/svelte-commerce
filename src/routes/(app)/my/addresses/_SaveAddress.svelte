@@ -70,7 +70,7 @@ async function onCountryChange(country) {
 	<form on:submit|preventDefault="{() => SaveAddress(address)}">
 		<div class="mb-5 flex flex-col gap-2 lg:mb-10">
 			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">First Name</h6>
+				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">First Name</h6>
 
 				<div class="mb-2 w-full max-w-md">
 					<Textbox type="text" placeholder="Enter First Name" bind:value="{address.firstName}" />
@@ -78,7 +78,7 @@ async function onCountryChange(country) {
 			</div>
 
 			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">Last Name</h6>
+				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">Last Name</h6>
 
 				<div class="mb-2 w-full max-w-md">
 					<Textbox placeholder="Enter Last Name" bind:value="{address.lastName}" />
@@ -86,7 +86,7 @@ async function onCountryChange(country) {
 			</div>
 
 			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">Email</h6>
+				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">Email</h6>
 
 				<div class="mb-2 w-full max-w-md">
 					<Textbox type="text" placeholder="Enter Email" bind:value="{address.email}" />
@@ -94,7 +94,7 @@ async function onCountryChange(country) {
 			</div>
 
 			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">Phone</h6>
+				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">Phone</h6>
 
 				<div class="mb-2 w-full max-w-md">
 					<Textbox type="text" placeholder="Enter Phone" bind:value="{address.phone}" />
@@ -102,7 +102,7 @@ async function onCountryChange(country) {
 			</div>
 
 			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">Address</h6>
+				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">Address</h6>
 
 				<div class="mb-2 w-full max-w-md">
 					<Textarea placeholder="Enter Address" bind:value="{address.address}" />
@@ -110,7 +110,7 @@ async function onCountryChange(country) {
 			</div>
 
 			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">Locality</h6>
+				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">Locality</h6>
 
 				<div class="mb-2 w-full max-w-md">
 					<Textbox placeholder="Enter Locality" bind:value="{address.locality}" />
@@ -118,7 +118,7 @@ async function onCountryChange(country) {
 			</div>
 
 			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">City</h6>
+				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">City</h6>
 
 				<div class="mb-2 w-full max-w-md">
 					<Textbox placeholder="Enter City" bind:value="{address.city}" />
@@ -127,7 +127,7 @@ async function onCountryChange(country) {
 
 			{#if states?.length > 0}
 				<div class="flex flex-wrap">
-					<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">State</h6>
+					<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">State</h6>
 
 					<div class="mb-2 w-full max-w-md">
 						<select
@@ -148,7 +148,7 @@ async function onCountryChange(country) {
 			{/if}
 
 			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">Country</h6>
+				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">Country</h6>
 
 				<div class="mb-2 w-full max-w-md">
 					<select
@@ -171,7 +171,7 @@ async function onCountryChange(country) {
 			</div>
 
 			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 flex-shrink-0 font-medium">zip</h6>
+				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">zip</h6>
 
 				<div class="mb-2 w-full max-w-md">
 					<Textbox placeholder="Enter zip" bind:value="{address.zip}" />

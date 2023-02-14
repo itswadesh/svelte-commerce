@@ -74,7 +74,7 @@ function selectPrimaryImage() {
 </script>
 
 <div
-	class="group relative col-span-1 block w-full overflow-hidden border bg-white sm:w-52 sm:flex-shrink-0 sm:rounded-md sm:border-transparent sm:hover:border-gray-200 sm:hover:shadow-lg"
+	class="group relative col-span-1 block w-full overflow-hidden border bg-white sm:w-52 sm:shrink-0 sm:rounded-md sm:border-transparent sm:hover:border-gray-200 sm:hover:shadow-lg"
 	on:mouseenter="{showitems}"
 	on:mouseleave="{hideitems}"
 >
@@ -134,7 +134,7 @@ function selectPrimaryImage() {
 					class="trans flex h-7 w-7 items-center rounded-full border border-primary-500 bg-white text-primary-500">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
-						class="h-5 w-5 flex-shrink-0"
+						class="h-5 w-5 shrink-0"
 						fill="none"
 						viewBox="0 0 24 24"
 						stroke="currentColor">
@@ -167,7 +167,7 @@ function selectPrimaryImage() {
 							class="trans flex h-7 w-7 items-center rounded-full border border-primary-500 bg-white text-primary-500">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
-								class="h-5 w-5 flex-shrink-0"
+								class="h-5 w-5 shrink-0"
 								fill="none"
 								viewBox="0 0 24 24"
 								stroke="currentColor">
@@ -207,7 +207,7 @@ function selectPrimaryImage() {
 					{:else}
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
-							class="h-5 w-5 flex-shrink-0"
+							class="h-5 w-5 shrink-0"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
@@ -413,7 +413,7 @@ function selectPrimaryImage() {
 				</svg>
 			</button>
 
-			<div class="h-full flex-shrink-0">
+			<div class="h-full shrink-0">
 				<h2 class="border-b p-4 text-center font-bold uppercase sm:text-lg">Similar Products</h2>
 
 				<div class="h-full overflow-y-auto p-4 pb-16 overflow-x-hidden">

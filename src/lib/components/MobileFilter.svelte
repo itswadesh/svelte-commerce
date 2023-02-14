@@ -649,7 +649,7 @@ $: {
 															xmlns="http://www.w3.org/2000/svg"
 															viewBox="0 0 20 20"
 															fill="currentColor"
-															class="h-5 w-5 flex-shrink-0 transition duration-300
+															class="h-5 w-5 shrink-0 transition duration-300
 																{showSubCategory[mx] ? 'transform rotate-90' : ''}"
 														>
 															<path
@@ -697,7 +697,7 @@ $: {
 																			xmlns="http://www.w3.org/2000/svg"
 																			viewBox="0 0 20 20"
 																			fill="currentColor"
-																			class="h-5 w-5 flex-shrink-0 transition duration-300
+																			class="h-5 w-5 shrink-0 transition duration-300
 																				{showSubCategory2[cx] ? 'transform rotate-90' : ''}"
 																		>
 																			<path

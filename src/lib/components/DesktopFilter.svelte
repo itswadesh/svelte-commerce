@@ -115,7 +115,7 @@ function handleToggleSubCategory2(c, cx) {
 </script>
 
 <div
-	class="{clazz} flex h-[85vh] w-56 flex-shrink-0 flex-col items-start overflow-x-auto pr-6 overflow-x-hidden scrollbar-thin scrollbar-thumb-slate-200"
+	class="{clazz} flex h-[85vh] w-56 shrink-0 flex-col items-start overflow-x-auto pr-6 overflow-x-hidden scrollbar-thin scrollbar-thumb-slate-200"
 >
 	<div class="flex flex-col items-start gap-1">
 		<h6 class="font-bold tracking-wide">
@@ -182,7 +182,7 @@ function handleToggleSubCategory2(c, cx) {
 										xmlns="http://www.w3.org/2000/svg"
 										viewBox="0 0 20 20"
 										fill="currentColor"
-										class="h-5 w-5 flex-shrink-0 transition duration-300
+										class="h-5 w-5 shrink-0 transition duration-300
 										{showSubCategory[mx] ? 'transform rotate-90' : ''}"
 									>
 										<path
@@ -230,7 +230,7 @@ function handleToggleSubCategory2(c, cx) {
 														xmlns="http://www.w3.org/2000/svg"
 														viewBox="0 0 20 20"
 														fill="currentColor"
-														class="h-5 w-5 flex-shrink-0 transition duration-300
+														class="h-5 w-5 shrink-0 transition duration-300
 														{showSubCategory2[cx] ? 'transform rotate-90' : ''}"
 													>
 														<path

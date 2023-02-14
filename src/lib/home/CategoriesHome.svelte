@@ -100,7 +100,7 @@ let categoryColors = [
 								class="group flex w-20 flex-col items-center justify-center"
 							>
 								<div
-									class="mb-1 h-20 w-20 flex-shrink-0 overflow-hidden rounded-full border-2 border-gray-300 group-hover:border-primary-500 group-hover:shadow-xl sm:mb-4"
+									class="mb-1 h-20 w-20 shrink-0 overflow-hidden rounded-full border-2 border-gray-300 group-hover:border-primary-500 group-hover:shadow-xl sm:mb-4"
 								>
 									<LazyImg
 										src="{category.img}"
@@ -124,7 +124,7 @@ let categoryColors = [
 								class="group flex w-20 flex-col items-center justify-center"
 							>
 								<div
-									class="relative mb-1 h-20 w-20 flex-shrink-0 overflow-hidden rounded-full border-2 border-gray-300 bg-cover bg-center bg-no-repeat group-hover:border-primary-500 group-hover:shadow-xl sm:mb-4
+									class="relative mb-1 h-20 w-20 shrink-0 overflow-hidden rounded-full border-2 border-gray-300 bg-cover bg-center bg-no-repeat group-hover:border-primary-500 group-hover:shadow-xl sm:mb-4
 									"
 									style="background-image: url('/atoz-store.jpg');"
 								>
@@ -153,7 +153,7 @@ let categoryColors = [
 						class="group flex w-20 flex-col items-center justify-center hover:text-primary-500"
 					>
 						<div
-							class="mb-1 flex h-20 w-20 flex-shrink-0 items-center justify-center overflow-hidden rounded-full sm:mb-4"
+							class="mb-1 flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full sm:mb-4"
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -193,7 +193,7 @@ let categoryColors = [
 									class="zoom-out group flex w-32 flex-col items-center justify-center lg:w-36"
 								>
 									<div
-										class="mb-4 h-32 w-32 flex-shrink-0 overflow-hidden rounded-full border-2 border-gray-300 group-hover:border-primary-500 group-hover:shadow-xl lg:h-36 lg:w-36"
+										class="mb-4 h-32 w-32 shrink-0 overflow-hidden rounded-full border-2 border-gray-300 group-hover:border-primary-500 group-hover:shadow-xl lg:h-36 lg:w-36"
 									>
 										<LazyImg
 											src="{category.img}"
@@ -217,7 +217,7 @@ let categoryColors = [
 									class="group flex flex-col items-center justify-center hover:text-primary-500 sm:w-32 lg:w-36"
 								>
 									<div
-										class="relative mb-1 flex-shrink-0 overflow-hidden rounded-full border-2 border-gray-300 bg-cover  bg-center bg-no-repeat group-hover:border-primary-500 group-hover:shadow-xl sm:mb-4 sm:h-32 sm:w-32 lg:h-36 lg:w-36
+										class="relative mb-1 shrink-0 overflow-hidden rounded-full border-2 border-gray-300 bg-cover  bg-center bg-no-repeat group-hover:border-primary-500 group-hover:shadow-xl sm:mb-4 sm:h-32 sm:w-32 lg:h-36 lg:w-36
 									"
 										style="background-image: url('/atoz-store.jpg');"
 									>

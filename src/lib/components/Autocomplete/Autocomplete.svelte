@@ -116,7 +116,7 @@ const navigateList = (e) => {
 		<button
 			type="submit"
 			aria-label="Click here to search input data"
-			class="absolute inset-y-0 right-0 z-10 hidden h-full w-10 flex-shrink-0 cursor-default items-center justify-center focus:outline-none sm:flex"
+			class="absolute inset-y-0 right-0 z-10 hidden h-full w-10 shrink-0 cursor-default items-center justify-center focus:outline-none sm:flex"
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"

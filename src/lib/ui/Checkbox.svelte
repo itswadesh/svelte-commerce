@@ -176,7 +176,7 @@ function selectallFilters() {}
 								bind:group="{selectedItems}"
 								value="{i._source.slug}"
 								on:change="{() => dispatch('go', { model, selectedItems })}"
-								class="mt-0.5 h-4 w-4 flex-shrink-0 focus:ring-0 focus:ring-offset-0"
+								class="mt-0.5 h-4 w-4 shrink-0 focus:ring-0 focus:ring-offset-0"
 							/>
 
 							<div class="flex flex-1 flex-wrap items-center">

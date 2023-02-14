@@ -132,7 +132,7 @@ $: heroBanners =
 								<a
 									href="/{category.link || category.slug || '##'}"
 									aria-label="Click to get the category related products"
-									class="flex-shrink-0"
+									class="shrink-0"
 								>
 									<LazyImg
 										src="{category.img || category.img}"
