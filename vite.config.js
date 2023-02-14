@@ -13,11 +13,11 @@ export default defineConfig(({ command, mode }) => {
 			SvelteKitPWA({
 				registerType: 'autoUpdate',
 				srcDir: './src',
-				mode: 'development',
+				// mode: 'development',
 				scope: '/',
 				base: '/',
 				devOptions: {
-					enabled: true,
+					// enabled: true,
 					type: 'module',
 					navigateFallback: '/'
 				},

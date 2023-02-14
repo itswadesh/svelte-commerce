@@ -182,6 +182,9 @@ export const fetchProductsOfCategory = async ({
 				category = res?.category
 				err = !res?.estimatedTotalHits ? 'No result Not Found' : null
 				break
+			case 'medusajs':
+				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`products?categories=${categorySlug}`, {}, sid)
 				count = res?.count
@@ -235,6 +238,9 @@ export const fetchNextPageProducts = async ({
 					p1.id = p._id
 					return p1
 				})
+				break
+			case 'medusajs':
+				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(
@@ -302,6 +308,9 @@ export const fetchRelatedProducts = async ({
 				relatedProducts = relatedProductsRes?.data.filter((p) => {
 					return p._id !== pid
 				})
+				break
+			case 'medusajs':
+				relatedProducts = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
 				break
 			case 'bigcommerce':
 				relatedProducts = await getBigCommerceApi(`products?categories=${categorySlug}`, {}, sid)

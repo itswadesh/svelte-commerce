@@ -1,7 +1,14 @@
 import { provider } from '$lib/config'
 import type { Error } from '$lib/types'
 import { del, getAPI, post } from '$lib/utils/api'
-import { getBigCommerceApi, getBySid, getWooCommerceApi, postBySid, postt } from '$lib/utils/server'
+import {
+	getBigCommerceApi,
+	getBySid,
+	getMedusajsApi,
+	getWooCommerceApi,
+	postBySid,
+	postt
+} from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
@@ -15,6 +22,9 @@ export const fetchCartData = async ({ origin, storeId, server = false, sid = nul
 				} else {
 					res = await getAPI(`cart?store=${storeId}`, origin)
 				}
+				break
+			case 'medusajs':
+				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`cart`, {}, sid)
@@ -42,6 +52,9 @@ export const fetchRefreshCart = async ({ origin, storeId, server = false, sid = 
 					res = await getAPI(`carts/refresh-cart?store=${storeId}`, origin)
 				}
 				break
+			case 'medusajs':
+				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`carts/refresh-cart`, {}, sid)
 				break
@@ -67,6 +80,9 @@ export const fetchMyCart = async ({ origin, storeId, server = false, sid = null 
 				} else {
 					res = await getAPI(`carts/my?store=${storeId}`, origin)
 				}
+				break
+			case 'medusajs':
+				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`carts/my`, {}, sid)
@@ -122,6 +138,9 @@ export const addToCartService = async ({
 					)
 				}
 				break
+			case 'medusajs':
+				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`carts/add-to-cart`, {})
 				break
@@ -155,6 +174,9 @@ export const applyCouponService = async ({
 					origin
 				)
 				break
+			case 'medusajs':
+				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`apply-coupon`, {})
 				break
@@ -179,14 +201,10 @@ export const removeCouponService = async ({
 		let res: any = {}
 		switch (provider) {
 			case 'litekart':
-				res = await del(
-					`remove-coupon`,
-					{
-						code,
-						store: storeId
-					},
-					origin
-				)
+				res = await del(`remove-coupon?code=${code}&store=${storeId}`, origin)
+				break
+			case 'medusajs':
+				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`remove-coupon`, {})

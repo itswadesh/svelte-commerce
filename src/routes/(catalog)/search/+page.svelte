@@ -37,7 +37,6 @@ let today = dayjs(new Date()).toISOString()
 
 export let data
 
-console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	brand: $page.data.store?.title,

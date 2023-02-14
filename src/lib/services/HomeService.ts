@@ -1,7 +1,7 @@
 import { provider } from '$lib/config'
 import type { Error } from '$lib/types'
 import { getAPI } from '$lib/utils/api'
-import { getBigCommerceApi, getBySid, getWooCommerceApi } from '$lib/utils/server'
+import { getBigCommerceApi, getBySid, getMedusajsApi, getWooCommerceApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
@@ -15,6 +15,9 @@ export const fetchHome = async ({ origin, storeId, server = false, sid = null }:
 				} else {
 					res = await getAPI(`home?store=${storeId}`, origin)
 				}
+				break
+			case 'medusajs':
+				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`home`, {}, sid)

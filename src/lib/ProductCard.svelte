@@ -46,7 +46,6 @@ let images = [
 	'https://s3.ap-south-1.amazonaws.com/litekart.in/stores/6356502aca4ff28ed596cb1b/product/6045f9ae120e71405f1767d3/ohdbaf-1288-decorebugs-original-imaem5qyq8f6vtyy-q27lkebwlah0.jpeg'
 ]
 
-// console.log('zzzzzzzzzzzzzzzzzz', product)
 
 let show=false,
 	showRelatedProducts = false,

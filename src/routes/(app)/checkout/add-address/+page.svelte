@@ -14,7 +14,6 @@ import Textbox from '$lib/ui/Textbox.svelte'
 
 export let data
 
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let err
 let loading = false
