@@ -1,5 +1,6 @@
 import { provider } from '$lib/config'
 import type { Error } from '$lib/types'
+import { mapMedusajsCategory } from '$lib/utils'
 import { getAPI } from '$lib/utils/api'
 import { getBigCommerceApi, getBySid, getMedusajsApi, getWooCommerceApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
@@ -29,7 +30,7 @@ export const fetchFooterCategories = async ({
 				// must return link:string, slug:string(optional) name:string, new:boolean
 				break
 			case 'medusajs':
-				data = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				data = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				data = await getBigCommerceApi(`categories`, {}, sid)
@@ -44,19 +45,19 @@ export const fetchFooterCategories = async ({
 	}
 }
 
-export const fetchCategory = async ({ origin, id, server = false, sid = null }: any) => {
+export const fetchCategory = async ({ origin, slug, id, server = false, sid = null }: any) => {
 	try {
 		let res: any = {}
 		switch (provider) {
 			case 'litekart':
 				if (server) {
-					res = await getBySid(`category/${id}`, sid)
+					res = await getBySid(`category/${slug}`, sid)
 				} else {
-					res = await getAPI(`category/${id}`, origin)
+					res = await getAPI(`category/${slug}`, origin)
 				}
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`product-categories/${id}`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`categories`, {}, sid)
@@ -97,7 +98,7 @@ export const fetchAllCategories = async ({
 				currentPage = res.currentPage
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`categories`, {}, sid)
@@ -144,8 +145,8 @@ export const fetchAllProductsOfCategories = async ({
 				err = !products ? 'No result Not Found' : null
 				// must return link:string, slug:string(optional) name:string, new:boolean
 				break
-				case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+			case 'medusajs':
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`categories`, {}, sid)
@@ -173,7 +174,10 @@ export const fetchMegamenuData = async ({ origin, storeId, server = false, sid =
 				// must return link:string, slug:string(optional) name:string, new:boolean
 				break
 			case 'medusajs':
-				data = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				const med = await getMedusajsApi(`product-categories`, {}, sid)
+				console.log('zzzzzzzzzzzzzzzzzzzz', med)
+				data = []
+				// data = med.map((c) => mapMedusajsCategory(c))
 				break
 			case 'bigcommerce':
 				data = await getBigCommerceApi(`banners`, {}, sid)

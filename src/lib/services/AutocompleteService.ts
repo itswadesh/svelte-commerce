@@ -24,7 +24,7 @@ export const fetchAutocompleteData = async ({ origin, storeId, q }: any) => {
 				}
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {})).customer.shipping_address
+				res = (await getMedusajsApi(`customers/me`, {}))
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`es/autocomplete?q=${filterText}&store=${storeId}`, {})

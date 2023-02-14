@@ -209,7 +209,7 @@ async function goCheckbox(item) {
 						</div>
 					</div>
 
-					{#if data.facets.all_aggs.style_tags?.all?.buckets?.length}
+					{#if data.facets?.all_aggs?.style_tags?.all?.buckets?.length}
 						<div
 							class="w-screen overflow-x-auto scrollbar-none lg:mb-5 lg:w-full lg:overflow-x-hidden"
 						>

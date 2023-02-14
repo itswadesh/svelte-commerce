@@ -89,7 +89,7 @@ export const fetchTrackOrder = async ({ origin, storeId, id, server = false, sid
 				}
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`order-tracking`, {}, sid)
@@ -143,7 +143,7 @@ export const paySuccessPageHit = async ({
 				}
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`orders/pay-sucess-page-hit`, {}, sid)
@@ -183,7 +183,7 @@ export const codCheckout = async ({
 				)
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`orders/checkout/cod`, {}, sid)
@@ -222,7 +222,7 @@ export const cashfreeCheckout = async ({
 				)
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`payments/checkout-cf`, {}, sid)
@@ -262,7 +262,7 @@ export const razorpayCheckout = async ({
 				)
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`payments/checkout-rp`, {}, sid)
@@ -300,7 +300,7 @@ export const razorpayCapture = async ({
 				)
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`payments/capture-rp`, {}, sid)
@@ -338,7 +338,7 @@ export const stripeCheckoutService = async ({
 				)
 				break
 			case 'medusajs':
-				res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`stripe`, {}, sid)
