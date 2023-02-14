@@ -92,7 +92,7 @@ async function saveProfile() {
 						class="frosted flex flex-col gap-4 rounded-lg border border-gray-300 p-4 shadow-lg md:p-6"
 					>
 						<div class="flex flex-wrap items-center gap-2">
-							<div class="w-52 flex-shrink-0 font-medium">
+							<div class="w-52 shrink-0 font-medium">
 								<SingleImageUpload
 									class=""
 									avatar
@@ -118,7 +118,7 @@ async function saveProfile() {
 						</div>
 
 						<div class="flex flex-wrap gap-2">
-							<h6 class="w-52 flex-shrink-0 font-medium">First Name</h6>
+							<h6 class="w-52 shrink-0 font-medium">First Name</h6>
 
 							<div class="w-full max-w-md">
 								<Textbox
@@ -130,7 +130,7 @@ async function saveProfile() {
 						</div>
 
 						<div class="flex flex-wrap gap-2">
-							<h6 class="w-52 flex-shrink-0 font-medium">Last Name</h6>
+							<h6 class="w-52 shrink-0 font-medium">Last Name</h6>
 
 							<div class="w-full max-w-md">
 								<Textbox
@@ -142,7 +142,7 @@ async function saveProfile() {
 						</div>
 
 						<div class="flex flex-wrap gap-2">
-							<h6 class="w-52 flex-shrink-0 font-medium">Date Of Birth</h6>
+							<h6 class="w-52 shrink-0 font-medium">Date Of Birth</h6>
 
 							<div class="w-full max-w-md">
 								<Textbox
@@ -154,7 +154,7 @@ async function saveProfile() {
 						</div>
 
 						<div class="flex flex-wrap gap-2">
-							<h6 class="w-52 flex-shrink-0 font-medium">Phone</h6>
+							<h6 class="w-52 shrink-0 font-medium">Phone</h6>
 
 							<div class="w-full max-w-md">
 								<Textbox

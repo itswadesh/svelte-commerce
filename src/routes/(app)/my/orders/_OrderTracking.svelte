@@ -15,7 +15,7 @@ export let tracks
 		{#each tracks as t}
 			<div>
 				<div class="mb-2 flex items-start gap-4">
-					<div class="h-5 w-5 flex-shrink-0 overflow-hidden rounded-full">
+					<div class="h-5 w-5 shrink-0 overflow-hidden rounded-full">
 						{#if t.icon}
 							<LazyImg
 								src="{t.icon}"

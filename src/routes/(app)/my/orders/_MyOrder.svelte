@@ -83,7 +83,7 @@ export { clazz as class }
 									{#each order.orderItems as item}
 										<tr>
 											<td class="p-3">
-												<div class="flex-shrink-0">
+												<div class="shrink-0">
 													{#if item.isCustomized}
 														<LazyImg
 															src="{item.customizedImg}"
@@ -111,7 +111,7 @@ export { clazz as class }
 													<span>{item.name}</span>
 
 													{#if $page?.data?.store?.isFnb && item.foodType}
-														<div class="flex-shrink-0">
+														<div class="shrink-0">
 															{#if item.foodType === 'veg'}
 																<img src="/product/veg.png" alt="veg" class="h-5 w-5" />
 															{:else if item.foodType === 'nonveg'}
@@ -171,7 +171,7 @@ export { clazz as class }
 							>
 								{#each order.orderItems as item}
 									<div class="flex items-start gap-2 p-4 sm:gap-5">
-										<div class="flex-shrink-0">
+										<div class="shrink-0">
 											{#if item.isCustomized}
 												<LazyImg
 													src="{item.customizedImg}"

@@ -186,7 +186,7 @@ async function getStoreData() {
 									viewBox="0 0 24 24"
 									stroke-width="1.5"
 									stroke="currentColor"
-									class="h-5 w-5 flex-shrink-0"
+									class="h-5 w-5 shrink-0"
 								>
 									<path
 										stroke-linecap="round"
@@ -213,7 +213,7 @@ async function getStoreData() {
 									viewBox="0 0 24 24"
 									stroke-width="1.5"
 									stroke="currentColor"
-									class="h-5 w-5 flex-shrink-0"
+									class="h-5 w-5 shrink-0"
 								>
 									<path
 										stroke-linecap="round"
@@ -239,7 +239,7 @@ async function getStoreData() {
 								viewBox="0 0 24 24"
 								stroke-width="1.5"
 								stroke="currentColor"
-								class="h-5 w-5 flex-shrink-0"
+								class="h-5 w-5 shrink-0"
 							>
 								<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"
 								></path>
@@ -259,7 +259,7 @@ async function getStoreData() {
 								viewBox="0 0 24 24"
 								stroke-width="1.5"
 								stroke="currentColor"
-								class="h-5 w-5 flex-shrink-0"
+								class="h-5 w-5 shrink-0"
 							>
 								<path
 									stroke-linecap="round"

@@ -81,7 +81,7 @@ async function onSearchSubmit({ detail }) {
 			{#if $page?.data?.isShowBackButton}
 				<button
 					type="button"
-					class="block flex-shrink-0 focus:outline-none lg:hidden"
+					class="block shrink-0 focus:outline-none lg:hidden"
 					on:click="{() => window.history.go(-1)}"
 				>
 					<svg
@@ -207,7 +207,7 @@ async function onSearchSubmit({ detail }) {
 							</svg>
 						</button>
 
-						<div class="h-full flex-shrink-0">
+						<div class="h-full shrink-0">
 							<h2 class="border-b p-4 text-center font-bold uppercase sm:text-lg">Cart</h2>
 
 							<div class="h-full overflow-y-auto p-4 pb-20 overflow-x-hidden">
@@ -218,7 +218,7 @@ async function onSearchSubmit({ detail }) {
 												<a
 													href="/product/{item.slug}"
 													aria-label="Click to route product detail page"
-													class="flex-shrink-0"
+													class="shrink-0"
 													on:click="{() => (showCartSidebar = false)}"
 												>
 													{#if item.isCustomized}

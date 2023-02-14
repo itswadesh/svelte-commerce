@@ -160,7 +160,7 @@ async function remove(id, index) {
 
 							{#if i.isHome}
 								<div
-									class="flex-shrink-0 rounded-full border-2 border-gray-300 bg-gray-100 py-0.5 px-4 text-xs font-bold uppercase tracking-wide"
+									class="shrink-0 rounded-full border-2 border-gray-300 bg-gray-100 py-0.5 px-4 text-xs font-bold uppercase tracking-wide"
 								>
 									Home
 								</div>

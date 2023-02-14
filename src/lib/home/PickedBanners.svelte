@@ -30,7 +30,7 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 							<div role="banner" class="flex flex-row items-start">
 								{#each b.data as banner, bx}
 									{#if banner.img}
-										<a href="{banner.link}" class="block flex-shrink-0" data-sveltekit-preload-data>
+										<a href="{banner.link}" class="block shrink-0" data-sveltekit-preload-data>
 											<LazyImg
 												src="{banner.img}"
 												alt="banner{bx}"
@@ -80,7 +80,7 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 							<div role="banner" class="flex flex-row items-start">
 								{#each b.data as banner, bx}
 									{#if banner.img}
-										<a href="{banner.link}" class="block flex-shrink-0" data-sveltekit-preload-data>
+										<a href="{banner.link}" class="block shrink-0" data-sveltekit-preload-data>
 											<LazyImg
 												src="{banner.img}"
 												alt="banner{bx}"

@@ -209,16 +209,14 @@ function checkIfStripeCardValid({ detail }) {
 				<div class="flex w-full flex-col gap-4" class:wiggle="{paymentDenied}">
 					{#each data.paymentMethods as pm}
 						<label
-							class="flex w-full cursor-pointer items-center gap-2 rounded-md border border-gray-300 p-4 shadow-md transition duration-300 hover:bg-primary-50 sm:gap-4"
-						>
+							class="flex w-full cursor-pointer items-center gap-2 rounded-md border border-gray-300 p-4 shadow-md transition duration-300 hover:bg-primary-50 sm:gap-4">
 							<input
 								bind:group="{selectedPaymentMethod}"
 								type="radio"
 								value="{pm}"
 								name="group"
 								class="h-4 w-4 focus:outline-none focus:ring-0 focus:ring-offset-0"
-								on:click="{() => paymentMethodChanged(pm)}"
-							/>
+								on:click="{() => paymentMethodChanged(pm)}" />
 
 							<div class="flex w-full flex-1 items-center justify-between gap-4">
 								<div class="flex-1">
@@ -229,19 +227,17 @@ function checkIfStripeCardValid({ detail }) {
 									<p class="mt-1 text-sm text-gray-500">{pm.text}</p>
 								</div>
 
-								<div class="flex-shrink-0">
+								<div class="shrink-0">
 									{#if pm.img}
 										<img
 											src="{pm.img}"
 											alt="{pm.name}"
 											width="56"
 											height="56"
-											class="h-14 w-14 rounded-full border object-cover object-center text-xs"
-										/>
+											class="h-14 w-14 rounded-full border object-cover object-center text-xs" />
 									{:else}
 										<div
-											class="flex h-14 w-14 items-center justify-center rounded-full border bg-gray-200 text-center text-xs uppercase"
-										>
+											class="flex h-14 w-14 items-center justify-center rounded-full border bg-gray-200 text-center text-xs uppercase">
 											{pm.name}
 										</div>
 									{/if}
@@ -252,8 +248,7 @@ function checkIfStripeCardValid({ detail }) {
 				</div>
 			{:else}
 				<div
-					class="flex h-[50vh] items-center justify-center rounded-xl border bg-white p-4 shadow-xl"
-				>
+					class="flex h-[50vh] items-center justify-center rounded-xl border bg-white p-4 shadow-xl">
 					<div class="mx-auto flex max-w-md flex-col items-center justify-center text-center">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -261,8 +256,7 @@ function checkIfStripeCardValid({ detail }) {
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
-							stroke-width="2"
-						>
+							stroke-width="2">
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
@@ -284,11 +278,10 @@ function checkIfStripeCardValid({ detail }) {
 				address="{data.addressId}"
 				isStripeSelected="{selectedPaymentMethod.name === 'Stripe'}"
 				stripePublishableKey="{stripePublishableKey}"
-				on:isStripeCardValid="{checkIfStripeCardValid}"
-			/>
+				on:isStripeCardValid="{checkIfStripeCardValid}" />
 		</div>
 
-		<div class="w-full md:w-80 md:flex-shrink-0 md:flex-grow-0">
+		<div class="w-full md:w-80 md:shrink-0 md:grow-0">
 			<h2 class="text-xl font-bold capitalize tracking-wide sm:text-2xl">Cart Summary</h2>
 			{#if data.address}
 				<div class="mt-5 border-t pt-5">
@@ -296,7 +289,7 @@ function checkIfStripeCardValid({ detail }) {
 
 					<div class="text-sm font-light">
 						<div class="my-1 flex flex-row">
-							<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Name</h5>
+							<h5 class="mr-2 w-20 shrink-0 font-semibold tracking-wide">Name</h5>
 
 							<p>
 								{data.address.firstName}
@@ -305,7 +298,7 @@ function checkIfStripeCardValid({ detail }) {
 						</div>
 
 						<div class="flex flex-row">
-							<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Address</h5>
+							<h5 class="mr-2 w-20 shrink-0 font-semibold tracking-wide">Address</h5>
 
 							<p class="flex flex-wrap items-center">
 								{#if data.address.address}
@@ -331,19 +324,19 @@ function checkIfStripeCardValid({ detail }) {
 						</div>
 
 						<div class="my-1 flex flex-row">
-							<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Pin</h5>
+							<h5 class="mr-2 w-20 shrink-0 font-semibold tracking-wide">Pin</h5>
 
 							<h6>{data.address.zip}</h6>
 						</div>
 
 						<div class="my-1 flex flex-row">
-							<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Phone</h5>
+							<h5 class="mr-2 w-20 shrink-0 font-semibold tracking-wide">Phone</h5>
 
 							<h6>{data.address.phone}</h6>
 						</div>
 
 						<div class="my-1 flex flex-row flex-wrap">
-							<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Email</h5>
+							<h5 class="mr-2 w-20 shrink-0 font-semibold tracking-wide">Email</h5>
 
 							<h6>{data.address.email}</h6>
 						</div>
@@ -358,7 +351,7 @@ function checkIfStripeCardValid({ detail }) {
 					<div class="text-sm font-light">
 						{#if data.prescription.name}
 							<div class="my-1 flex flex-row">
-								<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Name</h5>
+								<h5 class="mr-2 w-20 shrink-0 font-semibold tracking-wide">Name</h5>
 
 								<p class="flex-1">
 									{data.prescription.name}
@@ -368,7 +361,7 @@ function checkIfStripeCardValid({ detail }) {
 
 						{#if data.prescription.description}
 							<div class="my-1 flex flex-row">
-								<h5 class="mr-2 w-20 flex-shrink-0 font-semibold tracking-wide">Note</h5>
+								<h5 class="mr-2 w-20 shrink-0 font-semibold tracking-wide">Note</h5>
 
 								<p class="flex-1">
 									{data.prescription.description}
@@ -382,8 +375,7 @@ function checkIfStripeCardValid({ detail }) {
 									src="{data.prescription.url}"
 									alt=""
 									height="80"
-									class="h-20 w-auto object-contain object-top text-xs"
-								/>
+									class="h-20 w-auto object-contain object-top text-xs" />
 							</div>
 						{/if}
 					</div>
@@ -398,16 +390,14 @@ function checkIfStripeCardValid({ detail }) {
 				disabled="{!razorpayReady ||
 					!selectedPaymentMethod?.name ||
 					(selectedPaymentMethod?.name === 'Stripe' && disabled)}"
-				on:submit="{() => submit(selectedPaymentMethod)}"
-			/>
+				on:submit="{() => submit(selectedPaymentMethod)}" />
 		</div>
 	</div>
 </div>
 
 {#if loading}
 	<div
-		class="fixed inset-0 z-[100] flex h-screen w-screen items-center justify-center gap-5 bg-black bg-opacity-75 p-5 text-center text-white sm:p-10"
-	>
+		class="fixed inset-0 z-[100] flex h-screen w-screen items-center justify-center gap-5 bg-black bg-opacity-75 p-5 text-center text-white sm:p-10">
 		Please wait... your payment is currently being processed
 	</div>
 {/if}

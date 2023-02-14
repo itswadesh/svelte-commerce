@@ -346,7 +346,7 @@ async function goCheckbox(item) {
 							{#if ix % 40 === 39 && data.facets.all_aggs.tags?.all?.buckets?.length}
 								<div class="col-span-2 w-screen overflow-x-auto bg-primary-100 scrollbar-none">
 									<div class="flex items-center gap-6 p-4">
-										<div class="flex-shrink-0">
+										<div class="shrink-0">
 											<span class="text-lg text-gray-500">Filter by</span>
 
 											<br />
@@ -354,7 +354,7 @@ async function goCheckbox(item) {
 											<span class="text-2xl font-bold">Tags</span>
 										</div>
 
-										<ul class="flex w-[40rem] flex-shrink-0 flex-wrap gap-2">
+										<ul class="flex w-[40rem] shrink-0 flex-wrap gap-2">
 											{#each data.facets.all_aggs.tags.all.buckets || [] as t}
 												{#if t}
 													<button

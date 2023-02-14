@@ -1,9 +1,9 @@
-import { provider } from '$lib/config'
-import type { Error } from '$lib/types'
+import { error } from '@sveltejs/kit'
 import { getAPI } from '$lib/utils/api'
 import { getBigCommerceApi, getBySid, getMedusajsApi, getWooCommerceApi } from '$lib/utils/server'
+import { provider } from '$lib/config'
 import { serializeNonPOJOs } from '$lib/utils/validations'
-import { error } from '@sveltejs/kit'
+import type { Error } from '$lib/types'
 
 export const fetchHome = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {

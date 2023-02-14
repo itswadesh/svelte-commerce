@@ -32,7 +32,7 @@ let openSidebar = false
 	<div class="mt-14 flex h-full w-full sm:mt-20">
 		{#if menu?.length > 0}
 			<div
-				class="relative hidden w-44 flex-shrink-0 overflow-y-auto bg-primary-500 py-3 overflow-x-hidden scrollbar-none sm:block"
+				class="relative hidden w-44 shrink-0 overflow-y-auto bg-primary-500 py-3 overflow-x-hidden scrollbar-none sm:block"
 			>
 				<!-- Dashboard -->
 

@@ -110,7 +110,7 @@ function toggle2(cx) {
 										>
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
-												class="h-6 w-6 flex-shrink-0 transition duration-300
+												class="h-6 w-6 shrink-0 transition duration-300
 													{showChild[mx] ? 'transform -rotate-180' : ''}"
 												viewBox="0 0 20 20"
 												fill="currentColor"
@@ -124,7 +124,7 @@ function toggle2(cx) {
 									</div>
 
 									{#if m.img}
-										<div class="flex-shrink-0">
+										<div class="shrink-0">
 											<img src="{m.img}" alt="" class="h-auto w-20 object-contain object-bottom" />
 										</div>
 									{/if}
@@ -142,7 +142,7 @@ function toggle2(cx) {
 									</div>
 
 									{#if m.img}
-										<div class="flex-shrink-0">
+										<div class="shrink-0">
 											<img src="{m.img}" alt="" class="h-auto w-20 object-contain object-bottom" />
 										</div>
 									{/if}
@@ -167,7 +167,7 @@ function toggle2(cx) {
 															class="flex flex-1 items-center gap-4"
 														>
 															{#if c.img}
-																<div class="h-12 w-12 flex-shrink-0 overflow-hidden rounded-full">
+																<div class="h-12 w-12 shrink-0 overflow-hidden rounded-full">
 																	<LazyImg
 																		src="{c.img}"
 																		alt=""
@@ -178,7 +178,7 @@ function toggle2(cx) {
 																</div>
 															{:else}
 																<div
-																	class="h-12 w-12 flex-shrink-0 overflow-hidden rounded-full bg-gray-200"
+																	class="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-gray-200"
 																></div>
 															{/if}
 
@@ -194,7 +194,7 @@ function toggle2(cx) {
 														>
 															<svg
 																xmlns="http://www.w3.org/2000/svg"
-																class="h-5 w-5 flex-shrink-0 transition duration-300
+																class="h-5 w-5 shrink-0 transition duration-300
 																	{showChild2[cx] ? 'transform -rotate-180' : ''}"
 																viewBox="0 0 20 20"
 																fill="currentColor"
@@ -213,7 +213,7 @@ function toggle2(cx) {
 														class="flex items-center gap-4 py-3 px-8 font-medium"
 													>
 														{#if c.img}
-															<div class="h-12 w-12 flex-shrink-0 overflow-hidden rounded-full">
+															<div class="h-12 w-12 shrink-0 overflow-hidden rounded-full">
 																<LazyImg
 																	src="{c.img}"
 																	alt=""
@@ -224,7 +224,7 @@ function toggle2(cx) {
 															</div>
 														{:else}
 															<div
-																class="h-12 w-12 flex-shrink-0 overflow-hidden rounded-full bg-gray-200"
+																class="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-gray-200"
 															></div>
 														{/if}
 

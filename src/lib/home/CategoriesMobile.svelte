@@ -47,7 +47,7 @@ let categoryColors = [
 								class="group flex w-16 flex-col items-center justify-center"
 							>
 								<div
-									class="mb-1 h-16 w-16 flex-shrink-0 overflow-hidden rounded-full border shadow-md group-hover:border-primary-500 group-hover:shadow-xl sm:mb-4"
+									class="mb-1 h-16 w-16 shrink-0 overflow-hidden rounded-full border shadow-md group-hover:border-primary-500 group-hover:shadow-xl sm:mb-4"
 								>
 									<LazyImg
 										src="{category.img}"
