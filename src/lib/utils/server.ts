@@ -20,35 +20,51 @@ import { serialize } from '.'
 // 	version: 'wc/v3'
 // })
 
-export async function postt(endpoint: string, data: any, ck?: any) {
-	const ep = HTTP_ENDPOINT + '/api/' + endpoint
-	const response: any = await fetch(ep, {
-		method: 'POST',
-		credentials: 'include',
-		body: JSON.stringify(data || {}),
-		headers: {
-			'Content-Type': 'application/json',
-			cookie: `connect.sid=${ck.get('connect.sid')}`
-		}
-	})
-	const sid: string | null = response.headers.get('set-cookie')
-	if (sid) {
-		const sidCookie: any = cookie.parse(sid)
-		ck.set('connect.sid', sidCookie.sid, {
-			path: '/'
-		})
-	}
-	const isJson = response.headers.get('content-type')?.includes('application/json')
+// export async function postt(endpoint: string, data: any, ck?: any) {
+// 	const ep = HTTP_ENDPOINT + '/api/' + endpoint
+// 	const response: any = await fetch(ep, {
+// 		method: 'POST',
+// 		credentials: 'include',
+// 		body: JSON.stringify(data || {}),
+// 		headers: {
+// 			'Content-Type': 'application/json',
+// 			cookie: `connect.sid=${ck.get('connect.sid')}`
+// 		}
+// 	})
+// 	const sid: string | null = response.headers.get('set-cookie')
+// 	if (sid) {
+// 		const sidCookie: any = cookie.parse(sid)
+// 		ck.set('connect.sid', sidCookie.sid, {
+// 			path: '/'
+// 		})
+// 	}
+// 	const isJson = response.headers.get('content-type')?.includes('application/json')
 
+// 	const res = isJson ? await response.json() : await response.text()
+// 	if (res?.status > 399) {
+// 		throw { status: res.status, message: res }
+// 	} else if (response?.status > 399) {
+// 		throw { status: response.status, message: res }
+// 	} else {
+// 		return res
+// 	}
+// }
+
+export const delBySid = async (endpoint: string, sid?: any) => {
+	const response = await fetch(HTTP_ENDPOINT + '/api/' + endpoint, {
+		method: 'DELETE',
+		credentials: 'include',
+		headers: { cookie: `connect.sid=${sid}` }
+	})
+	const isJson = response.headers.get('content-type')?.includes('application/json')
 	const res = isJson ? await response.json() : await response.text()
-	if (res?.status > 399) {
-		throw { status: res.status, message: res }
-	} else if (response?.status > 399) {
-		throw { status: response.status, message: res }
+	if (response?.status > 399) {
+		throw { status: response.status, message: response.statusText }
 	} else {
 		return res
 	}
 }
+
 export async function postBySid(endpoint: string, data: any, sid?: string) {
 	const ep = HTTP_ENDPOINT + '/api/' + endpoint
 	const response = await fetch(ep, {

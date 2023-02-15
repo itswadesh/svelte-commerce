@@ -16,12 +16,21 @@ export const actions: Actions = {
 			path: '/',
 			expires: new Date(0)
 		})
+		cookies.set('connect.sid', '', {
+			path: '/',
+			expires: new Date(0)
+		})
+		cookies.set('sid', '', {
+			path: '/',
+			expires: new Date(0)
+		})
 		cookies.set('me', '', {
 			path: '/',
 			expires: new Date(0)
 		})
 		locals.session = null
 		locals.me = null
+		locals.sid = null
 		// cookies.set('sid', '', {
 		// 	path: '/',
 		// 	expires: new Date(0)

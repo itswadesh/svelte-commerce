@@ -6,8 +6,7 @@ import {
 	getBySid,
 	getMedusajsApi,
 	getWooCommerceApi,
-	postBySid,
-	postt
+	postBySid
 } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
@@ -113,7 +112,7 @@ export const addToCartService = async ({
 		switch (provider) {
 			case 'litekart':
 				if (server) {
-					res = await postt(
+					res = await postBySid(
 						`carts/add-to-cart`,
 						{
 							pid,
