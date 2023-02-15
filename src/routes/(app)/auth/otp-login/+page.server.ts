@@ -1,6 +1,5 @@
 import { fetchMyCart } from '$lib/services/CartService'
 import { getOtpService, verifyOtpService } from '$lib/services/UserService'
-import { post } from '$lib/utils/api'
 import { fail, redirect } from '@sveltejs/kit'
 import type { Action, Actions, PageServerLoad } from './$types'
 export const load: PageServerLoad = async ({ locals, url }) => {
@@ -87,7 +86,7 @@ const verifyOtp: Action = async ({ cookies, request, locals }) => {
 			maxAge: 60 * 60 * 24 * 30
 		})
 		try {
-			const cartRes = fetchMyCart({
+			const cartRes = await fetchMyCart({
 				storeId: locals.store?.id,
 				server: true,
 				sid: cookies.get('connect.sid')
