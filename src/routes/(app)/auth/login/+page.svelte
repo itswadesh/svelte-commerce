@@ -96,7 +96,7 @@ async function submit() {
 		if (browser) goto(r)
 	} catch (e) {
 		toast(e.body,'error')
-		err = e?.body || body
+		err = e?.body || e
 	} finally {
 		loading = false
 	}
