@@ -29,7 +29,9 @@ import googlePlay from '$lib/assets/app/google-play.png'
 import type { Category, Me } from './types'
 // import { fetchFooterCategories } from './services/CategoryService'
 
-export let store={}, popularSearches:{ took: 0, count: 0, data: [] }, megamenu:Category[]
+export let store = {},
+	popularSearches: { took: 0; count: 0; data: [] },
+	megamenu: Category[]
 
 // let categories = []
 
@@ -59,7 +61,7 @@ function getYear() {
 	return year
 }
 
-let footerItems:any = [
+let footerItems: any = [
 	{
 		heading: 'Store Info',
 		subMenu: [
@@ -112,9 +114,8 @@ async function getStoreData() {
 <footer class="w-full justify-center bg-gray-50 p-3 text-sm sm:p-10">
 	<div class="container mx-auto max-w-6xl">
 		<div
-			class="mb-4 flex w-full flex-col flex-wrap items-start justify-start gap-5 sm:mb-8 sm:max-h-[30rem] sm:gap-10 lg:max-h-96 xl:max-h-60"
-		>
-			{#if footerItems?.length}	
+			class="mb-4 flex w-full flex-col flex-wrap items-start justify-start gap-5 sm:mb-8 sm:max-h-[30rem] sm:gap-10 lg:max-h-96 xl:max-h-60">
+			{#if footerItems?.length}
 				{#each footerItems as item}
 					<div>
 						<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">
@@ -127,15 +128,13 @@ async function getStoreData() {
 									<a
 										href="{itm.link}"
 										aria-label="Click to route this page"
-										class="link-underline link-underline-gray whitespace-pre-wrap"
-									>
+										class="link-underline link-underline-gray whitespace-pre-wrap">
 										{itm.title}
 									</a>
 
 									{#if itm.new}
 										<div
-											class="ml-2 max-w-max rounded bg-primary-500 py-[0.1rem] px-1 text-[0.5rem] font-semibold leading-3 tracking-wider text-white"
-										>
+											class="ml-2 max-w-max rounded bg-primary-500 py-[0.1rem] px-1 text-[0.5rem] font-semibold leading-3 tracking-wider text-white">
 											NEW
 										</div>
 									{/if}
@@ -155,15 +154,13 @@ async function getStoreData() {
 								<a
 									href="/{category.link || category.slug}"
 									aria-label="Click to route this page"
-									class="link-underline link-underline-gray whitespace-pre-wrap"
-								>
+									class="link-underline link-underline-gray whitespace-pre-wrap">
 									{category.name}
 								</a>
 
 								{#if category.new}
 									<div
-										class="ml-2 max-w-max rounded bg-primary-500 py-[0.1rem] px-1 text-[0.5rem] font-semibold leading-3 tracking-wider text-white"
-									>
+										class="ml-2 max-w-max rounded bg-primary-500 py-[0.1rem] px-1 text-[0.5rem] font-semibold leading-3 tracking-wider text-white">
 										NEW
 									</div>
 								{/if}
@@ -179,54 +176,52 @@ async function getStoreData() {
 				<ul class="flex flex-col gap-2 text-gray-500">
 					{#if $page.data.store?.email}
 						<li class="max-w-max">
-							<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke-width="1.5"
-									stroke="currentColor"
-									class="h-5 w-5 shrink-0"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
-									></path>
-								</svg>
+							<a href="mailto:{$page.data.store?.email}" class="group block">
+								<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke-width="1.5"
+										stroke="currentColor"
+										class="h-5 w-5 shrink-0">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
+										></path>
+									</svg>
 
-								<span>Email</span>
-							</h6>
+									<span>Email</span>
+								</h6>
 
-							<a href="mailto:{$page.data.store?.email}" aria-label="Click to send email">
-								{$page.data.store?.email}
+								<span class="group-hover:underline">{$page.data.store?.email}</span>
 							</a>
 						</li>
 					{/if}
 
 					{#if $page.data.store?.phone}
 						<li class="max-w-max">
-							<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke-width="1.5"
-									stroke="currentColor"
-									class="h-5 w-5 shrink-0"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"
-									></path>
-								</svg>
+							<a href="tel:+{$page.data.store?.phone}" class="group block">
+								<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke-width="1.5"
+										stroke="currentColor"
+										class="h-5 w-5 shrink-0">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"
+										></path>
+									</svg>
 
-								<span>Phone</span>
-							</h6>
+									<span>Phone</span>
+								</h6>
 
-							<a href="tel:+{$page.data.store?.phone}" aria-label="Click to make phone call">
-								{$page.data.store?.phone}
+								<span class="group-hover:underline">{$page.data.store?.phone}</span>
 							</a>
 						</li>
 					{/if}
@@ -239,8 +234,7 @@ async function getStoreData() {
 								viewBox="0 0 24 24"
 								stroke-width="1.5"
 								stroke="currentColor"
-								class="h-5 w-5 shrink-0"
-							>
+								class="h-5 w-5 shrink-0">
 								<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"
 								></path>
 							</svg>
@@ -259,8 +253,7 @@ async function getStoreData() {
 								viewBox="0 0 24 24"
 								stroke-width="1.5"
 								stroke="currentColor"
-								class="h-5 w-5 shrink-0"
-							>
+								class="h-5 w-5 shrink-0">
 								<path
 									stroke-linecap="round"
 									stroke-linejoin="round"
@@ -285,8 +278,7 @@ async function getStoreData() {
 						href="https://"
 						aria-label="Click for the app link on Google Play"
 						target="_blank"
-						rel="noopener noreferrer"
-					>
+						rel="noopener noreferrer">
 						<img src="{googlePlay}" alt="" class="h-auto w-32 object-contain object-left" />
 					</a>
 
@@ -294,8 +286,7 @@ async function getStoreData() {
 						href="https://"
 						aria-label="Click for the app link on App Store"
 						target="_blank"
-						rel="noopener noreferrer"
-					>
+						rel="noopener noreferrer">
 						<img src="{appStore}" alt="" class="h-auto w-32 object-contain object-left p-1" />
 					</a>
 				</div>
@@ -314,8 +305,7 @@ async function getStoreData() {
 									href="{$page.data.store?.facebookPage}"
 									target="_blank"
 									rel="noopener noreferrer"
-									aria-label="Click for facebook link"
-								>
+									aria-label="Click for facebook link">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										class="h-5 w-5 transition duration-300	hover:text-[#4267B2]"
@@ -324,8 +314,7 @@ async function getStoreData() {
 										stroke="currentColor"
 										fill="none"
 										stroke-linecap="round"
-										stroke-linejoin="round"
-									>
+										stroke-linejoin="round">
 										<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
 										<path
 											d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3"
@@ -343,8 +332,7 @@ async function getStoreData() {
 									href="{$page.data.store?.instagramPage}"
 									target="_blank"
 									rel="noopener noreferrer"
-									aria-label="Click for instagram link"
-								>
+									aria-label="Click for instagram link">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										class="h-5 w-5 transition duration-300	hover:text-[#C13584]"
@@ -353,8 +341,7 @@ async function getStoreData() {
 										stroke="currentColor"
 										fill="none"
 										stroke-linecap="round"
-										stroke-linejoin="round"
-									>
+										stroke-linejoin="round">
 										<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
 										<rect x="4" y="4" width="16" height="16" rx="4"></rect>
 										<circle cx="12" cy="12" r="3"></circle>
@@ -372,8 +359,7 @@ async function getStoreData() {
 									href="{$page.data.store?.twitterPage}"
 									target="_blank"
 									rel="noopener noreferrer"
-									aria-label="Click for twitter link"
-								>
+									aria-label="Click for twitter link">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										class="h-5 w-5 transition duration-300	hover:text-[#1DA1F2]"
@@ -382,8 +368,7 @@ async function getStoreData() {
 										stroke="currentColor"
 										fill="none"
 										stroke-linecap="round"
-										stroke-linejoin="round"
-									>
+										stroke-linejoin="round">
 										<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
 										<path
 											d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z"
@@ -399,8 +384,7 @@ async function getStoreData() {
 							<li class="max-w-max">
 								<a
 									href="mailto:{$page.data.store?.email}"
-									aria-label="Click to contact with mail id"
-								>
+									aria-label="Click to contact with mail id">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										class="h-5 w-5 transition duration-300	hover:text-[#c71610]"
@@ -409,8 +393,7 @@ async function getStoreData() {
 										stroke="currentColor"
 										fill="none"
 										stroke-linecap="round"
-										stroke-linejoin="round"
-									>
+										stroke-linejoin="round">
 										<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
 										<rect x="3" y="5" width="18" height="14" rx="2"></rect>
 										<polyline points="3 7 12 13 21 7"></polyline>
@@ -427,8 +410,7 @@ async function getStoreData() {
 									href="{$page.data.store?.linkedinPage}"
 									target="_blank"
 									rel="noopener noreferrer"
-									aria-label="Click for linkedin link"
-								>
+									aria-label="Click for linkedin link">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										class="h-5 w-5 transition duration-300	hover:text-[#0077b5]"
@@ -437,8 +419,7 @@ async function getStoreData() {
 										stroke="currentColor"
 										fill="none"
 										stroke-linecap="round"
-										stroke-linejoin="round"
-									>
+										stroke-linejoin="round">
 										<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
 										<rect x="4" y="4" width="16" height="16" rx="2"></rect>
 										<line x1="8" y1="11" x2="8" y2="16"></line>
@@ -458,8 +439,7 @@ async function getStoreData() {
 									href="{$page.data.store?.pinterestPage}"
 									target="_blank"
 									rel="noopener noreferrer"
-									aria-label="Click for pinterest link"
-								>
+									aria-label="Click for pinterest link">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										class="h-5 w-5 transition duration-300	hover:text-[#c8232c]"
@@ -468,8 +448,7 @@ async function getStoreData() {
 										stroke="currentColor"
 										fill="none"
 										stroke-linecap="round"
-										stroke-linejoin="round"
-									>
+										stroke-linejoin="round">
 										<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
 										<line x1="8" y1="20" x2="12" y2="11"></line>
 										<path
@@ -489,8 +468,7 @@ async function getStoreData() {
 									href="{$page.data.store?.youtubeChannel}"
 									target="_blank"
 									rel="noopener noreferrer"
-									aria-label="Click for youtube link"
-								>
+									aria-label="Click for youtube link">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										class="h-5 w-5 transition duration-300	hover:text-[#FF0000]"
@@ -499,8 +477,7 @@ async function getStoreData() {
 										stroke="currentColor"
 										fill="none"
 										stroke-linecap="round"
-										stroke-linejoin="round"
-									>
+										stroke-linejoin="round">
 										<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
 										<rect x="3" y="5" width="18" height="14" rx="4"></rect>
 										<path d="M10 9l5 3l-5 3z"></path>
@@ -527,8 +504,7 @@ async function getStoreData() {
 							<a
 								href="/search?q={p.text}"
 								aria-label="Click for the products related to this field"
-								class="link-underline link-underline-gray uppercase"
-							>
+								class="link-underline link-underline-gray uppercase">
 								{p.text}
 							</a>
 
@@ -556,24 +532,21 @@ async function getStoreData() {
 		<hr class="mb-4 w-full border-t sm:mb-8" />
 
 		<div
-			class="flex flex-wrap items-center justify-center gap-2 text-sm text-gray-500 sm:gap-5 md:justify-between"
-		>
+			class="flex flex-wrap items-center justify-center gap-2 text-sm text-gray-500 sm:gap-5 md:justify-between">
 			<p>Copyright {getYear()} © {$page.data.store?.websiteName} made with ❤️ in India</p>
 
 			<div class="flex items-center justify-center gap-4">
 				<a
 					href="/contact-us"
 					aria-label="Click to route this page"
-					class="font-bold uppercase text-primary-500 transition duration-300 hover:text-primary-700"
-				>
+					class="font-bold uppercase text-primary-500 transition duration-300 hover:text-primary-700">
 					Contact Us
 				</a>
 
 				<a
 					href="/faqs"
 					aria-label="Click to route this page"
-					class="font-bold uppercase text-primary-500 transition duration-300 hover:text-primary-700"
-				>
+					class="font-bold uppercase text-primary-500 transition duration-300 hover:text-primary-700">
 					Faqs
 				</a>
 			</div>
