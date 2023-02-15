@@ -50,7 +50,7 @@
 
 # Latest Updates
 
-## Update 15-December-2022
+## Update 07-February-2023
 
 - 07-February-2023 - Prettified.
 - 06-February-2023 - Sveltekit 1.5
