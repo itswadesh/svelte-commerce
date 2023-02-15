@@ -43,10 +43,8 @@ export const searchProducts = async ({
 					res = await getAPI(`es/products?${query}&store=${storeId}`, origin)
 				}
 				res = res || {}
-				let products = []
 				products = res.data.map((p) => {
-					let p1
-					p1 = { ...p._source }
+					const p1 = { ...p._source }
 					p1.id = p._id
 					return p1
 				})
@@ -182,6 +180,13 @@ export const fetchProductsOfCategory = async ({
 				category = res?.category
 				err = !res?.estimatedTotalHits ? 'No result Not Found' : null
 				break
+			case 'medusajs':
+				res = await getMedusajsApi(`products`, {}, sid)
+				count = res?.count
+				products = res?.products.map((p) => mapMedusajsProduct(p))
+				const offset = res?.offset
+				const limit = res?.limit
+				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(`products?categories=${categorySlug}`, {}, sid)
 				count = res?.count
@@ -235,6 +240,9 @@ export const fetchNextPageProducts = async ({
 					p1.id = p._id
 					return p1
 				})
+				break
+			case 'medusajs':
+				res = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				res = await getBigCommerceApi(
@@ -302,6 +310,9 @@ export const fetchRelatedProducts = async ({
 				relatedProducts = relatedProductsRes?.data.filter((p) => {
 					return p._id !== pid
 				})
+				break
+			case 'medusajs':
+				relatedProducts = await getMedusajsApi(`customers/me`, {}, sid)
 				break
 			case 'bigcommerce':
 				relatedProducts = await getBigCommerceApi(`products?categories=${categorySlug}`, {}, sid)
