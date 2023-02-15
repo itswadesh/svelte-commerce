@@ -658,7 +658,7 @@ async function onSearchSubmit({ detail }) {
 						</li>
 					{/each}
 
-					<!-- Log Out -->
+					<!-- Logout -->
 
 					<li>
 						<form action="/auth/logout" method="POST" use:enhance>
@@ -679,7 +679,7 @@ async function onSearchSubmit({ detail }) {
 										clip-rule="evenodd"></path>
 								</svg>
 
-								<span>Log Out</span>
+								<span>Logout</span>
 							</button>
 						</form>
 					</li>

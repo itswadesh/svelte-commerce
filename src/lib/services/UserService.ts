@@ -2,11 +2,13 @@ import { provider } from '$lib/config'
 import type { Error } from '$lib/types'
 import { del, getAPI, post, put } from '$lib/utils/api'
 import {
+	delBySid,
 	getBigCommerceApi,
 	getBySid,
 	getMedusajsApi,
 	getWooCommerceApi,
 	postBigCommerceApi,
+	postBySid,
 	postMedusajsApi,
 	postWooCommerceApi
 } from '$lib/utils/server'
@@ -321,10 +323,10 @@ export const logoutService = async ({ storeId, origin, server = false, sid = nul
 		let res: any = {}
 		switch (provider) {
 			case 'litekart':
-				res = await del(`logout?store=${storeId}`, origin)
+				res = await postBySid(`logout?store=${storeId}`, sid)
 				break
 			case 'medusajs':
-				res = await del(`auth`, origin)
+				res = await delBySid(`auth`, origin)
 				break
 			case 'bigcommerce':
 				res = await postBigCommerceApi(`signup`, {})
