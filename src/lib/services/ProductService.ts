@@ -43,10 +43,8 @@ export const searchProducts = async ({
 					res = await getAPI(`es/products?${query}&store=${storeId}`, origin)
 				}
 				res = res || {}
-				let products = []
 				products = res.data.map((p) => {
-					let p1
-					p1 = { ...p._source }
+					const p1 = { ...p._source }
 					p1.id = p._id
 					return p1
 				})
