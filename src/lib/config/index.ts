@@ -87,8 +87,5 @@ export const woocommerceHeaders = {
 	'Content-Type': 'application/json',
 	Accept: 'application/json'
 }
-export const provider = env.PUBLIC_API_PROVIDER || 'litekart'
+export const provider = env.PUBLIC_API_PROVIDER || 'litekart' // 'medusajs' 'woocommerce' 'bigcommerce'
 export const IS_DEV = !!env.PUBLIC_IS_DEV
-// export const provider: string = 'medusajs'
-// export const provider: string = 'woocommerce'
-// export const provider: string = 'bigcommerce'

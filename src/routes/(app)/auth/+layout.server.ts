@@ -1,5 +1,4 @@
 import { fetchMyCart } from '$lib/services/CartService'
-import cookie from 'cookie'
 export const prerender = false
 
 export async function load({ url, locals, cookies }) {
@@ -8,12 +7,11 @@ export async function load({ url, locals, cookies }) {
 	let cart
 	// let serializedCart
 	try {
-		const res: any = fetchMyCart({
+		const res: any = await fetchMyCart({
 			storeId: locals.store?.id,
 			server: true,
 			sid: cookies.get('connect.sid')
 		})
-
 		if (res) {
 			const cookieCart = {
 				items: res?.items,
