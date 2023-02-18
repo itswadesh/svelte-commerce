@@ -30,7 +30,8 @@ import {
 	websiteLegalName,
 	websiteName,
 	WWW_URL,
-	youtubeChannel
+	youtubeChannel,
+	IS_DEV
 } from '$lib/config'
 export const getStoreData = async ({
 	cookieStore,
@@ -76,7 +77,7 @@ export const getStoreData = async ({
 	}
 	if (!cookieStore || cookieStore === 'undefined') {
 		const uri = new URL(url)
-		storeRes = await getBySid(`init?domain=${DOMAIN || uri.host}`)
+		storeRes = await getBySid(`init?domain=${IS_DEV ? DOMAIN : uri.host}`)
 		store = {
 			id: storeRes.storeOne._id,
 			address: storeRes.storeOne.address,
