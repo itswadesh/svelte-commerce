@@ -12,11 +12,11 @@ import { page } from '$app/stores'
 
 // const dispatch = createEventDispatcher()
 
-export let count = 10,
+export let count = 1,
 	current = 1
 
 count = +count
-$: pages = +count
+$: pages = +count > 100 ? 100 : +count
 $: startTab = 5 - current <= 5 && 5 - current >= 0 ? 1 : current - 4
 $: endTab = startTab + 9
 function changePage(e) {

@@ -17,7 +17,7 @@ export const loginUrl = '/auth/login'
 export const weightUnit = 'g'
 export const currencyCode = 'USD'
 export const currencySymbol = '$'
-export const DOMAIN = env.PUBLIC_DOMAIN
+export const DOMAIN = env.PUBLIC_DOMAIN || 'demo.litekart.in'
 export const entity = 'Misiki'
 export const HTTP_ENDPOINT = env.PUBLIC_HTTP_ENDPOINT || 'https://api.litekart.in'
 export const IMAGE_CDN_URL = 'https://ik.imagekit.io/3wzatecz51w3i'
@@ -87,8 +87,5 @@ export const woocommerceHeaders = {
 	'Content-Type': 'application/json',
 	Accept: 'application/json'
 }
-export const provider = env.PUBLIC_API_PROVIDER || 'litekart'
+export const provider = env.PUBLIC_API_PROVIDER || 'litekart' // 'medusajs' 'woocommerce' 'bigcommerce'
 export const IS_DEV = !!env.PUBLIC_IS_DEV
-// export const provider: string = 'medusajs'
-// export const provider: string = 'woocommerce'
-// export const provider: string = 'bigcommerce'
