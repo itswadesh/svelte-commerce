@@ -10,6 +10,7 @@ declare namespace App {
 		q: string
 		sid: string
 		url: string
+		zip: string
 		currentPage: number
 		user: {
 			name: string
