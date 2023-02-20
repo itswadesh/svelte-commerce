@@ -38,6 +38,7 @@ const send = async ({ method, path, params, data, token, headers, origin }: any)
 				contentType == 'image/jpeg' ||
 				contentType == 'image/gif' ||
 				contentType == 'image/png' ||
+				contentType == 'image/svg' ||
 				contentType == 'image/ico' ||
 				contentType == 'image/webp' ||
 				contentType == 'application/pdf' ||
