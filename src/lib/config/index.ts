@@ -10,7 +10,7 @@ export const authorInfo = {
 	telegramUsername: 'itswadesh',
 	twitterUsername: 'itswadesh'
 }
-export const currency = { symbol: '₹', code: 'INR' }
+export const currency = { symbol: '$', code: 'USD' }
 export const adminUrl = 'https://admin.litekart.in'
 export const dimentionUnit = 'cm'
 export const loginUrl = '/auth/login'
