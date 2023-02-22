@@ -37,7 +37,6 @@ let today = dayjs(new Date()).toISOString()
 
 export let data
 
-
 let seoProps = {
 	brand: $page.data.store?.title,
 	caption: $page.data.store?.title,
@@ -78,6 +77,7 @@ let seoProps = {
 	twitterImage: { url: $page.data.store?.logo }
 }
 
+let selectedFilter
 let showFilter = false
 let showSort = false
 
@@ -123,6 +123,11 @@ async function goCheckbox(item) {
 	await goto($page.url.toString())
 	await invalidateAll()
 }
+
+function handleFilterTags() {
+	selectedFilter = 'Tags'
+	showFilter = true
+}
 </script>
 
 <SEO {...seoProps} />
@@ -149,25 +154,25 @@ async function goCheckbox(item) {
 			<DesktopFilter
 				facets="{data.facets}"
 				query="{data.query}"
+				style_tags="{data.style_tags}"
 				class="sticky top-24 hidden lg:block"
-				on:clearAll="{refreshData}"
-			/>
+				on:clearAll="{refreshData}" />
 
 			<MobileFilter
 				facets="{data.facets}"
+				style_tags="{data.style_tags}"
 				bind:showFilter="{showFilter}"
 				bind:showSort="{showSort}"
+				selected="{selectedFilter}"
 				class="sticky top-14 z-40 block sm:top-20 lg:hidden"
-				on:clearAll="{refreshData}"
-			/>
+				on:clearAll="{refreshData}" />
 		{/if}
 
 		<div class="w-full sm:px-10 lg:px-0">
 			{#if data.products?.length}
 				<div class="mb-5 w-full sm:mb-10 lg:mb-20">
 					<div
-						class="mb-5 hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex"
-					>
+						class="mb-5 hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex">
 						<h2 class="flex flex-wrap items-center gap-2">
 							<span class="text-xl font-bold capitalize md:text-2xl">
 								Showing results {#if data.searchData}
@@ -199,8 +204,7 @@ async function goCheckbox(item) {
 								<select
 									bind:value="{data.sort}"
 									class="max-w-max border-b bg-transparent py-1 pr-2 font-semibold focus:border-primary-500 focus:outline-none hover:border-primary-500"
-									on:change="{() => sortNow(data.sort)}"
-								>
+									on:change="{() => sortNow(data.sort)}">
 									{#each sorts as s}
 										<option value="{s.val}">{s.name}</option>
 									{/each}
@@ -209,18 +213,19 @@ async function goCheckbox(item) {
 						</div>
 					</div>
 
-					{#if data.facets?.all_aggs?.style_tags?.all?.buckets?.length}
+					{#if data.style_tags?.length}
 						<div
-							class="w-screen overflow-x-auto scrollbar-none lg:mb-5 lg:w-full lg:overflow-x-hidden"
-						>
+							class="w-screen overflow-x-auto scrollbar-none lg:mb-5 lg:w-full lg:overflow-x-hidden">
 							<div class="inline-flex gap-2 p-3 lg:flex lg:flex-wrap lg:p-0">
-								{#each data.facets.all_aggs.style_tags.all.buckets || [] as t}
-									{#if t}
+								{#each data.style_tags || [] as t}
+									{#if t?._source?.name}
 										<button
-											class="block whitespace-nowrap rounded-full border bg-white py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none hover:border-primary-500 hover:text-primary-500"
-											on:click="{() => goCheckbox(t.key)}"
-										>
-											{t.key} ({t.doc_count})
+											class="whitespace-nowrap block rounded-full border py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none
+											{$page.url.searchParams.get('tags')?.includes(t?._source?.name)
+												? 'bg-primary-500 border-primary-500 text-white'
+												: 'bg-white hover:border-primary-500 hover:text-primary-500'}"
+											on:click="{() => goCheckbox(t?._source?.name)}">
+											{t?._source?.name}
 										</button>
 									{/if}
 								{/each}
@@ -229,15 +234,15 @@ async function goCheckbox(item) {
 					{/if}
 
 					<ul
-						class="grid w-full grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6"
-					>
+						class="grid w-full grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6">
 						{#each data.products as p, ix}
 							<li>
 								<ProductCard product="{p}" />
 							</li>
 
 							{#if ix % 40 === 39 && data.facets.all_aggs.tags?.all?.buckets?.length}
-								<div class="col-span-2 w-screen overflow-x-auto bg-primary-100 scrollbar-none">
+								<div
+									class="col-span-2 w-screen block lg:hidden overflow-x-auto bg-primary-100 scrollbar-none">
 									<div class="flex items-center gap-6 p-4">
 										<div class="shrink-0">
 											<span class="text-lg text-gray-500">Filter by</span>
@@ -248,16 +253,25 @@ async function goCheckbox(item) {
 										</div>
 
 										<ul class="flex w-[40rem] shrink-0 flex-wrap gap-2">
-											{#each data.facets.all_aggs.tags.all.buckets || [] as t}
-												{#if t}
+											{#each data.facets.all_aggs.tags.all.buckets || [] as t, tx}
+												{#if t && tx < 12}
 													<button
+														type="button"
 														class="capitalizefocus:outline-none max-w-max rounded-md bg-white py-2 px-4 text-sm font-semibold"
-														on:click="{() => goCheckbox(t.key)}"
-													>
+														on:click="{() => goCheckbox(t.key)}">
 														{t.key}
 													</button>
 												{/if}
 											{/each}
+
+											{#if data.facets.all_aggs.tags.all.buckets?.length - 12 > 0}
+												<button
+													type="button"
+													class="font-semibold text-sm text-primary-500 focus:outline-none"
+													on:click="{handleFilterTags}">
+													+{data.facets.all_aggs.tags.all.buckets?.length - 12} more
+												</button>
+											{/if}
 										</ul>
 									</div>
 								</div>
@@ -274,8 +288,7 @@ async function goCheckbox(item) {
 			{:else}
 				<div
 					class="mb-5 flex w-full items-center justify-center px-3 sm:mb-10 sm:px-0 lg:mb-20"
-					style="height: 60vh;"
-				>
+					style="height: 60vh;">
 					<div class="m-10 flex flex-col items-center justify-center text-center">
 						<h2 class="mb-10 text-xl capitalize sm:text-2xl lg:text-3xl">
 							{#if data.searchData}You searched for "{data.searchData}"{/if}
@@ -285,8 +298,7 @@ async function goCheckbox(item) {
 							<img
 								src="{noNoDataAvailable}"
 								alt="no data availible"
-								class="h-20 w-20 object-contain text-xs"
-							/>
+								class="h-20 w-20 object-contain text-xs" />
 						</div>
 
 						<h2>We couldn't find any matches!</h2>
@@ -305,8 +317,7 @@ async function goCheckbox(item) {
 			{:else}
 				<Pagination
 					count="{Math.ceil((data?.count || 1) / data.pageSize)}"
-					current="{data?.currentPage || 1}"
-				/>
+					current="{data?.currentPage || 1}" />
 			{/if}
 		</div>
 	</div>
