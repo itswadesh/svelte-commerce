@@ -108,8 +108,7 @@ async function remove(id) {
 					<select
 						bind:value="{data.sort}"
 						class="border-b border-gray-300 bg-transparent p-0.5 text-sm font-semibold focus:outline-none"
-						on:change="{() => sortNow(data.sort)}"
-					>
+						on:change="{() => sortNow(data.sort)}">
 						<option value="-updatedAt" selected class="p-4">Whats New</option>
 						<option value="name">Name ASC</option>
 						<option value="-name">Name DESC</option>
@@ -131,8 +130,7 @@ async function remove(id) {
 										src="{review.listing?.img}"
 										alt="{review.listing?.name || ''}"
 										width="128"
-										class="h-full w-full object-contain object-top"
-									/>
+										class="h-full w-full object-contain object-top" />
 								</div>
 
 								<div class="relative flex h-auto w-full flex-1 flex-col">
@@ -140,8 +138,7 @@ async function remove(id) {
 										<a
 											href="{`/product/${review.listing?.slug}`}"
 											aria-label="Click to view the product details"
-											class="flex-1 font-semibold"
-										>
+											class="flex-1 font-semibold">
 											{review.listing?.name}
 										</a>
 
@@ -158,16 +155,14 @@ async function remove(id) {
 
 									<div class="mb-2 flex flex-row items-center">
 										<div
-											class="mr-2 flex items-center gap-1 rounded bg-primary-500 py-0.5 px-2 text-center text-sm font-bold text-white"
-										>
+											class="mr-2 flex items-center gap-1 rounded bg-primary-500 py-0.5 px-2 text-center text-sm font-bold text-white">
 											{review.rating}
 
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
 												class="h-4 w-4"
 												viewBox="0 0 20 20"
-												fill="currentColor"
-											>
+												fill="currentColor">
 												<path
 													d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
 												></path>
@@ -204,14 +199,12 @@ async function remove(id) {
 							<div class="flex justify-end">
 								<button
 									class="w-9 rounded-full bg-gray-100 p-2 text-xs text-gray-500 transition duration-300 hover:bg-gray-200"
-									on:click="{() => remove(review.id)}"
-								>
+									on:click="{() => remove(review.id)}">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										class="h-5 w-5"
 										viewBox="0 0 20 20"
-										fill="currentColor"
-									>
+										fill="currentColor">
 										<path
 											fill-rule="evenodd"
 											d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
@@ -229,19 +222,17 @@ async function remove(id) {
 			count="{Math.ceil(
 				data.reviews?.data?.myReviews?.count / data.reviews?.data?.myReviews?.pageSize
 			)}"
-			current="{+data.currentPage}"
-		/>
+			current="{+data.currentPage}" />
 	{:else}
 		<div class="flex h-[70vh] flex-col items-center justify-center text-center">
 			<img
 				src="/no/online-review-animate.svg"
 				alt="empty reviews"
-				class="mb-5 h-60 object-contain"
-			/>
+				class="mb-5 h-60 object-contain" />
 
 			<span class="mb-3 text-xl font-medium md:text-3xl"> Empty Reviews !!</span>
 
-			<span class="mb-5 text-sm"> We didn't find any review against your listing</span>
+			<span class="mb-5 text-sm"> You haven't reviewed any item yet.</span>
 
 			<a href="/" aria-label="Click to route home" data-sveltekit-preload-data>
 				<PrimaryButton class="w-40 py-2 text-sm">Shop Now</PrimaryButton>
