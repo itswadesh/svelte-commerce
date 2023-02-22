@@ -1,12 +1,9 @@
-import { gett } from '$lib/utils'
+import { fetchProductsOfCategory } from '$lib/services/ProductService'
 import { error } from '@sveltejs/kit'
 export const prerender = false
 
 export async function load({ url, params, locals, cookies, parent, setHeaders }) {
-	// const d1 = new Date()
 	const { store } = locals
-	// const d2 = new Date()
-	// console.log('Got data from Layout page (ms): ', d2.getTime() - d1.getTime())
 	let loading = false,
 		err,
 		count,
@@ -14,7 +11,8 @@ export async function load({ url, params, locals, cookies, parent, setHeaders })
 		facets,
 		ressss,
 		pageSize,
-		category
+		category,
+		style_tags = []
 
 	const fl = {}
 	const currentPage = +url.searchParams.get('page') || 1
@@ -30,31 +28,35 @@ export async function load({ url, params, locals, cookies, parent, setHeaders })
 	let res
 	try {
 		loading = true
-		res = await gett(
-			`es/products?categories=${categorySlug}&store=${store?.id}&${query.toString()}`
-		)
-		products = res?.data?.map((p) => {
-			const p1 = { ...p._source }
-			p1.id = p._id
-			return p1
+		res = await fetchProductsOfCategory({
+			storeId: store?.id,
+			query: query.toString(),
+			categorySlug,
+			server: true
 		})
-
+		products = res?.products
 		count = res?.count
 		facets = res?.facets
+		// style_tags = res?.style_tags
 		pageSize = res?.pageSize
 		category = res?.category
-		err = !res?.estimatedTotalHits ? 'No result Not Found' : null
+		err = res?.err
+		if (facets.all_aggs?.tags?.all?.buckets?.length) {
+			const style_tags_with_product = facets.all_aggs?.tags?.all?.buckets?.filter(
+				(t) => t.doc_count > 0
+			)
+			style_tags = res?.style_tags.filter((st) => {
+				return style_tags_with_product.some((t) => {
+					return st._source.name === t.key // Assuming there is a unique "id" property in each object
+				})
+			})
+		}
 	} catch (e) {
 		err = e
 		throw error(400, e?.message || e || 'No results found')
 	} finally {
 		loading = false
 	}
-	// const d3 = new Date()
-	// console.log('Product listing page loading complete (ms): ', d3.getTime() - d2.getTime())
-	// setHeaders({
-	// 	'cache-control': 'public, max-age=7200, must-revalidate'
-	// })
 
 	return {
 		loading,
@@ -70,6 +72,7 @@ export async function load({ url, params, locals, cookies, parent, setHeaders })
 		fl,
 		ressss,
 		category: category,
+		style_tags,
 		store,
 		categorySlug,
 		origin: locals.origin
