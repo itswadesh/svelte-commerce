@@ -11,7 +11,8 @@ export async function load({ url, params, locals, cookies, parent, setHeaders })
 		facets,
 		ressss,
 		pageSize,
-		category
+		category,
+		style_tags = []
 
 	const fl = {}
 	const currentPage = +url.searchParams.get('page') || 1
@@ -36,9 +37,20 @@ export async function load({ url, params, locals, cookies, parent, setHeaders })
 		products = res?.products
 		count = res?.count
 		facets = res?.facets
+		// style_tags = res?.style_tags
 		pageSize = res?.pageSize
 		category = res?.category
 		err = res?.err
+		if (facets.all_aggs?.tags?.all?.buckets?.length) {
+			const style_tags_with_product = facets.all_aggs?.tags?.all?.buckets?.filter(
+				(t) => t.doc_count > 0
+			)
+			style_tags = res?.style_tags.filter((st) => {
+				return style_tags_with_product.some((t) => {
+					return st._source.name === t.key // Assuming there is a unique "id" property in each object
+				})
+			})
+		}
 	} catch (e) {
 		err = e
 		throw error(400, e?.message || e || 'No results found')
@@ -60,6 +72,7 @@ export async function load({ url, params, locals, cookies, parent, setHeaders })
 		fl,
 		ressss,
 		category: category,
+		style_tags,
 		store,
 		categorySlug,
 		origin: locals.origin

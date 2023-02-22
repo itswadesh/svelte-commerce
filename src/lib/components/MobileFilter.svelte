@@ -22,31 +22,51 @@ const dispatch = createEventDispatcher()
 let clazz = ''
 export { clazz as class }
 
-export let facets = {},
-	fl = {},
-	appliedFilters = {},
-	filterLength = 0,
-	mergedArr = [],
-	showFilter = false,
-	showSort = false
+export let appliedFilters = {}
+export let facets = {}
+export let filterLength = 0
+export let fl = {}
+export let mergedArr = []
+export let selected
+export let showFilter = false
+export let showSort = false
+export let style_tags = []
 
-let selected
+// console.log('facets', facets)
+
+let filteredStyleTags = []
+let filteredThemeTags = []
 let megamenu
 let selectedCategory
-let showSubCategory = []
 let selectedCategory2
+let showSubCategory = []
 let showSubCategory2 = []
 
-onMount(() => {
+onMount(async () => {
 	$page.url.searchParams.forEach(function (value, key) {
 		fl[key] = value
 		if (key !== 'page' && key !== 'sort' && key !== 'lat' && key !== 'lng')
 			appliedFilters[key] = value
 	})
 
-	getMegamenu()
-	getSelected()
+	const style_tags_with_product = facets.all_aggs?.tags?.all?.buckets?.filter(
+		(t) => t.doc_count > 0
+	)
+
+	for (let st of style_tags) {
+		// console.log('zzzzzzzzzzzzzzzzzzzz', st.key)
+		filteredThemeTags = style_tags_with_product.filter((t) => t.key != st.key)
+		filteredStyleTags = style_tags_with_product.filter((t) => t.key == st.key)
+	}
+
+	// console.log('filteredThemeTags', filteredThemeTags)
+	// console.log('filteredStyleTags', filteredStyleTags)
+
+	await getMegamenu()
+	await getSelected()
 })
+
+// console.log('fl', fl)
 
 async function getMegamenu() {
 	if (browser) {
@@ -69,7 +89,14 @@ async function getMegamenu() {
 }
 
 function getSelected() {
-	if (facets?.all_aggs?.age?.all?.buckets?.length > 0) {
+	// if (facets?.all_aggs?.tags?.all?.buckets?.length > 0) {
+	// 	selected = 'Tags'
+	// }
+	if (filteredThemeTags?.length > 0) {
+		selected = 'Themes'
+	} else if (filteredStyleTags?.length > 0) {
+		selected = 'Styles'
+	} else if (facets?.all_aggs?.age?.all?.buckets?.length > 0) {
 		selected = 'Age'
 	} else if (facets?.all_aggs?.brands?.all?.buckets?.length > 0) {
 		selected = 'Brands'
@@ -169,23 +196,20 @@ $: {
 </script>
 
 <div
-	class="{clazz} grid w-full grid-cols-2 divide-x divide-gray-300 border-b bg-white font-medium shadow-md"
->
+	class="{clazz} grid w-full grid-cols-2 divide-x divide-gray-300 border-b bg-white font-medium shadow-md">
 	<!-- Filter -->
 
 	<button
 		type="button"
 		class="flex items-center justify-center gap-2 px-3 py-2"
-		on:click="{() => (showFilter = true) && getSelected()}"
-	>
+		on:click="{() => (showFilter = true) && getSelected()}">
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"
 			viewBox="0 0 24 24"
 			stroke-width="1.5"
 			stroke="currentColor"
-			class="h-5 w-5"
-		>
+			class="h-5 w-5">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -201,16 +225,14 @@ $: {
 	<button
 		type="button"
 		class="flex items-center justify-center gap-2 px-3 py-2"
-		on:click="{() => (showSort = true)}"
-	>
+		on:click="{() => (showSort = true)}">
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"
 			viewBox="0 0 24 24"
 			stroke-width="1.5"
 			stroke="currentColor"
-			class="h-5 w-5"
-		>
+			class="h-5 w-5">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -224,11 +246,9 @@ $: {
 {#if showFilter}
 	<div
 		transition:fly="{{ x: -50, duration: 300 }}"
-		class="fixed inset-0 z-[100] h-screen w-screen bg-white"
-	>
+		class="fixed inset-0 z-[100] h-screen w-screen bg-white">
 		<header
-			class="relative grid grid-cols-3 items-center gap-3 p-3 text-center text-lg font-bold tracking-wide shadow-md"
-		>
+			class="relative grid grid-cols-3 items-center gap-3 p-3 text-center text-lg font-bold tracking-wide shadow-md">
 			<div class="col-span-1 flex items-center justify-self-start">
 				<button type="button" class="focus:outline-none" on:click="{() => (showFilter = false)}">
 					<svg
@@ -237,8 +257,7 @@ $: {
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="h-6 w-6"
-					>
+						class="h-6 w-6">
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -251,8 +270,7 @@ $: {
 
 					<button
 						on:click="{clearFilters}"
-						class="text-xs text-primary-500 focus:outline-none hover:underline"
-					>
+						class="text-xs text-primary-500 focus:outline-none hover:underline">
 						Clear All
 					</button>
 				{/if}
@@ -265,8 +283,7 @@ $: {
 				loadingringsize="xs"
 				roundedFull
 				class="col-span-1 justify-self-end text-xs"
-				on:click="{() => (showFilter = false)}">APPLY</PrimaryButton
-			>
+				on:click="{() => (showFilter = false)}">APPLY</PrimaryButton>
 
 			<!-- <button
 				on:click="{clearFilters}"
@@ -276,18 +293,60 @@ $: {
 		</header>
 
 		<div class="flex h-full items-start">
-			<!-- Left Section -->
+			<!-- Left Sidebar Section -->
 
 			<div class="flex h-full w-2/6 flex-col border-b border-r bg-gray-100">
+				<!-- {#if facets?.all_aggs?.tags?.all?.buckets?.length > 0}
+					<button
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						{selected === 'Tags'
+							? 'text-primary-500 border-primary-500 bg-white'
+							: 'border-gray-100 bg-transparent'}"
+						on:click="{() => (selected = 'Tags')}">
+						Tags
+					</button>
+
+					<hr class="w-full" />
+				{/if} -->
+
+				{#if filteredThemeTags?.length > 0}
+					<button
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						{selected === 'Themes'
+							? 'text-primary-500 border-primary-500 bg-white'
+							: 'border-gray-100 bg-transparent'}"
+						on:click="{() => (selected = 'Themes')}">
+						Themes
+					</button>
+
+					<hr class="w-full" />
+				{/if}
+
+				{#if filteredStyleTags?.length > 0}
+					<button
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						{selected === 'Styles'
+							? 'text-primary-500 border-primary-500 bg-white'
+							: 'border-gray-100 bg-transparent'}"
+						on:click="{() => (selected = 'Styles')}">
+						Styles
+					</button>
+
+					<hr class="w-full" />
+				{/if}
+
 				{#if facets?.all_aggs?.age?.all?.buckets?.length > 0}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Age'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'Age')}"
-					>
-						Age
+						on:click="{() => (selected = 'Age')}">
+						<span> Age </span>
+
+						{#if fl.age?.length}
+							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
+						{/if}
 					</button>
 
 					<hr class="w-full" />
@@ -295,13 +354,16 @@ $: {
 
 				{#if facets?.all_aggs?.brands?.all?.buckets?.length > 0}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Brands'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'Brands')}"
-					>
-						Brands
+						on:click="{() => (selected = 'Brands')}">
+						<span>Brands</span>
+
+						{#if fl.brands?.length}
+							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
+						{/if}
 					</button>
 
 					<hr class="w-full" />
@@ -309,13 +371,16 @@ $: {
 
 				{#if facets?.all_aggs?.genders?.all?.buckets?.length > 0}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide focus:outline-none 
-						{selected === 'genders'
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						{selected === 'Genders'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'genders')}"
-					>
-						Genders
+						on:click="{() => (selected = 'Genders')}">
+						<span> Genders </span>
+
+						{#if fl.genders?.length}
+							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
+						{/if}
 					</button>
 
 					<hr class="w-full" />
@@ -323,13 +388,16 @@ $: {
 
 				{#if facets?.all_aggs?.sizes?.all?.buckets?.length > 0}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'sizes'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'sizes')}"
-					>
-						Sizes
+						on:click="{() => (selected = 'sizes')}">
+						<span> Sizes </span>
+
+						{#if fl.sizes?.length}
+							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
+						{/if}
 					</button>
 
 					<hr class="w-full" />
@@ -337,13 +405,16 @@ $: {
 
 				{#if facets?.all_aggs?.themes?.all?.buckets?.length > 0}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'themes'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'themes')}"
-					>
-						Themes
+						on:click="{() => (selected = 'themes')}">
+						<span> Themes </span>
+
+						{#if fl.themes?.length}
+							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
+						{/if}
 					</button>
 
 					<hr class="w-full" />
@@ -351,13 +422,16 @@ $: {
 
 				{#if facets?.all_aggs?.promotions?.all?.buckets?.length > 0}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'promotions'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'promotions')}"
-					>
-						Promotions
+						on:click="{() => (selected = 'promotions')}">
+						<span> Promotions </span>
+
+						{#if fl.promotions?.length}
+							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
+						{/if}
 					</button>
 
 					<hr class="w-full" />
@@ -365,13 +439,16 @@ $: {
 
 				{#if facets?.all_aggs?.types?.all?.buckets?.length > 0}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'types'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'types')}"
-					>
-						Types
+						on:click="{() => (selected = 'types')}">
+						<span> Types </span>
+
+						{#if fl.types?.length}
+							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
+						{/if}
 					</button>
 
 					<hr class="w-full" />
@@ -379,13 +456,16 @@ $: {
 
 				{#if facets?.all_aggs?.colors?.all?.buckets?.length > 0}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Colors'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'Colors')}"
-					>
-						Colors
+						on:click="{() => (selected = 'Colors')}">
+						<span>Colors</span>
+
+						{#if fl.colors?.length}
+							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
+						{/if}
 					</button>
 
 					<hr class="w-full" />
@@ -393,13 +473,16 @@ $: {
 
 				{#if facets?.all_aggs?.discount?.all?.buckets?.length > 0}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Discount'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'Discount')}"
-					>
-						Discount
+						on:click="{() => (selected = 'Discount')}">
+						<span> Discount </span>
+
+						{#if fl.discount?.length}
+							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
+						{/if}
 					</button>
 
 					<hr class="w-full" />
@@ -407,27 +490,16 @@ $: {
 
 				{#if facets?.all_aggs?.features?.all?.buckets?.length > 0}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Features'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'Features')}"
-					>
-						Features
-					</button>
+						on:click="{() => (selected = 'Features')}">
+						<span> Features </span>
 
-					<hr class="w-full" />
-				{/if}
-
-				{#if facets?.all_aggs?.genders?.all?.buckets?.length > 0}
-					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide focus:outline-none 
-						{selected === 'Genders'
-							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'Genders')}"
-					>
-						Genders
+						{#if fl.features?.length}
+							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
+						{/if}
 					</button>
 
 					<hr class="w-full" />
@@ -435,13 +507,16 @@ $: {
 
 				{#if facets?.all_aggs?.price?.all?.buckets?.length > 0}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Price'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'Price')}"
-					>
-						Price
+						on:click="{() => (selected = 'Price')}">
+						<span> Price </span>
+
+						{#if fl.price?.length}
+							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
+						{/if}
 					</button>
 
 					<hr class="w-full" />
@@ -449,13 +524,16 @@ $: {
 
 				{#if facets?.all_aggs?.sizes?.all?.buckets?.length > 0}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Sizes'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'Sizes')}"
-					>
-						Sizes
+						on:click="{() => (selected = 'Sizes')}">
+						<span> Sizes </span>
+
+						{#if fl.sizes?.length}
+							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
+						{/if}
 					</button>
 
 					<hr class="w-full" />
@@ -463,12 +541,11 @@ $: {
 
 				{#if megamenu}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Categories'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'Categories')}"
-					>
+						on:click="{() => (selected = 'Categories')}">
 						Categories
 					</button>
 
@@ -479,19 +556,62 @@ $: {
 			<!-- Right Section -->
 
 			<div class="h-full w-4/6">
+				<!-- {#if selected === 'Tags'}
+					<div
+						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
+						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
+						{#if facets?.all_aggs?.tags?.all?.buckets?.length > 0}
+							<CheckboxEs
+								items="{facets?.all_aggs?.tags?.all?.buckets}"
+								model="tags"
+								selectedItems="{fl.tags || []}"
+								showSearchBox
+								on:go="{goCheckbox}" />
+						{/if}
+					</div>
+				{/if} -->
+
+				{#if selected === 'Themes'}
+					<div
+						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
+						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
+						{#if filteredThemeTags?.length > 0}
+							<CheckboxEs
+								items="{filteredThemeTags}"
+								model="themes"
+								selectedItems="{fl.themes || []}"
+								showSearchBox
+								on:go="{goCheckbox}" />
+						{/if}
+					</div>
+				{/if}
+
+				{#if selected === 'Styles'}
+					<div
+						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
+						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
+						{#if filteredStyleTags?.length > 0}
+							<CheckboxEs
+								items="{filteredStyleTags}"
+								model="styles"
+								selectedItems="{fl.styles || []}"
+								showSearchBox
+								on:go="{goCheckbox}" />
+						{/if}
+					</div>
+				{/if}
+
 				{#if selected === 'Age'}
 					<div
 						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
-						in:fly="{{ y: -10, duration: 300, delay: 300 }}"
-					>
+						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
 						{#if facets?.all_aggs?.age?.all?.buckets?.length > 0}
 							<CheckboxEs
 								items="{facets?.all_aggs?.age?.all?.buckets}"
 								model="age"
 								selectedItems="{fl.age || []}"
 								showSearchBox
-								on:go="{goCheckbox}"
-							/>
+								on:go="{goCheckbox}" />
 						{/if}
 					</div>
 				{/if}
@@ -499,16 +619,14 @@ $: {
 				{#if selected === 'Brands'}
 					<div
 						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
-						in:fly="{{ y: -10, duration: 300, delay: 300 }}"
-					>
+						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
 						{#if facets?.all_aggs?.brands?.all?.buckets?.length > 0}
 							<CheckboxEs
 								items="{facets?.all_aggs?.brands?.all?.buckets}"
 								model="brands"
 								selectedItems="{fl.brands || []}"
 								showSearchBox
-								on:go="{goCheckbox}"
-							/>
+								on:go="{goCheckbox}" />
 						{/if}
 					</div>
 				{/if}
@@ -516,16 +634,14 @@ $: {
 				{#if selected === 'Colors'}
 					<div
 						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
-						in:fly="{{ y: -10, duration: 300, delay: 300 }}"
-					>
+						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
 						{#if facets?.all_aggs?.colors?.all?.buckets?.length > 0}
 							<CheckboxEs
 								items="{facets?.all_aggs?.colors?.all?.buckets}"
 								model="colors"
 								selectedItems="{fl.colors || []}"
 								showSearchBox
-								on:go="{goCheckbox}"
-							/>
+								on:go="{goCheckbox}" />
 						{/if}
 					</div>
 				{/if}
@@ -533,16 +649,14 @@ $: {
 				{#if selected === 'Discount'}
 					<div
 						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
-						in:fly="{{ y: -10, duration: 300, delay: 300 }}"
-					>
+						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
 						{#if facets?.all_aggs?.discount?.all?.buckets?.length > 0}
 							<CheckboxEs
 								items="{facets?.all_aggs?.discount?.all?.buckets}"
 								model="discount"
 								selectedItems="{fl.discount || []}"
 								showSearchBox
-								on:go="{goCheckbox}"
-							/>
+								on:go="{goCheckbox}" />
 						{/if}
 					</div>
 				{/if}
@@ -550,16 +664,14 @@ $: {
 				{#if selected === 'Features'}
 					<div
 						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
-						in:fly="{{ y: -10, duration: 300, delay: 300 }}"
-					>
+						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
 						{#if facets?.all_aggs?.features?.all?.buckets?.length > 0}
 							<CheckboxEs
 								items="{facets?.all_aggs?.features?.all?.buckets}"
 								model="features"
 								selectedItems="{fl.features || []}"
 								showSearchBox
-								on:go="{goCheckbox}"
-							/>
+								on:go="{goCheckbox}" />
 						{/if}
 					</div>
 				{/if}
@@ -567,16 +679,14 @@ $: {
 				{#if selected === 'Genders'}
 					<div
 						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
-						in:fly="{{ y: -10, duration: 300, delay: 300 }}"
-					>
+						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
 						{#if facets?.all_aggs?.genders?.all?.buckets?.length > 0}
 							<CheckboxEs
 								items="{facets?.all_aggs?.genders?.all?.buckets}"
 								model="genders"
 								selectedItems="{fl.genders || []}"
 								showSearchBox
-								on:go="{goCheckbox}"
-							/>
+								on:go="{goCheckbox}" />
 						{/if}
 					</div>
 				{/if}
@@ -584,16 +694,14 @@ $: {
 				{#if selected === 'Price'}
 					<div
 						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
-						in:fly="{{ y: -10, duration: 300, delay: 300 }}"
-					>
+						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
 						{#if facets?.all_aggs?.price?.all?.buckets?.length > 0}
 							<CheckboxEs
 								items="{facets?.all_aggs?.price?.all?.buckets}"
 								model="price"
 								selectedItems="{fl.price || []}"
 								showSearchBox
-								on:go="{goCheckbox}"
-							/>
+								on:go="{goCheckbox}" />
 						{/if}
 					</div>
 				{/if}
@@ -601,16 +709,14 @@ $: {
 				{#if selected === 'Sizes'}
 					<div
 						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
-						in:fly="{{ y: -10, duration: 300, delay: 300 }}"
-					>
+						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
 						{#if facets?.all_aggs?.sizes?.all?.buckets?.length > 0}
 							<CheckboxEs
 								items="{facets?.all_aggs?.sizes?.all?.buckets}"
 								model="sizes"
 								selectedItems="{fl.sizes || []}"
 								showSearchBox
-								on:go="{goCheckbox}"
-							/>
+								on:go="{goCheckbox}" />
 						{/if}
 					</div>
 				{/if}
@@ -618,8 +724,7 @@ $: {
 				{#if selected === 'Categories'}
 					<div
 						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
-						in:fly="{{ y: -10, duration: 300, delay: 300 }}"
-					>
+						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
 						<ul class="flex cursor-pointer flex-col text-sm">
 							{#if megamenu}
 								<!-- 1st level categories -->
@@ -630,28 +735,24 @@ $: {
 											{#if m.children?.length}
 												<div
 													class="flex w-full items-center justify-between gap-2
-													{selectedCategory === m.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}"
-												>
+													{selectedCategory === m.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
 													<a
 														href="/{m.slug}"
 														aria-label="Click to route into category related products page"
-														class="flex-1"
-													>
+														class="flex-1">
 														{m.name}
 													</a>
 
 													<button
 														type="button"
 														class="overflow-hidden p-1 focus:outline-none"
-														on:click="{() => handleToggleSubCategory(m, mx)}"
-													>
+														on:click="{() => handleToggleSubCategory(m, mx)}">
 														<svg
 															xmlns="http://www.w3.org/2000/svg"
 															viewBox="0 0 20 20"
 															fill="currentColor"
 															class="h-5 w-5 shrink-0 transition duration-300
-																{showSubCategory[mx] ? 'transform rotate-90' : ''}"
-														>
+																{showSubCategory[mx] ? 'transform rotate-90' : ''}">
 															<path
 																fill-rule="evenodd"
 																d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
@@ -663,8 +764,7 @@ $: {
 												<a
 													href="/{m.slug}"
 													aria-label="Click to route into category related products page"
-													class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600"
-												>
+													class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 													{m.name}
 												</a>
 											{/if}
@@ -678,28 +778,24 @@ $: {
 															{#if c.children?.length}
 																<div
 																	class="flex w-full items-center justify-between gap-2
-																	{selectedCategory2 === c.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}"
-																>
+																	{selectedCategory2 === c.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
 																	<a
 																		href="/{c.slug}"
 																		aria-label="Click to route into category related products page"
-																		class="flex-1"
-																	>
+																		class="flex-1">
 																		{c.name}
 																	</a>
 
 																	<button
 																		type="button"
 																		class="overflow-hidden p-1 focus:outline-none"
-																		on:click="{() => handleToggleSubCategory2(c, cx)}"
-																	>
+																		on:click="{() => handleToggleSubCategory2(c, cx)}">
 																		<svg
 																			xmlns="http://www.w3.org/2000/svg"
 																			viewBox="0 0 20 20"
 																			fill="currentColor"
 																			class="h-5 w-5 shrink-0 transition duration-300
-																				{showSubCategory2[cx] ? 'transform rotate-90' : ''}"
-																		>
+																				{showSubCategory2[cx] ? 'transform rotate-90' : ''}">
 																			<path
 																				fill-rule="evenodd"
 																				d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
@@ -711,8 +807,7 @@ $: {
 																<a
 																	href="/{c.slug}"
 																	aria-label="Click to route into category related products page"
-																	class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600"
-																>
+																	class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 																	{c.name}
 																</a>
 															{/if}
@@ -725,8 +820,7 @@ $: {
 																		<a
 																			href="/{cc.slug}"
 																			aria-label="Click to route into category related products page"
-																			class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600"
-																		>
+																			class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 																			{cc.name}
 																		</a>
 																	{/each}
@@ -774,8 +868,7 @@ $: {
 
 		<div
 			transition:fly="{{ y: 626, duration: 300 }}"
-			class="relative z-10 max-h-max w-full rounded-t-lg bg-white"
-		>
+			class="relative z-10 max-h-max w-full rounded-t-lg bg-white">
 			<div class="flex items-center justify-between gap-5 border-b border-gray-300 p-3 text-sm">
 				<span>Sort</span>
 
@@ -784,8 +877,7 @@ $: {
 						xmlns="http://www.w3.org/2000/svg"
 						class="h-4 w-4 text-gray-500"
 						viewBox="0 0 20 20"
-						fill="currentColor"
-					>
+						fill="currentColor">
 						<path
 							fill-rule="evenodd"
 							d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
@@ -800,8 +892,7 @@ $: {
 						<button
 							type="button"
 							class="w-full text-left text-sm font-semibold tracking-wide focus:outline-none"
-							on:click="{() => sortNow(s.val) && (showSort = false)}"
-						>
+							on:click="{() => sortNow(s.val) && (showSort = false)}">
 							{s.name}
 						</button>
 					</li>
