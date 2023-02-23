@@ -1,9 +1,9 @@
 import { error } from '@sveltejs/kit'
 import { getAPI } from '$lib/utils/api'
 import { getBigCommerceApi, getBySid, getMedusajsApi, getWooCommerceApi } from '$lib/utils/server'
+import { provider } from '$lib/config'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import type { Error } from '$lib/types'
-import { provider } from '$lib/config'
 
 export const fetchFaqs = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {
@@ -26,7 +26,7 @@ export const fetchFaqs = async ({ origin, storeId, server = false, sid = null }:
 				res = await getWooCommerceApi(`faqs`, {}, sid)
 				break
 		}
-		return res.data || []
+		return res || {}
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)
 	}

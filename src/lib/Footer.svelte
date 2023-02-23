@@ -268,7 +268,7 @@ async function getStoreData() {
 				</ul>
 			</div>
 
-			<div>
+			<!-- <div>
 				<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">
 					Experience {$page.data.store?.websiteName} app on mobile
 				</h5>
@@ -290,7 +290,7 @@ async function getStoreData() {
 						<img src="{appStore}" alt="" class="h-auto w-32 object-contain object-left p-1" />
 					</a>
 				</div>
-			</div>
+			</div> -->
 
 			{#if $page.data.store?.facebookPage || $page.data.store?.instagramPage || $page.data.store?.twitterPage || $page.data.store?.email || $page.data.store?.linkedinPage || $page.data.store?.pinterestPage || $page.data.store?.youtubeChannel}
 				<div>

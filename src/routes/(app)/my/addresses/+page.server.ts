@@ -7,9 +7,12 @@ export async function load({ cookies, locals }) {
 		server: true,
 		sid: cookies.get('connect.sid')
 	})
+
 	myAddresses.count = count
+
 	if (myAddresses) {
 		return { addresses: myAddresses, selectedAddress }
 	}
+
 	throw error(404, 'Addresses not found')
 }

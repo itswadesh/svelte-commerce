@@ -1,5 +1,5 @@
-import { fetchReviews } from '$lib/services/ReviewService'
 import { error, redirect } from '@sveltejs/kit'
+import { fetchReviews } from '$lib/services/ReviewService'
 
 export async function load({ cookies, locals }) {
 	try {
@@ -8,6 +8,7 @@ export async function load({ cookies, locals }) {
 			server: true,
 			sid: cookies.get('connect.sid')
 		})
+
 		if (res) {
 			return res
 		}

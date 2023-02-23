@@ -1,35 +1,41 @@
-import { error } from '@sveltejs/kit'
 import { fetchAddress } from '$lib/services/AddressService'
-import { fetchStates } from '$lib/services/CountryService'
+import { fetchCountries, fetchStates } from '$lib/services/CountryService'
 
-export async function load({ locals, params, parent, cookies }) {
+export const prerender = false
+
+export async function load({ cookies, locals, params, url }) {
 	const { store } = locals
 	const { id } = params
-	let address
+	// const prescriptionId = url.searchParams.get('prescription')
+	let address = {}
+	let countries = []
+	let states = []
 
 	if (id === 'new') {
-		address = { id: 'new' }
+		address = { id: 'new', country: null, state: null }
 	} else {
 		address = await fetchAddress({
 			storeId: locals.store?.id,
-			server: true,
-			sid: cookies.get('connect.sid'),
-			id
+			id,
+			sid: cookies.get('sid'),
+			server: true
 		})
 	}
 
-	const countries = { data: [{ code: 'IN', name: 'India' }] }
-
-	const states = await fetchStates({
+	countries = await fetchCountries({
 		storeId: locals.store?.id,
 		server: true,
-		sid: cookies.get('connect.sid'),
-		countryCode: 'IN'
+		sid: cookies.get('sid')
 	})
 
-	if (address) {
-		return { address, countries, states }
+	if (address?.country) {
+		states = await fetchStates({
+			storeId: locals.store?.id,
+			server: true,
+			sid: cookies.get('sid'),
+			countryCode: address?.country
+		})
 	}
 
-	throw error(404, 'Address not found')
+	return { address, countries, states }
 }

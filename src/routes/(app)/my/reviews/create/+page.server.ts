@@ -1,4 +1,6 @@
+import { error } from '@sveltejs/kit'
 import { fetchProduct } from '$lib/services/ProductService'
+
 export const prerender = false
 
 export async function load({ url, locals, cookies, context }) {
@@ -13,12 +15,11 @@ export async function load({ url, locals, cookies, context }) {
 			server: true,
 			sid: cookies.get('connect.sid')
 		})
-	} catch (e) {
-	} finally {
-	}
 
-	return {
-		ref,
-		product
-	}
+		if (!product) throw error(404, 'Product not found')
+
+		return { ref, product}
+	} catch (e) {
+		throw error(e.status, e.message || 'Not found')
+	} 
 }

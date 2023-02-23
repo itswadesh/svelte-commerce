@@ -11,9 +11,9 @@ export const fetchCountries = async ({ origin, storeId, server = false, sid = nu
 		switch (provider) {
 			case 'litekart':
 				if (server) {
-					res = await getBySid(`countries?limit=300&page=0&store=${storeId}`, sid)
+					res = await getBySid(`countries?limit=500&page=0&store=${storeId}`, sid)
 				} else {
-					res = await getAPI(`countries?limit=300&page=0&store=${storeId}`, origin)
+					res = await getAPI(`countries?limit=500&page=0&store=${storeId}`, origin)
 				}
 				break
 			case 'medusajs':
@@ -45,12 +45,12 @@ export const fetchStates = async ({
 			case 'litekart':
 				if (server) {
 					res = await getBySid(
-						`states?countryCode=${countryCode}&limit=300&page=0&sort=name&store=${storeId}`,
+						`states?countryCode=${countryCode}&limit=500&page=0&sort=name&store=${storeId}`,
 						sid
 					)
 				} else {
 					res = await getAPI(
-						`states?countryCode=${countryCode}&limit=300&page=0&sort=name&store=${storeId}`,
+						`states?countryCode=${countryCode}&limit=500&page=0&sort=name&store=${storeId}`,
 						origin
 					)
 				}
