@@ -113,7 +113,7 @@ $: heroBanners =
 		</div>
 
 		<h1 class="text-center text-2xl font-bold sm:text-3xl">
-			The High Performance and Scalable Ecommerce
+			{data.store.alert}
 		</h1>
 
 		<!-- TOP CATEGORIES -->

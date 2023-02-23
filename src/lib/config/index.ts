@@ -36,6 +36,7 @@ export const mediaqueries = {
 export const searchbarText = 'Search for brands categories & more'
 export const siteShortTitle = 'Litekart' // used as SchemaOrg siteTitleAlt
 export const siteTitle = 'Litekart'
+export const alert = 'The High Performance and Scalable Ecommerce'
 export const sorts = [
 	{ name: 'Recomended', val: null },
 	{ name: `What's New`, val: '-updatedAt' },
