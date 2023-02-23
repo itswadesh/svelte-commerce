@@ -12,37 +12,38 @@ import { createEventDispatcher } from 'svelte'
 
 const dispatch = createEventDispatcher()
 
-export let loading = false,
-	loadingringsize = 'base',
-	disabled = false,
-	roundedNone = false,
-	roundedFull = false,
-	hideLoading = false,
-	clickEffect = true,
-	type = 'button',
-	title = ''
+export let blackBackground = false
+export let clickEffect = true
+export let disabled = false
+export let hideLoading = false
+export let loading = false
+export let loadingringsize = 'base'
+export let roundedFull = false
+export let roundedNone = false
+export let title = ''
+export let type = 'button'
 
 // creates a `class` property, even
 // though it is a reserved word
 let clazz = ''
-let localLoadingPeriod = false
-
 export { clazz as class }
 
+let localLoadingPeriod = false
+
 function handleClick() {
-	dispatch('click')
-	if (!hideLoading) {
-		handleLoading()
-	}
-}
+	if (loading || disabled) return
+	else {
+		dispatch('click')
 
-function handleLoading() {
-	if (loading === false) {
-		localLoadingPeriod = true
+		if (!hideLoading) {
+			if (loading === false) {
+				localLoadingPeriod = true
 
-		setTimeout(() => {
-			localLoadingPeriod = false
-		}, 820)
+				setTimeout(() => {
+					localLoadingPeriod = false
+				}, 820)
+			}
+		}
 	}
 }
 </script>
@@ -51,33 +52,34 @@ function handleLoading() {
 	type="{type}"
 	title="{title}"
 	class="relative transform items-center justify-center overflow-hidden rounded-md border px-4 py-2 text-center font-semibold tracking-wider text-white shadow-md transition duration-700 focus:outline-none focus:ring-0 focus:ring-offset-0 {clazz}
-	{disabled
-		? 'bg-gray-400 border-gray-400 cursor-not-allowed'
-		: 'bg-primary-500 hover:bg-primary-700 border-primary-500 hover:border-primary-700'}	  
+	{disabled ? 'cursor-not-allowed border-gray-400 bg-gray-400 opacity-40' : 'opacity-100'}
+	{disabled && blackBackground
+		? 'border-gray-800 bg-gray-800 hover:border-black hover:bg-black'
+		: ''}		  
+	{!disabled && !blackBackground
+		? 'border-primary-500 bg-primary-500 hover:border-primary-700 hover:bg-primary-700'
+		: ''}		  
     "
 	class:active:scale-95="{clickEffect}"
 	class:applyRoundedNone="{roundedNone}"
 	class:applyroundedFull="{roundedFull}"
-	on:click="{handleClick}"
->
+	on:click="{handleClick}">
 	<div class="flex items-center justify-center gap-2">
 		<slot />
 	</div>
 
 	{#if loading || localLoadingPeriod}
 		<div
-			class="absolute inset-0 flex cursor-not-allowed items-center justify-center bg-black bg-opacity-70"
-		>
+			class="absolute inset-0 flex cursor-not-allowed items-center justify-center bg-black bg-opacity-70">
 			<svg
 				class="mx-auto animate-spin text-white 
-				{loadingringsize == 'xs' ? 'w-4 h-4' : ''}
+				{loadingringsize == 'xs' ? 'h-4 w-4' : ''}
 				{loadingringsize == 'sm' ? 'h-5 w-5' : ''}
 				{loadingringsize == 'base' ? 'h-6 w-6' : ''}
 				{loadingringsize == 'lg' ? 'h-7 w-7' : ''}"
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
-				viewBox="0 0 24 24"
-			>
+				viewBox="0 0 24 24">
 				<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
 				></circle>
 				<path

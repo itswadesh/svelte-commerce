@@ -39,6 +39,8 @@ const seoProps = {
 
 export let data
 
+// console.log('zzzzzzzzzzzzzzzzzz', data)
+
 let errorMessage = 'Select a Payment Method',
 	disabled = false,
 	showPayWithBankTransfer = false,
@@ -205,7 +207,7 @@ function checkIfStripeCardValid({ detail }) {
 		<div class="w-full flex-1">
 			<h2 class="mb-5 text-xl font-bold capitalize tracking-wide sm:text-2xl">Payment Options</h2>
 
-			{#if data.paymentMethods}
+			{#if data.paymentMethods?.length}
 				<div class="flex w-full flex-col gap-4" class:wiggle="{paymentDenied}">
 					{#each data.paymentMethods as pm}
 						<label
@@ -244,41 +246,37 @@ function checkIfStripeCardValid({ detail }) {
 								</div>
 							</div>
 						</label>
+
+						{#if pm.value === 'stripe'}
+							<Stripe
+								address="{data.addressId}"
+								isStripeSelected="{selectedPaymentMethod.name === 'Stripe'}"
+								stripePublishableKey="{stripePublishableKey}"
+								on:isStripeCardValid="{checkIfStripeCardValid}" />
+						{/if}
 					{/each}
 				</div>
 			{:else}
-				<div
-					class="flex h-[50vh] items-center justify-center rounded-xl border bg-white p-4 shadow-xl">
-					<div class="mx-auto flex max-w-md flex-col items-center justify-center text-center">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							class="mb-5 h-10 w-10"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-							stroke-width="2">
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-							></path>
-						</svg>
+				<div class="flex flex-col h-1/2 items-center justify-center p-4 text-gray-500 text-center">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="mb-2 h-10 w-10"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+						stroke-width="2">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+						></path>
+					</svg>
 
-						<p class="mb-2 font-bold capitalize">We are very sorry!!</p>
+					<h6 class="mb-2 font-bold capitalize">We are very sorry!!</h6>
 
-						<p class="text-sm text-gray-500">
-							There's no payment methode is available. If you are an admin, then add a payment
-							methode as fast as possible
-						</p>
-					</div>
+					<p class="text-sm">Payment method is not setup yet, Please contact the store admin</p>
 				</div>
 			{/if}
-
-			<Stripe
-				address="{data.addressId}"
-				isStripeSelected="{selectedPaymentMethod.name === 'Stripe'}"
-				stripePublishableKey="{stripePublishableKey}"
-				on:isStripeCardValid="{checkIfStripeCardValid}" />
 		</div>
 
 		<div class="w-full md:w-80 md:shrink-0 md:grow-0">
@@ -397,7 +395,7 @@ function checkIfStripeCardValid({ detail }) {
 
 {#if loading}
 	<div
-		class="fixed inset-0 z-[100] flex h-screen w-screen items-center justify-center gap-5 bg-black bg-opacity-75 p-5 text-center text-white sm:p-10">
+		class="fixed inset-0 z-[100] flex h-screen w-screen items-center justify-center gap-5 bg-black bg-opacity-90 p-5 text-center text-white sm:p-10">
 		Please wait... your payment is currently being processed
 	</div>
 {/if}

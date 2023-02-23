@@ -13,9 +13,9 @@ let loading = false
 let paySuccess = false
 let isCardValid = false
 let stripeCardMounting = true
-let card:any
-export let stripePublishableKey:string //process.env.VITE_STRIPE_PUBLISHABLE_KEY
-let stripe:any,
+let card: any
+export let stripePublishableKey: string //process.env.VITE_STRIPE_PUBLISHABLE_KEY
+let stripe: any,
 	errors,
 	errorMessage = { text: '', show: false }
 const dispatch = createEventDispatcher()
@@ -23,7 +23,7 @@ const dispatch = createEventDispatcher()
 export let address = '',
 	isStripeSelected = false
 
-async function payWithCard(clientSecret:string, orderId:string) {
+async function payWithCard(clientSecret: string, orderId: string) {
 	// This is for 3d authentication
 	try {
 		loading = true
@@ -48,12 +48,12 @@ async function payWithCard(clientSecret:string, orderId:string) {
 	}
 }
 
-const payWithStripe = async (pm:PaymentMethod) => {
+const payWithStripe = async (pm: PaymentMethod) => {
 	try {
 		loading = true
 		toast('Contacting Payment Server...', 'warning')
 		const paymentMethodId = pm.id
-		const resStripe:any = stripeCheckoutService({
+		const resStripe: any = stripeCheckoutService({
 			paymentMethodId,
 			address,
 			storeId: $page.data.store?.id,
@@ -73,7 +73,7 @@ const payWithStripe = async (pm:PaymentMethod) => {
 				paySuccess = true
 			}
 		}
-	} catch (e:any) {
+	} catch (e: any) {
 		errorMessage = { show: true, text: e.toString() }
 	} finally {
 		loading = false
@@ -96,7 +96,7 @@ function stripeLoaded() {
 }
 function submit() {
 	loading = true
-	stripe.createPaymentMethod({ type: 'card', card }).then(async function (result:any) {
+	stripe.createPaymentMethod({ type: 'card', card }).then(async function (result: any) {
 		if (result.error) {
 			// Inform the customer that there was an error.
 			errorMessage.text = result.error.message
@@ -118,7 +118,7 @@ async function loadStripeElements() {
 	card = await elements.create('card', {})
 	await card.mount('#mount-point-for-stripe-elements')
 	stripeCardMounting = false
-	card.on('change', function (event:any) {
+	card.on('change', function (event: any) {
 		isCardValid = event.complete
 		dispatch('isStripeCardValid', isCardValid)
 		if (event.error) {
@@ -141,11 +141,11 @@ async function loadStripeElements() {
 		{errorMessage.text}
 	</div>
 {/if}
+
 {#if stripeReady}
 	<form
 		on:submit|preventDefault="{submit}"
-		class="{!isStripeSelected ? 'hidden' : 'block'} my-4 rounded border px-8 py-4 shadow-lg"
-	>
+		class="{!isStripeSelected ? 'hidden' : 'block'} my-4 rounded border px-8 py-4 shadow-lg">
 		<div class="form-row">
 			<label for="mount-point-for-stripe-elements" class="mb-3 text-lg font-bold tracking-wide">
 				{#if stripeCardMounting} Please wait... {:else} Enter Card Details {/if}
@@ -162,13 +162,14 @@ async function loadStripeElements() {
 			loading="{loading}"
 			disabled="{loading || !stripeReady || !isCardValid}"
 			type="submit"
-			class="mt-5 py-3 px-9"
-		>
+			class="mt-5 py-3 px-9">
 			Make Payment
 		</GrnIndGradiantButton>
 
 		<div id="error-message" role="alert" class="mt-4 text-sm text-red-500"></div>
 	</form>
 {:else}
-	<div class="rounded bg-green-200 text-blue-500 shadow">Pleae wait...</div>
+	<div class="rounded-md border border-yellow-200 bg-yellow-50 py-2 px-4 text-yellow-600">
+		Warn: Pleae wait...Stripe is getting ready .
+	</div>
 {/if}
