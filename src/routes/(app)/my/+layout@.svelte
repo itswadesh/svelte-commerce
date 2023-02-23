@@ -10,7 +10,7 @@ import Footer from '$lib/Footer.svelte'
 import PageTransitions from '$lib/PageTransitions.svelte'
 import menu from '$lib/config/menu'
 import SidebarDashboard from './_SidebarDashboard.svelte'
-import { page } from '$app/stores'
+
 export let data
 
 $: ({ path, url, sort, isHome, q, currentPage, me, cart, store } = data)
@@ -26,65 +26,27 @@ let openSidebar = false
 		store="{data.store}"
 		q="{data.q}"
 		bind:showCartSidebar="{showCartSidebar}"
-		bind:openSidebar="{openSidebar}"
-	/>
+		bind:openSidebar="{openSidebar}" />
 
-	<div class="mt-14 flex h-full w-full sm:mt-20">
+	<div class="mt-14 sm:mt-20 flex h-full w-full antialiased">
 		{#if menu?.length > 0}
 			<div
-				class="relative hidden w-44 shrink-0 overflow-y-auto bg-primary-500 py-3 overflow-x-hidden scrollbar-none sm:block"
-			>
+				class="relative hidden w-44 shrink-0 overflow-y-auto overflow-x-hidden bg-primary-500 py-3 scrollbar-none sm:block">
 				<!-- Dashboard -->
 
 				<a href="/my" aria-label="Click to route dashboard" data-sveltekit-preload-data>
 					<button
 						type="button"
-						class="w-full p-3 text-left text-xs text-gray-200 focus:outline-none"
-					>
+						class="w-full p-3 text-left text-sm text-gray-300 focus:outline-none">
 						Dashboard
 					</button>
 				</a>
 
 				<!-- Sidebar Data -->
 
-				<ul>
-					{#each menu as s}
-						<li>
-							<SidebarDashboard me="{me}" sidebar="{s}" />
-						</li>
-					{/each}
-
-					{#if $page.data.me?.role === 'vendor'}
-						<li>
-							<a
-								href="{$page.data.store?.adminUrl || '##'}"
-								target="_blank"
-								rel="external"
-								aria-label="Click to route admin panel of the store front"
-								class="ml-10 text-sm text-white"
-							>
-								Admin Panel
-							</a>
-						</li>
-					{/if}
-				</ul>
-
-				<hr class="border-primary-600" />
-
-				<!-- Change Password -->
-
-				<a
-					href="/auth/change-password"
-					aria-label="Click to route dashboard"
-					data-sveltekit-preload-data
-				>
-					<button
-						type="button"
-						class="w-full p-3 text-left text-xs text-gray-200 focus:outline-none"
-					>
-						Change Password
-					</button>
-				</a>
+				{#each menu as s}
+					<SidebarDashboard me="{me}" sidebar="{s}" />
+				{/each}
 			</div>
 		{/if}
 

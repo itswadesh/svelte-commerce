@@ -73,18 +73,18 @@ export const fetchAddress = async ({ origin, storeId, server = false, sid = null
 }
 
 export const saveAddress = async ({
-	storeId,
 	id,
-	firstName,
-	lastName,
-	email,
-	phone,
-	locality,
 	address,
 	city,
-	state,
 	country,
+	email,
+	firstName,
+	lastName,
+	locality,
+	phone,
+	state,
 	zip,
+	storeId,
 	origin,
 	server = false,
 	sid = null
@@ -97,15 +97,15 @@ export const saveAddress = async ({
 					`addresses`,
 					{
 						id,
+						address,
+						city,
+						country,
+						email,
 						firstName,
 						lastName,
-						email,
-						phone,
-						address,
 						locality,
-						city,
+						phone,
 						state,
-						country,
 						zip,
 						store: storeId
 					},
@@ -115,17 +115,18 @@ export const saveAddress = async ({
 			case 'medusajs':
 				res = (
 					await postMedusajsApi('customers/me/addresses', {
-						first_name: firstName,
-						last_name: lastName,
-						email,
-						phone,
 						address_1: address,
 						address_2: locality,
 						city,
-						state,
 						country_code: country,
+						email,
+						first_name: firstName,
+						landmark,
+						last_name: lastName,
+						phone,
+						postal_code: zip,
 						province: state,
-						postal_code: zip
+						state
 					})
 				).customer
 				break

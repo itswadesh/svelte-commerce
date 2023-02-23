@@ -1,8 +1,12 @@
 <script>
+import noEmptyFaqs from '$lib/assets/no/empty-faqs.svg'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import Skeleton from '$lib/ui/Skeleton.svelte'
 
-export let data //loading, err, faqs, count
+export let data
+
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	title: `Frequently Asked Questions`,
@@ -31,8 +35,7 @@ function showans(i) {
 
 			<div>
 				<h1
-					class="mb-5 text-center font-serif text-2xl font-medium sm:mb-10 md:text-3xl lg:text-4xl"
-				>
+					class="mb-5 text-center font-serif text-2xl font-medium sm:mb-10 md:text-3xl lg:text-4xl">
 					Frequently Asked Questions
 				</h1>
 
@@ -42,8 +45,7 @@ function showans(i) {
 							<button
 								type="button"
 								class="flex w-full cursor-pointer items-start justify-between p-4 text-left focus:outline-none sm:p-6"
-								on:click="{() => showans(fx)}"
-							>
+								on:click="{() => showans(fx)}">
 								<span class="flex-1  text-base font-medium md:text-lg">{f.question}</span>
 
 								<svg
@@ -52,8 +54,7 @@ function showans(i) {
 									{show[fx] ? 'text-primary-500 transform rotate-45 transition duration-300' : ''}"
 									fill="none"
 									viewBox="0 0 24 24"
-									stroke="currentColor"
-								>
+									stroke="currentColor">
 									<path
 										stroke-linecap="round"
 										stroke-linejoin="round"
@@ -64,14 +65,25 @@ function showans(i) {
 
 							{#if show[fx]}
 								<div
-									class="prose animate-dropdown px-4 pb-4 text-sm text-gray-500 first-letter:uppercase sm:px-6 sm:pb-6 md:text-base"
-								>
+									class="prose animate-dropdown px-4 pb-4 text-sm text-gray-500 first-letter:uppercase sm:px-6 sm:pb-6 md:text-base">
 									{@html f.answer}
 								</div>
 							{/if}
 						</div>
 					{/each}
 				</div>
+			</div>
+		{:else}
+			<div class="flex h-[70vh] flex-col items-center justify-center text-center">
+				<img src="{noEmptyFaqs}" alt="empty faqs" class="mb-5 h-60 object-contain" />
+
+				<p class="mb-2 text-xl font-medium md:text-3xl">Empty FAQs!!</p>
+
+				<p class="mb-5 text-sm">There's no frequently asked questions found.</p>
+
+				<a href="/" aria-label="Click to route home" data-sveltekit-preload-data>
+					<PrimaryButton class="w-40 py-2 text-sm">Shop Now</PrimaryButton>
+				</a>
 			</div>
 		{/if}
 	</div>

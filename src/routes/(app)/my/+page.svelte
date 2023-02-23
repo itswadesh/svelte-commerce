@@ -14,13 +14,12 @@ export let data
 <SEO {...seoProps} />
 
 <div>
-	<div class="mb-20">
+	<div class="mb-14 sm:mb-0">
 		<UserDashboard
 			me="{data.me}"
 			myOrders="{data.myOrders}"
 			myWishlist="{data.myWishlist}"
-			myReviews="{data.myReviews}"
-		/>
+			myReviews="{data.myReviews}" />
 	</div>
 
 	<!-- MOBILE FOOTER -->

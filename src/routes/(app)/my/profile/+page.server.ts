@@ -5,6 +5,7 @@ import dayjs from 'dayjs'
 export async function load({ cookies, locals }) {
 	const { me, store } = locals
 	let profile = {}
+
 	try {
 		const data = await fetchMeData({
 			storeId: locals.store?.id,
@@ -24,8 +25,10 @@ export async function load({ cookies, locals }) {
 		throw error(e.status, e.message)
 	} finally {
 	}
+
 	if (profile) {
 		return { profile, store: store }
 	}
-	throw redirect(307, store.loginUrl)
+
+		throw redirect(307, store.loginUrl)
 }

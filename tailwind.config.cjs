@@ -13,9 +13,9 @@ module.exports = {
 					700: '#B8843F' /* more darker rose gold */
 				},
 				secondary: {
-					100: '#f8e2ff' /* light purple */,
-					500: '#df80ff' /* purple */,
-					600: '#da6cff' /* dark purple */
+					100: '#f3e6db' /* light dark gold */,
+					500: '#aa6c39' /* dark gold */,
+					600: '#9b6334' /* dark dark gold */
 				},
 				accent: {
 					100: '#ffffd8' /* light-yellow */,

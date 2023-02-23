@@ -2,14 +2,15 @@
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { post } from '$lib/utils/api'
-import { toast } from '$lib/utils'
+import { saveReview } from '$lib/services/ReviewService'
+import { getExtension, toast } from '$lib/utils'
 import BackButton from '$lib/ui/BackButton.svelte'
+import dayjs from 'dayjs'
 import Errors from '$lib/ui/Errors.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
-import { saveReview } from '$lib/services/ReviewService'
 
 const seoProps = {
 	title: 'Reviews Details',
@@ -17,6 +18,8 @@ const seoProps = {
 }
 
 export let data
+
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let information = [
 	{
@@ -39,13 +42,50 @@ let review = {
 	message: '',
 	rating: null
 }
-
-let select = null,
-	errors = []
+let today = dayjs().format('YYYY-MM-DD')
+let file
+let folder = 'userdesigns'
+if (today) {
+	folder = `userdesigns/${today}`
+}
+let uploading = false
+let select = null
+let errors = []
+let images = []
 
 function onSelect(i) {
 	select = i
 	review.rating = i + 1
+}
+
+async function uploadImageToS3() {
+	// console.log('file', file)
+	try {
+		uploading = true
+		const response = await fetch('/server/files/upload', {
+			method: 'POST',
+			body: file[0],
+			headers: {
+				folder,
+				extension: getExtension(file[0]?.name),
+				'Content-Type': file[0].type || 'image/*'
+			}
+		})
+		const res = await response.json()
+
+		// console.log('res', res)
+
+		if (res?.url) {
+			let imgs = [...images]
+			imgs.push(res?.url)
+			images = imgs
+		}
+
+		// console.log('images', images)
+	} catch (e) {
+	} finally {
+		uploading = false
+	}
 }
 
 async function saveReviewproduct(review) {
@@ -57,6 +97,7 @@ async function saveReviewproduct(review) {
 			pid: review.pid,
 			message: review.message,
 			rating: review.rating,
+			images,
 			storeId: $page.data.store?.id,
 			origin: $page.data.origin
 		})
@@ -85,19 +126,21 @@ async function saveReviewproduct(review) {
 			<a
 				href="{data.ref || '##'}"
 				aria-label="Click to view the product details"
-				class="mb-2 flex max-w-max flex-row items-center gap-4 text-sm text-gray-500 lg:flex-row-reverse"
-			>
-				<div>
+				class="mb-2 flex max-w-max flex-row items-center gap-4 text-sm text-gray-500 lg:flex-row-reverse lg:text-right group">
+				<div
+					class="h-14 w-14 border border-gray-300 rounded-md shadow-md flex items-center justify-center">
 					<LazyImg
 						src="{data.product?.img}"
 						alt="Business img"
-						width="48"
 						height="48"
-						class="h-12 w-auto object-contain object-center text-xs"
-					/>
+						class="h-12 w-auto object-contain object-center text-xs" />
 				</div>
 
-				<span>{data.product?.name}</span>
+				<div class="flex-1">
+					<h6 class="font-semibold">{data.product?.brand?.name}</h6>
+
+					<span class="group-hover:underline">{data.product?.name}</span>
+				</div>
 			</a>
 		{/if}
 	</div>
@@ -121,72 +164,114 @@ async function saveReviewproduct(review) {
 			</ul>
 		</div>
 
-		<div class="h-full w-full">
-			<div class="flex flex-col rounded-md border bg-white p-4 shadow-md">
-				<div class="mb-2 flex flex-wrap items-center">
+		<form on:submit|preventDefault="{() => saveReviewproduct(review)}" class="w-full">
+			<div class="flex flex-col gap-4 rounded-md border bg-white p-4 shadow-md">
+				<div class="flex flex-wrap items-center">
 					<h2 class="mb-2 mr-4 text-lg font-semibold capitalize">Rate this business</h2>
 
-					<div class="mb-2">
-						<div class="flex items-center gap-4">
-							<div class="flex items-center gap-2">
-								{#each { length: 5 } as _, i}
-									<button
-										type="button"
-										class="focus:outline-none focus:ring-0 focus:ring-offset-0"
-										on:click="{() => onSelect(i)}"
-									>
-										<svg
-											class="block h-8 w-8
+					<div class="flex items-center gap-4">
+						<div class="flex items-center gap-2">
+							{#each { length: 5 } as _, i}
+								<button
+									type="button"
+									class="focus:outline-none focus:ring-0 focus:ring-offset-0"
+									on:click="{() => onSelect(i)}">
+									<svg
+										class="block h-8 w-8
         									{select >= i && select != null ? 'text-primary-500' : 'text-gray-300'}"
-											fill="currentColor"
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 20 20"
-										>
-											<path
-												d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"
-											></path>
-										</svg>
-									</button>
-								{/each}
-							</div>
-
-							{#if select == 0}
-								<span class="font-semibold text-red-600"> Very Disappointed </span>
-							{/if}
-
-							{#if select == 1}
-								<span class="font-semibold text-orange-600"> Slightly Disapponted </span>
-							{/if}
-
-							{#if select == 2}
-								<span class="font-semibold text-green-600"> Good</span>
-							{/if}
-
-							{#if select == 3}
-								<span class="font-semibold text-green-600"> Very Good</span>
-							{/if}
-
-							{#if select == 4}
-								<span class="font-semibold text-green-600"> Excellent</span>
-							{/if}
+										fill="currentColor"
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 20 20">
+										<path
+											d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"
+										></path>
+									</svg>
+								</button>
+							{/each}
 						</div>
+
+						{#if select == 0}
+							<span class="font-semibold text-red-600"> Very Disappointed </span>
+						{/if}
+
+						{#if select == 1}
+							<span class="font-semibold text-orange-600"> Slightly Disapponted </span>
+						{/if}
+
+						{#if select == 2}
+							<span class="font-semibold text-green-600"> Good</span>
+						{/if}
+
+						{#if select == 3}
+							<span class="font-semibold text-green-600"> Very Good</span>
+						{/if}
+
+						{#if select == 4}
+							<span class="font-semibold text-green-600"> Excellent</span>
+						{/if}
 					</div>
 				</div>
 
 				<div>
 					<h2 class="mb-2 mr-4 text-lg font-semibold capitalize">Reviews this business</h2>
 
-					<form on:submit|preventDefault="{() => saveReviewproduct(review)}">
-						<div class="mb-4">
-							<Textarea placeholder="Description" bind:value="{review.message}" />
-						</div>
+					<Textarea placeholder="Description" bind:value="{review.message}" />
+				</div>
 
-						<div class="ml-auto max-w-max">
-							<PrimaryButton type="submit" class="w-40">SUBMIT</PrimaryButton>
+				<div>
+					<h2 class="mb-2 mr-4 text-lg font-semibold capitalize">Upload Image</h2>
+
+					{#if images?.length}
+						<div class="mb-10">
+							{#each images as img}
+								<img src="{img}" alt="review image" class="h-40 w-auto object-contain" />
+							{/each}
 						</div>
-					</form>
+					{/if}
+
+					<div class="flex items-center justify-center w-full">
+						<label
+							for="dropzone-file"
+							class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+							<div class="flex flex-col items-center justify-center pt-5 pb-6">
+								<svg
+									aria-hidden="true"
+									class="w-10 h-10 mb-3 text-gray-400"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24"
+									xmlns="http://www.w3.org/2000/svg">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
+									</path>
+								</svg>
+
+								<p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+									<span class="font-semibold">Click to upload</span> or drag and drop
+								</p>
+
+								<p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF</p>
+							</div>
+
+							<input
+								id="dropzone-file"
+								type="file"
+								accept="image/*"
+								class="hidden"
+								multiple="{false}"
+								bind:files="{file}"
+								on:change="{uploadImageToS3}" />
+						</label>
+					</div>
+				</div>
+
+				<div class="ml-auto max-w-max">
+					<PrimaryButton type="submit" class="w-40">SUBMIT</PrimaryButton>
 				</div>
 			</div>
-		</div>
+		</form>
 	</div>
 </div>

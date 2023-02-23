@@ -3,34 +3,39 @@ import { fetchCountries, fetchStates } from '$lib/services/CountryService'
 
 export const prerender = false
 
-export async function load({ url, cookies, locals }) {
-	let ads = {}
+export async function load({ cookies, locals, params, url }) {
+	const { store } = locals
 	const id = url.searchParams.get('id')
-	const prescriptionId = url.searchParams.get('prescription')
+	// const prescriptionId = url.searchParams.get('prescription')
+	let address = {}
+	let countries = []
+	let states = []
 
 	if (id === 'new') {
-		ads = { id: 'new' }
+		address = { id: 'new', country: null, state: null }
 	} else {
-		ads = await fetchAddress({
-			storeId: locals.store?.id,
+		address = await fetchAddress({
 			id,
-			sid: cookies.get('connect.sid'),
-			server: true
+			storeId: locals.store?.id,
+			server: true,
+			sid: cookies.get('sid')
 		})
 	}
 
-	const countries = await fetchCountries({
+	countries = await fetchCountries({
 		storeId: locals.store?.id,
 		server: true,
-		sid: cookies.get('connect.sid')
+		sid: cookies.get('sid')
 	})
 
-	const states = await fetchStates({
-		storeId: locals.store?.id,
-		server: true,
-		sid: cookies.get('connect.sid'),
-		countryCode: 'IN'
-	})
+	if (address?.country) {
+		states = await fetchStates({
+			storeId: locals.store?.id,
+			server: true,
+			sid: cookies.get('sid'),
+			countryCode: address?.country
+		})
+	}
 
-	return { ads, countries, states }
+	return { address, countries, states }
 }
