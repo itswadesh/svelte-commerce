@@ -112,9 +112,13 @@ $: heroBanners =
 			<Hero banners="{data.home.banners?.data}" />
 		</div>
 
-		<h1 class="text-center text-2xl font-bold sm:text-3xl">
-			{data.store.alert}
-		</h1>
+		{#if data.store?.alert}
+			<div class="p-3 py-5 sm:p-10 bg-primary-50">
+				<h1 class="container mx-auto text-center text-3xl font-bold sm:text-4xl md:text-5xl">
+					{data.store?.alert}
+				</h1>
+			</div>
+		{/if}
 
 		<!-- TOP CATEGORIES -->
 
