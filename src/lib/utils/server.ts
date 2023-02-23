@@ -77,6 +77,7 @@ export async function postBySid(endpoint: string, data: any, sid?: string) {
 			cookie: `connect.sid=${sid}`
 		}
 	})
+	if (endpoint.includes('logout')) return true
 	const isJson = response.headers.get('content-type')?.includes('application/json')
 	const res = isJson ? await response.json() : await response.text()
 	if (res?.status > 399) {

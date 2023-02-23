@@ -100,7 +100,7 @@ async function saveProfile() {
 							<SingleImageUpload
 								class=""
 								avatar
-								folder="avatar/{data.profile?.phone?.replace('+', '')}"
+								folder="avatar/{(data.profile?.phone || data.profile?.email)?.replace('+', '')}"
 								images="{data.profile.avatar}"
 								loading="{loading}"
 								on:save="{({ detail }) => saveImage(detail)}"

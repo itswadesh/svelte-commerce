@@ -411,3 +411,7 @@ export const buildQueryFromObject: any = (search: string, prefix = '') =>
 				: `${prefix ? `${prefix}[${key}]` : `${key}`}=${value}`
 		)
 		.join('&')
+
+export const getExtension = (filename) => {
+	return filename.substring(filename.lastIndexOf('.') + 1)
+}
