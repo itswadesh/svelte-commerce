@@ -16,7 +16,7 @@
 
 <script>
 import { createEventDispatcher } from 'svelte'
-import { toast } from './utils'
+import { getExtension, toast } from './utils'
 
 const dispatch = createEventDispatcher()
 
@@ -66,11 +66,13 @@ const handleSubmit = async (e) => {
 		return
 	}
 	try {
+		const contentType = file?.type
+
 		loading = true
 		const response = await fetch('/server/files/upload', {
 			method: 'POST',
 			body: file,
-			headers: { folder, 'Content-Type': 'image/png' }
+			headers: { folder, extension: getExtension(file?.name), 'Content-Type': contentType }
 		})
 		const res = await response.json()
 		dispatch('save', res?.url)
