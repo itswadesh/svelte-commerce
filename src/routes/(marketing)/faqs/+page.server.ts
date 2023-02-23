@@ -13,7 +13,6 @@ export async function load({ request, locals, parent, cookies }) {
 			server: true,
 			sid: cookies.get('connect.sid')
 		})
-		console.log('zzzzzzzzzzzzzzzzzz', res)
 		faqs = res?.data
 		count = res?.count
 	} catch (e) {
