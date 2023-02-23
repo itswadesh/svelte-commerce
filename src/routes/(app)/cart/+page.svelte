@@ -408,7 +408,7 @@ async function getCoupons() {
 													on:click="{() =>
 														addToCart({
 															pid: item.pid,
-															qty: -999999,
+															qty: -9999999,
 															customizedImg: item.customizedImg,
 															ix: ix
 														})}"
