@@ -11,9 +11,9 @@ export const fetchBlogs = async ({ origin, storeId, server = false, sid = null }
 		switch (provider) {
 			case 'litekart':
 				if (server) {
-					res = await getBySid(`blogs?store${storeId}`, sid)
+					res = await getBySid(`blogs?store=${storeId}`, sid)
 				} else {
-					res = await getAPI(`blogs?store${storeId}`, origin)
+					res = await getAPI(`blogs?store=${storeId}`, origin)
 				}
 				break
 			case 'medusajs':
