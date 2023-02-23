@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-	content: ['./src/**/*.{html,js,svelte,ts}', './node_modules/tw-elements/dist/js/**/*.js'],
+	content: ['./src/**/*.{html,js,svelte,ts}'],
 	theme: {
 		extend: {
 			colors: {
@@ -8,14 +8,14 @@ module.exports = {
 					50: '#f8efed' /* very very light rose gold */,
 					100: '#f3e3df' /* very light rose gold */,
 					200: '#edd6d1' /* light rose gold */,
-					500: '#ddb1a6' /* rose gold */,
+					500: '#d2988a' /* rose gold */,
 					600: '#d8a598' /* dark rose gold */,
-					700: '#d2988a' /* more darker rose gold */
+					700: '#B8843F' /* more darker rose gold */
 				},
 				secondary: {
-					100: '#f8e2ff' /* light purple */,
-					500: '#df80ff' /* purple */,
-					600: '#da6cff' /* dark purple */
+					100: '#f3e6db' /* light dark gold */,
+					500: '#aa6c39' /* dark gold */,
+					600: '#9b6334' /* dark dark gold */
 				},
 				accent: {
 					100: '#ffffd8' /* light-yellow */,
@@ -62,7 +62,6 @@ module.exports = {
 		}
 	},
 	plugins: [
-		require('tw-elements/dist/plugin'),
 		require('tailwind-scrollbar'),
 		require('@tailwindcss/typography'),
 		require('@tailwindcss/line-clamp')

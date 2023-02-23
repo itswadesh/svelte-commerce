@@ -1,0 +1,30 @@
+<script>
+import MobileFooter from '$lib/MobileFooter.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
+import UserDashboard from './_UserDashboard.svelte'
+
+const seoProps = {
+	title: 'Dashboard',
+	metadescription: 'Dashboard'
+}
+
+export let data
+</script>
+
+<SEO {...seoProps} />
+
+<div>
+	<div class="mb-14 sm:mb-0">
+		<UserDashboard
+			me="{data.me}"
+			myOrders="{data.myOrders}"
+			myWishlist="{data.myWishlist}"
+			myReviews="{data.myReviews}" />
+	</div>
+
+	<!-- MOBILE FOOTER -->
+
+	<div class="block sm:hidden">
+		<MobileFooter />
+	</div>
+</div>
