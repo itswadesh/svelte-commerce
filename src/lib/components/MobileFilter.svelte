@@ -7,7 +7,7 @@
 
 <script>
 import { browser } from '$app/environment'
-import { constructURL2 } from '$lib/utils'
+import { constructURL2, currency } from '$lib/utils'
 import { createEventDispatcher, onMount } from 'svelte'
 import { fetchMegamenuData } from '$lib/services/CategoryService'
 import { fly } from 'svelte/transition'
@@ -16,6 +16,7 @@ import { page } from '$app/stores'
 import { sorts } from '$lib/config'
 import CheckboxEs from '$lib/ui/CheckboxEs.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import RadioEs from '$lib/ui/RadioEs.svelte'
 
 const dispatch = createEventDispatcher()
 
@@ -34,13 +35,25 @@ export let style_tags = []
 
 // console.log('facets', facets)
 
-let filteredStyleTags = []
-let filteredThemeTags = []
-let megamenu
 let selectedCategory
 let selectedCategory2
 let showSubCategory = []
 let showSubCategory2 = []
+// ----------------
+let megamenu
+let allAges = []
+let allBrands = []
+let allColors = []
+let allDiscount = []
+let allFeatures = []
+let allGenders = []
+let allPromotions = []
+let allSizes = []
+let allTypes = []
+let allVendors = []
+let filteredStyleTags = []
+let filteredThemeTags = []
+let priceRanges = []
 
 onMount(async () => {
 	$page.url.searchParams.forEach(function (value, key) {
@@ -49,24 +62,110 @@ onMount(async () => {
 			appliedFilters[key] = value
 	})
 
-	const style_tags_with_product = facets.all_aggs?.tags?.all?.buckets?.filter(
-		(t) => t.doc_count > 0
-	)
+	getFacetsWithProducts()
 
-	for (let st of style_tags) {
-		// console.log('zzzzzzzzzzzzzzzzzzzz', st.key)
-		filteredThemeTags = style_tags_with_product.filter((t) => t.key != st.key)
-		filteredStyleTags = style_tags_with_product.filter((t) => t.key == st.key)
+	if (facets.all_aggs?.tags?.all?.buckets?.length) {
+		const tags_with_product = facets.all_aggs?.tags?.all?.buckets?.filter((t) => t.doc_count > 0)
+
+		// console.log('tags_with_product', tags_with_product)
+		// console.log('style_tags', style_tags)
+
+		const abcd = style_tags.map((t) => {
+			return t._source?.name
+		})
+
+		// console.log('abcd', abcd)
+
+		const newStyleTags = new Set(abcd)
+
+		filteredThemeTags = tags_with_product.filter((stp) => {
+			return !newStyleTags.has(stp.key)
+		})
+
+		// console.log('filteredThemeTags', filteredThemeTags)
+
+		filteredStyleTags = tags_with_product.filter((stp) => {
+			return style_tags.some((st) => {
+				return st._source?.name === stp.key
+			})
+		})
+
+		// console.log('filteredStyleTags', filteredStyleTags)
 	}
 
-	// console.log('filteredThemeTags', filteredThemeTags)
-	// console.log('filteredStyleTags', filteredStyleTags)
+	if (facets.all_aggs?.price_stats?.max && facets.all_aggs?.price_stats?.min) {
+		getPriceRanges()
+	}
 
 	await getMegamenu()
 	await getSelected()
 })
 
 // console.log('fl', fl)
+
+function getFacetsWithProducts() {
+	if (facets?.all_aggs?.age?.all?.buckets?.length) {
+		allAges = facets?.all_aggs?.age?.all?.buckets?.filter((t) => t.doc_count > 0)
+	}
+	if (facets?.all_aggs?.brands?.all?.buckets?.length) {
+		allBrands = facets?.all_aggs?.brands?.all?.buckets?.filter((t) => t.doc_count > 0)
+	}
+	if (facets?.all_aggs?.colors?.all?.buckets?.length) {
+		allColors = facets?.all_aggs?.colors?.all?.buckets?.filter((t) => t.doc_count > 0)
+	}
+	if (facets?.all_aggs?.discount?.all?.buckets?.length) {
+		allDiscount = facets?.all_aggs?.discount?.all?.buckets?.filter((t) => t.doc_count > 0)
+	}
+	if (facets?.all_aggs?.features?.all?.buckets?.length) {
+		allFeatures = facets?.all_aggs?.features?.all?.buckets?.filter((t) => t.doc_count > 0)
+	}
+	if (facets?.all_aggs?.genders?.all?.buckets?.length) {
+		allGenders = facets?.all_aggs?.genders?.all?.buckets?.filter((t) => t.doc_count > 0)
+	}
+	if (facets?.all_aggs?.promotions?.all?.buckets?.length) {
+		allPromotions = facets?.all_aggs?.promotions?.all?.buckets?.filter((t) => t.doc_count > 0)
+	}
+	if (facets?.all_aggs?.sizes?.all?.buckets?.length) {
+		allSizes = facets?.all_aggs?.sizes?.all?.buckets?.filter((t) => t.doc_count > 0)
+	}
+	if (facets?.all_aggs?.types?.all?.buckets?.length) {
+		allTypes = facets?.all_aggs?.types?.all?.buckets?.filter((t) => t.doc_count > 0)
+	}
+	if (facets?.all_aggs?.vendors?.all?.buckets?.length) {
+		allVendors = facets?.all_aggs?.vendors?.all?.buckets?.filter((t) => t.doc_count > 0)
+	}
+}
+
+function getPriceRanges() {
+	const difference = facets.all_aggs?.price_stats?.max - facets.all_aggs?.price_stats?.min
+	// console.log('min', facets.all_aggs?.price_stats?.min)
+	// console.log('max', facets.all_aggs?.price_stats?.max)
+	// console.log('difference', difference)
+	if (difference) {
+		const priceGap = difference / 4
+		// console.log('priceGap', priceGap)
+		if (priceGap) {
+			const price1 = facets.all_aggs?.price_stats?.min
+			const price2 = price1 + priceGap
+			const price3 = price2 + priceGap
+			const price4 = price3 + priceGap
+			const price5 = facets.all_aggs?.price_stats?.max
+
+			// console.log('price1,2,3,4,5', price1, price2, price3, price4, price5)
+
+			if (price1 && price2 && price3 && price4 && price5) {
+				priceRanges = [
+					{ from: price1, key: `From ${currency(price1)} to ${currency(price2)}`, to: price2 },
+					{ from: price2, key: `From ${currency(price2)} to ${currency(price3)}`, to: price3 },
+					{ from: price3, key: `From ${currency(price3)} to ${currency(price4)}`, to: price4 },
+					{ from: price4, key: `From ${currency(price4)} to ${currency(price5)}`, to: price5 }
+				]
+
+				// console.log('priceRanges', priceRanges)
+			}
+		}
+	}
+}
 
 async function getMegamenu() {
 	if (browser) {
@@ -89,32 +188,36 @@ async function getMegamenu() {
 }
 
 function getSelected() {
-	// if (facets?.all_aggs?.tags?.all?.buckets?.length > 0) {
-	// 	selected = 'Tags'
-	// }
-	if (filteredThemeTags?.length > 0) {
-		selected = 'Themes'
+	if (allAges?.length > 0) {
+		selected = 'Age'
+	} else if (allBrands?.length > 0) {
+		selected = 'Brands'
+	} else if (allColors?.length > 0) {
+		selected = 'Colors'
+	} else if (allDiscount?.length > 0) {
+		selected = 'Discount'
+	} else if (allFeatures?.length > 0) {
+		selected = 'Features'
+	} else if (allGenders?.length > 0) {
+		selected = 'Genders'
+	} else if (allPromotions?.length > 0) {
+		selected = 'Promotions'
+	} else if (allSizes?.length > 0) {
+		selected = 'Sizes'
+	} else if (allTypes?.length > 0) {
+		selected = 'Types'
+	} else if (allVendors?.length > 0) {
+		selected = 'Vendors'
 	} else if (filteredStyleTags?.length > 0) {
 		selected = 'Styles'
-	} else if (facets?.all_aggs?.age?.all?.buckets?.length > 0) {
-		selected = 'Age'
-	} else if (facets?.all_aggs?.brands?.all?.buckets?.length > 0) {
-		selected = 'Brands'
-	} else if (facets?.all_aggs?.colors?.all?.buckets?.length > 0) {
-		selected = 'Colors'
-	} else if (facets?.all_aggs?.discount?.all?.buckets?.length > 0) {
-		selected = 'Discount'
-	} else if (facets?.all_aggs?.features?.all?.buckets?.length > 0) {
-		selected = 'Features'
-	} else if (facets?.all_aggs?.genders?.all?.buckets?.length > 0) {
-		selected = 'Genders'
-	} else if (facets?.all_aggs?.price?.all?.buckets?.length > 0) {
-		selected = 'Price'
-	} else if (facets?.all_aggs?.sizes?.all?.buckets?.length > 0) {
-		selected = 'Sizes'
-	} else if (megamenu) {
-		selected = 'Categories'
+	} else if (filteredThemeTags?.length > 0) {
+		selected = 'Themes'
+	} else if (priceRanges?.length > 0) {
+		selected = 'Prices'
 	}
+	// else if (facets?.all_aggs?.tags?.all?.buckets?.length > 0) {
+	// 	selected = 'Tags'
+	// }
 }
 
 function handleToggleSubCategory(m, mx) {
@@ -195,6 +298,8 @@ $: {
 }
 </script>
 
+<!-- Header -->
+
 <div
 	class="{clazz} grid w-full grid-cols-2 divide-x divide-gray-300 border-b bg-white font-medium shadow-md">
 	<!-- Filter -->
@@ -243,6 +348,8 @@ $: {
 	</button>
 </div>
 
+<!-- Show Filter -->
+
 {#if showFilter}
 	<div
 		transition:fly="{{ x: -50, duration: 300 }}"
@@ -250,6 +357,8 @@ $: {
 		<header
 			class="relative grid grid-cols-3 items-center gap-3 p-3 text-center text-lg font-bold tracking-wide shadow-md">
 			<div class="col-span-1 flex items-center justify-self-start">
+				<!-- Close Filter -->
+
 				<button type="button" class="focus:outline-none" on:click="{() => (showFilter = false)}">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -261,9 +370,12 @@ $: {
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
-							d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+							d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+						</path>
 					</svg>
 				</button>
+
+				<!-- Clear All -->
 
 				{#if filterLength > 0}
 					<span class="mx-2 h-6 w-[2px] border-l-2 border-gray-300"></span>
@@ -278,64 +390,23 @@ $: {
 
 			<h5 class="col-span-1 justify-self-center">Filter</h5>
 
+			<!-- Apply Button -->
+
 			<PrimaryButton
 				type="button"
 				loadingringsize="xs"
 				roundedFull
-				class="col-span-1 justify-self-end text-xs"
-				on:click="{() => (showFilter = false)}">APPLY</PrimaryButton>
-
-			<!-- <button
-				on:click="{clearFilters}"
-				class="absolute inset-y-0 text-xs text-right right-4 text-primary-500 hover:underline focus:outline-none">
-				Clear All
-			</button> -->
+				class="col-span-1 justify-self-end text-xs uppercase"
+				on:click="{() => (showFilter = false)}">
+				Apply
+			</PrimaryButton>
 		</header>
 
 		<div class="flex h-full items-start">
 			<!-- Left Sidebar Section -->
 
 			<div class="flex h-full w-2/6 flex-col border-b border-r bg-gray-100">
-				<!-- {#if facets?.all_aggs?.tags?.all?.buckets?.length > 0}
-					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
-						{selected === 'Tags'
-							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'Tags')}">
-						Tags
-					</button>
-
-					<hr class="w-full" />
-				{/if} -->
-
-				{#if filteredThemeTags?.length > 0}
-					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
-						{selected === 'Themes'
-							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'Themes')}">
-						Themes
-					</button>
-
-					<hr class="w-full" />
-				{/if}
-
-				{#if filteredStyleTags?.length > 0}
-					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
-						{selected === 'Styles'
-							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'Styles')}">
-						Styles
-					</button>
-
-					<hr class="w-full" />
-				{/if}
-
-				{#if facets?.all_aggs?.age?.all?.buckets?.length > 0}
+				{#if allAges?.length > 0}
 					<button
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Age'
@@ -352,7 +423,7 @@ $: {
 					<hr class="w-full" />
 				{/if}
 
-				{#if facets?.all_aggs?.brands?.all?.buckets?.length > 0}
+				{#if allBrands?.length > 0}
 					<button
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Brands'
@@ -369,92 +440,7 @@ $: {
 					<hr class="w-full" />
 				{/if}
 
-				{#if facets?.all_aggs?.genders?.all?.buckets?.length > 0}
-					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
-						{selected === 'Genders'
-							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'Genders')}">
-						<span> Genders </span>
-
-						{#if fl.genders?.length}
-							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
-						{/if}
-					</button>
-
-					<hr class="w-full" />
-				{/if}
-
-				{#if facets?.all_aggs?.sizes?.all?.buckets?.length > 0}
-					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
-						{selected === 'sizes'
-							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'sizes')}">
-						<span> Sizes </span>
-
-						{#if fl.sizes?.length}
-							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
-						{/if}
-					</button>
-
-					<hr class="w-full" />
-				{/if}
-
-				{#if facets?.all_aggs?.themes?.all?.buckets?.length > 0}
-					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
-						{selected === 'themes'
-							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'themes')}">
-						<span> Themes </span>
-
-						{#if fl.themes?.length}
-							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
-						{/if}
-					</button>
-
-					<hr class="w-full" />
-				{/if}
-
-				{#if facets?.all_aggs?.promotions?.all?.buckets?.length > 0}
-					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
-						{selected === 'promotions'
-							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'promotions')}">
-						<span> Promotions </span>
-
-						{#if fl.promotions?.length}
-							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
-						{/if}
-					</button>
-
-					<hr class="w-full" />
-				{/if}
-
-				{#if facets?.all_aggs?.types?.all?.buckets?.length > 0}
-					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
-						{selected === 'types'
-							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'types')}">
-						<span> Types </span>
-
-						{#if fl.types?.length}
-							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
-						{/if}
-					</button>
-
-					<hr class="w-full" />
-				{/if}
-
-				{#if facets?.all_aggs?.colors?.all?.buckets?.length > 0}
+				{#if allColors?.length > 0}
 					<button
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Colors'
@@ -471,7 +457,7 @@ $: {
 					<hr class="w-full" />
 				{/if}
 
-				{#if facets?.all_aggs?.discount?.all?.buckets?.length > 0}
+				{#if allDiscount?.length > 0}
 					<button
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Discount'
@@ -488,7 +474,7 @@ $: {
 					<hr class="w-full" />
 				{/if}
 
-				{#if facets?.all_aggs?.features?.all?.buckets?.length > 0}
+				{#if allFeatures?.length > 0}
 					<button
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Features'
@@ -505,7 +491,169 @@ $: {
 					<hr class="w-full" />
 				{/if}
 
-				{#if facets?.all_aggs?.price?.all?.buckets?.length > 0}
+				{#if allGenders?.length > 0}
+					<button
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						{selected === 'Genders'
+							? 'text-primary-500 border-primary-500 bg-white'
+							: 'border-gray-100 bg-transparent'}"
+						on:click="{() => (selected = 'Genders')}">
+						<span> Genders </span>
+
+						{#if fl.genders?.length}
+							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
+						{/if}
+					</button>
+
+					<hr class="w-full" />
+				{/if}
+
+				{#if allPromotions?.length > 0}
+					<button
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						{selected === 'promotions'
+							? 'text-primary-500 border-primary-500 bg-white'
+							: 'border-gray-100 bg-transparent'}"
+						on:click="{() => (selected = 'promotions')}">
+						<span> Promotions </span>
+
+						{#if fl.promotions?.length}
+							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
+						{/if}
+					</button>
+
+					<hr class="w-full" />
+				{/if}
+
+				{#if allSizes?.length > 0}
+					<button
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						{selected === 'sizes'
+							? 'text-primary-500 border-primary-500 bg-white'
+							: 'border-gray-100 bg-transparent'}"
+						on:click="{() => (selected = 'sizes')}">
+						<span> Sizes </span>
+
+						{#if fl.sizes?.length}
+							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
+						{/if}
+					</button>
+
+					<hr class="w-full" />
+				{/if}
+
+				{#if allTypes?.length > 0}
+					<button
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						{selected === 'types'
+							? 'text-primary-500 border-primary-500 bg-white'
+							: 'border-gray-100 bg-transparent'}"
+						on:click="{() => (selected = 'types')}">
+						<span> Types </span>
+
+						{#if fl.types?.length}
+							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
+						{/if}
+					</button>
+
+					<hr class="w-full" />
+				{/if}
+
+				{#if allVendors?.length > 0}
+					<button
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						{selected === 'Vendors'
+							? 'text-primary-500 border-primary-500 bg-white'
+							: 'border-gray-100 bg-transparent'}"
+						on:click="{() => (selected = 'Vendors')}">
+						<span> Vendors </span>
+
+						{#if fl.types?.length}
+							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
+						{/if}
+					</button>
+
+					<hr class="w-full" />
+				{/if}
+
+				{#if filteredThemeTags?.length > 0}
+					<button
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						{selected === 'Themes'
+							? 'text-primary-500 border-primary-500 bg-white'
+							: 'border-gray-100 bg-transparent'}"
+						on:click="{() => (selected = 'Themes')}">
+						<span> Themes </span>
+
+						{#if fl.tags?.length}
+							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
+						{/if}
+					</button>
+
+					<hr class="w-full" />
+				{/if}
+
+				{#if filteredStyleTags?.length > 0}
+					<button
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						{selected === 'Styles'
+							? 'text-primary-500 border-primary-500 bg-white'
+							: 'border-gray-100 bg-transparent'}"
+						on:click="{() => (selected = 'Styles')}">
+						<span> Styles </span>
+
+						{#if fl.tags?.length}
+							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
+						{/if}
+					</button>
+
+					<hr class="w-full" />
+				{/if}
+
+				{#if priceRanges?.length > 0}
+					<button
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						{selected === 'Prices'
+							? 'text-primary-500 border-primary-500 bg-white'
+							: 'border-gray-100 bg-transparent'}"
+						on:click="{() => (selected = 'Prices')}">
+						<span> Prices </span>
+
+						{#if fl.price?.length}
+							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
+						{/if}
+					</button>
+
+					<hr class="w-full" />
+				{/if}
+
+				{#if megamenu?.length}
+					<button
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						{selected === 'Categories'
+							? 'text-primary-500 border-primary-500 bg-white'
+							: 'border-gray-100 bg-transparent'}"
+						on:click="{() => (selected = 'Categories')}">
+						Categories
+					</button>
+
+					<hr class="w-full" />
+				{/if}
+
+				<!-- {#if facets?.all_aggs?.tags?.all?.buckets?.length > 0}
+					<button
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						{selected === 'Tags'
+							? 'text-primary-500 border-primary-500 bg-white'
+							: 'border-gray-100 bg-transparent'}"
+						on:click="{() => (selected = 'Tags')}">
+						Tags
+					</button>
+
+					<hr class="w-full" />
+				{/if} -->
+
+				<!-- {#if facets?.all_aggs?.price?.all?.buckets?.length > 0}
 					<button
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Price'
@@ -520,66 +668,155 @@ $: {
 					</button>
 
 					<hr class="w-full" />
-				{/if}
-
-				{#if facets?.all_aggs?.sizes?.all?.buckets?.length > 0}
-					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
-						{selected === 'Sizes'
-							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'Sizes')}">
-						<span> Sizes </span>
-
-						{#if fl.sizes?.length}
-							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
-						{/if}
-					</button>
-
-					<hr class="w-full" />
-				{/if}
-
-				{#if megamenu}
-					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
-						{selected === 'Categories'
-							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'Categories')}">
-						Categories
-					</button>
-
-					<hr class="w-full" />
-				{/if}
+				{/if} -->
 			</div>
 
 			<!-- Right Section -->
 
 			<div class="h-full w-4/6">
-				<!-- {#if selected === 'Tags'}
+				{#if selected === 'Age'}
 					<div
 						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
 						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
-						{#if facets?.all_aggs?.tags?.all?.buckets?.length > 0}
+						{#if allAges?.length > 0}
 							<CheckboxEs
-								items="{facets?.all_aggs?.tags?.all?.buckets}"
-								model="tags"
-								selectedItems="{fl.tags || []}"
+								items="{allAges}"
+								model="age"
+								selectedItems="{fl.age || []}"
 								showSearchBox
 								on:go="{goCheckbox}" />
 						{/if}
 					</div>
-				{/if} -->
+				{/if}
 
-				{#if selected === 'Themes'}
+				{#if selected === 'Brands'}
 					<div
 						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
 						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
-						{#if filteredThemeTags?.length > 0}
+						{#if allBrands?.length > 0}
 							<CheckboxEs
-								items="{filteredThemeTags}"
-								model="themes"
-								selectedItems="{fl.themes || []}"
+								items="{allBrands}"
+								model="brands"
+								selectedItems="{fl.brands || []}"
+								showSearchBox
+								on:go="{goCheckbox}" />
+						{/if}
+					</div>
+				{/if}
+
+				{#if selected === 'Colors'}
+					<div
+						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
+						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
+						{#if allColors?.length > 0}
+							<CheckboxEs
+								items="{allColors}"
+								model="colors"
+								selectedItems="{fl.colors || []}"
+								showSearchBox
+								on:go="{goCheckbox}" />
+						{/if}
+					</div>
+				{/if}
+
+				{#if selected === 'Discount'}
+					<div
+						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
+						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
+						{#if allDiscount?.length > 0}
+							<RadioEs
+								items="{allDiscount}"
+								model="discount"
+								selectedItems="{fl.discount || []}"
+								on:go="{goCheckbox}" />
+						{/if}
+					</div>
+				{/if}
+
+				{#if selected === 'Features'}
+					<div
+						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
+						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
+						{#if allFeatures?.length > 0}
+							<CheckboxEs
+								items="{allFeatures}"
+								model="features"
+								selectedItems="{fl.features || []}"
+								showSearchBox
+								on:go="{goCheckbox}" />
+						{/if}
+					</div>
+				{/if}
+
+				{#if selected === 'Genders'}
+					<div
+						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
+						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
+						{#if allGenders?.length > 0}
+							<CheckboxEs
+								items="{allGenders}"
+								model="genders"
+								selectedItems="{fl.genders || []}"
+								showSearchBox
+								on:go="{goCheckbox}" />
+						{/if}
+					</div>
+				{/if}
+
+				{#if selected === 'Promotions'}
+					<div
+						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
+						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
+						{#if allPromotions?.length > 0}
+							<CheckboxEs
+								items="{allPromotions}"
+								model="promotions"
+								selectedItems="{fl.promotions || []}"
+								showSearchBox
+								on:go="{goCheckbox}" />
+						{/if}
+					</div>
+				{/if}
+
+				{#if selected === 'Sizes'}
+					<div
+						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
+						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
+						{#if allSizes?.length > 0}
+							<CheckboxEs
+								items="{allSizes}"
+								model="sizes"
+								selectedItems="{fl.sizes || []}"
+								showSearchBox
+								on:go="{goCheckbox}" />
+						{/if}
+					</div>
+				{/if}
+
+				{#if selected === 'Types'}
+					<div
+						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
+						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
+						{#if allTypes?.length > 0}
+							<CheckboxEs
+								items="{allTypes}"
+								model="types"
+								selectedItems="{fl.types || []}"
+								showSearchBox
+								on:go="{goCheckbox}" />
+						{/if}
+					</div>
+				{/if}
+
+				{#if selected === 'Vendors'}
+					<div
+						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
+						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
+						{#if allVendors?.length > 0}
+							<CheckboxEs
+								items="{allVendors}"
+								model="vendors"
+								selectedItems="{fl.vendors || []}"
 								showSearchBox
 								on:go="{goCheckbox}" />
 						{/if}
@@ -593,129 +830,38 @@ $: {
 						{#if filteredStyleTags?.length > 0}
 							<CheckboxEs
 								items="{filteredStyleTags}"
-								model="styles"
-								selectedItems="{fl.styles || []}"
+								model="tags"
+								selectedItems="{fl.tags || []}"
 								showSearchBox
 								on:go="{goCheckbox}" />
 						{/if}
 					</div>
 				{/if}
 
-				{#if selected === 'Age'}
+				{#if selected === 'Themes'}
 					<div
 						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
 						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
-						{#if facets?.all_aggs?.age?.all?.buckets?.length > 0}
+						{#if filteredThemeTags?.length > 0}
 							<CheckboxEs
-								items="{facets?.all_aggs?.age?.all?.buckets}"
-								model="age"
-								selectedItems="{fl.age || []}"
+								items="{filteredThemeTags}"
+								model="tags"
+								selectedItems="{fl.tags || []}"
 								showSearchBox
 								on:go="{goCheckbox}" />
 						{/if}
 					</div>
 				{/if}
 
-				{#if selected === 'Brands'}
+				{#if selected === 'Prices'}
 					<div
 						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
 						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
-						{#if facets?.all_aggs?.brands?.all?.buckets?.length > 0}
-							<CheckboxEs
-								items="{facets?.all_aggs?.brands?.all?.buckets}"
-								model="brands"
-								selectedItems="{fl.brands || []}"
-								showSearchBox
-								on:go="{goCheckbox}" />
-						{/if}
-					</div>
-				{/if}
-
-				{#if selected === 'Colors'}
-					<div
-						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
-						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
-						{#if facets?.all_aggs?.colors?.all?.buckets?.length > 0}
-							<CheckboxEs
-								items="{facets?.all_aggs?.colors?.all?.buckets}"
-								model="colors"
-								selectedItems="{fl.colors || []}"
-								showSearchBox
-								on:go="{goCheckbox}" />
-						{/if}
-					</div>
-				{/if}
-
-				{#if selected === 'Discount'}
-					<div
-						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
-						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
-						{#if facets?.all_aggs?.discount?.all?.buckets?.length > 0}
-							<CheckboxEs
-								items="{facets?.all_aggs?.discount?.all?.buckets}"
-								model="discount"
-								selectedItems="{fl.discount || []}"
-								showSearchBox
-								on:go="{goCheckbox}" />
-						{/if}
-					</div>
-				{/if}
-
-				{#if selected === 'Features'}
-					<div
-						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
-						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
-						{#if facets?.all_aggs?.features?.all?.buckets?.length > 0}
-							<CheckboxEs
-								items="{facets?.all_aggs?.features?.all?.buckets}"
-								model="features"
-								selectedItems="{fl.features || []}"
-								showSearchBox
-								on:go="{goCheckbox}" />
-						{/if}
-					</div>
-				{/if}
-
-				{#if selected === 'Genders'}
-					<div
-						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
-						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
-						{#if facets?.all_aggs?.genders?.all?.buckets?.length > 0}
-							<CheckboxEs
-								items="{facets?.all_aggs?.genders?.all?.buckets}"
-								model="genders"
-								selectedItems="{fl.genders || []}"
-								showSearchBox
-								on:go="{goCheckbox}" />
-						{/if}
-					</div>
-				{/if}
-
-				{#if selected === 'Price'}
-					<div
-						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
-						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
-						{#if facets?.all_aggs?.price?.all?.buckets?.length > 0}
-							<CheckboxEs
-								items="{facets?.all_aggs?.price?.all?.buckets}"
+						{#if priceRanges?.length > 0}
+							<RadioEs
+								items="{priceRanges}"
 								model="price"
 								selectedItems="{fl.price || []}"
-								showSearchBox
-								on:go="{goCheckbox}" />
-						{/if}
-					</div>
-				{/if}
-
-				{#if selected === 'Sizes'}
-					<div
-						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
-						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
-						{#if facets?.all_aggs?.sizes?.all?.buckets?.length > 0}
-							<CheckboxEs
-								items="{facets?.all_aggs?.sizes?.all?.buckets}"
-								model="sizes"
-								selectedItems="{fl.sizes || []}"
-								showSearchBox
 								on:go="{goCheckbox}" />
 						{/if}
 					</div>
@@ -726,7 +872,7 @@ $: {
 						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
 						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
 						<ul class="flex cursor-pointer flex-col text-sm">
-							{#if megamenu}
+							{#if megamenu?.length}
 								<!-- 1st level categories -->
 
 								<ul class="flex w-full cursor-pointer flex-col text-sm">
@@ -837,8 +983,40 @@ $: {
 						</ul>
 					</div>
 				{/if}
+
+				<!-- {#if selected === 'Tags'}
+					<div
+						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
+						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
+						{#if facets?.all_aggs?.tags?.all?.buckets?.length > 0}
+							<CheckboxEs
+								items="{facets?.all_aggs?.tags?.all?.buckets}"
+								model="tags"
+								selectedItems="{fl.tags || []}"
+								showSearchBox
+								on:go="{goCheckbox}" />
+						{/if}
+					</div>
+				{/if} -->
+
+				<!-- {#if selected === 'Price'}
+					<div
+						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
+						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
+						{#if facets?.all_aggs?.price?.all?.buckets?.length > 0}
+							<CheckboxEs
+								items="{facets?.all_aggs?.price?.all?.buckets}"
+								model="price"
+								selectedItems="{fl.price || []}"
+								showSearchBox
+								on:go="{goCheckbox}" />
+						{/if}
+					</div>
+				{/if} -->
 			</div>
 		</div>
+
+		<!-- Close and Apply button -->
 
 		<!-- <div
 			class="absolute inset-x-0 bottom-0 z-[100] flex items-center divide-x-2 divide-gray-300 border-2 border-gray-300 bg-white">
@@ -858,6 +1036,8 @@ $: {
 		</div> -->
 	</div>
 {/if}
+
+<!-- Show Sort -->
 
 {#if showSort}
 	<div class="fixed inset-0 z-[100] flex h-screen w-screen items-end bg-black bg-opacity-50">
