@@ -274,7 +274,7 @@ $: heroBanners =
 
 		<!-- TRENDING PRODUCTS -->
 
-		{#await data.home then home}
+		<!-- {#await data.home then home}
 			{#if home?.trending?.length > 0}
 				<div>
 					<h2
@@ -298,7 +298,7 @@ $: heroBanners =
 					</ul>
 				</div>
 			{/if}
-		{/await}
+		{/await} -->
 
 		<!-- <ProductTab /> -->
 	</div>
