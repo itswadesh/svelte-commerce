@@ -175,7 +175,7 @@ export const fetchMegamenuData = async ({ origin, storeId, server = false, sid =
 				break
 			case 'medusajs':
 				const med = await getMedusajsApi(`product-categories`, {}, sid)
-				console.log('zzzzzzzzzzzzzzzzzzzz', med)
+				// console.log('zzzzzzzzzzzzzzzzzzzz', med)
 				data = []
 				// data = med.map((c) => mapMedusajsCategory(c))
 				break
