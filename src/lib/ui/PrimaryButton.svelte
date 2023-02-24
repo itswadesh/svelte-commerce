@@ -53,8 +53,8 @@ function handleClick() {
 	title="{title}"
 	class="relative transform items-center justify-center overflow-hidden rounded-md border px-4 py-2 text-center font-semibold tracking-wider text-white shadow-md transition duration-700 focus:outline-none focus:ring-0 focus:ring-offset-0 {clazz}
 	{disabled ? 'cursor-not-allowed border-gray-400 bg-gray-400 opacity-40' : 'opacity-100'}
-	{disabled && blackBackground
-		? 'border-gray-800 bg-gray-800 hover:border-black hover:bg-black'
+	{!disabled && blackBackground
+		? 'border-black bg-black hover:bg-gray-800 hover:border-gray-800'
 		: ''}		  
 	{!disabled && !blackBackground
 		? 'border-primary-500 bg-primary-500 hover:border-primary-700 hover:bg-primary-700'
