@@ -20,7 +20,7 @@ export let address = {}
 export let countries = []
 export let states = []
 
-console.log('address', address)
+// console.log('address', address)
 // console.log('countries', countries)
 // console.log('states', states)
 
