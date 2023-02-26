@@ -41,7 +41,7 @@ export async function load({ url, locals, cookies, parent }) {
 			const style_tags_with_product = facets.all_aggs?.tags?.all?.buckets?.filter(
 				(t) => t.doc_count > 0
 			)
-			style_tags = res?.style_tags.filter((st) => {
+			style_tags = res?.style_tags?.filter((st) => {
 				return style_tags_with_product.some((t) => {
 					return st._source.name === t.key // Assuming there is a unique "id" property in each object
 				})
