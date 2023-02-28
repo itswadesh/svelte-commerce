@@ -1,21 +1,5 @@
-<style>
-.back-to-top {
-	transition: opacity 0.5s, visibility 0.5s;
-	position: fixed;
-	z-index: 99;
-	right: 20px;
-	user-select: none;
-	bottom: 70px;
-}
-
-.back-to-top.hidden {
-	opacity: 0;
-	visibility: hidden;
-}
-</style>
-
 <script>
-import { fade, fly } from 'svelte/transition'
+import { fade } from 'svelte/transition'
 
 export let showOnPx = 150
 
@@ -55,20 +39,17 @@ function handleOnScroll() {
 {#if !hidden}
 	<button
 		transition:fade="{{ duration: 500 }}"
-		aria-label="Click to go to top"
-		class="back-to-top overflow-hidden rounded-full bg-white focus:outline-none"
-		on:click="{goTop}"
-	>
+		aria-label="Back to Top"
+		class="fixed z-[99] bottom-16 right-4 group p-2 bg-white border shadow-md hover:shadow-lg hover:border-gray-300 transition duration-300 rounded-full focus:outline-none overflow-hidden"
+		on:click="{goTop}">
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
-			class="h-8 w-8 text-primary-500"
-			viewBox="0 0 20 20"
-			fill="currentColor"
-		>
-			<path
-				fill-rule="evenodd"
-				d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z"
-				clip-rule="evenodd"></path>
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke-width="1.5"
+			stroke="currentColor"
+			class="w-5 h-5 transform group-hover:-translate-y-1 transition duration-500 group-hover:text-primary-500">
+			<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"></path>
 		</svg>
 	</button>
 {/if}
