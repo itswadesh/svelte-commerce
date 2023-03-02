@@ -18,24 +18,16 @@ import { navigating } from '$app/stores'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { ToastContainer, FlatToast } from 'svelte-toasts'
-import AllMegamenuStore from '$lib/store/megamenu-all'
-import MegamenuStore from '$lib/store/megamenu'
 import noStoreFound from '$lib/assets/no/no_store_found.png'
 import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 import storeClosed from '$lib/assets/store-closed.png'
 import whatsappIcon from '$lib/assets/social-media/whatsapp.png'
+import { getAllMegamenuFromStore, getMegamenuFromStore } from '$lib/store/megamenu'
+import { browser } from '$app/environment'
+
+// console.log('$page', $page)
 
 let megamenu
-
-MegamenuStore.subscribe((data) => {
-	megamenu = data
-})
-
-let allMegamenu
-
-AllMegamenuStore.subscribe((data) => {
-	allMegamenu = data
-})
 
 export let data
 
@@ -65,47 +57,29 @@ onMount(async () => {
 	// 		}
 	// 	})
 	// }
-	// // Get the User-Agent header from the request
-	// const userAgent = navigator.userAgent || navigator.vendor || window.opera
-	// // console.log('userAgent', userAgent)
-	// // Check if the User-Agent indicates an Android device
-	// // const isAndroid = userAgent.includes('Android')
+	if (browser) {
+		// Get the User-Agent header from the request
+		const userAgent = navigator.userAgent || navigator.vendor || window.opera
+		// console.log('userAgent', userAgent)
+		// Check if the User-Agent indicates an Android device
+		// const isAndroid = userAgent.includes('Android')
 
-	// if (/android/i.test(userAgent) && $page.url.host !== 'm.zapvi.in') {
-	// 	// Attempt to open the app using the custom URL scheme
-	// 	window.location.href = `zapviin://m.zapvi.in/?slug=${$page.url.pathname.substring(1)}`
-	// }
-	// console.log(allMegamenu)
-
-	try {
-		if (!megamenu.length) {
-			// console.log('Calling megamenu api')
-			const megamenuRes = await CategoryService.fetchMegamenuData({
-				megamenu: true,
-				storeId: $page.data.store.id,
-				origin: $page.data.origin,
-				isCors: $page.data.isCors
-			})
-			MegamenuStore.update((currentData) => {
-				return megamenuRes
-			})
+		if (/android/i.test(userAgent) && $page.url.host !== 'm.zapvi.in') {
+			// Attempt to open the app using the custom URL scheme
+			window.location.href = `zapviin://m.zapvi.in/?slug=${$page.url.pathname.substring(1)}`
 		}
-	} catch (e) {}
 
-	try {
-		if (!allMegamenu.length) {
-			// console.log('Calling all megamenu api')
-			const megamenuRes = await CategoryService.fetchMegamenuData({
-				megamenu: false,
-				storeId: $page.data.store.id,
-				origin: $page.data.origin,
-				isCors: $page.data.isCors
-			})
-			AllMegamenuStore.update((currentData) => {
-				return megamenuRes
-			})
-		}
-	} catch (e) {}
+		getMegamenuFromStore({
+			storeId: $page.data.store.id,
+			origin: $page.data.origin,
+			isCors: $page.data.isCors
+		})
+		getAllMegamenuFromStore({
+			storeId: $page.data.store.id,
+			origin: $page.data.origin,
+			isCors: $page.data.isCors
+		})
+	}
 })
 // $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : ''
 
@@ -152,8 +126,8 @@ onMount(async () => {
 	<meta name="apple-mobile-web-app-title" content="{$page.data.store?.websiteName}" />
 	<meta name="application-name" content="{$page.data.store?.websiteName}" />
 	<link
-		href="https://fonts.googleapis.com/css2?family={$page.data.store
-			.fontFamily}:wght@100;200;300;400;500;600;700;800;900&display=swap"
+		href="https://fonts.googleapis.com/css2?family={$page.data.store.fontFamily ||
+			'Montserrat'}:wght@100;200;300;400;500;600;700;800;900&display=swap"
 		rel="stylesheet" />
 
 	<!-- {@html webManifest} -->
