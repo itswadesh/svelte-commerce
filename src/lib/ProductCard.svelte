@@ -24,30 +24,21 @@
 }
 </style>
 
-<script lang="ts">
-
+<script>
 import { currency } from './utils'
 import { fly } from 'svelte/transition'
 import { goto } from '$app/navigation'
-import { loginUrl } from '$lib/store'
 import { page } from '$app/stores'
 import { post } from './utils/api'
-import { toggleWishlistService } from './services/WishlistService'
 import LazyImg from './components/Image/LazyImg.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
-import type { Product } from './types'
 
-export let product:Product
+export let product = {}
 
-let images = [
-	'https://s3.ap-south-1.amazonaws.com/litekart.in/stores/6356502aca4ff28ed596cb1b/product/6045f9ae120e71405f1767d3/fancy-0235-888-fancymart-original-imafhez6qfja6jza-vjkatenzjzyw.jpeg',
-	'https://s3.ap-south-1.amazonaws.com/litekart.in/stores/6356502aca4ff28ed596cb1b/product/6045f9ae120e71405f1767d3/ohdbaf-1287-decorebugs-original-imaem5qy9pus7vfk-beflo8mcngxe.jpeg',
-	'https://s3.ap-south-1.amazonaws.com/litekart.in/stores/6356502aca4ff28ed596cb1b/product/6045f9ae120e71405f1767d3/ohdbaf-1288-decorebugs-original-imaem5qyq8f6vtyy-q27lkebwlah0.jpeg'
-]
+// console.log('zzzzzzzzzzzzzzzzzz', product)
 
-
-let show=false,
+let show,
 	showRelatedProducts = false,
 	isWislisted = false,
 	loadingForWishlist = false
@@ -59,40 +50,25 @@ function showitems() {
 function hideitems() {
 	show = false
 }
-
-let showcaseImg = images[0]
-
-function selectSecondImage() {
-	if (images?.length > 1) {
-		showcaseImg = images[1]
-	}
-}
-
-function selectPrimaryImage() {
-	showcaseImg = images[0]
-}
 </script>
 
 <div
-	class="group relative col-span-1 block w-full overflow-hidden border bg-white sm:w-52 sm:shrink-0 sm:rounded-md sm:border-transparent sm:hover:border-gray-200 sm:hover:shadow-lg"
+	class="group relative col-span-1 block w-full overflow-hidden sm:w-52 sm:shrink-0 sm:rounded-md border sm:border-transparent sm:hover:border-gray-200 sm:hover:bg-white sm:hover:shadow-lg bg-white"
 	on:mouseenter="{showitems}"
-	on:mouseleave="{hideitems}"
->
+	on:mouseleave="{hideitems}">
 	<a
-		href="/product/{product.slug}?id={product.id}"
+		href="/product/{product.slug}"
 		target="{$page?.data?.isDesktop ? '_blank' : ''}"
 		rel="noopener noreferrer"
 		aria-label="Click to view the product details"
 		data-sveltekit-preload-data
-		class="flex flex-col items-center"
-	>
+		class="flex flex-col items-center">
 		<!-- New -->
 		{#if product.new || product.tags?.length}
 			<div class="absolute top-1 left-1 flex flex-col gap-0.5">
 				{#if product.new}
 					<div
-						class="text-rem max-w-max bg-red-500 py-0.5 px-1.5 text-xs font-semibold uppercase text-white"
-					>
+						class="text-rem max-w-max bg-red-500 py-0.5 px-1.5 text-xs font-semibold uppercase text-white">
 						New
 					</div>
 				{/if}
@@ -102,8 +78,7 @@ function selectPrimaryImage() {
 						{#if tag?.name && tag?.type === 'Ribbon'}
 							<div
 								class="text-rem max-w-max py-0.5 px-1.5 text-xs font-semibold uppercase text-white"
-								style="background-color: {tag.colorCode};"
-							>
+								style="background-color: {tag.colorCode};">
 								{tag.name}
 							</div>
 						{/if}
@@ -112,20 +87,17 @@ function selectPrimaryImage() {
 			</div>
 		{/if}
 
-		<!-- on:mouseenter="{selectSecondImage}" on:mouseleave="{selectPrimaryImage}"
-		showcaseImg -->
-		<!-- <button type="button" class="h-[280px] w-[210px] overflow-hidden"> -->
-		<LazyImg
-			src="{product.img||''}"
-			alt="{product.name}"
-			width="210"
-			height="280"
-			class="h-[280px] w-[210px] object-contain object-bottom text-xs"
-		/>
-		<!-- </button> -->
+		<div class="w-[210px] h-[280px] overflow-hidden">
+			<LazyImg
+				src="{product.img}"
+				alt="{product.name}"
+				width="210"
+				height="280"
+				class="object-contain object-bottom w-[210px] h-[280px] text-xs" />
+		</div>
 	</a>
 
-	<div class="p-4">
+	<div class="p-2 sm:p-4">
 		<!-- View smilar button start-->
 
 		<!-- <div class="{product.relatedProducts?.length > 0 ? 'absolute bottom-24 right-4' : 'hidden'}">
@@ -230,7 +202,7 @@ function selectPrimaryImage() {
 		<!-- <div class="mt-1.5 flex items-baseline justify-start">
 					<h2 class="mr-1 text-sm">Sizes:</h2>
 
-					<h2 class="flex items-baseline gap-1 text-xs font-medium text-gray-500 ">
+					<h3 class="flex items-baseline gap-1 text-xs font-medium text-gray-500 ">
 						{#if product.variants?.length}
 							{#each product.variants as v, i}
 								<div>{v.size}</div>
@@ -238,7 +210,7 @@ function selectPrimaryImage() {
 						{:else}
 							One Size
 						{/if}
-					</h2>
+					</h3>
 				</div> -->
 
 		<!-- Size chart end-->
@@ -281,7 +253,7 @@ function selectPrimaryImage() {
 						</div>
 					</div>
 
-					<h2
+					<h3
 						href="{'/' + product.slug}"
 						target="_blank"
 						rel="noopener noreferrer"
@@ -291,7 +263,7 @@ function selectPrimaryImage() {
 						{:else}
 							_
 						{/if}
-					</h2>
+					</h3>
 				</a>
 			</div> -->
 
@@ -301,9 +273,7 @@ function selectPrimaryImage() {
 			<a
 				href="/product/{product.slug}"
 				aria-label="Click to view the product details"
-				class="block"
-				data-sveltekit-preload-data
-			>
+				data-sveltekit-preload-data>
 				<!-- <div class="mb-1.5 flex items-center justify-between"> -->
 				<!-- {#if product.brand?.name || product.brandName}
 						<h2 class="font-semibold">
@@ -330,10 +300,10 @@ function selectPrimaryImage() {
 					</div> -->
 				<!-- </div> -->
 
-				<div class="flex justify-between gap-2">
-					<h2 class="flex-1 text-sm line-clamp-2 group-hover:underline">
+				<div class="flex gap-2 justify-between">
+					<h3 class="flex-1 text-xs sm:text-sm truncate w-full group-hover:underline">
 						{product.name || '_'}
-					</h2>
+					</h3>
 
 					{#if $page?.data?.store?.isFnb && product.foodType}
 						<div>
@@ -347,27 +317,24 @@ function selectPrimaryImage() {
 				</div>
 			</a>
 		</div>
-
 		<!-- {/if} -->
 
 		<a
 			href="/product/{product.slug}"
 			aria-label="Click to view the product details"
-			data-sveltekit-preload-data
-			class="block"
-		>
-			<div class="mt-2.5 flex flex-wrap items-baseline justify-start gap-1.5 text-xs leading-4">
-				<span class="whitespace-nowrap text-sm font-bold sm:text-base">
-					{currency(product.price, $page.data?.store?.currencySymbol)}
+			data-sveltekit-preload-data>
+			<div class="mt-0.5 flex flex-wrap items-baseline justify-start leading-4 text-xs gap-1.5">
+				<span class="font-bold text-sm sm:text-base whitespace-nowrap">
+					{currency(product.price)}
 				</span>
 
 				{#if product.mrp > product.price}
-					<span class="whitespace-nowrap text-gray-600 line-through">
-						{currency(product.mrp, $page.data?.store?.currencySymbol)}
+					<span class="text-gray-500 line-through whitespace-nowrap">
+						{currency(product.mrp)}
 					</span>
 
 					{#if Math.floor(((product.mrp - product.price) / product.mrp) * 100) > 0}
-						<span class="whitespace-nowrap text-primary-700">
+						<span class="text-orange-500 sm:text-gray-900 whitespace-nowrap">
 							({Math.floor(((product.mrp - product.price) / product.mrp) * 100)}% off)
 						</span>
 					{/if}
@@ -375,7 +342,8 @@ function selectPrimaryImage() {
 			</div>
 
 			{#if !product.hasStock && !show}
-				<p class="absolute inset-x-0 bottom-[5.5rem] text-center text-xs text-red-500">
+				<p
+					class="absolute inset-x-0 bottom-[3rem] sm:bottom-[3.8rem] text-center text-xs text-red-500">
 					Out of Stock
 				</p>
 			{/if}
@@ -387,25 +355,21 @@ function selectPrimaryImage() {
 	<div class="fixed inset-0 z-[100] h-screen w-full">
 		<button
 			class="absolute inset-0 cursor-default bg-black bg-opacity-50 focus:outline-none"
-			on:click="{() => (showRelatedProducts = false)}"
-		>
+			on:click="{() => (showRelatedProducts = false)}">
 		</button>
 
 		<div
 			transition:fly="{{ x: 400, duration: 500 }}"
-			class="absolute inset-y-0 right-0 z-[101] h-full max-w-max border-l bg-white"
-		>
+			class="absolute inset-y-0 right-0 z-[101] h-full max-w-max border-l bg-white">
 			<button
 				type="button"
 				class="absolute top-5 right-4 transform cursor-pointer text-gray-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-gray-700"
-				on:click="{() => (showRelatedProducts = false)}"
-			>
+				on:click="{() => (showRelatedProducts = false)}">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					class="h-5 w-5"
 					viewBox="0 0 20 20"
-					fill="currentColor"
-				>
+					fill="currentColor">
 					<path
 						fill-rule="evenodd"
 						d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
@@ -416,23 +380,20 @@ function selectPrimaryImage() {
 			<div class="h-full shrink-0">
 				<h2 class="border-b p-4 text-center font-bold uppercase sm:text-lg">Similar Products</h2>
 
-				<div class="h-full overflow-y-auto p-4 pb-16 overflow-x-hidden">
+				<div class="h-full overflow-y-auto overflow-x-hidden p-4 pb-16">
 					<div class="grid grid-cols-2 sm:gap-4">
 						{#each product.relatedProducts as relatedProduct}
 							<a
 								href="/product/{relatedProduct.slug}"
 								target="_blank"
 								rel="noopener noreferrer"
-								aria-label="Click to route product details page"
 								class="group relative w-full sm:w-48"
-								on:click="{() => (showRelatedProducts = false)}"
-							>
+								on:click="{() => (showRelatedProducts = false)}">
 								<!-- New -->
 
 								{#if relatedProduct.new}
 									<div
-										class="text-rem absolute top-2 left-2 max-w-max rounded bg-red-500 py-0.5 px-1.5 text-center uppercase tracking-wider text-white"
-									>
+										class="text-rem absolute top-2 left-2 max-w-max rounded bg-red-500 py-0.5 px-1.5 text-center uppercase tracking-wider text-white">
 										NEW
 									</div>
 								{/if}
@@ -442,8 +403,7 @@ function selectPrimaryImage() {
 										src="{relatedProduct.img}"
 										alt="{relatedProduct.name}"
 										aspect_ratio="3:4"
-										class="h-full w-full object-contain object-bottom"
-									/>
+										class="h-full w-full object-contain object-bottom" />
 								</div>
 
 								<div class="p-4">
@@ -453,30 +413,28 @@ function selectPrimaryImage() {
 										</h2>
 									{/if}
 
-									<h2
-										class="overflow-hidden overflow-ellipsis whitespace-nowrap text-sm group-hover:underline"
-									>
+									<h3
+										class="overflow-hidden overflow-ellipsis whitespace-nowrap text-sm group-hover:underline">
 										{#if relatedProduct.name}
 											{relatedProduct.name}
 										{:else}
 											_
 										{/if}
-									</h2>
+									</h3>
 
 									<div
-										class="mt-2.5 flex flex-wrap items-baseline justify-start gap-1.5 text-xs leading-4"
-									>
-										<span class="whitespace-nowrap font-semibold sm:text-sm">
-											{currency(relatedProduct.price, $page.data?.store?.currencySymbol)}
+										class="mt-2.5 flex flex-wrap items-baseline justify-start leading-4 text-xs gap-1.5">
+										<span class="font-semibold sm:text-sm whitespace-nowrap">
+											{currency(relatedProduct.price)}
 										</span>
 
 										{#if relatedProduct.mrp > relatedProduct.price}
-											<span class="whitespace-nowrap text-gray-600 line-through">
-												{currency(relatedProduct.mrp, $page.data?.store?.currencySymbol)}
+											<span class="text-gray-500 line-through whitespace-nowrap">
+												{currency(relatedProduct.mrp)}
 											</span>
 
 											{#if Math.floor(((relatedProduct.mrp - relatedProduct.price) / relatedProduct.mrp) * 100) > 0}
-												<span class="whitespace-nowrap text-green-600 sm:text-gray-700">
+												<span class="text-green-600 sm:text-gray-700 whitespace-nowrap">
 													({Math.floor(
 														((relatedProduct.mrp - relatedProduct.price) / relatedProduct.mrp) * 100
 													)}% off)
