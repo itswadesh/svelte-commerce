@@ -99,7 +99,7 @@ async function onSearchSubmit({ detail }) {
 						src="{$page?.data?.store?.logo}"
 						alt="logo"
 						height="40"
-						class="max-w-32 h-auto max-h-10 object-contain object-left sm:max-h-16" />
+						class="max-w-32 h-auto max-h-8 object-contain object-left" />
 				{:else if $page?.data?.store?.websiteName}
 					<h2
 						class="bg-gradient-to-b from-primary-500 to-secondary-500 bg-clip-text text-2xl font-extrabold text-transparent sm:text-3xl">
@@ -108,14 +108,9 @@ async function onSearchSubmit({ detail }) {
 				{:else}
 					<img
 						src="{logo}"
-						alt=" "
-						class="h-auto max-h-10 w-32 object-contain object-left sm:max-h-16" />
-
-					<img
-						src="{logo}"
 						alt="logo"
 						height="40"
-						class="max-w-32 h-auto max-h-10 object-contain object-left sm:max-h-16" />
+						class="max-w-32 h-auto max-h-8 sm:max-h-16 object-contain object-left" />
 				{/if}
 			</a>
 		</div>

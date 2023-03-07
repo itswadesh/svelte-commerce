@@ -219,7 +219,8 @@ function handleToggleSubCategory2(c, cx) {
 function clearFilters() {
 	fl = {}
 	appliedFilters = {}
-	const url = $page?.url?.pathname
+	const q = $page?.url?.searchParams.get('q') || ''
+	const url = `${$page?.url?.pathname}?q=${q}`
 	showFilter = false
 	goto(url)
 	dispatch('clearAll')

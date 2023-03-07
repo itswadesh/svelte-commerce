@@ -3,10 +3,12 @@ import { browser } from '$app/environment'
 import { constructURL2, currency, toast } from '$lib/utils'
 import { fetchMegamenuData } from '$lib/services/CategoryService'
 import { goto } from '$app/navigation'
-import { onMount } from 'svelte'
+import { createEventDispatcher, onMount } from 'svelte'
 import { page } from '$app/stores'
 import CheckboxEs from '$lib/ui/CheckboxEs.svelte'
 import RadioEs from '$lib/ui/RadioEs.svelte'
+
+const dispatch = createEventDispatcher()
 
 export let facets = {},
 	fl = {},
@@ -42,8 +44,10 @@ let megamenu
 function clearFilters() {
 	fl = {}
 	appliedFilters = {}
-	let url = $page?.url?.pathname
-	goto(`${url}?page=1`)
+	const q = $page?.url?.searchParams.get('q') || ''
+	const url = `${$page?.url?.pathname}?q=${q}`
+	goto(url)
+	dispatch('clearAll')
 }
 
 function goCheckbox(e) {

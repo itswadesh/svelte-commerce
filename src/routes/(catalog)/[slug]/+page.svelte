@@ -425,7 +425,9 @@ function handleFilterTags() {
 					<!-- Category top description -->
 
 					{#if data.category?.topDescription}
-						<div class="prose prose-sm mb-5 max-w-none px-3 text-justify sm:px-0">
+						<div
+							class="prose prose-sm max-w-none px-3 text-justify sm:px-0 
+							{!data.styleTags?.length ? 'my-5 lg:mt-0' : 'mb-5'}">
 							{@html data.category?.topDescription}
 						</div>
 					{/if}
@@ -550,10 +552,10 @@ function handleFilterTags() {
 					</h2>
 
 					<ul class="flex flex-col gap-2">
-						<li class="grid grid-cols-6 items-center gap-5 font-semibold uppercase">
-							<span class="col-span-5">{data.category?.name}</span>
+						<li class="grid grid-cols-4 gap-5 items-center font-semibold uppercase">
+							<span class="col-span-3">{data.category?.name}</span>
 
-							<span class="col-span-1">Price <br /> (Rs)</span>
+							<span class="col-span-1">Price (Rs)</span>
 						</li>
 						{#if data?.products}
 							{#each data.products as p, px}
@@ -562,8 +564,8 @@ function handleFilterTags() {
 										<a
 											href="/product/{p.slug}"
 											aria-label="Click to route product details page"
-											class="grid grid-cols-6 gap-5">
-											<span class="col-span-5 text-justify">{p.name}</span>
+											class="grid grid-cols-4 gap-5">
+											<span class="col-span-3 text-justify">{p.name}</span>
 
 											<span class="col-span-1 whitespace-nowrap">
 												{currency(p.price, $page.data?.store?.currencySymbol)}
