@@ -1,4 +1,8 @@
-import { fetchProductsOfCategory } from '$lib/services/ProductService'
+import {
+	fetchProductsOfCategory,
+	fetchProductsOfCategoryTypesense
+} from '$lib/services/ProductService'
+import { currency, generatePriceRange } from '$lib/utils'
 import { error } from '@sveltejs/kit'
 export const prerender = false
 
@@ -11,8 +15,7 @@ export async function load({ url, params, locals, cookies, parent, setHeaders })
 		facets,
 		ressss,
 		pageSize,
-		category,
-		style_tags = []
+		category
 
 	const fl = {}
 	const currentPage = +url.searchParams.get('page') || 1
@@ -37,27 +40,19 @@ export async function load({ url, params, locals, cookies, parent, setHeaders })
 		products = res?.products
 		count = res?.count
 		facets = res?.facets
-		// style_tags = res?.style_tags
 		pageSize = res?.pageSize
 		category = res?.category
 		err = res?.err
-		if (facets.all_aggs?.tags?.all?.buckets?.length) {
-			const style_tags_with_product = facets.all_aggs?.tags?.all?.buckets?.filter(
-				(t) => t.doc_count > 0
-			)
-			style_tags = res?.style_tags?.filter((st) => {
-				return style_tags_with_product.some((t) => {
-					return st._source.name === t.key // Assuming there is a unique "id" property in each object
-				})
-			})
-		}
 	} catch (e) {
 		err = e
 		throw error(400, e?.message || e || 'No results found')
 	} finally {
 		loading = false
 	}
-
+	let priceRange = []
+	if (facets.all_aggs?.price_stats?.max && facets.all_aggs?.price_stats?.min) {
+		priceRange = generatePriceRange(facets.all_aggs?.price_stats)
+	}
 	return {
 		loading,
 		err,
@@ -70,9 +65,9 @@ export async function load({ url, params, locals, cookies, parent, setHeaders })
 		query: query.toString(),
 		searchData,
 		fl,
+		priceRange,
 		ressss,
 		category: category,
-		style_tags,
 		store,
 		categorySlug,
 		origin: locals.origin
