@@ -28,10 +28,10 @@ export let facets = {}
 export let filterLength = 0
 export let fl = {}
 export let mergedArr = []
+export let priceRange = []
 export let selected
 export let showFilter = false
 export let showSort = false
-export let style_tags = []
 
 // console.log('facets', facets)
 
@@ -41,6 +41,7 @@ let showSubCategory = []
 let showSubCategory2 = []
 // ----------------
 let megamenu
+
 let allAges = []
 let allBrands = []
 let allColors = []
@@ -49,10 +50,9 @@ let allFeatures = []
 let allGenders = []
 let allPromotions = []
 let allSizes = []
+let allTags = []
 let allTypes = []
 let allVendors = []
-let filteredStyleTags = []
-let filteredThemeTags = []
 let priceRanges = []
 
 onMount(async () => {
@@ -64,35 +64,6 @@ onMount(async () => {
 
 	getFacetsWithProducts()
 
-	if (facets.all_aggs?.tags?.all?.buckets?.length) {
-		const tags_with_product = facets.all_aggs?.tags?.all?.buckets?.filter((t) => t.doc_count > 0)
-
-		// console.log('tags_with_product', tags_with_product)
-		// console.log('style_tags', style_tags)
-
-		const abcd = style_tags.map((t) => {
-			return t._source?.name
-		})
-
-		// console.log('abcd', abcd)
-
-		const newStyleTags = new Set(abcd)
-
-		filteredThemeTags = tags_with_product.filter((stp) => {
-			return !newStyleTags.has(stp.key)
-		})
-
-		// console.log('filteredThemeTags', filteredThemeTags)
-
-		filteredStyleTags = tags_with_product.filter((stp) => {
-			return style_tags.some((st) => {
-				return st._source?.name === stp.key
-			})
-		})
-
-		// console.log('filteredStyleTags', filteredStyleTags)
-	}
-
 	if (facets.all_aggs?.price_stats?.max && facets.all_aggs?.price_stats?.min) {
 		getPriceRanges()
 	}
@@ -102,6 +73,7 @@ onMount(async () => {
 })
 
 // console.log('fl', fl)
+// console.log('appliedFilters', appliedFilters)
 
 function getFacetsWithProducts() {
 	if (facets?.all_aggs?.age?.all?.buckets?.length) {
@@ -127,6 +99,9 @@ function getFacetsWithProducts() {
 	}
 	if (facets?.all_aggs?.sizes?.all?.buckets?.length) {
 		allSizes = facets?.all_aggs?.sizes?.all?.buckets?.filter((t) => t.doc_count > 0)
+	}
+	if (facets?.all_aggs?.tags?.all?.buckets?.length) {
+		allTags = facets?.all_aggs?.tags?.all?.buckets?.filter((t) => t.doc_count > 0)
 	}
 	if (facets?.all_aggs?.types?.all?.buckets?.length) {
 		allTypes = facets?.all_aggs?.types?.all?.buckets?.filter((t) => t.doc_count > 0)
@@ -204,20 +179,15 @@ function getSelected() {
 		selected = 'Promotions'
 	} else if (allSizes?.length > 0) {
 		selected = 'Sizes'
+	} else if (allTags?.length > 0) {
+		selected = 'Tags'
 	} else if (allTypes?.length > 0) {
 		selected = 'Types'
 	} else if (allVendors?.length > 0) {
 		selected = 'Vendors'
-	} else if (filteredStyleTags?.length > 0) {
-		selected = 'Styles'
-	} else if (filteredThemeTags?.length > 0) {
-		selected = 'Themes'
-	} else if (priceRanges?.length > 0) {
+	} else if (priceRange?.length > 0) {
 		selected = 'Prices'
 	}
-	// else if (facets?.all_aggs?.tags?.all?.buckets?.length > 0) {
-	// 	selected = 'Tags'
-	// }
 }
 
 function handleToggleSubCategory(m, mx) {
@@ -257,6 +227,10 @@ function clearFilters() {
 
 function goCheckbox(e) {
 	fl[e.detail.model] = e.detail.selectedItems
+}
+
+function applyFilter() {
+	showFilter = false
 	fl.q = $page.url.searchParams.get('q')
 	let url = constructURL2(`${$page.url.pathname}`, fl)
 	appliedFilters = { ...fl }
@@ -300,14 +274,45 @@ $: {
 
 <!-- Header -->
 
-<div
-	class="{clazz} grid w-full grid-cols-2 divide-x divide-gray-300 border-b bg-white font-medium shadow-md">
+<div class="{clazz} grid w-full grid-cols-2 bg-white font-medium shadow-md">
+	<!-- Sort -->
+
+	<button
+		type="button"
+		class="flex items-center justify-center gap-2 px-3 py-2 border"
+		on:click="{() => (showSort = true)}">
+		<div
+			class="h-1.5 w-1.5 rounded-full 
+			{$page?.url?.searchParams.get('sort') ? 'bg-primary-500' : 'bg-gray-300'}">
+		</div>
+
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke-width="1.5"
+			stroke="currentColor"
+			class="h-5 w-5">
+			<path
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				d="M3 7.5L7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5"></path>
+		</svg>
+
+		<span>Sort</span>
+	</button>
+
 	<!-- Filter -->
 
 	<button
 		type="button"
-		class="flex items-center justify-center gap-2 px-3 py-2"
+		class="flex items-center justify-center gap-2 px-3 py-2 border"
 		on:click="{() => (showFilter = true) && getSelected()}">
+		<div
+			class="h-1.5 w-1.5 rounded-full 
+			{filterLength ? 'bg-primary-500' : 'bg-gray-300'}">
+		</div>
+
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"
@@ -323,28 +328,6 @@ $: {
 		</svg>
 
 		<span>Filter</span>
-	</button>
-
-	<!-- Sort -->
-
-	<button
-		type="button"
-		class="flex items-center justify-center gap-2 px-3 py-2"
-		on:click="{() => (showSort = true)}">
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			fill="none"
-			viewBox="0 0 24 24"
-			stroke-width="1.5"
-			stroke="currentColor"
-			class="h-5 w-5">
-			<path
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				d="M3 7.5L7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5"></path>
-		</svg>
-
-		<span>Sort</span>
 	</button>
 </div>
 
@@ -366,12 +349,8 @@ $: {
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="h-6 w-6">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
-						</path>
+						class="w-6 h-6">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
 					</svg>
 				</button>
 
@@ -397,7 +376,7 @@ $: {
 				loadingringsize="xs"
 				roundedFull
 				class="col-span-1 justify-self-end text-xs uppercase"
-				on:click="{() => (showFilter = false)}">
+				on:click="{applyFilter}">
 				Apply
 			</PrimaryButton>
 		</header>
@@ -511,10 +490,10 @@ $: {
 				{#if allPromotions?.length > 0}
 					<button
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
-						{selected === 'promotions'
+						{selected === 'Promotions'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'promotions')}">
+						on:click="{() => (selected = 'Promotions')}">
 						<span> Promotions </span>
 
 						{#if fl.promotions?.length}
@@ -528,10 +507,10 @@ $: {
 				{#if allSizes?.length > 0}
 					<button
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
-						{selected === 'sizes'
+						{selected === 'Sizes'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'sizes')}">
+						on:click="{() => (selected = 'Sizes')}">
 						<span> Sizes </span>
 
 						{#if fl.sizes?.length}
@@ -542,13 +521,30 @@ $: {
 					<hr class="w-full" />
 				{/if}
 
+				{#if allTags?.length > 0}
+					<button
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						{selected === 'Tags'
+							? 'text-primary-500 border-primary-500 bg-white'
+							: 'border-gray-100 bg-transparent'}"
+						on:click="{() => (selected = 'Tags')}">
+						<span> Tags </span>
+
+						{#if fl.tags?.length}
+							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
+						{/if}
+					</button>
+
+					<hr class="w-full" />
+				{/if}
+
 				{#if allTypes?.length > 0}
 					<button
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
-						{selected === 'types'
+						{selected === 'Types'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'types')}">
+						on:click="{() => (selected = 'Types')}">
 						<span> Types </span>
 
 						{#if fl.types?.length}
@@ -576,41 +572,7 @@ $: {
 					<hr class="w-full" />
 				{/if}
 
-				{#if filteredThemeTags?.length > 0}
-					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
-						{selected === 'Themes'
-							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'Themes')}">
-						<span> Themes </span>
-
-						{#if fl.tags?.length}
-							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
-						{/if}
-					</button>
-
-					<hr class="w-full" />
-				{/if}
-
-				{#if filteredStyleTags?.length > 0}
-					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
-						{selected === 'Styles'
-							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'Styles')}">
-						<span> Styles </span>
-
-						{#if fl.tags?.length}
-							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
-						{/if}
-					</button>
-
-					<hr class="w-full" />
-				{/if}
-
-				{#if priceRanges?.length > 0}
+				{#if priceRange?.length > 0}
 					<button
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Prices'
@@ -639,19 +601,6 @@ $: {
 
 					<hr class="w-full" />
 				{/if}
-
-				<!-- {#if facets?.all_aggs?.tags?.all?.buckets?.length > 0}
-					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
-						{selected === 'Tags'
-							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
-						on:click="{() => (selected = 'Tags')}">
-						Tags
-					</button>
-
-					<hr class="w-full" />
-				{/if} -->
 
 				<!-- {#if facets?.all_aggs?.price?.all?.buckets?.length > 0}
 					<button
@@ -793,6 +742,21 @@ $: {
 					</div>
 				{/if}
 
+				{#if selected === 'Tags'}
+					<div
+						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
+						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
+						{#if allTags?.length > 0}
+							<CheckboxEs
+								items="{allTags}"
+								model="tags"
+								selectedItems="{fl.tags || []}"
+								showSearchBox
+								on:go="{goCheckbox}" />
+						{/if}
+					</div>
+				{/if}
+
 				{#if selected === 'Types'}
 					<div
 						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
@@ -817,36 +781,6 @@ $: {
 								items="{allVendors}"
 								model="vendors"
 								selectedItems="{fl.vendors || []}"
-								showSearchBox
-								on:go="{goCheckbox}" />
-						{/if}
-					</div>
-				{/if}
-
-				{#if selected === 'Styles'}
-					<div
-						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
-						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
-						{#if filteredStyleTags?.length > 0}
-							<CheckboxEs
-								items="{filteredStyleTags}"
-								model="tags"
-								selectedItems="{fl.tags || []}"
-								showSearchBox
-								on:go="{goCheckbox}" />
-						{/if}
-					</div>
-				{/if}
-
-				{#if selected === 'Themes'}
-					<div
-						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
-						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
-						{#if filteredThemeTags?.length > 0}
-							<CheckboxEs
-								items="{filteredThemeTags}"
-								model="tags"
-								selectedItems="{fl.tags || []}"
 								showSearchBox
 								on:go="{goCheckbox}" />
 						{/if}
@@ -983,21 +917,6 @@ $: {
 						</ul>
 					</div>
 				{/if}
-
-				<!-- {#if selected === 'Tags'}
-					<div
-						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
-						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
-						{#if facets?.all_aggs?.tags?.all?.buckets?.length > 0}
-							<CheckboxEs
-								items="{facets?.all_aggs?.tags?.all?.buckets}"
-								model="tags"
-								selectedItems="{fl.tags || []}"
-								showSearchBox
-								on:go="{goCheckbox}" />
-						{/if}
-					</div>
-				{/if} -->
 
 				<!-- {#if selected === 'Price'}
 					<div

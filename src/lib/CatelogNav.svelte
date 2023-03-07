@@ -5,21 +5,25 @@
 </style>
 
 <script lang="ts">
-import { createEventDispatcher, onMount } from 'svelte'
+import { enhance } from '$app/forms'
+import { goto, invalidateAll } from '$app/navigation'
+import { toast } from '$lib/utils'
+import { createEventDispatcher, getContext, onMount } from 'svelte'
 import { cubicOut } from 'svelte/easing'
 import { fade, fly } from 'svelte/transition'
-import { goto } from '$app/navigation'
-import { logo } from './config'
 import { page } from '$app/stores'
 import Autocomplete from '$lib/components/Autocomplete/Autocomplete.svelte'
+import AutosuggestModal from './AutosuggestModal.svelte'
 import LazyImg from './components/Image/LazyImg.svelte'
 import MegaMenu from './components/MegaMenu.svelte'
 import menu from '$lib/config/menu'
+import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import PrimaryButton from './ui/PrimaryButton.svelte'
-import WhiteButton from './ui/WhiteButton.svelte'
-import AutosuggestModal from './AutosuggestModal.svelte'
-import { enhance } from '$app/forms'
+import productNonVeg from '$lib/assets/product/non-veg.png'
+import productVeg from '$lib/assets/product/veg.png'
 import type { Cart, Me } from './types'
+import userEmptyProfile from '$lib/assets/user-empty-profile.png'
+import WhiteButton from './ui/WhiteButton.svelte'
 
 const dispatch = createEventDispatcher()
 
@@ -56,16 +60,67 @@ async function onSearchSubmit({ detail }) {
 	} else {
 		const u = new URL('/search', $page.data.origin)
 		u.searchParams.set('q', detail?.name)
-		newUrl = u.toString() + '&sort=price'
+		newUrl = u.toString()
 	}
 
 	goto(newUrl)
 	dispatch('search', detail)
 }
+
+function handleShowCartSidebar() {
+	if ($page?.url?.pathname !== '/cart') {
+		showCartSidebar = true
+		getCategories()
+	}
+
+	return
+}
+
+async function getCategories() {
+	try {
+		const res1 = await getAPI(`categories?store=${$page.data.store?.id}`, $page.data.origin)
+		categories = res1?.data.filter((c) => {
+			return c.img
+		})
+		// console.log('res1', res1)
+		// console.log('categories', categories)
+	} catch (e) {
+	} finally {
+	}
+}
+
+const removeItemFromCart = async ({ pid, qty, customizedImg, ix }: any) => {
+	try {
+		loadingForDeleteItemFromCart[ix] = true
+		const res = await post(
+			'carts/add-to-cart',
+			{
+				pid: pid,
+				qty: qty,
+				customizedImg: customizedImg || null,
+				store: $page.data.store?.id
+			},
+			$page.data.origin
+		)
+
+		// cart = res
+		// $page.data.cart = res
+
+		// await refreshCart()
+		await invalidateAll()
+	} catch (e) {
+	} finally {
+		loadingForDeleteItemFromCart[ix] = false
+	}
+}
+
+const optionIdentifier = 'name'
+const getOptionLabel = (option) => option.name
+const getSelectionLabel = (option) => option.name
 </script>
 
 <nav
-	class="minimum-width-rem fixed inset-x-0 top-0 flex h-14 w-full items-center justify-center border-b bg-white px-3 shadow-md sm:h-20 sm:px-10
+	class="minimum-width-rem fixed inset-x-0 top-0 flex h-14 w-full items-center justify-center border-b bg-white px-3 shadow-md sm:h-20 sm:px-10 lg:hidden
 	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
 	<div class="flex w-full items-center justify-between gap-4 lg:gap-8">
 		<div class="flex items-center gap-4">
@@ -74,7 +129,7 @@ async function onSearchSubmit({ detail }) {
 			{#if $page?.data?.isShowBackButton}
 				<button
 					type="button"
-					class="block shrink-0 focus:outline-none sm:hidden"
+					class="block shrink-0 focus:outline-none lg:hidden"
 					on:click="{() => window.history.go(-1)}">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -91,39 +146,14 @@ async function onSearchSubmit({ detail }) {
 				</button>
 			{/if}
 
-			<!-- Website Logo/Name -->
+			<!-- External data on slot -->
 
-			<a href="/" aria-label="Click to route home page" class="block shrink-0">
-				{#if $page?.data?.store?.logo}
-					<LazyImg
-						src="{$page?.data?.store?.logo}"
-						alt="logo"
-						height="40"
-						class="max-w-32 h-auto max-h-10 object-contain object-left sm:max-h-16" />
-				{:else if $page?.data?.store?.websiteName}
-					<h2
-						class="bg-gradient-to-b from-primary-500 to-secondary-500 bg-clip-text text-2xl font-extrabold text-transparent sm:text-3xl">
-						{$page?.data?.store?.websiteName}
-					</h2>
-				{:else}
-					<img
-						src="{logo}"
-						alt=" "
-						class="h-auto max-h-10 w-32 object-contain object-left sm:max-h-16" />
-
-					<img
-						src="{logo}"
-						alt="logo"
-						height="40"
-						class="max-w-32 h-auto max-h-10 object-contain object-left sm:max-h-16" />
-				{/if}
-			</a>
+			<slot />
 		</div>
 
 		<!-- Mega menu -->
 
-		<div
-			class="hidden w-80 items-start justify-start overflow-auto scrollbar scrollbar-track-transparent scrollbar-thumb-gray-100 lg:flex xl:w-auto">
+		<div class="hidden lg:block">
 			<MegaMenu />
 		</div>
 
@@ -179,7 +209,7 @@ async function onSearchSubmit({ detail }) {
 
 				{#if $page.data.cartQty > 0}
 					<div
-						class="cart absolute -top-2 -right-1.5 flex items-center justify-center rounded-full bg-primary-500 py-[0.8px] px-[5px] text-center text-xs font-bold uppercase text-white">
+						class="absolute -top-2 -right-1.5 flex items-center justify-center rounded-full bg-primary-500 py-[0.8px] px-[5px] text-center text-xs font-bold uppercase text-white">
 						{$page.data.cartQty}
 					</div>
 				{/if}
@@ -222,7 +252,7 @@ async function onSearchSubmit({ detail }) {
 											<div class="flex items-start justify-between gap-4">
 												<a
 													href="/product/{item.slug}"
-													aria-label="Click to route product details page"
+													aria-label="Click to route product detail"
 													class="shrink-0"
 													on:click="{() => (showCartSidebar = false)}">
 													{#if item.isCustomized}
@@ -251,9 +281,9 @@ async function onSearchSubmit({ detail }) {
 														{#if $page?.data?.store?.isFnb && item.foodType}
 															<div>
 																{#if item.foodType === 'veg'}
-																	<img src="/product/veg.png" alt="veg" class="h-5 w-5" />
+																	<img src="{productVeg}" alt="veg" class="h-5 w-5" />
 																{:else if item.foodType === 'nonveg'}
-																	<img src="/product/non-veg.png" alt="non veg" class="h-5 w-5" />
+																	<img src="{productNonVeg}" alt="non veg" class="h-5 w-5" />
 																{/if}
 															</div>
 														{/if}
@@ -297,7 +327,7 @@ async function onSearchSubmit({ detail }) {
 									<div class="mb-10 flex flex-col gap-2">
 										<a
 											href="/cart"
-											aria-label="Click to route cart page"
+											aria-label="Click to route cart"
 											class="block w-full"
 											data-sveltekit-preload-data>
 											<WhiteButton
@@ -311,7 +341,7 @@ async function onSearchSubmit({ detail }) {
 
 										<a
 											href="/checkout/address"
-											aria-label="Click to route address of checkout page"
+											aria-label="Click to route address of checkout"
 											class="block w-full"
 											data-sveltekit-preload-data>
 											<PrimaryButton
@@ -328,7 +358,7 @@ async function onSearchSubmit({ detail }) {
 									<div class="mb-10 flex flex-col items-center text-center">
 										<div>
 											<img
-												src="/no/add-to-cart-animate.svg"
+												src="{noAddToCartAnimate}"
 												alt="empty listing"
 												class="mb-5 h-40 object-contain" />
 										</div>
@@ -358,7 +388,7 @@ async function onSearchSubmit({ detail }) {
 												href="/{c.link}"
 												target="_blank"
 												rel="noopener noreferrer"
-												aria-label="Click to route category related products page"
+												aria-label="Click to route into category related products page"
 												class="col-span-1 block transform border transition duration-500 hover:-translate-y-2 hover:shadow-lg">
 												<LazyImg
 													src="{c.img}"
@@ -374,6 +404,8 @@ async function onSearchSubmit({ detail }) {
 			{/if}
 
 			{#if me?.active}
+				<!-- Profile -->
+
 				<div
 					class="relative hidden lg:block"
 					on:mouseenter="{() => (showDropdownAccount = true)}"
@@ -419,7 +451,7 @@ async function onSearchSubmit({ detail }) {
 												class="object-cover object-top" />
 										{:else}
 											<img
-												src="/user-empty-profile.png"
+												src="{userEmptyProfile}"
 												alt=""
 												class="h-full w-full object-cover object-top" />
 										{/if}
@@ -459,7 +491,15 @@ async function onSearchSubmit({ detail }) {
 							{/each}
 
 							<li>
-								<form action="/auth/logout" method="POST" use:enhance>
+								<form
+									action="/auth/logout"
+									method="POST"
+									use:enhance="{() => {
+										return async () => {
+											toast('Logged out successfully', 'success')
+											await invalidateAll()
+										}
+									}}">
 									<button
 										type="submit"
 										class="w-full cursor-pointer rounded py-2 px-4 text-left transition duration-300 focus:outline-none hover:bg-primary-50">
@@ -495,8 +535,7 @@ async function onSearchSubmit({ detail }) {
 				<!-- Login -->
 
 				<a
-					href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page?.url
-						?.search}"
+					href="/auth/otp-login?ref={$page?.url?.pathname}{$page?.url?.search}"
 					aria-label="Click to route login"
 					data-sveltekit-preload-data>
 					<button
@@ -584,7 +623,7 @@ async function onSearchSubmit({ detail }) {
 										class="object-cover object-top" />
 								{:else}
 									<img
-										src="/user-empty-profile.png"
+										src="{userEmptyProfile}"
 										alt=""
 										class="h-full w-full object-cover object-top" />
 								{/if}
@@ -629,7 +668,15 @@ async function onSearchSubmit({ detail }) {
 					<!-- Logout -->
 
 					<li>
-						<form action="/auth/logout" method="POST" use:enhance>
+						<form
+							action="/auth/logout"
+							method="POST"
+							use:enhance="{() => {
+								return async () => {
+									toast('Logged out successfully', 'success')
+									await invalidateAll()
+								}
+							}}">
 							<button type="submit" aria-label="Logout" class="flex w-full items-center gap-2 py-2">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -655,10 +702,9 @@ async function onSearchSubmit({ detail }) {
 				<!-- Login -->
 
 				<a
-					href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page?.url
-						?.search}"
-					aria-label="Click to route login"
 					data-sveltekit-preload-data
+					href="/auth/otp-login?ref={$page?.url?.pathname}{$page?.url?.search}"
+					aria-label="Click to route login"
 					class="flex items-center gap-2 py-2"
 					on:click="{() => (openSidebar = false)}">
 					<svg

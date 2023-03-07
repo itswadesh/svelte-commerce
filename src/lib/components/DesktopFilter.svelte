@@ -14,7 +14,7 @@ export let facets = {},
 	query, // Required because after loading finished then only we will initiate the price slider component
 	filterLength = 0,
 	mergedArr = [],
-	style_tags = []
+	priceRange = []
 
 // console.log('facets', facets)
 
@@ -26,7 +26,6 @@ let selectedCategory2
 let showSubCategory = []
 let showSubCategory2 = []
 // ----------------
-let megamenu
 let allAges = []
 let allBrands = []
 let allColors = []
@@ -35,11 +34,10 @@ let allFeatures = []
 let allGenders = []
 let allPromotions = []
 let allSizes = []
+let allTags = []
 let allTypes = []
 let allVendors = []
-let filteredStyleTags = []
-let filteredThemeTags = []
-let priceRanges = []
+let megamenu
 
 function clearFilters() {
 	fl = {}
@@ -68,39 +66,6 @@ onMount(async () => {
 	})
 
 	getFacetsWithProducts()
-
-	if (facets.all_aggs?.tags?.all?.buckets?.length) {
-		const tags_with_product = facets.all_aggs?.tags?.all?.buckets?.filter((t) => t.doc_count > 0)
-
-		// console.log('tags_with_product', tags_with_product)
-		// console.log('style_tags', style_tags)
-
-		const abcd = style_tags.map((t) => {
-			return t._source?.name
-		})
-
-		// console.log('abcd', abcd)
-
-		const newStyleTags = new Set(abcd)
-
-		filteredThemeTags = tags_with_product.filter((stp) => {
-			return !newStyleTags.has(stp.key)
-		})
-
-		// console.log('filteredThemeTags', filteredThemeTags)
-
-		filteredStyleTags = tags_with_product.filter((stp) => {
-			return style_tags.some((st) => {
-				return st._source?.name === stp.key
-			})
-		})
-
-		// console.log('filteredStyleTags', filteredStyleTags)
-	}
-
-	if (facets.all_aggs?.price_stats?.max && facets.all_aggs?.price_stats?.min) {
-		getPriceRanges()
-	}
 
 	await getMegamenu()
 })
@@ -132,42 +97,14 @@ function getFacetsWithProducts() {
 	if (facets?.all_aggs?.sizes?.all?.buckets?.length) {
 		allSizes = facets?.all_aggs?.sizes?.all?.buckets?.filter((t) => t.doc_count > 0)
 	}
+	if (facets?.all_aggs?.tags?.all?.buckets?.length) {
+		allTags = facets?.all_aggs?.tags?.all?.buckets?.filter((t) => t.doc_count > 0)
+	}
 	if (facets?.all_aggs?.types?.all?.buckets?.length) {
 		allTypes = facets?.all_aggs?.types?.all?.buckets?.filter((t) => t.doc_count > 0)
 	}
 	if (facets?.all_aggs?.vendors?.all?.buckets?.length) {
 		allVendors = facets?.all_aggs?.vendors?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
-}
-
-function getPriceRanges() {
-	const difference = facets.all_aggs?.price_stats?.max - facets.all_aggs?.price_stats?.min
-	// console.log('min', facets.all_aggs?.price_stats?.min)
-	// console.log('max', facets.all_aggs?.price_stats?.max)
-	// console.log('difference', difference)
-	if (difference) {
-		const priceGap = difference / 4
-		// console.log('priceGap', priceGap)
-		if (priceGap) {
-			const price1 = facets.all_aggs?.price_stats?.min
-			const price2 = price1 + priceGap
-			const price3 = price2 + priceGap
-			const price4 = price3 + priceGap
-			const price5 = facets.all_aggs?.price_stats?.max
-
-			// console.log('price1,2,3,4,5', price1, price2, price3, price4, price5)
-
-			if (price1 && price2 && price3 && price4 && price5) {
-				priceRanges = [
-					{ from: price1, key: `From ${currency(price1)} to ${currency(price2)}`, to: price2 },
-					{ from: price2, key: `From ${currency(price2)} to ${currency(price3)}`, to: price3 },
-					{ from: price3, key: `From ${currency(price3)} to ${currency(price4)}`, to: price4 },
-					{ from: price4, key: `From ${currency(price4)} to ${currency(price5)}`, to: price5 }
-				]
-
-				// console.log('priceRanges', priceRanges)
-			}
-		}
 	}
 }
 
@@ -492,6 +429,19 @@ function handleToggleSubCategory2(c, cx) {
 		</div>
 	{/if}
 
+	{#if allTags?.length > 0}
+		<div class="my-3">
+			<hr class="mb-3 w-full" />
+
+			<CheckboxEs
+				items="{allTags}"
+				title="tags"
+				model="tags"
+				selectedItems="{fl.tags || []}"
+				on:go="{goCheckbox}" />
+		</div>
+	{/if}
+
 	{#if allTypes?.length > 0}
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
@@ -518,54 +468,18 @@ function handleToggleSubCategory2(c, cx) {
 		</div>
 	{/if}
 
-	{#if filteredStyleTags?.length > 0}
-		<div class="my-3">
-			<hr class="mb-3 w-full" />
-			<CheckboxEs
-				items="{filteredStyleTags}"
-				title="Styles"
-				model="tags"
-				selectedItems="{fl.tags || []}"
-				on:go="{goCheckbox}" />
-		</div>
-	{/if}
-
-	{#if filteredThemeTags?.length > 0}
-		<div class="my-3">
-			<hr class="mb-3 w-full" />
-			<CheckboxEs
-				items="{filteredThemeTags}"
-				title="Themes"
-				model="tags"
-				selectedItems="{fl.tags || []}"
-				on:go="{goCheckbox}" />
-		</div>
-	{/if}
-
-	{#if priceRanges?.length > 0}
+	{#if priceRange?.length > 0}
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
 			<RadioEs
-				items="{priceRanges}"
+				items="{priceRange}"
 				title="Price"
 				model="price"
 				selectedItems="{fl.price || []}"
 				on:go="{goCheckbox}" />
 		</div>
 	{/if}
-
-	<!-- {#if facets?.all_aggs?.filter_tags?.all?.buckets?.length > 0}
-		<div class="my-3">
-			<hr class="mb-3 w-full" />
-			<CheckboxEs
-				items="{facets.all_aggs?.filter_tags?.all?.buckets}"
-				title="Tags"
-				model="tags"
-				selectedItems="{fl.tags || []}"
-				on:go="{goCheckbox}" />
-		</div>
-	{/if} -->
 
 	<!-- {#if facets?.all_aggs?.price?.all?.buckets?.length > 0}
 		<div class="my-3">

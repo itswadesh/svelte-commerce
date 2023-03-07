@@ -21,16 +21,15 @@ import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { sorts } from '$lib/config'
-import Breadcrumb from '$lib/components/Breadcrumb.svelte'
+import CatelogNav from '$lib/CatelogNav.svelte'
 import DesktopFilter from '$lib/components/DesktopFilter.svelte'
+import dotsLoading from '$lib/assets/dots-loading.gif'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
 import MobileFilter from '$lib/components/MobileFilter.svelte'
-import MobileFooter from '$lib/MobileFooter.svelte'
 import noNoDataAvailable from '$lib/assets/no/no-data-availible.png'
 import Pagination from '$lib/components/Pagination.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
-import ProductNav from '$lib/ProductNav.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
@@ -168,6 +167,7 @@ async function loadNextPage() {
 			nextPage,
 			searchParams
 		})
+		// console.log('res', res)
 		const nextPageData = res.nextPageData
 		data.products = data?.products?.concat(nextPageData)
 		data.count = res?.count
@@ -275,28 +275,54 @@ function handleFilterTags() {
 
 <svelte:window bind:scrollY="{y}" bind:innerWidth="{innerWidth}" on:scroll="{handleOnScroll}" />
 
-<ProductNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page?.data?.store}">
+<CatelogNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page?.data?.store}">
 	<div class="flex max-w-max flex-col items-start gap-1">
 		<h2 class="w-28 truncate font-semibold capitalize leading-4">{data.category?.name}</h2>
 
 		<p class="text-xs">
-			{data.count}
+			{data.count?.value}
 
-			{#if data.count > 1}
+			{#if data.count?.value > 1}
 				Items
 			{:else}
 				Item
 			{/if}
 		</p>
 	</div>
-</ProductNav>
+</CatelogNav>
 
 <div class="{showFilter || showSort ? 'h-[93vh] overflow-hidden' : 'h-full min-h-screen'}">
+	<!-- Style tags -->
+
+	{#if data.styleTags?.length}
+		<div
+			class="mb-5 block lg:hidden p-3 sm:px-10 w-screen overflow-x-auto scrollbar-none sticky top-14 sm:top-20 bg-white z-40 shadow-md">
+			<div class="inline-flex gap-2">
+				{#each { length: 3 } as _}
+					{#each data.styleTags || [] as t}
+						{#if t?.key}
+							<button
+								class="whitespace-nowrap block rounded-full border py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none
+											{$page.url.searchParams.get('tags')?.includes(t?.key)
+									? 'bg-primary-500 border-primary-500 text-white'
+									: 'bg-white hover:border-primary-500 hover:text-primary-500'}"
+								on:click="{() => goCheckbox(t?.key)}">
+								{t?.key}
+							</button>
+						{/if}
+					{/each}
+				{/each}
+			</div>
+		</div>
+	{/if}
+
+	<!-- Mobile black product count indicator -->
+
 	{#if !hidden && innerWidth <= 1024}
 		<button
 			transition:fade="{{ duration: 500 }}"
 			aria-label="Click to go to top"
-			class="fixed top-28 left-[50%] z-40 -ml-14 flex w-28 transform items-center justify-center gap-1 rounded-full bg-black bg-opacity-60 py-1 px-3 text-xs uppercase text-white transition duration-300 focus:outline-none hover:bg-opacity-80 active:scale-90 sm:top-36"
+			class="fixed top-28 left-[50%] z-40 transform -translate-x-1/2 flex w-28 items-center justify-center gap-1 rounded-full bg-black bg-opacity-60 py-1 px-3 text-xs uppercase text-white transition duration-300 focus:outline-none hover:bg-opacity-80 active:scale-90 sm:top-36 whitespace-nowrap"
 			on:click="{goTop}">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -309,34 +335,36 @@ function handleFilterTags() {
 				></path>
 			</svg>
 
-			<span class="flex-1">{data.products?.length} / {data.count}</span>
+			<span class="flex-1">{data.products?.length} / {data.count?.value}</span>
 		</button>
 	{/if}
 
-	<div class="mb-10 flex w-full flex-col sm:mb-20 lg:flex-row lg:gap-10 lg:p-10">
+	<div class="mb-10 flex flex-col items-start sm:mb-20 lg:flex-row lg:gap-10 lg:p-10">
 		{#if data.facets}
 			<DesktopFilter
 				facets="{data.facets}"
+				priceRange="{data.priceRange}"
 				query="{data.query}"
-				style_tags="{data.style_tags}"
 				class="sticky top-24 hidden lg:block"
 				on:clearAll="{refreshData}" />
 
 			<MobileFilter
-				facets="{data.facets}"
-				style_tags="{data.style_tags}"
 				bind:showFilter="{showFilter}"
 				bind:showSort="{showSort}"
+				facets="{data.facets}"
+				priceRange="{data.priceRange}"
 				selected="{selectedFilter}"
-				class="sticky top-14 z-40 block sm:top-20 lg:hidden"
+				class="fixed bottom-0 border-t z-40 block lg:hidden"
 				on:clearAll="{refreshData}" />
 		{/if}
 
-		<div class="w-full sm:px-10 lg:px-0">
-			{#if data.products?.length > 0}
-				<div class="mb-5 w-full sm:mb-10 lg:mb-20">
+		<div class="w-full flex-1 sm:px-10 lg:px-0">
+			{#if data.products?.length}
+				<div class="mb-5 sm:mb-10 lg:mb-20">
 					<div
 						class="mb-5 hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex">
+						<!-- Name and count -->
+
 						<h1 class="flex flex-wrap items-center gap-2">
 							<span class="text-xl font-bold capitalize md:text-2xl"> {data.category?.name} </span>
 
@@ -344,11 +372,11 @@ function handleFilterTags() {
 
 							<p>
 								<span class="text-xl font-bold capitalize md:text-2xl">
-									{data.count}
+									{data.count?.value}
 								</span>
 
 								<span>
-									{#if data.count > 1}
+									{#if data.count?.value > 1}
 										Items
 									{:else}
 										Item
@@ -356,6 +384,8 @@ function handleFilterTags() {
 								</span>
 							</p>
 						</h1>
+
+						<!-- Sort -->
 
 						<div class="flex flex-wrap items-center justify-between">
 							<label class="flex items-center gap-2">
@@ -373,25 +403,26 @@ function handleFilterTags() {
 						</div>
 					</div>
 
-					{#if data.style_tags?.length}
-						<div
-							class="w-screen overflow-x-auto scrollbar-none lg:mb-5 lg:w-full lg:overflow-x-hidden">
-							<div class="inline-flex gap-2 p-3 lg:flex lg:flex-wrap lg:p-0">
-								{#each data.style_tags || [] as t}
-									{#if t?._source?.name}
-										<button
-											class="whitespace-nowrap block rounded-full border py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none
-											{$page.url.searchParams.get('tags')?.includes(t?._source?.name)
-												? 'bg-primary-500 border-primary-500 text-white'
-												: 'bg-white hover:border-primary-500 hover:text-primary-500'}"
-											on:click="{() => goCheckbox(t?._source?.name)}">
-											{t?._source?.name}
-										</button>
-									{/if}
-								{/each}
-							</div>
+					<!-- Style tags -->
+
+					{#if data.styleTags?.length}
+						<div class="hidden mb-5 lg:flex flex-wrap items-center gap-2">
+							{#each data.styleTags || [] as t}
+								{#if t?.key}
+									<button
+										class="whitespace-nowrap block rounded-full border py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none
+											{$page.url.searchParams.get('tags')?.includes(t?.key)
+											? 'bg-primary-500 border-primary-500 text-white'
+											: 'bg-white hover:border-primary-500 hover:text-primary-500'}"
+										on:click="{() => goCheckbox(t?.key)}">
+										{t?.key}
+									</button>
+								{/if}
+							{/each}
 						</div>
 					{/if}
+
+					<!-- Category top description -->
 
 					{#if data.category?.topDescription}
 						<div class="prose prose-sm mb-5 max-w-none px-3 text-justify sm:px-0">
@@ -399,17 +430,21 @@ function handleFilterTags() {
 						</div>
 					{/if}
 
+					<!-- Products -->
+
 					<ul
-						class="grid w-full grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6">
+						class="grid grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6">
 						{#each data.products as p, ix}
 							<li>
 								<ProductCard product="{p}" />
 							</li>
 
+							<!-- Filter by tags -->
+
 							{#if ix % 40 === 39 && data.facets.all_aggs.tags?.all?.buckets?.length}
 								<div
-									class="col-span-2 w-screen block lg:hidden overflow-x-auto bg-primary-100 scrollbar-none">
-									<div class="flex items-center gap-6 p-4">
+									class="col-span-2 block sm:hidden overflow-x-auto bg-primary-100 scrollbar-none">
+									<div class="w-full flex items-center gap-6 p-4">
 										<div class="shrink-0">
 											<span class="text-lg text-gray-500">Filter by</span>
 
@@ -418,7 +453,7 @@ function handleFilterTags() {
 											<span class="text-2xl font-bold">Tags</span>
 										</div>
 
-										<ul class="flex w-[40rem] shrink-0 flex-wrap gap-2">
+										<ul class="flex max-w-[40rem] shrink-0 flex-wrap gap-2">
 											{#each data.facets.all_aggs.tags.all.buckets || [] as t, tx}
 												{#if t && tx < 12}
 													<button
@@ -453,7 +488,7 @@ function handleFilterTags() {
 				</div>
 			{:else}
 				<div
-					class="mb-5 flex w-full items-center justify-center px-3 sm:mb-10 sm:px-0 lg:mb-20"
+					class="mb-5 flex items-center justify-center px-3 sm:mb-10 sm:px-0 lg:mb-20"
 					style="height: 60vh;">
 					<div class="m-10 flex flex-col items-center justify-center text-center">
 						<h2 class="mb-10 text-xl capitalize sm:text-2xl lg:text-3xl">
@@ -479,10 +514,21 @@ function handleFilterTags() {
 			{/if}
 
 			{#if !$page?.data?.isDesktop}
-				<div class="more">{data.isLoading ? 'loading...' : ''}</div>
+				<div class="more">
+					<!-- Dot loading gif -->
+
+					{#if data.isLoading}
+						<div class="flex items-center justify-center p-6">
+							<img
+								src="{dotsLoading}"
+								alt="loading"
+								class="h-auto w-5 object-contain object-center" />
+						</div>
+					{/if}
+				</div>
 			{:else}
 				<Pagination
-					count="{Math.ceil((data?.count || 1) / data.pageSize)}"
+					count="{Math.ceil((data?.count?.value || 1) / data.pageSize)}"
 					current="{data?.currentPage || 1}" />
 			{/if}
 		</div>
@@ -491,7 +537,7 @@ function handleFilterTags() {
 	<!-- CATEGORY DESCRIPTION -->
 
 	{#if data.category?.description}
-		<div class="w-full justify-center bg-gray-50 px-3 py-10 sm:px-10 sm:py-20">
+		<div class="justify-center bg-gray-50 px-3 py-10 sm:px-10 sm:py-20">
 			<div
 				class="container mx-auto grid max-w-6xl grid-cols-1 gap-10 text-sm sm:gap-20 md:grid-cols-6">
 				<div class="prose prose-sm col-span-1 max-w-none text-justify md:col-span-3 lg:col-span-4">
@@ -538,8 +584,4 @@ function handleFilterTags() {
 			</div>
 		</div>
 	{/if}
-
-	<div class="block sm:hidden">
-		<MobileFooter />
-	</div>
 </div>
