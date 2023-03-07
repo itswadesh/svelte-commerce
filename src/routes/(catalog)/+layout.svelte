@@ -10,15 +10,14 @@ let openSidebar = false
 </script>
 
 <div class="{showCartSidebar || openSidebar ? 'h-screen overflow-hidden' : 'h-full'}">
-	<div class="hidden sm:block">
+	<div class="hidden lg:block">
 		<Nav
 			me="{data.me}"
 			cart="{data.cart}"
 			store="{data.store}"
 			q="{data.q}"
 			bind:showCartSidebar="{showCartSidebar}"
-			bind:openSidebar="{openSidebar}"
-		/>
+			bind:openSidebar="{openSidebar}" />
 	</div>
 
 	<PageTransitions url="{data.url}">
