@@ -2,7 +2,7 @@
 import { applyAction, enhance } from '$app/forms'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { toast } from '$lib/util'
+import { toast } from '$lib/utils'
 import dayjs from 'dayjs'
 import productCod from '$lib/assets/product/cod.png'
 import productDelivery from '$lib/assets/product/delivery.png'
@@ -68,7 +68,7 @@ function changePincode() {
 			maxlength="6"
 			placeholder="Enter pincode"
 			disabled="{disabled}"
-			class="w-full rounded-md bg-transparent py-3 px-4 pr-24 text-sm font-semibold placeholder:font-normal focus:outline-none disabled:bg-gray-100" />
+			class="w-full rounded-md disabled:bg-gray-100 bg-transparent py-3 px-4 pr-24 text-sm font-semibold placeholder:font-normal focus:outline-none" />
 
 		{#if !deliveryDetails}
 			<button
@@ -104,7 +104,7 @@ function changePincode() {
 		{:else}
 			<button
 				type="button"
-				class="absolute inset-y-0 right-0 z-10 flex w-20 items-center justify-center text-right text-sm font-bold text-primary-500"
+				class="absolute inset-y-0 right-0 z-10 flex w-20 text-primary-500 items-center justify-center text-right text-sm font-bold"
 				on:click="{changePincode}">
 				{#if loading}
 					<div
