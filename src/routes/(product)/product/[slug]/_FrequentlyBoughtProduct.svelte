@@ -1,9 +1,10 @@
 <script>
 import { applyAction, enhance } from '$app/forms'
-import { currency } from '$lib/utils'
+import { date, currency, delay, toast } from '$lib/utils'
 import { fireGTagEvent } from '$lib/utils/gTag'
 import { invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
+import { post } from '$lib/utils/api'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
@@ -15,23 +16,68 @@ export let product = {}
 let loading = false
 let cartButtonText = 'Add to Bag'
 let bounceItemFromTop = false
+
+// async function addToBag(p) {
+// 	loading = true
+// 	cartButtonText = 'Adding...'
+
+// 	try {
+// 		await post(
+// 			'carts/add-to-cart',
+// 			{
+// 				pid: p._id,
+// 				vid: p._id,
+// 				qty: 1,
+// 				options: p.options,
+// 				store: $page.data.store?.id
+// 			},
+// 			$page.data.origin
+// 		)
+
+// 		await invalidateAll() //$page.url.toString()
+// 		cartButtonText = 'Go to cart'
+
+// 		// const res = await getAPI('carts/my')
+
+// 		// if (res) {
+// 		// 	const cookieCart = {
+// 		// 		items: res?.items,
+// 		// 		qty: res?.qty,
+// 		// 		tax: res?.tax,
+// 		// 		subtotal: res?.subtotal,
+// 		// 		total: res?.total,
+// 		// 		currencySymbol: res?.currencySymbol,
+// 		// 		discount: res?.discount,
+// 		// 		selfTakeout: res?.selfTakeout,
+// 		// 		shipping: res?.shipping,
+// 		// 		unavailableItems: res?.unavailableItems,
+// 		// 		formattedAmount: res?.formattedAmount
+// 		// 	}
+// 		// 	await cookies.set('cart', cookieCart, { path: '/' })
+// 		// 	$page.data.cart = cookieCart
+// 		// 	cartButtonText = 'Added To Cart'
+// 		// 	bounceItemFromTop = true
+// 		// }
+// 	} catch (e) {
+// 		cartButtonText = 'Error adding To Cart'
+// 	} finally {
+// 		loading = false
+// 		await delay(5000)
+// 		cartButtonText = 'Add to bag'
+// 		bounceItemFromTop = false
+// 	}
+// }
 </script>
 
 <div class="group relative col-span-1 block w-full overflow-hidden sm:w-48 sm:shrink-0">
-	<a
-		href="/product/{product.slug}"
-		target="_blank"
-		rel="noopener noreferrer"
-		aria-label="Click to route product details page"
-	>
-		<div class="mb-2 h-[280px] w-[210px] overflow-hidden">
-			<LazyImg
+	<a href="/product/{product.slug}" target="_blank" rel="noopener noreferrer">
+		<div class="mb-2 h-40 overflow-hidden">
+			<img
 				src="{product.img}"
 				alt="{product.name}"
-				width="210"
-				height="280"
-				class="h-[280px] w-[210px] object-contain object-bottom text-xs"
-			/>
+				width="208"
+				height="240"
+				class="h-full w-full object-contain object-bottom" />
 		</div>
 
 		<div class="flex flex-col gap-1">
@@ -43,11 +89,10 @@ let bounceItemFromTop = false
 
 			<!-- Name -->
 
-			<div class="flex justify-between gap-2">
+			<div class="flex gap-2 justify-between">
 				{#if product.name}
 					<h2
-						class="flex-1 truncate text-sm text-gray-500 group-hover:text-blue-600 group-hover:underline sm:text-base"
-					>
+						class="flex-1 truncate text-sm text-gray-500 group-hover:text-blue-600 group-hover:underline sm:text-base">
 						{product.name}
 					</h2>
 
@@ -65,21 +110,17 @@ let bounceItemFromTop = false
 
 			<!-- prices -->
 
-			<div class="mx-auto flex max-w-max flex-wrap items-center gap-2 text-xs">
-				<span class="whitespace-nowrap text-sm">
-					<b>
-						{currency(product.price, $page.data?.store?.currencySymbol)}
-					</b>
-				</span>
+			<div class="flex flex-wrap items-center gap-2 max-w-max mx-auto">
+				<span class="text-sm whitespace-nowrap"><b>{product.formattedPrice}</b></span>
 
 				{#if product.mrp > product.price}
-					<span class="whitespace-nowrap text-gray-600 line-through">
-						{currency(product.mrp, $page.data?.store?.currencySymbol)}
+					<span class="text-xs whitespace-nowrap">
+						<strike>{product.formattedMrp}</strike>
 					</span>
 
-					{#if product.discount > 0}
-						<span class="whitespace-nowrap text-green-600">
-							({product.discount}%)
+					{#if Math.floor(((product.mrp - product.price) / product.mrp) * 100) > 0}
+						<span class="text-xs whitespace-nowrap">
+							({Math.floor(((product.mrp - product.price) / product.mrp) * 100)}%)
 						</span>
 					{/if}
 				{/if}
@@ -91,11 +132,9 @@ let bounceItemFromTop = false
 		{#if product.active && product.hasStock}
 			{#if cartButtonText === 'Go to cart'}
 				<a
-					href="/cart"
-					aria-label="cart"
 					class="relative flex w-full transform items-center justify-center overflow-hidden rounded-full border border-primary-500 bg-primary-500 px-4 py-2 text-center text-xs font-semibold tracking-wider text-white shadow-md transition duration-700 focus:outline-none focus:ring-0 focus:ring-offset-0 hover:border-primary-700 hover:bg-primary-700"
-					data-sveltekit-preload-data
-				>
+					href="/cart"
+					data-sveltekit-preload-data>
 					{cartButtonText}
 				</a>
 			{:else}
@@ -107,6 +146,7 @@ let bounceItemFromTop = false
 							result.data.qty < 0
 								? fireGTagEvent('remove_from_cart', result.data)
 								: fireGTagEvent('add_to_cart', result.data)
+							// console.log('bounceItemFromTop')
 							bounceItemFromTop = true
 							setTimeout(() => {
 								bounceItemFromTop = false
@@ -114,8 +154,7 @@ let bounceItemFromTop = false
 							invalidateAll()
 							await applyAction(result)
 						}
-					}}"
-				>
+					}}">
 					<input type="hidden" name="pid" value="{product?._id}" />
 					<input type="hidden" name="vid" value="{product?._id}" />
 					<input type="hidden" name="qty" value="{1}" />
@@ -127,8 +166,7 @@ let bounceItemFromTop = false
 						loading="{loading}"
 						loadingringsize="xs"
 						roundedFull
-						class="text-xs"
-					>
+						class="text-xs">
 						{cartButtonText}
 					</PrimaryButton>
 				</form>

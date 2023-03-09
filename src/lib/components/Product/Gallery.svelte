@@ -13,19 +13,17 @@ import { slide } from 'svelte/transition'
 import LazyImg from '../Image/LazyImg.svelte'
 
 export let showPhotosModal = false
-export let product:Product|any = {}
+export let product: Product | any = {}
 export let selectedImgIndex = 0
 
-let selectedimg:string
+let selectedimg: string
 
 $: if (product?.images) {
 	selectedimg = product?.images[selectedImgIndex]
 }
 
-let Carousel, Splide:any
+let Splide: any
 onMount(async () => {
-	// const RTEmodule = await import('$lib/components/TwECarousel.svelte')
-	// Carousel = RTEmodule.default
 	const SplideModule = await import('$lib/components/SplideJs.svelte')
 	Splide = SplideModule.default
 })
@@ -33,21 +31,18 @@ onMount(async () => {
 
 {#if showPhotosModal}
 	<div
-		class="frosted-black fixed inset-0 z-50 flex h-screen w-screen items-center justify-center overflow-hidden sm:p-10 lg:p-20"
-	>
+		class="frosted-black fixed inset-0 z-50 flex h-screen w-screen items-center justify-center overflow-hidden sm:p-10 lg:p-20">
 		<button
 			type="button"
 			class="fixed top-2 right-2 transform cursor-pointer text-gray-200 transition duration-300 hover:scale-125 hover:text-white lg:top-5 lg:right-5"
-			on:click="{() => (showPhotosModal = false)}"
-		>
+			on:click="{() => (showPhotosModal = false)}">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
 				viewBox="0 0 24 24"
 				stroke-width="1.5"
 				stroke="currentColor"
-				class="h-8 w-8"
-			>
+				class="h-8 w-8">
 				<path
 					stroke-linecap="round"
 					stroke-linejoin="round"
@@ -74,46 +69,30 @@ onMount(async () => {
 						// 	arrows: false
 						// }
 						// }
-					}}"
-				>
+					}}">
 					{#each product?.images as img}
 						{#if img}
 							<SplideSlide>
-								<div class="itmes-center jusrify-center flex h-full w-full p-2 sm:p-5">
-									<img
+								<div class="itmes-center jusrify-center flex h-full w-full">
+									<LazyImg
 										src="{img}"
 										alt=""
-										class="block h-full w-full object-contain object-center"
-									/>
+										class="block h-full w-full object-contain object-center" />
 								</div>
 							</SplideSlide>
 						{/if}
 					{/each}
 				</svelte:component>
-
-				<!-- <svelte:component this="{Carousel}">
-					{#each product?.images as img, ix}
-						{#if img}
-							<div
-								class="carousel-item relative float-left max-h-screen w-full 
-							{ix == 0 ? 'active' : ''}">
-								<img src="{img}" alt="" class="block h-full object-contain" />
-							</div>
-						{/if}
-					{/each}
-				</svelte:component> -->
 			{:else if product?.images?.length === 1}
 				<div data-sveltekit-preload-data class="max-h-screen w-full">
-					<img
+					<LazyImg
 						src="{product?.images && product?.images[0]}"
 						alt=""
-						class="block h-full object-contain"
-					/>
+						class="block h-full object-contain" />
 				</div>
 			{:else}
 				<div
-					class="flex max-h-screen w-full items-center justify-center text-center text-sm text-white"
-				>
+					class="flex max-h-screen w-full items-center justify-center text-center text-sm text-white">
 					Oops! No Image found
 				</div>
 			{/if}
@@ -122,13 +101,11 @@ onMount(async () => {
 		<!-- Desktop Gallery -->
 
 		<div
-			class="container relative mx-auto hidden h-full w-full items-center justify-between gap-4 overflow-hidden rounded-md bg-black lg:flex lg:flex-row"
-		>
+			class="container relative mx-auto hidden h-full w-full items-center justify-between gap-4 overflow-hidden rounded-md bg-black lg:flex lg:flex-row">
 			{#if selectedimg}
 				<div
-					class="flex h-full w-full flex-1 shrink-0 items-center justify-center overflow-hidden px-5 sm:px-10"
-				>
-					<LazyImg src="{selectedimg}" alt="" class="h-full w-full object-contain object-center" />
+					class="flex h-full w-full flex-1 shrink-0 items-center justify-center overflow-hidden px-5 sm:px-10">
+					<img src="{selectedimg}" alt="" class="h-full w-full object-contain object-center" />
 				</div>
 			{/if}
 
@@ -141,26 +118,23 @@ onMount(async () => {
 					</div>
 
 					<div
-						class="grid grid-cols-3 gap-2 overflow-y-auto px-5 overflow-x-hidden scrollbar-thin scrollbar-thumb-slate-300 lg:max-h-[70vh] lg:grid-cols-2"
-					>
+						class="grid grid-cols-3 gap-2 overflow-y-auto px-5 overflow-x-hidden scrollbar-thin scrollbar-thumb-slate-300 lg:max-h-[70vh] lg:grid-cols-2">
 						{#each product?.images as img}
 							{#if img}
 								<button
 									type="button"
-									class="relative z-0 col-span-1 border bg-gray-100 focus:outline-none"
-									on:click="{() => (selectedimg = img)}"
-								>
+									class="relative z-0 col-span-1 border bg-gray-100 focus:outline-none flex items-center justify-center"
+									on:click="{() => (selectedimg = img)}">
 									<LazyImg
 										src="{img}"
 										alt=""
 										height="240"
-										class="h-40 w-40 rounded-md object-contain object-center"
-									/>
+										class="h-40 w-40 rounded-md object-contain object-center" />
 
 									<div
 										class="absolute inset-0 z-10 h-full w-full bg-white  
-                                    {selectedimg === img ? 'bg-opacity-0' : 'bg-opacity-50'}"
-									></div>
+                                    {selectedimg === img ? 'bg-opacity-0' : 'bg-opacity-50'}">
+									</div>
 								</button>
 							{/if}
 						{/each}
