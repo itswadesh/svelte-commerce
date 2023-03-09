@@ -1,10 +1,11 @@
 import { currency as currencyConfig, IMAGE_CDN_URL } from '../config'
 import { toasts } from 'svelte-toasts'
-import type { AllOrders, AllProducts, Order, Product } from '$lib/types'
+import type { AllOrders, AllProducts, Category, Order, Product } from '$lib/types'
+import type { ToastProps, ToastType } from 'svelte-toasts/types/common'
 
-let allToasts
+let allToasts: any
 
-export function constructURL2(url, fl) {
+export function constructURL2(url: string, fl: any) {
 	url += '?'
 	Object.keys(fl).forEach((e) => {
 		if (e == 'page') return
@@ -14,7 +15,7 @@ export function constructURL2(url, fl) {
 	return url
 }
 
-export const delay = (delayInms) => {
+export const delay = (delayInms: number) => {
 	return new Promise((resolve) => {
 		setTimeout(() => {
 			resolve(2)
@@ -22,7 +23,7 @@ export const delay = (delayInms) => {
 	})
 }
 
-export const getCdnImageUrl = (src) => {
+export const getCdnImageUrl = (src: string) => {
 	if (src) {
 		if (
 			src.includes('https://s3.ap-south-1.amazonaws.com/litekart.in/') ||
@@ -40,7 +41,7 @@ export const getCdnImageUrl = (src) => {
 	}
 }
 
-const toast = (title, type) => {
+const toast = (title: any, type: ToastType | undefined) => {
 	if (title?.message) title = title?.message
 	allToasts?.remove()
 	allToasts = toasts.add({
@@ -56,13 +57,13 @@ const toast = (title, type) => {
 	})
 }
 
-const removeToasts = (toast) => {
+const removeToasts = () => {
 	allToasts.remove()
 }
 
 export { toast, removeToasts }
 
-export function date(value) {
+export function date(value: string) {
 	const date = new Date(value)
 	return date.toLocaleString(['en-US'], {
 		month: 'short',
@@ -73,7 +74,7 @@ export function date(value) {
 	})
 }
 
-export function dateOnly(value) {
+export function dateOnly(value: string) {
 	const date = new Date(value)
 	return date.toLocaleString(['en-US'], {
 		month: 'short',
@@ -82,7 +83,7 @@ export function dateOnly(value) {
 	})
 }
 
-export function time(value) {
+export function time(value: string) {
 	const date = new Date(value)
 	return date.toLocaleString(['en-US'], {
 		hour: '2-digit',
@@ -90,12 +91,12 @@ export function time(value) {
 	})
 }
 
-export function truncate(text, stop, clamp) {
+export function truncate(text: string, stop: number, clamp: string) {
 	if (text) return text.slice(0, stop) + (stop < text.length ? clamp || '...' : '')
 	else return ''
 }
 
-export function currency(value, currency = '₹', decimals?) {
+export function currency(value: any, currency = '$', decimals?: number) {
 	const digitsRE = /(\d{3})(?=\d)/g
 	value = parseFloat(value)
 	if (!isFinite(value) || (!value && value !== 0)) return ''
@@ -119,9 +120,9 @@ export const serialize = (obj: any) => {
 	return str.join('&')
 }
 
-export const mapBigcommerceProducts = (b) => {
+export const mapBigcommerceProducts = (b: any) => {
 	if (b) {
-		b.images = b.images.map((i) => i.url_standard)
+		b.images = b.images.map((i: any) => i.url_standard)
 		const prod: any = {
 			id: b.id,
 			name: b.name,
@@ -255,6 +256,22 @@ export const mapMedusajsProduct = (p: any) => {
 	}
 }
 
+export const mapMedusajsCategory = (c: any) => {
+	if (c) {
+		const r: Category = {
+			id: c.id,
+			name: c.name,
+			slug: c.handle,
+			children: c.category_children.map((i: any) => {
+				if (i) return mapMedusajsCategory(i)
+			})
+		}
+		return r
+	} else {
+		return {}
+	}
+}
+
 export const mapMedusajsAllOrders = (p: any) => {
 	if (p) {
 		const allOrd: AllOrders = {
@@ -277,9 +294,16 @@ export const mapMedusajsOrder = (o: any) => {
 			status: o.status,
 			paymentStatus: o.payment_status,
 			cartId: o.cart_id,
+			cart: {},
+			customer: o.customer,
+			address: o.address,
 			// cart: o.cart,
 			// customer_id: o.customer_id,
 			// user: o.customer,
+			orderItems: [],
+			orderNo: '',
+			updatedAt: o.updated_at,
+			user: o.user,
 			userEmail: o.email,
 			billingAddress: o.billing_address.map((a: any) => {
 				if (a)
@@ -327,7 +351,7 @@ export const mapMedusajsOrder = (o: any) => {
 	}
 }
 
-export const mapWoocommerceProducts = (p) => {
+export const mapWoocommerceProducts = (p: any) => {
 	if (p) {
 		const prod: any = {
 			id: p.id,
@@ -365,7 +389,7 @@ export const mapWoocommerceProducts = (p) => {
 			related_products: p.related_ids,
 			stock_status: p.stock_status,
 			has_options: p.has_options,
-			images: p.images.map((i) => {
+			images: p.images.map((i: any) => {
 				if (i) return i.src
 			})
 		}
@@ -376,10 +400,10 @@ export const mapWoocommerceProducts = (p) => {
 	}
 }
 
-export const removeNullish = (obj) =>
-	Object.entries(obj).reduce((a, [k, v]) => (v ? ((a[k] = v), a) : a), {})
+export const removeNullish = (obj: any) =>
+	Object.entries(obj).reduce((a: any, [k, v]) => (v ? ((a[k] = v), a) : a), {})
 
-export const buildQueryFromObject = (search, prefix = '') =>
+export const buildQueryFromObject: any = (search: string, prefix = '') =>
 	Object.entries(search)
 		.map(([key, value]) =>
 			typeof value === 'object'
@@ -387,3 +411,32 @@ export const buildQueryFromObject = (search, prefix = '') =>
 				: `${prefix ? `${prefix}[${key}]` : `${key}`}=${value}`
 		)
 		.join('&')
+
+export const getExtension = (filename) => {
+	return filename.substring(filename.lastIndexOf('.') + 1)
+}
+
+export const generatePriceRange = (price_stats) => {
+	let priceRange = []
+	const difference = price_stats?.max - price_stats?.min
+	if (difference) {
+		const priceGap = difference / 4
+		if (priceGap) {
+			const price1 = price_stats?.min
+			const price2 = price1 + priceGap
+			const price3 = price2 + priceGap
+			const price4 = price3 + priceGap
+			const price5 = price_stats?.max
+
+			if (price1 && price2 && price3 && price4 && price5) {
+				priceRange = [
+					{ from: price1, key: `From ${currency(price1)} to ${currency(price2)}`, to: price2 },
+					{ from: price2, key: `From ${currency(price2)} to ${currency(price3)}`, to: price3 },
+					{ from: price3, key: `From ${currency(price3)} to ${currency(price4)}`, to: price4 },
+					{ from: price4, key: `From ${currency(price4)} to ${currency(price5)}`, to: price5 }
+				]
+			}
+		}
+	}
+	return priceRange
+}
