@@ -9,7 +9,6 @@
 import { fly } from 'svelte/transition'
 import { page } from '$app/stores'
 import { Reddit, Telegram, WhatsApp, Facebook, Twitter } from 'svelte-share-buttons-component'
-import { WWW_URL } from '$lib/config'
 import type { Cart, Me } from './types'
 
 export let cart: Cart
@@ -19,6 +18,7 @@ export let openSidebar: boolean
 export let productName: string
 export let showCartSidebar: boolean
 export let store
+export let url: string
 
 $: scrollY = 0
 
@@ -76,30 +76,31 @@ let showShareButtons = false
 				{#if showShareButtons}
 					<ul
 						transition:fly="{{ y: -5, duration: 300 }}"
-						class="absolute top-9 right-0 z-50 flex min-w-max list-none flex-col divide-y rounded-md border bg-white shadow-md">
+						class="absolute top-9 right-0 z-30 flex min-w-max list-none flex-col divide-y rounded-md border bg-white shadow-md">
 						<li class="p-2">
-							<Reddit title="{productName}" url="{WWW_URL}" />
+							<Reddit title="{productName}" url="{url}" />
 						</li>
 
 						<li class="p-2">
-							<Telegram text="{productName}" url="{WWW_URL}" />
+							<Telegram text="{productName}" url="{url}" />
 						</li>
 
 						<li class="p-2">
-							<WhatsApp text="{productName} {WWW_URL}" />
+							<WhatsApp text="{productName}" url="{url}" />
 						</li>
 
 						<li class="p-2">
-							<Facebook quote="{productName}" url="{WWW_URL}" />
+							<Facebook quote="{productName}" url="{url}" />
 						</li>
 
 						<li class="p-2">
 							<Twitter
+								class="share-button"
 								text="{productName}"
-								url="{WWW_URL}"
-								hashtags="lrnr"
-								via="lrnrin"
-								related="mcq,cbse,chse,wbbse" />
+								url="{url}"
+								hashtags="zapvi"
+								via="zapvi"
+								related="mobile cover,t-shirt,key chain " />
 						</li>
 					</ul>
 

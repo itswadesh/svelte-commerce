@@ -1,9 +1,9 @@
 <script lang="ts">
 import { Reddit, Telegram, WhatsApp, Facebook, Twitter } from 'svelte-share-buttons-component'
-import { WWW_URL } from '$lib/config'
 import { fly } from 'svelte/transition'
 
-export let product
+export let productName
+export let url
 
 let showDropDown = false
 </script>
@@ -16,16 +16,14 @@ let showDropDown = false
 			? 'border-primary-500 bg-primary-500 text-white shadow-lg'
 			: 'hover:border-primary-500 hover:text-primary-500'}
 		"
-		on:click="{() => (showDropDown = !showDropDown)}"
-	>
+		on:click="{() => (showDropDown = !showDropDown)}">
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"
 			viewBox="0 0 24 24"
 			stroke-width="1.5"
 			stroke="currentColor"
-			class="h-5 w-5"
-		>
+			class="h-5 w-5">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -39,40 +37,38 @@ let showDropDown = false
 	{#if showDropDown}
 		<ul
 			transition:fly="{{ y: -5, duration: 300 }}"
-			class="absolute top-10 right-0 z-50 flex min-w-max list-none flex-col divide-y rounded-md border bg-white shadow-md"
-		>
+			class="absolute top-10 right-0 z-30 flex min-w-max list-none flex-col divide-y rounded-md border bg-white shadow-md">
 			<li class="p-2">
-				<Reddit title="{product.title || product.name}" url="{WWW_URL}" />
+				<Reddit title="{productName}" url="{url}" />
 			</li>
 
 			<li class="p-2">
-				<Telegram text="{product.title || product.name}" url="{WWW_URL}" />
+				<Telegram text="{productName}" url="{url}" />
 			</li>
 
 			<li class="p-2">
-				<WhatsApp text="{product.title || product.name} {WWW_URL}" />
+				<WhatsApp text="{productName}" url="{url}" />
 			</li>
 
 			<li class="p-2">
-				<Facebook quote="{product.title || product.name}" url="{WWW_URL}" />
+				<Facebook quote="{productName}" url="{url}" />
 			</li>
 
 			<li class="p-2">
 				<Twitter
-					text="{product.title || product.name}"
-					url="{WWW_URL}"
-					hashtags="lrnr"
-					via="lrnrin"
-					related="mcq,cbse,chse,wbbse"
-				/>
+					class="share-button"
+					text="{productName}"
+					url="{url}"
+					hashtags="zapvi"
+					via="zapvi"
+					related="mobile cover,t-shirt,key chain " />
 			</li>
 		</ul>
 
 		<button
 			type="button"
 			class="fixed inset-0 z-40 h-full w-full bg-black bg-opacity-0 focus:outline-none"
-			on:click="{() => (showDropDown = false)}"
-		>
+			on:click="{() => (showDropDown = false)}">
 		</button>
 	{/if}
 </div>
