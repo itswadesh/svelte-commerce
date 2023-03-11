@@ -84,7 +84,9 @@ function handleShowReviewsCount() {
 							<div class="relative h-1 w-full rounded-full bg-gray-300">
 								<div
 									class="absolute inset-y-0 left-0 rounded-full bg-green-500"
-									style="width: {r.percent}%">
+									style="width: {Math.round(
+										(r.doc_count / reviews?.summary?.ratings_sum?.value) * 100
+									)}%">
 								</div>
 							</div>
 
