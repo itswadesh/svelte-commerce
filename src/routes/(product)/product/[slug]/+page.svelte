@@ -46,13 +46,12 @@
 <script lang="ts">
 import { addToCartService, toggleWishlistService } from '$lib/services'
 import { applyAction, enhance } from '$app/forms'
-import { createEventDispatcher, onMount } from 'svelte'
-import { date, currency, delay, toast } from '$lib/utils'
+import { onMount } from 'svelte'
+import { currency, delay, toast } from '$lib/utils'
 import { fireGTagEvent } from '$lib/utils/gTag'
-import { fly, slide, fade } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
-import { post, getAPI } from '$lib/utils/api'
+import { getAPI } from '$lib/utils/api'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
 import Breadcrumb from '$lib/components/Breadcrumb.svelte'
 import CategoryPoolButtons from './_CategoryPoolButtons.svelte'
@@ -75,18 +74,18 @@ import RatingsAndReviews from '$lib/components/Product/RatingsAndReviews.svelte'
 import RecomendedProducts from '$lib/components/Product/RecomendedProducts.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import SimilarProductsFromCategorySlug from '$lib/components/Product/SimilarProductsFromCategorySlug.svelte'
+import SocialSharingButtons from '$lib/components/SocialSharingButtons.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
-import UserForm from '$lib/components/Product/UserForm.svelte'
+// import UserForm from '$lib/components/Product/UserForm.svelte'
 import viewport from '$lib/actions/useViewPort'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
 
-const dispatch = createEventDispatcher()
 const cookies = Cookie()
 
 export let data
 
-console.log('zzzzzzzzzzzzzzzzzz', data)
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -416,16 +415,21 @@ function handleMobileCanvas() {
 	cart="{$page?.data?.cart}"
 	me="{$page?.data?.me}"
 	productName="{data.product?.name}"
+	url="{$page?.url?.href}"
 	store="{$page?.data?.store}" />
 
 <div class="min-h-screen lg:p-10">
 	<div class="md:container md:mx-auto">
-		<!-- Breadcrumb -->
+		<div class="mb-5 hidden lg:flex items-center justify-between gap-2">
+			<!-- Breadcrumb -->
 
-		<div class="mb-5 hidden lg:block">
 			<Breadcrumb
 				categoryPool="{data.product?.categoryPool}"
 				currentProductName="{data.product?.name}" />
+
+			<!-- Social share button -->
+
+			<SocialSharingButtons productName="{data.product?.name}" url="{$page?.url?.href}" />
 		</div>
 
 		<div class="mb-5 grid grid-cols-1 items-start gap-5 sm:mb-10 sm:gap-10 lg:grid-cols-5">
