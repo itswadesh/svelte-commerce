@@ -27,7 +27,7 @@ export async function load({ locals, setHeaders }) {
 		throw error(
 			404,
 			`Store Not Found @Page 
-			<br/>ID: ${store.id}
+			<br/>ID: ${store?.id}
 			<br/>ORIGIN: ${origin}
 			<br/>DOMAIN(env):${DOMAIN}
 			<br/>HTTP_ENDPOINT(env):${HTTP_ENDPOINT}`

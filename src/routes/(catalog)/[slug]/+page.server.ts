@@ -1,7 +1,4 @@
-import {
-	fetchProductsOfCategory,
-	fetchProductsOfCategoryTypesense
-} from '$lib/services/ProductService'
+import { fetchProductsOfCategory } from '$lib/services/ProductService'
 import { currency, generatePriceRange } from '$lib/utils'
 import { error } from '@sveltejs/kit'
 export const prerender = false
