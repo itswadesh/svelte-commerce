@@ -8,6 +8,10 @@
 <img src="https://repository-images.githubusercontent.com/213575283/f577b8bd-8edb-41ba-bfe5-36e65072e1f2" alt/>
 </a>
 
+<a href="https://litekart.in/" aria-label="Click to browse litekart">
+<img src="https://res.cloudinary.com/itswadesh/image/upload/v1678600224/litekart/free_for_developers_1.png" alt/>
+</a>
+
 ![version](https://img.shields.io/badge/node-v16.x-blue.svg)
 ![Branch stable](https://img.shields.io/badge/stable%20branch-master-blue.svg)
 ![Typescript](https://img.shields.io/badge/TS-Typescript-blue)
