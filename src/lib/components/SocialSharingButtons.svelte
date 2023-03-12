@@ -59,8 +59,8 @@ let showDropDown = false
 					class="share-button"
 					text="{productName}"
 					url="{url}"
-					hashtags="zapvi"
-					via="zapvi"
+					hashtags="Litekart"
+					via="Litekart"
 					related="mobile cover,t-shirt,key chain " />
 			</li>
 		</ul>
