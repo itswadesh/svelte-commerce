@@ -1,3 +1,6 @@
+Any queries or guidance, can reach me at 
+<a href="https://discord.gg/4G7zbcpt" target="blank" rel="noopener noreferrer" aria-label="Click to Discord">Discord</a>
+
 # What is Svelte Commerce?
 
 - Svelte Commerce is a PWA storefront for your existing eCommerce based on Sveltekit.
