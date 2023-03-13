@@ -3,8 +3,7 @@ import { goto } from '$app/navigation'
 import { createEventDispatcher, onMount } from 'svelte'
 import { page } from '$app/stores'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import { fetchAutocompleteData } from '$lib/services/AutocompleteService'
-import { fetchAllCategories } from './services/CategoryService'
+import { AutocompleteService,CategoryService } from '$lib/services'
 
 const dispatch = createEventDispatcher()
 
@@ -59,7 +58,7 @@ async function getData(e:any) {
 
 	typingTimer = setTimeout(async () => {
 		try {
-			autocomplete = await fetchAutocompleteData({
+			autocomplete = await AutocompleteService.fetchAutocompleteData({
 				q: q,
 				origin: $page?.data?.origin,
 				storeId: $page?.data?.store?.id
@@ -77,7 +76,7 @@ onMount(async () => {
 	searchInput.focus()
 	try {
 		categories = (
-			await fetchAllCategories({
+			await CategoryService.fetchAllCategories({
 				featured: true,
 				storeId: $page?.data?.store?.id,
 				origin: $page.data.origin

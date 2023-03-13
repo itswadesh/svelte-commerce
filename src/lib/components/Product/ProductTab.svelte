@@ -4,7 +4,7 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import ProductCard from '$lib/ProductCard.svelte'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
-import { fetchProducts } from '$lib/services/ProductService'
+import { ProductService } from '$lib/services'
 
 let name = 'Product Tab'
 let allCoreCategories = [
@@ -33,7 +33,7 @@ let products:Product[] = []
 onMount(async () => {
 	try {
 		loading = true
-		products = await fetchProducts({ origin: $page?.data?.origin, storeId: $page?.data?.store?.id })
+		products = await ProductService.fetchProducts({ origin: $page?.data?.origin, storeId: $page?.data?.store?.id })
 	} catch (e) {
 	} finally {
 		loading = false

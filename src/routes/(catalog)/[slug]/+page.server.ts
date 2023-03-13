@@ -1,4 +1,4 @@
-import { fetchProductsOfCategory } from '$lib/services/ProductService'
+import { ProductService } from '$lib/services'
 import { currency, generatePriceRange } from '$lib/utils'
 import { error } from '@sveltejs/kit'
 export const prerender = false
@@ -28,7 +28,7 @@ export async function load({ url, params, locals, cookies, parent, setHeaders })
 	let res
 	try {
 		loading = true
-		res = await fetchProductsOfCategory({
+		res = await ProductService.fetchProductsOfCategory({
 			storeId: store?.id,
 			query: query.toString(),
 			categorySlug,

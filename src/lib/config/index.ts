@@ -72,6 +72,7 @@ export const bigcommerceHeaders = {
 	Accept: 'application/json'
 }
 
+export const SHOPIFY_BASE_URL = `https://api.sopify.com`
 export const BIG_COMMERCE_BASE_URL = `https://api.bigcommerce.com/stores/${BIG_COMMERCE_STORE_HASH}/v3/catalog`
 export const MEDUSAJS_BASE_URL = `${env.PUBLIC_MEDUSAJS_API_URL}/store`
 
@@ -88,5 +89,5 @@ export const woocommerceHeaders = {
 	'Content-Type': 'application/json',
 	Accept: 'application/json'
 }
-export const provider = env.PUBLIC_API_PROVIDER || 'litekart' // 'medusajs' 'woocommerce' 'bigcommerce'
+export const provider = env.PUBLIC_API_PROVIDER || 'Litekart' // 'Medusa' 'Woocommerce' 'Bigcommerce'
 export const IS_DEV = !!env.PUBLIC_IS_DEV

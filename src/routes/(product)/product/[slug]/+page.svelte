@@ -44,7 +44,7 @@
 </style>
 
 <script lang="ts">
-import { addToCartService, toggleWishlistService } from '$lib/services'
+import { CartService, WishlistService } from '$lib/services'
 import { applyAction, enhance } from '$app/forms'
 import { onMount } from 'svelte'
 import { currency, delay, toast } from '$lib/utils'
@@ -215,7 +215,7 @@ async function addToBag(p, customizedImg, customizedJson) {
 	cartButtonText = 'Adding...'
 
 	try {
-		let cart = await addToCartService({
+		let cart = await CartService.addToCartService({
 			pid: p._id,
 			vid: p._id,
 			qty: 1,
@@ -229,7 +229,7 @@ async function addToBag(p, customizedImg, customizedJson) {
 		})
 		if (selectedLinkiedProducts?.length) {
 			for (const i of selectedLinkiedProducts) {
-				cart = await addToCartService({
+				cart = await CartService.addToCartService({
 					pid: i,
 					vid: i,
 					qty: 1,
@@ -361,7 +361,7 @@ async function toggleWishlist(id) {
 
 	try {
 		loadingForWishlist = true
-		isWislisted = await toggleWishlistService({
+		isWislisted = await CartService.toggleWishlistService({
 			pid: id,
 			vid: id,
 			storeId: $page.data.store?.id,

@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit'
-import { fetchProduct } from '$lib/services/ProductService'
+import { ProductService } from '$lib/services'
 
 export const prerender = false
 
@@ -9,7 +9,7 @@ export async function load({ url, locals, cookies, context }) {
 	let product
 
 	try {
-		product = await fetchProduct({
+		product = await ProductService.fetchProduct({
 			id: productId,
 			storeId: locals.store?.id,
 			server: true,
