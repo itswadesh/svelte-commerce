@@ -5,7 +5,7 @@ export const fetchAutocompleteData = async ({ origin, storeId, q }: any) => {
 	try {
 		let res: any = {}
 		let data = []
-		let filterText = `es/autocomplete?store=${storeId}&q=`
+		let filterText = `es/autocomplete?store=${storeId}&q=''`
 		if (!!q && q !== 'undefined' && q !== 'null' && q !== '') {
 			filterText = `es/autocomplete?store=${storeId}&q=${q}`
 		}

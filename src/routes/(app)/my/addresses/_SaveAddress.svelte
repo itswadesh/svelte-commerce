@@ -1,6 +1,6 @@
 <script>
 import { createEventDispatcher } from 'svelte'
-import { CountryService } from '$lib/services'
+import { AddressService, CountryService } from '$lib/services'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { toast } from '$lib/utils'
@@ -54,7 +54,7 @@ async function SaveAddress(address) {
 
 		toast('Saving Address Info...', 'info')
 
-		const newAddress = await CountryService.saveAddress({
+		const newAddress = await AddressService.saveAddress({
 			id,
 			address: address.address,
 			city,
