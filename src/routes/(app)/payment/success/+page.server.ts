@@ -1,5 +1,4 @@
-import { fetchRefreshCart } from '$lib/services/CartService'
-import { paySuccessPageHit } from '$lib/services/OrdersService'
+import { CartService, OrdersService } from '$lib/services'
 import { error, redirect } from '@sveltejs/kit'
 
 export const prerender = false
@@ -11,7 +10,7 @@ export async function load({ url, request, locals, cookies }) {
 	let loading, err, order, cart
 	try {
 		loading = true
-		order = await paySuccessPageHit({
+		order = await OrdersService.paySuccessPageHit({
 			paymentMode,
 			status,
 			orderId,
@@ -34,7 +33,7 @@ export async function load({ url, request, locals, cookies }) {
 	}
 
 	try {
-		cart = fetchRefreshCart({
+		cart = CartService.fetchRefreshCart({
 			storeId: locals.store?.id,
 			server: true,
 			sid: cookies.get('connect.sid')

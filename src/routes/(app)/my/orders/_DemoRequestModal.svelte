@@ -12,7 +12,7 @@ import { onMount } from 'svelte'
 import Modal from './_Modal.svelte'
 import { createEventDispatcher } from 'svelte'
 import { post } from '$lib/utils/api'
-import { saveScheduleDemo } from '$lib/services/DemoRequestService'
+import { DemoRequestService } from '$lib/services'
 const dispatch = createEventDispatcher()
 
 export let product,
@@ -44,7 +44,7 @@ async function submit() {
 	const msg = 'Schedule Done !'
 	loading = true
 	try {
-		await saveScheduleDemo({ schedule, storeId: $page.data.store?.id, origin: $page.data.origin })
+		await DemoRequestService.saveScheduleDemo({ schedule, storeId: $page.data.store?.id, origin: $page.data.origin })
 		toast(msg, 'success')
 		goto(`/my/demo-requests`)
 	} catch (e) {

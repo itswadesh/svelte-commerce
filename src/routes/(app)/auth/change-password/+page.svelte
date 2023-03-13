@@ -15,7 +15,7 @@ import loginBgLighter from '$lib/assets/login/bg-lighter.svg'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
-import { changePasswordService } from '$lib/services/UserService'
+import { UserService } from '$lib/services'
 
 const seoProps = {
 	title: 'Change Password',
@@ -58,7 +58,7 @@ async function submit(p) {
 		loading = true
 		const { oldPassword, password, passwordConfirmation } = p
 
-		const res = await changePasswordService({
+		const res = await UserService.changePasswordService({
 			oldPassword: oldPassword,
 			password: password,
 			passwordConfirmation: passwordConfirmation,

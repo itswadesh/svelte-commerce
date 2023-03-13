@@ -1,5 +1,4 @@
-import { fetchMegamenuData } from '$lib/services/CategoryService'
-import { fetchProductsOfCategory } from '$lib/services/ProductService'
+import { CategoryService } from '$lib/services'
 
 export async function load({ locals, cookies }) {
 	let loading = false,
@@ -12,7 +11,7 @@ export async function load({ locals, cookies }) {
 	try {
 		loading = true
 
-		const res1 = await fetchMegamenuData({
+		const res1 = await CategoryService.fetchMegamenuData({
 			storeId: locals.store?.id,
 			server: true,
 			sid: cookies.get('connect.sid')
@@ -22,7 +21,7 @@ export async function load({ locals, cookies }) {
 			return m.name === 'New Arrivals'
 		})
 
-		const res2 = await fetchProductsOfCategory({
+		const res2 = await CategoryService.fetchProductsOfCategory({
 			categoryId: newArrivals[0].slug,
 			storeId: locals.store?.id,
 			server: true,

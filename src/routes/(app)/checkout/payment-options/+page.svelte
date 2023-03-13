@@ -25,12 +25,7 @@ import Pricesummary from '$lib/components/Pricesummary.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import Stripe from '$lib/Stripe.svelte'
-import {
-	cashfreeCheckout,
-	codCheckout,
-	razorpayCapture,
-	razorpayCheckout
-} from '$lib/services/OrdersService'
+import { CartService, OrdersService, PaymentMethodService } from '$lib/services'
 
 const seoProps = {
 	title: 'Select Payment Option',
@@ -97,7 +92,7 @@ async function submit(pm) {
 	if (paymentMethod === 'COD') {
 		try {
 			toast('Please wait...your order with COD is on process', 'warning')
-			const res = await codCheckout({
+			const res = await OrdersService.codCheckout({
 				address: data.addressId,
 				paymentMethod: 'COD',
 				prescription: data.prescription?._id,
@@ -113,7 +108,7 @@ async function submit(pm) {
 	} else if (paymentMethod === 'Cashfree') {
 		try {
 			loading = true
-			const res = await cashfreeCheckout({
+			const res = await OrdersService.cashfreeCheckout({
 				address: data.addressId,
 				storeId: $page.data.store?.id,
 				origin: $page.data.origin
@@ -131,7 +126,7 @@ async function submit(pm) {
 	} else if (paymentMethod === 'Razorpay') {
 		try {
 			loading = true
-			const rp = await razorpayCheckout({
+			const rp = await OrdersService.razorpayCheckout({
 				address: data.addressId,
 				storeId: $page.data.store?.id,
 				origin: $page.data.origin
@@ -148,7 +143,7 @@ async function submit(pm) {
 					// console.log('response = ', response)
 
 					try {
-						const capture = await razorpayCapture({
+						const capture = await OrdersService.razorpayCapture({
 							rpPaymentId: response.razorpay_payment_id,
 							rpOrderId: response.razorpay_order_id,
 							storeId: $page.data.store?.id,

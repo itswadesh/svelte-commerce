@@ -1,4 +1,4 @@
-import { fetchFaqs } from '$lib/services/FaqService'
+import { FaqService } from '$lib/services'
 
 export async function load({ request, locals, parent, cookies }) {
 	let loading = false,
@@ -8,7 +8,7 @@ export async function load({ request, locals, parent, cookies }) {
 
 	try {
 		loading = true
-		const res = await fetchFaqs({
+		const res = await FaqService.fetchFaqs({
 			storeId: locals.store?.id,
 			server: true,
 			sid: cookies.get('connect.sid')

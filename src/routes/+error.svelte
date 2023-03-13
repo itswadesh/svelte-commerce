@@ -17,7 +17,7 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import Nav from '$lib/Nav.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 // import { fetchCartData } from '$lib/services/CartService'
-import { fetchMeData } from '$lib/services/UserService'
+import { UserService } from '$lib/services'
 import type { Cart, Me } from '$lib/types'
 
 let openSidebar = false

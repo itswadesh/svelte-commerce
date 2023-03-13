@@ -16,7 +16,7 @@ import Error from '$lib/components/Error.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
-import { forgotPasswordService } from '$lib/services/UserService'
+import { UserService } from '$lib/services'
 
 const seoProps = {
 	title: 'Forgot Password',
@@ -31,7 +31,7 @@ async function submit() {
 	try {
 		loading = true
 
-		const res = await forgotPasswordService({
+		const res = await UserService.forgotPasswordService({
 			email: email,
 			referrer: $page.data.origin,
 			storeId: $page.data.store?.id,

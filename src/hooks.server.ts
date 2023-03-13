@@ -4,7 +4,7 @@ const SENTRY_DSN = SECRET_SENTRY_DSN
 import * as Sentry from '@sentry/svelte'
 import { BrowserTracing } from '@sentry/tracing'
 import { DOMAIN, HTTP_ENDPOINT, listOfPagesWithoutBackButton, WWW_URL } from '$lib/config'
-import { fetchStoreData, authenticateUser, fetchCart, measurePerformance } from '$lib/server'
+import { fetchStoreData, authenticateUser, fetchCart } from '$lib/server'
 
 if (SENTRY_DSN) {
 	Sentry.init({
