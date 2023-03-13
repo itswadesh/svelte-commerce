@@ -1,4 +1,4 @@
-import { getWooCommerceApi, postWooCommerceApi } from '$lib/utils/server'
+import { getWoocommerceApi, postWoocommerceApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
@@ -8,7 +8,7 @@ export const fetchAddresses = async ({ origin, storeId, server = false, sid = nu
 		let selectedAddress = {}
 		let myAddresses = []
 
-		res = (await getWooCommerceApi(`customers/me`, {}, sid)).customer.shipping_address
+		res = (await getWoocommerceApi(`customers/me`, {}, sid)).customer.shipping_address
 
 		return { myAddresses: { data: myAddresses }, selectedAddress, count: res?.count }
 	} catch (e) {
@@ -20,7 +20,7 @@ export const fetchAddress = async ({ origin, storeId, server = false, sid = null
 	try {
 		let res: any = {}
 
-		res = (await getWooCommerceApi(`customers/me`, {}, sid)).customer.shipping_address
+		res = (await getWoocommerceApi(`customers/me`, {}, sid)).customer.shipping_address
 
 		return res || {}
 	} catch (e) {
@@ -49,7 +49,7 @@ export const saveAddress = async ({
 		let res: any = {}
 
 		res = (
-			await postWooCommerceApi('customers/me/addresses', {
+			await postWoocommerceApi('customers/me/addresses', {
 				address_1: address,
 				address_2: locality,
 				city,

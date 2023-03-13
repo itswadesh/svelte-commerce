@@ -1,6 +1,5 @@
 import { error } from '@sveltejs/kit'
 import { getShopifyApi, postShopifyApi } from '$lib/utils/server'
-import { mapShopifyProduct, mapShopifyAllProducts } from '$lib/utils'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import type { AllProducts, Error, Product } from '$lib/types'
 
@@ -42,7 +41,7 @@ export const fetchProducts = async ({ origin, slug, id, server = false, sid = nu
 		let res: AllProducts | {} = {}
 
 		const med = (await getShopifyApi(`products`, {}, sid)).product
-		res = mapShopifyAllProducts(med)
+		// res = mapShopifyAllProducts(med)
 
 		return res?.data || []
 	} catch (e) {
@@ -57,7 +56,7 @@ export const fetchProduct = async ({ origin, slug, id, server = false, sid = nul
 		let res: Product | {} = {}
 
 		const med = (await getShopifyApi(`products/${id}`, {}, sid)).product
-		res = mapShopifyProduct(med)
+		// res = mapShopifyProduct(med)
 
 		return res || {}
 	} catch (e) {
@@ -86,7 +85,7 @@ export const fetchProductsOfCategory = async ({
 
 		res = await getShopifyApi(`products`, {}, sid)
 		count = res?.count
-		products = res?.products.map((p) => mapShopifyProduct(p))
+		// products = res?.products.map((p) => mapShopifyProduct(p))
 		const offset = res?.offset
 		const limit = res?.limit
 

@@ -1,13 +1,7 @@
 import { error } from '@sveltejs/kit'
 import { getAPI } from '$lib/utils/api'
-import {
-	getWoocommerceApi,
-	postWoocommerceApi
-} from '$lib/utils/server'
-import {
-	mapWoocommerceAllProducts,
-	mapWoocommerceProducts
-} from '$lib/utils'
+import { getWoocommerceApi, postWoocommerceApi } from '$lib/utils/server'
+import { mapWoocommerceProducts } from '$lib/utils'
 import { provider } from '$lib/config'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import type { AllProducts, Error, Product } from '$lib/types'
@@ -50,7 +44,7 @@ export const fetchProducts = async ({ origin, slug, id, server = false, sid = nu
 		let res: AllProducts | {} = {}
 
 		const med = (await getWoocommerceApi(`products`, {}, sid)).product
-		res = mapWoocommerceAllProducts(med)
+		// res = mapWoocommerceAllProducts(med)
 
 		return res?.data || []
 	} catch (e) {
@@ -65,7 +59,7 @@ export const fetchProduct = async ({ origin, slug, id, server = false, sid = nul
 		let res: Product | {} = {}
 
 		const med = (await getWoocommerceApi(`products/${id}`, {}, sid)).product
-		res = mapWoocommerceProduct(med)
+		res = mapWoocommerceProducts(med)
 
 		return res || {}
 	} catch (e) {
@@ -94,7 +88,7 @@ export const fetchProductsOfCategory = async ({
 
 		res = await getWoocommerceApi(`products`, {}, sid)
 		count = res?.count
-		products = res?.products.map((p) => mapWoocommerceProduct(p))
+		products = res?.products.map((p) => mapWoocommerceProducts(p))
 		const offset = res?.offset
 		const limit = res?.limit
 

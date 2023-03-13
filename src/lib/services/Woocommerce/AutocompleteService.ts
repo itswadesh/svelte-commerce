@@ -1,4 +1,4 @@
-import { getWooCommerceApi } from '$lib/utils/server'
+import { getWoocommerceApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
@@ -7,7 +7,7 @@ export const fetchAutocompleteData = async ({ origin, storeId, q }: any) => {
 		let res: any = {}
 		let data = []
 
-		res = await getWooCommerceApi(`customers/me`, {})
+		res = await getWoocommerceApi(`customers/me`, {})
 
 		// must return name:string, slug:string type:string
 		return data || []

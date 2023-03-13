@@ -1,4 +1,4 @@
-import { getWooCommerceApi } from '$lib/utils/server'
+import { getWoocommerceApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
@@ -6,7 +6,7 @@ export const fetchBlogs = async ({ origin, storeId, server = false, sid = null }
 	try {
 		let res: any = {}
 
-		res = await getWooCommerceApi(`customers/me`, {}, sid)
+		res = await getWoocommerceApi(`customers/me`, {}, sid)
 
 		return res.data || []
 	} catch (e) {
@@ -18,7 +18,7 @@ export const fetchLatestBlogs = async ({ origin, storeId, server = false, sid = 
 	try {
 		let res: any = {}
 
-		res = await getWooCommerceApi(`customers/me`, {}, sid)
+		res = await getWoocommerceApi(`customers/me`, {}, sid)
 
 		return res.data || []
 	} catch (e) {
@@ -30,7 +30,7 @@ export const fetchBlog = async ({ origin, id, storeId, server = false, sid = nul
 	try {
 		let res: any = {}
 
-		res = await getWooCommerceApi(`customers/me`, {}, sid)
+		res = await getWoocommerceApi(`customers/me`, {}, sid)
 
 		return res.data || []
 	} catch (e) {

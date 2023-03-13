@@ -1,11 +1,7 @@
 import { provider } from '$lib/config'
 import type { Error } from '$lib/types'
 import { getAPI } from '$lib/utils/api'
-import {
-	getBySid,
-	getBigcommerceApi,
-	getWooCommerceApi
-} from '$lib/utils/server'
+import { getBySid, getBigcommerceApi, getWoocommerceApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 

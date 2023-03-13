@@ -1,4 +1,4 @@
-import { getWooCommerceApi } from '$lib/utils/server'
+import { getWoocommerceApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
@@ -12,7 +12,7 @@ export const fetchBanners = async ({
 	try {
 		let res: any = {}
 
-		res = await getWooCommerceApi(`customers/me`, {}, sid)
+		res = await getWoocommerceApi(`customers/me`, {}, sid)
 
 		return res.data || []
 	} catch (e) {

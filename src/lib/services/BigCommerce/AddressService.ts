@@ -1,13 +1,4 @@
-import { provider } from '$lib/config'
-import type { Error } from '$lib/types'
-import { getAPI, post } from '$lib/utils/api'
-import {
-	getBySid,
-	getBigcommerceApi,
-	getWooCommerceApi,
-	postBigcommerceApi,
-	postWooCommerceApi
-} from '$lib/utils/server'
+import { getBigcommerceApi, postBigCommerceApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
@@ -58,7 +49,7 @@ export const saveAddress = async ({
 		let res: any = {}
 
 		res = (
-			await postBigcommerceApi('customers/me/addresses', {
+			await postBigCommerceApi('customers/me/addresses', {
 				address_1: address,
 				address_2: locality,
 				city,
