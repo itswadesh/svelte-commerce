@@ -9,11 +9,10 @@
 import { browser } from '$app/environment'
 import { constructURL2, currency } from '$lib/utils'
 import { createEventDispatcher, onMount } from 'svelte'
-import { CategoryService } from '$lib/services'
 import { fly } from 'svelte/transition'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
-import { sorts } from '$lib/config'
+import { provider, sorts } from '$lib/config'
 import CheckboxEs from '$lib/ui/CheckboxEs.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import RadioEs from '$lib/ui/RadioEs.svelte'
@@ -148,6 +147,7 @@ async function getMegamenu() {
 			const localmegamenu = localStorage.getItem('megamenu')
 
 			if (!localmegamenu || localmegamenu === 'undefined') {
+				const CategoryService  = await import(`$lib/services/${provider}/CategoryService.ts`);
 				megamenu = await CategoryService.fetchMegamenuData({
 					origin: $page?.data?.origin,
 					storeId: $page?.data?.store?.id

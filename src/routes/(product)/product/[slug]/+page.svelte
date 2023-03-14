@@ -80,6 +80,7 @@ import Textbox from '$lib/ui/Textbox.svelte'
 // import UserForm from '$lib/components/Product/UserForm.svelte'
 import viewport from '$lib/actions/useViewPort'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
+import { provider } from '$lib/config'
 
 const cookies = Cookie()
 
@@ -182,16 +183,17 @@ if (data.product?.size?.name === 'One Size') {
 	selectedSize = 'One Size'
 }
 
-let Konvas
-
 onMount(async () => {
 	screenWidth = screen.width
 
 	try {
-		isWislisted = await getAPI(
-			`wishlists/check?product=${data.product?._id}&variant=${data.product?._id}&store=${$page.data?.store?.id}`,
-			$page.data.origin
-		)
+		const WishlistService = await import(`$lib/services/${provider}/WishlistService.ts`)
+		isWislisted = await WishlistService.checkhWishlist({
+			pid: data.product?._id,
+			vid: data.product?._id,
+			storeId: $page.data?.store?.id,
+			origin: $page.data.origin
+		})
 
 		// console.log('isWislisted', isWislisted)
 	} catch (e) {
