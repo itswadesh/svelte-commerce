@@ -6,12 +6,14 @@ import { BrowserTracing } from '@sentry/tracing'
 import { DOMAIN, HTTP_ENDPOINT, listOfPagesWithoutBackButton, WWW_URL } from '$lib/config'
 import { fetchStoreData, authenticateUser, fetchCart } from '$lib/server'
 
-if (SENTRY_DSN) {
+try {
 	Sentry.init({
 		dsn: SENTRY_DSN,
 		integrations: [new BrowserTracing()],
 		tracesSampleRate: 1.0
 	})
+} catch (error) {
+	console.warn('Skipping Sentry...') // Now you may skip sentry logging
 }
 
 /** @type {import('@sveltejs/kit').HandleFetch} */
