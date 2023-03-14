@@ -296,12 +296,12 @@ function handleFilterTags() {
 
 <CatelogNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page?.data?.store}">
 	<div class="flex max-w-max flex-col items-start gap-1">
-		<h2 class="w-28 truncate font-semibold capitalize leading-4">{data.searchData}</h2>
+		<h2 class="w-28 truncate font-semibold capitalize leading-4">{data.searchData || ''}</h2>
 
 		<p class="text-xs">
-			{data.count?.value}
+			{data.count}
 
-			{#if data.count?.value > 1}
+			{#if data.count > 1}
 				Items
 			{:else}
 				Item
@@ -354,7 +354,7 @@ function handleFilterTags() {
 				></path>
 			</svg>
 
-			<span class="flex-1">{data.products?.length} / {data.count?.value}</span>
+			<span class="flex-1">{data.products?.length} / {data.count}</span>
 		</button>
 	{/if}
 
@@ -391,11 +391,11 @@ function handleFilterTags() {
 
 							<p>
 								<span class="text-xl font-bold capitalize md:text-2xl">
-									{data.count?.value}
+									{data.count}
 								</span>
 
 								<span>
-									{#if data.count?.value > 1}
+									{#if data.count > 1}
 										Items
 									{:else}
 										Item
@@ -539,7 +539,7 @@ function handleFilterTags() {
 				</div>
 			{:else}
 				<Pagination
-					count="{Math.ceil((data?.count?.value || 1) / data.pageSize)}"
+					count="{Math.ceil((data?.count || 1) / data.pageSize)}"
 					current="{data?.currentPage || 1}" />
 			{/if}
 		</div>
