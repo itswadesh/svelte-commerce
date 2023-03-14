@@ -1,7 +1,5 @@
 import { redirect } from '@sveltejs/kit'
-import { fetchAddress } from '$lib/services/AddressService'
-import { fetchPaymentMethods } from '$lib/services/PaymentMethodService'
-import { fetchRefreshCart } from '$lib/services/CartService'
+import { AddressService, CartService, PaymentMethodService } from '$lib/services'
 
 export const prerender = false
 
@@ -11,7 +9,7 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 		const redirectUrl = `${locals.store?.loginUrl || '/auth/login'}?ref=${url?.pathname}`
 		throw redirect(307, redirectUrl)
 	}
-	const cartRes: any = await fetchRefreshCart({
+	const cartRes: any = await CartService.fetchRefreshCart({
 		storeId: locals.store?.id,
 		server: true,
 		sid: cookies.get('connect.sid')
@@ -35,13 +33,16 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 	try {
 		const id = url.searchParams.get('address')
 
-		const address = await fetchAddress({
+		const address = await AddressService.fetchAddress({
 			storeId: locals.store?.id,
 			server: true,
 			id,
 			sid: cookies.get('connect.sid')
 		})
-		const paymentMethods = await fetchPaymentMethods({ storeId: locals.store.id, server: true })
+		const paymentMethods = await PaymentMethodService.fetchPaymentMethods({
+			storeId: locals.store.id,
+			server: true
+		})
 		return { paymentMethods, address, addressId: id, me, cart }
 	} catch (e) {
 		if (e) {

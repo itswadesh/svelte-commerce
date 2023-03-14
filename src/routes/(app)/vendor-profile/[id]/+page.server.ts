@@ -1,17 +1,17 @@
-import { fetchProductsOfVendor, fetchVendor } from '$lib/services/VerndorService'
+import { VerndorService } from '$lib/services'
 import { error } from '@sveltejs/kit'
 
 export async function load({ params, parent, locals, cookies }) {
 	const { store } = await parent()
 	let vendorId = params.id
 
-	const vendor = await fetchVendor({
+	const vendor = await VerndorService.fetchVendor({
 		id: vendorId,
 		storeId: locals.store.id,
 		server: true,
 		sid: cookies.get('connect.sid')
 	})
-	const vendorProducts = await fetchProductsOfVendor({
+	const vendorProducts = await VerndorService.fetchProductsOfVendor({
 		id: vendorId,
 		storeId: locals.store.id,
 		server: true,
