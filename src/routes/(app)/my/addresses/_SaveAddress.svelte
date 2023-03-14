@@ -74,7 +74,11 @@ async function SaveAddress(address) {
 		toast('Address Info Saved.', 'success')
 		dispatch('saved')
 
-		if (id === 'new') goto(`/my/addresses/${newAddress._id}`)
+		if (newAddress?._id || newAddress?.id) {
+			if (id === 'new') {
+				goto(`/checkout/payment-options?address=${newAddress._id || newAddress?.id}`)
+			}
+		}
 	} catch (e) {
 		err = e
 		// toast(e, 'error')
