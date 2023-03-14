@@ -7,19 +7,17 @@
 </style>
 
 <script>
-import SEO from '$lib/components/SEO/index.svelte'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import { toast } from '$lib/util'
-import { goto, invalidateAll } from '$app/navigation'
-import VerifyOtp from '../_VerifyOtp.svelte'
-import SendOtp from '../_SendOtp.svelte'
-import { page } from '$app/stores'
-import { onMount } from 'svelte'
-import Cookie from 'cookie-universal'
-import { post } from '$lib/util/api'
 import { browser } from '$app/environment'
-import { GOOGLE_CLIENT_ID } from '$lib/config'
-import { googleOneTap } from '../login/google-one-tap'
+import { GOOGLE_CLIENT_ID, provider } from '$lib/config'
+import { googleOneTap } from '../email-login/google-one-tap'
+import { goto, invalidateAll } from '$app/navigation'
+import { onMount } from 'svelte'
+import { page } from '$app/stores'
+import { toast } from '$lib/utils'
+import Cookie from 'cookie-universal'
+import SendOtp from '../_SendOtp.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
+import VerifyOtp from '../_VerifyOtp.svelte'
 
 const cookies = Cookie()
 
@@ -42,7 +40,11 @@ onMount(() => {
 			client_id: GOOGLE_CLIENT_ID
 		},
 		async (res) => {
-			const onetap = await post('auth/google/onetap', res)
+			const UserService = await import(`$lib/services/${provider}/UserService.ts`)
+			const onetap = await UserService.googleOneTapLoginService({
+				data: res,
+				origin: $page.data.origin
+			})
 			const me = {
 				email: onetap.email,
 				phone: onetap.phone,
@@ -64,11 +66,15 @@ async function handleSendOTP({ detail }) {
 	phone = detail
 	try {
 		loading = true
-		const res = await post('get-otp', { phone, store: data.store?.id }, data.origin)
+		const res = await UserService.getOtpService({
+			phone,
+			storeId: data.store?.id,
+			origin: data.origin
+		})
 		resendAfter = res?.timer
 		otpRequestSend = true
 	} catch (e) {
-		toast(e, 'error')
+		toast(e?.body?.message || e, 'error')
 	} finally {
 		loading = false
 	}
@@ -78,7 +84,12 @@ async function handleVerifyOtp({ detail }) {
 	try {
 		loading = true
 		const otp = detail
-		const res = await post('verify-otp', { phone, otp, store: data.store?.id }, data.origin)
+		const res = await UserService.verifyOtpService({
+			phone,
+			otp,
+			storeId: data.store?.id,
+			origin: data.origin
+		})
 		const me = {
 			email: res.email,
 			phone: res.phone,
@@ -94,7 +105,7 @@ async function handleVerifyOtp({ detail }) {
 		let r = ref || '/'
 		if (browser) goto(r)
 	} catch (e) {
-		toast(e, 'error')
+		toast(e?.body?.message || e, 'error')
 	} finally {
 		loading = false
 	}
@@ -145,7 +156,7 @@ function changeNumber() {
 
 		<a
 			href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store?.id}"
-			aria-label="Click to login with email"
+			aria-label="Click to login as vendor"
 			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
 			Join as Vendor
 		</a>
@@ -154,7 +165,7 @@ function changeNumber() {
 	<p class="text-center text-sm text-gray-500">
 		By clicking send OTP you are accepting our
 		<a
-			href="/p/terms-conditions"
+			href="/terms-conditions"
 			aria-label="Click to route terms & conditions"
 			target="_blank"
 			rel="noopener noreferrer"
