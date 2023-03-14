@@ -44,14 +44,16 @@
 </style>
 
 <script lang="ts">
-import { CartService, WishlistService } from '$lib/services'
+// import UserForm from '$lib/components/Product/UserForm.svelte'
 import { applyAction, enhance } from '$app/forms'
-import { onMount } from 'svelte'
+import { CartService, WishlistService } from '$lib/services'
 import { currency, delay, toast } from '$lib/utils'
 import { fireGTagEvent } from '$lib/utils/gTag'
-import { goto, invalidateAll } from '$app/navigation'
-import { page } from '$app/stores'
 import { getAPI } from '$lib/utils/api'
+import { goto, invalidateAll } from '$app/navigation'
+import { onMount } from 'svelte'
+import { page } from '$app/stores'
+import { provider } from '$lib/config'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
 import Breadcrumb from '$lib/components/Breadcrumb.svelte'
 import CategoryPoolButtons from './_CategoryPoolButtons.svelte'
@@ -77,10 +79,8 @@ import SimilarProductsFromCategorySlug from '$lib/components/Product/SimilarProd
 import SocialSharingButtons from '$lib/components/SocialSharingButtons.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
-// import UserForm from '$lib/components/Product/UserForm.svelte'
 import viewport from '$lib/actions/useViewPort'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
-import { provider } from '$lib/config'
 
 const cookies = Cookie()
 
@@ -213,10 +213,10 @@ function handleSelectedLinkiedProducts(e) {
 
 // This is used only for customized product else cart?/add
 async function addToBag(p, customizedImg, customizedJson) {
-	loading = true
-	cartButtonText = 'Adding...'
-
 	try {
+		loading = true
+		cartButtonText = 'Adding...'
+
 		let cart = await CartService.addToCartService({
 			pid: p._id,
 			vid: p._id,
@@ -286,19 +286,19 @@ async function addToBag(p, customizedImg, customizedJson) {
 		cartButtonText = 'Error Add To Cart'
 	} finally {
 		loading = false
-		await delay(5000)
-		cartButtonText = 'Add to bag'
+		await delay(3000)
 		bounceItemFromTop = false
+		cartButtonText = 'Add to bag'
 	}
 }
 
 // let windowHeight
 // let cartButtonPosition = 0
 // onMount(() => {
-// 	let elem = document.getElementById('cartButton')
-// 	let rect = elem.getBoundingClientRect()
-// 	const ActualCartButtonPosition = rect.y
-// 	cartButtonPosition = ActualCartButtonPosition - windowHeight + 280
+//  let elem = document.getElementById('cartButton')
+//  let rect = elem.getBoundingClientRect()
+//  const ActualCartButtonPosition = rect.y
+//  cartButtonPosition = ActualCartButtonPosition - windowHeight + 280
 // })
 
 function cartButtonEnterViewport() {
@@ -636,7 +636,7 @@ function handleMobileCanvas() {
 							<button
 								type="button"
 								class="overflow-hidden rounded border py-1 px-3 text-sm font-medium uppercase transition duration-500 focus:outline-none
-              				{data.product?.size?.name === selectedSize
+                            {data.product?.size?.name === selectedSize
 									? 'bg-primary-500 border-primary-500 text-white'
 									: 'bg-transparent border-gray-300 text-gray-500 hover:border-primary-500 hover:text-primary-500'}"
 								on:click="{() => selectSize(data.product?.size)}">
@@ -737,15 +737,15 @@ function handleMobileCanvas() {
 
 									<!-- daterange -->
 									<!-- {:else if o.inputType == 'daterange'}
-									<span>Date range picker is not found</span> -->
+                                    <span>Date range picker is not found</span> -->
 
 									<!-- <date-picker
-									bind:value="{selectedOptions[o.id]}"
-									class="max-w-xs flex-1"
-									type="date"
-									:disabled-date="disabledBeforeTodayAndAfterAWeek"
-									range
-									@change="$emit('optionChanged', selectedOptions)"></date-picker> -->
+                                    bind:value="{selectedOptions[o.id]}"
+                                    class="max-w-xs flex-1"
+                                    type="date"
+                                    :disabled-date="disabledBeforeTodayAndAfterAWeek"
+                                    range
+                                    @change="$emit('optionChanged', selectedOptions)"></date-picker> -->
 
 									<!-- textarea -->
 								{:else if o.inputType == 'textarea'}
@@ -1069,7 +1069,7 @@ function handleMobileCanvas() {
 					<button
 						type="button"
 						class="font-semibold border-b-4 focus:outline-none 
-						{selectedReviewType === 'product_review'
+                        {selectedReviewType === 'product_review'
 							? 'border-primary-500 text-primary-500'
 							: 'border-gray-200 text-gray-500'}"
 						on:click="{() => (selectedReviewType = 'product_review')}">
@@ -1079,7 +1079,7 @@ function handleMobileCanvas() {
 					<button
 						type="button"
 						class="font-semibold border-b-4 focus:outline-none 
-						{selectedReviewType === 'brand_review'
+                        {selectedReviewType === 'brand_review'
 							? 'border-primary-500 text-primary-500'
 							: 'border-gray-200 text-gray-500'}"
 						on:click="{() => (selectedReviewType = 'brand_review')}">
