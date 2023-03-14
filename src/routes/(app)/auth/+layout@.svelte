@@ -36,7 +36,7 @@ let url
 								class="max-h-16 w-32 object-contain object-center" />
 						{:else}
 							<h1
-								class="bg-gradient-to-b from-primary-500 to-secondary-500 bg-clip-text text-2xl font-extrabold text-transparent sm:text-3xl">
+								class="bg-gradient-to-b from-primary-500 to-secondary-500 bg-clip-text text-2xl font-bold text-transparent sm:text-3xl">
 								{#if $page.data.store?.websiteName}
 									{$page.data.store?.websiteName}
 								{:else}
