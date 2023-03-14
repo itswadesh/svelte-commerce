@@ -5,7 +5,7 @@ import { goto } from '$app/navigation'
 import GrnIndGradiantButton from './ui/GrnIndGradiantButton.svelte'
 import { post } from '$lib/utils/api'
 import { page } from '$app/stores'
-import { stripeCheckoutService } from './services/OrdersService'
+import { OrdersService } from './services'
 import type { Error, PaymentMethod } from './types'
 let stripeReady = false
 let mounted = false
@@ -53,7 +53,7 @@ const payWithStripe = async (pm: PaymentMethod) => {
 		loading = true
 		toast('Contacting Payment Server...', 'warning')
 		const paymentMethodId = pm.id
-		const resStripe: any = stripeCheckoutService({
+		const resStripe: any = OrdersService.stripeCheckoutService({
 			paymentMethodId,
 			address,
 			storeId: $page.data.store?.id,

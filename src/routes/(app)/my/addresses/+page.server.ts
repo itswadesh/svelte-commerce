@@ -1,8 +1,8 @@
-import { fetchAddresses } from '$lib/services/AddressService'
+import { AddressService } from '$lib/services'
 import { error } from '@sveltejs/kit'
 
 export async function load({ cookies, locals }) {
-	const { myAddresses, selectedAddress, count } = await fetchAddresses({
+	const { myAddresses, selectedAddress, count } = await AddressService.fetchAddresses({
 		storeId: locals.store?.id,
 		server: true,
 		sid: cookies.get('connect.sid')

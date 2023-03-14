@@ -17,13 +17,7 @@ import productVeg from '$lib/assets/product/veg.png'
 import SEO from '$lib/components/SEO/index.svelte'
 import Skeleton from '$lib/ui/Skeleton.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
-import { fetchProducts } from '$lib/services/ProductService'
-import { fetchCoupons } from '$lib/services/CouponService'
-import {
-	addToCartService,
-	applyCouponService,
-	removeCouponService
-} from '$lib/services/CartService'
+import { ProductService, CartService } from '$lib/services'
 
 export let data
 
@@ -74,7 +68,7 @@ function handleCouponCode(couponCode: string) {
 async function applyCouponCode(selectedCouponCode: string) {
 	try {
 		loadingApplyCoupon = true
-		const resAC = await applyCouponService({
+		const resAC = await CartService.applyCouponService({
 			code: selectedCouponCode,
 			storeId: $page.data.store?.id,
 			origin: $page.data.origin
@@ -92,7 +86,7 @@ async function applyCouponCode(selectedCouponCode: string) {
 async function removeCouponCode() {
 	try {
 		loadingRemoveCoupon = true
-		await removeCouponService({ storeId: $page.data.store?.id, origin: $page.data.origin })
+		await CartService.removeCouponService({ storeId: $page.data.store?.id, origin: $page.data.origin })
 		selectedCouponCode = ''
 		await invalidateAll()
 	} catch (e) {
@@ -105,7 +99,7 @@ async function removeCouponCode() {
 async function getProducts() {
 	try {
 		loadingProducts = true
-		const resP = await fetchProducts({
+		const resP = await CartService.fetchProducts({
 			origin: $page?.data?.origin,
 			storeId: $page?.data?.store?.id
 		})
@@ -119,7 +113,7 @@ async function getProducts() {
 async function getCoupons() {
 	try {
 		loadingCoupon = true
-		const resC = await fetchCoupons({
+		const resC = await CartService.fetchCoupons({
 			origin: $page?.data?.origin,
 			storeId: $page?.data?.store?.id
 		})

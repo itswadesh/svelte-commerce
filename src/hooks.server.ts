@@ -41,7 +41,22 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// event.locals.sid = derivedSid
 		// event.cookies.set('sid', derivedSid, { path: '/' })
 		// event.request.headers.delete('connection')
-		return await resolve(event)
+		const route = event.url
+		let start = performance.now()
+		const response = await resolve(event)
+		let end = performance.now()
+
+		let responseTime = end - start
+
+		if (responseTime > 1000) {
+			console.log(`🐢 ${route} took ${responseTime.toFixed(2)} ms`)
+		}
+
+		if (responseTime < 100) {
+			console.log(`🚀 ${route} took ${responseTime.toFixed(2)} ms`)
+		}
+
+		return response
 	} catch (e) {
 		const err = `Store Not Found @Hook 
 			<br/>ID: ${event.locals.store?.id}

@@ -1,22 +1,20 @@
-import { fetchOrders } from '$lib/services/OrdersService'
-import { fetchReviews } from '$lib/services/ReviewService'
-import { fetchWishlist } from '$lib/services/WishlistService'
+import { OrdersService, ReviewService, WishlistService } from '$lib/services'
 import { redirect } from '@sveltejs/kit'
 
 export async function load({ request, locals, parent, cookies }) {
 	const { me, store } = locals
 	try {
-		const myOrders = await fetchOrders({
+		const myOrders = await OrdersService.fetchOrders({
 			storeId: locals.store?.id,
 			server: true,
 			sid: cookies.get('connect.sid')
 		})
-		const myWishlist = await fetchWishlist({
+		const myWishlist = await WishlistService.fetchWishlist({
 			storeId: locals.store?.id,
 			server: true,
 			sid: cookies.get('connect.sid')
 		})
-		const myReviews = await fetchReviews({
+		const myReviews = await ReviewService.fetchReviews({
 			storeId: locals.store?.id,
 			server: true,
 			sid: cookies.get('connect.sid')

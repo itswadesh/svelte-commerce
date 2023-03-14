@@ -1,5 +1,5 @@
 <script>
-import { fetchProductsOfCategory } from '$lib/services'
+import { CategoryService } from '$lib/services'
 import { onMount } from 'svelte'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
 import ProductCard from '$lib/ProductCard.svelte'

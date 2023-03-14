@@ -19,7 +19,7 @@ import Error from '$lib/components/Error.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
-import { googleOneTapLoginService, loginService } from '$lib/services/UserService'
+import { UserService } from '$lib/services'
 import { toast } from '$lib/utils'
 
 const cookies = Cookie()
@@ -72,7 +72,7 @@ async function submit() {
 	try {
 		loading = true
 
-		const res = await loginService({
+		const res = await UserService.loginService({
 			email: email,
 			password: password,
 			storeId: $page.data.store?.id,

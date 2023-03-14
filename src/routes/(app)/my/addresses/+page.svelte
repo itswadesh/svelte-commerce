@@ -15,7 +15,7 @@
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import { del } from '$lib/utils/api'
-import { saveAddress } from '$lib/services/AddressService'
+import { AddressService } from '$lib/services'
 import noEmptyAddress from '$lib/assets/no/empty-address.svg'
 import Pagination from '$lib/components/Pagination.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
@@ -53,7 +53,7 @@ async function sortNow(sort) {
 async function saveAddr(e) {
 	const { _id: id, active } = e
 	try {
-		await saveAddress({ id, storeId: $page.data.store?.id, origin: $page.data.origin })
+		await AddressService.saveAddress({ id, storeId: $page.data.store?.id, origin: $page.data.origin })
 		await invalidateAll()
 	} catch (e) {
 		data.err = e

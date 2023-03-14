@@ -1,7 +1,6 @@
 import { DOMAIN, HTTP_ENDPOINT } from '$lib/config'
 // import { redis } from '$lib/server/redis'
-import { fetchDeals } from '$lib/services/DealsService'
-import { fetchHome } from '$lib/services/HomeService'
+import { DealsService, HomeService } from '$lib/services'
 import { error } from '@sveltejs/kit'
 
 export async function load({ locals, setHeaders }) {
@@ -15,7 +14,7 @@ export async function load({ locals, setHeaders }) {
 		// 	home = JSON.parse(cached)
 		// } else {
 		// console.log('Cache miss!')
-		home = await fetchHome({ storeId: store?.id, server: true })
+		home = await HomeService.fetchHome({ storeId: store?.id, server: true })
 		// setHeaders({ 'cache-control': 'max-age: 600' })
 		// redis.set(`home-www-${locals.store?.id}`, JSON.stringify(home), 'EX', 600)
 		// }
@@ -27,7 +26,7 @@ export async function load({ locals, setHeaders }) {
 		throw error(
 			404,
 			`Store Not Found @Page 
-			<br/>ID: ${store.id}
+			<br/>ID: ${store?.id}
 			<br/>ORIGIN: ${origin}
 			<br/>DOMAIN(env):${DOMAIN}
 			<br/>HTTP_ENDPOINT(env):${HTTP_ENDPOINT}`

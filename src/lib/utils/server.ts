@@ -5,7 +5,8 @@ import {
 	bigcommerceHeaders,
 	provider,
 	woocommerceHeaders,
-	MEDUSAJS_BASE_URL
+	MEDUSAJS_BASE_URL,
+	SHOPIFY_BASE_URL
 } from '../config'
 
 // import pkg from '@woocommerce/woocommerce-rest-api' // node v-18
@@ -122,7 +123,7 @@ export const getBySid = async (endpoint: string, sid?: any) => {
 	}
 }
 
-export const getBigCommerceApi = async (endpoint: string, query: any, sid?: any) => {
+export const getBigcommerceApi = async (endpoint: string, query: any, sid?: any) => {
 	// console.log(BIG_COMMERCE_BASE_URL + '/' + endpoint)
 	const response = await fetch(BIG_COMMERCE_BASE_URL + '/' + endpoint + '?' + serialize(query), {
 		headers: bigcommerceHeaders
@@ -198,7 +199,46 @@ export const postMedusajsApi = async (endpoint: string, data: any, sid?: any) =>
 	}
 }
 
-export const getWooCommerceApi = async (endpoint: string, query: any, sid?: any) => {
+export const getShopifyApi = async (endpoint: string, query: any, sid?: any) => {
+	const response = await fetch(SHOPIFY_BASE_URL + '/' + endpoint, {
+		method: 'GET',
+		credentials: 'include',
+		headers: { cookie: `connect.sid=${sid}` }
+	})
+	const isJson = response.headers.get('content-type')?.includes('application/json')
+	const res = isJson ? await response.json() : await response.text()
+	if (res?.status > 399) {
+		throw { status: res.status, message: res }
+	} else if (response?.status > 399) {
+		throw { status: response.status, message: res }
+	} else {
+		return res
+	}
+}
+
+export const postShopifyApi = async (endpoint: string, data: any, sid?: any) => {
+	const ep = SHOPIFY_BASE_URL + '/' + endpoint
+	const response = await fetch(ep, {
+		method: 'POST',
+		credentials: 'include',
+		body: JSON.stringify(data || {}),
+		headers: {
+			'Content-Type': 'application/json',
+			cookie: `connect.sid=${sid}`
+		}
+	})
+	const isJson = response.headers.get('content-type')?.includes('application/json')
+	const res = isJson ? await response.json() : await response.text()
+	if (res?.status > 399) {
+		throw { status: res.status, message: res.body.message }
+	} else if (response?.status > 399) {
+		throw { status: response.status, message: res }
+	} else {
+		return res
+	}
+}
+
+export const getWoocommerceApi = async (endpoint: string, query: any, sid?: any) => {
 	try {
 		// const res = await WooCommerce.get(endpoint + '?' + serialize(query))
 		// const response = await fetch(
@@ -219,7 +259,7 @@ export const getWooCommerceApi = async (endpoint: string, query: any, sid?: any)
 	}
 }
 
-export const postWooCommerceApi = async (endpoint: string, query: any, sid?: any) => {
+export const postWoocommerceApi = async (endpoint: string, query: any, sid?: any) => {
 	try {
 		// const res = await WooCommerce.get(endpoint + '?' + serialize(query))
 		// const response = await fetch(

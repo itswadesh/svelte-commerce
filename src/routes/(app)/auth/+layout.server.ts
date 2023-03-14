@@ -1,4 +1,4 @@
-import { fetchMyCart } from '$lib/services/CartService'
+import { CartService } from '$lib/services'
 export const prerender = false
 
 export async function load({ url, locals, cookies }) {
@@ -7,7 +7,7 @@ export async function load({ url, locals, cookies }) {
 	let cart
 	// let serializedCart
 	try {
-		const res: any = await fetchMyCart({
+		const res: any = await CartService.fetchMyCart({
 			storeId: locals.store?.id,
 			server: true,
 			sid: cookies.get('connect.sid')

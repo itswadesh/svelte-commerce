@@ -1,9 +1,9 @@
 import { error, redirect } from '@sveltejs/kit'
-import { fetchReviews } from '$lib/services/ReviewService'
+import { ReviewService } from '$lib/services'
 
 export async function load({ cookies, locals }) {
 	try {
-		const res = await fetchReviews({
+		const res = await ReviewService.fetchReviews({
 			storeId: locals.store?.id,
 			server: true,
 			sid: cookies.get('connect.sid')

@@ -16,11 +16,10 @@
 <script>
 import { currency, dateOnly, toast } from '$lib/utils'
 import { fade } from 'svelte/transition'
-import { fetchNextPageProducts } from '$lib/services/ProductService'
+import { ProductService, PopularSearchService } from '$lib/services'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { savePopularSearch } from '$lib/services/PopularSearchService'
 import { sorts } from '$lib/config'
 import CatelogNav from '$lib/CatelogNav.svelte'
 import dayjs from 'dayjs'
@@ -180,7 +179,7 @@ async function loadNextPage() {
 	const searchParams = $page.url.searchParams.toString()
 	try {
 		data.isLoading = true
-		const res = await fetchNextPageProducts({
+		const res = await ProductService.fetchNextPageProducts({
 			categorySlug: data.category?.slug,
 			origin: $page?.data?.origin,
 			storeId: $page?.data?.store?.id,

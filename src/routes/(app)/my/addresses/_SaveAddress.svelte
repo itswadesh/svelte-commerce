@@ -1,9 +1,8 @@
 <script>
 import { createEventDispatcher } from 'svelte'
-import { fetchStates } from '$lib/services'
+import { AddressService, CountryService } from '$lib/services'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
-import { saveAddress } from '$lib/services/AddressService'
 import { toast } from '$lib/utils'
 import Error from '$lib/components/Error.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
@@ -31,7 +30,7 @@ async function onCountryChange(country) {
 		err = null
 		loadingStates = true
 		address.state = null
-		states = await fetchStates({
+		states = await CountryService.fetchStates({
 			countryCode: country,
 			storeId: $page.data?.store?.id,
 			origin: $page.data?.origin
@@ -55,7 +54,7 @@ async function SaveAddress(address) {
 
 		toast('Saving Address Info...', 'info')
 
-		const newAddress = await saveAddress({
+		const newAddress = await AddressService.saveAddress({
 			id,
 			address: address.address,
 			city,

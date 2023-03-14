@@ -1,3 +1,6 @@
+Any queries or guidance, can reach me at 
+<a href="https://discord.gg/4G7zbcpt" target="blank" rel="noopener noreferrer" aria-label="Click to Discord">Discord</a>
+
 # What is Svelte Commerce?
 
 - Svelte Commerce is a PWA storefront for your existing eCommerce based on Sveltekit.
@@ -6,6 +9,10 @@
 
 <a href="https://litekart.in/" aria-label="Click to browse litekart">
 <img src="https://repository-images.githubusercontent.com/213575283/f577b8bd-8edb-41ba-bfe5-36e65072e1f2" alt/>
+</a>
+
+<a href="https://litekart.in/" aria-label="Click to browse litekart">
+<img src="https://res.cloudinary.com/itswadesh/image/upload/v1678600224/litekart/free_for_developers_1.png" alt/>
 </a>
 
 ![version](https://img.shields.io/badge/node-v16.x-blue.svg)

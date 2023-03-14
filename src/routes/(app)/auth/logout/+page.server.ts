@@ -1,4 +1,4 @@
-import { logoutService } from '$lib/services/UserService'
+import { UserService } from '$lib/services'
 import { redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
 
@@ -10,7 +10,7 @@ export const load: PageServerLoad = async () => {
 
 export const actions: Actions = {
 	async default({ cookies, locals }) {
-		await logoutService({ storeId: locals.store?.id, sid: cookies.get('connect.sid') })
+		await UserService.logoutService({ storeId: locals.store?.id, sid: cookies.get('connect.sid') })
 		// eat the cookie
 		cookies.set('session', '', {
 			path: '/',

@@ -1,4 +1,4 @@
-import { getStoreData } from '$lib/services/StoreService'
+import { StoreService } from '$lib/services'
 import type { RequestEvent } from '@sveltejs/kit'
 export const fetchStoreData = async (event: RequestEvent) => {
 	try {
@@ -7,7 +7,7 @@ export const fetchStoreData = async (event: RequestEvent) => {
 		if (zip) {
 			event.locals.zip = JSON.parse(zip)
 		}
-		const r = await getStoreData({
+		const r = await StoreService.getStoreData({
 			url: event.request.url,
 			cookies: event.cookies,
 			cookieStore,

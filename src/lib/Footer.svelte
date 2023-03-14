@@ -77,11 +77,11 @@ let footerItems: any = [
 				link: '/payments-returns',
 				new: false
 			},
-			{
-				title: 'Printing Terms & Cancellation Policy',
-				link: '/printing-terms-cancellation-policy',
-				new: false
-			},
+			// {
+			// 	title: 'Printing Terms & Cancellation Policy',
+			// 	link: '/printing-terms-cancellation-policy',
+			// 	new: false
+			// },
 			{ title: 'Track Your Order', link: '/my/orders?sort=-updatedAt', new: false },
 			{ title: 'Bulk Order Inquiry', link: '/bulk-order-inquiry', new: true },
 			{ title: 'Blogs', link: '/blogs', new: false },

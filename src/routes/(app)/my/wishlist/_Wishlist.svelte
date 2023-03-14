@@ -15,7 +15,7 @@
 <script>
 import { applyAction, enhance } from '$app/forms'
 import { currency } from '$lib/utils'
-import { fetchWishlist, toggleWishlistService } from '$lib/services/WishlistService'
+import { WishlistService } from '$lib/services'
 import { fireGTagEvent } from '$lib/utils/gTag'
 import { invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
@@ -36,7 +36,7 @@ let bounceItemFromTop = false
 async function removeFromWishlist(id, wx) {
 	try {
 		loadingProduct[wx] = true
-		await toggleWishlistService({
+		await WishlistService.toggleWishlistService({
 			pid: id,
 			vid: id,
 			storeId: $page.data.store?.id,
@@ -52,7 +52,7 @@ async function removeFromWishlist(id, wx) {
 
 async function getWishlistedProducts() {
 	try {
-		wishlistedProducts = fetchWishlist({
+		wishlistedProducts = WishlistService.fetchWishlist({
 			origin: $page?.data?.origin,
 			storeId: $page?.data?.store?.id
 		})

@@ -1,5 +1,4 @@
-import { fetchMyCart } from '$lib/services/CartService'
-import { getOtpService, verifyOtpService } from '$lib/services/UserService'
+import { UserService, CartService } from '$lib/services'
 import { fail, redirect } from '@sveltejs/kit'
 import type { Action, Actions, PageServerLoad } from './$types'
 export const load: PageServerLoad = async ({ locals, url }) => {
@@ -21,7 +20,7 @@ const getOtp: Action = async ({ request, locals }) => {
 		return fail(400, { invalid: true })
 	}
 	try {
-		const data = await getOtpService({ phone, storeId: locals.store?.id, origin: locals.origin })
+		const data = await UserService.getOtpService({ phone, storeId: locals.store?.id, origin: locals.origin })
 		// const data = { timer: 1 }
 		return {
 			phone: phone,
@@ -46,7 +45,7 @@ const verifyOtp: Action = async ({ cookies, request, locals }) => {
 		return fail(400, { invalid: true })
 	}
 	try {
-		const user = await verifyOtpService({
+		const user = await UserService.verifyOtpService({
 			phone,
 			otp,
 			storeId: locals.store?.id,
@@ -86,7 +85,7 @@ const verifyOtp: Action = async ({ cookies, request, locals }) => {
 			maxAge: 60 * 60 * 24 * 30
 		})
 		try {
-			const cartRes = await fetchMyCart({
+			const cartRes = await CartService.fetchMyCart({
 				storeId: locals.store?.id,
 				server: true,
 				sid: cookies.get('connect.sid')

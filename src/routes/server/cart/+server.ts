@@ -1,9 +1,9 @@
-import { fetchMyCart } from '$lib/services/CartService'
+import { CartService } from '$lib/services'
 
 export async function GET({ request, locals, cookies }) {
 	let cart: any = {}
 	const d = new Date()
-	cart = await fetchMyCart({
+	cart = await CartService.fetchMyCart({
 		storeId: locals.store?.id,
 		server: true,
 		sid: cookies.get('connect.sid')

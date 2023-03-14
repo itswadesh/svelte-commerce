@@ -6,7 +6,7 @@ import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextareaFloating from '$lib/ui/TextareaFloating.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
-import { submitContactUsForm } from '$lib/services/ContactService'
+import { ContactService } from '$lib/services'
 
 let seoProps = {
 	title: `Contact Us`,
@@ -25,7 +25,7 @@ async function submitContactInformation() {
 		err = null
 		loading = true
 
-		await submitContactUsForm({
+		await ContactService.submitContactUsForm({
 			fullName,
 			email,
 			phone,

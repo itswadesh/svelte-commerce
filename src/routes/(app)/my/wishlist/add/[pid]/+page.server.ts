@@ -1,10 +1,10 @@
-import { checkhWishlist, toggleWishlistService } from '$lib/services/WishlistService'
+import {WishlistService } from '$lib/services'
 
 import { redirect } from '@sveltejs/kit'
 
 export async function load({ locals, cookies, params, request }) {
 	const pid = params.pid
-	const isExistInWishlist = await checkhWishlist({
+	const isExistInWishlist = await WishlistService.checkhWishlist({
 		pid,
 		vid: pid,
 		storeId: locals.store?.id,
@@ -13,7 +13,7 @@ export async function load({ locals, cookies, params, request }) {
 	})
 
 	if (!isExistInWishlist) {
-		await toggleWishlistService({
+		await WishlistService.toggleWishlistService({
 			pid: pid,
 			vid: pid,
 			storeId: locals.store?.id,

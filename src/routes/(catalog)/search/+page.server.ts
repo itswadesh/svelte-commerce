@@ -1,4 +1,4 @@
-import { searchProducts } from '$lib/services/ProductService'
+import { ProductService } from '$lib/services'
 import { generatePriceRange } from '$lib/utils'
 import { error } from '@sveltejs/kit'
 export const prerender = false
@@ -25,7 +25,7 @@ export async function load({ url, locals, cookies, parent }) {
 
 	try {
 		loading = true
-		const res = await searchProducts({
+		const res = await ProductService.searchProducts({
 			storeId: store?.id,
 			query: query.toString(),
 			searchData: searchData,

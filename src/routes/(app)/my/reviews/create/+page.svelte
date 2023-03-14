@@ -2,7 +2,7 @@
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { post } from '$lib/utils/api'
-import { saveReview } from '$lib/services/ReviewService'
+import { ReviewService } from '$lib/services'
 import { getExtension, toast } from '$lib/utils'
 import BackButton from '$lib/ui/BackButton.svelte'
 import dayjs from 'dayjs'
@@ -92,7 +92,7 @@ async function saveReviewproduct(review) {
 	try {
 		toast('Sending your business rating and review', 'info')
 		review.store = $page.data.store?.id
-		await saveReview({
+		await ReviewService.saveReview({
 			id: review.id,
 			pid: review.pid,
 			message: review.message,

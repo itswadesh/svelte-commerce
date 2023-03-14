@@ -9,7 +9,7 @@
 import { browser } from '$app/environment'
 import { constructURL2, currency } from '$lib/utils'
 import { createEventDispatcher, onMount } from 'svelte'
-import { fetchMegamenuData } from '$lib/services/CategoryService'
+import { CategoryService } from '$lib/services'
 import { fly } from 'svelte/transition'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
@@ -148,7 +148,7 @@ async function getMegamenu() {
 			const localmegamenu = localStorage.getItem('megamenu')
 
 			if (!localmegamenu || localmegamenu === 'undefined') {
-				megamenu = await fetchMegamenuData({
+				megamenu = await CategoryService.fetchMegamenuData({
 					origin: $page?.data?.origin,
 					storeId: $page?.data?.store?.id
 				})
