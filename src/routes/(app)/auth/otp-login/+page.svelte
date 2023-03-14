@@ -9,7 +9,7 @@
 <script>
 import { browser } from '$app/environment'
 import { GOOGLE_CLIENT_ID, provider } from '$lib/config'
-import { googleOneTap } from '../login/google-one-tap'
+import { googleOneTap } from '../email-login/google-one-tap'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
