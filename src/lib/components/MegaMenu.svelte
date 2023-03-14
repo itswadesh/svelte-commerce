@@ -35,7 +35,8 @@ import { onMount } from 'svelte'
 import { toast } from '$lib/utils'
 import { page } from '$app/stores'
 import { browser } from '$app/environment'
-import { CategoryService } from '$lib/services'
+// import { CategoryService } from '$lib/services'
+import { provider } from '$lib/config'
 
 let megamenu = []
 let selectedCategory = ''
@@ -52,6 +53,7 @@ async function getMegaMenu() {
 			if (!!localMegamenu && localMegamenu !== 'undefined') {
 				megamenu = JSON.parse(localMegamenu)
 			} else {
+				const CategoryService  = await import(`$lib/services/${provider}/CategoryService.ts`);
 				megamenu = await CategoryService.fetchMegamenuData({
 					storeId: $page?.data?.store?.id,
 					origin: $page.data?.origin

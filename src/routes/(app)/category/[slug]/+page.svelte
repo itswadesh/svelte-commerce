@@ -26,6 +26,7 @@ let query = $page?.url?.searchParams
 
 onMount(async () => {
 	try {
+		const CategoryService = await import(`$lib/services/${provider}/CategoryService.ts`)
 		const res = await CategoryService.fetchAllProductsOfCategories({
 			origin: $page?.data?.origin,
 			storeId: $page?.data?.store?.id
@@ -77,14 +78,12 @@ async function refreshData() {
 				facets="{facets}"
 				query="{query}"
 				class="sticky top-[7.5rem] hidden lg:top-[5.5rem] lg:block"
-				on:clearAll="{refreshData}"
-			/>
+				on:clearAll="{refreshData}" />
 
 			<MobileFilter
 				facets="{facets}"
 				class="sticky top-[4.9rem] z-50 block lg:hidden"
-				on:clearAll="{refreshData}"
-			/>
+				on:clearAll="{refreshData}" />
 		{/if}
 
 		<div class="flex w-full px-3 py-5">
@@ -101,8 +100,7 @@ async function refreshData() {
 							<select
 								class="bg-transparent px-2 py-1 font-semibold focus:outline-none hover:underline"
 								bind:value="{data.sort}"
-								on:change="{() => sortNow(data.sort)}"
-							>
+								on:change="{() => sortNow(data.sort)}">
 								{#each sorts as s}
 									<option value="{s.val}">{s.name}</option>
 								{/each}
@@ -111,8 +109,7 @@ async function refreshData() {
 					</div>
 
 					<div
-						class="mb-5 grid w-full grid-cols-2 items-start gap-3 sm:mb-10 sm:flex sm:flex-wrap sm:justify-between lg:mb-20 lg:gap-6"
-					>
+						class="mb-5 grid w-full grid-cols-2 items-start gap-3 sm:mb-10 sm:flex sm:flex-wrap sm:justify-between lg:mb-20 lg:gap-6">
 						{#each products as p}
 							<ProductCard product="{p}" />
 						{/each}
@@ -132,8 +129,7 @@ async function refreshData() {
 									alt="no data availible"
 									width="80"
 									height="80"
-									class="h-20 w-20 text-xs"
-								/>
+									class="h-20 w-20 text-xs" />
 							</div>
 
 							<p class="mb-5 text-center text-gray-500">No data found</p>

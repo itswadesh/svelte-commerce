@@ -1,12 +1,12 @@
 <script>
 import { browser } from '$app/environment'
-import { CategoryService } from '$lib/services'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { toast } from '$lib/utils'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import MobileFooter from '$lib/MobileFooter.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+import { provider } from '$lib/config'
 
 let seoProps = {
 	title: `Categories`,
@@ -42,6 +42,7 @@ async function getMegaMenu() {
 		try {
 			const localMegamenu = localStorage.getItem('megamenu')
 			if (!localMegamenu || localMegamenu === 'undefined') {
+				const CategoryService = await import(`$lib/services/${provider}/CategoryService.ts`)
 				megamenu = await CategoryService.fetchMegamenuData({
 					origin: $page?.data?.origin,
 					storeId: $page?.data?.store?.id
