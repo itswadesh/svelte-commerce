@@ -26,161 +26,51 @@ let AddressService,
 	WishlistService,
 	ZipService
 ;(async () => {
-	AddressService =
-		(provider === 'Litekart' && (await import('./Litekart/AddressService'))) ||
-		(provider === 'BigCommerce' && (await import('./Bigcommerce/AddressService'))) ||
-		(provider === 'Woocommerce' && (await import('./Woocommerce/AddressService'))) ||
-		(provider === 'Shopify' && (await import('./Shopify/AddressService'))) ||
-		(provider === 'Medusa' && (await import('./Medusa/AddressService')))
+	AddressService = await import(`./${provider}/AddressService.ts`)
 
-	BannersService =
-		(provider === 'Litekart' && (await import('./Litekart/BannersService'))) ||
-		(provider === 'BigCommerce' && (await import('./Bigcommerce/BannersService'))) ||
-		(provider === 'Woocommerce' && (await import('./Woocommerce/BannersService'))) ||
-		(provider === 'Shopify' && (await import('./Shopify/BannersService'))) ||
-		(provider === 'Medusa' && (await import('./Medusa/BannersService')))
+	BannersService = await import(`./${provider}/BannersService.ts`)
 
-	BlogService =
-		(provider === 'Litekart' && (await import('./Litekart/BlogService'))) ||
-		(provider === 'BigCommerce' && (await import('./Bigcommerce/BlogService'))) ||
-		(provider === 'Woocommerce' && (await import('./Woocommerce/BlogService'))) ||
-		(provider === 'Shopify' && (await import('./Shopify/BlogService'))) ||
-		(provider === 'Medusa' && (await import('./Medusa/BlogService')))
+	BlogService = await import(`./${provider}/BlogService.ts`)
 
-	AutocompleteService =
-		(provider === 'Litekart' && (await import('./Litekart/AutocompleteService'))) ||
-		(provider === 'BigCommerce' && (await import('./Bigcommerce/AutocompleteService'))) ||
-		(provider === 'Woocommerce' && (await import('./Woocommerce/AutocompleteService'))) ||
-		(provider === 'Shopify' && (await import('./Shopify/AutocompleteService'))) ||
-		(provider === 'Medusa' && (await import('./Medusa/AutocompleteService')))
+	AutocompleteService = await import(`./${provider}/AutocompleteService.ts`)
 
-	CartService =
-		(provider === 'Litekart' && (await import('./Litekart/CartService'))) ||
-		(provider === 'BigCommerce' && (await import('./Bigcommerce/CartService'))) ||
-		(provider === 'Woocommerce' && (await import('./Woocommerce/CartService'))) ||
-		(provider === 'Shopify' && (await import('./Shopify/CartService'))) ||
-		(provider === 'Medusa' && (await import('./Medusa/CartService')))
+	CartService = await import(`./${provider}/CartService.ts`)
 
-	CategoryService =
-		(provider === 'Litekart' && (await import('./Litekart/CategoryService'))) ||
-		(provider === 'BigCommerce' && (await import('./Bigcommerce/CategoryService'))) ||
-		(provider === 'Woocommerce' && (await import('./Woocommerce/CategoryService'))) ||
-		(provider === 'Shopify' && (await import('./Shopify/CategoryService'))) ||
-		(provider === 'Medusa' && (await import('./Medusa/CategoryService')))
+	CategoryService = await import(`./${provider}/CategoryService.ts`)
 
-	ContactService =
-		(provider === 'Litekart' && (await import('./Litekart/ContactService'))) ||
-		(provider === 'BigCommerce' && (await import('./Bigcommerce/ContactService'))) ||
-		(provider === 'Woocommerce' && (await import('./Woocommerce/ContactService'))) ||
-		(provider === 'Shopify' && (await import('./Shopify/ContactService'))) ||
-		(provider === 'Medusa' && (await import('./Medusa/ContactService')))
+	ContactService = await import(`./${provider}/ContactService.ts`)
 
-	CountryService =
-		(provider === 'Litekart' && (await import('./Litekart/CountryService'))) ||
-		(provider === 'BigCommerce' && (await import('./Bigcommerce/CountryService'))) ||
-		(provider === 'Woocommerce' && (await import('./Woocommerce/CountryService'))) ||
-		(provider === 'Shopify' && (await import('./Shopify/CountryService'))) ||
-		(provider === 'Medusa' && (await import('./Medusa/CountryService')))
+	CountryService = await import(`./${provider}/CountryService.ts`)
 
-	CouponService =
-		(provider === 'Litekart' && (await import('./Litekart/CouponService'))) ||
-		(provider === 'BigCommerce' && (await import('./Bigcommerce/CouponService'))) ||
-		(provider === 'Woocommerce' && (await import('./Woocommerce/CouponService'))) ||
-		(provider === 'Shopify' && (await import('./Shopify/CouponService'))) ||
-		(provider === 'Medusa' && (await import('./Medusa/CouponService')))
+	CouponService = await import(`./${provider}/CouponService.ts`)
 
-	DealsService =
-		(provider === 'Litekart' && (await import('./Litekart/DealsService'))) ||
-		(provider === 'BigCommerce' && (await import('./Bigcommerce/DealsService'))) ||
-		(provider === 'Woocommerce' && (await import('./Woocommerce/DealsService'))) ||
-		(provider === 'Shopify' && (await import('./Shopify/DealsService'))) ||
-		(provider === 'Medusa' && (await import('./Medusa/DealsService')))
+	DealsService = await import(`./${provider}/DealsService.ts`)
 
-	DemoRequestService =
-		(provider === 'Litekart' && (await import('./Litekart/DemoRequestService'))) ||
-		(provider === 'BigCommerce' && (await import('./Bigcommerce/DemoRequestService'))) ||
-		(provider === 'Woocommerce' && (await import('./Woocommerce/DemoRequestService'))) ||
-		(provider === 'Shopify' && (await import('./Shopify/DemoRequestService'))) ||
-		(provider === 'Medusa' && (await import('./Medusa/DemoRequestService')))
+	DemoRequestService = await import(`./${provider}/DemoRequestService.ts`)
 
-	FaqService =
-		(provider === 'Litekart' && (await import('./Litekart/FaqService'))) ||
-		(provider === 'BigCommerce' && (await import('./Bigcommerce/FaqService'))) ||
-		(provider === 'Woocommerce' && (await import('./Woocommerce/FaqService'))) ||
-		(provider === 'Shopify' && (await import('./Shopify/FaqService'))) ||
-		(provider === 'Medusa' && (await import('./Medusa/FaqService')))
+	FaqService = await import(`./${provider}/FaqService.ts`)
 
-	HomeService =
-		(provider === 'Litekart' && (await import('./Litekart/HomeService'))) ||
-		(provider === 'BigCommerce' && (await import('./Bigcommerce/HomeService'))) ||
-		(provider === 'Woocommerce' && (await import('./Woocommerce/HomeService'))) ||
-		(provider === 'Shopify' && (await import('./Shopify/HomeService'))) ||
-		(provider === 'Medusa' && (await import('./Medusa/HomeService')))
+	HomeService = await import(`./${provider}/HomeService.ts`)
 
-	OrdersService =
-		(provider === 'Litekart' && (await import('./Litekart/OrdersService'))) ||
-		(provider === 'BigCommerce' && (await import('./Bigcommerce/OrdersService'))) ||
-		(provider === 'Woocommerce' && (await import('./Woocommerce/OrdersService'))) ||
-		(provider === 'Shopify' && (await import('./Shopify/OrdersService'))) ||
-		(provider === 'Medusa' && (await import('./Medusa/OrdersService')))
+	OrdersService = await import(`./${provider}/OrdersService.ts`)
 
-	PaymentMethodService =
-		(provider === 'Litekart' && (await import('./Litekart/PaymentMethodService'))) ||
-		(provider === 'BigCommerce' && (await import('./Bigcommerce/PaymentMethodService'))) ||
-		(provider === 'Woocommerce' && (await import('./Woocommerce/PaymentMethodService'))) ||
-		(provider === 'Shopify' && (await import('./Shopify/PaymentMethodService'))) ||
-		(provider === 'Medusa' && (await import('./Medusa/PaymentMethodService')))
+	PaymentMethodService = await import(`./${provider}/PaymentMethodService.ts`)
 
-	PopularSearchService =
-		(provider === 'Litekart' && (await import('./Litekart/PopularSearchService'))) ||
-		(provider === 'BigCommerce' && (await import('./Bigcommerce/PopularSearchService'))) ||
-		(provider === 'Woocommerce' && (await import('./Woocommerce/PopularSearchService'))) ||
-		(provider === 'Shopify' && (await import('./Shopify/PopularSearchService'))) ||
-		(provider === 'Medusa' && (await import('./Medusa/PopularSearchService')))
+	PopularSearchService = await import(`./${provider}/PopularSearchService.ts`)
 
-	ProductService =
-		(provider === 'Litekart' && (await import('./Litekart/ProductService'))) ||
-		(provider === 'BigCommerce' && (await import('./Bigcommerce/ProductService'))) ||
-		(provider === 'Woocommerce' && (await import('./Woocommerce/ProductService'))) ||
-		(provider === 'Shopify' && (await import('./Shopify/ProductService'))) ||
-		(provider === 'Medusa' && (await import('./Medusa/ProductService')))
+	ProductService = await import(`./${provider}/ProductService.ts`)
 
-	ReviewService =
-		(provider === 'Litekart' && (await import('./Litekart/ReviewService'))) ||
-		(provider === 'BigCommerce' && (await import('./Bigcommerce/ReviewService'))) ||
-		(provider === 'Woocommerce' && (await import('./Woocommerce/ReviewService'))) ||
-		(provider === 'Shopify' && (await import('./Shopify/ReviewService'))) ||
-		(provider === 'Medusa' && (await import('./Medusa/ReviewService')))
+	ReviewService = await import(`./${provider}/ReviewService.ts`)
 
-	StoreService = provider === 'Litekart' && (await import('./Litekart/StoreService'))
+	StoreService = await import(`./${provider}/StoreService.ts`)
 
-	UserService =
-		(provider === 'Litekart' && (await import('./Litekart/UserService'))) ||
-		(provider === 'BigCommerce' && (await import('./Bigcommerce/UserService'))) ||
-		(provider === 'Woocommerce' && (await import('./Woocommerce/UserService'))) ||
-		(provider === 'Shopify' && (await import('./Shopify/UserService'))) ||
-		(provider === 'Medusa' && (await import('./Medusa/UserService')))
+	UserService = await import(`./${provider}/UserService.ts`)
 
-	VerndorService =
-		(provider === 'Litekart' && (await import('./Litekart/VerndorService'))) ||
-		(provider === 'BigCommerce' && (await import('./Bigcommerce/VerndorService'))) ||
-		(provider === 'Woocommerce' && (await import('./Woocommerce/VerndorService'))) ||
-		(provider === 'Shopify' && (await import('./Shopify/VerndorService'))) ||
-		(provider === 'Medusa' && (await import('./Medusa/VerndorService')))
+	VerndorService = await import(`./${provider}/VerndorService.ts`)
 
-	WishlistService =
-		(provider === 'Litekart' && (await import('./Litekart/WishlistService'))) ||
-		(provider === 'BigCommerce' && (await import('./Bigcommerce/WishlistService'))) ||
-		(provider === 'Woocommerce' && (await import('./Woocommerce/WishlistService'))) ||
-		(provider === 'Shopify' && (await import('./Shopify/WishlistService'))) ||
-		(provider === 'Medusa' && (await import('./Medusa/WishlistService')))
+	WishlistService = await import(`./${provider}/WishlistService.ts`)
 
-	ZipService =
-		(provider === 'Litekart' && (await import('./Litekart/ZipService'))) ||
-		(provider === 'BigCommerce' && (await import('./Bigcommerce/ZipService'))) ||
-		(provider === 'Woocommerce' && (await import('./Woocommerce/ZipService'))) ||
-		(provider === 'Shopify' && (await import('./Shopify/ZipService'))) ||
-		(provider === 'Medusa' && (await import('./Medusa/ZipService')))
+	ZipService = await import(`./${provider}/ZipService.ts`)
 })()
 
 export {
