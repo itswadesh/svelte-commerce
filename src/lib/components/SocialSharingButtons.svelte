@@ -59,15 +59,15 @@ let showDropDown = false
 					class="share-button"
 					text="{productName}"
 					url="{url}"
-					hashtags="Litekart"
-					via="Litekart"
-					related="mobile cover,t-shirt,key chain " />
+					hashtags="litekart"
+					via="litekart"
+					related="ecommerce" />
 			</li>
 		</ul>
 
 		<button
 			type="button"
-			class="fixed inset-0 z-40 h-full w-full bg-black bg-opacity-0 focus:outline-none"
+			class="fixed inset-0 z-20 h-full w-full bg-black bg-opacity-0 focus:outline-none"
 			on:click="{() => (showDropDown = false)}">
 		</button>
 	{/if}

@@ -32,32 +32,14 @@ let showShareButtons = false
 	{showCartSidebar ? 'z-50 ' : 'z-40'}"
 	style="background-color: rgba(255, 255, 255, {scrollY < 500 ? scrollY / 500 : 1});">
 	<div class="flex items-center justify-between gap-4 w-full">
-		<!-- Back button -->
+		<div class="flex items-center gap-4">
+			<!-- Back button -->
 
-		{#if $page?.data?.isShowBackButton}
-			<button
-				type="button"
-				class="h-8 w-8 flex items-center justify-center frosted-white rounded-full focus:outline-none"
-				on:click="{() => window.history.go(-1)}">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke-width="1.5"
-					stroke="currentColor"
-					class="w-6 h-6">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"
-					></path>
-				</svg>
-			</button>
-		{/if}
-
-		<div class="flex itmes-center gap-2">
-			<div class="relative">
+			{#if $page?.data?.isShowBackButton}
 				<button
 					type="button"
-					class="h-8 w-8 flex items-center justify-center frosted-white rounded-full focus:outline-none"
-					on:click="{() => (showShareButtons = true)}">
+					class="h-8 w-8 shrink-0 flex items-center justify-center frosted-white rounded-full focus:outline-none"
+					on:click="{() => window.history.go(-1)}">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
@@ -65,52 +47,82 @@ let showShareButtons = false
 						stroke-width="1.5"
 						stroke="currentColor"
 						class="w-6 h-6">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z"
+						<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"
 						></path>
 					</svg>
 				</button>
+			{/if}
 
-				{#if showShareButtons}
-					<ul
-						transition:fly="{{ y: -5, duration: 300 }}"
-						class="absolute top-9 right-0 z-30 flex min-w-max list-none flex-col divide-y rounded-md border bg-white shadow-md">
-						<li class="p-2">
-							<Reddit title="{productName}" url="{url}" />
-						</li>
+			<div class="flex-1">
+				<slot />
+			</div>
+		</div>
 
-						<li class="p-2">
-							<Telegram text="{productName}" url="{url}" />
-						</li>
+		<div class="flex itmes-center gap-2">
+			<!-- Social share -->
 
-						<li class="p-2">
-							<WhatsApp text="{productName}" url="{url}" />
-						</li>
-
-						<li class="p-2">
-							<Facebook quote="{productName}" url="{url}" />
-						</li>
-
-						<li class="p-2">
-							<Twitter
-								class="share-button"
-								text="{productName}"
-								url="{url}"
-								hashtags="litekart"
-								via="litekart"
-								related="fashion, ecommerce" />
-						</li>
-					</ul>
-
+			{#if productName}
+				<div class="relative">
 					<button
 						type="button"
-						class="fixed inset-0 z-40 h-full w-full bg-black bg-opacity-0 focus:outline-none"
-						on:click="{() => (showShareButtons = false)}">
+						class="h-8 w-8 flex items-center justify-center frosted-white rounded-full focus:outline-none"
+						on:click="{() => (showShareButtons = true)}">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1.5"
+							stroke="currentColor"
+							class="w-6 h-6">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z"
+							></path>
+						</svg>
 					</button>
-				{/if}
-			</div>
+
+					{#if showShareButtons}
+						<ul
+							transition:fly="{{ y: -5, duration: 300 }}"
+							class="absolute top-9 right-0 z-30 flex min-w-max list-none flex-col divide-y rounded-md border bg-white shadow-md">
+							<li class="p-2">
+								<Reddit title="{productName}" url="{url}" />
+							</li>
+
+							<li class="p-2">
+								<Telegram text="{productName}" url="{url}" />
+							</li>
+
+							<li class="p-2">
+								<WhatsApp text="{productName}" url="{url}" />
+							</li>
+
+							<li class="p-2">
+								<Facebook quote="{productName}" url="{url}" />
+							</li>
+
+							<li class="p-2">
+								<Twitter
+									class="share-button"
+									text="{productName}"
+									url="{url}"
+									hashtags="litekart"
+									via="litekart"
+									related="ecommerce" />
+							</li>
+						</ul>
+
+						<button
+							type="button"
+							class="fixed inset-0 z-20 h-full w-full bg-black bg-opacity-0 focus:outline-none"
+							on:click="{() => (showShareButtons = false)}">
+						</button>
+					{/if}
+				</div>
+			{/if}
+
+			<!-- Wishlist-->
 
 			<a
 				href="/my/wishlist"
@@ -131,6 +143,8 @@ let showShareButtons = false
 					></path>
 				</svg>
 			</a>
+
+			<!-- Cart -->
 
 			<a
 				href="/cart"
