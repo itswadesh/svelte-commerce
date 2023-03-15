@@ -33,7 +33,7 @@ let products: Product[] = []
 onMount(async () => {
 	try {
 		loading = true
-		const ProductService = await import(`$lib/services/${provider}/ProductService.ts`)
+		const ProductService = await import(`./../../../lib/services/${provider}/ProductService.ts`)
 		products = await ProductService.fetchProducts({
 			origin: $page?.data?.origin,
 			storeId: $page?.data?.store?.id

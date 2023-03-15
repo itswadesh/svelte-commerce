@@ -8,14 +8,13 @@
 
 <script>
 import { browser } from '$app/environment'
-import { GOOGLE_CLIENT_ID, IS_DEV } from '$lib/config'
+import { GOOGLE_CLIENT_ID, IS_DEV, provider } from '$lib/config'
 import { googleOneTap } from './google-one-tap'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { scale } from 'svelte/transition'
 import { toast } from '$lib/utils'
-import { UserService } from '$lib/services'
 import Cookie from 'cookie-universal'
 import Error from '$lib/components/Error.svelte'
 // import indiaFlag from '$lib/assets/flags/india.png'
@@ -36,14 +35,14 @@ const seoProps = {
 }
 
 let email = IS_DEV ? 'hi@litekart.in' : ''
+let password = IS_DEV ? 'litekart' : ''
+let phone = IS_DEV ? '8249028220' : ''
 let err
 let isEmail = false
 let isMobile = false
 let loading = false
 let maxlength = null
 let otpRequestSend = false
-let password = IS_DEV ? 'litekart' : ''
-let phone = null
 let ref = $page?.url?.searchParams.get('ref')
 let resendAfter = 0
 let selectedCountry = data.countries[0]
@@ -58,6 +57,7 @@ onMount(() => {
 			client_id: GOOGLE_CLIENT_ID
 		},
 		async (res) => {
+			const UserService = await import(`./../../../lib/services/${provider}/UserService.ts`)
 			const onetap = await UserService.googleOneTapLoginService({
 				data: res,
 				origin: $page.data.origin
@@ -118,6 +118,8 @@ async function submit() {
 		try {
 			loading = true
 
+			const UserService = await import(`./../../../lib/services/${provider}/UserService.ts`)
+
 			const res = await UserService.loginService({
 				email: email,
 				password: password,
@@ -158,6 +160,8 @@ async function handleSendOTP({ detail }) {
 	try {
 		loading = true
 
+		const UserService = await import(`./../../../lib/services/${provider}/UserService.ts`)
+
 		const res = await UserService.getOtpService({
 			phone,
 			storeId: data.store?.id,
@@ -179,6 +183,9 @@ async function handleVerifyOtp({ detail }) {
 
 		phone = selectedCountry?.dialCode + value
 		const otp = detail
+
+		const UserService = await import(`./../../../lib/services/${provider}/UserService.ts`)
+
 		const res = await UserService.verifyOtpService({
 			phone,
 			otp,
