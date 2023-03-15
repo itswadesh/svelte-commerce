@@ -160,4 +160,4 @@ Svelte ecommerce - Headless, Authentication, Cart & Checkout, TailwindCSS, Serve
 - Twitter: [@itswadesh](https://twitter.com/itswadesh)
 - Telegram: [@itswadesh](https://t.me/itswadesh)
 - Email: swadesh@litekart.in
-- Discord: [Invitation](https://discord.gg/VbXyQmUR)
+- Discord: [Invitation](https://discord.gg/4G7zbcpt)
