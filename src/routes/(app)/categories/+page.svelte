@@ -42,7 +42,9 @@ async function getMegaMenu() {
 		try {
 			const localMegamenu = localStorage.getItem('megamenu')
 			if (!localMegamenu || localMegamenu === 'undefined') {
-				const CategoryService = await import(`$lib/services/${provider}/CategoryService.ts`)
+				const CategoryService = await import(
+					`./../../../lib/services/${provider}/CategoryService.ts`
+				)
 				megamenu = await CategoryService.fetchMegamenuData({
 					origin: $page?.data?.origin,
 					storeId: $page?.data?.store?.id

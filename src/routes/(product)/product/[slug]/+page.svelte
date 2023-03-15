@@ -187,7 +187,7 @@ onMount(async () => {
 	screenWidth = screen.width
 
 	try {
-		const WishlistService = await import(`$lib/services/${provider}/WishlistService.ts`)
+		const WishlistService = await import(`./../../../../lib/services/${provider}/WishlistService.ts`)
 		isWislisted = await WishlistService.checkhWishlist({
 			pid: data.product?._id,
 			vid: data.product?._id,

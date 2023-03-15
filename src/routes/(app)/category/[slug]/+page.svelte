@@ -26,7 +26,7 @@ let query = $page?.url?.searchParams
 
 onMount(async () => {
 	try {
-		const CategoryService = await import(`$lib/services/${provider}/CategoryService.ts`)
+		const CategoryService = await import(`./../../../lib/services/${provider}/CategoryService.ts`)
 		const res = await CategoryService.fetchAllProductsOfCategories({
 			origin: $page?.data?.origin,
 			storeId: $page?.data?.store?.id
