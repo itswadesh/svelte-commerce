@@ -41,7 +41,6 @@ onMount(async () => {
 			client_id: GOOGLE_CLIENT_ID
 		},
 		async (res) => {
-			const UserService = await import(`./../../../lib/services/${provider}/UserService.ts`)
 			const onetap = await UserService.googleOneTapLoginService({
 				data: res,
 				origin: $page.data.origin

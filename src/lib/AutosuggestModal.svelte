@@ -3,7 +3,7 @@ import { goto } from '$app/navigation'
 import { createEventDispatcher, onMount } from 'svelte'
 import { page } from '$app/stores'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import { AutocompleteService } from '$lib/services'
+import { AutocompleteService, CategoryService } from '$lib/services'
 
 const dispatch = createEventDispatcher()
 
@@ -75,8 +75,6 @@ function resetInput() {
 onMount(async () => {
 	searchInput.focus()
 	try {
-		const CategoryService = await import(`$lib/services/${provider}/CategoryService.ts`);
-
 		categories = (
 			await CategoryService.fetchAllCategories({
 				featured: true,

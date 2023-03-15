@@ -5,6 +5,7 @@ import { page } from '$app/stores'
 import ProductCard from '$lib/ProductCard.svelte'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
 import { provider } from '$lib/config'
+import { ProductService } from '$lib/services'
 
 let name = 'Product Tab'
 let allCoreCategories = [
@@ -33,7 +34,6 @@ let products: Product[] = []
 onMount(async () => {
 	try {
 		loading = true
-		const ProductService = await import(`./../../../lib/services/${provider}/ProductService.ts`)
 		products = await ProductService.fetchProducts({
 			origin: $page?.data?.origin,
 			storeId: $page?.data?.store?.id

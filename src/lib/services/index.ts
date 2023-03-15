@@ -1,114 +1,45 @@
-// const provider = 'Litekart'
-// const dirPath = `./${provider}`
-// const moduleNames = ['AddressService', 'ZipService', 'AutocompleteService']
-import { provider } from '$lib/config'
-let AddressService,
-	BannersService,
-	BlogService,
-	AutocompleteService,
-	CartService,
-	CategoryService,
-	ContactService,
-	CountryService,
-	CouponService,
-	DealsService,
-	DemoRequestService,
-	FaqService,
-	HomeService,
-	OrdersService,
-	PaymentMethodService,
-	PopularSearchService,
-	ProductService,
-	ReviewService,
-	StoreService,
-	UserService,
-	VerndorService,
-	WishlistService,
-	ZipService
-;(async () => {
-	AddressService = await import(`./${provider}/AddressService.ts`)
+	export * as AddressService from './Active/AddressService'
 
-	BannersService = await import(`./${provider}/BannersService.ts`)
+	export * as BannersService from './Active/BannersService'
 
-	BlogService = await import(`./${provider}/BlogService.ts`)
+	export * as BlogService from './Active/BlogService'
 
-	AutocompleteService = await import(`./${provider}/AutocompleteService.ts`)
+	export * as AutocompleteService from './Active/AutocompleteService'
 
-	CartService = await import(`./${provider}/CartService.ts`)
+	export * as CartService from './Active/CartService'
 
-	CategoryService = await import(`./${provider}/CategoryService.ts`)
+	export * as CategoryService from './Active/CategoryService'
 
-	ContactService = await import(`./${provider}/ContactService.ts`)
+	export * as ContactService from './Active/ContactService'
 
-	CountryService = await import(`./${provider}/CountryService.ts`)
+	export * as CountryService from './Active/CountryService'
 
-	CouponService = await import(`./${provider}/CouponService.ts`)
+	export * as CouponService from './Active/CouponService'
 
-	DealsService = await import(`./${provider}/DealsService.ts`)
+	export * as DealsService from './Active/DealsService'
 
-	DemoRequestService = await import(`./${provider}/DemoRequestService.ts`)
+	export * as DemoRequestService from './Active/DemoRequestService'
 
-	FaqService = await import(`./${provider}/FaqService.ts`)
+	export * as FaqService from './Active/FaqService'
 
-	HomeService = await import(`./${provider}/HomeService.ts`)
+	export * as HomeService from './Active/HomeService'
 
-	OrdersService = await import(`./${provider}/OrdersService.ts`)
+	export * as OrdersService from './Active/OrdersService'
 
-	PaymentMethodService = await import(`./${provider}/PaymentMethodService.ts`)
+	export * as PaymentMethodService from './Active/PaymentMethodService'
 
-	PopularSearchService = await import(`./${provider}/PopularSearchService.ts`)
+	export * as PopularSearchService from './Active/PopularSearchService'
 
-	ProductService = await import(`./${provider}/ProductService.ts`)
+	export * as ProductService from './Active/ProductService'
 
-	ReviewService = await import(`./${provider}/ReviewService.ts`)
+	export * as ReviewService from './Active/ReviewService'
 
-	StoreService = await import(`./${provider}/StoreService.ts`)
+	export * as StoreService from './Active/StoreService'
 
-	UserService = await import(`./${provider}/UserService.ts`)
+	export * as UserService from './Active/UserService'
 
-	VerndorService = await import(`./${provider}/VerndorService.ts`)
+	export * as VerndorService from './Active/VerndorService'
 
-	WishlistService = await import(`./${provider}/WishlistService.ts`)
+	export * as WishlistService from './Active/WishlistService'
 
-	ZipService = await import(`./${provider}/ZipService.ts`)
-})()
-
-export {
-	AddressService,
-	BannersService,
-	BlogService,
-	AutocompleteService,
-	CartService,
-	CategoryService,
-	ContactService,
-	CountryService,
-	CouponService,
-	DealsService,
-	DemoRequestService,
-	FaqService,
-	HomeService,
-	OrdersService,
-	PaymentMethodService,
-	PopularSearchService,
-	ProductService,
-	ReviewService,
-	StoreService,
-	UserService,
-	VerndorService,
-	WishlistService,
-	ZipService
-}
-// async function importModules() {
-// 	const modules = await Promise.all(
-// 		moduleNames.map(async (moduleName) => {
-//             if(provider === 'Litekart')
-// 			console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', `${dirPath}/${moduleName}.ts`)
-// 			const { default: module } = await import(`${dirPath}/${moduleName}.ts`)
-// 			console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', JSON.stringify(module))
-// 			return module
-// 		})
-// 	)
-// 	return Object.fromEntries(moduleNames.map((name, i) => [name, modules[i]]))
-// }
-
-// export default importModules
+	export * as ZipService from './Active/ZipService'
