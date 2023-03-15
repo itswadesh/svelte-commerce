@@ -154,8 +154,9 @@ Click on the button to directly deploy to Netlify or Vercel. Zero configuration 
 
 If you like the ideas behind Svelte Commerce and want to become a contributor - join github discussions, check the list of the active issues or contact me directly via swadesh@litekart.in
 
-# Support
+Svelte ecommerce - Headless, Authentication, Cart & Checkout, TailwindCSS, Server Rendered, Proxy + API Integrated, Animations, Lazy Loading, Loading Indicators, Carousel, Instant Search, Faceted Filters, Open Source
 
+# Support
 - Twitter: [@itswadesh](https://twitter.com/itswadesh)
 - Telegram: [@itswadesh](https://t.me/itswadesh)
 - Email: swadesh@litekart.in
