@@ -118,8 +118,6 @@ async function submit() {
 		try {
 			loading = true
 
-			const UserService = await import(`./../../../lib/services/${provider}/UserService.ts`)
-
 			const res = await UserService.loginService({
 				email: email,
 				password: password,
@@ -160,8 +158,6 @@ async function handleSendOTP({ detail }) {
 	try {
 		loading = true
 
-		const UserService = await import(`./../../../lib/services/${provider}/UserService.ts`)
-
 		const res = await UserService.getOtpService({
 			phone,
 			storeId: data.store?.id,
@@ -183,8 +179,6 @@ async function handleVerifyOtp({ detail }) {
 
 		phone = selectedCountry?.dialCode + value
 		const otp = detail
-
-		const UserService = await import(`./../../../lib/services/${provider}/UserService.ts`)
 
 		const res = await UserService.verifyOtpService({
 			phone,

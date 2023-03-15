@@ -18,6 +18,7 @@ import Cookie from 'cookie-universal'
 import SendOtp from '../_SendOtp.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import VerifyOtp from '../_VerifyOtp.svelte'
+import { UserService } from '$lib/services'
 
 const cookies = Cookie()
 
@@ -40,7 +41,7 @@ onMount(async () => {
 			client_id: GOOGLE_CLIENT_ID
 		},
 		async (res) => {
-			const UserService = await import(`$lib/services/${provider}/UserService.ts`)
+			const UserService = await import(`./../../../lib/services/${provider}/UserService.ts`)
 			const onetap = await UserService.googleOneTapLoginService({
 				data: res,
 				origin: $page.data.origin
@@ -66,7 +67,6 @@ async function handleSendOTP({ detail }) {
 	phone = detail
 	try {
 		loading = true
-		const UserService = await import(`$lib/services/${provider}/UserService.ts`)
 		const res = await UserService.getOtpService({
 			phone,
 			storeId: data.store?.id,
@@ -85,7 +85,6 @@ async function handleVerifyOtp({ detail }) {
 	try {
 		loading = true
 		const otp = detail
-		const UserService = await import(`$lib/services/${provider}/UserService.ts`)
 
 		const res = await UserService.verifyOtpService({
 			phone,
