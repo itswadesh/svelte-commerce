@@ -16,9 +16,6 @@ $: sliderBannersMobile = banners?.filter((b) => {
 let Carousel, Splide
 
 onMount(async () => {
-	// const RTEmodule = await import('$lib/components/TwECarousel.svelte')
-	// Carousel = RTEmodule.default
-
 	const SplideModule = await import('$lib/components/SplideJs.svelte')
 	Splide = SplideModule.default
 })
