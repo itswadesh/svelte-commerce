@@ -22,6 +22,7 @@ import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
 import VerifyOtp from '../_VerifyOtp.svelte'
+import { UserService } from '$lib/services'
 
 const cookies = Cookie()
 
@@ -57,7 +58,6 @@ onMount(() => {
 			client_id: GOOGLE_CLIENT_ID
 		},
 		async (res) => {
-			const UserService = await import(`./../../../lib/services/${provider}/UserService.ts`)
 			const onetap = await UserService.googleOneTapLoginService({
 				data: res,
 				origin: $page.data.origin

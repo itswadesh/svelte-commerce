@@ -16,6 +16,7 @@ import { provider, sorts } from '$lib/config'
 import CheckboxEs from '$lib/ui/CheckboxEs.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import RadioEs from '$lib/ui/RadioEs.svelte'
+import { CategoryService } from '$lib/services'
 
 const dispatch = createEventDispatcher()
 
@@ -147,7 +148,6 @@ async function getMegamenu() {
 			const localmegamenu = localStorage.getItem('megamenu')
 
 			if (!localmegamenu || localmegamenu === 'undefined') {
-				const CategoryService  = await import(`$lib/services/${provider}/CategoryService.ts`);
 				megamenu = await CategoryService.fetchMegamenuData({
 					origin: $page?.data?.origin,
 					storeId: $page?.data?.store?.id

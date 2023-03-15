@@ -3,8 +3,8 @@
 	"version": "2023.02.01",
 	"private": true,
 	"scripts": {
-		"dev": "vite dev --host --port 3000",
-		"build": "vite build",
+		"dev": "node src/lib/services/copy && vite dev --host --port 3000",
+		"build": "node src/lib/services/copy && vite build",
 		"start-node": "node build/index.js",
 		"start": "NODE_ENV=production && vite preview --host --port 3000",
 		"update": "npm exec -- npx ncu -u -p npm i",
@@ -43,6 +43,7 @@
 		"cssnano": "^5.1.15",
 		"date-fns": "2.29.3",
 		"dayjs": "^1.11.7",
+		"dotenv": "16.0.3",
 		"eslint": "^8.36.0",
 		"eslint-config-prettier": "^8.7.0",
 		"eslint-plugin-svelte3": "^4.0.0",

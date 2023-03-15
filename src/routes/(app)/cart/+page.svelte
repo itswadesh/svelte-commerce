@@ -18,7 +18,7 @@ import SEO from '$lib/components/SEO/index.svelte'
 import Skeleton from '$lib/ui/Skeleton.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 import { provider } from '$lib/config'
-import { CartService } from '$lib/services'
+import { CartService, CouponService, ProductService } from '$lib/services'
 
 export let data
 
@@ -103,9 +103,8 @@ async function removeCouponCode() {
 async function getProducts() {
 	try {
 		loadingProducts = true
-		const CartService = await import(`./../../../lib/services/${provider}/CartService.ts`)
 
-		const resP = await CartService.fetchProducts({
+		const resP = await ProductService.fetchProducts({
 			origin: $page?.data?.origin,
 			storeId: $page?.data?.store?.id
 		})
@@ -119,8 +118,7 @@ async function getProducts() {
 async function getCoupons() {
 	try {
 		loadingCoupon = true
-		const CartService = await import(`./../../../lib/services/${provider}/CartService.ts`)
-		const resC = await CartService.fetchCoupons({
+		const resC = await CouponService.fetchCoupons({
 			origin: $page?.data?.origin,
 			storeId: $page?.data?.store?.id
 		})
