@@ -1,9 +1,9 @@
 <script>
+import { AutocompleteService } from '$lib/services'
 import { createEventDispatcher, onMount } from 'svelte'
 import { page } from '$app/stores'
-import AutocompleteItem from './AutocompleteItem.svelte'
 import { provider } from '$lib/config'
-import { AutocompleteService } from '$lib/services'
+import AutocompleteItem from './AutocompleteItem.svelte'
 
 export let placeholder = 'Search Products'
 

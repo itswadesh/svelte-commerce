@@ -119,7 +119,7 @@ async function submit() {
 			loading = true
 
 			const res = await UserService.loginService({
-				email: email,
+				email: value,
 				password: password,
 				storeId: $page.data.store?.id,
 				origin: $page.data.origin
@@ -230,6 +230,8 @@ function changeNumber() {
 			<!-- Email or mobile number -->
 
 			<label>
+				<!-- Heading -->
+
 				<h6 class="mb-1">
 					{#if isMobile}
 						Mobile number
@@ -241,6 +243,8 @@ function changeNumber() {
 				</h6>
 
 				<div class="relative w-full bg-white rounded-md ">
+					<!-- Enter email or mobile number -->
+
 					<input
 						type="text"
 						placeholder="Enter email or mobile number"
@@ -251,6 +255,8 @@ function changeNumber() {
 						class="w-full rounded-md border border-gray-300 focus:border-primary-500 focus:outline-none
 						{isMobile ? 'py-3 pl-3 pr-40' : 'p-3'}"
 						on:input="{verifyIsMobileNum}" />
+
+					<!-- Countries list for country code -->
 
 					{#if isMobile && selectedCountry}
 						<div class="absolute right-0 inset-y-0">
@@ -308,7 +314,7 @@ function changeNumber() {
 				</div>
 			</label>
 
-			<!-- Password -->
+			<!-- Email password -->
 
 			{#if isEmail}
 				<div transition:scale="{{ duration: 300 }}">
@@ -391,6 +397,8 @@ function changeNumber() {
 			</PrimaryButton>
 		</form>
 	{:else}
+		<!-- Verify OTP -->
+
 		<VerifyOtp
 			loading="{loading}"
 			phone="{phone}"
@@ -399,6 +407,8 @@ function changeNumber() {
 			on:resend="{({ detail }) => handleSendOTP({ detail })}"
 			on:changeNumber="{changeNumber}" />
 	{/if}
+
+	<!-- Signup & Join as Vendor -->
 
 	<div class="mx-auto mb-5 flex max-w-max flex-col gap-1 text-center text-sm">
 		<a
@@ -415,6 +425,8 @@ function changeNumber() {
 			Join as Vendor
 		</a>
 	</div>
+
+	<!-- Terms & Conditions -->
 
 	<p class="text-center text-sm text-gray-500">
 		By clicking login you are accepting our

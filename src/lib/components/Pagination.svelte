@@ -12,11 +12,12 @@ import { page } from '$app/stores'
 
 // const dispatch = createEventDispatcher()
 
-export let count = 10,
-	current = 1
+export let count = 10
+export let current = 1
+export let providePaddingOnMobile = false
 
 count = +count
-$: pages = +count
+$: pages = +count > 50 ? 50 : +count
 $: startTab = 5 - current <= 5 && 5 - current >= 0 ? 1 : current - 4
 $: endTab = startTab + 9
 function changePage(e) {
@@ -41,7 +42,8 @@ function changePage(e) {
 
 {#if count > 1}
 	<div
-		class="flex flex-wrap items-center justify-between gap-4 border-t border-gray-300 pt-4 text-sm">
+		class="flex flex-wrap items-center justify-between gap-4 border-t border-gray-300 text-sm
+		{providePaddingOnMobile ? 'p-5 sm:pt-5' : 'pt-5'}">
 		<div class="whitespace-nowrap text-gray-500">
 			Page {current} of {count}
 		</div>
@@ -77,7 +79,7 @@ function changePage(e) {
 				{/if}
 			{/each}
 
-			{#if +current < count}
+			{#if +current < pages}
 				<button
 					class="flex h-8 items-center justify-center gap-2 rounded-md border border-gray-300 px-3 focus:outline-none hover:border-gray-800"
 					on:click="{() => changePage(+current + 1)}">
