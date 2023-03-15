@@ -8,7 +8,7 @@
 
 <script>
 import { browser } from '$app/environment'
-import { GOOGLE_CLIENT_ID, provider } from '$lib/config'
+import { GOOGLE_CLIENT_ID, IS_DEV, provider } from '$lib/config'
 import { googleOneTap } from '../email-login/google-one-tap'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
@@ -28,13 +28,13 @@ const seoProps = {
 	description: 'OTP Login'
 }
 
-let phone
+let phone = IS_DEV ? '8249028220' : ''
 let loading = false
 let otpRequestSend = false
 let resendAfter = 0
 let ref = $page?.url?.searchParams.get('ref')
 
-onMount(() => {
+onMount(async () => {
 	googleOneTap(
 		{
 			client_id: GOOGLE_CLIENT_ID
@@ -66,6 +66,7 @@ async function handleSendOTP({ detail }) {
 	phone = detail
 	try {
 		loading = true
+		const UserService = await import(`$lib/services/${provider}/UserService.ts`)
 		const res = await UserService.getOtpService({
 			phone,
 			storeId: data.store?.id,
@@ -84,6 +85,8 @@ async function handleVerifyOtp({ detail }) {
 	try {
 		loading = true
 		const otp = detail
+		const UserService = await import(`$lib/services/${provider}/UserService.ts`)
+
 		const res = await UserService.verifyOtpService({
 			phone,
 			otp,
