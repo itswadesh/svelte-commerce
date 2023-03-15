@@ -8,14 +8,13 @@
 
 <script>
 import { browser } from '$app/environment'
-import { GOOGLE_CLIENT_ID, IS_DEV } from '$lib/config'
+import { GOOGLE_CLIENT_ID, IS_DEV, provider } from '$lib/config'
 import { googleOneTap } from './google-one-tap'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { scale } from 'svelte/transition'
 import { toast } from '$lib/utils'
-import { UserService } from '$lib/services'
 import Cookie from 'cookie-universal'
 import Error from '$lib/components/Error.svelte'
 // import indiaFlag from '$lib/assets/flags/india.png'
@@ -23,6 +22,7 @@ import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
 import VerifyOtp from '../_VerifyOtp.svelte'
+import { UserService } from '$lib/services'
 
 const cookies = Cookie()
 
@@ -36,14 +36,14 @@ const seoProps = {
 }
 
 let email = IS_DEV ? 'hi@litekart.in' : ''
+let password = IS_DEV ? 'litekart' : ''
+let phone = IS_DEV ? '8249028220' : ''
 let err
 let isEmail = false
 let isMobile = false
 let loading = false
 let maxlength = null
 let otpRequestSend = false
-let password = IS_DEV ? 'litekart' : ''
-let phone = null
 let ref = $page?.url?.searchParams.get('ref')
 let resendAfter = 0
 let selectedCountry = data.countries[0]
@@ -119,7 +119,7 @@ async function submit() {
 			loading = true
 
 			const res = await UserService.loginService({
-				email: email,
+				email: value,
 				password: password,
 				storeId: $page.data.store?.id,
 				origin: $page.data.origin
@@ -179,6 +179,7 @@ async function handleVerifyOtp({ detail }) {
 
 		phone = selectedCountry?.dialCode + value
 		const otp = detail
+
 		const res = await UserService.verifyOtpService({
 			phone,
 			otp,
@@ -229,6 +230,8 @@ function changeNumber() {
 			<!-- Email or mobile number -->
 
 			<label>
+				<!-- Heading -->
+
 				<h6 class="mb-1">
 					{#if isMobile}
 						Mobile number
@@ -240,6 +243,8 @@ function changeNumber() {
 				</h6>
 
 				<div class="relative w-full bg-white rounded-md ">
+					<!-- Enter email or mobile number -->
+
 					<input
 						type="text"
 						placeholder="Enter email or mobile number"
@@ -250,6 +255,8 @@ function changeNumber() {
 						class="w-full rounded-md border border-gray-300 focus:border-primary-500 focus:outline-none
 						{isMobile ? 'py-3 pl-3 pr-40' : 'p-3'}"
 						on:input="{verifyIsMobileNum}" />
+
+					<!-- Countries list for country code -->
 
 					{#if isMobile && selectedCountry}
 						<div class="absolute right-0 inset-y-0">
@@ -307,7 +314,7 @@ function changeNumber() {
 				</div>
 			</label>
 
-			<!-- Password -->
+			<!-- Email password -->
 
 			{#if isEmail}
 				<div transition:scale="{{ duration: 300 }}">
@@ -390,6 +397,8 @@ function changeNumber() {
 			</PrimaryButton>
 		</form>
 	{:else}
+		<!-- Verify OTP -->
+
 		<VerifyOtp
 			loading="{loading}"
 			phone="{phone}"
@@ -398,6 +407,8 @@ function changeNumber() {
 			on:resend="{({ detail }) => handleSendOTP({ detail })}"
 			on:changeNumber="{changeNumber}" />
 	{/if}
+
+	<!-- Signup & Join as Vendor -->
 
 	<div class="mx-auto mb-5 flex max-w-max flex-col gap-1 text-center text-sm">
 		<a
@@ -414,6 +425,8 @@ function changeNumber() {
 			Join as Vendor
 		</a>
 	</div>
+
+	<!-- Terms & Conditions -->
 
 	<p class="text-center text-sm text-gray-500">
 		By clicking login you are accepting our
