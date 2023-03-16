@@ -1,7 +1,8 @@
 <script lang="ts">
-import { Reddit, Telegram, WhatsApp, Facebook, Twitter } from 'svelte-share-buttons-component'
+import { Pinterest, Telegram, WhatsApp, Facebook, Twitter } from 'svelte-share-buttons-component'
 import { fly } from 'svelte/transition'
 
+export let productImage
 export let productName
 export let url
 
@@ -11,10 +12,10 @@ let showDropDown = false
 <div class="relative max-w-max">
 	<button
 		type="button"
-		class="flex items-center gap-2 rounded-full border py-1 px-4 transition duration-300 focus:outline-none 
+		class="flex items-center gap-2 rounded-full border border-transparent lg:border-gray-200 p-1 lg:py-1 lg:px-4 transition duration-300 focus:outline-none 
 		{showDropDown
 			? 'border-primary-500 bg-primary-500 text-white shadow-lg'
-			: 'hover:border-primary-500 hover:text-primary-500'}
+			: 'lg:hover:border-primary-500 lg:hover:text-primary-500'}
 		"
 		on:click="{() => (showDropDown = !showDropDown)}">
 		<svg
@@ -23,7 +24,7 @@ let showDropDown = false
 			viewBox="0 0 24 24"
 			stroke-width="1.5"
 			stroke="currentColor"
-			class="h-5 w-5">
+			class="h-6 w-6 lg:h-5 lg:w-5">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -31,7 +32,7 @@ let showDropDown = false
 			></path>
 		</svg>
 
-		<span> Share </span>
+		<span class="hidden lg:block"> Share </span>
 	</button>
 
 	{#if showDropDown}
@@ -39,7 +40,7 @@ let showDropDown = false
 			transition:fly="{{ y: -5, duration: 300 }}"
 			class="absolute top-10 right-0 z-30 flex min-w-max list-none flex-col divide-y rounded-md border bg-white shadow-md">
 			<li class="p-2">
-				<Reddit title="{productName}" url="{url}" />
+				<Pinterest url="{url}" media="{productImage}" description="{productName}" />
 			</li>
 
 			<li class="p-2">

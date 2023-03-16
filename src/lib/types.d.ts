@@ -145,6 +145,14 @@ interface Tag {
 	active: boolean
 }
 
+interface ProductReview {
+	brand?: Brand
+	message: string
+	createdAt: string
+	images?: string[]
+	user: User
+}
+
 interface AllOrders {
 	count: number
 	currentPage?: number
