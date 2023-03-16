@@ -19,7 +19,7 @@ let seoProps = {
 		<h1 class="font-serif text-2xl font-medium md:text-3xl lg:text-4xl">About Us</h1>
 
 		<p class="text-gray-500">
-			{$page.data.store?.websiteName} is the best place to shop online in India. {$page.data.store
+			{$page.data.store?.websiteName} is the best place to shop online. {$page.data.store
 				.websiteName} is a well-established brand in the personalized gifts segment. Choose from a wide
 			range of mobile covers, t-shirts, photo mugs, key-chains, 3D-crystals, photo clocks, picture frames
 			and hundreds of other gifts.
@@ -89,7 +89,7 @@ let seoProps = {
 					<p class="text-gray-500">
 						We use advanced technologies to create products that are as durable as they are
 						delightful. We stand behindour products with customer service and support previously
-						unseen in India.
+						unseen.
 					</p>
 				</div>
 			</div>
@@ -106,7 +106,7 @@ let seoProps = {
 				<h3 class="text-lg font-bold text-gray-700">{$page.data.store?.websiteName}</h3>
 
 				<p class="text-gray-500">
-					{$page.data.store?.websiteName} is the best place to shop online in India. {$page.data
+					{$page.data.store?.websiteName} is the best place to shop online. {$page.data
 						.websiteName} is a well-established brand in the personalized gifts segment.
 				</p>
 
