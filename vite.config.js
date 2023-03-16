@@ -12,6 +12,9 @@ export default defineConfig(({ command, mode }) => {
 			sveltekit(),
 			SvelteKitPWA({
 				registerType: 'autoUpdate',
+				workbox: {
+					globPatterns: ['**/*.{js,css,html,ico,png,svg,webp}']
+				},
 				srcDir: './src',
 				// mode: 'development',
 				scope: '/',
