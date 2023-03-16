@@ -36,6 +36,6 @@ export const actions: Actions = {
 		// 	expires: new Date(0)
 		// })
 		//redirect the user
-		throw redirect(307, locals.store?.loginUrl || '/auth/otp-login')
+		throw redirect(307, locals.store?.loginUrl || '/auth/login')
 	}
 }

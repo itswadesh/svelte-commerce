@@ -97,7 +97,7 @@ export const getStoreData = async ({
 		DOMAIN: storeRes.storeOne.DOMAIN,
 		email: storeRes.storeOne.websiteEmail,
 		otpLogin: storeRes.storeOne.otpLogin || true,
-		loginUrl: storeRes.storeOne.otpLogin ? '/auth/otp-login' : '/auth/login',
+		loginUrl: storeRes.storeOne.otpLogin ? '/auth/login' : '/auth/login',
 		facebookPage: storeRes.storeOne.facebookPage,
 		GOOGLE_ANALYTICS_ID: storeRes.storeOne.GOOGLE_ANALYTICS_ID,
 		GOOGLE_CLIENT_ID: storeRes.storeOne.GOOGLE_CLIENT_ID,

@@ -15,7 +15,7 @@ export const geoLocation = writable({
 export const settings = writable({})
 export const store = writable({})
 export const megamenu = writable({})
-export const loginUrl = writable('/auth/otp-login')
+export const loginUrl = writable('/auth/login')
 export const me = writable({})
 export const loadingDelayed = writable(false)
 
