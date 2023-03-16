@@ -91,11 +91,11 @@ const verifyIsMobileNum = () => {
 		if (value[0] === '+') {
 			isEmail = false
 			isMobile = true
-			maxlength = 10
+			maxlength = 14
 		} else if (parseFloat(value) == value) {
 			isEmail = false
 			isMobile = true
-			maxlength = 10
+			maxlength = 14
 		} else {
 			isEmail = true
 			isMobile = false
@@ -112,7 +112,8 @@ const verifyIsMobileNum = () => {
 
 async function submit() {
 	if (isMobile) {
-		phone = selectedCountry?.dialCode + value
+		// phone = selectedCountry?.dialCode + value
+		phone = value
 		await handleSendOTP({ detail: phone })
 	} else {
 		try {
@@ -177,7 +178,8 @@ async function handleVerifyOtp({ detail }) {
 	try {
 		loading = true
 
-		phone = selectedCountry?.dialCode + value
+		// phone = selectedCountry?.dialCode + value
+		phone = value
 		const otp = detail
 
 		const res = await UserService.verifyOtpService({
@@ -258,13 +260,13 @@ function changeNumber() {
 
 					<!-- Countries list for country code -->
 
-					{#if isMobile && selectedCountry}
+					<!-- {#if isMobile && selectedCountry}
 						<div class="absolute right-0 inset-y-0">
 							<button
 								type="button"
 								class="h-full relative max-w-max px-4 flex items-center justify-center gap-2 text-sm whitespace-nowrap rounded-md border border-transparent focus:border-primary-500 focus:outline-none"
 								on:click="{() => (showDropDown = !showDropDown)}">
-								<!-- <img src="{indiaFlag}" alt="" class="h-8 w-8 object-contain object-center" /> -->
+								<img src="{indiaFlag}" alt="" class="h-8 w-8 object-contain object-center" />
 
 								<span>{selectedCountry?.code}</span>
 
@@ -294,7 +296,7 @@ function changeNumber() {
 											on:click="{() => {
 												;(selectedCountry = country), (showDropDown = false)
 											}}">
-											<!-- <img src="{indiaFlag}" alt="" class="h-8 w-8 object-contain object-center" /> -->
+											<img src="{indiaFlag}" alt="" class="h-8 w-8 object-contain object-center" />
 
 											<span>{country?.code}</span>
 
@@ -310,8 +312,12 @@ function changeNumber() {
 								on:click="{() => (showDropDown = false)}">
 							</button>
 						{/if}
-					{/if}
+					{/if} -->
 				</div>
+
+				{#if isMobile}
+					<p class="mt-1 text-xs text-gray-500">E.g. +nnxxxxxxxxxx</p>
+				{/if}
 			</label>
 
 			<!-- Email password -->

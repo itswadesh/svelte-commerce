@@ -44,16 +44,18 @@
 </style>
 
 <script lang="ts">
+
 // import UserForm from '$lib/components/Product/UserForm.svelte'
 import { applyAction, enhance } from '$app/forms'
-import { CartService, WishlistService } from '$lib/services'
+import { browser } from '$app/environment'
+import { CartService, ReviewService } from '$lib/services'
 import { currency, delay, toast } from '$lib/utils'
+import { fade } from 'svelte/transition'
 import { fireGTagEvent } from '$lib/utils/gTag'
 import { getAPI } from '$lib/utils/api'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { provider } from '$lib/config'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
 import Breadcrumb from '$lib/components/Breadcrumb.svelte'
 import CategoryPoolButtons from './_CategoryPoolButtons.svelte'
@@ -68,14 +70,15 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import ProductNav from '$lib/ProductNav.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
+import ProductsGrid from '$lib/components/Product/ProductsGrid.svelte'
 import productVeg from '$lib/assets/product/veg.png'
 import Radio from '$lib/ui/Radio.svelte'
 import RadioColor from '$lib/ui/RadioColor.svelte'
 import RadioSize from '$lib/ui/RadioSize.svelte'
 import RatingsAndReviews from '$lib/components/Product/RatingsAndReviews.svelte'
-import RecomendedProducts from '$lib/components/Product/RecomendedProducts.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import SimilarProductsFromCategorySlug from '$lib/components/Product/SimilarProductsFromCategorySlug.svelte'
+import Skeleton from '$lib/ui/Skeleton.svelte'
 import SocialSharingButtons from '$lib/components/SocialSharingButtons.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
@@ -107,7 +110,6 @@ let seoProps = {
 	// gtin: '',
 	// height: '',
 	id: $page?.url?.href,
-	image: `${data.product?.img}`,
 	logo: $page?.data?.store?.logo,
 	// ogSquareImage: { url: 'https://lrnr.in/favicon.ico', width: 56, height: 56 },
 	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00'],
@@ -140,8 +142,10 @@ let seoProps = {
 	keywords: data.product?.keywords,
 	lastUpdated: `${data.product?.updatedAt || '_'}`,
 	msapplicationTileImage: `${data.product?.img}`,
-	ogImage: { url: $page?.data?.store?.logo, width: 128, height: 56 },
-	ogImageSecureUrl: `${$page?.data?.store?.logo}`,
+	image: `${data.product?.img}`,
+	'og:image': `${data.product?.img}`,
+	ogImage: { url: data.product?.img, width: 128, height: 56 },
+	ogImageSecureUrl: data.product?.img,
 	ogImageType: 'image/jpeg',
 	ogSiteName: `${$page.data.origin}/sitemap/sitemap.xml`,
 	productAvailability: `${data.product?.stock}`,
@@ -174,6 +178,10 @@ let showPhotosModal = false
 let showStickyCartButton = true
 let showUserInputForm = false
 let y
+let productReviewsProduct = []
+let productReviewsBrand = []
+let loadingForProductReview = false
+let recentlyViewed = []
 
 $: if (y > 500) {
 	showUserInputForm = true
@@ -183,23 +191,113 @@ if (data.product?.size?.name === 'One Size') {
 	selectedSize = 'One Size'
 }
 
+let Konvas
+
 onMount(async () => {
 	screenWidth = screen.width
 
+	const canvasEmodule = await import('$lib/components/ProductDesigner/Konvas.svelte')
+	Konvas = canvasEmodule.default
+
+	await getProductReviewProduct()
+	await getProductReviewBrand()
+
 	try {
-		isWislisted = await WishlistService.checkhWishlist({
-			pid: data.product?._id,
-			vid: data.product?._id,
-			storeId: $page.data?.store?.id,
-			origin: $page.data.origin
-		})
+		isWislisted = await getAPI(
+			`wishlists/check?product=${data.product?._id}&variant=${data.product?._id}&store=${$page.data?.store?.id}`,
+			$page.data.origin
+		)
 
 		// console.log('isWislisted', isWislisted)
 	} catch (e) {
 		// toast(e, 'error')
 	} finally {
 	}
+
+	storeProductToLocatStorage()
 })
+
+const storeProductToLocatStorage = async () => {
+	const localRecentlyVieewed = localStorage.getItem('recentlyViewed')
+	// console.log('localRecentlyVieewed', localRecentlyVieewed)
+
+	if (!!localRecentlyVieewed && localRecentlyVieewed !== 'undefined') {
+		recentlyViewed = JSON.parse(localRecentlyVieewed)
+	}
+
+	if (JSON.stringify(recentlyViewed).includes(data?.product?.name)) {
+		return
+	} else {
+		const prod = {
+			brandName: data?.product?.brand?.name,
+			discount: data?.product?.discount,
+			hasStock: data?.product?.hasStock,
+			img: data?.product?.img,
+			mrp: data?.product?.mrp,
+			name: data?.product?.name,
+			price: data?.product?.price,
+			slug: data?.product?.slug
+		}
+
+		if (localRecentlyVieewed?.length > 10) {
+			recentlyViewed.slice(0, -1)
+		}
+
+		const resvw = [...recentlyViewed]
+		resvw.push(prod)
+		recentlyViewed = resvw
+
+		if (browser) {
+			localStorage.setItem('recentlyViewed', JSON.stringify(recentlyViewed))
+		}
+	}
+
+	// console.log('localStorage', localStorage)
+}
+
+async function getProductReviewProduct() {
+	try {
+		loadingForProductReview = true
+
+		const res = await ReviewService.fetchProductReviews({
+			page: +$page?.url?.searchParams.get('page') || 1,
+			type: 'product',
+			pid: data.product?._id,
+			storeId: $page?.data?.store?.id,
+			origin: $page?.data?.origin
+		})
+
+		// console.log('res', res)
+
+		productReviewsProduct = res?.data
+	} catch (e) {
+		console.log(e, 'error')
+	} finally {
+		loadingForProductReview = false
+	}
+}
+
+async function getProductReviewBrand() {
+	try {
+		loadingForProductReview = true
+
+		const res = await ReviewService.fetchProductReviews({
+			page: +$page?.url?.searchParams.get('page') || 1,
+			type: 'brand',
+			pid: data.product?._id,
+			storeId: $page?.data?.store?.id,
+			origin: $page?.data?.origin
+		})
+
+		// console.log('res', res)
+
+		productReviewsBrand = res?.data
+	} catch (e) {
+		console.log(e, 'error')
+	} finally {
+		loadingForProductReview = false
+	}
+}
 
 function selectSize(s) {
 	selectedSize = s.name
@@ -211,6 +309,7 @@ function handleSelectedLinkiedProducts(e) {
 }
 
 // This is used only for customized product else cart?/add
+
 async function addToBag(p, customizedImg, customizedJson) {
 	try {
 		loading = true
@@ -285,19 +384,19 @@ async function addToBag(p, customizedImg, customizedJson) {
 		cartButtonText = 'Error Add To Cart'
 	} finally {
 		loading = false
-		await delay(3000)
-		bounceItemFromTop = false
+		await delay(5000)
 		cartButtonText = 'Add to bag'
+		bounceItemFromTop = false
 	}
 }
 
 // let windowHeight
 // let cartButtonPosition = 0
 // onMount(() => {
-//  let elem = document.getElementById('cartButton')
-//  let rect = elem.getBoundingClientRect()
-//  const ActualCartButtonPosition = rect.y
-//  cartButtonPosition = ActualCartButtonPosition - windowHeight + 280
+// 	let elem = document.getElementById('cartButton')
+// 	let rect = elem.getBoundingClientRect()
+// 	const ActualCartButtonPosition = rect.y
+// 	cartButtonPosition = ActualCartButtonPosition - windowHeight + 280
 // })
 
 function cartButtonEnterViewport() {
@@ -357,12 +456,12 @@ $: {
 
 async function toggleWishlist(id) {
 	if (!$page.data.me) {
-		goto(`/auth/login?ref=/my/wishlist/add/${id}`)
+		goto(`/auth/otp-login?ref=/my/wishlist/add/${id}`)
 	}
 
 	try {
 		loadingForWishlist = true
-		isWislisted = await CartService.toggleWishlistService({
+		isWislisted = await toggleWishlistService({
 			pid: id,
 			vid: id,
 			storeId: $page.data.store?.id,
@@ -430,7 +529,10 @@ function handleMobileCanvas() {
 
 			<!-- Social share button -->
 
-			<SocialSharingButtons productName="{data.product?.name}" url="{$page?.url?.href}" />
+			<SocialSharingButtons
+				productName="{data.product?.name}"
+				productImage="{data.product?.img}"
+				url="{$page?.url?.href}" />
 		</div>
 
 		<div class="mb-5 grid grid-cols-1 items-start gap-5 sm:mb-10 sm:gap-10 lg:grid-cols-5">
@@ -454,15 +556,85 @@ function handleMobileCanvas() {
 							{/each}
 						{/if}
 					</div>
+				{:else if data.product?.layoutTemplate}
+					<div
+						transition:fade="{{ duration: 200 }}"
+						class="{showEditor
+							? 'fixed inset-0 top-0 z-[100] h-[90vh] w-full bg-white sm:static sm:z-0 sm:h-auto sm:bg-transparent'
+							: 'mt-14 sm:mt-20 lg:mt-0'}">
+						{#if showEditor}
+							<button
+								type="button"
+								class="absolute top-3 right-3 z-[70] text-white"
+								on:click="{() => (showEditor = false)}">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke-width="1.5"
+									stroke="currentColor"
+									class="h-6 w-6">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+								</svg>
+							</button>
+						{/if}
+
+						<!-- <button type="button" on:click="{handleMobileCanvas}" class="h-full w-full"> -->
+						<svelte:component
+							this="{Konvas}"
+							product="{data.product}"
+							bind:customizedImg="{customizedImg}"
+							on:saveAndAddToCart="{({ detail }) =>
+								addToBag(data.product, detail.customizedImg, detail.customizedJson)}" />
+						<!-- </button> -->
+					</div>
+				{:else}
+					<div
+						class="flex h-screen w-full flex-col items-center justify-center gap-5 text-center sm:mx-auto sm:h-auto sm:w-auto">
+						<h1 class="text-xl font-semibold capitalize sm:text-2xl">Make your custom design</h1>
+
+						<div
+							class="relative flex h-full w-full flex-col items-center justify-center gap-2 rounded-md border bg-gray-100 text-sm text-gray-500 sm:h-[570px] sm:w-[302px]">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke-width="1.5"
+								stroke="currentColor"
+								class="h-10 w-10">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M15.182 16.318A4.486 4.486 0 0012.016 15a4.486 4.486 0 00-3.198 1.318M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"
+								></path>
+							</svg>
+
+							<span> Opps! layout template not found </span>
+						</div>
+					</div>
 				{/if}
 			</div>
 
 			<div class="col-span-1 lg:col-span-2 px-3 sm:px-10 lg:px-0">
-				<!-- Brand -->
+				<div class="flex items-center justify-between gap-2">
+					<!-- Brand -->
 
-				{#if data.product?.brand?.name}
-					<h2 class="mb-1 text-xl sm:text-2xl"><b>{data.product?.brand?.name}</b></h2>
-				{/if}
+					{#if data.product?.brand?.name}
+						<h2 class="mb-1 text-xl sm:text-2xl"><b>{data.product?.brand?.name}</b></h2>
+					{/if}
+
+					<!-- Social share button -->
+
+					<div class="block lg:hidden">
+						<SocialSharingButtons
+							productName="{data.product?.name}"
+							productImage="{data.product?.img}"
+							url="{$page?.url?.href}" />
+					</div>
+				</div>
 
 				<!-- Name -->
 
@@ -510,13 +682,15 @@ function handleMobileCanvas() {
 
 				<!-- ratings -->
 
-				{#if data?.product?.reviews?.summary?.ratings_avg?.value > 0}
+				{#if data?.product?.reviews?.productReviews?.summary?.ratings_avg?.value > 0}
 					<button
 						type="button"
-						class="mt-2 flex max-w-max items-center divide-x-2 divide-gray-300 border border-gray-300 py-1 text-sm focus:outline-none"
+						class="mt-2 flex max-w-max items-center divide-x divide-gray-300 border border-gray-300 py-1 text-sm focus:outline-none"
 						on:click="{() => scrollTo('ratings-and-reviews')}">
 						<div class="flex items-center gap-1 px-2 font-semibold">
-							<span> {data?.product?.reviews?.summary?.ratings_avg?.value.toFixed(1)} </span>
+							<span>
+								{data?.product?.reviews?.productReviews?.summary?.ratings_avg?.value.toFixed(1)}
+							</span>
 
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -529,15 +703,13 @@ function handleMobileCanvas() {
 							</svg>
 						</div>
 
-						{#if data?.product?.reviews?.reviews?.length}
-							<span class="px-2 text-gray-500">
-								{data?.product?.reviews?.reviews?.length} Reviews
-							</span>
-						{/if}
+						<span class="px-2 text-gray-500">
+							{data?.product?.reviews?.productReviews?.reviews?.length || 'No'} Reviews
+						</span>
 					</button>
 				{/if}
 
-				<hr class="my-5 w-full border-t border-gray-300 block sm:hidden lg:block" />
+				<hr class="my-5 w-full border-t border-gray-300" />
 
 				<!-- Delivery Options Mobile -->
 
@@ -635,7 +807,7 @@ function handleMobileCanvas() {
 							<button
 								type="button"
 								class="overflow-hidden rounded border py-1 px-3 text-sm font-medium uppercase transition duration-500 focus:outline-none
-                            {data.product?.size?.name === selectedSize
+              				{data.product?.size?.name === selectedSize
 									? 'bg-primary-500 border-primary-500 text-white'
 									: 'bg-transparent border-gray-300 text-gray-500 hover:border-primary-500 hover:text-primary-500'}"
 								on:click="{() => selectSize(data.product?.size)}">
@@ -702,6 +874,26 @@ function handleMobileCanvas() {
 					</div>
 				{/if}
 
+				<!-- {#if moreOptions?.length > 0}
+					<div class="mb-5 flex flex-col gap-2">
+						{#each moreOptions as option}
+							<label for="{option.title}" class="flex items-center gap-2 text-sm font-medium">
+								{#if option.type === 'checkbox'}
+									<input
+										type="checkbox"
+										name="{option.title}"
+										id="{option.title}"
+										class="h-4 w-4" />
+								{/if}
+
+								<span>
+									{option.title}
+								</span>
+							</label>
+						{/each}
+					</div>
+				{/if} -->
+
 				<!-- select options  -->
 
 				{#if data.product?.options?.length > 0}
@@ -736,15 +928,15 @@ function handleMobileCanvas() {
 
 									<!-- daterange -->
 									<!-- {:else if o.inputType == 'daterange'}
-                                    <span>Date range picker is not found</span> -->
+									<span>Date range picker is not found</span> -->
 
 									<!-- <date-picker
-                                    bind:value="{selectedOptions[o.id]}"
-                                    class="max-w-xs flex-1"
-                                    type="date"
-                                    :disabled-date="disabledBeforeTodayAndAfterAWeek"
-                                    range
-                                    @change="$emit('optionChanged', selectedOptions)"></date-picker> -->
+									bind:value="{selectedOptions[o.id]}"
+									class="max-w-xs flex-1"
+									type="date"
+									:disabled-date="disabledBeforeTodayAndAfterAWeek"
+									range
+									@change="$emit('optionChanged', selectedOptions)"></date-picker> -->
 
 									<!-- textarea -->
 								{:else if o.inputType == 'textarea'}
@@ -1068,7 +1260,7 @@ function handleMobileCanvas() {
 					<button
 						type="button"
 						class="font-semibold border-b-4 focus:outline-none 
-                        {selectedReviewType === 'product_review'
+						{selectedReviewType === 'product_review'
 							? 'border-primary-500 text-primary-500'
 							: 'border-gray-200 text-gray-500'}"
 						on:click="{() => (selectedReviewType = 'product_review')}">
@@ -1078,7 +1270,7 @@ function handleMobileCanvas() {
 					<button
 						type="button"
 						class="font-semibold border-b-4 focus:outline-none 
-                        {selectedReviewType === 'brand_review'
+						{selectedReviewType === 'brand_review'
 							? 'border-primary-500 text-primary-500'
 							: 'border-gray-200 text-gray-500'}"
 						on:click="{() => (selectedReviewType = 'brand_review')}">
@@ -1086,12 +1278,26 @@ function handleMobileCanvas() {
 					</button>
 				</div>
 
-				<RatingsAndReviews
-					product="{data?.product}"
-					reviews="{selectedReviewType === 'product_review'
-						? data?.product?.reviews?.productReviews
-						: data?.product?.reviews?.brandReviews}"
-					class="mb-5" />
+				{#if loadingForProductReview}
+					<ul class="flex flex-col gap-3">
+						{#each { length: 5 } as _}
+							<li>
+								<Skeleton small />
+							</li>
+						{/each}
+					</ul>
+				{:else if productReviewsProduct || productReviewsBrand}
+					<RatingsAndReviews
+						type="{selectedReviewType === 'product_review' ? 'product' : 'brand'}"
+						product="{data?.product}"
+						reviewsSummary="{selectedReviewType === 'product_review'
+							? data?.product?.reviews?.productReviews
+							: data?.product?.reviews?.brandReviews}"
+						reviews="{selectedReviewType === 'product_review'
+							? productReviewsProduct
+							: productReviewsBrand}"
+						class="mb-5" />
+				{/if}
 			</div>
 		</div>
 
@@ -1127,6 +1333,14 @@ function handleMobileCanvas() {
 				<CategoryPoolButtons categoryPool="{data.product?.categoryPool}" />
 			</div>
 
+			<!-- Recently viewed products -->
+
+			{#if recentlyViewed?.length}
+				<hr class="mb-5 w-full sm:mb-10" />
+
+				<ProductsGrid title="Recently Viewed" products="{recentlyViewed}" />
+			{/if}
+
 			<!-- Similar products From category slug -->
 
 			{#if data.product?.category?.slug}
@@ -1135,12 +1349,12 @@ function handleMobileCanvas() {
 				</div>
 			{/if}
 
-			<!-- Recomended products -->
+			<!-- Recommended products -->
 
 			{#if data.product?.relatedProducts?.length}
 				<hr class="mb-5 w-full sm:mb-10" />
 
-				<RecomendedProducts products="{data.product?.relatedProducts}" />
+				<ProductsGrid title="Recommended Products" products="{data.product?.relatedProducts}" />
 			{/if}
 		</div>
 	</div>
