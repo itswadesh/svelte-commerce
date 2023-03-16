@@ -47,7 +47,7 @@ let showDropDown = false
 			</li>
 
 			<li class="p-2">
-				<WhatsApp text="{productName}" url="{url}" />
+				<WhatsApp text="{productName} {url}" />
 			</li>
 
 			<li class="p-2">
