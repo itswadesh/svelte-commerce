@@ -357,7 +357,7 @@ $: {
 
 async function toggleWishlist(id) {
 	if (!$page.data.me) {
-		goto(`/auth/otp-login?ref=/my/wishlist/add/${id}`)
+		goto(`/auth/login?ref=/my/wishlist/add/${id}`)
 	}
 
 	try {
