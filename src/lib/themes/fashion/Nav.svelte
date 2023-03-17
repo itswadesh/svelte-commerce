@@ -478,9 +478,12 @@ async function getCategories() {
 															loadingForSelectedCartItem[ix] = false
 														}
 													}}">
-													<input type="hidden" name="pid" value="{item.pid}" />
+													<input type="hidden" name="pid" value="{item.pid || null}" />
 													<input type="hidden" name="qty" value="{-1}" />
-													<input type="hidden" name="customizedImg" value="{item.customizedImg}" />
+													<input
+														type="hidden"
+														name="customizedImg"
+														value="{item.customizedImg || null}" />
 
 													<button
 														type="submit"
@@ -529,9 +532,12 @@ async function getCategories() {
 															loadingForSelectedCartItem[ix] = false
 														}
 													}}">
-													<input type="hidden" name="pid" value="{item.pid}" />
+													<input type="hidden" name="pid" value="{item.pid || null}" />
 													<input type="hidden" name="qty" value="{+1}" />
-													<input type="hidden" name="customizedImg" value="{item.customizedImg}" />
+													<input
+														type="hidden"
+														name="customizedImg"
+														value="{item.customizedImg || null}" />
 													<button
 														type="submit"
 														disabled="{loadingForSelectedCartItem[ix]}"
@@ -571,9 +577,12 @@ async function getCategories() {
 													loadingForSelectedCartItem[ix] = false
 												}
 											}}">
-											<input type="hidden" name="pid" value="{item.pid}" />
+											<input type="hidden" name="pid" value="{item.pid || null}" />
 											<input type="hidden" name="qty" value="{-9999999}" />
-											<input type="hidden" name="customizedImg" value="{item.customizedImg}" />
+											<input
+												type="hidden"
+												name="customizedImg"
+												value="{item.customizedImg || null}" />
 
 											<button
 												type="submit"

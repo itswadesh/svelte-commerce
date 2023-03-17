@@ -6,8 +6,8 @@ import { invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import { post } from '$lib/utils/api'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
-import {LazyImg} from '$lib/components'
-import {PrimaryButton} from '$lib/ui'
+import { LazyImg } from '$lib/components'
+import { PrimaryButton } from '$lib/ui'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 
@@ -154,11 +154,11 @@ let bounceItemFromTop = false
 							await applyAction(result)
 						}
 					}}">
-					<input type="hidden" name="pid" value="{product?._id}" />
-					<input type="hidden" name="vid" value="{product?._id}" />
+					<input type="hidden" name="pid" value="{product?._id || null}" />
+					<input type="hidden" name="vid" value="{product?._id || null}" />
 					<input type="hidden" name="qty" value="{1}" />
-					<input type="hidden" name="options" value="{JSON.stringify(product?.options)}" />
-					<input type="hidden" name="customizedImg" value="{'undefined'}" />
+					<input type="hidden" name="options" value="{JSON.stringify(product?.options) || null}" />
+					<input type="hidden" name="customizedImg" value="{null}" />
 
 					<PrimaryButton
 						type="submit"

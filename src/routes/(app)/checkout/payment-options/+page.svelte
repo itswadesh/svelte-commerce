@@ -17,7 +17,7 @@ const seoProps = {
 }
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
+console.log('zzzzzzzzzzzzzzzzzz', data)
 // console.log('$page', $page)
 
 let cashfreeReady = false
@@ -53,10 +53,11 @@ onMount(async () => {
 
 	fireGTagEvent('begin_checkout', data.cart)
 
-	if (data.paymentMethods?.length === 1) {
-		const pm = data.paymentMethods[0]
+	const pm = data?.paymentMethods[0]
+	paymentMethodChanged(pm)
 
-		selectedPaymentMethod = pm
+	if (data.paymentMethods?.length === 1 && data.paymentMethods[0].type === 'pg' && !orderNo) {
+		submit(pm)
 	}
 })
 

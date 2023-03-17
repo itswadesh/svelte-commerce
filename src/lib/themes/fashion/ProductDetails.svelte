@@ -575,24 +575,27 @@ function scrollTo(elementId) {
 								await applyAction(result)
 							}
 						}}">
-						<input type="hidden" name="pid" value="{data?.product?._id}" />
+						<input type="hidden" name="pid" value="{data?.product?._id || null}" />
 
-						<input type="hidden" name="vid" value="{data?.product?._id}" />
+						<input type="hidden" name="vid" value="{data?.product?._id || null}" />
 
-						<input type="hidden" name="variantsLength" value="{value?.variants?.length}" />
+						<input type="hidden" name="variantsLength" value="{value?.variants?.length || null}" />
 
-						<input type="hidden" name="currentVariantId" value="{currentVariantId}" />
+						<input type="hidden" name="currentVariantId" value="{currentVariantId || null}" />
 
 						<input
 							type="hidden"
 							name="linkedItems"
-							value="{JSON.stringify(selectedLinkiedProducts)}" />
+							value="{JSON.stringify(selectedLinkiedProducts) || null}" />
 
 						<input type="hidden" name="qty" value="{1}" />
 
-						<input type="hidden" name="options" value="{JSON.stringify(selectedOptions1)}" />
+						<input
+							type="hidden"
+							name="options"
+							value="{JSON.stringify(selectedOptions1) || null}" />
 
-						<input type="hidden" name="customizedImg" value="{customizedImg}" />
+						<input type="hidden" name="customizedImg" value="{customizedImg || null}" />
 
 						<WhiteButton type="submit" loadingringsize="sm" class="w-full text-sm uppercase">
 							{cartButtonText}
@@ -623,24 +626,27 @@ function scrollTo(elementId) {
 								await applyAction(result)
 							}
 						}}">
-						<input type="hidden" name="pid" value="{data?.product?._id}" />
+						<input type="hidden" name="pid" value="{data?.product?._id || null}" />
 
-						<input type="hidden" name="vid" value="{data?.product?._id}" />
+						<input type="hidden" name="vid" value="{data?.product?._id || null}" />
 
-						<input type="hidden" name="variantsLength" value="{value?.variants?.length}" />
+						<input type="hidden" name="variantsLength" value="{value?.variants?.length || null}" />
 
-						<input type="hidden" name="currentVariantId" value="{currentVariantId}" />
+						<input type="hidden" name="currentVariantId" value="{currentVariantId || null}" />
 
 						<input
 							type="hidden"
 							name="linkedItems"
-							value="{JSON.stringify(selectedLinkiedProducts)}" />
+							value="{JSON.stringify(selectedLinkiedProducts) || null}" />
 
 						<input type="hidden" name="qty" value="{1}" />
 
-						<input type="hidden" name="options" value="{JSON.stringify(selectedOptions1)}" />
+						<input
+							type="hidden"
+							name="options"
+							value="{JSON.stringify(selectedOptions1) || null}" />
 
-						<input type="hidden" name="customizedImg" value="{customizedImg}" />
+						<input type="hidden" name="customizedImg" value="{customizedImg || null}" />
 
 						<PrimaryButton type="submit" loadingringsize="sm" class="w-full text-sm uppercase">
 							Buy Now
