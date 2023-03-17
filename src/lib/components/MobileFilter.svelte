@@ -7,6 +7,7 @@
 
 <script>
 import { browser } from '$app/environment'
+import { CategoryService } from '$lib/services'
 import { constructURL2, currency } from '$lib/utils'
 import { createEventDispatcher, onMount } from 'svelte'
 import { fly } from 'svelte/transition'
@@ -16,7 +17,6 @@ import { provider, sorts } from '$lib/config'
 import CheckboxEs from '$lib/ui/CheckboxEs.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import RadioEs from '$lib/ui/RadioEs.svelte'
-import { CategoryService } from '$lib/services'
 
 const dispatch = createEventDispatcher()
 

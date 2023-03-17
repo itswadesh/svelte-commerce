@@ -43,10 +43,12 @@ export async function load({ url, locals, cookies, parent }) {
 	} finally {
 		loading = false
 	}
+
 	let priceRange = []
-	if (facets.all_aggs?.price_stats?.max && facets.all_aggs?.price_stats?.min) {
+	if (facets.all_aggs?.price_stats?.max > 0 && facets.all_aggs?.price_stats?.min >= 0) {
 		priceRange = generatePriceRange(facets.all_aggs?.price_stats)
 	}
+
 	return {
 		loading,
 		err,

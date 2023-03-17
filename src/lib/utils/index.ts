@@ -418,9 +418,9 @@ export const getExtension = (filename) => {
 
 export const generatePriceRange = (price_stats) => {
 	let priceRange = []
-	const difference = price_stats?.max - price_stats?.min
+	const difference = Math.round(price_stats?.max - price_stats?.min)
 	if (difference) {
-		const priceGap = difference / 4
+		const priceGap = Math.round(difference / 4)
 		if (priceGap) {
 			const price1 = price_stats?.min
 			const price2 = price1 + priceGap
@@ -428,7 +428,7 @@ export const generatePriceRange = (price_stats) => {
 			const price4 = price3 + priceGap
 			const price5 = price_stats?.max
 
-			if (price1 && price2 && price3 && price4 && price5) {
+			if (price1 >= 0 && price2 && price3 && price4 && price5) {
 				priceRange = [
 					{ from: price1, key: `From ${currency(price1)} to ${currency(price2)}`, to: price2 },
 					{ from: price2, key: `From ${currency(price2)} to ${currency(price3)}`, to: price3 },
