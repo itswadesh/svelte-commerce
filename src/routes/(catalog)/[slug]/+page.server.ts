@@ -1,7 +1,4 @@
-import {
-	fetchProductsOfCategory,
-	fetchProductsOfCategoryTypesense
-} from '$lib/services/ProductService'
+import { ProductService } from '$lib/services'
 import { currency, generatePriceRange } from '$lib/utils'
 import { error } from '@sveltejs/kit'
 export const prerender = false
@@ -31,7 +28,7 @@ export async function load({ url, params, locals, cookies, parent, setHeaders })
 	let res
 	try {
 		loading = true
-		res = await fetchProductsOfCategory({
+		res = await ProductService.fetchProductsOfCategory({
 			storeId: store?.id,
 			query: query.toString(),
 			categorySlug,
@@ -49,10 +46,12 @@ export async function load({ url, params, locals, cookies, parent, setHeaders })
 	} finally {
 		loading = false
 	}
+
 	let priceRange = []
-	if (facets.all_aggs?.price_stats?.max && facets.all_aggs?.price_stats?.min) {
+	if (facets.all_aggs?.price_stats?.max > 0 && facets.all_aggs?.price_stats?.min >= 0) {
 		priceRange = generatePriceRange(facets.all_aggs?.price_stats)
 	}
+
 	return {
 		loading,
 		err,
