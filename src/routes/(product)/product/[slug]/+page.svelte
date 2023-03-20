@@ -995,7 +995,7 @@ function handleMobileCanvas() {
 
 				{#if !data.product?.isCustomized}
 					<div
-						class="fixed inset-x-0 bottom-0 z-10 h-16 md:h-auto flex items-center border-t bg-white p-2 md:static md:mb-5  md:border-t-0 md:bg-transparent md:p-0 md:max-w-sm box-shadow">
+						class="fixed inset-x-0 bottom-0 z-10 md:z-0 h-16 md:h-auto flex items-center border-t bg-white p-2 md:static md:mb-5  md:border-t-0 md:bg-transparent md:p-0 md:max-w-sm box-shadow">
 						<div class="w-full grid grid-cols-5 gap-2 itmes-center uppercase md:grid-cols-2">
 							<div class="col-span-2 md:col-span-1">
 								<WhiteButton
