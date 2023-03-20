@@ -190,13 +190,8 @@ if (data.product?.size?.name === 'One Size') {
 	selectedSize = 'One Size'
 }
 
-let Konvas
-
 onMount(async () => {
 	screenWidth = screen.width
-
-	const canvasEmodule = await import('$lib/components/ProductDesigner/Konvas.svelte')
-	Konvas = canvasEmodule.default
 
 	await getProductReviewProduct()
 	await getProductReviewBrand()
@@ -554,41 +549,6 @@ function handleMobileCanvas() {
 								</button>
 							{/each}
 						{/if}
-					</div>
-				{:else if data.product?.layoutTemplate}
-					<div
-						transition:fade="{{ duration: 200 }}"
-						class="{showEditor
-							? 'fixed inset-0 top-0 z-[100] h-[90vh] w-full bg-white sm:static sm:z-0 sm:h-auto sm:bg-transparent'
-							: 'mt-14 sm:mt-20 lg:mt-0'}">
-						{#if showEditor}
-							<button
-								type="button"
-								class="absolute top-3 right-3 z-[70] text-white"
-								on:click="{() => (showEditor = false)}">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke-width="1.5"
-									stroke="currentColor"
-									class="h-6 w-6">
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-								</svg>
-							</button>
-						{/if}
-
-						<!-- <button type="button" on:click="{handleMobileCanvas}" class="h-full w-full"> -->
-						<svelte:component
-							this="{Konvas}"
-							product="{data.product}"
-							bind:customizedImg="{customizedImg}"
-							on:saveAndAddToCart="{({ detail }) =>
-								addToBag(data.product, detail.customizedImg, detail.customizedJson)}" />
-						<!-- </button> -->
 					</div>
 				{:else}
 					<div
