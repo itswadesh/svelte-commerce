@@ -46,7 +46,14 @@ export const searchProducts = async ({
 
 // Fetch all products
 
-export const fetchProducts = async ({ origin, storeId, slug, id, server = false, sid = null }: any) => {
+export const fetchProducts = async ({
+	origin,
+	storeId,
+	slug,
+	id,
+	server = false,
+	sid = null
+}: any) => {
 	try {
 		let res: AllProducts | {} = {}
 
