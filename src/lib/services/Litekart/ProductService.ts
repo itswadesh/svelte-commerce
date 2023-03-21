@@ -46,7 +46,14 @@ export const searchProducts = async ({
 
 // Fetch all products
 
-export const fetchProducts = async ({ origin, slug, id, server = false, sid = null }: any) => {
+export const fetchProducts = async ({
+	origin,
+	storeId,
+	slug,
+	id,
+	server = false,
+	sid = null
+}: any) => {
 	try {
 		let res: AllProducts | {} = {}
 
@@ -189,7 +196,7 @@ export const fetchRelatedProducts = async ({
 			)
 		}
 
-		relatedProducts = relatedProductsRes?.data.filter((p) => {
+		const relatedProducts = relatedProductsRes?.data.filter((p) => {
 			return p._id !== pid
 		})
 
