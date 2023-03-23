@@ -42,8 +42,8 @@ async function getMegaMenu() {
 			const localMegamenu = localStorage.getItem('megamenu')
 			if (!localMegamenu || localMegamenu === 'undefined') {
 				megamenu = await CategoryService.fetchMegamenuData({
-					origin: $page?.data?.origin,
-					storeId: $page?.data?.store?.id
+					origin: $page.data.origin,
+					storeId: $page.data.store?.id
 				})
 			} else {
 				megamenu = JSON.parse(localMegamenu)

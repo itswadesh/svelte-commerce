@@ -143,14 +143,14 @@ function getPriceRanges() {
 }
 
 async function getMegamenu() {
-	if (browser) {
+	if (browser && !$page.data.isDesktop) {
 		try {
 			const localmegamenu = localStorage.getItem('megamenu')
 
 			if (!localmegamenu || localmegamenu === 'undefined') {
 				megamenu = await CategoryService.fetchMegamenuData({
-					origin: $page?.data?.origin,
-					storeId: $page?.data?.store?.id
+					origin: $page.data.origin,
+					storeId: $page.data.store?.id
 				})
 			} else {
 				megamenu = JSON.parse(localmegamenu)

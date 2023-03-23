@@ -55,8 +55,8 @@ async function getMegaMenu() {
 				megamenu = JSON.parse(localMegamenu)
 			} else {
 				megamenu = await CategoryService.fetchMegamenuData({
-					storeId: $page?.data?.store?.id,
-					origin: $page.data?.origin
+					storeId: $page.data.store?.id,
+					origin: $page.data.origin
 				})
 			}
 		} catch (e) {
