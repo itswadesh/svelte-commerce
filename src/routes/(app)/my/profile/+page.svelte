@@ -62,7 +62,6 @@ async function saveProfile() {
 
 		if (data.profile) {
 			data.profile.dob = data.profile.dob ? dayjs(data.profile.dob).format('YYYY-MM-DD') : null
-			formChanged = false
 			toast('Profile Info Saved.', 'success')
 		}
 
@@ -75,6 +74,7 @@ async function saveProfile() {
 		toast(e, 'error')
 	} finally {
 		loading = false
+		formChanged = false
 	}
 }
 </script>

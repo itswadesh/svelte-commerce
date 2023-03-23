@@ -28,6 +28,16 @@ export let me: Me, cart: Cart, data, showCartSidebar: boolean, openSidebar: bool
 let clazz = ''
 export { clazz as class }
 
+export function convertParagraphs(node) {
+	const paragraphs = node.querySelectorAll('p')
+
+	paragraphs.forEach((paragraph) => {
+		const span = document.createElement('span')
+		span.innerHTML = paragraph.innerHTML
+		paragraph.parentNode.replaceChild(span, paragraph)
+	})
+}
+
 let hellobar = $page.data.store?.hellobar || {}
 let pin = ''
 let q = ''
@@ -88,6 +98,7 @@ async function onSearchSubmit({ detail }) {
 
 	{#if hellobar?.active?.val}
 		<div
+			use:convertParagraphs
 			class="h-8 text-center tracking-wider flex items-center justify-center text-sm"
 			style="background-color: {hellobar?.bgColor?.val || '#27272a'};
 				 color: {hellobar?.textColor?.val || '#ffffff'};">
