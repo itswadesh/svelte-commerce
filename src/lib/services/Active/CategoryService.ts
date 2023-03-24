@@ -122,6 +122,6 @@ export const fetchMegamenuData = async ({ origin, storeId, server = false, sid =
 
 		return data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status || 400, e.data?.message || e.message)
 	}
 }
