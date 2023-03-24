@@ -50,10 +50,10 @@ onMount(async () => {
 
 		<!-- Images -->
 
-		<div
+		<!-- <div
 			class="fixed top-2.5 lg:top-10 left-[50%] transform -translate-x-1/2 max-w-xs text-white text-sm">
 			Images {currentImageIndex}/{gallery?.length}
-		</div>
+		</div> -->
 
 		<div class="container mx-auto relative bg-white rounded-3xl w-full max-w-xl max-h-max">
 			{#if gallery?.length}
