@@ -79,6 +79,7 @@ export const getStoreData = async ({
 	}
 	// if (!cookieStore || cookieStore === 'undefined') {
 	const uri = new URL(url)
+
 	storeRes = await getBySid(`init?domain=${IS_DEV ? DOMAIN : uri.host}`)
 	if (!storeRes.storeOne) {
 		throw new Error('Store not found')
