@@ -26,11 +26,8 @@ export const handleFetch = async ({ event, request, fetch }) => {
 export const handle: Handle = async ({ event, resolve }) => {
 	try {
 		const url = new URL(event.request.url)
-		// console.log('Origin.............', url.origin)
-		event.locals.origin = url.origin // https not coming in coolify hence hard coded in .env
-		if (event.locals.origin.includes('.')) {
-			event.locals.origin = event.locals.origin.replace('http://', 'https://')
-		}
+		const destinationOrigin = DOMAIN || url.host
+		event.locals.origin = !IS_DEV ? `https://${destinationOrigin}` : `http://${url.host}`
 		const isDesktop = event.request.headers.get('sec-ch-ua-mobile') === '?0'
 		event.locals.isDesktop = isDesktop
 		const isShowBackButton = !listOfPagesWithoutBackButton.includes(url?.pathname)
