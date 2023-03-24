@@ -3,7 +3,7 @@ import { SECRET_SENTRY_DSN } from '$env/static/private'
 const SENTRY_DSN = SECRET_SENTRY_DSN
 import * as Sentry from '@sentry/svelte'
 import { BrowserTracing } from '@sentry/tracing'
-import { DOMAIN, HTTP_ENDPOINT, listOfPagesWithoutBackButton } from '$lib/config'
+import { DOMAIN, HTTP_ENDPOINT, IS_DEV, listOfPagesWithoutBackButton } from '$lib/config'
 import { fetchStoreData, authenticateUser, fetchCart } from '$lib/server'
 
 try {
