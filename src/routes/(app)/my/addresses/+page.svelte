@@ -1,5 +1,6 @@
 <script lang="ts">
 import { AddressService } from '$lib/services'
+import { applyAction, enhance } from '$app/forms'
 import { del } from '$lib/utils/api'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
@@ -9,7 +10,6 @@ import { WhiteButton } from '$lib/ui'
 import noEmptyAddress from '$lib/assets/no/empty-address.svg'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-import { applyAction, enhance } from '$app/forms'
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
@@ -135,7 +135,7 @@ async function remove(id, index) {
 								</span>
 
 								<span>
-									{i.address || '_'}, {i.locality || '_'}, {i.city || '_'}
+									{i.address || '_'}, {i.city || '_'}
 
 									<br />
 
