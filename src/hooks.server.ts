@@ -3,7 +3,7 @@ import { SECRET_SENTRY_DSN } from '$env/static/private'
 const SENTRY_DSN = SECRET_SENTRY_DSN
 import * as Sentry from '@sentry/svelte'
 import { BrowserTracing } from '@sentry/tracing'
-import { DOMAIN, HTTP_ENDPOINT, listOfPagesWithoutBackButton, WWW_URL } from '$lib/config'
+import { DOMAIN, HTTP_ENDPOINT, IS_DEV, listOfPagesWithoutBackButton } from '$lib/config'
 import { fetchStoreData, authenticateUser, fetchCart } from '$lib/server'
 
 try {
@@ -26,11 +26,7 @@ export const handleFetch = async ({ event, request, fetch }) => {
 export const handle: Handle = async ({ event, resolve }) => {
 	try {
 		const url = new URL(event.request.url)
-		const WWW_URL1 = url.origin
-		event.locals.origin = WWW_URL || WWW_URL1 // https not coming in coolify hence hard coded in .env
-		if (event.locals.origin.includes('.')) {
-			event.locals.origin = event.locals.origin.replace('http://', 'https://')
-		}
+		event.locals.origin = !IS_DEV ? `https://${url.host}` : `http://${url.host}`
 		const isDesktop = event.request.headers.get('sec-ch-ua-mobile') === '?0'
 		event.locals.isDesktop = isDesktop
 		const isShowBackButton = !listOfPagesWithoutBackButton.includes(url?.pathname)

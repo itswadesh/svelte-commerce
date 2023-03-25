@@ -11,13 +11,13 @@ const send = async ({ method, path, params, data, token, headers, origin }: any)
 		path.includes('dev-sw')
 	)
 		return
-	origin = origin || 'http://localhost:3000'
-	if (headers && headers.get('cookie') && headers.get('cookie').includes('store')) {
-		origin = headers.get('origin') || headers.get('host')
-		if (origin === 'localhost:3000') origin = 'http://localhost:3000'
-		else origin = 'https://' + origin
-	} else {
-	}
+	// origin = origin || 'http://localhost:3000'
+	// if (headers && headers.get('cookie') && headers.get('cookie').includes('store')) {
+	// 	origin = headers.get('origin') || headers.get('host')
+	// 	if (origin === 'localhost:3000') origin = 'http://localhost:3000'
+	// 	else origin = 'https://' + origin
+	// } else {
+	// }
 	let uri = new URL(path, origin)
 
 	if (!path.includes('/api/')) {
