@@ -51,11 +51,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 		let responseTime = end - start
 
 		if (responseTime > 1000) {
-			console.log(`🐢 ${route} took ${responseTime.toFixed(2)} ms`)
+			// console.log(`🐢 ${route} took ${responseTime.toFixed(2)} ms`)
 		}
 
 		if (responseTime < 100) {
-			console.log(`🚀 ${route} took ${responseTime.toFixed(2)} ms`)
+			// console.log(`🚀 ${route} took ${responseTime.toFixed(2)} ms`)
 		}
 
 		return response
