@@ -111,16 +111,17 @@ export const fetchAllProductsOfCategories = async ({
 export const fetchMegamenuData = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {
 		let data: []
-
-		if (server) {
-			data = await getBySid(`categories/megamenu?megamenu=true&store=${storeId}`, sid)
-		} else {
-			data = await getAPI(`categories/megamenu?megamenu=true&store=${storeId}`, origin)
+		if (storeId) {
+			if (server) {
+				data = await getBySid(`categories/megamenu?megamenu=true&store=${storeId}`, sid)
+			} else {
+				data = await getAPI(`categories/megamenu?megamenu=true&store=${storeId}`, origin)
+			}
 		}
 		// must return link:string, slug:string(optional) name:string, new:boolean
 
 		return data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status || 400, e.data?.message || e.message)
 	}
 }
