@@ -265,7 +265,7 @@ async function getProductReviewProduct() {
 
 		productReviewsProduct = res?.data
 	} catch (e) {
-		console.log(e, 'error')
+		console.error(e, 'error')
 	} finally {
 		loadingForProductReview = false
 	}
@@ -287,7 +287,7 @@ async function getProductReviewBrand() {
 
 		productReviewsBrand = res?.data
 	} catch (e) {
-		console.log(e, 'error')
+		console.error(e, 'error')
 	} finally {
 		loadingForProductReview = false
 	}

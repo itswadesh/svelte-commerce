@@ -11,10 +11,10 @@
 		//    console.log('Checking for sw update')
 		//    r.update()
 		// }, 20000 /* 20s for testing purposes */)
-			console.log(`SW Registered: ${r}`)
+			// console.log(`SW Registered: ${r}`)
 		},
 		onRegisterError(error) {
-			console.log('SW registration error', error)
+			// console.log('SW registration error', error)
 		},
 	})
 	const close = () => {
