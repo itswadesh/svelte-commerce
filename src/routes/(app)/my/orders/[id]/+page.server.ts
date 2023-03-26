@@ -3,15 +3,21 @@ import { error } from '@sveltejs/kit'
 export const prerender = false
 
 export async function load({ params, url, locals, cookies, request }) {
-	const { store } = locals
+	const storeId = locals?.store?.id
 	const { id } = params
+	const sid = cookies.get('connect.sid')
 	const order = await OrdersService.fetchOrder({
-		storeId: locals.store?.id,
 		id,
+		storeId,
 		server: true,
-		sid: cookies.get('connect.sid')
+		sid
 	})
-	const orderTracking = await OrdersService.fetchTrackOrder({ id, storeId: store?.id, server: true })
+	const orderTracking = await OrdersService.fetchTrackOrder({
+		id,
+		storeId,
+		server: true,
+		sid
+	})
 	if (order) {
 		return { order, orderTracking }
 	} else {
