@@ -2,7 +2,7 @@ import { OrdersService } from '$lib/services'
 import { error } from '@sveltejs/kit'
 export const prerender = false
 
-export async function load({ params, url, locals, cookies, request }) {
+export async function load({ params, locals, cookies }) {
 	const storeId = locals?.store?.id
 	const { id } = params
 	const sid = cookies.get('connect.sid')
@@ -12,12 +12,7 @@ export async function load({ params, url, locals, cookies, request }) {
 		server: true,
 		sid
 	})
-	const orderTracking = await OrdersService.fetchTrackOrder({
-		id,
-		storeId,
-		server: true,
-		sid
-	})
+	const orderTracking = await OrdersService.fetchTrackOrder({ id, storeId, server: true, sid })
 	if (order) {
 		return { order, orderTracking }
 	} else {

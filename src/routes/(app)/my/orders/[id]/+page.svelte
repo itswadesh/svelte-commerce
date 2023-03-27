@@ -88,7 +88,7 @@ onMount(() => {
 										{/if}
 									</a>
 
-									<div class="flex w-full flex-1 flex-col text-sm xl:pr-4">
+									<div class="flex w-full flex-1 flex-col gap-1 text-sm xl:pr-4">
 										<div class="mb-1 flex justify-between gap-2 sm:gap-4">
 											<a
 												href="{`/product/${item.slug}`}"
@@ -109,39 +109,42 @@ onMount(() => {
 										</div>
 
 										{#if item.brandName}
-											<h4 class="mb-2 capitalize">
+											<span>
+												<b>Brand :</b>
+
 												{item.brandName}
-											</h4>
+											</span>
 										{/if}
 
-										<div class="flex flex-wrap items-center whitespace-nowrap">
+										<div class="flex flex-wrap gap-1 items-center">
 											{#if item.size}
-												<h6 class="mr-4 mb-2">
-													Size :
+												<span>
+													<b>Size :</b>
 
-													<span class="font-medium">{item.size}</span>
-												</h6>
+													{item.size}
+												</span>
 											{/if}
 
 											{#if item.color}
-												<h6 class="mb-2">
-													Color :
+												<span>
+													<b>Color : </b>
 
-													<span class="font-medium">{item.color}</span>
-												</h6>
+													{item.color}
+												</span>
 											{/if}
 										</div>
 
 										{#if item.vendor}
-											<h6 class="mb-2">
-												Seller :
+											<span>
+												<b>Seller :</b>
+
 												<a
 													href="{`/vendor/${item.vendor?.id}`}"
 													aria-label="Click to view the vendor's profile"
 													class="font-medium">
 													{item.vendor?.businessName}
 												</a>
-											</h6>
+											</span>
 										{/if}
 
 										{#if item?.usedOptions?.length}
@@ -150,6 +153,7 @@ onMount(() => {
 													{#if option?.val?.length && option?.val !== undefined && option?.val != ''}
 														<div class="flex flex-wrap gap-2">
 															<h6>{option.name}:</h6>
+
 															{#if option.val}
 																{#each option.val as v}
 																	{#if v}
@@ -182,6 +186,17 @@ onMount(() => {
 												{/if}
 											{/if}
 										</div>
+
+										{#if item?.status === 'delivered'}
+											<div class="mt-2 xl:mt-0 xl:w-1/3">
+												<a
+													href="/my/reviews/create?pid={item?.pid}&oid={item?.orderItemId}&ref=/product/{item?.slug}"
+													aria-label="Click to route rate & review product"
+													class="whitespace-nowrap font-semibold text-indigo-500 focus:outline-none hover:underline">
+													Rate & Review Product
+												</a>
+											</div>
+										{/if}
 									</div>
 								</div>
 							{/each}
@@ -268,7 +283,7 @@ onMount(() => {
 			<!-- Order Tracker -->
 
 			<div>
-				{#if !!data.order?.foodType && data.order?.status !== 'Delivered' && data.order?.expectedDeliveryDate}
+				{#if !!data.order?.foodType && data.order?.status !== 'delivered' && data.order?.expectedDeliveryDate}
 					<h4 class="mb-5">
 						<span class="font-medium">Expected Delivery Date : </span>
 
@@ -278,18 +293,7 @@ onMount(() => {
 					</h4>
 				{/if}
 
-				{#if data.order?.status === 'Delivered'}
-					<div class="mt-2 xl:mt-0 xl:w-1/3">
-						<a
-							href="/my/reviews/create?product={data.order?.pid}&ref=/product/{data.order?.slug}"
-							aria-label="Click to route rate & review product"
-							class="whitespace-nowrap font-semibold text-indigo-500 focus:outline-none hover:underline">
-							Rate & Review Product
-						</a>
-					</div>
-				{/if}
-
-				<div class="mt-5 sm:mt-10 xl:flex xl:items-center xl:justify-between">
+				<div class="mt-5 sm:mt-10 flex flex-wrap gap-10">
 					{#if data.orderTracking?.length}
 						<OrderTracking tracks="{data.orderTracking}" />
 					{/if}
@@ -299,35 +303,34 @@ onMount(() => {
 						<ReturnTracking order="{data.order}" />
 					{/if} -->
 
-					<div class="mt-10 mb-4 xl:mb-0 xl:mt-0 xl:w-1/3">
-						<div class="flex flex-col xl:items-center xl:justify-center">
-							{#if data.order?.invoiceLink}
-								<a
-									href="{data.order?.invoiceLink}"
-									aria-label="Click to download invoice"
-									target="blank"
-									class="mb-4">
-									<PrimaryButton class="w-48" type="button">Download Invoice</PrimaryButton>
-								</a>
-							{/if}
+					<div class="flex flex-col gap-2">
+						{#if data.order?.invoiceLink}
+							<a
+								href="{data.order?.invoiceLink}"
+								aria-label="Click to download invoice"
+								target="blank"
+								class="block">
+								<PrimaryButton class="w-48" type="button">Download Invoice</PrimaryButton>
+							</a>
+						{/if}
 
-							{#if data.order?.replaceValidTill != null && now <= data.order?.replaceValidTill && !data.order?.isReplaceOrReturn}
-								<a
-									href="/my/exchange?orderId=${data.order?.orderId}&itemId=${data.order?.itemId}"
-									aria-label="Click to route exchange"
-									class="mb-4">
-									<TransparentButton class="w-48" type="button" border>Exchange</TransparentButton>
-								</a>
-							{/if}
+						{#if data.order?.replaceValidTill != null && now <= data.order?.replaceValidTill && !data.order?.isReplaceOrReturn}
+							<a
+								href="/my/exchange?orderId=${data.order?.orderId}&itemId=${data.order?.itemId}"
+								aria-label="Click to route exchange"
+								class="block">
+								<TransparentButton class="w-48" type="button" border>Exchange</TransparentButton>
+							</a>
+						{/if}
 
-							<!-- {#if data.order?.returnValidTill != null && now <= data.order?.returnValidTill && !data.order?.isReplaceOrReturn}
-								<a
-									href="/my/return?orderId=${data.order?.orderId}&itemId=${data.order?.itemId}"
-									aria-label="Click to route return">
-									<TransparentButton class="w-48" type="button" border>Return</TransparentButton>
-								</a>
-							{/if} -->
-						</div>
+						<!-- {#if data.order?.returnValidTill != null && now <= data.order?.returnValidTill && !data.order?.isReplaceOrReturn}
+							<a
+								href="/my/return?orderId=${data.order?.orderId}&itemId=${data.order?.itemId}"
+								aria-label="Click to route return"
+								class="block">
+								<TransparentButton class="w-48" type="button" border>Return</TransparentButton>
+							</a>
+						{/if} -->
 					</div>
 				</div>
 			</div>
