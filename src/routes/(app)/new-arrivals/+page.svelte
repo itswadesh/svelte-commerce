@@ -2,6 +2,7 @@
 import { goto } from '$app/navigation'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import MobileFooter from '$lib/MobileFooter.svelte'
+import noDataAvailable from '$lib/assets/no/no-data-available.png'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
@@ -102,9 +103,9 @@ let showItemCount = 10
 
 						<div class="mb-5">
 							<img
-								src="/no/no-data-availible.png"
-								alt="no data availible"
-								class="h-20 w-20 object-contain text-xs" />
+								src="{noDataAvailable}"
+								alt="no data available"
+								class="h-60 w-auto object-contain text-xs" />
 						</div>
 
 						<p class="mb-5 text-center text-gray-500">No data found</p>
@@ -123,9 +124,9 @@ let showItemCount = 10
 
 				<div class="mb-5">
 					<img
-						src="/no/no-data-availible.png"
-						alt="no data availible"
-						class="h-20 w-20 object-contain text-xs" />
+						src="{noDataAvailable}"
+						alt="no data available"
+						class="h-60 w-auto object-contain text-xs" />
 				</div>
 
 				<p class="mb-5 text-center text-gray-500">No data found</p>
@@ -137,7 +138,7 @@ let showItemCount = 10
 
 	<!-- MOBILE FOOTER -->
 
-	<div class="block sm:hidden">
+	<div class="block lg:hidden">
 		<MobileFooter />
 	</div>
 </div>

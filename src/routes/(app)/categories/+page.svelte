@@ -1,13 +1,12 @@
 <script>
 import { browser } from '$app/environment'
-import { fetchMegamenuData } from '$lib/services/CategoryService'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { toast } from '$lib/utils'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import MobileFooter from '$lib/MobileFooter.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-
+import { CategoryService } from '$lib/services'
 let seoProps = {
 	title: `Categories`,
 	description: `Categories`
@@ -42,9 +41,9 @@ async function getMegaMenu() {
 		try {
 			const localMegamenu = localStorage.getItem('megamenu')
 			if (!localMegamenu || localMegamenu === 'undefined') {
-				megamenu = await fetchMegamenuData({
-					origin: $page?.data?.origin,
-					storeId: $page?.data?.store?.id
+				megamenu = await CategoryService.fetchMegamenuData({
+					origin: $page.data.origin,
+					storeId: $page.data.store?.id
 				})
 			} else {
 				megamenu = JSON.parse(localMegamenu)
@@ -255,7 +254,7 @@ function toggle2(cx) {
 
 	<!-- MOBILE FOOTER -->
 
-	<div class="block sm:hidden">
+	<div class="block lg:hidden">
 		<MobileFooter />
 	</div>
 </div>
