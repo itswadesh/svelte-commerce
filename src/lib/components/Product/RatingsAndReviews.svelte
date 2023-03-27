@@ -1,9 +1,9 @@
 <script>
 import { date } from '$lib/utils'
+import { ReviewService } from '$lib/services'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { ReviewService } from '$lib/services'
 import ReviewGallery from './ReviewGallery.svelte'
 
 export let type
@@ -22,6 +22,7 @@ export { clazz as class }
 let gallery = []
 let loadingForGallery = false
 let openReviewImages = []
+let selectedProductGallery = []
 let showGalleryModal = false
 
 onMount(async () => {
@@ -59,10 +60,31 @@ async function getGallery() {
 
 		// console.log('gallery', gallery)
 	} catch (e) {
-		console.error('error', e)
+		console.log('error', e)
 	} finally {
 		loadingForGallery = false
 	}
+}
+
+const handleSelectedProductGallery = (review, rx) => {
+	// console.log('review, rx', review, rx)
+
+	selectedProductGallery = review.images
+		.map((item) => {
+			return {
+				createdAt: review.createdAt,
+				image: item,
+				message: review.message,
+				product: review.product,
+				rating: review.rating,
+				user: review.user
+			}
+		})
+		.flat()
+
+	// console.log('selectedProductGallery', selectedProductGallery)
+
+	openReviewImages[rx] = true
 }
 </script>
 
@@ -196,16 +218,19 @@ async function getGallery() {
 										<button
 											type="button"
 											class="flex flex-wrap gap-1"
-											on:click="{() => (openReviewImages[rx] = true)}">
+											on:click="{() => handleSelectedProductGallery(review, rx)}">
 											{#each review?.images as img}
-												<img src="{img}" alt="" class="h-20 w-14 rounded-md object-cover" />
+												<img
+													src="{img}"
+													alt=""
+													class="h-20 w-14 rounded-md object-cover border bg-white" />
 											{/each}
 										</button>
 
-										<!-- <ReviewGallery
+										<ReviewGallery
 											showPhotosModal="{openReviewImages[rx]}"
-											gallery="{review?.images}"
-											on:close="{() => (openReviewImages[rx] = false)}" /> -->
+											gallery="{selectedProductGallery}"
+											on:close="{() => (openReviewImages[rx] = false)}" />
 									{/if}
 
 									<div class="flex flex-wrap items-center gap-1 text-gray-500 text-xs">
@@ -251,42 +276,42 @@ async function getGallery() {
 						<div class="grid grid-cols-3 grid-rows-3 gap-2 h-72 max-w-sm">
 							{#if gallery[0]?.image}
 								<div
-									class="col-span-2 row-span-2 rounded-md bg-no-repeat bg-cover overflow-hidden"
+									class="col-span-2 row-span-2 rounded-md bg-no-repeat bg-cover bg-white border overflow-hidden"
 									style="background-image:url({gallery[0]?.image});">
 								</div>
 							{/if}
 
 							{#if gallery[1]?.image}
 								<div
-									class="col-span-1 row-span-1 rounded-md bg-no-repeat bg-cover overflow-hidden"
+									class="col-span-1 row-span-1 rounded-md bg-no-repeat bg-cover bg-white border overflow-hidden"
 									style="background-image:url({gallery[1]?.image});">
 								</div>
 							{/if}
 
 							{#if gallery[2]?.image}
 								<div
-									class="col-span-1 row-span-1 rounded-md bg-no-repeat bg-cover overflow-hidden"
+									class="col-span-1 row-span-1 rounded-md bg-no-repeat bg-cover bg-white border overflow-hidden"
 									style="background-image:url({gallery[2]?.image});">
 								</div>
 							{/if}
 
 							{#if gallery[3]?.image}
 								<div
-									class="col-span-1 row-span-1 rounded-md bg-no-repeat bg-cover overflow-hidden"
+									class="col-span-1 row-span-1 rounded-md bg-no-repeat bg-cover bg-white border overflow-hidden"
 									style="background-image:url({gallery[3]?.image});">
 								</div>
 							{/if}
 
 							{#if gallery[4]?.image}
 								<div
-									class="col-span-1 row-span-1 rounded-md bg-no-repeat bg-cover overflow-hidden"
+									class="col-span-1 row-span-1 rounded-md bg-no-repeat bg-cover bg-white border overflow-hidden"
 									style="background-image:url({gallery[4]?.image});">
 								</div>
 							{/if}
 
 							{#if gallery?.length - 5 > 0}
 								<div
-									class="col-span-1 row-span-1 relative p-3 rounded-md bg-no-repeat bg-cover overflow-hidden"
+									class="col-span-1 row-span-1 relative p-3 rounded-md bg-no-repeat bg-cover bg-white border overflow-hidden"
 									style="background-image:url(gallery[5]?.image);">
 									<div
 										class="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-center font-bold text-xl text-white">
