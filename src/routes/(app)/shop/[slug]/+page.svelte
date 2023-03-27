@@ -1,13 +1,14 @@
 <script>
-import SEO from '$lib/components/SEO/index.svelte'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import MobileFooter from '$lib/MobileFooter.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { goto } from '$app/navigation'
+import { page } from '$app/stores'
 import Hero from '$lib/home/Hero.svelte'
 import HeroBanners from '$lib/home/HeroBanners.svelte'
+import MobileFooter from '$lib/MobileFooter.svelte'
+import noDataAvailable from '$lib/assets/no/no-data-available.png'
 import PageIdPickedBanner from '$lib/components/PageIdBanners/PageIdPickedBanner.svelte'
-import { page } from '$app/stores'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
+
 export let data
 
 $: heroBanners = data.banners?.data.filter((b) => {
@@ -51,8 +52,7 @@ let seoProps = {
 						{#if heroBanners.length > 0}
 							<div>
 								<h1
-									class="uppercase p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 md:py-10 sm:text-2xl md:text-3xl xl:text-4xl"
-								>
+									class="uppercase p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 md:py-10 sm:text-2xl md:text-3xl xl:text-4xl">
 									BEST OF {$page.data.store?.websiteName} EXCLUSIVE
 								</h1>
 
@@ -84,12 +84,6 @@ let seoProps = {
 					{/await}
 				</div>
 			</div>
-
-			<!-- MOBILE FOOTER -->
-
-			<div class="block sm:hidden">
-				<MobileFooter />
-			</div>
 		</div>
 	{:else}
 		<div class="flex h-[70vh] items-center justify-center">
@@ -100,10 +94,9 @@ let seoProps = {
 
 				<div class="mb-5">
 					<img
-						src="/no/no-data-availible.png"
-						alt="no data availible"
-						class="h-20 w-20 text-xs object-contain"
-					/>
+						src="{noDataAvailable}"
+						alt="no data available"
+						class="h-60 w-auto object-contain text-xs" />
 				</div>
 
 				<p class="mb-5 text-center text-gray-500">No data found</p>
@@ -112,4 +105,10 @@ let seoProps = {
 			</div>
 		</div>
 	{/if}
+
+	<!-- MOBILE FOOTER -->
+
+	<div class="block lg:hidden">
+		<MobileFooter />
+	</div>
 </div>

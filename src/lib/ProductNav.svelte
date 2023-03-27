@@ -6,9 +6,8 @@
 </style>
 
 <script lang="ts">
-import { fly } from 'svelte/transition'
 import { page } from '$app/stores'
-import { Reddit, Telegram, WhatsApp, Facebook, Twitter } from 'svelte-share-buttons-component'
+import AutosuggestModal from './AutosuggestModal.svelte'
 import type { Cart, Me } from './types'
 
 export let cart: Cart
@@ -22,7 +21,7 @@ export let url: string
 
 $: scrollY = 0
 
-let showShareButtons = false
+let show = false
 </script>
 
 <svelte:window bind:scrollY="{scrollY}" />
@@ -59,67 +58,28 @@ let showShareButtons = false
 		</div>
 
 		<div class="flex itmes-center gap-2">
-			<!-- Social share -->
+			<!-- Search -->
 
-			{#if productName}
-				<div class="relative">
-					<button
-						type="button"
-						class="h-8 w-8 flex items-center justify-center frosted-white rounded-full focus:outline-none"
-						on:click="{() => (showShareButtons = true)}">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke-width="1.5"
-							stroke="currentColor"
-							class="w-6 h-6">
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z"
-							></path>
-						</svg>
-					</button>
+			<button
+				type="button"
+				class="h-8 w-8 flex items-center justify-center frosted-white rounded-full focus:outline-none"
+				on:click="{() => (show = true)}">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke-width="1.5"
+					stroke="currentColor"
+					class="w-6 h-6">
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path>
+				</svg>
+			</button>
 
-					{#if showShareButtons}
-						<ul
-							transition:fly="{{ y: -5, duration: 300 }}"
-							class="absolute top-9 right-0 z-30 flex min-w-max list-none flex-col divide-y rounded-md border bg-white shadow-md">
-							<li class="p-2">
-								<Reddit title="{productName}" url="{url}" />
-							</li>
-
-							<li class="p-2">
-								<Telegram text="{productName}" url="{url}" />
-							</li>
-
-							<li class="p-2">
-								<WhatsApp text="{productName}" url="{url}" />
-							</li>
-
-							<li class="p-2">
-								<Facebook quote="{productName}" url="{url}" />
-							</li>
-
-							<li class="p-2">
-								<Twitter
-									class="share-button"
-									text="{productName}"
-									url="{url}"
-									hashtags="litekart"
-									via="litekart"
-									related="ecommerce" />
-							</li>
-						</ul>
-
-						<button
-							type="button"
-							class="fixed inset-0 z-20 h-full w-full bg-black bg-opacity-0 focus:outline-none"
-							on:click="{() => (showShareButtons = false)}">
-						</button>
-					{/if}
-				</div>
+			{#if show}
+				<AutosuggestModal bind:show="{show}" />
 			{/if}
 
 			<!-- Wishlist-->

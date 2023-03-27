@@ -6,7 +6,7 @@ import { toast } from '$lib/utils'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import MobileFooter from '$lib/MobileFooter.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-import {CategoryService} from '$lib/services'
+import { CategoryService } from '$lib/services'
 let seoProps = {
 	title: `Categories`,
 	description: `Categories`
@@ -254,7 +254,7 @@ function toggle2(cx) {
 
 	<!-- MOBILE FOOTER -->
 
-	<div class="block sm:hidden">
+	<div class="block lg:hidden">
 		<MobileFooter />
 	</div>
 </div>
