@@ -21,39 +21,18 @@
 </style>
 
 <script lang="ts">
+// import { fetchFooterCategories } from './services/CategoryService'
 import { browser } from '$app/environment'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import appStore from '$lib/assets/app/app-store.svg'
 import googlePlay from '$lib/assets/app/google-play.png'
-import type { Category, Me } from './types'
-// import { fetchFooterCategories } from './services/CategoryService'
+import type { Category } from './types'
 
-export let store = {},
-	popularSearches: { took: 0; count: 0; data: [] },
-	megamenu: Category[]
-
-// let categories = []
-
-// onMount(async () => {
-// await getCategories()
-// })
-
-// async function getCategories() {
-// 	try {
-// categories= await fetchFooterCategories({
-// 	origin: $page?.data?.origin,
-// 	storeId: $page?.data?.store?.id
-// })
-// const megamenu2 = await fetchMegamenuData({
-// 	storeId: $page?.data?.store?.id,
-// 	origin: $page.data?.origin
-// })
-// localStorage.setItem('megamenu', JSON.stringify(megamenu2))
-// 	} catch (e) {
-// 	} finally {
-// 	}
-// }
+export let me
+export let store = {}
+export let popularSearches: { took: 0; count: 0; data: [] }
+export let megamenu: Category[]
 
 function getYear() {
 	const d = new Date()
@@ -63,7 +42,7 @@ function getYear() {
 
 let footerItems: any = [
 	{
-		heading: 'Store Info',
+		heading: 'Company',
 		subMenu: [
 			{ title: 'About Us', link: '/about-us', new: false },
 			{ title: 'Privacy Policy', link: '/privacy-policy', new: false },
@@ -77,20 +56,20 @@ let footerItems: any = [
 				link: '/payments-returns',
 				new: false
 			},
-			// {
-			// 	title: 'Printing Terms & Cancellation Policy',
-			// 	link: '/printing-terms-cancellation-policy',
-			// 	new: false
-			// },
-			{ title: 'Track Your Order', link: '/my/orders?sort=-updatedAt', new: false },
-			{ title: 'Bulk Order Inquiry', link: '/bulk-order-inquiry', new: true },
-			{ title: 'Blogs', link: '/blogs', new: false },
+			{ title: 'Blogs', link: '/blogs', new: false }
 			// {
 			// 	title: 'Join as Vendor',
 			// 	link: `${$page.data.store?.adminUrl}?role=vendor&store=${$page.data.store?.id}`,
 			// 	new: true,
 			// 	target: '_blank'
 			// }
+		]
+	},
+	{
+		heading: 'Customer service',
+		subMenu: [
+			{ title: 'Track Your Order', link: '##', new: false },
+			{ title: 'Bulk Order Inquiry', link: '/bulk-order-inquiry', new: true }
 		]
 	}
 ]
@@ -114,7 +93,7 @@ async function getStoreData() {
 <footer class="w-full justify-center bg-gray-50 p-3 text-sm sm:p-10">
 	<div class="container mx-auto max-w-6xl">
 		<div
-			class="mb-4 flex w-full flex-col flex-wrap items-start justify-start gap-5 sm:mb-8 sm:max-h-[30rem] sm:gap-10 lg:max-h-96 xl:max-h-60">
+			class="mb-4 flex w-full flex-col flex-wrap items-start justify-start gap-5 sm:mb-8 sm:gap-10 h-full sm:max-h-[35rem] xl:max-h-96">
 			{#if footerItems?.length}
 				{#each footerItems as item}
 					<div>
@@ -489,7 +468,6 @@ async function getStoreData() {
 				</div>
 			{/if}
 		</div>
-
 		{#if popularSearches?.count > 0}
 			<div class="mb-4 sm:mb-8">
 				<h2 class="mb-4 flex items-center gap-4 font-semibold">
@@ -533,7 +511,7 @@ async function getStoreData() {
 
 		<div
 			class="flex flex-wrap items-center justify-center gap-2 text-sm text-gray-500 sm:gap-5 md:justify-between">
-			<p>Copyright {getYear()} © {$page.data.store?.websiteName} made with ❤️</p>
+			<p>Copyright {getYear()} © {$page.data.store?.websiteName} made with ❤️ in India</p>
 
 			<div class="flex items-center justify-center gap-4">
 				<a

@@ -12,6 +12,6 @@ import { page } from '$app/stores'
 	</div>
 </div>
 
-<div class="hidden sm:block">
+<div class="hidden lg:block">
 	<Footer me="{$page.data.me}" cart="{$page.data.cart}" />
 </div>

@@ -327,7 +327,7 @@ function handleFilterTags() {
 
 	{#if data.styleTags?.length}
 		<div
-			class="block lg:hidden p-3 sm:px-10 w-screen overflow-x-auto scrollbar-none sticky top-14 sm:top-20 bg-white z-40 shadow-md">
+			class="lg:hidden h-12 flex items-center justify-start px-3 sm:px-10 w-screen overflow-x-auto scrollbar-none fixed top-14 sm:top-20 bg-white z-40 shadow-md">
 			<div class="inline-flex gap-2">
 				{#each data.styleTags || [] as t}
 					{#if t?.key}
@@ -387,7 +387,9 @@ function handleFilterTags() {
 				on:clearAll="{refreshData}" />
 		{/if}
 
-		<div class="w-full flex-1 sm:px-10 sm:pt-10 lg:pt-0 lg:px-0">
+		<div
+			class="w-full flex-1 sm:px-10 sm:pt-10 lg:pt-0 lg:px-0
+			{data.styleTags?.length ? 'mt-12 lg:mt-0' : 'mt-0'}">
 			{#if data.products?.length}
 				<div class="flex flex-col gap-5">
 					<div class="hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex">
