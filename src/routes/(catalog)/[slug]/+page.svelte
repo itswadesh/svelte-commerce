@@ -26,7 +26,7 @@ import DesktopFilter from '$lib/components/DesktopFilter.svelte'
 import dotsLoading from '$lib/assets/dots-loading.gif'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
 import MobileFilter from '$lib/components/MobileFilter.svelte'
-import noNoDataAvailable from '$lib/assets/no/no-data-availible.png'
+import noDataAvailable from '$lib/assets/no/no-data-available.png'
 import Pagination from '$lib/components/Pagination.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
@@ -107,11 +107,13 @@ let seoProps = {
 	twitterImage: { url: `${data.category?.img}` }
 }
 
+let currentPage = 1
+let hidden = true
+let reachedLast = false
 let selectedFilter
 let showFilter = false
-let showSort = false
-let hidden = true
 let showOnPx = 600
+let showSort = false
 let y
 
 $: innerWidth = 0
@@ -152,39 +154,47 @@ async function sortNow(s) {
 	// await goto(`/search?${$page.url.searchParams.toString()}`)
 }
 
-let currentPage = 1
-
 async function loadNextPage() {
-	let nextPage = currentPage + 1
-	$page.url.searchParams.delete('page')
-	const searchParams = $page.url.searchParams.toString()
-	try {
-		data.isLoading = true
-		const res = await ProductService.fetchNextPageProducts({
-			categorySlug: data.category?.slug,
-			origin: $page?.data?.origin,
-			storeId: $page?.data?.store?.id,
-			nextPage,
-			searchParams
-		})
-		// console.log('res', res)
-		const nextPageData = res.nextPageData
-		data.products = data?.products?.concat(nextPageData)
-		data.count = res?.count
-		data.facets = res?.facets
-		data.err = !res?.estimatedTotalHits ? 'No result Not Found' : null
-		currentPage = currentPage + 1
-	} catch (e) {
-		toast(e, 'error')
-	} finally {
-		data.isLoading = false
+	if (!reachedLast) {
+		let nextPage = currentPage + 1
+		$page.url.searchParams.delete('page')
+		const searchParams = $page.url.searchParams.toString()
+
+		try {
+			data.isLoading = true
+
+			const res = await ProductService.fetchNextPageProducts({
+				categorySlug: data.category?.slug,
+				origin: $page?.data?.origin,
+				storeId: $page?.data?.store?.id,
+				nextPage,
+				searchParams
+			})
+
+			// console.log('res', res)
+
+			const nextPageData = res.nextPageData
+			data.products = data?.products?.concat(nextPageData)
+			data.count = res?.count
+			data.facets = res?.facets
+			data.err = !res?.estimatedTotalHits ? 'No result Not Found' : null
+			currentPage = currentPage + 1
+
+			if (data.count && data.products?.length === data.count) {
+				reachedLast = true
+			}
+		} catch (e) {
+			toast(e, 'error')
+		} finally {
+			data.isLoading = false
+		}
 	}
 }
 
 async function refreshData() {}
 
 onMount(() => {
-	if (!$page?.data?.isDesktop) {
+	if (!$page?.data?.isDesktop && data.count && data.products?.length === data.count) {
 		const intersectionObserver = new IntersectionObserver((entries) => {
 			if (entries[0].intersectionRatio <= 0) return
 			// load more content;
@@ -296,21 +306,19 @@ function handleFilterTags() {
 
 	{#if data.styleTags?.length}
 		<div
-			class="mb-5 block lg:hidden p-3 sm:px-10 w-screen overflow-x-auto scrollbar-none sticky top-14 sm:top-20 bg-white z-40 shadow-md">
+			class="block lg:hidden p-3 sm:px-10 w-screen overflow-x-auto scrollbar-none sticky top-14 sm:top-20 bg-white z-40 shadow-md">
 			<div class="inline-flex gap-2">
-				{#each { length: 3 } as _}
-					{#each data.styleTags || [] as t}
-						{#if t?.key}
-							<button
-								class="whitespace-nowrap block rounded-full border py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none
+				{#each data.styleTags || [] as t}
+					{#if t?.key}
+						<button
+							class="whitespace-nowrap block rounded-full border py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none
 											{$page.url.searchParams.get('tags')?.includes(t?.key)
-									? 'bg-primary-500 border-primary-500 text-white'
-									: 'bg-white hover:border-primary-500 hover:text-primary-500'}"
-								on:click="{() => goCheckbox(t?.key)}">
-								{t?.key}
-							</button>
-						{/if}
-					{/each}
+								? 'bg-primary-500 border-primary-500 text-white'
+								: 'bg-white hover:border-primary-500 hover:text-primary-500'}"
+							on:click="{() => goCheckbox(t?.key)}">
+							{t?.key}
+						</button>
+					{/if}
 				{/each}
 			</div>
 		</div>
@@ -358,11 +366,10 @@ function handleFilterTags() {
 				on:clearAll="{refreshData}" />
 		{/if}
 
-		<div class="w-full flex-1 sm:px-10 lg:px-0">
+		<div class="w-full flex-1 sm:px-10 sm:pt-10 lg:pt-0 lg:px-0">
 			{#if data.products?.length}
-				<div class="mb-5 sm:mb-10 lg:mb-20">
-					<div
-						class="mb-5 hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex">
+				<div class="flex flex-col gap-5">
+					<div class="hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex">
 						<!-- Name and count -->
 
 						<h1 class="flex flex-wrap items-center gap-2">
@@ -406,7 +413,7 @@ function handleFilterTags() {
 					<!-- Style tags -->
 
 					{#if data.styleTags?.length}
-						<div class="hidden mb-5 lg:flex flex-wrap items-center gap-2">
+						<div class="hidden lg:flex flex-wrap items-center gap-2">
 							{#each data.styleTags || [] as t}
 								{#if t?.key}
 									<button
@@ -424,10 +431,8 @@ function handleFilterTags() {
 
 					<!-- Category top description -->
 
-					{#if data.category?.topDescription}
-						<div
-							class="prose prose-sm max-w-none px-3 text-justify sm:px-0 
-							{!data.styleTags?.length ? 'my-5 lg:mt-0' : 'mb-5'}">
+					{#if data.category?.topDescription && data.category?.topDescription?.length > 11}
+						<div class="prose prose-sm max-w-none px-3 text-justify sm:px-0">
 							{@html data.category?.topDescription}
 						</div>
 					{/if}
@@ -487,11 +492,37 @@ function handleFilterTags() {
 							</li>
 						{/each}
 					</ul>
+
+					{#if !$page?.data?.isDesktop}
+						<div class="more">
+							<!-- Dot loading gif -->
+
+							{#if data.isLoading}
+								<div class="flex items-center justify-center p-6">
+									<img
+										src="{dotsLoading}"
+										alt="loading"
+										class="h-auto w-5 object-contain object-center" />
+								</div>
+							{/if}
+						</div>
+
+						<!-- Reached last -->
+
+						{#if reachedLast}
+							<p class="text-gray-500 p-4 text-center">
+								<i>~ You have seen all the products ~</i>
+							</p>
+						{/if}
+					{:else}
+						<Pagination
+							count="{Math.ceil((data?.count || 1) / data.pageSize)}"
+							current="{data?.currentPage || 1}"
+							providePaddingOnMobile />
+					{/if}
 				</div>
 			{:else}
-				<div
-					class="mb-5 flex items-center justify-center px-3 sm:mb-10 sm:px-0 lg:mb-20"
-					style="height: 60vh;">
+				<div class="flex items-center justify-center px-3 sm:px-0" style="height: 60vh;">
 					<div class="m-10 flex flex-col items-center justify-center text-center">
 						<h2 class="mb-10 text-xl capitalize sm:text-2xl lg:text-3xl">
 							{#if data.searchData}You searched for "{data.searchData}"{/if}
@@ -499,14 +530,14 @@ function handleFilterTags() {
 
 						<div class="mb-5">
 							<img
-								src="{noNoDataAvailable}"
-								alt="no data availible"
-								class="h-20 w-20 object-contain text-xs" />
+								src="{noDataAvailable}"
+								alt="no data available"
+								class="h-60 w-auto object-contain text-xs" />
 						</div>
 
-						<h2>We couldn't find any matches!</h2>
+						<h2 class="mb-1 font-semibold">We couldn't find any matches!</h2>
 
-						<p class="mb-5 text-center text-xs text-gray-500">
+						<p class="mb-5 text-center text-sm text-gray-500">
 							Please check the spelling or try searching something else
 						</p>
 
@@ -514,31 +545,12 @@ function handleFilterTags() {
 					</div>
 				</div>
 			{/if}
-
-			{#if !$page?.data?.isDesktop}
-				<div class="more">
-					<!-- Dot loading gif -->
-
-					{#if data.isLoading}
-						<div class="flex items-center justify-center p-6">
-							<img
-								src="{dotsLoading}"
-								alt="loading"
-								class="h-auto w-5 object-contain object-center" />
-						</div>
-					{/if}
-				</div>
-			{:else}
-				<Pagination
-					count="{Math.ceil((data?.count || 1) / data.pageSize)}"
-					current="{data?.currentPage || 1}" />
-			{/if}
 		</div>
 	</div>
 
 	<!-- CATEGORY DESCRIPTION -->
 
-	{#if data.category?.description}
+	{#if data.category?.description && data.category?.description?.length > 11}
 		<div class="justify-center bg-gray-50 px-3 py-10 sm:px-10 sm:py-20">
 			<div
 				class="container mx-auto grid max-w-6xl grid-cols-1 gap-10 text-sm sm:gap-20 md:grid-cols-6">
@@ -552,10 +564,10 @@ function handleFilterTags() {
 					</h2>
 
 					<ul class="flex flex-col gap-2">
-						<li class="grid grid-cols-4 gap-5 items-center font-semibold uppercase">
-							<span class="col-span-3">{data.category?.name}</span>
+						<li class="grid grid-cols-6 items-center gap-5 font-semibold uppercase">
+							<span class="col-span-5">{data.category?.name}</span>
 
-							<span class="col-span-1">Price (Rs)</span>
+							<span class="col-span-1">Price <br /> (Rs)</span>
 						</li>
 						{#if data?.products}
 							{#each data.products as p, px}
@@ -564,8 +576,8 @@ function handleFilterTags() {
 										<a
 											href="/product/{p.slug}"
 											aria-label="Click to route product details page"
-											class="grid grid-cols-4 gap-5">
-											<span class="col-span-3 text-justify">{p.name}</span>
+											class="grid grid-cols-6 gap-5">
+											<span class="col-span-5 text-justify">{p.name}</span>
 
 											<span class="col-span-1 whitespace-nowrap">
 												{currency(p.price, $page.data?.store?.currencySymbol)}

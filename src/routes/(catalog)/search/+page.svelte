@@ -27,7 +27,7 @@ import DesktopFilter from '$lib/components/DesktopFilter.svelte'
 import dotsLoading from '$lib/assets/dots-loading.gif'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
 import MobileFilter from '$lib/components/MobileFilter.svelte'
-import noNoDataAvailable from '$lib/assets/no/no-data-availible.png'
+import noDataAvailable from '$lib/assets/no/no-data-available.png'
 import Pagination from '$lib/components/Pagination.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
@@ -110,11 +110,13 @@ let seoProps = {
 	twitterImage: { url: $page.data.store?.logo }
 }
 
+let currentPage = 1
+let hidden = true
+let reachedLast = false
 let selectedFilter
 let showFilter = false
-let showSort = false
-let hidden = true
 let showOnPx = 600
+let showSort = false
 let y
 
 $: innerWidth = 0
@@ -125,7 +127,7 @@ $: if (data?.count === 0) {
 
 async function saveSearchData(searchData) {
 	try {
-		await savePopularSearch({
+		await PopularSearchService.savePopularSearch({
 			id: 'new',
 			// popularity: 0,
 			text: searchData,
@@ -166,44 +168,54 @@ async function sortNow(s) {
 	} else {
 		await u.searchParams.set('sort', s)
 	}
-	window.scroll({ top: 0, behavior: 'smooth' })
-	await goto(`/search?${u.toString()}`)
 	// await invalidateAll()
+	goto(u.toString())
+	window.scroll({ top: 0, behavior: 'smooth' })
+
+	// await goto(`/search?${$page.url.searchParams.toString()}`)
 }
 
-let currentPage = 1
-
 async function loadNextPage() {
-	let nextPage = currentPage + 1
-	$page.url.searchParams.delete('page')
-	const searchParams = $page.url.searchParams.toString()
-	try {
-		data.isLoading = true
-		const res = await ProductService.fetchNextPageProducts({
-			categorySlug: data.category?.slug,
-			origin: $page?.data?.origin,
-			storeId: $page?.data?.store?.id,
-			nextPage,
-			searchParams
-		})
-		// console.log('res', res)
-		const nextPageData = res.nextPageData
-		data.products = data?.products?.concat(nextPageData)
-		data.count = res?.count
-		data.facets = res?.facets
-		data.err = !res?.estimatedTotalHits ? 'No result Not Found' : null
-		currentPage = currentPage + 1
-	} catch (e) {
-		toast(e, 'error')
-	} finally {
-		data.isLoading = false
+	if (!reachedLast) {
+		let nextPage = currentPage + 1
+		$page.url.searchParams.delete('page')
+		const searchParams = $page.url.searchParams.toString()
+
+		try {
+			data.isLoading = true
+
+			const res = await ProductService.fetchNextPageProducts({
+				categorySlug: data.category?.slug,
+				origin: $page?.data?.origin,
+				storeId: $page?.data?.store?.id,
+				nextPage,
+				searchParams
+			})
+
+			// console.log('res', res)
+
+			const nextPageData = res.nextPageData
+			data.products = data?.products?.concat(nextPageData)
+			data.count = res?.count
+			data.facets = res?.facets
+			data.err = !res?.estimatedTotalHits ? 'No result Not Found' : null
+			currentPage = currentPage + 1
+
+			if (data.count && data.products?.length === data.count) {
+				reachedLast = true
+			}
+		} catch (e) {
+			toast(e, 'error')
+		} finally {
+			data.isLoading = false
+		}
 	}
 }
 
 async function refreshData() {}
 
 onMount(() => {
-	if (!$page?.data?.isDesktop) {
+	if (!$page?.data?.isDesktop && data.count && data.products?.length === data.count) {
 		const intersectionObserver = new IntersectionObserver((entries) => {
 			if (entries[0].intersectionRatio <= 0) return
 			// load more content;
@@ -315,21 +327,19 @@ function handleFilterTags() {
 
 	{#if data.styleTags?.length}
 		<div
-			class="mb-5 block lg:hidden p-3 sm:px-10 w-screen overflow-x-auto scrollbar-none sticky top-14 sm:top-20 bg-white z-40 shadow-md">
+			class="block lg:hidden p-3 sm:px-10 w-screen overflow-x-auto scrollbar-none sticky top-14 sm:top-20 bg-white z-40 shadow-md">
 			<div class="inline-flex gap-2">
-				{#each { length: 3 } as _}
-					{#each data.styleTags || [] as t}
-						{#if t?.key}
-							<button
-								class="whitespace-nowrap block rounded-full border py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none
+				{#each data.styleTags || [] as t}
+					{#if t?.key}
+						<button
+							class="whitespace-nowrap block rounded-full border py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none
 											{$page.url.searchParams.get('tags')?.includes(t?.key)
-									? 'bg-primary-500 border-primary-500 text-white'
-									: 'bg-white hover:border-primary-500 hover:text-primary-500'}"
-								on:click="{() => goCheckbox(t?.key)}">
-								{t?.key}
-							</button>
-						{/if}
-					{/each}
+								? 'bg-primary-500 border-primary-500 text-white'
+								: 'bg-white hover:border-primary-500 hover:text-primary-500'}"
+							on:click="{() => goCheckbox(t?.key)}">
+							{t?.key}
+						</button>
+					{/if}
 				{/each}
 			</div>
 		</div>
@@ -377,11 +387,10 @@ function handleFilterTags() {
 				on:clearAll="{refreshData}" />
 		{/if}
 
-		<div class="w-full flex-1 sm:px-10 lg:px-0">
+		<div class="w-full flex-1 sm:px-10 sm:pt-10 lg:pt-0 lg:px-0">
 			{#if data.products?.length}
-				<div class="mb-5 sm:mb-10 lg:mb-20">
-					<div
-						class="mb-5 hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex">
+				<div class="flex flex-col gap-5">
+					<div class="hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex">
 						<!-- Name and count -->
 
 						<h1 class="flex flex-wrap items-center gap-2">
@@ -425,7 +434,7 @@ function handleFilterTags() {
 					<!-- Style tags -->
 
 					{#if data.styleTags?.length}
-						<div class="hidden mb-5 lg:flex flex-wrap items-center gap-2">
+						<div class="hidden lg:flex flex-wrap items-center gap-2">
 							{#each data.styleTags || [] as t}
 								{#if t?.key}
 									<button
@@ -496,11 +505,37 @@ function handleFilterTags() {
 							</li>
 						{/each}
 					</ul>
+
+					{#if !$page?.data?.isDesktop}
+						<div class="more">
+							<!-- Dot loading gif -->
+
+							{#if data.isLoading}
+								<div class="flex items-center justify-center p-6">
+									<img
+										src="{dotsLoading}"
+										alt="loading"
+										class="h-auto w-5 object-contain object-center" />
+								</div>
+							{/if}
+						</div>
+
+						<!-- Reached last -->
+
+						{#if reachedLast}
+							<p class="text-gray-500 p-4 text-center">
+								<i>~ You have seen all the products ~</i>
+							</p>
+						{/if}
+					{:else}
+						<Pagination
+							count="{Math.ceil((data?.count || 1) / data.pageSize)}"
+							current="{data?.currentPage || 1}"
+							providePaddingOnMobile />
+					{/if}
 				</div>
 			{:else}
-				<div
-					class="mb-5 flex items-center justify-center px-3 sm:mb-10 sm:px-0 lg:mb-20"
-					style="height: 60vh;">
+				<div class="flex items-center justify-center px-3 sm:px-0" style="height: 60vh;">
 					<div class="m-10 flex flex-col items-center justify-center text-center">
 						<h2 class="mb-10 text-xl capitalize sm:text-2xl lg:text-3xl">
 							{#if data.searchData}You searched for "{data.searchData}"{/if}
@@ -508,39 +543,20 @@ function handleFilterTags() {
 
 						<div class="mb-5">
 							<img
-								src="{noNoDataAvailable}"
-								alt="no data availible"
-								class="h-20 w-20 object-contain text-xs" />
+								src="{noDataAvailable}"
+								alt="no data available"
+								class="h-60 w-auto object-contain text-xs" />
 						</div>
 
-						<h2>We couldn't find any matches!</h2>
+						<h2 class="mb-1 font-semibold">We couldn't find any matches!</h2>
 
-						<p class="mb-5 text-center text-xs text-gray-500">
+						<p class="mb-5 text-center text-sm text-gray-500">
 							Please check the spelling or try searching something else
 						</p>
 
 						<PrimaryButton class="text-sm" on:click="{() => goto('/')}">Back to Home</PrimaryButton>
 					</div>
 				</div>
-			{/if}
-
-			{#if !$page?.data?.isDesktop}
-				<div class="more">
-					<!-- Dot loading gif -->
-
-					{#if data.isLoading}
-						<div class="flex items-center justify-center p-6">
-							<img
-								src="{dotsLoading}"
-								alt="loading"
-								class="h-auto w-5 object-contain object-center" />
-						</div>
-					{/if}
-				</div>
-			{:else}
-				<Pagination
-					count="{Math.ceil((data?.count || 1) / data.pageSize)}"
-					current="{data?.currentPage || 1}" />
 			{/if}
 		</div>
 	</div>

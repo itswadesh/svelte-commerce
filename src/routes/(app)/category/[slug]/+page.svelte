@@ -1,4 +1,5 @@
 <script lang="ts">
+import { CategoryService } from '$lib/services'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
@@ -8,10 +9,10 @@ import DesktopFilter from '$lib/components/DesktopFilter.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import MobileFilter from '$lib/components/MobileFilter.svelte'
 import MobileFooter from '$lib/MobileFooter.svelte'
+import noDataAvailable from '$lib/assets/no/no-data-available.png'
 import Pagination from '$lib/components/Pagination.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
-import { CategoryService } from '$lib/services'
 
 export let data
 
@@ -123,12 +124,10 @@ async function refreshData() {
 							</h1>
 
 							<div class="mb-5">
-								<LazyImg
-									src="/no/no-data-availible.png"
-									alt="no data availible"
-									width="80"
-									height="80"
-									class="h-20 w-20 text-xs" />
+								<img
+									src="{noDataAvailable}"
+									alt="no data available"
+									class="h-60 w-auto object-contain text-xs" />
 							</div>
 
 							<p class="mb-5 text-center text-gray-500">No data found</p>
@@ -143,7 +142,7 @@ async function refreshData() {
 		</div>
 	</div>
 
-	<div class="block sm:hidden">
+	<div class="block lg:hidden">
 		<MobileFooter />
 	</div>
 </div>
