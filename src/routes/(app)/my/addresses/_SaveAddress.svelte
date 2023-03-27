@@ -79,8 +79,8 @@ async function SaveAddress(address) {
 			}
 		}
 	} catch (e) {
-		err = e
-		// toast(e, 'error')
+		err = e?.body
+		toast(err, 'error')
 	} finally {
 		loading = false
 		formChanged = false
@@ -134,7 +134,7 @@ async function SaveAddress(address) {
 				</h6>
 
 				<div class="mb-2 w-full max-w-md">
-					<Textbox type="email" placeholder="Enter Email" bind:value="{address.email}" required />
+					<Textbox type="email" placeholder="Enter Email" bind:value="{address.email}" />
 				</div>
 			</div>
 

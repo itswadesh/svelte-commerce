@@ -28,7 +28,7 @@ export { clazz as class }
 		<div>
 			<header
 				class="mb-5 flex flex-col items-start md:items-center justify-between md:flex-row gap-2">
-				<h1 class="text-2xl font-semibold md:text-3xl lg:text-4xl">
+				<h1 class="text-2xl font-medium md:text-3xl lg:text-4xl">
 					Orders
 
 					{#if orders.count}
@@ -83,7 +83,7 @@ export { clazz as class }
 														alt=" "
 														width="80"
 														class="h-auto w-20 object-contain object-top" />
-												{:else if !item.img}
+												{:else if item.img}
 													<LazyImg
 														src="{item.img}"
 														alt=" "
@@ -264,8 +264,8 @@ export { clazz as class }
 			</ul>
 
 			<Pagination
-				count="{Math.ceil(orders.count / orders.pageSize)}"
-				current="{+orders.currentPage}" />
+				count="{Math.ceil((orders.count || 1) / orders.pageSize)}"
+				current="{orders.currentPage || 1}" />
 		</div>
 	{:else}
 		<div class="flex h-[70vh] flex-col items-center justify-center text-center">

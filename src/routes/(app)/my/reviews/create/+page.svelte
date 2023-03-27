@@ -1,9 +1,9 @@
 <script>
+import { getExtension, toast } from '$lib/utils'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { post } from '$lib/utils/api'
 import { ReviewService } from '$lib/services'
-import { getExtension, toast } from '$lib/utils'
 import BackButton from '$lib/ui/BackButton.svelte'
 import dayjs from 'dayjs'
 import Errors from '$lib/ui/Errors.svelte'
@@ -39,6 +39,7 @@ let information = [
 let review = {
 	id: 'new',
 	pid: data.product?._id,
+	oid: $page?.url?.searchParams.get('oid') || null,
 	message: '',
 	rating: null
 }
@@ -95,6 +96,7 @@ async function saveReviewproduct(review) {
 		await ReviewService.saveReview({
 			id: review.id,
 			pid: review.pid,
+			oid: review.oid,
 			message: review.message,
 			rating: review.rating,
 			images,
@@ -106,7 +108,7 @@ async function saveReviewproduct(review) {
 
 		if (data.product) goto(`${data.ref}#ratings-and-reviews`)
 	} catch (e) {
-		toast(e, 'error')
+		toast(e?.body?.message || e?.body, 'error')
 	} finally {
 	}
 }

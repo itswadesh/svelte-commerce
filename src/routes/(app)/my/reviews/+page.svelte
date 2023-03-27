@@ -80,7 +80,7 @@ async function remove(id) {
 		<div>
 			<header
 				class="mb-5 flex flex-col items-start md:items-center justify-between md:flex-row gap-2">
-				<h1 class="text-2xl font-semibold md:text-3xl lg:text-4xl">
+				<h1 class="text-2xl font-medium md:text-3xl lg:text-4xl">
 					Reviews
 
 					{#if data.reviews.count}
@@ -205,9 +205,9 @@ async function remove(id) {
 
 			<Pagination
 				count="{Math.ceil(
-					data.reviews?.data?.myReviews?.count / data.reviews?.data?.myReviews?.pageSize
+					(data.reviews?.data?.myReviews?.count || 1) / data.reviews?.data?.myReviews?.pageSize
 				)}"
-				current="{+data.currentPage}" />
+				current="{data?.currentPage || 1}" />
 		</div>
 	{:else}
 		<div class="flex h-[70vh] flex-col items-center justify-center text-center">

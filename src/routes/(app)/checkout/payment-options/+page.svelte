@@ -92,7 +92,7 @@ async function submit(pm) {
 	if (paymentMethod === 'COD') {
 		try {
 			loading = true
-			toast('Please wait...your order with COD is on process', 'warning')
+
 			const res = await OrdersService.codCheckout({
 				address: data.addressId,
 				paymentMethod: 'COD',
