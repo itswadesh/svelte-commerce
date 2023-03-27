@@ -26,7 +26,7 @@ let openSidebar = false
 		</div>
 	</PageTransitions>
 
-	<div class="hidden sm:block">
+	<div class="hidden md:block">
 		<Footer me="{data.me}" cart="{data.cart}" />
 	</div>
 </div>

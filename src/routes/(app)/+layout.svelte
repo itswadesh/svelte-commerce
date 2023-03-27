@@ -17,8 +17,6 @@ import Footer from '$lib/Footer.svelte'
 import Nav from '$lib/Nav.svelte'
 import PageTransitions from '$lib/PageTransitions.svelte'
 
-// console.log('zzzzzzzzzzzzzzzzzz', $page)
-
 export let data
 
 let openSidebar = false
@@ -60,7 +58,7 @@ let showCartSidebar = false
 		</div>
 	</PageTransitions>
 
-	<div class="hidden sm:block">
+	<div class="hidden lg:block">
 		<Footer me="{data.me}" />
 	</div>
 </div>
