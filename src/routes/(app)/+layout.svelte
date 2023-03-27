@@ -17,7 +17,6 @@ import Footer from '$lib/Footer.svelte'
 import Nav from '$lib/Nav.svelte'
 import PageTransitions from '$lib/PageTransitions.svelte'
 
-
 export let data
 
 let openSidebar = false
@@ -29,8 +28,7 @@ let showCartSidebar = false
 		me="{data.me}"
 		cart="{data.cart}"
 		bind:showCartSidebar="{showCartSidebar}"
-		bind:openSidebar="{openSidebar}"
-	/>
+		bind:openSidebar="{openSidebar}" />
 
 	<PageTransitions url="{data.url}">
 		<div class="mt-14 w-full flex-1 sm:mt-20">
@@ -60,7 +58,7 @@ let showCartSidebar = false
 		</div>
 	</PageTransitions>
 
-	<div class="hidden sm:block">
+	<div class="hidden lg:block">
 		<Footer me="{data.me}" />
 	</div>
 </div>
