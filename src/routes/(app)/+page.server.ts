@@ -4,10 +4,14 @@ import { DealsService, HomeService } from '$lib/services'
 import { error } from '@sveltejs/kit'
 
 export async function load({ locals, setHeaders }) {
-	const { store, origin } = locals
 	// console.log('Store ID.............', locals.store?.id)
+
+	const { store, origin } = locals
+
+	let home = {}
+	let deals = {}
+
 	try {
-		let home
 		// const cached = await redis.get(`home-www-${locals.store?.id}`)
 		// if (cached) {
 		// 	console.log('Cache hit!')
@@ -18,9 +22,10 @@ export async function load({ locals, setHeaders }) {
 		// setHeaders({ 'cache-control': 'max-age: 600' })
 		// redis.set(`home-www-${locals.store?.id}`, JSON.stringify(home), 'EX', 600)
 		// }
-		const deals = [] //await fetchDeals({ storeId: store?.id, server: true })
+		deals = await DealsService.fetchDeals({ storeId: store?.id, server: true })
+
 		if (home) {
-			return { home: home, deals: deals || {} }
+			return { home: home, deals: deals }
 		}
 	} catch (e) {
 		throw error(
