@@ -19,7 +19,9 @@ let count = productReviews?.count
 let currentPage = 1
 let loading = false
 let openReviewGallery = []
+let openReviewImages = []
 let reachedLast = false
+let selectedProductGallery = []
 
 onMount(() => {
 	const intersectionObserver = new IntersectionObserver((entries) => {
@@ -67,6 +69,27 @@ async function loadNextPage() {
 			loading = false
 		}
 	}
+}
+
+const handleSelectedProductGallery = (review, rx) => {
+	// console.log('review, rx', review, rx)
+
+	selectedProductGallery = review.images
+		.map((item) => {
+			return {
+				createdAt: review.createdAt,
+				image: item,
+				message: review.message,
+				product: review.product,
+				rating: review.rating,
+				user: review.user
+			}
+		})
+		.flat()
+
+	// console.log('selectedProductGallery', selectedProductGallery)
+
+	openReviewImages[rx] = true
 }
 </script>
 
@@ -157,16 +180,16 @@ async function loadNextPage() {
 								<button
 									type="button"
 									class="flex flex-wrap gap-1"
-									on:click="{() => (openReviewGallery[rx] = true)}">
+									on:click="{() => handleSelectedProductGallery(review, rx)}">
 									{#each review?.images as img}
 										<img src="{img}" alt="" class="h-20 w-14 rounded-md object-cover" />
 									{/each}
 								</button>
 
 								<ReviewGallery
-									showPhotosModal="{openReviewGallery[rx]}"
-									gallery="{review?.images}"
-									on:close="{() => (openReviewGallery[rx] = false)}" />
+									showPhotosModal="{openReviewImages[rx]}"
+									gallery="{selectedProductGallery}"
+									on:close="{() => (openReviewImages[rx] = false)}" />
 							{/if}
 
 							<div class="flex flex-wrap items-center gap-1 text-gray-500 text-xs">

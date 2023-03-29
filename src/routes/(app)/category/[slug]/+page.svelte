@@ -6,7 +6,6 @@ import { page } from '$app/stores'
 import { sorts } from '$lib/config'
 import { toast } from '$lib/utils'
 import DesktopFilter from '$lib/components/DesktopFilter.svelte'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import MobileFilter from '$lib/components/MobileFilter.svelte'
 import MobileFooter from '$lib/MobileFooter.svelte'
 import noDataAvailable from '$lib/assets/no/no-data-available.png'
@@ -115,7 +114,7 @@ async function refreshData() {
 						{/each}
 					</div>
 
-					<Pagination count="{Math.ceil(productsCount / 40)}" current="{currentPage}" />
+					<Pagination count="{Math.ceil((productsCount || 1) / 40)}" current="{currentPage || 1}" />
 				{:else}
 					<div class="flex items-center justify-center" style="height: 60vh;">
 						<div class="m-10 flex flex-col items-center justify-center text-center">
@@ -141,6 +140,8 @@ async function refreshData() {
 			</div>
 		</div>
 	</div>
+
+	<!-- MOBILE FOOTER -->
 
 	<div class="block lg:hidden">
 		<MobileFooter />
