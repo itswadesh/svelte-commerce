@@ -511,7 +511,7 @@ async function getStoreData() {
 
 		<div
 			class="flex flex-wrap items-center justify-center gap-2 text-sm text-gray-500 sm:gap-5 md:justify-between">
-			<p>Copyright {getYear()} © {$page.data.store?.websiteName} made with ❤️ in India</p>
+			<p>Copyright {getYear()} © {$page.data.store?.websiteName} made with ❤️</p>
 
 			<div class="flex items-center justify-center gap-4">
 				<a
