@@ -41,7 +41,7 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies }) =>
 		if (e?.status === 401) {
 			throw redirect(307, locals.store?.loginUrl || '/auth/login')
 		}
-		throw error(400, e?.message || e)
+		throw error(400, e?.body?.message || e)
 	} finally {
 		loading = false
 	}

@@ -32,9 +32,8 @@ export const fetchRefreshCart = async ({ origin, storeId, server = false, sid = 
 		}
 
 		return res || {}
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data?.message)
+	} catch (e) {
+		throw error(e.status, e.message)
 	}
 }
 
