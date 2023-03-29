@@ -2,7 +2,6 @@
 import { AutocompleteService } from '$lib/services'
 import { createEventDispatcher, onMount } from 'svelte'
 import { page } from '$app/stores'
-import { provider } from '$lib/config'
 import AutocompleteItem from './AutocompleteItem.svelte'
 
 export let placeholder = 'Search Products'
@@ -19,12 +18,14 @@ onMount(async () => {
 
 const getAutocompleteData = async (filterText = '') => {
 	try {
-		return await AutocompleteService.fetchAutocompleteData({
-			q: filterText,
-			origin: $page?.data?.origin,
-			storeId: $page?.data?.store?.id
-		})
+		const ac =
+			(await AutocompleteService.fetchAutocompleteData({
+				q: filterText || '',
+				origin: $page?.data?.origin,
+				storeId: $page?.data?.store?.id
+			})) || []
 	} catch (e) {
+		return []
 		// console.log('err....', e)
 	}
 }
