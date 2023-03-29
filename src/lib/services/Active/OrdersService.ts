@@ -153,7 +153,7 @@ export const cashfreeCheckout = async ({
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message?.message || e.message)
 	}
 }
 
