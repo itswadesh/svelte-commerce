@@ -308,12 +308,14 @@ function handleFilterTags() {
 		<h2 class="w-28 truncate font-semibold capitalize leading-4">{data.category?.name || ''}</h2>
 
 		<p class="text-xs">
-			{data.count}
+			{#if data.count}
+				<b>
+					{data.count}
+				</b>
 
-			{#if data.count > 1}
 				Items
 			{:else}
-				Item
+				No Item
 			{/if}
 		</p>
 	</div>
@@ -397,19 +399,13 @@ function handleFilterTags() {
 
 							-
 
-							<p>
-								<span class="text-xl font-bold capitalize md:text-2xl">
+							<span>
+								<span class="font-bold text-2xl">
 									{data.count}
 								</span>
 
-								<span>
-									{#if data.count > 1}
-										Items
-									{:else}
-										Item
-									{/if}
-								</span>
-							</p>
+								Items
+							</span>
 						</h1>
 
 						<!-- Sort -->
