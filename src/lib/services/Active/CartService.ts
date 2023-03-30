@@ -50,9 +50,8 @@ export const fetchMyCart = async ({ origin, storeId, server = false, sid = null 
 		}
 
 		return res || {}
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data?.message)
+	} catch (e) {
+		throw error(e.status, e.message)
 	}
 }
 
