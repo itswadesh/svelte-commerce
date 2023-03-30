@@ -93,7 +93,7 @@ async function getStoreData() {
 <footer class="w-full justify-center bg-gray-50 p-3 text-sm sm:p-10">
 	<div class="container mx-auto max-w-6xl">
 		<div
-			class="mb-4 flex w-full flex-col flex-wrap items-start justify-start gap-5 sm:mb-8 sm:gap-10 h-full sm:max-h-[35rem] xl:max-h-96">
+			class="mb-4 flex w-full flex-col flex-wrap items-start justify-start gap-5 sm:mb-8 sm:gap-10 h-full sm:max-h-[35rem] xl:max-h-96 overflow-hidden">
 			{#if footerItems?.length}
 				{#each footerItems as item}
 					<div>
@@ -123,6 +123,7 @@ async function getStoreData() {
 					</div>
 				{/each}
 			{/if}
+
 			{#if megamenu?.length}
 				<div>
 					<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Collections</h5>
