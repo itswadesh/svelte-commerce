@@ -1,20 +1,12 @@
-<style>
-.frosted {
-	background-image: url('/auth/login/bg-lighter.svg');
-	backdrop-filter: blur(15px);
-	background-color: hsla(0, 0%, 100%, 0.75);
-}
-</style>
-
 <script>
 import { browser } from '$app/environment'
-import { GOOGLE_CLIENT_ID, provider } from '$lib/config'
-import { googleOneTap } from '../email-login/google-one-tap'
 import { goto, invalidateAll } from '$app/navigation'
-import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import { post } from '$lib/utils/api'
 import { toast } from '$lib/utils'
+import { UserService } from '$lib/services'
 import Cookie from 'cookie-universal'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import SendOtp from '../_SendOtp.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import VerifyOtp from '../_VerifyOtp.svelte'
@@ -34,36 +26,20 @@ let otpRequestSend = false
 let resendAfter = 0
 let ref = $page?.url?.searchParams.get('ref')
 
-onMount(() => {
-	googleOneTap(
-		{
-			client_id: GOOGLE_CLIENT_ID
-		},
-		async (res) => {
-			const UserService = await import(`$lib/services/${provider}/UserService.ts`)
-			const onetap = await UserService.googleOneTapLoginService({
-				data: res,
-				origin: $page.data.origin
-			})
-			const me = {
-				email: onetap.email,
-				phone: onetap.phone,
-				firstName: onetap.firstName,
-				lastName: onetap.lastName,
-				avatar: onetap.avatar,
-				role: onetap.role,
-				verified: onetap.verified,
-				active: onetap.active
-			}
-			await cookies.set('me', me, { path: '/' })
-			let r = ref || '/'
-			if (browser) goto(r)
-		}
-	)
-})
-
 async function handleSendOTP({ detail }) {
 	phone = detail
+	const role = $page.url.searchParams.get('role')
+	const store = $page.url.searchParams.get('store')
+	const getOtpPayLoad = {
+		phone,
+		role: 'admin'
+	}
+	if (role && role !== 'null' && role !== null) {
+		getOtpPayLoad.role = role
+	}
+	if (store && store !== 'null' && store !== null) {
+		getOtpPayLoad.store = store
+	}
 	try {
 		loading = true
 		const res = await UserService.getOtpService({
@@ -71,10 +47,11 @@ async function handleSendOTP({ detail }) {
 			storeId: data.store?.id,
 			origin: data.origin
 		})
+
 		resendAfter = res?.timer
 		otpRequestSend = true
 	} catch (e) {
-		toast(e?.body?.message || e, 'error')
+		toast(e.message, 'error')
 	} finally {
 		loading = false
 	}
@@ -84,13 +61,16 @@ async function handleVerifyOtp({ detail }) {
 	try {
 		loading = true
 		const otp = detail
+
 		const res = await UserService.verifyOtpService({
 			phone,
 			otp,
 			storeId: data.store?.id,
 			origin: data.origin
 		})
+
 		const me = {
+			id: res._id,
 			email: res.email,
 			phone: res.phone,
 			firstName: res.firstName,
@@ -98,14 +78,18 @@ async function handleVerifyOtp({ detail }) {
 			avatar: res.avatar,
 			role: res.role,
 			verified: res.verified,
-			active: res.active
+			active: res.active,
+			store: res.store
 		}
+
 		await cookies.set('me', me, { path: '/' })
-		// await invalidateAll()
+		// $page.data.me = me
+		await invalidateAll()
+
 		let r = ref || '/'
 		if (browser) goto(r)
 	} catch (e) {
-		toast(e?.body?.message || e, 'error')
+		toast(e, 'error')
 	} finally {
 		loading = false
 	}
@@ -115,13 +99,44 @@ function changeNumber() {
 	phone = ''
 	otpRequestSend = false
 }
+
+function getLoginUrl(baseUrl) {
+	const query = $page.url.searchParams.toString()
+	const ref = $page.url.searchParams.get('ref')
+	// let baseUrl = `${$page.data.origin}/auth/login`
+	let url = '' //new URL(baseUrl)
+	if (!!ref) {
+		// url.searchParams.set('ref', ref || '')
+		url = `${baseUrl}?ref=${ref}`
+	} else {
+		url = baseUrl + '?' + query
+	}
+	return url.toString()
+}
 </script>
 
 <SEO {...seoProps} />
 
-<div
-	class="frosted container mx-auto flex w-full max-w-sm flex-col rounded-2xl border bg-cover bg-center bg-no-repeat p-10 shadow-2xl"
-	style="background-image: url('/login/bg-lighter.svg');">
+<div class="flex w-full max-w-md flex-col rounded-2xl border bg-white p-10 shadow-2xl">
+	<a href="/" aria-label="Go to home" class="mx-auto mb-8 block max-w-max">
+		{#if $page.data.store?.logo}
+			<LazyImg
+				src="{$page.data.store?.logo}"
+				alt="{$page.data.store?.websiteName}"
+				height="80"
+				class="h-14 w-32 object-contain object-center" />
+		{:else}
+			<h1
+				class="bg-gradient-to-b from-primary-500 to-primary-700 bg-clip-text text-3xl font-extrabold text-transparent underline decoration-gray-800">
+				{#if $page.data.store?.websiteName}
+					{$page.data.store?.websiteName}
+				{:else}
+					Litekart
+				{/if}
+			</h1>
+		{/if}
+	</a>
+
 	<h1 class="mb-8 w-full text-center text-2xl font-bold text-primary-500">Login/Register</h1>
 
 	{#if !otpRequestSend}
@@ -141,25 +156,18 @@ function changeNumber() {
 
 	<div class="mx-auto mb-5 flex max-w-max flex-col gap-1 text-center text-sm">
 		<a
-			href="{`/auth/login?ref=${$page.url.searchParams.get('ref') || '/'}`}"
+			href="{getLoginUrl('/auth/login')}"
 			aria-label="Click to login with email"
 			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
 			Login with Email
 		</a>
 
-		<a
+		<!-- <a
 			href="{`/auth/signup?ref=${$page.url.searchParams.get('ref') || '/'}`}"
 			aria-label="Click to login with email"
 			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
 			Signup
-		</a>
-
-		<a
-			href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store?.id}"
-			aria-label="Click to login as vendor"
-			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
-			Join as Vendor
-		</a>
+		</a> -->
 	</div>
 
 	<p class="text-center text-sm text-gray-500">

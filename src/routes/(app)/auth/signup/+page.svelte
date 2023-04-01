@@ -1,33 +1,36 @@
-<style>
-.frosted {
-	background-image: url('/auth/login/bg-lighter.svg');
-	backdrop-filter: blur(15px);
-	background-color: hsla(0, 0%, 100%, 0.75);
-}
-</style>
-
 <script>
 import { browser } from '$app/environment'
+import { fly } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
+import { IS_DEV } from '$lib/config'
 import { page } from '$app/stores'
 import { post } from '$lib/utils/api'
 import { toast } from '$lib/utils'
+import { UserService } from '$lib/services'
 import Cookie from 'cookie-universal'
 import Error from '$lib/components/Error.svelte'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
-import { signupService } from '$lib/services/UserService'
 
 const cookies = Cookie()
 
 const seoProps = {
-	title: 'Email Login',
-	description: 'Email Login'
+	title: 'Signup',
+	description: 'Signup'
 }
 
 let ref = $page?.url?.searchParams.get('ref')
-let newResistration = {}
+let role = $page?.url?.searchParams.get('role') || 'admin'
+let store = $page?.url?.searchParams.get('store') || undefined
+let newResistration = {
+	firstName: IS_DEV ? 'Swadesh' : '',
+	lastName: IS_DEV ? 'Behera' : '',
+	email: IS_DEV ? 'hi@litekart.in' : '',
+	password: IS_DEV ? 'litekart' : '',
+	passwordConfirmation: IS_DEV ? 'litekart' : ''
+}
 let loading = false
 let showPassword = false
 let passwordType = 'password'
@@ -49,22 +52,39 @@ function toggleConfirmPassword() {
 	} else confirmPasswordType = 'password'
 }
 
+function getLoginUrl(baseUrl) {
+	const query = $page.url.searchParams.toString()
+	const ref = $page.url.searchParams.get('ref')
+	// let baseUrl = `${$page.data.origin}/auth/login`
+	let url = '' //new URL(baseUrl)
+	if (!!ref) {
+		// url.searchParams.set('ref', ref || '')
+		url = `${baseUrl}?ref=${ref}`
+	} else {
+		url = baseUrl + '?' + query
+	}
+	return url.toString()
+}
+
 async function submit(n) {
 	try {
 		loading = true
 		const { firstName, lastName, phone, email, password, passwordConfirmation } = n
-		const res = await signupService({
+
+		const res = await UserService.signupService({
 			firstName: firstName,
 			lastName: lastName,
 			phone: phone,
 			email: email,
 			password: password,
 			passwordConfirmation: passwordConfirmation,
+			role: role,
 			storeId: $page.data.store.id,
 			origin: $page.data.origin
 		})
 
 		const me = {
+			id: res._id,
 			email: res.email,
 			phone: res.phone,
 			firstName: res.firstName,
@@ -72,15 +92,17 @@ async function submit(n) {
 			avatar: res.avatar,
 			role: res.role,
 			verified: res.verified,
-			active: res.active
+			active: res.active,
+			store: res.store
 		}
 
 		await cookies.set('me', me, { path: '/' })
 		// $page.data.me = me
 		await invalidateAll()
-		let r = ref || '/'
-		if (browser) goto(r)
+
+		if (browser) goto('/')
 	} catch (e) {
+		toast(e, 'error')
 		err = e
 	} finally {
 		loading = false
@@ -90,9 +112,26 @@ async function submit(n) {
 
 <SEO {...seoProps} />
 
-<div
-	class="frosted container mx-auto flex w-full max-w-sm flex-col rounded-2xl border bg-cover bg-center bg-no-repeat p-10 shadow-2xl"
-	style="background-image: url('/login/bg-lighter.svg');">
+<div class="flex w-full max-w-md flex-col rounded-2xl border bg-white p-10 shadow-2xl">
+	<a href="/" aria-label="Go to home" class="mx-auto mb-8 block max-w-max">
+		{#if $page.data.store?.logo}
+			<LazyImg
+				src="{$page.data.store?.logo}"
+				alt="{$page.data.store?.websiteName}"
+				height="80"
+				class="h-14 w-32 object-contain object-center" />
+		{:else}
+			<h1
+				class="bg-gradient-to-b from-primary-500 to-primary-700 bg-clip-text text-3xl font-extrabold text-transparent underline decoration-gray-800">
+				{#if $page.data.store?.websiteName}
+					{$page.data.store?.websiteName}
+				{:else}
+					Litekart
+				{/if}
+			</h1>
+		{/if}
+	</a>
+
 	<h1 class="mb-8 w-full text-center text-2xl font-bold text-primary-500">Signup</h1>
 
 	<Error err="{err}" />
@@ -112,28 +151,22 @@ async function submit(n) {
 			required
 			bind:value="{newResistration.lastName}" />
 
-		<TextboxFloating
-			type="tel"
-			label="Phone"
-			class="w-full"
-			required
-			bind:value="{newResistration.phone}" />
+		<TextboxFloating type="tel" label="Phone" class="w-full" bind:value="{newResistration.phone}" />
 
 		<div>
 			<TextboxFloating
 				type="email"
 				label="Email"
 				class="mb-1 w-full"
-				required
 				bind:value="{newResistration.email}" />
 
 			<p class="text-xs">
 				Do not have email?
 				<a
-					href="{$page.data.store?.loginUrl}"
-					aria-label="Click to login using phone number"
+					href="{getLoginUrl('/auth/login')}"
+					tabindex="-1"
 					class="text-primary-500 hover:underline">
-					Sign up using phone number
+					Signup using phone number
 				</a>
 			</p>
 		</div>
@@ -147,6 +180,8 @@ async function submit(n) {
 				bind:value="{newResistration.password}" />
 
 			<button
+				type="button"
+				tabindex="-1"
 				class="absolute inset-y-0 right-2 flex cursor-pointer items-end justify-center pb-2"
 				on:click="{togglePassword}">
 				{#if showPassword}
@@ -194,6 +229,8 @@ async function submit(n) {
 				bind:value="{newResistration.passwordConfirmation}" />
 
 			<button
+				type="button"
+				tabindex="-1"
 				class="absolute inset-y-0 right-2 flex cursor-pointer items-end justify-center pb-2"
 				on:click="{toggleConfirmPassword}">
 				{#if showConfirmPassword}
@@ -235,24 +272,20 @@ async function submit(n) {
 		<PrimaryButton type="submit" loading="{loading}" class="w-full">SUMBIT</PrimaryButton>
 	</form>
 
-	<div class="mx-auto mb-5 flex max-w-max flex-col gap-1 text-center text-sm">
+	<div class="mx-auto mb-5 flex max-w-max flex-col gap-1 text-center">
 		<a
-			href="{`${$page.data.store?.loginUrl}?ref=${$page.url.searchParams.get('ref') || '/'}`}"
+			href="{getLoginUrl('/auth/login')}"
 			aria-label="Click to signin"
 			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
 			Signin
 		</a>
-
-		<a
-			href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store?.id}"
-			aria-label="Click to login as vendor"
-			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
-			Join as Vendor
-		</a>
 	</div>
 
-	<p class="text-center text-sm text-gray-500">
+	<p in:fly="{{ y: 10, duration: 700, delay: 300 }}" class="text-center text-sm text-gray-500">
 		By clicking login you are accepting our
+
+		<br />
+
 		<a
 			href="/terms-conditions"
 			aria-label="Click to route terms & conditions"
