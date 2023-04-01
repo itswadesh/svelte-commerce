@@ -1,17 +1,6 @@
-import { UserService, CartService } from '$lib/services'
 import { fail, redirect } from '@sveltejs/kit'
+import { UserService, CartService } from '$lib/services'
 import type { Action, Actions, PageServerLoad } from './$types'
-export const load: PageServerLoad = async ({ locals, url }) => {
-	// redirect user if logged in
-	if (locals.session) {
-		throw redirect(307, '/')
-	}
-	if (!locals.store.otpLogin) {
-		const ref = url.searchParams.get('ref') || '/'
-		throw redirect(307, `/auth/login?ref=${ref}`)
-	}
-	return { store: locals.store, origin: locals.origin }
-}
 
 const getOtp: Action = async ({ request, locals }) => {
 	const data = await request.formData()
@@ -20,8 +9,14 @@ const getOtp: Action = async ({ request, locals }) => {
 		return fail(400, { invalid: true })
 	}
 	try {
-		const data = await UserService.getOtpService({ phone, storeId: locals.store?.id, origin: locals.origin })
+		const data = await UserService.getOtpService({
+			phone,
+			storeId: locals.store?.id,
+			origin: locals.origin
+		})
+
 		// const data = { timer: 1 }
+
 		return {
 			phone: phone,
 			resendAfter: data?.timer,
@@ -51,10 +46,13 @@ const verifyOtp: Action = async ({ cookies, request, locals }) => {
 			storeId: locals.store?.id,
 			origin: locals.origin
 		})
+
 		if (!user) {
 			return fail(400, { credentials: true })
 		}
+
 		const me = {
+			id: user._id,
 			email: user.email,
 			phone: user.phone,
 			firstName: user.firstName,
@@ -62,8 +60,10 @@ const verifyOtp: Action = async ({ cookies, request, locals }) => {
 			avatar: user.avatar,
 			role: user.role,
 			verified: user.verified,
-			active: user.active
+			active: user.active,
+			store: user.store
 		}
+
 		cookies.set('me', JSON.stringify(me), {
 			path: '/'
 			// httpOnly: true,
@@ -71,6 +71,7 @@ const verifyOtp: Action = async ({ cookies, request, locals }) => {
 			// secure: process.env.NODE_ENV === 'production',
 			// maxAge: 60 * 60 * 24 * 30,
 		})
+
 		cookies.set('session', user._id, {
 			// send cookie for every page
 			path: '/',
@@ -84,36 +85,6 @@ const verifyOtp: Action = async ({ cookies, request, locals }) => {
 			// set cookie to expire after a month
 			maxAge: 60 * 60 * 24 * 30
 		})
-		try {
-			const cartRes = await CartService.fetchMyCart({
-				storeId: locals.store?.id,
-				server: true,
-				sid: cookies.get('connect.sid')
-			})
-			const cart = {
-				cartId: cartRes.cart_id,
-				items: cartRes.items,
-				qty: cartRes.qty,
-				tax: cartRes.tax,
-				subtotal: cartRes.subtotal,
-				total: cartRes.total,
-				currencySymbol: cartRes.currencySymbol,
-				discount: cartRes.discount,
-				selfTakeout: cartRes.selfTakeout,
-				shipping: cartRes.shipping,
-				unavailableItems: cartRes.unavailableItems,
-				formattedAmount: cartRes.formattedAmount
-			}
-			if (cart) {
-				// locals.cart = cart
-				locals.cartId = cart.cartId
-				locals.cartQty = cart.qty
-				locals.cart = cart
-				cookies.set('cartId', cart.cartId, { path: '/' })
-				cookies.set('cartQty', cart.qty, { path: '/' })
-				// cookies.set('cart', JSON.stringify(cart), { path: '/' })
-			}
-		} catch (e) {}
 		// redirect the user
 		redirect(307, '/')
 		return {}
