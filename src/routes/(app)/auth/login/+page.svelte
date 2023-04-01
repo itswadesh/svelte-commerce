@@ -81,6 +81,8 @@ function togglePassword() {
 }
 
 const verifyIsMobileNum = () => {
+	err = null
+
 	if (value) {
 		if (value[0] === '+') {
 			isEmail = false
@@ -105,6 +107,8 @@ const verifyIsMobileNum = () => {
 }
 
 async function submit() {
+	err = null
+
 	if (isMobile) {
 		// phone = selectedCountry?.dialCode + value
 		phone = value
