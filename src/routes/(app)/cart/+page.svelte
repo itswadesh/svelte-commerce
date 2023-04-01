@@ -375,7 +375,7 @@ async function getCoupons() {
 
 													<div
 														class="mx-2 flex h-6 w-6 items-center justify-center text-xs font-bold sm:h-8  sm:w-8  ">
-														{#if loading[ix]}
+														{#if selectedLoadingType !== 'delete' && loading[ix]}
 															<img
 																src="{dotsLoading}"
 																alt="loading"
