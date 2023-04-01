@@ -120,7 +120,9 @@ function handleSearchBox() {
 			{/if}
 
 			<div class="absolute inset-x-0 right-0 z-10 flex h-8 justify-end">
-				<div class="relative mb-3 h-8 rounded-full bg-gray-100 {showSearchBox ? 'w-full' : 'w-8'}">
+				<div
+					class="relative mb-3 h-8 rounded-full transition duration-300
+					{showSearchBox ? 'w-full bg-gray-100' : 'w-8 hover:bg-gray-100'}">
 					<input
 						type="search"
 						id="{title}searchText"
@@ -161,7 +163,7 @@ function handleSearchBox() {
 		</div>
 	{:else}
 		<div class="mb-3 flex h-8">
-			<div class="relative mb-3 h-8 w-full rounded-md border bg-gray-100">
+			<div class="relative mb-3 h-8 w-full rounded-full border bg-gray-100 transition duration-300">
 				<input
 					type="search"
 					id="{title || model}searchText"

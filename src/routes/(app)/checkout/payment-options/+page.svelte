@@ -10,13 +10,14 @@
 </style>
 
 <script>
-import { toast } from '$lib/utils'
+import { CartService, OrdersService, PaymentMethodService } from '$lib/services'
 import { fireGTagEvent } from '$lib/utils/gTag'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { post } from '$lib/utils/api'
 import { stripePublishableKey } from '$lib/config'
+import { toast } from '$lib/utils'
 import CheckoutHeader from '$lib/components/CheckoutHeader.svelte'
 import Error from '$lib/components/Error.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
@@ -25,7 +26,6 @@ import Pricesummary from '$lib/components/Pricesummary.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import Stripe from '$lib/Stripe.svelte'
-import { CartService, OrdersService, PaymentMethodService } from '$lib/services'
 
 const seoProps = {
 	title: 'Select Payment Option',
@@ -36,27 +36,14 @@ export let data
 
 // console.log('zzzzzzzzzzzzzzzzzz', data)
 
-let errorMessage = 'Select a Payment Method',
-	disabled = false,
-	showPayWithBankTransfer = false,
-	bankPayment = {
-		type: 'order',
-		reference: '',
-		remark: '',
-		paymentMethodId: '',
-		amount: 0
-	},
-	selectedPaymentMethod = {
-		id: '',
-		name: '',
-		text: '',
-		instructions: '',
-		qrcode: '',
-		img: ''
-	},
-	paymentDenied = false,
-	razorpayReady = false,
-	loading = false
+let bankPayment = { type: 'order', reference: '', remark: '', paymentMethodId: '', amount: 0 }
+let disabled = false
+let errorMessage = 'Select a Payment Method'
+let loading = false
+let paymentDenied = false
+let razorpayReady = false
+let selectedPaymentMethod = { id: '', name: '', text: '', instructions: '', qrcode: '', img: '' }
+let showPayWithBankTransfer = false
 
 $: if (data.paymentMethods?.length === 1 && data.paymentMethods[0]?.type === 'pg') {
 	const pm = data.paymentMethods[0]
@@ -244,7 +231,7 @@ function checkIfStripeCardValid({ detail }) {
 							</div>
 						</label>
 
-						{#if pm.value === 'stripe'}
+						{#if pm.value === 'Stripe'}
 							<Stripe
 								address="{data.addressId}"
 								isStripeSelected="{selectedPaymentMethod.name === 'Stripe'}"

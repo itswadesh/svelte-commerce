@@ -1,28 +1,20 @@
-<style>
-.frosted {
-	background-image: url('/auth/login/bg-lighter.svg');
-	backdrop-filter: blur(15px);
-	background-color: hsla(0, 0%, 100%, 0.75);
-}
-</style>
-
 <script>
+// import indiaFlag from '$lib/assets/flags/india.png'
 import { browser } from '$app/environment'
+import { fly, scale } from 'svelte/transition'
 import { GOOGLE_CLIENT_ID, IS_DEV, provider } from '$lib/config'
 import { googleOneTap } from './google-one-tap'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { scale } from 'svelte/transition'
 import { toast } from '$lib/utils'
+import { UserService } from '$lib/services'
 import Cookie from 'cookie-universal'
 import Error from '$lib/components/Error.svelte'
-// import indiaFlag from '$lib/assets/flags/india.png'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
 import VerifyOtp from '../_VerifyOtp.svelte'
-import { UserService } from '$lib/services'
 
 const cookies = Cookie()
 
@@ -31,26 +23,26 @@ export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
 
 const seoProps = {
-	title: 'Login',
-	description: 'Login'
+	title: 'Login with email/phone',
+	description: 'Login with email/phone'
 }
 
-let email = IS_DEV ? 'hi@litekart.in' : ''
-let password = IS_DEV ? 'litekart' : ''
-let phone = IS_DEV ? '8249028220' : ''
+let email = $page?.url?.searchParams.get('email')
 let err
 let isEmail = false
 let isMobile = false
 let loading = false
 let maxlength = null
 let otpRequestSend = false
+let password = IS_DEV ? 'litekart' : ''
+let phone = IS_DEV ? '8249028220' : ''
 let ref = $page?.url?.searchParams.get('ref')
 let resendAfter = 0
 let selectedCountry = data.countries[0]
 let showDropDown = false
 let showPassword = false
 let type = 'password'
-let value = null
+let value = email ? email : IS_DEV ? 'admin@litekart.in' : null
 
 onMount(() => {
 	googleOneTap(
@@ -77,6 +69,8 @@ onMount(() => {
 			if (browser) goto(r)
 		}
 	)
+
+	verifyIsMobileNum()
 })
 
 function togglePassword() {
@@ -220,9 +214,26 @@ function changeNumber() {
 
 <SEO {...seoProps} />
 
-<div
-	class="frosted container mx-auto flex w-full max-w-sm flex-col rounded-2xl border bg-cover bg-center bg-no-repeat p-10 shadow-2xl"
-	style="background-image: url('/login/bg-lighter.svg');">
+<div class="flex w-full max-w-md flex-col rounded-2xl border bg-white p-10 shadow-2xl">
+	<a href="/" aria-label="Go to home" class="mx-auto mb-8 block max-w-max">
+		{#if $page.data.store?.logo}
+			<LazyImg
+				src="{$page.data.store?.logo}"
+				alt="{$page.data.store?.websiteName}"
+				height="80"
+				class="h-14 w-32 object-contain object-center" />
+		{:else}
+			<h1
+				class="bg-gradient-to-b from-primary-500 to-primary-700 bg-clip-text text-3xl font-extrabold text-transparent underline decoration-gray-800">
+				{#if $page.data.store?.websiteName}
+					{$page.data.store?.websiteName}
+				{:else}
+					Litekart
+				{/if}
+			</h1>
+		{/if}
+	</a>
+
 	<h1 class="mb-8 w-full text-center text-2xl font-bold text-primary-500">Log in</h1>
 
 	<Error err="{err}" />
@@ -244,7 +255,7 @@ function changeNumber() {
 					{/if}
 				</h6>
 
-				<div class="relative w-full bg-white rounded-md ">
+				<div class="relative w-full rounded-md bg-white ">
 					<!-- Enter email or mobile number -->
 
 					<input
@@ -323,16 +334,19 @@ function changeNumber() {
 			<!-- Email password -->
 
 			{#if isEmail}
-				<div transition:scale="{{ duration: 300 }}">
-					<div class="mb-1 flex items-center gap-2 justify-between">
+				<div transition:scale="{{ duration: 100 }}">
+					<div class="mb-1 flex items-center justify-between gap-2">
 						<label for="password" class="flex-1">Password</label>
 
-						<button class="max-w-max text-xs text-gray-500 hover:underline focus:outline-none">
+						<a
+							href="/auth/forgot-password"
+							tabindex="-1"
+							class="max-w-max text-xs text-gray-500 focus:outline-none hover:underline">
 							Forgot Password
-						</button>
+						</a>
 					</div>
 
-					<div class="relative w-full bg-white rounded-md">
+					<div class="relative w-full rounded-md bg-white">
 						{#if type === 'text'}
 							<input
 								id="password"
@@ -340,7 +354,7 @@ function changeNumber() {
 								placeholder="Enter email or mobile number"
 								bind:value="{password}"
 								required
-								class="py-3 pl-3 pr-12 w-full rounded-md border border-gray-300 focus:border-primary-500 focus:outline-none" />
+								class="w-full rounded-md border border-gray-300 py-3 pl-3 pr-12 focus:border-primary-500 focus:outline-none" />
 						{:else if type === 'password'}
 							<input
 								id="password"
@@ -348,11 +362,13 @@ function changeNumber() {
 								placeholder="Enter email or mobile number"
 								bind:value="{password}"
 								required
-								class="py-3 pl-3 pr-12 w-full rounded-md border border-gray-300 focus:border-primary-500 focus:outline-none" />
+								class="w-full rounded-md border border-gray-300 py-3 pl-3 pr-12 focus:border-primary-500 focus:outline-none" />
 						{/if}
 
-						<div
-							class="absolute inset-y-0 right-0 px-3 flex cursor-pointer items-center justify-center"
+						<button
+							type="button"
+							tabindex="-1"
+							class="absolute inset-y-0 right-0 flex cursor-pointer items-center justify-center px-3"
 							on:click="{togglePassword}">
 							{#if showPassword}
 								<svg
@@ -387,7 +403,7 @@ function changeNumber() {
 										d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
 								</svg>
 							{/if}
-						</div>
+						</button>
 					</div>
 				</div>
 			{/if}
@@ -434,8 +450,11 @@ function changeNumber() {
 
 	<!-- Terms & Conditions -->
 
-	<p class="text-center text-sm text-gray-500">
+	<p in:fly="{{ y: 10, duration: 700, delay: 300 }}" class="text-center text-sm text-gray-500">
 		By clicking login you are accepting our
+
+		<br />
+
 		<a
 			href="/terms-conditions"
 			aria-label="Click to route terms & conditions"

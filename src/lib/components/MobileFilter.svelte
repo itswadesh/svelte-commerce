@@ -40,7 +40,6 @@ let selectedCategory2
 let showSubCategory = []
 let showSubCategory2 = []
 // ----------------
-let megamenu
 let allAges = []
 let allBrands = []
 let allColors = []
@@ -49,8 +48,10 @@ let allFeatures = []
 let allGenders = []
 let allPromotions = []
 let allSizes = []
+let allTags = []
 let allTypes = []
 let allVendors = []
+let megamenu
 let priceRanges = []
 
 onMount(async () => {
@@ -306,7 +307,9 @@ $: {
 	<button
 		type="button"
 		class="flex items-center justify-center gap-2 px-3 py-2 border"
-		on:click="{() => (showFilter = true) && getSelected()}">
+		on:click="{() => {
+			;(showFilter = true) && getSelected()
+		}}">
 		<div
 			class="h-1.5 w-1.5 rounded-full 
 			{filterLength ? 'bg-primary-500' : 'bg-gray-300'}">

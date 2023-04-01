@@ -22,7 +22,7 @@ let showSidebar = false
 // })
 </script>
 
-<main class="h-screen w-full bg-zinc-100">
+<main class="h-screen w-full bg-gray-100">
 	<header class="mb-16 md:mb-0">
 		<Nav
 			me="{$page.data.me}"
@@ -43,7 +43,7 @@ let showSidebar = false
 
 				<div class="mb-2 text-xl font-bold sm:text-2xl">Something went wrong!</div>
 
-				<p class="mb-10 text-sm text-zinc-500 sm:text-base">
+				<p class="mb-10 text-sm text-gray-500 sm:text-base">
 					{#if $page.status === 401}
 						{$page.error?.message || 'Need to login again'}
 					{:else if $page.status === 403}

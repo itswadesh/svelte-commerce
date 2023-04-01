@@ -5,19 +5,19 @@ export const prerender = false
 
 export async function load({ url, locals, cookies, parent }) {
 	const { store } = locals
-	let loading = false,
-		err,
-		count,
-		products,
-		facets,
-		pageSize,
-		ressss,
-		fl = {}
+	let count
+	let err
+	let facets
+	let fl = {}
+	let loading = false
+	let pageSize
+	let products
+	let ressss
 
 	const currentPage = +url.searchParams.get('page') || 1
-	const sort = url.searchParams.get('sort')
-	const searchData = url.searchParams.get('q')
 	const query = url.searchParams
+	const searchData = url.searchParams.get('q')
+	const sort = url.searchParams.get('sort')
 
 	query.forEach(function (value, key) {
 		fl[key] = value
@@ -25,18 +25,21 @@ export async function load({ url, locals, cookies, parent }) {
 
 	try {
 		loading = true
+
 		const res = await ProductService.searchProducts({
-			storeId: store?.id,
 			query: query.toString(),
 			searchData: searchData,
-			server: true
+			server: true,
+			sid: cookies.get('connect.sid'),
+			storeId: store?.id
 		})
-		ressss = res
-		products = res.products
+
 		count = res.count
+		err = res.err
 		facets = res.facets || []
 		pageSize = res.pageSize || 40
-		err = res.err
+		products = res.products
+		ressss = res
 	} catch (e) {
 		err = e
 		throw error(400, e?.message || e || 'No results found')
@@ -50,18 +53,18 @@ export async function load({ url, locals, cookies, parent }) {
 	}
 
 	return {
-		loading,
-		err,
-		currentPage,
-		sort,
-		products,
 		count,
+		currentPage,
+		err,
 		facets,
+		fl,
+		loading,
 		pageSize,
 		priceRange,
+		products,
 		query: query.toString(),
+		ressss,
 		searchData,
-		fl,
-		ressss
+		sort
 	}
 }

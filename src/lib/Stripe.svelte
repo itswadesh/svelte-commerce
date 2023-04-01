@@ -1,30 +1,34 @@
 <script lang="ts">
-import { currency, toast } from '$lib/utils'
 import { createEventDispatcher, onMount } from 'svelte'
+import { fly } from 'svelte/transition'
 import { goto } from '$app/navigation'
-import GrnIndGradiantButton from './ui/GrnIndGradiantButton.svelte'
-import { post } from '$lib/utils/api'
-import { page } from '$app/stores'
 import { OrdersService } from './services'
+import { page } from '$app/stores'
+import { toast } from '$lib/utils'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import type { Error, PaymentMethod } from './types'
-let stripeReady = false
-let mounted = false
-let loading = false
-let paySuccess = false
-let isCardValid = false
-let stripeCardMounting = true
-let card: any
-export let stripePublishableKey: string //process.env.VITE_STRIPE_PUBLISHABLE_KEY
-let stripe: any,
-	errors,
-	errorMessage = { text: '', show: false }
+
 const dispatch = createEventDispatcher()
 
-export let address = '',
-	isStripeSelected = false
+export let address = null
+export let isStripeSelected = false
+export let stripePublishableKey: string //process.env.VITE_STRIPE_PUBLISHABLE_KEY
+
+let card: any
+let isCardValid = false
+let loading = false
+let mounted = false
+let paySuccess = false
+let stripeCardMounting = true
+let stripeReady = false
+
+let errorMessage = { text: '', show: false }
+let errors
+let stripe: any
 
 async function payWithCard(clientSecret: string, orderId: string) {
 	// This is for 3d authentication
+
 	try {
 		loading = true
 		const result = await stripe.confirmCardPayment(clientSecret, {
@@ -82,18 +86,21 @@ const payWithStripe = async (pm: PaymentMethod) => {
 
 onMount(() => {
 	mounted = true
+
 	if (stripeReady) {
 		loadStripeElements()
 	}
 })
 
 function stripeLoaded() {
-	stripeReady = true
 	stripeCardMounting = true
+	stripeReady = true
+
 	if (mounted) {
 		loadStripeElements()
 	}
 }
+
 function submit() {
 	loading = true
 	stripe.createPaymentMethod({ type: 'card', card }).then(async function (result: any) {
@@ -136,40 +143,41 @@ async function loadStripeElements() {
 	<script src="https://js.stripe.com/v3/" on:load="{stripeLoaded}"></script>
 </svelte:head>
 
-{#if errorMessage.show}
-	<div class="rounded border-red-300 bg-red-100 px-4 py-2 text-red-500 shadow">
-		{errorMessage.text}
-	</div>
-{/if}
+<section transition:fly="{{ y: 50, duration: 150 }}" class="flex flex-col gap-4">
+	{#if isStripeSelected && errorMessage.show}
+		<div class="rounded-md border border-red-500 bg-red-50 p-4 text-red-500 text-sm">
+			{errorMessage.text}
+		</div>
+	{/if}
 
-{#if stripeReady}
-	<form
-		on:submit|preventDefault="{submit}"
-		class="{!isStripeSelected ? 'hidden' : 'block'} my-4 rounded border px-8 py-4 shadow-lg">
-		<div class="form-row">
-			<label for="mount-point-for-stripe-elements" class="mb-3 text-lg font-bold tracking-wide">
+	{#if stripeReady}
+		<form
+			on:submit|preventDefault="{submit}"
+			class="rounded-md border p-4 shadow-md flex flex-col gap-4
+			{isStripeSelected ? 'block' : 'hidden'}">
+			<script src="https://js.stripe.com/v3/"></script>
+
+			<label for="mount-point-for-stripe-elements" class="font-semibold text-lg">
 				{#if stripeCardMounting} Please wait... {:else} Enter Card Details {/if}
 			</label>
 
-			<div id="mount-point-for-stripe-elements" class="mt-2">
+			<div id="mount-point-for-stripe-elements">
 				<!-- A Stripe Element will be inserted here. -->
 			</div>
+
+			<div id="error-message" role="alert" class="text-sm text-red-500"></div>
+
+			<PrimaryButton
+				type="submit"
+				loading="{loading}"
+				disabled="{loading || !stripeReady || !isCardValid}"
+				class="w-60">
+				Make Payment
+			</PrimaryButton>
+		</form>
+	{:else}
+		<div class="rounded-md border border-yellow-500 bg-yellow-50 p-4 text-yellow-500 text-sm">
+			Warn: Pleae wait...Stripe is getting ready .
 		</div>
-
-		<script src="https://js.stripe.com/v3/"></script>
-
-		<GrnIndGradiantButton
-			loading="{loading}"
-			disabled="{loading || !stripeReady || !isCardValid}"
-			type="submit"
-			class="mt-5 py-3 px-9">
-			Make Payment
-		</GrnIndGradiantButton>
-
-		<div id="error-message" role="alert" class="mt-4 text-sm text-red-500"></div>
-	</form>
-{:else}
-	<div class="rounded-md border border-yellow-200 bg-yellow-50 py-2 px-4 text-yellow-600">
-		Warn: Pleae wait...Stripe is getting ready .
-	</div>
-{/if}
+	{/if}
+</section>
