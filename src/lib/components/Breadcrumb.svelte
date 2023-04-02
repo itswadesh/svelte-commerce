@@ -70,11 +70,7 @@ export { clazz as class }
 	{/each}
 
 	{#if currentProductName}
-		<li class="text-zinc-400 first-letter:uppercase">
-			<span>
-				{currentProductName}
-			</span>
-
+		<li class="flex items-center text-zinc-400 first-letter:uppercase">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				class="h-5 w-5 px-1"
@@ -84,6 +80,10 @@ export { clazz as class }
 				stroke-width="2">
 				<path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
 			</svg>
+
+			<span>
+				{currentProductName}
+			</span>
 		</li>
 	{/if}
 </ul>
