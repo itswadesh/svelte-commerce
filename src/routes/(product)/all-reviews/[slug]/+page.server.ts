@@ -4,12 +4,13 @@ import type { Error, ProductReview } from '$lib/types'
 
 export async function load({ params, parent, url, cookies, locals, request }) {
 	const { slug } = params
+	const brandId = url.searchParams.get('brandIc')
 	let productReviews: ProductReview = {}
 
 	try {
 		productReviews = await ReviewService.fetchProductReviews({
 			page: url?.searchParams.get('page') || 1,
-			type: 'brand',
+			brandId: brandId,
 			pid: slug,
 			storeId: locals.store?.id,
 			server: true,

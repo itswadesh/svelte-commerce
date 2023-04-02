@@ -47,13 +47,13 @@ export const fetchReviews = async ({
 // Fetch product reviews
 
 export const fetchProductReviews = async ({
+	brandId,
 	origin,
-	storeId,
 	page,
-	type,
 	pid,
 	server = false,
-	sid = null
+	sid = null,
+	storeId
 }: any) => {
 	try {
 		let productReviewsRes: any = {}
@@ -62,12 +62,12 @@ export const fetchProductReviews = async ({
 
 		if (server) {
 			productReviewsRes = await getBySid(
-				`reviews/product-reviews?pid=${pid}&page=${page}&type=${type}&sort=-createdAt&store=${storeId}`,
+				`reviews/product-reviews?pid=${pid}&brandId=${brandId}&page=${page}&sort=-createdAt&store=${storeId}`,
 				sid
 			)
 		} else {
 			productReviewsRes = await getAPI(
-				`reviews/product-reviews?pid=${pid}&page=${page}&type=${type}&sort=-createdAt&store=${storeId}`,
+				`reviews/product-reviews?pid=${pid}&brandId=${brandId}&page=${page}&sort=-createdAt&store=${storeId}`,
 				origin
 			)
 		}
