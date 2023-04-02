@@ -81,9 +81,9 @@ onMount(async () => {
 							<SplideSlide>
 								<div class="p-4">
 									<div class="mb-4 h-96 w-full">
-										{#if g.image}
+										{#if g.image || g.images[0]}
 											<LazyImg
-												src="{g.image}"
+												src="{g.image || g.images[0]}"
 												alt=""
 												class="block h-full w-full object-contain object-center rounded-md" />
 										{:else}
@@ -196,9 +196,9 @@ onMount(async () => {
 					{#if g}
 						<div class="p-4">
 							<div class="mb-4 h-96 w-full">
-								{#if g.image}
+								{#if g.image || g.images[0]}
 									<LazyImg
-										src="{g.image}"
+										src="{g.image || g.images[0]}"
 										alt=""
 										class="block h-full w-full object-contain object-center rounded-md" />
 								{:else}

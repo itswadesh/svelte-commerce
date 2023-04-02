@@ -44,10 +44,9 @@
 </style>
 
 <script lang="ts">
-// import UserForm from '$lib/components/Product/UserForm.svelte'
-import { applyAction, enhance } from '$app/forms'
 import { browser } from '$app/environment'
 import { CartService, ReviewService } from '$lib/services'
+import { applyAction, enhance } from '$app/forms'
 import { currency, delay, toast } from '$lib/utils'
 import { fade } from 'svelte/transition'
 import { fireGTagEvent } from '$lib/utils/gTag'
@@ -69,20 +68,21 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import ProductNav from '$lib/ProductNav.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
-import ProductsGrid from '$lib/components/Product/ProductsGrid.svelte'
 import productVeg from '$lib/assets/product/veg.png'
 import Radio from '$lib/ui/Radio.svelte'
 import RadioColor from '$lib/ui/RadioColor.svelte'
 import RadioSize from '$lib/ui/RadioSize.svelte'
 import RatingsAndReviews from '$lib/components/Product/RatingsAndReviews.svelte'
+import ProductsGrid from '$lib/components/Product/ProductsGrid.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import SimilarProductsFromCategorySlug from '$lib/components/Product/SimilarProductsFromCategorySlug.svelte'
-import Skeleton from '$lib/ui/Skeleton.svelte'
 import SocialSharingButtons from '$lib/components/SocialSharingButtons.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
+// import UserForm from '$lib/components/Product/UserForm.svelte'
 import viewport from '$lib/actions/useViewPort'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
+import Skeleton from '$lib/ui/Skeleton.svelte'
 
 const cookies = Cookie()
 
@@ -177,8 +177,7 @@ let showPhotosModal = false
 let showStickyCartButton = true
 let showUserInputForm = false
 let y
-let productReviewsProduct = []
-let productReviewsBrand = []
+let productReviews = {}
 let loadingForProductReview = false
 let recentlyViewed = []
 
@@ -190,11 +189,12 @@ if (data.product?.size?.name === 'One Size') {
 	selectedSize = 'One Size'
 }
 
+let Konvas
+
 onMount(async () => {
 	screenWidth = screen.width
 
-	await getProductReviewProduct()
-	await getProductReviewBrand()
+	await getProductReviews()
 
 	try {
 		isWislisted = await getAPI(
@@ -249,45 +249,21 @@ const storeProductToLocatStorage = async () => {
 	// console.log('localStorage', localStorage)
 }
 
-async function getProductReviewProduct() {
+async function getProductReviews() {
 	try {
 		loadingForProductReview = true
 
-		const res = await ReviewService.fetchProductReviews({
+		productReviews = await ReviewService.fetchProductReviews({
 			page: +$page?.url?.searchParams.get('page') || 1,
-			type: 'product',
+			brandId: data.product.brand?._id,
 			pid: data.product?._id,
 			storeId: $page?.data?.store?.id,
 			origin: $page?.data?.origin
 		})
 
-		// console.log('res', res)
-
-		productReviewsProduct = res?.data
+		// console.log('productReviews', productReviews)
 	} catch (e) {
-		console.error(e, 'error')
-	} finally {
-		loadingForProductReview = false
-	}
-}
-
-async function getProductReviewBrand() {
-	try {
-		loadingForProductReview = true
-
-		const res = await ReviewService.fetchProductReviews({
-			page: +$page?.url?.searchParams.get('page') || 1,
-			type: 'brand',
-			pid: data.product?._id,
-			storeId: $page?.data?.store?.id,
-			origin: $page?.data?.origin
-		})
-
-		// console.log('res', res)
-
-		productReviewsBrand = res?.data
-	} catch (e) {
-		console.error(e, 'error')
+		toast(e, 'error')
 	} finally {
 		loadingForProductReview = false
 	}
@@ -321,6 +297,7 @@ async function addToBag(p, customizedImg, customizedJson) {
 			server: false,
 			cookies
 		})
+
 		if (selectedLinkiedProducts?.length) {
 			for (const i of selectedLinkiedProducts) {
 				cart = await CartService.addToCartService({
@@ -334,10 +311,12 @@ async function addToBag(p, customizedImg, customizedJson) {
 				})
 			}
 		}
+
 		// console.log('selectedLinkiedProducts inside add to cart function =', selectedLinkiedProducts)
 		const response = await fetch('/server/cart')
 		cart = await response.json()
 		// console.error('Cart called after add to cart', cart.cart_id, cart.qty)
+
 		if (cart) {
 			const cookieCart = {
 				cartId: cart?.cart_id,
@@ -354,6 +333,7 @@ async function addToBag(p, customizedImg, customizedJson) {
 				unavailableItems: cart?.unavailableItems,
 				formattedAmount: cart?.formattedAmount
 			}
+
 			cookies.set('cartId', cookieCart.cartId, { path: '/' })
 			cookies.set('cartQty', cookieCart.qty, { path: '/' })
 			// cookies.set('cart', JSON.stringify(cookieCart), { path: '/' })
@@ -663,7 +643,7 @@ function handleMobileCanvas() {
 						</div>
 
 						<span class="px-2 text-gray-500">
-							{productReviewsProduct?.length || 'No'} Reviews
+							{productReviews?.product?.count || 'No'} Reviews
 						</span>
 					</button>
 				{/if}
@@ -1246,16 +1226,14 @@ function handleMobileCanvas() {
 							</li>
 						{/each}
 					</ul>
-				{:else if productReviewsProduct || productReviewsBrand}
+				{:else if productReviews?.product?.count || productReviews?.brand?.count}
 					<RatingsAndReviews
-						type="{selectedReviewType === 'product_review' ? 'product' : 'brand'}"
+						type="{selectedReviewType}"
 						product="{data?.product}"
 						reviewsSummary="{selectedReviewType === 'product_review'
 							? data?.product?.reviews?.productReviews
 							: data?.product?.reviews?.brandReviews}"
-						reviews="{selectedReviewType === 'product_review'
-							? productReviewsProduct
-							: productReviewsBrand}"
+						reviews="{productReviews}"
 						class="mb-5" />
 				{/if}
 			</div>
