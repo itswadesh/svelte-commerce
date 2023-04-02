@@ -1,9 +1,6 @@
 <script>
 import { date } from '$lib/utils'
-import { ReviewService } from '$lib/services'
 import { goto } from '$app/navigation'
-import { onMount } from 'svelte'
-import { page } from '$app/stores'
 import ReviewGallery from './ReviewGallery.svelte'
 
 export let type
@@ -19,52 +16,18 @@ export let reviews = {}
 let clazz = ''
 export { clazz as class }
 
-let gallery = []
-let loadingForGallery = false
+let selectedReviews = []
+$: if (type === 'product_review') {
+	selectedReviews = reviews.product?.data
+} else {
+	selectedReviews = reviews.brand?.data
+}
+// console.log('selectedReviews', selectedReviews)
+let gallery = reviews?.gallery?.data || []
+// console.log('gallery', gallery)
 let openReviewImages = []
 let selectedProductGallery = []
 let showGalleryModal = false
-
-onMount(async () => {
-	await getGallery()
-})
-
-async function getGallery() {
-	try {
-		loadingForGallery = true
-
-		const res = await ReviewService.fetchProductReviews({
-			page: +$page?.url?.searchParams.get('page') || 1,
-			type: 'gallery',
-			pid: product?._id,
-			storeId: $page?.data?.store?.id,
-			origin: $page?.data?.origin
-		})
-
-		// console.log('fetchProductReviews', res)
-
-		gallery = res?.data
-			.map((item) => {
-				return item.images.map((image) => {
-					return {
-						createdAt: item.createdAt,
-						image: image,
-						message: item.message,
-						product: item.product,
-						rating: item.rating,
-						user: item.user
-					}
-				})
-			})
-			.flat()
-
-		// console.log('gallery', gallery)
-	} catch (e) {
-		console.log('error', e)
-	} finally {
-		loadingForGallery = false
-	}
-}
 
 const handleSelectedProductGallery = (review, rx) => {
 	// console.log('review, rx', review, rx)
@@ -116,7 +79,7 @@ const handleSelectedProductGallery = (review, rx) => {
 			<div class="mb-5">
 				<div class="tems-center flex">
 					<div
-						class="flex max-w-max flex-col items-center justify-center border-r border-gray-300 px-3 text-center">
+						class="flex w-40 flex-col items-center justify-center border-r border-gray-300 px-3 text-center">
 						<h2 class="mb-2 flex items-end gap-2">
 							<span class="text-4xl sm:text-5xl">
 								{reviewsSummary?.summary?.ratings_avg?.value.toFixed(1).replace(/\.0+$/, '')}
@@ -179,13 +142,13 @@ const handleSelectedProductGallery = (review, rx) => {
 
 			<!-- Customer Reviews -->
 
-			{#if reviews?.length}
+			{#if selectedReviews?.length}
 				<div class="mb-5">
 					<h2 class="mb-5 font-semibold">
-						Customer Reviews ({reviews?.length})
+						Customer Reviews ({selectedReviews?.length})
 					</h2>
 
-					{#each reviews as review, rx}
+					{#each selectedReviews as review, rx}
 						{#if rx <= 5}
 							<div class="mb-5 flex items-start gap-4">
 								{#if review.rating}
@@ -256,8 +219,8 @@ const handleSelectedProductGallery = (review, rx) => {
 
 				<!-- View all reviews -->
 
-				{#if reviews?.length > 5}
-					<a href="/all-reviews/{product?._id}?type={type}">
+				{#if selectedReviews?.length > 5}
+					<a href="/all-reviews/{product?._id}?brandId={product?.brand?._id}&type={type}">
 						<button
 							type="button"
 							class="border rounded-full py-1 px-4 text-xs text-primary-500 hover:bg-primary-500 hover:text-white transition duration-700 focus:outline-none">
@@ -274,49 +237,74 @@ const handleSelectedProductGallery = (review, rx) => {
 						class="mt-5 w-full h-auto"
 						on:click="{() => (showGalleryModal = true)}">
 						<div class="grid grid-cols-3 grid-rows-3 gap-2 h-72 max-w-sm">
-							{#if gallery[0]?.image}
+							{#if gallery[0]?.images[0]}
 								<div
 									class="col-span-2 row-span-2 rounded-md bg-no-repeat bg-cover bg-white border overflow-hidden"
-									style="background-image:url({gallery[0]?.image});">
+									style="background-image:url({gallery[0]?.images[0]});">
 								</div>
 							{/if}
 
-							{#if gallery[1]?.image}
+							{#if gallery[1]?.images[0]}
 								<div
 									class="col-span-1 row-span-1 rounded-md bg-no-repeat bg-cover bg-white border overflow-hidden"
-									style="background-image:url({gallery[1]?.image});">
+									style="background-image:url({gallery[1]?.images[0]});">
+								</div>
+							{:else}
+								<div
+									class="col-span-1 row-span-1 rounded-md bg-gray-100 border overflow-hidden flex items-center justify-center text-center text-gray-400 text-sm">
+									No image
 								</div>
 							{/if}
 
-							{#if gallery[2]?.image}
+							{#if gallery[2]?.images[0]}
 								<div
 									class="col-span-1 row-span-1 rounded-md bg-no-repeat bg-cover bg-white border overflow-hidden"
-									style="background-image:url({gallery[2]?.image});">
+									style="background-image:url({gallery[2]?.images[0]});">
+								</div>
+							{:else}
+								<div
+									class="col-span-1 row-span-1 rounded-md bg-gray-100 border overflow-hidden flex items-center justify-center text-center text-gray-400 text-sm">
+									No image
 								</div>
 							{/if}
 
-							{#if gallery[3]?.image}
+							{#if gallery[3]?.images[0]}
 								<div
 									class="col-span-1 row-span-1 rounded-md bg-no-repeat bg-cover bg-white border overflow-hidden"
-									style="background-image:url({gallery[3]?.image});">
+									style="background-image:url({gallery[3]?.images[0]});">
+								</div>
+							{:else}
+								<div
+									class="col-span-1 row-span-1 rounded-md bg-gray-100 border overflow-hidden flex items-center justify-center text-center text-gray-400 text-sm">
+									No image
 								</div>
 							{/if}
 
-							{#if gallery[4]?.image}
+							{#if gallery[4]?.images[0]}
 								<div
 									class="col-span-1 row-span-1 rounded-md bg-no-repeat bg-cover bg-white border overflow-hidden"
-									style="background-image:url({gallery[4]?.image});">
+									style="background-image:url({gallery[4]?.images[0]});">
+								</div>
+							{:else}
+								<div
+									class="col-span-1 row-span-1 rounded-md bg-gray-100 border overflow-hidden flex items-center justify-center text-center text-gray-400 text-sm">
+									No image
 								</div>
 							{/if}
 
 							{#if gallery?.length - 5 > 0}
 								<div
 									class="col-span-1 row-span-1 relative p-3 rounded-md bg-no-repeat bg-cover bg-white border overflow-hidden"
-									style="background-image:url(gallery[5]?.image);">
+									style="background-image:url(gallery[5]?.images[0]);">
 									<div
 										class="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-center font-bold text-xl text-white">
 										+{gallery?.length - 5}
 									</div>
+								</div>
+							{:else}
+								<div
+									class="col-span-1 row-span-1 rounded-md bg-gray-100 border overflow-hidden flex items-center justify-center text-center text-gray-400 text-sm">
+									No image
 								</div>
 							{/if}
 						</div>
