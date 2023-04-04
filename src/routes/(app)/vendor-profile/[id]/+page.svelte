@@ -1,46 +1,37 @@
 <script>
 import { dateOnly } from '$lib/utils'
+import DummyProductCard from '$lib/DummyProductCard.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import ProductCard from '$lib/ProductCard.svelte'
 import RatingStarDisplay from '$lib/ui/RatingStarDisplay.svelte'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'
-import ProductCard from '$lib/ProductCard.svelte'
-import DummyProductCard from '$lib/DummyProductCard.svelte'
 
 export let data
 
-// console.log('data', data)
+console.log('data', data)
 </script>
 
 <section class="min-h-screen">
-	<div class="p-3 sm:p-10">
+	<div class="sm:p-10">
 		<div class="container mx-auto w-full max-w-6xl">
-			<!-- {#if data.loading}
-			<div class="flex flex-col gap-5">
-				{#each { length: 3 } as _}
-					<Skeleton />
-				{/each}
-			</div>
-		{:else if data.count > 0} -->
-
 			<!-- Vendor Profile -->
 
 			{#if data.vendor}
-				<div class="grid grid-cols-1 gap-10 lg:grid-cols-6 lg:gap-20">
-					<div class="col-span-1 lg:col-span-2">
-						<div class="static flex flex-col items-center justify-center gap-4 lg:sticky lg:top-32">
+				<div class="grid grid-cols-1 lg:grid-cols-6 lg:gap-10">
+					<div class="col-span-1 lg:col-span-2 px-3 py-5 sm:px-0 sm:py-0">
+						<div
+							class="static flex flex-col items-center justify-center gap-4 lg:sticky lg:top-32 max-w-sm mx-auto">
 							<div>
 								{#if data.vendor?.banners[0]}
 									<LazyImg
 										src="{data.vendor?.banners[0]}"
 										alt=" "
-										class="h-40 w-40 rounded-full object-cover object-top"
-									/>
+										class="h-40 w-40 rounded-full object-cover object-top" />
 								{:else}
 									<img
 										src="{userEmptyProfile}"
 										alt=" "
-										class="h-40 w-40 rounded-full object-cover object-top"
-									/>
+										class="h-40 w-40 rounded-full object-cover object-top" />
 								{/if}
 							</div>
 
@@ -61,7 +52,9 @@ export let data
 							<ul class="flex flex-col gap-1">
 								{#if data.vendor?.storeName}
 									<li class="itmes-center flex gap-2">
-										<h6 class="w-24 font-medium">Store</h6>
+										<h6 class="w-28 font-semibold">Store</h6>
+
+										<span>:</span>
 
 										<span>{data.vendor?.storeName}</span>
 									</li>
@@ -69,22 +62,26 @@ export let data
 
 								{#if data.vendor?.productSold}
 									<li class="itmes-center flex gap-2">
-										<h6 class="w-24 font-medium">Product Sold</h6>
+										<h6 class="w-28 font-semibold">Product Sold</h6>
+
+										<span>:</span>
 
 										<span>{data.vendor?.productSold}</span>
 									</li>
 								{/if}
 
-								{#if data.vendor?.ratings}
-									<li class="itmes-center flex gap-2">
-										<h6 class="w-24 font-medium">Ratings</h6>
+								<li class="itmes-center flex gap-2">
+									<h6 class="w-28 shrink-0 font-semibold">Ratings</h6>
 
-										<RatingStarDisplay rating="{data.vendor?.ratings}" />
-									</li>
-								{/if}
+									<span>:</span>
+
+									<RatingStarDisplay rating="{data.vendor?.ratings}" />
+								</li>
 
 								<li class="itmes-center flex gap-2">
-									<h6 class="w-24 font-medium">Verified</h6>
+									<h6 class="w-28 font-semibold">Verified</h6>
+
+									<span>:</span>
 
 									<span class="{data.vendor?.verified ? 'text-green-500' : 'text-gray-300'}">
 										{#if data.vendor?.verified}Yes{:else}No{/if}
@@ -93,7 +90,9 @@ export let data
 
 								{#if data.vendor?.createdAt}
 									<li class="itmes-center flex gap-2">
-										<h6 class="w-24 font-medium">Registered</h6>
+										<h6 class="w-28 font-semibold">Registered</h6>
+
+										<span>:</span>
 
 										<span>{dateOnly(data.vendor?.createdAt)}</span>
 									</li>
@@ -119,15 +118,13 @@ export let data
 
 								{#if data.vendor?.facebook_url}
 									<li
-										class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#4267B2] hover:text-white"
-									>
+										class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#4267B2] hover:text-white">
 										<a
 											href="{data.vendor?.facebook_url}"
 											aria-label="Click to route facebook page"
 											target="_blank"
 											rel="noopener noreferrer"
-											class="flex h-full w-full items-center justify-center"
-										>
+											class="flex h-full w-full items-center justify-center">
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
 												class="h-5 w-5"
@@ -136,8 +133,7 @@ export let data
 												stroke="currentColor"
 												fill="none"
 												stroke-linecap="round"
-												stroke-linejoin="round"
-											>
+												stroke-linejoin="round">
 												<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
 												<path
 													d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3"
@@ -151,15 +147,13 @@ export let data
 
 								{#if data.vendor?.insta_url}
 									<li
-										class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#C13584] hover:text-white"
-									>
+										class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#C13584] hover:text-white">
 										<a
 											href="{data.vendor?.insta_url}"
 											aria-label="Click to route instagram page"
 											target="_blank"
 											rel="noopener noreferrer"
-											class="flex h-full w-full items-center justify-center"
-										>
+											class="flex h-full w-full items-center justify-center">
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
 												class="h-5 w-5"
@@ -168,8 +162,7 @@ export let data
 												stroke="currentColor"
 												fill="none"
 												stroke-linecap="round"
-												stroke-linejoin="round"
-											>
+												stroke-linejoin="round">
 												<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
 												<rect x="4" y="4" width="16" height="16" rx="4"></rect>
 												<circle cx="12" cy="12" r="3"></circle>
@@ -183,15 +176,13 @@ export let data
 
 								{#if data.vendor?.twitter_url}
 									<li
-										class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#1DA1F2] hover:text-white"
-									>
+										class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#1DA1F2] hover:text-white">
 										<a
 											href="{data.vendor?.twitter_url}"
 											aria-label="Click to route twitter page"
 											target="_blank"
 											rel="noopener noreferrer"
-											class="flex h-full w-full items-center justify-center"
-										>
+											class="flex h-full w-full items-center justify-center">
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
 												class="h-5 w-5"
@@ -200,8 +191,7 @@ export let data
 												stroke="currentColor"
 												fill="none"
 												stroke-linecap="round"
-												stroke-linejoin="round"
-											>
+												stroke-linejoin="round">
 												<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
 												<path
 													d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z"
@@ -215,15 +205,13 @@ export let data
 
 								{#if data.vendor?.linkedin_url}
 									<li
-										class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#0077b5] hover:text-white"
-									>
+										class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#0077b5] hover:text-white">
 										<a
 											href="{data.vendor?.linkedin_url}"
 											aria-label="Click to route linkedin page"
 											target="_blank"
 											rel="noopener noreferrer"
-											class="flex h-full w-full items-center justify-center"
-										>
+											class="flex h-full w-full items-center justify-center">
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
 												class="h-5 w-5"
@@ -232,8 +220,7 @@ export let data
 												stroke="currentColor"
 												fill="none"
 												stroke-linecap="round"
-												stroke-linejoin="round"
-											>
+												stroke-linejoin="round">
 												<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
 												<rect x="4" y="4" width="16" height="16" rx="2"></rect>
 												<line x1="8" y1="11" x2="8" y2="16"></line>
@@ -249,15 +236,13 @@ export let data
 
 								{#if data.vendor?.youtube_url}
 									<li
-										class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#FF0000] hover:text-white"
-									>
+										class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#FF0000] hover:text-white">
 										<a
 											href="{data.vendor?.youtube_url}"
 											aria-label="Click to route youtube page"
 											target="_blank"
 											rel="noopener noreferrer"
-											class="flex h-full w-full items-center justify-center"
-										>
+											class="flex h-full w-full items-center justify-center">
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
 												class="h-5 w-5"
@@ -266,8 +251,7 @@ export let data
 												stroke="currentColor"
 												fill="none"
 												stroke-linecap="round"
-												stroke-linejoin="round"
-											>
+												stroke-linejoin="round">
 												<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
 												<rect x="3" y="5" width="18" height="14" rx="4"></rect>
 												<path d="M10 9l5 3l-5 3z"></path>
@@ -279,23 +263,24 @@ export let data
 						</div>
 					</div>
 
-					<div class="col-span-1 hidden flex-col gap-5 sm:flex lg:col-span-4">
+					<div class="col-span-1 lg:col-span-4">
 						<div class="flex items-center justify-between gap-5">
-							<h2 class="text-xl font-bold sm:text-2xl md:text-3xl">Vendor Products</h2>
+							<h2 class="text-xl font-bold sm:text-2xl md:text-3xl p-5">
+								Vendor Products {data.vendorsProduct?.length}
+							</h2>
 
 							<!-- <a
-							href="/{data.vendor?.slug}?sort=-updatedAt"
-							aria-label="click to route vendor details page"
-							class="text-xs font-medium text-primary-500 hover:text-primary-700 hover:underline sm:text-sm">
-							View All
-						</a> -->
+								href="/{data.vendor?.slug}?sort=-updatedAt"
+								aria-label="click to route vendor details page"
+								class="text-xs font-semibold text-primary-500 hover:text-primary-700 hover:underline sm:text-sm">
+								View All
+							</a> -->
 						</div>
 
-						{#if data.vendorProducts?.data?.length}
+						{#if data.vendorsProduct?.length}
 							<ul
-								class="grid w-full grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6"
-							>
-								{#each data.vendorProducts?.data as p, ix}
+								class="grid w-full grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6">
+								{#each data.vendorsProduct as p, ix}
 									<li>
 										<ProductCard product="{p}" />
 									</li>
@@ -316,40 +301,5 @@ export let data
 				</div>
 			{/if}
 		</div>
-	</div>
-
-	<div class="block sm:hidden">
-		<div class="flex items-center justify-between gap-5 p-5">
-			<h1 class="text-xl font-bold">Vendor Products</h1>
-
-			<!-- <a
-				href="/{data.vendor?.slug}?sort=-updatedAt"
-				aria-label="Click to route vendor details page"
-				class="text-xs font-medium text-primary-500 hover:text-primary-700 hover:underline sm:text-sm">
-				View All
-			</a> -->
-		</div>
-
-		{#if data.vendorProducts?.data?.length}
-			<ul
-				class="grid w-full grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6"
-			>
-				{#each data.vendorProducts?.data as p, ix}
-					<li>
-						<ProductCard product="{p}" />
-					</li>
-				{/each}
-
-				{#each { length: 7 } as _}
-					<li class="hidden sm:block">
-						<DummyProductCard />
-					</li>
-				{/each}
-			</ul>
-		{:else}
-			<p class="text-sm text-gray-500">
-				No products found, vendor has not uploaded any product yet...
-			</p>
-		{/if}
 	</div>
 </section>
