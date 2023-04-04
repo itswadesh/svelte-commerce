@@ -212,7 +212,7 @@ onMount(async () => {
 })
 
 const storeProductToLocatStorage = async () => {
-	const localRecentlyViewed = localStorage.getItem('recentlyViewed')
+	const localRecentlyViewed = localStorage.getItem(`recentlyViewed_${$page.data.store.id}`)
 	// console.log('localRecentlyViewed', localRecentlyViewed)
 
 	if (!!localRecentlyViewed && localRecentlyViewed !== 'undefined') {
@@ -242,7 +242,7 @@ const storeProductToLocatStorage = async () => {
 		recentlyViewed = resvw
 
 		if (browser) {
-			localStorage.setItem('recentlyViewed', JSON.stringify(recentlyViewed))
+			localStorage.setItem(`recentlyViewed_${$page.data.store.id}`, JSON.stringify(recentlyViewed))
 		}
 	}
 
@@ -1251,7 +1251,7 @@ function handleMobileCanvas() {
 					</h2>
 
 					<div
-						class="mb-5 grid w-full grid-cols-2 items-start gap-3 sm:mb-10 sm:flex sm:flex-wrap sm:justify-between lg:mb-20 lg:gap-6">
+						class="mb-5 grid w-full grid-cols-2 items-start gap-3 sm:mb-10 sm:flex sm:flex-wrap sm:justify-between lg:gap-6">
 						{#each data.product?.crossSells as csp}
 							<FrequentlyBoughtProduct product="{csp}" />
 						{/each}
