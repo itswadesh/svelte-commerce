@@ -12,7 +12,7 @@ export const fetchVendor = async ({ origin, id, storeId, server = false, sid = n
 			res = await getAPI(`vendors/${id}`, origin)
 		}
 
-		return res || {}
+		return res.data || []
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)
 	}
