@@ -75,7 +75,7 @@ let showItemCount = 10
 				<!-- PRODUCTS -->
 
 				<div
-					class="mb-5 grid w-full grid-cols-2 items-start gap-3 sm:mb-10 sm:flex sm:flex-wrap sm:justify-between lg:mb-20 lg:gap-6">
+					class="mb-5 grid w-full grid-cols-2 items-start gap-3 sm:mb-10 sm:flex sm:flex-wrap sm:justify-between lg:gap-6">
 					{#each data.products as p, px}
 						{#if showItemCount >= px + 1}
 							<ProductCard product="{p}" />

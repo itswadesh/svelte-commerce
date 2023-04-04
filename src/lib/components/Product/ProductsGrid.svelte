@@ -11,7 +11,7 @@ export let products = []
 		<h2 class="mb-5 text-lg font-bold capitalize sm:text-xl md:text-2xl">{title}</h2>
 
 		<div
-			class="mb-5 grid w-full grid-cols-2 items-start gap-3 sm:mb-10 sm:flex sm:flex-wrap sm:justify-between lg:mb-20 lg:gap-6">
+			class="mb-5 grid w-full grid-cols-2 items-start gap-3 sm:mb-10 sm:flex sm:flex-wrap sm:justify-between lg:gap-6">
 			{#each products as p, px}
 				<ProductCard product="{p}" />
 			{/each}
