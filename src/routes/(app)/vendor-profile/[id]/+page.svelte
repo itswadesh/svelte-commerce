@@ -1,33 +1,26 @@
 <script>
 import { dateOnly } from '$lib/utils'
+import DummyProductCard from '$lib/DummyProductCard.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import ProductCard from '$lib/ProductCard.svelte'
 import RatingStarDisplay from '$lib/ui/RatingStarDisplay.svelte'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'
-import ProductCard from '$lib/ProductCard.svelte'
-import DummyProductCard from '$lib/DummyProductCard.svelte'
 
 export let data
 
-// console.log('data', data)
+console.log('data', data)
 </script>
 
 <section class="min-h-screen">
-	<div class="p-3 sm:p-10">
+	<div class="sm:p-10">
 		<div class="container mx-auto w-full max-w-6xl">
-			<!-- {#if data.loading}
-			<div class="flex flex-col gap-5">
-				{#each { length: 3 } as _}
-					<Skeleton />
-				{/each}
-			</div>
-		{:else if data.count > 0} -->
-
 			<!-- Vendor Profile -->
 
 			{#if data.vendor}
-				<div class="grid grid-cols-1 gap-10 lg:grid-cols-6 lg:gap-20">
-					<div class="col-span-1 lg:col-span-2">
-						<div class="static flex flex-col items-center justify-center gap-4 lg:sticky lg:top-32">
+				<div class="grid grid-cols-1 lg:grid-cols-6 lg:gap-10">
+					<div class="col-span-1 lg:col-span-2 px-3 py-5 sm:px-0 sm:py-0">
+						<div
+							class="static flex flex-col items-center justify-center gap-4 lg:sticky lg:top-32 max-w-sm mx-auto">
 							<div>
 								{#if data.vendor?.banners[0]}
 									<LazyImg
@@ -59,7 +52,9 @@ export let data
 							<ul class="flex flex-col gap-1">
 								{#if data.vendor?.storeName}
 									<li class="itmes-center flex gap-2">
-										<h6 class="w-24 font-medium">Store</h6>
+										<h6 class="w-28 font-semibold">Store</h6>
+
+										<span>:</span>
 
 										<span>{data.vendor?.storeName}</span>
 									</li>
@@ -67,22 +62,26 @@ export let data
 
 								{#if data.vendor?.productSold}
 									<li class="itmes-center flex gap-2">
-										<h6 class="w-24 font-medium">Product Sold</h6>
+										<h6 class="w-28 font-semibold">Product Sold</h6>
+
+										<span>:</span>
 
 										<span>{data.vendor?.productSold}</span>
 									</li>
 								{/if}
 
-								{#if data.vendor?.ratings}
-									<li class="itmes-center flex gap-2">
-										<h6 class="w-24 font-medium">Ratings</h6>
+								<li class="itmes-center flex gap-2">
+									<h6 class="w-28 shrink-0 font-semibold">Ratings</h6>
 
-										<RatingStarDisplay rating="{data.vendor?.ratings}" />
-									</li>
-								{/if}
+									<span>:</span>
+
+									<RatingStarDisplay rating="{data.vendor?.ratings}" />
+								</li>
 
 								<li class="itmes-center flex gap-2">
-									<h6 class="w-24 font-medium">Verified</h6>
+									<h6 class="w-28 font-semibold">Verified</h6>
+
+									<span>:</span>
 
 									<span class="{data.vendor?.verified ? 'text-green-500' : 'text-gray-300'}">
 										{#if data.vendor?.verified}Yes{:else}No{/if}
@@ -91,7 +90,9 @@ export let data
 
 								{#if data.vendor?.createdAt}
 									<li class="itmes-center flex gap-2">
-										<h6 class="w-24 font-medium">Registered</h6>
+										<h6 class="w-28 font-semibold">Registered</h6>
+
+										<span>:</span>
 
 										<span>{dateOnly(data.vendor?.createdAt)}</span>
 									</li>
@@ -262,22 +263,24 @@ export let data
 						</div>
 					</div>
 
-					<div class="col-span-1 hidden flex-col gap-5 sm:flex lg:col-span-4">
+					<div class="col-span-1 lg:col-span-4">
 						<div class="flex items-center justify-between gap-5">
-							<h2 class="text-xl font-bold sm:text-2xl md:text-3xl">Vendor Products</h2>
+							<h2 class="text-xl font-bold sm:text-2xl md:text-3xl p-5">
+								Vendor Products {data.vendorsProduct?.length}
+							</h2>
 
 							<!-- <a
-							href="/{data.vendor?.slug}?sort=-updatedAt"
-							aria-label="click to route vendor details page"
-							class="text-xs font-medium text-primary-500 hover:text-primary-700 hover:underline sm:text-sm">
-							View All
-						</a> -->
+								href="/{data.vendor?.slug}?sort=-updatedAt"
+								aria-label="click to route vendor details page"
+								class="text-xs font-semibold text-primary-500 hover:text-primary-700 hover:underline sm:text-sm">
+								View All
+							</a> -->
 						</div>
 
-						{#if data.vendorProducts?.data?.length}
+						{#if data.vendorsProduct?.length}
 							<ul
 								class="grid w-full grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6">
-								{#each data.vendorProducts?.data as p, ix}
+								{#each data.vendorsProduct as p, ix}
 									<li>
 										<ProductCard product="{p}" />
 									</li>
@@ -298,39 +301,5 @@ export let data
 				</div>
 			{/if}
 		</div>
-	</div>
-
-	<div class="block sm:hidden">
-		<div class="flex items-center justify-between gap-5 p-5">
-			<h1 class="text-xl font-bold">Vendor Products</h1>
-
-			<!-- <a
-				href="/{data.vendor?.slug}?sort=-updatedAt"
-				aria-label="Click to route vendor details page"
-				class="text-xs font-medium text-primary-500 hover:text-primary-700 hover:underline sm:text-sm">
-				View All
-			</a> -->
-		</div>
-
-		{#if data.vendorProducts?.data?.length}
-			<ul
-				class="grid w-full grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6">
-				{#each data.vendorProducts?.data as p, ix}
-					<li>
-						<ProductCard product="{p}" />
-					</li>
-				{/each}
-
-				{#each { length: 7 } as _}
-					<li class="hidden sm:block">
-						<DummyProductCard />
-					</li>
-				{/each}
-			</ul>
-		{:else}
-			<p class="text-sm text-gray-500">
-				No products found, vendor has not uploaded any product yet...
-			</p>
-		{/if}
 	</div>
 </section>

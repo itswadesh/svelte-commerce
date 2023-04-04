@@ -88,7 +88,7 @@ const cookies = Cookie()
 
 export let data
 
-// console.log('zzzzzzzzzzzzzzzzzz', data)
+console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -1192,49 +1192,63 @@ function handleMobileCanvas() {
 					<DeliveryOptions product="{data.product}" deliveryDetails="{data.deliveryDetails}" />
 				</div>
 
-				<hr class="mb-5 w-full border-t border-gray-300" />
+				<!-- Vendor name -->
+
+				{#if data.product?.vendor?.name || data.product?.vendor?._id}
+					<p class="flex items-center gap-2">
+						<b>Seller : </b>
+
+						<a href="/vendor-profile/{data.product?.vendor?._id}" class="block hover:underline">
+							{data.product?.vendor?.name}
+						</a>
+					</p>
+				{/if}
 
 				<!-- Ratings & Reviews -->
 
-				<div class="mb-5 flex items-center flex-wrap gap-4">
-					<button
-						type="button"
-						class="font-semibold border-b-4 focus:outline-none 
+				{#if productReviews?.product?.count || productReviews?.brand?.count}
+					<hr class="mb-5 w-full border-t border-gray-300" />
+
+					<div class="mb-5 flex items-center flex-wrap gap-4">
+						<button
+							type="button"
+							class="font-semibold border-b-4 focus:outline-none 
 						{selectedReviewType === 'product_review'
-							? 'border-primary-500 text-primary-500'
-							: 'border-gray-200 text-gray-500'}"
-						on:click="{() => (selectedReviewType = 'product_review')}">
-						Product Review
-					</button>
+								? 'border-primary-500 text-primary-500'
+								: 'border-gray-200 text-gray-500'}"
+							on:click="{() => (selectedReviewType = 'product_review')}">
+							Product Review
+						</button>
 
-					<button
-						type="button"
-						class="font-semibold border-b-4 focus:outline-none 
+						<button
+							type="button"
+							class="font-semibold border-b-4 focus:outline-none 
 						{selectedReviewType === 'brand_review'
-							? 'border-primary-500 text-primary-500'
-							: 'border-gray-200 text-gray-500'}"
-						on:click="{() => (selectedReviewType = 'brand_review')}">
-						Brand Review
-					</button>
-				</div>
+								? 'border-primary-500 text-primary-500'
+								: 'border-gray-200 text-gray-500'}"
+							on:click="{() => (selectedReviewType = 'brand_review')}">
+							Brand Review
+						</button>
+					</div>
 
-				{#if loadingForProductReview}
-					<ul class="flex flex-col gap-3">
-						{#each { length: 5 } as _}
-							<li>
-								<Skeleton small />
-							</li>
-						{/each}
-					</ul>
-				{:else if productReviews?.product?.count || productReviews?.brand?.count}
-					<RatingsAndReviews
-						type="{selectedReviewType}"
-						product="{data?.product}"
-						reviewsSummary="{selectedReviewType === 'product_review'
-							? data?.product?.reviews?.productReviews
-							: data?.product?.reviews?.brandReviews}"
-						reviews="{productReviews}"
-						class="mb-5" />
+					{#if loadingForProductReview}
+						<ul class="flex flex-col gap-3">
+							{#each { length: 5 } as _}
+								<li>
+									<Skeleton small />
+								</li>
+							{/each}
+						</ul>
+					{:else}
+						<RatingsAndReviews
+							type="{selectedReviewType}"
+							product="{data?.product}"
+							reviewsSummary="{selectedReviewType === 'product_review'
+								? data?.product?.reviews?.productReviews
+								: data?.product?.reviews?.brandReviews}"
+							reviews="{productReviews}"
+							class="mb-5" />
+					{/if}
 				{/if}
 			</div>
 		</div>
