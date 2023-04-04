@@ -7,11 +7,11 @@ export async function load({ params, parent, locals, cookies }) {
 
 	const vendor = await VerndorService.fetchVendor({
 		id: vendorId,
-		storeId: locals.store.id,
 		server: true,
 		sid: cookies.get('connect.sid')
 	})
-	const vendorProducts = await VerndorService.fetchProductsOfVendor({
+
+	const vendorsProduct = await VerndorService.fetchProductsOfVendor({
 		id: vendorId,
 		storeId: locals.store.id,
 		server: true,
@@ -19,7 +19,7 @@ export async function load({ params, parent, locals, cookies }) {
 	})
 
 	if (vendor) {
-		return { vendor, vendorProducts }
+		return { vendor, vendorsProduct }
 	}
 
 	throw error(404, 'User not found')

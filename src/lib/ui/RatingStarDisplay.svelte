@@ -8,137 +8,148 @@ export let rating,
 let fullColorCount = 0,
 	disableColorCount = 0
 
-$: if (rating === 1.5) {
+$: if (rating == 1.5) {
 	fullColorCount = 1
 	disableColorCount = 3
-} else if (rating === 2.5) {
+} else if (rating == 2.5) {
 	fullColorCount = 2
 	disableColorCount = 2
-} else if (rating === 3.5) {
+} else if (rating == 3.5) {
 	fullColorCount = 3
 	disableColorCount = 1
-} else if (rating === 4.5) {
+} else if (rating == 4.5) {
 	fullColorCount = 4
 	disableColorCount = 0
 }
 </script>
 
-{#if rating || reviewCount}
-	<div
-		class="flex flex-wrap items-center gap-2 text-sm  {textWhite ? 'text-white' : 'text-gray-800'} 
-		{biggerSize ? 'font-semibold' : 'font-normal'}"
-	>
-		{#if rating > 0}
-			{#if rating === 5 || rating === 4 || rating === 3 || rating === 2 || rating === 1}
-				<div class="flex items-center gap-1">
-					{#each { length: rating } as _}
-						<div class="flex items-center justify-center rounded-md bg-primary-500 p-1 text-white">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="{biggerSize ? 'h-5 w-5' : 'h-4 w-4'}"
-								viewBox="0 0 20 20"
-								fill="currentColor"
-							>
-								<path
-									d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-								></path>
-							</svg>
-						</div>
-					{/each}
+<div
+	class="flex flex-wrap items-center gap-2 text-sm
+	{textWhite ? 'text-white' : 'text-gray-800'} 
+	{biggerSize ? 'font-semibold' : 'font-normal'}">
+	{#if rating == 4.5 || rating == 3.5 || rating == 2.5 || rating == 1.5}
+		<div class="flex items-center gap-1">
+			{#each { length: fullColorCount } as _}
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="text-primary-500 {biggerSize ? 'h-5 w-5' : 'h-4 w-4'}"
+					viewBox="0 0 24 24"
+					stroke-width="2"
+					stroke="currentColor"
+					fill="none"
+					stroke-linecap="round"
+					stroke-linejoin="round">
+					<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+					<path
+						d="M8.243 7.34l-6.38 .925l-.113 .023a1 1 0 0 0 -.44 1.684l4.622 4.499l-1.09 6.355l-.013 .11a1 1 0 0 0 1.464 .944l5.706 -3l5.693 3l.1 .046a1 1 0 0 0 1.352 -1.1l-1.091 -6.355l4.624 -4.5l.078 -.085a1 1 0 0 0 -.633 -1.62l-6.38 -.926l-2.852 -5.78a1 1 0 0 0 -1.794 0l-2.853 5.78z"
+						stroke-width="0"
+						fill="currentColor"></path>
+				</svg>
+			{/each}
 
-					{#each { length: 5 - rating } as _}
-						<div class="flex items-center justify-center rounded-md bg-gray-300 p-1 text-white">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="{biggerSize ? 'h-5 w-5' : 'h-4 w-4'}"
-								viewBox="0 0 20 20"
-								fill="currentColor"
-							>
-								<path
-									d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-								></path>
-							</svg>
-						</div>
-					{/each}
-				</div>
-			{:else if rating === 4.5 || rating === 3.5 || rating === 2.5 || rating === 1.5}
-				<div class="flex items-center gap-1">
-					{#each { length: fullColorCount } as _}
-						<div class="flex items-center justify-center rounded-md bg-primary-500 p-1 text-white">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="{biggerSize ? 'h-5 w-5' : 'h-4 w-4'}"
-								viewBox="0 0 20 20"
-								fill="currentColor"
-							>
-								<path
-									d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-								></path>
-							</svg>
-						</div>
-					{/each}
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				class="text-primary-500 {biggerSize ? 'h-5 w-5' : 'h-4 w-4'}"
+				viewBox="0 0 24 24"
+				stroke-width="2"
+				stroke="currentColor"
+				fill="none"
+				stroke-linecap="round"
+				stroke-linejoin="round">
+				<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+				<path
+					d="M12 1a.993 .993 0 0 1 .823 .443l.067 .116l2.852 5.781l6.38 .925c.741 .108 1.08 .94 .703 1.526l-.07 .095l-.078 .086l-4.624 4.499l1.09 6.355a1.001 1.001 0 0 1 -1.249 1.135l-.101 -.035l-.101 -.046l-5.693 -3l-5.706 3c-.105 .055 -.212 .09 -.32 .106l-.106 .01a1.003 1.003 0 0 1 -1.038 -1.06l.013 -.11l1.09 -6.355l-4.623 -4.5a1.001 1.001 0 0 1 .328 -1.647l.113 -.036l.114 -.023l6.379 -.925l2.853 -5.78a.968 .968 0 0 1 .904 -.56zm0 3.274v12.476a1 1 0 0 1 .239 .029l.115 .036l.112 .05l4.363 2.299l-.836 -4.873a1 1 0 0 1 .136 -.696l.07 -.099l.082 -.09l3.546 -3.453l-4.891 -.708a1 1 0 0 1 -.62 -.344l-.073 -.097l-.06 -.106l-2.183 -4.424z"
+					stroke-width="0"
+					fill="currentColor"></path>
+			</svg>
 
-					<div
-						class="flex items-center justify-center rounded-md  p-1 text-white"
-						style="background: linear-gradient(90deg, #1F2937 50%, #D1D5DB 50%);"
-					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							class="{biggerSize ? 'h-5 w-5' : 'h-4 w-4'}"
-							viewBox="0 0 20 20"
-							fill="currentColor"
-						>
-							<path
-								d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-							>
-							</path>
-						</svg>
-					</div>
-
-					{#each { length: disableColorCount } as _}
-						<div class="flex items-center justify-center rounded-md bg-gray-300 p-1 text-white">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="{biggerSize ? 'h-5 w-5' : 'h-4 w-4'}"
-								viewBox="0 0 20 20"
-								fill="currentColor"
-							>
-								<path
-									d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-								></path>
-							</svg>
-						</div>
-					{/each}
-				</div>
-			{/if}
-		{/if}
-
-		<div class="flex items-center gap-2 whitespace-nowrap">
-			{#if ratingCount}
-				<span>
-					{ratingCount}
-					{#if ratingCount === 1}
-						rating
-					{:else}
-						ratings
-					{/if}
-				</span>
-			{/if}
-
-			{#if ratingCount && reviewCount}
-				&
-			{/if}
-
-			{#if reviewCount}
-				<span>
-					{reviewCount}
-					{#if reviewCount === 1}
-						review
-					{:else}
-						reviews
-					{/if}
-				</span>
-			{/if}
+			{#each { length: disableColorCount } as _}
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="text-gray-300 {biggerSize ? 'h-5 w-5' : 'h-4 w-4'}"
+					viewBox="0 0 24 24"
+					stroke-width="2"
+					stroke="currentColor"
+					fill="none"
+					stroke-linecap="round"
+					stroke-linejoin="round">
+					<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+					<path
+						d="M8.243 7.34l-6.38 .925l-.113 .023a1 1 0 0 0 -.44 1.684l4.622 4.499l-1.09 6.355l-.013 .11a1 1 0 0 0 1.464 .944l5.706 -3l5.693 3l.1 .046a1 1 0 0 0 1.352 -1.1l-1.091 -6.355l4.624 -4.5l.078 -.085a1 1 0 0 0 -.633 -1.62l-6.38 -.926l-2.852 -5.78a1 1 0 0 0 -1.794 0l-2.853 5.78z"
+						stroke-width="0"
+						fill="currentColor"></path>
+				</svg>
+			{/each}
 		</div>
+	{:else}
+		<div class="flex items-center gap-1">
+			{#each { length: rating } as _}
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="text-primary-500 {biggerSize ? 'h-5 w-5' : 'h-4 w-4'}"
+					viewBox="0 0 24 24"
+					stroke-width="2"
+					stroke="currentColor"
+					fill="none"
+					stroke-linecap="round"
+					stroke-linejoin="round">
+					<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+					<path
+						d="M8.243 7.34l-6.38 .925l-.113 .023a1 1 0 0 0 -.44 1.684l4.622 4.499l-1.09 6.355l-.013 .11a1 1 0 0 0 1.464 .944l5.706 -3l5.693 3l.1 .046a1 1 0 0 0 1.352 -1.1l-1.091 -6.355l4.624 -4.5l.078 -.085a1 1 0 0 0 -.633 -1.62l-6.38 -.926l-2.852 -5.78a1 1 0 0 0 -1.794 0l-2.853 5.78z"
+						stroke-width="0"
+						fill="currentColor"></path>
+				</svg>
+			{/each}
+
+			{#each { length: 5 - rating } as _}
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="text-gray-300 {biggerSize ? 'h-5 w-5' : 'h-4 w-4'}"
+					viewBox="0 0 24 24"
+					stroke-width="2"
+					stroke="currentColor"
+					fill="none"
+					stroke-linecap="round"
+					stroke-linejoin="round">
+					<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+					<path
+						d="M8.243 7.34l-6.38 .925l-.113 .023a1 1 0 0 0 -.44 1.684l4.622 4.499l-1.09 6.355l-.013 .11a1 1 0 0 0 1.464 .944l5.706 -3l5.693 3l.1 .046a1 1 0 0 0 1.352 -1.1l-1.091 -6.355l4.624 -4.5l.078 -.085a1 1 0 0 0 -.633 -1.62l-6.38 -.926l-2.852 -5.78a1 1 0 0 0 -1.794 0l-2.853 5.78z"
+						stroke-width="0"
+						fill="currentColor"></path>
+				</svg>
+			{/each}
+		</div>
+	{/if}
+
+	<div class="flex felx-wrap items-center gap-2 whitespace-nowrap">
+		<span>
+			{#if ratingCount}
+				{ratingCount}
+			{:else}
+				No
+			{/if}
+
+			{#if ratingCount > 1}
+				Review
+			{:else}
+				Rating
+			{/if}
+		</span>
+
+		&
+
+		<span>
+			{#if reviewCount}
+				{reviewCount}
+			{:else}
+				No
+			{/if}
+
+			{#if reviewCount > 1}
+				Reviews
+			{:else}
+				Review
+			{/if}
+		</span>
 	</div>
-{/if}
+</div>
