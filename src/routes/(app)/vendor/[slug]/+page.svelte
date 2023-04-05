@@ -2,22 +2,23 @@
 import { dateOnly } from '$lib/utils'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import Pagination from '$lib/components/Pagination.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
 import RatingStarDisplay from '$lib/ui/RatingStarDisplay.svelte'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'
 
 export let data
 
-console.log('data', data)
+// console.log('data', data)
 </script>
 
 <section class="min-h-screen">
 	<div class="sm:p-10">
 		<div class="container mx-auto w-full max-w-6xl">
-			<!-- Vendor Profile -->
-
 			{#if data.vendor}
 				<div class="grid grid-cols-1 lg:grid-cols-6 lg:gap-10">
+					<!-- Vendor Profile -->
+
 					<div class="col-span-1 lg:col-span-2 px-3 py-5 sm:px-0 sm:py-0">
 						<div
 							class="static flex flex-col items-center justify-center gap-4 lg:sticky lg:top-32 max-w-sm mx-auto">
@@ -51,7 +52,7 @@ console.log('data', data)
 
 							<ul class="flex flex-col gap-1">
 								{#if data.vendor?.storeName}
-									<li class="itmes-center flex gap-2">
+									<li class="items-center flex gap-2">
 										<h6 class="w-28 font-semibold">Store</h6>
 
 										<span>:</span>
@@ -61,7 +62,7 @@ console.log('data', data)
 								{/if}
 
 								{#if data.vendor?.productSold}
-									<li class="itmes-center flex gap-2">
+									<li class="items-center flex gap-2">
 										<h6 class="w-28 font-semibold">Product Sold</h6>
 
 										<span>:</span>
@@ -70,7 +71,7 @@ console.log('data', data)
 									</li>
 								{/if}
 
-								<li class="itmes-center flex gap-2">
+								<li class="items-center flex gap-2">
 									<h6 class="w-28 shrink-0 font-semibold">Ratings</h6>
 
 									<span>:</span>
@@ -78,7 +79,7 @@ console.log('data', data)
 									<RatingStarDisplay rating="{data.vendor?.ratings}" />
 								</li>
 
-								<li class="itmes-center flex gap-2">
+								<li class="items-center flex gap-2">
 									<h6 class="w-28 font-semibold">Verified</h6>
 
 									<span>:</span>
@@ -89,7 +90,7 @@ console.log('data', data)
 								</li>
 
 								{#if data.vendor?.createdAt}
-									<li class="itmes-center flex gap-2">
+									<li class="items-center flex gap-2">
 										<h6 class="w-28 font-semibold">Registered</h6>
 
 										<span>:</span>
@@ -263,10 +264,16 @@ console.log('data', data)
 						</div>
 					</div>
 
+					<!-- Vendor products -->
+
 					<div class="col-span-1 lg:col-span-4">
 						<div class="flex items-center justify-between gap-5">
-							<h2 class="text-xl font-bold sm:text-2xl md:text-3xl p-5">
-								Vendor Products {data.vendorsProduct?.length}
+							<h2 class="text-xl font-bold sm:text-2xl md:text-3xl p-5 lg:p-0 lg:mb-5">
+								Vendor's Product
+
+								{#if data.vendorsProduct?.count}
+									({data.vendorsProduct?.count})
+								{/if}
 							</h2>
 
 							<!-- <a
@@ -277,24 +284,30 @@ console.log('data', data)
 							</a> -->
 						</div>
 
-						{#if data.vendorsProduct?.length}
-							<ul
-								class="grid w-full grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6">
-								{#each data.vendorsProduct as p, ix}
-									<li>
-										<ProductCard product="{p}" />
-									</li>
-								{/each}
+						{#if data.vendorsProduct?.count}
+							<div>
+								<ul
+									class="grid w-full grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6">
+									{#each data.vendorsProduct?.data as p, ix}
+										<li>
+											<ProductCard product="{p}" />
+										</li>
+									{/each}
 
-								{#each { length: 7 } as _}
-									<li class="hidden sm:block">
-										<DummyProductCard />
-									</li>
-								{/each}
-							</ul>
+									{#each { length: 7 } as _}
+										<li class="hidden sm:block">
+											<DummyProductCard />
+										</li>
+									{/each}
+								</ul>
+
+								<Pagination
+									count="{Math.ceil((data.vendorsProduct?.count || 1) / 40)}"
+									current="{data.page || 1}" />
+							</div>
 						{:else}
-							<p class="text-sm text-gray-500">
-								No product found, vendor has not uploaded any product yet.
+							<p class="bg-gray-200 rounded p-5 text-sm text-gray-500 text-center">
+								Oops!...No product found, vendor has not uploaded any product yet.
 							</p>
 						{/if}
 					</div>
