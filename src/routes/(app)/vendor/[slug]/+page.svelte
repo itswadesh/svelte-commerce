@@ -44,9 +44,9 @@ export let data
 										</li>
 									{/if}
 
-									{#if data.vendor?.name}
+									<!-- {#if data.vendor?.name}
 										<li>{data.vendor?.name}</li>
-									{/if}
+									{/if} -->
 								</ul>
 							{/if}
 
@@ -102,7 +102,7 @@ export let data
 
 							<hr class="w-full" />
 
-							{#if data.vendor?.email || data.vendor?.phone}
+							<!-- {#if data.vendor?.email || data.vendor?.phone}
 								<div>
 									{#if data.vendor?.email}
 										<p>{data.vendor?.email}</p>
@@ -112,7 +112,7 @@ export let data
 										<p>{data.vendor?.phone}</p>
 									{/if}
 								</div>
-							{/if}
+							{/if} -->
 
 							<ul class="flex flex-wrap items-center gap-1">
 								<!-- Facebook -->
