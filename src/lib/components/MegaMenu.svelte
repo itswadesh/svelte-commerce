@@ -76,7 +76,7 @@ async function getMegaMenu() {
 			on:mouseenter="{() => (selectedCategory = category.name)}"
 			on:mouseleave="{() => (selectedCategory = '')}">
 			<div
-				class="itmes-center relative flex h-20 shrink-0 justify-center whitespace-nowrap border-b-4 border-transparent p-2 font-medium uppercase
+				class="items-center relative flex h-20 shrink-0 justify-center whitespace-nowrap border-b-4 border-transparent p-2 font-medium uppercase
                     {index % 6 == 0 ? 'hover:border-yellow-500' : ''}
                     {index % 6 == 1 ? 'hover:border-purple-500' : ''}
                     {index % 6 == 2 ? 'hover:border-red-500' : ''}
