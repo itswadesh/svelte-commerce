@@ -1199,7 +1199,7 @@ function handleMobileCanvas() {
 						<b>Seller : </b>
 
 						<a
-							href="/vendor/{data.product?.vendor?.slug}?id={data.product?.vendor?._id}"
+							href="/vendor/{data.product?.vendor?.slug}"
 							class="block hover:underline">
 							{data.product?.vendor?.name}
 						</a>

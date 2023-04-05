@@ -139,7 +139,7 @@ onMount(() => {
 												<b>Seller :</b>
 
 												<a
-													href="{`/vendor/${item.vendor?.id}`}"
+													href="{`/vendor/${item.vendor?.slug}`}"
 													aria-label="Click to view the vendor's profile"
 													class="font-medium">
 													{item.vendor?.businessName}
