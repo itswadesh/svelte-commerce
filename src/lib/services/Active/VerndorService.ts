@@ -2,14 +2,14 @@ import { getAPI } from '$lib/utils/api'
 import { getBySid } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 
-export const fetchVendor = async ({ origin, slug, storeId, server = false, sid = null }: any) => {
+export const fetchVendor = async ({ origin, id, storeId, server = false, sid = null }: any) => {
 	try {
 		let res: any = {}
 
 		if (server) {
-			res = await getBySid(`vendors/${slug}`, sid)
+			res = await getBySid(`vendors/${id}`, sid)
 		} else {
-			res = await getAPI(`vendors/${slug}`, origin)
+			res = await getAPI(`vendors/${id}`, origin)
 		}
 
 		return res || {}
@@ -19,23 +19,22 @@ export const fetchVendor = async ({ origin, slug, storeId, server = false, sid =
 }
 
 export const fetchProductsOfVendor = async ({
-	id,
 	origin,
-	page,
+	id,
+	storeId,
 	server = false,
-	sid = null,
-	storeId
+	sid = null
 }: any) => {
 	try {
 		let res: any = {}
 
 		if (server) {
-			res = await getBySid(`products?vendors=${id}&page=${page}&store=${storeId}`, sid)
+			res = await getBySid(`products?vendors=${id}&store=${storeId}`, sid)
 		} else {
-			res = await getAPI(`products?vendors=${id}&page=${page}&store=${storeId}`, origin)
+			res = await getAPI(`products?vendors=${id}&store=${storeId}`, origin)
 		}
 
-		return res || {}
+		return res.data || []
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)
 	}
