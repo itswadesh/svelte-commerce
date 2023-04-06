@@ -13,13 +13,13 @@ export const fetchCollections = async ({
 		let res: any = {}
 
 		if (server) {
-			res = await getBySid(`admin/collections?store=${storeId}`, sid)
+			res = await getBySid(`collections?store=${storeId}`, sid)
 		} else {
-			res = await getAPI(`admin/collections?store=${storeId}`, origin)
+			res = await getAPI(`collections?store=${storeId}`, origin)
 		}
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		return {}
 	}
 }
