@@ -14,6 +14,6 @@ export const fetchDeals = async ({ origin, query, storeId, server = false, sid =
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		return {}
 	}
 }
