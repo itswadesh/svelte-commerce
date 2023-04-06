@@ -11,6 +11,12 @@ export let deal
 $: innerWidth = 0
 let Carousel, Splide
 
+let widthOfSlider = innerWidth - 410
+
+if (deal.img) {
+	widthOfSlider = innerWidth
+}
+
 onMount(async () => {
 	const SplideModule = await import('$lib/components/SplideJs.svelte')
 	Splide = SplideModule.default
@@ -36,17 +42,14 @@ onMount(async () => {
 			<svelte:component
 				this="{Splide}"
 				options="{{
-					type: 'loop',
-					rewind: true,
-					perMove: 1,
-					keyboard: true,
-					gap: '12px',
-					pagination: false,
 					autoWidth: true,
-					width: innerWidth - 410,
-					height: '100%'
+					gap: '12px',
+					height: '100%',
+					pagination: false,
+					perMove: 1,
+					width: widthOfSlider
 				}}">
-				{#each deal.products as p, ix}
+				{#each deal.products as p}
 					{#if p}
 						<SplideSlide>
 							<ProductCard product="{p}" />

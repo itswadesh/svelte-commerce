@@ -1,15 +1,16 @@
 import { DOMAIN, HTTP_ENDPOINT } from '$lib/config'
 // import { redis } from '$lib/server/redis'
-import { DealsService, HomeService } from '$lib/services'
+import { CollectionService, DealsService, HomeService } from '$lib/services'
 import { error } from '@sveltejs/kit'
 
-export async function load({ locals, setHeaders }) {
+export async function load({ cookies, locals, setHeaders }) {
 	// console.log('Store ID.............', locals.store?.id)
 
 	const { store, origin } = locals
 
 	let home = {}
 	let deals = {}
+	let collections = {}
 
 	try {
 		// const cached = await redis.get(`home-www-${locals.store?.id}`)
@@ -24,8 +25,14 @@ export async function load({ locals, setHeaders }) {
 		// }
 		deals = await DealsService.fetchDeals({ storeId: store?.id, server: true })
 
+		collections = await CollectionService.fetchCollections({
+			storeId: store?.id,
+			server: true,
+			sid: cookies.get('sid')
+		})
+
 		if (home) {
-			return { home: home, deals: deals }
+			return { home, deals, collections }
 		}
 	} catch (e) {
 		throw error(

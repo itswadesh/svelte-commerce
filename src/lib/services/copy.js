@@ -1,16 +1,20 @@
-import shell from 'shelljs'
 import { config } from 'dotenv'
+import shell from 'shelljs'
+
 config()
+
 const provider = process.env.PUBLIC_API_PROVIDER || 'Litekart'
+
 shell.cd('src/lib/services')
 // shell.rm('-Rf', 'Active')
 // shell.mkdir('-p', '-f', 'Active')
 shell.cp('-R', `${provider}/AddressService.ts`, 'Active/AddressService.ts')
+shell.cp('-R', `${provider}/AutocompleteService.ts`, 'Active/AutocompleteService.ts')
 shell.cp('-R', `${provider}/BannersService.ts`, 'Active/BannersService.ts')
 shell.cp('-R', `${provider}/BlogService.ts`, 'Active/BlogService.ts')
-shell.cp('-R', `${provider}/AutocompleteService.ts`, 'Active/AutocompleteService.ts')
 shell.cp('-R', `${provider}/CartService.ts`, 'Active/CartService.ts')
 shell.cp('-R', `${provider}/CategoryService.ts`, 'Active/CategoryService.ts')
+shell.cp('-R', `${provider}/CollectionService.ts`, 'Active/CollectionService.ts')
 shell.cp('-R', `${provider}/ContactService.ts`, 'Active/ContactService.ts')
 shell.cp('-R', `${provider}/CountryService.ts`, 'Active/CountryService.ts')
 shell.cp('-R', `${provider}/CouponService.ts`, 'Active/CouponService.ts')
