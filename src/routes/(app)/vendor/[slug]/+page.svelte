@@ -9,7 +9,7 @@ import userEmptyProfile from '$lib/assets/user-empty-profile.png'
 
 export let data
 
-// console.log('data', data)
+console.log('data', data)
 </script>
 
 <section class="min-h-screen">
