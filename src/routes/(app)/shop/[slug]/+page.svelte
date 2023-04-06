@@ -10,13 +10,16 @@ import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
-$: heroBanners = data.banners?.data.filter((b) => {
+$: heroBanners = data.banners?.data?.filter((b) => {
 	return b.type === 'hero'
 })
 
 $: pickedBanners = data.groupByBanners?.filter((b) => {
-	return b._id?.title !== null
+	if (b._id && b._id.title && b._id.title !== null) {
+		return b
+	}
 })
 
 let seoProps = {
@@ -28,15 +31,15 @@ let seoProps = {
 <SEO {...seoProps} />
 
 <div>
-	{#if data.banners?.count > 0 || data.groupByBanners?.count > 0}
+	{#if data.banners?.length || data.groupByBanners?.length}
 		<div class="bg-opacity-25 bg-center bg-repeat">
 			<div class="mb-20 sm:mb-0">
 				<div class="flex flex-col gap-5 sm:gap-10">
-					<Hero banners="{data.banners?.data}" />
+					<Hero banners="{data.banners}" />
 
 					<!-- HERO BANNERS -->
 
-					{#await data.banners?.data}
+					{#await data.banners}
 						<div class="grid grid-cols-2 items-center gap-2 md:grid-cols-4">
 							<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
 
@@ -49,7 +52,7 @@ let seoProps = {
 							<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
 						</div>
 					{:then banner}
-						{#if heroBanners.length > 0}
+						{#if heroBanners?.length}
 							<div>
 								<h1
 									class="uppercase p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 md:py-10 sm:text-2xl md:text-3xl xl:text-4xl">
@@ -76,7 +79,7 @@ let seoProps = {
 							<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
 						</div>
 					{:then banner}
-						{#if pickedBanners.length > 0}
+						{#if pickedBanners.length}
 							<div>
 								<PageIdPickedBanner pickedBanners="{pickedBanners}" />
 							</div>
