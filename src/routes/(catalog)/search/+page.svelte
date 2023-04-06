@@ -420,9 +420,13 @@ function handleFilterTags() {
 						<!-- Name and count -->
 
 						<h1 class="flex flex-wrap items-center gap-2">
-							<span class="text-xl font-bold capitalize md:text-2xl"> {data.searchData} </span>
+							{#if data.searchData}
+								<span class="text-xl font-bold capitalize md:text-2xl">
+									{data.searchData}
+								</span>
 
-							-
+								-
+							{/if}
 
 							<span>
 								<span class="font-bold text-2xl">

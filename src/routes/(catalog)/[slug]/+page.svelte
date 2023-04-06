@@ -395,9 +395,13 @@ function handleFilterTags() {
 						<!-- Name and count -->
 
 						<h1 class="flex flex-wrap items-center gap-2">
-							<span class="text-xl font-bold capitalize md:text-2xl"> {data.category?.name} </span>
+							{#if data.category?.name}
+								<span class="text-xl font-bold capitalize md:text-2xl">
+									{data.category?.name}
+								</span>
 
-							-
+								-
+							{/if}
 
 							<span>
 								<span class="font-bold text-2xl">
