@@ -15,7 +15,7 @@ export async function load({ cookies, locals, params, parent, url }) {
 
 	if (vendor._id) {
 		vendorsProduct = await VerndorService.fetchProductsOfVendor({
-			id: vendor._id,
+			slug: vendorSlug,
 			page: page,
 			server: true,
 			sid: cookies.get('connect.sid'),
