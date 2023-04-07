@@ -26,7 +26,7 @@ onMount(async () => {
 <svelte:window bind:innerWidth="{innerWidth}" />
 
 {#if deal}
-	<div class="hidden items-start justify-start gap-3 lg:flex">
+	<div class="hidden items-start justify-start gap-3 sm:flex" class:px-10="{!deal.img}">
 		{#if deal.img}
 			<div class="shrink-0">
 				<LazyImg
@@ -60,7 +60,7 @@ onMount(async () => {
 		</div>
 	</div>
 
-	<div class="flex w-[98vw] items-start justify-start gap-3 overflow-x-auto lg:hidden">
+	<div class="flex w-[98vw] items-start justify-start gap-3 overflow-x-auto sm:hidden">
 		{#if deal.img}
 			<div class="shrink-0">
 				<LazyImg
