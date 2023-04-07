@@ -19,10 +19,13 @@ export async function load({ cookies, locals, setHeaders }) {
 		// 	home = JSON.parse(cached)
 		// } else {
 		// console.log('Cache miss!')
+
 		home = await HomeService.fetchHome({ storeId: store?.id, server: true })
+
 		// setHeaders({ 'cache-control': 'max-age: 600' })
 		// redis.set(`home-www-${locals.store?.id}`, JSON.stringify(home), 'EX', 600)
 		// }
+
 		deals = await DealsService.fetchDeals({ storeId: store?.id, server: true })
 
 		collections = await CollectionService.fetchCollections({

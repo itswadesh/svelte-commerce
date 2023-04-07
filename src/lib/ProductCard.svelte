@@ -36,6 +36,10 @@ import productVeg from '$lib/assets/product/veg.png'
 
 export let product = {}
 
+if (product?._source) {
+	product = product?._source
+}
+
 // console.log('zzzzzzzzzzzzzzzzzz', product)
 
 let show,

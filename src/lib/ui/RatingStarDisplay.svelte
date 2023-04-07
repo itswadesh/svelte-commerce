@@ -1,12 +1,15 @@
 <script>
-export let rating,
-	ratingCount,
-	reviewCount,
-	textWhite = false,
-	biggerSize = false
+export let biggerSize = false
+export let rating
+export let ratingCount
+export let reviewCount
+export let textWhite = false
 
-let fullColorCount = 0,
-	disableColorCount = 0
+let clazz = ''
+export { clazz as class }
+
+let disableColorCount = 0
+let fullColorCount = 0
 
 $: if (rating == 1.5) {
 	fullColorCount = 1
@@ -24,7 +27,7 @@ $: if (rating == 1.5) {
 </script>
 
 <div
-	class="flex flex-wrap items-center gap-2 text-sm
+	class="{clazz} text-sm
 	{textWhite ? 'text-white' : 'text-gray-800'} 
 	{biggerSize ? 'font-semibold' : 'font-normal'}">
 	{#if rating == 4.5 || rating == 3.5 || rating == 2.5 || rating == 1.5}
