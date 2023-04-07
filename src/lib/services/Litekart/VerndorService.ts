@@ -30,9 +30,9 @@ export const fetchProductsOfVendor = async ({
 		let res: any = {}
 
 		if (server) {
-			res = await getBySid(`products?vendors=${id}&page=${page}&store=${storeId}`, sid)
+			res = await getBySid(`es/products?vendors=${id}&page=${page}&store=${storeId}`, sid)
 		} else {
-			res = await getAPI(`products?vendors=${id}&page=${page}&store=${storeId}`, origin)
+			res = await getAPI(`es/products?vendors=${id}&page=${page}&store=${storeId}`, origin)
 		}
 
 		return res || {}
