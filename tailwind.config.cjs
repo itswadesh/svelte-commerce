@@ -61,9 +61,5 @@ module.exports = {
 			fontFamily: {}
 		}
 	},
-	plugins: [
-		require('tailwind-scrollbar'),
-		require('@tailwindcss/typography'),
-		require('@tailwindcss/line-clamp')
-	]
+	plugins: [require('tailwind-scrollbar'), require('@tailwindcss/typography')]
 }
