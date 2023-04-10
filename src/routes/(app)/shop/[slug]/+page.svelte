@@ -1,26 +1,25 @@
 <script>
-// import logo from '$lib/assets/logo.svg'
-// import ProductTab from '$lib/components/Product/ProductTab.svelte'
+import { browser } from '$app/environment'
+import { CategoryService } from '$lib/services'
 import { goto } from '$app/navigation'
+import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import { toast } from '$lib/utils'
 import CategoriesMobile from '$lib/home/CategoriesMobile.svelte'
 import dayjs from 'dayjs'
-import Deals from '$lib/home/Deals.svelte'
-import DummyProductCard from '$lib/DummyProductCard.svelte'
 import Hero from '$lib/home/Hero.svelte'
 import HeroBanners from '$lib/home/HeroBanners.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import MobileFooter from '$lib/MobileFooter.svelte'
 import PickedBanners from '$lib/home/PickedBanners.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import ProductCard from '$lib/ProductCard.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 let today = dayjs(new Date()).toISOString()
 
 export let data
 
-// console.log('zzzzzzzzzzzzzzzzzz', data)
+console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -88,6 +87,76 @@ let seoProps = {
 	title: $page.data.store?.title,
 	twitterImage: { url: $page.data.store?.logo }
 }
+
+let loading = false
+let megamenu = []
+let showChild = []
+let showChild2 = []
+let bgColors = [
+	'bg-fuchsia-200',
+	'bg-blue-200',
+	'bg-green-200',
+	'bg-stone-200',
+	'bg-indigo-200',
+	'bg-amber-200',
+	'bg-lime-200',
+	'bg-orange-200',
+	'bg-teal-200',
+	'bg-cyan-200',
+	'bg-yellow-200',
+	'bg-gray-200'
+]
+
+onMount(() => {
+	getMegaMenu()
+})
+
+async function getMegaMenu() {
+	loading = true
+
+	if (browser) {
+		try {
+			const localMegamenu = localStorage.getItem('megamenu')
+
+			if (!localMegamenu || localMegamenu === 'undefined') {
+				megamenu = await CategoryService.fetchMegamenuData({
+					origin: $page.data.origin,
+					storeId: $page.data.store?.id
+				})
+			} else {
+				megamenu = JSON.parse(localMegamenu)
+			}
+
+			megamenu = megamenu.filter((e) => {
+				return e.name !== 'New Arrivals'
+			})
+
+			// console.log('megamenu', megamenu)
+		} catch (e) {
+			toast(e, 'error')
+		} finally {
+		}
+	}
+
+	loading = false
+}
+
+function toggle(mx) {
+	if (showChild[mx] === true) {
+		showChild[mx] = false
+		toggle2(mx)
+	} else {
+		showChild[mx] = true
+	}
+}
+
+function toggle2(cx) {
+	if (showChild2[cx] === true) {
+		showChild2[cx] = false
+	} else {
+		showChild2[cx] = true
+	}
+}
 </script>
 
 <SEO {...seoProps} />
@@ -99,78 +168,18 @@ let seoProps = {
 
 			{#await data then categories}
 				{#if data?.categories?.length}
-					<div class="block sm:hidden">
+					<div class="mb-5 sm:mb-10 block sm:hidden">
 						<CategoriesMobile loading="{data.isFetching}" categories="{data?.categories}" />
 					</div>
 				{/if}
 			{/await}
 
-			<div class="mb-5 sm:mb-10">
-				<Hero banners="{data.banners}" />
-			</div>
-
-			{#if data.store?.alert}
-				<div class="p-3 py-5 sm:p-10 bg-primary-50">
-					<h1 class="container mx-auto text-center text-3xl font-bold sm:text-4xl md:text-5xl">
-						{data.store?.alert}
-					</h1>
-				</div>
-			{/if}
-
-			<!-- TOP CATEGORIES -->
-
-			{#if data.categories?.length}
-				<div class="mb-5 hidden sm:mb-10 sm:block">
-					<h2
-						class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
-						TOP COLLECTIONS
-					</h2>
-
-					<div class="max-w-screen overflow-x-auto scrollbar-none lg:hidden">
-						<div class="flex flex-row">
-							{#each data.categories as category}
-								{#if category?.img || category?.img}
-									<a
-										href="/{category.link || category.slug || '##'}"
-										aria-label="Click to get the category related products"
-										class="shrink-0">
-										<LazyImg
-											src="{category.img || category.img}"
-											alt=""
-											width="375"
-											height="375"
-											aspect_ratio="1:1"
-											class="w-[47vw] object-contain sm:w-60" />
-									</a>
-								{/if}
-							{/each}
-						</div>
-					</div>
-
-					<div class="hidden grid-cols-7 lg:grid">
-						{#each data.categories as category}
-							{#if category?.img || category?.img}
-								<a
-									href="/{category.link || category.slug || '##'}"
-									aria-label="Click to get the category related products"
-									class="col-span-1">
-									<LazyImg
-										src="{category.img || category.img}"
-										alt=""
-										width="375"
-										aspect_ratio="1:1"
-										class="h-full w-full object-contain" />
-								</a>
-							{/if}
-						{/each}
-					</div>
-				</div>
-			{/if}
+			<Hero banners="{data.banners}" />
 
 			<!-- HERO BANNERS -->
 
 			{#await data.heroBanners}
-				<div class="grid grid-cols-2 items-center gap-2 md:grid-cols-4">
+				<div class="mt-5 sm:mt-10 grid grid-cols-2 items-center gap-2 md:grid-cols-4">
 					<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
 
 					<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
@@ -183,7 +192,7 @@ let seoProps = {
 				</div>
 			{:then heroBanners}
 				{#if data.heroBanners?.length}
-					<div class="mb-5 sm:mb-10">
+					<div class="mt-5 sm:mt-10">
 						<h2
 							class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
 							BEST OF {$page.data.store?.websiteName} EXCLUSIVE
@@ -197,7 +206,7 @@ let seoProps = {
 			<!-- PICKED BANNERS -->
 
 			{#await data.groupByBanner}
-				<div class="grid grid-cols-2 items-center gap-2 md:grid-cols-4">
+				<div class="mt-5 sm:mt-10 grid grid-cols-2 items-center gap-2 md:grid-cols-4">
 					<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
 
 					<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
@@ -210,11 +219,147 @@ let seoProps = {
 				</div>
 			{:then groupByBanner}
 				{#if data.groupByBanner?.length}
-					<div class="mb-5 sm:mb-10">
+					<div class="mt-5 sm:mt-10">
 						<PickedBanners banners="{data.groupByBanner}" />
 					</div>
 				{/if}
 			{/await}
+
+			{#if megamenu.length}
+				<div class="mt-5 sm:mt-10">
+					<h2
+						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
+						Categories
+					</h2>
+
+					<!-- 1st level categories -->
+
+					<ul class="flex flex-col divide-y-2 divide-white tracking-wider text-center">
+						{#each megamenu as m, mx}
+							{#if m}
+								<li>
+									{#if m.children?.length}
+										<button
+											type="button"
+											class="flex h-24 w-full items-end justify-between focus:outline-none 
+											{bgColors[mx]}">
+											<div class="flex h-full w-full flex-1 items-center justify-center gap-4 px-6">
+												<a
+													href="/{m.link || m.slug}"
+													aria-label="Click to route {m.name || '##'}"
+													class="block text-xl font-bold uppercase">
+													{m.name}
+												</a>
+
+												<button
+													type="button"
+													class="overflow-hidden rounded-full bg-transparent
+													hover:bg-white/50 transition duration-300 p-2 focus:outline-none"
+													on:click="{() => toggle(mx)}">
+													<svg
+														xmlns="http://www.w3.org/2000/svg"
+														class="h-6 w-6 shrink-0 transition duration-300
+														{showChild[mx] ? 'transform -rotate-180' : ''}"
+														viewBox="0 0 20 20"
+														fill="currentColor">
+														<path
+															fill-rule="evenodd"
+															d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+															clip-rule="evenodd"></path>
+													</svg>
+												</button>
+											</div>
+										</button>
+									{:else}
+										<a
+											href="/{m.link || m.slug}"
+											aria-label="Click to route {m.name || '##'}"
+											class="flex items-center justify-center h-24 w-full {bgColors[mx]}">
+											<h1 class="flex-1 text-xl font-bold uppercase px-6">
+												{m.name}
+											</h1>
+										</a>
+									{/if}
+
+									<!-- 2nd level categories -->
+
+									{#if showChild[mx]}
+										{#if m.children?.length}
+											<ul class="flex flex-col divide-y">
+												{#each m.children as c, cx}
+													<li>
+														{#if c.children?.length}
+															<div
+																class="flex w-full items-center justify-center gap-4 py-3 px-8 text-left font-medium focus:outline-none">
+																<a
+																	href="/{c.link || c.slug}"
+																	aria-label="Click to route {c.name || '##'}"
+																	class="block">
+																	{c.name}
+																</a>
+
+																<button
+																	type="button"
+																	class="overflow-hidden rounded-full bg-transparent hover:bg-gray-200/50 transition duration-300 p-2 focus:outline-none"
+																	on:click="{() => toggle2(cx)}">
+																	<svg
+																		xmlns="http://www.w3.org/2000/svg"
+																		class="h-6 w-6 shrink-0 transition duration-300 {showChild2[cx]
+																			? 'transform -rotate-180'
+																			: ''}"
+																		viewBox="0 0 20 20"
+																		fill="currentColor">
+																		<path
+																			fill-rule="evenodd"
+																			d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+																			clip-rule="evenodd"></path>
+																	</svg>
+																</button>
+															</div>
+														{:else}
+															<a
+																href="/{c.link || c.slug}"
+																aria-label="Click to route {c.name || '##'}"
+																class="py-3 px-8 font-medium">
+																<h6>{c.name}</h6>
+															</a>
+														{/if}
+
+														<!-- 3rd level categories -->
+
+														{#if showChild2[cx]}
+															{#if c.children?.length}
+																<ul class="flex flex-col divide-y bg-gray-100">
+																	{#each c.children as cc}
+																		<li>
+																			<a
+																				href="/{cc.link || cc.slug}"
+																				aria-label="Click to route {cc.name || '##'}"
+																				class="block py-3 px-8 font-medium">
+																				{cc.name}
+																			</a>
+																		</li>
+																	{/each}
+																</ul>
+															{/if}
+														{/if}
+													</li>
+												{/each}
+											</ul>
+										{/if}
+									{/if}
+								</li>
+							{/if}
+						{/each}
+					</ul>
+				</div>
+			{/if}
+
+			{#if data.content}
+				<div class="my-5 sm:my-10 px-3 sm:px-10">
+					{@html data.content}
+				</div>
+			{/if}
 		</div>
 
 		<!-- MOBILE FOOTER -->
