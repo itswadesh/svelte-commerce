@@ -8,6 +8,7 @@ import noDataAvailable from '$lib/assets/no/no-data-available.png'
 import PageIdPickedBanner from '$lib/components/PageIdBanners/PageIdPickedBanner.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+import CategoriesMobile from '$lib/home/CategoriesMobile.svelte'
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
@@ -23,8 +24,8 @@ $: pickedBanners = data.groupByBanners?.filter((b) => {
 })
 
 let seoProps = {
-	title: `Category specific banners`,
-	description: `Category specific banners`
+	title: `Shop`,
+	description: `Shop`
 }
 </script>
 
@@ -88,26 +89,9 @@ let seoProps = {
 				</div>
 			</div>
 		</div>
-	{:else}
-		<div class="flex h-[70vh] items-center justify-center">
-			<div class="m-10 flex flex-col items-center justify-center text-center">
-				<h1 class="mb-10 text-xl font-semibold capitalize sm:text-2xl lg:text-3xl">
-					Oops!!, No Items Found In this Id
-				</h1>
-
-				<div class="mb-5">
-					<img
-						src="{noDataAvailable}"
-						alt="no data available"
-						class="h-60 w-auto object-contain text-xs" />
-				</div>
-
-				<p class="mb-5 text-center text-gray-500">No data found</p>
-
-				<PrimaryButton class="text-sm" on:click="{() => goto('/')}">Back to banner</PrimaryButton>
-			</div>
-		</div>
 	{/if}
+
+	{@html data.page.description}
 
 	<!-- MOBILE FOOTER -->
 
