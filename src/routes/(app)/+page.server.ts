@@ -3,7 +3,7 @@ import { DOMAIN, HTTP_ENDPOINT } from '$lib/config'
 import { CollectionService, DealsService, HomeService } from '$lib/services'
 import { error } from '@sveltejs/kit'
 
-export async function load({ cookies, locals, setHeaders }) {
+export function load({ cookies, locals, setHeaders }) {
 	// console.log('Store ID.............', locals.store?.id)
 
 	const { store, origin } = locals
@@ -20,15 +20,15 @@ export async function load({ cookies, locals, setHeaders }) {
 		// } else {
 		// console.log('Cache miss!')
 
-		home = await HomeService.fetchHome({ storeId: store?.id, server: true })
+		home = HomeService.fetchHome({ storeId: store?.id, server: true })
 
 		// setHeaders({ 'cache-control': 'max-age: 600' })
 		// redis.set(`home-www-${locals.store?.id}`, JSON.stringify(home), 'EX', 600)
 		// }
 
-		deals = await DealsService.fetchDeals({ storeId: store?.id, server: true })
+		deals = DealsService.fetchDeals({ storeId: store?.id, server: true })
 
-		collections = await CollectionService.fetchCollections({
+		collections = CollectionService.fetchCollections({
 			storeId: store?.id,
 			server: true,
 			sid: cookies.get('sid')

@@ -44,6 +44,7 @@ export const fetchHome = async ({
 			banners,
 			brands: res?.brands,
 			categories,
+			content: res?.content,
 			groupByBanner,
 			heroBanners,
 			trending: res?.trending,
