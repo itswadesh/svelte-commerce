@@ -40,13 +40,14 @@ export const fetchHome = async ({
 			categories = res?.categories?.data
 		}
 
-		console.log('res?.categories?.data?.length', res?.categories?.data?.length)
-
 		return {
 			banners,
+			brands: res?.brands,
 			categories,
 			groupByBanner,
-			heroBanners
+			heroBanners,
+			trending: res?.trending,
+			youMayLike: res?.youMayLike
 		}
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)
