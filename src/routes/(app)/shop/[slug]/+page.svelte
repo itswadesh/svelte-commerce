@@ -162,229 +162,208 @@ function toggle2(cx) {
 <SEO {...seoProps} />
 
 <div class="bg-opacity-25 bg-center bg-repeat">
-	{#if data.banners?.length > 0 || data.groupByBanners?.length > 0}
-		<div class="mb-14 sm:mb-0">
-			<!-- CATEGORIES SLIDER MOBILE -->
+	<div class="mb-14 sm:mb-0">
+		<!-- CATEGORIES SLIDER MOBILE -->
 
-			{#await data then categories}
-				{#if data?.categories?.length}
-					<div class="mb-5 sm:mb-10 block sm:hidden">
-						<CategoriesMobile loading="{data.isFetching}" categories="{data?.categories}" />
-					</div>
-				{/if}
-			{/await}
-
-			<Hero banners="{data.banners}" />
-
-			<!-- HERO BANNERS -->
-
-			{#await data.heroBanners}
-				<div class="mt-5 sm:mt-10 grid grid-cols-2 items-center gap-2 md:grid-cols-4">
-					<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
-
-					<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
-
-					<div class="col-span-1 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
-
-					<div class="col-span-1 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
-
-					<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+		{#await data then categories}
+			{#if data?.categories?.length}
+				<div class="mb-5 sm:mb-10 block sm:hidden">
+					<CategoriesMobile loading="{data.isFetching}" categories="{data?.categories}" />
 				</div>
-			{:then heroBanners}
-				{#if data.heroBanners?.length}
-					<div class="mt-5 sm:mt-10">
-						<h2
-							class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
-							BEST OF {$page.data.store?.websiteName} EXCLUSIVE
-						</h2>
+			{/if}
+		{/await}
 
-						<HeroBanners heroBanners="{data.heroBanners}" />
-					</div>
-				{/if}
-			{/await}
+		<Hero banners="{data.banners}" />
 
-			<!-- PICKED BANNERS -->
+		<!-- HERO BANNERS -->
 
-			{#await data.groupByBanner}
-				<div class="mt-5 sm:mt-10 grid grid-cols-2 items-center gap-2 md:grid-cols-4">
-					<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+		{#await data.heroBanners}
+			<div class="mt-5 sm:mt-10 grid grid-cols-2 items-center gap-2 md:grid-cols-4">
+				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
 
-					<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
 
-					<div class="col-span-1 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+				<div class="col-span-1 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
 
-					<div class="col-span-1 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+				<div class="col-span-1 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
 
-					<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
-				</div>
-			{:then groupByBanner}
-				{#if data.groupByBanner?.length}
-					<div class="mt-5 sm:mt-10">
-						<PickedBanners banners="{data.groupByBanner}" />
-					</div>
-				{/if}
-			{/await}
-
-			{#if megamenu.length}
+				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+			</div>
+		{:then heroBanners}
+			{#if data.heroBanners?.length}
 				<div class="mt-5 sm:mt-10">
 					<h2
 						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
-						Categories
+						BEST OF {$page.data.store?.websiteName} EXCLUSIVE
 					</h2>
 
-					<!-- 1st level categories -->
+					<HeroBanners heroBanners="{data.heroBanners}" />
+				</div>
+			{/if}
+		{/await}
 
-					<ul class="flex flex-col divide-y-2 divide-white tracking-wider text-center">
-						{#each megamenu as m, mx}
-							{#if m}
-								<li>
-									{#if m.children?.length}
-										<button
-											type="button"
-											class="flex h-24 w-full items-end justify-between focus:outline-none 
+		<!-- PICKED BANNERS -->
+
+		{#await data.groupByBanner}
+			<div class="mt-5 sm:mt-10 grid grid-cols-2 items-center gap-2 md:grid-cols-4">
+				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+
+				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+
+				<div class="col-span-1 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+
+				<div class="col-span-1 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+
+				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+			</div>
+		{:then groupByBanner}
+			{#if data.groupByBanner?.length}
+				<div class="mt-5 sm:mt-10">
+					<PickedBanners banners="{data.groupByBanner}" />
+				</div>
+			{/if}
+		{/await}
+
+		{#if megamenu.length}
+			<div class="mt-5 sm:mt-10">
+				<h2
+					class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
+					Categories
+				</h2>
+
+				<!-- 1st level categories -->
+
+				<ul class="flex flex-col divide-y-2 divide-white tracking-wider text-center">
+					{#each megamenu as m, mx}
+						{#if m}
+							<li>
+								{#if m.children?.length}
+									<button
+										type="button"
+										class="flex h-24 w-full items-end justify-between focus:outline-none 
 											{bgColors[mx]}">
-											<div class="flex h-full w-full flex-1 items-center justify-center gap-4 px-6">
-												<a
-													href="/{m.link || m.slug}"
-													aria-label="Click to route {m.name || '##'}"
-													class="block text-xl font-bold uppercase">
-													{m.name}
-												</a>
-
-												<button
-													type="button"
-													class="overflow-hidden rounded-full bg-transparent
-													hover:bg-white/50 transition duration-300 p-2 focus:outline-none"
-													on:click="{() => toggle(mx)}">
-													<svg
-														xmlns="http://www.w3.org/2000/svg"
-														class="h-6 w-6 shrink-0 transition duration-300
-														{showChild[mx] ? 'transform -rotate-180' : ''}"
-														viewBox="0 0 20 20"
-														fill="currentColor">
-														<path
-															fill-rule="evenodd"
-															d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-															clip-rule="evenodd"></path>
-													</svg>
-												</button>
-											</div>
-										</button>
-									{:else}
-										<a
-											href="/{m.link || m.slug}"
-											aria-label="Click to route {m.name || '##'}"
-											class="flex items-center justify-center h-24 w-full {bgColors[mx]}">
-											<h1 class="flex-1 text-xl font-bold uppercase px-6">
+										<div class="flex h-full w-full flex-1 items-center justify-center gap-4 px-6">
+											<a
+												href="/{m.link || m.slug}"
+												aria-label="Click to route {m.name || '##'}"
+												class="block text-xl font-bold uppercase">
 												{m.name}
-											</h1>
-										</a>
-									{/if}
+											</a>
 
-									<!-- 2nd level categories -->
+											<button
+												type="button"
+												class="overflow-hidden rounded-full bg-transparent
+													hover:bg-white/50 transition duration-300 p-2 focus:outline-none"
+												on:click="{() => toggle(mx)}">
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													class="h-6 w-6 shrink-0 transition duration-300
+														{showChild[mx] ? 'transform -rotate-180' : ''}"
+													viewBox="0 0 20 20"
+													fill="currentColor">
+													<path
+														fill-rule="evenodd"
+														d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+														clip-rule="evenodd"></path>
+												</svg>
+											</button>
+										</div>
+									</button>
+								{:else}
+									<a
+										href="/{m.link || m.slug}"
+										aria-label="Click to route {m.name || '##'}"
+										class="flex items-center justify-center h-24 w-full {bgColors[mx]}">
+										<h1 class="flex-1 text-xl font-bold uppercase px-6">
+											{m.name}
+										</h1>
+									</a>
+								{/if}
 
-									{#if showChild[mx]}
-										{#if m.children?.length}
-											<ul class="flex flex-col divide-y">
-												{#each m.children as c, cx}
-													<li>
-														{#if c.children?.length}
-															<div
-																class="flex w-full items-center justify-center gap-4 py-3 px-8 text-left font-medium focus:outline-none">
-																<a
-																	href="/{c.link || c.slug}"
-																	aria-label="Click to route {c.name || '##'}"
-																	class="block">
-																	{c.name}
-																</a>
+								<!-- 2nd level categories -->
 
-																<button
-																	type="button"
-																	class="overflow-hidden rounded-full bg-transparent hover:bg-gray-200/50 transition duration-300 p-2 focus:outline-none"
-																	on:click="{() => toggle2(cx)}">
-																	<svg
-																		xmlns="http://www.w3.org/2000/svg"
-																		class="h-6 w-6 shrink-0 transition duration-300 {showChild2[cx]
-																			? 'transform -rotate-180'
-																			: ''}"
-																		viewBox="0 0 20 20"
-																		fill="currentColor">
-																		<path
-																			fill-rule="evenodd"
-																			d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-																			clip-rule="evenodd"></path>
-																	</svg>
-																</button>
-															</div>
-														{:else}
+								{#if showChild[mx]}
+									{#if m.children?.length}
+										<ul class="flex flex-col divide-y">
+											{#each m.children as c, cx}
+												<li>
+													{#if c.children?.length}
+														<div
+															class="flex w-full items-center justify-center gap-4 py-3 px-8 text-left font-medium focus:outline-none">
 															<a
 																href="/{c.link || c.slug}"
 																aria-label="Click to route {c.name || '##'}"
-																class="py-3 px-8 font-medium">
-																<h6>{c.name}</h6>
+																class="block">
+																{c.name}
 															</a>
-														{/if}
 
-														<!-- 3rd level categories -->
+															<button
+																type="button"
+																class="overflow-hidden rounded-full bg-transparent hover:bg-gray-200/50 transition duration-300 p-2 focus:outline-none"
+																on:click="{() => toggle2(cx)}">
+																<svg
+																	xmlns="http://www.w3.org/2000/svg"
+																	class="h-6 w-6 shrink-0 transition duration-300 {showChild2[cx]
+																		? 'transform -rotate-180'
+																		: ''}"
+																	viewBox="0 0 20 20"
+																	fill="currentColor">
+																	<path
+																		fill-rule="evenodd"
+																		d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+																		clip-rule="evenodd"></path>
+																</svg>
+															</button>
+														</div>
+													{:else}
+														<a
+															href="/{c.link || c.slug}"
+															aria-label="Click to route {c.name || '##'}"
+															class="py-3 px-8 font-medium">
+															<h6>{c.name}</h6>
+														</a>
+													{/if}
 
-														{#if showChild2[cx]}
-															{#if c.children?.length}
-																<ul class="flex flex-col divide-y bg-gray-100">
-																	{#each c.children as cc}
-																		<li>
-																			<a
-																				href="/{cc.link || cc.slug}"
-																				aria-label="Click to route {cc.name || '##'}"
-																				class="block py-3 px-8 font-medium">
-																				{cc.name}
-																			</a>
-																		</li>
-																	{/each}
-																</ul>
-															{/if}
+													<!-- 3rd level categories -->
+
+													{#if showChild2[cx]}
+														{#if c.children?.length}
+															<ul class="flex flex-col divide-y bg-gray-100">
+																{#each c.children as cc}
+																	<li>
+																		<a
+																			href="/{cc.link || cc.slug}"
+																			aria-label="Click to route {cc.name || '##'}"
+																			class="block py-3 px-8 font-medium">
+																			{cc.name}
+																		</a>
+																	</li>
+																{/each}
+															</ul>
 														{/if}
-													</li>
-												{/each}
-											</ul>
-										{/if}
+													{/if}
+												</li>
+											{/each}
+										</ul>
 									{/if}
-								</li>
-							{/if}
-						{/each}
-					</ul>
-				</div>
-			{/if}
-
-			{#if data.content}
-				<div class="my-5 sm:my-10 px-3 sm:px-10">
-					{@html data.content}
-				</div>
-			{/if}
-		</div>
-
-		<!-- MOBILE FOOTER -->
-
-		<div class="block lg:hidden">
-			<MobileFooter />
-		</div>
-	{:else}
-		<div class="flex h-[70vh] items-center justify-center">
-			<div class="m-10 flex flex-col items-center justify-center text-center">
-				<h1 class="mb-10 text-xl font-semibold capitalize sm:text-2xl lg:text-3xl">
-					Oops!!, No Items Found In this Id
-				</h1>
-
-				<div class="mb-5">
-					<img
-						src="/no/no-data-availible.png"
-						alt="no data availible"
-						class="h-20 w-20 text-xs object-contain" />
-				</div>
-
-				<p class="mb-5 text-center text-gray-500">No data found</p>
-
-				<PrimaryButton class="text-sm" on:click="{() => goto('/')}">Back to banner</PrimaryButton>
+								{/if}
+							</li>
+						{/if}
+					{/each}
+				</ul>
 			</div>
-		</div>
-	{/if}
+		{/if}
+
+		{#if data.content}
+			<div class="my-5 sm:my-10 px-3 sm:px-10">
+				{@html data.content}
+			</div>
+		{/if}
+	</div>
+
+	<!-- MOBILE FOOTER -->
+
+	<div class="block lg:hidden">
+		<MobileFooter />
+	</div>
 </div>
