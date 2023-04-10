@@ -5,8 +5,8 @@ config()
 
 const provider = process.env.PUBLIC_API_PROVIDER || 'Litekart'
 
-// shell.cd('src/lib/services')
-shell.ln('-s', `src/lib/services/${provider}/`, `src/lib/services/Active/`)
+shell.cd('./src/lib/services')
+shell.ln('-s', `${provider}/`, `Active/`)
 // shell.rm('-Rf', 'Active')
 // shell.mkdir('-p', '-f', 'Active')
 // shell.cp('-R', `${provider}/AddressService.ts`, 'Active/AddressService.ts')
