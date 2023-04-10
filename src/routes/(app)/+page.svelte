@@ -7,11 +7,11 @@ import DummyProductCard from '$lib/DummyProductCard.svelte'
 import Hero from '$lib/home/Hero.svelte'
 import HeroBanners from '$lib/home/HeroBanners.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import logo from '$lib/assets/logo.svg'
+// import logo from '$lib/assets/logo.svg'
 import MobileFooter from '$lib/MobileFooter.svelte'
 import PickedBanners from '$lib/home/PickedBanners.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
-import ProductTab from '$lib/components/Product/ProductTab.svelte'
+// import ProductTab from '$lib/components/Product/ProductTab.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 let today = dayjs(new Date()).toISOString()
@@ -86,12 +86,6 @@ let seoProps = {
 	title: $page.data.store?.title,
 	twitterImage: { url: $page.data.store?.logo }
 }
-
-$: heroBanners =
-	data.home?.banners?.data &&
-	data.home?.banners?.data.filter((b) => {
-		return b.type === 'hero'
-	})
 </script>
 
 <SEO {...seoProps} />
@@ -101,15 +95,15 @@ $: heroBanners =
 		<!-- CATEGORIES SLIDER MOBILE -->
 
 		{#await data.home then home}
-			{#if home?.categories?.data?.length > 0}
+			{#if home?.categories?.length}
 				<div class="block sm:hidden">
-					<CategoriesMobile loading="{home.isFetching}" categories="{home?.categories?.data}" />
+					<CategoriesMobile loading="{home.isFetching}" categories="{home?.categories}" />
 				</div>
 			{/if}
 		{/await}
 
 		<div class="mb-5 sm:mb-10">
-			<Hero banners="{data.home.banners?.data}" />
+			<Hero banners="{data.home.banners}" />
 		</div>
 
 		{#if data.store?.alert}
@@ -122,7 +116,7 @@ $: heroBanners =
 
 		<!-- TOP CATEGORIES -->
 
-		{#if data.home?.categories?.data?.length > 0}
+		{#if data.home?.categories?.length}
 			<div class="mb-5 hidden sm:mb-10 sm:block">
 				<h2
 					class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
@@ -131,7 +125,7 @@ $: heroBanners =
 
 				<div class="max-w-screen overflow-x-auto scrollbar-none lg:hidden">
 					<div class="flex flex-row">
-						{#each data.home?.categories?.data as category}
+						{#each data.home?.categories as category}
 							{#if category?.img || category?.img}
 								<a
 									href="/{category.link || category.slug || '##'}"
@@ -151,7 +145,7 @@ $: heroBanners =
 				</div>
 
 				<div class="hidden grid-cols-7 lg:grid">
-					{#each data.home?.categories?.data as category}
+					{#each data.home?.categories as category}
 						{#if category?.img || category?.img}
 							<a
 								href="/{category.link || category.slug || '##'}"
@@ -185,14 +179,14 @@ $: heroBanners =
 				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
 			</div>
 		{:then home}
-			{#if heroBanners?.length > 0}
+			{#if data.home.heroBanners?.length}
 				<div class="mb-5 sm:mb-10">
 					<h2
 						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
 						BEST OF {$page.data.store?.websiteName} EXCLUSIVE
 					</h2>
 
-					<HeroBanners heroBanners="{heroBanners}" />
+					<HeroBanners heroBanners="{data.home.heroBanners}" />
 				</div>
 			{/if}
 		{/await}

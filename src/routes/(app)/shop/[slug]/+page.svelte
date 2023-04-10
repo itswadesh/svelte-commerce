@@ -1,97 +1,218 @@
 <script>
-import { goto } from '$app/navigation'
 import { page } from '$app/stores'
+import CategoriesMobile from '$lib/home/CategoriesMobile.svelte'
+import dayjs from 'dayjs'
+import Deals from '$lib/home/Deals.svelte'
+import DummyProductCard from '$lib/DummyProductCard.svelte'
 import Hero from '$lib/home/Hero.svelte'
 import HeroBanners from '$lib/home/HeroBanners.svelte'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
+// import logo from '$lib/assets/logo.svg'
 import MobileFooter from '$lib/MobileFooter.svelte'
-import noDataAvailable from '$lib/assets/no/no-data-available.png'
-import PageIdPickedBanner from '$lib/components/PageIdBanners/PageIdPickedBanner.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import PickedBanners from '$lib/home/PickedBanners.svelte'
+import ProductCard from '$lib/ProductCard.svelte'
+// import ProductTab from '$lib/components/Product/ProductTab.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-import CategoriesMobile from '$lib/home/CategoriesMobile.svelte'
+
+let today = dayjs(new Date()).toISOString()
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
-$: heroBanners = data.banners?.data?.filter((b) => {
-	return b.type === 'hero'
-})
-
-$: pickedBanners = data.groupByBanners?.filter((b) => {
-	if (b._id && b._id.title && b._id.title !== null) {
-		return b
-	}
-})
+console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
-	title: `Shop`,
-	description: `Shop`
+	// addressCountry: 'India',
+	// addressLocality: 'Semiliguda, Koraput',
+	// addressRegion: 'Odisha',
+	// alternateJsonHref: '',
+	// alternateXml: { title: '', href: '' },
+	brand: $page.data.store?.title,
+	// breadcrumbs: '',
+	caption: $page.data.store?.title,
+	category: $page.data.store?.title,
+	contentUrl: $page.data.store?.logo,
+	createdAt: today,
+	// depth: { unitCode: '', value: '' },
+	email: `${$page?.data?.store?.email}`,
+	// entityMeta: '',
+	// facebookPage: '',
+	// gtin: '',
+	// height: '',
+	id: $page?.url?.href,
+	image: $page.data.store?.logo,
+	logo: $page.data.store?.logo,
+	ogSquareImage: { url: '', width: 56, height: 56 },
+	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 08:00-13:00'],
+	// popularity: product.popularity,
+	// postalCode: '764036',
+	// price: product.price,
+	// priceRange: `${product.price}-${product.mrp}`,
+	// ratingCount: 1,
+	// ratingValue: +product.ratings + 1,
+	// sku: product.sku,
+	// streetAddress: 'Padmajyoti Marg, Nandapur Road',
+	timeToRead: 0,
+	updatedAt: today,
+	// weight: { unitCode: '', value: '' },
+	// width: { unitCode: '', value: '' },
+	// wlwmanifestXmlHref: '',
+	metadescription: $page.data.store?.description,
+	// article: false,
+	canonical: `${$page?.url.href}`,
+	datePublished: today,
+	description: $page.data.store?.description,
+	dnsPrefetch: `//cdn.jsdelivr.net`,
+	// entityMeta: null,
+	featuredImage: {
+		url: $page.data.store?.logo,
+		width: 675,
+		height: 380,
+		caption: $page.data.store?.title
+	},
+	keywords: $page.data.store?.keywords,
+	lastUpdated: today,
+	msapplicationTileImage: $page.data.store?.logo,
+	ogImage: { url: $page.data.store?.logo, width: 128, height: 56 },
+	ogImageSecureUrl: `${$page?.data?.store?.logo}`,
+	ogImageType: 'image/jpeg',
+	ogSiteName: `${$page.data.origin}/sitemap/sitemap.xml`,
+	// productAvailability: `${product.stock}`,
+	productBrand: $page.data.store?.title,
+	productName: $page.data.store?.title,
+	// productPriceAmount: `${product.price}`,
+	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
+	slug: `/`,
+	// timeToRead: 0,
+	title: $page.data.store?.title,
+	twitterImage: { url: $page.data.store?.logo }
 }
 </script>
 
 <SEO {...seoProps} />
 
-<div>
-	{#if data.banners?.length || data.groupByBanners?.length}
-		<div class="bg-opacity-25 bg-center bg-repeat">
-			<div class="mb-20 sm:mb-0">
-				<div class="flex flex-col gap-5 sm:gap-10">
-					<Hero banners="{data.banners}" />
+<div class="bg-opacity-25 bg-center bg-repeat">
+	<div class="mb-14 sm:mb-0">
+		<!-- CATEGORIES SLIDER MOBILE -->
 
-					<!-- HERO BANNERS -->
+		{#await data then categories}
+			{#if data?.categories?.length}
+				<div class="block sm:hidden">
+					<CategoriesMobile loading="{data.isFetching}" categories="{data?.categories}" />
+				</div>
+			{/if}
+		{/await}
 
-					{#await data.banners}
-						<div class="grid grid-cols-2 items-center gap-2 md:grid-cols-4">
-							<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+		<div class="mb-5 sm:mb-10">
+			<Hero banners="{data.banners}" />
+		</div>
 
-							<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+		{#if data.store?.alert}
+			<div class="p-3 py-5 sm:p-10 bg-primary-50">
+				<h1 class="container mx-auto text-center text-3xl font-bold sm:text-4xl md:text-5xl">
+					{data.store?.alert}
+				</h1>
+			</div>
+		{/if}
 
-							<div class="col-span-1 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+		<!-- TOP CATEGORIES -->
 
-							<div class="col-span-1 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+		{#if data.categories?.length}
+			<div class="mb-5 hidden sm:mb-10 sm:block">
+				<h2
+					class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
+					TOP COLLECTIONS
+				</h2>
 
-							<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
-						</div>
-					{:then banner}
-						{#if heroBanners?.length}
-							<div>
-								<h1
-									class="uppercase p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 md:py-10 sm:text-2xl md:text-3xl xl:text-4xl">
-									BEST OF {$page.data.store?.websiteName} EXCLUSIVE
-								</h1>
+				<div class="max-w-screen overflow-x-auto scrollbar-none lg:hidden">
+					<div class="flex flex-row">
+						{#each data.categories as category}
+							{#if category?.img || category?.img}
+								<a
+									href="/{category.link || category.slug || '##'}"
+									aria-label="Click to get the category related products"
+									class="shrink-0">
+									<LazyImg
+										src="{category.img || category.img}"
+										alt=""
+										width="375"
+										height="375"
+										aspect_ratio="1:1"
+										class="w-[47vw] object-contain sm:w-60" />
+								</a>
+							{/if}
+						{/each}
+					</div>
+				</div>
 
-								<HeroBanners heroBanners="{heroBanners}" />
-							</div>
+				<div class="hidden grid-cols-7 lg:grid">
+					{#each data.categories as category}
+						{#if category?.img || category?.img}
+							<a
+								href="/{category.link || category.slug || '##'}"
+								aria-label="Click to get the category related products"
+								class="col-span-1">
+								<LazyImg
+									src="{category.img || category.img}"
+									alt=""
+									width="375"
+									aspect_ratio="1:1"
+									class="h-full w-full object-contain" />
+							</a>
 						{/if}
-					{/await}
-
-					<!-- PICKED BANNERS -->
-
-					{#await data.groupByBanners}
-						<div class="grid grid-cols-2 items-center gap-2 md:grid-cols-4">
-							<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
-
-							<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
-
-							<div class="col-span-1 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
-
-							<div class="col-span-1 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
-
-							<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
-						</div>
-					{:then banner}
-						{#if pickedBanners.length}
-							<div>
-								<PageIdPickedBanner pickedBanners="{pickedBanners}" />
-							</div>
-						{/if}
-					{/await}
+					{/each}
 				</div>
 			</div>
-		</div>
-	{/if}
+		{/if}
 
-	{@html data.page.description}
+		<!-- HERO BANNERS -->
+
+		{#await data.heroBanners}
+			<div class="grid grid-cols-2 items-center gap-2 md:grid-cols-4">
+				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+
+				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+
+				<div class="col-span-1 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+
+				<div class="col-span-1 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+
+				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+			</div>
+		{:then heroBanners}
+			{#if data.heroBanners?.length}
+				<div class="mb-5 sm:mb-10">
+					<h2
+						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
+						BEST OF {$page.data.store?.websiteName} EXCLUSIVE
+					</h2>
+
+					<HeroBanners heroBanners="{data.heroBanners}" />
+				</div>
+			{/if}
+		{/await}
+
+		<!-- PICKED BANNERS -->
+
+		{#await data.groupByBanner}
+			<div class="grid grid-cols-2 items-center gap-2 md:grid-cols-4">
+				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+
+				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+
+				<div class="col-span-1 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+
+				<div class="col-span-1 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+
+				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+			</div>
+		{:then groupByBanner}
+			{#if data.groupByBanner?.length}
+				<div class="mb-5 sm:mb-10">
+					<PickedBanners banners="{data.groupByBanner}" />
+				</div>
+			{/if}
+		{/await}
+	</div>
 
 	<!-- MOBILE FOOTER -->
 
