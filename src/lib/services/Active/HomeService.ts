@@ -10,6 +10,10 @@ export const fetchHome = async ({
 	sid = null
 }: any) => {
 	try {
+		let banners = []
+		let categories = {}
+		let groupByBanner = {}
+		let heroBanners = []
 		let res: any = {}
 
 		if (server) {
@@ -18,14 +22,32 @@ export const fetchHome = async ({
 			res = await getAPI(`home?store=${storeId}&pageId=${pageId}`, origin)
 		}
 
-		const heroBanners =
-			res.home?.banners?.data &&
-			res.home?.banners?.data.filter((b) => {
-				return b.type === 'hero'
-			})
-		const groupByBanners = res.groupByBanners
-		const categories = res.categories
-		return { groupByBanners, heroBanners, categories }
+		if (res?.banners?.data?.length) {
+			banners = res?.banners?.data
+
+			heroBanners =
+				res?.banners?.data &&
+				res?.banners?.data.filter((b) => {
+					return b.type === 'hero'
+				})
+		}
+
+		if (res?.groupByBanner?.length) {
+			groupByBanner = res?.groupByBanner
+		}
+
+		if (res?.categories?.data?.length) {
+			categories = res?.categories?.data
+		}
+
+		console.log('res?.categories?.data?.length', res?.categories?.data?.length)
+
+		return {
+			banners,
+			categories,
+			groupByBanner,
+			heroBanners
+		}
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)
 	}
