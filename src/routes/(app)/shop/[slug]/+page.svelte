@@ -354,9 +354,9 @@ function toggle2(cx) {
 			</div>
 		{/if}
 
-		{#if data.content}
-			<div class="my-5 sm:my-10 px-3 sm:px-10">
-				{@html data.content}
+		{#if data.html}
+			<div class="my-5 sm:my-10 px-3 sm:px-10 prose max-w-none">
+				{@html data.html}
 			</div>
 		{/if}
 	</div>
