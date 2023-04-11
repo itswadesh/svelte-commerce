@@ -21,8 +21,8 @@
 		"live": "run-s build copy liveS"
 	},
 	"devDependencies": {
-		"@playwright/test": "^1.31.2",
 		"@builder.io/partytown": "0.7.5",
+		"@playwright/test": "^1.31.2",
 		"@sentry/svelte": "7.42.0",
 		"@sentry/tracing": "7.42.0",
 		"@splidejs/svelte-splide": "0.2.9",
@@ -49,6 +49,7 @@
 		"eslint": "^8.36.0",
 		"eslint-config-prettier": "^8.7.0",
 		"eslint-plugin-svelte3": "^4.0.0",
+		"fuse.js": "6.6.2",
 		"hash-it": "^6.0.0",
 		"ioredis": "5.3.1",
 		"minio": "7.0.32",
