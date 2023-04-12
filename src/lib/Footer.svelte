@@ -56,7 +56,7 @@ let footerItems: any = [
 				link: '/payments-returns',
 				new: false
 			},
-			{ title: 'Blogs', link: '/blogs', new: false }
+			{ title: 'Blogs', link: '/blogs', new: false },
 			{
 				title: 'Join as Vendor',
 				link: `${$page.data.store?.adminUrl}?role=vendor&store=${$page.data.store?.id}`,
