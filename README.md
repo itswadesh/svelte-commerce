@@ -1,42 +1,114 @@
-Any queries or guidance, can reach me at 
-<a href="https://discord.gg/4G7zbcpt" target="blank" rel="noopener noreferrer" aria-label="Click to Discord">Discord</a>
+<div align="center">
+<h2>Svelte Commerce</h2>
+</div>
 
-# What is Svelte Commerce?
+<div align="center">
+
+**The open-source frontend for any eCommerce. Built with a PWA and headless approach, using a modern JS stack. We have WIP for Litekart. Woocommerce, MedusaJS, Bigcommerce and Shopify. The API approach also allows you to merge Svelte Commerce with any third-party tool like payment gateways, POS or AI.**
+
+</div>
+
+<div align="center">
+
+### [[Live Demo](https://demo.litekart.in/)] \[[What is it?](#what-is-it)] \[[Features](#features)] \[[Get Started](#get-started)]
+
+</div>
+
+<div align="center" width="60%" height="auto">
+  <br>
+    <img src=".github/svelte-commerce.gif">
+</div>
+<br/>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Made_With-Svelte-red.svg?style=for-the-badge&color=dc8a78&logoColor=FF3E00&labelColor=302D41&logo=svelte"><br/><br/>
+  <img src="https://img.shields.io/badge/Maintained%3F-Yes-blueviolet?style=for-the-badge&color=209fb5&labelColor=5c5f77">
+	<a href="https://github.com/itswadesh/svelte-commerce/stargazers" target="_blank">
+		<img alt="Stargazers" src="https://img.shields.io/github/stars/itswadesh/svelte-commerce?style=for-the-badge&logo=starship&color=C9CBFF&logoColor=D9E0EE&labelColor=302D41"></a>
+	<a href="https://github.com/itswadesh/svelte-commerce/issues" target="_blank">
+		<img alt="Issues" src="https://img.shields.io/github/issues/itswadesh/svelte-commerce?style=for-the-badge&logo=gitbook&color=B5E8E0&logoColor=D9E0EE&labelColor=302D41"></a>
+  <a href="https://t.me/itswadesh" target="_blank">
+    <img alt="Telegram" src="https://img.shields.io/badge/Telegram-itswadesh-blue.svg?style=for-the-badge"></a>
+</p>
+
+<br/>
+<p align="center">
+  <a href="https://github.com/itswadesh/svelte-commerce/discussions/new/choose" target="_blank">
+    <picture>
+      <source srcset="assets/social/macchiato_github.svg" width="64" height="64" alt="Github Logo" media="(prefers-color-scheme: dark)"/>
+      <source srcset="assets/social/latte_github.svg" width="64" height="64" alt="Github Logo" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)"/>
+      <img src="assets/social/latte_github.svg" width="64" height="64" alt="Github Logo"/>
+    </picture>
+  </a>
+  <img src="assets/misc/transparent.png" height="1" width="5"/>
+  <a href="https://discord.gg/4G7zbcpt" target="_blank">
+    <picture>
+      <source srcset="assets/social/macchiato_discord.svg" width="64" height="64" alt="Discord Logo" media="(prefers-color-scheme: dark)"/>
+      <source srcset="assets/social/latte_discord.svg" width="64" height="64" alt="Discord Logo" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)"/>
+      <img src="assets/social/latte_discord.svg" width="64" height="64" alt="Discord Logo"/>
+    </picture>
+  </a>
+  <img src="assets/misc/transparent.png" height="1" width="5"/>
+  <a href="https://twitter.com/itswadesh" target="_blank">
+    <picture>
+      <source srcset="assets/social/macchiato_twitter.svg" width="64" height="64" alt="Twitter Logo" media="(prefers-color-scheme: dark)"/>
+      <source srcset="assets/social/latte_twitter.svg" width="64" height="64" alt="Twitter Logo" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)"/>
+      <img src="assets/social/latte_twitter.svg" width="64" height="64" alt="Twitter Logo"/>
+    </picture>
+  </a>
+  <img src="assets/misc/transparent.png" height="1" width="5"/>
+  <a href="https://reddit.com/u/itswadesh" target="_blank">
+    <picture>
+      <source srcset="assets/social/macchiato_reddit.svg" width="64" height="64" alt="Reddit Logo" media="(prefers-color-scheme: dark)"/>
+      <source srcset="assets/social/latte_reddit.svg" width="64" height="64" alt="Reddit Logo" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)"/>
+      <img src="assets/social/latte_reddit.svg" width="64" height="64" alt="Reddit Logo"/>
+    </picture>
+  </a>
+</p>
+
+<p align="center">
+Reach out to me with queries!
+</p>
+<br/>
+<br/>
+
+<div align="center">
+
+### Live demos using `svelte-commerce`
+
+</div>
+<br/>
+<p align="center">
+  <a href="https://food.misiki.in/" target="_blank">
+    <img src="https://ik.imagekit.io/3wzatecz51w3i/img/logo-eiyrtowkfwnx.png?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="Misiki Logo">
+  </a>
+  <img src="assets/misc/transparent.png" height="1" width="15"/>
+  <a href="https://varnijewels.com/" target="_blank">
+    <img src="https://ik.imagekit.io/3n6cglxq6/img/varni-logo_1619291754__34835-qt10qx2uq90x.webp?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="Varni Jewels Logo">
+  </a>
+  <img src="assets/misc/transparent.png" height="1" width="15"/>
+  <a href="https://next.trialshot.com/" target="_blank">
+    <img src="https://ik.imagekit.io/3wzatecz51w3i/misiki/img/logo-infeip6oao61.png?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="Trialshot Logo">
+  </a>
+  <img src="assets/misc/transparent.png" height="1" width="15"/>
+  <a href="https://tablez.com/" target="_blank">
+    <img src="https://tablez.com/icon.png" height="64" alt="Tablez Logo">
+  </a>
+  <img src="assets/misc/transparent.png" height="1" width="15"/>
+  <a href="https://next.zapvi.in/" target="_blank">
+    <img src="https://cdn.zapvi.in/img/Zapvi-Black-Logo-iKPQP43npcI2.svg?width=3&height=4&blur=25&aspect_ratio=3:4" height="64" alt="Misiki Logo">
+  </a>
+</p>
+<br/>
+<br/>
+
+## What is it?
 
 - Svelte Commerce is a PWA storefront for your existing eCommerce based on Sveltekit.
 - It is possible to connect with any eCommerce backend that provides an API
 - We are working on adaptors of Medusajs, Shopify, Magento, Woocommerce, Litekart, Bigcommerce
 
-<a href="https://litekart.in/" aria-label="Click to browse litekart">
-<img src="https://repository-images.githubusercontent.com/213575283/f577b8bd-8edb-41ba-bfe5-36e65072e1f2" alt/>
-</a>
-
-<a href="https://litekart.in/" aria-label="Click to browse litekart">
-<img src="https://res.cloudinary.com/itswadesh/image/upload/v1678600224/litekart/free_for_developers_1.png" alt/>
-</a>
-
-![version](https://img.shields.io/badge/node-v16.x-blue.svg)
-![Branch stable](https://img.shields.io/badge/stable%20branch-master-blue.svg)
-![Typescript](https://img.shields.io/badge/TS-Typescript-blue)
-<br />
-
-<!-- <a href="https://codenx.slack.com" target="blank" rel="noopener noreferrer" aria-label="Click to browse codenx">![Branch Develop](https://img.shields.io/badge/community%20chat-slack-FF1493.svg?style=for-the-badge&logo=Slack&logoColor=white)</a> -->
-
-<a href="https://join.skype.com/invite/aBegFXZGdaPh" target="blank" rel="noopener noreferrer" aria-label="Click to invite on skype">![Branch Develop](https://img.shields.io/badge/Skype%20Message-%252300AFF0.svg?style=for-the-badge&logo=Skype&logoColor=white)</a>
-<a href="https://t.me/itswadesh" target="blank" rel="noopener noreferrer" aria-label="Click to browse twitter account">![Branch Develop](https://img.shields.io/badge/Telegram%20Message-%2300AFF0.svg?style=for-the-badge&logo=Telegram&logoColor=white)</a>
-![Branch Develop](https://res.cloudinary.com/itswadesh/image/upload/v1656864555/open-to-work.svg)
-
-- Demo <a href="https://demo.litekart.in/" target="blank" rel="noopener noreferrer">demo.litekart.in</a>
-- Svelte commerce in home made FNB sector https://food.misiki.in/ (https://github.com/itswadesh/homefood)
-- Svelte commerce in jewellery industry https://varnijewels.com/
-- Svelte commerce in fashion industry https://next.trialshot.com/
-- Svelte commerce in toys industry https://tablez.com/
-- Svelte commerce in mobile cover customization https://next.zapvi.in/
-
-- I can make your existing ecommerce fast and scalable with fastest possible time
-
-- Portfolio <a href="https://itswadesh.com/" target="blank" rel="noopener noreferrer" aria-label="Click to browse portfolio website">itswadesh.com</a>
-  <br/>
+## Features
 
 - 🛍️ Attach Svelte store front to <a href="https://admin.litekart.in/" aria-label="Click to brouse svelte store front"> Litekart </a> and your complete ecommerce tech stack becomes free.
 - 👥 The demo uses litekart as backend
@@ -45,19 +117,48 @@ Any queries or guidance, can reach me at
 - 🔗 It is possible to connect with any eCommerce backend if the backend has Rest API
 - 🔓 Svelte Commerce is free and open source. Download and modify it the way you want
 - 🛒 Most of the essential features for ecommerce are already integrated
-- 🕒 Save hours of development time setting up an ecommerce store front
 - 💰 No need to make a big leap or invest huge amount. Just take this opend source project and attach to existing backend.
-- 🐛 If you have discovered a bug or have feature suggestion, feel free to create/join a discussion on Github.
-- 👍 I have been supporting this project alone since 2019. Any little code contribution will be appreciated
-- ✨ Deployment to Netlify or Vercel with zero-configuration
 
-|                                                                                                                                           |                                                                                                                                             |                                                                                                                                           |
-| :---------------------------------------------------------------------------------------------------------------------------------------- | :-----------------------------------------------------------------------------------------------------------------------------------------: | ----------------------------------------------------------------------------------------------------------------------------------------: |
-| <img src="https://res.cloudinary.com/itswadesh/image/upload/c_scale,f_auto,w_250/v1627577152/sveltekit/svelte-commerce-home.png" alt=""/> | <img src="https://res.cloudinary.com/itswadesh/image/upload/c_scale,f_auto,w_250/v1627577152/sveltekit/svelte-commerce-detail.png" alt=""/> | <img src="https://res.cloudinary.com/itswadesh/image/upload/c_scale,f_auto,w_250/v1627577154/sveltekit/svelte-commerce-cart.png" alt=""/> |
+## Get Started
 
-# Latest Updates
+```
+git clone https://github.com/itswadesh/svelte-commerce.git
+cd svelte-commerce
+npm i
+cp .env.example .env    # You will need to update the values in this .env file
+npm run dev
+```
 
-## Update 07-February-2023
+Thats all !
+
+Open http://localhost:3000 on chrome. Your app should be live with awesome sveltekit up and running
+
+## Configuration
+
+If required, change `config/index.ts` according to your requirement
+
+## Deployment
+
+Click on the button to directly deploy to Netlify or Vercel. Zero configuration required.
+
+<a href="https://app.netlify.com/start/deploy?repository=https://github.com/itswadesh/svelte-commerce" aria-label="Click to deploy into netlify">
+<img src="https://www.netlify.com/img/deploy/button.svg" alt="Deploy to netlify">
+</a>
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fitswadesh%2Fsvelte-commerce&demo-title=SvelteKit%20Commerce)
+
+## Contributing
+
+If you like the ideas behind Svelte Commerce and want to become a contributor - [join github discussions](https://github.com/itswadesh/svelte-commerce/discussions/new/choose), check the list of the [active issues](https://github.com/itswadesh/svelte-commerce/issues) or contact me directly via swadesh@litekart.in
+
+Svelte ecommerce - Headless, Authentication, Cart & Checkout, TailwindCSS, Server Rendered, Proxy + API Integrated, Animations, Lazy Loading, Loading Indicators, Carousel, Instant Search, Faceted Filters, Open Source
+
+## Updates
+
+Latest update: 07-February-2023
+
+<details>
+<summary>Click here to see all the updates</summary>
 
 - 07-February-2023 - Prettified.
 - 06-February-2023 - Sveltekit 1.5
@@ -94,70 +195,4 @@ Any queries or guidance, can reach me at
 - 22-July-2021 - Integrated with netlify deployment
 - 07-May-2021 - Completely Migrated to SvelteKit
 
-# Installation
-
-Install - [NodeJS](https://nodejs.org/en/) - [Yarn](https://yarnpkg.com/en/) - [Git](https://git-scm.com/)
-
-## To start Development
-
-```
-git clone https://github.com/itswadesh/svelte-commerce.git
-cd svelte-commerce
-npm i
-cp .env.example .env    # You will need to update the values in this .env file
-npm run dev
-```
-
-Thats all !
-
-Open http://localhost:3000 on chrome. Your app should be live with awesome sveltekit up and running
-
-# Configurations
-
-If required change `config/index.ts` according to your requirement
-
-# Deployment
-
-Click on the button to directly deploy to Netlify or Vercel. Zero configuration required.
-
-<a href="https://app.netlify.com/start/deploy?repository=https://github.com/itswadesh/svelte-commerce" aria-label="Click to deploy into netlify">
-<img src="https://www.netlify.com/img/deploy/button.svg" alt="Deploy to netlify">
-</a>
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fitswadesh%2Fsvelte-commerce&demo-title=SvelteKit%20Commerce)
-
-# Features
-
-- Awesome shiny new SvelteKit
-- Typescript for rock solid app
-- TailwindCSS Integrated
-- Server Rendered
-- Proxy + API integrated
-- Lazy loading images
-- Animations (Page transition)
-- Login
-- Cart & Checkout
-- Settings from database
-- Stores
-- SEO optimized pages
-- Carousel (Slider)
-- Toasts (Notifications)
-- Loading Indicators
-- Componentized Checkbox, Radio, Textbox
-- Instant Search
-- Faceted filters
-- API calls
-- Skeletons
-- Responsive
-
-# Contributing
-
-If you like the ideas behind Svelte Commerce and want to become a contributor - [join github discussions](https://github.com/itswadesh/svelte-commerce/discussions/new/choose), check the list of the [active issues](https://github.com/itswadesh/svelte-commerce/issues) or contact me directly via swadesh@litekart.in
-
-Svelte ecommerce - Headless, Authentication, Cart & Checkout, TailwindCSS, Server Rendered, Proxy + API Integrated, Animations, Lazy Loading, Loading Indicators, Carousel, Instant Search, Faceted Filters, Open Source
-
-# Support
-- Twitter: [@itswadesh](https://twitter.com/itswadesh)
-- Telegram: [@itswadesh](https://t.me/itswadesh)
-- Email: swadesh@litekart.in
-- Discord: [Invitation](https://discord.gg/4G7zbcpt)
+</details>
