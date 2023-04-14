@@ -78,7 +78,6 @@ Reach out to me with queries!
 
 </div>
 <br/>
-<br/>
 <p align="center">
   <a href="https://food.misiki.in/" target="_blank">
     <img src="https://ik.imagekit.io/3wzatecz51w3i/img/logo-eiyrtowkfwnx.png?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="Misiki Logo">
@@ -100,6 +99,8 @@ Reach out to me with queries!
     <img src="https://cdn.zapvi.in/img/Zapvi-Black-Logo-iKPQP43npcI2.svg?width=3&height=4&blur=25&aspect_ratio=3:4" height="64" alt="Misiki Logo">
   </a>
 </p>
+<br/>
+<br/>
 
 ## What is it?
 
