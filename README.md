@@ -15,6 +15,11 @@
 <br/>
 </div>
 
+<div align="center" width="60%" height="auto">
+  <br>
+    <img src=".github/svelte-commerce.gif">
+</div>
+
 <p align="center">
   <img src="https://img.shields.io/badge/Made_With-Svelte-red.svg?style=for-the-badge&color=dc8a78&logoColor=FF3E00&labelColor=302D41&logo=svelte"><br/><br/>
   <img src="https://img.shields.io/badge/Maintained%3F-Yes-blueviolet?style=for-the-badge&color=209fb5&labelColor=5c5f77">
