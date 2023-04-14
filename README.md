@@ -72,17 +72,40 @@ Reach out to me with queries!
 <br/>
 <br/>
 
+<div align="center">
+
+### Live demos using `svelte-commerce`
+
+</div>
+<br/>
+<br/>
+<p align="center">
+  <a href="https://food.misiki.in/" target="_blank">
+    <img src="https://ik.imagekit.io/3wzatecz51w3i/img/logo-eiyrtowkfwnx.png?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="Misiki Logo">
+  </a>
+  <img src="assets/misc/transparent.png" height="1" width="15"/>
+  <a href="https://varnijewels.com/" target="_blank">
+    <img src="https://ik.imagekit.io/3n6cglxq6/img/varni-logo_1619291754__34835-qt10qx2uq90x.webp?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="Varni Jewels Logo">
+  </a>
+  <img src="assets/misc/transparent.png" height="1" width="15"/>
+  <a href="https://next.trialshot.com/" target="_blank">
+    <img src="https://ik.imagekit.io/3wzatecz51w3i/misiki/img/logo-infeip6oao61.png?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="Trialshot Logo">
+  </a>
+  <img src="assets/misc/transparent.png" height="1" width="15"/>
+  <a href="https://tablez.com/" target="_blank">
+    <img src="https://tablez.com/icon.png" height="64" alt="Tablez Logo">
+  </a>
+  <img src="assets/misc/transparent.png" height="1" width="15"/>
+  <a href="https://next.zapvi.in/" target="_blank">
+    <img src="https://cdn.zapvi.in/img/Zapvi-Black-Logo-iKPQP43npcI2.svg?width=3&height=4&blur=25&aspect_ratio=3:4" height="64" alt="Misiki Logo">
+  </a>
+</p>
+
 ## What is it?
 
 - Svelte Commerce is a PWA storefront for your existing eCommerce based on Sveltekit.
 - It is possible to connect with any eCommerce backend that provides an API
 - We are working on adaptors of Medusajs, Shopify, Magento, Woocommerce, Litekart, Bigcommerce
-
-## Live Demo's
-
-Following are some of the live demo's using `svelte-commerce` in action.
-
-#### \[[Food](https://food.misiki.in/)] \[[Varni Jewels](https://varnijewels.com/)] \[[Trialshot](https://next.trialshot.com/)] \[[Tablez](https://tablez.com/)] \[[Zapvi](https://next.zapvi.in/)]
 
 ## Features
 
