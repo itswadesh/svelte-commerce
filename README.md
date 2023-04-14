@@ -8,6 +8,12 @@
 
 </div>
 
+<div align="center">
+
+### [[Live Demo](https://demo.litekart.in/)] \[[Why this?](#why-this)] \[[Get Started](https://litekart.in/)]
+
+</div>
+
 <div align="center" width="60%" height="auto">
   <br>
     <img src=".github/svelte-commerce.gif">
@@ -24,12 +30,6 @@
   <a href="https://t.me/itswadesh" target="_blank">
     <img alt="Telegram" src="https://img.shields.io/badge/Telegram-itswadesh-blue.svg?style=for-the-badge"></a>
 </p>
-
-<div align="center">
-
-### [[Live Demo](https://demo.litekart.in/)] \[[Why this?](#why-this)] \[[Get Started](https://litekart.in/)]
-
-</div>
 
 <br/>
 <p align="center">
