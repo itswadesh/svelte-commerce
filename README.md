@@ -82,7 +82,7 @@ Reach out to me with queries!
 
 Following are some of the live demo's using `svelte-commerce` in action.
 
-### \[[Food](https://food.misiki.in/)] \[[Varni Jewels](https://varnijewels.com/)] \[[Trialshot](https://next.trialshot.com/)] \[[Tablez](https://tablez.com/)] \[[Zapvi](https://next.zapvi.in/)]
+#### \[[Food](https://food.misiki.in/)] \[[Varni Jewels](https://varnijewels.com/)] \[[Trialshot](https://next.trialshot.com/)] \[[Tablez](https://tablez.com/)] \[[Zapvi](https://next.zapvi.in/)]
 
 ## Features
 
