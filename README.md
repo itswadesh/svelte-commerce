@@ -4,12 +4,6 @@
 
 <div align="center">
 
-### [[Live Demo](https://demo.litekart.in/)] \[[Why this?](#why-this)] \[[Get Started](https://litekart.in/)]
-
-</div>
-
-<div align="center">
-
 **The open-source frontend for any eCommerce. Built with a PWA and headless approach, using a modern JS stack. We have WIP for Litekart. Woocommerce, MedusaJS, Bigcommerce and Shopify. The API approach also allows you to merge Svelte Commerce with any third-party tool like payment gateways, POS or AI.**
 
 </div>
@@ -30,3 +24,10 @@
   <a href="https://t.me/itswadesh">
     <img alt="Telegram" src="https://img.shields.io/badge/Telegram-itswadesh-blue.svg?style=for-the-badge"></a>
 </p>
+<br/>
+
+<div align="center">
+
+### [[Live Demo](https://demo.litekart.in/)] \[[Why this?](#why-this)] \[[Get Started](https://litekart.in/)]
+
+</div>
