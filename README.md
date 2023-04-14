@@ -78,6 +78,12 @@ Reach out to me with queries!
 - It is possible to connect with any eCommerce backend that provides an API
 - We are working on adaptors of Medusajs, Shopify, Magento, Woocommerce, Litekart, Bigcommerce
 
+## Live Demo's
+
+Following are some of the live demo's using `svelte-commerce` in action.
+
+### \[[Food](https://food.misiki.in/)] \[[Varni Jewels](https://varnijewels.com/)] \[[Trialshot](https://next.trialshot.com/)] \[[Tablez](https://tablez.com/)] \[[Zapvi](https://next.zapvi.in/)]
+
 ## Features
 
 - 🛍️ Attach Svelte store front to <a href="https://admin.litekart.in/" aria-label="Click to brouse svelte store front"> Litekart </a> and your complete ecommerce tech stack becomes free.
