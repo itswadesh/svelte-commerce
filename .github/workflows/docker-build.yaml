@@ -16,7 +16,7 @@ jobs:
 
       # Build the app using nodejs
       - name: Use node js 18
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '18'
       - name: Install dependencies
