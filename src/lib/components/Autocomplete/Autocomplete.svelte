@@ -1,6 +1,6 @@
 <script lang="ts">
 import { createEventDispatcher, onMount } from 'svelte'
-import { AutocompleteService, CategoryService } from './../../services'
+import { AutocompleteService, CategoryService } from '$lib/services'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 // import AutocompleteItem from '$lib/AutocompleteItem.svelte'
