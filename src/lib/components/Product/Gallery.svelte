@@ -31,10 +31,10 @@ onMount(async () => {
 
 {#if showPhotosModal}
 	<div
-		class="frosted-black fixed inset-0 z-50 flex h-screen w-screen items-center justify-center overflow-hidden sm:p-10 lg:p-20">
+		class="frosted-black fixed inset-0 z-[100] flex h-screen w-screen items-center justify-center overflow-hidden sm:p-10 lg:p-20">
 		<button
 			type="button"
-			class="fixed top-2 right-2 transform cursor-pointer text-gray-200 transition duration-300 hover:scale-125 hover:text-white lg:top-5 lg:right-5"
+			class="fixed top-2 right-2 transform cursor-pointer text-zinc-200 transition duration-300 hover:scale-125 hover:text-white lg:top-5 lg:right-5"
 			on:click="{() => (showPhotosModal = false)}">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -101,7 +101,7 @@ onMount(async () => {
 		<!-- Desktop Gallery -->
 
 		<div
-			class="container relative mx-auto hidden h-full w-full items-center justify-between gap-4 overflow-hidden rounded-md bg-black lg:flex lg:flex-row">
+			class="container relative mx-auto hidden h-full w-full items-center justify-between gap-4 overflow-hidden rounded bg-black lg:flex lg:flex-row">
 			{#if selectedimg}
 				<div
 					class="flex h-full w-full flex-1 shrink-0 items-center justify-center overflow-hidden px-5 sm:px-10">
@@ -123,13 +123,13 @@ onMount(async () => {
 							{#if img}
 								<button
 									type="button"
-									class="relative z-0 col-span-1 border bg-gray-100 focus:outline-none flex items-center justify-center"
+									class="relative z-0 col-span-1 border bg-zinc-100 focus:outline-none flex items-center justify-center"
 									on:click="{() => (selectedimg = img)}">
 									<LazyImg
 										src="{img}"
 										alt=""
 										height="240"
-										class="h-40 w-40 rounded-md object-contain object-center" />
+										class="h-40 w-40 rounded object-contain object-center" />
 
 									<div
 										class="absolute inset-0 z-10 h-full w-full bg-white  

@@ -24,7 +24,7 @@ input:checked ~ .purple {
 	@apply bg-purple-500;
 }
 input:checked ~ .black {
-	@apply bg-gray-800;
+	@apply bg-zinc-800;
 }
 </style>
 
@@ -36,7 +36,7 @@ const dispatch = createEventDispatcher()
 
 export let id = ''
 export let color = 'green'
-export let checked
+export let checked = false
 export let name = ''
 export let required = false
 export let disabled = false
@@ -52,7 +52,7 @@ onMount(() => {
 	genId()
 })
 
-let uniqueId
+let uniqueId = ''
 
 function genId() {
 	if (id === undefined || typeof String) {
@@ -87,7 +87,7 @@ function genId() {
 			<!-- line -->
 
 			<div
-				class="block rounded-full bg-gray-300 
+				class="block rounded-full bg-zinc-200 
 				{disabled ? '' : 'opacity-100 group-hover:opacity-90 transition duration-300'}
                 {size == 'xs' ? 'h-5 w-8' : ''}
                 {size == 'sm' ? 'h-6 w-10' : ''}
@@ -119,14 +119,14 @@ function genId() {
 				class="font-semibold 
 			{textFirst ? 'mr-2' : 'ml-2'}
 			{disabled ? '' : 'opacity-100 group-hover:opacity-90 transition duration-300'}
-      		{color == 'green' && checked === true ? 'text-green-500' : 'text-gray-400'}
-      		{color == 'blue' && checked === true ? 'text-blue-500' : 'text-gray-400'}
-      		{color == 'red' && checked === true ? 'text-red-500' : 'text-gray-400'}
-      		{color == 'pink' && checked === true ? 'text-pink-500' : 'text-gray-400'}
-      		{color == 'purple' && checked === true ? 'text-purple-500' : 'text-gray-400'}
-      		{color == 'yellow' && checked === true ? 'text-yellow-500' : 'text-gray-400'}
-      		{color == 'indigo' && checked === true ? 'text-indigo-500' : 'text-gray-400'}
-      		{color == 'black' && checked === true ? 'text-black' : 'text-gray-400'}
+      		{color == 'green' && checked === true ? 'text-green-500' : 'text-zinc-400'}
+      		{color == 'blue' && checked === true ? 'text-blue-500' : 'text-zinc-400'}
+      		{color == 'red' && checked === true ? 'text-red-500' : 'text-zinc-400'}
+      		{color == 'pink' && checked === true ? 'text-pink-500' : 'text-zinc-400'}
+      		{color == 'purple' && checked === true ? 'text-purple-500' : 'text-zinc-400'}
+      		{color == 'yellow' && checked === true ? 'text-yellow-500' : 'text-zinc-400'}
+      		{color == 'indigo' && checked === true ? 'text-indigo-500' : 'text-zinc-400'}
+      		{color == 'black' && checked === true ? 'text-black' : 'text-zinc-400'}
 			{size == 'xs' ? 'text-sm' : ''}
             {size == 'sm' ? 'text-base' : ''}
             {size == 'md' ? 'text-xl' : ''}

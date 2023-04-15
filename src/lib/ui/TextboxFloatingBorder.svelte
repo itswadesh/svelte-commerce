@@ -37,7 +37,7 @@ label {
 }
 </style>
 
-<script>
+<script lang="ts">
 import { createEventDispatcher } from 'svelte'
 
 const dispatch = createEventDispatcher()
@@ -48,7 +48,7 @@ export { clazz as class }
 export let label = '',
 	type = 'text',
 	value = '',
-	name,
+	name: string,
 	placeholder = ' ',
 	disabled = false,
 	required = false
@@ -62,9 +62,9 @@ export let label = '',
 			name="{name}"
 			type="text"
 			bind:value="{value}"
-			class="floating-input w-full rounded-md border text-sm placeholder-gray-400 transition duration-300 focus:outline-none{disabled
-				? 'cursor-not-allowed bg-gray-100'
-				: ' bg-white hover:bg-gray-50'}"
+			class="floating-input w-full rounded border text-sm placeholder-zinc-400 transition duration-300 focus:outline-none{disabled
+				? 'cursor-not-allowed bg-zinc-100'
+				: ' bg-white hover:bg-zinc-50'}"
 			placeholder="{placeholder}"
 			aria-label="{label}"
 			disabled="{disabled}"
@@ -77,9 +77,9 @@ export let label = '',
 			name="email"
 			type="email"
 			bind:value="{value}"
-			class="floating-input w-full rounded-md border text-sm placeholder-gray-400 transition duration-300 focus:outline-none{disabled
-				? 'cursor-not-allowed bg-gray-100'
-				: ' bg-white hover:bg-gray-50'}"
+			class="floating-input w-full rounded border text-sm placeholder-zinc-400 transition duration-300 focus:outline-none{disabled
+				? 'cursor-not-allowed bg-zinc-100'
+				: ' bg-white hover:bg-zinc-50'}"
 			placeholder="{placeholder}"
 			aria-label="{label}"
 			disabled="{disabled}"
@@ -92,9 +92,9 @@ export let label = '',
 			name="password"
 			type="password"
 			bind:value="{value}"
-			class="floating-input w-full rounded-md border text-sm placeholder-gray-400 transition duration-300 focus:outline-none{disabled
-				? 'cursor-not-allowed bg-gray-100'
-				: ' bg-white hover:bg-gray-50'}"
+			class="floating-input w-full rounded border text-sm placeholder-zinc-400 transition duration-300 focus:outline-none{disabled
+				? 'cursor-not-allowed bg-zinc-100'
+				: ' bg-white hover:bg-zinc-50'}"
 			placeholder="{placeholder}"
 			aria-label="{label}"
 			disabled="{disabled}"
@@ -107,9 +107,9 @@ export let label = '',
 			name="date"
 			type="date"
 			bind:value="{value}"
-			class="floating-input w-full rounded-md border text-sm placeholder-gray-400 transition duration-300 focus:outline-none{disabled
-				? 'cursor-not-allowed bg-gray-100'
-				: ' bg-white hover:bg-gray-50'}"
+			class="floating-input w-full rounded border text-sm placeholder-zinc-400 transition duration-300 focus:outline-none{disabled
+				? 'cursor-not-allowed bg-zinc-100'
+				: ' bg-white hover:bg-zinc-50'}"
 			placeholder="{placeholder}"
 			aria-label="{label}"
 			disabled="{disabled}"
@@ -122,9 +122,9 @@ export let label = '',
 			name="time"
 			type="time"
 			bind:value="{value}"
-			class="floating-input w-full rounded-md border text-sm placeholder-gray-400 transition duration-300 focus:outline-none{disabled
-				? 'cursor-not-allowed bg-gray-100'
-				: ' bg-white hover:bg-gray-50'}"
+			class="floating-input w-full rounded border text-sm placeholder-zinc-400 transition duration-300 focus:outline-none{disabled
+				? 'cursor-not-allowed bg-zinc-100'
+				: ' bg-white hover:bg-zinc-50'}"
 			placeholder="{placeholder}"
 			aria-label="{label}"
 			disabled="{disabled}"
@@ -137,9 +137,9 @@ export let label = '',
 			name="number"
 			type="number"
 			bind:value="{value}"
-			class="floating-input w-full rounded-md border text-sm placeholder-gray-400 transition duration-300 focus:outline-none{disabled
-				? 'cursor-not-allowed bg-gray-100'
-				: ' bg-white hover:bg-gray-50'}"
+			class="floating-input w-full rounded border text-sm placeholder-zinc-400 transition duration-300 focus:outline-none{disabled
+				? 'cursor-not-allowed bg-zinc-100'
+				: ' bg-white hover:bg-zinc-50'}"
 			placeholder="{placeholder}"
 			aria-label="{label}"
 			disabled="{disabled}"
@@ -152,9 +152,9 @@ export let label = '',
 			name="tel"
 			type="tel"
 			bind:value="{value}"
-			class="floating-input w-full rounded-md border text-sm placeholder-gray-400 transition duration-300 focus:outline-none{disabled
-				? 'cursor-not-allowed bg-gray-100'
-				: ' bg-white hover:bg-gray-50'}"
+			class="floating-input w-full rounded border text-sm placeholder-zinc-400 transition duration-300 focus:outline-none{disabled
+				? 'cursor-not-allowed bg-zinc-100'
+				: ' bg-white hover:bg-zinc-50'}"
 			placeholder="{placeholder}"
 			aria-label="{label}"
 			disabled="{disabled}"
@@ -167,9 +167,9 @@ export let label = '',
 			name="datetime-local"
 			type="datetime-local"
 			bind:value="{value}"
-			class="floating-input w-full rounded-md border text-sm placeholder-gray-400 transition duration-300 focus:outline-none{disabled
-				? 'cursor-not-allowed bg-gray-100'
-				: ' bg-white hover:bg-gray-50'}"
+			class="floating-input w-full rounded border text-sm placeholder-zinc-400 transition duration-300 focus:outline-none{disabled
+				? 'cursor-not-allowed bg-zinc-100'
+				: ' bg-white hover:bg-zinc-50'}"
 			placeholder="{placeholder}"
 			aria-label="{label}"
 			disabled="{disabled}"

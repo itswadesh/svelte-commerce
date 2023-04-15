@@ -128,9 +128,9 @@ async function saveReviewproduct(review) {
 			<a
 				href="{data.ref || '##'}"
 				aria-label="Click to view the product details"
-				class="mb-2 flex max-w-max flex-row items-center gap-4 text-sm text-gray-500 lg:flex-row-reverse lg:text-right group">
+				class="mb-2 flex max-w-max flex-row items-center gap-4 text-sm text-zinc-500 lg:flex-row-reverse lg:text-right group">
 				<div
-					class="h-14 w-14 border border-gray-300 rounded-md shadow-md flex items-center justify-center">
+					class="h-14 w-14 border border-zinc-200 rounded shadow-md flex items-center justify-center">
 					<LazyImg
 						src="{data.product?.img}"
 						alt="Business img"
@@ -151,11 +151,11 @@ async function saveReviewproduct(review) {
 
 	<div class="flex flex-col-reverse xl:flex-row xl:gap-4">
 		<div class="mt-4 flex w-full flex-col gap-2 xl:mt-0 xl:w-1/3">
-			<div class="rounded-md border bg-white p-4 text-lg font-semibold capitalize shadow-md">
+			<div class="rounded border bg-white p-4 text-lg font-semibold capitalize shadow-md">
 				What makes a good review
 			</div>
 
-			<ul class="gap-2 divide-y rounded-md  border bg-white shadow-md">
+			<ul class="gap-2 divide-y rounded  border bg-white shadow-md">
 				{#each information as info}
 					<li class="flex flex-col gap-1 p-4 text-sm">
 						<span class="font-semibold">{info.question}</span>
@@ -167,7 +167,7 @@ async function saveReviewproduct(review) {
 		</div>
 
 		<form on:submit|preventDefault="{() => saveReviewproduct(review)}" class="w-full">
-			<div class="flex flex-col gap-4 rounded-md border bg-white p-4 shadow-md">
+			<div class="flex flex-col gap-4 rounded border bg-white p-4 shadow-md">
 				<div class="flex flex-wrap items-center">
 					<h2 class="mb-2 mr-4 text-lg font-semibold capitalize">Rate this business</h2>
 
@@ -180,7 +180,7 @@ async function saveReviewproduct(review) {
 									on:click="{() => onSelect(i)}">
 									<svg
 										class="block h-8 w-8
-        									{select >= i && select != null ? 'text-primary-500' : 'text-gray-300'}"
+        									{select >= i && select != null ? 'text-primary-500' : 'text-zinc-200'}"
 										fill="currentColor"
 										xmlns="http://www.w3.org/2000/svg"
 										viewBox="0 0 20 20">
@@ -234,11 +234,11 @@ async function saveReviewproduct(review) {
 					<div class="flex items-center justify-center w-full">
 						<label
 							for="dropzone-file"
-							class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+							class="flex flex-col items-center justify-center w-full h-64 border-2 border-zinc-200 border-dashed rounded-lg cursor-pointer bg-zinc-50 hover:bg-zinc-100">
 							<div class="flex flex-col items-center justify-center pt-5 pb-6">
 								<svg
 									aria-hidden="true"
-									class="w-10 h-10 mb-3 text-gray-400"
+									class="w-10 h-10 mb-3 text-zinc-400"
 									fill="none"
 									stroke="currentColor"
 									viewBox="0 0 24 24"
@@ -251,11 +251,11 @@ async function saveReviewproduct(review) {
 									</path>
 								</svg>
 
-								<p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+								<p class="mb-2 text-sm text-zinc-500 dark:text-zinc-400">
 									<span class="font-semibold">Click to upload</span> or drag and drop
 								</p>
 
-								<p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF</p>
+								<p class="text-xs text-zinc-500 dark:text-zinc-400">SVG, PNG, JPG or GIF</p>
 							</div>
 
 							<input

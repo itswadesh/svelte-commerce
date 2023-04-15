@@ -1,17 +1,19 @@
 <script>
+// import CategoriesHome from '$lib/home/CategoriesHome.svelte'
+// import logo from '$lib/assets/logo.svg'
+// import ProductTab from '$lib/components/Product/ProductTab.svelte'
 import { page } from '$app/stores'
 import CategoriesMobile from '$lib/home/CategoriesMobile.svelte'
+import CategoriesSlider from '$lib/home/CategoriesSlider.svelte'
 import dayjs from 'dayjs'
 import Deals from '$lib/home/Deals.svelte'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
 import Hero from '$lib/home/Hero.svelte'
 import HeroBanners from '$lib/home/HeroBanners.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
-// import logo from '$lib/assets/logo.svg'
 import MobileFooter from '$lib/MobileFooter.svelte'
 import PickedBanners from '$lib/home/PickedBanners.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
-// import ProductTab from '$lib/components/Product/ProductTab.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 let today = dayjs(new Date()).toISOString()
@@ -102,9 +104,7 @@ let seoProps = {
 			{/if}
 		{/await}
 
-		<div class="mb-5 sm:mb-10">
-			<Hero banners="{data.home.banners}" />
-		</div>
+		<Hero banners="{data.home.banners}" />
 
 		{#if data.store?.alert}
 			<div class="p-3 py-5 sm:p-10 bg-primary-50">
@@ -117,8 +117,12 @@ let seoProps = {
 		<!-- TOP CATEGORIES -->
 
 		{#if data.home?.categories?.length}
-			<div class="mb-5 hidden sm:mb-10 sm:block">
-				<h2
+			<div class="hidden sm:block">
+				<!-- <CategoriesHome categories="{data.home?.categories}" /> -->
+
+				<CategoriesSlider title="Top Categories" categories="{data.home?.categories}" />
+
+				<!-- <h2
 					class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
 					TOP COLLECTIONS
 				</h2>
@@ -134,17 +138,17 @@ let seoProps = {
 									<LazyImg
 										src="{category.img || category.img}"
 										alt=""
-										width="375"
-										height="375"
+										width="160"
+										height="160"
 										aspect_ratio="1:1"
-										class="w-[47vw] object-contain sm:w-60" />
+										class="w-40 object-contain" />
 								</a>
 							{/if}
 						{/each}
 					</div>
 				</div>
 
-				<div class="hidden grid-cols-7 lg:grid">
+				<div class="hidden grid-cols-12 lg:grid">
 					{#each data.home?.categories as category}
 						{#if category?.img || category?.img}
 							<a
@@ -160,7 +164,7 @@ let seoProps = {
 							</a>
 						{/if}
 					{/each}
-				</div>
+				</div> -->
 			</div>
 		{/if}
 
@@ -168,19 +172,19 @@ let seoProps = {
 
 		{#await data.home}
 			<div class="grid grid-cols-2 items-center gap-2 md:grid-cols-4">
-				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 
-				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 
-				<div class="col-span-1 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+				<div class="col-span-1 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 
-				<div class="col-span-1 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+				<div class="col-span-1 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 
-				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 			</div>
 		{:then home}
 			{#if data.home.heroBanners?.length}
-				<div class="mb-5 sm:mb-10">
+				<div>
 					<h2
 						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
 						BEST OF {$page.data.store?.websiteName} EXCLUSIVE
@@ -195,19 +199,19 @@ let seoProps = {
 
 		{#await data.home}
 			<div class="grid grid-cols-2 items-center gap-2 md:grid-cols-4">
-				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 
-				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 
-				<div class="col-span-1 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+				<div class="col-span-1 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 
-				<div class="col-span-1 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+				<div class="col-span-1 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 
-				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 			</div>
 		{:then home}
 			{#if home.groupByBanner?.length > 0}
-				<div class="mb-5 sm:mb-10">
+				<div>
 					<PickedBanners banners="{home.groupByBanner}" />
 				</div>
 			{/if}
@@ -215,9 +219,9 @@ let seoProps = {
 
 		{#await data.deals}
 			<div class="flex w-[98vw] items-start justify-start gap-3 overflow-x-auto">
-				<div class="w-60 h-60 animate-pulse rounded-md bg-gray-300">
+				<div class="w-60 h-60 animate-pulse rounded bg-gray-300">
 					{#each { length: 10 } as _}
-						<div class="w-52 h-60 animate-pulse rounded-md bg-gray-300"></div>
+						<div class="w-52 h-60 animate-pulse rounded bg-gray-300"></div>
 					{/each}
 				</div>
 			</div>
@@ -238,9 +242,9 @@ let seoProps = {
 
 		{#await data.collections}
 			<div class="flex w-[98vw] items-start justify-start gap-3 overflow-x-auto">
-				<div class="w-60 h-60 animate-pulse rounded-md bg-gray-300">
+				<div class="w-60 h-60 animate-pulse rounded bg-gray-300">
 					{#each { length: 10 } as _}
-						<div class="w-52 h-60 animate-pulse rounded-md bg-gray-300"></div>
+						<div class="w-52 h-60 animate-pulse rounded bg-gray-300"></div>
 					{/each}
 				</div>
 			</div>
@@ -264,7 +268,7 @@ let seoProps = {
 		{#await data.home then home}
 			{#if home?.popular}
 				{#if home?.popular?.data?.length > 0}
-					<div class="mb-5 sm:mb-10">
+					<div>
 						<h2
 							class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
 							POPULAR ON {$page.data.store?.websiteName}

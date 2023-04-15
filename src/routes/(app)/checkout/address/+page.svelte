@@ -54,12 +54,12 @@ async function refreshAddress() {
 				<a
 					href="/checkout/add-address?id=new"
 					aria-label="Click to route add address"
-					class="group flex h-40 w-full flex-col items-center justify-center rounded-md border border-dashed border-gray-400 hover:border-blue-500 sm:h-60 ">
+					class="group flex h-40 w-full flex-col items-center justify-center rounded border border-dashed border-zinc-400 hover:border-blue-500 sm:h-60 ">
 					<div
-						class="flex h-8 w-8 items-center justify-center rounded-full border  border-gray-400 bg-gray-50 group-hover:border-blue-500 sm:h-10 sm:w-10">
+						class="flex h-8 w-8 items-center justify-center rounded-full border  border-zinc-400 bg-zinc-50 group-hover:border-blue-500 sm:h-10 sm:w-10">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
-							class="h-6 w-6 text-gray-600 group-hover:text-blue-500"
+							class="h-6 w-6 text-zinc-500 group-hover:text-blue-500"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor">
@@ -72,7 +72,7 @@ async function refreshAddress() {
 					</div>
 
 					<span
-						class="mt-2 text-sm font-medium text-gray-700 group-hover:text-blue-500 sm:text-base">
+						class="mt-2 text-sm font-medium text-zinc-800 group-hover:text-blue-500 sm:text-base">
 						ADD NEW ADDRESS
 					</span>
 				</a>

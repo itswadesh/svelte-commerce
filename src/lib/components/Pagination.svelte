@@ -42,16 +42,16 @@ function changePage(e) {
 
 {#if count > 1}
 	<div
-		class="flex flex-wrap items-center justify-between gap-4 border-t border-gray-300 text-sm
+		class="flex flex-wrap items-center justify-between gap-4 border-t border-zinc-200 text-sm
 		{providePaddingOnMobile ? 'p-5 sm:pt-5' : 'pt-5'}">
-		<div class="whitespace-nowrap text-gray-500">
+		<div class="whitespace-nowrap text-zinc-500">
 			Page {current} of {count}
 		</div>
 
 		<div class="flex w-full max-w-max flex-wrap items-center gap-2">
 			{#if +current > 1}
 				<button
-					class="flex h-8 items-center justify-center gap-2 rounded-md border border-gray-300 px-3 focus:outline-none hover:border-gray-800"
+					class="flex h-8 items-center justify-center gap-2 rounded border border-zinc-200 px-3 focus:outline-none hover:border-zinc-800"
 					on:click="{() => changePage(+current - 1)}">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -71,7 +71,7 @@ function changePage(e) {
 			{#each { length: pages } as _, i}
 				{#if startTab <= i + 1 && endTab - 1 >= i}
 					<button
-						class="h-8 w-8 rounded border-gray-800 focus:outline-none hover:border hover:border-gray-800"
+						class="h-8 w-8 rounded border-zinc-800 focus:outline-none hover:border hover:border-zinc-800"
 						class:active="{+current === i + 1}"
 						on:click="{() => changePage(i + 1)}">
 						{i + 1}
@@ -81,7 +81,7 @@ function changePage(e) {
 
 			{#if +current < pages}
 				<button
-					class="flex h-8 items-center justify-center gap-2 rounded-md border border-gray-300 px-3 focus:outline-none hover:border-gray-800"
+					class="flex h-8 items-center justify-center gap-2 rounded border border-zinc-200 px-3 focus:outline-none hover:border-zinc-800"
 					on:click="{() => changePage(+current + 1)}">
 					<span class="hidden sm:block">Next</span>
 

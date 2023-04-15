@@ -39,7 +39,7 @@ function showans(i) {
 					Frequently Asked Questions
 				</h1>
 
-				<div class="divide-y overflow-hidden rounded-md border">
+				<div class="divide-y overflow-hidden rounded border">
 					{#each data.faqs as f, fx}
 						<div class:text-primary-500="{show[fx]}">
 							<button
@@ -65,7 +65,7 @@ function showans(i) {
 
 							{#if show[fx]}
 								<div
-									class="prose animate-dropdown px-4 pb-4 text-sm text-gray-500 first-letter:uppercase sm:px-6 sm:pb-6 md:text-base">
+									class="prose animate-dropdown px-4 pb-4 text-sm text-zinc-500 first-letter:uppercase sm:px-6 sm:pb-6 md:text-base">
 									{@html f.answer}
 								</div>
 							{/if}

@@ -1,5 +1,6 @@
 <script>
-import { CategoryService } from '$lib/services'
+// import { CategoryService } from '$lib/services'
+// import { page } from '$app/stores'
 import { onMount } from 'svelte'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
@@ -17,7 +18,7 @@ onMount(async () => {
 	try {
 		loading = true
 
-		// data = await fetchProductsOfCategory({
+		// data = await CategoryService.fetchProductsOfCategory({
 		// 	origin: $page?.data?.origin,
 		// 	storeId: $page?.data?.store?.id,
 		// 	categorySlug,
@@ -49,7 +50,11 @@ onMount(async () => {
 	</ul>
 {:else if data?.length}
 	<div class="mb-5 sm:mb-10">
-		<h2 class="mb-5 text-lg font-bold capitalize sm:text-xl md:text-2xl">Similar Products</h2>
+		<div class="sticky top-14 z-30 lg:static lg:z-0 mb-3 bg-white py-2">
+			<h2 class="font-bold capitalize sm:text-lg border-b-4 border-zinc-800 max-w-max">
+				Similar Products
+			</h2>
+		</div>
 
 		<div
 			class="mb-5 grid w-full grid-cols-2 items-start gap-3 sm:mb-10 sm:flex sm:flex-wrap sm:justify-between lg:gap-6">

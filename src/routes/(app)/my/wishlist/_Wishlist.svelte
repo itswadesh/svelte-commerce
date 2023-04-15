@@ -15,7 +15,7 @@
 <script>
 import { applyAction, enhance } from '$app/forms'
 import { currency } from '$lib/utils'
-import { fetchWishlist, toggleWishlistService } from '$lib/services/WishlistService'
+import { WishlistService } from '$lib/services'
 import { fireGTagEvent } from '$lib/utils/gTag'
 import { invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
@@ -36,7 +36,7 @@ let bounceItemFromTop = false
 async function removeFromWishlist(id, wx) {
 	try {
 		loadingProduct[wx] = true
-		await toggleWishlistService({
+		await WishlistService.toggleWishlistService({
 			pid: id,
 			vid: id,
 			storeId: $page.data.store?.id,
@@ -52,7 +52,7 @@ async function removeFromWishlist(id, wx) {
 
 async function getWishlistedProducts() {
 	try {
-		wishlistedProducts = fetchWishlist({
+		wishlistedProducts = WishlistService.fetchWishlist({
 			origin: $page?.data?.origin,
 			storeId: $page?.data?.store?.id
 		})
@@ -168,7 +168,7 @@ async function getWishlistedProducts() {
 											</span>
 
 											{#if w.product?.mrp > w.product?.price}
-												<span class="whitespace-nowrap text-gray-600 line-through">
+												<span class="whitespace-nowrap text-zinc-500 line-through">
 													{currency(w.product?.mrp, $page.data?.store?.currencySymbol)}
 												</span>
 
@@ -230,7 +230,7 @@ async function getWishlistedProducts() {
 							<AnimatedCartItem img="{w.product?.img}" />
 						{/if}
 					{:else}
-						<div class="cols-span-1 sm:w-48 p-4 text-center bg-gray-200 text-sm text-gray-500">
+						<div class="cols-span-1 sm:w-48 p-4 text-center bg-zinc-200 text-sm text-zinc-500">
 							It has no product, please delete from backend
 						</div>
 					{/if}

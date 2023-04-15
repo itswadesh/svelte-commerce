@@ -92,7 +92,7 @@ let bounceItemFromTop = false
 			<div class="flex gap-2 justify-between">
 				{#if product.name}
 					<h2
-						class="flex-1 truncate text-sm text-gray-500 group-hover:text-blue-600 group-hover:underline sm:text-base">
+						class="flex-1 truncate text-sm text-zinc-500 group-hover:text-blue-600 group-hover:underline sm:text-base">
 						{product.name}
 					</h2>
 

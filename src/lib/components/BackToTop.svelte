@@ -40,7 +40,7 @@ function handleOnScroll() {
 	<button
 		transition:fade="{{ duration: 500 }}"
 		aria-label="Back to Top"
-		class="fixed z-[99] bottom-16 right-4 group p-2 bg-white border shadow-md hover:shadow-lg hover:border-gray-300 transition duration-300 rounded-full focus:outline-none overflow-hidden"
+		class="fixed z-[99] bottom-16 right-4 group p-2 bg-white border shadow-md hover:shadow-lg hover:border-zinc-200 transition duration-300 rounded-full focus:outline-none overflow-hidden"
 		on:click="{goTop}">
 		<svg
 			xmlns="http://www.w3.org/2000/svg"

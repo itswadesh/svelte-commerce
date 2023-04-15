@@ -52,8 +52,8 @@ function handleLoading() {
 	title="{title}"
 	disabled="{disabled}"
 	class="relative transform items-center justify-center overflow-hidden bg-white px-4 py-2 text-center font-semibold tracking-wider text-white shadow-md transition duration-700 focus:outline-none focus:ring-0 focus:ring-offset-0 hover:shadow
-	{disabled ? 'bg-gray-400 cursor-not-allowed' : 'gradient active:scale-95'}
-    {roundedFull ? 'rounded-full' : 'rounded-md'}
+	{disabled ? 'bg-zinc-400 cursor-not-allowed' : 'gradient active:scale-95'}
+    {roundedFull ? 'rounded-full' : 'rounded'}
 	{className}"
 	on:click="{handleClick}">
 	<div class="flex items-center justify-center gap-1">

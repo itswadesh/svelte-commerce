@@ -14,14 +14,13 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 })
 </script>
 
-<div class="flex flex-col gap-5 sm:gap-10">
+<div>
 	{#if pickedBannersForDeals?.length}
-		<div class="flex flex-col gap-5 sm:gap-10">
+		<div>
 			{#each pickedBannersForDeals as b}
 				<div>
 					<h2
-						class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl"
-					>
+						class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
 						{b._id?.title}
 					</h2>
 
@@ -36,8 +35,7 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 												alt="banner{bx}"
 												height="430"
 												width="375"
-												class="h-[430px] w-[375px] object-contain object-top"
-											/>
+												class="h-[430px] w-[375px] object-contain object-top" />
 										</a>
 									{/if}
 								{/each}
@@ -53,8 +51,7 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 											alt="banner{bx}"
 											height="430"
 											width="375"
-											class="h-auto w-[375px] object-contain object-top"
-										/>
+											class="h-auto w-[375px] object-contain object-top" />
 									</a>
 								{/if}
 							{/each}
@@ -66,12 +63,11 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 	{/if}
 
 	{#if pickedBanners?.length}
-		<div class="flex flex-col gap-5 sm:gap-10">
+		<div>
 			{#each pickedBanners as b}
 				<div>
 					<h2
-						class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl"
-					>
+						class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
 						{b._id?.title}
 					</h2>
 
@@ -86,8 +82,7 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 												alt="banner{bx}"
 												height="430"
 												width="375"
-												class="h-[430px] w-[375px] object-contain object-top"
-											/>
+												class="h-[430px] w-[375px] object-contain object-top" />
 										</a>
 									{/if}
 								{/each}
@@ -103,8 +98,7 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 											alt="banner{bx}"
 											height="430"
 											width="375"
-											class="h-auto w-[375px] object-contain object-top"
-										/>
+											class="h-auto w-[375px] object-contain object-top" />
 									</a>
 								{/if}
 							{/each}
