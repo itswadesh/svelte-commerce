@@ -1,7 +1,7 @@
 <script>
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
-import { constructURL2, currency, toast } from '$lib/utils'
+import { constructURL2, toast } from '$lib/utils'
 import { createEventDispatcher, onMount } from 'svelte'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'

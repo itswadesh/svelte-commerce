@@ -268,7 +268,7 @@ onMount(async () => {
 													<div class="flex items-center gap-2 whitespace-nowrap">
 														<span class="font-medium text-zinc-500">Price :</span>
 
-														<b>{currency(item.price)}</b>
+														<b>{currency(item.price, $page.data.store.currencySymbol)}</b>
 													</div>
 												</div>
 
@@ -402,7 +402,12 @@ onMount(async () => {
 									<div class="flex items-center">
 										<h6 class="mr-2 w-20">Subtotal</h6>
 
-										<span>: &nbsp; {currency(data.order?.amount.subtotal)} </span>
+										<span
+											>: &nbsp; {currency(
+												data.order?.amount.subtotal,
+												$page.data.store.currencySymbol
+											)}
+										</span>
 									</div>
 								{/if}
 
@@ -410,7 +415,12 @@ onMount(async () => {
 									<div class="flex items-center">
 										<h6 class="mr-2 w-20">Discount</h6>
 
-										<span>: &nbsp; {currency(data.order?.amount.discount)} </span>
+										<span
+											>: &nbsp; {currency(
+												data.order?.amount.discount,
+												$page.data.store.currencySymbol
+											)}
+										</span>
 									</div>
 								{/if}
 
@@ -418,7 +428,12 @@ onMount(async () => {
 									<div class="flex items-center">
 										<h6 class="mr-2 w-20">Shipping</h6>
 
-										<span>: &nbsp; {currency(data.order?.amount.shipping)} </span>
+										<span
+											>: &nbsp; {currency(
+												data.order?.amount.shipping,
+												$page.data.store.currencySymbol
+											)}
+										</span>
 									</div>
 								{/if}
 
@@ -428,7 +443,12 @@ onMount(async () => {
 									<div class="flex items-center text-base font-bold">
 										<h6 class="mr-2 w-20">Total</h6>
 
-										<span>: &nbsp; {currency(data.order?.amount.total)} </span>
+										<span
+											>: &nbsp; {currency(
+												data.order?.amount.total,
+												$page.data.store.currencySymbol
+											)}
+										</span>
 									</div>
 								{/if}
 							</div>
