@@ -7,9 +7,9 @@ export const fetchVendor = async ({ origin, slug, storeId, server = false, sid =
 		let res: any = {}
 
 		if (server) {
-			res = await getBySid(`vendors/${slug}`, sid)
+			res = await getBySid(`vendors/${slug}?store=${storeId}`, sid)
 		} else {
-			res = await getAPI(`vendors/${slug}`, origin)
+			res = await getAPI(`vendors/${slug}?store=${storeId}`, origin)
 		}
 
 		return res || {}
