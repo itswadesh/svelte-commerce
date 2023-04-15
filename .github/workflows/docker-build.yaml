@@ -26,7 +26,7 @@ jobs:
       - uses: actions/upload-artifact@master
         with:
           name: Webapp artifacts
-          path: dist/
+          path: .svelte-kit/
 
   push-to-docker:
     needs: build-webapp
@@ -39,7 +39,7 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: Webapp artifacts
-          path: ./dist/
+          path: ./.svelte-kit/
       # Extract metadata for the docker image
       - name: Docker meta
         id: meta
