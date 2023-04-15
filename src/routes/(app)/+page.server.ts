@@ -31,7 +31,7 @@ export function load({ cookies, locals, setHeaders }) {
 		collections = CollectionService.fetchCollections({
 			storeId: store?.id,
 			server: true,
-			sid: cookies.get('sid')
+			sid: cookies.get('connect.sid')
 		})
 
 		if (home) {
