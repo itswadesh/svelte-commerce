@@ -35,7 +35,7 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 												alt="banner{bx}"
 												height="430"
 												width="375"
-												class="h-[430px] w-[375px] object-contain object-top" />
+												class="h-[55vw] max-h-80 w-auto object-contain object-top" />
 										</a>
 									{/if}
 								{/each}
@@ -82,7 +82,7 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 												alt="banner{bx}"
 												height="430"
 												width="375"
-												class="h-[430px] w-[375px] object-contain object-top" />
+												class="h-[55vw] max-h-80 w-auto object-contain object-top" />
 										</a>
 									{/if}
 								{/each}

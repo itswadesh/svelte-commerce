@@ -73,7 +73,9 @@ let categoryColors = [
 		</div>
 	</div>
 {:else if categories && categories.length}
-	<div class="px-3 py-5 sm:p-10">
+	<!-- Old version UI -->
+
+	<!-- <div class="px-3 py-5 sm:p-10">
 		<div class="container mx-auto max-w-6xl">
 			<div class="flex items-center justify-center space-x-2 pb-5 lg:pb-10">
 				<hr class="h-1 flex-1 border-zinc-200" />
@@ -86,7 +88,7 @@ let categoryColors = [
 				<hr class="h-1 flex-1 border-zinc-200" />
 			</div>
 
-			<!-- Mobile(Ends at screen size : sm) -->
+			Mobile(Ends at screen size : sm)
 
 			<div class="grid grid-cols-4 items-start justify-items-center gap-4 sm:hidden">
 				{#each categories as category, i}
@@ -166,7 +168,7 @@ let categoryColors = [
 				</div>
 			</div>
 
-			<!-- Desktop(starts from screen size : sm) -->
+			Desktop(starts from screen size : sm)
 
 			<div class="hidden sm:block">
 				<div class="grid grid-cols-4 items-start justify-items-center gap-4 lg:grid-cols-6">
@@ -226,6 +228,63 @@ let categoryColors = [
 						View All
 					</a>
 				</div>
+			</div>
+		</div>
+	</div> -->
+
+	<!-- New version UI -->
+
+	<div>
+		<h2
+			class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
+			TOP COLLECTIONS
+		</h2>
+
+		<div class="px-3 sm:px-10">
+			<div class="container mx-auto flex flex-wrap items-start gap-5 justify-center">
+				{#each categories as category, ix}
+					{#if category.img}
+						<a
+							href="{`/${category.slug || '##'}`}"
+							aria-label="Click to view related products of this category"
+							class="zoom-out group flex w-24 flex-col items-center justify-center lg:w-28">
+							<div
+								class="mb-2 h-24 w-24 shrink-0 overflow-hidden rounded-full border group-hover:border-primary-500 group-hover:shadow-xl lg:h-28 lg:w-28">
+								<LazyImg
+									src="{category.img}"
+									alt="{category.name}"
+									width="144"
+									height="144"
+									class="h-full w-full object-cover text-xs" />
+							</div>
+
+							<h6
+								class="w-full overflow-ellipsis text-center text-xs font-medium capitalize text-zinc-500 line-clamp-2 group-hover:font-semibold sm:text-base">
+								{category.name}
+							</h6>
+						</a>
+					{:else}
+						<a
+							href="/{category.slug || '##'}"
+							aria-label="Click to view related products of this category"
+							class="group flex flex-col items-center justify-center hover:text-primary-500 sm:w-24 lg:w-28">
+							<div
+								class="relative mb-2 shrink-0 overflow-hidden rounded-full border bg-cover bg-center bg-no-repeat group-hover:border-primary-500 group-hover:shadow-xl  h-24 w-24 lg:h-28 lg:w-28"
+								style="background-image: url('/logo.svg');">
+								<div
+									class="absolute inset-0 flex items-center justify-center bg-opacity-70 text-center text-5xl font-bold text-white group-hover:font-bold
+									{categoryColors[ix >= 12 ? String(ix)[1] : ix]}">
+									{category.name[0]}
+								</div>
+							</div>
+
+							<h6
+								class="w-full overflow-ellipsis text-center text-xs font-medium capitalize text-zinc-500 line-clamp-2 group-hover:font-semibold sm:text-base">
+								{category.name}
+							</h6>
+						</a>
+					{/if}
+				{/each}
 			</div>
 		</div>
 	</div>

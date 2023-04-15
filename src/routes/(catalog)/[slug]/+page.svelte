@@ -321,7 +321,7 @@ function handleFilterTags() {
 	</div>
 </CatelogNav>
 
-<div class="{showFilter || showSort ? 'h-[93vh] overflow-hidden' : 'h-full min-h-screen'}">
+<div class="h-full min-h-screen">
 	<!-- Style tags -->
 
 	{#if data.styleTags?.length}

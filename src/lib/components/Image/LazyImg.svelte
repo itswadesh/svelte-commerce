@@ -18,24 +18,27 @@ img:not([src]) {
 </style>
 
 <script lang="ts">
-import { onMount } from 'svelte'
-import { IMAGE_CDN_URL } from '$lib/config'
-import lazyload from 'vanilla-lazyload'
-import { onDestroy } from 'svelte'
 import { browser } from '$app/environment'
 import { getCdnImageUrl } from '$lib/utils'
+import { IMAGE_CDN_URL } from '$lib/config'
+import { onDestroy } from 'svelte'
+import { onMount } from 'svelte'
+import lazyload from 'vanilla-lazyload'
 
-export let src:string
 export let alt = ''
-export let width = 'auto'
-export let height = 'auto'
 export let aspect_ratio = '3:4'
-const w = width === 'auto' ? 'auto' : +width * 2
-const h = height === 'auto' ? 'auto' : +height * 2
+export let height = 'auto'
+export let src: string
+export let width = 'auto'
 
-let clazz:string
+let clazz: string
 export { clazz as class }
-let lazyloadInstance:any
+
+const h = height === 'auto' ? 'auto' : +height * 2
+const w = width === 'auto' ? 'auto' : +width * 2
+
+let lazyloadInstance: any
+
 onMount(() => {
 	if (browser) {
 		lazyloadInstance = new lazyload({
@@ -43,6 +46,7 @@ onMount(() => {
 		})
 	}
 })
+
 onDestroy(() => {
 	if (lazyloadInstance) lazyloadInstance.destroy()
 })
@@ -63,5 +67,5 @@ onDestroy(() => {
 	data-src="{`${getCdnImageUrl(src)}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(
 		':',
 		'-'
-	)},cm-pad_resize&sharpen=true`}"
-/>
+	)},cm-pad_resize`}" />
+<!-- &sharpen=true -->
