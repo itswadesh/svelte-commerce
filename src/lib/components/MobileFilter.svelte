@@ -129,10 +129,38 @@ function getPriceRanges() {
 
 			if (price1 && price2 && price3 && price4 && price5) {
 				priceRanges = [
-					{ from: price1, key: `From ${currency(price1)} to ${currency(price2)}`, to: price2 },
-					{ from: price2, key: `From ${currency(price2)} to ${currency(price3)}`, to: price3 },
-					{ from: price3, key: `From ${currency(price3)} to ${currency(price4)}`, to: price4 },
-					{ from: price4, key: `From ${currency(price4)} to ${currency(price5)}`, to: price5 }
+					{
+						from: price1,
+						key: `From ${currency(price1, $page.data.store.currencySymbol)} to ${currency(
+							price2,
+							$page.data.store.currencySymbol
+						)}`,
+						to: price2
+					},
+					{
+						from: price2,
+						key: `From ${currency(price2, $page.data.store.currencySymbol)} to ${currency(
+							price3,
+							$page.data.store.currencySymbol
+						)}`,
+						to: price3
+					},
+					{
+						from: price3,
+						key: `From ${currency(price3, $page.data.store.currencySymbol)} to ${currency(
+							price4,
+							$page.data.store.currencySymbol
+						)}`,
+						to: price4
+					},
+					{
+						from: price4,
+						key: `From ${currency(price4, $page.data.store.currencySymbol)} to ${currency(
+							price5,
+							$page.data.store.currencySymbol
+						)}`,
+						to: price5
+					}
 				]
 
 				// console.log('priceRanges', priceRanges)

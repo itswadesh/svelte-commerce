@@ -4,6 +4,7 @@ import { createEventDispatcher } from 'svelte'
 import { currency } from '$lib/utils'
 import { goto } from '$app/navigation'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import { page } from '$app/stores'
 
 const dispatch = createEventDispatcher()
 
@@ -50,7 +51,7 @@ function submit() {
 					<h4>You Saved</h4>
 
 					<h4>
-						{currency(cart?.savings)}
+						{currency(cart?.savings, $page.data.store.currencySymbol)}
 					</h4>
 				</div>
 			{/if}
@@ -60,7 +61,7 @@ function submit() {
 
 				<h4 class="text-green-500">
 					{#if cart?.discount?.amount > 0}
-						- {currency(cart?.discount?.amount)}
+						- {currency(cart?.discount?.amount, $page.data.store.currencySymbol)}
 					{:else}
 						0
 					{/if}
@@ -82,7 +83,7 @@ function submit() {
 					{#if cart.shipping?.charge < 1}
 						<span class="text-green-500">Free</span>
 					{:else}
-						{currency(cart.shipping?.charge)}
+						{currency(cart.shipping?.charge, $page.data.store.currencySymbol)}
 					{/if}
 				</h4>
 			</div>

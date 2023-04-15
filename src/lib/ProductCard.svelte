@@ -329,12 +329,12 @@ function hideitems() {
 			data-sveltekit-preload-data>
 			<div class="mt-0.5 flex flex-wrap items-baseline justify-start leading-4 text-xs gap-1.5">
 				<span class="font-bold text-sm sm:text-base whitespace-nowrap">
-					{currency(product.price)}
+					{currency(product.price, $page.data.store.currencySymbol)}
 				</span>
 
 				{#if product.mrp > product.price}
 					<span class="text-zinc-500 line-through whitespace-nowrap">
-						{currency(product.mrp)}
+						{currency(product.mrp, $page.data.store.currencySymbol)}
 					</span>
 
 					{#if Math.floor(((product.mrp - product.price) / product.mrp) * 100) > 0}
@@ -429,12 +429,12 @@ function hideitems() {
 									<div
 										class="mt-2.5 flex flex-wrap items-baseline justify-start leading-4 text-xs gap-1.5">
 										<span class="font-semibold sm:text-sm whitespace-nowrap">
-											{currency(relatedProduct.price)}
+											{currency(relatedProduct.price, $page.data.store.currencySymbol)}
 										</span>
 
 										{#if relatedProduct.mrp > relatedProduct.price}
 											<span class="text-zinc-500 line-through whitespace-nowrap">
-												{currency(relatedProduct.mrp)}
+												{currency(relatedProduct.mrp, $page.data.store.currencySymbol)}
 											</span>
 
 											{#if Math.floor(((relatedProduct.mrp - relatedProduct.price) / relatedProduct.mrp) * 100) > 0}
