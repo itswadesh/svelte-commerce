@@ -22,7 +22,7 @@ const seoProps = {
 				class="h-14 w-32 object-contain object-center" />
 		{:else}
 			<h1
-				class="bg-gradient-to-b from-primary-500 to-primary-700 bg-clip-text text-3xl font-extrabold text-transparent underline decoration-gray-800">
+				class="bg-gradient-to-b from-primary-500 to-primary-700 bg-clip-text text-3xl font-extrabold text-transparent underline decoration-zinc-800">
 				{#if $page.data.store?.websiteName}
 					{$page.data.store?.websiteName}
 				{:else}
@@ -46,7 +46,7 @@ const seoProps = {
 				clip-rule="evenodd"></path>
 		</svg>
 
-		<p class="text-gray-500">Password reset link sent to your email successfully</p>
+		<p class="text-zinc-500">Password reset link sent to your email successfully</p>
 	</div>
 
 	<div class="mx-auto mb-5 flex max-w-max flex-col gap-1 text-center text-sm">

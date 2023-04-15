@@ -99,11 +99,11 @@ const schemaOrgEntity =
 					'@id': location
 				},
 				sameAs: [
-					`${$page?.data?.store?.twitterPage}`,
-					`${$page?.data?.store?.facebookPage}`,
-					`${$page?.data?.store?.instagramPage}`,
-					`${$page?.data?.store?.linkedinPage}`,
-					`${$page?.data?.store?.youtubeChannel}`
+					`${$page?.data?.store?.twitterUrl}`,
+					`${$page?.data?.store?.facebookUrl}`,
+					`${$page?.data?.store?.instagramUrl}`,
+					`${$page?.data?.store?.linkedinUrl}`,
+					`${$page?.data?.store?.youtubeUrl}`
 					// `https://github.com/${githubPage}`,
 					// `https://t.me/${telegramUsername}`
 				]
@@ -230,11 +230,11 @@ const schemaOrgPublisher = {
 		'@id': `${siteUrl}/#personlogo`
 	},
 	sameAs: [
-		`${$page?.data?.store?.twitterPage}`,
-		`${$page?.data?.store?.facebookPage}`,
-		`${$page?.data?.store?.instagramPage}`,
-		`${$page?.data?.store?.linkedinPage}`,
-		`${$page?.data?.store?.youtubeChannel}`
+		`${$page?.data?.store?.twitterUrl}`,
+		`${$page?.data?.store?.facebookUrl}`,
+		`${$page?.data?.store?.instagramUrl}`,
+		`${$page?.data?.store?.linkedinUrl}`,
+		`${$page?.data?.store?.youtubeUrl}`
 		// `https://github.com/${githubPage}`,
 		// `https://t.me/${telegramUsername}`
 	]

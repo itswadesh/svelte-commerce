@@ -81,7 +81,7 @@ const seoProps = {
 	<main class="min-h-screen">
 		<div class="gray-pattern mb-5 border-b shadow-md sm:mb-10">
 			<div class="container mx-auto p-4 md:p-10">
-				<h1 class="font-hairline my-2 items-center text-xl text-gray-700">
+				<h1 class="font-hairline my-2 items-center text-xl text-zinc-800">
 					<span class="text-3xl font-bold">{data.blogs?.length}</span>
 
 					<span>awesome collection articles</span>
@@ -104,7 +104,6 @@ const seoProps = {
 		<Pagination
 			count="{Math.ceil(data.blogs.length)}"
 			current="{parseInt(data?.page || 1)}"
-			on:change="{changePage}"
-		/>
+			on:change="{changePage}" />
 	</main>
 {/if}

@@ -28,7 +28,7 @@ export let ref = null
 				bind:value="{phone}" />
 		</div>
 
-		<p class="text-sm font-light text-gray-500">Ex. 9XXXXXXXXX</p>
+		<p class="text-sm font-light text-zinc-500">Ex. 9XXXXXXXXX</p>
 	</div>
 
 	<PrimaryButton loading="{loading}" class="w-full" type="submit">SEND OTP</PrimaryButton>

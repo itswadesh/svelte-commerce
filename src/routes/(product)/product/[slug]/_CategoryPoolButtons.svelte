@@ -9,7 +9,7 @@ export let categoryPool = []
 			<li>
 				<a
 					href="/{c.slug}"
-					class="py-2 px-6 text-sm rounded-full font-semibold border bg-transparent border-gray-300 hover:border-primary-500 text-primary-500 flex items-center justify-center gap-1 uppercase whitespace-nowrap transition duration-300 focus:outline-none">
+					class="py-2 px-6 text-sm rounded-full font-semibold border bg-transparent border-zinc-200 hover:border-primary-500 text-primary-500 flex items-center justify-center gap-1 uppercase whitespace-nowrap transition duration-300 focus:outline-none">
 					<span>{c.name}</span>
 
 					<svg

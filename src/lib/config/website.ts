@@ -7,22 +7,22 @@ export const closedMessage = `Sorry we're closed for the day`
 export const description = ''
 export const domain = 'litekart.in'
 export const email = 'hi@misiki.in'
-export const facebookPage = 'https://www.facebook.com/misiki/'
+export const facebookUrl = 'https://www.facebook.com/misiki/'
 export const GOOGLE_ANALYTICS_ID = 'G-BG3JKWLYPF'
 export const GOOGLE_CLIENT_ID =
 	'414060469322-n4raqj2rdbjhegvrtdk6mhbdm4sd0oc7.apps.googleusercontent.com'
-export const instagramPage = 'https://www.instagram.com/misiki/'
+export const instagramUrl = 'https://www.instagram.com/misiki/'
 export const keywords = 'ecommerce, product'
-export const linkedinPage = 'https://www.linkedin.com/company/misiki/'
+export const linkedinUrl = 'https://www.linkedin.com/company/misiki/'
 export const logo = Logo
 export const phone = '+91-8249028220'
-export const pinterestPage = 'https://www.pinterest.com/company/misiki/'
+export const pinterestUrl = 'https://www.pinterest.com/company/misiki/'
 export const stripePublishableKey =
 	'pk_test_51HXxXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXq'
-export const twitterPage = 'https://twitter.com/MisikiOfficial'
+export const twitterUrl = 'https://twitter.com/MisikiOfficial'
 export const websiteLegalName = 'Misiki Technologies LLP'
 export const websiteName = 'Litekart'
-export const youtubeChannel = 'https://www.youtube.com/channel/UCcb3eRHh-7qAiv9ea7jmTHQ'
+export const youtubeUrl = 'https://www.youtube.com/channel/UCcb3eRHh-7qAiv9ea7jmTHQ'
 // All above data will be replaced by Footer.svelte after the server/store call and saved to cookie
 
 // Bellow PWA Settings, can't configure from admin

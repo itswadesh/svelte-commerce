@@ -53,7 +53,11 @@ async function sortNow(sort) {
 async function saveAddr(e) {
 	const { _id: id, active } = e
 	try {
-		await AddressService.saveAddress({ id, storeId: $page.data.store?.id, origin: $page.data.origin })
+		await AddressService.saveAddress({
+			id,
+			storeId: $page.data.store?.id,
+			origin: $page.data.origin
+		})
 		await invalidateAll()
 	} catch (e) {
 		data.err = e
@@ -117,7 +121,7 @@ async function remove(id, index) {
 			{#each data.addresses.data as i, index}
 				{#if i}
 					<li
-						class="overflow-hidden rounded-md border bg-white shadow-md transition duration-300 hover:shadow-md">
+						class="overflow-hidden rounded border bg-white shadow-md transition duration-300 hover:shadow-md">
 						<div class="flex items-start gap-3 p-4 sm:p-6">
 							<div class="flex flex-1 flex-col gap-1 text-sm">
 								<span class="text-base font-semibold">
@@ -144,7 +148,7 @@ async function remove(id, index) {
 
 							{#if i.isHome}
 								<div
-									class="shrink-0 rounded-full border-2 border-gray-300 bg-gray-100 py-0.5 px-4 text-xs font-bold uppercase tracking-wide">
+									class="shrink-0 rounded-full border-2 border-zinc-200 bg-zinc-100 py-0.5 px-4 text-xs font-bold uppercase tracking-wide">
 									Home
 								</div>
 							{/if}
@@ -154,13 +158,13 @@ async function remove(id, index) {
 							<a
 								href="{`/my/addresses/${i._id}`}"
 								aria-label="Click to route address details"
-								class="bg-transparent p-2 text-center font-semibold uppercase text-primary-500 transition duration-300 focus:outline-none hover:bg-gray-100 hover:text-primary-700">
+								class="bg-transparent p-2 text-center font-semibold uppercase text-primary-500 transition duration-300 focus:outline-none hover:bg-zinc-100 hover:text-primary-700">
 								Edit
 							</a>
 
 							<button
 								type="button"
-								class="bg-transparent p-2 text-center font-semibold uppercase text-primary-500 transition duration-300 focus:outline-none hover:bg-gray-100 hover:text-primary-700"
+								class="bg-transparent p-2 text-center font-semibold uppercase text-primary-500 transition duration-300 focus:outline-none hover:bg-zinc-100 hover:text-primary-700"
 								on:click="{() => remove(i._id, index)}">
 								{#if loadingOnDelete[index]}
 									Removing...

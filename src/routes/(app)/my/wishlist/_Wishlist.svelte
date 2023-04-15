@@ -168,7 +168,7 @@ async function getWishlistedProducts() {
 											</span>
 
 											{#if w.product?.mrp > w.product?.price}
-												<span class="whitespace-nowrap text-gray-600 line-through">
+												<span class="whitespace-nowrap text-zinc-500 line-through">
 													{currency(w.product?.mrp, $page.data?.store?.currencySymbol)}
 												</span>
 
@@ -230,7 +230,7 @@ async function getWishlistedProducts() {
 							<AnimatedCartItem img="{w.product?.img}" />
 						{/if}
 					{:else}
-						<div class="cols-span-1 sm:w-48 p-4 text-center bg-gray-200 text-sm text-gray-500">
+						<div class="cols-span-1 sm:w-48 p-4 text-center bg-zinc-200 text-sm text-zinc-500">
 							It has no product, please delete from backend
 						</div>
 					{/if}

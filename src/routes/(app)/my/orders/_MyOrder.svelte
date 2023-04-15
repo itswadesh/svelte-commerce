@@ -40,39 +40,39 @@ export { clazz as class }
 			<ul>
 				{#each orders.data as order}
 					<li class="mb-4 hidden sm:mb-10 xl:block">
-						<div class="mb-3 flex items-center justify-between text-sm text-gray-500 sm:mb-4">
+						<div class="mb-3 flex items-center justify-between text-sm text-zinc-500 sm:mb-4">
 							<h6>Order No : #{order.orderNo}</h6>
 
 							<h6>Order Date : {date(order.createdAt)}</h6>
 						</div>
 
 						<table
-							class="group min-w-full divide-y divide-gray-200 rounded-md border border-gray-200 text-gray-500 shadow-md"
+							class="group min-w-full divide-y divide-zinc-200 rounded border border-zinc-200 text-zinc-500 shadow-md"
 							on:click="{() => goto(`/my/orders/${order._id}`)}">
-							<thead class="whitespace-nowrap rounded-t-md bg-gray-100 text-xs uppercase">
+							<thead class="whitespace-nowrap rounded-t-md bg-zinc-100 text-xs uppercase">
 								<tr>
-									<!-- <th class="px-5 py-3 font-medium tracking-wider text-gray-500"> # </th> -->
+									<!-- <th class="px-5 py-3 font-medium tracking-wider text-zinc-500"> # </th> -->
 
-									<th class="p-3 font-medium tracking-wider text-gray-500"> Image </th>
+									<th class="p-3 font-medium tracking-wider text-zinc-500"> Image </th>
 
-									<th class="p-3 font-medium tracking-wider text-gray-500"> Vendor </th>
+									<th class="p-3 font-medium tracking-wider text-zinc-500"> Vendor </th>
 
-									<th class="p-3 font-medium tracking-wider text-gray-500"> Name </th>
+									<th class="p-3 font-medium tracking-wider text-zinc-500"> Name </th>
 
-									<th class="p-3 font-medium tracking-wider text-gray-500"> Qty </th>
+									<th class="p-3 font-medium tracking-wider text-zinc-500"> Qty </th>
 
-									<th class="p-3 font-medium tracking-wider text-gray-500"> Price </th>
+									<th class="p-3 font-medium tracking-wider text-zinc-500"> Price </th>
 
-									<th class="p-3 font-medium tracking-wider text-gray-500"> Shipping </th>
+									<th class="p-3 font-medium tracking-wider text-zinc-500"> Shipping </th>
 
-									<th class="p-3 font-medium tracking-wider text-gray-500"> Total </th>
+									<th class="p-3 font-medium tracking-wider text-zinc-500"> Total </th>
 
-									<th class="p-3 font-medium tracking-wider text-gray-500"> Status </th>
+									<th class="p-3 font-medium tracking-wider text-zinc-500"> Status </th>
 								</tr>
 							</thead>
 
 							<tbody
-								class="cursor-pointer divide-y divide-gray-200 rounded-b-md bg-white bg-white text-sm transition duration-300 group-hover:bg-primary-50">
+								class="cursor-pointer divide-y divide-zinc-200 rounded-b-md bg-white bg-white text-sm transition duration-300 group-hover:bg-primary-50">
 								{#each order.orderItems as item}
 									<tr>
 										<td class="p-3">
@@ -91,7 +91,7 @@ export { clazz as class }
 														class="h-auto w-20 object-contain object-top" />
 												{:else}
 													<div
-														class="w-20 h-20 rounded-md bg-gray-200 flex items-center flex-col justify-center p-2 text-center text-xs text-gray-500">
+														class="w-20 h-20 rounded bg-zinc-200 flex items-center flex-col justify-center p-2 text-center text-xs text-zinc-500">
 														<svg
 															xmlns="http://www.w3.org/2000/svg"
 															fill="none"
@@ -159,7 +159,7 @@ export { clazz as class }
 					</li>
 
 					<li class="xl:hidden">
-						<div class="mb-3 flex items-center justify-between text-sm text-gray-500 sm:mb-4">
+						<div class="mb-3 flex items-center justify-between text-sm text-zinc-500 sm:mb-4">
 							<h6>
 								<span class="hidden sm:block">Order No :</span>
 
@@ -176,7 +176,7 @@ export { clazz as class }
 						<a
 							href="/my/orders/{order._id}"
 							aria-label="orders"
-							class="mb-4 block w-full divide-y divide-gray-200 rounded-md border bg-white text-sm text-gray-600 shadow-md transition duration-300 hover:bg-primary-50 sm:mb-10">
+							class="mb-4 block w-full divide-y divide-zinc-200 rounded border bg-white text-sm text-zinc-500 shadow-md transition duration-300 hover:bg-primary-50 sm:mb-10">
 							{#each order.orderItems as item}
 								<div class="flex items-start gap-2 p-4 sm:gap-5">
 									<div class="shrink-0">
@@ -224,7 +224,7 @@ export { clazz as class }
 											<div class="flex items-center gap-2">
 												<h6>Price :</h6>
 
-												<b class="text-gray-500">
+												<b class="text-zinc-500">
 													{currency(item.price)}
 													*
 													{item.qty}
@@ -234,7 +234,7 @@ export { clazz as class }
 											<div class="flex items-center gap-2">
 												<h6>Delivery :</h6>
 
-												<b class="text-gray-500">
+												<b class="text-zinc-500">
 													{currency(item.shippingCharge)}
 												</b>
 											</div>
@@ -242,7 +242,7 @@ export { clazz as class }
 											<div class="flex items-center gap-2">
 												<h6>Total :</h6>
 
-												<b class="text-gray-500">
+												<b class="text-zinc-500">
 													{currency(item.total)}
 												</b>
 											</div>

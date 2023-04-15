@@ -22,7 +22,7 @@ let seoProps = {
 			<li>
 				<h6 class="mb-5 font-semibold">PAYMENTS</h6>
 
-				<p class="text-gray-500">
+				<p class="text-zinc-500">
 					{$page.data.store?.websiteName} accepts Debit Cards, Credit Cards, NetBanking & Wallets for
 					payments.
 				</p>
@@ -31,7 +31,7 @@ let seoProps = {
 			<li>
 				<h6 class="mb-5 font-semibold">SHIPPING</h6>
 
-				<p class="text-gray-500">
+				<p class="text-zinc-500">
 					{$page.data.store?.websiteName} offers to ship to cities all over India. Customers usually
 					receive their orders within 7-8 working days. The customer is responsible for any import duty
 					that may be levied upon their order. <br /> <br />
@@ -51,7 +51,7 @@ let seoProps = {
 			<li>
 				<h6 class="mb-5 font-semibold">RETURNS</h6>
 
-				<div class="text-gray-500">
+				<div class="text-zinc-500">
 					{$page.data.store?.websiteName} offers a replacement guarantee only if the product received
 					is damaged/defective. Please get in touch with us at {$page.data.store?.websiteEmail} within
 					3 days of receiving your order if you would like to have it replaced. We will provide a shipping

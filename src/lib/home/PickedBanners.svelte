@@ -14,9 +14,9 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 })
 </script>
 
-<div class="flex flex-col gap-5 sm:gap-10">
+<div>
 	{#if pickedBannersForDeals?.length}
-		<div class="flex flex-col gap-5 sm:gap-10">
+		<div>
 			{#each pickedBannersForDeals as b}
 				<div>
 					<h2
@@ -63,7 +63,7 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 	{/if}
 
 	{#if pickedBanners?.length}
-		<div class="flex flex-col gap-5 sm:gap-10">
+		<div>
 			{#each pickedBanners as b}
 				<div>
 					<h2

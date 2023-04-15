@@ -84,7 +84,7 @@ const handleSubmit = async (e) => {
 </script>
 
 <div
-	class="{clazz} group relative h-36 w-36 shrink-0 grow-0 bg-gray-50 transition duration-300 hover:bg-white">
+	class="{clazz} group relative h-36 w-36 shrink-0 grow-0 bg-zinc-50 transition duration-300 hover:bg-white">
 	{#if !uploading && !deleting && images != '' && images !== undefined}
 		<div
 			class="slowtransition absolute inset-0 z-0 hidden items-center justify-center bg-black bg-opacity-50 text-center group-hover:flex">
@@ -94,7 +94,7 @@ const handleSubmit = async (e) => {
 		<button
 			type="button"
 			title="delete"
-			class="hover:text-graey-800 absolute right-0 top-0 z-20 -m-2 hidden rounded-full border bg-white p-1 text-gray-500 shadow-md transition duration-300 focus:outline-none group-hover:flex hover:bg-gray-200"
+			class="hover:text-graey-800 absolute right-0 top-0 z-20 -m-2 hidden rounded-full border bg-white p-1 text-zinc-500 shadow-md transition duration-300 focus:outline-none group-hover:flex hover:bg-zinc-200"
 			on:click="{() => remove(images)}">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -127,17 +127,17 @@ const handleSubmit = async (e) => {
 				</div>
 			</div>
 		{:else if images != '' && images != undefined}
-			<div class="h-36 w-36 border-2 border-gray-300 bg-white text-xs">
+			<div class="h-36 w-36 border-2 border-zinc-200 bg-white text-xs">
 				<img src="{images}" alt="images" class="h-full w-full object-contain object-center" />
 			</div>
 		{:else if avatar}
 			<div
-				class="flex items-center justify-center h-36 w-36 border-2 p-1 border-gray-300 bg-gray-100">
+				class="flex items-center justify-center h-36 w-36 border-2 p-1 border-zinc-200 bg-zinc-100">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					viewBox="0 0 24 24"
 					fill="currentColor"
-					class="w-full h-full text-gray-300">
+					class="w-full h-full text-zinc-200">
 					<path
 						fill-rule="evenodd"
 						d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z"

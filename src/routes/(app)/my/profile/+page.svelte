@@ -95,7 +95,7 @@ async function saveProfile() {
 			<form class="mb-5 flex flex-col gap-4 sm:mb-10" on:submit|preventDefault="{saveProfile}">
 				<div>
 					<div
-						class="frosted flex flex-col gap-4 rounded-lg border border-gray-300 p-4 shadow-lg md:p-6">
+						class="frosted flex flex-col gap-4 rounded-lg border border-zinc-200 p-4 shadow-lg md:p-6">
 						<div class="flex flex-wrap items-center gap-2">
 							<SingleImageUpload
 								class=""

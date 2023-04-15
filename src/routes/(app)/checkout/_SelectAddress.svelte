@@ -44,8 +44,7 @@ async function addressChanged(id) {
 				value="{address._id}"
 				name="group"
 				class="mt-1.5 h-4 w-4 focus:outline-none focus:ring-0 focus:ring-offset-0"
-				on:change="{() => addressChanged(address._id)}"
-			/>
+				on:change="{() => addressChanged(address._id)}" />
 
 			<div class="flex w-full cursor-pointer flex-col gap-2 font-light">
 				<h5 class="flex-1 font-semibold capitalize tracking-wide md:text-lg">
@@ -105,26 +104,23 @@ async function addressChanged(id) {
 		<div class="ml-6 mt-5 flex items-center gap-5 text-sm sm:ml-8">
 			<button
 				type="button"
-				class="w-full rounded-md border border-primary-500 py-2 px-4 font-semibold tracking-wide text-primary-500 shadow-md transition duration-300 focus:outline-none hover:bg-primary-500 hover:text-white"
-				on:click="{() => goto(`/checkout/add-address?id=${address._id}`)}"
-			>
+				class="w-full rounded border border-primary-500 py-2 px-4 font-semibold tracking-wide text-primary-500 shadow-md transition duration-300 focus:outline-none hover:bg-primary-500 hover:text-white"
+				on:click="{() => goto(`/checkout/add-address?id=${address._id}`)}">
 				EDIT
 			</button>
 
 			<button
 				type="button"
-				class="w-full rounded-md border border-transparent bg-transparent py-2 px-4 font-semibold tracking-wide text-gray-500 transition duration-300 focus:outline-none hover:border-gray-500 hover:bg-gray-500 hover:text-white hover:shadow-md"
-				on:click="{() => remove(address._id)}"
-			>
+				class="w-full rounded border border-transparent bg-transparent py-2 px-4 font-semibold tracking-wide text-zinc-500 transition duration-300 focus:outline-none hover:border-zinc-500 hover:bg-zinc-500 hover:text-white hover:shadow-md"
+				on:click="{() => remove(address._id)}">
 				{#if removing}
 					<div class="flex justify-center">
 						<svg
 							style="height: 20px; width: 20px"
-							class="-ms-1 animate-spin text-gray-500"
+							class="-ms-1 animate-spin text-zinc-500"
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
-							viewBox="0 0 24 24"
-						>
+							viewBox="0 0 24 24">
 							<circle
 								class="opacity-25"
 								cx="12"
