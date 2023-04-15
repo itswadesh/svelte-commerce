@@ -33,7 +33,7 @@ const seoProps = {
 		{/if}
 	</a>
 
-	<h1 class="mb-8 w-full text-center text-2xl font-bold text-primary-500">Forgot Success</h1>
+	<h1 class="mb-8 w-full text-center text-2xl font-semibold text-primary-500">Forgot Success</h1>
 
 	<div class="mb-5 flex flex-col items-center justify-center gap-5 text-center">
 		<svg
