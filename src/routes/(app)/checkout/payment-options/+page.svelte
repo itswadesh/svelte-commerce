@@ -190,49 +190,51 @@ function checkIfStripeCardValid({ detail }) {
 			{#if data.paymentMethods?.length}
 				<div class="flex w-full flex-col gap-4" class:wiggle="{paymentDenied}">
 					{#each data.paymentMethods as pm}
-						<label
-							class="flex w-full cursor-pointer items-center gap-2 rounded border border-zinc-200 p-4 shadow-md transition duration-300 hover:bg-primary-50 sm:gap-4">
-							<input
-								bind:group="{selectedPaymentMethod}"
-								type="radio"
-								value="{pm}"
-								name="group"
-								class="h-4 w-4 focus:outline-none focus:ring-0 focus:ring-offset-0"
-								on:click="{() => paymentMethodChanged(pm)}" />
+						{#if pm._id}
+							<label
+								class="flex w-full cursor-pointer items-center gap-2 rounded border border-zinc-200 p-4 shadow-md transition duration-300 hover:bg-primary-50 sm:gap-4">
+								<input
+									bind:group="{selectedPaymentMethod}"
+									type="radio"
+									value="{pm}"
+									name="group"
+									class="h-4 w-4 focus:outline-none focus:ring-0 focus:ring-offset-0"
+									on:click="{() => paymentMethodChanged(pm)}" />
 
-							<div class="flex w-full flex-1 items-center justify-between gap-4">
-								<div class="flex-1">
-									<h2 class="text-xl font-semibold" style="color:{pm.color}">
-										{pm.name}
-									</h2>
-
-									<p class="mt-1 text-sm text-zinc-500">{pm.text}</p>
-								</div>
-
-								<div class="shrink-0">
-									{#if pm.img}
-										<img
-											src="{pm.img}"
-											alt="{pm.name}"
-											width="56"
-											height="56"
-											class="h-14 w-14 rounded-full border object-cover object-center text-xs" />
-									{:else}
-										<div
-											class="flex h-14 w-14 items-center justify-center rounded-full border bg-zinc-200 text-center text-xs uppercase">
+								<div class="flex w-full flex-1 items-center justify-between gap-4">
+									<div class="flex-1">
+										<h2 class="text-xl font-semibold" style="color:{pm.color}">
 											{pm.name}
-										</div>
-									{/if}
-								</div>
-							</div>
-						</label>
+										</h2>
 
-						{#if pm.value === 'Stripe'}
-							<Stripe
-								address="{data.addressId}"
-								isStripeSelected="{selectedPaymentMethod.name === 'Stripe'}"
-								stripePublishableKey="{stripePublishableKey}"
-								on:isStripeCardValid="{checkIfStripeCardValid}" />
+										<p class="mt-1 text-sm text-zinc-500">{pm.text}</p>
+									</div>
+
+									<div class="shrink-0">
+										{#if pm.img}
+											<img
+												src="{pm.img}"
+												alt="{pm.name}"
+												width="56"
+												height="56"
+												class="h-14 w-14 rounded-full border object-cover object-center text-xs" />
+										{:else}
+											<div
+												class="flex h-14 w-14 items-center justify-center rounded-full border bg-zinc-200 text-center text-xs uppercase">
+												{pm.name}
+											</div>
+										{/if}
+									</div>
+								</div>
+							</label>
+
+							{#if pm.value === 'Stripe'}
+								<Stripe
+									address="{data.addressId}"
+									isStripeSelected="{selectedPaymentMethod.name === 'Stripe'}"
+									stripePublishableKey="{stripePublishableKey}"
+									on:isStripeCardValid="{checkIfStripeCardValid}" />
+							{/if}
 						{/if}
 					{/each}
 				</div>

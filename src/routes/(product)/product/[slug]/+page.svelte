@@ -89,6 +89,7 @@ const cookies = Cookie()
 
 export let data
 
+// console.log('$page', $page)
 // console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
@@ -198,16 +199,18 @@ onMount(async () => {
 
 	await getProductReviews()
 
-	try {
-		isWislisted = await getAPI(
-			`wishlists/check?product=${data.product?._id}&variant=${data.product?._id}&store=${$page.data?.store?.id}`,
-			$page.data.origin
-		)
+	if ($page.data?.me) {
+		try {
+			isWislisted = await getAPI(
+				`wishlists/check?product=${data.product?._id}&variant=${data.product?._id}&store=${$page.data?.store?.id}`,
+				$page.data.origin
+			)
 
-		// console.log('isWislisted', isWislisted)
-	} catch (e) {
-		// toast(e, 'error')
-	} finally {
+			// console.log('isWislisted', isWislisted)
+		} catch (e) {
+			// toast(e, 'error')
+		} finally {
+		}
 	}
 
 	storeProductToLocatStorage()

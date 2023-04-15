@@ -138,7 +138,7 @@ function getLoginUrl(baseUrl) {
 		{/if}
 	</a>
 
-	<h1 class="mb-8 w-full text-center text-2xl font-bold text-primary-500">Login/Register</h1>
+	<h1 class="mb-8 w-full text-center text-2xl font-semibold text-primary-500">Login/Register</h1>
 
 	{#if !otpRequestSend}
 		<SendOtp
