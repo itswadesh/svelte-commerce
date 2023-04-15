@@ -35,7 +35,7 @@ onMount(async () => {
 
 		<button
 			type="button"
-			class="fixed top-2 right-2 transform cursor-pointer text-gray-200 transition duration-300 hover:scale-125 hover:text-white lg:top-10 lg:right-10"
+			class="fixed top-2 right-2 transform cursor-pointer text-zinc-200 transition duration-300 hover:scale-125 hover:text-white lg:top-10 lg:right-10"
 			on:click="{() => dispatch('close')}">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -85,10 +85,10 @@ onMount(async () => {
 											<LazyImg
 												src="{g.image || g.images[0]}"
 												alt=""
-												class="block h-full w-full object-contain object-center rounded-md" />
+												class="block h-full w-full object-contain object-center rounded" />
 										{:else}
 											<div
-												class="bg-gray-100 text-gray-500 flex flex-col gap-2 h-full w-full items-center justify-center text-center text-sm rounded-md">
+												class="bg-zinc-100 text-zinc-500 flex flex-col gap-2 h-full w-full items-center justify-center text-center text-sm rounded">
 												<svg
 													xmlns="http://www.w3.org/2000/svg"
 													viewBox="0 0 24 24"
@@ -115,7 +115,7 @@ onMount(async () => {
 														fill="currentColor"
 														class="w-4 h-4 {index < g.rating
 															? 'text-primary-500'
-															: 'text-gray-300'}">
+															: 'text-zinc-200'}">
 														<path
 															fill-rule="evenodd"
 															d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z"
@@ -137,7 +137,7 @@ onMount(async () => {
 										{/if}
 
 										{#if g.user}
-											<p class="text-xs text-gray-500">
+											<p class="text-xs text-zinc-500">
 												{g.user?.firstName} | {date(g.createdAt)}
 											</p>
 										{/if}
@@ -155,7 +155,7 @@ onMount(async () => {
 													<LazyImg
 														src="{g.product?.img}"
 														alt=""
-														class="block w-16 h-auto object-contain object-center rounded-md" />
+														class="block w-16 h-auto object-contain object-center rounded" />
 												{/if}
 
 												<div class="flex-1">
@@ -200,10 +200,10 @@ onMount(async () => {
 									<LazyImg
 										src="{g.image || g.images[0]}"
 										alt=""
-										class="block h-full w-full object-contain object-center rounded-md" />
+										class="block h-full w-full object-contain object-center rounded" />
 								{:else}
 									<div
-										class="bg-gray-100 text-gray-500 flex flex-col gap-2 h-full w-full items-center justify-center text-center text-sm rounded-md">
+										class="bg-zinc-100 text-zinc-500 flex flex-col gap-2 h-full w-full items-center justify-center text-center text-sm rounded">
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
 											viewBox="0 0 24 24"
@@ -228,7 +228,7 @@ onMount(async () => {
 												xmlns="http://www.w3.org/2000/svg"
 												viewBox="0 0 20 20"
 												fill="currentColor"
-												class="w-4 h-4 {index < g.rating ? 'text-primary-500' : 'text-gray-300'}">
+												class="w-4 h-4 {index < g.rating ? 'text-primary-500' : 'text-zinc-200'}">
 												<path
 													fill-rule="evenodd"
 													d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z"
@@ -249,7 +249,7 @@ onMount(async () => {
 								{/if}
 
 								{#if g.user}
-									<p class="text-xs text-gray-500">
+									<p class="text-xs text-zinc-500">
 										{g.user?.firstName} | {date(g.createdAt)}
 									</p>
 								{/if}
@@ -267,7 +267,7 @@ onMount(async () => {
 											<LazyImg
 												src="{g.product?.img}"
 												alt=""
-												class="block w-16 h-auto object-contain object-center rounded-md" />
+												class="block w-16 h-auto object-contain object-center rounded" />
 										{/if}
 
 										<div class="flex-1">

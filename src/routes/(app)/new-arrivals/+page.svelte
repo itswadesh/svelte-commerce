@@ -63,7 +63,7 @@ let showItemCount = 10
 									class="mr-2 whitespace-nowrap rounded-full border-2 px-4 py-1 text-sm font-semibold focus:outline-none
                             {selectedCategory.name === c.name
 										? 'border-primary-500 bg-primary-500 text-white'
-										: 'text-gray-700 border-gray-200 bg-transparent'}"
+										: 'text-zinc-800 border-zinc-200 bg-transparent'}"
 									on:click="{() => (selectedCategory = c)}">
 									{c.name}
 								</button>
@@ -108,7 +108,7 @@ let showItemCount = 10
 								class="h-60 w-auto object-contain text-xs" />
 						</div>
 
-						<p class="mb-5 text-center text-gray-500">No data found</p>
+						<p class="mb-5 text-center text-zinc-500">No data found</p>
 
 						<PrimaryButton class="text-sm" on:click="{() => goto('/')}">Back to Home</PrimaryButton>
 					</div>
@@ -129,7 +129,7 @@ let showItemCount = 10
 						class="h-60 w-auto object-contain text-xs" />
 				</div>
 
-				<p class="mb-5 text-center text-gray-500">No data found</p>
+				<p class="mb-5 text-center text-zinc-500">No data found</p>
 
 				<PrimaryButton class="text-sm" on:click="{() => goto('/')}">Back to Home</PrimaryButton>
 			</div>

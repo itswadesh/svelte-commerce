@@ -1,117 +1,122 @@
-<script>
-import { AutocompleteService } from '$lib/services'
+<script lang="ts">
 import { createEventDispatcher, onMount } from 'svelte'
+import { AutocompleteService, CategoryService } from './../../services'
+import { goto } from '$app/navigation'
 import { page } from '$app/stores'
-import AutocompleteItem from './AutocompleteItem.svelte'
-
-export let placeholder = 'Search Products'
-
-let data
-let inputObject = null
-let showSuggestionOptions = false
+// import AutocompleteItem from '$lib/AutocompleteItem.svelte'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
 
 const dispatch = createEventDispatcher()
 
-onMount(async () => {
-	data = await getAutocompleteData()
-})
+export let placeholder = 'Search products...'
 
-const getAutocompleteData = async (filterText = '') => {
-	try {
-		const ac =
-			(await AutocompleteService.fetchAutocompleteData({
-				q: filterText || '',
+let autocomplete: { img: string; name: string }[] = []
+let categories: any = []
+let err
+let popular = []
+let popularSearches = null
+let product
+let q = ''
+let query = ''
+let searchInput: any
+let showSuggestionOptions = false
+let trending = []
+let typingTimer: any
+
+// console.log('popular = ', popular?.data?.length)
+
+function submit() {
+	showSuggestionOptions = false
+
+	// console.log('zzzzzzzzzzzzzzzzzz', autocomplete[0])
+
+	if (autocomplete?.length && autocomplete[0].slug) {
+		goto(`/${autocomplete[0].slug}`)
+	} else {
+		goto(`/search?q=${q}`)
+	}
+}
+
+function handleRouteToCategorySlug(link: string, slug: string) {
+	goto(`/${link || slug}`)
+}
+
+function onselect(v: any) {
+	showSuggestionOptions = false
+
+	if (v) {
+		if (v.type === 'categories') {
+			goto(`/${v.slug}`)
+		} else {
+			goto(`/search?q=${encodeURIComponent(v.key)}`)
+		}
+	}
+}
+
+function fillValue(val: string) {
+	product = val
+}
+
+async function getData(e: any) {
+	if (e) {
+		if (e.isComposing) {
+			if (e.target.value === '') {
+				q = query.slice(0, -1)
+			} else {
+				q = e.target.value
+			}
+		} else {
+			q = e.target.value
+		}
+	}
+
+	clearTimeout(typingTimer)
+
+	typingTimer = setTimeout(async () => {
+		try {
+			autocomplete = await AutocompleteService.fetchAutocompleteData({
+				q: q,
 				origin: $page?.data?.origin,
 				storeId: $page?.data?.store?.id
-			})) || []
-	} catch (e) {
-		return []
-		// console.log('err....', e)
-	}
+			})
+		} catch (e) {}
+	}, 200)
 }
 
-let filteredData = []
-
-const filterData = async (e) => {
-	const data = await getAutocompleteData(e.target.value)
-	filteredData = data
-	if (!filteredData?.length) {
-		inputObject = null
-	}
-}
-
-let searchInput // use with bind:this to focus element
-let inputValue = ''
-
-$: if (!inputValue) {
-	inputObject = null
-	filteredData = []
-	hiLiteIndex = null
-}
-
-const clearInput = () => {
-	inputValue = ''
+function resetInput() {
 	searchInput.focus()
+	q = ''
 }
 
-const setInputVal = (d) => {
-	inputObject = d
-	inputValue = d?.name || d
-	filteredData = []
-	hiLiteIndex = null
-	submitValue()
-}
-
-const submitValue = () => {
-	if (!inputObject) {
-		inputObject = { name: inputValue, slug: undefined, type: 'product' }
+onMount(async () => {
+	searchInput.focus()
+	try {
+		categories = (
+			await CategoryService.fetchAllCategories({
+				featured: true,
+				storeId: $page?.data?.store?.id,
+				origin: $page.data.origin
+			})
+		).data
+	} catch (e) {
+		err = e
+	} finally {
 	}
-	if (inputValue) dispatch('search', inputObject)
-}
-
-const makeMatchBold = (str) => {
-	let matched = str.name.substring(0, inputValue.length)
-	let makeBold = `<strong>${matched}</strong>`
-	str.boldedMatch = str.name.replace(matched, makeBold)
-	return str
-}
-
-const removeBold = (str) => {
-	return str.replace(/<(.)*?>/g, '')
-}
-
-let hiLiteIndex = null
-
-const navigateList = (e) => {
-	if (e.key === 'ArrowDown' && hiLiteIndex <= filteredData?.length - 1) {
-		hiLiteIndex === null ? (hiLiteIndex = 0) : (hiLiteIndex += 1)
-	} else if (e.key === 'ArrowUp' && hiLiteIndex !== null) {
-		hiLiteIndex === 0 ? (hiLiteIndex = filteredData?.length - 1) : (hiLiteIndex -= 1)
-	} else if (e.key === 'Enter') {
-		if (hiLiteIndex !== null) {
-			setInputVal(filteredData[hiLiteIndex])
-		} else {
-			setInputVal({ name: e.target.value, slug: undefined, type: 'product' })
-		}
-	} else {
-		return
-	}
-}
+})
 </script>
 
-<form autocomplete="off" on:submit|preventDefault="{submitValue}" class="relative">
+<form autocomplete="off" class="relative" on:submit|preventDefault="{submit}">
 	<button
 		type="button"
 		class="relative w-full focus:outline-none"
-		on:click="{() => (showSuggestionOptions = !showSuggestionOptions)}">
+		on:click="{() => (showSuggestionOptions = true)}">
 		<input
 			id="data-input"
-			type="text"
+			type="search"
 			placeholder="{placeholder}"
 			bind:this="{searchInput}"
-			bind:value="{inputValue}"
-			on:input="{filterData}"
-			class="w-full rounded-md border bg-white py-2 pl-4 pr-12 text-sm font-light transition duration-300 placeholder:text-gray-500 focus:border-gray-400 focus:outline-none" />
+			on:input="{getData}"
+			class="w-full rounded border bg-white py-2 pl-4 pr-12 text-sm font-light transition duration-300 placeholder:text-zinc-500 focus:border-zinc-400 focus:outline-none" />
 
 		<button
 			type="submit"
@@ -119,7 +124,7 @@ const navigateList = (e) => {
 			class="absolute inset-y-0 right-0 z-10 hidden h-full w-10 shrink-0 cursor-default items-center justify-center focus:outline-none sm:flex">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
-				class="h-5 w-5 text-gray-500"
+				class="h-5 w-5 text-zinc-500"
 				viewBox="0 0 20 20"
 				fill="currentColor">
 				<path
@@ -130,14 +135,46 @@ const navigateList = (e) => {
 		</button>
 	</button>
 
-	{#if filteredData?.length > 0 && showSuggestionOptions}
-		<ul class="absolute top-12 z-40 w-full border-t border-l border-r bg-white shadow-xl">
-			{#each filteredData as d, i}
-				<AutocompleteItem
-					itemLabel="{d.name}"
-					highlighted="{i === hiLiteIndex}"
-					on:click="{() => setInputVal(d)}" />
+	{#if autocomplete?.length > 0 && showSuggestionOptions}
+		<ul
+			class="absolute top-10 z-50 w-full border bg-white divide-y rounded shadow-xl overflow-hidden">
+			{#each autocomplete || [] as v}
+				<button
+					type="button"
+					class="p-3 flex w-full items-center justify-between text-left text-zinc-500 hover:bg-zinc-100"
+					on:click="{() => onselect(v)}">
+					<div class="flex-1 flex items-center gap-2 justify-start">
+						{#if v.img}
+							<LazyImg
+								src="{v.img}"
+								alt=""
+								height="40"
+								class="h-10 object-contain w-auto object-center" />
+						{/if}
+
+						<span class="w-full truncate text-sm capitalize">{v.key}</span>
+					</div>
+
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke-width="1.5"
+						stroke="currentColor"
+						class="w-5 h-5">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"></path>
+					</svg>
+				</button>
 			{/each}
 		</ul>
+
+		<button
+			type="button"
+			class="fixed inset-0 h-full w-full z-40 bg-black bg-opacity-0 cursor-default"
+			on:click="{() => (showSuggestionOptions = false)}">
+		</button>
 	{/if}
 </form>

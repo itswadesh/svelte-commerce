@@ -78,7 +78,7 @@ console.log('data', data)
 
 									<p
 										class="flex items-center gap-1 
-										{data.vendor?.verified ? 'text-green-500' : 'text-gray-300'}">
+										{data.vendor?.verified ? 'text-green-500' : 'text-zinc-200'}">
 										{#if data.vendor?.verified}
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
@@ -328,7 +328,7 @@ console.log('data', data)
 									current="{data.page || 1}" />
 							</div>
 						{:else}
-							<p class="bg-gray-200 rounded p-5 text-sm text-gray-500 text-center">
+							<p class="bg-zinc-200 rounded p-5 text-sm text-zinc-500 text-center">
 								Oops!...No product found, vendor has not uploaded any product yet.
 							</p>
 						{/if}

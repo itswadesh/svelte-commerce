@@ -50,11 +50,12 @@ function handleClick() {
 <button
 	type="{type}"
 	title="{title}"
-	class="relative transform items-center justify-center overflow-hidden rounded-md border px-4 py-2 text-center font-semibold tracking-wider text-gray-800 shadow-md transition duration-700 focus:outline-none focus:ring-0 focus:ring-offset-0 {clazz}
+	class="relative transform items-center justify-center overflow-hidden rounded border px-4 py-2 text-center font-semibold tracking-wider text-zinc-800 transition duration-300 focus:outline-none focus:ring-0 focus:ring-offset-0 
+	{clazz}
 	{disabled
-		? 'cursor-not-allowed border-gray-400 bg-gray-400 opacity-40'
-		: 'bg-white opacity-100 hover:border-primary-50 hover:bg-primary-50 active:scale-95'}"
-	class:active:scale-95="{clickEffect}"
+		? 'cursor-not-allowed border-zinc-400 bg-zinc-400 opacity-40'
+		: 'bg-white hover:border-zinc-800'}"
+	class:active:scale-95="{clickEffect && !disabled}"
 	class:applyRoundedNone="{roundedNone}"
 	class:applyroundedFull="{roundedFull}"
 	on:click="{handleClick}">

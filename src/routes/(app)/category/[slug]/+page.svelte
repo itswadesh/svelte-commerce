@@ -129,7 +129,7 @@ async function refreshData() {
 									class="h-60 w-auto object-contain text-xs" />
 							</div>
 
-							<p class="mb-5 text-center text-gray-500">No data found</p>
+							<p class="mb-5 text-center text-zinc-500">No data found</p>
 
 							<PrimaryButton class="text-sm" on:click="{() => goto('/')}">
 								Back to Home

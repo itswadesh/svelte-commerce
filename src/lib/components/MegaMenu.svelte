@@ -31,15 +31,14 @@
 </style>
 
 <script>
-import { onMount } from 'svelte'
-import { toast } from '$lib/utils'
-import { page } from '$app/stores'
 import { browser } from '$app/environment'
-// import { CategoryService } from '$lib/services'
-import { provider } from '$lib/config'
 import { CategoryService } from '$lib/services'
+import { onMount } from 'svelte'
+import { page } from '$app/stores'
+import { provider } from '$lib/config'
+import { toast } from '$lib/utils'
 
-let megamenu = []
+let megamenu = $page.data.megamenu || []
 let selectedCategory = ''
 
 onMount(() => {
@@ -66,7 +65,6 @@ async function getMegaMenu() {
 		} finally {
 		}
 	} else {
-		megamenu = []
 	}
 }
 </script>
@@ -77,57 +75,49 @@ async function getMegaMenu() {
 			class="hoverable mx-1"
 			on:mouseenter="{() => (selectedCategory = category.name)}"
 			on:mouseleave="{() => (selectedCategory = '')}">
-			<div
-				class="items-center relative flex h-20 shrink-0 justify-center whitespace-nowrap border-b-4 border-transparent p-2 font-medium uppercase
-                    {index % 6 == 0 ? 'hover:border-yellow-500' : ''}
-                    {index % 6 == 1 ? 'hover:border-purple-500' : ''}
-                    {index % 6 == 2 ? 'hover:border-red-500' : ''}
-                    {index % 6 == 3 ? 'hover:border-green-500' : ''}
-                    {index % 6 == 4 ? 'hover:border-pink-500' : ''}
-                    {index % 6 == 5 ? 'hover:border-blue-500' : ''}
-                    {index % 6 == 0 && selectedCategory === category.name
-					? 'border-yellow-500'
-					: ''}
-                    {index % 6 == 1 && selectedCategory === category.name
-					? 'border-purple-500'
-					: ''}
-                    {index % 6 == 2 && selectedCategory === category.name ? 'border-red-500' : ''}
-                    {index % 6 == 3 && selectedCategory === category.name ? 'border-green-500' : ''}
-                    {index % 6 == 4 && selectedCategory === category.name ? 'border-pink-500' : ''}
-                    {index % 6 == 5 && selectedCategory === category.name ? 'border-blue-500' : ''}
-                    ">
-				<a
-					href="/{category.link || category.slug}"
-					aria-label="Click to route into category related products page"
-					data-sveltekit-reload
-					class="flex w-full items-center gap-1">
-					<!-- Root category -->
+			<a
+				href="/{category.link || category.slug}"
+				aria-label="Click to route into category related products page"
+				data-sveltekit-reload
+				class="items-center relative flex h-20 shrink-0 justify-center gap-1 whitespace-nowrap border-b-4 border-transparent p-2 font-medium uppercase
+                {index % 6 == 0 ? 'hover:border-yellow-500' : ''}
+                {index % 6 == 1 ? 'hover:border-purple-500' : ''}
+                {index % 6 == 2 ? 'hover:border-red-500' : ''}
+                {index % 6 == 3 ? 'hover:border-green-500' : ''}
+                {index % 6 == 4 ? 'hover:border-pink-500' : ''}
+                {index % 6 == 5 ? 'hover:border-blue-500' : ''}
+                {index % 6 == 0 && selectedCategory === category.name ? 'border-yellow-500' : ''}
+                {index % 6 == 1 && selectedCategory === category.name ? 'border-purple-500' : ''}
+                {index % 6 == 2 && selectedCategory === category.name ? 'border-red-500' : ''}
+                {index % 6 == 3 && selectedCategory === category.name ? 'border-green-500' : ''}
+                {index % 6 == 4 && selectedCategory === category.name ? 'border-pink-500' : ''}
+                {index % 6 == 5 && selectedCategory === category.name ? 'border-blue-500' : ''}">
+				<!-- Root category -->
 
-					<span>{category.name}</span>
+				<span>{category.name}</span>
 
-					<!-- Down icon -->
+				<!-- Down icon -->
 
-					{#if category.children?.length}
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 20 20"
-							fill="currentColor"
-							class="h-4 w-4 shrink-0 transition duration-300
+				{#if category.children?.length}
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 20 20"
+						fill="currentColor"
+						class="h-4 w-4 shrink-0 transition duration-300
                             {selectedCategory === category.name ? 'transform -rotate-180' : ''}">
-							<path
-								fill-rule="evenodd"
-								d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-								clip-rule="evenodd"></path>
-						</svg>
-					{/if}
-				</a>
-			</div>
+						<path
+							fill-rule="evenodd"
+							d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+							clip-rule="evenodd"></path>
+					</svg>
+				{/if}
+			</a>
 
 			{#if category.children?.length}
 				<div class="mega-menu relative overflow-hidden border-b bg-white shadow-2xl">
 					<div class="absolute inset-0 z-0 grid w-full grid-cols-4">
 						{#each { length: 4 } as _, ix}
-							<div class="{ix % 2 === 0 ? 'bg-white' : 'bg-gray-50'}"></div>
+							<div class="{ix % 2 === 0 ? 'bg-white' : 'bg-zinc-50'}"></div>
 						{/each}
 					</div>
 

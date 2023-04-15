@@ -7,21 +7,28 @@
 <script lang="ts">
 import { createEventDispatcher, onMount } from 'svelte'
 import { cubicOut } from 'svelte/easing'
-import { fade, fly } from 'svelte/transition'
-import { goto } from '$app/navigation'
+import { enhance } from '$app/forms'
+import { fade, fly, slide } from 'svelte/transition'
+import { goto, invalidateAll } from '$app/navigation'
 import { logo } from './config'
 import { page } from '$app/stores'
-import Autocomplete from '$lib/components/Autocomplete/Autocomplete.svelte'
+import { toast } from '$lib/utils'
+import Autocomplete from './components/Autocomplete/Autocomplete.svelte'
+import AutosuggestModal from './AutosuggestModal.svelte'
+import Cookie from 'cookie-universal'
+import Item from '$lib/AutocompleteItem.svelte'
 import LazyImg from './components/Image/LazyImg.svelte'
 import MegaMenu from './components/MegaMenu.svelte'
 import menu from '$lib/config/menu'
+import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import PrimaryButton from './ui/PrimaryButton.svelte'
+import productNonVeg from '$lib/assets/product/non-veg.png'
+import productVeg from '$lib/assets/product/veg.png'
+import userEmptyProfile from '$lib/assets/user-empty-profile.png'
 import WhiteButton from './ui/WhiteButton.svelte'
-import AutosuggestModal from './AutosuggestModal.svelte'
-import { enhance } from '$app/forms'
-import type { Cart, Me } from './types'
 
 const dispatch = createEventDispatcher()
+const cookies = Cookie()
 
 export let me: Me, cart: Cart, data, showCartSidebar: boolean, openSidebar: boolean, store
 
@@ -31,18 +38,63 @@ let show = false
 let loadingForDeleteItemFromCart = []
 let categories
 
+// if (cart) cart = JSON.parse(cart)
+
+// export const signOut = async () => {
+// 	let logout, error
+
+// 	try {
+// 		await post('logout', {})
+// 	} catch (e) {
+// 		error = e
+// 	} finally {
+// 	}
+
+// 	await cookies.set('me', null, { path: '/' })
+// 	await cookies.set('cart', null, { path: '/' })
+// 	await cookies.remove('token')
+// 	await cookies.remove('connect.sid')
+// 	await cookies.remove('me')
+// 	await invalidateAll()
+
+// 	return { data: logout, error }
+// }
+
 onMount(async () => {
-	q = $page.url.searchParams.get('q') || ''
+	q = $page.url.searchParams.get('q')
+	// const response = await fetch('/server/cart')
+	// cart = await response.json()
 })
 
-function slideFade(node: any, params: any) {
+// onMount(() => {
+//   getFace(`face`)
+// })
+
+// function getFace(id) {
+//   const face = faces.generate(null, { race: 'white' })
+//   faces.display(id, face)
+// }
+
+// async function handleSignout() {
+// 	try {
+// 		await signOut()
+// 		toast('Signed Out...', 'success')
+// 		goto('/auth/otp-login')
+// 	} catch (e) {
+// 		console.log(e)
+// 		toast(e, 'error')
+// 	} finally {
+// 	}
+// }
+
+function slideFade(node, params) {
 	const existingTransform = getComputedStyle(node).transform.replace('none', '')
 
 	return {
 		delay: params.delay || 0,
 		duration: params.duration || 400,
 		easing: params.easing || cubicOut,
-		css: (t: number, u: number) =>
+		css: (t, u) =>
 			`transform-origin: top right; transform: ${existingTransform} scaleX(${t}); opacity: ${t};`
 	}
 }
@@ -56,12 +108,63 @@ async function onSearchSubmit({ detail }) {
 	} else {
 		const u = new URL('/search', $page.data.origin)
 		u.searchParams.set('q', detail?.name)
-		newUrl = u.toString() + '&sort=price'
+		newUrl = u.toString()
 	}
 
 	goto(newUrl)
 	dispatch('search', detail)
 }
+
+// function handleShowCartSidebar() {
+// 	if ($page?.url?.pathname !== '/cart') {
+// 		showCartSidebar = true
+// 		getCategories()
+// 	}
+
+// 	return
+// }
+
+// async function getCategories() {
+// 	try {
+// 		const res1 = await getAPI(`categories?store=${$page.data.store?.id}`, $page.data.origin)
+// 		categories = res1?.data.filter((c) => {
+// 			return c.img
+// 		})
+// 		// console.log('res1', res1)
+// 		// console.log('categories', categories)
+// 	} catch (e) {
+// 	} finally {
+// 	}
+// }
+
+// const removeItemFromCart = async ({ pid, qty, customizedImg, ix }: any) => {
+// 	try {
+// 		loadingForDeleteItemFromCart[ix] = true
+// 		const res = await post(
+// 			'carts/add-to-cart',
+// 			{
+// 				pid: pid,
+// 				qty: qty,
+// 				customizedImg: customizedImg || null,
+// 				store: $page.data.store?.id
+// 			},
+// 			$page.data.origin
+// 		)
+
+// 		// cart = res
+// 		// $page.data.cart = res
+
+// 		// await refreshCart()
+// 		await invalidateAll()
+// 	} catch (e) {
+// 	} finally {
+// 		loadingForDeleteItemFromCart[ix] = false
+// 	}
+// }
+
+const optionIdentifier = 'name'
+const getOptionLabel = (option) => option.name
+const getSelectionLabel = (option) => option.name
 </script>
 
 <nav
@@ -94,13 +197,13 @@ async function onSearchSubmit({ detail }) {
 
 			<!-- Website Logo/Name -->
 
-			<a href="/" aria-label="Click to route home page" class="block shrink-0">
+			<a href="/" aria-label="Go to home" class="block shrink-0">
 				{#if $page?.data?.store?.logo}
 					<LazyImg
 						src="{$page?.data?.store?.logo}"
 						alt="logo"
 						height="40"
-						class="max-w-32 h-auto max-h-8 object-contain object-left" />
+						class="max-h-10 w-auto max-w-min object-contain object-left" />
 				{:else if $page?.data?.store?.websiteName}
 					<h2
 						class="bg-gradient-to-b from-primary-500 to-secondary-500 bg-clip-text text-2xl font-extrabold text-transparent sm:text-3xl">
@@ -111,7 +214,7 @@ async function onSearchSubmit({ detail }) {
 						src="{logo}"
 						alt="logo"
 						height="40"
-						class="max-w-32 h-auto max-h-8 sm:max-h-16 object-contain object-left" />
+						class="max-h-10 w-auto max-w-min object-contain object-left" />
 				{/if}
 			</a>
 		</div>
@@ -119,7 +222,7 @@ async function onSearchSubmit({ detail }) {
 		<!-- Mega menu -->
 
 		<div
-			class="hidden w-80 items-start justify-start overflow-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-200 lg:flex xl:w-auto max-w-6xl">
+			class="hidden w-80 items-start justify-start overflow-auto scrollbar scrollbar-track-transparent scrollbar-thumb-zinc-100 lg:flex xl:w-auto">
 			<MegaMenu />
 		</div>
 
@@ -132,9 +235,30 @@ async function onSearchSubmit({ detail }) {
 		</div>
 
 		<div class="flex items-center gap-4 lg:gap-8">
+			<!-- Search -->
+
+			<!-- <a
+				data-sveltekit-preload-data
+				href="/autosuggest"
+				aria-label="Click to search quizzes, videos, notes etc..."
+				class="block focus:outline-none lg:hidden">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke-width="1.5"
+					stroke="currentColor"
+					class="h-6 w-6">
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path>
+				</svg>
+			</a> -->
+
 			<button
 				type="button"
-				aria-label="Click to search quizzes, videos, notes etc..."
+				aria-label="Click to search products..."
 				class="block focus:outline-none lg:hidden"
 				on:click="{() => (show = true)}">
 				<svg
@@ -152,10 +276,16 @@ async function onSearchSubmit({ detail }) {
 				</svg>
 			</button>
 
+			<!-- Cart -->
+
+			<!-- <button
+				class="relative flex flex-col items-center justify-center gap-1 focus:outline-none lg:border-b-4 lg:border-transparent"
+				aria-label="Click to route cart"
+				on:click="{handleShowCartSidebar}"> -->
 			<a
 				href="/cart"
-				aria-label="Click to route cart"
 				class="relative flex flex-col items-center justify-center gap-1 focus:outline-none lg:border-b-4 lg:border-transparent"
+				aria-label="Click to route cart"
 				data-sveltekit-preload-data>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -175,11 +305,12 @@ async function onSearchSubmit({ detail }) {
 
 				{#if $page.data.cartQty > 0}
 					<div
-						class="cart absolute -top-2 -right-1.5 flex items-center justify-center rounded-full bg-primary-500 py-[0.8px] px-[5px] text-center text-xs font-bold uppercase text-white">
+						class="absolute -top-2 -right-1.5 flex items-center justify-center rounded-full bg-primary-500 py-[0.8px] px-[5px] text-center text-xs font-bold uppercase text-white">
 						{$page.data.cartQty}
 					</div>
 				{/if}
 			</a>
+			<!-- </button> -->
 
 			{#if showCartSidebar}
 				<div class="fixed inset-0 z-[100] h-screen w-full">
@@ -194,7 +325,7 @@ async function onSearchSubmit({ detail }) {
 						class="absolute inset-y-0 right-0 h-full w-full border-l bg-white lg:max-w-xs">
 						<button
 							type="button"
-							class="absolute top-5 right-4 transform cursor-pointer text-gray-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-gray-700"
+							class="absolute top-5 right-4 transform cursor-pointer text-zinc-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-zinc-800"
 							on:click="{() => (showCartSidebar = false)}">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -247,9 +378,9 @@ async function onSearchSubmit({ detail }) {
 														{#if $page?.data?.store?.isFnb && item.foodType}
 															<div>
 																{#if item.foodType === 'veg'}
-																	<img src="/product/veg.png" alt="veg" class="h-5 w-5" />
+																	<img src="{productVeg}" alt="veg" class="h-5 w-5" />
 																{:else if item.foodType === 'nonveg'}
-																	<img src="/product/non-veg.png" alt="non veg" class="h-5 w-5" />
+																	<img src="{productNonVeg}" alt="non veg" class="h-5 w-5" />
 																{/if}
 															</div>
 														{/if}
@@ -279,23 +410,48 @@ async function onSearchSubmit({ detail }) {
 															{item.qty}
 														</span>
 
-														<span class="text-gray-500">x</span>
+														<span class="text-zinc-500">x</span>
 
 														<span class="font-semibold">
 															{item.formattedItemAmount?.price}
 														</span>
 													</div>
 												</div>
+
+												<!-- {#if loadingForDeleteItemFromCart[ix]}
+													<div>...</div>
+												{:else}
+													<button
+														type="button"
+														class="transform overflow-hidden rounded-full border p-1 text-zinc-500 transition duration-300 focus:outline-none hover:scale-105 hover:border-zinc-800 hover:text-zinc-800"
+														on:click="{() =>
+															removeItemFromCart({
+																pid: item.pid,
+																qty: -9999999,
+																customizedImg: item.customizedImg,
+																ix: ix
+															})}">
+														<svg
+															xmlns="http://www.w3.org/2000/svg"
+															fill="none"
+															viewBox="0 0 24 24"
+															stroke-width="1.5"
+															stroke="currentColor"
+															class="h-4 w-4">
+															<path
+																stroke-linecap="round"
+																stroke-linejoin="round"
+																d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+															></path>
+														</svg>
+													</button>
+												{/if} -->
 											</div>
 										{/each}
 									</div>
 
 									<div class="mb-10 flex flex-col gap-2">
-										<a
-											href="/cart"
-											aria-label="Click to route cart page"
-											class="block w-full"
-											data-sveltekit-preload-data>
+										<a href="/cart" class="block w-full" data-sveltekit-preload-data>
 											<WhiteButton
 												type="button"
 												class="w-full text-xs uppercase"
@@ -305,11 +461,7 @@ async function onSearchSubmit({ detail }) {
 											</WhiteButton>
 										</a>
 
-										<a
-											href="/checkout/address"
-											aria-label="Click to route address of checkout page"
-											class="block w-full"
-											data-sveltekit-preload-data>
+										<a href="/checkout/address" class="block w-full" data-sveltekit-preload-data>
 											<PrimaryButton
 												type="button"
 												class="w-full text-xs uppercase"
@@ -324,7 +476,7 @@ async function onSearchSubmit({ detail }) {
 									<div class="mb-10 flex flex-col items-center text-center">
 										<div>
 											<img
-												src="/no/add-to-cart-animate.svg"
+												src="{noAddToCartAnimate}"
 												alt="empty listing"
 												class="mb-5 h-40 object-contain" />
 										</div>
@@ -369,7 +521,72 @@ async function onSearchSubmit({ detail }) {
 				</div>
 			{/if}
 
+			<!-- <div class="dropdown-end dropdown">
+				<button
+					title="Cart"
+					tabindex="0"
+					class="flex h-20 flex-col items-center justify-center gap-1 border-b-4 border-transparent px-2 focus:outline-none sm:px-4"
+					aria-label="Cart">
+					<div class="indicator">
+						<div>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-6 w-6 shrink-0"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								stroke-width="2">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+							</svg>
+
+							<span class="hidden text-center text-xs font-semibold tracking-wider lg:block">
+								Bag
+							</span>
+						</div>
+
+						{#if cart?.qty}
+							<span class="badge indicator-item badge-sm" transition:slide|local>
+								{#key cart?.qty}
+									<span in:fly="{{ y: -20 }}">
+										{cart?.qty || 0}
+									</span>
+								{/key}
+							</span>
+						{/if}
+					</div>
+				</button>
+
+				<div
+					tabindex="0"
+					class="card dropdown-content card-compact mt-3 w-52 border bg-white  shadow-md">
+					<div class="card-body">
+						<span class="text-lg font-bold">{cart?.qty || 0} Items</span>
+
+						<span class="font-medium text-primary-500">
+							Subtotal: {currency(cart?.total || 0)}
+						</span>
+
+						<div class="card-actions">
+							<a
+								href="/cart"
+								aria-label="Click to route cart"
+								class="w-full"
+								data-sveltekit-preload-data>
+								<PrimaryButton loadingringsize="sm" class="w-full text-sm uppercase">
+									View cart
+								</PrimaryButton>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div> -->
+
 			{#if me?.active}
+				<!-- Profile -->
+
 				<div
 					class="relative hidden lg:block"
 					on:mouseenter="{() => (showDropdownAccount = true)}"
@@ -415,7 +632,7 @@ async function onSearchSubmit({ detail }) {
 												class="object-cover object-top" />
 										{:else}
 											<img
-												src="/user-empty-profile.png"
+												src="{userEmptyProfile}"
 												alt=""
 												class="h-full w-full object-cover object-top" />
 										{/if}
@@ -455,7 +672,15 @@ async function onSearchSubmit({ detail }) {
 							{/each}
 
 							<li>
-								<form action="/auth/logout" method="POST" use:enhance>
+								<form
+									action="/auth/logout"
+									method="POST"
+									use:enhance="{() => {
+										return async () => {
+											toast('Logged out successfully', 'success')
+											await invalidateAll()
+										}
+									}}">
 									<button
 										type="submit"
 										class="w-full cursor-pointer rounded py-2 px-4 text-left transition duration-300 focus:outline-none hover:bg-primary-50">
@@ -545,7 +770,7 @@ async function onSearchSubmit({ detail }) {
 
 			<button
 				type="button"
-				class="absolute top-5 right-4 transform cursor-pointer text-gray-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-gray-700"
+				class="absolute top-5 right-4 transform cursor-pointer text-zinc-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-zinc-800"
 				on:click="{() => (openSidebar = false)}">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -560,17 +785,17 @@ async function onSearchSubmit({ detail }) {
 			</button>
 
 			{#if me?.active}
-				<ul class="text-gray-600">
+				<ul class="text-zinc-500">
 					<!-- Profile Preview -->
 
 					<li>
 						<a
+							data-sveltekit-preload-data
 							href="/my/profile"
 							aria-label="Click to route profile"
 							class="mb-4 flex flex-col gap-2 border-b pb-4"
-							data-sveltekit-preload-data
 							on:click="{() => (openSidebar = false)}">
-							<div class="h-20 w-20 overflow-hidden rounded-md border">
+							<div class="h-20 w-20 overflow-hidden rounded border">
 								{#if me.avatar}
 									<LazyImg
 										src="{me.avatar}"
@@ -580,7 +805,7 @@ async function onSearchSubmit({ detail }) {
 										class="object-cover object-top" />
 								{:else}
 									<img
-										src="/user-empty-profile.png"
+										src="{userEmptyProfile}"
 										alt=""
 										class="h-full w-full object-cover object-top" />
 								{/if}
@@ -610,10 +835,10 @@ async function onSearchSubmit({ detail }) {
 					{#each menu as m}
 						<li>
 							<a
+								data-sveltekit-preload-data
 								href="{m.url}"
 								aria-label="Click to route account"
 								class="flex items-center gap-2 py-2"
-								data-sveltekit-preload-data
 								on:click="{() => (openSidebar = false)}">
 								{@html m.svg}
 
@@ -625,7 +850,15 @@ async function onSearchSubmit({ detail }) {
 					<!-- Logout -->
 
 					<li>
-						<form action="/auth/logout" method="POST" use:enhance>
+						<form
+							action="/auth/logout"
+							method="POST"
+							use:enhance="{() => {
+								return async () => {
+									toast('Logged out successfully', 'success')
+									await invalidateAll()
+								}
+							}}">
 							<button type="submit" aria-label="Logout" class="flex w-full items-center gap-2 py-2">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"

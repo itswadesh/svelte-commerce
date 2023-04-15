@@ -93,7 +93,7 @@ async function remove(id) {
 
 					<select
 						bind:value="{data.sort}"
-						class="border-b border-gray-300 bg-transparent p-0.5 text-sm font-semibold focus:outline-none"
+						class="border-b border-zinc-200 bg-transparent p-0.5 text-sm font-semibold focus:outline-none"
 						on:change="{() => sortNow(data.sort)}">
 						<option value="-updatedAt" selected class="p-4">Whats New</option>
 						<option value="name">Name ASC</option>
@@ -183,7 +183,7 @@ async function remove(id) {
 
 								<div class="flex justify-end">
 									<button
-										class="w-9 rounded-full bg-gray-100 p-2 text-xs text-gray-500 transition duration-300 hover:bg-gray-200"
+										class="w-9 rounded-full bg-zinc-100 p-2 text-xs text-zinc-500 transition duration-300 hover:bg-zinc-200"
 										on:click="{() => remove(review.id)}">
 										<svg
 											xmlns="http://www.w3.org/2000/svg"

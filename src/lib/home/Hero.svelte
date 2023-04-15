@@ -30,7 +30,7 @@ onMount(async () => {
 			height="380"
 			class="h-full w-full object-contain object-center" />
 	{:else}
-		<div class="h-full w-full animate-pulse bg-gray-300"></div>
+		<div class="h-full w-full animate-pulse bg-zinc-200"></div>
 	{/if}
 </div> -->
 

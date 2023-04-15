@@ -38,8 +38,7 @@ let items = [
 
 <div class="w-full border-t border-b bg-white px-3 sm:px-10">
 	<div
-		class="container mx-auto grid max-w-6xl grid-cols-1 divide-y divide-x border-l border-r sm:grid-cols-2 lg:grid-cols-4 lg:divide-y-0"
-	>
+		class="container mx-auto grid max-w-6xl grid-cols-1 divide-y divide-x border-l border-r sm:grid-cols-2 lg:grid-cols-4 lg:divide-y-0">
 		{#each items as item}
 			<div class="col-span-1">
 				<div class="flex flex-col items-center justify-center gap-5 px-6 py-10 text-center">
@@ -49,7 +48,7 @@ let items = [
 
 					<h6 class="font-semibold uppercase">{item.title}</h6>
 
-					<p class="text-sm text-gray-500">{item.info}</p>
+					<p class="text-sm text-zinc-500">{item.info}</p>
 				</div>
 			</div>
 		{/each}

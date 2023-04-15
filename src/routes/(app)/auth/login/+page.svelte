@@ -228,7 +228,7 @@ function changeNumber() {
 				class="h-14 w-32 object-contain object-center" />
 		{:else}
 			<h1
-				class="bg-gradient-to-b from-primary-500 to-primary-700 bg-clip-text text-3xl font-extrabold text-transparent underline decoration-gray-800">
+				class="bg-gradient-to-b from-primary-500 to-primary-700 bg-clip-text text-3xl font-extrabold text-transparent underline decoration-zinc-800">
 				{#if $page.data.store?.websiteName}
 					{$page.data.store?.websiteName}
 				{:else}
@@ -259,7 +259,7 @@ function changeNumber() {
 					{/if}
 				</h6>
 
-				<div class="relative w-full rounded-md bg-white ">
+				<div class="relative w-full rounded bg-white ">
 					<!-- Enter email or mobile number -->
 
 					<input
@@ -269,7 +269,7 @@ function changeNumber() {
 						maxlength="{maxlength}"
 						autofocus
 						required
-						class="w-full rounded-md border border-gray-300 focus:border-primary-500 focus:outline-none
+						class="w-full rounded border border-zinc-200 focus:border-primary-500 focus:outline-none
 						{isMobile ? 'py-3 pl-3 pr-40' : 'p-3'}"
 						on:input="{verifyIsMobileNum}" />
 
@@ -279,7 +279,7 @@ function changeNumber() {
 						<div class="absolute right-0 inset-y-0">
 							<button
 								type="button"
-								class="h-full relative max-w-max px-4 flex items-center justify-center gap-2 text-sm whitespace-nowrap rounded-md border border-transparent focus:border-primary-500 focus:outline-none"
+								class="h-full relative max-w-max px-4 flex items-center justify-center gap-2 text-sm whitespace-nowrap rounded border border-transparent focus:border-primary-500 focus:outline-none"
 								on:click="{() => (showDropDown = !showDropDown)}">
 								<img src="{indiaFlag}" alt="" class="h-8 w-8 object-contain object-center" />
 
@@ -303,11 +303,11 @@ function changeNumber() {
 
 						{#if showDropDown}
 							<ul
-								class="absolute z-10 top-14 inset-x-0 h-80 p-2 overflow-y-auto bg-white border shadow-md text-sm rounded-md">
+								class="absolute z-10 top-14 inset-x-0 h-80 p-2 overflow-y-auto bg-white border shadow-md text-sm rounded">
 								{#each data.countries as country}
 									<li>
 										<button
-											class="w-full text-left p-2 flex items-center gap-4 hover:bg-gray-100 transition duration-300 rounded-md focus:outline-none"
+											class="w-full text-left p-2 flex items-center gap-4 hover:bg-zinc-100 transition duration-300 rounded focus:outline-none"
 											on:click="{() => {
 												;(selectedCountry = country), (showDropDown = false)
 											}}">
@@ -331,7 +331,7 @@ function changeNumber() {
 				</div>
 
 				{#if isMobile}
-					<p class="mt-1 text-xs text-gray-500">E.g. +nnxxxxxxxxxx</p>
+					<p class="mt-1 text-xs text-zinc-500">E.g. +nnxxxxxxxxxx</p>
 				{/if}
 			</label>
 
@@ -345,12 +345,12 @@ function changeNumber() {
 						<a
 							href="/auth/forgot-password"
 							tabindex="-1"
-							class="max-w-max text-xs text-gray-500 focus:outline-none hover:underline">
+							class="max-w-max text-xs text-zinc-500 focus:outline-none hover:underline">
 							Forgot Password
 						</a>
 					</div>
 
-					<div class="relative w-full rounded-md bg-white">
+					<div class="relative w-full rounded bg-white">
 						{#if type === 'text'}
 							<input
 								id="password"
@@ -358,7 +358,7 @@ function changeNumber() {
 								placeholder="Enter email or mobile number"
 								bind:value="{password}"
 								required
-								class="w-full rounded-md border border-gray-300 py-3 pl-3 pr-12 focus:border-primary-500 focus:outline-none" />
+								class="w-full rounded border border-zinc-200 py-3 pl-3 pr-12 focus:border-primary-500 focus:outline-none" />
 						{:else if type === 'password'}
 							<input
 								id="password"
@@ -366,7 +366,7 @@ function changeNumber() {
 								placeholder="Enter email or mobile number"
 								bind:value="{password}"
 								required
-								class="w-full rounded-md border border-gray-300 py-3 pl-3 pr-12 focus:border-primary-500 focus:outline-none" />
+								class="w-full rounded border border-zinc-200 py-3 pl-3 pr-12 focus:border-primary-500 focus:outline-none" />
 						{/if}
 
 						<button
@@ -454,7 +454,7 @@ function changeNumber() {
 
 	<!-- Terms & Conditions -->
 
-	<p in:fly="{{ y: 10, duration: 700, delay: 300 }}" class="text-center text-sm text-gray-500">
+	<p in:fly="{{ y: 10, duration: 700, delay: 300 }}" class="text-center text-sm text-zinc-500">
 		By clicking login you are accepting our
 
 		<br />

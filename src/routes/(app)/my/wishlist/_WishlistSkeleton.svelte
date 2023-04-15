@@ -1,1 +1,1 @@
-<div class="w-full h-72 border bg-gray-200 rounded-md animate-pulse"></div>
+<div class="w-full h-72 border bg-zinc-200 rounded animate-pulse"></div>

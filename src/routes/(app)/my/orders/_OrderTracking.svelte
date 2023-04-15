@@ -22,9 +22,9 @@ export let tracks
 								width="20"
 								height="20"
 								alt=" "
-								class="h-full w-full bg-gray-100 object-contain object-center" />
+								class="h-full w-full bg-zinc-100 object-contain object-center" />
 						{:else}
-							<div class="h-full w-full bg-gray-200"></div>
+							<div class="h-full w-full bg-zinc-200"></div>
 						{/if}
 					</div>
 
@@ -37,11 +37,11 @@ export let tracks
 					<!-- This is required for gray straight line -->
 
 					<div class="flex w-5 items-center justify-center">
-						<div class="h-full min-h-[24px] w-[2px] bg-gray-200"></div>
+						<div class="h-full min-h-[24px] w-[2px] bg-zinc-200"></div>
 					</div>
 
 					<div class="flex flex-1 flex-col gap-1">
-						<span class="text-xs text-gray-500">{date(t.time)}</span>
+						<span class="text-xs text-zinc-500">{date(t.time)}</span>
 
 						{#if t.comment}
 							<p class="text-xs first-letter:uppercase">
@@ -96,7 +96,7 @@ export let tracks
 									{t.time ? 'opacity-100' : 'opacity-40'} ">
 									<h4 class="font-medium">{t.status}</h4>
 
-									<h6 class="mt-1 text-xs font-light text-gray-500">
+									<h6 class="mt-1 text-xs font-light text-zinc-500">
 										{#if t.time}
 											<span>
 												{date(t.time)}
@@ -111,7 +111,7 @@ export let tracks
 							{#if tx < 4}
 								<div
 									class="mt-4 h-2 w-full rounded-full
-									{t.time ? 'bg-primary-500' : 'bg-gray-400'}">
+									{t.time ? 'bg-primary-500' : 'bg-zinc-400'}">
 								</div>
 							{/if}
 						</div>

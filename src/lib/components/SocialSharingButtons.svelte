@@ -74,7 +74,7 @@ const copyToClipboard = (link) => {
 <div class="relative max-w-max">
 	<button
 		type="button"
-		class="flex items-center gap-2 rounded-full border border-transparent lg:border-gray-200 p-1 lg:py-1 lg:px-4 transition duration-300 focus:outline-none 
+		class="flex items-center gap-2 rounded-full border border-transparent lg:border-zinc-200 p-1 lg:py-1 lg:px-4 transition duration-300 focus:outline-none 
 		{showDropDown
 			? 'border-primary-500 bg-primary-500 text-white shadow-lg'
 			: 'lg:hover:border-primary-500 lg:hover:text-primary-500'}
@@ -102,7 +102,7 @@ const copyToClipboard = (link) => {
 
 		<ul
 			transition:fly="{{ y: -5, duration: 300 }}"
-			class="hidden lg:flex absolute top-10 right-0 z-10 min-w-max list-none flex-col divide-y rounded-md border bg-white shadow-md">
+			class="hidden lg:flex absolute top-10 right-0 z-10 min-w-max list-none flex-col divide-y rounded border bg-white shadow-md">
 			<li class="p-2">
 				<WhatsApp text="{productName} {url}" />
 			</li>

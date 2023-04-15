@@ -54,9 +54,9 @@ onMount(() => {
 		<section>
 			<BackButton to="/my/orders?sort=-updatedAt" class="mb-2" />
 
-			<div class="mb-5 overflow-hidden rounded-md border sm:mb-10">
+			<div class="mb-5 overflow-hidden rounded border sm:mb-10">
 				<div
-					class="flex flex-wrap items-center justify-between border-b bg-gray-200 px-5 py-2 text-sm">
+					class="flex flex-wrap items-center justify-between border-b bg-zinc-200 px-5 py-2 text-sm">
 					<h5><b>Order No :</b> #{data.order?.orderNo}</h5>
 
 					<h5><b>Order Date </b>: {date(data.order?.createdAt)}</h5>
@@ -175,7 +175,7 @@ onMount(() => {
 											</span>
 
 											{#if item.mrp > item.price}
-												<span class="whitespace-nowrap text-gray-600 line-through">
+												<span class="whitespace-nowrap text-zinc-500 line-through">
 													{currency(item.mrp)}
 												</span>
 
@@ -207,7 +207,7 @@ onMount(() => {
 						<div>
 							<h4 class="mb-2 font-semibold">Delivery Address</h4>
 
-							<p class="flex flex-col text-sm font-light text-gray-500">
+							<p class="flex flex-col text-sm font-light text-zinc-500">
 								<span>
 									{data.order?.userFirstName}
 									{data.order?.userLastName}
@@ -233,7 +233,7 @@ onMount(() => {
 						<div>
 							<h4 class="mb-2 font-semibold">Billing Address</h4>
 
-							<p class="flex flex-col text-sm font-light text-gray-500">
+							<p class="flex flex-col text-sm font-light text-zinc-500">
 								<span>
 									{data.order?.billingAddress?.firstName}
 									{data.order?.billingAddress?.lastName}
@@ -259,7 +259,7 @@ onMount(() => {
 						<!-- <div>
 							<h4 class="mb-2 font-semibold">Vendor Details :</h4>
 
-							<p class="flex flex-col text-sm font-light text-gray-500">
+							<p class="flex flex-col text-sm font-light text-zinc-500">
 								<span>
 									{data.order?.vendorBusinessName},
 
@@ -287,7 +287,7 @@ onMount(() => {
 					<h4 class="mb-5">
 						<span class="font-medium">Expected Delivery Date : </span>
 
-						<span class="text-sm font-light text-gray-500">
+						<span class="text-sm font-light text-zinc-500">
 							{date(data.order?.expectedDeliveryDate)}
 						</span>
 					</h4>

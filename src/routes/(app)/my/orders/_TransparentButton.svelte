@@ -15,11 +15,11 @@ export { clazz as class }
 	<button
 		type="{type}"
 		class="relative transform items-center justify-center border-2 px-4 py-2 text-center font-semibold tracking-wider text-primary-500 transition duration-300 focus:outline-none focus:ring-0 focus:ring-offset-0 active:scale-95
-		{disabled ? 'bg-gray-400 cursor-not-allowed' : 'bg-transparent'}
-		{rounded ? 'rounded-full ' : 'rounded-md'}
+		{disabled ? 'bg-zinc-400 cursor-not-allowed' : 'bg-transparent'}
+		{rounded ? 'rounded-full ' : 'rounded'}
 		{border
 			? ' border-primary-500 hover:border-primary-700 hover:text-primary-700 shadow-md hover:shadow'
-			: 'border-transparent hover:bg-gray-500 hover:text-white '}
+			: 'border-transparent hover:bg-zinc-500 hover:text-white '}
     "
 		on:click>
 		<div class="flex items-center justify-center gap-1">
@@ -29,7 +29,7 @@ export { clazz as class }
 		{#if loading}
 			<div
 				class="absolute inset-0 flex cursor-not-allowed items-center justify-center bg-black bg-opacity-50
-				{rounded ? 'rounded-full' : 'rounded-md'}">
+				{rounded ? 'rounded-full' : 'rounded'}">
 				<svg
 					class="animate-spin text-white
 					{loadingringsize == 'xs'

@@ -208,7 +208,7 @@ const handleSelectedProductGallery = (review, rx) => {
 									class="flex flex-wrap gap-1"
 									on:click="{() => handleSelectedProductGallery(review, rx)}">
 									{#each review?.images as img}
-										<img src="{img}" alt="" class="h-20 w-14 rounded-md object-cover" />
+										<img src="{img}" alt="" class="h-20 w-14 rounded object-cover" />
 									{/each}
 								</button>
 
@@ -218,7 +218,7 @@ const handleSelectedProductGallery = (review, rx) => {
 									on:close="{() => (openReviewImages[rx] = false)}" />
 							{/if}
 
-							<div class="flex flex-wrap items-center gap-1 text-gray-500 text-xs">
+							<div class="flex flex-wrap items-center gap-1 text-zinc-500 text-xs">
 								{#if review.user?.firstName}
 									<span>{review.user?.firstName}</span>
 
@@ -226,7 +226,7 @@ const handleSelectedProductGallery = (review, rx) => {
 										<span>{review.user?.lastName}</span>
 									{/if}
 
-									<span class="h-2.5 border-l border-gray-300"></span>
+									<span class="h-2.5 border-l border-zinc-200"></span>
 								{/if}
 
 								{#if review.createdAt}
@@ -255,7 +255,7 @@ const handleSelectedProductGallery = (review, rx) => {
 				<!-- Reached last -->
 
 				{#if reachedLast}
-					<p class="text-gray-500 p-4 text-center">
+					<p class="text-zinc-500 p-4 text-center">
 						<i>~ You have seen all the reviews ~</i>
 					</p>
 				{/if}

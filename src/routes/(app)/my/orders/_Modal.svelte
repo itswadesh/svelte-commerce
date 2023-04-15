@@ -39,7 +39,7 @@ function emitConfirm() {
 					class="flex max-w-max flex-col overflow-hidden rounded-lg border bg-white align-middle shadow-lg">
 					<!-- header-->
 
-					<div class="flex items-center justify-between border-b border-gray-200 p-3 sm:px-6">
+					<div class="flex items-center justify-between border-b border-zinc-200 p-3 sm:px-6">
 						<h3 class="mr-4 text-lg font-semibold">
 							<slot name="title" />
 						</h3>
@@ -74,7 +74,7 @@ function emitConfirm() {
 					<!-- footer-->
 
 					<slot name="footer">
-						<div class="flex items-center justify-end border-t border-gray-200 p-3 sm:px-6">
+						<div class="flex items-center justify-end border-t border-zinc-200 p-3 sm:px-6">
 							<button on:click="{emitCancel}">
 								<slot name="cancel-button"><button class="btn-outline">Cancel</button></slot>
 							</button>

@@ -490,7 +490,7 @@ function handleFilterTags() {
 									class="col-span-2 block sm:hidden overflow-x-auto bg-primary-100 scrollbar-none">
 									<div class="w-full flex items-center gap-6 p-4">
 										<div class="shrink-0">
-											<span class="text-lg text-gray-500">Filter by</span>
+											<span class="text-lg text-zinc-500">Filter by</span>
 
 											<br />
 
@@ -502,7 +502,7 @@ function handleFilterTags() {
 												{#if t && tx < 12}
 													<button
 														type="button"
-														class="capitalizefocus:outline-none max-w-max rounded-md bg-white py-2 px-4 text-sm font-semibold"
+														class="capitalizefocus:outline-none max-w-max rounded bg-white py-2 px-4 text-sm font-semibold"
 														on:click="{() => goCheckbox(t.key)}">
 														{t.key}
 													</button>
@@ -547,7 +547,7 @@ function handleFilterTags() {
 						<!-- Reached last -->
 
 						{#if reachedLast}
-							<p class="text-gray-500 p-4 text-center">
+							<p class="text-zinc-500 p-4 text-center">
 								<i>~ You have seen all the products ~</i>
 							</p>
 						{/if}
@@ -574,7 +574,7 @@ function handleFilterTags() {
 
 						<h2 class="mb-1 font-semibold">We couldn't find any matches!</h2>
 
-						<p class="mb-5 text-center text-sm text-gray-500">
+						<p class="mb-5 text-center text-sm text-zinc-500">
 							Please check the spelling or try searching something else
 						</p>
 

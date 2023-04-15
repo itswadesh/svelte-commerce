@@ -57,7 +57,7 @@ function hideitems() {
 </script>
 
 <div
-	class="group relative col-span-1 block w-full overflow-hidden sm:w-52 sm:shrink-0 sm:rounded-md border sm:border-transparent sm:hover:border-gray-200 sm:hover:bg-white sm:hover:shadow-lg bg-white"
+	class="group relative col-span-1 block w-full overflow-hidden sm:w-52 sm:shrink-0 sm:rounded border sm:border-transparent sm:hover:border-zinc-200 sm:hover:bg-white sm:hover:shadow-lg bg-white"
 	on:mouseenter="{showitems}"
 	on:mouseleave="{hideitems}">
 	<a
@@ -165,7 +165,7 @@ function hideitems() {
 		<!-- Wishlist start-->
 
 		<!-- <button
-					class="mt-3.5 flex w-full items-center justify-center  gap-2 border border-gray-300 py-1 text-sm font-semibold focus:outline-none"
+					class="mt-3.5 flex w-full items-center justify-center  gap-2 border border-zinc-200 py-1 text-sm font-semibold focus:outline-none"
 					on:click="{() => toggleWishlist(product._id)}">
 					{#if isWislisted}
 						<svg
@@ -206,7 +206,7 @@ function hideitems() {
 		<!-- <div class="mt-1.5 flex items-baseline justify-start">
 					<h2 class="mr-1 text-sm">Sizes:</h2>
 
-					<h3 class="flex items-baseline gap-1 text-xs font-medium text-gray-500 ">
+					<h3 class="flex items-baseline gap-1 text-xs font-medium text-zinc-500 ">
 						{#if product.variants?.length}
 							{#each product.variants as v, i}
 								<div>{v.size}</div>
@@ -333,12 +333,12 @@ function hideitems() {
 				</span>
 
 				{#if product.mrp > product.price}
-					<span class="text-gray-500 line-through whitespace-nowrap">
+					<span class="text-zinc-500 line-through whitespace-nowrap">
 						{currency(product.mrp)}
 					</span>
 
 					{#if Math.floor(((product.mrp - product.price) / product.mrp) * 100) > 0}
-						<span class="text-orange-500 sm:text-gray-900 whitespace-nowrap">
+						<span class="text-orange-500 sm:text-zinc-800 whitespace-nowrap">
 							({Math.floor(((product.mrp - product.price) / product.mrp) * 100)}% off)
 						</span>
 					{/if}
@@ -367,7 +367,7 @@ function hideitems() {
 			class="absolute inset-y-0 right-0 z-[101] h-full max-w-max border-l bg-white">
 			<button
 				type="button"
-				class="absolute top-5 right-4 transform cursor-pointer text-gray-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-gray-700"
+				class="absolute top-5 right-4 transform cursor-pointer text-zinc-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-zinc-800"
 				on:click="{() => (showRelatedProducts = false)}">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -433,12 +433,12 @@ function hideitems() {
 										</span>
 
 										{#if relatedProduct.mrp > relatedProduct.price}
-											<span class="text-gray-500 line-through whitespace-nowrap">
+											<span class="text-zinc-500 line-through whitespace-nowrap">
 												{currency(relatedProduct.mrp)}
 											</span>
 
 											{#if Math.floor(((relatedProduct.mrp - relatedProduct.price) / relatedProduct.mrp) * 100) > 0}
-												<span class="text-green-600 sm:text-gray-700 whitespace-nowrap">
+												<span class="text-green-600 sm:text-zinc-800 whitespace-nowrap">
 													({Math.floor(
 														((relatedProduct.mrp - relatedProduct.price) / relatedProduct.mrp) * 100
 													)}% off)

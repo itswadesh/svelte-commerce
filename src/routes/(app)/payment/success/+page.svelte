@@ -202,7 +202,7 @@ onMount(async () => {
 					{#if data.order?.items?.length > 0}
 						<div class="mb-5">
 							<h6
-								class="border-b border-dashed border-gray-400 pb-2 text-base font-bold sm:text-lg">
+								class="border-b border-dashed border-zinc-400 pb-2 text-base font-bold sm:text-lg">
 								Item Details
 							</h6>
 
@@ -242,7 +242,7 @@ onMount(async () => {
 															href="/product/{item.slug}"
 															aria-label="Click to view the product details"
 															data-sveltekit-reload
-															class="flex-1 text-sm text-gray-500 group-hover:underline">
+															class="flex-1 text-sm text-zinc-500 group-hover:underline">
 															{item.name}
 														</a>
 
@@ -260,13 +260,13 @@ onMount(async () => {
 
 												<div class="mb-2 flex w-full flex-wrap gap-4 text-sm">
 													<div class="flex items-center gap-2 whitespace-nowrap">
-														<span class="font-medium text-gray-500">Qty :</span>
+														<span class="font-medium text-zinc-500">Qty :</span>
 
 														<b>{item.qty}</b>
 													</div>
 
 													<div class="flex items-center gap-2 whitespace-nowrap">
-														<span class="font-medium text-gray-500">Price :</span>
+														<span class="font-medium text-zinc-500">Price :</span>
 
 														<b>{currency(item.price)}</b>
 													</div>
@@ -303,7 +303,7 @@ onMount(async () => {
 					{#if data.order?.seats?.length > 0}
 						<div class="mb-5">
 							<h6
-								class="mb-4 border-b border-dashed border-gray-400 pb-2 text-base font-semibold sm:text-lg">
+								class="mb-4 border-b border-dashed border-zinc-400 pb-2 text-base font-semibold sm:text-lg">
 								Booking Details
 							</h6>
 
@@ -332,11 +332,11 @@ onMount(async () => {
 					{#if data.order && data.order?.address}
 						<div class="text-sm">
 							<h6
-								class="mb-4 border-b border-dashed border-gray-400 pb-2 text-base font-semibold sm:text-lg">
+								class="mb-4 border-b border-dashed border-zinc-400 pb-2 text-base font-semibold sm:text-lg">
 								Shipping Information
 							</h6>
 
-							<div class="text-sm text-gray-600">
+							<div class="text-sm text-zinc-500">
 								{#if data.order?.address.firstName}
 									<h5 class="mb-2 text-base font-semibold capitalize tracking-wide">
 										{data.order?.address.firstName}
@@ -393,7 +393,7 @@ onMount(async () => {
 					{#if data.order && data.order?.amount}
 						<div class="text-sm">
 							<h6
-								class="mb-4 border-b border-dashed border-gray-400 pb-2 text-base font-semibold sm:text-lg">
+								class="mb-4 border-b border-dashed border-zinc-400 pb-2 text-base font-semibold sm:text-lg">
 								Payment Information
 							</h6>
 
@@ -423,7 +423,7 @@ onMount(async () => {
 								{/if}
 
 								{#if data.order?.amount.total}
-									<hr class="w-full border-t border-gray-300" />
+									<hr class="w-full border-t border-zinc-200" />
 
 									<div class="flex items-center text-base font-bold">
 										<h6 class="mr-2 w-20">Total</h6>

@@ -54,7 +54,7 @@ export let order
 							{t.time ? 'opacity-100' : 'opacity-40'}">
 							<h4 class="font-medium">{t.status}</h4>
 
-							<h6 class="mt-1 text-xs font-light text-gray-500">
+							<h6 class="mt-1 text-xs font-light text-zinc-500">
 								{#if t.time}
 									<span>
 										{date(+t.time)}

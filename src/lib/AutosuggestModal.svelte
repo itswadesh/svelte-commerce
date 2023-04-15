@@ -1,9 +1,9 @@
 <script lang="ts">
+import { AutocompleteService, CategoryService } from '$lib/services'
 import { createEventDispatcher, onMount } from 'svelte'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import { AutocompleteService, CategoryService } from '$lib/services'
 
 const dispatch = createEventDispatcher()
 
@@ -25,7 +25,14 @@ let typingTimer: any
 
 function submit() {
 	show = false
-	goto(`/search?q=${q}`)
+
+	// console.log('zzzzzzzzzzzzzzzzzz', autocomplete[0])
+
+	if (autocomplete?.length && autocomplete[0].slug) {
+		goto(`/${autocomplete[0].slug}`)
+	} else {
+		goto(`/search?q=${q}`)
+	}
 }
 
 function handleRouteToCategorySlug(link: string, slug: string) {
@@ -35,10 +42,10 @@ function handleRouteToCategorySlug(link: string, slug: string) {
 
 function onselect(v: any) {
 	if (v) {
-		if (v.type === 'category') {
+		if (v.type === 'categories') {
 			goto(`/${v.slug}`)
 		} else {
-			goto(`/search?q=${encodeURIComponent(v.name)}`)
+			goto(`/search?q=${encodeURIComponent(v.key)}`)
 		}
 	}
 }
@@ -69,6 +76,7 @@ async function getData(e: any) {
 				origin: $page?.data?.origin,
 				storeId: $page?.data?.store?.id
 			})
+			// console.log('autocomplete', autocomplete)
 		} catch (e) {}
 	}, 200)
 }
@@ -138,7 +146,7 @@ onMount(async () => {
 									<button on:click="{resetInput}" type="button">
 										{#if q}
 											<svg
-												class="absolute my-auto mr-2 mt-4 flex h-6 w-6 justify-end text-sm text-gray-500"
+												class="absolute my-auto mr-2 mt-4 flex h-6 w-6 justify-end text-sm text-zinc-500"
 												xmlns="http://www.w3.org/2000/svg"
 												viewBox="0 0 20 20"
 												fill="currentColor">
@@ -149,7 +157,7 @@ onMount(async () => {
 											</svg>
 										{:else}
 											<svg
-												class="absolute my-auto mr-2 mt-4 flex h-6 w-6 justify-end text-sm text-gray-500"
+												class="absolute my-auto mr-2 mt-4 flex h-6 w-6 justify-end text-sm text-zinc-500"
 												xmlns="http://www.w3.org/2000/svg"
 												fill="none"
 												viewBox="0 0 24 24"
@@ -166,11 +174,11 @@ onMount(async () => {
 							</form>
 
 							<div
-								class="mt-1 w-full overflow-auto rounded border-gray-400 bg-white scrollbar-none">
+								class="mt-1 w-full overflow-auto rounded border-zinc-400 bg-white scrollbar-none">
 								{#each autocomplete || [] as v}
 									<button
 										type="button"
-										class="p-3 flex w-full items-center justify-between text-left border-b text-gray-500 hover:bg-gray-100"
+										class="p-3 flex w-full items-center justify-between text-left border-b text-zinc-500 hover:bg-zinc-100"
 										on:click="{() => onselect(v)}">
 										<div class="flex-1 flex items-center gap-2 justify-start">
 											{#if v.img}
@@ -181,7 +189,7 @@ onMount(async () => {
 													class="h-10 object-contain w-auto object-center" />
 											{/if}
 
-											<span class="w-full truncate text-sm capitalize">{v.name}</span>
+											<span class="w-full truncate text-sm capitalize">{v.key}</span>
 										</div>
 
 										<svg
@@ -209,7 +217,7 @@ onMount(async () => {
 
 		{#if categories && categories?.data?.length}
 			<div class="mt-20 px-4">
-				<h6 class="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-600">
+				<h6 class="mb-4 text-sm font-semibold uppercase tracking-wide text-zinc-500">
 					Categories on {$page?.data?.store?.websiteName}
 				</h6>
 

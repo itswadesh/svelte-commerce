@@ -3,10 +3,6 @@
 	backdrop-filter: blur(12px);
 	background-color: hsla(0, 0%, 0%, 0.5);
 }
-
-.z-index {
-	z-index: 99999;
-}
 </style>
 
 <script>
@@ -195,7 +191,7 @@ function checkIfStripeCardValid({ detail }) {
 				<div class="flex w-full flex-col gap-4" class:wiggle="{paymentDenied}">
 					{#each data.paymentMethods as pm}
 						<label
-							class="flex w-full cursor-pointer items-center gap-2 rounded-md border border-gray-300 p-4 shadow-md transition duration-300 hover:bg-primary-50 sm:gap-4">
+							class="flex w-full cursor-pointer items-center gap-2 rounded border border-zinc-200 p-4 shadow-md transition duration-300 hover:bg-primary-50 sm:gap-4">
 							<input
 								bind:group="{selectedPaymentMethod}"
 								type="radio"
@@ -210,7 +206,7 @@ function checkIfStripeCardValid({ detail }) {
 										{pm.name}
 									</h2>
 
-									<p class="mt-1 text-sm text-gray-500">{pm.text}</p>
+									<p class="mt-1 text-sm text-zinc-500">{pm.text}</p>
 								</div>
 
 								<div class="shrink-0">
@@ -223,7 +219,7 @@ function checkIfStripeCardValid({ detail }) {
 											class="h-14 w-14 rounded-full border object-cover object-center text-xs" />
 									{:else}
 										<div
-											class="flex h-14 w-14 items-center justify-center rounded-full border bg-gray-200 text-center text-xs uppercase">
+											class="flex h-14 w-14 items-center justify-center rounded-full border bg-zinc-200 text-center text-xs uppercase">
 											{pm.name}
 										</div>
 									{/if}
@@ -241,7 +237,7 @@ function checkIfStripeCardValid({ detail }) {
 					{/each}
 				</div>
 			{:else}
-				<div class="flex flex-col h-1/2 items-center justify-center p-4 text-gray-500 text-center">
+				<div class="flex flex-col h-1/2 items-center justify-center p-4 text-zinc-500 text-center">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						class="mb-2 h-10 w-10"

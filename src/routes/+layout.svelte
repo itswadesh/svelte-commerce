@@ -11,7 +11,7 @@ import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 import BackToTop from '$lib/components/BackToTop.svelte'
 import GoogleAnalytics from '$lib/components/GoogleAnalytics.svelte'
 import { navigating, page } from '$app/stores'
- import { pwaInfo } from 'virtual:pwa-info'
+import { pwaInfo } from 'virtual:pwa-info'
 import { onMount } from 'svelte'
 // import { onMount } from 'svelte'
 // import { partytownSnippet } from '@builder.io/partytown/integration'
@@ -23,17 +23,16 @@ export let data
 // 		scriptEl.textContent = partytownSnippet()
 // 	}
 // })
-let ReloadPrompt;
+let ReloadPrompt
 onMount(async () => {
-	pwaInfo && (ReloadPrompt = (await import('$lib/ReloadPrompt.svelte')).default);
+	pwaInfo && (ReloadPrompt = (await import('$lib/ReloadPrompt.svelte')).default)
 })
 
 $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : ''
-
 </script>
 
 <svelte:head>
-    {@html webManifest}
+	{@html webManifest}
 </svelte:head>
 
 <!-- <svelte:head>
@@ -86,8 +85,7 @@ $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : ''
 
 <main
 	data-sveltekit-preload-data
-	class="minimum-width-rem relative flex min-h-screen flex-col bg-white antialiased"
->
+	class="minimum-width-rem relative flex min-h-screen flex-col bg-white antialiased">
 	<div class="h-rem w-full flex-1">
 		<slot />
 	</div>
@@ -102,5 +100,5 @@ $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : ''
 </ToastContainer>
 
 {#if ReloadPrompt}
-  <svelte:component this={ReloadPrompt} />
+	<svelte:component this="{ReloadPrompt}" />
 {/if}

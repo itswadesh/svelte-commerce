@@ -22,7 +22,7 @@ let seoProps = {
 			<li>
 				<h6 class="mb-5 font-semibold">CONDITIONS OF USE</h6>
 
-				<p class="text-gray-500">
+				<p class="text-zinc-500">
 					Welcome to our online store! {$page.data.store?.websiteName} and its associates provide their
 					services to you subject to the following conditions. If you visit or shop within this website,
 					you accept these conditions. Please read them carefully.
@@ -32,7 +32,7 @@ let seoProps = {
 			<li>
 				<h6 class="mb-5 font-semibold">PRIVACY</h6>
 
-				<p class="text-gray-500">
+				<p class="text-zinc-500">
 					Please review our Privacy Notice, which also governs your visit to our website, to
 					understand our practices.
 				</p>
@@ -41,7 +41,7 @@ let seoProps = {
 			<li>
 				<h6 class="mb-5 font-semibold">ELECTRONIC COMMUNICATIONS</h6>
 
-				<p class="text-gray-500">
+				<p class="text-zinc-500">
 					When you visit {$page.data.store?.websiteName} or send e-mails to us, you are communicating
 					with us electronically. You consent to receive communications from us electronically. We will
 					communicate with you by e-mail or by posting notices on this site. You agree that all agreements,
@@ -53,7 +53,7 @@ let seoProps = {
 			<li>
 				<h6 class="mb-5 font-semibold">COPYRIGHT</h6>
 
-				<p class="text-gray-500">
+				<p class="text-zinc-500">
 					All content included on this site, such as text, graphics, logos, button icons, images,
 					audio clips, digital downloads, data compilations, and software, is the property of {$page
 						.data.store.websiteName}
@@ -67,7 +67,7 @@ let seoProps = {
 			<li>
 				<h6 class="mb-5 font-semibold">TRADE MARKS</h6>
 
-				<p class="text-gray-500">
+				<p class="text-zinc-500">
 					{$page.data.store?.websiteName}’s trademarks and trade dress may not be used in connection
 					with any product or service that is not {$page.data.store?.websiteName}’s, in any manner
 					that is likely to cause confusion among customers, or in any manner that disparages or
@@ -81,7 +81,7 @@ let seoProps = {
 			<li>
 				<h6 class="mb-5 font-semibold">LICENSE AND SITE ACCESS</h6>
 
-				<p class="text-gray-500">
+				<p class="text-zinc-500">
 					{$page.data.store?.websiteName} grants you a limited license to access and make personal use
 					of this site and not to download (other than page caching) or modify it, or any portion of
 					it, except with express written consent of {$page.data.store?.websiteName}. This license
@@ -111,7 +111,7 @@ let seoProps = {
 			<li>
 				<h6 class="mb-5 font-semibold">YOUR MEMBERSHIP ACCOUNT</h6>
 
-				<p class="text-gray-500">
+				<p class="text-zinc-500">
 					If you use this site, you are responsible for maintaining the confidentiality of your
 					account and password and for restricting access to your computer, and you agree to accept
 					responsibility for all activities that occur under your account or password. If you are
@@ -125,7 +125,7 @@ let seoProps = {
 			<li>
 				<h6 class="mb-5 font-semibold">REVIEWS, COMMENTS, EMAILS, AND OTHER CONTENT</h6>
 
-				<p class="text-gray-500">
+				<p class="text-zinc-500">
 					Visitors may post reviews, comments, and other content: and submit suggestions, ideas,
 					comments, questions, or other information, so long as the content is not illegal, obscene,
 					threatening, defamatory, invasive of privacy, infringing of intellectual property rights,
@@ -155,7 +155,7 @@ let seoProps = {
 			<li>
 				<h6 class="mb-5 font-semibold">RISK OF LOSS</h6>
 
-				<p class="text-gray-500">
+				<p class="text-zinc-500">
 					All items purchased from {$page.data.store?.websiteName} are made pursuant to a shipment contract.
 					This basically means that the risk of loss and title for such items pass to you upon our delivery
 					to the carrier.
@@ -165,14 +165,14 @@ let seoProps = {
 			<li>
 				<h6 class="mb-5 font-semibold">PRODUCT DESCRIPTIONS</h6>
 
-				<p class="mb-5 text-gray-500">
+				<p class="mb-5 text-zinc-500">
 					{$page.data.store?.websiteName} and its associates attempt to be as accurate as possible. However,
 					{$page.data.store?.websiteName}
 					does not warrant that product descriptions or other content of this site is accurate, complete,
 					reliable, current, or error-free.
 				</p>
 
-				<p class="text-gray-500">
+				<p class="text-zinc-500">
 					Disclaimer of warranties and limitation of liability this site is provided by {$page.data
 						.store.websiteName}
 					on an “as is” and “as available” basis. {$page.data.store?.websiteName} makes no representations
@@ -195,7 +195,7 @@ let seoProps = {
 			<li>
 				<h6 class="mb-5 font-semibold">APPLICABLE LAW</h6>
 
-				<p class="text-gray-500">
+				<p class="text-zinc-500">
 					By visiting {$page.data.store?.websiteName}, you agree that the laws of the state of
 					GUJARAT, INDIA, without regard to principles of conflict of laws, will govern these
 					Conditions of Use and any dispute of any sort that might arise between you and {$page.data
@@ -206,7 +206,7 @@ let seoProps = {
 			<li>
 				<h6 class="mb-5 font-semibold">DISPUTES</h6>
 
-				<p class="text-gray-500">
+				<p class="text-zinc-500">
 					Any dispute relating in any way to your visit to {$page.data.store?.websiteName} or to products
 					you purchase through
 					{$page.data.store?.websiteName} shall be submitted to confidential arbitration in Telangana,
@@ -226,7 +226,7 @@ let seoProps = {
 			<li>
 				<h6 class="mb-5 font-semibold">SITE POLICIES, MODIFICATION, AND SEVER-ABILITY</h6>
 
-				<p class="text-gray-500">
+				<p class="text-zinc-500">
 					Please review our other policies, such as our Shipping and Returns policy, posted on this
 					site. These policies also govern your visit to {$page.data.store?.websiteName} . We reserve
 					the right to make changes to our site, policies, and these Conditions of Use at any time. If
@@ -239,7 +239,7 @@ let seoProps = {
 			<li>
 				<h6 class="mb-5 font-semibold">QUESTIONS</h6>
 
-				<p class="text-gray-500">
+				<p class="text-zinc-500">
 					Questions regarding our Conditions of Usage, Privacy Policy, or other policy related
 					material can be directed to our support staff by clicking on the “Contact Us” link in the
 					side menu or in the footer. Or you can email us at: {$page.data.store?.websiteEmail}

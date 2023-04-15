@@ -123,7 +123,7 @@ function handleSearchBox() {
 			<div class="absolute inset-x-0 right-0 z-10 flex h-8 justify-end">
 				<div
 					class="relative mb-3 h-8 rounded-full transition duration-300
-					{showSearchBox ? 'w-full bg-gray-100' : 'w-8 hover:bg-gray-100'}">
+					{showSearchBox ? 'w-full bg-zinc-100' : 'w-8 hover:bg-zinc-100'}">
 					<input
 						type="search"
 						id="{title}searchText"
@@ -133,7 +133,7 @@ function handleSearchBox() {
 
 					<button
 						type="button"
-						class="absolute inset-y-0 right-2 z-20 flex items-center justify-center text-gray-500 focus:outline-none"
+						class="absolute inset-y-0 right-2 z-20 flex items-center justify-center text-zinc-500 focus:outline-none"
 						on:click="{handleSearchBox}">
 						{#if !showSearchBox}
 							<svg
@@ -164,7 +164,7 @@ function handleSearchBox() {
 		</div>
 	{:else}
 		<div class="mb-3 flex h-8">
-			<div class="relative mb-3 h-8 w-full rounded-full border bg-gray-100 transition duration-300">
+			<div class="relative mb-3 h-8 w-full rounded-full border bg-zinc-100 transition duration-300">
 				<input
 					type="search"
 					id="{title || model}searchText"
@@ -174,7 +174,7 @@ function handleSearchBox() {
 
 				<button
 					type="button"
-					class="absolute inset-y-0 right-2 z-20 flex items-center justify-center text-gray-500 focus:outline-none"
+					class="absolute inset-y-0 right-2 z-20 flex items-center justify-center text-zinc-500 focus:outline-none"
 					on:click="{handleSearchBox}">
 					{#if !showSearchBox}
 						<svg
@@ -220,7 +220,7 @@ function handleSearchBox() {
 								bind:group="{selectedItems}"
 								value="{i.key}"
 								on:change="{() => dispatch('go', { model, selectedItems })}"
-								class="input-checkbox h-3.5 w-3.5 rounded-md border border-gray-200 bg-transparent text-primary-500" />
+								class="input-checkbox h-3.5 w-3.5 rounded border border-zinc-200 bg-transparent text-primary-500" />
 
 							<!-- {`${selectedItems.toString().search(i.key) === i.key}` ? 'font-medium' : 'font-normal'} -->
 
@@ -228,7 +228,7 @@ function handleSearchBox() {
 								<span>{i.key}</span>
 
 								{#if i.doc_count}
-									<span class="text-xs text-gray-500">({i.doc_count})</span>
+									<span class="text-xs text-zinc-500">({i.doc_count})</span>
 								{/if}
 							</div>
 						</label>
@@ -269,7 +269,7 @@ function handleSearchBox() {
 							bind:group="{selectedItems}"
 							value="{i.key}"
 							on:change="{() => dispatch('go', { model, selectedItems })}"
-							class="input-checkbox h-3.5 w-3.5 rounded-md border border-gray-200 bg-transparent text-primary-500" />
+							class="input-checkbox h-3.5 w-3.5 rounded border border-zinc-200 bg-transparent text-primary-500" />
 
 						<!-- {`${selectedItems.toString().search(i.key) === i.key}` ? 'font-medium' : 'font-normal'} -->
 
@@ -277,7 +277,7 @@ function handleSearchBox() {
 							<span>{i.key}</span>
 
 							{#if i.doc_count}
-								<span class="text-xs text-gray-500">({i.doc_count})</span>
+								<span class="text-xs text-zinc-500">({i.doc_count})</span>
 							{/if}
 						</div>
 					</label>

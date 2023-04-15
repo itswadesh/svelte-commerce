@@ -283,7 +283,7 @@ $: {
 		on:click="{() => (showSort = true)}">
 		<div
 			class="h-1.5 w-1.5 rounded-full 
-			{$page?.url?.searchParams.get('sort') ? 'bg-primary-500' : 'bg-gray-300'}">
+			{$page?.url?.searchParams.get('sort') ? 'bg-primary-500' : 'bg-zinc-200'}">
 		</div>
 
 		<svg
@@ -312,7 +312,7 @@ $: {
 		}}">
 		<div
 			class="h-1.5 w-1.5 rounded-full 
-			{filterLength ? 'bg-primary-500' : 'bg-gray-300'}">
+			{filterLength ? 'bg-primary-500' : 'bg-zinc-200'}">
 		</div>
 
 		<svg
@@ -359,7 +359,7 @@ $: {
 				<!-- Clear All -->
 
 				{#if filterLength > 0}
-					<span class="mx-2 h-6 w-[2px] border-l-2 border-gray-300"></span>
+					<span class="mx-2 h-6 w-[2px] border-l-2 border-zinc-200"></span>
 
 					<button
 						on:click="{clearFilters}"
@@ -386,13 +386,13 @@ $: {
 		<div class="flex h-full items-start">
 			<!-- Left Sidebar Section -->
 
-			<div class="flex h-full w-2/6 flex-col border-b border-r bg-gray-100">
+			<div class="flex h-full w-2/6 flex-col border-b border-r bg-zinc-100">
 				{#if allAges?.length > 0}
 					<button
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Age'
 							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
+							: 'border-zinc-100 bg-transparent'}"
 						on:click="{() => (selected = 'Age')}">
 						<span> Age </span>
 
@@ -409,7 +409,7 @@ $: {
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Brands'
 							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
+							: 'border-zinc-100 bg-transparent'}"
 						on:click="{() => (selected = 'Brands')}">
 						<span>Brands</span>
 
@@ -426,7 +426,7 @@ $: {
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Colors'
 							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
+							: 'border-zinc-100 bg-transparent'}"
 						on:click="{() => (selected = 'Colors')}">
 						<span>Colors</span>
 
@@ -443,7 +443,7 @@ $: {
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Discount'
 							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
+							: 'border-zinc-100 bg-transparent'}"
 						on:click="{() => (selected = 'Discount')}">
 						<span> Discount </span>
 
@@ -460,7 +460,7 @@ $: {
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Features'
 							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
+							: 'border-zinc-100 bg-transparent'}"
 						on:click="{() => (selected = 'Features')}">
 						<span> Features </span>
 
@@ -477,7 +477,7 @@ $: {
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Genders'
 							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
+							: 'border-zinc-100 bg-transparent'}"
 						on:click="{() => (selected = 'Genders')}">
 						<span> Genders </span>
 
@@ -494,7 +494,7 @@ $: {
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Promotions'
 							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
+							: 'border-zinc-100 bg-transparent'}"
 						on:click="{() => (selected = 'Promotions')}">
 						<span> Promotions </span>
 
@@ -511,7 +511,7 @@ $: {
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Sizes'
 							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
+							: 'border-zinc-100 bg-transparent'}"
 						on:click="{() => (selected = 'Sizes')}">
 						<span> Sizes </span>
 
@@ -528,7 +528,7 @@ $: {
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Tags'
 							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
+							: 'border-zinc-100 bg-transparent'}"
 						on:click="{() => (selected = 'Tags')}">
 						<span> Tags </span>
 
@@ -545,7 +545,7 @@ $: {
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Types'
 							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
+							: 'border-zinc-100 bg-transparent'}"
 						on:click="{() => (selected = 'Types')}">
 						<span> Types </span>
 
@@ -562,7 +562,7 @@ $: {
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Vendors'
 							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
+							: 'border-zinc-100 bg-transparent'}"
 						on:click="{() => (selected = 'Vendors')}">
 						<span> Vendors </span>
 
@@ -579,7 +579,7 @@ $: {
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Prices'
 							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
+							: 'border-zinc-100 bg-transparent'}"
 						on:click="{() => (selected = 'Prices')}">
 						<span> Prices </span>
 
@@ -596,7 +596,7 @@ $: {
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Categories'
 							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
+							: 'border-zinc-100 bg-transparent'}"
 						on:click="{() => (selected = 'Categories')}">
 						Categories
 					</button>
@@ -609,7 +609,7 @@ $: {
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
 						{selected === 'Price'
 							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-gray-100 bg-transparent'}"
+							: 'border-zinc-100 bg-transparent'}"
 						on:click="{() => (selected = 'Price')}">
 						<span> Price </span>
 
@@ -940,7 +940,7 @@ $: {
 		<!-- Close and Apply button -->
 
 		<!-- <div
-			class="absolute inset-x-0 bottom-0 z-[100] flex items-center divide-x-2 divide-gray-300 border-2 border-gray-300 bg-white">
+			class="absolute inset-x-0 bottom-0 z-[100] flex items-center divide-x-2 divide-zinc-200 border-2 border-zinc-200 bg-white">
 			<button
 				type="button"
 				class="w-1/2 p-3 font-bold tracking-wide text-center focus:outline-none"
@@ -970,13 +970,13 @@ $: {
 		<div
 			transition:fly="{{ y: 626, duration: 300 }}"
 			class="relative z-10 max-h-max w-full rounded-t-lg bg-white">
-			<div class="flex items-center justify-between gap-5 border-b border-gray-300 p-3 text-sm">
+			<div class="flex items-center justify-between gap-5 border-b border-zinc-200 p-3 text-sm">
 				<span>Sort</span>
 
 				<button type="button" class="focus:outline-none" on:click="{() => (showSort = false)}">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
-						class="h-4 w-4 text-gray-500"
+						class="h-4 w-4 text-zinc-500"
 						viewBox="0 0 20 20"
 						fill="currentColor">
 						<path

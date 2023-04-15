@@ -24,7 +24,7 @@ input:checked ~ .purple {
 	@apply bg-purple-500;
 }
 input:checked ~ .black {
-	@apply bg-gray-800;
+	@apply bg-zinc-800;
 }
 </style>
 
@@ -36,7 +36,7 @@ const dispatch = createEventDispatcher()
 
 export let id = ''
 export let color = 'green'
-export let checked=false
+export let checked = false
 export let name = ''
 export let required = false
 export let disabled = false
@@ -52,7 +52,7 @@ onMount(() => {
 	genId()
 })
 
-let uniqueId=''
+let uniqueId = ''
 
 function genId() {
 	if (id === undefined || typeof String) {
@@ -70,8 +70,7 @@ function genId() {
 		for="{uniqueId}"
 		class="group flex max-w-max cursor-pointer items-center
 		{textFirst ? 'flex-row-reverse' : 'flex-row'}
-		{disabled ? 'opacity-40 cursor-not-allowed' : 'opacity-100'}"
-	>
+		{disabled ? 'opacity-40 cursor-not-allowed' : 'opacity-100'}">
 		<!-- toggle -->
 
 		<div class="relative mr-2">
@@ -83,13 +82,12 @@ function genId() {
 				required="{required}"
 				class="hidden"
 				bind:checked="{checked}"
-				on:change="{() => dispatch('change')}"
-			/>
+				on:change="{() => dispatch('change')}" />
 
 			<!-- line -->
 
 			<div
-				class="block rounded-full bg-gray-300 
+				class="block rounded-full bg-zinc-200 
 				{disabled ? '' : 'opacity-100 group-hover:opacity-90 transition duration-300'}
                 {size == 'xs' ? 'h-5 w-8' : ''}
                 {size == 'sm' ? 'h-6 w-10' : ''}
@@ -102,8 +100,8 @@ function genId() {
                 {color == 'yellow' ? 'yellow' : ''}
                 {color == 'indigo' ? 'indigo' : ''}
                 {color == 'black' ? 'black' : ''}
-      			"
-			></div>
+      			">
+			</div>
 
 			<!-- dot -->
 
@@ -112,8 +110,8 @@ function genId() {
                 {size == 'xs' ? 'h-3 w-3' : ''}
                 {size == 'sm' ? 'h-4 w-4' : ''}
                 {size == 'md' ? 'h-7 w-7' : ''}
-       			"
-			></div>
+       			">
+			</div>
 		</div>
 
 		<slot>
@@ -121,19 +119,18 @@ function genId() {
 				class="font-semibold 
 			{textFirst ? 'mr-2' : 'ml-2'}
 			{disabled ? '' : 'opacity-100 group-hover:opacity-90 transition duration-300'}
-      		{color == 'green' && checked === true ? 'text-green-500' : 'text-gray-400'}
-      		{color == 'blue' && checked === true ? 'text-blue-500' : 'text-gray-400'}
-      		{color == 'red' && checked === true ? 'text-red-500' : 'text-gray-400'}
-      		{color == 'pink' && checked === true ? 'text-pink-500' : 'text-gray-400'}
-      		{color == 'purple' && checked === true ? 'text-purple-500' : 'text-gray-400'}
-      		{color == 'yellow' && checked === true ? 'text-yellow-500' : 'text-gray-400'}
-      		{color == 'indigo' && checked === true ? 'text-indigo-500' : 'text-gray-400'}
-      		{color == 'black' && checked === true ? 'text-black' : 'text-gray-400'}
+      		{color == 'green' && checked === true ? 'text-green-500' : 'text-zinc-400'}
+      		{color == 'blue' && checked === true ? 'text-blue-500' : 'text-zinc-400'}
+      		{color == 'red' && checked === true ? 'text-red-500' : 'text-zinc-400'}
+      		{color == 'pink' && checked === true ? 'text-pink-500' : 'text-zinc-400'}
+      		{color == 'purple' && checked === true ? 'text-purple-500' : 'text-zinc-400'}
+      		{color == 'yellow' && checked === true ? 'text-yellow-500' : 'text-zinc-400'}
+      		{color == 'indigo' && checked === true ? 'text-indigo-500' : 'text-zinc-400'}
+      		{color == 'black' && checked === true ? 'text-black' : 'text-zinc-400'}
 			{size == 'xs' ? 'text-sm' : ''}
             {size == 'sm' ? 'text-base' : ''}
             {size == 'md' ? 'text-xl' : ''}
-     		"
-			>
+     		">
 				{#if checked === true && onText}
 					{onText}
 				{:else if offText}

@@ -38,9 +38,8 @@ function ctrlSPressed(e) {
 {#if formChanged}
 	<div
 		class="fixed inset-x-0 top-0 z-50 flex w-full items-center justify-between bg-primary-50 p-2 text-center text-sm shadow-lg md:p-3 md:px-5"
-		transition:fly="{{ y: -20, duration: 300 }}"
-	>
-		<h6 class="flex max-w-max flex-row items-center gap-2 text-gray-600 md:mx-auto">
+		transition:fly="{{ y: -20, duration: 300 }}">
+		<h6 class="flex max-w-max flex-row items-center gap-2 text-zinc-500 md:mx-auto">
 			{#if loading}
 				<span class=" sm:block "> {@html loadingMessage || 'Saving...'} </span>
 			{:else if successMessage}

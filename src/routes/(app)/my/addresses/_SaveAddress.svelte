@@ -154,7 +154,7 @@ async function SaveAddress(address) {
 						bind:value="{address.phone}"
 						required />
 
-					<p class="mt-1 text-xs text-gray-500">E.g.+nnxxxxxxxxxx</p>
+					<p class="mt-1 text-xs text-zinc-500">E.g.+nnxxxxxxxxxx</p>
 				</div>
 			</div>
 
@@ -204,7 +204,7 @@ async function SaveAddress(address) {
 
 				<div class="mb-2 w-full max-w-md">
 					<select
-						class="w-full rounded-md border border-gray-300 bg-white p-2 text-sm placeholder-gray-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-gray-50"
+						class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
 						bind:value="{address.country}"
 						on:change="{() => onCountryChange(address.country)}"
 						required>
@@ -232,7 +232,7 @@ async function SaveAddress(address) {
 
 				<div class="mb-2 w-full max-w-md">
 					<select
-						class="w-full rounded-md border border-gray-300 bg-white p-2 text-sm placeholder-gray-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-gray-50"
+						class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
 						bind:value="{address.state}"
 						disabled="{!address.country || loadingStates}"
 						required>

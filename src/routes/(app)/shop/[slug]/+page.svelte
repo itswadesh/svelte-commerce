@@ -99,7 +99,7 @@ let bgColors = [
 	'bg-teal-200',
 	'bg-cyan-200',
 	'bg-yellow-200',
-	'bg-gray-200'
+	'bg-zinc-200'
 ]
 let loading = false
 let megamenu = []
@@ -205,15 +205,15 @@ function toggle2(cx) {
 
 		{#await data.heroBanners}
 			<div class="mt-5 sm:mt-10 grid grid-cols-2 items-center gap-2 md:grid-cols-4">
-				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 
-				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 
-				<div class="col-span-1 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+				<div class="col-span-1 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 
-				<div class="col-span-1 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+				<div class="col-span-1 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 
-				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 			</div>
 		{:then heroBanners}
 			{#if data.heroBanners?.length}
@@ -232,15 +232,15 @@ function toggle2(cx) {
 
 		{#await data.groupByBanner}
 			<div class="mt-5 sm:mt-10 grid grid-cols-2 items-center gap-2 md:grid-cols-4">
-				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 
-				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 
-				<div class="col-span-1 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+				<div class="col-span-1 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 
-				<div class="col-span-1 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+				<div class="col-span-1 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 
-				<div class="col-span-2 h-40 animate-pulse rounded-md bg-gray-300 sm:h-60"></div>
+				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 			</div>
 		{:then groupByBanner}
 			{#if data.groupByBanner?.length}
@@ -269,50 +269,45 @@ function toggle2(cx) {
 
 				<!-- 1st level categories -->
 
-				<ul class="flex flex-col divide-y-2 divide-white tracking-wider text-center">
+				<ul class="flex flex-col divide-y-2 divide-white tracking-wider">
 					{#each megamenuResult as m, mx}
 						{#if m}
 							<li>
 								{#if m.children?.length}
-									<button
-										type="button"
-										class="flex h-24 w-full items-end justify-between focus:outline-none 
-											{bgColors[mx]}">
-										<div class="flex h-full w-full flex-1 items-center justify-center gap-4 px-6">
-											<a
-												href="/{m.link || m.slug}"
-												aria-label="Click to route {m.name || '##'}"
-												class="block text-xl font-bold uppercase">
-												{m.name}
-											</a>
+									<div
+										class="flex h-24 gap-4 px-6 w-full items-center justify-between focus:outline-none 
+										{bgColors[mx]}">
+										<a
+											href="/{m.link || m.slug}"
+											aria-label="Click to route {m.name || '##'}"
+											class="block text-xl font-bold uppercase">
+											{m.name}
+										</a>
 
-											<button
-												type="button"
-												class="overflow-hidden rounded-full bg-transparent
-													hover:bg-white/50 transition duration-300 p-2 focus:outline-none"
-												on:click="{() => toggle(mx)}">
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													class="h-6 w-6 shrink-0 transition duration-300
+										<button
+											type="button"
+											class="overflow-hidden rounded-full bg-transparent hover:bg-white/50 transition duration-300 p-2 focus:outline-none"
+											on:click="{() => toggle(mx)}">
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												class="h-6 w-6 shrink-0 transition duration-300
 														{showChild[mx] ? 'transform -rotate-180' : ''}"
-													viewBox="0 0 20 20"
-													fill="currentColor">
-													<path
-														fill-rule="evenodd"
-														d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-														clip-rule="evenodd"></path>
-												</svg>
-											</button>
-										</div>
-									</button>
+												viewBox="0 0 20 20"
+												fill="currentColor">
+												<path
+													fill-rule="evenodd"
+													d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+													clip-rule="evenodd"></path>
+											</svg>
+										</button>
+									</div>
 								{:else}
 									<a
 										href="/{m.link || m.slug}"
 										aria-label="Click to route {m.name || '##'}"
-										class="flex items-center justify-center h-24 w-full {bgColors[mx]}">
-										<h1 class="flex-1 text-xl font-bold uppercase px-6">
-											{m.name}
-										</h1>
+										class="flex items-center h-24 w-full text-xl font-bold uppercase px-6 
+										{bgColors[mx]}">
+										{m.name}
 									</a>
 								{/if}
 
@@ -322,10 +317,10 @@ function toggle2(cx) {
 									{#if m.children?.length}
 										<ul class="flex flex-col divide-y">
 											{#each m.children as c, cx}
-												<li>
+												<li class="font-medium">
 													{#if c.children?.length}
 														<div
-															class="flex w-full items-center justify-center gap-4 py-3 px-8 text-left font-medium focus:outline-none">
+															class="flex w-full items-center justify-between gap-4 h-14 px-6 focus:outline-none">
 															<a
 																href="/{c.link || c.slug}"
 																aria-label="Click to route {c.name || '##'}"
@@ -335,7 +330,7 @@ function toggle2(cx) {
 
 															<button
 																type="button"
-																class="overflow-hidden rounded-full bg-transparent hover:bg-gray-200/50 transition duration-300 p-2 focus:outline-none"
+																class="overflow-hidden rounded-full bg-transparent hover:bg-zinc-200/50 transition duration-300 p-2 focus:outline-none"
 																on:click="{() => toggle2(cx)}">
 																<svg
 																	xmlns="http://www.w3.org/2000/svg"
@@ -355,7 +350,7 @@ function toggle2(cx) {
 														<a
 															href="/{c.link || c.slug}"
 															aria-label="Click to route {c.name || '##'}"
-															class="py-3 px-8 font-medium">
+															class="flex items-center h-14 px-6">
 															<h6>{c.name}</h6>
 														</a>
 													{/if}
@@ -364,13 +359,13 @@ function toggle2(cx) {
 
 													{#if showChild2[cx]}
 														{#if c.children?.length}
-															<ul class="flex flex-col divide-y bg-gray-100">
+															<ul class="flex flex-col divide-y bg-zinc-100">
 																{#each c.children as cc}
 																	<li>
 																		<a
 																			href="/{cc.link || cc.slug}"
 																			aria-label="Click to route {cc.name || '##'}"
-																			class="block py-3 px-8 font-medium">
+																			class="flex items-center h-14 px-6 text-sm">
 																			{cc.name}
 																		</a>
 																	</li>

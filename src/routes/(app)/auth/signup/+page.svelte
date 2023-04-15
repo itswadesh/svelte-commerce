@@ -122,7 +122,7 @@ async function submit(n) {
 				class="h-14 w-32 object-contain object-center" />
 		{:else}
 			<h1
-				class="bg-gradient-to-b from-primary-500 to-primary-700 bg-clip-text text-3xl font-extrabold text-transparent underline decoration-gray-800">
+				class="bg-gradient-to-b from-primary-500 to-primary-700 bg-clip-text text-3xl font-extrabold text-transparent underline decoration-zinc-800">
 				{#if $page.data.store?.websiteName}
 					{$page.data.store?.websiteName}
 				{:else}
@@ -281,7 +281,7 @@ async function submit(n) {
 		</a>
 	</div>
 
-	<p in:fly="{{ y: 10, duration: 700, delay: 300 }}" class="text-center text-sm text-gray-500">
+	<p in:fly="{{ y: 10, duration: 700, delay: 300 }}" class="text-center text-sm text-zinc-500">
 		By clicking login you are accepting our
 
 		<br />

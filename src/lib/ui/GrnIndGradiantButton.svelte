@@ -49,10 +49,9 @@ function handleLoading() {
 	title="{title}"
 	disabled="{disabled}"
 	class="{clazz} relative transform items-center justify-center bg-white px-4 py-2 text-center font-semibold tracking-wider text-white shadow-md transition duration-700 focus:outline-none focus:ring-0 focus:ring-offset-0 hover:shadow active:scale-95
-    {disabled ? 'bg-gray-400 cursor-not-allowed' : 'gradient'}
-    {rounded ? 'rounded-full ' : 'rounded-md'}"
-	on:click="{handleClick}"
->
+    {disabled ? 'bg-zinc-400 cursor-not-allowed' : 'gradient'}
+    {rounded ? 'rounded-full ' : 'rounded'}"
+	on:click="{handleClick}">
 	<div class="flex items-center justify-center gap-1">
 		<slot />
 	</div>
@@ -60,8 +59,7 @@ function handleLoading() {
 	{#if loading || localLoadingPeriod}
 		<div
 			class="absolute inset-0 flex cursor-not-allowed items-center justify-center bg-black bg-opacity-70
-        	{rounded ? 'rounded-full' : 'rounded-md'}"
-		>
+        	{rounded ? 'rounded-full' : 'rounded'}">
 			<svg
 				class="animate-spin text-white 
 				{loadingringsize == 'xs' ? 'w-4 h-4' : ''}
@@ -70,8 +68,7 @@ function handleLoading() {
 				{loadingringsize == 'lg' ? 'h-7 w-7' : ''}"
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
-				viewBox="0 0 24 24"
-			>
+				viewBox="0 0 24 24">
 				<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
 				</circle>
 				<path

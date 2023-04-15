@@ -37,7 +37,7 @@ let openSidebar = false
 				<a href="/my" aria-label="Click to route dashboard" data-sveltekit-preload-data>
 					<button
 						type="button"
-						class="w-full p-3 text-left text-sm text-gray-300 focus:outline-none">
+						class="w-full p-3 text-left text-sm text-zinc-200 focus:outline-none">
 						Dashboard
 					</button>
 				</a>

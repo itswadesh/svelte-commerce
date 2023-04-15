@@ -228,7 +228,7 @@ const getSelectionLabel = (option) => option.name
 						class="absolute inset-y-0 right-0 h-full w-full border-l bg-white lg:max-w-xs">
 						<button
 							type="button"
-							class="absolute top-5 right-4 transform cursor-pointer text-gray-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-gray-700"
+							class="absolute top-5 right-4 transform cursor-pointer text-zinc-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-zinc-800"
 							on:click="{() => (showCartSidebar = false)}">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -313,7 +313,7 @@ const getSelectionLabel = (option) => option.name
 															{item.qty}
 														</span>
 
-														<span class="text-gray-500">x</span>
+														<span class="text-zinc-500">x</span>
 
 														<span class="font-semibold">
 															{item.formattedItemAmount?.price}
@@ -588,7 +588,7 @@ const getSelectionLabel = (option) => option.name
 
 			<button
 				type="button"
-				class="absolute top-5 right-4 transform cursor-pointer text-gray-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-gray-700"
+				class="absolute top-5 right-4 transform cursor-pointer text-zinc-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-zinc-800"
 				on:click="{() => (openSidebar = false)}">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -603,7 +603,7 @@ const getSelectionLabel = (option) => option.name
 			</button>
 
 			{#if me?.active}
-				<ul class="text-gray-600">
+				<ul class="text-zinc-500">
 					<!-- Profile Preview -->
 
 					<li>
@@ -613,7 +613,7 @@ const getSelectionLabel = (option) => option.name
 							class="mb-4 flex flex-col gap-2 border-b pb-4"
 							data-sveltekit-preload-data
 							on:click="{() => (openSidebar = false)}">
-							<div class="h-20 w-20 overflow-hidden rounded-md border">
+							<div class="h-20 w-20 overflow-hidden rounded border">
 								{#if me.avatar}
 									<LazyImg
 										src="{me.avatar}"

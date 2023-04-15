@@ -151,7 +151,7 @@ function onInput(e) {
 					type="tel"
 					id="first"
 					maxlength="1"
-					class="flex h-12 w-12 items-center justify-center rounded-md border bg-white text-center text-xl font-semibold shadow-md ring-2 ring-white ring-transparent focus:outline-none focus:ring-primary-500"
+					class="flex h-12 w-12 items-center justify-center rounded border bg-white text-center text-xl font-semibold shadow-md ring-2 ring-white ring-transparent focus:outline-none focus:ring-primary-500"
 					on:keyup="{() => clickEvent('first', 'second')}" />
 
 				<input
@@ -159,7 +159,7 @@ function onInput(e) {
 					type="tel"
 					id="second"
 					maxlength="1"
-					class="flex h-12 w-12 items-center justify-center rounded-md border bg-white text-center text-xl font-semibold shadow-md ring-2 ring-white ring-transparent focus:outline-none focus:ring-primary-500"
+					class="flex h-12 w-12 items-center justify-center rounded border bg-white text-center text-xl font-semibold shadow-md ring-2 ring-white ring-transparent focus:outline-none focus:ring-primary-500"
 					on:keyup="{() => clickEvent('second', 'third')}" />
 
 				<input
@@ -167,7 +167,7 @@ function onInput(e) {
 					type="tel"
 					id="third"
 					maxlength="1"
-					class="flex h-12 w-12 items-center justify-center rounded-md border bg-white text-center text-xl font-semibold shadow-md ring-2 ring-white ring-transparent focus:outline-none focus:ring-primary-500"
+					class="flex h-12 w-12 items-center justify-center rounded border bg-white text-center text-xl font-semibold shadow-md ring-2 ring-white ring-transparent focus:outline-none focus:ring-primary-500"
 					on:keyup="{() => clickEvent('third', 'fourth')}" />
 
 				<input
@@ -175,7 +175,7 @@ function onInput(e) {
 					type="tel"
 					id="fourth"
 					maxlength="1"
-					class="flex h-12 w-12 items-center justify-center rounded-md border bg-white text-center text-xl font-semibold shadow-md ring-2 ring-white ring-transparent focus:outline-none focus:ring-primary-500"
+					class="flex h-12 w-12 items-center justify-center rounded border bg-white text-center text-xl font-semibold shadow-md ring-2 ring-white ring-transparent focus:outline-none focus:ring-primary-500"
 					on:keyup="{() => clickEvent('fourth', '')}" />
 			</div> -->
 		<!-- </div> -->

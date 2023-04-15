@@ -29,6 +29,8 @@ import appStore from '$lib/assets/app/app-store.svg'
 import googlePlay from '$lib/assets/app/google-play.png'
 import type { Category } from './types'
 
+// console.log(' $page', $page)
+
 export let me
 export let store = {}
 export let popularSearches: { took: 0; count: 0; data: [] }
@@ -77,7 +79,7 @@ let footerItems: any = [
 onMount(async () => {
 	const res = await getStoreData()
 	store = res.storeOne
-	megamenu = res.megamenu
+	megamenu = res.megamenu1
 	popularSearches = res.popularSearches
 	if (browser) {
 		localStorage.setItem('megamenu', JSON.stringify(megamenu))
@@ -272,17 +274,17 @@ async function getStoreData() {
 				</div>
 			</div> -->
 
-			{#if $page.data.store?.facebookPage || $page.data.store?.instagramPage || $page.data.store?.twitterPage || $page.data.store?.email || $page.data.store?.linkedinPage || $page.data.store?.pinterestPage || $page.data.store?.youtubeChannel}
+			{#if $page.data.store?.facebookUrl || $page.data.store?.instagramUrl || $page.data.store?.twitterUrl || $page.data.store?.email || $page.data.store?.linkedinUrl || $page.data.store?.pinterestUrl || $page.data.store?.youtubeUrl}
 				<div>
 					<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Keep in touch</h5>
 
 					<ul class="flex flex-wrap gap-4 text-gray-500">
 						<!-- Facebook -->
 
-						{#if $page.data.store?.facebookPage}
+						{#if $page.data.store?.facebookUrl}
 							<li class="max-w-max">
 								<a
-									href="{$page.data.store?.facebookPage}"
+									href="{$page.data.store?.facebookUrl}"
 									target="_blank"
 									rel="noopener noreferrer"
 									aria-label="Click for facebook link">
@@ -306,10 +308,10 @@ async function getStoreData() {
 
 						<!-- Instagram -->
 
-						{#if $page.data.store?.instagramPage}
+						{#if $page.data.store?.instagramUrl}
 							<li class="max-w-max">
 								<a
-									href="{$page.data.store?.instagramPage}"
+									href="{$page.data.store?.instagramUrl}"
 									target="_blank"
 									rel="noopener noreferrer"
 									aria-label="Click for instagram link">
@@ -333,10 +335,10 @@ async function getStoreData() {
 
 						<!-- Twitter -->
 
-						{#if $page.data.store?.twitterPage}
+						{#if $page.data.store?.twitterUrl}
 							<li class="max-w-max">
 								<a
-									href="{$page.data.store?.twitterPage}"
+									href="{$page.data.store?.twitterUrl}"
 									target="_blank"
 									rel="noopener noreferrer"
 									aria-label="Click for twitter link">
@@ -384,10 +386,10 @@ async function getStoreData() {
 
 						<!-- Linkedin -->
 
-						{#if $page.data.store?.linkedinPage}
+						{#if $page.data.store?.linkedinUrl}
 							<li class="max-w-max">
 								<a
-									href="{$page.data.store?.linkedinPage}"
+									href="{$page.data.store?.linkedinUrl}"
 									target="_blank"
 									rel="noopener noreferrer"
 									aria-label="Click for linkedin link">
@@ -413,10 +415,10 @@ async function getStoreData() {
 
 						<!-- Pinterest -->
 
-						{#if $page.data.store?.pinterestPage}
+						{#if $page.data.store?.pinterestUrl}
 							<li class="max-w-max">
 								<a
-									href="{$page.data.store?.pinterestPage}"
+									href="{$page.data.store?.pinterestUrl}"
 									target="_blank"
 									rel="noopener noreferrer"
 									aria-label="Click for pinterest link">
@@ -442,10 +444,10 @@ async function getStoreData() {
 
 						<!-- Youtube -->
 
-						{#if $page.data.store?.youtubeChannel}
+						{#if $page.data.store?.youtubeUrl}
 							<li class="max-w-max">
 								<a
-									href="{$page.data.store?.youtubeChannel}"
+									href="{$page.data.store?.youtubeUrl}"
 									target="_blank"
 									rel="noopener noreferrer"
 									aria-label="Click for youtube link">

@@ -58,9 +58,9 @@ function changePincode() {
 				disabled = true
 			}
 		}}"
-		class="relative w-full max-w-sm overflow-hidden rounded-md border
-        {disabled ? 'border-gray-300' : ''}
-		{pincode && pincode.toString().length === 6 ? 'border-primary-500' : 'border-gray-300'}">
+		class="relative w-full max-w-sm overflow-hidden rounded border
+        {disabled ? 'border-zinc-200' : ''}
+		{pincode && pincode.toString().length === 6 ? 'border-primary-500' : 'border-zinc-200'}">
 		<input
 			type="tel"
 			name="zip"
@@ -68,13 +68,13 @@ function changePincode() {
 			maxlength="6"
 			placeholder="Enter pincode"
 			disabled="{disabled}"
-			class="w-full rounded-md disabled:bg-gray-100 bg-transparent py-3 px-4 pr-24 text-sm font-semibold placeholder:font-normal focus:outline-none" />
+			class="w-full rounded disabled:bg-zinc-100 bg-transparent py-3 px-4 pr-24 text-sm font-semibold placeholder:font-normal focus:outline-none" />
 
 		{#if !deliveryDetails}
 			<button
 				type="submit"
 				class="absolute inset-y-0 right-0 z-10 flex w-20 items-center justify-center text-right text-sm font-bold
-				{pincode && pincode.toString().length === 6 ? 'text-primary-500' : 'text-gray-300'}">
+				{pincode && pincode.toString().length === 6 ? 'text-primary-500' : 'text-zinc-200'}">
 				{#if loading}
 					<div
 						class="absolute inset-0 flex cursor-not-allowed items-center justify-center bg-black bg-opacity-70">
@@ -201,7 +201,7 @@ function changePincode() {
 		</ul>
 	{:else if !deliveryDetails?.pincode}
 		<div class="mt-2">
-			<p class="text-xs text-gray-500">
+			<p class="text-xs text-zinc-500">
 				Please enter PIN code to check delivery time & Pay on Delivery Availability
 			</p>
 

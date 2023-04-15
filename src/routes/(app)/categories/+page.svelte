@@ -28,7 +28,7 @@ let bgColors = [
 	'bg-teal-200',
 	'bg-cyan-200',
 	'bg-yellow-200',
-	'bg-gray-200'
+	'bg-zinc-200'
 ]
 
 onMount(() => {
@@ -170,7 +170,7 @@ function toggle2(cx) {
 																</div>
 															{:else}
 																<div
-																	class="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-gray-200">
+																	class="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-zinc-200">
 																</div>
 															{/if}
 
@@ -212,7 +212,7 @@ function toggle2(cx) {
 															</div>
 														{:else}
 															<div
-																class="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-gray-200">
+																class="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-zinc-200">
 															</div>
 														{/if}
 
@@ -224,7 +224,7 @@ function toggle2(cx) {
 
 												{#if showChild2[cx]}
 													{#if c.children?.length}
-														<ul class="flex flex-col divide-y bg-gray-100">
+														<ul class="flex flex-col divide-y bg-zinc-100">
 															{#each c.children as cc}
 																<li>
 																	<a

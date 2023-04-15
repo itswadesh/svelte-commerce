@@ -1,4 +1,5 @@
 <script>
+import { ContactService } from '$lib/services'
 import { page } from '$app/stores'
 import { toast } from '$lib/utils'
 import Error from '$lib/components/Error.svelte'
@@ -6,7 +7,6 @@ import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextareaFloating from '$lib/ui/TextareaFloating.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
-import { ContactService } from '$lib/services'
 
 let seoProps = {
 	title: `Contact Us`,
@@ -58,14 +58,14 @@ async function submitContactInformation() {
 		<div class="mb-5 text-center sm:mb-10">
 			<h1 class="mb-2 font-serif text-2xl font-medium md:text-3xl lg:text-4xl">Contact Us</h1>
 
-			<p class="text-sm text-gray-500">Any queation or remarks? Just write us a message!</p>
+			<p class="text-sm text-zinc-500">Any queation or remarks? Just write us a message!</p>
 		</div>
 
 		<div class="grid grid-cols-1 rounded-xl border shadow-lg xl:grid-cols-3">
 			<div class="col-span-1 m-2 overflow-hidden rounded-xl bg-primary-500 p-5 text-white sm:p-10">
 				<h2 class="mb-2 text-xl font-semibold sm:text-2xl">Contact Information</h2>
 
-				<p class="mb-5 text-sm text-gray-200 sm:text-base">
+				<p class="mb-5 text-sm text-zinc-200 sm:text-base">
 					Fill up teh form and our Team will get back to you within 24 hours.
 				</p>
 
@@ -124,15 +124,15 @@ async function submitContactInformation() {
 					</ul>
 				{/if}
 
-				{#if $page.data.store?.facebookPage || $page.data.store?.instagramPage || $page.data.store?.twitterPage || $page.data.store?.email || $page.data.store?.linkedinPage || $page.data.store?.pinterestPage || $page.data.store?.youtubeChannel}
+				{#if $page.data.store?.facebookUrl || $page.data.store?.instagramUrl || $page.data.store?.twitterUrl || $page.data.store?.email || $page.data.store?.linkedinUrl || $page.data.store?.pinterestUrl || $page.data.store?.youtubeUrl}
 					<ul class="flex flex-wrap items-center gap-2">
 						<!-- Facebook -->
 
-						{#if $page.data.store?.facebookPage}
+						{#if $page.data.store?.facebookUrl}
 							<li
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#4267B2]">
 								<a
-									href="{$page.data.store?.facebookPage}"
+									href="{$page.data.store?.facebookUrl}"
 									aria-label="Click to route facebook page"
 									target="_blank"
 									rel="noopener noreferrer"
@@ -157,11 +157,11 @@ async function submitContactInformation() {
 
 						<!-- Instagram -->
 
-						{#if $page.data.store?.instagramPage}
+						{#if $page.data.store?.instagramUrl}
 							<li
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#C13584]">
 								<a
-									href="{$page.data.store?.instagramPage}"
+									href="{$page.data.store?.instagramUrl}"
 									aria-label="Click to route instagram page"
 									target="_blank"
 									rel="noopener noreferrer"
@@ -186,11 +186,11 @@ async function submitContactInformation() {
 
 						<!-- Twitter -->
 
-						{#if $page.data.store?.twitterPage}
+						{#if $page.data.store?.twitterUrl}
 							<li
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#1DA1F2]">
 								<a
-									href="{$page.data.store?.twitterPage}"
+									href="{$page.data.store?.twitterUrl}"
 									aria-label="Click to route twitter page"
 									target="_blank"
 									rel="noopener noreferrer"
@@ -215,11 +215,11 @@ async function submitContactInformation() {
 
 						<!-- Linked in -->
 
-						{#if $page.data.store?.linkedinPage}
+						{#if $page.data.store?.linkedinUrl}
 							<li
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#0077b5]">
 								<a
-									href="{$page.data.store?.linkedinPage}"
+									href="{$page.data.store?.linkedinUrl}"
 									aria-label="Click to route linkedin page"
 									target="_blank"
 									rel="noopener noreferrer"
@@ -246,11 +246,11 @@ async function submitContactInformation() {
 
 						<!-- Pinterest -->
 
-						{#if $page.data.store?.pinterestPage}
+						{#if $page.data.store?.pinterestUrl}
 							<li
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#D32D2D]">
 								<a
-									href="{$page.data.store?.pinterestPage}"
+									href="{$page.data.store?.pinterestUrl}"
 									aria-label="Click to route pinterest page"
 									target="_blank"
 									rel="noopener noreferrer"
@@ -277,11 +277,11 @@ async function submitContactInformation() {
 
 						<!-- Youtube -->
 
-						{#if $page.data.store?.youtubeChannel}
+						{#if $page.data.store?.youtubeUrl}
 							<li
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#FF0000]">
 								<a
-									href="{$page.data.store?.youtubeChannel}"
+									href="{$page.data.store?.youtubeUrl}"
 									aria-label="Click to route youtube page"
 									target="_blank"
 									rel="noopener noreferrer"

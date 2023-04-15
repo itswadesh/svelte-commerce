@@ -44,9 +44,10 @@
 </style>
 
 <script lang="ts">
-import { browser } from '$app/environment'
+// import UserForm from '$lib/components/Product/UserForm.svelte'
 import { CartService, ReviewService } from '$lib/services'
 import { applyAction, enhance } from '$app/forms'
+import { browser } from '$app/environment'
 import { currency, delay, toast } from '$lib/utils'
 import { fade } from 'svelte/transition'
 import { fireGTagEvent } from '$lib/utils/gTag'
@@ -68,27 +69,27 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import ProductNav from '$lib/ProductNav.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
+import ProductsGrid from '$lib/components/Product/ProductsGrid.svelte'
 import productVeg from '$lib/assets/product/veg.png'
 import Radio from '$lib/ui/Radio.svelte'
 import RadioColor from '$lib/ui/RadioColor.svelte'
 import RadioSize from '$lib/ui/RadioSize.svelte'
 import RatingsAndReviews from '$lib/components/Product/RatingsAndReviews.svelte'
-import ProductsGrid from '$lib/components/Product/ProductsGrid.svelte'
+import RecentlyViewedProductsSlider from '$lib/components/Product/RecentlyViewedProductsSlider.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import SimilarProductsFromCategorySlug from '$lib/components/Product/SimilarProductsFromCategorySlug.svelte'
+import Skeleton from '$lib/ui/Skeleton.svelte'
 import SocialSharingButtons from '$lib/components/SocialSharingButtons.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
-// import UserForm from '$lib/components/Product/UserForm.svelte'
 import viewport from '$lib/actions/useViewPort'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
-import Skeleton from '$lib/ui/Skeleton.svelte'
 
 const cookies = Cookie()
 
 export let data
 
-console.log('zzzzzzzzzzzzzzzzzz', data)
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -163,7 +164,10 @@ let cartButtonText = 'Add to Bag'
 let customizedImg
 let isWislisted = false
 let loading = false
+let loadingForProductReview = false
 let loadingForWishlist = false
+let productReviews = {}
+let recentlyViewed = []
 let screenWidth
 let selectedImgIndex
 let selectedLinkiedProducts = []
@@ -173,13 +177,11 @@ let selectedReviewType = 'product_review'
 let selectedSize
 let shake = false
 let showEditor = false
+let showLongDescription = false
 let showPhotosModal = false
 let showStickyCartButton = true
 let showUserInputForm = false
-let y
-let productReviews = {}
-let loadingForProductReview = false
-let recentlyViewed = []
+let y = 0
 
 $: if (y > 500) {
 	showUserInputForm = true
@@ -297,7 +299,6 @@ async function addToBag(p, customizedImg, customizedJson) {
 			server: false,
 			cookies
 		})
-
 		if (selectedLinkiedProducts?.length) {
 			for (const i of selectedLinkiedProducts) {
 				cart = await CartService.addToCartService({
@@ -347,12 +348,6 @@ async function addToBag(p, customizedImg, customizedJson) {
 		await invalidateAll()
 
 		// const res = await getAPI('carts/my')
-
-		// if (res) {
-
-		if (customizedImg) {
-			goto(`/checkout/address`)
-		}
 	} catch (e) {
 		toast(e, 'error')
 		cartButtonText = 'Error Add To Cart'
@@ -379,6 +374,8 @@ function cartButtonEnterViewport() {
 	} else {
 		showStickyCartButton = true
 	}
+
+	// console.log('y, cartButtonEnterViewport', y, showStickyCartButton)
 }
 
 function cartButtonExitViewport() {
@@ -387,6 +384,8 @@ function cartButtonExitViewport() {
 	} else {
 		showStickyCartButton = false
 	}
+
+	// console.log('y, cartButtonExitViewport', y, showStickyCartButton)
 }
 
 function alertToSelectMandatoryOptions() {
@@ -536,7 +535,7 @@ function handleMobileCanvas() {
 						<h1 class="text-xl font-semibold capitalize sm:text-2xl">Make your custom design</h1>
 
 						<div
-							class="relative flex h-full w-full flex-col items-center justify-center gap-2 rounded-md border bg-gray-100 text-sm text-gray-500 sm:h-[570px] sm:w-[302px]">
+							class="relative flex h-full w-full flex-col items-center justify-center gap-2 rounded border bg-zinc-100 text-sm text-zinc-500 sm:h-[570px] sm:w-[302px]">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"
@@ -579,7 +578,7 @@ function handleMobileCanvas() {
 
 				{#if data.product?.name}
 					<div class="flex justify-between gap-2">
-						<h1 class="flex-1 sm:text-lg text-gray-500">
+						<h1 class="flex-1 sm:text-lg text-zinc-500">
 							{data.product?.name}
 						</h1>
 
@@ -604,7 +603,7 @@ function handleMobileCanvas() {
 						</span>
 
 						{#if data.product?.mrp > data.product?.price}
-							<span class="whitespace-nowrap text-gray-400">
+							<span class="whitespace-nowrap text-zinc-400">
 								<strike>{currency(data.product?.mrp)}</strike>
 							</span>
 
@@ -624,7 +623,7 @@ function handleMobileCanvas() {
 				{#if data?.product?.reviews?.productReviews?.summary?.ratings_avg?.value > 0}
 					<button
 						type="button"
-						class="mt-2 flex max-w-max items-center divide-x divide-gray-300 border border-gray-300 py-1 text-sm focus:outline-none"
+						class="mt-2 flex max-w-max items-center divide-x divide-zinc-200 border border-zinc-200 py-1 text-sm focus:outline-none"
 						on:click="{() => scrollTo('ratings-and-reviews')}">
 						<div class="flex items-center gap-1 px-2 font-semibold">
 							<span>
@@ -642,13 +641,13 @@ function handleMobileCanvas() {
 							</svg>
 						</div>
 
-						<span class="px-2 text-gray-500">
+						<span class="px-2 text-zinc-500">
 							{productReviews?.product?.count || 'No'} Reviews
 						</span>
 					</button>
 				{/if}
 
-				<hr class="my-5 w-full border-t border-gray-300" />
+				<hr class="my-5 w-full border-t border-zinc-200" />
 
 				<!-- Delivery Options Mobile -->
 
@@ -683,7 +682,7 @@ function handleMobileCanvas() {
 						</span>
 
 						{#if data.product?.mrp > data.product?.price}
-							<span class="whitespace-nowrap text-lg text-gray-500 sm:text-xl">
+							<span class="whitespace-nowrap text-lg text-zinc-500 sm:text-xl">
 								<strike>{currency(data.product?.mrp)}</strike>
 							</span>
 
@@ -748,7 +747,7 @@ function handleMobileCanvas() {
 								class="overflow-hidden rounded border py-1 px-3 text-sm font-medium uppercase transition duration-500 focus:outline-none
               				{data.product?.size?.name === selectedSize
 									? 'bg-primary-500 border-primary-500 text-white'
-									: 'bg-transparent border-gray-300 text-gray-500 hover:border-primary-500 hover:text-primary-500'}"
+									: 'bg-transparent border-zinc-200 text-zinc-500 hover:border-primary-500 hover:text-primary-500'}"
 								on:click="{() => selectSize(data.product?.size)}">
 								{data.product?.size?.name}
 							</button>
@@ -785,7 +784,7 @@ function handleMobileCanvas() {
 										href="/product/{gp.slug}"
 										class="flex flex-col gap-1 text-center w-14 text-xs leading-tight">
 										<div
-											class="flex h-16 w-14 items-center justify-center overflow-hidden rounded-md border border-gray-300 transition duration-300 hover:border-primary-500 p-1 shadow-md">
+											class="flex h-16 w-14 items-center justify-center overflow-hidden rounded border border-zinc-200 transition duration-300 hover:border-primary-500 p-1 shadow-md">
 											<LazyImg
 												src="{gp.img}"
 												alt="{gp.img}"
@@ -849,7 +848,7 @@ function handleMobileCanvas() {
 								{#if o.inputType == 'dropdown'}
 									<select
 										bind:value="{selectedOptions[o._id]}"
-										class="w-full max-w-xs flex-1 rounded-md border border-gray-300 py-1.5 text-sm font-light placeholder-gray-400 transition duration-300 focus:outline-none hover:bg-white">
+										class="w-full max-w-xs flex-1 rounded border border-zinc-200 py-1.5 text-sm font-light placeholder-zinc-400 transition duration-300 focus:outline-none hover:bg-white">
 										{#each o.values as i}
 											<option value="{i._id}">
 												{i.name}
@@ -886,7 +885,7 @@ function handleMobileCanvas() {
 									<div class="flex flex-wrap">
 										{#each o.values as v}
 											<RadioSize value="{v._id}" bind:modelValue="{selectedOptions[o._id]}">
-												<span class="text-gray-500">{v.name}</span>
+												<span class="text-zinc-500">{v.name}</span>
 											</RadioSize>
 										{/each}
 									</div>
@@ -896,7 +895,7 @@ function handleMobileCanvas() {
 									<div class="flex flex-wrap gap-4">
 										{#each o.values as v}
 											<RadioColor value="{v._id}" bind:modelValue="{selectedOptions[o._id]}">
-												<span class="text-gray-500">{v.name}</span>
+												<span class="text-zinc-500">{v.name}</span>
 											</RadioColor>
 										{/each}
 									</div>
@@ -905,7 +904,7 @@ function handleMobileCanvas() {
 									<div class="flex flex-wrap gap-4">
 										{#each o.values as v}
 											<Radio value="{v._id}" bind:modelValue="{selectedOptions[o._id]}">
-												<span class="text-gray-500">{v.name}</span>
+												<span class="text-zinc-500">{v.name}</span>
 											</Radio>
 										{/each}
 									</div>
@@ -915,7 +914,7 @@ function handleMobileCanvas() {
 									<div class="flex flex-wrap gap-4">
 										{#each o.values as v, i}
 											<Checkbox value="{v._id}" bind:modelValue="{selectedOptions[o._id]}">
-												<span class="text-gray-500">{v.name}</span>
+												<span class="text-zinc-500">{v.name}</span>
 											</Checkbox>
 										{/each}
 									</div>
@@ -927,154 +926,289 @@ function handleMobileCanvas() {
 
 				<!-- Add to Cart -->
 
+				<!-- id="cart_viewport" -->
 				<div
 					use:viewport
 					on:enterViewport="{cartButtonEnterViewport}"
 					on:exitViewport="{cartButtonExitViewport}">
 				</div>
 
+				{#if showStickyCartButton}
+					<div
+						class="w-full grid md:hidden grid-cols-5 gap-2 items-center uppercase md:grid-cols-2 fixed inset-x-0 bottom-0 z-40 h-16 border-t bg-white p-2 box-shadow">
+						<div class="col-span-2">
+							<WhiteButton
+								type="button"
+								loadingringsize="sm"
+								loading="{loadingForWishlist}"
+								class="w-full text-sm"
+								on:click="{() => toggleWishlist(data.product?._id)}">
+								{#if isWislisted}
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										class="h-5 w-5 shrink-0 text-red-500"
+										viewBox="0 0 20 20"
+										fill="currentColor">
+										<path
+											fill-rule="evenodd"
+											d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+											clip-rule="evenodd"></path>
+									</svg>
+
+									<span>Wishlisted</span>
+								{:else}
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										class="h-5 w-5 shrink-0"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+										stroke-width="2">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+										></path>
+									</svg>
+
+									<span>Wishlist</span>
+								{/if}
+							</WhiteButton>
+						</div>
+
+						<div class="col-span-3">
+							{#if data.product?.active && data.product?.hasStock}
+								{#if cartButtonText === 'Go to cart'}
+									<a class="block" href="/cart" data-sveltekit-preload-data>
+										<PrimaryButton type="button" hideLoading class="w-full text-sm" blackBackground>
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												class="h-5 w-5 shrink-0"
+												fill="none"
+												viewBox="0 0 24 24"
+												stroke="currentColor"
+												stroke-width="2">
+												<path
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
+												</path>
+											</svg>
+
+											<span>
+												{cartButtonText}
+											</span>
+										</PrimaryButton>
+									</a>
+								{:else}
+									<form
+										action="/cart?/add"
+										method="POST"
+										use:enhance="{() => {
+											return async ({ result }) => {
+												result?.data?.qty < 0
+													? fireGTagEvent('remove_from_cart', result?.data)
+													: fireGTagEvent('add_to_cart', result?.data)
+												cartButtonText = 'Added To Cart'
+												bounceItemFromTop = true
+												setTimeout(() => {
+													bounceItemFromTop = false
+												}, 3000)
+												cartButtonText = 'Go to cart'
+												if (customizedImg) {
+													goto(`/checkout/address`)
+												}
+												invalidateAll()
+												await applyAction(result)
+											}
+										}}">
+										<input type="hidden" name="pid" value="{data?.product?._id}" />
+										<input type="hidden" name="vid" value="{data?.product?._id}" />
+
+										<input
+											type="hidden"
+											name="linkedItems"
+											value="{JSON.stringify(selectedLinkiedProducts)}" />
+
+										<input type="hidden" name="qty" value="{1}" />
+
+										<input
+											type="hidden"
+											name="options"
+											value="{JSON.stringify(selectedOptions1)}" />
+
+										<input type="hidden" name="customizedImg" value="{customizedImg}" />
+
+										<PrimaryButton
+											type="submit"
+											loading="{loading}"
+											loadingringsize="sm"
+											class="w-full text-sm">
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												class="h-5 w-5 shrink-0"
+												fill="none"
+												viewBox="0 0 24 24"
+												stroke="currentColor"
+												stroke-width="2">
+												<path
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
+												</path>
+											</svg>
+
+											<span>
+												{cartButtonText}
+											</span>
+										</PrimaryButton>
+									</form>
+								{/if}
+							{:else}
+								<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
+									Item Unavailable
+								</PrimaryButton>
+							{/if}
+						</div>
+					</div>
+				{/if}
+
 				{#if !data.product?.isCustomized}
 					<div
-						class="fixed inset-x-0 bottom-0 z-10 md:z-0 h-16 md:h-auto flex items-center border-t bg-white p-2 md:static md:mb-5  md:border-t-0 md:bg-transparent md:p-0 md:max-w-sm box-shadow">
-						<div class="w-full grid grid-cols-5 gap-2 items-center uppercase md:grid-cols-2">
-							<div class="col-span-2 md:col-span-1">
-								<WhiteButton
-									type="button"
-									loadingringsize="sm"
-									loading="{loadingForWishlist}"
-									class="w-full text-sm"
-									on:click="{() => toggleWishlist(data.product?._id)}">
-									{#if isWislisted}
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											class="h-5 w-5 shrink-0 text-red-500"
-											viewBox="0 0 20 20"
-											fill="currentColor">
-											<path
-												fill-rule="evenodd"
-												d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-												clip-rule="evenodd"></path>
-										</svg>
+						class="w-full grid grid-cols-5 gap-2 items-center uppercase md:grid-cols-2 static md:max-w-sm mb-5">
+						<div class="col-span-2 md:col-span-1">
+							<WhiteButton
+								type="button"
+								loadingringsize="sm"
+								loading="{loadingForWishlist}"
+								class="w-full text-sm"
+								on:click="{() => toggleWishlist(data.product?._id)}">
+								{#if isWislisted}
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										class="h-5 w-5 shrink-0 text-red-500"
+										viewBox="0 0 20 20"
+										fill="currentColor">
+										<path
+											fill-rule="evenodd"
+											d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+											clip-rule="evenodd"></path>
+									</svg>
 
-										<span>Wishlisted</span>
-									{:else}
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											class="h-5 w-5 shrink-0"
-											fill="none"
-											viewBox="0 0 24 24"
-											stroke="currentColor"
-											stroke-width="2">
-											<path
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-											></path>
-										</svg>
-
-										<span>Wishlist</span>
-									{/if}
-								</WhiteButton>
-							</div>
-
-							<div class="col-span-3 md:col-span-1">
-								{#if data.product?.active && data.product?.hasStock}
-									{#if cartButtonText === 'Go to cart'}
-										<a class="block" href="/cart" data-sveltekit-preload-data>
-											<PrimaryButton
-												type="button"
-												hideLoading
-												class="w-full text-sm"
-												blackBackground>
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													class="h-5 w-5 shrink-0"
-													fill="none"
-													viewBox="0 0 24 24"
-													stroke="currentColor"
-													stroke-width="2">
-													<path
-														stroke-linecap="round"
-														stroke-linejoin="round"
-														d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
-													</path>
-												</svg>
-
-												<span>
-													{cartButtonText}
-												</span>
-											</PrimaryButton>
-										</a>
-									{:else}
-										<form
-											action="/cart?/add"
-											method="POST"
-											use:enhance="{() => {
-												return async ({ result }) => {
-													result?.data?.qty < 0
-														? fireGTagEvent('remove_from_cart', result?.data)
-														: fireGTagEvent('add_to_cart', result?.data)
-													cartButtonText = 'Added To Cart'
-													bounceItemFromTop = true
-													setTimeout(() => {
-														bounceItemFromTop = false
-													}, 3000)
-													cartButtonText = 'Go to cart'
-													if (customizedImg) {
-														goto(`/checkout/address`)
-													}
-													invalidateAll()
-													await applyAction(result)
-												}
-											}}">
-											<input type="hidden" name="pid" value="{data?.product?._id}" />
-											<input type="hidden" name="vid" value="{data?.product?._id}" />
-
-											<input
-												type="hidden"
-												name="linkedItems"
-												value="{JSON.stringify(selectedLinkiedProducts)}" />
-
-											<input type="hidden" name="qty" value="{1}" />
-
-											<input
-												type="hidden"
-												name="options"
-												value="{JSON.stringify(selectedOptions1)}" />
-
-											<input type="hidden" name="customizedImg" value="{customizedImg}" />
-
-											<PrimaryButton
-												type="submit"
-												loading="{loading}"
-												loadingringsize="sm"
-												class="w-full text-sm">
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													class="h-5 w-5 shrink-0"
-													fill="none"
-													viewBox="0 0 24 24"
-													stroke="currentColor"
-													stroke-width="2">
-													<path
-														stroke-linecap="round"
-														stroke-linejoin="round"
-														d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
-													</path>
-												</svg>
-
-												<span>
-													{cartButtonText}
-												</span>
-											</PrimaryButton>
-										</form>
-									{/if}
+									<span>Wishlisted</span>
 								{:else}
-									<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
-										Item Unavailable
-									</PrimaryButton>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										class="h-5 w-5 shrink-0"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+										stroke-width="2">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+										></path>
+									</svg>
+
+									<span>Wishlist</span>
 								{/if}
-							</div>
+							</WhiteButton>
+						</div>
+
+						<div class="col-span-3 md:col-span-1">
+							{#if data.product?.active && data.product?.hasStock}
+								{#if cartButtonText === 'Go to cart'}
+									<a class="block" href="/cart" data-sveltekit-preload-data>
+										<PrimaryButton type="button" hideLoading class="w-full text-sm" blackBackground>
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												class="h-5 w-5 shrink-0"
+												fill="none"
+												viewBox="0 0 24 24"
+												stroke="currentColor"
+												stroke-width="2">
+												<path
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
+												</path>
+											</svg>
+
+											<span>
+												{cartButtonText}
+											</span>
+										</PrimaryButton>
+									</a>
+								{:else}
+									<form
+										action="/cart?/add"
+										method="POST"
+										use:enhance="{() => {
+											return async ({ result }) => {
+												result?.data?.qty < 0
+													? fireGTagEvent('remove_from_cart', result?.data)
+													: fireGTagEvent('add_to_cart', result?.data)
+												cartButtonText = 'Added To Cart'
+												bounceItemFromTop = true
+												setTimeout(() => {
+													bounceItemFromTop = false
+												}, 3000)
+												cartButtonText = 'Go to cart'
+												if (customizedImg) {
+													goto(`/checkout/address`)
+												}
+												invalidateAll()
+												await applyAction(result)
+											}
+										}}">
+										<input type="hidden" name="pid" value="{data?.product?._id}" />
+										<input type="hidden" name="vid" value="{data?.product?._id}" />
+
+										<input
+											type="hidden"
+											name="linkedItems"
+											value="{JSON.stringify(selectedLinkiedProducts)}" />
+
+										<input type="hidden" name="qty" value="{1}" />
+
+										<input
+											type="hidden"
+											name="options"
+											value="{JSON.stringify(selectedOptions1)}" />
+
+										<input type="hidden" name="customizedImg" value="{customizedImg}" />
+
+										<PrimaryButton
+											type="submit"
+											loading="{loading}"
+											loadingringsize="sm"
+											class="w-full text-sm">
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												class="h-5 w-5 shrink-0"
+												fill="none"
+												viewBox="0 0 24 24"
+												stroke="currentColor"
+												stroke-width="2">
+												<path
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
+												</path>
+											</svg>
+
+											<span>
+												{cartButtonText}
+											</span>
+										</PrimaryButton>
+									</form>
+								{/if}
+							{:else}
+								<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
+									Item Unavailable
+								</PrimaryButton>
+							{/if}
 						</div>
 					</div>
 				{/if}
@@ -1141,32 +1275,38 @@ function handleMobileCanvas() {
 				<!-- Description -->
 
 				{#if data.product?.longDescription}
-					<div class="mb-5">
-						<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
-							<span> Description </span>
+					<div class="mb-5 flex flex-col gap-5">
+						<hr class="w-full border-t border-zinc-200" />
 
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke-width="1"
-								stroke="currentColor"
-								class="h-5 w-5">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"
-								></path>
-							</svg>
-						</h6>
+						<div>
+							<button
+								type="button"
+								class="w-full flex items-center gap-2 justify-between font-semibold uppercase focus:outline-none"
+								on:click="{() => (showLongDescription = !showLongDescription)}">
+								<span> Description </span>
 
-						<div class="prose text-sm max-w-none">
-							{@html data.product?.longDescription}
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 0 20 20"
+									fill="currentColor"
+									class="w-5 h-5 transition duration-300
+									{showLongDescription ? 'transform -rotate-45' : ''}">
+									<path
+										d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"
+									></path>
+								</svg>
+							</button>
+
+							{#if showLongDescription}
+								<div class="mt-2 prose text-sm max-w-none">
+									{@html data.product?.longDescription}
+								</div>
+							{/if}
 						</div>
+
+						<hr class="w-full border-t border-zinc-200" />
 					</div>
 				{/if}
-
-				<hr class="mb-5 w-full border-t border-gray-300 hidden sm:block" />
 
 				<!-- Delivery Options Desktop -->
 
@@ -1198,9 +1338,7 @@ function handleMobileCanvas() {
 					<p class="flex items-center gap-2">
 						<b>Seller : </b>
 
-						<a
-							href="/vendor/{data.product?.vendor?.slug}"
-							class="block hover:underline">
+						<a href="/vendor/{data.product?.vendor?.slug}" class="block hover:underline">
 							{data.product?.vendor?.name}
 						</a>
 					</p>
@@ -1209,28 +1347,30 @@ function handleMobileCanvas() {
 				<!-- Ratings & Reviews -->
 
 				{#if productReviews?.product?.count || productReviews?.brand?.count}
-					<hr class="mb-5 w-full border-t border-gray-300" />
+					<hr class="hidden sm:block mb-5 w-full border-t border-zinc-200" />
 
-					<div class="mb-5 flex items-center flex-wrap gap-4">
-						<button
-							type="button"
-							class="font-semibold border-b-4 focus:outline-none 
-						{selectedReviewType === 'product_review'
-								? 'border-primary-500 text-primary-500'
-								: 'border-gray-200 text-gray-500'}"
-							on:click="{() => (selectedReviewType = 'product_review')}">
-							Product Review
-						</button>
+					<div class="sticky top-14 z-30 lg:static lg:z-0 mb-5 bg-white py-2">
+						<div class="flex items-center flex-wrap gap-4">
+							<button
+								type="button"
+								class="font-semibold border-b-4 focus:outline-none
+								{selectedReviewType === 'product_review'
+									? 'border-primary-500 text-primary-500'
+									: 'border-zinc-200 text-zinc-500'}"
+								on:click="{() => (selectedReviewType = 'product_review')}">
+								Product Review
+							</button>
 
-						<button
-							type="button"
-							class="font-semibold border-b-4 focus:outline-none 
-						{selectedReviewType === 'brand_review'
-								? 'border-primary-500 text-primary-500'
-								: 'border-gray-200 text-gray-500'}"
-							on:click="{() => (selectedReviewType = 'brand_review')}">
-							Brand Review
-						</button>
+							<button
+								type="button"
+								class="font-semibold border-b-4 focus:outline-none
+								{selectedReviewType === 'brand_review'
+									? 'border-primary-500 text-primary-500'
+									: 'border-zinc-200 text-zinc-500'}"
+								on:click="{() => (selectedReviewType = 'brand_review')}">
+								Brand Review
+							</button>
+						</div>
 					</div>
 
 					{#if loadingForProductReview}
@@ -1262,9 +1402,11 @@ function handleMobileCanvas() {
 				<hr class="mb-5 w-full sm:mb-10" />
 
 				<div class="mb-5 sm:mb-10">
-					<h2 class="mb-5 text-lg font-bold capitalize sm:text-xl md:text-2xl">
-						Frequently bought together
-					</h2>
+					<div class="sticky top-14 z-30 lg:static lg:z-0 mb-3 bg-white py-2">
+						<h2 class="font-bold capitalize sm:text-lg border-b-4 border-zinc-800 max-w-max">
+							Frequently bought together
+						</h2>
+					</div>
 
 					<div
 						class="mb-5 grid w-full grid-cols-2 items-start gap-3 sm:mb-10 sm:flex sm:flex-wrap sm:justify-between lg:gap-6">
@@ -1292,7 +1434,7 @@ function handleMobileCanvas() {
 			{#if recentlyViewed?.length}
 				<hr class="mb-5 w-full sm:mb-10" />
 
-				<ProductsGrid title="Recently Viewed" products="{recentlyViewed}" />
+				<RecentlyViewedProductsSlider title="Recently Viewed" products="{recentlyViewed}" />
 			{/if}
 
 			<!-- Similar products From category slug -->
