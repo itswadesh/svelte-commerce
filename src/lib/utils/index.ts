@@ -416,7 +416,7 @@ export const getExtension = (filename) => {
 	return filename.substring(filename.lastIndexOf('.') + 1)
 }
 
-export const generatePriceRange = (price_stats) => {
+export const generatePriceRange = (price_stats, currencySymbol) => {
 	let priceRange = []
 	const difference = Math.round(price_stats?.max - price_stats?.min)
 	if (difference) {
@@ -431,10 +431,26 @@ export const generatePriceRange = (price_stats) => {
 			if (price1 >= 0 && price2 && price3 && price4 && price5) {
 				priceRange = [
 					{ from: price1, key: `Any`, to: price5 },
-					{ from: price1, key: `From ${currency(price1)} to ${currency(price2)}`, to: price2 },
-					{ from: price2, key: `From ${currency(price2)} to ${currency(price3)}`, to: price3 },
-					{ from: price3, key: `From ${currency(price3)} to ${currency(price4)}`, to: price4 },
-					{ from: price4, key: `From ${currency(price4)} to ${currency(price5)}`, to: price5 }
+					{
+						from: price1,
+						key: `From ${currency(price1, currencySymbol)} to ${currency(price2, currencySymbol)}`,
+						to: price2
+					},
+					{
+						from: price2,
+						key: `From ${currency(price2, currencySymbol)} to ${currency(price3, currencySymbol)}`,
+						to: price3
+					},
+					{
+						from: price3,
+						key: `From ${currency(price3, currencySymbol)} to ${currency(price4, currencySymbol)}`,
+						to: price4
+					},
+					{
+						from: price4,
+						key: `From ${currency(price4, currencySymbol)} to ${currency(price5, currencySymbol)}`,
+						to: price5
+					}
 				]
 			}
 		}

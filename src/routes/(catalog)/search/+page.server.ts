@@ -49,7 +49,7 @@ export async function load({ url, locals, cookies, parent }) {
 
 	let priceRange = []
 	if (facets.all_aggs?.price_stats?.max > 0 && facets.all_aggs?.price_stats?.min >= 0) {
-		priceRange = generatePriceRange(facets.all_aggs?.price_stats)
+		priceRange = generatePriceRange(facets.all_aggs?.price_stats, store.currencySymbol)
 	}
 
 	return {
