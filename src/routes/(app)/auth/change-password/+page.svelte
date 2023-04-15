@@ -78,10 +78,11 @@ async function submit(p) {
 	<a href="/" aria-label="Go to home" class="mx-auto mb-8 block max-w-max">
 		{#if $page.data.store?.logo}
 			<LazyImg
-				src="{$page.data.store?.logo}"
-				alt="{$page.data.store?.websiteName}"
-				height="80"
-				class="h-14 w-32 object-contain object-center" />
+				src="{$page?.data?.store?.logo}"
+				alt="logo"
+				height="64"
+				aspect_ratio="4:1"
+				class="max-h-16 w-40 object-contain object-center" />
 		{:else}
 			<h1
 				class="bg-gradient-to-b from-primary-500 to-primary-700 bg-clip-text text-3xl font-extrabold text-transparent underline decoration-zinc-800">
