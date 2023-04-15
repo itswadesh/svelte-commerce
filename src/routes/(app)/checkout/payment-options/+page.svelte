@@ -204,10 +204,12 @@ function checkIfStripeCardValid({ detail }) {
 								<div class="flex w-full flex-1 items-center justify-between gap-4">
 									<div class="flex-1">
 										<h2 class="text-xl font-semibold" style="color:{pm.color}">
-											{pm.name}
+											{pm.name || pm.value}
 										</h2>
 
-										<p class="mt-1 text-sm text-zinc-500">{pm.text}</p>
+										{#if pm.text}
+											<p class="mt-1 text-sm text-zinc-500">{pm.text}</p>
+										{/if}
 									</div>
 
 									<div class="shrink-0">
@@ -220,8 +222,10 @@ function checkIfStripeCardValid({ detail }) {
 												class="h-14 w-14 rounded-full border object-cover object-center text-xs" />
 										{:else}
 											<div
-												class="flex h-14 w-14 items-center justify-center rounded-full border bg-zinc-200 text-center text-xs uppercase">
-												{pm.name}
+												class="flex h-14 w-14 p-2 items-center justify-center rounded-full border bg-zinc-200 text-center text-xs uppercase">
+												<span class="w-full truncate">
+													{pm.name || pm.value}
+												</span>
 											</div>
 										{/if}
 									</div>
@@ -368,7 +372,7 @@ function checkIfStripeCardValid({ detail }) {
 				loading="{loading}"
 				hideCheckoutButton="{selectedPaymentMethod.name === 'Stripe'}"
 				disabled="{!razorpayReady ||
-					!selectedPaymentMethod?.name ||
+					(!selectedPaymentMethod?.name && !selectedPaymentMethod?.value) ||
 					(selectedPaymentMethod?.name === 'Stripe' && disabled)}"
 				on:submit="{() => submit(selectedPaymentMethod)}" />
 		</div>
