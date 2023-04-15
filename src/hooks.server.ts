@@ -31,7 +31,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.isDesktop = isDesktop
 		const isShowBackButton = !listOfPagesWithoutBackButton.includes(url?.pathname)
 		event.locals.isShowBackButton = isShowBackButton
-		event.locals.store = await fetchStoreData(event)
+		const { megamenu, storeOne } = await fetchStoreData(event)
+		event.locals.store = storeOne
+		event.locals.megamenu = megamenu
 		event.locals.me = await authenticateUser(event)
 		event.locals.cart = await fetchCart(event)
 		// Bellow conversion is for medusajs
@@ -47,11 +49,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// let responseTime = end - start
 
 		// if (responseTime > 1000) {
-			// console.log(`🐢 ${route} took ${responseTime.toFixed(2)} ms`)
+		// console.log(`🐢 ${route} took ${responseTime.toFixed(2)} ms`)
 		// }
 
 		// if (responseTime < 100) {
-			// console.log(`🚀 ${route} took ${responseTime.toFixed(2)} ms`)
+		// console.log(`🚀 ${route} took ${responseTime.toFixed(2)} ms`)
 		// }
 
 		return response

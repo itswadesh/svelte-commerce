@@ -1,4 +1,4 @@
-import { StoreService } from '$lib/services'
+import { CategoryService, StoreService } from '$lib/services'
 import type { RequestEvent } from '@sveltejs/kit'
 export const fetchStoreData = async (event: RequestEvent) => {
 	try {
@@ -13,8 +13,14 @@ export const fetchStoreData = async (event: RequestEvent) => {
 			cookieStore,
 			server: true
 		})
-		return r?.storeOne || {}
+		r.megamenu1 = await CategoryService.fetchMegamenuData({
+			origin: event.request.url,
+			storeId: r.storeOne.id,
+			sid: event.cookies.get('connect.sid'),
+			server: true
+		})
+		return r || {}
 	} catch (e) {
-		return null
+		return {}
 	}
 }
