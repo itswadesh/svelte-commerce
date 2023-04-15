@@ -6,13 +6,12 @@ export async function load({ cookies, locals, params, parent, url }) {
 	let vendor = {}
 	let vendorSlug = params.slug
 	let vendorsProduct = {}
-
 	vendor = await VerndorService.fetchVendor({
 		server: true,
 		sid: cookies.get('connect.sid'),
-		slug: vendorSlug
+		slug: vendorSlug,
+		storeId: locals.store.id
 	})
-
 	if (vendor._id) {
 		vendorsProduct = await VerndorService.fetchProductsOfVendor({
 			slug: vendorSlug,
