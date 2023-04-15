@@ -8,7 +8,7 @@ export async function load({ cookies, locals, params, url }) {
 	countries = await CountryService.fetchCountries({
 		storeId: locals.store?.id,
 		server: true,
-		sid: cookies.get('sid')
+		sid: cookies.get('connect.sid')
 	})
 
 	return { countries }
