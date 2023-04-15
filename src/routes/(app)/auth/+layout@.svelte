@@ -11,7 +11,6 @@
 <script lang="ts">
 import { navigating, page } from '$app/stores'
 import { scale } from 'svelte/transition'
-import loginBgLighter from '$lib/assets/login/bg-lighter.svg'
 import PageTransitions from '$lib/PageTransitions.svelte'
 import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 
@@ -28,10 +27,8 @@ import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 			{/if}
 
 			<div
-				class="{$navigating
-					? 'h-screen'
-					: 'h-full min-h-screen'} bg-primary-500 bg-fixed bg-center bg-no-repeat"
-				style="background-image: url({loginBgLighter});">
+				class="{$navigating ? 'h-screen' : 'h-full min-h-screen'} bg-fixed bg-center bg-no-repeat"
+				style="background-image: url('/login/auth-background.png');">
 				<div
 					in:scale="{{ duration: 150 }}"
 					class="frosted mx-auto flex h-full min-h-screen items-center justify-center overflow-y-auto p-5 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-400 sm:p-10 md:p-20">
