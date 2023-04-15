@@ -24,6 +24,12 @@ jobs:
       - name: Build for production
         run: npm run build
 
+      # Setup buildx in order to build for multiple platforms
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
       # Extract metadata for the docker image
       - name: Docker meta
         id: meta
