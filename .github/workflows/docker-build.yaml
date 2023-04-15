@@ -13,6 +13,7 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
+
       # Build the app using nodejs
       - name: Use node js 18
         uses: actions/setup-node@v2
@@ -22,24 +23,7 @@ jobs:
         run: npm install
       - name: Build for production
         run: npm run build
-      # Upload the dist directory
-      - uses: actions/upload-artifact@master
-        with:
-          name: Webapp artifacts
-          path: .svelte-kit/
 
-  push-to-docker:
-    needs: build-webapp
-    runs-on: ubuntu-latest
-    steps:
-      # Checkout the repo in order to fetch the latest content
-      - name: Checkout repo
-        uses: actions/checkout@v3
-      - name: Download built artifact
-        uses: actions/download-artifact@master
-        with:
-          name: Webapp artifacts
-          path: ./.svelte-kit/
       # Extract metadata for the docker image
       - name: Docker meta
         id: meta
