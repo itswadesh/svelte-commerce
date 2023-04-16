@@ -147,6 +147,14 @@ Click on the button to directly deploy to Netlify or Vercel. Zero configuration 
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fitswadesh%2Fsvelte-commerce&demo-title=SvelteKit%20Commerce)
 
+### Docker
+
+We also support docker images, use the following command to pull the latest docker image and deploy it:
+
+```sh
+docker run -d -p 3000:3000 ghcr.io/itswadesh/svelte-commerce:latest
+```
+
 ## Contributing
 
 If you like the ideas behind Svelte Commerce and want to become a contributor - [join github discussions](https://github.com/itswadesh/svelte-commerce/discussions/new/choose), check the list of the [active issues](https://github.com/itswadesh/svelte-commerce/issues) or contact me directly via swadesh@litekart.in
