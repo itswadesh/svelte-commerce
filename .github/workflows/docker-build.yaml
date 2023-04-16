@@ -1,9 +1,6 @@
 name: Build app and push to GHCR
 
 on:
-  push:
-    branches:
-      - feat/docker-workflow
   release:
     types: [published]
 
