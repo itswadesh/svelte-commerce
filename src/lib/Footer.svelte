@@ -92,7 +92,7 @@ async function getStoreData() {
 }
 </script>
 
-<footer class="w-full justify-center bg-gray-50 p-3 text-sm sm:p-10">
+<footer class="w-full justify-center bg-zinc-50 p-3 text-sm sm:p-10">
 	<div class="container mx-auto max-w-6xl">
 		<div
 			class="mb-4 flex w-full flex-col flex-wrap items-start justify-start gap-5 sm:mb-8 sm:gap-10 h-full sm:max-h-[35rem] xl:max-h-96 overflow-hidden">
@@ -103,7 +103,7 @@ async function getStoreData() {
 							{item.heading}
 						</h5>
 
-						<ul class="flex flex-col gap-1 text-gray-500">
+						<ul class="flex flex-col gap-1 text-zinc-500">
 							{#each item?.subMenu as itm}
 								<li class="flex max-w-max items-center">
 									<a
@@ -130,7 +130,7 @@ async function getStoreData() {
 				<div>
 					<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Collections</h5>
 
-					<ul class="flex flex-col gap-1 text-gray-500">
+					<ul class="flex flex-col gap-1 text-zinc-500">
 						{#each megamenu as category}
 							<li class="flex max-w-max items-center">
 								<a
@@ -155,7 +155,7 @@ async function getStoreData() {
 			<div>
 				<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Contact Us</h5>
 
-				<ul class="flex flex-col gap-2 text-gray-500">
+				<ul class="flex flex-col gap-2 text-zinc-500">
 					{#if $page.data.store?.email}
 						<li class="max-w-max">
 							<a href="mailto:{$page.data.store?.email}" class="group block">
@@ -278,7 +278,7 @@ async function getStoreData() {
 				<div>
 					<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Keep in touch</h5>
 
-					<ul class="flex flex-wrap gap-4 text-gray-500">
+					<ul class="flex flex-wrap gap-4 text-zinc-500">
 						<!-- Facebook -->
 
 						{#if $page.data.store?.facebookUrl}
@@ -479,7 +479,7 @@ async function getStoreData() {
 					<hr class="w-full border-t" />
 				</h2>
 
-				<ul class="flex flex-wrap items-center text-gray-500">
+				<ul class="flex flex-wrap items-center text-zinc-500">
 					{#each popularSearches.data as p, px}
 						<li class="max-w-max">
 							<a
@@ -504,7 +504,7 @@ async function getStoreData() {
 			<div class="mb-4 sm:mb-8">
 				<h2 class="mb-4 whitespace-nowrap font-semibold uppercase">Registered Office Address</h2>
 
-				<p class="text-gray-500">
+				<p class="text-zinc-500">
 					{@html $page.data.store?.address}
 				</p>
 			</div>
@@ -513,7 +513,7 @@ async function getStoreData() {
 		<hr class="mb-4 w-full border-t sm:mb-8" />
 
 		<div
-			class="flex flex-wrap items-center justify-center gap-2 text-sm text-gray-500 sm:gap-5 md:justify-between">
+			class="flex flex-wrap items-center justify-center gap-2 text-sm text-zinc-500 sm:gap-5 md:justify-between">
 			<p>Copyright {getYear()} © {$page.data.store?.websiteName} made with ❤️</p>
 
 			<div class="flex items-center justify-center gap-4">

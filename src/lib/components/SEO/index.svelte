@@ -90,7 +90,15 @@ export let width = { unitCode: '', value: '' }
 export let wlwmanifestXmlHref = ''
 
 const url = `${WWW_URL}/${slug}`
-const pageTitle = `${title}`
+
+let pageTitle
+
+if (title) {
+	pageTitle = `${title} - ${siteTitle}`
+} else {
+	pageTitle = `${siteTitle}`
+}
+
 const openGraphProps = {
 	article,
 	datePublished,
@@ -189,8 +197,7 @@ const productProps = {
 
 	<meta
 		name="robots"
-		content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
-	/>
+		content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
 
 	<meta property="og:site_name" content="{ogSiteName}" />
 
