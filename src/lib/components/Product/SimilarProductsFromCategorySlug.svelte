@@ -10,8 +10,6 @@ import ProductSkeleton from '$lib/ui/ProductSkeleton.svelte'
 
 export let data
 
-// console.log('zzzzzzzzzzzzzzzzzz', data)
-
 let loading = false
 
 onMount(async () => {

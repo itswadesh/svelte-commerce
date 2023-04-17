@@ -90,7 +90,6 @@ const cookies = Cookie()
 export let data
 
 // console.log('$page', $page)
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	// addressCountry: 'India',

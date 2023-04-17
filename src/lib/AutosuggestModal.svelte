@@ -26,8 +26,6 @@ let typingTimer: any
 function submit() {
 	show = false
 
-	// console.log('zzzzzzzzzzzzzzzzzz', autocomplete[0])
-
 	if (autocomplete?.length && autocomplete[0].slug) {
 		goto(`/${autocomplete[0].slug}`)
 	} else {

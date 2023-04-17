@@ -6,7 +6,6 @@ import ProductCard from '$lib/ProductCard.svelte'
 
 export let deal
 
-// console.log('dealzzzzzzzzzzzzzzzzzz', deal)
 
 $: innerWidth = 0
 let Carousel, Splide

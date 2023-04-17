@@ -23,7 +23,6 @@ let loading = false
 
 export let data
 
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let clazz
 export { clazz as class }

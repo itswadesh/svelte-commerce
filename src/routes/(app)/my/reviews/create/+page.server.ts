@@ -16,7 +16,6 @@ export async function load({ url, locals, cookies, context }) {
 			server: true,
 			sid: cookies.get('connect.sid')
 		})
-		// console.log('zzzzzzzzzzzzzzzzzz', product)
 
 		if (!product) throw error(404, 'Product not found')
 

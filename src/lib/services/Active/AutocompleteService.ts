@@ -14,7 +14,6 @@ export const fetchAutocompleteData = async ({ origin, storeId, q }: any) => {
 
 		res = await getAPI(filterText, origin)
 
-		// console.log('autocompletezzzzzzzzzzzzzzzzzz', res)
 
 		data = res?.data
 

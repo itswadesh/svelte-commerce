@@ -59,7 +59,6 @@ async function submit(p) {
 			origin: $page.data.origin
 		})
 
-		// console.log('zzzzzzzzzzzzzzzzzz', res)
 
 		await invalidateAll()
 
