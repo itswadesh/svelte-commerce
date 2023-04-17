@@ -12,6 +12,7 @@ import HeroBanners from '$lib/home/HeroBanners.svelte'
 import MobileFooter from '$lib/MobileFooter.svelte'
 import PickedBanners from '$lib/home/PickedBanners.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+import Skeleton from '$lib/ui/Skeleton.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 
 let today = dayjs(new Date()).toISOString()
@@ -102,11 +103,12 @@ let bgColors = [
 	'bg-zinc-200'
 ]
 let loading = false
+let loadingForMegamenu = false
 let megamenu = []
+let megamenuResult = []
 let searchCategoryValue = null
 let showChild = []
 let showChild2 = []
-let megamenuResult = []
 
 const options = {
 	keys: ['name', 'children.name', 'children.children.name'], // Search name and children's names
@@ -122,6 +124,7 @@ async function getMegaMenu() {
 
 	if (browser) {
 		try {
+			loadingForMegamenu = true
 			const localMegamenu = localStorage.getItem('megamenu')
 
 			if (!localMegamenu || localMegamenu === 'undefined') {
@@ -143,6 +146,7 @@ async function getMegaMenu() {
 		} catch (e) {
 			toast(e, 'error')
 		} finally {
+			loadingForMegamenu = false
 		}
 	}
 
@@ -250,7 +254,15 @@ function toggle2(cx) {
 			{/if}
 		{/await}
 
-		{#if megamenuResult.length}
+		{#if loadingForMegamenu}
+			<ul class="p-3 sm:p-10 flex flex-col gap-4 m-0 list-none">
+				{#each { length: 5 } as _}
+					<li>
+						<Skeleton />
+					</li>
+				{/each}
+			</ul>
+		{:else if megamenuResult.length}
 			<div class="mt-5 sm:mt-10">
 				<h2
 					class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">

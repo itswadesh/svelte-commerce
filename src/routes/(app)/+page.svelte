@@ -1,8 +1,8 @@
 <script>
-// import CategoriesHome from '$lib/home/CategoriesHome.svelte'
 // import logo from '$lib/assets/logo.svg'
 // import ProductTab from '$lib/components/Product/ProductTab.svelte'
 import { page } from '$app/stores'
+import CategoriesHome from '$lib/home/CategoriesHome.svelte'
 import CategoriesMobile from '$lib/home/CategoriesMobile.svelte'
 import CategoriesSlider from '$lib/home/CategoriesSlider.svelte'
 import dayjs from 'dayjs'
@@ -94,7 +94,7 @@ let seoProps = {
 
 <div class="bg-opacity-25 bg-center bg-repeat">
 	<div class="mb-14 sm:mb-0">
-		<!-- CATEGORIES SLIDER MOBILE -->
+		<!-- Categories slider mobile -->
 
 		{#await data.home then home}
 			{#if home?.categories?.length}
@@ -104,7 +104,11 @@ let seoProps = {
 			{/if}
 		{/await}
 
+		<!-- Main slider banner -->
+
 		<Hero banners="{data.home.banners}" />
+
+		<!-- Alert message -->
 
 		{#if data.store?.alert}
 			<div class="p-3 py-5 sm:p-10 bg-primary-50">
@@ -114,7 +118,7 @@ let seoProps = {
 			</div>
 		{/if}
 
-		<!-- TOP CATEGORIES -->
+		<!-- top categories -->
 
 		{#if data.home?.categories?.length}
 			<div class="hidden sm:block">
@@ -168,7 +172,7 @@ let seoProps = {
 			</div>
 		{/if}
 
-		<!-- HERO BANNERS -->
+		<!-- Hero banners -->
 
 		{#await data.home}
 			<div class="grid grid-cols-2 items-center gap-2 md:grid-cols-4">
@@ -195,7 +199,7 @@ let seoProps = {
 			{/if}
 		{/await}
 
-		<!-- PICKED BANNERS -->
+		<!-- Picked banners -->
 
 		{#await data.home}
 			<div class="grid grid-cols-2 items-center gap-2 md:grid-cols-4">
@@ -219,9 +223,9 @@ let seoProps = {
 
 		{#await data.deals}
 			<div class="flex w-[98vw] items-start justify-start gap-3 overflow-x-auto">
-				<div class="w-60 h-60 animate-pulse rounded bg-gray-300">
+				<div class="w-60 h-60 animate-pulse rounded bg-zinc-200">
 					{#each { length: 10 } as _}
-						<div class="w-52 h-60 animate-pulse rounded bg-gray-300"></div>
+						<div class="w-52 h-60 animate-pulse rounded bg-zinc-200"></div>
 					{/each}
 				</div>
 			</div>
@@ -242,9 +246,9 @@ let seoProps = {
 
 		{#await data.collections}
 			<div class="flex w-[98vw] items-start justify-start gap-3 overflow-x-auto">
-				<div class="w-60 h-60 animate-pulse rounded bg-gray-300">
+				<div class="w-60 h-60 animate-pulse rounded bg-zinc-200">
 					{#each { length: 10 } as _}
-						<div class="w-52 h-60 animate-pulse rounded bg-gray-300"></div>
+						<div class="w-52 h-60 animate-pulse rounded bg-zinc-200"></div>
 					{/each}
 				</div>
 			</div>
@@ -263,7 +267,7 @@ let seoProps = {
 			{/if}
 		{/await}
 
-		<!-- POPULAR PRODUCTS -->
+		<!-- Popular products -->
 
 		{#await data.home then home}
 			{#if home?.popular}
@@ -293,7 +297,7 @@ let seoProps = {
 			{/if}
 		{/await}
 
-		<!-- TRENDING PRODUCTS -->
+		<!-- Trending products -->
 
 		{#await data.home then home}
 			{#if home?.trending?.length > 0}

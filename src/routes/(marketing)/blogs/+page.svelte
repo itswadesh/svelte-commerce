@@ -1,5 +1,5 @@
 <style>
-.gray-pattern {
+.zinc-pattern {
 	background: linear-gradient(120deg, #b2b2b2, #f2f2f2, #b2b2b2, #f2f2f2, #b2b2b2);
 }
 </style>
@@ -79,7 +79,7 @@ const seoProps = {
 
 {#if data?.blogs}
 	<main class="min-h-screen">
-		<div class="gray-pattern mb-5 border-b shadow-md sm:mb-10">
+		<div class="zinc-pattern mb-5 border-b shadow-md sm:mb-10">
 			<div class="container mx-auto p-4 md:p-10">
 				<h1 class="font-hairline my-2 items-center text-xl text-zinc-800">
 					<span class="text-3xl font-bold">{data.blogs?.length}</span>
