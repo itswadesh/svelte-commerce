@@ -39,36 +39,33 @@ onMount(async () => {
 	{/if}
 </div> -->
 
-{#if sliderBanners?.length}
-	<div class="relative mx-auto hidden w-full overflow-hidden bg-white sm:block">
-		{#if loading}
-			<div class="h-[350px] w-full bg-gray-200 animate-pulse"></div>
-		{:else}
-			<svelte:component
-				this="{Splide}"
-				options="{{ type: 'loop', autoplay: true, lazyLoad: true }}">
-				{#each sliderBanners as b, ix}
-					{#if b.img}
-						<SplideSlide>
-							<a
-								href="{b.link || '##'}"
-								aria-label="Click to route into banner related products page"
-								class="block"
-								data-sveltekit-preload-data>
-								<LazyImg
-									src="{b.img}"
-									alt="{b.name}"
-									height="380"
-									aspect_ratio="4:1"
-									class="block h-auto w-full object-contain object-top" />
-							</a>
-						</SplideSlide>
-					{/if}
-				{/each}
-			</svelte:component>
-		{/if}
+<div class="relative mx-auto hidden w-full overflow-hidden bg-white sm:block">
+	{#if loading}
+		<div class="h-[350px] w-full bg-zinc-200 animate-pulse"></div>
+	{:else if sliderBanners?.length}
+		<svelte:component this="{Splide}" options="{{ type: 'loop', autoplay: true, lazyLoad: true }}">
+			{#each sliderBanners as b, ix}
+				{#if b.img}
+					<SplideSlide>
+						<a
+							href="{b.link || '##'}"
+							aria-label="Click to route into banner related products page"
+							class="block"
+							data-sveltekit-preload-data>
+							<LazyImg
+								src="{b.img}"
+								alt="{b.name}"
+								height="380"
+								aspect_ratio="4:1"
+								class="block h-auto w-full object-contain object-top" />
+						</a>
+					</SplideSlide>
+				{/if}
+			{/each}
+		</svelte:component>
+	{/if}
 
-		<!-- <svelte:component this="{Carousel}">
+	<!-- <svelte:component this="{Carousel}">
 			{#each sliderBanners as b, ix}
 				{#if b.img}
 					<a
@@ -86,36 +83,33 @@ onMount(async () => {
 				{/if}
 			{/each}
 		</svelte:component> -->
-	</div>
-{/if}
+</div>
 
-{#if sliderBannersMobile?.length}
-	<div class="relative mx-auto block w-full overflow-hidden bg-white sm:hidden">
-		{#if loading}
-			<div class="h-[200px] w-full bg-gray-200 animate-pulse"></div>
-		{:else}
-			<svelte:component
-				this="{Splide}"
-				options="{{ type: 'loop', autoplay: true, lazyLoad: true, arrows: false }}">
-				{#each sliderBannersMobile as b, ix}
-					{#if b.img}
-						<SplideSlide>
-							<a
-								href="{b.link || '##'}"
-								aria-label="Click to route into banner related products page"
-								class="block"
-								data-sveltekit-preload-data>
-								<LazyImg
-									src="{b.img}"
-									alt="{b.name}"
-									height="190"
-									aspect_ratio="4:1"
-									class="block h-auto w-full object-contain object-top" />
-							</a>
-						</SplideSlide>
-					{/if}
-				{/each}
-			</svelte:component>
-		{/if}
-	</div>
-{/if}
+<div class="relative mx-auto block w-full overflow-hidden bg-white sm:hidden">
+	{#if loading}
+		<div class="h-[200px] w-full bg-zinc-200 animate-pulse"></div>
+	{:else if sliderBannersMobile?.length}
+		<svelte:component
+			this="{Splide}"
+			options="{{ type: 'loop', autoplay: true, lazyLoad: true, arrows: false }}">
+			{#each sliderBannersMobile as b, ix}
+				{#if b.img}
+					<SplideSlide>
+						<a
+							href="{b.link || '##'}"
+							aria-label="Click to route into banner related products page"
+							class="block"
+							data-sveltekit-preload-data>
+							<LazyImg
+								src="{b.img}"
+								alt="{b.name}"
+								height="190"
+								aspect_ratio="4:1"
+								class="block h-auto w-full object-contain object-top" />
+						</a>
+					</SplideSlide>
+				{/if}
+			{/each}
+		</svelte:component>
+	{/if}
+</div>
