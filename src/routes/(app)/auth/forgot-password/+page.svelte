@@ -25,7 +25,6 @@ function protocol() {
 }
 
 async function submit() {
-	// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', {
 	// 	email: email,
 	// 	referrer: `${$page.data.origin}`
 	// })
@@ -40,7 +39,6 @@ async function submit() {
 			origin: $page.data.origin
 		})
 
-		// console.log('zzzzzzzzzzzzzzzzzz', res)
 
 		await invalidateAll()
 

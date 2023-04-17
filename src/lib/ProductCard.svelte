@@ -40,7 +40,6 @@ if (product?._source) {
 	product = product?._source
 }
 
-// console.log('zzzzzzzzzzzzzzzzzz', product)
 
 let show,
 	showRelatedProducts = false,

@@ -20,8 +20,6 @@ const cookies = Cookie()
 
 export let data
 
-// console.log('zzzzzzzzzzzzzzzzzz', data)
-
 const seoProps = {
 	title: 'Login with email/phone',
 	description: 'Login with email/phone'

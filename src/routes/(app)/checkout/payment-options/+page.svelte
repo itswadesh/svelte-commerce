@@ -30,7 +30,6 @@ const seoProps = {
 
 export let data
 
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let bankPayment = { type: 'order', reference: '', remark: '', paymentMethodId: '', amount: 0 }
 let disabled = false
