@@ -28,7 +28,8 @@ import {
 	websiteLegalName,
 	websiteName,
 	weightUnit,
-	youtubeUrl
+	youtubeUrl,
+	IMAGE_CDN_URL
 } from '$lib/config'
 import { fetchInit } from './InitService'
 
@@ -74,7 +75,8 @@ export const getStoreData = async ({
 		websiteLegalName,
 		websiteName,
 		weightUnit,
-		youtubeUrl
+		youtubeUrl,
+		IMAGE_CDN_URL: IMAGE_CDN_URL
 	}
 	let megamenu = null
 	if (
@@ -121,7 +123,8 @@ export const getStoreData = async ({
 			websiteLegalName: storeRes.storeOne.websiteLegalName,
 			websiteName: storeRes.storeOne.websiteName,
 			weightUnit: storeRes.storeOne.weightUnit,
-			youtubeUrl: storeRes.storeOne.youtubeUrl
+			youtubeUrl: storeRes.storeOne.youtubeUrl,
+			IMAGE_CDN_URL: storeRes.storeOne.IMAGE_CDN_URL
 		}
 		megamenu = storeRes.megamenu
 		cookies.set('store', JSON.stringify(store), { path: '/' })
