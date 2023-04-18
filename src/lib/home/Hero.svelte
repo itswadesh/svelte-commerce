@@ -5,6 +5,8 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 
 export let banners = []
 
+// console.log('banners', banners)
+
 $: sliderBanners = banners?.filter((b) => {
 	return b.type === 'slider' && b.isMobile === false
 })
@@ -13,16 +15,11 @@ $: sliderBannersMobile = banners?.filter((b) => {
 	return b.type === 'slider' && b.isMobile === true
 })
 
-let loading = false
 let Splide
 
 onMount(async () => {
-	loading = true
-
 	const SplideModule = await import('$lib/components/SplideJs.svelte')
 	Splide = SplideModule.default
-
-	loading = false
 })
 </script>
 
@@ -40,9 +37,7 @@ onMount(async () => {
 </div> -->
 
 <div class="relative mx-auto hidden w-full overflow-hidden bg-white sm:block">
-	{#if loading}
-		<div class="h-[350px] w-full bg-zinc-200 animate-pulse"></div>
-	{:else if sliderBanners?.length}
+	{#if sliderBanners?.length}
 		<svelte:component this="{Splide}" options="{{ type: 'loop', autoplay: true, lazyLoad: true }}">
 			{#each sliderBanners as b, ix}
 				{#if b.img}
@@ -86,9 +81,7 @@ onMount(async () => {
 </div>
 
 <div class="relative mx-auto block w-full overflow-hidden bg-white sm:hidden">
-	{#if loading}
-		<div class="h-[200px] w-full bg-zinc-200 animate-pulse"></div>
-	{:else if sliderBannersMobile?.length}
+	{#if sliderBannersMobile?.length}
 		<svelte:component
 			this="{Splide}"
 			options="{{ type: 'loop', autoplay: true, lazyLoad: true, arrows: false }}">

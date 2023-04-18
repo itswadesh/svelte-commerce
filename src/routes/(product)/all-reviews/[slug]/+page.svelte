@@ -59,7 +59,7 @@ async function loadNextPage() {
 			const res = await ReviewService.fetchProductReviews({
 				page: nextPage,
 				brandIc: brandId,
-				pid: data.pid,
+				slug: data.slug,
 				origin: $page?.data?.origin,
 				storeId: $page?.data?.store?.id
 			})
