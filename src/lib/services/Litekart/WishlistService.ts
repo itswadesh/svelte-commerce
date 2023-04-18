@@ -32,7 +32,7 @@ export const fetchWishlist = async ({
 	}
 }
 
-export const checkhWishlist = async ({
+export const checkWishlist = async ({
 	origin,
 	storeId,
 	pid,

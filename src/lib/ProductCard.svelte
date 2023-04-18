@@ -40,7 +40,6 @@ if (product?._source) {
 	product = product?._source
 }
 
-
 let show,
 	showRelatedProducts = false,
 	isWislisted = false,
@@ -64,7 +63,7 @@ function hideitems() {
 		target="{$page?.data?.isDesktop ? '_blank' : ''}"
 		rel="noopener noreferrer"
 		aria-label="Click to view the product details"
-		data-sveltekit-preload-data
+		data-sveltekit-preload-data="tap"
 		class="flex flex-col items-center">
 		<!-- New -->
 		{#if product.new || product.tags?.length}

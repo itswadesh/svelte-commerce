@@ -10,8 +10,7 @@ export async function load({ params, parent, url, cookies, locals, request }) {
 	try {
 		productReviews = await ReviewService.fetchProductReviews({
 			page: url?.searchParams.get('page') || 1,
-			brandId: brandId,
-			pid: slug,
+			slug: slug,
 			storeId: locals.store?.id,
 			server: true,
 			sid: cookies.get('connect.sid')

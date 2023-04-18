@@ -8,6 +8,7 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import dotsLoading from '$lib/assets/dots-loading.gif'
 import Error from '$lib/components/Error.svelte'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import Pricesummary from '$lib/components/Pricesummary.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
@@ -196,16 +197,18 @@ async function getCoupons() {
 										{#each data.cart?.unavailableItems as item}
 											<div class="flex w-full items-start gap-4 py-5">
 												<a
-													href="{item?.slug}"
+													href="/product/{item?.slug}"
 													aria-label="Click to route product details"
-													class="shrink-0 ">
-													<img
+													class="block shrink-0 overflow-hidden">
+													<LazyImg
 														src="{getCdnImageUrl(
 															item.isCustomizeditem ? item.customizedImg : item.img
-														)}?tr=w-auto,h-256,cm-pad_resize&sharpen=true"
-														alt=""
-														width="128"
-														class="w-16 cursor-pointer rounded object-contain sm:w-32" />
+														)}?tr=w-80,h-160,cm-pad_resizes"
+														alt=" "
+														width="80"
+														height="160"
+														aspect_ratio="1:2"
+														class="object-contain object-bottom h-32 sm:h-40 w-auto text-xs" />
 												</a>
 
 												<div class="w-full flex-1">
@@ -264,24 +267,16 @@ async function getCoupons() {
 										<a
 											href="/product/{item?.slug}"
 											aria-label="Click to route product details"
-											class="shrink-0 ">
-											{#if item.isCustomized}
-												<img
-													src="{getCdnImageUrl(
-														item.customizedImg
-													)}?tr=w-auto,h-256,cm-pad_resize&sharpen=true"
-													alt=""
-													width="128"
-													class="w-16 cursor-pointer rounded object-contain sm:w-32" />
-											{:else}
-												<img
-													src="{getCdnImageUrl(
-														item.img
-													)}?tr=w-auto,h-256,cm-pad_resize&sharpen=true"
-													alt=""
-													width="128"
-													class="w-16 cursor-pointer rounded object-contain sm:w-32" />
-											{/if}
+											class="block shrink-0 overflow-hidden">
+											<LazyImg
+												src="{getCdnImageUrl(
+													item.isCustomizeditem ? item.customizedImg : item.img
+												)}?tr=w-80,h-160,cm-pad_resizes"
+												alt=" "
+												width="80"
+												height="160"
+												aspect_ratio="1:2"
+												class="object-contain object-bottom h-32 sm:h-40 w-auto text-xs" />
 										</a>
 
 										<div class="w-full flex-1">

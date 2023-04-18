@@ -1,7 +1,7 @@
-import type { Error } from '$lib/types'
 import { del, getAPI, post } from '$lib/utils/api'
-import { getBySid, postt } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
+import { getBySid, postt } from '$lib/utils/server'
+import type { Error } from '$lib/types'
 
 export const fetchCartData = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {
@@ -37,7 +37,6 @@ export const fetchRefreshCart = async ({ origin, storeId, server = false, sid = 
 		throw error(e.status, e.data?.message)
 	}
 }
-
 export const fetchMyCart = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {
 		let res: any = {}
@@ -60,10 +59,12 @@ export const addToCartService = async ({
 	vid,
 	qty,
 	customizedImg,
+	customizedData,
 	origin,
+	options,
 	storeId,
 	server = false,
-	sid = null
+	cookies = null
 }: any) => {
 	try {
 		let res: any = {}
@@ -76,9 +77,11 @@ export const addToCartService = async ({
 					vid,
 					qty,
 					customizedImg,
-					store: storeId
+					store: storeId,
+					customizedData,
+					options
 				},
-				sid
+				cookies
 			)
 		} else {
 			res = await post(
@@ -88,7 +91,9 @@ export const addToCartService = async ({
 					vid,
 					qty,
 					customizedImg,
-					store: storeId
+					store: storeId,
+					customizedData,
+					options
 				},
 				origin
 			)
@@ -111,7 +116,7 @@ export const applyCouponService = async ({
 		let res: any = {}
 
 		res = await post(
-			`apply-coupon`,
+			`coupons/apply`,
 			{
 				code,
 				store: storeId
@@ -135,7 +140,8 @@ export const removeCouponService = async ({
 	try {
 		let res: any = {}
 
-		res = await del(`remove-coupon?code=${code}&store=${storeId}`, origin)
+		res = await del(`coupon/remove?code=${code}&store=${storeId}`, origin)
+
 
 		return res || {}
 	} catch (e) {

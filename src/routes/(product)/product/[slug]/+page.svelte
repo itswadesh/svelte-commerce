@@ -45,13 +45,12 @@
 
 <script lang="ts">
 // import UserForm from '$lib/components/Product/UserForm.svelte'
-import { CartService, ReviewService } from '$lib/services'
 import { applyAction, enhance } from '$app/forms'
 import { browser } from '$app/environment'
+import { CartService, ReviewService, WishlistService } from '$lib/services'
 import { currency, delay, toast } from '$lib/utils'
 import { fade } from 'svelte/transition'
 import { fireGTagEvent } from '$lib/utils/gTag'
-import { getAPI } from '$lib/utils/api'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
@@ -70,6 +69,7 @@ import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import ProductNav from '$lib/ProductNav.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import ProductsGrid from '$lib/components/Product/ProductsGrid.svelte'
+import ProductSkeleton from '$lib/ui/ProductSkeleton.svelte'
 import productVeg from '$lib/assets/product/veg.png'
 import Radio from '$lib/ui/Radio.svelte'
 import RadioColor from '$lib/ui/RadioColor.svelte'
@@ -88,8 +88,8 @@ import WhiteButton from '$lib/ui/WhiteButton.svelte'
 const cookies = Cookie()
 
 export let data
-
 // console.log('$page', $page)
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -162,9 +162,8 @@ let seoProps = {
 let bounceItemFromTop = false
 let cartButtonText = 'Add to Bag'
 let customizedImg
-let isWislisted = false
+let isWishlisted = false
 let loading = false
-let loadingForProductReview = false
 let loadingForWishlist = false
 let productReviews = {}
 let recentlyViewed = []
@@ -181,6 +180,7 @@ let showLongDescription = false
 let showPhotosModal = false
 let showStickyCartButton = true
 let showUserInputForm = false
+let viewPortCartPositionFromTop = 0
 let y = 0
 
 $: if (y > 500) {
@@ -194,28 +194,41 @@ if (data.product?.size?.name === 'One Size') {
 let Konvas
 
 onMount(async () => {
-	screenWidth = screen.width
+	try {
+		screenWidth = screen.width
 
-	await getProductReviews()
+		// moreProductDetails = fetchProduct2({
+		// 	slug: data.product?.slug,
+		// 	id: null,
+		// 	server: false,
+		// 	sid: null,
+		// 	origin,
+		// 	storeId: $page.data.store?.id
+		// })
 
-	if ($page.data?.me) {
-		try {
-			isWislisted = await getAPI(
-				`wishlists/check?product=${data.product?._id}&variant=${data.product?._id}&store=${$page.data?.store?.id}`,
-				$page.data.origin
-			)
+		// console.log('moreProductDetails', await moreProductDetails)
 
-			// console.log('isWislisted', isWislisted)
-		} catch (e) {
-			// toast(e, 'error')
-		} finally {
+		if ($page.data?.me) {
+			try {
+				isWishlisted = await WishlistService.checkWishlist({
+					pid: data.product?._id,
+					vid: data.product?._id,
+					storeId: $page.data.store.id,
+					origin: $page.data.origin
+				})
+
+				// console.log('isWishlisted', isWishlisted)
+			} catch (e) {
+				// toast(e, 'error')
+			} finally {
+			}
 		}
-	}
 
-	storeProductToLocatStorage()
+		storeRecentlyViewedToLocatStorage()
+	} catch (e) {}
 })
 
-const storeProductToLocatStorage = async () => {
+const storeRecentlyViewedToLocatStorage = async () => {
 	const localRecentlyViewed = localStorage.getItem(`recentlyViewed_${$page.data.store.id}`)
 	// console.log('localRecentlyViewed', localRecentlyViewed)
 
@@ -251,26 +264,6 @@ const storeProductToLocatStorage = async () => {
 	}
 
 	// console.log('localStorage', localStorage)
-}
-
-async function getProductReviews() {
-	try {
-		loadingForProductReview = true
-
-		productReviews = await ReviewService.fetchProductReviews({
-			page: +$page?.url?.searchParams.get('page') || 1,
-			brandId: data.product.brand?._id,
-			pid: data.product?._id,
-			storeId: $page?.data?.store?.id,
-			origin: $page?.data?.origin
-		})
-
-		// console.log('productReviews', productReviews)
-	} catch (e) {
-		toast(e, 'error')
-	} finally {
-		loadingForProductReview = false
-	}
 }
 
 function selectSize(s) {
@@ -370,7 +363,9 @@ async function addToBag(p, customizedImg, customizedJson) {
 // 	cartButtonPosition = ActualCartButtonPosition - windowHeight + 280
 // })
 
-function cartButtonEnterViewport() {
+async function cartButtonEnterViewport() {
+	await getCartViewPortLocation()
+
 	if (y > 0) {
 		showStickyCartButton = false
 	} else {
@@ -380,14 +375,23 @@ function cartButtonEnterViewport() {
 	// console.log('y, cartButtonEnterViewport', y, showStickyCartButton)
 }
 
-function cartButtonExitViewport() {
-	if (y < 400) {
+async function cartButtonExitViewport() {
+	await getCartViewPortLocation()
+
+	if (y < viewPortCartPositionFromTop) {
 		showStickyCartButton = true
 	} else {
 		showStickyCartButton = false
 	}
 
 	// console.log('y, cartButtonExitViewport', y, showStickyCartButton)
+}
+
+const getCartViewPortLocation = () => {
+	const cartViewPort = document.getElementById('cart_viewport')
+	viewPortCartPositionFromTop = cartViewPort.offsetTop
+
+	// console.log('viewPortCartPositionFromTop', viewPortCartPositionFromTop)
 }
 
 function alertToSelectMandatoryOptions() {
@@ -436,7 +440,7 @@ async function toggleWishlist(id) {
 
 	try {
 		loadingForWishlist = true
-		isWislisted = await toggleWishlistService({
+		isWishlisted = await WishlistService.toggleWishlistService({
 			pid: id,
 			vid: id,
 			storeId: $page.data.store?.id,
@@ -576,7 +580,7 @@ function handleMobileCanvas() {
 					</div>
 				</div>
 
-				<!-- Name -->
+				<!-- Name veg/non veg icon -->
 
 				{#if data.product?.name}
 					<div class="flex justify-between gap-2">
@@ -626,7 +630,7 @@ function handleMobileCanvas() {
 					<button
 						type="button"
 						class="mt-2 flex max-w-max items-center divide-x divide-zinc-200 border border-zinc-200 py-1 text-sm focus:outline-none"
-						on:click="{() => scrollTo('ratings-and-reviews')}">
+						on:click="{() => scrollTo('ratings_and_reviews')}">
 						<div class="flex items-center gap-1 px-2 font-semibold">
 							<span>
 								{data?.product?.reviews?.productReviews?.summary?.ratings_avg?.value.toFixed(1)}
@@ -759,60 +763,74 @@ function handleMobileCanvas() {
 
 				<!-- Group Products -->
 
-				{#if data.product?.groupProduct?.length}
-					<div class="mb-5">
-						<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
-							<span> Similar Products </span>
+				{#await data.streamed.moreProductDetails}
+					<ul class="mb-5 p-0 list-none flex flex-wrap gap-4">
+						{#each { length: 3 } as _}
+							<li class="flex flex-wrap gap-1 w-14 animate-pulse">
+								<div class="rounded bg-zinc-200 h-14 w-full"></div>
 
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke-width="1.5"
-								stroke="currentColor"
-								class="h-5 w-5">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 01-1.125-1.125v-3.75zM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-8.25zM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-2.25z"
-								></path>
-							</svg>
-						</h6>
+								<div class="rounded-full h-3 w-full bg-zinc-200"></div>
+							</li>
+						{/each}
+					</ul>
+				{:then value}
+					{#if value.groupProduct?.length}
+						<div class="mb-5">
+							<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
+								<span> Similar Products </span>
 
-						<ul class="flex flex-wrap gap-2">
-							{#each data.product?.groupProduct as gp}
-								<li>
-									<a
-										href="/product/{gp.slug}"
-										class="flex flex-col gap-1 text-center w-14 text-xs leading-tight">
-										<div
-											class="flex h-16 w-14 items-center justify-center overflow-hidden rounded border border-zinc-200 transition duration-300 hover:border-primary-500 p-1 shadow-md">
-											<LazyImg
-												src="{gp.img}"
-												alt="{gp.img}"
-												height="56"
-												class="h-14 w-auto object-contain object-center" />
-										</div>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke-width="1.5"
+									stroke="currentColor"
+									class="h-5 w-5">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 01-1.125-1.125v-3.75zM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-8.25zM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-2.25z"
+									></path>
+								</svg>
+							</h6>
 
-										{#if gp.tags?.length}
-											{#each gp.tags as tag}
-												<span>
-													{#if tag.type === 'Style'}
-														{tag.name}
-													{/if}
-												</span>
-											{/each}
-										{/if}
+							<ul class="flex flex-wrap gap-2">
+								{#each value.groupProduct as gp}
+									<li>
+										<a
+											href="/product/{gp.slug}"
+											class="flex flex-col gap-1 text-center w-14 text-xs leading-tight">
+											<div
+												class="flex h-16 w-14 items-center justify-center overflow-hidden rounded border border-zinc-200 transition duration-300 hover:border-primary-500 p-1 shadow-md">
+												<LazyImg
+													src="{gp.img}"
+													alt="{gp.img}"
+													height="56"
+													class="h-14 w-auto object-contain object-center" />
+											</div>
 
-										{#if gp.price}
-											<span><b>{currency(gp.price, $page.data.store.currencySymbol)}</b></span>
-										{/if}
-									</a>
-								</li>
-							{/each}
-						</ul>
-					</div>
-				{/if}
+											{#if gp.tags?.length}
+												{#each gp.tags as tag}
+													<span>
+														{#if tag.type === 'Style'}
+															{tag.name}
+														{/if}
+													</span>
+												{/each}
+											{/if}
+
+											{#if gp.price}
+												<span><b>{currency(gp.price)}</b></span>
+											{/if}
+										</a>
+									</li>
+								{/each}
+							</ul>
+						</div>
+					{/if}
+				{:catch error}
+					{error?.message}
+				{/await}
 
 				<!-- {#if moreOptions?.length > 0}
 					<div class="mb-5 flex flex-col gap-2">
@@ -836,41 +854,46 @@ function handleMobileCanvas() {
 
 				<!-- select options  -->
 
-				{#if data.product?.options?.length > 0}
-					<div
-						class="sizeSelector mb-5 flex flex-col gap-3 text-sm"
-						class:shake-animation="{shake}">
-						{#each data.product?.options as o}
-							<div class="flex flex-col items-start sm:flex-row">
-								<h6 class="mb-1 w-full shrink-0 font-medium sm:mb-0 sm:w-52">
-									{o.name}
-								</h6>
+				{#await data.streamed.moreProductDetails}
+					<div class="mb-5">
+						<Skeleton extraSmall />
+					</div>
+				{:then value}
+					{#if value.options?.length > 0}
+						<div
+							class="sizeSelector mb-5 flex flex-col gap-3 text-sm"
+							class:shake-animation="{shake}">
+							{#each value.options as o}
+								<div class="flex flex-col items-start sm:flex-row">
+									<h6 class="mb-1 w-full shrink-0 font-medium sm:mb-0 sm:w-52">
+										{o.name}
+									</h6>
 
-								<!-- dropdown -->
-								{#if o.inputType == 'dropdown'}
-									<select
-										bind:value="{selectedOptions[o._id]}"
-										class="w-full max-w-xs flex-1 rounded border border-zinc-200 py-1.5 text-sm font-light placeholder-zinc-400 transition duration-300 focus:outline-none hover:bg-white">
-										{#each o.values as i}
-											<option value="{i._id}">
-												{i.name}
-											</option>
-										{/each}
-									</select>
+									<!-- dropdown -->
+									{#if o.inputType == 'dropdown'}
+										<select
+											bind:value="{selectedOptions[o._id]}"
+											class="w-full max-w-xs flex-1 rounded border border-zinc-200 py-1.5 text-sm font-light placeholder-zinc-400 transition duration-300 focus:outline-none hover:bg-white">
+											{#each o.values as i}
+												<option value="{i._id}">
+													{i.name}
+												</option>
+											{/each}
+										</select>
 
-									<!-- textbox -->
-								{:else if o.inputType == 'textbox'}
-									<Textbox bind:value="{selectedOptions[o._id]}" type="text" />
+										<!-- textbox -->
+									{:else if o.inputType == 'textbox'}
+										<Textbox bind:value="{selectedOptions[o._id]}" type="text" />
 
-									<!-- date -->
-								{:else if o.inputType == 'date'}
-									<Textbox id="start" bind:value="{selectedOptions[o._id]}" type="date" />
+										<!-- date -->
+									{:else if o.inputType == 'date'}
+										<Textbox id="start" bind:value="{selectedOptions[o._id]}" type="date" />
 
-									<!-- daterange -->
-									<!-- {:else if o.inputType == 'daterange'}
+										<!-- daterange -->
+										<!-- {:else if o.inputType == 'daterange'}
 									<span>Date range picker is not found</span> -->
 
-									<!-- <date-picker
+										<!-- <date-picker
 									bind:value="{selectedOptions[o.id]}"
 									class="max-w-xs flex-1"
 									type="date"
@@ -878,66 +901,259 @@ function handleMobileCanvas() {
 									range
 									@change="$emit('optionChanged', selectedOptions)"></date-picker> -->
 
-									<!-- textarea -->
-								{:else if o.inputType == 'textarea'}
-									<Textarea bind:value="{selectedOptions[o._id]}" />
+										<!-- textarea -->
+									{:else if o.inputType == 'textarea'}
+										<Textarea bind:value="{selectedOptions[o._id]}" />
 
-									<!-- size -->
-								{:else if o.inputType == 'size'}
-									<div class="flex flex-wrap">
-										{#each o.values as v}
-											<RadioSize value="{v._id}" bind:modelValue="{selectedOptions[o._id]}">
-												<span class="text-zinc-500">{v.name}</span>
-											</RadioSize>
-										{/each}
-									</div>
+										<!-- size -->
+									{:else if o.inputType == 'size'}
+										<div class="flex flex-wrap">
+											{#each o.values as v}
+												<RadioSize value="{v._id}" bind:modelValue="{selectedOptions[o._id]}">
+													<span class="text-zinc-500">{v.name}</span>
+												</RadioSize>
+											{/each}
+										</div>
 
-									<!-- color -->
-								{:else if o.inputType == 'color'}
-									<div class="flex flex-wrap gap-4">
-										{#each o.values as v}
-											<RadioColor value="{v._id}" bind:modelValue="{selectedOptions[o._id]}">
-												<span class="text-zinc-500">{v.name}</span>
-											</RadioColor>
-										{/each}
-									</div>
-									<!-- radio -->
-								{:else if o.inputType == 'radio'}
-									<div class="flex flex-wrap gap-4">
-										{#each o.values as v}
-											<Radio value="{v._id}" bind:modelValue="{selectedOptions[o._id]}">
-												<span class="text-zinc-500">{v.name}</span>
-											</Radio>
-										{/each}
-									</div>
+										<!-- color -->
+									{:else if o.inputType == 'color'}
+										<div class="flex flex-wrap gap-4">
+											{#each o.values as v}
+												<RadioColor value="{v._id}" bind:modelValue="{selectedOptions[o._id]}">
+													<span class="text-zinc-500">{v.name}</span>
+												</RadioColor>
+											{/each}
+										</div>
+										<!-- radio -->
+									{:else if o.inputType == 'radio'}
+										<div class="flex flex-wrap gap-4">
+											{#each o.values as v}
+												<Radio value="{v._id}" bind:modelValue="{selectedOptions[o._id]}">
+													<span class="text-zinc-500">{v.name}</span>
+												</Radio>
+											{/each}
+										</div>
 
-									<!-- checkbox -->
-								{:else if o.inputType == 'checkbox'}
-									<div class="flex flex-wrap gap-4">
-										{#each o.values as v, i}
-											<Checkbox value="{v._id}" bind:modelValue="{selectedOptions[o._id]}">
-												<span class="text-zinc-500">{v.name}</span>
-											</Checkbox>
-										{/each}
-									</div>
-								{/if}
+										<!-- checkbox -->
+									{:else if o.inputType == 'checkbox'}
+										<div class="flex flex-wrap gap-4">
+											{#each o.values as v, i}
+												<Checkbox value="{v._id}" bind:modelValue="{selectedOptions[o._id]}">
+													<span class="text-zinc-500">{v.name}</span>
+												</Checkbox>
+											{/each}
+										</div>
+									{/if}
+								</div>
+							{/each}
+						</div>
+					{/if}
+				{:catch error}
+					{error?.message}
+				{/await}
+
+				<!-- Product Details -->
+
+				{#await data.streamed.moreProductDetails}
+					<div class="mb-5">
+						<Skeleton extraSmall />
+					</div>
+				{:then value}
+					{#if value.description}
+						<div class="mb-5">
+							<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
+								<span> Product Details </span>
+
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="h-5 w-5"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+									stroke-width="1">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
+									></path>
+								</svg>
+							</h6>
+
+							<div class="prose text-sm  max-w-none">
+								{@html value.description}
 							</div>
-						{/each}
+						</div>
+					{/if}
+				{:catch error}
+					{error?.message}
+				{/await}
+
+				<!-- Linked Products -->
+
+				{#if data.product?.linkedProducts?.length}
+					<div class="mb-5">
+						<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
+							<span> Linked Products </span>
+
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke-width="1"
+								stroke="currentColor"
+								class="h-5 w-5">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 01-1.125-1.125v-3.75zM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-8.25zM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-2.25z"
+								></path>
+							</svg>
+						</h6>
+
+						<div class="flex flex-col gap-4">
+							<CheckboxOfMultiProducts
+								items="{data.product?.linkedProducts}"
+								selectedItems="{selectedLinkiedProducts || []}"
+								on:change="{handleSelectedLinkiedProducts}" />
+						</div>
 					</div>
 				{/if}
 
+				<!-- Description -->
+
+				{#await data.streamed.moreProductDetails}
+					<div class="mb-5">
+						<Skeleton extraSmall />
+					</div>
+				{:then value}
+					{#if value.longDescription}
+						<div class="mb-5 flex flex-col gap-5">
+							<hr class="w-full border-t border-zinc-200" />
+
+							<div>
+								<button
+									type="button"
+									class="w-full flex items-center gap-2 justify-between font-semibold uppercase focus:outline-none"
+									on:click="{() => (showLongDescription = !showLongDescription)}">
+									<span> Description </span>
+
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 20 20"
+										fill="currentColor"
+										class="w-5 h-5 transition duration-300
+									{showLongDescription ? 'transform -rotate-45' : ''}">
+										<path
+											d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"
+										></path>
+									</svg>
+								</button>
+
+								{#if showLongDescription}
+									<div class="mt-2 prose text-sm max-w-none">
+										{@html value.longDescription}
+									</div>
+								{/if}
+							</div>
+
+							<hr class="w-full border-t border-zinc-200" />
+						</div>
+					{/if}
+				{:catch error}
+					{error?.message}
+				{/await}
+
+				<!-- Delivery Options Desktop -->
+
+				<div class="mb-5 hidden sm:block">
+					<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
+						<span> Delivery Options </span>
+
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1"
+							stroke="currentColor"
+							class="h-5 w-5">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"
+							></path>
+						</svg>
+					</h6>
+
+					<DeliveryOptions product="{data.product}" deliveryDetails="{data.deliveryDetails}" />
+				</div>
+
+				<!-- Ratings & Reviews -->
+
+				{#await data.streamed.productReviews}
+					<ul class="my-5 p-0 flex flex-col gap-4">
+						<li>
+							<Skeleton extraSmall />
+						</li>
+					</ul>
+				{:then productReviews}
+					<hr class="hidden sm:block mb-5 w-full border-t border-zinc-200" />
+
+					<div
+						id="ratings_and_reviews"
+						class="sticky top-14 z-30 lg:static lg:z-0 mb-5 bg-white py-2">
+						<div class="flex items-center flex-wrap gap-4">
+							<button
+								type="button"
+								class="font-semibold border-b-4 focus:outline-none
+								{selectedReviewType === 'product_review'
+									? 'border-primary-500 text-primary-500'
+									: 'border-zinc-200 text-zinc-500'}"
+								on:click="{() => {
+									;(selectedReviewType = 'product_review') && scrollTo('ratings_and_reviews')
+								}}">
+								Product Review
+							</button>
+
+							<button
+								type="button"
+								class="font-semibold border-b-4 focus:outline-none
+								{selectedReviewType === 'brand_review'
+									? 'border-primary-500 text-primary-500'
+									: 'border-zinc-200 text-zinc-500'}"
+								on:click="{() => {
+									;(selectedReviewType = 'brand_review') && scrollTo('ratings_and_reviews')
+								}}">
+								Brand Review
+							</button>
+						</div>
+					</div>
+
+					<RatingsAndReviews
+						type="{selectedReviewType}"
+						product="{data?.product}"
+						reviewsSummary="{selectedReviewType === 'product_review'
+							? productReviews.reviewsSummary?.productReviews
+							: productReviews.reviewsSummary?.brandReviews}"
+						reviews="{productReviews}"
+						class="mb-5" />
+				{:catch error}
+					{error?.message}
+				{/await}
+
 				<!-- Add to Cart -->
 
-				<!-- id="cart_viewport" -->
+				<!-- Cart viewport -->
+
 				<div
+					id="cart_viewport"
 					use:viewport
 					on:enterViewport="{cartButtonEnterViewport}"
 					on:exitViewport="{cartButtonExitViewport}">
 				</div>
 
-				{#if showStickyCartButton}
+				{#if showStickyCartButton && !data.product?.isCustomized}
 					<div
-						class="w-full grid md:hidden grid-cols-5 gap-2 items-center uppercase md:grid-cols-2 fixed inset-x-0 bottom-0 z-40 h-16 border-t bg-white p-2 box-shadow">
+						class="w-full grid md:hidden grid-cols-5 gap-2 items-center uppercase md:grid-cols-2 fixed inset-x-0 bottom-0 z-40 h-16 border-t bg-white p-3 box-shadow">
 						<div class="col-span-2">
 							<WhiteButton
 								type="button"
@@ -945,7 +1161,7 @@ function handleMobileCanvas() {
 								loading="{loadingForWishlist}"
 								class="w-full text-sm"
 								on:click="{() => toggleWishlist(data.product?._id)}">
-								{#if isWislisted}
+								{#if isWishlisted}
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										class="h-5 w-5 shrink-0 text-red-500"
@@ -1085,7 +1301,7 @@ function handleMobileCanvas() {
 								loading="{loadingForWishlist}"
 								class="w-full text-sm"
 								on:click="{() => toggleWishlist(data.product?._id)}">
-								{#if isWislisted}
+								{#if isWishlisted}
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										class="h-5 w-5 shrink-0 text-red-500"
@@ -1214,186 +1430,6 @@ function handleMobileCanvas() {
 						</div>
 					</div>
 				{/if}
-
-				<!-- Product Details -->
-
-				{#if data.product?.description}
-					<div class="mb-5">
-						<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
-							<span> Product Details </span>
-
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="h-5 w-5"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor"
-								stroke-width="1">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
-								></path>
-							</svg>
-						</h6>
-
-						<div class="prose text-sm  max-w-none">
-							{@html data.product?.description}
-						</div>
-					</div>
-				{/if}
-
-				<!-- Linked Products -->
-
-				{#if data.product?.linkedProducts?.length}
-					<div class="mb-5">
-						<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
-							<span> Linked Products </span>
-
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke-width="1"
-								stroke="currentColor"
-								class="h-5 w-5">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 01-1.125-1.125v-3.75zM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-8.25zM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-2.25z"
-								></path>
-							</svg>
-						</h6>
-
-						<div class="flex flex-col gap-4">
-							<CheckboxOfMultiProducts
-								items="{data.product?.linkedProducts}"
-								selectedItems="{selectedLinkiedProducts || []}"
-								on:change="{handleSelectedLinkiedProducts}" />
-						</div>
-					</div>
-				{/if}
-
-				<!-- Description -->
-
-				{#if data.product?.longDescription}
-					<div class="mb-5 flex flex-col gap-5">
-						<hr class="w-full border-t border-zinc-200" />
-
-						<div>
-							<button
-								type="button"
-								class="w-full flex items-center gap-2 justify-between font-semibold uppercase focus:outline-none"
-								on:click="{() => (showLongDescription = !showLongDescription)}">
-								<span> Description </span>
-
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									viewBox="0 0 20 20"
-									fill="currentColor"
-									class="w-5 h-5 transition duration-300
-									{showLongDescription ? 'transform -rotate-45' : ''}">
-									<path
-										d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"
-									></path>
-								</svg>
-							</button>
-
-							{#if showLongDescription}
-								<div class="mt-2 prose text-sm max-w-none">
-									{@html data.product?.longDescription}
-								</div>
-							{/if}
-						</div>
-
-						<hr class="w-full border-t border-zinc-200" />
-					</div>
-				{/if}
-
-				<!-- Delivery Options Desktop -->
-
-				<div class="mb-5 hidden sm:block">
-					<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
-						<span> Delivery Options </span>
-
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke-width="1"
-							stroke="currentColor"
-							class="h-5 w-5">
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"
-							></path>
-						</svg>
-					</h6>
-
-					<DeliveryOptions product="{data.product}" deliveryDetails="{data.deliveryDetails}" />
-				</div>
-
-				<!-- Vendor name -->
-
-				{#if data.product?.vendor?.name && data.product?.vendor?.slug && data.product?.vendor?._id}
-					<p class="flex items-center gap-2">
-						<b>Seller : </b>
-
-						<a href="/vendor/{data.product?.vendor?.slug}" class="block hover:underline">
-							{data.product?.vendor?.name}
-						</a>
-					</p>
-				{/if}
-
-				<!-- Ratings & Reviews -->
-
-				{#if productReviews?.product?.count || productReviews?.brand?.count}
-					<hr class="hidden sm:block mb-5 w-full border-t border-zinc-200" />
-
-					<div class="sticky top-14 z-30 lg:static lg:z-0 mb-5 bg-white py-2">
-						<div class="flex items-center flex-wrap gap-4">
-							<button
-								type="button"
-								class="font-semibold border-b-4 focus:outline-none
-								{selectedReviewType === 'product_review'
-									? 'border-primary-500 text-primary-500'
-									: 'border-zinc-200 text-zinc-500'}"
-								on:click="{() => (selectedReviewType = 'product_review')}">
-								Product Review
-							</button>
-
-							<button
-								type="button"
-								class="font-semibold border-b-4 focus:outline-none
-								{selectedReviewType === 'brand_review'
-									? 'border-primary-500 text-primary-500'
-									: 'border-zinc-200 text-zinc-500'}"
-								on:click="{() => (selectedReviewType = 'brand_review')}">
-								Brand Review
-							</button>
-						</div>
-					</div>
-
-					{#if loadingForProductReview}
-						<ul class="flex flex-col gap-3">
-							{#each { length: 5 } as _}
-								<li>
-									<Skeleton small />
-								</li>
-							{/each}
-						</ul>
-					{:else}
-						<RatingsAndReviews
-							type="{selectedReviewType}"
-							product="{data?.product}"
-							reviewsSummary="{selectedReviewType === 'product_review'
-								? data?.product?.reviews?.productReviews
-								: data?.product?.reviews?.brandReviews}"
-							reviews="{productReviews}"
-							class="mb-5" />
-					{/if}
-				{/if}
 			</div>
 		</div>
 
@@ -1441,11 +1477,23 @@ function handleMobileCanvas() {
 
 			<!-- Similar products From category slug -->
 
-			{#if data.product?.category?.slug}
-				<div class="mb-5 sm:mb-10">
-					<SimilarProductsFromCategorySlug data="{data.product?.moreFromCategory}" />
-				</div>
-			{/if}
+			{#await data.streamed.moreProductDetails}
+				<ul class="mb-5 p-0 list-none flex flex-wrap gap-4">
+					{#each { length: 7 } as _}
+						<li>
+							<ProductSkeleton />
+						</li>
+					{/each}
+				</ul>
+			{:then value}
+				{#if value.moreFromCategory}
+					<div class="mb-5 sm:mb-10">
+						<SimilarProductsFromCategorySlug data="{value.moreFromCategory}" />
+					</div>
+				{/if}
+			{:catch error}
+				{error?.message}
+			{/await}
 
 			<!-- Recommended products -->
 
