@@ -1,6 +1,7 @@
+import { error } from '@sveltejs/kit'
 import { getAPI, post } from '$lib/utils/api'
 import { getBySid, postBySid } from '$lib/utils/server'
-import { error } from '@sveltejs/kit'
+
 
 export const fetchWishlist = async ({
 	origin,
@@ -32,7 +33,7 @@ export const fetchWishlist = async ({
 	}
 }
 
-export const checkhWishlist = async ({
+export const checkWishlist = async ({
 	origin,
 	storeId,
 	pid,
@@ -40,6 +41,8 @@ export const checkhWishlist = async ({
 	server = false,
 	sid = null
 }: any) => {
+	// if (!sid) return false
+
 	try {
 		let res: any = {}
 
@@ -51,7 +54,7 @@ export const checkhWishlist = async ({
 
 		return res
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		return false
 	}
 }
 

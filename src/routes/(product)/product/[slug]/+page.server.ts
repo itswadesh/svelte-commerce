@@ -1,30 +1,40 @@
-import { error } from '@sveltejs/kit'
-import { ProductService } from '$lib/services'
-import type { Error, Product } from '$lib/types'
+import { ProductService, ReviewService } from '$lib/services'
 
-export async function load({ params, parent, url, cookies, locals, request }) {
-	let zip = cookies.get('zip')
-	if (zip) zip = JSON.parse(zip)
+const isServer = import.meta.env.SSR // get the SSR value
 
+export async function load({ params, url, parent }) {
 	const { slug } = params
-	const id = url.searchParams.get('id')
+	const { zip, sid, origin, store } = await parent()
+	const storeId = store?.id
+	const page = url.searchParams.get('page') || 1
 
-	let product: Product = {}
+	// console.log('zip...........', store.id, isServer, zip, sid, origin)
 
-	try {
-		product = await ProductService.fetchProduct({
+	return {
+		product: ProductService.fetchProduct({
+			origin,
+			server: isServer,
+			sid,
 			slug,
-			id,
-			server: true,
-			sid: cookies.get('connect.sid')
-		})
+			storeId
+		}),
 
-		if (!product) throw error(404, 'Product not found')
+		deliveryDetails: zip,
 
-		// cookies.set('cache-control', 'public, max-age=200')
+		streamed: {
+			moreProductDetails: ProductService.fetchProduct2({
+				origin,
+				server: isServer,
+				slug,
+				storeId,
+			}),
 
-		return { product, deliveryDetails: zip }
-	} catch (e) {
-		throw error(e.status, e.message || 'Not found')
+			productReviews: ReviewService.fetchProductReviews({
+				page,
+				server: isServer,
+				slug,
+				storeId,
+			})
+		}
 	}
 }

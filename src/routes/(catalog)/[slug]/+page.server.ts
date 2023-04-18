@@ -1,6 +1,7 @@
-import { ProductService } from '$lib/services'
-import { currency, generatePriceRange } from '$lib/utils'
 import { error } from '@sveltejs/kit'
+import { generatePriceRange } from '$lib/utils'
+import { CategoryService, ProductService } from '$lib/services'
+
 export const prerender = false
 
 export async function load({ url, params, locals, cookies, parent, setHeaders }) {
@@ -13,6 +14,7 @@ export async function load({ url, params, locals, cookies, parent, setHeaders })
 	let pageSize
 	let products
 	let ressss
+	let themeTags
 
 	const categorySlug = params.slug
 	const currentPage = +url.searchParams.get('page') || 1
@@ -29,21 +31,6 @@ export async function load({ url, params, locals, cookies, parent, setHeaders })
 
 	try {
 		loading = true
-
-		res = await ProductService.fetchProductsOfCategory({
-			categorySlug,
-			query: query.toString(),
-			server: true,
-			sid: cookies.get('connect.sid'),
-			storeId: store?.id
-		})
-
-		category = res?.category
-		count = res?.count
-		err = res?.err
-		facets = res?.facets
-		pageSize = res?.pageSize
-		products = res?.products
 	} catch (e) {
 		err = e
 		throw error(400, e?.message || e || 'No results found')
@@ -51,28 +38,24 @@ export async function load({ url, params, locals, cookies, parent, setHeaders })
 		loading = false
 	}
 
-	let priceRange = []
-	if (facets.all_aggs?.price_stats?.max > 0 && facets.all_aggs?.price_stats?.min >= 0) {
-		priceRange = generatePriceRange(facets.all_aggs?.price_stats, store.currencySymbol)
-	}
-
 	return {
-		category: category,
-		categorySlug,
-		count,
-		currentPage,
-		err,
-		facets,
-		fl,
-		loading,
-		origin: locals.origin,
-		pageSize,
-		priceRange,
-		products,
+		category: CategoryService.fetchCategory({
+			id: categorySlug,
+			server: true,
+			sid: cookies.get('connect.sid'),
+			storeId: store?.id
+		}),
+		products: ProductService.fetchProductsOfCategory({
+			categorySlug,
+			query: query.toString(),
+			server: true,
+			sid: cookies.get('connect.sid'),
+			storeId: store?.id
+		}),
 		query: query.toString(),
-		ressss,
 		searchData,
 		sort,
-		store
+		store,
+		currentPage
 	}
 }

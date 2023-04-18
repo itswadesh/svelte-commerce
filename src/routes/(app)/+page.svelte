@@ -20,6 +20,7 @@ let today = dayjs(new Date()).toISOString()
 
 export let data
 
+console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -95,7 +96,7 @@ let seoProps = {
 	<div class="mb-14 sm:mb-0">
 		<!-- Categories slider mobile -->
 
-		{#await data.home then home}
+		{#await data.streamed.home then home}
 			{#if home?.categories?.length}
 				<div class="block sm:hidden">
 					<CategoriesMobile loading="{home.isFetching}" categories="{home?.categories}" />
@@ -105,7 +106,12 @@ let seoProps = {
 
 		<!-- Main slider banner -->
 
-		<Hero banners="{data.home.banners}" />
+		{#await data.streamed.home}
+			<div class="h-96 w-full bg-zinc-200 animate-pulse"></div>
+		{:then home}
+			<Hero banners="{home.banners}" />
+			<!-- <div class="h-96 w-full bg-red-500 animate-pulse"></div> -->
+		{/await}
 
 		<!-- Alert message -->
 
@@ -119,13 +125,21 @@ let seoProps = {
 
 		<!-- top categories -->
 
-		{#if data.home?.categories?.length}
-			<div class="hidden sm:block">
-				<!-- <CategoriesHome categories="{data.home?.categories}" /> -->
+		{#await data.streamed.home}
+			<ul class="flex flex-wrap gap-3 justify-center p-3 py-5 md:py-10">
+				{#each { length: 10 } as _}
+					<li class="h-24 w-24 shrink-0 rounded-full lg:h-28 lg:w-28 bg-zinc-200 animate-pulse">
+					</li>
+				{/each}
+			</ul>
+		{:then home}
+			{#if home?.categories?.length}
+				<div class="hidden sm:block">
+					<!-- <CategoriesHome categories="{data.home?.categories}" /> -->
 
-				<CategoriesSlider title="Top Categories" categories="{data.home?.categories}" />
+					<CategoriesSlider title="Top Categories" categories="{home?.categories}" />
 
-				<!-- <h2
+					<!-- <h2
 					class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
 					TOP COLLECTIONS
 				</h2>
@@ -168,13 +182,14 @@ let seoProps = {
 						{/if}
 					{/each}
 				</div> -->
-			</div>
-		{/if}
+				</div>
+			{/if}
+		{/await}
 
 		<!-- Hero banners -->
 
-		{#await data.home}
-			<div class="grid grid-cols-2 items-center gap-2 md:grid-cols-4">
+		{#await data.streamed.home}
+			<div class="p-3 py-5 md:py-10 grid grid-cols-2 items-center gap-2 md:grid-cols-4">
 				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 
 				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
@@ -186,21 +201,21 @@ let seoProps = {
 				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 			</div>
 		{:then home}
-			{#if data.home.heroBanners?.length}
+			{#if home.heroBanners?.length}
 				<div>
 					<h2
 						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
 						BEST OF {$page.data.store?.websiteName} EXCLUSIVE
 					</h2>
 
-					<HeroBanners heroBanners="{data.home.heroBanners}" />
+					<HeroBanners heroBanners="{home.heroBanners}" />
 				</div>
 			{/if}
 		{/await}
 
 		<!-- Picked banners -->
 
-		{#await data.home}
+		{#await data.streamed.home}
 			<div class="grid grid-cols-2 items-center gap-2 md:grid-cols-4">
 				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 
@@ -220,7 +235,7 @@ let seoProps = {
 			{/if}
 		{/await}
 
-		{#await data.deals}
+		{#await data.streamed.deals}
 			<div class="flex w-[98vw] items-start justify-start gap-3 overflow-x-auto">
 				<div class="w-60 h-60 animate-pulse rounded bg-zinc-200">
 					{#each { length: 10 } as _}
@@ -243,7 +258,7 @@ let seoProps = {
 			{/if}
 		{/await}
 
-		{#await data.collections}
+		{#await data.streamed.collections}
 			<div class="flex w-[98vw] items-start justify-start gap-3 overflow-x-auto">
 				<div class="w-60 h-60 animate-pulse rounded bg-zinc-200">
 					{#each { length: 10 } as _}
@@ -268,7 +283,7 @@ let seoProps = {
 
 		<!-- Popular products -->
 
-		{#await data.home then home}
+		{#await data.streamed.home then home}
 			{#if home?.popular}
 				{#if home?.popular?.data?.length > 0}
 					<div>
@@ -298,7 +313,7 @@ let seoProps = {
 
 		<!-- Trending products -->
 
-		{#await data.home then home}
+		{#await data.streamed.home then home}
 			{#if home?.trending?.length > 0}
 				<div>
 					<h2

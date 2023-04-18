@@ -1,10 +1,10 @@
-import {WishlistService } from '$lib/services'
+import { WishlistService } from '$lib/services'
 
 import { redirect } from '@sveltejs/kit'
 
 export async function load({ locals, cookies, params, request }) {
 	const pid = params.pid
-	const isExistInWishlist = await WishlistService.checkhWishlist({
+	const isExistInWishlist = await WishlistService.checkWishlist({
 		pid,
 		vid: pid,
 		storeId: locals.store?.id,

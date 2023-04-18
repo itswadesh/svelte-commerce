@@ -1,9 +1,12 @@
 import { DOMAIN, IS_DEV } from '$lib/config'
 import { getBySid } from '$lib/utils/server'
+import { InitService } from '$lib/services'
+
 // @ts-ignore
+
 export async function GET({ request, cookies, locals }) {
 	const uri = new URL(request.url)
-	const storeRes = await getBySid(`init?domain=${IS_DEV ? DOMAIN : uri.host}`)
+	const storeRes = await InitService.fetchInit(uri.host)
 	const { storeOne, settings, popularSearches, megamenu } = storeRes
 	const store = {
 		id: storeOne?._id,
@@ -37,7 +40,9 @@ export async function GET({ request, cookies, locals }) {
 		websiteName: storeOne?.websiteName,
 		youtubeUrl: storeOne?.youtubeUrl
 	}
+
 	locals.store = store
 	cookies.set('store', JSON.stringify(store), { path: '/' })
+
 	return new Response(JSON.stringify({ storeOne, settings, popularSearches, megamenu }))
 }

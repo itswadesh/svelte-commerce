@@ -1,20 +1,25 @@
-import { ProductService } from '$lib/services'
-import { generatePriceRange } from '$lib/utils'
 import { error } from '@sveltejs/kit'
+import { generatePriceRange } from '$lib/utils'
+import { ProductService } from '$lib/services'
+
+
 export const prerender = false
 
-export async function load({ url, locals, cookies, parent }) {
+export async function load({ url, params, locals, cookies, parent, setHeaders }) {
 	const { store } = locals
+	let category
 	let count
 	let err
 	let facets
-	let fl = {}
 	let loading = false
 	let pageSize
 	let products
 	let ressss
+	let themeTags
 
+	const categorySlug = params.slug
 	const currentPage = +url.searchParams.get('page') || 1
+	const fl = {}
 	const query = url.searchParams
 	const searchData = url.searchParams.get('q')
 	const sort = url.searchParams.get('sort')
@@ -23,23 +28,10 @@ export async function load({ url, locals, cookies, parent }) {
 		fl[key] = value
 	})
 
+	let res
+
 	try {
 		loading = true
-
-		const res = await ProductService.searchProducts({
-			query: query.toString(),
-			searchData: searchData,
-			server: true,
-			sid: cookies.get('connect.sid'),
-			storeId: store?.id
-		})
-
-		count = res.count
-		err = res.err
-		facets = res.facets || []
-		pageSize = res.pageSize || 40
-		products = res.products
-		ressss = res
 	} catch (e) {
 		err = e
 		throw error(400, e?.message || e || 'No results found')
@@ -47,24 +39,18 @@ export async function load({ url, locals, cookies, parent }) {
 		loading = false
 	}
 
-	let priceRange = []
-	if (facets.all_aggs?.price_stats?.max > 0 && facets.all_aggs?.price_stats?.min >= 0) {
-		priceRange = generatePriceRange(facets.all_aggs?.price_stats, store.currencySymbol)
-	}
-
 	return {
-		count,
-		currentPage,
-		err,
-		facets,
-		fl,
-		loading,
-		pageSize,
-		priceRange,
-		products,
+		products: ProductService.fetchProductsOfCategory({
+			categorySlug,
+			query: query.toString(),
+			server: true,
+			sid: cookies.get('connect.sid'),
+			storeId: store?.id
+		}),
 		query: query.toString(),
-		ressss,
 		searchData,
-		sort
+		sort,
+		store,
+		currentPage
 	}
 }
