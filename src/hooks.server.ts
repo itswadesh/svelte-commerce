@@ -6,7 +6,7 @@ import { nanoid } from 'nanoid'
 import { authenticateUser, fetchCart, fetchStoreData } from '$lib/server'
 import { DOMAIN, HTTP_ENDPOINT, IS_DEV, listOfPagesWithoutBackButton } from '$lib/config'
 
-if (SENTRY_DSN) {
+if (SENTRY_DSN && SENTRY_DSN !== 'YOUR_SENTRY_DSN') {
 	SentryNode.init({
 		dsn: SENTRY_DSN
 	})
