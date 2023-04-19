@@ -1,6 +1,6 @@
 <script lang="ts">
 import { CartService, CouponService, ProductService } from '$lib/services'
-import { date, getCdnImageUrl } from '$lib/utils'
+import { date } from '$lib/utils'
 import { fireGTagEvent } from '$lib/utils/gTag'
 import { fly } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
@@ -20,6 +20,7 @@ import Skeleton from '$lib/ui/Skeleton.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 
 export let data
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	title: `Cart`,
@@ -201,9 +202,7 @@ async function getCoupons() {
 													aria-label="Click to route product details"
 													class="block shrink-0 overflow-hidden">
 													<LazyImg
-														src="{getCdnImageUrl(
-															item.isCustomizeditem ? item.customizedImg : item.img
-														)}?tr=w-80,h-160,cm-pad_resizes"
+														src="{item.isCustomizeditem ? item.customizedImg : item.img}"
 														alt=" "
 														width="80"
 														height="160"
@@ -269,9 +268,7 @@ async function getCoupons() {
 											aria-label="Click to route product details"
 											class="block shrink-0 overflow-hidden">
 											<LazyImg
-												src="{getCdnImageUrl(
-													item.isCustomizeditem ? item.customizedImg : item.img
-												)}?tr=w-80,h-160,cm-pad_resizes"
+												src="{item.isCustomizeditem ? item.customizedImg : item.img}"
 												alt=" "
 												width="80"
 												height="160"
