@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit'
 import { getBySid } from '$lib/utils/server'
 import { DOMAIN } from '$lib/config'
 
-export const fetchInit = async ({ host }) => {
+export const fetchInit = async (host) => {
 	// This is called once during hard reload + everytime footer is hit through /server/store/server.ts
 	const isServer = import.meta.env.SSR
 	if (!isServer) return {}
