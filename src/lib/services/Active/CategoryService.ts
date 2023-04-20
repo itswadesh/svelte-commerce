@@ -2,7 +2,6 @@ import { error } from '@sveltejs/kit'
 import { getAPI } from '$lib/utils/api'
 import { getBySid } from '$lib/utils/server'
 
-
 export const fetchFooterCategories = async ({
 	origin,
 	storeId,
@@ -27,14 +26,14 @@ export const fetchFooterCategories = async ({
 	}
 }
 
-export const fetchCategory = async ({ origin, id, server = false, sid = null }: any) => {
+export const fetchCategory = async ({ origin, id, server = false, sid = null, storeId }: any) => {
 	try {
 		let res: any = {}
 
 		if (server) {
-			res = await getBySid(`category/${id}`, sid)
+			res = await getBySid(`es/categories/${id}?store=${storeId}`, sid)
 		} else {
-			res = await getAPI(`category/${id}`, origin)
+			res = await getAPI(`es/categories/${id}?store=${storeId}`, origin)
 		}
 
 		return res || {}
