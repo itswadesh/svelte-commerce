@@ -23,14 +23,12 @@ export const fetchCartData = async ({ origin, storeId, server = false, sid = nul
 export const fetchRefreshCart = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {
 		let res: any = {}
-
 		if (server) {
 			res = await getBySid(`carts/refresh-cart?store=${storeId}`, sid)
 			// res = await getBySid(`carts/my?store=${storeId}`, sid)
 		} else {
 			res = await getAPI(`carts/refresh-cart?store=${storeId}`, origin)
 		}
-
 		return res || {}
 	} catch (err) {
 		const e = err as Error
@@ -141,7 +139,6 @@ export const removeCouponService = async ({
 		let res: any = {}
 
 		res = await del(`coupon/remove?code=${code}&store=${storeId}`, origin)
-
 
 		return res || {}
 	} catch (e) {

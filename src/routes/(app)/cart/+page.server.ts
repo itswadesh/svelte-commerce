@@ -2,7 +2,8 @@ import { CartService } from '$lib/services'
 import { error, fail, redirect } from '@sveltejs/kit'
 import type { Action, Actions, PageServerLoad } from './$types'
 
-export const load: PageServerLoad = async ({ url, request, locals, cookies }) => {
+export const load: PageServerLoad = async ({ url, request, locals, cookies, depends }) => {
+	depends('cart:my')
 	let loading = false
 	let cart = locals.cart
 	try {
@@ -39,7 +40,7 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies }) =>
 	} catch (e) {
 		// console.log('Error at /cart/+page.server.ts page.....', e)
 		if (e?.status === 401) {
-			throw redirect(307, locals.store?.loginUrl || '/auth/login')
+			throw redirect(307, '/auth/login')
 		}
 		throw error(400, e?.body?.message || e)
 	} finally {
@@ -68,7 +69,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 			customizedImg,
 			storeId: locals.store?.id,
 			server: true,
-			sid: cookies // This is a special case to pass complete cookie
+			cookies // This is a special case to pass complete cookie
 		})
 		if (linkedItems?.length) {
 			for (const i of linkedItems) {
@@ -78,7 +79,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 					qty: 1,
 					storeId: locals.store?.id,
 					server: true,
-					sid: cookies
+					cookies // This is a special case to pass complete cookie
 				})
 			}
 		}
