@@ -14,17 +14,8 @@ import { page } from '$app/stores'
 import { ToastContainer, FlatToast } from 'svelte-toasts'
 import BackToTop from '$lib/components/BackToTop.svelte'
 import GoogleAnalytics from '$lib/components/GoogleAnalytics.svelte' // Can not dynamically import Google Analytics, it throws gtag not found error, not even party town
-import PageTransitions from '$lib/PageTransitions.svelte'
 import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
-import { fly } from 'svelte/transition'
 import { cubicIn, cubicOut } from 'svelte/easing'
-
-const duration = 300
-const delay = duration + 100
-const y = 10
-
-const transitionIn = { easing: cubicOut, y, duration, delay }
-const transitionOut = { easing: cubicIn, y: -y, duration }
 
 $: innerWidth = 0
 
@@ -138,13 +129,11 @@ export let data
 {#if $navigating}
 	<PreloadingIndicator />
 {/if}
-{#key data.pathname}
-	<section class="minimum-width-rem relative flex min-h-screen flex-col bg-white antialiased">
-		<div class="h-rem w-full flex-1" in:fly="{transitionIn}" out:fly="{transitionOut}">
-			<slot />
-		</div>
-	</section>
-{/key}
+<section class="minimum-width-rem relative flex min-h-screen flex-col bg-white antialiased">
+	<div class="h-rem w-full flex-1">
+		<slot />
+	</div>
+</section>
 <!-- <PartytownSnippet /> -->
 
 {#if showBackToTopButton}
