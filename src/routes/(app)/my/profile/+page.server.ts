@@ -30,5 +30,5 @@ export async function load({ cookies, locals }) {
 		return { profile, store: store }
 	}
 
-		throw redirect(307, store.loginUrl)
+	throw redirect(307, store.loginUrl)
 }
