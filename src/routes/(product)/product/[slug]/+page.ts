@@ -7,9 +7,6 @@ export async function load({ params, url, parent }) {
 	const { zip, sid, origin, store } = await parent()
 	const storeId = store?.id
 	const page = url.searchParams.get('page') || 1
-
-	// console.log('zip...........', store.id, isServer, zip, sid, origin)
-
 	return {
 		product: ProductService.fetchProduct({
 			origin,
@@ -26,14 +23,14 @@ export async function load({ params, url, parent }) {
 				origin,
 				server: isServer,
 				slug,
-				storeId,
+				storeId
 			}),
 
 			productReviews: ReviewService.fetchProductReviews({
 				page,
 				server: isServer,
 				slug,
-				storeId,
+				storeId
 			})
 		}
 	}

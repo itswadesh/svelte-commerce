@@ -54,3 +54,25 @@ export const fetchHome = async ({
 		throw error(e.status, e.data?.message || e.message)
 	}
 }
+export const fetchCollections = async ({ origin, storeId, server = false, sid = null }) => {
+	let collections
+	if (server) {
+		collections = await getBySid(`collections?store=${storeId}`, sid)
+	} else {
+		collections = await getAPI(`collections?store=${storeId}`, origin)
+	}
+
+	return collections
+}
+export const fetchInitialPendants = async ({ origin, storeId, server = false, sid = null }) => {
+	let initialPendants
+	if (server) {
+		initialPendants = await getBySid(
+			`es/products?categories=pendants-initial-pendants-en-en&sort=-updatedAt&limit=20&store=${storeId}`,
+			sid
+		)
+	} else {
+		initialPendants = await getAPI(`collections?store=${storeId}`, origin)
+	}
+	return initialPendants
+}
