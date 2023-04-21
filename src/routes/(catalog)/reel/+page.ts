@@ -4,7 +4,7 @@ const isServer = import.meta.env.SSR
 export const prerender = false
 
 export async function load({ url, params, parent }) {
-	const { store } = await parent()
+	const { store, origin } = await parent()
 
 	const categorySlug = params.slug
 	const currentPage = +url.searchParams.get('page') || 1
@@ -16,14 +16,21 @@ export async function load({ url, params, parent }) {
 	query.forEach(function (value, key) {
 		fl[key] = value
 	})
-
-	return {
-		products: ProductService.fetchProductsOfCategory({
-			categorySlug,
+	const { products, count, facets, pageSize, category, err } =
+		await ProductService.fetchProductsOfCategory({
+			categorySlug: '',
 			query: query.toString(),
 			server: isServer,
-			storeId: store?.id
-		}),
+			storeId: store?.id,
+			origin
+		})
+	return {
+		products,
+		count,
+		facets,
+		pageSize,
+		category,
+		err,
 		query: query.toString(),
 		searchData,
 		sort,
