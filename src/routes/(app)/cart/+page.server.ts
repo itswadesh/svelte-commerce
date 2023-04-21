@@ -40,7 +40,7 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 	} catch (e) {
 		// console.log('Error at /cart/+page.server.ts page.....', e)
 		if (e?.status === 401) {
-			throw redirect(307, '/auth/login')
+			throw redirect(307, '/auth/otp-login')
 		}
 		throw error(400, e?.body?.message || e)
 	} finally {
@@ -57,6 +57,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 	const linkedItems = JSON.parse(data.get('linkedItems'))
 	const options = JSON.parse(data.get('options')) //data.get('options') //
 	const customizedImg = data.get('customizedImg')
+	const sid = cookies.get('connect.sid')
 	if (typeof pid !== 'string' || !pid) {
 		return fail(400, { invalid: true })
 	}
@@ -69,7 +70,8 @@ const add: Action = async ({ request, cookies, locals }) => {
 			customizedImg,
 			storeId: locals.store?.id,
 			server: true,
-			cookies // This is a special case to pass complete cookie
+			origin,
+			sid // This is a special case to pass complete cookie
 		})
 		if (linkedItems?.length) {
 			for (const i of linkedItems) {
@@ -79,7 +81,8 @@ const add: Action = async ({ request, cookies, locals }) => {
 					qty: 1,
 					storeId: locals.store?.id,
 					server: true,
-					cookies // This is a special case to pass complete cookie
+					origin,
+					sid // This is a special case to pass complete cookie
 				})
 			}
 		}

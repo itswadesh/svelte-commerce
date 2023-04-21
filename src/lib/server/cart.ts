@@ -23,6 +23,7 @@ export const fetchCart = async (event: RequestEvent) => {
 			unavailableItems: cartRes.unavailableItems,
 			formattedAmount: cartRes.formattedAmount
 		}
+		event.locals.cartQty = +cart.qty
 		return cart
 	} catch (e) {
 		return null

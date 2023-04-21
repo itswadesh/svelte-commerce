@@ -40,8 +40,8 @@ const send = async ({ method, path, params, data, token, headers, origin }: any)
 		uri = new URL('api/' + path, origin)
 	}
 
-	const domain = uri.searchParams.get('domain')
-	const st = uri.searchParams.get('store')
+	// const domain = uri.searchParams.get('domain')
+	// const st = uri.searchParams.get('store')
 
 	// if (!storeId && !domain && !st) {
 	// 	console.error('store id not found in config', path)
@@ -82,11 +82,11 @@ const send = async ({ method, path, params, data, token, headers, origin }: any)
 			const form = new FormData()
 
 			if (data && data.files) {
-				for (let x of data.files) {
+				for (const x of data.files) {
 					form.append('files', x)
 				}
 			}
-			for (let d in data) {
+			for (const d in data) {
 				if (d !== 'files') form.append(d, data[d])
 			}
 			opts.body = form
@@ -111,49 +111,43 @@ const send = async ({ method, path, params, data, token, headers, origin }: any)
 		Object.keys(params).forEach((key) => uri.searchParams.append(key, params[key]))
 	}
 
-	try {
-		const url = uri.toString()
+	const url = uri.toString()
 
-		startDelayedLoadingIndicator()
+	startDelayedLoadingIndicator()
 
-		// alert(JSON.stringify(url))
-		// alert(JSON.stringify(opts))
+	// alert(JSON.stringify(url))
+	// alert(JSON.stringify(opts))
 
-		let response = await fetch(url, opts)
+	const response = await fetch(url, opts)
 
-		cancelDelayedLoadingIndicator()
+	cancelDelayedLoadingIndicator()
 
-		const isJson = response.headers.get('content-type')?.includes('application/json')
+	const isJson = response.headers.get('content-type')?.includes('application/json')
 
-		const res = isJson ? await response.json() : await response.text()
+	const res = isJson ? await response.json() : await response.text()
 
-		if (res?.status > 399) {
-			throw { status: res.status, message: res }
-		} else if (response?.status > 399) {
-			throw { status: response.status, message: res }
-		} else {
-			return res
-		}
-	} catch (e) {
-		// const err = JSON.parse(e)
-		throw e
-	} finally {
+	if (res?.status > 399) {
+		throw { status: res.status, message: res }
+	} else if (response?.status > 399) {
+		throw { status: response.status, message: res }
+	} else {
+		return res
 	}
 }
 
-export const getAPI = (path: string, origin: string, headers?: any) => {
+export const getAPI = (path: string, origin: string, headers?) => {
 	return send({ method: 'GET', path, origin, headers })
 }
 
-export const del = (path: string, origin: string, headers?: any) => {
+export const del = (path: string, origin: string, headers?) => {
 	return send({ method: 'DELETE', path, origin, headers })
 }
 
-export const post = (path: string, data: any, origin: string, headers?: any) => {
+export const post = (path: string, data, origin: string, headers?) => {
 	return send({ method: 'POST', path, data, origin, headers })
 }
 
-export const put = (path: string, data: any, origin: string, headers?: any) => {
+export const put = (path: string, data, origin: string, headers?) => {
 	return send({ method: 'PUT', path, data, origin, headers })
 }
 

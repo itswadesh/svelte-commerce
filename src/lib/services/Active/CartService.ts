@@ -1,11 +1,11 @@
 import { del, getAPI, post } from '$lib/utils/api'
 import { error } from '@sveltejs/kit'
-import { getBySid, postt } from '$lib/utils/server'
+import { getBySid, postBySid } from '$lib/utils/server'
 import type { Error } from '$lib/types'
 
-export const fetchCartData = async ({ origin, storeId, server = false, sid = null }: any) => {
+export const fetchCartData = async ({ origin, storeId, server = false, sid = null }) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		if (server) {
 			res = await getBySid(`cart?store=${storeId}`, sid)
@@ -20,9 +20,9 @@ export const fetchCartData = async ({ origin, storeId, server = false, sid = nul
 	}
 }
 
-export const fetchRefreshCart = async ({ origin, storeId, server = false, sid = null }: any) => {
+export const fetchRefreshCart = async ({ origin, storeId, server = false, sid = null }) => {
 	try {
-		let res: any = {}
+		let res = {}
 		if (server) {
 			res = await getBySid(`carts/refresh-cart?store=${storeId}`, sid)
 			// res = await getBySid(`carts/my?store=${storeId}`, sid)
@@ -35,9 +35,9 @@ export const fetchRefreshCart = async ({ origin, storeId, server = false, sid = 
 		throw error(e.status, e.data?.message)
 	}
 }
-export const fetchMyCart = async ({ origin, storeId, server = false, sid = null }: any) => {
+export const fetchMyCart = async ({ origin, storeId, server = false, sid = null }) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		if (server) {
 			res = await getBySid(`carts/my?store=${storeId}`, sid)
@@ -56,19 +56,18 @@ export const addToCartService = async ({
 	pid,
 	vid,
 	qty,
-	customizedImg,
-	customizedData,
+	customizedImg = null,
+	customizedData = null,
 	origin,
-	options,
+	options = null,
 	storeId,
 	server = false,
-	cookies = null
-}: any) => {
+	sid = null
+}) => {
 	try {
-		let res: any = {}
-
+		let res = {}
 		if (server) {
-			res = await postt(
+			res = await postBySid(
 				`carts/add-to-cart`,
 				{
 					pid,
@@ -79,7 +78,7 @@ export const addToCartService = async ({
 					customizedData,
 					options
 				},
-				cookies
+				sid
 			)
 		} else {
 			res = await post(
@@ -103,15 +102,9 @@ export const addToCartService = async ({
 	}
 }
 
-export const applyCouponService = async ({
-	code,
-	origin,
-	storeId,
-	server = false,
-	sid = null
-}: any) => {
+export const applyCouponService = async ({ code, origin, storeId, server = false, sid = null }) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		res = await post(
 			`coupons/apply`,
@@ -134,9 +127,9 @@ export const removeCouponService = async ({
 	storeId,
 	server = false,
 	sid = null
-}: any) => {
+}) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		res = await del(`coupon/remove?code=${code}&store=${storeId}`, origin)
 
