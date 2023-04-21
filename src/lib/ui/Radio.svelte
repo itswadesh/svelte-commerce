@@ -20,8 +20,7 @@ if (modelValue === value) {
 		value="{value}"
 		checked="{checked}"
 		class="mt-0.5 h-4 w-4 text-primary-500 focus:ring-0 focus:ring-offset-0"
-		on:change="{() => dispatch('change', modelValue)}"
-	/>
+		on:change="{() => dispatch('change', modelValue)}" />
 
 	<span class="max-w-max text-sm">
 		<slot />

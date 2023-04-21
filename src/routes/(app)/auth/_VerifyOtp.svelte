@@ -115,12 +115,10 @@ function checkLength(e) {
 		return
 	}
 }
-
 function onKeyPress(e) {
 	const value = e.target.value
 	if (value.length == 4) return false
 }
-
 function onInput(e) {
 	// let value = e.target.value
 	// value = value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')
@@ -182,7 +180,7 @@ function onInput(e) {
 
 		<div class="otp-input-wrapper mx-auto mb-5 max-w-max">
 			<input
-				type="text"
+				type="tel"
 				bind:value="{otp}"
 				maxlength="4"
 				pattern="[0-9]*"

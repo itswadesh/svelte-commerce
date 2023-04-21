@@ -168,9 +168,8 @@ const getSelectionLabel = (option) => option.name
 </script>
 
 <nav
-	class="minimum-width-rem fixed inset-x-0 top-0 flex h-14 w-full items-center justify-center bg-white px-3 sm:h-20 sm:px-10
-	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}"
-	style="box-shadow: 0 4px 12px 0 rgba(0,0,0,.05);">
+	class="minimum-width-rem fixed inset-x-0 top-0 flex h-14 w-full items-center justify-center border-b bg-white px-3 shadow-md sm:h-20 sm:px-10
+	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
 	<div class="flex w-full items-center justify-between gap-4 lg:gap-8">
 		<div class="flex items-center gap-4">
 			<!-- Back button -->

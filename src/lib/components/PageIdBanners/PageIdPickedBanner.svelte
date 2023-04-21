@@ -2,8 +2,6 @@
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 
 export let pickedBanners
-
-// console.log('pickedBanners', pickedBanners)
 </script>
 
 {#if pickedBanners?.length}
@@ -22,7 +20,7 @@ export let pickedBanners
 								{#if banner.img}
 									<a
 										href="{banner.link || '##'}"
-										aria-label="Click to route into banner related products page"
+										aria-label="Click to view banner related products page"
 										class="shrink-0">
 										<LazyImg
 											src="{banner.img}"
@@ -40,7 +38,7 @@ export let pickedBanners
 							{#if banner.img}
 								<a
 									href="{banner.link || '##'}"
-									aria-label="Click to route into banner related products page"
+									aria-label="Click to view banner related products page"
 									class="col-span-1">
 									<LazyImg
 										src="{banner.img}"

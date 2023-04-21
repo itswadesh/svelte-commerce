@@ -18,12 +18,16 @@ export const fetchReviews = async ({
 
 		if (server) {
 			res = await getBySid(
-				`es/reviews/${pid}?search=${search || ''}&sort=${sort}&page=${currentPage}&store=${storeId}`,
+				`es/reviews/${pid}?search=${
+					search || ''
+				}&sort=${sort}&page=${currentPage}&store=${storeId}`,
 				sid
 			)
 		} else {
 			res = await getAPI(
-				`es/reviews/${pid}?search=${search || ''}&sort=${sort}&page=${currentPage}&store=${storeId}`,
+				`es/reviews/${pid}?search=${
+					search || ''
+				}&sort=${sort}&page=${currentPage}&store=${storeId}`,
 				origin
 			)
 		}
@@ -107,4 +111,3 @@ export const saveReview = async ({
 		throw error(e.status, e.data?.message || e.message)
 	}
 }
-

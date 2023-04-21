@@ -5,8 +5,6 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 
 export let banners = []
 
-// console.log('banners', banners)
-
 $: sliderBanners = banners?.filter((b) => {
 	return b.type === 'slider' && b.isMobile === false
 })

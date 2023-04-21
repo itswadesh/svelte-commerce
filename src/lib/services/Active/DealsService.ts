@@ -1,6 +1,5 @@
 import { getAPI } from '$lib/utils/api'
 import { getBySid } from '$lib/utils/server'
-import { error } from '@sveltejs/kit'
 
 export const fetchDeals = async ({ origin, query, storeId, server = false, sid = null }: any) => {
 	try {

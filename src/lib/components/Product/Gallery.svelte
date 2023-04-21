@@ -9,7 +9,6 @@
 import type { Product } from '$lib/types'
 import { SplideSlide } from '@splidejs/svelte-splide'
 import { onMount } from 'svelte'
-import { slide } from 'svelte/transition'
 import LazyImg from '../Image/LazyImg.svelte'
 
 export let showPhotosModal = false

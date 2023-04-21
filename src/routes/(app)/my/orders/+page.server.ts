@@ -1,13 +1,16 @@
 import { OrdersService } from '$lib/services'
 import { error } from '@sveltejs/kit'
 
-export async function load({ params, parent, request, locals, cookies }) {
+export async function load({ locals, cookies }) {
 	try {
+		const storeId = locals.store?.id
+
 		const res = await OrdersService.fetchOrders({
-			storeId: locals.store?.id,
+			storeId,
 			server: true,
 			sid: cookies.get('connect.sid')
 		})
+
 		if (res) {
 			return res
 		}

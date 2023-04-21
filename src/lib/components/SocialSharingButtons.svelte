@@ -142,7 +142,7 @@ const copyToClipboard = (link) => {
 
 		<div
 			transition:fly="{{ y: 100, duration: 300 }}"
-			class="fixed lg:hidden inset-x-0 bottom-0 z-50 bg-white border-t"
+			class="fixed lg:hidden inset-x-0 bottom-0 z-[100] bg-white border-t"
 			style="box-shadow: 0px -4px 10px rgba(50, 50, 50, 0.075);">
 			<div class="py-2 px-4 flex items-center gap-2">
 				<button type="button" class="focus:outline-none" on:click="{() => (showDropDown = false)}">

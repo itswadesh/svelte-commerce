@@ -8,11 +8,11 @@
 }
 </style>
 
-<script lang="ts">
+<script>
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 
-let selectedItem: any = {}
+let selectedItem = {}
 $: selectedItem.link = $page?.url.pathname
 
 let footerItems = [
@@ -70,7 +70,7 @@ let footerItems = [
 	}
 ]
 
-function handleClick(item: any) {
+function handleClick(item) {
 	goto(item.link)
 	selectedItem = item
 }

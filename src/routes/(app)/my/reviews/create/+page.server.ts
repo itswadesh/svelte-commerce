@@ -3,7 +3,7 @@ import { ProductService } from '$lib/services'
 
 export const prerender = false
 
-export async function load({ url, locals, cookies, context }) {
+export async function load({ url, locals, cookies }) {
 	const pid = url.searchParams.get('pid')
 	const ref = url.searchParams.get('ref')
 
@@ -21,7 +21,6 @@ export async function load({ url, locals, cookies, context }) {
 
 		return { ref, product }
 	} catch (e) {
-		console.error(e)
 		throw error(e.status, e.message || 'Not found')
 	}
 }

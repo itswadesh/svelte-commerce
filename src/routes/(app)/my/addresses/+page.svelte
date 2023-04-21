@@ -178,7 +178,9 @@ async function remove(id, index) {
 			{/each}
 		</ul>
 
-		<Pagination count="{Math.ceil(data.count / 40)}" current="{data.currentPage}" />
+		<Pagination
+			count="{Math.ceil((data.count || 1) / data.pageSize)}"
+			current="{data.currentPage || 1}" />
 	{:else}
 		<div class="flex h-[70vh] flex-col items-center justify-center text-center">
 			<img src="{noEmptyAddress}" alt="empty wishlist" class="mb-5 h-60 object-contain" />

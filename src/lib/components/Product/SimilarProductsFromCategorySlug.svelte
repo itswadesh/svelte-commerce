@@ -1,37 +1,12 @@
 <script>
-// import { CategoryService } from '$lib/services'
-// import { page } from '$app/stores'
-import { onMount } from 'svelte'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
 import ProductSkeleton from '$lib/ui/ProductSkeleton.svelte'
 
-// export let categorySlug
-
 export let data
-
-let loading = false
-
-onMount(async () => {
-	try {
-		loading = true
-
-		// data = await CategoryService.fetchProductsOfCategory({
-		// 	origin: $page?.data?.origin,
-		// 	storeId: $page?.data?.store?.id,
-		// 	categorySlug,
-		// 	server: false
-		// })
-	} catch (e) {
-	} finally {
-		loading = false
-	}
-})
-
-// console.log('data', data)
 </script>
 
-{#if loading}
+{#if data.loading}
 	<ul
 		class="mb-5 grid w-full grid-cols-2 items-start gap-3 sm:mb-10 sm:flex sm:flex-wrap sm:justify-between lg:gap-6">
 		{#each { length: 12 } as _}
