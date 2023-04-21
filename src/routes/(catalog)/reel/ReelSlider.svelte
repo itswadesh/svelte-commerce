@@ -59,7 +59,7 @@ onMount(async () => {
 							{product.name}
 						</h6>
 						<video autoplay="{true}" loop muted="{true}" id="active{ix}" class="detail">
-							<source src="{product.img}" type="video/mp4" />
+							<source src="{product.video}" type="video/mp4" />
 						</video>
 					</div>
 				</SplideSlide>

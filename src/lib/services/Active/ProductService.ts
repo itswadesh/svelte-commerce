@@ -69,6 +69,29 @@ export const fetchProducts = async ({
 	}
 }
 
+export const fetchReels = async ({
+	origin,
+	storeId,
+	slug,
+	id,
+	server = false,
+	sid = null
+}: any) => {
+	try {
+		let res: AllProducts | {} = {}
+
+		if (server) {
+			res = await getBySid(`reels?store=${storeId}`, sid)
+		} else {
+			res = await getAPI(`reels?store=${storeId}`, origin)
+		}
+
+		return res || {}
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
+	}
+}
+
 // Fetch single product
 
 export const fetchProduct = async ({ origin, slug, id, server = false, sid = null }: any) => {

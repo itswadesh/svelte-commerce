@@ -16,42 +16,40 @@ export async function load({ url, params, parent }) {
 	query.forEach(function (value, key) {
 		fl[key] = value
 	})
-	const { products, count, facets, pageSize, category, err } =
-		await ProductService.fetchProductsOfCategory({
-			categorySlug: '',
-			query: query.toString(),
-			server: isServer,
-			storeId: store?.id,
-			origin
-		})
-	const products1 = [
-		{
-			name: '1 CERULEAN EMBROIDERED ORGANZA -  LUXURY LINE UNSTITCHED 4-PC',
-			img: 'https://litekart.b-cdn.net/litekart/reel-1.mp4'
-		},
-		{
-			name: '2 CERULEAN EMBROIDERED ORGANZA -  LUXURY LINE UNSTITCHED 4-PC',
-			img: 'https://litekart.b-cdn.net/litekart/reel-2.mp4'
-		},
-		{
-			name: '3 CERULEAN EMBROIDERED ORGANZA -  LUXURY LINE UNSTITCHED 4-PC',
-			img: 'https://litekart.b-cdn.net/litekart/reel-3.mp4'
-		},
-		{
-			name: '4 CERULEAN EMBROIDERED ORGANZA -  LUXURY LINE UNSTITCHED 4-PC',
-			img: 'https://litekart.b-cdn.net/litekart/reel-4.mp4'
-		},
-		{
-			name: '5 CERULEAN EMBROIDERED ORGANZA -  LUXURY LINE UNSTITCHED 4-PC',
-			img: 'https://litekart.b-cdn.net/litekart/reel-11.mp4'
-		}
-	]
+	const { data, count, facets, pageSize, err } = await ProductService.fetchReels({
+		server: isServer,
+		storeId: store?.id,
+		page: currentPage,
+		origin
+	})
+	console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', data)
+	// const products1 = [
+	// 	{
+	// 		name: '1 CERULEAN EMBROIDERED ORGANZA -  LUXURY LINE UNSTITCHED 4-PC',
+	// 		img: 'https://litekart.b-cdn.net/litekart/reel-1.mp4'
+	// 	},
+	// 	{
+	// 		name: '2 CERULEAN EMBROIDERED ORGANZA -  LUXURY LINE UNSTITCHED 4-PC',
+	// 		img: 'https://litekart.b-cdn.net/litekart/reel-2.mp4'
+	// 	},
+	// 	{
+	// 		name: '3 CERULEAN EMBROIDERED ORGANZA -  LUXURY LINE UNSTITCHED 4-PC',
+	// 		img: 'https://litekart.b-cdn.net/litekart/reel-3.mp4'
+	// 	},
+	// 	{
+	// 		name: '4 CERULEAN EMBROIDERED ORGANZA -  LUXURY LINE UNSTITCHED 4-PC',
+	// 		img: 'https://litekart.b-cdn.net/litekart/reel-4.mp4'
+	// 	},
+	// 	{
+	// 		name: '5 CERULEAN EMBROIDERED ORGANZA -  LUXURY LINE UNSTITCHED 4-PC',
+	// 		img: 'https://litekart.b-cdn.net/litekart/reel-11.mp4'
+	// 	}
+	// ]
 	return {
-		products: products1,
+		data,
 		count,
 		facets,
 		pageSize,
-		category,
 		err,
 		query: query.toString(),
 		searchData,

@@ -26,7 +26,6 @@ let today = dayjs(new Date()).toISOString()
 
 let seoProps = {
 	brand: $page.data.store?.title,
-	breadcrumbs: data.category?.children,
 	caption: $page.data.store?.title,
 	category: data.searchData,
 	contentUrl: $page.data.store?.logo,
@@ -71,6 +70,6 @@ let seoProps = {
 
 <div class="h-full min-h-screen max-w-sm justify-center text-center">
 	<div class="">
-		<ReelSlider products="{data.products}" />
+		<ReelSlider products="{data.data}" />
 	</div>
 </div>
