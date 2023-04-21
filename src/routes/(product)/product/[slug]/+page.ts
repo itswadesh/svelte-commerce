@@ -27,6 +27,7 @@ export async function load({ params, url, parent }) {
 			}),
 
 			productReviews: ReviewService.fetchProductReviews({
+				origin,
 				page,
 				server: isServer,
 				slug,

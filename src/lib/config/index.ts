@@ -54,7 +54,8 @@ export const listOfPagesWithoutBackButton = [
 	'/new-arrivals',
 	'/my/wishlist',
 	'/my',
-	'/payment/success'
+	'/payment/success',
+	'/my/reviews/create'
 ]
 
 export const BIG_COMMERCE_CLIENT_ID =

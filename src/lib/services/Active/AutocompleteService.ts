@@ -14,12 +14,11 @@ export const fetchAutocompleteData = async ({ origin, storeId, q }: any) => {
 
 		res = await getAPI(filterText, origin)
 
-
 		data = res?.data
 
 		return data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		// throw error(e.status, e.data?.message || e.message)
 	}
 }
 

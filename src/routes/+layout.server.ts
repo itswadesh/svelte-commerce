@@ -8,17 +8,20 @@ export const load: LayoutServerLoad = async ({ url, locals, cookies }) => {
 	try {
 		const currentPage = +url.searchParams.get('page') || 1
 		const q = url.searchParams.get('q') || ''
-		locals.currentPage = currentPage
-		locals.q = q
-		locals.sid = cookies.get('connect.sid')
-		locals.url = url.href
-		locals.zip = cookies.get('zip')
+		const { pathname } = url
 
 		// setHeaders({
 		// 	'cache-control': 'public, max-age=300'
 		// })
-
-		return locals
+		const zip = cookies.get('zip')
+		locals.url = url.href
+		locals.currentPage = currentPage
+		locals.q = q
+		locals.sid = cookies.get('connect.sid')
+		locals.cartQty = cookies.get('cartQty')
+		if (zip) locals.zip = JSON.parse(zip)
+		// me,
+		return { ...locals, pathname }
 	} catch (e) {
 		throw error(
 			404,

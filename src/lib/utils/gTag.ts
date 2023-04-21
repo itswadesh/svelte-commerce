@@ -1,6 +1,7 @@
-export const fireGTagEvent = (event_name: string, data: any) => {
+export const fireGTagEvent = (event_name, data) => {
+	if (!data) data = {}
 	data.items = data.items || []
-	const items = data.items.map((item:any) => {
+	const items = data.items.map((item) => {
 		item.discount = item.discount || item.coupon || {}
 		return {
 			item_id: item._id,
@@ -13,6 +14,7 @@ export const fireGTagEvent = (event_name: string, data: any) => {
 			coupon: item.discount?.code,
 			currency: 'INR',
 			discount: item.discount?.amount,
+			savings: item.savings,
 			index: 0
 		}
 	})

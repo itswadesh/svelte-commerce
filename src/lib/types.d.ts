@@ -35,7 +35,7 @@ interface AllProducts {
 	facets: Facet[]
 }
 
-interface Facet { }
+interface Facet {}
 interface EsProduct {
 	_source: Product
 }
@@ -63,7 +63,7 @@ interface Product {
 	img?: string
 	isCustomized?: boolean
 	isFnb?: boolean
-	layoutTemplateCdn?: string
+	layoutTemplate?: string
 	length?: number
 	linkedProducts?: Product[]
 	longDescription?: string
@@ -90,6 +90,7 @@ interface Product {
 	varified?: boolean
 	weight: number
 	width: number
+	isWishlisted: boolean
 }
 
 interface Brand {
@@ -295,9 +296,14 @@ interface Order {
 }
 
 interface User {
-	fullName: string
-	phone: string
+	_id: string
+	avatar: string
 	email: string
+	email: string
+	firstName: string
+	fullName: string
+	lastName: string
+	phone: string
 }
 
 interface Address {

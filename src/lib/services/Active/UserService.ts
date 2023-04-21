@@ -216,11 +216,11 @@ export const logoutService = async ({ storeId, origin, server = false, sid = nul
 	try {
 		let res: any = {}
 
-		res = await postBySid(`logout?store=${storeId}`, sid)
+		res = await postBySid(`logout?store=${storeId}`, {}, sid)
 
 		return res
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e?.status || 500, e.data?.message || e.message)
 	}
 }
 

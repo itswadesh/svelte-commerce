@@ -9,7 +9,6 @@ const seoProps = {
 }
 
 export let data
-
 </script>
 
 <SEO {...seoProps} />
@@ -20,8 +19,10 @@ export let data
 		<h1 class="text-xl font-medium md:text-2xl lg:text-3xl">
 			{#if data.id === 'new'}
 				<span> Add New Address </span>
+			{:else if !data.address?.title}
+				<span>Address Details</span>
 			{:else}
-				<span> Edit Address </span>
+				<span> Address Details of "{data.address?.title}"</span>
 			{/if}
 		</h1>
 
