@@ -24,8 +24,30 @@ export async function load({ url, params, parent }) {
 			storeId: store?.id,
 			origin
 		})
+	const products1 = [
+		{
+			name: '1 CERULEAN EMBROIDERED ORGANZA -  LUXURY LINE UNSTITCHED 4-PC',
+			img: 'https://litekart.b-cdn.net/litekart/reel-1.mp4'
+		},
+		{
+			name: '2 CERULEAN EMBROIDERED ORGANZA -  LUXURY LINE UNSTITCHED 4-PC',
+			img: 'https://litekart.b-cdn.net/litekart/reel-2.mp4'
+		},
+		{
+			name: '3 CERULEAN EMBROIDERED ORGANZA -  LUXURY LINE UNSTITCHED 4-PC',
+			img: 'https://litekart.b-cdn.net/litekart/reel-3.mp4'
+		},
+		{
+			name: '4 CERULEAN EMBROIDERED ORGANZA -  LUXURY LINE UNSTITCHED 4-PC',
+			img: 'https://litekart.b-cdn.net/litekart/reel-4.mp4'
+		},
+		{
+			name: '5 CERULEAN EMBROIDERED ORGANZA -  LUXURY LINE UNSTITCHED 4-PC',
+			img: 'https://litekart.b-cdn.net/litekart/reel-11.mp4'
+		}
+	]
 	return {
-		products,
+		products: products1,
 		count,
 		facets,
 		pageSize,

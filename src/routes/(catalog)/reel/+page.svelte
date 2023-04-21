@@ -18,7 +18,7 @@ import { page } from '$app/stores'
 import CatelogNav from '$lib/CatelogNav.svelte'
 import dayjs from 'dayjs'
 import SEO from '$lib/components/SEO/index.svelte'
-import ReelsSlider from './ReelsSlider.svelte'
+import ReelSlider from './ReelSlider.svelte'
 
 export let data
 
@@ -69,8 +69,8 @@ let seoProps = {
 
 <SEO {...seoProps} />
 
-<div class="h-full min-h-screen max-w-xs justify-center text-center">
+<div class="h-full min-h-screen max-w-sm justify-center text-center">
 	<div class="">
-		<ReelsSlider />
+		<ReelSlider products="{data.products}" />
 	</div>
 </div>
