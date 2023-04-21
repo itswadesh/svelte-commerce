@@ -70,7 +70,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 			customizedImg,
 			storeId: locals.store?.id,
 			server: true,
-			origin,
+			origin: locals.origin,
 			sid // This is a special case to pass complete cookie
 		})
 		if (linkedItems?.length) {
@@ -81,7 +81,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 					qty: 1,
 					storeId: locals.store?.id,
 					server: true,
-					origin,
+					origin: locals.origin,
 					sid // This is a special case to pass complete cookie
 				})
 			}
