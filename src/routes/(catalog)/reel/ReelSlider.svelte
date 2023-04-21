@@ -30,6 +30,8 @@ let Splide
 const options = {
 	pagination: false,
 	arrows: false,
+	autoplay: true,
+	lazy: true,
 	height: 800,
 	type: 'loop',
 	perPage: 1,
