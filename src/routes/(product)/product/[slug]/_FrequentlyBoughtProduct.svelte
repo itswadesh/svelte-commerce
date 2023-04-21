@@ -70,7 +70,7 @@ let bounceItemFromTop = false
 </script>
 
 <div class="group relative col-span-1 block w-full overflow-hidden sm:w-48 sm:shrink-0">
-	<a href="/product/{product.slug}" target="_blank" rel="noopener noreferrer">
+	<a href="/product/{product.slug}" rel="noopener noreferrer">
 		<div class="mb-2 h-40 overflow-hidden">
 			<img
 				src="{product.img}"

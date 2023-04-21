@@ -197,17 +197,6 @@ onMount(async () => {
 	try {
 		screenWidth = screen.width
 
-		// moreProductDetails = fetchProduct2({
-		// 	slug: data.product?.slug,
-		// 	id: null,
-		// 	server: false,
-		// 	sid: null,
-		// 	origin,
-		// 	storeId: $page.data.store?.id
-		// })
-
-		// console.log('moreProductDetails', await moreProductDetails)
-
 		if ($page.data?.me) {
 			try {
 				isWishlisted = await WishlistService.checkWishlist({
