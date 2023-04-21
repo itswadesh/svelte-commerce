@@ -3,8 +3,8 @@ import { CategoryService, ProductService } from '$lib/services'
 export const prerender = false
 const isServer = import.meta.env.SSR
 
-export async function load({ url, params, locals, cookies, parent, setHeaders }) {
-	const { store, origin, sid } = locals
+export async function load({ url, params, parent, setHeaders }) {
+	const { store, origin, sid } = await parent()
 
 	const categorySlug = params.slug
 	const currentPage = +url.searchParams.get('page') || 1

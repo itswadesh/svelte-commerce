@@ -49,7 +49,6 @@ onMount(async () => {
 				<SplideSlide>
 					<a
 						href="/product/{p.slug}"
-						target="{$page?.data?.isDesktop ? '_blank' : ''}"
 						rel="noopener noreferrer"
 						aria-label="Click to view the product details"
 						data-sveltekit-preload-data

@@ -60,7 +60,6 @@ function hideitems() {
 	on:mouseleave="{hideitems}">
 	<a
 		href="/product/{product.slug}"
-		target="{$page?.data?.isDesktop ? '_blank' : ''}"
 		rel="noopener noreferrer"
 		aria-label="Click to view the product details"
 		data-sveltekit-preload-data="tap"
@@ -225,7 +224,6 @@ function hideitems() {
 		<!-- <div class="sm:hidden">
 				<a
 					href="/product/{product.slug}"
-					target="_blank"
 					rel="noopener noreferrer"
 					aria-label="Click to view the product details"
 					data-sveltekit-preload-data>
@@ -257,7 +255,6 @@ function hideitems() {
 
 					<h3
 						href="{'/' + product.slug}"
-						target="_blank"
 						rel="noopener noreferrer"
 						class="overflow-hidden overflow-ellipsis whitespace-nowrap text-sm font-medium group-hover:underline">
 						{#if product.name}
@@ -387,7 +384,6 @@ function hideitems() {
 						{#each product.relatedProducts as relatedProduct}
 							<a
 								href="/product/{relatedProduct.slug}"
-								target="_blank"
 								rel="noopener noreferrer"
 								class="group relative w-full sm:w-48"
 								on:click="{() => (showRelatedProducts = false)}">
