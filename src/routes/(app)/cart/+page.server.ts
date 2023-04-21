@@ -40,7 +40,7 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 	} catch (e) {
 		// console.log('Error at /cart/+page.server.ts page.....', e)
 		if (e?.status === 401) {
-			throw redirect(307, '/auth/otp-login')
+			throw redirect(307, '/auth/login')
 		}
 		throw error(400, e?.body?.message || e)
 	} finally {
