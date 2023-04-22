@@ -4,7 +4,7 @@ const isServer = import.meta.env.SSR
 export const prerender = false
 
 export async function load({ url, params, parent }) {
-	const { store } = await parent()
+	const { store, origin } = await parent()
 
 	const categorySlug = params.slug
 	const currentPage = +url.searchParams.get('page') || 1
@@ -22,7 +22,8 @@ export async function load({ url, params, parent }) {
 			categorySlug,
 			query: query.toString(),
 			server: isServer,
-			storeId: store?.id
+			storeId: store?.id,
+			origin
 		}),
 		query: query.toString(),
 		searchData,

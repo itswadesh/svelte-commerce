@@ -1,4 +1,4 @@
-import { CartService, AddressService } from '$lib/services'
+import { AddressService, CartService } from '$lib/services'
 import { error, redirect } from '@sveltejs/kit'
 export const prerender = false
 
@@ -15,7 +15,8 @@ export async function load({ request, url, locals, cookies }) {
 		const cart = await CartService.fetchRefreshCart({
 			storeId: locals.store?.id,
 			server: true,
-			sid: cookies.get('connect.sid')
+			sid: cookies.get('connect.sid'),
+			origin: locals.origin
 		})
 		return {
 			cart,

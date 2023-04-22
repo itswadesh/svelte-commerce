@@ -58,12 +58,35 @@ export const fetchProducts = async ({
 		let res: AllProducts | {} = {}
 
 		if (server) {
-			res = await getBySid(`products?store=${storeId}`, sid)
+			res = await getBySid(`es/products?store=${storeId}`, sid)
 		} else {
-			res = await getAPI(`products?store=${storeId}`, origin)
+			res = await getAPI(`es/products?store=${storeId}`, origin)
 		}
 
 		return res?.data || []
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
+	}
+}
+
+export const fetchReels = async ({
+	origin,
+	storeId,
+	slug,
+	id,
+	server = false,
+	sid = null
+}: any) => {
+	try {
+		let res: AllProducts | {} = {}
+
+		if (server) {
+			res = await getBySid(`reels?store=${storeId}`, sid)
+		} else {
+			res = await getAPI(`reels?store=${storeId}`, origin)
+		}
+
+		return res || {}
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)
 	}
