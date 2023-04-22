@@ -36,7 +36,7 @@ export const fetchRefreshCart = async ({ origin, storeId, server = false, sid = 
 		throw error(e.status, e.data?.message)
 	}
 }
-export const fetchMyCart = async ({ origin, storeId, server = false, sid = null, cookies }) => {
+export const fetchMyCart = async ({ origin, storeId, server = false, sid = null }) => {
 	try {
 		let res = {}
 

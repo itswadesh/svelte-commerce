@@ -6,10 +6,12 @@ export async function load({ url, locals, cookies }) {
 	const q = url.searchParams.get('q') || ''
 	let cart
 	try {
+		const sid = cookies.get('connect.sid')
 		const res: any = await CartService.fetchMyCart({
 			storeId: locals.store?.id,
 			server: true,
-			sid: cookies.get('connect.sid')
+			sid,
+			origin: locals.origin
 		})
 
 		if (res) {

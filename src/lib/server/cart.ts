@@ -1,7 +1,5 @@
 import { CartService } from '$lib/services'
 import type { RequestEvent } from '@sveltejs/kit'
-import Cookie from 'cookie-universal'
-const cookies = Cookie()
 
 export const fetchCart = async (event: RequestEvent) => {
 	try {
@@ -12,10 +10,10 @@ export const fetchCart = async (event: RequestEvent) => {
 		const cartQty: string | undefined = event.cookies.get('cartQty')
 		if (cartId) event.locals.cartId = cartId
 		if (cartQty) event.locals.cartQty = +cartQty
-		const cartRes = await CartService.fetchMyCart({ cookies, origin, storeId, sid })
+		const cartRes = await CartService.fetchMyCart({ origin, storeId, sid })
 		const cart = {
 			cartId: cartRes.cart_id,
-			// items: cartRes.items,
+			items: cartRes.items,
 			qty: cartRes.qty,
 			tax: cartRes.tax,
 			subtotal: cartRes.subtotal,
