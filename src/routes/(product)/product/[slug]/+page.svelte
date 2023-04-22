@@ -189,9 +189,15 @@ if (data.product?.size?.name === 'One Size') {
 	selectedSize = 'One Size'
 }
 
-let Konvas
+function handlePopstate(event) {
+	if (!history.state) {
+		goto('/')
+	}
+}
 
 onMount(async () => {
+	window.addEventListener('popstate', handlePopstate)
+
 	try {
 		screenWidth = screen.width
 
