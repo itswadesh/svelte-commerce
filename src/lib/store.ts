@@ -12,7 +12,7 @@ export const geoLocation = writable({
 	lat: 0,
 	lng: 0
 })
-// export const settings = writable({})
+export const settings = writable({})
 // export const store = writable({})
 // export const megamenu = writable({})
 export const loginUrl = writable('/auth/login')
