@@ -606,7 +606,7 @@ function handleFilterTags() {
 									<li>
 										<a
 											href="/product/{p.slug}"
-											aria-label="Click to route product details page"
+											aria-label="Click to visit product details page"
 											class="grid grid-cols-6 gap-5">
 											<span class="col-span-5 text-justify">{p.name}</span>
 

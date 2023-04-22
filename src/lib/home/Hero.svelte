@@ -42,7 +42,7 @@ onMount(async () => {
 					<SplideSlide>
 						<a
 							href="{b.link || '##'}"
-							aria-label="Click to route into banner related products page"
+							aria-label="Click to visit banner related products page"
 							class="block"
 							data-sveltekit-preload-data>
 							<LazyImg
@@ -63,7 +63,7 @@ onMount(async () => {
 				{#if b.img}
 					<a
 						href="{b.link || '##'}"
-						aria-label="Click to route into banner related products page"
+						aria-label="Click to visit banner related products page"
 						data-sveltekit-preload-data
 						class="carousel-item relative  float-left h-auto w-full {ix == 0 ? 'active' : ''}">
 						<LazyImg
@@ -88,7 +88,7 @@ onMount(async () => {
 					<SplideSlide>
 						<a
 							href="{b.link || '##'}"
-							aria-label="Click to route into banner related products page"
+							aria-label="Click to visit banner related products page"
 							class="block"
 							data-sveltekit-preload-data>
 							<LazyImg

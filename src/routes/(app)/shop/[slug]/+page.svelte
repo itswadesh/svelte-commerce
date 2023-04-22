@@ -297,7 +297,7 @@ function toggle2(cx) {
 										{bgColors[mx]}">
 										<a
 											href="/{m.link || m.slug}"
-											aria-label="Click to route {m.name || '##'}"
+											aria-label="Click to visit {m.name || '##'}"
 											class="block text-xl font-bold uppercase">
 											{m.name}
 										</a>
@@ -322,7 +322,7 @@ function toggle2(cx) {
 								{:else}
 									<a
 										href="/{m.link || m.slug}"
-										aria-label="Click to route {m.name || '##'}"
+										aria-label="Click to visit {m.name || '##'}"
 										class="flex items-center h-24 w-full text-xl font-bold uppercase px-6 
 										{bgColors[mx]}">
 										{m.name}
@@ -341,7 +341,7 @@ function toggle2(cx) {
 															class="flex w-full items-center justify-between gap-4 h-14 px-6 focus:outline-none">
 															<a
 																href="/{c.link || c.slug}"
-																aria-label="Click to route {c.name || '##'}"
+																aria-label="Click to visit {c.name || '##'}"
 																class="block">
 																{c.name}
 															</a>
@@ -367,7 +367,7 @@ function toggle2(cx) {
 													{:else}
 														<a
 															href="/{c.link || c.slug}"
-															aria-label="Click to route {c.name || '##'}"
+															aria-label="Click to visit {c.name || '##'}"
 															class="flex items-center h-14 px-6">
 															<h6>{c.name}</h6>
 														</a>
@@ -382,7 +382,7 @@ function toggle2(cx) {
 																	<li>
 																		<a
 																			href="/{cc.link || cc.slug}"
-																			aria-label="Click to route {cc.name || '##'}"
+																			aria-label="Click to visit {cc.name || '##'}"
 																			class="flex items-center h-14 px-6 text-sm">
 																			{cc.name}
 																		</a>

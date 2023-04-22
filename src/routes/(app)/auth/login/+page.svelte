@@ -460,7 +460,7 @@ function changeNumber() {
 
 		<a
 			href="/terms-conditions"
-			aria-label="Click to route terms & conditions"
+			aria-label="Click to visit terms & conditions"
 			target="_blank"
 			rel="noopener noreferrer"
 			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">

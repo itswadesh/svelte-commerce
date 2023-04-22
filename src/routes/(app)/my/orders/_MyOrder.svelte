@@ -197,7 +197,7 @@ export { clazz as class }
 
 									<div class="w-full flex-1">
 										<!-- {#if item.vendor}
-													<a href="/vendor/${item.vendor?.slug}" aria-label="Click to route vendor's profile">
+													<a href="/vendor/${item.vendor?.slug}" aria-label="Click to visit vendor's profile">
 														 {#if store.isFnb && item.vendorBusinessName}
 															 <b class="mb-2">
 																 {item.vendorBusinessName}
@@ -275,7 +275,7 @@ export { clazz as class }
 
 			<p class="mb-5 text-sm">There's no order placed, start adding items to your cart.</p>
 
-			<a href="/" aria-label="Click to route home" data-sveltekit-preload-data>
+			<a href="/" aria-label="Click to visit home" data-sveltekit-preload-data>
 				<PrimaryButton class="w-40 py-2 text-sm">Shop Now</PrimaryButton>
 			</a>
 		</div>

@@ -45,7 +45,7 @@ let socialSharesList = [
 	{
 		icon: twitterIcon,
 		title: 'Twitter',
-		href: `https://twitter.com/intent/tweet/?text=${productName}&hashtags=${'zapvi'}&via=${'zapvi'}&related=${'mobile cover, mousepad, phone grips, t-shirt, keychain, mobile accessories'}&url=${url}`
+		href: `https://twitter.com/intent/tweet/?text=${productName}&hashtags=${'litekart'}&via=${'litekart'}&related=${'mobile cover, mousepad, phone grips, t-shirt, keychain, mobile accessories'}&url=${url}`
 	},
 	{
 		icon: pinterestIcon,
@@ -120,8 +120,8 @@ const copyToClipboard = (link) => {
 					class="share-button"
 					text="{productName}"
 					url="{url}"
-					hashtags="zapvi"
-					via="zapvi"
+					hashtags="litekart"
+					via="litekart"
 					related="mobile cover,t-shirt,key chain " />
 			</li>
 

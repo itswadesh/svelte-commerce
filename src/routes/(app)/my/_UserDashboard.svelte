@@ -22,7 +22,7 @@ export let me, myOrders, myWishlist, myReviews
 		class="mt-2 space-y-4 lg:mt-5 lg:flex lg:flex-row lg:items-center lg:justify-between lg:gap-8 lg:space-y-0">
 		<a
 			href="/my/orders?sort=-updatedAt"
-			aria-label="Click to route my orders"
+			aria-label="Click to visit my orders"
 			class="relative flex items-end justify-between overflow-hidden rounded-lg bg-gradient-to-r from-primary-500 to-fuchsia-600 p-4 text-white shadow-lg shadow-orange-500/30 sm:p-6 lg:w-1/2">
 			<div class="flex-1" in:fly="{{ y: 20, duration: 1000, delay: 500 }}">
 				<h3 class="mt-2 text-xl font-bold sm:text-2xl">Orders</h3>
@@ -41,7 +41,7 @@ export let me, myOrders, myWishlist, myReviews
 
 		<a
 			href="/my/wishlist?sort=-updatedAt"
-			aria-label="Click to route my wishlist"
+			aria-label="Click to visit my wishlist"
 			class="relative flex items-end justify-between overflow-hidden rounded-lg bg-gradient-to-r from-fuchsia-600 to-pink-600 p-4 text-white shadow-lg shadow-fuchsia-500/30 sm:p-6 lg:w-1/2">
 			<div class="flex-1" in:fly="{{ y: 20, duration: 1000, delay: 700 }}">
 				<h3 class="mt-2 text-xl font-bold sm:text-2xl">Wishlist</h3>
@@ -63,7 +63,7 @@ export let me, myOrders, myWishlist, myReviews
 		class="mt-4 space-y-4 lg:mt-8 lg:flex lg:flex-row lg:items-center lg:justify-between lg:gap-8 lg:space-y-0">
 		<a
 			href="/my/reviews?sort=-updatedAt"
-			aria-label="Click to route my reviews"
+			aria-label="Click to visit my reviews"
 			class="relative flex items-end justify-between overflow-hidden rounded-lg bg-gradient-to-r from-secondary-500 to-cyan-600 p-4 text-white shadow-lg shadow-purple-500/30 sm:p-6 lg:w-1/2">
 			<div class="flex-1" in:fly="{{ y: 20, duration: 1000, delay: 900 }}">
 				<h3 class="mt-2 text-xl font-bold sm:text-2xl">Reviews</h3>
@@ -82,7 +82,7 @@ export let me, myOrders, myWishlist, myReviews
 
 		<a
 			href="/my/profile"
-			aria-label="Click to route my profile"
+			aria-label="Click to visit my profile"
 			class="relative flex items-end justify-between overflow-hidden rounded-lg bg-gradient-to-r from-cyan-600 to-emerald-600 p-4 text-white shadow-lg shadow-cyan-500/30 sm:p-6 lg:w-1/2">
 			<div class="flex-1" in:fly="{{ y: 20, duration: 1000, delay: 1100 }}">
 				<h3 class="mt-2 text-xl font-bold sm:text-2xl">Profile</h3>

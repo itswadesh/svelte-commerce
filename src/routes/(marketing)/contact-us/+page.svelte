@@ -133,7 +133,7 @@ async function submitContactInformation() {
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#4267B2]">
 								<a
 									href="{$page.data.store?.facebookUrl}"
-									aria-label="Click to route facebook page"
+									aria-label="Click to visit facebook page"
 									target="_blank"
 									rel="noopener noreferrer"
 									class="flex h-full w-full items-center justify-center">
@@ -162,7 +162,7 @@ async function submitContactInformation() {
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#C13584]">
 								<a
 									href="{$page.data.store?.instagramUrl}"
-									aria-label="Click to route instagram page"
+									aria-label="Click to visit instagram page"
 									target="_blank"
 									rel="noopener noreferrer"
 									class="flex h-full w-full items-center justify-center">
@@ -191,7 +191,7 @@ async function submitContactInformation() {
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#1DA1F2]">
 								<a
 									href="{$page.data.store?.twitterUrl}"
-									aria-label="Click to route twitter page"
+									aria-label="Click to visit twitter page"
 									target="_blank"
 									rel="noopener noreferrer"
 									class="flex h-full w-full items-center justify-center">
@@ -220,7 +220,7 @@ async function submitContactInformation() {
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#0077b5]">
 								<a
 									href="{$page.data.store?.linkedinUrl}"
-									aria-label="Click to route linkedin page"
+									aria-label="Click to visit linkedin page"
 									target="_blank"
 									rel="noopener noreferrer"
 									class="flex h-full w-full items-center justify-center">
@@ -251,7 +251,7 @@ async function submitContactInformation() {
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#D32D2D]">
 								<a
 									href="{$page.data.store?.pinterestUrl}"
-									aria-label="Click to route pinterest page"
+									aria-label="Click to visit pinterest page"
 									target="_blank"
 									rel="noopener noreferrer"
 									class="flex h-full w-full items-center justify-center">
@@ -282,7 +282,7 @@ async function submitContactInformation() {
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#FF0000]">
 								<a
 									href="{$page.data.store?.youtubeUrl}"
-									aria-label="Click to route youtube page"
+									aria-label="Click to visit youtube page"
 									target="_blank"
 									rel="noopener noreferrer"
 									class="flex h-full w-full items-center justify-center">

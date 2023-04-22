@@ -217,7 +217,7 @@ async function remove(id) {
 
 			<p class="mb-5 text-sm">There's no review found, start adding review on purchased items.</p>
 
-			<a href="/" aria-label="Click to route home" data-sveltekit-preload-data>
+			<a href="/" aria-label="Click to visit home" data-sveltekit-preload-data>
 				<PrimaryButton class="w-40 py-2 text-sm">Shop Now</PrimaryButton>
 			</a>
 		</div>

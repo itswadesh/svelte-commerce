@@ -50,7 +50,7 @@ const main = async () => {
 			theme_color: themeColor,
 			description,
 			icons: sizes.map((size) => {
-				const path = `icons/zapvi-icon-${size}x${size}.png`
+				const path = `icons/icon-${size}x${size}.png`
 				resizeIcon({ size, path: `static/${path}` })
 				if (size === 180) {
 					return {

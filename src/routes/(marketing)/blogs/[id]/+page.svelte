@@ -89,7 +89,7 @@ let seoProps = {
 							<li>
 								<a
 									href="/blogs/{blog._id}"
-									aria-label="Click to route blog details page"
+									aria-label="Click to visit blog details page"
 									data-sveltekit-preload-data
 									class="group flex items-start gap-4 py-4">
 									<div class="h-16 w-24 overflow-hidden rounded border">
