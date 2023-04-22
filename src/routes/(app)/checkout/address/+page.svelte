@@ -53,7 +53,7 @@ async function refreshAddress() {
 			<div class="my-10 w-1/2">
 				<a
 					href="/checkout/add-address?id=new"
-					aria-label="Click to route add address"
+					aria-label="Click to visit add address"
 					class="group flex h-40 w-full flex-col items-center justify-center rounded border border-dashed border-zinc-400 hover:border-blue-500 sm:h-60 ">
 					<div
 						class="flex h-8 w-8 items-center justify-center rounded-full border  border-zinc-400 bg-zinc-50 group-hover:border-blue-500 sm:h-10 sm:w-10">

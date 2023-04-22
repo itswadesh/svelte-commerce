@@ -190,7 +190,7 @@ onMount(async () => {
 						</a>
 					{/if}
 
-					<a href="/" rel="noopener" aria-label="Click to route home" data-sveltekit-preload-data>
+					<a href="/" rel="noopener" aria-label="Click to visit home" data-sveltekit-preload-data>
 						<WhiteButton type="button">Continue Shopping</WhiteButton>
 					</a>
 				</div>

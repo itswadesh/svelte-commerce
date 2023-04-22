@@ -86,7 +86,7 @@ let show = false
 
 			<a
 				href="/my/wishlist"
-				aria-label="Click to route wishlist"
+				aria-label="Click to visit wishlist"
 				class="h-8 w-8 flex items-center justify-center frosted-white rounded-full focus:outline-none"
 				data-sveltekit-preload-data>
 				<svg
@@ -108,7 +108,7 @@ let show = false
 
 			<a
 				href="/cart"
-				aria-label="Click to route cart"
+				aria-label="Click to visit cart"
 				class="h-8 w-8 relative flex items-center justify-center frosted-white rounded-full focus:outline-none"
 				data-sveltekit-preload-data>
 				<svg

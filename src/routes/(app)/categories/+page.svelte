@@ -96,7 +96,7 @@ function toggle2(cx) {
 									<div class="flex h-full w-full flex-1 items-center gap-2 px-6">
 										<a
 											href="/{m.slug}"
-											aria-label="Click to route {m.name || '##'}"
+											aria-label="Click to visit {m.name || '##'}"
 											class="flex-1 text-left text-xl font-bold uppercase">
 											{m.name}
 										</a>
@@ -128,7 +128,7 @@ function toggle2(cx) {
 							{:else}
 								<a
 									href="/{m.slug}"
-									aria-label="Click to route {m.name || '##'}"
+									aria-label="Click to visit {m.name || '##'}"
 									class="flex h-24 w-full items-end justify-between {bgColors[mx]}">
 									<div class="flex h-full w-full flex-1 items-center px-6">
 										<h1 class="flex-1 text-xl font-bold uppercase">
@@ -157,7 +157,7 @@ function toggle2(cx) {
 														class="flex w-full items-center gap-4 py-3 px-8 text-left font-medium focus:outline-none">
 														<a
 															href="/{c.slug}"
-															aria-label="Click to route {c.name || '##'}"
+															aria-label="Click to visit {c.name || '##'}"
 															class="flex flex-1 items-center gap-4">
 															{#if c.img}
 																<div class="h-12 w-12 shrink-0 overflow-hidden rounded-full">
@@ -199,7 +199,7 @@ function toggle2(cx) {
 												{:else}
 													<a
 														href="/{c.slug}"
-														aria-label="Click to route {c.name || '##'}"
+														aria-label="Click to visit {c.name || '##'}"
 														class="flex items-center gap-4 py-3 px-8 font-medium">
 														{#if c.img}
 															<div class="h-12 w-12 shrink-0 overflow-hidden rounded-full">
@@ -229,7 +229,7 @@ function toggle2(cx) {
 																<li>
 																	<a
 																		href="/{cc.slug}"
-																		aria-label="Click to route {cc.name || '##'}"
+																		aria-label="Click to visit {cc.name || '##'}"
 																		class="flex w-full items-center gap-4 py-3 px-8 font-medium">
 																		{cc.name}
 																	</a>

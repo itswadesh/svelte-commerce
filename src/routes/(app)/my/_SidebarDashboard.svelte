@@ -36,7 +36,7 @@ function close() {
 							data-sveltekit-preload-data
 							on:click="{() => (sidebar.hidden = '')}"
 							href="{sidebar.url}"
-							aria-label="Click to route this page"
+							aria-label="Click to visit this page"
 							class:active="{$page.url.pathname === sidebar.pathName}"
 							class="flex w-full items-center justify-start gap-2 p-3 text-white">
 							<div
@@ -76,7 +76,7 @@ function close() {
 							data-sveltekit-preload-data
 							on:click="{() => close()}"
 							href="{sidebar.url}"
-							aria-label="Click to route this page"
+							aria-label="Click to visit this page"
 							class:active="{$page.url.pathname === sidebar.pathName}"
 							class="flex w-full items-center justify-start gap-2 p-3 text-white">
 							<div
@@ -119,7 +119,7 @@ function close() {
 									data-sveltekit-preload-data
 									on:click="{() => close()}"
 									href="{subItems.url}"
-									aria-label="Click to route this page"
+									aria-label="Click to visit this page"
 									class:active-submenu="{$page.url?.pathname === subItems.pathName}">
 									<div class="px-3 py-2 capitalize text-white">
 										{subItems.name}

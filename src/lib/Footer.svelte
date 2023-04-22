@@ -109,7 +109,7 @@ async function getStoreData() {
 									<a
 										href="{itm.link}"
 										target="{item.target || 'self'}"
-										aria-label="Click to route this page"
+										aria-label="Click to visit this page"
 										class="link-underline link-underline-gray whitespace-pre-wrap">
 										{itm.title}
 									</a>
@@ -136,7 +136,7 @@ async function getStoreData() {
 							<li class="flex max-w-max items-center">
 								<a
 									href="/{category.link || category.slug}"
-									aria-label="Click to route this page"
+									aria-label="Click to visit this page"
 									class="link-underline link-underline-gray whitespace-pre-wrap">
 									{category.name}
 								</a>
@@ -520,14 +520,14 @@ async function getStoreData() {
 			<div class="flex items-center justify-center gap-4">
 				<a
 					href="/contact-us"
-					aria-label="Click to route this page"
+					aria-label="Click to visit this page"
 					class="font-bold uppercase text-primary-500 transition duration-300 hover:text-primary-700">
 					Contact Us
 				</a>
 
 				<a
 					href="/faqs"
-					aria-label="Click to route this page"
+					aria-label="Click to visit this page"
 					class="font-bold uppercase text-primary-500 transition duration-300 hover:text-primary-700">
 					Faqs
 				</a>

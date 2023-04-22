@@ -202,7 +202,7 @@ async function getCoupons() {
 											<div class="flex w-full items-start gap-4 py-5">
 												<a
 													href="/product/{item?.slug}"
-													aria-label="Click to route product details"
+													aria-label="Click to visit product details"
 													class="block shrink-0 overflow-hidden">
 													<LazyImg
 														src="{item.isCustomizeditem ? item.customizedImg : item.img}"
@@ -217,7 +217,7 @@ async function getCoupons() {
 													<div class="mb-2 flex justify-between">
 														<a
 															href="/product/{item?.slug}"
-															aria-label="Click to route product details"
+															aria-label="Click to visit product details"
 															class="cart-item flex-1 cursor-pointer text-base font-medium text-zinc-500 hover:underline sm:text-lg">
 															{item?.name}
 														</a>
@@ -268,7 +268,7 @@ async function getCoupons() {
 									<div class="flex w-full items-start gap-4 py-5">
 										<a
 											href="/product/{item?.slug}"
-											aria-label="Click to route product details"
+											aria-label="Click to visit product details"
 											class="block shrink-0 overflow-hidden">
 											<LazyImg
 												src="{item.isCustomizeditem ? item.customizedImg : item.img}"
@@ -283,7 +283,7 @@ async function getCoupons() {
 											<div class="mb-2 flex justify-between">
 												<a
 													href="/product/{item?.slug}"
-													aria-label="Click to route product details"
+													aria-label="Click to visit product details"
 													class="flex-1 cursor-pointer text-base font-medium text-zinc-500 hover:underline sm:text-lg">
 													{item?.name}
 												</a>

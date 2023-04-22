@@ -276,12 +276,12 @@ const getSelectionLabel = (option) => option.name
 
 			<!-- <button
 				class="relative flex flex-col items-center justify-center gap-1 focus:outline-none lg:border-b-4 lg:border-transparent"
-				aria-label="Click to route cart"
+				aria-label="Click to visit cart"
 				on:click="{handleShowCartSidebar}"> -->
 			<a
 				href="/cart"
 				class="relative flex flex-col items-center justify-center gap-1 focus:outline-none lg:border-b-4 lg:border-transparent"
-				aria-label="Click to route cart"
+				aria-label="Click to visit cart"
 				data-sveltekit-preload-data>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -345,7 +345,7 @@ const getSelectionLabel = (option) => option.name
 											<div class="flex items-start justify-between gap-4">
 												<a
 													href="/product/{item.slug}"
-													aria-label="Click to route product details page"
+													aria-label="Click to visit product details page"
 													class="shrink-0"
 													on:click="{() => (showCartSidebar = false)}">
 													{#if item.isCustomized}
@@ -367,7 +367,7 @@ const getSelectionLabel = (option) => option.name
 													<div class="mb-2 flex justify-between gap-2">
 														<a
 															href="/product/{item.slug}"
-															aria-label="Click to route product details page"
+															aria-label="Click to visit product details page"
 															class="flex-1 text-sm leading-4"
 															on:click="{() => (showCartSidebar = false)}">{item.name}</a>
 
@@ -501,7 +501,7 @@ const getSelectionLabel = (option) => option.name
 											<a
 												href="/{c.link}"
 												rel="noopener noreferrer"
-												aria-label="Click to route category related products page"
+												aria-label="Click to visit category related products page"
 												class="col-span-1 block transform border transition duration-500 hover:-translate-y-2 hover:shadow-lg">
 												<LazyImg
 													src="{c.img}"
@@ -567,7 +567,7 @@ const getSelectionLabel = (option) => option.name
 						<div class="card-actions">
 							<a
 								href="/cart"
-								aria-label="Click to route cart"
+								aria-label="Click to visit cart"
 								class="w-full"
 								data-sveltekit-preload-data>
 								<PrimaryButton loadingringsize="sm" class="w-full text-sm uppercase">
@@ -616,7 +616,7 @@ const getSelectionLabel = (option) => option.name
 							<li class="mb-2 border-b py-2 px-4">
 								<a
 									href="/my/profile"
-									aria-label="Click to route profile"
+									aria-label="Click to visit profile"
 									class="flex items-center gap-2">
 									<div class="h-10 w-10 overflow-hidden rounded-full border">
 										{#if me.avatar}
@@ -656,7 +656,7 @@ const getSelectionLabel = (option) => option.name
 								<li class="h-auto w-full flex-1">
 									<a
 										href="{m.url}"
-										aria-label="Click to route {m.name}"
+										aria-label="Click to visit {m.name}"
 										data-sveltekit-preload-data>
 										<h6
 											class="w-full cursor-pointer rounded py-2 px-4 text-left transition duration-300 focus:outline-none hover:bg-primary-50">
@@ -713,7 +713,7 @@ const getSelectionLabel = (option) => option.name
 				<a
 					href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page?.url
 						?.search}"
-					aria-label="Click to route login"
+					aria-label="Click to visit login"
 					data-sveltekit-preload-data>
 					<button
 						class="flex flex-col items-center justify-center gap-1 focus:outline-none lg:border-b-4 lg:border-transparent"
@@ -787,7 +787,7 @@ const getSelectionLabel = (option) => option.name
 						<a
 							data-sveltekit-preload-data
 							href="/my/profile"
-							aria-label="Click to route profile"
+							aria-label="Click to visit profile"
 							class="mb-4 flex flex-col gap-2 border-b pb-4"
 							on:click="{() => (openSidebar = false)}">
 							<div class="h-20 w-20 overflow-hidden rounded border">
@@ -832,7 +832,7 @@ const getSelectionLabel = (option) => option.name
 							<a
 								data-sveltekit-preload-data
 								href="{m.url}"
-								aria-label="Click to route account"
+								aria-label="Click to visit account"
 								class="flex items-center gap-2 py-2"
 								on:click="{() => (openSidebar = false)}">
 								{@html m.svg}
@@ -881,7 +881,7 @@ const getSelectionLabel = (option) => option.name
 				<a
 					href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page?.url
 						?.search}"
-					aria-label="Click to route login"
+					aria-label="Click to visit login"
 					data-sveltekit-preload-data
 					class="flex items-center gap-2 py-2"
 					on:click="{() => (openSidebar = false)}">
