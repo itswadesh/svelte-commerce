@@ -500,7 +500,6 @@ const getSelectionLabel = (option) => option.name
 										{#each categories as c}
 											<a
 												href="/{c.link}"
-												rel="noopener noreferrer"
 												aria-label="Click to visit category related products page"
 												class="col-span-1 block transform border transition duration-500 hover:-translate-y-2 hover:shadow-lg">
 												<LazyImg

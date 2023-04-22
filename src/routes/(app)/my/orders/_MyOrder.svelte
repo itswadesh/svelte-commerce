@@ -137,15 +137,15 @@ export { clazz as class }
 										</td>
 
 										<td class="whitespace-nowrap p-3">
-											{currency(item.price, $page.data.store.currencySymbol)}
+											{currency(item.price, $page.data?.store?.currencySymbol)}
 										</td>
 
 										<td class="whitespace-nowrap p-3">
-											{currency(item.shippingCharge, $page.data.store.currencySymbol)}
+											{currency(item.shippingCharge, $page.data?.store?.currencySymbol)}
 										</td>
 
 										<td class="whitespace-nowrap p-3">
-											{currency(item.total, $page.data.store.currencySymbol)}
+											{currency(item.total, $page.data?.store?.currencySymbol)}
 										</td>
 
 										<td class="p-3">
@@ -225,7 +225,7 @@ export { clazz as class }
 												<h6>Price :</h6>
 
 												<b class="text-zinc-500">
-													{currency(item.price, $page.data.store.currencySymbol)}
+													{currency(item.price, $page.data?.store?.currencySymbol)}
 													*
 													{item.qty}
 												</b>
@@ -235,7 +235,7 @@ export { clazz as class }
 												<h6>Delivery :</h6>
 
 												<b class="text-zinc-500">
-													{currency(item.shippingCharge, $page.data.store.currencySymbol)}
+													{currency(item.shippingCharge, $page.data?.store?.currencySymbol)}
 												</b>
 											</div>
 
@@ -243,7 +243,7 @@ export { clazz as class }
 												<h6>Total :</h6>
 
 												<b class="text-zinc-500">
-													{currency(item.total, $page.data.store.currencySymbol)}
+													{currency(item.total, $page.data?.store?.currencySymbol)}
 												</b>
 											</div>
 

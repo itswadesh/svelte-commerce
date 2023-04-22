@@ -561,12 +561,12 @@ function handleMobileCanvas() {
 				<div class="mt-2 block sm:hidden">
 					<div class="mb-2 flex flex-wrap items-center gap-2">
 						<span class="whitespace-nowrap">
-							<b>{currency(data.product?.price, $page.data.store.currencySymbol)}</b>
+							<b>{currency(data.product?.price, $page.data?.store?.currencySymbol)}</b>
 						</span>
 
 						{#if data.product?.mrp > data.product?.price}
 							<span class="whitespace-nowrap text-zinc-400">
-								<strike>{currency(data.product?.mrp, $page.data.store.currencySymbol)}</strike>
+								<strike>{currency(data.product?.mrp, $page.data?.store?.currencySymbol)}</strike>
 							</span>
 
 							{#if data.product?.discount > 0}
@@ -640,12 +640,12 @@ function handleMobileCanvas() {
 				<div class="hidden sm:block">
 					<div class="mb-2 flex flex-wrap items-center gap-4">
 						<span class="whitespace-nowrap text-xl sm:text-2xl">
-							<b>{currency(data.product?.price, $page.data.store.currencySymbol)}</b>
+							<b>{currency(data.product?.price, $page.data?.store?.currencySymbol)}</b>
 						</span>
 
 						{#if data.product?.mrp > data.product?.price}
 							<span class="whitespace-nowrap text-lg text-zinc-500 sm:text-xl">
-								<strike>{currency(data.product?.mrp, $page.data.store.currencySymbol)}</strike>
+								<strike>{currency(data.product?.mrp, $page.data?.store?.currencySymbol)}</strike>
 							</span>
 
 							{#if data.product?.discount > 0}
@@ -776,7 +776,7 @@ function handleMobileCanvas() {
 											{/if}
 
 											{#if gp.price}
-												<span><b>{currency(gp.price, $page.data.store.currencySymbol)}</b></span>
+												<span><b>{currency(gp.price, $page.data?.store?.currencySymbol)}</b></span>
 											{/if}
 										</a>
 									</li>

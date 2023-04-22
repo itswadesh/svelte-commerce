@@ -14,6 +14,7 @@ export async function load({ url, locals, cookies }) {
 			id: pid,
 			storeId: locals.store?.id,
 			server: true,
+			origin: locals.origin,
 			sid: cookies.get('connect.sid')
 		})
 
