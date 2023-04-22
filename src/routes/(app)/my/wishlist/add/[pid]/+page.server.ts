@@ -9,6 +9,7 @@ export async function load({ locals, cookies, params, request }) {
 		pid,
 		vid: pid,
 		storeId: locals.store?.id,
+		origin: locals.origin,
 		server: true,
 		sid
 	})
@@ -19,9 +20,9 @@ export async function load({ locals, cookies, params, request }) {
 			vid: pid,
 			storeId,
 			sid,
+			origin: locals.origin,
 			server: true
 		})
 	}
-
 	throw redirect(307, '/my/wishlist')
 }

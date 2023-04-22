@@ -54,7 +54,6 @@ export const fetchHome = async ({
 		throw error(e.status, e.data?.message || e.message)
 	}
 }
-
 export const fetchInitialPendants = async ({ origin, storeId, server = false, sid = null }) => {
 	let initialPendants
 	if (server) {
@@ -63,7 +62,10 @@ export const fetchInitialPendants = async ({ origin, storeId, server = false, si
 			sid
 		)
 	} else {
-		initialPendants = await getAPI(`collections?store=${storeId}`, origin)
+		initialPendants = await getAPI(
+			`es/products?categories=pendants-initial-pendants-en-en&sort=-updatedAt&limit=20&store=${storeId}`,
+			origin
+		)
 	}
 	return initialPendants
 }

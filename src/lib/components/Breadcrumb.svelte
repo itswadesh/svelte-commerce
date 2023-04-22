@@ -6,7 +6,7 @@ let clazz = ''
 export { clazz as class }
 </script>
 
-<ul class="{clazz} flex flex-wrap items-center text-sm">
+<ul class="{clazz} flex text-gray-500 items-center text-sm truncate">
 	<!-- Home -->
 
 	<li class="flex items-center">
@@ -35,7 +35,6 @@ export { clazz as class }
 	</li>
 
 	<!-- Category Pool -->
-
 	{#each categoryPool as d}
 		<li class="flex items-center">
 			<a

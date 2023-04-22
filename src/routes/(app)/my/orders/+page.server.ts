@@ -8,6 +8,7 @@ export async function load({ locals, cookies }) {
 		const res = await OrdersService.fetchOrders({
 			storeId,
 			server: true,
+			origin: locals.origin,
 			sid: cookies.get('connect.sid')
 		})
 

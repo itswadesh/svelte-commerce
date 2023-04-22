@@ -13,12 +13,14 @@ export async function load({ locals, cookies }) {
 		const myWishlist = await WishlistService.fetchWishlist({
 			storeId: store?.id,
 			server: true,
-			sid: cookies.get('connect.sid')
+			sid: cookies.get('connect.sid'),
+			origin: locals.origin
 		})
 		const myReviews = await ReviewService.fetchReviews({
 			storeId: store?.id,
 			server: true,
-			sid: cookies.get('connect.sid')
+			sid: cookies.get('connect.sid'),
+			origin: locals.origin
 		})
 		return { me: me, myOrders, myWishlist, myReviews }
 	} catch (e) {

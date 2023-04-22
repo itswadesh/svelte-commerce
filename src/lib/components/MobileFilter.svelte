@@ -131,33 +131,33 @@ function getPriceRanges() {
 				priceRanges = [
 					{
 						from: price1,
-						key: `From ${currency(price1, $page.data.store.currencySymbol)} to ${currency(
+						key: `From ${currency(price1, $page.data?.store?.currencySymbol)} to ${currency(
 							price2,
-							$page.data.store.currencySymbol
+							$page.data?.store?.currencySymbol
 						)}`,
 						to: price2
 					},
 					{
 						from: price2,
-						key: `From ${currency(price2, $page.data.store.currencySymbol)} to ${currency(
+						key: `From ${currency(price2, $page.data?.store?.currencySymbol)} to ${currency(
 							price3,
-							$page.data.store.currencySymbol
+							$page.data?.store?.currencySymbol
 						)}`,
 						to: price3
 					},
 					{
 						from: price3,
-						key: `From ${currency(price3, $page.data.store.currencySymbol)} to ${currency(
+						key: `From ${currency(price3, $page.data?.store?.currencySymbol)} to ${currency(
 							price4,
-							$page.data.store.currencySymbol
+							$page.data?.store?.currencySymbol
 						)}`,
 						to: price4
 					},
 					{
 						from: price4,
-						key: `From ${currency(price4, $page.data.store.currencySymbol)} to ${currency(
+						key: `From ${currency(price4, $page.data?.store?.currencySymbol)} to ${currency(
 							price5,
-							$page.data.store.currencySymbol
+							$page.data?.store?.currencySymbol
 						)}`,
 						to: price5
 					}

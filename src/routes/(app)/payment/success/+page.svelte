@@ -268,7 +268,7 @@ onMount(async () => {
 													<div class="flex items-center gap-2 whitespace-nowrap">
 														<span class="font-medium text-zinc-500">Price :</span>
 
-														<b>{currency(item.price, $page.data.store.currencySymbol)}</b>
+														<b>{currency(item.price, $page.data?.store?.currencySymbol)}</b>
 													</div>
 												</div>
 
@@ -405,7 +405,7 @@ onMount(async () => {
 										<span
 											>: &nbsp; {currency(
 												data.order?.amount.subtotal,
-												$page.data.store.currencySymbol
+												$page.data?.store?.currencySymbol
 											)}
 										</span>
 									</div>
@@ -418,7 +418,7 @@ onMount(async () => {
 										<span
 											>: &nbsp; {currency(
 												data.order?.amount.discount,
-												$page.data.store.currencySymbol
+												$page.data?.store?.currencySymbol
 											)}
 										</span>
 									</div>
@@ -431,7 +431,7 @@ onMount(async () => {
 										<span
 											>: &nbsp; {currency(
 												data.order?.amount.shipping,
-												$page.data.store.currencySymbol
+												$page.data?.store?.currencySymbol
 											)}
 										</span>
 									</div>
@@ -446,7 +446,7 @@ onMount(async () => {
 										<span
 											>: &nbsp; {currency(
 												data.order?.amount.total,
-												$page.data.store.currencySymbol
+												$page.data?.store?.currencySymbol
 											)}
 										</span>
 									</div>

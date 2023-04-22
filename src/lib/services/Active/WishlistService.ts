@@ -6,9 +6,9 @@ const isServer = import.meta.env.SSR
 export const fetchWishlist = async ({
 	origin,
 	storeId,
-	search,
-	sort,
-	currentPage,
+	search = null,
+	sort = '-createdAt',
+	currentPage = 1,
 	server = false,
 	sid = null
 }) => {

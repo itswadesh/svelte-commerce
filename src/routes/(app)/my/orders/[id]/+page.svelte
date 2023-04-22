@@ -169,12 +169,12 @@ onMount(() => {
 
 										<div class="flex flex-wrap items-center gap-2">
 											<span class="whitespace-nowrap text-base font-bold">
-												{currency(item.price, $page.data.store.currencySymbol)}
+												{currency(item.price, $page.data?.store?.currencySymbol)}
 											</span>
 
 											{#if item.mrp > item.price}
 												<span class="whitespace-nowrap text-zinc-500 line-through">
-													{currency(item.mrp, $page.data.store.currencySymbol)}
+													{currency(item.mrp, $page.data?.store?.currencySymbol)}
 												</span>
 
 												{#if Math.floor(((item.mrp - item.price) / item.mrp) * 100) > 0}
