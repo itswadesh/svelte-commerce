@@ -79,7 +79,7 @@ onMount(async () => {
 // 	try {
 // 		await signOut()
 // 		toast('Signed Out...', 'success')
-// 		goto('/auth/otp-login')
+// 		goto('/auth/login')
 // 	} catch (e) {
 // 		console.log(e)
 // 		toast(e, 'error')

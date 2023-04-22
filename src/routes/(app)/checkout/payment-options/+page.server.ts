@@ -14,12 +14,12 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 	const cartRes: any = await CartService.fetchRefreshCart({
 		storeId: locals.store?.id,
 		server: true,
-		sid: cookies.get('connect.sid')
+		sid: cookies.get('connect.sid'),
+		origin: locals.origin
 	})
 
 	const cart = {
 		cartId: cartRes.cart_id,
-		items: cartRes.items,
 		qty: cartRes.qty,
 		tax: cartRes.tax,
 		subtotal: cartRes.subtotal,

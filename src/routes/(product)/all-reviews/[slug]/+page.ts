@@ -1,7 +1,7 @@
 import { ReviewService } from '$lib/services'
 const isServer = import.meta.env.SSR
 
-export async function load({ params, parent, url, cookies, locals, request }) {
+export async function load({ params, parent, url }) {
 	const { slug } = params
 	const { sid, origin, store } = await parent()
 	return {
