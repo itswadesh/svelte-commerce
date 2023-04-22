@@ -37,6 +37,7 @@ const h = height === 'auto' ? 'auto' : +height * 2
 const w = width === 'auto' ? 'auto' : +width * 2
 
 let lazyloadInstance: any
+const IMAGE_CDN_URL = $page.data.store.IMAGE_CDN_URL
 
 onMount(() => {
 	if (browser) {
@@ -60,11 +61,11 @@ onDestroy(() => {
 <img
 	alt="{alt}"
 	class="lazy {clazz}"
-	src="{`${getCdnImageUrl(src, $page.data.store.IMAGE_CDN_URL)}?tr=w-${
-		aspect_ratio.split(':')[0]
-	},h-${aspect_ratio.split(':')[1]},ar-${aspect_ratio.replace(':', '-')}`}"
-	data-src="{`${getCdnImageUrl(
-		src,
-		$page.data.store.IMAGE_CDN_URL
-	)}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(':', '-')},cm-pad_resize`}" />
+	src="{`${getCdnImageUrl(src, IMAGE_CDN_URL)}?tr=w-${aspect_ratio.split(':')[0]},h-${
+		aspect_ratio.split(':')[1]
+	},ar-${aspect_ratio.replace(':', '-')}`}"
+	data-src="{`${getCdnImageUrl(src, IMAGE_CDN_URL)}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(
+		':',
+		'-'
+	)},cm-pad_resize`}" />
 <!-- &sharpen=true -->

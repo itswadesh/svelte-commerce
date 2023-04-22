@@ -198,8 +198,8 @@ onMount(async () => {
 		if ($page.data?.me) {
 			try {
 				isWishlisted = await WishlistService.checkWishlist({
-					pid: data.product?.id,
-					vid: data.product?.id,
+					pid: data.product?._id,
+					vid: data.product?._id,
 					storeId: $page.data.store.id,
 					origin: $page.data.origin
 				})
@@ -511,6 +511,7 @@ function handleMobileCanvas() {
 								<LazyImg
 									src="{img}"
 									alt="{data.product?.name}"
+									height="262"
 									class="object-contain object-top w-full h-auto first-line:text-xs" />
 							</button>
 						{/each}
@@ -984,7 +985,7 @@ function handleMobileCanvas() {
 								loadingringsize="sm"
 								loading="{loadingForWishlist}"
 								class="w-full text-sm"
-								on:click="{() => toggleWishlist(data.product?.id)}">
+								on:click="{() => toggleWishlist(data.product?._id)}">
 								{#if isWishlisted}
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
@@ -1065,8 +1066,8 @@ function handleMobileCanvas() {
 												await applyAction(result)
 											}
 										}}">
-										<input type="hidden" name="pid" value="{data?.product?.id}" />
-										<input type="hidden" name="vid" value="{data?.product?.id}" />
+										<input type="hidden" name="pid" value="{data?.product?._id}" />
+										<input type="hidden" name="vid" value="{data?.product?._id}" />
 
 										<input
 											type="hidden"
@@ -1257,7 +1258,7 @@ function handleMobileCanvas() {
 								loadingringsize="sm"
 								loading="{loadingForWishlist}"
 								class="w-full text-sm"
-								on:click="{() => toggleWishlist(data.product?.id)}">
+								on:click="{() => toggleWishlist(data.product?._id)}">
 								{#if isWishlisted}
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
@@ -1337,8 +1338,8 @@ function handleMobileCanvas() {
 												await applyAction(result)
 											}
 										}}">
-										<input type="hidden" name="pid" value="{data?.product?.id}" />
-										<input type="hidden" name="vid" value="{data?.product?.id}" />
+										<input type="hidden" name="pid" value="{data?.product?._id}" />
+										<input type="hidden" name="vid" value="{data?.product?._id}" />
 
 										<input
 											type="hidden"
@@ -1396,7 +1397,7 @@ function handleMobileCanvas() {
 								loadingringsize="sm"
 								loading="{loadingForWishlist}"
 								class="w-full text-sm"
-								on:click="{() => toggleWishlist(data.product?.id)}">
+								on:click="{() => toggleWishlist(data.product?._id)}">
 								{#if isWishlisted}
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
@@ -1476,8 +1477,8 @@ function handleMobileCanvas() {
 												await applyAction(result)
 											}
 										}}">
-										<input type="hidden" name="pid" value="{data?.product?.id}" />
-										<input type="hidden" name="vid" value="{data?.product?.id}" />
+										<input type="hidden" name="pid" value="{data?.product?._id}" />
+										<input type="hidden" name="vid" value="{data?.product?._id}" />
 
 										<input
 											type="hidden"

@@ -8,7 +8,7 @@ export const fetchCartData = async ({ origin, storeId, server = false, sid = nul
 	try {
 		let res = {}
 
-		if (server) {
+		if (isServer) {
 			res = await getBySid(`cart?store=${storeId}`, sid)
 		} else {
 			res = await getAPI(`cart?store=${storeId}`, origin)
@@ -24,7 +24,7 @@ export const fetchCartData = async ({ origin, storeId, server = false, sid = nul
 export const fetchRefreshCart = async ({ origin, storeId, server = false, sid = null }) => {
 	try {
 		let res = {}
-		if (server) {
+		if (isServer) {
 			res = await getBySid(`carts/refresh-cart?store=${storeId}`, sid)
 			// res = await getBySid(`carts/my?store=${storeId}`, sid)
 		} else {
@@ -67,7 +67,7 @@ export const addToCartService = async ({
 }) => {
 	try {
 		let res = {}
-		if (server) {
+		if (isServer) {
 			res = await postt(
 				`carts/add-to-cart`,
 				{
