@@ -1,7 +1,8 @@
-import { getBySid } from '$lib/utils/server'
+import { ZipService } from '$lib/services/index.js'
+
 export async function POST({ request, cookies, locals }) {
 	const formData = Object.fromEntries(await request.formData())
-	const res = await getBySid(`pincodes/${formData.zip}`, cookies.get('connect.sid'))
+	const res = await ZipService.findZip({ zip: formData.zip, origin: locals.origin })
 	let zip
 	if (res) {
 		zip = {

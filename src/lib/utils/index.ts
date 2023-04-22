@@ -1,4 +1,4 @@
-import { currency as currencyConfig, IMAGE_CDN_URL } from '../config'
+import { currency as currencyConfig } from '../config'
 import { toasts } from 'svelte-toasts'
 import type { AllOrders, AllProducts, Category, Order, Product } from '$lib/types'
 import type { ToastProps, ToastType } from 'svelte-toasts/types/common'
@@ -23,7 +23,7 @@ export const delay = (delayInms: number) => {
 	})
 }
 
-export const getCdnImageUrl = (src: string) => {
+export const getCdnImageUrl = (src: string, IMAGE_CDN_URL: string) => {
 	if (src) {
 		if (
 			src.includes('https://s3.ap-south-1.amazonaws.com/litekart.in/') ||

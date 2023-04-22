@@ -44,11 +44,10 @@
 </style>
 
 <script lang="ts">
-// import UserForm from '$lib/components/Product/UserForm.svelte'
 import { applyAction, enhance } from '$app/forms'
 import { browser } from '$app/environment'
-import { CartService, ReviewService, WishlistService } from '$lib/services'
-import { currency, delay, toast } from '$lib/utils'
+import { CartService, WishlistService } from '$lib/services'
+import { currency, toast } from '$lib/utils'
 import { fade } from 'svelte/transition'
 import { fireGTagEvent } from '$lib/utils/gTag'
 import { goto, invalidateAll } from '$app/navigation'
@@ -86,10 +85,9 @@ import viewport from '$lib/actions/useViewPort'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
 
 const cookies = Cookie()
+const isServer = import.meta.env.SSR
 
 export let data
-// console.log('$page', $page)
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -200,13 +198,11 @@ onMount(async () => {
 		if ($page.data?.me) {
 			try {
 				isWishlisted = await WishlistService.checkWishlist({
-					pid: data.product?._id,
-					vid: data.product?._id,
+					pid: data.product?.id,
+					vid: data.product?.id,
 					storeId: $page.data.store.id,
 					origin: $page.data.origin
 				})
-
-				// console.log('isWishlisted', isWishlisted)
 			} catch (e) {
 				// toast(e, 'error')
 			} finally {
@@ -272,15 +268,15 @@ async function addToBag(p, customizedImg, customizedJson) {
 		cartButtonText = 'Adding...'
 
 		let cart = await CartService.addToCartService({
-			pid: p._id,
-			vid: p._id,
+			pid: p.id,
+			vid: p.id,
 			qty: 1,
 			options: selectedOptions,
 			customizedImg: customizedImg,
 			customizedData: customizedJson,
-			store: $page.data.store?.id,
+			storeId: $page.data.store?.id,
 			origin: $page.data.origin,
-			server: false,
+			server: isServer,
 			cookies
 		})
 		if (selectedLinkiedProducts?.length) {
@@ -289,23 +285,21 @@ async function addToBag(p, customizedImg, customizedJson) {
 					pid: i,
 					vid: i,
 					qty: 1,
-					store: $page.data.store?.id,
+					storeId: $page.data.store?.id,
 					origin: $page.data.origin,
-					server: false,
+					server: isServer,
 					cookies
 				})
 			}
 		}
-
 		// console.log('selectedLinkiedProducts inside add to cart function =', selectedLinkiedProducts)
 		const response = await fetch('/server/cart')
 		cart = await response.json()
 		// console.error('Cart called after add to cart', cart.cart_id, cart.qty)
-
 		if (cart) {
 			const cookieCart = {
 				cartId: cart?.cart_id,
-				items: cart?.items,
+				// items: cart?.items,
 				qty: cart?.qty,
 				tax: cart?.tax,
 				subtotal: cart?.subtotal,
@@ -318,7 +312,6 @@ async function addToBag(p, customizedImg, customizedJson) {
 				unavailableItems: cart?.unavailableItems,
 				formattedAmount: cart?.formattedAmount
 			}
-
 			cookies.set('cartId', cookieCart.cartId, { path: '/' })
 			cookies.set('cartQty', cookieCart.qty, { path: '/' })
 			// cookies.set('cart', JSON.stringify(cookieCart), { path: '/' })
@@ -337,7 +330,7 @@ async function addToBag(p, customizedImg, customizedJson) {
 		cartButtonText = 'Error Add To Cart'
 	} finally {
 		loading = false
-		await delay(5000)
+		// await delay(1000)
 		cartButtonText = 'Add to bag'
 		bounceItemFromTop = false
 	}
@@ -507,48 +500,22 @@ function handleMobileCanvas() {
 			<!-- Images -->
 
 			<div class="col-span-1 h-auto lg:col-span-3">
-				{#if !data.product?.isCustomized}
-					<div
-						class="flex w-full grid-cols-2 flex-row gap-2 overflow-x-scroll scrollbar-none md:grid">
-						{#if data?.product?.images?.length}
-							{#each data.product?.images as img, index}
-								<button
-									type="button"
-									class="cursor-zoom-in overflow-hidden rounded md:flex-shrink w-full h-auto flex items-center justify-center shrink-0"
-									on:click="{() => handleGallery(index)}">
-									<LazyImg
-										src="{img}"
-										alt="{data.product?.name}"
-										class="object-contain object-top w-full h-auto first-line:text-xs" />
-								</button>
-							{/each}
-						{/if}
-					</div>
-				{:else}
-					<div
-						class="flex h-screen w-full flex-col items-center justify-center gap-5 text-center sm:mx-auto sm:h-auto sm:w-auto">
-						<h1 class="text-xl font-semibold capitalize sm:text-2xl">Make your custom design</h1>
-
-						<div
-							class="relative flex h-full w-full flex-col items-center justify-center gap-2 rounded border bg-zinc-100 text-sm text-zinc-500 sm:h-[570px] sm:w-[302px]">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke-width="1.5"
-								stroke="currentColor"
-								class="h-10 w-10">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="M15.182 16.318A4.486 4.486 0 0012.016 15a4.486 4.486 0 00-3.198 1.318M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"
-								></path>
-							</svg>
-
-							<span> Opps! layout template not found </span>
-						</div>
-					</div>
-				{/if}
+				<div
+					class="flex w-full grid-cols-2 flex-row gap-2 overflow-x-scroll scrollbar-none md:grid">
+					{#if data?.product?.images?.length}
+						{#each data.product?.images as img, index}
+							<button
+								type="button"
+								class="cursor-zoom-in overflow-hidden rounded md:flex-shrink w-full h-auto flex items-center justify-center shrink-0"
+								on:click="{() => handleGallery(index)}">
+								<LazyImg
+									src="{img}"
+									alt="{data.product?.name}"
+									class="object-contain object-top w-full h-auto first-line:text-xs" />
+							</button>
+						{/each}
+					{/if}
+				</div>
 			</div>
 
 			<div class="col-span-1 lg:col-span-2 px-3 sm:px-10 lg:px-0">
@@ -752,7 +719,7 @@ function handleMobileCanvas() {
 
 				<!-- Group Products -->
 
-				{#await data.streamed.moreProductDetails}
+				{#await data.streamed?.moreProductDetails}
 					<ul class="mb-5 p-0 list-none flex flex-wrap gap-4">
 						{#each { length: 3 } as _}
 							<li class="flex flex-wrap gap-1 w-14 animate-pulse">
@@ -809,7 +776,7 @@ function handleMobileCanvas() {
 											{/if}
 
 											{#if gp.price}
-												<span><b>{currency(gp.price)}</b></span>
+												<span><b>{currency(gp.price, $page.data.store.currencySymbol)}</b></span>
 											{/if}
 										</a>
 									</li>
@@ -843,7 +810,7 @@ function handleMobileCanvas() {
 
 				<!-- select options  -->
 
-				{#await data.streamed.moreProductDetails}
+				{#await data.streamed?.moreProductDetails}
 					<div class="mb-5">
 						<Skeleton extraSmall />
 					</div>
@@ -943,7 +910,7 @@ function handleMobileCanvas() {
 
 				<!-- Product Details -->
 
-				{#await data.streamed.moreProductDetails}
+				{#await data.streamed?.moreProductDetails}
 					<div class="mb-5">
 						<Skeleton extraSmall />
 					</div>
@@ -1017,7 +984,7 @@ function handleMobileCanvas() {
 								loadingringsize="sm"
 								loading="{loadingForWishlist}"
 								class="w-full text-sm"
-								on:click="{() => toggleWishlist(data.product?._id)}">
+								on:click="{() => toggleWishlist(data.product?.id)}">
 								{#if isWishlisted}
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
@@ -1088,6 +1055,7 @@ function handleMobileCanvas() {
 												bounceItemFromTop = true
 												setTimeout(() => {
 													bounceItemFromTop = false
+													cartButtonText = 'Add To Bag'
 												}, 3000)
 												cartButtonText = 'Go to cart'
 												if (customizedImg) {
@@ -1097,8 +1065,8 @@ function handleMobileCanvas() {
 												await applyAction(result)
 											}
 										}}">
-										<input type="hidden" name="pid" value="{data?.product?._id}" />
-										<input type="hidden" name="vid" value="{data?.product?._id}" />
+										<input type="hidden" name="pid" value="{data?.product?.id}" />
+										<input type="hidden" name="vid" value="{data?.product?.id}" />
 
 										<input
 											type="hidden"
@@ -1150,7 +1118,7 @@ function handleMobileCanvas() {
 
 				<!-- Description -->
 
-				{#await data.streamed.moreProductDetails}
+				{#await data.streamed?.moreProductDetails}
 					<div class="mb-5">
 						<Skeleton extraSmall />
 					</div>
@@ -1218,7 +1186,7 @@ function handleMobileCanvas() {
 
 				<!-- Ratings & Reviews -->
 
-				{#await data.streamed.productReviews}
+				{#await data.streamed?.productReviews}
 					<ul class="my-5 p-0 flex flex-col gap-4">
 						<li>
 							<Skeleton extraSmall />
@@ -1289,7 +1257,7 @@ function handleMobileCanvas() {
 								loadingringsize="sm"
 								loading="{loadingForWishlist}"
 								class="w-full text-sm"
-								on:click="{() => toggleWishlist(data.product?._id)}">
+								on:click="{() => toggleWishlist(data.product?.id)}">
 								{#if isWishlisted}
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
@@ -1369,8 +1337,8 @@ function handleMobileCanvas() {
 												await applyAction(result)
 											}
 										}}">
-										<input type="hidden" name="pid" value="{data?.product?._id}" />
-										<input type="hidden" name="vid" value="{data?.product?._id}" />
+										<input type="hidden" name="pid" value="{data?.product?.id}" />
+										<input type="hidden" name="vid" value="{data?.product?.id}" />
 
 										<input
 											type="hidden"
@@ -1428,7 +1396,7 @@ function handleMobileCanvas() {
 								loadingringsize="sm"
 								loading="{loadingForWishlist}"
 								class="w-full text-sm"
-								on:click="{() => toggleWishlist(data.product?._id)}">
+								on:click="{() => toggleWishlist(data.product?.id)}">
 								{#if isWishlisted}
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
@@ -1508,8 +1476,8 @@ function handleMobileCanvas() {
 												await applyAction(result)
 											}
 										}}">
-										<input type="hidden" name="pid" value="{data?.product?._id}" />
-										<input type="hidden" name="vid" value="{data?.product?._id}" />
+										<input type="hidden" name="pid" value="{data?.product?.id}" />
+										<input type="hidden" name="vid" value="{data?.product?.id}" />
 
 										<input
 											type="hidden"
@@ -1605,7 +1573,7 @@ function handleMobileCanvas() {
 
 			<!-- Similar products From category slug -->
 
-			{#await data.streamed.moreProductDetails}
+			{#await data.streamed?.moreProductDetails}
 				<ul class="mb-5 p-0 list-none flex flex-wrap gap-4">
 					{#each { length: 7 } as _}
 						<li>

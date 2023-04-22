@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store'
-import Cookie from 'cookie-universal'
-import { getBySid } from './utils/server'
-const cookies = Cookie()
+// import Cookie from 'cookie-universal'
+// import { getBySid } from './utils/server'
+// const cookies = Cookie()
 
 export const geoLocation = writable({
 	selectedPrediction: null,
@@ -12,11 +12,11 @@ export const geoLocation = writable({
 	lat: 0,
 	lng: 0
 })
-export const settings = writable({})
-export const store = writable({})
-export const megamenu = writable({})
-export const loginUrl = writable('/auth/login')
-export const me = writable({})
+// export const settings = writable({})
+// export const store = writable({})
+// export const megamenu = writable({})
+// export const loginUrl = writable('/auth/login')
+// export const me = writable({})
 export const loadingDelayed = writable(false)
 
 export const fetchLocation = async () => {
@@ -48,43 +48,43 @@ export const fetchLocation = async () => {
 		})
 	}
 }
-export const fetchSettings = async () => {
-	try {
-		const data = (await getBySid('settings')).data?.settings
-		settings.set(data)
-		// if (data.otpLogin) loginUrl.set(locals.store?.loginUrl)
-	} catch (e) {
-		settings.set({})
-	}
-}
-export const fetchStore = async () => {
-	try {
-		const storeOne = await cookies.get('store')
-		const data = { _id: storeOne.id } //await get('store?domain=misiki.io')
-		store.set(data)
-		// await gett('store-one?id=' + storeOne.id)
-		const data1 = (
-			await getBySid(`categories?store=${storeOne.id}&megamenu=true&limit=6&page=0&level=0`)
-		).data
-		megamenu.set(data1)
-	} catch (e) {
-		store.set({})
-	}
-}
-export const fetchMegamenu = async () => {
-	// try {
-	// } catch (e) {
-	// 	megamenu.set([])
-	// }
-}
-export const fetchUser = async () => {
-	try {
-		const data = await getBySid('users/me')
-		me.set(data)
-	} catch (e) {
-		me.set({})
-	}
-}
+// export const fetchSettings = async () => {
+// 	try {
+// 		const data = (await getBySid('settings')).data?.settings
+// 		settings.set(data)
+// 		// if (data.otpLogin) loginUrl.set(locals.store?.loginUrl)
+// 	} catch (e) {
+// 		settings.set({})
+// 	}
+// }
+// export const fetchStore = async () => {
+// 	try {
+// 		const storeOne = await cookies.get('store')
+// 		const data = { _id: storeOne.id } //await get('store?domain=misiki.io')
+// 		store.set(data)
+// 		// await gett('store-one?id=' + storeOne.id)
+// 		const data1 = (
+// 			await getBySid(`categories?store=${storeOne.id}&megamenu=true&limit=6&page=0&level=0`)
+// 		).data
+// 		megamenu.set(data1)
+// 	} catch (e) {
+// 		store.set({})
+// 	}
+// }
+// export const fetchMegamenu = async () => {
+// 	// try {
+// 	// } catch (e) {
+// 	// 	megamenu.set([])
+// 	// }
+// }
+// export const fetchUser = async () => {
+// 	try {
+// 		const data = await getBySid('users/me')
+// 		me.set(data)
+// 	} catch (e) {
+// 		me.set({})
+// 	}
+// }
 // fetchLocation()
 // fetchSettings()
 // fetchStore()

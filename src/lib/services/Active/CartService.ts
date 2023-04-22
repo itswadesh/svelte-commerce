@@ -1,7 +1,8 @@
 import { del, getAPI, post } from '$lib/utils/api'
 import { error } from '@sveltejs/kit'
-import { getBySid, postBySid } from '$lib/utils/server'
+import { getBySid, postt } from '$lib/utils/server'
 import type { Error } from '$lib/types'
+const isServer = import.meta.env.SSR
 
 export const fetchCartData = async ({ origin, storeId, server = false, sid = null }) => {
 	try {
@@ -35,13 +36,12 @@ export const fetchRefreshCart = async ({ origin, storeId, server = false, sid = 
 		throw error(e.status, e.data?.message)
 	}
 }
-export const fetchMyCart = async ({ origin, storeId, server = false, sid = null }) => {
+export const fetchMyCart = async ({ origin, storeId, server = false, sid = null, cookies }) => {
 	try {
 		let res = {}
 
-		if (server) {
+		if (isServer) {
 			res = await getBySid(`carts/my?store=${storeId}`, sid)
-			// res = await getBySid(`carts/my?store=${storeId}`, sid)
 		} else {
 			res = await getAPI(`carts/my?store=${storeId}`, origin)
 		}
@@ -62,12 +62,13 @@ export const addToCartService = async ({
 	options = null,
 	storeId,
 	server = false,
-	sid = null
+	sid = null,
+	cookies
 }) => {
 	try {
 		let res = {}
 		if (server) {
-			res = await postBySid(
+			res = await postt(
 				`carts/add-to-cart`,
 				{
 					pid,
@@ -78,7 +79,7 @@ export const addToCartService = async ({
 					customizedData,
 					options
 				},
-				sid
+				cookies
 			)
 		} else {
 			res = await post(

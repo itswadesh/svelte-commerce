@@ -1,17 +1,21 @@
-import { getBySid } from '$lib/utils/server'
+import { CartService } from '$lib/services'
 import type { RequestEvent } from '@sveltejs/kit'
+import Cookie from 'cookie-universal'
+const cookies = Cookie()
 
 export const fetchCart = async (event: RequestEvent) => {
 	try {
+		const sid = event.cookies.get('connect.sid')
+		const storeId = event.locals.store.id
+		const origin = event.locals.origin
 		const cartId: string | undefined = event.cookies.get('cartId')
 		const cartQty: string | undefined = event.cookies.get('cartQty')
 		if (cartId) event.locals.cartId = cartId
 		if (cartQty) event.locals.cartQty = +cartQty
-		const sid = event.cookies.get('connect.sid')
-		const cartRes = await getBySid('carts/my', sid)
+		const cartRes = await CartService.fetchMyCart({ cookies, origin, storeId, sid })
 		const cart = {
 			cartId: cartRes.cart_id,
-			items: cartRes.items,
+			// items: cartRes.items,
 			qty: cartRes.qty,
 			tax: cartRes.tax,
 			subtotal: cartRes.subtotal,
@@ -23,7 +27,7 @@ export const fetchCart = async (event: RequestEvent) => {
 			unavailableItems: cartRes.unavailableItems,
 			formattedAmount: cartRes.formattedAmount
 		}
-		event.locals.cartQty = +cart.qty
+		// event.locals.cartQty = +cart.qty
 		return cart
 	} catch (e) {
 		return null
