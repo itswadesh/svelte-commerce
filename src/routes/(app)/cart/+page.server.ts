@@ -17,7 +17,7 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 		if (res) {
 			cart = {
 				cartId: res?.cart_id,
-				// items: res?.items,
+				items: res?.items,
 				qty: res?.qty,
 				tax: +res?.tax,
 				subtotal: +res?.subtotal,
