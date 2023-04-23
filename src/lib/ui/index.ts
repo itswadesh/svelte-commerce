@@ -4,6 +4,7 @@ import Checkbox from './Checkbox.svelte'
 import CheckboxOfMultiProducts from './CheckboxOfMultiProducts.svelte'
 import Errors from './Errors.svelte'
 import GradientButton from './GradientButton.svelte'
+import GropuCheckbox from './GropuCheckbox.svelte'
 import PaymentLoading from './PaymentLoading.svelte'
 import PrimaryButton from './PrimaryButton.svelte'
 import ProductSkeleton from './ProductSkeleton.svelte'
@@ -12,6 +13,7 @@ import RadioColor from './RadioColor.svelte'
 import RadioSize from './RadioSize.svelte'
 import RatingStarDisplay from './RatingStarDisplay.svelte'
 import SearchBox from './SearchBox.svelte'
+import SecondaryButton from './SecondaryButton.svelte'
 import Skeleton from './Skeleton.svelte'
 import Textarea from './Textarea.svelte'
 import TextareaFloating from './TextareaFloating.svelte'
@@ -37,6 +39,7 @@ export {
     CheckboxOfMultiProducts,
     Errors,
     GradientButton,
+    GropuCheckbox,
     PaymentLoading,
     PrimaryButton,
     ProductSkeleton,
@@ -46,6 +49,7 @@ export {
     RadioSize,
     RatingStarDisplay,
     SearchBox,
+    SecondaryButton,
     Skeleton,
     Textarea,
     TextareaFloating,

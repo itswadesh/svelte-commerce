@@ -13,6 +13,7 @@ import DummyProductCard from '$lib/themes/fashion/DummyProductCard.svelte'
 import Footer from '$lib/themes/fashion/Footer.svelte'
 import Hero from '$lib/themes/fashion/Hero.svelte'
 import HeroBanners from '$lib/themes/fashion/HeroBanners.svelte'
+import Home from '$lib/themes/fashion/Home.svelte'
 import MegamenuHorizontal from '$lib/themes/misiki/MegamenuHorizontal.svelte'
 import MegamenuVertical from '$lib/themes/misiki/MegamenuVertical.svelte'
 import Nav from '$lib/themes/fashion/Nav.svelte'
@@ -39,6 +40,7 @@ export {
     Footer,
     Hero,
     HeroBanners,
+    Home,
     MegamenuHorizontal,
     MegamenuVertical,
     Nav,
