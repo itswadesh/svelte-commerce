@@ -9,6 +9,7 @@
 import { page } from '$app/stores'
 import AutosuggestModal from './AutosuggestModal.svelte'
 import type { Cart, Me } from './types'
+import { goback } from './utils'
 
 export let cart: Cart
 export let data
@@ -38,7 +39,7 @@ let show = false
 				<button
 					type="button"
 					class="h-8 w-8 shrink-0 flex items-center justify-center frosted-white rounded-full focus:outline-none"
-					on:click="{() => window.history.go(-1)}">
+					on:click="{goback}">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"

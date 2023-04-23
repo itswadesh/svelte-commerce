@@ -12,7 +12,7 @@ import { fade, fly, slide } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
 import { logo } from './config'
 import { page } from '$app/stores'
-import { toast } from '$lib/utils'
+import { goback, toast } from '$lib/utils'
 import Autocomplete from './components/Autocomplete/Autocomplete.svelte'
 import AutosuggestModal from './AutosuggestModal.svelte'
 import Cookie from 'cookie-universal'
@@ -178,7 +178,7 @@ const getSelectionLabel = (option) => option.name
 				<button
 					type="button"
 					class="block shrink-0 focus:outline-none sm:hidden"
-					on:click="{() => window.history.go(-1)}">
+					on:click="{goback}">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"

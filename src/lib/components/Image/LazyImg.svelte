@@ -60,8 +60,10 @@ onDestroy(() => {
 
 <img
 	alt="{alt}"
-	class="lazy {clazz}"
-	src="{`${getCdnImageUrl(src, IMAGE_CDN_URL)}?tr=w-${aspect_ratio.split(':')[0]},h-${
+	class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}"
+	width="{w}"
+	height="{h}"
+	src="{`${getCdnImageUrl(src, IMAGE_CDN_URL)}?tr=w-1,h-1:w-${aspect_ratio.split(':')[0]},h-${
 		aspect_ratio.split(':')[1]
 	},ar-${aspect_ratio.replace(':', '-')}`}"
 	data-src="{`${getCdnImageUrl(src, IMAGE_CDN_URL)}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(

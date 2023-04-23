@@ -2,8 +2,17 @@ import { currency as currencyConfig } from '../config'
 import { toasts } from 'svelte-toasts'
 import type { AllOrders, AllProducts, Category, Order, Product } from '$lib/types'
 import type { ToastProps, ToastType } from 'svelte-toasts/types/common'
+import { goto } from '$app/navigation'
 
 let allToasts: any
+
+export const goback = () => {
+	if (history.length < 3) {
+		goto('/')
+	} else {
+		window.history.go(-1)
+	}
+}
 
 export function constructURL2(url: string, fl: any) {
 	url += '?'

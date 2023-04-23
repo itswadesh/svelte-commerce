@@ -7,7 +7,7 @@
 <script lang="ts">
 import { enhance } from '$app/forms'
 import { goto, invalidateAll } from '$app/navigation'
-import { toast } from '$lib/utils'
+import { goback, toast } from '$lib/utils'
 import { createEventDispatcher, getContext, onMount } from 'svelte'
 import { cubicOut } from 'svelte/easing'
 import { fade, fly } from 'svelte/transition'
@@ -130,7 +130,7 @@ const getSelectionLabel = (option) => option.name
 				<button
 					type="button"
 					class="block shrink-0 focus:outline-none lg:hidden"
-					on:click="{() => window.history.go(-1)}">
+					on:click="{goback}">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
