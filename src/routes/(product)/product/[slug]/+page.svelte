@@ -517,7 +517,7 @@ function handleMobileCanvas() {
 								<LazyImg
 									src="{img}"
 									alt="{data.product?.name}"
-									height="262"
+									height="512"
 									class="object-contain object-top w-full h-auto first-line:text-xs" />
 							</button>
 						{/each}
