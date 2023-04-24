@@ -95,7 +95,7 @@ export const fetchReels = async ({
 
 // Fetch single product
 
-export const fetchProduct = async ({ origin, slug, id, server = false, sid = null }: any) => {
+export const fetchProduct = async ({ origin, slug, id,storeId, server = false, sid = null }: any) => {
 	try {
 		let res: Product | object = {}
 		if (isServer) {
