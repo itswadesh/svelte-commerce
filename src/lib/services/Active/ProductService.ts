@@ -58,9 +58,9 @@ export const fetchProducts = async ({
 		let res: AllProducts | {} = {}
 
 		if (server) {
-			res = await getBySid(`products?store=${storeId}`, sid)
+			res = await getBySid(`es/products?store=${storeId}`, sid)
 		} else {
-			res = await getAPI(`products?store=${storeId}`, origin)
+			res = await getAPI(`es/products?store=${storeId}`, origin)
 		}
 
 		return res?.data || []

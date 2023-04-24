@@ -18,6 +18,8 @@ import productVeg from '$lib/assets/product/veg.png'
 import SEO from '$lib/components/SEO/index.svelte'
 import Skeleton from '$lib/ui/Skeleton.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
+import Cookie from 'cookie-universal'
+const cookies = Cookie()
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
@@ -57,11 +59,12 @@ const addToCart = async ({ pid, qty, customizedImg, ix, loadingType }: any) => {
 		qty: qty,
 		customizedImg: customizedImg || null,
 		storeId: $page.data.store?.id,
-		origin: $page.data.origin
+		origin: $page.data.origin,
+		cookies
 	})
 
-	await invalidateAll()
-
+	await invalidateAll() // Has to be invalidateAll everywhere because cart is called on hooks.server.ts and any invalidation will trigger hooks.server.ts call
+	// Keep await here, else the loader will stop before updating the locals value
 	loading[ix] = false
 	selectedLoadingType = null
 }
@@ -658,7 +661,7 @@ async function getCoupons() {
 
 					<div
 						class="grid w-full grid-cols-2 items-end sm:flex sm:flex-wrap sm:justify-between sm:gap-10">
-						{#each products as p, px}
+						{#each products as p, px (p.id)}
 							{#if p && px < 10}
 								<ProductCard product="{p}" />
 							{/if}

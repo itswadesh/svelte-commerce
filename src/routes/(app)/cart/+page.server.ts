@@ -11,12 +11,13 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 		const res = await CartService.fetchRefreshCart({
 			storeId: locals.store?.id,
 			sid: cookies.get('connect.sid'),
-			server: true
+			server: true,
+			origin: locals.origin
 		})
 		if (res) {
 			cart = {
 				cartId: res?.cart_id,
-				items: res?.items,
+				// items: res?.items,
 				qty: res?.qty,
 				tax: +res?.tax,
 				subtotal: +res?.subtotal,
@@ -57,6 +58,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 	const linkedItems = JSON.parse(data.get('linkedItems'))
 	const options = JSON.parse(data.get('options')) //data.get('options') //
 	const customizedImg = data.get('customizedImg')
+	const sid = cookies.get('connect.sid')
 	if (typeof pid !== 'string' || !pid) {
 		return fail(400, { invalid: true })
 	}
@@ -69,6 +71,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 			customizedImg,
 			storeId: locals.store?.id,
 			server: true,
+			origin: locals.origin,
 			cookies // This is a special case to pass complete cookie
 		})
 		if (linkedItems?.length) {
@@ -79,6 +82,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 					qty: 1,
 					storeId: locals.store?.id,
 					server: true,
+					origin: locals.origin,
 					cookies // This is a special case to pass complete cookie
 				})
 			}

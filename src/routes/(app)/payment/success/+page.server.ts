@@ -36,7 +36,8 @@ export async function load({ url, request, locals, cookies }) {
 		cart = CartService.fetchRefreshCart({
 			storeId: locals.store?.id,
 			server: true,
-			sid: cookies.get('connect.sid')
+			sid: cookies.get('connect.sid'),
+			origin: locals.origin
 		})
 		if (cart) {
 			const cartObj = {
