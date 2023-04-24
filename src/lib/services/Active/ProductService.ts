@@ -2,6 +2,7 @@ import { error } from '@sveltejs/kit'
 import { getAPI } from '$lib/utils/api'
 import { getBySid } from '$lib/utils/server'
 import type { AllProducts, Error, Product } from '$lib/types'
+const isServer = import.meta.env.SSR
 
 // Search product
 
@@ -22,7 +23,7 @@ export const searchProducts = async ({
 		let category = ''
 		let err = ''
 
-		if (server) {
+		if (isServer) {
 			res = await getBySid(`es/products?${query}&store=${storeId}`, sid)
 		} else {
 			res = await getAPI(`es/products?${query}&store=${storeId}`, origin)
@@ -57,7 +58,7 @@ export const fetchProducts = async ({
 	try {
 		let res: AllProducts | {} = {}
 
-		if (server) {
+		if (isServer) {
 			res = await getBySid(`es/products?store=${storeId}`, sid)
 		} else {
 			res = await getAPI(`es/products?store=${storeId}`, origin)
@@ -80,7 +81,7 @@ export const fetchReels = async ({
 	try {
 		let res: AllProducts | {} = {}
 
-		if (server) {
+		if (isServer) {
 			res = await getBySid(`reels?store=${storeId}`, sid)
 		} else {
 			res = await getAPI(`reels?store=${storeId}`, origin)
@@ -96,14 +97,12 @@ export const fetchReels = async ({
 
 export const fetchProduct = async ({ origin, slug, id, server = false, sid = null }: any) => {
 	try {
-		let res: Product | {} = {}
-
-		if (server) {
-			res = await getBySid(`products/${slug}`, sid)
+		let res: Product | object = {}
+		if (isServer) {
+			res = await getBySid(`es/products/${slug || id}?store=${storeId}`, sid)
 		} else {
-			res = await getAPI(`products/${slug}`, origin)
+			res = await getAPI(`es/products/${slug || id}?store=${storeId}`, origin)
 		}
-
 		return res || {}
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)
@@ -122,7 +121,7 @@ export const fetchProduct2 = async ({
 }: any) => {
 	try {
 		let res: Product | object = {}
-		if (server) {
+		if (isServer) {
 			res = await getBySid(`es/products2/${slug || id}?store=${storeId}`, sid)
 		} else {
 			res = await getAPI(`es/products2/${slug || id}?store=${storeId}`, origin)
@@ -152,7 +151,7 @@ export const fetchProductsOfCategory = async ({
 		let category = ''
 		let err = ''
 
-		if (server) {
+		if (isServer) {
 			res = await getBySid(`es/products?categories=${categorySlug}&store=${storeId}&${query}`, sid)
 		} else {
 			res = await getAPI(`es/products?categories=${categorySlug}&store=${storeId}&${query}`, origin)
@@ -189,7 +188,7 @@ export const fetchNextPageProducts = async ({
 		let nextPageData = []
 		let res: any = {}
 
-		if (server) {
+		if (isServer) {
 			res = await getBySid(
 				`es/products?categories=${categorySlug}&store=${storeId}&page=${nextPage}&${searchParams}`,
 				sid
@@ -230,7 +229,7 @@ export const fetchRelatedProducts = async ({
 	try {
 		let relatedProductsRes: any = {}
 
-		if (server) {
+		if (isServer) {
 			relatedProductsRes = await getBySid(
 				`es/products?categories=${categorySlug}&store=${storeId}`,
 				sid
