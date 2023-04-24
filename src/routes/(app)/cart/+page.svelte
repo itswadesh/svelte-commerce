@@ -198,7 +198,7 @@ async function getCoupons() {
 									</div>
 
 									<div class="flex flex-col divide-y">
-										{#each data.cart?.unavailableItems as item}
+										{#each data.cart?.unavailableItems as item (item.pid)}
 											<div class="flex w-full items-start gap-4 py-5">
 												<a
 													href="/product/{item?.slug}"
@@ -262,7 +262,7 @@ async function getCoupons() {
 
 						{#if data.cart?.items}
 							<div class="flex flex-col divide-y">
-								{#each data.cart?.items as item, ix}
+								{#each data.cart?.items as item, ix (item.pid)}
 									<!-- Product detail start -->
 
 									<div class="flex w-full items-start gap-4 py-5">
