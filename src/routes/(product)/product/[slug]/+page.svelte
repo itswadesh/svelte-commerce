@@ -160,7 +160,7 @@ let seoProps = {
 }
 
 let bounceItemFromTop = false
-let cartButtonText = 'Add to Bag'
+let cartButtonText = 'Buy Now'
 let customizedImg
 let isWishlisted = false
 let loading = false
