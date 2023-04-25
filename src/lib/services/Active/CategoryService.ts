@@ -1,17 +1,19 @@
 import { error } from '@sveltejs/kit'
 import { getAPI } from '$lib/utils/api'
 import { getBySid } from '$lib/utils/server'
+const isServer = import.meta.env.SSR
 
 export const fetchFooterCategories = async ({
 	origin,
 	storeId,
 	server = false,
+	isCors = false,
 	sid = null
-}: any) => {
+}) => {
 	try {
 		let data: []
 
-		if (server) {
+		if (isServer || isCors) {
 			data = await getBySid(`categories?megamenu=true&limit=6&page=0&level=0&store=${storeId}`, sid)
 		} else {
 			data = await getAPI(
@@ -26,12 +28,20 @@ export const fetchFooterCategories = async ({
 	}
 }
 
-export const fetchCategory = async ({ origin, id, server = false, sid = null, storeId }: any) => {
+export const fetchCategory = async ({
+	origin,
+	id,
+	server = false,
+	children = false,
+	isCors = false,
+	sid = null,
+	storeId
+}) => {
 	try {
 		let res: any = {}
 
-		if (server) {
-			res = await getBySid(`es/categories/${id}?store=${storeId}`, sid)
+		if (isServer || isCors) {
+			res = await getBySid(`es/categories/${id}?store=${storeId}&children=${children}`, sid)
 		} else {
 			res = await getAPI(`es/categories/${id}?store=${storeId}`, origin)
 		}
@@ -46,9 +56,10 @@ export const fetchAllCategories = async ({
 	origin,
 	storeId,
 	server = false,
+	isCors = false,
 	sid = null,
 	featured = false
-}: any) => {
+}) => {
 	try {
 		let res: any = {}
 		let data, pageSize, currentPage
@@ -58,7 +69,7 @@ export const fetchAllCategories = async ({
 			catQ += '&featured=true'
 		}
 
-		if (server) {
+		if (isServer || isCors) {
 			res = await getBySid(catQ, sid)
 		} else {
 			res = await getAPI(catQ, origin)
@@ -77,9 +88,10 @@ export const fetchAllProductsOfCategories = async ({
 	origin,
 	storeId,
 	server = false,
+	isCors = false,
 	sid = null,
 	featured = false
-}: any) => {
+}) => {
 	try {
 		let res: any = {}
 		let products = []
@@ -93,7 +105,7 @@ export const fetchAllProductsOfCategories = async ({
 			catQ += '&featured=true'
 		}
 
-		if (server) {
+		if (isServer || isCors) {
 			res = await getBySid(catQ, sid)
 		} else {
 			res = await getAPI(catQ, origin)
@@ -111,11 +123,17 @@ export const fetchAllProductsOfCategories = async ({
 	}
 }
 
-export const fetchMegamenuData = async ({ origin, storeId, server = false, sid = null }: any) => {
+export const fetchMegamenuData = async ({
+	origin,
+	storeId,
+	server = false,
+	isCors = false,
+	sid = null
+}) => {
 	try {
 		let data: []
 
-		if (server) {
+		if (isServer || isCors) {
 			data = await getBySid(`categories/megamenu?megamenu=true&store=${storeId}`, sid)
 		} else {
 			data = await getAPI(`categories/megamenu?megamenu=true&store=${storeId}`, origin)
