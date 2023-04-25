@@ -22,7 +22,7 @@ export async function load({ url, params, parent }) {
 		page: currentPage,
 		origin
 	})
-	console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', data)
+	// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', data)
 	// const products1 = [
 	// 	{
 	// 		name: '1 CERULEAN EMBROIDERED ORGANZA -  LUXURY LINE UNSTITCHED 4-PC',

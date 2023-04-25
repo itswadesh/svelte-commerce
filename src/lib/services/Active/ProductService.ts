@@ -86,7 +86,9 @@ export const fetchReels = async ({
 		} else {
 			res = await getAPI(`reels?store=${storeId}`, origin)
 		}
-
+		res.data = res.data.map((d) => {
+			return { ...d, muted: false }
+		})
 		return res || {}
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)
@@ -95,7 +97,14 @@ export const fetchReels = async ({
 
 // Fetch single product
 
-export const fetchProduct = async ({ origin, slug, id,storeId, server = false, sid = null }: any) => {
+export const fetchProduct = async ({
+	origin,
+	slug,
+	id,
+	storeId,
+	server = false,
+	sid = null
+}) => {
 	try {
 		let res: Product | object = {}
 		if (isServer) {
