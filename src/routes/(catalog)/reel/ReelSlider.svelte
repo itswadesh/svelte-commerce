@@ -1,6 +1,10 @@
 <script lang="ts">
 import { onMount } from 'svelte'
 import { SplideSlide } from '@splidejs/svelte-splide'
+// import { Video } from '@splidejs/splide-extension-video'
+// import '@splidejs/splide-extension-video/dist/css/splide-extension-video.min.css'
+
+// const videos = ['3GNQL3alB-Y', 'xLJ2QQDrN9k', 'cdz__ojQOuU', 'oS6N_ZBFDZE']
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import { currency } from '$lib/utils'
 import { currencySymbol } from '$lib/config'
@@ -8,41 +12,35 @@ import { CartService } from '$lib/services'
 import { page } from '$app/stores'
 import { invalidateAll } from '$app/navigation'
 
-
-
 export let products = []
 export let title = ''
 
-
+// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', products)
 
 // share button function
 
-const share = async ({title, text, url}: any) => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: title,
-          text: text,
-          url: url,
-        });
-        console.log('Successfully shared.');
-      } catch (error) {
-        console.error('Error sharing:', error);
-      }
-    } else {
-      console.log('Web Share API not supported.');
-	  console.log('/');
-	  console.log(title);
-	  console.log('/');
-	  console.log(text);
-	  console.log('/');
-	  console.log(url);
-	  
-    }
-  };
-
-
-
+const share = async ({ title, text, url }: any) => {
+	if (navigator.share) {
+		try {
+			await navigator.share({
+				title: title,
+				text: text,
+				url: url
+			})
+			console.log('Successfully shared.')
+		} catch (error) {
+			console.error('Error sharing:', error)
+		}
+	} else {
+		console.log('Web Share API not supported.')
+		console.log('/')
+		console.log(title)
+		console.log('/')
+		console.log(text)
+		console.log('/')
+		console.log(url)
+	}
+}
 
 let autoplay = true
 let imgUrl = ''
@@ -57,13 +55,9 @@ let isAddedtoBag = false
 
 let muted = true
 
-function handleMute({ ix }) {
-	if (muted) {
-		muted = false
-	} else {
-		muted = true
-	}
-	console.log(ix)
+function toggleMute(product) {
+	product.muted = !product.muted
+	console.log(product.muted)
 }
 
 const addToCart = async ({ pid, qty, customizedImg, ix, loadingType }: any) => {
@@ -111,9 +105,14 @@ let productColors = [
 
 let Splide
 const options = {
+	// autoHeight: true,
 	pagination: false,
 	arrows: false,
-	autoplay: true,
+	rewind: true,
+	heightRatio: 2,
+	keyboard: true,
+	accessibility: true,
+	autoplay: false,
 	lazy: true,
 	height: 800,
 	type: 'loop',
@@ -134,12 +133,13 @@ onMount(async () => {
 {#if products}
 	<div class="overflow-hidden">
 		<svelte:component this="{Splide}" options="{options}">
-			{#each products as product, ix}
+			{#each products as product, ix (product.id)}
 				<SplideSlide>
 					<div class="w-full h-full">
 						<!-- svelte-ignore a11y-media-has-caption -->
 						<video autoplay="{true}" id="active{ix}" class="detail" loop muted="{muted}">
 							<source src="{product.video}" type="video/mp4" />
+							Your browser does not support the video tag.
 						</video>
 
 						<div class="flex absolute top-[54%] ml-6 bg-white h-40 rounded-lg">
@@ -201,8 +201,8 @@ onMount(async () => {
 							<li>
 								<button
 									class="btn-group-fb opacity-50 my-2 py-4 px-4 mx-3 bg-current rounded-full h-13 w-13"
-									on:click="{() => handleMute({ ix: ix })}">
-									{#if muted}
+									on:click="{() => toggleMute(product)}">
+									{#if product.muted}
 										<img src="{imgMute}" alt="mute" />
 									{:else}
 										<img src="{imgUnmute}" alt="unmute" />
@@ -243,7 +243,9 @@ onMount(async () => {
 							</li>
 							<li>
 								<button
-									class="btn-group-fb opacity-50 my-2 py-4 px-4 mx-3 bg-current rounded-full h-13 w-13" on:click="{() =>share({ title: product.name, text: product.description, url: product.slug})}">
+									class="btn-group-fb opacity-50 my-2 py-4 px-4 mx-3 bg-current rounded-full h-13 w-13"
+									on:click="{() =>
+										share({ title: product.name, text: product.description, url: product.slug })}">
 									<img src="https://filebin.net/9mzp2tdfrtgsiuck/share.svg" alt="share" />
 								</button>
 							</li>

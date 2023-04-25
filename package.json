@@ -26,6 +26,7 @@
 		"@sentry/node": "7.38.0",
 		"@sentry/svelte": "7.42.0",
 		"@sentry/tracing": "7.42.0",
+		"@splidejs/splide-extension-video": "0.8.0",
 		"@splidejs/svelte-splide": "0.2.9",
 		"@sveltejs/adapter-auto": "2.0.0",
 		"@sveltejs/adapter-vercel": "2.3.1",
