@@ -74,30 +74,36 @@ Reach out to me with queries!
 
 <div align="center">
 
-### Live demos using `svelte-commerce`
+### Big Brands using `svelte-commerce`
 
 </div>
 <br/>
 <p align="center">
-  <a href="https://food.misiki.in/" target="_blank">
-    <img src="https://ik.imagekit.io/3wzatecz51w3i/img/logo-eiyrtowkfwnx.png?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="Misiki Logo">
+  <a href="https://tesoro.pk/" target="_blank">
+    <img src="https://d24mf1as2csgn7.cloudfront.net/img/jZI-6NXHEB26SYEeozIyL3tN-347200166766.png
+" height="64" alt="Tesoro">
   </a>
   <img src="assets/misc/transparent.png" height="1" width="15"/>
   <a href="https://varnijewels.com/" target="_blank">
-    <img src="https://ik.imagekit.io/3n6cglxq6/img/varni-logo_1619291754__34835-qt10qx2uq90x.webp?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="Varni Jewels Logo">
+    <img src="https://ik.imagekit.io/3n6cglxq6/img/varni-logo_1619291754__34835-qt10qx2uq90x.webp?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="Varni Jewels">
   </a>
   <img src="assets/misc/transparent.png" height="1" width="15"/>
-  <a href="https://next.trialshot.com/" target="_blank">
-    <img src="https://ik.imagekit.io/3wzatecz51w3i/misiki/img/logo-infeip6oao61.png?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="Trialshot Logo">
+  <a href="https://lrnr.in/" target="_blank">
+    <img src="https://res.cloudinary.com/itswadesh/image/upload/v1682423814/logo-lrnr.png?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="LRNR">
   </a>
   <img src="assets/misc/transparent.png" height="1" width="15"/>
   <a href="https://tablez.com/" target="_blank">
-    <img src="https://tablez.com/icon.png" height="64" alt="Tablez Logo">
+    <img src="https://tablez.com/icon.png" height="64" alt="Tablez">
   </a>
   <img src="assets/misc/transparent.png" height="1" width="15"/>
-  <a href="https://next.zapvi.in/" target="_blank">
-    <img src="https://cdn.zapvi.in/img/Zapvi-Black-Logo-iKPQP43npcI2.svg?width=3&height=4&blur=25&aspect_ratio=3:4" height="64" alt="Misiki Logo">
+  <a href="https://b.zapvi.in/" target="_blank">
+    <img src="https://cdn.zapvi.in/img/Zapvi-Black-Logo-iKPQP43npcI2.svg?width=3&height=4&blur=25&aspect_ratio=3:4" height="64" alt="Misiki">
   </a>
+  <img src="assets/misc/transparent.png" height="1" width="15"/>
+  <div>
+    <img src="https://res.cloudinary.com/itswadesh/image/upload/v1682424327/clicky_logo-97724356932.png?width=3&height=4&blur=25&aspect_ratio=3:4" height="64" alt="Clicky">
+  </div>
+
 </p>
 <br/>
 <br/>
