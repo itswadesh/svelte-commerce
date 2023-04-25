@@ -80,8 +80,7 @@ Reach out to me with queries!
 <br/>
 <p align="center">
   <a href="https://tesoro.pk/" target="_blank">
-    <img src="https://d24mf1as2csgn7.cloudfront.net/img/jZI-6NXHEB26SYEeozIyL3tN-347200166766.png
-" height="64" alt="Tesoro">
+    <img src="https://res.cloudinary.com/itswadesh/image/upload/v1682424690/tesoro.png?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="Tesoro">
   </a>
   <img src="assets/misc/transparent.png" height="1" width="15"/>
   <a href="https://varnijewels.com/" target="_blank">
