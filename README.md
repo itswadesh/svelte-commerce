@@ -135,7 +135,6 @@ Reach out to me with queries!
 git clone https://github.com/itswadesh/svelte-commerce.git
 cd svelte-commerce
 npm i
-cp .env.example .env    # You will need to update the values in this .env file
 npm run dev
 ```
 
@@ -144,8 +143,16 @@ Thats all !
 Open http://localhost:3000 on chrome. Your app should be live with awesome sveltekit up and running
 
 ## Configuration
+There are 3 places to configure
 
-If required, change `config/index.ts` according to your requirement
+1. `src/lib/config/`
+All non secret and application wide configs are stored here, if required, change according to your requirement.
+
+2. `.env`
+All secrets stored here
+
+3. `src/lib/services/index.ts`
+This is used to define which service to use. Only 1 of the listed service can be active at a time. Valid values are `Litekart Medusa Bigcommerce Shopify Woocommerce`
 
 ## Deployment
 

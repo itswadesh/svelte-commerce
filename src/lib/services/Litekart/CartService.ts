@@ -1,13 +1,14 @@
-import type { Error } from '$lib/types'
 import { del, getAPI, post } from '$lib/utils/api'
-import { getBySid, postt } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
+import { getBySid, postt } from '$lib/utils/server'
+import type { Error } from '$lib/types'
+const isServer = import.meta.env.SSR
 
-export const fetchCartData = async ({ origin, storeId, server = false, sid = null }: any) => {
+export const fetchCartData = async ({ origin, storeId, server = false, sid = null }) => {
 	try {
-		let res: any = {}
+		let res = {}
 
-		if (server) {
+		if (isServer) {
 			res = await getBySid(`cart?store=${storeId}`, sid)
 		} else {
 			res = await getAPI(`cart?store=${storeId}`, origin)
@@ -20,31 +21,27 @@ export const fetchCartData = async ({ origin, storeId, server = false, sid = nul
 	}
 }
 
-export const fetchRefreshCart = async ({ origin, storeId, server = false, sid = null }: any) => {
+export const fetchRefreshCart = async ({ origin, storeId, server = false, sid = null }) => {
 	try {
-		let res: any = {}
-
-		if (server) {
+		let res = {}
+		if (isServer) {
 			res = await getBySid(`carts/refresh-cart?store=${storeId}`, sid)
 			// res = await getBySid(`carts/my?store=${storeId}`, sid)
 		} else {
 			res = await getAPI(`carts/refresh-cart?store=${storeId}`, origin)
 		}
-
 		return res || {}
 	} catch (err) {
 		const e = err as Error
 		throw error(e.status, e.data?.message)
 	}
 }
-
-export const fetchMyCart = async ({ origin, storeId, server = false, sid = null }: any) => {
+export const fetchMyCart = async ({ origin, storeId, server = false, sid = null }) => {
 	try {
-		let res: any = {}
+		let res = {}
 
-		if (server) {
+		if (isServer) {
 			res = await getBySid(`carts/my?store=${storeId}`, sid)
-			// res = await getBySid(`carts/my?store=${storeId}`, sid)
 		} else {
 			res = await getAPI(`carts/my?store=${storeId}`, origin)
 		}
@@ -59,16 +56,18 @@ export const addToCartService = async ({
 	pid,
 	vid,
 	qty,
-	customizedImg,
+	customizedImg = null,
+	customizedData = null,
 	origin,
+	options = null,
 	storeId,
 	server = false,
-	sid = null
-}: any) => {
+	sid = null,
+	cookies
+}) => {
 	try {
-		let res: any = {}
-
-		if (server) {
+		let res = {}
+		if (isServer) {
 			res = await postt(
 				`carts/add-to-cart`,
 				{
@@ -76,9 +75,11 @@ export const addToCartService = async ({
 					vid,
 					qty,
 					customizedImg,
-					store: storeId
+					store: storeId,
+					customizedData,
+					options
 				},
-				sid
+				cookies
 			)
 		} else {
 			res = await post(
@@ -88,7 +89,9 @@ export const addToCartService = async ({
 					vid,
 					qty,
 					customizedImg,
-					store: storeId
+					store: storeId,
+					customizedData,
+					options
 				},
 				origin
 			)
@@ -100,18 +103,12 @@ export const addToCartService = async ({
 	}
 }
 
-export const applyCouponService = async ({
-	code,
-	origin,
-	storeId,
-	server = false,
-	sid = null
-}: any) => {
+export const applyCouponService = async ({ code, origin, storeId, server = false, sid = null }) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		res = await post(
-			`apply-coupon`,
+			`coupons/apply`,
 			{
 				code,
 				store: storeId
@@ -131,11 +128,11 @@ export const removeCouponService = async ({
 	storeId,
 	server = false,
 	sid = null
-}: any) => {
+}) => {
 	try {
-		let res: any = {}
+		let res = {}
 
-		res = await del(`remove-coupon?code=${code}&store=${storeId}`, origin)
+		res = await del(`coupon/remove?code=${code}&store=${storeId}`, origin)
 
 		return res || {}
 	} catch (e) {
