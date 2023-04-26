@@ -1,5 +1,5 @@
+import { error } from '@sveltejs/kit'
 import { getBigcommerceApi } from '$lib/utils/server'
-import { serializeNonPOJOs } from '$lib/utils/validations'
 import type { AllProducts, Error, Product } from '$lib/types'
 
 // Search product

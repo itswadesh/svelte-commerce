@@ -1,4 +1,3 @@
-import { provider } from '$lib/config'
 import type { Error } from '$lib/types'
 import { mapBigcommerceCategory } from '$lib/utils'
 import { getAPI } from '$lib/utils/api'

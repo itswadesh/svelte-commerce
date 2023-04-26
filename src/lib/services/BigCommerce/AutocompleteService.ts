@@ -1,8 +1,4 @@
-import { provider } from '$lib/config'
-import type { Error } from '$lib/types'
-import { getAPI, post } from '$lib/utils/api'
 import { getBigcommerceApi } from '$lib/utils/server'
-import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
 export const fetchAutocompleteData = async ({ origin, storeId, q }: any) => {
