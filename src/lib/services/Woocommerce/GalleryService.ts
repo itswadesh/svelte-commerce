@@ -1,16 +1,11 @@
 import { error } from '@sveltejs/kit'
-import { getAPI } from '$lib/utils/api'
-import { getBySid } from '$lib/utils/server'
+import { getWoocommerceApi } from '$lib/utils/server'
 
 export const fetchGallery = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {
 		let res: any = {}
 
-		if (server) {
-			res = await getBySid(`gallery?store=${storeId}`, sid)
-		} else {
-			res = await getAPI(`gallery?store=${storeId}`, origin)
-		}
+		res = await getWoocommerceApi(`gallery?store=${storeId}`)
 
 		return res.data || []
 	} catch (e) {

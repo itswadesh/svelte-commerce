@@ -237,7 +237,7 @@ export const postShopifyApi = async (endpoint: string, data: any, sid?: any) => 
 	}
 }
 
-export const getWoocommerceApi = async (endpoint: string, query: any, sid?: any) => {
+export const getWoocommerceApi = async (endpoint: string, query?: any, sid?: any) => {
 	try {
 		// const res = await WooCommerce.get(endpoint + '?' + serialize(query))
 		// const response = await fetch(

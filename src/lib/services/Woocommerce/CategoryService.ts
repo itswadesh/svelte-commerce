@@ -1,5 +1,4 @@
 import { getWoocommerceApi } from '$lib/utils/server'
-import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
 export const fetchFooterCategories = async ({
@@ -11,7 +10,7 @@ export const fetchFooterCategories = async ({
 	try {
 		let data: []
 
-		data = await getWoocommerceApi(`customers/me`, {}, sid)
+		data = await getWoocommerceApi(`customers/me`)
 
 		return data || []
 	} catch (e) {
