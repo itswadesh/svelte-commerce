@@ -136,10 +136,11 @@ async function getMegaMenu() {
 				megamenu = JSON.parse(localMegamenu)
 			}
 
-			megamenu = megamenu.filter((e) => {
-				return e.name !== 'New Arrivals'
-			})
-
+			if (megamenu?.length) {
+				megamenu = megamenu.filter((e) => {
+					return e.name !== 'New Arrivals'
+				})
+			}
 			megamenuResult = megamenu
 
 			// console.log('megamenu', megamenu)

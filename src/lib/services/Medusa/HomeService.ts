@@ -1,6 +1,5 @@
 import { error } from '@sveltejs/kit'
 import { getMedusajsApi } from '$lib/utils/server'
-import { serializeNonPOJOs } from '$lib/utils/validations'
 
 export const fetchHome = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {
@@ -10,6 +9,6 @@ export const fetchHome = async ({ origin, storeId, server = false, sid = null }:
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status || 404, e.data?.message || e.message)
 	}
 }

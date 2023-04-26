@@ -2,7 +2,7 @@
 // import indiaFlag from '$lib/assets/flags/india.png'
 import { browser } from '$app/environment'
 import { fly, scale } from 'svelte/transition'
-import { GOOGLE_CLIENT_ID, IS_DEV } from '$lib/config'
+import { GOOGLE_CLIENT_ID } from '$lib/config'
 import { googleOneTap } from './google-one-tap'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
@@ -15,8 +15,9 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import VerifyOtp from '../_VerifyOtp.svelte'
-
 const cookies = Cookie()
+
+const IS_DEV = import.meta.env.DEV;
 
 export let data
 
