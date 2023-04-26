@@ -22,7 +22,6 @@ export async function GET({ cookies, request, locals }) {
 			title: storeOne.title,
 			description: storeOne.description,
 			keywords: storeOne.keywords,
-			stripePublishableKey: storeOne.stripePublishableKey,
 			logo: storeOne.logo,
 			facebookUrl: storeOne.facebookUrl,
 			instagramUrl: storeOne.instagramUrl,

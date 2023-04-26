@@ -17,8 +17,6 @@ export const linkedinUrl = 'https://www.linkedin.com/itswadesh'
 export const logo = Logo
 export const phone = '+91-8249028220'
 export const pinterestUrl = 'https://www.pinterest.com/itswadesh'
-export const stripePublishableKey =
-	'pk_test_51HXxXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXq'
 export const twitterUrl = 'https://twitter.com/itswadesh'
 export const websiteLegalName = 'Misiki Technologies LLP'
 export const websiteName = 'Litekart'
