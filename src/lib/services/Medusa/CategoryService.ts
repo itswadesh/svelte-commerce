@@ -1,4 +1,4 @@
-import {  getMedusajsApi } from '$lib/utils/server'
+import { getMedusajsApi } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 
 export const fetchFooterCategories = async ({
@@ -10,7 +10,7 @@ export const fetchFooterCategories = async ({
 	try {
 		let data: []
 
-		data = await getMedusajsApi(`categories`, {}, sid)
+		data = await getMedusajsApi(`categories`)
 
 		return data || []
 	} catch (e) {
@@ -22,7 +22,7 @@ export const fetchCategory = async ({ origin, slug, id, server = false, sid = nu
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`product-categories/${id}`, {}, sid)
+		res = await getMedusajsApi(`product-categories/${id}`)
 
 		return res || {}
 	} catch (e) {
@@ -41,7 +41,7 @@ export const fetchAllCategories = async ({
 		let res: any = {}
 		let data, pageSize, currentPage
 
-		res = await getMedusajsApi(`categories`, {}, sid)
+		res = await getMedusajsApi(`categories`)
 
 		return { data, pageSize, currentPage }
 	} catch (e) {
@@ -64,7 +64,7 @@ export const fetchAllProductsOfCategories = async ({
 		let facets = {}
 		let err = null
 
-		res = await getMedusajsApi(`categories`, {}, sid)
+		res = await getMedusajsApi(`categories`)
 
 		return { products, productsCount, currentPage, facets, err }
 	} catch (e) {
@@ -76,7 +76,7 @@ export const fetchMegamenuData = async ({ origin, storeId, server = false, sid =
 	try {
 		let data: []
 
-		data = await getMedusajsApi(`product-categories`, {}, sid)
+		data = await getMedusajsApi(`product-categories`)
 
 		return data || []
 	} catch (e) {
