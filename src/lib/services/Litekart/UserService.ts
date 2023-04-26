@@ -1,12 +1,13 @@
 import { getAPI, post, put } from '$lib/utils/api'
 import { getBySid, postBySid } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
+const isServer = import.meta.env.SSR
 
 export const fetchMeData = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {
 		let res: any = {}
 
-		if (server) {
+		if (isServer) {
 			res = await getBySid(`users/me?store=${storeId}`, sid)
 		} else {
 			res = await getAPI(`users/me?store=${storeId}`, origin)
