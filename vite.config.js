@@ -6,7 +6,7 @@ import { SvelteKitPWA } from '@vite-pwa/sveltekit'
 /** @type {import('vite').UserConfig} */
 export default defineConfig(({ command, mode }) => {
 	const env = loadEnv(mode, process.cwd(), '')
-	const HTTP_ENDPOINT = env.PUBLIC_HTTP_ENDPOINT || 'https://api.litekart.in'
+	const HTTP_ENDPOINT = env.PUBLIC_LITEKART_API_URL || 'https://api.litekart.in'
 	return {
 		plugins: [
 			sveltekit(),
