@@ -17,9 +17,9 @@ export const loginUrl = '/auth/login'
 export const weightUnit = 'g'
 export const currencyCode = 'USD'
 export const currencySymbol = '$'
-export const DOMAIN = env.PUBLIC_DOMAIN // Never add any default value here, it will break SaaS working
+export const DOMAIN = env.PUBLIC_LITEKART_DOMAIN // Never add any default value here, it will break SaaS working
 export const entity = 'Misiki'
-export const HTTP_ENDPOINT = env.PUBLIC_HTTP_ENDPOINT || 'https://api.litekart.in'
+export const HTTP_ENDPOINT = env.PUBLIC_LITEKART_API_URL || 'https://api.litekart.in'
 export const IMAGE_CDN_URL = 'https://ik.imagekit.io/3wzatecz51w3i'
 export const mediaqueries = {
 	xs: '(min-width: 480px)',
@@ -47,7 +47,7 @@ export const sorts = [
 	{ name: `Name: Asc`, val: 'name' },
 	{ name: `Name: Desc`, val: '-name' } // { name: 'Most Viewed', val: '-views' }
 ]
-export const WWW_URL = env.PUBLIC_WWW_URL || env.PUBLIC_DOMAIN
+export const WWW_URL = env.PUBLIC_WWW_URL || env.PUBLIC_LITEKART_DOMAIN
 export const listOfPagesWithoutBackButton = [
 	'/',
 	'/categories',
@@ -90,5 +90,5 @@ export const woocommerceHeaders = {
 	'Content-Type': 'application/json',
 	Accept: 'application/json'
 }
-export const provider = env.PUBLIC_API_PROVIDER || 'Litekart' // 'Medusa' 'Woocommerce' 'Bigcommerce'
+// export const provider = env.PUBLIC_API_PROVIDER || 'Litekart' // 'Medusa' 'Woocommerce' 'Bigcommerce'
 export const IS_DEV = !!env.PUBLIC_IS_DEV
