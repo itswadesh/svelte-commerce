@@ -91,4 +91,4 @@ export const woocommerceHeaders = {
 	Accept: 'application/json'
 }
 // export const provider = env.PUBLIC_API_PROVIDER || 'Litekart' // 'Medusa' 'Woocommerce' 'Bigcommerce'
-export const IS_DEV = !!env.PUBLIC_IS_DEV
+// export const IS_DEV = !!env.PUBLIC_IS_DEV

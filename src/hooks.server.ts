@@ -4,7 +4,7 @@ const SENTRY_DSN = SECRET_SENTRY_DSN
 import * as SentryNode from '@sentry/node'
 import { nanoid } from 'nanoid'
 import { authenticateUser, fetchCart, fetchStoreData } from '$lib/server'
-import { DOMAIN, HTTP_ENDPOINT, IS_DEV, listOfPagesWithoutBackButton } from '$lib/config'
+import { DOMAIN, HTTP_ENDPOINT, listOfPagesWithoutBackButton } from '$lib/config'
 
 if (SENTRY_DSN && SENTRY_DSN !== 'YOUR_SENTRY_DSN') {
 	SentryNode.init({
@@ -32,6 +32,7 @@ export const handleError: HandleServerError = ({ error, event }) => {
 }
 export const handle: Handle = async ({ event, resolve }) => {
 	try {
+		const IS_DEV = import.meta.env.DEV
 		const url = new URL(event.request.url)
 		event.locals.origin = !IS_DEV ? `https://${url.host}` : `http://${url.host}`
 		const isDesktop = event.request.headers.get('sec-ch-ua-mobile') === '?0'
@@ -70,7 +71,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// if (responseTime < 100) {
 		// 	console.log(`🚀 ${route} took ${responseTime.toFixed(2)} ms`)
 		// }
-
+		
 		return response
 	} catch (e) {
 		const err = `Store Not Found @Hook 

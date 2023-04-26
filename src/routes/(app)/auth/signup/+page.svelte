@@ -2,7 +2,6 @@
 import { browser } from '$app/environment'
 import { fly } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
-import { IS_DEV } from '$lib/config'
 import { page } from '$app/stores'
 import { post } from '$lib/utils/api'
 import { toast } from '$lib/utils'
@@ -13,6 +12,7 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
+const IS_DEV = import.meta.env.DEV
 
 const cookies = Cookie()
 
