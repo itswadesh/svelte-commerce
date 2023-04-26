@@ -14,7 +14,7 @@ export const fetchWishlist = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`customers/me`, {}, sid)
+		res = await getMedusajsApi(`wishlists/me`, {}, sid)
 
 		return res?.data || []
 	} catch (e) {
@@ -33,7 +33,7 @@ export const checkWishlist = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`customers/me`, {}, sid)
+		res = await getMedusajsApi(`wishlists/me`, {}, sid)
 
 		return res
 	} catch (e) {
@@ -52,7 +52,7 @@ export const toggleWishlistService = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`customers/me`, {}, sid)
+		res = await getMedusajsApi(`wishlists/me`, {}, sid)
 
 		return res
 	} catch (e) {

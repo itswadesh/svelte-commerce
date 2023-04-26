@@ -6,7 +6,7 @@ export const fetchBlogs = async ({ origin, storeId, server = false, sid = null }
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`customers/me`, {}, sid)
+		res = await getMedusajsApi(`blogs`, {}, sid)
 
 		return res.data || []
 	} catch (e) {
@@ -18,7 +18,7 @@ export const fetchLatestBlogs = async ({ origin, storeId, server = false, sid = 
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`customers/me`, {}, sid)
+		res = await getMedusajsApi(`blogs`, {}, sid)
 
 		return res.data || []
 	} catch (e) {
@@ -30,7 +30,7 @@ export const fetchBlog = async ({ origin, id, storeId, server = false, sid = nul
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`customers/me`, {}, sid)
+		res = await getMedusajsApi(`blog`, {}, sid)
 
 		return res.data || []
 	} catch (e) {

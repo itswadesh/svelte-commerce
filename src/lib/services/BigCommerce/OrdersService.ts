@@ -1,12 +1,12 @@
 import { error } from '@sveltejs/kit'
-import { getMedusajsApi } from '$lib/utils/server'
-import type { AllOrders, Error } from '$lib/types'
+import { getBigcommerceApi } from '$lib/utils/server'
+import type { AllOrders } from '$lib/types'
 
 export const fetchOrders = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {
 		let res: AllOrders | {} = {}
 
-		const med = (await getMedusajsApi(`orders/me/orders`, {}, sid)).product
+		const med = (await getBigcommerceApi(`customers/me/orders`, {}, sid)).product
 
 		return {
 			data: res.data || [],
@@ -24,7 +24,7 @@ export const fetchOrder = async ({ origin, storeId, id, server = false, sid = nu
 	try {
 		let res: any = {}
 
-		const med = (await getMedusajsApi(`products`, {}, sid)).product
+		const med = (await getBigcommerceApi(`products`, {}, sid)).product
 
 		return res || {}
 	} catch (e) {
@@ -36,7 +36,7 @@ export const fetchTrackOrder = async ({ origin, storeId, id, server = false, sid
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`orders/me`, {}, sid)
+		res = await getBigcommerceApi(`customers/me`, {}, sid)
 
 		return res.data || []
 	} catch (e) {
@@ -57,7 +57,7 @@ export const paySuccessPageHit = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`orders/me`, {}, sid)
+		res = await getBigcommerceApi(`customers/me`, {}, sid)
 
 		return res || {}
 	} catch (e) {
@@ -77,7 +77,7 @@ export const codCheckout = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`orders/me`, {}, sid)
+		res = await getBigcommerceApi(`customers/me`, {}, sid)
 
 		return res || {}
 	} catch (e) {
@@ -97,7 +97,7 @@ export const cashfreeCheckout = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`orders/me`, {}, sid)
+		res = await getBigcommerceApi(`customers/me`, {}, sid)
 
 		return res || {}
 	} catch (e) {
@@ -117,7 +117,7 @@ export const razorpayCheckout = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`orders/me`, {}, sid)
+		res = await getBigcommerceApi(`customers/me`, {}, sid)
 
 		return res.data || []
 	} catch (e) {
@@ -136,7 +136,7 @@ export const razorpayCapture = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`orders/me`, {}, sid)
+		res = await getBigcommerceApi(`customers/me`, {}, sid)
 
 		return res.data || []
 	} catch (e) {
@@ -155,7 +155,7 @@ export const stripeCheckoutService = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`orders/me`, {}, sid)
+		res = await getBigcommerceApi(`customers/me`, {}, sid)
 
 		return res.data || []
 	} catch (e) {

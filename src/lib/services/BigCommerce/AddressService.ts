@@ -1,8 +1,4 @@
-import {
-	getMedusajsApi,
-	postMedusajsApi,
-} from '$lib/utils/server'
-import { serializeNonPOJOs } from '$lib/utils/validations'
+import { getBigcommerceApi, postMedusajsApi } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 
 export const fetchAddresses = async ({ origin, storeId, server = false, sid = null }: any) => {
@@ -11,7 +7,7 @@ export const fetchAddresses = async ({ origin, storeId, server = false, sid = nu
 		let selectedAddress = {}
 		let myAddresses = []
 
-		res = (await getMedusajsApi(`address`, {}, sid)).customer.shipping_address
+		res = (await getBigcommerceApi(`customers/me`, {}, sid)).customer.shipping_address
 
 		return { myAddresses: { data: myAddresses }, selectedAddress, count: res?.count }
 	} catch (e) {
@@ -23,7 +19,7 @@ export const fetchAddress = async ({ origin, storeId, server = false, sid = null
 	try {
 		let res: any = {}
 
-		res = (await getMedusajsApi(`address`, {}, sid)).customer.shipping_address
+		res = (await getBigcommerceApi(`customers/me`, {}, sid)).customer.shipping_address
 
 		return res || {}
 	} catch (e) {

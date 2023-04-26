@@ -1,4 +1,4 @@
-import { getMedusajsApi } from '$lib/utils/server'
+import { getBigcommerceApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
@@ -15,7 +15,7 @@ export const fetchReviews = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`reviews/me`, {}, sid)
+		res = await getBigcommerceApi(`customers/me`)
 
 		return {
 			data: res.data || [],
@@ -39,7 +39,7 @@ export const fetchProductReviews = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`reviews/me`, {}, sid)
+		res = await getBigcommerceApi(`customers/me`)
 
 		return res?.data || []
 	} catch (e) {
@@ -60,7 +60,7 @@ export const saveReview = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`reviews/me`, {}, sid)
+		res = await getBigcommerceApi(`customers/me`)
 
 		return res
 	} catch (e) {

@@ -6,7 +6,7 @@ export const fetchCartData = async ({ origin, storeId, server = false, sid = nul
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`customers/me`, {}, sid)
+		res = await getMedusajsApi(`cart`, {}, sid)
 
 		return res || {}
 	} catch (err) {
@@ -19,7 +19,7 @@ export const fetchRefreshCart = async ({ origin, storeId, server = false, sid = 
 	try {
 		let res: any = {}
 
-		// res = await getMedusajsApi(`customers/me`, {}, sid)
+		// res = await getMedusajsApi(`cart/me`, {}, sid)
 
 		return res || {}
 	} catch (err) {
@@ -32,7 +32,7 @@ export const fetchMyCart = async ({ origin, storeId, server = false, sid = null 
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`customers/me`, {}, sid)
+		res = await getMedusajsApi(`cart/me`, {}, sid)
 
 		return res || {}
 	} catch (err) {
@@ -54,7 +54,7 @@ export const addToCartService = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`customers/me`, {}, sid)
+		res = await getMedusajsApi(`cart/me`, {}, sid)
 
 		return res || {}
 	} catch (e) {
@@ -72,7 +72,7 @@ export const applyCouponService = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`customers/me`, {}, sid)
+		res = await getMedusajsApi(`cart/me`, {}, sid)
 
 		return res || {}
 	} catch (e) {
@@ -90,7 +90,7 @@ export const removeCouponService = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`customers/me`, {}, sid)
+		res = await getMedusajsApi(`cart/me`, {}, sid)
 
 		return res || {}
 	} catch (e) {

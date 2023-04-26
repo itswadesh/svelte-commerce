@@ -12,7 +12,7 @@ export const fetchBanners = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`customers/me`, {}, sid)
+		res = await getMedusajsApi(`banners`, {}, sid)
 
 		return res.data || []
 	} catch (e) {
@@ -30,7 +30,7 @@ export const fetchBannersGroup = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`customers/me`, {}, sid)
+		res = await getMedusajsApi(`banners`, {}, sid)
 
 		return res.data || []
 	} catch (e) {

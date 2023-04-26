@@ -1,11 +1,9 @@
-import { getMedusajsApi } from '$lib/utils/server'
-import { serializeNonPOJOs } from '$lib/utils/validations'
+import { getBigcommerceApi } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 
-export const fetchReviews = async ({
+export const fetchWishlist = async ({
 	origin,
 	storeId,
-	pid,
 	search,
 	sort,
 	currentPage,
@@ -15,31 +13,7 @@ export const fetchReviews = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`reviews/me`, {}, sid)
-
-		return {
-			data: res.data || [],
-			count: res.count,
-			pageSize: res.pageSize,
-			noOfPage: res.noOfPage,
-			page: res.page
-		}
-	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
-	}
-}
-
-export const fetchProductReviews = async ({
-	origin,
-	storeId,
-	pid,
-	server = false,
-	sid = null
-}: any) => {
-	try {
-		let res: any = {}
-
-		res = await getMedusajsApi(`reviews/me`, {}, sid)
+		res = await getBigcommerceApi(`customers/me`)
 
 		return res?.data || []
 	} catch (e) {
@@ -47,12 +21,29 @@ export const fetchProductReviews = async ({
 	}
 }
 
-export const saveReview = async ({
+export const checkWishlist = async ({
+	origin,
 	storeId,
-	id,
 	pid,
-	message,
-	rating,
+	vid,
+	server = false,
+	sid = null
+}: any) => {
+	try {
+		let res: any = {}
+
+		res = await getBigcommerceApi(`customers/me`)
+
+		return res
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
+	}
+}
+
+export const toggleWishlistService = async ({
+	storeId,
+	pid,
+	vid,
 	origin,
 	server = false,
 	sid = null
@@ -60,7 +51,7 @@ export const saveReview = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`reviews/me`, {}, sid)
+		res = await getBigcommerceApi(`customers/me`)
 
 		return res
 	} catch (e) {

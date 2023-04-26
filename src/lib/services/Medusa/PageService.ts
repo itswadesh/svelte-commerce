@@ -1,11 +1,11 @@
-import { getWoocommerceApi } from '$lib/utils/server'
+import { getMedusajsApi } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 
 export const fetchPages = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {
 		let res: any = {}
 
-		res = await getWoocommerceApi(`pages?store=${storeId}`)
+		res = await getMedusajsApi(`pages?store=${storeId}`)
 
 		return res.data || []
 	} catch (e) {
@@ -17,7 +17,7 @@ export const fetchLatestPages = async ({ origin, storeId, server = false, sid = 
 	try {
 		let res: any = {}
 
-		res = await getWoocommerceApi(`pages?sort=-updatedAt&limit=10&store=${storeId}`)
+		res = await getMedusajsApi(`pages?sort=-updatedAt&limit=10&store=${storeId}`)
 
 		return res.data || []
 	} catch (e) {
@@ -29,7 +29,7 @@ export const fetchPage = async ({ origin, id, storeId, server = false, sid = nul
 	try {
 		let res: any = {}
 
-		res = await getWoocommerceApi(`pages/${id}`)
+		res = await getMedusajsApi(`pages/${id}`)
 
 		return res.data || []
 	} catch (e) {

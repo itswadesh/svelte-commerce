@@ -1,4 +1,4 @@
-import { getMedusajsApi } from '$lib/utils/server'
+import { getBigcommerceApi } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 
 export const saveScheduleDemo = async ({
@@ -11,7 +11,7 @@ export const saveScheduleDemo = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`schedule-demo`, {}, sid)
+		res = await getBigcommerceApi(`customers/me`, {}, sid)
 
 		return res
 	} catch (e) {

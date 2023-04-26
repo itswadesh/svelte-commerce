@@ -1,9 +1,10 @@
-import { getMedusajsApi } from '$lib/utils/server'
+import { getBigcommerceApi } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 
-export const saveScheduleDemo = async ({
+export const savePopularSearch = async ({
 	storeId,
-	schedule,
+	id,
+	text,
 	origin,
 	server = false,
 	sid = null
@@ -11,7 +12,7 @@ export const saveScheduleDemo = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`schedule-demo`, {}, sid)
+		res = await getBigcommerceApi(`customers/me`)
 
 		return res
 	} catch (e) {

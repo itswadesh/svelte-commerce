@@ -122,7 +122,7 @@ export const getBySid = async (endpoint: string, sid?: any) => {
 	}
 }
 
-export const getBigcommerceApi = async (endpoint: string, query: any, sid?: any) => {
+export const getBigcommerceApi = async (endpoint: string, query?: any, sid?: any) => {
 	// console.log(BIG_COMMERCE_BASE_URL + '/' + endpoint)
 	const response = await fetch(BIG_COMMERCE_BASE_URL + '/' + endpoint + '?' + serialize(query), {
 		headers: bigcommerceHeaders
@@ -159,7 +159,7 @@ export const postBigCommerceApi = async (endpoint: string, query: any, sid?: any
 	}
 }
 
-export const getMedusajsApi = async (endpoint: string, query: any, sid?: any) => {
+export const getMedusajsApi = async (endpoint: string, query?: any, sid?: any) => {
 	const response = await fetch(MEDUSAJS_BASE_URL + '/' + endpoint, {
 		method: 'GET',
 		credentials: 'include',

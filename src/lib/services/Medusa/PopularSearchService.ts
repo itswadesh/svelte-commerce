@@ -12,7 +12,7 @@ export const savePopularSearch = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`customers/me`, {}, sid)
+		res = await getMedusajsApi(`popular-searches`, {}, sid)
 
 		return res
 	} catch (e) {
