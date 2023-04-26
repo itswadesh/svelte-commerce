@@ -3,7 +3,6 @@ import {
 	BIG_COMMERCE_BASE_URL,
 	HTTP_ENDPOINT,
 	bigcommerceHeaders,
-	provider,
 	woocommerceHeaders,
 	MEDUSAJS_BASE_URL,
 	SHOPIFY_BASE_URL

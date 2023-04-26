@@ -1,4 +1,3 @@
-import { provider } from '$lib/config'
 import { getBigcommerceApi } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 import type { Error } from '$lib/types'

@@ -4,7 +4,6 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import ProductCard from '$lib/ProductCard.svelte'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
-import { provider } from '$lib/config'
 import { ProductService } from '$lib/services'
 
 let name = 'Product Tab'

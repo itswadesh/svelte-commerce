@@ -35,7 +35,6 @@ import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { provider } from '$lib/config'
 import { toast } from '$lib/utils'
 
 let megamenu = $page.data.megamenu || []

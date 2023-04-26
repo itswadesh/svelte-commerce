@@ -1,6 +1,5 @@
 import { error } from '@sveltejs/kit'
 import { getWoocommerceApi } from '$lib/utils/server'
-import { provider } from '$lib/config'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import type { AllOrders, Error } from '$lib/types'
 import { mapWoocommerceOrder, mapWoocommerceAllOrders } from '$lib/utils'

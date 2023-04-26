@@ -2,7 +2,7 @@
 // import indiaFlag from '$lib/assets/flags/india.png'
 import { browser } from '$app/environment'
 import { fly, scale } from 'svelte/transition'
-import { GOOGLE_CLIENT_ID, IS_DEV, provider } from '$lib/config'
+import { GOOGLE_CLIENT_ID, IS_DEV } from '$lib/config'
 import { googleOneTap } from './google-one-tap'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
