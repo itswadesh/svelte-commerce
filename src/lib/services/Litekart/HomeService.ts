@@ -1,6 +1,7 @@
 import { error } from '@sveltejs/kit'
 import { getAPI } from '$lib/utils/api'
 import { getBySid } from '$lib/utils/server'
+const isServer = import.meta.env.SSR
 
 export const fetchHome = async ({
 	origin,
@@ -16,7 +17,7 @@ export const fetchHome = async ({
 		let heroBanners = []
 		let res: any = {}
 
-		if (server) {
+		if (isServer) {
 			res = await getBySid(`home?store=${storeId}&pageId=${pageId}`, sid)
 		} else {
 			res = await getAPI(`home?store=${storeId}&pageId=${pageId}`, origin)
@@ -56,7 +57,7 @@ export const fetchHome = async ({
 }
 export const fetchInitialPendants = async ({ origin, storeId, server = false, sid = null }) => {
 	let initialPendants
-	if (server) {
+	if (isServer) {
 		initialPendants = await getBySid(
 			`es/products?categories=pendants-initial-pendants-en-en&sort=-updatedAt&limit=20&store=${storeId}`,
 			sid

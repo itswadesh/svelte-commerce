@@ -1,13 +1,12 @@
 import { getAPI } from '$lib/utils/api'
 import { getBySid } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
-const isServer = import.meta.env.SSR
 
 export const fetchPages = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {
 		let res: any = {}
 
-		if (isServer) {
+		if (server) {
 			res = await getBySid(`pages?store=${storeId}`, sid)
 		} else {
 			res = await getAPI(`pages?store=${storeId}`, origin)
@@ -23,7 +22,7 @@ export const fetchLatestPages = async ({ origin, storeId, server = false, sid = 
 	try {
 		let res: any = {}
 
-		if (isServer) {
+		if (server) {
 			res = await getBySid(`pages?sort=-updatedAt&limit=10&store=${storeId}`, sid)
 		} else {
 			res = await getAPI(`pages?sort=-updatedAt&limit=10&store=${storeId}`, origin)
@@ -39,7 +38,7 @@ export const fetchPage = async ({ origin, id, storeId, server = false, sid = nul
 	try {
 		let res: any = {}
 
-		if (isServer) {
+		if (server) {
 			res = await getBySid(`pages/${id}`, sid)
 		} else {
 			res = await getAPI(`pages/${id}`, origin)

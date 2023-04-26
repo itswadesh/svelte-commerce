@@ -1,4 +1,3 @@
-import { error } from '@sveltejs/kit'
 import { getBigcommerceApi } from '$lib/utils/server'
 import type { AllProducts, Error, Product } from '$lib/types'
 

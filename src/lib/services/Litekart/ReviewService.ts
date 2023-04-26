@@ -2,6 +2,7 @@ import { error } from '@sveltejs/kit'
 import { getAPI, post } from '$lib/utils/api'
 import { getBySid } from '$lib/utils/server'
 import type { Error, ProductReview } from '$lib/types'
+const isServer = import.meta.env.SSR
 
 export const fetchReviews = async ({
 	origin,
@@ -16,7 +17,7 @@ export const fetchReviews = async ({
 	try {
 		let res: any = {}
 
-		if (server) {
+		if (isServer) {
 			res = await getBySid(
 				`es/reviews/${pid}?search=${
 					search || ''
@@ -59,7 +60,7 @@ export const fetchProductReviews = async ({
 		// : ProductReviews[]
 		let productReviews: ProductReview = []
 
-		if (server) {
+		if (isServer) {
 			productReviewsRes = await getBySid(
 				`reviews/product-reviews?slug=${slug}&page=${page}&sort=-createdAt&store=${storeId}`,
 				sid
