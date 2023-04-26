@@ -1,8 +1,5 @@
 import type { Error } from '$lib/types'
-import {
-	getMedusajsApi,
-} from '$lib/utils/server'
-import { serializeNonPOJOs } from '$lib/utils/validations'
+import { getMedusajsApi } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 
 export const fetchCartData = async ({ origin, storeId, server = false, sid = null }: any) => {
@@ -22,7 +19,7 @@ export const fetchRefreshCart = async ({ origin, storeId, server = false, sid = 
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`customers/me`, {}, sid)
+		// res = await getMedusajsApi(`customers/me`, {}, sid)
 
 		return res || {}
 	} catch (err) {
