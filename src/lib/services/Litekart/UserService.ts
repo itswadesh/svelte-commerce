@@ -127,6 +127,36 @@ export const forgotPasswordService = async ({
 	}
 }
 
+export const resetPasswordService = async ({
+	id,
+	token,
+	password,
+	passwordConfirmation,
+	storeId,
+	origin,
+	server = false,
+	sid = null
+}: any) => {
+	try {
+		let res: any = {}
+
+		res = await post(
+			`users/reset-password`,
+			{
+				id,
+				token,
+				password,
+				passwordConfirmation,
+				store: storeId
+			},
+			origin
+		)
+
+		return res
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
+	}
+}
 export const changePasswordService = async ({
 	oldPassword,
 	password,
