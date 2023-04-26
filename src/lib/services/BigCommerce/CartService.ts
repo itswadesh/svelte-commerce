@@ -1,8 +1,5 @@
-import { provider } from '$lib/config'
 import type { Error } from '$lib/types'
-import { del, getAPI, post } from '$lib/utils/api'
-import { getBySid, getBigcommerceApi, getWoocommerceApi, postBySid, postt } from '$lib/utils/server'
-import { serializeNonPOJOs } from '$lib/utils/validations'
+import {  getBigcommerceApi } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 
 export const fetchCartData = async ({ origin, storeId, server = false, sid = null }: any) => {
