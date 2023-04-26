@@ -5,7 +5,7 @@ export const fetchHome = async ({ origin, storeId, server = false, sid = null }:
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`products`, {}, sid)
+		res = await getMedusajsApi(`products`)
 
 		return res || {}
 	} catch (e) {

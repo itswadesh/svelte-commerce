@@ -1,5 +1,4 @@
-import { getAPI } from '$lib/utils/api'
-import { getBySid } from '$lib/utils/server'
+import { getMedusajsApi } from '$lib/utils/server'
 
 export const fetchCollections = async ({
 	origin,
@@ -11,11 +10,7 @@ export const fetchCollections = async ({
 	try {
 		let res: any = {}
 
-		if (server) {
-			res = await getBySid(`collections?store=${storeId}`, sid)
-		} else {
-			res = await getAPI(`collections?store=${storeId}`, origin)
-		}
+		res = await getMedusajsApi(`collections`)
 
 		return res || {}
 	} catch (e) {
