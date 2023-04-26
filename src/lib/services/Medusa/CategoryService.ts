@@ -10,7 +10,7 @@ export const fetchFooterCategories = async ({
 	try {
 		let data: []
 
-		data = await getMedusajsApi(`customers/me`, {}, sid)
+		data = await getMedusajsApi(`categories`, {}, sid)
 
 		return data || []
 	} catch (e) {
@@ -41,7 +41,7 @@ export const fetchAllCategories = async ({
 		let res: any = {}
 		let data, pageSize, currentPage
 
-		res = await getMedusajsApi(`customers/me`, {}, sid)
+		res = await getMedusajsApi(`categories`, {}, sid)
 
 		return { data, pageSize, currentPage }
 	} catch (e) {
@@ -64,7 +64,7 @@ export const fetchAllProductsOfCategories = async ({
 		let facets = {}
 		let err = null
 
-		res = await getMedusajsApi(`customers/me`, {}, sid)
+		res = await getMedusajsApi(`categories`, {}, sid)
 
 		return { products, productsCount, currentPage, facets, err }
 	} catch (e) {

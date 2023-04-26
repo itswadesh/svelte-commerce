@@ -5,7 +5,7 @@ export const fetchFaqs = async ({ origin, storeId, server = false, sid = null }:
 	try {
 		let res: any = {}
 	
-				res = await getMedusajsApi(`customers/me`, {}, sid)
+				res = await getMedusajsApi(`faqs`, {}, sid)
 				
 		return res || {}
 	} catch (e) {

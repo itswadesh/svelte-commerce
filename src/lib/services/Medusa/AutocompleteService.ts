@@ -7,7 +7,7 @@ export const fetchAutocompleteData = async ({ origin, storeId, q }: any) => {
 		let res: any = {}
 		let data = []
 
-		res = await getMedusajsApi(`customers/me`, {})
+		res = await getMedusajsApi(`autocomplete`, {})
 
 		// must return name:string, slug:string type:string
 		return data || []

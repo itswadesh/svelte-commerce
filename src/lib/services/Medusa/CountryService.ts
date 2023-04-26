@@ -6,7 +6,7 @@ export const fetchCountries = async ({ origin, storeId, server = false, sid = nu
 	try {
 		let res: any = {}
 	
-				res = await getMedusajsApi(`customers/me`, {}, sid)
+				res = await getMedusajsApi(`countries`, {}, sid)
 			
 		return res?.data || []
 	} catch (e) {
@@ -24,7 +24,7 @@ export const fetchStates = async ({
 	try {
 		let res: any = {}
 	
-				res = await getMedusajsApi(`customers/me`, {}, sid)
+				res = await getMedusajsApi(`countries`, {}, sid)
 				
 		return res?.data || []
 	} catch (e) {

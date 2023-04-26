@@ -1,5 +1,5 @@
-import { getBigcommerceApi } from '$lib/utils/server'
-import type { AllProducts, Error, Product } from '$lib/types'
+import { getBigcommerceApi, postBigCommerceApi } from '$lib/utils/server'
+import type { AllProducts, Product } from '$lib/types'
 
 // Search product
 
@@ -20,7 +20,7 @@ export const searchProducts = async ({
 		let category = ''
 		let err = ''
 
-		res = await postBigcommerceApi(`products/search?q=${searchData}`, {}, sid)
+		res = await getBigcommerceApi(`products/search?q=${searchData}`)
 		products = res?.products
 		count = res?.count
 		facets = res?.facets || []
@@ -38,7 +38,7 @@ export const fetchProducts = async ({ origin, slug, id, server = false, sid = nu
 	try {
 		let res: AllProducts | {} = {}
 
-		const med = (await getBigcommerceApi(`products`, {}, sid)).product
+		const med = (await getBigcommerceApi(`products`)).product
 		res = mapBigcommerceAllProducts(med)
 
 		return res?.data || []
@@ -53,7 +53,7 @@ export const fetchProduct = async ({ origin, slug, id, server = false, sid = nul
 	try {
 		let res: Product | {} = {}
 
-		const med = (await getBigcommerceApi(`products/${id}`, {}, sid)).product
+		const med = (await getBigcommerceApi(`products/${id}`)).product
 		res = mapBigcommerceProduct(med)
 
 		return res || {}
@@ -81,7 +81,7 @@ export const fetchProductsOfCategory = async ({
 		let category = ''
 		let err = ''
 
-		res = await getBigcommerceApi(`products`, {}, sid)
+		res = await getBigcommerceApi(`products`)
 		count = res?.count
 		products = res?.products.map((p) => mapBigcommerceProduct(p))
 		const offset = res?.offset
@@ -108,7 +108,7 @@ export const fetchNextPageProducts = async ({
 		let nextPageData = []
 		let res: any = {}
 
-		res = await getBigcommerceApi(`customers/me`, {}, sid)
+		res = await getBigcommerceApi(`customers/me`)
 
 		return {
 			nextPageData: nextPageData || [],
@@ -132,10 +132,9 @@ export const fetchRelatedProducts = async ({
 	sid = null
 }: any) => {
 	try {
-		let relatedProductsRes: any = {}
 		let relatedProducts: Product[] = []
 
-		relatedProducts = await getBigcommerceApi(`customers/me`, {}, sid)
+		relatedProducts = await getBigcommerceApi(`customers/me`)
 
 		return relatedProducts || []
 	} catch (e) {

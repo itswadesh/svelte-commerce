@@ -10,9 +10,9 @@ export const saveScheduleDemo = async ({
 }: any) => {
 	try {
 		let res: any = {}
-	
-				res = await getMedusajsApi(`customers/me`, {}, sid)
-				
+
+		res = await getMedusajsApi(`schedule-demo`, {}, sid)
+
 		return res
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)

@@ -1,4 +1,4 @@
-import { getBigcommerceApi, getWoocommerceApi } from '$lib/utils/server'
+import { getBigcommerceApi } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 
 export const fetchBanners = async ({

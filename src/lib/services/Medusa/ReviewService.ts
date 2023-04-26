@@ -15,7 +15,7 @@ export const fetchReviews = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`customers/me`, {}, sid)
+		res = await getMedusajsApi(`reviews/me`, {}, sid)
 
 		return {
 			data: res.data || [],
@@ -39,7 +39,7 @@ export const fetchProductReviews = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`customers/me`, {}, sid)
+		res = await getMedusajsApi(`reviews/me`, {}, sid)
 
 		return res?.data || []
 	} catch (e) {
@@ -60,7 +60,7 @@ export const saveReview = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`customers/me`, {}, sid)
+		res = await getMedusajsApi(`reviews/me`, {}, sid)
 
 		return res
 	} catch (e) {

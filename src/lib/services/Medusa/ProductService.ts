@@ -1,8 +1,7 @@
 import { error } from '@sveltejs/kit'
 import { getMedusajsApi, postMedusajsApi } from '$lib/utils/server'
-import { mapMedusajsProduct, mapMedusajsAllProducts } from '$lib/utils'
-import { serializeNonPOJOs } from '$lib/utils/validations'
-import type { AllProducts, Error, Product } from '$lib/types'
+import type { AllProducts,  Product } from '$lib/types'
+import { mapMedusajsAllProducts, mapMedusajsProduct } from './medusa-utils'
 
 // Search product
 
@@ -23,7 +22,7 @@ export const searchProducts = async ({
 		let category = ''
 		let err = ''
 
-		res = await postMedusajsApi(`products/search?q=${searchData}`, {}, sid)
+		res = await postMedusajsApi(`products/search?q=${searchData}`,{})
 		products = res?.products
 		count = res?.count
 		facets = res?.facets || []
@@ -41,7 +40,7 @@ export const fetchProducts = async ({ origin, slug, id, server = false, sid = nu
 	try {
 		let res: AllProducts | {} = {}
 
-		const med = (await getMedusajsApi(`products`, {}, sid)).product
+		const med = (await getMedusajsApi(`products`)).product
 		res = mapMedusajsAllProducts(med)
 
 		return res?.data || []
@@ -56,7 +55,7 @@ export const fetchProduct = async ({ origin, slug, id, server = false, sid = nul
 	try {
 		let res: Product | {} = {}
 
-		const med = (await getMedusajsApi(`products/${id}`, {}, sid)).product
+		const med = (await getMedusajsApi(`products/${id}`)).product
 		res = mapMedusajsProduct(med)
 
 		return res || {}
@@ -84,7 +83,7 @@ export const fetchProductsOfCategory = async ({
 		let category = ''
 		let err = ''
 
-		res = await getMedusajsApi(`products`, {}, sid)
+		res = await getMedusajsApi(`products`)
 		count = res?.count
 		products = res?.products.map((p) => mapMedusajsProduct(p))
 		const offset = res?.offset
@@ -111,7 +110,7 @@ export const fetchNextPageProducts = async ({
 		let nextPageData = []
 		let res: any = {}
 
-		res = await getMedusajsApi(`customers/me`, {}, sid)
+		res = await getMedusajsApi(`products`)
 
 		return {
 			nextPageData: nextPageData || [],
@@ -138,7 +137,7 @@ export const fetchRelatedProducts = async ({
 		let relatedProductsRes: any = {}
 		let relatedProducts: Product[] = []
 
-		relatedProducts = await getMedusajsApi(`customers/me`, {}, sid)
+		relatedProducts = await getMedusajsApi(`products`)
 
 		return relatedProducts || []
 	} catch (e) {
