@@ -48,3 +48,4 @@ export const groupByState = async (locals: App.Locals, id: string) => {
 		throw error(e.status, e.data.message)
 	}
 }
+ 

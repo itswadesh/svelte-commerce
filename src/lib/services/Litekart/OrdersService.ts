@@ -2,12 +2,13 @@ import { error } from '@sveltejs/kit'
 import { getAPI, post } from '$lib/utils/api'
 import { getBySid, postBySid } from '$lib/utils/server'
 import type { AllOrders, Error } from '$lib/types'
+const isServer = import.meta.env.SSR
 
 export const fetchOrders = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {
 		let res: AllOrders | {} = {}
 
-		if (server) {
+		if (isServer) {
 			res = await getBySid(`orders/my?store=${storeId}&active=true`, sid)
 		} else {
 			res = await getAPI(`orders/my?store=${storeId}&active=true`, origin)
@@ -29,7 +30,7 @@ export const fetchOrder = async ({ origin, storeId, id, server = false, sid = nu
 	try {
 		let res: any = {}
 
-		if (server) {
+		if (isServer) {
 			res = await getBySid(`orders/${id}?store=${storeId}`, sid)
 		} else {
 			res = await getAPI(`orders/${id}?store=${storeId}`, origin)
@@ -45,7 +46,7 @@ export const fetchTrackOrder = async ({ origin, storeId, id, server = false, sid
 	try {
 		let res: any = {}
 
-		if (server) {
+		if (isServer) {
 			res = await getBySid(`order-tracking?order=${id}&store=${storeId}`, sid)
 		} else {
 			res = await getAPI(`order-tracking?order=${id}&store=${storeId}`, origin)
@@ -70,7 +71,7 @@ export const paySuccessPageHit = async ({
 	try {
 		let res: any = {}
 
-		if (server) {
+		if (isServer) {
 			res = await postBySid(
 				`orders/pay-sucess-page-hit`,
 				{

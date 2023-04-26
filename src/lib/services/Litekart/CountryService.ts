@@ -1,12 +1,13 @@
 import { getAPI } from '$lib/utils/api'
 import { getBySid } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
+const isServer = import.meta.env.SSR
 
 export const fetchCountries = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {
 		let res: any = {}
 
-		if (server) {
+		if (isServer) {
 			res = await getBySid(`countries?limit=500&page=0&store=${storeId}`, sid)
 		} else {
 			res = await getAPI(`countries?limit=500&page=0&store=${storeId}`, origin)
@@ -28,7 +29,7 @@ export const fetchStates = async ({
 	try {
 		let res: any = {}
 
-		if (server) {
+		if (isServer) {
 			res = await getBySid(
 				`states?countryCode=${countryCode}&limit=500&page=0&sort=name&store=${storeId}`,
 				sid

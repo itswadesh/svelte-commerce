@@ -1,6 +1,7 @@
 import { getAPI } from '$lib/utils/api'
 import { getBySid } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
+const isServer = import.meta.env.SSR
 
 export const fetchBanners = async ({
 	origin,
@@ -12,7 +13,7 @@ export const fetchBanners = async ({
 	try {
 		let res: any = {}
 
-		if (server) {
+		if (isServer) {
 			res = await getBySid(`banners?pageId=${pageId}&store=${storeId}&active=true`, sid)
 		} else {
 			res = await getAPI(`banners?pageId=${pageId}&store=${storeId}&active=true`, origin)
@@ -34,7 +35,7 @@ export const fetchBannersGroup = async ({
 	try {
 		let res: any = {}
 
-		if (server) {
+		if (isServer) {
 			res = await getBySid(`banners?pageId=${pageId}&store=${storeId}&active=true`, sid)
 		} else {
 			res = await getAPI(`banners?pageId=${pageId}&store=${storeId}&active=true`, origin)
