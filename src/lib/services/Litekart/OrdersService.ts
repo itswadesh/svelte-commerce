@@ -62,6 +62,7 @@ export const paySuccessPageHit = async ({
 	origin,
 	paymentMode,
 	orderId,
+	paymentReferenceId,
 	storeId,
 	status,
 	id,
@@ -78,6 +79,7 @@ export const paySuccessPageHit = async ({
 					paymentMode,
 					status,
 					orderId,
+					paymentReferenceId,
 					store: storeId
 				},
 				sid
@@ -181,7 +183,7 @@ export const razorpayCheckout = async ({
 			origin
 		)
 
-		return res.data || []
+		return res || {}
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)
 	}
@@ -208,7 +210,7 @@ export const razorpayCapture = async ({
 			origin
 		)
 
-		return res.data || []
+		return res || {}
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)
 	}
@@ -235,8 +237,8 @@ export const stripeCheckoutService = async ({
 			origin
 		)
 
-		return res.data || []
+		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e)
 	}
 }

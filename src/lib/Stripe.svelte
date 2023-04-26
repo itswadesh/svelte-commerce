@@ -57,17 +57,16 @@ const payWithStripe = async (pm: PaymentMethod) => {
 		loading = true
 		toast('Contacting Payment Server...', 'warning')
 		const paymentMethodId = pm.id
-		const resStripe: any = OrdersService.stripeCheckoutService({
+		const res: any = await OrdersService.stripeCheckoutService({
 			paymentMethodId,
 			address,
 			storeId: $page.data.store?.id,
 			origin: $page.data.origin
 		})
-		if (resStripe.errors) {
-			errorMessage = { show: true, text: resStripe.errors[0].message }
+		if (res.errors) {
+			errorMessage = { show: true, text: res.errors[0].message }
 			return
 		} else {
-			const res = resStripe.data?.stripe
 			if (!res.paid) {
 				await payWithCard(res.clientSecret, res?.orderId)
 			} else if (res) {

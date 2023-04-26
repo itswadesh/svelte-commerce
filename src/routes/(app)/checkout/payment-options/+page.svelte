@@ -12,7 +12,6 @@ import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { post } from '$lib/utils/api'
-import { stripePublishableKey } from '$lib/config'
 import { toast } from '$lib/utils'
 import CheckoutHeader from '$lib/components/CheckoutHeader.svelte'
 import Error from '$lib/components/Error.svelte'
@@ -21,7 +20,6 @@ import logo from '$lib/assets/logo.svg'
 import Pricesummary from '$lib/components/Pricesummary.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-import Stripe from '$lib/Stripe.svelte'
 
 const seoProps = {
 	title: 'Select Payment Option',
@@ -29,7 +27,6 @@ const seoProps = {
 }
 
 export let data
-
 
 let bankPayment = { type: 'order', reference: '', remark: '', paymentMethodId: '', amount: 0 }
 let disabled = false
@@ -46,7 +43,12 @@ $: if (data.paymentMethods?.length === 1 && data.paymentMethods[0]?.type === 'pg
 	submit(pm)
 }
 
+let Stripe
+
 onMount(async () => {
+	const StripeModule = await import('$lib/Stripe.svelte')
+	Stripe = StripeModule.default
+
 	const razorpayScript = document.createElement('script')
 	razorpayScript.setAttribute('src', 'https://checkout.razorpay.com/v1/checkout.js')
 	document.head.appendChild(razorpayScript)
@@ -115,7 +117,6 @@ async function submit(pm) {
 				storeId: $page.data.store?.id,
 				origin: $page.data.origin
 			})
-
 			const options = {
 				key: rp.keyId, // Enter the Key ID generated from the Dashboard
 				name: 'Litekart.in',
@@ -153,7 +154,7 @@ async function submit(pm) {
 					color: '#112D4E'
 				}
 			}
-
+			console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', options)
 			const rzp1 = new Razorpay(options)
 			rzp1.open()
 		} catch (e) {
@@ -232,10 +233,11 @@ function checkIfStripeCardValid({ detail }) {
 							</label>
 
 							{#if pm.value === 'Stripe'}
-								<Stripe
+								<svelte:component
+									this="{Stripe}"
 									address="{data.addressId}"
 									isStripeSelected="{selectedPaymentMethod.name === 'Stripe'}"
-									stripePublishableKey="{stripePublishableKey}"
+									stripePublishableKey="{pm.app_id}"
 									on:isStripeCardValid="{checkIfStripeCardValid}" />
 							{/if}
 						{/if}

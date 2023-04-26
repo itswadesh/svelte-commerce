@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit'
 import { getMedusajsApi, postMedusajsApi } from '$lib/utils/server'
-import type { AllProducts,  Product } from '$lib/types'
+import type { AllProducts, Product } from '$lib/types'
 import { mapMedusajsAllProducts, mapMedusajsProduct } from './medusa-utils'
 
 // Search product
@@ -22,7 +22,7 @@ export const searchProducts = async ({
 		let category = ''
 		let err = ''
 
-		res = await postMedusajsApi(`products/search?q=${searchData}`,{})
+		res = await postMedusajsApi(`products/search?q=${searchData}`, {})
 		products = res?.products
 		count = res?.count
 		facets = res?.facets || []
@@ -88,7 +88,6 @@ export const fetchProductsOfCategory = async ({
 		products = res?.products.map((p) => mapMedusajsProduct(p))
 		const offset = res?.offset
 		const limit = res?.limit
-
 		return { products, count, facets, pageSize, category, err }
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)

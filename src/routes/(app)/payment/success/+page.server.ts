@@ -7,6 +7,8 @@ export async function load({ url, request, locals, cookies }) {
 	const orderId = url.searchParams.get('id')
 	const status = url.searchParams.get('status')
 	const paymentMode = url.searchParams.get('provider')
+	const paymentReferenceId = url.searchParams.get('payment_reference_id')
+	const sid = cookies.get('connect.sid')
 	let loading, err, order, cart
 	try {
 		loading = true
@@ -14,9 +16,10 @@ export async function load({ url, request, locals, cookies }) {
 			paymentMode,
 			status,
 			orderId,
+			paymentReferenceId,
 			storeId: locals.store?.id,
 			server: true,
-			sid: cookies.get('connect.sid')
+			sid
 		})
 	} catch (e) {
 		if (e.status === 401) {
