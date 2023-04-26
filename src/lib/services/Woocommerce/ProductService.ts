@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit'
 import { getWoocommerceApi, postWoocommerceApi } from '$lib/utils/server'
-import { mapWoocommerceProducts } from '$lib/utils'
 import type { AllProducts, Product } from '$lib/types'
+import { mapWoocommerceProducts } from './woocommerce-utils'
 
 // Search product
 

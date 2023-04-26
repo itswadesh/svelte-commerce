@@ -1,8 +1,6 @@
 import { error } from '@sveltejs/kit'
 import { getWoocommerceApi } from '$lib/utils/server'
-import { serializeNonPOJOs } from '$lib/utils/validations'
 import type { AllOrders, Error } from '$lib/types'
-import { mapWoocommerceOrder, mapWoocommerceAllOrders } from '$lib/utils'
 
 export const fetchOrders = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {

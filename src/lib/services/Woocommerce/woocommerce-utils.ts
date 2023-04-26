@@ -119,7 +119,7 @@ export const mapWoocommerceAllOrders = (p: any) => {
 			// currentPage: p.currentPage,
 			// pageSize: p.pageSize,
 			limit: p.limit,
-			data: p.orders.forEach(mapMedusajsOrder)
+			data: p.orders.forEach(mapWoocommerceOrder)
 		}
 		return allOrd
 	} else {
