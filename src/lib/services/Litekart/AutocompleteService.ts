@@ -5,22 +5,20 @@ export const fetchAutocompleteData = async ({ origin, storeId, q }: any) => {
 	try {
 		let res: any = {}
 		let data = []
-		let filterText = `es/autocomplete?store=${storeId}&q=''`
+
+		let filterText = `es/autocomplete?store=${storeId}&q=`
+
 		if (!!q && q !== 'undefined' && q !== 'null' && q !== '') {
 			filterText = `es/autocomplete?store=${storeId}&q=${q}`
 		}
-		res = await getAPI(filterText, origin)
-		const hits = res?.data?.hits?.hits
-		if (hits) {
-			data = hits.map((h) => {
-				return { name: h._source.name, slug: h._source.slug, type: h._source.type }
-			})
-		}
 
-		// must return name:string, slug:string type:string
+		res = await getAPI(filterText, origin)
+
+		data = res?.data
+
 		return data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		// throw error(e.status, e.data?.message || e.message)
 	}
 }
 

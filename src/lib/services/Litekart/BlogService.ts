@@ -39,9 +39,9 @@ export const fetchBlog = async ({ origin, id, storeId, server = false, sid = nul
 		let res: any = {}
 
 		if (server) {
-			res = await getBySid(`blogs/${id}`, sid)
+			res = await getBySid(`blogs/${id}?store=${storeId}`, sid)
 		} else {
-			res = await getAPI(`blogs/${id}`, origin)
+			res = await getAPI(`blogs/${id}?store=${storeId}`, origin)
 		}
 
 		return res.data || []
