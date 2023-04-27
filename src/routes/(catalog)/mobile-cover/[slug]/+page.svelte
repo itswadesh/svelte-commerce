@@ -31,11 +31,12 @@ import Pagination from '$lib/components/Pagination.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+import { children } from 'svelte/internal'
 
 export let data
 
 // console.log('data = ', data)
-// console.log('data = ', data.category)
+// console.log('data = ', data.category?.children)
 // console.log('Products = ', products)
 // console.log('Count = ', count)
 // console.log('Facets = ', facets)
@@ -336,297 +337,21 @@ function handleFilterTags() {
 </CatelogNav>
 
 <div class="h-full min-h-screen">
-	<!-- Style tags -->
 
-	{#if data.products?.facets?.all_aggs?.materials?.all?.buckets?.length}
-		<div
-			class="lg:hidden h-12 flex items-center justify-start px-3 sm:px-10 w-screen overflow-x-auto scrollbar-none fixed top-14 sm:top-20 bg-white z-40 shadow-md">
-			<div class="inline-flex gap-2">
-				{#each data.products?.facets?.all_aggs?.materials?.all?.buckets || [] as t}
-					{#if t?.key}
-						<button
-							class="whitespace-nowrap block rounded-full border py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none
-											{$page.url.searchParams.get('styleTags')?.includes(t?.key)
-								? 'bg-primary-500 border-primary-500 text-white'
-								: 'bg-white hover:border-primary-500 hover:text-primary-500'}"
-							on:click="{() => goCheckbox(t?.key)}">
-							{t?.key}
-						</button>
-					{/if}
-				{/each}
-			</div>
-		</div>
-	{/if}
-
-	<!-- Mobile black product count indicator -->
-
-	{#if !hidden && innerWidth <= 1024}
-		<button
-			transition:fade="{{ duration: 500 }}"
-			aria-label="Click to go to top"
-			class="fixed top-28 left-[50%] z-40 transform -translate-x-1/2 flex w-28 items-center justify-center gap-1 rounded-full bg-black bg-opacity-60 py-1 px-3 text-xs uppercase text-white transition duration-300 focus:outline-none hover:bg-opacity-80 active:scale-90 sm:top-36 whitespace-nowrap"
-			on:click="{goTop}">
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke-width="2"
-				stroke="currentColor"
-				class="h-3 w-3">
-				<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"
-				></path>
-			</svg>
-
-			<span class="flex-1">{data.products?.products?.length} / {data.products?.count}</span>
-		</button>
-	{/if}
-
-	<div class="mb-10 flex flex-col items-start sm:mb-20 lg:flex-row lg:gap-10 lg:p-10">
-		{#if data.products.facets}
-			<DesktopFilter
-				facets="{data.products.facets}"
-				priceRange="{priceRange}"
-				query="{data.query}"
-				class="sticky top-24 hidden lg:block"
-				on:clearAll="{refreshData}" />
-
-			<MobileFilter
-				bind:showFilter="{showFilter}"
-				bind:showSort="{showSort}"
-				facets="{data.products.facets}"
-				priceRange="{priceRange}"
-				selected="{selectedFilter}"
-				class="fixed bottom-0 border-t z-40 block lg:hidden"
-				on:clearAll="{refreshData}" />
-		{/if}
-
-		<div
-			class="w-full flex-1 sm:px-10 sm:pt-10 lg:pt-0 lg:px-0
-			{data.products?.facets?.all_aggs?.materials?.all?.buckets?.length ? 'mt-12 lg:mt-0' : 'mt-0'}">
-			<div class="flex flex-col gap-5">
-				<div class="hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex">
-					<!-- Name and count -->
-
-					<h1 class="flex flex-wrap items-center gap-2">
-						{#if data.category?.name}
-							<span class="text-xl font-bold capitalize md:text-2xl"> {data.category?.name} </span>
-
-							-
-						{/if}
-
-						<span>
-							<span class="font-bold text-2xl">
-								{data.products.count}
-							</span>
-
-							Items
-						</span>
-					</h1>
-
-					<!-- Sort -->
-
-					<div class="flex flex-wrap items-center justify-between">
-						<label class="flex items-center gap-2">
-							<span>Sort : </span>
-
-							<select
-								bind:value="{data.sort}"
-								class="max-w-max border-b bg-transparent py-1 pr-2 font-semibold focus:border-primary-500 focus:outline-none hover:border-primary-500"
-								on:change="{() => sortNow(data.sort)}">
-								{#each sorts as s}
-									<option value="{s.val}">{s.name}</option>
-								{/each}
-							</select>
-						</label>
-					</div>
-				</div>
-
-				<!-- Style tags -->
-
-				{#if data.products?.facets?.all_aggs?.materials?.all?.buckets?.length}
-					<div class="hidden lg:flex flex-wrap items-center gap-2">
-						{#each data.products?.facets?.all_aggs?.materials?.all?.buckets || [] as t}
-							{#if t?.key}
-								<button
-									class="whitespace-nowrap block rounded-full border py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none
-											{$page.url.searchParams.get('styleTags')?.includes(t?.key)
-										? 'bg-primary-500 border-primary-500 text-white'
-										: 'bg-white hover:border-primary-500 hover:text-primary-500'}"
-									on:click="{() => goCheckbox(t?.key)}">
-									{t?.key}
-								</button>
-							{/if}
-						{/each}
-					</div>
-				{/if}
-
-				<!-- Category top description -->
-
-				{#if data.category?.topDescription && data.category?.topDescription?.length > 11}
-					<div class="prose prose-sm max-w-none px-3 text-justify sm:px-0">
-						{@html data.category?.topDescription}
-					</div>
-				{/if}
-			</div>
-
-			<!-- Products -->
-
-			{#if data.products?.products?.length}
-				<ul
-					class="lg:mt-5 grid grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6">
-					{#each data.products?.products as p, ix}
-						<li>
-							<ProductCard product="{p}" />
-						</li>
-
-						<!-- Filter by tags -->
-
-						{#if ix % 40 === 39 && data.products?.facets?.all_aggs?.tags?.all?.buckets?.length}
-							<div class="col-span-2 block sm:hidden overflow-x-auto bg-primary-100 scrollbar-none">
-								<div class="w-full flex items-center gap-6 p-4">
-									<div class="shrink-0">
-										<span class="text-lg text-zinc-500">Filter by</span>
-
-										<br />
-
-										<span class="text-2xl font-bold">Tags</span>
-									</div>
-
-									<ul class="flex max-w-[40rem] shrink-0 flex-wrap gap-2">
-										{#each data.products.facets.all_aggs.tags.all.buckets || [] as t, tx}
-											{#if t && tx < 12}
-												<button
-													type="button"
-													class="capitalizefocus:outline-none max-w-max rounded bg-white py-2 px-4 text-sm font-semibold"
-													on:click="{() => goCheckbox(t.key)}">
-													{t.key}
-												</button>
-											{/if}
-										{/each}
-
-										{#if data.products.facets.all_aggs.tags.all.buckets?.length - 12 > 0}
-											<button
-												type="button"
-												class="font-semibold text-sm text-primary-500 focus:outline-none"
-												on:click="{handleFilterTags}">
-												+{data.products.facets.all_aggs.tags.all.buckets?.length - 12} more
-											</button>
-										{/if}
-									</ul>
-								</div>
-							</div>
-						{/if}
-					{/each}
-
-					{#each { length: 7 } as _}
-						<li class="hidden sm:block">
-							<DummyProductCard />
-						</li>
-					{/each}
-				</ul>
-
-				{#if !$page?.data?.isDesktop}
-					<!-- <div class="more"> -->
-					<div bind:this="{loadMoreDiv}">
-						<!-- Dot loading gif -->
-						{#if data.isLoading}
-							<div class="flex items-center justify-center p-6">
-								<img
-									src="{dotsLoading}"
-									alt="loading"
-									class="h-auto w-5 object-contain object-center" />
-							</div>
-						{/if}
-					</div>
-
-					<!-- Reached last -->
-
-					{#if reachedLast}
-						<p class="text-zinc-500 p-4 text-center">
-							<i>~ You have seen all the products ~</i>
-						</p>
-					{/if}
-				{:else}
-					<Pagination
-						count="{Math.ceil((data?.count || 1) / data.pageSize)}"
-						current="{data?.currentPage || 1}"
-						providePaddingOnMobile />
-				{/if}
-			{:else}
-				<div class="flex items-center justify-center px-3 sm:px-0" style="height: 60vh;">
-					<div class="m-10 flex flex-col items-center justify-center text-center">
-						<h2 class="mb-10 text-xl capitalize sm:text-2xl lg:text-3xl">
-							{#if data.searchData}You searched for "{data.searchData}"{/if}
-						</h2>
-
-						<div class="mb-5">
-							<img
-								src="{noDataAvailable}"
-								alt="no data available"
-								class="h-60 w-auto object-contain text-xs" />
-						</div>
-
-						<h2 class="mb-1 font-semibold">We couldn't find any matches!</h2>
-
-						<p class="mb-5 text-center text-sm text-zinc-500">
-							Please check the spelling or try searching something else
-						</p>
-
-						<PrimaryButton class="text-sm" on:click="{() => goto('/')}">Back to Home</PrimaryButton>
-					</div>
-				</div>
-			{/if}
-		</div>
+<div class="flex flex-col bg-[#f5f5f5]">
+	<div class="flex-auto mt-5 ml-5">
+		<h1 class="text-3xl underline underline-offset-8 text-gray-950 font-bold"> {data?.category.name} Mobile Covers And Cases</h1>
 	</div>
-
-	<!-- CATEGORY DESCRIPTION -->
-
-	{#if data.category?.description && data.category?.description?.length > 11}
-		<div class="justify-center bg-zinc-50 px-3 py-10 sm:px-10 sm:py-20">
-			<div
-				class="container mx-auto grid max-w-6xl grid-cols-1 gap-10 text-sm sm:gap-20 md:grid-cols-6">
-				<div class="prose prose-sm col-span-1 max-w-none text-justify md:col-span-3 lg:col-span-4">
-					{@html data.category?.description}
-				</div>
-
-				<div class="col-span-1 md:col-span-3 lg:col-span-2">
-					<h2 class="mb-5 text-center text-base font-bold uppercase tracking-wide">
-						{data.category?.name} price list
-					</h2>
-
-					<ul class="flex flex-col gap-2">
-						<li class="grid grid-cols-6 items-center gap-5 font-semibold uppercase">
-							<span class="col-span-5">{data.category?.name}</span>
-
-							<span class="col-span-1">Price <br /> (Rs)</span>
-						</li>
-						{#if data?.products}
-							{#each data.products as p, px}
-								{#if p && px < 10}
-									<li>
-										<a
-											href="/product/{p.slug}"
-											aria-label="Click to visit product details page"
-											class="grid grid-cols-6 gap-5">
-											<span class="col-span-5 text-justify">{p.name}</span>
-
-											<span class="col-span-1 whitespace-nowrap">
-												{currency(p.price, $page.data?.store?.currencySymbol)}
-											</span>
-										</a>
-									</li>
-								{/if}
-							{/each}
-						{/if}
-
-						{#if data?.products && data?.products[0] && data?.products[0]?.updatedAt}
-							<li class="font-semibold">
-								<i>Data last updated on {dateOnly(data.products[0]?.updatedAt)}</i>
-							</li>
-						{/if}
-					</ul>
-				</div>
-			</div>
-		</div>
-	{/if}
+	
+  <div class="flex-col">
+   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4 mx-5 my-5">
+  <!-- Loop through the array and create a card for each element -->
+   {#each data.category?.children as c}
+  <a class="p-4 bg-white rounded-lg shadow-md" href="/{c?.slug}">
+    <p class="text-xl font-medium">{c?.name}</p>
+  </a>
+  {/each}
+</div>
+  </div>
+</div>
 </div>
