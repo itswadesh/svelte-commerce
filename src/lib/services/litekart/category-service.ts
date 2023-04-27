@@ -43,7 +43,7 @@ export const fetchCategory = async ({
 		if (isServer || isCors) {
 			res = await getBySid(`es/categories/${id}?store=${storeId}&children=${children}`, sid)
 		} else {
-			res = await getAPI(`es/categories/${id}?store=${storeId}`, origin)
+			res = await getAPI(`es/categories/${id}?store=${storeId}&children=${children}`, origin)
 		}
 
 		return res || {}
