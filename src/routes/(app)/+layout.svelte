@@ -13,6 +13,8 @@
 
 <script lang="ts">
 import { page } from '$app/stores'
+import icon_up from '$lib/assets/icon_up.png'
+import icon_down from '$lib/assets/icon_down.png'
 import Footer from '$lib/Footer.svelte'
 import Nav from '$lib/Nav.svelte'
 import PageTransitions from '$lib/PageTransitions.svelte'
@@ -21,6 +23,33 @@ export let data
 
 let openSidebar = false
 let showCartSidebar = false
+
+let showMobileFooter = false;
+
+let iClass = "icon_down";
+let iClassImg = icon_down
+
+
+function handleFooterClick(){
+
+	showMobileFooter = !showMobileFooter
+    
+	if (iClass == "icon_down") {
+		iClass = "icon_up";
+		iClassImg = icon_up
+	} else {
+		iClass = "icon_down";
+		iClassImg = icon_down
+	}
+	
+
+ console.log(showMobileFooter);
+ console.log(iClass);
+ 
+
+}
+
+
 </script>
 
 <div class="{showCartSidebar || openSidebar ? 'h-screen overflow-hidden' : 'h-full'}">
@@ -58,6 +87,23 @@ let showCartSidebar = false
 		</div>
 	</PageTransitions>
 
+	<div class="moreAboutZapvi mb-32 lg:hidden md:hidden">
+
+    <button class="w-full relative p-6 h-16 text-left bg-white border text-base font-bold border-black justify-evenly" on:click="{handleFooterClick}">
+		More About Zapvi
+		 
+        <i class="{iClass} absolute right-6 top-7">
+			<img src="{iClassImg}" alt="{iClass}">
+		</i>
+	</button>
+
+	{#if showMobileFooter == true}
+
+	<Footer me="{data.me}" />
+
+	{/if}
+
+</div>
 	<div class="hidden lg:block">
 		<Footer me="{data.me}" />
 	</div>

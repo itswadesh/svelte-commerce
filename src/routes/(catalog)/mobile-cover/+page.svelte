@@ -371,9 +371,9 @@ function handleFilterTags() {
 	{/if}
 
 	<div class="mb-10 flex flex-col items-start sm:mb-20 lg:flex-row lg:gap-10 lg:p-10">
-		{#if data.products.facets}
+		{#if data.products?.facets}
 			<DesktopFilter
-				facets="{data.products.facets}"
+				facets="{data.products?.facets}"
 				priceRange="{priceRange}"
 				query="{data.query}"
 				class="sticky top-24 hidden lg:block"
@@ -382,7 +382,7 @@ function handleFilterTags() {
 			<MobileFilter
 				bind:showFilter="{showFilter}"
 				bind:showSort="{showSort}"
-				facets="{data.products.facets}"
+				facets="{data.products?.facets}"
 				priceRange="{priceRange}"
 				selected="{selectedFilter}"
 				class="fixed bottom-0 border-t z-40 block lg:hidden"
@@ -405,7 +405,7 @@ function handleFilterTags() {
 
 						<span>
 							<span class="font-bold text-2xl">
-								{data.products.count}
+								{data.products?.count}
 							</span>
 
 							Items
@@ -482,7 +482,7 @@ function handleFilterTags() {
 									</div>
 
 									<ul class="flex max-w-[40rem] shrink-0 flex-wrap gap-2">
-										{#each data.products.facets.all_aggs.tags.all.buckets || [] as t, tx}
+										{#each data.products?.facets.all_aggs.tags.all.buckets || [] as t, tx}
 											{#if t && tx < 12}
 												<button
 													type="button"
@@ -493,12 +493,12 @@ function handleFilterTags() {
 											{/if}
 										{/each}
 
-										{#if data.products.facets.all_aggs.tags.all.buckets?.length - 12 > 0}
+										{#if data.products?.facets.all_aggs.tags.all.buckets?.length - 12 > 0}
 											<button
 												type="button"
 												class="font-semibold text-sm text-primary-500 focus:outline-none"
 												on:click="{handleFilterTags}">
-												+{data.products.facets.all_aggs.tags.all.buckets?.length - 12} more
+												+{data.products?.facets.all_aggs.tags.all.buckets?.length - 12} more
 											</button>
 										{/if}
 									</ul>
