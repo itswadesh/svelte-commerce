@@ -20,6 +20,9 @@
 		"liveS": "node devops/deploy",
 		"live": "run-s build copy liveS"
 	},
+	"dependencies": {
+		"@vite-pwa/sveltekit": "0.1.3"
+	},
 	"devDependencies": {
 		"@builder.io/partytown": "0.7.5",
 		"@playwright/test": "^1.31.2",
@@ -36,7 +39,6 @@
 		"@types/bcrypt": "^5.0.0",
 		"@typescript-eslint/eslint-plugin": "^5.54.1",
 		"@typescript-eslint/parser": "^5.54.1",
-		"@vite-pwa/sveltekit": "0.1.3",
 		"@woocommerce/woocommerce-rest-api": "1.0.1",
 		"amazon-s3-uri": "^0.1.1",
 		"autoprefixer": "^10.4.14",
