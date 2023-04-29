@@ -86,7 +86,7 @@ onMount(async () => {
 <SEO {...seoProps} />
 
 {#if data.order}
-	<div class="min-h-screen w-full  px-3 py-5 sm:p-10 ">
+	<div class="min-h-screen w-full px-3 py-5 sm:p-10">
 		<div class="container mx-auto max-w-6xl">
 			<div>
 				<div class="mb-5 sm:mb-10">
@@ -108,8 +108,8 @@ onMount(async () => {
 				{/if}
 
 				<p class="mb-5 text-center text-sm">
-					A confirmation e-mail will be sent to the e-mail address that you specified in Order
-					details.
+					A confirmation e-mail/sms will be sent to the e-mail address that you specified during
+					Order.
 				</p>
 
 				<ul class="mx-auto mb-5 flex max-w-max flex-col gap-2 sm:mb-10">
