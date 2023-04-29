@@ -265,7 +265,7 @@ async function getCoupons() {
 								{#each data.cart?.items as item, ix (item.pid)}
 									<!-- Product detail start -->
 
-									<div class="flex w-full items-start gap-4 py-5">
+									<div out:fly="{{ x: -2400, duration: 2500 }}" class="flex w-full items-start gap-4 py-5">
 										<a
 											href="/product/{item?.slug}"
 											aria-label="Click to visit product details"
