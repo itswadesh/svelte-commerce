@@ -47,6 +47,7 @@ async function getMegaMenu() {
 				})
 			} else {
 				megamenu = JSON.parse(localMegamenu)
+				
 			}
 			if (megamenu?.length) {
 				megamenu = megamenu.filter((e) => {
@@ -77,6 +78,9 @@ function toggle2(cx) {
 		showChild2[cx] = true
 	}
 }
+
+
+
 </script>
 
 <SEO {...seoProps} />
@@ -91,22 +95,16 @@ function toggle2(cx) {
 					{#if m}
 						<li>
 							{#if m.children?.length}
+							
 								<button
 									type="button"
 									class="flex h-24 w-full items-end justify-between focus:outline-none 
-									{bgColors[mx]}">
+									{bgColors[mx]}" on:click="{() => toggle(mx)}">
 									<div class="flex h-full w-full flex-1 items-center gap-2 px-6">
-										<a
-											href="/{m.slug}"
-											aria-label="Click to visit {m.name || '##'}"
+										<p
 											class="flex-1 text-left text-xl font-bold uppercase">
 											{m.name}
-										</a>
-
-										<button
-											type="button"
-											class="overflow-hidden rounded-full p-2 focus:outline-none"
-											on:click="{() => toggle(mx)}">
+									</p>
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
 												class="h-6 w-6 shrink-0 transition duration-300
@@ -118,7 +116,6 @@ function toggle2(cx) {
 													d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
 													clip-rule="evenodd"></path>
 											</svg>
-										</button>
 									</div>
 
 									{#if m.img}
@@ -156,11 +153,8 @@ function toggle2(cx) {
 												{#if c.children?.length}
 													<button
 														type="button"
-														class="flex w-full items-center gap-4 py-3 px-8 text-left font-medium focus:outline-none">
-														<a
-															href="/{c.slug}"
-															aria-label="Click to visit {c.name || '##'}"
-															class="flex flex-1 items-center gap-4">
+														class="flex w-full items-center gap-4 py-3 px-8 text-left font-medium focus:outline-none" on:click="{() => toggle2(cx)}">
+													
 															{#if c.img}
 																<div class="h-12 w-12 shrink-0 overflow-hidden rounded-full">
 																	<LazyImg
@@ -179,12 +173,8 @@ function toggle2(cx) {
 															<h2 class="flex-1">
 																{c.name}
 															</h2>
-														</a>
+														
 
-														<button
-															type="button"
-															class="overflow-hidden rounded-full p-2 focus:outline-none"
-															on:click="{() => toggle2(cx)}">
 															<svg
 																xmlns="http://www.w3.org/2000/svg"
 																class="h-5 w-5 shrink-0 transition duration-300
@@ -196,7 +186,6 @@ function toggle2(cx) {
 																	d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
 																	clip-rule="evenodd"></path>
 															</svg>
-														</button>
 													</button>
 												{:else}
 													<a
