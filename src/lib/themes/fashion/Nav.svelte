@@ -3,6 +3,7 @@ import { applyAction, enhance } from '$app/forms'
 import { CartService, CategoryService } from '$lib/services'
 import { cubicOut } from 'svelte/easing'
 import { fade, fly, slide } from 'svelte/transition'
+import { fireGTagEvent } from '$lib/utils/gTagB'
 import { getAPI } from '$lib/utils/api'
 import { invalidateAll } from '$app/navigation'
 import { logo } from '$lib/config'
@@ -72,9 +73,9 @@ async function fetchCart() {
 		loading = true
 
 		const res = await CartService.fetchRefreshCart({
-			cookies,
-			storeId: $page.data.store?.id,
-			origin: $page.data.origin
+			cartId: $page.data.cartId,
+			origin: origin,
+			storeId: store?.id
 		})
 
 		if (res) {
@@ -402,227 +403,182 @@ async function getCategories() {
 				<h2 class="border-b p-4 text-center font-bold uppercase sm:text-lg">Cart</h2>
 
 				<div class="h-full overflow-y-auto p-4 pb-20 overflow-x-hidden">
-					{#if $page.data.cartQty > 0}
+					{#if loading}
 						<ul class="p-0 list-none mb-5 flex flex-col gap-5">
-							{#if loading}
-								{#each { length: 4 } as _}
-									<li>
-										<Skeleton small />
-									</li>
-								{/each}
-							{:else}
-								{#each cart?.items || [] as item, ix}
-									<li class="flex items-start justify-between gap-4">
-										<a
-											href="/product/{item.slug}"
-											aria-label="Click to visit product details page"
-											class="shrink-0"
-											on:click="{() => (showCartSidebar = false)}">
-											<LazyImg
-												src="{item.isCustomized ? item.customizedImg : item.img}"
-												alt=""
-												width="64"
-												class="h-auto w-16 object-contain object-left" />
-										</a>
+							{#each { length: 4 } as _}
+								<li>
+									<Skeleton small />
+								</li>
+							{/each}
+						</ul>
+					{:else if $page.data?.cartQty > 0}
+						<ul class="p-0 list-none mb-5 flex flex-col gap-5">
+							{#each cart?.items || [] as item, ix}
+								<li class="flex items-start justify-between gap-4">
+									<a
+										href="/product/{item.slug}"
+										aria-label="Click to visit product details page"
+										class="shrink-0"
+										on:click="{() => (showCartSidebar = false)}">
+										<LazyImg
+											src="{item.isCustomized ? item.customizedImg : item.img}"
+											alt=""
+											width="64"
+											class="h-auto w-16 object-contain object-left" />
+									</a>
 
-										<div class="flex flex-1 flex-col gap-2 text-sm">
-											<div class="flex justify-between gap-2">
-												<a
-													href="/product/{item.slug}"
-													aria-label="Click to visit product details page"
-													class="flex-1 leading-4"
-													on:click="{() => (showCartSidebar = false)}">{item.name}</a>
+									<div class="flex flex-1 flex-col gap-2 text-sm">
+										<div class="flex justify-between gap-2">
+											<a
+												href="/product/{item.slug}"
+												aria-label="Click to visit product details page"
+												class="flex-1 leading-4"
+												on:click="{() => (showCartSidebar = false)}">{item.name}</a>
 
-												{#if $page?.data?.store?.isFnb && item.foodType}
-													<div>
-														{#if item.foodType === 'veg'}
-															<img src="{productVeg}" alt="veg" class="h-5 w-5" />
-														{:else if item.foodType === 'nonveg'}
-															<img src="{productNonVeg}" alt="non veg" class="h-5 w-5" />
+											{#if $page?.data?.store?.isFnb && item.foodType}
+												<div>
+													{#if item.foodType === 'veg'}
+														<img src="{productVeg}" alt="veg" class="h-5 w-5" />
+													{:else if item.foodType === 'nonveg'}
+														<img src="{productNonVeg}" alt="non veg" class="h-5 w-5" />
+													{/if}
+												</div>
+											{/if}
+										</div>
+
+										<!-- options -->
+
+										{#if item?.usedOptions?.length}
+											{#each item?.usedOptions as option}
+												{#if option?.val?.length && option?.val !== undefined && option?.val != ''}
+													<div class="flex flex-wrap gap-2">
+														<span>{option.name}:</span>
+
+														{#if option.val}
+															<ul class="flex flex-wrap items-center gap-x-2 gap-y-1">
+																{#each option.val as v, valIndex}
+																	{#if v}
+																		<b>
+																			{v}
+																		</b>
+
+																		{#if valIndex < option.val?.length - 1}
+																			,
+																		{/if}
+																	{/if}
+																{/each}
+															</ul>
 														{/if}
 													</div>
 												{/if}
-											</div>
+											{/each}
+										{/if}
 
-											{#if item?.usedOptions?.length}
-												<div class="flex flex-col gap-2">
-													{#each item?.usedOptions as option}
-														{#if option?.val?.length && option?.val !== undefined && option?.val != ''}
-															<div class="flex flex-wrap gap-2">
-																<h6>{option.name}:</h6>
-																{#each option.val as v}
-																	{#if v}
-																		<div class="font-bold">
-																			{v}
-																		</div>
-																	{/if}
-																{/each}
-															</div>
-														{/if}
-													{/each}
-												</div>
-											{/if}
+										<div class="flex flex-wrap items-center gap-1">
+											<span>
+												{item.qty}
+											</span>
 
-											<div class="flex flex-wrap items-center gap-1">
-												<span>
-													{item.qty}
-												</span>
+											<span class="text-zinc-500">x</span>
 
-												<span class="text-zinc-500">x</span>
-
-												<span class="font-semibold">
-													{item.formattedItemAmount?.price}
-												</span>
-											</div>
-
-											<div class="flex items-center gap-2">
-												<!-- Minus icon -->
-
-												<form
-													action="/cart?/add"
-													method="POST"
-													use:enhance="{() => {
-														loadingForSelectedCartItem[ix] = true
-														return async ({ result }) => {
-															await applyAction(result)
-															fetchCart()
-															loadingForSelectedCartItem[ix] = false
-														}
-													}}">
-													<input type="hidden" name="pid" value="{item.pid || null}" />
-													<input type="hidden" name="qty" value="{-1}" />
-													<input
-														type="hidden"
-														name="customizedImg"
-														value="{item.customizedImg || null}" />
-
-													<button
-														type="submit"
-														disabled="{loadingForSelectedCartItem[ix]}"
-														class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8
-															{loadingForSelectedCartItem[ix]
-															? 'cursor-not-allowed opacity-80'
-															: 'cursor-pointer hover:opacity-80 active:scale-95'}">
-														<svg
-															xmlns="http://www.w3.org/2000/svg"
-															fill="none"
-															viewBox="0 0 24 24"
-															stroke-width="1.5"
-															stroke="currentColor"
-															class="w-4 h-4 text-zinc-500">
-															<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15"
-															></path>
-														</svg>
-													</button>
-												</form>
-
-												<!-- Quantity indicator -->
-
-												<div
-													class="flex h-6 w-6 items-center justify-center text-xs font-bold sm:h-8 sm:w-8">
-													{#if selectedLoadingType !== 'delete' && loadingForSelectedCartItem[ix]}
-														<img
-															src="{dotsLoading}"
-															alt="loading"
-															class="h-auto w-5 object-contain object-center" />
-													{:else}
-														<span>{item?.qty}</span>
-													{/if}
-												</div>
-
-												<!-- Puls icon -->
-
-												<form
-													action="/cart?/add"
-													method="POST"
-													use:enhance="{() => {
-														loadingForSelectedCartItem[ix] = true
-														return async ({ result }) => {
-															await applyAction(result)
-															fetchCart()
-															loadingForSelectedCartItem[ix] = false
-														}
-													}}">
-													<input type="hidden" name="pid" value="{item.pid || null}" />
-													<input type="hidden" name="qty" value="{+1}" />
-													<input
-														type="hidden"
-														name="customizedImg"
-														value="{item.customizedImg || null}" />
-													<button
-														type="submit"
-														disabled="{loadingForSelectedCartItem[ix]}"
-														class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8
-															{loadingForSelectedCartItem[ix]
-															? 'cursor-not-allowed opacity-80'
-															: 'cursor-pointer hover:opacity-80 active:scale-95'}">
-														<svg
-															xmlns="http://www.w3.org/2000/svg"
-															fill="none"
-															viewBox="0 0 24 24"
-															stroke-width="1.5"
-															stroke="currentColor"
-															class="w-4 h-4 text-zinc-500">
-															<path
-																stroke-linecap="round"
-																stroke-linejoin="round"
-																d="M12 4.5v15m7.5-7.5h-15"></path>
-														</svg>
-													</button>
-												</form>
-											</div>
+											<span class="font-semibold">
+												{item.formattedItemAmount?.price}
+											</span>
 										</div>
 
-										<!-- Delete icon -->
+										<div class="flex items-center">
+											<!-- Minus icon -->
 
-										<form
-											action="/cart?/add"
-											method="POST"
-											use:enhance="{() => {
-												selectedLoadingType = 'delete'
-												loadingForSelectedCartItem[ix] = true
-												return async ({ result }) => {
-													await applyAction(result)
-													fetchCart()
-													selectedLoadingType = null
-													loadingForSelectedCartItem[ix] = false
-												}
-											}}">
-											<input type="hidden" name="pid" value="{item.pid || null}" />
-											<input type="hidden" name="qty" value="{-9999999}" />
-											<input
-												type="hidden"
-												name="customizedImg"
-												value="{item.customizedImg || null}" />
+											<form
+												action="/cart?/add"
+												method="POST"
+												use:enhance="{() => {
+													loadingForSelectedCartItem[ix] = true
+													return async ({ result }) => {
+														fireGTagEvent('remove_from_cart', item)
+														await applyAction(result)
+														loadingForSelectedCartItem[ix] = false
+														fetchCart()
+													}
+												}}">
+												<input type="hidden" name="pid" value="{item.pid || null}" />
+												<input type="hidden" name="vid" value="{item.vid || null}" />
+												<input type="hidden" name="qty" value="{-1}" />
+												<input
+													type="hidden"
+													name="customizedImg"
+													value="{item.customizedImg || null}" />
+												<input
+													type="hidden"
+													name="options"
+													value="{JSON.stringify(item.options) || null}" />
 
-											<button
-												type="submit"
-												disabled="{loadingForSelectedCartItem[ix]}"
-												class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8
-														{loadingForSelectedCartItem[ix]
-													? 'cursor-not-allowed opacity-80'
-													: 'cursor-pointer hover:opacity-80 active:scale-95'}">
-												{#if selectedLoadingType === 'delete' && loadingForSelectedCartItem[ix]}
+												<button
+													type="submit"
+													disabled="{loadingForSelectedCartItem[ix]}"
+													class="flex transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none h-6 w-6
+															{loadingForSelectedCartItem[ix]
+														? 'cursor-not-allowed opacity-80'
+														: 'cursor-pointer hover:opacity-80 active:scale-95'}">
 													<svg
 														xmlns="http://www.w3.org/2000/svg"
-														class="h-4 w-4 animate-spin"
+														fill="none"
 														viewBox="0 0 24 24"
 														stroke-width="1.5"
 														stroke="currentColor"
-														fill="none"
-														stroke-linecap="round"
-														stroke-linejoin="round">
-														<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-														<path d="M8.56 3.69a9 9 0 0 0 -2.92 1.95"></path>
-														<path d="M3.69 8.56a9 9 0 0 0 -.69 3.44"></path>
-														<path d="M3.69 15.44a9 9 0 0 0 1.95 2.92"></path>
-														<path d="M8.56 20.31a9 9 0 0 0 3.44 .69"></path>
-														<path d="M15.44 20.31a9 9 0 0 0 2.92 -1.95"></path>
-														<path d="M20.31 15.44a9 9 0 0 0 .69 -3.44"></path>
-														<path d="M20.31 8.56a9 9 0 0 0 -1.95 -2.92"></path>
-														<path d="M15.44 3.69a9 9 0 0 0 -3.44 -.69"></path>
+														class="w-4 h-4 text-zinc-500">
+														<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15"
+														></path>
 													</svg>
+												</button>
+											</form>
+
+											<!-- Quantity indicator -->
+
+											<div class="mx-2 flex h-6 w-6 items-center justify-center text-xs font-bold">
+												{#if selectedLoadingType !== 'delete' && loading[ix]}
+													<img
+														src="{dotsLoading}"
+														alt="loading"
+														class="h-auto w-4 object-contain object-center" />
 												{:else}
+													<span>{item?.qty}</span>
+												{/if}
+											</div>
+
+											<!-- Puls icon -->
+
+											<form
+												action="/cart?/add"
+												method="POST"
+												use:enhance="{() => {
+													loadingForSelectedCartItem[ix] = true
+													return async ({ result }) => {
+														fireGTagEvent('add_to_cart', result?.data)
+														await applyAction(result)
+														loadingForSelectedCartItem[ix] = false
+														fetchCart()
+													}
+												}}">
+												<input type="hidden" name="pid" value="{item.pid || null}" />
+												<input type="hidden" name="vid" value="{item.vid || null}" />
+												<input type="hidden" name="qty" value="{+1}" />
+												<input
+													type="hidden"
+													name="customizedImg"
+													value="{item.customizedImg || null}" />
+												<input
+													type="hidden"
+													name="options"
+													value="{JSON.stringify(item.options) || null}" />
+
+												<button
+													type="submit"
+													disabled="{loadingForSelectedCartItem[ix]}"
+													class="flex transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none h-6 w-6
+															{loadingForSelectedCartItem[ix]
+														? 'cursor-not-allowed opacity-80'
+														: 'cursor-pointer hover:opacity-80 active:scale-95'}">
 													<svg
 														xmlns="http://www.w3.org/2000/svg"
 														fill="none"
@@ -633,15 +589,87 @@ async function getCategories() {
 														<path
 															stroke-linecap="round"
 															stroke-linejoin="round"
-															d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-														></path>
+															d="M12 4.5v15m7.5-7.5h-15"></path>
 													</svg>
-												{/if}
-											</button>
-										</form>
-									</li>
-								{/each}
-							{/if}
+												</button>
+											</form>
+										</div>
+									</div>
+
+									<!-- Delete icon -->
+
+									<form
+										action="/cart?/add"
+										method="POST"
+										use:enhance="{() => {
+											selectedLoadingType = 'delete'
+											loadingForSelectedCartItem[ix] = true
+											return async ({ result }) => {
+												fireGTagEvent('remove_from_cart', item)
+												await applyAction(result)
+												selectedLoadingType = null
+												loadingForSelectedCartItem[ix] = false
+												fetchCart()
+											}
+										}}">
+										<input type="hidden" name="pid" value="{item.pid || null}" />
+										<input type="hidden" name="vid" value="{item.vid || null}" />
+										<input type="hidden" name="qty" value="{-9999999}" />
+										<input
+											type="hidden"
+											name="customizedImg"
+											value="{item.customizedImg || null}" />
+										<input
+											type="hidden"
+											name="options"
+											value="{JSON.stringify(item.options) || null}" />
+
+										<button
+											type="submit"
+											disabled="{loadingForSelectedCartItem[ix]}"
+											class="flex transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none h-6 w-6
+														{loadingForSelectedCartItem[ix]
+												? 'cursor-not-allowed opacity-80'
+												: 'cursor-pointer hover:opacity-80 active:scale-95'}">
+											{#if selectedLoadingType === 'delete' && loading[ix]}
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													class="h-4 w-4 animate-spin"
+													viewBox="0 0 24 24"
+													stroke-width="1.5"
+													stroke="currentColor"
+													fill="none"
+													stroke-linecap="round"
+													stroke-linejoin="round">
+													<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+													<path d="M8.56 3.69a9 9 0 0 0 -2.92 1.95"></path>
+													<path d="M3.69 8.56a9 9 0 0 0 -.69 3.44"></path>
+													<path d="M3.69 15.44a9 9 0 0 0 1.95 2.92"></path>
+													<path d="M8.56 20.31a9 9 0 0 0 3.44 .69"></path>
+													<path d="M15.44 20.31a9 9 0 0 0 2.92 -1.95"></path>
+													<path d="M20.31 15.44a9 9 0 0 0 .69 -3.44"></path>
+													<path d="M20.31 8.56a9 9 0 0 0 -1.95 -2.92"></path>
+													<path d="M15.44 3.69a9 9 0 0 0 -3.44 -.69"></path>
+												</svg>
+											{:else}
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													fill="none"
+													viewBox="0 0 24 24"
+													stroke-width="1.5"
+													stroke="currentColor"
+													class="w-4 h-4 text-zinc-500">
+													<path
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+													></path>
+												</svg>
+											{/if}
+										</button>
+									</form>
+								</li>
+							{/each}
 						</ul>
 
 						<div class="mb-10 flex flex-col gap-2">
@@ -714,7 +742,6 @@ async function getCategories() {
 		</div>
 	</div>
 {/if}
-
 {#if show}
 	<AutosuggestModal bind:show="{show}" />
 {/if}
