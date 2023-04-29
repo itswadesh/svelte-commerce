@@ -220,7 +220,7 @@ onMount(async () => {
 })
 
 const storeRecentlyViewedToLocatStorage = async () => {
-	const localRecentlyViewed = localStorage.getItem(`recentlyViewed_${$page.data.store.id}`)
+	const localRecentlyViewed = localStorage.getItem(`recently_viewed_${$page.data.store.id}`)
 	// console.log('localRecentlyViewed', localRecentlyViewed)
 
 	if (!!localRecentlyViewed && localRecentlyViewed !== 'undefined') {
@@ -250,7 +250,7 @@ const storeRecentlyViewedToLocatStorage = async () => {
 		recentlyViewed = resvw
 
 		if (browser) {
-			localStorage.setItem(`recentlyViewed_${$page.data.store.id}`, JSON.stringify(recentlyViewed))
+			localStorage.setItem(`recently_viewed_${$page.data.store.id}`, JSON.stringify(recentlyViewed))
 		}
 	}
 
