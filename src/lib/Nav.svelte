@@ -203,14 +203,17 @@ const getSelectionLabel = (option) => option.name
 						alt="logo"
 						height="64"
 						aspect_ratio="4:1"
-						class="max-h-16 w-40 object-contain object-left" />
+						class="max-h-10 sm:max-h-16 w-40 object-contain object-left" />
 				{:else if $page?.data?.store?.websiteName}
 					<h2
 						class="bg-gradient-to-b from-primary-500 to-secondary-500 bg-clip-text text-2xl font-extrabold text-transparent sm:text-3xl">
 						{$page?.data?.store?.websiteName}
 					</h2>
 				{:else}
-					<img src="{logo}" alt="logo" class="max-h-16 w-40 object-contain object-left" />
+					<img
+						src="{logo}"
+						alt="logo"
+						class="max-h-10 sm:max-h-16 w-40 object-contain object-left" />
 				{/if}
 			</a>
 		</div>

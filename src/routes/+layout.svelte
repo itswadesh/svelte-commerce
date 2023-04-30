@@ -21,7 +21,7 @@ $: innerWidth = 0
 
 let showBackToTopButton = true
 
-$: if ($page?.url?.pathname === `/${$page?.params?.slug}` && innerWidth < 1024) {
+$: if (innerWidth < 1024) {
 	showBackToTopButton = false
 } else {
 	showBackToTopButton = true
