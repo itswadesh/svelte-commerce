@@ -41,7 +41,7 @@ let selectedCountry = data.countries[0]
 let showDropDown = false
 let showPassword = false
 let type = 'password'
-let value = email ? email : IS_DEV ? 'admin@litekart.in' : null
+let value = email ? email : IS_DEV ? 'hi@litekart.in' : null
 
 onMount(() => {
 	googleOneTap(
