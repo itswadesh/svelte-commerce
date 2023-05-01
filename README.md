@@ -24,7 +24,12 @@
     <img width="400" height="300" src=".github/svelte-commerce-demo.gif" hspace="5">
 </div>
 
-
+<br>
+<p align="center">
+<img width="200" height="400" src=".github/home-page-mobile.jpg" hspace="10">
+<img width="200" height="400" src=".github/catalog-listing-mobile.jpg" hspace="10">
+<img width="200" height="400" src=".github/product-details-mobile.jpg" hspace="10">
+<p/>
 <br/>
 
 <p align="center">
