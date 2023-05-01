@@ -13,8 +13,6 @@ import { navigating, page } from '$app/stores'
 import { scale } from 'svelte/transition'
 import PageTransitions from '$lib/PageTransitions.svelte'
 import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
-
-// console.log('$page', $page)
 </script>
 
 <section class="minimum-width-rem bg-white font-sans antialiased">

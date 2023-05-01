@@ -19,7 +19,6 @@ const seoProps = {
 
 export let data
 
-
 let information = [
 	{
 		question: `Have you used this business?`,
@@ -59,7 +58,6 @@ function onSelect(i) {
 }
 
 async function uploadImageToS3() {
-	// console.log('file', file)
 	try {
 		uploading = true
 		const response = await fetch('/server/files/upload', {
@@ -73,15 +71,11 @@ async function uploadImageToS3() {
 		})
 		const res = await response.json()
 
-		// console.log('res', res)
-
 		if (res?.url) {
 			let imgs = [...images]
 			imgs.push(res?.url)
 			images = imgs
 		}
-
-		// console.log('images', images)
 	} catch (e) {
 	} finally {
 		uploading = false
@@ -154,7 +148,7 @@ async function saveReviewproduct(review) {
 				What makes a good review
 			</div>
 
-			<ul class="gap-2 divide-y rounded  border bg-white shadow-md">
+			<ul class="gap-2 divide-y rounded border bg-white shadow-md">
 				{#each information as info}
 					<li class="flex flex-col gap-1 p-4 text-sm">
 						<span class="font-semibold">{info.question}</span>

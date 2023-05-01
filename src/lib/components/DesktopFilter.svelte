@@ -18,8 +18,6 @@ export let priceRange = []
 export let query // Required because after loading finished then only we will initiate the price slider component
 export let facets = {}
 
-// console.log('facets', facets)
-
 let clazz
 export { clazz as class }
 
@@ -73,8 +71,6 @@ onMount(async () => {
 
 	await getMegamenu()
 })
-
-// console.log('fl', fl)
 
 function getFacetsWithProducts() {
 	if (facets?.all_aggs?.age?.all?.buckets?.length) {
