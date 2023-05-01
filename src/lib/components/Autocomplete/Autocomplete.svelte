@@ -23,8 +23,6 @@ let showSuggestionOptions = false
 let trending = []
 let typingTimer: any
 
-// console.log('popular = ', popular?.data?.length)
-
 function submit() {
 	showSuggestionOptions = false
 

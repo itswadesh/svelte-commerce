@@ -54,7 +54,6 @@ const host = {
 const SSH = new SSH2Shell(host)
 // Use a callback function to process the full session text
 const callback = function (sessionText) {
-	// console.log(sessionText)
 }
 
 // Start the process

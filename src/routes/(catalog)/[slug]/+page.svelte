@@ -34,12 +34,6 @@ import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
 
-// console.log('data = ', data)
-// console.log('data = ', data.category)
-// console.log('Products = ', products)
-// console.log('Count = ', count)
-// console.log('Facets = ', facets)
-
 let seoProps = {
 	// addressCountry: 'India',
 	// addressLocality: 'Semiliguda, Koraput',
@@ -181,8 +175,6 @@ async function loadNextPage() {
 				nextPage,
 				searchParams
 			})
-
-			// console.log('res', res)
 
 			const nextPageData = res.nextPageData
 			data.products = data?.products?.concat(nextPageData)

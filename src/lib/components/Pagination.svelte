@@ -32,8 +32,6 @@ function changePage(e) {
 	// goto($page.url.pathname + $page.url.search)
 	// const r = $page.url.searchParams.get('r')
 
-	// console.log('rrrrrrrrrrrrrrr', r)
-
 	// if (r) $page.url.searchParams.delete('r')
 	// else $page.url.searchParams.set('r', Math.random().toString())
 	// // scrollToTop();

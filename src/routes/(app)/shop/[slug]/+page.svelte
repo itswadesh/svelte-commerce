@@ -19,8 +19,6 @@ let today = dayjs(new Date()).toISOString()
 
 export let data
 
-// console.log('zzzzzzzzzzzzzzzzzz', data)
-
 let seoProps = {
 	// addressCountry: 'India',
 	// addressLocality: 'Semiliguda, Koraput',
@@ -142,8 +140,6 @@ async function getMegaMenu() {
 				})
 			}
 			megamenuResult = megamenu
-
-			// console.log('megamenu', megamenu)
 		} catch (e) {
 			toast(e, 'error')
 		} finally {
@@ -155,8 +151,6 @@ async function getMegaMenu() {
 }
 
 function searchCategories() {
-	// console.log('searchCategoryValue', searchCategoryValue)
-
 	const fuse = new Fuse(megamenu, options)
 
 	megamenuResult = fuse.search(searchCategoryValue)
@@ -168,8 +162,6 @@ function searchCategories() {
 	if (!megamenuResult.length) {
 		megamenuResult = megamenu
 	}
-
-	// console.log('megamenuResult', megamenuResult)
 }
 
 function toggle(mx) {
@@ -294,7 +286,7 @@ function toggle2(cx) {
 							<li>
 								{#if m.children?.length}
 									<div
-										class="flex h-24 gap-4 px-6 w-full items-center justify-between focus:outline-none 
+										class="flex h-24 gap-4 px-6 w-full items-center justify-between focus:outline-none
 										{bgColors[mx]}">
 										<a
 											href="/{m.link || m.slug}"
@@ -324,7 +316,7 @@ function toggle2(cx) {
 									<a
 										href="/{m.link || m.slug}"
 										aria-label="Click to visit {m.name || '##'}"
-										class="flex items-center h-24 w-full text-xl font-bold uppercase px-6 
+										class="flex items-center h-24 w-full text-xl font-bold uppercase px-6
 										{bgColors[mx]}">
 										{m.name}
 									</a>

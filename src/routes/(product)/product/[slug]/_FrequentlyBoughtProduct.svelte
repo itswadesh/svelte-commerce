@@ -146,7 +146,6 @@ let bounceItemFromTop = false
 							result.data.qty < 0
 								? fireGTagEvent('remove_from_cart', result.data)
 								: fireGTagEvent('add_to_cart', result.data)
-							// console.log('bounceItemFromTop')
 							bounceItemFromTop = true
 							setTimeout(() => {
 								bounceItemFromTop = false

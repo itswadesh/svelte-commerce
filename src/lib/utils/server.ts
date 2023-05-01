@@ -123,7 +123,6 @@ export const getBySid = async (endpoint: string, sid?: any) => {
 }
 
 export const getBigcommerceApi = async (endpoint: string, query?: any, sid?: any) => {
-	// console.log(BIG_COMMERCE_BASE_URL + '/' + endpoint)
 	const response = await fetch(BIG_COMMERCE_BASE_URL + '/' + endpoint + '?' + serialize(query), {
 		headers: bigcommerceHeaders
 	})
@@ -132,7 +131,6 @@ export const getBigcommerceApi = async (endpoint: string, query?: any, sid?: any
 
 	const isJson = response.headers.get('content-type')?.includes('application/json')
 	const res = isJson ? await response.json() : await response.text()
-	// console.log(res)
 	if (res?.status > 399) {
 		throw { status: res.status, message: res }
 	} else if (response?.status > 399) {
@@ -247,14 +245,13 @@ export const getWoocommerceApi = async (endpoint: string, query?: any, sid?: any
 		// 	}
 		// )
 		// const isJson = response.headers.get('content-type')?.includes('application/json')
-		// console.log(res)
 		// if (res?.status > 399) {
 		// 	throw { status: res.status, message: res }
 		// } else {
 		// 	return res
 		// }
 	} catch (e) {
-		// console.log('eeeeeeeeeeeeee', e.message)
+		throw new Error(e)
 	}
 }
 
@@ -269,13 +266,12 @@ export const postWoocommerceApi = async (endpoint: string, query: any, sid?: any
 		// 	}
 		// )
 		// const isJson = response.headers.get('content-type')?.includes('application/json')
-		// console.log(res)
 		// if (res?.status > 399) {
 		// 	throw { status: res.status, message: res }
 		// } else {
 		// 	return res
 		// }
 	} catch (e) {
-		// console.log('eeeeeeeeeeeeee', e.message)
+		throw new Error(e)
 	}
 }

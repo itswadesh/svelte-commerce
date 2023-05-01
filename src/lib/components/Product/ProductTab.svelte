@@ -50,8 +50,6 @@ function filterProducts(selectedCategory: string) {
 		// return p.tags?.name === selectedCategory
 		return p.new
 	})
-
-	// console.log('products', products)
 }
 </script>
 

@@ -37,12 +37,11 @@ export const createUploadStream = async (key: string, mimetype: string) => {
 				.promise()
 		}
 	} catch (e) {
-		// console.log('utils/awsS3/createUploadStream Err:::109 ', e) //long string
+		throw new Error(e)
 	}
 }
 
 export const deleteFileFromS3 = async (url: string) => {
-	// console.log('the delete image from s3 url is:', url)
 	let deleted = null
 	try {
 		const { region, bucket, key } = AmazonS3URI(url)
@@ -54,11 +53,9 @@ export const deleteFileFromS3 = async (url: string) => {
 			deleted = await s3.deleteObject(params).promise()
 			return deleted
 		} catch (e) {
-			// console.log('Errs:: Delete from S3', e.toString())
 			throw new Error(e)
 		}
-	} catch (e: any) {
-		// console.warn(`${url} is not a valid S3 uri`) // should not happen because `uri` is valid in that example
+	} catch (e) {
 		throw new Error(e)
 	}
 }
@@ -68,8 +65,7 @@ export const createDestinationFilePath = async (folder: string, fileName: string
 		const randomName = await generateRandomFilename(fileName)
 		return folder + '/' + randomName
 	} catch (e) {
-		// console.log('utils/awsS3/createDestinationFilePath Err:::109 ', e)
-		//long string
+		throw new Error(e)
 	}
 }
 
@@ -87,8 +83,7 @@ const generateRandomFilename = async (fileName: string) => {
 		const randomName = nameHyphen + '-' + generateRandomString(12) + ext.split('?')[0]
 		return randomName.toLowerCase()
 	} catch (e) {
-		// console.log('utils/base/generateRandomFilename Err:::109 ', e.toString())
-		//long string
+		throw new Error(e)
 	}
 }
 const generateRandomString = (length: number) => {

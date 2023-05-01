@@ -215,7 +215,6 @@ onMount(async () => {
 
 const storeRecentlyViewedToLocatStorage = async () => {
 	const localRecentlyViewed = localStorage.getItem(`recently_viewed_${$page.data.store.id}`)
-	// console.log('localRecentlyViewed', localRecentlyViewed)
 
 	if (!!localRecentlyViewed && localRecentlyViewed !== 'undefined') {
 		recentlyViewed = JSON.parse(localRecentlyViewed)
@@ -247,8 +246,6 @@ const storeRecentlyViewedToLocatStorage = async () => {
 			localStorage.setItem(`recently_viewed_${$page.data.store.id}`, JSON.stringify(recentlyViewed))
 		}
 	}
-
-	// console.log('localStorage', localStorage)
 }
 
 function selectSize(s) {
@@ -257,7 +254,6 @@ function selectSize(s) {
 
 function handleSelectedLinkiedProducts(e) {
 	selectedLinkiedProducts = e.detail
-	// console.log('selectedLinkiedProducts', selectedLinkiedProducts)
 }
 
 // This is used only for customized product else cart?/add
@@ -292,10 +288,10 @@ async function addToBag(p, customizedImg, customizedJson) {
 				})
 			}
 		}
-		// console.log('selectedLinkiedProducts inside add to cart function =', selectedLinkiedProducts)
+
 		const response = await fetch('/server/cart')
 		cart = await response.json()
-		// console.error('Cart called after add to cart', cart.cart_id, cart.qty)
+
 		if (cart) {
 			const cookieCart = {
 				cartId: cart?.cart_id,
@@ -353,8 +349,6 @@ async function cartButtonEnterViewport() {
 	} else {
 		showStickyCartButton = true
 	}
-
-	// console.log('y, cartButtonEnterViewport', y, showStickyCartButton)
 }
 
 async function cartButtonExitViewport() {
@@ -365,15 +359,11 @@ async function cartButtonExitViewport() {
 	} else {
 		showStickyCartButton = false
 	}
-
-	// console.log('y, cartButtonExitViewport', y, showStickyCartButton)
 }
 
 const getCartViewPortLocation = () => {
 	const cartViewPort = document.getElementById('cart_viewport')
 	viewPortCartPositionFromTop = cartViewPort.offsetTop
-
-	// console.log('viewPortCartPositionFromTop', viewPortCartPositionFromTop)
 }
 
 function alertToSelectMandatoryOptions() {
@@ -398,20 +388,6 @@ $: {
 		else o1.push({ option: i, values: [selectedOptions[i]] })
 	}
 
-	// console.log('oooooooooooooooooo', o)
-	// console.log('dddddddddddddd', o1)
-
-	//   if (!this.selectedOptions) this.selectedOptions = []
-	//   for (const i in o) {
-	//     this.selectedOptions.push({ option: i, values: [o[i]] })
-	//   }
-
-	//   console.log('occccccccccccccccccccccc', this.selectedOptions)
-	// },
-
-	// dateChanged(o) {
-	//   if (!this.selectedOptions) this.selectedOptions = []
-	//   this.selectedOptions.push(o)
 	selectedOptions1 = o1
 }
 
@@ -437,12 +413,8 @@ async function toggleWishlist(id) {
 function scrollTo(elementId) {
 	let element
 	if (elementId.detail) {
-		// console.log('elementId = ', elementId.detail)
-
 		element = document.getElementById(elementId.detail)
 	} else {
-		// console.log('elementId = ', elementId)
-
 		element = document.getElementById(elementId)
 	}
 	window.scroll({
@@ -936,7 +908,7 @@ function handleMobileCanvas() {
 								</svg>
 							</h6>
 
-							<div class="prose text-sm  max-w-none">
+							<div class="prose text-sm max-w-none">
 								{@html value.description}
 							</div>
 						</div>
