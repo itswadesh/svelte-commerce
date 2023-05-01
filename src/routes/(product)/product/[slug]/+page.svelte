@@ -83,6 +83,7 @@ import Textarea from '$lib/ui/Textarea.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 import viewport from '$lib/actions/useViewPort'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
+import Footer from '$lib/Footer.svelte'
 
 const cookies = Cookie()
 const isServer = import.meta.env.SSR
@@ -174,6 +175,7 @@ let selectedReviewType = 'product_review'
 let selectedSize
 let shake = false
 let showEditor = false
+let showFooter = false
 let showLongDescription = false
 let showPhotosModal = false
 let showStickyCartButton = true
@@ -1196,7 +1198,7 @@ function handleMobileCanvas() {
 
 					<div
 						id="ratings_and_reviews"
-						class="sticky top-14 z-30 lg:static lg:z-0 mb-5 bg-white py-2">
+						class="sticky top-14 sm:top-20 z-30 lg:static lg:z-0 mb-5 bg-white py-2">
 						<div class="flex items-center flex-wrap gap-4">
 							<button
 								type="button"
@@ -1535,7 +1537,7 @@ function handleMobileCanvas() {
 				<hr class="mb-5 w-full sm:mb-10" />
 
 				<div class="mb-5 sm:mb-10">
-					<div class="sticky top-14 z-30 lg:static lg:z-0 mb-3 bg-white py-2">
+					<div class="sticky top-14 sm:top-20 z-30 lg:static lg:z-0 mb-3 bg-white py-2">
 						<h2 class="font-bold capitalize sm:text-lg border-b-4 border-zinc-800 max-w-max">
 							Frequently bought together
 						</h2>
@@ -1599,8 +1601,30 @@ function handleMobileCanvas() {
 			{/if}
 		</div>
 
-		<!-- This is required for mobile bottom fixed wishlist and add to bag section -->
-		<div class="block md:hidden h-16 w-full"></div>
+		<!-- Footer show hide toggle -->
+
+		<button
+			type="button"
+			class="md:hidden p-3 sm:px-10 w-full border-t border-b border-zinc-400 flex items-center justify-between gap-4 text-sm focus:outline-none"
+			on:click="{() => (showFooter = !showFooter)}">
+			<span>More about {$page.data.store?.websiteName || 'store'}</span>
+
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 20 20"
+				fill="currentColor"
+				class="w-5 h-5 transition duration-300
+				{showFooter ? 'transform rotate-180' : ''}">
+				<path
+					fill-rule="evenodd"
+					d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+					clip-rule="evenodd"></path>
+			</svg>
+		</button>
+
+		<div class="{showFooter ? 'block' : 'hidden'}">
+			<Footer me="{data.me}" />
+		</div>
 	</div>
 </div>
 
