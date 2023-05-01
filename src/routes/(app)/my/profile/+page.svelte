@@ -20,7 +20,6 @@ import Textbox from '$lib/ui/Textbox.svelte'
 
 export let data
 
-
 const seoProps = {
 	title: 'Dashboard - Edit Profile ',
 	description: 'Edit the profile credentials'
@@ -33,15 +32,11 @@ let formChanged = false
 let err = ''
 
 function saveImage(detail) {
-	// console.log('detail = ', detail)
-
 	data.profile.avatar = detail
 	saveProfile()
 }
 
 function removeImage(detail) {
-	// console.log('detail = ', detail)
-
 	data.profile.avatar = ''
 	saveProfile()
 }

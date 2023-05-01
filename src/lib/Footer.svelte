@@ -29,8 +29,6 @@ import appStore from '$lib/assets/app/app-store.svg'
 import googlePlay from '$lib/assets/app/google-play.png'
 import type { Category } from './types'
 
-// console.log(' $page', $page)
-
 export let me
 export let store = {}
 export let popularSearches: { took: 0; count: 0; data: [] }
@@ -291,7 +289,7 @@ async function getStoreData() {
 									aria-label="Click for facebook link">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 transition duration-300	hover:text-[#4267B2]"
+										class="h-5 w-5 transition duration-300 hover:text-[#4267B2]"
 										viewBox="0 0 24 24"
 										stroke-width="1.5"
 										stroke="currentColor"
@@ -318,7 +316,7 @@ async function getStoreData() {
 									aria-label="Click for instagram link">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 transition duration-300	hover:text-[#C13584]"
+										class="h-5 w-5 transition duration-300 hover:text-[#C13584]"
 										viewBox="0 0 24 24"
 										stroke-width="1.5"
 										stroke="currentColor"
@@ -345,7 +343,7 @@ async function getStoreData() {
 									aria-label="Click for twitter link">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 transition duration-300	hover:text-[#1DA1F2]"
+										class="h-5 w-5 transition duration-300 hover:text-[#1DA1F2]"
 										viewBox="0 0 24 24"
 										stroke-width="1.5"
 										stroke="currentColor"
@@ -370,7 +368,7 @@ async function getStoreData() {
 									aria-label="Click to contact with mail id">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 transition duration-300	hover:text-[#c71610]"
+										class="h-5 w-5 transition duration-300 hover:text-[#c71610]"
 										viewBox="0 0 24 24"
 										stroke-width="1.5"
 										stroke="currentColor"
@@ -396,7 +394,7 @@ async function getStoreData() {
 									aria-label="Click for linkedin link">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 transition duration-300	hover:text-[#0077b5]"
+										class="h-5 w-5 transition duration-300 hover:text-[#0077b5]"
 										viewBox="0 0 24 24"
 										stroke-width="1.5"
 										stroke="currentColor"
@@ -425,7 +423,7 @@ async function getStoreData() {
 									aria-label="Click for pinterest link">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 transition duration-300	hover:text-[#c8232c]"
+										class="h-5 w-5 transition duration-300 hover:text-[#c8232c]"
 										viewBox="0 0 24 24"
 										stroke-width="1.5"
 										stroke="currentColor"
@@ -454,7 +452,7 @@ async function getStoreData() {
 									aria-label="Click for youtube link">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 transition duration-300	hover:text-[#FF0000]"
+										class="h-5 w-5 transition duration-300 hover:text-[#FF0000]"
 										viewBox="0 0 24 24"
 										stroke-width="1.5"
 										stroke="currentColor"

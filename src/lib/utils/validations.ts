@@ -52,7 +52,6 @@ export const validateData = async <T extends z.ZodTypeAny>(
 				errors: null
 			}
 		} catch (err) {
-			// console.log('Error:', err)
 			const errors = (err as ZodError).flatten()
 			return {
 				formData,
@@ -67,7 +66,6 @@ export const validateData = async <T extends z.ZodTypeAny>(
 				errors: null
 			}
 		} catch (err) {
-			// console.log('Error:', err)
 			const errors = (err as ZodError).flatten()
 			return {
 				formData: body,
@@ -90,7 +88,6 @@ export const validateFormData = async <T extends z.ZodTypeAny>(
 			errors: null
 		}
 	} catch (err) {
-		// console.log('Error:', err)
 		const errors = (err as ZodError).flatten()
 		return {
 			formData: body,
