@@ -10,7 +10,7 @@ import {
 	shortcuts,
 	description,
 	screenshots
-} from './src/lib/config/manifest.js'
+} from './src/lib/config'
 const __dirname = path.resolve()
 const iconsDirectory = path.join(__dirname, 'static/icons')
 const manifestFile = path.join(__dirname, 'static/manifest.json')
@@ -43,6 +43,12 @@ const main = async () => {
 		const manifest = {
 			short_name: siteShortTitle,
 			name: siteTitle,
+			start_url: '/',
+			background_color: backgroundColor,
+			display: 'fullscreen',
+			scope: '/',
+			theme_color: themeColor,
+			description,
 			icons: sizes.map((size) => {
 				const path = `icons/icon-${size}x${size}.png`
 				resizeIcon({ size, path: `static/${path}` })
@@ -62,28 +68,19 @@ const main = async () => {
 					}
 				}
 			}),
-			start_url: '/',
-			background_color: backgroundColor,
-			display: 'standalone',
-			scope: '/',
-			theme_color: themeColor,
 			shortcuts,
-			description,
 			screenshots
 		}
 
 		fs.writeFileSync(manifestFile, JSON.stringify(manifest, null, 2))
 	} catch (error) {
-		// console.error(error)
+		console.error(error)
 	}
 }
 
-// console.log('Generating manifest.json')
-
 fs.mkdir(iconsDirectory, { recursive: true }, (err) => {
 	if (err) {
-		return
-		// console.error(err)
+		// return console.error(err)
 	}
 })
 

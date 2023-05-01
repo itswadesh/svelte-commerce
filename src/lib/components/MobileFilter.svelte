@@ -33,8 +33,6 @@ export let selected
 export let showFilter = false
 export let showSort = false
 
-// console.log('facets', facets)
-
 let selectedCategory
 let selectedCategory2
 let showSubCategory = []
@@ -70,9 +68,6 @@ onMount(async () => {
 	await getMegamenu()
 	await getSelected()
 })
-
-// console.log('fl', fl)
-// console.log('appliedFilters', appliedFilters)
 
 function getFacetsWithProducts() {
 	if (facets?.all_aggs?.age?.all?.buckets?.length) {
@@ -112,12 +107,8 @@ function getFacetsWithProducts() {
 
 function getPriceRanges() {
 	const difference = facets.all_aggs?.price_stats?.max - facets.all_aggs?.price_stats?.min
-	// console.log('min', facets.all_aggs?.price_stats?.min)
-	// console.log('max', facets.all_aggs?.price_stats?.max)
-	// console.log('difference', difference)
 	if (difference) {
 		const priceGap = difference / 4
-		// console.log('priceGap', priceGap)
 		if (priceGap) {
 			const price1 = facets.all_aggs?.price_stats?.min
 			const price2 = price1 + priceGap
@@ -125,17 +116,41 @@ function getPriceRanges() {
 			const price4 = price3 + priceGap
 			const price5 = facets.all_aggs?.price_stats?.max
 
-			// console.log('price1,2,3,4,5', price1, price2, price3, price4, price5)
-
 			if (price1 && price2 && price3 && price4 && price5) {
 				priceRanges = [
-					{ from: price1, key: `From ${currency(price1)} to ${currency(price2)}`, to: price2 },
-					{ from: price2, key: `From ${currency(price2)} to ${currency(price3)}`, to: price3 },
-					{ from: price3, key: `From ${currency(price3)} to ${currency(price4)}`, to: price4 },
-					{ from: price4, key: `From ${currency(price4)} to ${currency(price5)}`, to: price5 }
+					{
+						from: price1,
+						key: `From ${currency(price1, $page.data?.store?.currencySymbol)} to ${currency(
+							price2,
+							$page.data?.store?.currencySymbol
+						)}`,
+						to: price2
+					},
+					{
+						from: price2,
+						key: `From ${currency(price2, $page.data?.store?.currencySymbol)} to ${currency(
+							price3,
+							$page.data?.store?.currencySymbol
+						)}`,
+						to: price3
+					},
+					{
+						from: price3,
+						key: `From ${currency(price3, $page.data?.store?.currencySymbol)} to ${currency(
+							price4,
+							$page.data?.store?.currencySymbol
+						)}`,
+						to: price4
+					},
+					{
+						from: price4,
+						key: `From ${currency(price4, $page.data?.store?.currencySymbol)} to ${currency(
+							price5,
+							$page.data?.store?.currencySymbol
+						)}`,
+						to: price5
+					}
 				]
-
-				// console.log('priceRanges', priceRanges)
 			}
 		}
 	}
@@ -282,7 +297,7 @@ $: {
 		class="flex items-center justify-center gap-2 px-3 py-2 border"
 		on:click="{() => (showSort = true)}">
 		<div
-			class="h-1.5 w-1.5 rounded-full 
+			class="h-1.5 w-1.5 rounded-full
 			{$page?.url?.searchParams.get('sort') ? 'bg-primary-500' : 'bg-zinc-200'}">
 		</div>
 
@@ -311,7 +326,7 @@ $: {
 			;(showFilter = true) && getSelected()
 		}}">
 		<div
-			class="h-1.5 w-1.5 rounded-full 
+			class="h-1.5 w-1.5 rounded-full
 			{filterLength ? 'bg-primary-500' : 'bg-zinc-200'}">
 		</div>
 
@@ -389,7 +404,7 @@ $: {
 			<div class="flex h-full w-2/6 flex-col border-b border-r bg-zinc-100">
 				{#if allAges?.length > 0}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
 						{selected === 'Age'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-zinc-100 bg-transparent'}"
@@ -406,7 +421,7 @@ $: {
 
 				{#if allBrands?.length > 0}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
 						{selected === 'Brands'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-zinc-100 bg-transparent'}"
@@ -423,7 +438,7 @@ $: {
 
 				{#if allColors?.length > 0}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
 						{selected === 'Colors'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-zinc-100 bg-transparent'}"
@@ -440,7 +455,7 @@ $: {
 
 				{#if allDiscount?.length > 0}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
 						{selected === 'Discount'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-zinc-100 bg-transparent'}"
@@ -457,7 +472,7 @@ $: {
 
 				{#if allFeatures?.length > 0}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
 						{selected === 'Features'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-zinc-100 bg-transparent'}"
@@ -474,7 +489,7 @@ $: {
 
 				{#if allGenders?.length > 0}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
 						{selected === 'Genders'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-zinc-100 bg-transparent'}"
@@ -491,7 +506,7 @@ $: {
 
 				{#if allPromotions?.length > 0}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
 						{selected === 'Promotions'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-zinc-100 bg-transparent'}"
@@ -508,7 +523,7 @@ $: {
 
 				{#if allSizes?.length > 0}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
 						{selected === 'Sizes'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-zinc-100 bg-transparent'}"
@@ -525,7 +540,7 @@ $: {
 
 				{#if allTags?.length > 0}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
 						{selected === 'Tags'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-zinc-100 bg-transparent'}"
@@ -542,7 +557,7 @@ $: {
 
 				{#if allTypes?.length > 0}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
 						{selected === 'Types'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-zinc-100 bg-transparent'}"
@@ -559,7 +574,7 @@ $: {
 
 				{#if allVendors?.length > 0}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
 						{selected === 'Vendors'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-zinc-100 bg-transparent'}"
@@ -576,7 +591,7 @@ $: {
 
 				{#if priceRange?.length > 0}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
 						{selected === 'Prices'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-zinc-100 bg-transparent'}"
@@ -593,7 +608,7 @@ $: {
 
 				{#if megamenu?.length}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
 						{selected === 'Categories'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-zinc-100 bg-transparent'}"
@@ -606,7 +621,7 @@ $: {
 
 				<!-- {#if facets?.all_aggs?.price?.all?.buckets?.length > 0}
 					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none 
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
 						{selected === 'Price'
 							? 'text-primary-500 border-primary-500 bg-white'
 							: 'border-zinc-100 bg-transparent'}"
@@ -820,7 +835,7 @@ $: {
 													{selectedCategory === m.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
 													<a
 														href="/{m.slug}"
-														aria-label="Click to route into category related products page"
+														aria-label="Click to visit category related products page"
 														class="flex-1">
 														{m.name}
 													</a>
@@ -845,7 +860,7 @@ $: {
 											{:else}
 												<a
 													href="/{m.slug}"
-													aria-label="Click to route into category related products page"
+													aria-label="Click to visit category related products page"
 													class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 													{m.name}
 												</a>
@@ -863,7 +878,7 @@ $: {
 																	{selectedCategory2 === c.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
 																	<a
 																		href="/{c.slug}"
-																		aria-label="Click to route into category related products page"
+																		aria-label="Click to visit category related products page"
 																		class="flex-1">
 																		{c.name}
 																	</a>
@@ -888,7 +903,7 @@ $: {
 															{:else}
 																<a
 																	href="/{c.slug}"
-																	aria-label="Click to route into category related products page"
+																	aria-label="Click to visit category related products page"
 																	class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 																	{c.name}
 																</a>
@@ -901,7 +916,7 @@ $: {
 																	{#each c.children as cc}
 																		<a
 																			href="/{cc.slug}"
-																			aria-label="Click to route into category related products page"
+																			aria-label="Click to visit category related products page"
 																			class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 																			{cc.name}
 																		</a>

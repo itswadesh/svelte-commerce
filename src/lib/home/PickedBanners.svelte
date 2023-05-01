@@ -3,8 +3,6 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 
 export let banners
 
-// console.log('banners', banners)
-
 $: pickedBanners = banners?.filter((b) => {
 	return b._id?.type === 'picked' && b._id?.title !== 'DEAL ZONE'
 })
