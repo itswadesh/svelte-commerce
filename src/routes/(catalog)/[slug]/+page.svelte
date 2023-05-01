@@ -34,12 +34,6 @@ import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
 
-// console.log('data = ', data)
-// console.log('data = ', data.category)
-// console.log('Products = ', products)
-// console.log('Count = ', count)
-// console.log('Facets = ', facets)
-
 let seoProps = {
 	// addressCountry: 'India',
 	// addressLocality: 'Semiliguda, Koraput',
@@ -118,11 +112,11 @@ let showSort = false
 let y
 
 if (
-	data.products.facets.all_aggs?.price_stats?.max > 0 &&
-	data.products.facets.all_aggs?.price_stats?.min >= 0
+	data.products?.facets?.all_aggs?.price_stats?.max > 0 &&
+	data.products?.facets?.all_aggs?.price_stats?.min >= 0
 ) {
 	priceRange = generatePriceRange(
-		data.products.facets.all_aggs?.price_stats,
+		data.products?.facets?.all_aggs?.price_stats,
 		data.store.currencySymbol
 	)
 }
@@ -181,8 +175,6 @@ async function loadNextPage() {
 				nextPage,
 				searchParams
 			})
-
-			// console.log('res', res)
 
 			const nextPageData = res.nextPageData
 			data.products = data?.products?.concat(nextPageData)
@@ -338,11 +330,11 @@ function handleFilterTags() {
 <div class="h-full min-h-screen">
 	<!-- Style tags -->
 
-	{#if data.products.facets.all_aggs?.materials?.all?.buckets?.length}
+	{#if data.products?.facets?.all_aggs?.materials?.all?.buckets?.length}
 		<div
 			class="lg:hidden h-12 flex items-center justify-start px-3 sm:px-10 w-screen overflow-x-auto scrollbar-none fixed top-14 sm:top-20 bg-white z-40 shadow-md">
 			<div class="inline-flex gap-2">
-				{#each data.products.facets.all_aggs?.materials?.all?.buckets || [] as t}
+				{#each data.products?.facets?.all_aggs?.materials?.all?.buckets || [] as t}
 					{#if t?.key}
 						<button
 							class="whitespace-nowrap block rounded-full border py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none
@@ -402,7 +394,7 @@ function handleFilterTags() {
 
 		<div
 			class="w-full flex-1 sm:px-10 sm:pt-10 lg:pt-0 lg:px-0
-			{data.products.facets.all_aggs?.materials?.all?.buckets?.length ? 'mt-12 lg:mt-0' : 'mt-0'}">
+			{data.products?.facets?.all_aggs?.materials?.all?.buckets?.length ? 'mt-12 lg:mt-0' : 'mt-0'}">
 			<div class="flex flex-col gap-5">
 				<div class="hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex">
 					<!-- Name and count -->
@@ -443,9 +435,9 @@ function handleFilterTags() {
 
 				<!-- Style tags -->
 
-				{#if data.products.facets.all_aggs?.materials?.all?.buckets?.length}
+				{#if data.products?.facets?.all_aggs?.materials?.all?.buckets?.length}
 					<div class="hidden lg:flex flex-wrap items-center gap-2">
-						{#each data.products.facets.all_aggs?.materials?.all?.buckets || [] as t}
+						{#each data.products?.facets?.all_aggs?.materials?.all?.buckets || [] as t}
 							{#if t?.key}
 								<button
 									class="whitespace-nowrap block rounded-full border py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none
@@ -481,7 +473,7 @@ function handleFilterTags() {
 
 						<!-- Filter by tags -->
 
-						{#if ix % 40 === 39 && data.products.facets.all_aggs.tags?.all?.buckets?.length}
+						{#if ix % 40 === 39 && data.products?.facets?.all_aggs?.tags?.all?.buckets?.length}
 							<div class="col-span-2 block sm:hidden overflow-x-auto bg-primary-100 scrollbar-none">
 								<div class="w-full flex items-center gap-6 p-4">
 									<div class="shrink-0">
@@ -606,7 +598,7 @@ function handleFilterTags() {
 									<li>
 										<a
 											href="/product/{p.slug}"
-											aria-label="Click to route product details page"
+											aria-label="Click to visit product details page"
 											class="grid grid-cols-6 gap-5">
 											<span class="col-span-5 text-justify">{p.name}</span>
 

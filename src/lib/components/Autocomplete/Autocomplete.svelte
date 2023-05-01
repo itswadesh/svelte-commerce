@@ -23,12 +23,8 @@ let showSuggestionOptions = false
 let trending = []
 let typingTimer: any
 
-// console.log('popular = ', popular?.data?.length)
-
 function submit() {
 	showSuggestionOptions = false
-
-	// console.log('zzzzzzzzzzzzzzzzzz', autocomplete[0])
 
 	if (autocomplete?.length && autocomplete[0].slug) {
 		goto(`/${autocomplete[0].slug}`)

@@ -1,7 +1,5 @@
 <script>
 export let errors
-
-// console.log('errors component =', errors)
 </script>
 
 <div class="mb-4 text-sm text-red-600">

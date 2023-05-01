@@ -19,10 +19,6 @@ export let address = {}
 export let countries = []
 export let states = []
 
-// console.log('address', address)
-// console.log('countries', countries)
-// console.log('states', states)
-
 let loadingStates = false
 
 async function onCountryChange(country) {
@@ -35,8 +31,6 @@ async function onCountryChange(country) {
 			storeId: $page.data?.store?.id,
 			origin: $page.data?.origin
 		})
-
-		// console.log('states', states)
 	} catch (e) {
 		err = e
 	} finally {
@@ -204,7 +198,7 @@ async function SaveAddress(address) {
 
 				<div class="mb-2 w-full max-w-md">
 					<select
-						class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
+						class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
 						bind:value="{address.country}"
 						on:change="{() => onCountryChange(address.country)}"
 						required>
@@ -232,7 +226,7 @@ async function SaveAddress(address) {
 
 				<div class="mb-2 w-full max-w-md">
 					<select
-						class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
+						class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
 						bind:value="{address.state}"
 						disabled="{!address.country || loadingStates}"
 						required>

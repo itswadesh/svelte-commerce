@@ -16,8 +16,6 @@ const dispatch = createEventDispatcher()
 export let showPhotosModal = false
 export let gallery
 
-// console.log('gallery', gallery)
-
 let Splide: any
 let currentImageIndex = 0
 
@@ -30,7 +28,7 @@ onMount(async () => {
 
 {#if showPhotosModal}
 	<div
-		class="frosted-black fixed inset-0 z-50 flex h-screen w-screen items-center justify-center overflow-hidden p-5 sm:p-10 lg:p-20">
+		class="frosted-black fixed inset-0 z-[100] flex h-screen w-screen items-center justify-center overflow-hidden p-5 sm:p-10 lg:p-20">
 		<!-- Close button -->
 
 		<button

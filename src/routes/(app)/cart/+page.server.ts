@@ -1,23 +1,19 @@
-import { invalidateAll } from '$app/navigation'
-import { fireGTagEvent } from '$lib/util/gTag'
-import { getBySid, gett, post } from '$lib/utils'
-import { error, invalid, redirect } from '@sveltejs/kit'
+import { CartService } from '$lib/services'
+import { error, fail, redirect } from '@sveltejs/kit'
 import type { Action, Actions, PageServerLoad } from './$types'
 
-export const load: PageServerLoad = async ({ url, request, locals, cookies }) => {
-	// const cookies = Cookie()
+export const load: PageServerLoad = async ({ url, request, locals, cookies, depends }) => {
+	depends('cart:my')
 	let loading = false
 	let cart = locals.cart
 	try {
 		loading = true
-		const res = await getBySid(`carts/refresh-cart?store=${locals.store?.id}`, cookies.get('sid'))
-		// console.error(
-		// 	'Refresh cart called at cart.server page...',
-		// 	res.cart_id,
-		// 	res.qty,
-		// 	res.items.length
-		// )
-
+		const res = await CartService.fetchRefreshCart({
+			storeId: locals.store?.id,
+			sid: cookies.get('connect.sid'),
+			server: true,
+			origin: locals.origin
+		})
 		if (res) {
 			cart = {
 				cartId: res?.cart_id,
@@ -43,11 +39,10 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies }) =>
 			locals.cart = cart
 		}
 	} catch (e) {
-		// console.log('Error at /cart/+page.server.ts page.....', e)
 		if (e?.status === 401) {
-			throw redirect(307, '/auth/otp-login')
+			throw redirect(307, '/auth/login')
 		}
-		throw error(400, e?.message || e)
+		throw error(400, e?.body?.message || e)
 	} finally {
 		loading = false
 	}
@@ -62,34 +57,33 @@ const add: Action = async ({ request, cookies, locals }) => {
 	const linkedItems = JSON.parse(data.get('linkedItems'))
 	const options = JSON.parse(data.get('options')) //data.get('options') //
 	const customizedImg = data.get('customizedImg')
+	const sid = cookies.get('connect.sid')
 	if (typeof pid !== 'string' || !pid) {
-		return invalid(400, { invalid: true })
+		return fail(400, { invalid: true })
 	}
 	try {
-		let cart = await post(
-			'carts/add-to-cart',
-			{
-				pid,
-				vid,
-				qty: 1,
-				options,
-				customizedImg,
-				store: locals.store?.id
-			},
-			cookies
-		)
+		let cart = await CartService.addToCartService({
+			pid,
+			vid,
+			qty: 1,
+			options,
+			customizedImg,
+			storeId: locals.store?.id,
+			server: true,
+			origin: locals.origin,
+			cookies // This is a special case to pass complete cookie
+		})
 		if (linkedItems?.length) {
 			for (const i of linkedItems) {
-				cart = await post(
-					'carts/add-to-cart',
-					{
-						pid: i,
-						vid: i,
-						qty: 1,
-						store: locals.store?.id
-					},
-					cookies
-				)
+				cart = await CartService.addToCartService({
+					pid: i,
+					vid: i,
+					qty: 1,
+					storeId: locals.store?.id,
+					server: true,
+					origin: locals.origin,
+					cookies // This is a special case to pass complete cookie
+				})
 			}
 		}
 		if (cart) {
@@ -113,13 +107,11 @@ const add: Action = async ({ request, cookies, locals }) => {
 			locals.cartQty = cartObj.qty
 			cookies.set('cartId', cartObj.cartId, { path: '/' })
 			cookies.set('cartQty', cartObj.qty, { path: '/' })
-			// cookies.set('cart', JSON.stringify(cartObj), { path: '/' })
 			return cartObj
 		} else {
 			return {}
 		}
 	} catch (e) {
-		// console.log('err', e)
 		return {}
 	}
 }

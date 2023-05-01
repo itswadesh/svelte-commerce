@@ -1,7 +1,7 @@
 <script>
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
-import { constructURL2, currency, toast } from '$lib/utils'
+import { constructURL2, toast } from '$lib/utils'
 import { createEventDispatcher, onMount } from 'svelte'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
@@ -17,8 +17,6 @@ export let mergedArr = []
 export let priceRange = []
 export let query // Required because after loading finished then only we will initiate the price slider component
 export let facets = {}
-
-// console.log('facets', facets)
 
 let clazz
 export { clazz as class }
@@ -74,8 +72,6 @@ onMount(async () => {
 	await getMegamenu()
 })
 
-// console.log('fl', fl)
-
 function getFacetsWithProducts() {
 	if (facets?.all_aggs?.age?.all?.buckets?.length) {
 		allAges = facets?.all_aggs?.age?.all?.buckets?.filter((t) => t.doc_count > 0)
@@ -118,8 +114,8 @@ async function getMegamenu() {
 			const localmegamenu = localStorage.getItem('megamenu')
 			if (!localmegamenu || localmegamenu === 'undefined') {
 				megamenu = await CategoryService.fetchMegamenuData({
-					origin: $page?.data?.origin,
-					storeId: $page?.data?.store?.id
+					origin: $page.data.origin,
+					storeId: $page.data.store?.id
 				})
 			} else {
 				megamenu = JSON.parse(localmegamenu)
@@ -231,7 +227,7 @@ function handleToggleSubCategory2(c, cx) {
 								{selectedCategory === m.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
 								<a
 									href="/{m.slug}"
-									aria-label="Click to route into category related products"
+									aria-label="Click to visit category related products"
 									class="flex-1">
 									{m.name}
 								</a>
@@ -256,7 +252,7 @@ function handleToggleSubCategory2(c, cx) {
 						{:else}
 							<a
 								href="/{m.slug}"
-								aria-label="Click to route into category related products"
+								aria-label="Click to visit category related products"
 								class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 								{m.name}
 							</a>
@@ -274,7 +270,7 @@ function handleToggleSubCategory2(c, cx) {
 												{selectedCategory2 === c.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
 												<a
 													href="/{c.slug}"
-													aria-label="Click to route into category related products page"
+													aria-label="Click to visit category related products page"
 													class="flex-1">
 													{c.name}
 												</a>
@@ -299,7 +295,7 @@ function handleToggleSubCategory2(c, cx) {
 										{:else}
 											<a
 												href="/{c.slug}"
-												aria-label="Click to route into category related products page"
+												aria-label="Click to visit category related products page"
 												class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 												{c.name}
 											</a>
@@ -312,7 +308,7 @@ function handleToggleSubCategory2(c, cx) {
 												{#each c.children as cc}
 													<a
 														href="/{cc.slug}"
-														aria-label="Click to route into category related products page"
+														aria-label="Click to visit category related products page"
 														class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 														{cc.name}
 													</a>
