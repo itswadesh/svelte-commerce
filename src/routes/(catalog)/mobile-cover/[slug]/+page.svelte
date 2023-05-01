@@ -35,12 +35,6 @@ import { children } from 'svelte/internal'
 
 export let data
 
-// console.log('data = ', data)
-// console.log('data = ', data.category?.children)
-// console.log('Products = ', products)
-// console.log('Count = ', count)
-// console.log('Facets = ', facets)
-
 let seoProps = {
 	// addressCountry: 'India',
 	// addressLocality: 'Semiliguda, Koraput',
@@ -182,8 +176,6 @@ async function loadNextPage() {
 				nextPage,
 				searchParams
 			})
-
-			// console.log('res', res)
 
 			const nextPageData = res.nextPageData
 			data.products = data?.products?.concat(nextPageData)
@@ -337,21 +329,23 @@ function handleFilterTags() {
 </CatelogNav>
 
 <div class="h-full min-h-screen">
+	<div class="flex flex-col bg-[#f5f5f5]">
+		<div class="flex-auto mt-5 ml-5">
+			<h1 class="text-3xl underline underline-offset-8 text-gray-950 font-bold">
+				{data?.category.name} Mobile Covers And Cases
+			</h1>
+		</div>
 
-<div class="flex flex-col bg-[#f5f5f5]">
-	<div class="flex-auto mt-5 ml-5">
-		<h1 class="text-3xl underline underline-offset-8 text-gray-950 font-bold"> {data?.category.name} Mobile Covers And Cases</h1>
+		<div class="flex-col">
+			<div
+				class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4 mx-5 my-5">
+				<!-- Loop through the array and create a card for each element -->
+				{#each data.category?.children as c}
+					<a class="p-4 bg-white rounded-lg shadow-md" href="/{c?.slug}">
+						<p class="text-xl font-medium">{c?.name}</p>
+					</a>
+				{/each}
+			</div>
+		</div>
 	</div>
-	
-  <div class="flex-col">
-   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4 mx-5 my-5">
-  <!-- Loop through the array and create a card for each element -->
-   {#each data.category?.children as c}
-  <a class="p-4 bg-white rounded-lg shadow-md" href="/{c?.slug}">
-    <p class="text-xl font-medium">{c?.name}</p>
-  </a>
-  {/each}
-</div>
-  </div>
-</div>
 </div>

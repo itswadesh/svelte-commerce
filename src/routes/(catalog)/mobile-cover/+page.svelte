@@ -35,11 +35,6 @@ import { children } from 'svelte/internal'
 export let data
 let selectedBrand = ''
 let selectedOption = ''
-// console.log('data = ', data)
-// console.log('data = ', data.category?.children)
-// console.log('Products = ', products)
-// console.log('Count = ', count)
-// console.log('Facets = ', facets)
 let seoProps = {
 	// addressCountry: 'India',
 	// addressLocality: 'Semiliguda, Koraput',
@@ -175,7 +170,6 @@ async function loadNextPage() {
 				nextPage,
 				searchParams
 			})
-			// console.log('res', res)
 			const nextPageData = res.nextPageData
 			data.products = data?.products?.concat(nextPageData)
 			data.count = res?.count
@@ -291,6 +285,7 @@ function handleFilterTags() {
 	showFilter = true
 }
 </script>
+
 <SEO {...seoProps} />
 <svelte:window bind:scrollY="{y}" bind:innerWidth="{innerWidth}" on:scroll="{handleOnScroll}" />
 <CatelogNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page?.data?.store}">
