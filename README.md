@@ -20,8 +20,8 @@
 </div>
 <div align="center">
   <br>
-    <img width="460" height="300" src=".github/svelte-commerce.gif" >
-    <img width="460" height="300" src=".github/svelte-commerce-demo.gif" hspace="5">
+    <img width="400" height="300" src=".github/svelte-commerce.gif" >
+    <img width="400" height="300" src=".github/svelte-commerce-demo.gif" hspace="5">
 </div>
 
 
