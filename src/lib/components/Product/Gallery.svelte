@@ -10,6 +10,7 @@ import type { Product } from '$lib/types'
 import { SplideSlide } from '@splidejs/svelte-splide'
 import { onMount } from 'svelte'
 import LazyImg from '../Image/LazyImg.svelte'
+import { fade } from 'svelte/transition';
 
 export let showPhotosModal = false
 export let product: Product | any = {}
@@ -103,7 +104,7 @@ onMount(async () => {
 			class="container relative mx-auto hidden h-full w-full items-center justify-between gap-4 overflow-hidden rounded bg-black lg:flex lg:flex-row">
 			{#if selectedimg}
 				<div
-					class="flex h-full w-full flex-1 shrink-0 items-center justify-center overflow-hidden px-5 sm:px-10">
+					class="flex h-full w-full flex-1 shrink-0 items-center justify-center overflow-hidden px-5 sm:px-10" in:fade="{{ duration: 1000}}">
 					<img src="{selectedimg}" alt="" class="h-full w-full object-contain object-center" />
 				</div>
 			{/if}

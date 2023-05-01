@@ -24,6 +24,7 @@ import { onDestroy } from 'svelte'
 import { onMount } from 'svelte'
 import lazyload from 'vanilla-lazyload'
 import { page } from '$app/stores'
+import { fade } from 'svelte/transition'
 export let alt = ''
 export let aspect_ratio = '3:4'
 export let height = 'auto'
@@ -60,7 +61,7 @@ onDestroy(() => {
 
 <img
 	alt="{alt}"
-	class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}"
+	class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" in:fade="{{ duration: 1000}}"
 	width="{w}"
 	height="{h}"
 	src="{`${getCdnImageUrl(src, IMAGE_CDN_URL)}?tr=w-1,h-1:w-${aspect_ratio.split(':')[0]},h-${
