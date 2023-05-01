@@ -40,19 +40,13 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.isDesktop = isDesktop
 		event.locals.isShowBackButton = isShowBackButton
 		// This calls init only when store data not present in browser cookies
-		// console.time('fetchStoreData..')
 		const { megamenu, storeOne } = await fetchStoreData(event)
-		// console.timeEnd('fetchStoreData..')
 		event.locals.store = storeOne
 		event.locals.megamenu = megamenu
 		// this simply gets data from cookie
-		// console.time('authenticateUser..')
 		event.locals.me = await authenticateUser(event)
-		// console.timeEnd('authenticateUser..')
 		// This makes a call to backend on every request
-		// console.time('fetchCart..')
 		event.locals.cart = await fetchCart(event)
-		// console.timeEnd('fetchCart..')
 		// const derivedSid: string = event.cookies.get('connect.sid') || ''
 		// event.locals.sid = derivedSid
 		// event.cookies.set('sid', derivedSid, { path: '/' })
@@ -71,15 +65,14 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// if (responseTime < 100) {
 		// 	console.log(`🚀 ${route} took ${responseTime.toFixed(2)} ms`)
 		// }
-		
+
 		return response
 	} catch (e) {
-		const err = `Store Not Found @Hook 
+		const err = `Store Not Found @Hook
 			<br/>ID: ${event.locals.store?.id}
 			<br/>ORIGIN: ${event.locals?.origin}
 			<br/>DOMAIN(env): ${DOMAIN}
 			<br/>HTTP_ENDPOINT(env): ${HTTP_ENDPOINT}`
-		// console.log('Err at Hooks...', e)
 		throw error(404, err)
 	}
 }

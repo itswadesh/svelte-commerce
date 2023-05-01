@@ -35,12 +35,6 @@ import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
 
-// console.log('data = ', data)
-// console.log('data = ', data.category)
-// console.log('Products = ', products)
-// console.log('Count = ', count)
-// console.log('Facets = ', facets)
-
 let today = dayjs(new Date()).toISOString()
 
 let seoProps = {
@@ -203,8 +197,6 @@ async function loadNextPage() {
 				searchParams
 			})
 
-			// console.log('res', res)
-
 			const nextPageData = res.nextPageData
 			data.products = data?.products?.concat(nextPageData)
 			data.count = res?.count
@@ -245,10 +237,9 @@ onMount(() => {
 	if (loadMoreDiv && !$page?.data?.isDesktop) {
 		observer.observe(loadMoreDiv)
 	}
-	// console.log('mmmmmmmmmmmmmmmm')
+
 	// if (!$page?.data?.isDesktop && data.count && data.products?.length < data.count) {
 	// 	const intersectionObserver = new IntersectionObserver((entries) => {
-	// 		console.log('sssssssssssssssssssss', entries[0].intersectionRatio)
 	// 		if (entries[0].intersectionRatio <= 0) return
 	// 		// load more content;
 	// 		loadNextPage()

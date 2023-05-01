@@ -11,7 +11,6 @@ export const findZip = async ({ zip, origin }) => {
 		else data = getAPI(`pincodes/${zip}`, origin)
 		return data
 	} catch (err) {
-		// console.log(err)
 		const e = err as Error
 		throw error(e.status, e.data.message)
 	}
@@ -22,7 +21,6 @@ export const findByCity = async (locals: App.Locals, q: string) => {
 		const data = await getBySid(`pincodes?${q}`)
 		return data
 	} catch (err) {
-		// console.log(err)
 		const e = err as Error
 		throw error(e.status, e.data.message)
 	}
@@ -33,7 +31,6 @@ export const groupByCity = async (locals: App.Locals, id: string) => {
 		const data = await getBySid(`pincodes/group-by-city`)
 		return data
 	} catch (err) {
-		// console.log(err)
 		const e = err as Error
 		throw error(e.status, e.data.message)
 	}
@@ -48,4 +45,3 @@ export const groupByState = async (locals: App.Locals, id: string) => {
 		throw error(e.status, e.data.message)
 	}
 }
- 

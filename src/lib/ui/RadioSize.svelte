@@ -7,8 +7,6 @@ export let modelValue, value
 
 let checked = false
 
-// console.log('modelValue, value', modelValue, value)
-
 if (modelValue === value) {
 	checked = true
 }

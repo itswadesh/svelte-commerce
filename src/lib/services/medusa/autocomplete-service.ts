@@ -1,4 +1,4 @@
-import {  getMedusajsApi } from '$lib/utils/server'
+import { getMedusajsApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
@@ -25,10 +25,7 @@ export const fetchAutocompleteData = async ({ origin, storeId, q }: any) => {
 // 			success: true
 // 		};
 // 	} catch (err) {
-// 		console.log('Error:', err);
-
 // 		const e = err as Error;
-
 // 		throw error(e.status, e.data.message);
 // 	}
 // };
@@ -41,7 +38,6 @@ export const fetchAutocompleteData = async ({ origin, storeId, q }: any) => {
 // 			success: true
 // 		};
 // 	} catch (err) {
-// 		console.log('Error:', err);
 // 		const e = err as Error;
 // 		throw error(e.status, e.data.message);
 // 	}

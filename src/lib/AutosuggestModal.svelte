@@ -21,8 +21,6 @@ let searchInput: any
 let trending = []
 let typingTimer: any
 
-// console.log('popular = ', popular?.data?.length)
-
 function submit() {
 	show = false
 
@@ -74,7 +72,6 @@ async function getData(e: any) {
 				origin: $page?.data?.origin,
 				storeId: $page?.data?.store?.id
 			})
-			// console.log('autocomplete', autocomplete)
 		} catch (e) {}
 	}, 200)
 }

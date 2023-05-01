@@ -69,6 +69,7 @@
 		"svelte-share-buttons-component": "1.5.5",
 		"svelte-timeago": "0.1.2",
 		"svelte-toasts": "^1.1.2",
+		"sveltekit-medusa-client": "0.0.1",
 		"tailwind-scrollbar": "2.1.0",
 		"tailwindcss": "^3.2.7",
 		"tslib": "^2.5.0",

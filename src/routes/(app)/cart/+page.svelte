@@ -22,7 +22,6 @@ import Cookie from 'cookie-universal'
 const cookies = Cookie()
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	title: `Cart`,
@@ -265,7 +264,9 @@ async function getCoupons() {
 								{#each data.cart?.items as item, ix (item.pid)}
 									<!-- Product detail start -->
 
-									<div out:fly="{{ x: -2400, duration: 2500 }}" class="flex w-full items-start gap-4 py-5">
+									<div
+										out:fly="{{ x: -2400, duration: 2500 }}"
+										class="flex w-full items-start gap-4 py-5">
 										<a
 											href="/product/{item?.slug}"
 											aria-label="Click to visit product details"
@@ -350,7 +351,7 @@ async function getCoupons() {
 																customizedImg: item.customizedImg,
 																ix: ix
 															})}"
-														class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8 
+														class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8
 														{loading[ix]
 															? 'cursor-not-allowed opacity-80'
 															: 'cursor-pointer hover:opacity-80 active:scale-95'}">
@@ -369,7 +370,7 @@ async function getCoupons() {
 													<!-- Quantity indicator -->
 
 													<div
-														class="mx-2 flex h-6 w-6 items-center justify-center text-xs font-bold sm:h-8  sm:w-8  ">
+														class="mx-2 flex h-6 w-6 items-center justify-center text-xs font-bold sm:h-8 sm:w-8">
 														{#if selectedLoadingType !== 'delete' && loading[ix]}
 															<img
 																src="{dotsLoading}"
@@ -392,7 +393,7 @@ async function getCoupons() {
 																customizedImg: item.customizedImg,
 																ix: ix
 															})}"
-														class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8 
+														class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8
 														{loading[ix]
 															? 'cursor-not-allowed opacity-80'
 															: 'cursor-pointer hover:opacity-80 active:scale-95'}">
@@ -424,7 +425,7 @@ async function getCoupons() {
 															ix: ix,
 															loadingType: 'delete'
 														})}"
-													class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8 
+													class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8
 														{loading[ix]
 														? 'cursor-not-allowed opacity-80'
 														: 'cursor-pointer hover:opacity-80 active:scale-95'}">

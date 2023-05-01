@@ -16,8 +16,6 @@ const dispatch = createEventDispatcher()
 export let showPhotosModal = false
 export let gallery
 
-// console.log('gallery', gallery)
-
 let Splide: any
 let currentImageIndex = 0
 

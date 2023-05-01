@@ -81,7 +81,6 @@ onMount(async () => {
 // 		toast('Signed Out...', 'success')
 // 		goto('/auth/login')
 // 	} catch (e) {
-// 		console.log(e)
 // 		toast(e, 'error')
 // 	} finally {
 // 	}
@@ -130,8 +129,6 @@ async function onSearchSubmit({ detail }) {
 // 		categories = res1?.data.filter((c) => {
 // 			return c.img
 // 		})
-// 		// console.log('res1', res1)
-// 		// console.log('categories', categories)
 // 	} catch (e) {
 // 	} finally {
 // 	}
@@ -614,7 +611,7 @@ const getSelectionLabel = (option) => option.name
 					{#if showDropdownAccount}
 						<ul
 							transition:fly="{{ y: 5, duration: 700 }}"
-							class="absolute top-20 right-0 flex min-w-max flex-col rounded-b border bg-white p-2 text-sm font-semibold  shadow-inner">
+							class="absolute top-20 right-0 flex min-w-max flex-col rounded-b border bg-white p-2 text-sm font-semibold shadow-inner">
 							<li class="mb-2 border-b py-2 px-4">
 								<a
 									href="/my/profile"

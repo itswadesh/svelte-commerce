@@ -62,8 +62,6 @@ function paymentMethodChanged(pm) {
 }
 
 async function submit(pm) {
-	// console.log('pm = ', pm)
-
 	if (!pm || pm === undefined) {
 		disabled = true
 		errorMessage = 'Please select a payment option'
@@ -125,8 +123,6 @@ async function submit(pm) {
 				amount: rp.amount,
 				order_id: rp.id,
 				async handler(response) {
-					// console.log('response = ', response)
-
 					try {
 						const capture = await OrdersService.razorpayCapture({
 							rpPaymentId: response.razorpay_payment_id,

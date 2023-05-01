@@ -51,13 +51,11 @@ async function getMegaMenu() {
 
 			if (!!localMegamenu && localMegamenu !== 'undefined') {
 				megamenu = JSON.parse(localMegamenu)
-				// console.log('localMegamenu', megamenu)
 			} else {
 				megamenu = await CategoryService.fetchMegamenuData({
 					storeId: $page.data.store?.id,
 					origin: $page.data.origin
 				})
-				// console.log('megamenu', megamenu)
 			}
 		} catch (e) {
 			toast(e, 'error')

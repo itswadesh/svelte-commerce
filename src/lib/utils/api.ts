@@ -49,8 +49,6 @@ const send = async ({ method, path, params, data, token, headers, origin }: any)
 	// 	return
 	// }
 
-	// console.log('store id not found.........', storeIdFromConfig)
-
 	const opts: any = {
 		method
 	}

@@ -17,7 +17,7 @@ import SEO from '$lib/components/SEO/index.svelte'
 import VerifyOtp from '../_VerifyOtp.svelte'
 const cookies = Cookie()
 
-const IS_DEV = import.meta.env.DEV;
+const IS_DEV = import.meta.env.DEV
 
 export let data
 
@@ -101,8 +101,6 @@ const verifyIsMobileNum = () => {
 		isMobile = false
 		maxlength = null
 	}
-
-	// console.log('isMobile, isEmail', isMobile, isEmail)
 }
 
 async function submit() {
@@ -150,8 +148,6 @@ async function submit() {
 
 async function handleSendOTP({ detail }) {
 	phone = detail
-
-	// console.log('phone', phone)
 
 	try {
 		loading = true
@@ -259,7 +255,7 @@ function changeNumber() {
 					{/if}
 				</h6>
 
-				<div class="relative w-full rounded bg-white ">
+				<div class="relative w-full rounded bg-white">
 					<!-- Enter email or mobile number -->
 
 					<input

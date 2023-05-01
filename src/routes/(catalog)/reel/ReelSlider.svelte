@@ -15,8 +15,6 @@ import { invalidateAll } from '$app/navigation'
 export let products = []
 export let title = ''
 
-// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', products)
-
 // share button function
 
 const share = async ({ title, text, url }: any) => {
