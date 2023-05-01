@@ -18,10 +18,12 @@
   <br>
     <img src="https://res.cloudinary.com/itswadesh/image/upload/v1678600224/litekart/free_for_developers_1.png">
 </div>
-<div align="center" width="60%" height="auto">
+<div align="center">
   <br>
-    <img src=".github/svelte-commerce.gif">
+    <img width="500" height="340" src=".github/svelte-commerce.gif" >
+    <img width="500" height="340" src=".github/svelte-commerce-demo.gif" hspace="5">
 </div>
+
 
 <br/>
 
