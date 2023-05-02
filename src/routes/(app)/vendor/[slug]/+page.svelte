@@ -5,12 +5,20 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import Pagination from '$lib/components/Pagination.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
 import RatingStarDisplay from '$lib/ui/RatingStarDisplay.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'
 
 export let data
 
-console.log('data', data)
+// console.log('data', data)
+
+const seoProps = {
+	title: 'Vendor Profile',
+	metadescription: 'Vendor Profile'
+}
 </script>
+
+<SEO {...seoProps} />
 
 <section class="min-h-screen">
 	<div class="sm:p-10">
