@@ -89,6 +89,7 @@ const cookies = Cookie()
 const isServer = import.meta.env.SSR
 
 export let data
+// console.log('zzzzzzzzzzzzzzzzzz', data);
 
 let seoProps = {
 	// addressCountry: 'India',

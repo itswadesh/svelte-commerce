@@ -5,22 +5,22 @@ module.exports = {
 		extend: {
 			colors: {
 				primary: {
-					50: '#f8efed' /* very very light rose gold */,
-					100: '#f3e3df' /* very light rose gold */,
-					200: '#edd6d1' /* light rose gold */,
-					500: '#d2988a' /* rose gold */,
-					600: '#d8a598' /* dark rose gold */,
-					700: '#B8843F' /* more darker rose gold */
+					50: '#f0f0f2', // zinc shades
+					100: '#e6e6e9',
+					200: '#dcdce0',
+					500: '#18181B',
+					600: '#0f0f11',
+					700: '#060606'
 				},
 				secondary: {
-					100: '#f3e6db' /* light dark gold */,
-					500: '#aa6c39' /* dark gold */,
-					600: '#9b6334' /* dark dark gold */
+					100: '#e1e6f4', // slate shades
+					500: '#0F172A',
+					600: '##0a0f1c'
 				},
 				accent: {
-					100: '#ffffd8' /* light-yellow */,
-					500: '#FFFF00' /* yellow-500 */,
-					900: '#eb0000;' // red
+					100: '#ffffed', // light-yellow
+					500: '#ffffed', // yellow
+					900: '#ff1414' // red
 				}
 			},
 
