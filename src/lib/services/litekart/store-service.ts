@@ -123,7 +123,9 @@ export const getStoreData = async ({
 		}
 		megamenu = storeRes.megamenu
 		cookies.set('store', JSON.stringify(store), { path: '/' })
-		cookies.set('megamenu', JSON.stringify(megamenu), { path: '/' })
+		try {
+			cookies.set('megamenu', JSON.stringify(megamenu), { path: '/' })
+		} catch (e) {}
 	} else {
 		store = JSON.parse(cookieStore)
 		megamenu = JSON.parse(cookieMegamenu)
