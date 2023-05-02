@@ -5,12 +5,20 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import Pagination from '$lib/components/Pagination.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
 import RatingStarDisplay from '$lib/ui/RatingStarDisplay.svelte'
+import SEO from '$lib/components/SEO/index.svelte'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'
 
 export let data
 
-console.log('data', data)
+// console.log('data', data)
+
+const seoProps = {
+	title: 'Vendor Profile',
+	metadescription: 'Vendor Profile'
+}
 </script>
+
+<SEO {...seoProps} />
 
 <section class="min-h-screen">
 	<div class="sm:p-10">
@@ -144,7 +152,7 @@ console.log('data', data)
 										class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#4267B2] hover:text-white">
 										<a
 											href="{data.vendor?.facebook_url}"
-											aria-label="Click to route facebook page"
+											aria-label="Click to visit facebook page"
 											target="_blank"
 											rel="noopener noreferrer"
 											class="flex h-full w-full items-center justify-center">
@@ -173,7 +181,7 @@ console.log('data', data)
 										class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#C13584] hover:text-white">
 										<a
 											href="{data.vendor?.insta_url}"
-											aria-label="Click to route instagram page"
+											aria-label="Click to visit instagram page"
 											target="_blank"
 											rel="noopener noreferrer"
 											class="flex h-full w-full items-center justify-center">
@@ -202,7 +210,7 @@ console.log('data', data)
 										class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#1DA1F2] hover:text-white">
 										<a
 											href="{data.vendor?.twitter_url}"
-											aria-label="Click to route twitter page"
+											aria-label="Click to visit twitter page"
 											target="_blank"
 											rel="noopener noreferrer"
 											class="flex h-full w-full items-center justify-center">
@@ -231,7 +239,7 @@ console.log('data', data)
 										class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#0077b5] hover:text-white">
 										<a
 											href="{data.vendor?.linkedin_url}"
-											aria-label="Click to route linkedin page"
+											aria-label="Click to visit linkedin page"
 											target="_blank"
 											rel="noopener noreferrer"
 											class="flex h-full w-full items-center justify-center">
@@ -262,7 +270,7 @@ console.log('data', data)
 										class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#FF0000] hover:text-white">
 										<a
 											href="{data.vendor?.youtube_url}"
-											aria-label="Click to route youtube page"
+											aria-label="Click to visit youtube page"
 											target="_blank"
 											rel="noopener noreferrer"
 											class="flex h-full w-full items-center justify-center">
@@ -300,7 +308,7 @@ console.log('data', data)
 
 							<!-- <a
 								href="/{data.vendor?.slug}?sort=-updatedAt"
-								aria-label="click to route vendor details page"
+								aria-label="Click to visit vendor details page"
 								class="text-xs font-semibold text-primary-500 hover:text-primary-700 hover:underline sm:text-sm">
 								View All
 							</a> -->
