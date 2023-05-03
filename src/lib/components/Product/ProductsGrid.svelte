@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import DummyProductCard from '$lib/DummyProductCard.svelte'
 import ProductCard from '$lib/ProductCard.svelte'
 
