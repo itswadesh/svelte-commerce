@@ -53,15 +53,10 @@ onDestroy(() => {
 })
 </script>
 
-<!-- <img
-	alt="{alt}"
-	class="lazy {clazz}"
-	src="{`${getImageUrl(src)}?tr=h-2,w-1:w-${w},h-${h}`}"
-	data-src="{`${getImageUrl(src)}?tr=w-${w},h-${h}:w-${w},h-${h}`}" /> -->
-
 <img
 	alt="{alt}"
-	class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" in:fade="{{ duration: 1000}}"
+	class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}"
+	in:fade="{{ duration: 1000 }}"
 	width="{w}"
 	height="{h}"
 	src="{`${getCdnImageUrl(src, IMAGE_CDN_URL)}?tr=w-1,h-1:w-${aspect_ratio.split(':')[0]},h-${
@@ -71,4 +66,3 @@ onDestroy(() => {
 		':',
 		'-'
 	)},cm-pad_resize`}" />
-<!-- &sharpen=true -->
