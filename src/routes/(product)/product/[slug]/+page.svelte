@@ -89,7 +89,7 @@ const cookies = Cookie()
 const isServer = import.meta.env.SSR
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data);
+
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -205,7 +205,7 @@ onMount(async () => {
 					origin: $page.data.origin
 				})
 			} catch (e) {
-				// toast(e, 'error')
+				toast(e, 'error')
 			} finally {
 			}
 		}
@@ -323,7 +323,7 @@ async function addToBag(p, customizedImg, customizedJson) {
 
 		// const res = await getAPI('carts/my')
 	} catch (e) {
-		toast(e, 'error')
+		// toast(e, 'error')
 		cartButtonText = 'Error Add To Cart'
 	} finally {
 		loading = false
@@ -468,7 +468,6 @@ function handleMobileCanvas() {
 				productImage="{data.product?.img}"
 				url="{$page?.url?.href}" />
 		</div>
-
 		<div class="mb-5 grid grid-cols-1 items-start gap-5 sm:mb-10 sm:gap-10 lg:grid-cols-5">
 			<!-- Images -->
 
