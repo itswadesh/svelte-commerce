@@ -27,9 +27,7 @@
 <script>
 import { currency } from './utils'
 import { fly } from 'svelte/transition'
-import { goto } from '$app/navigation'
 import { page } from '$app/stores'
-import { post } from './utils/api'
 import LazyImg from './components/Image/LazyImg.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
@@ -40,10 +38,10 @@ if (product?._source) {
 	product = product?._source
 }
 
-let show,
-	showRelatedProducts = false,
-	isWislisted = false,
-	loadingForWishlist = false
+let isWislisted = false
+let loadingForWishlist = false
+let showRelatedProducts = false
+let show = false
 
 function showitems() {
 	show = true
@@ -103,27 +101,27 @@ function hideitems() {
 			<!-- View smilar button start-->
 
 			<!-- <div class="{product.relatedProducts?.length > 0 ? 'absolute bottom-24 right-4' : 'hidden'}">
-			<button class="focus:outline-none" on:click="{() => (showRelatedProducts = true)}">
-				<div
-					class="trans flex h-7 w-7 items-center rounded-full border border-primary-500 bg-white text-primary-500">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="h-5 w-5 shrink-0"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
-						></path>
-					</svg>
+				<button class="focus:outline-none" on:click="{() => (showRelatedProducts = true)}">
+					<div
+						class="trans flex h-7 w-7 items-center rounded-full border border-primary-500 bg-white text-primary-500">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="h-5 w-5 shrink-0"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
+							></path>
+						</svg>
 
-					<span class="whitespace-nowrap pl-2 text-xs">View similar</span>
-				</div>
-			</button>
-		</div> -->
+						<span class="whitespace-nowrap pl-2 text-xs">View similar</span>
+					</div>
+				</button>
+			</div> -->
 
 			<!-- View smilar button end-->
 
@@ -134,86 +132,86 @@ function hideitems() {
 			<!-- View smilar button start-->
 
 			<!-- <div
-					class="flex justify-end 
+				class="flex justify-end 
 					{product.relatedProducts?.length > 0 ? 'opacity-100' : 'opacity-0'}">
-					<button class="focus:outline-none" on:click="{() => (showRelatedProducts = true)}">
-						<div
-							class="trans flex h-7 w-7 items-center rounded-full border border-primary-500 bg-white text-primary-500">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="h-5 w-5 shrink-0"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
-								></path>
-							</svg>
+				<button class="focus:outline-none" on:click="{() => (showRelatedProducts = true)}">
+					<div
+						class="trans flex h-7 w-7 items-center rounded-full border border-primary-500 bg-white text-primary-500">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="h-5 w-5 shrink-0"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
+							></path>
+						</svg>
 
-							<span class="whitespace-nowrap pl-2 text-xs">View similar</span>
-						</div>
-					</button>
-				</div> -->
+						<span class="whitespace-nowrap pl-2 text-xs">View similar</span>
+					</div>
+				</button>
+			</div> -->
 
 			<!-- View smilar button end-->
 
 			<!-- Wishlist start-->
 
 			<!-- <button
-					class="mt-3.5 flex w-full items-center justify-center  gap-2 border border-zinc-200 py-1 text-sm font-semibold focus:outline-none"
-					on:click="{() => toggleWishlist(product._id)}">
-					{#if isWislisted}
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							class="h-5 w-5 text-red-500"
-							viewBox="0 0 20 20"
-							fill="currentColor">
-							<path
-								fill-rule="evenodd"
-								d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-								clip-rule="evenodd"></path>
-						</svg>
+				class="mt-3.5 flex w-full items-center justify-center  gap-2 border border-zinc-200 py-1 text-sm font-semibold focus:outline-none"
+				on:click="{() => toggleWishlist(product._id)}">
+				{#if isWislisted}
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-5 w-5 text-red-500"
+						viewBox="0 0 20 20"
+						fill="currentColor">
+						<path
+							fill-rule="evenodd"
+							d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+							clip-rule="evenodd"></path>
+					</svg>
 
-						<span>Wishlisted</span>
-					{:else}
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							class="h-5 w-5 shrink-0"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-							stroke-width="2">
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-							></path>
-						</svg>
+					<span>Wishlisted</span>
+				{:else}
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-5 w-5 shrink-0"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+						stroke-width="2">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+						></path>
+					</svg>
 
-						<span>Wishlist</span>
-					{/if}
-				</button> -->
+					<span>Wishlist</span>
+				{/if}
+			</button> -->
 
 			<!-- Wishlist end-->
 
 			<!-- Size chart start-->
 
 			<!-- <div class="mt-1.5 flex items-baseline justify-start">
-					<h2 class="mr-1 text-sm">Sizes:</h2>
+				<h2 class="mr-1 text-sm">Sizes:</h2>
 
-					<h3 class="flex items-baseline gap-1 text-xs font-medium text-zinc-500 ">
-						{#if product.variants?.length}
-							{#each product.variants as v, i}
-								<div>{v.size}</div>
-							{/each}
-						{:else}
-							One Size
-						{/if}
-					</h3>
-				</div> -->
+				<h3 class="flex items-baseline gap-1 text-xs font-medium text-zinc-500 ">
+					{#if product.variants?.length}
+						{#each product.variants as v, i}
+							<div>{v.size}</div>
+						{/each}
+					{:else}
+						One Size
+					{/if}
+				</h3>
+			</div> -->
 
 			<!-- Size chart end-->
 			<!-- </div> -->
@@ -275,11 +273,11 @@ function hideitems() {
 					aria-label="Click to view the product details"
 					data-sveltekit-preload-data>
 					<!-- <div class="mb-1.5 flex items-center justify-between"> -->
-					<!-- {#if product.brand?.name || product.brandName}
+					{#if product.brand?.name || product.brandName}
 						<h2 class="font-semibold">
 							{product.brand?.name || product.brandName}
 						</h2>
-					{/if} -->
+					{/if}
 
 					<!-- Wishlist -->
 
@@ -343,7 +341,7 @@ function hideitems() {
 
 				{#if !product.hasStock && !show}
 					<p
-						class="absolute inset-x-0 bottom-[3rem] sm:bottom-[3.8rem] text-center text-xs text-red-500">
+						class="absolute inset-x-0 bottom-[2.65rem] sm:bottom-[3.8rem] text-center text-xs text-red-500">
 						Out of Stock
 					</p>
 				{/if}
@@ -397,12 +395,13 @@ function hideitems() {
 										</div>
 									{/if}
 
-									<div class="h-auto w-full">
+									<div class="w-[210px] h-[280px] overflow-hidden">
 										<LazyImg
-											src="{relatedProduct.img}"
-											alt="{relatedProduct.name}"
-											aspect_ratio="3:4"
-											class="h-full w-full object-contain object-bottom" />
+											src="{product.img}"
+											alt="{product.name}"
+											width="210"
+											height="280"
+											class="object-contain object-bottom w-[210px] h-[280px] text-xs" />
 									</div>
 
 									<div class="p-4">
