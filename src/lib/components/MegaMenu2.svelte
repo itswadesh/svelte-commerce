@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import { page } from '$app/stores'
 import { fly } from 'svelte/transition'
 
@@ -15,7 +15,7 @@ let showDropdownMegaMenu = []
 					on:mouseleave="{() => (showDropdownMegaMenu[mx] = false)}">
 					<a
 						href="/{m.slug}"
-						aria-label="Click to route this page"
+						aria-label="Click to visit this page"
 						class="flex h-20 items-center gap-1 border-b-4 px-4 uppercase focus:outline-none
 						{showDropdownMegaMenu[mx] ? 'border-primary-500' : 'border-white'}">
 						<span>{m.name}</span>
@@ -45,10 +45,10 @@ let showDropdownMegaMenu = []
 						{#if showDropdownMegaMenu[mx]}
 							<ul
 								transition:fly="{{ y: 5, duration: 700 }}"
-								class="absolute top-20 left-0 z-[100] flex min-w-max flex-col rounded-b border bg-white p-2 text-sm uppercase   shadow-inner">
+								class="absolute top-20 left-0 z-[100] flex min-w-max flex-col rounded-b border bg-white p-2 text-sm uppercase shadow-inner">
 								{#each m.children as c}
 									<li class="h-auto w-full flex-1">
-										<a href="{c.link}" aria-label="Click to route this page">
+										<a href="{c.link}" aria-label="Click to visit this page">
 											<h6
 												class="w-full cursor-pointer rounded py-2 px-4 text-left transition duration-300 focus:outline-none hover:bg-primary-50">
 												{c.name}

@@ -15,7 +15,7 @@ module.exports = {
 				secondary: {
 					100: '#e1e6f4', // slate shades
 					500: '#0F172A',
-					600: '##0a0f1c'
+					600: '#0a0f1c'
 				},
 				accent: {
 					100: '#ffffed', // light-yellow

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import { createEventDispatcher, onDestroy, onMount } from 'svelte'
 import { fly } from 'svelte/transition'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
@@ -14,16 +14,6 @@ export let loading = false
 function emitSave() {
 	dispatch('save')
 }
-
-// function mounted() {
-// 	document.addEventListener('keydown', this.ctrlSPressed)
-// }
-// function beforeDestroy() {
-// 	document.removeEventListener('keydown', this.ctrlSPressed)
-// }
-// onDestroy(() => {
-// 	document.removeEventListener('keydown', this.ctrlSPressed)
-// })
 
 function ctrlSPressed(e) {
 	if (!(e.keyCode === 83 && (e.ctrlKey || e.metaKey))) {
@@ -41,12 +31,12 @@ function ctrlSPressed(e) {
 		transition:fly="{{ y: -20, duration: 300 }}">
 		<h6 class="flex max-w-max flex-row items-center gap-2 text-zinc-500 md:mx-auto">
 			{#if loading}
-				<span class=" sm:block "> {@html loadingMessage || 'Saving...'} </span>
+				<span class=" sm:block"> {@html loadingMessage || 'Saving...'} </span>
 			{:else if successMessage}
-				<span class=" sm:block "> {@html successMessage || 'Success.'} </span>
+				<span class=" sm:block"> {@html successMessage || 'Success.'} </span>
 			{:else if errors && errors.length}
 				{#each errors as e}
-					<span class=" sm:block "> {@html e.message} </span>
+					<span class=" sm:block"> {@html e.message} </span>
 				{/each}
 			{:else}
 				<span class=" sm:block"> There are unsaved changes on this page. Press </span>
