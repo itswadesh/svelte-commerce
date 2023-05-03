@@ -5,7 +5,7 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
 import { slide } from 'svelte/transition'
 
