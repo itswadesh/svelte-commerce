@@ -39,7 +39,27 @@ export const fetchProductReviews = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`reviews/me`, {}, sid)
+		// res = await getMedusajsApi(`reviews/me`, {}, sid)
+
+		// add dummy data schema for product review
+
+		res = {
+			reviewsSummary: [],
+			product: {
+				count: 0,
+				data: [],
+				noOfPage: 1
+			},
+			brand: {
+				count: 0,
+				noOfPage: 1
+			},
+			gallery: {
+				count: 0,
+				data: [],
+				noOfPage: 1
+			}
+		}
 
 		return res?.data || []
 	} catch (e) {
