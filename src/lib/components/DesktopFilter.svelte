@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
 import { constructURL2, toast } from '$lib/utils'
@@ -25,7 +25,7 @@ let selectedCategory
 let selectedCategory2
 let showSubCategory = []
 let showSubCategory2 = []
-// ----------------
+
 let allAges = []
 let allBrands = []
 let allColors = []

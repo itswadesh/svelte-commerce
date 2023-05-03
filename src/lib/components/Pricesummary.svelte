@@ -1,9 +1,8 @@
 <script lang="ts">
-import { spring } from 'svelte/motion'
 import { createEventDispatcher } from 'svelte'
 import { currency } from '$lib/utils'
-import { goto } from '$app/navigation'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import { page } from '$app/stores'
 
 const dispatch = createEventDispatcher()
 
@@ -26,7 +25,7 @@ function submit() {
 </script>
 
 {#if cart}
-	<section class="my-5 border-t  border-zinc-200 py-5">
+	<section class="my-5 border-t border-zinc-200 py-5">
 		<h5 class="text-xl font-bold capitalize tracking-wide">
 			<span>Price Summary</span>
 
@@ -50,7 +49,7 @@ function submit() {
 					<h4>You Saved</h4>
 
 					<h4>
-						{currency(cart?.savings)}
+						{currency(cart?.savings, $page.data?.store?.currencySymbol)}
 					</h4>
 				</div>
 			{/if}
@@ -60,7 +59,7 @@ function submit() {
 
 				<h4 class="text-green-500">
 					{#if cart?.discount?.amount > 0}
-						- {currency(cart?.discount?.amount)}
+						- {currency(cart?.discount?.amount, $page.data?.store?.currencySymbol)}
 					{:else}
 						0
 					{/if}
@@ -82,21 +81,16 @@ function submit() {
 					{#if cart.shipping?.charge < 1}
 						<span class="text-green-500">Free</span>
 					{:else}
-						{currency(cart.shipping?.charge)}
+						{currency(cart.shipping?.charge, $page.data?.store?.currencySymbol)}
 					{/if}
 				</h4>
 			</div>
-
-			<!-- <p class="d mt-1 text-xs tracking-wider text-zinc-400">
-				Free shipping on orders of ₹999 or more. For first purchase,
-				<a href="##" aria-label="Click to see all available offers" class="underline hover:text-primary-500">See Offer</a>
-			</p> -->
 		</div>
 
 		<hr class="my-5 border-t border-dashed border-zinc-200" />
 
 		{#if cart.subtotal}
-			<div class="my-2 mb-5 flex items-center justify-between text-lg font-bold ">
+			<div class="my-2 mb-5 flex items-center justify-between text-lg font-bold">
 				<h4>Total Amount</h4>
 
 				{cart.formattedAmount?.total}
