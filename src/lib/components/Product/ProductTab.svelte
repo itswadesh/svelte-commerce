@@ -47,7 +47,6 @@ onMount(async () => {
 
 function filterProducts(selectedCategory: string) {
 	products = products?.filter((p) => {
-		// return p.tags?.name === selectedCategory
 		return p.new
 	})
 }
