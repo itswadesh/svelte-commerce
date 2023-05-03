@@ -41,7 +41,7 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import { onMount } from 'svelte'
 let p = 0
 let visible = false

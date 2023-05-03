@@ -1,8 +1,6 @@
 <script lang="ts">
-import { spring } from 'svelte/motion'
 import { createEventDispatcher } from 'svelte'
 import { currency } from '$lib/utils'
-import { goto } from '$app/navigation'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { page } from '$app/stores'
 
@@ -27,7 +25,7 @@ function submit() {
 </script>
 
 {#if cart}
-	<section class="my-5 border-t  border-zinc-200 py-5">
+	<section class="my-5 border-t border-zinc-200 py-5">
 		<h5 class="text-xl font-bold capitalize tracking-wide">
 			<span>Price Summary</span>
 
@@ -87,17 +85,12 @@ function submit() {
 					{/if}
 				</h4>
 			</div>
-
-			<!-- <p class="d mt-1 text-xs tracking-wider text-zinc-400">
-				Free shipping on orders of ₹999 or more. For first purchase,
-				<a href="##" aria-label="Click to see all available offers" class="underline hover:text-primary-500">See Offer</a>
-			</p> -->
 		</div>
 
 		<hr class="my-5 border-t border-dashed border-zinc-200" />
 
 		{#if cart.subtotal}
-			<div class="my-2 mb-5 flex items-center justify-between text-lg font-bold ">
+			<div class="my-2 mb-5 flex items-center justify-between text-lg font-bold">
 				<h4>Total Amount</h4>
 
 				{cart.formattedAmount?.total}

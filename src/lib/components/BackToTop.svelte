@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import { fade } from 'svelte/transition'
 
 export let showOnPx = 150
@@ -6,14 +6,7 @@ export let showOnPx = 150
 let hidden = true
 let y
 
-// $: if (y === y) {
-// 	setTimeout(() => {
-// 		hidden = true
-// 	}, 10000)
-// }
-
 function goTop() {
-	// scroll to the top
 	window.scroll({ top: 0, behavior: 'smooth' })
 }
 
