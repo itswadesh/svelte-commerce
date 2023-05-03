@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import { date } from '$lib/utils'
 import { goto } from '$app/navigation'
 import ReviewGallery from './ReviewGallery.svelte'
