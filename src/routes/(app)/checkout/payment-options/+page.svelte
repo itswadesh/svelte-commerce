@@ -85,7 +85,7 @@ async function submit(pm) {
 
 			goto(`/payment/success?id=${res?._id}&status=PAYMENT_SUCCESS&provider=COD`)
 		} catch (e) {
-			toast(e, 'error')
+			toast(e?.body?.message || e, 'error')
 		} finally {
 			loading = false
 		}
@@ -103,7 +103,7 @@ async function submit(pm) {
 				toast('Something went wrong', 'error')
 			}
 		} catch (e) {
-			toast(e?.body, 'error')
+			toast(e?.body?.message || e, 'error')
 		} finally {
 			loading = false
 		}

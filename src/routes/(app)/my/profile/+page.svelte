@@ -137,7 +137,7 @@ async function saveProfile() {
 							</div>
 						</div>
 
-						<div class="flex flex-wrap gap-2">
+						<!-- <div class="flex flex-wrap gap-2">
 							<h6 class="w-52 shrink-0 font-medium">Date Of Birth</h6>
 
 							<div class="w-full max-w-md">
@@ -147,14 +147,13 @@ async function saveProfile() {
 									bind:value="{data.profile.dob}"
 									on:input="{() => (formChanged = true)}" />
 							</div>
-						</div>
+						</div> -->
 
 						<div class="flex flex-wrap gap-2">
 							<h6 class="w-52 shrink-0 font-medium">Phone</h6>
 
 							<div class="w-full max-w-md">
 								<Textbox
-									disabled
 									type="text"
 									placeholder="Eg: +91000000000"
 									bind:value="{data.profile.phone}"
