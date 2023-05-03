@@ -80,9 +80,11 @@ export const mapMedusajsAllProducts = (p: any) => {
 }
 
 export const mapMedusajsProduct = (p: any) => {
+	
 	if (p) {
 		const prod: Product = {
 			_id: p.id,
+			id: p.id,
 			// created_at: p.variants[0].created_at,
 			// updated_at: p.variants[0].updated_at,
 			// deleted_at: p.variants[0].deleted_at,
@@ -159,9 +161,11 @@ export const mapMedusajsCategory = (c: any) => {
 			id: c.id,
 			name: c.name,
 			slug: c.handle,
-			children: c.category_children.map((i: any) => {
-				if (i) return mapMedusajsCategory(i)
-			})
+			children: c.category_children
+				? c.category_children.map((i: any) => {
+						if (i) return mapMedusajsCategory(i)
+				  })
+				: []
 		}
 		return r
 	} else {

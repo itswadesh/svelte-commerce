@@ -1,5 +1,6 @@
 import { getMedusajsApi } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
+import { mapMedusajsCategory } from './medusa-utils'
 
 export const fetchFooterCategories = async ({
 	origin,
@@ -10,7 +11,7 @@ export const fetchFooterCategories = async ({
 	try {
 		let data: []
 
-		data = await getMedusajsApi(`categories`)
+		data = await getMedusajsApi(`product-categories`)
 
 		return data || []
 	} catch (e) {
@@ -41,7 +42,7 @@ export const fetchAllCategories = async ({
 		let res: any = {}
 		let data, pageSize, currentPage
 
-		res = await getMedusajsApi(`categories`)
+		res = await getMedusajsApi(`product-categories`)
 
 		return { data, pageSize, currentPage }
 	} catch (e) {
@@ -64,7 +65,7 @@ export const fetchAllProductsOfCategories = async ({
 		let facets = {}
 		let err = null
 
-		res = await getMedusajsApi(`categories`)
+		res = await getMedusajsApi(`product-categories`)
 
 		return { products, productsCount, currentPage, facets, err }
 	} catch (e) {
@@ -74,9 +75,13 @@ export const fetchAllProductsOfCategories = async ({
 
 export const fetchMegamenuData = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {
-		let data: []
+		let cat_data: []
 
-		data = await getMedusajsApi(`product-categories`)
+		cat_data = (await getMedusajsApi(`product-categories`)).product_categories
+
+		const data = cat_data.map((category: any) => {
+			return mapMedusajsCategory(category)
+		})
 
 		return data || []
 	} catch (e) {
