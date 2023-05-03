@@ -12,7 +12,6 @@ img.loaded {
 import { getCdnImageUrl } from '$lib/utils'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-// export let noLazy = false // Dont add lazy to images that are on viewport
 export let clazz: string
 export let src: string
 export let alt: string

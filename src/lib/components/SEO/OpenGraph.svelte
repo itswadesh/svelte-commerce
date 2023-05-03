@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 export let article = false
 export let datePublished
 export let lastUpdated

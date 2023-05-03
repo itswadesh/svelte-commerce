@@ -1,26 +1,20 @@
 <script lang="ts">
-import { createEventDispatcher, onMount } from 'svelte'
+import { onMount } from 'svelte'
 import { AutocompleteService, CategoryService } from '$lib/services'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
-// import AutocompleteItem from '$lib/AutocompleteItem.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
-
-const dispatch = createEventDispatcher()
 
 export let placeholder = 'Search products...'
 
 let autocomplete: { img: string; name: string }[] = []
 let categories: any = []
 let err
-let popular = []
-let popularSearches = null
 let product
 let q = ''
 let query = ''
 let searchInput: any
 let showSuggestionOptions = false
-let trending = []
 let typingTimer: any
 
 function submit() {
@@ -33,10 +27,6 @@ function submit() {
 	}
 }
 
-function handleRouteToCategorySlug(link: string, slug: string) {
-	goto(`/${link || slug}`)
-}
-
 function onselect(v: any) {
 	showSuggestionOptions = false
 
@@ -47,10 +37,6 @@ function onselect(v: any) {
 			goto(`/search?q=${encodeURIComponent(v.key)}`)
 		}
 	}
-}
-
-function fillValue(val: string) {
-	product = val
 }
 
 async function getData(e: any) {
@@ -77,11 +63,6 @@ async function getData(e: any) {
 			})
 		} catch (e) {}
 	}, 200)
-}
-
-function resetInput() {
-	searchInput.focus()
-	q = ''
 }
 
 onMount(async () => {
