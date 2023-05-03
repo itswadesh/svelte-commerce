@@ -59,8 +59,10 @@ import CategoryPoolButtons from './_CategoryPoolButtons.svelte'
 import Checkbox from '$lib/ui/Checkbox.svelte'
 import CheckboxOfMultiProducts from '$lib/ui/CheckboxOfMultiProducts.svelte'
 import Cookie from 'cookie-universal'
+import dayjs from 'dayjs'
 import DeliveryOptions from './_DeliveryOptions.svelte'
 import DummyProductCard from '$lib/DummyProductCard.svelte'
+import Footer from '$lib/Footer.svelte'
 import FrequentlyBoughtProduct from './_FrequentlyBoughtProduct.svelte'
 import Gallery from '$lib/components/Product/Gallery.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
@@ -83,13 +85,12 @@ import Textarea from '$lib/ui/Textarea.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 import viewport from '$lib/actions/useViewPort'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
-import Footer from '$lib/Footer.svelte'
 
 const cookies = Cookie()
 const isServer = import.meta.env.SSR
 
 export let data
-
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -162,6 +163,7 @@ let seoProps = {
 let bounceItemFromTop = false
 let cartButtonText = 'Buy Now'
 let customizedImg
+let isExpired = false
 let isWishlisted = false
 let loading = false
 let loadingForWishlist = false
@@ -183,6 +185,7 @@ let showStickyCartButton = true
 let showUserInputForm = false
 let viewPortCartPositionFromTop = 0
 let y = 0
+let today = dayjs().format('YYYY-MM-DD')
 
 $: if (y > 500) {
 	showUserInputForm = true
@@ -190,6 +193,29 @@ $: if (y > 500) {
 
 if (data.product?.size?.name === 'One Size') {
 	selectedSize = 'One Size'
+}
+
+if (data.product?.expiryDate) {
+	// console.log('data.product?.expiryDate', data.product?.expiryDate)
+
+	// Create a Date object from the UTC string
+	const date = new Date(data.product?.expiryDate)
+
+	// Calculate the difference in milliseconds between the given date and now
+	const diffMs = Date.now() - date.getTime()
+
+	// Convert the difference in milliseconds to minutes
+	const diffMinutes = Math.round(diffMs / (1000 * 60))
+
+	// Log the result
+	// console.log(diffMinutes + ' minutes')
+
+	if (diffMinutes > 0) {
+		isExpired = true
+	} else {
+		isExpired = false
+	}
+	// console.log('isExpired',isExpired)
 }
 
 onMount(async () => {
@@ -1011,7 +1037,11 @@ function handleMobileCanvas() {
 						</div>
 
 						<div class="col-span-1">
-							{#if data.product?.active && data.product?.hasStock}
+							{#if isExpired}
+								<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
+									Item Expired
+								</PrimaryButton>
+							{:else if data.product?.active && data.product?.hasStock}
 								{#if cartButtonText === 'Go to cart'}
 									<a class="block" href="/cart" data-sveltekit-preload-data>
 										<PrimaryButton type="button" hideLoading class="w-full text-sm" blackBackground>
@@ -1284,7 +1314,11 @@ function handleMobileCanvas() {
 						</div>
 
 						<div class="col-span-3">
-							{#if data.product?.active && data.product?.hasStock}
+							{#if isExpired}
+								<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
+									Item Expired
+								</PrimaryButton>
+							{:else if data.product?.active && data.product?.hasStock}
 								{#if cartButtonText === 'Go to cart'}
 									<a class="block" href="/cart" data-sveltekit-preload-data>
 										<PrimaryButton type="button" hideLoading class="w-full text-sm" blackBackground>
