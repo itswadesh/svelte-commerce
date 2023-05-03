@@ -408,10 +408,14 @@ function handleFilterTags() {
 
 						<span>
 							<span class="font-bold text-2xl">
-								{data.products.count}
+								{data.products.count || 'No'}
 							</span>
 
-							Items
+							{#if data.products.count}
+								Items
+							{:else}
+								Item
+							{/if}
 						</span>
 					</h1>
 

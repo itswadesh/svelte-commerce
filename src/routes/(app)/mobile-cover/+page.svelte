@@ -1,10 +1,11 @@
 <script>
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
-import Breadcrumb from '$lib/components/Breadcrumb.svelte'
+import CatelogNav from '$lib/CatelogNav.svelte'
 import landingPageMobileBox from '$lib/assets/landing-page-mobile-box.webp'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import Breadcrumb from '$lib/components/Breadcrumb.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 
 export let data
 // console.log('data = ', data)
@@ -197,15 +198,13 @@ function searchSubmit() {
 						<div class="text-sm">
 							<h3 class="uppercase text-zinc-400 tracking-widest font-semibold mb-5">Popular</h3>
 
-							<ul class="grid grid-cols-2 sm:grid-cols-3 gap-5 p-0 m-0 list-none">
+							<ul class="grid grid-cols-1 sm:grid-cols-3 gap-5 p-0 m-0 list-none">
 								{#each mobileBrands as m, mx}
-									{#if m && mx < 10}
-										<li class="col-span-1">
-											<a href="/mobile-cover/{m.slug}">
-												{m.name}
-											</a>
-										</li>
-									{/if}
+									<li class="col-span-1">
+										<a href="/mobile-cover/{m.slug}">
+											{m.name}
+										</a>
+									</li>
 								{/each}
 							</ul>
 						</div>
