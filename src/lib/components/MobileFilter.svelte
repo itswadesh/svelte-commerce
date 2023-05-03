@@ -5,7 +5,7 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
 import { constructURL2, currency } from '$lib/utils'
@@ -37,7 +37,7 @@ let selectedCategory
 let selectedCategory2
 let showSubCategory = []
 let showSubCategory2 = []
-// ----------------
+
 let allAges = []
 let allBrands = []
 let allColors = []
@@ -264,11 +264,8 @@ async function sortNow(s) {
 	} else {
 		await u.searchParams.set('sort', s)
 	}
-	// await invalidateAll()
 	goto(u.toString())
 	window.scroll({ top: 0, behavior: 'smooth' })
-
-	// await goto(`/search?${$page.url.searchParams.toString()}`)
 }
 
 $: {

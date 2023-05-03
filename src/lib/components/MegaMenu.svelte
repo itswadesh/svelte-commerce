@@ -30,7 +30,7 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
 import { onMount } from 'svelte'

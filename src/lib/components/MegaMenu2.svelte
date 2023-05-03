@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import { page } from '$app/stores'
 import { fly } from 'svelte/transition'
 
@@ -45,7 +45,7 @@ let showDropdownMegaMenu = []
 						{#if showDropdownMegaMenu[mx]}
 							<ul
 								transition:fly="{{ y: 5, duration: 700 }}"
-								class="absolute top-20 left-0 z-[100] flex min-w-max flex-col rounded-b border bg-white p-2 text-sm uppercase   shadow-inner">
+								class="absolute top-20 left-0 z-[100] flex min-w-max flex-col rounded-b border bg-white p-2 text-sm uppercase shadow-inner">
 								{#each m.children as c}
 									<li class="h-auto w-full flex-1">
 										<a href="{c.link}" aria-label="Click to visit this page">
