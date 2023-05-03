@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import { page } from '$app/stores'
 import dayjs from 'dayjs'
 import hash from 'hash-it'
@@ -104,8 +104,6 @@ const schemaOrgEntity =
 					`${$page?.data?.store?.instagramUrl}`,
 					`${$page?.data?.store?.linkedinUrl}`,
 					`${$page?.data?.store?.youtubeUrl}`
-					// `https://github.com/${githubPage}`,
-					// `https://t.me/${telegramUsername}`
 				]
 		  }
 		: null
@@ -235,8 +233,6 @@ const schemaOrgPublisher = {
 		`${$page?.data?.store?.instagramUrl}`,
 		`${$page?.data?.store?.linkedinUrl}`,
 		`${$page?.data?.store?.youtubeUrl}`
-		// `https://github.com/${githubPage}`,
-		// `https://t.me/${telegramUsername}`
 	]
 }
 const schemaOrgProduct = {

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 
 export let pickedBanners

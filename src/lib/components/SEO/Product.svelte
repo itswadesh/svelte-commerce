@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 export let alternateJsonHref
 export let alternateXml = { title: '', href: '' }
 export let canonical

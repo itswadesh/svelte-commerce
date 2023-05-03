@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import { currency } from '$lib/utils'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
