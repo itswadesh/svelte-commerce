@@ -5,7 +5,6 @@ node_modules
 /.svelte-kit
 /build
 /functions
-pnpm-lock.yaml
 package-lock.json
 /package
 /prod
