@@ -78,6 +78,8 @@ async function remove(id, index) {
 			await del(`addresses/${id}?store=${$page?.data?.store?.id}`, $page.data.origin)
 
 			toast('Item deleted successfully', 'success')
+
+			invalidateAll()
 		} catch (e) {
 			data.err = e?.message
 			toast(e, 'error')
