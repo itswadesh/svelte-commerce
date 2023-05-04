@@ -515,7 +515,7 @@ function handleMobileCanvas() {
 						{/each}
 					{:else}
 						<div
-							class="w-full h-[512px] bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500">
+							class="w-full h-[512px] bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"
