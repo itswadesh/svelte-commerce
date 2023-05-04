@@ -12,10 +12,11 @@
 </style>
 
 <script>
+import { AddressService } from '$lib/services'
+import { del } from '$lib/utils/api'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
-import { del } from '$lib/utils/api'
-import { AddressService } from '$lib/services'
+import { toast } from '$lib/utils'
 import noEmptyAddress from '$lib/assets/no/empty-address.svg'
 import Pagination from '$lib/components/Pagination.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
@@ -66,16 +67,25 @@ async function saveAddr(e) {
 }
 
 async function remove(id, index) {
-	try {
-		loadingOnDelete[index] = true
+	data.err = null
 
-		await del(`addresses/${id}`, $page.data.origin)
+	if (confirm('Are you sure to delete?')) {
+		try {
+			loadingOnDelete[index] = true
 
-		await invalidateAll()
-	} catch (e) {
-		data.err = e
-	} finally {
-		loadingOnDelete[index] = false
+			toast('Deleting...Please wait', 'warning')
+
+			await del(`addresses/${id}?store=${$page?.data?.store?.id}`, $page.data.origin)
+
+			toast('Item deleted successfully', 'success')
+		} catch (e) {
+			data.err = e?.message
+			toast(e, 'error')
+		} finally {
+			loadingOnDelete[index] = false
+		}
+	} else {
+		return
 	}
 }
 </script>
@@ -92,7 +102,7 @@ async function remove(id, index) {
 			{/if}
 		</h1>
 
-		<a href="/my/addresses/new" aria-label="Click to route new address" data-sveltekit-preload-data>
+		<a href="/my/addresses/new" aria-label="Click to visit new address" data-sveltekit-preload-data>
 			<PrimaryButton type="button" loadingringsize="sm" class="text-sm">
 				<svg
 					class="h-5 w-5"
@@ -157,7 +167,7 @@ async function remove(id, index) {
 						<div class="grid grid-cols-2 divide-x border-t">
 							<a
 								href="{`/my/addresses/${i._id}`}"
-								aria-label="Click to route address details"
+								aria-label="Click to visit address details"
 								class="bg-transparent p-2 text-center font-semibold uppercase text-primary-500 transition duration-300 focus:outline-none hover:bg-zinc-100 hover:text-primary-700">
 								Edit
 							</a>
@@ -178,7 +188,9 @@ async function remove(id, index) {
 			{/each}
 		</ul>
 
-		<Pagination count="{Math.ceil(data.count / 40)}" current="{data.currentPage}" />
+		<Pagination
+			count="{Math.ceil((data.count || 1) / data.pageSize)}"
+			current="{data.currentPage || 1}" />
 	{:else}
 		<div class="flex h-[70vh] flex-col items-center justify-center text-center">
 			<img src="{noEmptyAddress}" alt="empty wishlist" class="mb-5 h-60 object-contain" />
@@ -189,7 +201,7 @@ async function remove(id, index) {
 				There's no address found, start adding address by clicking the add new address button above.
 			</p>
 
-			<a href="/" aria-label="Click to route home" data-sveltekit-preload-data>
+			<a href="/" aria-label="Click to visit home" data-sveltekit-preload-data>
 				<PrimaryButton class="w-40 py-2 text-sm">Shop Now</PrimaryButton>
 			</a>
 		</div>
