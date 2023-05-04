@@ -1,4 +1,5 @@
 <script>
+import { goto } from '$app/navigation'
 import BackButton from '$lib/ui/BackButton.svelte'
 import SaveAddress from '../../my/addresses/_SaveAddress.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
@@ -10,6 +11,13 @@ const seoProps = {
 
 export let data
 
+function redirectToCheckout({ detail }) {
+	// console.log('{detail}', { detail })
+
+	if (detail.id === 'new' && detail.newAddressId) {
+		goto(`/checkout/payment-options?address=${detail.newAddressId}`)
+	}
+}
 </script>
 
 <SEO {...seoProps} />
@@ -30,5 +38,9 @@ export let data
 		</div>
 	</header>
 
-	<SaveAddress address="{data.address}" countries="{data.countries}" states="{data.states}" />
+	<SaveAddress
+		address="{data.address}"
+		countries="{data.countries}"
+		states="{data.states}"
+		on:saved="{({ detail }) => redirectToCheckout({ detail })}" />
 </div>

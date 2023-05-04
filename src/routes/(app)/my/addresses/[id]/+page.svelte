@@ -1,4 +1,5 @@
 <script>
+import { goto } from '$app/navigation'
 import BackButton from '$lib/ui/BackButton.svelte'
 import SaveAddress from '../_SaveAddress.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
@@ -9,6 +10,14 @@ const seoProps = {
 }
 
 export let data
+
+function redirectToNewAddressDetailsPage({ detail }) {
+	// console.log('{detail}', { detail })
+
+	if (detail.id === 'new' && detail.newAddressId) {
+		goto(`/my/addresses/${detail.newAddressId}`)
+	}
+}
 </script>
 
 <SEO {...seoProps} />
@@ -29,5 +38,9 @@ export let data
 		<BackButton to="/my/addresses?sort=-updatedAt" />
 	</header>
 
-	<SaveAddress address="{data.address}" countries="{data.countries}" states="{data.states}" />
+	<SaveAddress
+		address="{data.address}"
+		countries="{data.countries}"
+		states="{data.states}"
+		on:saved="{({ detail }) => redirectToNewAddressDetailsPage({ detail })}" />
 </div>

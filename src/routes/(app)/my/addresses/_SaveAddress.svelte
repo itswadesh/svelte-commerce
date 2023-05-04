@@ -64,14 +64,10 @@ async function SaveAddress(address) {
 			origin: $page.data.origin
 		})
 
-		toast('Address Info Saved.', 'success')
-		dispatch('saved')
+		const newAddressId = newAddress._id || newAddress.id
 
-		if (newAddress?._id || newAddress?.id) {
-			if (id === 'new') {
-				goto(`/checkout/payment-options?address=${newAddress._id || newAddress?.id}`)
-			}
-		}
+		toast('Address Info Saved.', 'success')
+		dispatch('saved', { id, newAddressId })
 	} catch (e) {
 		err = e?.body
 		toast(err, 'error')
