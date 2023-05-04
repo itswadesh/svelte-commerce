@@ -12,10 +12,11 @@
 </style>
 
 <script>
+import { AddressService } from '$lib/services'
+import { del } from '$lib/utils/api'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
-import { del } from '$lib/utils/api'
-import { AddressService } from '$lib/services'
+import { toast } from '$lib/utils'
 import noEmptyAddress from '$lib/assets/no/empty-address.svg'
 import Pagination from '$lib/components/Pagination.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
@@ -66,16 +67,25 @@ async function saveAddr(e) {
 }
 
 async function remove(id, index) {
-	try {
-		loadingOnDelete[index] = true
+	data.err = null
 
-		await del(`addresses/${id}`, $page.data.origin)
+	if (confirm('Are you sure to delete?')) {
+		try {
+			loadingOnDelete[index] = true
 
-		await invalidateAll()
-	} catch (e) {
-		data.err = e
-	} finally {
-		loadingOnDelete[index] = false
+			toast('Deleting...Please wait', 'warning')
+
+			await del(`addresses/${id}?store=${$page?.data?.store?.id}`, $page.data.origin)
+
+			toast('Item deleted successfully', 'success')
+		} catch (e) {
+			data.err = e?.message
+			toast(e, 'error')
+		} finally {
+			loadingOnDelete[index] = false
+		}
+	} else {
+		return
 	}
 }
 </script>
