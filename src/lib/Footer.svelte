@@ -513,7 +513,11 @@ async function getStoreData() {
 
 		<div
 			class="flex flex-wrap items-center justify-center gap-2 text-sm text-zinc-500 sm:gap-5 md:justify-between">
-			<p>Copyright {getYear()} © {$page.data.store?.websiteName} made with ❤️</p>
+			<p>
+				Copyright {getYear()} © {$page.data.store?.websiteName} | Powered by
+				<a href="https://litekart.in">Litekart</a>
+				made with ❤️
+			</p>
 
 			<div class="flex items-center justify-center gap-4">
 				<a
