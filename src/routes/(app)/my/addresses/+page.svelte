@@ -1,17 +1,4 @@
-<style>
-.line-clamp-3 {
-	overflow: hidden;
-	display: -webkit-box;
-	-webkit-box-orient: vertical;
-	-webkit-line-clamp: 3;
-}
-
-.h-rem-empty {
-	height: 70vh;
-}
-</style>
-
-<script>
+<script lang="ts">
 import { AddressService } from '$lib/services'
 import { del } from '$lib/utils/api'
 import { goto, invalidateAll } from '$app/navigation'
