@@ -4,16 +4,12 @@
 		top: 85px;
 	}
 }
-.frosted-black {
-	backdrop-filter: blur(5px);
-	background-color: hsla(0, 0%, 0%, 0.8);
-}
 .height {
 	max-height: 85vh;
 }
 </style>
 
-<script>
+<script lang="ts">
 import { currency, dateOnly, generatePriceRange, toast } from '$lib/utils'
 import { fade } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'

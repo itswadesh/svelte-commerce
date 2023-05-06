@@ -1,11 +1,4 @@
 <style>
-.frosted-black {
-	backdrop-filter: blur(5px);
-	background-color: hsla(0, 0%, 0%, 0.8);
-}
-.frosted-blur {
-	backdrop-filter: blur(12px);
-}
 .shake-animation {
 	animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 	transform: translate3d(0, 0, 0);
