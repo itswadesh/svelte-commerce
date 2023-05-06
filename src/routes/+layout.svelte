@@ -5,9 +5,7 @@
 </style>
 
 <script lang="ts">
-// import { partytownSnippet } from '@builder.io/partytown/integration'
 import './../app.css'
-import { cubicIn, cubicOut } from 'svelte/easing'
 import { navigating } from '$app/stores'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
@@ -20,7 +18,6 @@ import storeClosed from '$lib/assets/store-closed.png'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 
 export let data
-// console.log('$page', $page)
 
 $: innerWidth = 0
 

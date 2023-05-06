@@ -5,8 +5,6 @@ import landingPageMobileBox from '$lib/assets/landing-page-mobile-box.webp'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
-// console.log('data = ', data)
-// console.log('$page = ', $page)
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -80,14 +78,8 @@ let selectedBrandSlug = $page.params.slug
 
 $: if (data.megamenu.length) {
 	const mocv = data.megamenu.filter((obj) => obj.name === 'Mobile Cover')
-	// console.log('mocv', mocv)
-	// console.log('mocv[0].children', mocv[0].children)
-
 	const selectedBrandObject = mocv[0].children.filter((obj) => obj.slug === selectedBrandSlug)
-	// console.log('selectedBrandObject', selectedBrandObject)
-
 	selectedBrandAllModels = selectedBrandObject[0].children
-	// console.log('selectedBrandAllModels', selectedBrandAllModels)
 }
 </script>
 
