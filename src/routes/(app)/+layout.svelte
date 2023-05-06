@@ -1,7 +1,7 @@
 <script lang="ts">
-import Nav from '$lib/Nav.svelte'
-import Footer from '$lib/Footer.svelte'
-import PageTransitions from '$lib/PageTransitions.svelte'
+import Nav from '$lib/components/Nav.svelte'
+import Footer from '$lib/components/Footer.svelte'
+import PageTransitions from '$lib/components/PageTransitions.svelte'
 
 export let data
 

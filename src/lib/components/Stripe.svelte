@@ -2,11 +2,11 @@
 import { createEventDispatcher, onMount } from 'svelte'
 import { fly } from 'svelte/transition'
 import { goto } from '$app/navigation'
-import { OrdersService } from './services'
+import { OrdersService } from './../services'
 import { page } from '$app/stores'
 import { toast } from '$lib/utils'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import type { Error, PaymentMethod } from './types'
+import type { Error, PaymentMethod } from './../types'
 
 const dispatch = createEventDispatcher()
 

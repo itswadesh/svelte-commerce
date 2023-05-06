@@ -3,7 +3,7 @@ import { page } from '$app/stores'
 import errAnimated from '$lib/assets/no/error.svg'
 import errBackground from '$lib/assets/no/error-background.png'
 import menu from '$lib/config/menu'
-import Nav from '$lib/Nav.svelte'
+import Nav from '$lib/components/Nav.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 
 export let data
