@@ -1,0 +1,7 @@
+export * as CategoriesHome from './CategoriesHome.svelte'
+export * as CategoriesMobile from './CategoriesMobile.svelte'
+export * as CategoriesSlider from './CategoriesSlider.svelte'
+export * as Deals from './Deals.svelte'
+export * as Hero from './Hero.svelte'
+export * as HeroBanners from './HeroBanners.svelte'
+export * as PickedBanners from './PickedBanners.svelte'
