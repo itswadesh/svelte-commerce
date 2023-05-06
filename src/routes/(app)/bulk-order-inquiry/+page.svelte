@@ -1,8 +1,4 @@
 <style>
-.success-animation {
-	margin: 150px auto;
-}
-
 .checkmark {
 	width: 100px;
 	height: 100px;
@@ -70,7 +66,7 @@ import Radio from '$lib/ui/Radio.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
-import { bulkOrderEnquiry } from '$lib/services/ContactService'
+import { ContactService } from '$lib/services'
 
 let seoProps = {
 	title: `Bulk order inquiry`,
@@ -112,7 +108,7 @@ function updateQuantity(detail) {
 
 async function submit() {
 	try {
-		const res = await bulkOrderEnquiry({
+		const res = await ContactService.bulkOrderEnquiry({
 			name: blukOrder.name,
 			companayName: blukOrder.companayName,
 			email: blukOrder.email,
@@ -432,7 +428,7 @@ async function submit() {
 					</ul>
 				</div>
 
-				<a href="/" aria-label="Click to route home" class="mx-auto block max-w-max">
+				<a href="/" aria-label="Click to visit home" class="mx-auto block max-w-max">
 					<PrimaryButton class="px-10">Go to Home</PrimaryButton>
 				</a>
 			</div>

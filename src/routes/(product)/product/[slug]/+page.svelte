@@ -90,7 +90,6 @@ const cookies = Cookie()
 const isServer = import.meta.env.SSR
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -196,8 +195,6 @@ if (data.product?.size?.name === 'One Size') {
 }
 
 if (data.product?.expiryDate) {
-	// console.log('data.product?.expiryDate', data.product?.expiryDate)
-
 	// Create a Date object from the UTC string
 	const date = new Date(data.product?.expiryDate)
 
@@ -207,15 +204,11 @@ if (data.product?.expiryDate) {
 	// Convert the difference in milliseconds to minutes
 	const diffMinutes = Math.round(diffMs / (1000 * 60))
 
-	// Log the result
-	// console.log(diffMinutes + ' minutes')
-
 	if (diffMinutes > 0) {
 		isExpired = true
 	} else {
 		isExpired = false
 	}
-	// console.log('isExpired',isExpired)
 }
 
 onMount(async () => {
