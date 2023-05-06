@@ -1,14 +1,3 @@
-<style>
-@media (min-width: 1024px) {
-	.top-rem-map {
-		top: 85px;
-	}
-}
-.height {
-	max-height: 85vh;
-}
-</style>
-
 <script lang="ts">
 import { page } from '$app/stores'
 import dayjs from 'dayjs'

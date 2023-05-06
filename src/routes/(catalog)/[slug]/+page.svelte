@@ -1,14 +1,3 @@
-<style>
-@media (min-width: 1024px) {
-	.top-rem-map {
-		top: 85px;
-	}
-}
-.height {
-	max-height: 85vh;
-}
-</style>
-
 <script lang="ts">
 import { currency, dateOnly, generatePriceRange, toast } from '$lib/utils'
 import { fade } from 'svelte/transition'
@@ -31,48 +20,25 @@ import SEO from '$lib/components/SEO/index.svelte'
 export let data
 
 let seoProps = {
-	// addressCountry: 'India',
-	// addressLocality: 'Semiliguda, Koraput',
-	// addressRegion: 'Odisha',
-	// alternateJsonHref: '',
-	// alternateXml: { title: '', href: '' },
 	brand: $page.data.store?.title,
 	breadcrumbs: data.category?.children,
 	caption: $page.data.store?.title,
 	category: data.category?.name,
 	contentUrl: $page.data.store?.logo,
 	createdAt: `${data.category?.createdAt || '_'}`,
-	// depth: { unitCode: '', value: '' },
 	email: `${$page?.data?.store?.email}`,
-	// entityMeta: '',
-	// facebookPage: '',
-	// gtin: '',
-	// height: '',
 	id: $page?.url?.href,
 	image: `${data.category?.img}`,
 	logo: $page.data.store?.logo,
 	ogSquareImage: { url: '', width: 56, height: 56 },
 	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00'],
-	// popularity: data.category?.popularity,
-	// postalCode: '764036',
-	// price: data.category?.price,
-	// priceRange: `${data.category?.price}-${data.category?.mrp}`,
-	// ratingCount: 1,
-	// ratingValue: +data.category?.ratings + 1,
-	// sku: data.category?.sku,
-	// streetAddress: 'Padmajyoti Marg, Nandapur Road',
 	timeToRead: 0,
 	updatedAt: `${data.category?.updatedAt || '_'}`,
-	// weight: { unitCode: '', value: '' },
-	// width: { unitCode: '', value: '' },
-	// wlwmanifestXmlHref: '',
 	metadescription: data.category?.metaDescription,
-	// article: false,
 	canonical: `${$page?.url.href}`,
 	datePublished: `${data.category?.publishedAt || '_'}`,
 	description: ` ${data.category?.description}`,
 	dnsPrefetch: `//cdn.jsdelivr.net`,
-	// entityMeta: null,
 	featuredImage: {
 		url: `${data.category?.img}`,
 		width: 675,
@@ -89,10 +55,8 @@ let seoProps = {
 	productAvailability: `${data.category?.stock}`,
 	productBrand: `${data.category?.brandName || $page.data.store?.title}`,
 	productName: `${data.category?.name}`,
-	// productPriceAmount: `${data.category?.price}`,
 	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
 	slug: `${data.category?.slug}`,
-	// timeToRead: 0,
 	title: `${data.category?.name || 'Buy online in - ' + $page.data.store?.websiteName}`,
 	twitterImage: { url: `${data.category?.img}` }
 }
