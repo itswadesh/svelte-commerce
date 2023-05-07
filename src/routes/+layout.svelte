@@ -144,7 +144,25 @@ $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : ''
 	<PreloadingIndicator />
 {/if}
 
-{#if !$page.data.store.closed}
+{#if $page.data.store}
+	<div class="h-screen w-full bg-white flex items-center justify-center">
+		<div
+			class="fixed top-0 inset-x-0 z-10 p-5 px-10 flex items-center justify-center border-b shadow-md">
+			<LazyImg src="{$page.data.store.logo}" class="h-10 w-auto object-contain object-center" />
+		</div>
+
+		<div class="flex items-center justify-center p-10 bg-white text-center">
+			<div
+				class="p-10 flex flex-col gap-2 items-center justify-center border-4 rounded-3xl shadow-2xl">
+				<img src="{storeClosed}" alt="" class="h-52 w-auto object-contain object-center" />
+
+				<p class="text-lg font-semibold text-zinc-500">
+					{$page.data.store.closedMessage}
+				</p>
+			</div>
+		</div>
+	</div>
+{:else if !$page.data.store.closed}
 	<section class="minimum-width-rem relative flex min-h-screen flex-col bg-white antialiased">
 		<div class="h-rem w-full flex-1">
 			<slot />
