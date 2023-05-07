@@ -30,7 +30,7 @@ import {
 	youtubeUrl,
 	IMAGE_CDN_URL
 } from '$lib/config'
-import { fetchInit } from './InitService'
+import { fetchInit } from './init-service'
 
 export const getStoreData = async ({
 	cookieStore,
