@@ -26,7 +26,7 @@ export const youtubeUrl = 'https://www.youtube.com/channel/UCW_HHzkVcv37smPvwvbZ
 // Bellow PWA Settings, can't configure from admin
 export const ogLanguage = 'en_US'
 export const siteLanguage = 'en-US'
-export const icon = 'static/icon.png'
+export const icon = 'static/litekart-icon-512x512-black.png'
 export const backgroundColor = '#1b4079'
 export const themeColor = '#d62828'
 export const shortcuts = [
