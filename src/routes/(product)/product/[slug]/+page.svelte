@@ -1608,7 +1608,7 @@ function handleMobileCanvas() {
 					{/each}
 				</ul>
 			{:then value}
-				{#if value.moreFromCategory}
+				{#if value.moreFromCategory && value.moreFromCategory[0] && value.moreFromCategory[0].slug}
 					<div class="mb-5 sm:mb-10">
 						<SimilarProductsFromCategorySlug data="{value.moreFromCategory}" />
 					</div>
