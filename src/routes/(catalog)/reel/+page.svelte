@@ -15,7 +15,7 @@
 
 <script>
 import { page } from '$app/stores'
-import CatelogNav from '$lib/CatelogNav.svelte'
+import {CatelogNav} from '$lib/components'
 import dayjs from 'dayjs'
 import SEO from '$lib/components/SEO/index.svelte'
 import ReelSlider from './ReelSlider.svelte'

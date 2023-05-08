@@ -21,17 +21,13 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { ProductService } from '$lib/services'
 import { sorts } from '$lib/config'
-import CatelogNav from '$lib/CatelogNav.svelte'
-import DesktopFilter from '$lib/components/DesktopFilter.svelte'
-import dotsLoading from '$lib/assets/dots-loading.gif'
-import DummyProductCard from '$lib/DummyProductCard.svelte'
-import MobileFilter from '$lib/components/MobileFilter.svelte'
-import noDataAvailable from '$lib/assets/no/no-data-available.png'
-import Pagination from '$lib/components/Pagination.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import ProductCard from '$lib/ProductCard.svelte'
-import SEO from '$lib/components/SEO/index.svelte'
+import {Pagination,ProductCard,CatelogNav,DesktopFilter,DummyProductCard,MobileFilter} from '$lib/components'
 
+import dotsLoading from '$lib/assets/dots-loading.gif'
+import noDataAvailable from '$lib/assets/no/no-data-available.png'
+
+import {PrimaryButton} from '$lib/ui'
+import SEO from '$lib/components/SEO/index.svelte'
 export let data
 
 let seoProps = {

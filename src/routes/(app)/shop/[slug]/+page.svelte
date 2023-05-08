@@ -9,11 +9,10 @@ import dayjs from 'dayjs'
 import Fuse from 'fuse.js'
 import Hero from '$lib/home/Hero.svelte'
 import HeroBanners from '$lib/home/HeroBanners.svelte'
-import MobileFooter from '$lib/MobileFooter.svelte'
+import {MobileFooter} from '$lib/components'
 import PickedBanners from '$lib/home/PickedBanners.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-import Skeleton from '$lib/ui/Skeleton.svelte'
-import Textbox from '$lib/ui/Textbox.svelte'
+import {Skeleton,Textbox} from '$lib/ui'
 
 let today = dayjs(new Date()).toISOString()
 

@@ -2,8 +2,8 @@
 import type { Product } from '$lib/types'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import ProductCard from '$lib/ProductCard.svelte'
-import DummyProductCard from '$lib/DummyProductCard.svelte'
+import {ProductCard,DummyProductCard} from '$lib/components'
+
 import { ProductService } from '$lib/services'
 
 let name = 'Product Tab'

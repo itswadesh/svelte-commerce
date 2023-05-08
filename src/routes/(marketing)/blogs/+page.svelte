@@ -9,7 +9,7 @@ import { browser } from '$app/environment'
 import { constructURL2 } from '$lib/utils'
 import { goto } from '$app/navigation'
 import BlogPostGrid from './_BlogPostGrid.svelte'
-import Pagination from '$lib/components/Pagination.svelte'
+import {Pagination} from '$lib/components'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data

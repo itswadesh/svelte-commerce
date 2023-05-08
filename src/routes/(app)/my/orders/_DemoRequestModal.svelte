@@ -4,7 +4,7 @@
 import { goto } from '$app/navigation'
 
 import { store } from '$lib/store'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import {PrimaryButton} from '$lib/ui'
 import { page } from '$app/stores'
 import dayjs from 'dayjs'
 import { toast } from '$lib/utils'

@@ -1,8 +1,7 @@
 <script>
 import noEmptyFaqs from '$lib/assets/no/empty-faqs.svg'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import {Skeleton,PrimaryButton} from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
-import Skeleton from '$lib/ui/Skeleton.svelte'
 
 export let data
 

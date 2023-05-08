@@ -1,5 +1,5 @@
 <script lang="ts">
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import {LazyImg} from '$lib/components'
 
 export let pickedBanners
 </script>

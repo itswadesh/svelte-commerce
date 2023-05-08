@@ -11,13 +11,9 @@ import {
 	CategoriesMobile,
 	CategoriesSlider
 } from '$lib/home'
-import DummyProductCard from '$lib/components/DummyProductCard.svelte'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import MobileFooter from '$lib/components/MobileFooter.svelte'
+import {Footer,ProductCard,MobileFooter,LazyImg,DummyProductCard} from '$lib/components'
 import PickedBanners from '$lib/home/PickedBanners.svelte'
-import ProductCard from '$lib/components/ProductCard.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-import Footer from '$lib/components/Footer.svelte'
 
 let today = dayjs(new Date()).toISOString()
 

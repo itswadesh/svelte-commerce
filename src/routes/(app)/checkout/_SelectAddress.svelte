@@ -1,6 +1,6 @@
 <script>
 import { goto } from '$app/navigation'
-import Error from '$lib/components/Error.svelte'
+import {Error} from '$lib/components'
 import AddressSkeleton from './_AddressSkeleton.svelte'
 import { createEventDispatcher } from 'svelte'
 import { del } from '$lib/utils/api'

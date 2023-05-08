@@ -2,11 +2,9 @@
 import { ContactService } from '$lib/services'
 import { page } from '$app/stores'
 import { toast } from '$lib/utils'
-import Error from '$lib/components/Error.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import {Error} from '$lib/components'
+import {TextboxFloating,TextareaFloating,PrimaryButton} from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
-import TextareaFloating from '$lib/ui/TextareaFloating.svelte'
-import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
 
 let seoProps = {
 	title: `Contact Us`,

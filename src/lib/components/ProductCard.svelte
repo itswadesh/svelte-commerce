@@ -25,10 +25,10 @@
 </style>
 
 <script>
-import { currency } from './utils'
+import { currency } from '$lib/utils'
 import { fly } from 'svelte/transition'
 import { page } from '$app/stores'
-import LazyImg from './components/Image/LazyImg.svelte'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 

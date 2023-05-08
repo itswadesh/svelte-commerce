@@ -1,7 +1,5 @@
 <script>
-import CheckoutHeader from '$lib/components/CheckoutHeader.svelte'
-import Error from '$lib/components/Error.svelte'
-import Pricesummary from '$lib/components/Pricesummary.svelte'
+import {CheckoutHeader,Error,Pricesummary} from '$lib/components'
 import SelectAddress from '../_SelectAddress.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import { invalidateAll } from '$app/navigation'

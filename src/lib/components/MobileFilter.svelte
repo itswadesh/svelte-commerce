@@ -14,9 +14,7 @@ import { fly } from 'svelte/transition'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { sorts } from '$lib/config'
-import CheckboxEs from '$lib/ui/CheckboxEs.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import RadioEs from '$lib/ui/RadioEs.svelte'
+import {RadioEs,CheckboxEs,PrimaryButton} from '$lib/ui'
 
 const dispatch = createEventDispatcher()
 

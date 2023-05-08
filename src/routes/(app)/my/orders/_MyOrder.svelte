@@ -9,11 +9,10 @@
 import { currency, date } from '$lib/utils'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import OrderListSkeleton from './_OrderListSkeleton.svelte'
-import Pagination from '$lib/components/Pagination.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import {LazyImg,Pagination} from '$lib/components'
+import {PrimaryButton} from '$lib/ui'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 

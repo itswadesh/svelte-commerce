@@ -5,8 +5,8 @@ import { constructURL2, toast } from '$lib/utils'
 import { createEventDispatcher, onMount } from 'svelte'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
-import CheckboxEs from '$lib/ui/CheckboxEs.svelte'
-import RadioEs from '$lib/ui/RadioEs.svelte'
+import {RadioEs,CheckboxEs} from '$lib/ui'
+
 
 const dispatch = createEventDispatcher()
 
