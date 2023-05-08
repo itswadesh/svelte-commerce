@@ -3,7 +3,7 @@ import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import CatelogNav from '$lib/CatelogNav.svelte'
 import landingPageMobileBox from '$lib/assets/landing-page-mobile-box.webp'
-import Breadcrumb from '$lib/components/Breadcrumb.svelte'
+import {Breadcrumb} from '$lib/components'
 import SEO from '$lib/components/SEO/index.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 
