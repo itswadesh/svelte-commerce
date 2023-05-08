@@ -86,11 +86,11 @@ const verifyIsMobileNum = () => {
 		if (value[0] === '+') {
 			isEmail = false
 			isMobile = true
-			maxlength = 14
+			maxlength = 13
 		} else if (parseFloat(value) == value) {
 			isEmail = false
 			isMobile = true
-			maxlength = 14
+			maxlength = 13
 		} else {
 			isEmail = true
 			isMobile = false
