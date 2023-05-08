@@ -161,6 +161,7 @@ async function saveProfile() {
 								<Textbox
 									type="text"
 									placeholder="Eg: +91000000000"
+									maxlength="13"
 									bind:value="{data.profile.phone}"
 									on:input="{() => (formChanged = true)}" />
 							</div>
