@@ -1,24 +1,15 @@
-<style>
-.frosted-black {
-	backdrop-filter: blur(12px);
-	background-color: hsla(0, 0%, 0%, 0.5);
-}
-</style>
-
-<script>
-import { CartService, OrdersService, PaymentMethodService } from '$lib/services'
+<script lang="ts">
+import { OrdersService } from '$lib/services'
 import { fireGTagEvent } from '$lib/utils/gTag'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { post } from '$lib/utils/api'
 import { toast } from '$lib/utils'
 import CheckoutHeader from '$lib/components/CheckoutHeader.svelte'
 import Error from '$lib/components/Error.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import logo from '$lib/assets/logo.svg'
 import Pricesummary from '$lib/components/Pricesummary.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 const seoProps = {
@@ -85,7 +76,7 @@ async function submit(pm) {
 
 			goto(`/payment/success?id=${res?._id}&status=PAYMENT_SUCCESS&provider=COD`)
 		} catch (e) {
-			toast(e, 'error')
+			toast(e?.body?.message || e, 'error')
 		} finally {
 			loading = false
 		}
@@ -103,7 +94,7 @@ async function submit(pm) {
 				toast('Something went wrong', 'error')
 			}
 		} catch (e) {
-			toast(e?.body, 'error')
+			toast(e?.body?.message || e, 'error')
 		} finally {
 			loading = false
 		}

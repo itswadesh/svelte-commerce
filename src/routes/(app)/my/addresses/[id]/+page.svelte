@@ -12,8 +12,6 @@ const seoProps = {
 export let data
 
 function redirectToNewAddressDetailsPage({ detail }) {
-	// console.log('{detail}', { detail })
-
 	if (detail.id === 'new' && detail.newAddressId) {
 		goto(`/my/addresses/${detail.newAddressId}`)
 	}
