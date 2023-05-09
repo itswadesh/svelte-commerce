@@ -1,10 +1,3 @@
-<style>
-.frosted-black {
-	backdrop-filter: blur(5px);
-	background-color: hsla(0, 0%, 0%, 0.8);
-}
-</style>
-
 <script lang="ts">
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
 import { slide } from 'svelte/transition'

@@ -1,21 +1,5 @@
-<style>
-@media (min-width: 1024px) {
-	.top-rem-map {
-		top: 85px;
-	}
-}
-.frosted-black {
-	backdrop-filter: blur(5px);
-	background-color: hsla(0, 0%, 0%, 0.8);
-}
-.height {
-	max-height: 85vh;
-}
-</style>
-
-<script>
+<script lang="ts">
 import { page } from '$app/stores'
-import CatelogNav from '$lib/CatelogNav.svelte'
 import dayjs from 'dayjs'
 import SEO from '$lib/components/SEO/index.svelte'
 import ReelSlider from './ReelSlider.svelte'
