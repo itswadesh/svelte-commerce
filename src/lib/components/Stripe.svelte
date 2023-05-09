@@ -5,7 +5,7 @@ import { goto } from '$app/navigation'
 import { OrdersService } from './../services'
 import { page } from '$app/stores'
 import { toast } from '$lib/utils'
-import {PrimaryButton} from '$lib/ui'
+import { PrimaryButton } from '$lib/ui'
 import type { Error, PaymentMethod } from './../types'
 
 const dispatch = createEventDispatcher()

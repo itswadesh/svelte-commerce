@@ -345,7 +345,11 @@ function hideitems() {
 				data-sveltekit-preload-data>
 				<div class="mt-0.5 flex flex-wrap items-baseline justify-start leading-4 text-xs gap-1.5">
 					<span class="font-bold text-sm sm:text-base whitespace-nowrap">
-						{currency(product.price, $page.data?.store?.currencySymbol)}
+						{#if product.price}
+							{currency(product.price, $page.data?.store?.currencySymbol)}
+						{:else}
+							Free
+						{/if}
 					</span>
 
 					{#if product.mrp > product.price}

@@ -15,14 +15,14 @@
 <script>
 import { applyAction, enhance } from '$app/forms'
 import { currency } from '$lib/utils'
-import { WishlistService } from '$lib/services'
 import { fireGTagEvent } from '$lib/utils/gTag'
 import { invalidateAll } from '$app/navigation'
+import { LazyImg, DummyProductCard } from '$lib/components'
 import { page } from '$app/stores'
 import { post } from '$lib/utils/api'
+import { PrimaryButton, BlackButton } from '$lib/ui'
+import { WishlistService } from '$lib/services'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
-import {PrimaryButton,BlackButton} from '$lib/ui'
-import {LazyImg,DummyProductCard} from '$lib/components'
 import noEmptyWishlist from '$lib/assets/no/empty-wishlist.svg'
 import WishlistSkeleton from './_WishlistSkeleton.svelte'
 

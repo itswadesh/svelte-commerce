@@ -1,9 +1,9 @@
 <script>
 import { currency, date } from '$lib/utils'
+import { LazyImg } from '$lib/components'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import {PrimaryButton,BackButton} from '$lib/ui'
-import {LazyImg} from '$lib/components'
+import { PrimaryButton, BackButton } from '$lib/ui'
 import dayjs from 'dayjs'
 import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import OrderListSkeleton from '../_OrderListSkeleton.svelte'

@@ -15,9 +15,9 @@ import { del } from '$lib/utils/api'
 import { goto, invalidateAll } from '$app/navigation'
 import { loginUrl } from '$lib/store'
 import { page } from '$app/stores'
-import {Pagination,LazyImg} from '$lib/components'
+import { Pagination, LazyImg } from '$lib/components'
+import { PrimaryButton } from '$lib/ui'
 import noOnlineReviewAnimate from '$lib/assets/no/online-review-animate.svg'
-import {PrimaryButton} from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
 
 const seoProps = {

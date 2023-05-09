@@ -1,6 +1,6 @@
 <script>
 import { goto } from '$app/navigation'
-import {BackButton} from '$lib/ui'
+import { BackButton } from '$lib/ui'
 import SaveAddress from '../../my/addresses/_SaveAddress.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 

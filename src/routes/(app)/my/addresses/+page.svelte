@@ -3,10 +3,10 @@ import { AddressService } from '$lib/services'
 import { del } from '$lib/utils/api'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
+import { Pagination } from '$lib/components'
 import { toast } from '$lib/utils'
 import noEmptyAddress from '$lib/assets/no/empty-address.svg'
-import {Pagination} from '$lib/components'
-import {PrimaryButton} from '$lib/ui'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 const seoProps = {
