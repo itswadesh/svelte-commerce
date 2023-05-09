@@ -1,8 +1,4 @@
 <style>
-.success-animation {
-	margin: 150px auto;
-}
-
 .checkmark {
 	width: 100px;
 	height: 100px;

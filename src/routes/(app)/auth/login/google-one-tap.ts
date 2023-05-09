@@ -28,6 +28,5 @@ export const googleOneTap = (
 		})
 		window.google.accounts.id.prompt()
 	} else {
-		// console.error('Google client is blocked')
 	}
 }
