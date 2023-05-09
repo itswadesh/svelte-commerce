@@ -7,7 +7,7 @@
 	padding: 12px;
 	border: 1px solid #8885;
 	border-radius: 4px;
-	z-index: 2;
+	z-index: 1;
 	text-align: left;
 	box-shadow: 3px 4px 5px 0 #8885;
 	background-color: white;
@@ -26,21 +26,22 @@
 
 <script lang="ts">
 import { useRegisterSW } from 'virtual:pwa-register/svelte'
-const { needRefresh, updateServiceWorker, offlineReady } = useRegisterSW({
-	onRegistered(r) {
-		// uncomment following code if you want check for updates
-		// r && setInterval(() => {
-		//    r.update()
-		// }, 20000 /* 20s for testing purposes */)
+
+const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW({
+	onRegistered(swr) {
+		console.log(`SW registered: ${swr}`)
 	},
-	onRegisterError(error) {}
+	onRegisterError(error) {
+		console.log('SW registration error', error)
+	}
 })
-const close = () => {
+
+function close() {
 	offlineReady.set(false)
 	needRefresh.set(false)
 }
-// $: toast = $offlineReady || $needRefresh
-$: toast = $needRefresh
+
+$: toast = $offlineReady || $needRefresh
 </script>
 
 {#if toast}

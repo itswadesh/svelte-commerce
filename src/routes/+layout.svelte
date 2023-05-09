@@ -13,7 +13,7 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 // import { pwaInfo } from 'virtual:pwa-info'
 import { ToastContainer, FlatToast } from 'svelte-toasts'
-import {BackToTop,LazyImg,GoogleAnalytics} from '$lib/components' // Can not dynamically import Google Analytics, it throws gtag not found error, not even party town
+import { BackToTop, LazyImg, GoogleAnalytics } from '$lib/components' // Can not dynamically import Google Analytics, it throws gtag not found error, not even party town
 import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 import storeClosed from '$lib/assets/store-closed.png'
 
@@ -35,14 +35,11 @@ $: if (innerWidth < 1024) {
 onMount(async () => {
 	// if (pwaInfo) {
 	// 	const { registerSW } = await import('virtual:pwa-register')
-
 	// 	registerSW({
 	// 		immediate: true,
-
 	// 		onRegistered(r) {
 	// 			console.log(`SW Registered: ${r}`)
 	// 		},
-
 	// 		onRegisterError(error) {
 	// 			console.log('SW registration error', error)
 	// 		}
