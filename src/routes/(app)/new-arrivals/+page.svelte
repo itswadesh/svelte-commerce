@@ -1,10 +1,8 @@
 <script>
 import { goto } from '$app/navigation'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import MobileFooter from '$lib/MobileFooter.svelte'
+import {LazyImg,ProductCard,MobileFooter} from '$lib/components'
 import noDataAvailable from '$lib/assets/no/no-data-available.png'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import ProductCard from '$lib/ProductCard.svelte'
+import {PrimaryButton} from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data

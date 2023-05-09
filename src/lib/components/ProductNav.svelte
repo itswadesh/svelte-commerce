@@ -8,8 +8,8 @@
 <script lang="ts">
 import { page } from '$app/stores'
 import AutosuggestModal from './AutosuggestModal.svelte'
-import type { Cart, Me } from './types'
-import { goback } from './utils'
+import type { Cart, Me } from '$lib/types'
+import { goback } from '$lib/utils'
 
 export let cart: Cart
 export let data

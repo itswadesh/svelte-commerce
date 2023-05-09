@@ -1,7 +1,7 @@
 <script lang="ts">
 import { createEventDispatcher, onDestroy, onMount } from 'svelte'
 import { fly } from 'svelte/transition'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import {PrimaryButton} from '$lib/ui'
 
 const dispatch = createEventDispatcher()
 

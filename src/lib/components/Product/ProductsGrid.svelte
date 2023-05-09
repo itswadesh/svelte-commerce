@@ -1,6 +1,6 @@
 <script lang="ts">
-import DummyProductCard from '$lib/DummyProductCard.svelte'
-import ProductCard from '$lib/ProductCard.svelte'
+import {DummyProductCard,ProductCard} from '$lib/components'
+
 
 export let title = 'Recommended Products'
 export let products = []

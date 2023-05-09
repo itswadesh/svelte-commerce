@@ -27,7 +27,7 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import appStore from '$lib/assets/app/app-store.svg'
 import googlePlay from '$lib/assets/app/google-play.png'
-import type { Category } from './types'
+import type { Category } from '$lib/types'
 
 export let me
 export let store = {}

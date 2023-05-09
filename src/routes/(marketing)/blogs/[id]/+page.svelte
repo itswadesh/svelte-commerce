@@ -1,7 +1,7 @@
 <script>
 import { date } from '$lib/utils'
 import { page } from '$app/stores'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import {LazyImg} from '$lib/components'
 import SEO from '$lib/components/SEO/index.svelte'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'
 

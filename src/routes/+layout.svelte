@@ -9,13 +9,11 @@ import './../app.css'
 import { navigating } from '$app/stores'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { pwaInfo } from 'virtual:pwa-info'
+// import { pwaInfo } from 'virtual:pwa-info'
 import { ToastContainer, FlatToast } from 'svelte-toasts'
-import BackToTop from '$lib/components/BackToTop.svelte'
-import GoogleAnalytics from '$lib/components/GoogleAnalytics.svelte' // Can not dynamically import Google Analytics, it throws gtag not found error, not even party town
+import {BackToTop,LazyImg,GoogleAnalytics} from '$lib/components' // Can not dynamically import Google Analytics, it throws gtag not found error, not even party town
 import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 import storeClosed from '$lib/assets/store-closed.png'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
 
 export let data
 
@@ -32,24 +30,24 @@ $: if (innerWidth < 1024) {
 // let ReloadPrompt
 
 onMount(async () => {
-	if (pwaInfo) {
-		const { registerSW } = await import('virtual:pwa-register')
+	// if (pwaInfo) {
+	// 	const { registerSW } = await import('virtual:pwa-register')
 
-		registerSW({
-			immediate: true,
+	// 	registerSW({
+	// 		immediate: true,
 
-			onRegistered(r) {
-				console.log(`SW Registered: ${r}`)
-			},
+	// 		onRegistered(r) {
+	// 			console.log(`SW Registered: ${r}`)
+	// 		},
 
-			onRegisterError(error) {
-				console.log('SW registration error', error)
-			}
-		})
-	}
+	// 		onRegisterError(error) {
+	// 			console.log('SW registration error', error)
+	// 		}
+	// 	})
+	// }
 })
 
-$: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : ''
+// $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : ''
 
 // Add the Partytown script to the DOM head
 // let scriptEl
@@ -86,9 +84,9 @@ $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : ''
 // }
 </script>
 
-<svelte:head>
+<!-- <svelte:head>
 	{@html webManifest}
-</svelte:head>
+</svelte:head> -->
 
 <!-- <svelte:head>
 	<script>

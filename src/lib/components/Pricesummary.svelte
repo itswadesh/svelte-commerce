@@ -1,7 +1,7 @@
 <script lang="ts">
 import { createEventDispatcher } from 'svelte'
 import { currency } from '$lib/utils'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import {PrimaryButton} from '$lib/ui'
 import { page } from '$app/stores'
 
 const dispatch = createEventDispatcher()

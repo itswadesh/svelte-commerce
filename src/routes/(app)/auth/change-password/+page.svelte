@@ -4,11 +4,10 @@ import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import { post } from '$lib/utils/api'
 import { UserService } from '$lib/services'
-import Error from '$lib/components/Error.svelte'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import {LazyImg,Error} from '$lib/components'
+
+import {TextboxFloating,PrimaryButton} from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
-import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
 
 const seoProps = {
 	title: 'Change Password',

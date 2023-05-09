@@ -1,6 +1,5 @@
 <script>
-import Footer from '$lib/Footer.svelte'
-import Nav from '$lib/Nav.svelte'
+import {Nav,Footer} from '$lib/components'
 import { page } from '$app/stores'
 </script>
 

@@ -1,7 +1,6 @@
 <script lang="ts">
-import DummyProductCard from '$lib/DummyProductCard.svelte'
-import ProductCard from '$lib/ProductCard.svelte'
-import ProductSkeleton from '$lib/ui/ProductSkeleton.svelte'
+import {ProductCard,DummyProductCard} from '$lib/components'
+import {ProductSkeleton} from '$lib/ui'
 
 export let data
 </script>

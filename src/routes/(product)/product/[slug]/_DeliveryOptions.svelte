@@ -7,7 +7,7 @@ import dayjs from 'dayjs'
 import productCod from '$lib/assets/product/cod.png'
 import productDelivery from '$lib/assets/product/delivery.png'
 import productOppositeArrows from '$lib/assets/product/opposite-arrows.png'
-import Skeleton from '$lib/ui/Skeleton.svelte'
+import {Skeleton} from '$lib/ui'
 
 export let product, deliveryDetails
 

@@ -1,6 +1,6 @@
 <script>
 import { page } from '$app/stores'
-import Breadcrumb from '$lib/components/Breadcrumb.svelte'
+import {Breadcrumb} from '$lib/components'
 import landingPageMobileBox from '$lib/assets/landing-page-mobile-box.webp'
 import SEO from '$lib/components/SEO/index.svelte'
 

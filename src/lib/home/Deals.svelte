@@ -1,8 +1,7 @@
 <script>
 import { onMount } from 'svelte'
 import { SplideSlide } from '@splidejs/svelte-splide'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import ProductCard from '$lib/ProductCard.svelte'
+import {LazyImg,ProductCard} from '$lib/components'
 
 export let deal
 

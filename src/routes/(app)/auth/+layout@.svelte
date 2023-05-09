@@ -11,7 +11,7 @@
 <script lang="ts">
 import { navigating, page } from '$app/stores'
 import { scale } from 'svelte/transition'
-import PageTransitions from '$lib/PageTransitions.svelte'
+import {PageTransitions} from '$lib/components'
 import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 </script>
 

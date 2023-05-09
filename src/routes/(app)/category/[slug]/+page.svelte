@@ -5,13 +5,9 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { sorts } from '$lib/config'
 import { toast } from '$lib/utils'
-import DesktopFilter from '$lib/components/DesktopFilter.svelte'
-import MobileFilter from '$lib/components/MobileFilter.svelte'
-import MobileFooter from '$lib/MobileFooter.svelte'
+import {ProductCard,Pagination,MobileFooter,DesktopFilter,MobileFilter} from '$lib/components'
 import noDataAvailable from '$lib/assets/no/no-data-available.png'
-import Pagination from '$lib/components/Pagination.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import ProductCard from '$lib/ProductCard.svelte'
+import {PrimaryButton} from '$lib/ui'
 
 export let data
 

@@ -16,7 +16,7 @@
 
 <script>
 import { createEventDispatcher } from 'svelte'
-import { getExtension, toast } from './utils'
+import { getExtension, toast } from '$lib/utils'
 
 const dispatch = createEventDispatcher()
 
