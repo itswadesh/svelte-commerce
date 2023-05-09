@@ -5,11 +5,9 @@ import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { toast } from '$lib/utils'
-import CheckoutHeader from '$lib/components/CheckoutHeader.svelte'
-import Error from '$lib/components/Error.svelte'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import {Pricesummary,LazyImg,CheckoutHeader,Error} from '$lib/components'
 import logo from '$lib/assets/logo.svg'
-import Pricesummary from '$lib/components/Pricesummary.svelte'
+import {PrimaryButton} from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
 
 const seoProps = {
@@ -37,7 +35,7 @@ $: if (data.paymentMethods?.length === 1 && data.paymentMethods[0]?.type === 'pg
 let Stripe
 
 onMount(async () => {
-	const StripeModule = await import('$lib/Stripe.svelte')
+	const StripeModule = await import('$lib/components/Stripe.svelte')
 	Stripe = StripeModule.default
 
 	const razorpayScript = document.createElement('script')

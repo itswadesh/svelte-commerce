@@ -3,8 +3,8 @@ import { page } from '$app/stores'
 import errAnimated from '$lib/assets/no/error.svg'
 import errBackground from '$lib/assets/no/error-background.png'
 import menu from '$lib/config/menu'
-import Nav from '$lib/Nav.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import {Nav} from '$lib/components'
+import {PrimaryButton} from '$lib/ui'
 
 export let data
 

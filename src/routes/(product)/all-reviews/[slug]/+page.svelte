@@ -3,10 +3,9 @@ import { date, toast } from '$lib/utils'
 import { ReviewService } from '$lib/services'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import BackButton from '$lib/ui/BackButton.svelte'
+import {BackButton} from '$lib/ui'
 import dotsLoading from '$lib/assets/dots-loading.gif'
-import ProductNav from '$lib/ProductNav.svelte'
-import ReviewGallery from '$lib/components/Product/ReviewGallery.svelte'
+import {ReviewGallery,ProductNav} from '$lib/components'
 
 export let data
 

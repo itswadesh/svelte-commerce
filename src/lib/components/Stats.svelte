@@ -1,5 +1,5 @@
 <script lang="ts">
-import LazyImg from './components/Image/LazyImg.svelte'
+import {LazyImg} from '$lib/components'
 
 export let students, tests, schools, results
 </script>

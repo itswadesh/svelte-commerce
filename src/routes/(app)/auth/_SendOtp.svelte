@@ -1,6 +1,6 @@
 <script>
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
+import {TextboxFloating,PrimaryButton} from '$lib/ui'
+
 import { createEventDispatcher } from 'svelte'
 import { onMount } from 'svelte'
 

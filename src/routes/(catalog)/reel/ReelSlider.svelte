@@ -5,7 +5,7 @@ import { SplideSlide } from '@splidejs/svelte-splide'
 // import '@splidejs/splide-extension-video/dist/css/splide-extension-video.min.css'
 
 // const videos = ['3GNQL3alB-Y', 'xLJ2QQDrN9k', 'cdz__ojQOuU', 'oS6N_ZBFDZE']
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import {LazyImg} from '$lib/components'
 import { currency } from '$lib/utils'
 import { currencySymbol } from '$lib/config'
 import { CartService } from '$lib/services'

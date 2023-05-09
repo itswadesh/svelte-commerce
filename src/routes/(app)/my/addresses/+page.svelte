@@ -5,8 +5,8 @@ import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import { toast } from '$lib/utils'
 import noEmptyAddress from '$lib/assets/no/empty-address.svg'
-import Pagination from '$lib/components/Pagination.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import {Pagination} from '$lib/components'
+import {PrimaryButton} from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
 
 const seoProps = {

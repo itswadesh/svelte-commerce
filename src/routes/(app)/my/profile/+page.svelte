@@ -10,13 +10,10 @@ import { page } from '$app/stores'
 import { put } from '$lib/utils/api'
 import { toast } from '$lib/utils'
 import Cookie from 'cookie-universal'
-import CtrlS from '$lib/components/CtrlS.svelte'
 import dayjs from 'dayjs'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import {Skeleton,Textbox,PrimaryButton} from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
-import SingleImageUpload from '$lib/SingleImageUpload.svelte'
-import Skeleton from '$lib/ui/Skeleton.svelte'
-import Textbox from '$lib/ui/Textbox.svelte'
+import {CtrlS,SingleImageUpload} from '$lib/components'
 
 export let data
 

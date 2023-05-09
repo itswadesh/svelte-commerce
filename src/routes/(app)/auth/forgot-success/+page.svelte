@@ -1,7 +1,7 @@
 <script>
 import { page } from '$app/stores'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import {LazyImg} from '$lib/components'
+import {PrimaryButton} from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
 
 const seoProps = {

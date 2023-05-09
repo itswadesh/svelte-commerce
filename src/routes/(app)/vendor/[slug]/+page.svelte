@@ -1,10 +1,7 @@
 <script>
 import { dateOnly } from '$lib/utils'
-import DummyProductCard from '$lib/DummyProductCard.svelte'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import Pagination from '$lib/components/Pagination.svelte'
-import ProductCard from '$lib/ProductCard.svelte'
-import RatingStarDisplay from '$lib/ui/RatingStarDisplay.svelte'
+import {DummyProductCard,Pagination,LazyImg,ProductCard} from '$lib/components'
+import {RatingStarDisplay} from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'
 

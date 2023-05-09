@@ -1,7 +1,7 @@
 <script>
 import { page } from '$app/stores'
 import noCancle from '$lib/assets/no/cancle.png'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import {PrimaryButton} from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
 
 let seoProps = {

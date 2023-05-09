@@ -2,20 +2,18 @@
 // import logo from '$lib/assets/logo.svg'
 // import ProductTab from '$lib/components/Product/ProductTab.svelte'
 import { page } from '$app/stores'
-import CategoriesHome from '$lib/home/CategoriesHome.svelte'
-import CategoriesMobile from '$lib/home/CategoriesMobile.svelte'
-import CategoriesSlider from '$lib/home/CategoriesSlider.svelte'
 import dayjs from 'dayjs'
-import Deals from '$lib/home/Deals.svelte'
-import DummyProductCard from '$lib/DummyProductCard.svelte'
-import Hero from '$lib/home/Hero.svelte'
-import HeroBanners from '$lib/home/HeroBanners.svelte'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import MobileFooter from '$lib/MobileFooter.svelte'
+import {
+	CategoriesHome,
+	Deals,
+	Hero,
+	HeroBanners,
+	CategoriesMobile,
+	CategoriesSlider
+} from '$lib/home'
+import {Footer,ProductCard,MobileFooter,LazyImg,DummyProductCard} from '$lib/components'
 import PickedBanners from '$lib/home/PickedBanners.svelte'
-import ProductCard from '$lib/ProductCard.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-import Footer from '$lib/Footer.svelte'
 
 let today = dayjs(new Date()).toISOString()
 
