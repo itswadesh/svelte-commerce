@@ -3,14 +3,14 @@ lockfileVersion: 5.4
 specifiers:
   '@builder.io/partytown': 0.8.0
   '@playwright/test': ^1.33.0
-  '@sentry/node': 7.50.0
-  '@sentry/svelte': 7.50.0
-  '@sentry/tracing': 7.50.0
+  '@sentry/node': 7.51.0
+  '@sentry/svelte': 7.51.0
+  '@sentry/tracing': 7.51.0
   '@splidejs/splide-extension-video': 0.8.0
   '@splidejs/svelte-splide': 0.2.9
   '@sveltejs/adapter-auto': 2.0.1
   '@sveltejs/adapter-vercel': 2.4.3
-  '@sveltejs/kit': 1.15.10
+  '@sveltejs/kit': 1.16.2
   '@tailwindcss/line-clamp': ^0.4.4
   '@tailwindcss/typography': ^0.5.9
   '@types/bcrypt': ^5.0.0
@@ -20,7 +20,7 @@ specifiers:
   '@woocommerce/woocommerce-rest-api': 1.0.1
   amazon-s3-uri: ^0.1.1
   autoprefixer: ^10.4.14
-  aws-sdk: ^2.1371.0
+  aws-sdk: ^2.1373.0
   bcrypt: ^5.1.0
   cookie: ^0.5.0
   cookie-universal: ^2.2.2
@@ -28,7 +28,7 @@ specifiers:
   date-fns: 2.30.0
   dayjs: ^1.11.7
   dotenv: 16.0.3
-  eslint: ^8.39.0
+  eslint: ^8.40.0
   eslint-config-prettier: ^8.8.0
   eslint-plugin-svelte3: ^4.0.0
   fuse.js: 6.6.2
@@ -41,7 +41,7 @@ specifiers:
   prettier-plugin-svelte: ^2.10.0
   shelljs: 0.8.5
   ssh2shell: 2.0.8
-  svelte: ^3.58.0
+  svelte: ^3.59.0
   svelte-confetti: ^1.2.2
   svelte-preprocess: ^5.0.3
   svelte-share-buttons-component: 1.5.5
@@ -53,25 +53,25 @@ specifiers:
   tslib: ^2.5.0
   typescript: ~5.0.4
   vanilla-lazyload: ^17.8.3
-  vite: ^4.3.4
+  vite: ^4.3.5
   vite-plugin-pwa: 0.14.7
   zod: 3.21.4
   zod-form-data: 2.0.1
 
 dependencies:
-  '@vite-pwa/sveltekit': 0.2.1_56zjkwx6l7yxcsha3pg3penwla
+  '@vite-pwa/sveltekit': 0.2.1_vf2arxbek45zu47cad6vo5m4yi
 
 devDependencies:
   '@builder.io/partytown': 0.8.0
   '@playwright/test': 1.33.0
-  '@sentry/node': 7.50.0
-  '@sentry/svelte': 7.50.0_svelte@3.59.0
-  '@sentry/tracing': 7.50.0
+  '@sentry/node': 7.51.0
+  '@sentry/svelte': 7.51.0_svelte@3.59.0
+  '@sentry/tracing': 7.51.0
   '@splidejs/splide-extension-video': 0.8.0
   '@splidejs/svelte-splide': 0.2.9
-  '@sveltejs/adapter-auto': 2.0.1_@sveltejs+kit@1.15.10
-  '@sveltejs/adapter-vercel': 2.4.3_@sveltejs+kit@1.15.10
-  '@sveltejs/kit': 1.15.10_svelte@3.59.0+vite@4.3.5
+  '@sveltejs/adapter-auto': 2.0.1_@sveltejs+kit@1.16.2
+  '@sveltejs/adapter-vercel': 2.4.3_@sveltejs+kit@1.16.2
+  '@sveltejs/kit': 1.16.2_svelte@3.59.0+vite@4.3.5
   '@tailwindcss/line-clamp': 0.4.4_tailwindcss@3.3.2
   '@tailwindcss/typography': 0.5.9_tailwindcss@3.3.2
   '@types/bcrypt': 5.0.0
@@ -1602,45 +1602,45 @@ packages:
       picomatch: 2.3.1
       rollup: 3.21.5
 
-  /@sentry-internal/tracing/7.50.0:
-    resolution: {integrity: sha512-4TQ4vN0aMBWsUXfJWk2xbe4x7fKfwCXgXKTtHC/ocwwKM+0EefV5Iw9YFG8IrIQN4vMtuRzktqcs9q0/Sbv7tg==}
+  /@sentry-internal/tracing/7.51.0:
+    resolution: {integrity: sha512-mhXl4B02OQq6/vevjX04OchmQbxPRaLci9vTTPcPcIz/n+wkum29ze35gHcJsPJUesScjd0m19Xou3C8fNnZRA==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/core': 7.50.0
-      '@sentry/types': 7.50.0
-      '@sentry/utils': 7.50.0
+      '@sentry/core': 7.51.0
+      '@sentry/types': 7.51.0
+      '@sentry/utils': 7.51.0
       tslib: 1.14.1
     dev: true
 
-  /@sentry/browser/7.50.0:
-    resolution: {integrity: sha512-a+UYbP89+SAvW47/p9wxEi9eWlyp/SkYl52OCdZNXnplQY4kQIOVyiaIs5nnCxIxZgXKrhAX4eo1E9ykleFuNQ==}
+  /@sentry/browser/7.51.0:
+    resolution: {integrity: sha512-SqaXM9qhGnSqEcdWEnzHKKkCLcMzE0cAc/Y6VQOttGjkP3KRW8INdWrN7F0ySBdy6BMar6ViDJKhB6cMKsuCIg==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry-internal/tracing': 7.50.0
-      '@sentry/core': 7.50.0
-      '@sentry/replay': 7.50.0
-      '@sentry/types': 7.50.0
-      '@sentry/utils': 7.50.0
+      '@sentry-internal/tracing': 7.51.0
+      '@sentry/core': 7.51.0
+      '@sentry/replay': 7.51.0
+      '@sentry/types': 7.51.0
+      '@sentry/utils': 7.51.0
       tslib: 1.14.1
     dev: true
 
-  /@sentry/core/7.50.0:
-    resolution: {integrity: sha512-6oD1a3fYs4aiNK7tuJSd88LHjYJAetd7ZK/AfJniU7zWKj4jxIYfO8nhm0qdnhEDs81RcweVDmPhWm3Kwrzzsg==}
+  /@sentry/core/7.51.0:
+    resolution: {integrity: sha512-GgYwlXU8Y1kDEHsJO1Bmr2CNan5BzoNRR0TDBmxRgI/DgTNNSYrXeFDELgPi9/p/0XENeuttzDZ3iYd1nF7meA==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/types': 7.50.0
-      '@sentry/utils': 7.50.0
+      '@sentry/types': 7.51.0
+      '@sentry/utils': 7.51.0
       tslib: 1.14.1
     dev: true
 
-  /@sentry/node/7.50.0:
-    resolution: {integrity: sha512-11UJBKoQFMp7f8sbzeO2gENsKIUkVCNBTzuPRib7l2K1HMjSfacXmwwma7ZEs0mc3ofIZ1UYuyONAXmI1lK9cQ==}
+  /@sentry/node/7.51.0:
+    resolution: {integrity: sha512-UHJ0yN3I8hSrythr3/KPewh+xLIdjF6AU+BW3bgsP0ZtztrftrQk9+XnWRIX0p6ZstzoP4F3arkJIXkWfOk5Pg==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry-internal/tracing': 7.50.0
-      '@sentry/core': 7.50.0
-      '@sentry/types': 7.50.0
-      '@sentry/utils': 7.50.0
+      '@sentry-internal/tracing': 7.51.0
+      '@sentry/core': 7.51.0
+      '@sentry/types': 7.51.0
+      '@sentry/utils': 7.51.0
       cookie: 0.4.2
       https-proxy-agent: 5.0.1
       lru_map: 0.3.3
@@ -1649,46 +1649,46 @@ packages:
       - supports-color
     dev: true
 
-  /@sentry/replay/7.50.0:
-    resolution: {integrity: sha512-EYRk+DTZ5luwfkiCaDpBC3YBKIEdkReTUNZtWDVUytSVjsCnttkAipx/y6bxy3HN+rSXungMd3XKQT5RNMRUNA==}
+  /@sentry/replay/7.51.0:
+    resolution: {integrity: sha512-3jv+chhhlOVFjPKYJOEJy+J+9yTUEHxybZ0tTwGZYOJp9T8HdO21L6NjYk5b9wEqJonhZHp1BiQnzG82NLDkSQ==}
     engines: {node: '>=12'}
     dependencies:
-      '@sentry/core': 7.50.0
-      '@sentry/types': 7.50.0
-      '@sentry/utils': 7.50.0
+      '@sentry/core': 7.51.0
+      '@sentry/types': 7.51.0
+      '@sentry/utils': 7.51.0
     dev: true
 
-  /@sentry/svelte/7.50.0_svelte@3.59.0:
-    resolution: {integrity: sha512-SyuPjmmfzfDQR+3X1R41CPu6oQ1nAC2MdFxQ6VJs72ojfEc/IOgnbdI9FIbp1f2ZpQF5INHYAVMK+RNBcztG5w==}
+  /@sentry/svelte/7.51.0_svelte@3.59.0:
+    resolution: {integrity: sha512-r5+U/BKFfN6wGbM6r/fumzqzceadUhA/WI1c2XCbrvm2So+NRAe/DTCXPOpNHb8/yL9ghzbIt2QcfnhyEVQSLA==}
     engines: {node: '>=8'}
     peerDependencies:
       svelte: 3.x
     dependencies:
-      '@sentry/browser': 7.50.0
-      '@sentry/types': 7.50.0
-      '@sentry/utils': 7.50.0
+      '@sentry/browser': 7.51.0
+      '@sentry/types': 7.51.0
+      '@sentry/utils': 7.51.0
       magic-string: 0.26.7
       svelte: 3.59.0
       tslib: 1.14.1
     dev: true
 
-  /@sentry/tracing/7.50.0:
-    resolution: {integrity: sha512-avbIgDA/Bktci5OeWb5T6JCS5edWHeket92KeFNpMH79NfF46csA5yBgM+q0X9/R4swZd5fuTQwh4y6BHA4lEQ==}
+  /@sentry/tracing/7.51.0:
+    resolution: {integrity: sha512-NXBW0ucxb2MJJbkzPfwpaLGEs8DrSTp6FwqG6ejRdVydViyoWKFaRl0dedw1u2ACGDITEYnTfLO6YWTc3ruUNA==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry-internal/tracing': 7.50.0
+      '@sentry-internal/tracing': 7.51.0
     dev: true
 
-  /@sentry/types/7.50.0:
-    resolution: {integrity: sha512-Zo9vyI98QNeYT0K0y57Rb4JRWDaPEgmp+QkQ4CRQZFUTWetO5fvPZ4Gb/R7TW16LajuHZlbJBHmvmNj2pkL2kw==}
+  /@sentry/types/7.51.0:
+    resolution: {integrity: sha512-8REzzY0DslDryp6Yxj+tJ4NkXFHulLW9k8dgZV2Qo/0rBDMKir8g0IHYeN8ZBcnWrx2F+6rQb6uN6BjyLZY7Dg==}
     engines: {node: '>=8'}
     dev: true
 
-  /@sentry/utils/7.50.0:
-    resolution: {integrity: sha512-iyPwwC6fwJsiPhH27ZbIiSsY5RaccHBqADS2zEjgKYhmP4P9WGgHRDrvLEnkOjqQyKNb6c0yfmv83n0uxYnolw==}
+  /@sentry/utils/7.51.0:
+    resolution: {integrity: sha512-y5zq4IfZDCm6cg0EQJMghUM4YjZToFni7J5OKopLXKVtc9YtRtkYoFuFqEWm4HBuBwplreiS/KkDQgWn3FVn7A==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/types': 7.50.0
+      '@sentry/types': 7.51.0
       tslib: 1.14.1
     dev: true
 
@@ -1716,21 +1716,21 @@ packages:
       magic-string: 0.25.9
       string.prototype.matchall: 4.0.8
 
-  /@sveltejs/adapter-auto/2.0.1_@sveltejs+kit@1.15.10:
+  /@sveltejs/adapter-auto/2.0.1_@sveltejs+kit@1.16.2:
     resolution: {integrity: sha512-anxxYMcQy7HWSKxN4YNaVcgNzCHtNFwygq72EA1Xv7c+5gSECOJ1ez1PYoLciPiFa7A3XBvMDQXUFJ2eqLDtAA==}
     peerDependencies:
       '@sveltejs/kit': ^1.0.0
     dependencies:
-      '@sveltejs/kit': 1.15.10_svelte@3.59.0+vite@4.3.5
+      '@sveltejs/kit': 1.16.2_svelte@3.59.0+vite@4.3.5
       import-meta-resolve: 3.0.0
     dev: true
 
-  /@sveltejs/adapter-vercel/2.4.3_@sveltejs+kit@1.15.10:
+  /@sveltejs/adapter-vercel/2.4.3_@sveltejs+kit@1.16.2:
     resolution: {integrity: sha512-3k/3udwaioFYdKDAgQcWSByB+KCbtjX+ARonYGCtYE0iuxWLStrESxy3SaU+17XD5Frh8w7tfY8ft4TV3ej3Dg==}
     peerDependencies:
       '@sveltejs/kit': ^1.5.0
     dependencies:
-      '@sveltejs/kit': 1.15.10_svelte@3.59.0+vite@4.3.5
+      '@sveltejs/kit': 1.16.2_svelte@3.59.0+vite@4.3.5
       '@vercel/nft': 0.22.6
       esbuild: 0.17.18
     transitivePeerDependencies:
@@ -1738,8 +1738,8 @@ packages:
       - supports-color
     dev: true
 
-  /@sveltejs/kit/1.15.10_svelte@3.59.0+vite@4.3.5:
-    resolution: {integrity: sha512-qRZxODfsixjgY+7OOxhAQB8viVaxjyDUz2lM6cE22kObzF5mNke81FIxB2wdaOX42LyfVwIYULZQSr7duxLZ7w==}
+  /@sveltejs/kit/1.16.2_svelte@3.59.0+vite@4.3.5:
+    resolution: {integrity: sha512-yxcpA4nvlVlJ+VyYnj0zD3QN05kfmoh4OyitlPrVG34nnZSHzFpE4eZ33X1A/tc9prslSFRhpM6rWngCs0nM8w==}
     engines: {node: ^16.14 || >=18}
     hasBin: true
     requiresBuild: true
@@ -2008,14 +2008,14 @@ packages:
       weakmap-polyfill: 2.0.4
     dev: true
 
-  /@vite-pwa/sveltekit/0.2.1_56zjkwx6l7yxcsha3pg3penwla:
+  /@vite-pwa/sveltekit/0.2.1_vf2arxbek45zu47cad6vo5m4yi:
     resolution: {integrity: sha512-B13xF2slkrnRZhAwSgje4EvsX3+pdmxDYXIJ/iiRotYa9o+ThwfhtMrpvmapqHBazzIlvOu9HY7TV8W2qxh+AA==}
     engines: {node: '>=16.14'}
     peerDependencies:
       '@sveltejs/kit': ^1.3.1
       vite-plugin-pwa: ^0.14.0
     dependencies:
-      '@sveltejs/kit': 1.15.10_svelte@3.59.0+vite@4.3.5
+      '@sveltejs/kit': 1.16.2_svelte@3.59.0+vite@4.3.5
       vite-plugin-pwa: 0.14.7_vite@4.3.5
     dev: false
 

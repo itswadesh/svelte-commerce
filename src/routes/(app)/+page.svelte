@@ -11,7 +11,7 @@ import {
 	CategoriesMobile,
 	CategoriesSlider
 } from '$lib/home'
-import {Footer,ProductCard,MobileFooter,LazyImg,DummyProductCard} from '$lib/components'
+import { Footer, ProductCard, MobileFooter, LazyImg, DummyProductCard } from '$lib/components'
 import PickedBanners from '$lib/home/PickedBanners.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
