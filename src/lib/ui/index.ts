@@ -1,23 +1,49 @@
-export * as Checkbox from './Checkbox.svelte'
-export * as Errors from './Errors.svelte'
-export * as BackButton from './BackButton.svelte'
-export * as BlackButton from './BlackButton.svelte'
-export * as CheckboxEs from './CheckboxEs.svelte'
-export * as CheckboxOfMultiProducts from './CheckboxOfMultiProducts.svelte'
-export * as GradientButton from './GradientButton.svelte'
-export * as PrimaryButton from './PrimaryButton.svelte'
-export * as ProductSkeleton from './ProductSkeleton.svelte'
-export * as Radio from './Radio.svelte'
-export * as RadioColor from './RadioColor.svelte'
-export * as RadioEs from './RadioEs.svelte'
-export * as RadioSize from './RadioSize.svelte'
-export * as RatingStarDisplay from './RatingStarDisplay.svelte'
-export * as SearchBox from './SearchBox.svelte'
-export * as Skeleton from './Skeleton.svelte'
-export * as Textarea from './Textarea.svelte'
-export * as TextareaFloating from './TextareaFloating.svelte'
-export * as Textbox from './Textbox.svelte'
-export * as TextboxFloating from './TextboxFloating.svelte'
-export * as TextboxFloatingBorder from './TextboxFloatingBorder.svelte'
-export * as ToggleSwitch from './ToggleSwitch.svelte'
-export * as WhiteButton from './WhiteButton.svelte'
+import BackButton from './BackButton.svelte'
+import BlackButton from './BlackButton.svelte'
+import Checkbox from './Checkbox.svelte'
+import CheckboxEs from './CheckboxEs.svelte'
+import CheckboxOfMultiProducts from './CheckboxOfMultiProducts.svelte'
+import Errors from './Errors.svelte'
+import GradientButton from './GradientButton.svelte'
+import PrimaryButton from './PrimaryButton.svelte'
+import ProductSkeleton from './ProductSkeleton.svelte'
+import Radio from './Radio.svelte'
+import RadioColor from './RadioColor.svelte'
+import RadioEs from './RadioEs.svelte'
+import RadioSize from './RadioSize.svelte'
+import RatingStarDisplay from './RatingStarDisplay.svelte'
+import SearchBox from './SearchBox.svelte'
+import Skeleton from './Skeleton.svelte'
+import Textarea from './Textarea.svelte'
+import TextareaFloating from './TextareaFloating.svelte'
+import Textbox from './Textbox.svelte'
+import TextboxFloating from './TextboxFloating.svelte'
+import TextboxFloatingBorder from './TextboxFloatingBorder.svelte'
+import ToggleSwitch from './ToggleSwitch.svelte'
+import WhiteButton from './WhiteButton.svelte'
+
+export {
+    BackButton,
+    BlackButton,
+    Checkbox,
+    CheckboxEs,
+    CheckboxOfMultiProducts,
+    Errors,
+    GradientButton,
+    PrimaryButton,
+    ProductSkeleton,
+    Radio,
+    RadioColor,
+    RadioEs,
+    RadioSize,
+    RatingStarDisplay,
+    SearchBox,
+    Skeleton,
+    Textarea,
+    TextareaFloating,
+    Textbox,
+    TextboxFloating,
+    TextboxFloatingBorder,
+    ToggleSwitch,
+    WhiteButton
+}

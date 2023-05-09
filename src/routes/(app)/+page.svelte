@@ -91,7 +91,7 @@ let showFooter = false
 
 <SEO {...seoProps} />
 
-<div class="bg-opacity-25 bg-center bg-repeat">
+<div class="bg-opacity-25 bg-center bg-repeat min-h-screen">
 	<div class="mb-14 lg:mb-0">
 		<!-- Categories slider mobile -->
 

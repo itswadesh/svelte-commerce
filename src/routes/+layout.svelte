@@ -16,6 +16,7 @@ import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 import storeClosed from '$lib/assets/store-closed.png'
 
 export let data
+// console.log('$page', $page)
 
 $: innerWidth = 0
 

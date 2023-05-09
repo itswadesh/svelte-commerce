@@ -5,6 +5,7 @@ import Deals from './Deals.svelte'
 import Hero from './Hero.svelte'
 import HeroBanners from './HeroBanners.svelte'
 import PickedBanners from './PickedBanners.svelte'
+
 export {
 	CategoriesHome,
 	CategoriesMobile,
