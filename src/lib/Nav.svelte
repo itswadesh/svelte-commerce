@@ -623,7 +623,7 @@ const getSelectionLabel = (option) => option.name
 												src="{me.avatar}"
 												alt=""
 												width="40"
-												class="object-cover object-top" />
+												class="w-10 h-10 rounded-full object-cover object-top" />
 										{:else}
 											<img
 												src="{userEmptyProfile}"
