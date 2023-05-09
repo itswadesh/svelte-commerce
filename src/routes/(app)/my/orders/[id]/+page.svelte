@@ -1,14 +1,13 @@
 <script>
 import { currency, date } from '$lib/utils'
+import { LazyImg } from '$lib/components'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import BackButton from '$lib/ui/BackButton.svelte'
+import { PrimaryButton, BackButton } from '$lib/ui'
 import dayjs from 'dayjs'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import OrderListSkeleton from '../_OrderListSkeleton.svelte'
 import OrderTracking from '../_OrderTracking.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 import ReturnTracking from '../_ReturnTracking.svelte'
@@ -22,8 +21,6 @@ let showDemoScheduler = false
 let loading = false
 
 export let data
-
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let clazz
 export { clazz as class }
@@ -171,12 +168,12 @@ onMount(() => {
 
 										<div class="flex flex-wrap items-center gap-2">
 											<span class="whitespace-nowrap text-base font-bold">
-												{currency(item.price)}
+												{currency(item.price, $page.data?.store?.currencySymbol)}
 											</span>
 
 											{#if item.mrp > item.price}
 												<span class="whitespace-nowrap text-zinc-500 line-through">
-													{currency(item.mrp)}
+													{currency(item.mrp, $page.data?.store?.currencySymbol)}
 												</span>
 
 												{#if Math.floor(((item.mrp - item.price) / item.mrp) * 100) > 0}
@@ -191,7 +188,7 @@ onMount(() => {
 											<div class="mt-2 xl:mt-0 xl:w-1/3">
 												<a
 													href="/my/reviews/create?pid={item?.pid}&oid={item?.orderItemId}&ref=/product/{item?.slug}"
-													aria-label="Click to route rate & review product"
+													aria-label="Click to visit rate & review product"
 													class="whitespace-nowrap font-semibold text-indigo-500 focus:outline-none hover:underline">
 													Rate & Review Product
 												</a>
@@ -317,7 +314,7 @@ onMount(() => {
 						{#if data.order?.replaceValidTill != null && now <= data.order?.replaceValidTill && !data.order?.isReplaceOrReturn}
 							<a
 								href="/my/exchange?orderId=${data.order?.orderId}&itemId=${data.order?.itemId}"
-								aria-label="Click to route exchange"
+								aria-label="Click to visit exchange"
 								class="block">
 								<TransparentButton class="w-48" type="button" border>Exchange</TransparentButton>
 							</a>
@@ -326,7 +323,7 @@ onMount(() => {
 						<!-- {#if data.order?.returnValidTill != null && now <= data.order?.returnValidTill && !data.order?.isReplaceOrReturn}
 							<a
 								href="/my/return?orderId=${data.order?.orderId}&itemId=${data.order?.itemId}"
-								aria-label="Click to route return"
+								aria-label="Click to visit return"
 								class="block">
 								<TransparentButton class="w-48" type="button" border>Return</TransparentButton>
 							</a>
@@ -343,7 +340,7 @@ onMount(() => {
 
 			<span class="mb-4 text-xs">Add items to it now</span>
 
-			<a href="/" aria-label="Click to route home" data-sveltekit-preload-data>
+			<a href="/" aria-label="Click to visit home" data-sveltekit-preload-data>
 				<PrimaryButton class="w-40 py-2 text-sm">Shop Now</PrimaryButton>
 			</a>
 		</div>

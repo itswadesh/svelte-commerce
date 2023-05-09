@@ -6,19 +6,15 @@ import { fly } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import { ProductCard, Pricesummary, LazyImg, Error } from '$lib/components'
+import { Skeleton, Textbox, PrimaryButton } from '$lib/ui'
+import Cookie from 'cookie-universal'
 import dotsLoading from '$lib/assets/dots-loading.gif'
-import Error from '$lib/components/Error.svelte'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
-import Pricesummary from '$lib/components/Pricesummary.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import ProductCard from '$lib/ProductCard.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 import SEO from '$lib/components/SEO/index.svelte'
-import Skeleton from '$lib/ui/Skeleton.svelte'
-import Textbox from '$lib/ui/Textbox.svelte'
-import Cookie from 'cookie-universal'
+
 const cookies = Cookie()
 
 export let data

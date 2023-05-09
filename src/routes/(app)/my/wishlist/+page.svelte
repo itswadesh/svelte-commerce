@@ -1,11 +1,9 @@
 <script>
-import MobileFooter from '$lib/MobileFooter.svelte'
+import { MobileFooter } from '$lib/components'
 import SEO from '$lib/components/SEO/index.svelte'
 import Wishlist from './_Wishlist.svelte'
 
 export let data
-
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	title: `Wishlist`,
