@@ -5,16 +5,11 @@ import AutosuggestModal from './AutosuggestModal.svelte'
 import BackToTop from './BackToTop.svelte'
 import Breadcrumb from './Breadcrumb.svelte'
 import CatelogNav from './CatelogNav.svelte'
-import CheckboxEsSquare from './Varni/CheckboxEsSquare.svelte'
 import CheckoutHeader from './CheckoutHeader.svelte'
 import CtrlS from './CtrlS.svelte'
-import DesktopFilter from './DesktopFilter.svelte'
-import DesktopFilterBordered from './Varni/DesktopFilterBordered.svelte'
 import DummyProductCard from './DummyProductCard.svelte'
 import Error from './Error.svelte'
 import FatNav from './Varni/FatNav.svelte'
-import Footer from './Footer.svelte'
-import Footer2 from './Varni/Footer2.svelte'
 import Gallery from './Product/Gallery.svelte'
 import GoogleAnalytics from './GoogleAnalytics.svelte'
 import HeadingUnderline from './HeadingUnderline.svelte'
@@ -35,12 +30,9 @@ import PageTransitions from './PageTransitions.svelte'
 import Pagination from './Pagination.svelte'
 import PreloadingIndicator from './PreloadingIndicator.svelte'
 import Pricesummary from './Pricesummary.svelte'
-import ProductCard from './ProductCard.svelte'
-import ProductCardSquare from './Varni/ProductCardSquare.svelte'
 import ProductNav from './ProductNav.svelte'
 import ProductsGrid from './Product/ProductsGrid.svelte'
 import ProductTab from './Product/ProductTab.svelte'
-import RadioEsSquare from './Varni/RadioEsSquare.svelte'
 import RatingsAndReviews from './Product/RatingsAndReviews.svelte'
 import ReloadPrompt from './ReloadPrompt.svelte'
 import ReviewGallery from './Product/ReviewGallery.svelte'
@@ -53,6 +45,16 @@ import StoreInformationFooter from './StoreInformationFooter.svelte'
 import Stripe from './Stripe.svelte'
 import UserForm from './Product/UserForm.svelte'
 
+// Core components of svelte commerce
+import DesktopFilter from './DesktopFilter.svelte'
+import Footer from './Footer.svelte'
+import ProductCard from './ProductCard.svelte'
+
+// Varni components
+// import DesktopFilter from './Varni/DesktopFilter.svelte'
+// import Footer from './Varni/Footer.svelte'
+// import ProductCard from './Varni/ProductCard.svelte'
+
 export {
 	AnimatedCartItem,
 	Autocomplete,
@@ -61,16 +63,13 @@ export {
 	BackToTop,
 	Breadcrumb,
 	CatelogNav,
-	CheckboxEsSquare,
 	CheckoutHeader,
 	CtrlS,
 	DesktopFilter,
-	DesktopFilterBordered,
 	DummyProductCard,
 	Error,
 	FatNav,
 	Footer,
-	Footer2,
 	Gallery,
 	GoogleAnalytics,
 	HeadingUnderline,
@@ -92,11 +91,9 @@ export {
 	PreloadingIndicator,
 	Pricesummary,
 	ProductCard,
-	ProductCardSquare,
 	ProductNav,
 	ProductsGrid,
 	ProductTab,
-	RadioEsSquare,
 	RatingsAndReviews,
 	ReloadPrompt,
 	ReviewGallery,
