@@ -12,7 +12,7 @@ import DesktopFilter from './DesktopFilter.svelte'
 import DesktopFilterBordered from './Varni/DesktopFilterBordered.svelte'
 import DummyProductCard from './DummyProductCard.svelte'
 import Error from './Error.svelte'
-import FatNav2 from './Varni/FatNav2.svelte'
+import FatNav from './Varni/FatNav.svelte'
 import Footer from './Footer.svelte'
 import Footer2 from './Varni/Footer2.svelte'
 import Gallery from './Product/Gallery.svelte'
@@ -68,7 +68,7 @@ export {
 	DesktopFilterBordered,
 	DummyProductCard,
 	Error,
-	FatNav2,
+	FatNav,
 	Footer,
 	Footer2,
 	Gallery,
