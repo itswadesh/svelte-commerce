@@ -1,7 +1,7 @@
 <script>
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
-import { CheckboxEsSquare, RadioEsSquare } from '$lib/components'
+import { CheckboxEs, RadioEs } from '$lib/ui'
 import { constructURL2, toast } from '$lib/utils'
 import { createEventDispatcher, onMount } from 'svelte'
 import { goto } from '$app/navigation'
@@ -336,7 +336,7 @@ function handleToggleSubCategory2(c, cx) {
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
-			<CheckboxEsSquare
+			<CheckboxEs
 				items="{allAges}"
 				model="age"
 				selectedItems="{fl.age || []}"
@@ -349,7 +349,7 @@ function handleToggleSubCategory2(c, cx) {
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
-			<CheckboxEsSquare
+			<CheckboxEs
 				items="{allBrands}"
 				title="Brands"
 				model="brands"
@@ -362,7 +362,7 @@ function handleToggleSubCategory2(c, cx) {
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
-			<CheckboxEsSquare
+			<CheckboxEs
 				items="{allColors}"
 				title="Colors"
 				model="colors"
@@ -375,7 +375,7 @@ function handleToggleSubCategory2(c, cx) {
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
-			<RadioEsSquare
+			<RadioEs
 				items="{allDiscount}"
 				title="Discount"
 				model="discount"
@@ -388,7 +388,7 @@ function handleToggleSubCategory2(c, cx) {
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
-			<RadioEsSquare
+			<RadioEs
 				items="{allFeatures}"
 				title="Features"
 				model="features"
@@ -401,7 +401,7 @@ function handleToggleSubCategory2(c, cx) {
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
-			<CheckboxEsSquare
+			<CheckboxEs
 				items="{allGenders}"
 				title="Genders"
 				model="genders"
@@ -414,7 +414,7 @@ function handleToggleSubCategory2(c, cx) {
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
-			<CheckboxEsSquare
+			<CheckboxEs
 				items="{allPromotions}"
 				title="Promotions"
 				model="promotions"
@@ -427,7 +427,7 @@ function handleToggleSubCategory2(c, cx) {
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
-			<CheckboxEsSquare
+			<CheckboxEs
 				items="{allSizes}"
 				title="Sizes"
 				model="sizes"
@@ -440,7 +440,7 @@ function handleToggleSubCategory2(c, cx) {
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
-			<CheckboxEsSquare
+			<CheckboxEs
 				items="{allTags}"
 				title="tags"
 				model="tags"
@@ -453,7 +453,7 @@ function handleToggleSubCategory2(c, cx) {
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
-			<CheckboxEsSquare
+			<CheckboxEs
 				items="{allTypes}"
 				title="types"
 				model="types"
@@ -466,7 +466,7 @@ function handleToggleSubCategory2(c, cx) {
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
-			<CheckboxEsSquare
+			<CheckboxEs
 				items="{allVendors}"
 				title="vendors"
 				model="vendors"
@@ -479,7 +479,7 @@ function handleToggleSubCategory2(c, cx) {
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
-			<RadioEsSquare
+			<RadioEs
 				items="{priceRange}"
 				title="Price"
 				model="price"
@@ -492,7 +492,7 @@ function handleToggleSubCategory2(c, cx) {
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
-			<RadioEsSquare
+			<RadioEs
 				items="{facets?.all_aggs?.price?.all?.buckets}"
 				title="Price"
 				model="price"
