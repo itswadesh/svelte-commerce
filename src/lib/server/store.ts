@@ -15,7 +15,7 @@ export const fetchStoreData = async (event: RequestEvent) => {
 			cookieMegamenu,
 			server: true
 		})
-		if (!cookieMegamenu) {
+		if (!cookieMegamenu || cookieMegamenu == 'undefined') {
 			r.megamenu1 = await CategoryService.fetchMegamenuData({
 				origin: event.request.url,
 				storeId: r.storeOne.id,
