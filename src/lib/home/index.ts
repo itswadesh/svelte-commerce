@@ -6,6 +6,11 @@ import Hero from './Hero.svelte'
 import HeroBanners from './HeroBanners.svelte'
 import PickedBanners from './PickedBanners.svelte'
 
+// Core components of svelte commerce
+
+
+// Varni components
+
 export {
 	CategoriesHome,
 	CategoriesMobile,

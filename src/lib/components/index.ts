@@ -6,6 +6,7 @@ import BackToTop from './BackToTop.svelte'
 import Breadcrumb from './Breadcrumb.svelte'
 import CatelogNav from './CatelogNav.svelte'
 import CheckoutHeader from './CheckoutHeader.svelte'
+import CollectionsHome from './Varni/CollectionsHome.svelte'
 import CtrlS from './CtrlS.svelte'
 import DummyProductCard from './DummyProductCard.svelte'
 import Error from './Error.svelte'
@@ -13,10 +14,12 @@ import FatNav from './Varni/FatNav.svelte'
 import Gallery from './Product/Gallery.svelte'
 import GoogleAnalytics from './GoogleAnalytics.svelte'
 import HeadingUnderline from './HeadingUnderline.svelte'
+import HeroBannersCollage6 from './Varni/HeroBannersCollage6.svelte'
 import Image from './Image/Image.svelte'
 import IntersectionObserver from './Image/IntersectionObserver.svelte'
 import LazyImg from './Image/LazyImg.svelte'
 import LazyImgManual from './Image/LazyImgManual.svelte'
+import LegalFooterInformation from './Varni/LegalFooterInformation.svelte'
 import MegaMenu from './MegaMenu.svelte'
 import MegaMenu2 from './MegaMenu2.svelte'
 import MegamenuHorizontal from './Varni/MegamenuHorizontal.svelte'
@@ -30,12 +33,14 @@ import PageTransitions from './PageTransitions.svelte'
 import Pagination from './Pagination.svelte'
 import PreloadingIndicator from './PreloadingIndicator.svelte'
 import Pricesummary from './Pricesummary.svelte'
+import ProductGridShowCase from './Varni/ProductGridShowCase.svelte'
 import ProductNav from './ProductNav.svelte'
 import ProductsGrid from './Product/ProductsGrid.svelte'
 import ProductTab from './Product/ProductTab.svelte'
 import RatingsAndReviews from './Product/RatingsAndReviews.svelte'
 import ReloadPrompt from './ReloadPrompt.svelte'
 import ReviewGallery from './Product/ReviewGallery.svelte'
+import ShopYourStone from './Varni/ShopYourStone.svelte'
 import SimilarProductsFromCategorySlug from './Product/SimilarProductsFromCategorySlug.svelte'
 import SingleImageUpload from './SingleImageUpload.svelte'
 import SocialSharingButtons from './SocialSharingButtons.svelte'
@@ -64,6 +69,7 @@ export {
 	Breadcrumb,
 	CatelogNav,
 	CheckoutHeader,
+	CollectionsHome,
 	CtrlS,
 	DesktopFilter,
 	DummyProductCard,
@@ -73,10 +79,12 @@ export {
 	Gallery,
 	GoogleAnalytics,
 	HeadingUnderline,
+	HeroBannersCollage6,
 	Image,
 	IntersectionObserver,
 	LazyImg,
 	LazyImgManual,
+	LegalFooterInformation,
 	MegaMenu,
 	MegaMenu2,
 	MegamenuHorizontal,
@@ -91,12 +99,14 @@ export {
 	PreloadingIndicator,
 	Pricesummary,
 	ProductCard,
+	ProductGridShowCase,
 	ProductNav,
 	ProductsGrid,
 	ProductTab,
 	RatingsAndReviews,
 	ReloadPrompt,
 	ReviewGallery,
+	ShopYourStone,
 	SimilarProductsFromCategorySlug,
 	SingleImageUpload,
 	SocialSharingButtons,

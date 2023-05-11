@@ -1,7 +1,7 @@
 <script>
 import { onMount } from 'svelte'
 import { SplideSlide } from '@splidejs/svelte-splide'
-import {LazyImg} from '$lib/components'
+import { LazyImg } from '$lib/components'
 
 export let banners = []
 
