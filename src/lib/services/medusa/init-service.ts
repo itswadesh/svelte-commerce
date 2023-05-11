@@ -1,4 +1,3 @@
-import { error } from '@sveltejs/kit'
 export const fetchInit = async (host) => {
-	return { storeOne: { _id: 'Medusa' } }
+	return { storeOne: { id: 'Medusa', _id: 'Medusa' } }
 }
