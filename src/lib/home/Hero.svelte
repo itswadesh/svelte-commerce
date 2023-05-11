@@ -1,11 +1,9 @@
 <script>
 import { onMount } from 'svelte'
 import { SplideSlide } from '@splidejs/svelte-splide'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import { LazyImg } from '$lib/components'
 
 export let banners = []
-
-// console.log('banners', banners)
 
 $: sliderBanners = banners?.filter((b) => {
 	return b.type === 'slider' && b.isMobile === false
@@ -44,7 +42,7 @@ onMount(async () => {
 					<SplideSlide>
 						<a
 							href="{b.link || '##'}"
-							aria-label="Click to route into banner related products page"
+							aria-label="Click to visit banner related products page"
 							class="block"
 							data-sveltekit-preload-data>
 							<LazyImg
@@ -65,7 +63,7 @@ onMount(async () => {
 				{#if b.img}
 					<a
 						href="{b.link || '##'}"
-						aria-label="Click to route into banner related products page"
+						aria-label="Click to visit banner related products page"
 						data-sveltekit-preload-data
 						class="carousel-item relative  float-left h-auto w-full {ix == 0 ? 'active' : ''}">
 						<LazyImg
@@ -90,7 +88,7 @@ onMount(async () => {
 					<SplideSlide>
 						<a
 							href="{b.link || '##'}"
-							aria-label="Click to route into banner related products page"
+							aria-label="Click to visit banner related products page"
 							class="block"
 							data-sveltekit-preload-data>
 							<LazyImg
