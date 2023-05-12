@@ -17,7 +17,7 @@ const seoProps = {
 }
 
 export let data
-console.log('zzzzzzzzzzzzzzzzzz', data)
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 // console.log('$page', $page)
 
 let cashfreeReady = false
@@ -111,11 +111,12 @@ async function submit(pm) {
 					storeId: $page.data.store?.id
 				})
 
-				// console.log('res of cod', res)
+				// console.log('res of cod',res.id,res._id, res)
 
 				goto(`/payment/success?orderId=${res?._id || res?.id}&status=PAYMENT_SUCCESS&provider=COD`)
 			} catch (e) {
 				data.err = e
+				gotoOrder(orderNo)
 			} finally {
 				loading = false
 			}
@@ -145,6 +146,7 @@ async function submit(pm) {
 					)
 				} catch (e) {
 					data.err = e
+					gotoOrder(orderNo)
 				} finally {
 					loading = false
 				}
@@ -199,6 +201,8 @@ async function submit(pm) {
 			} catch (e) {
 				data.err = e
 				toast(`Payment failed, please try again`, 'error')
+				gotoOrder(orderNo)
+
 				// goto(`/payment/failed?id=${data.addressId}&status=PAYMENT_PENDING&provider=Cashfree`)
 			} finally {
 				loading = false
@@ -224,6 +228,7 @@ async function submit(pm) {
 				}
 			} catch (e) {
 				data.err = e
+				gotoOrder(orderNo)
 			} finally {
 				loading = false
 			}
@@ -248,6 +253,7 @@ async function submit(pm) {
 				}
 			} catch (e) {
 				data.err = e
+				gotoOrder(orderNo)
 			} finally {
 				loading = false
 			}
@@ -313,13 +319,9 @@ async function submit(pm) {
 				toast(`Payment failed, please try again`, 'error')
 			} finally {
 				loading = false
+				gotoOrder(orderNo)
 			}
 		}
-
-		const u = new URL($page.url)
-		u.searchParams.set('order_no', orderNo)
-		// console.log('uzzzzzzzzzzzzzzzzzz', u.toString())
-		goto(u.toString())
 	} else {
 		paymentDenied = true
 
@@ -327,6 +329,12 @@ async function submit(pm) {
 			paymentDenied = false
 		}, 820)
 	}
+}
+
+function gotoOrder(orderNo) {
+	const u = new URL($page.url)
+	u.searchParams.set('order_no', orderNo)
+	goto(u.toString())
 }
 
 function checkIfStripeCardValid({ detail }) {
