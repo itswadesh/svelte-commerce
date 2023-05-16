@@ -176,7 +176,10 @@ function checkIfStripeCardValid({ detail }) {
 
 	<div class="mt-10 flex flex-col gap-10 md:flex-row md:justify-center xl:gap-20">
 		<div class="w-full flex-1">
-			<h2 class="mb-5 text-xl font-bold capitalize tracking-wide sm:text-2xl">Payment Options</h2>
+			<h2
+				class="mb-5 h-6 sm:h-8 flex items-center text-xl font-bold capitalize tracking-wide sm:text-2xl">
+				Payment Options
+			</h2>
 
 			{#if data.paymentMethods?.length}
 				<div class="flex w-full flex-col gap-4" class:wiggle="{paymentDenied}">
@@ -256,9 +259,15 @@ function checkIfStripeCardValid({ detail }) {
 		</div>
 
 		<div class="w-full md:w-80 md:shrink-0 md:grow-0">
-			<h2 class="text-xl font-bold capitalize tracking-wide sm:text-2xl">Cart Summary</h2>
+			<h2
+				class="mb-5 h-6 sm:h-8 flex items-center text-xl font-bold capitalize tracking-wide sm:text-2xl">
+				Cart Summary
+			</h2>
+
+			<hr class="mb-5" />
+
 			{#if data.address}
-				<div class="mt-5 border-t pt-5">
+				<div class="mb-5">
 					<h5 class="mb-2 text-xl font-bold capitalize tracking-wide">Delivery Address</h5>
 
 					<div class="text-sm font-light">
@@ -316,10 +325,12 @@ function checkIfStripeCardValid({ detail }) {
 						</div>
 					</div>
 				</div>
+
+				<hr class="mb-5" />
 			{/if}
 
 			{#if data.prescription}
-				<div class="mt-5 border-t pt-5">
+				<div class="mb-5">
 					<h5 class="mb-2 text-xl font-bold capitalize tracking-wide">Prescription</h5>
 
 					<div class="text-sm font-light">
@@ -354,6 +365,8 @@ function checkIfStripeCardValid({ detail }) {
 						{/if}
 					</div>
 				</div>
+
+				<hr class="mb-5" />
 			{/if}
 
 			<Pricesummary

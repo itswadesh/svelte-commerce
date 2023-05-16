@@ -253,7 +253,9 @@ async function toggleWishlist(id) {
 			{newProduct.name || '_'}
 		</p>
 
-		<div class="mt-1 flex flex-wrap items-baseline justify-center gap-1 text-xs">
+		<div
+			class="{$page.data.store?.isSecureCatalogue && $page.data?.me ? 'flex' : 'hidden'}
+			mt-1 flex-wrap items-baseline justify-center gap-1 text-xs">
 			<span class="whitespace-nowrap text-sm font-bold sm:text-base">
 				{currency(newProduct.price, $page.data?.store?.currencySymbol)}
 			</span>

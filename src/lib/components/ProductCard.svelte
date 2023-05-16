@@ -343,7 +343,9 @@ function hideitems() {
 				href="/product/{product.slug}"
 				aria-label="Click to view the product details"
 				data-sveltekit-preload-data>
-				<div class="mt-0.5 flex flex-wrap items-baseline justify-start leading-4 text-xs gap-1.5">
+				<div
+					class="{$page.data.store?.isSecureCatalogue && $page.data?.me ? 'flex' : 'hidden'} 
+					mt-0.5 flex-wrap items-baseline justify-start leading-4 text-xs gap-1.5">
 					<span class="font-bold text-sm sm:text-base whitespace-nowrap">
 						{#if product.price}
 							{currency(product.price, $page.data?.store?.currencySymbol)}
