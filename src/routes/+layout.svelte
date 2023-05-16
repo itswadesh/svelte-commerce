@@ -7,7 +7,6 @@
 <script lang="ts">
 // import { pwaInfo } from 'virtual:pwa-info'
 import './../app.css'
-import { BackToTop, LazyImg, GoogleAnalytics } from '$lib/components' // Can not dynamically import Google Analytics, it throws gtag not found error, not even party town
 import { navigating } from '$app/stores'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'

@@ -1,3 +1,6 @@
+
+// Core components of svelte commerce
+import AnimatedCartItem from './AnimatedCartItem.svelte'
 import Autocomplete from './Autocomplete/Autocomplete.svelte'
 import AutocompleteItem from './AutocompleteItem.svelte'
 import AutosuggestModal from './AutosuggestModal.svelte'
@@ -7,9 +10,12 @@ import CatelogNav from './CatelogNav.svelte'
 import CheckoutHeader from './CheckoutHeader.svelte'
 import CollectionsHome from './Varni/CollectionsHome.svelte'
 import CtrlS from './CtrlS.svelte'
+import DesktopFilter from './DesktopFilter.svelte'
 import DummyProductCard from './DummyProductCard.svelte'
 import Error from './Error.svelte'
 import FatNav from './Varni/FatNav.svelte'
+import FetchInit from './FetchInit.svelte'
+import Footer from './Footer.svelte'
 import Gallery from './Product/Gallery.svelte'
 import GoogleAnalytics from './GoogleAnalytics.svelte'
 import HeadingUnderline from './HeadingUnderline.svelte'
@@ -29,8 +35,10 @@ import Modal from './Modal.svelte'
 import Nav from './Nav.svelte'
 import PageIdPickedBanner from './PageIdPickedBanner.svelte'
 import PageTransitions from './PageTransitions.svelte'
+import Pagination from './Pagination.svelte'
 import PreloadingIndicator from './PreloadingIndicator.svelte'
 import Pricesummary from './Pricesummary.svelte'
+import ProductCard from './ProductCard.svelte'
 import ProductGridShowCase from './Varni/ProductGridShowCase.svelte'
 import ProductNav from './ProductNav.svelte'
 import ProductsGrid from './Product/ProductsGrid.svelte'
@@ -47,13 +55,6 @@ import Stats from './Stats.svelte'
 import StoreInformationFooter from './StoreInformationFooter.svelte'
 import Stripe from './Stripe.svelte'
 import UserForm from './Product/UserForm.svelte'
-
-// Core components of svelte commerce
-import AnimatedCartItem from './AnimatedCartItem.svelte'
-import DesktopFilter from './DesktopFilter.svelte'
-import Footer from './Footer.svelte'
-import Pagination from './Pagination.svelte'
-import ProductCard from './ProductCard.svelte'
 
 // Varni components
 // import AnimatedCartItem from './Varni/AnimatedCartItem.svelte'
@@ -77,6 +78,7 @@ export {
 	DummyProductCard,
 	Error,
 	FatNav,
+	FetchInit,
 	Footer,
 	Gallery,
 	GoogleAnalytics,
