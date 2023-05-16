@@ -1,0 +1,18 @@
+<script>
+import { onMount } from 'svelte'
+import Cookie from 'cookie-universal'
+
+const cookies = Cookie()
+
+onMount(async () => {
+	const response = await fetch('/server/store')
+
+	const res = await response.json()
+
+	// console.log('zzzzzzzzzzzzzzzzzz', res)
+
+	const { storeOne } = res
+
+	cookies.set('store', JSON.stringify(storeOne), { path: '/' })
+})
+</script>
