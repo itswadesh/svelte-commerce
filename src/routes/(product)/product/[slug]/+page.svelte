@@ -153,7 +153,7 @@ let seoProps = {
 }
 
 let bounceItemFromTop = false
-let cartButtonText = 'Buy Now'
+let cartButtonText = 'Add to Bag'
 let customizedImg
 let isExpired = false
 let isWishlisted = false
@@ -328,7 +328,7 @@ async function addToBag(p, customizedImg, customizedJson) {
 			bounceItemFromTop = true
 		}
 
-		cartButtonText = 'Go to cart'
+		cartButtonText = 'Go to Cart'
 		p.qty < 0 ? fireGTagEvent('remove_from_cart', cart) : fireGTagEvent('add_to_cart', cart)
 
 		await invalidateAll()
@@ -340,7 +340,7 @@ async function addToBag(p, customizedImg, customizedJson) {
 	} finally {
 		loading = false
 		// await delay(1000)
-		cartButtonText = 'Add to bag'
+		cartButtonText = 'Add to Bag'
 		bounceItemFromTop = false
 	}
 }
@@ -1075,7 +1075,7 @@ function handleMobileCanvas() {
 									Item Expired
 								</PrimaryButton>
 							{:else if data.product?.active && data.product?.hasStock}
-								{#if cartButtonText === 'Go to cart'}
+								{#if cartButtonText === 'Go to Cart'}
 									<a class="block" href="/cart" data-sveltekit-preload-data>
 										<PrimaryButton type="button" hideLoading class="w-full text-sm" blackBackground>
 											<svg
@@ -1110,9 +1110,9 @@ function handleMobileCanvas() {
 												bounceItemFromTop = true
 												setTimeout(() => {
 													bounceItemFromTop = false
-													cartButtonText = 'Add To Bag'
+													cartButtonText = 'Add to Bag'
 												}, 3000)
-												cartButtonText = 'Go to cart'
+												cartButtonText = 'Go to Cart'
 												if (customizedImg) {
 													goto(`/checkout/address`)
 												}
@@ -1383,7 +1383,7 @@ function handleMobileCanvas() {
 									Item Expired
 								</PrimaryButton>
 							{:else if data.product?.active && data.product?.hasStock}
-								{#if cartButtonText === 'Go to cart'}
+								{#if cartButtonText === 'Go to Cart'}
 									<a class="block" href="/cart" data-sveltekit-preload-data>
 										<PrimaryButton type="button" hideLoading class="w-full text-sm" blackBackground>
 											<svg
@@ -1419,7 +1419,7 @@ function handleMobileCanvas() {
 												setTimeout(() => {
 													bounceItemFromTop = false
 												}, 3000)
-												cartButtonText = 'Go to cart'
+												cartButtonText = 'Go to Cart'
 												if (customizedImg) {
 													goto(`/checkout/address`)
 												}
@@ -1555,7 +1555,7 @@ function handleMobileCanvas() {
 									Item Expired
 								</PrimaryButton>
 							{:else if data.product?.active && data.product?.hasStock}
-								{#if cartButtonText === 'Go to cart'}
+								{#if cartButtonText === 'Go to Cart'}
 									<a class="block" href="/cart" data-sveltekit-preload-data>
 										<PrimaryButton type="button" hideLoading class="w-full text-sm" blackBackground>
 											<svg
@@ -1591,7 +1591,7 @@ function handleMobileCanvas() {
 												setTimeout(() => {
 													bounceItemFromTop = false
 												}, 3000)
-												cartButtonText = 'Go to cart'
+												cartButtonText = 'Go to Cart'
 												if (customizedImg) {
 													goto(`/checkout/address`)
 												}
