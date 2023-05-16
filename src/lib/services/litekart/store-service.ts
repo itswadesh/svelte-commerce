@@ -40,7 +40,9 @@ export const getStoreData = async ({
 	server = false,
 	sid = null
 }: any) => {
+
 	let storeRes: any = {}
+
 	let store = {
 		id,
 		address,
@@ -59,7 +61,15 @@ export const getStoreData = async ({
 		GOOGLE_ANALYTICS_ID,
 		GOOGLE_CLIENT_ID,
 		instagramUrl,
+		hellobar: {},
+		isSecureCatalogue: false,
+		isProductReviewsAndRatings: false,
+		isGDPR: false,
 		isFnb: false,
+		isDiscountCoupons: false,
+		isDeals: false,
+		isWhatsappChatButton: false,
+		isWishlist: false,
 		keywords,
 		linkedinUrl,
 		loginUrl,
@@ -76,14 +86,19 @@ export const getStoreData = async ({
 		youtubeUrl,
 		IMAGE_CDN_URL: IMAGE_CDN_URL
 	}
+
+
 	let megamenu = null
+
 	if (
 		!cookieStore ||
 		cookieStore === 'undefined' ||
 		!cookieMegamenu ||
 		cookieMegamenu == 'undefined'
 	) {
+
 		const uri = new URL(url)
+
 		storeRes = await fetchInit(uri.host)
 
 		store = {
@@ -104,7 +119,15 @@ export const getStoreData = async ({
 			GOOGLE_ANALYTICS_ID: storeRes.storeOne.GOOGLE_ANALYTICS_ID,
 			GOOGLE_CLIENT_ID: storeRes.storeOne.GOOGLE_CLIENT_ID,
 			instagramUrl: storeRes.storeOne.instagramUrl,
+			isSecureCatalogue: storeRes.storeOne.isSecureCatalogue,
+			isWishlist: storeRes.storeOne.isWishlist,
+			isDeals: storeRes.storeOne.isDeals,
+			isDiscountCoupons: storeRes.storeOne.isDiscountCoupons,
+			isProductReviewsAndRatings: storeRes.storeOne.isProductReviewsAndRatings,
+			isWhatsappChatButton: storeRes.storeOne.isWhatsappChatButton,
+			isGDPR: storeRes.storeOne.isGDPR,
 			isFnb: storeRes.storeOne.isFnb,
+			hellobar: storeRes.storeOne.hellobar,
 			keywords: storeRes.storeOne.keywords,
 			linkedinUrl: storeRes.storeOne.linkedinUrl,
 			loginUrl: storeRes.storeOne.otpLogin ? '/auth/otp-login' : '/auth/login',
@@ -121,16 +144,24 @@ export const getStoreData = async ({
 			youtubeUrl: storeRes.storeOne.youtubeUrl,
 			IMAGE_CDN_URL: storeRes.storeOne.IMAGE_CDN_URL
 		}
+
 		megamenu = storeRes.megamenu
+
 		cookies.set('store', JSON.stringify(store), { path: '/' })
+
 		try {
 			cookies.set('megamenu', JSON.stringify(megamenu), { path: '/' })
-		} catch (e) {}
+		} catch (e) {
+
+		}
 	} else {
 		store = JSON.parse(cookieStore)
 		megamenu = JSON.parse(cookieMegamenu)
 	}
+
 	storeRes.storeOne = store
 	storeRes.megamenu = megamenu
+
+
 	return storeRes
 }

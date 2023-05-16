@@ -33,6 +33,7 @@ import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 
 export let product = {}
+// console.log('product', product)
 
 if (product?._source) {
 	product = product?._source
@@ -342,9 +343,15 @@ function hideitems() {
 				href="/product/{product.slug}"
 				aria-label="Click to view the product details"
 				data-sveltekit-preload-data>
-				<div class="mt-0.5 flex flex-wrap items-baseline justify-start leading-4 text-xs gap-1.5">
+				<div
+					class="{$page.data.store?.isSecureCatalogue && !$page.data?.me ? 'hidden' : 'flex'} 
+					mt-0.5 flex-wrap items-baseline justify-start leading-4 text-xs gap-1.5">
 					<span class="font-bold text-sm sm:text-base whitespace-nowrap">
-						{currency(product.price, $page.data?.store?.currencySymbol)}
+						{#if product.price}
+							{currency(product.price, $page.data?.store?.currencySymbol)}
+						{:else}
+							Free
+						{/if}
 					</span>
 
 					{#if product.mrp > product.price}

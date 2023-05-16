@@ -1,10 +1,3 @@
-<style>
-.frosted-black {
-	backdrop-filter: blur(5px);
-	background-color: hsla(0, 0%, 0%, 0.8);
-}
-</style>
-
 <script lang="ts">
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
@@ -14,7 +7,7 @@ import { fly } from 'svelte/transition'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { sorts } from '$lib/config'
-import {RadioEs,CheckboxEs,PrimaryButton} from '$lib/ui'
+import { RadioEs, CheckboxEs, PrimaryButton } from '$lib/ui'
 
 const dispatch = createEventDispatcher()
 

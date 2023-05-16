@@ -1,7 +1,22 @@
-export * as CategoriesHome from './CategoriesHome.svelte'
-export * as CategoriesMobile from './CategoriesMobile.svelte'
-export * as CategoriesSlider from './CategoriesSlider.svelte'
-export * as Deals from './Deals.svelte'
-export * as Hero from './Hero.svelte'
-export * as HeroBanners from './HeroBanners.svelte'
-export * as PickedBanners from './PickedBanners.svelte'
+import CategoriesHome from './CategoriesHome.svelte'
+import CategoriesMobile from './CategoriesMobile.svelte'
+import CategoriesSlider from './CategoriesSlider.svelte'
+import Deals from './Deals.svelte'
+import Hero from './Hero.svelte'
+import HeroBanners from './HeroBanners.svelte'
+import PickedBanners from './PickedBanners.svelte'
+
+// Core components of svelte commerce
+
+
+// Varni components
+
+export {
+	CategoriesHome,
+	CategoriesMobile,
+	CategoriesSlider,
+	Deals,
+	Hero,
+	HeroBanners,
+	PickedBanners
+}

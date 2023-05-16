@@ -7,8 +7,6 @@ import userEmptyProfile from '$lib/assets/user-empty-profile.png'
 
 export let data
 
-// console.log('data', data)
-
 const seoProps = {
 	title: 'Vendor Profile',
 	metadescription: 'Vendor Profile'
@@ -82,7 +80,7 @@ const seoProps = {
 									<span>:</span>
 
 									<p
-										class="flex items-center gap-1 
+										class="flex items-center gap-1
 										{data.vendor?.verified ? 'text-green-500' : 'text-zinc-200'}">
 										{#if data.vendor?.verified}
 											<svg

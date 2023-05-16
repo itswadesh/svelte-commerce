@@ -1,8 +1,8 @@
 <script lang="ts">
 import { createEventDispatcher } from 'svelte'
 import { currency } from '$lib/utils'
-import {PrimaryButton} from '$lib/ui'
 import { page } from '$app/stores'
+import { PrimaryButton } from '$lib/ui'
 
 const dispatch = createEventDispatcher()
 
@@ -25,7 +25,7 @@ function submit() {
 </script>
 
 {#if cart}
-	<section class="my-5 border-t border-zinc-200 py-5">
+	<section>
 		<h5 class="text-xl font-bold capitalize tracking-wide">
 			<span>Price Summary</span>
 

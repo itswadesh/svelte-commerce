@@ -1,11 +1,4 @@
 <style>
-.frosted-black {
-	backdrop-filter: blur(5px);
-	background-color: hsla(0, 0%, 0%, 0.8);
-}
-.frosted-blur {
-	backdrop-filter: blur(12px);
-}
 .shake-animation {
 	animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 	transform: translate3d(0, 0, 0);
@@ -48,11 +41,16 @@ import { applyAction, enhance } from '$app/forms'
 import { browser } from '$app/environment'
 import { CartService, WishlistService } from '$lib/services'
 import { currency, toast } from '$lib/utils'
+import { DummyProductCard } from '$lib/components'
 import { fade } from 'svelte/transition'
 import { fireGTagEvent } from '$lib/utils/gTag'
+import { Footer } from '$lib/components'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import { ProductNav } from '$lib/components'
+import { ProductsGrid } from '$lib/components'
+import { SocialSharingButtons } from '$lib/components'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
 import Breadcrumb from '$lib/components/Breadcrumb.svelte'
 import CategoryPoolButtons from './_CategoryPoolButtons.svelte'
@@ -61,15 +59,11 @@ import CheckboxOfMultiProducts from '$lib/ui/CheckboxOfMultiProducts.svelte'
 import Cookie from 'cookie-universal'
 import dayjs from 'dayjs'
 import DeliveryOptions from './_DeliveryOptions.svelte'
-import {DummyProductCard} from '$lib/components'
-import {Footer} from '$lib/components'
 import FrequentlyBoughtProduct from './_FrequentlyBoughtProduct.svelte'
 import Gallery from '$lib/components/Product/Gallery.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import {ProductNav} from '$lib/components'
 import productNonVeg from '$lib/assets/product/non-veg.png'
-import {ProductsGrid} from '$lib/components'
 import ProductSkeleton from '$lib/ui/ProductSkeleton.svelte'
 import productVeg from '$lib/assets/product/veg.png'
 import Radio from '$lib/ui/Radio.svelte'
@@ -80,7 +74,6 @@ import RecentlyViewedProductsSlider from '$lib/components/Product/RecentlyViewed
 import SEO from '$lib/components/SEO/index.svelte'
 import SimilarProductsFromCategorySlug from '$lib/components/Product/SimilarProductsFromCategorySlug.svelte'
 import Skeleton from '$lib/ui/Skeleton.svelte'
-import {SocialSharingButtons} from '$lib/components'
 import Textarea from '$lib/ui/Textarea.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 import viewport from '$lib/actions/useViewPort'
@@ -90,7 +83,6 @@ const cookies = Cookie()
 const isServer = import.meta.env.SSR
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -161,7 +153,7 @@ let seoProps = {
 }
 
 let bounceItemFromTop = false
-let cartButtonText = 'Buy Now'
+let cartButtonText = 'Add to Bag'
 let customizedImg
 let isExpired = false
 let isWishlisted = false
@@ -196,8 +188,6 @@ if (data.product?.size?.name === 'One Size') {
 }
 
 if (data.product?.expiryDate) {
-	// console.log('data.product?.expiryDate', data.product?.expiryDate)
-
 	// Create a Date object from the UTC string
 	const date = new Date(data.product?.expiryDate)
 
@@ -207,15 +197,11 @@ if (data.product?.expiryDate) {
 	// Convert the difference in milliseconds to minutes
 	const diffMinutes = Math.round(diffMs / (1000 * 60))
 
-	// Log the result
-	// console.log(diffMinutes + ' minutes')
-
 	if (diffMinutes > 0) {
 		isExpired = true
 	} else {
 		isExpired = false
 	}
-	// console.log('isExpired',isExpired)
 }
 
 onMount(async () => {
@@ -342,7 +328,7 @@ async function addToBag(p, customizedImg, customizedJson) {
 			bounceItemFromTop = true
 		}
 
-		cartButtonText = 'Go to cart'
+		cartButtonText = 'Go to Cart'
 		p.qty < 0 ? fireGTagEvent('remove_from_cart', cart) : fireGTagEvent('add_to_cart', cart)
 
 		await invalidateAll()
@@ -354,7 +340,7 @@ async function addToBag(p, customizedImg, customizedJson) {
 	} finally {
 		loading = false
 		// await delay(1000)
-		cartButtonText = 'Add to bag'
+		cartButtonText = 'Add to Bag'
 		bounceItemFromTop = false
 	}
 }
@@ -576,26 +562,35 @@ function handleMobileCanvas() {
 
 				<!-- prices mobile -->
 
-				<div class="mt-2 block sm:hidden">
-					<div class="mb-2 flex flex-wrap items-center gap-2">
-						<span class="whitespace-nowrap">
-							<b>{currency(data.product?.price, $page.data?.store?.currencySymbol)}</b>
-						</span>
-
-						{#if data.product?.mrp > data.product?.price}
-							<span class="whitespace-nowrap text-zinc-400">
-								<strike>{currency(data.product?.mrp, $page.data?.store?.currencySymbol)}</strike>
+				<div class="block sm:hidden mt-2">
+					{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
+						<a
+							href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page?.url
+								?.search}"
+							class="block mb-5 hover:underline max-w-max font-bold">
+							Login to view price
+						</a>
+					{:else}
+						<div class="mb-2 flex flex-wrap items-center gap-2">
+							<span class="whitespace-nowrap">
+								<b>{currency(data.product?.price, $page.data?.store?.currencySymbol)}</b>
 							</span>
 
-							{#if data.product?.discount > 0}
-								<span class="whitespace-nowrap font-semibold text-[#ff5a5a]">
-									({data.product?.discount}% off)
+							{#if data.product?.mrp > data.product?.price}
+								<span class="whitespace-nowrap text-zinc-400">
+									<strike>{currency(data.product?.mrp, $page.data?.store?.currencySymbol)}</strike>
 								</span>
-							{/if}
-						{/if}
-					</div>
 
-					<p class="text-sm font-semibold text-green-700">Inclusive of all taxes</p>
+								{#if data.product?.discount > 0}
+									<span class="whitespace-nowrap font-semibold text-[#ff5a5a]">
+										({data.product?.discount}% off)
+									</span>
+								{/if}
+							{/if}
+						</div>
+
+						<p class="text-sm font-semibold text-green-700">Inclusive of all taxes</p>
+					{/if}
 				</div>
 
 				<!-- ratings -->
@@ -656,25 +651,34 @@ function handleMobileCanvas() {
 				<!-- prices desktop -->
 
 				<div class="hidden sm:block">
-					<div class="mb-2 flex flex-wrap items-center gap-4">
-						<span class="whitespace-nowrap text-xl sm:text-2xl">
-							<b>{currency(data.product?.price, $page.data?.store?.currencySymbol)}</b>
-						</span>
-
-						{#if data.product?.mrp > data.product?.price}
-							<span class="whitespace-nowrap text-lg text-zinc-500 sm:text-xl">
-								<strike>{currency(data.product?.mrp, $page.data?.store?.currencySymbol)}</strike>
+					{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
+						<a
+							href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page?.url
+								?.search}"
+							class="block mb-5 hover:underline max-w-max font-bold">
+							Login to view price
+						</a>
+					{:else}
+						<div class="mb-2 flex flex-wrap items-center gap-4">
+							<span class="whitespace-nowrap text-xl sm:text-2xl">
+								<b>{currency(data.product?.price, $page.data?.store?.currencySymbol)}</b>
 							</span>
 
-							{#if data.product?.discount > 0}
-								<span class="whitespace-nowrap text-lg font-semibold text-amber-500 sm:text-xl">
-									({data.product?.discount}% off)
+							{#if data.product?.mrp > data.product?.price}
+								<span class="whitespace-nowrap text-lg text-zinc-500 sm:text-xl">
+									<strike>{currency(data.product?.mrp, $page.data?.store?.currencySymbol)}</strike>
 								</span>
-							{/if}
-						{/if}
-					</div>
 
-					<p class="mb-5 text-sm font-semibold text-green-700">Inclusive of all taxes</p>
+								{#if data.product?.discount > 0}
+									<span class="whitespace-nowrap text-lg font-semibold text-amber-500 sm:text-xl">
+										({data.product?.discount}% off)
+									</span>
+								{/if}
+							{/if}
+						</div>
+
+						<p class="mb-5 text-sm font-semibold text-green-700">Inclusive of all taxes</p>
+					{/if}
 				</div>
 
 				<!-- New and Tags -->
@@ -996,53 +1000,82 @@ function handleMobileCanvas() {
 				{#if !data.product?.isCustomized}
 					<div
 						class="w-full hidden md:grid gap-2 items-center uppercase grid-cols-2 static max-w-sm mb-5">
+						{#if $page.data.store?.isWishlist}
+							<div class="col-span-1">
+								<WhiteButton
+									type="button"
+									loadingringsize="sm"
+									loading="{loadingForWishlist}"
+									class="w-full text-sm"
+									on:click="{() => toggleWishlist(data.product?._id)}">
+									{#if isWishlisted}
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											class="h-5 w-5 shrink-0 text-red-500"
+											viewBox="0 0 20 20"
+											fill="currentColor">
+											<path
+												fill-rule="evenodd"
+												d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+												clip-rule="evenodd"></path>
+										</svg>
+
+										<span>Wishlisted</span>
+									{:else}
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											class="h-5 w-5 shrink-0"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke="currentColor"
+											stroke-width="2">
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+											></path>
+										</svg>
+
+										<span>Wishlist</span>
+									{/if}
+								</WhiteButton>
+							</div>
+						{/if}
+
 						<div class="col-span-1">
-							<WhiteButton
-								type="button"
-								loadingringsize="sm"
-								loading="{loadingForWishlist}"
-								class="w-full text-sm"
-								on:click="{() => toggleWishlist(data.product?._id)}">
-								{#if isWishlisted}
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 shrink-0 text-red-500"
-										viewBox="0 0 20 20"
-										fill="currentColor">
-										<path
-											fill-rule="evenodd"
-											d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-											clip-rule="evenodd"></path>
-									</svg>
+							{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
+								<a
+									href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
+										?.url?.search}"
+									class="block">
+									<WhiteButton
+										type="button"
+										loadingringsize="sm"
+										hideLoading
+										class="w-full text-sm">
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke-width="1.5"
+											stroke="currentColor"
+											class="w-5 h-5">
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+											></path>
+										</svg>
 
-									<span>Wishlisted</span>
-								{:else}
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 shrink-0"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke="currentColor"
-										stroke-width="2">
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-										></path>
-									</svg>
-
-									<span>Wishlist</span>
-								{/if}
-							</WhiteButton>
-						</div>
-
-						<div class="col-span-1">
-							{#if isExpired}
+										<span> Login </span>
+									</WhiteButton>
+								</a>
+							{:else if isExpired}
 								<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
 									Item Expired
 								</PrimaryButton>
 							{:else if data.product?.active && data.product?.hasStock}
-								{#if cartButtonText === 'Go to cart'}
+								{#if cartButtonText === 'Go to Cart'}
 									<a class="block" href="/cart" data-sveltekit-preload-data>
 										<PrimaryButton type="button" hideLoading class="w-full text-sm" blackBackground>
 											<svg
@@ -1077,9 +1110,9 @@ function handleMobileCanvas() {
 												bounceItemFromTop = true
 												setTimeout(() => {
 													bounceItemFromTop = false
-													cartButtonText = 'Add To Bag'
+													cartButtonText = 'Add to Bag'
 												}, 3000)
-												cartButtonText = 'Go to cart'
+												cartButtonText = 'Go to Cart'
 												if (customizedImg) {
 													goto(`/checkout/address`)
 												}
@@ -1208,56 +1241,58 @@ function handleMobileCanvas() {
 
 				<!-- Ratings & Reviews -->
 
-				{#await data.streamed?.productReviews}
-					<ul class="my-5 p-0 flex flex-col gap-4">
-						<li>
-							<Skeleton extraSmall />
-						</li>
-					</ul>
-				{:then productReviews}
-					<hr class="hidden sm:block mb-5 w-full border-t border-zinc-200" />
+				{#if $page.data.store?.isProductReviewsAndRatings}
+					{#await data.streamed?.productReviews}
+						<ul class="my-5 p-0 flex flex-col gap-4">
+							<li>
+								<Skeleton extraSmall />
+							</li>
+						</ul>
+					{:then productReviews}
+						<hr class="hidden sm:block mb-5 w-full border-t border-zinc-200" />
 
-					<div
-						id="ratings_and_reviews"
-						class="sticky top-14 sm:top-20 z-30 lg:static lg:z-0 mb-5 bg-white py-2">
-						<div class="flex items-center flex-wrap gap-4">
-							<button
-								type="button"
-								class="font-semibold border-b-4 focus:outline-none
+						<div
+							id="ratings_and_reviews"
+							class="sticky top-14 sm:top-20 z-30 lg:static lg:z-0 mb-5 bg-white py-2">
+							<div class="flex items-center flex-wrap gap-4">
+								<button
+									type="button"
+									class="font-semibold border-b-4 focus:outline-none
 								{selectedReviewType === 'product_review'
-									? 'border-primary-500 text-primary-500'
-									: 'border-zinc-200 text-zinc-500'}"
-								on:click="{() => {
-									;(selectedReviewType = 'product_review') && scrollTo('ratings_and_reviews')
-								}}">
-								Product Review
-							</button>
+										? 'border-primary-500 text-primary-500'
+										: 'border-zinc-200 text-zinc-500'}"
+									on:click="{() => {
+										;(selectedReviewType = 'product_review') && scrollTo('ratings_and_reviews')
+									}}">
+									Product Review
+								</button>
 
-							<button
-								type="button"
-								class="font-semibold border-b-4 focus:outline-none
+								<button
+									type="button"
+									class="font-semibold border-b-4 focus:outline-none
 								{selectedReviewType === 'brand_review'
-									? 'border-primary-500 text-primary-500'
-									: 'border-zinc-200 text-zinc-500'}"
-								on:click="{() => {
-									;(selectedReviewType = 'brand_review') && scrollTo('ratings_and_reviews')
-								}}">
-								Brand Review
-							</button>
+										? 'border-primary-500 text-primary-500'
+										: 'border-zinc-200 text-zinc-500'}"
+									on:click="{() => {
+										;(selectedReviewType = 'brand_review') && scrollTo('ratings_and_reviews')
+									}}">
+									Brand Review
+								</button>
+							</div>
 						</div>
-					</div>
 
-					<RatingsAndReviews
-						type="{selectedReviewType}"
-						product="{data?.product}"
-						reviewsSummary="{selectedReviewType === 'product_review'
-							? productReviews.reviewsSummary?.productReviews
-							: productReviews.reviewsSummary?.brandReviews}"
-						reviews="{productReviews}"
-						class="mb-5" />
-				{:catch error}
-					{error?.message}
-				{/await}
+						<RatingsAndReviews
+							type="{selectedReviewType}"
+							product="{data?.product}"
+							reviewsSummary="{selectedReviewType === 'product_review'
+								? productReviews.reviewsSummary?.productReviews
+								: productReviews.reviewsSummary?.brandReviews}"
+							reviews="{productReviews}"
+							class="mb-5" />
+					{:catch error}
+						{error?.message}
+					{/await}
+				{/if}
 
 				<!-- Add to Cart -->
 
@@ -1272,54 +1307,83 @@ function handleMobileCanvas() {
 
 				{#if showStickyCartButton && !data.product?.isCustomized}
 					<div
-						class="w-full grid md:hidden grid-cols-5 gap-2 items-center uppercase md:grid-cols-2 fixed inset-x-0 bottom-0 z-40 h-16 border-t bg-white p-3 box-shadow">
-						<div class="col-span-2">
-							<WhiteButton
-								type="button"
-								loadingringsize="sm"
-								loading="{loadingForWishlist}"
-								class="w-full text-sm"
-								on:click="{() => toggleWishlist(data.product?._id)}">
-								{#if isWishlisted}
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 shrink-0 text-red-500"
-										viewBox="0 0 20 20"
-										fill="currentColor">
-										<path
-											fill-rule="evenodd"
-											d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-											clip-rule="evenodd"></path>
-									</svg>
+						class="w-full grid md:hidden grid-cols-5 gap-2 items-center uppercase fixed inset-x-0 bottom-0 z-40 h-16 border-t bg-white p-3 box-shadow">
+						{#if $page.data.store?.isWishlist}
+							<div class="col-span-2">
+								<WhiteButton
+									type="button"
+									loadingringsize="sm"
+									loading="{loadingForWishlist}"
+									class="w-full text-sm"
+									on:click="{() => toggleWishlist(data.product?._id)}">
+									{#if isWishlisted}
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											class="h-5 w-5 shrink-0 text-red-500"
+											viewBox="0 0 20 20"
+											fill="currentColor">
+											<path
+												fill-rule="evenodd"
+												d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+												clip-rule="evenodd"></path>
+										</svg>
 
-									<span>Wishlisted</span>
-								{:else}
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 shrink-0"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke="currentColor"
-										stroke-width="2">
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-										></path>
-									</svg>
+										<span>Wishlisted</span>
+									{:else}
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											class="h-5 w-5 shrink-0"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke="currentColor"
+											stroke-width="2">
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+											></path>
+										</svg>
 
-									<span>Wishlist</span>
-								{/if}
-							</WhiteButton>
-						</div>
+										<span>Wishlist</span>
+									{/if}
+								</WhiteButton>
+							</div>
+						{/if}
 
-						<div class="col-span-3">
-							{#if isExpired}
+						<div class="{$page.data.store?.isWishlist ? ' col-span-5' : ' col-span-3'}">
+							{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
+								<a
+									href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
+										?.url?.search}"
+									class="block">
+									<WhiteButton
+										type="button"
+										loadingringsize="sm"
+										hideLoading
+										class="w-full text-sm">
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke-width="1.5"
+											stroke="currentColor"
+											class="w-5 h-5">
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+											></path>
+										</svg>
+
+										<span> Login </span>
+									</WhiteButton>
+								</a>
+							{:else if isExpired}
 								<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
 									Item Expired
 								</PrimaryButton>
 							{:else if data.product?.active && data.product?.hasStock}
-								{#if cartButtonText === 'Go to cart'}
+								{#if cartButtonText === 'Go to Cart'}
 									<a class="block" href="/cart" data-sveltekit-preload-data>
 										<PrimaryButton type="button" hideLoading class="w-full text-sm" blackBackground>
 											<svg
@@ -1355,7 +1419,7 @@ function handleMobileCanvas() {
 												setTimeout(() => {
 													bounceItemFromTop = false
 												}, 3000)
-												cartButtonText = 'Go to cart'
+												cartButtonText = 'Go to Cart'
 												if (customizedImg) {
 													goto(`/checkout/address`)
 												}
@@ -1416,49 +1480,82 @@ function handleMobileCanvas() {
 
 				{#if !data.product?.isCustomized}
 					<div class="w-full grid md:hidden grid-cols-5 gap-2 items-center uppercase mb-5">
-						<div class="col-span-2">
-							<WhiteButton
-								type="button"
-								loadingringsize="sm"
-								loading="{loadingForWishlist}"
-								class="w-full text-sm"
-								on:click="{() => toggleWishlist(data.product?._id)}">
-								{#if isWishlisted}
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 shrink-0 text-red-500"
-										viewBox="0 0 20 20"
-										fill="currentColor">
-										<path
-											fill-rule="evenodd"
-											d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-											clip-rule="evenodd"></path>
-									</svg>
+						{#if $page.data.store?.isWishlist}
+							<div class="col-span-2">
+								<WhiteButton
+									type="button"
+									loadingringsize="sm"
+									loading="{loadingForWishlist}"
+									class="w-full text-sm"
+									on:click="{() => toggleWishlist(data.product?._id)}">
+									{#if isWishlisted}
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											class="h-5 w-5 shrink-0 text-red-500"
+											viewBox="0 0 20 20"
+											fill="currentColor">
+											<path
+												fill-rule="evenodd"
+												d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+												clip-rule="evenodd"></path>
+										</svg>
 
-									<span>Wishlisted</span>
-								{:else}
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 shrink-0"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke="currentColor"
-										stroke-width="2">
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-										></path>
-									</svg>
+										<span>Wishlisted</span>
+									{:else}
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											class="h-5 w-5 shrink-0"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke="currentColor"
+											stroke-width="2">
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+											></path>
+										</svg>
 
-									<span>Wishlist</span>
-								{/if}
-							</WhiteButton>
-						</div>
+										<span>Wishlist</span>
+									{/if}
+								</WhiteButton>
+							</div>
+						{/if}
 
-						<div class="col-span-3">
-							{#if data.product?.active && data.product?.hasStock}
-								{#if cartButtonText === 'Go to cart'}
+						<div class="{$page.data.store?.isWishlist ? ' col-span-5' : ' col-span-3'}">
+							{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
+								<a
+									href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
+										?.url?.search}"
+									class="block">
+									<WhiteButton
+										type="button"
+										loadingringsize="sm"
+										hideLoading
+										class="w-full text-sm">
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke-width="1.5"
+											stroke="currentColor"
+											class="w-5 h-5">
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+											></path>
+										</svg>
+
+										<span> Login </span>
+									</WhiteButton>
+								</a>
+							{:else if isExpired}
+								<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
+									Item Expired
+								</PrimaryButton>
+							{:else if data.product?.active && data.product?.hasStock}
+								{#if cartButtonText === 'Go to Cart'}
 									<a class="block" href="/cart" data-sveltekit-preload-data>
 										<PrimaryButton type="button" hideLoading class="w-full text-sm" blackBackground>
 											<svg
@@ -1494,7 +1591,7 @@ function handleMobileCanvas() {
 												setTimeout(() => {
 													bounceItemFromTop = false
 												}, 3000)
-												cartButtonText = 'Go to cart'
+												cartButtonText = 'Go to Cart'
 												if (customizedImg) {
 													goto(`/checkout/address`)
 												}
@@ -1608,7 +1705,7 @@ function handleMobileCanvas() {
 					{/each}
 				</ul>
 			{:then value}
-				{#if value.moreFromCategory}
+				{#if value.moreFromCategory && value.moreFromCategory[0] && value.moreFromCategory[0].slug}
 					<div class="mb-5 sm:mb-10">
 						<SimilarProductsFromCategorySlug data="{value.moreFromCategory}" />
 					</div>

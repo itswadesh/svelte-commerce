@@ -89,7 +89,7 @@ export const getStoreData = async ({
 		store = {
 			id: storeRes.storeOne._id,
 			address: storeRes.storeOne.address,
-			adminUrl: storeRes.storeOne.adminUrl || storeRes.settings.adminUrl, // storeRes.storeOne.adminUrl used for arialmall
+			adminUrl: storeRes.storeOne.adminUrl || storeRes.settings?.adminUrl, // storeRes.storeOne.adminUrl used for arialmall
 			alert: storeRes.storeOne.alert,
 			closed: storeRes.storeOne.closed,
 			closedMessage: storeRes.storeOne.closedMessage,

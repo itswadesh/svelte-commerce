@@ -5,17 +5,17 @@
 </style>
 
 <script lang="ts">
-// import { partytownSnippet } from '@builder.io/partytown/integration'
+// import { pwaInfo } from 'virtual:pwa-info'
 import './../app.css'
-import { cubicIn, cubicOut } from 'svelte/easing'
+import { BackToTop, LazyImg, GoogleAnalytics } from '$lib/components' // Can not dynamically import Google Analytics, it throws gtag not found error, not even party town
 import { navigating } from '$app/stores'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-// import { pwaInfo } from 'virtual:pwa-info'
 import { ToastContainer, FlatToast } from 'svelte-toasts'
-import { BackToTop, LazyImg, GoogleAnalytics } from '$lib/components' // Can not dynamically import Google Analytics, it throws gtag not found error, not even party town
+import { BackToTop, LazyImg, GoogleAnalytics, FetchInit } from '$lib/components' // Can not dynamically import Google Analytics, it throws gtag not found error, not even party town
 import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 import storeClosed from '$lib/assets/store-closed.png'
+import whatsappIcon from '$lib/assets/social-media/whatsapp.png'
 
 export let data
 // console.log('$page', $page)
@@ -139,7 +139,26 @@ onMount(async () => {
 	<PreloadingIndicator />
 {/if}
 
-{#if !$page.data.store.closed}
+{#if !$page.data.store}
+	<!-- If store not found -->
+
+	<div class="h-screen w-full bg-white flex items-center justify-center">
+		<a
+			href="https://litekart.in/"
+			class="fixed top-0 inset-x-0 z-10 p-5 px-10 flex items-center justify-center border-b shadow-md">
+			<img
+				src="/litekart-rectangular-logo-black.png"
+				alt=""
+				class="h-10 w-auto object-contain object-center" />
+		</a>
+
+		<div class="flex items-center justify-center p-10 bg-white text-center">
+			<img src="/no/no_store_found.png" alt="" class="h-80 w-auto object-contain object-center" />
+		</div>
+	</div>
+{:else if !$page.data.store.closed}
+	<!-- If store found and is not closed -->
+
 	<section class="minimum-width-rem relative flex min-h-screen flex-col bg-white antialiased">
 		<div class="h-rem w-full flex-1">
 			<slot />
@@ -152,6 +171,19 @@ onMount(async () => {
 		<BackToTop />
 	{/if}
 
+	{#if $page.data.store?.isWhatsappChatButton && $page.data.store?.whatsappNumber}
+		<a
+			href="https://api.whatsapp.com/send?phone={$page.data.store?.whatsappNumber}"
+			target="_blank"
+			rel="noopener noreferrer"
+			class="fixed z-40 bottom-16 left-4">
+			<img
+				src="{whatsappIcon}"
+				alt=""
+				class="h-10 w-10 object-contain transform hover:scale-125 hover:-translate-y-2 transition duration-300" />
+		</a>
+	{/if}
+
 	<ToastContainer let:data>
 		<FlatToast data="{data}" />
 	</ToastContainer>
@@ -160,6 +192,8 @@ onMount(async () => {
 		<svelte:component this="{ReloadPrompt}" />
 	{/if} -->
 {:else}
+	<!-- If store found and is closed -->
+
 	<div class="h-screen w-full bg-white flex items-center justify-center">
 		<div
 			class="fixed top-0 inset-x-0 z-10 p-5 px-10 flex items-center justify-center border-b shadow-md">
@@ -178,3 +212,5 @@ onMount(async () => {
 		</div>
 	</div>
 {/if}
+
+<FetchInit />

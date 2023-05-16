@@ -1,8 +1,6 @@
 <script>
 // import logo from '$lib/assets/logo.svg'
 // import ProductTab from '$lib/components/Product/ProductTab.svelte'
-import { page } from '$app/stores'
-import dayjs from 'dayjs'
 import {
 	CategoriesHome,
 	Deals,
@@ -11,13 +9,16 @@ import {
 	CategoriesMobile,
 	CategoriesSlider
 } from '$lib/home'
-import {Footer,ProductCard,MobileFooter,LazyImg,DummyProductCard} from '$lib/components'
+import { Footer, ProductCard, MobileFooter, LazyImg, DummyProductCard } from '$lib/components'
+import { page } from '$app/stores'
+import dayjs from 'dayjs'
 import PickedBanners from '$lib/home/PickedBanners.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 let today = dayjs(new Date()).toISOString()
 
 export let data
+console.log('$page', $page)
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -86,13 +87,23 @@ let seoProps = {
 	twitterImage: { url: $page.data.store?.logo }
 }
 
+let hellobar = $page.data.store?.hellobar || {}
 let showFooter = false
 </script>
 
 <SEO {...seoProps} />
 
-<div class="bg-opacity-25 bg-center bg-repeat">
+<div class="bg-opacity-25 bg-center bg-repeat min-h-screen">
 	<div class="mb-14 lg:mb-0">
+		{#if hellobar.text?.val}
+			<div
+				class="sticky z-30 top-14 sm:top-20 inset-x-0 w-full h-8 text-center tracking-wider flex items-center justify-center text-sm"
+				style="background-color: {hellobar?.bgColor.val || '#27272a'};
+				 color: {hellobar?.textColor.val || '#ffffff'};">
+				{hellobar.text?.val}
+			</div>
+		{/if}
+
 		<!-- Categories slider mobile -->
 
 		{#await data.streamed.home then home}
@@ -234,28 +245,30 @@ let showFooter = false
 			{/if}
 		{/await}
 
-		{#await data.streamed.deals}
-			<div class="flex w-[98vw] items-start justify-start gap-3 overflow-x-auto">
-				<div class="w-60 h-60 animate-pulse rounded bg-zinc-200">
-					{#each { length: 10 } as _}
-						<div class="w-52 h-60 animate-pulse rounded bg-zinc-200"></div>
-					{/each}
-				</div>
-			</div>
-		{:then deals}
-			{#if deals.data?.length > 0}
-				{#each deals.data as deal}
-					<div class="mb-5 sm:mb-10">
-						<h2
-							class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
-							{deal.name}
-						</h2>
-
-						<Deals deal="{deal}" />
+		{#if $page.data.store?.isDeals}
+			{#await data.streamed.deals}
+				<div class="flex w-[98vw] items-start justify-start gap-3 overflow-x-auto">
+					<div class="w-60 h-60 animate-pulse rounded bg-zinc-200">
+						{#each { length: 10 } as _}
+							<div class="w-52 h-60 animate-pulse rounded bg-zinc-200"></div>
+						{/each}
 					</div>
-				{/each}
-			{/if}
-		{/await}
+				</div>
+			{:then deals}
+				{#if deals.data?.length > 0}
+					{#each deals.data as deal}
+						<div class="mb-5 sm:mb-10">
+							<h2
+								class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
+								{deal.name}
+							</h2>
+
+							<Deals deal="{deal}" />
+						</div>
+					{/each}
+				{/if}
+			{/await}
+		{/if}
 
 		{#await data.streamed.collections}
 			<div class="flex w-[98vw] items-start justify-start gap-3 overflow-x-auto">

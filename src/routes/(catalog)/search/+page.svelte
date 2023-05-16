@@ -1,20 +1,5 @@
-<style>
-@media (min-width: 1024px) {
-	.top-rem-map {
-		top: 85px;
-	}
-}
-.frosted-black {
-	backdrop-filter: blur(5px);
-	background-color: hsla(0, 0%, 0%, 0.8);
-}
-.height {
-	max-height: 85vh;
-}
-</style>
-
-<script>
-import { currency, dateOnly, generatePriceRange, toast } from '$lib/utils'
+<script lang="ts">
+import { generatePriceRange, toast } from '$lib/utils'
 import { fade } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
@@ -33,48 +18,25 @@ export let data
 let today = dayjs(new Date()).toISOString()
 
 let seoProps = {
-	// addressCountry: 'India',
-	// addressLocality: 'Semiliguda, Koraput',
-	// addressRegion: 'Odisha',
-	// alternateJsonHref: '',
-	// alternateXml: { title: '', href: '' },
 	brand: $page.data.store?.title,
 	breadcrumbs: data.category?.children,
 	caption: $page.data.store?.title,
 	category: data.searchData,
 	contentUrl: $page.data.store?.logo,
 	createdAt: today,
-	// depth: { unitCode: '', value: '' },
 	email: `${$page?.data?.store?.email}`,
-	// entityMeta: '',
-	// facebookPage: '',
-	// gtin: '',
-	// height: '',
 	id: $page?.url?.href,
 	image: $page.data.store?.logo,
 	logo: $page.data.store?.logo,
 	ogSquareImage: { url: '', width: 56, height: 56 },
 	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00'],
-	// popularity: data.category?.popularity,
-	// postalCode: '764036',
-	// price: data.category?.price,
-	// priceRange: `${data.category?.price}-${data.category?.mrp}`,
-	// ratingCount: 1,
-	// ratingValue: +data.category?.ratings + 1,
-	// sku: data.category?.sku,
-	// streetAddress: 'Padmajyoti Marg, Nandapur Road',
 	timeToRead: 0,
 	updatedAt: today,
-	// weight: { unitCode: '', value: '' },
-	// width: { unitCode: '', value: '' },
-	// wlwmanifestXmlHref: '',
 	metadescription: $page.data.store?.description,
-	// article: false,
 	canonical: `${$page?.url.href}`,
 	datePublished: today,
 	description: $page.data.store?.description,
 	dnsPrefetch: `//cdn.jsdelivr.net`,
-	// entityMeta: null,
 	featuredImage: {
 		url: $page.data.store?.logo,
 		width: 675,
@@ -88,13 +50,10 @@ let seoProps = {
 	ogImageSecureUrl: `${$page?.data?.store?.logo}`,
 	ogImageType: 'image/jpeg',
 	ogSiteName: `${$page.data.origin}/sitemap/sitemap.xml`,
-	// productAvailability: `${data.category?.stock}`,
 	productBrand: data.searchData,
 	productName: data.searchData,
-	// productPriceAmount: `${data.category?.price}`,
 	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
 	slug: `/`,
-	// timeToRead: 0,
 	title: data.searchData || 'Buy online in - ' + $page.data.store?.websiteName,
 	twitterImage: { url: $page.data.store?.logo }
 }
@@ -129,7 +88,6 @@ async function saveSearchData(searchData) {
 	try {
 		await PopularSearchService.savePopularSearch({
 			id: 'new',
-			// popularity: 0,
 			text: searchData,
 			storeId: $page.data.store?.id,
 			origin: $page.data.origin
@@ -140,7 +98,6 @@ async function saveSearchData(searchData) {
 }
 
 function goTop() {
-	// scroll to the top
 	window.scroll({ top: 0, behavior: 'smooth' })
 }
 

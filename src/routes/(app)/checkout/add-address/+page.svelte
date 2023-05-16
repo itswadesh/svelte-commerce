@@ -1,6 +1,6 @@
 <script>
 import { goto } from '$app/navigation'
-import {BackButton} from '$lib/ui'
+import { BackButton } from '$lib/ui'
 import SaveAddress from '../../my/addresses/_SaveAddress.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
@@ -12,8 +12,6 @@ const seoProps = {
 export let data
 
 function redirectToCheckout({ detail }) {
-	// console.log('{detail}', { detail })
-
 	if (detail.id === 'new' && detail.newAddressId) {
 		goto(`/checkout/payment-options?address=${detail.newAddressId}`)
 	}

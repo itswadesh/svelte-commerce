@@ -7,7 +7,6 @@ import SEO from '$lib/components/SEO/index.svelte'
 import {PrimaryButton} from '$lib/ui'
 
 export let data
-// console.log('data = ', data)
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -68,10 +67,8 @@ let seoProps = {
 	productAvailability: `${data.category?.stock}`,
 	productBrand: `${data.category?.brandName || $page.data.store?.title}`,
 	productName: `${data.category?.name}`,
-	// productPriceAmount: `${data.category?.price}`,
 	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
 	slug: `${data.category?.slug}`,
-	// timeToRead: 0,
 	title: `${data.category?.name || 'Buy online in - ' + $page.data.store?.websiteName}`,
 	twitterImage: { url: `${data.category?.img}` }
 }
@@ -85,23 +82,15 @@ let searchDenied = false
 
 $: if (data.megamenu.length) {
 	const mocv = data.megamenu.filter((obj) => obj.name === 'Mobile Cover')
-	// console.log('mocv', mocv)
-
 	mobileBrands = mocv[0].children
-	// console.log('mobileBrands', mobileBrands)
 }
 
 function handleSelectedBrand(e) {
 	const selectedBrandSlug = e.target.value
-	// console.log('selectedBrandSlug', selectedBrandSlug)
-
 	selectedBrandAllModels = []
 
 	const selectedBrandObject = mobileBrands.filter((obj) => obj.slug === selectedBrandSlug)
-	// console.log('selectedBrandObject', selectedBrandObject)
-
 	selectedBrandAllModels = selectedBrandObject[0].children
-	// console.log('selectedBrandAllModels', selectedBrandAllModels)
 }
 
 function handleOptionChange(e) {

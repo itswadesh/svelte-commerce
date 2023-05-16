@@ -1,13 +1,16 @@
 <script>
 import { getExtension, toast } from '$lib/utils'
 import { goto } from '$app/navigation'
+import { LazyImg } from '$lib/components'
 import { page } from '$app/stores'
 import { post } from '$lib/utils/api'
 import { ReviewService } from '$lib/services'
-import {Textarea,PrimaryButton,Errors,BackButton} from '$lib/ui'
+import BackButton from '$lib/ui/BackButton.svelte'
 import dayjs from 'dayjs'
-import {LazyImg} from '$lib/components'
+import Errors from '$lib/ui/Errors.svelte'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+import Textarea from '$lib/ui/Textarea.svelte'
 
 const seoProps = {
 	title: 'Reviews Details',
@@ -15,6 +18,7 @@ const seoProps = {
 }
 
 export let data
+// console.log('zzzzzzzzzzzzzzzzzz', data);
 
 let information = [
 	{
