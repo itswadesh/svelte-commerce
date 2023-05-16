@@ -5,25 +5,25 @@
 </style>
 
 <script lang="ts">
+import { Autocomplete } from '$lib/components'
 import { createEventDispatcher, onMount } from 'svelte'
 import { cubicOut } from 'svelte/easing'
 import { enhance } from '$app/forms'
 import { fade, fly, slide } from 'svelte/transition'
+import { goback, toast } from '$lib/utils'
 import { goto, invalidateAll } from '$app/navigation'
 import { logo } from '$lib/config'
+import { MegaMenu, LazyImg } from '$lib/components'
 import { page } from '$app/stores'
-import { goback, toast } from '$lib/utils'
-import {Autocomplete} from '$lib/components'
+import { WhiteButton, PrimaryButton } from '$lib/ui'
 import AutosuggestModal from './AutosuggestModal.svelte'
 import Cookie from 'cookie-universal'
-import {MegaMenu,LazyImg} from '$lib/components'
+import Item from '$lib/components/AutocompleteItem.svelte'
 import menu from '$lib/config/menu'
 import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
-import {WhiteButton,PrimaryButton} from '$lib/ui'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'
-import Item from '$lib/components/AutocompleteItem.svelte'
 
 const dispatch = createEventDispatcher()
 const cookies = Cookie()
@@ -609,7 +609,7 @@ const getSelectionLabel = (option) => option.name
 					{#if showDropdownAccount}
 						<ul
 							transition:fly="{{ y: 5, duration: 700 }}"
-							class="absolute top-20 right-0 flex min-w-max flex-col rounded-b border bg-white p-2 text-sm font-semibold shadow-inner">
+							class="absolute z-50 top-20 right-0 flex min-w-max flex-col rounded-b border bg-white p-2 text-sm font-semibold shadow-inner">
 							<li class="mb-2 border-b py-2 px-4">
 								<a
 									href="/my/profile"

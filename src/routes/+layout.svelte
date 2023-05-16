@@ -15,6 +15,7 @@ import { ToastContainer, FlatToast } from 'svelte-toasts'
 import FetchInit from '$lib/components/FetchInit.svelte'
 import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 import storeClosed from '$lib/assets/store-closed.png'
+import whatsappIcon from '$lib/assets/social-media/whatsapp.png'
 
 export let data
 // console.log('$page', $page)
@@ -168,6 +169,19 @@ onMount(async () => {
 
 	{#if showBackToTopButton}
 		<BackToTop />
+	{/if}
+
+	{#if $page.data.store?.isWhatsappChatButton && $page.data.store?.whatsappNumber}
+		<a
+			href="https://api.whatsapp.com/send?phone={$page.data.store?.whatsappNumber}"
+			target="_blank"
+			rel="noopener noreferrer"
+			class="fixed z-40 bottom-16 left-4">
+			<img
+				src="{whatsappIcon}"
+				alt=""
+				class="h-10 w-10 object-contain transform hover:scale-125 hover:-translate-y-2 transition duration-300" />
+		</a>
 	{/if}
 
 	<ToastContainer let:data>

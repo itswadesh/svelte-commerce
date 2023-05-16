@@ -146,14 +146,11 @@ async function getCoupons() {
 		{:else if data.cart?.qty > 0}
 			<div class="flex flex-col gap-10 lg:flex-row lg:justify-center xl:gap-20">
 				<div class="w-full flex-1">
-					<div class="items-center justify-between pb-3 sm:flex">
+					<div class="items-center justify-between h-10 sm:h-14 sm:flex">
 						<!-- Cart start  -->
 
 						<div class="mr-4 flex items-baseline">
-							<h1
-								class="font-serif text-xl font-medium tracking-wider sm:text-2xl md:text-3xl xl:text-4xl">
-								Cart
-							</h1>
+							<h1 class="font-serif text-2xl font-medium tracking-wider sm:text-3xl">Cart</h1>
 
 							<div class="mx-3 h-1 w-1 rounded-full bg-zinc-500"></div>
 
@@ -169,7 +166,9 @@ async function getCoupons() {
 						</div>
 					</div>
 
-					<div class="border-t pt-5">
+					<hr />
+
+					<div>
 						{#if data.cart?.unavailableItems?.length > 0}
 							<div>
 								<div class="cursor-default border-b opacity-50">
@@ -518,45 +517,50 @@ async function getCoupons() {
 
 				<div class="w-full lg:w-80 lg:shrink-0 lg:grow-0">
 					<!-- Promo code section -->
+					{#if $page.data.store?.isDiscountCoupons}
+						<div class="h-10 sm:h-14 flex items-center">
+							{#if data.cart?.discount?.amount > 0}
+								<div class="flex w-full items-center justify-between text-sm">
+									<h5 class="flex-1 truncate text-left font-semibold">
+										Applied Coupon "{data.cart?.discount?.code}"
+									</h5>
 
-					{#if data.cart?.discount?.amount > 0}
-						<div class="mt-3 flex w-full items-center justify-between text-sm">
-							<h5 class="flex-1 truncate text-left font-semibold">
-								Applied Coupon "{data.cart?.discount?.code}"
-							</h5>
+									<button
+										type="button"
+										class="w-16 font-bold text-primary-500 focus:outline-none hover:text-primary-700"
+										on:click="{removeCouponCode}">
+										{#if loadingRemoveCoupon}
+											<span class="text-center text-zinc-500"> ... </span>
+										{:else}
+											<span class="text-right hover:underline"> Remove </span>
+										{/if}
+									</button>
+								</div>
+							{:else}
+								<button
+									type="button"
+									class="flex w-full items-center justify-between focus:outline-none hover:text-primary-500"
+									class:text-primary-500="{openApplyPromoCodeModal}"
+									on:click="{() => (openApplyPromoCodeModal = true)}">
+									<h5 class="text-sm font-semibold">Apply Promo Code</h5>
 
-							<button
-								type="button"
-								class="w-16 font-bold text-primary-500 focus:outline-none hover:text-primary-700"
-								on:click="{removeCouponCode}">
-								{#if loadingRemoveCoupon}
-									<span class="text-center text-zinc-500"> ... </span>
-								{:else}
-									<span class="text-right hover:underline"> Remove </span>
-								{/if}
-							</button>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										class="h-5 w-5"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M9 5l7 7-7 7"></path>
+									</svg>
+								</button>
+							{/if}
 						</div>
-					{:else}
-						<button
-							type="button"
-							class="mt-3 flex w-full items-center justify-between focus:outline-none hover:text-primary-500"
-							class:text-primary-500="{openApplyPromoCodeModal}"
-							on:click="{() => (openApplyPromoCodeModal = true)}">
-							<h5 class="text-sm font-semibold">Apply Promo Code</h5>
 
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="h-5 w-5"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									d="M9 5l7 7-7 7"></path>
-							</svg>
-						</button>
+						<hr class="mb-5" />
 					{/if}
 
 					<Pricesummary
