@@ -5,13 +5,14 @@
 </style>
 
 <script lang="ts">
+// import { pwaInfo } from 'virtual:pwa-info'
 import './../app.css'
+import { BackToTop, LazyImg, GoogleAnalytics } from '$lib/components' // Can not dynamically import Google Analytics, it throws gtag not found error, not even party town
 import { navigating } from '$app/stores'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-// import { pwaInfo } from 'virtual:pwa-info'
 import { ToastContainer, FlatToast } from 'svelte-toasts'
-import { BackToTop, LazyImg, GoogleAnalytics } from '$lib/components' // Can not dynamically import Google Analytics, it throws gtag not found error, not even party town
+import FetchInit from '$lib/components/FetchInit.svelte'
 import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 import storeClosed from '$lib/assets/store-closed.png'
 
@@ -197,3 +198,5 @@ onMount(async () => {
 		</div>
 	</div>
 {/if}
+
+<FetchInit />

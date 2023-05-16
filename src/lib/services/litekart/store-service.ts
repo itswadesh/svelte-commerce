@@ -40,7 +40,9 @@ export const getStoreData = async ({
 	server = false,
 	sid = null
 }: any) => {
+
 	let storeRes: any = {}
+
 	let store = {
 		id,
 		address,
@@ -76,14 +78,19 @@ export const getStoreData = async ({
 		youtubeUrl,
 		IMAGE_CDN_URL: IMAGE_CDN_URL
 	}
+
+
 	let megamenu = null
+
 	if (
 		!cookieStore ||
 		cookieStore === 'undefined' ||
 		!cookieMegamenu ||
 		cookieMegamenu == 'undefined'
 	) {
+
 		const uri = new URL(url)
+
 		storeRes = await fetchInit(uri.host)
 
 		store = {
@@ -121,16 +128,24 @@ export const getStoreData = async ({
 			youtubeUrl: storeRes.storeOne.youtubeUrl,
 			IMAGE_CDN_URL: storeRes.storeOne.IMAGE_CDN_URL
 		}
+
 		megamenu = storeRes.megamenu
+
 		cookies.set('store', JSON.stringify(store), { path: '/' })
+
 		try {
 			cookies.set('megamenu', JSON.stringify(megamenu), { path: '/' })
-		} catch (e) {}
+		} catch (e) {
+
+		}
 	} else {
 		store = JSON.parse(cookieStore)
 		megamenu = JSON.parse(cookieMegamenu)
 	}
+
 	storeRes.storeOne = store
 	storeRes.megamenu = megamenu
+
+
 	return storeRes
 }

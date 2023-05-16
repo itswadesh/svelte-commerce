@@ -1,6 +1,7 @@
 import { error } from '@sveltejs/kit'
 import { getAPI } from '$lib/utils/api'
 import { getBySid } from '$lib/utils/server'
+
 const isServer = import.meta.env.SSR
 
 export const fetchHome = async ({
