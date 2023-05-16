@@ -1,10 +1,11 @@
-import { error, type Handle, type HandleServerError } from '@sveltejs/kit'
-import { SECRET_SENTRY_DSN } from '$env/static/private'
-const SENTRY_DSN = SECRET_SENTRY_DSN
-import * as SentryNode from '@sentry/node'
-import { nanoid } from 'nanoid'
 import { authenticateUser, fetchCart, fetchStoreData } from '$lib/server'
 import { DOMAIN, HTTP_ENDPOINT, listOfPagesWithoutBackButton } from '$lib/config'
+import { error, type Handle, type HandleServerError } from '@sveltejs/kit'
+import { nanoid } from 'nanoid'
+import { SECRET_SENTRY_DSN } from '$env/static/private'
+import * as SentryNode from '@sentry/node'
+
+const SENTRY_DSN = SECRET_SENTRY_DSN
 
 if (SENTRY_DSN && SENTRY_DSN !== 'YOUR_SENTRY_DSN') {
 	SentryNode.init({
@@ -30,32 +31,42 @@ export const handleError: HandleServerError = ({ error, event }) => {
 		errorId
 	}
 }
+
 export const handle: Handle = async ({ event, resolve }) => {
 	try {
 		const IS_DEV = import.meta.env.DEV
 		const url = new URL(event.request.url)
+
 		event.locals.origin = !IS_DEV ? `https://${url.host}` : `http://${url.host}`
+
 		const isDesktop = event.request.headers.get('sec-ch-ua-mobile') === '?0'
 		const isShowBackButton = !listOfPagesWithoutBackButton.includes(url?.pathname)
+
 		event.locals.isDesktop = isDesktop
 		event.locals.isShowBackButton = isShowBackButton
+
 		// This calls init only when store data not present in browser cookies
 		const { megamenu, storeOne } = await fetchStoreData(event)
+
 		event.locals.store = storeOne
 		event.locals.megamenu = megamenu
+
 		// this simply gets data from cookie
 		event.locals.me = await authenticateUser(event)
+
 		// This makes a call to backend on every request
 		event.locals.cart = await fetchCart(event)
+
 		// const derivedSid: string = event.cookies.get('connect.sid') || ''
-		// event.locals.sid = derivedSid
-		// event.cookies.set('sid', derivedSid, { path: '/' })
-		// event.request.headers.delete('connection')
 		// const route = event.url
 		// const start = performance.now()
-		const response = await resolve(event)
-		// const end = performance.now()
+		// event.cookies.set('sid', derivedSid, { path: '/' })
+		// event.locals.sid = derivedSid
+		// event.request.headers.delete('connection')
 
+		const response = await resolve(event)
+
+		// const end = performance.now()
 		// const responseTime = end - start
 
 		// if (responseTime > 1000) {
@@ -73,6 +84,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			<br/>ORIGIN: ${event.locals?.origin}
 			<br/>DOMAIN(env): ${DOMAIN}
 			<br/>HTTP_ENDPOINT(env): ${HTTP_ENDPOINT}`
+
 		throw error(404, err)
 	}
 }
