@@ -3,10 +3,11 @@ services:
   svelte-commerce:
     build:
       dockerfile: Dockerfile
+      context: .
     ports:
       - 3000:3000
     environment:
       - NODE_ENV=production
       # Add this line to use .env instead of .env.example
       - ENV_FILE=.env
-    pull_policy: always
+    # pull_policy: always
