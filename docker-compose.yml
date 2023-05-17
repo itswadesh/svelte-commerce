@@ -4,7 +4,7 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
-      pull_policy: always
+    pull_policy: always
     ports:
       - 3000:3000
     environment:
