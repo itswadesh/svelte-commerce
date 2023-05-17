@@ -20,6 +20,7 @@ count = +count
 $: pages = +count > 50 ? 50 : +count
 $: startTab = 5 - current <= 5 && 5 - current >= 0 ? 1 : current - 4
 $: endTab = startTab + 9
+
 function changePage(e) {
 	current = e || '1'
 	// dispatch('change', current)

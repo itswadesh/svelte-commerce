@@ -1,5 +1,5 @@
 <script>
-import {Nav,Footer} from '$lib/components'
+import { Nav, Footer } from '$lib/components'
 import { page } from '$app/stores'
 </script>
 
