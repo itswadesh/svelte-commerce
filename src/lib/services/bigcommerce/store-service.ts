@@ -11,23 +11,17 @@ import {
 	domain,
 	DOMAIN,
 	email,
-	facebookUrl,
 	GOOGLE_ANALYTICS_ID,
 	GOOGLE_CLIENT_ID,
-	instagramUrl,
 	keywords,
-	linkedinUrl,
 	loginUrl,
 	logo,
 	phone,
-	pinterestUrl,
 	searchbarText,
 	siteTitle,
-	twitterUrl,
 	websiteLegalName,
 	websiteName,
 	weightUnit,
-	youtubeUrl,
 	IMAGE_CDN_URL
 } from '$lib/config'
 import { fetchInit } from './init-service'
@@ -55,28 +49,25 @@ export const getStoreData = async ({
 		domain,
 		DOMAIN,
 		email,
-		facebookUrl,
 		GOOGLE_ANALYTICS_ID,
 		GOOGLE_CLIENT_ID,
-		instagramUrl,
+		IMAGE_CDN_URL: IMAGE_CDN_URL,
 		isFnb: false,
 		keywords,
-		linkedinUrl,
 		loginUrl,
 		logo,
 		otpLogin: false,
 		phone,
-		pinterestUrl,
 		searchbarText,
+		socialSharingButtons: {},
 		title: siteTitle,
-		twitterUrl,
 		websiteLegalName,
 		websiteName,
 		weightUnit,
-		youtubeUrl,
-		IMAGE_CDN_URL: IMAGE_CDN_URL
 	}
+
 	let megamenu = null
+
 	if (
 		!cookieStore ||
 		cookieStore === 'undefined' ||
@@ -100,26 +91,21 @@ export const getStoreData = async ({
 			domain: storeRes.storeOne.domain,
 			DOMAIN: storeRes.storeOne.DOMAIN,
 			email: storeRes.storeOne.websiteEmail,
-			facebookUrl: storeRes.storeOne.facebookUrl,
 			GOOGLE_ANALYTICS_ID: storeRes.storeOne.GOOGLE_ANALYTICS_ID,
 			GOOGLE_CLIENT_ID: storeRes.storeOne.GOOGLE_CLIENT_ID,
-			instagramUrl: storeRes.storeOne.instagramUrl,
+			IMAGE_CDN_URL: storeRes.storeOne.IMAGE_CDN_URL,
 			isFnb: storeRes.storeOne.isFnb,
 			keywords: storeRes.storeOne.keywords,
-			linkedinUrl: storeRes.storeOne.linkedinUrl,
 			loginUrl: storeRes.storeOne.otpLogin ? '/auth/otp-login' : '/auth/login',
 			logo: storeRes.storeOne.logo,
 			otpLogin: storeRes.storeOne.otpLogin || true,
 			phone: storeRes.storeOne.phone,
-			pinterestUrl: storeRes.storeOne.pinterestUrl,
 			searchbarText: storeRes.storeOne.searchbarText,
+			socialSharingButtons: storeRes.storeOne.socialSharingButtons,
 			title: storeRes.storeOne.title,
-			twitterUrl: storeRes.storeOne.twitterUrl,
 			websiteLegalName: storeRes.storeOne.websiteLegalName,
 			websiteName: storeRes.storeOne.websiteName,
 			weightUnit: storeRes.storeOne.weightUnit,
-			youtubeUrl: storeRes.storeOne.youtubeUrl,
-			IMAGE_CDN_URL: storeRes.storeOne.IMAGE_CDN_URL
 		}
 		megamenu = storeRes.megamenu
 		cookies.set('store', JSON.stringify(store), { path: '/' })

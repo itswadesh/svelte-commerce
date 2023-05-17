@@ -2,8 +2,8 @@
 import { ContactService } from '$lib/services'
 import { page } from '$app/stores'
 import { toast } from '$lib/utils'
-import {Error} from '$lib/components'
-import {TextboxFloating,TextareaFloating,PrimaryButton} from '$lib/ui'
+import { Error } from '$lib/components'
+import { TextboxFloating, TextareaFloating, PrimaryButton } from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
 
 let seoProps = {
@@ -122,15 +122,15 @@ async function submitContactInformation() {
 					</ul>
 				{/if}
 
-				{#if $page.data.store?.facebookUrl || $page.data.store?.instagramUrl || $page.data.store?.twitterUrl || $page.data.store?.email || $page.data.store?.linkedinUrl || $page.data.store?.pinterestUrl || $page.data.store?.youtubeUrl}
+				{#if $page.data.store?.socialSharingButtons || $page.data.store?.email}
 					<ul class="flex flex-wrap items-center gap-2">
 						<!-- Facebook -->
 
-						{#if $page.data.store?.facebookUrl}
+						{#if $page.data.store?.socialSharingButtons?.facebook?.val}
 							<li
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#4267B2]">
 								<a
-									href="{$page.data.store?.facebookUrl}"
+									href="{$page.data.store?.socialSharingButtons?.facebook?.val}"
 									aria-label="Click to visit facebook page"
 									target="_blank"
 									rel="noopener noreferrer"
@@ -155,11 +155,11 @@ async function submitContactInformation() {
 
 						<!-- Instagram -->
 
-						{#if $page.data.store?.instagramUrl}
+						{#if $page.data.store?.socialSharingButtons?.instagram?.val}
 							<li
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#C13584]">
 								<a
-									href="{$page.data.store?.instagramUrl}"
+									href="{$page.data.store?.socialSharingButtons?.instagram?.val}"
 									aria-label="Click to visit instagram page"
 									target="_blank"
 									rel="noopener noreferrer"
@@ -184,11 +184,11 @@ async function submitContactInformation() {
 
 						<!-- Twitter -->
 
-						{#if $page.data.store?.twitterUrl}
+						{#if $page.data.store?.socialSharingButtons?.twitter?.val}
 							<li
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#1DA1F2]">
 								<a
-									href="{$page.data.store?.twitterUrl}"
+									href="{$page.data.store?.socialSharingButtons?.twitter?.val}"
 									aria-label="Click to visit twitter page"
 									target="_blank"
 									rel="noopener noreferrer"
@@ -213,11 +213,11 @@ async function submitContactInformation() {
 
 						<!-- Linked in -->
 
-						{#if $page.data.store?.linkedinUrl}
+						{#if $page.data.store?.socialSharingButtons?.linkedin?.val}
 							<li
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#0077b5]">
 								<a
-									href="{$page.data.store?.linkedinUrl}"
+									href="{$page.data.store?.socialSharingButtons?.linkedin?.val}"
 									aria-label="Click to visit linkedin page"
 									target="_blank"
 									rel="noopener noreferrer"
@@ -244,11 +244,11 @@ async function submitContactInformation() {
 
 						<!-- Pinterest -->
 
-						{#if $page.data.store?.pinterestUrl}
+						{#if $page.data.store?.socialSharingButtons?.pinterest?.val}
 							<li
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#D32D2D]">
 								<a
-									href="{$page.data.store?.pinterestUrl}"
+									href="{$page.data.store?.socialSharingButtons?.pinterest?.val}"
 									aria-label="Click to visit pinterest page"
 									target="_blank"
 									rel="noopener noreferrer"
@@ -275,11 +275,11 @@ async function submitContactInformation() {
 
 						<!-- Youtube -->
 
-						{#if $page.data.store?.youtubeUrl}
+						{#if $page.data.store?.socialSharingButtons?.youtube?.val}
 							<li
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#FF0000]">
 								<a
-									href="{$page.data.store?.youtubeUrl}"
+									href="{$page.data.store?.socialSharingButtons?.youtube?.val}"
 									aria-label="Click to visit youtube page"
 									target="_blank"
 									rel="noopener noreferrer"
