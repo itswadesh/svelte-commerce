@@ -99,11 +99,11 @@ const schemaOrgEntity =
 					'@id': location
 				},
 				sameAs: [
-					`${$page?.data?.store?.twitterUrl}`,
-					`${$page?.data?.store?.facebookUrl}`,
-					`${$page?.data?.store?.instagramUrl}`,
-					`${$page?.data?.store?.linkedinUrl}`,
-					`${$page?.data?.store?.youtubeUrl}`
+					`${$page.data.store?.socialSharingButtons?.twitter?.val}`,
+					`${$page.data.store?.socialSharingButtons?.facebook?.val}`,
+					`${$page.data.store?.socialSharingButtons?.instagram?.val}`,
+					`${$page.data.store?.socialSharingButtons?.linkedin?.val}`,
+					`${$page.data.store?.socialSharingButtons?.youtube?.val}`
 				]
 		  }
 		: null
@@ -228,11 +228,11 @@ const schemaOrgPublisher = {
 		'@id': `${siteUrl}/#personlogo`
 	},
 	sameAs: [
-		`${$page?.data?.store?.twitterUrl}`,
-		`${$page?.data?.store?.facebookUrl}`,
-		`${$page?.data?.store?.instagramUrl}`,
-		`${$page?.data?.store?.linkedinUrl}`,
-		`${$page?.data?.store?.youtubeUrl}`
+		`${$page.data.store?.socialSharingButtons?.twitter?.val}`,
+		`${$page.data.store?.socialSharingButtons?.facebook?.val}`,
+		`${$page.data.store?.socialSharingButtons?.instagram?.val}`,
+		`${$page.data.store?.socialSharingButtons?.linkedin?.val}`,
+		`${$page.data.store?.socialSharingButtons?.youtube?.val}`
 	]
 }
 const schemaOrgProduct = {
