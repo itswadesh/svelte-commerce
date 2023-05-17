@@ -5,3 +5,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - 3000:3000
+    environment:
+      - NODE_ENV=production
+      # Add this line to use .env instead of .env.example
+      - ENV_FILE=.env
