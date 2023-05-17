@@ -25,18 +25,11 @@ const share = async ({ title, text, url }: any) => {
 				text: text,
 				url: url
 			})
-			console.log('Successfully shared.')
 		} catch (error) {
 			console.error('Error sharing:', error)
 		}
 	} else {
 		console.log('Web Share API not supported.')
-		console.log('/')
-		console.log(title)
-		console.log('/')
-		console.log(text)
-		console.log('/')
-		console.log(url)
 	}
 }
 
@@ -55,7 +48,6 @@ let muted = true
 
 function toggleMute(product) {
 	product.muted = !product.muted
-	console.log(product.muted)
 }
 
 const addToCart = async ({ pid, qty, customizedImg, ix, loadingType }: any) => {

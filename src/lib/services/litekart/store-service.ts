@@ -34,7 +34,6 @@ export const getStoreData = async ({
 	server = false,
 	sid = null
 }: any) => {
-
 	let storeRes: any = {}
 
 	let store = {
@@ -76,7 +75,6 @@ export const getStoreData = async ({
 		weightUnit,
 	}
 
-
 	let megamenu = null
 
 	if (
@@ -85,9 +83,8 @@ export const getStoreData = async ({
 		!cookieMegamenu ||
 		cookieMegamenu == 'undefined'
 	) {
-
 		const uri = new URL(url)
-
+		console.log('URI..............', uri)
 		storeRes = await fetchInit(uri.host)
 
 		store = {
@@ -135,9 +132,7 @@ export const getStoreData = async ({
 
 		try {
 			cookies.set('megamenu', JSON.stringify(megamenu), { path: '/' })
-		} catch (e) {
-
-		}
+		} catch (e) {}
 	} else {
 		store = JSON.parse(cookieStore)
 		megamenu = JSON.parse(cookieMegamenu)
@@ -145,7 +140,6 @@ export const getStoreData = async ({
 
 	storeRes.storeOne = store
 	storeRes.megamenu = megamenu
-
 
 	return storeRes
 }

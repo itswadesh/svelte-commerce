@@ -15,7 +15,6 @@ const seoProps = {
 }
 
 export let data
-console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let bankPayment = { type: 'order', reference: '', remark: '', paymentMethodId: '', amount: 0 }
 let disabled = false
@@ -142,7 +141,6 @@ async function submit(pm) {
 					color: '#112D4E'
 				}
 			}
-			console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', options)
 			const rzp1 = new Razorpay(options)
 			rzp1.open()
 		} catch (e) {
