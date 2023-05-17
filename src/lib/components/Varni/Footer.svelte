@@ -346,16 +346,17 @@ async function getStoreData() {
 	</div>
 
 	<div class="p-3 sm:px-10">
-		<div class="container mx-auto max-w-6xl flex flex-wrap items-center justify-between gap-4">
-			<p>
+		<div
+			class="container mx-auto max-w-6xl flex flex-wrap xl:grid xl:grid-cols-3 items-center justify-between gap-4">
+			<p class="col-span-1 justify-start text-xs">
 				Copyright © {getYear()}
 				{$page.data.store?.websiteName},
-				<!-- <br /> -->
+				<br />
 				All Rights Reserved | Powered by Litekart
 			</p>
 
 			{#if $page.data.store?.socialSharingButtons || $page.data.store?.email}
-				<ul class="flex flex-wrap gap-4">
+				<ul class="col-span-1 justify-center flex flex-wrap gap-4">
 					<!-- Facebook -->
 
 					{#if $page.data.store?.socialSharingButtons?.facebook?.val}
@@ -545,7 +546,7 @@ async function getStoreData() {
 			{/if}
 
 			{#if paymentMethodCards?.length}
-				<ul class="flex flex-wrap gap-2 items-center m-0 p-0 list-none">
+				<ul class="col-span-1 justify-end flex flex-wrap gap-2 items-center m-0 p-0 list-none">
 					{#each paymentMethodCards as pmc}
 						<li>
 							<img src="{pmc}" alt="" class="h-8 w-auto object-contain" />

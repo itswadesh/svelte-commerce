@@ -21,12 +21,12 @@ import ToggleSwitch from './ToggleSwitch.svelte'
 import WhiteButton from './WhiteButton.svelte'
 
 // Core components of svelte commerce
-import CheckboxEs from './CheckboxEs.svelte'
-import RadioEs from './RadioEs.svelte'
+// import CheckboxEs from './CheckboxEs.svelte'
+// import RadioEs from './RadioEs.svelte'
 
 // Varni components
-// import CheckboxEs from './../components/Varni/CheckboxEs.svelte'
-// import RadioEs from './../components/Varni/RadioEs.svelte'
+import CheckboxEs from './../components/Varni/CheckboxEs.svelte'
+import RadioEs from './../components/Varni/RadioEs.svelte'
 
 export {
     BackButton,

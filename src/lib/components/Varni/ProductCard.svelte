@@ -22,11 +22,9 @@ export let product = {}
 let newProduct = {}
 
 onMount(() => {
-
 	if (product?._source) {
 		newProduct = product?._source
 		newProduct._id = product?._id
-
 	} else {
 		newProduct = product
 	}
@@ -65,6 +63,7 @@ async function toggleWishlist(id) {
 
 		toast('Added to wishlist successfully', 'success')
 	} catch (e) {
+		toast(e, 'error')
 	} finally {
 		loadingForWishlist = false
 	}

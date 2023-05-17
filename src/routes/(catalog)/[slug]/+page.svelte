@@ -4,16 +4,24 @@ import { fade } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import {
+	Pagination,
+	ProductCard,
+	CatelogNav,
+	DesktopFilter,
+	DummyProductCard,
+	MobileFilter
+} from '$lib/components'
+import { PrimaryButton } from '$lib/ui'
 import { ProductService } from '$lib/services'
 import { sorts } from '$lib/config'
-import {Pagination,ProductCard,CatelogNav,DesktopFilter,DummyProductCard,MobileFilter} from '$lib/components'
-
 import dotsLoading from '$lib/assets/dots-loading.gif'
 import noDataAvailable from '$lib/assets/no/no-data-available.png'
-
-import {PrimaryButton} from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
+
 export let data
+
+console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	brand: $page.data.store?.title,
@@ -500,7 +508,7 @@ function handleFilterTags() {
 					{/if}
 				{:else}
 					<Pagination
-						count="{Math.ceil((data?.count || 1) / data.pageSize)}"
+						count="{Math.ceil((data.products?.count || 1) / data.products?.pageSize)}"
 						current="{data?.currentPage || 1}"
 						providePaddingOnMobile />
 				{/if}
