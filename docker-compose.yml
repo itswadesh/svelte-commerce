@@ -8,6 +8,7 @@ services:
       - 3000:3000
     environment:
       - NODE_ENV=production
+      - APP_VERSION="1.0.0"
       # Add this line to use .env instead of .env.example
       - ENV_FILE=.env
     # pull_policy: always
