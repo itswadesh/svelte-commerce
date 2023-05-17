@@ -11,4 +11,4 @@ services:
       - APP_VERSION="1.0.0"
       # Add this line to use .env instead of .env.example
       - ENV_FILE=.env
-    # pull_policy: always
+    pull_policy: always
