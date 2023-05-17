@@ -9,8 +9,8 @@ export const fetchInit = async (host) => {
 	try {
 		let res: any = {}
 		// DOMAIN value is proviede in case of self hosted and host value in case of SaaS
+		console.log('init..................', `init?domain=${DOMAIN ? DOMAIN : host}`)
 		res = await getBySid(`init?domain=${DOMAIN ? DOMAIN : host}`)
-		console.log('init..................', res)
 		return res || {}
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)
