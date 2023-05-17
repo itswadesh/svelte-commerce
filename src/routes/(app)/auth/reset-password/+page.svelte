@@ -50,7 +50,6 @@ async function submit(p) {
 		const { password, passwordConfirmation } = p
 		const id = $page.data?.id
 		const token = $page.data?.token
-		console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', id, token)
 
 		const res = await UserService.resetPasswordService({
 			id,

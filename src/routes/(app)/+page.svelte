@@ -18,7 +18,6 @@ import SEO from '$lib/components/SEO/index.svelte'
 let today = dayjs(new Date()).toISOString()
 
 export let data
-console.log('$page', $page)
 
 let seoProps = {
 	// addressCountry: 'India',
