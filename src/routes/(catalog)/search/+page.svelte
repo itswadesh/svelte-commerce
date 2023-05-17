@@ -1,19 +1,28 @@
 <script lang="ts">
-import { generatePriceRange, toast } from '$lib/utils'
 import { fade } from 'svelte/transition'
+import { generatePriceRange, toast } from '$lib/utils'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { ProductService, PopularSearchService } from '$lib/services'
 import { sorts } from '$lib/config'
+import { PrimaryButton } from '$lib/ui'
+import {
+	ProductCard,
+	Pagination,
+	MobileFilter,
+	DummyProductCard,
+	CatelogNav,
+	DesktopFilter
+} from '$lib/components'
 import dayjs from 'dayjs'
-import {ProductCard,Pagination,MobileFilter,DummyProductCard,CatelogNav,DesktopFilter} from '$lib/components'
 import dotsLoading from '$lib/assets/dots-loading.gif'
 import noDataAvailable from '$lib/assets/no/no-data-available.png'
-import {PrimaryButton} from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
+
+console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let today = dayjs(new Date()).toISOString()
 
@@ -80,7 +89,7 @@ if (
 
 $: innerWidth = 0
 
-$: if (data?.count === 0) {
+$: if (data.products?.count === 0) {
 	saveSearchData(data?.searchData)
 }
 
@@ -511,7 +520,7 @@ function handleFilterTags() {
 					{/if}
 				{:else}
 					<Pagination
-						count="{Math.ceil((data?.count || 1) / data.pageSize)}"
+						count="{Math.ceil((data.products?.count || 1) / data.products?.pageSize)}"
 						current="{data?.currentPage || 1}"
 						providePaddingOnMobile />
 				{/if}
