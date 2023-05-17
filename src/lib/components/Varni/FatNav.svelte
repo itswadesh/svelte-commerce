@@ -51,8 +51,6 @@ const cookies = Cookie()
 
 export let me, cart, data, showCartSidebar, openSidebar, store
 
-// console.log('page', $page)
-
 let q = ''
 let showDropdownAccount = false
 let show = false
@@ -113,7 +111,6 @@ onMount(async () => {
 // 		toast('Signed Out...', 'success')
 // 		goto('/auth/login')
 // 	} catch (e) {
-// 		console.log(e)
 // 		toast(e, 'error')
 // 	} finally {
 // 	}
@@ -162,8 +159,6 @@ async function getCategories() {
 		categories = res1?.data.filter((c) => {
 			return c.img
 		})
-		// console.log('res1', res1)
-		// console.log('categories', categories)
 	} catch (e) {
 	} finally {
 	}

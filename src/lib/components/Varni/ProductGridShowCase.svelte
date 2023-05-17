@@ -5,8 +5,6 @@ export let topTitle = ''
 export let title = 'Products'
 export let products = []
 
-// console.log('products', products)
-
 let showCount = 10
 </script>
 

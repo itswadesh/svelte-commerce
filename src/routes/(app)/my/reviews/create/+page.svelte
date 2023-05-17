@@ -18,7 +18,6 @@ const seoProps = {
 }
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data);
 
 let information = [
 	{

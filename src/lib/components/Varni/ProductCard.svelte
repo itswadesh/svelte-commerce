@@ -22,13 +22,11 @@ export let product = {}
 let newProduct = {}
 
 onMount(() => {
-	// console.log('product', product)
 
 	if (product?._source) {
 		newProduct = product?._source
 		newProduct._id = product?._id
 
-		// console.log('newProduct', newProduct)
 	} else {
 		newProduct = product
 	}
