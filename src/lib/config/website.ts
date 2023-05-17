@@ -7,20 +7,14 @@ export const closedMessage = `Sorry we're closed for the day`
 export const description = ''
 export const domain = 'litekart.in'
 export const email = 'hi@litekart.in'
-export const facebookUrl = 'https://www.facebook.com/itswadesh'
 export const GOOGLE_ANALYTICS_ID = 'G-BG3JKWLYPF'
 export const GOOGLE_CLIENT_ID =
 	'414060469322-n4raqj2rdbjhegvrtdk6mhbdm4sd0oc7.apps.googleusercontent.com'
-export const instagramUrl = 'https://www.instagram.com/litekart'
 export const keywords = 'ecommerce, headless, pwa'
-export const linkedinUrl = 'https://www.linkedin.com/itswadesh'
 export const logo = Logo
 export const phone = '+91-8249028220'
-export const pinterestUrl = 'https://www.pinterest.com/itswadesh'
-export const twitterUrl = 'https://twitter.com/itswadesh'
 export const websiteLegalName = 'Misiki Technologies LLP'
 export const websiteName = 'Litekart'
-export const youtubeUrl = 'https://www.youtube.com/channel/UCW_HHzkVcv37smPvwvbZyQQ'
 // All above data will be replaced by Footer.svelte after the server/store call and saved to cookie
 
 // Bellow PWA Settings, can't configure from admin
