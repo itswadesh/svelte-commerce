@@ -1,5 +1,6 @@
 <script lang="ts">
-import {PageTransitions,Nav,Footer} from '$lib/components'
+import { PageTransitions, Nav, Footer } from '$lib/components'
+import { slotMarginProduct } from '$lib/config'
 
 export let data
 
@@ -19,7 +20,7 @@ let openSidebar = false
 	</div>
 
 	<PageTransitions url="{data.url}">
-		<div class="lg:mt-20 w-full flex-1">
+		<div class="{slotMarginProduct} w-full flex-1">
 			<slot />
 		</div>
 	</PageTransitions>
