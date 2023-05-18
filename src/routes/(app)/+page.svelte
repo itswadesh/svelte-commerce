@@ -3,13 +3,26 @@
 // import ProductTab from '$lib/components/Product/ProductTab.svelte'
 import {
 	CategoriesHome,
+	CategoriesMobile,
+	CategoriesSlider,
 	Deals,
 	Hero,
-	HeroBanners,
-	CategoriesMobile,
-	CategoriesSlider
+	HeroBanners
 } from '$lib/home'
-import { Footer, ProductCard, MobileFooter, LazyImg, DummyProductCard } from '$lib/components'
+import {
+	CollectionsHome,
+	DummyProductCard,
+	Footer,
+	HeroBannersCollage6,
+	LazyImg,
+	LegalFooterInformation,
+	MobileFooter,
+	PopularProductsHome,
+	ProductCard,
+	ProductGridShowCase,
+	ShopYourStone,
+	TrendingProductsHome
+} from '$lib/components'
 import { page } from '$app/stores'
 import dayjs from 'dayjs'
 import PickedBanners from '$lib/home/PickedBanners.svelte'
@@ -292,63 +305,33 @@ let showFooter = false
 			{/if}
 		{/await}
 
+		{#await data.streamed.home then home}
+			<HeroBannersCollage6 heroBanners="{home.heroBanners}" />
+		{/await}
+
 		<!-- Popular products -->
 
-		{#await data.streamed.home then home}
-			{#if home?.popular}
-				{#if home?.popular?.data?.length > 0}
-					<div>
-						<h2
-							class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
-							POPULAR ON {$page.data.store?.websiteName}
-						</h2>
-
-						<ul
-							class="sm:px-10 border-t sm:border-t-0 grid w-full grid-cols-2 items-start sm:gap-3 sm:flex sm:flex-wrap sm:justify-between lg:gap-6">
-							{#each home?.popular?.data as p}
-								<li>
-									<ProductCard product="{p}" />
-								</li>
-							{/each}
-
-							{#each { length: 7 } as _}
-								<li class="hidden sm:block">
-									<DummyProductCard />
-								</li>
-							{/each}
-						</ul>
-					</div>
-				{/if}
-			{/if}
-		{/await}
+		<PopularProductsHome data="{data}" />
 
 		<!-- Trending products -->
 
-		{#await data.streamed.home then home}
-			{#if home?.trending?.length > 0}
-				<div>
-					<h2
-						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
-						TRENDING ON {$page.data.store?.websiteName}
-					</h2>
+		<TrendingProductsHome data="{data}" />
 
-					<ul
-						class="sm:px-10 border-t sm:border-t-0 grid w-full grid-cols-2 items-start sm:gap-3 sm:flex sm:flex-wrap sm:justify-between lg:gap-6">
-						{#each home?.trending as p}
-							<li>
-								<ProductCard product="{p}" />
-							</li>
-						{/each}
+		<!-- Trending products -->
+		<!-- Note: Write the categories with comma separation -->
+		<ProductGridShowCase topTitle="New Shop Items" title="Fashion" categories="fashion" />
 
-						{#each { length: 8 } as _}
-							<li class="hidden sm:block">
-								<DummyProductCard />
-							</li>
-						{/each}
-					</ul>
-				</div>
-			{/if}
-		{/await}
+		<!-- Collections -->
+
+		<CollectionsHome data="{data}" />
+
+		<!-- Shop your stone -->
+
+		<ShopYourStone />
+
+		<!-- Legal Footer Information -->
+
+		<LegalFooterInformation />
 
 		<!-- <ProductTab /> -->
 

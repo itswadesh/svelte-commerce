@@ -1,17 +1,33 @@
 <script>
+import { HomeService } from '$lib/services'
 import { ProductCard } from '$lib/components'
+import { onMount } from 'svelte'
+import { page } from '$app/stores'
 
-export let topTitle = ''
+export let categories = ''
 export let title = 'Products'
-export let products = []
+export let topTitle = ''
 
+let categoriesProducts
 let showCount = 10
+
+onMount(async () => {
+	categoriesProducts = (
+		await HomeService.fetchCategoriesProducts({
+			categories,
+			origin,
+			storeId: $page.data.store?.id
+		})
+	).data
+
+	console.log('categoriesProducts', categoriesProducts)
+})
 </script>
 
-{#if products?.length}
+{#if categoriesProducts?.length}
 	<div class="px-3 xl:px-10 py-10">
 		<div class="w-full xl:mx-auto xl:max-w-6xl">
-			<h2 class="uppercase flex items-center gap-4">
+			<h2 class="mb-5 uppercase flex items-center gap-4">
 				<hr class="flex-1" />
 
 				<div class="flex flex-col gap-1 items-center text-center">
@@ -25,7 +41,7 @@ let showCount = 10
 
 			<div>
 				<ul class="mb-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 sm:gap-4">
-					{#each products as p, px}
+					{#each categoriesProducts as p, px}
 						{#if px < showCount}
 							<li class="col-span-1">
 								<ProductCard product="{p}" />
