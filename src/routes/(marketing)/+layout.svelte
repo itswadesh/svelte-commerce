@@ -1,13 +1,13 @@
 <script>
-import Footer from '$lib/Footer.svelte'
-import Nav from '$lib/Nav.svelte'
+import { Nav, Footer } from '$lib/components'
 import { page } from '$app/stores'
+import { slotMarginGeneral } from '$lib/config'
 </script>
 
 <div class="h-rem w-full flex-1">
 	<Nav me="{$page.data.me}" cart="{$page.data.cart}" />
 
-	<div class="mt-14 w-full flex-1 sm:mt-20">
+	<div class="{slotMarginGeneral} w-full flex-1">
 		<slot />
 	</div>
 </div>
