@@ -1,5 +1,5 @@
 <script>
-import {MobileFooter} from '$lib/components'
+import { MobileFooter } from '$lib/components'
 import SEO from '$lib/components/SEO/index.svelte'
 import UserDashboard from './_UserDashboard.svelte'
 
@@ -9,6 +9,7 @@ const seoProps = {
 }
 
 export let data
+console.log('zzzzzzzzzzzzzzzzzz', data)
 </script>
 
 <SEO {...seoProps} />
@@ -17,9 +18,9 @@ export let data
 	<div class="mb-14 sm:mb-0">
 		<UserDashboard
 			me="{data.me}"
-			myOrders="{data.myOrders}"
-			myWishlist="{data.myWishlist}"
-			myReviews="{data.myReviews}" />
+			myOrders="{data.orders}"
+			myWishlist="{data.wishlists}"
+			myReviews="{data.reviews}" />
 	</div>
 
 	<!-- MOBILE FOOTER -->

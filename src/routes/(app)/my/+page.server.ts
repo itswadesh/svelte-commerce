@@ -1,31 +1,26 @@
 import { OrdersService, ReviewService, WishlistService } from '$lib/services'
+import { error } from '@sveltejs/kit'
 
-import { redirect } from '@sveltejs/kit'
-
-export async function load({ locals, cookies }) {
-	const { me, store } = locals
+export async function load({ cookies, locals }) {
 	try {
-		const myOrders = await OrdersService.fetchOrders({
-			storeId: store?.id,
-			server: true,
-			sid: cookies.get('connect.sid')
-		})
-		const myWishlist = await WishlistService.fetchWishlist({
-			storeId: store?.id,
-			server: true,
+		const orders = await OrdersService.fetchOrders({
 			sid: cookies.get('connect.sid'),
-			origin: locals.origin
+			storeId: locals.store?.id
 		})
-		const myReviews = await ReviewService.fetchReviews({
-			storeId: store?.id,
-			server: true,
+
+		const wishlists = await WishlistService.fetchWishlist({
 			sid: cookies.get('connect.sid'),
-			origin: locals.origin
+			storeId: locals.store?.id
 		})
-		return { me: me, myOrders, myWishlist, myReviews }
+
+		const reviews = await ReviewService.fetchReviews({
+			sid: cookies.get('connect.sid'),
+			storeId: locals.store?.id
+		})
+
+		return { orders, wishlists, reviews }
+
 	} catch (e) {
-		if (e.status === 401) {
-			throw redirect(307, store?.loginUrl)
-		}
+		throw error(400, e?.message)
 	}
 }
