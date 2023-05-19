@@ -54,9 +54,9 @@ onMount(() => {
 	countDown()
 })
 
-// onDestroy(() => {
-//   clearInterval(interval);
-// });
+onDestroy(() => {
+	clearInterval(interval)
+})
 </script>
 
 <div class="clock__wrapper bg-slate-900 flex flex-col h-56 mt-8">
