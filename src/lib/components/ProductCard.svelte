@@ -55,7 +55,7 @@ function hideitems() {
 
 {#if product}
 	<div
-		class="group relative col-span-1 block w-full overflow-hidden sm:w-52 sm:shrink-0 sm:rounded border sm:border-transparent sm:hover:border-zinc-200 sm:hover:bg-white sm:hover:shadow-lg bg-white"
+		class="group relative col-span-1 block w-full border-solid border-slate-300	 border-2  overflow-hidden sm:w-52 sm:shrink-0 sm:rounded"
 		on:mouseenter="{showitems}"
 		on:mouseleave="{hideitems}">
 		<a

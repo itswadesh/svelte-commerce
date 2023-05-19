@@ -48,10 +48,10 @@ onMount(async () => {
 							<LazyImg
 								src="{b.img}"
 								alt="{b.name}"
-								height="380"
-								aspect_ratio="4:1"
-								class="block h-auto w-full object-contain object-top" />
-						</a>
+								height="384"
+								class="block h-screen w-full object-contain object-top" />
+							</a>
+							<!-- aspect_ratio="4:1" -->
 					</SplideSlide>
 				{/if}
 			{/each}

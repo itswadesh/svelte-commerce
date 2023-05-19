@@ -29,6 +29,8 @@ import appStore from '$lib/assets/app/app-store.svg'
 import googlePlay from '$lib/assets/app/google-play.png'
 import type { Category } from '$lib/types'
 
+// console.log('$page', $page)
+
 export let me
 export let store = {}
 export let popularSearches: { took: 0; count: 0; data: [] }
@@ -44,34 +46,38 @@ let footerItems: any = [
 	{
 		heading: 'Company',
 		subMenu: [
-			{ title: 'About Us', link: '/about-us', new: false },
-			{ title: 'Privacy Policy', link: '/privacy-policy', new: false },
 			{
-				title: 'Terms & Conditions',
-				link: '/terms-conditions',
+				title: '(870) 932-9077 1407 Mitzi LnJonesboro, Arkansas(AR), 72401',
+				link: '/about-us',
 				new: false
-			},
-			{
-				title: 'Payments & Returns',
-				link: '/payments-returns',
-				new: false
-			},
-			{ title: 'Blogs', link: '/blogs', new: false },
-			{
-				title: 'Join as Vendor',
-				link: `${$page.data.store?.adminUrl}?role=vendor&store=${$page.data.store?.id}`,
-				new: true,
-				target: '_blank'
 			}
-		]
-	},
-	{
-		heading: 'Customer service',
-		subMenu: [
-			{ title: 'Track Your Order', link: '##', new: false },
-			{ title: 'Bulk Order Inquiry', link: '/bulk-order-inquiry', new: true }
+			// { title: 'Privacy Policy', link: '/privacy-policy', new: false },
+			// {
+			// 	title: 'Terms & Conditions',
+			// 	link: '/terms-conditions',
+			// 	new: false
+			// },
+			// {
+			// 	title: 'Payments & Returns',
+			// 	link: '/payments-returns',
+			// 	new: false
+			// },
+			// { title: 'Blogs', link: '/blogs', new: false },
+			// {
+			// 	title: 'Join as Vendor',
+			// 	link: `${$page.data.store?.adminUrl}?role=vendor&store=${$page.data.store?.id}`,
+			// 	new: true,
+			// 	target: '_blank'
+			// }
 		]
 	}
+	// {
+	// 	heading: 'Customer service',
+	// 	subMenu: [
+	// 		{ title: 'Track Your Order', link: '##', new: false },
+	// 		{ title: 'Bulk Order Inquiry', link: '/bulk-order-inquiry', new: true }
+	// 	]
+	// }
 ]
 
 onMount(async () => {
@@ -90,7 +96,7 @@ async function getStoreData() {
 }
 </script>
 
-<footer class="w-full justify-center bg-zinc-50 p-3 text-sm sm:p-10">
+<footer class="w-full justify-center bg-slate-900 text-white p-3 text-sm sm:p-10">
 	<div class="container mx-auto max-w-6xl">
 		<div
 			class="mb-4 flex w-full flex-col flex-wrap items-start justify-start gap-5 sm:mb-8 sm:gap-10 h-full sm:max-h-[35rem] xl:max-h-80 overflow-hidden">
@@ -150,7 +156,72 @@ async function getStoreData() {
 					</ul>
 				</div>
 			{/if}
+			<div>
+				<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Best Products</h5>
 
+				<ul class="flex flex-col gap-2 text-zinc-500">
+					<li class="max-w-max">
+						<a href="#" class="group block">
+							<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
+								<span></span>
+							</h6>
+
+							<span class="group-hover:underline">Double Beds</span>
+						</a>
+					</li>
+					<li class="max-w-max">
+						<a href="#" class="group block">
+							<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
+								<span></span>
+							</h6>
+
+							<span class="group-hover:underline">Sofa Set</span>
+						</a>
+					</li>
+					<li class="max-w-max">
+						<a href="#" class="group block">
+							<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
+								<span></span>
+							</h6>
+
+							<span class="group-hover:underline">Home Decore</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div>
+				<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Useful Links</h5>
+
+				<ul class="flex flex-col gap-2 text-zinc-500">
+					<li class="max-w-max">
+						<a href="/contact-us" class="group block">
+							<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
+								<span></span>
+							</h6>
+
+							<span class="group-hover:underline">Contact us</span>
+						</a>
+					</li>
+					<li class="max-w-max">
+						<a href="/about-us" class="group block">
+							<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
+								<span></span>
+							</h6>
+
+							<span class="group-hover:underline">About Us</span>
+						</a>
+					</li>
+					<li class="max-w-max">
+						<a href="/cart" class="group block">
+							<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
+								<span></span>
+							</h6>
+
+							<span class="group-hover:underline">Cart </span>
+						</a>
+					</li>
+				</ul>
+			</div>
 			<div>
 				<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Contact Us</h5>
 
@@ -272,205 +343,9 @@ async function getStoreData() {
 					</a>
 				</div>
 			</div> -->
-
-			{#if $page.data.store?.facebookUrl || $page.data.store?.instagramUrl || $page.data.store?.twitterUrl || $page.data.store?.email || $page.data.store?.linkedinUrl || $page.data.store?.pinterestUrl || $page.data.store?.youtubeUrl}
-				<div>
-					<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Keep in touch</h5>
-
-					<ul class="flex flex-wrap gap-4 text-zinc-500">
-						<!-- Facebook -->
-
-						{#if $page.data.store?.facebookUrl}
-							<li class="max-w-max">
-								<a
-									href="{$page.data.store?.facebookUrl}"
-									target="_blank"
-									rel="noopener noreferrer"
-									aria-label="Click for facebook link">
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 transition duration-300 hover:text-[#4267B2]"
-										viewBox="0 0 24 24"
-										stroke-width="1.5"
-										stroke="currentColor"
-										fill="none"
-										stroke-linecap="round"
-										stroke-linejoin="round">
-										<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-										<path
-											d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3"
-										></path>
-									</svg>
-								</a>
-							</li>
-						{/if}
-
-						<!-- Instagram -->
-
-						{#if $page.data.store?.instagramUrl}
-							<li class="max-w-max">
-								<a
-									href="{$page.data.store?.instagramUrl}"
-									target="_blank"
-									rel="noopener noreferrer"
-									aria-label="Click for instagram link">
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 transition duration-300 hover:text-[#C13584]"
-										viewBox="0 0 24 24"
-										stroke-width="1.5"
-										stroke="currentColor"
-										fill="none"
-										stroke-linecap="round"
-										stroke-linejoin="round">
-										<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-										<rect x="4" y="4" width="16" height="16" rx="4"></rect>
-										<circle cx="12" cy="12" r="3"></circle>
-										<line x1="16.5" y1="7.5" x2="16.5" y2="7.501"></line>
-									</svg>
-								</a>
-							</li>
-						{/if}
-
-						<!-- Twitter -->
-
-						{#if $page.data.store?.twitterUrl}
-							<li class="max-w-max">
-								<a
-									href="{$page.data.store?.twitterUrl}"
-									target="_blank"
-									rel="noopener noreferrer"
-									aria-label="Click for twitter link">
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 transition duration-300 hover:text-[#1DA1F2]"
-										viewBox="0 0 24 24"
-										stroke-width="1.5"
-										stroke="currentColor"
-										fill="none"
-										stroke-linecap="round"
-										stroke-linejoin="round">
-										<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-										<path
-											d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z"
-										></path>
-									</svg>
-								</a>
-							</li>
-						{/if}
-
-						<!-- Mail -->
-
-						{#if $page.data.store?.email}
-							<li class="max-w-max">
-								<a
-									href="mailto:{$page.data.store?.email}"
-									aria-label="Click to contact with mail id">
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 transition duration-300 hover:text-[#c71610]"
-										viewBox="0 0 24 24"
-										stroke-width="1.5"
-										stroke="currentColor"
-										fill="none"
-										stroke-linecap="round"
-										stroke-linejoin="round">
-										<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-										<rect x="3" y="5" width="18" height="14" rx="2"></rect>
-										<polyline points="3 7 12 13 21 7"></polyline>
-									</svg>
-								</a>
-							</li>
-						{/if}
-
-						<!-- Linkedin -->
-
-						{#if $page.data.store?.linkedinUrl}
-							<li class="max-w-max">
-								<a
-									href="{$page.data.store?.linkedinUrl}"
-									target="_blank"
-									rel="noopener noreferrer"
-									aria-label="Click for linkedin link">
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 transition duration-300 hover:text-[#0077b5]"
-										viewBox="0 0 24 24"
-										stroke-width="1.5"
-										stroke="currentColor"
-										fill="none"
-										stroke-linecap="round"
-										stroke-linejoin="round">
-										<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-										<rect x="4" y="4" width="16" height="16" rx="2"></rect>
-										<line x1="8" y1="11" x2="8" y2="16"></line>
-										<line x1="8" y1="8" x2="8" y2="8.01"></line>
-										<line x1="12" y1="16" x2="12" y2="11"></line>
-										<path d="M16 16v-3a2 2 0 0 0 -4 0"></path>
-									</svg>
-								</a>
-							</li>
-						{/if}
-
-						<!-- Pinterest -->
-
-						{#if $page.data.store?.pinterestUrl}
-							<li class="max-w-max">
-								<a
-									href="{$page.data.store?.pinterestUrl}"
-									target="_blank"
-									rel="noopener noreferrer"
-									aria-label="Click for pinterest link">
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 transition duration-300 hover:text-[#c8232c]"
-										viewBox="0 0 24 24"
-										stroke-width="1.5"
-										stroke="currentColor"
-										fill="none"
-										stroke-linecap="round"
-										stroke-linejoin="round">
-										<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-										<line x1="8" y1="20" x2="12" y2="11"></line>
-										<path
-											d="M10.7 14c.437 1.263 1.43 2 2.55 2c2.071 0 3.75 -1.554 3.75 -4a5 5 0 1 0 -9.7 1.7"
-										></path>
-										<circle cx="12" cy="12" r="9"></circle>
-									</svg>
-								</a>
-							</li>
-						{/if}
-
-						<!-- Youtube -->
-
-						{#if $page.data.store?.youtubeUrl}
-							<li class="max-w-max">
-								<a
-									href="{$page.data.store?.youtubeUrl}"
-									target="_blank"
-									rel="noopener noreferrer"
-									aria-label="Click for youtube link">
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 transition duration-300 hover:text-[#FF0000]"
-										viewBox="0 0 24 24"
-										stroke-width="1.5"
-										stroke="currentColor"
-										fill="none"
-										stroke-linecap="round"
-										stroke-linejoin="round">
-										<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-										<rect x="3" y="5" width="18" height="14" rx="4"></rect>
-										<path d="M10 9l5 3l-5 3z"></path>
-									</svg>
-								</a>
-							</li>
-						{/if}
-					</ul>
-				</div>
-			{/if}
 		</div>
-		{#if popularSearches?.count > 0}
+
+		<!-- {#if popularSearches?.count > 0}
 			<div class="mb-4 sm:mb-8">
 				<h2 class="mb-4 flex items-center gap-4 font-semibold">
 					<span class="flex-1 whitespace-nowrap uppercase"> Popular searches </span>
@@ -495,9 +370,9 @@ async function getStoreData() {
 					{/each}
 				</ul>
 			</div>
-		{/if}
+		{/if} -->
 
-		{#if $page.data.store?.address}
+		<!-- {#if $page.data.store?.address}
 			<hr class="mb-4 w-full border-t sm:mb-8" />
 
 			<div class="mb-4 sm:mb-8">
@@ -507,7 +382,7 @@ async function getStoreData() {
 					{@html $page.data.store?.address}
 				</p>
 			</div>
-		{/if}
+		{/if} -->
 
 		<hr class="mb-4 w-full border-t sm:mb-8" />
 

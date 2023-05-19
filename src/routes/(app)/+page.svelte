@@ -14,6 +14,8 @@ import {
 import { Footer, ProductCard, MobileFooter, LazyImg, DummyProductCard } from '$lib/components'
 import PickedBanners from '$lib/home/PickedBanners.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+import Service from '$lib/components/Service.svelte'
+import Clock from '$lib/components/Clock.svelte'
 
 let today = dayjs(new Date()).toISOString()
 
@@ -98,7 +100,7 @@ let showFooter = false
 		{#await data.streamed.home then home}
 			{#if home?.categories?.length}
 				<div class="block sm:hidden">
-					<CategoriesMobile loading="{home.isFetching}" categories="{home?.categories}" />
+					<!-- <CategoriesMobile loading="{home.isFetching}" categories="{home?.categories}" /> -->
 				</div>
 			{/if}
 		{/await}
@@ -108,26 +110,34 @@ let showFooter = false
 		{#await data.streamed.home}
 			<div class="h-96 w-full bg-zinc-200 animate-pulse"></div>
 		{:then home}
-			<Hero banners="{home.banners}" />
+			<Hero banners="{home.banners}"  />
 			<!-- <div class="h-96 w-full bg-red-500 animate-pulse"></div> -->
 		{/await}
 
 		<!-- Alert message -->
-
+<!-- 
 		{#if data.store?.alert}
 			<div class="p-3 py-5 sm:p-10 bg-primary-50">
 				<h1 class="container mx-auto text-center text-3xl font-bold sm:text-4xl md:text-5xl">
 					{data.store?.alert}
 				</h1>
 			</div>
-		{/if}
+		{/if} -->
 
 		<!-- top categories -->
 
+		<!-- Sevices For Furniture Theme -->
+		<Service />
+		<!-- Cleck Deal -->
+		
+        <Clock />
+                           
+                           
+		
 		{#await data.streamed.home}
 			<ul class="flex flex-wrap gap-3 justify-center p-3 py-5 md:py-10">
 				{#each { length: 10 } as _}
-					<li class="h-24 w-24 shrink-0 rounded-full lg:h-28 lg:w-28 bg-zinc-200 animate-pulse">
+					<li class="h-24	 w-24 shrink-0 rounded-full lg:h-28 lg:w-28 bg-zinc-200 animate-pulse">
 					</li>
 				{/each}
 			</ul>
@@ -136,13 +146,12 @@ let showFooter = false
 				<div class="hidden sm:block">
 					<!-- <CategoriesHome categories="{data.home?.categories}" /> -->
 
-					<CategoriesSlider title="Top Categories" categories="{home?.categories}" />
+					<!-- <CategoriesSlider title="Top Categories" categories="{home?.categories}" /> -->
 
 					<!-- <h2
 					class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
 					TOP COLLECTIONS
 				</h2>
-
 				<div class="max-w-screen overflow-x-auto scrollbar-none lg:hidden">
 					<div class="flex flex-row">
 						{#each data.home?.categories as category}
@@ -202,12 +211,12 @@ let showFooter = false
 		{:then home}
 			{#if home.heroBanners?.length}
 				<div>
-					<h2
+					<!-- <h2
 						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
 						BEST OF {$page.data.store?.websiteName} EXCLUSIVE
-					</h2>
+					</h2> -->
 
-					<HeroBanners heroBanners="{home.heroBanners}" />
+					<!-- <HeroBanners heroBanners="{home.heroBanners}" /> -->
 				</div>
 			{/if}
 		{/await}
@@ -229,7 +238,7 @@ let showFooter = false
 		{:then home}
 			{#if home.groupByBanner?.length > 0}
 				<div>
-					<PickedBanners banners="{home.groupByBanner}" />
+					<!-- <PickedBanners banners="{home.groupByBanner}" /> -->
 				</div>
 			{/if}
 		{/await}
@@ -246,12 +255,12 @@ let showFooter = false
 			{#if deals.data?.length > 0}
 				{#each deals.data as deal}
 					<div class="mb-5 sm:mb-10">
-						<h2
+						<!-- <h2
 							class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
 							{deal.name}
-						</h2>
+						</h2> -->
 
-						<Deals deal="{deal}" />
+						<!-- <Deals deal="{deal}" /> -->
 					</div>
 				{/each}
 			{/if}
@@ -269,12 +278,12 @@ let showFooter = false
 			{#if collections.data?.length > 0}
 				{#each collections.data as collection}
 					<div class="mb-5 sm:mb-10">
-						<h2
+						<!-- <h2
 							class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
 							{collection.name}
-						</h2>
+						</h2> -->
 
-						<Deals deal="{collection}" />
+						<!-- <Deals deal="{collection}" /> -->
 					</div>
 				{/each}
 			{/if}
@@ -288,7 +297,8 @@ let showFooter = false
 					<div>
 						<h2
 							class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
-							POPULAR ON {$page.data.store?.websiteName}
+							POPULAR Products 
+							<!-- {$page.data.store?.websiteName} -->
 						</h2>
 
 						<ul
@@ -316,8 +326,9 @@ let showFooter = false
 			{#if home?.trending?.length > 0}
 				<div>
 					<h2
-						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
-						TRENDING ON {$page.data.store?.websiteName}
+						class="p-3 py-5 text-center font-serif text-xl font-bold tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
+						TRENDING PRODUCTS 
+						<!-- {$page.data.store?.websiteName} -->
 					</h2>
 
 					<ul
