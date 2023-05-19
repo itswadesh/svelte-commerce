@@ -19,15 +19,13 @@ export const fetchReviews = async ({
 
 		if (isServer) {
 			res = await getBySid(
-				`es/reviews/${pid}?search=${
-					search || ''
+				`es/reviews?search=${search || ''
 				}&sort=${sort}&page=${currentPage}&store=${storeId}`,
 				sid
 			)
 		} else {
 			res = await getAPI(
-				`es/reviews/${pid}?search=${
-					search || ''
+				`es/reviews?search=${search || ''
 				}&sort=${sort}&page=${currentPage}&store=${storeId}`,
 				origin
 			)

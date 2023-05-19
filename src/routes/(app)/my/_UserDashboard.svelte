@@ -5,7 +5,14 @@ import dashboardProfile from '$lib/assets/dashboard/profile.png'
 import dashboardReviews from '$lib/assets/dashboard/reviews.png'
 import dashboardWishlist from '$lib/assets/dashboard/wishlist.png'
 
-export let me, myOrders, myWishlist, myReviews
+export let me
+export let myOrders
+export let myReviews
+export let myWishlist
+
+// console.log('myOrders', myOrders)
+// console.log('myReviews', myReviews)
+// console.log('myWishlist', myWishlist)
 </script>
 
 <section class="h-full w-full tracking-wide">
@@ -27,10 +34,10 @@ export let me, myOrders, myWishlist, myReviews
 			<div class="flex-1" in:fly="{{ y: 20, duration: 1000, delay: 500 }}">
 				<h3 class="mt-2 text-xl font-bold sm:text-2xl">Orders</h3>
 
-				<div class="mt-2 flex items-center">
-					<h6 class="mr-2 text-sm">Total orders</h6>
+				<div class="mt-2 flex items-baseline flex-wrap gap-2">
+					<span class="text-xl font-semibold">{myOrders?.count}</span>
 
-					<span class="font-semibold">{myOrders?.count}</span>
+					<span class="text-sm">Total orders</span>
 				</div>
 			</div>
 
@@ -46,10 +53,10 @@ export let me, myOrders, myWishlist, myReviews
 			<div class="flex-1" in:fly="{{ y: 20, duration: 1000, delay: 700 }}">
 				<h3 class="mt-2 text-xl font-bold sm:text-2xl">Wishlist</h3>
 
-				<div class="mt-2 flex items-center">
-					<h6 class="mr-2 text-sm">Wishlisted items</h6>
+				<div class="mt-2 flex items-baseline flex-wrap gap-2">
+					<span class="text-xl font-semibold">{myWishlist?.length}</span>
 
-					<span class="font-semibold">{myWishlist?.count}</span>
+					<span class="text-sm">Wishlisted items</span>
 				</div>
 			</div>
 
@@ -68,10 +75,10 @@ export let me, myOrders, myWishlist, myReviews
 			<div class="flex-1" in:fly="{{ y: 20, duration: 1000, delay: 900 }}">
 				<h3 class="mt-2 text-xl font-bold sm:text-2xl">Reviews</h3>
 
-				<div class="mt-2 flex items-center">
-					<h6 class="mr-2 text-sm">Total reviews</h6>
+				<div class="mt-2 flex items-baseline flex-wrap gap-2">
+					<span class="text-xl font-semibold">{myReviews?.count}</span>
 
-					<span class="font-semibold">{myReviews?.count}</span>
+					<span class="text-sm">Total reviews</span>
 				</div>
 			</div>
 
