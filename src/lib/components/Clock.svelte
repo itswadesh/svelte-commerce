@@ -37,7 +37,7 @@ let days, hours, minutes, seconds
 let interval
 
 const countDown = () => {
-	let dest = new Date('May 30,2023').getTime()
+	let dest = new Date('Jun 15,2023').getTime()
 	interval = setInterval(() => {
 		const now = new Date().getTime()
 		const diff = dest - now
