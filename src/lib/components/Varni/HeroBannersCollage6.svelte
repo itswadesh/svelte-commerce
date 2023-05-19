@@ -1,7 +1,8 @@
 <script>
-import { LazyImg } from '$lib/components'
+// import { LazyImg } from '$lib/components'
 
 export let heroBanners
+// console.log('heroBanners', heroBanners)
 </script>
 
 {#if heroBanners?.length}
@@ -19,10 +20,17 @@ export let heroBanners
 						href="{heroBanners[0]?.link || '##'}"
 						aria-label="Click here to view the banner's related products"
 						class="block col-span-1">
-						<LazyImg
+						<!-- <LazyImg
 							src="{heroBanners[0]?.img}"
 							alt=""
 							aspect_ratio="1:1"
+							height="390"
+							width="390"
+							class="h-full w-full object-cover" /> -->
+
+						<img
+							src="{heroBanners[0]?.img}"
+							alt=""
 							height="390"
 							width="390"
 							class="h-full w-full object-cover" />
@@ -34,10 +42,17 @@ export let heroBanners
 						href="{heroBanners[1]?.link || '##'}"
 						aria-label="Click here to view the banner's related products"
 						class="block col-span-1">
-						<LazyImg
+						<!-- <LazyImg
 							src="{heroBanners[1]?.img}"
 							alt=""
 							aspect_ratio="1:1"
+							height="390"
+							width="390"
+							class="h-full w-full object-cover" /> -->
+
+						<img
+							src="{heroBanners[1]?.img}"
+							alt=""
 							height="390"
 							width="390"
 							class="h-full w-full object-cover" />
@@ -49,10 +64,17 @@ export let heroBanners
 						href="{heroBanners[2]?.link || '##'}"
 						aria-label="Click here to view the banner's related products"
 						class="block col-span-1">
-						<LazyImg
+						<!-- <LazyImg
 							src="{heroBanners[2]?.img}"
 							alt=""
 							aspect_ratio="1:1"
+							height="390"
+							width="390"
+							class="h-full w-full object-cover" /> -->
+
+						<img
+							src="{heroBanners[2]?.img}"
+							alt=""
 							height="390"
 							width="390"
 							class="h-full w-full object-cover" />
@@ -64,10 +86,17 @@ export let heroBanners
 						href="{heroBanners[3]?.link || '##'}"
 						aria-label="Click here to view the banner's related products"
 						class="block col-span-1">
-						<LazyImg
+						<!-- <LazyImg
 							src="{heroBanners[3]?.img}"
 							alt=""
 							aspect_ratio="1:1"
+							height="390"
+							width="390"
+							class="h-full w-full object-cover" /> -->
+
+						<img
+							src="{heroBanners[3]?.img}"
+							alt=""
 							height="390"
 							width="390"
 							class="h-full w-full object-cover" />
@@ -79,10 +108,17 @@ export let heroBanners
 						href="{heroBanners[4]?.link || '##'}"
 						aria-label="Click here to view the banner's related products"
 						class="block col-span-1 md:col-span-2">
-						<LazyImg
+						<!-- <LazyImg
 							src="{heroBanners[4]?.img}"
 							alt=""
 							aspect_ratio="2:1"
+							height="390"
+							width="780"
+							class="h-full w-full object-cover" /> -->
+
+						<img
+							src="{heroBanners[4]?.img}"
+							alt=""
 							height="390"
 							width="780"
 							class="h-full w-full object-cover" />
@@ -97,10 +133,17 @@ export let heroBanners
 					href="{heroBanners[5]?.link || '##'}"
 					aria-label="Click here to view the banner's related products"
 					class="block col-span-1">
-					<LazyImg
+					<!-- <LazyImg
 						src="{heroBanners[5]?.img}"
 						alt=""
 						aspect_ratio="1:2"
+						width="390"
+						height="780"
+						class="h-full w-full object-cover" /> -->
+
+					<img
+						src="{heroBanners[5]?.img}"
+						alt=""
 						width="390"
 						height="780"
 						class="h-full w-full object-cover" />
