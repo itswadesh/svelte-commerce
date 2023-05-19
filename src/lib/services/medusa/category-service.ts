@@ -23,7 +23,18 @@ export const fetchCategory = async ({ origin, slug, id, server = false, sid = nu
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`product-categories/${id}`)
+		// res = await getMedusajsApi(`product-categories?handle=${id}`)
+
+		// let cat_data: any = {}
+
+		const cat_data = (await getMedusajsApi(`product-categories?handle=${id}`)).product_categories
+
+		 res = cat_data.map((category: any) => {
+			return mapMedusajsCategory(category)
+		})
+         
+		console.log(res);
+		
 
 		return res || {}
 	} catch (e) {

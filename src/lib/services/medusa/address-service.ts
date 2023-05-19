@@ -5,13 +5,20 @@ import {
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
-export const fetchAddresses = async ({ origin, storeId, server = false, sid = null }: any) => {
+export const fetchAddresses = async ({
+	origin,
+	storeId,
+	server = false,
+	sid = 's:rbsl8gACO6pZuNvSnQNo1LKTpxUKaQnl.3B6p9hkKCV4dQOGLNmCqA4fhj70AAhv2bSGRtCmom0I'
+}: any) => {
 	try {
 		let res: any = {}
 		let selectedAddress = {}
 		let myAddresses = []
 
-		res = (await getMedusajsApi(`address`, {}, sid)).customer.shipping_address
+		res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
+
+		console.log(res)
 
 		return { myAddresses: { data: myAddresses }, selectedAddress, count: res?.count }
 	} catch (e) {
