@@ -1,13 +1,18 @@
 <script>
 import { Nav, Footer } from '$lib/components'
 import { page } from '$app/stores'
-import { slotMarginGeneral } from '$lib/config'
+import { slotMarginGeneral, slotMarginGeneralWithHelloBar } from '$lib/config'
+
+let hellobar = $page.data.store?.hellobar || {}
 </script>
 
 <div class="h-rem w-full flex-1">
 	<Nav me="{$page.data.me}" cart="{$page.data.cart}" />
 
-	<div class="{slotMarginGeneral} w-full flex-1">
+	<div
+		class="{hellobar?.active?.val
+			? slotMarginGeneralWithHelloBar
+			: slotMarginGeneral} w-full flex-1">
 		<slot />
 	</div>
 </div>

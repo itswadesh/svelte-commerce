@@ -100,7 +100,6 @@ let seoProps = {
 	twitterImage: { url: $page.data.store?.logo }
 }
 
-let hellobar = $page.data.store?.hellobar || {}
 let showFooter = false
 </script>
 
@@ -108,15 +107,6 @@ let showFooter = false
 
 <div class="bg-opacity-25 bg-center bg-repeat min-h-screen">
 	<div class="mb-14 lg:mb-0">
-		{#if hellobar.text?.val}
-			<div
-				class="sticky z-30 top-14 sm:top-20 inset-x-0 w-full h-8 text-center tracking-wider flex items-center justify-center text-sm"
-				style="background-color: {hellobar?.bgColor.val || '#27272a'};
-				 color: {hellobar?.textColor.val || '#ffffff'};">
-				{hellobar.text?.val}
-			</div>
-		{/if}
-
 		<!-- Categories slider mobile -->
 
 		{#await data.streamed.home then home}
