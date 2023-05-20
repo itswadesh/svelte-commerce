@@ -1,11 +1,13 @@
 <script lang="ts">
+import { page } from '$app/stores'
 import { PageTransitions, Nav, Footer } from '$lib/components'
-import { slotMarginProduct } from '$lib/config'
+import { slotMarginGeneral, slotMarginGeneralWithHelloBar } from '$lib/config'
 
 export let data
 
 let showCartSidebar = false
 let openSidebar = false
+let hellobar = $page.data.store?.hellobar || {}
 </script>
 
 <div class="{showCartSidebar || openSidebar ? 'h-screen overflow-hidden' : 'h-full'}">
@@ -20,7 +22,10 @@ let openSidebar = false
 	</div>
 
 	<PageTransitions url="{data.url}">
-		<div class="{slotMarginProduct} w-full flex-1">
+		<div
+			class="{hellobar?.active?.val
+				? slotMarginGeneralWithHelloBar
+				: slotMarginGeneral} w-full flex-1">
 			<slot />
 		</div>
 	</PageTransitions>
