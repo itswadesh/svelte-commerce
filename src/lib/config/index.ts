@@ -76,10 +76,12 @@ export const WOO_COMMERCE_STORE_LINK = env.PUBLIC_WOO_COMMERCE_STORE_LINK || 'ht
 export const woocommerceHeaders = { username: WOO_COMMERCE_KEY, password: WOO_COMMERCE_SECRET, 'Content-Type': 'application/json', Accept: 'application/json' }
 
 // Core config of svelte commerce
-// export const slotMarginGeneral = 'mt-14 sm:mt-20'
-// export const slotMarginProduct = 'lg:mt-20'
+export const slotMarginGeneral = 'mt-14 sm:mt-20'
+export const slotMarginGeneralWithHelloBar = 'mt-[88px] sm:mt-28'
+export const slotMarginProduct = 'lg:mt-20'
 
 
 // Varni config
-export const slotMarginGeneral = 'mt-14 sm:mt-20 lg:mt-0'
-export const slotMarginProduct = 'mt-14 sm:mt-20 lg:mt-0'
+// export const slotMarginGeneral = 'mt-14 sm:mt-20 lg:mt-0'
+// export const slotMarginGeneralWithHelloBar = 'mt-14 sm:mt-20 lg:mt-0'
+// export const slotMarginProduct = 'mt-14 sm:mt-20 lg:mt-0'

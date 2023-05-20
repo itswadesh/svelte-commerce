@@ -21,8 +21,7 @@ import noDataAvailable from '$lib/assets/no/no-data-available.png'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
-
-console.log('zzzzzzzzzzzzzzzzzz', data)
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let today = dayjs(new Date()).toISOString()
 
@@ -68,6 +67,7 @@ let seoProps = {
 }
 
 let currentPage = 1
+let hellobar = $page.data.store?.hellobar || {}
 let hidden = true
 let priceRange = []
 let reachedLast = false
@@ -362,7 +362,8 @@ function handleFilterTags() {
 				facets="{data.products.facets}"
 				priceRange="{priceRange}"
 				query="{data.query}"
-				class="sticky top-24 hidden lg:block"
+				class="sticky hidden lg:block
+				{hellobar?.active?.val ? 'top-32' : 'top-24'}"
 				on:clearAll="{refreshData}" />
 
 			<MobileFilter

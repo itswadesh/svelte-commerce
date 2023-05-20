@@ -56,6 +56,7 @@ let showDropdownAccount = false
 let show = false
 let loadingForDeleteItemFromCart = []
 let categories
+let hellobar = $page.data.store?.hellobar || {}
 // let menuItems = [
 // 	{ title: 'Trending', link: '/trending-en?sort=-updatedAt' },
 // 	{ title: 'Custom Design', link: '/custom-design' },
@@ -199,12 +200,14 @@ let y
 <svelte:window bind:scrollY="{y}" />
 
 <nav
-	class="fixed lg:static minimum-width-rem flex h-14 w-full flex-col items-center border-b bg-white shadow-md sm:h-20 lg:h-40
-	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
-	<div class="px-3 sm:px-10 w-full h-10 bg-zinc-100 shrink-0 hidden lg:block">
-		<div
-			class="container max-w-6xl mx-auto h-full w-full items-center shrink-0 grid-cols-3 gap-4 text-xs leading-3 grid">
-			{#if $page.data.store?.phone || $page.data.store?.email}
+	class="fixed lg:static minimum-width-rem flex w-full flex-col items-center border-b bg-white shadow-md
+	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}
+	{hellobar?.active?.val ? 'h-14 sm:h-20 lg:h-40' : 'h-14 sm:h-20 lg:h-[120px]'}">
+	{#if hellobar?.active?.val}
+		<div class="px-3 sm:px-10 w-full h-10 bg-zinc-100 shrink-0 hidden lg:block">
+			<div
+				class="container max-w-6xl mx-auto h-full w-full items-center shrink-0 grid-cols-3 gap-4 grid">
+				<!-- {#if $page.data.store?.phone || $page.data.store?.email}
 				<div class="flex items-center col-span-1 gap-4 text-zinc-500 justify-self-start">
 					{#if $page.data.store?.phone}
 						<div class="flex items-center gap-1">
@@ -250,9 +253,12 @@ let y
 
 			<a href="/contact-us" class="block col-span-1 text-zinc-500 justify-self-end hover:underline">
 				Need Help?
-			</a>
+			</a> -->
+
+				{@html hellobar.content?.val}
+			</div>
 		</div>
-	</div>
+	{/if}
 
 	<div class="px-3 sm:px-10 w-full h-20 sm:shrink-0">
 		<div
