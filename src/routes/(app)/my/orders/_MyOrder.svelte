@@ -8,12 +8,11 @@
 <script>
 import { currency, date } from '$lib/utils'
 import { goto } from '$app/navigation'
+import { LazyImg, Pagination } from '$lib/components'
 import { page } from '$app/stores'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import { PrimaryButton, WhiteButton } from '$lib/ui'
 import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import OrderListSkeleton from './_OrderListSkeleton.svelte'
-import Pagination from '$lib/components/Pagination.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 
@@ -26,15 +25,41 @@ export { clazz as class }
 <div class="w-full {clazz}">
 	{#if orders.data?.length}
 		<div>
-			<header
-				class="mb-5 flex flex-col items-start md:items-center justify-between md:flex-row gap-2">
-				<h1 class="text-2xl font-medium md:text-3xl lg:text-4xl">
-					Orders
+			<header class="mb-5 flex flex-wrap items-start justify-between gap-4">
+				<div>
+					<div class="flex flex-wrap items-center gap-2">
+						<h2 class="text-2xl capitalize sm:text-3xl">
+							Orders {#if orders.count}({orders.count}){/if}
+						</h2>
+					</div>
 
-					{#if orders.count}
-						({orders.count})
-					{/if}
-				</h1>
+					<!-- <p class="mt-2 text-sm text-zinc-500"></p> -->
+				</div>
+
+				<!--  Back button -->
+
+				<div class="flex flex-wrap items-center gap-2">
+					<a href="/my" class="block">
+						<WhiteButton hideLoading class="group text-xs">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke-width="1.5"
+								stroke="currentColor"
+								class="h-5 w-5 transform transition duration-300 group-hover:-translate-x-2">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"
+								></path>
+							</svg>
+
+							<div class="flex flex-col gap-0.5 text-left">
+								<span class="hidden text-xs font-normal text-zinc-500 sm:block"> Prev </span>
+
+								<span>Dashboard</span>
+							</div>
+						</WhiteButton>
+					</a>
+				</div>
 			</header>
 
 			<ul>
@@ -137,15 +162,15 @@ export { clazz as class }
 										</td>
 
 										<td class="whitespace-nowrap p-3">
-											{currency(item.price)}
+											{currency(item.price, $page.data?.store?.currencySymbol)}
 										</td>
 
 										<td class="whitespace-nowrap p-3">
-											{currency(item.shippingCharge)}
+											{currency(item.shippingCharge, $page.data?.store?.currencySymbol)}
 										</td>
 
 										<td class="whitespace-nowrap p-3">
-											{currency(item.total)}
+											{currency(item.total, $page.data?.store?.currencySymbol)}
 										</td>
 
 										<td class="p-3">
@@ -197,7 +222,7 @@ export { clazz as class }
 
 									<div class="w-full flex-1">
 										<!-- {#if item.vendor}
-													<a href="/vendor/${item.vendor?.slug}" aria-label="Click to route vendor's profile">
+													<a href="/vendor/${item.vendor?.slug}" aria-label="Click to visit vendor's profile">
 														 {#if store.isFnb && item.vendorBusinessName}
 															 <b class="mb-2">
 																 {item.vendorBusinessName}
@@ -225,7 +250,7 @@ export { clazz as class }
 												<h6>Price :</h6>
 
 												<b class="text-zinc-500">
-													{currency(item.price)}
+													{currency(item.price, $page.data?.store?.currencySymbol)}
 													*
 													{item.qty}
 												</b>
@@ -235,7 +260,7 @@ export { clazz as class }
 												<h6>Delivery :</h6>
 
 												<b class="text-zinc-500">
-													{currency(item.shippingCharge)}
+													{currency(item.shippingCharge, $page.data?.store?.currencySymbol)}
 												</b>
 											</div>
 
@@ -243,7 +268,7 @@ export { clazz as class }
 												<h6>Total :</h6>
 
 												<b class="text-zinc-500">
-													{currency(item.total)}
+													{currency(item.total, $page.data?.store?.currencySymbol)}
 												</b>
 											</div>
 
@@ -275,7 +300,7 @@ export { clazz as class }
 
 			<p class="mb-5 text-sm">There's no order placed, start adding items to your cart.</p>
 
-			<a href="/" aria-label="Click to route home" data-sveltekit-preload-data>
+			<a href="/" aria-label="Click to visit home" data-sveltekit-preload-data>
 				<PrimaryButton class="w-40 py-2 text-sm">Shop Now</PrimaryButton>
 			</a>
 		</div>
