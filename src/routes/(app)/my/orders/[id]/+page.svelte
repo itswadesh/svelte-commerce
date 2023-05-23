@@ -14,12 +14,6 @@ import ReturnTracking from '../_ReturnTracking.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TransparentButton from '../_TransparentButton.svelte'
 
-// let deliveryBy = null
-let now = null
-let selectedProduct = null
-let showDemoScheduler = false
-let loading = false
-
 export let data
 
 let clazz
@@ -29,6 +23,12 @@ const seoProps = {
 	title: 'Details ',
 	metadescription: 'Details '
 }
+
+// let deliveryBy = null
+let now = null
+let selectedProduct = null
+let showDemoScheduler = false
+let loading = false
 
 function head() {
 	return {

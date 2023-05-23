@@ -112,10 +112,16 @@ async function saveReviewproduct(review) {
 <div>
 	<BackButton to="{data.ref}" class="mb-2" />
 
-	<div class="mb-3 flex flex-col justify-between lg:flex-row lg:items-center">
-		<h1 class="mb-2 font-serif text-2xl font-medium md:text-3xl lg:text-4xl">
-			Ratings and Reviews
-		</h1>
+	<div class="mb-5 flex flex-col justify-between lg:flex-row lg:items-center">
+		<header class="flex flex-wrap items-start justify-between gap-4">
+			<div>
+				<div class="flex flex-wrap items-center gap-2">
+					<h2 class="text-2xl capitalize sm:text-3xl">Ratings and Reviews</h2>
+				</div>
+
+				<!-- <p class="mt-2 text-sm text-zinc-500"></p> -->
+			</div>
+		</header>
 
 		{#if data.product}
 			<a

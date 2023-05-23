@@ -20,7 +20,7 @@ import { invalidateAll } from '$app/navigation'
 import { LazyImg, DummyProductCard } from '$lib/components'
 import { page } from '$app/stores'
 import { post } from '$lib/utils/api'
-import { PrimaryButton, BlackButton } from '$lib/ui'
+import { PrimaryButton, BlackButton, WhiteButton } from '$lib/ui'
 import { WishlistService } from '$lib/services'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
 import noEmptyWishlist from '$lib/assets/no/empty-wishlist.svg'
@@ -72,15 +72,41 @@ async function getWishlistedProducts() {
 
 	{#if wishlistedProducts?.length}
 		<div>
-			<header
-				class="mb-5 flex flex-col items-start md:items-center justify-between md:flex-row gap-2">
-				<h1 class="text-2xl font-semibold md:text-3xl lg:text-4xl">
-					Wishlist
+			<header class="mb-5 flex flex-wrap items-start justify-between gap-4">
+				<div>
+					<div class="flex flex-wrap items-center gap-2">
+						<h2 class="text-2xl capitalize sm:text-3xl">
+							Wishlist {#if wishlistedProducts.length}({wishlistedProducts.length}){/if}
+						</h2>
+					</div>
 
-					{#if wishlistedProducts?.length}
-						({wishlistedProducts?.length})
-					{/if}
-				</h1>
+					<!-- <p class="mt-2 text-sm text-zinc-500"></p> -->
+				</div>
+
+				<!--  Back button -->
+
+				<div class="flex flex-wrap items-center gap-2">
+					<a href="/my" class="block">
+						<WhiteButton hideLoading class="group text-xs">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke-width="1.5"
+								stroke="currentColor"
+								class="h-5 w-5 transform transition duration-300 group-hover:-translate-x-2">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"
+								></path>
+							</svg>
+
+							<div class="flex flex-col gap-0.5 text-left">
+								<span class="hidden text-xs font-normal text-zinc-500 sm:block"> Prev </span>
+
+								<span>Dashboard</span>
+							</div>
+						</WhiteButton>
+					</a>
+				</div>
 			</header>
 
 			<div class="grid w-full grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-between lg:mb-20">

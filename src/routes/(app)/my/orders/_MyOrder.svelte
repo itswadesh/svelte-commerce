@@ -8,11 +8,11 @@
 <script>
 import { currency, date } from '$lib/utils'
 import { goto } from '$app/navigation'
+import { LazyImg, Pagination } from '$lib/components'
 import { page } from '$app/stores'
+import { PrimaryButton, WhiteButton } from '$lib/ui'
 import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import OrderListSkeleton from './_OrderListSkeleton.svelte'
-import {LazyImg,Pagination} from '$lib/components'
-import {PrimaryButton} from '$lib/ui'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 
@@ -25,15 +25,41 @@ export { clazz as class }
 <div class="w-full {clazz}">
 	{#if orders.data?.length}
 		<div>
-			<header
-				class="mb-5 flex flex-col items-start md:items-center justify-between md:flex-row gap-2">
-				<h1 class="text-2xl font-medium md:text-3xl lg:text-4xl">
-					Orders
+			<header class="mb-5 flex flex-wrap items-start justify-between gap-4">
+				<div>
+					<div class="flex flex-wrap items-center gap-2">
+						<h2 class="text-2xl capitalize sm:text-3xl">
+							Orders {#if orders.count}({orders.count}){/if}
+						</h2>
+					</div>
 
-					{#if orders.count}
-						({orders.count})
-					{/if}
-				</h1>
+					<!-- <p class="mt-2 text-sm text-zinc-500"></p> -->
+				</div>
+
+				<!--  Back button -->
+
+				<div class="flex flex-wrap items-center gap-2">
+					<a href="/my" class="block">
+						<WhiteButton hideLoading class="group text-xs">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke-width="1.5"
+								stroke="currentColor"
+								class="h-5 w-5 transform transition duration-300 group-hover:-translate-x-2">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"
+								></path>
+							</svg>
+
+							<div class="flex flex-col gap-0.5 text-left">
+								<span class="hidden text-xs font-normal text-zinc-500 sm:block"> Prev </span>
+
+								<span>Dashboard</span>
+							</div>
+						</WhiteButton>
+					</a>
+				</div>
 			</header>
 
 			<ul>
