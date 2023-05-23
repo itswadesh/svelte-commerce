@@ -1,4 +1,4 @@
-import { ZipService } from '$lib/services/index.js'
+import { ZipService } from '$lib/services'
 
 export async function POST({ request, cookies, locals }) {
 	const formData = Object.fromEntries(await request.formData())

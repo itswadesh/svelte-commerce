@@ -64,6 +64,6 @@ export async function load({ url, request, locals, cookies }) {
 			cookies.set('cartId', cartObj.cartId, { path: '/' })
 			cookies.set('cartQty', cartObj.qty, { path: '/' })
 		}
-	} catch (e) {}
+	} catch (e) { }
 	return { loading, status, paymentMode, order, err, cart }
 }
