@@ -13,7 +13,7 @@ let seoProps = {
 
 <SEO {...seoProps} />
 
-<div>
+<section>
 	<div class="mb-20">
 		<Wishlist wishlistedProducts="{data.wishlistedProducts}" />
 	</div>
@@ -23,4 +23,4 @@ let seoProps = {
 	<div class="block lg:hidden">
 		<MobileFooter />
 	</div>
-</div>
+</section>

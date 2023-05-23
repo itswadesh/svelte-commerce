@@ -5,16 +5,17 @@ import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import { Pagination } from '$lib/components'
 import { toast } from '$lib/utils'
+import { WhiteButton } from '$lib/ui'
 import noEmptyAddress from '$lib/assets/no/empty-address.svg'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+
+export let data
 
 const seoProps = {
 	title: 'Dashboard - Addresses ',
 	description: 'My Addresses'
 }
-
-export let data
 
 let typingTimer
 let loadingOnDelete = []
@@ -81,34 +82,43 @@ async function remove(id, index) {
 
 <SEO {...seoProps} />
 
-<div>
-	<header class="mb-5 flex flex-col items-start md:items-center justify-between md:flex-row gap-2">
-		<h1 class="text-2xl font-semibold md:text-3xl lg:text-4xl">
-			Addresses
+<section>
+	<header class="mb-5 flex flex-wrap items-start justify-between gap-4">
+		<div>
+			<div class="flex flex-wrap items-center gap-2">
+				<h2 class="text-2xl capitalize sm:text-3xl">
+					Addresses {#if data.addresses.count}({data.addresses.count}){/if}
+				</h2>
+			</div>
 
-			{#if data.addresses.count}
-				({data.addresses.count})
-			{/if}
-		</h1>
+			<!-- <p class="mt-2 text-sm text-zinc-500"></p> -->
+		</div>
 
-		<a href="/my/addresses/new" aria-label="Click to visit new address" data-sveltekit-preload-data>
-			<PrimaryButton type="button" loadingringsize="sm" class="text-sm">
-				<svg
-					class="h-5 w-5"
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke="currentColor">
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-				</svg>
+		<!--  Back button -->
 
-				<span>Add New Address</span>
-			</PrimaryButton>
-		</a>
+		<div class="flex flex-wrap items-center gap-2">
+			<a
+				href="/my/addresses/new"
+				aria-label="Click to visit new address"
+				data-sveltekit-preload-data>
+				<PrimaryButton type="button" loadingringsize="sm" class="text-sm">
+					<svg
+						class="h-5 w-5"
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+					</svg>
+
+					<span>Add New Address</span>
+				</PrimaryButton>
+			</a>
+		</div>
 	</header>
 
 	{#if data.addresses?.isFetching}
@@ -195,4 +205,4 @@ async function remove(id, index) {
 			</a>
 		</div>
 	{/if}
-</div>
+</section>

@@ -8,7 +8,6 @@ const seoProps = {
 }
 
 export let data
-
 </script>
 
 <SEO {...seoProps} />
