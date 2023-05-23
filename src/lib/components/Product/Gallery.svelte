@@ -6,11 +6,11 @@
 </style>
 
 <script lang="ts">
-import type { Product } from '$lib/types'
-import { SplideSlide } from '@splidejs/svelte-splide'
+import { fade } from 'svelte/transition'
 import { onMount } from 'svelte'
+import { SplideSlide } from '@splidejs/svelte-splide'
 import LazyImg from '../Image/LazyImg.svelte'
-import { fade } from 'svelte/transition';
+import type { Product } from '$lib/types'
 
 export let showPhotosModal = false
 export let product: Product | any = {}
@@ -104,7 +104,8 @@ onMount(async () => {
 			class="container relative mx-auto hidden h-full w-full items-center justify-between gap-4 overflow-hidden rounded bg-black lg:flex lg:flex-row">
 			{#if selectedimg}
 				<div
-					class="flex h-full w-full flex-1 shrink-0 items-center justify-center overflow-hidden px-5 sm:px-10" in:fade="{{ duration: 1000}}">
+					class="flex h-full w-full flex-1 shrink-0 items-center justify-center overflow-hidden px-5 sm:px-10"
+					in:fade="{{ duration: 1000 }}">
 					<img src="{selectedimg}" alt="" class="h-full w-full object-contain object-center" />
 				</div>
 			{/if}
@@ -132,7 +133,7 @@ onMount(async () => {
 										class="h-40 w-40 rounded object-contain object-center" />
 
 									<div
-										class="absolute inset-0 z-10 h-full w-full bg-white  
+										class="absolute inset-0 z-10 h-full w-full bg-white
                                     {selectedimg === img ? 'bg-opacity-0' : 'bg-opacity-50'}">
 									</div>
 								</button>
