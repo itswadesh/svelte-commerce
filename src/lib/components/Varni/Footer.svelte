@@ -385,10 +385,10 @@ async function getStoreData() {
 
 					<!-- Instagram -->
 
-					{#if $page.data.store?.socialSharingButtons?.linkedin?.val}
+					{#if $page.data.store?.socialSharingButtons?.instagram?.val}
 						<li class="max-w-max">
 							<a
-								href="{$page.data.store?.socialSharingButtons?.linkedin?.val}"
+								href="{$page.data.store?.socialSharingButtons?.instagram?.val}"
 								target="_blank"
 								rel="noopener noreferrer"
 								aria-label="Click for instagram link">
