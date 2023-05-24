@@ -1,5 +1,5 @@
 <script>
-import {LazyImg} from '$lib/components'
+import { LazyImg } from '$lib/components'
 
 export let banners
 
@@ -23,7 +23,7 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 					</h2>
 
 					{#if b.data?.length}
-						<div class="max-w-screen overflow-x-auto scrollbar-none lg:hidden">
+						<div class="w-screen overflow-x-auto scrollbar-none lg:hidden">
 							<div role="banner" class="flex flex-row items-start">
 								{#each b.data as banner, bx}
 									{#if banner.img}
@@ -70,7 +70,7 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 					</h2>
 
 					{#if b.data?.length}
-						<div class="max-w-screen overflow-x-auto scrollbar-none lg:hidden">
+						<div class="w-screen overflow-x-auto scrollbar-none lg:hidden">
 							<div role="banner" class="flex flex-row items-start">
 								{#each b.data as banner, bx}
 									{#if banner.img}

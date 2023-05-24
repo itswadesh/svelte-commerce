@@ -31,7 +31,7 @@ import paypal from '$lib/assets/payment-method/paypal.png'
 import skrill from '$lib/assets/payment-method/skrill.png'
 import type { Category, Me } from '$lib/types'
 import visa from '$lib/assets/payment-method/visa.png'
-import visaElectron from '$lib/assets/payment-method/visa-electron.png'
+// import visaElectron from '$lib/assets/payment-method/visa-electron.png'
 
 export let store = {},
 	popularSearches: { took: 0; count: 0; data: [] },
@@ -101,7 +101,7 @@ let footerItems: any = [
 	}
 ]
 
-let paymentMethodCards = [masterCard, paypal, skrill, visa, visaElectron]
+let paymentMethodCards = [masterCard, paypal, skrill, visa]
 
 onMount(async () => {
 	const res = await getStoreData()

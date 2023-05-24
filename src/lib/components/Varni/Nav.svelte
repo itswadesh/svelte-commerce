@@ -200,7 +200,7 @@ let y
 <svelte:window bind:scrollY="{y}" />
 
 <nav
-	class="fixed lg:static minimum-width-rem flex w-full flex-col items-center border-b bg-white shadow-md
+	class="fixed lg:static minimum-width-rem flex w-full inset-x-0 flex-col items-center border-b bg-white shadow-md
 	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}
 	{hellobar?.active?.val ? 'h-14 sm:h-20 lg:h-40' : 'h-14 sm:h-20 lg:h-[120px]'}">
 	{#if hellobar?.active?.val}

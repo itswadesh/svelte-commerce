@@ -242,9 +242,7 @@ let showFooter = false
 			</div>
 		{:then home}
 			{#if home.groupByBanner?.length > 0}
-				<div>
-					<PickedBanners banners="{home.groupByBanner}" />
-				</div>
+				<PickedBanners banners="{home.groupByBanner}" />
 			{/if}
 		{/await}
 
