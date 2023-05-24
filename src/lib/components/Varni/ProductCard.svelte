@@ -71,7 +71,7 @@ async function toggleWishlist(id) {
 </script>
 
 <div
-	class="relative col-span-1 block w-full overflow-hidden sm:w-[210px] sm:shrink-0"
+	class="relative col-span-1 flex flex-col items-center justify-center text-center w-full overflow-hidden sm:w-[200px] sm:shrink-0"
 	on:mouseenter="{showitems}"
 	on:mouseleave="{hideitems}">
 	<!-- New and Tags -->
@@ -101,20 +101,18 @@ async function toggleWishlist(id) {
 
 	<!-- Product image -->
 
-	<div class="w-[219px] h-[219px] overflow-hidden">
-		<LazyImg
-			src="{newProduct.img}"
-			alt="{newProduct.name}"
-			width="219"
-			height="219"
-			aspect_ratio="1:1"
-			class="object-contain object-bottom w-[219px] h-[219px] text-xs" />
-	</div>
+	<LazyImg
+		src="{newProduct.img}"
+		alt="{newProduct.name}"
+		width="200"
+		height="200"
+		aspect_ratio="1:1"
+		class="object-contain object-bottom w-[200px] h-[200px] text-xs" />
 
 	{#if show}
 		<div
 			transition:fade="{{ duration: 300 }}"
-			class="absolute inset-x-0 top-[182px] bg-white border-b border-l border-r">
+			class="absolute inset-x-0 top-[163px] bg-white border-b border-l border-r">
 			<ul class="bg-white grid grid-cols-4 divide-x divide-secondary-500 p-2">
 				<!-- Cart -->
 
@@ -245,7 +243,7 @@ async function toggleWishlist(id) {
 
 	<!-- Product name and prices -->
 
-	<div class="p-2 text-center">
+	<div class="p-2">
 		<p class="text-sm line-clamp-2">
 			{newProduct.name || '_'}
 		</p>

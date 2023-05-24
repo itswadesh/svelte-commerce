@@ -40,10 +40,10 @@ onMount(async () => {
 			</h2>
 
 			<div>
-				<ul class="mb-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 sm:gap-4">
+				<ul class="mb-5 grid grid-cols-2 sm:flex sm:flex-wrap justify-between sm:gap-4">
 					{#each categoriesProducts as p, px}
 						{#if px < showCount}
-							<li class="col-span-1">
+							<li>
 								<ProductCard product="{p}" />
 							</li>
 						{/if}
