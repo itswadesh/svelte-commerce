@@ -34,7 +34,6 @@ export const getStoreData = async ({
 	server = false,
 	sid = null
 }: any) => {
-
 	let storeRes: any = {}
 
 	let store = {
@@ -61,7 +60,6 @@ export const getStoreData = async ({
 		isGDPR: false,
 		isProductReviewsAndRatings: false,
 		isSecureCatalogue: false,
-		isWhatsappChatButton: false,
 		isWishlist: false,
 		keywords,
 		loginUrl,
@@ -74,8 +72,8 @@ export const getStoreData = async ({
 		websiteLegalName,
 		websiteName,
 		weightUnit,
+		whatsappChatButton: {},
 	}
-
 
 	let megamenu = null
 
@@ -85,9 +83,8 @@ export const getStoreData = async ({
 		!cookieMegamenu ||
 		cookieMegamenu == 'undefined'
 	) {
-
 		const uri = new URL(url)
-
+		// console.log('URI..............', uri.host)
 		storeRes = await fetchInit(uri.host)
 
 		store = {
@@ -114,7 +111,6 @@ export const getStoreData = async ({
 			isGDPR: storeRes.storeOne.isGDPR,
 			isProductReviewsAndRatings: storeRes.storeOne.isProductReviewsAndRatings,
 			isSecureCatalogue: storeRes.storeOne.isSecureCatalogue,
-			isWhatsappChatButton: storeRes.storeOne.isWhatsappChatButton,
 			isWishlist: storeRes.storeOne.isWishlist,
 			keywords: storeRes.storeOne.keywords,
 			loginUrl: storeRes.storeOne.otpLogin ? '/auth/otp-login' : '/auth/login',
@@ -127,17 +123,13 @@ export const getStoreData = async ({
 			websiteLegalName: storeRes.storeOne.websiteLegalName,
 			websiteName: storeRes.storeOne.websiteName,
 			weightUnit: storeRes.storeOne.weightUnit,
+			whatsappChatButton: storeRes.storeOne.whatsappChatButton,
 		}
 
 		megamenu = storeRes.megamenu
 
-		cookies.set('store', JSON.stringify(store), { path: '/' })
-
-		try {
-			cookies.set('megamenu', JSON.stringify(megamenu), { path: '/' })
-		} catch (e) {
-
-		}
+		// cookies.set('store', JSON.stringify(store), { path: '/' })
+		// cookies.set('megamenu', JSON.stringify(megamenu), { path: '/' })
 	} else {
 		store = JSON.parse(cookieStore)
 		megamenu = JSON.parse(cookieMegamenu)
@@ -146,6 +138,7 @@ export const getStoreData = async ({
 	storeRes.storeOne = store
 	storeRes.megamenu = megamenu
 
+	// console.log('zzzzzzzzzzzzzzzzzz', storeRes);
 
 	return storeRes
 }
