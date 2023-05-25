@@ -30,7 +30,8 @@ let socialSharesList = [
 	{
 		icon: whatsappIcon,
 		title: 'Whatsapp',
-		href: `whatsapp://send?text=${url}`
+		dataAction: 'share/whatsapp/share',
+		href: `whatsapp://send?text=${productName} ${url}`
 	},
 	{
 		icon: telegramIcon,
@@ -45,7 +46,7 @@ let socialSharesList = [
 	{
 		icon: twitterIcon,
 		title: 'Twitter',
-		href: `https://twitter.com/intent/tweet/?text=${productName}&hashtags=${'zapvi'}&via=${'zapvi'}&related=${'mobile cover, mousepad, phone grips, t-shirt, keychain, mobile accessories'}&url=${url}`
+		href: `https://twitter.com/intent/tweet/?text=${productName}&hashtags=${'litekart'}&via=${'litekart'}&related=${'mobile cover, mousepad, phone grips, t-shirt, keychain, mobile accessories'}&url=${url}`
 	},
 	{
 		icon: pinterestIcon,
@@ -74,7 +75,7 @@ const copyToClipboard = (link) => {
 <div class="relative max-w-max">
 	<button
 		type="button"
-		class="flex items-center gap-2 rounded-full border border-transparent lg:border-zinc-200 p-1 lg:py-1 lg:px-4 transition duration-300 focus:outline-none 
+		class="flex items-center gap-2 rounded-full border border-transparent lg:border-zinc-200 p-1 lg:py-1 lg:px-4 transition duration-300 focus:outline-none
 		{showDropDown
 			? 'border-primary-500 bg-primary-500 text-white shadow-lg'
 			: 'lg:hover:border-primary-500 lg:hover:text-primary-500'}
@@ -120,8 +121,8 @@ const copyToClipboard = (link) => {
 					class="share-button"
 					text="{productName}"
 					url="{url}"
-					hashtags="zapvi"
-					via="zapvi"
+					hashtags="litekart"
+					via="litekart"
 					related="mobile cover,t-shirt,key chain " />
 			</li>
 
@@ -142,7 +143,7 @@ const copyToClipboard = (link) => {
 
 		<div
 			transition:fly="{{ y: 100, duration: 300 }}"
-			class="fixed lg:hidden inset-x-0 bottom-0 z-50 bg-white border-t"
+			class="fixed lg:hidden inset-x-0 bottom-0 z-[100] bg-white border-t"
 			style="box-shadow: 0px -4px 10px rgba(50, 50, 50, 0.075);">
 			<div class="py-2 px-4 flex items-center gap-2">
 				<button type="button" class="focus:outline-none" on:click="{() => (showDropDown = false)}">
@@ -180,6 +181,7 @@ const copyToClipboard = (link) => {
 					<li class="col-span-1">
 						<a
 							href="{encodeURI(ss.href)}"
+							data-action="{ss.dataAction || ''}"
 							target="_blank"
 							rel="noopener noreferrer"
 							class="max-w-max flex flex-col items-center justify-center gap-1 text-xs"
