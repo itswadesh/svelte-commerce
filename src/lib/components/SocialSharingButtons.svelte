@@ -30,7 +30,8 @@ let socialSharesList = [
 	{
 		icon: whatsappIcon,
 		title: 'Whatsapp',
-		href: `whatsapp://send?text=${url}`
+		dataAction: 'share/whatsapp/share',
+		href: `whatsapp://send?text=${productName} ${url}`
 	},
 	{
 		icon: telegramIcon,
@@ -74,7 +75,7 @@ const copyToClipboard = (link) => {
 <div class="relative max-w-max">
 	<button
 		type="button"
-		class="flex items-center gap-2 rounded-full border border-transparent lg:border-zinc-200 p-1 lg:py-1 lg:px-4 transition duration-300 focus:outline-none 
+		class="flex items-center gap-2 rounded-full border border-transparent lg:border-zinc-200 p-1 lg:py-1 lg:px-4 transition duration-300 focus:outline-none
 		{showDropDown
 			? 'border-primary-500 bg-primary-500 text-white shadow-lg'
 			: 'lg:hover:border-primary-500 lg:hover:text-primary-500'}
@@ -180,6 +181,7 @@ const copyToClipboard = (link) => {
 					<li class="col-span-1">
 						<a
 							href="{encodeURI(ss.href)}"
+							data-action="{ss.dataAction || ''}"
 							target="_blank"
 							rel="noopener noreferrer"
 							class="max-w-max flex flex-col items-center justify-center gap-1 text-xs"
