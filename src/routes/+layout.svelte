@@ -168,9 +168,9 @@ onMount(async () => {
 		<BackToTop />
 	{/if}
 
-	{#if $page.data.store?.isWhatsappChatButton && $page.data.store?.whatsappNumber}
+	{#if $page.data.store?.whatsappChatButton?.active?.val && $page.data.store?.whatsappChatButton?.phone?.val}
 		<a
-			href="https://api.whatsapp.com/send?phone={$page.data.store?.whatsappNumber}"
+			href="https://api.whatsapp.com/send?phone={$page.data.store?.whatsappChatButton?.phone?.val}"
 			target="_blank"
 			rel="noopener noreferrer"
 			class="fixed z-40 bottom-16 left-4">
