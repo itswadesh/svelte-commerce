@@ -164,7 +164,7 @@ const getSelectionLabel = (option) => option.name
 </script>
 
 <div
-	class="minimum-width-rem fixed inset-x-0 top-0 w-full bg-white shadow-xs
+	class="minimum-width-rem fixed inset-x-0 top-0 w-full border-b bg-white shadow-xs
 	{hellobar?.active?.val ? 'h-[88px] sm:h-28' : 'h-14 sm:h-20'}
 	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
 	{#if hellobar?.active?.val}
@@ -176,7 +176,7 @@ const getSelectionLabel = (option) => option.name
 		</div>
 	{/if}
 
-	<nav class="flex items-center justify-center border-b px-3 sm:px-10">
+	<nav class="h-full flex items-center justify-center px-3 sm:px-10">
 		<div class="flex w-full items-center justify-between gap-4 lg:gap-8">
 			<div class="flex items-center gap-4">
 				<!-- Back button -->
