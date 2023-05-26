@@ -10,8 +10,8 @@ import { page } from '$app/stores'
 import { toast } from '$lib/utils'
 import { UserService } from '$lib/services'
 import Cookie from 'cookie-universal'
-import {LazyImg,Error} from '$lib/components'
-import {PrimaryButton} from '$lib/ui'
+import { LazyImg, Error } from '$lib/components'
+import { PrimaryButton } from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
 import VerifyOtp from '../_VerifyOtp.svelte'
 const cookies = Cookie()
@@ -264,9 +264,9 @@ function changeNumber() {
 						maxlength="{maxlength}"
 						autofocus
 						required
-						class="w-full rounded border border-zinc-200 focus:border-primary-500 focus:outline-none
-						{isMobile ? 'py-3 pl-3 pr-40' : 'p-3'}"
+						class="w-full p-3 rounded border border-zinc-200 focus:border-primary-500 focus:outline-none"
 						on:input="{verifyIsMobileNum}" />
+					<!-- {isMobile ? 'py-3 pl-3 pr-40' : 'p-3'} -->
 
 					<!-- Countries list for country code -->
 
