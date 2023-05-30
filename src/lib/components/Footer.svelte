@@ -112,11 +112,11 @@ async function getPages() {
 	<div class="container mx-auto max-w-6xl">
 		<div
 			class="mb-4 flex w-full flex-col flex-wrap items-start justify-start gap-5 sm:mb-8 sm:gap-10 h-full sm:max-h-[35rem] xl:max-h-80 overflow-hidden">
-			{#if pages?.length}
-				<div>
-					<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Company</h5>
+			<div>
+				<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Company</h5>
 
-					<ul class="flex flex-col gap-1 text-zinc-500">
+				<ul class="flex flex-col gap-1 text-zinc-500">
+					{#if pages?.length}
 						{#each pages as page}
 							<li class="flex max-w-max items-center">
 								<a
@@ -135,9 +135,24 @@ async function getPages() {
 								{/if}
 							</li>
 						{/each}
-					</ul>
-				</div>
-			{/if}
+					{/if}
+
+					<li class="flex max-w-max items-center">
+						<a
+							href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store?.id}"
+							target="_blank"
+							aria-label="Click to visit this page"
+							class="link-underline link-underline-gray whitespace-pre-wrap">
+							Join as Vendor
+						</a>
+
+						<div
+							class="ml-2 max-w-max rounded bg-primary-500 py-[0.1rem] px-1 text-[0.5rem] font-semibold leading-3 tracking-wider text-white">
+							NEW
+						</div>
+					</li>
+				</ul>
+			</div>
 
 			{#if footerItems?.length}
 				{#each footerItems as item}
