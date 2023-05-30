@@ -121,7 +121,6 @@ async function getPages() {
 							<li class="flex max-w-max items-center">
 								<a
 									href="/p/{page.slug}"
-									target="_blank"
 									aria-label="Click to visit this page"
 									class="link-underline link-underline-gray whitespace-pre-wrap">
 									{page.name}
