@@ -35,17 +35,17 @@ export const fetchLatestPages = async ({ origin, storeId, server = false, sid = 
 	}
 }
 
-export const fetchPage = async ({ origin, id, storeId, server = false, sid = null }: any) => {
+export const fetchPage = async ({ origin, id, slug, storeId, server = false, sid = null }: any) => {
 	try {
 		let res: any = {}
 
 		if (isServer) {
-			res = await getBySid(`pages/${id}`, sid)
+			res = await getBySid(`pages/${id || slug}?store=${storeId}`, sid)
 		} else {
-			res = await getAPI(`pages/${id}`, origin)
+			res = await getAPI(`pages/${id || slug}?store=${storeId}`, origin)
 		}
 
-		return res.data || []
+		return res || {}
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)
 	}
