@@ -8,9 +8,9 @@ export const fetchPaymentMethods = async ({ origin, storeId, server = false, sid
 		let res: any = {}
 
 		if (isServer) {
-			res = await getBySid(`payment-methods?store=${storeId}`, sid)
+			res = await getBySid(`payment-methods?store=${storeId}&active=true`, sid)
 		} else {
-			res = await getAPI(`payment-methods?store=${storeId}`, origin)
+			res = await getAPI(`payment-methods?store=${storeId}&active=true`, origin)
 		}
 
 		return res.data || []
