@@ -197,7 +197,7 @@ let seoProps = {
 
 				<p class="text-zinc-500">
 					By visiting {$page.data.store?.websiteName}, you agree that the laws of the state of
-					GUJARAT, INDIA, without regard to principles of conflict of laws, will govern these
+					ODISHA, INDIA, without regard to principles of conflict of laws, will govern these
 					Conditions of Use and any dispute of any sort that might arise between you and {$page.data
 						.store.websiteName} or its associates.
 				</p>
@@ -209,8 +209,8 @@ let seoProps = {
 				<p class="text-zinc-500">
 					Any dispute relating in any way to your visit to {$page.data.store?.websiteName} or to products
 					you purchase through
-					{$page.data.store?.websiteName} shall be submitted to confidential arbitration in Telangana,
-					India, except that, to the extent you have in any manner violated or threatened to violate
+					{$page.data.store?.websiteName} shall be submitted to confidential arbitration in Odisha, India,
+					except that, to the extent you have in any manner violated or threatened to violate
 					{$page.data.store?.websiteName}’s intellectual property rights, {$page.data.store
 						.websiteName} may seek injunctive or other appropriate relief in any state or federal court
 					in the state of Telangana, India, and you consent to exclusive jurisdiction and venue in such
