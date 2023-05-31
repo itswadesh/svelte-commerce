@@ -32,7 +32,7 @@ let showSubCategory2 = []
 let allAges = []
 let allBrands = []
 let allColors = []
-let allDiscount = []
+// let allDiscount = []
 let allFeatures = []
 let allGenders = []
 let allPromotions = []
@@ -65,9 +65,9 @@ function getFacetsWithProducts() {
 	if (facets?.all_aggs?.colors?.all?.buckets?.length) {
 		allColors = facets?.all_aggs?.colors?.all?.buckets?.filter((t) => t.doc_count > 0)
 	}
-	if (facets?.all_aggs?.discount?.all?.buckets?.length) {
-		allDiscount = facets?.all_aggs?.discount?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
+	// if (facets?.all_aggs?.discount?.all?.buckets?.length) {
+	// 	allDiscount = facets?.all_aggs?.discount?.all?.buckets?.filter((t) => t.doc_count > 0)
+	// }
 	if (facets?.all_aggs?.features?.all?.buckets?.length) {
 		allFeatures = facets?.all_aggs?.features?.all?.buckets?.filter((t) => t.doc_count > 0)
 	}
@@ -118,9 +118,11 @@ function getSelected() {
 		selected = 'Brands'
 	} else if (allColors?.length > 0) {
 		selected = 'Colors'
-	} else if (allDiscount?.length > 0) {
-		selected = 'Discount'
-	} else if (allFeatures?.length > 0) {
+	}
+	// else if (allDiscount?.length > 0) {
+	// 	selected = 'Discount'
+	// }
+	else if (allFeatures?.length > 0) {
 		selected = 'Features'
 	} else if (allGenders?.length > 0) {
 		selected = 'Genders'
@@ -385,7 +387,7 @@ $: {
 					<hr class="w-full" />
 				{/if}
 
-				{#if allDiscount?.length > 0}
+				<!-- {#if allDiscount?.length > 0}
 					<button
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
 						{selected === 'Discount'
@@ -400,7 +402,7 @@ $: {
 					</button>
 
 					<hr class="w-full" />
-				{/if}
+				{/if} -->
 
 				{#if allFeatures?.length > 0}
 					<button
@@ -617,7 +619,7 @@ $: {
 					</div>
 				{/if}
 
-				{#if selected === 'Discount'}
+				<!-- {#if selected === 'Discount'}
 					<div
 						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
 						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
@@ -629,7 +631,7 @@ $: {
 								on:go="{goCheckbox}" />
 						{/if}
 					</div>
-				{/if}
+				{/if} -->
 
 				{#if selected === 'Features'}
 					<div
