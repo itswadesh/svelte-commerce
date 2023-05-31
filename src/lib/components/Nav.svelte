@@ -213,7 +213,7 @@ const getSelectionLabel = (option) => option.name
 							class="max-h-10 sm:max-h-16 w-40 object-contain object-left" />
 					{:else if $page?.data?.store?.websiteName}
 						<h2
-							class="bg-gradient-to-b from-primary-500 to-secondary-500 bg-clip-text text-2xl font-extrabold text-transparent sm:text-3xl">
+							class="bg-gradient-to-b from-primary-500 to-secondary-500 bg-clip-text text-2xl font-extrabold text-transparent sm:text-3xl truncate w-40 sm:w-auto sm:max-w-sm">
 							{$page?.data?.store?.websiteName}
 						</h2>
 					{:else}
