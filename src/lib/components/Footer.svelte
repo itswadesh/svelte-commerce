@@ -138,6 +138,15 @@ async function getPages() {
 
 					<li class="flex max-w-max items-center">
 						<a
+							href="/blogs"
+							aria-label="Click to visit this page"
+							class="link-underline link-underline-gray whitespace-pre-wrap">
+							Blogs
+						</a>
+					</li>
+
+					<li class="flex max-w-max items-center">
+						<a
 							href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store?.id}"
 							target="_blank"
 							aria-label="Click to visit this page"
