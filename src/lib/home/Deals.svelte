@@ -1,17 +1,16 @@
 <script>
+import { LazyImg, ProductCard } from '$lib/components'
 import { onMount } from 'svelte'
+import { page } from '$app/stores'
 import { SplideSlide } from '@splidejs/svelte-splide'
-import {LazyImg,ProductCard} from '$lib/components'
 
 export let deal
 
-
-$: innerWidth = 0
 let Carousel, Splide
 
-let widthOfSlider = innerWidth - 410
-
-if (deal.img) {
+$: innerWidth = 0
+$: widthOfSlider = innerWidth - 410
+$: if (deal.img) {
 	widthOfSlider = innerWidth
 }
 
@@ -24,7 +23,9 @@ onMount(async () => {
 <svelte:window bind:innerWidth="{innerWidth}" />
 
 {#if deal}
-	<div class="hidden items-start justify-start gap-3 sm:flex" class:px-10="{!deal.img}">
+	<div
+		class="hidden items-start justify-start gap-3 sm:flex w-[99vw] overflow-hidden"
+		class:px-10="{!deal.img}">
 		{#if deal.img}
 			<div class="shrink-0">
 				<LazyImg

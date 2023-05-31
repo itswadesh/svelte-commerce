@@ -32,15 +32,19 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 
+// console.log('$page', $page)
+
 export let product = {}
+
 if (product?._source) {
 	product = product?._source
 }
 
 let isWislisted = false
 let loadingForWishlist = false
-let showRelatedProducts = false
 let show = false
+let showRelatedProducts = false
+let product_image_dimention = $page.data.store.product_image_dimention || '3x4'
 
 function showitems() {
 	show = true
@@ -53,7 +57,8 @@ function hideitems() {
 
 {#if product}
 	<div
-		class="group relative col-span-1 block w-full overflow-hidden sm:w-52 sm:shrink-0 sm:rounded border sm:border-transparent sm:hover:border-zinc-200 sm:hover:bg-white sm:hover:shadow-lg bg-white"
+		class="group relative col-span-1 block w-full overflow-hidden sm:shrink-0 sm:rounded border sm:border-transparent sm:hover:border-zinc-200 sm:hover:bg-white sm:hover:shadow-lg bg-white
+		{product_image_dimention == '16x9' ? 'md:w-[420px]' : 'sm:w-[210px]'}"
 		on:mouseenter="{showitems}"
 		on:mouseleave="{hideitems}">
 		<a
@@ -86,34 +91,151 @@ function hideitems() {
 				</div>
 			{/if}
 
-			{#if product.img}
-				<div class="w-[210px] h-[280px] overflow-hidden">
+			{#if product_image_dimention == '1x1'}
+				{#if product.img}
+					<LazyImg
+						src="{product.img}"
+						alt="{product.name}"
+						width="210"
+						height="210"
+						aspect_ratio="1:1"
+						class="object-contain object-bottom w-[210px] h-[210px] text-xs" />
+				{:else}
+					<div
+						class="w-[210px] h-[210px] bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1.5"
+							stroke="currentColor"
+							class="w-6 h-6">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
+							></path>
+						</svg>
+
+						<span>No image available</span>
+					</div>
+				{/if}
+			{:else if product_image_dimention == '3x4'}
+				{#if product.img}
 					<LazyImg
 						src="{product.img}"
 						alt="{product.name}"
 						width="210"
 						height="280"
+						aspect_ratio="3:4"
 						class="object-contain object-bottom w-[210px] h-[280px] text-xs" />
-				</div>
-			{:else}
-				<div
-					class="w-[210px] h-[280px] bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke-width="1.5"
-						stroke="currentColor"
-						class="w-6 h-6">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
-						></path>
-					</svg>
+				{:else}
+					<div
+						class="w-[210px] h-[280px] bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1.5"
+							stroke="currentColor"
+							class="w-6 h-6">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
+							></path>
+						</svg>
 
-					<span>No image available</span>
-				</div>
+						<span>No image available</span>
+					</div>
+				{/if}
+			{:else if product_image_dimention == '4x3'}
+				{#if product.img}
+					<LazyImg
+						src="{product.img}"
+						alt="{product.name}"
+						width="210"
+						height="157"
+						aspect_ratio="4:3"
+						class="object-contain object-bottom w-[210px] h-[157px] text-xs" />
+				{:else}
+					<div
+						class="w-[210px] h-[157px] bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1.5"
+							stroke="currentColor"
+							class="w-6 h-6">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
+							></path>
+						</svg>
+
+						<span>No image available</span>
+					</div>
+				{/if}
+			{:else if product_image_dimention == '16x9'}
+				{#if product.img}
+					<LazyImg
+						src="{product.img}"
+						alt="{product.name}"
+						width="420"
+						height="236"
+						aspect_ratio="16:9"
+						class="object-contain object-bottom w-[420px] h-[236px] text-xs" />
+				{:else}
+					<div
+						class="w-[420px] h-[236px] bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1.5"
+							stroke="currentColor"
+							class="w-6 h-6">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
+							></path>
+						</svg>
+
+						<span>No image available</span>
+					</div>
+				{/if}
+			{:else if product_image_dimention == '9x16'}
+				{#if product.img}
+					<LazyImg
+						src="{product.img}"
+						alt="{product.name}"
+						width="210"
+						height="373"
+						aspect_ratio="9:16"
+						class="object-contain object-bottom w-[210px] h-[373px] text-xs" />
+				{:else}
+					<div
+						class="w-[210px] h-[373px] bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1.5"
+							stroke="currentColor"
+							class="w-6 h-6">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
+							></path>
+						</svg>
+
+						<span>No image available</span>
+					</div>
+				{/if}
 			{/if}
 		</a>
 
@@ -366,8 +488,7 @@ function hideitems() {
 				</div>
 
 				{#if !product.hasStock && !show}
-					<p
-						class="absolute inset-x-0 bottom-[2.65rem] sm:bottom-[3.8rem] text-center text-xs text-red-500">
+					<p class="absolute inset-x-0 bottom-16 sm:bottom-20 text-center text-xs text-red-500">
 						Out of Stock
 					</p>
 				{/if}
