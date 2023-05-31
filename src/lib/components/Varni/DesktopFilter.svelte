@@ -17,8 +17,6 @@ export let priceRange = []
 export let query // Required because after loading finished then only we will initiate the price slider component
 export let facets = {}
 
-// console.log('facets', facets)
-
 let clazz
 export { clazz as class }
 
@@ -30,7 +28,7 @@ let showSubCategory2 = []
 let allAges = []
 let allBrands = []
 let allColors = []
-let allDiscount = []
+// let allDiscount = []
 let allFeatures = []
 let allGenders = []
 let allPromotions = []
@@ -73,8 +71,6 @@ onMount(async () => {
 	await getMegamenu()
 })
 
-// console.log('fl', fl)
-
 function getFacetsWithProducts() {
 	if (facets?.all_aggs?.age?.all?.buckets?.length) {
 		allAges = facets?.all_aggs?.age?.all?.buckets?.filter((t) => t.doc_count > 0)
@@ -85,9 +81,9 @@ function getFacetsWithProducts() {
 	if (facets?.all_aggs?.colors?.all?.buckets?.length) {
 		allColors = facets?.all_aggs?.colors?.all?.buckets?.filter((t) => t.doc_count > 0)
 	}
-	if (facets?.all_aggs?.discount?.all?.buckets?.length) {
-		allDiscount = facets?.all_aggs?.discount?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
+	// if (facets?.all_aggs?.discount?.all?.buckets?.length) {
+	// 	allDiscount = facets?.all_aggs?.discount?.all?.buckets?.filter((t) => t.doc_count > 0)
+	// }
 	if (facets?.all_aggs?.features?.all?.buckets?.length) {
 		allFeatures = facets?.all_aggs?.features?.all?.buckets?.filter((t) => t.doc_count > 0)
 	}
