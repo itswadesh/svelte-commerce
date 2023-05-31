@@ -28,7 +28,7 @@ let showSubCategory2 = []
 let allAges = []
 let allBrands = []
 let allColors = []
-let allDiscount = []
+// let allDiscount = []
 let allFeatures = []
 let allGenders = []
 let allPromotions = []
@@ -81,9 +81,9 @@ function getFacetsWithProducts() {
 	if (facets?.all_aggs?.colors?.all?.buckets?.length) {
 		allColors = facets?.all_aggs?.colors?.all?.buckets?.filter((t) => t.doc_count > 0)
 	}
-	if (facets?.all_aggs?.discount?.all?.buckets?.length) {
-		allDiscount = facets?.all_aggs?.discount?.all?.buckets?.filter((t) => t.doc_count > 0)
-	}
+	// if (facets?.all_aggs?.discount?.all?.buckets?.length) {
+	// 	allDiscount = facets?.all_aggs?.discount?.all?.buckets?.filter((t) => t.doc_count > 0)
+	// }
 	if (facets?.all_aggs?.features?.all?.buckets?.length) {
 		allFeatures = facets?.all_aggs?.features?.all?.buckets?.filter((t) => t.doc_count > 0)
 	}
