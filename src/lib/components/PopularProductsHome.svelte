@@ -3,6 +3,8 @@ import { page } from '$app/stores'
 import { ProductCard, DummyProductCard } from '$lib/components'
 
 export let data
+
+let product_image_dimention = $page.data.store.product_image_dimention || '3x4'
 </script>
 
 <!-- Popular products -->
@@ -16,7 +18,10 @@ export let data
 			</h2>
 
 			<ul
-				class="sm:px-10 border-t sm:border-t-0 grid w-full grid-cols-2 items-start sm:gap-3 sm:flex sm:flex-wrap sm:justify-between lg:gap-6">
+				class="sm:px-10 border-t sm:border-t-0 grid w-full items-start sm:gap-3 lg:gap-6
+				{product_image_dimention == '16x9'
+					? 'grid-cols-1 md:grid-cols-2 lg:flex lg:flex-wrap lg:justify-between'
+					: 'grid-cols-2 sm:flex sm:flex-wrap sm:justify-between'}">
 				{#each home?.popular as p}
 					<li>
 						<ProductCard product="{p}" />
