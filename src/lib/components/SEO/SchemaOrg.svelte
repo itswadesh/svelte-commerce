@@ -279,7 +279,7 @@ const schemaOrgProduct = {
 		seller: {
 			'@type': 'Organization',
 			'@id': `${siteUrl}`,
-			name: 'Litekart',
+			name: $page?.data?.store?.websiteName,
 			url: $page.data.origin,
 			logo
 		}
