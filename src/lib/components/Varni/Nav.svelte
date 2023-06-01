@@ -288,7 +288,7 @@ let y
 
 				<!-- Website Logo/Name -->
 
-				<a href="/" aria-label="Click to visit home" class="shrink-0 block sm:px-10">
+				<a href="/" aria-label="Click to visit home" class="shrink-0 block">
 					{#if $page?.data?.store?.logo}
 						<!-- <LazyImg
 							src="{$page?.data?.store?.logo}"

@@ -120,7 +120,7 @@ async function getPages() {
 						{#each pages as page}
 							<li class="flex max-w-max items-center">
 								<a
-									href="/p/{page.slug}"
+									href="/p/{page.link || page.slug}"
 									aria-label="Click to visit this page"
 									class="link-underline link-underline-gray whitespace-pre-wrap">
 									{page.name}
@@ -173,7 +173,7 @@ async function getPages() {
 							{#each item?.subMenu as item}
 								<li class="flex max-w-max items-center">
 									<a
-										href="{page.link}"
+										href="{item.link}"
 										target="{item.target || 'self'}"
 										aria-label="Click to visit this page"
 										class="link-underline link-underline-gray whitespace-pre-wrap capitalize">
