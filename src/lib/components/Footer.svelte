@@ -70,10 +70,7 @@ let footerItems: any = [
 	// },
 	{
 		heading: 'Customer service',
-		subMenu: [
-			{ title: 'Track Your Order', link: '##', new: false },
-			{ title: 'Bulk Order Inquiry', link: '/bulk-order-inquiry', new: true }
-		]
+		subMenu: [{ title: 'Track Your Order', link: '##', new: false }]
 	}
 ]
 let pages = []
@@ -145,20 +142,32 @@ async function getPages() {
 						</a>
 					</li>
 
-					<li class="flex max-w-max items-center">
-						<a
-							href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store?.id}"
-							target="_blank"
-							aria-label="Click to visit this page"
-							class="link-underline link-underline-gray whitespace-pre-wrap">
-							Join as Vendor
-						</a>
+					{#if $page.data.store?.isMultiVendor}
+						<li class="flex max-w-max items-center">
+							<a
+								href="{$page.data.store?.adminUrl}"
+								target="_blank"
+								aria-label="Click to visit this page"
+								class="link-underline link-underline-gray whitespace-pre-wrap">
+								Vendor Login
+							</a>
+						</li>
 
-						<div
-							class="ml-2 max-w-max rounded bg-primary-500 py-[0.1rem] px-1 text-[0.5rem] font-semibold leading-3 tracking-wider text-white">
-							NEW
-						</div>
-					</li>
+						<li class="flex max-w-max items-center">
+							<a
+								href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store?.id}"
+								target="_blank"
+								aria-label="Click to visit this page"
+								class="link-underline link-underline-gray whitespace-pre-wrap">
+								Join as Vendor
+							</a>
+
+							<div
+								class="ml-2 max-w-max rounded bg-primary-500 py-[0.1rem] px-1 text-[0.5rem] font-semibold leading-3 tracking-wider text-white">
+								NEW
+							</div>
+						</li>
+					{/if}
 				</ul>
 			</div>
 
@@ -188,6 +197,22 @@ async function getPages() {
 									{/if}
 								</li>
 							{/each}
+
+							{#if $page.data.store?.isBulkOrder}
+								<li class="flex max-w-max items-center">
+									<a
+										href="/bulk-order-inquiry"
+										aria-label="Click to visit this page"
+										class="link-underline link-underline-gray whitespace-pre-wrap capitalize">
+										Bulk Order Inquiry
+									</a>
+
+									<div
+										class="ml-2 max-w-max rounded bg-primary-500 py-[0.1rem] px-1 text-[0.5rem] font-semibold leading-3 tracking-wider text-white">
+										NEW
+									</div>
+								</li>
+							{/if}
 						</ul>
 					</div>
 				{/each}
