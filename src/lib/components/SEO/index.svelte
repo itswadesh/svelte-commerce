@@ -1,18 +1,10 @@
 <script lang="ts">
-import {
-	authorInfo,
-	WWW_URL,
-	entity,
-	ogLanguage,
-	siteLanguage,
-	siteShortTitle,
-	siteTitle
-} from '$lib/config'
+import { authorInfo, WWW_URL, entity, ogLanguage, siteLanguage, siteShortTitle } from '$lib/config'
 import OpenGraph from './OpenGraph.svelte'
 import Product from './Product.svelte'
 import SchemaOrg from './SchemaOrg.svelte'
 import Twitter from './Twitter.svelte'
-
+import { page } from '$app/stores'
 const {
 	author,
 	facebookAuthorPage,
@@ -92,11 +84,10 @@ export let wlwmanifestXmlHref = ''
 const url = `${WWW_URL}/${slug}`
 
 let pageTitle
-
 if (title) {
-	pageTitle = `${title} - ${siteTitle}`
+	pageTitle = `${title} - ${$page.data?.store?.websiteName}`
 } else {
-	pageTitle = `${siteTitle}`
+	pageTitle = `${$page.data?.store?.websiteName}`
 }
 
 const openGraphProps = {
@@ -108,7 +99,7 @@ const openGraphProps = {
 	description,
 	ogLanguage,
 	pageTitle,
-	siteTitle,
+	siteTitle: $page.data?.store?.websiteName,
 	url,
 	...(article ? { datePublished, lastUpdated, facebookPageName, facebookAuthorPage } : {})
 }
@@ -127,7 +118,7 @@ const schemaOrgProps = {
 	linkedinProfile,
 	name: productName,
 	siteLanguage,
-	siteTitle,
+	siteTitle: $page.data?.store?.websiteName,
 	siteTitleAlt: siteShortTitle,
 	siteUrl: WWW_URL,
 	telegramUsername,
