@@ -15,7 +15,6 @@ const seoProps = {
 }
 
 export let data
-console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let bankPayment = { type: 'order', reference: '', remark: '', paymentMethodId: '', amount: 0 }
 let disabled = false
@@ -142,7 +141,6 @@ async function submit(pm) {
 					color: '#112D4E'
 				}
 			}
-			console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', options)
 			const rzp1 = new Razorpay(options)
 			rzp1.open()
 		} catch (e) {
@@ -174,7 +172,8 @@ function checkIfStripeCardValid({ detail }) {
 		<Error err="{data.err}" />
 	</div>
 
-	<div class="mt-10 flex flex-col gap-10 md:flex-row md:justify-center xl:gap-20">
+	<div
+		class="mb-14 lg:mb-0 mt-5 md:mt-10 flex flex-col lg:flex-row lg:justify-center gap-10 xl:gap-20">
 		<div class="w-full flex-1">
 			<h2
 				class="mb-5 h-6 sm:h-8 flex items-center text-xl font-bold capitalize tracking-wide sm:text-2xl">
