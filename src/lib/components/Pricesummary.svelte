@@ -150,7 +150,8 @@ function submit() {
 					<a href="{nextpage}">
 						<PrimaryButton
 							roundedNone
-							class="w-full uppercase"
+							class="w-full uppercase h-14"
+							clickEffect="{false}"
 							loading="{loading}"
 							disabled="{disabled}">
 							<span>{text}</span>
@@ -173,7 +174,7 @@ function submit() {
 					<PrimaryButton
 						roundedNone
 						type="submit"
-						class="w-full uppercase"
+						class="w-full uppercase h-14"
 						loading="{loading}"
 						disabled="{disabled}"
 						on:click="{submit}">

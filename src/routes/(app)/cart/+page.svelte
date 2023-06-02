@@ -135,7 +135,7 @@ async function getCoupons() {
 
 <SEO {...seoProps} />
 
-<section class="min-h-screen w-full p-3 sm:p-10">
+<section class="min-h-screen w-full px-3 py-5 sm:p-10">
 	<div class="container mx-auto max-w-6xl">
 		{#if data.loadingCart}
 			<div class="flex flex-col gap-5">
@@ -144,7 +144,7 @@ async function getCoupons() {
 				{/each}
 			</div>
 		{:else if data.cart?.qty > 0}
-			<div class="flex flex-col gap-10 lg:flex-row lg:justify-center xl:gap-20">
+			<div class="mb-14 lg:mb-0 flex flex-col gap-10 lg:flex-row lg:justify-center xl:gap-20">
 				<div class="w-full flex-1">
 					<div class="items-center justify-between h-10 sm:h-14 sm:flex">
 						<!-- Cart start  -->
@@ -517,6 +517,7 @@ async function getCoupons() {
 
 				<div class="w-full lg:w-80 lg:shrink-0 lg:grow-0">
 					<!-- Promo code section -->
+
 					{#if $page.data.store?.isDiscountCoupons}
 						<div class="h-10 sm:h-14 flex items-center">
 							{#if data.cart?.discount?.amount > 0}

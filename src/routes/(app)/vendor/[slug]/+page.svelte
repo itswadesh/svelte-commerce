@@ -1,11 +1,12 @@
 <script>
 import { dateOnly } from '$lib/utils'
-import {DummyProductCard,Pagination,LazyImg,ProductCard} from '$lib/components'
-import {RatingStarDisplay} from '$lib/ui'
+import { DummyProductCard, Pagination, LazyImg, ProductCard } from '$lib/components'
+import { RatingStarDisplay } from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'
 
 export let data
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 const seoProps = {
 	title: 'Vendor Profile',
@@ -16,7 +17,7 @@ const seoProps = {
 <SEO {...seoProps} />
 
 <section class="min-h-screen">
-	<div class="sm:p-10">
+	<div class="px-3 py-5 sm:p-10">
 		<div class="container mx-auto w-full max-w-6xl">
 			{#if data.vendor}
 				<div class="grid grid-cols-1 lg:grid-cols-6 lg:gap-10">
@@ -292,9 +293,19 @@ const seoProps = {
 					<!-- Vendor products -->
 
 					<div class="col-span-1 lg:col-span-4">
-						<div class="flex items-center justify-between gap-5">
-							<h2 class="text-xl font-bold sm:text-2xl md:text-3xl p-5 lg:p-0 lg:mb-5">
-								Vendor's Product
+						{#if data.vendor.description}
+							<div class="mb-10">
+								<h2 class="mb-5 text-2xl capitalize sm:text-3xl">About Seller</h2>
+
+								<div class="prose max-w-none">
+									{@html data.vendor.description}
+								</div>
+							</div>
+						{/if}
+
+						<div class="mb-5 flex flex-wrap items-center justify-between gap-2">
+							<h2 class="text-2xl capitalize sm:text-3xl">
+								Products
 
 								{#if data.vendorsProduct?.count}
 									({data.vendorsProduct?.count})
@@ -302,11 +313,11 @@ const seoProps = {
 							</h2>
 
 							<!-- <a
-								href="/{data.vendor?.slug}?sort=-updatedAt"
-								aria-label="Click to visit vendor details page"
-								class="text-xs font-semibold text-primary-500 hover:text-primary-700 hover:underline sm:text-sm">
-								View All
-							</a> -->
+									href="/{data.vendor?.slug}?sort=-updatedAt"
+									aria-label="Click to visit vendor details page"
+									class="text-xs font-semibold text-primary-500 hover:text-primary-700 hover:underline sm:text-sm">
+									View All
+								</a> -->
 						</div>
 
 						{#if data.vendorsProduct?.count}

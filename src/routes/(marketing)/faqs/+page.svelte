@@ -1,6 +1,6 @@
 <script>
+import { Skeleton, PrimaryButton } from '$lib/ui'
 import noEmptyFaqs from '$lib/assets/no/empty-faqs.svg'
-import {Skeleton,PrimaryButton} from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
@@ -19,7 +19,7 @@ function showans(i) {
 
 <SEO {...seoProps} />
 
-<section class="min-h-screen p-3 sm:p-10">
+<section class="min-h-screen px-3 py-5 sm:p-10">
 	<div class="container mx-auto w-full max-w-6xl">
 		{#if data.loading}
 			<div class="flex flex-col gap-5">
@@ -43,11 +43,11 @@ function showans(i) {
 								type="button"
 								class="flex w-full cursor-pointer items-start justify-between p-4 text-left focus:outline-none sm:p-6"
 								on:click="{() => showans(fx)}">
-								<span class="flex-1  text-base font-medium md:text-lg">{f.question}</span>
+								<span class="flex-1 text-base font-medium md:text-lg">{f.question}</span>
 
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
-									class="h-5 transition duration-300 sm:h-6 
+									class="h-5 transition duration-300 sm:h-6
 									{show[fx] ? 'text-primary-500 transform rotate-45 transition duration-300' : ''}"
 									fill="none"
 									viewBox="0 0 24 24"

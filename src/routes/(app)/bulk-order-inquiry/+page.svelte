@@ -130,7 +130,7 @@ async function submit() {
 
 <SEO {...seoProps} />
 
-<section class="min-h-screen p-3 sm:p-10">
+<section class="min-h-screen px-3 py-5 sm:p-10">
 	<div class="container mx-auto mb-20 w-full max-w-lg">
 		{#if err}
 			<div class="mb-5">

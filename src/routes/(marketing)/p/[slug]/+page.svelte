@@ -13,7 +13,7 @@ let seoProps = {
 <SEO {...seoProps} />
 
 {#if data.page}
-	<section class="min-h-screen p-3 sm:p-10">
+	<section class="min-h-screen px-3 py-5 sm:p-10">
 		<div class="container mx-auto w-full max-w-6xl">
 			<!-- Payments & Returns -->
 

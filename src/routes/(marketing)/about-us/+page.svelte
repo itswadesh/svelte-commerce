@@ -10,7 +10,7 @@ let seoProps = {
 
 <SEO {...seoProps} />
 
-<section class="min-h-screen p-3 sm:p-10">
+<section class="min-h-screen px-3 py-5 sm:p-10">
 	<div
 		class="container mx-auto flex w-full max-w-6xl flex-col items-center gap-5 text-center text-sm sm:gap-10 sm:text-base">
 		<!-- About Us -->
