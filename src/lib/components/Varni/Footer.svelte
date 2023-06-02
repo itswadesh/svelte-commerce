@@ -120,7 +120,7 @@ async function getStoreData() {
 </script>
 
 <footer class="w-full text-sm">
-	<div class="justify-center bg-primary-500 p-3 sm:p-10 text-white">
+	<div class="justify-center bg-primary-500 px-3 py-5 sm:p-10 text-white">
 		<div class="container mx-auto max-w-6xl">
 			<div
 				class="mb-4 flex w-full flex-col flex-wrap items-start justify-start gap-5 sm:mb-8 sm:max-h-[30rem] sm:gap-10 lg:max-h-80">

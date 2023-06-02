@@ -34,7 +34,7 @@ function emitConfirm() {
 	<transition name="{trnsitionName}">
 		{#if isVisible}
 			<div
-				class="frosted fixed inset-0 z-50 flex h-screen w-screen flex-col items-center justify-center p-3 sm:p-10">
+				class="frosted fixed inset-0 z-50 flex h-screen w-screen flex-col items-center justify-center px-3 py-5 sm:p-10">
 				<div
 					class="flex max-w-max flex-col overflow-hidden rounded-lg border bg-white align-middle shadow-lg">
 					<!-- header-->
