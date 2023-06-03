@@ -352,7 +352,7 @@ async function getStoreData() {
 				Copyright © {getYear()}
 				{$page.data.store?.websiteName},
 				<br />
-				All Rights Reserved | Powered by Litekart
+				All Rights Reserved | Powered by <a href="http://litekart.in" target="_blank">Litekart</a>
 			</p>
 
 			{#if $page.data.store?.socialSharingButtons || $page.data.store?.email}
