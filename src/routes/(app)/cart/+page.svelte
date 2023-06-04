@@ -1,7 +1,7 @@
 <script lang="ts">
 import { CartService, CouponService, ProductService } from '$lib/services'
 import { date } from '$lib/utils'
-import { fireGTagEvent } from '$lib/utils/gTag'
+import { fireGTagEvent } from '$lib/utils/gTagB'
 import { fly } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
@@ -57,7 +57,7 @@ const addToCart = async ({ pid, qty, customizedImg, ix, loadingType }: any) => {
 		origin: $page.data.origin,
 		cookies
 	})
-
+	fireGTagEvent('add_to_cart', data.cart)
 	await invalidateAll() // Has to be invalidateAll everywhere because cart is called on hooks.server.ts and any invalidation will trigger hooks.server.ts call
 	// Keep await here, else the loader will stop before updating the locals value
 	loading[ix] = false

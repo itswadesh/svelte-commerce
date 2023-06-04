@@ -69,13 +69,14 @@ export const getStoreData = async ({
 		otpLogin: false,
 		phone,
 		product_image_dimention: null,
+		googleAnalytics: {},
 		searchbarText,
 		socialSharingButtons: {},
 		title: siteTitle,
 		websiteLegalName,
 		websiteName,
 		weightUnit,
-		whatsappChatButton: {},
+		whatsappChatButton: {}
 	}
 
 	let megamenu = null
@@ -89,7 +90,6 @@ export const getStoreData = async ({
 		const uri = new URL(url)
 		// console.log('URI..............', uri.host)
 		storeRes = await fetchInit(uri.host)
-
 		store = {
 			id: storeRes.storeOne._id,
 			address: storeRes.storeOne.address,
@@ -123,13 +123,14 @@ export const getStoreData = async ({
 			otpLogin: storeRes.storeOne.otpLogin || true,
 			phone: storeRes.storeOne.phone,
 			product_image_dimention: storeRes.storeOne.product_image_dimention,
+			googleAnalytics: { active: true, id: 'G-7GT925KFBB' }, //storeRes.storeOne.googleAnalytics,
 			searchbarText: storeRes.storeOne.searchbarText,
 			socialSharingButtons: storeRes.storeOne.socialSharingButtons,
 			title: storeRes.storeOne.title,
 			websiteLegalName: storeRes.storeOne.websiteLegalName,
 			websiteName: storeRes.storeOne.websiteName,
 			weightUnit: storeRes.storeOne.weightUnit,
-			whatsappChatButton: storeRes.storeOne.whatsappChatButton,
+			whatsappChatButton: storeRes.storeOne.whatsappChatButton
 		}
 
 		megamenu = storeRes.megamenu

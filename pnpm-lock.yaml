@@ -6,6 +6,9 @@ dependencies:
     version: 0.2.1(@sveltejs/kit@1.16.2)(vite-plugin-pwa@0.14.7)
 
 devDependencies:
+  '@beyonk/svelte-google-analytics':
+    specifier: 2.6.4
+    version: 2.6.4
   '@builder.io/partytown':
     specifier: 0.8.0
     version: 0.8.0
@@ -1301,6 +1304,16 @@ packages:
       '@babel/helper-string-parser': 7.21.5
       '@babel/helper-validator-identifier': 7.19.1
       to-fast-properties: 2.0.0
+
+  /@beyonk/async-script-loader@2.3.0:
+    resolution: {integrity: sha512-/vbDM5j8OHmtnWLx87sef0T/jGWVvZV6ILm3QFLpfRwSg0KmhQoAZnOT4XSaUL/EjOC9eMzgX5qtS2jztKzY2A==}
+    dev: true
+
+  /@beyonk/svelte-google-analytics@2.6.4:
+    resolution: {integrity: sha512-m2P1fs36qObCLtIZ9edLC62RHLrGVknaKuE4uEBQk5+Jfy1apa7DOIT0Jq1PvScyrndV62FvyjUUrWwrXjYbmw==}
+    dependencies:
+      '@beyonk/async-script-loader': 2.3.0
+    dev: true
 
   /@builder.io/partytown@0.8.0:
     resolution: {integrity: sha512-M6H7nSMwW2dHd1/MQ+9J1Jqdw22uhl1nKv90kIiL9G7gjFVqqouQp4qSS1oZclmtW1XjAa4Q5UnbHB4iytmxZA==}
