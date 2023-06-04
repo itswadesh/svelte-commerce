@@ -1,22 +1,20 @@
 import stream from 'stream'
-import S3 from 'aws-sdk/clients/s3'
+import { Upload } from '@aws-sdk/lib-storage';
+import { S3 } from '@aws-sdk/client-s3';
 import * as path from 'path'
 import AmazonS3URI from 'amazon-s3-uri'
-import {
-	SECRET_S3_ACCESS_KEY,
-	SECRET_S3_BUCKET_NAME,
-	SECRET_S3_REGION,
-	SECRET_S3_SECRET_KEY
-} from '$env/static/private'
+import { env } from '$env/dynamic/private'
 
-const bucketName = SECRET_S3_BUCKET_NAME
-const region = SECRET_S3_REGION
-const accessKeyId = SECRET_S3_ACCESS_KEY
-const secretAccessKey = SECRET_S3_SECRET_KEY
+const bucketName = env.SECRET_S3_BUCKET_NAME
+const region = env.SECRET_S3_REGION
+const accessKeyId = env.SECRET_S3_ACCESS_KEY
+const secretAccessKey = env.SECRET_S3_SECRET_KEY
 const s3 = new S3({
 	region,
-	accessKeyId,
-	secretAccessKey
+	credentials: {
+		accessKeyId,
+		secretAccessKey
+	}
 })
 
 export const createUploadStream = async (key: string, mimetype: string) => {
@@ -24,8 +22,9 @@ export const createUploadStream = async (key: string, mimetype: string) => {
 		const pass = new stream.PassThrough()
 		return {
 			writeStream: pass,
-			promise: s3
-				.upload({
+			promise: new Upload({
+				client: s3,
+				params: {
 					Bucket: bucketName,
 					Key: key,
 					Body: pass,
@@ -33,8 +32,8 @@ export const createUploadStream = async (key: string, mimetype: string) => {
 					ContentDisposition: 'inline',
 					ACL: 'public-read',
 					CacheControl: 'public, max-age=31536000'
-				})
-				.promise()
+				}
+			}).done()
 		}
 	} catch (e) {
 		throw new Error(e)
@@ -50,7 +49,7 @@ export const deleteFileFromS3 = async (url: string) => {
 				Bucket: bucket,
 				Key: key
 			}
-			deleted = await s3.deleteObject(params).promise()
+			deleted = await s3.deleteObject(params)
 			return deleted
 		} catch (e) {
 			throw new Error(e)
