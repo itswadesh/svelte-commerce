@@ -6,6 +6,9 @@ dependencies:
     version: 0.2.1(@sveltejs/kit@1.16.2)(vite-plugin-pwa@0.14.7)
 
 devDependencies:
+  '@beyonk/svelte-facebook-pixel':
+    specifier: 3.0.1
+    version: 3.0.1
   '@beyonk/svelte-google-analytics':
     specifier: 2.6.4
     version: 2.6.4
@@ -1307,6 +1310,10 @@ packages:
 
   /@beyonk/async-script-loader@2.3.0:
     resolution: {integrity: sha512-/vbDM5j8OHmtnWLx87sef0T/jGWVvZV6ILm3QFLpfRwSg0KmhQoAZnOT4XSaUL/EjOC9eMzgX5qtS2jztKzY2A==}
+    dev: true
+
+  /@beyonk/svelte-facebook-pixel@3.0.1:
+    resolution: {integrity: sha512-jlUI/RYvHnsnBnkt0O0sjLpHqkAqKsHsNniWgzcScr4P5qPXNjos3MUyLJVifONLaPTxzrUSGpt4BWXE/zw77w==}
     dev: true
 
   /@beyonk/svelte-google-analytics@2.6.4:
