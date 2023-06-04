@@ -17,6 +17,7 @@ import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 import storeClosed from '$lib/assets/store-closed.png'
 import whatsappIcon from '$lib/assets/social-media/whatsapp.png'
 import { GoogleAnalytics } from '@beyonk/svelte-google-analytics'
+import { FacebookPixel } from '@beyonk/svelte-facebook-pixel'
 
 export let data
 
@@ -134,6 +135,9 @@ onMount(async () => {
 {#if $page.data.store?.googleAnalytics?.active}
 	<GoogleAnalytics properties="{[$page.data.store?.googleAnalytics.id]}" />
 	<!-- <GoogleAnalytics googleAnalyticsId="{$page.data.store?.googleAnalytics.id}" /> -->
+{/if}
+{#if $page.data.store?.facebookPixel?.active}
+	<FacebookPixel pixels="{[$page.data.store?.facebookPixel.id]}" />
 {/if}
 
 {#if $navigating}

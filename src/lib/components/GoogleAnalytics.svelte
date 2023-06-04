@@ -1,6 +1,6 @@
 <script lang="ts">
 import { page } from '$app/stores'
-import { GOOGLE_ANALYTICS_ID } from '$lib/config'
+// import { GOOGLE_ANALYTICS_ID } from '$lib/config'
 export let googleAnalyticsId
 $: {
 	if (typeof gtag !== 'undefined') {
