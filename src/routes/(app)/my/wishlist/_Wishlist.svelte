@@ -15,7 +15,7 @@
 <script>
 import { applyAction, enhance } from '$app/forms'
 import { currency } from '$lib/utils'
-import { fireGTagEvent } from '$lib/utils/gTag'
+import { fireGTagEvent } from '$lib/utils/gTagB'
 import { invalidateAll } from '$app/navigation'
 import { LazyImg, DummyProductCard } from '$lib/components'
 import { page } from '$app/stores'

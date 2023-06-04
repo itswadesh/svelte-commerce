@@ -1,7 +1,7 @@
 <script>
 import { applyAction, enhance } from '$app/forms'
 import { date, currency, delay, toast } from '$lib/utils'
-import { fireGTagEvent } from '$lib/utils/gTag'
+import { fireGTagEvent } from '$lib/utils/gTagB'
 import { invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import { post } from '$lib/utils/api'

@@ -24,6 +24,7 @@
 		"@vite-pwa/sveltekit": "0.2.1"
 	},
 	"devDependencies": {
+		"@beyonk/svelte-google-analytics": "2.6.4",
 		"@builder.io/partytown": "0.8.0",
 		"@playwright/test": "^1.33.0",
 		"@sentry/node": "7.51.0",

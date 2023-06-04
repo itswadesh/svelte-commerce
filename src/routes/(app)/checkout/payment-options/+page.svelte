@@ -1,5 +1,5 @@
 <script lang="ts">
-import { fireGTagEvent } from '$lib/utils/gTag'
+import { fireGTagEvent } from '$lib/utils/gTagB'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { OrdersService } from '$lib/services'
