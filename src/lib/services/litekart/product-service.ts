@@ -107,6 +107,7 @@ export const fetchProduct = async ({
 }) => {
 	try {
 		let res: Product | object = {}
+
 		if (isServer) {
 			res = await getBySid(`es/products/${slug || id}?store=${storeId}`, sid)
 		} else {

@@ -2,6 +2,7 @@
 import { page } from '$app/stores'
 // import { GOOGLE_ANALYTICS_ID } from '$lib/config'
 export let googleAnalyticsId
+
 $: {
 	if (typeof gtag !== 'undefined') {
 		gtag('config', googleAnalyticsId, {
@@ -15,6 +16,7 @@ $: {
 <svelte:head>
 	<script async src="{`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`}">
 	</script>
+
 	<script>
 	let GA = 'G-BG3JKWLYPF'
 	window.dataLayer = window.dataLayer || []

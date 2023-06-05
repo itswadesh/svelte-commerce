@@ -35,7 +35,7 @@ interface AllProducts {
 	facets: Facet[]
 }
 
-interface Facet {}
+interface Facet { }
 interface EsProduct {
 	_source: Product
 }
@@ -50,6 +50,7 @@ interface Product {
 	categoryPool: Category
 	countryOfOrigin: string
 	crossSells?: Product[]
+	deliveryDetails: string
 	description: string
 	discount: number
 	ean: string
@@ -63,6 +64,7 @@ interface Product {
 	img?: string
 	isCustomized?: boolean
 	isFnb?: boolean
+	isWishlisted: boolean
 	layoutTemplate?: string
 	length?: number
 	linkedProducts?: Product[]
@@ -90,7 +92,6 @@ interface Product {
 	varified?: boolean
 	weight: number
 	width: number
-	isWishlisted: boolean
 }
 
 interface Brand {
