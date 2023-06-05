@@ -1,0 +1,18 @@
+.DS_Store
+.env
+node_modules
+/.svelte
+/.svelte-kit
+/build
+/functions
+package-lock.json
+/package
+/prod
+# Local Netlify folder
+.netlify
+dev-dist
+.vercel_build_output
+$houdini
+$kitql
+test-results/basic-test/trace.zip
+test-results/home-test/trace.zip
