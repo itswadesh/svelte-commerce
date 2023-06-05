@@ -17,8 +17,7 @@ export async function GET({ cookies, request, locals }) {
 			address: storeRes.storeOne.address,
 			adminUrl: storeRes.storeOne.adminUrl || storeRes.settings.adminUrl, // storeRes.storeOne.adminUrl used for arialmall
 			alert: storeRes.storeOne.alert,
-			closed: storeRes.storeOne.closed,
-			closedMessage: storeRes.storeOne.closedMessage,
+			close: storeRes.storeOne.close,
 			currencyCode: storeRes.storeOne.storeCurrency?.isoCode || 'USD',
 			currencySymbol: storeRes.storeOne.storeCurrency?.symbol || '$',
 			description: storeRes.storeOne.description,

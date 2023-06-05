@@ -122,7 +122,7 @@ async function submitContactInformation() {
 					</ul>
 				{/if}
 
-				{#if $page.data.store?.socialSharingButtons || $page.data.store?.email}
+				{#if $page.data.store?.socialSharingButtons && $page.data.store?.socialSharingButtons?.active?.val}
 					<ul class="flex flex-wrap items-center gap-2">
 						<!-- Facebook -->
 
