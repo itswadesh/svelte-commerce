@@ -175,6 +175,7 @@ function submit() {
 						roundedNone
 						type="submit"
 						class="w-full uppercase h-14"
+						clickEffect="{false}"
 						loading="{loading}"
 						disabled="{disabled}"
 						on:click="{submit}">
