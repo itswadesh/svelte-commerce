@@ -50,6 +50,7 @@ function hideitems() {
 async function toggleWishlist(id) {
 	if (!$page.data.me) {
 		goto(`${$page.data.loginUrl || '/auth/login'}?ref=/my/wishlist/add/${id}`)
+		return
 	}
 
 	try {
@@ -101,13 +102,20 @@ async function toggleWishlist(id) {
 
 	<!-- Product image -->
 
-	<LazyImg
-		src="{newProduct.img}"
-		alt="{newProduct.name}"
-		width="200"
-		height="200"
-		aspect_ratio="1:1"
-		class="object-contain object-bottom w-[200px] h-[200px] text-xs" />
+	<a
+		href="/product/{newProduct.slug}"
+		rel="noopener noreferrer"
+		aria-label="Click to view the product details"
+		data-sveltekit-preload-data="tap"
+		class="block">
+		<LazyImg
+			src="{newProduct.img}"
+			alt="{newProduct.name}"
+			width="200"
+			height="200"
+			aspect_ratio="1:1"
+			class="object-contain object-bottom w-[200px] h-[200px] text-xs" />
+	</a>
 
 	{#if show}
 		<div
