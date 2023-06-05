@@ -359,7 +359,7 @@ async function getStoreData() {
 				<ul class="col-span-1 justify-center flex flex-wrap gap-4">
 					<!-- Facebook -->
 
-					{#if $page.data.store?.socialSharingButtons?.facebook?.val}
+					{#if $page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.facebook?.val}
 						<li class="max-w-max">
 							<a
 								href="{$page.data.store?.socialSharingButtons?.facebook?.val}"
@@ -385,7 +385,7 @@ async function getStoreData() {
 
 					<!-- Instagram -->
 
-					{#if $page.data.store?.socialSharingButtons?.instagram?.val}
+					{#if $page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.instagram?.val}
 						<li class="max-w-max">
 							<a
 								href="{$page.data.store?.socialSharingButtons?.instagram?.val}"
@@ -412,7 +412,7 @@ async function getStoreData() {
 
 					<!-- Twitter -->
 
-					{#if $page.data.store?.socialSharingButtons?.twitter?.val}
+					{#if $page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.twitter?.val}
 						<li class="max-w-max">
 							<a
 								href="{$page.data.store?.socialSharingButtons?.twitter?.val}"
@@ -461,7 +461,7 @@ async function getStoreData() {
 
 					<!-- Linkedin -->
 
-					{#if $page.data.store?.socialSharingButtons?.linkedin?.val}
+					{#if $page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.linkedin?.val}
 						<li class="max-w-max">
 							<a
 								href="{$page.data.store?.socialSharingButtons?.linkedin?.val}"
@@ -490,7 +490,7 @@ async function getStoreData() {
 
 					<!-- Pinterest -->
 
-					{#if $page.data.store?.socialSharingButtons?.youtube?.val}
+					{#if $page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.youtube?.val}
 						<li class="max-w-max">
 							<a
 								href="{$page.data.store?.socialSharingButtons?.youtube?.val}"
@@ -519,7 +519,7 @@ async function getStoreData() {
 
 					<!-- Youtube -->
 
-					{#if $page.data.store?.youtubeUrl}
+					{#if $page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.youtubeUrl}
 						<li class="max-w-max">
 							<a
 								href="{$page.data.store?.youtubeUrl}"

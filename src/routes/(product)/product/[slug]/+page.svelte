@@ -83,6 +83,8 @@ const cookies = Cookie()
 const isServer = import.meta.env.SSR
 
 export let data
+// console.log('zzzzzzzzzzzzzzzzzz', data)
+// console.log('$page', $page)
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -480,6 +482,7 @@ function handleMobileCanvas() {
 				productImage="{data.product?.img}"
 				url="{$page?.url?.href}" />
 		</div>
+
 		<div class="mb-5 grid grid-cols-1 items-start gap-5 sm:mb-10 sm:gap-10 lg:grid-cols-5">
 			<!-- Images -->
 
@@ -645,7 +648,13 @@ function handleMobileCanvas() {
 						</svg>
 					</h6>
 
-					<DeliveryOptions product="{data.product}" deliveryDetails="{data.deliveryDetails}" />
+					{#if data.product?.deliveryDetails}
+						<p class="text-sm">
+							{data.product?.deliveryDetails}
+						</p>
+					{:else if $page.data.store?.isIndianPincodes}
+						<DeliveryOptions product="{data.product}" deliveryDetails="{data.deliveryDetails}" />
+					{/if}
 				</div>
 
 				<!-- prices desktop -->
@@ -1236,7 +1245,13 @@ function handleMobileCanvas() {
 						</svg>
 					</h6>
 
-					<DeliveryOptions product="{data.product}" deliveryDetails="{data.deliveryDetails}" />
+					{#if data.product?.deliveryDetails}
+						<p class="text-sm">
+							{data.product?.deliveryDetails}
+						</p>
+					{:else if $page.data.store?.isIndianPincodes}
+						<DeliveryOptions product="{data.product}" deliveryDetails="{data.deliveryDetails}" />
+					{/if}
 				</div>
 
 				<!-- Ratings & Reviews -->
@@ -1350,7 +1365,7 @@ function handleMobileCanvas() {
 							</div>
 						{/if}
 
-						<div class="{$page.data.store?.isWishlist ? ' col-span-5' : ' col-span-3'}">
+						<div class="{$page.data.store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
 							{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
 								<a
 									href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
@@ -1522,7 +1537,7 @@ function handleMobileCanvas() {
 							</div>
 						{/if}
 
-						<div class="{$page.data.store?.isWishlist ? ' col-span-5' : ' col-span-3'}">
+						<div class="{$page.data.store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
 							{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
 								<a
 									href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page

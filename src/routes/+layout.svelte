@@ -8,6 +8,8 @@
 // import { pwaInfo } from 'virtual:pwa-info'
 import './../app.css'
 import { BackToTop, LazyImg } from '$lib/components' // Can not dynamically import Google Analytics, it throws gtag not found error, not even party town
+import { FacebookPixel } from '@beyonk/svelte-facebook-pixel'
+import { GoogleAnalytics } from '@beyonk/svelte-google-analytics'
 import { navigating } from '$app/stores'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
@@ -16,8 +18,6 @@ import FetchInit from '$lib/components/FetchInit.svelte'
 import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 import storeClosed from '$lib/assets/store-closed.png'
 import whatsappIcon from '$lib/assets/social-media/whatsapp.png'
-import { GoogleAnalytics } from '@beyonk/svelte-google-analytics'
-import { FacebookPixel } from '@beyonk/svelte-facebook-pixel'
 
 export let data
 
@@ -133,7 +133,7 @@ onMount(async () => {
 <svelte:window bind:innerWidth="{innerWidth}" />
 
 {#if $page.data.store?.googleAnalytics?.active}
-	<GoogleAnalytics properties="{[$page.data.store?.googleAnalytics.id]}" />
+	<GoogleAnalytics properties="{[$page.data.store?.googleAnalytics.id.val]}" />
 	<!-- <GoogleAnalytics googleAnalyticsId="{$page.data.store?.googleAnalytics.id}" /> -->
 {/if}
 {#if $page.data.store?.facebookPixel?.active}
@@ -211,7 +211,7 @@ onMount(async () => {
 				<img src="{storeClosed}" alt="" class="h-52 w-auto object-contain object-center" />
 
 				<p class="text-lg font-semibold text-zinc-500">
-					{$page.data.store.closedMessage}
+					{$page.data.store.close?.message?.val}
 				</p>
 			</div>
 		</div>
