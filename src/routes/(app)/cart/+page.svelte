@@ -281,7 +281,7 @@ async function getCoupons() {
 									<!-- Product detail start -->
 
 									<div
-										out:fly="{{ x: -2400, duration: 2500 }}"
+										out:fly="{{ x: -800, duration: 300 }}"
 										class="flex w-full items-start gap-4 py-5">
 										<a
 											href="/product/{item?.slug}"
