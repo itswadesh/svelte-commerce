@@ -6,15 +6,17 @@
 
 <script lang="ts">
 import { Nav, PageTransitions, Footer } from '$lib/components'
-import { slotMarginGeneral } from '$lib/config'
+import { page } from '$app/stores'
+import { slotMarginGeneral, slotMarginGeneralWithHelloBar } from '$lib/config'
 import menu from '$lib/config/menu'
 import SidebarDashboard from './_SidebarDashboard.svelte'
 
 export let data
 $: ({ path, url, sort, isHome, q, currentPage, me, cart, store } = data)
 
-let showCartSidebar = false
+let hellobar = $page.data.store?.hellobar || {}
 let openSidebar = false
+let showCartSidebar = false
 </script>
 
 <div class="minimum-width-rem h-screen overflow-hidden">
@@ -26,7 +28,10 @@ let openSidebar = false
 		bind:showCartSidebar="{showCartSidebar}"
 		bind:openSidebar="{openSidebar}" />
 
-	<div class="{slotMarginGeneral} flex h-full w-full antialiased">
+	<div
+		class="{hellobar?.active?.val
+			? slotMarginGeneralWithHelloBar
+			: slotMarginGeneral} flex h-full w-full antialiased">
 		{#if menu?.length > 0}
 			<div
 				class="relative hidden w-44 shrink-0 overflow-y-auto overflow-x-hidden bg-primary-500 py-3 scrollbar-none sm:block">
@@ -35,7 +40,7 @@ let openSidebar = false
 				<a href="/my" aria-label="Click to visit dashboard" data-sveltekit-preload-data>
 					<button
 						type="button"
-						class="w-full p-3 text-left text-sm text-zinc-200 focus:outline-none">
+						class="w-full p-3 text-left text-sm text-zinc-400 focus:outline-none">
 						Dashboard
 					</button>
 				</a>

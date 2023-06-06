@@ -134,8 +134,10 @@ onMount(async () => {
 
 {#if $page.data.store?.googleAnalytics?.active}
 	<GoogleAnalytics properties="{[$page.data.store?.googleAnalytics.id.val]}" />
+
 	<!-- <GoogleAnalytics googleAnalyticsId="{$page.data.store?.googleAnalytics.id}" /> -->
 {/if}
+
 {#if $page.data.store?.facebookPixel?.active}
 	<FacebookPixel pixels="{[$page.data.store?.facebookPixel.id]}" />
 {/if}

@@ -78,9 +78,9 @@ function close() {
 							href="{sidebar.url}"
 							aria-label="Click to visit this page"
 							class:active="{$page.url.pathname === sidebar.pathName}"
-							class="flex w-full items-center justify-start gap-2 p-3 text-white">
+							class="flex w-full items-center justify-start gap-2 p-3 text-white group">
 							<div
-								class="dutaion-500 flex flex-1 transform items-center gap-2 transition hover:translate-x-2">
+								class="dutaion-300 flex flex-1 transform items-center gap-2 transition group-hover:translate-x-2">
 								<div>
 									{@html sidebar.svg}
 								</div>

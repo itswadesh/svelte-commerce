@@ -19,12 +19,13 @@ img:not([src]) {
 
 <script lang="ts">
 import { browser } from '$app/environment'
+import { fade } from 'svelte/transition'
 import { getCdnImageUrl } from '$lib/utils'
 import { onDestroy } from 'svelte'
 import { onMount } from 'svelte'
-import lazyload from 'vanilla-lazyload'
 import { page } from '$app/stores'
-import { fade } from 'svelte/transition'
+import lazyload from 'vanilla-lazyload'
+
 export let alt = ''
 export let aspect_ratio = '3:4'
 export let height = 'auto'
