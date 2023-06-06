@@ -1,6 +1,6 @@
 <script lang="ts">
-import { CartService, CouponService, ProductService } from '$lib/services'
-import { date } from '$lib/utils'
+import { CartService, CouponService, ProductService, WishlistService } from '$lib/services'
+import { date, toast } from '$lib/utils'
 import { fireGTagEvent } from '$lib/utils/gTagB'
 import { fly } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
@@ -18,6 +18,7 @@ import SEO from '$lib/components/SEO/index.svelte'
 const cookies = Cookie()
 
 export let data
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	title: `Cart`,
@@ -131,6 +132,42 @@ async function getCoupons() {
 		loadingCoupon = false
 	}
 }
+
+function moveAllUnavailableItemsToWishlist() {
+	// console.log('data.cart?.unavailableItems?.length', data.cart?.unavailableItems?.length)
+
+	data.cart?.unavailableItems.forEach(async function (item) {
+		// console.log('item', item)
+
+		if (!$page.data.me) {
+			goto(`${$page.data.loginUrl || '/auth/login'}`)
+			return
+		}
+
+		try {
+			const isWislisted = await WishlistService.toggleWishlistService({
+				pid: item.pid,
+				vid: item.pid,
+				origin: $page?.data?.origin,
+				storeId: $page?.data?.store?.id
+			})
+		} catch (e) {
+			toast(e, 'error')
+		} finally {
+		}
+
+		try {
+			const res = await addToCart({
+				pid: item.pid,
+				qty: -9999999,
+				customizedImg: item.customizedImg
+			})
+		} catch (e) {
+			toast(e, 'error')
+		} finally {
+		}
+	})
+}
 </script>
 
 <SEO {...seoProps} />
@@ -171,7 +208,7 @@ async function getCoupons() {
 					<div>
 						{#if data.cart?.unavailableItems?.length > 0}
 							<div>
-								<div class="cursor-default border-b opacity-50">
+								<div class="mt-5 cursor-default border-b opacity-50">
 									<div class="flex gap-4">
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
@@ -202,10 +239,10 @@ async function getCoupons() {
 														<LazyImg
 															src="{item.isCustomizeditem ? item.customizedImg : item.img}"
 															alt=" "
-															width="80"
-															height="160"
-															aspect_ratio="1:2"
-															class="object-contain object-bottom h-32 sm:h-40 w-20 text-xs" />
+															width="384"
+															height="512"
+															aspect_ratio="3:4"
+															class="object-contain object-top h-28 w-20 text-xs" />
 													{:else}
 														<div
 															class="h-32 sm:h-40 w-20 bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center">
@@ -271,7 +308,9 @@ async function getCoupons() {
 									</div>
 								</div>
 
-								<PrimaryButton class="w-full">Move to Wishlist</PrimaryButton>
+								<PrimaryButton class="w-full" on:click="{moveAllUnavailableItemsToWishlist}">
+									Move to Wishlist
+								</PrimaryButton>
 							</div>
 						{/if}
 
@@ -291,10 +330,10 @@ async function getCoupons() {
 												<LazyImg
 													src="{item.isCustomizeditem ? item.customizedImg : item.img}"
 													alt=" "
-													width="80"
-													height="160"
-													aspect_ratio="1:2"
-													class="object-contain object-bottom h-32 sm:h-40 w-20 text-xs" />
+													width="384"
+													height="512"
+													aspect_ratio="3:4"
+													class="object-contain object-top h-28 w-20 text-xs" />
 											{:else}
 												<div
 													class="h-32 sm:h-40 w-20 bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center">
