@@ -88,8 +88,13 @@ export const getStoreData = async ({
 		cookieMegamenu == 'undefined'
 	) {
 		const uri = new URL(url)
+
 		// console.log('URI..............', uri.host)
+
 		storeRes = await fetchInit(uri.host)
+
+		// console.log('storeRes', storeRes);
+
 		store = {
 			id: storeRes.storeOne._id,
 			address: storeRes.storeOne.address,
@@ -123,8 +128,8 @@ export const getStoreData = async ({
 			otpLogin: storeRes.storeOne.otpLogin || true,
 			phone: storeRes.storeOne.phone,
 			product_image_dimention: storeRes.storeOne.product_image_dimention,
-			googleAnalytics: { active: true, id: 'G-BG3JKWLYPF' }, //storeRes.storeOne.googleAnalytics,
-			facebookPixel: { active: true, id: '931636488112724' }, //storeRes.storeOne.googleAnalytics,
+			googleAnalytics: { active: storeRes.storeOne?.googleAnalytics?.active?.val, id: storeRes.storeOne?.googleAnalytics?.id?.val || '' },
+			facebookPixel: { active: storeRes.storeOne?.facebookPixel?.active?.val, id: storeRes.storeOne?.facebookPixel?.id?.val || '' },
 			searchbarText: storeRes.storeOne.searchbarText,
 			socialSharingButtons: storeRes.storeOne.socialSharingButtons,
 			title: storeRes.storeOne.title,
