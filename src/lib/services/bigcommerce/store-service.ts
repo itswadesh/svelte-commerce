@@ -47,21 +47,36 @@ export const getStoreData = async ({
 		domain,
 		DOMAIN,
 		email,
+		facebookPixel: {},
 		GOOGLE_ANALYTICS_ID,
 		GOOGLE_CLIENT_ID,
+		googleAnalytics: {},
+		hellobar: {},
 		IMAGE_CDN_URL: IMAGE_CDN_URL,
+		isBulkOrder: false,
+		isDeals: false,
+		isDiscountCoupons: false,
 		isFnb: false,
+		isGDPR: false,
+		isIndianPincodes: false,
+		isMultiVendor: false,
+		isProductReviewsAndRatings: false,
+		isSecureCatalogue: false,
+		isWishlist: false,
 		keywords,
 		loginUrl,
 		logo,
 		otpLogin: false,
 		phone,
+		product_image_dimention: null,
 		searchbarText,
 		socialSharingButtons: {},
+		storePromoVideo: {},
 		title: siteTitle,
 		websiteLegalName,
 		websiteName,
 		weightUnit,
+		whatsappChatButton: {}
 	}
 
 	let megamenu = null
@@ -74,6 +89,7 @@ export const getStoreData = async ({
 	) {
 		const uri = new URL(url)
 		storeRes = await fetchInit(uri.host)
+
 
 		store = {
 			id: storeRes.storeOne._id,
@@ -88,30 +104,51 @@ export const getStoreData = async ({
 			domain: storeRes.storeOne.domain,
 			DOMAIN: storeRes.storeOne.DOMAIN,
 			email: storeRes.storeOne.websiteEmail,
+			facebookPixel: { active: storeRes.storeOne?.facebookPixel?.active?.val, id: storeRes.storeOne?.facebookPixel?.id?.val || '' },
 			GOOGLE_ANALYTICS_ID: storeRes.storeOne.GOOGLE_ANALYTICS_ID,
 			GOOGLE_CLIENT_ID: storeRes.storeOne.GOOGLE_CLIENT_ID,
+			googleAnalytics: { active: storeRes.storeOne?.googleAnalytics?.active?.val, id: storeRes.storeOne?.googleAnalytics?.id?.val || '' },
+			hellobar: storeRes.storeOne.hellobar,
 			IMAGE_CDN_URL: storeRes.storeOne.IMAGE_CDN_URL,
+			isBulkOrder: storeRes.storeOne.isBulkOrder,
+			isDeals: storeRes.storeOne.isDeals,
+			isDiscountCoupons: storeRes.storeOne.isDiscountCoupons,
 			isFnb: storeRes.storeOne.isFnb,
+			isGDPR: storeRes.storeOne.isGDPR,
+			isIndianPincodes: storeRes.storeOne.isIndianPincodes,
+			isMultiVendor: storeRes.storeOne.isMultiVendor,
+			isProductReviewsAndRatings: storeRes.storeOne.isProductReviewsAndRatings,
+			isSecureCatalogue: storeRes.storeOne.isSecureCatalogue,
+			isWishlist: storeRes.storeOne.isWishlist,
 			keywords: storeRes.storeOne.keywords,
 			loginUrl: storeRes.storeOne.otpLogin ? '/auth/otp-login' : '/auth/login',
 			logo: storeRes.storeOne.logo,
 			otpLogin: storeRes.storeOne.otpLogin || true,
 			phone: storeRes.storeOne.phone,
+			product_image_dimention: storeRes.storeOne.product_image_dimention,
 			searchbarText: storeRes.storeOne.searchbarText,
 			socialSharingButtons: storeRes.storeOne.socialSharingButtons,
+			storePromoVideo: storeRes.storeOne.storePromoVideo,
 			title: storeRes.storeOne.title,
 			websiteLegalName: storeRes.storeOne.websiteLegalName,
 			websiteName: storeRes.storeOne.websiteName,
 			weightUnit: storeRes.storeOne.weightUnit,
+			whatsappChatButton: storeRes.storeOne.whatsappChatButton
 		}
+
 		megamenu = storeRes.megamenu
-		cookies.set('store', JSON.stringify(store), { path: '/' })
-		cookies.set('megamenu', JSON.stringify(megamenu), { path: '/' })
+
+		// cookies.set('store', JSON.stringify(store), { path: '/' })
+		// cookies.set('megamenu', JSON.stringify(megamenu), { path: '/' })
 	} else {
 		store = JSON.parse(cookieStore)
 		megamenu = JSON.parse(cookieMegamenu)
 	}
+
 	storeRes.storeOne = store
 	storeRes.megamenu = megamenu
+
+	// console.log('zzzzzzzzzzzzzzzzzz', storeRes);
+
 	return storeRes
 }
