@@ -192,6 +192,7 @@ Latest update: 07-February-2023
 <details>
 <summary>Click here to see all the updates</summary>
 
+- 07-Jun-2023      - Deeplinking for social aharing buttons
 - 07-February-2023 - Prettified.
 - 06-February-2023 - Sveltekit 1.5
 - 15-December-2022 - Sveltekit 1.0 - Finally.
