@@ -30,39 +30,40 @@ let socialSharesList = [
   {
     icon: whatsappIcon,
     title: 'Whatsapp',
-    href: `whatsapp://send?text=${encodeURIComponent(url)}`
+    href: `whatsapp://send?text=${url}`
   },
   {
     icon: telegramIcon,
     title: 'Telegram',
-    href: `tg://msg?text=${encodeURIComponent(productName)}%20${encodeURIComponent(url)}`
+    href: `tg://msg?text=${productName}&${url}`
   },
   {
     icon: facebookIcon,
     title: 'Facebook',
-    href: `fb://share/?text=${encodeURIComponent(productName)}&u=${encodeURIComponent(url)}`
+    href: `fb://share/?text=${productName}&u=${url}`
   },
   {
     icon: twitterIcon,
     title: 'Twitter',
-    href: `twitter://post?message=${encodeURIComponent(productName)}%20${encodeURIComponent(url)}`
+    href: `twitter://post?message=${productName}&${url}`
   },
   {
     icon: pinterestIcon,
     title: 'Pinterest',
-    href: `pinterest://pin/create/bookmarklet/?url=${encodeURIComponent(url)}&description=${encodeURIComponent(productName)}`
+    href: `pinterest://pin/create/bookmarklet/?url=${url}&description=${productName}`
   },
   {
     icon: linkedinIcon,
     title: 'LinkedIn',
-    href: `linkedin://shareArticle?url=${encodeURIComponent(url)}&title=${encodeURIComponent(productName)}&summary=${encodeURIComponent(productName)}&source=`
+    href: `linkedin://shareArticle?url=${url}&title=${productName}&summary=${productName}&source=`
   },
   {
     icon: gmailIcon,
     title: 'Gmail',
-    href: `googlegmail:///co?subject=Take%20a%20look%20at%20this%20${encodeURIComponent(productName)}&body=${encodeURIComponent(url)}`
+    href: `googlegmail:///co?subject=Take a look at this ${productName}&body=${url}`
   }
 ];
+
 
 
 const copyToClipboard = (link) => {
