@@ -47,8 +47,10 @@ export const getStoreData = async ({
 		domain,
 		DOMAIN,
 		email,
+		facebookPixel: {},
 		GOOGLE_ANALYTICS_ID,
 		GOOGLE_CLIENT_ID,
+		googleAnalytics: {},
 		hellobar: {},
 		IMAGE_CDN_URL: IMAGE_CDN_URL,
 		isBulkOrder: false,
@@ -56,6 +58,7 @@ export const getStoreData = async ({
 		isDiscountCoupons: false,
 		isFnb: false,
 		isGDPR: false,
+		isIndianPincodes: false,
 		isMultiVendor: false,
 		isProductReviewsAndRatings: false,
 		isSecureCatalogue: false,
@@ -68,11 +71,12 @@ export const getStoreData = async ({
 		product_image_dimention: null,
 		searchbarText,
 		socialSharingButtons: {},
+		storePromoVideo: {},
 		title: siteTitle,
 		websiteLegalName,
 		websiteName,
 		weightUnit,
-		whatsappChatButton: {},
+		whatsappChatButton: {}
 	}
 
 	let megamenu = null
@@ -99,8 +103,10 @@ export const getStoreData = async ({
 			domain: storeRes.storeOne.domain,
 			DOMAIN: storeRes.storeOne.DOMAIN,
 			email: storeRes.storeOne.websiteEmail,
+			facebookPixel: { active: storeRes.storeOne?.facebookPixel?.active?.val, id: storeRes.storeOne?.facebookPixel?.id?.val || '' },
 			GOOGLE_ANALYTICS_ID: storeRes.storeOne.GOOGLE_ANALYTICS_ID,
 			GOOGLE_CLIENT_ID: storeRes.storeOne.GOOGLE_CLIENT_ID,
+			googleAnalytics: { active: storeRes.storeOne?.googleAnalytics?.active?.val, id: storeRes.storeOne?.googleAnalytics?.id?.val || '' },
 			hellobar: storeRes.storeOne.hellobar,
 			IMAGE_CDN_URL: storeRes.storeOne.IMAGE_CDN_URL,
 			isBulkOrder: storeRes.storeOne.isBulkOrder,
@@ -108,6 +114,7 @@ export const getStoreData = async ({
 			isDiscountCoupons: storeRes.storeOne.isDiscountCoupons,
 			isFnb: storeRes.storeOne.isFnb,
 			isGDPR: storeRes.storeOne.isGDPR,
+			isIndianPincodes: storeRes.storeOne.isIndianPincodes,
 			isMultiVendor: storeRes.storeOne.isMultiVendor,
 			isProductReviewsAndRatings: storeRes.storeOne.isProductReviewsAndRatings,
 			isSecureCatalogue: storeRes.storeOne.isSecureCatalogue,
@@ -120,11 +127,12 @@ export const getStoreData = async ({
 			product_image_dimention: storeRes.storeOne.product_image_dimention,
 			searchbarText: storeRes.storeOne.searchbarText,
 			socialSharingButtons: storeRes.storeOne.socialSharingButtons,
+			storePromoVideo: storeRes.storeOne.storePromoVideo,
 			title: storeRes.storeOne.title,
 			websiteLegalName: storeRes.storeOne.websiteLegalName,
 			websiteName: storeRes.storeOne.websiteName,
 			weightUnit: storeRes.storeOne.weightUnit,
-			whatsappChatButton: storeRes.storeOne.whatsappChatButton,
+			whatsappChatButton: storeRes.storeOne.whatsappChatButton
 		}
 		megamenu = storeRes.megamenu
 		cookies.set('store', JSON.stringify(store), { path: '/' })

@@ -1,6 +1,7 @@
 <script lang="ts">
 import { date } from '$lib/utils'
 import { goto } from '$app/navigation'
+import LazyImg from '../Image/LazyImg.svelte'
 import ReviewGallery from './ReviewGallery.svelte'
 
 export let type
@@ -224,68 +225,83 @@ const handleSelectedProductGallery = (review, rx) => {
 				{#if gallery?.length}
 					<button
 						type="button"
-						class="mt-5 w-full h-auto"
+						class="mt-5 w-full max-h-max focus:outline-none"
 						on:click="{() => (showGalleryModal = true)}">
-						<div class="grid grid-cols-3 grid-rows-3 gap-2 h-72 max-w-sm">
+						<div class="grid grid-cols-3 grid-rows-3 gap-2 max-w-sm">
 							{#if gallery[0]?.images[0]}
-								<div
-									class="col-span-2 row-span-2 rounded bg-no-repeat bg-cover bg-white border overflow-hidden"
-									style="background-image:url({gallery[0]?.images[0]});">
-								</div>
+								<LazyImg
+									src="{gallery[0]?.images[0]}"
+									height="168"
+									width="224"
+									aspect_ratio="4:3"
+									class="col-span-2 row-span-2 w-full h-[168px] rounded object-cover border" />
 							{/if}
 
 							{#if gallery[1]?.images[0]}
-								<div
-									class="col-span-1 row-span-1 rounded bg-no-repeat bg-cover bg-white border overflow-hidden"
-									style="background-image:url({gallery[1]?.images[0]});">
-								</div>
+								<LazyImg
+									src="{gallery[1]?.images[0]}"
+									height="80"
+									width="106"
+									aspect_ratio="4:3"
+									class="col-span-1 row-span-1 w-full h-20 rounded object-cover border" />
 							{:else}
 								<div
-									class="col-span-1 row-span-1 rounded bg-zinc-100 border overflow-hidden flex items-center justify-center text-center text-zinc-400 text-sm">
+									class="col-span-1 row-span-1 w-full h-20 rounded bg-zinc-100 border overflow-hidden flex items-center justify-center text-center text-zinc-400 text-sm">
 									No image
 								</div>
 							{/if}
 
 							{#if gallery[2]?.images[0]}
-								<div
-									class="col-span-1 row-span-1 rounded bg-no-repeat bg-cover bg-white border overflow-hidden"
-									style="background-image:url({gallery[2]?.images[0]});">
-								</div>
+								<LazyImg
+									src="{gallery[2]?.images[0]}"
+									height="80"
+									width="106"
+									aspect_ratio="4:3"
+									class="col-span-1 row-span-1 w-full h-20 rounded object-cover border" />
 							{:else}
 								<div
-									class="col-span-1 row-span-1 rounded bg-zinc-100 border overflow-hidden flex items-center justify-center text-center text-zinc-400 text-sm">
+									class="col-span-1 row-span-1 w-full h-20 rounded bg-zinc-100 border overflow-hidden flex items-center justify-center text-center text-zinc-400 text-sm">
 									No image
 								</div>
 							{/if}
 
 							{#if gallery[3]?.images[0]}
-								<div
-									class="col-span-1 row-span-1 rounded bg-no-repeat bg-cover bg-white border overflow-hidden"
-									style="background-image:url({gallery[3]?.images[0]});">
-								</div>
+								<LazyImg
+									src="{gallery[3]?.images[0]}"
+									height="80"
+									width="106"
+									aspect_ratio="4:3"
+									class="col-span-1 row-span-1 w-full h-20 rounded object-cover border" />
 							{:else}
 								<div
-									class="col-span-1 row-span-1 rounded bg-zinc-100 border overflow-hidden flex items-center justify-center text-center text-zinc-400 text-sm">
+									class="col-span-1 row-span-1 w-full h-20 rounded bg-zinc-100 border overflow-hidden flex items-center justify-center text-center text-zinc-400 text-sm">
 									No image
 								</div>
 							{/if}
 
 							{#if gallery[4]?.images[0]}
-								<div
-									class="col-span-1 row-span-1 rounded bg-no-repeat bg-cover bg-white border overflow-hidden"
-									style="background-image:url({gallery[4]?.images[0]});">
-								</div>
+								<LazyImg
+									src="{gallery[4]?.images[0]}"
+									height="80"
+									width="106"
+									aspect_ratio="4:3"
+									class="col-span-1 row-span-1 w-full h-20 rounded object-cover border" />
 							{:else}
 								<div
-									class="col-span-1 row-span-1 rounded bg-zinc-100 border overflow-hidden flex items-center justify-center text-center text-zinc-400 text-sm">
+									class="col-span-1 row-span-1 w-full h-20 rounded bg-zinc-100 border overflow-hidden flex items-center justify-center text-center text-zinc-400 text-sm">
 									No image
 								</div>
 							{/if}
 
 							{#if gallery?.length - 5 > 0}
 								<div
-									class="col-span-1 row-span-1 relative p-3 rounded bg-no-repeat bg-cover bg-white border overflow-hidden"
-									style="background-image:url(gallery[5]?.images[0]);">
+									class="relative col-span-1 row-span-1 w-full h-20 rounded bg-white border overflow-hidden">
+									<LazyImg
+										src="{gallery[5]?.images[0]}"
+										height="80"
+										width="80"
+										aspect_ratio="4:3"
+										class="w-full h-20 rounded object-cover " />
 									<div
 										class="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-center font-bold text-xl text-white">
 										+{gallery?.length - 5}

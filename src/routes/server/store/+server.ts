@@ -25,8 +25,10 @@ export async function GET({ cookies, request, locals }) {
 			domain: storeRes.storeOne.domain,
 			DOMAIN: storeRes.storeOne.DOMAIN,
 			email: storeRes.storeOne.websiteEmail,
+			facebookPixel: { active: storeRes.storeOne?.facebookPixel?.active?.val, id: storeRes.storeOne?.facebookPixel?.id?.val || '' },
 			GOOGLE_ANALYTICS_ID: storeRes.storeOne.GOOGLE_ANALYTICS_ID,
 			GOOGLE_CLIENT_ID: storeRes.storeOne.GOOGLE_CLIENT_ID,
+			googleAnalytics: { active: storeRes.storeOne?.googleAnalytics?.active?.val, id: storeRes.storeOne?.googleAnalytics?.id?.val || '' },
 			hellobar: storeRes.storeOne.hellobar,
 			IMAGE_CDN_URL: storeRes.storeOne.IMAGE_CDN_URL,
 			isBulkOrder: storeRes.storeOne.isBulkOrder,
@@ -34,6 +36,7 @@ export async function GET({ cookies, request, locals }) {
 			isDiscountCoupons: storeRes.storeOne.isDiscountCoupons,
 			isFnb: storeRes.storeOne.isFnb,
 			isGDPR: storeRes.storeOne.isGDPR,
+			isIndianPincodes: storeRes.storeOne.isIndianPincodes,
 			isMultiVendor: storeRes.storeOne.isMultiVendor,
 			isProductReviewsAndRatings: storeRes.storeOne.isProductReviewsAndRatings,
 			isSecureCatalogue: storeRes.storeOne.isSecureCatalogue,
@@ -46,11 +49,12 @@ export async function GET({ cookies, request, locals }) {
 			product_image_dimention: storeRes.storeOne.product_image_dimention,
 			searchbarText: storeRes.storeOne.searchbarText,
 			socialSharingButtons: storeRes.storeOne.socialSharingButtons,
+			storePromoVideo: storeRes.storeOne.storePromoVideo,
 			title: storeRes.storeOne.title,
 			websiteLegalName: storeRes.storeOne.websiteLegalName,
 			websiteName: storeRes.storeOne.websiteName,
 			weightUnit: storeRes.storeOne.weightUnit,
-			whatsappChatButton: storeRes.storeOne.whatsappChatButton,
+			whatsappChatButton: storeRes.storeOne.whatsappChatButton
 
 		}
 		cookies.set('store', JSON.stringify(store), { path: '/' })

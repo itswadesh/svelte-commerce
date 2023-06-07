@@ -1309,6 +1309,17 @@ function handleMobileCanvas() {
 					{/await}
 				{/if}
 
+				{#if $page.data.store?.storePromoVideo?.active?.val}
+					<iframe
+						src="https://www.youtube.com/embed/{$page.data.store?.storePromoVideo?.url?.val}"
+						title="YouTube video player"
+						frameborder="0"
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+						class="mb-5 w-full max-w-md h-auto aspect-video"
+						allowfullscreen>
+					</iframe>
+				{/if}
+
 				<!-- Add to Cart -->
 
 				<!-- Cart viewport -->
