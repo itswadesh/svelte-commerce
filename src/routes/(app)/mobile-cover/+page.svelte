@@ -1,10 +1,10 @@
 <script>
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
+import { Breadcrumb, CatelogNav } from '$lib/components'
 import landingPageMobileBox from '$lib/assets/landing-page-mobile-box.webp'
-import Breadcrumb from '$lib/components/Breadcrumb.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import { PrimaryButton } from '$lib/ui'
 
 export let data
 
@@ -44,9 +44,8 @@ let seoProps = {
 	// weight: { unitCode: '', value: '' },
 	// width: { unitCode: '', value: '' },
 	// wlwmanifestXmlHref: '',
-	metadescription: data.category?.metaDescription,
+	metaDescription: data.category?.metaDescription,
 	// article: false,
-	canonical: `${$page?.url.href}`,
 	datePublished: `${data.category?.publishedAt || '_'}`,
 	description: ` ${data.category?.description}`,
 	dnsPrefetch: `//cdn.jsdelivr.net`,
@@ -69,7 +68,7 @@ let seoProps = {
 	productName: `${data.category?.name}`,
 	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
 	slug: `${data.category?.slug}`,
-	title: `${data.category?.name || 'Buy online in - ' + $page.data.store?.websiteName}`,
+	title: `${data.category?.name || 'Buy online'}`,
 	twitterImage: { url: `${data.category?.img}` }
 }
 
@@ -208,7 +207,7 @@ function searchSubmit() {
 			</div>
 
 			{#if data.category?.description && data.category?.description?.length > 11}
-				<div class="prose prose-sm max-w-none text-justify">
+				<div class="prose max-w-none">
 					{@html data.category?.description}
 				</div>
 			{/if}

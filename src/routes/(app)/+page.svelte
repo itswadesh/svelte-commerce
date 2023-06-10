@@ -1,5 +1,5 @@
 <script>
-// import logo from '$lib/assets/logo.svg'
+// import logo from '$lib/assets/logo.png'
 // import ProductTab from '$lib/components/Product/ProductTab.svelte'
 import { Home } from '$lib/theme-config'
 import { onMount } from 'svelte'
@@ -12,7 +12,6 @@ const cookies = Cookie()
 let today = dayjs(new Date()).toISOString()
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -52,7 +51,6 @@ let seoProps = {
 	// wlwmanifestXmlHref: '',
 	metaDescription: $page.data.store?.metaDescription,
 	// article: false,
-	canonical: `${$page?.url.href}`,
 	datePublished: today,
 	description: $page.data.store?.description,
 	dnsPrefetch: `//cdn.jsdelivr.net`,

@@ -26,11 +26,16 @@ import SEO from '$lib/components/SEO/index.svelte'
 import SimilarProductsFromCategorySlug from './SimilarProductsFromCategorySlug.svelte'
 import Error from '$lib/components/Error.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import { updateCartStore } from '$lib/store/cart'
+import { storeStore } from '$lib/store/store'
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
-
+let store = {}
 onMount(() => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
 	storeRecentlyViewedToLocatStorage()
 })
 
@@ -74,7 +79,6 @@ let seoProps = {
 	// wlwmanifestXmlHref: '',
 	metaDescription: data.product?.metaDescription,
 	// article: false,
-	canonical: `${$page?.url.href}`,
 	datePublished: `${data.product?.publishedAt || '_'}`,
 	description: ` ${data.product?.description}`,
 	dnsPrefetch: `//cdn.jsdelivr.net`,
@@ -125,7 +129,7 @@ function selectSize(s) {
 }
 
 const storeRecentlyViewedToLocatStorage = async () => {
-	const localRecentlyViewed = localStorage.getItem(`recently_viewed_${$page?.data?.store?.id}`)
+	const localRecentlyViewed = localStorage.getItem(`recently_viewed_${$page?.data?.storeId}`)
 
 	if (!!localRecentlyViewed && localRecentlyViewed !== 'undefined') {
 		recentlyViewed = JSON.parse(localRecentlyViewed)
@@ -154,10 +158,7 @@ const storeRecentlyViewedToLocatStorage = async () => {
 		recentlyViewed = resvw
 
 		if (browser) {
-			localStorage.setItem(
-				`recently_viewed_${$page.data?.store?.id}`,
-				JSON.stringify(recentlyViewed)
-			)
+			localStorage.setItem(`recently_viewed_${$page.data?.storeId}`, JSON.stringify(recentlyViewed))
 		}
 	}
 }
@@ -280,12 +281,12 @@ function scrollTo(elementId) {
 
 				<div class="flex flex-wrap leading-3 gap-2">
 					<span class="text-lg text-secondary-500">
-						{currency(currentVariantId, $page.data?.store?.currencySymbol)}
+						{currency(currentVariantId, store?.currencySymbol)}
 					</span>
 
 					<span class="text-lg text-zinc-500">
 						<strike>
-							{currency(data.product?.mrp, $page.data?.store?.currencySymbol)}
+							{currency(data.product?.mrp, store?.currencySymbol)}
 						</strike>
 					</span>
 				</div>
@@ -480,9 +481,7 @@ function scrollTo(elementId) {
 											</span>
 
 											{#if mgp.material.price}
-												<span
-													><b>{currency(mgp.material.price, $page.data?.store?.currencySymbol)}</b
-													></span>
+												<span><b>{currency(mgp.material.price, store?.currencySymbol)}</b></span>
 											{/if}
 										</a>
 									</li>
@@ -558,11 +557,11 @@ function scrollTo(elementId) {
 									}, 820)
 									return
 								}
+								updateCartStore({ data: result.data })
 								result?.data?.qty < 0
 									? fireGTagEvent('remove_from_cart', result?.data)
 									: fireGTagEvent('add_to_cart', result?.data)
-									
-									
+
 								cartButtonText = 'Added To Cart'
 								bounceItemFromTop = true
 								setTimeout(() => {
@@ -573,7 +572,7 @@ function scrollTo(elementId) {
 								if (customizedImg) {
 									goto(`/checkout/address`)
 								}
-								invalidateAll()
+								// invalidateAll()
 								await applyAction(result)
 							}
 						}}">
@@ -621,6 +620,7 @@ function scrollTo(elementId) {
 									}, 820)
 									return
 								}
+								updateCartStore({ data: result.data })
 								result?.data?.qty < 0
 									? fireGTagEvent('remove_from_cart', result?.data)
 									: fireGTagEvent('add_to_cart', result?.data)
