@@ -595,12 +595,12 @@ function handleMobileCanvas() {
 						<p class="mb-2 text-sm font-semibold text-green-700">Inclusive of all taxes</p>
 					{/if}
 
-					{#if data?.product?.vendor && data?.product?.vendor?.slug && data?.product?.vendor?.name}
+					{#if data?.product?.vendor && data?.product?.vendor?.slug && data?.product?.vendor?.businessName}
 						<div class="mb-5 flex items-center gap-2">
-							<span class="font-semibold"> Seller : </span>
+							<span class="font-semibold"> Sold by : </span>
 
 							<a href="/vendor/{data?.product?.vendor?.slug}" class="hover:underline">
-								{data?.product?.vendor?.name}
+								{data?.product?.vendor?.businessName}
 							</a>
 						</div>
 					{/if}
@@ -701,12 +701,12 @@ function handleMobileCanvas() {
 						<p class="mb-2 text-sm font-semibold text-green-700">Inclusive of all taxes</p>
 					{/if}
 
-					{#if data?.product?.vendor && data?.product?.vendor?.slug && data?.product?.vendor?.name}
+					{#if data?.product?.vendor && data?.product?.vendor?.slug && data?.product?.vendor?.businessName}
 						<div class="mb-5 flex items-center gap-2">
-							<span class="font-semibold"> Seller : </span>
+							<span class="font-semibold"> Sold by : </span>
 
 							<a href="/vendor/{data?.product?.vendor?.slug}" class="hover:underline">
-								{data?.product?.vendor?.name}
+								{data?.product?.vendor?.businessName}
 							</a>
 						</div>
 					{/if}

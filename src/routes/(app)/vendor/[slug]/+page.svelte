@@ -41,16 +41,10 @@ const seoProps = {
 							</div>
 
 							<ul class="flex flex-col gap-1 text-center">
-								{#if data.vendor?.businessName || data.vendor?.name}
-									{#if data.vendor?.businessName}
-										<li class="text-xl font-semibold">
-											{data.vendor?.businessName}
-										</li>
-									{/if}
-
-									{#if data.vendor?.name}
-										<li>{data.vendor?.name}</li>
-									{/if}
+								{#if data.vendor?.businessName}
+									<li class="text-xl font-semibold">
+										{data.vendor?.businessName}
+									</li>
 								{/if}
 
 								<li>
