@@ -8,12 +8,6 @@
 
 </div>
 
-<div align="center">
-
-### [[Live Demo](https://demo.litekart.in/)] \[[What is it?](#what-is-it)] \[[Features](#features)] \[[Get Started](#get-started)]
-
-</div>
-
 <div align="center" width="60%" height="auto">
   <br>
     <!-- <img src="https://res.cloudinary.com/itswadesh/image/upload/v1678600224/litekart/free_for_developers_1.png"> -->
@@ -127,8 +121,6 @@ Reach out to me with queries!
 
 ## Features
 
-- 🛍️ Attach Svelte store front to <a href="https://admin.litekart.in/" aria-label="Click to brouse svelte store front"> Litekart </a> and your complete ecommerce tech stack becomes free.
-- 👥 The demo uses litekart as backend
 - 👨🏻‍💻 Its both SSR and SPA
 - 🚀 Superfast
 - 🔗 It is possible to connect with any eCommerce backend if the backend has Rest API
