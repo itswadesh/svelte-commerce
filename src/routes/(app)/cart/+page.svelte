@@ -14,6 +14,7 @@ import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 import SEO from '$lib/components/SEO/index.svelte'
+import { applyAction, enhance } from '$app/forms'
 
 const cookies = Cookie()
 
@@ -316,7 +317,7 @@ function moveAllUnavailableItemsToWishlist() {
 
 						{#if data.cart?.items}
 							<div class="flex flex-col divide-y">
-								{#each data.cart?.items as item, ix (item.pid)}
+								{#each data.cart?.items as item, ix}
 									<!-- Product detail start -->
 
 									<div
@@ -417,16 +418,24 @@ function moveAllUnavailableItemsToWishlist() {
 												<div class="flex items-center justify-center">
 													<!-- Minus icon -->
 
+
+													<form
+										action="/cart?/add"
+										method="POST"
+										use:enhance="{() => {
+											return async ({ result }) => {
+												invalidateAll()
+												await applyAction(result)
+											}
+										}}">
+										<input type="hidden" name="pid" value="{item.pid}" />
+										<input type="hidden" name="qty" value="{-1}" />
+										<input type="hidden" name="customizedImg" value="{item.customizedImg}" />
+
+
 													<button
-														type="button"
+														type="submit"
 														disabled="{loading[ix]}"
-														on:click="{() =>
-															addToCart({
-																pid: item.pid,
-																qty: -1,
-																customizedImg: item.customizedImg,
-																ix: ix
-															})}"
 														class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8
 														{loading[ix]
 															? 'cursor-not-allowed opacity-80'
@@ -442,6 +451,7 @@ function moveAllUnavailableItemsToWishlist() {
 															></path>
 														</svg>
 													</button>
+													</form>
 
 													<!-- Quantity indicator -->
 
@@ -459,16 +469,22 @@ function moveAllUnavailableItemsToWishlist() {
 
 													<!-- Puls icon -->
 
+
+													<form
+										action="/cart?/add"
+										method="POST"
+										use:enhance="{() => {
+											return async ({ result }) => {
+												invalidateAll()
+												await applyAction(result)
+											}
+										}}">
+										<input type="hidden" name="pid" value="{item.pid}" />
+										<input type="hidden" name="qty" value="{+1}" />
+										<input type="hidden" name="customizedImg" value="{item.customizedImg}" />
 													<button
-														type="button"
+														type="submit"
 														disabled="{loading[ix]}"
-														on:click="{() =>
-															addToCart({
-																pid: item.pid,
-																qty: +1,
-																customizedImg: item.customizedImg,
-																ix: ix
-															})}"
 														class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8
 														{loading[ix]
 															? 'cursor-not-allowed opacity-80'
@@ -486,21 +502,28 @@ function moveAllUnavailableItemsToWishlist() {
 																d="M12 4.5v15m7.5-7.5h-15"></path>
 														</svg>
 													</button>
+													</form>
 												</div>
 
 												<!-- Delete icon -->
 
+
+													<form
+										action="/cart?/add"
+										method="POST"
+										use:enhance="{() => {
+											return async ({ result }) => {
+												invalidateAll()
+												await applyAction(result)
+											}
+										}}">
+										<input type="hidden" name="pid" value="{item.pid}" />
+										<input type="hidden" name="qty" value="{-9999999}" />
+										<input type="hidden" name="customizedImg" value="{item.customizedImg}" />
+
 												<button
-													type="button"
+													type="submit"
 													disabled="{loading[ix]}"
-													on:click="{() =>
-														addToCart({
-															pid: item.pid,
-															qty: -9999999,
-															customizedImg: item.customizedImg,
-															ix: ix,
-															loadingType: 'delete'
-														})}"
 													class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8
 														{loading[ix]
 														? 'cursor-not-allowed opacity-80'
@@ -541,6 +564,7 @@ function moveAllUnavailableItemsToWishlist() {
 														</svg>
 													{/if}
 												</button>
+												</form>
 											</div>
 										</div>
 									</div>
