@@ -84,7 +84,7 @@ Reach out to me with queries!
 <br/>
 <br/>
 
-<div align="center">
+<div align="">
 
 <!-- ### Big Brands using `svelte-commerce`
 
