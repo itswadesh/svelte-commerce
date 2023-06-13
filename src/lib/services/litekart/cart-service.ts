@@ -97,7 +97,7 @@ export const addToCartService = async ({
 				origin
 			)
 		}
-
+            res.qty = +res.qty
 		return res || {}
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)

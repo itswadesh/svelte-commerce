@@ -308,10 +308,10 @@ const getSelectionLabel = (option) => option.name
 
 				<span class="hidden text-center text-xs font-semibold tracking-wider lg:block"> Cart </span>
 
-				{#if $page.data?.cart?.qty > 0}
+				{#if $page.data?.cartQty > 0}
 					<div
 						class="absolute -top-2 -right-1.5 flex items-center justify-center rounded-full bg-primary-500 py-[0.8px] px-[5px] text-center text-xs font-bold uppercase text-white">
-						{$page.data?.cart?.qty}
+						{$page.data?.cartQty}
 					</div>
 				{/if}
 			</a>
