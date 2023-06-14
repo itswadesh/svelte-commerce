@@ -96,7 +96,7 @@ const openGraphProps = {
 	lastUpdated,
 	image: ogImage,
 	squareImage: ogSquareImage,
-	description,
+	metadescription,
 	ogLanguage,
 	pageTitle,
 	siteTitle: $page.data?.store?.websiteName,

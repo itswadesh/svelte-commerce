@@ -1,8 +1,9 @@
 <script lang="ts">
+import { applyAction, enhance } from '$app/forms'
 import { CartService, CouponService, ProductService, WishlistService } from '$lib/services'
 import { date, toast } from '$lib/utils'
 import { fireGTagEvent } from '$lib/utils/gTagB'
-import { fly } from 'svelte/transition'
+import { fly, slide } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
@@ -14,7 +15,6 @@ import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 import SEO from '$lib/components/SEO/index.svelte'
-import { applyAction, enhance } from '$app/forms'
 
 const cookies = Cookie()
 
@@ -29,7 +29,7 @@ let seoProps = {
 let appliedCouponInfo = {}
 let couponErr
 let coupons
-let loading = {}
+let loading = []
 let loadingApplyCoupon = false
 let loadingCoupon = false
 let loadingProducts = false
@@ -321,6 +321,7 @@ function moveAllUnavailableItemsToWishlist() {
 									<!-- Product detail start -->
 
 									<div
+										in:slide="{{ duration: 300 }}"
 										out:fly="{{ x: -800, duration: 300 }}"
 										class="flex w-full items-start gap-4 py-5">
 										<a
@@ -418,39 +419,44 @@ function moveAllUnavailableItemsToWishlist() {
 												<div class="flex items-center justify-center">
 													<!-- Minus icon -->
 
-
 													<form
-										action="/cart?/add"
-										method="POST"
-										use:enhance="{() => {
-											return async ({ result }) => {
-												invalidateAll()
-												await applyAction(result)
-											}
-										}}">
-										<input type="hidden" name="pid" value="{item.pid}" />
-										<input type="hidden" name="qty" value="{-1}" />
-										<input type="hidden" name="customizedImg" value="{item.customizedImg}" />
+														action="/cart?/add"
+														method="POST"
+														use:enhance="{() => {
+															loading[ix] = true
+															return async ({ result }) => {
+																invalidateAll()
+																await applyAction(result)
+																loading[ix] = false
+															}
+														}}">
+														<input type="hidden" name="pid" value="{item.pid}" />
+														<input type="hidden" name="qty" value="{-1}" />
+														<input
+															type="hidden"
+															name="customizedImg"
+															value="{item.customizedImg}" />
 
-
-													<button
-														type="submit"
-														disabled="{loading[ix]}"
-														class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8
-														{loading[ix]
-															? 'cursor-not-allowed opacity-80'
-															: 'cursor-pointer hover:opacity-80 active:scale-95'}">
-														<svg
-															xmlns="http://www.w3.org/2000/svg"
-															fill="none"
-															viewBox="0 0 24 24"
-															stroke-width="1.5"
-															stroke="currentColor"
-															class="w-4 h-4 text-zinc-500">
-															<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15"
-															></path>
-														</svg>
-													</button>
+														<button
+															type="submit"
+															disabled="{loading[ix]}"
+															class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8
+															{loading[ix]
+																? 'cursor-not-allowed opacity-80'
+																: 'cursor-pointer hover:opacity-80 active:scale-95'}">
+															<svg
+																xmlns="http://www.w3.org/2000/svg"
+																fill="none"
+																viewBox="0 0 24 24"
+																stroke-width="1.5"
+																stroke="currentColor"
+																class="w-4 h-4 text-zinc-500">
+																<path
+																	stroke-linecap="round"
+																	stroke-linejoin="round"
+																	d="M19.5 12h-15"></path>
+															</svg>
+														</button>
 													</form>
 
 													<!-- Quantity indicator -->
@@ -469,19 +475,65 @@ function moveAllUnavailableItemsToWishlist() {
 
 													<!-- Puls icon -->
 
-
 													<form
-										action="/cart?/add"
-										method="POST"
-										use:enhance="{() => {
-											return async ({ result }) => {
-												invalidateAll()
-												await applyAction(result)
-											}
-										}}">
-										<input type="hidden" name="pid" value="{item.pid}" />
-										<input type="hidden" name="qty" value="{+1}" />
-										<input type="hidden" name="customizedImg" value="{item.customizedImg}" />
+														action="/cart?/add"
+														method="POST"
+														use:enhance="{() => {
+															loading[ix] = true
+															return async ({ result }) => {
+																invalidateAll()
+																await applyAction(result)
+																loading[ix] = false
+															}
+														}}">
+														<input type="hidden" name="pid" value="{item.pid}" />
+														<input type="hidden" name="qty" value="{+1}" />
+														<input
+															type="hidden"
+															name="customizedImg"
+															value="{item.customizedImg}" />
+														<button
+															type="submit"
+															disabled="{loading[ix]}"
+															class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8
+															{loading[ix]
+																? 'cursor-not-allowed opacity-80'
+																: 'cursor-pointer hover:opacity-80 active:scale-95'}">
+															<svg
+																xmlns="http://www.w3.org/2000/svg"
+																fill="none"
+																viewBox="0 0 24 24"
+																stroke-width="1.5"
+																stroke="currentColor"
+																class="w-4 h-4 text-zinc-500">
+																<path
+																	stroke-linecap="round"
+																	stroke-linejoin="round"
+																	d="M12 4.5v15m7.5-7.5h-15"></path>
+															</svg>
+														</button>
+													</form>
+												</div>
+
+												<!-- Delete icon -->
+
+												<form
+													action="/cart?/add"
+													method="POST"
+													use:enhance="{() => {
+														selectedLoadingType = 'delete'
+														loading[ix] = true
+														return async ({ result }) => {
+															invalidateAll()
+															await applyAction(result)
+															selectedLoadingType = null
+															loading[ix] = false
+														}
+													}}">
+													<input type="hidden" name="pid" value="{item.pid}" />
+													<input type="hidden" name="qty" value="{-9999999}" />
+													<input type="hidden" name="customizedImg" value="{item.customizedImg}" />
+
 													<button
 														type="submit"
 														disabled="{loading[ix]}"
@@ -489,81 +541,42 @@ function moveAllUnavailableItemsToWishlist() {
 														{loading[ix]
 															? 'cursor-not-allowed opacity-80'
 															: 'cursor-pointer hover:opacity-80 active:scale-95'}">
-														<svg
-															xmlns="http://www.w3.org/2000/svg"
-															fill="none"
-															viewBox="0 0 24 24"
-															stroke-width="1.5"
-															stroke="currentColor"
-															class="w-4 h-4 text-zinc-500">
-															<path
+														{#if selectedLoadingType === 'delete' && loading[ix]}
+															<svg
+																xmlns="http://www.w3.org/2000/svg"
+																class="h-4 w-4 animate-spin"
+																viewBox="0 0 24 24"
+																stroke-width="1.5"
+																stroke="currentColor"
+																fill="none"
 																stroke-linecap="round"
-																stroke-linejoin="round"
-																d="M12 4.5v15m7.5-7.5h-15"></path>
-														</svg>
+																stroke-linejoin="round">
+																<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+																<path d="M8.56 3.69a9 9 0 0 0 -2.92 1.95"></path>
+																<path d="M3.69 8.56a9 9 0 0 0 -.69 3.44"></path>
+																<path d="M3.69 15.44a9 9 0 0 0 1.95 2.92"></path>
+																<path d="M8.56 20.31a9 9 0 0 0 3.44 .69"></path>
+																<path d="M15.44 20.31a9 9 0 0 0 2.92 -1.95"></path>
+																<path d="M20.31 15.44a9 9 0 0 0 .69 -3.44"></path>
+																<path d="M20.31 8.56a9 9 0 0 0 -1.95 -2.92"></path>
+																<path d="M15.44 3.69a9 9 0 0 0 -3.44 -.69"></path>
+															</svg>
+														{:else}
+															<svg
+																xmlns="http://www.w3.org/2000/svg"
+																fill="none"
+																viewBox="0 0 24 24"
+																stroke-width="1.5"
+																stroke="currentColor"
+																class="w-4 h-4 text-zinc-500">
+																<path
+																	stroke-linecap="round"
+																	stroke-linejoin="round"
+																	d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+																></path>
+															</svg>
+														{/if}
 													</button>
-													</form>
-												</div>
-
-												<!-- Delete icon -->
-
-
-													<form
-										action="/cart?/add"
-										method="POST"
-										use:enhance="{() => {
-											return async ({ result }) => {
-												invalidateAll()
-												await applyAction(result)
-											}
-										}}">
-										<input type="hidden" name="pid" value="{item.pid}" />
-										<input type="hidden" name="qty" value="{-9999999}" />
-										<input type="hidden" name="customizedImg" value="{item.customizedImg}" />
-
-												<button
-													type="submit"
-													disabled="{loading[ix]}"
-													class="flex h-6 w-6 transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none sm:h-8 sm:w-8
-														{loading[ix]
-														? 'cursor-not-allowed opacity-80'
-														: 'cursor-pointer hover:opacity-80 active:scale-95'}">
-													{#if selectedLoadingType === 'delete' && loading[ix]}
-														<svg
-															xmlns="http://www.w3.org/2000/svg"
-															class="h-4 w-4 animate-spin"
-															viewBox="0 0 24 24"
-															stroke-width="1.5"
-															stroke="currentColor"
-															fill="none"
-															stroke-linecap="round"
-															stroke-linejoin="round">
-															<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-															<path d="M8.56 3.69a9 9 0 0 0 -2.92 1.95"></path>
-															<path d="M3.69 8.56a9 9 0 0 0 -.69 3.44"></path>
-															<path d="M3.69 15.44a9 9 0 0 0 1.95 2.92"></path>
-															<path d="M8.56 20.31a9 9 0 0 0 3.44 .69"></path>
-															<path d="M15.44 20.31a9 9 0 0 0 2.92 -1.95"></path>
-															<path d="M20.31 15.44a9 9 0 0 0 .69 -3.44"></path>
-															<path d="M20.31 8.56a9 9 0 0 0 -1.95 -2.92"></path>
-															<path d="M15.44 3.69a9 9 0 0 0 -3.44 -.69"></path>
-														</svg>
-													{:else}
-														<svg
-															xmlns="http://www.w3.org/2000/svg"
-															fill="none"
-															viewBox="0 0 24 24"
-															stroke-width="1.5"
-															stroke="currentColor"
-															class="w-4 h-4 text-zinc-500">
-															<path
-																stroke-linecap="round"
-																stroke-linejoin="round"
-																d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-															></path>
-														</svg>
-													{/if}
-												</button>
 												</form>
 											</div>
 										</div>

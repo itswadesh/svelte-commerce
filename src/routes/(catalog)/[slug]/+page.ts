@@ -1,14 +1,10 @@
 import { CategoryService, ProductService } from '$lib/services'
-import { redirect } from '@sveltejs/kit'
 
 export const prerender = false
 const isServer = import.meta.env.SSR
 
-export async function load({ url, params, parent, setHeaders }) {
-	const { store, origin, sid, me } = await parent()
-	if (store?.isSecureCatalogue && !me) {
-		throw redirect(307, `/auth/login?ref=${url?.pathname}`)
-	}
+export async function load({ url, params, parent }) {
+	const { store, origin, sid } = await parent()
 	const categorySlug = params.slug
 	const currentPage = +url.searchParams.get('page') || 1
 	const fl = {}
@@ -26,6 +22,7 @@ export async function load({ url, params, parent, setHeaders }) {
 			server: isServer,
 			sid,
 			storeId: store?.id,
+			isCors: store?.isCors,
 			origin
 		}),
 		products: ProductService.fetchProductsOfCategory({
@@ -34,6 +31,7 @@ export async function load({ url, params, parent, setHeaders }) {
 			server: isServer,
 			sid,
 			storeId: store?.id,
+			isCors: store?.isCors,
 			origin
 		}),
 		query: query.toString(),
