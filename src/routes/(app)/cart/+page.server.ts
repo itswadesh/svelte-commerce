@@ -54,7 +54,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 	const data = await request.formData()
 	const pid = data.get('pid')
 	const vid = data.get('pid')
-	const qty = data.get('qty')
+	const qty = +data.get('qty')
 	const linkedItems = JSON.parse(data.get('linkedItems'))
 	const options = JSON.parse(data.get('options')) //data.get('options') //
 	const customizedImg = data.get('customizedImg')
