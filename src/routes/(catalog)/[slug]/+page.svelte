@@ -126,28 +126,30 @@ async function sortNow(s) {
 async function loadNextPage() {
 	if (!reachedLast) {
 		let nextPage = currentPage + 1
-		$page.url.searchParams.delete('page')
-		const searchParams = $page.url.searchParams.toString()
+		$page?.url?.searchParams.delete('page')
+		const searchParams = $page?.url?.searchParams.toString()
 
 		try {
 			data.isLoading = true
 
 			const res = await ProductService.fetchNextPageProducts({
-				categorySlug: data.category?.slug,
+				categorySlug: data?.category?.slug,
 				origin: $page?.data?.origin,
 				storeId: $page?.data?.store?.id,
 				nextPage,
 				searchParams
 			})
 
-			const nextPageData = res.nextPageData
-			data.products = data?.products?.concat(nextPageData)
-			data.count = res?.count
-			data.products.facets = res?.facets
+			// console.log('res', res)
+
+			const nextPageData = res?.nextPageData
+			data.products.products = data?.products?.products?.concat(nextPageData)
+			data.products.count = res?.count
+			data.products.products.facets = res?.facets
 			data.err = !res?.estimatedTotalHits ? 'No result Not Found' : null
 			currentPage = currentPage + 1
 
-			if (data.count && data.products?.length === data.count) {
+			if (data.product?.count && data.products?.length === data.product?.count) {
 				reachedLast = true
 			}
 		} catch (e) {
@@ -167,8 +169,8 @@ onMount(() => {
 		entries.forEach((entry) => {
 			if (
 				entry.isIntersecting &&
-				data.count &&
-				data.products?.length < data.count &&
+				data.products?.count &&
+				data.products?.products?.length < data.products?.count &&
 				!data.isLoading
 			) {
 				// Do something when the element is intersecting
@@ -340,20 +342,19 @@ function handleFilterTags() {
 	<div class="mb-10 flex flex-col items-start sm:mb-20 lg:flex-row lg:gap-10 lg:p-10">
 		{#if data.products.facets}
 			<DesktopFilter
+				class="sticky hidden lg:block {hellobar?.active?.val ? 'top-32' : 'top-24'}"
 				facets="{data.products.facets}"
 				priceRange="{priceRange}"
 				query="{data.query}"
-				class="sticky hidden lg:block
-				{hellobar?.active?.val ? 'top-32' : 'top-24'}"
 				on:clearAll="{refreshData}" />
 
 			<MobileFilter
 				bind:showFilter="{showFilter}"
 				bind:showSort="{showSort}"
+				class="fixed bottom-0 border-t z-40 block lg:hidden"
 				facets="{data.products.facets}"
 				priceRange="{priceRange}"
 				selected="{selectedFilter}"
-				class="fixed bottom-0 border-t z-40 block lg:hidden"
 				on:clearAll="{refreshData}" />
 		{/if}
 
@@ -546,23 +547,26 @@ function handleFilterTags() {
 		<div class="justify-center bg-zinc-50 px-3 py-10 sm:px-10 sm:py-20">
 			<div
 				class="container mx-auto grid max-w-6xl grid-cols-1 gap-10 text-sm sm:gap-20 md:grid-cols-6">
-				<div class="prose prose-sm col-span-1 max-w-none text-justify md:col-span-3 lg:col-span-4">
+				<div
+					class="prose prose-sm col-span-1 max-w-none text-justify
+					{data?.products?.products.length ? 'md:col-span-3 lg:col-span-4' : 'md:col-span-6'}">
 					{@html data.category?.description}
 				</div>
 
-				<div class="col-span-1 md:col-span-3 lg:col-span-2">
-					<h2 class="mb-5 text-center text-base font-bold uppercase tracking-wide">
-						{data.category?.name} price list
-					</h2>
+				{#if data?.products?.products.length}
+					<div class="col-span-1 md:col-span-3 lg:col-span-2">
+						<h2 class="mb-5 text-center text-base font-bold uppercase tracking-wide">
+							{data.category?.name} price list
+						</h2>
 
-					<ul class="flex flex-col gap-2">
-						<li class="grid grid-cols-6 items-center gap-5 font-semibold uppercase">
-							<span class="col-span-5">{data.category?.name}</span>
+						<ul class="flex flex-col gap-2">
+							<li class="grid grid-cols-6 items-center gap-5 font-semibold uppercase">
+								<span class="col-span-5">{data.category?.name}</span>
 
-							<span class="col-span-1">Price <br /> (Rs)</span>
-						</li>
-						{#if data?.products}
-							{#each data.products as p, px}
+								<span class="col-span-1">Price <br /> (Rs)</span>
+							</li>
+
+							{#each data.products?.products as p, px}
 								{#if p && px < 10}
 									<li>
 										<a
@@ -578,15 +582,15 @@ function handleFilterTags() {
 									</li>
 								{/if}
 							{/each}
-						{/if}
 
-						{#if data?.products && data?.products[0] && data?.products[0]?.updatedAt}
-							<li class="font-semibold">
-								<i>Data last updated on {dateOnly(data.products[0]?.updatedAt)}</i>
-							</li>
-						{/if}
-					</ul>
-				</div>
+							{#if data?.products?.products && data?.products?.products[0] && data?.products?.products[0]?.updatedAt}
+								<li class="font-semibold">
+									<i>Data last updated on {dateOnly(data.products?.products[0]?.updatedAt)}</i>
+								</li>
+							{/if}
+						</ul>
+					</div>
+				{/if}
 			</div>
 		</div>
 	{/if}
