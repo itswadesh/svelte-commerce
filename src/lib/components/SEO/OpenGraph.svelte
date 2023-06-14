@@ -6,7 +6,7 @@ export let facebookAuthorPage = ''
 export let facebookPage = ''
 export let image
 export let squareImage
-export let metadescription
+export let metaDescription
 export let ogLanguage
 export let pageTitle
 export let siteTitle
@@ -19,7 +19,7 @@ export let url
 	<meta property="og:url" content="{url}" />
 	<meta property="og:type" content="{article ? 'article' : 'website'}" />
 	<meta property="og:title" content="{pageTitle}" />
-	<meta property="og:description" content="{metadescription}" />
+	<meta property="og:description" content="{metaDescription}" />
 	{#if image}
 		<meta property="og:image" content="{image.url}" />
 		<meta property="og:image:width" content="1200" />

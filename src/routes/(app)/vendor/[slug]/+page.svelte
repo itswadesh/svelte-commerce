@@ -10,7 +10,7 @@ export let data
 
 const seoProps = {
 	title: 'Vendor Profile',
-	metadescription: 'Vendor Profile'
+	metaDescription: 'Vendor Profile'
 }
 </script>
 

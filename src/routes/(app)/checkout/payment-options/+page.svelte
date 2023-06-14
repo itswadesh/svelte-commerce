@@ -11,7 +11,7 @@ import SEO from '$lib/components/SEO/index.svelte'
 
 const seoProps = {
 	title: 'Select Payment Option',
-	metadescription: 'Choose your payment method'
+	metaDescription: 'Choose your payment method'
 }
 
 export let data

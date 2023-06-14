@@ -5,7 +5,7 @@ import UserDashboard from './_UserDashboard.svelte'
 
 const seoProps = {
 	title: 'Dashboard',
-	metadescription: 'Dashboard'
+	metaDescription: 'Dashboard'
 }
 
 export let data

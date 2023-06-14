@@ -51,7 +51,7 @@ export let image = null
 export let keywords = ''
 export let lastUpdated = null
 export let logo = ''
-export let metadescription = ''
+export let metaDescription = ''
 export let msapplicationTileImage = ''
 export let ogImage = { url: '', alt: defaultAlt, width: null, height: null }
 export let ogImageSecureUrl = ''
@@ -96,7 +96,7 @@ const openGraphProps = {
 	lastUpdated,
 	image: ogImage,
 	squareImage: ogSquareImage,
-	metadescription,
+	metaDescription,
 	ogLanguage,
 	pageTitle,
 	siteTitle: $page.data?.store?.websiteName,
@@ -141,7 +141,7 @@ const schemaOrgProps = {
 	id,
 	image,
 	logo,
-	metadescription,
+	metaDescription,
 	openingHours,
 	popularity,
 	postalCode,
@@ -182,7 +182,7 @@ const productProps = {
 <svelte:head>
 	<title>{pageTitle}</title>
 
-	<meta name="description" content="{description}" />
+	<meta name="description" content="{metaDescription}" />
 
 	<meta name="keywords" content="{keywords}" />
 
