@@ -2,10 +2,10 @@ import { authenticateUser, fetchCart, fetchStoreData } from '$lib/server'
 import { DOMAIN, HTTP_ENDPOINT, listOfPagesWithoutBackButton } from '$lib/config'
 import { error, type Handle, type HandleServerError } from '@sveltejs/kit'
 import { nanoid } from 'nanoid'
-import { SECRET_SENTRY_DSN } from '$env/static/private'
+import { env } from '$env/dynamic/private'
 import * as SentryNode from '@sentry/node'
 
-const SENTRY_DSN = SECRET_SENTRY_DSN
+const SENTRY_DSN = env.SECRET_SENTRY_DSN
 
 if (SENTRY_DSN && SENTRY_DSN !== 'YOUR_SENTRY_DSN') {
 	SentryNode.init({
