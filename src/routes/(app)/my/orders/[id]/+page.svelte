@@ -21,7 +21,7 @@ export { clazz as class }
 
 const seoProps = {
 	title: 'Details ',
-	metadescription: 'Details '
+	metaDescription: 'Details '
 }
 
 // let deliveryBy = null

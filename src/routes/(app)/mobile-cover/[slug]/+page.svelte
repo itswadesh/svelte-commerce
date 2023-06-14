@@ -42,7 +42,8 @@ let seoProps = {
 	// weight: { unitCode: '', value: '' },
 	// width: { unitCode: '', value: '' },
 	// wlwmanifestXmlHref: '',
-	metadescription: data.category?.metaDescription,
+	metaDescription
+: data.category?.metaDescription,
 	// article: false,
 	canonical: `${$page?.url.href}`,
 	datePublished: `${data.category?.publishedAt || '_'}`,

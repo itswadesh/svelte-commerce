@@ -37,7 +37,7 @@ let seoProps = {
 	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00'],
 	timeToRead: 0,
 	updatedAt: `${data.category?.updatedAt || '_'}`,
-	metadescription: data.category?.metaDescription,
+	metaDescription: data.category?.metaDescription,
 	canonical: `${$page?.url.href}`,
 	datePublished: `${data.category?.publishedAt || '_'}`,
 	description: ` ${data.category?.description}`,

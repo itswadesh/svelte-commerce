@@ -73,7 +73,8 @@ export let data
 
 const seoProps = {
 	title: 'Payment Success ',
-	metadescription: 'Payment Success '
+	metaDescription
+: 'Payment Success '
 }
 
 onMount(async () => {

@@ -30,7 +30,7 @@ export let image = null
 export let lastUpdated = null
 export let linkedinProfile = null
 export let logo = ''
-export let metadescription = ''
+export let metaDescription = ''
 export let name = null
 export let openingHours = ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00']
 export let popularity = 1000
@@ -169,7 +169,7 @@ const schemaOrgWebPage = {
 	author: {
 		'@id': `${$page?.url?.href}/${entityHash}`
 	},
-	description: metadescription,
+	description: metaDescription,
 	breadcrumb: {
 		'@id': `${url}#breadcrumb`
 	},

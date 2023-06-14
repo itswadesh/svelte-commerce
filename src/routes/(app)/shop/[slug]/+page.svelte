@@ -54,7 +54,7 @@ let seoProps = {
 	// weight: { unitCode: '', value: '' },
 	// width: { unitCode: '', value: '' },
 	// wlwmanifestXmlHref: '',
-	metadescription: $page.data.store?.description,
+	metaDescription: $page.data.store?.metaDescription,
 	// article: false,
 	canonical: `${$page?.url.href}`,
 	datePublished: today,

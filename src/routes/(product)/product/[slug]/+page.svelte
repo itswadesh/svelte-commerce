@@ -121,7 +121,7 @@ let seoProps = {
 	// weight: { unitCode: '', value: '' },
 	// width: { unitCode: '', value: '' },
 	// wlwmanifestXmlHref: '',
-	metadescription: data.product?.metaDescription,
+	metaDescription: data.product?.metaDescription,
 	// article: false,
 	canonical: `${$page?.url.href}`,
 	datePublished: `${data.product?.publishedAt || '_'}`,

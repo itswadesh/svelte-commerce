@@ -8,7 +8,7 @@ export let data
 
 const seoProps = {
 	title: 'Address ',
-	metadescription: 'Address'
+	metaDescription: 'Address'
 }
 
 function addressChanged(detail) {

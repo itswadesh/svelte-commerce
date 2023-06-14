@@ -1,10 +1,10 @@
 <script>
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
-import {Breadcrumb,CatelogNav} from '$lib/components'
+import { Breadcrumb, CatelogNav } from '$lib/components'
 import landingPageMobileBox from '$lib/assets/landing-page-mobile-box.webp'
 import SEO from '$lib/components/SEO/index.svelte'
-import {PrimaryButton} from '$lib/ui'
+import { PrimaryButton } from '$lib/ui'
 
 export let data
 
@@ -44,7 +44,7 @@ let seoProps = {
 	// weight: { unitCode: '', value: '' },
 	// width: { unitCode: '', value: '' },
 	// wlwmanifestXmlHref: '',
-	metadescription: data.category?.metaDescription,
+	metaDescription: data.category?.metaDescription,
 	// article: false,
 	canonical: `${$page?.url.href}`,
 	datePublished: `${data.category?.publishedAt || '_'}`,
