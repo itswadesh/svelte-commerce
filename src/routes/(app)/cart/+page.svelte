@@ -317,7 +317,7 @@ function moveAllUnavailableItemsToWishlist() {
 
 						{#if data.cart?.items}
 							<div class="flex flex-col divide-y">
-								{#each data.cart?.items as item, ix}
+								{#each data.cart?.items as item, ix (item.pid)}
 									<!-- Product detail start -->
 
 									<div
