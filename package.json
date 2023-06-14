@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "node src/lib/services/copy && vite dev --host --port 3000",
-		"build": "node src/lib/services/copy && vite build",
+		"build": "vite build",
 		"start-node": "node build/index.js",
 		"start": "NODE_ENV=production && vite preview --host --port 3000",
 		"update": "npm exec -- npx ncu -u -p npm i",
