@@ -26,7 +26,7 @@ const seoProps = {
 					<div class="col-span-1 lg:col-span-2 px-3 py-5 sm:px-0 sm:py-0">
 						<div
 							class="static flex flex-col items-center justify-center gap-4 lg:sticky lg:top-32 max-w-sm mx-auto">
-							<div>
+							<div class="border shadow h-40 w-40 rounded-full">
 								{#if data.vendor?.banners[0]}
 									<LazyImg
 										src="{data.vendor?.banners[0]}"
@@ -34,7 +34,7 @@ const seoProps = {
 										class="h-40 w-40 rounded-full object-cover object-top" />
 								{:else}
 									<div
-										class="h-40 w-40 bg-zinc-200 text-zinc-500 text-xs rounded-full flex flex-col gap-1 items-center justify-center text-center">
+										class="h-full w-full bg-zinc-100 text-zinc-500 text-xs rounded-full flex flex-col gap-1 items-center justify-center text-center">
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
 											fill="none"
