@@ -60,8 +60,8 @@ const toast = (title: any, type: ToastType | undefined) => {
 		theme: 'dark',
 		placement: 'top-center',
 		showProgress: false,
-		onClick: () => {},
-		onRemove: () => {}
+		onClick: () => { },
+		onRemove: () => { }
 	})
 }
 
