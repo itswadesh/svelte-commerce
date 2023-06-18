@@ -28,7 +28,8 @@ export const listOfPagesWithoutBackButton = [
 	'/my/wishlist',
 	'/my',
 	'/payment/success',
-	'/my/reviews/create'
+	'/my/reviews/create',
+	'/__data.json'
 ]
 export const loginUrl = '/auth/login'
 export const mediaqueries = {
