@@ -43,36 +43,6 @@ function getYear() {
 	return year
 }
 
-let footerItems: any = [
-	// {
-	// 	heading: 'Company',
-	// 	subMenu: [
-	// 		{ title: 'About Us', link: '/about-us', new: false },
-	// 		{ title: 'Privacy Policy', link: '/privacy-policy', new: false },
-	// 		{
-	// 			title: 'Terms & Conditions',
-	// 			link: '/terms-conditions',
-	// 			new: false
-	// 		},
-	// 		{
-	// 			title: 'Payments & Returns',
-	// 			link: '/payments-returns',
-	// 			new: false
-	// 		},
-	// 		{ title: 'Blogs', link: '/blogs', new: false },
-	// 		{
-	// 			title: 'Join as Vendor',
-	// 			link: `${$page.data.store?.adminUrl}?role=vendor&store=${$page.data.store?.id}`,
-	// 			new: true,
-	// 			target: '_blank'
-	// 		}
-	// 	]
-	// },
-	{
-		heading: 'Customer service',
-		subMenu: [{ title: 'Track Your Order', link: '##', new: false }]
-	}
-]
 let pages = []
 
 onMount(async () => {
@@ -109,8 +79,20 @@ async function getPages() {
 	<div class="container mx-auto max-w-6xl">
 		<div
 			class="mb-4 flex w-full flex-col flex-wrap items-start justify-start gap-5 sm:mb-8 sm:gap-10 h-full sm:max-h-[35rem] xl:max-h-80 overflow-hidden">
+			{#if $page.data.store?.description}
+				<div>
+					<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">
+						About {$page.data.store?.websiteName}
+					</h5>
+
+					<p class="text-zinc-500">
+						{@html $page.data.store?.description}
+					</p>
+				</div>
+			{/if}
+
 			<div>
-				<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Company</h5>
+				<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Customer Service</h5>
 
 				<ul class="flex flex-col gap-1 text-zinc-500">
 					{#if pages?.length}
@@ -142,6 +124,15 @@ async function getPages() {
 						</a>
 					</li>
 
+					<li class="flex max-w-max items-center">
+						<a
+							href="/my/orders"
+							aria-label="Click to visit this page"
+							class="link-underline link-underline-gray whitespace-pre-wrap">
+							Track Your Order
+						</a>
+					</li>
+
 					{#if $page.data.store?.isMultiVendor}
 						<li class="flex max-w-max items-center">
 							<a
@@ -170,53 +161,6 @@ async function getPages() {
 					{/if}
 				</ul>
 			</div>
-
-			{#if footerItems?.length}
-				{#each footerItems as item}
-					<div>
-						<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">
-							{item.heading}
-						</h5>
-
-						<ul class="flex flex-col gap-1 text-zinc-500">
-							{#each item?.subMenu as item}
-								<li class="flex max-w-max items-center">
-									<a
-										href="{item.link}"
-										target="{item.target || 'self'}"
-										aria-label="Click to visit this page"
-										class="link-underline link-underline-gray whitespace-pre-wrap capitalize">
-										{item.title}
-									</a>
-
-									{#if item.new}
-										<div
-											class="ml-2 max-w-max rounded bg-primary-500 py-[0.1rem] px-1 text-[0.5rem] font-semibold leading-3 tracking-wider text-white">
-											NEW
-										</div>
-									{/if}
-								</li>
-							{/each}
-
-							{#if $page.data.store?.isBulkOrder}
-								<li class="flex max-w-max items-center">
-									<a
-										href="/bulk-order-inquiry"
-										aria-label="Click to visit this page"
-										class="link-underline link-underline-gray whitespace-pre-wrap capitalize">
-										Bulk Order Inquiry
-									</a>
-
-									<div
-										class="ml-2 max-w-max rounded bg-primary-500 py-[0.1rem] px-1 text-[0.5rem] font-semibold leading-3 tracking-wider text-white">
-										NEW
-									</div>
-								</li>
-							{/if}
-						</ul>
-					</div>
-				{/each}
-			{/if}
 
 			{#if megamenu?.length}
 				<div>
@@ -250,8 +194,8 @@ async function getPages() {
 				<ul class="flex flex-col gap-2 text-zinc-500">
 					{#if $page.data.store?.email}
 						<li class="max-w-max">
-							<a href="mailto:{$page.data.store?.email}" class="group block">
-								<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
+							<a href="mailto:{$page.data.store?.email}" class="group flex items-center gap-2">
+								<h6 class="w-16 flex items-center gap-1 font-semibold">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										fill="none"
@@ -276,8 +220,8 @@ async function getPages() {
 
 					{#if $page.data.store?.phone}
 						<li class="max-w-max">
-							<a href="tel:+{$page.data.store?.phone}" class="group block">
-								<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
+							<a href="tel:+{$page.data.store?.phone}" class="group flex items-center gap-2">
+								<h6 class="w-16 flex items-center gap-1 font-semibold">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										fill="none"
@@ -606,11 +550,13 @@ async function getPages() {
 		<hr class="mb-4 w-full border-t sm:mb-8" />
 
 		<div
-			class="flex flex-wrap items-center justify-center gap-2 text-sm text-zinc-500 sm:gap-5 md:justify-between">
-			<p>
-				Copyright {getYear()} © {$page.data.store?.websiteName} | Powered by
-				<a href="https://litekart.in">Litekart</a>
-				made with ❤️
+			class="flex flex-col sm:flex-wrap items-center justify-center text-sm text-zinc-500 gap-5 md:justify-between">
+			<p class="text-center sm:text-left">
+				© {$page.data.store?.websiteName}
+
+				<br />
+
+				Powered by <a href="https://litekart.in" class="hover:underline">Litekart</a>
 			</p>
 
 			<div class="flex items-center justify-center gap-4">

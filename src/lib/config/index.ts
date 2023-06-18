@@ -28,7 +28,8 @@ export const listOfPagesWithoutBackButton = [
 	'/my/wishlist',
 	'/my',
 	'/payment/success',
-	'/my/reviews/create'
+	'/my/reviews/create',
+	'/__data.json'
 ]
 export const loginUrl = '/auth/login'
 export const mediaqueries = {
@@ -45,7 +46,7 @@ export const mediaqueries = {
 }
 // export const provider = env.PUBLIC_API_PROVIDER || 'Litekart' // 'Medusa' 'Woocommerce' 'Bigcommerce'
 export const searchbarText = 'Search for brands categories & more'
-export const SHOPIFY_BASE_URL = `https://api.sopify.com`
+export const SHOPIFY_BASE_URL = `https://api.shopify.com`
 export const siteShortTitle = 'Litekart' // used as SchemaOrg siteTitleAlt
 export const siteTitle = 'Litekart'
 export const sorts = [

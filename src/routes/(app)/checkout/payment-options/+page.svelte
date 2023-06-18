@@ -1,5 +1,5 @@
 <script lang="ts">
-import { fireGTagEvent } from '$lib/utils/gTag'
+import { fireGTagEvent } from '$lib/utils/gTagB'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { OrdersService } from '$lib/services'
@@ -11,10 +11,11 @@ import SEO from '$lib/components/SEO/index.svelte'
 
 const seoProps = {
 	title: 'Select Payment Option',
-	metadescription: 'Choose your payment method'
+	metaDescription: 'Choose your payment method'
 }
 
 export let data
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let bankPayment = { type: 'order', reference: '', remark: '', paymentMethodId: '', amount: 0 }
 let disabled = false
