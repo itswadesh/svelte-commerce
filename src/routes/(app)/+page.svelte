@@ -99,8 +99,6 @@ let seoProps = {
 	title: $page.data.store?.title,
 	twitterImage: { url: $page.data.store?.logo }
 }
-
-let showFooter = false
 </script>
 
 <SEO {...seoProps} />
@@ -324,30 +322,7 @@ let showFooter = false
 
 		<!-- <ProductTab /> -->
 
-		<!-- Footer show hide toggle -->
-
-		<button
-			type="button"
-			class="lg:hidden p-3 sm:px-10 w-full border-t border-b border-zinc-400 flex items-center justify-between gap-4 text-sm focus:outline-none"
-			on:click="{() => (showFooter = !showFooter)}">
-			<span>More about {$page.data.store?.websiteName || 'store'}</span>
-
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 20 20"
-				fill="currentColor"
-				class="w-5 h-5 transition duration-300
-				{showFooter ? 'transform rotate-180' : ''}">
-				<path
-					fill-rule="evenodd"
-					d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-					clip-rule="evenodd"></path>
-			</svg>
-		</button>
-
-		<div class="{showFooter ? 'block' : 'hidden'}">
-			<Footer me="{data.me}" />
-		</div>
+		<Footer me="{data.me}" />
 	</div>
 
 	<!-- MOBILE FOOTER -->

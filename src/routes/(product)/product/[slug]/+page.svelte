@@ -172,14 +172,13 @@ let selectedReviewType = 'product_review'
 let selectedSize
 let shake = false
 let showEditor = false
-let showFooter = false
 let showLongDescription = false
 let showPhotosModal = false
 let showStickyCartButton = true
 let showUserInputForm = false
+let today = dayjs().format('YYYY-MM-DD')
 let viewPortCartPositionFromTop = 0
 let y = 0
-let today = dayjs().format('YYYY-MM-DD')
 
 $: if (y > 500) {
 	showUserInputForm = true
@@ -563,6 +562,13 @@ function handleMobileCanvas() {
 					</div>
 				{/if}
 
+				{#if data?.product?.vendor && data?.product?.vendor?.slug && data?.product?.vendor?.businessName}
+					<div class="mb-5 text-sm text-zinc-500">
+						By <a href="/vendor/{data?.product?.vendor?.slug}" class="underline hover:text-zinc-800"
+							>{data?.product?.vendor?.businessName}</a>
+					</div>
+				{/if}
+
 				<!-- prices mobile -->
 
 				<div class="block sm:hidden mt-2">
@@ -594,16 +600,6 @@ function handleMobileCanvas() {
 
 						<p class="mb-2 text-sm font-semibold text-green-700">Inclusive of all taxes</p>
 					{/if}
-
-					{#if data?.product?.vendor && data?.product?.vendor?.slug && data?.product?.vendor?.businessName}
-						<div class="mb-5 flex items-center gap-2">
-							<span class="font-semibold"> Sold by : </span>
-
-							<a href="/vendor/{data?.product?.vendor?.slug}" class="hover:underline">
-								{data?.product?.vendor?.businessName}
-							</a>
-						</div>
-					{/if}
 				</div>
 
 				<!-- ratings -->
@@ -634,8 +630,6 @@ function handleMobileCanvas() {
 						</span>
 					</button>
 				{/if}
-
-				<hr class="my-5 w-full border-t border-zinc-200" />
 
 				<!-- Delivery Options Mobile -->
 
@@ -699,16 +693,6 @@ function handleMobileCanvas() {
 						</div>
 
 						<p class="mb-2 text-sm font-semibold text-green-700">Inclusive of all taxes</p>
-					{/if}
-
-					{#if data?.product?.vendor && data?.product?.vendor?.slug && data?.product?.vendor?.businessName}
-						<div class="mb-5 flex items-center gap-2">
-							<span class="font-semibold"> Sold by : </span>
-
-							<a href="/vendor/{data?.product?.vendor?.slug}" class="hover:underline">
-								{data?.product?.vendor?.businessName}
-							</a>
-						</div>
 					{/if}
 				</div>
 
@@ -969,28 +953,8 @@ function handleMobileCanvas() {
 					</div>
 				{:then value}
 					{#if value.description}
-						<div class="mb-5">
-							<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
-								<span> Product Details </span>
-
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="h-5 w-5"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-									stroke-width="1">
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
-									></path>
-								</svg>
-							</h6>
-
-							<div class="prose text-sm max-w-none">
-								{@html value.description}
-							</div>
+						<div class="mb-5 prose text-sm max-w-none">
+							{@html value.description}
 						</div>
 					{/if}
 				{:catch error}
@@ -1073,132 +1037,138 @@ function handleMobileCanvas() {
 							</div>
 						{/if}
 
-						<div class="col-span-1">
-							{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
-								<a
-									href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
-										?.url?.search}"
-									class="block">
-									<WhiteButton
-										type="button"
-										loadingringsize="sm"
-										hideLoading
-										class="w-full text-sm">
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											fill="none"
-											viewBox="0 0 24 24"
-											stroke-width="1.5"
-											stroke="currentColor"
-											class="w-5 h-5">
-											<path
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-											></path>
-										</svg>
-
-										<span> Login </span>
-									</WhiteButton>
-								</a>
-							{:else if isExpired}
-								<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
-									Item Expired
-								</PrimaryButton>
-							{:else if data.product?.active && data.product?.hasStock}
-								{#if cartButtonText === 'Go to Cart'}
-									<a class="block" href="/cart" data-sveltekit-preload-data>
-										<PrimaryButton type="button" hideLoading class="w-full text-sm" blackBackground>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												class="h-5 w-5 shrink-0"
-												fill="none"
-												viewBox="0 0 24 24"
-												stroke="currentColor"
-												stroke-width="2">
-												<path
-													stroke-linecap="round"
-													stroke-linejoin="round"
-													d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
-												</path>
-											</svg>
-
-											<span>
-												{cartButtonText}
-											</span>
-										</PrimaryButton>
-									</a>
-								{:else}
-									<form
-										action="/cart?/add"
-										method="POST"
-										use:enhance="{() => {
-											return async ({ result }) => {
-												result?.data?.qty < 0
-													? fireGTagEvent('remove_from_cart', result?.data)
-													: fireGTagEvent('add_to_cart', result?.data)
-												cartButtonText = 'Added To Cart'
-												bounceItemFromTop = true
-												setTimeout(() => {
-													bounceItemFromTop = false
-													cartButtonText = 'Add to Bag'
-												}, 3000)
-												cartButtonText = 'Go to Cart'
-												if (customizedImg) {
-													goto(`/checkout/address`)
-												}
-												invalidateAll()
-												await applyAction(result)
-											}
-										}}">
-										<input type="hidden" name="pid" value="{data?.product?._id}" />
-										<input type="hidden" name="vid" value="{data?.product?._id}" />
-
-										<input
-											type="hidden"
-											name="linkedItems"
-											value="{JSON.stringify(selectedLinkiedProducts)}" />
-
-										<input type="hidden" name="qty" value="{1}" />
-
-										<input
-											type="hidden"
-											name="options"
-											value="{JSON.stringify(selectedOptions1)}" />
-
-										<input type="hidden" name="customizedImg" value="{customizedImg}" />
-
-										<PrimaryButton
-											type="submit"
-											loading="{loading}"
+						{#if data.product?.price > 0}
+							<div class="col-span-1">
+								{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
+									<a
+										href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
+											?.url?.search}"
+										class="block">
+										<WhiteButton
+											type="button"
 											loadingringsize="sm"
+											hideLoading
 											class="w-full text-sm">
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
-												class="h-5 w-5 shrink-0"
 												fill="none"
 												viewBox="0 0 24 24"
+												stroke-width="1.5"
 												stroke="currentColor"
-												stroke-width="2">
+												class="w-5 h-5">
 												<path
 													stroke-linecap="round"
 													stroke-linejoin="round"
-													d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
-												</path>
+													d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+												></path>
 											</svg>
 
-											<span>
-												{cartButtonText}
-											</span>
-										</PrimaryButton>
-									</form>
+											<span> Login </span>
+										</WhiteButton>
+									</a>
+								{:else if isExpired}
+									<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
+										Item Expired
+									</PrimaryButton>
+								{:else if data.product?.active && data.product?.hasStock}
+									{#if cartButtonText === 'Go to Cart'}
+										<a class="block" href="/cart" data-sveltekit-preload-data>
+											<PrimaryButton
+												type="button"
+												hideLoading
+												class="w-full text-sm"
+												blackBackground>
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													class="h-5 w-5 shrink-0"
+													fill="none"
+													viewBox="0 0 24 24"
+													stroke="currentColor"
+													stroke-width="2">
+													<path
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
+													</path>
+												</svg>
+
+												<span>
+													{cartButtonText}
+												</span>
+											</PrimaryButton>
+										</a>
+									{:else}
+										<form
+											action="/cart?/add"
+											method="POST"
+											use:enhance="{() => {
+												return async ({ result }) => {
+													result?.data?.qty < 0
+														? fireGTagEvent('remove_from_cart', result?.data)
+														: fireGTagEvent('add_to_cart', result?.data)
+													cartButtonText = 'Added To Cart'
+													bounceItemFromTop = true
+													setTimeout(() => {
+														bounceItemFromTop = false
+														cartButtonText = 'Add to Bag'
+													}, 3000)
+													cartButtonText = 'Go to Cart'
+													if (customizedImg) {
+														goto(`/checkout/address`)
+													}
+													invalidateAll()
+													await applyAction(result)
+												}
+											}}">
+											<input type="hidden" name="pid" value="{data?.product?._id}" />
+											<input type="hidden" name="vid" value="{data?.product?._id}" />
+
+											<input
+												type="hidden"
+												name="linkedItems"
+												value="{JSON.stringify(selectedLinkiedProducts)}" />
+
+											<input type="hidden" name="qty" value="{1}" />
+
+											<input
+												type="hidden"
+												name="options"
+												value="{JSON.stringify(selectedOptions1)}" />
+
+											<input type="hidden" name="customizedImg" value="{customizedImg}" />
+
+											<PrimaryButton
+												type="submit"
+												loading="{loading}"
+												loadingringsize="sm"
+												class="w-full text-sm">
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													class="h-5 w-5 shrink-0"
+													fill="none"
+													viewBox="0 0 24 24"
+													stroke="currentColor"
+													stroke-width="2">
+													<path
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
+													</path>
+												</svg>
+
+												<span>
+													{cartButtonText}
+												</span>
+											</PrimaryButton>
+										</form>
+									{/if}
+								{:else}
+									<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
+										Item Unavailable
+									</PrimaryButton>
 								{/if}
-							{:else}
-								<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
-									Item Unavailable
-								</PrimaryButton>
-							{/if}
-						</div>
+							</div>
+						{/if}
 					</div>
 				{/if}
 
@@ -1288,8 +1258,6 @@ function handleMobileCanvas() {
 							</li>
 						</ul>
 					{:then productReviews}
-						<hr class="hidden sm:block mb-5 w-full border-t border-zinc-200" />
-
 						<div
 							id="ratings_and_reviews"
 							class="sticky top-14 sm:top-20 z-30 lg:static lg:z-0 mb-5 bg-white py-2">
@@ -1303,7 +1271,7 @@ function handleMobileCanvas() {
 									on:click="{() => {
 										;(selectedReviewType = 'product_review') && scrollTo('ratings_and_reviews')
 									}}">
-									Product Review
+									Reviews
 								</button>
 
 								<button
@@ -1315,7 +1283,7 @@ function handleMobileCanvas() {
 									on:click="{() => {
 										;(selectedReviewType = 'brand_review') && scrollTo('ratings_and_reviews')
 									}}">
-									Brand Review
+									Brand Reviews
 								</button>
 							</div>
 						</div>
@@ -1402,131 +1370,137 @@ function handleMobileCanvas() {
 							</div>
 						{/if}
 
-						<div class="{$page.data.store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
-							{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
-								<a
-									href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
-										?.url?.search}"
-									class="block">
-									<WhiteButton
-										type="button"
-										loadingringsize="sm"
-										hideLoading
-										class="w-full text-sm">
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											fill="none"
-											viewBox="0 0 24 24"
-											stroke-width="1.5"
-											stroke="currentColor"
-											class="w-5 h-5">
-											<path
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-											></path>
-										</svg>
-
-										<span> Login </span>
-									</WhiteButton>
-								</a>
-							{:else if isExpired}
-								<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
-									Item Expired
-								</PrimaryButton>
-							{:else if data.product?.active && data.product?.hasStock}
-								{#if cartButtonText === 'Go to Cart'}
-									<a class="block" href="/cart" data-sveltekit-preload-data>
-										<PrimaryButton type="button" hideLoading class="w-full text-sm" blackBackground>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												class="h-5 w-5 shrink-0"
-												fill="none"
-												viewBox="0 0 24 24"
-												stroke="currentColor"
-												stroke-width="2">
-												<path
-													stroke-linecap="round"
-													stroke-linejoin="round"
-													d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
-												</path>
-											</svg>
-
-											<span>
-												{cartButtonText}
-											</span>
-										</PrimaryButton>
-									</a>
-								{:else}
-									<form
-										action="/cart?/add"
-										method="POST"
-										use:enhance="{() => {
-											return async ({ result }) => {
-												result?.data?.qty < 0
-													? fireGTagEvent('remove_from_cart', result?.data)
-													: fireGTagEvent('add_to_cart', result?.data)
-												cartButtonText = 'Added To Cart'
-												bounceItemFromTop = true
-												setTimeout(() => {
-													bounceItemFromTop = false
-												}, 3000)
-												cartButtonText = 'Go to Cart'
-												if (customizedImg) {
-													goto(`/checkout/address`)
-												}
-												invalidateAll()
-												await applyAction(result)
-											}
-										}}">
-										<input type="hidden" name="pid" value="{data?.product?._id}" />
-										<input type="hidden" name="vid" value="{data?.product?._id}" />
-
-										<input
-											type="hidden"
-											name="linkedItems"
-											value="{JSON.stringify(selectedLinkiedProducts)}" />
-
-										<input type="hidden" name="qty" value="{1}" />
-
-										<input
-											type="hidden"
-											name="options"
-											value="{JSON.stringify(selectedOptions1)}" />
-
-										<input type="hidden" name="customizedImg" value="{customizedImg}" />
-
-										<PrimaryButton
-											type="submit"
-											loading="{loading}"
+						{#if data.product?.price > 0}
+							<div class="{$page.data.store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
+								{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
+									<a
+										href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
+											?.url?.search}"
+										class="block">
+										<WhiteButton
+											type="button"
 											loadingringsize="sm"
+											hideLoading
 											class="w-full text-sm">
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
-												class="h-5 w-5 shrink-0"
 												fill="none"
 												viewBox="0 0 24 24"
+												stroke-width="1.5"
 												stroke="currentColor"
-												stroke-width="2">
+												class="w-5 h-5">
 												<path
 													stroke-linecap="round"
 													stroke-linejoin="round"
-													d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
-												</path>
+													d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+												></path>
 											</svg>
 
-											<span>
-												{cartButtonText}
-											</span>
-										</PrimaryButton>
-									</form>
+											<span> Login </span>
+										</WhiteButton>
+									</a>
+								{:else if isExpired}
+									<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
+										Item Expired
+									</PrimaryButton>
+								{:else if data.product?.active && data.product?.hasStock}
+									{#if cartButtonText === 'Go to Cart'}
+										<a class="block" href="/cart" data-sveltekit-preload-data>
+											<PrimaryButton
+												type="button"
+												hideLoading
+												class="w-full text-sm"
+												blackBackground>
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													class="h-5 w-5 shrink-0"
+													fill="none"
+													viewBox="0 0 24 24"
+													stroke="currentColor"
+													stroke-width="2">
+													<path
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
+													</path>
+												</svg>
+
+												<span>
+													{cartButtonText}
+												</span>
+											</PrimaryButton>
+										</a>
+									{:else}
+										<form
+											action="/cart?/add"
+											method="POST"
+											use:enhance="{() => {
+												return async ({ result }) => {
+													result?.data?.qty < 0
+														? fireGTagEvent('remove_from_cart', result?.data)
+														: fireGTagEvent('add_to_cart', result?.data)
+													cartButtonText = 'Added To Cart'
+													bounceItemFromTop = true
+													setTimeout(() => {
+														bounceItemFromTop = false
+													}, 3000)
+													cartButtonText = 'Go to Cart'
+													if (customizedImg) {
+														goto(`/checkout/address`)
+													}
+													invalidateAll()
+													await applyAction(result)
+												}
+											}}">
+											<input type="hidden" name="pid" value="{data?.product?._id}" />
+											<input type="hidden" name="vid" value="{data?.product?._id}" />
+
+											<input
+												type="hidden"
+												name="linkedItems"
+												value="{JSON.stringify(selectedLinkiedProducts)}" />
+
+											<input type="hidden" name="qty" value="{1}" />
+
+											<input
+												type="hidden"
+												name="options"
+												value="{JSON.stringify(selectedOptions1)}" />
+
+											<input type="hidden" name="customizedImg" value="{customizedImg}" />
+
+											<PrimaryButton
+												type="submit"
+												loading="{loading}"
+												loadingringsize="sm"
+												class="w-full text-sm">
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													class="h-5 w-5 shrink-0"
+													fill="none"
+													viewBox="0 0 24 24"
+													stroke="currentColor"
+													stroke-width="2">
+													<path
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
+													</path>
+												</svg>
+
+												<span>
+													{cartButtonText}
+												</span>
+											</PrimaryButton>
+										</form>
+									{/if}
+								{:else}
+									<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
+										Item Unavailable
+									</PrimaryButton>
 								{/if}
-							{:else}
-								<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
-									Item Unavailable
-								</PrimaryButton>
-							{/if}
-						</div>
+							</div>
+						{/if}
 					</div>
 				{/if}
 
@@ -1574,131 +1548,137 @@ function handleMobileCanvas() {
 							</div>
 						{/if}
 
-						<div class="{$page.data.store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
-							{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
-								<a
-									href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
-										?.url?.search}"
-									class="block">
-									<WhiteButton
-										type="button"
-										loadingringsize="sm"
-										hideLoading
-										class="w-full text-sm">
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											fill="none"
-											viewBox="0 0 24 24"
-											stroke-width="1.5"
-											stroke="currentColor"
-											class="w-5 h-5">
-											<path
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-											></path>
-										</svg>
-
-										<span> Login </span>
-									</WhiteButton>
-								</a>
-							{:else if isExpired}
-								<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
-									Item Expired
-								</PrimaryButton>
-							{:else if data.product?.active && data.product?.hasStock}
-								{#if cartButtonText === 'Go to Cart'}
-									<a class="block" href="/cart" data-sveltekit-preload-data>
-										<PrimaryButton type="button" hideLoading class="w-full text-sm" blackBackground>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												class="h-5 w-5 shrink-0"
-												fill="none"
-												viewBox="0 0 24 24"
-												stroke="currentColor"
-												stroke-width="2">
-												<path
-													stroke-linecap="round"
-													stroke-linejoin="round"
-													d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
-												</path>
-											</svg>
-
-											<span>
-												{cartButtonText}
-											</span>
-										</PrimaryButton>
-									</a>
-								{:else}
-									<form
-										action="/cart?/add"
-										method="POST"
-										use:enhance="{() => {
-											return async ({ result }) => {
-												result?.data?.qty < 0
-													? fireGTagEvent('remove_from_cart', result?.data)
-													: fireGTagEvent('add_to_cart', result?.data)
-												cartButtonText = 'Added To Cart'
-												bounceItemFromTop = true
-												setTimeout(() => {
-													bounceItemFromTop = false
-												}, 3000)
-												cartButtonText = 'Go to Cart'
-												if (customizedImg) {
-													goto(`/checkout/address`)
-												}
-												invalidateAll()
-												await applyAction(result)
-											}
-										}}">
-										<input type="hidden" name="pid" value="{data?.product?._id}" />
-										<input type="hidden" name="vid" value="{data?.product?._id}" />
-
-										<input
-											type="hidden"
-											name="linkedItems"
-											value="{JSON.stringify(selectedLinkiedProducts)}" />
-
-										<input type="hidden" name="qty" value="{1}" />
-
-										<input
-											type="hidden"
-											name="options"
-											value="{JSON.stringify(selectedOptions1)}" />
-
-										<input type="hidden" name="customizedImg" value="{customizedImg}" />
-
-										<PrimaryButton
-											type="submit"
-											loading="{loading}"
+						{#if data.product?.price > 0}
+							<div class="{$page.data.store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
+								{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
+									<a
+										href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
+											?.url?.search}"
+										class="block">
+										<WhiteButton
+											type="button"
 											loadingringsize="sm"
+											hideLoading
 											class="w-full text-sm">
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
-												class="h-5 w-5 shrink-0"
 												fill="none"
 												viewBox="0 0 24 24"
+												stroke-width="1.5"
 												stroke="currentColor"
-												stroke-width="2">
+												class="w-5 h-5">
 												<path
 													stroke-linecap="round"
 													stroke-linejoin="round"
-													d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
-												</path>
+													d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+												></path>
 											</svg>
 
-											<span>
-												{cartButtonText}
-											</span>
-										</PrimaryButton>
-									</form>
+											<span> Login </span>
+										</WhiteButton>
+									</a>
+								{:else if isExpired}
+									<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
+										Item Expired
+									</PrimaryButton>
+								{:else if data.product?.active && data.product?.hasStock}
+									{#if cartButtonText === 'Go to Cart'}
+										<a class="block" href="/cart" data-sveltekit-preload-data>
+											<PrimaryButton
+												type="button"
+												hideLoading
+												class="w-full text-sm"
+												blackBackground>
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													class="h-5 w-5 shrink-0"
+													fill="none"
+													viewBox="0 0 24 24"
+													stroke="currentColor"
+													stroke-width="2">
+													<path
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
+													</path>
+												</svg>
+
+												<span>
+													{cartButtonText}
+												</span>
+											</PrimaryButton>
+										</a>
+									{:else}
+										<form
+											action="/cart?/add"
+											method="POST"
+											use:enhance="{() => {
+												return async ({ result }) => {
+													result?.data?.qty < 0
+														? fireGTagEvent('remove_from_cart', result?.data)
+														: fireGTagEvent('add_to_cart', result?.data)
+													cartButtonText = 'Added To Cart'
+													bounceItemFromTop = true
+													setTimeout(() => {
+														bounceItemFromTop = false
+													}, 3000)
+													cartButtonText = 'Go to Cart'
+													if (customizedImg) {
+														goto(`/checkout/address`)
+													}
+													invalidateAll()
+													await applyAction(result)
+												}
+											}}">
+											<input type="hidden" name="pid" value="{data?.product?._id}" />
+											<input type="hidden" name="vid" value="{data?.product?._id}" />
+
+											<input
+												type="hidden"
+												name="linkedItems"
+												value="{JSON.stringify(selectedLinkiedProducts)}" />
+
+											<input type="hidden" name="qty" value="{1}" />
+
+											<input
+												type="hidden"
+												name="options"
+												value="{JSON.stringify(selectedOptions1)}" />
+
+											<input type="hidden" name="customizedImg" value="{customizedImg}" />
+
+											<PrimaryButton
+												type="submit"
+												loading="{loading}"
+												loadingringsize="sm"
+												class="w-full text-sm">
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													class="h-5 w-5 shrink-0"
+													fill="none"
+													viewBox="0 0 24 24"
+													stroke="currentColor"
+													stroke-width="2">
+													<path
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
+													</path>
+												</svg>
+
+												<span>
+													{cartButtonText}
+												</span>
+											</PrimaryButton>
+										</form>
+									{/if}
+								{:else}
+									<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
+										Item Unavailable
+									</PrimaryButton>
 								{/if}
-							{:else}
-								<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
-									Item Unavailable
-								</PrimaryButton>
-							{/if}
-						</div>
+							</div>
+						{/if}
 					</div>
 				{/if}
 			</div>
@@ -1775,30 +1755,7 @@ function handleMobileCanvas() {
 			{/if}
 		</div>
 
-		<!-- Footer show hide toggle -->
-
-		<button
-			type="button"
-			class="md:hidden p-3 sm:px-10 w-full border-t border-b border-zinc-400 flex items-center justify-between gap-4 text-sm focus:outline-none"
-			on:click="{() => (showFooter = !showFooter)}">
-			<span>More about {$page.data.store?.websiteName || 'store'}</span>
-
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 20 20"
-				fill="currentColor"
-				class="w-5 h-5 transition duration-300
-				{showFooter ? 'transform rotate-180' : ''}">
-				<path
-					fill-rule="evenodd"
-					d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-					clip-rule="evenodd"></path>
-			</svg>
-		</button>
-
-		<div class="{showFooter ? 'block' : 'hidden'}">
-			<Footer me="{data.me}" />
-		</div>
+		<Footer me="{data.me}" />
 	</div>
 </div>
 

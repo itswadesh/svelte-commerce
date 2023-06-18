@@ -1,6 +1,6 @@
 <script lang="ts">
-import {ProductCard,DummyProductCard} from '$lib/components'
-import {ProductSkeleton} from '$lib/ui'
+import { ProductCard, DummyProductCard } from '$lib/components'
+import { ProductSkeleton } from '$lib/ui'
 
 export let data
 </script>
@@ -24,7 +24,7 @@ export let data
 	<div class="mb-5 sm:mb-10">
 		<div class="sticky top-14 sm:top-20 z-30 lg:static lg:z-0 mb-3 bg-white py-2">
 			<h2 class="font-bold capitalize sm:text-lg border-b-4 border-zinc-800 max-w-max">
-				Similar Products
+				Similar Items
 			</h2>
 		</div>
 
