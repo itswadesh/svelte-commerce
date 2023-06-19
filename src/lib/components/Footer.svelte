@@ -85,7 +85,7 @@ async function getPages() {
 						About {$page.data.store?.websiteName}
 					</h5>
 
-					<p class="text-zinc-500">
+					<p class="max-w-xs text-zinc-500">
 						{@html $page.data.store?.description}
 					</p>
 				</div>
@@ -550,13 +550,15 @@ async function getPages() {
 		<hr class="mb-4 w-full border-t sm:mb-8" />
 
 		<div
-			class="flex flex-col sm:flex-wrap items-center justify-center text-sm text-zinc-500 gap-5 md:justify-between">
-			<p class="text-center sm:text-left">
-				© {$page.data.store?.websiteName}
+			class="flex flex-col sm:flex-row items-center justify-center sm:justify-between text-sm text-zinc-500 gap-5 md:justify-between">
+			<p class="text-center sm:text-left flex flex-col sm:flex-row gap-1">
+				<span>
+					© {$page.data.store?.websiteName}
+				</span>
 
-				<br />
-
-				Powered by <a href="https://litekart.in" class="hover:underline">Litekart</a>
+				<span>
+					Powered by <a href="https://litekart.in" class="hover:underline">Litekart</a>
+				</span>
 			</p>
 
 			<div class="flex items-center justify-center gap-4">

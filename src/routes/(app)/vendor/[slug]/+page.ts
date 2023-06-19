@@ -1,4 +1,4 @@
-import { VerndorService } from '$lib/services'
+import { VendorService } from '$lib/services'
 const isServer = import.meta.env.SSR
 
 export async function load({ params, parent, url }) {
@@ -7,14 +7,14 @@ export async function load({ params, parent, url }) {
 	const { store, sid, origin } = await parent()
 	return {
 		page,
-		vendor: VerndorService.fetchVendor({
+		vendor: VendorService.fetchVendor({
 			server: isServer,
 			sid,
 			slug: vendorSlug,
 			storeId: store?.id,
 			origin
 		}),
-		vendorsProduct: VerndorService.fetchProductsOfVendor({
+		vendorsProduct: VendorService.fetchProductsOfVendor({
 			slug: vendorSlug,
 			page: page,
 			server: isServer,

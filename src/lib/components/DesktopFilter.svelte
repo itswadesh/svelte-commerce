@@ -467,7 +467,7 @@ function handleToggleSubCategory2(c, cx) {
 		</div>
 	{/if}
 
-	{#if priceRange?.length > 0}
+	<!-- {#if priceRange?.length > 0}
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
@@ -478,7 +478,7 @@ function handleToggleSubCategory2(c, cx) {
 				selectedItems="{fl.price || []}"
 				on:go="{goCheckbox}" />
 		</div>
-	{/if}
+	{/if} -->
 
 	<!-- {#if facets?.all_aggs?.price?.all?.buckets?.length > 0}
 		<div class="my-3">

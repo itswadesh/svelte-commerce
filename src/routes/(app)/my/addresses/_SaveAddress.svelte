@@ -116,10 +116,7 @@ async function SaveAddress(address) {
 			<!-- Email -->
 
 			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">
-					Email
-					<span class="text-red-500">*</span>
-				</h6>
+				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">Email</h6>
 
 				<div class="mb-2 w-full max-w-md">
 					<Textbox type="email" placeholder="Enter Email" bind:value="{address.email}" />
@@ -172,13 +169,10 @@ async function SaveAddress(address) {
 			<!-- City -->
 
 			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">
-					City
-					<span class="text-red-500">*</span>
-				</h6>
+				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">City</h6>
 
 				<div class="mb-2 w-full max-w-md">
-					<Textbox placeholder="Enter City" bind:value="{address.city}" required />
+					<Textbox placeholder="Enter City" bind:value="{address.city}" />
 				</div>
 			</div>
 
