@@ -1,5 +1,5 @@
 import CategoriesHome from './CategoriesHome.svelte'
-import CategoriesMobile from './CategoriesMobile.svelte'
+import CategoriesMobile from './CategoriesMobile2.svelte'
 import CategoriesSlider from './CategoriesSlider.svelte'
 import Deals from './Deals.svelte'
 import Hero from './Hero.svelte'

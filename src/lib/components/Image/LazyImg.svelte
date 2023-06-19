@@ -66,4 +66,4 @@ onDestroy(() => {
 	data-src="{`${getCdnImageUrl(src, IMAGE_CDN_URL)}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(
 		':',
 		'-'
-	)},cm-pad_resize`}" />
+	)}`}" />
