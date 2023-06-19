@@ -12,7 +12,6 @@ import {
 import {
 	CollectionsHome,
 	DummyProductCard,
-	Footer,
 	HeroBannersCollage6,
 	LazyImg,
 	LegalFooterInformation,
@@ -321,8 +320,6 @@ let seoProps = {
 		<LegalFooterInformation />
 
 		<!-- <ProductTab /> -->
-
-		<Footer me="{data.me}" />
 	</div>
 
 	<!-- MOBILE FOOTER -->

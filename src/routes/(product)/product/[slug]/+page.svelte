@@ -42,9 +42,7 @@ import { browser } from '$app/environment'
 import { CartService, WishlistService } from '$lib/services'
 import { currency, toast } from '$lib/utils'
 import { DummyProductCard } from '$lib/components'
-import { fade } from 'svelte/transition'
 import { fireGTagEvent } from '$lib/utils/gTagB'
-import { Footer } from '$lib/components'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
@@ -571,15 +569,17 @@ function handleMobileCanvas() {
 
 				<!-- prices mobile -->
 
-				<div class="block sm:hidden mt-2">
-					{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
+				{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
+					<div class="block sm:hidden mt-2">
 						<a
 							href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page?.url
 								?.search}"
 							class="block mb-5 hover:underline max-w-max font-bold">
 							Login to view price
 						</a>
-					{:else}
+					</div>
+				{:else if data.product?.price > 0}
+					<div class="block sm:hidden mt-2">
 						<div class="mb-2 flex flex-wrap items-center gap-2">
 							<span class="whitespace-nowrap">
 								<b>{currency(data.product?.price, $page.data?.store?.currencySymbol)}</b>
@@ -599,8 +599,8 @@ function handleMobileCanvas() {
 						</div>
 
 						<p class="mb-2 text-sm font-semibold text-green-700">Inclusive of all taxes</p>
-					{/if}
-				</div>
+					</div>
+				{/if}
 
 				<!-- ratings -->
 
@@ -654,7 +654,7 @@ function handleMobileCanvas() {
 						</h6>
 
 						{#if data.product?.deliveryDetails}
-							<p class="text-sm">
+							<p class="text-sm bg-yellow-300 px-2 py-1 max-w-max">
 								{data.product?.deliveryDetails}
 							</p>
 						{:else if $page.data.store?.isIndianPincodes}
@@ -665,15 +665,17 @@ function handleMobileCanvas() {
 
 				<!-- prices desktop -->
 
-				<div class="hidden sm:block">
-					{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
+				{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
+					<div class="hidden sm:block">
 						<a
 							href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page?.url
 								?.search}"
 							class="block mb-5 hover:underline max-w-max font-bold">
 							Login to view price
 						</a>
-					{:else}
+					</div>
+				{:else if data.product?.price > 0}
+					<div class="hidden sm:block">
 						<div class="mb-2 flex flex-wrap items-center gap-4">
 							<span class="whitespace-nowrap text-xl sm:text-2xl">
 								<b>{currency(data.product?.price, $page.data?.store?.currencySymbol)}</b>
@@ -693,8 +695,8 @@ function handleMobileCanvas() {
 						</div>
 
 						<p class="mb-2 text-sm font-semibold text-green-700">Inclusive of all taxes</p>
-					{/if}
-				</div>
+					</div>
+				{/if}
 
 				<!-- New and Tags -->
 
@@ -1239,7 +1241,7 @@ function handleMobileCanvas() {
 						</h6>
 
 						{#if data.product?.deliveryDetails}
-							<p class="text-sm">
+							<p class="text-sm bg-yellow-300 px-2 py-1 max-w-max">
 								{data.product?.deliveryDetails}
 							</p>
 						{:else if $page.data.store?.isIndianPincodes}
@@ -1754,8 +1756,6 @@ function handleMobileCanvas() {
 				<ProductsGrid title="Recommended Products" products="{data.product?.relatedProducts}" />
 			{/if}
 		</div>
-
-		<Footer me="{data.me}" />
 	</div>
 </div>
 
