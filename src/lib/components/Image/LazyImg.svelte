@@ -28,15 +28,17 @@ import lazyload from 'vanilla-lazyload'
 
 export let alt = ''
 export let aspect_ratio = '3:4'
-export let height = 'auto'
+export let height = null
 export let src: string
-export let width = 'auto'
+export let width = null
+
+// console.log('height, width', height, width)
 
 let clazz: string
 export { clazz as class }
 
-const h = height === 'auto' ? 'auto' : +height * 2
-const w = width === 'auto' ? 'auto' : +width * 2
+const h = height === null ? 'auto' : +height * 2
+const w = width === null ? 'auto' : +width * 2
 
 let lazyloadInstance: any
 const IMAGE_CDN_URL = $page.data.store.IMAGE_CDN_URL
