@@ -40,6 +40,7 @@ import productVeg from '$lib/assets/product/veg.png'
 // console.log('$page', $page)
 
 export let product = {}
+// console.log('product', product)
 
 if (product?._source) {
 	product = product?._source
@@ -461,6 +462,14 @@ function hideitems() {
 						{/if}
 					</div>
 				</a>
+
+				{#if $page?.data?.store?.isMultiVendor && product?.vendor && product?.vendor?.slug && product?.vendor?.businessName}
+					<div class="mb-5 text-sm text-zinc-500">
+						By <a href="/vendor/{product?.vendor?.slug}" class="underline hover:text-zinc-800">
+							{product?.vendor?.businessName}
+						</a>
+					</div>
+				{/if}
 			</div>
 			<!-- {/if} -->
 
