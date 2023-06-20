@@ -5,7 +5,6 @@
 	border-radius: 4px;
 	color: #424242;
 	font-size: 30px;
-	font-family: arial;
 	background-image: linear-gradient(#424242, #424242);
 	background-position: 50% 50%;
 	background-repeat: no-repeat;
@@ -24,7 +23,6 @@
 	border-radius: 4px;
 	color: #ffffff;
 	font-size: 30px;
-	font-family: arial;
 	background-image: linear-gradient(#ffffff, #ffffff);
 	background-position: 50% 50%;
 	background-repeat: no-repeat;
@@ -54,9 +52,8 @@ export { clazz as class }
 <button
 	type="{type}"
 	title="{title}"
-	class="{clazz} focus:outline-none 
+	class="{clazz} focus:outline-none
 	{reverseColor ? 'bg-center-to-corner-reverse-color' : 'bg-center-to-corner'}"
-	on:click="{() => dispatch('click')}"
->
+	on:click="{() => dispatch('click')}">
 	<slot />
 </button>
