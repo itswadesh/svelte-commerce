@@ -41,7 +41,7 @@ import { applyAction, enhance } from '$app/forms'
 import { browser } from '$app/environment'
 import { CartService, WishlistService } from '$lib/services'
 import { currency, toast } from '$lib/utils'
-import { DummyProductCard } from '$lib/components'
+import { DummyProductCard, Footer } from '$lib/components'
 import { fireGTagEvent } from '$lib/utils/gTagB'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
@@ -159,6 +159,7 @@ let isExpired = false
 let isWishlisted = false
 let loading = false
 let loadingForWishlist = false
+let product_image_dimention = $page.data.store.product_image_dimention || '3x4'
 let productReviews = {}
 let recentlyViewed = []
 let screenWidth
@@ -448,9 +449,9 @@ function handleMobileCanvas() {
 }
 </script>
 
-<SEO {...seoProps} />
-
 <svelte:window bind:scrollY="{y}" />
+
+<SEO {...seoProps} />
 
 <svelte:head>
 	<title>{data.product?.name}</title>
@@ -492,11 +493,21 @@ function handleMobileCanvas() {
 								type="button"
 								class="cursor-zoom-in overflow-hidden rounded md:flex-shrink w-full h-auto flex items-center justify-center shrink-0"
 								on:click="{() => handleGallery(index)}">
-								<LazyImg
-									src="{img}"
-									alt="{data.product?.name}"
-									height="512"
-									class="object-contain object-top w-full h-auto first-line:text-xs" />
+								{#if product_image_dimention === '1x1'}
+									<LazyImg
+										src="{img}"
+										alt="{data.product?.name} catelog {index}"
+										height="512"
+										width="512"
+										aspect_ratio="1:1"
+										class="object-cover object-center w-full h-auto first-line:text-xs" />
+								{:else}
+									<LazyImg
+										src="{img}"
+										alt="{data.product?.name}"
+										height="512"
+										class="object-contain object-top w-full h-auto first-line:text-xs" />
+								{/if}
 							</button>
 						{/each}
 					{:else}
@@ -523,7 +534,7 @@ function handleMobileCanvas() {
 			</div>
 
 			<div class="col-span-1 lg:col-span-2 px-3 sm:px-10 lg:px-0">
-				<div class="flex items-center justify-between gap-2">
+				<div class="mb-5 flex items-center justify-between gap-2">
 					<!-- Brand -->
 
 					{#if data.product?.brand?.name}
@@ -560,10 +571,11 @@ function handleMobileCanvas() {
 					</div>
 				{/if}
 
-				{#if data?.product?.vendor && data?.product?.vendor?.slug && data?.product?.vendor?.businessName}
+				{#if $page?.data?.store?.isMultiVendor && data?.product?.vendor && data?.product?.vendor?.slug && data?.product?.vendor?.businessName}
 					<div class="mb-5 text-sm text-zinc-500">
 						By <a href="/vendor/{data?.product?.vendor?.slug}" class="underline hover:text-zinc-800"
-							>{data?.product?.vendor?.businessName}</a>
+							>{data?.product?.vendor?.businessName}
+						</a>
 					</div>
 				{/if}
 
@@ -1755,6 +1767,10 @@ function handleMobileCanvas() {
 
 				<ProductsGrid title="Recommended Products" products="{data.product?.relatedProducts}" />
 			{/if}
+
+			<div class="block md:hidden">
+				<Footer me="{data.me}" />
+			</div>
 		</div>
 	</div>
 </div>

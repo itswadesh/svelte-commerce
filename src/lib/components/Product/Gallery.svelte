@@ -8,6 +8,7 @@
 <script lang="ts">
 import { fade } from 'svelte/transition'
 import { onMount } from 'svelte'
+import { page } from '$app/stores'
 import { SplideSlide } from '@splidejs/svelte-splide'
 import LazyImg from '../Image/LazyImg.svelte'
 import type { Product } from '$lib/types'
@@ -16,6 +17,7 @@ export let showPhotosModal = false
 export let product: Product | any = {}
 export let selectedImgIndex = 0
 
+let product_image_dimention = $page.data.store.product_image_dimention || '3x4'
 let selectedimg: string
 
 $: if (product?.images) {
@@ -70,26 +72,42 @@ onMount(async () => {
 						// }
 						// }
 					}}">
-					{#each product?.images as img}
+					{#each product?.images as img, ix}
 						{#if img}
 							<SplideSlide>
-								<div class="items-center jusrify-center flex h-full w-full">
+								{#if product_image_dimention === '1x1'}
+									<LazyImg
+										src="{img}"
+										alt="{product?.name} catelog {ix}"
+										height="512"
+										width="512"
+										aspect_ratio="1:1"
+										class="object-cover object-center w-full h-auto first-line:text-xs" />
+								{:else}
 									<LazyImg
 										src="{img}"
 										alt=""
 										class="block h-full w-full object-contain object-center" />
-								</div>
+								{/if}
 							</SplideSlide>
 						{/if}
 					{/each}
 				</svelte:component>
 			{:else if product?.images?.length === 1}
-				<div data-sveltekit-preload-data class="max-h-screen w-full">
+				{#if product_image_dimention === '1x1'}
+					<LazyImg
+						src="{product?.images && product?.images[0]}"
+						alt="{product?.name} catelog 1"
+						height="512"
+						width="512"
+						aspect_ratio="1:1"
+						class="object-cover object-center w-full h-auto first-line:text-xs" />
+				{:else}
 					<LazyImg
 						src="{product?.images && product?.images[0]}"
 						alt=""
 						class="block h-full object-contain" />
-				</div>
+				{/if}
 			{:else}
 				<div
 					class="flex max-h-screen w-full items-center justify-center text-center text-sm text-white">
@@ -106,7 +124,11 @@ onMount(async () => {
 				<div
 					class="flex h-full w-full flex-1 shrink-0 items-center justify-center overflow-hidden px-5 sm:px-10"
 					in:fade="{{ duration: 1000 }}">
-					<img src="{selectedimg}" alt="" class="h-full w-full object-contain object-center" />
+					<img
+						src="{selectedimg}"
+						alt="{product?.name} catelog"
+						class="object-center w-full h-full first-line:text-xs
+						{product_image_dimention === '1x1' ? 'object-cover' : 'object-contain'}" />
 				</div>
 			{/if}
 
@@ -120,7 +142,7 @@ onMount(async () => {
 
 					<div
 						class="grid grid-cols-3 gap-2 overflow-y-auto px-5 overflow-x-hidden scrollbar-thin scrollbar-thumb-slate-300 lg:max-h-[70vh] lg:grid-cols-2">
-						{#each product?.images as img}
+						{#each product?.images as img, ix}
 							{#if img}
 								<button
 									type="button"
@@ -128,9 +150,14 @@ onMount(async () => {
 									on:click="{() => (selectedimg = img)}">
 									<LazyImg
 										src="{img}"
-										alt=""
-										height="240"
-										class="h-40 w-40 rounded object-contain object-center" />
+										alt="{product?.name} catelog {ix}"
+										height="512"
+										width="512"
+										aspect_ratio="1:1"
+										class="object-center w-full h-auto first-line:text-xs{product_image_dimention ===
+										'1x1'
+											? 'object-cover'
+											: 'object-contain'}" />
 
 									<div
 										class="absolute inset-0 z-10 h-full w-full bg-white
