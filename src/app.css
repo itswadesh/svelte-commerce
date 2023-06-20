@@ -6,7 +6,7 @@
 
 @layer base {
 	html {
-		font-family: DM Sans, system-ui, sans-serif;
+		font-family: 'Poppins', sans-serif;
 	}
 }
 
@@ -19,6 +19,7 @@
 	}
 
 	@keyframes shake {
+
 		10%,
 		90% {
 			transform: translate3d(-1px, 0, 0);
