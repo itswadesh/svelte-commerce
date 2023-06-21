@@ -1,7 +1,8 @@
 <script>
 import { date } from '$lib/utils'
-import { page } from '$app/stores'
 import { LazyImg } from '$lib/components'
+import { page } from '$app/stores'
+import { Skeleton } from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'
 
@@ -81,61 +82,75 @@ let seoProps = {
 				</div>
 			</div>
 
-			{#if data.latestBlogs?.count > 0}
+			{#await data?.streamed.latestBlogs}
 				<div class="col-span-1 lg:col-span-2">
 					<h3 class="mb-1 text-3xl font-bold underline sm:mb-6">Latest Blogs</h3>
 
 					<ul class="flex flex-col divide-y">
-						{#each data.latestBlogs?.data as blog, index}
-							<li>
-								<a
-									href="/blogs/{blog._id}"
-									aria-label="Click to visit blog details page"
-									data-sveltekit-preload-data
-									class="group flex items-start gap-4 py-4">
-									<div class="h-16 w-24 overflow-hidden rounded border">
-										{#if blog.img}
-											<LazyImg
-												src="{blog.img}"
-												height="64"
-												alt=""
-												class="h-16 w-full object-cover object-center" />
-										{:else}
-											<img
-												src="{$page.data.store?.logo}"
-												alt=""
-												class="h-16 w-24 object-contain object-center p-2" />
-										{/if}
-									</div>
-
-									<div class="flex flex-1 flex-col gap-1 text-xs text-zinc-400">
-										<h6 class="text-base font-semibold text-zinc-800 group-hover:underline">
-											{blog.title}
-										</h6>
-
-										{#if blog.tags?.length}
-											<ul class="flex flex-wrap items-center gap-1">
-												{#each blog?.tags as tag}
-													{#if tag.name && tag.name !== 'SCHOOL BOARDS'}
-														<li
-															class="max-w-max rounded bg-zinc-200 py-0.5 px-2 text-center text-xs font-semibold uppercase">
-															#{tag.name}
-														</li>
-													{/if}
-												{/each}
-											</ul>
-										{/if}
-
-										<p>
-											{date(blog.createdAt)}
-										</p>
-									</div>
-								</a>
+						{#each { length: 5 } as _}
+							<li class="py-4">
+								<Skeleton small />
 							</li>
 						{/each}
 					</ul>
 				</div>
-			{/if}
+			{:then latestBlogs}
+				{#if latestBlogs?.count > 0}
+					<div class="col-span-1 lg:col-span-2">
+						<h3 class="mb-1 text-3xl font-bold underline sm:mb-6">Latest Blogs</h3>
+
+						<ul class="flex flex-col divide-y">
+							{#each latestBlogs?.data as blog, index}
+								<li>
+									<a
+										href="/blogs/{blog.slug}"
+										aria-label="Click to visit blog details page"
+										data-sveltekit-preload-data
+										class="group flex items-start gap-4 py-4">
+										<div class="h-16 w-24 overflow-hidden rounded border">
+											{#if blog.img}
+												<LazyImg
+													src="{blog.img}"
+													height="64"
+													alt=""
+													class="h-16 w-full object-cover object-center" />
+											{:else}
+												<img
+													src="{$page.data.store?.logo}"
+													alt=""
+													class="h-16 w-24 object-contain object-center p-2" />
+											{/if}
+										</div>
+
+										<div class="flex flex-1 flex-col gap-1 text-xs text-zinc-400">
+											<h6 class="text-base font-semibold text-zinc-800 group-hover:underline">
+												{blog.title}
+											</h6>
+
+											{#if blog.tags?.length}
+												<ul class="flex flex-wrap items-center gap-1">
+													{#each blog?.tags as tag}
+														{#if tag.name && tag.name !== 'SCHOOL BOARDS'}
+															<li
+																class="max-w-max rounded bg-zinc-200 py-0.5 px-2 text-center text-xs font-semibold uppercase">
+																#{tag.name}
+															</li>
+														{/if}
+													{/each}
+												</ul>
+											{/if}
+
+											<p>
+												{date(blog.createdAt)}
+											</p>
+										</div>
+									</a>
+								</li>
+							{/each}
+						</ul>
+					</div>
+				{/if}
+			{/await}
 		</div>
 	</section>
 {/if}
