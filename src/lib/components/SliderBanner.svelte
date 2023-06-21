@@ -189,23 +189,23 @@ onMount(async () => {
 						<!-- Business address-->
 
 						{#if data.address?.address || data.address?.landmark || data.address?.city || data.address?.country || data.address?.zip}
-							<div class="flex items-start gap-1 text-sm text-gray-100">
+							<div class="flex items-start gap-2 text-sm text-gray-100">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
-									class="h-5 w-5 flex-shrink-0"
 									fill="none"
 									viewBox="0 0 24 24"
+									stroke-width="1.5"
 									stroke="currentColor"
-									stroke-width="2">
+									class="w-5 h-5">
 									<path
 										stroke-linecap="round"
 										stroke-linejoin="round"
-										d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+										d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"></path>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
 									></path>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
 								</svg>
 
 								<p class="flex-1">
@@ -236,19 +236,19 @@ onMount(async () => {
 
 						<!-- Business phone-->
 
-						{#if data.phone}
-							<div class="flex items-start gap-1 text-sm text-gray-100">
+						<!-- {#if data.phone}
+							<div class="flex items-start gap-2 text-sm text-gray-100">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
-									class="h-5 w-5 flex-shrink-0"
 									fill="none"
 									viewBox="0 0 24 24"
+									stroke-width="1.5"
 									stroke="currentColor"
-									stroke-width="2">
+									class="w-5 h-5">
 									<path
 										stroke-linecap="round"
 										stroke-linejoin="round"
-										d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+										d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"
 									></path>
 								</svg>
 
@@ -266,7 +266,31 @@ onMount(async () => {
 									{/if}
 								</p>
 							</div>
-						{/if}
+						{/if} -->
+
+						<!-- Business email-->
+
+						<!-- {#if data.email}
+							<div class="flex items-start gap-2 text-sm text-gray-100">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke-width="1.5"
+									stroke="currentColor"
+									class="w-5 h-5">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
+									></path>
+								</svg>
+
+								<p class="flex-1">
+									{data.email}
+								</p>
+							</div>
+						{/if} -->
 
 						<div class="flex flex-col gap-2">
 							<RatingStarDisplayBig
@@ -346,7 +370,10 @@ onMount(async () => {
 	</div>
 </div>
 
-<Gallery bind:showPhotosModal="{showPhotosModal}" images="{data.banners}" title="{data?.businessName}" />
+<Gallery
+	bind:showPhotosModal="{showPhotosModal}"
+	images="{data.banners}"
+	title="{data?.businessName}" />
 
 <!-- {#if showPhotosModal}
 	<div
