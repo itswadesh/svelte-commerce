@@ -21,7 +21,6 @@ let currentImageIndex = 0
 
 onMount(async () => {
 	const SplideModule = await import('$lib/components/SplideJs.svelte')
-
 	Splide = SplideModule.default
 })
 </script>

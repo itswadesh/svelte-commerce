@@ -29,10 +29,12 @@ import ProductNav from './ProductNav.svelte'
 import ProductsGrid from './Product/ProductsGrid.svelte'
 import ProductTab from './Product/ProductTab.svelte'
 import RatingsAndReviews from './Product/RatingsAndReviews.svelte'
+import RatingStarDisplayBig from './RatingStarDisplayBig.svelte'
 import ReloadPrompt from './ReloadPrompt.svelte'
 import ReviewGallery from './Product/ReviewGallery.svelte'
 import SimilarProductsFromCategorySlug from './Product/SimilarProductsFromCategorySlug.svelte'
 import SingleImageUpload from './SingleImageUpload.svelte'
+import SliderBanner from './SliderBanner.svelte'
 import SocialSharingButtons from './SocialSharingButtons.svelte'
 import SplideJs from './SplideJs.svelte'
 import Stats from './Stats.svelte'
@@ -116,11 +118,13 @@ export {
 	ProductsGrid,
 	ProductTab,
 	RatingsAndReviews,
+	RatingStarDisplayBig,
 	ReloadPrompt,
 	ReviewGallery,
 	ShopYourStone,
 	SimilarProductsFromCategorySlug,
 	SingleImageUpload,
+	SliderBanner,
 	SocialSharingButtons,
 	SplideJs,
 	Stats,
