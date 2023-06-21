@@ -1778,7 +1778,8 @@ function handleMobileCanvas() {
 <Gallery
 	bind:selectedImgIndex="{selectedImgIndex}"
 	bind:showPhotosModal="{showPhotosModal}"
-	product="{data.product}" />
+	images="{data.product?.images}"
+	title="{data.product?.businessName}" />
 
 {#if bounceItemFromTop}
 	<AnimatedCartItem img="{customizedImg || data.product?.img}" />
