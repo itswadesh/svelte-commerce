@@ -40,7 +40,7 @@
 import { applyAction, enhance } from '$app/forms'
 import { browser } from '$app/environment'
 import { CartService, WishlistService } from '$lib/services'
-import { currency, toast } from '$lib/utils'
+import { currency, getIdFromYoutubeVideo, toast } from '$lib/utils'
 import { DummyProductCard, Footer } from '$lib/components'
 import { fireGTagEvent } from '$lib/utils/gTagB'
 import { goto, invalidateAll } from '$app/navigation'
@@ -1317,9 +1317,11 @@ function handleMobileCanvas() {
 
 				<!-- Promo video -->
 
-				{#if $page.data.store?.storePromoVideo?.active?.val}
+				{#if $page.data.store?.storePromoVideo?.active?.val && getIdFromYoutubeVideo($page.data.store?.storePromoVideo?.url?.val)}
 					<iframe
-						src="https://www.youtube.com/embed/{$page.data.store?.storePromoVideo?.url?.val}"
+						src="https://www.youtube.com/embed/{getIdFromYoutubeVideo(
+							$page.data.store?.storePromoVideo?.url?.val
+						)}"
 						title="YouTube video player"
 						frameborder="0"
 						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
