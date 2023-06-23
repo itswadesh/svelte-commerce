@@ -30,9 +30,9 @@ function submit() {
 	showSuggestionOptions = false
 
 	if (autocomplete?.length && autocomplete[0].slug) {
-		goto(`/${autocomplete[0].slug}?zips=${pinCode}`)
+		goto(`/${autocomplete[0].slug}?zip=${pinCode}`)
 	} else {
-		goto(`/search?q=${q}&zips=${pinCode}`)
+		goto(`/search?q=${q}&zip=${pinCode}`)
 	}
 }
 
