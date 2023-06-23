@@ -24,6 +24,7 @@ export let selected
 export let showFilter = false
 export let showSort = false
 
+let pinCode = null
 let selectedCategory
 let selectedCategory2
 let showSubCategory = []
@@ -53,6 +54,12 @@ onMount(async () => {
 
 	await getMegamenu()
 	await getSelected()
+
+	const pin = localStorage.getItem('pinCode')
+	// console.log('pin', pin)
+	if (pin && pin.length === 6) {
+		pinCode = pin
+	}
 })
 
 function getFacetsWithProducts() {
@@ -766,7 +773,7 @@ $: {
 													class="flex w-full items-center justify-between gap-2
 													{selectedCategory === m.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
 													<a
-														href="/{m.slug}"
+														href="/{m.slug}?zips={pinCode || ''}"
 														aria-label="Click to visit category related products page"
 														class="flex-1">
 														{m.name}
@@ -791,7 +798,7 @@ $: {
 												</div>
 											{:else}
 												<a
-													href="/{m.slug}"
+													href="/{m.slug}?zips={pinCode || ''}"
 													aria-label="Click to visit category related products page"
 													class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 													{m.name}
@@ -809,7 +816,7 @@ $: {
 																	class="flex w-full items-center justify-between gap-2
 																	{selectedCategory2 === c.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
 																	<a
-																		href="/{c.slug}"
+																		href="/{c.slug}?zips={pinCode || ''}"
 																		aria-label="Click to visit category related products page"
 																		class="flex-1">
 																		{c.name}
@@ -834,7 +841,7 @@ $: {
 																</div>
 															{:else}
 																<a
-																	href="/{c.slug}"
+																	href="/{c.slug}?zips={pinCode || ''}"
 																	aria-label="Click to visit category related products page"
 																	class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 																	{c.name}
@@ -847,7 +854,7 @@ $: {
 																<ul class="ml-4">
 																	{#each c.children as cc}
 																		<a
-																			href="/{cc.slug}"
+																			href="/{cc.slug}?zips={pinCode || ''}"
 																			aria-label="Click to visit category related products page"
 																			class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 																			{cc.name}

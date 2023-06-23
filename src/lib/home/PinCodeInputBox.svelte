@@ -17,7 +17,7 @@ let pinCode = null
 onMount(() => {
 	const pin = localStorage.getItem('pinCode')
 	// console.log('pin', pin)
-	if (pin) {
+	if (pin && pin.length === 6) {
 		alreadyHavePinCode = true
 		disabled = true
 		pinCode = pin

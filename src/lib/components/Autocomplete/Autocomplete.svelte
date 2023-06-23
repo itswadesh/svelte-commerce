@@ -10,6 +10,7 @@ export let placeholder = 'Search products...'
 let autocomplete: { img: string; name: string }[] = []
 let categories: any = []
 let err
+let pinCode = null
 let product
 let q = ''
 let query = ''
@@ -17,13 +18,21 @@ let searchInput: any
 let showSuggestionOptions = false
 let typingTimer: any
 
+onMount(() => {
+	const pin = localStorage.getItem('pinCode')
+	// console.log('pin', pin)
+	if (pin && pin.length === 6) {
+		pinCode = pin
+	}
+})
+
 function submit() {
 	showSuggestionOptions = false
 
 	if (autocomplete?.length && autocomplete[0].slug) {
-		goto(`/${autocomplete[0].slug}`)
+		goto(`/${autocomplete[0].slug}?zips=${pinCode}`)
 	} else {
-		goto(`/search?q=${q}`)
+		goto(`/search?q=${q}&zips=${pinCode}`)
 	}
 }
 
