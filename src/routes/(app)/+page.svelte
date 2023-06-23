@@ -7,7 +7,8 @@ import {
 	CategoriesSlider,
 	Deals,
 	Hero,
-	HeroBanners
+	HeroBanners,
+	LocationInputBox
 } from '$lib/home'
 import {
 	CollectionsHome,
@@ -104,6 +105,10 @@ let seoProps = {
 <SEO {...seoProps} />
 
 <div class="bg-opacity-25 bg-center bg-repeat min-h-screen">
+	{#if $page.data.store?.isHyperlocal}
+		<LocationInputBox />
+	{/if}
+
 	<div class="mb-14 lg:mb-0">
 		<!-- Categories slider mobile -->
 
