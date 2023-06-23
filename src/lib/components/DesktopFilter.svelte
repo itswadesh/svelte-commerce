@@ -6,7 +6,9 @@ import { createEventDispatcher, onMount } from 'svelte'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { RadioEs, CheckboxEs } from '$lib/ui'
+import Cookie from 'cookie-universal'
 
+const cookies = Cookie()
 const dispatch = createEventDispatcher()
 
 export let appliedFilters = {}
@@ -20,7 +22,7 @@ export let facets = {}
 let clazz
 export { clazz as class }
 
-let pinCode = null
+let pincode = null
 let selectedCategory
 let selectedCategory2
 let showSubCategory = []
@@ -71,10 +73,12 @@ onMount(async () => {
 
 	await getMegamenu()
 
-	const pin = localStorage.getItem('pinCode')
-	// console.log('pin', pin)
-	if (pin && pin.length === 6) {
-		pinCode = pin
+	const pin = cookies.get('zip')
+
+	// console.log('pin', pin, pin.toString()?.length)
+
+	if (pin && pin.toString()?.length === 6) {
+		pincode = pin
 	}
 })
 
@@ -232,7 +236,7 @@ function handleToggleSubCategory2(c, cx) {
 								class="flex w-full items-center justify-between gap-2
 								{selectedCategory === m.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
 								<a
-									href="/{m.slug}?zip={pinCode || ''}"
+									href="/{m.slug}?zip={pincode || ''}"
 									aria-label="Click to visit category related products"
 									class="flex-1">
 									{m.name}
@@ -257,7 +261,7 @@ function handleToggleSubCategory2(c, cx) {
 							</div>
 						{:else}
 							<a
-								href="/{m.slug}?zip={pinCode || ''}"
+								href="/{m.slug}?zip={pincode || ''}"
 								aria-label="Click to visit category related products"
 								class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 								{m.name}
@@ -275,7 +279,7 @@ function handleToggleSubCategory2(c, cx) {
 												class="flex w-full items-center justify-between gap-2
 												{selectedCategory2 === c.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
 												<a
-													href="/{c.slug}?zip={pinCode || ''}"
+													href="/{c.slug}?zip={pincode || ''}"
 													aria-label="Click to visit category related products page"
 													class="flex-1">
 													{c.name}
@@ -300,7 +304,7 @@ function handleToggleSubCategory2(c, cx) {
 											</div>
 										{:else}
 											<a
-												href="/{c.slug}?zip={pinCode || ''}"
+												href="/{c.slug}?zip={pincode || ''}"
 												aria-label="Click to visit category related products page"
 												class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 												{c.name}
@@ -313,7 +317,7 @@ function handleToggleSubCategory2(c, cx) {
 											<ul class="ml-4">
 												{#each c.children as cc}
 													<a
-														href="/{cc.slug}?zip={pinCode || ''}"
+														href="/{cc.slug}?zip={pincode || ''}"
 														aria-label="Click to visit category related products page"
 														class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 														{cc.name}

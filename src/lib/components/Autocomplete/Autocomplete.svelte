@@ -4,13 +4,16 @@ import { AutocompleteService, CategoryService } from '$lib/services'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import Cookie from 'cookie-universal'
+
+const cookies = Cookie()
 
 export let placeholder = 'Search products...'
 
 let autocomplete: { img: string; name: string }[] = []
 let categories: any = []
 let err
-let pinCode = null
+let pincode = null
 let product
 let q = ''
 let query = ''
@@ -19,10 +22,12 @@ let showSuggestionOptions = false
 let typingTimer: any
 
 onMount(() => {
-	const pin = localStorage.getItem('pinCode')
-	// console.log('pin', pin)
-	if (pin && pin.length === 6) {
-		pinCode = pin
+	const pin = cookies.get('zip')
+
+	// console.log('pin', pin, pin.toString()?.length)
+
+	if (pin && pin.toString()?.length === 6) {
+		pincode = pin
 	}
 })
 
@@ -30,9 +35,9 @@ function submit() {
 	showSuggestionOptions = false
 
 	if (autocomplete?.length && autocomplete[0].slug) {
-		goto(`/${autocomplete[0].slug}?zip=${pinCode}`)
+		goto(`/${autocomplete[0].slug}?zip=${pincode}`)
 	} else {
-		goto(`/search?q=${q}&zip=${pinCode}`)
+		goto(`/search?q=${q}&zip=${pincode}`)
 	}
 }
 

@@ -1,57 +1,80 @@
 <script>
 import { browser } from '$app/environment'
 import { Error } from '$lib/components'
+import { fade } from 'svelte/transition'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
+import Cookie from 'cookie-universal'
+
+const cookies = Cookie()
 
 let alreadyHavePinCode = false
 let disabled = false
 let err = null
 let loading = false
 let locationPinCodesList = [
-	{ area: 'Semiliguda', pinCode: '764036' },
-	{ area: 'Sunabeda', pinCode: '763002' }
+	{ area: 'Semiliguda', pincode: 764036 },
+	{ area: 'Sunabeda', pincode: 763002 }
 ]
-let pinCode = null
+let pincode = null
+let showPinCodeEntryModal = true
 
 onMount(() => {
-	const pin = localStorage.getItem('pinCode')
-	// console.log('pin', pin)
-	if (pin && pin.length === 6) {
+	const pin = cookies.get('zip')
+
+	// console.log('pin', pin, pin.toString()?.length)
+
+	if (pin && pin.toString()?.length === 6) {
 		alreadyHavePinCode = true
 		disabled = true
-		pinCode = pin
+		pincode = pin
 	}
 })
 
 function changePinCode() {
 	alreadyHavePinCode = false
 	disabled = false
-	pinCode = null
+	pincode = null
 }
 
-function handlePinCode() {
+function handlePinCode(pincodeNew) {
 	err = null
 
-	if (pinCode && pinCode.toString().length !== 6) {
+	if (pincodeNew && pincodeNew.toString().length !== 6) {
 		err = 'Wrong Pin Code'
 		return
 	} else {
 		disabled = true
 
 		if (browser) {
-			localStorage.setItem('pinCode', JSON.stringify(pinCode))
+			cookies.set('zip', JSON.stringify(pincodeNew), { path: '/' })
 		}
 
-		goto(`/search?zip=${pinCode}`)
+		goto(`/search?zip=${pincodeNew}`)
 	}
 }
 </script>
 
-{#if !alreadyHavePinCode}
+{#if !alreadyHavePinCode && showPinCodeEntryModal}
 	<div
+		transition:fade="{{ duration: 300 }}"
 		class="fixed z-[100] inset-0 h-screen w-screen flex items-center justify-center p-5 sm:p-10 bg-black bg-opacity-50">
-		<div class="bg-white shadow rounded-3xl">
+		<div class="relative bg-white shadow rounded-3xl">
+			<button
+				type="button"
+				class="absolute top-0 right-0 z-10 -m-8 text-white transform hover:scale-110 transition duration-300 focus:outline-noen"
+				on:click="{() => (showPinCodeEntryModal = false)}">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke-width="2"
+					stroke="currentColor"
+					class="w-8 h-8">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+				</svg>
+			</button>
+
 			<h2 class="p-5 font-semibold">Enter Your Pin Code</h2>
 
 			<hr />
@@ -60,14 +83,14 @@ function handlePinCode() {
 				<Error bind:err="{err}" />
 
 				<form
-					on:submit|preventDefault="{handlePinCode}"
+					on:submit|preventDefault="{() => handlePinCode(pincode)}"
 					class="relative w-full sm:w-96 overflow-hidden rounded border
         			{disabled ? 'border-zinc-200' : ''}
-					{pinCode && pinCode.toString().length === 6 ? 'border-primary-500' : 'border-zinc-200'}">
+					{pincode && pincode.toString().length === 6 ? 'border-primary-500' : 'border-zinc-200'}">
 					<input
 						type="number"
 						name="zip"
-						bind:value="{pinCode}"
+						bind:value="{pincode}"
 						maxlength="6"
 						placeholder="Enter your 6 digit pin code..."
 						disabled="{disabled}"
@@ -78,7 +101,7 @@ function handlePinCode() {
 						<button
 							type="submit"
 							class="absolute inset-y-0 right-0 z-10 flex w-20 items-center justify-center text-right text-sm font-bold
-				        	{pinCode && pinCode.toString().length === 6 ? 'text-primary-500' : 'text-zinc-200'}">
+				        	{pincode && pincode.toString().length === 6 ? 'text-primary-500' : 'text-zinc-200'}">
 							{#if loading}
 								<div
 									class="absolute inset-0 flex cursor-not-allowed items-center justify-center bg-black bg-opacity-70">
@@ -146,11 +169,12 @@ function handlePinCode() {
 						<ul class="m-0 p-0 list-none flex flex-wrap gap-1">
 							{#each locationPinCodesList as lp}
 								<li>
-									<a
-										href="/search?zip={lp.pinCode}"
-										class="bg-zinc-200 rounded py-1 px-2 text-xs text-zinc-500 font-semibold hover:bg-zinc-300 hover:text-zinc-800 transition duration-300 focus:outline-none">
+									<button
+										type="button"
+										class="bg-zinc-200 rounded py-1 px-2 text-xs text-zinc-500 font-semibold hover:bg-zinc-300 hover:text-zinc-800 transition duration-300 focus:outline-none"
+										on:click="{() => handlePinCode(lp.pincode)}">
 										{lp.area}
-									</a>
+									</button>
 								</li>
 							{/each}
 						</ul>
