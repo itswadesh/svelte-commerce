@@ -47,12 +47,12 @@ onMount(async () => {
 			}}">
 			{#each products as p, px}
 				<SplideSlide>
-					{#if p.slug && p.img && p.price}
+					{#if p.slug && p.img && p.price && px + 1 != products?.length}
 						<a
 							href="/product/{p.slug}"
 							aria-label="Click to view the product details"
 							data-sveltekit-preload-data
-							class="flex flex-col w-48 shrink-0">
+							class="flex flex-col items-center w-48 shrink-0">
 							{#if p.new || p.tags?.length}
 								<div class="absolute top-1 left-1 flex flex-col gap-0.5">
 									{#if p.new}

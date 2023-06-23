@@ -8,9 +8,9 @@ export let err = null
 			{err?.body?.message}
 		{:else if err?.message}
 			{err.message}
-		{:else if err?.length}
+		{:else if err?.body?.message > 1 || err?.message > 1}
 			<ul class="flex flex-col gap-1 m-0 p-0 list-disc">
-				{#each err as e}
+				{#each err?.body?.message || err?.message as e}
 					<li>{e.message}</li>
 				{/each}
 			</ul>

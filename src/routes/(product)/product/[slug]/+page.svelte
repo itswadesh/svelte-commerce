@@ -1736,7 +1736,7 @@ function handleMobileCanvas() {
 
 			<!-- Recently viewed products -->
 
-			{#if recentlyViewed?.length}
+			{#if recentlyViewed?.length > 1}
 				<hr class="mb-5 w-full sm:mb-10" />
 
 				<RecentlyViewedProductsSlider title="Recently Viewed" products="{recentlyViewed}" />

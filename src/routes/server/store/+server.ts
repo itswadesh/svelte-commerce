@@ -36,6 +36,7 @@ export async function GET({ cookies, request, locals }) {
 			isDiscountCoupons: storeRes.storeOne.isDiscountCoupons,
 			isFnb: storeRes.storeOne.isFnb,
 			isGDPR: storeRes.storeOne.isGDPR,
+			isHyperlocal: storeRes.storeOne.isHyperlocal,
 			isIndianPincodes: storeRes.storeOne.isIndianPincodes,
 			isMultiVendor: storeRes.storeOne.isMultiVendor,
 			isProductReviewsAndRatings: storeRes.storeOne.isProductReviewsAndRatings,
