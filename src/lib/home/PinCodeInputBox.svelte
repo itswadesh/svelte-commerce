@@ -43,7 +43,7 @@ function handlePinCode() {
 			localStorage.setItem('pinCode', JSON.stringify(pinCode))
 		}
 
-		goto(`/search?zips=${pinCode}`)
+		goto(`/search?zip=${pinCode}`)
 	}
 }
 </script>
@@ -147,7 +147,7 @@ function handlePinCode() {
 							{#each locationPinCodesList as lp}
 								<li>
 									<a
-										href="/search?zips={lp.pinCode}"
+										href="/search?zip={lp.pinCode}"
 										class="bg-zinc-200 rounded py-1 px-2 text-xs text-zinc-500 font-semibold hover:bg-zinc-300 hover:text-zinc-800 transition duration-300 focus:outline-none">
 										{lp.area}
 									</a>
