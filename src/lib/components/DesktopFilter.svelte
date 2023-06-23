@@ -20,6 +20,7 @@ export let facets = {}
 let clazz
 export { clazz as class }
 
+let pinCode = null
 let selectedCategory
 let selectedCategory2
 let showSubCategory = []
@@ -69,6 +70,12 @@ onMount(async () => {
 	getFacetsWithProducts()
 
 	await getMegamenu()
+
+	const pin = localStorage.getItem('pinCode')
+	// console.log('pin', pin)
+	if (pin && pin.length === 6) {
+		pinCode = pin
+	}
 })
 
 function getFacetsWithProducts() {
@@ -225,7 +232,7 @@ function handleToggleSubCategory2(c, cx) {
 								class="flex w-full items-center justify-between gap-2
 								{selectedCategory === m.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
 								<a
-									href="/{m.slug}"
+									href="/{m.slug}?zips={pinCode || ''}"
 									aria-label="Click to visit category related products"
 									class="flex-1">
 									{m.name}
@@ -250,7 +257,7 @@ function handleToggleSubCategory2(c, cx) {
 							</div>
 						{:else}
 							<a
-								href="/{m.slug}"
+								href="/{m.slug}?zips={pinCode || ''}"
 								aria-label="Click to visit category related products"
 								class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 								{m.name}
@@ -268,7 +275,7 @@ function handleToggleSubCategory2(c, cx) {
 												class="flex w-full items-center justify-between gap-2
 												{selectedCategory2 === c.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
 												<a
-													href="/{c.slug}"
+													href="/{c.slug}?zips={pinCode || ''}"
 													aria-label="Click to visit category related products page"
 													class="flex-1">
 													{c.name}
@@ -293,7 +300,7 @@ function handleToggleSubCategory2(c, cx) {
 											</div>
 										{:else}
 											<a
-												href="/{c.slug}"
+												href="/{c.slug}?zips={pinCode || ''}"
 												aria-label="Click to visit category related products page"
 												class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 												{c.name}
@@ -306,7 +313,7 @@ function handleToggleSubCategory2(c, cx) {
 											<ul class="ml-4">
 												{#each c.children as cc}
 													<a
-														href="/{cc.slug}"
+														href="/{cc.slug}?zips={pinCode || ''}"
 														aria-label="Click to visit category related products page"
 														class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 														{cc.name}
