@@ -123,7 +123,7 @@ export const getStoreData = async ({
 			isSecureCatalogue: storeRes.storeOne.isSecureCatalogue,
 			isWishlist: storeRes.storeOne.isWishlist,
 			keywords: storeRes.storeOne.keywords,
-			loginUrl: storeRes.storeOne.otpLogin ? '/auth/otp-login' : '/auth/login',
+			loginUrl: '/auth/login',
 			logo: storeRes.storeOne.logo,
 			otpLogin: storeRes.storeOne.otpLogin || true,
 			phone: storeRes.storeOne.phone,
