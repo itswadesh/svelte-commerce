@@ -126,7 +126,7 @@ function handlePinCode(pincodeNew) {
 								</div>
 							{/if}
 
-							<span> Check </span>
+							<span> Search </span>
 						</button>
 					{:else}
 						<button
