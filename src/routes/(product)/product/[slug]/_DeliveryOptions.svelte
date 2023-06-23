@@ -2,33 +2,34 @@
 import { applyAction, enhance } from '$app/forms'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import { Skeleton } from '$lib/ui'
 import { toast } from '$lib/utils'
 import dayjs from 'dayjs'
 import productCod from '$lib/assets/product/cod.png'
 import productDelivery from '$lib/assets/product/delivery.png'
 import productOppositeArrows from '$lib/assets/product/opposite-arrows.png'
-import {Skeleton} from '$lib/ui'
 
 export let product, deliveryDetails
 
 // let deliveryDetails = $page.data.zip || {}
-let pincode = deliveryDetails?.pincode ?? null
-let loading = false
 let disabled = false
+let loading = false
+let pincode = deliveryDetails?.pincode ?? null
 
 if (pincode && pincode.toString().length === 6) {
 	disabled = true
 }
 
 function changePincode() {
-	pincode = null
-	disabled = false
 	deliveryDetails = null
+	disabled = false
+	pincode = null
 }
 
 // onMount(() => {
 // 	enableTextbox = !!deliveryDetails?.pincode
 // })
+
 // async function submit() {
 // 	try {
 // 		loading = true
