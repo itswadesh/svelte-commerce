@@ -62,7 +62,7 @@ function handlePinCode(pincodeNew) {
 		<div class="relative bg-white shadow rounded-3xl">
 			<button
 				type="button"
-				class="absolute top-0 right-0 z-10 -m-8 text-white transform hover:scale-110 transition duration-300 focus:outline-noen"
+				class="absolute top-0 right-0 z-10 -m-5 text-white transform hover:scale-110 transition duration-300 focus:outline-noen"
 				on:click="{() => (showPinCodeEntryModal = false)}">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
