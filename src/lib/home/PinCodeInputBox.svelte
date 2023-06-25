@@ -167,7 +167,7 @@ function handlePinCode(pincodeNew) {
 						<h3 class="text-sm text-zinc-500">Suggested Area</h3>
 
 						<ul class="m-0 p-0 list-none flex flex-wrap gap-1">
-							{#each locationPinCodesList as lp}
+							{#each locationPinCodesList as lp,ix}
 								<li>
 									<button
 										type="button"
