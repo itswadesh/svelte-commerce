@@ -2,12 +2,11 @@
 import { browser } from '$app/environment'
 import { Error } from '$lib/components'
 import { fade } from 'svelte/transition'
+import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import Cookie from 'cookie-universal'
 
 const cookies = Cookie()
-
-export let showModal = true
 
 let alreadyHavePinCode = false
 let disabled = false
@@ -18,17 +17,18 @@ let locationPinCodesList = [
 	{ area: 'Sunabeda', pincode: 763002 }
 ]
 let pincode = null
+let showPinCodeEntryModal = true
 
 onMount(() => {
-		const pin = cookies.get('zip')
-		
-		// console.log('pin', pin, pin.toString()?.length)
-		
-		if (pin && pin.toString()?.length === 6) {
-			alreadyHavePinCode = true
-			disabled = true
-			pincode = pin
-		}
+	const pin = cookies.get('zip')
+
+	// console.log('pin', pin, pin.toString()?.length)
+
+	if (pin && pin.toString()?.length === 6) {
+		alreadyHavePinCode = true
+		disabled = true
+		pincode = pin
+	}
 })
 
 function changePinCode() {
@@ -50,20 +50,20 @@ function handlePinCode(pincodeNew) {
 			cookies.set('zip', JSON.stringify(pincodeNew), { path: '/' })
 		}
 
-		showModal = false
+		goto(`/search?zip=${pincodeNew}`)
 	}
 }
 </script>
 
-{#if showModal}
+{#if !alreadyHavePinCode && showPinCodeEntryModal}
 	<div
 		transition:fade="{{ duration: 300 }}"
-		class="fixed z-[100] inset-0 h-screen w-screen flex items-center justify-center p-10 bg-black bg-opacity-50">
+		class="fixed z-[100] inset-0 h-screen w-screen flex items-center justify-center p-5 sm:p-10 bg-black bg-opacity-50">
 		<div class="relative bg-white shadow rounded-3xl">
 			<button
 				type="button"
-				class="absolute -top-6 -right-6 z-10 text-white transform hover:scale-110 transition duration-300 focus:outline-noen"
-				on:click="{() => (showModal = false)}">
+				class="absolute top-0 right-0 z-10 -m-5 text-white transform hover:scale-110 transition duration-300 focus:outline-noen"
+				on:click="{() => (showPinCodeEntryModal = false)}">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
