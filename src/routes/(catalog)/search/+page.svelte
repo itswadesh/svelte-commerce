@@ -446,7 +446,7 @@ function handleFilterTags() {
 
 				<ul
 					class="lg:mt-5 grid grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6">
-					{#each data.products.products as p, ix(p._id)}
+					{#each data.products.products as p, ix(p._id || p.id)}
 						<li>
 							<ProductCard product="{p}" />
 						</li>
