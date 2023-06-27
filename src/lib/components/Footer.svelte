@@ -26,13 +26,9 @@ import { browser } from '$app/environment'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { PageService } from '$lib/services'
-import { PinCodeInputBox } from '$lib/home'
 import appStore from '$lib/assets/app/app-store.svg'
 import googlePlay from '$lib/assets/app/google-play.png'
 import type { Category } from '$lib/types'
-import Cookie from 'cookie-universal'
-
-const cookies = Cookie()
 
 // console.log('$page', $page)
 
@@ -48,8 +44,6 @@ function getYear() {
 }
 
 let pages = []
-let pincode = null
-let showPinCodeEntryModal = false
 
 onMount(async () => {
 	const res1 = await getPages()
@@ -61,14 +55,6 @@ onMount(async () => {
 
 	if (browser) {
 		localStorage.setItem('megamenu', JSON.stringify(megamenu))
-	}
-
-	const pin = cookies.get('zip')
-
-	// console.log('pin', pin, pin.toString()?.length)
-
-	if (pin && pin.toString()?.length === 6) {
-		pincode = pin
 	}
 })
 
@@ -145,16 +131,6 @@ async function getPages() {
 							class="link-underline link-underline-gray whitespace-pre-wrap">
 							Track Your Order
 						</a>
-					</li>
-
-					<li class="flex max-w-max items-center">
-						<button
-							type="button"
-							aria-label="Click to visit this page"
-							class="link-underline link-underline-gray whitespace-pre-wrap focus:outline-none"
-							on:click="{() => (showPinCodeEntryModal = true)}">
-							Location {pincode || ''}
-						</button>
 					</li>
 
 					{#if $page.data.store?.isMultiVendor}
@@ -603,7 +579,3 @@ async function getPages() {
 		</div>
 	</div>
 </footer>
-
-{#if showPinCodeEntryModal}
-	<PinCodeInputBox on:close="{() => (showPinCodeEntryModal = false)}" />
-{/if}
