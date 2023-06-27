@@ -145,12 +145,13 @@ export const fetchProduct2 = async ({
 // Fetch products based on category
 
 export const fetchProductsOfCategory = async ({
-	origin,
-	storeId,
-	query,
 	categorySlug,
+	origin,
+	query,
 	server = false,
-	sid = null
+	sid = null,
+	storeId,
+	zip,
 }: any) => {
 	try {
 		let res: any = {}
@@ -162,15 +163,17 @@ export const fetchProductsOfCategory = async ({
 		let err = ''
 
 		if (isServer) {
-			res = await getBySid(`es/products?categories=${categorySlug}&store=${storeId}&${query}`, sid)
+			res = await getBySid(`es/products?categories=${categorySlug}&zip=${zip || ''}&store=${storeId}&${query}`, sid)
 		} else {
-			res = await getAPI(`es/products?categories=${categorySlug}&store=${storeId}&${query}`, origin)
+			res = await getAPI(`es/products?categories=${categorySlug}&zip=${zip || ''}&store=${storeId}&${query}`, origin)
 		}
+
 		products = res?.data?.map((p) => {
 			const p1 = { ...p._source }
 			p1.id = p._id
 			return p1
 		})
+
 		count = res?.count
 		facets = res?.facets
 		pageSize = res?.pageSize

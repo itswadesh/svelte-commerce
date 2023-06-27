@@ -24,10 +24,14 @@ import {
 	ShopYourStone,
 	TrendingProductsHome
 } from '$lib/components'
+import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import Cookie from 'cookie-universal'
 import dayjs from 'dayjs'
 import PickedBanners from '$lib/home/PickedBanners.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+
+const cookies = Cookie()
 
 let today = dayjs(new Date()).toISOString()
 
@@ -100,13 +104,27 @@ let seoProps = {
 	title: $page.data.store?.title,
 	twitterImage: { url: $page.data.store?.logo }
 }
+
+let showPinCodeEntryModal = false
+
+onMount(() => {
+	const pin = cookies.get('zip')
+
+	// console.log('pin', pin, pin.toString()?.length)
+
+	if (pin && pin.toString()?.length === 6) {
+		showPinCodeEntryModal = false
+	} else {
+		showPinCodeEntryModal = true
+	}
+})
 </script>
 
 <SEO {...seoProps} />
 
 <div class="bg-opacity-25 bg-center bg-repeat min-h-screen">
-	{#if $page.data.store?.isHyperlocal}
-		<PinCodeInputBox />
+	{#if $page.data.store?.isHyperlocal || showPinCodeEntryModal}
+		<PinCodeInputBox on:close="{() => (showPinCodeEntryModal = false)}" />
 	{/if}
 
 	<div class="mb-14 lg:mb-0">

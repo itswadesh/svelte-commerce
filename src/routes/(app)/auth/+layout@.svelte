@@ -11,7 +11,7 @@
 <script lang="ts">
 import { navigating, page } from '$app/stores'
 import { scale } from 'svelte/transition'
-import {PageTransitions} from '$lib/components'
+import { PageTransitions } from '$lib/components'
 import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 </script>
 
@@ -24,8 +24,7 @@ import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 				<PreloadingIndicator />
 			{/if}
 
-			<div
-				class="{$navigating ? 'h-screen' : 'h-full min-h-screen'} bg-primary-500">
+			<div class="{$navigating ? 'h-screen' : 'h-full min-h-screen'} bg-primary-500">
 				<div
 					in:scale="{{ duration: 150 }}"
 					class="frosted mx-auto flex h-full min-h-screen items-center justify-center overflow-y-auto p-5 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-400 sm:p-10 md:p-20">

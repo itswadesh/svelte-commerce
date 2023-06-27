@@ -777,7 +777,7 @@ $: {
 													class="flex w-full items-center justify-between gap-2
 													{selectedCategory === m.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
 													<a
-														href="/{m.slug}?zip={pincode || ''}"
+														href="/{m.slug}"
 														aria-label="Click to visit category related products page"
 														class="flex-1">
 														{m.name}
@@ -802,7 +802,7 @@ $: {
 												</div>
 											{:else}
 												<a
-													href="/{m.slug}?zip={pincode || ''}"
+													href="/{m.slug}"
 													aria-label="Click to visit category related products page"
 													class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 													{m.name}
@@ -820,7 +820,7 @@ $: {
 																	class="flex w-full items-center justify-between gap-2
 																	{selectedCategory2 === c.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
 																	<a
-																		href="/{c.slug}?zip={pincode || ''}"
+																		href="/{c.slug}"
 																		aria-label="Click to visit category related products page"
 																		class="flex-1">
 																		{c.name}
@@ -845,7 +845,7 @@ $: {
 																</div>
 															{:else}
 																<a
-																	href="/{c.slug}?zip={pincode || ''}"
+																	href="/{c.slug}"
 																	aria-label="Click to visit category related products page"
 																	class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 																	{c.name}
@@ -858,7 +858,7 @@ $: {
 																<ul class="ml-4">
 																	{#each c.children as cc}
 																		<a
-																			href="/{cc.slug}?zip={pincode || ''}"
+																			href="/{cc.slug}"
 																			aria-label="Click to visit category related products page"
 																			class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 																			{cc.name}

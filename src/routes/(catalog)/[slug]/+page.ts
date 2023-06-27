@@ -3,7 +3,7 @@ import { CategoryService, ProductService } from '$lib/services'
 export const prerender = false
 const isServer = import.meta.env.SSR
 
-export async function load({ url, params, parent }) {
+export async function load({ url, params, parent, cookies }) {
 	const { store, origin, sid } = await parent()
 	const categorySlug = params.slug
 	const currentPage = +url.searchParams.get('page') || 1
@@ -11,6 +11,7 @@ export async function load({ url, params, parent }) {
 	const query = url.searchParams
 	const searchData = url.searchParams.get('q')
 	const sort = url.searchParams.get('sort')
+	const zip = cookies.get('zip')
 
 	query.forEach(function (value, key) {
 		fl[key] = value
@@ -27,12 +28,13 @@ export async function load({ url, params, parent }) {
 		}),
 		products: ProductService.fetchProductsOfCategory({
 			categorySlug,
+			isCors: store?.isCors,
+			origin,
 			query: query.toString(),
 			server: isServer,
 			sid,
 			storeId: store?.id,
-			isCors: store?.isCors,
-			origin
+			zip,
 		}),
 		query: query.toString(),
 		searchData,
