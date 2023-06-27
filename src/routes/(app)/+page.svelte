@@ -105,7 +105,7 @@ let seoProps = {
 	twitterImage: { url: $page.data.store?.logo }
 }
 
-let showModal = false
+let showPinCodeEntryModal = false
 
 onMount(() => {
 	const pin = cookies.get('zip')
@@ -113,9 +113,9 @@ onMount(() => {
 	// console.log('pin', pin, pin.toString()?.length)
 
 	if (pin && pin.toString()?.length === 6) {
-		showModal = false
+		showPinCodeEntryModal = false
 	} else {
-		showModal = true
+		showPinCodeEntryModal = true
 	}
 })
 </script>
@@ -123,8 +123,8 @@ onMount(() => {
 <SEO {...seoProps} />
 
 <div class="bg-opacity-25 bg-center bg-repeat min-h-screen">
-	{#if $page.data.store?.isHyperlocal}
-		<PinCodeInputBox bind:showModal="{showModal}" />
+	{#if $page.data.store?.isHyperlocal || showPinCodeEntryModal}
+		<PinCodeInputBox on:close="{() => (showPinCodeEntryModal = false)}" />
 	{/if}
 
 	<div class="mb-14 lg:mb-0">

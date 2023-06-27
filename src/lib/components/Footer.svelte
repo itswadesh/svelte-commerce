@@ -30,6 +30,9 @@ import { PinCodeInputBox } from '$lib/home'
 import appStore from '$lib/assets/app/app-store.svg'
 import googlePlay from '$lib/assets/app/google-play.png'
 import type { Category } from '$lib/types'
+import Cookie from 'cookie-universal'
+
+const cookies = Cookie()
 
 // console.log('$page', $page)
 
@@ -45,7 +48,8 @@ function getYear() {
 }
 
 let pages = []
-let showModal = false
+let pincode = null
+let showPinCodeEntryModal = false
 
 onMount(async () => {
 	const res1 = await getPages()
@@ -57,6 +61,14 @@ onMount(async () => {
 
 	if (browser) {
 		localStorage.setItem('megamenu', JSON.stringify(megamenu))
+	}
+
+	const pin = cookies.get('zip')
+
+	// console.log('pin', pin, pin.toString()?.length)
+
+	if (pin && pin.toString()?.length === 6) {
+		pincode = pin
 	}
 })
 
@@ -135,6 +147,16 @@ async function getPages() {
 						</a>
 					</li>
 
+					<li class="flex max-w-max items-center">
+						<button
+							type="button"
+							aria-label="Click to visit this page"
+							class="link-underline link-underline-gray whitespace-pre-wrap focus:outline-none"
+							on:click="{() => (showPinCodeEntryModal = true)}">
+							Location {pincode || ''}
+						</button>
+					</li>
+
 					{#if $page.data.store?.isMultiVendor}
 						<li class="flex max-w-max items-center">
 							<a
@@ -161,15 +183,6 @@ async function getPages() {
 							</div>
 						</li>
 					{/if}
-
-						<li class="flex max-w-max items-center">
-						<button type="button" 
-							aria-label="Click to visit this page"
-							class="link-underline link-underline-gray whitespace-pre-wrap focus:outline-none"
-							on:click="{()=>showModal = true}">
-							Change Pincode
-						</button>
-					</li>
 				</ul>
 			</div>
 
@@ -591,5 +604,6 @@ async function getPages() {
 	</div>
 </footer>
 
-
-<PinCodeInputBox bind:showModal="{showModal}" />
+{#if showPinCodeEntryModal}
+	<PinCodeInputBox on:close="{() => (showPinCodeEntryModal = false)}" />
+{/if}
