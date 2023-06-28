@@ -14,6 +14,8 @@ export const logo = Logo
 export const phone = '+91-8249028220'
 export const websiteLegalName = 'Misiki Technologies LLP'
 export const websiteName = 'Litekart'
+export const saasName = 'Litekart'
+export const saasDomain = 'https://litekart.in'
 // All above data will be replaced by Footer.svelte after the server/store call and saved to cookie
 
 // Bellow PWA Settings, can't configure from admin
