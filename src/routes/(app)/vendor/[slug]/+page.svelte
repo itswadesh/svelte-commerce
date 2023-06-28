@@ -7,6 +7,16 @@
 <script>
 import { dateOnly } from '$lib/utils'
 import { DummyProductCard, Pagination, LazyImg, ProductCard, SliderBanner } from '$lib/components'
+import {
+	Email,
+	Facebook,
+	LinkedIn,
+	Pinterest,
+	Telegram,
+	Twitter,
+	WhatsApp
+} from 'svelte-share-buttons-component'
+import { page } from '$app/stores'
 import { RatingStarDisplay } from '$lib/ui'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
@@ -18,6 +28,10 @@ const seoProps = {
 	title: 'Vendor Profile',
 	metaDescription: 'Vendor Profile'
 }
+
+let text = data.vendor?.businessName
+let url = $page?.url?.href
+let media = data.vendor?.banners[0]
 </script>
 
 <SEO {...seoProps} />
@@ -30,7 +44,43 @@ const seoProps = {
 		reviewCount="{data.reviewCount}" />
 	<!-- needClaim -->
 
-	<div class="px-3 py-5 sm:p-10">
+	<div class="px-3 py-5 sm:p-10 xl:flex items-start gap-5">
+		<ul class="hidden sticky top-28 xl:flex flex-col gap-2 m-0 p-0 list-none">
+			<li>
+				<WhatsApp text="{text} {url}" />
+			</li>
+
+			<li>
+				<Telegram text="{text}" url="{url}" />
+			</li>
+
+			<li>
+				<Facebook quote="{text}" url="{url}" />
+			</li>
+
+			<li>
+				<Twitter
+					class="share-button"
+					text="{text}"
+					url="{url}"
+					hashtags="litekart"
+					via="litekart"
+					related="mobile cover,t-shirt,key chain " />
+			</li>
+
+			<li>
+				<Pinterest url="{url}" media="{media}" description="{text}" />
+			</li>
+
+			<li>
+				<LinkedIn url="{url}" />
+			</li>
+
+			<li>
+				<Email subject="Take a look at this {text}" body="{url}" />
+			</li>
+		</ul>
+
 		<div class="container mx-auto w-full max-w-6xl">
 			<!-- About Vendor -->
 
@@ -39,6 +89,42 @@ const seoProps = {
 					{@html data.vendor?.description}
 				</p>
 			{/if}
+
+			<ul class="xl:hidden flex flex-wrap gap-2 m-0 p-0 list-none">
+				<li>
+					<WhatsApp text="{text} {url}" />
+				</li>
+
+				<li>
+					<Telegram text="{text}" url="{url}" />
+				</li>
+
+				<li>
+					<Facebook quote="{text}" url="{url}" />
+				</li>
+
+				<li>
+					<Twitter
+						class="share-button"
+						text="{text}"
+						url="{url}"
+						hashtags="litekart"
+						via="litekart"
+						related="mobile cover,t-shirt,key chain " />
+				</li>
+
+				<li>
+					<Pinterest url="{url}" media="{media}" description="{text}" />
+				</li>
+
+				<li>
+					<LinkedIn url="{url}" />
+				</li>
+
+				<li>
+					<Email subject="Take a look at this {text}" body="{url}" />
+				</li>
+			</ul>
 
 			<!-- Categories -->
 
