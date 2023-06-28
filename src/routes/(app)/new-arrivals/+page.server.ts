@@ -23,9 +23,10 @@ export async function load({ locals, cookies }) {
 
 		const res2 = await CategoryService.fetchProductsOfCategory({
 			categoryId: newArrivals[0].slug,
-			storeId: locals.store?.id,
 			server: true,
-			sid: cookies.get('connect.sid')
+			sid: cookies.get('connect.sid'),
+			storeId: locals.store?.id,
+			zip: cookies.get('zip'),
 		})
 		products = res2.products
 		productsCount = res2.count

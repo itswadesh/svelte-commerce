@@ -245,7 +245,7 @@ function hideitems() {
 			{/if}
 		</a>
 
-		<div class="p-2 sm:p-4">
+		<div class="p-2">
 			<!-- View smilar button start-->
 
 			<!-- <div class="{product.relatedProducts?.length > 0 ? 'absolute bottom-24 right-4' : 'hidden'}">
@@ -464,7 +464,7 @@ function hideitems() {
 				</a>
 
 				{#if $page?.data?.store?.isMultiVendor && product?.vendor && product?.vendor?.slug && product?.vendor?.businessName}
-					<div class="mb-5 text-sm text-zinc-500">
+					<div class="text-sm text-zinc-500">
 						By <a href="/vendor/{product?.vendor?.slug}" class="underline hover:text-zinc-800">
 							{product?.vendor?.businessName}
 						</a>
@@ -480,7 +480,7 @@ function hideitems() {
 					data-sveltekit-preload-data>
 					<div
 						class="{$page.data.store?.isSecureCatalogue && !$page.data?.me ? 'hidden' : 'flex'} 
-					mt-0.5 flex-wrap items-baseline justify-start leading-4 text-xs gap-1.5">
+						mt-1 flex-wrap items-baseline justify-start leading-4 text-xs gap-1.5">
 						<span class="font-bold text-sm sm:text-base whitespace-nowrap">
 							{currency(product.price, $page.data?.store?.currencySymbol)}
 						</span>

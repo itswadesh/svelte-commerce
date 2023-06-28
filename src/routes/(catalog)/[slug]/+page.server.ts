@@ -11,7 +11,6 @@ export async function load({ url, params, parent, cookies }) {
 	const query = url.searchParams
 	const searchData = url.searchParams.get('q')
 	const sort = url.searchParams.get('sort')
-	const zip = cookies.get('zip')
 
 	query.forEach(function (value, key) {
 		fl[key] = value
@@ -34,7 +33,7 @@ export async function load({ url, params, parent, cookies }) {
 			server: isServer,
 			sid,
 			storeId: store?.id,
-			zip,
+			zip: cookies.get('zip'),
 		}),
 		query: query.toString(),
 		searchData,
