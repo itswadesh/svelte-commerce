@@ -15,6 +15,7 @@ import SEO from '$lib/components/SEO/index.svelte'
 import TransparentButton from '../_TransparentButton.svelte'
 
 export let data
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let clazz
 export { clazz as class }

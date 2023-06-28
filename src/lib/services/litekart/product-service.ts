@@ -163,9 +163,9 @@ export const fetchProductsOfCategory = async ({
 		let err = ''
 
 		if (isServer) {
-			res = await getBySid(`es/products?categories=${categorySlug}&zips=${zip || ''}&store=${storeId}&${query}`, sid)
+			res = await getBySid(`es/products?categories=${categorySlug}&zip=${zip || ''}&store=${storeId}&${query}`, sid)
 		} else {
-			res = await getAPI(`es/products?categories=${categorySlug}&zips=${zip || ''}&store=${storeId}&${query}`, origin)
+			res = await getAPI(`es/products?categories=${categorySlug}&zip=${zip || ''}&store=${storeId}&${query}`, origin)
 		}
 
 		products = res?.data?.map((p) => {

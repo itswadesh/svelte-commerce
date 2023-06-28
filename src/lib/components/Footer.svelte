@@ -26,8 +26,9 @@ import { browser } from '$app/environment'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { PageService } from '$lib/services'
-import appStore from '$lib/assets/app/app-store.svg'
-import googlePlay from '$lib/assets/app/google-play.png'
+import PincodeInputBox from '$lib/home/PincodeInputBox.svelte'
+// import appStore from '$lib/assets/app/app-store.svg'
+// import googlePlay from '$lib/assets/app/google-play.png'
 import type { Category } from '$lib/types'
 
 // console.log('$page', $page)
@@ -44,6 +45,7 @@ function getYear() {
 }
 
 let pages = []
+let showPincodeInputBox = false
 
 onMount(async () => {
 	const res1 = await getPages()
@@ -74,6 +76,10 @@ async function getPages() {
 	// console.log('pages', pages)
 }
 </script>
+
+{#if showPincodeInputBox}
+	<PincodeInputBox on:close="{() => (showPincodeInputBox = false)}" />
+{/if}
 
 <footer class="w-full justify-center bg-zinc-50 p-3 text-sm sm:p-10">
 	<div class="container mx-auto max-w-6xl">
@@ -131,6 +137,16 @@ async function getPages() {
 							class="link-underline link-underline-gray whitespace-pre-wrap">
 							Track Your Order
 						</a>
+					</li>
+
+					<li class="flex max-w-max items-center">
+						<button
+							type="button"
+							aria-label="Click to change location"
+							class="link-underline link-underline-gray whitespace-pre-wrap"
+							on:click="{() => (showPincodeInputBox = true)}">
+							Change Location
+						</button>
 					</li>
 
 					{#if $page.data.store?.isMultiVendor}
