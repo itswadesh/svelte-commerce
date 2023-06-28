@@ -110,20 +110,20 @@ let showPinCodeEntryModal = false
 onMount(() => {
 	const pin = cookies.get('zip')
 
-	// console.log('pin', pin, pin.toString()?.length)
-
 	if (pin && pin.toString()?.length === 6) {
 		showPinCodeEntryModal = false
 	} else {
 		showPinCodeEntryModal = true
 	}
+
+	// console.log('pin, showPinCodeEntryModal', pin, pin.toString()?.length, showPinCodeEntryModal)
 })
 </script>
 
 <SEO {...seoProps} />
 
 <div class="bg-opacity-25 bg-center bg-repeat min-h-screen">
-	{#if $page.data.store?.isHyperlocal || showPinCodeEntryModal}
+	{#if $page.data.store?.isHyperlocal && showPinCodeEntryModal}
 		<PinCodeInputBox on:close="{() => (showPinCodeEntryModal = false)}" />
 	{/if}
 

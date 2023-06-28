@@ -3,7 +3,7 @@ const isServer = import.meta.env.SSR
 
 export const prerender = false
 
-export async function load({ url, params, parent }) {
+export async function load({ url, params, parent, cookies }) {
 	const { store, origin } = await parent()
 
 	const categorySlug = params.slug
@@ -23,7 +23,8 @@ export async function load({ url, params, parent }) {
 			query: query.toString(),
 			server: isServer,
 			storeId: store?.id,
-			origin
+			origin,
+			zip: cookies.get('zip')
 		}),
 		query: query.toString(),
 		searchData,
