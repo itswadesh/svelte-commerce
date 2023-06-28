@@ -20,6 +20,8 @@ import {
 	siteTitle,
 	websiteLegalName,
 	websiteName,
+	saasName,
+	saasDomain,
 	weightUnit,
 	IMAGE_CDN_URL
 } from '$lib/config'
@@ -77,6 +79,8 @@ export const getStoreData = async ({
 		title: siteTitle,
 		websiteLegalName,
 		websiteName,
+		saasName,
+		saasDomain,
 		weightUnit,
 		whatsappChatButton: {}
 	}
@@ -139,6 +143,8 @@ export const getStoreData = async ({
 			title: storeRes.storeOne.title,
 			websiteLegalName: storeRes.storeOne.websiteLegalName,
 			websiteName: storeRes.storeOne.websiteName,
+			saasName: storeRes.settings.saasName,
+			saasDomain: storeRes.settings.saasDomain,
 			weightUnit: storeRes.storeOne.weightUnit,
 			whatsappChatButton: storeRes.storeOne.whatsappChatButton
 		}
