@@ -25,10 +25,10 @@ const seoProps = {
 <section class="min-h-screen">
 	<SliderBanner
 		data="{data.vendor}"
-		needClaim
 		rating="{data.rating}"
 		ratingCount="{data.ratingCount}"
 		reviewCount="{data.reviewCount}" />
+	<!-- needClaim -->
 
 	<div class="px-3 py-5 sm:p-10">
 		<div class="container mx-auto w-full max-w-6xl">
