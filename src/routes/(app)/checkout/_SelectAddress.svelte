@@ -1,6 +1,6 @@
 <script>
 import { goto } from '$app/navigation'
-import {Error} from '$lib/components'
+import { Error } from '$lib/components'
 import AddressSkeleton from './_AddressSkeleton.svelte'
 import { createEventDispatcher } from 'svelte'
 import { del } from '$lib/utils/api'
@@ -48,8 +48,8 @@ async function addressChanged(id) {
 
 			<div class="flex w-full cursor-pointer flex-col gap-2 font-light">
 				<h5 class="flex-1 font-semibold capitalize tracking-wide md:text-lg">
-					{address.firstName}
-					{address.lastName}
+					{address.firstName || '_'}
+					{address.lastName || '_'}
 				</h5>
 
 				<div class="flex flex-wrap items-start text-sm md:flex-nowrap">
@@ -79,7 +79,7 @@ async function addressChanged(id) {
 					<h5 class="w-20 font-semibold">Pin Code</h5>
 
 					<p class="flex flex-1 flex-col">
-						: {address.zip}
+						: {address.zip || '_'}
 					</p>
 				</div>
 
@@ -95,7 +95,7 @@ async function addressChanged(id) {
 					<h5 class="w-20 font-semibold">Email</h5>
 
 					<p class="flex flex-1 flex-col">
-						: {address.email}
+						: {address.email || '_'}
 					</p>
 				</div>
 			</div>
