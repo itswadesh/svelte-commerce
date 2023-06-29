@@ -465,7 +465,7 @@ function hideitems() {
 
 				{#if $page?.data?.store?.isMultiVendor && product?.vendor && product?.vendor?.slug && product?.vendor?.businessName}
 					<div class="text-sm text-zinc-500">
-						By <a href="/vendor/{product?.vendor?.slug}" class="underline hover:text-zinc-800">
+						By <a href="/store/{product?.vendor?.slug}" class="underline hover:text-zinc-800">
 							{product?.vendor?.businessName}
 						</a>
 					</div>

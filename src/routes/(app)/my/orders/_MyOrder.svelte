@@ -222,7 +222,7 @@ export { clazz as class }
 
 									<div class="w-full flex-1">
 										<!-- {#if item.vendor}
-													<a href="/vendor/${item.vendor?.slug}" aria-label="Click to visit vendor's profile">
+													<a href="/store/${item.vendor?.slug}" aria-label="Click to visit vendor's profile">
 														 {#if store.isFnb && item.vendorBusinessName}
 															 <b class="mb-2">
 																 {item.vendorBusinessName}
