@@ -14,6 +14,7 @@ let err = null
 let loading = false
 let locationPinCodesList = [
 	{ area: 'Berhampur (City)', pincode: 760002 },
+	{ area: 'Gopalpur', pincode: 761002 },
 	{ area: 'Sunabeda', pincode: 763002 },
 	{ area: 'Sunabeda', pincode: 763002 }
 ]
