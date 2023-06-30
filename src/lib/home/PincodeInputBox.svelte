@@ -15,7 +15,7 @@ let loading = false
 let locationPinCodesList = [
 	{ area: 'Berhampur (City)', pincode: 760002 },
 	{ area: 'Gopalpur', pincode: 761002 },
-	{ area: 'Sunabeda', pincode: 763002 },
+	{ area: 'Semiliguda', pincode: 764036 },
 	{ area: 'Sunabeda', pincode: 763002 }
 ]
 let pincode = null
@@ -101,7 +101,7 @@ function handlePinCode(pincodeNew) {
 					<button
 						type="submit"
 						class="absolute inset-y-0 right-0 z-10 flex w-20 items-center justify-center text-right text-sm font-bold
-				        	{pincode && pincode.toString().length === 6 ? 'text-primary-500' : 'text-zinc-200'}">
+				        {pincode && pincode.toString().length === 6 ? 'text-primary-500' : 'text-zinc-200'}">
 						{#if loading}
 							<div
 								class="absolute inset-0 flex cursor-not-allowed items-center justify-center bg-black bg-opacity-70">

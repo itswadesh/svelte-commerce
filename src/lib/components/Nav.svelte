@@ -21,6 +21,7 @@ import Cookie from 'cookie-universal'
 import Item from '$lib/components/AutocompleteItem.svelte'
 import menu from '$lib/config/menu'
 import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
+import PincodeInputBox from '$lib/home/PincodeInputBox.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'
@@ -34,9 +35,11 @@ export let me: Me, cart: Cart, data, showCartSidebar: boolean, openSidebar: bool
 let categories
 let hellobar = $page.data.store?.hellobar || {}
 let loadingForDeleteItemFromCart = []
+let pin = ''
 let q = ''
 let show = false
 let showDropdownAccount = false
+let showPincodeInputBox = false
 
 // if (cart) cart = JSON.parse(cart)
 
@@ -64,6 +67,10 @@ onMount(async () => {
 	q = $page.url.searchParams.get('q')
 	// const response = await fetch('/server/cart')
 	// cart = await response.json()
+
+	pin = cookies.get('zip')
+
+	// console.log('pin', pin, pin?.toString()?.length)
 })
 
 // onMount(() => {
@@ -164,9 +171,13 @@ const getOptionLabel = (option) => option.name
 const getSelectionLabel = (option) => option.name
 </script>
 
+<!-- {hellobar?.active?.val ? 'h-[88px] sm:h-28' : 'h-14 sm:h-20'} -->
 <div
 	class="minimum-width-rem fixed inset-x-0 top-0 w-full border-b bg-white shadow-xs
-	{hellobar?.active?.val ? 'h-[88px] sm:h-28' : 'h-14 sm:h-20'}
+	{hellobar?.active?.val && $page.data.store?.isHyperlocal ? 'h-[114px] sm:h-[206px] lg:h-[182px]' : ''}
+	{hellobar?.active?.val ? 'h-[88px] sm:h-28 lg:h-[88px]' : ''}
+	{$page.data.store?.isHyperlocal ? 'h-20 sm:h-[104px] lg:h-20' : ''}
+	{!hellobar?.active?.val && !$page.data.store?.isHyperlocal ? 'h-14 sm:h-20 lg:h-14' : ''}
 	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
 	{#if hellobar?.active?.val}
 		<div
@@ -223,6 +234,33 @@ const getSelectionLabel = (option) => option.name
 						class="max-h-10 sm:max-h-16 w-40 object-contain object-left" />
 				{/if}
 			</a>
+
+			{#if $page.data.store?.isHyperlocal}
+				<button
+					type="button"
+					class="hidden lg:flex items-center gap-2 text-sm font-semibold bg-zinc-100 py-2 px-4 rounded-full"
+					on:click="{() => (showPincodeInputBox = true)}">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke-width="1.5"
+						stroke="currentColor"
+						class="w-5 h-5">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"></path>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
+						></path>
+					</svg>
+
+					<span>{pin || 'Select your pincode...'}</span>
+				</button>
+			{/if}
 		</div>
 
 		<!-- Mega menu -->
@@ -749,7 +787,35 @@ const getSelectionLabel = (option) => option.name
 			{/if}
 		</div>
 	</nav>
+
+	{#if $page.data.store?.isHyperlocal}
+		<button
+			type="button"
+			class="h-6 lg:hidden flex items-center justify-start gap-1 text-xs font-semibold bg-primary-100 px-3 w-full text-left"
+			on:click="{() => (showPincodeInputBox = true)}">
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke-width="1.5"
+				stroke="currentColor"
+				class="w-4 h-4">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
+				></path>
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"></path>
+			</svg>
+
+			<span>{pin || 'Select your pincode...'}</span>
+		</button>
+	{/if}
 </div>
+
+{#if showPincodeInputBox}
+	<PincodeInputBox on:close="{() => (showPincodeInputBox = false)}" />
+{/if}
 
 {#if show}
 	<AutosuggestModal bind:show="{show}" />
