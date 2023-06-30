@@ -1,7 +1,6 @@
 <script lang="ts">
 import { page } from '$app/stores'
 import { PageTransitions, Nav, Footer } from '$lib/components'
-import { slotMarginGeneral, slotMarginGeneralWithHelloBar } from '$lib/config'
 
 export let data
 
@@ -23,9 +22,14 @@ let hellobar = $page.data.store?.hellobar || {}
 
 	<PageTransitions url="{data.url}">
 		<div
-			class="{hellobar?.active?.val
-				? slotMarginGeneralWithHelloBar
-				: slotMarginGeneral} w-full flex-1">
+			class="w-full flex-1
+			{hellobar?.active?.val && $page.data.store?.isHyperlocal
+				? 'mt-[114px] sm:mt-[206px] lg:mt-[182px]'
+				: ''}
+			{hellobar?.active?.val ? 'mt-[88px] sm:mt-28 lg:mt-[88px]' : ''}
+			{$page.data.store?.isHyperlocal ? 'mt-20 sm:mt-[104px] lg:mt-20' : ''}
+			{!hellobar?.active?.val && !$page.data.store?.isHyperlocal ? 'mt-14 sm:mt-20 lg:mt-14' : ''}
+			">
 			<slot />
 		</div>
 	</PageTransitions>

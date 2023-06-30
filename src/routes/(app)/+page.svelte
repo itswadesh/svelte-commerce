@@ -32,7 +32,6 @@ import PincodeInputBox from '$lib/home/PincodeInputBox.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 const cookies = Cookie()
-
 let today = dayjs(new Date()).toISOString()
 
 export let data

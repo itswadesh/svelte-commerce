@@ -79,6 +79,8 @@ export const woocommerceHeaders = { username: WOO_COMMERCE_KEY, password: WOO_CO
 // Core config of svelte commerce
 export const slotMarginGeneral = 'mt-14 sm:mt-20'
 export const slotMarginGeneralWithHelloBar = 'mt-[88px] sm:mt-28'
+export const slotMarginGeneralWithHelloBarAndHyperLocal = 'mt-[114px] sm:mt-[206px]'
+export const slotMarginGeneralWithHyperLocal = 'mt-20 sm:mt-[104px]'
 export const slotMarginProduct = 'lg:mt-20'
 
 
