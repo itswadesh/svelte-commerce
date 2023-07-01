@@ -38,7 +38,7 @@ function changePinCode() {
 	pincode = null
 }
 
-function handlePinCode(pincodeNew) {
+async function handlePinCode(pincodeNew) {
 	err = null
 
 	if (pincodeNew && pincodeNew.toString().length !== 6) {
@@ -48,10 +48,12 @@ function handlePinCode(pincodeNew) {
 		disabled = true
 
 		if (browser) {
-			cookies.set('zip', JSON.stringify(pincodeNew), { path: '/' })
+			await cookies.set('zip', JSON.stringify(pincodeNew), { path: '/' })
 		}
 
 		dispatch('close')
+
+		location.reload()
 	}
 }
 </script>
