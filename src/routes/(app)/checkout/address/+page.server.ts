@@ -1,15 +1,13 @@
 import { AddressService, CartService, CountryService } from '$lib/services'
 import { error, redirect } from '@sveltejs/kit'
-import { loginUrl } from '$lib/config/index.js'
 
 export const prerender = false
 
-export async function load({ request, url, locals, cookies }) {
-	const { me, sid, store, origin } = locals
-	const cartId = cookies.get('cartId')
+export async function load({ locals, url, parent }) {
+	const { me, sid, store, storeId, origin, cartId } = locals
 
 	if (!me || !sid) {
-		const redirectUrl = `${loginUrl}?ref=${url?.pathname}${url?.search || ''}`
+		const redirectUrl = `/auth/login?ref=${url?.pathname}${url?.search || ''}`
 		throw redirect(307, redirectUrl)
 	}
 
@@ -19,13 +17,14 @@ export async function load({ request, url, locals, cookies }) {
 		let err
 
 		const { myAddresses, selectedAddress } = await AddressService.fetchAddresses({
-			storeId: store?.id,
+			storeId,
 			origin,
+			server: true,
 			sid
 		})
 
 		const countries = await CountryService.fetchCountries({
-			storeId: store?.id,
+			storeId,
 			origin,
 			sid
 		})
@@ -34,7 +33,7 @@ export async function load({ request, url, locals, cookies }) {
 			cartId,
 			origin,
 			sid,
-			storeId: store?.id,
+			storeId
 		})
 
 		// console.log('cart at address', cart);
@@ -51,9 +50,10 @@ export async function load({ request, url, locals, cookies }) {
 			myAddresses,
 			q,
 			selectedAddress,
-			url: url.href,
+			url: url.href
 		}
 	} catch (e) {
+		// console.log('errzzzzzzzzzzzzzzzzzz', e);
 		if (e.status === 307 && e.location === '/cart') {
 			throw redirect(307, '/cart')
 		} else if (e.status === 401 || e.status === 307) {
