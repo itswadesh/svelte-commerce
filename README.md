@@ -106,7 +106,7 @@ Reach out to me with queries!
   </a>
   <img src="assets/misc/transparent.png" height="1" width="15"/>
   <div>
-    <img src="https://res.cloudinary.com/itswadesh/image/upload/v1682424327/clicky_logo-97724356932.png?width=3&height=4&blur=25&aspect_ratio=3:4" height="64" alt="Clicky">
+<!--     <img src="https://res.cloudinary.com/itswadesh/image/upload/v1682424327/clicky_logo-97724356932.png?width=3&height=4&blur=25&aspect_ratio=3:4" height="64" alt="Clicky"> -->
   </div>
 
 </p>
