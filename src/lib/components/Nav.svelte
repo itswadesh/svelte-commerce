@@ -174,10 +174,12 @@ const getSelectionLabel = (option) => option.name
 <!-- {hellobar?.active?.val ? 'h-[88px] sm:h-28' : 'h-14 sm:h-20'} -->
 <div
 	class="minimum-width-rem fixed inset-x-0 top-0 w-full border-b bg-white shadow-xs
-	{hellobar?.active?.val && $page.data.store?.isHyperlocal ? 'h-[114px] sm:h-[206px] lg:h-[182px]' : ''}
-	{hellobar?.active?.val ? 'h-[88px] sm:h-28 lg:h-[88px]' : ''}
-	{$page.data.store?.isHyperlocal ? 'h-20 sm:h-[104px] lg:h-20' : ''}
-	{!hellobar?.active?.val && !$page.data.store?.isHyperlocal ? 'h-14 sm:h-20 lg:h-14' : ''}
+	{hellobar?.active?.val && $page.data.store?.isHyperlocal
+		? 'h-[114px] sm:h-[206px] lg:h-[114px]'
+		: ''}
+	{hellobar?.active?.val && !$page.data.store?.isHyperlocal ? 'h-[88px] sm:h-28' : ''}
+	{$page.data.store?.isHyperlocal && !hellobar?.active?.val ? 'h-20 sm:h-[104px] lg:h-20' : ''}
+	{!hellobar?.active?.val && !$page.data.store?.isHyperlocal ? 'h-14 sm:h-20' : ''}
 	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
 	{#if hellobar?.active?.val}
 		<div
@@ -238,7 +240,7 @@ const getSelectionLabel = (option) => option.name
 			{#if $page.data.store?.isHyperlocal}
 				<button
 					type="button"
-					class="hidden lg:flex items-center gap-2 text-sm font-semibold bg-zinc-100 py-2 px-4 rounded-full"
+					class="hidden lg:flex max-w-max whitespace-nowrap items-center gap-2 text-sm font-semibold bg-zinc-100 py-2 px-4 rounded-full"
 					on:click="{() => (showPincodeInputBox = true)}">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -246,7 +248,7 @@ const getSelectionLabel = (option) => option.name
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="w-5 h-5">
+						class="w-5 h-5 shrink-0">
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -258,7 +260,7 @@ const getSelectionLabel = (option) => option.name
 						></path>
 					</svg>
 
-					<span>{pin || 'Select your pincode...'}</span>
+					<span class="hidden xl:block truncate">{pin || 'Select your pincode...'}</span>
 				</button>
 			{/if}
 		</div>
@@ -266,13 +268,13 @@ const getSelectionLabel = (option) => option.name
 		<!-- Mega menu -->
 
 		<div
-			class="hidden w-80 items-start justify-start overflow-auto scrollbar-none lg:flex xl:w-auto">
+			class="hidden lg:flex w-auto flex-1 items-start justify-start overflow-auto scrollbar-none">
 			<MegaMenu />
 		</div>
 
 		<!-- Search box -->
 
-		<div class="hidden w-full min-w-min max-w-4xl flex-1 lg:block">
+		<div class="hidden w-full min-w-[200px] max-w-4xl flex-1 lg:block">
 			<Autocomplete
 				placeholder="{$page?.data?.store?.searchbarText || 'Search...'}"
 				on:search="{onSearchSubmit}" />
