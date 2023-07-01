@@ -9,22 +9,22 @@
 </div>
 
 <div align="center" width="60%" height="auto">
-  <br>
-    <!-- <img src="https://res.cloudinary.com/itswadesh/image/upload/v1678600224/litekart/free_for_developers_1.png"> -->
+  <br/>
+  <img src="https://res.cloudinary.com/itswadesh/image/upload/v1678600224/litekart/free_for_developers_1.png">
 </div>
-<!-- <div align="center">
+<div align="center">
   <br>
     <img width="400" src=".github/svelte-commerce.gif" >
     <img width="400" src=".github/svelte-commerce-demo.gif" hspace="5">
-</div> -->
+</div>
 
-<!-- <br>
+<br>
 <p align="center">
 <img height="400" src=".github/home-page-mobile.jpg" hspace="10">
 <img height="400" src=".github/catalog-listing-mobile.jpg" hspace="10">
 <img height="400" src=".github/product-details-mobile.jpg" hspace="10">
 <p/>
-<br/> -->
+<br/>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Made_With-Svelte-red.svg?style=for-the-badge&color=dc8a78&logoColor=FF3E00&labelColor=302D41&logo=svelte"><br/><br/>
@@ -80,7 +80,7 @@ Reach out to me with queries!
 
 <div align="">
 
-<!-- ### Big Brands using `svelte-commerce`
+### Big Brands using `svelte-commerce`
 
 </div>
 <br/>
@@ -111,7 +111,7 @@ Reach out to me with queries!
 
 </p>
 <br/>
-<br/> -->
+<br/>
 
 ## What is it?
 
