@@ -1,7 +1,7 @@
 <script>
 // import { LazyImg } from '$lib/components'
 
-export let data = []
+export let data = {}
 // console.log('collections', data)
 </script>
 

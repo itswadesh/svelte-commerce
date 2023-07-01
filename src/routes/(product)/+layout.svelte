@@ -24,12 +24,11 @@ let hellobar = $page.data.store?.hellobar || {}
 		<div
 			class="w-full flex-1
 			{hellobar?.active?.val && $page.data.store?.isHyperlocal
-				? 'mt-[114px] sm:mt-[206px] lg:mt-[182px]'
+				? 'mt-[114px] sm:mt-[206px] lg:mt-[114px]'
 				: ''}
-			{hellobar?.active?.val ? 'mt-[88px] sm:mt-28 lg:mt-[88px]' : ''}
-			{$page.data.store?.isHyperlocal ? 'mt-20 sm:mt-[104px] lg:mt-20' : ''}
-			{!hellobar?.active?.val && !$page.data.store?.isHyperlocal ? 'mt-14 sm:mt-20 lg:mt-14' : ''}
-			">
+			{hellobar?.active?.val && !$page.data.store?.isHyperlocal ? 'mt-[88px] sm:mt-28' : ''}
+			{$page.data.store?.isHyperlocal && !hellobar?.active?.val ? 'mt-20 sm:mt-[104px] lg:mt-20' : ''}
+			{!hellobar?.active?.val && !$page.data.store?.isHyperlocal ? 'mt-14 sm:mt-20' : ''}">
 			<slot />
 		</div>
 	</PageTransitions>

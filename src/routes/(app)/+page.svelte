@@ -5,12 +5,14 @@ import {
 	CategoriesHome,
 	CategoriesMobile,
 	CategoriesSlider,
+	CollectionsGeneral,
 	Deals,
 	Hero,
 	HeroBanners
 } from '$lib/home'
 import {
 	CollectionsHome,
+	CollectionsHome2,
 	DummyProductCard,
 	Footer,
 	HeroBannersCollage6,
@@ -173,48 +175,48 @@ onMount(() => {
 					<CategoriesSlider title="Top Categories" categories="{home?.categories}" />
 
 					<!-- <h2
-					class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
-					TOP COLLECTIONS
-				</h2>
+						class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
+						TOP COLLECTIONS
+					</h2>
 
-				<div class="max-w-screen overflow-x-auto scrollbar-none lg:hidden">
-					<div class="flex flex-row">
+					<div class="max-w-screen overflow-x-auto scrollbar-none lg:hidden">
+						<div class="flex flex-row">
+							{#each data.home?.categories as category}
+								{#if category?.img || category?.img}
+									<a
+										href="/{category.link || category.slug || '##'}"
+										aria-label="Click to get the category related products"
+										class="shrink-0">
+										<LazyImg
+											src="{category.img || category.img}"
+											alt=""
+											width="160"
+											height="160"
+											aspect_ratio="1:1"
+											class="w-40 object-contain" />
+									</a>
+								{/if}
+							{/each}
+						</div>
+					</div>
+
+					<div class="hidden grid-cols-12 lg:grid">
 						{#each data.home?.categories as category}
 							{#if category?.img || category?.img}
 								<a
 									href="/{category.link || category.slug || '##'}"
 									aria-label="Click to get the category related products"
-									class="shrink-0">
+									class="col-span-1">
 									<LazyImg
 										src="{category.img || category.img}"
 										alt=""
-										width="160"
-										height="160"
+										width="375"
 										aspect_ratio="1:1"
-										class="w-40 object-contain" />
+										class="h-full w-full object-contain" />
 								</a>
 							{/if}
 						{/each}
-					</div>
-				</div>
-
-				<div class="hidden grid-cols-12 lg:grid">
-					{#each data.home?.categories as category}
-						{#if category?.img || category?.img}
-							<a
-								href="/{category.link || category.slug || '##'}"
-								aria-label="Click to get the category related products"
-								class="col-span-1">
-								<LazyImg
-									src="{category.img || category.img}"
-									alt=""
-									width="375"
-									aspect_ratio="1:1"
-									class="h-full w-full object-contain" />
-							</a>
-						{/if}
-					{/each}
-				</div> -->
+					</div> -->
 				</div>
 			{/if}
 		{/await}
@@ -268,12 +270,10 @@ onMount(() => {
 
 		{#if $page.data.store?.isDeals}
 			{#await data.streamed.deals}
-				<div class="flex w-[98vw] items-start justify-start gap-3 overflow-x-auto">
-					<div class="w-60 h-60 animate-pulse rounded bg-zinc-200">
-						{#each { length: 10 } as _}
-							<div class="w-52 h-60 animate-pulse rounded bg-zinc-200"></div>
-						{/each}
-					</div>
+				<div class="flex flex-wrap w-[98vw] items-start justify-start gap-3 overflow-x-auto">
+					{#each { length: 8 } as _}
+						<div class="w-52 h-60 animate-pulse rounded bg-zinc-200"></div>
+					{/each}
 				</div>
 			{:then deals}
 				{#if deals.data?.length > 0}
@@ -291,28 +291,7 @@ onMount(() => {
 			{/await}
 		{/if}
 
-		{#await data.streamed.collections}
-			<div class="flex w-[98vw] items-start justify-start gap-3 overflow-x-auto">
-				<div class="w-60 h-60 animate-pulse rounded bg-zinc-200">
-					{#each { length: 10 } as _}
-						<div class="w-52 h-60 animate-pulse rounded bg-zinc-200"></div>
-					{/each}
-				</div>
-			</div>
-		{:then collections}
-			{#if collections.data?.length > 0}
-				{#each collections.data as collection}
-					<div class="mb-5 sm:mb-10">
-						<h2
-							class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
-							{collection.name}
-						</h2>
-
-						<Deals deal="{collection}" />
-					</div>
-				{/each}
-			{/if}
-		{/await}
+		<CollectionsGeneral data="{data}" />
 
 		{#await data.streamed.home then home}
 			<HeroBannersCollage6 heroBanners="{home.heroBanners}" />
@@ -330,9 +309,13 @@ onMount(() => {
 		<!-- Note: Write the categories with comma separation -->
 		<ProductGridShowCase topTitle="New Shop Items" title="Fashion" categories="fashion" />
 
-		<!-- Collections -->
+		<!-- Collections Home -->
 
 		<CollectionsHome data="{data}" />
+
+		<!-- Collections Home 2 -->
+
+		<CollectionsHome2 data="{data}" />
 
 		<!-- Shop your stone -->
 
