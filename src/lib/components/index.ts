@@ -6,6 +6,7 @@ import Breadcrumb from './Breadcrumb.svelte'
 import CatelogNav from './CatelogNav.svelte'
 import CheckoutHeader from './CheckoutHeader.svelte'
 import CtrlS from './CtrlS.svelte'
+import DummyProductCard from './DummyProductCard.svelte'
 import Error from './Error.svelte'
 import Gallery from './Product/Gallery.svelte'
 import GoogleAnalytics from './GoogleAnalytics.svelte'
@@ -43,10 +44,8 @@ import UserForm from './Product/UserForm.svelte'
 
 // Core components of svelte commerce
 import AnimatedCartItem from './AnimatedCartItem.svelte'
-// import CollectionsHome from './CollectionsHome.svelte'
-// import CollectionsHome2 from './CollectionsHome2.svelte'
+import CollectionsHome from './CollectionsHome.svelte'
 import DesktopFilter from './DesktopFilter.svelte'
-// import DummyProductCard from './DummyProductCard.svelte'
 import Footer from './Footer.svelte'
 import HeroBannersCollage6 from './HeroBannersCollage6.svelte'
 import LegalFooterInformation from './LegalFooterInformation.svelte'
@@ -54,17 +53,15 @@ import MobileFilter from './MobileFilter.svelte'
 import Nav from './Nav.svelte'
 import Pagination from './Pagination.svelte'
 import PopularProductsHome from './PopularProductsHome.svelte'
-// import ProductCard from './ProductCard.svelte'
+import ProductCard from './ProductCard.svelte'
 import ProductGridShowCase from './ProductGridShowCase.svelte'
 import ShopYourStone from './ShopYourStone.svelte'
-// import TrendingProductsHome from './TrendingProductsHome.svelte'
+import TrendingProductsHome from './TrendingProductsHome.svelte'
 
 // Varni components
 // import AnimatedCartItem from './Varni/AnimatedCartItem.svelte'
 // import CollectionsHome from './Varni/CollectionsHome.svelte'
-// import CollectionsHome2 from './Varni/CollectionsHome2.svelte'
 // import DesktopFilter from './Varni/DesktopFilter.svelte'
-// import DummyProductCard from './DummyProductCard.svelte'
 // import Footer from './Varni/Footer.svelte'
 // import HeroBannersCollage6 from './Varni/HeroBannersCollage6.svelte'
 // import LegalFooterInformation from './Varni/LegalFooterInformation.svelte'
@@ -77,14 +74,6 @@ import ShopYourStone from './ShopYourStone.svelte'
 // import ShopYourStone from './Varni/ShopYourStone.svelte'
 // import TrendingProductsHome from './Varni/TrendingProductsHome.svelte'
 
-
-// Kesudi components
-import CollectionsHome from './Kesudi/CollectionsHome.svelte'
-import CollectionsHome2 from './Kesudi/CollectionsHome2.svelte'
-import DummyProductCard from './Kesudi/DummyProductCard.svelte'
-import ProductCard from './Kesudi/ProductCard.svelte'
-import TrendingProductsHome from './Kesudi/TrendingProductsHome.svelte'
-
 export {
 	AnimatedCartItem,
 	Autocomplete,
@@ -95,7 +84,6 @@ export {
 	CatelogNav,
 	CheckoutHeader,
 	CollectionsHome,
-	CollectionsHome2,
 	CtrlS,
 	DesktopFilter,
 	DummyProductCard,
@@ -143,5 +131,5 @@ export {
 	StoreInformationFooter,
 	Stripe,
 	TrendingProductsHome,
-	UserForm,
+	UserForm
 }
