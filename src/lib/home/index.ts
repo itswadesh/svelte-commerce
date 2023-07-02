@@ -7,15 +7,16 @@ import PickedBanners from './PickedBanners.svelte'
 
 // Core components of svelte commerce
 import HeroBanners from './HeroBanners.svelte'
-// import CollectionsGeneral from './CollectionsGeneral.svelte'
 
+// Core components of svelte commerce
+import CollectionsGeneral from './CollectionsGeneral.svelte'
 
 // Varni components
 // import CollectionsGeneral from './../components/Varni/CollectionsGeneral.svelte'
 // import HeroBanners from './../components/Varni/HeroBanners.svelte'
 
 // Kesudi components
-import CollectionsGeneral from './../components/Kesudi/CollectionsGeneral.svelte'
+// import CollectionsGeneral from './../components/Kesudi/CollectionsGeneral.svelte'
 
 export {
 	CategoriesHome,
