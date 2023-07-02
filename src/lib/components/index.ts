@@ -43,10 +43,7 @@ import UserForm from './Product/UserForm.svelte'
 
 // Core components of svelte commerce
 import AnimatedCartItem from './AnimatedCartItem.svelte'
-// import CollectionsHome from './CollectionsHome.svelte'
-// import CollectionsHome2 from './CollectionsHome2.svelte'
 import DesktopFilter from './DesktopFilter.svelte'
-// import DummyProductCard from './DummyProductCard.svelte'
 import Footer from './Footer.svelte'
 import HeroBannersCollage6 from './HeroBannersCollage6.svelte'
 import LegalFooterInformation from './LegalFooterInformation.svelte'
@@ -54,10 +51,15 @@ import MobileFilter from './MobileFilter.svelte'
 import Nav from './Nav.svelte'
 import Pagination from './Pagination.svelte'
 import PopularProductsHome from './PopularProductsHome.svelte'
-// import ProductCard from './ProductCard.svelte'
 import ProductGridShowCase from './ProductGridShowCase.svelte'
 import ShopYourStone from './ShopYourStone.svelte'
-// import TrendingProductsHome from './TrendingProductsHome.svelte'
+
+// Core components of svelte commerce
+import CollectionsHome from './CollectionsHome.svelte'
+import CollectionsHome2 from './CollectionsHome2.svelte'
+import DummyProductCard from './DummyProductCard.svelte'
+import ProductCard from './ProductCard.svelte'
+import TrendingProductsHome from './TrendingProductsHome.svelte'
 
 // Varni components
 // import AnimatedCartItem from './Varni/AnimatedCartItem.svelte'
@@ -79,11 +81,11 @@ import ShopYourStone from './ShopYourStone.svelte'
 
 
 // Kesudi components
-import CollectionsHome from './Kesudi/CollectionsHome.svelte'
-import CollectionsHome2 from './Kesudi/CollectionsHome2.svelte'
-import DummyProductCard from './Kesudi/DummyProductCard.svelte'
-import ProductCard from './Kesudi/ProductCard.svelte'
-import TrendingProductsHome from './Kesudi/TrendingProductsHome.svelte'
+// import CollectionsHome from './Kesudi/CollectionsHome.svelte'
+// import CollectionsHome2 from './Kesudi/CollectionsHome2.svelte'
+// import DummyProductCard from './Kesudi/DummyProductCard.svelte'
+// import ProductCard from './Kesudi/ProductCard.svelte'
+// import TrendingProductsHome from './Kesudi/TrendingProductsHome.svelte'
 
 export {
 	AnimatedCartItem,
