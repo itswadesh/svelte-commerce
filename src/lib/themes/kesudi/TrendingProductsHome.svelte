@@ -1,13 +1,10 @@
 <script>
 import { fly } from 'svelte/transition'
-import { page } from '$app/stores'
 import { ProductCard, DummyProductCard } from '$lib/components'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
-
-let product_image_dimention = $page.data.store.product_image_dimention || '3x4'
 </script>
 
 <!-- Trending products -->
