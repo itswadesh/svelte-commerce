@@ -25,14 +25,8 @@
 </style>
 
 <script lang="ts">
-import {
-	Autocomplete,
-	AutosuggestModal,
-	AutocompleteItem,
-	LazyImg,
-	MegamenuHorizontal,
-	MegamenuVertical
-} from '$lib/components'
+import { Autocomplete, AutosuggestModal, AutocompleteItem, LazyImg } from '$lib/components'
+import { MegamenuHorizontal, MegamenuVertical } from '$lib/theme-config'
 import { createEventDispatcher, getContext, onMount } from 'svelte'
 import { cubicOut } from 'svelte/easing'
 import { enhance } from '$app/forms'
