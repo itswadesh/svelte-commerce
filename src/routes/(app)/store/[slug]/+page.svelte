@@ -90,7 +90,7 @@ let media = data.vendor?.banners[0]
 				</p>
 			{/if}
 
-			<ul class="xl:hidden flex flex-wrap gap-2 m-0 p-0 list-none">
+			<ul class="xl:hidden flex flex-wrap gap-2 mb-5 p-0 list-none">
 				<li>
 					<WhatsApp text="{text} {url}" />
 				</li>
