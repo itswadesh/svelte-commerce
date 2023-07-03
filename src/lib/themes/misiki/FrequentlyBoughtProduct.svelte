@@ -1,13 +1,13 @@
 <script>
 import { applyAction, enhance } from '$app/forms'
 import { date, currency, delay, toast } from '$lib/utils'
-import { fireGTagEvent } from '$lib/utils/gTag'
+import { fireGTagEvent } from '$lib/utils/gTagB'
 import { invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import { post } from '$lib/utils/api'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import {LazyImg} from '$lib/components'
+import {PrimaryButton} from '$lib/ui'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 
