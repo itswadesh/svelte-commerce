@@ -1227,11 +1227,13 @@ function handleMobileCanvas() {
 							<hr class="w-full border-t border-zinc-200" />
 						</div>
 					{/if}
+
+					{#if value.attributes?.length}
+					<ProductAttributes attributes="{value.attributes}" />
+					{/if}
 				{:catch error}
 					{error?.message}
 				{/await}
-
-				<ProductAttributes attributes="{data.product.attributes}" />
 
 				<!-- Delivery Options Desktop -->
 
