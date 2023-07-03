@@ -15,7 +15,11 @@ import MegamenuHorizontal from '$lib/themes/misiki/MegamenuHorizontal.svelte'
 import MegamenuVertical from '$lib/themes/misiki/MegamenuVertical.svelte'
 import PickedBanners from '$lib/themes/misiki/PickedBanners.svelte'
 import ProductCard from '$lib/themes/fashion/ProductCard.svelte'
+import ProductDetails from '$lib/themes/fashion/ProductDetails.svelte'
+import ProductListingSearchPage from '$lib/themes/fashion/ProductListingSearchPage.svelte'
+import ProductSliderBanner from '$lib/themes/fashion/ProductSliderBanner.svelte'
 import ProductsListingPage from '$lib/themes/fashion/ProductsListingPage.svelte'
+import SimilarProductsFromCategorySlug from '$lib/themes/fashion/SimilarProductsFromCategorySlug.svelte'
 import TrendingProductsHome from '$lib/themes/fashion/TrendingProductsHome.svelte'
 
 export {
@@ -34,6 +38,10 @@ export {
     MegamenuVertical,
     PickedBanners,
     ProductCard,
+    ProductDetails,
+    ProductListingSearchPage,
+    ProductSliderBanner,
     ProductsListingPage,
+    SimilarProductsFromCategorySlug,
     TrendingProductsHome,
 }

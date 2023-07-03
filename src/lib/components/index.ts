@@ -29,7 +29,6 @@ import RatingsAndReviews from './Product/RatingsAndReviews.svelte'
 import RatingStarDisplayBig from './RatingStarDisplayBig.svelte'
 import ReloadPrompt from './ReloadPrompt.svelte'
 import ReviewGallery from './Product/ReviewGallery.svelte'
-import SimilarProductsFromCategorySlug from './Product/SimilarProductsFromCategorySlug.svelte'
 import SingleImageUpload from './SingleImageUpload.svelte'
 import SliderBanner from './SliderBanner.svelte'
 import SocialSharingButtons from './SocialSharingButtons.svelte'
@@ -105,7 +104,6 @@ export {
 	ReloadPrompt,
 	ReviewGallery,
 	ShopYourStone,
-	SimilarProductsFromCategorySlug,
 	SingleImageUpload,
 	SliderBanner,
 	SocialSharingButtons,
