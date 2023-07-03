@@ -17,7 +17,7 @@ export let title = ''
 export let selectedImgIndex = 0
 export let showPhotosModal = false
 
-let product_image_dimension = $page.data.store.product_image_dimension || '3x4'
+let product_image_dimention = $page.data.store.product_image_dimention || '3x4'
 let selectedimg: string
 
 $: if (images?.length) {
@@ -72,7 +72,7 @@ onMount(async () => {
 					{#each images as img, ix}
 						{#if img}
 							<SplideSlide>
-								{#if product_image_dimension === '1x1'}
+								{#if product_image_dimention === '1x1'}
 									<LazyImg
 										src="{img}"
 										alt="image {ix}"
@@ -91,7 +91,7 @@ onMount(async () => {
 					{/each}
 				</svelte:component>
 			{:else if images?.length === 1}
-				{#if product_image_dimension === '1x1'}
+				{#if product_image_dimention === '1x1'}
 					<LazyImg
 						src="{images && images[0]}"
 						alt="image 1"
@@ -140,30 +140,35 @@ onMount(async () => {
 					</div>
 
 					<div
-						class="grid grid-cols-3 items-start justify-between gap-2 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-slate-300 lg:grid-cols-2
+						class="overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-slate-300
 						{title ? 'h-[90%]' : 'h-[94%]'}">
-						{#each images as img, ix}
-							{#if img}
-								<button
-									type="button"
-									class="relative z-0 col-span-1 border bg-zinc-100 focus:outline-none flex items-center justify-center"
-									on:click="{() => (selectedimg = img)}">
-									<LazyImg
-										src="{img}"
-										alt="image {ix}"
-										height="512"
-										width="512"
-										aspect_ratio="1:1"
-										class="object-center w-full h-auto first-line:text-xs
-										{product_image_dimension === '1x1' ? 'object-cover' : 'object-contain'}" />
+						<ul
+							class="m-0 p-0 list-none grid grid-cols-3 items-start justify-between gap-2 lg:grid-cols-2">
+							{#each images as img, ix}
+								{#if img}
+									<li>
+										<button
+											type="button"
+											class="relative z-0 col-span-1 border bg-zinc-100 focus:outline-none flex items-center justify-center"
+											on:click="{() => (selectedimg = img)}">
+											<LazyImg
+												src="{img}"
+												alt="image {ix}"
+												height="512"
+												width="512"
+												aspect_ratio="1:1"
+												class="object-center w-full h-auto first-line:text-xs
+												{product_image_dimention === '1x1' ? 'object-cover' : 'object-contain'}" />
 
-									<div
-										class="absolute inset-0 z-10 h-full w-full bg-white
-                                    {selectedimg === img ? 'bg-opacity-0' : 'bg-opacity-50'}">
-									</div>
-								</button>
-							{/if}
-						{/each}
+											<div
+												class="absolute inset-0 z-10 h-full w-full bg-white
+												{selectedimg === img ? 'bg-opacity-0' : 'bg-opacity-50'}">
+											</div>
+										</button>
+									</li>
+								{/if}
+							{/each}
+						</ul>
 					</div>
 				</div>
 			{/if}
