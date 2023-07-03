@@ -46,6 +46,7 @@ import { fireGTagEvent } from '$lib/utils/gTagB'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import { ProductAttributes } from '$lib/theme-config'
 import { ProductNav } from '$lib/components'
 import { ProductsGrid } from '$lib/components'
 import { SocialSharingButtons } from '$lib/components'
@@ -1229,6 +1230,8 @@ function handleMobileCanvas() {
 				{:catch error}
 					{error?.message}
 				{/await}
+
+				<ProductAttributes attributes="{data.product.attributes}" />
 
 				<!-- Delivery Options Desktop -->
 

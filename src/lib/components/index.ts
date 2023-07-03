@@ -57,7 +57,6 @@ import CollectionsHome from './CollectionsHome.svelte'
 import CollectionsHome2 from './CollectionsHome2.svelte'
 import DummyProductCard from './DummyProductCard.svelte'
 import ProductCard from './ProductCard.svelte'
-import TrendingProductsHome from './TrendingProductsHome.svelte'
 
 export {
 	AnimatedCartItem,
@@ -114,6 +113,5 @@ export {
 	Stats,
 	StoreInformationFooter,
 	Stripe,
-	TrendingProductsHome,
 	UserForm,
 }
