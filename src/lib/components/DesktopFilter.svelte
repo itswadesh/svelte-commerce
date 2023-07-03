@@ -180,7 +180,7 @@ function handleToggleSubCategory2(c, cx) {
 </script>
 
 <div
-	class="{clazz} flex h-[85vh] w-56 shrink-0 flex-col items-start pr-6 overflow-hidden scrollbar-thin scrollbar-thumb-slate-200">
+	class="{clazz} flex h-[85vh] w-56 shrink-0 flex-col items-start pr-6 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-200">
 	<div class="flex flex-col items-start gap-1">
 		<!-- Applied filters count -->
 

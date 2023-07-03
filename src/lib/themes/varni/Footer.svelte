@@ -24,8 +24,8 @@
 import { browser } from '$app/environment'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import appStore from '$lib/assets/app/app-store.svg'
-import googlePlay from '$lib/assets/app/google-play.png'
+// import appStore from '$lib/assets/app/app-store.svg'
+// import googlePlay from '$lib/assets/app/google-play.png'
 import masterCard from '$lib/assets/payment-method/mastercard.png'
 import paypal from '$lib/assets/payment-method/paypal.png'
 import skrill from '$lib/assets/payment-method/skrill.png'
@@ -33,9 +33,9 @@ import type { Category, Me } from '$lib/types'
 import visa from '$lib/assets/payment-method/visa.png'
 // import visaElectron from '$lib/assets/payment-method/visa-electron.png'
 
-export let store = {},
-	popularSearches: { took: 0; count: 0; data: [] },
-	megamenu: Category[]
+export let megamenu: Category[]
+export let popularSearches: { took: 0; count: 0; data: [] }
+export let store = {}
 
 // let categories = []
 
