@@ -1,25 +1,11 @@
 <script>
-import {LazyImg} from '$lib/components'
+import { LazyImg } from '$lib/components'
 
-export let loading, categories
+export let categories
+export let loading
 
 let clazz = ''
 export { clazz as class }
-
-let categoryColors = [
-	'bg-fuchsia-900',
-	'bg-blue-900',
-	'bg-green-900',
-	'bg-stone-900',
-	'bg-indigo-900',
-	'bg-amber-900',
-	'bg-lime-900',
-	'bg-orange-900',
-	'bg-teal-900',
-	'bg-cyan-900',
-	'bg-yellow-900',
-	'bg-zinc-800'
-]
 </script>
 
 <div class="{clazz} w-screen">
