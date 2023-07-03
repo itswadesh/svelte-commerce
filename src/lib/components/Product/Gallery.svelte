@@ -17,7 +17,7 @@ export let title = ''
 export let selectedImgIndex = 0
 export let showPhotosModal = false
 
-let product_image_dimention = $page.data.store.product_image_dimention || '3x4'
+let product_image_dimension = $page.data.store.product_image_dimension || '3x4'
 let selectedimg: string
 
 $: if (images?.length) {
@@ -72,7 +72,7 @@ onMount(async () => {
 					{#each images as img, ix}
 						{#if img}
 							<SplideSlide>
-								{#if product_image_dimention === '1x1'}
+								{#if product_image_dimension === '1x1'}
 									<LazyImg
 										src="{img}"
 										alt="image {ix}"
@@ -91,7 +91,7 @@ onMount(async () => {
 					{/each}
 				</svelte:component>
 			{:else if images?.length === 1}
-				{#if product_image_dimention === '1x1'}
+				{#if product_image_dimension === '1x1'}
 					<LazyImg
 						src="{images && images[0]}"
 						alt="image 1"
@@ -155,7 +155,7 @@ onMount(async () => {
 										width="512"
 										aspect_ratio="1:1"
 										class="object-center w-full h-auto first-line:text-xs
-										{product_image_dimention === '1x1' ? 'object-cover' : 'object-contain'}" />
+										{product_image_dimension === '1x1' ? 'object-cover' : 'object-contain'}" />
 
 									<div
 										class="absolute inset-0 z-10 h-full w-full bg-white

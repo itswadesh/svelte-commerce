@@ -159,7 +159,7 @@ let isExpired = false
 let isWishlisted = false
 let loading = false
 let loadingForWishlist = false
-let product_image_dimention = $page.data.store.product_image_dimention || '3x4'
+let product_image_dimension = $page.data.store.product_image_dimension || '3x4'
 let productReviews = {}
 let recentlyViewed = []
 let screenWidth
@@ -493,7 +493,7 @@ function handleMobileCanvas() {
 								type="button"
 								class="cursor-zoom-in overflow-hidden rounded md:flex-shrink w-full h-auto flex items-center justify-center shrink-0"
 								on:click="{() => handleGallery(index)}">
-								{#if product_image_dimention === '1x1'}
+								{#if product_image_dimension === '1x1'}
 									<LazyImg
 										src="{img}"
 										alt="{data.product?.name} catelog {index}"

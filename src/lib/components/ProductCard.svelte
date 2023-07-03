@@ -37,10 +37,9 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 
-// console.log('$page', $page)
-
 export let product = {}
 // console.log('product', product)
+// console.log('$page', $page)
 
 if (product?._source) {
 	product = product?._source
@@ -50,7 +49,7 @@ let isWislisted = false
 let loadingForWishlist = false
 let show = false
 let showRelatedProducts = false
-let product_image_dimention = $page.data.store.product_image_dimention || '3x4'
+let product_image_dimension = $page.data.store.product_image_dimension || '3x4'
 
 function showitems() {
 	show = true
@@ -64,7 +63,7 @@ function hideitems() {
 {#if product}
 	<div
 		class="group relative col-span-1 block w-full sm:shrink-0 sm:rounded bg-white border sm:border-transparent shadow-effect overflow-hidden sm:overflow-visible
-		{product_image_dimention == '16x9' ? 'md:w-[420px]' : 'sm:w-[210px]'}"
+		{product_image_dimension == '16x9' ? 'md:w-[420px]' : 'sm:w-[210px]'}"
 		on:mouseenter="{showitems}"
 		on:mouseleave="{hideitems}">
 		<a
@@ -97,7 +96,7 @@ function hideitems() {
 				</div>
 			{/if}
 
-			{#if product_image_dimention == '1x1'}
+			{#if product_image_dimension == '1x1'}
 				{#if product.img}
 					<LazyImg
 						src="{product.img}"
@@ -126,7 +125,7 @@ function hideitems() {
 						<span>No image available</span>
 					</div>
 				{/if}
-			{:else if product_image_dimention == '3x4'}
+			{:else if product_image_dimension == '3x4'}
 				{#if product.img}
 					<LazyImg
 						src="{product.img}"
@@ -155,7 +154,7 @@ function hideitems() {
 						<span>No image available</span>
 					</div>
 				{/if}
-			{:else if product_image_dimention == '4x3'}
+			{:else if product_image_dimension == '4x3'}
 				{#if product.img}
 					<LazyImg
 						src="{product.img}"
@@ -184,7 +183,7 @@ function hideitems() {
 						<span>No image available</span>
 					</div>
 				{/if}
-			{:else if product_image_dimention == '16x9'}
+			{:else if product_image_dimension == '16x9'}
 				{#if product.img}
 					<LazyImg
 						src="{product.img}"
@@ -213,7 +212,7 @@ function hideitems() {
 						<span>No image available</span>
 					</div>
 				{/if}
-			{:else if product_image_dimention == '9x16'}
+			{:else if product_image_dimension == '9x16'}
 				{#if product.img}
 					<LazyImg
 						src="{product.img}"
@@ -416,6 +415,10 @@ function hideitems() {
 			<!-- For view below 640px end -->
 			<!-- {:else} -->
 			<div>
+				<!-- {#if !product.hasStock && !show}
+					<p class="text-center text-xs text-red-500">Out of Stock</p>
+				{/if} -->
+
 				<a
 					href="/product/{product.slug}"
 					aria-label="Click to view the product details"
@@ -497,12 +500,6 @@ function hideitems() {
 							{/if}
 						{/if}
 					</div>
-
-					{#if !product.hasStock && !show}
-						<p class="absolute inset-x-0 bottom-16 sm:bottom-20 text-center text-xs text-red-500">
-							Out of Stock
-						</p>
-					{/if}
 				</a>
 			{/if}
 		</div>

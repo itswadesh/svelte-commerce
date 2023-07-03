@@ -47,7 +47,7 @@ export async function GET({ cookies, request, locals }) {
 			logo: storeRes.storeOne.logo,
 			otpLogin: storeRes.storeOne.otpLogin || true,
 			phone: storeRes.storeOne.phone,
-			product_image_dimention: storeRes.storeOne.product_image_dimention,
+			product_image_dimension: storeRes.storeOne.product_image_dimension,
 			searchbarText: storeRes.storeOne.searchbarText,
 			socialSharingButtons: storeRes.storeOne.socialSharingButtons,
 			storePromoVideo: storeRes.storeOne.storePromoVideo,
