@@ -11,6 +11,7 @@ import HeroBanners from '$lib/themes/misiki/HeroBanners.svelte'
 import MegamenuHorizontal from '$lib/themes/misiki/MegamenuHorizontal.svelte'
 import MegamenuVertical from '$lib/themes/misiki/MegamenuVertical.svelte'
 import PickedBanners from '$lib/themes/misiki/PickedBanners.svelte'
+import ProductsListingPage from '$lib/themes/misiki/ProductsListingPage.svelte'
 
 export {
     CategoriesHome,
@@ -24,4 +25,5 @@ export {
     MegamenuHorizontal,
     MegamenuVertical,
     PickedBanners,
+    ProductsListingPage,
 }

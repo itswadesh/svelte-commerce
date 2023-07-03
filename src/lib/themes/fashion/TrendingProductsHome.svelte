@@ -1,7 +1,8 @@
 <script>
 import { fly } from 'svelte/transition'
-import { ProductCard, DummyProductCard } from '$lib/components'
+import DummyProductCard from './DummyProductCard.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import ProductCard from './ProductCard.svelte'
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)

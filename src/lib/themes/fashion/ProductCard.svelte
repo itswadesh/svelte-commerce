@@ -115,7 +115,8 @@ if (product?._source) {
 					rel="noopener noreferrer"
 					aria-label="Click to view the product details"
 					data-sveltekit-preload-data="tap"
-					class="block flex-1 text-xs sm:text-sm truncate w-full group-hover:underline">
+					class="block flex-1 text-xs sm:text-sm truncate group-hover:underline"
+					style="max-width: 20ch;">
 					{product.name || '_'}
 				</a>
 
