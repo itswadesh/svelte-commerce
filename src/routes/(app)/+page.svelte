@@ -12,22 +12,17 @@ import {
 	PickedBanners
 } from '$lib/theme-config'
 import {
-	CollectionsHome,
-	CollectionsHome2,
-	DummyProductCard,
 	Footer,
 	HeroBannersCollage6,
-	LazyImg,
 	LegalFooterInformation,
 	MobileFooter,
 	PopularProductsHome,
-	ProductCard,
 	ProductGridShowCase,
-	ShopYourStone,
-	TrendingProductsHome
+	ShopYourStone
 } from '$lib/components'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import { CollectionsHome, CollectionsHome2, TrendingProductsHome } from '$lib/theme-config'
 import Cookie from 'cookie-universal'
 import dayjs from 'dayjs'
 import PincodeInputBox from '$lib/themes/misiki/PincodeInputBox.svelte'
