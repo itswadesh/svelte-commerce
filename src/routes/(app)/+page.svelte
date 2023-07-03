@@ -9,8 +9,7 @@ import {
 	Deals,
 	Hero,
 	HeroBanners,
-	PickedBanners,
-	PincodeInputBox
+	PickedBanners
 } from '$lib/theme-config'
 import {
 	CollectionsHome,
@@ -31,6 +30,7 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import Cookie from 'cookie-universal'
 import dayjs from 'dayjs'
+import PincodeInputBox from '$lib/themes/misiki/PincodeInputBox.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 const cookies = Cookie()
