@@ -1,5 +1,5 @@
 <script>
-import { Deals } from '$lib/home'
+import { Deals } from '$lib/theme-config'
 
 export let data = {}
 </script>

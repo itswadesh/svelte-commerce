@@ -1,17 +1,14 @@
 <script>
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
+import { CategoriesMobile, Hero, HeroBanners, PickedBanners } from '$lib/theme-config'
 import { MobileFooter } from '$lib/components'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { Skeleton, Textbox } from '$lib/ui'
 import { toast } from '$lib/utils'
-import CategoriesMobile from '$lib/home/CategoriesMobile.svelte'
 import dayjs from 'dayjs'
 import Fuse from 'fuse.js'
-import Hero from '$lib/home/Hero.svelte'
-import HeroBanners from '$lib/home/HeroBanners.svelte'
-import PickedBanners from '$lib/home/PickedBanners.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 let today = dayjs(new Date()).toISOString()

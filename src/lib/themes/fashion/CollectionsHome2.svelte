@@ -27,19 +27,11 @@ import { LazyImg } from '$lib/components'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { SplideSlide } from '@splidejs/svelte-splide'
-import { PrimaryButton, WhiteButton } from '$lib/ui'
-import { applyAction, enhance } from '$app/forms'
-import { fireGTagEvent } from '$lib/utils/gTagB'
-import { goto, invalidateAll } from '$app/navigation'
+import { PrimaryButton } from '$lib/ui'
 
 export let data = {}
 // console.log('zzzzzzzzzzzzzzzzzz', data)
 
-let bounceItemFromTop = false
-let cartButtonText = 'Add to Bag'
-let customizedImg
-let selectedLinkiedProducts = []
-let selectedOptions1 = []
 let Splide
 
 $: innerWidth = 0
