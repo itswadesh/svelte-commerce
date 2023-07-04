@@ -173,13 +173,15 @@ const getSelectionLabel = (option) => option.name
 
 <!-- {hellobar?.active?.val ? 'h-[88px] sm:h-28' : 'h-14 sm:h-20'} -->
 <div
-	class="minimum-width-rem fixed inset-x-0 top-0 w-full border-b bg-white shadow-xs
+	class="minimum-width-rem sticky inset-x-0 top-0 w-full border-b bg-white shadow-xs
 	{hellobar?.active?.val && $page.data.store?.isHyperlocal
-		? 'h-[114px] sm:h-[206px] lg:h-[114px]'
+		? 'h-[112px] sm:h-[136px] lg:h-[112px]'
 		: ''}
-	{hellobar?.active?.val && !$page.data.store?.isHyperlocal ? 'h-[88px] sm:h-28' : ''}
-	{$page.data.store?.isHyperlocal && !hellobar?.active?.val ? 'h-20 sm:h-[104px] lg:h-20' : ''}
-	{!hellobar?.active?.val && !$page.data.store?.isHyperlocal ? 'h-14 sm:h-20' : ''}
+	{hellobar?.active?.val && !$page.data.store?.isHyperlocal ? 'h-[88px] sm:h-[112px]' : ''}
+	{$page.data.store?.isHyperlocal && !hellobar?.active?.val
+		? 'h-[80px] sm:h-[104px] lg:h-[80px]'
+		: ''}
+	{!hellobar?.active?.val && !$page.data.store?.isHyperlocal ? 'h-[56px] sm:h-[80px]' : ''}
 	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
 	{#if hellobar?.active?.val}
 		<div
