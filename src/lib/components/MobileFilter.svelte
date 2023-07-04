@@ -33,6 +33,7 @@ let showSubCategory = []
 let showSubCategory2 = []
 
 let allAges = []
+let allAttributes = []
 let allBrands = []
 let allColors = []
 let allDiscount = []
@@ -69,6 +70,9 @@ onMount(async () => {
 function getFacetsWithProducts() {
 	if (facets?.all_aggs?.age?.all?.buckets?.length) {
 		allAges = facets?.all_aggs?.age?.all?.buckets?.filter((t) => t.doc_count > 0)
+	}
+	if (facets?.all_aggs?.attributes?.all?.key?.buckets?.length) {
+		allAttributes = facets?.all_aggs?.attributes?.all?.key?.buckets?.filter((t) => t.doc_count > 0)
 	}
 	if (facets?.all_aggs?.brands?.all?.buckets?.length) {
 		allBrands = facets?.all_aggs?.brands?.all?.buckets?.filter((t) => t.doc_count > 0)
@@ -125,6 +129,8 @@ async function getMegamenu() {
 function getSelected() {
 	if (allAges?.length > 0) {
 		selected = 'Age'
+	} else if (allAttributes?.length > 0) {
+		selected = 'Attributes'
 	} else if (allBrands?.length > 0) {
 		selected = 'Brands'
 	} else if (allColors?.length > 0) {
@@ -362,6 +368,23 @@ $: {
 					<hr class="w-full" />
 				{/if}
 
+				{#if allAttributes?.length > 0}
+					<button
+						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
+						{selected === 'Attributes'
+							? 'text-primary-500 border-primary-500 bg-white'
+							: 'border-zinc-100 bg-transparent'}"
+						on:click="{() => (selected = 'Attributes')}">
+						<span> Attributes </span>
+
+						{#if fl.attributes?.length}
+							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
+						{/if}
+					</button>
+
+					<hr class="w-full" />
+				{/if}
+
 				{#if allBrands?.length > 0}
 					<button
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
@@ -592,6 +615,21 @@ $: {
 								items="{allAges}"
 								model="age"
 								selectedItems="{fl.age || []}"
+								showSearchBox
+								on:go="{goCheckbox}" />
+						{/if}
+					</div>
+				{/if}
+
+				{#if selected === 'Attributes'}
+					<div
+						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
+						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
+						{#if allAttributes?.length > 0}
+							<CheckboxEs
+								items="{allAttributes}"
+								model="attributes"
+								selectedItems="{fl.attributes || []}"
 								showSearchBox
 								on:go="{goCheckbox}" />
 						{/if}

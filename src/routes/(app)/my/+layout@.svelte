@@ -6,14 +6,12 @@
 
 <script lang="ts">
 import { Nav, PageTransitions, Footer } from '$lib/components'
-import { page } from '$app/stores'
 import menu from '$lib/config/menu'
 import SidebarDashboard from './_SidebarDashboard.svelte'
 
 export let data
 $: ({ path, url, sort, isHome, q, currentPage, me, cart, store } = data)
 
-let hellobar = $page.data.store?.hellobar || {}
 let openSidebar = false
 let showCartSidebar = false
 </script>
@@ -27,14 +25,7 @@ let showCartSidebar = false
 		bind:showCartSidebar="{showCartSidebar}"
 		bind:openSidebar="{openSidebar}" />
 
-	<div
-		class="flex h-full w-full antialiased flex-1
-		{hellobar?.active?.val && $page.data.store?.isHyperlocal
-			? 'mt-[114px] sm:mt-[206px] lg:mt-[114px]'
-			: ''}
-		{hellobar?.active?.val && !$page.data.store?.isHyperlocal ? 'mt-[88px] sm:mt-28' : ''}
-		{$page.data.store?.isHyperlocal && !hellobar?.active?.val ? 'mt-20 sm:mt-[104px] lg:mt-20' : ''}
-		{!hellobar?.active?.val && !$page.data.store?.isHyperlocal ? 'mt-14 sm:mt-20' : ''}">
+	<div class="flex h-full w-full antialiased flex-1">
 		{#if menu?.length > 0}
 			<div
 				class="relative hidden w-44 shrink-0 overflow-y-auto overflow-x-hidden bg-primary-500 py-3 scrollbar-none sm:block">
@@ -56,7 +47,7 @@ let showCartSidebar = false
 			</div>
 		{/if}
 
-		<div class="h-[89vh] w-full flex-1 overflow-y-auto p-3 py-5 sm:p-10">
+		<div class="h-full w-full flex-1 overflow-y-auto p-3 py-5 sm:p-10">
 			<PageTransitions url="{data.url}">
 				<slot />
 			</PageTransitions>
