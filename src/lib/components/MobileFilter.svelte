@@ -44,6 +44,7 @@ let allSizes = []
 let allTags = []
 let allTypes = []
 let allVendors = []
+let firstBucketObjectWithLength = {}
 let megamenu
 
 onMount(async () => {
@@ -129,8 +130,8 @@ async function getMegamenu() {
 function getSelected() {
 	if (allAges?.length > 0) {
 		selected = 'Age'
-	} else if (allAttributes?.length > 0) {
-		selected = 'Attributes'
+	} else if (firstBucketWithLength()) {
+		selected = firstBucketObjectWithLength.key
 	} else if (allBrands?.length > 0) {
 		selected = 'Brands'
 	} else if (allColors?.length > 0) {
@@ -154,6 +155,13 @@ function getSelected() {
 		// } else if (priceRange?.length > 0) {
 		// 	selected = 'Prices'
 	}
+}
+
+function firstBucketWithLength() {
+	// Find the first bucket with a length inside the buckets array
+	firstBucketObjectWithLength = allAttributes.find((bucket) => bucket.value.buckets.length > 0)
+
+	return firstBucketObjectWithLength ? true : false
 }
 
 function handleToggleSubCategory(m, mx) {
@@ -369,20 +377,24 @@ $: {
 				{/if}
 
 				{#if allAttributes?.length > 0}
-					<button
-						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
-						{selected === 'Attributes'
-							? 'text-primary-500 border-primary-500 bg-white'
-							: 'border-zinc-100 bg-transparent'}"
-						on:click="{() => (selected = 'Attributes')}">
-						<span> Attributes </span>
+					{#each allAttributes as attribute}
+						{#if allAttributes?.length > 0}
+							<button
+								class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
+								{selected === attribute.key
+									? 'text-primary-500 border-primary-500 bg-white'
+									: 'border-zinc-100 bg-transparent'}"
+								on:click="{() => (selected = attribute.key)}">
+								<span> {attribute.key} </span>
 
-						{#if fl.attributes?.length}
-							<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
+								{#if fl[attribute.key.toLowerCase()]?.length}
+									<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
+								{/if}
+							</button>
+
+							<hr class="w-full" />
 						{/if}
-					</button>
-
-					<hr class="w-full" />
+					{/each}
 				{/if}
 
 				{#if allBrands?.length > 0}
@@ -621,19 +633,23 @@ $: {
 					</div>
 				{/if}
 
-				{#if selected === 'Attributes'}
-					<div
-						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
-						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
-						{#if allAttributes?.length > 0}
-							<CheckboxEs
-								items="{allAttributes}"
-								model="attributes"
-								selectedItems="{fl.attributes || []}"
-								showSearchBox
-								on:go="{goCheckbox}" />
+				{#if allAttributes?.length > 0}
+					{#each allAttributes as attribute}
+						{#if selected === attribute.key}
+							<div
+								class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
+								in:fly="{{ y: -10, duration: 300, delay: 300 }}">
+								{#if attribute.value?.buckets?.length > 0}
+									<CheckboxEs
+										items="{attribute.value?.buckets}"
+										model="{attribute.key.toLowerCase()}"
+										selectedItems="{fl[attribute.key.toLowerCase()] || []}"
+										showSearchBox
+										on:go="{goCheckbox}" />
+								{/if}
+							</div>
 						{/if}
-					</div>
+					{/each}
 				{/if}
 
 				{#if selected === 'Brands'}

@@ -115,7 +115,7 @@ function handleSearchBox() {
 	{#if title}
 		<div class="relative mb-3 flex items-center justify-between gap-4">
 			{#if title}
-				<h6 class="relative z-0 font-bold tracking-wide first-letter:uppercase">
+				<h6 class="relative z-0 font-bold tracking-wide first-letter:uppercase pr-8">
 					{title}
 				</h6>
 			{/if}
