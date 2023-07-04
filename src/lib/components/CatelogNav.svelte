@@ -5,19 +5,20 @@
 </style>
 
 <script lang="ts">
-import { enhance } from '$app/forms'
-import { goto, invalidateAll } from '$app/navigation'
-import { goback, toast } from '$lib/utils'
+import { Autocomplete, MegaMenu } from '$lib/components'
 import { createEventDispatcher, getContext, onMount } from 'svelte'
 import { cubicOut } from 'svelte/easing'
+import { enhance } from '$app/forms'
 import { fade, fly } from 'svelte/transition'
+import { getAPI, post } from '$lib/utils/api'
+import { goback, toast } from '$lib/utils'
+import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
-import { Autocomplete, MegaMenu } from '$lib/components'
+import { WhiteButton, PrimaryButton } from '$lib/ui'
 import AutosuggestModal from './AutosuggestModal.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import menu from '$lib/config/menu'
 import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
-import { WhiteButton, PrimaryButton } from '$lib/ui'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 import type { Cart, Me } from '$lib/types'
@@ -117,8 +118,8 @@ const getSelectionLabel = (option) => option.name
 </script>
 
 <nav
-	class="minimum-width-rem fixed inset-x-0 top-0 w-full border-b bg-white shadow-md sm:h-20 lg:hidden
-	{hellobar?.active?.val ? 'h-[88px]' : 'h-14'}
+	class="minimum-width-rem sticky inset-x-0 top-0 w-full border-b bg-white shadow-md lg:hidden
+	{hellobar?.active?.val ? 'h-[88px] sm:h-[112px]' : 'h-[56px] sm:h-[80px]'}
 	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
 	{#if hellobar?.active?.val}
 		<div
@@ -129,7 +130,7 @@ const getSelectionLabel = (option) => option.name
 		</div>
 	{/if}
 
-	<div class="px-3 sm:px-10 flex w-full h-14 items-center justify-center">
+	<div class="px-3 sm:px-10 flex w-full h-14 sm:h-20 items-center justify-center">
 		<div class="flex w-full items-center justify-between gap-4 lg:gap-8">
 			<div class="flex items-center gap-4">
 				<!-- Back button -->

@@ -29,6 +29,7 @@ let showSubCategory = []
 let showSubCategory2 = []
 
 let allAges = []
+let allAttributes = []
 let allBrands = []
 let allColors = []
 let allDiscount = []
@@ -85,6 +86,9 @@ onMount(async () => {
 function getFacetsWithProducts() {
 	if (facets?.all_aggs?.age?.all?.buckets?.length) {
 		allAges = facets?.all_aggs?.age?.all?.buckets?.filter((t) => t.doc_count > 0)
+	}
+	if (facets?.all_aggs?.attributes?.all?.key?.buckets?.length) {
+		allAttributes = facets?.all_aggs?.attributes?.all?.key?.buckets?.filter((t) => t.doc_count > 0)
 	}
 	if (facets?.all_aggs?.brands?.all?.buckets?.length) {
 		allBrands = facets?.all_aggs?.brands?.all?.buckets?.filter((t) => t.doc_count > 0)
@@ -344,6 +348,19 @@ function handleToggleSubCategory2(c, cx) {
 				model="age"
 				selectedItems="{fl.age || []}"
 				showSearchBox
+				on:go="{goCheckbox}" />
+		</div>
+	{/if}
+
+	{#if allAttributes?.length > 0}
+		<div class="my-3">
+			<hr class="mb-3 w-full" />
+
+			<CheckboxEs
+				items="{allAttributes}"
+				title="attributes"
+				model="attributes"
+				selectedItems="{fl.attributes || []}"
 				on:go="{goCheckbox}" />
 		</div>
 	{/if}
