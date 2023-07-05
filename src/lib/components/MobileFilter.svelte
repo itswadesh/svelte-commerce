@@ -387,7 +387,7 @@ $: {
 								on:click="{() => (selected = attribute.key)}">
 								<span> {attribute.key} </span>
 
-								{#if fl[attribute.key.toLowerCase()]?.length}
+								{#if fl[attribute.key]?.length}
 									<div class="h-1.5 w-1.5 rounded-full bg-primary-500"></div>
 								{/if}
 							</button>
@@ -642,8 +642,8 @@ $: {
 								{#if attribute.value?.buckets?.length > 0}
 									<CheckboxEs
 										items="{attribute.value?.buckets}"
-										model="{attribute.key.toLowerCase()}"
-										selectedItems="{fl[attribute.key.toLowerCase()] || []}"
+										model="{attribute.key}"
+										selectedItems="{fl[attribute.key] || []}"
 										showSearchBox
 										on:go="{goCheckbox}" />
 								{/if}
