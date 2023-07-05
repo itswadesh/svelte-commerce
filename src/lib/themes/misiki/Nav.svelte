@@ -13,10 +13,9 @@ import { fade, fly, slide } from 'svelte/transition'
 import { goback, toast } from '$lib/utils'
 import { goto, invalidateAll } from '$app/navigation'
 import { logo } from '$lib/config'
-import { MegaMenu, LazyImg } from '$lib/components'
+import { AutosuggestModal, MegaMenu, LazyImg } from '$lib/components'
 import { page } from '$app/stores'
 import { WhiteButton, PrimaryButton } from '$lib/ui'
-import AutosuggestModal from './AutosuggestModal.svelte'
 import Cookie from 'cookie-universal'
 import Item from '$lib/components/AutocompleteItem.svelte'
 import menu from '$lib/config/menu'
@@ -172,7 +171,7 @@ const getSelectionLabel = (option) => option.name
 </script>
 
 <!-- {hellobar?.active?.val ? 'h-[88px] sm:h-28' : 'h-14 sm:h-20'} -->
-<div
+<nav
 	class="minimum-width-rem sticky inset-x-0 top-0 w-full border-b bg-white shadow-xs
 	{hellobar?.active?.val && $page.data.store?.isHyperlocal
 		? 'h-[112px] sm:h-[136px] lg:h-[112px]'
@@ -192,7 +191,7 @@ const getSelectionLabel = (option) => option.name
 		</div>
 	{/if}
 
-	<nav class="h-14 sm:h-20 flex items-center px-3 sm:px-10 w-full justify-between gap-4 lg:gap-8">
+	<div class="h-14 sm:h-20 flex items-center px-3 sm:px-10 w-full justify-between gap-4 lg:gap-8">
 		<div class="flex items-center gap-4">
 			<!-- Back button -->
 
@@ -790,7 +789,7 @@ const getSelectionLabel = (option) => option.name
 				</a>
 			{/if}
 		</div>
-	</nav>
+	</div>
 
 	{#if $page.data.store?.isHyperlocal}
 		<button
@@ -815,7 +814,7 @@ const getSelectionLabel = (option) => option.name
 			<span>{pin || 'Select your pincode...'}</span>
 		</button>
 	{/if}
-</div>
+</nav>
 
 {#if showPincodeInputBox}
 	<PincodeInputBox on:close="{() => (showPincodeInputBox = false)}" />

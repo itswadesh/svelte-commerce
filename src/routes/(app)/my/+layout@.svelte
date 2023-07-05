@@ -5,7 +5,8 @@
 </style>
 
 <script lang="ts">
-import { Nav, PageTransitions, Footer } from '$lib/components'
+import { Nav } from '$lib/theme-config'
+import { PageTransitions, Footer } from '$lib/components'
 import menu from '$lib/config/menu'
 import SidebarDashboard from './_SidebarDashboard.svelte'
 

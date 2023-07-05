@@ -15,6 +15,7 @@ import Hero from '$lib/themes/misiki/Hero.svelte'
 import HeroBanners from '$lib/themes/misiki/HeroBanners.svelte'
 import MegamenuHorizontal from '$lib/themes/misiki/MegamenuHorizontal.svelte'
 import MegamenuVertical from '$lib/themes/misiki/MegamenuVertical.svelte'
+import Nav from '$lib/themes/misiki/Nav.svelte'
 import PickedBanners from '$lib/themes/misiki/PickedBanners.svelte'
 import ProductAttributes from '$lib/themes/misiki/ProductAttributes.svelte'
 import ProductDetails from '$lib/themes/misiki/ProductDetails.svelte'
@@ -39,6 +40,7 @@ export {
     HeroBanners,
     MegamenuHorizontal,
     MegamenuVertical,
+    Nav,
     PickedBanners,
     ProductAttributes,
     ProductDetails,
