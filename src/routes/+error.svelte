@@ -1,10 +1,10 @@
 <script>
+import { Nav } from '$lib/theme-config'
 import { page } from '$app/stores'
+import { PrimaryButton } from '$lib/ui'
 import errAnimated from '$lib/assets/no/error.svg'
 import errBackground from '$lib/assets/no/error-background.png'
 import menu from '$lib/config/menu'
-import {Nav} from '$lib/components'
-import {PrimaryButton} from '$lib/ui'
 
 export let data
 
