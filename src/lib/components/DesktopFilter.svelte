@@ -364,8 +364,8 @@ function handleToggleSubCategory2(c, cx) {
 				<CheckboxEs
 					items="{attribute.value?.buckets}"
 					title="{attribute.key}"
-					model="{attribute.key.toLowerCase()}"
-					selectedItems="{fl[attribute.key.toLowerCase()] || []}"
+					model="{attribute.key}"
+					selectedItems="{fl[attribute.key] || []}"
 					on:go="{goCheckbox}" />
 			</div>
 		{/each}
