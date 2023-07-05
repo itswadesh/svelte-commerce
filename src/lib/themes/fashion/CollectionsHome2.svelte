@@ -54,54 +54,42 @@ onMount(async () => {
 {#await data.streamed.collections then collections}
 	{#if collections?.count}
 		{#each collections.data as collection}
-			<div class="p-3 py-5 sm:px-10 md:py-10 text-center uppercase flex flex-col gap-2">
-				<p class="text-sm tracking-widest">Shop</p>
+			{#if collection.block === 'block-2'}
+				<div class="p-3 py-5 sm:px-10 md:py-10 text-center uppercase flex flex-col gap-2">
+					<p class="text-sm tracking-widest">Shop</p>
 
-				{#if collection.name}
-					<h2 class="text-xl font-medium tracking-wider sm:text-2xl md:text-2xl">
-						{collection.name}
-					</h2>
-				{/if}
-			</div>
+					{#if collection.name}
+						<h2 class="text-xl font-medium tracking-wider sm:text-2xl md:text-2xl">
+							{collection.name}
+						</h2>
+					{/if}
+				</div>
 
-			{#if collection?.products?.length}
-				<div class="px-3 py-10 sm:px-10">
-					<div class="container mx-auto max-w-6xl">
-						<svelte:component
-							this="{Splide}"
-							options="{{
-								rewind: true,
-								lazyLoad: true,
-								perPage: 1,
-								perMove: 1,
-								pagination: false,
-								width: responsiveWidth || '100%'
-							}}">
-							{#each collection?.products as product, ix}
-								{#if product.img}
-									<SplideSlide>
-										<div
-											class="grid grid-cols-1 sm:grid-cols-5 gap-5 items-center sm:gap-10 md:gap-20">
-											<!-- Banner section -->
+				{#if collection?.products?.length}
+					<div class="px-3 py-10 sm:px-10">
+						<div class="container mx-auto max-w-6xl">
+							<svelte:component
+								this="{Splide}"
+								options="{{
+									rewind: true,
+									lazyLoad: true,
+									perPage: 1,
+									perMove: 1,
+									pagination: false,
+									width: responsiveWidth || '100%'
+								}}">
+								{#each collection?.products as product, ix}
+									{#if product.img}
+										<SplideSlide>
+											<div
+												class="grid grid-cols-1 sm:grid-cols-5 gap-5 items-center sm:gap-10 md:gap-20">
+												<!-- Banner section -->
 
-											<a
-												href="{product.link || `/product/${product.slug}`}"
-												aria-label="Click to visit banner related products page"
-												class="hidden sm:block col-span-1 sm:col-span-2"
-												data-sveltekit-preload-data>
-												<LazyImg
-													src="{product.img}"
-													alt="{product.name}"
-													width="400"
-													height="533"
-													aspect_ratio="3:4"
-													class="object-cover object-bottom text-xs" />
-											</a>
-
-											<!-- Details section -->
-
-											<div class="col-span-1 sm:col-span-3 flex justify-center sm:justify-start">
-												<div class="flex flex-col items-center text-center gap-5 max-w-[250px]">
+												<a
+													href="{product.link || `/product/${product.slug}`}"
+													aria-label="Click to visit banner related products page"
+													class="hidden sm:block col-span-1 sm:col-span-2"
+													data-sveltekit-preload-data>
 													<LazyImg
 														src="{product.img}"
 														alt="{product.name}"
@@ -109,38 +97,52 @@ onMount(async () => {
 														height="533"
 														aspect_ratio="3:4"
 														class="object-cover object-bottom text-xs" />
+												</a>
 
-													<div>
-														<a
-															href="{product.link || `/product/${product.slug}`}"
-															aria-label="Click to visit banner related products page"
-															class="block"
-															data-sveltekit-preload-data>
-															{product.name}
-														</a>
+												<!-- Details section -->
 
-														<p class="text-zinc-500">
-															{currency(product.price, $page.data?.store?.currencySymbol)}
-														</p>
+												<div class="col-span-1 sm:col-span-3 flex justify-center sm:justify-start">
+													<div class="flex flex-col items-center text-center gap-5 max-w-[250px]">
+														<LazyImg
+															src="{product.img}"
+															alt="{product.name}"
+															width="400"
+															height="533"
+															aspect_ratio="3:4"
+															class="object-cover object-bottom text-xs" />
+
+														<div>
+															<a
+																href="{product.link || `/product/${product.slug}`}"
+																aria-label="Click to visit banner related products page"
+																class="block"
+																data-sveltekit-preload-data>
+																{product.name}
+															</a>
+
+															<p class="text-zinc-500">
+																{currency(product.price, $page.data?.store?.currencySymbol)}
+															</p>
+														</div>
+
+														<PrimaryButton
+															type="button"
+															hideLoading
+															class="w-full text-sm uppercase"
+															roundedNone
+															blackBackground>
+															View This Product
+														</PrimaryButton>
 													</div>
-
-													<PrimaryButton
-														type="button"
-														hideLoading
-														class="w-full text-sm uppercase"
-														roundedNone
-														blackBackground>
-														View This Product
-													</PrimaryButton>
 												</div>
 											</div>
-										</div>
-									</SplideSlide>
-								{/if}
-							{/each}
-						</svelte:component>
+										</SplideSlide>
+									{/if}
+								{/each}
+							</svelte:component>
+						</div>
 					</div>
-				</div>
+				{/if}
 			{/if}
 		{/each}
 	{/if}
