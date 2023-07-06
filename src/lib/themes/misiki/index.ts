@@ -10,6 +10,7 @@ import CollectionsHome from '$lib/themes/misiki/CollectionsHome.svelte'
 import CollectionsHome2 from '$lib/themes/misiki/CollectionsHome2.svelte'
 import Deals from '$lib/themes/misiki/Deals.svelte'
 import DeliveryOptions from '$lib/themes/misiki/DeliveryOptions.svelte'
+import Footer from '$lib/themes/misiki/Footer.svelte'
 import FrequentlyBoughtProduct from '$lib/themes/misiki/FrequentlyBoughtProduct.svelte'
 import Hero from '$lib/themes/misiki/Hero.svelte'
 import HeroBanners from '$lib/themes/misiki/HeroBanners.svelte'
@@ -35,6 +36,7 @@ export {
     CollectionsHome2,
     Deals,
     DeliveryOptions,
+    Footer,
     FrequentlyBoughtProduct,
     Hero,
     HeroBanners,

@@ -9,6 +9,7 @@ import CollectionsHome from '$lib/themes/fashion/CollectionsHome.svelte'
 import CollectionsHome2 from '$lib/themes/fashion/CollectionsHome2.svelte'
 import Deals from '$lib/themes/misiki/Deals.svelte'
 import DummyProductCard from '$lib/themes/fashion/DummyProductCard.svelte'
+import Footer from '$lib/themes/fashion/Footer.svelte'
 import Hero from '$lib/themes/misiki/Hero.svelte'
 import HeroBanners from '$lib/themes/misiki/HeroBanners.svelte'
 import MegamenuHorizontal from '$lib/themes/misiki/MegamenuHorizontal.svelte'
@@ -33,6 +34,7 @@ export {
     CollectionsHome2,
     Deals,
     DummyProductCard,
+    Footer,
     Hero,
     HeroBanners,
     MegamenuHorizontal,

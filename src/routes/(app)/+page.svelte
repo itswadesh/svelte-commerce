@@ -7,12 +7,12 @@ import {
 	CategoriesSlider,
 	CollectionsGeneral,
 	Deals,
+	Footer,
 	Hero,
 	HeroBanners,
 	PickedBanners
 } from '$lib/theme-config'
 import {
-	Footer,
 	HeroBannersCollage6,
 	LegalFooterInformation,
 	MobileFooter,

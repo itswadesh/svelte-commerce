@@ -1,7 +1,7 @@
 <script>
-import { Nav } from '$lib/theme-config'
+import { Footer, Nav } from '$lib/theme-config'
 import { page } from '$app/stores'
-import { PageTransitions, Footer } from '$lib/components'
+import { PageTransitions } from '$lib/components'
 
 export let data
 </script>
