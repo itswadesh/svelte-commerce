@@ -40,150 +40,150 @@ function handleInput() {
 	{#if type === 'text'}
 		<input
 			type="text"
-			bind:value="{value}"
-			id="{id}"
-			name="{name}"
-			autoFocus="{autoFocus}"
-			maxlength="{maxlength}"
+			bind:value
+			{id}
+			{name}
+			{autoFocus}
+			{maxlength}
 			class="w-full rounded border border-zinc-200 p-2 text-sm placeholder-zinc-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 {clazz} 
 			{disabled ? 'cursor-not-allowed bg-zinc-100' : 'bg-transparent hover:bg-zinc-50'}
 			{success ? 'border-green-500 focus:border-green-500 bg-green-100 focus:ring-green-500' : ''}
 			{error ? 'border-red-500 focus:border-red-500 bg-red-100 focus:ring-red-500' : ''}"
-			placeholder="{placeholder}"
-			required="{required}"
-			disabled="{disabled}"
+			{placeholder}
+			{required}
+			{disabled}
 			aria-label="{placeholder}"
 			on:input="{handleInput}"
 			on:blur="{() => dispatch('blur')}" />
 	{:else if type === 'email'}
 		<input
 			type="email"
-			bind:value="{value}"
-			id="{id}"
-			name="{name}"
-			autoFocus="{autoFocus}"
-			maxlength="{maxlength}"
+			bind:value
+			{id}
+			{name}
+			{autoFocus}
+			{maxlength}
 			class="w-full rounded border border-zinc-200 p-2 text-sm placeholder-zinc-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 {clazz} 
 			{disabled ? 'cursor-not-allowed bg-zinc-100' : 'bg-transparent hover:bg-zinc-50'}
 			{success ? 'border-green-500 focus:border-green-500 bg-green-100 focus:ring-green-500' : ''}
 			{error ? 'border-red-500 focus:border-red-500 bg-red-100 focus:ring-red-500' : ''}"
-			placeholder="{placeholder}"
-			required="{required}"
-			disabled="{disabled}"
+			{placeholder}
+			{required}
+			{disabled}
 			aria-label="{placeholder}"
 			on:input="{handleInput}"
 			on:blur="{() => dispatch('blur')}" />
 	{:else if type === 'password'}
 		<input
 			type="password"
-			bind:value="{value}"
-			id="{id}"
-			name="{name}"
-			autoFocus="{autoFocus}"
-			maxlength="{maxlength}"
+			bind:value
+			{id}
+			{name}
+			{autoFocus}
+			{maxlength}
 			class="w-full rounded border border-zinc-200 p-2 text-sm placeholder-zinc-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 {clazz} 
 			{disabled ? 'cursor-not-allowed bg-zinc-100' : 'bg-transparent hover:bg-zinc-50'}
 			{success ? 'border-green-500 focus:border-green-500 bg-green-100 focus:ring-green-500' : ''}
 			{error ? 'border-red-500 focus:border-red-500 bg-red-100 focus:ring-red-500' : ''}"
-			placeholder="{placeholder}"
-			required="{required}"
-			disabled="{disabled}"
+			{placeholder}
+			{required}
+			{disabled}
 			aria-label="{placeholder}"
 			on:input="{handleInput}"
 			on:blur="{() => dispatch('blur')}" />
 	{:else if type === 'date'}
 		<input
 			type="date"
-			bind:value="{value}"
-			id="{id}"
-			name="{name}"
-			autoFocus="{autoFocus}"
-			maxlength="{maxlength}"
+			bind:value
+			{id}
+			{name}
+			{autoFocus}
+			{maxlength}
 			class="w-full rounded border border-zinc-200 p-2 text-sm placeholder-zinc-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 {clazz} 
 			{disabled ? 'cursor-not-allowed bg-zinc-100' : 'bg-transparent hover:bg-zinc-50'}
 			{success ? 'border-green-500 focus:border-green-500 bg-green-100 focus:ring-green-500' : ''}
 			{error ? 'border-red-500 focus:border-red-500 bg-red-100 focus:ring-red-500' : ''}"
-			placeholder="{placeholder}"
-			required="{required}"
-			disabled="{disabled}"
+			{placeholder}
+			{required}
+			{disabled}
 			aria-label="{placeholder}"
 			on:input="{handleInput}"
 			on:blur="{() => dispatch('blur')}" />
 	{:else if type === 'time'}
 		<input
 			type="time"
-			bind:value="{value}"
-			id="{id}"
-			name="{name}"
-			autoFocus="{autoFocus}"
-			maxlength="{maxlength}"
+			bind:value
+			{id}
+			{name}
+			{autoFocus}
+			{maxlength}
 			class="w-full rounded border border-zinc-200 p-2 text-sm placeholder-zinc-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 {clazz} 
 			{disabled ? 'cursor-not-allowed bg-zinc-100' : 'bg-transparent hover:bg-zinc-50'}
 			{success ? 'border-green-500 focus:border-green-500 bg-green-100 focus:ring-green-500' : ''}
 			{error ? 'border-red-500 focus:border-red-500 bg-red-100 focus:ring-red-500' : ''}"
-			placeholder="{placeholder}"
-			required="{required}"
-			disabled="{disabled}"
+			{placeholder}
+			{required}
+			{disabled}
 			aria-label="{placeholder}"
 			on:input="{handleInput}"
 			on:blur="{() => dispatch('blur')}" />
 	{:else if type === 'number'}
 		<input
 			type="number"
-			bind:value="{value}"
-			id="{id}"
-			name="{name}"
-			autoFocus="{autoFocus}"
-			maxlength="{maxlength}"
+			bind:value
+			{id}
+			{name}
+			{autoFocus}
+			{maxlength}
 			class="w-full rounded border border-zinc-200 p-2 text-sm placeholder-zinc-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 {clazz} 
 			{disabled ? 'cursor-not-allowed bg-zinc-100' : 'bg-transparent hover:bg-zinc-50'}
 			{success ? 'border-green-500 focus:border-green-500 bg-green-100 focus:ring-green-500' : ''}
 			{error ? 'border-red-500 focus:border-red-500 bg-red-100 focus:ring-red-500' : ''}"
-			placeholder="{placeholder}"
-			required="{required}"
-			disabled="{disabled}"
+			{placeholder}
+			{required}
+			{disabled}
 			aria-label="{placeholder}"
 			on:input="{handleInput}"
 			on:blur="{() => dispatch('blur')}" />
 	{:else if type === 'tel'}
 		<input
 			type="tel"
-			bind:value="{value}"
-			id="{id}"
-			name="{name}"
-			autoFocus="{autoFocus}"
-			maxlength="{maxlength}"
+			bind:value
+			{id}
+			{name}
+			{autoFocus}
+			{maxlength}
 			class="w-full rounded border border-zinc-200 p-2 text-sm placeholder-zinc-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 {clazz} 
 			{disabled ? 'cursor-not-allowed bg-zinc-100' : 'bg-transparent hover:bg-zinc-50'}
 			{success ? 'border-green-500 focus:border-green-500 bg-green-100 focus:ring-green-500' : ''}
 			{error ? 'border-red-500 focus:border-red-500 bg-red-100 focus:ring-red-500' : ''}"
-			placeholder="{placeholder}"
-			required="{required}"
-			disabled="{disabled}"
+			{placeholder}
+			{required}
+			{disabled}
 			aria-label="{placeholder}"
 			on:input="{handleInput}"
 			on:blur="{() => dispatch('blur')}" />
 	{:else if type === 'datetime-local'}
 		<input
 			type="datetime-local"
-			bind:value="{value}"
-			id="{id}"
-			name="{name}"
-			autoFocus="{autoFocus}"
-			maxlength="{maxlength}"
+			bind:value
+			{id}
+			{name}
+			{autoFocus}
+			{maxlength}
 			class="w-full rounded border border-zinc-200 p-2 text-sm placeholder-zinc-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 {clazz} 
 			{disabled ? 'cursor-not-allowed bg-zinc-100' : 'bg-transparent hover:bg-zinc-50'}
 			{success ? 'border-green-500 focus:border-green-500 bg-green-100 focus:ring-green-500' : ''}
 			{error ? 'border-red-500 focus:border-red-500 bg-red-100 focus:ring-red-500' : ''}"
-			placeholder="{placeholder}"
-			required="{required}"
-			disabled="{disabled}"
+			{placeholder}
+			{required}
+			{disabled}
 			aria-label="{placeholder}"
 			on:input="{handleInput}"
 			on:blur="{() => dispatch('blur')}" />
 	{/if}
 
 	{#if alphaNumeric && error}
-		<p class="mt-2 text-xs text-red-500">Must contain only letters and numbers with no spaces</p>
+		<p class="mt-2 text-xs text-red-600">Must contain only letters and numbers with no spaces</p>
 	{/if}
 </div>
