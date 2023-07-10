@@ -40,6 +40,7 @@
 import { applyAction, enhance } from '$app/forms'
 import { browser } from '$app/environment'
 import { CartService, WishlistService } from '$lib/services'
+import { cubicOut } from 'svelte/easing'
 import { currency, getIdFromYoutubeVideo, toast } from '$lib/utils'
 import { DummyProductCard } from '$lib/components'
 import { fireGTagEvent } from '$lib/utils/gTagB'
@@ -175,6 +176,7 @@ let shake = false
 let showEditor = false
 let showLongDescription = false
 let showPhotosModal = false
+let showSizeChart = false
 let showStickyCartButton = true
 let showUserInputForm = false
 let today = dayjs().format('YYYY-MM-DD')
@@ -265,6 +267,20 @@ const storeRecentlyViewedToLocatStorage = async () => {
 
 function selectSize(s) {
 	selectedSize = s.name
+}
+
+function slideFade(node, params) {
+	const existingTransform = getComputedStyle(node).transform.replace('none', '')
+
+	return {
+		delay: params.delay || 0,
+		duration: params.duration || 400,
+		easing: params.easing || cubicOut,
+		css: (t, u) =>
+			`transform-origin: ${
+				params.transformOrigin || 'top right'
+			}; transform: ${existingTransform} scaleX(${t}); opacity: ${t};`
+	}
 }
 
 function handleSelectedLinkiedProducts(e) {
@@ -738,29 +754,40 @@ function handleMobileCanvas() {
 
 				{#if data.product?.size}
 					<div class="mb-5">
-						<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
-							<span> Select Size </span>
+						<div class="mb-2 flex flex-wrap items-center gap-2 justify-between">
+							<h6 class="flex items-center gap-2 font-semibold uppercase">
+								<span> Select Size </span>
 
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="h-5 w-5"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor"
-								stroke-width="1">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-								></path>
-							</svg>
-						</h6>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="h-5 w-5"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+									stroke-width="1">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+									></path>
+								</svg>
+							</h6>
+
+							{#if data.product.sizechart}
+								<button
+									type="button"
+									class="text-right text-sm text-secondary-500 underline focus:outline-none"
+									on:click="{() => (showSizeChart = !showSizeChart)}">
+									Size Chart
+								</button>
+							{/if}
+						</div>
 
 						<div class="flex flex-wrap gap-2">
 							<button
 								type="button"
 								class="overflow-hidden rounded border py-1 px-3 text-sm font-medium uppercase transition duration-500 focus:outline-none
-              				{data.product?.size?.name === selectedSize
+              					{data.product?.size?.name === selectedSize
 									? 'bg-primary-500 border-primary-500 text-white'
 									: 'bg-transparent border-zinc-200 text-zinc-500 hover:border-primary-500 hover:text-primary-500'}"
 								on:click="{() => selectSize(data.product?.size)}">
@@ -1137,7 +1164,10 @@ function handleMobileCanvas() {
 												}
 											}}">
 											<input type="hidden" name="pid" value="{data?.product?._id}" />
+
 											<input type="hidden" name="vid" value="{data?.product?._id}" />
+
+											<input type="hidden" name="size" value="{selectedSize}" />
 
 											<input
 												type="hidden"
@@ -1230,7 +1260,7 @@ function handleMobileCanvas() {
 					{/if}
 
 					{#if value.attributes?.length}
-					<ProductAttributes attributes="{value.attributes}" />
+						<ProductAttributes attributes="{value.attributes}" />
 					{/if}
 				{:catch error}
 					{error?.message}
@@ -1475,7 +1505,10 @@ function handleMobileCanvas() {
 												}
 											}}">
 											<input type="hidden" name="pid" value="{data?.product?._id}" />
+
 											<input type="hidden" name="vid" value="{data?.product?._id}" />
+
+											<input type="hidden" name="size" value="{selectedSize}" />
 
 											<input
 												type="hidden"
@@ -1653,7 +1686,10 @@ function handleMobileCanvas() {
 												}
 											}}">
 											<input type="hidden" name="pid" value="{data?.product?._id}" />
+
 											<input type="hidden" name="vid" value="{data?.product?._id}" />
+
+											<input type="hidden" name="size" value="{selectedSize}" />
 
 											<input
 												type="hidden"
@@ -1791,6 +1827,43 @@ function handleMobileCanvas() {
 
 {#if bounceItemFromTop}
 	<AnimatedCartItem img="{customizedImg || data.product?.img}" />
+{/if}
+
+{#if showSizeChart}
+	<div class="fixed inset-0 h-screen w-screen z-50 flex justify-end">
+		<button
+			type="button"
+			class="absolute inset-0 cursor-default focus:outline-none"
+			on:click="{() => (showSizeChart = false)}">
+		</button>
+
+		<div
+			transition:slideFade="{{ duration: 500 }}"
+			class="absolute inset-y-0 right-0 z-[60] h-full w-full sm:w-96 bg-white p-5 sm:p-10 flex flex-col items-end justify-end"
+			style="box-shadow: -4px 0px 10px rgba(50, 50, 50, 0.2);">
+			<button
+				type="button"
+				class="text-zinc-500 hover:text-zinc-800 transition duration-300 transform scale-125 focus:outline-none"
+				on:click="{() => (showSizeChart = false)}">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke-width="1.5"
+					stroke="currentColor"
+					class="w-6 h-6">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+				</svg>
+			</button>
+
+			<div class="h-full w-full flex items-center justify-center">
+				<img
+					src="{data.product.sizechart}"
+					alt="{data.product?.name} size chart"
+					class="object-contain object-center w-full h-auto first-line:text-xs" />
+			</div>
+		</div>
+	</div>
 {/if}
 
 <!-- <UserForm showUserInputForm="{showUserInputForm}" /> -->
