@@ -72,7 +72,6 @@ const add: Action = async ({ request, cookies, locals }) => {
 			pid,
 			qty,
 			server: true,
-			size,
 			storeId: locals.store?.id,
 			vid,
 		})
