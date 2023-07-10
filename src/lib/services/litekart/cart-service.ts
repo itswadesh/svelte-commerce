@@ -63,7 +63,6 @@ export const addToCartService = async ({
 	qty,
 	server = false,
 	sid = null,
-	size,
 	storeId,
 	vid,
 }) => {
@@ -78,7 +77,6 @@ export const addToCartService = async ({
 					options,
 					pid,
 					qty,
-					size,
 					store: storeId,
 					vid,
 				},

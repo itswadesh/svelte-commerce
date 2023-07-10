@@ -171,7 +171,6 @@ let selectedLinkiedProducts = []
 let selectedOptions = []
 let selectedOptions1 = []
 let selectedReviewType = 'product_review'
-let selectedSize
 let shake = false
 let showEditor = false
 let showLongDescription = false
@@ -185,10 +184,6 @@ let y = 0
 
 $: if (y > 500) {
 	showUserInputForm = true
-}
-
-if (data.product?.size?.name === 'One Size') {
-	selectedSize = 'One Size'
 }
 
 if (data.product?.expiryDate) {
@@ -263,10 +258,6 @@ const storeRecentlyViewedToLocatStorage = async () => {
 			localStorage.setItem(`recently_viewed_${$page.data.store.id}`, JSON.stringify(recentlyViewed))
 		}
 	}
-}
-
-function selectSize(s) {
-	selectedSize = s.name
 }
 
 function slideFade(node, params) {
@@ -750,55 +741,6 @@ function handleMobileCanvas() {
 					</div>
 				{/if}
 
-				<!-- Size -->
-
-				{#if data.product?.size}
-					<div class="mb-5">
-						<div class="mb-2 flex flex-wrap items-center gap-2 justify-between">
-							<h6 class="flex items-center gap-2 font-semibold uppercase">
-								<span> Select Size </span>
-
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="h-5 w-5"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-									stroke-width="1">
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-									></path>
-								</svg>
-							</h6>
-
-							{#if data.product.sizechart}
-								<button
-									type="button"
-									class="text-right text-sm text-secondary-500 underline focus:outline-none"
-									on:click="{() => (showSizeChart = !showSizeChart)}">
-									Size Chart
-								</button>
-							{/if}
-						</div>
-
-						<div class="flex flex-wrap gap-2">
-							<button
-								type="button"
-								class="overflow-hidden rounded border py-1 px-3 text-sm font-medium uppercase transition duration-500 focus:outline-none
-              					{data.product?.size?.name === selectedSize
-									? 'bg-primary-500 border-primary-500 text-white'
-									: 'bg-transparent border-zinc-200 text-zinc-500 hover:border-primary-500 hover:text-primary-500'}"
-								on:click="{() => selectSize(data.product?.size)}">
-								{data.product?.size?.name}
-							</button>
-						</div>
-					</div>
-				{/if}
-
-				<!-- Group Products -->
-
 				{#await data.streamed?.moreProductDetails}
 					<ul class="mb-5 p-0 list-none flex flex-wrap gap-4">
 						{#each { length: 3 } as _}
@@ -811,6 +753,58 @@ function handleMobileCanvas() {
 					</ul>
 				{:then value}
 					{#if value.groupProduct?.length}
+						<!-- Size -->
+
+						<div class="mb-5">
+							<div class="mb-2 flex flex-wrap items-center gap-2 justify-between">
+								<h6 class="flex items-center gap-2 font-semibold uppercase">
+									<span> Select Size </span>
+
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										class="h-5 w-5"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+										stroke-width="1">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+										></path>
+									</svg>
+								</h6>
+
+								{#if data.product.sizechart}
+									<button
+										type="button"
+										class="text-right text-sm text-secondary-500 underline focus:outline-none"
+										on:click="{() => (showSizeChart = !showSizeChart)}">
+										Size Chart
+									</button>
+								{/if}
+							</div>
+
+							<ul class="flex flex-wrap gap-2">
+								{#each value.groupProduct as gp}
+									{#if gp}
+										<li>
+											<a
+												href="/product/{gp.slug}"
+												class="overflow-hidden rounded border py-1 px-3 text-sm font-medium uppercase transition duration-500 focus:outline-none
+												{gp?.size === data.product?.size?.name
+													? 'bg-primary-500 border-primary-500 text-white'
+													: 'bg-transparent border-zinc-200 text-zinc-500 hover:border-primary-500 hover:text-primary-500'}">
+												{gp?.size || '_'}
+											</a>
+										</li>
+									{/if}
+								{/each}
+							</ul>
+						</div>
+
+						<!-- Group Products -->
+
 						<div class="mb-5">
 							<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
 								<span> Similar Products </span>
@@ -831,22 +825,22 @@ function handleMobileCanvas() {
 							</h6>
 
 							<ul class="flex flex-wrap gap-2">
-								{#each value.groupProduct as gp}
+								{#each value.groupProduct as gp2}
 									<li>
 										<a
-											href="/product/{gp.slug}"
+											href="/product/{gp2.slug}"
 											class="flex flex-col gap-1 text-center w-14 text-xs leading-tight">
 											<div
 												class="flex h-16 w-14 items-center justify-center overflow-hidden rounded border border-zinc-200 transition duration-300 hover:border-primary-500 p-1 shadow-md">
 												<LazyImg
-													src="{gp.img}"
-													alt="{gp.img}"
+													src="{gp2.img}"
+													alt="{gp2.img}"
 													height="56"
 													class="h-14 w-auto object-contain object-center" />
 											</div>
 
-											{#if gp.tags?.length}
-												{#each gp.tags as tag}
+											{#if gp2.tags?.length}
+												{#each gp2.tags as tag}
 													<span>
 														{#if tag.type === 'Style'}
 															{tag.name}
@@ -855,8 +849,8 @@ function handleMobileCanvas() {
 												{/each}
 											{/if}
 
-											{#if gp.price}
-												<span><b>{currency(gp.price, $page.data?.store?.currencySymbol)}</b></span>
+											{#if gp2.price}
+												<span><b>{currency(gp2.price, $page.data?.store?.currencySymbol)}</b></span>
 											{/if}
 										</a>
 									</li>
@@ -1166,8 +1160,6 @@ function handleMobileCanvas() {
 											<input type="hidden" name="pid" value="{data?.product?._id}" />
 
 											<input type="hidden" name="vid" value="{data?.product?._id}" />
-
-											<input type="hidden" name="size" value="{selectedSize}" />
 
 											<input
 												type="hidden"
@@ -1508,8 +1500,6 @@ function handleMobileCanvas() {
 
 											<input type="hidden" name="vid" value="{data?.product?._id}" />
 
-											<input type="hidden" name="size" value="{selectedSize}" />
-
 											<input
 												type="hidden"
 												name="linkedItems"
@@ -1688,8 +1678,6 @@ function handleMobileCanvas() {
 											<input type="hidden" name="pid" value="{data?.product?._id}" />
 
 											<input type="hidden" name="vid" value="{data?.product?._id}" />
-
-											<input type="hidden" name="size" value="{selectedSize}" />
 
 											<input
 												type="hidden"
