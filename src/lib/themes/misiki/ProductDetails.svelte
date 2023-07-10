@@ -774,7 +774,7 @@ function handleMobileCanvas() {
 								</svg>
 							</h6>
 
-							<ul class="flex flex-wrap gap-2">
+							<ul class="flex flex-wrap gap-3">
 								{#each value?.pg.colorGroup as cg}
 									{#if cg?.color?.name}
 										<li>
@@ -836,17 +836,26 @@ function handleMobileCanvas() {
 								{/if}
 							</div>
 
-							<ul class="flex flex-wrap gap-2">
+							<ul class="flex flex-wrap gap-3">
 								{#each value?.pg.sizeGroup as sg}
 									{#if sg?.size?.name}
 										<li>
 											<a
 												href="/product/{sg.slug}"
-												class="overflow-hidden rounded border py-1 px-3 text-sm font-medium uppercase transition duration-500 focus:outline-none
+												class="flex flex-col items-center justify-center relative rounded border py-1 px-3 text-sm font-medium uppercase transition duration-500 focus:outline-none
 												{sg?.size?.name === data.product?.size?.name
 													? 'bg-primary-500 border-primary-500 text-white'
 													: 'bg-transparent border-zinc-200 text-zinc-500 hover:border-primary-500 hover:text-primary-500'}">
-												{sg?.size?.name || '_'}
+												<span>
+													{sg?.size?.name || '_'}
+												</span>
+
+												{#if sg.stock < 5 && sg.stock > 0}
+													<div
+														class="absolute z-10 max-w-max min-w-max -bottom-2 leading-3 py-0.5 px-2 rounded whitespace-nowrap bg-[#ff5a5a] text-white text-[0.65em] text-center">
+														{sg.stock} left
+													</div>
+												{/if}
 											</a>
 										</li>
 									{/if}
@@ -877,7 +886,7 @@ function handleMobileCanvas() {
 								</svg>
 							</h6>
 
-							<ul class="flex flex-wrap gap-2">
+							<ul class="flex flex-wrap gap-3">
 								{#each value?.pg.groupProduct as gp}
 									<li>
 										<a
