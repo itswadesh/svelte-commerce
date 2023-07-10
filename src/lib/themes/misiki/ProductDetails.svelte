@@ -753,6 +753,55 @@ function handleMobileCanvas() {
 					</ul>
 				{:then value}
 					{#if value.groupProduct?.length}
+						<!-- Color -->
+
+						<div class="mb-5">
+							<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
+								<span> Select Color </span>
+
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke-width="1"
+									stroke="currentColor"
+									class="w-5 h-5">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z"
+									></path>
+								</svg>
+							</h6>
+
+							<ul class="flex flex-wrap gap-2">
+								{#each value.groupProduct as gp}
+									{#if gp?.color?.name}
+										<li>
+											<a
+												href="/product/{gp.slug}"
+												class="flex flex-col items-center gap-2 text-sm group text-center transition duration-500 focus:outline-none
+												{gp?.color?.name === data.product?.color?.name
+													? 'text-primary-500'
+													: 'text-zinc-500 hover:text-primary-500'}">
+												<div
+													class="ring-1 ring-offset-2 h-10 w-10 rounded-full
+													{gp?.color?.name === data.product?.color?.name
+														? 'ring-primary-500'
+														: 'ring-zinc-200 group-hover:ring-primary-500'}"
+													style="background-color: {gp.color?.color_code};">
+												</div>
+
+												<span class="w-14 truncate">
+													{gp.color?.name}
+												</span>
+											</a>
+										</li>
+									{/if}
+								{/each}
+							</ul>
+						</div>
+
 						<!-- Size -->
 
 						<div class="mb-5">
@@ -786,16 +835,16 @@ function handleMobileCanvas() {
 							</div>
 
 							<ul class="flex flex-wrap gap-2">
-								{#each value.groupProduct as gp}
-									{#if gp}
+								{#each value.groupProduct as gp2}
+									{#if gp2?.size?.name}
 										<li>
 											<a
-												href="/product/{gp.slug}"
+												href="/product/{gp2.slug}"
 												class="overflow-hidden rounded border py-1 px-3 text-sm font-medium uppercase transition duration-500 focus:outline-none
-												{gp?.size === data.product?.size?.name
+												{gp2?.size?.name === data.product?.size?.name
 													? 'bg-primary-500 border-primary-500 text-white'
 													: 'bg-transparent border-zinc-200 text-zinc-500 hover:border-primary-500 hover:text-primary-500'}">
-												{gp?.size || '_'}
+												{gp2?.size?.name || '_'}
 											</a>
 										</li>
 									{/if}
@@ -825,22 +874,22 @@ function handleMobileCanvas() {
 							</h6>
 
 							<ul class="flex flex-wrap gap-2">
-								{#each value.groupProduct as gp2}
+								{#each value.groupProduct as gp3}
 									<li>
 										<a
-											href="/product/{gp2.slug}"
+											href="/product/{gp3.slug}"
 											class="flex flex-col gap-1 text-center w-14 text-xs leading-tight">
 											<div
 												class="flex h-16 w-14 items-center justify-center overflow-hidden rounded border border-zinc-200 transition duration-300 hover:border-primary-500 p-1 shadow-md">
 												<LazyImg
-													src="{gp2.img}"
-													alt="{gp2.img}"
+													src="{gp3.img}"
+													alt="{gp3.img}"
 													height="56"
 													class="h-14 w-auto object-contain object-center" />
 											</div>
 
-											{#if gp2.tags?.length}
-												{#each gp2.tags as tag}
+											{#if gp3.tags?.length}
+												{#each gp3.tags as tag}
 													<span>
 														{#if tag.type === 'Style'}
 															{tag.name}
@@ -849,8 +898,8 @@ function handleMobileCanvas() {
 												{/each}
 											{/if}
 
-											{#if gp2.price}
-												<span><b>{currency(gp2.price, $page.data?.store?.currencySymbol)}</b></span>
+											{#if gp3.price}
+												<span><b>{currency(gp3.price, $page.data?.store?.currencySymbol)}</b></span>
 											{/if}
 										</a>
 									</li>
