@@ -84,7 +84,7 @@ const cookies = Cookie()
 const isServer = import.meta.env.SSR
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
+console.log('zzzzzzzzzzzzzzzzzz', data)
 // console.log('$page', $page)
 
 let seoProps = {
@@ -776,25 +776,29 @@ function handleMobileCanvas() {
 
 							<ul class="flex flex-wrap gap-3">
 								{#each value?.pg.colorGroup as cg}
-									{#if cg?.color?.name}
+									{#if cg?.color?.name && cg.img}
 										<li>
 											<a
 												href="/product/{cg.slug}"
-												class="flex flex-col items-center gap-2 text-sm group text-center transition duration-500 focus:outline-none
-												{cg?.color?.name === data.product?.color?.name
-													? 'text-primary-500'
-													: 'text-zinc-500 hover:text-primary-500'}">
+												class="relative border h-20 w-14 flex items-center justify-center p-1 group transition-all duration-500 focus:outline-none
+												{cg?.color?.name === data.product?.color?.name ? 'border-primary-500' : 'hover:text-primary-500'}
+												{cg.hasStock ? 'opacity-100' : 'gray-scale opacity-40'}">
+												<LazyImg
+													src="{cg.img}"
+													alt="{cg.color.name}"
+													height="160"
+													width="120"
+													aspect_ratio="3:4"
+													class="transform group-hover:scale-95 object-contain object-center w-full h-auto text-xs" />
+
 												<div
-													class="ring-1 ring-offset-2 h-10 w-10 rounded-full
-													{cg?.color?.name === data.product?.color?.name
-														? 'ring-primary-500'
-														: 'ring-zinc-200 group-hover:ring-primary-500'}"
-													style="background-color: {cg.color?.color_code};">
+													class="hidden group-hover:block absolute z-20 max-w-max min-w-max -top-2 leading-3 py-0.5 px-2 rounded whitespace-nowrap bg-primary-500 text-white text-[0.65em] text-center">
+													{cg?.color.name}
 												</div>
 
-												<span class="w-14 truncate">
-													{cg.color?.name}
-												</span>
+												{#if cg.hasStock}
+													<hr class="absolute z-10 w-24 transform rotate-[56deg] border-zinc-500" />
+												{/if}
 											</a>
 										</li>
 									{/if}
@@ -842,19 +846,24 @@ function handleMobileCanvas() {
 										<li>
 											<a
 												href="/product/{sg.slug}"
-												class="flex flex-col items-center justify-center relative rounded border py-1 px-3 text-sm font-medium uppercase transition duration-500 focus:outline-none
+												class="flex flex-col items-center justify-center relative rounded border h-8 w-8 text-sm font-medium uppercase transition duration-500 focus:outline-none
 												{sg?.size?.name === data.product?.size?.name
 													? 'bg-primary-500 border-primary-500 text-white'
-													: 'bg-transparent border-zinc-200 text-zinc-500 hover:border-primary-500 hover:text-primary-500'}">
+													: 'bg-transparent border-zinc-200 text-zinc-500 hover:border-primary-500 hover:text-primary-500'}
+													{sg.hasStock ? 'opacity-100' : 'gray-scale opacity-40'}">
 												<span>
 													{sg?.size?.name || '_'}
 												</span>
 
 												{#if sg.stock < 5 && sg.stock > 0}
 													<div
-														class="absolute z-10 max-w-max min-w-max -bottom-2 leading-3 py-0.5 px-2 rounded whitespace-nowrap bg-[#ff5a5a] text-white text-[0.65em] text-center">
+														class="absolute z-20 max-w-max min-w-max -bottom-2 leading-3 py-0.5 px-2 rounded whitespace-nowrap bg-[#ff5a5a] text-white text-[0.65em] text-center">
 														{sg.stock} left
 													</div>
+												{/if}
+
+												{#if sg.hasStock}
+													<hr class="absolute z-10 w-10 transform rotate-45 border-zinc-500" />
 												{/if}
 											</a>
 										</li>
