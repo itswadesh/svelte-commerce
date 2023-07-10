@@ -32,6 +32,7 @@ const cookies = Cookie()
 let today = dayjs(new Date()).toISOString()
 
 export let data
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 // console.log('$page', $page)
 
 let seoProps = {
@@ -145,10 +146,10 @@ onMount(() => {
 
 		<!-- Alert message -->
 
-		{#if data.store?.alert}
+		{#if $page?.data.store.alert}
 			<div class="p-3 py-5 sm:p-10 bg-primary-50">
 				<h1 class="container mx-auto text-center text-3xl font-bold sm:text-4xl md:text-5xl">
-					{data.store?.alert}
+					{$page?.data.store.alert}
 				</h1>
 			</div>
 		{/if}
