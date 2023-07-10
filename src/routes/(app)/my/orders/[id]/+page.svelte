@@ -114,23 +114,21 @@ onMount(() => {
 											</span>
 										{/if}
 
-										<div class="flex flex-wrap gap-1 items-center">
-											{#if item.size}
-												<span>
-													<b>Size :</b>
+										{#if item.size}
+											<span>
+												<b>Size :</b>
 
-													{item.size}
-												</span>
-											{/if}
+												{item.size}
+											</span>
+										{/if}
 
-											{#if item.color}
-												<span>
-													<b>Color : </b>
+										{#if item.color}
+											<span>
+												<b>Color : </b>
 
-													{item.color}
-												</span>
-											{/if}
-										</div>
+												{item.color}
+											</span>
+										{/if}
 
 										{#if item.vendor}
 											<span>
