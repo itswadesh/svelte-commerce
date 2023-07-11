@@ -1,7 +1,16 @@
 <script>
-import { Deals } from '$lib/theme-config'
+import { LazyImg, ProductCard } from '$lib/components'
+import { onMount } from 'svelte'
+import { SplideSlide } from '@splidejs/svelte-splide'
 
 export let data = {}
+
+let Carousel, Splide
+
+onMount(async () => {
+	const SplideModule = await import('$lib/components/SplideJs.svelte')
+	Splide = SplideModule.default
+})
 </script>
 
 {#await data.streamed.collections}
@@ -19,7 +28,41 @@ export let data = {}
 					{collection.name}
 				</h2>
 
-				<Deals deal="{collection}" />
+				{#if collection}
+					<div class="hidden px-10 items-start justify-start gap-3 sm:flex w-[99vw]">
+						<svelte:component
+							this="{Splide}"
+							options="{{
+								autoWidth: true,
+								gap: '24px',
+								height: '100%',
+								width: '100%',
+								pagination: false,
+								perMove: 1
+							}}">
+							{#each collection.products as p}
+								{#if p}
+									<SplideSlide>
+										<ProductCard product="{p}" />
+									</SplideSlide>
+								{/if}
+							{/each}
+						</svelte:component>
+					</div>
+
+					<div
+						class="flex w-[98vw] items-start justify-start gap-3 overflow-x-auto sm:hidden scrollbar-none">
+						<ul class="flex w-full list-none items-start gap-2">
+							{#each collection.products as p, px}
+								{#if p}
+									<li class="max-w-[210px]">
+										<ProductCard product="{p}" />
+									</li>
+								{/if}
+							{/each}
+						</ul>
+					</div>
+				{/if}
 			</div>
 		{/each}
 	{/if}
