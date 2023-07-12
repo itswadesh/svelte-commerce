@@ -132,7 +132,7 @@ export const removeCouponService = async ({
 	try {
 		let res = {}
 
-		res = await del(`coupon/remove?code=${code}&store=${storeId}`, origin)
+		res = await del(`coupons/remove?code=${code}&store=${storeId}`, origin)
 
 		return res || {}
 	} catch (e) {
