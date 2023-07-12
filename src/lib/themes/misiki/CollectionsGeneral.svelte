@@ -34,7 +34,7 @@ onMount(async () => {
 							this="{Splide}"
 							options="{{
 								autoWidth: true,
-								gap: '24px',
+								gap: '62px',
 								height: '100%',
 								width: '100%',
 								pagination: false,
@@ -55,7 +55,7 @@ onMount(async () => {
 						<ul class="flex w-full list-none items-start gap-2">
 							{#each collection.products as p, px}
 								{#if p}
-									<li class="max-w-[210px]">
+									<li class="w-[210px] shrink-0">
 										<ProductCard product="{p}" />
 									</li>
 								{/if}

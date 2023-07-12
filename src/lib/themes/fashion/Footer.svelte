@@ -420,7 +420,7 @@ function subscribedForNewsletter() {
 			</ul>
 		</div>
 
-		<form
+		<!-- <form
 			on:submit|preventDefault="{subscribedForNewsletter}"
 			class="col-span-1 flex flex-col gap-4 max-w-xs justify-self-left md:justify-self-end">
 			<h5 class="whitespace-nowrap uppercase text-zinc-800">Newsletter</h5>
@@ -436,7 +436,7 @@ function subscribedForNewsletter() {
 			<PrimaryButton type="submit" blackBackground roundedNone class="max-w-max uppercase">
 				Subscribe
 			</PrimaryButton>
-		</form>
+		</form> -->
 	</div>
 
 	<div
