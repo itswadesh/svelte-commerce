@@ -84,7 +84,7 @@ const cookies = Cookie()
 const isServer = import.meta.env.SSR
 
 export let data
-console.log('zzzzzzzzzzzzzzzzzz', data)
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 // console.log('$page', $page)
 
 let seoProps = {
@@ -778,28 +778,49 @@ function handleMobileCanvas() {
 								{#each value?.pg.colorGroup as cg}
 									{#if cg?.color?.name && cg.img}
 										<li>
-											<a
-												href="/product/{cg.slug}"
-												class="relative border h-20 w-14 flex items-center justify-center p-1 group transition-all duration-500 focus:outline-none
-												{cg?.color?.name === data.product?.color?.name ? 'border-primary-500' : 'hover:text-primary-500'}
-												{cg.hasStock ? 'opacity-100' : 'gray-scale opacity-40'}">
-												<LazyImg
-													src="{cg.img}"
-													alt="{cg.color.name}"
-													height="160"
-													width="120"
-													aspect_ratio="3:4"
-													class="transform group-hover:scale-95 object-contain object-center w-full h-auto text-xs" />
+											{#if cg.hasStock}
+												<a
+													href="/product/{cg.slug}"
+													class="relative border h-20 w-14 flex items-center justify-center p-1 group transition duration-300 focus:outline-none
+													{cg?.color?.name === data.product?.color?.name
+														? 'border-primary-500'
+														: 'border-zinc-300 hover:border-primary-500'}">
+													<LazyImg
+														src="{cg.img}"
+														alt="{cg.color.name}"
+														height="160"
+														width="120"
+														aspect_ratio="3:4"
+														class="transform group-hover:scale-95 object-contain object-center w-full h-auto text-xs" />
 
-												<div
-													class="hidden group-hover:block absolute z-20 max-w-max min-w-max -top-2 leading-3 py-0.5 px-2 rounded whitespace-nowrap bg-primary-500 text-white text-[0.65em] text-center">
-													{cg?.color.name}
-												</div>
+													<div
+														class="hidden group-hover:block absolute z-20 max-w-max min-w-max -top-2 leading-3 py-1 px-2 rounded whitespace-nowrap bg-primary-500 text-white text-[0.65em] text-center">
+														{cg?.color.name}
+													</div>
+												</a>
+											{:else}
+												<a
+													href="/product/{cg.slug}"
+													class="relative border grayscale h-20 w-14 flex items-center justify-center p-1 group transition duration-300 focus:outline-none
+													{cg?.color?.name === data.product?.color?.name
+														? 'border-primary-500'
+														: 'border-zinc-300 hover:border-primary-500'}">
+													<LazyImg
+														src="{cg.img}"
+														alt="{cg.color.name}"
+														height="160"
+														width="120"
+														aspect_ratio="3:4"
+														class="transform group-hover:scale-95 object-contain object-center w-full h-auto text-xs" />
 
-												{#if cg.hasStock}
-													<hr class="absolute z-10 w-24 transform rotate-[56deg] border-zinc-500" />
-												{/if}
-											</a>
+													<div
+														class="hidden group-hover:block absolute z-20 max-w-max min-w-max -top-2 leading-3 py-1 px-2 rounded whitespace-nowrap bg-primary-500 text-white text-[0.65em] text-center">
+														{cg?.color.name}
+													</div>
+
+													<hr class="absolute z-10 w-24 transform rotate-[56deg] border-zinc-300" />
+												</a>
+											{/if}
 										</li>
 									{/if}
 								{/each}
@@ -844,28 +865,50 @@ function handleMobileCanvas() {
 								{#each value?.pg.sizeGroup as sg}
 									{#if sg?.size?.name}
 										<li>
-											<a
-												href="/product/{sg.slug}"
-												class="flex flex-col items-center justify-center relative rounded border h-8 w-8 text-sm font-medium uppercase transition duration-500 focus:outline-none
-												{sg?.size?.name === data.product?.size?.name
-													? 'bg-primary-500 border-primary-500 text-white'
-													: 'bg-transparent border-zinc-200 text-zinc-500 hover:border-primary-500 hover:text-primary-500'}
-													{sg.hasStock ? 'opacity-100' : 'gray-scale opacity-40'}">
-												<span>
-													{sg?.size?.name || '_'}
-												</span>
+											{#if sg?.hasStock}
+												<a
+													href="/product/{sg.slug}"
+													class="relative flex flex-col items-center justify-center text-center border h-14 w-14 rounded-full p-2 text-sm font-medium uppercase group transition duration-300 focus:outline-none
+													{sg?.size?.name === data.product?.size?.name
+														? 'bg-primary-500 border-primary-500 text-white'
+														: 'bg-transparent border-zinc-300 hover:border-primary-500'}">
+													<span class="w-full truncate">
+														{sg?.size?.name}
+													</span>
 
-												{#if sg.stock < 5 && sg.stock > 0}
 													<div
-														class="absolute z-20 max-w-max min-w-max -bottom-2 leading-3 py-0.5 px-2 rounded whitespace-nowrap bg-[#ff5a5a] text-white text-[0.65em] text-center">
-														{sg.stock} left
+														class="hidden group-hover:block absolute z-20 max-w-max min-w-max -top-2 leading-3 py-1 px-2 rounded whitespace-nowrap bg-primary-500 text-white text-[0.65em] text-center">
+														{sg?.size?.name}
 													</div>
-												{/if}
 
-												{#if sg.hasStock}
-													<hr class="absolute z-10 w-10 transform rotate-45 border-zinc-500" />
-												{/if}
-											</a>
+													{#if sg.stock < 5 && sg.stock > 0}
+														<div
+															class="absolute z-20 max-w-max min-w-max -bottom-2 leading-3 py-0.5 px-2 rounded whitespace-nowrap bg-[#ff5a5a] text-white text-[0.65em] text-center">
+															{sg.stock} left
+														</div>
+													{/if}
+												</a>
+											{:else}
+												<a
+													href="/product/{sg.slug}"
+													class="relative flex flex-col items-center justify-center text-zinc-300 text-center border h-14 w-14 rounded-full p-2 text-sm font-medium uppercase group transition duration-300 focus:outline-none grayscale
+													{sg?.size?.name === data.product?.size?.name
+														? 'border-primary-500'
+														: 'border-zinc-300 hover:border-primary-500'}">
+													<span class="w-full truncate">
+														{sg?.size?.name}
+													</span>
+
+													<div
+														class="hidden group-hover:block absolute z-20 max-w-max min-w-max -top-2 leading-3 py-1 px-2 rounded whitespace-nowrap bg-zinc-300 text-white text-[0.65em] text-center">
+														{sg?.size?.name}
+													</div>
+
+													<div class="absolute z-10 inset-0 flex items-center">
+														<hr class="w-full transform rotate-45 border-zinc-300" />
+													</div>
+												</a>
+											{/if}
 										</li>
 									{/if}
 								{/each}
