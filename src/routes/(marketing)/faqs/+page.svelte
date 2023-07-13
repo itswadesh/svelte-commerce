@@ -2,6 +2,7 @@
 import { Skeleton, PrimaryButton } from '$lib/ui'
 import noEmptyFaqs from '$lib/assets/no/empty-faqs.svg'
 import SEO from '$lib/components/SEO/index.svelte'
+import { slide } from 'svelte/transition'
 
 export let data
 
@@ -43,7 +44,7 @@ function showans(i) {
 								type="button"
 								class="flex w-full cursor-pointer items-start justify-between p-4 text-left focus:outline-none sm:p-6"
 								on:click="{() => showans(fx)}">
-								<span class="flex-1 text-base font-medium md:text-lg">{f.question}</span>
+								<span class="flex-1 text-base font-semibold md:text-lg">{@html f.question}</span>
 
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -62,7 +63,8 @@ function showans(i) {
 
 							{#if show[fx]}
 								<div
-									class="prose animate-dropdown px-4 pb-4 text-sm text-zinc-500 first-letter:uppercase sm:px-6 sm:pb-6 md:text-base">
+									transition:slide="{{ duration: 300 }}"
+									class="prose px-4 pb-4 text-sm text-zinc-500 first-letter:uppercase sm:px-6 sm:pb-6 md:text-base">
 									{@html f.answer}
 								</div>
 							{/if}

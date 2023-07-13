@@ -54,17 +54,17 @@ export const fetchMyCart = async ({ origin, storeId, server = false, sid = null 
 }
 
 export const addToCartService = async ({
-	pid,
-	vid,
-	qty,
-	customizedImg = null,
+	cookies,
 	customizedData = null,
-	origin,
+	customizedImg = null,
 	options = null,
-	storeId,
+	origin,
+	pid,
+	qty,
 	server = false,
 	sid = null,
-	cookies
+	storeId,
+	vid,
 }) => {
 	try {
 		let res = {}
@@ -72,13 +72,13 @@ export const addToCartService = async ({
 			res = await postt(
 				`carts/add-to-cart`,
 				{
-					pid,
-					vid,
-					qty,
-					customizedImg,
-					store: storeId,
 					customizedData,
-					options
+					customizedImg,
+					options,
+					pid,
+					qty,
+					store: storeId,
+					vid,
 				},
 				cookies
 			)
@@ -132,7 +132,7 @@ export const removeCouponService = async ({
 	try {
 		let res = {}
 
-		res = await del(`coupon/remove?code=${code}&store=${storeId}`, origin)
+		res = await del(`coupons/remove?code=${code}&store=${storeId}`, origin)
 
 		return res || {}
 	} catch (e) {

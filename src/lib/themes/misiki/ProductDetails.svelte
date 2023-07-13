@@ -40,6 +40,7 @@
 import { applyAction, enhance } from '$app/forms'
 import { browser } from '$app/environment'
 import { CartService, WishlistService } from '$lib/services'
+import { cubicOut } from 'svelte/easing'
 import { currency, getIdFromYoutubeVideo, toast } from '$lib/utils'
 import { DummyProductCard } from '$lib/components'
 import { fireGTagEvent } from '$lib/utils/gTagB'
@@ -170,11 +171,11 @@ let selectedLinkiedProducts = []
 let selectedOptions = []
 let selectedOptions1 = []
 let selectedReviewType = 'product_review'
-let selectedSize
 let shake = false
 let showEditor = false
 let showLongDescription = false
 let showPhotosModal = false
+let showSizeChart = false
 let showStickyCartButton = true
 let showUserInputForm = false
 let today = dayjs().format('YYYY-MM-DD')
@@ -183,10 +184,6 @@ let y = 0
 
 $: if (y > 500) {
 	showUserInputForm = true
-}
-
-if (data.product?.size?.name === 'One Size') {
-	selectedSize = 'One Size'
 }
 
 if (data.product?.expiryDate) {
@@ -263,8 +260,18 @@ const storeRecentlyViewedToLocatStorage = async () => {
 	}
 }
 
-function selectSize(s) {
-	selectedSize = s.name
+function slideFade(node, params) {
+	const existingTransform = getComputedStyle(node).transform.replace('none', '')
+
+	return {
+		delay: params.delay || 0,
+		duration: params.duration || 400,
+		easing: params.easing || cubicOut,
+		css: (t, u) =>
+			`transform-origin: ${
+				params.transformOrigin || 'top right'
+			}; transform: ${existingTransform} scaleX(${t}); opacity: ${t};`
+	}
 }
 
 function handleSelectedLinkiedProducts(e) {
@@ -734,44 +741,6 @@ function handleMobileCanvas() {
 					</div>
 				{/if}
 
-				<!-- Size -->
-
-				{#if data.product?.size}
-					<div class="mb-5">
-						<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
-							<span> Select Size </span>
-
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="h-5 w-5"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor"
-								stroke-width="1">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-								></path>
-							</svg>
-						</h6>
-
-						<div class="flex flex-wrap gap-2">
-							<button
-								type="button"
-								class="overflow-hidden rounded border py-1 px-3 text-sm font-medium uppercase transition duration-500 focus:outline-none
-              				{data.product?.size?.name === selectedSize
-									? 'bg-primary-500 border-primary-500 text-white'
-									: 'bg-transparent border-zinc-200 text-zinc-500 hover:border-primary-500 hover:text-primary-500'}"
-								on:click="{() => selectSize(data.product?.size)}">
-								{data.product?.size?.name}
-							</button>
-						</div>
-					</div>
-				{/if}
-
-				<!-- Group Products -->
-
 				{#await data.streamed?.moreProductDetails}
 					<ul class="mb-5 p-0 list-none flex flex-wrap gap-4">
 						{#each { length: 3 } as _}
@@ -783,7 +752,173 @@ function handleMobileCanvas() {
 						{/each}
 					</ul>
 				{:then value}
-					{#if value.groupProduct?.length}
+					<!-- Color -->
+
+					{#if value?.pg.colorGroup.length}
+						<div class="mb-5">
+							<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
+								<span> Select Color </span>
+
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke-width="1"
+									stroke="currentColor"
+									class="w-5 h-5">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z"
+									></path>
+								</svg>
+							</h6>
+
+							<ul class="flex flex-wrap gap-3">
+								{#each value?.pg.colorGroup as cg}
+									{#if cg?.color?.name && cg.img}
+										<li>
+											{#if cg.hasStock}
+												<a
+													href="/product/{cg.slug}"
+													class="relative border h-20 w-14 flex items-center justify-center p-1 group transition duration-300 focus:outline-none
+													{cg?.color?.name === data.product?.color?.name
+														? 'border-primary-500'
+														: 'border-zinc-300 hover:border-primary-500'}">
+													<LazyImg
+														src="{cg.img}"
+														alt="{cg.color.name}"
+														height="160"
+														width="120"
+														aspect_ratio="3:4"
+														class="transform group-hover:scale-95 object-contain object-center w-full h-auto text-xs" />
+
+													<div
+														class="hidden group-hover:block absolute z-20 max-w-max min-w-max -top-2 leading-3 py-1 px-2 rounded whitespace-nowrap bg-primary-500 text-white text-[0.65em] text-center">
+														{cg?.color.name}
+													</div>
+												</a>
+											{:else}
+												<a
+													href="/product/{cg.slug}"
+													class="relative border grayscale h-20 w-14 flex items-center justify-center p-1 group transition duration-300 focus:outline-none
+													{cg?.color?.name === data.product?.color?.name
+														? 'border-primary-500'
+														: 'border-zinc-300 hover:border-primary-500'}">
+													<LazyImg
+														src="{cg.img}"
+														alt="{cg.color.name}"
+														height="160"
+														width="120"
+														aspect_ratio="3:4"
+														class="transform group-hover:scale-95 object-contain object-center w-full h-auto text-xs" />
+
+													<div
+														class="hidden group-hover:block absolute z-20 max-w-max min-w-max -top-2 leading-3 py-1 px-2 rounded whitespace-nowrap bg-primary-500 text-white text-[0.65em] text-center">
+														{cg?.color.name}
+													</div>
+
+													<hr class="absolute z-10 w-24 transform rotate-[56deg] border-zinc-300" />
+												</a>
+											{/if}
+										</li>
+									{/if}
+								{/each}
+							</ul>
+						</div>
+					{/if}
+
+					<!-- Size -->
+
+					{#if value?.pg.sizeGroup.length}
+						<div class="mb-5">
+							<div class="mb-2 flex flex-wrap items-center gap-2 justify-between">
+								<h6 class="flex items-center gap-2 font-semibold uppercase">
+									<span> Select Size </span>
+
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										class="h-5 w-5"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+										stroke-width="1">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+										></path>
+									</svg>
+								</h6>
+
+								{#if data.product.sizechart}
+									<button
+										type="button"
+										class="text-right text-sm text-secondary-500 underline focus:outline-none"
+										on:click="{() => (showSizeChart = !showSizeChart)}">
+										Size Chart
+									</button>
+								{/if}
+							</div>
+
+							<ul class="flex flex-wrap gap-3">
+								{#each value?.pg.sizeGroup as sg}
+									{#if sg?.size?.name}
+										<li>
+											{#if sg?.hasStock}
+												<a
+													href="/product/{sg.slug}"
+													class="relative flex flex-col items-center justify-center text-center border h-14 w-14 rounded-full p-2 text-sm font-medium uppercase group transition duration-300 focus:outline-none
+													{sg?.size?.name === data.product?.size?.name
+														? 'bg-primary-500 border-primary-500 text-white'
+														: 'bg-transparent border-zinc-300 hover:border-primary-500'}">
+													<span class="w-full truncate">
+														{sg?.size?.name}
+													</span>
+
+													<div
+														class="hidden group-hover:block absolute z-20 max-w-max min-w-max -top-2 leading-3 py-1 px-2 rounded whitespace-nowrap bg-primary-500 text-white text-[0.65em] text-center">
+														{sg?.size?.name}
+													</div>
+
+													{#if sg.stock < 5 && sg.stock > 0}
+														<div
+															class="absolute z-20 max-w-max min-w-max -bottom-2 leading-3 py-0.5 px-2 rounded whitespace-nowrap bg-[#ff5a5a] text-white text-[0.65em] text-center">
+															{sg.stock} left
+														</div>
+													{/if}
+												</a>
+											{:else}
+												<a
+													href="/product/{sg.slug}"
+													class="relative flex flex-col items-center justify-center text-zinc-300 text-center border h-14 w-14 rounded-full p-2 text-sm font-medium uppercase group transition duration-300 focus:outline-none grayscale
+													{sg?.size?.name === data.product?.size?.name
+														? 'border-primary-500'
+														: 'border-zinc-300 hover:border-primary-500'}">
+													<span class="w-full truncate">
+														{sg?.size?.name}
+													</span>
+
+													<div
+														class="hidden group-hover:block absolute z-20 max-w-max min-w-max -top-2 leading-3 py-1 px-2 rounded whitespace-nowrap bg-zinc-300 text-white text-[0.65em] text-center">
+														{sg?.size?.name}
+													</div>
+
+													<div class="absolute z-10 inset-0 flex items-center">
+														<hr class="w-full transform rotate-45 border-zinc-300" />
+													</div>
+												</a>
+											{/if}
+										</li>
+									{/if}
+								{/each}
+							</ul>
+						</div>
+					{/if}
+
+					<!-- Group Products -->
+
+					<!-- {#if value?.pg.groupProduct.length}
 						<div class="mb-5">
 							<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
 								<span> Similar Products </span>
@@ -803,8 +938,8 @@ function handleMobileCanvas() {
 								</svg>
 							</h6>
 
-							<ul class="flex flex-wrap gap-2">
-								{#each value.groupProduct as gp}
+							<ul class="flex flex-wrap gap-3">
+								{#each value?.pg.groupProduct as gp}
 									<li>
 										<a
 											href="/product/{gp.slug}"
@@ -836,7 +971,7 @@ function handleMobileCanvas() {
 								{/each}
 							</ul>
 						</div>
-					{/if}
+					{/if} -->
 				{:catch error}
 					{error?.message}
 				{/await}
@@ -1137,6 +1272,7 @@ function handleMobileCanvas() {
 												}
 											}}">
 											<input type="hidden" name="pid" value="{data?.product?._id}" />
+
 											<input type="hidden" name="vid" value="{data?.product?._id}" />
 
 											<input
@@ -1230,7 +1366,7 @@ function handleMobileCanvas() {
 					{/if}
 
 					{#if value.attributes?.length}
-					<ProductAttributes attributes="{value.attributes}" />
+						<ProductAttributes attributes="{value.attributes}" />
 					{/if}
 				{:catch error}
 					{error?.message}
@@ -1475,6 +1611,7 @@ function handleMobileCanvas() {
 												}
 											}}">
 											<input type="hidden" name="pid" value="{data?.product?._id}" />
+
 											<input type="hidden" name="vid" value="{data?.product?._id}" />
 
 											<input
@@ -1653,6 +1790,7 @@ function handleMobileCanvas() {
 												}
 											}}">
 											<input type="hidden" name="pid" value="{data?.product?._id}" />
+
 											<input type="hidden" name="vid" value="{data?.product?._id}" />
 
 											<input
@@ -1791,6 +1929,43 @@ function handleMobileCanvas() {
 
 {#if bounceItemFromTop}
 	<AnimatedCartItem img="{customizedImg || data.product?.img}" />
+{/if}
+
+{#if showSizeChart}
+	<div class="fixed inset-0 h-screen w-screen z-50 flex justify-end">
+		<button
+			type="button"
+			class="absolute inset-0 cursor-default focus:outline-none"
+			on:click="{() => (showSizeChart = false)}">
+		</button>
+
+		<div
+			transition:slideFade="{{ duration: 500 }}"
+			class="absolute inset-y-0 right-0 z-[60] h-full w-full sm:w-96 bg-white p-5 sm:p-10 flex flex-col items-end justify-end"
+			style="box-shadow: -4px 0px 10px rgba(50, 50, 50, 0.2);">
+			<button
+				type="button"
+				class="text-zinc-500 hover:text-zinc-800 transition duration-300 transform scale-125 focus:outline-none"
+				on:click="{() => (showSizeChart = false)}">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke-width="1.5"
+					stroke="currentColor"
+					class="w-6 h-6">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+				</svg>
+			</button>
+
+			<div class="h-full w-full flex items-center justify-center">
+				<img
+					src="{data.product.sizechart}"
+					alt="{data.product?.name} size chart"
+					class="object-contain object-center w-full h-auto first-line:text-xs" />
+			</div>
+		</div>
+	</div>
 {/if}
 
 <!-- <UserForm showUserInputForm="{showUserInputForm}" /> -->

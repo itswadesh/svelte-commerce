@@ -10,8 +10,10 @@ import {
 	Twitter,
 	WhatsApp
 } from 'svelte-share-buttons-component'
+import { browser } from '$app/environment'
 import { fireGTagEvent } from '$lib/utils/gTagB'
 import { goto, invalidateAll } from '$app/navigation'
+import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { PrimaryButton, ProductSkeleton, Skeleton, WhiteButton } from '$lib/ui'
 import { ProductNav } from '$lib/components'
@@ -21,7 +23,6 @@ import ProductSliderBanner from './ProductSliderBanner.svelte'
 import productVeg from '$lib/assets/product/veg.png'
 import SEO from '$lib/components/SEO/index.svelte'
 import SimilarProductsFromCategorySlug from './SimilarProductsFromCategorySlug.svelte'
-import { onMount } from 'svelte'
 
 export let data
 

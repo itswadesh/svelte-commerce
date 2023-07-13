@@ -74,11 +74,13 @@ function handleCouponCode(couponCode: string) {
 async function applyCouponCode(selectedCouponCode: string) {
 	try {
 		loadingApplyCoupon = true
+
 		const resAC = await CartService.applyCouponService({
 			code: selectedCouponCode,
 			storeId: $page.data.store?.id,
 			origin: $page.data.origin
 		})
+
 		appliedCouponInfo = resAC
 		await invalidateAll()
 		openApplyPromoCodeModal = false
@@ -92,11 +94,15 @@ async function applyCouponCode(selectedCouponCode: string) {
 async function removeCouponCode() {
 	try {
 		loadingRemoveCoupon = true
+
 		await CartService.removeCouponService({
+			code: selectedCouponCode,
 			storeId: $page.data.store?.id,
 			origin: $page.data.origin
 		})
+
 		selectedCouponCode = ''
+
 		await invalidateAll()
 	} catch (e) {
 		couponErr = e
@@ -127,6 +133,9 @@ async function getCoupons() {
 			origin: $page?.data?.origin,
 			storeId: $page?.data?.store?.id
 		})
+
+		// console.log('zzzzzzzzzzzzzzzzzz', resC)
+
 		coupons = resC?.data
 	} catch (e) {
 	} finally {
@@ -240,7 +249,6 @@ function moveAllUnavailableItemsToWishlist() {
 														<LazyImg
 															src="{item.isCustomizeditem ? item.customizedImg : item.img}"
 															alt=" "
-															width="384"
 															height="512"
 															aspect_ratio="3:4"
 															class="object-contain object-top h-28 w-20 text-xs" />
@@ -332,7 +340,6 @@ function moveAllUnavailableItemsToWishlist() {
 												<LazyImg
 													src="{item.isCustomizeditem ? item.customizedImg : item.img}"
 													alt=" "
-													width="384"
 													height="512"
 													aspect_ratio="3:4"
 													class="object-contain object-top h-28 w-20 text-xs" />
@@ -681,10 +688,12 @@ function moveAllUnavailableItemsToWishlist() {
 									<form
 										on:submit|preventDefault="{() => applyCouponCode(selectedCouponCode)}"
 										class="flex items-center justify-between gap-2">
-										<Textbox
-											placeholder="Write your coupon code here..."
-											class="w-full"
-											bind:value="{selectedCouponCode}" />
+										<div class="flex-1">
+											<Textbox
+												placeholder="Write your coupon code here..."
+												class="w-full"
+												bind:value="{selectedCouponCode}" />
+										</div>
 
 										<PrimaryButton
 											type="submit"
@@ -710,13 +719,13 @@ function moveAllUnavailableItemsToWishlist() {
 
 											<Skeleton small />
 										</div>
-									{:else if coupons?.length > 0}
+									{:else if coupons?.length}
 										<ul class="flex flex-col divide-y">
 											{#each coupons as coupon}
 												<button
 													title="Click to apply the coupon"
 													on:click="{() => handleCouponCode(coupon.code)}"
-													class="group cursor-pointer py-5 tracking-wide">
+													class="group cursor-pointer py-5 text-left">
 													<div class="mb-2 flex items-center gap-3">
 														<div
 															class="max-w-max rounded border border-dashed py-1 px-4 font-semibold

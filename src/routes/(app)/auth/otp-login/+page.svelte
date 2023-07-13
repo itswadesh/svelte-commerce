@@ -6,7 +6,7 @@ import { post } from '$lib/utils/api'
 import { toast } from '$lib/utils'
 import { UserService } from '$lib/services'
 import Cookie from 'cookie-universal'
-import {LazyImg} from '$lib/components'
+import { LazyImg } from '$lib/components'
 import SendOtp from '../_SendOtp.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import VerifyOtp from '../_VerifyOtp.svelte'
@@ -125,7 +125,7 @@ function getLoginUrl(baseUrl) {
 				alt="logo"
 				height="64"
 				aspect_ratio="4:1"
-				class="max-h-16 w-40 object-contain object-center" />
+				class="max-h-16 max-w-[160px] object-contain object-center" />
 		{:else}
 			<h1
 				class="bg-gradient-to-b from-primary-500 to-primary-700 bg-clip-text text-3xl font-extrabold text-transparent underline decoration-zinc-800">

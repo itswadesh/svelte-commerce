@@ -82,13 +82,12 @@ if (product?._source) {
 				<LazyImg
 					src="{product.img}"
 					alt="{product.name}"
-					width="400"
 					height="533"
 					aspect_ratio="3:4"
-					class="object-cover object-bottom text-xs" />
+					class="object-contain object-bottom text-xs" />
 			{:else}
 				<div
-					class="bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center">
+					class="bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center w-[400px] h-auto min-h-[100px] max-h-[533px]">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"

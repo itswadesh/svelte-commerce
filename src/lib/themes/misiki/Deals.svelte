@@ -5,7 +5,7 @@ import { SplideSlide } from '@splidejs/svelte-splide'
 
 export let deal
 
-let Carousel, Splide
+let Splide
 
 $: innerWidth = 0
 $: widthOfSlider = innerWidth - 410
