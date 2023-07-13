@@ -36,7 +36,14 @@ onMount(async () => {
 
 <div class="relative mx-auto hidden w-full overflow-hidden bg-white sm:block">
 	{#if sliderBanners?.length}
-		<svelte:component this="{Splide}" options="{{ type: 'loop', autoplay: true, lazyLoad: true }}">
+		<svelte:component
+			this="{Splide}"
+			options="{{
+				autoplay: true,
+				height: 380,
+				lazyLoad: true,
+				type: 'loop'
+			}}">
 			{#each sliderBanners as b, ix}
 				{#if b.img}
 					<SplideSlide>
@@ -50,7 +57,7 @@ onMount(async () => {
 								alt="{b.name}"
 								height="380"
 								aspect_ratio="4:1"
-								class="block h-auto w-full object-contain object-top" />
+								class="block h-auto w-full object-contain object-center" />
 						</a>
 					</SplideSlide>
 				{/if}
@@ -71,7 +78,7 @@ onMount(async () => {
 							alt="{b.name}"
 							height="380"
 							aspect_ratio="4:1"
-							class="block h-auto w-full object-contain object-top" />
+							class="block h-auto w-full object-contain object-center" />
 					</a>
 				{/if}
 			{/each}
@@ -82,7 +89,13 @@ onMount(async () => {
 	{#if sliderBannersMobile?.length}
 		<svelte:component
 			this="{Splide}"
-			options="{{ type: 'loop', autoplay: true, lazyLoad: true, arrows: false }}">
+			options="{{
+				arrows: false,
+				autoplay: true,
+				height: 190,
+				lazyLoad: true,
+				type: 'loop'
+			}}">
 			{#each sliderBannersMobile as b, ix}
 				{#if b.img}
 					<SplideSlide>
@@ -96,7 +109,7 @@ onMount(async () => {
 								alt="{b.name}"
 								height="190"
 								aspect_ratio="4:1"
-								class="block h-auto w-full object-contain object-top" />
+								class="block h-auto w-full object-contain object-center" />
 						</a>
 					</SplideSlide>
 				{/if}

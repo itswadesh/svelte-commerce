@@ -29,16 +29,38 @@ onMount(async () => {
 				</h2>
 
 				{#if collection}
-					<div class="hidden px-10 items-start justify-start gap-3 sm:flex w-[99vw]">
+					<div class="hidden px-10 sm:block w-[99vw]">
 						<svelte:component
 							this="{Splide}"
 							options="{{
-								autoWidth: true,
-								gap: '62px',
-								height: '100%',
-								width: '100%',
+								gap: '24px',
+								lazyLoad: true,
 								pagination: false,
-								perMove: 1
+								perMove: 1,
+								perPage: 7,
+								rewind: true,
+								breakpoints: {
+									1693: {
+										arrows: collection.products?.length <= 6 ? false : true,
+										perPage: 6
+									},
+									1459: {
+										arrows: collection.products?.length <= 5 ? false : true,
+										perPage: 5
+									},
+									1225: {
+										arrows: collection.products?.length <= 4 ? false : true,
+										perPage: 4
+									},
+									955: {
+										arrows: collection.products?.length <= 3 ? false : true,
+										perPage: 3
+									},
+									733: {
+										arrows: collection.products?.length <= 2 ? false : true,
+										perPage: 2
+									}
+								}
 							}}">
 							{#each collection.products as p}
 								{#if p}

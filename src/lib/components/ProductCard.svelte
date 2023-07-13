@@ -101,10 +101,9 @@ function hideitems() {
 					<LazyImg
 						src="{product.img}"
 						alt="{product.name}"
-						width="210"
 						height="210"
 						aspect_ratio="1:1"
-						class="object-cover object-bottom w-[210px] h-[210px] text-xs" />
+						class="object-contain object-bottom w-[210px] h-[210px] text-xs" />
 				{:else}
 					<div
 						class="w-[210px] h-[210px] bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center">
@@ -130,10 +129,9 @@ function hideitems() {
 					<LazyImg
 						src="{product.img}"
 						alt="{product.name}"
-						width="210"
 						height="280"
 						aspect_ratio="3:4"
-						class="object-cover object-bottom w-[210px] h-[280px] text-xs" />
+						class="object-contain object-bottom w-[210px] h-[280px] text-xs" />
 				{:else}
 					<div
 						class="w-[210px] h-[280px] bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center">
@@ -159,10 +157,9 @@ function hideitems() {
 					<LazyImg
 						src="{product.img}"
 						alt="{product.name}"
-						width="210"
 						height="157"
 						aspect_ratio="4:3"
-						class="object-cover object-bottom w-[210px] h-[157px] text-xs" />
+						class="object-contain object-bottom w-[210px] h-[157px] text-xs" />
 				{:else}
 					<div
 						class="w-[210px] h-[157px] bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center">
@@ -188,10 +185,9 @@ function hideitems() {
 					<LazyImg
 						src="{product.img}"
 						alt="{product.name}"
-						width="420"
 						height="236"
 						aspect_ratio="16:9"
-						class="object-cover object-bottom w-[420px] h-[236px] text-xs" />
+						class="object-contain object-bottom w-[420px] h-[236px] text-xs" />
 				{:else}
 					<div
 						class="w-[420px] h-[236px] bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center">
@@ -217,10 +213,9 @@ function hideitems() {
 					<LazyImg
 						src="{product.img}"
 						alt="{product.name}"
-						width="210"
 						height="373"
 						aspect_ratio="9:16"
-						class="object-cover object-bottom w-[210px] h-[373px] text-xs" />
+						class="object-contain object-bottom w-[210px] h-[373px] text-xs" />
 				{:else}
 					<div
 						class="w-[210px] h-[373px] bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center">
@@ -555,9 +550,8 @@ function hideitems() {
 										<LazyImg
 											src="{product.img}"
 											alt="{product.name}"
-											width="210"
 											height="280"
-											class="object-cover object-bottom w-[210px] h-[280px] text-xs" />
+											class="object-contain object-bottom w-[210px] h-[280px] text-xs" />
 									</div>
 
 									<div class="p-4">
