@@ -19,6 +19,15 @@ export let states = []
 
 let loadingStates = false
 
+if (countries?.length === 1) {
+	address.country = countries[0]?.code
+	onCountryChange(address.country)
+}
+
+if (states?.length === 1) {
+	address.state = states[0]?.code
+}
+
 async function onCountryChange(country) {
 	try {
 		err = null

@@ -53,8 +53,9 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 const add: Action = async ({ request, cookies, locals }) => {
 	const data = await request.formData()
 	const pid = data.get('pid')
-	const vid = data.get('pid')
 	const qty = +data.get('qty')
+	const size = data.get('size')
+	const vid = data.get('pid')
 	const linkedItems = JSON.parse(data.get('linkedItems'))
 	const options = JSON.parse(data.get('options')) //data.get('options') //
 	const customizedImg = data.get('customizedImg')
@@ -64,44 +65,44 @@ const add: Action = async ({ request, cookies, locals }) => {
 	}
 	try {
 		let cart = await CartService.addToCartService({
-			pid,
-			vid,
-			qty,
-			options,
+			cookies, // This is a special case to pass complete cookie
 			customizedImg,
-			storeId: locals.store?.id,
-			server: true,
+			options,
 			origin: locals.origin,
-			cookies // This is a special case to pass complete cookie
+			pid,
+			qty,
+			server: true,
+			storeId: locals.store?.id,
+			vid,
 		})
 		if (linkedItems?.length) {
 			for (const i of linkedItems) {
 				cart = await CartService.addToCartService({
-					pid: i,
-					vid: i,
-					qty: 1,
-					storeId: locals.store?.id,
-					server: true,
+					cookies, // This is a special case to pass complete cookie
 					origin: locals.origin,
-					cookies // This is a special case to pass complete cookie
+					pid: i,
+					qty: 1,
+					server: true,
+					storeId: locals.store?.id,
+					vid: i,
 				})
 			}
 		}
 		if (cart) {
 			const cartObj = {
 				cartId: cart?.cart_id,
-				items: cart?.items,
-				qty: cart?.qty,
-				tax: cart?.tax,
-				subtotal: cart?.subtotal,
-				total: cart?.total,
 				currencySymbol: cart?.currencySymbol,
 				discount: cart?.discount,
+				formattedAmount: cart?.formattedAmount,
+				items: cart?.items,
+				qty: cart?.qty,
 				savings: cart?.savings,
 				selfTakeout: cart?.selfTakeout,
 				shipping: cart?.shipping,
+				subtotal: cart?.subtotal,
+				tax: cart?.tax,
+				total: cart?.total,
 				unavailableItems: cart?.unavailableItems,
-				formattedAmount: cart?.formattedAmount
 			}
 			locals.cart = cartObj
 			locals.cartId = cartObj.cartId

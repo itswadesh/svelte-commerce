@@ -93,10 +93,9 @@ onMount(async () => {
 													<LazyImg
 														src="{product.img}"
 														alt="{product.name}"
-														width="400"
 														height="533"
 														aspect_ratio="3:4"
-														class="object-cover object-bottom text-xs" />
+														class="object-contain object-bottom text-xs" />
 												</a>
 
 												<!-- Details section -->
@@ -106,10 +105,9 @@ onMount(async () => {
 														<LazyImg
 															src="{product.img}"
 															alt="{product.name}"
-															width="400"
 															height="533"
 															aspect_ratio="3:4"
-															class="object-cover object-bottom text-xs" />
+															class="object-contain object-bottom text-xs" />
 
 														<div>
 															<a

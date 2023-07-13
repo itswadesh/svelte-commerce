@@ -62,10 +62,24 @@ onDestroy(() => {
 	in:fade="{{ duration: 1000 }}"
 	width="{w}"
 	height="{h}"
+	src="{`${getCdnImageUrl('/logo_placeholder.gif', IMAGE_CDN_URL)}?tr=w-1,h-1:w-${
+		aspect_ratio.split(':')[0]
+	},h-${aspect_ratio.split(':')[1]},ar-${aspect_ratio.replace(':', '-')}`}"
+	data-src="{`${getCdnImageUrl(src, IMAGE_CDN_URL)}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(
+		':',
+		'-'
+	)}`}" />
+
+<!-- <img
+	alt="{alt}"
+	class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}"
+	in:fade="{{ duration: 1000 }}"
+	width="{w}"
+	height="{h}"
 	src="{`${getCdnImageUrl(src, IMAGE_CDN_URL)}?tr=w-1,h-1:w-${aspect_ratio.split(':')[0]},h-${
 		aspect_ratio.split(':')[1]
 	},ar-${aspect_ratio.replace(':', '-')}`}"
 	data-src="{`${getCdnImageUrl(src, IMAGE_CDN_URL)}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(
 		':',
 		'-'
-	)}`}" />
+	)}`}" /> -->
