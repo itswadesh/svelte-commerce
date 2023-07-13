@@ -14,7 +14,7 @@ export let data
 	{#if home?.trending?.length > 0}
 		<div>
 			<div class="p-3 py-5 sm:px-10 md:py-10 text-center uppercase flex flex-col gap-2">
-				<p class="text-sm tracking-widest">Featured Collection</p>
+				<p class="text-sm tracking-widest">Latest Collection</p>
 
 				{#if home?.trending[0]?.category?.name}
 					<h2 class="text-xl font-medium tracking-wider sm:text-2xl md:text-2xl">
