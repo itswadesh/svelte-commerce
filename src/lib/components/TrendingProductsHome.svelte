@@ -15,7 +15,7 @@ let product_image_dimension = $page.data.store.product_image_dimension || '3x4'
 			<h2
 				class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
 				<!-- TRENDING ON {$page.data.store?.websiteName} -->
-				Featured Collection
+				Latest Collection
 			</h2>
 
 			<ul
