@@ -36,6 +36,8 @@ import { CategoryService } from '$lib/services'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { toast } from '$lib/utils'
+import {getMegamenuFromStore} from '$lib/store/megamenu'
+
 import Cookie from 'cookie-universal'
 
 const cookies = Cookie()
@@ -59,16 +61,22 @@ onMount(() => {
 async function getMegaMenu() {
 	if (browser && $page.data.isDesktop) {
 		try {
-			const localMegamenu = localStorage.getItem('megamenu')
+			megamenu = await getMegamenuFromStore({
+				sid: null,
+				storeId: $page?.data?.store?.id,
+				isCors: $page?.data?.store?.isCors,
+				origin: $page.data.origin
+			})
+			// const localMegamenu = localStorage.getItem('megamenu')
 
-			if (!!localMegamenu && localMegamenu !== 'undefined') {
-				megamenu = JSON.parse(localMegamenu)
-			} else {
-				megamenu = await CategoryService.fetchMegamenuData({
-					storeId: $page.data.store?.id,
-					origin: $page.data.origin
-				})
-			}
+			// if (!!localMegamenu && localMegamenu !== 'undefined') {
+			// 	megamenu = JSON.parse(localMegamenu)
+			// } else {
+			// 	megamenu = await CategoryService.fetchMegamenuData({
+			// 		storeId: $page.data.store?.id,
+			// 		origin: $page.data.origin
+			// 	})
+			// }
 		} catch (e) {
 			toast(e, 'error')
 		} finally {
