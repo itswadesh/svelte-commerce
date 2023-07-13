@@ -10,6 +10,7 @@ let seoProps = {
 	title: `Categories`,
 	description: `Categories`
 }
+import {getMegamenuFromStore} from '$lib/store/megamenu'
 
 let loading = false
 let megamenu = []
@@ -38,16 +39,21 @@ async function getMegaMenu() {
 	loading = true
 	if (browser) {
 		try {
-			const localMegamenu = localStorage.getItem('megamenu')
-			if (!localMegamenu || localMegamenu === 'undefined') {
-				megamenu = await CategoryService.fetchMegamenuData({
-					origin: $page.data.origin,
-					storeId: $page.data.store?.id
-				})
-			} else {
-				megamenu = JSON.parse(localMegamenu)
-				
-			}
+			megamenu = await getMegamenuFromStore({
+				sid: null,
+				storeId: $page?.data?.store?.id,
+				isCors: $page?.data?.store?.isCors,
+				origin: $page.data.origin
+			})
+			// const localMegamenu = localStorage.getItem('megamenu')
+			// if (!localMegamenu || localMegamenu === 'undefined') {
+			// 	megamenu = await CategoryService.fetchMegamenuData({
+			// 		origin: $page.data.origin,
+			// 		storeId: $page.data.store?.id
+			// 	})
+			// } else {
+			// 	megamenu = JSON.parse(localMegamenu)
+			// }
 			if (megamenu?.length) {
 				megamenu = megamenu.filter((e) => {
 					return e.name !== 'New Arrivals'

@@ -4,8 +4,9 @@ import { AutocompleteService, CategoryService } from '$lib/services'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import Cookie from 'cookie-universal'
+import {findAutocompleteFromStore} from '$lib/store/autocomplete'
 
+import Cookie from 'cookie-universal'
 const cookies = Cookie()
 
 export let placeholder = 'Search products...'

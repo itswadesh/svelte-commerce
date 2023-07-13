@@ -8,6 +8,7 @@ import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { sorts } from '$lib/config'
 import { RadioEs, CheckboxEs, PrimaryButton } from '$lib/ui'
+import {getMegamenuFromStore} from '$lib/store/megamenu'
 import Cookie from 'cookie-universal'
 
 const cookies = Cookie()
@@ -110,16 +111,22 @@ function getFacetsWithProducts() {
 async function getMegamenu() {
 	if (browser) {
 		try {
-			const localmegamenu = localStorage.getItem('megamenu')
+			megamenu = await getMegamenuFromStore({
+				sid: null,
+				storeId: $page?.data?.store?.id,
+				isCors: $page?.data?.store?.isCors,
+				origin: $page.data.origin
+			})
+			// const localmegamenu = localStorage.getItem('megamenu')
 
-			if (!localmegamenu || localmegamenu === 'undefined') {
-				megamenu = await CategoryService.fetchMegamenuData({
-					origin: $page?.data?.origin,
-					storeId: $page?.data?.store?.id
-				})
-			} else {
-				megamenu = JSON.parse(localmegamenu)
-			}
+			// if (!localmegamenu || localmegamenu === 'undefined') {
+			// 	megamenu = await CategoryService.fetchMegamenuData({
+			// 		origin: $page?.data?.origin,
+			// 		storeId: $page?.data?.store?.id
+			// 	})
+			// } else {
+			// 	megamenu = JSON.parse(localmegamenu)
+			// }
 		} catch (e) {
 			// toast(e, 'error')
 		} finally {
