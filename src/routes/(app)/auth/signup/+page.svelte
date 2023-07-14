@@ -39,7 +39,7 @@ let passwordType = 'password'
 let showConfirmPassword = false
 let confirmPasswordType = 'password'
 let err
-let zodError = null
+let zodError = {}
 
 const zodSignupSchema = z
 	.object({
@@ -113,7 +113,7 @@ async function submit(n) {
 
 		try {
 			zodSignupSchema.parse(n)
-			zodError = null
+			zodError = {}
 		} catch (error) {
 			if (error instanceof z.ZodError) {
 				zodError = error.errors.reduce((acc, err) => {
