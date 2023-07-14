@@ -1,4 +1,5 @@
 <script>
+// import { getMegamenuFromStore } from '$lib/store/megamenu'
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
 import { CheckboxEs, RadioEs } from '$lib/ui'
@@ -6,7 +7,6 @@ import { constructURL2, toast } from '$lib/utils'
 import { createEventDispatcher, onMount } from 'svelte'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
-import {getMegamenuFromStore} from '$lib/store/megamenu'
 
 const dispatch = createEventDispatcher()
 
@@ -111,21 +111,23 @@ function getFacetsWithProducts() {
 async function getMegamenu() {
 	if (browser) {
 		try {
-			megamenu = await getMegamenuFromStore({
-				sid: null,
-				storeId: $page?.data?.store?.id,
-				isCors: $page?.data?.store?.isCors,
-				origin: $page.data.origin
-			})
-			// const localmegamenu = localStorage.getItem('megamenu')
-			// if (!localmegamenu || localmegamenu === 'undefined') {
-			// 	megamenu = await CategoryService.fetchMegamenuData({
-			// 		origin: $page.data.origin,
-			// 		storeId: $page.data.store?.id
-			// 	})
-			// } else {
-			// 	megamenu = JSON.parse(localmegamenu)
-			// }
+			// megamenu = await getMegamenuFromStore({
+			// 	sid: null,
+			// 	storeId: $page?.data?.store?.id,
+			// 	isCors: $page?.data?.store?.isCors,
+			// 	origin: $page.data.origin
+			// })
+
+			const localmegamenu = localStorage.getItem('megamenu')
+
+			if (!localmegamenu || localmegamenu === 'undefined') {
+				megamenu = await CategoryService.fetchMegamenuData({
+					origin: $page.data.origin,
+					storeId: $page.data.store?.id
+				})
+			} else {
+				megamenu = JSON.parse(localmegamenu)
+			}
 		} catch (e) {
 			toast(e, 'error')
 		} finally {

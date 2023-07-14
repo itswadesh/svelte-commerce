@@ -1,9 +1,9 @@
 <script>
+// import { getMegamenuFromStore } from '$lib/store/megamenu'
 import { browser } from '$app/environment'
 import { CategoriesMobile, Hero, HeroBanners, PickedBanners } from '$lib/theme-config'
 import { CategoryService } from '$lib/services'
 import { Footer, MobileFooter } from '$lib/components'
-import { getMegamenuFromStore } from '$lib/store/megamenu'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { Skeleton, Textbox } from '$lib/ui'
@@ -120,24 +120,26 @@ async function getMegaMenu() {
 
 	if (browser) {
 		try {
-			megamenu = await getMegamenuFromStore({
-				sid: null,
-				storeId: $page?.data?.store?.id,
-				isCors: $page?.data?.store?.isCors,
-				origin: $page.data.origin
-			})
-			// loadingForMegamenu = true
-			// const localMegamenu = localStorage.getItem('megamenu')
+			// megamenu = await getMegamenuFromStore({
+			// 	sid: null,
+			// 	storeId: $page?.data?.store?.id,
+			// 	isCors: $page?.data?.store?.isCors,
+			// 	origin: $page.data.origin
+			// })
 
-			// if (!localMegamenu || localMegamenu === 'undefined') {
-			// 	megamenu = await CategoryService.fetchMegamenuData({
-			// 		origin: $page.data.origin,
-			// 		storeId: $page.data.store?.id,
-			// 		isCors: $page.data.store?.isCors
-			// 	})
-			// } else {
-			// 	megamenu = JSON.parse(localMegamenu)
-			// }
+			loadingForMegamenu = true
+
+			const localMegamenu = localStorage.getItem('megamenu')
+
+			if (!localMegamenu || localMegamenu === 'undefined') {
+				megamenu = await CategoryService.fetchMegamenuData({
+					origin: $page.data.origin,
+					storeId: $page.data.store?.id,
+					isCors: $page.data.store?.isCors
+				})
+			} else {
+				megamenu = JSON.parse(localMegamenu)
+			}
 
 			if (megamenu?.length) {
 				megamenu = megamenu.filter((e) => {

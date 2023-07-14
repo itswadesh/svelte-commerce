@@ -44,32 +44,31 @@ function getYear() {
 let pages = []
 
 onMount(async () => {
-	// const res1 = await getPages()
-	// const res2 = await getStoreData()
+	const res1 = await getPages()
+	const res2 = await getStoreData()
 
-	// store = res2.storeOne
-	// megamenu = res2.megamenu1
-	// popularSearches = res2.popularSearches
+	store = res2.storeOne
+	megamenu = res2.megamenu1
+	popularSearches = res2.popularSearches
 
-	// if (browser) {
-	// 	localStorage.setItem('megamenu', JSON.stringify(megamenu))
-	// }
+	if (browser) {
+		localStorage.setItem('megamenu', JSON.stringify(megamenu))
+	}
 })
 
-// async function getStoreData() {
-// 	const response1 = await fetch('/server/store')
-// 	const res = await response1.json()
+async function getStoreData() {
+	const response1 = await fetch('/server/store')
+	const res = await response1.json()
 
-// 	return res
-// }
+	return res
+}
 
-// async function getPages() {
-// 	pages = await PageService.fetchPages({
-// 		origin: $page.data.origin,
-// 		storeId: $page.data.store?.id
-// 	})
-
-// }
+async function getPages() {
+	pages = await PageService.fetchPages({
+		origin: $page.data.origin,
+		storeId: $page.data.store?.id
+	})
+}
 </script>
 
 <footer class="w-full justify-center bg-zinc-50 p-3 text-sm sm:p-10">
