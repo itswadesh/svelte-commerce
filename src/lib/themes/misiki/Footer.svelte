@@ -30,7 +30,6 @@ import { PageService } from '$lib/services'
 // import googlePlay from '$lib/assets/app/google-play.png'
 import type { Category } from '$lib/types'
 
-// console.log('$page', $page)
 
 export let me
 export let store = {}
@@ -71,7 +70,6 @@ async function getPages() {
 		storeId: $page.data.store?.id
 	})
 
-	// console.log('pages', pages)
 }
 </script>
 

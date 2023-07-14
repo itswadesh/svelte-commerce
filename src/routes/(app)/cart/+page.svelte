@@ -19,7 +19,6 @@ import SEO from '$lib/components/SEO/index.svelte'
 const cookies = Cookie()
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	title: `Cart`,
@@ -134,7 +133,6 @@ async function getCoupons() {
 			storeId: $page?.data?.store?.id
 		})
 
-		// console.log('zzzzzzzzzzzzzzzzzz', resC)
 
 		coupons = resC?.data
 	} catch (e) {
@@ -144,10 +142,8 @@ async function getCoupons() {
 }
 
 function moveAllUnavailableItemsToWishlist() {
-	// console.log('data.cart?.unavailableItems?.length', data.cart?.unavailableItems?.length)
 
 	data.cart?.unavailableItems.forEach(async function (item) {
-		// console.log('item', item)
 
 		if (!$page.data.me) {
 			goto(`${$page.data.loginUrl || '/auth/login'}`)

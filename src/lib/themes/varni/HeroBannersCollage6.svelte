@@ -2,7 +2,6 @@
 // import { LazyImg } from '$lib/components'
 
 export let heroBanners
-// console.log('heroBanners', heroBanners)
 </script>
 
 {#if heroBanners?.length}

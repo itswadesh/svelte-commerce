@@ -97,11 +97,9 @@ export const getStoreData = async ({
 	) {
 		const uri = new URL(url)
 
-		// console.log('URI..............', uri.host)
 
 		storeRes = await fetchInit(uri.host)
 
-		// console.log('storeRes', storeRes);
 
 		store = {
 			id: storeRes.storeOne._id,
@@ -165,7 +163,6 @@ export const getStoreData = async ({
 	storeRes.storeOne = store
 	storeRes.megamenu = megamenu
 
-	// console.log('zzzzzzzzzzzzzzzzzz', storeRes);
 
 	return storeRes
 }

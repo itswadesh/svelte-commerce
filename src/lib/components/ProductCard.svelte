@@ -38,8 +38,6 @@ import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 
 export let product = {}
-// console.log('product', product)
-// console.log('$page', $page)
 
 if (product?._source) {
 	product = product?._source

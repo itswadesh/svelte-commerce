@@ -20,7 +20,6 @@ export let priceRange = []
 export let query // Required because after loading finished then only we will initiate the price slider component
 export let facets = {}
 
-// console.log('facets', facets)
 
 let clazz
 export { clazz as class }
@@ -73,15 +72,12 @@ onMount(async () => {
 			appliedFilters[key] = value
 	})
 
-	// console.log('fl', fl)
 
 	getFacetsWithProducts()
 
 	await getMegamenu()
 
 	const pin = cookies.get('zip')
-
-	// console.log('pin', pin, pin.toString()?.length)
 
 	if (pin && pin.toString()?.length === 6) {
 		pincode = pin

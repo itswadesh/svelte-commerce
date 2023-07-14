@@ -36,10 +36,8 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 
-// console.log('$page', $page)
 
 export let product = {}
-// console.log('product', product)
 
 if (product?._source) {
 	product = product?._source

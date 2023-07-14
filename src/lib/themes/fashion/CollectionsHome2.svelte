@@ -30,7 +30,6 @@ import { SplideSlide } from '@splidejs/svelte-splide'
 import { PrimaryButton } from '$lib/ui'
 
 export let data = {}
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let Splide
 

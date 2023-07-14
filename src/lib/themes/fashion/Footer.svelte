@@ -11,7 +11,6 @@ import { toast } from '$lib/utils'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import type { Category } from '$lib/types'
 
-// console.log('$page', $page)
 
 export let me
 export let store = {}
@@ -53,7 +52,6 @@ async function getPages() {
 		storeId: $page.data.store?.id
 	})
 
-	// console.log('pages', pages)
 }
 
 function subscribedForNewsletter() {

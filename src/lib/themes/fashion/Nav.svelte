@@ -22,7 +22,6 @@ const cookies = Cookie()
 
 export let me: Me, cart: Cart, data, showCartSidebar: boolean, openSidebar: boolean, store
 
-// console.log('$page', $page)
 
 let categories
 let hellobar = $page.data.store?.hellobar || {}
@@ -82,7 +81,6 @@ async function fetchCart() {
 				formattedAmount: res?.formattedAmount
 			}
 
-			console.log('cart', cart)
 
 			cookies.set('cartId', cart.cartId, { path: '/' })
 			cookies.set('cartQty', cart.qty, { path: '/' })
@@ -101,8 +99,6 @@ async function getCategories() {
 			storeId: $page.data.store?.id,
 			origin: $page.data.origin
 		})
-
-		// console.log('res1', res1)
 
 		categories = res1?.data.filter((c) => {
 			return c.img

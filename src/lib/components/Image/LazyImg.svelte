@@ -32,7 +32,6 @@ export let height = null
 export let src: string
 export let width = null
 
-// console.log('height, width', height, width)
 
 let clazz: string
 export { clazz as class }

@@ -29,7 +29,6 @@ const dispatch = createEventDispatcher()
 const cookies = Cookie()
 
 export let me: Me, cart: Cart, data, showCartSidebar: boolean, openSidebar: boolean, store
-// console.log('$page', $page)
 
 let categories
 let hellobar = $page.data.store?.hellobar || {}
@@ -69,7 +68,6 @@ onMount(async () => {
 
 	pin = cookies.get('zip')
 
-	// console.log('pin', pin, pin?.toString()?.length)
 })
 
 // onMount(() => {

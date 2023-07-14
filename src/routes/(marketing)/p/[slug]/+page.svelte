@@ -2,7 +2,6 @@
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	title: `${data.page.title || data.page.name || ''}`,

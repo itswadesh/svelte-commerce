@@ -32,8 +32,6 @@ const cookies = Cookie()
 let today = dayjs(new Date()).toISOString()
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
-// console.log('$page', $page)
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -113,7 +111,6 @@ onMount(() => {
 		showPinCodeEntryModal = true
 	}
 
-	// console.log('pin, showPinCodeEntryModal', pin, pin.toString()?.length, showPinCodeEntryModal)
 })
 </script>
 

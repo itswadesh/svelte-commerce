@@ -10,9 +10,6 @@ export let myOrders
 export let myReviews
 export let myWishlist
 
-// console.log('myOrders', myOrders)
-// console.log('myReviews', myReviews)
-// console.log('myWishlist', myWishlist)
 </script>
 
 <section class="h-full w-full tracking-wide">

@@ -62,7 +62,6 @@ onMount(async () => {
 
 	const pin = cookies.get('zip')
 
-	// console.log('pin', pin, pin.toString()?.length)
 
 	if (pin && pin.toString()?.length === 6) {
 		pincode = pin

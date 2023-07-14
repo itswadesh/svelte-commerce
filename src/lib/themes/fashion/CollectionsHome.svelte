@@ -33,7 +33,6 @@ import { fireGTagEvent } from '$lib/utils/gTagB'
 import { goto } from '$app/navigation'
 
 export let data = {}
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let bounceItemFromTop = false
 let cartButtonText = 'Add to Bag'

@@ -2,7 +2,6 @@
 // import { LazyImg } from '$lib/components'
 
 export let data = {}
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 </script>
 
 {#await data.streamed.collections then collections}

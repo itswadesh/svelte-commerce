@@ -30,8 +30,6 @@ import { PageService } from '$lib/services'
 // import googlePlay from '$lib/assets/app/google-play.png'
 import type { Category } from '$lib/types'
 
-// console.log('$page', $page)
-
 export let me
 export let store = {}
 export let popularSearches: { took: 0; count: 0; data: [] }
@@ -71,7 +69,6 @@ onMount(async () => {
 // 		storeId: $page.data.store?.id
 // 	})
 
-// 	// console.log('pages', pages)
 // }
 </script>
 
