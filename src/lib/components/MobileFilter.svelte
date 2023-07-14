@@ -8,7 +8,7 @@ import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { sorts } from '$lib/config'
 import { RadioEs, CheckboxEs, PrimaryButton } from '$lib/ui'
-import {getMegamenuFromStore} from '$lib/store/megamenu'
+import { getMegamenuFromStore } from '$lib/store/megamenu'
 import Cookie from 'cookie-universal'
 
 const cookies = Cookie()
@@ -56,12 +56,10 @@ onMount(async () => {
 	})
 
 	getFacetsWithProducts()
-
 	await getMegamenu()
 	await getSelected()
 
 	const pin = cookies.get('zip')
-
 
 	if (pin && pin.toString()?.length === 6) {
 		pincode = pin
@@ -121,7 +119,8 @@ async function getMegamenu() {
 			// if (!localmegamenu || localmegamenu === 'undefined') {
 			// 	megamenu = await CategoryService.fetchMegamenuData({
 			// 		origin: $page?.data?.origin,
-			// 		storeId: $page?.data?.store?.id
+			// 		storeId: $page?.data?.store?.id,
+			// 		isCors: $page.data.store?.isCors
 			// 	})
 			// } else {
 			// 	megamenu = JSON.parse(localmegamenu)
@@ -837,7 +836,7 @@ $: {
 													class="flex w-full items-center justify-between gap-2
 													{selectedCategory === m.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
 													<a
-														href="/{m.slug}"
+														href="{m.link || `/${m.slug}` || '##'}"
 														aria-label="Click to visit category related products page"
 														class="flex-1">
 														{m.name}
@@ -862,7 +861,7 @@ $: {
 												</div>
 											{:else}
 												<a
-													href="/{m.slug}"
+													href="{m.link || `/${m.slug}` || '##'}"
 													aria-label="Click to visit category related products page"
 													class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 													{m.name}
@@ -880,7 +879,7 @@ $: {
 																	class="flex w-full items-center justify-between gap-2
 																	{selectedCategory2 === c.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
 																	<a
-																		href="/{c.slug}"
+																		href="{c.link || `/${c.slug}` || '##'}"
 																		aria-label="Click to visit category related products page"
 																		class="flex-1">
 																		{c.name}
@@ -905,7 +904,7 @@ $: {
 																</div>
 															{:else}
 																<a
-																	href="/{c.slug}"
+																	href="{c.link || `/${c.slug}` || '##'}"
 																	aria-label="Click to visit category related products page"
 																	class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 																	{c.name}
@@ -918,7 +917,7 @@ $: {
 																<ul class="ml-4">
 																	{#each c.children as cc}
 																		<a
-																			href="/{cc.slug}"
+																			href="{cc.link || `/${cc.slug}` || '##'}"
 																			aria-label="Click to visit category related products page"
 																			class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 																			{cc.name}
