@@ -31,7 +31,6 @@ export let showFlight = false
 export let showGallery = false
 export let showOneBanner = false
 
-// console.log('data = ', data)
 
 let selectedImg
 let showPhotosModal = false

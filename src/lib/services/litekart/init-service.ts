@@ -12,7 +12,6 @@ export const fetchInit = async (host) => {
 		let res: any = {}
 
 		// DOMAIN value is proviede in case of self hosted and host value in case of SaaS
-		console.log('init...............', `init?domain=${DOMAIN ? DOMAIN : host}`)
 
 		res = await getBySid(`init?domain=${DOMAIN ? DOMAIN : host}`)
 

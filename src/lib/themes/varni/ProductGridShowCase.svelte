@@ -20,7 +20,6 @@ onMount(async () => {
 		})
 	).data
 
-	// console.log('categoriesProducts', categoriesProducts)
 })
 </script>
 

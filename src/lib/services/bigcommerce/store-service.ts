@@ -150,7 +150,6 @@ export const getStoreData = async ({
 	storeRes.storeOne = store
 	storeRes.megamenu = megamenu
 
-	// console.log('zzzzzzzzzzzzzzzzzz', storeRes);
 
 	return storeRes
 }

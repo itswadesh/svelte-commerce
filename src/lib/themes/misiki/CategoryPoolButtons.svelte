@@ -1,7 +1,6 @@
 <script>
 export let categoryPool = []
 
-// console.log('categoryPool', categoryPool)
 </script>
 
 {#if categoryPool?.length}
