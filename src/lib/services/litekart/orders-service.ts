@@ -145,7 +145,7 @@ export const cashfreeCheckout = async ({
 		let res: any = {}
 
 		res = await post(
-			`checkout/checkout-cf`,
+			`checkout/cashfree`,
 			{
 				address,
 				prescription,
@@ -173,7 +173,7 @@ export const razorpayCheckout = async ({
 		let res: any = {}
 
 		res = await post(
-			`checkout/checkout-rp`,
+			`checkout/razorpay`,
 			{
 				address,
 				paymentMethod,
@@ -201,7 +201,7 @@ export const razorpayCapture = async ({
 		let res: any = {}
 
 		res = await post(
-			`checkout/capture-rp`,
+			`checkout/capture-razorpay`,
 			{
 				rpPaymentId,
 				rpOrderId,
