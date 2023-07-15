@@ -97,6 +97,25 @@ async function submit(pm) {
 		} finally {
 			loading = false
 		}
+	} else if (paymentMethod === 'Paypal') {
+		try {
+			loading = true
+			const res = await OrdersService.paypalCheckout({
+				address: data.addressId,
+				storeId: $page.data.store?.id,
+				origin: $page.data.origin
+			})
+			if (res?.redirect_url && res?.redirect_url !== null) {
+				goto(`${res?.redirect_url}`)
+			} else {
+				toast('Something went wrong', 'error')
+			}
+		} catch (e) {
+			data.err = e
+			toast(e?.body?.message || e, 'error')
+		} finally {
+			loading = false
+		}
 	} else if (paymentMethod === 'Razorpay') {
 		try {
 			loading = true

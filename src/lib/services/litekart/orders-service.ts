@@ -242,3 +242,30 @@ export const stripeCheckoutService = async ({
 		throw error(e.status, e)
 	}
 }
+
+export const paypalCheckout = async ({
+	paymentMethodId,
+	address,
+	storeId,
+	origin,
+	server = false,
+	sid = null
+}: any) => {
+	try {
+		let res: any = {}
+
+		res = await post(
+			`payments/paypal`,
+			{
+				paymentMethodId,
+				address,
+				store: storeId
+			},
+			origin
+		)
+
+		return res || {}
+	} catch (e) {
+		throw error(e.status, e)
+	}
+}
