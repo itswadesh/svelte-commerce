@@ -19,7 +19,7 @@ let product_image_dimension = $page.data.store.product_image_dimension || '3x4'
 			</h2>
 
 			<ul
-				class="sm:px-10 border-t sm:border-t-0 grid w-full items-start sm:gap-3 lg:gap-6
+				class="px-3 sm:px-10 grid w-full items-start gap-3 lg:gap-6
 				{product_image_dimension == '16x9'
 					? 'grid-cols-1 md:grid-cols-2 lg:flex lg:flex-wrap lg:justify-between'
 					: 'grid-cols-2 sm:flex sm:flex-wrap sm:justify-between'}">

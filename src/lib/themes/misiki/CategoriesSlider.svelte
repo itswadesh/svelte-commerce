@@ -48,6 +48,7 @@ onMount(async () => {
 			options="{{
 				// autoplay: true,
 				autoWidth: true,
+				rewind: true,
 				gap: '12px',
 				lazyLoad: true,
 				padding: '40px',

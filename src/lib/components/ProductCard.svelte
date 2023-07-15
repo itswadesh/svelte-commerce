@@ -1,8 +1,6 @@
 <style>
-@media (min-width: 640px) {
-	.shadow-effect:hover {
-		box-shadow: 0 2px 16px 4px rgba(40, 44, 63, 0.07);
-	}
+.shadow-effect:hover {
+	box-shadow: 0 2px 16px 4px rgba(40, 44, 63, 0.07);
 }
 /* .zoom {
 	overflow: hidden;
@@ -60,7 +58,7 @@ function hideitems() {
 
 {#if product}
 	<div
-		class="group relative col-span-1 block w-full sm:shrink-0 sm:rounded bg-white border sm:border-transparent shadow-effect overflow-hidden sm:overflow-visible
+		class="group relative col-span-1 block w-full sm:shrink-0 rounded bg-white shadow-effect overflow-hidden sm:overflow-visible
 		{product_image_dimension == '16x9' ? 'md:w-[420px]' : 'sm:w-[210px]'}"
 		on:mouseenter="{showitems}"
 		on:mouseleave="{hideitems}">
@@ -101,7 +99,7 @@ function hideitems() {
 						alt="{product.name}"
 						height="210"
 						aspect_ratio="1:1"
-						class="object-contain object-bottom w-[210px] h-[210px] text-xs" />
+						class="object-contain object-bottom w-[210px] h-[210px] text-xs rounded" />
 				{:else}
 					<div
 						class="w-[210px] h-[210px] bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center">
