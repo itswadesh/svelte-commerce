@@ -11,7 +11,6 @@ export async function GET({ cookies, request, locals }) {
 		settings = storeRes.settings
 		popularSearches = storeRes.popularSearches
 		megamenu = storeRes.megamenu
-
 		store = {
 			id: storeRes.storeOne._id,
 			address: storeRes.storeOne.address,

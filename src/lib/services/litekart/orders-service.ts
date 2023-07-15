@@ -145,7 +145,7 @@ export const cashfreeCheckout = async ({
 		let res: any = {}
 
 		res = await post(
-			`payments/checkout-cf`,
+			`checkout/checkout-cf`,
 			{
 				address,
 				prescription,
@@ -173,7 +173,7 @@ export const razorpayCheckout = async ({
 		let res: any = {}
 
 		res = await post(
-			`payments/checkout-rp`,
+			`checkout/checkout-rp`,
 			{
 				address,
 				paymentMethod,
@@ -201,7 +201,7 @@ export const razorpayCapture = async ({
 		let res: any = {}
 
 		res = await post(
-			`payments/capture-rp`,
+			`checkout/capture-rp`,
 			{
 				rpPaymentId,
 				rpOrderId,
@@ -228,7 +228,7 @@ export const stripeCheckoutService = async ({
 		let res: any = {}
 
 		res = await post(
-			`stripe`,
+			`checkout/stripe`,
 			{
 				paymentMethodId,
 				address,
@@ -255,7 +255,7 @@ export const paypalCheckout = async ({
 		let res: any = {}
 
 		res = await post(
-			`payments/paypal`,
+			`checkout/paypal`,
 			{
 				paymentMethodId,
 				address,
