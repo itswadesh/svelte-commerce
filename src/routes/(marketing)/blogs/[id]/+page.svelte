@@ -1,7 +1,7 @@
 <script>
 import { date } from '$lib/utils'
 import { page } from '$app/stores'
-import {LazyImg} from '$lib/components'
+import { LazyImg } from '$lib/components'
 import SEO from '$lib/components/SEO/index.svelte'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'
 
@@ -63,7 +63,7 @@ let seoProps = {
 						</div>
 					{/if}
 
-					<div class="prose mb-5 max-w-none text-justify sm:mb-10">
+					<div class="mb-5 sm:mb-10 prose max-w-none">
 						{@html data.blog?.content}
 					</div>
 

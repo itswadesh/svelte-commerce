@@ -1,4 +1,4 @@
-import { fetchInitFromStore } from '$lib/store/init'
+// import { fetchInitFromStore } from '$lib/store/init'
 import { authenticateUser, fetchCart, fetchStoreData } from '$lib/server'
 import { DOMAIN, HTTP_ENDPOINT, listOfPagesWithoutBackButton } from '$lib/config'
 import { error, type Handle, type HandleServerError } from '@sveltejs/kit'
@@ -46,9 +46,16 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.isDesktop = isDesktop
 		event.locals.isShowBackButton = isShowBackButton
 
-		const { storeOne } = await fetchInitFromStore(url.host)
+		// This calls init only when store data not present in browser cookies
+		const { megamenu, storeOne } = await fetchStoreData(event)
+
 		event.locals.store = storeOne
+		event.locals.megamenu = megamenu
+
+		// this simply gets data from cookie
 		event.locals.me = await authenticateUser(event)
+
+		// This makes a call to backend on every request
 		event.locals.cart = await fetchCart(event)
 
 		const response = await resolve(event)

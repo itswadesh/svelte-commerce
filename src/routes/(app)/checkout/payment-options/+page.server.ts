@@ -1,5 +1,5 @@
-import { redirect } from '@sveltejs/kit'
 import { AddressService, CartService, PaymentMethodService } from '$lib/services'
+import { redirect } from '@sveltejs/kit'
 
 export const prerender = false
 

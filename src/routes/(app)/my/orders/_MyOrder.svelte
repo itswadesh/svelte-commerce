@@ -26,15 +26,9 @@ export { clazz as class }
 	{#if orders.data?.length}
 		<div>
 			<header class="mb-5 flex flex-wrap items-start justify-between gap-4">
-				<div>
-					<div class="flex flex-wrap items-center gap-2">
-						<h2 class="text-2xl capitalize sm:text-3xl">
-							Orders {#if orders.count}({orders.count}){/if}
-						</h2>
-					</div>
-
-					<!-- <p class="mt-2 text-sm text-zinc-500"></p> -->
-				</div>
+				<h1>
+					Orders {#if orders.count}({orders.count}){/if}
+				</h1>
 
 				<!--  Back button -->
 
@@ -65,10 +59,10 @@ export { clazz as class }
 			<ul>
 				{#each orders.data as order}
 					<li class="mb-4 hidden sm:mb-10 xl:block">
-						<div class="mb-3 flex items-center justify-between text-sm text-zinc-500 sm:mb-4">
-							<h6>Order No : #{order.orderNo}</h6>
+						<div class="mb-3 flex items-center justify-between text-zinc-500 sm:mb-4">
+							<p>Order No : #{order.orderNo}</p>
 
-							<h6>Order Date : {date(order.createdAt)}</h6>
+							<p>Order Date : {date(order.createdAt)}</p>
 						</div>
 
 						<table
@@ -76,23 +70,23 @@ export { clazz as class }
 							on:click="{() => goto(`/my/orders/${order._id}`)}">
 							<thead class="whitespace-nowrap rounded-t-md bg-zinc-100 text-xs uppercase">
 								<tr>
-									<!-- <th class="px-5 py-3 font-medium tracking-wider text-zinc-500"> # </th> -->
+									<!-- <th class="px-5 py-3 text-zinc-500"> # </th> -->
 
-									<th class="p-3 font-medium tracking-wider text-zinc-500"> Image </th>
+									<th class="p-3 text-zinc-500"> Image </th>
 
-									<th class="p-3 font-medium tracking-wider text-zinc-500"> Vendor </th>
+									<th class="p-3 text-zinc-500"> Vendor </th>
 
-									<th class="p-3 font-medium tracking-wider text-zinc-500"> Name </th>
+									<th class="p-3 text-zinc-500"> Name </th>
 
-									<th class="p-3 font-medium tracking-wider text-zinc-500"> Qty </th>
+									<th class="p-3 text-zinc-500"> Qty </th>
 
-									<th class="p-3 font-medium tracking-wider text-zinc-500"> Price </th>
+									<th class="p-3 text-zinc-500"> Price </th>
 
-									<th class="p-3 font-medium tracking-wider text-zinc-500"> Shipping </th>
+									<th class="p-3 text-zinc-500"> Shipping </th>
 
-									<th class="p-3 font-medium tracking-wider text-zinc-500"> Total </th>
+									<th class="p-3 text-zinc-500"> Total </th>
 
-									<th class="p-3 font-medium tracking-wider text-zinc-500"> Status </th>
+									<th class="p-3 text-zinc-500"> Status </th>
 								</tr>
 							</thead>
 
@@ -183,25 +177,22 @@ export { clazz as class }
 						</table>
 					</li>
 
-					<li class="xl:hidden">
-						<div class="mb-3 flex items-center justify-between text-sm text-zinc-500 sm:mb-4">
-							<h6>
-								<span class="hidden sm:block">Order No :</span>
-
+					<li class="block xl:hidden text-zinc-500">
+						<div class="mb-3 flex items-center justify-between sm:mb-4">
+							<p>
+								Order No :
 								{order.orderNo}
-							</h6>
+							</p>
 
-							<h6>
-								<span class="hidden sm:block">Order Date :</span>
-
+							<p>
 								{date(order.createdAt)}
-							</h6>
+							</p>
 						</div>
 
 						<a
 							href="/my/orders/{order._id}"
 							aria-label="orders"
-							class="mb-4 block w-full divide-y divide-zinc-200 rounded border bg-white text-sm text-zinc-500 shadow-md transition duration-300 hover:bg-primary-50 sm:mb-10">
+							class="mb-4 block w-full divide-y rounded border bg-white text-sm shadow transition duration-300 hover:bg-primary-50 sm:mb-10">
 							{#each order.orderItems as item}
 								<div class="flex items-start gap-2 p-4 sm:gap-5">
 									<div class="shrink-0">
@@ -222,7 +213,7 @@ export { clazz as class }
 
 									<div class="w-full flex-1">
 										<!-- {#if item.vendor}
-													<a href="/store/${item.vendor?.slug}" aria-label="Click to visit vendor's profile">
+													<a href="/vendor/${item.vendor?.slug}" aria-label="Click to visit vendor's profile">
 														 {#if store.isFnb && item.vendorBusinessName}
 															 <b class="mb-2">
 																 {item.vendorBusinessName}
@@ -232,7 +223,7 @@ export { clazz as class }
 												{/if} -->
 
 										<div class="mb-2 flex items-start justify-between">
-											<span class="flex-1">{item.name}</span>
+											<p class="flex-1">{item.name}</p>
 
 											{#if $page?.data?.store?.isFnb && item.foodType}
 												<div>
@@ -245,11 +236,11 @@ export { clazz as class }
 											{/if}
 										</div>
 
-										<div class="flex flex-wrap gap-2 text-sm">
+										<div class="flex flex-wrap gap-2">
 											<div class="flex items-center gap-2">
-												<h6>Price :</h6>
+												<p>Price :</p>
 
-												<b class="text-zinc-500">
+												<b>
 													{currency(item.price, $page.data?.store?.currencySymbol)}
 													*
 													{item.qty}
@@ -257,25 +248,25 @@ export { clazz as class }
 											</div>
 
 											<div class="flex items-center gap-2">
-												<h6>Delivery :</h6>
+												<p>Delivery :</p>
 
-												<b class="text-zinc-500">
+												<b>
 													{currency(item.shippingCharge, $page.data?.store?.currencySymbol)}
 												</b>
 											</div>
 
 											<div class="flex items-center gap-2">
-												<h6>Total :</h6>
+												<p>Total :</p>
 
-												<b class="text-zinc-500">
+												<b>
 													{currency(item.total, $page.data?.store?.currencySymbol)}
 												</b>
 											</div>
 
 											<div class="flex items-center gap-2">
-												<h6>Status :</h6>
+												<p>Status :</p>
 
-												<b class="uppercase text-primary-500">
+												<b class="uppercase text-zinc-800">
 													{item.status}
 												</b>
 											</div>
@@ -296,9 +287,9 @@ export { clazz as class }
 		<div class="flex h-[70vh] flex-col items-center justify-center text-center">
 			<img src="{noAddToCartAnimate}" alt="empty wishlist" class="mb-5 h-60 object-contain" />
 
-			<p class="mb-2 text-xl font-medium md:text-3xl">You have't Ordered Yet!!</p>
+			<h2 class="mb-2">You have't Ordered Yet!!</h2>
 
-			<p class="mb-5 text-sm">There's no order placed, start adding items to your cart.</p>
+			<p class="mb-5">There's no order placed, start adding items to your cart.</p>
 
 			<a href="/" aria-label="Click to visit home" data-sveltekit-preload-data>
 				<PrimaryButton class="w-40 py-2 text-sm">Shop Now</PrimaryButton>

@@ -1,16 +1,19 @@
 <script>
-import { goto } from '$app/navigation'
-import { Error } from '$lib/components'
-import AddressSkeleton from './_AddressSkeleton.svelte'
 import { createEventDispatcher } from 'svelte'
 import { del } from '$lib/utils/api'
+import { Error } from '$lib/components'
+import { goto } from '$app/navigation'
 import { page } from '$app/stores'
+import AddressSkeleton from './_AddressSkeleton.svelte'
+
 const dispatch = createEventDispatcher()
 
-export let address, selectedAddress, loading
+export let address
+export let loading
+export let selectedAddress
 
-let removing = false,
-	err
+let removing = false
+let err
 
 async function remove(id) {
 	if (confirm('Are you sure to delete?')) {
@@ -31,7 +34,7 @@ async function addressChanged(id) {
 }
 </script>
 
-<Error err="{err}" />
+<Error err="{err}" class="mb-5" />
 
 {#if loading}
 	<AddressSkeleton />
@@ -46,72 +49,54 @@ async function addressChanged(id) {
 				class="mt-1.5 h-4 w-4 focus:outline-none focus:ring-0 focus:ring-offset-0"
 				on:change="{() => addressChanged(address._id)}" />
 
-			<div class="flex w-full cursor-pointer flex-col gap-2 font-light">
-				<h5 class="flex-1 font-semibold capitalize tracking-wide md:text-lg">
-					{address.firstName || '_'}
-					{address.lastName || '_'}
-				</h5>
+			<div class="flex w-full cursor-pointer flex-col gap-1 font-light">
+				<h6 class="flex-1 capitalize">
+					{address.firstName}
+					{address.lastName}
+				</h6>
 
-				<div class="flex flex-wrap items-start text-sm md:flex-nowrap">
-					<h5 class="w-20 font-semibold">Address</h5>
+				<p>
+					{#if address.address}
+						{address.address}
+					{/if}
+					{#if address.locality}
+						, {address.locality}
+					{/if}
+					{#if address.city}
+						, {address.city}
+					{/if}
+					{#if address.state}
+						, {address.state}
+					{/if}
+					{#if address.country}
+						, {address.country}
+					{/if}
+					{#if address.zip}
+						- {address.zip}
+					{/if}
+				</p>
 
-					<p class="flex flex-1 flex-wrap items-center">
-						:
-						{#if address.address}
-							{address.address}
-						{/if}
-						{#if address.locality}
-							, {address.locality}
-						{/if}
-						{#if address.city}
-							, {address.city}
-						{/if}
-						{#if address.state}
-							, {address.state}
-						{/if}
-						{#if address.country}
-							, {address.country}
-						{/if}
-					</p>
-				</div>
+				<p>
+					{address.phone}
+				</p>
 
-				<div class="flex flex-wrap items-start text-sm md:flex-nowrap">
-					<h5 class="w-20 font-semibold">Pin Code</h5>
-
-					<p class="flex flex-1 flex-col">
-						: {address.zip || '_'}
-					</p>
-				</div>
-
-				<div class="flex flex-wrap items-start text-sm md:flex-nowrap">
-					<h5 class="w-20 font-semibold">Phone</h5>
-
-					<p class="flex flex-1 flex-col">
-						: {address.phone}
-					</p>
-				</div>
-
-				<div class="flex flex-wrap items-start text-sm md:flex-nowrap">
-					<h5 class="w-20 font-semibold">Email</h5>
-
-					<p class="flex flex-1 flex-col">
-						: {address.email || '_'}
-					</p>
-				</div>
+				<p>
+					{address.email}
+				</p>
 			</div>
 		</label>
 
 		<div class="ml-6 mt-5 flex items-center gap-5 text-sm sm:ml-8">
 			<button
 				type="button"
-				class="w-full rounded border border-primary-500 py-2 px-4 font-semibold tracking-wide text-primary-500 shadow-md transition duration-300 focus:outline-none hover:bg-primary-500 hover:text-white"
+				class="w-full rounded border py-2 px-4 font-semibold tracking-wide text-zinc-800 transition duration-300 focus:outline-none hover:border-zinc-800"
 				on:click="{() => goto(`/checkout/add-address?id=${address._id}`)}">
 				EDIT
 			</button>
 
 			<button
 				type="button"
-				class="w-full rounded border border-transparent bg-transparent py-2 px-4 font-semibold tracking-wide text-zinc-500 transition duration-300 focus:outline-none hover:border-zinc-500 hover:bg-zinc-500 hover:text-white hover:shadow-md"
+				class="w-full rounded border border-transparent py-2 px-4 font-semibold tracking-wide text-zinc-500 transition duration-300 focus:outline-none hover:text-zinc-800"
 				on:click="{() => remove(address._id)}">
 				{#if removing}
 					<div class="flex justify-center">

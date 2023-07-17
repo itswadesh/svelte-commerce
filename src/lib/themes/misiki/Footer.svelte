@@ -30,7 +30,6 @@ import { PageService } from '$lib/services'
 // import googlePlay from '$lib/assets/app/google-play.png'
 import type { Category } from '$lib/types'
 
-
 export let me
 export let store = {}
 export let popularSearches: { took: 0; count: 0; data: [] }
@@ -69,7 +68,6 @@ async function getPages() {
 		origin: $page.data.origin,
 		storeId: $page.data.store?.id
 	})
-
 }
 </script>
 
@@ -79,9 +77,9 @@ async function getPages() {
 			class="mb-4 flex w-full flex-col flex-wrap items-start justify-start gap-5 sm:mb-8 sm:gap-10 h-full sm:max-h-[35rem] xl:max-h-80 overflow-hidden">
 			{#if $page.data.store?.description}
 				<div>
-					<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">
+					<h6 class="mb-4 whitespace-nowrap uppercase">
 						About {$page.data.store?.websiteName}
-					</h5>
+					</h6>
 
 					<p class="max-w-xs text-zinc-500">
 						{@html $page.data.store?.description}
@@ -90,7 +88,7 @@ async function getPages() {
 			{/if}
 
 			<div>
-				<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Customer Service</h5>
+				<h6 class="mb-4 whitespace-nowrap uppercase">Customer Service</h6>
 
 				<ul class="flex flex-col gap-1 text-zinc-500">
 					{#if pages?.length}
@@ -99,7 +97,7 @@ async function getPages() {
 								<a
 									href="/p/{page.link || page.slug}"
 									aria-label="Click to visit this page"
-									class="link-underline link-underline-gray whitespace-pre-wrap">
+									class="capitalize link-underline link-underline-gray whitespace-pre-wrap">
 									{page.name}
 								</a>
 
@@ -162,7 +160,7 @@ async function getPages() {
 
 			{#if megamenu?.length}
 				<div>
-					<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Collections</h5>
+					<h6 class="mb-4 whitespace-nowrap uppercase">Collections</h6>
 
 					<ul class="flex flex-col gap-1 text-zinc-500">
 						{#each megamenu as category}
@@ -187,13 +185,13 @@ async function getPages() {
 			{/if}
 
 			<div>
-				<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Contact Us</h5>
+				<h6 class="mb-4 whitespace-nowrap uppercase">Contact Us</h6>
 
 				<ul class="flex flex-col gap-2 text-zinc-500">
 					{#if $page.data.store?.email}
 						<li class="max-w-max">
 							<a href="mailto:{$page.data.store?.email}" class="group flex items-center gap-2">
-								<h6 class="w-16 flex items-center gap-1 font-semibold">
+								<h6 class="w-16 flex items-center gap-1">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										fill="none"
@@ -219,7 +217,7 @@ async function getPages() {
 					{#if $page.data.store?.phone}
 						<li class="max-w-max">
 							<a href="tel:+{$page.data.store?.phone}" class="group flex items-center gap-2">
-								<h6 class="w-16 flex items-center gap-1 font-semibold">
+								<h6 class="w-16 flex items-center gap-1">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										fill="none"
@@ -244,7 +242,7 @@ async function getPages() {
 
 					{#if $page.data.store?.guaranteed_response_time}
 						<li class="max-w-max">
-							<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
+							<h6 class="mb-0.5 flex items-center gap-1">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									fill="none"
@@ -265,7 +263,7 @@ async function getPages() {
 
 					{#if $page.data.store?.store_timings}
 						<li class="max-w-max">
-							<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
+							<h6 class="mb-0.5 flex items-center gap-1">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									fill="none"
@@ -289,9 +287,9 @@ async function getPages() {
 			</div>
 
 			<!-- <div>
-				<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">
+				<h6 class="mb-4 whitespace-nowrap uppercase">
 					Experience {$page.data.store?.websiteName} app on mobile
-				</h5>
+				</h6>
 
 				<div class="flex items-center gap-1">
 					<a
@@ -312,9 +310,9 @@ async function getPages() {
 				</div>
 			</div> -->
 
-			{#if $page.data.store?.socialSharingButtons || $page.data.store?.email}
+			{#if ($page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.facebook?.val) || ($page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.instagram?.val) || ($page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.telegram?.val) || ($page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.twitter?.val) || ($page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.reddit?.val) || ($page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.linkedin?.val) || ($page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.pinterest?.val) || ($page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.youtube?.val)}
 				<div>
-					<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">Keep in touch</h5>
+					<h6 class="mb-4 whitespace-nowrap uppercase">Keep in touch</h6>
 
 					<ul class="flex flex-wrap gap-4 text-zinc-500">
 						<!-- Facebook -->
@@ -457,30 +455,6 @@ async function getPages() {
 							</li>
 						{/if}
 
-						<!-- Mail -->
-
-						{#if $page.data.store?.email}
-							<li class="max-w-max">
-								<a
-									href="mailto:{$page.data.store?.email}"
-									aria-label="Click to contact with mail id">
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 transition duration-300 hover:text-[#c71610]"
-										viewBox="0 0 24 24"
-										stroke-width="1.5"
-										stroke="currentColor"
-										fill="none"
-										stroke-linecap="round"
-										stroke-linejoin="round">
-										<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-										<rect x="3" y="5" width="18" height="14" rx="2"></rect>
-										<polyline points="3 7 12 13 21 7"></polyline>
-									</svg>
-								</a>
-							</li>
-						{/if}
-
 						<!-- Linkedin -->
 
 						{#if $page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.linkedin?.val}
@@ -571,11 +545,11 @@ async function getPages() {
 
 		{#if popularSearches?.count > 0}
 			<div class="mb-4 sm:mb-8">
-				<h2 class="mb-4 flex items-center gap-4 font-semibold">
-					<span class="flex-1 whitespace-nowrap uppercase"> Popular searches </span>
+				<div class="mb-4 flex items-center gap-4 font-semibold">
+					<h6 class="flex-1 whitespace-nowrap uppercase">Popular searches</h6>
 
 					<hr class="w-full border-t" />
-				</h2>
+				</div>
 
 				<ul class="flex flex-wrap items-center text-zinc-500">
 					{#each popularSearches.data as p, px}
@@ -600,9 +574,9 @@ async function getPages() {
 			<hr class="mb-4 w-full border-t sm:mb-8" />
 
 			<div class="mb-4 sm:mb-8">
-				<h2 class="mb-4 whitespace-nowrap font-semibold uppercase">Registered Office Address</h2>
+				<h6 class="mb-4 whitespace-nowrap uppercase">Registered Office Address</h6>
 
-				<p class="text-zinc-500">
+				<p>
 					{@html $page.data.store?.address}
 				</p>
 			</div>
@@ -618,11 +592,11 @@ async function getPages() {
 				</span>
 				<span>
 					Powered by <a
-						href="{$page.data.store?.saasDomain}"
+						href="{$page.data.store?.saasDomain || 'https://litekart.in'}"
 						rel="external"
 						class="hover:underline"
 						target="_blank">
-						{$page.data.store?.saasName}
+						{$page.data.store?.saasName || 'Litekart'}
 					</a>
 				</span>
 			</p>
@@ -631,14 +605,14 @@ async function getPages() {
 				<a
 					href="/contact-us"
 					aria-label="Click to visit this page"
-					class="font-bold uppercase text-primary-500 transition duration-300 hover:text-primary-700">
+					class="font-bold uppercase text-zinc-500 transition duration-300 hover:text-zinc-800">
 					Contact Us
 				</a>
 
 				<a
 					href="/faqs"
 					aria-label="Click to visit this page"
-					class="font-bold uppercase text-primary-500 transition duration-300 hover:text-primary-700">
+					class="font-bold uppercase text-zinc-500 transition duration-300 hover:text-zinc-800">
 					Faqs
 				</a>
 			</div>

@@ -21,19 +21,16 @@ function redirectToCheckout({ detail }) {
 <SEO {...seoProps} />
 
 <div class="container mx-auto min-h-screen max-w-3xl p-3 py-5 sm:p-10">
-	<header
-		class="mb-5 flex flex-col-reverse items-start md:items-center justify-between md:flex-row gap-2">
-		<h1 class="text-xl font-medium md:text-2xl lg:text-3xl">
+	<header class="mb-5 flex flex-wrap-reverse items-start md:items-center justify-between gap-2">
+		<h3>
 			{#if data.id === 'new'}
-				<span> Add New Address </span>
+				Add New Address
 			{:else}
-				<span> Edit Address </span>
+				Edit Address
 			{/if}
-		</h1>
+		</h3>
 
-		<div class="mr-3">
-			<BackButton to="/checkout/address" class="" />
-		</div>
+		<BackButton to="/checkout/address" />
 	</header>
 
 	<SaveAddress

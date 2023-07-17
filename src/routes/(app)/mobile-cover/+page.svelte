@@ -208,7 +208,7 @@ function searchSubmit() {
 			</div>
 
 			{#if data.category?.description && data.category?.description?.length > 11}
-				<div class="prose prose-sm max-w-none text-justify">
+				<div class="prose max-w-none">
 					{@html data.category?.description}
 				</div>
 			{/if}

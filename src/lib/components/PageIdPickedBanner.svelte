@@ -1,5 +1,5 @@
 <script lang="ts">
-import {LazyImg} from '$lib/components'
+import { LazyImg } from '$lib/components'
 
 export let pickedBanners
 </script>
@@ -8,8 +8,7 @@ export let pickedBanners
 	<div class="flex flex-col gap-5 sm:gap-10">
 		{#each pickedBanners as b}
 			<div>
-				<h2
-					class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
+				<h2 class="p-3 py-5 text-center sm:px-10 md:py-10 uppercase">
 					{b._id?.title}
 				</h2>
 

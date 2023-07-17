@@ -24,7 +24,7 @@ function redirectToNewAddressDetailsPage({ detail }) {
 	<header class="mb-5 flex flex-wrap items-start justify-between gap-4">
 		<div>
 			<div class="flex flex-wrap items-center gap-2">
-				<h2 class="text-2xl capitalize sm:text-3xl">
+				<h2 class="capitalize">
 					<span class="text-zinc-500"> Addresses / </span>
 
 					<span>
@@ -39,7 +39,7 @@ function redirectToNewAddressDetailsPage({ detail }) {
 				</h2>
 			</div>
 
-			<!-- <p class="mt-2 text-sm text-zinc-500"></p> -->
+			<!-- <p class="mt-2"></p> -->
 		</div>
 
 		<!--  Back button -->
@@ -68,9 +68,11 @@ function redirectToNewAddressDetailsPage({ detail }) {
 		</div>
 	</header>
 
-	<SaveAddress
-		address="{data.address}"
-		countries="{data.countries}"
-		states="{data.states}"
-		on:saved="{({ detail }) => redirectToNewAddressDetailsPage({ detail })}" />
+	<div class="max-w-3xl">
+		<SaveAddress
+			address="{data.address}"
+			countries="{data.countries}"
+			states="{data.states}"
+			on:saved="{({ detail }) => redirectToNewAddressDetailsPage({ detail })}" />
+	</div>
 </section>

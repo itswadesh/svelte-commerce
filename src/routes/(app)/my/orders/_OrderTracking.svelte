@@ -8,7 +8,7 @@ export let tracks
 </script>
 
 <div>
-	<h1 class="mb-4 text-xl font-semibold sm:text-2xl">Timeline</h1>
+	<h3 class="mb-4">Timeline</h3>
 
 	<div class="flex flex-col gap-2">
 		{#each tracks as t}
@@ -27,9 +27,9 @@ export let tracks
 						{/if}
 					</div>
 
-					<div class="flex-1 gap-1 text-sm font-semibold capitalize">
+					<h6 class="flex-1 gap-1 capitalize">
 						{t.title}
-					</div>
+					</h6>
 				</div>
 
 				<div class="flex gap-4">
@@ -40,13 +40,13 @@ export let tracks
 					</div>
 
 					<div class="flex flex-1 flex-col gap-1">
-						<span class="text-xs text-zinc-500">{date(t.time)}</span>
-
 						{#if t.comment}
-							<p class="text-xs first-letter:uppercase">
+							<p class="first-letter:uppercase">
 								{t.comment}
 							</p>
 						{/if}
+
+						<span class="text-xs text-zinc-500">{date(t.time)}</span>
 					</div>
 				</div>
 			</div>
@@ -93,9 +93,9 @@ export let tracks
 								<div
 									class="absolute left-12 whitespace-nowrap xl:static xl:mt-2 xl:text-center 
 									{t.time ? 'opacity-100' : 'opacity-40'} ">
-									<h4 class="font-medium">{t.status}</h4>
+									<h5>{t.status}</h5>
 
-									<h6 class="mt-1 text-xs font-light text-zinc-500">
+									<h6 class="mt-1 text-zinc-500">
 										{#if t.time}
 											<span>
 												{date(t.time)}

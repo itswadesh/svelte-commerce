@@ -24,6 +24,6 @@ let openSidebar = false
 	</PageTransitions>
 
 	<div class="hidden lg:block">
-		<Footer me="{data.me}" cart="{data.cart}" />
+		<Footer />
 	</div>
 </div>

@@ -12,8 +12,7 @@ let product_image_dimension = $page.data.store.product_image_dimension || '3x4'
 {#await data.streamed.home then home}
 	{#if home?.popular?.length > 0}
 		<div>
-			<h2
-				class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
+			<h2 class="p-3 py-5 text-center sm:px-10 md:py-10 uppercase">
 				POPULAR ON {$page.data.store?.websiteName}
 			</h2>
 

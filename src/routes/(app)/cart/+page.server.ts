@@ -53,9 +53,8 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 const add: Action = async ({ request, cookies, locals }) => {
 	const data = await request.formData()
 	const pid = data.get('pid')
-	const qty = +data.get('qty')
-	const size = data.get('size')
 	const vid = data.get('pid')
+	const qty = +data.get('qty')
 	const linkedItems = JSON.parse(data.get('linkedItems'))
 	const options = JSON.parse(data.get('options')) //data.get('options') //
 	const customizedImg = data.get('customizedImg')
@@ -65,44 +64,44 @@ const add: Action = async ({ request, cookies, locals }) => {
 	}
 	try {
 		let cart = await CartService.addToCartService({
-			cookies, // This is a special case to pass complete cookie
-			customizedImg,
-			options,
-			origin: locals.origin,
 			pid,
-			qty,
-			server: true,
-			storeId: locals.store?.id,
 			vid,
+			qty,
+			options,
+			customizedImg,
+			storeId: locals.store?.id,
+			server: true,
+			origin: locals.origin,
+			cookies // This is a special case to pass complete cookie
 		})
 		if (linkedItems?.length) {
 			for (const i of linkedItems) {
 				cart = await CartService.addToCartService({
-					cookies, // This is a special case to pass complete cookie
-					origin: locals.origin,
 					pid: i,
-					qty: 1,
-					server: true,
-					storeId: locals.store?.id,
 					vid: i,
+					qty: 1,
+					storeId: locals.store?.id,
+					server: true,
+					origin: locals.origin,
+					cookies // This is a special case to pass complete cookie
 				})
 			}
 		}
 		if (cart) {
 			const cartObj = {
 				cartId: cart?.cart_id,
-				currencySymbol: cart?.currencySymbol,
-				discount: cart?.discount,
-				formattedAmount: cart?.formattedAmount,
 				items: cart?.items,
 				qty: cart?.qty,
+				tax: cart?.tax,
+				subtotal: cart?.subtotal,
+				total: cart?.total,
+				currencySymbol: cart?.currencySymbol,
+				discount: cart?.discount,
 				savings: cart?.savings,
 				selfTakeout: cart?.selfTakeout,
 				shipping: cart?.shipping,
-				subtotal: cart?.subtotal,
-				tax: cart?.tax,
-				total: cart?.total,
 				unavailableItems: cart?.unavailableItems,
+				formattedAmount: cart?.formattedAmount
 			}
 			locals.cart = cartObj
 			locals.cartId = cartObj.cartId

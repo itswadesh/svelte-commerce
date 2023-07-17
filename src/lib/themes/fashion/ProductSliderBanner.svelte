@@ -22,6 +22,7 @@ const mainOptions = {
 const thumbsOptions = {
 	type: 'slide',
 	rewind: true,
+	arrows: data.product?.images?.length > 1 ? true : false,
 	gap: '1rem',
 	pagination: false,
 	fixedWidth: 100,

@@ -17,8 +17,7 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 		<div>
 			{#each pickedBannersForDeals as b}
 				<div>
-					<h2
-						class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
+					<h2 class="p-3 py-5 text-center sm:px-10 md:py-10 uppercase">
 						{b._id?.title}
 					</h2>
 
@@ -64,8 +63,7 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 		<div>
 			{#each pickedBanners as b}
 				<div>
-					<h2
-						class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
+					<h2 class="p-3 py-5 text-center sm:px-10 md:py-10 uppercase">
 						{b._id?.title}
 					</h2>
 

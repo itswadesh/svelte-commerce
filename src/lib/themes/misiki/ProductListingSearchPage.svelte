@@ -1,32 +1,32 @@
 <script lang="ts">
+import {
+	CatelogNav,
+	DesktopFilter,
+	DummyProductCard,
+	MobileFilter,
+	Pagination,
+	ProductCard
+} from '$lib/components'
+import { currency, dateOnly, generatePriceRange, toast } from '$lib/utils'
 import { fade } from 'svelte/transition'
-import { generatePriceRange, toast } from '$lib/utils'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { ProductService, PopularSearchService } from '$lib/services'
-import { sorts } from '$lib/config'
 import { PrimaryButton } from '$lib/ui'
-import {
-	ProductCard,
-	Pagination,
-	MobileFilter,
-	DummyProductCard,
-	CatelogNav,
-	DesktopFilter
-} from '$lib/components'
+import { PopularSearchService, ProductService } from '$lib/services'
+import { sorts } from '$lib/config'
 import dayjs from 'dayjs'
 import dotsLoading from '$lib/assets/dots-loading.gif'
 import noDataAvailable from '$lib/assets/no/no-data-available.png'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
-
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 let today = dayjs(new Date()).toISOString()
 
 let seoProps = {
 	brand: $page.data.store?.title,
-	breadcrumbs: data.category?.children,
+	// breadcrumbs: data.category?.children,
 	caption: $page.data.store?.title,
 	category: data.searchData,
 	contentUrl: $page.data.store?.logo,
@@ -39,7 +39,7 @@ let seoProps = {
 	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00'],
 	timeToRead: 0,
 	updatedAt: today,
-	metaDescription: $page.data.store?.metaDescription,
+	metaDescription: $page.data.store?.description,
 	canonical: `${$page?.url.href}`,
 	datePublished: today,
 	description: $page.data.store?.description,
@@ -106,6 +106,7 @@ async function saveSearchData(searchData) {
 }
 
 function goTop() {
+	// scroll to the top
 	window.scroll({ top: 0, behavior: 'smooth' })
 }
 
@@ -143,28 +144,30 @@ async function sortNow(s) {
 async function loadNextPage() {
 	if (!reachedLast) {
 		let nextPage = currentPage + 1
-		$page.url.searchParams.delete('page')
-		const searchParams = $page.url.searchParams.toString()
+		$page?.url?.searchParams.delete('page')
+		const searchParams = $page?.url?.searchParams.toString()
 
 		try {
 			data.isLoading = true
 
 			const res = await ProductService.fetchNextPageProducts({
-				categorySlug: data.category?.slug,
+				categorySlug: data?.category?.slug,
 				origin: $page?.data?.origin,
 				storeId: $page?.data?.store?.id,
 				nextPage,
 				searchParams
 			})
 
-			const nextPageData = res.nextPageData
-			data.products = data?.products?.concat(nextPageData)
-			data.count = res?.count
-			data.products.facets = res?.facets
+			// console.log('res', res)
+
+			const nextPageData = res?.nextPageData
+			data.products.products = data?.products?.products?.concat(nextPageData)
+			data.products.count = res?.count
+			data.products.products.facets = res?.facets
 			data.err = !res?.estimatedTotalHits ? 'No result Not Found' : null
 			currentPage = currentPage + 1
 
-			if (data.count && data.products?.length === data.count) {
+			if (data.product?.count && data.products?.length === data.product?.count) {
 				reachedLast = true
 			}
 		} catch (e) {
@@ -178,14 +181,16 @@ async function loadNextPage() {
 async function refreshData() {}
 
 let loadMoreDiv
+
 onMount(() => {
 	const observer = new IntersectionObserver((entries) => {
 		if (!entries) return
+
 		entries.forEach((entry) => {
 			if (
 				entry.isIntersecting &&
-				data.count &&
-				data.products?.length < data.count &&
+				data.products?.count &&
+				data.products?.products?.length < data.products?.count &&
 				!data.isLoading
 			) {
 				// Do something when the element is intersecting
@@ -198,73 +203,72 @@ onMount(() => {
 		observer.observe(loadMoreDiv)
 	}
 
-	// if (!$page?.data?.isDesktop && data.count && data.products?.length < data.count) {
-	// 	const intersectionObserver = new IntersectionObserver((entries) => {
-	// 		if (entries[0].intersectionRatio <= 0) return
-	// 		// load more content;
-	// 		loadNextPage()
-	// 	})
+	// const intersectionObserver = new IntersectionObserver((entries) => {
+	// 	if (entries[0].intersectionRatio <= 0) return
+	// 	// load more content;
+	// 	loadNextPage()
+	// })
 
-	// 	// start observing
+	// // start observing
 
-	// 	intersectionObserver.observe(document.querySelector('.more'))
-	// 	// // @ts-ignore
-	// 	// gtag('event', 'view_item', {
-	// 	// 	currency: 'USD',
-	// 	// 	value: 7.77,
-	// 	// 	items: [
-	// 	// 		{
-	// 	// 			item_id: 'SKU_12345',
-	// 	// 			item_name: 'Stan and Friends Tee',
-	// 	// 			affiliation: 'Google Merchandise Store',
-	// 	// 			coupon: 'SUMMER_FUN',
-	// 	// 			currency: 'USD',
-	// 	// 			discount: 2.22,
-	// 	// 			index: 0,
-	// 	// 			item_brand: 'Google',
-	// 	// 			item_category: 'Apparel',
-	// 	// 			item_category2: 'Adult',
-	// 	// 			item_category3: 'Shirts',
-	// 	// 			item_category4: 'Crew',
-	// 	// 			item_category5: 'Short sleeve',
-	// 	// 			item_list_id: 'related_products',
-	// 	// 			item_list_name: 'Related Products',
-	// 	// 			item_variant: 'green',
-	// 	// 			location_id: 'ChIJIQBpAG2ahYAR_6128GcTUEo',
-	// 	// 			price: 9.99,
-	// 	// 			quantity: 1
-	// 	// 		}
-	// 	// 	]
-	// 	// })
+	// intersectionObserver.observe(document.querySelector('.more'))
+	// // @ts-ignore
+	// gtag('event', 'view_item', {
+	// 	currency: 'USD',
+	// 	value: 7.77,
+	// 	items: [
+	// 		{
+	// 			item_id: 'SKU_12345',
+	// 			item_name: 'Stan and Friends Tee',
+	// 			affiliation: 'Google Merchandise Store',
+	// 			coupon: 'SUMMER_FUN',
+	// 			currency: 'USD',
+	// 			discount: 2.22,
+	// 			index: 0,
+	// 			item_brand: 'Google',
+	// 			item_category: 'Apparel',
+	// 			item_category2: 'Adult',
+	// 			item_category3: 'Shirts',
+	// 			item_category4: 'Crew',
+	// 			item_category5: 'Short sleeve',
+	// 			item_list_id: 'related_products',
+	// 			item_list_name: 'Related Products',
+	// 			item_variant: 'green',
+	// 			location_id: 'ChIJIQBpAG2ahYAR_6128GcTUEo',
+	// 			price: 9.99,
+	// 			quantity: 1
+	// 		}
+	// 	]
+	// })
 
-	// 	// // @ts-ignore
-	// 	// gtag('event', 'view_item_list', {
-	// 	// 	item_list_id: 'related_products',
-	// 	// 	item_list_name: 'Related products',
-	// 	// 	items: [
-	// 	// 		{
-	// 	// 			item_id: 'SKU_12345',
-	// 	// 			item_name: 'Stan and Friends Tee',
-	// 	// 			affiliation: 'Google Merchandise Store',
-	// 	// 			coupon: 'SUMMER_FUN',
-	// 	// 			currency: 'USD',
-	// 	// 			discount: 2.22,
-	// 	// 			index: 0,
-	// 	// 			item_brand: 'Google',
-	// 	// 			item_category: 'Apparel',
-	// 	// 			item_category2: 'Adult',
-	// 	// 			item_category3: 'Shirts',
-	// 	// 			item_category4: 'Crew',
-	// 	// 			item_category5: 'Short sleeve',
-	// 	// 			item_list_id: 'related_products',
-	// 	// 			item_list_name: 'Related Products',
-	// 	// 			item_variant: 'green',
-	// 	// 			location_id: 'ChIJIQBpAG2ahYAR_6128GcTUEo',
-	// 	// 			price: 9.99,
-	// 	// 			quantity: 1
-	// 	// 		}
-	// 	// 	]
-	// 	// })
+	// // @ts-ignore
+	// gtag('event', 'view_item_list', {
+	// 	item_list_id: 'related_products',
+	// 	item_list_name: 'Related products',
+	// 	items: [
+	// 		{
+	// 			item_id: 'SKU_12345',
+	// 			item_name: 'Stan and Friends Tee',
+	// 			affiliation: 'Google Merchandise Store',
+	// 			coupon: 'SUMMER_FUN',
+	// 			currency: 'USD',
+	// 			discount: 2.22,
+	// 			index: 0,
+	// 			item_brand: 'Google',
+	// 			item_category: 'Apparel',
+	// 			item_category2: 'Adult',
+	// 			item_category3: 'Shirts',
+	// 			item_category4: 'Crew',
+	// 			item_category5: 'Short sleeve',
+	// 			item_list_id: 'related_products',
+	// 			item_list_name: 'Related Products',
+	// 			item_variant: 'green',
+	// 			location_id: 'ChIJIQBpAG2ahYAR_6128GcTUEo',
+	// 			price: 9.99,
+	// 			quantity: 1
+	// 		}
+	// 	]
+	// })
 	// }
 })
 
@@ -292,14 +296,12 @@ function handleFilterTags() {
 <CatelogNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page?.data?.store}">
 	<div class="flex max-w-max flex-col items-start gap-1">
 		{#if data.searchData}
-			<h2 class="w-28 truncate font-semibold capitalize leading-4">{data.searchData}</h2>
+			<h5 class="w-28 truncate capitalize leading-4">{data.searchData}</h5>
 		{/if}
 
-		<p class="text-xs">
+		<p>
 			{#if data.products?.count}
-				<b>
-					{data.products?.count}
-				</b>
+				{data.products?.count}
 
 				Items
 			{:else}
@@ -310,31 +312,9 @@ function handleFilterTags() {
 </CatelogNav>
 
 <div class="h-full min-h-screen">
-	<!-- Style tags -->
-
-	{#if data.products?.facets?.all_aggs?.materials?.all?.buckets?.length}
-		<div
-			class="lg:hidden h-12 flex items-center justify-start px-3 sm:px-10 w-screen overflow-x-auto scrollbar-none fixed top-14 sm:top-20 bg-white z-40 shadow-md">
-			<div class="inline-flex gap-2">
-				{#each data.products?.facets?.all_aggs?.materials?.all?.buckets || [] as t}
-					{#if t?.key}
-						<button
-							class="whitespace-nowrap block rounded-full border py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none
-							{$page.url.searchParams.get('tags')?.includes(t?.key)
-								? 'bg-primary-500 border-primary-500 text-white'
-								: 'bg-white hover:border-primary-500 hover:text-primary-500'}"
-							on:click="{() => goCheckbox(t?.key)}">
-							{t?.key}
-						</button>
-					{/if}
-				{/each}
-			</div>
-		</div>
-	{/if}
-
 	<!-- Mobile black product count indicator -->
 
-	{#if !hidden && innerWidth <= 1024}
+	{#if !hidden && innerWidth <= 1024 && data.products?.products?.length}
 		<button
 			transition:fade="{{ duration: 500 }}"
 			aria-label="Click to go to top"
@@ -358,20 +338,19 @@ function handleFilterTags() {
 	<div class="mb-10 flex flex-col items-start sm:mb-20 lg:flex-row lg:gap-10 lg:p-10">
 		{#if data.products.facets}
 			<DesktopFilter
+				class="sticky hidden lg:block {hellobar?.active?.val ? 'top-32' : 'top-24'}"
 				facets="{data.products.facets}"
 				priceRange="{priceRange}"
 				query="{data.query}"
-				class="sticky hidden lg:block
-				{hellobar?.active?.val ? 'top-32' : 'top-24'}"
 				on:clearAll="{refreshData}" />
 
 			<MobileFilter
 				bind:showFilter="{showFilter}"
 				bind:showSort="{showSort}"
+				class="fixed bottom-0 border-t z-40 block lg:hidden"
 				facets="{data.products.facets}"
 				priceRange="{priceRange}"
 				selected="{selectedFilter}"
-				class="fixed bottom-0 border-t z-40 block lg:hidden"
 				on:clearAll="{refreshData}" />
 		{/if}
 
@@ -382,25 +361,27 @@ function handleFilterTags() {
 				<div class="hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex">
 					<!-- Name and count -->
 
-					<h1 class="flex flex-wrap items-center gap-2">
+					<div class="flex flex-wrap items-baseline gap-2">
 						{#if data.searchData}
-							<span class="text-xl font-bold capitalize md:text-2xl"> {data.searchData} </span>
-
-							-
+							<h1 class="capitalize">{data.searchData}</h1>
 						{/if}
 
-						<span>
-							<span class="font-bold text-2xl">
-								{data.products.count || 'No'}
-							</span>
+						<p>
+							-
 
 							{#if data.products.count}
-								Items
+								{data.products.count}
 							{:else}
-								Item
+								No
 							{/if}
-						</span>
-					</h1>
+
+							{#if data.products.count}
+								items
+							{:else}
+								item
+							{/if}
+						</p>
+					</div>
 
 					<!-- Sort -->
 
@@ -410,7 +391,7 @@ function handleFilterTags() {
 
 							<select
 								bind:value="{data.sort}"
-								class="max-w-max border-b bg-transparent py-1 pr-2 font-semibold focus:border-primary-500 focus:outline-none hover:border-primary-500"
+								class="max-w-max border-b bg-transparent pr-2 font-semibold focus:border-primary-500 focus:outline-none hover:border-primary-500"
 								on:change="{() => sortNow(data.sort)}">
 								{#each sorts as s}
 									<option value="{s.val}">{s.name}</option>
@@ -419,33 +400,14 @@ function handleFilterTags() {
 						</label>
 					</div>
 				</div>
-
-				<!-- Style tags -->
-
-				{#if data.products?.facets?.all_aggs?.materials?.all?.buckets?.length}
-					<div class="hidden lg:flex flex-wrap items-center gap-2">
-						{#each data.products?.facets?.all_aggs?.materials?.all?.buckets || [] as t}
-							{#if t?.key}
-								<button
-									class="whitespace-nowrap block rounded-full border py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none
-											{$page.url.searchParams.get('tags')?.includes(t?.key)
-										? 'bg-primary-500 border-primary-500 text-white'
-										: 'bg-white hover:border-primary-500 hover:text-primary-500'}"
-									on:click="{() => goCheckbox(t?.key)}">
-									{t?.key}
-								</button>
-							{/if}
-						{/each}
-					</div>
-				{/if}
 			</div>
 
-			{#if data.products.products?.length}
-				<!-- Products -->
+			<!-- Products -->
 
+			{#if data.products?.products?.length}
 				<ul
 					class="lg:mt-5 grid grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6">
-					{#each data.products.products as p, ix (p._id || p.id)}
+					{#each data.products?.products as p, ix}
 						<li>
 							<ProductCard product="{p}" />
 						</li>
@@ -456,11 +418,9 @@ function handleFilterTags() {
 							<div class="col-span-2 block sm:hidden overflow-x-auto bg-primary-100 scrollbar-none">
 								<div class="w-full flex items-center gap-6 p-4">
 									<div class="shrink-0">
-										<span class="text-lg text-zinc-500">Filter by</span>
+										<p>Filter by</p>
 
-										<br />
-
-										<span class="text-2xl font-bold">Tags</span>
+										<h2>Tags</h2>
 									</div>
 
 									<ul class="flex max-w-[40rem] shrink-0 flex-wrap gap-2">
@@ -468,7 +428,7 @@ function handleFilterTags() {
 											{#if t && tx < 12}
 												<button
 													type="button"
-													class="capitalizefocus:outline-none max-w-max rounded bg-white py-2 px-4 text-sm font-semibold"
+													class="capitalizefocus:outline-none max-w-max rounded bg-white py-2 px-4 text-sm"
 													on:click="{() => goCheckbox(t.key)}">
 													{t.key}
 												</button>
@@ -478,7 +438,7 @@ function handleFilterTags() {
 										{#if data.products.facets.all_aggs.tags.all.buckets?.length - 12 > 0}
 											<button
 												type="button"
-												class="font-semibold text-sm text-primary-500 focus:outline-none"
+												class="text-sm text-primary-500 focus:outline-none"
 												on:click="{handleFilterTags}">
 												+{data.products.facets.all_aggs.tags.all.buckets?.length - 12} more
 											</button>
@@ -498,7 +458,6 @@ function handleFilterTags() {
 
 				{#if !$page?.data?.isDesktop}
 					<!-- <div class="more"> -->
-
 					<div bind:this="{loadMoreDiv}">
 						<!-- Dot loading gif -->
 						{#if data.isLoading}
@@ -514,7 +473,7 @@ function handleFilterTags() {
 					<!-- Reached last -->
 
 					{#if reachedLast}
-						<p class="text-zinc-500 p-4 text-center">
+						<p class="p-4 text-center">
 							<i>~ You have seen all the products ~</i>
 						</p>
 					{/if}
@@ -527,7 +486,7 @@ function handleFilterTags() {
 			{:else}
 				<div class="flex items-center justify-center px-3 sm:px-0" style="height: 60vh;">
 					<div class="m-10 flex flex-col items-center justify-center text-center">
-						<h2 class="mb-10 text-xl capitalize sm:text-2xl lg:text-3xl">
+						<h2 class="mb-10 capitalize">
 							{#if data.searchData}You searched for "{data.searchData}"{/if}
 						</h2>
 
@@ -538,11 +497,9 @@ function handleFilterTags() {
 								class="h-60 w-auto object-contain text-xs" />
 						</div>
 
-						<h2 class="mb-1 font-semibold">We couldn't find any matches!</h2>
+						<h2 class="mb-1">We couldn't find any matches!</h2>
 
-						<p class="mb-5 text-center text-sm text-zinc-500">
-							Please check the spelling or try searching something else
-						</p>
+						<p class="mb-5">Please check the spelling or try searching something else</p>
 
 						<PrimaryButton class="text-sm" on:click="{() => goto('/')}">Back to Home</PrimaryButton>
 					</div>

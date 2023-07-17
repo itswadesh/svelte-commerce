@@ -133,7 +133,6 @@ async function loadNextPage() {
 				searchParams
 			})
 
-
 			const nextPageData = res?.nextPageData
 			data.products.products = data?.products?.products?.concat(nextPageData)
 			data.products.count = res?.count
@@ -406,7 +405,7 @@ function handleFilterTags() {
 			<!-- Category top description -->
 
 			{#if data.category?.topDescription && data.category?.topDescription?.length > 11}
-				<div class="prose prose-sm max-w-none px-3 text-justify sm:px-0">
+				<div class="px-3 sm:px-0 prose max-w-none">
 					{@html data.category?.topDescription}
 				</div>
 			{/if}
@@ -529,7 +528,7 @@ function handleFilterTags() {
 			<div
 				class="container mx-auto grid max-w-6xl grid-cols-1 gap-10 text-sm sm:gap-20 md:grid-cols-6">
 				<div
-					class="prose prose-sm col-span-1 max-w-none text-justify
+					class="prose col-span-1 max-w-none text-justify
 					{data?.products?.products.length ? 'md:col-span-3 lg:col-span-4' : 'md:col-span-6'}">
 					{@html data.category?.description}
 				</div>

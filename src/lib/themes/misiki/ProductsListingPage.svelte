@@ -1,17 +1,17 @@
 <script lang="ts">
+import {
+	CatelogNav,
+	DesktopFilter,
+	DummyProductCard,
+	MobileFilter,
+	Pagination,
+	ProductCard
+} from '$lib/components'
 import { currency, dateOnly, generatePriceRange, toast } from '$lib/utils'
 import { fade } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import {
-	Pagination,
-	ProductCard,
-	CatelogNav,
-	DesktopFilter,
-	DummyProductCard,
-	MobileFilter
-} from '$lib/components'
 import { PrimaryButton } from '$lib/ui'
 import { ProductService } from '$lib/services'
 import { sorts } from '$lib/config'
@@ -20,6 +20,7 @@ import noDataAvailable from '$lib/assets/no/no-data-available.png'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	brand: $page.data.store?.title,
@@ -139,6 +140,7 @@ async function loadNextPage() {
 				searchParams
 			})
 
+			// console.log('res', res)
 
 			const nextPageData = res?.nextPageData
 			data.products.products = data?.products?.products?.concat(nextPageData)
@@ -164,6 +166,8 @@ let loadMoreDiv
 
 onMount(() => {
 	const observer = new IntersectionObserver((entries) => {
+		if (!entries) return
+
 		entries.forEach((entry) => {
 			if (
 				entry.isIntersecting &&
@@ -274,14 +278,12 @@ function handleFilterTags() {
 <CatelogNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page?.data?.store}">
 	<div class="flex max-w-max flex-col items-start gap-1">
 		{#if data.category?.name}
-			<h2 class="w-28 truncate font-semibold capitalize leading-4">{data.category?.name}</h2>
+			<h5 class="w-28 truncate capitalize leading-4">{data.category?.name}</h5>
 		{/if}
 
-		<p class="text-xs">
+		<p>
 			{#if data.products?.count}
-				<b>
-					{data.products?.count}
-				</b>
+				{data.products?.count}
 
 				Items
 			{:else}
@@ -292,31 +294,9 @@ function handleFilterTags() {
 </CatelogNav>
 
 <div class="h-full min-h-screen">
-	<!-- Style tags -->
-
-	{#if data.products?.facets?.all_aggs?.materials?.all?.buckets?.length}
-		<div
-			class="lg:hidden h-12 flex items-center justify-start px-3 sm:px-10 w-screen overflow-x-auto scrollbar-none fixed top-14 sm:top-20 bg-white z-40 shadow-md">
-			<div class="inline-flex gap-2">
-				{#each data.products?.facets?.all_aggs?.materials?.all?.buckets || [] as t}
-					{#if t?.key}
-						<button
-							class="whitespace-nowrap block rounded-full border py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none
-											{$page.url.searchParams.get('styleTags')?.includes(t?.key)
-								? 'bg-primary-500 border-primary-500 text-white'
-								: 'bg-white hover:border-primary-500 hover:text-primary-500'}"
-							on:click="{() => goCheckbox(t?.key)}">
-							{t?.key}
-						</button>
-					{/if}
-				{/each}
-			</div>
-		</div>
-	{/if}
-
 	<!-- Mobile black product count indicator -->
 
-	{#if !hidden && innerWidth <= 1024}
+	{#if !hidden && innerWidth <= 1024 && data.products?.products?.length}
 		<button
 			transition:fade="{{ duration: 500 }}"
 			aria-label="Click to go to top"
@@ -363,25 +343,25 @@ function handleFilterTags() {
 				<div class="hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex">
 					<!-- Name and count -->
 
-					<h1 class="flex flex-wrap items-center gap-2">
+					<div class="flex flex-wrap items-baseline gap-2">
 						{#if data.category?.name}
-							<span class="text-xl font-bold capitalize md:text-2xl"> {data.category?.name} </span>
-
-							-
+							<h1 class="capitalize">{data.category?.name}</h1>
 						{/if}
 
-						<span>
-							<span class="font-bold text-2xl">
-								{data.products.count || 'No'}
-							</span>
+						<p>
+							{#if data.products.count}
+								- {data.products.count}
+							{:else}
+								No
+							{/if}
 
 							{#if data.products.count}
-								Items
+								items
 							{:else}
-								Item
+								item
 							{/if}
-						</span>
-					</h1>
+						</p>
+					</div>
 
 					<!-- Sort -->
 
@@ -391,7 +371,7 @@ function handleFilterTags() {
 
 							<select
 								bind:value="{data.sort}"
-								class="max-w-max border-b bg-transparent py-1 pr-2 font-semibold focus:border-primary-500 focus:outline-none hover:border-primary-500"
+								class="max-w-max border-b bg-transparent pr-2 font-semibold focus:border-primary-500 focus:outline-none hover:border-primary-500"
 								on:change="{() => sortNow(data.sort)}">
 								{#each sorts as s}
 									<option value="{s.val}">{s.name}</option>
@@ -401,29 +381,10 @@ function handleFilterTags() {
 					</div>
 				</div>
 
-				<!-- Style tags -->
-
-				{#if data.products?.facets?.all_aggs?.materials?.all?.buckets?.length}
-					<div class="hidden lg:flex flex-wrap items-center gap-2">
-						{#each data.products?.facets?.all_aggs?.materials?.all?.buckets || [] as t}
-							{#if t?.key}
-								<button
-									class="whitespace-nowrap block rounded-full border py-1 px-3 text-xs font-medium uppercase transition duration-300 focus:outline-none
-											{$page.url.searchParams.get('styleTags')?.includes(t?.key)
-										? 'bg-primary-500 border-primary-500 text-white'
-										: 'bg-white hover:border-primary-500 hover:text-primary-500'}"
-									on:click="{() => goCheckbox(t?.key)}">
-									{t?.key}
-								</button>
-							{/if}
-						{/each}
-					</div>
-				{/if}
-
 				<!-- Category top description -->
 
 				{#if data.category?.topDescription && data.category?.topDescription?.length > 11}
-					<div class="prose prose-sm max-w-none px-3 text-justify sm:px-0">
+					<div class="p-3 sm:p-0 prose max-w-none">
 						{@html data.category?.topDescription}
 					</div>
 				{/if}
@@ -445,11 +406,9 @@ function handleFilterTags() {
 							<div class="col-span-2 block sm:hidden overflow-x-auto bg-primary-100 scrollbar-none">
 								<div class="w-full flex items-center gap-6 p-4">
 									<div class="shrink-0">
-										<span class="text-lg text-zinc-500">Filter by</span>
+										<p>Filter by</p>
 
-										<br />
-
-										<span class="text-2xl font-bold">Tags</span>
+										<h2>Tags</h2>
 									</div>
 
 									<ul class="flex max-w-[40rem] shrink-0 flex-wrap gap-2">
@@ -457,7 +416,7 @@ function handleFilterTags() {
 											{#if t && tx < 12}
 												<button
 													type="button"
-													class="capitalizefocus:outline-none max-w-max rounded bg-white py-2 px-4 text-sm font-semibold"
+													class="capitalizefocus:outline-none max-w-max rounded bg-white py-2 px-4 text-sm"
 													on:click="{() => goCheckbox(t.key)}">
 													{t.key}
 												</button>
@@ -467,7 +426,7 @@ function handleFilterTags() {
 										{#if data.products.facets.all_aggs.tags.all.buckets?.length - 12 > 0}
 											<button
 												type="button"
-												class="font-semibold text-sm text-primary-500 focus:outline-none"
+												class="text-sm text-primary-500 focus:outline-none"
 												on:click="{handleFilterTags}">
 												+{data.products.facets.all_aggs.tags.all.buckets?.length - 12} more
 											</button>
@@ -502,7 +461,7 @@ function handleFilterTags() {
 					<!-- Reached last -->
 
 					{#if reachedLast}
-						<p class="text-zinc-500 p-4 text-center">
+						<p class="p-4 text-center">
 							<i>~ You have seen all the products ~</i>
 						</p>
 					{/if}
@@ -515,7 +474,7 @@ function handleFilterTags() {
 			{:else}
 				<div class="flex items-center justify-center px-3 sm:px-0" style="height: 60vh;">
 					<div class="m-10 flex flex-col items-center justify-center text-center">
-						<h2 class="mb-10 text-xl capitalize sm:text-2xl lg:text-3xl">
+						<h2 class="mb-10 capitalize">
 							{#if data.searchData}You searched for "{data.searchData}"{/if}
 						</h2>
 
@@ -526,11 +485,9 @@ function handleFilterTags() {
 								class="h-60 w-auto object-contain text-xs" />
 						</div>
 
-						<h2 class="mb-1 font-semibold">We couldn't find any matches!</h2>
+						<h2 class="mb-1">We couldn't find any matches!</h2>
 
-						<p class="mb-5 text-center text-sm text-zinc-500">
-							Please check the spelling or try searching something else
-						</p>
+						<p class="mb-5">Please check the spelling or try searching something else</p>
 
 						<PrimaryButton class="text-sm" on:click="{() => goto('/')}">Back to Home</PrimaryButton>
 					</div>
@@ -546,24 +503,24 @@ function handleFilterTags() {
 			<div
 				class="container mx-auto grid max-w-6xl grid-cols-1 gap-10 text-sm sm:gap-20 md:grid-cols-6">
 				<div
-					class="prose prose-sm col-span-1 max-w-none text-justify
+					class="prose col-span-1 max-w-none text-justify
 					{data?.products?.products.length ? 'md:col-span-3 lg:col-span-4' : 'md:col-span-6'}">
 					{@html data.category?.description}
 				</div>
 
 				{#if data?.products?.products.length}
 					<div class="col-span-1 md:col-span-3 lg:col-span-2">
-						<h2 class="mb-5 text-center text-base font-bold uppercase tracking-wide">
+						<h3 class="my-5 text-center uppercase">
 							{data.category?.name} price list
-						</h2>
+						</h3>
+
+						<h5 class="mb-2 grid grid-cols-6 items-start gap-5 uppercase">
+							<span class="col-span-5">{data.category?.name}</span>
+
+							<span class="col-span-1">Price <br /> (Rs)</span>
+						</h5>
 
 						<ul class="flex flex-col gap-2">
-							<li class="grid grid-cols-6 items-center gap-5 font-semibold uppercase">
-								<span class="col-span-5">{data.category?.name}</span>
-
-								<span class="col-span-1">Price <br /> (Rs)</span>
-							</li>
-
 							{#each data.products?.products as p, px}
 								{#if p && px < 10}
 									<li>
@@ -571,7 +528,7 @@ function handleFilterTags() {
 											href="/product/{p.slug}"
 											aria-label="Click to visit product details page"
 											class="grid grid-cols-6 gap-5">
-											<span class="col-span-5 text-justify">{p.name}</span>
+											<p class="col-span-5 text-justify">{p.name}</p>
 
 											<span class="col-span-1 whitespace-nowrap">
 												{currency(p.price, $page.data?.store?.currencySymbol)}
@@ -582,8 +539,12 @@ function handleFilterTags() {
 							{/each}
 
 							{#if data?.products?.products && data?.products?.products[0] && data?.products?.products[0]?.updatedAt}
-								<li class="font-semibold">
-									<i>Data last updated on {dateOnly(data.products?.products[0]?.updatedAt)}</i>
+								<li>
+									<p>
+										<i>
+											Data last updated on {dateOnly(data.products?.products[0]?.updatedAt)}
+										</i>
+									</p>
 								</li>
 							{/if}
 						</ul>

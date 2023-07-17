@@ -13,6 +13,7 @@ export const fetchInitFromStore = async (host) => {
 		}
 	})
 	let initDataFromServer
+	// console.log('existingInit', !existingInit?.store && isServer && !isLoading)
 	if (!existingInit?.storeOne?._id && isServer && !isLoading) {
 		isLoading = true
 		initDataFromServer = await InitService.fetchInit(host)

@@ -84,7 +84,7 @@ let media = data.vendor?.banners[0]
 			<!-- About Vendor -->
 
 			{#if data.vendor?.description}
-				<p class="mb-10 prose prose-sm sm:prose-base max-w-none">
+				<p class="mb-10 prose max-w-none">
 					{@html data.vendor?.description}
 				</p>
 			{/if}

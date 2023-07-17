@@ -212,7 +212,7 @@ onMount(async () => {
 
 		{#if categories && categories?.data?.length}
 			<div class="mt-20 px-4">
-				<h6 class="mb-4 text-sm font-semibold uppercase tracking-wide text-zinc-500">
+				<h6 class="mb-4 uppercase text-zinc-500">
 					Categories on {$page?.data?.store?.websiteName}
 				</h6>
 
@@ -235,7 +235,7 @@ onMount(async () => {
 
 							<div class="w-full flex-1 text-sm">
 								{#if c.brand}
-									<h6 class="font-medium">{c.brand}</h6>
+									<h6>{c.brand}</h6>
 								{/if}
 
 								{#if c.name}

@@ -64,7 +64,7 @@ function showans(i) {
 							{#if show[fx]}
 								<div
 									transition:slide="{{ duration: 300 }}"
-									class="prose px-4 pb-4 text-sm text-zinc-500 first-letter:uppercase sm:px-6 sm:pb-6 md:text-base">
+									class="px-4 pb-4 sm:px-6 sm:pb-6 prose max-w-none">
 									{@html f.answer}
 								</div>
 							{/if}

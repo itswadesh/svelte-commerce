@@ -199,9 +199,7 @@ const storeRecentlyViewedToLocatStorage = async () => {
 								</button>
 
 								{#if showdescription}
-									<div
-										transition:slide="{{ duration: 300 }}"
-										class="pb-10 prose text-sm max-w-none">
+									<div transition:slide="{{ duration: 300 }}" class="pb-10 max-w-none">
 										{@html value.description}
 									</div>
 								{/if}
@@ -341,7 +339,7 @@ const storeRecentlyViewedToLocatStorage = async () => {
 					</div>
 				{:then value}
 					{#if value.longDescription}
-						<div class="mb-5 prose text-sm max-w-none">
+						<div class="mb-5 prose max-w-none">
 							{@html value.longDescription}
 						</div>
 					{/if}

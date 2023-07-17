@@ -1,10 +1,10 @@
 <script lang="ts">
-import { onMount } from 'svelte'
+// import { findAutocompleteFromStore } from '$lib/store/autocomplete'
 import { AutocompleteService, CategoryService } from '$lib/services'
 import { goto } from '$app/navigation'
+import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import {findAutocompleteFromStore} from '$lib/store/autocomplete'
 
 import Cookie from 'cookie-universal'
 const cookies = Cookie()
@@ -24,7 +24,6 @@ let typingTimer: any
 
 onMount(() => {
 	const pin = cookies.get('zip')
-
 
 	if (pin && pin.toString()?.length === 6) {
 		pincode = pin
