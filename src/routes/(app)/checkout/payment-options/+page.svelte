@@ -71,7 +71,7 @@ async function submit(pm) {
 				origin: $page.data.origin
 			})
 
-			goto(`/payment/success?id=${res?._id}&status=PAYMENT_SUCCESS&provider=COD`)
+			goto(`/payment/success?id=${res?._id || res?.id}&status=PAYMENT_SUCCESS&provider=COD`)
 		} catch (e) {
 			data.err = e
 			toast(e?.body?.message || e, 'error')
@@ -88,6 +88,25 @@ async function submit(pm) {
 			})
 			if (res?.redirectUrl && res?.redirectUrl !== null) {
 				goto(`${res?.redirectUrl}`)
+			} else {
+				toast('Something went wrong', 'error')
+			}
+		} catch (e) {
+			data.err = e
+			toast(e?.body?.message || e, 'error')
+		} finally {
+			loading = false
+		}
+	} else if (paymentMethod === 'Paypal') {
+		try {
+			loading = true
+			const res = await OrdersService.paypalCheckout({
+				address: data.addressId,
+				storeId: $page.data.store?.id,
+				origin: $page.data.origin
+			})
+			if (res?.redirect_url && res?.redirect_url !== null) {
+				goto(`${res?.redirect_url}`)
 			} else {
 				toast('Something went wrong', 'error')
 			}
@@ -121,7 +140,7 @@ async function submit(pm) {
 							origin: $page.data.origin
 						})
 						toast('Payment success', 'success')
-						goto(`/payment/success?id=${capture._id}`)
+						goto(`/payment/success?id=${capture._id || capture.id}`)
 					} catch (e) {
 						data.err = e
 						goto(`/payment/failure?ref=/checkout/payment-options?address=${data.addressId}`)
@@ -168,23 +187,18 @@ function checkIfStripeCardValid({ detail }) {
 <div class="container mx-auto min-h-screen w-full max-w-6xl p-3 py-5 sm:p-10">
 	<CheckoutHeader selected="payment" />
 
-	<div class="mt-5">
-		<Error err="{data.err}" />
-	</div>
+	<Error err="{data.err}" class="mt-5" />
 
 	<div
 		class="mb-14 lg:mb-0 mt-5 md:mt-10 flex flex-col lg:flex-row lg:justify-center gap-10 xl:gap-20">
 		<div class="w-full flex-1">
-			<h2
-				class="mb-5 h-6 sm:h-8 flex items-center text-xl font-bold capitalize tracking-wide sm:text-2xl">
-				Payment Options
-			</h2>
+			<h2 class="mb-5">Payment Options</h2>
 
 			{#if data.paymentMethods?.length}
 				<div class="flex w-full flex-col gap-4" class:wiggle="{paymentDenied}">
 					{#each data.paymentMethods as pm}
 						<label
-							class="flex w-full cursor-pointer items-center gap-2 rounded border border-zinc-200 p-4 shadow-md transition duration-300 hover:bg-primary-50 sm:gap-4">
+							class="flex w-full cursor-pointer items-center gap-2 rounded border border-zinc-200 p-3 shadow-md transition duration-300 hover:bg-primary-50 sm:gap-4">
 							<input
 								bind:group="{selectedPaymentMethod}"
 								type="radio"
@@ -195,12 +209,12 @@ function checkIfStripeCardValid({ detail }) {
 
 							<div class="flex w-full flex-1 items-center justify-between gap-4">
 								<div class="flex-1">
-									<h2 class="text-xl font-semibold" style="color:{pm.color}">
+									<h3 style="color:{pm.color}">
 										{pm.name || pm.value}
-									</h2>
+									</h3>
 
 									{#if pm.text}
-										<p class="mt-1 text-sm text-zinc-500">{pm.text}</p>
+										<p class="mt-1">{pm.text}</p>
 									{/if}
 								</div>
 
@@ -209,12 +223,12 @@ function checkIfStripeCardValid({ detail }) {
 										<img
 											src="{pm.img}"
 											alt="{pm.name}"
-											width="56"
-											height="56"
-											class="h-14 w-14 rounded-full border object-cover object-center text-xs" />
+											width="48"
+											height="48"
+											class="h-12 w-12 rounded-full border object-cover object-center text-xs" />
 									{:else}
 										<div
-											class="flex h-14 w-14 p-2 items-center justify-center rounded-full border bg-zinc-200 text-center text-xs uppercase">
+											class="flex h-12 w-12 p-2 items-center justify-center rounded-full border bg-zinc-200 text-center text-xs uppercase">
 											<span class="w-full truncate">
 												{pm.name || pm.value}
 											</span>
@@ -250,79 +264,64 @@ function checkIfStripeCardValid({ detail }) {
 						></path>
 					</svg>
 
-					<h6 class="mb-2 font-bold capitalize">We are very sorry!!</h6>
+					<h6 class="mb-2 capitalize">We are very sorry!!</h6>
 
-					<p class="text-sm">Payment method is not setup yet, Please contact the store admin</p>
+					<p>Payment method is not setup yet, Please contact the store admin</p>
 				</div>
 			{/if}
 		</div>
 
 		<div class="w-full md:w-80 md:shrink-0 md:grow-0">
-			<h2
-				class="mb-5 h-6 sm:h-8 flex items-center text-xl font-bold capitalize tracking-wide sm:text-2xl">
-				Cart Summary
-			</h2>
+			<h2 class="mb-5">Cart Summary</h2>
 
 			<hr class="mb-5" />
 
 			{#if data.address}
 				<div class="mb-5">
-					<h5 class="mb-2 text-xl font-bold capitalize tracking-wide">Delivery Address</h5>
+					<h5 class="mb-2">Delivery Address</h5>
 
-					<div class="text-sm font-light">
-						<div class="my-1 flex flex-row">
-							<h5 class="mr-2 w-20 shrink-0 font-semibold tracking-wide">Name</h5>
+					<p>
+						{data.address.firstName || '_'}
+						{data.address.lastName || '_'}
 
-							<p>
-								{data.address.firstName}
-								{data.address.lastName}
-							</p>
-						</div>
+						<br />
 
-						<div class="flex flex-row">
-							<h5 class="mr-2 w-20 shrink-0 font-semibold tracking-wide">Address</h5>
+						{#if data.address.address}
+							{data.address.address}
+						{/if}
 
-							<p class="flex flex-wrap items-center">
-								{#if data.address.address}
-									{data.address.address}
-								{/if}
+						{#if data.address.locality}
+							, {data.address.locality}
+						{/if}
 
-								{#if data.address.locality}
-									, {data.address.locality}
-								{/if}
+						{#if data.address.city}
+							, {data.address.city}
+						{/if}
 
-								{#if data.address.city}
-									, {data.address.city}
-								{/if}
+						{#if data.address.state}
+							, {data.address.state}
+						{/if}
 
-								{#if data.address.state}
-									, {data.address.state}
-								{/if}
+						{#if data.address.country}
+							, {data.address.country}
+						{/if}
 
-								{#if data.address.country}
-									, {data.address.country}
-								{/if}
-							</p>
-						</div>
+						{#if data.address.zip}
+							- {data.address.zip}
+						{/if}
+					</p>
 
-						<div class="my-1 flex flex-row">
-							<h5 class="mr-2 w-20 shrink-0 font-semibold tracking-wide">Pin</h5>
+					{#if data.address.phone}
+						<p>
+							{data.address.phone}
+						</p>
+					{/if}
 
-							<h6>{data.address.zip}</h6>
-						</div>
-
-						<div class="my-1 flex flex-row">
-							<h5 class="mr-2 w-20 shrink-0 font-semibold tracking-wide">Phone</h5>
-
-							<h6>{data.address.phone}</h6>
-						</div>
-
-						<div class="my-1 flex flex-row flex-wrap">
-							<h5 class="mr-2 w-20 shrink-0 font-semibold tracking-wide">Email</h5>
-
-							<h6>{data.address.email}</h6>
-						</div>
-					</div>
+					{#if data.address.email}
+						<p>
+							{data.address.email}
+						</p>
+					{/if}
 				</div>
 
 				<hr class="mb-5" />
@@ -330,12 +329,12 @@ function checkIfStripeCardValid({ detail }) {
 
 			{#if data.prescription}
 				<div class="mb-5">
-					<h5 class="mb-2 text-xl font-bold capitalize tracking-wide">Prescription</h5>
+					<h5 class="mb-2">Prescription</h5>
 
 					<div class="text-sm font-light">
 						{#if data.prescription.name}
 							<div class="my-1 flex flex-row">
-								<h5 class="mr-2 w-20 shrink-0 font-semibold tracking-wide">Name</h5>
+								<h6 class="mr-2 w-20 shrink-0">Name</h6>
 
 								<p class="flex-1">
 									{data.prescription.name}
@@ -345,7 +344,7 @@ function checkIfStripeCardValid({ detail }) {
 
 						{#if data.prescription.description}
 							<div class="my-1 flex flex-row">
-								<h5 class="mr-2 w-20 shrink-0 font-semibold tracking-wide">Note</h5>
+								<h6 class="mr-2 w-20 shrink-0">Note</h6>
 
 								<p class="flex-1">
 									{data.prescription.description}
@@ -373,10 +372,10 @@ function checkIfStripeCardValid({ detail }) {
 				text="{errorMessage || 'Confirm Order'}"
 				loading="{loading}"
 				hideCheckoutButton="{selectedPaymentMethod.name === 'Stripe'}"
-				disabled="{!razorpayReady ||
-					(!selectedPaymentMethod?.name && !selectedPaymentMethod?.value) ||
-					(selectedPaymentMethod?.name === 'Stripe' && disabled)}"
 				on:submit="{() => submit(selectedPaymentMethod)}" />
+			<!-- disabled="{!razorpayReady ||
+					(!selectedPaymentMethod?.name && !selectedPaymentMethod?.value) ||
+					(selectedPaymentMethod?.name === 'Stripe' && disabled)}" -->
 		</div>
 	</div>
 </div>

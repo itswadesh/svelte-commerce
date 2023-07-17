@@ -1,16 +1,17 @@
 <script>
 import { browser } from '$app/environment'
+import { CategoryService } from '$lib/services'
+import { LazyImg, MobileFooter } from '$lib/components'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { toast } from '$lib/utils'
-import {LazyImg,MobileFooter} from '$lib/components'
 import SEO from '$lib/components/SEO/index.svelte'
-import { CategoryService } from '$lib/services'
+// import { getMegamenuFromStore } from '$lib/store/megamenu'
+
 let seoProps = {
 	title: `Categories`,
 	description: `Categories`
 }
-import {getMegamenuFromStore} from '$lib/store/megamenu'
 
 let loading = false
 let megamenu = []
@@ -39,21 +40,24 @@ async function getMegaMenu() {
 	loading = true
 	if (browser) {
 		try {
-			megamenu = await getMegamenuFromStore({
-				sid: null,
-				storeId: $page?.data?.store?.id,
-				isCors: $page?.data?.store?.isCors,
-				origin: $page.data.origin
-			})
-			// const localMegamenu = localStorage.getItem('megamenu')
-			// if (!localMegamenu || localMegamenu === 'undefined') {
-			// 	megamenu = await CategoryService.fetchMegamenuData({
-			// 		origin: $page.data.origin,
-			// 		storeId: $page.data.store?.id
-			// 	})
-			// } else {
-			// 	megamenu = JSON.parse(localMegamenu)
-			// }
+			// megamenu = await getMegamenuFromStore({
+			// 	sid: null,
+			// 	storeId: $page?.data?.store?.id,
+			// 	isCors: $page?.data?.store?.isCors,
+			// 	origin: $page.data.origin
+			// })
+
+			const localMegamenu = localStorage.getItem('megamenu')
+
+			if (!localMegamenu || localMegamenu === 'undefined') {
+				megamenu = await CategoryService.fetchMegamenuData({
+					origin: $page.data.origin,
+					storeId: $page.data.store?.id
+				})
+			} else {
+				megamenu = JSON.parse(localMegamenu)
+			}
+
 			if (megamenu?.length) {
 				megamenu = megamenu.filter((e) => {
 					return e.name !== 'New Arrivals'
@@ -83,9 +87,6 @@ function toggle2(cx) {
 		showChild2[cx] = true
 	}
 }
-
-
-
 </script>
 
 <SEO {...seoProps} />
@@ -95,32 +96,32 @@ function toggle2(cx) {
 		<!-- 1st level categories -->
 
 		{#if megamenu.length}
-			<ul class="flex flex-col divide-y-2 divide-white tracking-wider">
+			<ul class="flex flex-col divide-y-2 divide-white">
 				{#each megamenu as m, mx}
 					{#if m}
 						<li>
 							{#if m.children?.length}
-							
 								<button
 									type="button"
-									class="flex h-24 w-full items-end justify-between focus:outline-none 
-									{bgColors[mx]}" on:click="{() => toggle(mx)}">
+									class="flex h-24 w-full items-end justify-between focus:outline-none
+									{bgColors[mx]}"
+									on:click="{() => toggle(mx)}">
 									<div class="flex h-full w-full flex-1 items-center gap-2 px-6">
-										<p
-											class="flex-1 text-left text-xl font-bold uppercase">
+										<h2 class="flex-1 text-left uppercase">
 											{m.name}
-									</p>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												class="h-6 w-6 shrink-0 transition duration-300
+										</h2>
+
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											class="h-6 w-6 shrink-0 transition duration-300
 													{showChild[mx] ? 'transform -rotate-180' : ''}"
-												viewBox="0 0 20 20"
-												fill="currentColor">
-												<path
-													fill-rule="evenodd"
-													d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-													clip-rule="evenodd"></path>
-											</svg>
+											viewBox="0 0 20 20"
+											fill="currentColor">
+											<path
+												fill-rule="evenodd"
+												d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+												clip-rule="evenodd"></path>
+										</svg>
 									</div>
 
 									{#if m.img}
@@ -135,9 +136,9 @@ function toggle2(cx) {
 									aria-label="Click to visit {m.name || '##'}"
 									class="flex h-24 w-full items-end justify-between {bgColors[mx]}">
 									<div class="flex h-full w-full flex-1 items-center px-6">
-										<h1 class="flex-1 text-xl font-bold uppercase">
+										<h2 class="flex-1 uppercase">
 											{m.name}
-										</h1>
+										</h2>
 									</div>
 
 									{#if m.img}
@@ -158,43 +159,42 @@ function toggle2(cx) {
 												{#if c.children?.length}
 													<button
 														type="button"
-														class="flex w-full items-center gap-4 py-3 px-8 text-left font-medium focus:outline-none" on:click="{() => toggle2(cx)}">
-													
-															{#if c.img}
-																<div class="h-12 w-12 shrink-0 overflow-hidden rounded-full">
-																	<LazyImg
-																		src="{c.img}"
-																		alt=""
-																		width="48"
-																		height="48"
-																		class="h-full w-full" />
-																</div>
-															{:else}
-																<div
-																	class="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-zinc-200">
-																</div>
-															{/if}
+														class="flex w-full items-center gap-4 py-3 px-8 text-left font-medium focus:outline-none"
+														on:click="{() => toggle2(cx)}">
+														{#if c.img}
+															<div class="h-12 w-12 shrink-0 overflow-hidden rounded-full">
+																<LazyImg
+																	src="{c.img}"
+																	alt=""
+																	width="48"
+																	height="48"
+																	class="h-full w-full" />
+															</div>
+														{:else}
+															<div
+																class="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-zinc-200">
+															</div>
+														{/if}
 
-															<h2 class="flex-1">
-																{c.name}
-															</h2>
-														
+														<h5 class="flex-1">
+															{c.name}
+														</h5>
 
-															<svg
-																xmlns="http://www.w3.org/2000/svg"
-																class="h-5 w-5 shrink-0 transition duration-300
+														<svg
+															xmlns="http://www.w3.org/2000/svg"
+															class="h-5 w-5 shrink-0 transition duration-300
 																	{showChild2[cx] ? 'transform -rotate-180' : ''}"
-																viewBox="0 0 20 20"
-																fill="currentColor">
-																<path
-																	fill-rule="evenodd"
-																	d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-																	clip-rule="evenodd"></path>
-															</svg>
+															viewBox="0 0 20 20"
+															fill="currentColor">
+															<path
+																fill-rule="evenodd"
+																d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+																clip-rule="evenodd"></path>
+														</svg>
 													</button>
 												{:else}
 													<a
-														href="/{c.slug}"
+														href="{c.link || `/${c.slug}` || '##'}"
 														aria-label="Click to visit {c.name || '##'}"
 														class="flex items-center gap-4 py-3 px-8 font-medium">
 														{#if c.img}
@@ -212,7 +212,7 @@ function toggle2(cx) {
 															</div>
 														{/if}
 
-														<h6>{c.name}</h6>
+														<h5>{c.name}</h5>
 													</a>
 												{/if}
 
@@ -224,9 +224,9 @@ function toggle2(cx) {
 															{#each c.children as cc}
 																<li>
 																	<a
-																		href="/{cc.slug}"
+																		href="{cc.link || `/${cc.slug}` || '##'}"
 																		aria-label="Click to visit {cc.name || '##'}"
-																		class="flex w-full items-center gap-4 py-3 px-8 font-medium">
+																		class="flex w-full items-center gap-4 py-3 px-8 text-sm">
 																		{cc.name}
 																	</a>
 																</li>

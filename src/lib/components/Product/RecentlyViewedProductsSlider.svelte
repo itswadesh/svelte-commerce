@@ -79,14 +79,13 @@ onMount(async () => {
 							<LazyImg
 								src="{p.img}"
 								alt="{p.name}"
-								width="192"
 								height="192"
 								aspect_ratio="1:1"
 								class="h-48 w-48 object-contain object-bottom" />
 
 							<div
 								class="p-2 flex flex-wrap items-baseline justify-start leading-4 text-xs gap-1.5">
-								<span class="font-bold text-sm sm:text-base whitespace-nowrap">
+								<span class="font-bold text-sm whitespace-nowrap">
 									{currency(p.price, $page.data?.store?.currencySymbol)}
 								</span>
 

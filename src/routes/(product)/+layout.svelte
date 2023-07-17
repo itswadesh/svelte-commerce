@@ -1,11 +1,10 @@
 <script lang="ts">
 import { Footer, Nav } from '$lib/theme-config'
 import { PageTransitions } from '$lib/components'
-
 export let data
 
-let showCartSidebar = false
 let openSidebar = false
+let showCartSidebar = false
 </script>
 
 <div class="{showCartSidebar || openSidebar ? 'h-screen overflow-hidden' : 'h-full'}">
@@ -24,6 +23,6 @@ let openSidebar = false
 	</PageTransitions>
 
 	<div class="hidden md:block">
-		<Footer me="{data.me}" cart="{data.cart}" />
+		<Footer />
 	</div>
 </div>

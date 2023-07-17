@@ -96,75 +96,71 @@ onMount(async () => {
 				</div>
 
 				{#if data.order}
-					<h2 class="mb-2 text-center text-2xl font-bold sm:text-3xl">
+					<h1 class="mb-2 text-center">
 						{#if data.order?.seatsBooked}
 							Thank You For Your Booking!!
 						{:else}
 							Thank You For Your Purchase!!
 						{/if}
-					</h2>
+					</h1>
 				{/if}
 
-				<p class="mb-5 text-center text-sm">
+				<p class="mb-5 text-center">
 					A confirmation e-mail/sms will be sent to the e-mail address that you specified during
 					Order.
 				</p>
 
 				<ul class="mx-auto mb-5 flex max-w-max flex-col gap-2 sm:mb-10">
-					<li class="flex items-start gap-2 text-sm">
-						<h6 class="flex w-36 shrink-0 items-center justify-between gap-1">
-							<span>Order No</span> <span>:</span>
-						</h6>
+					<li>
+						<p class="flex items-start gap-2">
+							<span class="w-36 shrink-0"> Order No </span>
 
-						<b>
-							{data.order?.orderNo}
-						</b>
+							<span>
+								: &nbsp; {data.order?.orderNo}
+							</span>
+						</p>
 					</li>
 
-					<li class="flex items-start gap-2 text-sm">
-						<h6 class="flex w-36 shrink-0 items-center justify-between gap-1">
-							<span>Order placed on</span> <span>:</span>
-						</h6>
+					<li>
+						<p class="flex items-start gap-2">
+							<span class="w-36 shrink-0">Order Placed On </span>
 
-						<b>
-							{date(data.order?.createdAt)}
-						</b>
+							<span>
+								: &nbsp; {date(data.order?.createdAt)}
+							</span>
+						</p>
 					</li>
 
-					<li class="flex items-start gap-2 text-sm">
-						<h6 class="flex w-36 shrink-0 items-center justify-between gap-1">
-							<span>Payment Status</span> <span>:</span>
-						</h6>
+					<li>
+						<p class="flex items-start gap-2">
+							<span class="w-36 shrink-0">Payment Status </span>
 
-						<spn class="uppercase" class:text-green-500="{data.order?.paymentStatus === 'paid'}">
-							<b>
-								{data.order?.paymentStatus}
-							</b>
-						</spn>
+							<span class="uppercase" class:text-brand-500="{data.order?.paymentStatus === 'paid'}">
+								: &nbsp; {data.order?.paymentStatus}
+							</span>
+						</p>
 					</li>
 
-					<li class="flex items-start gap-2 text-sm">
-						<h6 class="flex w-36 shrink-0 items-center justify-between gap-1">
-							<span>Payment Mode</span> <span>:</span>
-						</h6>
+					<li>
+						<p class="flex items-start gap-2">
+							<span class="w-36 shrink-0">Payment Mode </span>
 
-						<spn class="uppercase">
-							<b>
-								{data.order?.paymentMode}
-							</b>
-						</spn>
+							<span class="uppercase">
+								: &nbsp; {data.order?.paymentMode}
+							</span>
+						</p>
 					</li>
 
 					{#if data.order?.paymentGateway}
-						<li class="flex items-start gap-2 text-sm">
-							<h6 class="flex w-36 shrink-0 items-center justify-between gap-1">
+						<li class="flex items-start gap-2">
+							<p class="flex w-36 shrink-0 items-center justify-between gap-1">
 								<span>Payment Gateway</span> <span>:</span>
-							</h6>
+							</p>
 
 							<spn class="first-letter:uppercase">
-								<b>
+								<span>
 									{data.order?.paymentGateway}
-								</b>
+								</span>
 							</spn>
 						</li>
 					{/if}
@@ -199,10 +195,7 @@ onMount(async () => {
 				<div class="sm:w-1/2">
 					{#if data.order?.items?.length > 0}
 						<div class="mb-5">
-							<h6
-								class="border-b border-dashed border-zinc-400 pb-2 text-base font-bold sm:text-lg">
-								Item Details
-							</h6>
+							<h4 class="border-b border-dashed border-zinc-400 pb-2">Item Details</h4>
 
 							<div class="items-start flex flex-col">
 								{#each data.order?.items as item, ix}
@@ -256,58 +249,37 @@ onMount(async () => {
 													</div>
 												</div>
 
-												{#if item.qty || item.price || item.size || item.color}
-													<div class="mb-2 flex w-full flex-wrap gap-4 text-sm">
-														{#if item.qty}
-															<div class="flex items-center gap-2 whitespace-nowrap">
-																<span class="font-medium text-zinc-500">Qty :</span>
+												<div class="mb-2 flex w-full flex-wrap gap-4">
+													<p class="flex items-center gap-2 whitespace-nowrap">
+														<span>Qty :</span>
 
-																<b>{item.qty}</b>
-															</div>
-														{/if}
+														<span>{item.qty}</span>
+													</p>
 
-														{#if item.price}
-															<div class="flex items-center gap-2 whitespace-nowrap">
-																<span class="font-medium text-zinc-500">Price :</span>
+													<p class="flex items-center gap-2 whitespace-nowrap">
+														<span>Price :</span>
 
-																<b>{currency(item.price, $page.data?.store?.currencySymbol)}</b>
-															</div>
-														{/if}
-
-														{#if item.size}
-															<div class="flex items-center gap-2 whitespace-nowrap">
-																<span class="font-medium text-zinc-500">Size :</span>
-
-																<b>{item.size}</b>
-															</div>
-														{/if}
-
-														{#if item.color}
-															<div class="flex items-center gap-2 whitespace-nowrap">
-																<span class="font-medium text-zinc-500">Color :</span>
-
-																<b>{item.color}</b>
-															</div>
-														{/if}
-													</div>
-												{/if}
+														<span>{currency(item.price, $page.data?.store?.currencySymbol)}</span>
+													</p>
+												</div>
 
 												<!-- Options -->
 
 												{#if item?.usedOptions?.length}
-													<div class="mt-2 flex flex-col gap-2 text-xs">
+													<div class="mt-2 flex flex-col gap-2">
 														{#each item?.usedOptions as option}
 															{#if option?.val?.length && option?.val !== undefined && option?.val != ''}
-																<div class="flex flex-wrap gap-2">
-																	<h6>{option.name}:</h6>
+																<p class="flex flex-wrap gap-2">
+																	<span>{option.name}:</span>
+
 																	{#each option.val as v}
 																		{#if v}
-																			<div class="font-bold">
+																			<span class="font-bold">
 																				{v}
-																			</div>
+																			</span>
 																		{/if}
 																	{/each}
-																</div>
+																</p>
 															{/if}
 														{/each}
 													</div>
@@ -322,18 +294,15 @@ onMount(async () => {
 
 					{#if data.order?.seats?.length > 0}
 						<div class="mb-5">
-							<h6
-								class="mb-4 border-b border-dashed border-zinc-400 pb-2 text-base font-semibold sm:text-lg">
-								Booking Details
-							</h6>
+							<h4 class="mb-4 border-b border-dashed border-zinc-400 pb-2">Booking Details</h4>
 
 							<div class="items-start flex flex-col divide-y text-sm">
 								{#each data.order?.seats as seat}
 									<div class="flex flex-col gap-2 py-4">
-										<span><b>Seat Number : &nbsp; </b> {seat.seatNo} </span>
+										<span><span>Seat Number : &nbsp; </span> {seat.seatNo} </span>
 
 										<span>
-											<b>Seat Type : &nbsp; </b>
+											<span>Seat Type : &nbsp; </span>
 
 											{#if seat.seatType === 'horizontal_sleeper'}
 												Sleeper
@@ -351,60 +320,45 @@ onMount(async () => {
 				<div class="flex flex-col gap-4 sm:w-1/2">
 					{#if data.order && data.order?.address}
 						<div class="text-sm">
-							<h6
-								class="mb-4 border-b border-dashed border-zinc-400 pb-2 text-base font-semibold sm:text-lg">
-								Shipping Information
-							</h6>
+							<h4 class="mb-4 border-b border-dashed border-zinc-400 pb-2">Shipping Information</h4>
 
-							<div class="text-sm text-zinc-500">
+							<div class="flex flex-col gap-1">
 								{#if data.order?.address.firstName}
-									<h5 class="mb-2 text-base font-semibold capitalize tracking-wide">
+									<p>
 										{data.order?.address.firstName}
 
 										{data.order?.address.lastName}
-									</h5>
+									</p>
 								{/if}
 
-								<div class="s flex flex-wrap">
+								<p>
 									{#if data.order?.address.address}
-										<div>
-											{data.order?.address.address},
-										</div>
+										{data.order?.address.address}
 									{/if}
 
 									{#if data.order?.address.city}
-										<div>
-											{data.order?.address.city},
-										</div>
+										, {data.order?.address.city}
 									{/if}
 
 									{#if data.order?.address.country}
-										<div>
-											{data.order?.address.country}
-										</div>
+										, {data.order?.address.country}
 									{/if}
 
 									{#if data.order?.address.zip}
-										<div>
-											{data.order?.address.zip}
-										</div>
+										- {data.order?.address.zip}
 									{/if}
-								</div>
+								</p>
 
 								{#if data.order?.address.phone || data.order?.address.userPhone}
-									<div>
-										<b>Phone:</b>
-
-										<span>{data.order?.address.phone || data.order?.userPhone}</span>
-									</div>
+									<p>
+										{data.order?.address.phone || data.order?.userPhone}
+									</p>
 								{/if}
 
 								{#if data.order?.address.email}
-									<div>
-										<b>Email:</b>
-
-										<span>{data.order?.address.email}</span>
-									</div>
+									<p>
+										{data.order?.address.email}
+									</p>
 								{/if}
 							</div>
 						</div>
@@ -412,15 +366,12 @@ onMount(async () => {
 
 					{#if data.order && data.order?.amount}
 						<div class="text-sm">
-							<h6
-								class="mb-4 border-b border-dashed border-zinc-400 pb-2 text-base font-semibold sm:text-lg">
-								Payment Information
-							</h6>
+							<h4 class="mb-4 border-b border-dashed border-zinc-400 pb-2">Payment Information</h4>
 
 							<div class="flex max-w-max flex-col items-start gap-2">
 								{#if data.order?.amount.subtotal}
-									<div class="flex items-center">
-										<h6 class="mr-2 w-20">Subtotal</h6>
+									<p class="flex items-center">
+										<span class="mr-2 w-20">Subtotal</span>
 
 										<span>
 											: &nbsp; {currency(
@@ -428,12 +379,12 @@ onMount(async () => {
 												$page.data?.store?.currencySymbol
 											)}
 										</span>
-									</div>
+									</p>
 								{/if}
 
 								{#if data.order?.amount.discount}
-									<div class="flex items-center">
-										<h6 class="mr-2 w-20">Discount</h6>
+									<p class="flex items-center">
+										<span class="mr-2 w-20">Discount</span>
 
 										<span>
 											: &nbsp; {currency(
@@ -441,12 +392,12 @@ onMount(async () => {
 												$page.data?.store?.currencySymbol
 											)}
 										</span>
-									</div>
+									</p>
 								{/if}
 
 								{#if data.order?.amount.shipping}
-									<div class="flex items-center">
-										<h6 class="mr-2 w-20">Shipping</h6>
+									<p class="flex items-center">
+										<span class="mr-2 w-20">Shipping</span>
 
 										<span>
 											: &nbsp; {currency(
@@ -454,14 +405,14 @@ onMount(async () => {
 												$page.data?.store?.currencySymbol
 											)}
 										</span>
-									</div>
+									</p>
 								{/if}
 
 								{#if data.order?.amount.total}
 									<hr class="w-full border-t border-zinc-200" />
 
-									<div class="flex items-center text-base font-bold">
-										<h6 class="mr-2 w-20">Total</h6>
+									<p class="flex items-center">
+										<span class="mr-2 w-20">Total</span>
 
 										<span>
 											: &nbsp; {currency(
@@ -469,7 +420,7 @@ onMount(async () => {
 												$page.data?.store?.currencySymbol
 											)}
 										</span>
-									</div>
+									</p>
 								{/if}
 							</div>
 						</div>

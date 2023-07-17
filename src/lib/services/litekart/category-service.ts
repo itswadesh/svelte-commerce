@@ -1,23 +1,25 @@
 import { error } from '@sveltejs/kit'
 import { getAPI } from '$lib/utils/api'
 import { getBySid } from '$lib/utils/server'
+
 const isServer = import.meta.env.SSR
 
 export const fetchFooterCategories = async ({
-	origin,
-	storeId,
-	server = false,
 	isCors = false,
-	sid = null
+	origin,
+	megamenu = false,
+	server = false,
+	sid = null,
+	storeId,
 }) => {
 	try {
 		let data: []
 
 		if (isServer || isCors) {
-			data = await getBySid(`categories?megamenu=true&limit=6&page=0&level=0&store=${storeId}`, sid)
+			data = await getBySid(`categories?megamenu=${megamenu}&limit=6&page=0&level=0&store=${storeId}`, sid)
 		} else {
 			data = await getAPI(
-				`categories?megamenu=true&limit=6&page=0&level=0&store=${storeId}`,
+				`categories?megamenu=${megamenu}&limit=6&page=0&level=0&store=${storeId}`,
 				origin
 			)
 		}
@@ -29,11 +31,11 @@ export const fetchFooterCategories = async ({
 }
 
 export const fetchCategory = async ({
-	origin,
-	id,
-	server = false,
 	children = false,
+	id,
 	isCors = false,
+	origin,
+	server = false,
 	sid = null,
 	storeId
 }) => {
@@ -53,12 +55,12 @@ export const fetchCategory = async ({
 }
 
 export const fetchAllCategories = async ({
-	origin,
-	storeId,
-	server = false,
+	featured = false,
 	isCors = false,
+	origin,
+	server = false,
 	sid = null,
-	featured = false
+	storeId,
 }) => {
 	try {
 		let res: any = {}
@@ -74,9 +76,9 @@ export const fetchAllCategories = async ({
 		} else {
 			res = await getAPI(catQ, origin)
 		}
+		currentPage = res.currentPage
 		data = res.data
 		pageSize = res.pageSize
-		currentPage = res.currentPage
 
 		return { data, pageSize, currentPage }
 	} catch (e) {
@@ -85,12 +87,12 @@ export const fetchAllCategories = async ({
 }
 
 export const fetchAllProductsOfCategories = async ({
-	origin,
-	storeId,
-	server = false,
+	featured = false,
 	isCors = false,
+	origin,
+	server = false,
 	sid = null,
-	featured = false
+	storeId,
 }) => {
 	try {
 		let res: any = {}
@@ -110,12 +112,12 @@ export const fetchAllProductsOfCategories = async ({
 		} else {
 			res = await getAPI(catQ, origin)
 		}
+		// must return link:string, slug:string(optional) name:string, new:boolean
+		currentPage = res?.page
+		err = !products ? 'No result Not Found' : null
+		facets = res?.facets?.all_aggs
 		products = res?.data || []
 		productsCount = res?.count
-		currentPage = res?.page
-		facets = res?.facets?.all_aggs
-		err = !products ? 'No result Not Found' : null
-		// must return link:string, slug:string(optional) name:string, new:boolean
 
 		return { products, productsCount, currentPage, facets, err }
 	} catch (e) {
@@ -124,19 +126,20 @@ export const fetchAllProductsOfCategories = async ({
 }
 
 export const fetchMegamenuData = async ({
-	origin,
-	storeId,
-	server = false,
 	isCors = false,
-	sid = null
+	megamenu = false,
+	origin,
+	server = false,
+	sid = null,
+	storeId,
 }) => {
 	try {
 		let data: []
 
 		if (isServer || isCors) {
-			data = await getBySid(`categories/megamenu?megamenu=true&store=${storeId}`, sid)
+			data = await getBySid(`categories/megamenu?megamenu=${megamenu}&store=${storeId}`, sid)
 		} else {
-			data = await getAPI(`categories/megamenu?megamenu=true&store=${storeId}`, origin)
+			data = await getAPI(`categories/megamenu?megamenu=${megamenu}&store=${storeId}`, origin)
 		}
 
 		return data || []

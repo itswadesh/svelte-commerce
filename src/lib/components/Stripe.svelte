@@ -4,9 +4,10 @@ import { fly } from 'svelte/transition'
 import { goto } from '$app/navigation'
 import { OrdersService } from './../services'
 import { page } from '$app/stores'
-import { toast } from '$lib/utils'
 import { PrimaryButton } from '$lib/ui'
-import type { Error, PaymentMethod } from './../types'
+import { toast } from '$lib/utils'
+import Error from './Error.svelte'
+import type { PaymentMethod } from './../types'
 
 const dispatch = createEventDispatcher()
 
@@ -144,9 +145,7 @@ async function loadStripeElements() {
 
 <section transition:fly="{{ y: 50, duration: 150 }}" class="flex flex-col gap-4">
 	{#if isStripeSelected && errorMessage.show}
-		<div class="rounded border border-red-500 bg-red-50 p-4 text-red-500 text-sm">
-			{errorMessage.text}
-		</div>
+		<Error err="{errorMessage.text}" />
 	{/if}
 
 	{#if stripeReady}
@@ -156,7 +155,7 @@ async function loadStripeElements() {
 			{isStripeSelected ? 'block' : 'hidden'}">
 			<script src="https://js.stripe.com/v3/"></script>
 
-			<label for="mount-point-for-stripe-elements" class="font-semibold text-lg">
+			<label for="mount-point-for-stripe-elements" class="font-semibold">
 				{#if stripeCardMounting} Please wait... {:else} Enter Card Details {/if}
 			</label>
 

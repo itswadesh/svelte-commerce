@@ -17,45 +17,54 @@ input[type='search']::-webkit-search-cancel-button {
 </style>
 
 <script>
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
-import { currency } from '$lib/utils'
 import { createEventDispatcher } from 'svelte'
+import { currency } from '$lib/utils'
 import { page } from '$app/stores'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
+
 const dispatch = createEventDispatcher()
 
-export let items = [],
-	selectedItems = [],
-	name = '',
-	required = false,
-	disabled = false
+export let disabled = false
+export let items = []
+export let name = ''
+export let required = false
+export let selectedItems = []
 </script>
 
-<ul class="flex flex-col gap-2">
-	{#each items as i}
-		{#if i._id}
-			<li>
-				<label class="inline-flex items-center gap-2">
-					<input
-						type="checkbox"
-						name="{name}"
-						id="{i._id}"
-						disabled="{disabled}"
-						required="{required}"
-						bind:group="{selectedItems}"
-						value="{i._id}"
-						class="inputcheckbox h-3.5 w-3.5 rounded border border-zinc-200 bg-transparent text-primary-500"
-						on:change="{() => dispatch('change', selectedItems)}" />
+{#if items?.length}
+	<ul class="flex flex-col gap-2">
+		{#each items as i}
+			{#if i._id}
+				<li>
+					<label class="inline-flex items-center gap-2">
+						<input
+							type="checkbox"
+							name="{name}"
+							id="{i._id}"
+							disabled="{disabled}"
+							required="{required}"
+							bind:group="{selectedItems}"
+							value="{i._id}"
+							class="inputcheckbox h-3.5 w-3.5 rounded border border-zinc-200 bg-transparent text-primary-500"
+							on:change="{() => dispatch('change', selectedItems)}" />
 
-					<div class="flex-1 text-sm first-letter:uppercase flex items-center gap-2">
-						<LazyImg src="{i.img}" alt=" " class="w-8 h-auto object-contain object-center" />
+						<div class="flex-1 text-sm first-letter:uppercase flex items-center gap-2">
+							<LazyImg
+								src="{i.img}"
+								alt=" "
+								aspect_ratio="3:4"
+								width="32"
+								height="42"
+								class="w-8 h-10 object-contain object-center" />
 
-						<span class="flex-1">
-							{i.name} at
-							{currency(i.price, $page.data?.store?.currencySymbol)}
-						</span>
-					</div>
-				</label>
-			</li>
-		{/if}
-	{/each}
-</ul>
+							<p class="flex-1">
+								{i.name} at
+								{currency(i.price, $page.data?.store?.currencySymbol)}
+							</p>
+						</div>
+					</label>
+				</li>
+			{/if}
+		{/each}
+	</ul>
+{/if}

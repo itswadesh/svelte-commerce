@@ -19,15 +19,6 @@ export let states = []
 
 let loadingStates = false
 
-if (countries?.length === 1) {
-	address.country = countries[0]?.code
-	onCountryChange(address.country)
-}
-
-if (states?.length === 1) {
-	address.state = states[0]?.code
-}
-
 async function onCountryChange(country) {
 	try {
 		err = null
@@ -86,20 +77,20 @@ async function SaveAddress(address) {
 </script>
 
 <div>
-	<Error err="{err}" />
+	<Error err="{err}" class="mb-5" />
 
 	<form on:submit|preventDefault="{() => SaveAddress(address)}">
 		<div class="mb-5 flex flex-col gap-2 lg:mb-10">
 			<!-- First Name -->
 
-			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">
+			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
+				<h6 class="sm:w-52 sm:shrink-0">
 					First Name
 
-					<span class="text-red-500">*</span>
+					<span class="text-accent-500">*</span>
 				</h6>
 
-				<div class="mb-2 w-full max-w-md">
+				<div class="w-full">
 					<Textbox
 						type="text"
 						placeholder="Enter First Name"
@@ -111,36 +102,39 @@ async function SaveAddress(address) {
 
 			<!-- Last Name -->
 
-			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">
+			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
+				<h6 class="sm:w-52 sm:shrink-0">
 					Last Name
-					<span class="text-red-500">*</span>
+					<span class="text-accent-500">*</span>
 				</h6>
 
-				<div class="mb-2 w-full max-w-md">
+				<div class="w-full">
 					<Textbox placeholder="Enter Last Name" bind:value="{address.lastName}" required />
 				</div>
 			</div>
 
 			<!-- Email -->
 
-			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">Email</h6>
+			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
+				<h6 class="sm:w-52 sm:shrink-0">
+					Email
+					<span class="text-accent-500">*</span>
+				</h6>
 
-				<div class="mb-2 w-full max-w-md">
+				<div class="w-full">
 					<Textbox type="email" placeholder="Enter Email" bind:value="{address.email}" />
 				</div>
 			</div>
 
 			<!-- Phone -->
 
-			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">
+			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
+				<h6 class="sm:w-52 sm:shrink-0">
 					Phone
-					<span class="text-red-500">*</span>
+					<span class="text-accent-500">*</span>
 				</h6>
 
-				<div class="mb-2 w-full max-w-md">
+				<div class="w-full">
 					<Textbox
 						type="tel"
 						placeholder="Enter Phone"
@@ -148,106 +142,103 @@ async function SaveAddress(address) {
 						bind:value="{address.phone}"
 						required />
 
-					<p class="mt-1 text-xs text-zinc-500">E.g.+nnxxxxxxxxxx</p>
+					<p class="mt-1">E.g.+nnxxxxxxxxxx</p>
 				</div>
 			</div>
 
 			<!-- Address -->
 
-			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">
+			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
+				<h6 class="sm:w-52 sm:shrink-0">
 					Address
-					<span class="text-red-500">*</span>
+					<span class="text-accent-500">*</span>
 				</h6>
 
-				<div class="mb-2 w-full max-w-md">
-					<Textarea placeholder="Enter Address" bind:value="{address.address}" required />
-				</div>
+				<Textarea placeholder="Enter Address" bind:value="{address.address}" required />
 			</div>
 
 			<!-- Locality -->
 
-			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">Locality</h6>
+			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
+				<h6 class="sm:w-52 sm:shrink-0">Locality</h6>
 
-				<div class="mb-2 w-full max-w-md">
+				<div class="w-full">
 					<Textbox placeholder="Enter Locality" bind:value="{address.locality}" />
 				</div>
 			</div>
 
 			<!-- City -->
 
-			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">City</h6>
+			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
+				<h6 class="sm:w-52 sm:shrink-0">
+					City
+					<span class="text-accent-500">*</span>
+				</h6>
 
-				<div class="mb-2 w-full max-w-md">
-					<Textbox placeholder="Enter City" bind:value="{address.city}" />
+				<div class="w-full">
+					<Textbox placeholder="Enter City" bind:value="{address.city}" required />
 				</div>
 			</div>
 
 			<!-- Country -->
 
-			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">
+			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
+				<h6 class="sm:w-52 sm:shrink-0">
 					Country
-					<span class="text-red-500">*</span>
+					<span class="text-accent-500">*</span>
 				</h6>
 
-				<div class="mb-2 w-full max-w-md">
-					<select
-						class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
-						bind:value="{address.country}"
-						on:change="{() => onCountryChange(address.country)}"
-						required>
-						<option value="{null}" disabled selected>-- Select a Country --</option>
-						{#if countries?.length}
-							{#each countries as c}
-								{#if c}
-									<option value="{c.code}">
-										{c.name}
-									</option>
-								{/if}
-							{/each}
-						{/if}
-					</select>
-				</div>
+				<select
+					class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
+					bind:value="{address.country}"
+					on:change="{() => onCountryChange(address.country)}"
+					required>
+					<option value="{null}" disabled selected>-- Select a Country --</option>
+					{#if countries?.length}
+						{#each countries as c}
+							{#if c}
+								<option value="{c.code}">
+									{c.name}
+								</option>
+							{/if}
+						{/each}
+					{/if}
+				</select>
 			</div>
 
 			<!-- State -->
 
-			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">
+			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
+				<h6 class="sm:w-52 sm:shrink-0">
 					State/Province
-					<span class="text-red-500">*</span>
+					<span class="text-accent-500">*</span>
 				</h6>
 
-				<div class="mb-2 w-full max-w-md">
-					<select
-						class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
-						bind:value="{address.state}"
-						disabled="{!address.country || loadingStates}"
-						required>
-						<option value="{null}" disabled selected>-- Select a State --</option>
-						{#each states as s}
-							{#if s}
-								<option value="{s.name}">
-									{s.name}
-								</option>
-							{/if}
-						{/each}
-					</select>
-				</div>
+				<select
+					class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
+					bind:value="{address.state}"
+					disabled="{!address.country || loadingStates}"
+					required>
+					<option value="{null}" disabled selected>-- Select a State --</option>
+					{#each states as s}
+						{#if s}
+							<option value="{s.name}">
+								{s.name}
+							</option>
+						{/if}
+					{/each}
+				</select>
 			</div>
 
 			<!-- ZIP -->
 
-			<div class="flex flex-wrap">
-				<h6 class="mb-1 mr-5 w-52 shrink-0 font-medium">
+			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
+				<h6 class="sm:w-52 sm:shrink-0">
 					ZIP
-					<span class="text-red-500">*</span>
+					<span class="text-accent-500">*</span>
 				</h6>
 
-				<div class="mb-2 w-full max-w-md">
+				<div class="w-full">
 					<Textbox
 						type="tel"
 						placeholder="Enter zip"

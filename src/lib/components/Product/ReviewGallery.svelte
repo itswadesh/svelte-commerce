@@ -7,7 +7,8 @@
 
 <script lang="ts">
 import { createEventDispatcher, onMount } from 'svelte'
-import { date } from '$lib/utils'
+import { currency, date } from '$lib/utils'
+import { page } from '$app/stores'
 import { SplideSlide } from '@splidejs/svelte-splide'
 import LazyImg from '../Image/LazyImg.svelte'
 
@@ -21,6 +22,7 @@ let currentImageIndex = 0
 
 onMount(async () => {
 	const SplideModule = await import('$lib/components/SplideJs.svelte')
+
 	Splide = SplideModule.default
 })
 </script>
@@ -76,8 +78,8 @@ onMount(async () => {
 					{#each gallery as g}
 						{#if g}
 							<SplideSlide>
-								<div class="p-4">
-									<div class="mb-4 h-96 w-full">
+								<div class="p-5">
+									<div class="mb-5 h-96 w-full">
 										{#if g.image || g.images[0]}
 											<LazyImg
 												src="{g.image || g.images[0]}"
@@ -122,7 +124,7 @@ onMount(async () => {
 											</div>
 
 											<div
-												class="bg-green-500 text-white text-xs py-0.5 px-2 font-thin rounded-full">
+												class="bg-brand-500 text-white text-xs py-0.5 px-2 font-thin rounded-full">
 												Verified Purchaser
 											</div>
 										</div>
@@ -134,9 +136,9 @@ onMount(async () => {
 										{/if}
 
 										{#if g.user}
-											<p class="text-xs text-zinc-500">
+											<span class="text-xs text-zinc-500">
 												{g.user?.firstName} | {date(g.createdAt)}
-											</p>
+											</span>
 										{/if}
 
 										{#if g.product}
@@ -160,21 +162,21 @@ onMount(async () => {
 														{g.product?.name}
 													</p>
 
-													<div class="flex items-center gap-2 flex-wrap">
-														{#if g.product?.price}
-															<b>
-																{g.product?.price}
-															</b>
-														{/if}
+													<div class="flex flex-wrap items-center gap-2 text-xs">
+														<span class="text-base font-bold whitespace-nowrap">
+															{currency(g.product?.price, $page.data?.store?.currencySymbol)}
+														</span>
 
-														{#if g.product?.price < g.product?.mrp}
-															<strike>
-																{g.product?.price}
-															</strike>
+														{#if g.product?.mrp > g.product?.price}
+															<span class="whitespace-nowrap text-zinc-500 line-through">
+																{currency(g.product?.mrp, $page.data?.store?.currencySymbol)}
+															</span>
 
-															{#if g.product.discount > 0}
-																<span class="text-green-500">
-																	({g.product.discount}% off)
+															{#if Math.floor(((g.product?.mrp - g.product?.price) / g.product?.mrp) * 100) > 0}
+																<span class="whitespace-nowrap text-secondary-500">
+																	({Math.floor(
+																		((g.product?.mrp - g.product?.price) / g.product?.mrp) * 100
+																	)}% off)
 																</span>
 															{/if}
 														{/if}
@@ -191,8 +193,8 @@ onMount(async () => {
 			{:else}
 				{#each gallery as g}
 					{#if g}
-						<div class="p-4">
-							<div class="mb-4 h-96 w-full">
+						<div class="p-5">
+							<div class="mb-5 h-96 w-full">
 								{#if g.image || g.images[0]}
 									<LazyImg
 										src="{g.image || g.images[0]}"
@@ -234,7 +236,7 @@ onMount(async () => {
 										{/each}
 									</div>
 
-									<div class="bg-green-500 text-white text-xs py-0.5 px-2 font-thin rounded-full">
+									<div class="bg-brand-500 text-white text-xs py-0.5 px-2 font-thin rounded-full">
 										Verified Purchaser
 									</div>
 								</div>
@@ -246,9 +248,9 @@ onMount(async () => {
 								{/if}
 
 								{#if g.user}
-									<p class="text-xs text-zinc-500">
+									<span class="text-xs text-zinc-500">
 										{g.user?.firstName} | {date(g.createdAt)}
-									</p>
+									</span>
 								{/if}
 
 								{#if g.product}
@@ -272,21 +274,21 @@ onMount(async () => {
 												{g.product?.name}
 											</p>
 
-											<div class="flex items-center gap-2 flex-wrap">
-												{#if g.product?.price}
-													<b>
-														{g.product?.price}
-													</b>
-												{/if}
+											<div class="flex flex-wrap items-center gap-2 text-xs">
+												<span class="text-base font-bold whitespace-nowrap">
+													{currency(g.product?.price, $page.data?.store?.currencySymbol)}
+												</span>
 
-												{#if g.product?.price < g.product?.mrp}
-													<strike>
-														{g.product?.price}
-													</strike>
+												{#if g.product?.mrp > g.product?.price}
+													<span class="whitespace-nowrap text-zinc-500 line-through">
+														{currency(g.product?.mrp, $page.data?.store?.currencySymbol)}
+													</span>
 
-													{#if g.product.discount > 0}
-														<span class="text-green-500">
-															({g.product.discount}% off)
+													{#if Math.floor(((g.product?.mrp - g.product?.price) / g.product?.mrp) * 100) > 0}
+														<span class="whitespace-nowrap text-secondary-500">
+															({Math.floor(
+																((g.product?.mrp - g.product?.price) / g.product?.mrp) * 100
+															)}% off)
 														</span>
 													{/if}
 												{/if}
