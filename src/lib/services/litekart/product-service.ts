@@ -168,19 +168,18 @@ export const fetchProductsOfCategory = async ({
 			res = await getAPI(`es/products?categories=${categorySlug}&zip=${zip || ''}&store=${storeId}&${query}`, origin)
 		}
 
-		products = res?.data?.map((p) => {
+		products = res?.hits?.hits?.map((p) => {
 			const p1 = { ...p._source }
 			p1.id = p._id
 			return p1
 		})
 
-		count = res?.count
-		facets = res?.facets
+		count = res?.hits?.total?.value
+		facets = res?.aggregations
 		pageSize = res?.pageSize
-		category = res?.category
 		err = !res?.estimatedTotalHits ? 'No result Not Found' : null
 
-		return { products, count, facets, pageSize, category, err }
+		return { products, count, facets, pageSize, err }
 	} catch (e) {
 		return {}
 	}

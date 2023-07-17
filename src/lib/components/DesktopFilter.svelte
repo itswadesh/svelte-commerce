@@ -1,9 +1,9 @@
 <script lang="ts">
-// import { getMegamenuFromStore } from '$lib/store/megamenu'
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
 import { constructURL2, toast } from '$lib/utils'
 import { createEventDispatcher, onMount } from 'svelte'
+// import { getMegamenuFromStore } from '$lib/store/megamenu'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { RadioEs, CheckboxEs } from '$lib/ui'
@@ -13,12 +13,12 @@ const cookies = Cookie()
 const dispatch = createEventDispatcher()
 
 export let appliedFilters = {}
+export let facets = {}
 export let filterLength = 0
 export let fl = {}
 export let mergedArr = []
 export let priceRange = []
 export let query // Required because after loading finished then only we will initiate the price slider component
-export let facets = {}
 
 let clazz
 export { clazz as class }
@@ -136,7 +136,8 @@ async function getMegamenu() {
 			if (!localmegamenu || localmegamenu === 'undefined') {
 				megamenu = await CategoryService.fetchMegamenuData({
 					origin: $page.data.origin,
-					storeId: $page.data.store?.id
+					storeId: $page.data.store?.id,
+					isCors: $page.data.store?.isCors
 				})
 			} else {
 				megamenu = JSON.parse(localmegamenu)
@@ -191,27 +192,29 @@ function handleToggleSubCategory2(c, cx) {
 </script>
 
 <div
-	class="{clazz} flex h-[85vh] w-56 shrink-0 flex-col items-start pr-6 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-200">
+	class="{clazz} flex h-[85vh] w-56 shrink-0 flex-col items-start pr-6 overflow-y-scroll scrollbar-thin scrollbar-thumb-slate-200">
 	<div class="flex flex-col items-start gap-1">
 		<!-- Applied filters count -->
 
-		<h6 class="font-bold tracking-wide">
-			<span>
-				{#if filterLength} {filterLength} {/if}
-			</span>
+		<h4>
+			{#if filterLength} {filterLength} {/if}
 
-			<span>
-				{filterLength > 1 ? 'Filters' : 'Filter'}
-			</span>
-		</h6>
+			{filterLength > 1 ? 'Filters' : 'Filter'}
+		</h4>
 
 		<!-- Applied filters -->
 
 		<ul class="flex flex-row flex-wrap gap-1 text-xs">
 			{#each Object.entries(appliedFilters) as [key, value], index (key)}
 				{#if value}
-					<li class="first-letter:uppercase">
-						{value}
+					<li class="flex items-center gap-1 first-letter:uppercase">
+						<span>
+							{value}
+						</span>
+
+						{#if index < Object.entries(appliedFilters)?.length - 1}
+							<div class="h-1 w-1 rounded-full bg-zinc-500"></div>
+						{/if}
 					</li>
 				{/if}
 			{/each}
@@ -222,7 +225,7 @@ function handleToggleSubCategory2(c, cx) {
 		{#if filterLength}
 			<button
 				type="button"
-				class="text-xs text-primary-500 transition duration-300 focus:outline-none hover:underline"
+				class="text-left text-sm text-secondary-500 hover:underline focus:outline-none"
 				on:click="{clearFilters}">
 				Clear All
 			</button>
@@ -235,7 +238,7 @@ function handleToggleSubCategory2(c, cx) {
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
-			<h6 class="mb-3 font-bold tracking-wide">Categories</h6>
+			<h6 class="mb-3">Categories</h6>
 
 			<!-- 1st level categories -->
 
@@ -247,7 +250,7 @@ function handleToggleSubCategory2(c, cx) {
 								class="flex w-full items-center justify-between gap-2
 								{selectedCategory === m.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
 								<a
-									href="/{m.slug}"
+									href="{m.link || `/${m.slug}` || '##'}"
 									aria-label="Click to visit category related products"
 									class="flex-1">
 									{m.name}
@@ -272,7 +275,7 @@ function handleToggleSubCategory2(c, cx) {
 							</div>
 						{:else}
 							<a
-								href="/{m.slug}"
+								href="{m.link || `/${m.slug}` || '##'}"
 								aria-label="Click to visit category related products"
 								class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 								{m.name}
@@ -290,7 +293,7 @@ function handleToggleSubCategory2(c, cx) {
 												class="flex w-full items-center justify-between gap-2
 												{selectedCategory2 === c.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
 												<a
-													href="/{c.slug}"
+													href="{c.link || `/${c.slug}` || '##'}"
 													aria-label="Click to visit category related products page"
 													class="flex-1">
 													{c.name}
@@ -315,7 +318,7 @@ function handleToggleSubCategory2(c, cx) {
 											</div>
 										{:else}
 											<a
-												href="/{c.slug}"
+												href="{c.link || `/${c.slug}` || '##'}"
 												aria-label="Click to visit category related products page"
 												class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 												{c.name}
@@ -328,7 +331,7 @@ function handleToggleSubCategory2(c, cx) {
 											<ul class="ml-4">
 												{#each c.children as cc}
 													<a
-														href="/{cc.slug}"
+														href="{cc.link || `/${cc.slug}` || '##'}"
 														aria-label="Click to visit category related products page"
 														class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 														{cc.name}
@@ -504,7 +507,7 @@ function handleToggleSubCategory2(c, cx) {
 		</div>
 	{/if}
 
-	<!-- {#if priceRange?.length > 0}
+	{#if priceRange?.length > 0}
 		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
@@ -515,7 +518,7 @@ function handleToggleSubCategory2(c, cx) {
 				selectedItems="{fl.price || []}"
 				on:go="{goCheckbox}" />
 		</div>
-	{/if} -->
+	{/if}
 
 	<!-- {#if facets?.all_aggs?.price?.all?.buckets?.length > 0}
 		<div class="my-3">

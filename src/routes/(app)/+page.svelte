@@ -20,9 +20,10 @@ import {
 	ProductGridShowCase,
 	ShopYourStone
 } from '$lib/components'
+import { CollectionsHome, CollectionsHome2, TrendingProductsHome } from '$lib/theme-config'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { CollectionsHome, CollectionsHome2, TrendingProductsHome } from '$lib/theme-config'
+import { slide } from 'svelte/transition'
 import Cookie from 'cookie-universal'
 import dayjs from 'dayjs'
 import PincodeInputBox from '$lib/themes/misiki/PincodeInputBox.svelte'
@@ -100,6 +101,7 @@ let seoProps = {
 	twitterImage: { url: $page.data.store?.logo }
 }
 
+let showFooter = false
 let showPinCodeEntryModal = false
 
 onMount(() => {
@@ -110,7 +112,6 @@ onMount(() => {
 	} else {
 		showPinCodeEntryModal = true
 	}
-
 })
 </script>
 
@@ -145,7 +146,7 @@ onMount(() => {
 
 		{#if $page?.data.store.alert}
 			<div class="p-3 py-5 sm:p-10 bg-primary-50">
-				<h1 class="container mx-auto text-center text-3xl font-bold sm:text-4xl md:text-5xl">
+				<h1 class="container mx-auto text-center">
 					{$page?.data.store.alert}
 				</h1>
 			</div>
@@ -167,10 +168,7 @@ onMount(() => {
 
 					<CategoriesSlider title="Top Categories" categories="{home?.categories}" />
 
-					<!-- <h2
-						class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
-						TOP COLLECTIONS
-					</h2>
+					<!-- <h2 class="p-3 py-5 text-center uppercase sm:px-10 md:py-10">TOP COLLECTIONS</h2>
 
 					<div class="max-w-screen overflow-x-auto scrollbar-none lg:hidden">
 						<div class="flex flex-row">
@@ -231,8 +229,7 @@ onMount(() => {
 		{:then home}
 			{#if home.heroBanners?.length}
 				<div>
-					<h2
-						class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
+					<h2 class="p-3 py-5 text-center sm:px-10 md:py-10 uppercase">
 						BEST OF {$page.data.store?.websiteName} EXCLUSIVE
 					</h2>
 
@@ -263,17 +260,18 @@ onMount(() => {
 
 		{#if $page.data.store?.isDeals}
 			{#await data.streamed.deals}
-				<div class="flex flex-wrap w-[98vw] items-start justify-start gap-3 overflow-x-auto">
-					{#each { length: 8 } as _}
-						<div class="w-52 h-60 animate-pulse rounded bg-zinc-200"></div>
-					{/each}
+				<div class="flex w-[98vw] items-start justify-start gap-3 overflow-x-auto">
+					<div class="w-60 h-60 animate-pulse rounded bg-zinc-200">
+						{#each { length: 10 } as _}
+							<div class="w-52 h-60 animate-pulse rounded bg-zinc-200"></div>
+						{/each}
+					</div>
 				</div>
 			{:then deals}
 				{#if deals.data?.length > 0}
 					{#each deals.data as deal}
 						<div class="mb-5 sm:mb-10">
-							<h2
-								class="p-3 py-5 text-center font-serif text-xl font-medium tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl uppercase">
+							<h2 class="p-3 py-5 text-center sm:px-10 md:py-10 uppercase">
 								{deal.name}
 							</h2>
 
@@ -319,10 +317,35 @@ onMount(() => {
 		<LegalFooterInformation />
 
 		<!-- <ProductTab /> -->
-	</div>
 
-	<div class="block lg:hidden mb-14 lg:mb-0">
-		<Footer me="{data.me}" />
+		<!-- Footer mobile show hide toggle -->
+
+		<div class="block lg:hidden">
+			<button
+				type="button"
+				class="p-3 sm:px-10 w-full flex items-center justify-between gap-4 text-sm focus:outline-none"
+				on:click="{() => (showFooter = !showFooter)}">
+				<span>More about {$page.data.store?.websiteName || 'store'}</span>
+
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 20 20"
+					fill="currentColor"
+					class="w-5 h-5 transition duration-300
+					{showFooter ? 'transform rotate-180' : ''}">
+					<path
+						fill-rule="evenodd"
+						d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+						clip-rule="evenodd"></path>
+				</svg>
+			</button>
+
+			{#if showFooter}
+				<div transition:slide="{{ duration: 300 }}">
+					<Footer />
+				</div>
+			{/if}
+		</div>
 	</div>
 
 	<!-- MOBILE FOOTER -->

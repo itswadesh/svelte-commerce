@@ -115,7 +115,7 @@ function handleSearchBox() {
 	{#if title}
 		<div class="relative mb-3 flex items-center justify-between gap-4">
 			{#if title}
-				<h6 class="relative z-0 font-bold tracking-wide first-letter:uppercase pr-8">
+				<h6 class="relative z-0 first-letter:uppercase">
 					{title}
 				</h6>
 			{/if}
@@ -240,14 +240,14 @@ function handleSearchBox() {
 		{#if filteredTerms.length > noOfitems}
 			<button
 				type="button"
-				class="text-left text-sm font-semibold text-primary-500 hover:underline focus:outline-none"
+				class="text-left text-sm text-secondary-500 hover:underline focus:outline-none"
 				on:click="{toggleShowAllList}">
 				See all
 			</button>
 		{:else if showAllList}
 			<button
 				type="button"
-				class="text-left text-sm font-semibold text-primary-500 hover:underline focus:outline-none"
+				class="text-left text-sm text-secondary-500 hover:underline focus:outline-none"
 				on:click="{toggleShowAllList}">
 				Close
 			</button>

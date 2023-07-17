@@ -1,10 +1,10 @@
 <script lang="ts">
-// import { getMegamenuFromStore } from '$lib/store/megamenu'
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
 import { constructURL2, currency } from '$lib/utils'
 import { createEventDispatcher, onMount } from 'svelte'
 import { fly } from 'svelte/transition'
+// import { getMegamenuFromStore } from '$lib/store/megamenu'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { RadioEs, CheckboxEs, PrimaryButton } from '$lib/ui'
@@ -27,7 +27,6 @@ export let selected
 export let showFilter = false
 export let showSort = false
 
-let pincode = null
 let selectedCategory
 let selectedCategory2
 let showSubCategory = []
@@ -158,8 +157,8 @@ function getSelected() {
 		selected = 'Types'
 	} else if (allVendors?.length > 0) {
 		selected = 'Vendors'
-		// } else if (priceRange?.length > 0) {
-		// 	selected = 'Prices'
+	} else if (priceRange?.length > 0) {
+		selected = 'Prices'
 	}
 }
 
@@ -573,7 +572,7 @@ $: {
 					<hr class="w-full" />
 				{/if}
 
-				<!-- {#if priceRange?.length > 0}
+				{#if priceRange?.length > 0}
 					<button
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
 						{selected === 'Prices'
@@ -588,7 +587,7 @@ $: {
 					</button>
 
 					<hr class="w-full" />
-				{/if} -->
+				{/if}
 
 				{#if megamenu?.length}
 					<button
@@ -807,7 +806,7 @@ $: {
 					</div>
 				{/if}
 
-				<!-- {#if selected === 'Prices'}
+				{#if selected === 'Prices'}
 					<div
 						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
 						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
@@ -819,7 +818,7 @@ $: {
 								on:go="{goCheckbox}" />
 						{/if}
 					</div>
-				{/if} -->
+				{/if}
 
 				{#if selected === 'Categories'}
 					<div

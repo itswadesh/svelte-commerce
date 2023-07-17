@@ -23,7 +23,7 @@ async function refreshAddress() {
 <SEO {...seoProps} />
 
 <div class="container mx-auto min-h-screen w-full max-w-6xl p-3 py-5 sm:p-10">
-	<Error err="{data.err}" />
+	<Error err="{data.err}" class="mb-5" />
 
 	<CheckoutHeader selected="address" />
 	<!-- isPrescription="{cart.needPrescription}" -->
@@ -31,10 +31,7 @@ async function refreshAddress() {
 	<div
 		class="mb-14 lg:mb-0 mt-5 md:mt-10 flex flex-col lg:flex-row lg:justify-center gap-10 xl:gap-20">
 		<div class="w-full flex-1">
-			<h2
-				class="mb-5 h-6 sm:h-8 flex items-center text-xl font-bold capitalize tracking-wide sm:text-2xl">
-				Select Delivery Address
-			</h2>
+			<h2 class="mb-5">Select Delivery Address</h2>
 
 			{#if data.myAddresses?.data?.length}
 				<div class="mb-5 rounded-lg border bg-white shadow-lg">
@@ -83,10 +80,7 @@ async function refreshAddress() {
 		</div>
 
 		<div class="w-full lg:w-80 lg:shrink-0 lg:grow-0">
-			<h2
-				class="mb-5 h-6 sm:h-8 flex items-center text-xl font-bold capitalize tracking-wide sm:text-2xl">
-				Cart Summary
-			</h2>
+			<h2 class="mb-5">Cart Summary</h2>
 
 			<hr class="mb-5" />
 

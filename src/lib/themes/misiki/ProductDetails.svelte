@@ -42,15 +42,19 @@ import { browser } from '$app/environment'
 import { CartService, WishlistService } from '$lib/services'
 import { cubicOut } from 'svelte/easing'
 import { currency, getIdFromYoutubeVideo, toast } from '$lib/utils'
-import { DummyProductCard } from '$lib/components'
+import { slide } from 'svelte/transition'
 import { fireGTagEvent } from '$lib/utils/gTagB'
-import { Footer } from '$lib/theme-config'
+import {
+	DummyProductCard,
+	Error,
+	Footer,
+	ProductNav,
+	ProductsGrid,
+	SocialSharingButtons
+} from '$lib/components'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { ProductNav } from '$lib/components'
-import { ProductsGrid } from '$lib/components'
-import { SocialSharingButtons } from '$lib/components'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
 import Breadcrumb from '$lib/components/Breadcrumb.svelte'
 import CategoryPoolButtons from './CategoryPoolButtons.svelte'
@@ -84,6 +88,7 @@ const cookies = Cookie()
 const isServer = import.meta.env.SSR
 
 export let data
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -163,6 +168,7 @@ let loadingForWishlist = false
 let product_image_dimension = $page.data.store.product_image_dimension || '3x4'
 let productReviews = {}
 let recentlyViewed = []
+let ribbonTags = []
 let screenWidth
 let selectedImgIndex
 let selectedLinkiedProducts = []
@@ -171,6 +177,7 @@ let selectedOptions1 = []
 let selectedReviewType = 'product_review'
 let shake = false
 let showEditor = false
+let showFooter = false
 let showLongDescription = false
 let showPhotosModal = false
 let showSizeChart = false
@@ -199,6 +206,14 @@ if (data.product?.expiryDate) {
 	} else {
 		isExpired = false
 	}
+}
+
+if (data.product?.tags?.length) {
+	ribbonTags = data.product?.tags.filter((tag) => {
+		return tag.type === 'Ribbon'
+	})
+
+	// console.log('Ribbon tags =', ribbonTags)
 }
 
 onMount(async () => {
@@ -272,8 +287,14 @@ function slideFade(node, params) {
 	}
 }
 
+function selectSize(s) {
+	selectedSize = s.name
+}
+
 function handleSelectedLinkiedProducts(e) {
 	selectedLinkiedProducts = e.detail
+
+	// console.log('selectedLinkiedProducts', selectedLinkiedProducts);
 }
 
 // This is used only for customized product else cart?/add
@@ -289,8 +310,8 @@ async function addToBag(p, customizedImg, customizedJson) {
 			qty: 1,
 			options: selectedOptions,
 			customizedImg: customizedImg,
-			customizedData: customizedJson,
 			storeId: $page.data.store?.id,
+			customizedData: customizedJson,
 			origin: $page.data.origin,
 			server: isServer,
 			cookies
@@ -456,9 +477,9 @@ function handleMobileCanvas() {
 }
 </script>
 
-<svelte:window bind:scrollY="{y}" />
-
 <SEO {...seoProps} />
+
+<svelte:window bind:scrollY="{y}" />
 
 <svelte:head>
 	<title>{data.product?.name}</title>
@@ -472,8 +493,8 @@ function handleMobileCanvas() {
 	store="{$page?.data?.store}" />
 
 <div class="min-h-screen lg:p-10">
-	<div class="md:container md:mx-auto">
-		<div class="mb-5 hidden lg:flex items-center justify-between gap-2">
+	<div class="md:container md:mx-auto flex flex-col gap-5">
+		<div class="hidden lg:flex items-center justify-between gap-2">
 			<!-- Breadcrumb -->
 
 			<Breadcrumb
@@ -489,7 +510,7 @@ function handleMobileCanvas() {
 		</div>
 
 		<div class="mb-5 grid grid-cols-1 items-start gap-5 sm:mb-10 sm:gap-10 lg:grid-cols-5">
-			<!-- Images -->
+			<!-- Banner section -->
 
 			<div class="col-span-1 h-auto lg:col-span-3">
 				<div
@@ -540,93 +561,101 @@ function handleMobileCanvas() {
 				</div>
 			</div>
 
-			<div class="col-span-1 lg:col-span-2 px-3 sm:px-10 lg:px-0">
-				<div class="mb-5 flex items-center justify-between gap-2">
-					<!-- Brand -->
+			<!-- Informatin section -->
 
-					{#if data.product?.brand?.name}
-						<h2 class="mb-1 text-xl sm:text-2xl"><b>{data.product?.brand?.name}</b></h2>
+			<div class="col-span-1 lg:col-span-2 px-3 sm:px-10 lg:px-0 flex flex-col gap-5">
+				<div>
+					<div class="mb-2 flex flex-wrap items-center justify-between gap-2">
+						<!-- Brand -->
+
+						{#if data.product?.brand?.name}
+							<h3>{data.product?.brand?.name}</h3>
+						{/if}
+
+						<!-- Social share button -->
+
+						<div class="block lg:hidden ml-auto">
+							<SocialSharingButtons
+								productName="{data.product?.name}"
+								productImage="{data.product?.img}"
+								url="{$page?.url?.href}" />
+						</div>
+					</div>
+
+					<!-- Name veg/non veg icon -->
+
+					{#if data.product?.name}
+						<div class="flex justify-between gap-2">
+							<span class="flex-1 sm:text-lg text-zinc-500">
+								{data.product?.name}
+							</span>
+
+							{#if $page?.data?.store?.isFnb && data.product.foodType}
+								<div>
+									{#if data.product.foodType === 'veg'}
+										<img src="{productVeg}" alt="veg" class="h-5 w-5" />
+									{:else if data.product.foodType === 'nonveg' || data.product.foodType === 'E'}
+										<img src="{productNonVeg}" alt="non veg" class="h-5 w-5" />
+									{/if}
+								</div>
+							{/if}
+						</div>
 					{/if}
 
-					<!-- Social share button -->
+					{#if $page?.data?.store?.isMultiVendor && data?.product?.vendor && data?.product?.vendor?.slug && data?.product?.vendor?.businessName}
+						<p>
+							By
 
-					<div class="block lg:hidden ml-auto">
-						<SocialSharingButtons
-							productName="{data.product?.name}"
-							productImage="{data.product?.img}"
-							url="{$page?.url?.href}" />
-					</div>
+							<a href="/store/{data?.product?.vendor?.slug}" class="underline hover:text-zinc-800">
+								{data?.product?.vendor?.businessName}
+							</a>
+						</p>
+					{/if}
 				</div>
-
-				<!-- Name veg/non veg icon -->
-
-				{#if data.product?.name}
-					<div class="flex justify-between gap-2">
-						<h1 class="flex-1 sm:text-lg text-zinc-500">
-							{data.product?.name}
-						</h1>
-
-						{#if $page?.data?.store?.isFnb && data.product.foodType}
-							<div>
-								{#if data.product.foodType === 'veg'}
-									<img src="{productVeg}" alt="veg" class="h-5 w-5" />
-								{:else if data.product.foodType === 'nonveg' || data.product.foodType === 'E'}
-									<img src="{productNonVeg}" alt="non veg" class="h-5 w-5" />
-								{/if}
-							</div>
-						{/if}
-					</div>
-				{/if}
-
-				{#if $page?.data?.store?.isMultiVendor && data?.product?.vendor && data?.product?.vendor?.slug && data?.product?.vendor?.businessName}
-					<div class="mb-5 text-sm text-zinc-500">
-						By <a href="/store/{data?.product?.vendor?.slug}" class="underline hover:text-zinc-800"
-							>{data?.product?.vendor?.businessName}
-						</a>
-					</div>
-				{/if}
 
 				<!-- prices mobile -->
 
-				{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
-					<div class="block sm:hidden mt-2">
+				<hr class="block sm:hidden w-full" />
+
+				<div class="block sm:hidden">
+					{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
 						<a
 							href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page?.url
 								?.search}"
-							class="block mb-5 hover:underline max-w-max font-bold">
+							class="block hover:underline max-w-max font-bold text-sm">
 							Login to view price
 						</a>
-					</div>
-				{:else if data.product?.price > 0}
-					<div class="block sm:hidden mt-2">
-						<div class="mb-2 flex flex-wrap items-center gap-2">
-							<span class="whitespace-nowrap">
-								<b>{currency(data.product?.price, $page.data?.store?.currencySymbol)}</b>
+					{:else}
+						<div class="mb-2 flex flex-wrap items-baseline gap-2 text-sm">
+							<span class="text-xl font-bold whitespace-nowrap">
+								{currency(data.product?.price, $page.data?.store?.currencySymbol)}
 							</span>
 
 							{#if data.product?.mrp > data.product?.price}
-								<span class="whitespace-nowrap text-zinc-400">
-									<strike>{currency(data.product?.mrp, $page.data?.store?.currencySymbol)}</strike>
+								<span class="whitespace-nowrap text-zinc-500">
+									<strike>
+										{currency(data.product?.mrp, $page.data?.store?.currencySymbol)}
+									</strike>
 								</span>
 
 								{#if data.product?.discount > 0}
-									<span class="whitespace-nowrap font-semibold text-[#ff5a5a]">
+									<span class="whitespace-nowrap text-secondary-500">
 										({data.product?.discount}% off)
 									</span>
 								{/if}
 							{/if}
 						</div>
 
-						<p class="mb-2 text-sm font-semibold text-green-700">Inclusive of all taxes</p>
-					</div>
-				{/if}
+						<h6 class="text-brand-500">Inclusive of all taxes</h6>
+					{/if}
+				</div>
 
 				<!-- ratings -->
 
 				{#if data?.product?.reviews?.productReviews?.summary?.ratings_avg?.value > 0}
 					<button
 						type="button"
-						class="mt-2 flex max-w-max items-center divide-x divide-zinc-200 border border-zinc-200 py-1 text-sm focus:outline-none"
+						class="flex max-w-max items-center divide-x divide-zinc-200 border border-zinc-200 py-1 text-sm focus:outline-none"
 						on:click="{() => scrollTo('ratings_and_reviews')}">
 						<div class="flex items-center gap-1 px-2 font-semibold">
 							<span>
@@ -650,12 +679,14 @@ function handleMobileCanvas() {
 					</button>
 				{/if}
 
+				<hr />
+
 				<!-- Delivery Options Mobile -->
 
 				{#if data.product?.deliveryDetails || $page.data.store?.isIndianPincodes}
-					<div class="mb-5 sm:hidden block">
-						<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
-							<span> Delivery Options </span>
+					<div class="sm:hidden block">
+						<div class="mb-2 flex items-center gap-2 uppercase">
+							<h5>Delivery Options</h5>
 
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -670,12 +701,12 @@ function handleMobileCanvas() {
 									d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"
 								></path>
 							</svg>
-						</h6>
+						</div>
 
 						{#if data.product?.deliveryDetails}
-							<p class="text-sm bg-yellow-300 px-2 py-1 max-w-max">
+							<span class="text-sm bg-yellow-300 px-2 py-1 max-w-max">
 								{data.product?.deliveryDetails}
-							</p>
+							</span>
 						{:else if $page.data.store?.isIndianPincodes}
 							<DeliveryOptions product="{data.product}" deliveryDetails="{data.deliveryDetails}" />
 						{/if}
@@ -684,53 +715,51 @@ function handleMobileCanvas() {
 
 				<!-- prices desktop -->
 
-				{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
-					<div class="hidden sm:block">
+				<div class="hidden sm:block">
+					{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
 						<a
-							href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page?.url
-								?.search}"
-							class="block mb-5 hover:underline max-w-max font-bold">
+							href="{$page.data?.store?.otpLogin ? '/auth/otp-login' : '/auth/login'}?ref={$page
+								?.url?.pathname}{$page?.url?.search}"
+							class="block hover:underline max-w-max font-bold">
 							Login to view price
 						</a>
-					</div>
-				{:else if data.product?.price > 0}
-					<div class="hidden sm:block">
-						<div class="mb-2 flex flex-wrap items-center gap-4">
-							<span class="whitespace-nowrap text-xl sm:text-2xl">
-								<b>{currency(data.product?.price, $page.data?.store?.currencySymbol)}</b>
+					{:else}
+						<div class="mb-2 flex flex-wrap items-baseline gap-2">
+							<span class="text-2xl font-bold whitespace-nowrap">
+								{currency(data.product?.price, $page.data?.store?.currencySymbol)}
 							</span>
 
 							{#if data.product?.mrp > data.product?.price}
-								<span class="whitespace-nowrap text-lg text-zinc-500 sm:text-xl">
-									<strike>{currency(data.product?.mrp, $page.data?.store?.currencySymbol)}</strike>
+								<span class="whitespace-nowrap text-zinc-500">
+									<strike>
+										{currency(data.product?.mrp, $page.data?.store?.currencySymbol)}
+									</strike>
 								</span>
 
 								{#if data.product?.discount > 0}
-									<span class="whitespace-nowrap text-lg font-semibold text-amber-500 sm:text-xl">
+									<span class="whitespace-nowrap text-secondary-500">
 										({data.product?.discount}% off)
 									</span>
 								{/if}
 							{/if}
 						</div>
 
-						<p class="mb-2 text-sm font-semibold text-green-700">Inclusive of all taxes</p>
-					</div>
-				{/if}
+						<h6 class="text-brand-500">Inclusive of all taxes</h6>
+					{/if}
+				</div>
 
 				<!-- New and Tags -->
 
-				{#if data.product?.tags?.length || data.product?.new}
-					<div class="mb-5 flex flex-wrap gap-1">
+				{#if ribbonTags?.length || data.product?.new}
+					<div class="flex flex-wrap gap-1 text-xs font-semibold uppercase text-white">
 						{#if data.product?.new}
-							<div class="bg-red-500 py-1 px-2 text-xs font-semibold uppercase text-white">New</div>
+							<div class="bg-accent-500 py-1 px-2">New</div>
 						{/if}
 
-						{#if data.product?.tags?.length}
-							{#each data.product?.tags as tag}
-								{#if tag?.name && tag?.type === 'Ribbon'}
-									<div
-										class="py-1 px-2 text-xs font-semibold uppercase text-white"
-										style="background-color: {tag.colorCode};">
+						{#if ribbonTags?.length}
+							{#each ribbonTags as tag}
+								{#if tag?.name}
+									<div class="py-1 px-2" style="background-color: {tag.colorCode || '#27272A'};">
 										{tag.name}
 									</div>
 								{/if}
@@ -753,9 +782,9 @@ function handleMobileCanvas() {
 					<!-- Color -->
 
 					{#if value?.pg.colorGroup.length}
-						<div class="mb-5">
-							<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
-								<span> Select Color </span>
+						<div>
+							<div class="mb-2 flex items-center gap-2 uppercase">
+								<h5>Select Color</h5>
 
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -770,7 +799,7 @@ function handleMobileCanvas() {
 										d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z"
 									></path>
 								</svg>
-							</h6>
+							</div>
 
 							<ul class="flex flex-wrap gap-3">
 								{#each value?.pg.colorGroup as cg}
@@ -829,10 +858,10 @@ function handleMobileCanvas() {
 					<!-- Size -->
 
 					{#if value?.pg.sizeGroup.length}
-						<div class="mb-5">
+						<div>
 							<div class="mb-2 flex flex-wrap items-center gap-2 justify-between">
-								<h6 class="flex items-center gap-2 font-semibold uppercase">
-									<span> Select Size </span>
+								<div class="flex items-center gap-2 uppercase">
+									<h5>Select Size</h5>
 
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
@@ -847,7 +876,7 @@ function handleMobileCanvas() {
 											d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
 										></path>
 									</svg>
-								</h6>
+								</div>
 
 								{#if data.product.sizechart}
 									<button
@@ -863,21 +892,16 @@ function handleMobileCanvas() {
 								{#each value?.pg.sizeGroup as sg}
 									{#if sg?.size?.name}
 										<li>
-											{#if sg?.hasStock}
+											{#if sg.hasStock}
 												<a
 													href="/product/{sg.slug}"
-													class="relative flex flex-col items-center justify-center text-center border h-14 w-14 rounded-full p-2 text-sm font-medium uppercase group transition duration-300 focus:outline-none
+													class="reltive flex flex-col items-center justify-center text-center border rounded py-2 px-4 text-sm font-medium uppercase group transition duration-300 focus:outline-none
 													{sg?.size?.name === data.product?.size?.name
 														? 'bg-primary-500 border-primary-500 text-white'
 														: 'bg-transparent border-zinc-300 hover:border-primary-500'}">
 													<span class="w-full truncate">
 														{sg?.size?.name}
 													</span>
-
-													<div
-														class="hidden group-hover:block absolute z-20 max-w-max min-w-max -top-2 leading-3 py-1 px-2 rounded whitespace-nowrap bg-primary-500 text-white text-[0.65em] text-center">
-														{sg?.size?.name}
-													</div>
 
 													{#if sg.stock < 5 && sg.stock > 0}
 														<div
@@ -889,22 +913,11 @@ function handleMobileCanvas() {
 											{:else}
 												<a
 													href="/product/{sg.slug}"
-													class="relative flex flex-col items-center justify-center text-zinc-300 text-center border h-14 w-14 rounded-full p-2 text-sm font-medium uppercase group transition duration-300 focus:outline-none grayscale
-													{sg?.size?.name === data.product?.size?.name
-														? 'border-primary-500'
-														: 'border-zinc-300 hover:border-primary-500'}">
+													class="flex flex-col items-center justify-center text-center border text-zinc-200 rounded py-2 px-4 text-sm font-medium uppercase group transition duration-300 focus:outline-none
+													{sg?.size?.name === data.product?.size?.name ? 'border-primary-500' : 'hover:border-primary-500'}">
 													<span class="w-full truncate">
 														{sg?.size?.name}
 													</span>
-
-													<div
-														class="hidden group-hover:block absolute z-20 max-w-max min-w-max -top-2 leading-3 py-1 px-2 rounded whitespace-nowrap bg-zinc-300 text-white text-[0.65em] text-center">
-														{sg?.size?.name}
-													</div>
-
-													<div class="absolute z-10 inset-0 flex items-center">
-														<hr class="w-full transform rotate-45 border-zinc-300" />
-													</div>
 												</a>
 											{/if}
 										</li>
@@ -917,9 +930,9 @@ function handleMobileCanvas() {
 					<!-- Group Products -->
 
 					<!-- {#if value?.pg.groupProduct.length}
-						<div class="mb-5">
-							<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
-								<span> Similar Products </span>
+						<div>
+							<div class="mb-2 flex items-center gap-2 uppercase">
+								<h5>Similar Products</h5>
 
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -934,7 +947,7 @@ function handleMobileCanvas() {
 										d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 01-1.125-1.125v-3.75zM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-8.25zM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-2.25z"
 									></path>
 								</svg>
-							</h6>
+							</div>
 
 							<ul class="flex flex-wrap gap-3">
 								{#each value?.pg.groupProduct as gp}
@@ -953,11 +966,11 @@ function handleMobileCanvas() {
 
 											{#if gp.tags?.length}
 												{#each gp.tags as tag}
-													<span>
+													<p class="line-clamp-2">
 														{#if tag.type === 'Style'}
 															{tag.name}
 														{/if}
-													</span>
+													</p>
 												{/each}
 											{/if}
 
@@ -971,7 +984,7 @@ function handleMobileCanvas() {
 						</div>
 					{/if} -->
 				{:catch error}
-					{error?.message}
+					<Error err="{error}" />
 				{/await}
 
 				<!-- {#if moreOptions?.length > 0}
@@ -1094,28 +1107,46 @@ function handleMobileCanvas() {
 					{error?.message}
 				{/await}
 
-				<!-- Product Details -->
+				<!-- Product details (short description) -->
 
 				{#await data.streamed?.moreProductDetails}
-					<div class="mb-5">
-						<Skeleton extraSmall />
-					</div>
+					<Skeleton extraSmall />
 				{:then value}
 					{#if value.description}
-						<div class="mb-5 prose text-sm max-w-none">
-							{@html value.description}
+						<div>
+							<div class="mb-2 flex items-center gap-2 uppercase">
+								<h5>Product Details</h5>
+
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="h-5 w-5"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+									stroke-width="1">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
+									></path>
+								</svg>
+							</div>
+
+							<p class="prose max-w-none">
+								{@html value.description}
+							</p>
 						</div>
 					{/if}
 				{:catch error}
-					{error?.message}
+					<Error err="{error}" />
 				{/await}
 
 				<!-- Linked Products -->
 
-				{#if data.product?.linkedProducts?.length}
-					<div class="mb-5">
-						<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
-							<span> Linked Products </span>
+				{#if data?.product?.linkedProducts?.length && data?.product?.linkedProducts[0] && (data?.product?.linkedProducts[0]._id || data?.product?.linkedProducts[0].id)}
+					<div>
+						<div class="mb-2 flex items-center gap-2 uppercase">
+							<h5>Linked Products</h5>
 
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -1130,20 +1161,18 @@ function handleMobileCanvas() {
 									d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 01-1.125-1.125v-3.75zM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-8.25zM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-2.25z"
 								></path>
 							</svg>
-						</h6>
-
-						<div class="flex flex-col gap-4">
-							<CheckboxOfMultiProducts
-								items="{data.product?.linkedProducts}"
-								selectedItems="{selectedLinkiedProducts || []}"
-								on:change="{handleSelectedLinkiedProducts}" />
 						</div>
+
+						<CheckboxOfMultiProducts
+							items="{data.product?.linkedProducts}"
+							selectedItems="{selectedLinkiedProducts || []}"
+							on:change="{handleSelectedLinkiedProducts}" />
 					</div>
 				{/if}
 
 				{#if !data.product?.isCustomized}
 					<div
-						class="w-full hidden md:grid gap-2 items-center uppercase grid-cols-2 static max-w-sm mb-5">
+						class="w-full hidden md:grid gap-2 items-center uppercase grid-cols-2 static max-w-sm">
 						{#if $page.data.store?.isWishlist}
 							<div class="col-span-1">
 								<WhiteButton
@@ -1155,7 +1184,7 @@ function handleMobileCanvas() {
 									{#if isWishlisted}
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
-											class="h-5 w-5 shrink-0 text-red-500"
+											class="h-5 w-5 shrink-0 text-accent-500"
 											viewBox="0 0 20 20"
 											fill="currentColor">
 											<path
@@ -1322,49 +1351,37 @@ function handleMobileCanvas() {
 					</div>
 				{/if}
 
-				<!-- Description -->
+				<!-- Long Description -->
 
 				{#await data.streamed?.moreProductDetails}
-					<div class="mb-5">
-						<Skeleton extraSmall />
-					</div>
+					<Skeleton extraSmall />
 				{:then value}
 					{#if value.longDescription}
-						<div class="mb-5 flex flex-col gap-5">
-							<hr class="w-full border-t border-zinc-200" />
+						<div class="flex flex-col border-t border-b">
+							<button
+								type="button"
+								class="py-5 w-full flex items-center gap-2 justify-between focus:outline-none"
+								on:click="{() => (showLongDescription = !showLongDescription)}">
+								<h5 class="uppercase">Description</h5>
 
-							<div>
-								<button
-									type="button"
-									class="w-full flex items-center gap-2 justify-between font-semibold uppercase focus:outline-none"
-									on:click="{() => (showLongDescription = !showLongDescription)}">
-									<span> Description </span>
-
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										viewBox="0 0 20 20"
-										fill="currentColor"
-										class="w-5 h-5 transition duration-300
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 0 20 20"
+									fill="currentColor"
+									class="w-5 h-5 transition duration-300
 									{showLongDescription ? 'transform -rotate-45' : ''}">
-										<path
-											d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"
-										></path>
-									</svg>
-								</button>
+									<path
+										d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"
+									></path>
+								</svg>
+							</button>
 
-								{#if showLongDescription}
-									<div class="mt-2 prose text-sm max-w-none">
-										{@html value.longDescription}
-									</div>
-								{/if}
-							</div>
-
-							<hr class="w-full border-t border-zinc-200" />
+							{#if showLongDescription}
+								<div transition:slide="{{ duration: 300 }}" class="pb-5 prose max-w-none">
+									{@html value.longDescription}
+								</div>
+							{/if}
 						</div>
-					{/if}
-
-					{#if value.attributes?.length}
-						<ProductAttributes attributes="{value.attributes}" />
 					{/if}
 				{:catch error}
 					{error?.message}
@@ -1373,9 +1390,9 @@ function handleMobileCanvas() {
 				<!-- Delivery Options Desktop -->
 
 				{#if data.product?.deliveryDetails || $page.data.store?.isIndianPincodes}
-					<div class="mb-5 hidden sm:block">
-						<h6 class="mb-2 flex items-center gap-2 font-semibold uppercase">
-							<span> Delivery Options </span>
+					<div class="hidden sm:block">
+						<div class="mb-2 flex items-center gap-2 uppercase">
+							<h5>Delivery Options</h5>
 
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -1390,54 +1407,58 @@ function handleMobileCanvas() {
 									d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"
 								></path>
 							</svg>
-						</h6>
+						</div>
 
 						{#if data.product?.deliveryDetails}
-							<p class="text-sm bg-yellow-300 px-2 py-1 max-w-max">
+							<div class="text-sm bg-yellow-300 px-2 py-1 max-w-max">
 								{data.product?.deliveryDetails}
-							</p>
+							</div>
 						{:else if $page.data.store?.isIndianPincodes}
 							<DeliveryOptions product="{data.product}" deliveryDetails="{data.deliveryDetails}" />
 						{/if}
 					</div>
+
+					<hr class="hidden sm:block" />
 				{/if}
 
 				<!-- Ratings & Reviews -->
 
 				{#if $page.data.store?.isProductReviewsAndRatings}
 					{#await data.streamed?.productReviews}
-						<ul class="my-5 p-0 flex flex-col gap-4">
-							<li>
-								<Skeleton extraSmall />
-							</li>
+						<ul class="m-0 p-0 flex flex-col gap-5">
+							{#each { length: 3 } as _}
+								<li>
+									<Skeleton extraSmall />
+								</li>
+							{/each}
 						</ul>
 					{:then productReviews}
 						<div
 							id="ratings_and_reviews"
-							class="sticky top-14 sm:top-20 z-30 lg:static lg:z-0 mb-5 bg-white py-2">
-							<div class="flex items-center flex-wrap gap-4">
+							class="sticky top-14 sm:top-20 z-30 lg:static lg:z-0 bg-white lg:bg-transparent">
+							<div class="flex items-center flex-wrap gap-5">
 								<button
 									type="button"
-									class="font-semibold border-b-4 focus:outline-none
-								{selectedReviewType === 'product_review'
+									class="mb-2 lg:mb-0 uppercase border-b-4 focus:outline-none
+										{selectedReviewType === 'product_review'
 										? 'border-primary-500 text-primary-500'
 										: 'border-zinc-200 text-zinc-500'}"
 									on:click="{() => {
 										;(selectedReviewType = 'product_review') && scrollTo('ratings_and_reviews')
 									}}">
-									Reviews
+									<h5>Product Review</h5>
 								</button>
 
 								<button
 									type="button"
-									class="font-semibold border-b-4 focus:outline-none
-								{selectedReviewType === 'brand_review'
+									class="mb-2 lg:mb-0 uppercase border-b-4 focus:outline-none
+										{selectedReviewType === 'brand_review'
 										? 'border-primary-500 text-primary-500'
 										: 'border-zinc-200 text-zinc-500'}"
 									on:click="{() => {
 										;(selectedReviewType = 'brand_review') && scrollTo('ratings_and_reviews')
 									}}">
-									Brand Reviews
+									<h5>Brand Review</h5>
 								</button>
 							</div>
 						</div>
@@ -1448,10 +1469,9 @@ function handleMobileCanvas() {
 							reviewsSummary="{selectedReviewType === 'product_review'
 								? productReviews.reviewsSummary?.productReviews
 								: productReviews.reviewsSummary?.brandReviews}"
-							reviews="{productReviews}"
-							class="mb-5" />
+							reviews="{productReviews}" />
 					{:catch error}
-						{error?.message}
+						<Error err="{error}" />
 					{/await}
 				{/if}
 
@@ -1465,7 +1485,7 @@ function handleMobileCanvas() {
 						title="YouTube video player"
 						frameborder="0"
 						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-						class="mb-5 w-full max-w-md h-auto aspect-video"
+						class="w-full max-w-md h-auto aspect-video"
 						allowfullscreen>
 					</iframe>
 				{/if}
@@ -1495,7 +1515,7 @@ function handleMobileCanvas() {
 									{#if isWishlisted}
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
-											class="h-5 w-5 shrink-0 text-red-500"
+											class="h-5 w-5 shrink-0 text-accent-500"
 											viewBox="0 0 20 20"
 											fill="currentColor">
 											<path
@@ -1662,7 +1682,7 @@ function handleMobileCanvas() {
 				{/if}
 
 				{#if !data.product?.isCustomized}
-					<div class="w-full grid md:hidden grid-cols-5 gap-2 items-center uppercase mb-5">
+					<div class="w-full grid md:hidden grid-cols-5 gap-2 items-center uppercase">
 						{#if $page.data.store?.isWishlist}
 							<div class="col-span-2">
 								<WhiteButton
@@ -1674,7 +1694,7 @@ function handleMobileCanvas() {
 									{#if isWishlisted}
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
-											class="h-5 w-5 shrink-0 text-red-500"
+											class="h-5 w-5 shrink-0 text-accent-500"
 											viewBox="0 0 20 20"
 											fill="currentColor">
 											<path
@@ -1842,52 +1862,48 @@ function handleMobileCanvas() {
 			</div>
 		</div>
 
-		<div class="px-3 sm:px-10 lg:px-0">
+		<div class="px-3 sm:px-10 lg:px-0 flex flex-col gap-5 sm:gap-10">
 			<!-- Frequently bought together -->
 
 			{#if data.product?.crossSells?.length}
-				<hr class="mb-5 w-full sm:mb-10" />
+				<hr />
 
-				<div class="mb-5 sm:mb-10">
-					<div class="sticky top-14 sm:top-20 z-30 lg:static lg:z-0 mb-3 bg-white py-2">
-						<h2 class="font-bold capitalize sm:text-lg border-b-4 border-zinc-800 max-w-max">
-							Frequently bought together
-						</h2>
-					</div>
+				<div class="sticky top-14 sm:top-20 z-30 lg:static lg:z-0 bg-white lg:bg-transparent">
+					<h5 class="capitalize border-b-4 border-zinc-800 max-w-max">
+						Frequently bought together
+					</h5>
+				</div>
 
-					<div
-						class="mb-5 grid w-full grid-cols-2 items-start gap-3 sm:mb-10 sm:flex sm:flex-wrap sm:justify-between lg:gap-6">
-						{#each data.product?.crossSells as csp}
-							<FrequentlyBoughtProduct product="{csp}" />
-						{/each}
+				<div
+					class="grid w-full grid-cols-2 items-start gap-2 sm:gap-5 sm:flex sm:flex-wrap sm:justify-between lg:gap-6">
+					{#each data.product?.crossSells as csp}
+						<FrequentlyBoughtProduct product="{csp}" />
+					{/each}
 
-						{#each { length: 7 } as _}
-							<div class="hidden sm:block">
-								<DummyProductCard />
-							</div>
-						{/each}
-					</div>
+					{#each { length: 7 } as _}
+						<div class="hidden sm:block">
+							<DummyProductCard />
+						</div>
+					{/each}
 				</div>
 			{/if}
-
-			<!-- Category pool buttons -->
-
-			<div class="mb-5 sm:mb-10">
-				<CategoryPoolButtons categoryPool="{data.product?.categoryPool}" />
-			</div>
 
 			<!-- Recently viewed products -->
 
 			{#if recentlyViewed?.length > 1}
-				<hr class="mb-5 w-full sm:mb-10" />
+				<hr />
 
 				<RecentlyViewedProductsSlider title="Recently Viewed" products="{recentlyViewed}" />
 			{/if}
 
+			<!-- Category pool buttons -->
+
+			<CategoryPoolButtons categoryPool="{data.product?.categoryPool}" />
+
 			<!-- Similar products From category slug -->
 
 			{#await data.streamed?.moreProductDetails}
-				<ul class="mb-5 p-0 list-none flex flex-wrap gap-4">
+				<ul class="m-0 p-0 list-none flex flex-wrap gap-5">
 					{#each { length: 7 } as _}
 						<li>
 							<ProductSkeleton />
@@ -1896,25 +1912,48 @@ function handleMobileCanvas() {
 				</ul>
 			{:then value}
 				{#if value.moreFromCategory && value.moreFromCategory[0] && value.moreFromCategory[0].slug}
-					<div class="mb-5 sm:mb-10">
-						<SimilarProductsFromCategorySlug data="{value.moreFromCategory}" />
-					</div>
+					<SimilarProductsFromCategorySlug data="{value.moreFromCategory}" />
 				{/if}
 			{:catch error}
-				{error?.message}
+				<Error err="{error}" />
 			{/await}
 
 			<!-- Recommended products -->
 
 			{#if data.product?.relatedProducts?.length}
-				<hr class="mb-5 w-full sm:mb-10" />
+				<hr />
 
 				<ProductsGrid title="Recommended Products" products="{data.product?.relatedProducts}" />
 			{/if}
+		</div>
 
-			<div class="block md:hidden">
-				<Footer me="{data.me}" />
-			</div>
+		<!-- Footer mobile show hide toggle -->
+
+		<div class="block lg:hidden">
+			<button
+				type="button"
+				class="p-3 sm:px-10 w-full flex items-center justify-between gap-4 text-sm focus:outline-none"
+				on:click="{() => (showFooter = !showFooter)}">
+				<span>More about {$page.data.store?.websiteName || 'store'}</span>
+
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 20 20"
+					fill="currentColor"
+					class="w-5 h-5 transition duration-300
+				{showFooter ? 'transform rotate-180' : ''}">
+					<path
+						fill-rule="evenodd"
+						d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+						clip-rule="evenodd"></path>
+				</svg>
+			</button>
+
+			{#if showFooter}
+				<div transition:slide="{{ duration: 300 }}">
+					<Footer />
+				</div>
+			{/if}
 		</div>
 	</div>
 </div>
@@ -1928,6 +1967,8 @@ function handleMobileCanvas() {
 {#if bounceItemFromTop}
 	<AnimatedCartItem img="{customizedImg || data.product?.img}" />
 {/if}
+
+<!-- <UserForm showUserInputForm="{showUserInputForm}" /> -->
 
 {#if showSizeChart}
 	<div class="fixed inset-0 h-screen w-screen z-50 flex justify-end">
@@ -1965,5 +2006,3 @@ function handleMobileCanvas() {
 		</div>
 	</div>
 {/if}
-
-<!-- <UserForm showUserInputForm="{showUserInputForm}" /> -->

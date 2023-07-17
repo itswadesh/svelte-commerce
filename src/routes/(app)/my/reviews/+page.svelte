@@ -79,7 +79,7 @@ async function remove(id) {
 		<div>
 			<header
 				class="mb-5 flex flex-col items-start md:items-center justify-between md:flex-row gap-2">
-				<h1 class="text-2xl font-medium md:text-3xl lg:text-4xl">
+				<h1>
 					Reviews
 
 					{#if data.reviews.count}
@@ -155,28 +155,30 @@ async function remove(id) {
 
 											<div class="text-normal flex-1 text-lg font-semibold">
 												{#if review.rating === 1}
-													<span class="font-semibold text-red-600"> Very Disappointed </span>
+													<span class="font-semibold text-accent-500"> Very Disappointed </span>
 												{:else if review.rating === 2}
-													<span class="font-semibold text-orange-600"> Slightly Disapponted </span>
+													<span class="font-semibold text-secondary-500">
+														Slightly Disapponted
+													</span>
 												{:else if review.rating === 3}
-													<span class="font-semibold text-green-600"> Good</span>
+													<span class="font-semibold text-brand-500"> Good</span>
 												{:else if review.rating === 4}
-													<span class="font-semibold text-green-600"> Very Good</span>
+													<span class="font-semibold text-brand-500"> Very Good</span>
 												{:else if review.rating === 5}
-													<span class="font-semibold text-green-600"> Excellent</span>
+													<span class="font-semibold text-brand-500"> Excellent</span>
 												{/if}
 											</div>
 										</div>
 
-										<p class="mb-2 text-sm">
+										<p class="mb-2">
 											<i>- {review.message}</i>
 										</p>
 
-										<div class="text-xs">
+										<span class="text-xs text-zinc-500">
 											<!-- <TimeAgo date="{+review.updatedAt}" /> -->
 
 											{date(review.updatedAt)}
-										</div>
+										</span>
 									</div>
 								</div>
 
@@ -212,9 +214,9 @@ async function remove(id) {
 		<div class="flex h-[70vh] flex-col items-center justify-center text-center">
 			<img src="{noOnlineReviewAnimate}" alt="empty review" class="mb-5 h-60 object-contain" />
 
-			<p class="mb-2 text-xl font-medium md:text-3xl">Empty Review!!</p>
+			<h2 class="mb-2">Empty Review!!</h2>
 
-			<p class="mb-5 text-sm">There's no review found, start adding review on purchased items.</p>
+			<p class="mb-5">There's no review found, start adding review on purchased items.</p>
 
 			<a href="/" aria-label="Click to visit home" data-sveltekit-preload-data>
 				<PrimaryButton class="w-40 py-2 text-sm">Shop Now</PrimaryButton>

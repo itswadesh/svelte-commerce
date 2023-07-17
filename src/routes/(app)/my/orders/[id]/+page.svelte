@@ -52,11 +52,10 @@ onMount(() => {
 			<BackButton to="/my/orders?sort=-updatedAt" class="mb-2" />
 
 			<div class="mb-5 overflow-hidden rounded border sm:mb-10">
-				<div
-					class="flex flex-wrap items-center justify-between border-b bg-zinc-200 px-5 py-2 text-sm">
-					<h5><b>Order No :</b> #{data.order?.orderNo}</h5>
+				<div class="flex flex-wrap items-center justify-between border-b bg-zinc-100 px-5 py-3">
+					<h6>Order No : #{data.order?.orderNo}</h6>
 
-					<h5><b>Order Date </b>: {date(data.order?.createdAt)}</h5>
+					<h6>Order Date : {date(data.order?.createdAt)}</h6>
 				</div>
 
 				<!-- Order detail  -->
@@ -85,12 +84,12 @@ onMount(() => {
 										{/if}
 									</a>
 
-									<div class="flex w-full flex-1 flex-col gap-1 text-sm xl:pr-4">
+									<div class="flex w-full flex-1 flex-col gap-1 xl:pr-4">
 										<div class="mb-1 flex justify-between gap-2 sm:gap-4">
 											<a
 												href="{`/product/${item.slug}`}"
 												aria-label="Click to view the product details"
-												class="flex-1 text-base font-semibold hover:underline">
+												class="flex-1 hover:underline text-zinc-500">
 												{item.name}
 											</a>
 
@@ -106,44 +105,46 @@ onMount(() => {
 										</div>
 
 										{#if item.brandName}
-											<span>
-												<b>Brand :</b>
+											<p>
+												Brand :
 
 												{item.brandName}
-											</span>
+											</p>
 										{/if}
 
-										{#if item.size}
-											<span>
-												<b>Size :</b>
+										<div class="flex flex-wrap gap-1 items-center">
+											{#if item.size}
+												<p>
+													Size :
 
-												{item.size}
-											</span>
-										{/if}
+													{item.size}
+												</p>
+											{/if}
 
-										{#if item.color}
-											<span>
-												<b>Color : </b>
+											{#if item.color}
+												<p>
+													Color :
 
-												{item.color}
-											</span>
-										{/if}
+													{item.color}
+												</p>
+											{/if}
+										</div>
 
 										{#if item.vendor}
-											<span>
-												<b>Seller :</b>
+											<p>
+												Seller :
 
 												<a
-													href="{`/store/${item.vendor?.slug}`}"
+													href="{`/vendor/${item.vendor?.slug}`}"
 													aria-label="Click to view the vendor's profile"
 													class="font-medium">
 													{item.vendor?.businessName}
 												</a>
-											</span>
+											</p>
 										{/if}
 
 										{#if item?.usedOptions?.length}
-											<div class="mt-2 flex flex-col gap-2 text-xs">
+											<div class="mt-2 flex flex-col gap-2">
 												{#each item?.usedOptions as option}
 													{#if option?.val?.length && option?.val !== undefined && option?.val != ''}
 														<div class="flex flex-wrap gap-2">
@@ -164,18 +165,20 @@ onMount(() => {
 											</div>
 										{/if}
 
-										<div class="flex flex-wrap items-center gap-2">
-											<span class="whitespace-nowrap text-base font-bold">
+										<div class="flex flex-wrap items-center gap-2 text-xs">
+											<span class="text-base font-bold whitespace-nowrap">
 												{currency(item.price, $page.data?.store?.currencySymbol)}
 											</span>
 
-											{#if item.mrp > item.price}
+											{#if item?.mrp > item?.price}
 												<span class="whitespace-nowrap text-zinc-500 line-through">
-													{currency(item.mrp, $page.data?.store?.currencySymbol)}
+													<strike>
+														{currency(item.mrp, $page.data?.store?.currencySymbol)}
+													</strike>
 												</span>
 
 												{#if Math.floor(((item.mrp - item.price) / item.mrp) * 100) > 0}
-													<span class="whitespace-nowrap text-green-600">
+													<span class="whitespace-nowrap text-secondary-500">
 														({Math.floor(((item.mrp - item.price) / item.mrp) * 100)}% off)
 													</span>
 												{/if}
@@ -200,12 +203,12 @@ onMount(() => {
 
 					<div class="col-span-1 flex flex-col gap-5 p-5 lg:gap-10">
 						<div>
-							<h4 class="mb-2 font-semibold">Delivery Address</h4>
+							<h5 class="mb-2">Delivery Address</h5>
 
-							<p class="flex flex-col text-sm font-light text-zinc-500">
+							<p class="flex flex-col">
 								<span>
-									{data.order?.userFirstName}
-									{data.order?.userLastName}
+									{data.order?.address?.firstName}
+									{data.order?.address?.lastName}
 
 									<br />
 
@@ -218,17 +221,17 @@ onMount(() => {
 								</span>
 							</p>
 
-							{#if data.order?.userPhone}
-								<h6 class="mt-1 text-sm">
-									Phone No: <span> {data.order?.userPhone}</span>
-								</h6>
+							{#if data.order?.address?.phone}
+								<p>
+									{data.order?.address?.phone}
+								</p>
 							{/if}
 						</div>
 
 						<div>
-							<h4 class="mb-2 font-semibold">Billing Address</h4>
+							<h5 class="mb-2">Billing Address</h5>
 
-							<p class="flex flex-col text-sm font-light text-zinc-500">
+							<p class="flex flex-col">
 								<span>
 									{data.order?.billingAddress?.firstName}
 									{data.order?.billingAddress?.lastName}
@@ -244,17 +247,17 @@ onMount(() => {
 								</span>
 							</p>
 
-							{#if data.order?.userPhone}
-								<h6 class="mt-1 text-sm">
-									Phone No: <span> {data.order?.userPhone}</span>
-								</h6>
+							{#if data.order?.billingAddress?.phone}
+								<p>
+									{data.order?.billingAddress?.phone}
+								</p>
 							{/if}
 						</div>
 
 						<!-- <div>
-							<h4 class="mb-2 font-semibold">Vendor Details :</h4>
+							<h5 class="mb-2">Vendor Details :</h5>
 
-							<p class="flex flex-col text-sm font-light text-zinc-500">
+							<p class="flex flex-col">
 								<span>
 									{data.order?.vendorBusinessName},
 
@@ -266,7 +269,7 @@ onMount(() => {
 							</p>
 
 							{#if data.order?.vendorPhone}
-								<h6 class="mt-2 text-sm">
+								<h6 class="mt-2">
 									Phone number: <span> {data.order?.vendorPhone}</span>
 								</h6>
 							{/if}
@@ -279,13 +282,13 @@ onMount(() => {
 
 			<div>
 				{#if !!data.order?.foodType && data.order?.status !== 'delivered' && data.order?.expectedDeliveryDate}
-					<h4 class="mb-5">
-						<span class="font-medium">Expected Delivery Date : </span>
+					<div class="mb-5 flex items-center gap-2 flex-wrap">
+						<h5>Expected Delivery Date :</h5>
 
-						<span class="text-sm font-light text-zinc-500">
+						<p>
 							{date(data.order?.expectedDeliveryDate)}
-						</span>
-					</h4>
+						</p>
+					</div>
 				{/if}
 
 				<div class="mt-5 sm:mt-10 flex flex-wrap gap-10">
@@ -331,12 +334,12 @@ onMount(() => {
 			</div>
 		</section>
 	{:else}
-		<div class="flex flex-col items-center justify-center text-center">
-			<img src="{noAddToCartAnimate}" alt="empty cart" class="mb-5 h-60 object-contain" />
+		<div class="flex h-[70vh] flex-col items-center justify-center text-center">
+			<img src="{noAddToCartAnimate}" alt="empty wishlist" class="mb-5 h-60 object-contain" />
 
-			<span class="mb-3 text-xl font-medium md:text-3xl"> Your have't ordered yet !!</span>
+			<h2 class="mb-2">Your have't Ordered Yet !!</h2>
 
-			<span class="mb-4 text-xs">Add items to it now</span>
+			<p class="mb-5">Add items to it now</p>
 
 			<a href="/" aria-label="Click to visit home" data-sveltekit-preload-data>
 				<PrimaryButton class="w-40 py-2 text-sm">Shop Now</PrimaryButton>

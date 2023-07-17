@@ -15,7 +15,7 @@
 <script>
 import { applyAction, enhance } from '$app/forms'
 import { currency } from '$lib/utils'
-import { fireGTagEvent } from '$lib/utils/gTagB'
+import { fireGTagEvent } from '$lib/utils/gTag'
 import { invalidateAll } from '$app/navigation'
 import { LazyImg, DummyProductCard } from '$lib/components'
 import { page } from '$app/stores'
@@ -73,15 +73,9 @@ async function getWishlistedProducts() {
 	{#if wishlistedProducts?.length}
 		<div>
 			<header class="mb-5 flex flex-wrap items-start justify-between gap-4">
-				<div>
-					<div class="flex flex-wrap items-center gap-2">
-						<h2 class="text-2xl capitalize sm:text-3xl">
-							Wishlist {#if wishlistedProducts.length}({wishlistedProducts.length}){/if}
-						</h2>
-					</div>
-
-					<!-- <p class="mt-2 text-sm text-zinc-500"></p> -->
-				</div>
+				<h1>
+					Wishlist {#if wishlistedProducts.length}({wishlistedProducts.length}){/if}
+				</h1>
 
 				<!--  Back button -->
 
@@ -129,7 +123,7 @@ async function getWishlistedProducts() {
 									await applyAction(result)
 								}
 							}}"
-							class="cols-span-1 relative flex flex-col justify-between border">
+							class="cols-span-1 relative flex flex-col justify-between border overflow-hidden">
 							<BlackButton
 								type="button"
 								class="absolute top-2 right-2 z-10"
@@ -149,7 +143,8 @@ async function getWishlistedProducts() {
 							</BlackButton>
 
 							<a href="/product/{w.product?.slug}" aria-label="Click to view the product details">
-								<div class="w-full items-center overflow-hidden rounded-lg bg-white p-4 sm:w-48">
+								<div
+									class="w-full items-center overflow-hidden rounded-lg bg-white p-4 sm:w-48 flex flex-col gap-4">
 									<div class="h-auto w-full">
 										<LazyImg
 											src="{w.product?.img}"
@@ -158,27 +153,27 @@ async function getWishlistedProducts() {
 											class="h-full w-full object-contain object-bottom text-xs" />
 									</div>
 
-									<div class="mx-auto p-2 text-center text-sm sm:p-4">
+									<div class="flex flex-col gap-2 items-center justify-center text-center">
 										{#if $page.data?.store?.isFnb && w.product?.vendor?.businessName}
-											<h4 class="mb-2 font-semibold">
+											<h5>
 												{w.product?.vendor?.businessName}
-											</h4>
+											</h5>
 										{:else if !$page.data?.store?.isFnb && w.product && w.product?.brand}
-											<h4 class="mb-2 font-semibold">
+											<h5>
 												{w.product?.brand.name}
-											</h4>
+											</h5>
 										{/if}
 
-										<div class="mb-2 flex items-start justify-center">
-											<h6 class="flex-1 truncate font-medium">
+										<div class="flex items-start justify-center">
+											<p class="flex-1 line-clamp-2">
 												{w.product?.name}
-											</h6>
+											</p>
 
-											{#if $page?.data?.store?.isFnb && w.product.foodType}
+											{#if $page?.data?.store?.isFnb && w.product?.foodType}
 												<div>
-													{#if w.product.foodType === 'veg'}
+													{#if w.product?.foodType === 'veg'}
 														<img src="/product/veg.png" alt="veg" class="h-5 w-5" />
-													{:else if w.product.foodType === 'nonveg'}
+													{:else if w.product?.foodType === 'nonveg'}
 														<img src="/product/non-veg.png" alt="non veg" class="h-5 w-5" />
 													{/if}
 												</div>
@@ -186,9 +181,9 @@ async function getWishlistedProducts() {
 										</div>
 
 										<div
-											class="flex flex-wrap items-center justify-center gap-2 overflow-hidden overflow-ellipsis text-xs">
-											<span class="whitespace-nowrap text-base font-bold">
-												{currency(w.product.price, $page.data?.store?.currencySymbol)}
+											class="flex flex-wrap items-baseline justify-center gap-1.5 text-xs leading-3">
+											<span class="text-base font-bold whitespace-nowrap leading-3">
+												{currency(w.product?.price, $page.data?.store?.currencySymbol)}
 											</span>
 
 											{#if w.product?.mrp > w.product?.price}
@@ -197,7 +192,7 @@ async function getWishlistedProducts() {
 												</span>
 
 												{#if Math.floor(((w.product?.mrp - w.product?.price) / w.product?.mrp) * 100) > 0}
-													<span class="whitespace-nowrap text-green-600">
+													<span class="whitespace-nowrap text-secondary-500">
 														({Math.floor(
 															((w.product?.mrp - w.product?.price) / w.product?.mrp) * 100
 														)}% off)
@@ -271,9 +266,9 @@ async function getWishlistedProducts() {
 		<div class="flex h-[70vh] flex-col items-center justify-center text-center">
 			<img src="{noEmptyWishlist}" alt="empty wishlist" class="mb-5 h-60 object-contain" />
 
-			<p class="mb-2 text-xl font-medium md:text-3xl">Empty Wishlist!!</p>
+			<h2 class="mb-2">Empty Wishlist!!</h2>
 
-			<p class="mb-5 text-sm">There's no wishlisted product found, start adding items.</p>
+			<p class="mb-5">There's no wishlisted product found, start adding items.</p>
 
 			<a href="/" aria-label="Click to visit home" data-sveltekit-preload-data>
 				<PrimaryButton class="w-40 py-2 text-sm">Shop Now</PrimaryButton>

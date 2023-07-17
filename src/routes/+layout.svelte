@@ -212,8 +212,8 @@ onMount(async () => {
 				class="p-10 flex flex-col gap-2 items-center justify-center border-4 rounded-3xl shadow-2xl">
 				<img src="{storeClosed}" alt="" class="h-52 w-auto object-contain object-center" />
 
-				<p class="text-lg font-semibold text-zinc-500">
-					{$page.data.store.close?.message?.val}
+				<p>
+					{$page.data.store.closedMessage}
 				</p>
 			</div>
 		</div>

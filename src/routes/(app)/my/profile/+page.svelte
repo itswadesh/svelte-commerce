@@ -80,13 +80,7 @@ async function saveProfile() {
 
 <section>
 	<header class="mb-5 flex flex-wrap items-start justify-between gap-4">
-		<div>
-			<div class="flex flex-wrap items-center gap-2">
-				<h2 class="text-2xl capitalize sm:text-3xl">Profile</h2>
-			</div>
-
-			<!-- <p class="mt-2 text-sm text-zinc-500"></p> -->
-		</div>
+		<h1>Profile</h1>
 
 		<!--  Back button -->
 
@@ -137,7 +131,7 @@ async function saveProfile() {
 									on:save="{({ detail }) => saveImage(detail)}"
 									on:remove="{({ detail }) => removeImage(detail)}" />
 
-								<div class="w-full max-w-md">
+								<div class="w-full">
 									{#if data.profile.email}
 										<span class="mb-1 text-sm font-medium sm:text-lg lg:text-xl">
 											{data.profile.email} <br />
@@ -150,10 +144,10 @@ async function saveProfile() {
 								</div>
 							</div>
 
-							<div class="flex flex-wrap gap-2">
-								<h6 class="w-52 shrink-0 font-medium">First Name</h6>
+							<div class="flex flex-col sm:flex-row gap-2">
+								<h6 class="w-52 shrink-0">First Name</h6>
 
-								<div class="w-full max-w-md">
+								<div class="w-full">
 									<Textbox
 										type="text"
 										placeholder="Enter First Name"
@@ -162,10 +156,10 @@ async function saveProfile() {
 								</div>
 							</div>
 
-							<div class="flex flex-wrap gap-2">
-								<h6 class="w-52 shrink-0 font-medium">Last Name</h6>
+							<div class="flex flex-col sm:flex-row gap-2">
+								<h6 class="w-52 shrink-0">Last Name</h6>
 
-								<div class="w-full max-w-md">
+								<div class="w-full">
 									<Textbox
 										type="text"
 										placeholder="Enter Last Name"
@@ -174,10 +168,10 @@ async function saveProfile() {
 								</div>
 							</div>
 
-							<!-- <div class="flex flex-wrap gap-2">
-							<h6 class="w-52 shrink-0 font-medium">Date Of Birth</h6>
+							<!-- <div class="flex flex-col sm:flex-row gap-2">
+							<h6 class="w-52 shrink-0">Date Of Birth</h6>
 
-							<div class="w-full max-w-md">
+							<div class="w-full">
 								<Textbox
 									type="date"
 									placeholder="Enter Date Of Birth"
@@ -186,10 +180,10 @@ async function saveProfile() {
 							</div>
 						</div> -->
 
-							<div class="flex flex-wrap gap-2">
-								<h6 class="w-52 shrink-0 font-medium">Phone</h6>
+							<div class="flex flex-col sm:flex-row gap-2">
+								<h6 class="w-52 shrink-0">Phone</h6>
 
-								<div class="w-full max-w-md">
+								<div class="w-full">
 									<Textbox
 										type="text"
 										placeholder="Eg: +91000000000"

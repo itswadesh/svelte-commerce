@@ -1,6 +1,6 @@
 <script>
 import { page } from '$app/stores'
-import {Breadcrumb} from '$lib/components'
+import { Breadcrumb } from '$lib/components'
 import landingPageMobileBox from '$lib/assets/landing-page-mobile-box.webp'
 import SEO from '$lib/components/SEO/index.svelte'
 
@@ -42,8 +42,7 @@ let seoProps = {
 	// weight: { unitCode: '', value: '' },
 	// width: { unitCode: '', value: '' },
 	// wlwmanifestXmlHref: '',
-	metaDescription
-: data.category?.metaDescription,
+	metaDescription: data.category?.metaDescription,
 	// article: false,
 	canonical: `${$page?.url.href}`,
 	datePublished: `${data.category?.publishedAt || '_'}`,
@@ -152,7 +151,7 @@ $: if (data.megamenu.length) {
 			</div>
 
 			{#if data.category?.description && data.category?.description?.length > 11}
-				<div class="prose prose-sm max-w-none text-justify">
+				<div class="prose max-w-none">
 					{@html data.category?.description}
 				</div>
 			{/if}

@@ -31,7 +31,6 @@ export let showFlight = false
 export let showGallery = false
 export let showOneBanner = false
 
-
 let selectedImg
 let showPhotosModal = false
 let Splide: any

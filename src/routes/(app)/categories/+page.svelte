@@ -1,5 +1,4 @@
 <script>
-// import { getMegamenuFromStore } from '$lib/store/megamenu'
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
 import { LazyImg, MobileFooter } from '$lib/components'
@@ -7,6 +6,7 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { toast } from '$lib/utils'
 import SEO from '$lib/components/SEO/index.svelte'
+// import { getMegamenuFromStore } from '$lib/store/megamenu'
 
 let seoProps = {
 	title: `Categories`,
@@ -96,7 +96,7 @@ function toggle2(cx) {
 		<!-- 1st level categories -->
 
 		{#if megamenu.length}
-			<ul class="flex flex-col divide-y-2 divide-white tracking-wider">
+			<ul class="flex flex-col divide-y-2 divide-white">
 				{#each megamenu as m, mx}
 					{#if m}
 						<li>
@@ -107,9 +107,10 @@ function toggle2(cx) {
 									{bgColors[mx]}"
 									on:click="{() => toggle(mx)}">
 									<div class="flex h-full w-full flex-1 items-center gap-2 px-6">
-										<p class="flex-1 text-left text-xl font-bold uppercase">
+										<h2 class="flex-1 text-left uppercase">
 											{m.name}
-										</p>
+										</h2>
+
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
 											class="h-6 w-6 shrink-0 transition duration-300
@@ -135,9 +136,9 @@ function toggle2(cx) {
 									aria-label="Click to visit {m.name || '##'}"
 									class="flex h-24 w-full items-end justify-between {bgColors[mx]}">
 									<div class="flex h-full w-full flex-1 items-center px-6">
-										<h1 class="flex-1 text-xl font-bold uppercase">
+										<h2 class="flex-1 uppercase">
 											{m.name}
-										</h1>
+										</h2>
 									</div>
 
 									{#if m.img}
@@ -175,9 +176,9 @@ function toggle2(cx) {
 															</div>
 														{/if}
 
-														<h2 class="flex-1">
+														<h5 class="flex-1">
 															{c.name}
-														</h2>
+														</h5>
 
 														<svg
 															xmlns="http://www.w3.org/2000/svg"
@@ -193,7 +194,7 @@ function toggle2(cx) {
 													</button>
 												{:else}
 													<a
-														href="/{c.slug}"
+														href="{c.link || `/${c.slug}` || '##'}"
 														aria-label="Click to visit {c.name || '##'}"
 														class="flex items-center gap-4 py-3 px-8 font-medium">
 														{#if c.img}
@@ -211,7 +212,7 @@ function toggle2(cx) {
 															</div>
 														{/if}
 
-														<h6>{c.name}</h6>
+														<h5>{c.name}</h5>
 													</a>
 												{/if}
 
@@ -223,9 +224,9 @@ function toggle2(cx) {
 															{#each c.children as cc}
 																<li>
 																	<a
-																		href="/{cc.slug}"
+																		href="{cc.link || `/${cc.slug}` || '##'}"
 																		aria-label="Click to visit {cc.name || '##'}"
-																		class="flex w-full items-center gap-4 py-3 px-8 font-medium">
+																		class="flex w-full items-center gap-4 py-3 px-8 text-sm">
 																		{cc.name}
 																	</a>
 																</li>
