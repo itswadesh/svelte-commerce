@@ -169,9 +169,14 @@ export const fetchProductsOfCategory = async ({
 		}
 
 		products = res?.data?.map((p) => {
-			const p1 = { ...p._source }
-			p1.id = p._id
-			return p1
+			if (p._source) {
+
+				const p1 = { ...p._source }
+				p1.id = p._id
+				return p1
+			} else {
+				return p
+			}
 		})
 		count = res?.count
 		facets = res?.facets
