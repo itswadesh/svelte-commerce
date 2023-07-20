@@ -3,9 +3,7 @@ import { CollectionService, DealsService, HomeService, ProductService } from '$l
 const isServer = import.meta.env.SSR
 
 export async function load({ params, parent, url }) {
-	const { store, origin, sid } = await parent()
-
-	const categorySlug = params.slug
+	const { store, storeId, origin, sid } = await parent()
 	const currentPage = +url.searchParams.get('page') || 1
 	const fl = {}
 	const query = url.searchParams
@@ -21,7 +19,7 @@ export async function load({ params, parent, url }) {
 			home: HomeService.fetchHome({
 				origin,
 				server: isServer,
-				storeId: store?.id,
+				storeId,
 				isCors: store?.isCors,
 				sid: sid
 			}),
@@ -29,7 +27,7 @@ export async function load({ params, parent, url }) {
 			deals: DealsService.fetchDeals({
 				origin,
 				server: isServer,
-				storeId: store?.id,
+				storeId,
 				isCors: store?.isCors,
 				sid: sid
 			}),
@@ -37,16 +35,15 @@ export async function load({ params, parent, url }) {
 			collections: CollectionService.fetchCollections({
 				origin,
 				server: isServer,
-				storeId: store?.id,
+				storeId,
 				isCors: store?.isCors,
 				sid: sid
-			}),
+			})
 		},
-		products: ProductService.searchProducts({
+		products: await ProductService.searchProducts({
 			query: query.toString(),
 			origin,
-			server: isServer,
-			storeId: store?.id,
+			storeId,
 			isCors: store?.isCors,
 			sid: sid
 		}),
@@ -55,6 +52,6 @@ export async function load({ params, parent, url }) {
 		query: query.toString(),
 		searchData,
 		sort,
-		store,
+		store
 	}
 }

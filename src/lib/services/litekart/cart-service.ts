@@ -4,12 +4,7 @@ import { getBySid, postBySid } from '$lib/utils/server'
 import type { Error } from '$lib/types'
 const isServer = import.meta.env.SSR
 
-export const fetchCartData = async ({
-	cartId = null,
-	origin,
-	sid = null,
-	storeId,
-}) => {
+export const fetchCartData = async ({ cartId = null, origin, sid = null, storeId }) => {
 	try {
 		let res = {}
 
@@ -31,7 +26,7 @@ export const fetchRefreshCart = async ({
 	isCors = false,
 	origin = null,
 	sid = null,
-	storeId,
+	storeId
 }) => {
 	try {
 		let res = {}
@@ -50,12 +45,7 @@ export const fetchRefreshCart = async ({
 	}
 }
 
-export const fetchMyCart = async ({
-	cartId = null,
-	origin,
-	sid = null,
-	storeId,
-}) => {
+export const fetchMyCart = async ({ cartId = null, origin, sid = null, storeId }) => {
 	try {
 		let res = {}
 
@@ -81,7 +71,7 @@ export const addToCartService = async ({
 	vid,
 	origin = null,
 	sid = null,
-	storeId,
+	storeId
 }) => {
 	try {
 		let res = {}
@@ -96,7 +86,7 @@ export const addToCartService = async ({
 					pid,
 					qty,
 					vid,
-					store: storeId,
+					store: storeId
 				},
 				sid
 			)
@@ -123,13 +113,7 @@ export const addToCartService = async ({
 	}
 }
 
-export const createBackOrder = async ({
-	pid,
-	qty,
-	origin = null,
-	sid = null,
-	storeId,
-}) => {
+export const createBackOrder = async ({ pid, qty, origin = null, sid = null, storeId }) => {
 	try {
 		let res = {}
 		if (isServer) {
@@ -138,7 +122,7 @@ export const createBackOrder = async ({
 				{
 					pid,
 					qty,
-					store: storeId,
+					store: storeId
 				},
 				sid
 			)
@@ -149,7 +133,7 @@ export const createBackOrder = async ({
 					id: 'new',
 					pid,
 					qty,
-					store: storeId,
+					store: storeId
 				},
 				origin
 			)
@@ -167,7 +151,7 @@ export const applyCouponService = async ({
 	origin,
 	server = false,
 	sid = null,
-	storeId,
+	storeId
 }) => {
 	try {
 		let res = {}
@@ -194,7 +178,7 @@ export const removeCouponService = async ({
 	origin,
 	server = false,
 	sid = null,
-	storeId,
+	storeId
 }) => {
 	try {
 		let res = {}
@@ -219,6 +203,96 @@ export const updateCart = async ({
 		const addressId = shippingAddress?._id || shippingAddress?.id
 
 		return addressId
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
+	}
+}
+
+export const updateCartWithoutLogIn = async ({
+	cartId,
+	address,
+	city,
+	country,
+	email,
+	firstName,
+	lastName,
+	phone,
+	state,
+	zip,
+	selfTakeout,
+	origin = null,
+	sid = null,
+	storeId
+}) => {
+	try {
+		let res = {}
+		if (isServer) {
+			res = await postBySid(
+				`carts/update-cart`,
+				{
+					cart_id: cartId,
+					selfTakeout,
+					shipping_address: {
+						address,
+						city,
+						country,
+						email,
+						firstName,
+						lastName,
+						phone,
+						pincode: zip,
+						state
+					},
+					billing_address: {
+						address,
+						city,
+						country,
+						email,
+						firstName,
+						lastName,
+						phone,
+						pincode: zip,
+						state
+					},
+					store: storeId
+				},
+				sid
+			)
+		} else {
+			res = await post(
+				`carts/update-cart`,
+				{
+					cart_id: cartId,
+					selfTakeout,
+					shipping_address: {
+						address,
+						city,
+						country,
+						email,
+						firstName,
+						lastName,
+						phone,
+						pincode: zip,
+						state
+					},
+					billing_address: {
+						address,
+						city,
+						country,
+						email,
+						firstName,
+						lastName,
+						phone,
+						pincode: zip,
+						state
+					},
+					store: storeId
+				},
+				origin
+			)
+		}
+
+		return res || {}
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)
 	}

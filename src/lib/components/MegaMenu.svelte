@@ -26,13 +26,13 @@
 .hoverable:hover .mega-menu {
 	visibility: visible;
 	opacity: 1;
-	transition-delay: 0.1s;
 }
 </style>
 
 <script lang="ts">
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
+import { fade } from 'svelte/transition'
 import { getContext, onMount } from 'svelte'
 import { getMegamenuFromStore } from '$lib/store/megamenu'
 import { navigateToProperPath, toast } from '$lib/utils'
@@ -47,6 +47,7 @@ const cookies = Cookie()
 let menuItems = []
 let pincode = null
 let selectedCategory = ''
+let toggleMenuItemChildren = []
 
 onMount(() => {
 	getMegaMenu()
@@ -80,8 +81,14 @@ async function getMegaMenu() {
 		{#each menuItems as category, index}
 			<li
 				class="hoverable mx-1"
-				on:mouseenter="{() => (selectedCategory = category.name)}"
-				on:mouseleave="{() => (selectedCategory = '')}">
+				on:mouseenter="{() => {
+					selectedCategory = category.name
+					toggleMenuItemChildren[index] = true
+				}}"
+				on:mouseleave="{() => {
+					selectedCategory = ''
+					toggleMenuItemChildren[index] = false
+				}}">
 				<a
 					href="{navigateToProperPath(category.link || category.slug)}"
 					aria-label="Click to visit category related products page"
@@ -119,8 +126,10 @@ async function getMegaMenu() {
 					{/if}
 				</a>
 
-				{#if category.children?.length}
-					<div class="mega-menu relative overflow-hidden border-b bg-white shadow-2xl">
+				{#if toggleMenuItemChildren[index] && category.children?.length}
+					<div
+						transition:fade="{{ duration: 100 }}"
+						class="mega-menu relative overflow-hidden border-b bg-white shadow-2xl">
 						<div class="absolute inset-0 z-0 grid w-full grid-cols-4">
 							{#each { length: 4 } as _, ix}
 								<div class="{ix % 2 === 0 ? 'bg-white' : 'bg-zinc-50'}"></div>
@@ -142,7 +151,8 @@ async function getMegaMenu() {
 										{index % 6 == 2 ? 'text-red-600 ' : ''}
                                     	{index % 6 == 3 ? 'text-green-500 ' : ''}
                                     	{index % 6 == 4 ? 'text-pink-500 ' : ''}
-                                    	{index % 6 == 5 ? 'text-blue-500 ' : ''}">
+                                    	{index % 6 == 5 ? 'text-blue-500 ' : ''}"
+										on:click="{() => (toggleMenuItemChildren[index] = false)}">
 										{c.name}
 									</a>
 
@@ -155,7 +165,8 @@ async function getMegaMenu() {
 													<a
 														href="{navigateToProperPath(c1.link || c1.slug)}"
 														aria-label="Click to visit category related products page"
-														class="block w-full font-light hover:font-medium">
+														class="block w-full font-light hover:font-medium"
+														on:click="{() => (toggleMenuItemChildren[index] = false)}">
 														{c1.name}
 													</a>
 												</li>
