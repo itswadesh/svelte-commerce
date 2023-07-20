@@ -36,7 +36,6 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 
-
 export let product = {}
 
 if (product?._source) {
@@ -105,14 +104,14 @@ if (product?._source) {
 			{/if}
 		</a>
 
-		<div class="p-4 flex flex-col gap-2">
+		<div class="p-4 flex flex-col gap-2 text-xs sm:text-sm">
 			<div class="flex gap-2 justify-between">
 				<a
 					href="/product/{product.slug}"
 					rel="noopener noreferrer"
 					aria-label="Click to view the product details"
 					data-sveltekit-preload-data="tap"
-					class="block flex-1 text-xs sm:text-sm truncate group-hover:underline"
+					class="block flex-1 truncate group-hover:underline"
 					style="max-width: 20ch;">
 					{product.name || '_'}
 				</a>
@@ -128,9 +127,17 @@ if (product?._source) {
 				{/if}
 			</div>
 
-			<span>
-				{currency(product.price, $page.data?.store?.currencySymbol)}
-			</span>
+			<div class="flex flex-wrap items-center gap-2 leading-3">
+				<span class="text-secondary-500">
+					{currency(product.price, $page.data?.store?.currencySymbol)}
+				</span>
+
+				<span class="text-zinc-500">
+					<strike>
+						{currency(product.price, $page.data?.store?.currencySymbol)}
+					</strike>
+				</span>
+			</div>
 		</div>
 	</div>
 {/if}
