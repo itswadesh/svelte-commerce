@@ -22,6 +22,9 @@ const cookies = Cookie()
 
 export let me: Me, cart: Cart, data, showCartSidebar: boolean, openSidebar: boolean, store
 
+let clazz = ''
+export { clazz as class }
+
 let categories
 let hellobar = $page.data.store?.hellobar || {}
 let loading = false
@@ -108,7 +111,7 @@ async function getCategories() {
 </script>
 
 <nav
-	class="minimum-width-rem sticky inset-x-0 top-0 w-full border-b bg-white shadow-xs
+	class="{clazz} sticky inset-x-0 top-0 w-full border-b bg-white shadow-xs
 	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
 	{#if hellobar?.active?.val}
 		<div

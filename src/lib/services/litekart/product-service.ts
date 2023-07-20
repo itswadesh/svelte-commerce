@@ -159,7 +159,7 @@ export const fetchProductsOfCategory = async ({
 		let count = 0
 		let facets = ''
 		let pageSize = 0
-		let category = ''
+		let category = {}
 		let err = ''
 
 		if (isServer) {

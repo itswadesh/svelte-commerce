@@ -235,7 +235,7 @@ function hideitems() {
 			{/if}
 		</a>
 
-		<div class="p-2">
+		<div class="p-4">
 			<!-- View smilar button start-->
 
 			<!-- <div class="{product.relatedProducts?.length > 0 ? 'absolute bottom-24 right-4' : 'hidden'}">
@@ -460,8 +460,12 @@ function hideitems() {
 				</a>
 
 				{#if $page?.data?.store?.isMultiVendor && product?.vendor && product?.vendor?.slug && product?.vendor?.businessName}
-					<div class="text-sm text-zinc-500">
-						By <a href="/store/{product?.vendor?.slug}" class="underline hover:text-zinc-800">
+					<div class="flex items-center gap-1 text-sm text-zinc-500">
+						<span> By </span>
+
+						<a
+							href="/store/{product?.vendor?.slug}"
+							class="block w-full truncate underline hover:text-zinc-800 capitalize">
 							{product?.vendor?.businessName}
 						</a>
 					</div>

@@ -231,9 +231,17 @@ const storeRecentlyViewedToLocatStorage = async () => {
 					</div>
 				{/if}
 
-				<p class="text-lg text-zinc-500">
-					{currency(data.product?.price, $page.data?.store?.currencySymbol)}
-				</p>
+				<div class="flex flex-wrap leading-3 gap-2">
+					<span class="text-lg text-secondary-500">
+						{currency(data.product?.price, $page.data?.store?.currencySymbol)}
+					</span>
+
+					<span class="text-lg text-zinc-500">
+						<strike>
+							{currency(data.product?.mrp, $page.data?.store?.currencySymbol)}
+						</strike>
+					</span>
+				</div>
 
 				<hr />
 

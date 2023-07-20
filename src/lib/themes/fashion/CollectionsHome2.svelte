@@ -55,19 +55,17 @@ onMount(async () => {
 		<div class="divide-y border-b">
 			{#each collections.data as collection}
 				{#if collection.block === 'block-2'}
-					<div class="p-3 py-5 sm:px-10 md:py-10 text-center uppercase flex flex-col gap-2">
-						<p class="text-sm tracking-widest">Shop</p>
+					<div class="px-3 py-10 sm:px-10 sm:py-20">
+						<div class="container mx-auto max-w-screen-2xl flex flex-col gap-10 sm:gap-20">
+							<div class="text-center uppercase flex flex-col gap-2">
+								<p class="text-sm tracking-widest">Shop</p>
 
-						{#if collection.name}
-							<h2 class="text-xl font-medium tracking-wider sm:text-2xl md:text-2xl">
-								{collection.name}
-							</h2>
-						{/if}
-					</div>
+								<h2 class="text-xl font-medium tracking-wider sm:text-2xl md:text-2xl">
+									{collection.name || 'New'}
+								</h2>
+							</div>
 
-					{#if collection?.products?.length && collection?.products[0]?.img}
-						<div class="px-3 py-10 sm:px-10">
-							<div class="container mx-auto max-w-5xl">
+							{#if collection?.products?.length}
 								<svelte:component
 									this="{Splide}"
 									options="{{
@@ -79,19 +77,19 @@ onMount(async () => {
 										width: responsiveWidth || '100%'
 									}}">
 									{#each collection?.products as product, ix}
-										{#if product.img}
+										{#if product.img || product.images[0]}
 											<SplideSlide>
 												<div
-													class="grid grid-cols-1 sm:grid-cols-5 gap-5 items-center sm:gap-10 md:gap-20">
+													class="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-5 items-start sm:gap-10 md:gap-20 items-center">
 													<!-- Banner section -->
 
 													<a
 														href="{product.link || `/product/${product.slug}`}"
 														aria-label="Click to visit banner related products page"
-														class="hidden sm:block col-span-1 sm:col-span-2"
+														class="hidden sm:block col-span-1"
 														data-sveltekit-preload-data>
 														<LazyImg
-															src="{product.img}"
+															src="{product.img || product.images[0]}"
 															alt="{product.name}"
 															height="533"
 															aspect_ratio="3:4"
@@ -100,11 +98,10 @@ onMount(async () => {
 
 													<!-- Details section -->
 
-													<div
-														class="col-span-1 sm:col-span-3 flex justify-center sm:justify-start">
+													<div class="col-span-1 flex justify-center sm:justify-start">
 														<div class="flex flex-col items-center text-center gap-5 max-w-[250px]">
 															<LazyImg
-																src="{product.img}"
+																src="{product.img || product.images[0]}"
 																alt="{product.name}"
 																height="533"
 																aspect_ratio="3:4"
@@ -139,9 +136,9 @@ onMount(async () => {
 										{/if}
 									{/each}
 								</svelte:component>
-							</div>
+							{/if}
 						</div>
-					{/if}
+					</div>
 				{/if}
 			{/each}
 		</div>
