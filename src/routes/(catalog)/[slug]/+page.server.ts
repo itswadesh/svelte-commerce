@@ -17,14 +17,6 @@ export async function load({ url, params, parent, cookies }) {
 	})
 
 	return {
-		category: CategoryService.fetchCategory({
-			id: categorySlug,
-			server: isServer,
-			sid,
-			storeId: store?.id,
-			isCors: store?.isCors,
-			origin
-		}),
 		products: ProductService.fetchProductsOfCategory({
 			categorySlug,
 			isCors: store?.isCors,

@@ -17,44 +17,44 @@ export let data
 
 let seoProps = {
 	brand: $page.data.store?.title,
-	breadcrumbs: data.category?.children,
+	breadcrumbs: data.products?.category?.children,
 	caption: $page.data.store?.title,
 	category: data.searchData,
 	contentUrl: $page.data.store?.logo,
-	createdAt: `${data.category?.createdAt || '_'}`,
+	createdAt: `${data.products?.category?.createdAt || '_'}`,
 	email: `${$page?.data?.store?.email}`,
 	id: $page?.url?.href,
-	image: `${data.category?.img}`,
+	image: `${data.products?.category?.img}`,
 	logo: $page.data.store?.logo,
 	ogSquareImage: { url: '', width: 56, height: 56 },
 	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00'],
 	timeToRead: 0,
-	updatedAt: `${data.category?.updatedAt || '_'}`,
-	metaDescription: data.category?.metaDescription,
+	updatedAt: `${data.products?.category?.updatedAt || '_'}`,
+	metaDescription: data.products?.category?.metaDescription,
 	canonical: `${$page?.url.href}`,
-	datePublished: `${data.category?.publishedAt || '_'}`,
-	description: ` ${data.category?.description}`,
+	datePublished: `${data.products?.category?.publishedAt || '_'}`,
+	description: ` ${data.products?.category?.description}`,
 	dnsPrefetch: `//cdn.jsdelivr.net`,
 	featuredImage: {
-		url: `${data.category?.img}`,
+		url: `${data.products?.category?.img}`,
 		width: 675,
 		height: 380,
 		caption: data.searchData
 	},
 	keywords: $page.data.store?.keywords,
-	lastUpdated: `${data.category?.updatedAt || '_'}`,
-	msapplicationTileImage: `${data.category?.img}`,
+	lastUpdated: `${data.products?.category?.updatedAt || '_'}`,
+	msapplicationTileImage: `${data.products?.category?.img}`,
 	ogImage: { url: $page.data.store?.logo, width: 128, height: 56 },
 	ogImageSecureUrl: `${$page?.data?.store?.logo}`,
 	ogImageType: 'image/jpeg',
 	ogSiteName: `${$page.data.origin}/sitemap/sitemap.xml`,
-	productAvailability: `${data.category?.stock}`,
-	productBrand: `${data.category?.brandName || $page.data.store?.title}`,
+	productAvailability: `${data.products?.category?.stock}`,
+	productBrand: `${data.products?.category?.brandName || $page.data.store?.title}`,
 	productName: `${data.searchData}`,
 	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
-	slug: `${data.category?.slug}`,
+	slug: `${data.products?.category?.slug}`,
 	title: `${data.searchData || 'Buy online in - ' + $page.data.store?.websiteName}`,
-	twitterImage: { url: `${data.category?.img}` }
+	twitterImage: { url: `${data.products?.category?.img}` }
 }
 
 let currentPage = 1
@@ -126,7 +126,7 @@ async function loadNextPage() {
 			data.isLoading = true
 
 			const res = await ProductService.fetchNextPageProducts({
-				categorySlug: data?.category?.slug,
+				categorySlug: data.products?.category?.slug,
 				origin: $page?.data?.origin,
 				storeId: $page?.data?.store?.id,
 				nextPage,
@@ -251,7 +251,7 @@ function handleFilterTags() {
 	<!-- Sort -->
 
 	<div
-		class="hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex divide-x border-t border-b">
+		class="hidden lg:flex bg-white sticky top-40 z-40 flex-wrap items-center justify-between gap-4 px-3 sm:px-0 divide-x border-t border-b">
 		<div class="flex-1"></div>
 
 		<label for="sort" class="max-w-max flex items-center gap-2 px-5 py-3 text-sm">
@@ -275,7 +275,8 @@ function handleFilterTags() {
 		<MobileFilter
 			bind:showFilter="{showFilter}"
 			bind:showSort="{showSort}"
-			class="z-40 block lg:hidden"
+			class="block sticky z-40 lg:hidden
+			{hellobar?.active?.val ? 'top-[88px] sm:top-28' : 'top-14 sm:top-20'}"
 			facets="{data.products.facets}"
 			priceRange="{priceRange}"
 			selected="{selectedFilter}"
@@ -307,7 +308,7 @@ function handleFilterTags() {
 	<div class="mb-10 flex flex-col items-start sm:mb-20 lg:flex-row lg:gap-10 lg:p-10">
 		{#if data.products?.products?.length && data.products.facets}
 			<DesktopFilter
-				class="sticky hidden lg:block {hellobar?.active?.val ? 'top-32' : 'top-24'}"
+				class="sticky hidden lg:block {hellobar?.active?.val ? 'top-56' : 'top-48'}"
 				facets="{data.products.facets}"
 				priceRange="{priceRange}"
 				query="{data.query}"
@@ -336,9 +337,9 @@ function handleFilterTags() {
 
 			<!-- Category top description -->
 
-			{#if data.category?.topDescription && data.category?.topDescription?.length > 11}
+			{#if data.products?.category?.topDescription && data.products?.category?.topDescription?.length > 11}
 				<div class="px-3 sm:px-0 prose max-w-none">
-					{@html data.category?.topDescription}
+					{@html data.products?.category?.topDescription}
 				</div>
 			{/if}
 
@@ -455,14 +456,14 @@ function handleFilterTags() {
 
 	<!-- CATEGORY DESCRIPTION -->
 
-	{#if data.category?.description && data.category?.description?.length > 11}
+	{#if data.products?.category?.description && data.products?.category?.description?.length > 11}
 		<div class="justify-center bg-zinc-50 px-3 py-10 sm:px-10 sm:py-20">
 			<div
 				class="container mx-auto grid max-w-6xl grid-cols-1 gap-10 text-sm sm:gap-20 md:grid-cols-6">
 				<div
 					class="prose col-span-1 max-w-none text-justify
 					{data?.products?.products.length ? 'md:col-span-3 lg:col-span-4' : 'md:col-span-6'}">
-					{@html data.category?.description}
+					{@html data.products?.category?.description}
 				</div>
 
 				{#if data?.products?.products.length}

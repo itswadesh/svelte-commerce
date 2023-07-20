@@ -24,44 +24,44 @@ export let data
 
 let seoProps = {
 	brand: $page.data.store?.title,
-	breadcrumbs: data.category?.children,
+	breadcrumbs: data.products?.category?.children,
 	caption: $page.data.store?.title,
-	category: data.category?.name,
+	category: data.products?.category?.name,
 	contentUrl: $page.data.store?.logo,
-	createdAt: `${data.category?.createdAt || '_'}`,
+	createdAt: `${data.products?.category?.createdAt || '_'}`,
 	email: `${$page?.data?.store?.email}`,
 	id: $page?.url?.href,
-	image: `${data.category?.img}`,
+	image: `${data.products?.category?.img}`,
 	logo: $page.data.store?.logo,
 	ogSquareImage: { url: '', width: 56, height: 56 },
 	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00'],
 	timeToRead: 0,
-	updatedAt: `${data.category?.updatedAt || '_'}`,
-	metaDescription: data.category?.metaDescription,
+	updatedAt: `${data.products?.category?.updatedAt || '_'}`,
+	metaDescription: data.products?.category?.metaDescription,
 	canonical: `${$page?.url.href}`,
-	datePublished: `${data.category?.publishedAt || '_'}`,
-	description: ` ${data.category?.description}`,
+	datePublished: `${data.products?.category?.publishedAt || '_'}`,
+	description: ` ${data.products?.category?.description}`,
 	dnsPrefetch: `//cdn.jsdelivr.net`,
 	featuredImage: {
-		url: `${data.category?.img}`,
+		url: `${data.products?.category?.img}`,
 		width: 675,
 		height: 380,
-		caption: data.category?.name
+		caption: data.products?.category?.name
 	},
 	keywords: $page.data.store?.keywords,
-	lastUpdated: `${data.category?.updatedAt || '_'}`,
-	msapplicationTileImage: `${data.category?.img}`,
+	lastUpdated: `${data.products?.category?.updatedAt || '_'}`,
+	msapplicationTileImage: `${data.products?.category?.img}`,
 	ogImage: { url: $page.data.store?.logo, width: 128, height: 56 },
 	ogImageSecureUrl: `${$page?.data?.store?.logo}`,
 	ogImageType: 'image/jpeg',
 	ogSiteName: `${$page.data.origin}/sitemap/sitemap.xml`,
-	productAvailability: `${data.category?.stock}`,
-	productBrand: `${data.category?.brandName || $page.data.store?.title}`,
-	productName: `${data.category?.name}`,
+	productAvailability: `${data.products?.category?.stock}`,
+	productBrand: `${data.products?.category?.brandName || $page.data.store?.title}`,
+	productName: `${data.products?.category?.name}`,
 	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
-	slug: `${data.category?.slug}`,
-	title: `${data.category?.name || 'Buy online in - ' + $page.data.store?.websiteName}`,
-	twitterImage: { url: `${data.category?.img}` }
+	slug: `${data.products?.category?.slug}`,
+	title: `${data.products?.category?.name || 'Buy online in - ' + $page.data.store?.websiteName}`,
+	twitterImage: { url: `${data.products?.category?.img}` }
 }
 
 let currentPage = 1
@@ -133,7 +133,7 @@ async function loadNextPage() {
 			data.isLoading = true
 
 			const res = await ProductService.fetchNextPageProducts({
-				categorySlug: data?.category?.slug,
+				categorySlug: data.products?.category?.slug,
 				origin: $page?.data?.origin,
 				storeId: $page?.data?.store?.id,
 				nextPage,
@@ -277,8 +277,8 @@ function handleFilterTags() {
 
 <CatelogNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page?.data?.store}">
 	<div class="flex max-w-max flex-col items-start gap-1">
-		{#if data.category?.name}
-			<h5 class="w-28 truncate capitalize leading-4">{data.category?.name}</h5>
+		{#if data.products?.category?.name}
+			<h5 class="w-28 truncate capitalize leading-4">{data.products?.category?.name}</h5>
 		{/if}
 
 		<p>
@@ -344,8 +344,8 @@ function handleFilterTags() {
 					<!-- Name and count -->
 
 					<div class="flex flex-wrap items-baseline gap-2">
-						{#if data.category?.name}
-							<h1 class="capitalize">{data.category?.name}</h1>
+						{#if data.products?.category?.name}
+							<h1 class="capitalize">{data.products?.category?.name}</h1>
 						{/if}
 
 						<p>
@@ -383,9 +383,9 @@ function handleFilterTags() {
 
 				<!-- Category top description -->
 
-				{#if data.category?.topDescription && data.category?.topDescription?.length > 11}
+				{#if data.products?.category?.topDescription && data.products?.category?.topDescription?.length > 11}
 					<div class="p-3 sm:p-0 prose max-w-none">
-						{@html data.category?.topDescription}
+						{@html data.products?.category?.topDescription}
 					</div>
 				{/if}
 			</div>
@@ -498,24 +498,24 @@ function handleFilterTags() {
 
 	<!-- CATEGORY DESCRIPTION -->
 
-	{#if data.category?.description && data.category?.description?.length > 11}
+	{#if data.products?.category?.description && data.products?.category?.description?.length > 11}
 		<div class="justify-center bg-zinc-50 px-3 py-10 sm:px-10 sm:py-20">
 			<div
 				class="container mx-auto grid max-w-6xl grid-cols-1 gap-10 text-sm sm:gap-20 md:grid-cols-6">
 				<div
 					class="prose col-span-1 max-w-none text-justify
 					{data?.products?.products.length ? 'md:col-span-3 lg:col-span-4' : 'md:col-span-6'}">
-					{@html data.category?.description}
+					{@html data.products?.category?.description}
 				</div>
 
 				{#if data?.products?.products.length}
 					<div class="col-span-1 md:col-span-3 lg:col-span-2">
 						<h3 class="my-5 text-center uppercase">
-							{data.category?.name} price list
+							{data.products?.category?.name} price list
 						</h3>
 
 						<h5 class="mb-2 grid grid-cols-6 items-start gap-5 uppercase">
-							<span class="col-span-5">{data.category?.name}</span>
+							<span class="col-span-5">{data.products?.category?.name}</span>
 
 							<span class="col-span-1">Price <br /> (Rs)</span>
 						</h5>
