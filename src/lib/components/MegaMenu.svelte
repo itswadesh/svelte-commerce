@@ -37,8 +37,10 @@ import { CategoryService } from '$lib/services'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { toast } from '$lib/utils'
-
 import Cookie from 'cookie-universal'
+
+let clazz = ''
+export { clazz as class }
 
 const cookies = Cookie()
 
@@ -86,7 +88,7 @@ async function getMegaMenu() {
 </script>
 
 {#if megamenu?.length}
-	<ul class="flex flex-row items-center justify-center font-semibold tracking-wide">
+	<ul class="flex flex-row items-center justify-center">
 		{#each megamenu as category, index}
 			<li
 				class="hoverable mx-1"
@@ -95,7 +97,7 @@ async function getMegaMenu() {
 				<a
 					href="{category.link || `/${category.slug}` || '_'}"
 					aria-label="Click to visit category related products page"
-					class="items-center relative flex h-20 shrink-0 justify-center gap-1 whitespace-nowrap border-b-4 border-transparent p-2 font-medium uppercase
+					class="{clazz} items-center relative flex shrink-0 justify-center gap-1 whitespace-nowrap border-b-4 border-transparent p-2
                 	{index % 6 == 0 ? 'hover:border-yellow-500' : ''}
                 	{index % 6 == 1 ? 'hover:border-purple-500' : ''}
                 	{index % 6 == 2 ? 'hover:border-red-500' : ''}
@@ -146,7 +148,7 @@ async function getMegaMenu() {
 									<a
 										href="{c.link || `/${c.slug}` || '_'}"
 										aria-label="Click to visit category related products page"
-										class="mb-2 block w-full
+										class="mb-2 block w-full font-semibold
 										{index % 6 == 0 ? 'text-yellow-500 ' : ''}
 										{index % 6 == 1 ? 'text-purple-500 ' : ''}
 										{index % 6 == 2 ? 'text-red-500 ' : ''}

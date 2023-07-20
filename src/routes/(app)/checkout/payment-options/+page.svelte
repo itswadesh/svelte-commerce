@@ -237,7 +237,7 @@ function checkIfStripeCardValid({ detail }) {
 								</div>
 							</div>
 						</label>
-
+						
 						{#if pm.value === 'Stripe'}
 							<svelte:component
 								this="{Stripe}"

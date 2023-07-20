@@ -38,27 +38,29 @@ onMount(async () => {
 	{#if sliderBanners?.length}
 		<svelte:component
 			this="{Splide}"
+			totalImagesLength="{sliderBanners?.length}"
 			options="{{
+				autoHeight: true,
 				autoplay: true,
-				height: 380,
+				autoWidth: true,
+				cover: true,
+				focus: 'center',
 				lazyLoad: true,
-				type: 'loop'
+				type: 'loop',
+				updateOnMove: true
 			}}">
 			{#each sliderBanners as b, ix}
 				{#if b.img}
-					<SplideSlide>
-						<a
-							href="{b.link || '##'}"
-							aria-label="Click to visit banner related products page"
-							class="block"
-							data-sveltekit-preload-data>
-							<LazyImg
-								src="{b.img}"
-								alt="{b.name}"
-								height="380"
-								aspect_ratio="4:1"
-								class="block h-auto w-full object-contain object-center" />
-						</a>
+					<SplideSlide key="{b._id || b.id}">
+						<div class="splide__slide__container">
+							<a
+								href="{b.link || '##'}"
+								aria-label="Click to visit banner related products page"
+								class="block"
+								data-sveltekit-preload-data>
+								<LazyImg src="{b.img}" alt="{b.name}" />
+							</a>
+						</div>
 					</SplideSlide>
 				{/if}
 			{/each}
@@ -91,26 +93,27 @@ onMount(async () => {
 			this="{Splide}"
 			options="{{
 				arrows: false,
+				autoHeight: true,
 				autoplay: true,
-				height: 190,
+				autoWidth: true,
+				cover: true,
+				focus: 'center',
 				lazyLoad: true,
-				type: 'loop'
+				type: 'loop',
+				updateOnMove: true
 			}}">
 			{#each sliderBannersMobile as b, ix}
 				{#if b.img}
-					<SplideSlide>
-						<a
-							href="{b.link || '##'}"
-							aria-label="Click to visit banner related products page"
-							class="block"
-							data-sveltekit-preload-data>
-							<LazyImg
-								src="{b.img}"
-								alt="{b.name}"
-								height="190"
-								aspect_ratio="4:1"
-								class="block h-auto w-full object-contain object-center" />
-						</a>
+					<SplideSlide key="{b._id || b.id}">
+						<div class="splide__slide__container">
+							<a
+								href="{b.link || '##'}"
+								aria-label="Click to visit banner related products page"
+								class="block"
+								data-sveltekit-preload-data>
+								<LazyImg src="{b.img}" alt="{b.name}" />
+							</a>
+						</div>
 					</SplideSlide>
 				{/if}
 			{/each}

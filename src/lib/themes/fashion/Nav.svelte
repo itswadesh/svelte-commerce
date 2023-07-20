@@ -22,7 +22,6 @@ const cookies = Cookie()
 
 export let me: Me, cart: Cart, data, showCartSidebar: boolean, openSidebar: boolean, store
 
-
 let categories
 let hellobar = $page.data.store?.hellobar || {}
 let loading = false
@@ -80,7 +79,6 @@ async function fetchCart() {
 				unavailableItems: res?.unavailableItems,
 				formattedAmount: res?.formattedAmount
 			}
-
 
 			cookies.set('cartId', cart.cartId, { path: '/' })
 			cookies.set('cartQty', cart.qty, { path: '/' })
@@ -348,12 +346,10 @@ async function getCategories() {
 		</div>
 	</div>
 
-	<hr />
-
 	<!-- Mega menu -->
 
 	<div class="hidden lg:flex items-center justify-center overflow-auto scrollbar-none">
-		<MegaMenu />
+		<MegaMenu class="h-12 text-sm uppercase" />
 	</div>
 </nav>
 

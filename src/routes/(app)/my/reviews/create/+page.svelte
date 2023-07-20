@@ -1,13 +1,11 @@
 <script>
+import { Error, LazyImg } from '$lib/components'
 import { getExtension, toast } from '$lib/utils'
 import { goto } from '$app/navigation'
-import { LazyImg } from '$lib/components'
 import { page } from '$app/stores'
-import { post } from '$lib/utils/api'
 import { ReviewService } from '$lib/services'
 import BackButton from '$lib/ui/BackButton.svelte'
 import dayjs from 'dayjs'
-import Errors from '$lib/ui/Errors.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
@@ -34,6 +32,7 @@ let information = [
 	}
 ]
 
+let err = null
 let review = {
 	id: 'new',
 	pid: data.product?._id,
@@ -49,7 +48,6 @@ if (today) {
 }
 let uploading = false
 let select = null
-let errors = []
 let images = []
 
 function onSelect(i) {
@@ -59,7 +57,9 @@ function onSelect(i) {
 
 async function uploadImageToS3() {
 	try {
+		err = null
 		uploading = true
+
 		const response = await fetch('/server/files/upload', {
 			method: 'POST',
 			body: file[0],
@@ -69,14 +69,15 @@ async function uploadImageToS3() {
 				'Content-Type': file[0].type || 'image/*'
 			}
 		})
-		const res = await response.json()
 
+		const res = await response.json()
 		if (res?.url) {
 			let imgs = [...images]
 			imgs.push(res?.url)
 			images = imgs
 		}
 	} catch (e) {
+		err = e
 	} finally {
 		uploading = false
 	}
@@ -84,8 +85,10 @@ async function uploadImageToS3() {
 
 async function saveReviewproduct(review) {
 	try {
+		err = null
 		toast('Sending your business rating and review', 'info')
 		review.store = $page.data.store?.id
+
 		await ReviewService.saveReview({
 			id: review.id,
 			pid: review.pid,
@@ -98,10 +101,10 @@ async function saveReviewproduct(review) {
 		})
 
 		toast('Successfully saved.', 'success')
-
 		if (data.product) goto(`${data.ref}#ratings-and-reviews`)
 	} catch (e) {
 		toast(e?.body?.message || e?.body, 'error')
+		err = e
 	} finally {
 	}
 }
@@ -138,7 +141,7 @@ async function saveReviewproduct(review) {
 		{/if}
 	</header>
 
-	<Errors errors="{errors}" />
+	<Error err="{err}" />
 
 	<div class="flex flex-col-reverse xl:flex-row xl:gap-4">
 		<div class="mt-4 flex w-full flex-col gap-2 xl:mt-0 xl:w-1/3">

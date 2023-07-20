@@ -171,7 +171,7 @@ async function onSearchSubmit({ detail }) {
 
 		<div
 			class="hidden lg:flex w-auto flex-1 items-start justify-start overflow-auto scrollbar-none">
-			<MegaMenu />
+			<MegaMenu class="h-20 uppercase" />
 		</div>
 
 		<!-- Search box -->

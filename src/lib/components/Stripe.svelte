@@ -143,39 +143,40 @@ async function loadStripeElements() {
 	<script src="https://js.stripe.com/v3/" on:load="{stripeLoaded}"></script>
 </svelte:head>
 
-<section transition:fly="{{ y: 50, duration: 150 }}" class="flex flex-col gap-4">
-	{#if isStripeSelected && errorMessage.show}
-		<Error err="{errorMessage.text}" />
-	{/if}
+{#if stripeReady}
+	<form
+		transition:fly="{{ y: 50, duration: 150 }}"
+		on:submit|preventDefault="{submit}"
+		class="rounded border p-4 shadow-md flex flex-col gap-4
+		{isStripeSelected ? 'block' : 'hidden'}">
+		<script src="https://js.stripe.com/v3/"></script>
 
-	{#if stripeReady}
-		<form
-			on:submit|preventDefault="{submit}"
-			class="rounded border p-4 shadow-md flex flex-col gap-4
-			{isStripeSelected ? 'block' : 'hidden'}">
-			<script src="https://js.stripe.com/v3/"></script>
+		{#if errorMessage.show}
+			<Error err="{errorMessage.text}" />
+		{/if}
 
-			<label for="mount-point-for-stripe-elements" class="font-semibold">
-				{#if stripeCardMounting} Please wait... {:else} Enter Card Details {/if}
-			</label>
+		<label for="mount-point-for-stripe-elements" class="font-semibold">
+			{#if stripeCardMounting} Please wait... {:else} Enter Card Details {/if}
+		</label>
 
-			<div id="mount-point-for-stripe-elements">
-				<!-- A Stripe Element will be inserted here. -->
-			</div>
-
-			<div id="error-message" role="alert" class="text-sm text-red-500"></div>
-
-			<PrimaryButton
-				type="submit"
-				loading="{loading}"
-				disabled="{loading || !stripeReady || !isCardValid}"
-				class="w-60">
-				Make Payment
-			</PrimaryButton>
-		</form>
-	{:else}
-		<div class="rounded border border-yellow-500 bg-yellow-50 p-4 text-yellow-500 text-sm">
-			Warn: Pleae wait...Stripe is getting ready .
+		<div id="mount-point-for-stripe-elements">
+			<!-- A Stripe Element will be inserted here. -->
 		</div>
-	{/if}
-</section>
+
+		<div id="error-message" role="alert" class="text-sm text-red-500"></div>
+
+		<PrimaryButton
+			type="submit"
+			loading="{loading}"
+			disabled="{loading || !stripeReady || !isCardValid}"
+			class="w-60">
+			Make Payment
+		</PrimaryButton>
+	</form>
+{:else}
+	<div
+		transition:fly="{{ y: 50, duration: 150 }}"
+		class="rounded border border-yellow-500 bg-yellow-50 p-4 text-yellow-500 text-sm">
+		Warn: Pleae wait...Stripe is getting ready .
+	</div>
+{/if}

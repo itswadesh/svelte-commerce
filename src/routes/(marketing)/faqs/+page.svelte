@@ -1,8 +1,8 @@
 <script>
 import { Skeleton, PrimaryButton } from '$lib/ui'
+import { slide } from 'svelte/transition'
 import noEmptyFaqs from '$lib/assets/no/empty-faqs.svg'
 import SEO from '$lib/components/SEO/index.svelte'
-import { slide } from 'svelte/transition'
 
 export let data
 
@@ -32,39 +32,34 @@ function showans(i) {
 			<!-- Frequently Asked Questions -->
 
 			<div>
-				<h1
-					class="mb-5 text-center font-serif text-2xl font-medium sm:mb-10 md:text-3xl lg:text-4xl">
-					Frequently Asked Questions
-				</h1>
+				<h1 class="mb-5 text-center sm:mb-10">Frequently Asked Questions</h1>
 
-				<div class="divide-y overflow-hidden rounded border">
+				<div class="divide-y rounded border">
 					{#each data.faqs as f, fx}
 						<div class:text-primary-500="{show[fx]}">
 							<button
 								type="button"
-								class="flex w-full cursor-pointer items-start justify-between p-4 text-left focus:outline-none sm:p-6"
+								class="flex w-full cursor-pointer items-start justify-between gap-5 p-5 text-left focus:outline-none"
 								on:click="{() => showans(fx)}">
-								<span class="flex-1 text-base font-semibold md:text-lg">{@html f.question}</span>
+								<h5 class="flex-1">{f.question}</h5>
 
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
-									class="h-5 transition duration-300 sm:h-6
-									{show[fx] ? 'text-primary-500 transform rotate-45 transition duration-300' : ''}"
 									fill="none"
 									viewBox="0 0 24 24"
-									stroke="currentColor">
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M12 4v16m8-8H4"></path>
+									stroke-width="1.5"
+									stroke="currentColor"
+									class="h-6 w-6 transition duration-300
+									{show[fx] ? 'text-primary-500 transform rotate-45 transition duration-300' : ''}">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15">
+									</path>
 								</svg>
 							</button>
 
 							{#if show[fx]}
 								<div
 									transition:slide="{{ duration: 300 }}"
-									class="px-4 pb-4 sm:px-6 sm:pb-6 prose max-w-none">
+									class="prose max-w-none px-5 pb-5 first-letter:uppercase">
 									{@html f.answer}
 								</div>
 							{/if}
@@ -76,9 +71,9 @@ function showans(i) {
 			<div class="flex h-[70vh] flex-col items-center justify-center text-center">
 				<img src="{noEmptyFaqs}" alt="empty faqs" class="mb-5 h-60 object-contain" />
 
-				<p class="mb-2 text-xl font-medium md:text-3xl">Empty FAQs!!</p>
+				<h2 class="mb-2">Empty FAQs!!</h2>
 
-				<p class="mb-5 text-sm">There's no frequently asked questions found.</p>
+				<p class="mb-5">There's no frequently asked questions found.</p>
 
 				<a href="/" aria-label="Click to visit home" data-sveltekit-preload-data>
 					<PrimaryButton class="w-40 py-2 text-sm">Shop Now</PrimaryButton>

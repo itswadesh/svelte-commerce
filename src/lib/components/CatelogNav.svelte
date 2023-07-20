@@ -163,7 +163,7 @@ const getSelectionLabel = (option) => option.name
 			<!-- Mega menu -->
 
 			<div class="hidden lg:block">
-				<MegaMenu />
+				<MegaMenu class="h-20 uppercase" />
 			</div>
 
 			<!-- Search box -->
