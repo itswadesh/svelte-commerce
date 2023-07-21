@@ -25,6 +25,9 @@ const cookies = Cookie()
 
 export let me: Me, cart: Cart, data, showCartSidebar: boolean, openSidebar: boolean, store
 
+let clazz = ''
+export { clazz as class }
+
 let hellobar = $page.data.store?.hellobar || {}
 let pin = ''
 let q = ''
@@ -71,7 +74,7 @@ async function onSearchSubmit({ detail }) {
 
 <!-- {hellobar?.active?.val ? 'h-[88px] sm:h-28' : 'h-14 sm:h-20'} -->
 <nav
-	class="minimum-width-rem sticky inset-x-0 top-0 w-full border-b bg-white shadow-xs
+	class="{clazz} minimum-width-rem sticky inset-x-0 top-0 w-full border-b bg-white shadow-xs
 	{hellobar?.active?.val && $page.data.store?.isHyperlocal
 		? 'h-[112px] sm:h-[136px] lg:h-[112px]'
 		: ''}
