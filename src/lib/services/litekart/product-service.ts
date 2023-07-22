@@ -216,17 +216,24 @@ export const fetchNextPageProducts = async ({
 				origin
 			)
 		}
+
 		nextPageData = res?.data?.map((p) => {
-			const p1 = { ...p._source }
-			p1.id = p._id
-			return p1
+			if (p._source) {
+
+				const p1 = { ...p._source }
+				p1.id = p._id
+				return p1
+			} else {
+				return p
+			}
 		})
 
 		return {
-			nextPageData: nextPageData || [],
+			category: res.category,
 			count: res.count,
 			estimatedTotalHits: res.estimatedTotalHits,
-			facets: res.facets
+			facets: res.facets,
+			nextPageData: nextPageData || [],
 		}
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)

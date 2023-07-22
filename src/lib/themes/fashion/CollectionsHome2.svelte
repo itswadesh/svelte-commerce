@@ -69,12 +69,18 @@ onMount(async () => {
 								<svelte:component
 									this="{Splide}"
 									options="{{
-										rewind: true,
+										arrows: true,
 										lazyLoad: true,
-										perPage: 1,
-										perMove: 1,
 										pagination: false,
-										width: responsiveWidth || '100%'
+										perMove: 1,
+										perPage: 1,
+										rewind: true,
+										width: responsiveWidth || '100%',
+										breakpoints: {
+											1536: {
+												arrows: false
+											}
+										}
 									}}">
 									{#each collection?.products as product, ix}
 										{#if product.img || product.images[0]}
