@@ -161,11 +161,12 @@ async function loadNextPage() {
 			// console.log('res', res)
 
 			const nextPageData = res?.nextPageData
-			data.products.products = data?.products?.products?.concat(nextPageData)
-			data.products.count = res?.count
-			data.products.products.facets = res?.facets
-			data.err = !res?.estimatedTotalHits ? 'No result Not Found' : null
 			currentPage = currentPage + 1
+			data.err = !res?.estimatedTotalHits ? 'No result Not Found' : null
+			data.products.category = res?.category
+			data.products.count = res?.count
+			data.products.products = data?.products?.products?.concat(nextPageData)
+			data.products.products.facets = res?.facets
 
 			if (data.product?.count && data.products?.length === data.product?.count) {
 				reachedLast = true
@@ -354,9 +355,7 @@ function handleFilterTags() {
 				on:clearAll="{refreshData}" />
 		{/if}
 
-		<div
-			class="w-full flex-1 sm:px-10 sm:pt-10 lg:pt-0 lg:px-0
-			{data.products?.facets?.all_aggs?.materials?.all?.buckets?.length ? 'mt-12 lg:mt-0' : 'mt-0'}">
+		<div class="w-full flex-1 sm:px-10 sm:pt-10 lg:pt-0 lg:px-0">
 			<div class="flex flex-col gap-5">
 				<div class="hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex">
 					<!-- Name and count -->

@@ -247,7 +247,7 @@ const storeRecentlyViewedToLocatStorage = async () => {
 
 	if (JSON.stringify(recentlyViewed).includes(data?.product?.name)) {
 		return
-	} else {
+	} else if (data?.product?.img && data?.product?.name && data?.product?.price) {
 		const prod = {
 			brandName: data?.product?.brand?.name,
 			discount: data?.product?.discount,

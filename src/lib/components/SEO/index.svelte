@@ -158,7 +158,7 @@ const schemaOrgProps = {
 }
 const twitterProps = {
 	title: pageTitle,
-	description: description,
+	description: metaDescription,
 	article,
 	author,
 	twitterUsername,
