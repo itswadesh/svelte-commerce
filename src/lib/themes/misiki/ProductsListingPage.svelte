@@ -8,7 +8,7 @@ import {
 	ProductCard
 } from '$lib/components'
 import { currency, dateOnly, generatePriceRange, toast } from '$lib/utils'
-import { fade } from 'svelte/transition'
+import { fade, fly } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
@@ -394,14 +394,14 @@ function handleFilterTags() {
 			{#if data.products?.products?.length}
 				<ul
 					class="lg:mt-5 grid grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6">
-					{#each data.products?.products as p, ix}
-						<li>
+					{#each data.products?.products as p, px}
+						<li in:fly="{{ y: 20, duration: 300, delay: 100 * px }}">
 							<ProductCard product="{p}" />
 						</li>
 
 						<!-- Filter by tags -->
 
-						{#if ix % 40 === 39 && data.products?.facets?.all_aggs?.tags?.all?.buckets?.length}
+						{#if px % 40 === 39 && data.products?.facets?.all_aggs?.tags?.all?.buckets?.length}
 							<div class="col-span-2 block sm:hidden overflow-x-auto bg-primary-100 scrollbar-none">
 								<div class="w-full flex items-center gap-6 p-4">
 									<div class="shrink-0">
