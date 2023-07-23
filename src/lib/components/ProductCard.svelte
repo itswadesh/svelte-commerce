@@ -93,9 +93,9 @@ function hideitems() {
 			{/if}
 
 			{#if product_image_dimension == '1x1'}
-				{#if product.img}
+				{#if product.img || product.images[0]}
 					<LazyImg
-						src="{product.img}"
+						src="{product.img || product.images[0]}"
 						alt="{product.name}"
 						height="210"
 						aspect_ratio="1:1"
@@ -121,9 +121,9 @@ function hideitems() {
 					</div>
 				{/if}
 			{:else if product_image_dimension == '3x4'}
-				{#if product.img}
+				{#if product.img || product.images[0]}
 					<LazyImg
-						src="{product.img}"
+						src="{product.img || product.images[0]}"
 						alt="{product.name}"
 						height="280"
 						aspect_ratio="3:4"
@@ -149,9 +149,9 @@ function hideitems() {
 					</div>
 				{/if}
 			{:else if product_image_dimension == '4x3'}
-				{#if product.img}
+				{#if product.img || product.images[0]}
 					<LazyImg
-						src="{product.img}"
+						src="{product.img || product.images[0]}"
 						alt="{product.name}"
 						height="157"
 						aspect_ratio="4:3"
@@ -177,9 +177,9 @@ function hideitems() {
 					</div>
 				{/if}
 			{:else if product_image_dimension == '16x9'}
-				{#if product.img}
+				{#if product.img || product.images[0]}
 					<LazyImg
-						src="{product.img}"
+						src="{product.img || product.images[0]}"
 						alt="{product.name}"
 						height="236"
 						aspect_ratio="16:9"
@@ -205,9 +205,9 @@ function hideitems() {
 					</div>
 				{/if}
 			{:else if product_image_dimension == '9x16'}
-				{#if product.img}
+				{#if product.img || product.images[0]}
 					<LazyImg
-						src="{product.img}"
+						src="{product.img || product.images[0]}"
 						alt="{product.name}"
 						height="373"
 						aspect_ratio="9:16"
@@ -555,7 +555,7 @@ function hideitems() {
 
 									<div class="w-[210px] h-[280px] overflow-hidden">
 										<LazyImg
-											src="{product.img}"
+											src="{product.img || product.images[0]}"
 											alt="{product.name}"
 											height="280"
 											class="object-contain object-bottom w-[210px] h-[280px] text-xs" />

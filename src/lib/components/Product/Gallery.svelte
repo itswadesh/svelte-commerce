@@ -117,7 +117,7 @@ onMount(async () => {
 			{#if selectedimg}
 				<div
 					class="flex h-full w-full flex-1 shrink-0 items-center justify-center overflow-hidden px-5 sm:px-10"
-					in:fade="{{ duration: 1000 }}">
+					in:fade="{{ duration: 300 }}">
 					<img
 						src="{selectedimg}"
 						alt="image"

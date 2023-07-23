@@ -26,6 +26,11 @@ export async function load({ cookies, locals, params, url }) {
 		server: true,
 		sid: cookies.get('connect.sid')
 	})
+
+	if (countries?.length === 1) {
+		address.country = countries[0].code
+	}
+
 	if (address?.country) {
 		states = await CountryService.fetchStates({
 			storeId: store?.id,
@@ -33,6 +38,10 @@ export async function load({ cookies, locals, params, url }) {
 			sid: cookies.get('connect.sid'),
 			countryCode: address?.country
 		})
+	}
+
+	if (states?.length === 1) {
+		address.state = states[0].code
 	}
 
 	return { address, countries, states }

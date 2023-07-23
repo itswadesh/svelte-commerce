@@ -1,7 +1,8 @@
 <script>
-import { onMount } from 'svelte'
-import { SplideSlide } from '@splidejs/svelte-splide'
 import { LazyImg } from '$lib/components'
+import { onMount } from 'svelte'
+import { page } from '$app/stores'
+import { SplideSlide } from '@splidejs/svelte-splide'
 
 export let banners = []
 
@@ -13,13 +14,52 @@ $: sliderBannersMobile = banners?.filter((b) => {
 	return b.type === 'slider' && b.isMobile === true
 })
 
+$: innerHeight = 0
+$: innerWidth = 0
+
+let hellobar = $page.data.store?.hellobar || {}
+let sliderHeightAccToPageHeight = innerHeight
 let Splide
 
 onMount(async () => {
 	const SplideModule = await import('$lib/components/SplideJs.svelte')
 	Splide = SplideModule.default
 })
+
+$: if (innerWidth < 640) {
+	if (hellobar?.active?.val && $page.data.store?.isHyperlocal) {
+		sliderHeightAccToPageHeight = innerHeight - 112
+	} else if (hellobar?.active?.val && !$page.data.store?.isHyperlocal) {
+		sliderHeightAccToPageHeight = innerHeight - 88
+	} else if ($page.data.store?.isHyperlocal && !hellobar?.active?.val) {
+		sliderHeightAccToPageHeight = innerHeight - 80
+	} else if (!hellobar?.active?.val && !$page.data.store?.isHyperlocal) {
+		sliderHeightAccToPageHeight = innerHeight - 56
+	}
+} else if (innerWidth < 1024) {
+	if (hellobar?.active?.val && $page.data.store?.isHyperlocal) {
+		sliderHeightAccToPageHeight = innerHeight - 136
+	} else if (hellobar?.active?.val && !$page.data.store?.isHyperlocal) {
+		sliderHeightAccToPageHeight = innerHeight - 112
+	} else if ($page.data.store?.isHyperlocal && !hellobar?.active?.val) {
+		sliderHeightAccToPageHeight = innerHeight - 104
+	} else if (!hellobar?.active?.val && !$page.data.store?.isHyperlocal) {
+		sliderHeightAccToPageHeight = innerHeight - 80
+	}
+} else {
+	if (hellobar?.active?.val && $page.data.store?.isHyperlocal) {
+		sliderHeightAccToPageHeight = innerHeight - 112
+	} else if (hellobar?.active?.val && !$page.data.store?.isHyperlocal) {
+		sliderHeightAccToPageHeight = innerHeight - 112
+	} else if ($page.data.store?.isHyperlocal && !hellobar?.active?.val) {
+		sliderHeightAccToPageHeight = innerHeight - 80
+	} else if (!hellobar?.active?.val && !$page.data.store?.isHyperlocal) {
+		sliderHeightAccToPageHeight = innerHeight - 80
+	}
+}
 </script>
+
+<svelte:window bind:innerHeight="{innerHeight}" bind:innerWidth="{innerWidth}" />
 
 <!-- <div class="w-full overflow-hidden">
 	{#if sliderBanners?.length > 0}
@@ -32,91 +72,133 @@ onMount(async () => {
 	{:else}
 		<div class="h-full w-full animate-pulse bg-zinc-200"></div>
 	{/if}
-</div> -->
+</div>
 
-<div class="relative mx-auto hidden w-full overflow-hidden bg-white sm:block">
+<svelte:component this="{Carousel}">
+	{#each sliderBanners as b, ix}
+		{#if b.img}
+			<a
+				href="{b.link || '##'}"
+				aria-label="Click to visit banner related products page"
+				data-sveltekit-preload-data
+				class="carousel-item relative float-left h-auto w-full {ix == 0 ? 'active' : ''}">
+				<LazyImg
+					src="{b.img}"
+					alt="{b.name}"
+					height="380"
+					aspect_ratio="4:1"
+					class="block h-auto w-full object-contain object-center" />
+			</a>
+		{/if}
+	{/each}
+</svelte:component> -->
+
+<!-- Desktop banner -->
+
+<div class="hidden sm:block">
 	{#if sliderBanners?.length}
 		<svelte:component
 			this="{Splide}"
 			totalImagesLength="{sliderBanners?.length}"
 			options="{{
-				autoHeight: true,
+				// heightRatio: 0.432,
+				arrows: true,
 				autoplay: true,
-				autoWidth: true,
 				cover: true,
 				focus: 'center',
+				height: sliderHeightAccToPageHeight,
 				lazyLoad: true,
-				type: 'loop',
-				updateOnMove: true
+				type: 'loop'
 			}}">
 			{#each sliderBanners as b, ix}
 				{#if b.img}
 					<SplideSlide key="{b._id || b.id}">
-						<div class="splide__slide__container">
-							<a
-								href="{b.link || '##'}"
-								aria-label="Click to visit banner related products page"
-								class="block"
-								data-sveltekit-preload-data>
-								<LazyImg src="{b.img}" alt="{b.name}" />
-							</a>
-						</div>
+						<a
+							href="{b.link || '##'}"
+							aria-label="Click to visit banner related products page"
+							class="block h-full"
+							data-sveltekit-preload-data>
+							<!-- <LazyImg
+								src="{b.img}"
+								alt="{b.name}"
+								height="{sliderHeightAccToPageHeight}"
+								class="h-[{sliderHeightAccToPageHeight}px] w-full object-cover" /> -->
+
+							<img src="{b.img}" alt="{b.name}" class="h-full w-full object-cover" />
+						</a>
 					</SplideSlide>
 				{/if}
 			{/each}
 		</svelte:component>
 	{/if}
-
-	<!-- <svelte:component this="{Carousel}">
-			{#each sliderBanners as b, ix}
-				{#if b.img}
-					<a
-						href="{b.link || '##'}"
-						aria-label="Click to visit banner related products page"
-						data-sveltekit-preload-data
-						class="carousel-item relative  float-left h-auto w-full {ix == 0 ? 'active' : ''}">
-						<LazyImg
-							src="{b.img}"
-							alt="{b.name}"
-							height="380"
-							aspect_ratio="4:1"
-							class="block h-auto w-full object-contain object-center" />
-					</a>
-				{/if}
-			{/each}
-		</svelte:component> -->
 </div>
 
-<div class="relative mx-auto block w-full overflow-hidden bg-white sm:hidden">
+<!-- Mobile banner -->
+
+<div class="block sm:hidden">
 	{#if sliderBannersMobile?.length}
 		<svelte:component
 			this="{Splide}"
+			totalImagesLength="{sliderBannersMobile?.length}"
 			options="{{
 				arrows: false,
-				autoHeight: true,
 				autoplay: true,
-				autoWidth: true,
 				cover: true,
 				focus: 'center',
+				height: sliderHeightAccToPageHeight,
 				lazyLoad: true,
-				type: 'loop',
-				updateOnMove: true
+				type: 'loop'
 			}}">
 			{#each sliderBannersMobile as b, ix}
 				{#if b.img}
 					<SplideSlide key="{b._id || b.id}">
-						<div class="splide__slide__container">
-							<a
-								href="{b.link || '##'}"
-								aria-label="Click to visit banner related products page"
-								class="block"
-								data-sveltekit-preload-data>
-								<LazyImg src="{b.img}" alt="{b.name}" />
-							</a>
-						</div>
+						<a
+							href="{b.link || '##'}"
+							aria-label="Click to visit banner related products page"
+							class="block h-full"
+							data-sveltekit-preload-data>
+							<!-- <LazyImg
+								src="{b.img}"
+								alt="{b.name}"
+								height="{sliderHeightAccToPageHeight}"
+								class="h-[{sliderHeightAccToPageHeight}px] w-full object-cover" /> -->
+
+							<img src="{b.img}" alt="{b.name}" class="h-full w-full object-cover" />
+						</a>
 					</SplideSlide>
 				{/if}
 			{/each}
 		</svelte:component>
 	{/if}
 </div>
+
+<!-- <div class="block sm:hidden">
+	{#if sliderBannersMobile?.length}
+		<svelte:component
+			this="{Splide}"
+			totalImagesLength="{sliderBanners?.length}"
+			options="{{
+				arrows: false,
+				autoHeight: true,
+				autoplay: true,
+				cover: true,
+				focus: 'center',
+				lazyLoad: true,
+				type: 'loop'
+			}}">
+			{#each sliderBannersMobile as b, ix}
+				{#if b.img}
+					<SplideSlide key="{b._id || b.id}">
+						<a
+							href="{b.link || '##'}"
+							aria-label="Click to visit banner related products page"
+							class="block"
+							data-sveltekit-preload-data>
+							<LazyImg src="{b.img}" alt="{b.name}" class="h-full w-full object-cover" />
+						</a>
+					</SplideSlide>
+				{/if}
+			{/each}
+		</svelte:component>
+	{/if}
+</div> -->
