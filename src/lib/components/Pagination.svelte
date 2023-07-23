@@ -30,7 +30,7 @@ function changePage(e) {
 {#if count > 1}
 	<div
 		class="flex flex-wrap items-center justify-between gap-4 border-t border-zinc-200 text-sm
-		{providePaddingOnMobile ? 'p-5 sm:pt-5' : 'pt-5'}">
+		{providePaddingOnMobile ? 'p-5 sm:pt-5 sm:px-0 sm:pb-0' : 'pt-5'}">
 		<div class="whitespace-nowrap text-zinc-500">
 			Page {current} of {count}
 		</div>

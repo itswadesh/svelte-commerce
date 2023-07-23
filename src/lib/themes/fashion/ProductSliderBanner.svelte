@@ -56,7 +56,10 @@ function handleGallery(index) {
 		<Splide options="{mainOptions}" bind:this="{main}" aria-labelledby="thumbnails-example-heading">
 			{#each data.product?.images as img, ix}
 				<SplideSlide class="flex justify-center">
-					<button type="button" on:click="{() => handleGallery(ix)}">
+					<button
+						type="button"
+						class="min-h-[300px] focus:outline-none"
+						on:click="{() => handleGallery(ix)}">
 						<LazyImg
 							src="{img}"
 							alt="{data.product?.name}"
@@ -77,7 +80,7 @@ function handleGallery(index) {
 		<Splide options="{thumbsOptions}" bind:this="{thumbs}">
 			{#each data.product?.images as slide, ix}
 				<SplideSlide>
-					<img src="{slide}" alt="{slide.alt}" />
+					<LazyImg src="{slide}" alt="{slide.alt}" height="80" width="80" />
 				</SplideSlide>
 			{/each}
 		</Splide>

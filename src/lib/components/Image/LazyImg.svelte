@@ -11,7 +11,7 @@ img.loaded,
 img.error {
 	opacity: 1;
 }
-img:not([src]) {
+img:not([src]) :not([srcset]) {
 	visibility: hidden;
 }
 /* Initially set the opacity of the loader-line span to 1 (visible) */
@@ -105,14 +105,14 @@ onDestroy(() => {
 	<img
 		alt="{alt}"
 		class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}"
-		in:fade="{{ duration: 1000 }}"
-		width="{w}"
-		height="{h}"
-		src="/placeholder.png'"
 		data-src="{`${getCdnImageUrl(src, IMAGE_CDN_URL)}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(
 			':',
 			'-'
-		)}`}" />
+		)}`}"
+		height="{h}"
+		in:fade="{{ duration: 300 }}"
+		src="/placeholder.png'"
+		width="{w}" />
 
 	<div class="absolute inset-0 flex itmes-center justify-center">
 		<span class="loader-line"></span>
@@ -122,7 +122,7 @@ onDestroy(() => {
 <!-- <img
 	alt="{alt}"
 	class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}"
-	in:fade="{{ duration: 1000 }}"
+	in:fade="{{ duration: 300}}"
 	width="{w}"
 	height="{h}"
 	src="{`${getCdnImageUrl(src, IMAGE_CDN_URL)}?tr=w-1,h-1:w-${aspect_ratio.split(':')[0]},h-${

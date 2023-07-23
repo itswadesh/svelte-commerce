@@ -105,6 +105,7 @@ async function SaveAddress(address) {
 			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
 				<h6 class="sm:w-52 sm:shrink-0">
 					Last Name
+
 					<span class="text-accent-500">*</span>
 				</h6>
 
@@ -116,10 +117,7 @@ async function SaveAddress(address) {
 			<!-- Email -->
 
 			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
-				<h6 class="sm:w-52 sm:shrink-0">
-					Email
-					<span class="text-accent-500">*</span>
-				</h6>
+				<h6 class="sm:w-52 sm:shrink-0">Email</h6>
 
 				<div class="w-full">
 					<Textbox type="email" placeholder="Enter Email" bind:value="{address.email}" />
@@ -131,6 +129,7 @@ async function SaveAddress(address) {
 			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
 				<h6 class="sm:w-52 sm:shrink-0">
 					Phone
+
 					<span class="text-accent-500">*</span>
 				</h6>
 
@@ -151,6 +150,7 @@ async function SaveAddress(address) {
 			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
 				<h6 class="sm:w-52 sm:shrink-0">
 					Address
+
 					<span class="text-accent-500">*</span>
 				</h6>
 
@@ -170,13 +170,10 @@ async function SaveAddress(address) {
 			<!-- City -->
 
 			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
-				<h6 class="sm:w-52 sm:shrink-0">
-					City
-					<span class="text-accent-500">*</span>
-				</h6>
+				<h6 class="sm:w-52 sm:shrink-0">City</h6>
 
 				<div class="w-full">
-					<Textbox placeholder="Enter City" bind:value="{address.city}" required />
+					<Textbox placeholder="Enter City" bind:value="{address.city}" />
 				</div>
 			</div>
 
@@ -185,6 +182,7 @@ async function SaveAddress(address) {
 			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
 				<h6 class="sm:w-52 sm:shrink-0">
 					Country
+
 					<span class="text-accent-500">*</span>
 				</h6>
 
@@ -194,7 +192,7 @@ async function SaveAddress(address) {
 					on:change="{() => onCountryChange(address.country)}"
 					required>
 					<option value="{null}" disabled selected>-- Select a Country --</option>
-					{#if countries?.length}
+					{#if countries?.length > 1}
 						{#each countries as c}
 							{#if c}
 								<option value="{c.code}">
@@ -211,6 +209,7 @@ async function SaveAddress(address) {
 			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
 				<h6 class="sm:w-52 sm:shrink-0">
 					State/Province
+
 					<span class="text-accent-500">*</span>
 				</h6>
 
@@ -220,13 +219,15 @@ async function SaveAddress(address) {
 					disabled="{!address.country || loadingStates}"
 					required>
 					<option value="{null}" disabled selected>-- Select a State --</option>
-					{#each states as s}
-						{#if s}
-							<option value="{s.name}">
-								{s.name}
-							</option>
-						{/if}
-					{/each}
+					{#if states?.length > 1}
+						{#each states as s}
+							{#if s}
+								<option value="{s.name}">
+									{s.name}
+								</option>
+							{/if}
+						{/each}
+					{/if}
 				</select>
 			</div>
 
@@ -235,6 +236,7 @@ async function SaveAddress(address) {
 			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
 				<h6 class="sm:w-52 sm:shrink-0">
 					ZIP
+
 					<span class="text-accent-500">*</span>
 				</h6>
 
