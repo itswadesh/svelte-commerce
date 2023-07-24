@@ -200,6 +200,7 @@ export const getMedusajsApi = async (endpoint: string, query?: any, sid?: any) =
 		})
 		const isJson = response.headers.get('content-type')?.includes('application/json')
 		const res = isJson ? await response.json() : await response.text()
+
 		if (res?.status > 399) {
 			throw { status: res.status, message: res }
 		} else if (response?.status > 399) {
