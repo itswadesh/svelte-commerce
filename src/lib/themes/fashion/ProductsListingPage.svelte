@@ -1,4 +1,5 @@
 <script lang="ts">
+import { SELECTED_ENV, SERVICE_LIST } from '$lib/constants'
 import { currency, dateOnly, generatePriceRange, toast } from '$lib/utils'
 import { fade, fly } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
@@ -377,7 +378,14 @@ function handleFilterTags() {
 	{/if}
 
 	<div class="mb-10 flex flex-col items-start sm:mb-20 lg:flex-row lg:gap-10 lg:p-10">
-		{#if data.products?.products?.length && data.products.facets}
+		{#if SELECTED_ENV == SERVICE_LIST.MEDUSAJS}
+			<DesktopFilter
+				class="sticky hidden lg:block {hellobar?.active?.val ? 'top-56' : 'top-48'}"
+				facets=""
+				priceRange="{priceRange}"
+				query="{data.query}"
+				on:clearAll="{refreshData}" />
+		{:else if data.products?.products?.length && data?.products?.facets}
 			<DesktopFilter
 				class="sticky hidden lg:block {hellobar?.active?.val ? 'top-56' : 'top-48'}"
 				facets="{data.products.facets}"

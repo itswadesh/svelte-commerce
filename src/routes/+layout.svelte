@@ -6,7 +6,7 @@
 
 <script lang="ts">
 // import { pwaInfo } from 'virtual:pwa-info'
-import { env } from '$env/dynamic/public'
+import { SELECTED_ENV, SERVICE_LIST } from '$lib/constants'
 import './../app.css'
 import { BackToTop, LazyImg } from '$lib/components' // Can not dynamically import Google Analytics, it throws gtag not found error, not even party town
 import { FacebookPixel } from '@beyonk/svelte-facebook-pixel'
@@ -21,8 +21,6 @@ import storeClosed from '$lib/assets/store-closed.png'
 import whatsappIcon from '$lib/assets/social-media/whatsapp.png'
 
 export let data
-
-let SELECTED_SERVICE = env.PUBLIC_SELECTED_SERVICE
 
 $: innerWidth = 0
 
@@ -149,7 +147,7 @@ onMount(async () => {
 	<PreloadingIndicator />
 {/if}
 
-{#if !$page?.data?.store && SELECTED_SERVICE != 'MEDUSAJS'}
+{#if !$page?.data?.store && SELECTED_ENV != SERVICE_LIST.MEDUSAJS}
 	<!-- If store not found -->
 
 	<div class="h-screen w-full bg-white flex items-center justify-center">
