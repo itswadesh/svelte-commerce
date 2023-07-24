@@ -1,4 +1,5 @@
 <script lang="ts">
+import { SELECTED_ENV, SERVICE_LIST } from '$lib/constants'
 import { applyAction, enhance } from '$app/forms'
 import { currency } from '$lib/utils'
 import {
@@ -116,7 +117,7 @@ function selectSize(s) {
 }
 
 const storeRecentlyViewedToLocatStorage = async () => {
-	const localRecentlyViewed = localStorage.getItem(`recently_viewed_${$page.data.store.id}`)
+	const localRecentlyViewed = localStorage.getItem(`recently_viewed_${$page?.data?.store?.id}`)
 
 	if (!!localRecentlyViewed && localRecentlyViewed !== 'undefined') {
 		recentlyViewed = JSON.parse(localRecentlyViewed)
@@ -145,13 +146,18 @@ const storeRecentlyViewedToLocatStorage = async () => {
 		recentlyViewed = resvw
 
 		if (browser) {
-			localStorage.setItem(`recently_viewed_${$page.data.store.id}`, JSON.stringify(recentlyViewed))
+			localStorage.setItem(
+				`recently_viewed_${$page.data?.store?.id}`,
+				JSON.stringify(recentlyViewed)
+			)
 		}
 	}
 }
 </script>
 
-<SEO {...seoProps} />
+{#if SELECTED_ENV !== SERVICE_LIST.MEDUSAJS}
+	<SEO {...seoProps} />
+{/if}
 
 <svelte:head>
 	<title>{data.product?.name}</title>

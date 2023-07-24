@@ -502,7 +502,9 @@ function handleFilterTags() {
 					{/if}
 				{:else}
 					<Pagination
-						count="{Math.ceil((data.products?.count || 1) / data.products?.pageSize)}"
+						count="{Math.ceil(
+							(data?.products?.count || 1) / (data?.products?.pageSize || data?.products?.count)
+						)}"
 						current="{data?.currentPage || 1}"
 						providePaddingOnMobile />
 				{/if}
