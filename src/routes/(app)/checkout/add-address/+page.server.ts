@@ -29,10 +29,11 @@ export async function load({ cookies, locals, params, url }) {
 
 	if (countries?.length === 1) {
 		address.country = countries[0].code
+	} else if (countries?.length < 1) {
+		// TODO: Hide address box and display "Contact the website admin to enable your country"
+	} else {
+		// TODO: Find default country from the list and set default in dropdown
 	}
-
-	// TODO: Find default country from the list and set default in dropdown
-
 	if (address?.country) {
 		states = await CountryService.fetchStates({
 			storeId: store?.id,
