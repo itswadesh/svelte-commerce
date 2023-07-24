@@ -158,41 +158,50 @@ export const postBigCommerceApi = async (endpoint: string, query: any, sid?: any
 }
 
 export const getMedusajsApi = async (endpoint: string, query?: any, sid?: any) => {
-	const response = await fetch(MEDUSAJS_BASE_URL + '/' + endpoint, {
-		method: 'GET',
-		credentials: 'include',
-		headers: { cookie: `connect.sid=${sid}` }
-	})
-	const isJson = response.headers.get('content-type')?.includes('application/json')
-	const res = isJson ? await response.json() : await response.text()
-	if (res?.status > 399) {
-		throw { status: res.status, message: res }
-	} else if (response?.status > 399) {
-		throw { status: response.status, message: res }
-	} else {
-		return res
+	try {
+		const response = await fetch(MEDUSAJS_BASE_URL + '/' + endpoint, {
+			method: 'GET',
+			credentials: 'include',
+			headers: { cookie: `connect.sid=${sid}` }
+		})
+		const isJson = response.headers.get('content-type')?.includes('application/json')
+		const res = isJson ? await response.json() : await response.text()
+		if (res?.status > 399) {
+			throw { status: res.status, message: res }
+		} else if (response?.status > 399) {
+			throw { status: response.status, message: res }
+		} else {
+			return res
+		}
+	} catch (e) {
+		console.log("/lib/utils/server.ts getMedusajsApi()", e);
 	}
+
 }
 
 export const postMedusajsApi = async (endpoint: string, data: any, sid?: any) => {
-	const ep = MEDUSAJS_BASE_URL + '/' + endpoint
-	const response = await fetch(ep, {
-		method: 'POST',
-		credentials: 'include',
-		body: JSON.stringify(data || {}),
-		headers: {
-			'Content-Type': 'application/json',
-			cookie: `connect.sid=${sid}`
+	try {
+		const ep = MEDUSAJS_BASE_URL + '/' + endpoint
+		const response = await fetch(ep, {
+			method: 'POST',
+			credentials: 'include',
+			body: JSON.stringify(data || {}),
+			headers: {
+				'Content-Type': 'application/json',
+				cookie: `connect.sid=${sid}`
+			}
+		})
+		const isJson = response.headers.get('content-type')?.includes('application/json')
+		const res = isJson ? await response.json() : await response.text()
+		if (res?.status > 399) {
+			throw { status: res.status, message: res.body.message }
+		} else if (response?.status > 399) {
+			throw { status: response.status, message: res }
+		} else {
+			return res
 		}
-	})
-	const isJson = response.headers.get('content-type')?.includes('application/json')
-	const res = isJson ? await response.json() : await response.text()
-	if (res?.status > 399) {
-		throw { status: res.status, message: res.body.message }
-	} else if (response?.status > 399) {
-		throw { status: response.status, message: res }
-	} else {
-		return res
+	} catch (e) {
+		console.log("/lib/utils/server.ts postMedusajsApi()", e);
 	}
 }
 
