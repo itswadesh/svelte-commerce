@@ -148,10 +148,8 @@ There are 3 places to configure
 All non secret and application wide configs are stored here, if required, change according to your requirement.
 
 2. `.env`
-All secrets stored here
+All secrets/public stored here, also you can choose the service that you need. Valid values for the service are `LITEKART MEDUSAJS BIGCOMMERCE SHOPIFY WOOCOMMERCE`
 
-3. `src/lib/services/index.ts`
-This is used to define which service to use. Only 1 of the listed service can be active at a time. Valid values are `Litekart Medusa Bigcommerce Shopify Woocommerce`
 
 ## Deployment
 

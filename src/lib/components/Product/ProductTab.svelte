@@ -2,7 +2,7 @@
 import type { Product } from '$lib/types'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import {ProductCard,DummyProductCard} from '$lib/components'
+import { ProductCard, DummyProductCard } from '$lib/components'
 
 import { ProductService } from '$lib/services'
 
