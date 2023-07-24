@@ -187,12 +187,13 @@ async function SaveAddress(address) {
 				</h6>
 
 				<select
+					disabled="{countries?.length === 1}"
 					class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
 					bind:value="{address.country}"
 					on:change="{() => onCountryChange(address.country)}"
 					required>
 					<option value="{null}" disabled selected>-- Select a Country --</option>
-					{#if countries?.length > 1}
+					{#if countries?.length > 0}
 						{#each countries as c}
 							{#if c}
 								<option value="{c.code}">

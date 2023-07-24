@@ -31,6 +31,8 @@ export async function load({ cookies, locals, params, url }) {
 		address.country = countries[0].code
 	}
 
+	// TODO: Find default country from the list and set default in dropdown
+
 	if (address?.country) {
 		states = await CountryService.fetchStates({
 			storeId: store?.id,
