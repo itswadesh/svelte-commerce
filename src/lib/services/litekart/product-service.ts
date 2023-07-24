@@ -97,14 +97,7 @@ export const fetchReels = async ({
 
 // Fetch single product
 
-export const fetchProduct = async ({
-	origin,
-	slug,
-	id,
-	storeId,
-	server = false,
-	sid = null
-}) => {
+export const fetchProduct = async ({ origin, slug, id, storeId, server = false, sid = null }) => {
 	try {
 		let res: Product | object = {}
 
@@ -161,16 +154,20 @@ export const fetchProductsOfCategory = async ({
 		let pageSize = 0
 		let category = {}
 		let err = ''
-
 		if (isServer) {
-			res = await getBySid(`es/products?categories=${categorySlug}&zip=${zip || ''}&store=${storeId}&${query}`, sid)
+			res = await getBySid(
+				`es/products?categories=${categorySlug}&zip=${zip || ''}&store=${storeId}&${query}`,
+				sid
+			)
 		} else {
-			res = await getAPI(`es/products?categories=${categorySlug}&zip=${zip || ''}&store=${storeId}&${query}`, origin)
+			res = await getAPI(
+				`es/products?categories=${categorySlug}&zip=${zip || ''}&store=${storeId}&${query}`,
+				origin
+			)
 		}
 
 		products = res?.data?.map((p) => {
 			if (p._source) {
-
 				const p1 = { ...p._source }
 				p1.id = p._id
 				return p1
@@ -219,7 +216,6 @@ export const fetchNextPageProducts = async ({
 
 		nextPageData = res?.data?.map((p) => {
 			if (p._source) {
-
 				const p1 = { ...p._source }
 				p1.id = p._id
 				return p1
@@ -233,7 +229,7 @@ export const fetchNextPageProducts = async ({
 			count: res.count,
 			estimatedTotalHits: res.estimatedTotalHits,
 			facets: res.facets,
-			nextPageData: nextPageData || [],
+			nextPageData: nextPageData || []
 		}
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)
