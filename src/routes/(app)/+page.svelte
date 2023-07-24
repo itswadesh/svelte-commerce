@@ -227,15 +227,7 @@ onMount(() => {
 				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 			</div>
 		{:then home}
-			{#if home.heroBanners?.length}
-				<div>
-					<h2 class="p-3 py-5 text-center sm:px-10 md:py-10 uppercase">
-						BEST OF {$page.data.store?.websiteName} EXCLUSIVE
-					</h2>
-
-					<HeroBanners heroBanners="{home.heroBanners}" />
-				</div>
-			{/if}
+			<HeroBanners heroBanners="{home.heroBanners}" />
 		{/await}
 
 		<!-- Picked banners -->

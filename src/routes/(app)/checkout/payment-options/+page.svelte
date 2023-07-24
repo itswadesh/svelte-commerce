@@ -237,12 +237,12 @@ function checkIfStripeCardValid({ detail }) {
 								</div>
 							</div>
 						</label>
-						
+
 						{#if pm.value === 'Stripe'}
 							<svelte:component
 								this="{Stripe}"
 								address="{data.addressId}"
-								isStripeSelected="{selectedPaymentMethod.name === 'Stripe'}"
+								isStripeSelected="{selectedPaymentMethod.value === 'Stripe'}"
 								stripePublishableKey="{pm.app_id}"
 								on:isStripeCardValid="{checkIfStripeCardValid}" />
 						{/if}
