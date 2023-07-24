@@ -87,7 +87,7 @@ onMount(async () => {
 										{#if product.img || product.images[0]}
 											<SplideSlide>
 												<div
-													class="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-5 items-start sm:gap-10 md:gap-20 items-center">
+													class="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-10 md:gap-20 items-center">
 													<!-- Banner section -->
 
 													<a
@@ -106,7 +106,8 @@ onMount(async () => {
 													<!-- Details section -->
 
 													<div class="col-span-1 flex justify-center sm:justify-start">
-														<div class="flex flex-col items-center text-center gap-5 max-w-[250px]">
+														<div
+															class="flex flex-col items-center text-center gap-5 w-full sm:max-w-[250px]">
 															<LazyImg
 																src="{product.img || product.images[0]}"
 																alt="{product.name}"

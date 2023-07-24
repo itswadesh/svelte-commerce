@@ -82,6 +82,8 @@ export let width = null
 let clazz: string
 export { clazz as class }
 
+let imageLoaded = false
+
 const h = height === null ? 'auto' : +height * 2
 const w = width === null ? 'auto' : +width * 2
 
@@ -98,21 +100,35 @@ onMount(() => {
 
 onDestroy(() => {
 	if (lazyloadInstance) lazyloadInstance.destroy()
+	imageLoaded = true
+	console.log('imageLoaded', imageLoaded)
 })
 </script>
 
 <div class="relative">
-	<img
-		alt="{alt}"
-		class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}"
-		data-src="{`${getCdnImageUrl(src, IMAGE_CDN_URL)}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(
-			':',
-			'-'
-		)}`}"
-		height="{h}"
-		in:fade="{{ duration: 300 }}"
-		src="/placeholder.png'"
-		width="{w}" />
+	{#if imageLoaded}
+		<img
+			in:fade="{{ duration: 300 }}"
+			alt="{alt}"
+			src="/placeholder.png"
+			data-src="{`${getCdnImageUrl(src, IMAGE_CDN_URL)}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(
+				':',
+				'-'
+			)}`}"
+			height="{h}"
+			width="{w}"
+			class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
+	{:else}
+		<img
+			in:fade="{{ duration: 300 }}"
+			alt=" "
+			src="https://i.ibb.co/ZXGBQdp/placeholder2.png"
+			data-src="{`${getCdnImageUrl(src, IMAGE_CDN_URL)}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(
+				':',
+				'-'
+			)}`}"
+			class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
+	{/if}
 
 	<div class="absolute inset-0 flex itmes-center justify-center">
 		<span class="loader-line"></span>

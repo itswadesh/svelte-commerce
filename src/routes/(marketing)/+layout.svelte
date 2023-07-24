@@ -4,6 +4,8 @@ import { page } from '$app/stores'
 import { PageTransitions } from '$lib/components'
 import { slide } from 'svelte/transition'
 
+export let data = {}
+
 let showFooter = false
 </script>
 
