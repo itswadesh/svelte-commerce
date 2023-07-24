@@ -52,13 +52,13 @@ export const fetchProducts = async ({ origin, slug, id, server = false, sid = nu
 // Fetch single product
 
 export const fetchProduct = async ({ origin, slug, id, server = false, sid = null }: any) => {
-	
+
 	try {
 		let res: Product | {} = {}
 
-		const med = (await getMedusajsApi(`products/${slug}`)).product
-		res = mapMedusajsProduct(med)	
-		
+		const med = (await getMedusajsApi(`products?handle=${slug}`)).product
+		res = mapMedusajsProduct(med)
+
 		return res || {}
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)
@@ -69,13 +69,13 @@ export const fetchProduct = async ({ origin, slug, id, server = false, sid = nul
 // Fetch other single product
 
 export const fetchProduct2 = async ({ origin, slug, id, server = false, sid = null }: any) => {
-	
+
 	try {
 		let res: Product | {} = {}
 
-		const med = (await getMedusajsApi(`products/${slug}`)).product
-		res = mapMedusajsProduct(med)	
-		
+		const med = (await getMedusajsApi(`products?handle=${slug}`)).product
+		res = mapMedusajsProduct(med)
+
 		return res || {}
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)
