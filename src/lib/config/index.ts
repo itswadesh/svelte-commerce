@@ -13,9 +13,9 @@ export const authorInfo = {
 	twitterUsername: 'itswadesh'
 }
 export const currency = { symbol: '$', code: 'USD' }
-export const currencyCode = 'USD'
-export const currencySymbol = '$'
-export const dimentionUnit = 'cm'
+export const currencyCode = env.PUBLIC_CORE_CURRENCY_CODE || 'USD'
+export const currencySymbol = env.PUBLIC_CORE_CURRENCY_SYMBOL || '$'
+export const dimentionUnit = env.PUBLIC_CORE_DIMENTION_UNITS || 'cm'
 export const DOMAIN = env.PUBLIC_LITEKART_DOMAIN || 'demo.litekart.in' // Never add any default value here, it will break SaaS working
 export const entity = 'Misiki'
 export const HTTP_ENDPOINT = env.PUBLIC_LITEKART_API_URL || 'https://api.litekart.in'
@@ -59,7 +59,7 @@ export const sorts = [
 	{ name: `Name: Asc`, val: 'name' },
 	{ name: `Name: Desc`, val: '-name' } // { name: 'Most Viewed', val: '-views' }
 ]
-export const weightUnit = 'g'
+export const weightUnit = env.PUBLIC_CORE_WEIGHT_UNIT || 'g'
 export const WWW_URL = env.PUBLIC_WWW_URL || env.PUBLIC_LITEKART_DOMAIN
 
 export const MEDUSAJS_BASE_URL = `${env.PUBLIC_MEDUSAJS_API_URL}/store`
