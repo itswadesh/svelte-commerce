@@ -1,5 +1,4 @@
 <script lang="ts">
-import { SELECTED_ENV, SERVICE_LIST } from '$lib/constants'
 import { applyAction, enhance } from '$app/forms'
 import { currency } from '$lib/utils'
 import {
@@ -173,9 +172,7 @@ function slideFade(node, params) {
 }
 </script>
 
-{#if SELECTED_ENV !== SERVICE_LIST.MEDUSAJS}
-	<SEO {...seoProps} />
-{/if}
+<SEO {...seoProps} />
 
 <svelte:head>
 	<title>{data.product?.name}</title>
