@@ -50,10 +50,10 @@ onMount(async () => {
 
 <svelte:window bind:innerWidth="{innerWidth}" />
 
-{#await data.streamed.collections then collections}
-	{#if collections?.count}
+{#await data?.streamed?.collections then collections}
+	{#if collections?.count > 0}
 		<div class="divide-y border-b">
-			{#each collections.data as collection}
+			{#each collections?.data as collection}
 				{#if collection.block === 'block-2'}
 					<div class="px-3 py-10 sm:px-10 sm:py-20">
 						<div class="container mx-auto max-w-screen-2xl flex flex-col gap-10 sm:gap-20">

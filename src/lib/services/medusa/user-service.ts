@@ -1,7 +1,12 @@
 import { delBySid, getMedusajsApi, postMedusajsApi } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 
-export const fetchMeData = async ({ origin, storeId, server = false, cookies }: any) => {
+export const fetchMeData = async ({
+	origin,
+	storeId,
+	server = false,
+	cookies
+}: any) => {
 	try {
 		let res: any = {}
 

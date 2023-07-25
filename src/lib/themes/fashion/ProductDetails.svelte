@@ -120,7 +120,7 @@ function selectSize(s) {
 }
 
 const storeRecentlyViewedToLocatStorage = async () => {
-	const localRecentlyViewed = localStorage.getItem(`recently_viewed_${$page.data.store.id}`)
+	const localRecentlyViewed = localStorage.getItem(`recently_viewed_${$page?.data?.store?.id}`)
 
 	if (!!localRecentlyViewed && localRecentlyViewed !== 'undefined') {
 		recentlyViewed = JSON.parse(localRecentlyViewed)
@@ -149,7 +149,10 @@ const storeRecentlyViewedToLocatStorage = async () => {
 		recentlyViewed = resvw
 
 		if (browser) {
-			localStorage.setItem(`recently_viewed_${$page.data.store.id}`, JSON.stringify(recentlyViewed))
+			localStorage.setItem(
+				`recently_viewed_${$page.data?.store?.id}`,
+				JSON.stringify(recentlyViewed)
+			)
 		}
 	}
 }
@@ -276,7 +279,7 @@ function slideFade(node, params) {
 				{:then value}
 					<!-- Color -->
 
-					{#if value?.pg.colorGroup.length}
+					{#if value?.pg?.colorGroup?.length}
 						<div>
 							<div class="mb-2 flex items-center gap-2 uppercase">
 								<h5>Select Color</h5>
@@ -352,7 +355,7 @@ function slideFade(node, params) {
 
 					<!-- Size -->
 
-					{#if value?.pg.sizeGroup.length}
+					{#if value?.pg?.sizeGroup?.length}
 						<div>
 							<div class="mb-2 flex flex-wrap items-center gap-2 justify-between">
 								<h6>Size:</h6>

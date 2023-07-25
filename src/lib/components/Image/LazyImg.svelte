@@ -88,7 +88,7 @@ const h = height === null ? 'auto' : +height * 2
 const w = width === null ? 'auto' : +width * 2
 
 let lazyloadInstance: any
-const IMAGE_CDN_URL = $page.data.store.IMAGE_CDN_URL
+const IMAGE_CDN_URL = $page.data.store?.IMAGE_CDN_URL ?? ''
 
 onMount(() => {
 	if (browser) {

@@ -1,5 +1,4 @@
 import { getMedusajsApi } from '$lib/utils/server'
-import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
 export const fetchCountries = async ({ origin, storeId, server = false, sid = null }: any) => {

@@ -80,6 +80,7 @@ export const addToCartService = async ({
 
 		return res || {}
 	} catch (e) {
+		console.error(e)
 		throw error(e.status, e.data?.message || e.message)
 	}
 }

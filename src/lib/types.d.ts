@@ -92,6 +92,7 @@ interface Product {
 	varified?: boolean
 	weight: number
 	width: number
+	variants?: any[]
 }
 
 interface Brand {
