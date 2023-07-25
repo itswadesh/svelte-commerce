@@ -10,7 +10,8 @@ export async function load({ cookies, locals }) {
 		const data = await UserService.fetchMeData({
 			storeId: locals.store?.id,
 			server: true,
-			sid: cookies.get('connect.sid')
+			sid: cookies.get('connect.sid'),
+			cookies
 		})
 		data.dob = data.dob ? dayjs(data.dob).format('YYYY-MM-DD') : null
 		profile = data || {

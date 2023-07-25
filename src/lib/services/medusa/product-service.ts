@@ -53,27 +53,12 @@ export const fetchProducts = async ({ origin, slug, id, server = false, sid = nu
 
 export const fetchProduct = async ({ origin, slug, id, server = false, sid = null }: any) => {
 	try {
-		let product: Product | {} = {};
-		let response = await getMedusajsApi(`products?handle=${slug}`);
-		if (response.count > 0) {
-			product = mapMedusajsProduct(response.products[0]);
-		}
-		return product || {}
-	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
-	}
-}
-
-
-// Fetch other single product
-
-export const fetchProduct2 = async ({ origin, slug, id, server = false, sid = null }: any) => {
-
-	try {
 		let res: Product | {} = {}
+		const med = await getMedusajsApi(`products?handle=${slug}&expand=categories,variants,images`)
 
-		const med = (await getMedusajsApi(`products?handle=${slug}`)).product
-		res = mapMedusajsProduct(med)
+		const productArray = med.products || [] // fetch the products array value from the med variable
+
+		res = mapMedusajsProduct(productArray[0]) // assuming we only want the first product in the array
 
 		return res || {}
 	} catch (e) {
@@ -81,6 +66,23 @@ export const fetchProduct2 = async ({ origin, slug, id, server = false, sid = nu
 	}
 }
 
+// Fetch other single product
+
+export const fetchProduct2 = async ({ origin, slug, id, server = false, sid = null }: any) => {
+	try {
+		let res: Product | {} = {}
+
+		const med = await getMedusajsApi(`products?handle=${slug}&expand=categories,variants,images`)
+
+		const productArray = med.products || [] // fetch the products array value from the med variable
+
+		res = mapMedusajsProduct(productArray[0]) // assuming we only want the first product in the array
+
+		return res || {}
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
+	}
+}
 // Fetch products based on category
 
 export const fetchProductsOfCategory = async ({
