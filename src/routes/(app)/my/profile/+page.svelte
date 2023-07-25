@@ -57,6 +57,8 @@ async function saveProfile() {
 
 		data.profile = await put('users/update-profile', e, $page.data.origin)
 
+		// Need to fix for medusajs
+
 		if (data.profile) {
 			data.profile.dob = data.profile.dob ? dayjs(data.profile.dob).format('YYYY-MM-DD') : null
 			formChanged = false

@@ -102,10 +102,16 @@ export const getStoreData = async ({
 			domain: storeRes.storeOne.domain,
 			DOMAIN: storeRes.storeOne.DOMAIN,
 			email: storeRes.storeOne.websiteEmail,
-			facebookPixel: { active: storeRes.storeOne?.facebookPixel?.active?.val, id: storeRes.storeOne?.facebookPixel?.id?.val || '' },
+			facebookPixel: {
+				active: storeRes.storeOne?.facebookPixel?.active?.val,
+				id: storeRes.storeOne?.facebookPixel?.id?.val || ''
+			},
 			GOOGLE_ANALYTICS_ID: storeRes.storeOne.GOOGLE_ANALYTICS_ID,
 			GOOGLE_CLIENT_ID: storeRes.storeOne.GOOGLE_CLIENT_ID,
-			googleAnalytics: { active: storeRes.storeOne?.googleAnalytics?.active?.val, id: storeRes.storeOne?.googleAnalytics?.id?.val || '' },
+			googleAnalytics: {
+				active: storeRes.storeOne?.googleAnalytics?.active?.val,
+				id: storeRes.storeOne?.googleAnalytics?.id?.val || ''
+			},
 			hellobar: storeRes.storeOne.hellobar,
 			IMAGE_CDN_URL: storeRes.storeOne.IMAGE_CDN_URL,
 			isBulkOrder: storeRes.storeOne.isBulkOrder,

@@ -80,7 +80,6 @@ export const mapMedusajsAllProducts = (p: any) => {
 }
 
 export const mapMedusajsProduct = (p: any) => {
-	
 	if (p) {
 		const prod: Product = {
 			_id: p.id,
@@ -92,6 +91,7 @@ export const mapMedusajsProduct = (p: any) => {
 			slug: p.handle,
 			description: p.description,
 			status: p.status,
+			active: p.status === 'published' ? true : false,
 			images: p.images.map((i: any) => {
 				if (i) return i.url
 			}),
@@ -103,7 +103,7 @@ export const mapMedusajsProduct = (p: any) => {
 			barcode: p.variants[0].barcode,
 			ean: p.variants[0].ean,
 			// upc: p.variants[0].upc,
-			stock: p.variants[0].inventory_quantity,
+			hasStock: p.variants[0].inventory_quantity,
 			// allow_backorder: p.variants[0].allow_backorder,
 			// manage_inventory: p.variants[0].manage_inventory,
 			hsn: p.variants[0].hs_code,
@@ -114,8 +114,8 @@ export const mapMedusajsProduct = (p: any) => {
 			height: p.variants[0].height,
 			width: p.variants[0].width,
 			length: p.variants[0].length,
-			price: p.variants[0].calculated_price_incl_tax,
-			mrp: p.variants[0].original_price_incl_tax,
+			price: p.variants[0].prices[0].amount,
+			mrp: p.variants[0].prices[0].amount,
 			discount:
 				100 *
 				((p.variants[0].original_price_incl_tax - p.variants[0].calculated_price_incl_tax) /
@@ -137,10 +137,10 @@ export const mapMedusajsProduct = (p: any) => {
 			// profile_id: p.profile_id,
 			// profile: p.profile,
 			// collection_id: p.collection_id,
-			categoryPool: p.collection,
+			categoryPool: p.categories,
 			// type_id: p.type_id,
 			// type: p.type,
-			tags: p.tags.map((i: any) => {
+			tags: p.tags?.map((i: any) => {
 				if (i)
 					return {
 						type: 'Ribbon',
@@ -186,4 +186,88 @@ export const mapMedusajsAllOrders = (p: any) => {
 	} else {
 		return {}
 	}
+}
+
+// Cart data
+export const mapMedusajsCart = (c: any) => {
+	if (c) {
+		return {
+			id: c.id,
+			uid: c.customer_id,
+			cart_id: c.id,
+			store: null,
+			storeCurrency: c.region.currency_code,
+			qty: c.items.reduce((total, item) => total + item.quantity, 0),
+			currencyCode: c.region.currency_code,
+			currencyName: c.region.currency_code,
+			currencySymbol: null,
+			discount: {
+				code: null,
+				amount: c.discount_total,
+				formattedAmount: {
+					value: c.discount_total,
+					currency: c.region.currency_code
+				}
+			},
+			subtotal: c.subtotal,
+			shipping: {
+				price: c.shipping_total,
+				tax: c.shipping_tax_total,
+				formattedPrice: {
+					value: c.shipping_total,
+					currency: c.region.currency_code
+				}
+			},
+			tax: c.tax_total,
+			total: c.total,
+			offer_total: null,
+			items: c.items?.map((item) => ({
+				product: {
+					id: item.variant.product_id,
+					name: item.variant.product.title,
+					sku: item.variant.sku,
+					image: null // image is not present in the given data
+				},
+				quantity: item.quantity,
+				price: item.unit_price,
+				discount: null,
+				formattedPrice: {
+					value: item.unit_price,
+					currency: null // currency code is not present in the given data
+				}
+			})),
+			// unavailableItems: [],
+			active: true,
+			sid: c.id,
+			formattedAmount: {
+				subtotal: {
+					value: c.subtotal,
+					currency: c.region.currency_code
+				},
+				discount: {
+					value: c.discount_total,
+					currency: c.region.currency_code
+				},
+				shipping: {
+					value: c.shipping_total,
+					currency: c.region.currency_code
+				},
+				tax: {
+					value: c.tax_total,
+					currency: c.region.currency_code
+				},
+				total: {
+					value: c.total,
+					currency: c.region.currency_code
+				}
+			},
+			needAddress: true,
+			needPrescription: false,
+			selfTakeout: false,
+			codAvailable: false,
+			createdAt: c.created_at,
+			updatedAt: c.updated_at
+		}
+	}
+	return null
 }

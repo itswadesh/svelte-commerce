@@ -1,15 +1,21 @@
 import { delBySid, getMedusajsApi, postMedusajsApi } from '$lib/utils/server'
-import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
-export const fetchMeData = async ({ origin, storeId, server = false, sid = null }: any) => {
+export const fetchMeData = async ({ origin, storeId, server = false, cookies }: any) => {
 	try {
 		let res: any = {}
 
-		const response = await getMedusajsApi(`auth`, null, sid)
-		res.firstName = response.first_name
-		res.lastName = response.last_name
-		res.active = res.has_account
+		const sid = cookies.get('connectSid')
+
+		console.log(sid)
+
+		const response = await getMedusajsApi(`customers/me`, null, sid)
+
+		const customerResponse = response.customer
+
+		res.firstName = customerResponse.first_name
+		res.lastName = customerResponse.last_name
+		res.active = customerResponse.has_account
 
 		return res || {}
 	} catch (e) {
@@ -88,7 +94,7 @@ export const forgotPasswordService = async ({
 	try {
 		let res: any = {}
 
-		res = await postMedusajsApi(`signup`, {})
+		res = await postMedusajsApi(`customers`, {})
 
 		return res
 	} catch (e) {
@@ -108,7 +114,7 @@ export const changePasswordService = async ({
 	try {
 		let res: any = {}
 
-		res = await postMedusajsApi(`signup`, {})
+		res = await postMedusajsApi(`customers/me`, {})
 
 		return res
 	} catch (e) {
@@ -131,7 +137,7 @@ export const getOtpService = async ({
 	try {
 		let res: any = {}
 
-		res = await postMedusajsApi(`signup`, {})
+		res = await postMedusajsApi(`customers`, {})
 
 		return res
 	} catch (e) {
@@ -150,7 +156,7 @@ export const verifyOtpService = async ({
 	try {
 		let res: any = {}
 
-		res = await postMedusajsApi(`signup`, {})
+		res = await postMedusajsApi(`customers`, {})
 
 		return res
 	} catch (e) {
