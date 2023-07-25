@@ -1,4 +1,5 @@
 <script lang="ts">
+import { SELECTED_ENV, SERVICE_LIST } from '$lib/constants'
 import { Gallery, LazyImg } from '$lib/components'
 import { onMount } from 'svelte'
 import { Splide, SplideSlide } from '@splidejs/svelte-splide'
@@ -88,9 +89,10 @@ function handleGallery(index) {
 </div>
 
 <!-- Gallery -->
-
-<Gallery
-	bind:selectedImgIndex="{selectedImgIndex}"
-	bind:showPhotosModal="{showPhotosModal}"
-	title="{data.product.name}"
-	images="{data.product?.images}" />
+{#if SELECTED_ENV !== SERVICE_LIST.MEDUSAJS}
+	<Gallery
+		bind:selectedImgIndex="{selectedImgIndex}"
+		bind:showPhotosModal="{showPhotosModal}"
+		title="{data.product.name}"
+		images="{data.product?.images}" />
+{/if}

@@ -98,7 +98,7 @@ export const mapMedusajsProduct = (p: any) => {
 			img: p.thumbnail,
 			// discountable: p.discountable,
 			// external_id: p.external_id,
-			// variants: p.variants,
+			variants: p.variants,
 			sku: p.variants[0].sku,
 			barcode: p.variants[0].barcode,
 			ean: p.variants[0].ean,
@@ -115,7 +115,7 @@ export const mapMedusajsProduct = (p: any) => {
 			width: p.variants[0].width,
 			length: p.variants[0].length,
 			price: p.variants[0].prices[0].amount,
-			mrp: p.variants[0].prices[0].amount,
+			mrp: p.variants[0].original_price_incl_tax,
 			discount:
 				100 *
 				((p.variants[0].original_price_incl_tax - p.variants[0].calculated_price_incl_tax) /
@@ -163,8 +163,8 @@ export const mapMedusajsCategory = (c: any) => {
 			slug: c.handle,
 			children: c.category_children
 				? c.category_children.map((i: any) => {
-						if (i) return mapMedusajsCategory(i)
-				  })
+					if (i) return mapMedusajsCategory(i)
+				})
 				: []
 		}
 		return r

@@ -1,5 +1,5 @@
 import type { Error } from '$lib/types'
-import { mapBigcommerceCategory } from '$lib/utils'
+//import { mapBigcommerceCategory } from '$lib/utils'
 import { getAPI } from '$lib/utils/api'
 import { getBySid, getBigcommerceApi, getWoocommerceApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
