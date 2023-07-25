@@ -279,7 +279,7 @@ function slideFade(node, params) {
 				{:then value}
 					<!-- Color -->
 
-					{#if value?.pg.colorGroup.length}
+					{#if value?.pg?.colorGroup?.length}
 						<div>
 							<div class="mb-2 flex items-center gap-2 uppercase">
 								<h5>Select Color</h5>
@@ -355,7 +355,7 @@ function slideFade(node, params) {
 
 					<!-- Size -->
 
-					{#if value?.pg.sizeGroup.length}
+					{#if value?.pg?.sizeGroup?.length}
 						<div>
 							<div class="mb-2 flex flex-wrap items-center gap-2 justify-between">
 								<h6>Size:</h6>

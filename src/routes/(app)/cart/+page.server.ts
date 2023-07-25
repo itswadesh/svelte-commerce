@@ -12,7 +12,8 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 			storeId: locals.store?.id,
 			sid: cookies.get('connect.sid'),
 			server: true,
-			origin: locals.origin
+			origin: locals.origin,
+			cookies
 		})
 		if (res) {
 			cart = {
@@ -87,6 +88,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 				})
 			}
 		}
+		
 		if (cart) {
 			const cartObj = {
 				cartId: cart?.cart_id,

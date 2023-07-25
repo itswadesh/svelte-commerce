@@ -101,7 +101,6 @@ onMount(() => {
 onDestroy(() => {
 	if (lazyloadInstance) lazyloadInstance.destroy()
 	imageLoaded = true
-	console.log('imageLoaded', imageLoaded)
 })
 </script>
 
