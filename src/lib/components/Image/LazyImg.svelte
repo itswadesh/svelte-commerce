@@ -121,7 +121,7 @@ onDestroy(() => {
 		<img
 			in:fade="{{ duration: 300 }}"
 			alt=" "
-			src="https://i.ibb.co/ZXGBQdp/placeholder2.png"
+			src="/placeholders/placeholder2.png"
 			data-src="{`${getCdnImageUrl(src, IMAGE_CDN_URL)}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(
 				':',
 				'-'
