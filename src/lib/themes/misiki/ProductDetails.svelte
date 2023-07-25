@@ -646,7 +646,15 @@ function handleMobileCanvas() {
 							{/if}
 						</div>
 
-						<h6 class="text-brand-500">Inclusive of all taxes</h6>
+						{#await data.streamed?.moreProductDetails then value}
+							<h6 class="text-brand-500">
+								{#if value?.igst}
+									Inclusive {currency(value?.igst, $page.data?.store?.currencySymbol)} GST
+								{:else}
+									Inclusive of all taxes
+								{/if}
+							</h6>
+						{/await}
 					{/if}
 				</div>
 
@@ -744,7 +752,15 @@ function handleMobileCanvas() {
 							{/if}
 						</div>
 
-						<h6 class="text-brand-500">Inclusive of all taxes</h6>
+						{#await data.streamed?.moreProductDetails then value}
+							<h6 class="text-brand-500">
+								{#if value?.igst}
+									Inclusive {currency(value?.igst, $page.data?.store?.currencySymbol)} GST
+								{:else}
+									Inclusive of all taxes
+								{/if}
+							</h6>
+						{/await}
 					{/if}
 				</div>
 
