@@ -114,8 +114,12 @@ export const mapMedusajsProduct = (p: any) => {
 			height: p.variants[0]?.height,
 			width: p.variants[0]?.width,
 			length: p.variants[0]?.length,
-			price: p.variants[0]?.prices?.length && p.variants[0]?.prices[0]?.amount,
-			mrp: p.variants[0]?.original_price_incl_tax,
+			price:
+				p.variants[0] &&
+				p.variants[0]?.prices &&
+				p.variants[0]?.prices[0] &&
+				p.variants[0]?.prices[0]?.amount,
+			mrp: p.variants[0] && p.variants[0]?.original_price_incl_tax,
 			discount:
 				100 *
 				((p.variants[0]?.original_price_incl_tax - p.variants[0]?.calculated_price_incl_tax) /
