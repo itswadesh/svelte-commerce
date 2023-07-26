@@ -224,7 +224,13 @@ function handleSearchBox() {
 
 							<!-- {`${selectedItems.toString().search(i.key) === i.key}` ? 'font-medium' : 'font-normal'} -->
 
-							<div class="ml-2 flex-1 text-sm leading-tight first-letter:uppercase">
+							<div
+								class="ml-2 flex-1 flex flex-wrap gap-2 text-sm leading-tight first-letter:uppercase">
+								{#if i.color_code}
+									<div class="h-6 w-6 rounded-full border" style="background-color: {i.color_code}">
+									</div>
+								{/if}
+
 								<span>{i.key}</span>
 
 								{#if i.doc_count}
@@ -273,7 +279,13 @@ function handleSearchBox() {
 
 						<!-- {`${selectedItems.toString().search(i.key) === i.key}` ? 'font-medium' : 'font-normal'} -->
 
-						<div class="ml-2 flex-1 text-sm leading-tight first-letter:uppercase">
+						<div
+							class="ml-2 flex-1 flex flex-wrap gap-2 text-sm leading-tight first-letter:uppercase">
+							{#if i.color_code}
+								<div class="h-6 w-6 rounded-full border" style="background-color: {i.color_code}">
+								</div>
+							{/if}
+
 							<span>{i.key}</span>
 
 							{#if i.doc_count}
