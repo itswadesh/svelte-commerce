@@ -28,11 +28,13 @@ import Cookie from 'cookie-universal'
 import dayjs from 'dayjs'
 import PincodeInputBox from '$lib/themes/misiki/PincodeInputBox.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+import Skeleton from '$lib/ui/Skeleton.svelte'
 
 const cookies = Cookie()
 let today = dayjs(new Date()).toISOString()
 
 export let data
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -254,29 +256,25 @@ onMount(() => {
 
 		{#if $page.data?.store?.isDeals}
 			{#await data?.streamed?.deals}
-				<div class="flex w-[98vw] items-start justify-start gap-3 overflow-x-auto">
-					<div class="w-60 h-60 animate-pulse rounded bg-zinc-200">
-						{#each { length: 10 } as _}
-							<div class="w-52 h-60 animate-pulse rounded bg-zinc-200"></div>
-						{/each}
-					</div>
+				<div class="p-3 py-5 md:py-10">
+					<Skeleton />
 				</div>
 			{:then deals}
-				{#if deals?.data?.length > 0}
-					{#each deals.data as deal}
-						<div class="mb-5 sm:mb-10">
-							<h2 class="p-3 py-5 text-center sm:px-10 md:py-10 uppercase">
-								{deal.name}
-							</h2>
-
-							<Deals deal="{deal}" />
-						</div>
-					{/each}
+				{#if deals?.data?.length}
+					<Deals deals="{deals.data}" />
 				{/if}
 			{/await}
 		{/if}
 
-		<CollectionsGeneral data="{data}" />
+		{#await data?.streamed?.collections}
+			<div class="p-3 py-5 md:py-10">
+				<Skeleton />
+			</div>
+		{:then collections}
+			{#if collections?.data?.length}
+				<CollectionsGeneral collections="{collections.data}" />
+			{/if}
+		{/await}
 
 		{#await data.streamed.home then home}
 			<HeroBannersCollage6 heroBanners="{home.heroBanners}" />
