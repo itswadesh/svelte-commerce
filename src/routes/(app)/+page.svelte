@@ -228,13 +228,7 @@ onMount(() => {
 			</div>
 		{:then home}
 			{#if home?.heroBanners?.length}
-				<div>
-					<h2 class="p-3 py-5 text-center sm:px-10 md:py-10 uppercase">
-						BEST OF {$page.data?.store?.websiteName} EXCLUSIVE
-					</h2>
-
-					<HeroBanners heroBanners="{home.heroBanners}" />
-				</div>
+				<HeroBanners heroBanners="{home.heroBanners}" />
 			{/if}
 		{/await}
 
