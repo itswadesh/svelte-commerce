@@ -57,12 +57,6 @@ onMount(async () => {
 	getFacetsWithProducts()
 	await getMegamenu()
 	await getSelected()
-
-	const pin = cookies.get('zip')
-
-	if (pin && pin.toString()?.length === 6) {
-		pincode = pin
-	}
 })
 
 function getFacetsWithProducts() {

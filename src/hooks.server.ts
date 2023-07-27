@@ -48,7 +48,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 		// This calls init only when store data not present in browser cookies
 		const { megamenu, storeOne } = await fetchStoreData(event)
-
 		event.locals.store = storeOne
 		event.locals.megamenu = megamenu
 

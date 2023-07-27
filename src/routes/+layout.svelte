@@ -146,7 +146,7 @@ onMount(async () => {
 	<PreloadingIndicator />
 {/if}
 
-{#if !$page.data.store}
+{#if !$page?.data?.store}
 	<!-- If store not found -->
 
 	<div class="h-screen w-full bg-white flex items-center justify-center">
@@ -163,7 +163,7 @@ onMount(async () => {
 			<img src="/no/no_store_found.png" alt="" class="h-80 w-auto object-contain object-center" />
 		</div>
 	</div>
-{:else if !$page.data.store.closed}
+{:else if !$page.data?.store?.closed}
 	<!-- If store found and is not closed -->
 
 	<section class="minimum-width-rem relative flex min-h-screen flex-col bg-white antialiased">

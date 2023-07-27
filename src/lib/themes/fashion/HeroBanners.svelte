@@ -13,8 +13,9 @@ function generateRandomImage() {
 </script>
 
 {#if heroBanners?.length > 0}
-	<h2 class="p-3 py-5 text-center sm:px-10 md:py-10 uppercase">
-		BEST OF {$page.data.store?.websiteName} EXCLUSIVE
+	<h2
+		class="p-3 py-5 sm:px-10 md:py-10 text-center uppercase text-xl font-medium tracking-wider sm:text-2xl md:text-2xl">
+		Best of {$page.data.store?.websiteName} exclusive
 	</h2>
 
 	<div>

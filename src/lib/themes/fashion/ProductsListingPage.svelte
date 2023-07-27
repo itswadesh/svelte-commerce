@@ -54,7 +54,7 @@ let seoProps = {
 	productName: `${data.products?.category?.name}`,
 	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
 	slug: `${data.products?.category?.slug}`,
-	title: `${data.products?.category?.name || 'Buy online in - ' + $page.data.store?.websiteName}`,
+	title: `${data.products?.category?.name || 'Buy online'}`,
 	twitterImage: { url: `${data.products?.category?.img}` }
 }
 
@@ -377,10 +377,10 @@ function handleFilterTags() {
 	{/if}
 
 	<div class="mb-10 flex flex-col items-start sm:mb-20 lg:flex-row lg:gap-10 lg:p-10">
-		{#if data.products?.products?.length && data.products.facets}
+		{#if data.products?.data?.length}
 			<DesktopFilter
 				class="sticky hidden lg:block {hellobar?.active?.val ? 'top-56' : 'top-48'}"
-				facets="{data.products.facets}"
+				facets="{data.products?.facets}"
 				priceRange="{priceRange}"
 				query="{data.query}"
 				on:clearAll="{refreshData}" />
@@ -494,7 +494,9 @@ function handleFilterTags() {
 					{/if}
 				{:else}
 					<Pagination
-						count="{Math.ceil((data.products?.count || 1) / data.products?.pageSize)}"
+						count="{Math.ceil(
+							(data?.products?.count || 1) / (data?.products?.pageSize || data?.products?.count)
+						)}"
 						current="{data?.currentPage || 1}"
 						providePaddingOnMobile />
 				{/if}

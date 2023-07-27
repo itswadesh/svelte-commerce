@@ -1,6 +1,7 @@
 import type { Error } from '$lib/types'
-import { getMedusajsApi } from '$lib/utils/server'
+import { getMedusajsApi, postMedusajsApi } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
+import { mapMedusajsCart } from './medusa-utils'
 
 export const fetchCartData = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {
@@ -15,11 +16,21 @@ export const fetchCartData = async ({ origin, storeId, server = false, sid = nul
 	}
 }
 
-export const fetchRefreshCart = async ({ origin, storeId, server = false, sid = null }: any) => {
+export const fetchRefreshCart = async ({
+	origin,
+	storeId,
+	cookies,
+	server = false,
+	sid = null
+}: any) => {
 	try {
 		let res: any = {}
 
-		// res = await getMedusajsApi(`cart/me`, {}, sid)
+		const id = cookies.get('cartId')
+
+		const cartRes = await getMedusajsApi(`carts/${id}`, {}, sid)
+
+		res = mapMedusajsCart(cartRes?.cart)
 
 		return res || {}
 	} catch (err) {
@@ -52,12 +63,24 @@ export const addToCartService = async ({
 	sid = null
 }: any) => {
 	try {
+		const var_id = await getMedusajsApi(`products/${pid}`, sid)
+
+		const body = {
+			variant_id: var_id.product?.variants[0]?.id,
+			quantity: qty
+		}
+
 		let res: any = {}
 
-		res = await getMedusajsApi(`cart/me`, {}, sid)
+		const cartRes = await postMedusajsApi(`carts`, sid)
+
+		const res_data = await postMedusajsApi(`carts/${cartRes.cart?.id}/line-items`, body, sid)
+
+		res = mapMedusajsCart(res_data?.cart)
 
 		return res || {}
 	} catch (e) {
+		console.error(e)
 		throw error(e.status, e.data?.message || e.message)
 	}
 }
