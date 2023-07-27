@@ -69,7 +69,7 @@ let seoProps = {
 	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
 	slug: `${data.category?.slug}`,
 	// timeToRead: 0,
-	title: `${data.category?.name || 'Buy online in - ' + $page.data.store?.websiteName}`,
+	title: `${data.category?.name || 'Buy online'}`,
 	twitterImage: { url: `${data.category?.img}` }
 }
 

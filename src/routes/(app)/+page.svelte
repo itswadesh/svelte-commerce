@@ -125,7 +125,7 @@ onMount(() => {
 	<div class="mb-14 lg:mb-0">
 		<!-- Categories slider mobile -->
 
-		{#await data.streamed.home then home}
+		{#await data?.streamed?.home then home}
 			{#if home?.categories?.length}
 				<div class="block sm:hidden">
 					<CategoriesMobile loading="{home.isFetching}" categories="{home?.categories}" />
@@ -135,7 +135,7 @@ onMount(() => {
 
 		<!-- Main slider banner -->
 
-		{#await data.streamed.home}
+		{#await data?.streamed?.home}
 			<div class="h-96 w-full bg-zinc-200 animate-pulse"></div>
 		{:then home}
 			<Hero banners="{home.banners}" />
@@ -144,7 +144,7 @@ onMount(() => {
 
 		<!-- Alert message -->
 
-		{#if $page?.data.store.alert}
+		{#if $page?.data?.store?.alert}
 			<div class="p-3 py-5 sm:p-10 bg-primary-50">
 				<h1 class="container mx-auto text-center">
 					{$page?.data.store.alert}
@@ -154,7 +154,7 @@ onMount(() => {
 
 		<!-- top categories -->
 
-		{#await data.streamed.home}
+		{#await data?.streamed?.home}
 			<ul class="flex flex-wrap gap-3 justify-center p-3 py-5 md:py-10">
 				{#each { length: 10 } as _}
 					<li class="h-24 w-24 shrink-0 rounded-full lg:h-28 lg:w-28 bg-zinc-200 animate-pulse">
@@ -214,7 +214,7 @@ onMount(() => {
 
 		<!-- Hero banners -->
 
-		{#await data.streamed.home}
+		{#await data?.streamed?.home}
 			<div class="p-3 py-5 md:py-10 grid grid-cols-2 items-center gap-2 md:grid-cols-4">
 				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 
@@ -227,20 +227,14 @@ onMount(() => {
 				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 			</div>
 		{:then home}
-			{#if home.heroBanners?.length}
-				<div>
-					<h2 class="p-3 py-5 text-center sm:px-10 md:py-10 uppercase">
-						BEST OF {$page.data.store?.websiteName} EXCLUSIVE
-					</h2>
-
-					<HeroBanners heroBanners="{home.heroBanners}" />
-				</div>
+			{#if home?.heroBanners?.length}
+				<HeroBanners heroBanners="{home.heroBanners}" />
 			{/if}
 		{/await}
 
 		<!-- Picked banners -->
 
-		{#await data.streamed.home}
+		{#await data?.streamed?.home}
 			<div class="grid grid-cols-2 items-center gap-2 md:grid-cols-4">
 				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 
@@ -253,13 +247,13 @@ onMount(() => {
 				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 			</div>
 		{:then home}
-			{#if home.groupByBanner?.length > 0}
+			{#if home?.groupByBanner?.length > 0}
 				<PickedBanners banners="{home.groupByBanner}" />
 			{/if}
 		{/await}
 
-		{#if $page.data.store?.isDeals}
-			{#await data.streamed.deals}
+		{#if $page.data?.store?.isDeals}
+			{#await data?.streamed?.deals}
 				<div class="flex w-[98vw] items-start justify-start gap-3 overflow-x-auto">
 					<div class="w-60 h-60 animate-pulse rounded bg-zinc-200">
 						{#each { length: 10 } as _}
@@ -268,7 +262,7 @@ onMount(() => {
 					</div>
 				</div>
 			{:then deals}
-				{#if deals.data?.length > 0}
+				{#if deals?.data?.length > 0}
 					{#each deals.data as deal}
 						<div class="mb-5 sm:mb-10">
 							<h2 class="p-3 py-5 text-center sm:px-10 md:py-10 uppercase">
@@ -325,7 +319,7 @@ onMount(() => {
 				type="button"
 				class="p-3 sm:px-10 w-full flex items-center justify-between gap-4 text-sm focus:outline-none"
 				on:click="{() => (showFooter = !showFooter)}">
-				<span>More about {$page.data.store?.websiteName || 'store'}</span>
+				<span>More about {$page.data?.store?.websiteName || 'store'}</span>
 
 				<svg
 					xmlns="http://www.w3.org/2000/svg"

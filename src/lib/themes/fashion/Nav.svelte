@@ -112,7 +112,8 @@ async function getCategories() {
 
 <nav
 	class="{clazz} sticky inset-x-0 top-0 w-full border-b bg-white shadow-xs
-	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
+		{hellobar?.active?.val ? 'h-[88px] sm:h-[112px] lg:h-[160px]' : 'h-[56px] sm:h-[80px] lg:h-[128px]'} 
+		{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
 	{#if hellobar?.active?.val}
 		<div
 			class="h-8 text-center tracking-wider flex items-center justify-center text-sm"

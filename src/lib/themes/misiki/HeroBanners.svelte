@@ -1,5 +1,6 @@
 <script>
 import { LazyImg } from '$lib/components'
+import { page } from '$app/stores'
 
 export let heroBanners
 
@@ -12,6 +13,10 @@ function generateRandomImage() {
 </script>
 
 {#if heroBanners?.length > 0}
+	<h2 class="p-3 py-5 text-center sm:px-10 md:py-10 uppercase">
+		BEST OF {$page.data.store?.websiteName} EXCLUSIVE
+	</h2>
+
 	<div>
 		<div class="grid grid-cols-1 sm:grid-cols-2">
 			<a

@@ -11,6 +11,7 @@ import {
 	WhatsApp
 } from 'svelte-share-buttons-component'
 import { browser } from '$app/environment'
+import { cubicOut } from 'svelte/easing'
 import { fireGTagEvent } from '$lib/utils/gTagB'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
@@ -23,6 +24,8 @@ import ProductSliderBanner from './ProductSliderBanner.svelte'
 import productVeg from '$lib/assets/product/veg.png'
 import SEO from '$lib/components/SEO/index.svelte'
 import SimilarProductsFromCategorySlug from './SimilarProductsFromCategorySlug.svelte'
+import Error from '$lib/components/Error.svelte'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
 
 export let data
 
@@ -106,6 +109,7 @@ let selectedLinkiedProducts = []
 let selectedOptions1 = []
 let selectedSize
 let recentlyViewed = []
+let showSizeChart = false
 
 if (data.product?.size?.name === 'One Size') {
 	selectedSize = 'One Size'
@@ -116,7 +120,7 @@ function selectSize(s) {
 }
 
 const storeRecentlyViewedToLocatStorage = async () => {
-	const localRecentlyViewed = localStorage.getItem(`recently_viewed_${$page.data.store.id}`)
+	const localRecentlyViewed = localStorage.getItem(`recently_viewed_${$page?.data?.store?.id}`)
 
 	if (!!localRecentlyViewed && localRecentlyViewed !== 'undefined') {
 		recentlyViewed = JSON.parse(localRecentlyViewed)
@@ -145,8 +149,25 @@ const storeRecentlyViewedToLocatStorage = async () => {
 		recentlyViewed = resvw
 
 		if (browser) {
-			localStorage.setItem(`recently_viewed_${$page.data.store.id}`, JSON.stringify(recentlyViewed))
+			localStorage.setItem(
+				`recently_viewed_${$page.data?.store?.id}`,
+				JSON.stringify(recentlyViewed)
+			)
 		}
+	}
+}
+
+function slideFade(node, params) {
+	const existingTransform = getComputedStyle(node).transform.replace('none', '')
+
+	return {
+		delay: params.delay || 0,
+		duration: params.duration || 400,
+		easing: params.easing || cubicOut,
+		css: (t, u) =>
+			`transform-origin: ${
+				params.transformOrigin || 'top right'
+			}; transform: ${existingTransform} scaleX(${t}); opacity: ${t};`
 	}
 }
 </script>
@@ -245,29 +266,208 @@ const storeRecentlyViewedToLocatStorage = async () => {
 
 				<hr />
 
-				<!-- Size -->
+				{#await data.streamed?.moreProductDetails}
+					<ul class="mb-5 p-0 list-none flex flex-wrap gap-4">
+						{#each { length: 3 } as _}
+							<li class="flex flex-wrap gap-1 w-14 animate-pulse">
+								<div class="rounded bg-zinc-200 h-14 w-full"></div>
 
-				{#if data.product?.size}
-					<div class="mb-5">
-						<div class="mb-2 flex items-center gap-2 justify-between text-sm">
-							<h6>Size:</h6>
+								<div class="rounded-full h-3 w-full bg-zinc-200"></div>
+							</li>
+						{/each}
+					</ul>
+				{:then value}
+					<!-- Color -->
 
-							<button type="button" class="underline focus:outline-none">Size chart</button>
+					{#if value?.pg?.colorGroup?.length}
+						<div>
+							<div class="mb-2 flex items-center gap-2 uppercase">
+								<h5>Select Color</h5>
+
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke-width="1"
+									stroke="currentColor"
+									class="w-5 h-5">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z"
+									></path>
+								</svg>
+							</div>
+
+							<ul class="flex flex-wrap gap-3">
+								{#each value?.pg.colorGroup as cg}
+									{#if cg?.color?.name && cg.img}
+										<li>
+											{#if cg.hasStock}
+												<a
+													href="/product/{cg.slug}"
+													class="relative border h-20 w-14 flex items-center justify-center p-1 group transition duration-300 focus:outline-none
+													{cg?.color?.name === data.product?.color?.name
+														? 'border-primary-500'
+														: 'border-zinc-300 hover:border-primary-500'}">
+													<LazyImg
+														src="{cg.img}"
+														alt="{cg.color.name}"
+														height="160"
+														width="120"
+														aspect_ratio="3:4"
+														class="transform group-hover:scale-95 object-contain object-center w-full h-auto text-xs" />
+
+													<div
+														class="hidden group-hover:block absolute z-20 max-w-max min-w-max -top-2 leading-3 py-1 px-2 rounded whitespace-nowrap bg-primary-500 text-white text-[0.65em] text-center">
+														{cg?.color.name}
+													</div>
+												</a>
+											{:else}
+												<a
+													href="/product/{cg.slug}"
+													class="relative border grayscale h-20 w-14 flex items-center justify-center p-1 group transition duration-300 focus:outline-none
+													{cg?.color?.name === data.product?.color?.name
+														? 'border-primary-500'
+														: 'border-zinc-300 hover:border-primary-500'}">
+													<LazyImg
+														src="{cg.img}"
+														alt="{cg.color.name}"
+														height="160"
+														width="120"
+														aspect_ratio="3:4"
+														class="transform group-hover:scale-95 object-contain object-center w-full h-auto text-xs" />
+
+													<div
+														class="hidden group-hover:block absolute z-20 max-w-max min-w-max -top-2 leading-3 py-1 px-2 rounded whitespace-nowrap bg-primary-500 text-white text-[0.65em] text-center">
+														{cg?.color.name}
+													</div>
+
+													<hr class="absolute z-10 w-24 transform rotate-[56deg] border-zinc-300" />
+												</a>
+											{/if}
+										</li>
+									{/if}
+								{/each}
+							</ul>
 						</div>
+					{/if}
 
-						<div class="flex flex-wrap gap-2">
-							<button
-								type="button"
-								class="overflow-hidden border py-1 px-3 text-sm font-medium uppercase transition duration-500 focus:outline-none
-              				{data.product?.size?.name === selectedSize
-									? 'border-primary-500 text-primary-500'
-									: 'border-zinc-200 text-zinc-500 hover:border-primary-500 hover:text-primary-500'}"
-								on:click="{() => selectSize(data.product?.size)}">
-								{data.product?.size?.name}
-							</button>
+					<!-- Size -->
+
+					{#if value?.pg?.sizeGroup?.length}
+						<div>
+							<div class="mb-2 flex flex-wrap items-center gap-2 justify-between">
+								<h6>Size:</h6>
+
+								{#if data.product.sizechart}
+									<button
+										type="button"
+										class="text-right text-sm underline focus:outline-none"
+										on:click="{() => (showSizeChart = !showSizeChart)}">
+										Size Chart
+									</button>
+								{/if}
+							</div>
+
+							<ul class="flex flex-wrap gap-3">
+								{#each value?.pg.sizeGroup as sg}
+									{#if sg?.size?.name}
+										<li>
+											{#if sg.hasStock}
+												<a
+													href="/product/{sg.slug}"
+													class="reltive flex flex-col items-center justify-center text-center border py-2 px-4 text-xs uppercase group transition duration-300 focus:outline-none
+													{sg?.size?.name === data.product?.size?.name
+														? 'bg-primary-500 border-primary-500 text-white'
+														: 'bg-transparent border-zinc-300 hover:border-primary-500'}">
+													<span class="w-full truncate">
+														{sg?.size?.name}
+													</span>
+
+													{#if sg.stock < 5 && sg.stock > 0}
+														<div
+															class="absolute z-20 max-w-max min-w-max -bottom-2 leading-3 py-0.5 px-2 rounded whitespace-nowrap bg-[#ff5a5a] text-white text-[0.65em] text-center">
+															{sg.stock} left
+														</div>
+													{/if}
+												</a>
+											{:else}
+												<a
+													href="/product/{sg.slug}"
+													class="flex flex-col items-center justify-center text-center border text-zinc-200 py-2 px-4 text-xs uppercase group transition duration-300 focus:outline-none
+													{sg?.size?.name === data.product?.size?.name ? 'border-primary-500' : 'hover:border-primary-500'}">
+													<span class="w-full truncate">
+														{sg?.size?.name}
+													</span>
+												</a>
+											{/if}
+										</li>
+									{/if}
+								{/each}
+							</ul>
 						</div>
-					</div>
-				{/if}
+					{/if}
+
+					<!-- Group Products -->
+
+					<!-- {#if value?.pg.groupProduct.length}
+						<div>
+							<div class="mb-2 flex items-center gap-2 uppercase">
+								<h5>Similar Products</h5>
+
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke-width="1.5"
+									stroke="currentColor"
+									class="h-5 w-5">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 01-1.125-1.125v-3.75zM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-8.25zM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-2.25z"
+									></path>
+								</svg>
+							</div>
+
+							<ul class="flex flex-wrap gap-3">
+								{#each value?.pg.groupProduct as gp}
+									<li>
+										<a
+											href="/product/{gp.slug}"
+											class="flex flex-col gap-1 text-center w-14 text-xs leading-tight">
+											<div
+												class="flex h-16 w-14 items-center justify-center overflow-hidden rounded border border-zinc-200 transition duration-300 hover:border-primary-500 p-1 shadow-md">
+												<LazyImg
+													src="{gp.img}"
+													alt="{gp.img}"
+													height="56"
+													class="h-14 w-auto object-contain object-center" />
+											</div>
+
+											{#if gp.tags?.length}
+												{#each gp.tags as tag}
+													<p class="line-clamp-2">
+														{#if tag.type === 'Style'}
+															{tag.name}
+														{/if}
+													</p>
+												{/each}
+											{/if}
+
+											{#if gp.price}
+												<span><b>{currency(gp.price, $page.data?.store?.currencySymbol)}</b></span>
+											{/if}
+										</a>
+									</li>
+								{/each}
+							</ul>
+						</div>
+					{/if} -->
+				{:catch error}
+					<Error err="{error}" />
+				{/await}
 
 				<form
 					action="/cart?/add"
@@ -427,3 +627,40 @@ const storeRecentlyViewedToLocatStorage = async () => {
 		{/if}
 	</div>
 </div>
+
+{#if showSizeChart}
+	<div class="fixed inset-0 h-screen w-screen z-50 flex justify-end">
+		<button
+			type="button"
+			class="absolute inset-0 cursor-default focus:outline-none"
+			on:click="{() => (showSizeChart = false)}">
+		</button>
+
+		<div
+			transition:slideFade="{{ duration: 500 }}"
+			class="absolute inset-y-0 right-0 z-[60] h-full w-full sm:w-96 bg-white p-5 sm:p-10 flex flex-col items-end justify-end"
+			style="box-shadow: -4px 0px 10px rgba(50, 50, 50, 0.2);">
+			<button
+				type="button"
+				class="text-zinc-500 hover:text-zinc-800 transition duration-300 transform scale-125 focus:outline-none"
+				on:click="{() => (showSizeChart = false)}">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke-width="1.5"
+					stroke="currentColor"
+					class="w-6 h-6">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+				</svg>
+			</button>
+
+			<div class="h-full w-full flex items-center justify-center">
+				<img
+					src="{data.product.sizechart}"
+					alt="{data.product?.name} size chart"
+					class="object-contain object-center w-full h-auto first-line:text-xs" />
+			</div>
+		</div>
+	</div>
+{/if}

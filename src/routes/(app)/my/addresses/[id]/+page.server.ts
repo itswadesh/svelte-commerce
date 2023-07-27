@@ -27,9 +27,19 @@ export async function load({ cookies, locals, params, url }) {
 		sid: cookies.get('connect.sid')
 	})
 
+
 	if (countries?.length === 1) {
 		address.country = countries[0].code
+	} else if (countries?.length > 1) {
+		const dafaultCountry = countries.filter((c) => { return c.dafault })
+
+		// console.log('dafaultCountry', dafaultCountry);
+
+		if (dafaultCountry[0]) {
+			address.country = dafaultCountry[0].code
+		}
 	}
+
 
 	if (address?.country) {
 		states = await CountryService.fetchStates({

@@ -28,23 +28,31 @@ onMount(async () => {
 
 $: if (innerWidth < 640) {
 	if (hellobar?.active?.val && $page.data.store?.isHyperlocal) {
-		sliderHeightAccToPageHeight = innerHeight - 112
+		// 112 (without mobile footer)
+		sliderHeightAccToPageHeight = innerHeight - 168
 	} else if (hellobar?.active?.val && !$page.data.store?.isHyperlocal) {
-		sliderHeightAccToPageHeight = innerHeight - 88
+		// 88 (without mobile footer)
+		sliderHeightAccToPageHeight = innerHeight - 144
 	} else if ($page.data.store?.isHyperlocal && !hellobar?.active?.val) {
-		sliderHeightAccToPageHeight = innerHeight - 80
+		// 80 (without mobile footer)
+		sliderHeightAccToPageHeight = innerHeight - 136
 	} else if (!hellobar?.active?.val && !$page.data.store?.isHyperlocal) {
-		sliderHeightAccToPageHeight = innerHeight - 56
+		// 56 (without mobile footer)
+		sliderHeightAccToPageHeight = innerHeight - 112
 	}
 } else if (innerWidth < 1024) {
 	if (hellobar?.active?.val && $page.data.store?.isHyperlocal) {
-		sliderHeightAccToPageHeight = innerHeight - 136
+		// 136 (without mobile footer)
+		sliderHeightAccToPageHeight = innerHeight - 192
 	} else if (hellobar?.active?.val && !$page.data.store?.isHyperlocal) {
-		sliderHeightAccToPageHeight = innerHeight - 112
+		// 112 (without mobile footer)
+		sliderHeightAccToPageHeight = innerHeight - 168
 	} else if ($page.data.store?.isHyperlocal && !hellobar?.active?.val) {
-		sliderHeightAccToPageHeight = innerHeight - 104
+		// 104 (without mobile footer)
+		sliderHeightAccToPageHeight = innerHeight - 160
 	} else if (!hellobar?.active?.val && !$page.data.store?.isHyperlocal) {
-		sliderHeightAccToPageHeight = innerHeight - 80
+		// 80 (without mobile footer)
+		sliderHeightAccToPageHeight = innerHeight - 136
 	}
 } else {
 	if (hellobar?.active?.val && $page.data.store?.isHyperlocal) {

@@ -11,7 +11,7 @@ export const fetchCollections = async ({
 		let res: any = {}
 
 		res = await getMedusajsApi(`collections`)
-
+		res.data = res.collections
 		return res || {}
 	} catch (e) {
 		return {}

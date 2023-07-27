@@ -186,22 +186,31 @@ async function SaveAddress(address) {
 					<span class="text-accent-500">*</span>
 				</h6>
 
-				<select
-					class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
-					bind:value="{address.country}"
-					on:change="{() => onCountryChange(address.country)}"
-					required>
-					<option value="{null}" disabled selected>-- Select a Country --</option>
-					{#if countries?.length > 1}
+				{#if countries?.length > 0}
+					<select
+						disabled="{countries?.length === 1}"
+						class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
+						bind:value="{address.country}"
+						on:change="{() => onCountryChange(address.country)}"
+						required>
+						<option value="{null}" disabled selected>-- Select a Country --</option>
+
 						{#each countries as c}
 							{#if c}
-								<option value="{c.code}">
+								<option value="{c.code}" selected="{c.default}">
 									{c.name}
 								</option>
 							{/if}
 						{/each}
-					{/if}
-				</select>
+					</select>
+				{:else}
+					<a
+						href="/contact-us"
+						aria-label="contact us"
+						class="py-2 text-sm text-zinc-500 hover:text-zinc-800 hover:underline">
+						Contact the website admin to enable your country
+					</a>
+				{/if}
 			</div>
 
 			<!-- State -->

@@ -10,7 +10,7 @@ export const fetchFooterCategories = async ({
 }: any) => {
 	try {
 		let data: []
-
+		console.log("origin");
 		data = await getMedusajsApi(`product-categories`)
 
 		return data || []
@@ -23,7 +23,15 @@ export const fetchCategory = async ({ origin, slug, id, server = false, sid = nu
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`product-categories/${id}`)
+		// res = await getMedusajsApi(`product-categories?handle=${id}`)
+
+		// let cat_data: any = {}
+
+		const cat_data = (await getMedusajsApi(`product-categories?handle=${id}`)).product_categories
+
+		res = cat_data.map((category: any) => {
+			return mapMedusajsCategory(category)
+		})
 
 		return res || {}
 	} catch (e) {

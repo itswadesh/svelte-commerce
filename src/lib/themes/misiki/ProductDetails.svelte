@@ -646,7 +646,15 @@ function handleMobileCanvas() {
 							{/if}
 						</div>
 
-						<h6 class="text-brand-500">Inclusive of all taxes</h6>
+						{#await data.streamed?.moreProductDetails then value}
+							<h6 class="text-brand-500">
+								{#if value?.igst}
+									Inclusive {currency(value?.igst, $page.data?.store?.currencySymbol)} GST
+								{:else}
+									Inclusive of all taxes
+								{/if}
+							</h6>
+						{/await}
 					{/if}
 				</div>
 
@@ -744,7 +752,15 @@ function handleMobileCanvas() {
 							{/if}
 						</div>
 
-						<h6 class="text-brand-500">Inclusive of all taxes</h6>
+						{#await data.streamed?.moreProductDetails then value}
+							<h6 class="text-brand-500">
+								{#if value?.igst}
+									Inclusive {currency(value?.igst, $page.data?.store?.currencySymbol)} GST
+								{:else}
+									Inclusive of all taxes
+								{/if}
+							</h6>
+						{/await}
 					{/if}
 				</div>
 
@@ -781,7 +797,7 @@ function handleMobileCanvas() {
 				{:then value}
 					<!-- Color -->
 
-					{#if value?.pg.colorGroup.length}
+					{#if value?.pg?.colorGroup?.length}
 						<div>
 							<div class="mb-2 flex items-center gap-2 uppercase">
 								<h5>Select Color</h5>
@@ -857,7 +873,7 @@ function handleMobileCanvas() {
 
 					<!-- Size -->
 
-					{#if value?.pg.sizeGroup.length}
+					{#if value?.pg?.sizeGroup?.length}
 						<div>
 							<div class="mb-2 flex flex-wrap items-center gap-2 justify-between">
 								<div class="flex items-center gap-2 uppercase">

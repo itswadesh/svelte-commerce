@@ -6,7 +6,7 @@ export const fetchOrders = async ({ origin, storeId, server = false, sid = null 
 	try {
 		let res: AllOrders | {} = {}
 
-		const med = (await getMedusajsApi(`orders/me/orders`, {}, sid)).product
+		const med = (await getMedusajsApi(`customers/me/orders`, {}, sid)).product
 
 		return {
 			data: res.data || [],

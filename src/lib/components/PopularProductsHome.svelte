@@ -4,16 +4,16 @@ import { ProductCard, DummyProductCard } from '$lib/components'
 
 export let data
 
-let product_image_dimension = $page.data.store.product_image_dimension || '3x4'
+let product_image_dimension = $page?.data?.store?.product_image_dimension || '3x4'
 </script>
 
 <!-- Popular products -->
 
-{#await data.streamed.home then home}
+{#await data?.streamed.home then home}
 	{#if home?.popular?.length > 0}
 		<div>
 			<h2 class="p-3 py-5 text-center sm:px-10 md:py-10 uppercase">
-				POPULAR ON {$page.data.store?.websiteName}
+				POPULAR ON {$page?.data?.store?.websiteName}
 			</h2>
 
 			<ul
