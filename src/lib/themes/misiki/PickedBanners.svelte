@@ -13,17 +13,19 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 </script>
 
 <div>
+	<!-- Picked Banners For Deals -->
+
 	{#if pickedBannersForDeals?.length}
-		<div>
+		<ul class="mb-5 sm:mb-10 p-0 list-none flex flex-col gap-5 sm:gap-10">
 			{#each pickedBannersForDeals as b}
-				<div>
+				<li>
 					<h2 class="p-3 py-5 text-center sm:px-10 md:py-10 uppercase">
 						{b._id?.title}
 					</h2>
 
 					{#if b.data?.length}
-						<div class="w-screen overflow-x-auto scrollbar-none lg:hidden">
-							<div role="banner" class="flex flex-row items-start">
+						<div role="banner" class="w-[97vw] overflow-x-auto scrollbar-none lg:hidden">
+							<div class="flex flex-row items-start">
 								{#each b.data as banner, bx}
 									{#if banner.img}
 										<a href="{banner.link}" class="block shrink-0" data-sveltekit-preload-data>
@@ -54,22 +56,24 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 							{/each}
 						</div>
 					{/if}
-				</div>
+				</li>
 			{/each}
-		</div>
+		</ul>
 	{/if}
 
+	<!-- Picked Banners -->
+
 	{#if pickedBanners?.length}
-		<div>
+		<ul class="mb-5 sm:mb-10 p-0 list-none flex flex-col gap-5 sm:gap-10">
 			{#each pickedBanners as b}
-				<div>
+				<li>
 					<h2 class="p-3 py-5 text-center sm:px-10 md:py-10 uppercase">
 						{b._id?.title}
 					</h2>
 
 					{#if b.data?.length}
-						<div class="w-screen overflow-x-auto scrollbar-none lg:hidden">
-							<div role="banner" class="flex flex-row items-start">
+						<div role="banner" class="w-[97vw] overflow-x-auto scrollbar-none lg:hidden">
+							<div class="flex flex-row items-start">
 								{#each b.data as banner, bx}
 									{#if banner.img}
 										<a href="{banner.link}" class="block shrink-0" data-sveltekit-preload-data>
@@ -100,8 +104,8 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 							{/each}
 						</div>
 					{/if}
-				</div>
+				</li>
 			{/each}
-		</div>
+		</ul>
 	{/if}
 </div>
