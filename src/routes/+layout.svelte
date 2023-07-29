@@ -92,9 +92,9 @@ onMount(async () => {
 	<meta name="apple-mobile-web-app-title" content="{$page.data.store.websiteName}" />
 	<meta name="application-name" content="{$page.data.store.websiteName}" />
 	<link
+		rel="stylesheet"
 		href="https://fonts.googleapis.com/css2?family={$page.data.store
-			.websiteName}:wght@300;400;600&display=swap"
-		rel="stylesheet" />
+			.fontFamily}:wght@300;400;600&display=swap" />
 
 	<!-- {@html webManifest} -->
 </svelte:head>
