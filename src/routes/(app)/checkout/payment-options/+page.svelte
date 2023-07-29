@@ -266,7 +266,13 @@ function checkIfStripeCardValid({ detail }) {
 
 					<h6 class="mb-2 capitalize">We are very sorry!!</h6>
 
-					<p>Payment method is not setup yet, Please contact the store admin</p>
+					<p>
+						<span> Payment method is not setup yet, </span>
+
+						<a href="/contact-us" class="block underline hover:text-zinc-800">
+							Please contact the store admin
+						</a>
+					</p>
 				</div>
 			{/if}
 		</div>

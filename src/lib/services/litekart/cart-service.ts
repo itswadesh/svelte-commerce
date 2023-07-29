@@ -21,10 +21,10 @@ export const fetchCartData = async ({ origin, storeId, server = false, sid = nul
 	}
 }
 
-export const fetchRefreshCart = async ({ origin, storeId, server = false, sid = null }) => {
+export const fetchRefreshCart = async ({ origin, storeId, isCors = false, server = false, sid = null }) => {
 	try {
 		let res = {}
-		if (isServer) {
+		if (isServer || isCors) {
 			res = await getBySid(`carts/refresh-cart?store=${storeId}`, sid)
 			// res = await getBySid(`carts/my?store=${storeId}`, sid)
 		} else {

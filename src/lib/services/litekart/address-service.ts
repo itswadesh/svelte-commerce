@@ -3,13 +3,13 @@ import { getBySid } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 const isServer = import.meta.env.SSR
 
-export const fetchAddresses = async ({ origin, storeId, server = false, sid = null }: any) => {
+export const fetchAddresses = async ({ origin, storeId, isCors = false, server = false, sid = null }: any) => {
 	try {
 		let res: any = {}
 		let selectedAddress = {}
 		let myAddresses = []
 
-		if (isServer) {
+		if (isServer || isCors) {
 			res = await getBySid(`addresses/my?store=${storeId}`, sid)
 		} else {
 			res = await getAPI(`addresses/my?store=${storeId}`, origin)
