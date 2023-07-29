@@ -20,6 +20,8 @@ import {
 	siteTitle,
 	websiteLegalName,
 	websiteName,
+	themeColor,
+	favicon,
 	saasName,
 	saasDomain,
 	weightUnit,
@@ -51,7 +53,8 @@ export const getStoreData = async ({
 		DOMAIN,
 		email,
 		facebookPixel: {},
-		favicon: null,
+		favicon,
+		themeColor,
 		GOOGLE_ANALYTICS_ID,
 		GOOGLE_CLIENT_ID,
 		googleAnalytics: {},
@@ -98,9 +101,7 @@ export const getStoreData = async ({
 	) {
 		const uri = new URL(url)
 
-
 		storeRes = await fetchInit(uri.host)
-
 
 		store = {
 			id: storeRes?.storeOne?._id,
@@ -115,11 +116,18 @@ export const getStoreData = async ({
 			domain: storeRes?.storeOne?.domain,
 			DOMAIN: storeRes?.storeOne?.DOMAIN,
 			email: storeRes?.storeOne?.websiteEmail,
-			facebookPixel: { active: storeRes?.storeOne?.facebookPixel?.active?.val, id: storeRes?.storeOne?.facebookPixel?.id?.val || '' },
-			favicon: storeRes?.storeOne?.favicon,
+			facebookPixel: {
+				active: storeRes?.storeOne?.facebookPixel?.active?.val,
+				id: storeRes?.storeOne?.facebookPixel?.id?.val || ''
+			},
+			favicon: storeRes?.storeOne?.favicon || favicon,
+			themeColor: storeRes?.storeOne?.themeColor || themeColor,
 			GOOGLE_ANALYTICS_ID: storeRes?.storeOne?.GOOGLE_ANALYTICS_ID,
 			GOOGLE_CLIENT_ID: storeRes?.storeOne?.GOOGLE_CLIENT_ID,
-			googleAnalytics: { active: storeRes?.storeOne?.googleAnalytics?.active?.val, id: storeRes?.storeOne?.googleAnalytics?.id?.val || '' },
+			googleAnalytics: {
+				active: storeRes?.storeOne?.googleAnalytics?.active?.val,
+				id: storeRes?.storeOne?.googleAnalytics?.id?.val || ''
+			},
 			guaranteed_response_time: storeRes?.storeOne?.guaranteed_response_time,
 			hellobar: storeRes?.storeOne?.hellobar,
 			IMAGE_CDN_URL: storeRes?.storeOne?.IMAGE_CDN_URL,
@@ -164,7 +172,6 @@ export const getStoreData = async ({
 
 	storeRes.storeOne = store
 	storeRes.megamenu = megamenu
-
 
 	return storeRes
 }
