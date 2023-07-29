@@ -19,8 +19,7 @@ export async function load({ request, url, locals, cookies }) {
 		const cart = await CartService.fetchRefreshCart({
 			storeId: locals.store?.id,
 			server: true,
-			sid: cookies.get('connect.sid'),
-			origin: locals.origin
+			sid: cookies.get('connect.sid')
 		})
 
 		return {
@@ -33,8 +32,8 @@ export async function load({ request, url, locals, cookies }) {
 			err
 		}
 	} catch (e) {
-		if (e.status === 401) {
-			throw redirect(307, `${locals.store?.loginUrl}?ref=${url?.pathname}`)
+		if (e.status === 401 || e.status === 307) {
+			throw redirect(e.status, `${locals.store?.loginUrl}?ref=${url?.pathname}`)
 		} else {
 			throw error(500, e?.message)
 		}

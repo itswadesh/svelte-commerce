@@ -69,8 +69,9 @@ function hideitems() {
 			data-sveltekit-preload-data="tap"
 			class="flex flex-col items-center">
 			<!-- New -->
+
 			{#if product.new || product.tags?.length}
-				<div class="absolute top-1 left-1 flex flex-col gap-0.5">
+				<div class="absolute z-10 top-1 left-1 flex flex-col gap-0.5">
 					{#if product.new}
 						<div
 							class="text-rem max-w-max bg-red-500 py-0.5 px-1.5 text-xs font-semibold uppercase text-white">

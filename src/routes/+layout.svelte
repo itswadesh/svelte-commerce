@@ -20,6 +20,7 @@ import storeClosed from '$lib/assets/store-closed.png'
 import whatsappIcon from '$lib/assets/social-media/whatsapp.png'
 
 export let data
+// console.log('$page', $page)
 
 $: innerWidth = 0
 
@@ -83,9 +84,20 @@ onMount(async () => {
 // }
 </script>
 
-<!-- <svelte:head>
-	{@html webManifest}
-</svelte:head> -->
+<svelte:head>
+	<link rel="icon" type="image/x-icon" href="{$page.data.store.favicon}" />
+	<link rel="shortcut icon" type="image/x-icon" href="{$page.data.store.favicon}" />
+	<meta name="theme-color" content="{$page.data.store.themeColor}" />
+	<link rel="apple-touch-icon" href="{$page.data.store.favicon}" />
+	<meta name="apple-mobile-web-app-title" content="{$page.data.store.websiteName}" />
+	<meta name="application-name" content="{$page.data.store.websiteName}" />
+	<link
+		href="https://fonts.googleapis.com/css2?family={$page.data.store
+			.websiteName}:wght@300;400;600&display=swap"
+		rel="stylesheet" />
+
+	<!-- {@html webManifest} -->
+</svelte:head>
 
 <!-- <svelte:head>
 	<script>

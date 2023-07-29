@@ -446,6 +446,7 @@ async function toggleWishlist(id) {
 			origin: $page.data.origin
 		})
 	} catch (e) {
+		toast(e, 'error')
 	} finally {
 		loadingForWishlist = false
 	}
