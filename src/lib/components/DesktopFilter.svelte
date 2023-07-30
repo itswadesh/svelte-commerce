@@ -53,8 +53,8 @@ function clearFilters() {
 }
 
 function goCheckbox(e) {
-	const selectedItems = e.detail.selectedItems
-	const replacedString = selectedItems.map(s=>s.replace(/,/g, ';'))
+	const selectedItems = e.detail.selectedItems.split(',')
+	const replacedString = selectedItems.map((s) => s.replace(/,/g, ';'))
 	fl[e.detail.model] = replacedString
 	fl.q = $page.url.searchParams.get('q')
 	let url = constructURL2(`${$page.url.pathname}`, fl)

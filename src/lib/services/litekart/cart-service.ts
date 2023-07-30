@@ -21,7 +21,7 @@ export const fetchCartData = async ({ origin, storeId, server = false, sid = nul
 	}
 }
 
-export const fetchRefreshCart = async ({ origin, storeId, isCors = false, server = false, sid = null }) => {
+export const fetchRefreshCart = async ({ origin = null, storeId, isCors = false, server = false, sid = null }) => {
 	try {
 		let res = {}
 		if (isServer || isCors) {

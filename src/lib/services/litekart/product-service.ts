@@ -154,6 +154,7 @@ export const fetchProductsOfCategory = async ({
 		let pageSize = 0
 		let category = {}
 		let err = ''
+
 		if (isServer) {
 			res = await getBySid(
 				`es/products?categories=${categorySlug}&zip=${zip || ''}&store=${storeId}&${query}`,
