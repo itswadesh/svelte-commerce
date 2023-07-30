@@ -1,8 +1,8 @@
 import { id } from '$lib/config'
 import { loadingDelayed } from '$lib/store'
-import Cookie from 'cookie-universal'
+// import Cookie from 'cookie-universal'
 
-const cookies = Cookie()
+// const cookies = Cookie()
 
 let typingTimer
 
