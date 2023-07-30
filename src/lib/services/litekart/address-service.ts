@@ -15,7 +15,7 @@ export const fetchAddresses = async ({ origin, storeId, isCors = false, server =
 			res = await getAPI(`addresses/my?store=${storeId}`, origin)
 		}
 		selectedAddress = res?.data[0]?._id
-		myAddresses = res.data || []
+		myAddresses = res?.data || []
 
 		return { myAddresses: { data: myAddresses }, selectedAddress, count: res?.count }
 	} catch (e) {
