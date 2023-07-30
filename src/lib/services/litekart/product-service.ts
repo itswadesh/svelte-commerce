@@ -97,14 +97,7 @@ export const fetchReels = async ({
 
 // Fetch single product
 
-export const fetchProduct = async ({
-	origin,
-	slug,
-	id,
-	storeId,
-	server = false,
-	sid = null
-}) => {
+export const fetchProduct = async ({ origin, slug, id, storeId, server = false, sid = null }) => {
 	try {
 		let res: Product | object = {}
 
@@ -151,7 +144,7 @@ export const fetchProductsOfCategory = async ({
 	server = false,
 	sid = null,
 	storeId,
-	zip,
+	zip
 }: any) => {
 	try {
 		let res: any = {}
@@ -159,21 +152,30 @@ export const fetchProductsOfCategory = async ({
 		let count = 0
 		let facets = ''
 		let pageSize = 0
-		let category = ''
+		let category = {}
 		let err = ''
 
 		if (isServer) {
-			res = await getBySid(`es/products?categories=${categorySlug}&zip=${zip || ''}&store=${storeId}&${query}`, sid)
+			res = await getBySid(
+				`es/products?categories=${categorySlug}&zip=${zip || ''}&store=${storeId}&${query}`,
+				sid
+			)
 		} else {
-			res = await getAPI(`es/products?categories=${categorySlug}&zip=${zip || ''}&store=${storeId}&${query}`, origin)
+			res = await getAPI(
+				`es/products?categories=${categorySlug}&zip=${zip || ''}&store=${storeId}&${query}`,
+				origin
+			)
 		}
 
 		products = res?.data?.map((p) => {
-			const p1 = { ...p._source }
-			p1.id = p._id
-			return p1
+			if (p._source) {
+				const p1 = { ...p._source }
+				p1.id = p._id
+				return p1
+			} else {
+				return p
+			}
 		})
-
 		count = res?.count
 		facets = res?.facets
 		pageSize = res?.pageSize
@@ -212,17 +214,23 @@ export const fetchNextPageProducts = async ({
 				origin
 			)
 		}
+
 		nextPageData = res?.data?.map((p) => {
-			const p1 = { ...p._source }
-			p1.id = p._id
-			return p1
+			if (p._source) {
+				const p1 = { ...p._source }
+				p1.id = p._id
+				return p1
+			} else {
+				return p
+			}
 		})
 
 		return {
-			nextPageData: nextPageData || [],
+			category: res.category,
 			count: res.count,
 			estimatedTotalHits: res.estimatedTotalHits,
-			facets: res.facets
+			facets: res.facets,
+			nextPageData: nextPageData || []
 		}
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)
