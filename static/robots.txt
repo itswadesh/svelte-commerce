@@ -1,2 +1,82 @@
+# we use Litekart as our ecommerce platform
+
 User-agent: *
+Disallow: /admin
+Disallow: /cart
+Disallow: /orders
+Disallow: /checkouts/
+Disallow: /checkout
+Disallow: /carts
+Disallow: /account
+Disallow: /collections/*sort_by*
+Disallow: /*/collections/*sort_by*
+Disallow: /collections/*+*
+Disallow: /collections/*%2B*
+Disallow: /collections/*%2b*
+Disallow: /*/collections/*+*
+Disallow: /*/collections/*%2B*
+Disallow: /*/collections/*%2b*
+Disallow: */collections/*filter*&*filter*
+Disallow: /policies/
+Disallow: /search
+Disallow: /apple-app-site-association
+
+# Google adsbot ignores robots.txt unless specifically named!
+User-agent: adsbot-google
+Disallow: /checkouts/
+Disallow: /checkout
+Disallow: /carts
+Disallow: /orders
+
+User-agent: Nutch
 Disallow: /
+
+User-agent: AhrefsBot
+Crawl-delay: 10
+Disallow: /admin
+Disallow: /cart
+Disallow: /orders
+Disallow: /checkouts/
+Disallow: /checkout
+Disallow: /carts
+Disallow: /account
+Disallow: /collections/*sort_by*
+Disallow: /*/collections/*sort_by*
+Disallow: /collections/*+*
+Disallow: /collections/*%2B*
+Disallow: /collections/*%2b*
+Disallow: /*/collections/*+*
+Disallow: /*/collections/*%2B*
+Disallow: /*/collections/*%2b*
+Disallow: */collections/*filter*&*filter*
+Disallow: /policies/
+Disallow: /search
+Disallow: /apple-app-site-association
+
+User-agent: AhrefsSiteAudit
+Crawl-delay: 10
+Disallow: /admin
+Disallow: /cart
+Disallow: /orders
+Disallow: /checkouts/
+Disallow: /checkout
+Disallow: /carts
+Disallow: /account
+Disallow: /collections/*sort_by*
+Disallow: /*/collections/*sort_by*
+Disallow: /collections/*+*
+Disallow: /collections/*%2B*
+Disallow: /collections/*%2b*
+Disallow: /*/collections/*+*
+Disallow: /*/collections/*%2B*
+Disallow: /*/collections/*%2b*
+Disallow: */collections/*filter*&*filter*
+Disallow: /policies/
+Disallow: /search
+Disallow: /apple-app-site-association
+
+User-agent: MJ12bot
+Crawl-Delay: 10
+
+User-agent: Pinterest
+Crawl-delay: 1
