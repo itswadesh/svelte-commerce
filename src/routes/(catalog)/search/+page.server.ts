@@ -18,13 +18,11 @@ export async function load({ url, params, parent, cookies }) {
 	})
 
 	return {
-		products: ProductService.fetchProductsOfCategory({
-			categorySlug,
+		products: ProductService.searchProducts({
 			query: query.toString(),
-			server: isServer,
 			storeId: store?.id,
-			origin,
-			zip: cookies.get('zip')
+			server: isServer,
+			sid: cookies.get('connect.sid')
 		}),
 		query: query.toString(),
 		searchData,
