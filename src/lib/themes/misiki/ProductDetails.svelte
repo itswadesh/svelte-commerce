@@ -88,7 +88,10 @@ const cookies = Cookie()
 const isServer = import.meta.env.SSR
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
+console.log('zzzzzzzzzzzzzzzzzz', data)
+
+let currentVariantId = $page.url.searchParams?.get('variant') || ''
+let currentVariantPrice = data.product?.price || 0
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -114,8 +117,8 @@ let seoProps = {
 	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00'],
 	popularity: data.product?.popularity,
 	// postalCode: '764036',
-	price: data.product?.price,
-	priceRange: `${data.product?.price}-${data.product?.mrp}`,
+	price: currentVariantPrice,
+	priceRange: `${currentVariantPrice}-${data.product?.mrp}`,
 	ratingCount: 1,
 	ratingValue: +data.product?.ratings + 1,
 	sku: data.product?.sku,
@@ -150,7 +153,7 @@ let seoProps = {
 	productAvailability: `${data.product?.stock}`,
 	productBrand: `${data.product?.brandName || `${$page?.data?.store?.websiteName}`}`,
 	productName: `${data.product?.name}`,
-	productPriceAmount: `${data.product?.price}`,
+	productPriceAmount: `${currentVariantPrice}`,
 	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
 	slug: `${data.product?.slug}`,
 	// timeToRead: 0,
@@ -160,8 +163,7 @@ let seoProps = {
 
 let bounceItemFromTop = false
 let cartButtonText = 'Add to Bag'
-let currentVariantId = $page.url.searchParams?.get('variant') || ''
-let currentVariantPrice = 0
+
 let customizedImg
 let isExpired = false
 let isWishlisted = false
@@ -481,7 +483,7 @@ function handleMobileCanvas() {
 
 async function updateVariant(variant) {
 	$page.url.searchParams.set('variant', variant.id)
-	// currentVariantPrice = variant.price || data.product?.price
+	currentVariantPrice = variant.prices[0]?.amount || currentVariantPrice
 	await goto($page.url.toString())
 	await invalidateAll()
 }
@@ -638,10 +640,10 @@ async function updateVariant(variant) {
 					{:else}
 						<div class="mb-2 flex flex-wrap items-baseline gap-2 text-sm">
 							<span class="text-xl font-bold whitespace-nowrap">
-								{currency(data.product?.price, $page.data?.store?.currencySymbol)}
+								{currency(currentVariantPrice, $page.data?.store?.currencySymbol)}
 							</span>
 
-							{#if data.product?.mrp > data.product?.price}
+							{#if data.product?.mrp > currentVariantPrice}
 								<span class="whitespace-nowrap text-zinc-500">
 									<strike>
 										{currency(data.product?.mrp, $page.data?.store?.currencySymbol)}
@@ -744,10 +746,10 @@ async function updateVariant(variant) {
 					{:else}
 						<div class="mb-2 flex flex-wrap items-baseline gap-2">
 							<span class="text-2xl font-bold whitespace-nowrap">
-								{currency(data.product?.price, $page.data?.store?.currencySymbol)}
+								{currency(currentVariantPrice, $page.data?.store?.currencySymbol)}
 							</span>
 
-							{#if data.product?.mrp > data.product?.price}
+							{#if data.product?.mrp > currentVariantPrice}
 								<span class="whitespace-nowrap text-zinc-500">
 									<strike>
 										{currency(data.product?.mrp, $page.data?.store?.currencySymbol)}
@@ -1282,7 +1284,7 @@ async function updateVariant(variant) {
 							</div>
 						{/if}
 
-						{#if data.product?.price > 0}
+						{#if currentVariantPrice > 0}
 							<div class="col-span-1">
 								{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
 									<a
@@ -1616,7 +1618,7 @@ async function updateVariant(variant) {
 							</div>
 						{/if}
 
-						{#if data.product?.price > 0}
+						{#if currentVariantPrice > 0}
 							<div class="{$page.data.store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
 								{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
 									<a
@@ -1798,7 +1800,7 @@ async function updateVariant(variant) {
 							</div>
 						{/if}
 
-						{#if data.product?.price > 0}
+						{#if currentVariantPrice > 0}
 							<div class="{$page.data.store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
 								{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
 									<a
