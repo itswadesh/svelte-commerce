@@ -88,7 +88,7 @@ const cookies = Cookie()
 const isServer = import.meta.env.SSR
 
 export let data
-console.log('zzzzzzzzzzzzzzzzzz', data)
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let currentVariantId = $page.url.searchParams?.get('variant') || ''
 let currentVariantPrice = data.product?.price || 0
