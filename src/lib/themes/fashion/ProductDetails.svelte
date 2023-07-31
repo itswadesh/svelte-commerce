@@ -102,13 +102,15 @@ let seoProps = {
 }
 
 let bounceItemFromTop = false
-let showdescription = false
 let cartButtonText = 'Add to Bag'
+let currentVariantId = $page.url.searchParams?.get('variant') || ''
+let currentVariantPrice = 0
 let customizedImg
+let recentlyViewed = []
 let selectedLinkiedProducts = []
 let selectedOptions1 = []
 let selectedSize
-let recentlyViewed = []
+let showdescription = false
 let showSizeChart = false
 
 if (data.product?.size?.name === 'One Size') {
@@ -169,6 +171,13 @@ function slideFade(node, params) {
 				params.transformOrigin || 'top right'
 			}; transform: ${existingTransform} scaleX(${t}); opacity: ${t};`
 	}
+}
+
+async function updateVariant(variant) {
+	$page.url.searchParams.set('variant', variant.id)
+	// currentVariantPrice = variant.price || data.product?.price
+	await goto($page.url.toString())
+	await invalidateAll()
 }
 </script>
 
@@ -465,12 +474,12 @@ function slideFade(node, params) {
 						</div>
 					{/if}
 
-					<!-- Varient Products -->
+					<!-- Variant Products -->
 
-					{#if value?.varient?.length}
+					{#if value?.variants?.length}
 						<div>
 							<div class="mb-2 flex items-center gap-2 uppercase">
-								<h5>Varient Products</h5>
+								<h5>Variant Products</h5>
 
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -488,33 +497,19 @@ function slideFade(node, params) {
 							</div>
 
 							<ul class="flex flex-wrap gap-3">
-								{#each value?.varient as v}
+								{#each value?.variants as v}
 									<li>
-										<a
-											href="/product/{v.slug}"
-											class="flex flex-col items-center justify-center gap-1 text-center w-14 text-xs">
-											<div
-												class="flex h-16 w-14 items-center justify-center overflow-hidden rounded border transition duration-300 p-1 shadow-md
-												{$page.url.pathname === v.slug
-													? 'border-primary-500'
-													: 'border-zinc-200 hover:border-primary-500'}">
-												<LazyImg
-													src="{v.img}"
-													alt="{v.img}"
-													height="56"
-													class="h-14 w-auto object-contain object-center" />
-											</div>
-
-											<span class="text-zinc-500 leading-3 line-clamp-2">
-												{v.material.name}
+										<button
+											type="button"
+											class="reltive flex flex-col items-center justify-center text-center border rounded py-2 px-4 text-sm font-medium uppercase group transition duration-300 focus:outline-none
+											{v?.id === currentVariantId
+												? 'bg-primary-500 border-primary-500 text-white'
+												: 'bg-transparent border-zinc-300 hover:border-primary-500'}"
+											on:click="{() => updateVariant(v)}">
+											<span class="w-full truncate">
+												{v?.title}
 											</span>
-
-											{#if v.material.price}
-												<span
-													><b>{currency(v.material.price, $page.data?.store?.currencySymbol)}</b
-													></span>
-											{/if}
-										</a>
+										</button>
 									</li>
 								{/each}
 							</ul>
@@ -547,7 +542,7 @@ function slideFade(node, params) {
 						}
 					}}">
 					<input type="hidden" name="pid" value="{data?.product?._id}" />
-					<input type="hidden" name="vid" value="{data?.product?._id}" />
+					<input type="hidden" name="vid" value="{currentVariantId || data?.product?._id}" />
 
 					<input
 						type="hidden"
@@ -578,7 +573,7 @@ function slideFade(node, params) {
 						}
 					}}">
 					<input type="hidden" name="pid" value="{data?.product?._id}" />
-					<input type="hidden" name="vid" value="{data?.product?._id}" />
+					<input type="hidden" name="vid" value="{currentVariantId || data?.product?._id}" />
 
 					<input
 						type="hidden"
