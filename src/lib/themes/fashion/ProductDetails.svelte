@@ -28,6 +28,7 @@ import Error from '$lib/components/Error.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 
 export let data
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 onMount(() => {
 	storeRecentlyViewedToLocatStorage()
