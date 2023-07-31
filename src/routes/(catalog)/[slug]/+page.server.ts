@@ -1,4 +1,4 @@
-import { CategoryService, ProductService } from '$lib/services'
+import { ProductService } from '$lib/services'
 
 export const prerender = false
 const isServer = import.meta.env.SSR
