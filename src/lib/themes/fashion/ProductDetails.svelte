@@ -411,10 +411,10 @@ function slideFade(node, params) {
 
 					<!-- Group Products -->
 
-					<!-- {#if value?.pg.groupProduct.length}
+					{#if value?.pg?.materialGroup?.length}
 						<div>
 							<div class="mb-2 flex items-center gap-2 uppercase">
-								<h5>Similar Products</h5>
+								<h5>Group Products</h5>
 
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -432,39 +432,94 @@ function slideFade(node, params) {
 							</div>
 
 							<ul class="flex flex-wrap gap-3">
-								{#each value?.pg.groupProduct as gp}
+								{#each value?.pg?.materialGroup as mgp}
 									<li>
 										<a
-											href="/product/{gp.slug}"
-											class="flex flex-col gap-1 text-center w-14 text-xs leading-tight">
+											href="/product/{mgp.slug}"
+											class="flex flex-col items-center justify-center gap-1 text-center w-14 text-xs">
 											<div
-												class="flex h-16 w-14 items-center justify-center overflow-hidden rounded border border-zinc-200 transition duration-300 hover:border-primary-500 p-1 shadow-md">
+												class="flex h-16 w-14 items-center justify-center overflow-hidden rounded border transition duration-300 p-1 shadow-md
+												{$page.url.pathname === mgp.slug
+													? 'border-primary-500'
+													: 'border-zinc-200 hover:border-primary-500'}">
 												<LazyImg
-													src="{gp.img}"
-													alt="{gp.img}"
+													src="{mgp.img}"
+													alt="{mgp.img}"
 													height="56"
 													class="h-14 w-auto object-contain object-center" />
 											</div>
 
-											{#if gp.tags?.length}
-												{#each gp.tags as tag}
-													<p class="line-clamp-2">
-														{#if tag.type === 'Style'}
-															{tag.name}
-														{/if}
-													</p>
-												{/each}
-											{/if}
+											<span class="text-zinc-500 leading-3 line-clamp-2">
+												{mgp.material.name}
+											</span>
 
-											{#if gp.price}
-												<span><b>{currency(gp.price, $page.data?.store?.currencySymbol)}</b></span>
+											{#if mgp.material.price}
+												<span
+													><b>{currency(mgp.material.price, $page.data?.store?.currencySymbol)}</b
+													></span>
 											{/if}
 										</a>
 									</li>
 								{/each}
 							</ul>
 						</div>
-					{/if} -->
+					{/if}
+
+					<!-- Varient Products -->
+
+					{#if value?.varient?.length}
+						<div>
+							<div class="mb-2 flex items-center gap-2 uppercase">
+								<h5>Varient Products</h5>
+
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke-width="1.5"
+									stroke="currentColor"
+									class="h-5 w-5">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 01-1.125-1.125v-3.75zM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-8.25zM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-2.25z"
+									></path>
+								</svg>
+							</div>
+
+							<ul class="flex flex-wrap gap-3">
+								{#each value?.varient as v}
+									<li>
+										<a
+											href="/product/{v.slug}"
+											class="flex flex-col items-center justify-center gap-1 text-center w-14 text-xs">
+											<div
+												class="flex h-16 w-14 items-center justify-center overflow-hidden rounded border transition duration-300 p-1 shadow-md
+												{$page.url.pathname === v.slug
+													? 'border-primary-500'
+													: 'border-zinc-200 hover:border-primary-500'}">
+												<LazyImg
+													src="{v.img}"
+													alt="{v.img}"
+													height="56"
+													class="h-14 w-auto object-contain object-center" />
+											</div>
+
+											<span class="text-zinc-500 leading-3 line-clamp-2">
+												{v.material.name}
+											</span>
+
+											{#if v.material.price}
+												<span
+													><b>{currency(v.material.price, $page.data?.store?.currencySymbol)}</b
+													></span>
+											{/if}
+										</a>
+									</li>
+								{/each}
+							</ul>
+						</div>
+					{/if}
 				{:catch error}
 					<Error err="{error}" />
 				{/await}
