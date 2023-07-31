@@ -97,8 +97,7 @@ export const fetchProductsOfCategory = async ({
 		let pageSize = 0
 		let category = ''
 		let err = ''
-
-		res = await getMedusajsApi(`products`)
+		res = await getMedusajsApi(`products?category_id[]=${categorySlug}`)
 		count = res?.count
 		products = res?.products.map((p) => mapMedusajsProduct(p))
 		const offset = res?.offset
