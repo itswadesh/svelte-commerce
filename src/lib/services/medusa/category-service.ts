@@ -10,7 +10,7 @@ export const fetchFooterCategories = async ({
 }: any) => {
 	try {
 		let data: []
-		console.log("origin");
+		// console.log("origin");
 		data = await getMedusajsApi(`product-categories`)
 
 		return data || []

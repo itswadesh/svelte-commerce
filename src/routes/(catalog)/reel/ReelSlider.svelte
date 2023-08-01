@@ -26,7 +26,7 @@ const share = async ({ title, text, url }: any) => {
 				url: url
 			})
 		} catch (error) {
-			console.error('Error sharing:', error)
+			// console.error('Error sharing:', error)
 		}
 	} else {
 		// console.log('Web Share API not supported.')

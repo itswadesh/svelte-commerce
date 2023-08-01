@@ -41,34 +41,50 @@ function submit() {
 			<div class="mt-2 flex items-center justify-between font-medium">
 				<span>Total</span>
 
-				<span>{cart.formattedAmount?.subtotal || '-'}</span>
+				<span>
+					{currency(
+						cart.formattedAmount?.subtotal?.value || cart.formattedAmount?.subtotal,
+						cart.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
+					)}
+				</span>
 			</div>
 
-			{#if cart?.savings > 0}
+			{#if cart?.formattedAmount?.savings?.value || cart?.savings}
 				<div class="mt-2 flex items-center justify-between font-medium text-brand-500">
 					<span>You Saved</span>
 
 					<span>
-						{currency(cart?.savings, $page.data?.store?.currencySymbol)}
+						{currency(
+							cart?.formattedAmount?.savings?.value || cart?.savings,
+							cart.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
+						)}
 					</span>
 				</div>
 			{/if}
 
-			{#if cart?.discount?.amount > 0}
+			{#if cart?.discount?.value || cart?.discount?.amount}
 				<div class="mt-2 flex items-center justify-between font-medium">
 					<span>Discount</span>
 
 					<span class="text-brand-500">
-						- {currency(cart?.discount?.amount, $page.data?.store?.currencySymbol)}
+						- {currency(
+							cart?.discount?.value || cart?.discount?.amount,
+							cart.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
+						)}
 					</span>
 				</div>
 			{/if}
 
-			{#if cart?.formattedAmount?.tax}
+			{#if cart?.formattedAmount?.tax?.value || cart?.formattedAmount?.tax}
 				<div class="mt-2 flex items-center justify-between font-medium">
 					<span>Tax</span>
 
-					<span>{cart?.formattedAmount?.tax}</span>
+					<span>
+						{currency(
+							cart?.formattedAmount?.tax?.value || cart?.formattedAmount?.tax,
+							cart.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
+						)}
+					</span>
 				</div>
 			{/if}
 
@@ -76,13 +92,16 @@ function submit() {
 				<span>Shipping</span>
 
 				<span>
-					{#if cart.shipping?.charge < 1}
+					{#if cart.formattedAmount?.shipping?.value < 1 || cart.shipping?.charge < 1}
 						<span
 							class="border border-accent-500 text-accent-500 uppercase px-1.5 py-0.5 rounded text-xs">
 							Free
 						</span>
 					{:else}
-						{currency(cart.shipping?.charge, $page.data?.store?.currencySymbol)}
+						{currency(
+							cart.formattedAmount?.shipping?.value || cart.shipping?.charge,
+							cart.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
+						)}
 					{/if}
 				</span>
 			</div>
@@ -90,12 +109,15 @@ function submit() {
 
 		<hr class="my-5 border-t border-dashed border-zinc-200" />
 
-		{#if cart.subtotal}
+		{#if cart.formattedAmount?.total?.value || cart.subtotal}
 			<h5 class="my-2 mb-5 flex items-center justify-between">
 				<span>Total Amount</span>
 
 				<span>
-					{cart.formattedAmount?.total}
+					{currency(
+						cart.formattedAmount?.total?.value || cart.formattedAmount?.total,
+						cart.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
+					)}
 				</span>
 			</h5>
 		{/if}

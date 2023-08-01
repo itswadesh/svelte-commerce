@@ -11,11 +11,8 @@ export const fetchMeData = async ({
 		let res: any = {}
 
 		const sid = cookies.get('connectSid')
-
-		console.log(sid)
-
+		// console.log(sid)
 		const response = await getMedusajsApi(`customers/me`, null, sid)
-
 		const customerResponse = response.customer
 
 		res.firstName = customerResponse.first_name

@@ -3,7 +3,7 @@ import { error } from '@sveltejs/kit'
 
 export async function load({ params, url, locals, cookies }) {
 	try {
-		console.log("fetch cate products")
+		// console.log("fetch cate products")
 		const { slug } = params
 		const id = url.searchParams.get('id')
 		const category = await CategoryService.fetchCategory({

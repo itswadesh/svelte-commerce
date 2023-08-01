@@ -298,7 +298,7 @@ function selectSize(s) {
 function handleSelectedLinkiedProducts(e) {
 	selectedLinkiedProducts = e.detail
 
-	// console.log('selectedLinkiedProducts', selectedLinkiedProducts);
+	// console.log('selectedLinkiedProducts', selectedLinkiedProducts)
 }
 
 // This is used only for customized product else cart?/add
@@ -1351,7 +1351,7 @@ async function updateVariant(variant) {
 												method="POST"
 												use:enhance="{() => {
 													return async ({ result }) => {
-														// console.log('result of add to cart', result);
+														// console.log('result of add to cart', result)
 														if (result?.data === 'choose variant') {
 															scrollTo('variants_list')
 															toast('Please choose a variant', 'warning')
@@ -1704,7 +1704,7 @@ async function updateVariant(variant) {
 												method="POST"
 												use:enhance="{() => {
 													return async ({ result }) => {
-														// console.log('result of add to cart', result);
+														// console.log('result of add to cart', result)
 														if (result?.data === 'choose variant') {
 															scrollTo('variants_list')
 															toast('Please choose a variant', 'warning')
@@ -1902,7 +1902,7 @@ async function updateVariant(variant) {
 												method="POST"
 												use:enhance="{() => {
 													return async ({ result }) => {
-														// console.log('result of add to cart', result);
+														// console.log('result of add to cart', result)
 														if (result?.data === 'choose variant') {
 															scrollTo('variants_list')
 															toast('Please choose a variant', 'warning')
