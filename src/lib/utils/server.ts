@@ -52,7 +52,7 @@ export async function postt(endpoint: string, data: any, ck?: any) {
 			return res
 		}
 	} catch (e) {
-		console.log("/lib/utils/server.ts postt()", e);
+		// console.log("/lib/utils/server.ts postt()", e);
 	}
 }
 
@@ -71,7 +71,7 @@ export const delBySid = async (endpoint: string, sid?: any) => {
 			return res
 		}
 	} catch (e) {
-		console.log("/lib/utils/server.ts delBySid()", e);
+		// console.log("/lib/utils/server.ts delBySid()", e);
 	}
 }
 
@@ -99,7 +99,7 @@ export async function postBySid(endpoint: string, data: any, sid?: string) {
 		}
 
 	} catch (e) {
-		console.log("/lib/utils/server.ts postBySid()", e);
+		// console.log("/lib/utils/server.ts postBySid()", e);
 	}
 }
 export async function gett(endpoint: string, ck?: any) {
@@ -123,7 +123,7 @@ export async function gett(endpoint: string, ck?: any) {
 		}
 
 	} catch (e) {
-		console.log("/lib/utils/server.ts gett()", e);
+		// console.log("/lib/utils/server.ts gett()", e);
 	}
 }
 export const getBySid = async (endpoint: string, sid?: any) => {
@@ -142,7 +142,7 @@ export const getBySid = async (endpoint: string, sid?: any) => {
 		}
 
 	} catch (e) {
-		console.log("/lib/utils/server.ts getBySid()", e);
+		// console.log("/lib/utils/server.ts getBySid()", e);
 	}
 }
 
@@ -162,7 +162,7 @@ export const getBigcommerceApi = async (endpoint: string, query?: any, sid?: any
 			return res
 		}
 	} catch (e) {
-		console.log("/lib/utils/server.ts getBigcommerceApi()", e);
+		// console.log("/lib/utils/server.ts getBigcommerceApi()", e);
 	}
 	const response = await fetch(BIG_COMMERCE_BASE_URL + '/' + endpoint + '?' + serialize(query), {
 		headers: bigcommerceHeaders
@@ -187,12 +187,14 @@ export const postBigCommerceApi = async (endpoint: string, query: any, sid?: any
 		}
 
 	} catch (e) {
-		console.log("/lib/utils/server.ts postBigCommerceApi()", e);
+		// console.log("/lib/utils/server.ts postBigCommerceApi()", e);
 	}
 }
 
 export const getMedusajsApi = async (endpoint: string, query?: any, sid?: any) => {
 	try {
+		// console.log('zzzzzzzzzzzzzzzzzz', MEDUSAJS_BASE_URL + '/' + endpoint);
+
 		const response = await fetch(MEDUSAJS_BASE_URL + '/' + endpoint, {
 			method: 'GET',
 			credentials: 'include',
@@ -209,7 +211,7 @@ export const getMedusajsApi = async (endpoint: string, query?: any, sid?: any) =
 			return res
 		}
 	} catch (e) {
-		console.log("/lib/utils/server.ts getMedusajsApi()", e);
+		// console.log("/lib/utils/server.ts getMedusajsApi()", e);
 	}
 
 }
@@ -236,7 +238,7 @@ export const postMedusajsApi = async (endpoint: string, data: any, sid?: any) =>
 			return res
 		}
 	} catch (e) {
-		console.log("/lib/utils/server.ts postMedusajsApi()", e);
+		// console.log("/lib/utils/server.ts postMedusajsApi()", e);
 	}
 }
 
@@ -258,7 +260,7 @@ export const getShopifyApi = async (endpoint: string, query: any, sid?: any) => 
 		}
 
 	} catch (e) {
-		console.log("/lib/utils/server.ts getShopifyApi()", e);
+		// console.log("/lib/utils/server.ts getShopifyApi()", e);
 	}
 }
 
@@ -285,7 +287,7 @@ export const postShopifyApi = async (endpoint: string, data: any, sid?: any) => 
 		}
 
 	} catch (e) {
-		console.log("/lib/utils/server.ts postShopifyApi()", e);
+		// console.log("/lib/utils/server.ts postShopifyApi()", e);
 	}
 }
 

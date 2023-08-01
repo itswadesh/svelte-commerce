@@ -70,7 +70,7 @@ import SEO from '$lib/components/SEO/index.svelte'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data);
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 const seoProps = {
 	title: 'Payment Success ',

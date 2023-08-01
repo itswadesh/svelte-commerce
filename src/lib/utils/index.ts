@@ -63,8 +63,8 @@ const toast = (title: any, type: ToastType | undefined) => {
 		theme: 'dark',
 		placement: 'top-center',
 		showProgress: false,
-		onClick: () => {},
-		onRemove: () => {}
+		onClick: () => { },
+		onRemove: () => { }
 	})
 }
 
@@ -111,7 +111,7 @@ export function currency(value: any, currency = '$', decimals?: number) {
 	const digitsRE = /(\d{3})(?=\d)/g
 	value = parseFloat(value)
 	if (!isFinite(value) || (!value && value !== 0)) return ''
-	currency = currency != null ? currency : currencyConfig.symbol
+	currency = currency != null ? currency.toUpperCase() : currencyConfig.symbol
 	decimals = decimals != null ? decimals : 2
 	const stringified = Math.abs(value).toFixed(decimals)
 	const _int = decimals ? stringified.slice(0, -1 - decimals) : stringified

@@ -44,7 +44,7 @@ const send = async ({ method, path, params, data, token, headers, origin }: any)
 	// const st = uri.searchParams.get('store')
 
 	// if (!storeId && !domain && !st) {
-	// 	console.error('store id not found in config', path)
+	// 	// console.error('store id not found in config', path)
 	// 	// throw 'Loading...'
 	// 	return
 	// }
