@@ -2,6 +2,7 @@ import type { Error } from '$lib/types'
 import { getMedusajsApi, postMedusajsApi } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 import { mapMedusajsCart } from './medusa-utils'
+import { REGION_ID } from '.'
 
 export const fetchCartData = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {
@@ -26,9 +27,9 @@ export const fetchRefreshCart = async ({
 	try {
 		let res: any = {}
 
-		const id = cookies.get('cartId')
-
-		const cartRes = await getMedusajsApi(`carts/${id}`, {}, sid)
+		const cart_id = cookies.get('cartId')
+		if (!cart_id) return []
+		const cartRes = await getMedusajsApi(`carts/${cart_id}`, {}, sid)
 
 		res = mapMedusajsCart(cartRes?.cart)
 
@@ -43,7 +44,7 @@ export const fetchMyCart = async ({ origin, storeId, server = false, sid = null 
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`cart/me`, {}, sid)
+		res = {} // await getMedusajsApi(`cart/me`, {}, sid)
 
 		return res || {}
 	} catch (err) {
@@ -60,21 +61,23 @@ export const addToCartService = async ({
 	origin,
 	storeId,
 	server = false,
+	cookies,
 	sid = null
 }: any) => {
 	try {
-		const var_id = await getMedusajsApi(`products/${pid}`, sid)
-
+		let cart_id = cookies.get('cartId')
+		if (cart_id == 'undefined') cart_id = null
+		
 		const body = {
-			variant_id: var_id.product?.variants[0]?.id,
+			variant_id: vid || pid,
 			quantity: qty
 		}
-
 		let res: any = {}
-
-		const cartRes = await postMedusajsApi(`carts`, sid)
-
-		const res_data = await postMedusajsApi(`carts/${cartRes.cart?.id}/line-items`, body, sid)
+		if (!cart_id) {
+			const cartRes = await postMedusajsApi(`carts`, { region_id: REGION_ID }, sid)
+			cart_id = cartRes.cart?.id
+		}
+		const res_data = await postMedusajsApi(`carts/${cart_id}/line-items`, body, sid)
 
 		res = mapMedusajsCart(res_data?.cart)
 

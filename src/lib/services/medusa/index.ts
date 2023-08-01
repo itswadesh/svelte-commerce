@@ -1,3 +1,4 @@
+export const REGION_ID = 'reg_01H6R1ZCPHAAHW7KSS5VK52YK2'
 export * as AddressService from './address-service'
 export * as AutocompleteService from './autocomplete-service'
 export * as BannersService from './banners-service'
