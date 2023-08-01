@@ -163,7 +163,6 @@ let seoProps = {
 
 let bounceItemFromTop = false
 let cartButtonText = 'Add to Bag'
-
 let customizedImg
 let isExpired = false
 let isWishlisted = false
@@ -189,6 +188,7 @@ let showStickyCartButton = true
 let showUserInputForm = false
 let today = dayjs().format('YYYY-MM-DD')
 let viewPortCartPositionFromTop = 0
+let wiggleVariants = false
 let y = 0
 
 $: if (y > 500) {
@@ -1014,7 +1014,7 @@ async function updateVariant(variant) {
 					<!-- Variant Products -->
 
 					{#if value?.variants?.length}
-						<div>
+						<div id="variants_list">
 							<div class="mb-2 flex items-center gap-2 uppercase">
 								<h5>Variant Products</h5>
 
@@ -1033,7 +1033,7 @@ async function updateVariant(variant) {
 								</svg>
 							</div>
 
-							<ul class="flex flex-wrap gap-3">
+							<ul class="flex flex-wrap gap-3" class:wiggle="{wiggleVariants}">
 								{#each value?.variants as v}
 									<li>
 										<button
@@ -1239,189 +1239,208 @@ async function updateVariant(variant) {
 					</div>
 				{/if}
 
-				{#if !data.product?.isCustomized}
-					<div
-						class="w-full hidden md:grid gap-2 items-center uppercase grid-cols-2 static max-w-sm">
-						{#if $page.data.store?.isWishlist}
-							<div class="col-span-1">
-								<WhiteButton
-									type="button"
-									loadingringsize="sm"
-									loading="{loadingForWishlist}"
-									class="w-full text-sm"
-									on:click="{() => toggleWishlist(data.product?._id)}">
-									{#if isWishlisted}
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											class="h-5 w-5 shrink-0 text-accent-500"
-											viewBox="0 0 20 20"
-											fill="currentColor">
-											<path
-												fill-rule="evenodd"
-												d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-												clip-rule="evenodd"></path>
-										</svg>
-
-										<span>Wishlisted</span>
-									{:else}
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											class="h-5 w-5 shrink-0"
-											fill="none"
-											viewBox="0 0 24 24"
-											stroke="currentColor"
-											stroke-width="2">
-											<path
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-											></path>
-										</svg>
-
-										<span>Wishlist</span>
-									{/if}
-								</WhiteButton>
-							</div>
-						{/if}
-
-						{#if currentVariantPrice > 0}
-							<div class="col-span-1">
-								{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
-									<a
-										href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
-											?.url?.search}"
-										class="block">
-										<WhiteButton
-											type="button"
-											loadingringsize="sm"
-											hideLoading
-											class="w-full text-sm">
+				{#await data.streamed?.moreProductDetails then value}
+					{#if !data.product?.isCustomized}
+						<div
+							class="w-full hidden md:grid gap-2 items-center uppercase grid-cols-2 static max-w-sm">
+							{#if $page.data.store?.isWishlist}
+								<div class="col-span-1">
+									<WhiteButton
+										type="button"
+										loadingringsize="sm"
+										loading="{loadingForWishlist}"
+										class="w-full text-sm"
+										on:click="{() => toggleWishlist(data.product?._id)}">
+										{#if isWishlisted}
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
+												class="h-5 w-5 shrink-0 text-accent-500"
+												viewBox="0 0 20 20"
+												fill="currentColor">
+												<path
+													fill-rule="evenodd"
+													d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+													clip-rule="evenodd"></path>
+											</svg>
+
+											<span>Wishlisted</span>
+										{:else}
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												class="h-5 w-5 shrink-0"
 												fill="none"
 												viewBox="0 0 24 24"
-												stroke-width="1.5"
 												stroke="currentColor"
-												class="w-5 h-5">
+												stroke-width="2">
 												<path
 													stroke-linecap="round"
 													stroke-linejoin="round"
-													d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+													d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
 												></path>
 											</svg>
 
-											<span> Login </span>
-										</WhiteButton>
-									</a>
-								{:else if isExpired}
-									<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
-										Item Expired
-									</PrimaryButton>
-								{:else if data.product?.active && data.product?.hasStock}
-									{#if cartButtonText === 'Go to Cart'}
-										<a class="block" href="/cart" data-sveltekit-preload-data>
-											<PrimaryButton
+											<span>Wishlist</span>
+										{/if}
+									</WhiteButton>
+								</div>
+							{/if}
+
+							{#if currentVariantPrice > 0}
+								<div class="col-span-1">
+									{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
+										<a
+											href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
+												?.url?.search}"
+											class="block">
+											<WhiteButton
 												type="button"
-												hideLoading
-												class="w-full text-sm"
-												blackBackground>
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													class="h-5 w-5 shrink-0"
-													fill="none"
-													viewBox="0 0 24 24"
-													stroke="currentColor"
-													stroke-width="2">
-													<path
-														stroke-linecap="round"
-														stroke-linejoin="round"
-														d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
-													</path>
-												</svg>
-
-												<span>
-													{cartButtonText}
-												</span>
-											</PrimaryButton>
-										</a>
-									{:else}
-										<form
-											action="/cart?/add"
-											method="POST"
-											use:enhance="{() => {
-												return async ({ result }) => {
-													result?.data?.qty < 0
-														? fireGTagEvent('remove_from_cart', result?.data)
-														: fireGTagEvent('add_to_cart', result?.data)
-													cartButtonText = 'Added To Cart'
-													bounceItemFromTop = true
-													setTimeout(() => {
-														bounceItemFromTop = false
-														cartButtonText = 'Add to Bag'
-													}, 3000)
-													cartButtonText = 'Go to Cart'
-													if (customizedImg) {
-														goto(`/checkout/address`)
-													}
-													invalidateAll()
-													await applyAction(result)
-												}
-											}}">
-											<input type="hidden" name="pid" value="{data?.product?._id}" />
-
-											<input
-												type="hidden"
-												name="vid"
-												value="{currentVariantId || data?.product?._id}" />
-
-											<input
-												type="hidden"
-												name="linkedItems"
-												value="{JSON.stringify(selectedLinkiedProducts)}" />
-
-											<input type="hidden" name="qty" value="{1}" />
-
-											<input
-												type="hidden"
-												name="options"
-												value="{JSON.stringify(selectedOptions1)}" />
-
-											<input type="hidden" name="customizedImg" value="{customizedImg}" />
-
-											<PrimaryButton
-												type="submit"
-												loading="{loading}"
 												loadingringsize="sm"
+												hideLoading
 												class="w-full text-sm">
 												<svg
 													xmlns="http://www.w3.org/2000/svg"
-													class="h-5 w-5 shrink-0"
 													fill="none"
 													viewBox="0 0 24 24"
+													stroke-width="1.5"
 													stroke="currentColor"
-													stroke-width="2">
+													class="w-5 h-5">
 													<path
 														stroke-linecap="round"
 														stroke-linejoin="round"
-														d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
-													</path>
+														d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+													></path>
 												</svg>
 
-												<span>
-													{cartButtonText}
-												</span>
-											</PrimaryButton>
-										</form>
+												<span> Login </span>
+											</WhiteButton>
+										</a>
+									{:else if isExpired}
+										<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
+											Item Expired
+										</PrimaryButton>
+									{:else if data.product?.active && data.product?.hasStock}
+										{#if cartButtonText === 'Go to Cart'}
+											<a class="block" href="/cart" data-sveltekit-preload-data>
+												<PrimaryButton
+													type="button"
+													hideLoading
+													class="w-full text-sm"
+													blackBackground>
+													<svg
+														xmlns="http://www.w3.org/2000/svg"
+														class="h-5 w-5 shrink-0"
+														fill="none"
+														viewBox="0 0 24 24"
+														stroke="currentColor"
+														stroke-width="2">
+														<path
+															stroke-linecap="round"
+															stroke-linejoin="round"
+															d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
+														</path>
+													</svg>
+
+													<span>
+														{cartButtonText}
+													</span>
+												</PrimaryButton>
+											</a>
+										{:else}
+											<form
+												action="/cart?/add"
+												method="POST"
+												use:enhance="{() => {
+													return async ({ result }) => {
+														// console.log('result of add to cart', result);
+														if (result?.data === 'choose variant') {
+															scrollTo('variants_list')
+															toast('Please choose a variant', 'warning')
+															wiggleVariants = true
+
+															setTimeout(() => {
+																wiggleVariants = false
+															}, 820)
+															return
+														}
+														result?.data?.qty < 0
+															? fireGTagEvent('remove_from_cart', result?.data)
+															: fireGTagEvent('add_to_cart', result?.data)
+														cartButtonText = 'Added To Cart'
+														bounceItemFromTop = true
+														setTimeout(() => {
+															bounceItemFromTop = false
+															cartButtonText = 'Add to Bag'
+														}, 3000)
+														cartButtonText = 'Go to Cart'
+														if (customizedImg) {
+															goto(`/checkout/address`)
+														}
+														invalidateAll()
+														await applyAction(result)
+													}
+												}}">
+												<input type="hidden" name="pid" value="{data?.product?._id}" />
+
+												<input type="hidden" name="vid" value="{data?.product?._id}" />
+
+												<input
+													type="hidden"
+													name="variantsLength"
+													value="{value?.variants?.length}" />
+
+												<input type="hidden" name="currentVariantId" value="{currentVariantId}" />
+
+												<input
+													type="hidden"
+													name="linkedItems"
+													value="{JSON.stringify(selectedLinkiedProducts)}" />
+
+												<input type="hidden" name="qty" value="{1}" />
+
+												<input
+													type="hidden"
+													name="options"
+													value="{JSON.stringify(selectedOptions1)}" />
+
+												<input type="hidden" name="customizedImg" value="{customizedImg}" />
+
+												<PrimaryButton
+													type="submit"
+													loading="{loading}"
+													loadingringsize="sm"
+													class="w-full text-sm">
+													<svg
+														xmlns="http://www.w3.org/2000/svg"
+														class="h-5 w-5 shrink-0"
+														fill="none"
+														viewBox="0 0 24 24"
+														stroke="currentColor"
+														stroke-width="2">
+														<path
+															stroke-linecap="round"
+															stroke-linejoin="round"
+															d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
+														</path>
+													</svg>
+
+													<span>
+														{cartButtonText}
+													</span>
+												</PrimaryButton>
+											</form>
+										{/if}
+									{:else}
+										<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
+											Item Unavailable
+										</PrimaryButton>
 									{/if}
-								{:else}
-									<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
-										Item Unavailable
-									</PrimaryButton>
-								{/if}
-							</div>
-						{/if}
-					</div>
-				{/if}
+								</div>
+							{/if}
+						</div>
+					{/if}
+				{:catch error}
+					<Error err="{error}" />
+				{/await}
 
 				<!-- Long Description -->
 
@@ -1573,370 +1592,406 @@ async function updateVariant(variant) {
 					on:exitViewport="{cartButtonExitViewport}">
 				</div>
 
-				{#if showStickyCartButton && !data.product?.isCustomized}
-					<div
-						class="w-full grid md:hidden grid-cols-5 gap-2 items-center uppercase fixed inset-x-0 bottom-0 z-40 h-16 border-t bg-white p-3 box-shadow">
-						{#if $page.data.store?.isWishlist}
-							<div class="col-span-2">
-								<WhiteButton
-									type="button"
-									loadingringsize="sm"
-									loading="{loadingForWishlist}"
-									class="w-full text-sm"
-									on:click="{() => toggleWishlist(data.product?._id)}">
-									{#if isWishlisted}
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											class="h-5 w-5 shrink-0 text-accent-500"
-											viewBox="0 0 20 20"
-											fill="currentColor">
-											<path
-												fill-rule="evenodd"
-												d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-												clip-rule="evenodd"></path>
-										</svg>
-
-										<span>Wishlisted</span>
-									{:else}
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											class="h-5 w-5 shrink-0"
-											fill="none"
-											viewBox="0 0 24 24"
-											stroke="currentColor"
-											stroke-width="2">
-											<path
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-											></path>
-										</svg>
-
-										<span>Wishlist</span>
-									{/if}
-								</WhiteButton>
-							</div>
-						{/if}
-
-						{#if currentVariantPrice > 0}
-							<div class="{$page.data.store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
-								{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
-									<a
-										href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
-											?.url?.search}"
-										class="block">
-										<WhiteButton
-											type="button"
-											loadingringsize="sm"
-											hideLoading
-											class="w-full text-sm">
+				{#await data.streamed?.moreProductDetails then value}
+					{#if showStickyCartButton && !data.product?.isCustomized}
+						<div
+							class="w-full grid md:hidden grid-cols-5 gap-2 items-center uppercase fixed inset-x-0 bottom-0 z-40 h-16 border-t bg-white p-3 box-shadow">
+							{#if $page.data.store?.isWishlist}
+								<div class="col-span-2">
+									<WhiteButton
+										type="button"
+										loadingringsize="sm"
+										loading="{loadingForWishlist}"
+										class="w-full text-sm"
+										on:click="{() => toggleWishlist(data.product?._id)}">
+										{#if isWishlisted}
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
+												class="h-5 w-5 shrink-0 text-accent-500"
+												viewBox="0 0 20 20"
+												fill="currentColor">
+												<path
+													fill-rule="evenodd"
+													d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+													clip-rule="evenodd"></path>
+											</svg>
+
+											<span>Wishlisted</span>
+										{:else}
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												class="h-5 w-5 shrink-0"
 												fill="none"
 												viewBox="0 0 24 24"
-												stroke-width="1.5"
 												stroke="currentColor"
-												class="w-5 h-5">
+												stroke-width="2">
 												<path
 													stroke-linecap="round"
 													stroke-linejoin="round"
-													d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+													d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
 												></path>
 											</svg>
 
-											<span> Login </span>
-										</WhiteButton>
-									</a>
-								{:else if isExpired}
-									<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
-										Item Expired
-									</PrimaryButton>
-								{:else if data.product?.active && data.product?.hasStock}
-									{#if cartButtonText === 'Go to Cart'}
-										<a class="block" href="/cart" data-sveltekit-preload-data>
-											<PrimaryButton
+											<span>Wishlist</span>
+										{/if}
+									</WhiteButton>
+								</div>
+							{/if}
+
+							{#if currentVariantPrice > 0}
+								<div class="{$page.data.store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
+									{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
+										<a
+											href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
+												?.url?.search}"
+											class="block">
+											<WhiteButton
 												type="button"
-												hideLoading
-												class="w-full text-sm"
-												blackBackground>
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													class="h-5 w-5 shrink-0"
-													fill="none"
-													viewBox="0 0 24 24"
-													stroke="currentColor"
-													stroke-width="2">
-													<path
-														stroke-linecap="round"
-														stroke-linejoin="round"
-														d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
-													</path>
-												</svg>
-
-												<span>
-													{cartButtonText}
-												</span>
-											</PrimaryButton>
-										</a>
-									{:else}
-										<form
-											action="/cart?/add"
-											method="POST"
-											use:enhance="{() => {
-												return async ({ result }) => {
-													result?.data?.qty < 0
-														? fireGTagEvent('remove_from_cart', result?.data)
-														: fireGTagEvent('add_to_cart', result?.data)
-													cartButtonText = 'Added To Cart'
-													bounceItemFromTop = true
-													setTimeout(() => {
-														bounceItemFromTop = false
-													}, 3000)
-													cartButtonText = 'Go to Cart'
-													if (customizedImg) {
-														goto(`/checkout/address`)
-													}
-													invalidateAll()
-													await applyAction(result)
-												}
-											}}">
-											<input type="hidden" name="pid" value="{data?.product?._id}" />
-
-											<input
-												type="hidden"
-												name="vid"
-												value="{currentVariantId || data?.product?._id}" />
-
-											<input
-												type="hidden"
-												name="linkedItems"
-												value="{JSON.stringify(selectedLinkiedProducts)}" />
-
-											<input type="hidden" name="qty" value="{1}" />
-
-											<input
-												type="hidden"
-												name="options"
-												value="{JSON.stringify(selectedOptions1)}" />
-
-											<input type="hidden" name="customizedImg" value="{customizedImg}" />
-
-											<PrimaryButton
-												type="submit"
-												loading="{loading}"
 												loadingringsize="sm"
+												hideLoading
 												class="w-full text-sm">
 												<svg
 													xmlns="http://www.w3.org/2000/svg"
-													class="h-5 w-5 shrink-0"
 													fill="none"
 													viewBox="0 0 24 24"
+													stroke-width="1.5"
 													stroke="currentColor"
-													stroke-width="2">
+													class="w-5 h-5">
 													<path
 														stroke-linecap="round"
 														stroke-linejoin="round"
-														d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
-													</path>
+														d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+													></path>
 												</svg>
 
-												<span>
-													{cartButtonText}
-												</span>
-											</PrimaryButton>
-										</form>
-									{/if}
-								{:else}
-									<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
-										Item Unavailable
-									</PrimaryButton>
-								{/if}
-							</div>
-						{/if}
-					</div>
-				{/if}
+												<span> Login </span>
+											</WhiteButton>
+										</a>
+									{:else if isExpired}
+										<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
+											Item Expired
+										</PrimaryButton>
+									{:else if data.product?.active && data.product?.hasStock}
+										{#if cartButtonText === 'Go to Cart'}
+											<a class="block" href="/cart" data-sveltekit-preload-data>
+												<PrimaryButton
+													type="button"
+													hideLoading
+													class="w-full text-sm"
+													blackBackground>
+													<svg
+														xmlns="http://www.w3.org/2000/svg"
+														class="h-5 w-5 shrink-0"
+														fill="none"
+														viewBox="0 0 24 24"
+														stroke="currentColor"
+														stroke-width="2">
+														<path
+															stroke-linecap="round"
+															stroke-linejoin="round"
+															d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
+														</path>
+													</svg>
 
-				{#if !data.product?.isCustomized}
-					<div class="w-full grid md:hidden grid-cols-5 gap-2 items-center uppercase">
-						{#if $page.data.store?.isWishlist}
-							<div class="col-span-2">
-								<WhiteButton
-									type="button"
-									loadingringsize="sm"
-									loading="{loadingForWishlist}"
-									class="w-full text-sm"
-									on:click="{() => toggleWishlist(data.product?._id)}">
-									{#if isWishlisted}
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											class="h-5 w-5 shrink-0 text-accent-500"
-											viewBox="0 0 20 20"
-											fill="currentColor">
-											<path
-												fill-rule="evenodd"
-												d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-												clip-rule="evenodd"></path>
-										</svg>
+													<span>
+														{cartButtonText}
+													</span>
+												</PrimaryButton>
+											</a>
+										{:else}
+											<form
+												action="/cart?/add"
+												method="POST"
+												use:enhance="{() => {
+													return async ({ result }) => {
+														// console.log('result of add to cart', result);
+														if (result?.data === 'choose variant') {
+															scrollTo('variants_list')
+															toast('Please choose a variant', 'warning')
+															wiggleVariants = true
 
-										<span>Wishlisted</span>
+															setTimeout(() => {
+																wiggleVariants = false
+															}, 820)
+															return
+														}
+														result?.data?.qty < 0
+															? fireGTagEvent('remove_from_cart', result?.data)
+															: fireGTagEvent('add_to_cart', result?.data)
+														cartButtonText = 'Added To Cart'
+														bounceItemFromTop = true
+														setTimeout(() => {
+															bounceItemFromTop = false
+															cartButtonText = 'Add to Bag'
+														}, 3000)
+														cartButtonText = 'Go to Cart'
+														if (customizedImg) {
+															goto(`/checkout/address`)
+														}
+														invalidateAll()
+														await applyAction(result)
+													}
+												}}">
+												<input type="hidden" name="pid" value="{data?.product?._id}" />
+
+												<input type="hidden" name="vid" value="{data?.product?._id}" />
+
+												<input
+													type="hidden"
+													name="variantsLength"
+													value="{value?.variants?.length}" />
+
+												<input type="hidden" name="currentVariantId" value="{currentVariantId}" />
+
+												<input
+													type="hidden"
+													name="linkedItems"
+													value="{JSON.stringify(selectedLinkiedProducts)}" />
+
+												<input type="hidden" name="qty" value="{1}" />
+
+												<input
+													type="hidden"
+													name="options"
+													value="{JSON.stringify(selectedOptions1)}" />
+
+												<input type="hidden" name="customizedImg" value="{customizedImg}" />
+
+												<PrimaryButton
+													type="submit"
+													loading="{loading}"
+													loadingringsize="sm"
+													class="w-full text-sm">
+													<svg
+														xmlns="http://www.w3.org/2000/svg"
+														class="h-5 w-5 shrink-0"
+														fill="none"
+														viewBox="0 0 24 24"
+														stroke="currentColor"
+														stroke-width="2">
+														<path
+															stroke-linecap="round"
+															stroke-linejoin="round"
+															d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
+														</path>
+													</svg>
+
+													<span>
+														{cartButtonText}
+													</span>
+												</PrimaryButton>
+											</form>
+										{/if}
 									{:else}
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											class="h-5 w-5 shrink-0"
-											fill="none"
-											viewBox="0 0 24 24"
-											stroke="currentColor"
-											stroke-width="2">
-											<path
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-											></path>
-										</svg>
-
-										<span>Wishlist</span>
+										<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
+											Item Unavailable
+										</PrimaryButton>
 									{/if}
-								</WhiteButton>
-							</div>
-						{/if}
+								</div>
+							{/if}
+						</div>
+					{/if}
 
-						{#if currentVariantPrice > 0}
-							<div class="{$page.data.store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
-								{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
-									<a
-										href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
-											?.url?.search}"
-										class="block">
-										<WhiteButton
-											type="button"
-											loadingringsize="sm"
-											hideLoading
-											class="w-full text-sm">
+					{#if !data.product?.isCustomized}
+						<div class="w-full grid md:hidden grid-cols-5 gap-2 items-center uppercase">
+							{#if $page.data.store?.isWishlist}
+								<div class="col-span-2">
+									<WhiteButton
+										type="button"
+										loadingringsize="sm"
+										loading="{loadingForWishlist}"
+										class="w-full text-sm"
+										on:click="{() => toggleWishlist(data.product?._id)}">
+										{#if isWishlisted}
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
+												class="h-5 w-5 shrink-0 text-accent-500"
+												viewBox="0 0 20 20"
+												fill="currentColor">
+												<path
+													fill-rule="evenodd"
+													d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+													clip-rule="evenodd"></path>
+											</svg>
+
+											<span>Wishlisted</span>
+										{:else}
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												class="h-5 w-5 shrink-0"
 												fill="none"
 												viewBox="0 0 24 24"
-												stroke-width="1.5"
 												stroke="currentColor"
-												class="w-5 h-5">
+												stroke-width="2">
 												<path
 													stroke-linecap="round"
 													stroke-linejoin="round"
-													d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+													d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
 												></path>
 											</svg>
 
-											<span> Login </span>
-										</WhiteButton>
-									</a>
-								{:else if isExpired}
-									<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
-										Item Expired
-									</PrimaryButton>
-								{:else if data.product?.active && data.product?.hasStock}
-									{#if cartButtonText === 'Go to Cart'}
-										<a class="block" href="/cart" data-sveltekit-preload-data>
-											<PrimaryButton
+											<span>Wishlist</span>
+										{/if}
+									</WhiteButton>
+								</div>
+							{/if}
+
+							{#if currentVariantPrice > 0}
+								<div class="{$page.data.store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
+									{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
+										<a
+											href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
+												?.url?.search}"
+											class="block">
+											<WhiteButton
 												type="button"
-												hideLoading
-												class="w-full text-sm"
-												blackBackground>
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													class="h-5 w-5 shrink-0"
-													fill="none"
-													viewBox="0 0 24 24"
-													stroke="currentColor"
-													stroke-width="2">
-													<path
-														stroke-linecap="round"
-														stroke-linejoin="round"
-														d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
-													</path>
-												</svg>
-
-												<span>
-													{cartButtonText}
-												</span>
-											</PrimaryButton>
-										</a>
-									{:else}
-										<form
-											action="/cart?/add"
-											method="POST"
-											use:enhance="{() => {
-												return async ({ result }) => {
-													result?.data?.qty < 0
-														? fireGTagEvent('remove_from_cart', result?.data)
-														: fireGTagEvent('add_to_cart', result?.data)
-													cartButtonText = 'Added To Cart'
-													bounceItemFromTop = true
-													setTimeout(() => {
-														bounceItemFromTop = false
-													}, 3000)
-													cartButtonText = 'Go to Cart'
-													if (customizedImg) {
-														goto(`/checkout/address`)
-													}
-													invalidateAll()
-													await applyAction(result)
-												}
-											}}">
-											<input type="hidden" name="pid" value="{data?.product?._id}" />
-
-											<input
-												type="hidden"
-												name="vid"
-												value="{currentVariantId || data?.product?._id}" />
-
-											<input
-												type="hidden"
-												name="linkedItems"
-												value="{JSON.stringify(selectedLinkiedProducts)}" />
-
-											<input type="hidden" name="qty" value="{1}" />
-
-											<input
-												type="hidden"
-												name="options"
-												value="{JSON.stringify(selectedOptions1)}" />
-
-											<input type="hidden" name="customizedImg" value="{customizedImg}" />
-
-											<PrimaryButton
-												type="submit"
-												loading="{loading}"
 												loadingringsize="sm"
+												hideLoading
 												class="w-full text-sm">
 												<svg
 													xmlns="http://www.w3.org/2000/svg"
-													class="h-5 w-5 shrink-0"
 													fill="none"
 													viewBox="0 0 24 24"
+													stroke-width="1.5"
 													stroke="currentColor"
-													stroke-width="2">
+													class="w-5 h-5">
 													<path
 														stroke-linecap="round"
 														stroke-linejoin="round"
-														d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
-													</path>
+														d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+													></path>
 												</svg>
 
-												<span>
-													{cartButtonText}
-												</span>
-											</PrimaryButton>
-										</form>
+												<span> Login </span>
+											</WhiteButton>
+										</a>
+									{:else if isExpired}
+										<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
+											Item Expired
+										</PrimaryButton>
+									{:else if data.product?.active && data.product?.hasStock}
+										{#if cartButtonText === 'Go to Cart'}
+											<a class="block" href="/cart" data-sveltekit-preload-data>
+												<PrimaryButton
+													type="button"
+													hideLoading
+													class="w-full text-sm"
+													blackBackground>
+													<svg
+														xmlns="http://www.w3.org/2000/svg"
+														class="h-5 w-5 shrink-0"
+														fill="none"
+														viewBox="0 0 24 24"
+														stroke="currentColor"
+														stroke-width="2">
+														<path
+															stroke-linecap="round"
+															stroke-linejoin="round"
+															d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
+														</path>
+													</svg>
+
+													<span>
+														{cartButtonText}
+													</span>
+												</PrimaryButton>
+											</a>
+										{:else}
+											<form
+												action="/cart?/add"
+												method="POST"
+												use:enhance="{() => {
+													return async ({ result }) => {
+														// console.log('result of add to cart', result);
+														if (result?.data === 'choose variant') {
+															scrollTo('variants_list')
+															toast('Please choose a variant', 'warning')
+															wiggleVariants = true
+
+															setTimeout(() => {
+																wiggleVariants = false
+															}, 820)
+															return
+														}
+														result?.data?.qty < 0
+															? fireGTagEvent('remove_from_cart', result?.data)
+															: fireGTagEvent('add_to_cart', result?.data)
+														cartButtonText = 'Added To Cart'
+														bounceItemFromTop = true
+														setTimeout(() => {
+															bounceItemFromTop = false
+															cartButtonText = 'Add to Bag'
+														}, 3000)
+														cartButtonText = 'Go to Cart'
+														if (customizedImg) {
+															goto(`/checkout/address`)
+														}
+														invalidateAll()
+														await applyAction(result)
+													}
+												}}">
+												<input type="hidden" name="pid" value="{data?.product?._id}" />
+
+												<input type="hidden" name="vid" value="{data?.product?._id}" />
+
+												<input
+													type="hidden"
+													name="variantsLength"
+													value="{value?.variants?.length}" />
+
+												<input type="hidden" name="currentVariantId" value="{currentVariantId}" />
+
+												<input
+													type="hidden"
+													name="linkedItems"
+													value="{JSON.stringify(selectedLinkiedProducts)}" />
+
+												<input type="hidden" name="qty" value="{1}" />
+
+												<input
+													type="hidden"
+													name="options"
+													value="{JSON.stringify(selectedOptions1)}" />
+
+												<input type="hidden" name="customizedImg" value="{customizedImg}" />
+
+												<PrimaryButton
+													type="submit"
+													loading="{loading}"
+													loadingringsize="sm"
+													class="w-full text-sm">
+													<svg
+														xmlns="http://www.w3.org/2000/svg"
+														class="h-5 w-5 shrink-0"
+														fill="none"
+														viewBox="0 0 24 24"
+														stroke="currentColor"
+														stroke-width="2">
+														<path
+															stroke-linecap="round"
+															stroke-linejoin="round"
+															d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
+														</path>
+													</svg>
+
+													<span>
+														{cartButtonText}
+													</span>
+												</PrimaryButton>
+											</form>
+										{/if}
+									{:else}
+										<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
+											Item Unavailable
+										</PrimaryButton>
 									{/if}
-								{:else}
-									<PrimaryButton type="button" hideLoading class="w-full text-sm" disabled>
-										Item Unavailable
-									</PrimaryButton>
-								{/if}
-							</div>
-						{/if}
-					</div>
-				{/if}
+								</div>
+							{/if}
+						</div>
+					{/if}
+				{:catch error}
+					<Error err="{error}" />
+				{/await}
 			</div>
 		</div>
 
