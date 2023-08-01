@@ -3,7 +3,7 @@ module.exports = {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 	theme: {
 		extend: {
-		colors: {
+			colors: {
 				primary: {
 					50: '#fbfbfb', // zinc shades
 					100: '#f0f0f2',
@@ -31,7 +31,6 @@ module.exports = {
 					700: '#d80000'
 				}
 			},
-
 			animation: {
 				float: 'float 6s linear infinite',
 				scale: 'scale 6s ease-in infinite',
@@ -39,7 +38,6 @@ module.exports = {
 				dropdown: 'dropdown 0.3s linear',
 				slide: 'slide 0.3s ease-in-out'
 			},
-
 			keyframes: {
 				float: {
 					'0%': { transform: 'translateY(0px)' },
@@ -66,7 +64,9 @@ module.exports = {
 					'100%': { transform: 'translateX(0px)', opacity: '1' }
 				}
 			},
-			fontFamily: {}
+			fontFamily: {
+				sans: ['Montserrat', 'Karla', 'Poppins', 'Inter', 'Roboto', 'sans'] // 'sans' is a fallback font in case the custom font isn't available
+			}
 		}
 	},
 	plugins: [require('tailwind-scrollbar'), require('@tailwindcss/typography')]
