@@ -6,7 +6,7 @@ export const fetchCoupons = async ({ origin, storeId, server = false, sid = null
 	try {
 		let res: any = {}
 	
-				res = await getMedusajsApi(`coupons`, {}, sid)
+				res = [] // await getMedusajsApi(`coupons`, {}, sid)
 				
 		return res?.data || []
 	} catch (e) {

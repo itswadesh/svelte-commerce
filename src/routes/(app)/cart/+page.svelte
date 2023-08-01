@@ -45,14 +45,15 @@ onMount(() => {
 	fireGTagEvent('view_cart', data.cart)
 })
 
-const addToCart = async ({ pid, qty, customizedImg, ix, loadingType }: any) => {
+const addToCart = async ({ pid, vid, qty, customizedImg, ix, loadingType }: any) => {
 	if (loadingType) {
 		selectedLoadingType = loadingType
 	}
 	loading[ix] = true
 	await CartService.addToCartService({
+		id: id,
 		pid: pid,
-		vid: pid,
+		vid: vid || pid,
 		qty: qty,
 		customizedImg: customizedImg || null,
 		storeId: $page.data.store?.id,
@@ -323,7 +324,7 @@ function moveAllUnavailableItemsToWishlist() {
 
 						{#if data.cart?.items}
 							<div class="flex flex-col divide-y">
-								{#each data.cart?.items as item, ix (item.pid)}
+								{#each data.cart?.items as item, ix (item.id || item.vid || item.pid)}
 									<!-- Product detail start -->
 
 									<div
@@ -437,6 +438,8 @@ function moveAllUnavailableItemsToWishlist() {
 																loading[ix] = false
 															}
 														}}">
+														<input type="hidden" name="id" value="{item.id}" />
+														<input type="hidden" name="vid" value="{item.vid}" />
 														<input type="hidden" name="pid" value="{item.pid}" />
 														<input type="hidden" name="qty" value="{-1}" />
 														<input
@@ -493,6 +496,8 @@ function moveAllUnavailableItemsToWishlist() {
 																loading[ix] = false
 															}
 														}}">
+														<input type="hidden" name="id" value="{item.id}" />
+														<input type="hidden" name="vid" value="{item.vid}" />
 														<input type="hidden" name="pid" value="{item.pid}" />
 														<input type="hidden" name="qty" value="{+1}" />
 														<input
@@ -537,6 +542,8 @@ function moveAllUnavailableItemsToWishlist() {
 															loading[ix] = false
 														}
 													}}">
+													<input type="hidden" name="id" value="{item.id}" />
+													<input type="hidden" name="vid" value="{item.vid}" />
 													<input type="hidden" name="pid" value="{item.pid}" />
 													<input type="hidden" name="qty" value="{-9999999}" />
 													<input type="hidden" name="customizedImg" value="{item.customizedImg}" />

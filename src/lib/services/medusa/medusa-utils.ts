@@ -226,18 +226,18 @@ export const mapMedusajsCart = (c: any) => {
 			total: c.total,
 			offer_total: null,
 			items: c.items?.map((item) => ({
-				product: {
-					id: item.variant.product_id,
-					name: item.variant.product.title,
-					sku: item.variant.sku,
-					image: null // image is not present in the given data
-				},
-				quantity: item.quantity,
+				id: item.id,
+				vid: item.variant_id,
+				name: item.title,
+				description: item.description,
+				sku: item.sku,
+				img: item.thumbnail,
+				qty: item.quantity,
 				price: item.unit_price,
-				discount: null,
-				formattedPrice: {
-					value: item.unit_price,
-					currency: null // currency code is not present in the given data
+				mrp: item.unit_price,
+				discount: 0,
+				formattedItemAmount: {
+					price: c.region.currency_code.toUpperCase() + ' ' + item.unit_price
 				}
 			})),
 			// unavailableItems: [],
