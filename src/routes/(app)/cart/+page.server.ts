@@ -12,7 +12,8 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 			storeId: locals.store?.id,
 			sid: cookies.get('connect.sid'),
 			server: true,
-			origin: locals.origin
+			origin: locals.origin,
+			cookies
 		})
 		if (res) {
 			cart = {
@@ -53,56 +54,61 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 const add: Action = async ({ request, cookies, locals }) => {
 	const data = await request.formData()
 	const pid = data.get('pid')
+	const vid = data.get('vid')
+	const variantsLength = +data.get('variantsLength')
+	const currentVariantId = data.get('currentVariantId')
 	const qty = +data.get('qty')
-	const size = data.get('size')
-	const vid = data.get('pid')
 	const linkedItems = JSON.parse(data.get('linkedItems'))
 	const options = JSON.parse(data.get('options')) //data.get('options') //
 	const customizedImg = data.get('customizedImg')
 	const sid = cookies.get('connect.sid')
+	if (variantsLength > 0 && !currentVariantId) {
+		return 'choose variant'
+	}
 	if (typeof pid !== 'string' || !pid) {
 		return fail(400, { invalid: true })
 	}
 	try {
 		let cart = await CartService.addToCartService({
-			cookies, // This is a special case to pass complete cookie
-			customizedImg,
-			options,
-			origin: locals.origin,
 			pid,
+			vid: currentVariantId || vid,
 			qty,
-			server: true,
+			options,
+			customizedImg,
 			storeId: locals.store?.id,
-			vid,
+			server: true,
+			origin: locals.origin,
+			cookies // This is a special case to pass complete cookie
 		})
 		if (linkedItems?.length) {
 			for (const i of linkedItems) {
 				cart = await CartService.addToCartService({
-					cookies, // This is a special case to pass complete cookie
-					origin: locals.origin,
 					pid: i,
-					qty: 1,
-					server: true,
-					storeId: locals.store?.id,
 					vid: i,
+					qty: 1,
+					storeId: locals.store?.id,
+					server: true,
+					origin: locals.origin,
+					cookies // This is a special case to pass complete cookie
 				})
 			}
 		}
+
 		if (cart) {
 			const cartObj = {
 				cartId: cart?.cart_id,
-				currencySymbol: cart?.currencySymbol,
-				discount: cart?.discount,
-				formattedAmount: cart?.formattedAmount,
 				items: cart?.items,
 				qty: cart?.qty,
+				tax: cart?.tax,
+				subtotal: cart?.subtotal,
+				total: cart?.total,
+				currencySymbol: cart?.currencySymbol,
+				discount: cart?.discount,
 				savings: cart?.savings,
 				selfTakeout: cart?.selfTakeout,
 				shipping: cart?.shipping,
-				subtotal: cart?.subtotal,
-				tax: cart?.tax,
-				total: cart?.total,
 				unavailableItems: cart?.unavailableItems,
+				formattedAmount: cart?.formattedAmount
 			}
 			locals.cart = cartObj
 			locals.cartId = cartObj.cartId
