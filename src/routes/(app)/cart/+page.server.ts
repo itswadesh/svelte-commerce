@@ -54,19 +54,24 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 const add: Action = async ({ request, cookies, locals }) => {
 	const data = await request.formData()
 	const pid = data.get('pid')
-	const vid = data.get('pid')
+	const vid = data.get('vid')
+	const variantsLength = +data.get('variantsLength')
+	const currentVariantId = data.get('currentVariantId')
 	const qty = +data.get('qty')
 	const linkedItems = JSON.parse(data.get('linkedItems'))
 	const options = JSON.parse(data.get('options')) //data.get('options') //
 	const customizedImg = data.get('customizedImg')
 	const sid = cookies.get('connect.sid')
+	if (variantsLength > 0 && !currentVariantId) {
+		return 'choose variant'
+	}
 	if (typeof pid !== 'string' || !pid) {
 		return fail(400, { invalid: true })
 	}
 	try {
 		let cart = await CartService.addToCartService({
 			pid,
-			vid,
+			vid: currentVariantId || vid,
 			qty,
 			options,
 			customizedImg,
@@ -88,7 +93,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 				})
 			}
 		}
-		
+
 		if (cart) {
 			const cartObj = {
 				cartId: cart?.cart_id,
