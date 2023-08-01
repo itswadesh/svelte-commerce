@@ -28,7 +28,7 @@ export const fetchRefreshCart = async ({
 		let res: any = {}
 
 		const cart_id = cookies.get('cartId')
-		if (!cart_id) return []
+		if (!cart_id || cart_id=='undefined') return []
 		const cartRes = await getMedusajsApi(`carts/${cart_id}`, {}, sid)
 
 		res = mapMedusajsCart(cartRes?.cart)
