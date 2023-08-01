@@ -20,6 +20,7 @@ import storeClosed from '$lib/assets/store-closed.png'
 import whatsappIcon from '$lib/assets/social-media/whatsapp.png'
 
 export let data
+// console.log('$page', $page)
 
 $: innerWidth = 0
 
@@ -83,9 +84,20 @@ onMount(async () => {
 // }
 </script>
 
-<!-- <svelte:head>
-	{@html webManifest}
-</svelte:head> -->
+<svelte:head>
+	<link rel="icon" type="image/x-icon" href="{$page.data.store.favicon}" />
+	<link rel="shortcut icon" type="image/x-icon" href="{$page.data.store.favicon}" />
+	<meta name="theme-color" content="{$page.data.store.themeColor}" />
+	<link rel="apple-touch-icon" href="{$page.data.store.favicon}" />
+	<meta name="apple-mobile-web-app-title" content="{$page.data.store.websiteName}" />
+	<meta name="application-name" content="{$page.data.store.websiteName}" />
+	<link
+		href="https://fonts.googleapis.com/css2?family={$page.data.store
+			.fontFamily}:wght@100;200;300;400;500;600;700;800;900&display=swap"
+		rel="stylesheet" />
+
+	<!-- {@html webManifest} -->
+</svelte:head>
 
 <!-- <svelte:head>
 	<script>
@@ -146,7 +158,7 @@ onMount(async () => {
 	<PreloadingIndicator />
 {/if}
 
-{#if !$page.data.store}
+{#if !$page?.data?.store}
 	<!-- If store not found -->
 
 	<div class="h-screen w-full bg-white flex items-center justify-center">
@@ -163,7 +175,7 @@ onMount(async () => {
 			<img src="/no/no_store_found.png" alt="" class="h-80 w-auto object-contain object-center" />
 		</div>
 	</div>
-{:else if !$page.data.store.closed}
+{:else if !$page.data?.store?.closed}
 	<!-- If store found and is not closed -->
 
 	<section class="minimum-width-rem relative flex min-h-screen flex-col bg-white antialiased">
@@ -212,8 +224,8 @@ onMount(async () => {
 				class="p-10 flex flex-col gap-2 items-center justify-center border-4 rounded-3xl shadow-2xl">
 				<img src="{storeClosed}" alt="" class="h-52 w-auto object-contain object-center" />
 
-				<p class="text-lg font-semibold text-zinc-500">
-					{$page.data.store.close?.message?.val}
+				<p>
+					{$page.data.store.closedMessage}
 				</p>
 			</div>
 		</div>
