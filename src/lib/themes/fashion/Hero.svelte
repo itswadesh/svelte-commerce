@@ -26,25 +26,29 @@ onMount(async () => {
 	Splide = SplideModule.default
 })
 
+{
+	hellobar?.active?.val ? 'h-[96px] sm:h-[120px] lg:h-[168px]' : 'h-[56px] sm:h-[80px] lg:h-[128px]'
+}
+
 $: if (innerWidth < 640) {
 	if (hellobar?.active?.val) {
-		// 88 (without mobile footer)
-		sliderHeightAccToPageHeight = innerHeight - 144
+		// 96 (without mobile footer)
+		sliderHeightAccToPageHeight = innerHeight - 152
 	} else {
 		// 56 (without mobile footer)
 		sliderHeightAccToPageHeight = innerHeight - 112
 	}
 } else if (innerWidth < 1024) {
 	if (hellobar?.active?.val) {
-		// 112 (without mobile footer)
-		sliderHeightAccToPageHeight = innerHeight - 168
+		// 120 (without mobile footer)
+		sliderHeightAccToPageHeight = innerHeight - 176
 	} else {
 		// 80 (without mobile footer)
 		sliderHeightAccToPageHeight = innerHeight - 136
 	}
 } else {
 	if (hellobar?.active?.val) {
-		sliderHeightAccToPageHeight = innerHeight - 160
+		sliderHeightAccToPageHeight = innerHeight - 168
 	} else {
 		sliderHeightAccToPageHeight = innerHeight - 128
 	}

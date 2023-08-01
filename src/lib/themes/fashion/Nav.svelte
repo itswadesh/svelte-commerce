@@ -112,12 +112,14 @@ async function getCategories() {
 
 <nav
 	class="{clazz} sticky inset-x-0 top-0 w-full border-b bg-white shadow-xs
-		{hellobar?.active?.val ? 'h-[88px] sm:h-[112px] lg:h-[160px]' : 'h-[56px] sm:h-[80px] lg:h-[128px]'} 
+		{hellobar?.active?.val
+		? 'h-[96px] sm:h-[120px] lg:h-[168px]'
+		: 'h-[56px] sm:h-[80px] lg:h-[128px]'} 
 		{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
 	{#if hellobar?.active?.val}
 		<div
-			class="h-8 text-center tracking-wider flex items-center justify-center text-sm"
-			style="background-color: {hellobar?.bgColor?.val || '#27272a'};
+			class="h-10 text-center tracking-wider flex items-center justify-center text-xs"
+			style="background-color: {hellobar?.bgColor?.val || '#515151'};
 				 color: {hellobar?.textColor?.val || '#ffffff'};">
 			{@html hellobar.content?.val}
 		</div>
