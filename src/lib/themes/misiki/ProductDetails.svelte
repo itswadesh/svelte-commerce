@@ -1016,7 +1016,7 @@ async function updateVariant(variant) {
 					{#if value?.variants?.length}
 						<div id="variants_list">
 							<div class="mb-2 flex items-center gap-2 uppercase">
-								<h5>Variant Products</h5>
+								<h5>Product Variations</h5>
 
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
