@@ -57,10 +57,10 @@ onMount(async () => {
 				{#if collection.block === 'block-2'}
 					<div class="px-3 py-10 sm:px-10 sm:py-20">
 						<div class="container mx-auto max-w-screen-2xl flex flex-col gap-10 sm:gap-20">
-							<div class="text-center uppercase flex flex-col gap-2">
-								<p class="text-sm tracking-widest">Shop</p>
+							<div class="text-center uppercase flex flex-col gap-5">
+								<p class="text-xs tracking-widest">Shop</p>
 
-								<h2 class="text-xl font-medium tracking-wider sm:text-2xl md:text-2xl">
+								<h2 class="text-center uppercase text-lg font-medium tracking-wider sm:text-xl">
 									{collection.name || 'New'}
 								</h2>
 							</div>

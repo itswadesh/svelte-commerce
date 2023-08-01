@@ -12,10 +12,10 @@ export let data
 {#await data.streamed.home then home}
 	{#if home?.trending?.length > 0}
 		<div>
-			<div class="px-3 py-5 sm:px-10 md:py-10 text-center uppercase flex flex-col gap-2">
-				<p class="text-sm tracking-widest">Latest Collection</p>
+			<div class="px-3 py-5 sm:px-10 md:py-10 text-center uppercase flex flex-col gap-5">
+				<p class="text-xs tracking-widest">FEATURED COLLECTION</p>
 
-				<h2 class="text-xl font-medium tracking-wider sm:text-2xl md:text-2xl">
+				<h2 class="text-center uppercase text-lg font-medium tracking-wider sm:text-xl">
 					{home?.trending[0]?.category?.name || 'New'}
 				</h2>
 			</div>

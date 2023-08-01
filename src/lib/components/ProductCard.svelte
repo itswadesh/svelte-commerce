@@ -43,9 +43,10 @@ if (product?._source) {
 
 let isWislisted = false
 let loadingForWishlist = false
+let product_image_dimension = $page.data.store.product_image_dimension || '3x4'
+let ribbonTags = []
 let show = false
 let showRelatedProducts = false
-let product_image_dimension = $page.data.store.product_image_dimension || '3x4'
 
 function showitems() {
 	show = true
@@ -53,6 +54,16 @@ function showitems() {
 
 function hideitems() {
 	show = false
+}
+
+// console.log('product', product)
+
+if (product?.tags?.length) {
+	ribbonTags = product?.tags.filter((tag) => {
+		return tag.type === 'Ribbon'
+	})
+
+	// console.log('Ribbon tags =', ribbonTags)
 }
 </script>
 
@@ -68,9 +79,9 @@ function hideitems() {
 			aria-label="Click to view the product details"
 			data-sveltekit-preload-data="tap"
 			class="flex flex-col items-center">
-			<!-- New -->
+			<!-- New and Tags -->
 
-			{#if product.new || product.tags?.length}
+			{#if ribbonTags?.length || product?.new}
 				<div class="absolute z-10 top-1 left-1 flex flex-col gap-0.5">
 					{#if product.new}
 						<div
@@ -79,15 +90,13 @@ function hideitems() {
 						</div>
 					{/if}
 
-					{#if product.tags?.length}
-						{#each product.tags as tag}
-							{#if tag?.name && tag?.type === 'Ribbon'}
-								<div
-									class="text-rem max-w-max py-0.5 px-1.5 text-xs font-semibold uppercase text-white"
-									style="background-color: {tag.colorCode};">
-									{tag.name}
-								</div>
-							{/if}
+					{#if ribbonTags?.length}
+						{#each ribbonTags as tag}
+							<div
+								class="text-rem max-w-max py-0.5 px-1.5 text-xs font-semibold uppercase text-white"
+								style="background-color: {tag.colorCode || '#27272A'};">
+								{tag.name}
+							</div>
 						{/each}
 					{/if}
 				</div>
