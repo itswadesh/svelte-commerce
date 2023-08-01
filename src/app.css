@@ -1,12 +1,139 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap');
 /* Write your global styles here, in PostCSS syntax */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-	html {
-		font-family: 'Montserrat', sans-serif;
+	body {
+		@apply text-zinc-800;
+	}
+
+	.prose {
+		@apply text-zinc-800 text-justify;
+	}
+
+	.prose p {
+		@apply text-sm text-zinc-500 font-normal;
+	}
+
+	.prose ul {
+		@apply text-zinc-500 flex flex-col gap-2 my-5;
+	}
+
+	.prose ol {
+		@apply text-zinc-500 flex flex-col gap-2 my-5;
+	}
+
+	.prose li {
+		@apply my-0;
+	}
+
+	.prose a {
+		@apply text-sm text-indigo-500 font-semibold;
+	}
+
+	p {
+		@apply text-sm text-zinc-500 font-normal;
+	}
+
+	@media only screen and (min-width: 640px) {
+		.prose h1 {
+			@apply text-3xl font-bold my-5;
+		}
+
+		.prose h2 {
+			@apply text-2xl font-bold my-5;
+		}
+
+		.prose h3 {
+			@apply text-xl font-bold my-5;
+		}
+
+		.prose h4 {
+			@apply text-lg font-bold my-5;
+		}
+
+		.prose h5 {
+			@apply text-base font-semibold my-2;
+		}
+
+		.prose h6 {
+			@apply text-sm font-semibold my-2;
+		}
+
+		h1 {
+			@apply text-3xl font-bold;
+		}
+
+		h2 {
+			@apply text-2xl font-bold;
+		}
+
+		h3 {
+			@apply text-xl font-bold;
+		}
+
+		h4 {
+			@apply text-lg font-bold;
+		}
+
+		h5 {
+			@apply text-base font-semibold;
+		}
+
+		h6 {
+			@apply text-sm font-semibold;
+		}
+	}
+
+	@media only screen and (max-width: 640px) {
+		.prose h1 {
+			@apply text-2xl font-bold my-5;
+		}
+
+		.prose h2 {
+			@apply text-xl font-bold my-5;
+		}
+
+		.prose h3 {
+			@apply text-lg font-bold my-5;
+		}
+
+		.prose h4 {
+			@apply text-base font-bold my-5;
+		}
+
+		.prose h5 {
+			@apply text-sm font-semibold my-2;
+		}
+
+		.prose h6 {
+			@apply text-xs font-semibold my-2;
+		}
+
+		h1 {
+			@apply text-2xl font-bold;
+		}
+
+		h2 {
+			@apply text-xl font-bold;
+		}
+
+		h3 {
+			@apply text-lg font-bold;
+		}
+
+		h4 {
+			@apply text-base font-bold;
+		}
+
+		h5 {
+			@apply text-sm font-semibold;
+		}
+
+		h6 {
+			@apply text-xs font-semibold;
+		}
 	}
 }
 
@@ -19,7 +146,6 @@
 	}
 
 	@keyframes shake {
-
 		10%,
 		90% {
 			transform: translate3d(-1px, 0, 0);
