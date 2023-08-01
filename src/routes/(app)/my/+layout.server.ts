@@ -5,9 +5,9 @@ import { redirect } from '@sveltejs/kit'
 // const cookies = Cookie()
 export const prerender = false
 export async function load({ url, params, locals, parent }) {
-	const { me, sid, cart, store } = locals
+	const { me, sid, cart } = locals
 	if (!me || !sid) {
-		throw redirect(307, `/auth/login?ref=${url.pathname}${url.search}`)
+		redirect(307, `/auth/login?ref=${url.pathname}${url.search}`)
 	}
 	const isHome = url.pathname === '/'
 	const currentPage = +url.searchParams.get('page') || 1
@@ -19,7 +19,6 @@ export async function load({ url, params, locals, parent }) {
 		q,
 		isHome,
 		me,
-		cart,
-		store
+		cart
 	}
 }

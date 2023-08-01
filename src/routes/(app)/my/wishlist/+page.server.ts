@@ -2,15 +2,15 @@ import { error, redirect } from '@sveltejs/kit'
 import { WishlistService } from '$lib/services'
 
 export async function load({ cookies, locals, url }) {
-	const { store, origin, me, sid } = locals
+	const { store, storeId, origin, me, sid } = locals
 
 	if (!me || !sid) {
-		throw redirect(307, `/auth/login?ref=${url.pathname}${url.search}`)
+		redirect(307, `/auth/login?ref=${url.pathname}${url.search}`)
 	}
 
 	try {
 		const wishlistedProducts = await WishlistService.fetchWishlist({
-			storeId: store?.id,
+			storeId,
 			server: true,
 			sid,
 			origin
@@ -20,10 +20,10 @@ export async function load({ cookies, locals, url }) {
 			return { wishlistedProducts }
 		}
 	} catch (e) {
-		throw redirect(307, '/auth/login')
+		redirect(307, '/auth/login')
 	}
 
-	throw error(404, 'Wishlist not found')
+	error(404, 'Wishlist not found')
 }
 
 const toggleWishlist = async ({ request, cookies, locals }) => {
@@ -32,10 +32,9 @@ const toggleWishlist = async ({ request, cookies, locals }) => {
 	const pid = data.get('pid')
 	const vid = data.get('vid')
 
-	const { store, origin, me, sid } = locals
-
+	const { storeId, origin, me, sid } = locals
 	if (!me || !sid) {
-		throw redirect(307, `/auth/login?ref=/my/wishlist/add/${pid}`)
+		redirect(307, `/auth/login?ref=/my/wishlist/add/${pid}`)
 	}
 
 	const res = await WishlistService.toggleWishlistService({
@@ -43,7 +42,7 @@ const toggleWishlist = async ({ request, cookies, locals }) => {
 		vid: vid,
 		origin,
 		sid,
-		storeId: store?.id
+		storeId
 	})
 
 	// console.log('res of toggle wishlist = ', res)

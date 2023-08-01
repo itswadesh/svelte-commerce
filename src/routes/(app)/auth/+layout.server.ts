@@ -4,15 +4,14 @@ export const prerender = false
 export async function load({ url, locals, cookies }) {
 	const currentPage = +url.searchParams.get('page') || 1
 	const q = url.searchParams.get('q') || ''
-
 	let cart
-	// let serializedCart
-
 	try {
+		const sid = cookies.get('connect.sid')
 		const res: any = await CartService.fetchMyCart({
-			storeId: locals.store?.id,
+			storeId: locals.storeId,
 			server: true,
-			sid: cookies.get('connect.sid')
+			sid,
+			origin: locals.origin
 		})
 
 		if (res) {
@@ -30,9 +29,7 @@ export async function load({ url, locals, cookies }) {
 				unavailableItems: res?.unavailableItems,
 				formattedAmount: res?.formattedAmount
 			}
-
 			cart = cookieCart
-
 			// serializedCart = cookie.serialize('cart', JSON.stringify(cookieCart) || '', {
 			// 	path: '/'
 			// })
@@ -42,15 +39,12 @@ export async function load({ url, locals, cookies }) {
 	}
 
 	if (cookies) {
-		// cookies.set(serializedCart)
 	}
-
 	return {
 		cart,
 		currentPage,
 		q,
 		settings: locals.settings,
-		store: locals.store,
 		url: url.href
 	}
 }
