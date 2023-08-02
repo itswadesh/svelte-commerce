@@ -1,4 +1,4 @@
-import { UserService } from "$lib/services"
+import { UserService } from '$lib/services'
 
 const login = async ({ request, cookies, locals }) => {
 	const data = await request.formData()
@@ -8,26 +8,25 @@ const login = async ({ request, cookies, locals }) => {
 
 	let res
 
-
-	if (isEmail) {
+	if (isEmail == 'true') {
 		res = await UserService.loginService({
 			email: phoneOrEmail,
 			password: password,
 			storeId: locals.store?.id,
 			server: true,
-			origin: locals.origin,
+			origin: locals.origin
 		})
 
-		// console.log('res of email login = ', res);
+		// console.log('res of email login = ', res)
 	} else {
 		res = await UserService.getOtpService({
 			phone: phoneOrEmail,
 			storeId: locals.store?.id,
 			server: true,
-			origin: locals.origin,
+			origin: locals.origin
 		})
 
-		// console.log('res of phone login = ', res);
+		// console.log('res of phone login = ', res)
 	}
 
 	return res
