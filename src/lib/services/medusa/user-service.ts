@@ -72,7 +72,7 @@ export const loginService = async ({
 		res.firstName = res.first_name
 		res.lastName = res.last_name
 		res.active = res.has_account
-
+		res.sid = response.sid
 		return res
 	} catch (e) {
 		if (e.status === 401) e.message = 'email or password is invalid'

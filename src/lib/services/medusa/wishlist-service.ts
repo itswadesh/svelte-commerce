@@ -14,7 +14,7 @@ export const fetchWishlist = async ({
 	try {
 		let res: any = {}
 
-		res = [] // await getMedusajsApi(`wishlists/me`, {}, sid)
+		res = {} // await getMedusajsApi(`wishlists/me`, {}, sid)
 
 		return res?.data || []
 	} catch (e) {

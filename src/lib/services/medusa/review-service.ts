@@ -15,7 +15,7 @@ export const fetchReviews = async ({
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`reviews/me`, {}, sid)
+		res = {} // await getMedusajsApi(`reviews/me`, {}, sid)
 
 		return {
 			data: res.data || [],
