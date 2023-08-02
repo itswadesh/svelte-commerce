@@ -220,7 +220,7 @@ export const postMedusajsApi = async (endpoint: string, data: any, sid?: any) =>
 				Cookie: `connect.sid=${sid}`
 			}
 		})
-		const allHeaders = Object.fromEntries(response.headers.entries())
+		// const allHeaders = Object.fromEntries(response.headers.entries())
 		// console.log(allHeaders)
 
 		const isJson = response.headers.get('content-type')?.includes('application/json')
