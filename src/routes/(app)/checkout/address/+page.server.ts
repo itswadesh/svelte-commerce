@@ -32,7 +32,7 @@ export async function load({ request, url, locals, cookies }) {
 		}
 	} catch (e) {
 		if (e.status === 401 || e.status === 307) {
-			throw redirect(e.status, `${locals.store?.loginUrl}?ref=${url?.pathname}`)
+			throw redirect(307, `/auth/login?ref=${url?.pathname}`)
 		} else {
 			throw error(500, e?.message)
 		}
