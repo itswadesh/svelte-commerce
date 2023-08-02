@@ -136,9 +136,30 @@ onMount(async () => {
 										{/if}
 
 										{#if g.user}
-											<span class="text-xs text-zinc-500">
-												{g.user?.firstName} | {date(g.createdAt)}
-											</span>
+											<div class="flex items-center gap-2">
+												{#if g.user?.avatar}
+													<div class="h-6 w-6 rounded-full overflow-hidden">
+														<img
+															src="{g.user?.avatar}"
+															alt="avatar"
+															class="h-full w-full object-cover object-top" />
+													</div>
+												{/if}
+
+												<p class="flex-1">
+													{#if g.user?.firstName}
+														{g.user?.firstName}
+													{/if}
+
+													{#if g.user?.lastName}
+														{g.user?.lastName}
+													{/if}
+
+													{#if g.user?.createdAt}
+														| {date(g?.createdAt)}
+													{/if}
+												</p>
+											</div>
 										{/if}
 
 										{#if g.product}

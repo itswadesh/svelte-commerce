@@ -20,7 +20,12 @@ import {
 	ProductGridShowCase,
 	ShopYourStone
 } from '$lib/components'
-import { CollectionsHome, CollectionsHome2, TrendingProductsHome } from '$lib/theme-config'
+import {
+	CollectionsHome,
+	CollectionsHome2,
+	CustomerFeedback,
+	TrendingProductsHome
+} from '$lib/theme-config'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { slide } from 'svelte/transition'
@@ -304,11 +309,17 @@ onMount(() => {
 
 		<ShopYourStone />
 
+		<!-- <ProductTab /> -->
+
+		<!-- Customer feedback -->
+
+		<CustomerFeedback data="{data}" />
+
 		<!-- Legal Footer Information -->
 
 		<LegalFooterInformation />
 
-		<!-- <ProductTab /> -->
+		<div class="h-10 sm:h-20 w-full"></div>
 
 		<!-- Footer mobile show hide toggle -->
 

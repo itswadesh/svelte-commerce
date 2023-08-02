@@ -1,4 +1,4 @@
-import { CollectionService, DealsService, HomeService, VendorService } from '$lib/services'
+import { CollectionService, DealsService, FeedbackService, HomeService, VendorService } from '$lib/services'
 const isServer = import.meta.env.SSR
 
 export async function load({ parent }) {
@@ -12,7 +12,9 @@ export async function load({ parent }) {
 
 			deals: DealsService.fetchDeals({ origin, storeId: store?.id, server: isServer }),
 
-			collections: CollectionService.fetchCollections({ origin, storeId: store?.id, server: isServer })
+			collections: CollectionService.fetchCollections({ origin, storeId: store?.id, server: isServer }),
+
+			feedbacks: FeedbackService.fetchFeedbacks({ origin, storeId: store?.id, server: isServer })
 		},
 
 		origin
