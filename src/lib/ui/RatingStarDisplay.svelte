@@ -3,6 +3,7 @@ export let biggerSize = false
 export let rating
 export let ratingCount
 export let reviewCount
+export let showOnlyStars = false
 export let textWhite = false
 
 let clazz = ''
@@ -124,35 +125,37 @@ $: if (rating == 1.5) {
 		</div>
 	{/if}
 
-	<div class="mt-1 flex felx-wrap items-center gap-2 whitespace-nowrap">
-		<span>
-			{#if ratingCount}
-				{ratingCount}
-			{:else}
-				No
-			{/if}
+	{#if !showOnlyStars}
+		<div class="mt-1 flex felx-wrap items-center gap-2 whitespace-nowrap">
+			<span>
+				{#if ratingCount}
+					{ratingCount}
+				{:else}
+					No
+				{/if}
 
-			{#if ratingCount > 1}
-				Ratings
-			{:else}
-				Rating
-			{/if}
-		</span>
+				{#if ratingCount > 1}
+					Ratings
+				{:else}
+					Rating
+				{/if}
+			</span>
 
-		&
+			&
 
-		<span>
-			{#if reviewCount}
-				{reviewCount}
-			{:else}
-				No
-			{/if}
+			<span>
+				{#if reviewCount}
+					{reviewCount}
+				{:else}
+					No
+				{/if}
 
-			{#if reviewCount > 1}
-				Reviews
-			{:else}
-				Review
-			{/if}
-		</span>
-	</div>
+				{#if reviewCount > 1}
+					Reviews
+				{:else}
+					Review
+				{/if}
+			</span>
+		</div>
+	{/if}
 </div>
