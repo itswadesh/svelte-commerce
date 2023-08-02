@@ -22,7 +22,6 @@ import { serialize } from '.'
 
 export async function postt(endpoint: string, data: any, ck?: any) {
 	try {
-
 		// ck need to be passed, because ck.set is used later bellow
 		const ep = HTTP_ENDPOINT + '/api/' + endpoint
 		const response: any = await fetch(ep, {
@@ -97,7 +96,6 @@ export async function postBySid(endpoint: string, data: any, sid?: string) {
 		} else {
 			return res
 		}
-
 	} catch (e) {
 		// console.log("/lib/utils/server.ts postBySid()", e);
 	}
@@ -121,7 +119,6 @@ export async function gett(endpoint: string, ck?: any) {
 		} else {
 			return res
 		}
-
 	} catch (e) {
 		// console.log("/lib/utils/server.ts gett()", e);
 	}
@@ -140,7 +137,6 @@ export const getBySid = async (endpoint: string, sid?: any) => {
 		} else {
 			return res
 		}
-
 	} catch (e) {
 		// console.log("/lib/utils/server.ts getBySid()", e);
 	}
@@ -148,7 +144,6 @@ export const getBySid = async (endpoint: string, sid?: any) => {
 
 export const getBigcommerceApi = async (endpoint: string, query?: any, sid?: any) => {
 	try {
-
 		// const totalPages = res?.meta?.pagination?.total_pages
 		// const totalItems = res?.meta?.pagination?.total
 
@@ -185,7 +180,6 @@ export const postBigCommerceApi = async (endpoint: string, query: any, sid?: any
 		} else {
 			return res
 		}
-
 	} catch (e) {
 		// console.log("/lib/utils/server.ts postBigCommerceApi()", e);
 	}
@@ -193,12 +187,10 @@ export const postBigCommerceApi = async (endpoint: string, query: any, sid?: any
 
 export const getMedusajsApi = async (endpoint: string, query?: any, sid?: any) => {
 	try {
-		// console.log('zzzzzzzzzzzzzzzzzz', MEDUSAJS_BASE_URL + '/' + endpoint);
-
 		const response = await fetch(MEDUSAJS_BASE_URL + '/' + endpoint, {
 			method: 'GET',
 			credentials: 'include',
-			headers: { cookie: `connect.sid=${sid}` }
+			headers: { Cookie: `connect.sid=${sid}` }
 		})
 		const isJson = response.headers.get('content-type')?.includes('application/json')
 		const res = isJson ? await response.json() : await response.text()
@@ -211,9 +203,9 @@ export const getMedusajsApi = async (endpoint: string, query?: any, sid?: any) =
 			return res
 		}
 	} catch (e) {
-		// console.log("/lib/utils/server.ts getMedusajsApi()", e);
+		console.log('/lib/utils/server.ts getMedusajsApi() => ' + endpoint, e)
+		throw e
 	}
-
 }
 
 export const postMedusajsApi = async (endpoint: string, data: any, sid?: any) => {
@@ -225,11 +217,19 @@ export const postMedusajsApi = async (endpoint: string, data: any, sid?: any) =>
 			body: JSON.stringify(data || {}),
 			headers: {
 				'Content-Type': 'application/json',
-				cookie: `connect.sid=${sid}`
+				Cookie: `connect.sid=${sid}`
 			}
 		})
+		const allHeaders = Object.fromEntries(response.headers.entries())
+		console.log(allHeaders)
+
 		const isJson = response.headers.get('content-type')?.includes('application/json')
 		const res = isJson ? await response.json() : await response.text()
+		const setCookieForLogin = response.headers.get('set-cookie')
+		const sidCookie = cookie.parse(setCookieForLogin)
+		if (sidCookie) {
+			res.sid = sidCookie['connect.sid']
+		}
 		if (res?.status > 399) {
 			throw { status: res.status, message: res.body.message }
 		} else if (response?.status > 399) {
@@ -238,7 +238,8 @@ export const postMedusajsApi = async (endpoint: string, data: any, sid?: any) =>
 			return res
 		}
 	} catch (e) {
-		// console.log("/lib/utils/server.ts postMedusajsApi()", e);
+		console.log('/lib/utils/server.ts postMedusajsApi() => ' + endpoint, e)
+		throw e
 	}
 }
 
@@ -247,7 +248,7 @@ export const getShopifyApi = async (endpoint: string, query: any, sid?: any) => 
 		const response = await fetch(SHOPIFY_BASE_URL + '/' + endpoint, {
 			method: 'GET',
 			credentials: 'include',
-			headers: { cookie: `connect.sid=${sid}` }
+			headers: { Cookie: `connect.sid=${sid}` }
 		})
 		const isJson = response.headers.get('content-type')?.includes('application/json')
 		const res = isJson ? await response.json() : await response.text()
@@ -258,7 +259,6 @@ export const getShopifyApi = async (endpoint: string, query: any, sid?: any) => 
 		} else {
 			return res
 		}
-
 	} catch (e) {
 		// console.log("/lib/utils/server.ts getShopifyApi()", e);
 	}
@@ -285,7 +285,6 @@ export const postShopifyApi = async (endpoint: string, data: any, sid?: any) => 
 		} else {
 			return res
 		}
-
 	} catch (e) {
 		// console.log("/lib/utils/server.ts postShopifyApi()", e);
 	}
