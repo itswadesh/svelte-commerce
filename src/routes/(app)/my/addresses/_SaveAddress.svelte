@@ -1,11 +1,12 @@
 <script>
 import { AddressService, CountryService } from '$lib/services'
+import { applyAction, enhance } from '$app/forms'
 import { createEventDispatcher } from 'svelte'
+import { Error } from '$lib/components'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
-import { toast } from '$lib/utils'
-import { Error } from '$lib/components'
 import { PrimaryButton, Textarea, Textbox } from '$lib/ui'
+import { toast } from '$lib/utils'
 
 const dispatch = createEventDispatcher()
 
@@ -82,7 +83,23 @@ async function SaveAddress(address) {
 <div>
 	<Error err="{err}" class="mb-5" />
 
-	<form on:submit|preventDefault="{() => SaveAddress(address)}">
+	<form
+		action="/my/addresses?/saveAddress"
+		method="POST"
+		use:enhance="{() => {
+			return async ({ result }) => {
+				console.log('result', result)
+				if (result?.data) {
+					const id = address._id || address.id || 'new'
+					const newAddressId = result.data?._id || result.data?.id
+
+					toast('Address Info Saved.', 'success')
+					dispatch('saved', { id, newAddressId })
+					await applyAction(result)
+				}
+			}
+		}}">
+		<!-- <form on:submit|preventDefault="{() => SaveAddress(address)}"> -->
 		<div class="mb-5 flex flex-col gap-2 lg:mb-10">
 			<!-- First Name -->
 
@@ -262,6 +279,17 @@ async function SaveAddress(address) {
 				</div>
 			</div>
 		</div>
+
+		<input type="hidden" name="address" value="{address.address}" />
+		<input type="hidden" name="city" value="{address.city}" />
+		<input type="hidden" name="country" value="{address.country}" />
+		<input type="hidden" name="email" value="{address.email}" />
+		<input type="hidden" name="firstName" value="{address.firstName}" />
+		<input type="hidden" name="lastName" value="{address.lastName}" />
+		<input type="hidden" name="locality" value="{address.locality}" />
+		<input type="hidden" name="phone" value="{address.phone}" />
+		<input type="hidden" name="state" value="{address.state}" />
+		<input type="hidden" name="zip" value="{address.zip}" />
 
 		<PrimaryButton type="submit" loading="{loading}" class="w-60">Save Address</PrimaryButton>
 	</form>
