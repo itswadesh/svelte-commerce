@@ -13,9 +13,9 @@ export const fetchFeedbacks = async ({
 		let res: any = {}
 
 		if (isServer) {
-			res = await getBySid(`es/reviews?store=${storeId}`, sid)
+			res = await getBySid(`reviews/top?store=${storeId}`, sid)
 		} else {
-			res = await getAPI(`es/reviews?store=${storeId}`, origin)
+			res = await getAPI(`reviews/top?store=${storeId}`, origin)
 		}
 
 		return res || {}

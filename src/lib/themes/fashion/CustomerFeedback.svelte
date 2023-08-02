@@ -96,7 +96,7 @@ onMount(async () => {
 										{/if}
 									</div>
 
-									<div class="p-5 flex flex-col gap-2 text-xs sm:text-sm">
+									<div class="p-5 flex flex-col gap-4 text-xs sm:text-sm">
 										<div class="flex items-center gap-2">
 											<div class="flex items-center gap-1">
 												{#each { length: 5 } as _, index}
@@ -116,10 +116,12 @@ onMount(async () => {
 												{/each}
 											</div>
 
-											<div
-												class="bg-brand-500 text-white text-xs py-0.5 px-2 font-thin rounded-full">
-												Verified Purchaser
-											</div>
+											{#if feedback.verified}
+												<div
+													class="bg-brand-500 text-white text-xs py-0.5 px-2 font-thin rounded-full">
+													Verified Purchaser
+												</div>
+											{/if}
 										</div>
 
 										{#if feedback.message}
@@ -129,9 +131,9 @@ onMount(async () => {
 										{/if}
 
 										{#if feedback.user}
-											<div class="flex items-center gap-2">
+											<div class="flex flex-wrap items-center gap-2">
 												{#if feedback.user?.avatar}
-													<div class="h-6 w-6 rounded-full overflow-hidden">
+													<div class="h-10 w-10 rounded-full overflow-hidden">
 														<img
 															src="{feedback.user?.avatar}"
 															alt="avatar"
@@ -139,66 +141,74 @@ onMount(async () => {
 													</div>
 												{/if}
 
-												<p class="flex-1">
-													{#if feedback.user?.firstName}
-														{feedback.user?.firstName}
-													{/if}
+												{#if feedback.user?.firstName || feedback.updatedAt}
+													<div class="flex-1 flex flex-col gap-1 leading-3">
+														{#if feedback.user?.firstName}
+															<h6>
+																{feedback.user?.firstName}
 
-													{#if feedback.user?.lastName}
-														{feedback.user?.lastName}
-													{/if}
+																{#if feedback.user?.lastName}
+																	{feedback.user?.lastName}
+																{/if}
+															</h6>
+														{/if}
 
-													{#if feedback.user?.createdAt}
-														| {date(feedback?.createdAt)}
-													{/if}
-												</p>
+														{#if feedback.updatedAt}
+															<span class="text-xs">
+																{date(feedback?.updatedAt)}
+															</span>
+														{/if}
+													</div>
+												{/if}
 											</div>
 										{/if}
 
-										{#if feedback.product}
-											<h6>Purchased Item:</h6>
+										{#if feedback.pid}
+											<div>
+												<h6 class="mb-2">Purchased Item:</h6>
 
-											<a
-												href="/product/{feedback.product?.slug}"
-												aria-label="View product"
-												target="_blank"
-												rel="noopener noreferrer"
-												class="flex items-start gap-2 group">
-												{#if feedback.product?.img}
-													<LazyImg
-														src="{feedback.product?.img}"
-														alt=""
-														class="block w-16 h-auto object-contain object-center rounded" />
-												{/if}
+												<a
+													href="/product/{feedback.pid?.slug}"
+													aria-label="View product"
+													target="_blank"
+													rel="noopener noreferrer"
+													class="flex items-start gap-2 group">
+													{#if feedback.pid?.img}
+														<LazyImg
+															src="{feedback.pid?.img}"
+															alt=""
+															class="block w-16 h-auto object-contain object-center rounded" />
+													{/if}
 
-												<div class="flex-1">
-													<p class="mb-1 group-hover:underline">
-														{feedback.product?.name}
-													</p>
+													<div class="flex-1">
+														<p class="mb-1 group-hover:underline">
+															{feedback.pid?.name}
+														</p>
 
-													<div class="flex flex-wrap items-center gap-2 text-xs">
-														<span class="text-base font-bold whitespace-nowrap">
-															{currency(feedback.product?.price, $page.data?.store?.currencySymbol)}
-														</span>
-
-														{#if feedback.product?.mrp > feedback.product?.price}
-															<span class="whitespace-nowrap text-zinc-500 line-through">
-																{currency(feedback.product?.mrp, $page.data?.store?.currencySymbol)}
+														<div class="flex flex-wrap items-center gap-2 text-xs">
+															<span class="text-base font-bold whitespace-nowrap">
+																{currency(feedback.pid?.price, $page.data?.store?.currencySymbol)}
 															</span>
 
-															{#if Math.floor(((feedback.product?.mrp - feedback.product?.price) / feedback.product?.mrp) * 100) > 0}
-																<span class="whitespace-nowrap text-secondary-500">
-																	({Math.floor(
-																		((feedback.product?.mrp - feedback.product?.price) /
-																			feedback.product?.mrp) *
-																			100
-																	)}% off)
+															{#if feedback.pid?.mrp > feedback.pid?.price}
+																<span class="whitespace-nowrap text-zinc-500 line-through">
+																	{currency(feedback.pid?.mrp, $page.data?.store?.currencySymbol)}
 																</span>
+
+																{#if Math.floor(((feedback.pid?.mrp - feedback.pid?.price) / feedback.pid?.mrp) * 100) > 0}
+																	<span class="whitespace-nowrap text-secondary-500">
+																		({Math.floor(
+																			((feedback.pid?.mrp - feedback.pid?.price) /
+																				feedback.pid?.mrp) *
+																				100
+																		)}% off)
+																	</span>
+																{/if}
 															{/if}
-														{/if}
+														</div>
 													</div>
-												</div>
-											</a>
+												</a>
+											</div>
 										{/if}
 									</div>
 								</div>
