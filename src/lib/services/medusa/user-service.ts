@@ -1,12 +1,7 @@
 import { delBySid, getMedusajsApi, postMedusajsApi } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 
-export const fetchMeData = async ({
-	origin,
-	storeId,
-	server = false,
-	cookies
-}: any) => {
+export const fetchMeData = async ({ origin, storeId, server = false, cookies }: any) => {
 	try {
 		let res: any = {}
 
@@ -139,7 +134,7 @@ export const getOtpService = async ({
 	try {
 		let res: any = {}
 
-		res = await postMedusajsApi(`customers`, {})
+		res = {} // await postMedusajsApi(`customers`, {})
 
 		return res
 	} catch (e) {
