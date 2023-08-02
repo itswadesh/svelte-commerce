@@ -28,7 +28,9 @@ const login = async ({ request, cookies, locals }) => {
 
 		// console.log('res of phone login = ', res)
 	}
-
+	cookies.set('connect.sid', res.sid, {
+		path: '/'
+	})
 	return res
 }
 
