@@ -1,5 +1,4 @@
-import { fetchAddress } from '$lib/services/AddressService'
-import { fetchCountries, fetchStates } from '$lib/services/CountryService'
+import { AddressService, CountryService } from '$lib/services'
 
 export const prerender = false
 
@@ -14,27 +13,43 @@ export async function load({ cookies, locals, params, url }) {
 	if (id === 'new') {
 		address = { id: 'new', country: null, state: null }
 	} else {
-		address = await fetchAddress({
+		address = await AddressService.fetchAddress({
 			id,
-			storeId: locals.store?.id,
+			storeId: store?.id,
 			server: true,
-			sid: cookies.get('sid')
+			sid: cookies.get('connect.sid')
 		})
 	}
 
-	countries = await fetchCountries({
-		storeId: locals.store?.id,
+	countries = await CountryService.fetchCountries({
+		storeId: store?.id,
 		server: true,
-		sid: cookies.get('sid')
+		sid: cookies.get('connect.sid')
 	})
 
+	if (countries?.length === 1) {
+		address.country = countries[0].code || countries[0].iso_2
+	} else if (countries?.length > 1) {
+		const dafaultCountry = countries.filter((c) => { return c.dafault })
+
+		// console.log('dafaultCountry', dafaultCountry);
+
+		if (dafaultCountry[0]) {
+			address.country = dafaultCountry[0].code
+		}
+	}
+
 	if (address?.country) {
-		states = await fetchStates({
-			storeId: locals.store?.id,
+		states = await CountryService.fetchStates({
+			storeId: store?.id,
 			server: true,
-			sid: cookies.get('sid'),
+			sid: cookies.get('connect.sid'),
 			countryCode: address?.country
 		})
+	}
+
+	if (states?.length === 1) {
+		address.state = states[0].code || states[0].iso_2
 	}
 
 	return { address, countries, states }
