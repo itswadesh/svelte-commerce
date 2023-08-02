@@ -9,7 +9,7 @@ export const fetchCountries = async ({ origin, storeId, server = false, sid = nu
 		res = cres.regions[0].countries[0].name
 		return res?.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 
@@ -27,6 +27,6 @@ export const fetchStates = async ({
 
 		return res?.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }

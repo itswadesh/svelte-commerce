@@ -29,7 +29,7 @@ export const searchProducts = async ({
 
 		return { products, count, facets, pageSize, err }
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 
@@ -44,7 +44,7 @@ export const fetchProducts = async ({ origin, slug, id, server = false, sid = nu
 
 		return res?.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 
@@ -60,7 +60,7 @@ export const fetchProduct = async ({ origin, slug, id, server = false, sid = nul
 		res = await mapMedusajsProduct(productArray[0]) // assuming we only want the first product in the array
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 
@@ -79,7 +79,7 @@ export const fetchProduct2 = async ({ origin, slug, id, server = false, sid = nu
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 // Fetch products based on category
@@ -107,7 +107,7 @@ export const fetchProductsOfCategory = async ({
 		const limit = res?.limit
 		return { products, count, facets, pageSize, category, err }
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 
@@ -135,7 +135,7 @@ export const fetchNextPageProducts = async ({
 			facets: res.facets
 		}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 
@@ -157,6 +157,6 @@ export const fetchRelatedProducts = async ({
 
 		return relatedProducts || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }

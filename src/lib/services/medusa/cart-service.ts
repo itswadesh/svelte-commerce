@@ -28,13 +28,12 @@ export const fetchRefreshCart = async ({
 		let res: any = {}
 		const cart_id = cookies.get('cartId')
 		if (!cart_id || cart_id == 'undefined') return []
-		const cartRes = await getMedusajsApi(`carts/${cart_id}`, {})
+		const cartRes = await getMedusajsApi(`carts/${cart_id}`)
 		res = mapMedusajsCart(cartRes?.cart)
 
 		return res || {}
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data?.message)
+	} catch (e) {
+		throw error(e.status, e.message)
 	}
 }
 
@@ -46,8 +45,7 @@ export const fetchMyCart = async ({ origin, storeId, server = false, sid = null 
 
 		return res || {}
 	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data?.message)
+		throw error(e.status, e.message)
 	}
 }
 
@@ -82,7 +80,7 @@ export const addToCartService = async ({
 		return res || {}
 	} catch (e) {
 		// console.error(e)
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 
@@ -100,7 +98,7 @@ export const applyCouponService = async ({
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 
@@ -118,6 +116,6 @@ export const removeCouponService = async ({
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }

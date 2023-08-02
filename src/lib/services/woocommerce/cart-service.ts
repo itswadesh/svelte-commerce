@@ -22,9 +22,8 @@ export const fetchRefreshCart = async ({ origin, storeId, server = false, sid = 
 		res = await getWoocommerceApi(`customers/me`, {}, sid)
 
 		return res || {}
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data?.message)
+	} catch (e) {
+		throw error(e.status, e.message)
 	}
 }
 
@@ -35,9 +34,8 @@ export const fetchMyCart = async ({ origin, storeId, server = false, sid = null 
 		res = await getWoocommerceApi(`customers/me`, {}, sid)
 
 		return res || {}
-	} catch (err) {
-		const e = err as Error
-		throw error(e.status, e.data?.message)
+	} catch (e) {
+		throw error(e.status, e.message)
 	}
 }
 
