@@ -39,6 +39,7 @@ export const saveAddress = async ({
 	country,
 	email,
 	firstName,
+	landmark,
 	lastName,
 	locality,
 	phone,

@@ -28,7 +28,7 @@ export async function load({ cookies, locals, params, url }) {
 	})
 
 	if (countries?.length === 1) {
-		address.country = countries[0].code
+		address.country = countries[0].code || countries[0].iso_2
 	} else if (countries?.length > 1) {
 		const dafaultCountry = countries.filter((c) => { return c.dafault })
 
@@ -49,7 +49,7 @@ export async function load({ cookies, locals, params, url }) {
 	}
 
 	if (states?.length === 1) {
-		address.state = states[0].code
+		address.state = states[0].code || states[0].iso_2
 	}
 
 	return { address, countries, states }

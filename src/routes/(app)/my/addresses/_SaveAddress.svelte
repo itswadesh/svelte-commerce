@@ -9,14 +9,16 @@ import { PrimaryButton, Textarea, Textbox } from '$lib/ui'
 
 const dispatch = createEventDispatcher()
 
-let err = null
-let formChanged = false
-let loading = false
-
 export let address = {}
 export let countries = []
 export let states = []
+// console.log('address', address)
+// console.log('countries', countries)
+// console.log('states', states)
 
+let err = null
+let formChanged = false
+let loading = false
 let loadingStates = false
 
 async function onCountryChange(country) {
@@ -67,6 +69,7 @@ async function SaveAddress(address) {
 		toast('Address Info Saved.', 'success')
 		dispatch('saved', { id, newAddressId })
 	} catch (e) {
+		console.log('error', e)
 		err = e?.body
 		toast(err, 'error')
 	} finally {
@@ -186,7 +189,7 @@ async function SaveAddress(address) {
 					<span class="text-accent-500">*</span>
 				</h6>
 
-				{#if countries?.length > 0}
+				{#if countries?.length}
 					<select
 						disabled="{countries?.length === 1}"
 						class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
@@ -197,7 +200,7 @@ async function SaveAddress(address) {
 
 						{#each countries as c}
 							{#if c}
-								<option value="{c.code}" selected="{c.default}">
+								<option value="{c.code || c.iso_2}" selected="{c.default}">
 									{c.name}
 								</option>
 							{/if}
@@ -215,20 +218,20 @@ async function SaveAddress(address) {
 
 			<!-- State -->
 
-			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
-				<h6 class="sm:w-52 sm:shrink-0">
-					State/Province
+			{#if states?.length}
+				<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
+					<h6 class="sm:w-52 sm:shrink-0">
+						State/Province
 
-					<span class="text-accent-500">*</span>
-				</h6>
+						<span class="text-accent-500">*</span>
+					</h6>
 
-				<select
-					class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
-					bind:value="{address.state}"
-					disabled="{!address.country || loadingStates}"
-					required>
-					<option value="{null}" disabled selected>-- Select a State --</option>
-					{#if states?.length > 1}
+					<select
+						class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
+						bind:value="{address.state}"
+						disabled="{!address.country || loadingStates}"
+						required>
+						<option value="{null}" disabled selected>-- Select a State --</option>
 						{#each states as s}
 							{#if s}
 								<option value="{s.name}">
@@ -236,9 +239,9 @@ async function SaveAddress(address) {
 								</option>
 							{/if}
 						{/each}
-					{/if}
-				</select>
-			</div>
+					</select>
+				</div>
+			{/if}
 
 			<!-- ZIP -->
 
