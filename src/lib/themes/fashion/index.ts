@@ -7,6 +7,7 @@ import CategoriesSlider from '$lib/themes/fashion/CategoriesSlider.svelte'
 import CollectionsGeneral from '$lib/themes/fashion/CollectionsGeneral.svelte'
 import CollectionsHome from '$lib/themes/fashion/CollectionsHome.svelte'
 import CollectionsHome2 from '$lib/themes/fashion/CollectionsHome2.svelte'
+import CustomerFeedback from '$lib/themes/fashion/CustomerFeedback.svelte'
 import Deals from '$lib/themes/misiki/Deals.svelte'
 import DummyProductCard from '$lib/themes/fashion/DummyProductCard.svelte'
 import Footer from '$lib/themes/fashion/Footer.svelte'
@@ -32,6 +33,7 @@ export {
     CollectionsGeneral,
     CollectionsHome,
     CollectionsHome2,
+    CustomerFeedback,
     Deals,
     DummyProductCard,
     Footer,
