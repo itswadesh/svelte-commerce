@@ -15,9 +15,9 @@ export const submitContactUsForm = async ({
 }: any) => {
 	try {
 		let res: any = {}
-	
-				res = await getMedusajsApi(`contact`, {}, sid)
-			
+
+		res = await getMedusajsApi(`contact`, {}, sid)
+
 		return res
 	} catch (err) {
 		const e = err as Error
@@ -40,11 +40,11 @@ export const bulkOrderEnquiry = async ({
 }: any) => {
 	try {
 		let res: any = {}
-	
-				res = await getMedusajsApi(`contact`, {}, sid)
-			
+
+		res = await getMedusajsApi(`contact`, {}, sid)
+
 		return res
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }

@@ -11,7 +11,7 @@ export const fetchPages = async ({ origin, storeId, server = false, sid = null }
 
 		return res.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 
@@ -19,11 +19,11 @@ export const fetchLatestPages = async ({ origin, storeId, server = false, sid = 
 	try {
 		let res: any = {}
 
-		res = {}//await getMedusajsApi(`pages?sort=-updatedAt&limit=10&store=${storeId}`)
+		res = {} //await getMedusajsApi(`pages?sort=-updatedAt&limit=10&store=${storeId}`)
 
 		return res.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 
@@ -35,6 +35,6 @@ export const fetchPage = async ({ origin, id, storeId, server = false, sid = nul
 
 		return res.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }

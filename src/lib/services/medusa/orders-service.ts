@@ -16,7 +16,7 @@ export const fetchOrders = async ({ origin, storeId, server = false, sid = null 
 			page: res.page
 		}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 
@@ -28,7 +28,7 @@ export const fetchOrder = async ({ origin, storeId, id, server = false, sid = nu
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 
@@ -40,7 +40,7 @@ export const fetchTrackOrder = async ({ origin, storeId, id, server = false, sid
 
 		return res.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 
@@ -61,7 +61,7 @@ export const paySuccessPageHit = async ({
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 
@@ -81,7 +81,7 @@ export const codCheckout = async ({
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 
@@ -101,7 +101,7 @@ export const cashfreeCheckout = async ({
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 
@@ -121,7 +121,7 @@ export const razorpayCheckout = async ({
 
 		return res.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 
@@ -140,7 +140,7 @@ export const razorpayCapture = async ({
 
 		return res.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 
@@ -159,6 +159,6 @@ export const stripeCheckoutService = async ({
 
 		return res.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }

@@ -16,7 +16,7 @@ export const fetchAddresses = async ({
 		res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_addresses
 		return { myAddresses: { data: myAddresses }, selectedAddress, count: res?.count }
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 
@@ -28,7 +28,7 @@ export const fetchAddress = async ({ origin, storeId, server = false, sid = null
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e.message)
 	}
 }
 
