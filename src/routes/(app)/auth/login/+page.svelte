@@ -246,9 +246,9 @@ function changeNumber() {
 			use:enhance="{() => {
 				return async ({ result }) => {
 					// console.log('result', result)
-
-					if (isEmail) {
-						if (result?.data) {
+					resendAfter = 0
+					if (result?.data) {
+						if (isEmail) {
 							const me = {
 								email: result?.data?.email,
 								phone: result?.data?.phone,
@@ -262,13 +262,13 @@ function changeNumber() {
 
 							// console.log('me =', me)
 							await cookies.set('me', me, { path: '/' })
+							const r = ref || '/'
+							if (browser) goto(r)
+							await applyAction(result)
+						} else {
+							otpRequestSend = true
+							resendAfter = result?.data?.timer
 						}
-
-						const r = ref || '/'
-						if (browser) goto(r)
-						await applyAction(result)
-					} else {
-						otpRequestSend = true
 					}
 				}
 			}}"
