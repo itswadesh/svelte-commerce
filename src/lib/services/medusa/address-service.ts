@@ -13,8 +13,7 @@ export const fetchAddresses = async ({
 		let selectedAddress = {}
 		let myAddresses = []
 
-		res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_address
-
+		res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_addresses
 		return { myAddresses: { data: myAddresses }, selectedAddress, count: res?.count }
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)
@@ -25,7 +24,7 @@ export const fetchAddress = async ({ origin, storeId, server = false, sid = null
 	try {
 		let res: any = {}
 
-		res = (await getMedusajsApi(`address`, {}, sid)).customer.shipping_address
+		res = (await getMedusajsApi(`address`, {}, sid)).customer.shipping_addresses
 
 		return res || {}
 	} catch (e) {

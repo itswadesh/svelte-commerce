@@ -221,7 +221,7 @@ export const postMedusajsApi = async (endpoint: string, data: any, sid?: any) =>
 			}
 		})
 		const allHeaders = Object.fromEntries(response.headers.entries())
-		console.log(allHeaders)
+		// console.log(allHeaders)
 
 		const isJson = response.headers.get('content-type')?.includes('application/json')
 		const res = isJson ? await response.json() : await response.text()

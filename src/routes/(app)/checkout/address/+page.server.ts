@@ -18,8 +18,7 @@ export async function load({ request, url, locals, cookies }) {
 
 		const cart = await CartService.fetchRefreshCart({
 			storeId: locals.store?.id,
-			server: true,
-			sid: cookies.get('connect.sid')
+			cookies
 		})
 
 		return {
