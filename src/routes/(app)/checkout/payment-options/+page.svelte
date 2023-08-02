@@ -1,5 +1,4 @@
 <script lang="ts">
-import { browser } from '$app/environment'
 import { fireGTagEvent } from '$lib/utils/gTagB'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
@@ -7,7 +6,6 @@ import { OrdersService } from '$lib/services'
 import { page } from '$app/stores'
 import { PaymentLoading } from '$lib/ui'
 import { Pricesummary, LazyImg, CheckoutHeader, Error, TrustBaggeContainer } from '$lib/components'
-import { selectedCartItemsStore } from 'lib/store/selected-cart-items'
 import { slide } from 'svelte/transition'
 import { toast } from '$lib/utils'
 import SEO from '$lib/components/SEO/index.svelte'
@@ -39,15 +37,7 @@ $: if (data.err) {
 	toast(data.err, 'error')
 }
 
-$: checkedCartItems = []
-
 onMount(async () => {
-	if (browser) {
-		selectedCartItemsStore.subscribe((value) => {
-			checkedCartItems = value
-		})
-	}
-
 	const StripeModule = await import('$lib/components/Stripe.svelte')
 	Stripe = StripeModule.default
 
@@ -117,7 +107,6 @@ async function submit(pm) {
 					cartId: $page.data.cartId,
 					paymentMethod: 'COD',
 					prescription: data.prescription?._id,
-					products: checkedCartItems,
 					origin: $page.data.origin,
 					storeId: $page.data.storeId
 				})
@@ -144,7 +133,6 @@ async function submit(pm) {
 						comment,
 						paymentMethod: 'COD',
 						prescription: data.prescription?._id,
-						products: checkedCartItems,
 						origin: $page.data.origin,
 						storeId: $page.data.storeId
 					})
@@ -544,10 +532,8 @@ function checkIfStripeCardValid({ detail }) {
 			{/if}
 
 			<Pricesummary
-				cart="{data.cart}"
 				text="{errorMessage || 'Confirm Order'}"
 				{loading}
-				{checkedCartItems}
 				hideCheckoutButton="{selectedPaymentMethod?.name === 'Stripe'}"
 				on:submit="{() => submit(selectedPaymentMethod)}" />
 
