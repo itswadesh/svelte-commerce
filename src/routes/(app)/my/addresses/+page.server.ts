@@ -30,7 +30,7 @@ const saveAddress = async ({ request, cookies, locals }) => {
 	const phone = data.get('phone')
 	const state = data.get('state')
 	const zip = data.get('zip')
-
+	const sid = cookies.get('connect.sid')
 	const res = await AddressService.saveAddress({
 		address,
 		city,
@@ -44,8 +44,7 @@ const saveAddress = async ({ request, cookies, locals }) => {
 		state,
 		zip,
 		storeId: locals.store?.id,
-		server: true,
-		origin: locals.origin
+		sid
 	})
 
 	// console.log('res of save address = ', res)

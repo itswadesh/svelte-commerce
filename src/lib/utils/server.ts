@@ -222,16 +222,22 @@ export const postMedusajsApi = async (endpoint: string, data: any, sid?: any) =>
 		})
 		// const allHeaders = Object.fromEntries(response.headers.entries())
 		// console.log(allHeaders)
-
 		const isJson = response.headers.get('content-type')?.includes('application/json')
 		const res = isJson ? await response.json() : await response.text()
+		if (response.status > 399) {
+			let message = res.message
+			if (message == 'null') {
+				message = 'Invalid data'
+			}
+			throw { status: 400, message }
+		}
 		const setCookieForLogin = response.headers.get('set-cookie')
-		const sidCookie = cookie.parse(setCookieForLogin)
-		if (sidCookie) {
+		if (setCookieForLogin) {
+			const sidCookie = cookie.parse(setCookieForLogin)
 			res.sid = sidCookie['connect.sid']
 		}
 		if (res?.status > 399) {
-			throw { status: res.status, message: res.body.message }
+			throw { status: res.status, message: res.message }
 		} else if (response?.status > 399) {
 			throw { status: response.status, message: res }
 		} else {

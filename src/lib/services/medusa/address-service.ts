@@ -1,5 +1,4 @@
 import { getMedusajsApi, postMedusajsApi } from '$lib/utils/server'
-import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
 export const fetchAddresses = async ({
@@ -13,7 +12,11 @@ export const fetchAddresses = async ({
 		let selectedAddress = {}
 		let myAddresses = []
 
-		res = (await getMedusajsApi(`customers/me`, {}, sid)).customer.shipping_addresses
+		res = await getMedusajsApi(`customers/me`, {}, sid)
+		myAddresses = res?.customer?.shipping_addresses
+		if (myAddresses?.length) {
+			selectedAddress = myAddresses[0]
+		}
 		return { myAddresses: { data: myAddresses }, selectedAddress, count: res?.count }
 	} catch (e) {
 		throw error(e.status, e.message)
@@ -24,7 +27,8 @@ export const fetchAddress = async ({ origin, storeId, server = false, sid = null
 	try {
 		let res: any = {}
 
-		res = (await getMedusajsApi(`address`, {}, sid)).customer.shipping_addresses
+		res = (await getMedusajsApi(`customers/me/addresses/${id}`, {}, sid))?.customer
+			?.shipping_addresses
 
 		return res || {}
 	} catch (e) {
@@ -47,31 +51,32 @@ export const saveAddress = async ({
 	zip,
 	storeId,
 	origin,
-	server = false,
 	sid = null
 }: any) => {
 	try {
 		let res: any = {}
-
-		res = (
-			await postMedusajsApi('customers/me/addresses', {
+		const addr = {
+			address: {
 				address_1: address,
 				address_2: locality,
 				city,
-				country_code: country,
-				email,
+				country_code: 'IN',
 				first_name: firstName,
 				landmark,
 				last_name: lastName,
 				phone,
 				postal_code: zip,
-				province: state,
-				state
-			})
-		).customer
-
-		return res
+				province: state
+			}
+		}
+		res = await postMedusajsApi('customers/me/addresses', addr, sid)
+		const shipping_addresses = res?.customer?.shipping_addresses
+		if (shipping_addresses) {
+			return shipping_addresses[0]
+		} else {
+			throw error(404, 'Error occured while saving address')
+		}
 	} catch (err) {
-		throw error(err.status, err.message)
+		throw error(err.status || 400, err.message)
 	}
 }
