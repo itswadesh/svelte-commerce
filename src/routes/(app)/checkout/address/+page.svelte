@@ -1,11 +1,13 @@
 <script>
+import { CartService } from '$lib/services'
 import { CheckoutHeader, Error, Pricesummary } from '$lib/components'
-import { invalidateAll } from '$app/navigation'
+import { countries } from '$lib/components/Autocomplete/countriesData'
+import { goto, invalidateAll } from '$app/navigation'
 import SelectAddress from '../_SelectAddress.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
+console.log('zzzzzzzzzzzzzzzzzz', data)
 
 const seoProps = {
 	title: 'Address ',
@@ -14,6 +16,39 @@ const seoProps = {
 
 function addressChanged(detail) {
 	data.selectedAddress = detail.detail
+}
+
+async function updateCart() {
+	try {
+		// console.log('selectedAddress', data.selectedAddress)
+
+		const selectedAddressFullObject = data.myAddresses?.data.filter((add) => {
+			return add.id === data.selectedAddress || add._id === data.selectedAddress
+		})
+
+		console.log('selectedAddressFullObject', selectedAddressFullObject)
+
+		if (selectedAddressFullObject[0]) {
+			const res = await CartService.updateCart({
+				billingAddress: selectedAddressFullObject[0],
+				cartId: data?.cartId,
+				email: selectedAddressFullObject[0].email,
+				shippingAddress: selectedAddressFullObject[0]
+			})
+
+			console.log('updated cart res =', res)
+		}
+	} catch (e) {
+	} finally {
+	}
+
+	if (data.prescriptionId) {
+		goto(
+			`/checkout/payment-options?address=${data.selectedAddress}&prescription=${data.prescriptionId}`
+		)
+	} else {
+		goto(`/checkout/payment-options?address=${data.selectedAddress}`)
+	}
 }
 
 async function refreshAddress() {
@@ -38,8 +73,8 @@ async function refreshAddress() {
 				<div class="mb-5 rounded-lg border bg-white shadow-lg">
 					{#each data.myAddresses.data as ads}
 						<SelectAddress
-							loading="{data.loading}"
 							address="{ads}"
+							loading="{data.loading}"
 							selectedAddress="{data.selectedAddress}"
 							on:deleteAddress="{refreshAddress}"
 							on:addressChanged="{({ detail }) => addressChanged({ detail })}" />
@@ -90,10 +125,7 @@ async function refreshAddress() {
 					cart="{data.cart}"
 					text="Proceed"
 					showNextIcon
-					nextpage="
-				    {data.prescriptionId
-						? `/checkout/payment-options?address=${data.selectedAddress}&prescription=${data.prescriptionId}`
-						: `/checkout/payment-options?address=${data.selectedAddress}`}"
+					on:submit="{updateCart}"
 					loading="{data.loading}" />
 			{:else}
 				<Pricesummary

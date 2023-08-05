@@ -1,5 +1,5 @@
-import { redirect } from '@sveltejs/kit'
 import { AddressService, CartService, PaymentMethodService } from '$lib/services'
+import { redirect } from '@sveltejs/kit'
 
 export const prerender = false
 
@@ -11,27 +11,12 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 		throw redirect(307, redirectUrl)
 	}
 
-	const cartRes: any = await CartService.fetchRefreshCart({
+	const cart = await CartService.fetchRefreshCart({
 		storeId: locals.store?.id,
-		server: true,
-		sid: cookies.get('connect.sid')
+		cookies
 	})
 
-	const cart = {
-		cartId: cartRes.cart_id,
-		items: cartRes.items,
-		qty: cartRes.qty,
-		tax: cartRes.tax,
-		subtotal: cartRes.subtotal,
-		total: cartRes.total,
-		currencySymbol: cartRes.currencySymbol,
-		discount: cartRes.discount,
-		savings: cartRes.savings,
-		selfTakeout: cartRes.selfTakeout,
-		shipping: cartRes.shipping,
-		unavailableItems: cartRes.unavailableItems,
-		formattedAmount: cartRes.formattedAmount
-	}
+	// console.log('cart', cart);
 
 	locals.cart = cart
 
@@ -41,12 +26,11 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 		const address = await AddressService.fetchAddress({
 			storeId: locals.store?.id,
 			server: true,
-			id,
 			sid: cookies.get('connect.sid')
 		})
 
 		const paymentMethods = await PaymentMethodService.fetchPaymentMethods({
-			storeId: locals.store.id,
+			storeId: locals.store?.id,
 			server: true,
 			sid: cookies.get('connect.sid')
 		})

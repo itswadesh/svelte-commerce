@@ -1,4 +1,4 @@
-import { getAPI, post } from '$lib/utils/api'
+import { del, getAPI, post } from '$lib/utils/api'
 import { getBySid } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 const isServer = import.meta.env.SSR
@@ -43,6 +43,53 @@ export const saveAddress = async ({
 	id,
 	address,
 	city,
+	company,
+	country,
+	email,
+	firstName,
+	lastName,
+	locality,
+	phone,
+	state,
+	zip,
+	storeId,
+	origin,
+	server = false,
+	sid = null
+}: any) => {
+	try {
+		let res: any = {}
+
+		res = await post(
+			`addresses`,
+			{
+				id,
+				address,
+				city,
+				country,
+				email,
+				firstName,
+				lastName,
+				locality,
+				phone,
+				state,
+				zip,
+				store: storeId
+			},
+			origin
+		)
+
+		return res
+	} catch (err) {
+		throw error(err.status, err.message)
+	}
+}
+
+export const editAddress = async ({
+	id,
+	address,
+	city,
+	company,
 	country,
 	email,
 	firstName,
@@ -81,3 +128,17 @@ export const saveAddress = async ({
 		throw error(err.status, err.message)
 	}
 }
+
+export const deleteAddress = async ({
+	id,
+	storeId,
+	origin,
+	sid = null
+}: any) => {
+	try {
+		del(`addresses/${id}?store=${storeId}`, null, sid)
+
+	} catch (err) {
+		throw error(err.status || 400, err.message)
+	}
+} 
