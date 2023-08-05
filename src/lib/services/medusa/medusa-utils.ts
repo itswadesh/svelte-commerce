@@ -167,8 +167,8 @@ export const mapMedusajsCategory = (c: any) => {
 			slug: c.handle,
 			children: c.category_children
 				? c.category_children.map((i: any) => {
-						if (i) return mapMedusajsCategory(i)
-				  })
+					if (i) return mapMedusajsCategory(i)
+				})
 				: []
 		}
 		return r
@@ -197,6 +197,7 @@ export const mapMedusajsCart = (c: any) => {
 	if (c) {
 		return {
 			id: c.id,
+			billingAddress: c.billing_address,
 			uid: c.customer_id,
 			cart_id: c.id,
 			store: null,
@@ -222,6 +223,7 @@ export const mapMedusajsCart = (c: any) => {
 					currency: c.region.currency_code
 				}
 			},
+			shippingAddress: c.shipping_address,
 			tax: c.tax_total,
 			total: c.total,
 			offer_total: null,

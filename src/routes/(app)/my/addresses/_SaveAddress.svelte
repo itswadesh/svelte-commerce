@@ -12,7 +12,9 @@ const dispatch = createEventDispatcher()
 
 export let address = {}
 export let countries = []
+export let editAddress = false
 export let states = []
+
 // console.log('address', address)
 // console.log('countries', countries)
 // console.log('states', states)
@@ -21,6 +23,21 @@ let err = null
 let formChanged = false
 let loading = false
 let loadingStates = false
+
+let refinedAddress = {
+	address_address: address.address || address.address_1,
+	address_city: address.city,
+	address_company: address.company,
+	address_country: address.country || address.country_code,
+	address_email: address.email,
+	address_firstName: address.firstName || address.first_name,
+	address_id: address._id || address.id || 'new',
+	address_lastName: address.lastName || address.last_name,
+	address_locality: address.locality || address.address_2,
+	address_phone: address.phone,
+	address_state: address.state || address.province,
+	address_zip: address.zip || address.postal_code
+}
 
 async function onCountryChange(country) {
 	try {
@@ -45,22 +62,35 @@ async function SaveAddress(address) {
 		err = null
 
 		let id = address._id || address.id || 'new'
-		const { city, country, email, firstName, lastName, locality, phone, state, zip } = address
+		const {
+			address_address,
+			address_city,
+			address_company,
+			address_country,
+			address_email,
+			address_firstName,
+			address_lastName,
+			address_locality,
+			address_phone,
+			address_state,
+			address_zip
+		} = address
 
 		toast('Saving Address Info...', 'info')
 
 		const newAddress = await AddressService.saveAddress({
 			id,
-			address: address.address,
-			city,
-			country,
-			email,
-			firstName,
-			lastName,
-			locality,
-			phone,
-			state,
-			zip,
+			address: address_address,
+			city: address_city,
+			// company: address_company,
+			country: address_country,
+			email: address_email,
+			firstName: address_firstName,
+			lastName: address_lastName,
+			locality: address_locality,
+			phone: address_phone,
+			state: address_state,
+			zip: address_zip,
 			storeId: $page.data.store?.id,
 			origin: $page.data.origin
 		})
@@ -84,22 +114,23 @@ async function SaveAddress(address) {
 	<Error err="{err}" class="mb-5" />
 
 	<form
-		action="/my/addresses?/saveAddress"
+		action="{refinedAddress.address_id !== 'new' ? '/my/addresses?/editAddress' : '/my/addresses?/saveAddress'}"
 		method="POST"
 		use:enhance="{() => {
 			return async ({ result }) => {
 				console.log('result', result)
 				if (result?.data) {
-					const id = address._id || address.id || 'new'
 					const newAddressId = result.data?._id || result.data?.id
-
 					toast('Address Info Saved.', 'success')
-					dispatch('saved', { id, newAddressId })
+					if (refinedAddress.address_id === 'new' && newAddressId) {
+						goto(`/checkout/payment-options?address=${newAddressId}`)
+					}
 					await applyAction(result)
 				}
+				editAddress = false
 			}
 		}}">
-		<!-- <form on:submit|preventDefault="{() => SaveAddress(address)}"> -->
+	<!-- <form on:submit|preventDefault="{() => SaveAddress(refinedAddress)}"> -->
 		<div class="mb-5 flex flex-col gap-2 lg:mb-10">
 			<!-- First Name -->
 
@@ -114,7 +145,7 @@ async function SaveAddress(address) {
 					<Textbox
 						type="text"
 						placeholder="Enter First Name"
-						bind:value="{address.firstName}"
+						bind:value="{refinedAddress.address_firstName}"
 						autoFocus
 						required />
 				</div>
@@ -130,7 +161,10 @@ async function SaveAddress(address) {
 				</h6>
 
 				<div class="w-full">
-					<Textbox placeholder="Enter Last Name" bind:value="{address.lastName}" required />
+					<Textbox
+						placeholder="Enter Last Name"
+						bind:value="{refinedAddress.address_lastName}"
+						required />
 				</div>
 			</div>
 
@@ -140,7 +174,10 @@ async function SaveAddress(address) {
 				<h6 class="sm:w-52 sm:shrink-0">Email</h6>
 
 				<div class="w-full">
-					<Textbox type="email" placeholder="Enter Email" bind:value="{address.email}" />
+					<Textbox
+						type="email"
+						placeholder="Enter Email"
+						bind:value="{refinedAddress.address_email}" />
 				</div>
 			</div>
 
@@ -158,7 +195,7 @@ async function SaveAddress(address) {
 						type="tel"
 						placeholder="Enter Phone"
 						maxlength="13"
-						bind:value="{address.phone}"
+						bind:value="{refinedAddress.address_phone}"
 						required />
 
 					<p class="mt-1">E.g.+nnxxxxxxxxxx</p>
@@ -174,7 +211,10 @@ async function SaveAddress(address) {
 					<span class="text-accent-500">*</span>
 				</h6>
 
-				<Textarea placeholder="Enter Address" bind:value="{address.address}" required />
+				<Textarea
+					placeholder="Enter Address"
+					bind:value="{refinedAddress.address_address}"
+					required />
 			</div>
 
 			<!-- Locality -->
@@ -183,7 +223,7 @@ async function SaveAddress(address) {
 				<h6 class="sm:w-52 sm:shrink-0">Locality</h6>
 
 				<div class="w-full">
-					<Textbox placeholder="Enter Locality" bind:value="{address.locality}" />
+					<Textbox placeholder="Enter Locality" bind:value="{refinedAddress.address_locality}" />
 				</div>
 			</div>
 
@@ -193,7 +233,17 @@ async function SaveAddress(address) {
 				<h6 class="sm:w-52 sm:shrink-0">City</h6>
 
 				<div class="w-full">
-					<Textbox placeholder="Enter City" bind:value="{address.city}" />
+					<Textbox placeholder="Enter City" bind:value="{refinedAddress.address_city}" />
+				</div>
+			</div>
+
+			<!-- Company -->
+
+			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
+				<h6 class="sm:w-52 sm:shrink-0">Company</h6>
+
+				<div class="w-full">
+					<Textbox placeholder="Enter Company" bind:value="{refinedAddress.address_company}" />
 				</div>
 			</div>
 
@@ -210,7 +260,7 @@ async function SaveAddress(address) {
 					<select
 						disabled="{countries?.length === 1}"
 						class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
-						bind:value="{address.country}"
+						bind:value="{refinedAddress.address_country}"
 						on:change="{() => onCountryChange(address.country)}"
 						required>
 						<option value="{null}" disabled selected>-- Select a Country --</option>
@@ -245,7 +295,7 @@ async function SaveAddress(address) {
 
 					<select
 						class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
-						bind:value="{address.state}"
+						bind:value="{refinedAddress.address_state}"
 						disabled="{!address.country || loadingStates}"
 						required>
 						<option value="{null}" disabled selected>-- Select a State --</option>
@@ -274,22 +324,24 @@ async function SaveAddress(address) {
 						type="tel"
 						placeholder="Enter zip"
 						maxlength="6"
-						bind:value="{address.zip}"
+						bind:value="{refinedAddress.address_zip}"
 						required />
 				</div>
 			</div>
 		</div>
 
-		<input type="hidden" name="address" value="{address.address}" />
-		<input type="hidden" name="city" value="{address.city}" />
-		<input type="hidden" name="country" value="{address.country}" />
-		<input type="hidden" name="email" value="{address.email}" />
-		<input type="hidden" name="firstName" value="{address.firstName}" />
-		<input type="hidden" name="lastName" value="{address.lastName}" />
-		<input type="hidden" name="locality" value="{address.locality}" />
-		<input type="hidden" name="phone" value="{address.phone}" />
-		<input type="hidden" name="state" value="{address.state}" />
-		<input type="hidden" name="zip" value="{address.zip}" />
+		<input type="hidden" name="address" value="{refinedAddress.address_address}" />
+		<input type="hidden" name="city" value="{refinedAddress.address_city}" />
+		<input type="hidden" name="company" value="{refinedAddress.address_company}" />
+		<input type="hidden" name="country" value="{refinedAddress.address_country}" />
+		<input type="hidden" name="email" value="{refinedAddress.address_email}" />
+		<input type="hidden" name="firstName" value="{refinedAddress.address_firstName}" />
+		<input type="hidden" name="id" value="{refinedAddress.address_id}" />
+		<input type="hidden" name="lastName" value="{refinedAddress.address_lastName}" />
+		<input type="hidden" name="locality" value="{refinedAddress.address_locality}" />
+		<input type="hidden" name="phone" value="{refinedAddress.address_phone}" />
+		<input type="hidden" name="state" value="{refinedAddress.address_state}" />
+		<input type="hidden" name="zip" value="{refinedAddress.address_zip}" />
 
 		<PrimaryButton type="submit" loading="{loading}" class="w-60">Save Address</PrimaryButton>
 	</form>

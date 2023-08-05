@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit'
-import { getMedusajsApi } from '$lib/utils/server'
+import { getMedusajsApi, postMedusajsApi } from '$lib/utils/server'
 import type { AllOrders, Error } from '$lib/types'
 
 export const fetchOrders = async ({ origin, storeId, server = false, sid = null }: any) => {
@@ -67,17 +67,19 @@ export const paySuccessPageHit = async ({
 
 export const codCheckout = async ({
 	address,
-	paymentMethod,
-	prescription,
-	storeId,
+	cartId,
 	origin,
+	paymentMethod,
+	paymentProviderId,
+	prescription,
 	server = false,
-	sid = null
+	sid = null,
+	storeId,
 }: any) => {
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`orders/me`, {}, sid)
+		res = await postMedusajsApi(`carts/${cartId}/payment-session`, { provider_id: paymentProviderId }, sid)
 
 		return res || {}
 	} catch (e) {

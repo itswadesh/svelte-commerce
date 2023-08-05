@@ -42,6 +42,7 @@ import { browser } from '$app/environment'
 import { CartService, WishlistService } from '$lib/services'
 import { cubicOut } from 'svelte/easing'
 import { currency, getIdFromYoutubeVideo, toast } from '$lib/utils'
+import { fade } from 'svelte/transition'
 import { fireGTagEvent } from '$lib/utils/gTagB'
 import {
 	DummyProductCard,
@@ -1201,9 +1202,9 @@ async function updateVariant(variant) {
 								</svg>
 							</div>
 
-							<p class="prose max-w-none">
+							<div class="prose max-w-none text-sm text-zinc-500">
 								{@html value.description}
-							</p>
+							</div>
 						</div>
 					{/if}
 				{:catch error}
@@ -1320,7 +1321,11 @@ async function updateVariant(variant) {
 										</PrimaryButton>
 									{:else if data.product?.active && data.product?.hasStock}
 										{#if cartButtonText === 'Go to Cart'}
-											<a class="block" href="/cart" data-sveltekit-preload-data>
+											<a
+												in:fade="{{ duration: 300 }}"
+												class="block"
+												href="/cart"
+												data-sveltekit-preload-data>
 												<PrimaryButton
 													type="button"
 													hideLoading
@@ -1347,6 +1352,7 @@ async function updateVariant(variant) {
 											</a>
 										{:else}
 											<form
+												in:fade="{{ duration: 300 }}"
 												action="/cart?/add"
 												method="POST"
 												use:enhance="{() => {
@@ -1673,7 +1679,11 @@ async function updateVariant(variant) {
 										</PrimaryButton>
 									{:else if data.product?.active && data.product?.hasStock}
 										{#if cartButtonText === 'Go to Cart'}
-											<a class="block" href="/cart" data-sveltekit-preload-data>
+											<a
+												in:fade="{{ duration: 300 }}"
+												class="block"
+												href="/cart"
+												data-sveltekit-preload-data>
 												<PrimaryButton
 													type="button"
 													hideLoading
@@ -1700,6 +1710,7 @@ async function updateVariant(variant) {
 											</a>
 										{:else}
 											<form
+												in:fade="{{ duration: 300 }}"
 												action="/cart?/add"
 												method="POST"
 												use:enhance="{() => {
@@ -1871,7 +1882,11 @@ async function updateVariant(variant) {
 										</PrimaryButton>
 									{:else if data.product?.active && data.product?.hasStock}
 										{#if cartButtonText === 'Go to Cart'}
-											<a class="block" href="/cart" data-sveltekit-preload-data>
+											<a
+												in:fade="{{ duration: 300 }}"
+												class="block"
+												href="/cart"
+												data-sveltekit-preload-data>
 												<PrimaryButton
 													type="button"
 													hideLoading
@@ -1898,6 +1913,7 @@ async function updateVariant(variant) {
 											</a>
 										{:else}
 											<form
+												in:fade="{{ duration: 300 }}"
 												action="/cart?/add"
 												method="POST"
 												use:enhance="{() => {

@@ -21,9 +21,10 @@ export const fetchCartData = async ({ origin, storeId, server = false, sid = nul
 	}
 }
 
-export const fetchRefreshCart = async ({ origin = null, storeId, isCors = false, server = false, sid = null }) => {
+export const fetchRefreshCart = async ({ cookies, origin = null, storeId, isCors = false, server = false, sid = null }) => {
 	try {
 		let res = {}
+
 		if (isServer || isCors) {
 			res = await getBySid(`carts/refresh-cart?store=${storeId}`, sid)
 			// res = await getBySid(`carts/my?store=${storeId}`, sid)
@@ -139,3 +140,5 @@ export const removeCouponService = async ({
 		throw error(e.status, e.data?.message || e.message)
 	}
 }
+
+export const updateCart = ({})

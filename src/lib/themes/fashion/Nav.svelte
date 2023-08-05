@@ -62,6 +62,7 @@ async function fetchCart() {
 		loading = true
 
 		const res = await CartService.fetchRefreshCart({
+			cookies,
 			storeId: $page.data.store?.id,
 			origin: $page.data.origin
 		})

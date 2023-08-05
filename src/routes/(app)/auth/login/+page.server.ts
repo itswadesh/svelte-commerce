@@ -13,11 +13,12 @@ const login = async ({ request, cookies, locals }) => {
 			email: phoneOrEmail,
 			password: password,
 			storeId: locals.store?.id,
+			cookies,
 			server: true,
 			origin: locals.origin
 		})
 
-		// console.log('res of email login = ', res)
+		console.log('res of email login = ', res)
 	} else {
 		res = await UserService.getOtpService({
 			phone: phoneOrEmail,
@@ -26,11 +27,9 @@ const login = async ({ request, cookies, locals }) => {
 			origin: locals.origin
 		})
 
-		// console.log('res of phone login = ', res)
+		console.log('res of phone login = ', res)
 	}
-	cookies.set('connect.sid', res.sid, {
-		path: '/'
-	})
+
 	return res
 }
 

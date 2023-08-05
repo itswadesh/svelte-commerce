@@ -27,7 +27,9 @@ export const fetchRefreshCart = async ({
 	try {
 		let res: any = {}
 		const cart_id = cookies.get('cartId')
+
 		if (!cart_id || cart_id == 'undefined') return []
+
 		const cartRes = await getMedusajsApi(`carts/${cart_id}`)
 		res = mapMedusajsCart(cartRes?.cart)
 
@@ -119,3 +121,60 @@ export const removeCouponService = async ({
 		throw error(e.status, e.message)
 	}
 }
+
+export const updateCart = async ({
+	cartId,
+	billingAddress,
+	email,
+	shippingAddress,
+	cookies,
+	sid = null
+}: any) => {
+	try {
+		const body = {
+			billing_address: {
+				address_1: billingAddress.address_1,
+				address_2: billingAddress.address_2,
+				city: billingAddress.city,
+				// country_code: billingAddress.country_code,
+				country_code: billingAddress.country || 'in',
+				first_name: billingAddress.first_name,
+				landmark: billingAddress.landmark,
+				last_name: billingAddress.last_name,
+				phone: billingAddress.phone,
+				postal_code: billingAddress.postal_code,
+				province: billingAddress.province
+			},
+			email: billingAddress.email,
+			shipping_address: {
+				address_1: shippingAddress.address_1,
+				address_2: shippingAddress.address_2,
+				city: shippingAddress.city,
+				// country_code: shippingAddress.country_code,
+				country_code: shippingAddress.country || 'in',
+				first_name: shippingAddress.first_name,
+				landmark: shippingAddress.landmark,
+				last_name: shippingAddress.last_name,
+				phone: shippingAddress.phone,
+				postal_code: shippingAddress.postal_code,
+				province: shippingAddress.province
+			},
+		}
+		// console.log('body', body);
+		// console.log('cartId', cartId);
+
+		let res: any = {}
+
+		if (cartId) {
+			const res_data = await postMedusajsApi(`carts/${cartId}`, body, sid)
+
+			res = mapMedusajsCart(res_data?.cart)
+
+			return res || {}
+		}
+	} catch (e) {
+		// console.error(e)
+		throw error(e.status, e.message)
+	}
+}
+

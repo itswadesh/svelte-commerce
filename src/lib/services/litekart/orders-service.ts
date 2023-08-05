@@ -105,12 +105,14 @@ export const paySuccessPageHit = async ({
 
 export const codCheckout = async ({
 	address,
-	paymentMethod,
-	prescription,
-	storeId,
+	cartId,
 	origin,
+	paymentMethod,
+	paymentProviderId,
+	prescription,
 	server = false,
-	sid = null
+	sid = null,
+	storeId,
 }: any) => {
 	try {
 		let res: any = {}

@@ -100,6 +100,7 @@ export async function postBySid(endpoint: string, data: any, sid?: string) {
 		// console.log("/lib/utils/server.ts postBySid()", e);
 	}
 }
+
 export async function gett(endpoint: string, ck?: any) {
 	try {
 		const ck1 = cookie.parse(ck || '')
@@ -123,6 +124,7 @@ export async function gett(endpoint: string, ck?: any) {
 		// console.log("/lib/utils/server.ts gett()", e);
 	}
 }
+
 export const getBySid = async (endpoint: string, sid?: any) => {
 	try {
 		const response = await fetch(HTTP_ENDPOINT + '/api/' + endpoint, {
@@ -141,6 +143,8 @@ export const getBySid = async (endpoint: string, sid?: any) => {
 		// console.log("/lib/utils/server.ts getBySid()", e);
 	}
 }
+
+// ---------------------------------- X ----------------------------------
 
 export const getBigcommerceApi = async (endpoint: string, query?: any, sid?: any) => {
 	try {
@@ -184,6 +188,8 @@ export const postBigCommerceApi = async (endpoint: string, query: any, sid?: any
 		// console.log("/lib/utils/server.ts postBigCommerceApi()", e);
 	}
 }
+
+// ---------------------------------- X ----------------------------------
 
 export const getMedusajsApi = async (endpoint: string, query?: any, sid?: any) => {
 	try {
@@ -249,6 +255,28 @@ export const postMedusajsApi = async (endpoint: string, data: any, sid?: any) =>
 	}
 }
 
+export const deleteMedusajsApi = async (endpoint: string, sid?: any) => {
+	try {
+		const ep = MEDUSAJS_BASE_URL + '/' + endpoint
+		const response = await fetch(ep, {
+			method: 'DELETE',
+			credentials: 'include',
+			headers: { cookie: `connect.sid=${sid}` }
+		})
+		const isJson = response.headers.get('content-type')?.includes('application/json')
+		const res = isJson ? await response.json() : await response.text()
+		if (response?.status > 399) {
+			throw { status: response.status, message: response.statusText }
+		} else {
+			return res
+		}
+	} catch (e) {
+		// console.log("/lib/utils/server.ts delBySid()", e);
+	}
+}
+
+// ---------------------------------- X ----------------------------------
+
 export const getShopifyApi = async (endpoint: string, query: any, sid?: any) => {
 	try {
 		const response = await fetch(SHOPIFY_BASE_URL + '/' + endpoint, {
@@ -295,6 +323,8 @@ export const postShopifyApi = async (endpoint: string, data: any, sid?: any) => 
 		// console.log("/lib/utils/server.ts postShopifyApi()", e);
 	}
 }
+
+// ---------------------------------- X ----------------------------------
 
 export const getWoocommerceApi = async (endpoint: string, query?: any, sid?: any) => {
 	try {

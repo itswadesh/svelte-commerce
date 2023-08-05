@@ -22,15 +22,16 @@
 </style>
 
 <script>
+import { applyAction, enhance } from '$app/forms'
 import { currency } from '$lib/utils'
+import { fireGTagEvent } from '$lib/utils/gTagB'
+import { fly } from 'svelte/transition'
+import { goto } from '$app/navigation'
 import { LazyImg } from '$lib/components'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { SplideSlide } from '@splidejs/svelte-splide'
 import { PrimaryButton, WhiteButton } from '$lib/ui'
-import { applyAction, enhance } from '$app/forms'
-import { fireGTagEvent } from '$lib/utils/gTagB'
-import { goto } from '$app/navigation'
+import { SplideSlide } from '@splidejs/svelte-splide'
 
 export let data = {}
 // console.log('zzzzzzzzzzzzzzzzzz', data)
@@ -62,9 +63,11 @@ onMount(async () => {
 {#await data?.streamed?.collections then collections}
 	{#if collections?.count}
 		<div class="divide-y border-b">
-			{#each collections?.data as collection}
+			{#each collections?.data as collection, cx}
 				{#if collection?.block === 'block-1'}
-					<div class="px-3 py-10 sm:px-10 sm:py-20">
+					<div
+						in:fly="{{ y: 20, duration: 700, delay: 100 * cx }}"
+						class="px-3 py-10 sm:px-10 sm:py-20">
 						<div class="container mx-auto max-w-screen-2xl flex flex-col gap-10 sm:gap-20">
 							<a
 								href="/search?collections={collection._id || collection.id}"

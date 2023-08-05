@@ -3,6 +3,7 @@ import { AutocompleteService, CategoryService } from '$lib/services'
 import { createEventDispatcher, onMount } from 'svelte'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
+import { slide } from 'svelte/transition'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 
 const dispatch = createEventDispatcher()
@@ -168,40 +169,45 @@ onMount(async () => {
 								</div>
 							</form>
 
-							<div
-								class="mt-1 w-full overflow-auto rounded border-zinc-400 bg-white scrollbar-none">
-								{#each autocomplete || [] as v}
-									<button
-										type="button"
-										class="p-3 flex w-full items-center justify-between text-left border-b text-zinc-500 hover:bg-zinc-100"
-										on:click="{() => onselect(v)}">
-										<div class="flex-1 flex items-center gap-2 justify-start">
-											{#if v.img}
-												<LazyImg
-													src="{v.img}"
-													alt=""
-													height="40"
-													class="h-10 object-contain w-auto object-center" />
-											{/if}
+							{#if autocomplete?.length}
+								<ul
+									transition:slide="{{ duration: 300 }}"
+									class="mt-1 m-0 p-0 list-none w-full overflow-auto rounded border-zinc-400 bg-white scrollbar-none">
+									{#each autocomplete || [] as v}
+										<li>
+											<button
+												type="button"
+												class="p-3 flex w-full items-center justify-between text-left border-b text-zinc-500 hover:bg-zinc-100"
+												on:click="{() => onselect(v)}">
+												<div class="flex-1 flex items-center gap-2 justify-start">
+													{#if v.img}
+														<LazyImg
+															src="{v.img}"
+															alt=""
+															height="40"
+															class="h-10 object-contain w-auto object-center" />
+													{/if}
 
-											<span class="w-full truncate text-sm capitalize">{v.key}</span>
-										</div>
+													<span class="w-full truncate text-sm capitalize">{v.key}</span>
+												</div>
 
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											fill="none"
-											viewBox="0 0 24 24"
-											stroke-width="1.5"
-											stroke="currentColor"
-											class="w-5 h-5">
-											<path
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"></path>
-										</svg>
-									</button>
-								{/each}
-							</div>
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													fill="none"
+													viewBox="0 0 24 24"
+													stroke-width="1.5"
+													stroke="currentColor"
+													class="w-5 h-5">
+													<path
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"></path>
+												</svg>
+											</button>
+										</li>
+									{/each}
+								</ul>
+							{/if}
 						</div>
 					</div>
 				</div>
