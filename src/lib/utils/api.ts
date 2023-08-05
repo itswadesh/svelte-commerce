@@ -1,4 +1,4 @@
-import { id } from '$lib/config'
+import cookie from 'cookie'
 import { loadingDelayed } from '$lib/store'
 // import Cookie from 'cookie-universal'
 
@@ -115,11 +115,8 @@ const send = async ({ method, path, params, data, token, headers, origin }: any)
 
 	// alert(JSON.stringify(url))
 	// alert(JSON.stringify(opts))
-
 	const response = await fetch(url, opts)
-
 	cancelDelayedLoadingIndicator()
-
 	const isJson = response.headers.get('content-type')?.includes('application/json')
 
 	const res = isJson ? await response.json() : await response.text()
@@ -129,6 +126,11 @@ const send = async ({ method, path, params, data, token, headers, origin }: any)
 	} else if (response?.status > 399) {
 		throw { status: response.status, message: res }
 	} else {
+		const setCookieForLogin = response.headers.get('set-cookie')
+		if (setCookieForLogin) {
+			const sidCookie = cookie.parse(setCookieForLogin)
+			res.sid = sidCookie['connect.sid']
+		}
 		return res
 	}
 }

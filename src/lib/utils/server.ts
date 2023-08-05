@@ -237,16 +237,16 @@ export const postMedusajsApi = async (endpoint: string, data: any, sid?: any) =>
 			}
 			throw { status: 400, message }
 		}
-		const setCookieForLogin = response.headers.get('set-cookie')
-		if (setCookieForLogin) {
-			const sidCookie = cookie.parse(setCookieForLogin)
-			res.sid = sidCookie['connect.sid']
-		}
 		if (res?.status > 399) {
 			throw { status: res.status, message: res.message }
 		} else if (response?.status > 399) {
 			throw { status: response.status, message: res }
 		} else {
+			const setCookieForLogin = response.headers.get('set-cookie')
+			if (setCookieForLogin) {
+				const sidCookie = cookie.parse(setCookieForLogin)
+				res.sid = sidCookie['connect.sid']
+			}
 			return res
 		}
 	} catch (e) {
