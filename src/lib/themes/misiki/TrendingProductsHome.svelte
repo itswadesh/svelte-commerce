@@ -1,4 +1,5 @@
 <script>
+import { fly } from 'svelte/transition'
 import { page } from '$app/stores'
 import { ProductCard, DummyProductCard } from '$lib/components'
 
@@ -11,7 +12,7 @@ let product_image_dimension = $page.data.store.product_image_dimension || '3x4'
 
 {#await data.streamed.home then home}
 	{#if home?.trending?.length > 0}
-		<div>
+		<div in:fly="{{ y: 20, duration: 700 }}">
 			<h2 class="p-3 py-5 text-center sm:px-10 md:py-10 uppercase">
 				TRENDING ON {$page.data.store?.websiteName}
 			</h2>

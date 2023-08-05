@@ -15,6 +15,7 @@ const seoProps = {
 }
 
 export let data
+console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let bankPayment = { type: 'order', reference: '', remark: '', paymentMethodId: '', amount: 0 }
 let disabled = false
@@ -57,19 +58,25 @@ async function submit(pm) {
 		return
 	}
 
-	const paymentMethod = pm.value
+	const paymentMethod = pm.value || pm.id
 
-	if (paymentMethod === 'COD') {
+	// console.log('paymentMethod', paymentMethod)
+
+	if (paymentMethod === 'COD' || paymentMethod === 'manual') {
 		try {
 			loading = true
 
 			const res = await OrdersService.codCheckout({
 				address: data.addressId,
+				cartId: data?.cartId,
 				paymentMethod: 'COD',
+				paymentProviderId: paymentMethod,
 				prescription: data.prescription?._id,
 				storeId: $page.data.store?.id,
 				origin: $page.data.origin
 			})
+
+			console.log('res of cod', res)
 
 			goto(`/payment/success?id=${res?._id || res?.id}&status=PAYMENT_SUCCESS&provider=COD`)
 		} catch (e) {
@@ -209,8 +216,8 @@ function checkIfStripeCardValid({ detail }) {
 
 							<div class="flex w-full flex-1 items-center justify-between gap-4">
 								<div class="flex-1">
-									<h3 style="color:{pm.color}">
-										{pm.name || pm.value}
+									<h3 style="color:{pm.color}" class="capitalize">
+										{pm.name || pm.value || pm.id}
 									</h3>
 
 									{#if pm.text}
@@ -230,7 +237,7 @@ function checkIfStripeCardValid({ detail }) {
 										<div
 											class="flex h-12 w-12 p-2 items-center justify-center rounded-full border bg-zinc-200 text-center text-xs uppercase">
 											<span class="w-full truncate">
-												{pm.name || pm.value}
+												{pm.name || pm.value || pm.id}
 											</span>
 										</div>
 									{/if}
@@ -326,6 +333,55 @@ function checkIfStripeCardValid({ detail }) {
 					{#if data.address.email}
 						<p>
 							{data.address.email}
+						</p>
+					{/if}
+				</div>
+
+				<hr class="mb-5" />
+			{:else if data.cart?.shippingAddress}
+				<div class="mb-5">
+					<h5 class="mb-2">Delivery Address</h5>
+
+					<p>
+						{data.cart?.shippingAddress?.first_name || '_'}
+						{data.cart?.shippingAddress?.last_name || '_'}
+
+						<br />
+
+						{#if data.cart?.shippingAddress?.address_1}
+							{data.cart?.shippingAddress?.address_1}
+						{/if}
+
+						{#if data.cart?.shippingAddress?.address_2}
+							, {data.cart?.shippingAddress?.address_2}
+						{/if}
+
+						{#if data.cart?.shippingAddress?.city}
+							, {data.cart?.shippingAddress?.city}
+						{/if}
+
+						{#if data.cart?.shippingAddress?.state}
+							, {data.cart?.shippingAddress?.state}
+						{/if}
+
+						{#if data.cart?.shippingAddress?.country}
+							, {data.cart?.shippingAddress?.country}
+						{/if}
+
+						{#if data.cart?.shippingAddress?.postal_code}
+							- {data.cart?.shippingAddress?.postal_code}
+						{/if}
+					</p>
+
+					{#if data.cart?.shippingAddress?.phone}
+						<p>
+							{data.cart?.shippingAddress?.phone}
+						</p>
+					{/if}
+
+					{#if data.cart?.shippingAddress?.email}
+						<p>
+							{data.cart?.shippingAddress?.email}
 						</p>
 					{/if}
 				</div>

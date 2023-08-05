@@ -4,9 +4,10 @@ import { AutocompleteService, CategoryService } from '$lib/services'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import { slide } from 'svelte/transition'
+import Cookie from 'cookie-universal'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 
-import Cookie from 'cookie-universal'
 const cookies = Cookie()
 
 export let placeholder = 'Search products...'
@@ -125,39 +126,42 @@ onMount(async () => {
 		</button>
 	</button>
 
-	{#if autocomplete?.length > 0 && showSuggestionOptions}
+	{#if autocomplete?.length && showSuggestionOptions}
 		<ul
-			class="absolute top-10 z-50 w-full border bg-white divide-y rounded shadow-xl overflow-hidden">
+			transition:slide="{{ duration: 300 }}"
+			class="absolute top-10 z-50 m-0 p-0 list-none w-full border bg-white divide-y rounded shadow-xl overflow-hidden">
 			{#each autocomplete || [] as v}
-				<button
-					type="button"
-					class="p-3 flex w-full items-center justify-between text-left text-zinc-500 hover:bg-zinc-100"
-					on:click="{() => onselect(v)}">
-					<div class="flex-1 flex items-center gap-2 justify-start">
-						{#if v.img}
-							<LazyImg
-								src="{v.img}"
-								alt=""
-								height="40"
-								class="h-10 object-contain w-auto object-center" />
-						{/if}
+				<li>
+					<button
+						type="button"
+						class="p-3 flex w-full items-center justify-between text-left text-zinc-500 hover:bg-zinc-100"
+						on:click="{() => onselect(v)}">
+						<div class="flex-1 flex items-center gap-2 justify-start">
+							{#if v.img}
+								<LazyImg
+									src="{v.img}"
+									alt=""
+									height="40"
+									class="h-10 object-contain w-auto object-center" />
+							{/if}
 
-						<span class="w-full truncate text-sm capitalize">{v.key}</span>
-					</div>
+							<span class="w-full truncate text-sm capitalize">{v.key}</span>
+						</div>
 
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke-width="1.5"
-						stroke="currentColor"
-						class="w-5 h-5">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"></path>
-					</svg>
-				</button>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1.5"
+							stroke="currentColor"
+							class="w-5 h-5">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"></path>
+						</svg>
+					</button>
+				</li>
 			{/each}
 		</ul>
 

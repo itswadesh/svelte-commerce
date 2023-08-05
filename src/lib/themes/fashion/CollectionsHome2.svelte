@@ -23,11 +23,12 @@
 
 <script>
 import { currency } from '$lib/utils'
+import { fly } from 'svelte/transition'
 import { LazyImg } from '$lib/components'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { SplideSlide } from '@splidejs/svelte-splide'
 import { PrimaryButton } from '$lib/ui'
+import { SplideSlide } from '@splidejs/svelte-splide'
 
 export let data = {}
 
@@ -53,9 +54,11 @@ onMount(async () => {
 {#await data?.streamed?.collections then collections}
 	{#if collections?.count > 0}
 		<div class="divide-y border-b">
-			{#each collections?.data as collection}
+			{#each collections?.data as collection, cx}
 				{#if collection.block === 'block-2'}
-					<div class="px-3 py-10 sm:px-10 sm:py-20">
+					<div
+						in:fly="{{ y: 20, duration: 700, delay: 100 * cx }}"
+						class="px-3 py-10 sm:px-10 sm:py-20">
 						<div class="container mx-auto max-w-screen-2xl flex flex-col gap-10 sm:gap-20">
 							<a
 								href="/search?collections={collection._id || collection.id}"

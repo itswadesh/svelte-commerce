@@ -6,9 +6,9 @@ export const fetchPaymentMethods = async ({ origin, storeId, server = false, sid
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`payment-methods/me`, {}, sid)
-
-		return res.data || []
+		const cres = await getMedusajsApi(`regions`, {}, sid)
+		res = cres.regions[0].payment_providers
+		return res || []
 	} catch (e) {
 		throw error(e.status, e.message)
 	}

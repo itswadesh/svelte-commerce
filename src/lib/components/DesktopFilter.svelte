@@ -8,6 +8,7 @@ import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { RadioEs, CheckboxEs } from '$lib/ui'
 import Cookie from 'cookie-universal'
+import { slide } from 'svelte/transition'
 
 const cookies = Cookie()
 const dispatch = createEventDispatcher()
@@ -237,7 +238,7 @@ function handleToggleSubCategory2(c, cx) {
 	<!-- Megamenu -->
 
 	{#if megamenu?.length}
-		<div class="my-3">
+		<div transition:slide="{{ duration: 300 }}" class="my-3">
 			<hr class="mb-3 w-full" />
 
 			<h6 class="mb-3">Categories</h6>
@@ -352,7 +353,7 @@ function handleToggleSubCategory2(c, cx) {
 	{/if}
 
 	{#if allAges?.length > 0}
-		<div class="my-3">
+		<div transition:slide="{{ duration: 300 }}" class="my-3">
 			<hr class="mb-3 w-full" />
 
 			<CheckboxEs
@@ -366,7 +367,7 @@ function handleToggleSubCategory2(c, cx) {
 
 	{#if allAttributes?.length > 0}
 		{#each allAttributes as attribute}
-			<div class="my-3">
+			<div transition:slide="{{ duration: 300 }}" class="my-3">
 				<hr class="mb-3 w-full" />
 
 				<CheckboxEs
@@ -380,7 +381,7 @@ function handleToggleSubCategory2(c, cx) {
 	{/if}
 
 	{#if allBrands?.length > 0}
-		<div class="my-3">
+		<div transition:slide="{{ duration: 300 }}" class="my-3">
 			<hr class="mb-3 w-full" />
 
 			<CheckboxEs
@@ -393,7 +394,7 @@ function handleToggleSubCategory2(c, cx) {
 	{/if}
 
 	{#if allColors?.length > 0}
-		<div class="my-3">
+		<div transition:slide="{{ duration: 300 }}" class="my-3">
 			<hr class="mb-3 w-full" />
 
 			<CheckboxEs
@@ -406,7 +407,7 @@ function handleToggleSubCategory2(c, cx) {
 	{/if}
 
 	{#if allDiscount?.length > 0}
-		<div class="my-3">
+		<div transition:slide="{{ duration: 300 }}" class="my-3">
 			<hr class="mb-3 w-full" />
 
 			<RadioEs
@@ -419,7 +420,7 @@ function handleToggleSubCategory2(c, cx) {
 	{/if}
 
 	{#if allFeatures?.length > 0}
-		<div class="my-3">
+		<div transition:slide="{{ duration: 300 }}" class="my-3">
 			<hr class="mb-3 w-full" />
 
 			<RadioEs
@@ -432,7 +433,7 @@ function handleToggleSubCategory2(c, cx) {
 	{/if}
 
 	{#if allGenders?.length > 0}
-		<div class="my-3">
+		<div transition:slide="{{ duration: 300 }}" class="my-3">
 			<hr class="mb-3 w-full" />
 
 			<CheckboxEs
@@ -445,7 +446,7 @@ function handleToggleSubCategory2(c, cx) {
 	{/if}
 
 	{#if allPromotions?.length > 0}
-		<div class="my-3">
+		<div transition:slide="{{ duration: 300 }}" class="my-3">
 			<hr class="mb-3 w-full" />
 
 			<CheckboxEs
@@ -458,7 +459,7 @@ function handleToggleSubCategory2(c, cx) {
 	{/if}
 
 	{#if allSizes?.length > 0}
-		<div class="my-3">
+		<div transition:slide="{{ duration: 300 }}" class="my-3">
 			<hr class="mb-3 w-full" />
 
 			<CheckboxEs
@@ -471,7 +472,7 @@ function handleToggleSubCategory2(c, cx) {
 	{/if}
 
 	{#if allTags?.length > 0}
-		<div class="my-3">
+		<div transition:slide="{{ duration: 300 }}" class="my-3">
 			<hr class="mb-3 w-full" />
 
 			<CheckboxEs
@@ -484,7 +485,7 @@ function handleToggleSubCategory2(c, cx) {
 	{/if}
 
 	{#if allTypes?.length > 0}
-		<div class="my-3">
+		<div transition:slide="{{ duration: 300 }}" class="my-3">
 			<hr class="mb-3 w-full" />
 
 			<CheckboxEs
@@ -497,7 +498,7 @@ function handleToggleSubCategory2(c, cx) {
 	{/if}
 
 	{#if allVendors?.length > 0}
-		<div class="my-3">
+		<div transition:slide="{{ duration: 300 }}" class="my-3">
 			<hr class="mb-3 w-full" />
 
 			<CheckboxEs
@@ -510,7 +511,7 @@ function handleToggleSubCategory2(c, cx) {
 	{/if}
 
 	{#if priceRange?.length > 0}
-		<div class="my-3">
+		<div transition:slide="{{ duration: 300 }}" class="my-3">
 			<hr class="mb-3 w-full" />
 
 			<RadioEs
@@ -523,7 +524,7 @@ function handleToggleSubCategory2(c, cx) {
 	{/if}
 
 	<!-- {#if facets?.all_aggs?.price?.all?.buckets?.length > 0}
-		<div class="my-3">
+		<div transition:slide="{{ duration: 300 }}" class="my-3">
 			<hr class="mb-3 w-full" />
 
 			<RadioEs
