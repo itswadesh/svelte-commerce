@@ -51,7 +51,8 @@ export async function postt(endpoint: string, data: any, ck?: any) {
 			return res
 		}
 	} catch (e) {
-		// console.log("/lib/utils/server.ts postt()", e);
+		console.log('/lib/utils/server.ts postt()', e)
+		throw e
 	}
 }
 
@@ -70,7 +71,8 @@ export const delBySid = async (endpoint: string, sid?: any) => {
 			return res
 		}
 	} catch (e) {
-		// console.log("/lib/utils/server.ts delBySid()", e);
+		console.log('/lib/utils/server.ts delBySid()', e)
+		throw e
 	}
 }
 
@@ -94,10 +96,16 @@ export async function postBySid(endpoint: string, data: any, sid?: string) {
 		} else if (response?.status > 399) {
 			throw { status: response.status, message: res }
 		} else {
+			const setCookieForLogin = response.headers.get('set-cookie')
+			if (setCookieForLogin) {
+				const sidCookie = cookie.parse(setCookieForLogin)
+				res.sid = sidCookie['connect.sid']
+			}
 			return res
 		}
 	} catch (e) {
-		// console.log("/lib/utils/server.ts postBySid()", e);
+		console.log('/lib/utils/server.ts postBySid()', e)
+		throw e
 	}
 }
 
@@ -121,7 +129,8 @@ export async function gett(endpoint: string, ck?: any) {
 			return res
 		}
 	} catch (e) {
-		// console.log("/lib/utils/server.ts gett()", e);
+		console.log('/lib/utils/server.ts gett()', e)
+		throw e
 	}
 }
 
@@ -140,7 +149,8 @@ export const getBySid = async (endpoint: string, sid?: any) => {
 			return res
 		}
 	} catch (e) {
-		// console.log("/lib/utils/server.ts getBySid()", e);
+		console.log(`/lib/utils/server.ts getBySid(${endpoint})`, e)
+		throw e
 	}
 }
 
@@ -161,7 +171,8 @@ export const getBigcommerceApi = async (endpoint: string, query?: any, sid?: any
 			return res
 		}
 	} catch (e) {
-		// console.log("/lib/utils/server.ts getBigcommerceApi()", e);
+		console.log('/lib/utils/server.ts getBigcommerceApi()', e)
+		throw e
 	}
 	const response = await fetch(BIG_COMMERCE_BASE_URL + '/' + endpoint + '?' + serialize(query), {
 		headers: bigcommerceHeaders
@@ -185,13 +196,16 @@ export const postBigCommerceApi = async (endpoint: string, query: any, sid?: any
 			return res
 		}
 	} catch (e) {
-		// console.log("/lib/utils/server.ts postBigCommerceApi()", e);
+		console.log('/lib/utils/server.ts postBigCommerceApi()', e)
+		throw e
 	}
 }
 
 // ---------------------------------- X ----------------------------------
 
 export const getMedusajsApi = async (endpoint: string, query?: any, sid?: any) => {
+	console.log('zzzzzzzzzzzzzzzzzz', MEDUSAJS_BASE_URL + '/' + endpoint);
+
 	try {
 		const response = await fetch(MEDUSAJS_BASE_URL + '/' + endpoint, {
 			method: 'GET',
@@ -209,7 +223,7 @@ export const getMedusajsApi = async (endpoint: string, query?: any, sid?: any) =
 			return res
 		}
 	} catch (e) {
-		// console.log('/lib/utils/server.ts getMedusajsApi() => ' + endpoint, e)
+		console.log('/lib/utils/server.ts getMedusajsApi() => ' + endpoint, e)
 		throw e
 	}
 }
@@ -250,7 +264,7 @@ export const postMedusajsApi = async (endpoint: string, data: any, sid?: any) =>
 			return res
 		}
 	} catch (e) {
-		// console.log('/lib/utils/server.ts postMedusajsApi() => ' + endpoint, e)
+		console.log('/lib/utils/server.ts postMedusajsApi() => ' + endpoint, e)
 		throw e
 	}
 }
@@ -271,7 +285,8 @@ export const deleteMedusajsApi = async (endpoint: string, sid?: any) => {
 			return res
 		}
 	} catch (e) {
-		// console.log("/lib/utils/server.ts delBySid()", e);
+		console.log('/lib/utils/server.ts delBySid()', e)
+		throw e
 	}
 }
 
@@ -294,7 +309,8 @@ export const getShopifyApi = async (endpoint: string, query: any, sid?: any) => 
 			return res
 		}
 	} catch (e) {
-		// console.log("/lib/utils/server.ts getShopifyApi()", e);
+		console.log('/lib/utils/server.ts getShopifyApi()', e)
+		throw e
 	}
 }
 
@@ -320,7 +336,8 @@ export const postShopifyApi = async (endpoint: string, data: any, sid?: any) => 
 			return res
 		}
 	} catch (e) {
-		// console.log("/lib/utils/server.ts postShopifyApi()", e);
+		console.log('/lib/utils/server.ts postShopifyApi()', e)
+		throw e
 	}
 }
 
