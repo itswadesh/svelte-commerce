@@ -1,5 +1,5 @@
 import { del, getAPI, post } from '$lib/utils/api'
-import { getBySid } from '$lib/utils/server'
+import { getBySid, postBySid, postt } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 const isServer = import.meta.env.SSR
 
@@ -60,7 +60,7 @@ export const saveAddress = async ({
 	try {
 		let res: any = {}
 
-		res = await post(
+		res = await postBySid(
 			`addresses`,
 			{
 				id,
@@ -76,7 +76,7 @@ export const saveAddress = async ({
 				zip,
 				store: storeId
 			},
-			origin
+			sid
 		)
 
 		return res
@@ -105,7 +105,7 @@ export const editAddress = async ({
 }: any) => {
 	try {
 		let res: any = {}
-		res = await post(
+		res = await postBySid(
 			`addresses`,
 			{
 				id,
@@ -121,7 +121,7 @@ export const editAddress = async ({
 				zip,
 				store: storeId
 			},
-			origin
+			sid
 		)
 		return res
 	} catch (err) {
