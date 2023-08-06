@@ -45,23 +45,22 @@ export const fetchTrackOrder = async ({ origin, storeId, id, server = false, sid
 }
 
 export const paySuccessPageHit = async ({
+	cartId = null,
 	origin,
-	paymentMode,
-	orderId,
 	storeId,
-	status,
-	id,
 	server = false,
 	sid = null
 }: any) => {
 	try {
 		let res: any = {}
 
-		res = await getMedusajsApi(`orders/me`, {}, sid)
+		res = await postMedusajsApi(`carts/${cartId}/complete`, {}, sid)
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.message)
+		console.log('error at medusa cart complete', e);
+		return {}
+		// throw error(e.status, e.message)
 	}
 }
 
@@ -81,7 +80,10 @@ export const codCheckout = async ({
 
 		res = await postMedusajsApi(`carts/${cartId}/payment-session`, { provider_id: paymentProviderId }, sid)
 
-		return res || {}
+		const paymentCartId = res?.cart?.id
+		res.id = paymentCartId
+
+		return res
 	} catch (e) {
 		throw error(e.status, e.message)
 	}

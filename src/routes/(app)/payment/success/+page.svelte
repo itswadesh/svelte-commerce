@@ -117,7 +117,7 @@ onMount(async () => {
 							<span class="w-36 shrink-0"> Order No </span>
 
 							<span>
-								: &nbsp; {data.order?.orderNo}
+								: &nbsp; {data.order?.orderNo || '_'}
 							</span>
 						</p>
 					</li>
@@ -127,7 +127,7 @@ onMount(async () => {
 							<span class="w-36 shrink-0">Order Placed On </span>
 
 							<span>
-								: &nbsp; {date(data.order?.createdAt)}
+								: &nbsp; {#if data.order?.createdAt}{date(data.order?.createdAt)}{:else} _{/if}
 							</span>
 						</p>
 					</li>
@@ -137,7 +137,7 @@ onMount(async () => {
 							<span class="w-36 shrink-0">Payment Status </span>
 
 							<span class="uppercase" class:text-brand-500="{data.order?.paymentStatus === 'paid'}">
-								: &nbsp; {data.order?.paymentStatus}
+								: &nbsp; {data.order?.paymentStatus || '_'}
 							</span>
 						</p>
 					</li>
@@ -147,7 +147,7 @@ onMount(async () => {
 							<span class="w-36 shrink-0">Payment Mode </span>
 
 							<span class="uppercase">
-								: &nbsp; {data.order?.paymentMode}
+								: &nbsp; {data.order?.paymentMode || '_'}
 							</span>
 						</p>
 					</li>
@@ -160,7 +160,7 @@ onMount(async () => {
 
 							<spn class="first-letter:uppercase">
 								<span>
-									{data.order?.paymentGateway}
+									{data.order?.paymentGateway || '_'}
 								</span>
 							</spn>
 						</li>
