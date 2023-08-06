@@ -150,11 +150,9 @@ async function addressChanged(id) {
 					return async ({ result }) => {
 						// console.log('result', result)
 
-						if (result?.data) {
-							toast('Address deleted', 'success')
-							await invalidateAll()
-							await applyAction(result)
-						}
+						toast('Address deleted', 'success')
+						await invalidateAll()
+						await applyAction(result)
 					}
 				}}"
 				class="w-full">

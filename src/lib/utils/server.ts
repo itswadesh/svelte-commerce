@@ -96,6 +96,11 @@ export async function postBySid(endpoint: string, data: any, sid?: string) {
 		} else if (response?.status > 399) {
 			throw { status: response.status, message: res }
 		} else {
+			const setCookieForLogin = response.headers.get('set-cookie')
+			if (setCookieForLogin) {
+				const sidCookie = cookie.parse(setCookieForLogin)
+				res.sid = sidCookie['connect.sid']
+			}
 			return res
 		}
 	} catch (e) {
@@ -144,7 +149,7 @@ export const getBySid = async (endpoint: string, sid?: any) => {
 			return res
 		}
 	} catch (e) {
-		console.log('/lib/utils/server.ts getBySid()', e)
+		console.log(`/lib/utils/server.ts getBySid(${endpoint})`, e)
 		throw e
 	}
 }
