@@ -47,7 +47,8 @@ const saveAddress = async ({ request, cookies, locals }) => {
 		state,
 		zip,
 		storeId: locals.store?.id,
-		sid
+		sid,
+		origin: locals.origin
 	})
 
 	// console.log('res of save address = ', res)
@@ -85,7 +86,8 @@ const editAddress = async ({ request, cookies, locals }) => {
 		state,
 		zip,
 		storeId: locals.store?.id,
-		sid
+		sid,
+		origin: locals.origin
 	})
 
 	// console.log('res of save address = ', res)
@@ -101,7 +103,8 @@ const deleteAddress = async ({ request, cookies, locals }) => {
 	const res = await AddressService.deleteAddress({
 		id,
 		storeId: locals.store?.id,
-		sid
+		sid,
+		origin: locals.origin
 	})
 
 	// console.log('res of save address = ', res)

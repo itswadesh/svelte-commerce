@@ -7,7 +7,7 @@ import SelectAddress from '../_SelectAddress.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
-console.log('zzzzzzzzzzzzzzzzzz', data)
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 const seoProps = {
 	title: 'Address ',
@@ -26,7 +26,7 @@ async function updateCart() {
 			return add.id === data.selectedAddress || add._id === data.selectedAddress
 		})
 
-		console.log('selectedAddressFullObject', selectedAddressFullObject)
+		// console.log('selectedAddressFullObject', selectedAddressFullObject)
 
 		if (selectedAddressFullObject[0]) {
 			const res = await CartService.updateCart({
@@ -36,7 +36,7 @@ async function updateCart() {
 				shippingAddress: selectedAddressFullObject[0]
 			})
 
-			console.log('updated cart res =', res)
+			// console.log('updated cart res =', res)
 		}
 	} catch (e) {
 	} finally {

@@ -209,7 +209,7 @@ export const getMedusajsApi = async (endpoint: string, query?: any, sid?: any) =
 			return res
 		}
 	} catch (e) {
-		console.log('/lib/utils/server.ts getMedusajsApi() => ' + endpoint, e)
+		// console.log('/lib/utils/server.ts getMedusajsApi() => ' + endpoint, e)
 		throw e
 	}
 }
@@ -237,20 +237,20 @@ export const postMedusajsApi = async (endpoint: string, data: any, sid?: any) =>
 			}
 			throw { status: 400, message }
 		}
-		const setCookieForLogin = response.headers.get('set-cookie')
-		if (setCookieForLogin) {
-			const sidCookie = cookie.parse(setCookieForLogin)
-			res.sid = sidCookie['connect.sid']
-		}
 		if (res?.status > 399) {
 			throw { status: res.status, message: res.message }
 		} else if (response?.status > 399) {
 			throw { status: response.status, message: res }
 		} else {
+			const setCookieForLogin = response.headers.get('set-cookie')
+			if (setCookieForLogin) {
+				const sidCookie = cookie.parse(setCookieForLogin)
+				res.sid = sidCookie['connect.sid']
+			}
 			return res
 		}
 	} catch (e) {
-		console.log('/lib/utils/server.ts postMedusajsApi() => ' + endpoint, e)
+		// console.log('/lib/utils/server.ts postMedusajsApi() => ' + endpoint, e)
 		throw e
 	}
 }
