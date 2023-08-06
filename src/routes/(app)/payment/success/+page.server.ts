@@ -9,10 +9,14 @@ export async function load({ url, request, locals, cookies }) {
 	const paymentMode = url.searchParams.get('provider')
 	const paymentReferenceId = url.searchParams.get('payment_reference_id')
 	const sid = cookies.get('connect.sid')
+	const cartId = cookies.get('cartId')
+
 	let loading, err, order, cart
+
 	try {
 		loading = true
 		order = await OrdersService.paySuccessPageHit({
+			cartId,
 			paymentMode,
 			status,
 			orderId,

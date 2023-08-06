@@ -14,6 +14,11 @@ export const fetchAddresses = async ({
 
 		res = await getMedusajsApi(`customers/me`, {}, sid)
 		myAddresses = res?.customer?.shipping_addresses
+		myAddresses.sort((a, b) => {
+			const da = new Date(a.updated_at),
+				db = new Date(b.updated_at);
+			return db - da
+		});
 		if (myAddresses?.length) {
 			selectedAddress = myAddresses[0]?._id || myAddresses[0]?.id
 		}
