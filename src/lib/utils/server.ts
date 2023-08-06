@@ -204,7 +204,7 @@ export const postBigCommerceApi = async (endpoint: string, query: any, sid?: any
 // ---------------------------------- X ----------------------------------
 
 export const getMedusajsApi = async (endpoint: string, query?: any, sid?: any) => {
-	console.log('zzzzzzzzzzzzzzzzzz', MEDUSAJS_BASE_URL + '/' + endpoint);
+	// console.log('zzzzzzzzzzzzzzzzzz', MEDUSAJS_BASE_URL + '/' + endpoint);
 
 	try {
 		const response = await fetch(MEDUSAJS_BASE_URL + '/' + endpoint, {

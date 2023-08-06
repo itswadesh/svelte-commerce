@@ -55,6 +55,7 @@ onMount(() => {
 				origin: $page.data.origin
 			})
 			const me = {
+				id: onetap.id,
 				email: onetap.email,
 				phone: onetap.phone,
 				firstName: onetap.firstName,
@@ -123,6 +124,7 @@ async function submit() {
 			})
 
 			const me = {
+				id: res.id,
 				email: res.email,
 				phone: res.phone,
 				firstName: res.firstName,
@@ -184,6 +186,7 @@ async function handleVerifyOtp({ detail }) {
 		})
 
 		const me = {
+			id: res.id,
 			email: res.email,
 			phone: res.phone,
 			firstName: res.firstName,
@@ -250,6 +253,7 @@ function changeNumber() {
 					if (result?.data) {
 						if (isEmail) {
 							const me = {
+								id: result?.data?.id,
 								email: result?.data?.email,
 								phone: result?.data?.phone,
 								firstName: result?.data?.firstName,

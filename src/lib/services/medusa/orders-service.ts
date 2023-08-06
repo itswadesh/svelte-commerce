@@ -4,16 +4,19 @@ import type { AllOrders, Error } from '$lib/types'
 
 export const fetchOrders = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {
-		let res: AllOrders | {} = {}
+		let res: AllOrders | [] = []
 
-		const med = (await getMedusajsApi(`customers/me/orders`, {}, sid)).orders
-
+		res = await getMedusajsApi(`customers/me/orders`, {}, sid)
+		res.orders.map((o) => {
+			o.orderItems = o.items
+			return o
+		})
 		return {
-			data: res.data || [],
-			count: res.count,
-			pageSize: res.pageSize,
-			noOfPage: res.noOfPage,
-			page: res.page
+			data: res.orders || [],
+			count: res?.count,
+			pageSize: res?.limit,
+			noOfPage: res?.noOfPage || 1,
+			page: res?.page || 1
 		}
 	} catch (e) {
 		throw error(e.status, e.message)
@@ -24,8 +27,7 @@ export const fetchOrder = async ({ origin, storeId, id, server = false, sid = nu
 	try {
 		let res: any = {}
 
-		const med = (await getMedusajsApi(`products`, {}, sid)).product
-
+		res = (await getMedusajsApi(`orders/${id}`, {}, sid)).order
 		return res || {}
 	} catch (e) {
 		throw error(e.status, e.message)
@@ -34,18 +36,15 @@ export const fetchOrder = async ({ origin, storeId, id, server = false, sid = nu
 
 export const fetchTrackOrder = async ({ origin, storeId, id, server = false, sid = null }: any) => {
 	try {
-		let res: any = {}
-
-		res = await getMedusajsApi(`orders/me`, {}, sid)
-
-		return res.data || []
+		return []
 	} catch (e) {
 		throw error(e.status, e.message)
 	}
 }
 
 export const paySuccessPageHit = async ({
-	cartId = null,
+	orderId,
+	cartId,
 	origin,
 	storeId,
 	server = false,
@@ -53,14 +52,18 @@ export const paySuccessPageHit = async ({
 }: any) => {
 	try {
 		let res: any = {}
-
-		res = await postMedusajsApi(`carts/${cartId}/complete`, {}, sid)
-
-		return res || {}
+		if (orderId && orderId != 'undefined') {
+			res = await getMedusajsApi(`orders/${orderId}`, {}, sid)
+			return res.order || {}
+			// return { paymentReferenceId: 'complete', message: 'Order success' }
+		} else {
+			res = await postMedusajsApi(`carts/${cartId}/complete`, {}, sid)
+			return res.data || {}
+		}
 	} catch (e) {
-		console.log('error at medusa cart complete', e);
-		return {}
-		// throw error(e.status, e.message)
+		console.log('error at medusa cart complete', e)
+		// return {}
+		throw error(e.status, e.message)
 	}
 }
 
@@ -73,15 +76,19 @@ export const codCheckout = async ({
 	prescription,
 	server = false,
 	sid = null,
-	storeId,
+	storeId
 }: any) => {
 	try {
 		let res: any = {}
 
-		res = await postMedusajsApi(`carts/${cartId}/payment-session`, { provider_id: paymentProviderId }, sid)
+		res = await postMedusajsApi(
+			`carts/${cartId}/payment-session`,
+			{ provider_id: paymentProviderId },
+			sid
+		)
 
-		const paymentCartId = res?.cart?.id
-		res.id = paymentCartId
+		// const paymentCartId = res?.cart?.id
+		res.id = '' //paymentCartId
 
 		return res
 	} catch (e) {
