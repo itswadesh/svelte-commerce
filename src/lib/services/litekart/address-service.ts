@@ -8,7 +8,7 @@ export const fetchAddresses = async ({ origin, storeId, isCors = false, server =
 		let res: any = {}
 		let selectedAddress = {}
 		let myAddresses = []
-		console.log('isServer, isCors', isServer, isCors);
+
 		if (isServer || isCors) {
 			res = await getBySid(`addresses/my?store=${storeId}`, sid)
 		} else {
@@ -19,7 +19,6 @@ export const fetchAddresses = async ({ origin, storeId, isCors = false, server =
 
 		return { myAddresses: { data: myAddresses }, selectedAddress, count: res?.count }
 	} catch (e) {
-		console.log('addresses error', e);
 		throw error(e.status, e.data?.message || e.message)
 	}
 }
@@ -142,4 +141,4 @@ export const deleteAddress = async ({
 	} catch (err) {
 		throw error(err.status || 400, err.message)
 	}
-} 
+}

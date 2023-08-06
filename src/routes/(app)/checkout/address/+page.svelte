@@ -1,8 +1,8 @@
 <script>
 import { CartService } from '$lib/services'
 import { CheckoutHeader, Error, Pricesummary } from '$lib/components'
-import { countries } from '$lib/components/Autocomplete/countriesData'
 import { goto, invalidateAll } from '$app/navigation'
+import { page } from '$app/stores'
 import SelectAddress from '../_SelectAddress.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
@@ -33,21 +33,22 @@ async function updateCart() {
 				billingAddress: selectedAddressFullObject[0],
 				cartId: data?.cartId,
 				email: selectedAddressFullObject[0].email,
-				shippingAddress: selectedAddressFullObject[0]
+				shippingAddress: selectedAddressFullObject[0],
+				storeId: $page.data?.store?.id
 			})
 
 			// console.log('updated cart res =', res)
+
+			if (data.prescriptionId) {
+				goto(
+					`/checkout/payment-options?address=${data.selectedAddress}&prescription=${data.prescriptionId}`
+				)
+			} else {
+				goto(`/checkout/payment-options?address=${data.selectedAddress}`)
+			}
 		}
 	} catch (e) {
 	} finally {
-	}
-
-	if (data.prescriptionId) {
-		goto(
-			`/checkout/payment-options?address=${data.selectedAddress}&prescription=${data.prescriptionId}`
-		)
-	} else {
-		goto(`/checkout/payment-options?address=${data.selectedAddress}`)
 	}
 }
 
