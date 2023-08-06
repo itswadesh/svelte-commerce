@@ -100,7 +100,7 @@ async function SaveAddress(address) {
 		toast('Address Info Saved.', 'success')
 		dispatch('saved', { id, newAddressId })
 	} catch (e) {
-		console.log('error', e)
+		// console.log('error', e)
 		err = e?.body
 		toast(err, 'error')
 	} finally {
@@ -114,11 +114,13 @@ async function SaveAddress(address) {
 	<Error err="{err}" class="mb-5" />
 
 	<form
-		action="{refinedAddress.address_id !== 'new' ? '/my/addresses?/editAddress' : '/my/addresses?/saveAddress'}"
+		action="{refinedAddress.address_id !== 'new'
+			? '/my/addresses?/editAddress'
+			: '/my/addresses?/saveAddress'}"
 		method="POST"
 		use:enhance="{() => {
 			return async ({ result }) => {
-				console.log('result', result)
+				// console.log('result', result)
 				if (result?.data) {
 					const newAddressId = result.data?._id || result.data?.id
 					toast('Address Info Saved.', 'success')
@@ -130,7 +132,7 @@ async function SaveAddress(address) {
 				editAddress = false
 			}
 		}}">
-	<!-- <form on:submit|preventDefault="{() => SaveAddress(refinedAddress)}"> -->
+		<!-- <form on:submit|preventDefault="{() => SaveAddress(refinedAddress)}"> -->
 		<div class="mb-5 flex flex-col gap-2 lg:mb-10">
 			<!-- First Name -->
 
@@ -261,7 +263,7 @@ async function SaveAddress(address) {
 						disabled="{countries?.length === 1}"
 						class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
 						bind:value="{refinedAddress.address_country}"
-						on:change="{() => onCountryChange(address.country)}"
+						on:change="{() => onCountryChange(refinedAddress.address_country)}"
 						required>
 						<option value="{null}" disabled selected>-- Select a Country --</option>
 

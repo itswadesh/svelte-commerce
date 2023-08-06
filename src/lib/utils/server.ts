@@ -209,7 +209,7 @@ export const getMedusajsApi = async (endpoint: string, query?: any, sid?: any) =
 			return res
 		}
 	} catch (e) {
-		console.log('/lib/utils/server.ts getMedusajsApi() => ' + endpoint, e)
+		// console.log('/lib/utils/server.ts getMedusajsApi() => ' + endpoint, e)
 		throw e
 	}
 }
@@ -250,7 +250,7 @@ export const postMedusajsApi = async (endpoint: string, data: any, sid?: any) =>
 			return res
 		}
 	} catch (e) {
-		console.log('/lib/utils/server.ts postMedusajsApi() => ' + endpoint, e)
+		// console.log('/lib/utils/server.ts postMedusajsApi() => ' + endpoint, e)
 		throw e
 	}
 }
