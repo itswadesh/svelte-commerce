@@ -15,7 +15,7 @@ const seoProps = {
 }
 
 export let data
-console.log('zzzzzzzzzzzzzzzzzz', data)
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let bankPayment = { type: 'order', reference: '', remark: '', paymentMethodId: '', amount: 0 }
 let disabled = false
@@ -76,7 +76,7 @@ async function submit(pm) {
 				origin: $page.data.origin
 			})
 
-			console.log('res of cod', res)
+			// console.log('res of cod', res)
 
 			goto(`/payment/success?id=${res?._id || res?.id}&status=PAYMENT_SUCCESS&provider=COD`)
 		} catch (e) {
