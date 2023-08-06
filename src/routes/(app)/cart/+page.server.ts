@@ -120,7 +120,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 			return {}
 		}
 	} catch (e) {
-		return {}
+		return fail(400, { invalid: true, message: e.body?.message || e.message })
 	}
 }
 
