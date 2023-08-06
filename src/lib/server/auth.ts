@@ -2,7 +2,8 @@ import type { RequestEvent } from '@sveltejs/kit'
 import type { Me } from '$lib/types'
 export const authenticateUser = (event: RequestEvent) => {
 	const meFromCookie: string | undefined = event.cookies.get('me')
-	if (meFromCookie) {
+	const sidFromCookie: string | undefined = event.cookies.get('connect.sid')
+	if (meFromCookie && sidFromCookie) {
 		const me: Me = JSON.parse(meFromCookie)
 		return {
 			active: me.active,

@@ -55,7 +55,6 @@ export { clazz as class }
 					</a>
 				</div>
 			</header>
-
 			<ul>
 				{#each orders.data as order}
 					<li class="mb-4 hidden sm:mb-10 xl:block">
@@ -67,7 +66,7 @@ export { clazz as class }
 
 						<table
 							class="group min-w-full divide-y divide-zinc-200 rounded border border-zinc-200 text-zinc-500 shadow-md"
-							on:click="{() => goto(`/my/orders/${order._id}`)}">
+							on:click="{() => goto(`/my/orders/${order.id || order._id}`)}">
 							<thead class="whitespace-nowrap rounded-t-md bg-zinc-100 text-xs uppercase">
 								<tr>
 									<!-- <th class="px-5 py-3 text-zinc-500"> # </th> -->
@@ -190,7 +189,7 @@ export { clazz as class }
 						</div>
 
 						<a
-							href="/my/orders/{order._id}"
+							href="/my/orders/{order.id || order._id}"
 							aria-label="orders"
 							class="mb-4 block w-full divide-y rounded border bg-white text-sm shadow transition duration-300 hover:bg-primary-50 sm:mb-10">
 							{#each order.orderItems as item}

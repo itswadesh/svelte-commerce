@@ -17,29 +17,28 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 		cookies
 	})
 
-	// console.log('cart', cart);
+	// console.log('cart.................', locals.cartId)
 
 	locals.cart = cart
 
 	try {
 		const id = url.searchParams.get('address')
-
+		const sid = cookies.get('connect.sid')
 		const address = await AddressService.fetchAddress({
 			id,
 			storeId: locals.store?.id,
-			server: true,
-			sid: cookies.get('connect.sid')
+			cartId: locals.cartId,
+			sid
 		})
 
 		const paymentMethods = await PaymentMethodService.fetchPaymentMethods({
 			storeId: locals.store?.id,
-			server: true,
-			sid: cookies.get('connect.sid')
+			cartId: locals.cartId,
+			sid
 		})
 
 		return { paymentMethods, address, addressId: id, me, cart }
 	} catch (e) {
-		console.log('error at payment options zzzzzzzzzzzzzzzzzz', e);
 		if (e) {
 			throw redirect(307, '/checkout/address')
 		}

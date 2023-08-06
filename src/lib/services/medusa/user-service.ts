@@ -13,6 +13,7 @@ export const fetchMeData = async ({ origin, storeId, server = false, cookies }: 
 		res.firstName = customerResponse.first_name
 		res.lastName = customerResponse.last_name
 		res.active = customerResponse.has_account
+		res.id = customerResponse.id
 
 		return res || {}
 	} catch (e) {
@@ -56,6 +57,7 @@ export const signupService = async ({
 export const loginService = async ({
 	email,
 	password,
+	cartId = null,
 	storeId,
 	origin,
 	server = false,
@@ -73,6 +75,10 @@ export const loginService = async ({
 		res.lastName = res.last_name
 		res.active = res.has_account
 		res.sid = response.sid
+		if (cartId) {
+			await postMedusajsApi(`carts/${cartId}`, { customer_id: res?.id }, sid)
+		}
+
 		return res
 	} catch (e) {
 		if (e.status === 401) e.message = 'email or password is invalid'

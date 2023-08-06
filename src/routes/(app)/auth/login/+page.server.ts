@@ -13,12 +13,14 @@ const login = async ({ request, cookies, locals }) => {
 			email: phoneOrEmail,
 			password: password,
 			storeId: locals.store?.id,
-			cookies,
+			cartId: locals.cartId,
 			server: true,
 			origin: locals.origin
 		})
-
-		// console.log('res of email login = ', res)
+		// const updatedCart = await CartService.updateCart({
+		// 	customer_id: res.customer_id
+		// })
+		// console.log('res of email login = ', updatedCart)
 	} else {
 		res = await UserService.getOtpService({
 			phone: phoneOrEmail,

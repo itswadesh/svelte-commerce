@@ -84,7 +84,7 @@ async function submit(n) {
 		})
 
 		const me = {
-			id: res._id,
+			id: res._id || res.id,
 			email: res.email,
 			phone: res.phone,
 			firstName: res.firstName,
