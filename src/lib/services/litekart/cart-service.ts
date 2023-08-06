@@ -141,4 +141,12 @@ export const removeCouponService = async ({
 	}
 }
 
-export const updateCart = ({})
+export const updateCart = async ({ billingAddress, cartId = '', email = '', shippingAddress, origin = null, storeId }) => {
+	try {
+		const addressId = shippingAddress?._id || shippingAddress?.id
+
+		return addressId
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
+	}
+}

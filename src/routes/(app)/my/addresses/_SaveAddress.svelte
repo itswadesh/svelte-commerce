@@ -3,7 +3,7 @@ import { AddressService, CountryService } from '$lib/services'
 import { applyAction, enhance } from '$app/forms'
 import { createEventDispatcher } from 'svelte'
 import { Error } from '$lib/components'
-import { goto } from '$app/navigation'
+import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import { PrimaryButton, Textarea, Textbox } from '$lib/ui'
 import { toast } from '$lib/utils'
@@ -49,6 +49,8 @@ async function onCountryChange(country) {
 			storeId: $page.data?.store?.id,
 			origin: $page.data?.origin
 		})
+
+		// console.log('states', states)
 	} catch (e) {
 		err = e
 	} finally {
@@ -114,13 +116,14 @@ async function SaveAddress(address) {
 	<Error err="{err}" class="mb-5" />
 
 	<form
-		action="{refinedAddress.address_id !== 'new'
-			? '/my/addresses?/editAddress'
-			: '/my/addresses?/saveAddress'}"
+		action="{refinedAddress.address_id === 'new'
+			? '/my/addresses?/saveAddress'
+			: '/my/addresses?/editAddress'}"
 		method="POST"
 		use:enhance="{() => {
 			return async ({ result }) => {
-				// console.log('result', result)
+				console.log('result, refinedAddress.address_id', result, refinedAddress.address_id)
+
 				if (result?.data) {
 					const newAddressId = result.data?._id || result.data?.id
 					toast('Address Info Saved.', 'success')
@@ -129,6 +132,7 @@ async function SaveAddress(address) {
 					}
 					await applyAction(result)
 				}
+
 				editAddress = false
 			}
 		}}">
@@ -298,12 +302,12 @@ async function SaveAddress(address) {
 					<select
 						class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
 						bind:value="{refinedAddress.address_state}"
-						disabled="{!address.country || loadingStates}"
+						disabled="{!refinedAddress.address_country || loadingStates}"
 						required>
 						<option value="{null}" disabled selected>-- Select a State --</option>
 						{#each states as s}
 							{#if s}
-								<option value="{s.name}">
+								<option value="{s.code || s.iso_2}">
 									{s.name}
 								</option>
 							{/if}
