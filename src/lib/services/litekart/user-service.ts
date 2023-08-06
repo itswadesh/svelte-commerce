@@ -83,7 +83,7 @@ export const loginService = async ({
 	try {
 		let res: any = {}
 
-		res = await post(
+		res = await postBySid(
 			`login`,
 			{
 				email,

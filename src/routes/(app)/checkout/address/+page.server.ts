@@ -33,6 +33,7 @@ export async function load({ request, url, locals, cookies }) {
 			err
 		}
 	} catch (e) {
+		console.log('errorzzzzzzzzzzzzzzzzzz', e);
 		if (e.status === 401 || e.status === 307) {
 			throw redirect(307, `/auth/login?ref=${url?.pathname}`)
 		} else {
