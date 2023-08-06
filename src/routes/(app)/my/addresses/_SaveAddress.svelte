@@ -8,6 +8,7 @@ import { page } from '$app/stores'
 import { PrimaryButton, Textarea, Textbox } from '$lib/ui'
 import { toast } from '$lib/utils'
 
+const IS_DEV = import.meta.env.DEV
 const dispatch = createEventDispatcher()
 
 export let address = {}
@@ -19,6 +20,22 @@ export let editAddress = false
 // console.log('$page', $page)
 // console.log('address', address)
 // console.log('countries', countries)
+
+if (!address) {
+	address = IS_DEV
+		? {
+				address: 'Test address',
+				city: 'Test city',
+				country: 'IN',
+				email: 'test@email.com',
+				firstName: 'Test first name',
+				lastName: 'Test last name',
+				phone: '1111111111',
+				state: 'GOA',
+				zip: '111111'
+			}
+		: {}
+}
 
 address.zip = address.zip || address.pincode || ''
 address.phone = address.phone || $page?.data?.me?.phone || ''
