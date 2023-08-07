@@ -1,7 +1,7 @@
 <script lang="ts">
 import { browser } from '$app/environment'
 import { CartService } from 'lib/services'
-import { cartStore } from '$lib/store/cart'
+import { cartStore, updateCartStore } from '$lib/store/cart'
 import { createEventDispatcher, onMount } from 'svelte'
 import { currency, logger, toast } from '$lib/utils'
 import { goto } from '$app/navigation'
@@ -45,6 +45,8 @@ async function submit() {
 					origin: $page.data?.origin,
 					storeId: $page.data?.storeId
 				})
+
+				updateCartStore({ data: res })
 
 				if (nextpage) {
 					goto(nextpage)
