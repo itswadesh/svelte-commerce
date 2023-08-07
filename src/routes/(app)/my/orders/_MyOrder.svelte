@@ -24,7 +24,7 @@ export { clazz as class }
 </script>
 
 <div class="w-full {clazz}">
-	{#if orders.data?.length}
+	{#if orders.count}
 		<div>
 			<header class="mb-5 flex flex-wrap items-start justify-between gap-4">
 				<h1>
@@ -58,11 +58,13 @@ export { clazz as class }
 			</header>
 			<ul>
 				{#each orders.data as order}
+					<!-- Desktop orders list -->
+
 					<li class="mb-4 hidden sm:mb-10 xl:block">
 						<div class="mb-3 flex items-center justify-between text-zinc-500 sm:mb-4">
-							<p>Order No : #{order.orderNo || order.id}</p>
+							<p>Order No : #{order.orderNo}</p>
 
-							<p>Order Date : {date(order.createdAt || order.created_at)}</p>
+							<p>Order Date : {date(order.createdAt)}</p>
 						</div>
 
 						<table
@@ -102,9 +104,9 @@ export { clazz as class }
 														alt=" "
 														width="80"
 														class="h-auto w-20 object-contain object-top" />
-												{:else if item.img || item.thumbnail}
+												{:else if item.img}
 													<LazyImg
-														src="{item.img || item.thumbnail}"
+														src="{item.img}"
 														alt=" "
 														width="80"
 														class="h-auto w-20 object-contain object-top" />
@@ -137,7 +139,7 @@ export { clazz as class }
 
 										<td class="p-3">
 											<div class="flex w-60 gap-2">
-												<span>{item.name || item.title || '_'}</span>
+												<span>{item.name || '_'}</span>
 
 												{#if $page?.data?.store?.isFnb && item.foodType}
 													<div class="shrink-0">
@@ -152,18 +154,15 @@ export { clazz as class }
 										</td>
 
 										<td class="whitespace-nowrap p-3">
-											{item.qty || item.quantity || '_'}
+											{item.qty || '_'}
 										</td>
 
 										<td class="whitespace-nowrap p-3">
-											{currency(item.price || item.unit_price, $page.data?.store?.currencySymbol)}
+											{currency(item.price, $page.data?.store?.currencySymbol)}
 										</td>
 
 										<td class="whitespace-nowrap p-3">
-											{currency(
-												item.shippingCharge || item.shipping_total,
-												$page.data?.store?.currencySymbol
-											)}
+											{currency(item.shippingCharge, $page.data?.store?.currencySymbol)}
 										</td>
 
 										<td class="whitespace-nowrap p-3">
@@ -172,7 +171,7 @@ export { clazz as class }
 
 										<td class="p-3">
 											<span class="whitespace-nowrap font-semibold uppercase text-primary-500">
-												{item.status || order.status || '_'}
+												{item.status || '_'}
 											</span>
 										</td></tr>
 								{/each}
@@ -180,15 +179,17 @@ export { clazz as class }
 						</table>
 					</li>
 
+					<!-- Mobile orders list -->
+
 					<li class="block xl:hidden text-zinc-500">
 						<div class="mb-3 flex items-center justify-between sm:mb-4">
 							<p>
 								Order No :
-								{order.orderNo || order.id}
+								{order.orderNo}
 							</p>
 
 							<p>
-								{date(order.createdAt || order.created_at)}
+								{date(order.createdAt)}
 							</p>
 						</div>
 
@@ -205,9 +206,9 @@ export { clazz as class }
 												alt=" "
 												width="56"
 												class="h-auto w-14 object-contain object-top" />
-										{:else if item.img || item.thumbnail}
+										{:else if item.img}
 											<LazyImg
-												src="{item.img || item.thumbnail}"
+												src="{item.img}"
 												alt=" "
 												width="56"
 												class="h-auto w-14 object-contain object-top" />
@@ -251,7 +252,7 @@ export { clazz as class }
 										{/if}
 
 										<div class="mb-2 flex items-start justify-between">
-											<p class="flex-1">{item.name || item.title || '_'}</p>
+											<p class="flex-1">{item.name || '_'}</p>
 
 											{#if $page?.data?.store?.isFnb && item.foodType}
 												<div>
@@ -269,12 +270,9 @@ export { clazz as class }
 												<p>Price :</p>
 
 												<b>
-													{currency(
-														item.price || item.unit_price,
-														$page.data?.store?.currencySymbol
-													)}
+													{currency(item.price, $page.data?.store?.currencySymbol)}
 													*
-													{item.qty || item.quantity || '_'}
+													{item.qty || '_'}
 												</b>
 											</div>
 
@@ -282,10 +280,7 @@ export { clazz as class }
 												<p>Delivery :</p>
 
 												<b>
-													{currency(
-														item.shippingCharge || item.shipping_total,
-														$page.data?.store?.currencySymbol
-													)}
+													{currency(item.shippingCharge, $page.data?.store?.currencySymbol)}
 												</b>
 											</div>
 
@@ -301,7 +296,7 @@ export { clazz as class }
 												<p>Status :</p>
 
 												<b class="uppercase text-zinc-800">
-													{item.status || order.status || '_'}
+													{item.status || '_'}
 												</b>
 											</div>
 										</div>

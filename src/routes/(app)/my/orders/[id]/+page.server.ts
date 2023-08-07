@@ -12,6 +12,7 @@ export async function load({ params, locals, cookies }) {
 		storeId,
 		sid
 	})
+
 	const orderTracking = await OrdersService.fetchTrackOrder({ id, storeId, sid })
 
 	if (order) {

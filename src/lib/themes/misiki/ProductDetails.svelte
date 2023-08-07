@@ -532,7 +532,7 @@ async function updateVariant(variant) {
 						{#each data.product?.images as img, index}
 							<button
 								type="button"
-								class="cursor-zoom-in overflow-hidden rounded md:flex-shrink w-full h-auto min-h-[300px] flex items-center justify-center shrink-0"
+								class="cursor-zoom-in overflow-hidden rounded md:flex-shrink w-full h-auto min-h-[512px] sm:min-h-[300px] flex items-center justify-center shrink-0"
 								on:click="{() => handleGallery(index)}">
 								{#if product_image_dimension === '1x1'}
 									<LazyImg

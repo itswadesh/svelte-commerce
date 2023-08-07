@@ -1,67 +1,4 @@
 import type { AllOrders, AllProducts, Category, Order, Product, Cart } from '$lib/types'
-export const mapMedusajsOrder = (o: any) => {
-	if (o) {
-		const ord: Order = {
-			_id: o.id,
-			status: o.status,
-			paymentStatus: o.payment_status,
-			cartId: o.cart_id,
-			cart: {},
-			customer: o.customer,
-			address: o.address,
-			// cart: o.cart,
-			// customer_id: o.customer_id,
-			// user: o.customer,
-			orderItems: [],
-			orderNo: '',
-			updatedAt: o.updated_at,
-			user: o.user,
-			userEmail: o.email,
-			billingAddress: o.billing_address.map((a: any) => {
-				if (a)
-					return {
-						address: a.address_1,
-						city: a.city,
-						country: a.country_code,
-						firstName: a.first_name,
-						lastName: a.last_name,
-						phone: a.phone,
-						state: a.province,
-						zip: a.postal_code
-					}
-			}),
-			paySuccess: o.paid_total,
-			totalAmountRefunded: o.refunded_total,
-			amount: {
-				currency: o.currency_code,
-				discount: 100 * ((o.total - o.discount_total) / o.total),
-				qty: o.items.length,
-				shipping: o.shipping_total,
-				subtotal: o.subtotal,
-				tax: o.tax_total,
-				total: o.total
-			},
-			items: o.items.map((i: any) => {
-				if (i)
-					return {
-						_id: i.id,
-						orderItemId: i.order_id,
-						description: i.description,
-						name: i.title,
-						img: i.thumbnail,
-						price: i.unit_price,
-						total: i.total,
-						subtotal: i.subtotal,
-						tax: i.tax_total,
-						qty: i.quantity
-					}
-			})
-		}
-		return ord
-	} else {
-		return {}
-	}
-}
 
 export const mapMedusajsAllProducts = (p: any) => {
 	if (p) {
@@ -177,20 +114,98 @@ export const mapMedusajsCategory = (c: any) => {
 	}
 }
 
-export const mapMedusajsAllOrders = (p: any) => {
-	if (p) {
+export const mapMedusajsAllOrders = (o: any) => {
+	if (o) {
 		const allOrd: AllOrders = {
-			count: p.count,
-			// currentPage: p.currentPage,
-			// pageSize: p.pageSize,
-			limit: p.limit,
-			data: p.orders.forEach(mapMedusajsOrder)
+			count: o?.count,
+			pageSize: o?.limit,
+			currentPage: o?.page || 1,
+			data: o?.orders.map((oo) => mapMedusajsOrder(oo))
 		}
 		return allOrd
 	} else {
 		return {}
 	}
 }
+
+export const mapMedusajsOrder = (o: any) => {
+	if (o) {
+		const ord: Order = {
+			_id: o.id,
+			status: o.status,
+			paymentStatus: o.payment_status,
+			cartId: o.cart_id,
+			customer: o.customer,
+			address: o.address,
+			// cart: o.cart,
+			// customer_id: o.customer_id,
+			// user: o.customer,
+			orderItems: o.items.map((i: any) => {
+				if (i)
+					return {
+						_id: i.id,
+						orderItemId: i.order_id,
+						description: i.description,
+						name: i.title,
+						img: i.thumbnail,
+						price: i.unit_price,
+						total: i.total,
+						subtotal: i.subtotal,
+						tax: i.tax_total,
+						qty: i.quantity
+					}
+			}),
+			orderNo: o.id,
+			createdAt: o.created_at,
+			updatedAt: o.updated_at,
+			user: o.user,
+			userEmail: o.email,
+			billingAddress: o.billing_address.map((a: any) => {
+				if (a)
+					return {
+						address: a.address_1,
+						city: a.city,
+						country: a.country_code,
+						firstName: a.first_name,
+						lastName: a.last_name,
+						phone: a.phone,
+						state: a.province,
+						zip: a.postal_code
+					}
+			}),
+			paySuccess: o.paid_total,
+			totalAmountRefunded: o.refunded_total,
+			amount: {
+				currency: o.currency_code,
+				discount: 100 * ((o.total - o.discount_total) / o.total),
+				qty: o.items.length,
+				shipping: o.shipping_total,
+				subtotal: o.subtotal,
+				tax: o.tax_total,
+				total: o.total
+			},
+			items: o.items.map((i: any) => {
+				if (i)
+					return {
+						_id: i.id,
+						orderItemId: i.order_id,
+						description: i.description,
+						name: i.title,
+						img: i.thumbnail,
+						price: i.unit_price,
+						total: i.total,
+						subtotal: i.subtotal,
+						tax: i.tax_total,
+						qty: i.quantity
+					}
+			})
+		}
+		return ord
+	} else {
+		return {}
+	}
+}
+
 
 // Cart data
 export const mapMedusajsCart = (c: any) => {
