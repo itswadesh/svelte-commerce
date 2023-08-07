@@ -131,6 +131,8 @@ async function SaveAddress(address) {
 						goto(`/checkout/payment-options?address=${newAddressId}`)
 					}
 					await applyAction(result)
+				} else if (result?.error) {
+					toast(result?.error?.messages, 'error')
 				}
 
 				editAddress = false
