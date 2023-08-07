@@ -42,8 +42,12 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 	} catch (e) {
 		if (e?.status === 401) {
 			throw redirect(307, '/auth/login')
+		} else {
+			cookies.set('cartId', '', { path: '/' })
+			return {}
+
+			// throw error(400, e?.body?.message || e)
 		}
-		throw error(400, e?.body?.message || e)
 	} finally {
 		loading = false
 	}
@@ -120,7 +124,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 			return {}
 		}
 	} catch (e) {
-		return {}
+		return fail(400, { invalid: true, message: e.body?.message || e.message })
 	}
 }
 
