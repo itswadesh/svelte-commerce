@@ -15,13 +15,14 @@ import SEO from '$lib/components/SEO/index.svelte'
 import TransparentButton from '../_TransparentButton.svelte'
 
 export let data
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let clazz
 export { clazz as class }
 
 const seoProps = {
-	title: 'Details ',
-	metaDescription: 'Details '
+	title: 'Order Details ',
+	metaDescription: 'Order Details '
 }
 
 // let deliveryBy = null
@@ -53,9 +54,9 @@ onMount(() => {
 
 			<div class="mb-5 overflow-hidden rounded border sm:mb-10">
 				<div class="flex flex-wrap items-center justify-between border-b bg-zinc-100 px-5 py-3">
-					<h6>Order No : #{data.order?.orderNo}</h6>
+					<h6>Order No : #{data.order?.orderNo || data.order?.id}</h6>
 
-					<h6>Order Date : {date(data.order?.createdAt)}</h6>
+					<h6>Order Date : {date(data.order?.createdAt || data.order?.created_at)}</h6>
 				</div>
 
 				<!-- Order detail  -->
@@ -66,7 +67,7 @@ onMount(() => {
 							{#each data.order?.items as item}
 								<div class="flex gap-2 p-5 lg:gap-5">
 									<a
-										href="{`/product/${item.slug}`}"
+										href="{`/product/${item.slug || item.title.replace(' ', '-').toLowerCase()}`}"
 										aria-label="Click to view the product details"
 										class="shrink-0">
 										{#if item.isCustomized}
@@ -77,7 +78,7 @@ onMount(() => {
 												class="h-auto w-24 object-contain object-top" />
 										{:else}
 											<LazyImg
-												src="{item.img}"
+												src="{item.img || item.thumbnail}"
 												alt=""
 												width="96"
 												class="h-auto w-24 object-contain object-top" />
@@ -87,10 +88,12 @@ onMount(() => {
 									<div class="flex w-full flex-1 flex-col gap-1 xl:pr-4">
 										<div class="mb-1 flex justify-between gap-2 sm:gap-4">
 											<a
-												href="{`/product/${item.slug}`}"
+												href="{`/product/${
+													item.slug || item.title.replace(' ', '-').toLowerCase()
+												}}`}"
 												aria-label="Click to view the product details"
 												class="flex-1 hover:underline text-zinc-500">
-												{item.name}
+												{item.name || item.title}
 											</a>
 
 											{#if $page?.data?.store?.isFnb && item.foodType}
@@ -126,6 +129,14 @@ onMount(() => {
 													Color :
 
 													{item.color}
+												</p>
+											{/if}
+
+											{#if item.variant?.title}
+												<p>
+													Variant :
+
+													{item.variant?.title}
 												</p>
 											{/if}
 										</div>
@@ -167,19 +178,23 @@ onMount(() => {
 
 										<div class="flex flex-wrap items-center gap-2 text-xs">
 											<span class="text-base font-bold whitespace-nowrap">
-												{currency(item.price, $page.data?.store?.currencySymbol)}
+												{currency(item.price || item.unit_price, $page.data?.store?.currencySymbol)}
 											</span>
 
-											{#if item?.mrp > item?.price}
+											{#if (item?.mrp || item.total) > (item?.price || item.unit_price)}
 												<span class="whitespace-nowrap text-zinc-500 line-through">
 													<strike>
-														{currency(item.mrp, $page.data?.store?.currencySymbol)}
+														{currency(item.mrp || item.total, $page.data?.store?.currencySymbol)}
 													</strike>
 												</span>
 
-												{#if Math.floor(((item.mrp - item.price) / item.mrp) * 100) > 0}
+												{#if Math.floor((((item?.mrp || item.total) - (item?.price || item.unit_price)) / (item?.mrp || item.total)) * 100) > 0}
 													<span class="whitespace-nowrap text-secondary-500">
-														({Math.floor(((item.mrp - item.price) / item.mrp) * 100)}% off)
+														({Math.floor(
+															(((item?.mrp || item.total) - (item?.price || item.unit_price)) /
+																(item?.mrp || item.total)) *
+																100
+														)}% off)
 													</span>
 												{/if}
 											{/if}
@@ -202,57 +217,64 @@ onMount(() => {
 					</div>
 
 					<div class="col-span-1 flex flex-col gap-5 p-5 lg:gap-10">
-						<div>
-							<h5 class="mb-2">Delivery Address</h5>
+						{#if data.order?.address || data.order?.shipping_address}
+							<div>
+								<h5 class="mb-2">Delivery Address</h5>
 
-							<p class="flex flex-col">
-								<span>
-									{data.order?.address?.firstName}
-									{data.order?.address?.lastName}
+								<p class="flex flex-col">
+									<span>
+										{data.order?.address?.firstName || data.order?.shipping_address?.first_name}
+										{data.order?.address?.lastName || data.order?.shipping_address?.last_name}
 
-									<br />
+										<br />
 
-									{data.order?.address?.address}, {data.order?.address?.city},
-									{data.order?.address?.country}, {data.order?.address?.state}
+										{data.order?.address?.address || data.order?.shipping_address?.address_1},
+										{data.order?.address?.locality || data.order?.shipping_address?.address_2},
+										{data.order?.address?.city || data.order?.shipping_address?.city},
+										{data.order?.address?.country || data.order?.shipping_address?.country_code},
+										{data.order?.address?.state || data.order?.shipping_address?.province}
 
-									<br />
+										<br />
 
-									{data.order?.address?.zip}
-								</span>
-							</p>
-
-							{#if data.order?.address?.phone}
-								<p>
-									{data.order?.address?.phone}
+										{data.order?.address?.zip || data.order?.shipping_address?.postal_code}
+									</span>
 								</p>
-							{/if}
-						</div>
 
-						<div>
-							<h5 class="mb-2">Billing Address</h5>
+								{#if data.order?.address?.phone || data.order?.shipping_address?.phone}
+									<p>
+										{data.order?.address?.phone || data.order?.shipping_address?.phone}
+									</p>
+								{/if}
+							</div>
+						{/if}
 
-							<p class="flex flex-col">
-								<span>
-									{data.order?.billingAddress?.firstName}
-									{data.order?.billingAddress?.lastName}
+						{#if data.order?.billingAddress}
+							<div>
+								<h5 class="mb-2">Billing Address</h5>
 
-									<br />
+								<p class="flex flex-col">
+									<span>
+										{data.order?.billingAddress?.firstName}
+										{data.order?.billingAddress?.lastName}
 
-									{data.order?.billingAddress?.address}, {data.order?.billingAddress?.city},
-									{data.order?.billingAddress?.country}, {data.order?.billingAddress?.state}
+										<br />
 
-									<br />
+										{data.order?.billingAddress?.address}, {data.order?.billingAddress?.city},
+										{data.order?.billingAddress?.country}, {data.order?.billingAddress?.state}
 
-									{data.order?.billingAddress?.zip}
-								</span>
-							</p>
+										<br />
 
-							{#if data.order?.billingAddress?.phone}
-								<p>
-									{data.order?.billingAddress?.phone}
+										{data.order?.billingAddress?.zip}
+									</span>
 								</p>
-							{/if}
-						</div>
+
+								{#if data.order?.billingAddress?.phone}
+									<p>
+										{data.order?.billingAddress?.phone}
+									</p>
+								{/if}
+							</div>
+						{/if}
 
 						<!-- <div>
 							<h5 class="mb-2">Vendor Details :</h5>
