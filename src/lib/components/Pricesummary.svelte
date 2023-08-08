@@ -14,6 +14,8 @@ export let nextpage = null
 export let showNextIcon = false
 export let text = 'Proceed to checkout'
 
+// console.log('cart', cart)
+
 function modulo(n, m) {
 	// handle negative numbers
 	return ((n % m) + m) % m
@@ -30,8 +32,8 @@ function submit() {
 			<h5>Price Summary</h5>
 
 			<p>
-				({cart.qty}
-				{#if cart.qty > 1} items {:else} item {/if})
+				({cart?.qty}
+				{#if cart?.qty > 1} items {:else} item {/if})
 			</p>
 		</div>
 
@@ -42,10 +44,14 @@ function submit() {
 				<span>Total</span>
 
 				<span>
-					{currency(
-						cart.formattedAmount?.subtotal?.value || cart.formattedAmount?.subtotal,
-						cart.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
-					)}
+					{#if cart?.formattedAmount?.subtotal?.value}
+						{currency(
+							cart?.formattedAmount?.subtotal?.value,
+							cart?.formattedAmount?.subtotal?.currency
+						)}
+					{:else if cart?.formattedAmount?.subtotal}
+						{cart?.formattedAmount?.subtotal}
+					{/if}
 				</span>
 			</div>
 
@@ -56,7 +62,7 @@ function submit() {
 					<span>
 						{currency(
 							cart?.formattedAmount?.savings?.value || cart?.savings,
-							cart.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
+							cart?.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
 						)}
 					</span>
 				</div>
@@ -69,7 +75,7 @@ function submit() {
 					<span class="text-brand-500">
 						- {currency(
 							cart?.discount?.value || cart?.discount?.amount,
-							cart.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
+							cart?.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
 						)}
 					</span>
 				</div>
@@ -80,10 +86,14 @@ function submit() {
 					<span>Tax</span>
 
 					<span>
-						{currency(
-							cart?.formattedAmount?.tax?.value || cart?.formattedAmount?.tax,
-							cart.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
-						)}
+						{#if cart?.formattedAmount?.tax?.value}
+							{currency(
+								cart?.formattedAmount?.tax?.value,
+								cart?.formattedAmount?.subtotal?.currency
+							)}
+						{:else if cart?.formattedAmount?.tax}
+							{cart?.formattedAmount?.tax}
+						{/if}
 					</span>
 				</div>
 			{/if}
@@ -92,15 +102,15 @@ function submit() {
 				<span>Shipping</span>
 
 				<span>
-					{#if cart.formattedAmount?.shipping?.value < 1 || cart.shipping?.charge < 1}
+					{#if cart?.formattedAmount?.shipping?.value < 1 || cart?.shipping?.charge < 1}
 						<span
 							class="border border-accent-500 text-accent-500 uppercase px-1.5 py-0.5 rounded text-xs">
 							Free
 						</span>
 					{:else}
 						{currency(
-							cart.formattedAmount?.shipping?.value || cart.shipping?.charge,
-							cart.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
+							cart?.formattedAmount?.shipping?.value || cart?.shipping?.charge,
+							cart?.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
 						)}
 					{/if}
 				</span>
@@ -109,21 +119,25 @@ function submit() {
 
 		<hr class="my-5 border-t border-dashed border-zinc-200" />
 
-		{#if cart.formattedAmount?.total?.value || cart.subtotal}
+		{#if cart?.formattedAmount?.total?.value || cart?.subtotal}
 			<h5 class="my-2 mb-5 flex items-center justify-between">
 				<span>Total Amount</span>
 
 				<span>
-					{currency(
-						cart.formattedAmount?.total?.value || cart.formattedAmount?.total,
-						cart.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
-					)}
+					{#if cart?.formattedAmount?.total?.value}
+						{currency(
+							cart?.formattedAmount?.total?.value,
+							cart?.formattedAmount?.subtotal?.currency
+						)}
+					{:else if cart?.formattedAmount?.total}
+						{cart?.formattedAmount?.total}
+					{/if}
 				</span>
 			</h5>
 		{/if}
 
 		<div class="hidden md:block">
-			{#if cart.qty > 0 && !hideCheckoutButton}
+			{#if cart?.qty > 0 && !hideCheckoutButton}
 				{#if nextpage}
 					<a href="{nextpage}">
 						<PrimaryButton class="group w-full uppercase" loading="{loading}" disabled="{disabled}">
@@ -170,7 +184,7 @@ function submit() {
 		</div>
 
 		<div class="fixed inset-x-0 bottom-0 z-50 block w-full md:hidden">
-			{#if cart.qty > 0 && !hideCheckoutButton}
+			{#if cart?.qty > 0 && !hideCheckoutButton}
 				{#if nextpage}
 					<a href="{nextpage}">
 						<PrimaryButton

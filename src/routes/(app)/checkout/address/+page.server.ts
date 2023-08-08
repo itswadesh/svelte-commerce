@@ -19,6 +19,12 @@ export async function load({ request, url, locals, cookies }) {
 			sid
 		})
 
+		const countries = await CountryService.fetchCountries({
+			storeId: locals.store?.id,
+			origin: locals.origin,
+			sid
+		})
+
 		const cart = await CartService.fetchRefreshCart({
 			cookies,
 			storeId: locals.store?.id,
@@ -28,12 +34,13 @@ export async function load({ request, url, locals, cookies }) {
 
 		return {
 			cart,
+			countries,
+			currentPage,
+			err,
 			myAddresses,
+			q,
 			selectedAddress,
 			url: url.href,
-			currentPage,
-			q,
-			err
 		}
 	} catch (e) {
 		if (e.status === 401 || e.status === 307) {

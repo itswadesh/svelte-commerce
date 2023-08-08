@@ -11,6 +11,7 @@ import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 const seoProps = {
 	title: 'Dashboard - Addresses ',
@@ -159,7 +160,7 @@ async function remove(id, index) {
 
 						<div class="grid grid-cols-2 divide-x border-t">
 							<a
-								href="{`/my/addresses/${i._id}`}"
+								href="{`/my/addresses/${i._id || i.id}`}"
 								aria-label="Click to visit address details"
 								class="bg-transparent p-2 text-center font-semibold uppercase text-primary-500 transition duration-300 focus:outline-none hover:bg-zinc-100 hover:text-primary-700">
 								Edit
@@ -168,7 +169,7 @@ async function remove(id, index) {
 							<button
 								type="button"
 								class="bg-transparent p-2 text-center font-semibold uppercase text-primary-500 transition duration-300 focus:outline-none hover:bg-zinc-100 hover:text-primary-700"
-								on:click="{() => remove(i._id, index)}">
+								on:click="{() => remove(i._id || i.id, index)}">
 								{#if loadingOnDelete[index]}
 									Removing...
 								{:else}
