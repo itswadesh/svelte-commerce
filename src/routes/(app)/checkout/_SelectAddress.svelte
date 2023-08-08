@@ -14,47 +14,13 @@ import SaveAddress from '../my/addresses/_SaveAddress.svelte'
 const dispatch = createEventDispatcher()
 
 export let address
+export let countries
 export let loading
 export let selectedAddress
 
-let countries = []
 let editAddress = false
 let err = null
 let removing = false
-let states = []
-
-onMount(async () => {
-	countries = await CountryService.fetchCountries({
-		origin: $page.data.origin,
-		storeId: $page.data.store?.id
-	})
-
-	if (countries?.length === 1) {
-		address.country = countries[0].code || countries[0].iso_2
-	} else if (countries?.length > 1) {
-		const dafaultCountry = countries.filter((c) => {
-			return c.dafault
-		})
-
-		// console.log('dafaultCountry', dafaultCountry)
-
-		if (dafaultCountry[0]) {
-			address.country = dafaultCountry[0].code
-		}
-	}
-
-	if (address?.country) {
-		states = await CountryService.fetchStates({
-			countryCode: address?.country,
-			origin: $page.data.origin,
-			storeId: $page.data.store?.id
-		})
-	}
-
-	if (states?.length === 1) {
-		address.state = states[0].code || states[0].iso_2
-	}
-})
 
 async function remove(id) {
 	if (confirm('Are you sure to delete?')) {
@@ -92,16 +58,16 @@ async function addressChanged(id) {
 
 			<div class="flex w-full cursor-pointer flex-col gap-1 font-light">
 				<h6 class="flex-1 capitalize">
-					{address.firstName || address.first_name}
-					{address.lastName || address.last_name}
+					{address.firstName}
+					{address.lastName}
 				</h6>
 
 				<p>
-					{#if address.address || address.address_1}
-						{address.address || address.address_1}
+					{#if address.address}
+						{address.address}
 					{/if}
-					{#if address.locality || address.address_2}
-						, {address.locality || address.address_2}
+					{#if address.locality}
+						, {address.locality}
 					{/if}
 					{#if address.company}
 						, {address.company}
@@ -109,14 +75,14 @@ async function addressChanged(id) {
 					{#if address.city}
 						, {address.city}
 					{/if}
-					{#if address.state || address.province}
-						, {address.state || address.province}
+					{#if address.state}
+						, {address.state}
 					{/if}
-					{#if address.country || address.country_code}
-						, {address.country || address.country_code}
+					{#if address.country}
+						, {address.country}
 					{/if}
-					{#if address.zip || address.postal_code}
-						- {address.zip || address.postal_code}
+					{#if address.zip}
+						- {address.zip}
 					{/if}
 				</p>
 
@@ -198,9 +164,5 @@ async function addressChanged(id) {
 	title="Edit Address"
 	hideFooter
 	on:close="{() => (editAddress = false)}">
-	<SaveAddress
-		bind:editAddress="{editAddress}"
-		address="{address}"
-		countries="{countries}"
-		states="{states}" />
+	<SaveAddress bind:editAddress="{editAddress}" address="{address}" countries="{countries}" />
 </Modal>

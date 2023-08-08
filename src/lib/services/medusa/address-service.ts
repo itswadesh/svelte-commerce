@@ -14,6 +14,24 @@ export const fetchAddresses = async ({ origin, storeId, server = false, sid }: a
 				db = new Date(b.updated_at)
 			return db - da
 		})
+
+		myAddresses = myAddresses.map((add) => {
+			return {
+				address: add.address_1,
+				city: add.city,
+				company: add.company,
+				country: add.country || add.country_code,
+				email: add.email,
+				firstName: add.first_name,
+				id: add.id || add._id,
+				lastName: add.last_name,
+				locality: add.address_2,
+				phone: add.phone,
+				state: add.province,
+				zip: add.postal_code,
+			}
+		})
+
 		if (myAddresses?.length) {
 			selectedAddress = myAddresses[0]?._id || myAddresses[0]?.id
 		}

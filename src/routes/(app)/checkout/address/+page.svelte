@@ -76,6 +76,7 @@ async function refreshAddress() {
 						<SelectAddress
 							address="{ads}"
 							loading="{data.loading}"
+							countries="{data.countries}"
 							selectedAddress="{data.selectedAddress}"
 							on:deleteAddress="{refreshAddress}"
 							on:addressChanged="{({ detail }) => addressChanged({ detail })}" />

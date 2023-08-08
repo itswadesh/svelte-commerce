@@ -7,6 +7,12 @@ export const fetchCountries = async ({ origin, storeId, server = false, sid = nu
 
 		const cres = await getMedusajsApi(`regions`, {}, sid)
 		res = cres.regions[0].countries
+		res = res.map((c) => {
+			return {
+				name: c.name,
+				code: c.iso_2
+			}
+		})
 		return res || []
 	} catch (e) {
 		throw error(e.status, e.message)
