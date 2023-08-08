@@ -99,7 +99,7 @@ export const paySuccessPageHit = async ({
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e?.status, e?.message)
 	}
 }
 
@@ -130,7 +130,7 @@ export const codCheckout = async ({
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw error(e.status, e?.message)
 	}
 }
 

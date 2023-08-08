@@ -9,8 +9,7 @@ export async function load({ url, request, locals, cookies }) {
 	const paymentMode = url.searchParams.get('provider')
 	const paymentReferenceId = url.searchParams.get('payment_reference_id')
 	const sid = cookies.get('connect.sid')
-	const cartId = cookies.get('cartId')
-
+	const cartId = locals.cartId
 	let loading, err, order, cart
 
 	try {
@@ -25,11 +24,15 @@ export async function load({ url, request, locals, cookies }) {
 			server: true,
 			sid
 		})
+		if (order.id) throw { status: 307, url: `/my/orders/${order.id}` }
 	} catch (e) {
+		err = e
+		if (e.status == 307) {
+			throw redirect(307, e.url)
+		}
 		if (e.status === 401) {
 			throw redirect(307, locals.store?.loginUrl)
 		}
-		err = e
 		throw error(400, e?.message || e)
 		// return {
 		// 	status: 400,
