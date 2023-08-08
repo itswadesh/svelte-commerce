@@ -43,7 +43,7 @@ async function payWithCard(clientSecret: string, orderId: string) {
 			errorMessage.show = false
 			errorMessage.text = ''
 			goto(
-				`/payment/success?payment_reference_id=${result.paymentIntent.id}&order_id=${orderId}&provider=Stripe`
+				`/payment/success?payment_reference_id=${result.paymentIntent.id}&id=${orderId}&provider=Stripe`
 			)
 		}
 	} catch (e) {
@@ -72,7 +72,7 @@ const payWithStripe = async (pm: PaymentMethod) => {
 				await payWithCard(res.clientSecret, res?.orderId)
 			} else if (res) {
 				goto(
-					`/payment/success?payment_reference_id=${res.referenceId}&order_id=${res?.orderId}&provider=Stripe`
+					`/payment/success?payment_reference_id=${res.referenceId}&id=${res?.orderId}&provider=Stripe`
 				)
 				paySuccess = true
 			}
