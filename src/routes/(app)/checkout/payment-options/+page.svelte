@@ -221,7 +221,7 @@ function checkIfStripeCardValid({ detail }) {
 									</h3>
 
 									{#if pm.text}
-										<p class="mt-1">{pm.text}</p>
+										<p class="mt-1">{@html pm.text}</p>
 									{/if}
 								</div>
 

@@ -54,8 +54,8 @@ function handleClick() {
 	class="relative transform items-center justify-center overflow-hidden rounded border px-4 py-2 text-center font-semibold tracking-wider text-white transition duration-300 focus:outline-none focus:ring-0 focus:ring-offset-0
 	{clazz}
 	{disabled
-		? 'cursor-not-allowed border-zinc-400 bg-zinc-400 opacity-40'
-		: 'opacity-100 hover:border-opacity-80 hover:bg-opacity-80'}
+		? 'cursor-not-allowed border-zinc-400 bg-zinc-400'
+		: 'hover:border-primary-700 hover:bg-primary-700'}
 	{!disabled && blackBackground ? 'border-black bg-black' : ''}		  
 	{!disabled && !blackBackground ? 'border-primary-500 bg-primary-500' : ''}		  
     "
@@ -71,7 +71,7 @@ function handleClick() {
 		<div
 			class="absolute inset-0 flex cursor-not-allowed items-center justify-center bg-black bg-opacity-70">
 			<svg
-				class="mx-auto animate-spin text-white 
+				class="mx-auto animate-spin text-white
 				{loadingringsize == 'xs' ? 'h-4 w-4' : ''}
 				{loadingringsize == 'sm' ? 'h-5 w-5' : ''}
 				{loadingringsize == 'base' ? 'h-6 w-6' : ''}

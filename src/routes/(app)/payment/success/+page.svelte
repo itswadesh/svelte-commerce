@@ -78,7 +78,7 @@ const seoProps = {
 }
 
 onMount(async () => {
-	if(!data.order) return
+	if (!data.order) return
 	fireGTagEvent('purchase', data.order)
 })
 </script>

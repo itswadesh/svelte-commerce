@@ -8,6 +8,8 @@ import menu from '$lib/config/menu'
 
 export let data
 
+// console.log('$page', $page)
+
 let q = ''
 let showSidebar = false
 
