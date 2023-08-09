@@ -240,34 +240,36 @@ function handleFilterTags() {
 		</button>
 	{/if}
 
-	<!-- Name -->
+	{#if data.products?.products?.length}
+		<!-- Name -->
 
-	{#if data.searchData}
-		<h1 class="px-3 py-5 sm:p-10 text-center text-xl uppercase md:text-2xl">
-			{data.searchData}
-		</h1>
+		{#if data.searchData}
+			<h1 class="px-3 py-5 sm:p-10 text-center text-xl uppercase md:text-2xl">
+				{data.searchData}
+			</h1>
+		{/if}
+
+		<!-- Sort -->
+
+		<div
+			class="hidden lg:flex bg-white sticky top-40 z-40 flex-wrap items-center justify-between gap-4 px-3 sm:px-0 divide-x border-t border-b">
+			<div class="flex-1"></div>
+
+			<label for="sort" class="max-w-max flex items-center gap-2 px-5 py-3 text-sm">
+				<span class="uppercase">Sort </span>
+
+				<select
+					id="sort"
+					bind:value="{data.sort}"
+					class="focus:outline-none"
+					on:change="{() => sortNow(data.sort)}">
+					{#each sorts as s}
+						<option value="{s.val}">{s.name}</option>
+					{/each}
+				</select>
+			</label>
+		</div>
 	{/if}
-
-	<!-- Sort -->
-
-	<div
-		class="hidden lg:flex bg-white sticky top-40 z-40 flex-wrap items-center justify-between gap-4 px-3 sm:px-0 divide-x border-t border-b">
-		<div class="flex-1"></div>
-
-		<label for="sort" class="max-w-max flex items-center gap-2 px-5 py-3 text-sm">
-			<span class="uppercase">Sort </span>
-
-			<select
-				id="sort"
-				bind:value="{data.sort}"
-				class="focus:outline-none"
-				on:change="{() => sortNow(data.sort)}">
-				{#each sorts as s}
-					<option value="{s.val}">{s.name}</option>
-				{/each}
-			</select>
-		</label>
-	</div>
 
 	<!-- Mobile Sort -->
 
