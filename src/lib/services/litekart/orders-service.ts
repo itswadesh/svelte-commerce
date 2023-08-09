@@ -151,7 +151,8 @@ export const cashfreeCheckout = async ({
 			{
 				address,
 				prescription,
-				store: storeId
+				store: storeId,
+				redirectUrl: `${origin}/payment/success`
 			},
 			origin
 		)
@@ -180,7 +181,8 @@ export const razorpayCheckout = async ({
 				address,
 				paymentMethod,
 				prescription,
-				store: storeId
+				store: storeId,
+				redirectUrl: `${origin}/payment/success`
 			},
 			origin
 		)
@@ -207,7 +209,8 @@ export const razorpayCapture = async ({
 			{
 				rpPaymentId,
 				rpOrderId,
-				store: storeId
+				store: storeId,
+				redirectUrl: `${origin}/payment/success`
 			},
 			origin
 		)
