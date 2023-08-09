@@ -104,6 +104,25 @@ async function submit(pm) {
 		} finally {
 			loading = false
 		}
+	} else if (paymentMethod === 'Phonepe') {
+		try {
+			loading = true
+			const res = await OrdersService.phonepeCheckout({
+				address: data.addressId,
+				storeId: $page.data.store?.id,
+				origin: $page.data.origin
+			})
+			if (res?.redirectUrl && res?.redirectUrl !== null) {
+				goto(`${res?.redirectUrl}`)
+			} else {
+				toast('Something went wrong', 'error')
+			}
+		} catch (e) {
+			data.err = e
+			toast(e?.body?.message || e, 'error')
+		} finally {
+			loading = false
+		}
 	} else if (paymentMethod === 'Paypal') {
 		try {
 			loading = true
