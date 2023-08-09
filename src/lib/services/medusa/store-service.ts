@@ -82,7 +82,8 @@ export const getStoreData = async ({
 		websiteLegalName,
 		websiteName,
 		weightUnit,
-		whatsappChatButton: {}
+		whatsappChatButton: {},
+		fontFamily: 'Montserrat'
 	}
 	let megamenu = null
 	if (
@@ -145,7 +146,8 @@ export const getStoreData = async ({
 			websiteLegalName: storeRes?.storeOne?.websiteLegalName,
 			websiteName: storeRes?.storeOne?.websiteName,
 			weightUnit: storeRes?.storeOne?.weightUnit,
-			whatsappChatButton: storeRes?.storeOne?.whatsappChatButton
+			whatsappChatButton: storeRes?.storeOne?.whatsappChatButton,
+			fontFamily: 'Montserrat'
 		}
 		megamenu = storeRes.megamenu
 		cookies.set('store', JSON.stringify(store), { path: '/' })
