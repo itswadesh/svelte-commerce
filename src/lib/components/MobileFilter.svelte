@@ -4,10 +4,11 @@ import { CategoryService } from '$lib/services'
 import { constructURL2, currency } from '$lib/utils'
 import { createEventDispatcher, onMount } from 'svelte'
 import { fly } from 'svelte/transition'
+// import { getMegamenuFromStore } from '$lib/store/megamenu'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
-import { sorts } from '$lib/config'
 import { RadioEs, CheckboxEs, PrimaryButton } from '$lib/ui'
+import { sorts } from '$lib/config'
 import Cookie from 'cookie-universal'
 
 const cookies = Cookie()
@@ -26,7 +27,6 @@ export let selected
 export let showFilter = false
 export let showSort = false
 
-let pincode = null
 let selectedCategory
 let selectedCategory2
 let showSubCategory = []
@@ -55,17 +55,8 @@ onMount(async () => {
 	})
 
 	getFacetsWithProducts()
-
 	await getMegamenu()
 	await getSelected()
-
-	const pin = cookies.get('zip')
-
-	// console.log('pin', pin, pin.toString()?.length)
-
-	if (pin && pin.toString()?.length === 6) {
-		pincode = pin
-	}
 })
 
 function getFacetsWithProducts() {
@@ -110,12 +101,20 @@ function getFacetsWithProducts() {
 async function getMegamenu() {
 	if (browser) {
 		try {
+			// megamenu = await getMegamenuFromStore({
+			// 	sid: null,
+			// 	storeId: $page?.data?.store?.id,
+			// 	isCors: $page?.data?.store?.isCors,
+			// 	origin: $page.data.origin
+			// })
+
 			const localmegamenu = localStorage.getItem('megamenu')
 
 			if (!localmegamenu || localmegamenu === 'undefined') {
 				megamenu = await CategoryService.fetchMegamenuData({
 					origin: $page?.data?.origin,
-					storeId: $page?.data?.store?.id
+					storeId: $page?.data?.store?.id,
+					isCors: $page.data.store?.isCors
 				})
 			} else {
 				megamenu = JSON.parse(localmegamenu)
@@ -152,8 +151,8 @@ function getSelected() {
 		selected = 'Types'
 	} else if (allVendors?.length > 0) {
 		selected = 'Vendors'
-		// } else if (priceRange?.length > 0) {
-		// 	selected = 'Prices'
+	} else if (priceRange?.length > 0) {
+		selected = 'Prices'
 	}
 }
 
@@ -567,7 +566,7 @@ $: {
 					<hr class="w-full" />
 				{/if}
 
-				<!-- {#if priceRange?.length > 0}
+				{#if priceRange?.length > 0}
 					<button
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
 						{selected === 'Prices'
@@ -582,7 +581,7 @@ $: {
 					</button>
 
 					<hr class="w-full" />
-				{/if} -->
+				{/if}
 
 				{#if megamenu?.length}
 					<button
@@ -801,7 +800,7 @@ $: {
 					</div>
 				{/if}
 
-				<!-- {#if selected === 'Prices'}
+				{#if selected === 'Prices'}
 					<div
 						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
 						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
@@ -813,7 +812,7 @@ $: {
 								on:go="{goCheckbox}" />
 						{/if}
 					</div>
-				{/if} -->
+				{/if}
 
 				{#if selected === 'Categories'}
 					<div
@@ -831,9 +830,9 @@ $: {
 													class="flex w-full items-center justify-between gap-2
 													{selectedCategory === m.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
 													<a
-														href="/{m.slug}"
+														href="{m.link || `/${m.slug}` || '##'}"
 														aria-label="Click to visit category related products page"
-														class="flex-1">
+														class="block">
 														{m.name}
 													</a>
 
@@ -856,7 +855,7 @@ $: {
 												</div>
 											{:else}
 												<a
-													href="/{m.slug}"
+													href="{m.link || `/${m.slug}` || '##'}"
 													aria-label="Click to visit category related products page"
 													class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 													{m.name}
@@ -874,9 +873,9 @@ $: {
 																	class="flex w-full items-center justify-between gap-2
 																	{selectedCategory2 === c.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
 																	<a
-																		href="/{c.slug}"
+																		href="{c.link || `/${c.slug}` || '##'}"
 																		aria-label="Click to visit category related products page"
-																		class="flex-1">
+																		class="block">
 																		{c.name}
 																	</a>
 
@@ -899,7 +898,7 @@ $: {
 																</div>
 															{:else}
 																<a
-																	href="/{c.slug}"
+																	href="{c.link || `/${c.slug}` || '##'}"
 																	aria-label="Click to visit category related products page"
 																	class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 																	{c.name}
@@ -912,7 +911,7 @@ $: {
 																<ul class="ml-4">
 																	{#each c.children as cc}
 																		<a
-																			href="/{cc.slug}"
+																			href="{cc.link || `/${cc.slug}` || '##'}"
 																			aria-label="Click to visit category related products page"
 																			class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 																			{cc.name}

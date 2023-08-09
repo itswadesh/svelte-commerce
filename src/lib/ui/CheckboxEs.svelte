@@ -111,11 +111,11 @@ function handleSearchBox() {
 }
 </script>
 
-<div>
+<div class="text-left">
 	{#if title}
 		<div class="relative mb-3 flex items-center justify-between gap-4">
 			{#if title}
-				<h6 class="relative z-0 font-bold tracking-wide first-letter:uppercase pr-8">
+				<h6 class="relative z-0 first-letter:uppercase">
 					{title}
 				</h6>
 			{/if}
@@ -204,7 +204,7 @@ function handleSearchBox() {
 		</div>
 	{/if}
 
-	<ul class="lg:flex flex-col hidden">
+	<ul class="lg:flex flex-col items-start hidden">
 		{#each filteredTerms as i, ix}
 			{#if ix + 1 <= noOfitems}
 				{#if i.key}
@@ -224,7 +224,13 @@ function handleSearchBox() {
 
 							<!-- {`${selectedItems.toString().search(i.key) === i.key}` ? 'font-medium' : 'font-normal'} -->
 
-							<div class="ml-2 flex-1 text-sm leading-tight first-letter:uppercase">
+							<div
+								class="ml-2 flex-1 flex flex-wrap gap-2 text-sm leading-tight first-letter:uppercase">
+								{#if i.color_code}
+									<div class="h-6 w-6 rounded-full border" style="background-color: {i.color_code}">
+									</div>
+								{/if}
+
 								<span>{i.key}</span>
 
 								{#if i.doc_count}
@@ -240,21 +246,21 @@ function handleSearchBox() {
 		{#if filteredTerms.length > noOfitems}
 			<button
 				type="button"
-				class="text-left text-sm font-semibold text-primary-500 hover:underline focus:outline-none"
+				class="text-left text-sm text-secondary-500 hover:underline focus:outline-none"
 				on:click="{toggleShowAllList}">
 				See all
 			</button>
 		{:else if showAllList}
 			<button
 				type="button"
-				class="text-left text-sm font-semibold text-primary-500 hover:underline focus:outline-none"
+				class="text-left text-sm text-secondary-500 hover:underline focus:outline-none"
 				on:click="{toggleShowAllList}">
 				Close
 			</button>
 		{/if}
 	</ul>
 
-	<ul class="flex flex-col lg:hidden">
+	<ul class="flex flex-col items-start lg:hidden">
 		{#each filteredTerms as i, ix}
 			{#if i.key}
 				<li>
@@ -273,7 +279,13 @@ function handleSearchBox() {
 
 						<!-- {`${selectedItems.toString().search(i.key) === i.key}` ? 'font-medium' : 'font-normal'} -->
 
-						<div class="ml-2 flex-1 text-sm leading-tight first-letter:uppercase">
+						<div
+							class="ml-2 flex-1 flex flex-wrap gap-2 text-sm leading-tight first-letter:uppercase">
+							{#if i.color_code}
+								<div class="h-6 w-6 rounded-full border" style="background-color: {i.color_code}">
+								</div>
+							{/if}
+
 							<span>{i.key}</span>
 
 							{#if i.doc_count}
