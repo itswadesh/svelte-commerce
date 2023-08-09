@@ -1,4 +1,4 @@
-import { delBySid, getMedusajsApi, postMedusajsApi } from '$lib/utils/server'
+import { deleteMedusajsApi, getMedusajsApi, postMedusajsApi } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 
 export const fetchMeData = async ({ origin, storeId, server = false, cookies }: any) => {
@@ -171,7 +171,7 @@ export const logoutService = async ({ storeId, origin, server = false, sid = nul
 	try {
 		let res: any = {}
 
-		res = await delBySid(`auth`, origin)
+		res = await deleteMedusajsApi(`auth`, sid)
 
 		return res
 	} catch (e) {
