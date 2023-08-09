@@ -53,8 +53,8 @@ let seoProps = {
 
 <SEO {...seoProps} />
 
-<div class="h-full min-h-screen max-w-sm justify-center text-center">
-	<div class="">
+<div class="h-full min-h-screen max-w-sm flex items-center justify-center text-center">
+	<div class="flex">
 		<ReelSlider products="{data.data}" />
 	</div>
 </div>
