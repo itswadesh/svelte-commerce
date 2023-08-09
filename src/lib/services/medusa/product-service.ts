@@ -82,6 +82,7 @@ export const fetchProduct2 = async ({ origin, slug, id, server = false, sid = nu
 		throw error(e.status, e.message)
 	}
 }
+
 // Fetch products based on category
 
 export const fetchProductsOfCategory = async ({

@@ -255,7 +255,7 @@ function handleToggleSubCategory2(c, cx) {
 								<a
 									href="{m.link || `/${m.slug}` || '##'}"
 									aria-label="Click to visit category related products"
-									class="flex-1">
+									class="block">
 									{m.name}
 								</a>
 
@@ -298,7 +298,7 @@ function handleToggleSubCategory2(c, cx) {
 												<a
 													href="{c.link || `/${c.slug}` || '##'}"
 													aria-label="Click to visit category related products page"
-													class="flex-1">
+													class="block">
 													{c.name}
 												</a>
 

@@ -134,7 +134,7 @@ function toggle2(cx) {
 								<a
 									href="/{m.slug}"
 									aria-label="Click to visit {m.name || '##'}"
-									class="flex h-24 w-full items-end justify-between {bgColors[mx]}">
+									class="text-left flex h-24 w-full items-end justify-between {bgColors[mx]}">
 									<div class="flex h-full w-full flex-1 items-center px-6">
 										<h2 class="flex-1 uppercase">
 											{m.name}

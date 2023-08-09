@@ -110,7 +110,7 @@ function handleSearchBox() {
 }
 </script>
 
-<div>
+<div class="text-left">
 	{#if title}
 		<div class="relative mb-3 flex items-center justify-between gap-4">
 			{#if title}
@@ -203,7 +203,7 @@ function handleSearchBox() {
 		</div>
 	{/if}
 
-	<ul class="lg:flex flex-col hidden">
+	<ul class="lg:flex flex-col items-start hidden">
 		{#each filteredTerms as i, ix}
 			{#if ix + 1 <= noOfitems}
 				{#if i.key}
@@ -259,7 +259,7 @@ function handleSearchBox() {
 		{/if}
 	</ul>
 
-	<ul class="flex flex-col lg:hidden">
+	<ul class="flex flex-col items-start lg:hidden">
 		{#each filteredTerms as i, ix}
 			{#if i.key}
 				<li>

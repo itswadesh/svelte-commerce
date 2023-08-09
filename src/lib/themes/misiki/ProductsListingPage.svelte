@@ -279,7 +279,7 @@ function handleFilterTags() {
 <CatelogNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page?.data?.store}">
 	<div class="flex max-w-max flex-col items-start gap-1">
 		{#if data.products?.category?.name}
-			<h5 class="w-28 truncate capitalize leading-4">{data.products?.category?.name}</h5>
+			<h5 class="w-28 truncate capitalize leading-4 text-left">{data.products?.category?.name}</h5>
 		{/if}
 
 		<p>
@@ -338,60 +338,60 @@ function handleFilterTags() {
 		{/if}
 
 		<div class="w-full flex-1 sm:px-10 sm:pt-10 lg:pt-0 lg:px-0">
-			<div class="flex flex-col gap-5">
-				<div class="hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex">
-					<!-- Name and count -->
+			{#if data.products?.products?.length}
+				<div class="flex flex-col gap-5">
+					<div class="hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex">
+						<!-- Name and count -->
 
-					<div class="flex flex-wrap items-baseline gap-2">
-						{#if data.products?.category?.name}
-							<h1 class="capitalize">{data.products?.category?.name}</h1>
-						{/if}
-
-						<p>
-							{#if data.products.count}
-								- {data.products.count}
-							{:else}
-								No
+						<div class="flex flex-wrap items-baseline gap-2">
+							{#if data.products?.category?.name}
+								<h1 class="capitalize">{data.products?.category?.name}</h1>
 							{/if}
 
-							{#if data.products.count}
-								items
-							{:else}
-								item
-							{/if}
-						</p>
+							<p>
+								{#if data.products.count}
+									- {data.products.count}
+								{:else}
+									No
+								{/if}
+
+								{#if data.products.count}
+									items
+								{:else}
+									item
+								{/if}
+							</p>
+						</div>
+
+						<!-- Sort -->
+
+						<div class="flex flex-wrap items-center justify-between">
+							<label class="flex items-center gap-2">
+								<span>Sort : </span>
+
+								<select
+									bind:value="{data.sort}"
+									class="max-w-max border-b bg-transparent pr-2 font-semibold focus:border-primary-500 focus:outline-none hover:border-primary-500"
+									on:change="{() => sortNow(data.sort)}">
+									{#each sorts as s}
+										<option value="{s.val}">{s.name}</option>
+									{/each}
+								</select>
+							</label>
+						</div>
 					</div>
 
-					<!-- Sort -->
+					<!-- Category top description -->
 
-					<div class="flex flex-wrap items-center justify-between">
-						<label class="flex items-center gap-2">
-							<span>Sort : </span>
-
-							<select
-								bind:value="{data.sort}"
-								class="max-w-max border-b bg-transparent pr-2 font-semibold focus:border-primary-500 focus:outline-none hover:border-primary-500"
-								on:change="{() => sortNow(data.sort)}">
-								{#each sorts as s}
-									<option value="{s.val}">{s.name}</option>
-								{/each}
-							</select>
-						</label>
-					</div>
+					{#if data.products?.category?.topDescription && data.products?.category?.topDescription?.length > 11}
+						<div class="p-3 sm:p-0 prose max-w-none">
+							{@html data.products?.category?.topDescription}
+						</div>
+					{/if}
 				</div>
 
-				<!-- Category top description -->
+				<!-- Products -->
 
-				{#if data.products?.category?.topDescription && data.products?.category?.topDescription?.length > 11}
-					<div class="p-3 sm:p-0 prose max-w-none">
-						{@html data.products?.category?.topDescription}
-					</div>
-				{/if}
-			</div>
-
-			<!-- Products -->
-
-			{#if data.products?.products?.length}
 				<ul
 					class="lg:mt-5 grid grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6">
 					{#each data.products?.products as p, px}
