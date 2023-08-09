@@ -27,9 +27,8 @@ const pageTransitionDuration = 500
 <div class="transition-outer">
 	{#key url}
 		<div
-			class="transition-inner"
+			class="transition-inner flex flex-col items-center justify-center text-center"
 			transition:scale="{{ delay: 0, duration: 100, easing: quintOut }}"
-			style="flex flex-col items-center justify-center text-center"
 		>
 			<slot />
 		</div>
