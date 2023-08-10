@@ -1,11 +1,40 @@
+<style>
+.animate-slide-in-left {
+	animation: slideInLeft 0.3s ease-out forwards;
+}
+
+.animate-bounce {
+	animation: bounce 0.3s ease-out forwards;
+}
+
+@keyframes slideInLeft {
+	from {
+		transform: translateX(100%);
+	}
+	to {
+		transform: translateX(0);
+	}
+}
+
+@keyframes bounce {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-20px);
+	}
+}
+</style>
+
 <script lang="ts">
+import { delay, toast } from '$lib/utils'
 import { fireGTagEvent } from '$lib/utils/gTagB'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { OrdersService } from '$lib/services'
 import { page } from '$app/stores'
 import { Pricesummary, LazyImg, CheckoutHeader, Error } from '$lib/components'
-import { toast } from '$lib/utils'
 import logo from '$lib/assets/logo.svg'
 import SEO from '$lib/components/SEO/index.svelte'
 
@@ -25,6 +54,7 @@ let paymentDenied = false
 let razorpayReady = false
 let selectedPaymentMethod = { id: '', name: '', text: '', instructions: '', qrcode: '', img: '' }
 let showPayWithBankTransfer = false
+let paymentProcessingStep = 1
 
 $: if (data.paymentMethods?.length === 1 && data.paymentMethods[0]?.type === 'pg') {
 	const pm = data.paymentMethods[0]
@@ -66,6 +96,13 @@ async function submit(pm) {
 		try {
 			loading = true
 
+			setTimeout(() => {
+				paymentProcessingStep = 2
+				setTimeout(() => {
+					paymentProcessingStep = 3
+				}, 500)
+			}, 500)
+
 			const res = await OrdersService.codCheckout({
 				address: data.addressId,
 				cartId: data?.cartId,
@@ -88,11 +125,22 @@ async function submit(pm) {
 	} else if (paymentMethod === 'Cashfree') {
 		try {
 			loading = true
+
+			setTimeout(() => {
+				paymentProcessingStep = 2
+				setTimeout(() => {
+					paymentProcessingStep = 3
+				}, 500)
+			}, 500)
+
 			const res = await OrdersService.cashfreeCheckout({
 				address: data.addressId,
 				storeId: $page.data.store?.id,
 				origin: $page.data.origin
 			})
+
+			// console.log('res of Cashfree', res)
+
 			if (res?.redirectUrl && res?.redirectUrl !== null) {
 				goto(`${res?.redirectUrl}`)
 			} else {
@@ -107,11 +155,22 @@ async function submit(pm) {
 	} else if (paymentMethod === 'Phonepe') {
 		try {
 			loading = true
+
+			setTimeout(() => {
+				paymentProcessingStep = 2
+				setTimeout(() => {
+					paymentProcessingStep = 3
+				}, 500)
+			}, 500)
+
 			const res = await OrdersService.phonepeCheckout({
 				address: data.addressId,
 				storeId: $page.data.store?.id,
 				origin: $page.data.origin
 			})
+
+			// console.log('res of Phonepe', res)
+
 			if (res?.redirectUrl && res?.redirectUrl !== null) {
 				goto(`${res?.redirectUrl}`)
 			} else {
@@ -126,11 +185,22 @@ async function submit(pm) {
 	} else if (paymentMethod === 'Paypal') {
 		try {
 			loading = true
+
+			setTimeout(() => {
+				paymentProcessingStep = 2
+				setTimeout(() => {
+					paymentProcessingStep = 3
+				}, 500)
+			}, 500)
+
 			const res = await OrdersService.paypalCheckout({
 				address: data.addressId,
 				storeId: $page.data.store?.id,
 				origin: $page.data.origin
 			})
+
+			// console.log('res of Paypal', res)
+
 			if (res?.redirect_url && res?.redirect_url !== null) {
 				goto(`${res?.redirect_url}`)
 			} else {
@@ -145,11 +215,22 @@ async function submit(pm) {
 	} else if (paymentMethod === 'Razorpay') {
 		try {
 			loading = true
+
+			setTimeout(() => {
+				paymentProcessingStep = 2
+				setTimeout(() => {
+					paymentProcessingStep = 3
+				}, 500)
+			}, 500)
+
 			const rp = await OrdersService.razorpayCheckout({
 				address: data.addressId,
 				storeId: $page.data.store?.id,
 				origin: $page.data.origin
 			})
+
+			// console.log('rp of Razorpay', res)
+
 			const options = {
 				key: rp.keyId, // Enter the Key ID generated from the Dashboard
 				name: 'Litekart.in',
@@ -277,8 +358,8 @@ function checkIfStripeCardValid({ detail }) {
 			{:else}
 				<div class="flex flex-col h-1/2 items-center justify-center p-4 text-zinc-500 text-center">
 					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="mb-2 h-10 w-10"
+						xmlns="http://www.w3.org/500/svg"
+						class="mb-2 h-8 w-10"
 						fill="none"
 						viewBox="0 0 24 24"
 						stroke="currentColor"
@@ -462,8 +543,37 @@ function checkIfStripeCardValid({ detail }) {
 </div>
 
 {#if loading}
-	<div
-		class="fixed inset-0 z-[100] flex h-screen w-screen items-center justify-center gap-5 bg-black bg-opacity-90 p-5 text-center text-white sm:p-10">
-		Please wait... your payment is currently being processed
+	<div class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-60 p-5 sm:p-10">
+		{#if paymentProcessingStep === 1}
+			<div
+				class="h-60 w-60 bg-white p-4 flex flex-col gap-4 items-center justify-center text-center font-semibold rounded transform translate-x-full animate-slide-in-left">
+				<img
+					src="/payment-processing/lightning.gif"
+					alt=""
+					class="h-8 w-auto object-contain object-center" />
+
+				<span> Fetching your order info </span>
+			</div>
+		{:else if paymentProcessingStep === 2}
+			<div
+				class="h-60 w-60 bg-white p-4 flex flex-col gap-4 items-center justify-center text-center font-semibold rounded transform animate-bounce">
+				<img
+					src="/payment-processing/list.gif"
+					alt=""
+					class="h-8 w-auto object-contain object-center" />
+
+				<span>Filling your information</span>
+			</div>
+		{:else}
+			<div
+				class="h-60 w-60 bg-white p-4 flex flex-col gap-4 items-center justify-center text-center font-semibold rounded transform animate-bounce">
+				<img
+					src="/payment-processing/tick.gif"
+					alt=""
+					class="h-8 w-auto object-contain object-center" />
+
+				<span>All set</span>
+			</div>
+		{/if}
 	</div>
 {/if}
