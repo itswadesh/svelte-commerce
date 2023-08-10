@@ -94,19 +94,56 @@ export const fetchProductsOfCategory = async ({
 	sid = null
 }: any) => {
 	try {
-		let res: any = {}
-		let products: Product[] = []
+		let res1: any = {}
+		let res2: any = {}
+
+		let categories = []
+		let category = {}
 		let count = 0
+		let currentPage = 0
+		let err = ''
 		let facets = ''
 		let pageSize = 0
-		let category = ''
-		let err = ''
-		res = await getMedusajsApi(`products?category_id[]=${categorySlug}`)
-		count = res?.count
-		products = res?.products.map((p) => mapMedusajsProduct(p))
-		const offset = res?.offset
-		const limit = res?.limit
-		return { products, count, facets, pageSize, category, err }
+		let products: Product[] = []
+
+
+		res1 = await getMedusajsApi(`product-categories`)
+
+		if (res1?.count) {
+
+			categories = res1?.product_categories.filter((c) => {
+				if (c.handle === categorySlug) {
+					return c
+				}
+			})
+
+			// console.log('categories', categories);
+
+			if (categories) {
+				category = categories[0]
+
+				try {
+					res2 = await getMedusajsApi(`products?category_id[]=${category?.id}`)
+
+					count = res2?.count
+					products = res2?.products.map((p) => mapMedusajsProduct(p))
+					currentPage = res2?.offset
+					pageSize = res2?.limit
+
+					return {
+						category,
+						count,
+						currentPage,
+						err,
+						facets,
+						pageSize,
+						products,
+					}
+				} catch (e) {
+					throw error(e.status, e.message)
+				}
+			}
+		}
 	} catch (e) {
 		throw error(e.status, e.message)
 	}

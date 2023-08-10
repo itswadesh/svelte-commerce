@@ -65,7 +65,7 @@ export const fetchOrder = async ({ origin, storeId, id, server = false, sid = nu
 			createdAt: res?.created_at,
 			items: res?.items?.map((item) => {
 				return {
-					slug: item.title.replace(' ', '-').toLowerCase(),
+					slug: item.handle,
 					img: item.thumbnail,
 					name: item.title,
 					qty: item.quantity,

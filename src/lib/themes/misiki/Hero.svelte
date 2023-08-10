@@ -24,6 +24,8 @@ let hellobar = $page.data.store?.hellobar || {}
 let sliderHeightAccToPageHeight = innerHeight
 let Splide
 
+// console.log('bannerHeight', bannerHeight)
+
 onMount(async () => {
 	const SplideModule = await import('$lib/components/SplideJs.svelte')
 	Splide = SplideModule.default

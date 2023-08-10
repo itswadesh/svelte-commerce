@@ -240,7 +240,7 @@ function moveAllUnavailableItemsToWishlist() {
 										{#each data.cart?.unavailableItems as item (item.pid)}
 											<div class="flex w-full items-start gap-4 py-5">
 												<a
-													href="/product/{item?.slug || item?.name.replace(' ', '-').toLowerCase()}"
+													href="/product/{item?.slug}"
 													aria-label="Click to visit product details"
 													class="block shrink-0 overflow-hidden">
 													{#if item.customizedImg || item.img}
@@ -276,8 +276,7 @@ function moveAllUnavailableItemsToWishlist() {
 												<div class="w-full flex-1">
 													<div class="mb-1 flex justify-between">
 														<a
-															href="/product/{item?.slug ||
-																item?.name.replace(' ', '-').toLowerCase()}"
+															href="/product/{item?.slug}"
 															aria-label="Click to visit product details"
 															class="cart-item flex-1 cursor-pointer text-zinc-500 hover:underline">
 															{item?.name}
@@ -333,7 +332,7 @@ function moveAllUnavailableItemsToWishlist() {
 										out:fly="{{ x: -800, duration: 300 }}"
 										class="flex w-full items-start gap-4 py-5">
 										<a
-											href="/product/{item?.slug || item?.name.replace(' ', '-').toLowerCase()}"
+											href="/product/{item?.slug}"
 											aria-label="Click to visit product details"
 											class="block shrink-0 overflow-hidden">
 											{#if item.customizedImg || item.img}
@@ -369,7 +368,7 @@ function moveAllUnavailableItemsToWishlist() {
 										<div class="w-full flex-1">
 											<div class="mb-1 flex justify-between">
 												<a
-													href="/product/{item?.slug || item?.name.replace(' ', '-').toLowerCase()}"
+													href="/product/{item?.slug}"
 													aria-label="Click to visit product details"
 													class="flex-1 cursor-pointer text-zinc-500 hover:underline">
 													{item?.name}
