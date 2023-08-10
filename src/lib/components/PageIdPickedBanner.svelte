@@ -1,5 +1,6 @@
 <script lang="ts">
 import { LazyImg } from '$lib/components'
+import { navigateToProperPath } from '$lib/utils'
 
 export let pickedBanners
 </script>
@@ -18,7 +19,7 @@ export let pickedBanners
 							{#each b.data as banner}
 								{#if banner.img}
 									<a
-										href="{banner.link || '##'}"
+										href="{navigateToProperPath(banner.link || banner.slug)}"
 										aria-label="Click to view banner related products page"
 										class="shrink-0">
 										<LazyImg
@@ -36,7 +37,7 @@ export let pickedBanners
 						{#each b.data as banner}
 							{#if banner.img}
 								<a
-									href="{banner.link || '##'}"
+									href="{navigateToProperPath(banner.link || banner.slug)}"
 									aria-label="Click to view banner related products page"
 									class="col-span-1">
 									<LazyImg

@@ -1,5 +1,6 @@
 <script>
 import { LazyImg } from '$lib/components'
+import { navigateToProperPath } from '$lib/utils'
 import { onMount } from 'svelte'
 import { SplideSlide } from '@splidejs/svelte-splide'
 
@@ -59,7 +60,7 @@ onMount(async () => {
 				<SplideSlide>
 					{#if category.img}
 						<a
-							href="{category.link || `/${category.slug}` || '##'}"
+							href="{navigateToProperPath(category.link || category.slug)}"
 							aria-label="Click to view related products of this category"
 							class="zoom-out group flex w-24 flex-col items-center justify-center lg:w-28">
 							<div

@@ -11,7 +11,7 @@ import { cubicOut } from 'svelte/easing'
 import { enhance } from '$app/forms'
 import { fade, fly } from 'svelte/transition'
 import { getAPI, post } from '$lib/utils/api'
-import { goback, toast } from '$lib/utils'
+import { goback, navigateToProperPath, toast } from '$lib/utils'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import { WhiteButton, PrimaryButton } from '$lib/ui'
@@ -396,7 +396,7 @@ const getSelectionLabel = (option) => option.name
 										<div class="grid grid-cols-3">
 											{#each categories as c}
 												<a
-													href="/{c.link}"
+													href="{navigateToProperPath(c.link || c.slug)}"
 													aria-label="Click to visit category related products page"
 													class="col-span-1 block transform border transition duration-500 hover:-translate-y-2 hover:shadow-lg">
 													<LazyImg
