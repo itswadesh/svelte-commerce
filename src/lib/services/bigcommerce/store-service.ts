@@ -52,6 +52,7 @@ export const getStoreData = async ({
 		GOOGLE_CLIENT_ID,
 		googleAnalytics: {},
 		hellobar: {},
+		homePageSliderBannerImageHeight: null,
 		IMAGE_CDN_URL: IMAGE_CDN_URL,
 		isBulkOrder: false,
 		isDeals: false,
@@ -110,6 +111,7 @@ export const getStoreData = async ({
 			GOOGLE_CLIENT_ID: storeRes.storeOne.GOOGLE_CLIENT_ID,
 			googleAnalytics: { active: storeRes.storeOne?.googleAnalytics?.active?.val, id: storeRes.storeOne?.googleAnalytics?.id?.val || '' },
 			hellobar: storeRes.storeOne.hellobar,
+			homePageSliderBannerImageHeight: storeRes?.storeOne?.homePageSliderBannerImageHeight,
 			IMAGE_CDN_URL: storeRes.storeOne.IMAGE_CDN_URL,
 			isBulkOrder: storeRes.storeOne.isBulkOrder,
 			isDeals: storeRes.storeOne.isDeals,
@@ -150,7 +152,6 @@ export const getStoreData = async ({
 	storeRes.storeOne = store
 	storeRes.megamenu = megamenu
 
-	// console.log('zzzzzzzzzzzzzzzzzz', storeRes);
 
 	return storeRes
 }

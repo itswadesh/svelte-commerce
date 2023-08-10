@@ -20,6 +20,9 @@ import {
 	siteTitle,
 	websiteLegalName,
 	websiteName,
+	themeColor,
+	favicon,
+	fontFamily,
 	saasName,
 	saasDomain,
 	weightUnit,
@@ -51,11 +54,14 @@ export const getStoreData = async ({
 		DOMAIN,
 		email,
 		facebookPixel: {},
+		favicon,
+		fontFamily,
 		GOOGLE_ANALYTICS_ID,
 		GOOGLE_CLIENT_ID,
 		googleAnalytics: {},
 		guaranteed_response_time: null,
 		hellobar: {},
+		homePageSliderBannerImageHeight: null,
 		IMAGE_CDN_URL: IMAGE_CDN_URL,
 		isBulkOrder: false,
 		isDeals: false,
@@ -80,6 +86,7 @@ export const getStoreData = async ({
 		socialSharingButtons: {},
 		store_timings: null,
 		storePromoVideo: {},
+		themeColor,
 		title: siteTitle,
 		websiteLegalName,
 		websiteName,
@@ -97,60 +104,66 @@ export const getStoreData = async ({
 	) {
 		const uri = new URL(url)
 
-		// console.log('URI..............', uri.host)
-
 		storeRes = await fetchInit(uri.host)
 
-		// console.log('storeRes', storeRes);
-
 		store = {
-			id: storeRes.storeOne._id,
-			address: storeRes.storeOne.address,
-			adminUrl: storeRes.storeOne.adminUrl || storeRes.settings.adminUrl, // storeRes.storeOne.adminUrl used for arialmall
-			alert: storeRes.storeOne.alert,
-			close: storeRes.storeOne.close,
-			currencyCode: storeRes.storeOne.storeCurrency?.isoCode || 'USD',
-			currencySymbol: storeRes.storeOne.storeCurrency?.symbol || '$',
-			description: storeRes.storeOne.description,
-			dimentionUnit: storeRes.storeOne.dimentionUnit,
-			domain: storeRes.storeOne.domain,
-			DOMAIN: storeRes.storeOne.DOMAIN,
-			email: storeRes.storeOne.websiteEmail,
-			facebookPixel: { active: storeRes.storeOne?.facebookPixel?.active?.val, id: storeRes.storeOne?.facebookPixel?.id?.val || '' },
-			GOOGLE_ANALYTICS_ID: storeRes.storeOne.GOOGLE_ANALYTICS_ID,
-			GOOGLE_CLIENT_ID: storeRes.storeOne.GOOGLE_CLIENT_ID,
-			googleAnalytics: { active: storeRes.storeOne?.googleAnalytics?.active?.val, id: storeRes.storeOne?.googleAnalytics?.id?.val || '' },
-			guaranteed_response_time: storeRes.storeOne.guaranteed_response_time,
-			hellobar: storeRes.storeOne.hellobar,
-			IMAGE_CDN_URL: storeRes.storeOne.IMAGE_CDN_URL,
-			isBulkOrder: storeRes.storeOne.isBulkOrder,
-			isDeals: storeRes.storeOne.isDeals,
-			isDiscountCoupons: storeRes.storeOne.isDiscountCoupons,
-			isFnb: storeRes.storeOne.isFnb,
-			isGDPR: storeRes.storeOne.isGDPR,
-			isHyperlocal: storeRes.storeOne.isHyperlocal,
-			isIndianPincodes: storeRes.storeOne.isIndianPincodes,
-			isMultiVendor: storeRes.storeOne.isMultiVendor,
-			isProductReviewsAndRatings: storeRes.storeOne.isProductReviewsAndRatings,
-			isSecureCatalogue: storeRes.storeOne.isSecureCatalogue,
-			isWishlist: storeRes.storeOne.isWishlist,
-			keywords: storeRes.storeOne.keywords,
+			id: storeRes?.storeOne?._id,
+			address: storeRes?.storeOne?.address,
+			adminUrl: storeRes?.storeOne?.adminUrl || storeRes?.settings?.adminUrl, // storeRes?.storeOne?.adminUrl used for arialmall
+			alert: storeRes?.storeOne?.alert,
+			close: storeRes?.storeOne?.close,
+			currencyCode: storeRes?.storeOne?.storeCurrency?.isoCode || 'USD',
+			currencySymbol: storeRes?.storeOne?.storeCurrency?.symbol || '$',
+			description: storeRes?.storeOne?.description,
+			dimentionUnit: storeRes?.storeOne?.dimentionUnit,
+			domain: storeRes?.storeOne?.domain,
+			DOMAIN: storeRes?.storeOne?.DOMAIN,
+			email: storeRes?.storeOne?.websiteEmail,
+			facebookPixel: {
+				active: storeRes?.storeOne?.facebookPixel?.active?.val,
+				id: storeRes?.storeOne?.facebookPixel?.id?.val || ''
+			},
+			favicon: storeRes?.storeOne?.favicon || favicon,
+			fontFamily: storeRes?.storeOne?.fontFamily || fontFamily,
+			themeColor: storeRes?.storeOne?.themeColor || themeColor,
+			GOOGLE_ANALYTICS_ID: storeRes?.storeOne?.GOOGLE_ANALYTICS_ID,
+			GOOGLE_CLIENT_ID: storeRes?.storeOne?.GOOGLE_CLIENT_ID,
+			googleAnalytics: {
+				active: storeRes?.storeOne?.googleAnalytics?.active?.val,
+				id: storeRes?.storeOne?.googleAnalytics?.id?.val || ''
+			},
+			guaranteed_response_time: storeRes?.storeOne?.guaranteed_response_time,
+			hellobar: storeRes?.storeOne?.hellobar,
+			homePageSliderBannerImageHeight: storeRes?.storeOne?.homePageSliderBannerImageHeight,
+			IMAGE_CDN_URL: storeRes?.storeOne?.IMAGE_CDN_URL,
+			isBulkOrder: storeRes?.storeOne?.isBulkOrder,
+			isDeals: storeRes?.storeOne?.isDeals,
+			isDiscountCoupons: storeRes?.storeOne?.isDiscountCoupons,
+			isFnb: storeRes?.storeOne?.isFnb,
+			isGDPR: storeRes?.storeOne?.isGDPR,
+			isHyperlocal: storeRes?.storeOne?.isHyperlocal,
+			isIndianPincodes: storeRes?.storeOne?.isIndianPincodes,
+			isMultiVendor: storeRes?.storeOne?.isMultiVendor,
+			isProductReviewsAndRatings: storeRes?.storeOne?.isProductReviewsAndRatings,
+			isSecureCatalogue: storeRes?.storeOne?.isSecureCatalogue,
+			isWishlist: storeRes?.storeOne?.isWishlist,
+			keywords: storeRes?.storeOne?.keywords,
 			loginUrl: '/auth/login',
-			logo: storeRes.storeOne.logo,
-			otpLogin: storeRes.storeOne.otpLogin || true,
-			phone: storeRes.storeOne.phone,
-			product_image_dimension: storeRes.storeOne.product_image_dimension,
+			logo: storeRes?.storeOne?.logo,
+			otpLogin: storeRes?.storeOne?.otpLogin || true,
+			phone: storeRes?.storeOne?.phone,
+			product_image_dimension: storeRes?.storeOne?.product_image_dimension,
 			saasDomain: storeRes.settings.saasDomain,
 			saasName: storeRes.settings.saasName,
-			searchbarText: storeRes.storeOne.searchbarText,
-			socialSharingButtons: storeRes.storeOne.socialSharingButtons,
-			store_timings: storeRes.storeOne.store_timings,
-			storePromoVideo: storeRes.storeOne.storePromoVideo,
-			title: storeRes.storeOne.title,
-			websiteLegalName: storeRes.storeOne.websiteLegalName,
-			websiteName: storeRes.storeOne.websiteName,
-			weightUnit: storeRes.storeOne.weightUnit,
-			whatsappChatButton: storeRes.storeOne.whatsappChatButton
+			searchbarText: storeRes?.storeOne?.searchbarText,
+			socialSharingButtons: storeRes?.storeOne?.socialSharingButtons,
+			store_timings: storeRes?.storeOne?.store_timings,
+			storePromoVideo: storeRes?.storeOne?.storePromoVideo,
+			title: storeRes?.storeOne?.title,
+			websiteLegalName: storeRes?.storeOne?.websiteLegalName,
+			websiteName: storeRes?.storeOne?.websiteName,
+			weightUnit: storeRes?.storeOne?.weightUnit,
+			whatsappChatButton: storeRes?.storeOne?.whatsappChatButton
 		}
 
 		megamenu = storeRes.megamenu
@@ -164,8 +177,6 @@ export const getStoreData = async ({
 
 	storeRes.storeOne = store
 	storeRes.megamenu = megamenu
-
-	// console.log('zzzzzzzzzzzzzzzzzz', storeRes);
 
 	return storeRes
 }
