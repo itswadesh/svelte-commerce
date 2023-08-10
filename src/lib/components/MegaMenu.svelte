@@ -31,12 +31,16 @@
 </style>
 
 <script lang="ts">
+// import { getMegamenuFromStore } from '$lib/store/megamenu'
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
+import { navigateToProperPath, toast } from '$lib/utils'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { toast } from '$lib/utils'
 import Cookie from 'cookie-universal'
+
+let clazz = ''
+export { clazz as class }
 
 const cookies = Cookie()
 
@@ -49,8 +53,6 @@ onMount(() => {
 
 	const pin = cookies.get('zip')
 
-	// console.log('pin', pin, pin.toString()?.length)
-
 	if (pin && pin.toString()?.length === 6) {
 		pincode = pin
 	}
@@ -59,6 +61,13 @@ onMount(() => {
 async function getMegaMenu() {
 	if (browser && $page.data.isDesktop) {
 		try {
+			// megamenu = await getMegamenuFromStore({
+			// 	sid: null,
+			// 	storeId: $page?.data?.store?.id,
+			// 	isCors: $page?.data?.store?.isCors,
+			// 	origin: $page.data.origin
+			// })
+
 			const localMegamenu = localStorage.getItem('megamenu')
 
 			if (!!localMegamenu && localMegamenu !== 'undefined') {
@@ -79,16 +88,16 @@ async function getMegaMenu() {
 </script>
 
 {#if megamenu?.length}
-	<ul class="flex flex-row items-center justify-center font-semibold tracking-wide">
+	<ul class="flex flex-row items-center justify-center">
 		{#each megamenu as category, index}
 			<li
 				class="hoverable mx-1"
 				on:mouseenter="{() => (selectedCategory = category.name)}"
 				on:mouseleave="{() => (selectedCategory = '')}">
 				<a
-					href="/{category.link || category.slug}"
+					href="{navigateToProperPath(category.link || category.slug)}"
 					aria-label="Click to visit category related products page"
-					class="items-center relative flex h-20 shrink-0 justify-center gap-1 whitespace-nowrap border-b-4 border-transparent p-2 font-medium uppercase
+					class="{clazz} items-center relative flex shrink-0 justify-center gap-1 whitespace-nowrap border-b-4 border-transparent p-2
                 	{index % 6 == 0 ? 'hover:border-yellow-500' : ''}
                 	{index % 6 == 1 ? 'hover:border-purple-500' : ''}
                 	{index % 6 == 2 ? 'hover:border-red-500' : ''}
@@ -137,9 +146,9 @@ async function getMegaMenu() {
 							{#each category.children as c}
 								<li class="mb-2 w-1/4 flex-1 shrink-0 grow-0 p-6 pr-2 text-sm">
 									<a
-										href="/{c.link || c.slug}"
+										href="{navigateToProperPath(c.link || c.slug)}"
 										aria-label="Click to visit category related products page"
-										class="mb-2 block w-full
+										class="mb-2 block w-full font-semibold
 										{index % 6 == 0 ? 'text-yellow-500 ' : ''}
 										{index % 6 == 1 ? 'text-purple-500 ' : ''}
 										{index % 6 == 2 ? 'text-red-500 ' : ''}
@@ -156,7 +165,7 @@ async function getMegaMenu() {
 											{#each c.children as c1, ixx}
 												<li class="w-full">
 													<a
-														href="/{c1.link || c1.slug}"
+														href="{navigateToProperPath(c1.link || c1.slug)}"
 														aria-label="Click to visit category related products page"
 														class="block w-full font-light hover:font-medium">
 														{c1.name}

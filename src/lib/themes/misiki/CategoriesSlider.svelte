@@ -1,5 +1,6 @@
 <script>
 import { LazyImg } from '$lib/components'
+import { navigateToProperPath } from '$lib/utils'
 import { onMount } from 'svelte'
 import { SplideSlide } from '@splidejs/svelte-splide'
 
@@ -38,8 +39,7 @@ onMount(async () => {
 
 {#if categories}
 	<div>
-		<h2
-			class="p-3 py-5 text-center font-serif text-xl font-medium uppercase tracking-wider sm:px-10 sm:text-2xl md:py-10 md:text-3xl xl:text-4xl">
+		<h2 class="p-3 py-5 text-center uppercase sm:px-10 md:py-10">
 			{title}
 		</h2>
 
@@ -60,7 +60,7 @@ onMount(async () => {
 				<SplideSlide>
 					{#if category.img}
 						<a
-							href="{`/${category.slug || '##'}`}"
+							href="{navigateToProperPath(category.link || category.slug)}"
 							aria-label="Click to view related products of this category"
 							class="zoom-out group flex w-24 flex-col items-center justify-center lg:w-28">
 							<div
@@ -73,10 +73,10 @@ onMount(async () => {
 									class="h-full w-full object-cover text-xs" />
 							</div>
 
-							<h6
-								class="w-full overflow-ellipsis text-center text-xs font-medium capitalize text-zinc-500 line-clamp-2 group-hover:font-semibold sm:text-base">
+							<p
+								class="w-full overflow-ellipsis text-center group-hover:text-zinc-500 capitalize line-clamp-2">
 								{category.name}
-							</h6>
+							</p>
 						</a>
 					{:else}
 						<a
@@ -93,10 +93,10 @@ onMount(async () => {
 								</div>
 							</div>
 
-							<h6
-								class="w-full overflow-ellipsis text-center text-xs font-medium capitalize text-zinc-500 line-clamp-2 group-hover:font-semibold sm:text-base">
+							<p
+								class="w-full overflow-ellipsis text-center group-hover:text-zinc-500 capitalize line-clamp-2">
 								{category.name}
-							</h6>
+							</p>
 						</a>
 					{/if}
 				</SplideSlide>

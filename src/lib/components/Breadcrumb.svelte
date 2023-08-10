@@ -1,12 +1,14 @@
 <script lang="ts">
-export let categoryPool = [],
-	currentProductName
+import { navigateToProperPath } from '$lib/utils'
+
+export let categoryPool = []
+export let currentProductName = ''
 
 let clazz = ''
 export { clazz as class }
 </script>
 
-<ul class="{clazz} flex flex-wrap items-center text-sm">
+<ul class="{clazz} flex text-gray-500 items-center text-sm truncate">
 	<!-- Home -->
 
 	<li class="flex items-center">
@@ -35,11 +37,10 @@ export { clazz as class }
 	</li>
 
 	<!-- Category Pool -->
-
 	{#each categoryPool as d}
 		<li class="flex items-center">
 			<a
-				href="/{d.slug}?sort=-updatedAt"
+				href="{navigateToProperPath(d.link || d.slug)}?sort=-updatedAt"
 				aria-label="Click to go inside this page"
 				class="first-letter:uppercase hover:text-primary-500 hover:underline">
 				{d.name}
