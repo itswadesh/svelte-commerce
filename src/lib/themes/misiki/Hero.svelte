@@ -5,6 +5,7 @@ import { page } from '$app/stores'
 import { SplideSlide } from '@splidejs/svelte-splide'
 
 export let banners = []
+// console.log('$page', $page)
 
 $: sliderBanners = banners?.filter((b) => {
 	return b.type === 'slider' && b.isMobile === false
@@ -17,6 +18,7 @@ $: sliderBannersMobile = banners?.filter((b) => {
 $: innerHeight = 0
 $: innerWidth = 0
 
+let bannerHeight = $page?.data?.store?.homePageSliderBannerImageHeight || 50
 let hellobar = $page.data.store?.hellobar || {}
 let sliderHeightAccToPageHeight = innerHeight
 let Splide
@@ -114,7 +116,7 @@ $: if (innerWidth < 640) {
 				autoplay: true,
 				cover: true,
 				focus: 'center',
-				height: sliderHeightAccToPageHeight,
+				height: bannerHeight == 50 ? sliderHeightAccToPageHeight / 2 : sliderHeightAccToPageHeight,
 				lazyLoad: true,
 				type: 'loop'
 			}}">
@@ -153,7 +155,7 @@ $: if (innerWidth < 640) {
 				autoplay: true,
 				cover: true,
 				focus: 'center',
-				height: sliderHeightAccToPageHeight,
+				height: bannerHeight == 50 ? sliderHeightAccToPageHeight / 3 : sliderHeightAccToPageHeight,
 				lazyLoad: true,
 				type: 'loop'
 			}}">
