@@ -26,15 +26,15 @@
 
 <script lang="ts">
 import { Autocomplete, AutosuggestModal, AutocompleteItem, LazyImg } from '$lib/components'
-import { MegamenuHorizontal, MegamenuVertical } from '$lib/theme-config'
 import { createEventDispatcher, getContext, onMount } from 'svelte'
 import { cubicOut } from 'svelte/easing'
 import { enhance } from '$app/forms'
 import { fade, fly } from 'svelte/transition'
 import { getAPI, post } from '$lib/utils/api'
-import { getCdnImageUrl } from '$lib/utils'
+import { getCdnImageUrl, navigateToProperPath } from '$lib/utils'
 import { goto, invalidateAll } from '$app/navigation'
 import { logo } from '$lib/config'
+import { MegamenuHorizontal, MegamenuVertical } from '$lib/theme-config'
 import { page } from '$app/stores'
 import { PrimaryButton, WhiteButton } from '$lib/ui'
 import Cookie from 'cookie-universal'
@@ -586,7 +586,7 @@ let y
 										<div class="grid grid-cols-3">
 											{#each categories as c}
 												<a
-													href="/{c.link}"
+													href="{navigateToProperPath(c.link || c.slug)}"
 													target="_blank"
 													rel="noopener noreferrer"
 													class="block col-span-1 transition duration-500 transform border hover:-translate-y-2 hover:shadow-lg">
@@ -860,7 +860,7 @@ let y
 							{#each menuItems as item}
 								<li class="px-4 py-2">
 									<a
-										href="{item.link}"
+										href="{navigateToProperPath(item.link || item.slug)}"
 										class="block font-semibold link-underline text-sm link-underline-gray">
 										{item.title}
 									</a>
@@ -902,7 +902,7 @@ let y
 						{#each menuItems as item}
 							<li class="px-4">
 								<a
-									href="{item.link}"
+									href="{navigateToProperPath(item.link || item.slug)}"
 									class="font-semibold block link-underline link-underline-gray">
 									{item.title}
 								</a>
@@ -974,7 +974,9 @@ let y
 					<ul class="flex items-center gap-4 text-sm xl:text-base">
 						{#each menuItems2 as item}
 							<li>
-								<a href="{item.link}" class="block uppercase link-underline link-underline-gray">
+								<a
+									href="{navigateToProperPath(item.link || item.slug)}"
+									class="block uppercase link-underline link-underline-gray">
 									{item.title}
 								</a>
 							</li>
@@ -1014,7 +1016,9 @@ let y
 						<ul class="flex items-center gap-4 text-sm xl:text-base">
 							{#each menuItems2 as item}
 								<li>
-									<a href="{item.link}" class="block uppercase link-underline link-underline-gray">
+									<a
+										href="{navigateToProperPath(item.link || item.slug)}"
+										class="block uppercase link-underline link-underline-gray">
 										{item.title}
 									</a>
 								</li>

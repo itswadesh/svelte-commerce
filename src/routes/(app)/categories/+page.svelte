@@ -1,12 +1,12 @@
 <script>
+// import { getMegamenuFromStore } from '$lib/store/megamenu'
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
 import { LazyImg, MobileFooter } from '$lib/components'
+import { navigateToProperPath, toast } from '$lib/utils'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { toast } from '$lib/utils'
 import SEO from '$lib/components/SEO/index.svelte'
-// import { getMegamenuFromStore } from '$lib/store/megamenu'
 
 let seoProps = {
 	title: `Categories`,
@@ -194,7 +194,7 @@ function toggle2(cx) {
 													</button>
 												{:else}
 													<a
-														href="{c.link || `/${c.slug}` || '##'}"
+														href="{navigateToProperPath(c.link || c.slug)}"
 														aria-label="Click to visit {c.name || '##'}"
 														class="flex items-center gap-4 py-3 px-8 font-medium">
 														{#if c.img}
@@ -224,7 +224,7 @@ function toggle2(cx) {
 															{#each c.children as cc}
 																<li>
 																	<a
-																		href="{cc.link || `/${cc.slug}` || '##'}"
+																		href="{navigateToProperPath(cc.link || cc.slug)}"
 																		aria-label="Click to visit {cc.name || '##'}"
 																		class="flex w-full items-center gap-4 py-3 px-8 text-sm">
 																		{cc.name}

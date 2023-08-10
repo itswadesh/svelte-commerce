@@ -12,6 +12,7 @@
 import { createEventDispatcher } from 'svelte'
 import { fly } from 'svelte/transition'
 import { Gallery, LazyImg, RatingStarDisplayBig } from '$lib/components'
+import { navigateToProperPath } from '$lib/utils'
 import { onMount } from 'svelte'
 import { SplideSlide } from '@splidejs/svelte-splide'
 import dayjs from 'dayjs'
@@ -121,7 +122,9 @@ onMount(async () => {
 
 					{#each breadCrumb as bc, ix}
 						{#if ix < breadCrumb.length - 1}
-							<a href="{bc.link}" class="cursor-pointer hover:underline">{bc.name}</a>
+							<a
+								href="{navigateToProperPath(bc.link || bc.slug)}"
+								class="cursor-pointer hover:underline">{bc.name}</a>
 						{:else}
 							<span class="text-primary-500">{bc.name}</span>
 						{/if}

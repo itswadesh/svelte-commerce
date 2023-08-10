@@ -22,12 +22,13 @@
 
 <script lang="ts">
 // import { fetchFooterCategories } from './services/CategoryService'
+// import appStore from '$lib/assets/app/app-store.svg'
+// import googlePlay from '$lib/assets/app/google-play.png'
 import { browser } from '$app/environment'
+import { navigateToProperPath } from '$lib/utils'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { PageService } from '$lib/services'
-// import appStore from '$lib/assets/app/app-store.svg'
-// import googlePlay from '$lib/assets/app/google-play.png'
 import type { Category } from '$lib/types'
 
 export let me
@@ -166,7 +167,7 @@ async function getPages() {
 						{#each megamenu as category}
 							<li class="flex max-w-max items-center">
 								<a
-									href="/{category.link || category.slug}"
+									href="{navigateToProperPath(category.link || category.slug)}"
 									aria-label="Click to visit this page"
 									class="link-underline link-underline-gray whitespace-pre-wrap">
 									{category.name}

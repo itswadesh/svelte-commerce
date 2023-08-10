@@ -1,7 +1,7 @@
 <script lang="ts">
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
-import { constructURL2, toast } from '$lib/utils'
+import { constructURL2, navigateToProperPath, toast } from '$lib/utils'
 import { createEventDispatcher, onMount } from 'svelte'
 // import { getMegamenuFromStore } from '$lib/store/megamenu'
 import { goto } from '$app/navigation'
@@ -253,7 +253,7 @@ function handleToggleSubCategory2(c, cx) {
 								class="flex w-full items-center justify-between gap-2
 								{selectedCategory === m.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
 								<a
-									href="{m.link || `/${m.slug}` || '##'}"
+									href="{navigateToProperPath(m.link || m.slug)}"
 									aria-label="Click to visit category related products"
 									class="block">
 									{m.name}
@@ -278,7 +278,7 @@ function handleToggleSubCategory2(c, cx) {
 							</div>
 						{:else}
 							<a
-								href="{m.link || `/${m.slug}` || '##'}"
+								href="{navigateToProperPath(m.link || m.slug)}"
 								aria-label="Click to visit category related products"
 								class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 								{m.name}
@@ -296,7 +296,7 @@ function handleToggleSubCategory2(c, cx) {
 												class="flex w-full items-center justify-between gap-2
 												{selectedCategory2 === c.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
 												<a
-													href="{c.link || `/${c.slug}` || '##'}"
+													href="{navigateToProperPath(c.link || c.slug)}"
 													aria-label="Click to visit category related products page"
 													class="block">
 													{c.name}
@@ -321,7 +321,7 @@ function handleToggleSubCategory2(c, cx) {
 											</div>
 										{:else}
 											<a
-												href="{c.link || `/${c.slug}` || '##'}"
+												href="{navigateToProperPath(c.link || c.slug)}"
 												aria-label="Click to visit category related products page"
 												class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 												{c.name}
@@ -334,7 +334,7 @@ function handleToggleSubCategory2(c, cx) {
 											<ul class="ml-4">
 												{#each c.children as cc}
 													<a
-														href="{cc.link || `/${cc.slug}` || '##'}"
+														href="{navigateToProperPath(cc.link || cc.slug)}"
 														aria-label="Click to visit category related products page"
 														class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 														{cc.name}

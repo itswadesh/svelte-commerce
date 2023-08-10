@@ -1,4 +1,6 @@
 <script>
+import { navigateToProperPath } from '$lib/utils'
+
 export let categoryPool = []
 </script>
 
@@ -8,7 +10,7 @@ export let categoryPool = []
 		{#each categoryPool as c}
 			<li>
 				<a
-					href="{c.link || `/${c.slug}` || '##'}"
+					href="{navigateToProperPath(c.link || c.slug)}"
 					class="py-2 px-6 text-sm rounded-full font-semibold border bg-transparent border-zinc-200 hover:border-primary-500 text-primary-500 flex items-center justify-center gap-1 uppercase whitespace-nowrap transition duration-300 focus:outline-none">
 					<span>{c.name}</span>
 

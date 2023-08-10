@@ -4,10 +4,10 @@ import { browser } from '$app/environment'
 import { CategoriesMobile, Hero, HeroBanners, PickedBanners } from '$lib/theme-config'
 import { CategoryService } from '$lib/services'
 import { Footer, MobileFooter } from '$lib/components'
+import { navigateToProperPath, toast } from '$lib/utils'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { Skeleton, Textbox } from '$lib/ui'
-import { toast } from '$lib/utils'
 import dayjs from 'dayjs'
 import Fuse from 'fuse.js'
 import SEO from '$lib/components/SEO/index.svelte'
@@ -292,7 +292,7 @@ function toggle2(cx) {
 										class="flex h-24 gap-4 px-6 w-full items-center justify-between focus:outline-none
 										{bgColors[mx]}">
 										<a
-											href="/{m.link || m.slug}"
+											href="{navigateToProperPath(m.link || m.slug)}"
 											aria-label="Click to visit {m.name || '##'}"
 											class="block text-xl font-bold uppercase">
 											{m.name}
@@ -317,7 +317,7 @@ function toggle2(cx) {
 									</div>
 								{:else}
 									<a
-										href="/{m.link || m.slug}"
+										href="{navigateToProperPath(m.link || m.slug)}"
 										aria-label="Click to visit {m.name || '##'}"
 										class="flex items-center h-24 w-full text-xl font-bold uppercase px-6
 										{bgColors[mx]}">
@@ -336,7 +336,7 @@ function toggle2(cx) {
 														<div
 															class="flex w-full items-center justify-between gap-4 h-14 px-6 focus:outline-none">
 															<a
-																href="/{c.link || c.slug}"
+																href="{navigateToProperPath(c.link || c.slug)}"
 																aria-label="Click to visit {c.name || '##'}"
 																class="block">
 																{c.name}
@@ -362,7 +362,7 @@ function toggle2(cx) {
 														</div>
 													{:else}
 														<a
-															href="/{c.link || c.slug}"
+															href="{navigateToProperPath(c.link || c.slug)}"
 															aria-label="Click to visit {c.name || '##'}"
 															class="flex items-center h-14 px-6">
 															<h6>{c.name}</h6>
@@ -377,7 +377,7 @@ function toggle2(cx) {
 																{#each c.children as cc}
 																	<li>
 																		<a
-																			href="/{cc.link || cc.slug}"
+																			href="{navigateToProperPath(cc.link || cc.slug)}"
 																			aria-label="Click to visit {cc.name || '##'}"
 																			class="flex items-center h-14 px-6 text-sm">
 																			{cc.name}

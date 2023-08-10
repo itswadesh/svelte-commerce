@@ -1,5 +1,6 @@
 <script>
 import { LazyImg } from '$lib/components'
+import { navigateToProperPath } from '$lib/utils'
 
 export let categories
 export let loading
@@ -28,7 +29,7 @@ export { clazz as class }
 					{#if category.img}
 						<div class="pr-3">
 							<a
-								href="{category.link || `/${category.slug}` || '##'}"
+								href="{navigateToProperPath(category.link || category.slug)}"
 								aria-label="Click to view related products of this category"
 								class="group flex w-16 flex-col items-center justify-center">
 								<div
