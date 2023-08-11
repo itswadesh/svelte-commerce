@@ -1408,7 +1408,7 @@ async function updateVariant(variant) {
 													name="options"
 													value="{JSON.stringify(selectedOptions1)}" />
 
-												<input type="hidden" name="customizedImg" value="{customizedImg}" />
+												<input type="hidden" name="customizedImg" value="{customizedImg || null}" />
 
 												<PrimaryButton
 													type="submit"
@@ -1766,7 +1766,7 @@ async function updateVariant(variant) {
 													name="options"
 													value="{JSON.stringify(selectedOptions1)}" />
 
-												<input type="hidden" name="customizedImg" value="{customizedImg}" />
+												<input type="hidden" name="customizedImg" value="{customizedImg || null}" />
 
 												<PrimaryButton
 													type="submit"
@@ -1969,7 +1969,7 @@ async function updateVariant(variant) {
 													name="options"
 													value="{JSON.stringify(selectedOptions1)}" />
 
-												<input type="hidden" name="customizedImg" value="{customizedImg}" />
+												<input type="hidden" name="customizedImg" value="{customizedImg || null}" />
 
 												<PrimaryButton
 													type="submit"
