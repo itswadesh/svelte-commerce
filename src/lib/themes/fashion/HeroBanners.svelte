@@ -1,5 +1,6 @@
 <script>
 import { LazyImg } from '$lib/components'
+import { navigateToProperPath } from '$lib/utils'
 import { page } from '$app/stores'
 
 export let heroBanners
@@ -21,7 +22,7 @@ function generateRandomImage() {
 	<div>
 		<div class="grid grid-cols-1 sm:grid-cols-2">
 			<a
-				href="{heroBanners[0]?.link || '##'}"
+				href="{navigateToProperPath(heroBanners[0]?.link || heroBanners[0]?.slug)}"
 				aria-label="Click here to view the banner's related products">
 				<LazyImg
 					src="{heroBanners[0]?.img || generateRandomImage()}"
@@ -32,7 +33,7 @@ function generateRandomImage() {
 			</a>
 
 			<a
-				href="{heroBanners[1]?.link || '##'}"
+				href="{navigateToProperPath(heroBanners[1]?.link || heroBanners[1]?.slug)}"
 				aria-label="Click here to view the banner's related products">
 				<LazyImg
 					src="{heroBanners[1]?.img || generateRandomImage()}"
@@ -46,7 +47,7 @@ function generateRandomImage() {
 		<div class="grid grid-cols-1 sm:grid-cols-2">
 			<div class="grid grid-cols-2">
 				<a
-					href="{heroBanners[2]?.link || '##'}"
+					href="{navigateToProperPath(heroBanners[2]?.link || heroBanners[2]?.slug)}"
 					aria-label="Click here to view the banner's related products">
 					<LazyImg
 						src="{heroBanners[2]?.img || generateRandomImage()}"
@@ -57,7 +58,7 @@ function generateRandomImage() {
 				</a>
 
 				<a
-					href="{heroBanners[2]?.link || '##'}"
+					href="{navigateToProperPath(heroBanners[3]?.link || heroBanners[3]?.slug)}"
 					aria-label="Click here to view the banner's related products">
 					<LazyImg
 						src="{heroBanners[3]?.img || generateRandomImage()}"
@@ -70,7 +71,7 @@ function generateRandomImage() {
 
 			<div>
 				<a
-					href="{heroBanners[4]?.link || '##'}"
+					href="{navigateToProperPath(heroBanners[4]?.link || heroBanners[4]?.slug)}"
 					aria-label="Click here to view the banner's related products">
 					<LazyImg
 						src="{heroBanners[4]?.img || generateRandomImage()}"

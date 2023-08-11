@@ -1,5 +1,6 @@
 <script>
 import { LazyImg } from '$lib/components'
+import { navigateToProperPath } from '$lib/utils'
 
 export let banners
 
@@ -28,7 +29,10 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 							<div class="flex flex-row items-start">
 								{#each b.data as banner, bx}
 									{#if banner.img}
-										<a href="{banner.link}" class="block shrink-0" data-sveltekit-preload-data>
+										<a
+											href="{navigateToProperPath(banner.link || banner.slug)}"
+											class="block shrink-0"
+											data-sveltekit-preload-data>
 											<LazyImg
 												src="{banner.img}"
 												alt="banner{bx}"
@@ -44,7 +48,10 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 						<div role="banner" class="hidden grid-cols-7 lg:grid">
 							{#each b.data as banner, bx}
 								{#if banner.img}
-									<a href="{banner.link}" class="col-span-1" data-sveltekit-preload-data>
+									<a
+										href="{navigateToProperPath(banner.link || banner.slug)}"
+										class="col-span-1"
+										data-sveltekit-preload-data>
 										<LazyImg
 											src="{banner.img}"
 											alt="banner{bx}"
@@ -76,7 +83,10 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 							<div class="flex flex-row items-start">
 								{#each b.data as banner, bx}
 									{#if banner.img}
-										<a href="{banner.link}" class="block shrink-0" data-sveltekit-preload-data>
+										<a
+											href="{navigateToProperPath(banner.link || banner.slug)}"
+											class="block shrink-0"
+											data-sveltekit-preload-data>
 											<LazyImg
 												src="{banner.img}"
 												alt="banner{bx}"
@@ -92,7 +102,10 @@ $: pickedBannersForDeals = banners?.filter((b) => {
 						<div role="banner" class="hidden grid-cols-7 lg:grid">
 							{#each b.data as banner, bx}
 								{#if banner.img}
-									<a href="{banner.link}" class="col-span-1" data-sveltekit-preload-data>
+									<a
+										href="{navigateToProperPath(banner.link || banner.slug)}"
+										class="col-span-1"
+										data-sveltekit-preload-data>
 										<LazyImg
 											src="{banner.img}"
 											alt="banner{bx}"

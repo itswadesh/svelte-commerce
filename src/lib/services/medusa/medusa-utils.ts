@@ -211,13 +211,8 @@ export const mapMedusajsOrder = (o: any) => {
 export const mapMedusajsCart = (c: any) => {
 	if (c) {
 		return {
-			id: c.id,
 			billingAddress: c.billing_address,
-			uid: c.customer_id,
 			cart_id: c.id,
-			store: null,
-			storeCurrency: c.region.currency_code,
-			qty: c.items.reduce((total, item) => total + item.quantity, 0),
 			currencyCode: c.region.currency_code,
 			currencyName: c.region.currency_code,
 			currencySymbol: null,
@@ -229,37 +224,6 @@ export const mapMedusajsCart = (c: any) => {
 					currency: c.region.currency_code
 				}
 			},
-			subtotal: c.subtotal,
-			shipping: {
-				price: c.shipping_total,
-				tax: c.shipping_tax_total,
-				formattedPrice: {
-					value: c.shipping_total,
-					currency: c.region.currency_code
-				}
-			},
-			shippingAddress: c.shipping_address,
-			tax: c.tax_total,
-			total: c.total,
-			offer_total: null,
-			items: c.items?.map((item) => ({
-				id: item.id,
-				vid: item.variant_id,
-				name: item.title,
-				description: item.description,
-				sku: item.sku,
-				img: item.thumbnail,
-				qty: item.quantity,
-				price: item.unit_price,
-				mrp: item.unit_price,
-				discount: 0,
-				formattedItemAmount: {
-					price: c.region.currency_code.toUpperCase() + ' ' + item.unit_price
-				}
-			})),
-			// unavailableItems: [],
-			active: true,
-			sid: c.id,
 			formattedAmount: {
 				subtotal: {
 					value: c.subtotal,
@@ -282,11 +246,48 @@ export const mapMedusajsCart = (c: any) => {
 					currency: c.region.currency_code
 				}
 			},
+			id: c.id,
+			items: c.items?.map((item) => ({
+				id: item.id,
+				vid: item.variant_id,
+				name: item.title,
+				description: item.description,
+				sku: item.sku,
+				img: item.thumbnail,
+				qty: item.quantity,
+				price: item.unit_price,
+				mrp: item.unit_price,
+				discount: 0,
+				formattedItemAmount: {
+					price: c.region.currency_code.toUpperCase() + ' ' + item.unit_price
+				}
+			})),
+			offer_total: null,
+			qty: c.items.reduce((total, item) => total + item.quantity, 0),
+			shipping: {
+				price: c.shipping_total,
+				tax: c.shipping_tax_total,
+				formattedPrice: {
+					value: c.shipping_total,
+					currency: c.region.currency_code
+				}
+			},
+			active: true,
+			codAvailable: false,
+			createdAt: c.created_at,
 			needAddress: true,
 			needPrescription: false,
 			selfTakeout: false,
-			codAvailable: false,
-			createdAt: c.created_at,
+			shippingAddress: c.shipping_address,
+			sid: c.id,
+			slug: c.handle,
+			store: null,
+			storeCurrency: c.region.currency_code,
+			subtotal: c.subtotal,
+			tax: c.tax_total,
+			total: c.total,
+			uid: c.customer_id,
+			// unavailableItems: [],
 			updatedAt: c.updated_at
 		}
 	}

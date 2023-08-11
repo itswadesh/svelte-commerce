@@ -31,6 +31,7 @@ export async function GET({ cookies, request, locals }) {
 			googleAnalytics: { active: storeRes.storeOne?.googleAnalytics?.active?.val, id: storeRes.storeOne?.googleAnalytics?.id?.val || '' },
 			guaranteed_response_time: storeRes.storeOne.guaranteed_response_time,
 			hellobar: storeRes.storeOne.hellobar,
+			homePageSliderBannerImageHeight: storeRes.storeOne.homePageSliderBannerImageHeight,
 			IMAGE_CDN_URL: storeRes.storeOne.IMAGE_CDN_URL,
 			isBulkOrder: storeRes.storeOne.isBulkOrder,
 			isDeals: storeRes.storeOne.isDeals,

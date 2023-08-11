@@ -25,9 +25,9 @@
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
 import { fly } from 'svelte/transition'
+import { navigateToProperPath, toast } from '$lib/utils'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { toast } from '$lib/utils'
 
 export let height = 40
 
@@ -101,7 +101,7 @@ async function getMegaMenu() {
 					on:mouseenter="{() => (showSecondLevel[index1] = true)}"
 					on:mouseleave="{() => (showSecondLevel[index1] = false)}">
 					<a
-						href="/{m1.link || m1.slug}?sort=-updatedAt"
+						href="{navigateToProperPath(m1.link || m1.slug)}?sort=-updatedAt"
 						class="flex items-center justify-between gap-2 p-2 transition duration-300 cursor-pointer w-60 link-underline link-underline-gray">
 						<span>
 							{m1.name}
@@ -131,7 +131,7 @@ async function getMegaMenu() {
 									on:mouseenter="{() => (showThirdLevel[index2] = true)}"
 									on:mouseleave="{() => (showThirdLevel[index2] = false)}">
 									<a
-										href="/{m2.link || m2.slug}?sort=-updatedAt"
+										href="{navigateToProperPath(m2.link || m2.slug)}?sort=-updatedAt"
 										class="flex items-center justify-between gap-2 p-2 transition duration-300 cursor-pointer w-60 link-underline link-underline-gray">
 										<span>
 											{m2.name}
@@ -161,7 +161,7 @@ async function getMegaMenu() {
 													on:mouseenter="{() => (showFourthLevel[index3] = true)}"
 													on:mouseleave="{() => (showFourthLevel[index3] = false)}">
 													<a
-														href="/{m3.link || m3.slug}?sort=-updatedAt"
+														href="{navigateToProperPath(m3.link || m3.slug)}?sort=-updatedAt"
 														class="flex items-center justify-between gap-2 p-2 transition duration-300 cursor-pointer w-60 link-underline link-underline-gray">
 														<span>
 															{m3.name}
@@ -191,7 +191,9 @@ async function getMegaMenu() {
 																	on:mouseenter="{() => (showFifthLevel[index4] = true)}"
 																	on:mouseleave="{() => (showFifthLevel[index4] = false)}">
 																	<a
-																		href="/{m4.link || m4.slug}?sort=-updatedAt"
+																		href="{navigateToProperPath(
+																			m4.link || m4.slug
+																		)}?sort=-updatedAt"
 																		class="flex items-center justify-between gap-2 p-2 transition duration-300 cursor-pointer w-60 link-underline link-underline-gray">
 																		<span>
 																			{m4.name}
@@ -221,7 +223,9 @@ async function getMegaMenu() {
 																					on:mouseenter="{() => (showSixthLevel[index5] = true)}"
 																					on:mouseleave="{() => (showSixthLevel[index5] = false)}">
 																					<a
-																						href="/{m5.link || m5.slug}?sort=-updatedAt"
+																						href="{navigateToProperPath(
+																							m5.link || m5.slug
+																						)}?sort=-updatedAt"
 																						class="flex items-center justify-between gap-2 p-2 transition duration-300 cursor-pointer w-60 link-underline link-underline-gray">
 																						<span>
 																							{m5.name}

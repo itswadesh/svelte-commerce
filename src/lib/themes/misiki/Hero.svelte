@@ -1,10 +1,12 @@
 <script>
 import { LazyImg } from '$lib/components'
+import { navigateToProperPath } from '$lib/utils'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { SplideSlide } from '@splidejs/svelte-splide'
 
 export let banners = []
+// console.log('$page', $page)
 
 $: sliderBanners = banners?.filter((b) => {
 	return b.type === 'slider' && b.isMobile === false
@@ -17,9 +19,12 @@ $: sliderBannersMobile = banners?.filter((b) => {
 $: innerHeight = 0
 $: innerWidth = 0
 
+let bannerHeight = $page?.data?.store?.homePageSliderBannerImageHeight || 50
 let hellobar = $page.data.store?.hellobar || {}
 let sliderHeightAccToPageHeight = innerHeight
 let Splide
+
+// console.log('bannerHeight', bannerHeight)
 
 onMount(async () => {
 	const SplideModule = await import('$lib/components/SplideJs.svelte')
@@ -86,7 +91,7 @@ $: if (innerWidth < 640) {
 	{#each sliderBanners as b, ix}
 		{#if b.img}
 			<a
-				href="{b.link || '##'}"
+				href="{navigateToProperPath(b.link || b.slug)}"
 				aria-label="Click to visit banner related products page"
 				data-sveltekit-preload-data
 				class="carousel-item relative float-left h-auto w-full {ix == 0 ? 'active' : ''}">
@@ -114,7 +119,7 @@ $: if (innerWidth < 640) {
 				autoplay: true,
 				cover: true,
 				focus: 'center',
-				height: sliderHeightAccToPageHeight,
+				height: bannerHeight == 50 ? sliderHeightAccToPageHeight / 2 : sliderHeightAccToPageHeight,
 				lazyLoad: true,
 				type: 'loop'
 			}}">
@@ -122,7 +127,7 @@ $: if (innerWidth < 640) {
 				{#if b.img}
 					<SplideSlide key="{b._id || b.id}">
 						<a
-							href="{b.link || '##'}"
+							href="{navigateToProperPath(b.link || b.slug)}"
 							aria-label="Click to visit banner related products page"
 							class="block h-full"
 							data-sveltekit-preload-data>
@@ -153,7 +158,7 @@ $: if (innerWidth < 640) {
 				autoplay: true,
 				cover: true,
 				focus: 'center',
-				height: sliderHeightAccToPageHeight,
+				height: bannerHeight == 50 ? sliderHeightAccToPageHeight / 3 : sliderHeightAccToPageHeight,
 				lazyLoad: true,
 				type: 'loop'
 			}}">
@@ -161,7 +166,7 @@ $: if (innerWidth < 640) {
 				{#if b.img}
 					<SplideSlide key="{b._id || b.id}">
 						<a
-							href="{b.link || '##'}"
+							href="{navigateToProperPath(b.link || b.slug)}"
 							aria-label="Click to visit banner related products page"
 							class="block h-full"
 							data-sveltekit-preload-data>
@@ -198,7 +203,7 @@ $: if (innerWidth < 640) {
 				{#if b.img}
 					<SplideSlide key="{b._id || b.id}">
 						<a
-							href="{b.link || '##'}"
+							href="{navigateToProperPath(b.link || b.slug)}"
 							aria-label="Click to visit banner related products page"
 							class="block"
 							data-sveltekit-preload-data>

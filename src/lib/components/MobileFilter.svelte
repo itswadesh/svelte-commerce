@@ -1,10 +1,10 @@
 <script lang="ts">
+// import { getMegamenuFromStore } from '$lib/store/megamenu'
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
-import { constructURL2, currency } from '$lib/utils'
+import { constructURL2, currency, navigateToProperPath } from '$lib/utils'
 import { createEventDispatcher, onMount } from 'svelte'
 import { fly } from 'svelte/transition'
-// import { getMegamenuFromStore } from '$lib/store/megamenu'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { RadioEs, CheckboxEs, PrimaryButton } from '$lib/ui'
@@ -830,7 +830,7 @@ $: {
 													class="flex w-full items-center justify-between gap-2
 													{selectedCategory === m.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
 													<a
-														href="{m.link || `/${m.slug}` || '##'}"
+														href="{navigateToProperPath(m.link || m.slug)}"
 														aria-label="Click to visit category related products page"
 														class="block">
 														{m.name}
@@ -855,7 +855,7 @@ $: {
 												</div>
 											{:else}
 												<a
-													href="{m.link || `/${m.slug}` || '##'}"
+													href="{navigateToProperPath(m.link || m.slug)}"
 													aria-label="Click to visit category related products page"
 													class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 													{m.name}
@@ -873,7 +873,7 @@ $: {
 																	class="flex w-full items-center justify-between gap-2
 																	{selectedCategory2 === c.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
 																	<a
-																		href="{c.link || `/${c.slug}` || '##'}"
+																		href="{navigateToProperPath(c.link || c.slug)}"
 																		aria-label="Click to visit category related products page"
 																		class="block">
 																		{c.name}
@@ -898,7 +898,7 @@ $: {
 																</div>
 															{:else}
 																<a
-																	href="{c.link || `/${c.slug}` || '##'}"
+																	href="{navigateToProperPath(c.link || c.slug)}"
 																	aria-label="Click to visit category related products page"
 																	class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 																	{c.name}
@@ -911,7 +911,7 @@ $: {
 																<ul class="ml-4">
 																	{#each c.children as cc}
 																		<a
-																			href="{cc.link || `/${cc.slug}` || '##'}"
+																			href="{navigateToProperPath(cc.link || cc.slug)}"
 																			aria-label="Click to visit category related products page"
 																			class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 																			{cc.name}
