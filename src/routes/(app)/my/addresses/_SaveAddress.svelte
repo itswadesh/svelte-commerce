@@ -39,7 +39,7 @@ onMount(() => {
 	}
 
 	if (address.country) {
-		fetchStates()
+		fetchStates(address.country)
 	}
 })
 
