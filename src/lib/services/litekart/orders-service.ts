@@ -112,7 +112,7 @@ export const codCheckout = async ({
 	prescription,
 	server = false,
 	sid = null,
-	storeId,
+	storeId
 }: any) => {
 	try {
 		let res: any = {}
@@ -131,6 +131,35 @@ export const codCheckout = async ({
 		return res || {}
 	} catch (e) {
 		throw error(e.status, e?.message)
+	}
+}
+
+export const phonepeCheckout = async ({
+	address,
+	paymentMethod,
+	prescription,
+	storeId,
+	origin,
+	server = false,
+	sid = null
+}: any) => {
+	try {
+		let res: any = {}
+
+		res = await post(
+			`checkout/phonepe`,
+			{
+				address,
+				prescription,
+				store: storeId,
+				redirectUrl: `${origin}/payment/success`
+			},
+			origin
+		)
+
+		return res || {}
+	} catch (e) {
+		throw error(e.status, e.message?.message || e.message)
 	}
 }
 
