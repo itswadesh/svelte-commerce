@@ -161,7 +161,13 @@ Click on the button to directly deploy to Netlify or Vercel. Zero configuration 
 <img src="https://www.netlify.com/img/deploy/button.svg" alt="Deploy to netlify">
 </a>
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fitswadesh%2Fsvelte-commerce&demo-title=SvelteKit%20Commerce)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fitswadesh%2Fsvelte-commerce&env=PUBLIC_LITEKART_DOMAIN&envDescription=demo.litekart.in)
+
+The following envirnoment variable is mandatory
+```
+PUBLIC_LITEKART_DOMAIN=demo.litekart.in
+```
+You can replace the env variable with your store domain
 
 ### Docker
 
