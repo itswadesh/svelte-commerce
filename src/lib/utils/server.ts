@@ -158,9 +158,9 @@ export const getBySid = async (endpoint: string, sid?: any) => {
 
 export const getBigcommerceApi = async (endpoint: string, query?: any, sid?: any) => {
 	try {
-		// const totalPages = res?.meta?.pagination?.total_pages
-		// const totalItems = res?.meta?.pagination?.total
-
+		const response = await fetch(BIG_COMMERCE_BASE_URL + '/' + endpoint + '?' + serialize(query), {
+			headers: bigcommerceHeaders
+		})
 		const isJson = response.headers.get('content-type')?.includes('application/json')
 		const res = isJson ? await response.json() : await response.text()
 		if (res?.status > 399) {
@@ -174,9 +174,6 @@ export const getBigcommerceApi = async (endpoint: string, query?: any, sid?: any
 		console.log(`/lib/utils/server.ts getBigcommerceApi(${HTTP_ENDPOINT + '/api/' + endpoint})`, e)
 		throw e
 	}
-	const response = await fetch(BIG_COMMERCE_BASE_URL + '/' + endpoint + '?' + serialize(query), {
-		headers: bigcommerceHeaders
-	})
 }
 
 export const postBigCommerceApi = async (endpoint: string, query: any, sid?: any) => {
@@ -204,8 +201,6 @@ export const postBigCommerceApi = async (endpoint: string, query: any, sid?: any
 // ---------------------------------- X ----------------------------------
 
 export const getMedusajsApi = async (endpoint: string, query?: any, sid?: any) => {
-	// console.log('zzzzzzzzzzzzzzzzzz', MEDUSAJS_BASE_URL + '/' + endpoint);
-
 	try {
 		const response = await fetch(MEDUSAJS_BASE_URL + '/' + endpoint, {
 			method: 'GET',

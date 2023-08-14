@@ -72,14 +72,7 @@ export const googleOneTapLoginService = async ({
 	}
 }
 
-export const loginService = async ({
-	email,
-	password,
-	storeId,
-	origin,
-	server = false,
-	sid = null
-}: any) => {
+export const loginService = async ({ email, password, storeId, origin, sid = null }: any) => {
 	try {
 		let res: any = {}
 
@@ -90,7 +83,7 @@ export const loginService = async ({
 				password,
 				store: storeId
 			},
-			origin
+			sid
 		)
 
 		return res
@@ -105,7 +98,6 @@ export const forgotPasswordService = async ({
 	referrer,
 	storeId,
 	origin,
-	server = false,
 	sid = null
 }: any) => {
 	try {
