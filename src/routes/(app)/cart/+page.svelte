@@ -237,7 +237,7 @@ function moveAllUnavailableItemsToWishlist() {
 									</div>
 
 									<div class="flex flex-col divide-y">
-										{#each data.cart?.unavailableItems as item (item.pid)}
+										{#each data.cart?.unavailableItems as item (item.id)}
 											<div class="flex w-full items-start gap-4 py-5">
 												<a
 													href="/product/{item?.slug}"
@@ -324,7 +324,7 @@ function moveAllUnavailableItemsToWishlist() {
 
 						{#if data.cart?.items}
 							<div class="flex flex-col divide-y">
-								{#each data.cart?.items as item, ix (item.id || item.vid || item.pid)}
+								{#each data.cart?.items as item, ix (item.id)}
 									<!-- Product detail start -->
 
 									<div
