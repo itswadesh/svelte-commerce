@@ -29,6 +29,7 @@ export async function load({ url, request, locals, cookies }) {
 			server: true,
 			sid
 		})
+			cookies.set('cartQty', cartObj.qty, { path: '/' })
 
 		if (order.id) throw { status: 307, url: `/my/orders/${order.id}` }
 	} catch (e) {
@@ -50,7 +51,7 @@ export async function load({ url, request, locals, cookies }) {
 	}
 
 	try {
-		cart = CartService.fetchRefreshCart({
+		cart = await CartService.fetchRefreshCart({
 			cookies,
 			storeId: locals.store?.id,
 			server: true,
@@ -78,7 +79,7 @@ export async function load({ url, request, locals, cookies }) {
 			locals.cartId = cart.cartId
 			locals.cartQty = cart.qty
 			locals.cart = cartObj
-			cookies.set('cartId', cartObj.cartId, { path: '/' })
+			// cookies.set('cartId', cartObj.cartId, { path: '/' })
 			cookies.set('cartQty', cartObj.qty, { path: '/' })
 		}
 	} catch (e) { }
