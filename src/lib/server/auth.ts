@@ -3,7 +3,12 @@ import type { Me } from '$lib/types'
 export const authenticateUser = (event: RequestEvent) => {
 	const meFromCookie: string | undefined = event.cookies.get('me')
 	const sidFromCookie: string | undefined = event.cookies.get('connect.sid')
-	if (meFromCookie && sidFromCookie) {
+	if (
+		meFromCookie &&
+		meFromCookie != 'undefined' &&
+		sidFromCookie &&
+		sidFromCookie != 'undefined'
+	) {
 		const me: Me = JSON.parse(meFromCookie)
 		return {
 			active: me.active,
