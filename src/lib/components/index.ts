@@ -6,6 +6,7 @@ import Breadcrumb from './Breadcrumb.svelte'
 import CatelogNav from './CatelogNav.svelte'
 import CheckoutHeader from './CheckoutHeader.svelte'
 import CtrlS from './CtrlS.svelte'
+import DealCountdown from './DealCountdown.svelte'
 import Error from './Error.svelte'
 import Gallery from './Product/Gallery.svelte'
 import GoogleAnalytics from './GoogleAnalytics.svelte'
@@ -68,6 +69,7 @@ export {
 	CollectionsHome,
 	CollectionsHome2,
 	CtrlS,
+	DealCountdown,
 	DesktopFilter,
 	DummyProductCard,
 	Error,
