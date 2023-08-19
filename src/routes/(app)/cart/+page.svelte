@@ -237,7 +237,7 @@ function moveAllUnavailableItemsToWishlist() {
 									</div>
 
 									<div class="flex flex-col divide-y">
-										{#each data.cart?.unavailableItems as item (item.pid)}
+										{#each data.cart?.unavailableItems as item (item.id)}
 											<div class="flex w-full items-start gap-4 py-5">
 												<a
 													href="/product/{item?.slug}"
@@ -253,7 +253,7 @@ function moveAllUnavailableItemsToWishlist() {
 															class="object-contain object-top h-28 w-20 text-xs" />
 													{:else}
 														<div
-															class="h-32 sm:h-40 w-20 bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center">
+															class="h-32 sm:h-40 w-20 bg-zinc-100 flex flex-col items-center justify-center gap-2 p-2 text-zinc-500 text-xs text-center">
 															<svg
 																xmlns="http://www.w3.org/2000/svg"
 																fill="none"
@@ -268,7 +268,7 @@ function moveAllUnavailableItemsToWishlist() {
 																></path>
 															</svg>
 
-															<span>No image available</span>
+															<span>No image</span>
 														</div>
 													{/if}
 												</a>
@@ -324,7 +324,7 @@ function moveAllUnavailableItemsToWishlist() {
 
 						{#if data.cart?.items}
 							<div class="flex flex-col divide-y">
-								{#each data.cart?.items as item, ix (item.id || item.vid || item.pid)}
+								{#each data.cart?.items as item, ix (item.id)}
 									<!-- Product detail start -->
 
 									<div
@@ -345,7 +345,7 @@ function moveAllUnavailableItemsToWishlist() {
 													class="object-contain object-top h-28 w-20 text-xs" />
 											{:else}
 												<div
-													class="h-32 sm:h-40 w-20 bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center">
+													class="h-32 sm:h-40 w-20 bg-zinc-100 flex flex-col items-center justify-center gap-2 p-2 text-zinc-500 text-xs text-center">
 													<svg
 														xmlns="http://www.w3.org/2000/svg"
 														fill="none"
@@ -360,7 +360,7 @@ function moveAllUnavailableItemsToWishlist() {
 														></path>
 													</svg>
 
-													<span>No image available</span>
+													<span>No image</span>
 												</div>
 											{/if}
 										</a>

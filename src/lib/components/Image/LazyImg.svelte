@@ -68,8 +68,7 @@ span.loader-line {
 import { browser } from '$app/environment'
 import { fade } from 'svelte/transition'
 import { getCdnImageUrl } from '$lib/utils'
-import { onDestroy } from 'svelte'
-import { onMount } from 'svelte'
+import { onDestroy, onMount } from 'svelte'
 import { page } from '$app/stores'
 import lazyload from 'vanilla-lazyload'
 
@@ -99,7 +98,10 @@ onMount(() => {
 })
 
 onDestroy(() => {
-	if (lazyloadInstance) lazyloadInstance.destroy()
+	if (lazyloadInstance) {
+		lazyloadInstance.destroy()
+	}
+
 	imageLoaded = true
 })
 </script>

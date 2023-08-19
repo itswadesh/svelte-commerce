@@ -53,6 +53,7 @@ export const getCdnImageUrl = (src: string, IMAGE_CDN_URL: string) => {
 }
 
 const toast = (title: any, type: ToastType | undefined) => {
+	if (title?.body?.message) title = title?.body?.message
 	if (title?.message) title = title?.message
 	allToasts?.remove()
 	allToasts = toasts.add({
@@ -63,8 +64,8 @@ const toast = (title: any, type: ToastType | undefined) => {
 		theme: 'dark',
 		placement: 'top-center',
 		showProgress: false,
-		onClick: () => { },
-		onRemove: () => { }
+		onClick: () => {},
+		onRemove: () => {}
 	})
 }
 

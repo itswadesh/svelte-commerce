@@ -115,7 +115,7 @@ async function submit(pm) {
 
 			// console.log('res of cod', res)
 
-			goto(`/payment/success?id=${res?._id || res?.id}&status=PAYMENT_SUCCESS&provider=COD`)
+			goto(`/payment/success?orderId=${res?._id || res?.id}&status=PAYMENT_SUCCESS&provider=COD`)
 		} catch (e) {
 			data.err = e
 			toast(e?.body?.message || e, 'error')
@@ -247,7 +247,7 @@ async function submit(pm) {
 							origin: $page.data.origin
 						})
 						toast('Payment success', 'success')
-						goto(`/payment/success?id=${capture._id || capture.id}`)
+						goto(`/payment/success?orderId=${capture._id || capture.id}`)
 					} catch (e) {
 						data.err = e
 						goto(`/payment/failure?ref=/checkout/payment-options?address=${data.addressId}`)

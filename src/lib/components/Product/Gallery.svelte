@@ -17,7 +17,7 @@ export let title = ''
 export let selectedImgIndex = 0
 export let showPhotosModal = false
 
-let product_image_dimention = $page.data.store.product_image_dimention || '3x4'
+let product_image_dimention = $page.data.store?.product_image_dimention || '3x4'
 let selectedimg: string
 
 $: if (images?.length) {

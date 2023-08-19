@@ -5,7 +5,7 @@ import { ProductCard, DummyProductCard } from '$lib/components'
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
-let product_image_dimension = $page.data.store.product_image_dimension || '3x4'
+let product_image_dimension = $page.data.store?.product_image_dimension || '3x4'
 </script>
 
 <!-- Trending products -->
