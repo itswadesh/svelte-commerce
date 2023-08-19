@@ -127,6 +127,7 @@ async function onSearchSubmit({ detail }) {
 						src="{$page?.data?.store?.logo}"
 						alt="logo"
 						height="64"
+						width="160"
 						aspect_ratio="4:1"
 						class="max-h-10 sm:max-h-16 max-w-[160px] object-contain object-left" />
 				{:else if $page?.data?.store?.websiteName}

@@ -1,5 +1,5 @@
 <script>
-import { LazyImg, ProductCard } from '$lib/components'
+import { DealCountdown, LazyImg, ProductCard } from '$lib/components'
 import { onMount } from 'svelte'
 import { SplideSlide } from '@splidejs/svelte-splide'
 
@@ -24,11 +24,16 @@ onMount(async () => {
 {#if deals.length}
 	<ul class="mb-5 sm:mb-10 p-0 list-none flex flex-col gap-5 sm:gap-10">
 		{#each deals as deal}
-			{#if deal}
+			{#if deal && deal.products?.length}
 				<li>
-					<h2 class="p-3 py-5 text-center uppercase sm:px-10 md:py-10">
-						{deal.name}
-					</h2>
+					<header
+						class="p-3 py-5 sm:px-10 md:py-10 flex flex-col items-center justify-center text-center gap-5">
+						<h2 class="uppercase">
+							{deal.name}
+						</h2>
+
+						<DealCountdown startTimeISO="{deal.startTimeISO}" endTimeISO="{deal.endTimeISO}" />
+					</header>
 
 					<div class="hidden sm:block">
 						<svelte:component
