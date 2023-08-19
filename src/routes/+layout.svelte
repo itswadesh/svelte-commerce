@@ -87,10 +87,10 @@ onMount(async () => {
 <svelte:head>
 	<link rel="icon" type="image/x-icon" href="{$page.data.store?.favicon}" />
 	<link rel="shortcut icon" type="image/x-icon" href="{$page.data.store?.favicon}" />
-	<meta name="theme-color" content="{$page.data.store.themeColor}" />
+	<meta name="theme-color" content="{$page.data.store?.themeColor}" />
 	<link rel="apple-touch-icon" href="{$page.data.store?.favicon}" />
-	<meta name="apple-mobile-web-app-title" content="{$page.data.store.websiteName}" />
-	<meta name="application-name" content="{$page.data.store.websiteName}" />
+	<meta name="apple-mobile-web-app-title" content="{$page.data.store?.websiteName}" />
+	<meta name="application-name" content="{$page.data.store?.websiteName}" />
 	<link
 		href="https://fonts.googleapis.com/css2?family={$page.data.store
 			.fontFamily}:wght@100;200;300;400;500;600;700;800;900&display=swap"
@@ -216,7 +216,7 @@ onMount(async () => {
 	<div class="h-screen w-full bg-white flex items-center justify-center">
 		<div
 			class="fixed top-0 inset-x-0 z-10 p-5 px-10 flex items-center justify-center border-b shadow-md">
-			<LazyImg src="{$page.data.store.logo}" class="h-10 w-auto object-contain object-center" />
+			<LazyImg src="{$page.data.store?.logo}" class="h-10 w-auto object-contain object-center" />
 		</div>
 
 		<div class="flex items-center justify-center p-10 bg-white text-center">
@@ -225,7 +225,7 @@ onMount(async () => {
 				<img src="{storeClosed}" alt="" class="h-52 w-auto object-contain object-center" />
 
 				<p>
-					{$page.data.store.closedMessage}
+					{$page.data.store?.closedMessage}
 				</p>
 			</div>
 		</div>

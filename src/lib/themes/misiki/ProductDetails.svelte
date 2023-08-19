@@ -169,7 +169,7 @@ let isExpired = false
 let isWishlisted = false
 let loading = false
 let loadingForWishlist = false
-let product_image_dimension = $page.data.store.product_image_dimension || '3x4'
+let product_image_dimension = $page.data.store?.product_image_dimension || '3x4'
 let productReviews = {}
 let recentlyViewed = []
 let ribbonTags = []
@@ -230,7 +230,7 @@ onMount(async () => {
 				isWishlisted = await WishlistService.checkWishlist({
 					pid: data.product?._id,
 					vid: data.product?._id,
-					storeId: $page.data.store.id,
+					storeId: $page.data.store?.id,
 					origin: $page.data.origin
 				})
 			} catch (e) {
@@ -244,7 +244,7 @@ onMount(async () => {
 })
 
 const storeRecentlyViewedToLocatStorage = async () => {
-	const localRecentlyViewed = localStorage.getItem(`recently_viewed_${$page.data.store.id}`)
+	const localRecentlyViewed = localStorage.getItem(`recently_viewed_${$page.data.store?.id}`)
 
 	if (!!localRecentlyViewed && localRecentlyViewed !== 'undefined') {
 		recentlyViewed = JSON.parse(localRecentlyViewed)
@@ -273,7 +273,10 @@ const storeRecentlyViewedToLocatStorage = async () => {
 		recentlyViewed = resvw
 
 		if (browser) {
-			localStorage.setItem(`recently_viewed_${$page.data.store.id}`, JSON.stringify(recentlyViewed))
+			localStorage.setItem(
+				`recently_viewed_${$page.data.store?.id}`,
+				JSON.stringify(recentlyViewed)
+			)
 		}
 	}
 }

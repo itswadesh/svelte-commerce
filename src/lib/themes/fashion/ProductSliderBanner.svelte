@@ -70,7 +70,7 @@ function handleGallery(index) {
 						<!-- <img
 							alt="{data.product?.name}"
 							height="500"
-							src="{`${getCdnImageUrl(img, $page.data.store.IMAGE_CDN_URL)}?tr=h-500`}"
+							src="{`${getCdnImageUrl(img, $page.data.store?.IMAGE_CDN_URL)}?tr=h-500`}"
 							class="block h-auto w-full justify-center object-contain object-center" /> -->
 					</button>
 				</SplideSlide>

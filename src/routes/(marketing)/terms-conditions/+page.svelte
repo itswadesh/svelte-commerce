@@ -96,7 +96,7 @@ let seoProps = {
 					(including images, text, page layout, or form) of {$page.data.store?.websiteName} and our associates
 					without express written consent. You may not use any meta tags or any other “hidden text” utilizing
 					{$page.data.store?.websiteName}’s name or trademarks without the express written consent
-					of {$page.data.store.websiteName}. Any unauthorized use terminates the permission or
+					of {$page.data.store?.websiteName}. Any unauthorized use terminates the permission or
 					license granted by {$page.data.store?.websiteName}. You are granted a limited, revocable,
 					and nonexclusive right to create a hyperlink to the home page of {$page.data.store
 						.websiteName}
