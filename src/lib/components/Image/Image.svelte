@@ -36,8 +36,8 @@ onMount(() => {
 	width="{width}px"
 	height="{height}px"
 	src="{!loaded
-		? `${getCdnImageUrl(src, $page.data.store.IMAGE_CDN_URL)}?width=2&height=4`
-		: `${getCdnImageUrl(src, $page.data.store.IMAGE_CDN_URL)}?width=${w}&height=${h}`}"
+		? `${getCdnImageUrl(src, $page.data.store?.IMAGE_CDN_URL)}?width=2&height=4`
+		: `${getCdnImageUrl(src, $page.data.store?.IMAGE_CDN_URL)}?width=${w}&height=${h}`}"
 	alt="{alt}"
 	class:loaded="{loaded}"
 	class="{clazz} whitespace-pre-line"

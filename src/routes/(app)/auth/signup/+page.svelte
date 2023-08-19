@@ -79,7 +79,7 @@ async function submit(n) {
 			password: password,
 			passwordConfirmation: passwordConfirmation,
 			role: role,
-			storeId: $page.data.store.id,
+			storeId: $page.data.store?.id,
 			origin: $page.data.origin
 		})
 
