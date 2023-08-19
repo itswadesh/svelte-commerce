@@ -85,10 +85,10 @@ onMount(async () => {
 </script>
 
 <svelte:head>
-	<link rel="icon" type="image/x-icon" href="{$page.data.store.favicon}" />
-	<link rel="shortcut icon" type="image/x-icon" href="{$page.data.store.favicon}" />
+	<link rel="icon" type="image/x-icon" href="{$page.data.store?.favicon}" />
+	<link rel="shortcut icon" type="image/x-icon" href="{$page.data.store?.favicon}" />
 	<meta name="theme-color" content="{$page.data.store.themeColor}" />
-	<link rel="apple-touch-icon" href="{$page.data.store.favicon}" />
+	<link rel="apple-touch-icon" href="{$page.data.store?.favicon}" />
 	<meta name="apple-mobile-web-app-title" content="{$page.data.store.websiteName}" />
 	<meta name="application-name" content="{$page.data.store.websiteName}" />
 	<link
