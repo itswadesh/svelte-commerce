@@ -24,6 +24,7 @@ let err = null
 let formChanged = false
 let loading = false
 let loadingStates = false
+let selectedCountry = {}
 let showErrorMessage = false
 let states = []
 
@@ -44,12 +45,24 @@ onMount(() => {
 
 	if (address.country) {
 		fetchStates(address.country)
+		getSelectedCountry()
 	}
 })
+
+function getSelectedCountry() {
+	selectedCountry = countries.filter((c) => {
+		if (c.code === address.country) {
+			return c
+		}
+	})
+
+	// console.log('selectedCountry', selectedCountry)
+}
 
 async function onCountryChange(country) {
 	address.state = null
 	fetchStates(country)
+	getSelectedCountry()
 }
 
 async function fetchStates(country) {
@@ -378,9 +391,10 @@ function validatePhoneNumber(phoneNumber) {
 		<input type="hidden" name="lastName" value="{address.lastName}" />
 		<input type="hidden" name="locality" value="{address.locality}" />
 		<input type="hidden" name="phone" value="{address.phone}" />
+		<input type="hidden" name="selectedCountry" value="{selectedCountry}" />
+		<input type="hidden" name="showErrorMessage" bind:value="{showErrorMessage}" />
 		<input type="hidden" name="state" value="{address.state}" />
 		<input type="hidden" name="zip" value="{address.zip}" />
-		<input type="hidden" name="showErrorMessage" bind:value="{showErrorMessage}" />
 
 		<PrimaryButton type="submit" loading="{loading}" class="w-60">Save Address</PrimaryButton>
 	</form>
