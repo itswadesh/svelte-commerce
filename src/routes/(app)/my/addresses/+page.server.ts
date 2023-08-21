@@ -31,29 +31,34 @@ const saveAddress = async ({ request, cookies, locals }) => {
 	const phone = data.get('phone')
 	const state = data.get('state')
 	const zip = data.get('zip')
+	const showErrorMessage = data.get('showErrorMessage')
 	const sid = cookies.get('connect.sid')
 
-	const res = await AddressService.saveAddress({
-		address,
-		city,
-		company,
-		country,
-		email,
-		firstName,
-		id,
-		lastName,
-		locality,
-		phone,
-		state,
-		zip,
-		storeId: locals.store?.id,
-		sid,
-		origin: locals.origin
-	})
+	if (showErrorMessage === true) {
+		throw error(404, 'Please enter valid phone number')
+	} else {
+		const res = await AddressService.saveAddress({
+			address,
+			city,
+			company,
+			country,
+			email,
+			firstName,
+			id,
+			lastName,
+			locality,
+			phone,
+			state,
+			zip,
+			storeId: locals.store?.id,
+			sid,
+			origin: locals.origin
+		})
 
-	// console.log('res of save address = ', res)
+		// console.log('res of save address = ', res)
 
-	return res
+		return res
+	}
 }
 
 const editAddress = async ({ request, cookies, locals }) => {
