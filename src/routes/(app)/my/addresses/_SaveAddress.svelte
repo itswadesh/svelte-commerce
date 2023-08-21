@@ -14,13 +14,17 @@ export let address = {}
 export let countries = []
 export let editAddress = false
 
+// console.log('$page', $page)
 // console.log('address', address)
 // console.log('countries', countries)
+
+address.phone = address.phone || $page?.data?.me?.phone || ''
 
 let err = null
 let formChanged = false
 let loading = false
 let loadingStates = false
+let showErrorMessage = false
 let states = []
 
 onMount(() => {
@@ -110,6 +114,25 @@ async function SaveAddress(address) {
 }
 
 // $: console.log('refinedAddress', JSON.stringify(refinedAddress))
+
+function validatePhoneNumber(phoneNumber) {
+	// Remove any spaces from the phone number
+	phoneNumber = phoneNumber.replace(/\s/g, '')
+
+	// Remove any leading '0' or '+91'
+	if (phoneNumber.startsWith('+91')) {
+		phoneNumber = phoneNumber.substring(3)
+	}
+
+	// Check if the resulting number is numeric and has a valid length
+	if (/^\d+$/.test(phoneNumber) && phoneNumber.length === 10) {
+		showErrorMessage = false
+		return true
+	}
+
+	showErrorMessage = true
+	return false
+}
 </script>
 
 <div>
@@ -120,14 +143,27 @@ async function SaveAddress(address) {
 		method="POST"
 		use:enhance="{() => {
 			return async ({ result }) => {
-				// console.log('result, address.id', result, address.id)
+				console.log(
+					'result, address.id, $page?.url?.pathname',
+					result,
+					address.id,
+					$page?.url?.pathname
+				)
 
 				if (result?.data) {
 					const newAddressId = result.data?._id || result.data?.id
 					toast('Address Info Saved.', 'success')
+
 					if (address.id === 'new' && newAddressId) {
-						goto(`/checkout/payment-options?address=${newAddressId}`)
+						if ($page?.url?.pathname.includes('checkout')) {
+							goto(`/checkout/payment-options?address=${newAddressId}`)
+						} else {
+							goto(`${newAddressId}`)
+						}
+					} else {
+						goto(history.back())
 					}
+
 					await applyAction(result)
 				} else if (result?.error) {
 					toast(result?.error?.message, 'error')
@@ -194,11 +230,16 @@ async function SaveAddress(address) {
 					<Textbox
 						type="tel"
 						placeholder="Enter Phone"
-						maxlength="13"
+						maxlength="17"
 						bind:value="{address.phone}"
+						on:input="{() => validatePhoneNumber(address.phone)}"
 						required />
 
-					<p class="mt-1">E.g.+nnxxxxxxxxxx</p>
+					<!-- <p class="mt-1">E.g.+nnxxxxxxxxxx</p> -->
+
+					{#if showErrorMessage}
+						<p id="phone-warning" class="text-rose-600">Please enter vaild phone number</p>
+					{/if}
 				</div>
 			</div>
 
@@ -339,6 +380,7 @@ async function SaveAddress(address) {
 		<input type="hidden" name="phone" value="{address.phone}" />
 		<input type="hidden" name="state" value="{address.state}" />
 		<input type="hidden" name="zip" value="{address.zip}" />
+		<input type="hidden" name="showErrorMessage" bind:value="{showErrorMessage}" />
 
 		<PrimaryButton type="submit" loading="{loading}" class="w-60">Save Address</PrimaryButton>
 	</form>
