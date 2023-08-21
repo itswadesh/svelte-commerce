@@ -31,24 +31,26 @@ export const delay = (delayInms: number) => {
 	})
 }
 
-export const getCdnImageUrl = (src: string, IMAGE_CDN_URL: string) => {
-	if (src) {
-		if (
-			IMAGE_CDN_URL &&
-			(src.includes('https://s3.ap-south-1.amazonaws.com/litekart.in/') ||
-				src.includes('https://misiki.s3.ap-south-1.amazonaws.com/') ||
-				src.includes('https://cartflo.s3.me-central-1.amazonaws.com') ||
-				src.includes('https://varnijewels.s3.amazonaws.com/'))
-		) {
-			const originalImageUrl = src
-				.replace('https://s3.ap-south-1.amazonaws.com/litekart.in/', '/')
-				.replace('https://misiki.s3.ap-south-1.amazonaws.com/', '/misiki/')
-				.replace('https://cartflo.s3.me-central-1.amazonaws.com/', '/cartflo/')
-				.replace('https://varnijewels.s3.amazonaws.com/', '/')
-			return IMAGE_CDN_URL + originalImageUrl
-		} else {
-			return src
+export const getCdnImageUrl = ({ src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY = false }) => {
+	const possibleImageUrls = [
+		'https://s3.ap-south-1.amazonaws.com/litekart.in/',
+		'https://misiki.s3.ap-south-1.amazonaws.com/',
+		'https://cartflo.s3.me-central-1.amazonaws.com',
+		'https://varnijewels.s3.amazonaws.com/'
+	]
+	let originalImageUrl = src
+	let shouldAttachCdn = false
+	for (const i of possibleImageUrls) {
+		if (src?.includes(i)) {
+			originalImageUrl = src.replace(i, '/')
+			shouldAttachCdn = true
 		}
+	}
+	if (shouldAttachCdn) {
+		if (NO_QUERY) return originalImageUrl
+		else return IMAGE_CDN_URL + originalImageUrl
+	} else {
+		return originalImageUrl
 	}
 }
 
@@ -64,8 +66,8 @@ const toast = (title: any, type: ToastType | undefined) => {
 		theme: 'dark',
 		placement: 'top-center',
 		showProgress: false,
-		onClick: () => {},
-		onRemove: () => {}
+		onClick: () => { },
+		onRemove: () => { }
 	})
 }
 
