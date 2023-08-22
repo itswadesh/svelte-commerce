@@ -44,6 +44,10 @@ const saveAddress = async ({ request, cookies, locals }) => {
 	} else {
 		phone = phone.replace(/[a-zA-Z ]/g, '')
 
+		if (phone.startsWith('0')) {
+			phone = phone.substring(1)
+		}
+
 		if (!phone.startsWith('+')) {
 			phone = (selectedCountry[0].dialCode || '+91') + phone
 		}
@@ -98,6 +102,12 @@ const editAddress = async ({ request, cookies, locals }) => {
 		throw error(404, 'Please enter valid phone number')
 	} else {
 		phone = phone.replace(/[a-zA-Z ]/g, '')
+
+		console.log(phone)
+
+		if (phone.startsWith('0')) {
+			phone = phone.substring(1)
+		}
 
 		if (!phone.startsWith('+')) {
 			phone = (selectedCountry[0].dialCode || '+91') + phone
