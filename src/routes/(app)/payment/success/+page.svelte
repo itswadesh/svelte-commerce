@@ -68,9 +68,10 @@ import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 import SEO from '$lib/components/SEO/index.svelte'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
+import { invalidateAll } from '$app/navigation'
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
+console.log('zzzzzzzzzzzzzzzzzz', data)
 
 const seoProps = {
 	title: 'Payment Success ',
@@ -78,6 +79,7 @@ const seoProps = {
 }
 
 onMount(async () => {
+	invalidateAll()
 	if (!data.order) return
 	fireGTagEvent('purchase', data.order)
 })
