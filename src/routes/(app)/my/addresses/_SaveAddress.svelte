@@ -84,14 +84,36 @@ async function fetchStates(country) {
 	}
 }
 
+function removeSpacesAndAlphabets(input) {
+	// Remove spaces and alphabetic characters using regular expression
+	const result = input.replace(/[a-zA-Z ]/g, '')
+
+	return result
+}
+
+
 async function SaveAddress(address) {
 	try {
 		loading = true
 		err = null
 
 		let id = address._id || address.id || 'new'
-		const { city, company, country, email, firstName, lastName, locality, phone, state, zip } =
+		let { city, company, country, email, firstName, lastName, locality, phone, state, zip } =
 			address
+
+
+						
+			if (phone.startsWith('0')) {
+				phone = phone.substring(1)
+			}
+
+			phone = removeSpacesAndAlphabets(phone)
+			
+			getSelectedCountry()
+			if (!phone.startsWith('+')) {
+				phone = (selectedCountry[0].dialCode || '+91') + phone
+			}
+		
 
 		toast('Saving Address Info...', 'info')
 
@@ -133,9 +155,11 @@ function validatePhoneNumber(phoneNumber) {
 	phoneNumber = phoneNumber.replace(/\s/g, '')
 
 	// Remove any leading '0' or '+91'
-	if (phoneNumber.startsWith('+91')) {
-		phoneNumber = phoneNumber.substring(3)
-	}
+	 if (phoneNumber.startsWith('0')) {
+        phoneNumber = phoneNumber.substring(1);
+      } else if (phoneNumber.startsWith('+91')) {
+        phoneNumber = phoneNumber.substring(3);
+      }
 
 	// Check if the resulting number is numeric and has a valid length
 	if (/^\d+$/.test(phoneNumber) && phoneNumber.length === 10) {
@@ -173,8 +197,10 @@ function validatePhoneNumber(phoneNumber) {
 						} else {
 							goto(`${newAddressId}`)
 						}
+					} else if ($page?.url?.pathname.includes('checkout')) {
+						goto(`/checkout/address`)
 					} else {
-						goto(history.back())
+						goto(`/my/addresses?sort=-updatedAt`)
 					}
 
 					await applyAction(result)
