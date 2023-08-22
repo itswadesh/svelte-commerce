@@ -29,7 +29,7 @@ export async function load({ url, request, locals, cookies }) {
 			server: true,
 			sid
 		})
-			cookies.set('cartQty', cartObj.qty, { path: '/' })
+			cookies.set('cartQty', '0', { path: '/' })
 
 		if (order.id) throw { status: 307, url: `/my/orders/${order.id}` }
 	} catch (e) {
