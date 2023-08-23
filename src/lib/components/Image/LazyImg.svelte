@@ -120,7 +120,7 @@ if (extension === 'svg') {
 
 <div class="relative">
 	{#if imageLoaded}
-		{#if IMAGE_CDN_PROVIDER === 'thumbor'}
+		{#if IMAGE_CDN_PROVIDER === 'imagekit'}
 			{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } ).includes('http')}
 				<img
 					in:fade="{{ duration: 300 }}"
@@ -150,7 +150,7 @@ if (extension === 'svg') {
 					width="{w}"
 					class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
 			{/if}
-		{:else if IMAGE_CDN_PROVIDER === 'imagekit'}
+		{:else if IMAGE_CDN_PROVIDER === 'thumbor'}
 			{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } ).includes('http')}
 				<img
 					in:fade="{{ duration: 300 }}"
@@ -181,7 +181,7 @@ if (extension === 'svg') {
 					class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
 			{/if}
 		{/if}
-	{:else if IMAGE_CDN_PROVIDER === 'thumbor'}
+	{:else if IMAGE_CDN_PROVIDER === 'imagekit'}
 		{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } ).includes('http')}
 			<img
 				in:fade="{{ duration: 300 }}"
@@ -207,7 +207,7 @@ if (extension === 'svg') {
 				})}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(':', '-')}`}"
 				class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
 		{/if}
-	{:else if IMAGE_CDN_PROVIDER === 'imagekit'}
+	{:else if IMAGE_CDN_PROVIDER === 'thumbor'}
 		{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } ).includes('http')}
 			<img
 				in:fade="{{ duration: 300 }}"
