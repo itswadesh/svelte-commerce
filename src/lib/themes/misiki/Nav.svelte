@@ -123,13 +123,10 @@ async function onSearchSubmit({ detail }) {
 
 			<a href="/" aria-label="Go to home" class="block shrink-0">
 				{#if $page?.data?.store?.logo}
-					<LazyImg
+					<img
 						src="{$page?.data?.store?.logo}"
 						alt="logo"
-						height="64"
-						width="160"
-						aspect_ratio="4:1"
-						class="max-h-10 sm:max-h-16 max-w-[160px] object-contain object-left" />
+						class="max-h-10 sm:max-h-16 w-40 object-contain object-left" />
 				{:else if $page?.data?.store?.websiteName}
 					<h2
 						class="bg-gradient-to-b from-primary-500 to-secondary-500 bg-clip-text text-transparent truncate w-40 sm:w-auto sm:max-w-sm">
