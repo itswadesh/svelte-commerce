@@ -1,5 +1,5 @@
-import { CartService, OrdersService } from '$lib/services'
-import { cartStore } from '$lib/store/cart'
+import { OrdersService } from '$lib/services'
+import { getCartFromStore } from '$lib/store/cart'
 import { error, redirect } from '@sveltejs/kit'
 
 export const prerender = false
@@ -11,7 +11,7 @@ export async function load({ url, request, locals, cookies }) {
 	const paymentReferenceId = url.searchParams.get('payment_reference_id')
 	const sid = cookies.get('connect.sid')
 	const status = url.searchParams.get('status')
-	const storeId = locals.store?.id
+	const storeId = locals.storeId
 
 	let cart
 	let err
@@ -26,25 +26,32 @@ export async function load({ url, request, locals, cookies }) {
 			paymentMode,
 			paymentReferenceId,
 			status,
-			server: true,
 			sid,
-			storeId
+			storeId,
+			origin: locals.origin
 		})
-		cookies.set('cartId', null, { path: '/', expires: new Date(0) })
-		cookies.set('cartQty', '0', { path: '/', expires: new Date(0) })
 
-	 
-		locals.cartId = null
-		locals.cartQty = 0
+		cart = await getCartFromStore({
+			origin: locals.origin,
+			storeId,
+			cartId,
+			forceUpdate: true
+		})
+
+		cookies.set('cartId', cart?.cart_id || cart?.cartId, { path: '/', expires: new Date(0) })
+		cookies.set('cartQty', cart?.qty, { path: '/', expires: new Date(0) })
+
+		locals.cartId = cart?.cart_id || cart?.cartId
+		locals.cartQty = cart?.qty
 	} catch (e) {
-		// console.log('error at payment success page', e);
+		console.log('error at payment success page', e);
 
 		err = e
 
 		if (e.status === 401) {
-			throw redirect(307, '/auth/login')
+			redirect(307, '/auth/login');
 		} else {
-			throw error(e?.status, e?.body?.message || e?.data?.message || e?.message)
+			error(e?.status, e?.body?.message || e?.data?.message || e?.message);
 		}
 	} finally {
 		loading = false
@@ -78,8 +85,6 @@ export async function load({ url, request, locals, cookies }) {
 	// 		locals.cartId = cartObj.cartId
 	// 		locals.cartQty = cartObj.qty
 	// 		locals.cart = cartObj
-	// 		cookies.set('cartId', cartObj.cartId, { path: '/', expires: new Date(0) })
-	// 		cookies.set('cartQty', JSON.stringify(cartObj.qty), { path: '/', expires: new Date(0) })
 	// 	}
 	// } catch (e) {
 	// 	// console.log('error at payment success page cart', e);
