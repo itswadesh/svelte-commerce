@@ -115,12 +115,10 @@ async function submit(n) {
 <div class="flex w-full max-w-md flex-col rounded-2xl border bg-white p-10 shadow-2xl">
 	<a href="/" aria-label="Go to home" class="mx-auto mb-8 block max-w-max">
 		{#if $page.data.store?.logo}
-			<LazyImg
+			<img
 				src="{$page?.data?.store?.logo}"
 				alt="logo"
-				height="64"
-				aspect_ratio="4:1"
-				class="max-h-16 max-w-[160px] object-contain object-center" />
+				class="max-h-10 sm:max-h-16 w-40 object-contain object-center" />
 		{:else}
 			<h1
 				class="bg-gradient-to-b from-primary-500 to-primary-700 bg-clip-text text-3xl font-extrabold text-transparent underline decoration-zinc-800">
@@ -133,7 +131,7 @@ async function submit(n) {
 		{/if}
 	</a>
 
-	<h1 class="mb-8 w-full text-center text-2xl font-semibold text-primary-500">Signup</h1>
+	<h2 class="mb-8 w-full text-center text-2xl font-semibold text-primary-500">Signup</h2>
 
 	<Error err="{err}" />
 
