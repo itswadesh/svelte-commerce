@@ -19,7 +19,7 @@ import SEO from '$lib/components/SEO/index.svelte'
 const cookies = Cookie()
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
+console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	title: `Cart`,
@@ -237,7 +237,7 @@ function moveAllUnavailableItemsToWishlist() {
 									</div>
 
 									<div class="flex flex-col divide-y">
-										{#each data.cart?.unavailableItems as item (item.id)}
+										{#each data.cart?.unavailableItems as item (item?._id)}
 											<div class="flex w-full items-start gap-4 py-5">
 												<a
 													href="/product/{item?.slug}"
@@ -324,7 +324,7 @@ function moveAllUnavailableItemsToWishlist() {
 
 						{#if data.cart?.items}
 							<div class="flex flex-col divide-y">
-								{#each data.cart?.items as item, ix (item.id)}
+								{#each data.cart?.items as item, ix (item?._id)}
 									<!-- Product detail start -->
 
 									<div
@@ -438,7 +438,7 @@ function moveAllUnavailableItemsToWishlist() {
 																loading[ix] = false
 															}
 														}}">
-														<input type="hidden" name="id" value="{item.id}" />
+														<input type="hidden" name="id" value="{item._id}" />
 														<input type="hidden" name="vid" value="{item.vid}" />
 														<input type="hidden" name="pid" value="{item.pid}" />
 														<input type="hidden" name="qty" value="{-1}" />
@@ -496,7 +496,7 @@ function moveAllUnavailableItemsToWishlist() {
 																loading[ix] = false
 															}
 														}}">
-														<input type="hidden" name="id" value="{item.id}" />
+														<input type="hidden" name="id" value="{item._id}" />
 														<input type="hidden" name="vid" value="{item.vid}" />
 														<input type="hidden" name="pid" value="{item.pid}" />
 														<input type="hidden" name="qty" value="{+1}" />
@@ -542,7 +542,7 @@ function moveAllUnavailableItemsToWishlist() {
 															loading[ix] = false
 														}
 													}}">
-													<input type="hidden" name="id" value="{item.id}" />
+													<input type="hidden" name="id" value="{item._id}" />
 													<input type="hidden" name="vid" value="{item.vid}" />
 													<input type="hidden" name="pid" value="{item.pid}" />
 													<input type="hidden" name="qty" value="{-9999999}" />
