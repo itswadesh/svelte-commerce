@@ -150,6 +150,9 @@ if (extension === 'svg') {
 					width="{w}"
 					class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
 			{/if}
+			<div class="absolute inset-0 flex itmes-center justify-center">
+				<span class="loader-line"></span>
+			</div>
 		{:else if IMAGE_CDN_PROVIDER === 'thumbor'}
 			{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } ).includes('http')}
 				<img
@@ -181,6 +184,9 @@ if (extension === 'svg') {
 					class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
 			{/if}
 		{/if}
+		<div class="absolute inset-0 flex itmes-center justify-center">
+			<span class="loader-line"></span>
+		</div>
 	{:else if IMAGE_CDN_PROVIDER === 'imagekit'}
 		{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } ).includes('http')}
 			<img
@@ -194,7 +200,10 @@ if (extension === 'svg') {
 					NO_QUERY: true
 				})}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(':', '-')}`}"
 				class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
-		{:else}
+			<div class="absolute inset-0 flex itmes-center justify-center">
+				<span class="loader-line"></span>
+			</div>
+		{:else if src}
 			<img
 				in:fade="{{ duration: 300 }}"
 				alt=" "
@@ -206,6 +215,11 @@ if (extension === 'svg') {
 					NO_QUERY: true
 				})}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(':', '-')}`}"
 				class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
+			<div class="absolute inset-0 flex itmes-center justify-center">
+				<span class="loader-line"></span>
+			</div>
+		{:else}
+			<p></p>
 		{/if}
 	{:else if IMAGE_CDN_PROVIDER === 'thumbor'}
 		{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } ).includes('http')}
@@ -220,7 +234,10 @@ if (extension === 'svg') {
 					NO_QUERY: true
 				})}`}"
 				class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
-		{:else}
+			<div class="absolute inset-0 flex itmes-center justify-center">
+				<span class="loader-line"></span>
+			</div>
+		{:else if src}
 			<img
 				in:fade="{{ duration: 300 }}"
 				alt=" "
@@ -232,12 +249,17 @@ if (extension === 'svg') {
 					NO_QUERY: true
 				})}`}"
 				class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
+			<div class="absolute inset-0 flex itmes-center justify-center">
+				<span class="loader-line"></span>
+			</div>
+		{:else}
+			<p></p>
 		{/if}
-	{/if}
 
-	<div class="absolute inset-0 flex itmes-center justify-center">
-		<span class="loader-line"></span>
-	</div>
+		<!-- <div class="absolute inset-0 flex itmes-center justify-center">
+			<span class="loader-line"></span>
+		</div> -->
+	{/if}
 </div>
 
 <!-- <img
