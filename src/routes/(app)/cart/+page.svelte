@@ -19,7 +19,7 @@ import SEO from '$lib/components/SEO/index.svelte'
 const cookies = Cookie()
 
 export let data
-console.log('zzzzzzzzzzzzzzzzzz', data)
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	title: `Cart`,
