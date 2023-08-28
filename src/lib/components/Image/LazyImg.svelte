@@ -97,12 +97,26 @@ let imageLoaded = false
 let isSvg = false
 let lazyloadInstance: any
 
+// let loadedImage = false
+
 onMount(() => {
 	if (browser) {
 		lazyloadInstance = new lazyload({
 			thresholds: '50px 10%'
 		})
 	}
+
+	const newImg = new Image()
+	newImg.src = src
+
+	newImg.onload = () => {
+		src = src
+	}
+
+	newImg.onerror = () => {
+       src = ''
+	}
+
 })
 
 onDestroy(() => {
@@ -219,10 +233,11 @@ if (extension === 'svg') {
 				<span class="loader-line"></span>
 			</div>
 		{:else}
-			<p></p>
+		<p></p>
 		{/if}
 	{:else if IMAGE_CDN_PROVIDER === 'thumbor'}
 		{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } ).includes('http')}
+			
 			<img
 				in:fade="{{ duration: 300 }}"
 				alt=" "
