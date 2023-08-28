@@ -173,7 +173,7 @@ if (extension === 'svg') {
 					in:fade="{{ duration: 300 }}"
 					alt="{alt}"
 					src="/placeholder.png"
-					data-src="{`${IMAGE_CDN_URL}fit-in/${w}x${h}${getCdnImageUrl({
+					data-src="{`${IMAGE_CDN_URL}/fit-in/${w}x${h}${getCdnImageUrl({
 						src,
 						IMAGE_CDN_URL,
 						IMAGE_CDN_PROVIDER,
@@ -242,7 +242,7 @@ if (extension === 'svg') {
 				in:fade="{{ duration: 300 }}"
 				alt=" "
 				src="/placeholders/placeholder2.png"
-				data-src="{`${IMAGE_CDN_URL}fit-in/${w}x${h}${getCdnImageUrl({
+				data-src="{`${IMAGE_CDN_URL}/fit-in/${w}x${h}${getCdnImageUrl({
 					src,
 					IMAGE_CDN_URL,
 					IMAGE_CDN_PROVIDER,
