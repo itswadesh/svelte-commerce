@@ -34,7 +34,7 @@ import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { OrdersService } from '$lib/services'
 import { page } from '$app/stores'
-import { Pricesummary, LazyImg, CheckoutHeader, Error } from '$lib/components'
+import { Pricesummary, LazyImg, CheckoutHeader, Error, TrustBaggeContainer } from '$lib/components'
 import logo from '$lib/assets/logo.svg'
 import SEO from '$lib/components/SEO/index.svelte'
 
@@ -384,7 +384,7 @@ function checkIfStripeCardValid({ detail }) {
 			{/if}
 		</div>
 
-		<div class="w-full md:w-80 md:shrink-0 md:grow-0">
+		<div class="w-full lg:w-96 lg:shrink-0 lg:grow-0">
 			<h2 class="mb-5">Cart Summary</h2>
 
 			<hr class="mb-5" />
@@ -538,6 +538,8 @@ function checkIfStripeCardValid({ detail }) {
 			<!-- disabled="{!razorpayReady ||
 					(!selectedPaymentMethod?.name && !selectedPaymentMethod?.value) ||
 					(selectedPaymentMethod?.name === 'Stripe' && disabled)}" -->
+
+			<TrustBaggeContainer class="mt-5" />
 		</div>
 	</div>
 </div>

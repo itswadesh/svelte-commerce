@@ -37,6 +37,7 @@ import SplideJs from './SplideJs.svelte'
 import Stats from './Stats.svelte'
 import StoreInformationFooter from './StoreInformationFooter.svelte'
 import Stripe from './Stripe.svelte'
+import TrustBaggeContainer from './TrustBaggeContainer.svelte'
 import UserForm from './Product/UserForm.svelte'
 
 // Core components of svelte commerce
@@ -111,5 +112,6 @@ export {
 	Stats,
 	StoreInformationFooter,
 	Stripe,
+	TrustBaggeContainer,
 	UserForm,
 }

@@ -7,7 +7,7 @@ import { fly, slide } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { ProductCard, Pricesummary, LazyImg, Error } from '$lib/components'
+import { ProductCard, Pricesummary, LazyImg, Error, TrustBaggeContainer } from '$lib/components'
 import { Skeleton, Textbox, PrimaryButton } from '$lib/ui'
 import Cookie from 'cookie-universal'
 import dotsLoading from '$lib/assets/dots-loading.gif'
@@ -34,6 +34,7 @@ let loadingApplyCoupon = false
 let loadingCoupon = false
 let loadingProducts = false
 let loadingRemoveCoupon = false
+let loadingSelectedCoupon = []
 let openApplyPromoCodeModal = false
 let products = []
 let selectedCouponCode = null
@@ -67,14 +68,19 @@ const addToCart = async ({ pid, vid, qty, customizedImg, ix, loadingType }: any)
 	selectedLoadingType = null
 }
 
-function handleCouponCode(couponCode: string) {
+function handleCouponCode(couponCode: string, index: number) {
 	selectedCouponCode = couponCode
-	applyCouponCode(selectedCouponCode)
+	applyCouponCode(selectedCouponCode, index)
 }
 
-async function applyCouponCode(selectedCouponCode: string) {
+async function applyCouponCode(selectedCouponCode: string, index: number) {
 	try {
-		loadingApplyCoupon = true
+		couponErr = null
+		if (index !== null) {
+			loadingSelectedCoupon[index] = true
+		} else {
+			loadingApplyCoupon = true
+		}
 
 		const resAC = await CartService.applyCouponService({
 			code: selectedCouponCode,
@@ -88,20 +94,22 @@ async function applyCouponCode(selectedCouponCode: string) {
 	} catch (e) {
 		couponErr = e
 	} finally {
-		loadingApplyCoupon = false
+		if (index !== null) {
+			loadingSelectedCoupon[index] = false
+		} else {
+			loadingApplyCoupon = false
+		}
 	}
 }
 
 async function removeCouponCode() {
 	try {
 		loadingRemoveCoupon = true
-
 		await CartService.removeCouponService({
-			code: selectedCouponCode,
+			code: selectedCouponCode || data.cart?.discount?.code,
 			storeId: $page.data.store?.id,
 			origin: $page.data.origin
 		})
-
 		selectedCouponCode = ''
 		await invalidateAll()
 	} catch (e) {
@@ -117,6 +125,7 @@ async function getProducts() {
 
 		const resP = await ProductService.fetchProducts({
 			origin: $page?.data?.origin,
+			isCors: $page?.data?.store?.isCors,
 			storeId: $page?.data?.store?.id
 		})
 		products = resP?.hits
@@ -131,9 +140,9 @@ async function getCoupons() {
 		loadingCoupon = true
 		const resC = await CouponService.fetchCoupons({
 			origin: $page?.data?.origin,
+			isCors: $page?.data?.store?.isCors,
 			storeId: $page?.data?.store?.id
 		})
-
 		coupons = resC?.data
 	} catch (e) {
 	} finally {
@@ -148,28 +157,34 @@ function moveAllUnavailableItemsToWishlist() {
 		// console.log('item', item)
 
 		if (!$page.data.me) {
-			goto(`${$page.data.loginUrl || '/auth/login'}`)
+			goto('/auth/login')
 			return
 		}
 
 		try {
-			const isWislisted = await WishlistService.toggleWishlistService({
+			const isWislisted = await WishlistService.checkWishlist({
 				pid: item.pid,
 				vid: item.pid,
 				origin: $page?.data?.origin,
 				storeId: $page?.data?.store?.id
 			})
-		} catch (e) {
-			toast(e, 'error')
-		} finally {
-		}
 
-		try {
+			if (!isWislisted) {
+				const wishlistRes = await WishlistService.toggleWishlistService({
+					pid: item.pid,
+					vid: item.pid,
+					origin: $page?.data?.origin,
+					storeId: $page?.data?.store?.id
+				})
+			}
+
 			const res = await addToCart({
 				pid: item.pid,
 				qty: -9999999,
 				customizedImg: item.customizedImg
 			})
+
+			await invalidateAll()
 		} catch (e) {
 			toast(e, 'error')
 		} finally {
@@ -605,7 +620,7 @@ function moveAllUnavailableItemsToWishlist() {
 					</div>
 				</div>
 
-				<div class="w-full lg:w-80 lg:shrink-0 lg:grow-0">
+				<div class="w-full lg:w-96 lg:shrink-0 lg:grow-0">
 					<!-- Promo code section -->
 
 					{#if $page.data.store?.isDiscountCoupons}
@@ -661,6 +676,8 @@ function moveAllUnavailableItemsToWishlist() {
 						nextpage="/checkout/address"
 						text="Select Address"
 						showNextIcon />
+
+					<TrustBaggeContainer class="mt-5" />
 				</div>
 			</div>
 
@@ -679,7 +696,10 @@ function moveAllUnavailableItemsToWishlist() {
 									<button
 										type="button"
 										class="transform cursor-pointer text-zinc-500 transition duration-300 focus:outline-none hover:scale-125 hover:text-zinc-800"
-										on:click="{() => (openApplyPromoCodeModal = false)}">
+										on:click="{() => {
+											openApplyPromoCodeModal = false
+											couponErr = null
+										}}">
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
 											class="h-5 w-5"
@@ -695,7 +715,7 @@ function moveAllUnavailableItemsToWishlist() {
 
 								<div class="flex flex-col p-5">
 									<form
-										on:submit|preventDefault="{() => applyCouponCode(selectedCouponCode)}"
+										on:submit|preventDefault="{() => applyCouponCode(selectedCouponCode, null)}"
 										class="flex items-center justify-between gap-2">
 										<div class="flex-1">
 											<Textbox
@@ -730,18 +750,42 @@ function moveAllUnavailableItemsToWishlist() {
 										</div>
 									{:else if coupons?.length > 0}
 										<ul class="flex flex-col divide-y">
-											{#each coupons as coupon}
+											{#each coupons as coupon, index}
 												<button
 													title="Click to apply the coupon"
-													on:click="{() => handleCouponCode(coupon.code)}"
+													on:click="{() => handleCouponCode(coupon.code, index)}"
 													class="group text-left py-5">
 													<div class="mb-2 flex items-center gap-3">
 														<div
-															class="max-w-max rounded border border-zinc-500 border-dashed py-1 px-4 font-semibold tracking-wide
+															class="max-w-max relative rounded border border-zinc-500 border-dashed py-1 px-4 font-semibold tracking-wide
 															{data.cart?.discount?.code === coupon.code
 																? 'border-blue-500 text-blue-500'
 																: 'group-hover:border-blue-500 group-hover:text-blue-500'}">
 															{coupon.code}
+
+															{#if loadingSelectedCoupon[index]}
+																<div
+																	class="absolute inset-0 flex cursor-not-allowed items-center justify-center bg-black bg-opacity-70">
+																	<svg
+																		class="mx-auto animate-spin text-white h-4 w-4"
+																		xmlns="http://www.w3.org/2000/svg"
+																		fill="none"
+																		viewBox="0 0 24 24">
+																		<circle
+																			class="opacity-25"
+																			cx="12"
+																			cy="12"
+																			r="10"
+																			stroke="currentColor"
+																			stroke-width="4"></circle>
+																		<path
+																			class="opacity-75"
+																			fill="currentColor"
+																			d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+																		></path>
+																	</svg>
+																</div>
+															{/if}
 														</div>
 
 														{#if data.cart?.discount?.code === coupon.code}
