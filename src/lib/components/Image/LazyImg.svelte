@@ -102,21 +102,11 @@ let lazyloadInstance: any
 onMount(() => {
 	if (browser) {
 		lazyloadInstance = new lazyload({
-			thresholds: '50px 10%'
+			thresholds: '50px 10%',
+			callback_error: (img) => {img.setAttribute("src", "https://i.ibb.co/ZKFtJ25/image-1.png")},
+			callback_enter: handleLineLoader
 		})
 	}
-
-	const newImg = new Image()
-	newImg.src = src
-
-	newImg.onload = () => {
-		src = src
-	}
-
-	newImg.onerror = () => {
-       src = ''
-	}
-
 })
 
 onDestroy(() => {
@@ -130,6 +120,15 @@ onDestroy(() => {
 if (extension === 'svg') {
 	isSvg = true
 }
+
+function handleLineLoader(){
+	const lineLoader = document.querySelector('.loader-line')
+
+	lineLoader.style.display = 'none'
+	
+}
+
+
 </script>
 
 <div class="relative">
@@ -164,9 +163,9 @@ if (extension === 'svg') {
 					width="{w}"
 					class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
 			{/if}
-			<div class="absolute inset-0 flex itmes-center justify-center">
+			<!-- <div class="absolute inset-0 flex itmes-center justify-center">
 				<span class="loader-line"></span>
-			</div>
+			</div> -->
 		{:else if IMAGE_CDN_PROVIDER === 'thumbor'}
 			{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } ).includes('http')}
 				<img
@@ -198,9 +197,9 @@ if (extension === 'svg') {
 					class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
 			{/if}
 		{/if}
-		<div class="absolute inset-0 flex itmes-center justify-center">
+		<!-- <div class="absolute inset-0 flex itmes-center justify-center">
 			<span class="loader-line"></span>
-		</div>
+		</div> -->
 	{:else if IMAGE_CDN_PROVIDER === 'imagekit'}
 		{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } ).includes('http')}
 			<img
@@ -214,10 +213,10 @@ if (extension === 'svg') {
 					NO_QUERY: true
 				})}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(':', '-')}`}"
 				class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
-			<div class="absolute inset-0 flex itmes-center justify-center">
+			<!-- <div class="absolute inset-0 flex itmes-center justify-center">
 				<span class="loader-line"></span>
-			</div>
-		{:else if src}
+			</div> -->
+		{:else}
 			<img
 				in:fade="{{ duration: 300 }}"
 				alt=" "
@@ -229,11 +228,9 @@ if (extension === 'svg') {
 					NO_QUERY: true
 				})}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(':', '-')}`}"
 				class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
-			<div class="absolute inset-0 flex itmes-center justify-center">
+			<!-- <div class="absolute inset-0 flex itmes-center justify-center">
 				<span class="loader-line"></span>
-			</div>
-		{:else}
-		<p></p>
+			</div> -->
 		{/if}
 	{:else if IMAGE_CDN_PROVIDER === 'thumbor'}
 		{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } ).includes('http')}
@@ -249,10 +246,10 @@ if (extension === 'svg') {
 					NO_QUERY: true
 				})}`}"
 				class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
-			<div class="absolute inset-0 flex itmes-center justify-center">
+			<!-- <div class="absolute inset-0 flex itmes-center justify-center">
 				<span class="loader-line"></span>
-			</div>
-		{:else if src}
+			</div> -->
+		{:else}
 			<img
 				in:fade="{{ duration: 300 }}"
 				alt=" "
@@ -264,17 +261,14 @@ if (extension === 'svg') {
 					NO_QUERY: true
 				})}`}"
 				class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
+			<!-- <div class="absolute inset-0 flex itmes-center justify-center">
+				<span class="loader-line"></span>
+			</div> -->
+		{/if}
+	{/if}
 			<div class="absolute inset-0 flex itmes-center justify-center">
 				<span class="loader-line"></span>
 			</div>
-		{:else}
-			<p></p>
-		{/if}
-
-		<!-- <div class="absolute inset-0 flex itmes-center justify-center">
-			<span class="loader-line"></span>
-		</div> -->
-	{/if}
 </div>
 
 <!-- <img
