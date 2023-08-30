@@ -71,7 +71,6 @@ import WhiteButton from '$lib/ui/WhiteButton.svelte'
 import { invalidateAll } from '$app/navigation'
 
 export let data
-console.log('zzzzzzzzzzzzzzzzzz', data)
 
 const seoProps = {
 	title: 'Payment Success ',

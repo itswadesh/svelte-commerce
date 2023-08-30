@@ -152,7 +152,7 @@ export const phonepeCheckout = async ({
 				address,
 				prescription,
 				store: storeId,
-				redirectUrl: `${origin}/payment/success`
+				return_url: `${origin}/payment/success`
 			},
 			origin
 		)
@@ -181,7 +181,8 @@ export const cashfreeCheckout = async ({
 				address,
 				prescription,
 				store: storeId,
-				redirectUrl: `${origin}/payment/success`
+				domain: origin,
+				return_url: `${origin}/payment/process-cf`
 			},
 			origin
 		)
@@ -189,6 +190,26 @@ export const cashfreeCheckout = async ({
 		return res || {}
 	} catch (e) {
 		throw error(e.status, e.message?.message || e.message)
+	}
+}
+
+export const cashfreeCapture = async ({ order_no, storeId, origin, sid }: any) => {
+	try {
+		let res: any = {}
+
+		res = await postBySid(
+			`checkout/cashfree-capture`,
+			{
+				order_no,
+				store: storeId,
+				domain: origin
+			},
+			sid
+		)
+
+		return res || {}
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -211,7 +232,8 @@ export const razorpayCheckout = async ({
 				paymentMethod,
 				prescription,
 				store: storeId,
-				redirectUrl: `${origin}/payment/success`
+				domain: origin,
+				return_url: `${origin}/payment/success`
 			},
 			origin
 		)
@@ -234,12 +256,13 @@ export const razorpayCapture = async ({
 		let res: any = {}
 
 		res = await post(
-			`checkout/capture-razorpay`,
+			`checkout/razorpay-capture`,
 			{
 				rpPaymentId,
 				rpOrderId,
 				store: storeId,
-				redirectUrl: `${origin}/payment/success`
+				domain: origin,
+				return_url: `${origin}/payment/success`
 			},
 			origin
 		)
