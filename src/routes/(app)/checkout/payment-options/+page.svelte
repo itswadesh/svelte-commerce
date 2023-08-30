@@ -45,13 +45,13 @@ const seoProps = {
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
-
 let bankPayment = { type: 'order', reference: '', remark: '', paymentMethodId: '', amount: 0 }
 let disabled = false
 let errorMessage = 'Select a Payment Method'
 let loading = false
 let paymentDenied = false
 let razorpayReady = false
+let cashfreeReady = false
 let selectedPaymentMethod = { id: '', name: '', text: '', instructions: '', qrcode: '', img: '' }
 let showPayWithBankTransfer = false
 let paymentProcessingStep = 1
@@ -72,6 +72,11 @@ onMount(async () => {
 	razorpayScript.setAttribute('src', 'https://checkout.razorpay.com/v1/checkout.js')
 	document.head.appendChild(razorpayScript)
 	razorpayReady = true
+
+	const cashfreeScript = document.createElement('script')
+	cashfreeScript.setAttribute('src', 'https://sdk.cashfree.com/js/v3/cashfree.js')
+	document.head.appendChild(cashfreeScript)
+	cashfreeReady = true
 	fireGTagEvent('begin_checkout', data.cart)
 })
 
@@ -139,13 +144,22 @@ async function submit(pm) {
 				origin: $page.data.origin
 			})
 
-			// console.log('res of Cashfree', res)
-
-			if (res?.redirectUrl && res?.redirectUrl !== null) {
-				goto(`${res?.redirectUrl}`)
-			} else {
-				toast('Something went wrong', 'error')
-			}
+			console.log('res of Cashfree', res.payment_session_id)
+			const cashfree = Cashfree({ mode: 'sandbox' })
+			cashfree
+				.checkout({
+					paymentSessionId: res.payment_session_id,
+					returnUrl: res.order_meta?.return_url,
+					redirectTarget: '_parent'
+				})
+				.then(function () {
+					console.log('on going redirection')
+				})
+			// if (res?.redirectUrl && res?.redirectUrl !== null) {
+			// 	goto(`${res?.redirectUrl}`)
+			// } else {
+			// 	toast('Something went wrong', 'error')
+			// }
 		} catch (e) {
 			data.err = e
 			toast(e?.body?.message || e, 'error')
@@ -290,7 +304,6 @@ function checkIfStripeCardValid({ detail }) {
 </script>
 
 <SEO {...seoProps} />
-
 <div class="container mx-auto min-h-screen w-full max-w-6xl p-3 py-5 sm:p-10">
 	<CheckoutHeader selected="payment" />
 
@@ -579,3 +592,4 @@ function checkIfStripeCardValid({ detail }) {
 		{/if}
 	</div>
 {/if}
+<iframe name="cashfreeFrame" title="Cashfree" class="absolute" allow="payment"></iframe>

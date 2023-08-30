@@ -5,7 +5,7 @@ export const prerender = false
 
 export async function load({ url, request, locals, cookies }) {
 	const cartId = locals.cartId
-	const orderId = url.searchParams.get('orderId')
+	const orderId = url.searchParams.get('orderId') || url.searchParams.get('order_no')
 	const paymentMode = url.searchParams.get('provider')
 	const paymentReferenceId = url.searchParams.get('payment_reference_id')
 	const sid = cookies.get('connect.sid')
@@ -29,7 +29,7 @@ export async function load({ url, request, locals, cookies }) {
 			server: true,
 			sid
 		})
-			cookies.set('cartQty', '0', { path: '/' })
+		cookies.set('cartQty', '0', { path: '/' })
 
 		if (order.id) throw { status: 307, url: `/my/orders/${order.id}` }
 	} catch (e) {
@@ -82,7 +82,7 @@ export async function load({ url, request, locals, cookies }) {
 			// cookies.set('cartId', cartObj.cartId, { path: '/' })
 			cookies.set('cartQty', cartObj.qty, { path: '/' })
 		}
-	} catch (e) { }
+	} catch (e) {}
 
 	return { loading, status, paymentMode, order, err, cart }
 }
