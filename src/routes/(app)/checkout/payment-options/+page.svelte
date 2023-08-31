@@ -145,6 +145,10 @@ async function submit(pm) {
 			})
 
 			console.log('res of Cashfree', res.payment_session_id)
+			if (!res.payment_session_id) {
+				data.err = 'Payment failed. Try again'
+				toast('Payment failed. Try again', 'error')
+			}
 			const cashfree = Cashfree({ mode: res.payment_mode })
 			cashfree
 				.checkout({
