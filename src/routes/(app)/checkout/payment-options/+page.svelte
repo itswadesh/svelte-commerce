@@ -105,8 +105,8 @@ async function submit(pm) {
 				paymentProcessingStep = 2
 				setTimeout(() => {
 					paymentProcessingStep = 3
-				}, 500)
-			}, 500)
+				}, 1000)
+			}, 1000)
 
 			const res = await OrdersService.codCheckout({
 				address: data.addressId,
