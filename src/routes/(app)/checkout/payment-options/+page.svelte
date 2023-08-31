@@ -145,7 +145,7 @@ async function submit(pm) {
 			})
 
 			console.log('res of Cashfree', res.payment_session_id)
-			const cashfree = Cashfree({ mode: 'sandbox' })
+			const cashfree = Cashfree({ mode: res.payment_mode })
 			cashfree
 				.checkout({
 					paymentSessionId: res.payment_session_id,

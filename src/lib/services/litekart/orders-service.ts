@@ -1,10 +1,10 @@
 import { error } from '@sveltejs/kit'
 import { getAPI, post } from '$lib/utils/api'
 import { getBySid, postBySid } from '$lib/utils/server'
-import type { AllOrders, Error } from '$lib/types'
+import type { AllOrders } from '$lib/types'
 const isServer = import.meta.env.SSR
 
-export const fetchOrders = async ({ origin, storeId, server = false, sid = null }: any) => {
+export const fetchOrders = async ({ origin, storeId, sid = null }: any) => {
 	try {
 		let res: AllOrders | {} = {}
 
@@ -26,7 +26,7 @@ export const fetchOrders = async ({ origin, storeId, server = false, sid = null 
 	}
 }
 
-export const fetchOrder = async ({ origin, storeId, id, server = false, sid = null }: any) => {
+export const fetchOrder = async ({ origin, storeId, id, sid = null }: any) => {
 	try {
 		let res: any = {}
 
@@ -42,7 +42,7 @@ export const fetchOrder = async ({ origin, storeId, id, server = false, sid = nu
 	}
 }
 
-export const fetchTrackOrder = async ({ origin, storeId, id, server = false, sid = null }: any) => {
+export const fetchTrackOrder = async ({ origin, storeId, id, sid = null }: any) => {
 	try {
 		let res: any = {}
 
@@ -65,8 +65,6 @@ export const paySuccessPageHit = async ({
 	paymentReferenceId,
 	storeId,
 	status,
-	id,
-	server = false,
 	sid = null
 }: any) => {
 	try {
@@ -110,8 +108,6 @@ export const codCheckout = async ({
 	paymentMethod,
 	paymentProviderId,
 	prescription,
-	server = false,
-	sid = null,
 	storeId
 }: any) => {
 	try {
@@ -140,7 +136,6 @@ export const phonepeCheckout = async ({
 	prescription,
 	storeId,
 	origin,
-	server = false,
 	sid = null
 }: any) => {
 	try {
@@ -165,11 +160,9 @@ export const phonepeCheckout = async ({
 
 export const cashfreeCheckout = async ({
 	address,
-	paymentMethod,
 	prescription,
 	storeId,
 	origin,
-	server = false,
 	sid = null
 }: any) => {
 	try {
@@ -249,7 +242,6 @@ export const razorpayCapture = async ({
 	rpOrderId,
 	storeId,
 	origin,
-	server = false,
 	sid = null
 }: any) => {
 	try {
@@ -278,7 +270,6 @@ export const stripeCheckoutService = async ({
 	address,
 	storeId,
 	origin,
-	server = false,
 	sid = null
 }: any) => {
 	try {
@@ -305,7 +296,6 @@ export const paypalCheckout = async ({
 	address,
 	storeId,
 	origin,
-	server = false,
 	sid = null
 }: any) => {
 	try {
