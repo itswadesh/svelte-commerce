@@ -1,14 +1,14 @@
 <script lang="ts">
 import { applyAction, enhance } from '$app/forms'
 import { CartService, CouponService, ProductService, WishlistService } from '$lib/services'
-import { date, toast } from '$lib/utils'
+import { currency, date, toast } from '$lib/utils'
+import { Error, LazyImg, Pricesummary, ProductCard, TrustBaggeContainer } from '$lib/components'
 import { fireGTagEvent } from '$lib/utils/gTagB'
 import { fly, slide } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { ProductCard, Pricesummary, LazyImg, Error, TrustBaggeContainer } from '$lib/components'
-import { Skeleton, Textbox, PrimaryButton } from '$lib/ui'
+import { PrimaryButton, Skeleton, Textbox, WhiteButton } from '$lib/ui'
 import Cookie from 'cookie-universal'
 import dotsLoading from '$lib/assets/dots-loading.gif'
 import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
@@ -32,6 +32,7 @@ let coupons
 let loading = []
 let loadingApplyCoupon = false
 let loadingCoupon = false
+let loadingMoveUnavailableItemsToWishlist = false
 let loadingProducts = false
 let loadingRemoveCoupon = false
 let loadingSelectedCoupon = []
@@ -45,28 +46,6 @@ onMount(() => {
 	getCoupons()
 	fireGTagEvent('view_cart', data.cart)
 })
-
-const addToCart = async ({ pid, vid, qty, customizedImg, ix, loadingType }: any) => {
-	if (loadingType) {
-		selectedLoadingType = loadingType
-	}
-	loading[ix] = true
-	await CartService.addToCartService({
-		id: id,
-		pid: pid,
-		vid: vid || pid,
-		qty: qty,
-		customizedImg: customizedImg || null,
-		storeId: $page.data.store?.id,
-		origin: $page.data.origin,
-		cookies
-	})
-	fireGTagEvent('add_to_cart', data.cart)
-	await invalidateAll() // Has to be invalidateAll everywhere because cart is called on hooks.server.ts and any invalidation will trigger hooks.server.ts call
-	// Keep await here, else the loader will stop before updating the locals value
-	loading[ix] = false
-	selectedLoadingType = null
-}
 
 function handleCouponCode(couponCode: string, index: number) {
 	selectedCouponCode = couponCode
@@ -150,46 +129,9 @@ async function getCoupons() {
 	}
 }
 
-function moveAllUnavailableItemsToWishlist() {
-	// console.log('data.cart?.unavailableItems?.length', data.cart?.unavailableItems?.length)
-
-	data.cart?.unavailableItems.forEach(async function (item) {
-		// console.log('item', item)
-
-		if (!$page.data.me) {
-			goto('/auth/login')
-			return
-		}
-
-		try {
-			const isWislisted = await WishlistService.checkWishlist({
-				pid: item.pid,
-				vid: item.pid,
-				origin: $page?.data?.origin,
-				storeId: $page?.data?.store?.id
-			})
-
-			if (!isWislisted) {
-				const wishlistRes = await WishlistService.toggleWishlistService({
-					pid: item.pid,
-					vid: item.pid,
-					origin: $page?.data?.origin,
-					storeId: $page?.data?.store?.id
-				})
-			}
-
-			const res = await addToCart({
-				pid: item.pid,
-				qty: -9999999,
-				customizedImg: item.customizedImg
-			})
-
-			await invalidateAll()
-		} catch (e) {
-			toast(e, 'error')
-		} finally {
-		}
-	})
+function chnageJsonInLocalStore({ json, pid, slug }) {
+	localStorage.setItem(pid, json)
+	goto('/product/' + slug)
 }
 </script>
 
@@ -203,7 +145,7 @@ function moveAllUnavailableItemsToWishlist() {
 					<Skeleton />
 				{/each}
 			</div>
-		{:else if data.cart?.qty > 0}
+		{:else if data?.cartQty > 0}
 			<div class="mb-14 lg:mb-0 flex flex-col gap-10 lg:flex-row lg:justify-center xl:gap-20">
 				<div class="w-full flex-1">
 					<div class="items-center justify-between h-10 sm:h-14 sm:flex">
@@ -229,7 +171,7 @@ function moveAllUnavailableItemsToWishlist() {
 					<hr />
 
 					<div>
-						{#if data.cart?.unavailableItems?.length > 0}
+						{#if data.cart?.unavailableItems?.length}
 							<div>
 								<div class="mt-5 cursor-default border-b opacity-50">
 									<div class="flex gap-4">
@@ -252,7 +194,7 @@ function moveAllUnavailableItemsToWishlist() {
 									</div>
 
 									<div class="flex flex-col divide-y">
-										{#each data.cart?.unavailableItems as item (item?._id)}
+										{#each data.cart?.unavailableItems as item (item._id)}
 											<div class="flex w-full items-start gap-4 py-5">
 												<a
 													href="/product/{item?.slug}"
@@ -260,7 +202,7 @@ function moveAllUnavailableItemsToWishlist() {
 													class="block shrink-0 overflow-hidden">
 													{#if item.customizedImg || item.img}
 														<LazyImg
-															src="{item.isCustomizeditem ? item.customizedImg : item.img}"
+															src="{item.isCustomized ? item.customizedImg : item.img}"
 															alt=" "
 															width="384"
 															height="512"
@@ -268,7 +210,7 @@ function moveAllUnavailableItemsToWishlist() {
 															class="object-contain object-top h-28 w-20 text-xs" />
 													{:else}
 														<div
-															class="h-32 sm:h-40 w-20 bg-zinc-100 flex flex-col items-center justify-center gap-2 p-2 text-zinc-500 text-xs text-center">
+															class="h-32 sm:h-40 w-20 bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center">
 															<svg
 																xmlns="http://www.w3.org/2000/svg"
 																fill="none"
@@ -283,7 +225,7 @@ function moveAllUnavailableItemsToWishlist() {
 																></path>
 															</svg>
 
-															<span>No image</span>
+															<span>No image available</span>
 														</div>
 													{/if}
 												</a>
@@ -331,17 +273,31 @@ function moveAllUnavailableItemsToWishlist() {
 									</div>
 								</div>
 
-								<PrimaryButton class="w-full" on:click="{moveAllUnavailableItemsToWishlist}">
-									Move to Wishlist
-								</PrimaryButton>
+								<form
+									action="/cart?/handleUnavailableItems"
+									method="POST"
+									use:enhance="{() => {
+										loadingMoveUnavailableItemsToWishlist = true
+										return async ({ result }) => {
+											console.log('result of unabailable items', result)
+											await invalidateAll()
+											await applyAction(result)
+											loadingMoveUnavailableItemsToWishlist = false
+										}
+									}}">
+									<WhiteButton
+										type="submit"
+										loading="{loadingMoveUnavailableItemsToWishlist}"
+										class="w-full">Move to Wishlist</WhiteButton>
+								</form>
 							</div>
 						{/if}
 
-						{#if data.cart?.items}
+						{#if data.cart?.qty}
 							<div class="flex flex-col divide-y">
-								{#each data.cart?.items as item, ix (item?._id)}
+								{#each data.cart?.items as item, ix (item._id)}
+									<!-- PID can not be a key because in case of customized items it will repeat-->
 									<!-- Product detail start -->
-
 									<div
 										in:slide="{{ duration: 300 }}"
 										out:fly="{{ x: -800, duration: 300 }}"
@@ -352,15 +308,15 @@ function moveAllUnavailableItemsToWishlist() {
 											class="block shrink-0 overflow-hidden">
 											{#if item.customizedImg || item.img}
 												<LazyImg
-													src="{item.isCustomizeditem ? item.customizedImg : item.img}"
+													src="{item.isCustomized ? item.customizedImg : item.img}"
 													alt=" "
-													width="384"
-													height="512"
+													width="80"
+													height="192"
 													aspect_ratio="3:4"
 													class="object-contain object-top h-28 w-20 text-xs" />
 											{:else}
 												<div
-													class="h-32 sm:h-40 w-20 bg-zinc-100 flex flex-col items-center justify-center gap-2 p-2 text-zinc-500 text-xs text-center">
+													class="h-32 sm:h-40 w-20 bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center">
 													<svg
 														xmlns="http://www.w3.org/2000/svg"
 														fill="none"
@@ -375,7 +331,7 @@ function moveAllUnavailableItemsToWishlist() {
 														></path>
 													</svg>
 
-													<span>No image</span>
+													<span>No image available</span>
 												</div>
 											{/if}
 										</a>
@@ -399,6 +355,20 @@ function moveAllUnavailableItemsToWishlist() {
 													</div>
 												{/if}
 											</div>
+
+											{#if item.isCustomized}
+												<button
+													type="button"
+													class="mb-1 text-sm text-zinc-500 italic hover:underline focus:outline-nne"
+													on:click="{() =>
+														chnageJsonInLocalStore({
+															json: item.customizedData,
+															pid: item.pid,
+															slug: item.slug
+														})}">
+													Click here to re-edit
+												</button>
+											{/if}
 
 											<div class="mb-1 flex flex-wrap items-center gap-2 text-xs sm:text-sm">
 												<span class="text-sm sm:text-base font-bold whitespace-nowrap">
@@ -448,14 +418,14 @@ function moveAllUnavailableItemsToWishlist() {
 														use:enhance="{() => {
 															loading[ix] = true
 															return async ({ result }) => {
-																invalidateAll()
+																fireGTagEvent('remove_from_cart', item)
+																await invalidateAll()
 																await applyAction(result)
 																loading[ix] = false
 															}
 														}}">
-														<input type="hidden" name="id" value="{item._id}" />
-														<input type="hidden" name="vid" value="{item.vid}" />
 														<input type="hidden" name="pid" value="{item.pid}" />
+														<input type="hidden" name="vid" value="{item.vid}" />
 														<input type="hidden" name="qty" value="{-1}" />
 														<input
 															type="hidden"
@@ -506,14 +476,14 @@ function moveAllUnavailableItemsToWishlist() {
 														use:enhance="{() => {
 															loading[ix] = true
 															return async ({ result }) => {
-																invalidateAll()
+																fireGTagEvent('add_to_cart', result?.data)
+																await invalidateAll()
 																await applyAction(result)
 																loading[ix] = false
 															}
 														}}">
-														<input type="hidden" name="id" value="{item._id}" />
-														<input type="hidden" name="vid" value="{item.vid}" />
 														<input type="hidden" name="pid" value="{item.pid}" />
+														<input type="hidden" name="vid" value="{item.vid}" />
 														<input type="hidden" name="qty" value="{+1}" />
 														<input
 															type="hidden"
@@ -551,15 +521,15 @@ function moveAllUnavailableItemsToWishlist() {
 														selectedLoadingType = 'delete'
 														loading[ix] = true
 														return async ({ result }) => {
-															invalidateAll()
+															fireGTagEvent('remove_from_cart', item)
+															await invalidateAll()
 															await applyAction(result)
 															selectedLoadingType = null
 															loading[ix] = false
 														}
 													}}">
-													<input type="hidden" name="id" value="{item._id}" />
-													<input type="hidden" name="vid" value="{item.vid}" />
 													<input type="hidden" name="pid" value="{item.pid}" />
+													<input type="hidden" name="vid" value="{item.vid}" />
 													<input type="hidden" name="qty" value="{-9999999}" />
 													<input type="hidden" name="customizedImg" value="{item.customizedImg}" />
 
@@ -614,10 +584,6 @@ function moveAllUnavailableItemsToWishlist() {
 							</div>
 						{/if}
 					</div>
-
-					<div>
-						<!-- <Weprovides /> -->
-					</div>
 				</div>
 
 				<div class="w-full lg:w-96 lg:shrink-0 lg:grow-0">
@@ -668,7 +634,6 @@ function moveAllUnavailableItemsToWishlist() {
 					{:else}
 						<h2 class="mb-5">Cart Summary</h2>
 					{/if}
-
 					<hr class="mb-5" />
 
 					<Pricesummary

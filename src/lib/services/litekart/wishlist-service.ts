@@ -3,6 +3,31 @@ import { getAPI, post } from '$lib/utils/api'
 import { getBySid, postBySid } from '$lib/utils/server'
 const isServer = import.meta.env.SSR
 
+export const moveUnavailableItemsToWishlist = async ({ origin, storeId, sid = null }) => {
+	try {
+		let res: any = {}
+
+		if (isServer) {
+			res = await postBySid(
+				`wishlists/move-unavailable-items-to-wishlist?store=${storeId}`,
+				{ store: storeId },
+				sid
+			)
+		} else {
+			res = await post(
+				`wishlists/move-unavailable-items-to-wishlist?store=${storeId}`,
+				{ store: storeId },
+				origin
+			)
+		}
+
+		return res || {}
+	} catch (e) {
+		console.log('error at move unavailable items to wishlist', e)
+		throw error(e.status, e.data?.message || e.message)
+	}
+}
+
 export const fetchWishlist = async ({
 	origin,
 	storeId,
@@ -33,13 +58,21 @@ export const fetchWishlist = async ({
 	}
 }
 
-export const checkWishlist = async ({ origin, storeId, pid, vid, server = false, sid = null }) => {
+export const checkWishlist = async ({
+	origin,
+	storeId,
+	pid,
+	vid,
+	isCors = false,
+	server = false,
+	sid = null
+}) => {
 	// if (!sid) return false
 
 	try {
 		let res: any = {}
 
-		if (isServer) {
+		if (isServer || isCors) {
 			res = await getBySid(`wishlists/check?product=${pid}&variant=${vid}&store=${storeId}`, sid)
 		} else {
 			res = await getAPI(`wishlists/check?product=${pid}&variant=${vid}&store=${storeId}`, origin)
@@ -56,13 +89,13 @@ export const toggleWishlistService = async ({
 	pid,
 	vid,
 	origin,
-	server = false,
+	isCors = false,
 	sid = null
 }) => {
 	try {
 		let res: any = {}
 
-		if (isServer) {
+		if (isServer || isCors) {
 			res = await postBySid(`wishlists/toggle`, { product: pid, variant: vid, store: storeId }, sid)
 		} else {
 			res = await post(`wishlists/toggle`, { product: pid, variant: vid, store: storeId }, origin)

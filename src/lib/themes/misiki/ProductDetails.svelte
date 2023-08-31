@@ -166,7 +166,6 @@ let bounceItemFromTop = false
 let cartButtonText = 'Add to Bag'
 let customizedImg
 let isExpired = false
-let isWishlisted = false
 let loading = false
 let loadingForWishlist = false
 let product_image_dimension = $page.data.store?.product_image_dimension || '3x4'
@@ -224,21 +223,6 @@ if (data.product?.tags?.length) {
 onMount(async () => {
 	try {
 		screenWidth = screen.width
-
-		if ($page.data?.me) {
-			try {
-				isWishlisted = await WishlistService.checkWishlist({
-					pid: data.product?._id,
-					vid: data.product?._id,
-					storeId: $page.data.store?.id,
-					origin: $page.data.origin
-				})
-			} catch (e) {
-				toast(e, 'error')
-			} finally {
-			}
-		}
-
 		storeRecentlyViewedToLocatStorage()
 	} catch (e) {}
 })
@@ -438,26 +422,6 @@ $: {
 	}
 
 	selectedOptions1 = o1
-}
-
-async function toggleWishlist(id) {
-	if (!$page.data.me) {
-		goto(`/auth/login?ref=/my/wishlist/add/${id}`)
-	}
-
-	try {
-		loadingForWishlist = true
-		isWishlisted = await WishlistService.toggleWishlistService({
-			pid: id,
-			vid: id,
-			storeId: $page.data.store?.id,
-			origin: $page.data.origin
-		})
-	} catch (e) {
-		toast(e, 'error')
-	} finally {
-		loadingForWishlist = false
-	}
 }
 
 function scrollTo(elementId) {
@@ -1249,43 +1213,73 @@ async function updateVariant(variant) {
 							class="w-full hidden md:grid gap-2 items-center uppercase grid-cols-2 static max-w-sm">
 							{#if $page.data.store?.isWishlist}
 								<div class="col-span-1">
-									<WhiteButton
-										type="button"
-										loadingringsize="sm"
-										loading="{loadingForWishlist}"
-										class="w-full text-sm"
-										on:click="{() => toggleWishlist(data.product?._id)}">
-										{#if isWishlisted}
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												class="h-5 w-5 shrink-0 text-accent-500"
-												viewBox="0 0 20 20"
-												fill="currentColor">
-												<path
-													fill-rule="evenodd"
-													d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-													clip-rule="evenodd"></path>
-											</svg>
+									<form
+										action="/my/wishlist?/toggleWishlist"
+										method="POST"
+										use:enhance="{() => {
+											return async ({ result }) => {
+												// console.log('wishlist toggle result', result)
 
-											<span>Wishlisted</span>
-										{:else}
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												class="h-5 w-5 shrink-0"
-												fill="none"
-												viewBox="0 0 24 24"
-												stroke="currentColor"
-												stroke-width="2">
-												<path
-													stroke-linecap="round"
-													stroke-linejoin="round"
-													d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-												></path>
-											</svg>
+												if (result?.type === 'redirect') {
+													goto(result?.location)
+												} else if (result?.data) {
+													data.product.isWishlisted = result?.data
+												} else if (result?.error) {
+													toast(result?.error?.message, 'error')
+												}
 
-											<span>Wishlist</span>
-										{/if}
-									</WhiteButton>
+												await invalidateAll()
+												await applyAction(result)
+											}
+										}}">
+										<input
+											type="hidden"
+											name="pid"
+											value="{data?.product?._id || data?.product?.id}" />
+
+										<input
+											type="hidden"
+											name="vid"
+											value="{data?.product?._id || data?.product?.id}" />
+
+										<WhiteButton
+											type="submit"
+											loadingringsize="sm"
+											loading="{loadingForWishlist}"
+											class="w-full text-sm">
+											<!-- on:click="{() => toggleWishlist(data.product?._id)}" -->
+											{#if data?.product?.isWishlisted}
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													class="h-5 w-5 shrink-0 text-accent-500"
+													viewBox="0 0 20 20"
+													fill="currentColor">
+													<path
+														fill-rule="evenodd"
+														d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+														clip-rule="evenodd"></path>
+												</svg>
+
+												<span>Wishlisted</span>
+											{:else}
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													class="h-5 w-5 shrink-0"
+													fill="none"
+													viewBox="0 0 24 24"
+													stroke="currentColor"
+													stroke-width="2">
+													<path
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+													></path>
+												</svg>
+
+												<span>Wishlist</span>
+											{/if}
+										</WhiteButton>
+									</form>
 								</div>
 							{/if}
 
@@ -1384,7 +1378,7 @@ async function updateVariant(variant) {
 														if (customizedImg) {
 															goto(`/checkout/address`)
 														}
-														invalidateAll()
+														await invalidateAll()
 														await applyAction(result)
 													}
 												}}">
@@ -1607,43 +1601,73 @@ async function updateVariant(variant) {
 							class="w-full grid md:hidden grid-cols-5 gap-2 items-center uppercase fixed inset-x-0 bottom-0 z-40 h-16 border-t bg-white p-3 box-shadow">
 							{#if $page.data.store?.isWishlist}
 								<div class="col-span-2">
-									<WhiteButton
-										type="button"
-										loadingringsize="sm"
-										loading="{loadingForWishlist}"
-										class="w-full text-sm"
-										on:click="{() => toggleWishlist(data.product?._id)}">
-										{#if isWishlisted}
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												class="h-5 w-5 shrink-0 text-accent-500"
-												viewBox="0 0 20 20"
-												fill="currentColor">
-												<path
-													fill-rule="evenodd"
-													d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-													clip-rule="evenodd"></path>
-											</svg>
+									<form
+										action="/my/wishlist?/toggleWishlist"
+										method="POST"
+										use:enhance="{() => {
+											return async ({ result }) => {
+												// console.log('wishlist toggle result', result)
 
-											<span>Wishlisted</span>
-										{:else}
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												class="h-5 w-5 shrink-0"
-												fill="none"
-												viewBox="0 0 24 24"
-												stroke="currentColor"
-												stroke-width="2">
-												<path
-													stroke-linecap="round"
-													stroke-linejoin="round"
-													d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-												></path>
-											</svg>
+												if (result?.type === 'redirect') {
+													goto(result?.location)
+												} else if (result?.data) {
+													data.product.isWishlisted = result?.data
+												} else if (result?.error) {
+													toast(result?.error?.message, 'error')
+												}
 
-											<span>Wishlist</span>
-										{/if}
-									</WhiteButton>
+												await invalidateAll()
+												await applyAction(result)
+											}
+										}}">
+										<input
+											type="hidden"
+											name="pid"
+											value="{data?.product?._id || data?.product?.id}" />
+
+										<input
+											type="hidden"
+											name="vid"
+											value="{data?.product?._id || data?.product?.id}" />
+
+										<WhiteButton
+											type="submit"
+											loadingringsize="sm"
+											loading="{loadingForWishlist}"
+											class="w-full text-sm">
+											<!-- on:click="{() => toggleWishlist(data.product?._id)}" -->
+											{#if data?.product?.isWishlisted}
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													class="h-5 w-5 shrink-0 text-accent-500"
+													viewBox="0 0 20 20"
+													fill="currentColor">
+													<path
+														fill-rule="evenodd"
+														d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+														clip-rule="evenodd"></path>
+												</svg>
+
+												<span>Wishlisted</span>
+											{:else}
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													class="h-5 w-5 shrink-0"
+													fill="none"
+													viewBox="0 0 24 24"
+													stroke="currentColor"
+													stroke-width="2">
+													<path
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+													></path>
+												</svg>
+
+												<span>Wishlist</span>
+											{/if}
+										</WhiteButton>
+									</form>
 								</div>
 							{/if}
 
@@ -1810,43 +1834,73 @@ async function updateVariant(variant) {
 						<div class="w-full grid md:hidden grid-cols-5 gap-2 items-center uppercase">
 							{#if $page.data.store?.isWishlist}
 								<div class="col-span-2">
-									<WhiteButton
-										type="button"
-										loadingringsize="sm"
-										loading="{loadingForWishlist}"
-										class="w-full text-sm"
-										on:click="{() => toggleWishlist(data.product?._id)}">
-										{#if isWishlisted}
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												class="h-5 w-5 shrink-0 text-accent-500"
-												viewBox="0 0 20 20"
-												fill="currentColor">
-												<path
-													fill-rule="evenodd"
-													d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-													clip-rule="evenodd"></path>
-											</svg>
+									<form
+										action="/my/wishlist?/toggleWishlist"
+										method="POST"
+										use:enhance="{() => {
+											return async ({ result }) => {
+												// console.log('wishlist toggle result', result)
 
-											<span>Wishlisted</span>
-										{:else}
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												class="h-5 w-5 shrink-0"
-												fill="none"
-												viewBox="0 0 24 24"
-												stroke="currentColor"
-												stroke-width="2">
-												<path
-													stroke-linecap="round"
-													stroke-linejoin="round"
-													d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-												></path>
-											</svg>
+												if (result?.type === 'redirect') {
+													goto(result?.location)
+												} else if (result?.data) {
+													data.product.isWishlisted = result?.data
+												} else if (result?.error) {
+													toast(result?.error?.message, 'error')
+												}
 
-											<span>Wishlist</span>
-										{/if}
-									</WhiteButton>
+												await invalidateAll()
+												await applyAction(result)
+											}
+										}}">
+										<input
+											type="hidden"
+											name="pid"
+											value="{data?.product?._id || data?.product?.id}" />
+
+										<input
+											type="hidden"
+											name="vid"
+											value="{data?.product?._id || data?.product?.id}" />
+
+										<WhiteButton
+											type="submit"
+											loadingringsize="sm"
+											loading="{loadingForWishlist}"
+											class="w-full text-sm">
+											<!-- on:click="{() => toggleWishlist(data.product?._id)}" -->
+											{#if data?.product?.isWishlisted}
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													class="h-5 w-5 shrink-0 text-accent-500"
+													viewBox="0 0 20 20"
+													fill="currentColor">
+													<path
+														fill-rule="evenodd"
+														d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+														clip-rule="evenodd"></path>
+												</svg>
+
+												<span>Wishlisted</span>
+											{:else}
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													class="h-5 w-5 shrink-0"
+													fill="none"
+													viewBox="0 0 24 24"
+													stroke="currentColor"
+													stroke-width="2">
+													<path
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+													></path>
+												</svg>
+
+												<span>Wishlist</span>
+											{/if}
+										</WhiteButton>
+									</form>
 								</div>
 							{/if}
 
