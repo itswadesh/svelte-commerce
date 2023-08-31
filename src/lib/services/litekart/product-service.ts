@@ -101,11 +101,11 @@ export const fetchReels = async ({
 
 // Fetch single product
 
-export const fetchProduct = async ({ origin, slug, id, storeId, server = false, sid = null }) => {
+export const fetchProduct = async ({ origin, slug, id, storeId, isCors = false, server = false, sid = null }) => {
 	try {
 		let res: Product | object = {}
 
-		if (isServer) {
+		if (isServer || isCors) {
 			res = await getBySid(`es/products/${slug || id}?store=${storeId}`, sid)
 		} else {
 			res = await getAPI(`es/products/${slug || id}?store=${storeId}`, origin)

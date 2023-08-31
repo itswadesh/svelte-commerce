@@ -1,17 +1,17 @@
 import { del, getAPI, post } from '$lib/utils/api'
 import { error } from '@sveltejs/kit'
-import { getBySid, postt } from '$lib/utils/server'
+import { getBySid, postBySid } from '$lib/utils/server'
 import type { Error } from '$lib/types'
 const isServer = import.meta.env.SSR
 
-export const fetchCartData = async ({ origin, storeId, server = false, sid = null }) => {
+export const fetchCartData = async ({ origin, storeId, cartId = null, sid = null }) => {
 	try {
 		let res = {}
 
 		if (isServer) {
-			res = await getBySid(`cart?store=${storeId}`, sid)
+			res = await getBySid(`cart?store=${storeId}&cart_id=${cartId}`, sid)
 		} else {
-			res = await getAPI(`cart?store=${storeId}`, origin)
+			res = await getAPI(`cart?store=${storeId}&cart_id=${cartId}`, origin)
 		}
 
 		return res || {}
@@ -21,15 +21,15 @@ export const fetchCartData = async ({ origin, storeId, server = false, sid = nul
 	}
 }
 
-export const fetchRefreshCart = async ({ cookies, origin = null, storeId, isCors = false, server = false, sid = null }) => {
+export const fetchRefreshCart = async ({ origin = null, storeId, isCors = false, cartId, sid = null }) => {
 	try {
 		let res = {}
 
 		if (isServer || isCors) {
-			res = await getBySid(`carts/refresh-cart?store=${storeId}`, sid)
+			res = await getBySid(`carts/refresh-cart?store=${storeId}&cart_id=${cartId}`, sid)
 			// res = await getBySid(`carts/my?store=${storeId}`, sid)
 		} else {
-			res = await getAPI(`carts/refresh-cart?store=${storeId}`, origin)
+			res = await getAPI(`carts/refresh-cart?store=${storeId}&cart_id=${cartId}`, origin)
 		}
 		return res || {}
 	} catch (err) {
@@ -38,14 +38,15 @@ export const fetchRefreshCart = async ({ cookies, origin = null, storeId, isCors
 		// throw error(e.status, e.data?.message)
 	}
 }
-export const fetchMyCart = async ({ origin, storeId, server = false, sid = null }) => {
+
+export const fetchMyCart = async ({ origin, storeId, cartId = null, sid = null }) => {
 	try {
 		let res = {}
 
 		if (isServer) {
-			res = await getBySid(`carts/my?store=${storeId}`, sid)
+			res = await getBySid(`carts/my?store=${storeId}&cart_id=${cartId}`, sid)
 		} else {
-			res = await getAPI(`carts/my?store=${storeId}`, origin)
+			res = await getAPI(`carts/my?store=${storeId}&cart_id=${cartId}`, origin)
 		}
 
 		return res || {}
@@ -55,49 +56,51 @@ export const fetchMyCart = async ({ origin, storeId, server = false, sid = null 
 }
 
 export const addToCartService = async ({
-	cookies,
-	customizedData = null,
-	customizedImg = null,
-	options = null,
-	origin,
 	pid,
-	qty,
-	server = false,
-	sid = null,
-	storeId,
 	vid,
+	qty,
+	customizedImg = null,
+	customizedData = null,
+	origin = null,
+	options = null,
+	storeId,
+	cartId,
+	sid = null
 }) => {
 	try {
 		let res = {}
 		if (isServer) {
-			res = await postt(
-				`carts/add-to-cart`,
+			res = await postBySid(
+				`carts/add-to-cart?store=${storeId}&cart_id=${cartId}`,
 				{
-					customizedData,
-					customizedImg,
-					options,
 					pid,
-					qty,
-					store: storeId,
 					vid,
+					qty,
+					customizedImg,
+					store: storeId,
+					cart_id: cartId,
+					customizedData,
+					options
 				},
-				cookies
+				sid
 			)
 		} else {
 			res = await post(
-				`carts/add-to-cart`,
+				`carts/add-to-cart?store=${storeId}&cart_id=${cartId}`,
 				{
 					pid,
 					vid,
 					qty,
 					customizedImg,
 					store: storeId,
+					cart_id: cartId,
 					customizedData,
 					options
 				},
 				origin
 			)
 		}
+
 		return res || {}
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)

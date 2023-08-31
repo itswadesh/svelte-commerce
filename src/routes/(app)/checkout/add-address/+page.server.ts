@@ -1,14 +1,36 @@
-import { AddressService, CountryService } from '$lib/services'
+import { AddressService, CartService, CountryService } from '$lib/services'
+import { loginUrl } from '$lib/config/index.js'
+import { redirect } from '@sveltejs/kit'
 
 export const prerender = false
 
 export async function load({ cookies, locals, params, url }) {
-	const { store } = locals
+	const { me, sid, store, origin } = locals
+	const cartId = cookies.get('cartId')
 	const id = url.searchParams.get('id')
 	// const prescriptionId = url.searchParams.get('prescription')
 	let address = {}
 	let countries = []
 	let states = []
+
+	if (!me || !sid) {
+		const redirectUrl = `${loginUrl}?ref=${url?.pathname}${url?.search || ''}`
+		throw redirect(307, redirectUrl)
+	}
+
+	const cart = await CartService.fetchRefreshCart({
+		cartId,
+		storeId: store?.id,
+		origin,
+		sid
+	})
+
+	// console.log('cart at add address', cart);
+
+	if (!cart?.qty) {
+		throw redirect(307, '/cart')
+	}
+
 
 	if (id === 'new') {
 		address = { id: 'new', country: null, state: null }
