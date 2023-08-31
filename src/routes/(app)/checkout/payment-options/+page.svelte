@@ -144,7 +144,7 @@ async function submit(pm) {
 				origin: $page.data.origin
 			})
 
-			console.log('res of Cashfree', res.payment_session_id)
+			// console.log('res of Cashfree', res.payment_session_id)
 			if (!res.payment_session_id) {
 				data.err = 'Payment failed. Try again'
 				toast('Payment failed. Try again', 'error')
@@ -265,10 +265,10 @@ async function submit(pm) {
 							origin: $page.data.origin
 						})
 						toast('Payment success', 'success')
-						goto(`/payment/success?orderId=${capture._id || capture.id}`)
+						goto(`/payment/process?pg=razorpay&order_no=${capture.order_no}`)
 					} catch (e) {
 						data.err = e
-						goto(`/payment/failure?ref=/checkout/payment-options?address=${data.addressId}`)
+						// goto(`/payment/failed?ref=/checkout/payment-options?address=${data.addressId}`)
 					} finally {
 					}
 				},

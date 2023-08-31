@@ -106,7 +106,6 @@ export const codCheckout = async ({
 	cartId,
 	origin,
 	paymentMethod,
-	paymentProviderId,
 	prescription,
 	storeId
 }: any) => {
@@ -132,7 +131,6 @@ export const codCheckout = async ({
 
 export const phonepeCheckout = async ({
 	address,
-	paymentMethod,
 	prescription,
 	storeId,
 	origin,
@@ -212,7 +210,6 @@ export const razorpayCheckout = async ({
 	prescription,
 	storeId,
 	origin,
-	server = false,
 	sid = null
 }: any) => {
 	try {
@@ -226,7 +223,7 @@ export const razorpayCheckout = async ({
 				prescription,
 				store: storeId,
 				domain: origin,
-				return_url: `${origin}/payment/success`
+				return_url: `${origin}/payment/process`
 			},
 			origin
 		)
@@ -254,7 +251,7 @@ export const razorpayCapture = async ({
 				rpOrderId,
 				store: storeId,
 				domain: origin,
-				return_url: `${origin}/payment/success`
+				return_url: `${origin}/payment/process`
 			},
 			origin
 		)
