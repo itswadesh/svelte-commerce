@@ -1,5 +1,5 @@
 import { del, getAPI, post } from '$lib/utils/api'
-import { getBySid, postBySid, postt } from '$lib/utils/server'
+import { getBySid, postBySid, postt, delBySid } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 const isServer = import.meta.env.SSR
 
@@ -135,9 +135,12 @@ export const deleteAddress = async ({
 	origin,
 	sid = null
 }: any) => {
+	
 	try {
-		const res = del(`addresses/${id}?store=${storeId}`, null, sid)
+		const res = await delBySid(`addresses/${id}`, sid)
+	
 	} catch (err) {
+	
 		throw error(err.status || 400, err.message)
 	}
 }

@@ -99,12 +99,14 @@ export async function postBySid(endpoint: string, data: any, sid?: string) {
 			const setCookieForLogin = response.headers.get('set-cookie')
 			if (setCookieForLogin) {
 				const sidCookie = cookie.parse(setCookieForLogin)
-				res.sid = sidCookie['connect.sid']
+				if (typeof res === 'object' && res !== null) {
+					res.sid = sidCookie['connect.sid']
+				}
 			}
 			return res
 		}
 	} catch (e) {
-		console.log(`/lib/utils/server.ts postBySid(${HTTP_ENDPOINT + '/api/' + endpoint})`, e)
+		// console.log(`/lib/utils/server.ts postBySid(${HTTP_ENDPOINT + '/api/' + endpoint})`, e)
 		throw e
 	}
 }

@@ -1,57 +1,58 @@
-import { CartService } from '$lib/services'
+import { CartService, WishlistService } from '$lib/services'
 import { error, fail, redirect } from '@sveltejs/kit'
 import type { Action, Actions, PageServerLoad } from './$types'
 
 export const load: PageServerLoad = async ({ url, request, locals, cookies, depends }) => {
+	const { store, origin } = locals
 	depends('cart:my')
 	let loading = false
 	let cart = locals.cart
 	try {
 		loading = true
-		const res = await CartService.fetchRefreshCart({
-			storeId: locals.store?.id,
-			sid: cookies.get('connect.sid'),
-			server: true,
-			origin: locals.origin,
-			cookies
-		})
-		if (res) {
-			cart = {
-				cartId: res?.cart_id,
-				items: res?.items,
-				qty: res?.qty,
-				tax: +res?.tax,
-				subtotal: +res?.subtotal,
-				total: +res?.total,
-				currencySymbol: res?.currencySymbol,
-				discount: res?.discount,
-				savings: res?.savings,
-				selfTakeout: res?.selfTakeout,
-				shipping: res?.shipping,
-				unavailableItems: res?.unavailableItems,
-				formattedAmount: res?.formattedAmount
-			}
+		const sid = cookies.get('connect.sid')
+		const cartId = cookies.get('cartId')
+		const cartQty = cookies.get('cartQty')
+		if (sid) {
+			const res = await CartService.fetchRefreshCart({
+				cartId,
+				storeId: store?.id,
+				sid,
+				origin: origin
+			})
 
-			cookies.set('cartId', cart.cartId, { path: '/' })
-			cookies.set('cartQty', cart.qty, { path: '/' })
-			// cookies.set('cart', JSON.stringify(cart), { path: '/' })
-			locals.cartId = cart.cartId
-			locals.cartQty = cart.qty
-			locals.cart = cart
+			if (res) {
+				cart = {
+					cartId: res?.cart_id,
+					items: res?.items,
+					qty: res?.qty,
+					tax: +res?.tax,
+					subtotal: +res?.subtotal,
+					total: +res?.total,
+					currencySymbol: res?.currencySymbol,
+					discount: res?.discount,
+					savings: res?.savings,
+					selfTakeout: res?.selfTakeout,
+					shipping: res?.shipping,
+					unavailableItems: res?.unavailableItems,
+					formattedAmount: res?.formattedAmount
+				}
+
+				// cookies.set('cartId', cart.cartId, { path: '/' })
+				// cookies.set('cartQty', cart.qty, { path: '/' })
+				// cookies.set('cart', JSON.stringify(cart), { path: '/' })
+				// locals.cartId = cart.cartId
+				// locals.cartQty = cart.qty
+				// locals.cart = cart
+			}
 		}
 	} catch (e) {
 		if (e?.status === 401) {
-			throw redirect(307, '/auth/login')
-		} else {
-			cookies.set('cartId', '', { path: '/' })
-			return {}
-
-			// throw error(400, e?.body?.message || e)
+			throw redirect(307, `/auth/login?ref=${url?.pathname}`)
 		}
+		throw error(400, e?.body?.message || e)
 	} finally {
 		loading = false
 	}
-
 	return { loadingCart: loading, cart }
 }
 
@@ -65,13 +66,18 @@ const add: Action = async ({ request, cookies, locals }) => {
 	const linkedItems = JSON.parse(data.get('linkedItems'))
 	const options = JSON.parse(data.get('options')) //data.get('options') //
 	const customizedImg = data.get('customizedImg')
-	const sid = cookies.get('connect.sid')
+	const customizedData = data.get('customizedData')
+	let cartId = locals.cartId
+	let sid = cookies.get('connect.sid')
+
 	if (variantsLength > 0 && !currentVariantId) {
 		return 'choose variant'
 	}
+
 	if (typeof pid !== 'string' || !pid) {
 		return fail(400, { invalid: true })
 	}
+
 	try {
 		let cart = await CartService.addToCartService({
 			pid,
@@ -79,11 +85,23 @@ const add: Action = async ({ request, cookies, locals }) => {
 			qty,
 			options,
 			customizedImg,
+			customizedData,
 			storeId: locals.store?.id,
-			server: true,
+			cartId,
 			origin: locals.origin,
-			cookies // This is a special case to pass complete cookie
+			sid // This is a special case to pass complete cookie
 		})
+
+		if (!cartId) {
+			cartId = cart.cart_id // This is required because when cart_id is null, it will add 3 items with null cart id hence last one prevails
+			cookies.set('cartId', cartId, { path: '/' })
+		}
+
+		if (!sid) {
+			sid = cart.sid
+			cookies.set('connect.sid', sid, { path: '/' })
+		}
+
 		if (linkedItems?.length) {
 			for (const i of linkedItems) {
 				cart = await CartService.addToCartService({
@@ -91,9 +109,9 @@ const add: Action = async ({ request, cookies, locals }) => {
 					vid: i,
 					qty: 1,
 					storeId: locals.store?.id,
-					server: true,
+					cartId,
 					origin: locals.origin,
-					cookies // This is a special case to pass complete cookie
+					sid // This is a special case to pass complete cookie
 				})
 			}
 		}
@@ -117,15 +135,45 @@ const add: Action = async ({ request, cookies, locals }) => {
 			locals.cart = cartObj
 			locals.cartId = cartObj.cartId
 			locals.cartQty = cartObj.qty
-			cookies.set('cartId', cartObj.cartId, { path: '/' })
-			cookies.set('cartQty', cartObj.qty, { path: '/' })
+
+			if (!sid) {
+				cookies.set('connect.sid', cart.sid, { path: '/' })
+			}
+
+			if (!cartId) cookies.set('cartId', cartObj.cartId, { path: '/' })
+
+			cookies.set('cartQty', JSON.stringify(cartObj.qty), { path: '/' })
+
 			return cartObj
 		} else {
 			return {}
 		}
 	} catch (e) {
-		return fail(400, { invalid: true, message: e.body?.message || e.message })
+		return {}
 	}
 }
 
-export const actions: Actions = { add }
+const handleUnavailableItems: Action = async ({ request, cookies, locals }) => {
+	const data = await request.formData()
+	const sid = cookies.get('connect.sid')
+
+	try {
+		const movedRes = await WishlistService.moveUnavailableItemsToWishlist({
+			storeId: locals.store?.id,
+			origin: locals.origin,
+			sid // This is a special case to pass complete cookie
+		})
+
+		// console.log('movedRes', movedRes);
+
+		if (movedRes.qty) {
+			locals.cartQty = movedRes.qty
+		}
+	} catch (e) {
+		return {}
+	}
+
+	return {}
+}
+
+export const actions: Actions = { add, handleUnavailableItems }

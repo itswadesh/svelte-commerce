@@ -14,13 +14,18 @@ export let address = {}
 export let countries = []
 export let editAddress = false
 
+// console.log('$page', $page)
 // console.log('address', address)
 // console.log('countries', countries)
+
+address.phone = address.phone || $page?.data?.me?.phone || ''
 
 let err = null
 let formChanged = false
 let loading = false
 let loadingStates = false
+let selectedCountry = {}
+let showErrorMessage = false
 let states = []
 
 onMount(() => {
@@ -40,12 +45,24 @@ onMount(() => {
 
 	if (address.country) {
 		fetchStates(address.country)
+		getSelectedCountry()
 	}
 })
+
+function getSelectedCountry() {
+	selectedCountry = countries.filter((c) => {
+		if (c.code === address.country) {
+			return c
+		}
+	})
+
+	// console.log('selectedCountry', selectedCountry)
+}
 
 async function onCountryChange(country) {
 	address.state = null
 	fetchStates(country)
+	getSelectedCountry()
 }
 
 async function fetchStates(country) {
@@ -67,14 +84,36 @@ async function fetchStates(country) {
 	}
 }
 
+function removeSpacesAndAlphabets(input) {
+	// Remove spaces and alphabetic characters using regular expression
+	const result = input.replace(/[a-zA-Z ]/g, '')
+
+	return result
+}
+
+
 async function SaveAddress(address) {
 	try {
 		loading = true
 		err = null
 
 		let id = address._id || address.id || 'new'
-		const { city, company, country, email, firstName, lastName, locality, phone, state, zip } =
+		let { city, company, country, email, firstName, lastName, locality, phone, state, zip } =
 			address
+
+
+						
+			if (phone.startsWith('0')) {
+				phone = phone.substring(1)
+			}
+
+			phone = removeSpacesAndAlphabets(phone)
+			
+			getSelectedCountry()
+			if (!phone.startsWith('+')) {
+				phone = (selectedCountry[0].dialCode || '+91') + phone
+			}
+		
 
 		toast('Saving Address Info...', 'info')
 
@@ -110,6 +149,27 @@ async function SaveAddress(address) {
 }
 
 // $: console.log('refinedAddress', JSON.stringify(refinedAddress))
+
+function validatePhoneNumber(phoneNumber) {
+	// Remove any spaces from the phone number
+	phoneNumber = phoneNumber.replace(/\s/g, '')
+
+	// Remove any leading '0' or '+91'
+	 if (phoneNumber.startsWith('0')) {
+        phoneNumber = phoneNumber.substring(1);
+      } else if (phoneNumber.startsWith('+91')) {
+        phoneNumber = phoneNumber.substring(3);
+      }
+
+	// Check if the resulting number is numeric and has a valid length
+	if (/^\d+$/.test(phoneNumber) && phoneNumber.length === 10) {
+		showErrorMessage = false
+		return true
+	}
+
+	showErrorMessage = true
+	return false
+}
 </script>
 
 <div>
@@ -120,14 +180,29 @@ async function SaveAddress(address) {
 		method="POST"
 		use:enhance="{() => {
 			return async ({ result }) => {
-				// console.log('result, address.id', result, address.id)
+				console.log(
+					'result, address.id, $page?.url?.pathname',
+					result,
+					address.id,
+					$page?.url?.pathname
+				)
 
 				if (result?.data) {
 					const newAddressId = result.data?._id || result.data?.id
 					toast('Address Info Saved.', 'success')
+
 					if (address.id === 'new' && newAddressId) {
-						goto(`/checkout/payment-options?address=${newAddressId}`)
+						if ($page?.url?.pathname.includes('checkout')) {
+							goto(`/checkout/payment-options?address=${newAddressId}`)
+						} else {
+							goto(`${newAddressId}`)
+						}
+					} else if ($page?.url?.pathname.includes('checkout')) {
+						goto(`/checkout/address`)
+					} else {
+						goto(`/my/addresses?sort=-updatedAt`)
 					}
+
 					await applyAction(result)
 				} else if (result?.error) {
 					toast(result?.error?.message, 'error')
@@ -194,11 +269,16 @@ async function SaveAddress(address) {
 					<Textbox
 						type="tel"
 						placeholder="Enter Phone"
-						maxlength="13"
+						maxlength="17"
 						bind:value="{address.phone}"
+						on:input="{() => validatePhoneNumber(address.phone)}"
 						required />
 
-					<p class="mt-1">E.g.+nnxxxxxxxxxx</p>
+					<!-- <p class="mt-1">E.g.+nnxxxxxxxxxx</p> -->
+
+					{#if showErrorMessage}
+						<p id="phone-warning" class="text-rose-600">Please enter vaild phone number</p>
+					{/if}
 				</div>
 			</div>
 
@@ -337,6 +417,8 @@ async function SaveAddress(address) {
 		<input type="hidden" name="lastName" value="{address.lastName}" />
 		<input type="hidden" name="locality" value="{address.locality}" />
 		<input type="hidden" name="phone" value="{address.phone}" />
+		<input type="hidden" name="selectedCountry" value="{selectedCountry}" />
+		<input type="hidden" name="showErrorMessage" bind:value="{showErrorMessage}" />
 		<input type="hidden" name="state" value="{address.state}" />
 		<input type="hidden" name="zip" value="{address.zip}" />
 

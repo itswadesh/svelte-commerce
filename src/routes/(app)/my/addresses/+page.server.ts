@@ -19,6 +19,7 @@ export async function load({ cookies, locals }) {
 
 const saveAddress = async ({ request, cookies, locals }) => {
 	const data = await request.formData()
+
 	const address = data.get('address')
 	const city = data.get('city')
 	const company = data.get('company')
@@ -28,36 +29,56 @@ const saveAddress = async ({ request, cookies, locals }) => {
 	const id = data.get('id')
 	const lastName = data.get('lastName')
 	const locality = data.get('locality')
-	const phone = data.get('phone')
+	const selectedCountry = data.get('selectedCountry')
+	const showErrorMessage = data.get('showErrorMessage')
 	const state = data.get('state')
 	const zip = data.get('zip')
+	let phone = data.get('phone')
+
 	const sid = cookies.get('connect.sid')
 
-	const res = await AddressService.saveAddress({
-		address,
-		city,
-		company,
-		country,
-		email,
-		firstName,
-		id,
-		lastName,
-		locality,
-		phone,
-		state,
-		zip,
-		storeId: locals.store?.id,
-		sid,
-		origin: locals.origin
-	})
+	// console.log('showErrorMessage at save address', showErrorMessage);
 
-	// console.log('res of save address = ', res)
+	if (showErrorMessage === true || showErrorMessage === 'true') {
+		throw error(404, 'Please enter valid phone number')
+	} else {
+		phone = phone.replace(/[a-zA-Z ]/g, '')
 
-	return res
+		if (phone.startsWith('0')) {
+			phone = phone.substring(1)
+		}
+
+		if (!phone.startsWith('+')) {
+			phone = (selectedCountry[0].dialCode || '+91') + phone
+		}
+
+		const res = await AddressService.saveAddress({
+			address,
+			city,
+			company,
+			country,
+			email,
+			firstName,
+			id,
+			lastName,
+			locality,
+			phone,
+			state,
+			zip,
+			storeId: locals.store?.id,
+			sid,
+			origin: locals?.origin
+		})
+
+		// console.log('res of save address = ', res)
+
+		return res
+	}
 }
 
 const editAddress = async ({ request, cookies, locals }) => {
 	const data = await request.formData()
+
 	const address = data.get('address')
 	const city = data.get('city')
 	const company = data.get('company')
@@ -67,32 +88,53 @@ const editAddress = async ({ request, cookies, locals }) => {
 	const id = data.get('id')
 	const lastName = data.get('lastName')
 	const locality = data.get('locality')
-	const phone = data.get('phone')
+	const selectedCountry = data.get('selectedCountry')
+	const showErrorMessage = data.get('showErrorMessage')
 	const state = data.get('state')
 	const zip = data.get('zip')
+	let phone = data.get('phone')
+
 	const sid = cookies.get('connect.sid')
 
-	const res = await AddressService.editAddress({
-		address,
-		city,
-		company,
-		country,
-		email,
-		firstName,
-		id,
-		lastName,
-		locality,
-		phone,
-		state,
-		zip,
-		storeId: locals.store?.id,
-		sid,
-		origin: locals.origin
-	})
+	// console.log('showErrorMessage at edit address', showErrorMessage);
 
-	// console.log('res of save address = ', res)
+	if (showErrorMessage === true || showErrorMessage === 'true') {
+		throw error(404, 'Please enter valid phone number')
+	} else {
+		phone = phone.replace(/[a-zA-Z ]/g, '')
 
-	return res
+		console.log(phone)
+
+		if (phone.startsWith('0')) {
+			phone = phone.substring(1)
+		}
+
+		if (!phone.startsWith('+')) {
+			phone = (selectedCountry[0].dialCode || '+91') + phone
+		}
+
+		const res = await AddressService.saveAddress({
+			address,
+			city,
+			company,
+			country,
+			email,
+			firstName,
+			id,
+			lastName,
+			locality,
+			phone,
+			state,
+			zip,
+			storeId: locals.store?.id,
+			sid,
+			origin: locals?.origin
+		})
+
+		// console.log('res of save address = ', res)
+
+		return res
+	}
 }
 
 const deleteAddress = async ({ request, cookies, locals }) => {

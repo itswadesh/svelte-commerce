@@ -4,44 +4,43 @@ import { error, redirect } from '@sveltejs/kit'
 export const prerender = false
 
 export async function load({ url, request, locals, cookies }) {
-	const cartId = locals.cartId
-	const orderId = url.searchParams.get('orderId')
+	const cartId = cookies.get('cartId')
+	const orderId = url.searchParams.get('orderId') || url.searchParams.get('order_no')
 	const paymentMode = url.searchParams.get('provider')
 	const paymentReferenceId = url.searchParams.get('payment_reference_id')
 	const sid = cookies.get('connect.sid')
 	const status = url.searchParams.get('status')
+	const storeId = locals.store?.id
 
 	let cart
 	let err
 	let loading
 	let order
-
 	try {
 		loading = true
 
 		order = await OrdersService.paySuccessPageHit({
-			cartId,
 			paymentMode,
 			status,
 			orderId,
 			paymentReferenceId,
-			storeId: locals.store?.id,
+			storeId,
 			server: true,
 			sid
 		})
-			cookies.set('cartQty', cartObj.qty, { path: '/' })
 
-		if (order.id) throw { status: 307, url: `/my/orders/${order.id}` }
+		cookies.set('cartQty', '0', { path: '/' })
+		locals.cartQty = 0
 	} catch (e) {
-		err = e
+		// console.log('error at payment success page', e);
 
-		if (e.status == 307) {
-			throw redirect(307, e.url)
-		}
 		if (e.status === 401) {
-			throw redirect(307, locals.store?.loginUrl)
+			throw redirect(307, '/auth/login')
 		}
+
+		err = e
 		throw error(400, e?.message || e)
+
 		// return {
 		// 	status: 400,
 		// 	errors: new Error(e?.message || e)
@@ -52,10 +51,9 @@ export async function load({ url, request, locals, cookies }) {
 
 	try {
 		cart = await CartService.fetchRefreshCart({
-			cookies,
-			storeId: locals.store?.id,
-			server: true,
-			sid: cookies.get('connect.sid'),
+			cartId,
+			storeId,
+			sid,
 			origin: locals.origin
 		})
 
@@ -76,13 +74,15 @@ export async function load({ url, request, locals, cookies }) {
 				formattedAmount: cart?.formattedAmount
 			}
 
-			locals.cartId = cart.cartId
-			locals.cartQty = cart.qty
+			locals.cartId = cartObj.cartId
+			locals.cartQty = cartObj.qty
 			locals.cart = cartObj
 			// cookies.set('cartId', cartObj.cartId, { path: '/' })
-			cookies.set('cartQty', cartObj.qty, { path: '/' })
+			cookies.set('cartQty', JSON.stringify(cartObj.qty), { path: '/' })
 		}
-	} catch (e) { }
+	} catch (e) {
+		// console.log('error at payment success page cart', e);
+	}
 
 	return { loading, status, paymentMode, order, err, cart }
 }

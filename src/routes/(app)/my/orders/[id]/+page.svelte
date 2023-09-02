@@ -88,7 +88,7 @@ onMount(() => {
 									<div class="flex w-full flex-1 flex-col gap-1 xl:pr-4">
 										<div class="mb-1 flex justify-between gap-2 sm:gap-4">
 											<a
-												href="{`/product/${item.slug}}`}"
+												href="{`/product/${item.slug}`}"
 												aria-label="Click to view the product details"
 												class="flex-1 hover:underline text-zinc-500">
 												{item.name}

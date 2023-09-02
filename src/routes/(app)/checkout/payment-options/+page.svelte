@@ -34,7 +34,7 @@ import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { OrdersService } from '$lib/services'
 import { page } from '$app/stores'
-import { Pricesummary, LazyImg, CheckoutHeader, Error } from '$lib/components'
+import { Pricesummary, LazyImg, CheckoutHeader, Error, TrustBaggeContainer } from '$lib/components'
 import logo from '$lib/assets/logo.svg'
 import SEO from '$lib/components/SEO/index.svelte'
 
@@ -45,13 +45,13 @@ const seoProps = {
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
-
 let bankPayment = { type: 'order', reference: '', remark: '', paymentMethodId: '', amount: 0 }
 let disabled = false
 let errorMessage = 'Select a Payment Method'
 let loading = false
 let paymentDenied = false
 let razorpayReady = false
+let cashfreeReady = false
 let selectedPaymentMethod = { id: '', name: '', text: '', instructions: '', qrcode: '', img: '' }
 let showPayWithBankTransfer = false
 let paymentProcessingStep = 1
@@ -72,6 +72,11 @@ onMount(async () => {
 	razorpayScript.setAttribute('src', 'https://checkout.razorpay.com/v1/checkout.js')
 	document.head.appendChild(razorpayScript)
 	razorpayReady = true
+
+	const cashfreeScript = document.createElement('script')
+	cashfreeScript.setAttribute('src', 'https://sdk.cashfree.com/js/v3/cashfree.js')
+	document.head.appendChild(cashfreeScript)
+	cashfreeReady = true
 	fireGTagEvent('begin_checkout', data.cart)
 })
 
@@ -100,8 +105,8 @@ async function submit(pm) {
 				paymentProcessingStep = 2
 				setTimeout(() => {
 					paymentProcessingStep = 3
-				}, 500)
-			}, 500)
+				}, 1000)
+			}, 1000)
 
 			const res = await OrdersService.codCheckout({
 				address: data.addressId,
@@ -139,13 +144,26 @@ async function submit(pm) {
 				origin: $page.data.origin
 			})
 
-			// console.log('res of Cashfree', res)
-
-			if (res?.redirectUrl && res?.redirectUrl !== null) {
-				goto(`${res?.redirectUrl}`)
-			} else {
-				toast('Something went wrong', 'error')
+			// console.log('res of Cashfree', res.payment_session_id)
+			if (!res.payment_session_id) {
+				data.err = 'Payment failed. Try again'
+				toast('Payment failed. Try again', 'error')
 			}
+			const cashfree = Cashfree({ mode: res.payment_mode })
+			cashfree
+				.checkout({
+					paymentSessionId: res.payment_session_id,
+					returnUrl: res.order_meta?.return_url,
+					redirectTarget: '_parent'
+				})
+				.then(function () {
+					console.log('on going redirection')
+				})
+			// if (res?.redirectUrl && res?.redirectUrl !== null) {
+			// 	goto(`${res?.redirectUrl}`)
+			// } else {
+			// 	toast('Something went wrong', 'error')
+			// }
 		} catch (e) {
 			data.err = e
 			toast(e?.body?.message || e, 'error')
@@ -247,10 +265,10 @@ async function submit(pm) {
 							origin: $page.data.origin
 						})
 						toast('Payment success', 'success')
-						goto(`/payment/success?orderId=${capture._id || capture.id}`)
+						goto(`/payment/process?pg=razorpay&order_no=${capture.order_no}`)
 					} catch (e) {
 						data.err = e
-						goto(`/payment/failure?ref=/checkout/payment-options?address=${data.addressId}`)
+						// goto(`/payment/failed?ref=/checkout/payment-options?address=${data.addressId}`)
 					} finally {
 					}
 				},
@@ -290,7 +308,6 @@ function checkIfStripeCardValid({ detail }) {
 </script>
 
 <SEO {...seoProps} />
-
 <div class="container mx-auto min-h-screen w-full max-w-6xl p-3 py-5 sm:p-10">
 	<CheckoutHeader selected="payment" />
 
@@ -384,7 +401,7 @@ function checkIfStripeCardValid({ detail }) {
 			{/if}
 		</div>
 
-		<div class="w-full md:w-80 md:shrink-0 md:grow-0">
+		<div class="w-full lg:w-96 lg:shrink-0 lg:grow-0">
 			<h2 class="mb-5">Cart Summary</h2>
 
 			<hr class="mb-5" />
@@ -538,6 +555,8 @@ function checkIfStripeCardValid({ detail }) {
 			<!-- disabled="{!razorpayReady ||
 					(!selectedPaymentMethod?.name && !selectedPaymentMethod?.value) ||
 					(selectedPaymentMethod?.name === 'Stripe' && disabled)}" -->
+
+			<TrustBaggeContainer class="mt-5" />
 		</div>
 	</div>
 </div>
@@ -577,3 +596,4 @@ function checkIfStripeCardValid({ detail }) {
 		{/if}
 	</div>
 {/if}
+<iframe name="cashfreeFrame" title="Cashfree" class="absolute" allow="payment"></iframe>

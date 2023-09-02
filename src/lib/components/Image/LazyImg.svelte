@@ -81,18 +81,30 @@ export let width = null
 let clazz: string
 export { clazz as class }
 
+// const h = height === 'auto' ? 'auto' : +height * 2
+// const w = width === 'auto' ? 'auto' : +width * 2
+const h = height === 'auto' ? '0' : +height * 2
+const w = width === 'auto' ? '0' : +width * 2
+
+const arh = aspect_ratio.split(':')[1]
+const arw = aspect_ratio.split(':')[0]
+
+const extension = src.split('.').pop()
+const IMAGE_CDN_PROVIDER = $page.data?.store?.imageCdn?.provider?.val
+const IMAGE_CDN_URL = $page.data?.store?.imageCdn?.url?.val
+
 let imageLoaded = false
-
-const h = height === null ? 'auto' : +height * 2
-const w = width === null ? 'auto' : +width * 2
-
+let isSvg = false
 let lazyloadInstance: any
-const IMAGE_CDN_URL = $page.data.store?.IMAGE_CDN_URL ?? ''
+
+// let loadedImage = false
 
 onMount(() => {
 	if (browser) {
 		lazyloadInstance = new lazyload({
-			thresholds: '50px 10%'
+			thresholds: '50px 10%',
+			callback_error: (img) => {img.setAttribute("src", "https://i.ibb.co/ZKFtJ25/image-1.png")},
+			callback_enter: handleLineLoader
 		})
 	}
 })
@@ -104,36 +116,159 @@ onDestroy(() => {
 
 	imageLoaded = true
 })
+
+if (extension === 'svg') {
+	isSvg = true
+}
+
+function handleLineLoader(){
+	const lineLoader = document.querySelector('.loader-line')
+
+	lineLoader.style.display = 'none'
+	
+}
+
+
 </script>
 
 <div class="relative">
 	{#if imageLoaded}
-		<img
-			in:fade="{{ duration: 300 }}"
-			alt="{alt}"
-			src="/placeholder.png"
-			data-src="{`${getCdnImageUrl(src, IMAGE_CDN_URL)}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(
-				':',
-				'-'
-			)}`}"
-			height="{h}"
-			width="{w}"
-			class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
-	{:else}
-		<img
-			in:fade="{{ duration: 300 }}"
-			alt=" "
-			src="/placeholders/placeholder2.png"
-			data-src="{`${getCdnImageUrl(src, IMAGE_CDN_URL)}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(
-				':',
-				'-'
-			)}`}"
-			class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
+		{#if IMAGE_CDN_PROVIDER === 'imagekit'}
+			{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } ).includes('http')}
+				<img
+					in:fade="{{ duration: 300 }}"
+					alt="{alt}"
+					src="/placeholder.png"
+					data-src="{`${getCdnImageUrl({
+						src,
+						IMAGE_CDN_URL,
+						IMAGE_CDN_PROVIDER,
+						NO_QUERY: true
+					})}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(':', '-')}`}"
+					height="{h}"
+					width="{w}"
+					class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
+			{:else}
+				<img
+					in:fade="{{ duration: 300 }}"
+					alt="{alt}"
+					src="/placeholder.png"
+					data-src="{`${IMAGE_CDN_URL}${getCdnImageUrl({
+						src,
+						IMAGE_CDN_URL,
+						IMAGE_CDN_PROVIDER,
+						NO_QUERY: true
+					})}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(':', '-')}`}"
+					height="{h}"
+					width="{w}"
+					class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
+			{/if}
+			<!-- <div class="absolute inset-0 flex itmes-center justify-center">
+				<span class="loader-line"></span>
+			</div> -->
+		{:else if IMAGE_CDN_PROVIDER === 'thumbor'}
+			{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } ).includes('http')}
+				<img
+					in:fade="{{ duration: 300 }}"
+					alt="{alt}"
+					src="/placeholder.png"
+					data-src="{`${getCdnImageUrl({
+						src,
+						IMAGE_CDN_URL,
+						IMAGE_CDN_PROVIDER,
+						NO_QUERY: true
+					})}`}"
+					height="{h}"
+					width="{w}"
+					class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
+			{:else}
+				<img
+					in:fade="{{ duration: 300 }}"
+					alt="{alt}"
+					src="/placeholder.png"
+					data-src="{`${IMAGE_CDN_URL}/fit-in/${w}x${h}${getCdnImageUrl({
+						src,
+						IMAGE_CDN_URL,
+						IMAGE_CDN_PROVIDER,
+						NO_QUERY: true
+					})}`}"
+					height="{h}"
+					width="{w}"
+					class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
+			{/if}
+		{/if}
+		<!-- <div class="absolute inset-0 flex itmes-center justify-center">
+			<span class="loader-line"></span>
+		</div> -->
+	{:else if IMAGE_CDN_PROVIDER === 'imagekit'}
+		{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } ).includes('http')}
+			<img
+				in:fade="{{ duration: 300 }}"
+				alt=" "
+				src="/placeholders/placeholder2.png"
+				data-src="{`${getCdnImageUrl({
+					src,
+					IMAGE_CDN_URL,
+					IMAGE_CDN_PROVIDER,
+					NO_QUERY: true
+				})}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(':', '-')}`}"
+				class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
+			<!-- <div class="absolute inset-0 flex itmes-center justify-center">
+				<span class="loader-line"></span>
+			</div> -->
+		{:else}
+			<img
+				in:fade="{{ duration: 300 }}"
+				alt=" "
+				src="/placeholders/placeholder2.png"
+				data-src="{`${IMAGE_CDN_URL}${getCdnImageUrl({
+					src,
+					IMAGE_CDN_URL,
+					IMAGE_CDN_PROVIDER,
+					NO_QUERY: true
+				})}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(':', '-')}`}"
+				class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
+			<!-- <div class="absolute inset-0 flex itmes-center justify-center">
+				<span class="loader-line"></span>
+			</div> -->
+		{/if}
+	{:else if IMAGE_CDN_PROVIDER === 'thumbor'}
+		{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } ).includes('http')}
+			
+			<img
+				in:fade="{{ duration: 300 }}"
+				alt=" "
+				src="/placeholders/placeholder2.png"
+				data-src="{`${getCdnImageUrl({
+					src,
+					IMAGE_CDN_URL,
+					IMAGE_CDN_PROVIDER,
+					NO_QUERY: true
+				})}`}"
+				class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
+			<!-- <div class="absolute inset-0 flex itmes-center justify-center">
+				<span class="loader-line"></span>
+			</div> -->
+		{:else}
+			<img
+				in:fade="{{ duration: 300 }}"
+				alt=" "
+				src="/placeholders/placeholder2.png"
+				data-src="{`${IMAGE_CDN_URL}/fit-in/${w}x${h}${getCdnImageUrl({
+					src,
+					IMAGE_CDN_URL,
+					IMAGE_CDN_PROVIDER,
+					NO_QUERY: true
+				})}`}"
+				class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
+			<!-- <div class="absolute inset-0 flex itmes-center justify-center">
+				<span class="loader-line"></span>
+			</div> -->
+		{/if}
 	{/if}
-
-	<div class="absolute inset-0 flex itmes-center justify-center">
-		<span class="loader-line"></span>
-	</div>
+			<div class="absolute inset-0 flex itmes-center justify-center">
+				<span class="loader-line"></span>
+			</div>
 </div>
 
 <!-- <img
