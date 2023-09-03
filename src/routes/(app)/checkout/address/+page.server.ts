@@ -21,7 +21,7 @@ export async function load({ locals, url, parent }) {
 		// console.log('cart at address', cart);
 
 		if (!cart?.qty) {
-			throw redirect(307, '/cart')
+			redirect(307, '/cart')
 		}
 
 		const countries = await CountryService.fetchCountries({
@@ -31,7 +31,7 @@ export async function load({ locals, url, parent }) {
 		})
 
 		if (me) {
-			const { myAddresses, selectedAddress } = await AddressService.fetchAddresses({
+			const { myAddresses, preSelectedAddress } = await AddressService.fetchAddresses({
 				storeId,
 				origin,
 				server: true,
@@ -45,7 +45,7 @@ export async function load({ locals, url, parent }) {
 				err,
 				myAddresses,
 				q,
-				selectedAddress,
+				preSelectedAddress,
 				url: url.href
 			}
 		} else {
@@ -61,11 +61,11 @@ export async function load({ locals, url, parent }) {
 	} catch (e) {
 		// console.log('errzzzzzzzzzzzzzzzzzz', e);
 		if (e.status === 307 && e.location === '/cart') {
-			throw redirect(307, '/cart')
+			redirect(307, '/cart')
 		} else if (e.status === 401 || e.status === 307) {
-			throw redirect(307, `/auth/login?ref=${url?.pathname}`)
+			redirect(307, `/auth/login?ref=${url?.pathname}`)
 		} else {
-			throw error(500, e?.message)
+			error(500, e?.message)
 		}
 	}
 }
