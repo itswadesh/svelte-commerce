@@ -104,6 +104,7 @@ export const paySuccessPageHit = async ({
 export const codCheckout = async ({
 	address,
 	cartId,
+	comment = '',
 	origin,
 	paymentMethod,
 	prescription,
@@ -116,6 +117,7 @@ export const codCheckout = async ({
 			`orders/checkout/cod`,
 			{
 				address,
+				comment,
 				paymentMethod,
 				prescription,
 				store: storeId

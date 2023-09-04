@@ -1,5 +1,5 @@
 <script>
-import { AddressService, CountryService } from '$lib/services'
+import { AddressService, CountryService, ZipService } from '$lib/services'
 import { applyAction, enhance } from '$app/forms'
 import { createEventDispatcher, onMount } from 'svelte'
 import { Error } from '$lib/components'
@@ -28,7 +28,9 @@ let selectedCountry = {}
 let showErrorMessage = false
 let states = []
 
-onMount(() => {
+onMount(async () => {
+	await invalidateAll()
+
 	if (countries?.length === 1) {
 		address.country = countries[0].code
 	} else if (countries?.length > 1) {
@@ -76,6 +78,11 @@ async function fetchStates(country) {
 			origin: $page.data?.origin
 		})
 
+		states = states.map((s) => {
+			s.name = s.name.toUpperCase()
+			return s
+		})
+
 		// console.log('states', states)
 	} catch (e) {
 		err = e
@@ -84,6 +91,36 @@ async function fetchStates(country) {
 	}
 }
 
+// async function fetchStateAndCity(zip) {
+// 	if (zip.length != 6) {
+// 		toast('Please enter 6 digit code', 'error')
+// 		return
+// 	}
+
+// 	try {
+// 		err = null
+// 		loadingStates = true
+
+// 		let { city, state } = address
+
+// 		const zipInfo = await ZipService.findZip({
+// 			zip,
+// 			origin
+// 		})
+
+// 		// console.log('zipInfo', zipInfo)
+
+// 		address.city = zipInfo.District || ''
+// 		address.state = zipInfo.StateName || ''
+// 	} catch (e) {
+// 		err = e
+// 		// console.log(e)
+// 		toast(e.message.error, 'error')
+// 	} finally {
+// 		loadingStates = false
+// 	}
+// }
+
 function removeSpacesAndAlphabets(input) {
 	// Remove spaces and alphabetic characters using regular expression
 	const result = input.replace(/[a-zA-Z ]/g, '')
@@ -91,29 +128,24 @@ function removeSpacesAndAlphabets(input) {
 	return result
 }
 
-
 async function SaveAddress(address) {
 	try {
 		loading = true
 		err = null
 
 		let id = address._id || address.id || 'new'
-		let { city, company, country, email, firstName, lastName, locality, phone, state, zip } =
-			address
+		let { city, country, email, firstName, lastName, phone, state, zip } = address
 
+		if (phone.startsWith('0')) {
+			phone = phone.substring(1)
+		}
 
-						
-			if (phone.startsWith('0')) {
-				phone = phone.substring(1)
-			}
+		phone = removeSpacesAndAlphabets(phone)
 
-			phone = removeSpacesAndAlphabets(phone)
-			
-			getSelectedCountry()
-			if (!phone.startsWith('+')) {
-				phone = (selectedCountry[0].dialCode || '+91') + phone
-			}
-		
+		getSelectedCountry()
+		if (!phone.startsWith('+')) {
+			phone = (selectedCountry[0].dialCode || '+91') + phone
+		}
 
 		toast('Saving Address Info...', 'info')
 
@@ -121,12 +153,10 @@ async function SaveAddress(address) {
 			id,
 			address: address.address, // This is to ignore conflicts
 			city: city,
-			// company: company,
 			country: country,
 			email: email,
 			firstName: firstName,
 			lastName: lastName,
-			locality: locality,
 			phone: phone,
 			state: state,
 			zip: zip,
@@ -148,18 +178,18 @@ async function SaveAddress(address) {
 	}
 }
 
-// $: console.log('refinedAddress', JSON.stringify(refinedAddress))
+// $: // console.log('refinedAddress', JSON.stringify(refinedAddress))
 
 function validatePhoneNumber(phoneNumber) {
 	// Remove any spaces from the phone number
 	phoneNumber = phoneNumber.replace(/\s/g, '')
 
 	// Remove any leading '0' or '+91'
-	 if (phoneNumber.startsWith('0')) {
-        phoneNumber = phoneNumber.substring(1);
-      } else if (phoneNumber.startsWith('+91')) {
-        phoneNumber = phoneNumber.substring(3);
-      }
+	if (phoneNumber.startsWith('0')) {
+		phoneNumber = phoneNumber.substring(1)
+	} else if (phoneNumber.startsWith('+91')) {
+		phoneNumber = phoneNumber.substring(3)
+	}
 
 	// Check if the resulting number is numeric and has a valid length
 	if (/^\d+$/.test(phoneNumber) && phoneNumber.length === 10) {
@@ -173,19 +203,19 @@ function validatePhoneNumber(phoneNumber) {
 </script>
 
 <div>
-	<Error err="{err}" class="mb-5" />
+	<Error err="{err?.message?.error || err}" class="mb-5" />
 
 	<form
 		action="{address.id === 'new' ? '/my/addresses?/saveAddress' : '/my/addresses?/editAddress'}"
 		method="POST"
 		use:enhance="{() => {
 			return async ({ result }) => {
-				console.log(
-					'result, address.id, $page?.url?.pathname',
-					result,
-					address.id,
-					$page?.url?.pathname
-				)
+				// console.log(
+				// 	'result, address.id, $page?.url?.pathname',
+				// 	result,
+				// 	address.id,
+				// 	$page?.url?.pathname
+				// )
 
 				if (result?.data) {
 					const newAddressId = result.data?._id || result.data?.id
@@ -205,9 +235,9 @@ function validatePhoneNumber(phoneNumber) {
 
 					await applyAction(result)
 				} else if (result?.error) {
+					address.phone = ''
 					toast(result?.error?.message, 'error')
 				}
-
 				editAddress = false
 			}
 		}}">
@@ -216,7 +246,7 @@ function validatePhoneNumber(phoneNumber) {
 			<!-- First Name -->
 
 			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
-				<h6 class="sm:w-52 sm:shrink-0">
+				<h6 class="sm:w-60 sm:shrink-0">
 					First Name
 
 					<span class="text-accent-500">*</span>
@@ -235,7 +265,7 @@ function validatePhoneNumber(phoneNumber) {
 			<!-- Last Name -->
 
 			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
-				<h6 class="sm:w-52 sm:shrink-0">
+				<h6 class="sm:w-60 sm:shrink-0">
 					Last Name
 
 					<span class="text-accent-500">*</span>
@@ -249,17 +279,17 @@ function validatePhoneNumber(phoneNumber) {
 			<!-- Email -->
 
 			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
-				<h6 class="sm:w-52 sm:shrink-0">Email</h6>
+				<h6 class="sm:w-60 sm:shrink-0">Email <span class="text-accent-500">*</span></h6>
 
 				<div class="w-full">
-					<Textbox type="email" placeholder="Enter Email" bind:value="{address.email}" />
+					<Textbox type="email" placeholder="Enter Email" bind:value="{address.email}" required />
 				</div>
 			</div>
 
 			<!-- Phone -->
 
 			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
-				<h6 class="sm:w-52 sm:shrink-0">
+				<h6 class="sm:w-60 sm:shrink-0">
 					Phone
 
 					<span class="text-accent-500">*</span>
@@ -277,7 +307,7 @@ function validatePhoneNumber(phoneNumber) {
 					<!-- <p class="mt-1">E.g.+nnxxxxxxxxxx</p> -->
 
 					{#if showErrorMessage}
-						<p id="phone-warning" class="text-rose-600">Please enter vaild phone number</p>
+						<p id="phone-warning" class="mt-1 text-rose-600">Please enter vaild phone number</p>
 					{/if}
 				</div>
 			</div>
@@ -285,7 +315,7 @@ function validatePhoneNumber(phoneNumber) {
 			<!-- Address -->
 
 			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
-				<h6 class="sm:w-52 sm:shrink-0">
+				<h6 class="sm:w-60 sm:shrink-0">
 					Address
 
 					<span class="text-accent-500">*</span>
@@ -294,40 +324,67 @@ function validatePhoneNumber(phoneNumber) {
 				<Textarea placeholder="Enter Address" bind:value="{address.address}" required />
 			</div>
 
-			<!-- Locality -->
+			<!-- Postal Code/Pincode/Zipcode -->
 
 			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
-				<h6 class="sm:w-52 sm:shrink-0">Locality</h6>
+				<h6 class="sm:w-60 sm:shrink-0">
+					Postal Code/Pincode/Zipcode
+
+					<span class="text-accent-500">*</span>
+				</h6>
 
 				<div class="w-full">
-					<Textbox placeholder="Enter Locality" bind:value="{address.locality}" />
+					<Textbox
+						type="tel"
+						placeholder="Enter Postal Code/Pincode/Zipcode"
+						maxlength="6"
+						bind:value="{address.zip}"
+						required />
+					<!-- on:blur="{() => fetchStateAndCity(address.zip)}" -->
 				</div>
 			</div>
 
 			<!-- City -->
 
 			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
-				<h6 class="sm:w-52 sm:shrink-0">City</h6>
+				<h6 class="sm:w-60 sm:shrink-0">City</h6>
 
 				<div class="w-full">
 					<Textbox placeholder="Enter City" bind:value="{address.city}" />
 				</div>
 			</div>
 
-			<!-- Company -->
+			<!-- State -->
 
-			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
-				<h6 class="sm:w-52 sm:shrink-0">Company</h6>
+			{#if states?.length}
+				<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
+					<h6 class="sm:w-60 sm:shrink-0">
+						State/Province
 
-				<div class="w-full">
-					<Textbox placeholder="Enter Company" bind:value="{address.company}" />
+						<span class="text-accent-500">*</span>
+					</h6>
+
+					<select
+						class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
+						bind:value="{address.state}"
+						disabled="{!address.country || loadingStates}"
+						required>
+						<option value="{null}" disabled selected>-- Select a State --</option>
+						{#each states as s}
+							{#if s}
+								<option value="{s.name}">
+									{s.name}
+								</option>
+							{/if}
+						{/each}
+					</select>
 				</div>
-			</div>
+			{/if}
 
 			<!-- Country -->
 
 			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
-				<h6 class="sm:w-52 sm:shrink-0">
+				<h6 class="sm:w-60 sm:shrink-0">
 					Country
 
 					<span class="text-accent-500">*</span>
@@ -359,69 +416,25 @@ function validatePhoneNumber(phoneNumber) {
 					</a>
 				{/if}
 			</div>
-
-			<!-- State -->
-
-			{#if states?.length}
-				<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
-					<h6 class="sm:w-52 sm:shrink-0">
-						State/Province
-
-						<span class="text-accent-500">*</span>
-					</h6>
-
-					<select
-						class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
-						bind:value="{address.state}"
-						disabled="{!address.country || loadingStates}"
-						required>
-						<option value="{null}" disabled selected>-- Select a State --</option>
-						{#each states as s}
-							{#if s}
-								<option value="{s.code}">
-									{s.name}
-								</option>
-							{/if}
-						{/each}
-					</select>
-				</div>
-			{/if}
-
-			<!-- ZIP -->
-
-			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
-				<h6 class="sm:w-52 sm:shrink-0">
-					ZIP
-
-					<span class="text-accent-500">*</span>
-				</h6>
-
-				<div class="w-full">
-					<Textbox
-						type="tel"
-						placeholder="Enter zip"
-						maxlength="6"
-						bind:value="{address.zip}"
-						required />
-				</div>
-			</div>
 		</div>
 
 		<input type="hidden" name="address" value="{address.address}" />
 		<input type="hidden" name="city" value="{address.city}" />
-		<input type="hidden" name="company" value="{address.company}" />
 		<input type="hidden" name="country" value="{address.country}" />
 		<input type="hidden" name="email" value="{address.email}" />
 		<input type="hidden" name="firstName" value="{address.firstName}" />
 		<input type="hidden" name="id" value="{address.id || address._id}" />
 		<input type="hidden" name="lastName" value="{address.lastName}" />
-		<input type="hidden" name="locality" value="{address.locality}" />
 		<input type="hidden" name="phone" value="{address.phone}" />
 		<input type="hidden" name="selectedCountry" value="{selectedCountry}" />
 		<input type="hidden" name="showErrorMessage" bind:value="{showErrorMessage}" />
 		<input type="hidden" name="state" value="{address.state}" />
 		<input type="hidden" name="zip" value="{address.zip}" />
 
-		<PrimaryButton type="submit" loading="{loading}" class="w-60">Save Address</PrimaryButton>
+		<PrimaryButton
+			type="submit"
+			loading="{loading}"
+			disabled="{loading || showErrorMessage}"
+			class="w-60">Save Address</PrimaryButton>
 	</form>
 </div>
