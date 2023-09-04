@@ -35,8 +35,10 @@ import { onMount } from 'svelte'
 import { OrdersService } from '$lib/services'
 import { page } from '$app/stores'
 import { Pricesummary, LazyImg, CheckoutHeader, Error, TrustBaggeContainer } from '$lib/components'
+import { slide } from 'svelte/transition'
 import logo from '$lib/assets/logo.svg'
 import SEO from '$lib/components/SEO/index.svelte'
+import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
 
 const seoProps = {
 	title: 'Select Payment Option',
@@ -45,16 +47,18 @@ const seoProps = {
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
+
 let bankPayment = { type: 'order', reference: '', remark: '', paymentMethodId: '', amount: 0 }
+let cashfreeReady = false
+let comment = ''
 let disabled = false
 let errorMessage = 'Select a Payment Method'
 let loading = false
 let paymentDenied = false
+let paymentProcessingStep = 1
 let razorpayReady = false
-let cashfreeReady = false
 let selectedPaymentMethod = { id: '', name: '', text: '', instructions: '', qrcode: '', img: '' }
 let showPayWithBankTransfer = false
-let paymentProcessingStep = 1
 
 $: if (data.paymentMethods?.length === 1 && data.paymentMethods[0]?.type === 'pg') {
 	const pm = data.paymentMethods[0]
@@ -126,6 +130,43 @@ async function submit(pm) {
 			toast(e?.body?.message || e, 'error')
 		} finally {
 			loading = false
+		}
+	} else if (paymentMethod === 'BankTransfer') {
+		if (comment) {
+			try {
+				loading = true
+
+				setTimeout(() => {
+					paymentProcessingStep = 2
+					setTimeout(() => {
+						paymentProcessingStep = 3
+					}, 1000)
+				}, 1000)
+
+				const res = await OrdersService.codCheckout({
+					address: data.addressId,
+					cartId: data?.cartId,
+					comment,
+					paymentMethod: 'COD',
+					paymentProviderId: paymentMethod,
+					prescription: data.prescription?._id,
+					storeId: $page.data.store?.id,
+					origin: $page.data.origin
+				})
+
+				// console.log('res of cod', res)
+
+				comment = ''
+
+				goto(`/payment/success?orderId=${res?._id || res?.id}&status=PAYMENT_SUCCESS&provider=COD`)
+			} catch (e) {
+				data.err = e
+				toast(e?.body?.message || e, 'error')
+			} finally {
+				loading = false
+			}
+		} else {
+			toast('Please enter your transaction id to place your order', 'info')
 		}
 	} else if (paymentMethod === 'Cashfree') {
 		try {
@@ -322,7 +363,7 @@ function checkIfStripeCardValid({ detail }) {
 				<div class="flex w-full flex-col gap-4" class:wiggle="{paymentDenied}">
 					{#each data.paymentMethods as pm}
 						<label
-							class="flex w-full cursor-pointer items-center gap-2 rounded border border-zinc-200 p-3 shadow-md transition duration-300 hover:bg-primary-50 sm:gap-4">
+							class="flex items-start w-full cursor-pointer gap-2 rounded border border-zinc-200 p-5 shadow-md transition duration-300 hover:bg-primary-50 sm:gap-4">
 							<input
 								bind:group="{selectedPaymentMethod}"
 								type="radio"
@@ -331,45 +372,55 @@ function checkIfStripeCardValid({ detail }) {
 								class="h-4 w-4 focus:outline-none focus:ring-0 focus:ring-offset-0"
 								on:click="{() => paymentMethodChanged(pm)}" />
 
-							<div class="flex w-full flex-1 items-center justify-between gap-4">
-								<div class="flex-1">
-									<h3 style="color:{pm.color}" class="capitalize">
-										{pm.name || pm.value || pm.id}
-									</h3>
+							<div class="w-full flex-1 flex flex-col gap-4">
+								<div class="flex items-center justify-between gap-4">
+									<div class="flex-1">
+										<h3 style="color:{pm.color}" class="leading-3 capitalize">
+											{pm.name || pm.value || pm.id}
+										</h3>
 
-									{#if pm.text}
-										<p class="mt-1">{@html pm.text}</p>
-									{/if}
+										{#if pm.text}
+											<p class="mt-1">{@html pm.text}</p>
+										{/if}
+									</div>
+
+									<div class="shrink-0">
+										{#if pm.img}
+											<img
+												src="{pm.img}"
+												alt="{pm.name}"
+												width="48"
+												height="48"
+												class="h-12 w-12 rounded-full border object-cover object-center text-xs" />
+										{:else}
+											<div
+												class="flex h-12 w-12 p-2 items-center justify-center rounded-full border bg-zinc-200 text-center text-xs uppercase">
+												<span class="w-full truncate">
+													{pm.name || pm.value || pm.id}
+												</span>
+											</div>
+										{/if}
+									</div>
 								</div>
 
-								<div class="shrink-0">
-									{#if pm.img}
-										<img
-											src="{pm.img}"
-											alt="{pm.name}"
-											width="48"
-											height="48"
-											class="h-12 w-12 rounded-full border object-cover object-center text-xs" />
-									{:else}
-										<div
-											class="flex h-12 w-12 p-2 items-center justify-center rounded-full border bg-zinc-200 text-center text-xs uppercase">
-											<span class="w-full truncate">
-												{pm.name || pm.value || pm.id}
-											</span>
-										</div>
-									{/if}
-								</div>
+								{#if pm.value === 'BankTransfer' && selectedPaymentMethod.value === 'BankTransfer'}
+									<div transition:slide="{{ duration: 300 }}">
+										<TextboxFloating bind:value="{comment}" label="Transaction ID" />
+									</div>
+								{/if}
+
+								{#if pm.value === 'Stripe'}
+									<div transition:slide="{{ duration: 300 }}">
+										<svelte:component
+											this="{Stripe}"
+											address="{data.addressId}"
+											isStripeSelected="{selectedPaymentMethod.value === 'Stripe'}"
+											stripePublishableKey="{pm.app_id}"
+											on:isStripeCardValid="{checkIfStripeCardValid}" />
+									</div>
+								{/if}
 							</div>
 						</label>
-
-						{#if pm.value === 'Stripe'}
-							<svelte:component
-								this="{Stripe}"
-								address="{data.addressId}"
-								isStripeSelected="{selectedPaymentMethod.value === 'Stripe'}"
-								stripePublishableKey="{pm.app_id}"
-								on:isStripeCardValid="{checkIfStripeCardValid}" />
-						{/if}
 					{/each}
 				</div>
 			{:else}
