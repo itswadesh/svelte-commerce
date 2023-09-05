@@ -58,34 +58,34 @@ onDestroy(() => {
 
 {#if $countdownStore !== null}
 	{#if $countdownStore}
-		<div class="relative border-2 border-secondary-500 rounded p-5">
+		<div class="relative border-2 border-secondary-500 rounded p-5 text-center">
 			<div class="absolute top-0 inset-x-0 flex items-center justify-center">
 				<h6 class="bg-white p-1 -mt-4">Offer ends in...</h6>
 			</div>
 
-			<div class="flex itmes-center gap-5 text-secondary-500 uppercase">
+			<div class="flex itmes-center gap-2 text-secondary-500 uppercase">
 				{#if $countdownStore.days > 0}
-					<div class="flex flex-col">
-						<h2 class="w-8">{$countdownStore.days}</h2>
+					<div class="flex flex-col items-center justify-center">
+						<h2 class="w-14">{$countdownStore.days}</h2>
 
 						<span class="text-xs">Days</span>
 					</div>
 				{/if}
 
-				<div class="flex flex-col">
-					<h2 class="w-8">{$countdownStore.hours}</h2>
+				<div class="flex flex-col items-center justify-center">
+					<h2 class="w-14">{$countdownStore.hours}</h2>
 
 					<span class="text-xs">Hrs</span>
 				</div>
 
-				<div class="flex flex-col">
-					<h2 class="w-8">{$countdownStore.minutes}</h2>
+				<div class="flex flex-col items-center justify-center">
+					<h2 class="w-14">{$countdownStore.minutes}</h2>
 
 					<span class="text-xs">Min</span>
 				</div>
 
-				<div class="flex flex-col">
-					<h2 class="w-8">{$countdownStore.seconds}</h2>
+				<div class="flex flex-col items-center justify-center">
+					<h2 class="w-14">{$countdownStore.seconds}</h2>
 
 					<span class="text-xs">Sec</span>
 				</div>

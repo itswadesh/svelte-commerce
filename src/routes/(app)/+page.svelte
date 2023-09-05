@@ -143,11 +143,12 @@ onMount(() => {
 
 		<!-- Main slider banner -->
 
-		{#await data?.streamed?.home}
+		{#await data.streamed.home}
 			<div class="h-96 w-full bg-zinc-200 animate-pulse"></div>
 		{:then home}
-			<Hero banners="{home.banners}" />
-			<!-- <div class="h-96 w-full bg-red-500 animate-pulse"></div> -->
+			<Hero
+				sliderBannersDesktop="{home.page?.sliderBanners?.banners}"
+				sliderBannersMobile="{home.page?.sliderBanners?.bannersMobile}" />
 		{/await}
 
 		<!-- Alert message -->
@@ -222,7 +223,9 @@ onMount(() => {
 
 		<!-- Hero banners -->
 
-		{#await data?.streamed?.home}
+		<!-- Hero banners -->
+
+		{#await data.streamed.home}
 			<div class="p-3 py-5 md:py-10 grid grid-cols-2 items-center gap-2 md:grid-cols-4">
 				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 
@@ -235,28 +238,30 @@ onMount(() => {
 				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 			</div>
 		{:then home}
-			{#if home?.heroBanners?.length}
-				<HeroBanners heroBanners="{home.heroBanners}" />
+			{#if home.page?.heroBanners?.banners?.length}
+				<HeroBanners heroBanners="{home?.page?.heroBanners?.banners}" />
 			{/if}
 		{/await}
 
 		<!-- Picked banners -->
 
-		{#await data?.streamed?.home}
-			<div class="grid grid-cols-2 items-center gap-2 md:grid-cols-4">
-				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
+		{#await data.streamed.home}
+			<div class="w-screen overflow-x-auto scrollbar-none lg:hidden">
+				<div class="flex flex-row items-start gap-5">
+					{#each { length: 7 } as _}
+						<div class="h-40 w-40 animate-pulse rounded bg-zinc-200 sm:h-60 sm:w-60 shrink-0"></div>
+					{/each}
+				</div>
+			</div>
 
-				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
-
-				<div class="col-span-1 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
-
-				<div class="col-span-1 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
-
-				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
+			<div class="hidden p-3 py-5 sm:px-10 md:py-10 grid-cols-7 lg:grid gap-5">
+				{#each { length: 7 } as _}
+					<div class="col-span-1 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
+				{/each}
 			</div>
 		{:then home}
-			{#if home?.groupByBanner?.length > 0}
-				<PickedBanners banners="{home.groupByBanner}" />
+			{#if home.page?.pickedBanners?.length > 0}
+				<PickedBanners pickedBanners="{home.page?.pickedBanners}" />
 			{/if}
 		{/await}
 

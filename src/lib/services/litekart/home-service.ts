@@ -5,37 +5,21 @@ import { getBySid } from '$lib/utils/server'
 const isServer = import.meta.env.SSR
 
 export const fetchHome = async ({
+	isCors = false,
 	origin,
-	storeId,
 	pageId = 'home',
 	server = false,
-	sid = null
+	sid = null,
+	storeId,
 }: any) => {
 	try {
-		let banners = []
 		let categories = {}
-		let groupByBanner = {}
-		let heroBanners = []
 		let res: any = {}
 
-		if (isServer) {
+		if (isServer || isCors) {
 			res = await getBySid(`home?store=${storeId}&pageId=${pageId}`, sid)
 		} else {
 			res = await getAPI(`home?store=${storeId}&pageId=${pageId}`, origin)
-		}
-
-		if (res?.banners?.data?.length) {
-			banners = res?.banners?.data
-
-			heroBanners =
-				res?.banners?.data &&
-				res?.banners?.data.filter((b) => {
-					return b.type === 'hero'
-				})
-		}
-
-		if (res?.groupByBanner?.length) {
-			groupByBanner = res?.groupByBanner
 		}
 
 		if (res?.categories?.data?.length) {
@@ -43,12 +27,10 @@ export const fetchHome = async ({
 		}
 
 		return {
-			banners,
 			brands: res?.brands,
 			categories,
 			html: res?.html,
-			groupByBanner,
-			heroBanners,
+			page: res?.page,
 			trending: res?.trending,
 			youMayLike: res?.youMayLike
 		}
@@ -57,7 +39,13 @@ export const fetchHome = async ({
 	}
 }
 
-export const fetchCategoriesProducts = async ({ categories, origin, storeId, server = false, sid = null }) => {
+export const fetchCategoriesProducts = async ({
+	categories,
+	origin,
+	server = false,
+	sid = null,
+	storeId,
+}) => {
 	let categoriesProducts
 
 	if (isServer) {
