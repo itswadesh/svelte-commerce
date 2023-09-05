@@ -5,6 +5,7 @@ import { createEventDispatcher, onMount } from 'svelte'
 import { del } from '$lib/utils/api'
 import { Error } from '$lib/components'
 import { goto, invalidateAll } from '$app/navigation'
+import { nanoid } from 'nanoid'
 import { page } from '$app/stores'
 import { toast } from '$lib/utils'
 import AddressSkeleton from './_AddressSkeleton.svelte'
@@ -49,10 +50,11 @@ async function addressChanged(id) {
 	<div class="border-b p-4 sm:p-6">
 		<label class="flex w-full cursor-pointer flex-row gap-2 sm:gap-4">
 			<input
+				id="{nanoid()}"
 				bind:group="{selectedAddress}"
 				type="radio"
 				value="{address._id || address.id}"
-				name="group"
+				name="shipping_address"
 				class="mt-1.5 h-4 w-4 focus:outline-none focus:ring-0 focus:ring-offset-0"
 				on:change="{() => addressChanged(address._id || address.id)}" />
 
@@ -121,7 +123,7 @@ async function addressChanged(id) {
 					return async ({ result }) => {
 						// console.log('result', result)
 
-						toast('Address deleted', 'success')
+						toast('Address deleted successfully', 'success')
 						await invalidateAll()
 						await applyAction(result)
 					}
