@@ -1,20 +1,31 @@
-import { CollectionService, DealsService, FeedbackService, HomeService, VendorService } from '$lib/services'
+import { CollectionService, DealsService, HomeService } from '$lib/services'
+
 const isServer = import.meta.env.SSR
 
 export async function load({ parent }) {
 	const { store, origin } = await parent()
-
 	return {
 		streamed: {
-			home: HomeService.fetchHome({ origin, storeId: store?.id, server: isServer }),
+			home: HomeService.fetchHome({
+				origin,
+				server: isServer,
+				storeId: store?.id,
+				isCors: store?.isCors
+			}),
 
-			// vendors: VendorService.fetchVendors({ origin, storeId: store?.id, server: isServer }),
+			deals: DealsService.fetchDeals({
+				origin,
+				server: isServer,
+				storeId: store?.id,
+				isCors: store?.isCors
+			}),
 
-			deals: DealsService.fetchDeals({ origin, storeId: store?.id, server: isServer }),
-
-			collections: CollectionService.fetchCollections({ origin, storeId: store?.id, server: isServer }),
-
-			feedbacks: FeedbackService.fetchFeedbacks({ origin, storeId: store?.id, server: isServer })
+			collections: CollectionService.fetchCollections({
+				origin,
+				server: isServer,
+				storeId: store?.id,
+				isCors: store?.isCors
+			})
 		},
 
 		origin
