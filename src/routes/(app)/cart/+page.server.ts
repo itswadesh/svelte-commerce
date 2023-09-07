@@ -88,6 +88,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 			customizedData,
 			storeId: locals.store?.id,
 			cartId,
+			cookies,
 			origin: locals.origin,
 			sid // This is a special case to pass complete cookie
 		})

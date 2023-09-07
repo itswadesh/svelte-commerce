@@ -63,9 +63,10 @@ export const addToCartService = async ({
 	customizedData = null,
 	origin = null,
 	options = null,
-	storeId,
 	cartId,
-	sid = null
+	cookies,
+	sid = null,
+	storeId,
 }) => {
 	try {
 		let res = {}
