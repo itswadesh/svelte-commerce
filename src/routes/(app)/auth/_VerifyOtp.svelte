@@ -1,46 +1,44 @@
 <style>
-.otp-input-wrapper {
-	width: 240px;
-	text-align: left;
-	display: inline-block;
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
 }
-.otp-input-wrapper input {
-	padding: 0;
-	width: 264px;
-	font-size: 32px;
-	font-weight: 600;
-	color: #3e3e3e;
-	background-color: transparent;
-	border: 0;
-	margin-left: 12px;
-	letter-spacing: 48px;
-	font-family: sans-serif !important;
-}
-.otp-input-wrapper input:focus {
-	box-shadow: none;
-	outline: none;
-}
-.otp-input-wrapper svg {
-	position: relative;
-	display: block;
-	width: 240px;
-	height: 2px;
+input[type='number'] {
+	-moz-appearance: textfield; /* Firefox */
 }
 </style>
 
-<script>
-import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
-import { createEventDispatcher, onMount } from 'svelte'
+<script lang="ts">
+import { browser } from '$app/environment'
+import { createEventDispatcher, tick } from 'svelte'
+import { enhance } from '$app/forms'
+import { goto, invalidateAll } from '$app/navigation'
+import { page } from '$app/stores'
+import { toast } from '$lib/utils'
 import { tweened } from 'svelte/motion'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 
 const dispatch = createEventDispatcher()
 
-export let phone, resendAfter, loading
+export let loading
+export let phone
+export let resendAfter
 
-let otp
+// $: console.log('resendAfter', resendAfter)
 
-// let timer = tweened(resendAfter)
-let timer = tweened(resendAfter)
+$: timer = tweened(resendAfter)
+
+let disabledBtn = true
+let formattedOTP = null
+let notACompleteOTP = true
+let otp = [
+	{ id: 0, value: '' },
+	{ id: 1, value: '' },
+	{ id: 2, value: '' },
+	{ id: 3, value: '' }
+]
+let ref = $page.url.searchParams.get('ref')
 
 setInterval(() => {
 	if ($timer > 0) $timer--
@@ -48,6 +46,10 @@ setInterval(() => {
 
 $: minutes = Math.floor($timer / 60)
 $: seconds = Math.floor($timer - minutes * 60)
+
+$: if ($timer == 0) {
+	disabledBtn = false
+}
 
 // const callMyCount = () => {
 // 	var myTimer = setInterval(startTimer, 1000)
@@ -78,51 +80,112 @@ $: seconds = Math.floor($timer - minutes * 60)
 // 	}
 // }
 
-let otp1 = '',
-	otp2 = '',
-	otp3 = '',
-	otp4 = ''
-
-function clickEvent(current, next) {
-	if (next) {
-		document.getElementById(next).focus()
-	}
-}
-
-function handleOtp() {
-	otp = otp1 + otp2 + otp3 + otp4
-
-	if (otp.length === 4) {
-		// alert(otp)
-		dispatch('verifyOtp', otp)
-	}
-}
-
 function handleResendOtp() {
-	otp1 = ''
-	otp2 = ''
-	otp3 = ''
-	otp4 = ''
-	otp = otp1 + otp2 + otp3 + otp4
-	// alert(otp)
+	otp = [
+		{ id: 0, value: '' },
+		{ id: 1, value: '' },
+		{ id: 2, value: '' },
+		{ id: 3, value: '' }
+	]
+	formattedOTP = null
 	dispatch('resend', phone)
 }
 
-function checkLength(e) {
-	if (e.target.value?.length === 4) {
-		dispatch('verifyOtp', e.target.value)
+export const handlePaste = async (event) => {
+	event.preventDefault()
+
+	// console.log(
+	// 	'event.clipboardData || window.clipboardData',
+	// 	event.clipboardData || window.clipboardData
+	// )
+
+	// alert(event.target.value.length)
+	// console.log(event.target.value, event.target.value.length, event);
+
+	// alert(event.data.length)
+
+	// const text =  await navigator.clipboard.readText();
+
+	const clipboardData = event.clipboardData || window.clipboardData
+	const pastedText = clipboardData.getData('text')
+
+	otp = [
+		{ id: 0, value: pastedText[0] },
+		{ id: 1, value: pastedText[1] },
+		{ id: 2, value: pastedText[2] },
+		{ id: 3, value: pastedText[3] }
+	]
+
+	updateOTP()
+
+	// Call any function to handle the pasted text here
+	// For example: handlePastedText(pastedText);
+}
+
+function handleInput(index, event) {
+	// console.log(navigator)
+
+	otp[index].value = event.target.value
+	const value = event.target.value
+	if (value.length > 1) {
+		otp[index].value = value[value.length - 1]
 	} else {
-		return
+		otp[index].value = value
+	}
+
+	if (index < otp.length - 1 && value) {
+		const nextInput = event.target.nextElementSibling
+		if (nextInput) {
+			nextInput.focus()
+		}
+	} else if (!value && index > 0) {
+		const prevInput = event.target.previousElementSibling
+		if (prevInput) {
+			prevInput.focus()
+		}
+	}
+
+	// console.log('otp', otp)
+	updateOTP()
+}
+
+function handleClear(index, event) {
+	if ((event.key === 'Backspace' || event.key === 'Delete') && index > 0) {
+		const prevInput = event.target.previousElementSibling
+		if (prevInput) {
+			otp[index].value = '' // Clear the current input value
+			prevInput.value = '' // Clear the previous input value
+			prevInput.focus() // Focus on the previous input
+		}
+		event.preventDefault() // Prevent the default behavior of the Backspace and Delete keys
+		updateOTP()
 	}
 }
-function onKeyPress(e) {
-	const value = e.target.value
-	if (value.length == 4) return false
+
+async function updateOTP() {
+	const formattedOTPValues = otp.map((elm) => {
+		return elm.value
+	})
+
+	formattedOTP = formattedOTPValues.join('')
+
+	if (formattedOTP?.length === 4) {
+		// console.log('your otp is', formattedOTP)
+		// console.log(formattedOTP)
+
+		notACompleteOTP = false
+
+		// dispatch('verifyOtp', formattedOTP)
+		await tick()
+		const form = document.querySelector('#otp-form')
+
+		form.dispatchEvent(new Event('submit'))
+	}
 }
-function onInput(e) {
-	// let value = e.target.value
-	// value = value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')
-}
+
+// function handleAutoSubmit() {
+
+// }
 </script>
 
 <div>
@@ -130,18 +193,39 @@ function onInput(e) {
 		<div class="text-sm">Enter the OTP sent to</div>
 
 		<div class="flex gap-2 text-xs">
-			<b>{phone} </b>
+			<b>{phone || 'No phone no found'} </b>
 
 			<button
 				type="button"
-				class="font-bold text-blue-600 focus:outline-none hover:text-blue-800"
+				class="font-bold focus:outline-none cursor-pointer hover:text-blue-600"
 				on:click="{() => dispatch('changeNumber')}">
 				Change
 			</button>
 		</div>
 	</div>
 
-	<form class="mb-8 flex flex-col text-center" on:submit|preventDefault="{handleOtp}">
+	<form
+		action="/auth/login?/verifyOtp"
+		method="POST"
+		use:enhance="{() => {
+			return async ({ result }) => {
+				if (result?.status === 200) {
+					goto(ref || '/')
+				} else {
+					toast(result?.data?.message, 'error')
+					otp = [
+						{ id: 0, value: '' },
+						{ id: 1, value: '' },
+						{ id: 2, value: '' },
+						{ id: 3, value: '' }
+					]
+					document.getElementById('otpbox_0').focus()
+				}
+			}
+		}}"
+		class="mb-8 flex flex-col items-center justify-center text-center"
+		id="otp-form">
+		<!-- on:submit|preventDefault="{handleOtp}" -->
 		<!-- <div class="mb-5 flex items-center justify-center gap-5"> -->
 		<!-- <div class="flex items-center justify-center gap-2">
 				<input
@@ -178,9 +262,30 @@ function onInput(e) {
 			</div> -->
 		<!-- </div> -->
 
-		<div class="otp-input-wrapper mx-auto mb-5 max-w-max">
+		<div class="mb-5 flex gap-x-2">
+			{#each otp as { id, value }, index (id)}
+				<input
+					id="otpbox_{id.toString()}"
+					class="w-12 h-12 text-center border focus:outline-none focus:border-zinc-500 focus:ring-1 ring-zinc-800 rounded"
+					type="number"
+					maxlength="1"
+					value="{value}"
+					autofocus="{index === 0 ? true : false}"
+					on:input="{(event) => handleInput(index, event)}"
+					on:paste="{handlePaste}"
+					on:keydown="{(event) => handleClear(index, event)}"
+					key="{id}" />
+			{/each}
+		</div>
+
+		<input type="hidden" name="phone" value="{phone}" />
+
+		<input type="hidden" name="otp" value="{formattedOTP}" />
+
+		<!-- <div class="otp-input-wrapper mx-auto mb-5 max-w-max">
 			<input
 				type="tel"
+				name="otp"
 				bind:value="{otp}"
 				maxlength="4"
 				pattern="[0-9]*"
@@ -188,6 +293,7 @@ function onInput(e) {
 				autofocus="{true}"
 				on:input="{checkLength}"
 				on:keypress="{onKeyPress}" />
+
 
 			<svg viewBox="0 0 240 1" xmlns="http://www.w3.org/2000/svg">
 				<line
@@ -199,16 +305,16 @@ function onInput(e) {
 					stroke-width="2"
 					stroke-dasharray="44,22"></line>
 			</svg>
-		</div>
+		</div> -->
 
-		<p class="mb-2 text-sm">Didn't receive the OTP?</p>
+		<p class="mb-2">Didn't receive the OTP?</p>
 
 		<div class="mb-5 text-sm">
 			{#if (minutes || seconds) && (minutes >= 0 || seconds >= 0)}
 				<div class="mx-auto flex max-w-max items-center gap-1">
 					<span>Resend OTP in</span>
 
-					<p class="flex items-center justify-center font-bold">
+					<p class="flex items-center justify-center">
 						<span>
 							{#if minutes < 10} 0{minutes} {:else} {minutes}{/if}
 						</span>
@@ -232,6 +338,10 @@ function onInput(e) {
 			{/if}
 		</div>
 
-		<PrimaryButton loading="{loading}" class="w-full" type="submit">VERIFY</PrimaryButton>
+		<PrimaryButton
+			type="submit"
+			loading="{loading}"
+			disabled="{notACompleteOTP || loading}"
+			class="w-full">VERIFY</PrimaryButton>
 	</form>
 </div>
