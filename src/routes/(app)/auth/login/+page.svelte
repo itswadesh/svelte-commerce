@@ -103,54 +103,15 @@ const verifyIsMobileNum = () => {
 		isMobile = false
 		maxlength = null
 	}
-}
-
-async function submit() {
-	err = null
 
 	if (isMobile) {
-		// phone = selectedCountry?.dialCode + value
 		phone = value
-		await handleSendOTP({ detail: phone })
-	} else {
-		try {
-			loading = true
-
-			const res = await UserService.loginService({
-				email: value,
-				password: password,
-				storeId: $page.data.store?.id,
-				origin: $page.data.origin
-			})
-
-			const me = {
-				id: res.id,
-				email: res.email,
-				phone: res.phone,
-				firstName: res.firstName,
-				lastName: res.lastName,
-				avatar: res.avatar,
-				role: res.role,
-				verified: res.verified,
-				active: res.active
-			}
-
-			await cookies.set('me', me, { path: '/' })
-			// $page.data.me = me
-			await invalidateAll()
-			let r = ref || '/'
-			if (browser) goto(r)
-		} catch (e) {
-			toast(e.body, 'error')
-			err = e?.body || e
-		} finally {
-			loading = false
-		}
 	}
 }
 
 async function handleSendOTP({ detail }) {
 	phone = detail
+	resendAfter = 0
 
 	try {
 		loading = true
@@ -163,46 +124,6 @@ async function handleSendOTP({ detail }) {
 
 		resendAfter = res?.timer
 		otpRequestSend = true
-	} catch (e) {
-		toast(e?.body?.message || e, 'error')
-	} finally {
-		loading = false
-	}
-}
-
-async function handleVerifyOtp({ detail }) {
-	try {
-		loading = true
-
-		// phone = selectedCountry?.dialCode + value
-		phone = value
-		const otp = detail
-
-		const res = await UserService.verifyOtpService({
-			phone,
-			otp,
-			cartId: cookies.get('cartId'),
-			storeId: data.store?.id,
-			origin: data.origin
-		})
-
-		const me = {
-			id: res.id,
-			email: res.email,
-			phone: res.phone,
-			firstName: res.firstName,
-			lastName: res.lastName,
-			avatar: res.avatar,
-			role: res.role,
-			verified: res.verified,
-			active: res.active
-		}
-
-		await cookies.set('me', me, { path: '/' })
-		// await invalidateAll()
-
-		let r = ref || '/'
-		if (browser) goto(r)
 	} catch (e) {
 		toast(e?.body?.message || e, 'error')
 	} finally {
@@ -248,8 +169,11 @@ function changeNumber() {
 			use:enhance="{() => {
 				return async ({ result }) => {
 					// console.log('result', result)
+
 					resendAfter = 0
-					if (result?.data) {
+					if (result?.error) {
+						toast(result?.error, 'error')
+					} else if (result?.data) {
 						if (isEmail) {
 							const me = {
 								id: result?.data?.id,
@@ -466,9 +390,8 @@ function changeNumber() {
 
 		<VerifyOtp
 			loading="{loading}"
-			phone="{phone}"
-			resendAfter="{resendAfter}"
-			on:verifyOtp="{({ detail }) => handleVerifyOtp({ detail })}"
+			bind:phone="{phone}"
+			bind:resendAfter="{resendAfter}"
 			on:resend="{({ detail }) => handleSendOTP({ detail })}"
 			on:changeNumber="{changeNumber}" />
 	{/if}
