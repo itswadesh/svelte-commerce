@@ -64,18 +64,29 @@ export const addToCartService = async ({
 }: any) => {
 	try {
 		let cart_id = cookies.get('cartId')
-		if (cart_id == 'undefined') cart_id = null
+
+		if (cart_id === undefined || cart_id === 'undefined') {
+			cart_id = null
+		}
 
 		const body = {
 			variant_id: vid || pid,
 			quantity: qty
 		}
+
 		let res: any = {}
+
 		if (!cart_id) {
 			const cartRes = await postMedusajsApi(`carts`, { region_id: REGION_ID }, sid)
+
 			cart_id = cartRes.cart?.id
 		}
+
 		const res_data = await postMedusajsApi(`carts/${cart_id}/line-items`, body, sid)
+
+		if (cart_id) {
+			const res_cartRes = await postMedusajsApi(`carts/${cart_id}`, { customer_id: res?.id }, sid)
+		}
 
 		res = mapMedusajsCart(res_data?.cart)
 
@@ -126,6 +137,7 @@ export const updateCart = async ({
 	cartId,
 	billingAddress,
 	email,
+	customer_id,
 	shippingAddress,
 	cookies,
 	sid = null
@@ -145,7 +157,6 @@ export const updateCart = async ({
 				postal_code: billingAddress.postal_code,
 				province: billingAddress.province
 			},
-			email: billingAddress.email,
 			shipping_address: {
 				address_1: shippingAddress.address_1,
 				address_2: shippingAddress.address_2,
@@ -159,6 +170,8 @@ export const updateCart = async ({
 				postal_code: shippingAddress.postal_code,
 				province: shippingAddress.province
 			},
+			email: billingAddress.email,
+			customer_id
 		}
 		// console.log('body', body);
 		// console.log('cartId', cartId);
@@ -177,4 +190,3 @@ export const updateCart = async ({
 		throw error(e.status, e.message)
 	}
 }
-
