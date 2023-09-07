@@ -103,7 +103,9 @@ onMount(() => {
 	if (browser) {
 		lazyloadInstance = new lazyload({
 			thresholds: '50px 10%',
-			callback_error: (img) => {img.setAttribute("src", "https://i.ibb.co/ZKFtJ25/image-1.png")},
+			callback_error: (img) => {
+				img.setAttribute('src', 'https://i.ibb.co/ZKFtJ25/image-1.png')
+			},
 			callback_enter: handleLineLoader
 		})
 	}
@@ -121,14 +123,11 @@ if (extension === 'svg') {
 	isSvg = true
 }
 
-function handleLineLoader(){
+function handleLineLoader() {
 	const lineLoader = document.querySelector('.loader-line')
 
 	lineLoader.style.display = 'none'
-	
 }
-
-
 </script>
 
 <div class="relative">
@@ -163,6 +162,7 @@ function handleLineLoader(){
 					width="{w}"
 					class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
 			{/if}
+
 			<!-- <div class="absolute inset-0 flex itmes-center justify-center">
 				<span class="loader-line"></span>
 			</div> -->
@@ -197,6 +197,7 @@ function handleLineLoader(){
 					class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
 			{/if}
 		{/if}
+
 		<!-- <div class="absolute inset-0 flex itmes-center justify-center">
 			<span class="loader-line"></span>
 		</div> -->
@@ -213,6 +214,7 @@ function handleLineLoader(){
 					NO_QUERY: true
 				})}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(':', '-')}`}"
 				class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
+
 			<!-- <div class="absolute inset-0 flex itmes-center justify-center">
 				<span class="loader-line"></span>
 			</div> -->
@@ -234,7 +236,6 @@ function handleLineLoader(){
 		{/if}
 	{:else if IMAGE_CDN_PROVIDER === 'thumbor'}
 		{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } ).includes('http')}
-			
 			<img
 				in:fade="{{ duration: 300 }}"
 				alt=" "
@@ -266,9 +267,10 @@ function handleLineLoader(){
 			</div> -->
 		{/if}
 	{/if}
-			<div class="absolute inset-0 flex itmes-center justify-center">
-				<span class="loader-line"></span>
-			</div>
+
+	<div class="absolute inset-0 flex itmes-center justify-center">
+		<span class="loader-line"></span>
+	</div>
 </div>
 
 <!-- <img

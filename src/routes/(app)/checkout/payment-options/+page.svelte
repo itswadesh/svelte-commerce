@@ -373,7 +373,7 @@ function checkIfStripeCardValid({ detail }) {
 								on:click="{() => paymentMethodChanged(pm)}" />
 
 							<div class="w-full flex-1 flex flex-col gap-4">
-								<div class="flex items-center justify-between gap-4">
+								<div class="flex justify-between gap-4">
 									<div class="flex-1">
 										<h3 style="color:{pm.color}" class="leading-3 capitalize">
 											{pm.name || pm.value || pm.id}
