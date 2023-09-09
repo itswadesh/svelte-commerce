@@ -638,8 +638,7 @@ async function updateVariant(variant) {
 					{/if}
 				</div>
 
-
-			<!-- ratings -->
+				<!-- ratings -->
 
 				{#if $page.data.store?.isProductReviewsAndRatings}
 					{#await data.streamed?.productReviews then productReviews}
@@ -1223,6 +1222,7 @@ async function updateVariant(variant) {
 							{#if $page.data.store?.isWishlist}
 								<div class="col-span-1">
 									<form
+										id="toggle_wishlist_1"
 										action="/my/wishlist?/toggleWishlist"
 										method="POST"
 										use:enhance="{() => {
@@ -1358,6 +1358,7 @@ async function updateVariant(variant) {
 											</a>
 										{:else}
 											<form
+												id="add_to_cart_1"
 												in:fade="{{ duration: 300 }}"
 												action="/cart?/add"
 												method="POST"
@@ -1611,6 +1612,7 @@ async function updateVariant(variant) {
 							{#if $page.data.store?.isWishlist}
 								<div class="col-span-2">
 									<form
+										id="toggle_wishlist_2"
 										action="/my/wishlist?/toggleWishlist"
 										method="POST"
 										use:enhance="{() => {
@@ -1746,6 +1748,7 @@ async function updateVariant(variant) {
 											</a>
 										{:else}
 											<form
+												id="add_to_cart_2"
 												in:fade="{{ duration: 300 }}"
 												action="/cart?/add"
 												method="POST"
@@ -1844,6 +1847,7 @@ async function updateVariant(variant) {
 							{#if $page.data.store?.isWishlist}
 								<div class="col-span-2">
 									<form
+										id="toggle_wishlist_3"
 										action="/my/wishlist?/toggleWishlist"
 										method="POST"
 										use:enhance="{() => {
@@ -1979,6 +1983,7 @@ async function updateVariant(variant) {
 											</a>
 										{:else}
 											<form
+												id="add_to_cart_3"
 												in:fade="{{ duration: 300 }}"
 												action="/cart?/add"
 												method="POST"

@@ -228,6 +228,7 @@ export const getMedusajsApi = async (endpoint: string, query?: any, sid?: any) =
 export const postMedusajsApi = async (endpoint: string, data: any, sid?: any) => {
 	try {
 		const ep = MEDUSAJS_BASE_URL + '/' + endpoint
+
 		const response = await fetch(ep, {
 			method: 'POST',
 			credentials: 'include',
