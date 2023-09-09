@@ -542,6 +542,7 @@ function scrollTo(elementId) {
 					</div>
 				{:then value}
 					<form
+						id="add_to_cart_1"
 						action="/cart?/add"
 						method="POST"
 						use:enhance="{() => {
@@ -599,6 +600,7 @@ function scrollTo(elementId) {
 					</form>
 
 					<form
+						id="add_to_cart_2"
 						action="/cart?/add"
 						method="POST"
 						use:enhance="{() => {
