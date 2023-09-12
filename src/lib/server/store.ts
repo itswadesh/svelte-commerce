@@ -24,7 +24,7 @@ export const fetchStoreData = async (event: RequestEvent) => {
 				origin: event.request.url,
 				storeId: r.storeOne.id,
 				sid: event.cookies.get('connect.sid'),
-				server: true
+				megamenu: true
 			})
 		} else {
 			r.megamenu1 = JSON.parse(cookieMegamenu)

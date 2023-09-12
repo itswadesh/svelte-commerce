@@ -45,13 +45,11 @@ function getYear() {
 let pages = []
 
 onMount(async () => {
-	const res1 = await getPages()
+	await getPages()
 	const res2 = await getStoreData()
-
 	store = res2.storeOne
-	megamenu = res2.megamenu1
+	megamenu = res2.megamenu
 	popularSearches = res2.popularSearches
-
 	if (browser) {
 		localStorage.setItem('megamenu', JSON.stringify(megamenu))
 	}
