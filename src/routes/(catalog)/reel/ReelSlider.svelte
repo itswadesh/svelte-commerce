@@ -35,8 +35,8 @@ const share = async ({ title, text, url }: any) => {
 
 let autoplay = true
 let imgUrl = ''
-let imgUnmute = 'https://filebin.net/xe3w7kf6nzuu1ta4/unmute.svg'
-let imgMute = 'https://filebin.net/fqn93tp24gijqgou/mute.svg'
+let imgUnmute = 'https://www.svgrepo.com/show/129402/mute.svg'
+let imgMute = 'https://www.svgrepo.com/show/129402/mute.svg'
 
 let cartButtonText = 'Add to Bag'
 let loading = {}
@@ -123,16 +123,17 @@ onMount(async () => {
 {#if products}
 	<div class="overflow-hidden">
 		<svelte:component this="{Splide}" options="{options}">
+		      {JSON.stringify(products)}
 			{#each products as product, ix (product.id)}
 				<SplideSlide>
-					<div class="w-full h-full">
+					<div class="w-full h-full flex">
 						<!-- svelte-ignore a11y-media-has-caption -->
-						<video autoplay="{true}" id="active{ix}" class="detail" loop muted="{muted}">
+						<video autoplay="{true}" id="active{ix}" class="detail w-full" loop muted="{muted}">
 							<source src="{product.video}" type="video/mp4" />
 							Your browser does not support the video tag.
 						</video>
 
-						<div class="flex absolute top-[54%] ml-6 bg-white h-40 rounded-lg">
+						<div class="flex absolute top-[69%] ml-[13.5rem] bg-white h-40 rounded-lg">
 							<div class="flex-auto w-12 mt-4 mx-1">
 								<img src="{product.img}" alt="product" />
 							</div>
@@ -190,29 +191,30 @@ onMount(async () => {
 						<ul class="btn-group">
 							<li>
 								<button
-									class="btn-group-fb opacity-50 my-2 py-4 px-4 mx-3 bg-current rounded-full h-13 w-13"
+									class="btn-group-fb my-2 py-4 px-4 mx-3 bg-current rounded-full h-13 w-13"
 									on:click="{() => toggleMute(product)}">
 									{#if product.muted}
-										<img src="{imgMute}" alt="mute" />
+										<img class="w-7 h-7" src="{imgMute}" alt="mute" />
 									{:else}
-										<img src="{imgUnmute}" alt="unmute" />
+										<img class="w-7 h-7" src="{imgUnmute}" alt="unmute" />
 									{/if}
 								</button>
 							</li>
-							<li
-								class="btn-group-fb opacity-50 my-2 py-4 px-4 mx-3 bg-current rounded-full h-13 w-13">
-								<img src="https://filebin.net/9mzp2tdfrtgsiuck/like.svg" alt="like" />
+							<li>
+								<button class="btn-group-fb my-2 py-4 px-4 mx-3 bg-current rounded-full h-13 w-13">
+								<img class="w-7 h-7 m-0 p-0 mx-0 my-0" src="https://www.svgrepo.com/show/231105/like.svg" alt="like" />
+								</button>
 							</li>
 							<li>
 								{#if isAddedtoBag == true}
 									<a href="/cart">
 										<button
-											class="btn-group-fb relative opacity-50 my-2 py-4 px-4 mx-3 bg-current rounded-full h-13 w-13">
-											<img src="https://filebin.net/9mzp2tdfrtgsiuck/cart.svg" alt="cart" />
+											class="btn-group-fb relative my-2 py-4 px-4 mx-3 bg-current rounded-full h-13 w-13">
+											<img class="w-7 h-7 m-0" src="https://www.svgrepo.com/show/452178/cart.svg" alt="cart" />
 										</button></a>
 								{:else}
 									<button
-										class="btn-group-fb relative opacity-50 my-2 py-4 px-4 mx-3 bg-current rounded-full h-13 w-13"
+										class="btn-group-fb relative my-2 py-4 px-4 mx-3 bg-current rounded-full h-13 w-13"
 										on:click="{() =>
 											addToCart({
 												pid: product.id,
@@ -220,7 +222,7 @@ onMount(async () => {
 												customizedImg: product.customizedImg,
 												ix: ix
 											})}">
-										<img src="https://filebin.net/9mzp2tdfrtgsiuck/cart.svg" alt="cart" />
+										<img class="w-7 h-7" src="https://www.svgrepo.com/show/452178/cart.svg" alt="cart" />
 
 										{#if $page.data.cartQty > 0}
 											<div
@@ -233,16 +235,16 @@ onMount(async () => {
 							</li>
 							<li>
 								<button
-									class="btn-group-fb opacity-50 my-2 py-4 px-4 mx-3 bg-current rounded-full h-13 w-13"
+									class="btn-group-fb my-2 py-4 px-4 mx-3 bg-current rounded-full h-13 w-13"
 									on:click="{() =>
 										share({ title: product.name, text: product.description, url: product.slug })}">
-									<img src="https://filebin.net/9mzp2tdfrtgsiuck/share.svg" alt="share" />
+									<img class="w-7 h-7" src="https://www.svgrepo.com/show/103057/share.svg" alt="share" />
 								</button>
 							</li>
 							<li
-								class="btn-group-list opacity-50 my-2 py-4 px-4 mx-3 bg-current rounded-full h-13 w-13">
+								class="btn-group-list my-2 py-4 px-4 mx-3 bg-current rounded-full h-13 w-13">
 								<a href="whatsapp://send?text={$page.data.origin}/product/{product.slug}">
-									<img src="https://filebin.net/9mzp2tdfrtgsiuck/wpapp.svg" alt="wp" /></a>
+									<img class="w-7 h-7" src="https://www.svgrepo.com/show/475692/whatsapp-color.svg" alt="wp" /></a>
 							</li>
 						</ul>
 					</div>
