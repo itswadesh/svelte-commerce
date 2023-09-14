@@ -271,6 +271,16 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 															{/if}
 														{/if}
 													</div>
+
+													{#if item?.size?.name}
+														<p class="flex items-center gap-2">
+															<span>Size : </span>
+
+															<span>
+																{item?.size?.name}
+															</span>
+														</p>
+													{/if}
 												</div>
 											</div>
 										{/each}
@@ -410,6 +420,16 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 														{/if}
 													{/each}
 												</div>
+											{/if}
+
+											{#if item?.size?.name}
+												<p class="flex items-center gap-2">
+													<span>Size : </span>
+
+													<span>
+														{item?.size?.name}
+													</span>
+												</p>
 											{/if}
 
 											<div class="mt-2 flex items-center justify-between">
