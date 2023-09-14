@@ -16,17 +16,18 @@ export async function load({ url, request, locals, cookies }) {
 	let err
 	let loading
 	let order
+
 	try {
 		loading = true
 
 		order = await OrdersService.paySuccessPageHit({
-			paymentMode,
-			status,
 			orderId,
+			paymentMode,
 			paymentReferenceId,
-			storeId,
+			status,
 			server: true,
-			sid
+			sid,
+			storeId,
 		})
 
 		cookies.set('cartQty', '0', { path: '/' })

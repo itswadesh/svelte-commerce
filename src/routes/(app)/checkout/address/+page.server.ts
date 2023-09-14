@@ -32,9 +32,9 @@ export async function load({ request, url, locals, cookies }) {
 
 		const cart = await CartService.fetchRefreshCart({
 			cartId,
-			storeId: store?.id,
 			origin,
-			sid
+			sid,
+			storeId: store?.id,
 		})
 
 		// console.log('cart at address', cart);

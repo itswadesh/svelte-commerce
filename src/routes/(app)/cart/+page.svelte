@@ -62,9 +62,10 @@ async function applyCouponCode(selectedCouponCode: string, index: number) {
 		}
 
 		const resAC = await CartService.applyCouponService({
+			cartId: $page.data.cartId,
 			code: selectedCouponCode,
-			storeId: $page.data.store?.id,
-			origin: $page.data.origin
+			origin: $page.data.origin,
+			storeId: $page.data.store?.id
 		})
 
 		appliedCouponInfo = resAC
@@ -84,11 +85,14 @@ async function applyCouponCode(selectedCouponCode: string, index: number) {
 async function removeCouponCode() {
 	try {
 		loadingRemoveCoupon = true
+
 		await CartService.removeCouponService({
+			cartId: $page.data.cartId,
 			code: selectedCouponCode || data.cart?.discount?.code,
-			storeId: $page.data.store?.id,
-			origin: $page.data.origin
+			origin: $page.data.origin,
+			storeId: $page.data.store?.id
 		})
+
 		selectedCouponCode = ''
 		await invalidateAll()
 	} catch (e) {
