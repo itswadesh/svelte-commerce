@@ -86,10 +86,10 @@ export { clazz as class }
 const h = height === 'auto' ? '0' : +height * 2
 const w = width === 'auto' ? '0' : +width * 2
 
-const arh = aspect_ratio.split(':')[1]
-const arw = aspect_ratio.split(':')[0]
+const arh = aspect_ratio?.split(':')[1]
+const arw = aspect_ratio?.split(':')[0]
 
-const extension = src.split('.').pop()
+const extension = src?.split('.').pop()
 const IMAGE_CDN_PROVIDER = $page.data?.store?.imageCdn?.provider?.val
 const IMAGE_CDN_URL = $page.data?.store?.imageCdn?.url?.val
 
@@ -133,7 +133,7 @@ function handleLineLoader() {
 <div class="relative">
 	{#if imageLoaded}
 		{#if IMAGE_CDN_PROVIDER === 'imagekit'}
-			{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } ).includes('http')}
+			{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } )?.includes('http')}
 				<img
 					in:fade="{{ duration: 300 }}"
 					alt="{alt}"
@@ -146,7 +146,9 @@ function handleLineLoader() {
 					})}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(':', '-')}`}"
 					height="{h}"
 					width="{w}"
-					class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
+					class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(
+						':'
+					)[1]}] lazy {clazz}" />
 			{:else}
 				<img
 					in:fade="{{ duration: 300 }}"
@@ -160,14 +162,16 @@ function handleLineLoader() {
 					})}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(':', '-')}`}"
 					height="{h}"
 					width="{w}"
-					class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
+					class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(
+						':'
+					)[1]}] lazy {clazz}" />
 			{/if}
 
 			<!-- <div class="absolute inset-0 flex itmes-center justify-center">
 				<span class="loader-line"></span>
 			</div> -->
 		{:else if IMAGE_CDN_PROVIDER === 'thumbor'}
-			{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } ).includes('http')}
+			{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } )?.includes('http')}
 				<img
 					in:fade="{{ duration: 300 }}"
 					alt="{alt}"
@@ -180,7 +184,9 @@ function handleLineLoader() {
 					})}`}"
 					height="{h}"
 					width="{w}"
-					class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
+					class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(
+						':'
+					)[1]}] lazy {clazz}" />
 			{:else}
 				<img
 					in:fade="{{ duration: 300 }}"
@@ -194,7 +200,9 @@ function handleLineLoader() {
 					})}`}"
 					height="{h}"
 					width="{w}"
-					class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
+					class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(
+						':'
+					)[1]}] lazy {clazz}" />
 			{/if}
 		{/if}
 
@@ -202,7 +210,7 @@ function handleLineLoader() {
 			<span class="loader-line"></span>
 		</div> -->
 	{:else if IMAGE_CDN_PROVIDER === 'imagekit'}
-		{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } ).includes('http')}
+		{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } )?.includes('http')}
 			<img
 				in:fade="{{ duration: 300 }}"
 				alt=" "
@@ -213,7 +221,7 @@ function handleLineLoader() {
 					IMAGE_CDN_PROVIDER,
 					NO_QUERY: true
 				})}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(':', '-')}`}"
-				class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
+				class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(':')[1]}] lazy {clazz}" />
 
 			<!-- <div class="absolute inset-0 flex itmes-center justify-center">
 				<span class="loader-line"></span>
@@ -229,13 +237,13 @@ function handleLineLoader() {
 					IMAGE_CDN_PROVIDER,
 					NO_QUERY: true
 				})}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(':', '-')}`}"
-				class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
+				class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(':')[1]}] lazy {clazz}" />
 			<!-- <div class="absolute inset-0 flex itmes-center justify-center">
 				<span class="loader-line"></span>
 			</div> -->
 		{/if}
 	{:else if IMAGE_CDN_PROVIDER === 'thumbor'}
-		{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } ).includes('http')}
+		{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } )?.includes('http')}
 			<img
 				in:fade="{{ duration: 300 }}"
 				alt=" "
@@ -246,7 +254,7 @@ function handleLineLoader() {
 					IMAGE_CDN_PROVIDER,
 					NO_QUERY: true
 				})}`}"
-				class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
+				class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(':')[1]}] lazy {clazz}" />
 			<!-- <div class="absolute inset-0 flex itmes-center justify-center">
 				<span class="loader-line"></span>
 			</div> -->
@@ -261,7 +269,7 @@ function handleLineLoader() {
 					IMAGE_CDN_PROVIDER,
 					NO_QUERY: true
 				})}`}"
-				class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}" />
+				class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(':')[1]}] lazy {clazz}" />
 			<!-- <div class="absolute inset-0 flex itmes-center justify-center">
 				<span class="loader-line"></span>
 			</div> -->
@@ -275,12 +283,12 @@ function handleLineLoader() {
 
 <!-- <img
 	alt="{alt}"
-	class="aspect-[{aspect_ratio.split(':')[0]}/{aspect_ratio.split(':')[1]}] lazy {clazz}"
+	class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(':')[1]}] lazy {clazz}"
 	in:fade="{{ duration: 300}}"
 	width="{w}"
 	height="{h}"
-	src="{`${getCdnImageUrl(src, IMAGE_CDN_URL)}?tr=w-1,h-1:w-${aspect_ratio.split(':')[0]},h-${
-		aspect_ratio.split(':')[1]
+	src="{`${getCdnImageUrl(src, IMAGE_CDN_URL)}?tr=w-1,h-1:w-${aspect_ratio?.split(':')[0]},h-${
+		aspect_ratio?.split(':')[1]
 	},ar-${aspect_ratio.replace(':', '-')}`}"
 	data-src="{`${getCdnImageUrl(src, IMAGE_CDN_URL)}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(
 		':',

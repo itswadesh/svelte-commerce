@@ -94,7 +94,7 @@ export { clazz as class }
 
 							<tbody
 								class="cursor-pointer divide-y divide-zinc-200 rounded-b-md bg-white bg-white text-sm transition duration-300 group-hover:bg-primary-50">
-								{#each order.orderItems as item}
+								{#each order.items as item}
 									<tr>
 										<td class="p-3">
 											<div class="shrink-0">
@@ -197,7 +197,7 @@ export { clazz as class }
 							href="/my/orders/{order.id || order._id}"
 							aria-label="orders"
 							class="mb-4 block w-full divide-y rounded border bg-white text-sm shadow transition duration-300 hover:bg-primary-50 sm:mb-10">
-							{#each order.orderItems as item}
+							{#each order.items as item}
 								<div class="flex items-start gap-2 p-4 sm:gap-5">
 									<div class="shrink-0">
 										{#if item.isCustomized}
