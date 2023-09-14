@@ -103,6 +103,7 @@ async function submit(pm) {
 
 	if (paymentMethod === 'COD' || paymentMethod === 'manual') {
 		try {
+			data.err = null
 			loading = true
 
 			setTimeout(() => {
@@ -118,8 +119,8 @@ async function submit(pm) {
 				paymentMethod: 'COD',
 				paymentProviderId: paymentMethod,
 				prescription: data.prescription?._id,
-				storeId: $page.data.store?.id,
-				origin: $page.data.origin
+				origin: $page.data.origin,
+				storeId: $page.data.store?.id
 			})
 
 			// console.log('res of cod', res)
@@ -127,13 +128,13 @@ async function submit(pm) {
 			goto(`/payment/success?orderId=${res?._id || res?.id}&status=PAYMENT_SUCCESS&provider=COD`)
 		} catch (e) {
 			data.err = e
-			toast(e?.body?.message || e, 'error')
 		} finally {
 			loading = false
 		}
 	} else if (paymentMethod === 'BankTransfer') {
 		if (comment) {
 			try {
+				data.err = null
 				loading = true
 
 				setTimeout(() => {
@@ -150,8 +151,8 @@ async function submit(pm) {
 					paymentMethod: 'COD',
 					paymentProviderId: paymentMethod,
 					prescription: data.prescription?._id,
-					storeId: $page.data.store?.id,
-					origin: $page.data.origin
+					origin: $page.data.origin,
+					storeId: $page.data.store?.id
 				})
 
 				// console.log('res of cod', res)
@@ -161,7 +162,6 @@ async function submit(pm) {
 				goto(`/payment/success?orderId=${res?._id || res?.id}&status=PAYMENT_SUCCESS&provider=COD`)
 			} catch (e) {
 				data.err = e
-				toast(e?.body?.message || e, 'error')
 			} finally {
 				loading = false
 			}
@@ -170,6 +170,7 @@ async function submit(pm) {
 		}
 	} else if (paymentMethod === 'Cashfree') {
 		try {
+			data.err = null
 			loading = true
 
 			setTimeout(() => {
@@ -181,8 +182,8 @@ async function submit(pm) {
 
 			const res = await OrdersService.cashfreeCheckout({
 				address: data.addressId,
-				storeId: $page.data.store?.id,
-				origin: $page.data.origin
+				origin: $page.data.origin,
+				storeId: $page.data.store?.id
 			})
 
 			// console.log('res of Cashfree', res.payment_session_id)
@@ -194,8 +195,8 @@ async function submit(pm) {
 			cashfree
 				.checkout({
 					paymentSessionId: res.payment_session_id,
-					returnUrl: res.order_meta?.return_url,
-					redirectTarget: '_parent'
+					redirectTarget: '_parent',
+					returnUrl: res.order_meta?.return_url
 				})
 				.then(function () {
 					console.log('on going redirection')
@@ -207,12 +208,12 @@ async function submit(pm) {
 			// }
 		} catch (e) {
 			data.err = e
-			toast(e?.body?.message || e, 'error')
 		} finally {
 			loading = false
 		}
 	} else if (paymentMethod === 'Phonepe') {
 		try {
+			data.err = null
 			loading = true
 
 			setTimeout(() => {
@@ -224,8 +225,8 @@ async function submit(pm) {
 
 			const res = await OrdersService.phonepeCheckout({
 				address: data.addressId,
-				storeId: $page.data.store?.id,
-				origin: $page.data.origin
+				origin: $page.data.origin,
+				storeId: $page.data.store?.id
 			})
 
 			// console.log('res of Phonepe', res)
@@ -237,12 +238,12 @@ async function submit(pm) {
 			}
 		} catch (e) {
 			data.err = e
-			toast(e?.body?.message || e, 'error')
 		} finally {
 			loading = false
 		}
 	} else if (paymentMethod === 'Paypal') {
 		try {
+			data.err = null
 			loading = true
 
 			setTimeout(() => {
@@ -254,8 +255,8 @@ async function submit(pm) {
 
 			const res = await OrdersService.paypalCheckout({
 				address: data.addressId,
-				storeId: $page.data.store?.id,
-				origin: $page.data.origin
+				origin: $page.data.origin,
+				storeId: $page.data.store?.id
 			})
 
 			// console.log('res of Paypal', res)
@@ -267,12 +268,12 @@ async function submit(pm) {
 			}
 		} catch (e) {
 			data.err = e
-			toast(e?.body?.message || e, 'error')
 		} finally {
 			loading = false
 		}
 	} else if (paymentMethod === 'Razorpay') {
 		try {
+			data.err = null
 			loading = true
 
 			setTimeout(() => {
@@ -284,8 +285,9 @@ async function submit(pm) {
 
 			const rp = await OrdersService.razorpayCheckout({
 				address: data.addressId,
-				storeId: $page.data.store?.id,
-				origin: $page.data.origin
+				cartId: data?.cartId,
+				origin: $page.data.origin,
+				storeId: $page.data.store?.id
 			})
 
 			// console.log('rp of Razorpay', res)
@@ -300,10 +302,10 @@ async function submit(pm) {
 				async handler(response) {
 					try {
 						const capture = await OrdersService.razorpayCapture({
-							rpPaymentId: response.razorpay_payment_id,
 							rpOrderId: response.razorpay_order_id,
-							storeId: $page.data.store?.id,
-							origin: $page.data.origin
+							rpPaymentId: response.razorpay_payment_id,
+							origin: $page.data.origin,
+							storeId: $page.data.store?.id
 						})
 						toast('Payment success', 'success')
 						goto(`/payment/process?pg=razorpay&order_no=${capture.order_no}`)
@@ -330,7 +332,6 @@ async function submit(pm) {
 			rzp1.open()
 		} catch (e) {
 			data.err = e
-			toast(e?.message, 'error')
 		} finally {
 			loading = false
 		}
@@ -426,19 +427,18 @@ function checkIfStripeCardValid({ detail }) {
 			{:else}
 				<div class="flex flex-col h-1/2 items-center justify-center p-4 text-zinc-500 text-center">
 					<svg
-						xmlns="http://www.w3.org/500/svg"
-						class="mb-2 h-8 w-10"
+						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
 						viewBox="0 0 24 24"
+						stroke-width="1.5"
 						stroke="currentColor"
-						stroke-width="2">
+						class="mb-2 w-10 h-10">
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
-							d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+							d="M15.182 16.318A4.486 4.486 0 0012.016 15a4.486 4.486 0 00-3.198 1.318M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"
 						></path>
 					</svg>
-
 					<h6 class="mb-2 capitalize">We are very sorry!!</h6>
 
 					<p>

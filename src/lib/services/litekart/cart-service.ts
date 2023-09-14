@@ -4,7 +4,12 @@ import { getBySid, postBySid } from '$lib/utils/server'
 import type { Error } from '$lib/types'
 const isServer = import.meta.env.SSR
 
-export const fetchCartData = async ({ origin, storeId, cartId = null, sid = null }) => {
+export const fetchCartData = async ({
+	cartId = null,
+	origin,
+	sid = null,
+	storeId,
+}) => {
 	try {
 		let res = {}
 
@@ -21,7 +26,13 @@ export const fetchCartData = async ({ origin, storeId, cartId = null, sid = null
 	}
 }
 
-export const fetchRefreshCart = async ({ origin = null, storeId, isCors = false, cartId, sid = null }) => {
+export const fetchRefreshCart = async ({
+	cartId,
+	isCors = false,
+	origin = null,
+	sid = null,
+	storeId,
+}) => {
 	try {
 		let res = {}
 
@@ -39,7 +50,12 @@ export const fetchRefreshCart = async ({ origin = null, storeId, isCors = false,
 	}
 }
 
-export const fetchMyCart = async ({ origin, storeId, cartId = null, sid = null }) => {
+export const fetchMyCart = async ({
+	cartId = null,
+	origin,
+	sid = null,
+	storeId,
+}) => {
 	try {
 		let res = {}
 
@@ -56,15 +72,14 @@ export const fetchMyCart = async ({ origin, storeId, cartId = null, sid = null }
 }
 
 export const addToCartService = async ({
-	pid,
-	vid,
-	qty,
-	customizedImg = null,
-	customizedData = null,
-	origin = null,
-	options = null,
 	cartId,
-	cookies,
+	customizedData = null,
+	customizedImg = null,
+	options = null,
+	pid,
+	qty,
+	vid,
+	origin = null,
 	sid = null,
 	storeId,
 }) => {
@@ -74,14 +89,14 @@ export const addToCartService = async ({
 			res = await postBySid(
 				`carts/add-to-cart?store=${storeId}&cart_id=${cartId}`,
 				{
-					pid,
-					vid,
-					qty,
-					customizedImg,
-					store: storeId,
 					cart_id: cartId,
 					customizedData,
-					options
+					customizedImg,
+					options,
+					pid,
+					qty,
+					vid,
+					store: storeId,
 				},
 				sid
 			)
@@ -108,13 +123,21 @@ export const addToCartService = async ({
 	}
 }
 
-export const applyCouponService = async ({ code, origin, storeId, server = false, sid = null }) => {
+export const applyCouponService = async ({
+	cartId,
+	code,
+	origin,
+	server = false,
+	sid = null,
+	storeId,
+}) => {
 	try {
 		let res = {}
 
 		res = await post(
-			`coupons/apply`,
+			`coupons/apply?cart_id=${cartId}`,
 			{
+				cart_id: cartId,
 				code,
 				store: storeId
 			},
@@ -128,16 +151,17 @@ export const applyCouponService = async ({ code, origin, storeId, server = false
 }
 
 export const removeCouponService = async ({
+	cartId,
 	code,
 	origin,
-	storeId,
 	server = false,
-	sid = null
+	sid = null,
+	storeId,
 }) => {
 	try {
 		let res = {}
 
-		res = await del(`coupons/remove?code=${code}&store=${storeId}`, origin)
+		res = await del(`coupons/remove?code=${code}&store=${storeId}&cart_id=${cartId}`, origin)
 
 		return res || {}
 	} catch (e) {
@@ -145,7 +169,14 @@ export const removeCouponService = async ({
 	}
 }
 
-export const updateCart = async ({ billingAddress, cartId = '', email = '', shippingAddress, origin = null, storeId }) => {
+export const updateCart = async ({
+	billingAddress,
+	cartId = '',
+	email = '',
+	origin = null,
+	shippingAddress,
+	storeId
+}) => {
 	try {
 		const addressId = shippingAddress?._id || shippingAddress?.id
 

@@ -5,16 +5,20 @@ export const prerender = false
 
 export async function load({ url, locals, cookies }) {
 	const order_no = url.searchParams.get('order_no')
+
 	const failed_url = `/payment/failed?order_no=${order_no}`
 	const success_url = `/payment/success?order_no=${order_no}`
+
 	try {
 		const res = await OrdersService.cashfreeCapture({
 			order_no: order_no,
-			storeId: locals.store?.id,
+			origin: locals.origin,
 			sid: locals.sid,
-			origin: locals.origin
+			storeId: locals.store?.id,
 		})
+
 		const status = res?.payment_status || 'FAILED'
+
 		if (status == 'FAILED') {
 			throw { status: 307, url: failed_url }
 		} else {
