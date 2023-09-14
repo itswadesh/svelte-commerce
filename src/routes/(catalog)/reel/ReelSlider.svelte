@@ -123,16 +123,17 @@ onMount(async () => {
 {#if products}
 	<div class="overflow-hidden">
 		<svelte:component this="{Splide}" options="{options}">
+		      {JSON.stringify(products)}
 			{#each products as product, ix (product.id)}
 				<SplideSlide>
 					<div class="w-full h-full flex">
 						<!-- svelte-ignore a11y-media-has-caption -->
-						<video autoplay="{true}" id="active{ix}" class="detail" loop muted="{muted}">
+						<video autoplay="{true}" id="active{ix}" class="detail w-full" loop muted="{muted}">
 							<source src="{product.video}" type="video/mp4" />
 							Your browser does not support the video tag.
 						</video>
 
-						<div class="flex absolute top-[54%] ml-6 bg-white h-40 rounded-lg">
+						<div class="flex absolute top-[69%] ml-[13.5rem] bg-white h-40 rounded-lg">
 							<div class="flex-auto w-12 mt-4 mx-1">
 								<img src="{product.img}" alt="product" />
 							</div>
