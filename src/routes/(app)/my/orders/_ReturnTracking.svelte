@@ -1,7 +1,7 @@
 <style></style>
 
 <script>
-import {LazyImg} from '$lib/components'
+import { LazyImg } from '$lib/components'
 
 import { date } from '$lib/utils'
 
@@ -52,9 +52,9 @@ export let order
 						<div
 							class="absolute left-12 md:static md:mt-2 md:text-center
 							{t.time ? 'opacity-100' : 'opacity-40'}">
-							<h4 class="font-medium">{t.status}</h4>
+							<h5>{t.status}</h5>
 
-							<h6 class="mt-1 text-xs font-light text-zinc-500">
+							<h6 class="mt-1 text-zinc-500">
 								{#if t.time}
 									<span>
 										{date(+t.time)}
