@@ -40,7 +40,7 @@ function emitConfirm() {
 					<!-- header-->
 
 					<div class="flex items-center justify-between border-b border-zinc-200 p-3 sm:px-6">
-						<h3 class="mr-4 text-lg font-semibold">
+						<h3 class="mr-4">
 							<slot name="title" />
 						</h3>
 
