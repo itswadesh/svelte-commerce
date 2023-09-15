@@ -4,7 +4,7 @@
 import { goto } from '$app/navigation'
 
 import { store } from '$lib/store'
-import {PrimaryButton} from '$lib/ui'
+import { PrimaryButton } from '$lib/ui'
 import { page } from '$app/stores'
 import dayjs from 'dayjs'
 import { toast } from '$lib/utils'
@@ -81,9 +81,10 @@ function hide(e) {
 
 		{#if minDate}
 			<form novalidate autocomplete="off" class="max-w-sm" on:submit|preventDefault="{submit}">
-				<p class="mb-5 text-sm">
+				<p class="mb-5">
 					Schedule product demo request for {product && product.name}
 				</p>
+
 				<input
 					id="demo-time"
 					bind:value="{schedule.scheduleDateTime}"

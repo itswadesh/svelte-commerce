@@ -60,6 +60,7 @@
 import { Confetti } from 'svelte-confetti'
 import { currency, date } from '$lib/utils'
 import { fireGTagEvent } from '$lib/utils/gTagB'
+import { invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
@@ -68,9 +69,9 @@ import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 import SEO from '$lib/components/SEO/index.svelte'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
-import { invalidateAll } from '$app/navigation'
 
 export let data
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 const seoProps = {
 	title: 'Payment Success ',
@@ -79,7 +80,6 @@ const seoProps = {
 
 onMount(async () => {
 	invalidateAll()
-	if (!data.order) return
 	fireGTagEvent('purchase', data.order)
 })
 </script>
@@ -193,111 +193,219 @@ onMount(async () => {
 				</div>
 			</div>
 
-			<div
-				class="mx-auto max-w-7xl gap-5 sm:flex sm:items-start sm:justify-center sm:gap-10 md:gap-20">
-				<div class="sm:w-1/2">
+			<div class="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-10 md:gap-20">
+				<div class="flex flex-col gap-5 col-span-1">
+					<!-- Item Details -->
+
 					{#if data.order?.items?.length > 0}
-						<div class="mb-5">
+						<div>
 							<h4 class="border-b border-dashed border-zinc-400 pb-2">Item Details</h4>
 
-							<div class="items-start flex flex-col">
-								{#each data.order?.items as item, ix}
-									<!-- data-sveltekit-reload added because in production it does not work-->
-									<a
-										href="/product/{item.slug}"
-										aria-label="Click to view the product details"
-										data-sveltekit-reload
-										class="group flex w-full flex-row justify-between py-4
-										{ix != data.order?.items.length - 1 ? 'border-b' : ''}">
-										<div class="flex w-full flex-row gap-4">
-											<div>
-												<LazyImg
-													src="{item.isCustomized ? item.customizedImg : item.img}"
-													alt=""
-													width="80"
-													class="h-auto w-20 object-contain" />
-											</div>
+							<div class="divide-y divide-dashed text-xs text-zinc-500">
+								{#each data.order?.items as item}
+									<div class="flex gap-2 py-5 lg:gap-5">
+										<a
+											href="{`/product/${item.slug}`}"
+											aria-label="Click to view the product details"
+											class="shrink-0">
+											<LazyImg
+												src="{item.isCustomized ? item.customizedImg : item.img}"
+												alt=""
+												width="56"
+												class="h-auto w-14 object-contain object-top" />
+										</a>
 
-											<div class="w-4/5 flex-1 lg:w-10/12">
-												<!-- {#if store.isFnb && item.vendor}
-												<b class="mb-2 text-sm">
-													{item.vendor.businessName}
-												</b>
-											{:else if item.brandName}
-												<b class="mb-2 text-sm">
-													{item.brandName}
-												</b>
-											{/if} -->
+										<div class="flex w-full flex-1 flex-col gap-0.5 xl:pr-4">
+											<div class="flex justify-between gap-2 sm:gap-4">
+												<a
+													href="{`/product/${item.slug}`}"
+													aria-label="Click to view the product details"
+													class="flex-1 hover:underline">
+													<p>
+														{item.name}
+													</p>
+												</a>
 
-												<div class="mb-2 flex items-start gap-2">
-													<!-- data-sveltekit-reload added because in production it does not work-->
-													<div class="flex w-full justify-between gap-2">
-														<a
-															href="/product/{item.slug}"
-															aria-label="Click to view the product details"
-															data-sveltekit-reload
-															class="flex-1 text-sm text-zinc-500 group-hover:underline">
-															{item.name}
-														</a>
-
-														{#if $page?.data?.store?.isFnb && item.foodType}
-															<div>
-																{#if item.foodType === 'veg'}
-																	<img src="{productVeg}" alt="veg" class="h-5 w-5" />
-																{:else if item.foodType === 'nonveg'}
-																	<img src="{productNonVeg}" alt="non veg" class="h-5 w-5" />
-																{/if}
-															</div>
+												{#if $page?.data?.store?.isFnb && item.foodType}
+													<div>
+														{#if item.foodType === 'veg'}
+															<img src="{productVeg}" alt="veg" class="h-5 w-5" />
+														{:else if item.foodType === 'nonveg'}
+															<img src="{productNonVeg}" alt="non veg" class="h-5 w-5" />
 														{/if}
-													</div>
-												</div>
-
-												<div class="mb-2 flex w-full flex-wrap gap-4">
-													<p class="flex items-center gap-2 whitespace-nowrap">
-														<span>Qty :</span>
-
-														<span>{item.qty}</span>
-													</p>
-
-													<p class="flex items-center gap-2 whitespace-nowrap">
-														<span>Price :</span>
-
-														<span>{currency(item.price, $page.data?.store?.currencySymbol)}</span>
-													</p>
-												</div>
-
-												<!-- Options -->
-
-												{#if item?.usedOptions?.length}
-													<div class="mt-2 flex flex-col gap-2">
-														{#each item?.usedOptions as option}
-															{#if option?.val?.length && option?.val !== undefined && option?.val != ''}
-																<p class="flex flex-wrap gap-2">
-																	<span>{option.name}:</span>
-
-																	{#each option.val as v}
-																		{#if v}
-																			<span class="font-bold">
-																				{v}
-																			</span>
-																		{/if}
-																	{/each}
-																</p>
-															{/if}
-														{/each}
 													</div>
 												{/if}
 											</div>
+
+											{#if item.qty}
+												<span>
+													Qty :
+
+													{item.qty}
+												</span>
+											{/if}
+
+											{#if item.size}
+												<span>
+													Size :
+
+													{item.size}
+												</span>
+											{/if}
+
+											{#if item?.usedOptions?.length}
+												{#each item?.usedOptions as option}
+													{#if option?.val?.length && option?.val !== undefined && option?.val != ''}
+														<div class="flex flex-wrap gap-2">
+															<h6>{option.name}:</h6>
+
+															{#if option.val}
+																{#each option.val as v}
+																	{#if v}
+																		<div class="font-bold">
+																			{v}
+																		</div>
+																	{/if}
+																{/each}
+															{/if}
+														</div>
+													{/if}
+												{/each}
+											{/if}
+
+											<div class="flex flex-wrap items-center gap-1">
+												Item price :
+
+												<span class="font-bold whitespace-nowrap text-zinc-800">
+													{currency(item.price, $page.data?.store?.currencySymbol)}
+												</span>
+
+												{#if item?.mrp > item?.price}
+													<span class="whitespace-nowrap text-zinc-500 line-through">
+														<strike>
+															{currency(item.mrp, $page.data?.store?.currencySymbol)}
+														</strike>
+													</span>
+
+													{#if Math.floor(((item.mrp - item.price) / item.mrp) * 100) > 0}
+														<span class="whitespace-nowrap text-secondary-500">
+															({Math.floor(((item.mrp - item.price) / item.mrp) * 100)}% off)
+														</span>
+													{/if}
+												{/if}
+											</div>
+
+											<div class="flex flex-wrap items-center gap-1">
+												Sub Total :
+
+												<span class="font-bold whitespace-nowrap text-zinc-800">
+													{currency(item.subtotal, $page.data?.store?.currencySymbol)}
+												</span>
+
+												{#if item?.total > item?.subtotal}
+													<span class="whitespace-nowrap text-zinc-500 line-through">
+														<strike>
+															{currency(item.total, $page.data?.store?.currencySymbol)}
+														</strike>
+													</span>
+
+													{#if Math.floor(((item.total - item.subtotal) / item.total) * 100) > 0}
+														<span class="whitespace-nowrap text-secondary-500">
+															({Math.floor(((item.total - item.subtotal) / item.total) * 100)}% off)
+														</span>
+													{/if}
+												{/if}
+											</div>
+
+											{#if item?.status === 'delivered'}
+												<div class="mt-2 xl:mt-0 xl:w-1/3">
+													<a
+														href="/my/reviews/create?pid={item?.pid}&oid={item?.orderItemId}&ref=/product/{item?.slug}"
+														aria-label="Click to visit rate & review product"
+														class="whitespace-nowrap font-semibold text-indigo-500 focus:outline-none hover:underline">
+														Rate & Review Product
+													</a>
+												</div>
+											{/if}
 										</div>
-									</a>
+									</div>
 								{/each}
 							</div>
 						</div>
 					{/if}
 
+					<!-- Payment Information -->
+
+					{#if data.order && data.order?.amount}
+						<div>
+							<h4 class="mb-5 border-b border-dashed border-zinc-400 pb-2">Payment Information</h4>
+
+							<div class="flex max-w-max flex-col items-start gap-2">
+								<p class="flex items-center">
+									<span class="mr-2 w-32">Subtotal</span>
+
+									<span>
+										: &nbsp; {currency(
+											data.order?.amount.subtotal,
+											$page.data?.store?.currencySymbol
+										)}
+									</span>
+								</p>
+
+								<p class="flex items-center">
+									<span class="mr-2 w-32">Discount</span>
+
+									<span>
+										: &nbsp;
+
+										{currency(data.order?.amount.discount, $page.data?.store?.currencySymbol)}
+									</span>
+								</p>
+
+								{#if data.order?.coupon.code}
+									<p class="flex items-center">
+										<span class="mr-2 w-32">Applied Coupon</span>
+
+										<span>
+											: &nbsp;
+											{data.order?.coupon.code}
+										</span>
+									</p>
+								{/if}
+
+								<p class="flex items-center">
+									<span class="mr-2 w-32">Shipping</span>
+
+									<span>
+										: &nbsp;
+										{#if data.order?.amount.shipping}
+											{currency(data.order?.amount.shipping, $page.data?.store?.currencySymbol)}
+										{:else}
+											Free
+										{/if}
+									</span>
+								</p>
+
+								<hr class="w-full border-t border-zinc-200" />
+
+								<div class="flex items-center text-sm font-bold text-zinc-800">
+									<span class="mr-2 w-32">Total</span>
+
+									<span>
+										: &nbsp; {currency(data.order?.amount.total, $page.data?.store?.currencySymbol)}
+									</span>
+								</div>
+							</div>
+						</div>
+					{/if}
+				</div>
+
+				<div class="flex flex-col gap-5 col-span-1">
+					<!-- Booking Information -->
+
 					{#if data.order?.seats?.length > 0}
-						<div class="mb-5">
-							<h4 class="mb-4 border-b border-dashed border-zinc-400 pb-2">Booking Details</h4>
+						<div>
+							<h4 class="mb-5 border-b border-dashed border-zinc-400 pb-2">Booking Information</h4>
 
 							<div class="items-start flex flex-col divide-y text-sm">
 								{#each data.order?.seats as seat}
@@ -318,12 +426,60 @@ onMount(async () => {
 							</div>
 						</div>
 					{/if}
-				</div>
 
-				<div class="flex flex-col gap-4 sm:w-1/2">
+					<!-- Billing Information -->
+
+					{#if data.order && data.order?.billingAddress}
+						<div>
+							<h4 class="mb-5 border-b border-dashed border-zinc-400 pb-2">Billing Information</h4>
+
+							<div class="flex flex-col gap-1">
+								{#if data.order?.billingAddress.firstName}
+									<p>
+										{data.order?.billingAddress.firstName}
+
+										{data.order?.billingAddress.lastName}
+									</p>
+								{/if}
+
+								<p>
+									{#if data.order?.billingAddress.address}
+										{data.order?.billingAddress.address}
+									{/if}
+
+									{#if data.order?.billingAddress.city}
+										, {data.order?.billingAddress.city}
+									{/if}
+
+									{#if data.order?.billingAddress.country}
+										, {data.order?.billingAddress.country}
+									{/if}
+
+									{#if data.order?.billingAddress.zip}
+										- {data.order?.billingAddress.zip}
+									{/if}
+								</p>
+
+								{#if data.order?.billingAddress.phone || data.order?.billingAddress.userPhone}
+									<p>
+										{data.order?.billingAddress.phone || data.order?.userPhone}
+									</p>
+								{/if}
+
+								{#if data.order?.billingAddress.email}
+									<p>
+										{data.order?.billingAddress.email}
+									</p>
+								{/if}
+							</div>
+						</div>
+					{/if}
+
+					<!-- Shipping Information -->
+
 					{#if data.order && data.order?.address}
-						<div class="text-sm">
-							<h4 class="mb-4 border-b border-dashed border-zinc-400 pb-2">Shipping Information</h4>
+						<div>
+							<h4 class="mb-5 border-b border-dashed border-zinc-400 pb-2">Shipping Information</h4>
 
 							<div class="flex flex-col gap-1">
 								{#if data.order?.address.firstName}
@@ -361,68 +517,6 @@ onMount(async () => {
 								{#if data.order?.address.email}
 									<p>
 										{data.order?.address.email}
-									</p>
-								{/if}
-							</div>
-						</div>
-					{/if}
-
-					{#if data.order && data.order?.amount}
-						<div class="text-sm">
-							<h4 class="mb-4 border-b border-dashed border-zinc-400 pb-2">Payment Information</h4>
-
-							<div class="flex max-w-max flex-col items-start gap-2">
-								{#if data.order?.amount.subtotal}
-									<p class="flex items-center">
-										<span class="mr-2 w-20">Subtotal</span>
-
-										<span>
-											: &nbsp; {currency(
-												data.order?.amount.subtotal,
-												$page.data?.store?.currencySymbol
-											)}
-										</span>
-									</p>
-								{/if}
-
-								{#if data.order?.amount.discount}
-									<p class="flex items-center">
-										<span class="mr-2 w-20">Discount</span>
-
-										<span>
-											: &nbsp; {currency(
-												data.order?.amount.discount,
-												$page.data?.store?.currencySymbol
-											)}
-										</span>
-									</p>
-								{/if}
-
-								{#if data.order?.amount.shipping}
-									<p class="flex items-center">
-										<span class="mr-2 w-20">Shipping</span>
-
-										<span>
-											: &nbsp; {currency(
-												data.order?.amount.shipping,
-												$page.data?.store?.currencySymbol
-											)}
-										</span>
-									</p>
-								{/if}
-
-								{#if data.order?.amount.total}
-									<hr class="w-full border-t border-zinc-200" />
-
-									<p class="flex items-center">
-										<span class="mr-2 w-20">Total</span>
-
-										<span>
-											: &nbsp; {currency(
-												data.order?.amount.total,
-												$page.data?.store?.currencySymbol
-											)}
-										</span>
 									</p>
 								{/if}
 							</div>
