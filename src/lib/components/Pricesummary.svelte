@@ -14,7 +14,7 @@ export let nextpage = null
 export let showNextIcon = false
 export let text = 'Proceed to checkout'
 
-// console.log('cart', cart)
+// console.log('zzzzzzzzzzzzzzzzzz', cart)
 
 function modulo(n, m) {
 	// handle negative numbers
@@ -98,6 +98,16 @@ function submit() {
 				</div>
 			{/if}
 
+			{#if cart.codCharges}
+				<div class="mt-2 flex items-center justify-between font-medium">
+					<span>COD Charges</span>
+
+					<span>
+						{currency(cart.codCharges, $page.data?.store?.currencySymbol)}
+					</span>
+				</div>
+			{/if}
+
 			<div class="mt-2 flex items-center justify-between font-medium">
 				<span>Shipping</span>
 
@@ -135,6 +145,16 @@ function submit() {
 				</span>
 			</h5>
 		{/if}
+
+		<!-- {#if cart?.savings + cart?.discount?.amount > 0}
+			<div class="mb-5 bg-brand-100 p-1 w-full text-center text-sm text-zinc-500">
+				You are saving
+				<span class="text-brand-500 font-bold">
+					{currency(cart?.savings + cart?.discount?.amount, $page.data?.store?.currencySymbol)}
+				</span>
+				on this order
+			</div>
+		{/if} -->
 
 		<div class="hidden md:block">
 			{#if cart?.qty > 0 && !hideCheckoutButton}
