@@ -16,17 +16,18 @@ export async function load({ url, request, locals, cookies }) {
 	let err
 	let loading
 	let order
+
 	try {
 		loading = true
 
 		order = await OrdersService.paySuccessPageHit({
-			paymentMode,
-			status,
 			orderId,
+			paymentMode,
 			paymentReferenceId,
-			storeId,
+			status,
 			server: true,
-			sid
+			sid,
+			storeId,
 		})
 
 		cookies.set('cartQty', '0', { path: '/' })
@@ -34,17 +35,13 @@ export async function load({ url, request, locals, cookies }) {
 	} catch (e) {
 		// console.log('error at payment success page', e);
 
+		err = e
+
 		if (e.status === 401) {
 			throw redirect(307, '/auth/login')
+		} else {
+			throw error(e?.status, e?.body?.message || e?.data?.message || e?.message)
 		}
-
-		err = e
-		throw error(400, e?.message || e)
-
-		// return {
-		// 	status: 400,
-		// 	errors: new Error(e?.message || e)
-		// }
 	} finally {
 		loading = false
 	}

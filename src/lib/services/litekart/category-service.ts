@@ -129,7 +129,6 @@ export const fetchMegamenuData = async ({
 	isCors = false,
 	megamenu = false,
 	origin,
-	server = false,
 	sid = null,
 	storeId,
 }) => {

@@ -6,7 +6,7 @@ import { page } from '$app/stores'
 export let heroBanners
 
 function generateRandomImage() {
-	const randomNum = Math.floor(Math.random() * 10) // Generates a random number between 0 and 9
+	const randomNum = Math.floor(Math.random() * 50) // Generates a random number between 0 and 9
 
 	// Replace the image source with a random image URL
 	return 'https://source.unsplash.com/random/' + randomNum
@@ -27,9 +27,10 @@ function generateRandomImage() {
 				<LazyImg
 					src="{heroBanners[0]?.img || generateRandomImage()}"
 					alt=""
+					width="694"
 					height="390"
-					aspect_ratio="2:1"
-					class="col-span-1 h-full max-h-[390px] w-full object-cover aspect-video" />
+					aspect_ratio="16:9"
+					class="col-span-1 h-full max-h-[390px] w-full object-cover object-center aspect-video" />
 			</a>
 
 			<a
@@ -38,9 +39,10 @@ function generateRandomImage() {
 				<LazyImg
 					src="{heroBanners[1]?.img || generateRandomImage()}"
 					alt=""
+					width="694"
 					height="390"
-					aspect_ratio="2:1"
-					class="col-span-1 h-full max-h-[390px] w-full object-cover aspect-video" />
+					aspect_ratio="16:9"
+					class="col-span-1 h-full max-h-[390px] w-full object-cover object-center aspect-video" />
 			</a>
 		</div>
 
@@ -52,9 +54,9 @@ function generateRandomImage() {
 					<LazyImg
 						src="{heroBanners[2]?.img || generateRandomImage()}"
 						alt=""
+						width="390"
 						height="390"
-						aspect_ratio="1:1"
-						class="col-span-1 h-full max-h-[390px] w-full object-cover aspect-square" />
+						class="col-span-1 h-full max-h-[390px] w-full object-cover object-center" />
 				</a>
 
 				<a
@@ -63,9 +65,9 @@ function generateRandomImage() {
 					<LazyImg
 						src="{heroBanners[3]?.img || generateRandomImage()}"
 						alt=""
+						width="390"
 						height="390"
-						aspect_ratio="1:1"
-						class="col-span-1 h-full max-h-[390px] w-full object-cover aspect-square" />
+						class="col-span-1 h-full max-h-[390px] w-full object-cover object-center" />
 				</a>
 			</div>
 
@@ -76,9 +78,10 @@ function generateRandomImage() {
 					<LazyImg
 						src="{heroBanners[4]?.img || generateRandomImage()}"
 						alt=""
+						width="694"
 						height="390"
-						aspect_ratio="2:1"
-						class="col-span-1 h-full max-h-[390px] w-full object-cover aspect-video" />
+						aspect_ratio="16:9"
+						class="col-span-1 h-full max-h-[390px] w-full object-cover object-center aspect-video" />
 				</a>
 			</div>
 		</div>

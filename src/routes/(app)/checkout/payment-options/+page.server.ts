@@ -14,10 +14,10 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 	}
 
 	const cartRes: any = await CartService.fetchRefreshCart({
-		storeId: store?.id,
 		cartId,
+		origin: origin,
 		sid,
-		origin: origin
+		storeId: store?.id,
 	})
 
 	if (!cartRes?.qty) {

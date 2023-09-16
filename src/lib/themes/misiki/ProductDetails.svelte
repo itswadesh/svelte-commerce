@@ -640,31 +640,39 @@ async function updateVariant(variant) {
 
 				<!-- ratings -->
 
-				{#if data?.product?.reviews?.productReviews?.summary?.ratings_avg?.value > 0}
-					<button
-						type="button"
-						class="flex max-w-max items-center divide-x divide-zinc-200 border border-zinc-200 py-1 text-sm focus:outline-none"
-						on:click="{() => scrollTo('ratings_and_reviews')}">
-						<div class="flex items-center gap-1 px-2 font-semibold">
-							<span>
-								{data?.product?.reviews?.productReviews?.summary?.ratings_avg?.value.toFixed(1)}
-							</span>
+				{#if $page.data.store?.isProductReviewsAndRatings}
+					{#await data.streamed?.productReviews then productReviews}
+						{#if productReviews?.reviewsSummary?.productReviews?.summary?.ratings_avg?.value}
+							<button
+								type="button"
+								class="flex max-w-max items-center divide-x divide-zinc-200 border border-zinc-200 py-1 text-sm focus:outline-none"
+								on:click="{() => scrollTo('ratings_and_reviews')}">
+								<div class="flex items-center gap-1 px-2 font-semibold">
+									<span>
+										{productReviews?.reviewsSummary?.productReviews?.summary?.ratings_avg?.value.toFixed(
+											1
+										)}
+									</span>
 
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="h-4 w-4 text-primary-500"
-								viewBox="0 0 20 20"
-								fill="currentColor">
-								<path
-									d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-								</path>
-							</svg>
-						</div>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										class="h-4 w-4 text-primary-500"
+										viewBox="0 0 20 20"
+										fill="currentColor">
+										<path
+											d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+										</path>
+									</svg>
+								</div>
 
-						<span class="px-2 text-zinc-500">
-							{productReviews?.product?.count || 'No'} Reviews
-						</span>
-					</button>
+								<span class="px-2 text-zinc-500">
+									{productReviews?.product?.count || 'No'} Reviews
+								</span>
+							</button>
+						{/if}
+					{:catch error}
+						<Error err="{error}" />
+					{/await}
 				{/if}
 
 				<hr />
@@ -1214,6 +1222,7 @@ async function updateVariant(variant) {
 							{#if $page.data.store?.isWishlist}
 								<div class="col-span-1">
 									<form
+										id="toggle_wishlist_1"
 										action="/my/wishlist?/toggleWishlist"
 										method="POST"
 										use:enhance="{() => {
@@ -1349,6 +1358,7 @@ async function updateVariant(variant) {
 											</a>
 										{:else}
 											<form
+												id="add_to_cart_1"
 												in:fade="{{ duration: 300 }}"
 												action="/cart?/add"
 												method="POST"
@@ -1602,6 +1612,7 @@ async function updateVariant(variant) {
 							{#if $page.data.store?.isWishlist}
 								<div class="col-span-2">
 									<form
+										id="toggle_wishlist_2"
 										action="/my/wishlist?/toggleWishlist"
 										method="POST"
 										use:enhance="{() => {
@@ -1737,6 +1748,7 @@ async function updateVariant(variant) {
 											</a>
 										{:else}
 											<form
+												id="add_to_cart_2"
 												in:fade="{{ duration: 300 }}"
 												action="/cart?/add"
 												method="POST"
@@ -1835,6 +1847,7 @@ async function updateVariant(variant) {
 							{#if $page.data.store?.isWishlist}
 								<div class="col-span-2">
 									<form
+										id="toggle_wishlist_3"
 										action="/my/wishlist?/toggleWishlist"
 										method="POST"
 										use:enhance="{() => {
@@ -1970,6 +1983,7 @@ async function updateVariant(variant) {
 											</a>
 										{:else}
 											<form
+												id="add_to_cart_3"
 												in:fade="{{ duration: 300 }}"
 												action="/cart?/add"
 												method="POST"

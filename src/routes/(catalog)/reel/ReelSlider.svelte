@@ -44,7 +44,7 @@ let selectedLoadingType = null
 
 let isAddedtoBag = false
 
-let muted = true
+let muted = []
 
 function toggleMute(product) {
 	product.muted = !product.muted
@@ -116,6 +116,15 @@ onMount(async () => {
 
 	options.arrows = !isMobile
 })
+
+
+
+
+function handleMuted(e,ix){
+   muted[ix] = !muted[ix]
+
+   console.log(muted[ix]); 
+}
 </script>
 
 <svelte:window bind:innerWidth="{innerWidth}" />
@@ -123,16 +132,17 @@ onMount(async () => {
 {#if products}
 	<div class="overflow-hidden">
 		<svelte:component this="{Splide}" options="{options}">
+		      {JSON.stringify(products)}
 			{#each products as product, ix (product.id)}
 				<SplideSlide>
 					<div class="w-full h-full flex">
 						<!-- svelte-ignore a11y-media-has-caption -->
-						<video autoplay="{true}" id="active{ix}" class="detail" loop muted="{muted}">
+						<video autoplay="{true}" id="active{ix}" class="detail w-full" loop muted={muted[ix]}>
 							<source src="{product.video}" type="video/mp4" />
 							Your browser does not support the video tag.
 						</video>
 
-						<div class="flex absolute top-[54%] ml-6 bg-white h-40 rounded-lg">
+						<div class="flex absolute top-[69%] ml-[13.5rem] bg-white h-40 rounded-lg">
 							<div class="flex-auto w-12 mt-4 mx-1">
 								<img src="{product.img}" alt="product" />
 							</div>
@@ -186,12 +196,12 @@ onMount(async () => {
 							</div>
 						</div>
 					</div>
-					<div class="btn-group absolute inset-y-0 right-0 top-20">
+					<div class="btn-group absolute inset-y-0 right-40 top-20">
 						<ul class="btn-group">
 							<li>
 								<button
 									class="btn-group-fb my-2 py-4 px-4 mx-3 bg-current rounded-full h-13 w-13"
-									on:click="{() => toggleMute(product)}">
+									on:click="{(event) => handleMuted(event,ix)}">
 									{#if product.muted}
 										<img class="w-7 h-7" src="{imgMute}" alt="mute" />
 									{:else}

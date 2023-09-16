@@ -7,34 +7,37 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 	depends('cart:my')
 	let loading = false
 	let cart = locals.cart
+
 	try {
 		loading = true
-		const sid = cookies.get('connect.sid')
+
 		const cartId = cookies.get('cartId')
 		const cartQty = cookies.get('cartQty')
+		const sid = cookies.get('connect.sid')
+
 		if (sid) {
 			const res = await CartService.fetchRefreshCart({
 				cartId,
-				storeId: store?.id,
+				origin: origin,
 				sid,
-				origin: origin
+				storeId: store?.id,
 			})
 
 			if (res) {
 				cart = {
 					cartId: res?.cart_id,
-					items: res?.items,
-					qty: res?.qty,
-					tax: +res?.tax,
-					subtotal: +res?.subtotal,
-					total: +res?.total,
 					currencySymbol: res?.currencySymbol,
 					discount: res?.discount,
+					formattedAmount: res?.formattedAmount,
+					items: res?.items,
+					qty: res?.qty,
 					savings: res?.savings,
 					selfTakeout: res?.selfTakeout,
 					shipping: res?.shipping,
-					unavailableItems: res?.unavailableItems,
-					formattedAmount: res?.formattedAmount
+					subtotal: +res?.subtotal,
+					tax: +res?.tax,
+					total: +res?.total,
+					unavailableItems: res?.unavailableItems
 				}
 
 				// cookies.set('cartId', cart.cartId, { path: '/' })
@@ -119,18 +122,18 @@ const add: Action = async ({ request, cookies, locals }) => {
 		if (cart) {
 			const cartObj = {
 				cartId: cart?.cart_id,
-				items: cart?.items,
-				qty: cart?.qty,
-				tax: cart?.tax,
-				subtotal: cart?.subtotal,
-				total: cart?.total,
 				currencySymbol: cart?.currencySymbol,
 				discount: cart?.discount,
+				formattedAmount: cart?.formattedAmount,
+				items: cart?.items,
+				qty: cart?.qty,
 				savings: cart?.savings,
 				selfTakeout: cart?.selfTakeout,
 				shipping: cart?.shipping,
-				unavailableItems: cart?.unavailableItems,
-				formattedAmount: cart?.formattedAmount
+				subtotal: cart?.subtotal,
+				tax: cart?.tax,
+				total: cart?.total,
+				unavailableItems: cart?.unavailableItems
 			}
 			locals.cart = cartObj
 			locals.cartId = cartObj.cartId

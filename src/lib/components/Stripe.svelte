@@ -147,7 +147,7 @@ async function loadStripeElements() {
 	<form
 		transition:fly="{{ y: 50, duration: 150 }}"
 		on:submit|preventDefault="{submit}"
-		class="rounded border p-4 shadow-md flex flex-col gap-4
+		class="flex flex-col gap-4
 		{isStripeSelected ? 'block' : 'hidden'}">
 		<script src="https://js.stripe.com/v3/"></script>
 
