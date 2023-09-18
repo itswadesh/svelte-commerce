@@ -62,12 +62,12 @@ export const fetchTrackOrder = async ({
 		let res: any = {}
 
 		if (isServer) {
-			res = await getBySid(`order-tracking?order=${id}&store=${storeId}`, sid)
+			res = await getBySid(`order-tracking/${id}?store=${storeId}`, sid)
 		} else {
-			res = await getAPI(`order-tracking?order=${id}&store=${storeId}`, origin)
+			res = await getAPI(`order-tracking/${id}?store=${storeId}`, origin)
 		}
 
-		return res.data || []
+		return res || []
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)
 	}
