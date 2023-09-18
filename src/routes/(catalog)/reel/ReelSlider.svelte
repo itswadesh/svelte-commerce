@@ -1,6 +1,6 @@
 <script lang="ts">
 import { onMount } from 'svelte'
-import { SplideSlide } from '@splidejs/svelte-splide'
+import { Splide,SplideSlide } from '@splidejs/svelte-splide'
 // import { Video } from '@splidejs/splide-extension-video'
 // import '@splidejs/splide-extension-video/dist/css/splide-extension-video.min.css'
 
@@ -93,7 +93,7 @@ let productColors = [
 	'bg-zinc-800'
 ]
 
-let Splide
+// let Splide
 const options = {
 	// autoHeight: true,
 	pagination: false,
@@ -111,7 +111,7 @@ const options = {
 }
 onMount(async () => {
 	const SplideModule = await import('$lib/components/SplideJs.svelte')
-	Splide = SplideModule.default
+	// Splide = SplideModule.default
 	const isMobile = window.innerWidth < 768 // set your preferred breakpoint here
 
 	options.arrows = !isMobile
@@ -121,9 +121,30 @@ onMount(async () => {
 
 
 function handleMuted(e,ix){
-   muted[ix] = !muted[ix]
+//    muted[ix] = !muted[ix]
 
-   console.log(muted[ix]); 
+//    console.log(muted[ix]); 
+
+  const vID = document.querySelector(`#active${ix}`)
+
+  console.log(vID);
+  
+  
+  if (vID) {
+    vID.muted = !vID.muted
+  }
+
+}
+
+function handleClick(e){
+	const video = e.target;
+  if (video.muted) {
+    video.muted = false; // Unmute the video
+  } else {
+    video.muted = true; // Mute the video
+  }
+	
+	
 }
 </script>
 
@@ -131,15 +152,20 @@ function handleMuted(e,ix){
 
 {#if products}
 	<div class="overflow-hidden">
-		<svelte:component this="{Splide}" options="{options}">
-		      {JSON.stringify(products)}
+		<!-- <svelte:component this="{Splide}" options="{options}"> -->
+			<Splide options={ {
+  direction: 'ttb',
+  lazy: true,
+  height: 800,
+} }>
+		      <!-- {JSON.stringify(products)} -->
 			{#each products as product, ix (product.id)}
 				<SplideSlide>
 					<div class="w-full h-full flex">
 						<!-- svelte-ignore a11y-media-has-caption -->
-						<video autoplay="{true}" id="active{ix}" class="detail w-full" loop muted={muted[ix]}>
-							<source src="{product.video}" type="video/mp4" />
-							Your browser does not support the video tag.
+						<video autoplay src="{product.video}" id="active{ix}" class="detail w-full" loop muted on:click="{(e) => handleClick(e)}">
+							<!-- <source src="{product.video}" type="video/mp4" />
+							Your browser does not support the video tag. -->
 						</video>
 
 						<div class="flex absolute top-[69%] ml-[13.5rem] bg-white h-40 rounded-lg">
@@ -201,7 +227,7 @@ function handleMuted(e,ix){
 							<li>
 								<button
 									class="btn-group-fb my-2 py-4 px-4 mx-3 bg-current rounded-full h-13 w-13"
-									on:click="{(event) => handleMuted(event,ix)}">
+									on:click="{(e) => handleMuted(e,ix)}">
 									{#if product.muted}
 										<img class="w-7 h-7" src="{imgMute}" alt="mute" />
 									{:else}
@@ -259,6 +285,17 @@ function handleMuted(e,ix){
 					</div>
 				</SplideSlide>
 			{/each}
-		</svelte:component>
+		
+		</Splide>
+		<!-- </svelte:component> -->
+			
+
+	<!---	{#each products as product, ix }
+
+		   <video src="{product.video}" on:click="{(e) => handleClick(e,ix)}" autoplay muted loop>
+
+		   </video>
+			
+		{/each}-->
 	</div>
 {/if}
