@@ -93,18 +93,18 @@ async function getMegaMenu() {
 					href="{navigateToProperPath(category.link || category.slug)}"
 					aria-label="Click to visit category related products page"
 					class="{clazz} items-center relative flex shrink-0 justify-center gap-1 whitespace-nowrap border-b-4 border-transparent p-2
-                	{index % 6 == 0 ? 'hover:border-yellow-500' : ''}
-                	{index % 6 == 1 ? 'hover:border-purple-500' : ''}
-                	{index % 6 == 2 ? 'hover:border-red-500' : ''}
-                	{index % 6 == 3 ? 'hover:border-green-500' : ''}
-                	{index % 6 == 4 ? 'hover:border-pink-500' : ''}
-                	{index % 6 == 5 ? 'hover:border-blue-500' : ''}
-                	{index % 6 == 0 && selectedCategory === category.name ? 'border-yellow-500' : ''}
-                	{index % 6 == 1 && selectedCategory === category.name ? 'border-purple-500' : ''}
-                	{index % 6 == 2 && selectedCategory === category.name ? 'border-red-500' : ''}
-                	{index % 6 == 3 && selectedCategory === category.name ? 'border-green-500' : ''}
-                	{index % 6 == 4 && selectedCategory === category.name ? 'border-pink-500' : ''}
-                	{index % 6 == 5 && selectedCategory === category.name ? 'border-blue-500' : ''}"
+          {index % 6 == 0 ? 'hover:border-yellow-500' : ''}
+          {index % 6 == 1 ? 'hover:border-purple-500' : ''}
+          {index % 6 == 2 ? 'hover:border-red-500' : ''}
+          {index % 6 == 3 ? 'hover:border-green-500' : ''}
+          {index % 6 == 4 ? 'hover:border-pink-500' : ''}
+          {index % 6 == 5 ? 'hover:border-blue-500' : ''}
+          {index % 6 == 0 && selectedCategory === category.name ? 'border-yellow-500' : ''}
+          {index % 6 == 1 && selectedCategory === category.name ? 'border-purple-500' : ''}
+          {index % 6 == 2 && selectedCategory === category.name ? 'border-red-500' : ''}
+          {index % 6 == 3 && selectedCategory === category.name ? 'border-green-500' : ''}
+          {index % 6 == 4 && selectedCategory === category.name ? 'border-pink-500' : ''}
+          {index % 6 == 5 && selectedCategory === category.name ? 'border-blue-500' : ''}"
 					on:click="{() => (toggleMenuItemChildren[index] = false)}">
 					<!-- Root category -->
 
@@ -118,7 +118,7 @@ async function getMegaMenu() {
 							viewBox="0 0 20 20"
 							fill="currentColor"
 							class="h-4 w-4 shrink-0 transition duration-300
-                            {selectedCategory === category.name ? 'transform -rotate-180' : ''}">
+              {selectedCategory === category.name ? 'transform -rotate-180' : ''}">
 							<path
 								fill-rule="evenodd"
 								d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
@@ -150,9 +150,9 @@ async function getMegaMenu() {
 										{index % 6 == 0 ? 'text-yellow-500 ' : ''}
 										{index % 6 == 1 ? 'text-purple-500 ' : ''}
 										{index % 6 == 2 ? 'text-red-600 ' : ''}
-                                    	{index % 6 == 3 ? 'text-green-500 ' : ''}
-                                    	{index % 6 == 4 ? 'text-pink-500 ' : ''}
-                                    	{index % 6 == 5 ? 'text-blue-500 ' : ''}"
+                    {index % 6 == 3 ? 'text-green-500 ' : ''}
+                    {index % 6 == 4 ? 'text-pink-500 ' : ''}
+                    {index % 6 == 5 ? 'text-blue-500 ' : ''}"
 										on:click="{() => (toggleMenuItemChildren[index] = false)}">
 										{c.name}
 									</a>
