@@ -69,6 +69,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// if (responseTime < 100) {
 		// 	// console.log(`🚀 ${route} took ${responseTime.toFixed(2)} ms`)
 		// }
+		
 
 		return response
 	} catch (e) {
