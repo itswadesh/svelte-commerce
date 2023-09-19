@@ -11,11 +11,15 @@ import { currencySymbol } from '$lib/config'
 import { CartService } from '$lib/services'
 import { page } from '$app/stores'
 import { invalidateAll } from '$app/navigation'
+import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import { applyAction, enhance } from '$app/forms'
+import { fade } from 'svelte/transition'
 
 export let products = []
 export let title = ''
 
 let showMuteButton = []
+let loadingg = false
 
 // share button function
 
@@ -126,7 +130,7 @@ function handleMuted(e, ix) {
 
 	const vID = document.querySelector(`#active${ix}`)
 
-	console.log(vID)
+	// console.log(vID)
 
 	if (vID) {
 		showMuteButton[ix] = !showMuteButton[ix]
@@ -189,24 +193,99 @@ function handleClick(e) {
 										</div>
 									</div>
 
-									{#if isAddedtoBag == true}
+									{#if isAddedtoBag === true}
 										<a href="/cart">
 											<button
 												class="absolute rounded-lg mt-2 w-[280px] left-2 h-12 bg-black text-white">
 												{cartButtonText}</button
 											></a>
 									{:else}
-										<button
-											class="absolute rounded-lg mt-2 w-[280px] left-2 h-12 bg-black text-white"
-											on:click="{() =>
-												addToCart({
-													pid: product.id,
-													qty: +1,
-													customizedImg: product.customizedImg,
-													ix: ix
-												})}">
-											{cartButtonText}
-										</button>
+										<form
+											id="add_to_cart_1"
+											in:fade="{{ duration: 300 }}"
+											action="/cart?/add"
+											method="POST"
+											use:enhance="{() => {
+												return async ({ result }) => {
+													// console.log('result of add to cart', result)
+													cartButtonText = 'Added To Cart'
+													isAddedtoBag = true
+													// if (result?.data === 'choose variant') {
+													// 	scrollTo('variants_list')
+													// 	toast('Please choose a variant', 'warning')
+													// 	wiggleVariants = true
+
+													// 	setTimeout(() => {
+													// 		wiggleVariants = false
+													// 	}, 820)
+													// 	return
+													// }
+													// result?.data?.qty < 0
+													// 	? fireGTagEvent('remove_from_cart', result?.data)
+													// 	: fireGTagEvent('add_to_cart', result?.data)
+													// cartButtonText = 'Added To Cart'
+													// bounceItemFromTop = true
+													// setTimeout(() => {
+													// 	bounceItemFromTop = false
+													// 	cartButtonText = 'Add to Bag'
+													// }, 3000)
+													// cartButtonText = 'Go to Cart'
+													// if (customizedImg) {
+													// 	goto(`/checkout/address`)
+													// }
+													await invalidateAll()
+													await applyAction(result)
+												}
+											}}">
+											<input type="hidden" name="pid" value="{product.id}" />
+
+											<input type="hidden" name="vid" value="{product.id}" />
+
+											<!-- <input
+													type="hidden"
+													name="variantsLength"
+													value="{product?.variants?.length}" />
+
+												<input type="hidden" name="currentVariantId" value="{product?.currentVariantId}" />
+
+												<input
+													type="hidden"
+													name="linkedItems"
+													value="{JSON.stringify(product?.selectedLinkiedProducts)}" /> -->
+
+											<input type="hidden" name="qty" value="{1}" />
+
+											<!-- <input
+													type="hidden"
+													name="options"
+													value="{JSON.stringify(selectedOptions1)}" />
+
+												<input type="hidden" name="customizedImg" value="{customizedImg || null}" /> -->
+
+											<PrimaryButton
+												type="submit"
+												loading="{loadingg}"
+												loadingringsize="sm"
+												class="w-full text-sm">
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													class="h-5 w-5 shrink-0"
+													fill="none"
+													viewBox="0 0 24 24"
+													stroke="currentColor"
+													stroke-width="2">
+													<path
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
+													</path>
+												</svg>
+
+												<span>
+													{cartButtonText}
+												</span>
+											</PrimaryButton>
+										</form>
 									{/if}
 								</div>
 							</div>
@@ -292,7 +371,7 @@ function handleClick(e) {
 								</button>
 							</li>
 							<li>
-								{#if isAddedtoBag == true}
+								{#if isAddedtoBag === true}
 									<a href="/cart">
 										<button
 											class="btn-group-fb relative my-2 py-4 px-4 mx-3 bg-current rounded-full h-13 w-13">
@@ -300,29 +379,86 @@ function handleClick(e) {
 												class="w-7 h-7 m-0"
 												src="https://www.svgrepo.com/show/452178/cart.svg"
 												alt="cart" />
+
+									
+
+											{#if $page.data.cartQty > 0}
+												<div
+													class="absolute -top-2 -right-1.5 flex items-center justify-center rounded-full bg-primary-500 py-[0.8px] px-[5px] text-center text-xs font-bold uppercase text-white">
+													{$page.data.cartQty}
+												</div>
+											{/if}
 										</button></a>
 								{:else}
-									<button
-										class="btn-group-fb relative my-2 py-4 px-4 mx-3 bg-current rounded-full h-13 w-13"
-										on:click="{() =>
-											addToCart({
-												pid: product.id,
-												qty: +1,
-												customizedImg: product.customizedImg,
-												ix: ix
-											})}">
-										<img
-											class="w-7 h-7"
-											src="https://www.svgrepo.com/show/452178/cart.svg"
-											alt="cart" />
+									<form
+										id="add_to_cart_1"
+										in:fade="{{ duration: 300 }}"
+										action="/cart?/add"
+										method="POST"
+										use:enhance="{() => {
+											return async ({ result }) => {
+												// console.log('result of add to cart', result)
+												// if (result?.data === 'choose variant') {
+												// 	scrollTo('variants_list')
+												// 	toast('Please choose a variant', 'warning')
+												// 	wiggleVariants = true
 
-										{#if $page.data.cartQty > 0}
-											<div
-												class="absolute -top-2 -right-1.5 flex items-center justify-center rounded-full bg-primary-500 py-[0.8px] px-[5px] text-center text-xs font-bold uppercase text-white">
-												{$page.data.cartQty}
-											</div>
-										{/if}
-									</button>
+												// 	setTimeout(() => {
+												// 		wiggleVariants = false
+												// 	}, 820)
+												// 	return
+												// }
+												// result?.data?.qty < 0
+												// 	? fireGTagEvent('remove_from_cart', result?.data)
+												// 	: fireGTagEvent('add_to_cart', result?.data)
+												cartButtonText = 'Added To Cart'
+												isAddedtoBag = true
+												// bounceItemFromTop = true
+												// setTimeout(() => {
+												// 	bounceItemFromTop = false
+												// 	cartButtonText = 'Add to Bag'
+												// }, 3000)
+												// cartButtonText = 'Go to Cart'
+												// if (customizedImg) {
+												// 	goto(`/checkout/address`)
+												// }
+												await invalidateAll()
+												await applyAction(result)
+											}
+										}}">
+										<input type="hidden" name="pid" value="{product.id}" />
+
+										<input type="hidden" name="vid" value="{product.id}" />
+
+										<!-- <input
+													type="hidden"
+													name="variantsLength"
+													value="{product?.variants?.length}" />
+
+												<input type="hidden" name="currentVariantId" value="{product?.currentVariantId}" />
+
+												<input
+													type="hidden"
+													name="linkedItems"
+													value="{JSON.stringify(product?.selectedLinkiedProducts)}" /> -->
+
+										<input type="hidden" name="qty" value="{1}" />
+
+										<button
+											class="btn-group-fb relative my-2 py-4 px-4 mx-3 bg-current rounded-full h-13 w-13">
+											<img
+												class="w-7 h-7"
+												src="https://www.svgrepo.com/show/452178/cart.svg"
+												alt="cart" />
+
+											{#if $page.data.cartQty > 0}
+												<div
+													class="absolute -top-2 -right-1.5 flex items-center justify-center rounded-full bg-primary-500 py-[0.8px] px-[5px] text-center text-xs font-bold uppercase text-white">
+													{$page.data.cartQty}
+												</div>
+											{/if}
+										</button>
+									</form>
 								{/if}
 							</li>
 							<li>
