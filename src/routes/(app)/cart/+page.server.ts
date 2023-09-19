@@ -156,6 +156,73 @@ const add: Action = async ({ request, cookies, locals }) => {
 	}
 }
 
+const createBackOrder: Action = async ({ request, cookies, locals }) => {
+	const data = await request.formData()
+	const pid = data.get('pid')
+	const qty = +data.get('qty')
+	let cartId = locals.cartId
+	let sid = cookies.get('connect.sid')
+
+	if (typeof pid !== 'string' || !pid) {
+		return fail(400, { invalid: true })
+	}
+
+	try {
+		const cart = await CartService.createBackOrder({
+			pid,
+			qty,
+			storeId: locals.store?.id,
+			origin: locals.origin,
+			sid // This is a special case to pass complete cookie
+		})
+
+		if (!cartId) {
+			cartId = cart.cart_id // This is required because when cart_id is null, it will add 3 items with null cart id hence last one prevails
+			cookies.set('cartId', cartId, { path: '/' })
+		}
+
+		if (!sid) {
+			sid = cart.sid
+			cookies.set('connect.sid', sid, { path: '/' })
+		}
+
+		if (cart) {
+			const cartObj = {
+				cartId: cart?.cart_id,
+				currencySymbol: cart?.currencySymbol,
+				discount: cart?.discount,
+				formattedAmount: cart?.formattedAmount,
+				items: cart?.items,
+				qty: cart?.qty,
+				savings: cart?.savings,
+				selfTakeout: cart?.selfTakeout,
+				shipping: cart?.shipping,
+				subtotal: cart?.subtotal,
+				tax: cart?.tax,
+				total: cart?.total,
+				unavailableItems: cart?.unavailableItems
+			}
+			locals.cart = cartObj
+			locals.cartId = cartObj.cartId
+			locals.cartQty = cartObj.qty
+
+			if (!sid) {
+				cookies.set('connect.sid', cart.sid, { path: '/' })
+			}
+
+			if (!cartId) cookies.set('cartId', cartObj.cartId, { path: '/' })
+
+			cookies.set('cartQty', JSON.stringify(cartObj.qty), { path: '/' })
+
+			return cartObj
+		} else {
+			return {}
+		}
+	} catch (e) {
+		return {}
+	}
+}
+
 const handleUnavailableItems: Action = async ({ request, cookies, locals }) => {
 	const data = await request.formData()
 	const sid = cookies.get('connect.sid')
@@ -179,4 +246,4 @@ const handleUnavailableItems: Action = async ({ request, cookies, locals }) => {
 	return {}
 }
 
-export const actions: Actions = { add, handleUnavailableItems }
+export const actions: Actions = { add, createBackOrder, handleUnavailableItems }

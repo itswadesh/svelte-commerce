@@ -1215,6 +1215,39 @@ async function updateVariant(variant) {
 					</div>
 				{/if}
 
+				{#if $page?.data?.store?.allowBackOrder}
+					<form
+						id="create_back_order"
+						in:fade="{{ duration: 300 }}"
+						action="/cart?/createBackOrder"
+						method="POST"
+						use:enhance="{() => {
+							return async ({ result }) => {
+								// console.log('result of add to cart', result)
+								result?.data?.qty < 0
+									? fireGTagEvent('remove_from_cart', result?.data)
+									: fireGTagEvent('add_to_cart', result?.data)
+								bounceItemFromTop = true
+								setTimeout(() => {
+									bounceItemFromTop = false
+								}, 3000)
+								await invalidateAll()
+								await applyAction(result)
+							}
+						}}">
+						<input type="hidden" name="pid" value="{data?.product?._id}" />
+
+						<input type="hidden" name="qty" value="{1}" />
+
+						<button
+							type="submit"
+							title="It will create a order, and the order will be shipped when vendor will get stock"
+							class="max-w-max text-sm text-secondary-500 font-semibold hover:underline focus:outline-none">
+							Create Back Order
+						</button>
+					</form>
+				{/if}
+
 				{#await data.streamed?.moreProductDetails then value}
 					{#if !data.product?.isCustomized}
 						<div
