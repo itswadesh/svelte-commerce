@@ -81,6 +81,9 @@ const add: Action = async ({ request, cookies, locals }) => {
 		return fail(400, { invalid: true })
 	}
 
+	// console.log(cartId);
+	
+
 	try {
 		let cart = await CartService.addToCartService({
 			pid,
@@ -118,6 +121,9 @@ const add: Action = async ({ request, cookies, locals }) => {
 				})
 			}
 		}
+
+		// console.log(cart);
+		
 
 		if (cart) {
 			const cartObj = {
