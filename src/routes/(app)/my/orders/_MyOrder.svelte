@@ -71,7 +71,7 @@ export { clazz as class }
 
 							<table
 								class="group min-w-full divide-y divide-zinc-200 rounded border border-zinc-200 shadow-md"
-								on:click="{() => goto(`/my/orders/${order._id}`)}">
+								on:click="{() => goto(`/my/orders/${order.orderNo}`)}">
 								<thead class="whitespace-nowrap rounded-t-md bg-zinc-100 text-xs uppercase">
 									<tr>
 										<!-- <th class="px-5 py-3 text-zinc-500"> # </th> -->
@@ -95,7 +95,7 @@ export { clazz as class }
 								</thead>
 
 								<tbody
-									class="cursor-pointer divide-y divide-zinc-200 rounded-b-md bg-white bg-white text-sm transition duration-300 group-hover:bg-primary-50">
+									class="cursor-pointer divide-y divide-zinc-200 rounded-b-md bg-white text-sm transition duration-300 group-hover:bg-primary-50">
 									{#each order.items as item}
 										<tr>
 											<td class="p-3">
@@ -196,7 +196,7 @@ export { clazz as class }
 							</div>
 
 							<a
-								href="/my/orders/{order._id}"
+								href="/my/orders/{order.orderNo}"
 								aria-label="orders"
 								class="mb-4 block w-full divide-y rounded border bg-white text-sm shadow transition duration-300 hover:bg-primary-50 sm:mb-10">
 								{#each order.items as item}
