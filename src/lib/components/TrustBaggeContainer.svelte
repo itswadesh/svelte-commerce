@@ -22,7 +22,7 @@ let trustBaggeContainerItems = [
 ]
 </script>
 
-<div class="{clazz} bg-zinc-100 grid grid-cols-3 items-start gap-3 p-5 rounded">
+<div class="{clazz} bg-zinc-100 flex items-start justify-between gap-3 p-5 rounded">
 	{#each trustBaggeContainerItems as item}
 		<div
 			class="flex flex-col items-center justify-center gap-2 text-center text-[0.5em] text-zinc-500 uppercase">
