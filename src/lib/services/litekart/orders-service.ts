@@ -87,7 +87,7 @@ export const paySuccessPageHit = async ({
 
 		if (isServer) {
 			res = await postBySid(
-				`orders/pay-sucess-page-hit`,
+				`orders/pay-success-page-hit`,
 				{
 					orderId,
 					paymentMode,
@@ -99,7 +99,7 @@ export const paySuccessPageHit = async ({
 			)
 		} else {
 			res = await post(
-				`orders/pay-sucess-page-hit`,
+				`orders/pay-success-page-hit`,
 				{
 					orderId,
 					paymentMode,
