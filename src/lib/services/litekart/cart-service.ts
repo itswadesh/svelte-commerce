@@ -136,7 +136,6 @@ export const createBackOrder = async ({
 			res = await postBySid(
 				`backorder`,
 				{
-					id: 'new',
 					pid,
 					qty,
 					store: storeId,
