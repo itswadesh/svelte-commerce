@@ -15,7 +15,7 @@ import SEO from '$lib/components/SEO/index.svelte'
 import TransparentButton from '../_TransparentButton.svelte'
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
+console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let clazz
 export { clazz as class }
@@ -180,15 +180,31 @@ onMount(() => {
 												{/if}
 											</div>
 
+											{#if item?.files?.length}
+												<ul class="mt-2 p-0 list-none flex flex-col gap-1">
+													{#each item?.files as file, fx}
+														<li>
+															<a href="{file}" download>
+																<PrimaryButton loadingringsize="xs" class="text-xs">
+																	Download File
+
+																	{#if item?.files?.length > 1}
+																		{fx + 1}
+																	{/if}
+																</PrimaryButton>
+															</a>
+														</li>
+													{/each}
+												</ul>
+											{/if}
+
 											{#if item?.status === 'delivered'}
-												<div class="mt-2 xl:mt-0 xl:w-1/3">
-													<a
-														href="/my/reviews/create?pid={item?.pid}&oid={item?.orderItemId}&ref=/product/{item?.slug}"
-														aria-label="Click to visit rate & review product"
-														class="whitespace-nowrap font-semibold text-indigo-500 focus:outline-none hover:underline">
-														Rate & Review Product
-													</a>
-												</div>
+												<a
+													href="/my/reviews/create?pid={item?.pid}&oid={item?.orderItemId}&ref=/product/{item?.slug}"
+													aria-label="Click to visit rate & review product"
+													class="max-w-max whitespace-nowrap font-semibold text-indigo-500 focus:outline-none hover:underline">
+													Rate & Review Product
+												</a>
 											{/if}
 										</div>
 									</div>
