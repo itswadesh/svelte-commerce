@@ -16,6 +16,7 @@ import {
 	HeroBannersCollage6,
 	LegalFooterInformation,
 	MobileFooter,
+	PopUpReviews,
 	PopularProductsHome,
 	ProductGridShowCase,
 	ShopYourStone
@@ -362,4 +363,8 @@ onMount(() => {
 	<div class="block lg:hidden">
 		<MobileFooter />
 	</div>
+
+	<!-- Pop-up reviews -->
+
+	<PopUpReviews />
 </div>
