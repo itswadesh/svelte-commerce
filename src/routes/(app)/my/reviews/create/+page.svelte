@@ -1,13 +1,11 @@
 <script>
+import { Error, LazyImg } from '$lib/components'
 import { getExtension, toast } from '$lib/utils'
 import { goto } from '$app/navigation'
-import { LazyImg } from '$lib/components'
 import { page } from '$app/stores'
-import { post } from '$lib/utils/api'
 import { ReviewService } from '$lib/services'
 import BackButton from '$lib/ui/BackButton.svelte'
 import dayjs from 'dayjs'
-import Errors from '$lib/ui/Errors.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
@@ -34,6 +32,7 @@ let information = [
 	}
 ]
 
+let err = null
 let review = {
 	id: 'new',
 	pid: data.product?._id,
@@ -49,7 +48,6 @@ if (today) {
 }
 let uploading = false
 let select = null
-let errors = []
 let images = []
 
 function onSelect(i) {
@@ -59,7 +57,9 @@ function onSelect(i) {
 
 async function uploadImageToS3() {
 	try {
+		err = null
 		uploading = true
+
 		const response = await fetch('/server/files/upload', {
 			method: 'POST',
 			body: file[0],
@@ -69,14 +69,15 @@ async function uploadImageToS3() {
 				'Content-Type': file[0].type || 'image/*'
 			}
 		})
-		const res = await response.json()
 
+		const res = await response.json()
 		if (res?.url) {
 			let imgs = [...images]
 			imgs.push(res?.url)
 			images = imgs
 		}
 	} catch (e) {
+		err = e
 	} finally {
 		uploading = false
 	}
@@ -84,8 +85,10 @@ async function uploadImageToS3() {
 
 async function saveReviewproduct(review) {
 	try {
+		err = null
 		toast('Sending your business rating and review', 'info')
 		review.store = $page.data.store?.id
+
 		await ReviewService.saveReview({
 			id: review.id,
 			pid: review.pid,
@@ -98,10 +101,10 @@ async function saveReviewproduct(review) {
 		})
 
 		toast('Successfully saved.', 'success')
-
 		if (data.product) goto(`${data.ref}#ratings-and-reviews`)
 	} catch (e) {
 		toast(e?.body?.message || e?.body, 'error')
+		err = e
 	} finally {
 	}
 }
@@ -112,16 +115,8 @@ async function saveReviewproduct(review) {
 <div>
 	<BackButton to="{data.ref}" class="mb-2" />
 
-	<div class="mb-5 flex flex-col justify-between lg:flex-row lg:items-center">
-		<header class="flex flex-wrap items-start justify-between gap-4">
-			<div>
-				<div class="flex flex-wrap items-center gap-2">
-					<h2 class="text-2xl capitalize sm:text-3xl">Ratings and Reviews</h2>
-				</div>
-
-				<!-- <p class="mt-2 text-sm text-zinc-500"></p> -->
-			</div>
-		</header>
+	<header class="mb-5 flex flex-col items-start md:items-center justify-between md:flex-row gap-2">
+		<h2>Ratings and Reviews</h2>
 
 		{#if data.product}
 			<a
@@ -138,28 +133,28 @@ async function saveReviewproduct(review) {
 				</div>
 
 				<div class="flex-1">
-					<h6 class="font-semibold">{data.product?.brand?.name}</h6>
+					{#if data.product?.brand?.name}
+						<h6 class="font-semibold">{data.product?.brand?.name}</h6>
+					{/if}
 
 					<span class="group-hover:underline">{data.product?.name}</span>
 				</div>
 			</a>
 		{/if}
-	</div>
+	</header>
 
-	<Errors errors="{errors}" />
+	<Error err="{err}" />
 
 	<div class="flex flex-col-reverse xl:flex-row xl:gap-4">
 		<div class="mt-4 flex w-full flex-col gap-2 xl:mt-0 xl:w-1/3">
-			<div class="rounded border bg-white p-4 text-lg font-semibold capitalize shadow-md">
-				What makes a good review
-			</div>
+			<h3 class="rounded border bg-white p-4 capitalize shadow-md">What makes a good review</h3>
 
 			<ul class="gap-2 divide-y rounded border bg-white shadow-md">
 				{#each information as info}
 					<li class="flex flex-col gap-1 p-4 text-sm">
-						<span class="font-semibold">{info.question}</span>
+						<h6>{info.question}</h6>
 
-						<span>{info.answer}</span>
+						<p>{info.answer}</p>
 					</li>
 				{/each}
 			</ul>
@@ -167,8 +162,8 @@ async function saveReviewproduct(review) {
 
 		<form on:submit|preventDefault="{() => saveReviewproduct(review)}" class="w-full">
 			<div class="flex flex-col gap-4 rounded border bg-white p-4 shadow-md">
-				<div class="flex flex-wrap items-center">
-					<h2 class="mb-2 mr-4 text-lg font-semibold capitalize">Rate this business</h2>
+				<div class="flex flex-wrap items-center gap-2 sm:gap-4">
+					<h4 class="capitalize">Rate this business</h4>
 
 					<div class="flex items-center gap-4">
 						<div class="flex items-center gap-2">
@@ -214,13 +209,13 @@ async function saveReviewproduct(review) {
 				</div>
 
 				<div>
-					<h2 class="mb-2 mr-4 text-lg font-semibold capitalize">Reviews this business</h2>
+					<h4 class="mb-2 capitalize">Reviews this business</h4>
 
 					<Textarea placeholder="Description" bind:value="{review.message}" />
 				</div>
 
 				<div>
-					<h2 class="mb-2 mr-4 text-lg font-semibold capitalize">Upload Image</h2>
+					<h4 class="mb-2 capitalize">Upload Image</h4>
 
 					{#if images?.length}
 						<div class="mb-10">
@@ -250,11 +245,11 @@ async function saveReviewproduct(review) {
 									</path>
 								</svg>
 
-								<p class="mb-2 text-sm text-zinc-500 dark:text-zinc-400">
-									<span class="font-semibold">Click to upload</span> or drag and drop
+								<p class="mb-2">
+									<b>Click to upload</b> or drag and drop
 								</p>
 
-								<p class="text-xs text-zinc-500 dark:text-zinc-400">SVG, PNG, JPG or GIF</p>
+								<p>SVG, PNG, JPG or GIF</p>
 							</div>
 
 							<input
