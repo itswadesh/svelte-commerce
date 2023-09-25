@@ -393,6 +393,17 @@ onMount(async () => {
 									</span>
 								</p>
 
+								{#if data.order?.amount.cod_charges}
+									<p class="flex items-center">
+										<span class="mr-2 w-32">COD Charges</span>
+
+										<span>
+											: &nbsp;
+											{currency(data.order?.amount.cod_charges, $page.data?.store?.currencySymbol)}
+										</span>
+									</p>
+								{/if}
+
 								<hr class="w-full border-t border-zinc-200" />
 
 								<div class="flex items-center text-sm font-bold text-zinc-800">
