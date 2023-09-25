@@ -366,5 +366,5 @@ onMount(() => {
 
 	<!-- Pop-up reviews -->
 
-	<PopUpReviews />
+	<!-- <PopUpReviews /> -->
 </div>
