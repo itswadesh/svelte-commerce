@@ -259,13 +259,15 @@ export { clazz as class }
 													</b>
 												</div>
 
-												<div class="flex items-center gap-2">
-													<p>Size :</p>
+												{#if item.size}
+													<div class="flex items-center gap-2">
+														<p>Size :</p>
 
-													<b>
-														{item.size || '_'}
-													</b>
-												</div>
+														<b>
+															{item.size || '_'}
+														</b>
+													</div>
+												{/if}
 
 												<div class="flex items-center gap-2">
 													<p>Delivery :</p>

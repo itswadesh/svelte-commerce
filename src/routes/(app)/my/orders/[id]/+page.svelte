@@ -15,7 +15,7 @@ import SEO from '$lib/components/SEO/index.svelte'
 import TransparentButton from '../_TransparentButton.svelte'
 
 export let data
-console.log('zzzzzzzzzzzzzzzzzz', data)
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let clazz
 export { clazz as class }
@@ -199,12 +199,14 @@ onMount(() => {
 											{/if}
 
 											{#if item?.status === 'delivered'}
-												<a
-													href="/my/reviews/create?pid={item?.pid}&oid={item?.orderItemId}&ref=/product/{item?.slug}"
-													aria-label="Click to visit rate & review product"
-													class="max-w-max whitespace-nowrap font-semibold text-indigo-500 focus:outline-none hover:underline">
-													Rate & Review Product
-												</a>
+												<div class="mt-2 xl:mt-0 xl:w-1/3">
+													<a
+														href="/my/reviews/create?pid={item?.pid}&oid={item?.orderItemId}&ref=/product/{item?.slug}"
+														aria-label="Click to visit rate & review product"
+														class="max-w-max whitespace-nowrap font-semibold text-indigo-500 focus:outline-none hover:underline">
+														Rate & Review Product
+													</a>
+												</div>
 											{/if}
 										</div>
 									</div>
@@ -257,6 +259,21 @@ onMount(() => {
 											{/if}
 										</span>
 									</p>
+
+									{#if data.order?.amount.cod_charges}
+										<p class="flex items-center">
+											<span class="mr-2 w-32">COD Charges</span>
+
+											<span>
+												: &nbsp;
+
+												{currency(
+													data.order?.amount.cod_charges,
+													$page.data?.store?.currencySymbol
+												)}
+											</span>
+										</p>
+									{/if}
 
 									<hr class="w-full border-t border-zinc-200" />
 
