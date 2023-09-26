@@ -192,7 +192,7 @@ function validatePhoneNumber(phoneNumber) {
 	}
 
 	// Check if the resulting number is numeric and has a valid length
-	if (/^\d+$/.test(phoneNumber) && phoneNumber.length === 10) {
+	if (/^\d+$/.test(phoneNumber) && phoneNumber.length < 14) {
 		showErrorMessage = false
 		return true
 	}
