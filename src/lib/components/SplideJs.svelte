@@ -1,18 +1,31 @@
 <script lang="ts">
 import '@splidejs/svelte-splide/css'
 import { Splide, SplideTrack } from '@splidejs/svelte-splide'
+import { createEventDispatcher } from 'svelte'
+
+
+const dispath = createEventDispatcher()
 
 export let currentImageIndex = 0
 export let options = {}
 export let showProgressBar = false
 export let totalImagesLength = 0
+
+
+function handleMove(e){
+	
+	currentImageIndex = e.detail.index
+
+	dispath('handleMove', {index: e.detail.index, prev: e.detail.prev})
+}
+
 </script>
 
 <Splide
 	options="{options}"
 	hasTrack="{false}"
 	aria-labelledby="autoplay-example-heading"
-	on:move="{(e) => (currentImageIndex = e.detail.index)}">
+	on:move="{(e) => handleMove(e)}">
 	<div style="position: relative">
 		<SplideTrack>
 			<slot />
