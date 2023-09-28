@@ -146,13 +146,39 @@ function handleClick(e) {
 		video.muted = true // Mute the video
 	}
 }
+
+
+
+
+function handleMove(e){
+	console.log(e);
+	
+	const ix = 	e.detail.index
+	const preIX = e.detail.prev
+	const vID = document.querySelector(`#active${ix}`)
+	const vID2 = document.querySelector(`#active${preIX}`)
+
+	if (vID) {
+		vID.muted = false
+		showMuteButton[ix] = true
+		
+	}
+
+	if(vID2){
+		vID2.muted = true
+		showMuteButton[preIX] = false
+	}
+	
+	console.log('Show Mute Button', vID, vID2, showMuteButton);
+	
+}
 </script>
 
 <svelte:window bind:innerWidth="{innerWidth}" />
 
 {#if products}
 	<div class="overflow-hidden">
-		<svelte:component this="{Splide}" options="{options}">
+		<svelte:component this="{Splide}" options="{options}" on:handleMove="{(e) => handleMove(e)}">
 			{#each products as product, ix (product.id)}
 				<SplideSlide>
 					<div class="w-full h-full flex">
