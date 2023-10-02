@@ -3,7 +3,7 @@
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
 import { constructURL2, currency, navigateToProperPath } from '$lib/utils'
-import { createEventDispatcher, onMount } from 'svelte'
+import { createEventDispatcher, getContext, onMount } from 'svelte'
 import { fly } from 'svelte/transition'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
@@ -55,7 +55,7 @@ onMount(async () => {
 	})
 
 	getFacetsWithProducts()
-	await getMegamenu()
+	// await getMegamenu()
 	await getSelected()
 })
 
@@ -97,6 +97,8 @@ function getFacetsWithProducts() {
 		allVendors = facets?.all_aggs?.vendors?.all?.buckets?.filter((t) => t.doc_count > 0)
 	}
 }
+
+let megamenuList = getContext('megamenu') 
 
 async function getMegamenu() {
 	if (browser) {
@@ -583,7 +585,7 @@ $: {
 					<hr class="w-full" />
 				{/if}
 
-				{#if megamenu?.length}
+				{#if $megamenuList?.length}
 					<button
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
 						{selected === 'Categories'
@@ -819,11 +821,11 @@ $: {
 						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
 						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
 						<ul class="flex cursor-pointer flex-col text-sm">
-							{#if megamenu?.length}
+							{#if $megamenuList?.length}
 								<!-- 1st level categories -->
 
 								<ul class="flex w-full cursor-pointer flex-col text-sm">
-									{#each megamenu as m, mx}
+									{#each $megamenuList as m, mx}
 										<li>
 											{#if m.children?.length}
 												<div

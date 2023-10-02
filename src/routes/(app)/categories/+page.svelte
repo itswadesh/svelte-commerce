@@ -4,7 +4,7 @@ import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
 import { LazyImg, MobileFooter } from '$lib/components'
 import { navigateToProperPath, toast } from '$lib/utils'
-import { onMount } from 'svelte'
+import { getContext, onMount } from 'svelte'
 import { page } from '$app/stores'
 import SEO from '$lib/components/SEO/index.svelte'
 
@@ -33,8 +33,17 @@ let bgColors = [
 ]
 
 onMount(() => {
-	getMegaMenu()
+	// getMegaMenu()
 })
+
+
+let megamenuList = getContext('megamenu') 
+
+	if ($megamenuList?.length) {
+				$megamenuList = $megamenuList.filter((e) => {
+					return e.name !== 'New Arrivals'
+				})
+			}
 
 async function getMegaMenu() {
 	loading = true
@@ -95,9 +104,9 @@ function toggle2(cx) {
 	<div class="mb-20 bg-white">
 		<!-- 1st level categories -->
 
-		{#if megamenu.length}
+		{#if $megamenuList.length}
 			<ul class="flex flex-col divide-y-2 divide-white">
-				{#each megamenu as m, mx}
+				{#each $megamenuList as m, mx}
 					{#if m}
 						<li>
 							{#if m.children?.length}
