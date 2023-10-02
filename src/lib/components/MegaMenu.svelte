@@ -35,7 +35,7 @@
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
 import { navigateToProperPath, toast } from '$lib/utils'
-import { onMount } from 'svelte'
+import { getContext, onMount } from 'svelte'
 import { page } from '$app/stores'
 import Cookie from 'cookie-universal'
 
@@ -49,7 +49,7 @@ let pincode = null
 let selectedCategory = ''
 
 onMount(() => {
-	getMegaMenu()
+	// getMegaMenu()
 
 	const pin = cookies.get('zip')
 
@@ -57,6 +57,12 @@ onMount(() => {
 		pincode = pin
 	}
 })
+
+
+//get megamenu from context
+
+let megamenuList = getContext('megamenu') 
+
 
 async function getMegaMenu() {
 	if (browser && $page.data.isDesktop) {
@@ -87,9 +93,9 @@ async function getMegaMenu() {
 }
 </script>
 
-{#if megamenu?.length}
+{#if $megamenuList?.length}
 	<ul class="flex flex-row items-center justify-center">
-		{#each megamenu as category, index}
+		{#each $megamenuList as category, index}
 			<li
 				class="hoverable mx-1"
 				on:mouseenter="{() => (selectedCategory = category.name)}"

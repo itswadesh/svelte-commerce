@@ -2,7 +2,7 @@
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
 import { constructURL2, navigateToProperPath, toast } from '$lib/utils'
-import { createEventDispatcher, onMount } from 'svelte'
+import { createEventDispatcher, getContext, onMount } from 'svelte'
 // import { getMegamenuFromStore } from '$lib/store/megamenu'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
@@ -76,7 +76,7 @@ onMount(async () => {
 
 	getFacetsWithProducts()
 
-	await getMegamenu()
+	// await getMegamenu()
 
 	const pin = cookies.get('zip')
 
@@ -123,6 +123,11 @@ function getFacetsWithProducts() {
 		allVendors = facets?.all_aggs?.vendors?.all?.buckets?.filter((t) => t.doc_count > 0)
 	}
 }
+
+//get megamenu from context
+
+let megamenuList = getContext('megamenu') 
+
 
 async function getMegamenu() {
 	if (browser) {
@@ -237,7 +242,7 @@ function handleToggleSubCategory2(c, cx) {
 
 	<!-- Megamenu -->
 
-	{#if megamenu?.length}
+	{#if $megamenuList?.length}
 		<div transition:slide="{{ duration: 300 }}" class="my-3">
 			<hr class="mb-3 w-full" />
 
@@ -246,7 +251,7 @@ function handleToggleSubCategory2(c, cx) {
 			<!-- 1st level categories -->
 
 			<ul class="flex w-full cursor-pointer flex-col text-sm">
-				{#each megamenu as m, mx}
+				{#each $megamenuList as m, mx}
 					<li>
 						{#if m.children?.length}
 							<div
