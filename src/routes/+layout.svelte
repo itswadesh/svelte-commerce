@@ -5,24 +5,41 @@
 </style>
 
 <script lang="ts">
+// import { checkIsAndroidDevice } from '$lib/store/is-android'
 // import { pwaInfo } from 'virtual:pwa-info'
+// import FetchInit from '$lib/components/FetchInit.svelte'
 import './../app.css'
 import { BackToTop, LazyImg } from '$lib/components' // Can not dynamically import Google Analytics, it throws gtag not found error, not even party town
+import { CategoryService } from '$lib/services'
 import { FacebookPixel } from '@beyonk/svelte-facebook-pixel'
+import { GOOGLE_ANALYTICS_ID } from '$lib/config'
 import { GoogleAnalytics } from '@beyonk/svelte-google-analytics'
 import { navigating } from '$app/stores'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { ToastContainer, FlatToast } from 'svelte-toasts'
-import FetchInit from '$lib/components/FetchInit.svelte'
+import AllMegamenuStore from '$lib/store/megamenu-all'
+import MegamenuStore from '$lib/store/megamenu'
+import noStoreFound from '$lib/assets/no/no_store_found.png'
 import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 import storeClosed from '$lib/assets/store-closed.png'
 import whatsappIcon from '$lib/assets/social-media/whatsapp.png'
 
-export let data
-// console.log('$page', $page)
+let megamenu
 
+MegamenuStore.subscribe((data) => {
+	megamenu = data
+})
+
+let allMegamenu
+
+AllMegamenuStore.subscribe((data) => {
+	allMegamenu = data
+})
+
+export let data
 $: innerWidth = 0
+// $: isAndroid = false
 
 let showBackToTopButton = true
 
@@ -45,8 +62,48 @@ onMount(async () => {
 	// 		}
 	// 	})
 	// }
-})
+	// Get the User-Agent header from the request
+	const userAgent = navigator.userAgent || navigator.vendor || window.opera
+	// console.log('userAgent', userAgent)
+	// Check if the User-Agent indicates an Android device
+	// const isAndroid = userAgent.includes('Android')
 
+	if (/android/i.test(userAgent) && $page.url.host !== 'm.zapvi.in') {
+		// Attempt to open the app using the custom URL scheme
+		window.location.href = `zapviin://m.zapvi.in/?slug=${$page.url.pathname.substring(1)}`
+	}
+	// console.log(allMegamenu)
+
+	try {
+		if (!megamenu.length) {
+			// console.log('Calling megamenu api')
+			const megamenuRes = await CategoryService.fetchMegamenuData({
+				megamenu: true,
+				storeId: $page.data.store.id,
+				origin: $page.data.origin,
+				isCors: $page.data.isCors
+			})
+			MegamenuStore.update((currentData) => {
+				return megamenuRes
+			})
+		}
+	} catch (e) {}
+
+	try {
+		if (!allMegamenu.length) {
+			// console.log('Calling all megamenu api')
+			const megamenuRes = await CategoryService.fetchMegamenuData({
+				megamenu: false,
+				storeId: $page.data.store.id,
+				origin: $page.data.origin,
+				isCors: $page.data.isCors
+			})
+			AllMegamenuStore.update((currentData) => {
+				return megamenuRes
+			})
+		}
+	} catch (e) {}
+})
 // $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : ''
 
 // Add the Partytown script to the DOM head
@@ -172,7 +229,7 @@ onMount(async () => {
 		</a>
 
 		<div class="flex items-center justify-center p-10 bg-white text-center">
-			<img src="/no/no_store_found.png" alt="" class="h-80 w-auto object-contain object-center" />
+			<img src="{noStoreFound}" alt="" class="h-80 w-auto object-contain object-center" />
 		</div>
 	</div>
 {:else if !$page.data?.store?.closed}
@@ -216,7 +273,9 @@ onMount(async () => {
 	<div class="h-screen w-full bg-white flex items-center justify-center">
 		<div
 			class="fixed top-0 inset-x-0 z-10 p-5 px-10 flex items-center justify-center border-b shadow-md">
-			<LazyImg src="{$page.data.store?.logo}" class="h-10 w-auto object-contain object-center" />
+			<LazyImg
+				src="{$page.data.store?.logo || '/litekart-rectangular-logo-black.png'}"
+				class="h-10 w-auto object-contain object-center" />
 		</div>
 
 		<div class="flex items-center justify-center p-10 bg-white text-center">
@@ -232,4 +291,4 @@ onMount(async () => {
 	</div>
 {/if}
 
-<FetchInit />
+<!-- <FetchInit /> -->

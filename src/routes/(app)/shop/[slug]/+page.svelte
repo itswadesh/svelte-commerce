@@ -1,5 +1,5 @@
 <script>
-// import { getMegamenuFromStore } from '$lib/store/megamenu'
+// import { getMegamenuFromStore } from '$lib/store/megamenu-old'
 import { browser } from '$app/environment'
 import { CategoriesMobile, Hero, HeroBanners, PickedBanners } from '$lib/theme-config'
 import { CategoryService } from '$lib/services'

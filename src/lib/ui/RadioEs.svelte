@@ -70,18 +70,18 @@ import { createEventDispatcher } from 'svelte'
 
 const dispatch = createEventDispatcher()
 
-export let model,
-	items = [],
-	selectedItems = [],
-	color = 'none',
-	name = '',
-	required = false,
-	disabled = false,
-	title = ''
+export let color = 'none'
+export let disabled = false
+export let items = []
+export let model
+export let name = ''
+export let required = false
+export let selectedItems = []
+export let showSearchBox = false
+export let title = ''
 
-let showAllList = false,
-	noOfitems = 5,
-	showSearchBox = false
+let noOfitems = 5
+let showAllList = false
 
 function toggleShowAllList() {
 	showAllList = !showAllList
@@ -223,13 +223,7 @@ function handleSearchBox() {
 
 							<!-- {`${selectedItems.toString().search(i.key) === i.key}` ? 'font-medium' : 'font-normal'} -->
 
-							<div
-								class="ml-2 flex-1 flex flex-wrap gap-2 text-sm leading-tight first-letter:uppercase">
-								{#if i.color_code}
-									<div class="h-6 w-6 rounded-full border" style="background-color: {i.color_code}">
-									</div>
-								{/if}
-
+							<div class="ml-2 flex-1 text-sm leading-tight first-letter:uppercase">
 								<span>{i.key}</span>
 
 								{#if i.doc_count}
@@ -278,13 +272,7 @@ function handleSearchBox() {
 
 						<!-- {`${selectedItems.toString().search(i.key) === i.key}` ? 'font-medium' : 'font-normal'} -->
 
-						<div
-							class="ml-2 flex-1 flex flex-wrap gap-2 text-sm leading-tight first-letter:uppercase">
-							{#if i.color_code}
-								<div class="h-6 w-6 rounded-full border" style="background-color: {i.color_code}">
-								</div>
-							{/if}
-
+						<div class="ml-2 flex-1 text-sm leading-tight first-letter:uppercase">
 							<span>{i.key}</span>
 
 							{#if i.doc_count}

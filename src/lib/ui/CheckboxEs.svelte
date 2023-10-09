@@ -67,22 +67,28 @@ input[type='search']::-webkit-search-cancel-button {
 
 <script>
 import { createEventDispatcher } from 'svelte'
+import { GetColorName } from 'hex-color-to-color-name'
 import { nanoid } from 'nanoid'
+import ColoredBackground from '$lib/assets/konva/colored_background.png'
 
 const dispatch = createEventDispatcher()
 
-export let model,
-	items = [],
-	selectedItems = [],
-	color = 'none',
-	name = '',
-	required = false,
-	disabled = false,
-	title = ''
+export let color = 'none'
+export let disabled = false
+export let isColor = false
+export let items = []
+export let model
+export let name = ''
+export let required = false
+export let selectedItems = []
+export let showSearchBox = false
+export let title = ''
 
-let showAllList = false,
-	noOfitems = 5,
-	showSearchBox = false
+// console.log('items', items)
+// console.log('selectedItems', selectedItems)
+
+let noOfitems = 5
+let showAllList = false
 
 function toggleShowAllList() {
 	showAllList = !showAllList
@@ -225,13 +231,30 @@ function handleSearchBox() {
 							<!-- {`${selectedItems.toString().search(i.key) === i.key}` ? 'font-medium' : 'font-normal'} -->
 
 							<div
-								class="ml-2 flex-1 flex flex-wrap gap-2 text-sm leading-tight first-letter:uppercase">
-								{#if i.color_code}
-									<div class="h-6 w-6 rounded-full border" style="background-color: {i.color_code}">
-									</div>
-								{/if}
+								class="ml-2 flex-1 flex flex-wrap gap-1 items-center text-sm leading-tight first-letter:uppercase">
+								{#if isColor && i.key}
+									{#if i.key === 'MultiColor'}
+										<img
+											src="{ColoredBackground}"
+											alt=""
+											class="h-5 w-5 shrink-0 border rounded-full object-cover object-center" />
 
-								<span>{i.key}</span>
+										<span>
+											{i.key}
+										</span>
+									{:else}
+										<div
+											class="h-5 w-5 shrink-0 border rounded-full"
+											style="background-color: {i.key};">
+										</div>
+
+										<span>
+											{GetColorName(i.key)}
+										</span>
+									{/if}
+								{:else}
+									<span>{i.key}</span>
+								{/if}
 
 								{#if i.doc_count}
 									<span class="text-xs text-zinc-500">({i.doc_count})</span>
@@ -280,13 +303,30 @@ function handleSearchBox() {
 						<!-- {`${selectedItems.toString().search(i.key) === i.key}` ? 'font-medium' : 'font-normal'} -->
 
 						<div
-							class="ml-2 flex-1 flex flex-wrap gap-2 text-sm leading-tight first-letter:uppercase">
-							{#if i.color_code}
-								<div class="h-6 w-6 rounded-full border" style="background-color: {i.color_code}">
-								</div>
-							{/if}
+							class="ml-2 flex-1 flex flex-wrap gap-1 items-center text-sm leading-tight first-letter:uppercase">
+							{#if isColor && i.key}
+								{#if i.key === 'MultiColor'}
+									<img
+										src="{ColoredBackground}"
+										alt=""
+										class="h-5 w-5 shrink-0 border rounded-full object-cover object-center" />
 
-							<span>{i.key}</span>
+									<span>
+										{i.key}
+									</span>
+								{:else}
+									<div
+										class="h-5 w-5 shrink-0 border rounded-full"
+										style="background-color: {i.key};">
+									</div>
+
+									<span>
+										{GetColorName(i.key)}
+									</span>
+								{/if}
+							{:else}
+								<span>{i.key}</span>
+							{/if}
 
 							{#if i.doc_count}
 								<span class="text-xs text-zinc-500">({i.doc_count})</span>

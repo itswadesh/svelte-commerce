@@ -1,5 +1,5 @@
 <script>
-// import { getMegamenuFromStore } from '$lib/store/megamenu'
+// import { getMegamenuFromStore } from '$lib/store/megamenu-old'
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
 import { CheckboxEs, RadioEs } from '$lib/ui'

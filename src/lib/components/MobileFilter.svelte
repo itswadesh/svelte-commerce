@@ -1,15 +1,16 @@
 <script lang="ts">
-// import { getMegamenuFromStore } from '$lib/store/megamenu'
 import { browser } from '$app/environment'
-import { CategoryService } from '$lib/services'
-import { constructURL2, currency, navigateToProperPath } from '$lib/utils'
-import { createEventDispatcher, getContext, onMount } from 'svelte'
+import { constructURL2, navigateToProperPath, toast } from '$lib/utils'
+import { createEventDispatcher, onMount } from 'svelte'
 import { fly } from 'svelte/transition'
+import { getAllMegamenuFromStore } from '$lib/store/megamenu-old'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { RadioEs, CheckboxEs, PrimaryButton } from '$lib/ui'
 import { sorts } from '$lib/config'
+import AllMegamenuStore from '$lib/store/megamenu-all'
 import Cookie from 'cookie-universal'
+import Fuse from 'fuse.js'
 
 const cookies = Cookie()
 const dispatch = createEventDispatcher()
@@ -23,12 +24,15 @@ export let filterLength = 0
 export let fl = {}
 export let mergedArr = []
 export let priceRange = []
-export let selected
+export let selected = ''
 export let showFilter = false
 export let showSort = false
 
+let loadingForMegamenu = false
+let searchCategoryValue = null
 let selectedCategory
 let selectedCategory2
+let showSearchBox = false
 let showSubCategory = []
 let showSubCategory2 = []
 
@@ -46,6 +50,12 @@ let allTypes = []
 let allVendors = []
 let firstBucketObjectWithLength = {}
 let megamenu
+let megamenuResult = []
+
+const options = {
+	keys: ['name', 'children.name', 'children.children.name'], // Search name and children's names
+	threshold: 0.4 // Require at least 40% match score
+}
 
 onMount(async () => {
 	$page.url.searchParams.forEach(function (value, key) {
@@ -55,6 +65,7 @@ onMount(async () => {
 	})
 
 	getFacetsWithProducts()
+
 	// await getMegamenu()
 	await getSelected()
 })
@@ -98,33 +109,80 @@ function getFacetsWithProducts() {
 	}
 }
 
-let megamenuList = getContext('megamenu') 
+// let allMegamenu
+AllMegamenuStore.subscribe((data) => {
+	megamenu = data
+	megamenuResult = megamenu
+})
+
+if (megamenuResult?.length) {
+	megamenuResult = megamenuResult.filter((e) => {
+		return e.name !== 'New Arrivals'
+	})
+}
 
 async function getMegamenu() {
 	if (browser) {
 		try {
-			// megamenu = await getMegamenuFromStore({
-			// 	sid: null,
-			// 	storeId: $page?.data?.store?.id,
-			// 	isCors: $page?.data?.store?.isCors,
-			// 	origin: $page.data.origin
-			// })
+			loadingForMegamenu = true
 
-			const localmegamenu = localStorage.getItem('megamenu')
+			megamenu = await getAllMegamenuFromStore({
+				storeId: $page?.data?.store?.id,
+				isCors: $page?.data?.store?.isCors,
+				origin: $page.data.origin
+			})
 
-			if (!localmegamenu || localmegamenu === 'undefined') {
-				megamenu = await CategoryService.fetchMegamenuData({
-					origin: $page?.data?.origin,
-					storeId: $page?.data?.store?.id,
-					isCors: $page.data.store?.isCors
+			// console.log
+
+			// const localmegamenu = localStorage.getItem('megamenu')
+			// if (!localmegamenu || localmegamenu === 'undefined') {
+			// 	megamenu = await CategoryService.fetchMegamenuData({
+			// 		origin: $page.data.origin,
+			// 		storeId: $page.data.store?.id,
+			// 		isCors: $page.data.store?.isCors
+			// 	})
+			// } else {
+			// 	megamenu = JSON.parse(localmegamenu)
+			// }
+
+			if (megamenu?.length) {
+				megamenu = megamenu.filter((e) => {
+					return e.name !== 'New Arrivals'
 				})
-			} else {
-				megamenu = JSON.parse(localmegamenu)
 			}
+
+			megamenuResult = megamenu
+			// console.log('megamenuResult', megamenuResult)
 		} catch (e) {
-			// toast(e, 'error')
+			toast(e, 'error')
 		} finally {
+			loadingForMegamenu = false
 		}
+	}
+}
+
+function searchCategories() {
+	const fuse = new Fuse(megamenu, options)
+
+	megamenuResult = fuse.search(searchCategoryValue)
+
+	megamenuResult = megamenuResult.map((m) => {
+		return m.item
+	})
+
+	if (!megamenuResult.length) {
+		megamenuResult = megamenu
+	}
+
+	// console.log('megamenuResult', megamenuResult)
+}
+
+async function handleSearchBox() {
+	showSearchBox = !showSearchBox
+	document.getElementById(`CategoriesSearchText`).focus()
+	if (!showSearchBox) {
+		searchCategoryValue = ''
+		await searchCategories()
 	}
 }
 
@@ -585,7 +643,7 @@ $: {
 					<hr class="w-full" />
 				{/if}
 
-				{#if $megamenuList?.length}
+				{#if megamenu?.length}
 					<button
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
 						{selected === 'Categories'
@@ -676,6 +734,7 @@ $: {
 							<CheckboxEs
 								items="{allColors}"
 								model="colors"
+								isColor
 								selectedItems="{fl.colors || []}"
 								showSearchBox
 								on:go="{goCheckbox}" />
@@ -820,21 +879,61 @@ $: {
 					<div
 						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
 						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
+						<div
+							class="relative mb-3 h-8 w-full rounded-full border bg-zinc-100 transition duration-300">
+							<input
+								type="search"
+								id="CategoriesSearchText"
+								placeholder="Search for categories"
+								class="h-8 w-full truncate rounded-full bg-transparent py-2 pl-4 pr-10 text-sm focus:outline-none"
+								bind:value="{searchCategoryValue}"
+								on:input="{searchCategories}" />
+
+							<button
+								type="button"
+								class="absolute inset-y-0 right-2 z-20 flex items-center justify-center text-zinc-500 focus:outline-none"
+								on:click="{handleSearchBox}">
+								{#if !showSearchBox}
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										class="h-4 w-4"
+										viewBox="0 0 20 20"
+										fill="currentColor">
+										<path
+											fill-rule="evenodd"
+											d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+											clip-rule="evenodd"></path>
+									</svg>
+								{:else}
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										class="h-4 w-4"
+										viewBox="0 0 20 20"
+										fill="currentColor">
+										<path
+											fill-rule="evenodd"
+											d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+											clip-rule="evenodd"></path>
+									</svg>
+								{/if}
+							</button>
+						</div>
+
 						<ul class="flex cursor-pointer flex-col text-sm">
-							{#if $megamenuList?.length}
+							{#if megamenuResult?.length}
 								<!-- 1st level categories -->
 
 								<ul class="flex w-full cursor-pointer flex-col text-sm">
-									{#each $megamenuList as m, mx}
+									{#each megamenuResult as m, mx}
 										<li>
 											{#if m.children?.length}
 												<div
 													class="flex w-full items-center justify-between gap-2
 													{selectedCategory === m.name ? 'text-blue-600 font-medium' : 'hover:text-blue-600'}">
 													<a
-														href="{navigateToProperPath(m.link || m.slug)}"
+														href="{navigateToProperPath(m.link || m.slug, $page.data.origin)}"
 														aria-label="Click to visit category related products page"
-														class="block">
+														class="flex-1">
 														{m.name}
 													</a>
 
@@ -857,7 +956,7 @@ $: {
 												</div>
 											{:else}
 												<a
-													href="{navigateToProperPath(m.link || m.slug)}"
+													href="{navigateToProperPath(m.link || m.slug, $page.data.origin)}"
 													aria-label="Click to visit category related products page"
 													class="flex w-full items-center justify-between gap-2 py-1 text-left focus:outline-none hover:text-blue-600">
 													{m.name}
@@ -877,7 +976,7 @@ $: {
 																	<a
 																		href="{navigateToProperPath(c.link || c.slug)}"
 																		aria-label="Click to visit category related products page"
-																		class="block">
+																		class="flex-1">
 																		{c.name}
 																	</a>
 

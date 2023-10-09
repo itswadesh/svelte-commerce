@@ -1,26 +1,14 @@
-export const prerender = false
-
 import { DOMAIN, HTTP_ENDPOINT } from '$lib/config'
 import { error } from '@sveltejs/kit'
 import type { LayoutServerLoad } from './$types'
-import { CategoryService } from '$lib/services'
 
-export const load: LayoutServerLoad = async ({ url, locals, cookies }) => {
+export const prerender = false
+
+export const load: LayoutServerLoad = async ({ url, locals, cookies, request, params }) => {
 	try {
 		const currentPage = +url.searchParams.get('page') || 1
 		const q = url.searchParams.get('q') || ''
 		const { pathname } = url
-
-
-		// fetch megamenu and store it in context
-
-		let megamenu = await CategoryService.fetchMegamenuData({
-			origin: locals.origin,
-			storeId: locals.store?.id,
-			isCors: locals.store?.isCors
-		})
-
-
 
 		// setHeaders({
 		// 	'cache-control': 'public, max-age=300'
@@ -33,7 +21,7 @@ export const load: LayoutServerLoad = async ({ url, locals, cookies }) => {
 		locals.cartQty = cookies.get('cartQty')
 		if (zip) locals.zip = JSON.parse(zip)
 		// me,
-		return { ...locals, pathname, megamenu }
+		return { ...locals, pathname }
 	} catch (e) {
 		throw error(
 			404,
