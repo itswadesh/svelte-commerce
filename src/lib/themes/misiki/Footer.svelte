@@ -67,12 +67,12 @@ onMount(async () => {
 	// }
 })
 
-async function getStoreData() {
-	const response1 = await fetch('/server/store')
-	const res = await response1.json()
+// async function getStoreData() {
+// 	const response1 = await fetch('/server/store')
+// 	const res = await response1.json()
 
-	return res
-}
+// 	return res
+// }
 
 function positionToDisplayIsMultiVendor(itemsLength) {
 	// console.log('itemsLength', itemsLength)
