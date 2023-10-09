@@ -1,18 +1,18 @@
-// import { fetchInitFromStore } from '$lib/store/init'
-import { authenticateUser, fetchCart, fetchStoreData } from '$lib/server'
+// import * as SentryNode from '@sentry/node'
+import { authenticateUser, fetchCart } from '$lib/server'
 import { DOMAIN, HTTP_ENDPOINT, listOfPagesWithoutBackButton } from '$lib/config'
-import { error, type Handle, type HandleServerError } from '@sveltejs/kit'
-import { nanoid } from 'nanoid'
 import { env } from '$env/dynamic/private'
-import * as SentryNode from '@sentry/node'
+import { error, type Handle, type HandleServerError } from '@sveltejs/kit'
+import { fetchInitFromStore } from '$lib/store/init'
+import { nanoid } from 'nanoid'
 
-const SENTRY_DSN = env.SECRET_SENTRY_DSN
+// const SENTRY_DSN = env.SECRET_SENTRY_DSN
 
-if (SENTRY_DSN && SENTRY_DSN !== 'YOUR_SENTRY_DSN') {
-	SentryNode.init({
-		dsn: SENTRY_DSN
-	})
-}
+// if (SENTRY_DSN && SENTRY_DSN !== 'YOUR_SENTRY_DSN') {
+// 	SentryNode.init({
+// 		dsn: SENTRY_DSN
+// 	})
+// }
 
 /** @type {import('@sveltejs/kit').HandleFetch} */
 export const handleFetch = async ({ event, request, fetch }) => {
@@ -23,9 +23,9 @@ export const handleFetch = async ({ event, request, fetch }) => {
 
 export const handleError: HandleServerError = ({ error, event }) => {
 	const errorId = nanoid()
-	SentryNode.captureException(error, {
-		contexts: { sveltekit: { event, errorId } }
-	})
+	// SentryNode.captureException(error, {
+	// 	contexts: { sveltekit: { event, errorId } }
+	// })
 
 	return {
 		message: "An unexpected error occurred. We're working on it.",
@@ -35,6 +35,8 @@ export const handleError: HandleServerError = ({ error, event }) => {
 
 export const handle: Handle = async ({ event, resolve }) => {
 	try {
+
+		// console.time('init1')
 		const IS_DEV = import.meta.env.DEV
 		const url = new URL(event.request.url)
 
@@ -46,17 +48,29 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.isDesktop = isDesktop
 		event.locals.isShowBackButton = isShowBackButton
 
+		const { menu, storeOne } = await fetchInitFromStore(url.host)
+		// console.log('menu at hooks.server.is', menu);
+		// console.log('storeOne at hooks.server.is', storeOne);
+
 		// This calls init only when store data not present in browser cookies
-		const { megamenu, storeOne } = await fetchStoreData(event)
-		event.locals.store = storeOne
-		event.locals.megamenu = megamenu
+		// const { storeOne } = await fetchStoreData(event)
+		// console.timeEnd('init1')
+
+		event.locals.menu = menu || []
+		event.locals.store = storeOne || { store: storeId }
+		// event.locals.megamenu = megamenu || []
 
 		// this simply gets data from cookie
 		event.locals.me = await authenticateUser(event)
 
 		// This makes a call to backend on every request
-		event.locals.cart = await fetchCart(event)
+		await fetchCart(event)
 
+		// const derivedSid: string = event.cookies.get('connect.sid') || ''
+		// const route = event.url
+		// const start = performance.now()
+		// event.locals.sid = derivedSid
+		// event.request.headers.delete('connection')
 		const response = await resolve(event)
 
 		// const end = performance.now()
@@ -69,7 +83,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// if (responseTime < 100) {
 		// 	// console.log(`🚀 ${route} took ${responseTime.toFixed(2)} ms`)
 		// }
-		
 
 		return response
 	} catch (e) {

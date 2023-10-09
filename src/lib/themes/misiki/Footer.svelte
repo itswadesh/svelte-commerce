@@ -24,17 +24,20 @@
 // import { fetchFooterCategories } from './services/CategoryService'
 // import appStore from '$lib/assets/app/app-store.svg'
 // import googlePlay from '$lib/assets/app/google-play.png'
-import { browser } from '$app/environment'
+import { getPopularSearchFromStore } from '$lib/store/popular-search'
 import { navigateToProperPath } from '$lib/utils'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { PageService } from '$lib/services'
 import type { Category } from '$lib/types'
 
+export let content = ``
 export let me
-export let store = {}
-export let popularSearches: { took: 0; count: 0; data: [] }
 export let megamenu: Category[]
+export let store = {}
+
+// console.log('$page', $page)
+
+let popularSearches = []
 
 function getYear() {
 	const d = new Date()
@@ -42,17 +45,26 @@ function getYear() {
 	return year
 }
 
-let pages = []
-
 onMount(async () => {
-	await getPages()
-	const res2 = await getStoreData()
-	store = res2.storeOne
-	megamenu = res2.megamenu
-	popularSearches = res2.popularSearches
-	if (browser) {
-		localStorage.setItem('megamenu', JSON.stringify(megamenu))
-	}
+	popularSearches = await getPopularSearchFromStore({
+		limit: 20,
+		sid: null,
+		origin: $page.data.origin,
+		storeId: $page.data.store?.id,
+		isCors: $page.data.store?.isCors
+	})
+
+	// console.log('popularSearches', popularSearches)
+
+	// const res2 = await getStoreData()
+
+	// store = res2.storeOne
+	// megamenu = res2.megamenu1
+	// popularSearches = res2.popularSearches
+
+	// if (browser) {
+	// 	localStorage.setItem('megamenu', JSON.stringify(megamenu))
+	// }
 })
 
 async function getStoreData() {
@@ -62,11 +74,14 @@ async function getStoreData() {
 	return res
 }
 
-async function getPages() {
-	pages = await PageService.fetchPages({
-		origin: $page.data.origin,
-		storeId: $page.data.store?.id
-	})
+function positionToDisplayIsMultiVendor(itemsLength) {
+	// console.log('itemsLength', itemsLength)
+
+	if (itemsLength >= 2) {
+		return 1
+	} else {
+		return 0
+	}
 }
 </script>
 
@@ -74,88 +89,74 @@ async function getPages() {
 	<div class="container mx-auto max-w-6xl">
 		<div
 			class="mb-4 flex w-full flex-col flex-wrap items-start justify-start gap-5 sm:mb-8 sm:gap-10 h-full sm:max-h-[35rem] xl:max-h-80 overflow-hidden">
-			{#if $page.data.store?.description}
-				<div>
-					<h6 class="mb-4 whitespace-nowrap uppercase">
-						About {$page.data.store?.websiteName}
-					</h6>
-
-					<p class="max-w-xs text-zinc-500">
-						{@html $page.data.store?.description}
-					</p>
-				</div>
-			{/if}
-
-			<div>
-				<h6 class="mb-4 whitespace-nowrap uppercase">Customer Service</h6>
-
-				<ul class="flex flex-col gap-1 text-zinc-500">
-					{#if pages?.length}
-						{#each pages as page}
-							<li class="flex max-w-max items-center">
-								<a
-									href="/p/{page.link || page.slug}"
-									aria-label="Click to visit this page"
-									class="capitalize link-underline link-underline-gray whitespace-pre-wrap">
-									{page.name}
-								</a>
-
-								{#if page.new}
-									<div
-										class="ml-2 max-w-max rounded bg-primary-500 py-[0.1rem] px-1 text-[0.5rem] font-semibold leading-3 tracking-wider text-white">
-										NEW
-									</div>
+			{#if $page?.data?.menu?.length}
+				{#each $page?.data?.menu as menu}
+					{#if menu.menu_id === 'footer'}
+						{#each menu.items as item, mx}
+							<div class="max-w-xs">
+								{#if item.link}
+									<a
+										href="{item.link || '#'} "
+										target="_blank"
+										aria-label="Click to visit this page"
+										class="block">
+										<h6 class="mb-4 whitespace-nowrap uppercase">{item.name}</h6>
+									</a>
+								{:else}
+									<h6 class="mb-4 whitespace-nowrap uppercase">{item.name}</h6>
 								{/if}
-							</li>
+
+								<ul class="flex flex-col gap-1 text-zinc-500">
+									{#each item.items as item2}
+										<li class="flex max-w-max items-center">
+											{#if item2.link}
+												<a
+													href="{item2.link || '#'} "
+													target="_blank"
+													aria-label="Click to visit this page"
+													class="link-underline link-underline-gray whitespace-pre-wrap">
+													{item2.name}
+												</a>
+											{:else}
+												<p>
+													{item2.name}
+												</p>
+											{/if}
+										</li>
+									{/each}
+
+									{#if mx === positionToDisplayIsMultiVendor(menu.items?.length) && $page.data.store?.isMultiVendor}
+										<li class="flex max-w-max items-center">
+											<a
+												href="{$page.data.store?.adminUrl || '#'} "
+												target="_blank"
+												aria-label="Click to visit this page"
+												class="link-underline link-underline-gray whitespace-pre-wrap">
+												Vendor Login
+											</a>
+										</li>
+
+										<li class="flex max-w-max items-center">
+											<a
+												href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store?.id}"
+												target="_blank"
+												aria-label="Click to visit this page"
+												class="link-underline link-underline-gray whitespace-pre-wrap">
+												Join as Vendor
+											</a>
+
+											<div
+												class="ml-2 max-w-max rounded bg-primary-500 py-[0.1rem] px-1 text-[0.5rem] font-semibold leading-3 tracking-wider text-white">
+												NEW
+											</div>
+										</li>
+									{/if}
+								</ul>
+							</div>
 						{/each}
 					{/if}
-
-					<li class="flex max-w-max items-center">
-						<a
-							href="/blogs"
-							aria-label="Click to visit this page"
-							class="link-underline link-underline-gray whitespace-pre-wrap">
-							Blogs
-						</a>
-					</li>
-
-					<li class="flex max-w-max items-center">
-						<a
-							href="/my/orders"
-							aria-label="Click to visit this page"
-							class="link-underline link-underline-gray whitespace-pre-wrap">
-							Track Your Order
-						</a>
-					</li>
-
-					{#if $page.data.store?.isMultiVendor}
-						<li class="flex max-w-max items-center">
-							<a
-								href="{$page.data.store?.adminUrl}"
-								target="_blank"
-								aria-label="Click to visit this page"
-								class="link-underline link-underline-gray whitespace-pre-wrap">
-								Vendor Login
-							</a>
-						</li>
-
-						<li class="flex max-w-max items-center">
-							<a
-								href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store?.id}"
-								target="_blank"
-								aria-label="Click to visit this page"
-								class="link-underline link-underline-gray whitespace-pre-wrap">
-								Join as Vendor
-							</a>
-
-							<div
-								class="ml-2 max-w-max rounded bg-primary-500 py-[0.1rem] px-1 text-[0.5rem] font-semibold leading-3 tracking-wider text-white">
-								NEW
-							</div>
-						</li>
-					{/if}
-				</ul>
-			</div>
+				{/each}
+			{/if}
 
 			{#if megamenu?.length}
 				<div>
@@ -165,7 +166,7 @@ async function getPages() {
 						{#each megamenu as category}
 							<li class="flex max-w-max items-center">
 								<a
-									href="{navigateToProperPath(category.link || category.slug)}"
+									href="{navigateToProperPath(category.link || category.slug, $page.data.origin)}"
 									aria-label="Click to visit this page"
 									class="link-underline link-underline-gray whitespace-pre-wrap">
 									{category.name}
@@ -187,10 +188,12 @@ async function getPages() {
 				<h6 class="mb-4 whitespace-nowrap uppercase">Contact Us</h6>
 
 				<ul class="flex flex-col gap-2 text-zinc-500">
-					{#if $page.data.store?.email}
+					{#if $page.data.store?.email || $page.data.store?.websiteEmail}
 						<li class="max-w-max">
-							<a href="mailto:{$page.data.store?.email}" class="group flex items-center gap-2">
-								<h6 class="w-16 flex items-center gap-1">
+							<a
+								href="mailto:{$page.data.store?.email || $page.data.store?.websiteEmail}"
+								class="block">
+								<h6 class="mb-0.5 flex items-center gap-1">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										fill="none"
@@ -208,15 +211,15 @@ async function getPages() {
 									<span>Email</span>
 								</h6>
 
-								<span class="group-hover:underline">{$page.data.store?.email}</span>
+								<p>{$page.data.store?.email || $page.data.store?.websiteEmail}</p>
 							</a>
 						</li>
 					{/if}
 
 					{#if $page.data.store?.phone}
 						<li class="max-w-max">
-							<a href="tel:+{$page.data.store?.phone}" class="group flex items-center gap-2">
-								<h6 class="w-16 flex items-center gap-1">
+							<a href="tel:+{$page.data.store?.phone}" class="block">
+								<h6 class="mb-0.5 flex items-center gap-1">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										fill="none"
@@ -234,7 +237,7 @@ async function getPages() {
 									<span>Phone</span>
 								</h6>
 
-								<span class="group-hover:underline">{$page.data.store?.phone}</span>
+								<p>{$page.data.store?.phone}</p>
 							</a>
 						</li>
 					{/if}
@@ -542,7 +545,7 @@ async function getPages() {
 			{/if}
 		</div>
 
-		{#if popularSearches?.count > 0}
+		{#if popularSearches?.length > 0}
 			<div class="mb-4 sm:mb-8">
 				<div class="mb-4 flex items-center gap-4 font-semibold">
 					<h6 class="flex-1 whitespace-nowrap uppercase">Popular searches</h6>
@@ -551,16 +554,16 @@ async function getPages() {
 				</div>
 
 				<ul class="flex flex-wrap items-center text-zinc-500">
-					{#each popularSearches.data as p, px}
+					{#each popularSearches as p, px}
 						<li class="max-w-max">
 							<a
-								href="/search?q={p.text}"
+								href="{navigateToProperPath(p.link || p.slug, $page.data.origin)} "
 								aria-label="Click for the products related to this field"
 								class="link-underline link-underline-gray capitalize">
-								{p.text}
+								{p.name}
 							</a>
 
-							{#if px < popularSearches.count - 1}
+							{#if px < popularSearches.length}
 								<span class="px-2">|</span>
 							{/if}
 						</li>
@@ -583,30 +586,30 @@ async function getPages() {
 
 		<hr class="mb-4 w-full border-t sm:mb-8" />
 
-		<div
-			class="flex flex-col sm:flex-row items-center justify-center sm:justify-between text-sm text-zinc-500 gap-5 md:justify-between">
-			<p class="text-center sm:text-left flex flex-col sm:flex-row gap-1">
-				<span>
-					© {$page.data.store?.websiteName}
-				</span>
-				<span>
-					Powered by <a
-						href="{$page.data.store?.saasDomain || 'https://litekart.in'}"
-						rel="external"
-						class="hover:underline"
-						target="_blank">
-						{$page.data.store?.saasName || 'Litekart'}
-					</a>
-				</span>
+		<div class="flex flex-wrap items-center justify-between gap-5 md:justify-between">
+			<p class="whitespace-nowrap">
+				© {$page.data.store?.websiteName}
+				Powered by
+				<a
+					href="{$page.data.store?.saasDomain || 'https://litekart.in'}"
+					rel="external"
+					class="hover:underline"
+					target="_blank">
+					{$page.data.store?.saasName || 'Litekart'}
+				</a>
 			</p>
 
-			<div class="flex items-center justify-center gap-4">
+			<div class="flex items-center justify-center gap-4 text-xs text-zinc-500">
+				<!-- Contact Us -->
+
 				<a
 					href="/contact-us"
 					aria-label="Click to visit this page"
 					class="font-bold uppercase text-zinc-500 transition duration-300 hover:text-zinc-800">
 					Contact Us
 				</a>
+
+				<!-- Faqs -->
 
 				<a
 					href="/faqs"
@@ -616,5 +619,13 @@ async function getPages() {
 				</a>
 			</div>
 		</div>
+
+		{#if content}
+			<hr class="my-4 w-full border-t sm:mb-8" />
+
+			<div class="prose max-w-none">
+				{@html content}
+			</div>
+		{/if}
 	</div>
 </footer>

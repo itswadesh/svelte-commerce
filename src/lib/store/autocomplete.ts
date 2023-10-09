@@ -1,11 +1,10 @@
 import { writable } from 'svelte/store'
 import { CategoryService } from '$lib/services'
 export const autocompleteStore = writable({})
-const isServer = import.meta.env.SSR
 let isLoading = false
 
-export const findAutocompleteFromStore = async ({ featured, isCors, sid, storeId, origin }) => {
-	let existingAutocomplete
+export const findAutocompleteFromStore = async ({ isCors, sid, storeId, origin }) => {
+	let existingAutocomplete = []
 	autocompleteStore.subscribe((value) => {
 		if (value.length) {
 			existingAutocomplete = value

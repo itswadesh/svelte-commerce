@@ -1,11 +1,11 @@
 <script>
-// import { getMegamenuFromStore } from '$lib/store/megamenu'
 import { browser } from '$app/environment'
-import { CategoryService } from '$lib/services'
+import { getAllMegamenuFromStore } from '$lib/store/megamenu-old'
 import { LazyImg, MobileFooter } from '$lib/components'
 import { navigateToProperPath, toast } from '$lib/utils'
-import { getContext, onMount } from 'svelte'
+import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import AllMegamenuStore from '$lib/store/megamenu-all'
 import SEO from '$lib/components/SEO/index.svelte'
 
 let seoProps = {
@@ -33,52 +33,41 @@ let bgColors = [
 ]
 
 onMount(() => {
-	// getMegaMenu()
+	// getMegamenu()
 })
 
+// let allMegamenu
+AllMegamenuStore.subscribe((data) => {
+	megamenu = data
+})
 
-let megamenuList = getContext('megamenu') 
+// async function getMegamenu() {
+// 	if (browser) {
+// 		try {
+// 			megamenu = await getAllMegamenuFromStore({
+// 				storeId: $page?.data?.store?.id,
+// 				isCors: $page?.data?.store?.isCors,
+// 				origin: $page.data.origin
+// 			})
 
-	if ($megamenuList?.length) {
-				$megamenuList = $megamenuList.filter((e) => {
-					return e.name !== 'New Arrivals'
-				})
-			}
+// 			// console.log('megamenu', megamenu)
 
-async function getMegaMenu() {
-	loading = true
-	if (browser) {
-		try {
-			// megamenu = await getMegamenuFromStore({
-			// 	sid: null,
-			// 	storeId: $page?.data?.store?.id,
-			// 	isCors: $page?.data?.store?.isCors,
-			// 	origin: $page.data.origin
-			// })
-
-			const localMegamenu = localStorage.getItem('megamenu')
-
-			if (!localMegamenu || localMegamenu === 'undefined') {
-				megamenu = await CategoryService.fetchMegamenuData({
-					origin: $page.data.origin,
-					storeId: $page.data.store?.id
-				})
-			} else {
-				megamenu = JSON.parse(localMegamenu)
-			}
-
-			if (megamenu?.length) {
-				megamenu = megamenu.filter((e) => {
-					return e.name !== 'New Arrivals'
-				})
-			}
-		} catch (e) {
-			toast(e, 'error')
-		} finally {
-		}
-	}
-	loading = false
-}
+// 			// const localmegamenu = localStorage.getItem('megamenu')
+// 			// if (!localmegamenu || localmegamenu === 'undefined') {
+// 			// 	megamenu = await CategoryService.fetchMegamenuData({
+// 			// 		origin: $page.data.origin,
+// 			// 		storeId: $page.data.store?.id,
+// 			// 		isCors: $page.data.store?.isCors
+// 			// 	})
+// 			// } else {
+// 			// 	megamenu = JSON.parse(localmegamenu)
+// 			// }
+// 		} catch (e) {
+// 			toast(e, 'error')
+// 		} finally {
+// 		}
+// 	}
+// }
 
 function toggle(mx) {
 	if (showChild[mx] === true) {
@@ -104,9 +93,9 @@ function toggle2(cx) {
 	<div class="mb-20 bg-white">
 		<!-- 1st level categories -->
 
-		{#if $megamenuList.length}
+		{#if megamenu?.length}
 			<ul class="flex flex-col divide-y-2 divide-white">
-				{#each $megamenuList as m, mx}
+				{#each megamenu as m, mx}
 					{#if m}
 						<li>
 							{#if m.children?.length}
