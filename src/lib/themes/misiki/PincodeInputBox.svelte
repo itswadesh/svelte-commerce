@@ -13,17 +13,15 @@ let disabled = false
 let err = null
 let loading = false
 let locationPinCodesList = [
-	{ area: 'Berhampur (City)', pincode: 760002 },
-	{ area: 'Gopalpur', pincode: 761002 },
-	{ area: 'Semiliguda', pincode: 764036 },
+	// { area: 'Berhampur (City)', pincode: 760002 },
+	// { area: 'Gopalpur', pincode: 761002 },
+	// { area: 'Semiliguda', pincode: 764036 },
 	{ area: 'Sunabeda', pincode: 763002 }
 ]
 let pincode = null
 
 onMount(() => {
 	const pin = cookies.get('zip')
-
-	// console.log('pin', pin, pin.toString()?.length)
 
 	if (pin && pin.toString()?.length === 6) {
 		alreadyHavePinCode = true
@@ -77,7 +75,7 @@ async function handlePinCode(pincodeNew) {
 			</svg>
 		</button>
 
-		<h2 class="p-5 font-semibold">Enter Your Pin Code</h2>
+		<h3 class="p-5">Enter Your Pin Code</h3>
 
 		<hr />
 
@@ -166,7 +164,7 @@ async function handlePinCode(pincodeNew) {
 
 			{#if locationPinCodesList?.length}
 				<div class="flex flex-col gap-3">
-					<h3 class="text-sm text-zinc-500">Suggested Area</h3>
+					<p>Suggested Area</p>
 
 					<ul class="m-0 p-0 list-none flex flex-wrap gap-1">
 						{#each locationPinCodesList as lp, ix}
