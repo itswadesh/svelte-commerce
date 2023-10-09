@@ -1,10 +1,9 @@
 // import * as SentryNode from '@sentry/node'
 import { authenticateUser, fetchCart } from '$lib/server'
 import { DOMAIN, HTTP_ENDPOINT, listOfPagesWithoutBackButton } from '$lib/config'
-import { env } from '$env/dynamic/private'
 import { error, type Handle, type HandleServerError } from '@sveltejs/kit'
-import { fetchInitFromStore } from '$lib/store/init'
 import { nanoid } from 'nanoid'
+import { InitService } from '$lib/services'
 
 // const SENTRY_DSN = env.SECRET_SENTRY_DSN
 
@@ -35,7 +34,6 @@ export const handleError: HandleServerError = ({ error, event }) => {
 
 export const handle: Handle = async ({ event, resolve }) => {
 	try {
-
 		// console.time('init1')
 		const IS_DEV = import.meta.env.DEV
 		const url = new URL(event.request.url)
@@ -48,7 +46,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.isDesktop = isDesktop
 		event.locals.isShowBackButton = isShowBackButton
 
-		const { menu, storeOne } = await fetchInitFromStore(url.host)
+		const { menu, storeOne } = await InitService.fetchInit(url.host)
 		// console.log('menu at hooks.server.is', menu);
 		// console.log('storeOne at hooks.server.is', storeOne);
 
@@ -57,7 +55,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// console.timeEnd('init1')
 
 		event.locals.menu = menu || []
-		event.locals.store = storeOne || { store: storeId }
+		event.locals.store = storeOne || { store: storeOne._id }
 		// event.locals.megamenu = megamenu || []
 
 		// this simply gets data from cookie
