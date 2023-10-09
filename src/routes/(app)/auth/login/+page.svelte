@@ -176,7 +176,7 @@ function changeNumber() {
 					} else if (result?.data) {
 						if (isEmail) {
 							const me = {
-								id: result?.data?.id,
+								id: result?.data?._id || result?.data?.id,
 								email: result?.data?.email,
 								phone: result?.data?.phone,
 								firstName: result?.data?.firstName,
