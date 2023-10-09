@@ -13,9 +13,9 @@ let disabled = false
 let err = null
 let loading = false
 let locationPinCodesList = [
-	{ area: 'Berhampur (City)', pincode: 760002 },
-	{ area: 'Gopalpur', pincode: 761002 },
-	{ area: 'Semiliguda', pincode: 764036 },
+	// { area: 'Berhampur (City)', pincode: 760002 },
+	// { area: 'Gopalpur', pincode: 761002 },
+	// { area: 'Semiliguda', pincode: 764036 },
 	{ area: 'Sunabeda', pincode: 763002 }
 ]
 let pincode = null
