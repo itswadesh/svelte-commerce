@@ -1,4 +1,5 @@
 <script>
+// import { getMegamenuFromStore } from '$lib/store/megamenu-old'
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
 import { CheckboxEs, RadioEs } from '$lib/ui'
@@ -110,7 +111,15 @@ function getFacetsWithProducts() {
 async function getMegamenu() {
 	if (browser) {
 		try {
+			// megamenu = await getMegamenuFromStore({
+			// 	sid: null,
+			// 	storeId: $page?.data?.store?.id,
+			// 	isCors: $page?.data?.store?.isCors,
+			// 	origin: $page.data.origin
+			// })
+
 			const localmegamenu = localStorage.getItem('megamenu')
+
 			if (!localmegamenu || localmegamenu === 'undefined') {
 				megamenu = await CategoryService.fetchMegamenuData({
 					origin: $page.data.origin,
