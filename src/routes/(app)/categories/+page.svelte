@@ -1,11 +1,10 @@
 <script>
 import { browser } from '$app/environment'
-import { getAllMegamenuFromStore } from '$lib/store/megamenu-old'
+import { getAllMegamenuFromStore } from '$lib/store/megamenu'
 import { LazyImg, MobileFooter } from '$lib/components'
 import { navigateToProperPath, toast } from '$lib/utils'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import AllMegamenuStore from '$lib/store/megamenu-all'
 import SEO from '$lib/components/SEO/index.svelte'
 
 let seoProps = {
@@ -33,41 +32,23 @@ let bgColors = [
 ]
 
 onMount(() => {
-	// getMegamenu()
+	getMegamenu()
 })
 
-// let allMegamenu
-AllMegamenuStore.subscribe((data) => {
-	megamenu = data
-})
-
-// async function getMegamenu() {
-// 	if (browser) {
-// 		try {
-// 			megamenu = await getAllMegamenuFromStore({
-// 				storeId: $page?.data?.store?.id,
-// 				isCors: $page?.data?.store?.isCors,
-// 				origin: $page.data.origin
-// 			})
-
-// 			// console.log('megamenu', megamenu)
-
-// 			// const localmegamenu = localStorage.getItem('megamenu')
-// 			// if (!localmegamenu || localmegamenu === 'undefined') {
-// 			// 	megamenu = await CategoryService.fetchMegamenuData({
-// 			// 		origin: $page.data.origin,
-// 			// 		storeId: $page.data.store?.id,
-// 			// 		isCors: $page.data.store?.isCors
-// 			// 	})
-// 			// } else {
-// 			// 	megamenu = JSON.parse(localmegamenu)
-// 			// }
-// 		} catch (e) {
-// 			toast(e, 'error')
-// 		} finally {
-// 		}
-// 	}
-// }
+async function getMegamenu() {
+	if (browser) {
+		try {
+			megamenu = await getAllMegamenuFromStore({
+				storeId: $page?.data?.store?.id,
+				isCors: $page?.data?.store?.isCors,
+				origin: $page.data.origin
+			})
+		} catch (e) {
+			toast(e, 'error')
+		} finally {
+		}
+	}
+}
 
 function toggle(mx) {
 	if (showChild[mx] === true) {

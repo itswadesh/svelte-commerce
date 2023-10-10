@@ -6,10 +6,11 @@ import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { RadioEs, CheckboxEs } from '$lib/ui'
 import { slide } from 'svelte/transition'
-import AllMegamenuStore from '$lib/store/megamenu-all'
 import ColoredBackground from '$lib/assets/konva/colored_background.png'
 import Cookie from 'cookie-universal'
 import Fuse from 'fuse.js'
+import { browser } from '$app/environment'
+import { getAllMegamenuFromStore } from '$lib/store/megamenu'
 
 const cookies = Cookie()
 const dispatch = createEventDispatcher()
@@ -83,7 +84,7 @@ onMount(async () => {
 
 	getFacetsWithProducts()
 
-	// await getMegamenu()
+	await getMegamenu()
 
 	const pin = cookies.get('zip')
 
@@ -131,50 +132,37 @@ function getFacetsWithProducts() {
 	}
 }
 
-// let allMegamenu
-AllMegamenuStore.subscribe((data) => {
-	megamenu = data
-	megamenuResult = megamenu
-})
+// // let allMegamenu
+// AllMegamenuStore.subscribe((data) => {
+// 	megamenu = data
+// 	megamenuResult = megamenu
+// })
+let loadingForMegamenu = false
+async function getMegamenu() {
+	if (browser) {
+		try {
+			loadingForMegamenu = true
 
-// async function getMegamenu() {
-// 	if (browser) {
-// 		try {
-// 			loadingForMegamenu = true
+			megamenu = await getAllMegamenuFromStore({
+				storeId: $page?.data?.store?.id,
+				isCors: $page?.data?.store?.isCors,
+				origin: $page.data.origin
+			})
 
-// 			megamenu = await getAllMegamenuFromStore({
-// 				storeId: $page?.data?.store?.id,
-// 				isCors: $page?.data?.store?.isCors,
-// 				origin: $page.data.origin
-// 			})
+			if (megamenu?.length) {
+				megamenu = megamenu.filter((e) => {
+					return e.name !== 'New Arrivals'
+				})
+			}
 
-// 			// console.log('megamenu', megamenu)
-
-// 			// const localmegamenu = localStorage.getItem('megamenu')
-// 			// if (!localmegamenu || localmegamenu === 'undefined') {
-// 			// 	megamenu = await CategoryService.fetchMegamenuData({
-// 			// 		origin: $page.data.origin,
-// 			// 		storeId: $page.data.store?.id,
-// 			// 		isCors: $page.data.store?.isCors
-// 			// 	})
-// 			// } else {
-// 			// 	megamenu = JSON.parse(localmegamenu)
-// 			// }
-
-// 			if (megamenu?.length) {
-// 				megamenu = megamenu.filter((e) => {
-// 					return e.name !== 'New Arrivals'
-// 				})
-// 			}
-
-// 			megamenuResult = megamenu
-// 		} catch (e) {
-// 			toast(e, 'error')
-// 		} finally {
-// 			loadingForMegamenu = false
-// 		}
-// 	}
-// }
+			megamenuResult = megamenu
+		} catch (e) {
+			toast(e, 'error')
+		} finally {
+			loadingForMegamenu = false
+		}
+	}
+}
 
 function searchCategories() {
 	const fuse = new Fuse(megamenu, options)

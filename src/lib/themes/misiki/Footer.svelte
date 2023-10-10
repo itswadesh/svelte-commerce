@@ -29,6 +29,7 @@ import { navigateToProperPath } from '$lib/utils'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import type { Category } from '$lib/types'
+import { browser } from '$app/environment'
 
 export let content = ``
 export let me
@@ -46,14 +47,15 @@ function getYear() {
 }
 
 onMount(async () => {
-	popularSearches = await getPopularSearchFromStore({
-		limit: 20,
-		sid: null,
-		origin: $page.data.origin,
-		storeId: $page.data.store?.id,
-		isCors: $page.data.store?.isCors
-	})
-
+	if (browser) {
+		popularSearches = await getPopularSearchFromStore({
+			limit: 20,
+			sid: null,
+			origin: $page.data.origin,
+			storeId: $page.data.store?.id,
+			isCors: $page.data.store?.isCors
+		})
+	}
 	// console.log('popularSearches', popularSearches)
 
 	// const res2 = await getStoreData()
