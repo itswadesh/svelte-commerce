@@ -10,13 +10,16 @@ export const fetchFooterCategories = async ({
 	megamenu = false,
 	server = false,
 	sid = null,
-	storeId,
+	storeId
 }) => {
 	try {
 		let data: []
 
 		if (isServer || isCors) {
-			data = await getBySid(`categories?megamenu=${megamenu}&limit=6&page=0&level=0&store=${storeId}`, sid)
+			data = await getBySid(
+				`categories?megamenu=${megamenu}&limit=6&page=0&level=0&store=${storeId}`,
+				sid
+			)
 		} else {
 			data = await getAPI(
 				`categories?megamenu=${megamenu}&limit=6&page=0&level=0&store=${storeId}`,
@@ -60,7 +63,7 @@ export const fetchAllCategories = async ({
 	origin,
 	server = false,
 	sid = null,
-	storeId,
+	storeId
 }) => {
 	try {
 		let res: any = {}
@@ -92,7 +95,7 @@ export const fetchAllProductsOfCategories = async ({
 	origin,
 	server = false,
 	sid = null,
-	storeId,
+	storeId
 }) => {
 	try {
 		let res: any = {}
@@ -130,15 +133,21 @@ export const fetchMegamenuData = async ({
 	megamenu = false,
 	origin,
 	sid = null,
-	storeId,
+	storeId
 }) => {
 	try {
 		let data: []
 
 		if (isServer || isCors) {
-			data = await getBySid(`categories/megamenu?megamenu=${megamenu}&store=${storeId}`, sid)
+			data = await getBySid(
+				`categories/megamenu?megamenu=${megamenu}&store=${storeId}&active=true`,
+				sid
+			)
 		} else {
-			data = await getAPI(`categories/megamenu?megamenu=${megamenu}&store=${storeId}`, origin)
+			data = await getAPI(
+				`categories/megamenu?megamenu=${megamenu}&store=${storeId}&active=true`,
+				origin
+			)
 		}
 
 		return data || []
