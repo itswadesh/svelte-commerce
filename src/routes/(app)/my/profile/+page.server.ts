@@ -13,7 +13,9 @@ export async function load({ cookies, locals }) {
 			sid: cookies.get('connect.sid'),
 			cookies
 		})
-		data.dob = data.dob ? dayjs(data.dob).format('YYYY-MM-DD') : null
+
+		data.dob = data?.dob ? dayjs(data.dob).format('YYYY-MM-DD') : null
+
 		profile = data || {
 			email: me.email,
 			firstName: me.firstName || '',
@@ -23,6 +25,7 @@ export async function load({ cookies, locals }) {
 		if (e.status === 401) {
 			throw redirect(307, store.loginUrl)
 		}
+
 		throw error(e.status, e.message)
 	} finally {
 	}

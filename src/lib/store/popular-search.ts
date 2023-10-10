@@ -16,7 +16,6 @@ export const getPopularSearchFromStore = async ({ limit, isCors, sid, storeId, o
 		isLoading = true
 
 		const popularsearchDataFromServer = await CategoryService.fetchAllCategories({
-			limit,
 			sid,
 			origin,
 			storeId,
@@ -24,7 +23,7 @@ export const getPopularSearchFromStore = async ({ limit, isCors, sid, storeId, o
 		})
 
 		// console.log('popularsearchDataFromServer', popularsearchDataFromServer);
-
+		// existingPopularSearch = popularsearchDataFromServer.data
 		popularsearchStore.update((u) => popularsearchDataFromServer.data)
 
 		// const popularsearchDataFromServer = await PopularSearchService.fetchPopularSearch({
