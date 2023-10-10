@@ -79,54 +79,8 @@ onMount(async () => {
 			origin: $page.data.origin,
 			isCors: $page.data.isCors
 		})
-
-		
-
-		Whatsappnumber = checkWhatsappNumber($page.data.store?.whatsappChatButton?.phone?.val)
-
-		// console.log('Whatsappnumber', Whatsappnumber);
-		
 	}
 })
-
-function checkWhatsappNumber(phoneNumber) {
-	// Remove any whitespace from the input
-	phoneNumber = phoneNumber.replace(/\s/g, '')
-
-	// Check if the phone number starts with '+91' or '91'
-	if (phoneNumber.startsWith('+91')) {
-		// Check if the rest of the number has 10 digits
-		if (phoneNumber.length === 13) {
-			// Remove the '+' prefix and return the number
-			return phoneNumber.substring(1)
-		} else {
-			return false
-		}
-	} else if (phoneNumber.startsWith('91')) {
-		// Check if the rest of the number has 10 digits
-		if (phoneNumber.length === 12) {
-			return phoneNumber
-		} else {
-			return false
-		}
-	} else if (phoneNumber.startsWith('0')) {
-		// Check if the rest of the number has 10 digits
-		if (phoneNumber.length === 11) {
-			return '91' + phoneNumber.substring(1)
-		} else {
-			return false
-		}
-	} else {
-		// Check if the number has exactly 10 digits
-		if (phoneNumber.length === 10) {
-			// Add '91' prefix and return the number
-			return '91' + phoneNumber
-		} else {
-			return false
-		}
-	}
-}
-
 // $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : ''
 
 // Add the Partytown script to the DOM head
