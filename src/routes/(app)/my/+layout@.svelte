@@ -83,7 +83,7 @@ $: if (innerWidth < 640) {
 	<div class="flex w-full antialiased" style="height: {slotHeightAccToPageHeight}px;">
 		{#if menu?.length > 0}
 			<div
-				class="relative hidden w-44 shrink-0 overflow-y-auto overflow-x-hidden bg-primary-500 py-3 scrollbar-none sm:block">
+				class="relative hidden w-44 shrink-0 overflow-y-auto overflow-x-hidden bg-primary-500 py-3 scrollbar-none lg:block">
 				<!-- Dashboard -->
 
 				<a href="/my" aria-label="Click to visit dashboard" data-sveltekit-preload-data>
