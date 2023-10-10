@@ -25,6 +25,8 @@ import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 import storeClosed from '$lib/assets/store-closed.png'
 import whatsappIcon from '$lib/assets/social-media/whatsapp.png'
 
+// console.log('$page', $page)
+
 let megamenu
 
 MegamenuStore.subscribe((data) => {
@@ -149,8 +151,8 @@ onMount(async () => {
 	<meta name="apple-mobile-web-app-title" content="{$page.data.store?.websiteName}" />
 	<meta name="application-name" content="{$page.data.store?.websiteName}" />
 	<link
-		href="https://fonts.googleapis.com/css2?family={$page.data.store
-			.fontFamily}:wght@100;200;300;400;500;600;700;800;900&display=swap"
+		href="https://fonts.googleapis.com/css2?family={$page.data.store.fontFamily ||
+			'Montserrat'}:wght@100;200;300;400;500;600;700;800;900&display=swap"
 		rel="stylesheet" />
 
 	<!-- {@html webManifest} -->

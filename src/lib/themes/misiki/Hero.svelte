@@ -27,29 +27,37 @@ onMount(async () => {
 $: if (innerWidth < 640) {
 	if (hellobar?.active?.val && $page.data.store?.isHyperlocal) {
 		// 112 (without mobile footer)
+		// 168 (with mobile footer)
 		sliderHeightAccToPageHeight = innerHeight - 168
 	} else if (hellobar?.active?.val && !$page.data.store?.isHyperlocal) {
 		// 88 (without mobile footer)
+		// 144 (with mobile footer)
 		sliderHeightAccToPageHeight = innerHeight - 144
 	} else if ($page.data.store?.isHyperlocal && !hellobar?.active?.val) {
 		// 80 (without mobile footer)
+		// 136 (with mobile footer)
 		sliderHeightAccToPageHeight = innerHeight - 136
 	} else if (!hellobar?.active?.val && !$page.data.store?.isHyperlocal) {
 		// 56 (without mobile footer)
+		// 112 (with mobile footer)
 		sliderHeightAccToPageHeight = innerHeight - 112
 	}
 } else if (innerWidth < 1024) {
 	if (hellobar?.active?.val && $page.data.store?.isHyperlocal) {
 		// 136 (without mobile footer)
+		// 192 (with mobile footer)
 		sliderHeightAccToPageHeight = innerHeight - 192
 	} else if (hellobar?.active?.val && !$page.data.store?.isHyperlocal) {
 		// 112 (without mobile footer)
+		// 168 (with mobile footer)
 		sliderHeightAccToPageHeight = innerHeight - 168
 	} else if ($page.data.store?.isHyperlocal && !hellobar?.active?.val) {
 		// 104 (without mobile footer)
+		// 160 (with mobile footer)
 		sliderHeightAccToPageHeight = innerHeight - 160
 	} else if (!hellobar?.active?.val && !$page.data.store?.isHyperlocal) {
 		// 80 (without mobile footer)
+		// 136 (with mobile footer)
 		sliderHeightAccToPageHeight = innerHeight - 136
 	}
 } else {
