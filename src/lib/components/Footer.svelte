@@ -24,52 +24,32 @@
 // import { fetchFooterCategories } from './services/CategoryService'
 // import appStore from '$lib/assets/app/app-store.svg'
 // import googlePlay from '$lib/assets/app/google-play.png'
-import { browser } from '$app/environment'
 import { navigateToProperPath } from '$lib/utils'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { PageService } from '$lib/services'
-import type { Category } from '$lib/types'
+import { getPopularSearchFromStore } from '$lib/store/popular-search'
+import { getAllMegamenuFromStore } from '$lib/store/megamenu'
+import { browser } from '$app/environment'
 
-export let me
-export let store = {}
-export let popularSearches: { took: 0; count: 0; data: [] }
-export let megamenu: Category[]
-
-function getYear() {
-	const d = new Date()
-	let year = d.getFullYear()
-	return year
-}
-
+let megamenu = []
 let pages = []
-
+let popularSearches = {}
 onMount(async () => {
-	const res1 = await getPages()
-	const res2 = await getStoreData()
-
-	store = res2.storeOne
-	megamenu = res2.megamenu1
-	popularSearches = res2.popularSearches
-
 	if (browser) {
-		localStorage.setItem('megamenu', JSON.stringify(megamenu))
+		megamenu = await getAllMegamenuFromStore({
+			storeId: $page?.data?.store?.id,
+			isCors: $page?.data?.store?.isCors,
+			origin: $page.data.origin
+		})
+		popularSearches = await getPopularSearchFromStore({
+			limit: 20,
+			sid: null,
+			origin: $page.data.origin,
+			storeId: $page.data.store?.id,
+			isCors: $page.data.store?.isCors
+		})
 	}
 })
-
-async function getStoreData() {
-	const response1 = await fetch('/server/store')
-	const res = await response1.json()
-
-	return res
-}
-
-async function getPages() {
-	pages = await PageService.fetchPages({
-		origin: $page.data.origin,
-		storeId: $page.data.store?.id
-	})
-}
 </script>
 
 <footer class="w-full justify-center bg-zinc-50 p-3 text-sm sm:p-10">

@@ -3,16 +3,16 @@ import { browser } from '$app/environment'
 import { constructURL2, navigateToProperPath, toast } from '$lib/utils'
 import { createEventDispatcher, onMount } from 'svelte'
 import { fly } from 'svelte/transition'
-import { getAllMegamenuFromStore } from '$lib/store/megamenu-old'
+import { getAllMegamenuFromStore } from '$lib/store/megamenu'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { RadioEs, CheckboxEs, PrimaryButton } from '$lib/ui'
 import { sorts } from '$lib/config'
-import AllMegamenuStore from '$lib/store/megamenu-all'
-import Cookie from 'cookie-universal'
+// import AllMegamenuStore from '$lib/store/megamenu'
+// import Cookie from 'cookie-universal'
 import Fuse from 'fuse.js'
 
-const cookies = Cookie()
+// const cookies = Cookie()
 const dispatch = createEventDispatcher()
 
 let clazz = ''
@@ -66,7 +66,7 @@ onMount(async () => {
 
 	getFacetsWithProducts()
 
-	// await getMegamenu()
+	await getMegamenu()
 	await getSelected()
 })
 

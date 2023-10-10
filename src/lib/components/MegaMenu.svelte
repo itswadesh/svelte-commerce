@@ -31,14 +31,13 @@
 </style>
 
 <script lang="ts">
-// import { getMegamenuFromStore } from '$lib/store/megamenu-old'
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
 import { getContext, onMount } from 'svelte'
 import { navigateToProperPath, toast } from '$lib/utils'
 import { page } from '$app/stores'
 import Cookie from 'cookie-universal'
-import MegamenuStore from '$lib/store/megamenu'
+import { getMegamenuFromStore } from '$lib/store/megamenu'
 
 let clazz = ''
 export { clazz as class }
@@ -50,7 +49,7 @@ let pincode = null
 let selectedCategory = ''
 
 onMount(() => {
-	// getMegaMenu()
+	getMegaMenu()
 
 	const pin = cookies.get('zip')
 
@@ -59,41 +58,32 @@ onMount(() => {
 	}
 })
 
-MegamenuStore.subscribe((data) => {
-	menuItems = data
-})
+async function getMegaMenu() {
+	if (browser && $page.data.isDesktop) {
+		try {
+			menuItems = await getMegamenuFromStore({
+				storeId: $page?.data?.store?.id,
+				isCors: $page?.data?.store?.isCors,
+				origin: $page.data.origin
+			})
 
-//get megamenu from context
+			// const localMegamenu = localStorage.getItem('megamenu')
 
-let megamenuList = getContext('megamenu')
-
-// async function getMegaMenu() {
-// 	if (browser && $page.data.isDesktop) {
-// 		try {
-// 			// megamenu = await getMegamenuFromStore({
-// 			// 	sid: null,
-// 			// 	storeId: $page?.data?.store?.id,
-// 			// 	isCors: $page?.data?.store?.isCors,
-// 			// 	origin: $page.data.origin
-// 			// })
-
-// 			const localMegamenu = localStorage.getItem('megamenu')
-
-// 			if (!!localMegamenu && localMegamenu !== 'undefined') {
-// 				megamenu = JSON.parse(localMegamenu)
-// 			} else {
-// 				megamenu = await CategoryService.fetchMegamenuData({
-// 					storeId: $page.data.store?.id,
-// 					origin: $page.data.origin
-// 				})
-// 			}
-// 		} catch (e) {
-// 			toast(e, 'error')
-// 		} finally {
-// 		}
-// 	} else {
-// 	}
-// }
+			// if (!!localMegamenu && localMegamenu !== 'undefined') {
+			// 	megamenu = JSON.parse(localMegamenu)
+			// } else {
+			// 	megamenu = await CategoryService.fetchMegamenuData({
+			// 		storeId: $page.data.store?.id,
+			// 		origin: $page.data.origin
+			// 	})
+			// }
+		} catch (e) {
+			toast(e, 'error')
+		} finally {
+		}
+	} else {
+	}
+}
 </script>
 
 {#if menuItems?.length}
