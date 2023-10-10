@@ -31,8 +31,6 @@ let megamenu
 
 export let data
 
-console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz', data);
-
 $: innerWidth = 0
 // $: isAndroid = false
 
@@ -224,10 +222,9 @@ onMount(async () => {
 		<BackToTop />
 	{/if}
 
-
 	{#if $page.data.store?.whatsappChatButton?.active?.val && $page.data.store?.whatsappChatButton?.phone?.val}
 		<a
-			href="https://wa.me/{$page.data.store?.whatsappChatButton?.phone?.val.replace('+','')}"
+			href="https://wa.me/{$page.data.store?.whatsappChatButton?.phone?.val}"
 			target="_blank"
 			rel="noopener noreferrer"
 			class="fixed z-40 bottom-16 left-4">
