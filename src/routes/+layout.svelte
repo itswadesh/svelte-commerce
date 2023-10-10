@@ -59,15 +59,15 @@ onMount(async () => {
 	// }
 	if (browser) {
 		// Get the User-Agent header from the request
-		const userAgent = navigator.userAgent || navigator.vendor || window.opera
-		// console.log('userAgent', userAgent)
-		// Check if the User-Agent indicates an Android device
-		// const isAndroid = userAgent.includes('Android')
+		// const userAgent = navigator.userAgent || navigator.vendor || window.opera
+		// // console.log('userAgent', userAgent)
+		// // Check if the User-Agent indicates an Android device
+		// // const isAndroid = userAgent.includes('Android')
 
-		if (/android/i.test(userAgent) && $page.url.host !== 'm.zapvi.in') {
-			// Attempt to open the app using the custom URL scheme
-			window.location.href = `zapviin://m.zapvi.in/?slug=${$page.url.pathname.substring(1)}`
-		}
+		// if (/android/i.test(userAgent) && $page.url.host !== 'm.zapvi.in') {
+		// 	// Attempt to open the app using the custom URL scheme
+		// 	window.location.href = `zapviin://m.zapvi.in/?slug=${$page.url.pathname.substring(1)}`
+		// }
 
 		getMegamenuFromStore({
 			storeId: $page.data.store.id,
