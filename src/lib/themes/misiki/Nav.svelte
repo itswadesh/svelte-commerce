@@ -404,7 +404,7 @@ async function onSearchSubmit({ detail }) {
 	{#if $page.data.store?.isHyperlocal}
 		<button
 			type="button"
-			class="h-6 lg:hidden flex items-center justify-start gap-1 text-xs font-semibold bg-primary-100 px-3 w-full text-left"
+			class="h-6 lg:hidden flex items-center justify-start gap-1 text-xs font-semibold bg-primary-100 px-3 sm:px-10 w-full text-left"
 			on:click="{() => (showPincodeInputBox = true)}">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"

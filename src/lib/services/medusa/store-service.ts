@@ -10,20 +10,21 @@ import {
 	domain,
 	DOMAIN,
 	email,
+	fontFamily,
 	GOOGLE_ANALYTICS_ID,
 	GOOGLE_CLIENT_ID,
+	IMAGE_CDN_URL,
 	keywords,
 	loginUrl,
 	logo,
 	phone,
+	saasDomain,
+	saasName,
 	searchbarText,
 	siteTitle,
 	websiteLegalName,
 	websiteName,
-	saasName,
-	saasDomain,
 	weightUnit,
-	IMAGE_CDN_URL
 } from '$lib/config'
 import { fetchInit } from './init-service'
 
@@ -51,6 +52,7 @@ export const getStoreData = async ({
 		DOMAIN,
 		email,
 		facebookPixel: {},
+		fontFamily,
 		GOOGLE_ANALYTICS_ID,
 		GOOGLE_CLIENT_ID,
 		googleAnalytics: {},
@@ -85,9 +87,10 @@ export const getStoreData = async ({
 		websiteName,
 		weightUnit,
 		whatsappChatButton: {},
-		fontFamily: 'Montserrat'
 	}
+
 	let megamenu = null
+
 	if (
 		!cookieStore ||
 		cookieStore === 'undefined' ||
@@ -95,7 +98,9 @@ export const getStoreData = async ({
 		cookieMegamenu == 'undefined'
 	) {
 		const uri = new URL(url)
+
 		storeRes = await fetchInit(uri.host)
+
 		store = {
 			id: storeRes?.storeOne?._id,
 			address: storeRes?.storeOne?.address,
@@ -114,6 +119,7 @@ export const getStoreData = async ({
 				active: storeRes?.storeOne?.facebookPixel?.active?.val,
 				id: storeRes?.storeOne?.facebookPixel?.id?.val || ''
 			},
+			fontFamily: storeRes?.storeOne?.fontFamily,
 			GOOGLE_ANALYTICS_ID: storeRes?.storeOne?.GOOGLE_ANALYTICS_ID,
 			GOOGLE_CLIENT_ID: storeRes?.storeOne?.GOOGLE_CLIENT_ID,
 			googleAnalytics: {
@@ -151,16 +157,19 @@ export const getStoreData = async ({
 			websiteName: storeRes?.storeOne?.websiteName,
 			weightUnit: storeRes?.storeOne?.weightUnit,
 			whatsappChatButton: storeRes?.storeOne?.whatsappChatButton,
-			fontFamily: 'Montserrat'
 		}
+
 		megamenu = storeRes.megamenu
+
 		cookies.set('store', JSON.stringify(store), { path: '/' })
 		cookies.set('megamenu', JSON.stringify(megamenu), { path: '/' })
 	} else {
 		store = JSON.parse(cookieStore)
 		megamenu = JSON.parse(cookieMegamenu)
 	}
+
 	storeRes.storeOne = store
 	storeRes.megamenu = megamenu
+
 	return storeRes
 }
