@@ -66,8 +66,7 @@ export const fetchAllCategories = async ({
 	storeId
 }) => {
 	try {
-		let res: any = {}
-		let data, pageSize, currentPage
+		let res = {}
 
 		let catQ = `categories?store=${storeId}`
 		if (featured) {
@@ -79,9 +78,9 @@ export const fetchAllCategories = async ({
 		} else {
 			res = await getAPI(catQ, origin)
 		}
-		currentPage = res.currentPage
-		data = res.data
-		pageSize = res.pageSize
+		const currentPage = res.currentPage
+		const data = res.data
+		const pageSize = res.pageSize
 
 		return { data, pageSize, currentPage }
 	} catch (e) {
