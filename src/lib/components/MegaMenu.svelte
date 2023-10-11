@@ -34,10 +34,10 @@
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
 import { getContext, onMount } from 'svelte'
+import { getMegamenuFromStore } from '$lib/store/megamenu'
 import { navigateToProperPath, toast } from '$lib/utils'
 import { page } from '$app/stores'
 import Cookie from 'cookie-universal'
-import { getMegamenuFromStore } from '$lib/store/megamenu'
 
 let clazz = ''
 export { clazz as class }
