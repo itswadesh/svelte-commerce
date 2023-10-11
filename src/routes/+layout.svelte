@@ -31,8 +31,6 @@ let megamenu
 
 export let data
 
-console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz', data);
-
 $: innerWidth = 0
 // $: isAndroid = false
 
