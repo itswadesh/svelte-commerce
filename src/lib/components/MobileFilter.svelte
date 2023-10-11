@@ -110,16 +110,10 @@ function getFacetsWithProducts() {
 }
 
 // let allMegamenu
-AllMegamenuStore.subscribe((data) => {
-	megamenu = data
-	megamenuResult = megamenu
-})
-
-if (megamenuResult?.length) {
-	megamenuResult = megamenuResult.filter((e) => {
-		return e.name !== 'New Arrivals'
-	})
-}
+// AllMegamenuStore.subscribe((data) => {
+// 	megamenu = data
+// 	megamenuResult = megamenu
+// })
 
 async function getMegamenu() {
 	if (browser) {
@@ -131,7 +125,12 @@ async function getMegamenu() {
 				isCors: $page?.data?.store?.isCors,
 				origin: $page.data.origin
 			})
-
+			megamenuResult = megamenu
+			if (megamenuResult?.length) {
+				megamenuResult = megamenuResult.filter((e) => {
+					return e.name !== 'New Arrivals'
+				})
+			}
 			// console.log
 
 			// const localmegamenu = localStorage.getItem('megamenu')

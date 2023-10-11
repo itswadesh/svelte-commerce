@@ -66,17 +66,6 @@ async function getMegaMenu() {
 				isCors: $page?.data?.store?.isCors,
 				origin: $page.data.origin
 			})
-
-			// const localMegamenu = localStorage.getItem('megamenu')
-
-			// if (!!localMegamenu && localMegamenu !== 'undefined') {
-			// 	megamenu = JSON.parse(localMegamenu)
-			// } else {
-			// 	megamenu = await CategoryService.fetchMegamenuData({
-			// 		storeId: $page.data.store?.id,
-			// 		origin: $page.data.origin
-			// 	})
-			// }
 		} catch (e) {
 			toast(e, 'error')
 		} finally {
