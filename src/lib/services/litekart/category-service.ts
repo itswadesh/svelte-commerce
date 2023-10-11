@@ -10,13 +10,16 @@ export const fetchFooterCategories = async ({
 	megamenu = false,
 	server = false,
 	sid = null,
-	storeId,
+	storeId
 }) => {
 	try {
 		let data: []
 
 		if (isServer || isCors) {
-			data = await getBySid(`categories?megamenu=${megamenu}&limit=6&page=0&level=0&store=${storeId}`, sid)
+			data = await getBySid(
+				`categories?megamenu=${megamenu}&limit=6&page=0&level=0&store=${storeId}`,
+				sid
+			)
 		} else {
 			data = await getAPI(
 				`categories?megamenu=${megamenu}&limit=6&page=0&level=0&store=${storeId}`,
@@ -60,11 +63,10 @@ export const fetchAllCategories = async ({
 	origin,
 	server = false,
 	sid = null,
-	storeId,
+	storeId
 }) => {
 	try {
-		let res: any = {}
-		let data, pageSize, currentPage
+		let res = {}
 
 		let catQ = `categories?store=${storeId}`
 		if (featured) {
@@ -76,9 +78,9 @@ export const fetchAllCategories = async ({
 		} else {
 			res = await getAPI(catQ, origin)
 		}
-		currentPage = res.currentPage
-		data = res.data
-		pageSize = res.pageSize
+		const currentPage = res.currentPage
+		const data = res.data
+		const pageSize = res.pageSize
 
 		return { data, pageSize, currentPage }
 	} catch (e) {
@@ -92,7 +94,7 @@ export const fetchAllProductsOfCategories = async ({
 	origin,
 	server = false,
 	sid = null,
-	storeId,
+	storeId
 }) => {
 	try {
 		let res: any = {}
@@ -130,15 +132,21 @@ export const fetchMegamenuData = async ({
 	megamenu = false,
 	origin,
 	sid = null,
-	storeId,
+	storeId
 }) => {
 	try {
 		let data: []
 
 		if (isServer || isCors) {
-			data = await getBySid(`categories/megamenu?megamenu=${megamenu}&store=${storeId}`, sid)
+			data = await getBySid(
+				`categories/megamenu?megamenu=${megamenu}&store=${storeId}&active=true`,
+				sid
+			)
 		} else {
-			data = await getAPI(`categories/megamenu?megamenu=${megamenu}&store=${storeId}`, origin)
+			data = await getAPI(
+				`categories/megamenu?megamenu=${megamenu}&store=${storeId}&active=true`,
+				origin
+			)
 		}
 
 		return data || []

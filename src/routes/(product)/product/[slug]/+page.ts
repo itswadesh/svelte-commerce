@@ -32,7 +32,7 @@ export async function load({ params, url, parent }) {
 				isCors,
 				origin,
 				sid,
-				storeId,
+				storeId
 			})
 
 			// console.log('isWishlisted', isWishlisted);
@@ -46,14 +46,14 @@ export async function load({ params, url, parent }) {
 		// setHeaders({ 'cache-control': `max-age=${CACHE_DURATION}` }) // This is to tell Cloudflare to store in its own cache
 		// setCache(p1, product)
 
-
-		const updatedPopularityRes = await PopularityService.updatePopulatiry({
-			pid: product?._id || product?.id,
-			isCors,
-			origin,
-			sid,
-			storeId,
-		})
+		// Removed on 11-Oct-2023 as it was slow down the navigation
+		// const updatedPopularityRes = await PopularityService.updatePopulatiry({
+		// 	pid: product?._id || product?.id,
+		// 	isCors,
+		// 	origin,
+		// 	sid,
+		// 	storeId,
+		// })
 
 		// console.log('updated popularity res', updatedPopularityRes);
 
