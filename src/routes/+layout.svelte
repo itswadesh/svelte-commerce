@@ -30,8 +30,7 @@ import { browser } from '$app/environment'
 let megamenu
 
 export let data
-
-console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz', data);
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 $: innerWidth = 0
 // $: isAndroid = false
@@ -57,6 +56,7 @@ onMount(async () => {
 	// 		}
 	// 	})
 	// }
+
 	if (browser) {
 		// Get the User-Agent header from the request
 		// const userAgent = navigator.userAgent || navigator.vendor || window.opera
@@ -74,6 +74,7 @@ onMount(async () => {
 			origin: $page.data.origin,
 			isCors: $page.data.isCors
 		})
+
 		getAllMegamenuFromStore({
 			storeId: $page.data.store.id,
 			origin: $page.data.origin,
@@ -81,6 +82,7 @@ onMount(async () => {
 		})
 	}
 })
+
 // $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : ''
 
 // Add the Partytown script to the DOM head
@@ -223,7 +225,6 @@ onMount(async () => {
 	{#if showBackToTopButton}
 		<BackToTop />
 	{/if}
-
 
 	{#if $page.data.store?.whatsappChatButton?.active?.val && $page.data.store?.whatsappChatButton?.phone?.val}
 		<a
