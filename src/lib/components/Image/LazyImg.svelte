@@ -135,7 +135,6 @@ function handleLineLoader() {
 		{#if IMAGE_CDN_PROVIDER === 'imagekit'}
 			{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } )?.includes('http')}
 				<img
-					in:fade="{{ duration: 300 }}"
 					alt="{alt}"
 					src="/placeholder.png"
 					data-src="{`${getCdnImageUrl({
@@ -151,7 +150,6 @@ function handleLineLoader() {
 					)[1]}] lazy {clazz}" />
 			{:else}
 				<img
-					in:fade="{{ duration: 300 }}"
 					alt="{alt}"
 					src="/placeholder.png"
 					data-src="{`${IMAGE_CDN_URL}${getCdnImageUrl({
@@ -173,7 +171,6 @@ function handleLineLoader() {
 		{:else if IMAGE_CDN_PROVIDER === 'thumbor'}
 			{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } )?.includes('http')}
 				<img
-					in:fade="{{ duration: 300 }}"
 					alt="{alt}"
 					src="/placeholder.png"
 					data-src="{`${getCdnImageUrl({
@@ -189,7 +186,6 @@ function handleLineLoader() {
 					)[1]}] lazy {clazz}" />
 			{:else}
 				<img
-					in:fade="{{ duration: 300 }}"
 					alt="{alt}"
 					src="/placeholder.png"
 					data-src="{`${IMAGE_CDN_URL}/fit-in/${w}x${h}${getCdnImageUrl({
@@ -212,7 +208,6 @@ function handleLineLoader() {
 	{:else if IMAGE_CDN_PROVIDER === 'imagekit'}
 		{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } )?.includes('http')}
 			<img
-				in:fade="{{ duration: 300 }}"
 				alt=" "
 				src="/placeholders/placeholder2.png"
 				data-src="{`${getCdnImageUrl({
@@ -228,7 +223,6 @@ function handleLineLoader() {
 			</div> -->
 		{:else}
 			<img
-				in:fade="{{ duration: 300 }}"
 				alt=" "
 				src="/placeholders/placeholder2.png"
 				data-src="{`${IMAGE_CDN_URL}${getCdnImageUrl({
@@ -245,7 +239,6 @@ function handleLineLoader() {
 	{:else if IMAGE_CDN_PROVIDER === 'thumbor'}
 		{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } )?.includes('http')}
 			<img
-				in:fade="{{ duration: 300 }}"
 				alt=" "
 				src="/placeholders/placeholder2.png"
 				data-src="{`${getCdnImageUrl({
@@ -260,7 +253,6 @@ function handleLineLoader() {
 			</div> -->
 		{:else}
 			<img
-				in:fade="{{ duration: 300 }}"
 				alt=" "
 				src="/placeholders/placeholder2.png"
 				data-src="{`${IMAGE_CDN_URL}/fit-in/${w}x${h}${getCdnImageUrl({

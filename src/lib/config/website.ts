@@ -6,7 +6,7 @@ export const address = `#22, Global Village, Rourkela,<br/> Odisha - 769002, Ind
 export const description = ''
 export const domain = 'litekart.in'
 export const email = 'hi@litekart.in'
-export const GOOGLE_ANALYTICS_ID = 'G-BG3JKWLYPF'
+export const GOOGLE_ANALYTICS_ID = 'G-BG3JKWLYPJ'
 export const GOOGLE_CLIENT_ID =
 	'414060469322-n4raqj2rdbjhegvrtdk6mhbdm4sd0oc7.apps.googleusercontent.com'
 export const keywords = 'ecommerce, headless, pwa'
@@ -14,6 +14,8 @@ export const logo = Logo
 export const phone = '+91-8249028220'
 export const websiteLegalName = 'Misiki Technologies LLP'
 export const websiteName = 'Litekart'
+export const saasName = 'Litekart'
+export const saasDomain = 'https://litekart.in'
 // All above data will be replaced by Footer.svelte after the server/store call and saved to cookie
 
 // Bellow PWA Settings, can't configure from admin
@@ -22,6 +24,8 @@ export const siteLanguage = 'en-US'
 export const icon = 'static/litekart-icon-512x512-black.png'
 export const backgroundColor = '#1b4079'
 export const themeColor = '#d62828'
+export const favicon = './favicon.ico'
+export const fontFamily = 'Montserrat'
 export const shortcuts = [
 	// {
 	// 	name: 'Buy Mobile covers',
