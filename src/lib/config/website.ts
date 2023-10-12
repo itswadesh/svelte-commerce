@@ -6,7 +6,7 @@ export const address = `#22, Global Village, Rourkela,<br/> Odisha - 769002, Ind
 export const description = ''
 export const domain = 'litekart.in'
 export const email = 'hi@litekart.in'
-export const GOOGLE_ANALYTICS_ID = 'G-BG3JKWLYPF'
+export const GOOGLE_ANALYTICS_ID = 'G-BG3JKWLYPJ'
 export const GOOGLE_CLIENT_ID =
 	'414060469322-n4raqj2rdbjhegvrtdk6mhbdm4sd0oc7.apps.googleusercontent.com'
 export const keywords = 'ecommerce, headless, pwa'
