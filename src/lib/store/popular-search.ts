@@ -1,18 +1,20 @@
-import { writable } from 'svelte/store'
 import { CategoryService, PopularSearchService } from '$lib/services'
+import { writable } from 'svelte/store'
+
 export const popularsearchStore = writable({})
+
 let isLoading = false
 
-export const getPopularSearchFromStore = async ({ limit, isCors, sid, storeId, origin }) => {
+export const getPopularSearchFromStore = async ({ limit, isCors, sid, storeId, origin, forceUpdate = false }) => {
 	let existingPopularSearch = null
 
 	popularsearchStore.subscribe((value) => {
-		if (value?.length) {
+		if (value && Object.values(value)?.length) {
 			existingPopularSearch = value
 		}
 	})
 
-	if (!isLoading && !existingPopularSearch) {
+	if ((!isLoading && !existingPopularSearch) || !!forceUpdate) {
 		isLoading = true
 
 		const popularsearchDataFromServer = await CategoryService.fetchAllCategories({
@@ -23,6 +25,7 @@ export const getPopularSearchFromStore = async ({ limit, isCors, sid, storeId, o
 		})
 
 		// console.log('popularsearchDataFromServer', popularsearchDataFromServer);
+
 		// existingPopularSearch = popularsearchDataFromServer.data
 		popularsearchStore.update((u) => popularsearchDataFromServer.data)
 
@@ -34,6 +37,7 @@ export const getPopularSearchFromStore = async ({ limit, isCors, sid, storeId, o
 		// })
 
 		// popularsearchStore.update((u) => popularsearchDataFromServer)
+
 		isLoading = false
 	}
 

@@ -1,24 +1,32 @@
-import { writable } from 'svelte/store'
 import { CategoryService } from '$lib/services'
+import { writable } from 'svelte/store'
+
 export const categoriesStore = writable([])
+
 let isLoading = false
 
-export const getCategoriesFromStore = async ({ origin, storeId, isCors }) => {
+export const getCategoriesFromStore = async ({ origin, storeId, isCors, forceUpdate = false }) => {
 	let existingCategories = []
+
 	categoriesStore.subscribe((value) => {
-		if (value.length) {
+		if (value && value.length) {
 			existingCategories = value
 		}
 	})
-	if (!isLoading && !existingCategories) {
+
+	if ((!isLoading && !existingCategories) || !!forceUpdate) {
 		isLoading = true
+
 		const categoriesDataFromServer = await CategoryService.fetchAllCategories({
 			storeId,
 			origin,
 			isCors
 		})
+
 		categoriesStore.update((u) => categoriesDataFromServer?.data || [])
+
 		isLoading = false
 	}
+
 	return existingCategories
 }

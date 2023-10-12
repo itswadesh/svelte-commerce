@@ -1,20 +1,9 @@
 <script lang="ts">
 import { Footer, Nav } from '$lib/theme-config'
 import { PageTransitions } from '$lib/components'
-import { writable } from 'svelte/store'
-import { setContext } from 'svelte'
 
 export let data
-
-// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz', data);
-
-
-let megaMenuFromServer = writable([])
-
-megaMenuFromServer.set(data?.megamenu)
-
-setContext('megamenu', megaMenuFromServer)
-
+// console.log('zzzzzzzzzzzzzzzzzz', data);
 
 let showCartSidebar = false
 let openSidebar = false

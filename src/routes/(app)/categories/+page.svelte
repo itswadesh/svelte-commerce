@@ -39,6 +39,7 @@ async function getMegamenu() {
 	if (browser) {
 		try {
 			megamenu = await getAllMegamenuFromStore({
+				forceUpdate: true,
 				storeId: $page?.data?.store?.id,
 				isCors: $page?.data?.store?.isCors,
 				origin: $page.data.origin
@@ -175,7 +176,7 @@ function toggle2(cx) {
 													<a
 														href="{navigateToProperPath(c.link || c.slug)}"
 														aria-label="Click to visit {c.name || '##'}"
-														class="flex items-center gap-4 py-3 px-8 font-medium">
+														class="text-left flex items-center gap-4 py-3 px-8 font-medium">
 														{#if c.img}
 															<div class="h-12 w-12 shrink-0 overflow-hidden rounded-full">
 																<LazyImg
@@ -205,7 +206,7 @@ function toggle2(cx) {
 																	<a
 																		href="{navigateToProperPath(cc.link || cc.slug)}"
 																		aria-label="Click to visit {cc.name || '##'}"
-																		class="flex w-full items-center gap-4 py-3 px-8 text-sm">
+																		class="text-left flex w-full items-center gap-4 py-3 px-8 text-sm">
 																		{cc.name}
 																	</a>
 																</li>

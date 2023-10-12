@@ -1,27 +1,32 @@
+import { MenuService } from '$lib/services'
 import { writable } from 'svelte/store'
-import { CategoryService } from '$lib/services'
 
 export const menuStore = writable([])
 
-let loadingForMegamenu = false
+let loadingForMenu = false
 
-export const getMenuFromStore = async ({ origin, storeId, isCors }) => {
-	let existingMegamenu
+export const getMenuFromStore = async ({ origin, storeId, isCors, forceUpdate = false }) => {
+	let existingMenu
+
 	menuStore.subscribe((value) => {
-		if (value.length) {
-			existingMegamenu = value
+		if (value && Object.values(value)?.length) {
+			existingMenu = value
 		}
 	})
-	if (!loadingForMegamenu && !existingMegamenu) {
-		loadingForMegamenu = true
-		const megamenuDataFromServer = await CategoryService.fetchMegamenuData({
-			megamenu: true,
+
+	if ((!loadingForMenu && !existingMenu) || !!forceUpdate) {
+		loadingForMenu = true
+
+		const menuDataFromServer = await MenuService.fetchMenuData({
 			storeId,
 			origin,
 			isCors
 		})
-		menuStore.update((u) => megamenuDataFromServer)
-		loadingForMegamenu = false
+
+		menuStore.update((u) => menuDataFromServer)
+
+		loadingForMenu = false
 	}
-	return existingMegamenu
+
+	return existingMenu
 }
