@@ -311,9 +311,6 @@ async function submit(pm) {
 
 			const options = {
 				key: rp.keyId, // Enter the Key ID generated from the Dashboard
-				name: 'Litekart.in',
-				description: 'Payment for Litekart',
-				image: logo,
 				amount: rp.amount,
 				order_id: rp.id,
 				async handler(response) {
@@ -336,15 +333,11 @@ async function submit(pm) {
 				prefill: {
 					name: `${data.me.firstName} ${data.me.lastName}`,
 					phone: data.me.phone,
-					email: data.me.email || 'help@litekart.in',
+					email: data.me.email || data.address.email || 'hi@litekart.in',
 					contact: data.me.phone
-				},
-				notes: {
-					address: 'Padmajyoti Marg, Semiliguda, Odisha 764036'
-				},
-				theme: {
-					color: '#112D4E'
 				}
+				// notes: rp.order_no,
+				// description: 'Order ' + rp.order_no
 			}
 
 			const rzp1 = new Razorpay(options)
