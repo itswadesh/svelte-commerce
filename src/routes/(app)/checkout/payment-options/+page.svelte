@@ -28,20 +28,17 @@
 </style>
 
 <script lang="ts">
-import { delay, toast } from '$lib/utils'
 import { fireGTagEvent } from '$lib/utils/gTagB'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { OrdersService } from '$lib/services'
 import { page } from '$app/stores'
+import { PaymentLoading } from '$lib/ui'
 import { Pricesummary, LazyImg, CheckoutHeader, Error, TrustBaggeContainer } from '$lib/components'
 import { slide } from 'svelte/transition'
-import lightning from '$lib/assets/payment-processing/lightning.gif'
-import list from '$lib/assets/payment-processing/list.gif'
-import logo from '$lib/assets/logo.svg'
+import { toast } from '$lib/utils'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
-import tick from '$lib/assets/payment-processing/tick.gif'
 
 const seoProps = {
 	title: 'Select Payment Option',
@@ -50,6 +47,7 @@ const seoProps = {
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
+// console.log('$page', $page)
 
 let cashfreeReady = false
 let comment = ''
@@ -57,18 +55,17 @@ let commentMissing = false
 let disabled = false
 let errorMessage = 'Select a Payment Method'
 let loading = false
+let loadingForPaymentProcessingSteps = false
+let orderNo = $page.url.searchParams.get('order_no') || ''
 let paymentDenied = false
 let paymentProcessingStep = 1
 let razorpayReady = false
 let selectedPaymentMethod = { id: '', name: '', text: '', instructions: '', qrcode: '', img: '' }
-
-$: if (data.paymentMethods?.length === 1 && data.paymentMethods[0]?.type === 'pg') {
-	const pm = data.paymentMethods[0]
-
-	submit(pm)
-}
-
 let Stripe
+
+$: if (data.err) {
+	toast(data.err, 'error')
+}
 
 onMount(async () => {
 	const StripeModule = await import('$lib/components/Stripe.svelte')
@@ -85,6 +82,12 @@ onMount(async () => {
 	cashfreeReady = true
 
 	fireGTagEvent('begin_checkout', data.cart)
+
+	if (data.paymentMethods?.length === 1 && data.paymentMethods[0]?.type === 'pg') {
+		const pm = data.paymentMethods[0]
+
+		selectedPaymentMethod = pm
+	}
 })
 
 function paymentMethodChanged(pm) {
@@ -127,7 +130,7 @@ async function submit(pm) {
 
 			const res = await OrdersService.codCheckout({
 				address: data.addressId,
-				cartId: data?.cartId,
+				cartId: $page.data.cartId,
 				paymentMethod: 'COD',
 				prescription: data.prescription?._id,
 				origin: $page.data.origin,
@@ -188,26 +191,35 @@ async function submit(pm) {
 		try {
 			data.err = null
 			loading = true
+			loadingForPaymentProcessingSteps = true
 
 			setTimeout(() => {
 				paymentProcessingStep = 2
 				setTimeout(() => {
 					paymentProcessingStep = 3
-				}, 500)
-			}, 500)
+					loadingForPaymentProcessingSteps = false
+				}, 1000)
+			}, 1000)
 
 			const res = await OrdersService.cashfreeCheckout({
 				address: data.addressId,
+				orderNo: orderNo,
 				origin: $page.data.origin,
-				storeId: $page.data.store?.id
+				storeId: $page.data.store?.id,
+				cartId: $page.data.cartId
 			})
 
-			// console.log('res of Cashfree', res.payment_session_id)
+			// console.log('res of cashfree', res)
+
+			orderNo = res.order_no || ''
+
 			if (!res.payment_session_id) {
 				data.err = 'Payment failed. Try again'
 				toast('Payment failed. Try again', 'error')
 			}
+
 			const cashfree = Cashfree({ mode: res.payment_mode })
+
 			cashfree
 				.checkout({
 					paymentSessionId: res.payment_session_id,
@@ -215,16 +227,25 @@ async function submit(pm) {
 					returnUrl: res.order_meta?.return_url
 				})
 				.then(function () {
-					console.log('on going redirection')
+					// console.log('on going redirection')
 				})
 			// if (res?.redirectUrl && res?.redirectUrl !== null) {
 			// 	goto(`${res?.redirectUrl}`)
 			// } else {
 			// 	toast('Something went wrong', 'error')
 			// }
+
+			const u = new URL($page.url)
+			u.searchParams.set('order_no', orderNo)
+			// console.log('uzzzzzzzzzzzzzzzzzz', u.toString())
+			goto(u.toString())
 		} catch (e) {
 			data.err = e
-			goto(`/payment/failed?id=${data.addressId}&status=PAYMENT_PENDING&provider=Cashfree`)
+			toast(`Payment failed, please try again`, 'error')
+			if (orderNo) {
+				goto(`/checkout/payment-options?order_no=${orderNo}`)
+			}
+			// goto(`/payment/failed?id=${data.addressId}&status=PAYMENT_PENDING&provider=Cashfree`)
 		} finally {
 			loading = false
 		}
@@ -232,13 +253,15 @@ async function submit(pm) {
 		try {
 			data.err = null
 			loading = true
+			loadingForPaymentProcessingSteps = true
 
 			setTimeout(() => {
 				paymentProcessingStep = 2
 				setTimeout(() => {
 					paymentProcessingStep = 3
-				}, 500)
-			}, 500)
+					loadingForPaymentProcessingSteps = false
+				}, 1000)
+			}, 1000)
 
 			const res = await OrdersService.phonepeCheckout({
 				address: data.addressId,
@@ -262,13 +285,15 @@ async function submit(pm) {
 		try {
 			data.err = null
 			loading = true
+			loadingForPaymentProcessingSteps = true
 
 			setTimeout(() => {
 				paymentProcessingStep = 2
 				setTimeout(() => {
 					paymentProcessingStep = 3
-				}, 500)
-			}, 500)
+					loadingForPaymentProcessingSteps = false
+				}, 1000)
+			}, 1000)
 
 			const res = await OrdersService.paypalCheckout({
 				address: data.addressId,
@@ -292,25 +317,33 @@ async function submit(pm) {
 		try {
 			data.err = null
 			loading = true
+			loadingForPaymentProcessingSteps = true
 
 			setTimeout(() => {
 				paymentProcessingStep = 2
 				setTimeout(() => {
 					paymentProcessingStep = 3
-				}, 500)
-			}, 500)
+					loadingForPaymentProcessingSteps = false
+				}, 1000)
+			}, 1000)
 
 			const rp = await OrdersService.razorpayCheckout({
 				address: data.addressId,
-				cartId: data?.cartId,
+				orderNo: orderNo,
+				cartId: $page.data.cartId,
 				origin: $page.data.origin,
 				storeId: $page.data.store?.id
 			})
 
-			// console.log('rp of Razorpay', res)
+			// console.log('rp of Razorpay', rp)
+
+			orderNo = rp.order_no || ''
 
 			const options = {
 				key: rp.keyId, // Enter the Key ID generated from the Dashboard
+				// name: $page.data?.store?.websiteName || 'Zapvi',
+				// description: 'Payment for Zapvi',
+				// image: $page.data?.store?.logo || logo,
 				amount: rp.amount,
 				order_id: rp.id,
 				async handler(response) {
@@ -326,24 +359,36 @@ async function submit(pm) {
 						goto(`/payment/process?pg=razorpay&order_no=${capture.order_no}`)
 					} catch (e) {
 						data.err = e
-						// goto(`/payment/failed?ref=/checkout/payment-options?address=${data.addressId}`)
 					} finally {
 					}
 				},
 				prefill: {
 					name: `${data.me.firstName} ${data.me.lastName}`,
 					phone: data.me.phone,
-					email: data.me.email || data.address.email || 'hi@litekart.in',
+					email: data.me.email || data.address.email || 'help@zapvi.in',
 					contact: data.me.phone
 				}
-				// notes: rp.order_no,
-				// description: 'Order ' + rp.order_no
+				// notes: {
+				// 	address: ''
+				// },
+				// theme: {
+				// 	color: $page.data.store?.themeColor || '#18181B'
+				// }
 			}
 
 			const rzp1 = new Razorpay(options)
 			rzp1.open()
+
+			const u = new URL($page.url)
+			u.searchParams.set('order_no', orderNo)
+			// console.log('uzzzzzzzzzzzzzzzzzz', u.toString())
+			goto(u.toString())
 		} catch (e) {
 			data.err = e
+			toast(`Payment failed, please try again`, 'error')
+			if (orderNo) {
+				goto(`/checkout/payment-options?order_no=${orderNo}`)
+			}
 		} finally {
 			loading = false
 		}
@@ -355,13 +400,10 @@ async function submit(pm) {
 		}, 820)
 	}
 }
-
-function checkIfStripeCardValid({ detail }) {
-	disabled = !detail
-}
 </script>
 
 <SEO {...seoProps} />
+
 <div class="container mx-auto min-h-screen w-full max-w-6xl p-3 py-5 sm:p-10">
 	<CheckoutHeader selected="payment" />
 
@@ -392,9 +434,13 @@ function checkIfStripeCardValid({ detail }) {
 											{pm.name || pm.value || pm.id}
 										</h4>
 
-										{#if pm.text}
-											<p class="mt-2">{@html pm.text}</p>
-										{/if}
+										<p class="mt-2">
+											{#if pm.text}
+												{@html pm.text}
+											{:else}
+												Payment securly
+											{/if}
+										</p>
 									</div>
 
 									<div class="shrink-0">
@@ -419,17 +465,6 @@ function checkIfStripeCardValid({ detail }) {
 								{#if pm.value === 'BankTransfer' && selectedPaymentMethod.value === 'BankTransfer'}
 									<div transition:slide="{{ duration: 300 }}" class:wiggle="{commentMissing}">
 										<TextboxFloating bind:value="{comment}" label="Transaction ID" />
-									</div>
-								{/if}
-
-								{#if pm.value === 'Stripe'}
-									<div transition:slide="{{ duration: 300 }}">
-										<svelte:component
-											this="{Stripe}"
-											address="{data.addressId}"
-											isStripeSelected="{selectedPaymentMethod.value === 'Stripe'}"
-											stripePublishableKey="{pm.app_id}"
-											on:isStripeCardValid="{checkIfStripeCardValid}" />
 									</div>
 								{/if}
 							</div>
@@ -514,55 +549,6 @@ function checkIfStripeCardValid({ detail }) {
 				</div>
 
 				<hr class="mb-5" />
-			{:else if data.cart?.shippingAddress}
-				<div class="mb-5">
-					<h5 class="mb-2">Delivery Address</h5>
-
-					<p>
-						{data.cart?.shippingAddress?.first_name || '_'}
-						{data.cart?.shippingAddress?.last_name || '_'}
-
-						<br />
-
-						{#if data.cart?.shippingAddress?.address_1}
-							{data.cart?.shippingAddress?.address_1}
-						{/if}
-
-						{#if data.cart?.shippingAddress?.address_2}
-							, {data.cart?.shippingAddress?.address_2}
-						{/if}
-
-						{#if data.cart?.shippingAddress?.city}
-							, {data.cart?.shippingAddress?.city}
-						{/if}
-
-						{#if data.cart?.shippingAddress?.state}
-							, {data.cart?.shippingAddress?.state}
-						{/if}
-
-						{#if data.cart?.shippingAddress?.country}
-							, {data.cart?.shippingAddress?.country}
-						{/if}
-
-						{#if data.cart?.shippingAddress?.postal_code}
-							- {data.cart?.shippingAddress?.postal_code}
-						{/if}
-					</p>
-
-					{#if data.cart?.shippingAddress?.phone}
-						<p>
-							{data.cart?.shippingAddress?.phone}
-						</p>
-					{/if}
-
-					{#if data.cart?.shippingAddress?.email}
-						<p>
-							{data.cart?.shippingAddress?.email}
-						</p>
-					{/if}
-				</div>
-
-				<hr class="mb-5" />
 			{/if}
 
 			{#if data.prescription}
@@ -612,40 +598,15 @@ function checkIfStripeCardValid({ detail }) {
 				hideCheckoutButton="{selectedPaymentMethod.name === 'Stripe'}"
 				on:submit="{() => submit(selectedPaymentMethod)}" />
 
-			<!-- disabled="{!razorpayReady ||
-					(!selectedPaymentMethod?.name && !selectedPaymentMethod?.value) ||
-					(selectedPaymentMethod?.name === 'Stripe' && disabled)}" -->
-
 			<TrustBaggeContainer class="mt-5" />
 		</div>
 	</div>
 </div>
 
-{#if loading}
-	<div class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-60 p-5 sm:p-10">
-		{#if paymentProcessingStep === 1}
-			<div
-				class="h-60 w-60 bg-white p-4 flex flex-col gap-4 items-center justify-center text-center font-semibold rounded transform translate-x-full animate-slide-in-left">
-				<img src="{lightning}" alt="" class="h-8 w-auto object-contain object-center" />
+{selectedPaymentMethod?.type}
 
-				<span> Fetching your order info </span>
-			</div>
-		{:else if paymentProcessingStep === 2}
-			<div
-				class="h-60 w-60 bg-white p-4 flex flex-col gap-4 items-center justify-center text-center font-semibold rounded transform animate-bounce">
-				<img src="{list}" alt="" class="h-8 w-auto object-contain object-center" />
-
-				<span>Filling your information</span>
-			</div>
-		{:else}
-			<div
-				class="h-60 w-60 bg-white p-4 flex flex-col gap-4 items-center justify-center text-center font-semibold rounded transform animate-bounce">
-				<img src="{tick}" alt="" class="h-8 w-auto object-contain object-center" />
-
-				<span>All set</span>
-			</div>
-		{/if}
-	</div>
+{#if selectedPaymentMethod?.type === 'pg' ? loadingForPaymentProcessingSteps : loading}
+	<PaymentLoading paymentProcessingStep="{paymentProcessingStep}" />
 {/if}
 
 <iframe name="cashfreeFrame" title="Cashfree" class="absolute" allow="payment"></iframe>

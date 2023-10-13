@@ -5,7 +5,6 @@
 </style>
 
 <script lang="ts">
-// import { checkIsAndroidDevice } from '$lib/store/is-android'
 // import { pwaInfo } from 'virtual:pwa-info'
 // import FetchInit from '$lib/components/FetchInit.svelte'
 import './../app.css'

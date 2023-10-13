@@ -1,5 +1,4 @@
 <script lang="ts">
-// import { findAutocompleteFromStore } from '$lib/store/autocomplete'
 import { AutocompleteService, CategoryService } from '$lib/services'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
