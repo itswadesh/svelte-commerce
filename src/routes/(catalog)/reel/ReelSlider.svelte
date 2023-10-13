@@ -52,8 +52,6 @@ let selectedLoadingType = null
 
 let isAddedtoBag = false
 
-
-
 function toggleMute(product) {
 	product.muted = !product.muted
 }
@@ -128,7 +126,6 @@ onMount(async () => {
 function handleMuted(e, ix) {
 	showMuteButton = !showMuteButton
 	isMuted = !isMuted
-
 }
 
 function handleClick(e) {
@@ -140,34 +137,27 @@ function handleClick(e) {
 	}
 }
 
+function handleMove(e) {
+	console.log(e)
 
-
-
-function handleMove(e){
-	console.log(e);
-	
-	const ix = 	e.detail.index
+	const ix = e.detail.index
 	const preIX = e.detail.prev
 	const vID = document.querySelector(`#active${ix}`)
 	const vID2 = document.querySelector(`#active${preIX}`)
-	
 
 	if (vID) {
 		vID.play()
 		// showMuteButton[ix] = true
-		
 	}
 
 	// console.log(vID.paused);
-	
 
-	if(vID2){
+	if (vID2) {
 		vID2.pause()
 		// showMuteButton[preIX] = false
 	}
-	
-	console.log('Paused video',vID, 'Played Video', vID2, showMuteButton);
-	
+
+	console.log('Paused video', vID, 'Played Video', vID2, showMuteButton)
 }
 </script>
 
@@ -180,7 +170,7 @@ function handleMove(e){
 				<SplideSlide>
 					<div class="w-full h-full flex">
 						<!-- svelte-ignore a11y-media-has-caption -->
-						<video autoplay  id="active{ix}" class="detail w-full" muted={isMuted} loop>
+						<video autoplay id="active{ix}" class="detail w-full" muted="{isMuted}" loop>
 							<source src="{product.video}" type="video/mp4" />
 							Your browser does not support the video tag.
 						</video>
@@ -260,28 +250,28 @@ function handleMove(e){
 													await applyAction(result)
 												}
 											}}">
-											<input type="hidden" name="pid" value="{product.id}" />
+											<input type="hidden" name="pid" value="{product.id || null}" />
 
-											<input type="hidden" name="vid" value="{product.id}" />
+											<input type="hidden" name="vid" value="{product.id || null}" />
 
 											<!-- <input
 													type="hidden"
 													name="variantsLength"
-													value="{product?.variants?.length}" />
+													value="{product?.variants?.length || null}" />
 
-												<input type="hidden" name="currentVariantId" value="{product?.currentVariantId}" />
+												<input type="hidden" name="currentVariantId" value="{product?.currentVariantId || null}" />
 
 												<input
 													type="hidden"
 													name="linkedItems"
-													value="{JSON.stringify(product?.selectedLinkiedProducts)}" /> -->
+													value="{JSON.stringify(product?.selectedLinkiedProducts) || null}" /> -->
 
 											<input type="hidden" name="qty" value="{1}" />
 
 											<!-- <input
 													type="hidden"
 													name="options"
-													value="{JSON.stringify(selectedOptions1)}" />
+													value="{JSON.stringify(selectedOptions1) || null}" />
 
 												<input type="hidden" name="customizedImg" value="{customizedImg || null}" /> -->
 
@@ -403,8 +393,6 @@ function handleMove(e){
 												src="https://www.svgrepo.com/show/452178/cart.svg"
 												alt="cart" />
 
-									
-
 											{#if $page.data.cartQty > 0}
 												<div
 													class="absolute -top-2 -right-1.5 flex items-center justify-center rounded-full bg-primary-500 py-[0.8px] px-[5px] text-center text-xs font-bold uppercase text-white">
@@ -449,21 +437,21 @@ function handleMove(e){
 												await applyAction(result)
 											}
 										}}">
-										<input type="hidden" name="pid" value="{product.id}" />
+										<input type="hidden" name="pid" value="{product.id || null}" />
 
-										<input type="hidden" name="vid" value="{product.id}" />
+										<input type="hidden" name="vid" value="{product.id || null}" />
 
 										<!-- <input
 													type="hidden"
 													name="variantsLength"
-													value="{product?.variants?.length}" />
+													value="{product?.variants?.length || null}" />
 
-												<input type="hidden" name="currentVariantId" value="{product?.currentVariantId}" />
+												<input type="hidden" name="currentVariantId" value="{product?.currentVariantId || null}" />
 
 												<input
 													type="hidden"
 													name="linkedItems"
-													value="{JSON.stringify(product?.selectedLinkiedProducts)}" /> -->
+													value="{JSON.stringify(product?.selectedLinkiedProducts) || null}" /> -->
 
 										<input type="hidden" name="qty" value="{1}" />
 

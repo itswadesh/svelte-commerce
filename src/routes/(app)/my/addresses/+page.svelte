@@ -191,7 +191,7 @@ async function remove(id, index) {
 									}
 								}}"
 								class="w-full">
-								<input type="hidden" name="id" value="{i._id || i.id}" />
+								<input type="hidden" name="id" value="{i._id || i.id || null}" />
 
 								<button
 									type="submit"

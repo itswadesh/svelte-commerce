@@ -1241,7 +1241,7 @@ async function updateVariant(variant) {
 								await applyAction(result)
 							}
 						}}">
-						<input type="hidden" name="pid" value="{data?.product?._id}" />
+						<input type="hidden" name="pid" value="{data?.product?._id || null}" />
 
 						<input type="hidden" name="qty" value="{1}" />
 
@@ -1283,12 +1283,12 @@ async function updateVariant(variant) {
 										<input
 											type="hidden"
 											name="pid"
-											value="{data?.product?._id || data?.product?.id}" />
+											value="{data?.product?._id || data?.product?.id || null}" />
 
 										<input
 											type="hidden"
 											name="vid"
-											value="{data?.product?._id || data?.product?.id}" />
+											value="{data?.product?._id || data?.product?.id || null}" />
 
 										<WhiteButton
 											type="submit"
@@ -1431,28 +1431,31 @@ async function updateVariant(variant) {
 														await applyAction(result)
 													}
 												}}">
-												<input type="hidden" name="pid" value="{data?.product?._id}" />
+												<input type="hidden" name="pid" value="{data?.product?._id || null}" />
 
-												<input type="hidden" name="vid" value="{data?.product?._id}" />
+												<input type="hidden" name="vid" value="{data?.product?._id || null}" />
 
 												<input
 													type="hidden"
 													name="variantsLength"
-													value="{value?.variants?.length}" />
+													value="{value?.variants?.length || null}" />
 
-												<input type="hidden" name="currentVariantId" value="{currentVariantId}" />
+												<input
+													type="hidden"
+													name="currentVariantId"
+													value="{currentVariantId || null}" />
 
 												<input
 													type="hidden"
 													name="linkedItems"
-													value="{JSON.stringify(selectedLinkiedProducts)}" />
+													value="{JSON.stringify(selectedLinkiedProducts) || null}" />
 
 												<input type="hidden" name="qty" value="{1}" />
 
 												<input
 													type="hidden"
 													name="options"
-													value="{JSON.stringify(selectedOptions1)}" />
+													value="{JSON.stringify(selectedOptions1) || null}" />
 
 												<input type="hidden" name="customizedImg" value="{customizedImg || null}" />
 
@@ -1681,12 +1684,12 @@ async function updateVariant(variant) {
 										<input
 											type="hidden"
 											name="pid"
-											value="{data?.product?._id || data?.product?.id}" />
+											value="{data?.product?._id || data?.product?.id || null}" />
 
 										<input
 											type="hidden"
 											name="vid"
-											value="{data?.product?._id || data?.product?.id}" />
+											value="{data?.product?._id || data?.product?.id || null}" />
 
 										<WhiteButton
 											type="submit"
@@ -1829,28 +1832,31 @@ async function updateVariant(variant) {
 														await applyAction(result)
 													}
 												}}">
-												<input type="hidden" name="pid" value="{data?.product?._id}" />
+												<input type="hidden" name="pid" value="{data?.product?._id || null}" />
 
-												<input type="hidden" name="vid" value="{data?.product?._id}" />
+												<input type="hidden" name="vid" value="{data?.product?._id || null}" />
 
 												<input
 													type="hidden"
 													name="variantsLength"
-													value="{value?.variants?.length}" />
+													value="{value?.variants?.length || null}" />
 
-												<input type="hidden" name="currentVariantId" value="{currentVariantId}" />
+												<input
+													type="hidden"
+													name="currentVariantId"
+													value="{currentVariantId || null}" />
 
 												<input
 													type="hidden"
 													name="linkedItems"
-													value="{JSON.stringify(selectedLinkiedProducts)}" />
+													value="{JSON.stringify(selectedLinkiedProducts) || null}" />
 
 												<input type="hidden" name="qty" value="{1}" />
 
 												<input
 													type="hidden"
 													name="options"
-													value="{JSON.stringify(selectedOptions1)}" />
+													value="{JSON.stringify(selectedOptions1) || null}" />
 
 												<input type="hidden" name="customizedImg" value="{customizedImg || null}" />
 
@@ -1916,12 +1922,12 @@ async function updateVariant(variant) {
 										<input
 											type="hidden"
 											name="pid"
-											value="{data?.product?._id || data?.product?.id}" />
+											value="{data?.product?._id || data?.product?.id || null}" />
 
 										<input
 											type="hidden"
 											name="vid"
-											value="{data?.product?._id || data?.product?.id}" />
+											value="{data?.product?._id || data?.product?.id || null}" />
 
 										<WhiteButton
 											type="submit"
@@ -2064,28 +2070,31 @@ async function updateVariant(variant) {
 														await applyAction(result)
 													}
 												}}">
-												<input type="hidden" name="pid" value="{data?.product?._id}" />
+												<input type="hidden" name="pid" value="{data?.product?._id || null}" />
 
-												<input type="hidden" name="vid" value="{data?.product?._id}" />
+												<input type="hidden" name="vid" value="{data?.product?._id || null}" />
 
 												<input
 													type="hidden"
 													name="variantsLength"
-													value="{value?.variants?.length}" />
+													value="{value?.variants?.length || null}" />
 
-												<input type="hidden" name="currentVariantId" value="{currentVariantId}" />
+												<input
+													type="hidden"
+													name="currentVariantId"
+													value="{currentVariantId || null}" />
 
 												<input
 													type="hidden"
 													name="linkedItems"
-													value="{JSON.stringify(selectedLinkiedProducts)}" />
+													value="{JSON.stringify(selectedLinkiedProducts) || null}" />
 
 												<input type="hidden" name="qty" value="{1}" />
 
 												<input
 													type="hidden"
 													name="options"
-													value="{JSON.stringify(selectedOptions1)}" />
+													value="{JSON.stringify(selectedOptions1) || null}" />
 
 												<input type="hidden" name="customizedImg" value="{customizedImg || null}" />
 
