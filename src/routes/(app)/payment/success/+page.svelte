@@ -155,16 +155,14 @@ onMount(async () => {
 					</li>
 
 					{#if data.order?.paymentGateway}
-						<li class="flex items-start gap-2">
-							<p class="flex w-36 shrink-0 items-center justify-between gap-1">
-								<span>Payment Gateway</span> <span>:</span>
-							</p>
+						<li>
+							<p class="flex items-start gap-2">
+								<span class="w-36 shrink-0">Payment Gateway </span>
 
-							<spn class="first-letter:uppercase">
-								<span>
-									{data.order?.paymentGateway || '_'}
+								<span class="uppercase">
+									: &nbsp; {data.order?.paymentGateway || '_'}
 								</span>
-							</spn>
+							</p>
 						</li>
 					{/if}
 				</ul>
