@@ -181,28 +181,28 @@ onMount(async () => {
 																	<input
 																		type="hidden"
 																		name="pid"
-																		value="{product?._id || product?.id}" />
+																		value="{product?._id || product?.id || null}" />
 																	<input
 																		type="hidden"
 																		name="vid"
-																		value="{product?._id || product?.id}" />
+																		value="{product?._id || product?.id || null}" />
 
 																	<input
 																		type="hidden"
 																		name="linkedItems"
-																		value="{JSON.stringify(selectedLinkiedProducts)}" />
+																		value="{JSON.stringify(selectedLinkiedProducts) || null}" />
 
 																	<input type="hidden" name="qty" value="{1}" />
 
 																	<input
 																		type="hidden"
 																		name="options"
-																		value="{JSON.stringify(selectedOptions1)}" />
+																		value="{JSON.stringify(selectedOptions1) || null}" />
 
 																	<input
 																		type="hidden"
 																		name="customizedImg"
-																		value="{customizedImg}" />
+																		value="{customizedImg || null}" />
 
 																	<WhiteButton
 																		type="submit"
@@ -230,25 +230,28 @@ onMount(async () => {
 																<input
 																	type="hidden"
 																	name="pid"
-																	value="{product?._id || product?.id}" />
+																	value="{product?._id || product?.id || null}" />
 																<input
 																	type="hidden"
 																	name="vid"
-																	value="{product?._id || product?.id}" />
+																	value="{product?._id || product?.id || null}" />
 
 																<input
 																	type="hidden"
 																	name="linkedItems"
-																	value="{JSON.stringify(selectedLinkiedProducts)}" />
+																	value="{JSON.stringify(selectedLinkiedProducts) || null}" />
 
 																<input type="hidden" name="qty" value="{1}" />
 
 																<input
 																	type="hidden"
 																	name="options"
-																	value="{JSON.stringify(selectedOptions1)}" />
+																	value="{JSON.stringify(selectedOptions1) || null}" />
 
-																<input type="hidden" name="customizedImg" value="{customizedImg}" />
+																<input
+																	type="hidden"
+																	name="customizedImg"
+																	value="{customizedImg || null}" />
 
 																<PrimaryButton
 																	type="submit"

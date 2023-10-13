@@ -418,18 +418,18 @@ function validatePhoneNumber(phoneNumber) {
 			</div>
 		</div>
 
-		<input type="hidden" name="address" value="{address.address}" />
-		<input type="hidden" name="city" value="{address.city}" />
-		<input type="hidden" name="country" value="{address.country}" />
-		<input type="hidden" name="email" value="{address.email}" />
-		<input type="hidden" name="firstName" value="{address.firstName}" />
-		<input type="hidden" name="id" value="{address.id || address._id}" />
-		<input type="hidden" name="lastName" value="{address.lastName}" />
-		<input type="hidden" name="phone" value="{address.phone}" />
-		<input type="hidden" name="selectedCountry" value="{selectedCountry}" />
+		<input type="hidden" name="address" value="{address.address || null}" />
+		<input type="hidden" name="city" value="{address.city || null}" />
+		<input type="hidden" name="country" value="{address.country || null}" />
+		<input type="hidden" name="email" value="{address.email || null}" />
+		<input type="hidden" name="firstName" value="{address.firstName || null}" />
+		<input type="hidden" name="id" value="{address.id || address._id || null}" />
+		<input type="hidden" name="lastName" value="{address.lastName || null}" />
+		<input type="hidden" name="phone" value="{address.phone || null}" />
+		<input type="hidden" name="selectedCountry" value="{selectedCountry || null}" />
 		<input type="hidden" name="showErrorMessage" bind:value="{showErrorMessage}" />
-		<input type="hidden" name="state" value="{address.state}" />
-		<input type="hidden" name="zip" value="{address.zip}" />
+		<input type="hidden" name="state" value="{address.state || null}" />
+		<input type="hidden" name="zip" value="{address.zip || null}" />
 
 		<PrimaryButton
 			type="submit"
