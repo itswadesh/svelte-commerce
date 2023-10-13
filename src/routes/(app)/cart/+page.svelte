@@ -448,13 +448,13 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 																loading[ix] = false
 															}
 														}}">
-														<input type="hidden" name="pid" value="{item.pid}" />
-														<input type="hidden" name="vid" value="{item.vid}" />
+														<input type="hidden" name="pid" value="{item.pid || null}" />
+														<input type="hidden" name="vid" value="{item.vid || null}" />
 														<input type="hidden" name="qty" value="{-1}" />
 														<input
 															type="hidden"
 															name="customizedImg"
-															value="{item.customizedImg}" />
+															value="{item.customizedImg || null}" />
 
 														<button
 															type="submit"
@@ -506,13 +506,13 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 																loading[ix] = false
 															}
 														}}">
-														<input type="hidden" name="pid" value="{item.pid}" />
-														<input type="hidden" name="vid" value="{item.vid}" />
+														<input type="hidden" name="pid" value="{item.pid || null}" />
+														<input type="hidden" name="vid" value="{item.vid || null}" />
 														<input type="hidden" name="qty" value="{+1}" />
 														<input
 															type="hidden"
 															name="customizedImg"
-															value="{item.customizedImg}" />
+															value="{item.customizedImg || null}" />
 														<button
 															type="submit"
 															disabled="{loading[ix]}"
@@ -552,10 +552,13 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 															loading[ix] = false
 														}
 													}}">
-													<input type="hidden" name="pid" value="{item.pid}" />
-													<input type="hidden" name="vid" value="{item.vid}" />
+													<input type="hidden" name="pid" value="{item.pid || null}" />
+													<input type="hidden" name="vid" value="{item.vid || null}" />
 													<input type="hidden" name="qty" value="{-9999999}" />
-													<input type="hidden" name="customizedImg" value="{item.customizedImg}" />
+													<input
+														type="hidden"
+														name="customizedImg"
+														value="{item.customizedImg || null}" />
 
 													<button
 														type="submit"

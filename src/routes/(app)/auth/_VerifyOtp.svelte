@@ -278,9 +278,9 @@ async function updateOTP() {
 			{/each}
 		</div>
 
-		<input type="hidden" name="phone" value="{phone}" />
+		<input type="hidden" name="phone" value="{phone || null}" />
 
-		<input type="hidden" name="otp" value="{formattedOTP}" />
+		<input type="hidden" name="otp" value="{formattedOTP || null}" />
 
 		<!-- <div class="otp-input-wrapper mx-auto mb-5 max-w-max">
 			<input

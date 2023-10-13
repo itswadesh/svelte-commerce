@@ -58,8 +58,13 @@ async function addressChanged(id) {
 
 			<div class="flex w-full cursor-pointer flex-col gap-1 font-light">
 				<h6 class="flex-1 capitalize">
-					{address.firstName}
-					{address.lastName}
+					{#if address.firstName}
+						{address.firstName}
+					{/if}
+
+					{#if address.lastName}
+						{address.lastName}
+					{/if}
 				</h6>
 
 				<p>
@@ -122,7 +127,7 @@ async function addressChanged(id) {
 					}
 				}}"
 				class="w-full">
-				<input type="hidden" name="id" value="{address._id || address.id}" />
+				<input type="hidden" name="id" value="{address._id || address.id || null}" />
 
 				<button
 					type="submit"
