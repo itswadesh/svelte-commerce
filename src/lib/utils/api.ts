@@ -1,5 +1,5 @@
-import cookie from 'cookie'
 import { loadingDelayed } from '$lib/store'
+import cookie from 'cookie'
 // import Cookie from 'cookie-universal'
 
 // const cookies = Cookie()

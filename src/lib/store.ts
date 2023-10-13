@@ -1,23 +1,30 @@
-import { writable } from 'svelte/store'
-// import Cookie from 'cookie-universal'
 // import { getBySid } from './utils/server'
+// import Cookie from 'cookie-universal'
+import { writable } from 'svelte/store'
+
 // const cookies = Cookie()
 
 export const geoLocation = writable({
-	selectedPrediction: null,
-	locality: null,
 	city: null,
-	state: null,
 	country: null,
 	lat: 0,
-	lng: 0
+	lng: 0,
+	locality: null,
+	selectedPrediction: null,
+	state: null
 })
-export const settings = writable({})
-// export const store = writable({})
-// export const megamenu = writable({})
-export const loginUrl = writable('/auth/login')
+
 // export const me = writable({})
+
+// export const megamenu = writable({})
+
+// export const store = writable({})
+
 export const loadingDelayed = writable(false)
+
+export const loginUrl = writable('/auth/login')
+
+export const settings = writable({})
 
 // export const fetchLocation = async () => {
 // 	try {
@@ -48,6 +55,7 @@ export const loadingDelayed = writable(false)
 // 		})
 // 	}
 // }
+
 // export const fetchSettings = async () => {
 // 	try {
 // 		const data = (await getBySid('settings')).data?.settings
@@ -57,6 +65,7 @@ export const loadingDelayed = writable(false)
 // 		settings.set({})
 // 	}
 // }
+
 // export const fetchStore = async () => {
 // 	try {
 // 		const storeOne = await cookies.get('store')
@@ -71,12 +80,14 @@ export const loadingDelayed = writable(false)
 // 		store.set({})
 // 	}
 // }
+
 // export const fetchMegamenu = async () => {
 // 	// try {
 // 	// } catch (e) {
 // 	// 	megamenu.set([])
 // 	// }
 // }
+
 // export const fetchUser = async () => {
 // 	try {
 // 		const data = await getBySid('users/me')
@@ -85,6 +96,7 @@ export const loadingDelayed = writable(false)
 // 		me.set({})
 // 	}
 // }
+
 // fetchLocation()
 // fetchSettings()
 // fetchStore()

@@ -4,6 +4,7 @@ import Checkbox from './Checkbox.svelte'
 import CheckboxOfMultiProducts from './CheckboxOfMultiProducts.svelte'
 import Errors from './Errors.svelte'
 import GradientButton from './GradientButton.svelte'
+import PaymentLoading from './PaymentLoading.svelte'
 import PrimaryButton from './PrimaryButton.svelte'
 import ProductSkeleton from './ProductSkeleton.svelte'
 import Radio from './Radio.svelte'
@@ -36,6 +37,7 @@ export {
     CheckboxOfMultiProducts,
     Errors,
     GradientButton,
+    PaymentLoading,
     PrimaryButton,
     ProductSkeleton,
     Radio,
