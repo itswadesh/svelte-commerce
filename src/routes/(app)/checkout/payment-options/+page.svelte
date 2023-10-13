@@ -1,32 +1,3 @@
-<style>
-.animate-slide-in-left {
-	animation: slideInLeft 0.3s ease-out forwards;
-}
-
-.animate-bounce {
-	animation: bounce 0.3s ease-out forwards;
-}
-
-@keyframes slideInLeft {
-	from {
-		transform: translateX(100%);
-	}
-	to {
-		transform: translateX(0);
-	}
-}
-
-@keyframes bounce {
-	0%,
-	100% {
-		transform: translateY(0);
-	}
-	50% {
-		transform: translateY(-20px);
-	}
-}
-</style>
-
 <script lang="ts">
 import { fireGTagEvent } from '$lib/utils/gTagB'
 import { goto } from '$app/navigation'
@@ -58,7 +29,6 @@ let loading = false
 let loadingForPaymentProcessingSteps = false
 let orderNo = $page.url.searchParams.get('order_no') || ''
 let paymentDenied = false
-let paymentProcessingStep = 1
 let razorpayReady = false
 let selectedPaymentMethod = { id: '', name: '', text: '', instructions: '', qrcode: '', img: '' }
 let Stripe
@@ -83,7 +53,7 @@ onMount(async () => {
 
 	fireGTagEvent('begin_checkout', data.cart)
 
-	if (data.paymentMethods?.length === 1 && data.paymentMethods[0]?.type === 'pg') {
+	if (data.paymentMethods?.length === 1) {
 		const pm = data.paymentMethods[0]
 
 		selectedPaymentMethod = pm
@@ -116,52 +86,24 @@ async function submit(pm) {
 
 	// console.log('paymentMethod', paymentMethod)
 
-	if (paymentMethod === 'COD' || paymentMethod === 'manual') {
-		try {
-			data.err = null
-			loading = true
-
-			setTimeout(() => {
-				paymentProcessingStep = 2
-				setTimeout(() => {
-					paymentProcessingStep = 3
-				}, 1000)
-			}, 1000)
-
-			const res = await OrdersService.codCheckout({
-				address: data.addressId,
-				cartId: $page.data.cartId,
-				paymentMethod: 'COD',
-				prescription: data.prescription?._id,
-				origin: $page.data.origin,
-				storeId: $page.data.store?.id
-			})
-
-			// console.log('res of cod', res)
-
-			goto(`/payment/success?orderId=${res?._id || res?.id}&status=PAYMENT_SUCCESS&provider=COD`)
-		} catch (e) {
-			data.err = e
-		} finally {
-			loading = false
-		}
-	} else if (paymentMethod === 'BankTransfer') {
-		if (comment) {
+	if (
+		paymentMethod === 'COD' ||
+		paymentMethod === 'manual' ||
+		paymentMethod === 'BankTransfer' ||
+		paymentMethod === 'Cashfree' ||
+		paymentMethod === 'Phonepe' ||
+		paymentMethod === 'Paypal' ||
+		paymentMethod === 'Razorpay'
+	) {
+		if (paymentMethod === 'COD' || paymentMethod === 'manual') {
 			try {
 				data.err = null
 				loading = true
-
-				setTimeout(() => {
-					paymentProcessingStep = 2
-					setTimeout(() => {
-						paymentProcessingStep = 3
-					}, 1000)
-				}, 1000)
+				loadingForPaymentProcessingSteps = true
 
 				const res = await OrdersService.codCheckout({
 					address: data.addressId,
-					cartId: data?.cartId,
-					comment,
+					cartId: $page.data.cartId,
 					paymentMethod: 'COD',
 					prescription: data.prescription?._id,
 					origin: $page.data.origin,
@@ -170,228 +112,213 @@ async function submit(pm) {
 
 				// console.log('res of cod', res)
 
-				comment = ''
-
 				goto(`/payment/success?orderId=${res?._id || res?.id}&status=PAYMENT_SUCCESS&provider=COD`)
 			} catch (e) {
 				data.err = e
 			} finally {
 				loading = false
 			}
-		} else {
-			toast('Please enter your transaction id to place your order', 'info')
+		} else if (paymentMethod === 'BankTransfer') {
+			if (comment) {
+				try {
+					data.err = null
+					loading = true
+					loadingForPaymentProcessingSteps = true
 
-			commentMissing = true
+					const res = await OrdersService.codCheckout({
+						address: data.addressId,
+						cartId: data?.cartId,
+						comment,
+						paymentMethod: 'COD',
+						prescription: data.prescription?._id,
+						origin: $page.data.origin,
+						storeId: $page.data.store?.id
+					})
 
-			setTimeout(() => {
-				commentMissing = false
-			}, 820)
-		}
-	} else if (paymentMethod === 'Cashfree') {
-		try {
-			data.err = null
-			loading = true
-			loadingForPaymentProcessingSteps = true
+					// console.log('res of cod', res)
 
-			setTimeout(() => {
-				paymentProcessingStep = 2
-				setTimeout(() => {
-					paymentProcessingStep = 3
-					loadingForPaymentProcessingSteps = false
-				}, 1000)
-			}, 1000)
+					comment = ''
 
-			const res = await OrdersService.cashfreeCheckout({
-				address: data.addressId,
-				orderNo: orderNo,
-				origin: $page.data.origin,
-				storeId: $page.data.store?.id,
-				cartId: $page.data.cartId
-			})
-
-			// console.log('res of cashfree', res)
-
-			orderNo = res.order_no || ''
-
-			if (!res.payment_session_id) {
-				data.err = 'Payment failed. Try again'
-				toast('Payment failed. Try again', 'error')
-			}
-
-			const cashfree = Cashfree({ mode: res.payment_mode })
-
-			cashfree
-				.checkout({
-					paymentSessionId: res.payment_session_id,
-					redirectTarget: '_parent',
-					returnUrl: res.order_meta?.return_url
-				})
-				.then(function () {
-					// console.log('on going redirection')
-				})
-			// if (res?.redirectUrl && res?.redirectUrl !== null) {
-			// 	goto(`${res?.redirectUrl}`)
-			// } else {
-			// 	toast('Something went wrong', 'error')
-			// }
-
-			const u = new URL($page.url)
-			u.searchParams.set('order_no', orderNo)
-			// console.log('uzzzzzzzzzzzzzzzzzz', u.toString())
-			goto(u.toString())
-		} catch (e) {
-			data.err = e
-			toast(`Payment failed, please try again`, 'error')
-			if (orderNo) {
-				goto(`/checkout/payment-options?order_no=${orderNo}`)
-			}
-			// goto(`/payment/failed?id=${data.addressId}&status=PAYMENT_PENDING&provider=Cashfree`)
-		} finally {
-			loading = false
-		}
-	} else if (paymentMethod === 'Phonepe') {
-		try {
-			data.err = null
-			loading = true
-			loadingForPaymentProcessingSteps = true
-
-			setTimeout(() => {
-				paymentProcessingStep = 2
-				setTimeout(() => {
-					paymentProcessingStep = 3
-					loadingForPaymentProcessingSteps = false
-				}, 1000)
-			}, 1000)
-
-			const res = await OrdersService.phonepeCheckout({
-				address: data.addressId,
-				origin: $page.data.origin,
-				storeId: $page.data.store?.id
-			})
-
-			// console.log('res of Phonepe', res)
-
-			if (res?.redirectUrl && res?.redirectUrl !== null) {
-				goto(`${res?.redirectUrl}`)
-			} else {
-				toast('Something went wrong', 'error')
-			}
-		} catch (e) {
-			data.err = e
-		} finally {
-			loading = false
-		}
-	} else if (paymentMethod === 'Paypal') {
-		try {
-			data.err = null
-			loading = true
-			loadingForPaymentProcessingSteps = true
-
-			setTimeout(() => {
-				paymentProcessingStep = 2
-				setTimeout(() => {
-					paymentProcessingStep = 3
-					loadingForPaymentProcessingSteps = false
-				}, 1000)
-			}, 1000)
-
-			const res = await OrdersService.paypalCheckout({
-				address: data.addressId,
-				origin: $page.data.origin,
-				storeId: $page.data.store?.id
-			})
-
-			// console.log('res of Paypal', res)
-
-			if (res?.redirect_url && res?.redirect_url !== null) {
-				goto(`${res?.redirect_url}`)
-			} else {
-				toast('Something went wrong', 'error')
-			}
-		} catch (e) {
-			data.err = e
-		} finally {
-			loading = false
-		}
-	} else if (paymentMethod === 'Razorpay') {
-		try {
-			data.err = null
-			loading = true
-			loadingForPaymentProcessingSteps = true
-
-			setTimeout(() => {
-				paymentProcessingStep = 2
-				setTimeout(() => {
-					paymentProcessingStep = 3
-					loadingForPaymentProcessingSteps = false
-				}, 1000)
-			}, 1000)
-
-			const rp = await OrdersService.razorpayCheckout({
-				address: data.addressId,
-				orderNo: orderNo,
-				cartId: $page.data.cartId,
-				origin: $page.data.origin,
-				storeId: $page.data.store?.id
-			})
-
-			// console.log('rp of Razorpay', rp)
-
-			orderNo = rp.order_no || ''
-
-			const options = {
-				key: rp.keyId, // Enter the Key ID generated from the Dashboard
-				// name: $page.data?.store?.websiteName || 'Zapvi',
-				// description: 'Payment for Zapvi',
-				// image: $page.data?.store?.logo || logo,
-				amount: rp.amount,
-				order_id: rp.id,
-				async handler(response) {
-					try {
-						const capture = await OrdersService.razorpayCapture({
-							rpOrderId: response.razorpay_order_id,
-							rpPaymentId: response.razorpay_payment_id,
-							origin: $page.data.origin,
-							storeId: $page.data.store?.id
-						})
-
-						toast('Payment success', 'success')
-						goto(`/payment/process?pg=razorpay&order_no=${capture.order_no}`)
-					} catch (e) {
-						data.err = e
-					} finally {
-					}
-				},
-				prefill: {
-					name: `${data.me.firstName} ${data.me.lastName}`,
-					phone: data.me.phone,
-					email: data.me.email || data.address.email || 'help@zapvi.in',
-					contact: data.me.phone
+					goto(
+						`/payment/success?orderId=${res?._id || res?.id}&status=PAYMENT_SUCCESS&provider=COD`
+					)
+				} catch (e) {
+					data.err = e
+				} finally {
+					loading = false
 				}
-				// notes: {
-				// 	address: ''
-				// },
-				// theme: {
-				// 	color: $page.data.store?.themeColor || '#18181B'
+			} else {
+				toast('Please enter your transaction id to place your order', 'info')
+
+				commentMissing = true
+
+				setTimeout(() => {
+					commentMissing = false
+				}, 820)
+			}
+		} else if (paymentMethod === 'Cashfree') {
+			try {
+				data.err = null
+				loading = true
+				loadingForPaymentProcessingSteps = true
+
+				const res = await OrdersService.cashfreeCheckout({
+					address: data.addressId,
+					orderNo: orderNo,
+					origin: $page.data.origin,
+					storeId: $page.data.store?.id,
+					cartId: $page.data.cartId
+				})
+
+				// console.log('res of cashfree', res)
+
+				orderNo = res.order_no || ''
+
+				if (!res.payment_session_id) {
+					data.err = 'Payment failed. Try again'
+					toast('Payment failed. Try again', 'error')
+				}
+
+				const cashfree = Cashfree({ mode: res.payment_mode })
+
+				cashfree
+					.checkout({
+						paymentSessionId: res.payment_session_id,
+						redirectTarget: '_parent',
+						returnUrl: res.order_meta?.return_url
+					})
+					.then(function () {
+						// console.log('on going redirection')
+					})
+				// if (res?.redirectUrl && res?.redirectUrl !== null) {
+				// 	goto(`${res?.redirectUrl}`)
+				// } else {
+				// 	toast('Something went wrong', 'error')
 				// }
+			} catch (e) {
+				data.err = e
+				toast(`Payment failed, please try again`, 'error')
+				// goto(`/payment/failed?id=${data.addressId}&status=PAYMENT_PENDING&provider=Cashfree`)
+			} finally {
+				loading = false
 			}
+		} else if (paymentMethod === 'Phonepe') {
+			try {
+				data.err = null
+				loading = true
+				loadingForPaymentProcessingSteps = true
 
-			const rzp1 = new Razorpay(options)
-			rzp1.open()
+				const res = await OrdersService.phonepeCheckout({
+					address: data.addressId,
+					origin: $page.data.origin,
+					storeId: $page.data.store?.id
+				})
 
-			const u = new URL($page.url)
-			u.searchParams.set('order_no', orderNo)
-			// console.log('uzzzzzzzzzzzzzzzzzz', u.toString())
-			goto(u.toString())
-		} catch (e) {
-			data.err = e
-			toast(`Payment failed, please try again`, 'error')
-			if (orderNo) {
-				goto(`/checkout/payment-options?order_no=${orderNo}`)
+				// console.log('res of Phonepe', res)
+
+				if (res?.redirectUrl && res?.redirectUrl !== null) {
+					goto(`${res?.redirectUrl}`)
+				} else {
+					toast('Something went wrong', 'error')
+				}
+			} catch (e) {
+				data.err = e
+			} finally {
+				loading = false
 			}
-		} finally {
-			loading = false
+		} else if (paymentMethod === 'Paypal') {
+			try {
+				data.err = null
+				loading = true
+				loadingForPaymentProcessingSteps = true
+
+				const res = await OrdersService.paypalCheckout({
+					address: data.addressId,
+					origin: $page.data.origin,
+					storeId: $page.data.store?.id
+				})
+
+				// console.log('res of Paypal', res)
+
+				if (res?.redirect_url && res?.redirect_url !== null) {
+					goto(`${res?.redirect_url}`)
+				} else {
+					toast('Something went wrong', 'error')
+				}
+			} catch (e) {
+				data.err = e
+			} finally {
+				loading = false
+			}
+		} else if (paymentMethod === 'Razorpay') {
+			try {
+				data.err = null
+				loading = true
+				loadingForPaymentProcessingSteps = true
+
+				const rp = await OrdersService.razorpayCheckout({
+					address: data.addressId,
+					orderNo: orderNo,
+					cartId: $page.data.cartId,
+					origin: $page.data.origin,
+					storeId: $page.data.store?.id
+				})
+
+				// console.log('rp of Razorpay', rp)
+
+				orderNo = rp.order_no || ''
+
+				const options = {
+					key: rp.keyId, // Enter the Key ID generated from the Dashboard
+					// name: $page.data?.store?.websiteName || 'Litekart',
+					// description: 'Payment for Litekart',
+					// image: $page.data?.store?.logo || logo,
+					amount: rp.amount,
+					order_id: rp.id,
+					async handler(response) {
+						try {
+							const capture = await OrdersService.razorpayCapture({
+								rpOrderId: response.razorpay_order_id,
+								rpPaymentId: response.razorpay_payment_id,
+								origin: $page.data.origin,
+								storeId: $page.data.store?.id
+							})
+
+							toast('Payment success', 'success')
+							goto(`/payment/process?pg=razorpay&order_no=${capture.order_no}`)
+						} catch (e) {
+							data.err = e
+						} finally {
+						}
+					},
+					prefill: {
+						name: `${data.me.firstName} ${data.me.lastName}`,
+						phone: data.me.phone,
+						email: data.me.email || data.address.email || 'hi@litekart.in',
+						contact: data.me.phone
+					}
+					// notes: {
+					// 	address: ''
+					// },
+					// theme: {
+					// 	color: $page.data.store?.themeColor || '#18181B'
+					// }
+				}
+
+				const rzp1 = new Razorpay(options)
+				rzp1.open()
+			} catch (e) {
+				data.err = e
+				toast(`Payment failed, please try again`, 'error')
+			} finally {
+				loading = false
+			}
 		}
+
+		const u = new URL($page.url)
+		u.searchParams.set('order_no', orderNo)
+		// console.log('uzzzzzzzzzzzzzzzzzz', u.toString())
+		goto(u.toString())
 	} else {
 		paymentDenied = true
 
@@ -399,6 +326,10 @@ async function submit(pm) {
 			paymentDenied = false
 		}, 820)
 	}
+}
+
+function checkIfStripeCardValid({ detail }) {
+	disabled = !detail
 }
 </script>
 
@@ -465,6 +396,17 @@ async function submit(pm) {
 								{#if pm.value === 'BankTransfer' && selectedPaymentMethod.value === 'BankTransfer'}
 									<div transition:slide="{{ duration: 300 }}" class:wiggle="{commentMissing}">
 										<TextboxFloating bind:value="{comment}" label="Transaction ID" />
+									</div>
+								{/if}
+
+								{#if pm.value === 'Stripe'}
+									<div transition:slide="{{ duration: 300 }}">
+										<svelte:component
+											this="{Stripe}"
+											address="{data.addressId}"
+											isStripeSelected="{selectedPaymentMethod.value === 'Stripe'}"
+											stripePublishableKey="{pm.app_id}"
+											on:isStripeCardValid="{checkIfStripeCardValid}" />
 									</div>
 								{/if}
 							</div>
@@ -603,10 +545,8 @@ async function submit(pm) {
 	</div>
 </div>
 
-{selectedPaymentMethod?.type}
-
-{#if selectedPaymentMethod?.type === 'pg' ? loadingForPaymentProcessingSteps : loading}
-	<PaymentLoading paymentProcessingStep="{paymentProcessingStep}" />
+{#if loadingForPaymentProcessingSteps}
+	<PaymentLoading bind:loadingForPaymentProcessingSteps="{loadingForPaymentProcessingSteps}" />
 {/if}
 
 <iframe name="cashfreeFrame" title="Cashfree" class="absolute" allow="payment"></iframe>
