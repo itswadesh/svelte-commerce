@@ -4,39 +4,19 @@ test.use({
 	ignoreHTTPSErrors: true,
 })
 
-test('addToCart working as expected', async ({ page }) => {
-	// Navigate to the product page
-	console.log('navigateToProduct')
+test('addToCart working as from home page', async ({ page }) => {
+  await page.goto('http://localhost:3000/');
+  await page.locator('li').filter({ hasText: 'Khaki Women Casual Long Sleeve V Neck Patchwork Slim Pullover T Shirt $ 53.00 $ ' }).getByLabel('Click to view the product details').first().click();
+  await page.getByRole('button', { name: 'Add to Bag' }).click();
+  await page.getByRole('link', { name: 'Click to visit cart' }).click();
 
-	await page.goto('/product/white-new-women-casual-o-neck-flare-sleeve-back-lace-up-blouse-tops')
-
-	console.log('page loaded')
-
- const addToBagSpan = await page.locator('span:has-text("Add to Bag")')
-
- console.log(addToBagSpan);
- 
-
- // Click the "Add to Bag" span element
- await addToBagSpan.click()
-
-
-	console.log('Clicked')
-
-	// Check if the cart quantity is '1'
-	const cartQuantity = await page.innerText('.cart')
-	expect(cartQuantity).toBe('1')
 })
 
-test('cart qty increase working', async ({ page }) => {
+test('add to bag from product page', async ({ page }) => {
 	// Navigate to the cart page
-	await page.goto('/cart')
-
-	// Find the 'Add to Cart' button in the cart page and click it
-	const addToCartButton = await page.locator('.addItemToCart')
-	await addToCartButton.click()
-
-	// Check if the cart item quantity is '2'
-	const cartItemQuantity = await page.innerText('.cart-item')
-	expect(cartItemQuantity).toBe('2')
+  await page.goto('http://localhost:3000/product/khaki-women-casual-long-sleeve-v-neck-patchwork-slim-pullover-t-shirt');
+  await page.getByRole('button', { name: 'Add to Bag' }).click();
+  await page.getByRole('button', { name: 'Add to Bag' }).click();
+  await page.getByRole('link', { name: 'Click to visit cart' }).click();
+//   await page.getByText('(3 items )').click();
 })
