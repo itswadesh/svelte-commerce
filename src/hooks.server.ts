@@ -84,12 +84,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 		return response
 	} catch (e) {
-		const err = `Store Not Found @Hook
-			<br/>ID: ${event.locals.store?.id}
-			<br/>ORIGIN: ${event.locals?.origin}
-			<br/>DOMAIN(env): ${DOMAIN}
-			<br/>HTTP_ENDPOINT(env): ${HTTP_ENDPOINT}`
-
-		throw error(404, err)
+		// If the store is not found, throw a 404 error
+		throw error(404, 'Store Not Found');
 	}
 }
