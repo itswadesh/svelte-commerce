@@ -1,6 +1,6 @@
-import { expect, test } from '@playwright/test'
+import { test, expect } from '@playwright/test';
 
-test('index page has expected h1', async ({ page }) => {
-	await page.goto('/')
-	expect(await page.textContent('h1')).toBe('Welcome to Svelte Commerce')
-})
+test('test', async ({ page }) => {
+  await page.goto('/');
+  await page.getByText('Welcome to the store...have a great time.').click();
+});
