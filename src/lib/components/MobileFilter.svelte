@@ -194,7 +194,7 @@ function getSelected() {
 		selected = 'Brands'
 	} else if (allColors?.length > 0) {
 		selected = 'Colors'
-	} else if (allDiscount?.length > 0) {
+	} else if (allDiscount?.length > 1) {
 		selected = 'Discount'
 	} else if (allFeatures?.length > 0) {
 		selected = 'Features'
@@ -489,7 +489,7 @@ $: {
 					<hr class="w-full" />
 				{/if}
 
-				{#if allDiscount?.length > 0}
+				{#if allDiscount?.length > 1}
 					<button
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none
 						{selected === 'Discount'
@@ -745,7 +745,7 @@ $: {
 					<div
 						class="h-[93vh] w-full overflow-y-auto p-4 overflow-x-hidden"
 						in:fly="{{ y: -10, duration: 300, delay: 300 }}">
-						{#if allDiscount?.length > 0}
+						{#if allDiscount?.length > 1}
 							<RadioEs
 								items="{allDiscount}"
 								model="discount"

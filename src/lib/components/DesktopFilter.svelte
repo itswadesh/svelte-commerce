@@ -519,7 +519,7 @@ function handleToggleSubCategory2(c, cx) {
 		</div>
 	{/if}
 
-	{#if allDiscount?.length > 0}
+	{#if allDiscount?.length > 1}
 		<div transition:slide="{{ duration: 300 }}" class="my-3">
 			<hr class="mb-3 w-full" />
 

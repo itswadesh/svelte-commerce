@@ -9,6 +9,7 @@
 // import FetchInit from '$lib/components/FetchInit.svelte'
 import './../app.css'
 import { BackToTop, LazyImg } from '$lib/components' // Can not dynamically import Google Analytics, it throws gtag not found error, not even party town
+import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
 import { FacebookPixel } from '@beyonk/svelte-facebook-pixel'
 import { GOOGLE_ANALYTICS_ID } from '$lib/config'
@@ -21,12 +22,8 @@ import noStoreFound from '$lib/assets/no/no_store_found.png'
 import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 import storeClosed from '$lib/assets/store-closed.png'
 import whatsappIcon from '$lib/assets/social-media/whatsapp.png'
-import { getAllMegamenuFromStore, getMegamenuFromStore } from '$lib/store/megamenu'
-import { browser } from '$app/environment'
 
 // console.log('$page', $page)
-
-let megamenu
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
@@ -44,43 +41,30 @@ $: if (innerWidth < 1024) {
 
 // let ReloadPrompt
 
-onMount(async () => {
-	// if (pwaInfo) {
-	// 	const { registerSW } = await import('virtual:pwa-register')
-	// 	registerSW({
-	// 		immediate: true,
-	// 		onRegistered(r) {
-	// 		},
-	// 		onRegisterError(error) {
-	// 		}
-	// 	})
-	// }
+// onMount(async () => {
+// 	// if (pwaInfo) {
+// 	// 	const { registerSW } = await import('virtual:pwa-register')
+// 	// 	registerSW({
+// 	// 		immediate: true,
+// 	// 		onRegistered(r) {
+// 	// 		},
+// 	// 		onRegisterError(error) {
+// 	// 		}
+// 	// 	})
+// 	// }
 
-	if (browser) {
-		// Get the User-Agent header from the request
-		// const userAgent = navigator.userAgent || navigator.vendor || window.opera
-		// // console.log('userAgent', userAgent)
-		// // Check if the User-Agent indicates an Android device
-		// // const isAndroid = userAgent.includes('Android')
-
-		// if (/android/i.test(userAgent) && $page.url.host !== 'm.zapvi.in') {
-		// 	// Attempt to open the app using the custom URL scheme
-		// 	window.location.href = `zapviin://m.zapvi.in/?slug=${$page.url.pathname.substring(1)}`
-		// }
-
-		getMegamenuFromStore({
-			storeId: $page.data.store.id,
-			origin: $page.data.origin,
-			isCors: $page.data.isCors
-		})
-
-		getAllMegamenuFromStore({
-			storeId: $page.data.store.id,
-			origin: $page.data.origin,
-			isCors: $page.data.isCors
-		})
-	}
-})
+// 	if (browser) {
+// 		// Get the User-Agent header from the request
+// 		// const userAgent = navigator.userAgent || navigator.vendor || window.opera
+// 		// // console.log('userAgent', userAgent)
+// 		// // Check if the User-Agent indicates an Android device
+// 		// // const isAndroid = userAgent.includes('Android')
+// 		// if (/android/i.test(userAgent) && $page.url.host !== 'm.zapvi.in') {
+// 		// 	// Attempt to open the app using the custom URL scheme
+// 		// 	window.location.href = `zapviin://m.zapvi.in/?slug=${$page.url.pathname.substring(1)}`
+// 		// }
+// 	}
+// })
 
 // $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : ''
 

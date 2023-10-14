@@ -56,9 +56,9 @@ onMount(async () => {
 	const pm = data?.paymentMethods[0]
 	paymentMethodChanged(pm)
 
-	if (data.paymentMethods?.length === 1 && data.paymentMethods[0].type === 'pg' && !orderNo) {
-		submit(pm)
-	}
+	// if (data.paymentMethods?.length === 1 && data.paymentMethods[0].type === 'pg' && !orderNo) {
+	// 	submit(pm)
+	// }
 })
 
 function paymentMethodChanged(pm) {

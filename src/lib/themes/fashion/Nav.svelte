@@ -25,6 +25,16 @@ export let me: Me, cart: Cart, data, showCartSidebar: boolean, openSidebar: bool
 let clazz = ''
 export { clazz as class }
 
+export function convertParagraphs(node) {
+	const paragraphs = node.querySelectorAll('p')
+
+	paragraphs.forEach((paragraph) => {
+		const span = document.createElement('span')
+		span.innerHTML = paragraph.innerHTML
+		paragraph.parentNode.replaceChild(span, paragraph)
+	})
+}
+
 let categories
 let hellobar = $page.data.store?.hellobar || {}
 let loading = false
@@ -119,8 +129,9 @@ async function getCategories() {
 		{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
 	{#if hellobar?.active?.val}
 		<div
+			use:convertParagraphs
 			class="h-10 text-center tracking-wider flex items-center justify-center text-xs"
-			style="background-color: {hellobar?.bgColor?.val || '#515151'};
+			style="background-color: {hellobar?.bgColor?.val || '#27272a'};
 				 color: {hellobar?.textColor?.val || '#ffffff'};">
 			{@html hellobar.content?.val}
 		</div>
