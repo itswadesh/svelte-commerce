@@ -54,9 +54,8 @@ export const getCdnImageUrl = ({ src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUER
 	}
 }
 
-const toast = (title: any, type: ToastType | undefined) => {
-	if (title?.body?.message) title = title?.body?.message
-	if (title?.message) title = title?.message
+const toast = (title, type) => {
+	title = title?.body?.message?.error || title?.body?.message || title?.message?.error || title?.message || title?.error || title || ''
 	allToasts?.remove()
 	allToasts = toasts.add({
 		title: title,
@@ -66,8 +65,9 @@ const toast = (title: any, type: ToastType | undefined) => {
 		theme: 'dark',
 		placement: 'top-center',
 		showProgress: false,
-		onClick: () => {},
-		onRemove: () => {}
+		onClick: () => { },
+		onRemove: () => { }
+		// component: BootstrapToast, // allows to override toast component/template per toast
 	})
 }
 
