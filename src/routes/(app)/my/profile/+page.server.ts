@@ -1,20 +1,19 @@
-import { UserService } from '$lib/services'
 import { error, redirect } from '@sveltejs/kit'
+import { UserService } from '$lib/services'
 import dayjs from 'dayjs'
 
 export async function load({ cookies, locals }) {
-	const { me, store } = locals
+	const { store, me, sid } = locals
 	let profile = {}
 
 	try {
 		const data = await UserService.fetchMeData({
-			storeId: locals.store?.id,
+			storeId: store?.id,
 			server: true,
-			sid: cookies.get('connect.sid'),
-			cookies
+			sid
 		})
 
-		data.dob = data?.dob ? dayjs(data.dob).format('YYYY-MM-DD') : null
+		data.dob = data.dob ? dayjs(data.dob).format('YYYY-MM-DD') : null
 
 		profile = data || {
 			email: me.email,
@@ -34,5 +33,5 @@ export async function load({ cookies, locals }) {
 		return { profile, store: store }
 	}
 
-	throw redirect(307, store.loginUrl)
+	throw redirect(307, '/auth/login')
 }

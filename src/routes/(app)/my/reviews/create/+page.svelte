@@ -133,9 +133,7 @@ async function saveReviewproduct(review) {
 				</div>
 
 				<div class="flex-1">
-					{#if data.product?.brand?.name}
-						<h6 class="font-semibold">{data.product?.brand?.name}</h6>
-					{/if}
+					<h6 class="font-semibold">{data.product?.brand?.name}</h6>
 
 					<span class="group-hover:underline">{data.product?.name}</span>
 				</div>

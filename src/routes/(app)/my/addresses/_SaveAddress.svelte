@@ -91,35 +91,35 @@ async function fetchStates(country) {
 	}
 }
 
-// async function fetchStateAndCity(zip) {
-// 	if (zip.length != 6) {
-// 		toast('Please enter 6 digit code', 'error')
-// 		return
-// 	}
+async function fetchStateAndCity(zip) {
+	if (zip.length != 6) {
+		toast('Please enter 6 digit code', 'error')
+		return
+	}
 
-// 	try {
-// 		err = null
-// 		loadingStates = true
+	try {
+		err = null
+		loadingStates = true
 
-// 		let { city, state } = address
+		let { city, state } = address
 
-// 		const zipInfo = await ZipService.findZip({
-// 			zip,
-// 			origin
-// 		})
+		const zipInfo = await ZipService.findZip({
+			zip,
+			origin
+		})
 
-// 		// console.log('zipInfo', zipInfo)
+		// console.log('zipInfo', zipInfo)
 
-// 		address.city = zipInfo.District || ''
-// 		address.state = zipInfo.StateName || ''
-// 	} catch (e) {
-// 		err = e
-// 		// console.log(e)
-// 		toast(e.message.error, 'error')
-// 	} finally {
-// 		loadingStates = false
-// 	}
-// }
+		address.city = zipInfo.District || ''
+		address.state = zipInfo.StateName || ''
+	} catch (e) {
+		err = e
+		// console.log(e)
+		toast(e.message.error, 'error')
+	} finally {
+		loadingStates = false
+	}
+}
 
 function removeSpacesAndAlphabets(input) {
 	// Remove spaces and alphabetic characters using regular expression
@@ -192,7 +192,7 @@ function validatePhoneNumber(phoneNumber) {
 	}
 
 	// Check if the resulting number is numeric and has a valid length
-	if (/^\d+$/.test(phoneNumber) && phoneNumber.length < 14) {
+	if (/^\d+$/.test(phoneNumber) && phoneNumber.length === 14) {
 		showErrorMessage = false
 		return true
 	}
@@ -339,8 +339,8 @@ function validatePhoneNumber(phoneNumber) {
 						placeholder="Enter Postal Code/Pincode/Zipcode"
 						maxlength="6"
 						bind:value="{address.zip}"
+						on:blur="{() => fetchStateAndCity(address.zip)}"
 						required />
-					<!-- on:blur="{() => fetchStateAndCity(address.zip)}" -->
 				</div>
 			</div>
 

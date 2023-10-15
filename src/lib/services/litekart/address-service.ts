@@ -43,12 +43,10 @@ export const saveAddress = async ({
 	id,
 	address,
 	city,
-	company,
 	country,
 	email,
 	firstName,
 	lastName,
-	locality,
 	phone,
 	state,
 	zip,
@@ -70,7 +68,6 @@ export const saveAddress = async ({
 				email,
 				firstName,
 				lastName,
-				locality,
 				phone,
 				state,
 				zip,
@@ -135,12 +132,12 @@ export const deleteAddress = async ({
 	origin,
 	sid = null
 }: any) => {
-	
+
 	try {
 		const res = await delBySid(`addresses/${id}`, sid)
-	
+
 	} catch (err) {
-	
+
 		throw error(err.status || 400, err.message)
 	}
 }
