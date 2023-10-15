@@ -2,27 +2,32 @@ import { WishlistService } from '$lib/services'
 import { redirect } from '@sveltejs/kit'
 
 export async function load({ locals, cookies, params, request }) {
-	const pid = params.pid
-	const storeId = locals.store?.id
-	const sid = locals.sid
-	const isExistInWishlist = await WishlistService.checkWishlist({
-		pid,
-		vid: pid,
-		storeId: locals.store?.id,
-		origin: locals.origin,
-		server: true,
-		sid
-	})
-
-	if (!isExistInWishlist) {
-		await WishlistService.toggleWishlistService({
-			pid: pid,
+	try {
+		const pid = params.pid
+		const storeId = locals.store?.id
+		const sid = locals.sid
+		const isExistInWishlist = await WishlistService.checkWishlist({
+			pid,
 			vid: pid,
-			storeId,
-			sid,
+			storeId: locals.store?.id,
 			origin: locals.origin,
-			server: true
+			server: true,
+			sid
 		})
+
+		if (!isExistInWishlist) {
+			await WishlistService.toggleWishlistService({
+				pid: pid,
+				vid: pid,
+				storeId,
+				sid,
+				origin: locals.origin,
+				server: true
+			})
+		}
+
+		throw redirect(307, '/my/wishlist')
+	} catch (e) {
+		throw redirect(307, '/auth/login')
 	}
-	throw redirect(307, '/my/wishlist')
 }
