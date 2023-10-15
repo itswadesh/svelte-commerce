@@ -170,7 +170,7 @@ onMount(async () => {
 				<div class="mb-5 flex flex-wrap items-center justify-center gap-2 sm:mb-10 sm:gap-5">
 					{#if data.order?.seatsBooked}
 						<a
-							href="/my/orders?page=1#BusTickets"
+							href="/my/orders?page=1"
 							rel="noopener"
 							aria-label="Click to view the booking details">
 							<PrimaryButton type="button">View Booking Details</PrimaryButton>

@@ -238,7 +238,7 @@ export const razorpayCheckout = async ({
 	origin,
 	sid = null,
 	storeId,
-}: any) => {
+}) => {
 	try {
 		let res: any = {}
 

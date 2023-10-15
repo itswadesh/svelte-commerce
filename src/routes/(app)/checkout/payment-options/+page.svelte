@@ -17,7 +17,7 @@ const seoProps = {
 }
 
 export let data
-console.log('zzzzzzzzzzzzzzzzzz', data)
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 // console.log('$page', $page)
 
 let cashfreeReady = false
@@ -111,7 +111,7 @@ async function submit(pm) {
 					storeId: $page.data.store?.id
 				})
 
-				// console.log('res of cod', res)
+				// console.log('res of cod',res.id,res._id, res)
 
 				goto(`/payment/success?orderId=${res?._id || res?.id}&status=PAYMENT_SUCCESS&provider=COD`)
 			} catch (e) {

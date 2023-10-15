@@ -27,10 +27,10 @@ export async function load({ url, request, locals, cookies }) {
 			status,
 			server: true,
 			sid,
-			storeId,
+			storeId
 		})
-
-		cookies.set('cartQty', '0', { path: '/' })
+		cookies.set('cartId', null, { path: '/', expires: new Date(0) })
+		cookies.set('cartQty', '0', { path: '/', expires: new Date(0) })
 		locals.cartQty = 0
 	} catch (e) {
 		// console.log('error at payment success page', e);
@@ -74,8 +74,8 @@ export async function load({ url, request, locals, cookies }) {
 			locals.cartId = cartObj.cartId
 			locals.cartQty = cartObj.qty
 			locals.cart = cartObj
-			// cookies.set('cartId', cartObj.cartId, { path: '/' })
-			cookies.set('cartQty', JSON.stringify(cartObj.qty), { path: '/' })
+			cookies.set('cartId', cartObj.cartId, { path: '/', expires: new Date(0) })
+			cookies.set('cartQty', JSON.stringify(cartObj.qty), { path: '/', expires: new Date(0) })
 		}
 	} catch (e) {
 		// console.log('error at payment success page cart', e);
