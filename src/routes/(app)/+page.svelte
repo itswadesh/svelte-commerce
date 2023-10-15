@@ -6,6 +6,7 @@ import {
 	CategoriesMobile,
 	CategoriesSlider,
 	CollectionsGeneral,
+	CustomBanners,
 	Deals,
 	Footer,
 	Hero,
@@ -266,6 +267,16 @@ onMount(() => {
 			{/if}
 		{/await}
 
+		{#await data.streamed.home}
+			<div class="p-3 py-5 md:py-10">
+				<Skeleton />
+			</div>
+		{:then home}
+			{#if home.page?.banners?.length > 0}
+				<CustomBanners sections="{home.page?.banners}" />
+			{/if}
+		{/await}
+
 		{#if $page.data?.store?.isDeals}
 			{#await data?.streamed?.deals}
 				<div class="p-3 py-5 md:py-10">
@@ -366,5 +377,5 @@ onMount(() => {
 
 	<!-- Pop-up reviews -->
 
-	<PopUpReviews />
+	<!-- <PopUpReviews /> -->
 </div>
