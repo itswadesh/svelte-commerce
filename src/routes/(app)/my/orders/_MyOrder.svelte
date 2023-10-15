@@ -88,6 +88,8 @@ export { clazz as class }
 
 										<th class="p-3 text-zinc-500"> Price </th>
 
+										<th class="p-3 text-zinc-500"> Shipping Charges </th>
+
 										<th class="p-3 text-zinc-500"> Total </th>
 
 										<th class="p-3 text-zinc-500"> Status </th>
@@ -168,6 +170,10 @@ export { clazz as class }
 											</td>
 
 											<td class="whitespace-nowrap p-3">
+												{currency(item.shippingCharges, $page.data?.store?.currencySymbol)}
+											</td>
+
+											<td class="whitespace-nowrap p-3">
 												{currency(item.total, $page.data?.store?.currencySymbol)}
 											</td>
 
@@ -175,7 +181,8 @@ export { clazz as class }
 												<span class="whitespace-nowrap font-semibold capitalize">
 													{item.status || '_'}
 												</span>
-											</td></tr>
+											</td>
+										</tr>
 									{/each}
 								</tbody>
 							</table>
@@ -269,13 +276,15 @@ export { clazz as class }
 													</div>
 												{/if}
 
-												<div class="flex items-center gap-2">
-													<p>Delivery :</p>
+												{#if item.shippingCharges}
+													<div class="flex items-center gap-2">
+														<p>Shipping Charges :</p>
 
-													<b>
-														{currency(item.shippingCharge, $page.data?.store?.currencySymbol)}
-													</b>
-												</div>
+														<b>
+															{currency(item.shippingCharges, $page.data?.store?.currencySymbol)}
+														</b>
+													</div>
+												{/if}
 
 												<div class="flex items-center gap-2">
 													<p>Total :</p>
