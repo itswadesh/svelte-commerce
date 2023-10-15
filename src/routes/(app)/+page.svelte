@@ -6,6 +6,7 @@ import {
 	CategoriesMobile,
 	CategoriesSlider,
 	CollectionsGeneral,
+	CustomBanners,
 	Deals,
 	Footer,
 	Hero,
@@ -263,6 +264,16 @@ onMount(() => {
 		{:then home}
 			{#if home.page?.pickedBanners?.length > 0}
 				<PickedBanners pickedBanners="{home.page?.pickedBanners}" />
+			{/if}
+		{/await}
+
+		{#await data.streamed.home}
+			<div class="p-3 py-5 md:py-10">
+				<Skeleton />
+			</div>
+		{:then home}
+			{#if home.page?.banners?.length > 0}
+				<CustomBanners sections="{home.page?.banners}" />
 			{/if}
 		{/await}
 
