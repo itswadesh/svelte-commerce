@@ -10,7 +10,7 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 
 	let address
 	let address_id = url.searchParams.get('address')
-	let order_no = url.searchParams.get('order_no')
+	const order_no = url.searchParams.get('order_no')
 	let paymentMethods
 
 	if (!me || !sid) {
