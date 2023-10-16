@@ -31,6 +31,7 @@ export async function load({ url, request, locals, cookies }) {
 		})
 		cookies.set('cartId', null, { path: '/', expires: new Date(0) })
 		cookies.set('cartQty', '0', { path: '/', expires: new Date(0) })
+		locals.cartId = null
 		locals.cartQty = 0
 	} catch (e) {
 		// console.log('error at payment success page', e);
@@ -46,40 +47,40 @@ export async function load({ url, request, locals, cookies }) {
 		loading = false
 	}
 
-	try {
-		cart = await CartService.fetchRefreshCart({
-			cartId,
-			storeId,
-			sid,
-			origin: locals.origin
-		})
+	// try {
+	// 	cart = await CartService.fetchRefreshCart({
+	// 		cartId,
+	// 		storeId,
+	// 		sid,
+	// 		origin: locals.origin
+	// 	})
 
-		if (cart) {
-			const cartObj = {
-				cartId: cart?.cart_id,
-				items: cart?.items,
-				qty: cart?.qty,
-				tax: cart?.tax,
-				subtotal: cart?.subtotal,
-				total: cart?.total,
-				currencySymbol: cart?.currencySymbol,
-				discount: cart?.discount,
-				savings: cart?.savings,
-				selfTakeout: cart?.selfTakeout,
-				shipping: cart?.shipping,
-				unavailableItems: cart?.unavailableItems,
-				formattedAmount: cart?.formattedAmount
-			}
+	// 	if (cart) {
+	// 		const cartObj = {
+	// 			cartId: cart?.cart_id,
+	// 			items: cart?.items,
+	// 			qty: cart?.qty,
+	// 			tax: cart?.tax,
+	// 			subtotal: cart?.subtotal,
+	// 			total: cart?.total,
+	// 			currencySymbol: cart?.currencySymbol,
+	// 			discount: cart?.discount,
+	// 			savings: cart?.savings,
+	// 			selfTakeout: cart?.selfTakeout,
+	// 			shipping: cart?.shipping,
+	// 			unavailableItems: cart?.unavailableItems,
+	// 			formattedAmount: cart?.formattedAmount
+	// 		}
 
-			locals.cartId = cartObj.cartId
-			locals.cartQty = cartObj.qty
-			locals.cart = cartObj
-			cookies.set('cartId', cartObj.cartId, { path: '/', expires: new Date(0) })
-			cookies.set('cartQty', JSON.stringify(cartObj.qty), { path: '/', expires: new Date(0) })
-		}
-	} catch (e) {
-		// console.log('error at payment success page cart', e);
-	}
+	// 		locals.cartId = cartObj.cartId
+	// 		locals.cartQty = cartObj.qty
+	// 		locals.cart = cartObj
+	// 		cookies.set('cartId', cartObj.cartId, { path: '/', expires: new Date(0) })
+	// 		cookies.set('cartQty', JSON.stringify(cartObj.qty), { path: '/', expires: new Date(0) })
+	// 	}
+	// } catch (e) {
+	// 	// console.log('error at payment success page cart', e);
+	// }
 
 	return { loading, status, paymentMode, order, err, cart }
 }
