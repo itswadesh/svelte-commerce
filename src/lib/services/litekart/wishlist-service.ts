@@ -40,7 +40,7 @@ export const fetchWishlist = async ({
 	try {
 		let res: any = {}
 
-		if (isServer) {
+		if (isServer && sid != null) {
 			res = await getBySid(
 				`wishlists/my?search=${search || ''}&sort=${sort}&page=${currentPage}&store=${storeId}`,
 				sid
