@@ -30,6 +30,8 @@ let shipping_address = data?.cart?.shipping_address || {}
 let showAddNewAddressModal = false
 
 onMount(() => {
+	// Here we are not taking id for if condition, because in case of guest checkout both id will be same 'new'
+
 	if (
 		shipping_address &&
 		billing_address &&
@@ -46,6 +48,10 @@ onMount(() => {
 
 function addressChanged(detail) {
 	selectedAddress = detail.detail
+
+	if (isSameAsBillingAddressWithLogIn) {
+		selectedBillingAddress = selectedAddress
+	}
 }
 
 function billingAddressChanged(detail) {
@@ -54,6 +60,10 @@ function billingAddressChanged(detail) {
 
 async function updateCart() {
 	try {
+		if (isSameAsBillingAddressWithLogIn) {
+			selectedBillingAddress = selectedAddress
+		}
+
 		// console.log('selectedAddress', selectedAddress)
 		const selectedAddressFullObject = data.myAddresses?.data.filter((add) => {
 			return add.id === selectedAddress || add._id === selectedAddress

@@ -95,8 +95,8 @@ const toast = (title, type) => {
 		theme: 'dark',
 		placement: 'top-center',
 		showProgress: false,
-		onClick: () => {},
-		onRemove: () => {}
+		onClick: () => { },
+		onRemove: () => { }
 		// component: BootstrapToast, // allows to override toast component/template per toast
 	})
 }
