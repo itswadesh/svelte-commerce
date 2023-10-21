@@ -72,7 +72,7 @@ export const checkWishlist = async ({
 	try {
 		let res: any = {}
 
-		if (isServer || isCors) {
+		if (isServer) {
 			res = await getBySid(`wishlists/check?product=${pid}&variant=${vid}&store=${storeId}`, sid)
 		} else {
 			res = await getAPI(`wishlists/check?product=${pid}&variant=${vid}&store=${storeId}`, origin)
