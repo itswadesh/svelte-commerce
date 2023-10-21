@@ -1,4 +1,6 @@
 <script>
+// import { storeStore } from '$lib/store/store'
+import { browser } from '$app/environment'
 import { currency, date } from '$lib/utils'
 import { LazyImg } from '$lib/components'
 import { onMount } from 'svelte'
@@ -15,7 +17,6 @@ import SEO from '$lib/components/SEO/index.svelte'
 import TransparentButton from '../_TransparentButton.svelte'
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let clazz
 export { clazz as class }
@@ -36,8 +37,13 @@ function head() {
 		title: 'Order Details'
 	}
 }
+// let store = {}
+$: store = $page.data?.store
 
 onMount(() => {
+	// if (browser) {
+	// 	storeStore.subscribe((value) => (store = value))
+	// }
 	// deliveryBy = dayjs().add(7, 'day').format('dddd, MMM D, YYYY')
 	now = dayjs()
 })
@@ -157,13 +163,13 @@ onMount(() => {
 												Item price :
 
 												<span class="font-bold whitespace-nowrap text-zinc-800">
-													{currency(item.price, $page.data?.store?.currencySymbol)}
+													{currency(item.price, store?.currencySymbol)}
 												</span>
 
 												{#if item?.mrp > item?.price}
 													<span class="whitespace-nowrap text-zinc-500 line-through">
 														<strike>
-															{currency(item.mrp, $page.data?.store?.currencySymbol)}
+															{currency(item.mrp, store?.currencySymbol)}
 														</strike>
 													</span>
 
@@ -179,13 +185,13 @@ onMount(() => {
 												Sub Total :
 
 												<span class="font-bold whitespace-nowrap text-zinc-800">
-													{currency(item.subtotal, $page.data?.store?.currencySymbol)}
+													{currency(item.subtotal, store?.currencySymbol)}
 												</span>
 
 												{#if item?.total > item?.subtotal}
 													<span class="whitespace-nowrap text-zinc-500 line-through">
 														<strike>
-															{currency(item.total, $page.data?.store?.currencySymbol)}
+															{currency(item.total, store?.currencySymbol)}
 														</strike>
 													</span>
 
@@ -236,10 +242,7 @@ onMount(() => {
 										<span class="mr-2 w-32">Subtotal</span>
 
 										<span>
-											: &nbsp; {currency(
-												data.order?.amount.subtotal,
-												$page.data?.store?.currencySymbol
-											)}
+											: &nbsp; {currency(data.order?.amount.subtotal, store?.currencySymbol)}
 										</span>
 									</p>
 
@@ -249,7 +252,7 @@ onMount(() => {
 										<span>
 											: &nbsp;
 
-											{currency(data.order?.amount.discount, $page.data?.store?.currencySymbol)}
+											{currency(data.order?.amount.discount, store?.currencySymbol)}
 										</span>
 									</p>
 
@@ -270,7 +273,7 @@ onMount(() => {
 										<span>
 											: &nbsp;
 											{#if data.order?.amount.shipping}
-												{currency(data.order?.amount.shipping, $page.data?.store?.currencySymbol)}
+												{currency(data.order?.amount.shipping, store?.currencySymbol)}
 											{:else}
 												Free
 											{/if}
@@ -284,10 +287,7 @@ onMount(() => {
 											<span>
 												: &nbsp;
 
-												{currency(
-													data.order?.amount.cod_charges,
-													$page.data?.store?.currencySymbol
-												)}
+												{currency(data.order?.amount.cod_charges, store?.currencySymbol)}
 											</span>
 										</p>
 									{/if}
@@ -298,10 +298,7 @@ onMount(() => {
 										<span class="mr-2 w-32">Total</span>
 
 										<span>
-											: &nbsp; {currency(
-												data.order?.amount.total,
-												$page.data?.store?.currencySymbol
-											)}
+											: &nbsp; {currency(data.order?.amount.total, store?.currencySymbol)}
 										</span>
 									</div>
 								</div>
@@ -317,23 +314,23 @@ onMount(() => {
 
 							<p class="flex flex-col">
 								<span>
-									{data.order?.address?.firstName}
-									{data.order?.address?.lastName}
+									{data.order?.shipping_address?.firstName}
+									{data.order?.shipping_address?.lastName}
 
 									<br />
 
-									{data.order?.address?.address}, {data.order?.address?.city},
-									{data.order?.address?.country}, {data.order?.address?.state}
+									{data.order?.shipping_address?.address}, {data.order?.shipping_address?.city},
+									{data.order?.shipping_address?.country}, {data.order?.shipping_address?.state}
 
 									<br />
 
-									{data.order?.address?.zip}
+									{data.order?.shipping_address?.zip}
 								</span>
 							</p>
 
-							{#if data.order?.address?.phone}
+							{#if data.order?.shipping_address?.phone}
 								<p>
-									{data.order?.address?.phone}
+									{data.order?.shipping_address?.phone}
 								</p>
 							{/if}
 						</div>
@@ -343,23 +340,23 @@ onMount(() => {
 
 							<p class="flex flex-col">
 								<span>
-									{data.order?.billingAddress?.firstName}
-									{data.order?.billingAddress?.lastName}
+									{data.order?.billing_address?.firstName}
+									{data.order?.billing_address?.lastName}
 
 									<br />
 
-									{data.order?.billingAddress?.address}, {data.order?.billingAddress?.city},
-									{data.order?.billingAddress?.country}, {data.order?.billingAddress?.state}
+									{data.order?.billing_address?.address}, {data.order?.billing_address?.city},
+									{data.order?.billing_address?.country}, {data.order?.billing_address?.state}
 
 									<br />
 
-									{data.order?.billingAddress?.zip}
+									{data.order?.billing_address?.zip}
 								</span>
 							</p>
 
-							{#if data.order?.billingAddress?.phone}
+							{#if data.order?.billing_address?.phone}
 								<p>
-									{data.order?.billingAddress?.phone}
+									{data.order?.billing_address?.phone}
 								</p>
 							{/if}
 						</div>

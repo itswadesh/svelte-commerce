@@ -6,9 +6,12 @@
 </style>
 
 <script>
+// import { storeStore } from '$lib/store/store'
+import { browser } from '$app/environment'
 import { currency, date } from '$lib/utils'
 import { goto } from '$app/navigation'
 import { LazyImg, Pagination } from '$lib/components'
+import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { PrimaryButton, WhiteButton } from '$lib/ui'
 import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
@@ -21,6 +24,15 @@ export let orders
 
 let clazz = ''
 export { clazz as class }
+
+// let store = {}
+$: store = $page.data?.store
+
+// onMount(() => {
+// 	if (browser) {
+// 		storeStore.subscribe((value) => (store = value))
+// 	}
+// })
 </script>
 
 <div class="w-full {clazz}">
@@ -78,8 +90,9 @@ export { clazz as class }
 
 										<th class="p-3 text-zinc-500"> Image </th>
 
-										<th class="p-3 text-zinc-500"> Vendor </th>
-
+										{#if $page.data.store?.isMultiVendor}
+											<th class="p-3 text-zinc-500"> Vendor </th>
+										{/if}
 										<th class="p-3 text-zinc-500"> Name </th>
 
 										<th class="p-3 text-zinc-500"> Qty </th>
@@ -136,15 +149,17 @@ export { clazz as class }
 												</div>
 											</td>
 
-											<td class="p-3">
-												{item.vendorBusinessName || '_'}
-											</td>
+											{#if $page.data.store?.isMultiVendor}
+												<td class="p-3">
+													{item.vendorBusinessName || '_'}
+												</td>
+											{/if}
 
 											<td class="p-3">
 												<div class="flex w-60 items-center gap-2">
 													<span>{item.name || '_'}</span>
 
-													{#if $page?.data?.store?.isFnb && item.foodType}
+													{#if store?.isFnb && item.foodType}
 														<div class="shrink-0">
 															{#if item.foodType === 'veg'}
 																<img src="{productVeg}" alt="veg" class="h-5 w-5" />
@@ -165,15 +180,15 @@ export { clazz as class }
 											</td>
 
 											<td class="whitespace-nowrap p-3">
-												{currency(item.price, $page.data?.store?.currencySymbol)}
+												{currency(item.price, store?.currencySymbol)}
 											</td>
 
 											<td class="whitespace-nowrap p-3">
-												{currency(item.shippingCharges, $page.data?.store?.currencySymbol)}
+												{currency(item.shippingCharges, store?.currencySymbol)}
 											</td>
 
 											<td class="whitespace-nowrap p-3">
-												{currency(item.total, $page.data?.store?.currencySymbol)}
+												{currency(item.total, store?.currencySymbol)}
 											</td>
 
 											<td class="p-3">
@@ -252,7 +267,7 @@ export { clazz as class }
 													<p>Price :</p>
 
 													<b>
-														{currency(item.price, $page.data?.store?.currencySymbol)}
+														{currency(item.price, store?.currencySymbol)}
 													</b>
 												</div>
 
@@ -279,7 +294,7 @@ export { clazz as class }
 														<p>Shipping Charges :</p>
 
 														<b>
-															{currency(item.shippingCharges, $page.data?.store?.currencySymbol)}
+															{currency(item.shippingCharges, store?.currencySymbol)}
 														</b>
 													</div>
 												{/if}
@@ -288,7 +303,7 @@ export { clazz as class }
 													<p>Total :</p>
 
 													<b>
-														{currency(item.total, $page.data?.store?.currencySymbol)}
+														{currency(item.total, store?.currencySymbol)}
 													</b>
 												</div>
 
@@ -299,6 +314,16 @@ export { clazz as class }
 														{item.status || '_'}
 													</b>
 												</div>
+
+												{#if $page.data.store?.isMultiVendor}
+													<div class="flex items-center gap-2">
+														<p>Vendor :</p>
+
+														<b class="capitalize">
+															{item.vendorBusinessName || '_'}
+														</b>
+													</div>
+												{/if}
 											</div>
 										</div>
 									</div>
