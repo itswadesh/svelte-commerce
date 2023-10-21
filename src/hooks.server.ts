@@ -40,15 +40,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 		event.locals.origin = !IS_DEV ? `https://${url.host}` : `http://${url.host}`
 
-
-		
 		const userAgent = event.request.headers.get('user-agent')
-		
+
 		const isDesktop = !/mobile/i.test(userAgent)
 		const isShowBackButton = !listOfPagesWithoutBackButton.includes(url?.pathname)
 
-		console.log(isDesktop);
-		
+		// console.log('isDesktop', isDesktop);
 
 		event.locals.isDesktop = isDesktop
 		event.locals.isShowBackButton = isShowBackButton
