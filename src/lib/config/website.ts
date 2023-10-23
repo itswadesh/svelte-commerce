@@ -25,7 +25,6 @@ export const icon = 'static/litekart-icon-512x512-black.png'
 export const backgroundColor = '#1b4079'
 export const themeColor = '#d62828'
 export const favicon = './favicon.ico'
-export const fontFamily = 'Montserrat'
 export const shortcuts = [
 	// {
 	// 	name: 'Buy Mobile covers',
