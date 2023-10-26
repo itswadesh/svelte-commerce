@@ -146,9 +146,7 @@ export let sections = []
 						<div
 							role="banner"
 							class="flex flex-row items-start"
-							style="
-                        gap: {banner.padding_between_banners}px; 
-                        padding: {banner.padding_over_all_banners}px;">
+							style="gap: {banner.padding_between_banners}px; padding: {banner.padding_over_all_banners}px;">
 							{#each banner.items as item, item_index}
 								{#if item.img}
 									<!-- Banner -->
@@ -161,8 +159,8 @@ export let sections = []
 											src="{item.img}"
 											alt="{banner.title || ''} banner {item_index + 1}"
 											aspect_ratio="{item.aspect_ratio || ''}"
-											height="{(item.rows_count * banner.row_height).toString()}"
-											class="h-[55vw] max-h-80 w-auto object-cover object-top" />
+											height="{banner.row_height}"
+											class="h-[{banner.row_height}px] object-contain object-top" />
 
 										{#if item.title}
 											<div class="absolute inset-0 z-10 flex items-center justify-start p-10">
