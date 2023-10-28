@@ -13,7 +13,6 @@
 import { date, toast } from '$lib/utils'
 import { del } from '$lib/utils/api'
 import { goto, invalidateAll } from '$app/navigation'
-import { loginUrl } from '$lib/store'
 import { page } from '$app/stores'
 import { Pagination, LazyImg } from '$lib/components'
 import { PrimaryButton } from '$lib/ui'
@@ -59,7 +58,7 @@ async function remove(id) {
 	} catch (e) {
 		if (e.message === 'You must be logged in') {
 			const url = '/'
-			goto(`${$loginUrl}?ref=${url}`)
+			goto(`/auth/login?ref=${url}`)
 		}
 	} finally {
 		// refreshData()

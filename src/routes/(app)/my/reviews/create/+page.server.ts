@@ -1,4 +1,4 @@
-import { error } from '@sveltejs/kit'
+import { error, redirect } from '@sveltejs/kit'
 import { ProductService } from '$lib/services'
 
 export const prerender = false
@@ -22,6 +22,10 @@ export async function load({ url, locals, cookies }) {
 
 		return { ref, product }
 	} catch (e) {
-		throw error(e.status, e.message || 'Not found')
+		if (e.status === 401 || e.status === 403) {
+			throw redirect(307, '/auth/login')
+		}
+
+		throw error(e.status, e.message)
 	}
 }

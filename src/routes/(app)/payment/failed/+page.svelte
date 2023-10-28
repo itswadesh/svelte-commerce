@@ -1,7 +1,7 @@
 <script>
 import { page } from '$app/stores'
+import { PrimaryButton } from '$lib/ui'
 import noCancle from '$lib/assets/no/cancle.png'
-import {PrimaryButton} from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
 
 let seoProps = {
@@ -9,7 +9,8 @@ let seoProps = {
 	description: `Payment Failure`
 }
 
-$: paymentUrl = $page?.url?.searchParams.get('ref')
+let addressId = $page.url.searchParams.get('address')
+let ordrNo = $page.url.searchParams.get('order_no')
 </script>
 
 <SEO {...seoProps} />
@@ -20,8 +21,12 @@ $: paymentUrl = $page?.url?.searchParams.get('ref')
 			<img src="{noCancle}" alt="failed" class="h-auto w-20 object-contain object-top" />
 		</div>
 
-		<h1 class="text-xl font-bold sm:text-2xl md:text-3xl">Payment Failed!</h1>
-		<a href="/cart" aria-label="Click to go back to payment method" data-sveltekit-preload-data>
+		<h1>Payment Failed!</h1>
+
+		<a
+			href="/checkout/payment-options?address={addressId}&order_no={ordrNo}"
+			aria-label="Click to go back to payment method"
+			data-sveltekit-preload-data>
 			<PrimaryButton class="uppercase">Pay Again</PrimaryButton>
 		</a>
 	</div>

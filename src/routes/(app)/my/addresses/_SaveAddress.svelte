@@ -30,7 +30,6 @@ let states = []
 
 onMount(async () => {
 	await invalidateAll()
-
 	if (countries?.length === 1) {
 		address.country = countries[0].code
 	} else if (countries?.length > 1) {
@@ -192,7 +191,7 @@ function validatePhoneNumber(phoneNumber) {
 	}
 
 	// Check if the resulting number is numeric and has a valid length
-	if (/^\d+$/.test(phoneNumber) && phoneNumber.length === 14) {
+	if (/^\d+$/.test(phoneNumber) && phoneNumber.length === 10) {
 		showErrorMessage = false
 		return true
 	}
@@ -347,10 +346,14 @@ function validatePhoneNumber(phoneNumber) {
 			<!-- City -->
 
 			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
-				<h6 class="sm:w-60 sm:shrink-0">City</h6>
+				<h6 class="sm:w-60 sm:shrink-0">
+					City
+
+					<span class="text-accent-500">*</span>
+				</h6>
 
 				<div class="w-full">
-					<Textbox placeholder="Enter City" bind:value="{address.city}" />
+					<Textbox type="text" placeholder="Enter City" bind:value="{address.city}" required />
 				</div>
 			</div>
 
@@ -372,7 +375,7 @@ function validatePhoneNumber(phoneNumber) {
 						<option value="{null}" disabled selected>-- Select a State --</option>
 						{#each states as s}
 							{#if s}
-								<option value="{s.name}">
+								<option value="{s.name.toUpperCase()}">
 									{s.name}
 								</option>
 							{/if}

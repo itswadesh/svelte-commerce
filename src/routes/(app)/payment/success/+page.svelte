@@ -239,7 +239,9 @@ onMount(async () => {
 												<span>
 													Qty :
 
-													{item.qty}
+													<b>
+														{item.qty}
+													</b>
 												</span>
 											{/if}
 
@@ -247,7 +249,9 @@ onMount(async () => {
 												<span>
 													Size :
 
-													{item.size}
+													<b>
+														{item.size}
+													</b>
 												</span>
 											{/if}
 
@@ -255,16 +259,23 @@ onMount(async () => {
 												{#each item?.usedOptions as option}
 													{#if option?.val?.length && option?.val !== undefined && option?.val != ''}
 														<div class="flex flex-wrap gap-2">
-															<h6>{option.name}:</h6>
+															<span>{option.name}:</span>
 
 															{#if option.val}
-																{#each option.val as v}
-																	{#if v}
-																		<div class="font-bold">
-																			{v}
-																		</div>
-																	{/if}
-																{/each}
+																<ul
+																	class="flex flex-wrap items-center gap-x-2 gap-y-1 text-zinc-800">
+																	{#each option.val as v, valIndex}
+																		{#if v}
+																			<b>
+																				{v}
+																			</b>
+
+																			{#if valIndex < option.val?.length - 1}
+																				,
+																			{/if}
+																		{/if}
+																	{/each}
+																</ul>
 															{/if}
 														</div>
 													{/if}

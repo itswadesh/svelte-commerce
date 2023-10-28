@@ -9,6 +9,7 @@ import DesktopFilter from '$lib/themes/varni/DesktopFilter.svelte'
 import Footer from '$lib/themes/varni/Footer.svelte'
 import HeroBanners from '$lib/themes/varni/HeroBanners.svelte'
 import HeroBannersCollage6 from '$lib/themes/varni/HeroBannersCollage6.svelte'
+import Home from '$lib/themes/varni/Home.svelte'
 import LegalFooterInformation from '$lib/themes/varni/LegalFooterInformation.svelte'
 import MegamenuHorizontal from '$lib/themes/varni/MegamenuHorizontal.svelte'
 import MegamenuVertical from '$lib/themes/varni/MegamenuVertical.svelte'
@@ -32,6 +33,7 @@ export {
     Footer,
     HeroBanners,
     HeroBannersCollage6,
+    Home,
     LegalFooterInformation,
     MegamenuHorizontal,
     MegamenuVertical,

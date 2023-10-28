@@ -35,8 +35,8 @@ export let sections = []
 						<div
 							class="grid grid-cols-12 shrink-0"
 							style="grid-template-rows: repeat({banner.total_rows}, minmax(0, 1fr)); 
-                        gap: {banner.padding_between_banners}px; 
-                        padding: {banner.padding_over_all_banners}px;">
+                        	gap: {banner.padding_between_banners}px; 
+                        	padding: {banner.padding_over_all_banners}px;">
 							{#each banner.items as item, item_index}
 								<a
 									href="{navigateToProperPath(item.link || item.slug)}"
@@ -91,8 +91,8 @@ export let sections = []
 						<div
 							class="grid grid-cols-12 shrink-0"
 							style="grid-template-rows: repeat({banner.total_rows}, minmax(0, 1fr)); 
-                        gap: {banner.padding_between_banners}px; 
-                        padding: {banner.padding_over_all_banners}px;">
+                        	gap: {banner.padding_between_banners}px; 
+                       	 	padding: {banner.padding_over_all_banners}px;">
 							{#each banner.items as item, item_index}
 								{#if item.img}
 									<a
