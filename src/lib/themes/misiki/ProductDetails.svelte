@@ -52,6 +52,7 @@ import {
 	ProductsGrid,
 	SocialSharingButtons
 } from '$lib/components'
+import { GropuCheckbox } from '$lib/ui'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
@@ -176,7 +177,7 @@ let screenWidth
 let selectedImgIndex
 let selectedLinkiedProducts = []
 let selectedOptions = []
-let selectedOptions1 = []
+let finalSelectedOptions = []
 let selectedReviewType = 'product_review'
 let shake = false
 let showEditor = false
@@ -415,13 +416,31 @@ function alertToSelectMandatoryOptions() {
 }
 
 $: {
-	const o1 = []
+	// console.log('selected options', selectedOptions)
+
+	const newOptions = []
+
 	for (const i in selectedOptions) {
-		if (Array.isArray(selectedOptions[i])) o1.push({ option: i, values: o[i] })
-		else o1.push({ option: i, values: [selectedOptions[i]] })
+		if (Array.isArray(selectedOptions[i]))
+			newOptions.push({ option: i, values: selectedOptions[i] })
+		else newOptions.push({ option: i, values: [selectedOptions[i]] || selectedOptions[i] })
 	}
 
-	selectedOptions1 = o1
+	// console.log('newOptions', newOptions)
+
+	finalSelectedOptions = newOptions.filter((item) => {
+		// console.log('typeof item.values', typeof item.values)
+
+		if (item.values?.length) {
+			if (item.values[0]) {
+				return item
+			}
+		} else if (typeof item.values !== 'object') {
+			return item
+		}
+	})
+
+	console.log('Final selected options', finalSelectedOptions)
 }
 
 function scrollTo(elementId) {
@@ -1064,26 +1083,23 @@ async function updateVariant(variant) {
 
 				<!-- select options  -->
 
-				{#await data.streamed?.moreProductDetails}
-					<div class="mb-5">
-						<Skeleton extraSmall />
-					</div>
-				{:then value}
-					{#if value.options?.length > 0}
-						<div
-							class="sizeSelector mb-5 flex flex-col gap-3 text-sm"
-							class:shake-animation="{shake}">
-							{#each value.options as o}
-								<div class="flex flex-col items-start sm:flex-row">
-									<h6 class="mb-1 w-full shrink-0 font-medium sm:mb-0 sm:w-52">
-										{o.name}
-									</h6>
+				{#if data.product.options?.length}
+					<div
+						class="sizeSelector mb-5 flex flex-col gap-3 text-sm"
+						class:shake-animation="{shake}">
+						{#each data.product.options as o}
+							<div class="flex flex-col items-start sm:flex-row">
+								<h6 class="mb-1 w-full shrink-0 font-medium sm:mb-0 sm:w-52">
+									{o.name}
+								</h6>
 
+								<div class="flex-1">
 									<!-- dropdown -->
 									{#if o.inputType == 'dropdown'}
 										<select
 											bind:value="{selectedOptions[o._id]}"
-											class="w-full max-w-xs flex-1 rounded border border-zinc-200 py-1.5 text-sm font-light placeholder-zinc-400 transition duration-300 focus:outline-none hover:bg-white">
+											class="w-full rounded border border-zinc-200 p-2 text-sm placeholder-zinc-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 bg-transparent hover:bg-zinc-50">
+											<option value="{undefined}" selected disabled>Select a Option</option>
 											{#each o.values as i}
 												<option value="{i._id}">
 													{i.name}
@@ -1093,23 +1109,32 @@ async function updateVariant(variant) {
 
 										<!-- textbox -->
 									{:else if o.inputType == 'textbox'}
-										<Textbox bind:value="{selectedOptions[o._id]}" type="text" />
+										<Textbox type="text" bind:value="{selectedOptions[o._id]}" />
 
 										<!-- date -->
 									{:else if o.inputType == 'date'}
-										<Textbox id="start" bind:value="{selectedOptions[o._id]}" type="date" />
+										<Textbox type="date" bind:value="{selectedOptions[o._id]}" />
 
 										<!-- daterange -->
 										<!-- {:else if o.inputType == 'daterange'}
-									<span>Date range picker is not found</span> -->
+										<div class="flex flex-col gap-2">
+											{#each o.values as v}
+												<div class="flex items-center gap-2">
+													<p class="w-20">
+														{v.name}
+													</p>
 
-										<!-- <date-picker
-									bind:value="{selectedOptions[o.id]}"
-									class="max-w-xs flex-1"
-									type="date"
-									:disabled-date="disabledBeforeTodayAndAfterAWeek"
-									range
-									@change="$emit('optionChanged', selectedOptions)"></date-picker> -->
+													-
+
+													<div class="w-full">
+														<Textbox
+															type="date"
+															placeholder="{v.name}"
+															bind:value="{selectedOptions[v._id]}" />
+													</div>
+												</div>
+											{/each}
+										</div> -->
 
 										<!-- textarea -->
 									{:else if o.inputType == 'textarea'}
@@ -1117,50 +1142,50 @@ async function updateVariant(variant) {
 
 										<!-- size -->
 									{:else if o.inputType == 'size'}
-										<div class="flex flex-wrap">
+										<div class="flex flex-wrap gap-2">
 											{#each o.values as v}
 												<RadioSize value="{v._id}" bind:modelValue="{selectedOptions[o._id]}">
-													<span class="text-zinc-500">{v.name}</span>
+													{v.name}
 												</RadioSize>
 											{/each}
 										</div>
 
 										<!-- color -->
 									{:else if o.inputType == 'color'}
-										<div class="flex flex-wrap gap-4">
+										<div class="flex flex-wrap gap-2">
 											{#each o.values as v}
-												<RadioColor value="{v._id}" bind:modelValue="{selectedOptions[o._id]}">
-													<span class="text-zinc-500">{v.name}</span>
+												<RadioColor
+													value="{v._id}"
+													backgroundColor="{v.name}"
+													bind:modelValue="{selectedOptions[o._id]}">
+													{v.name}
 												</RadioColor>
 											{/each}
 										</div>
+
 										<!-- radio -->
 									{:else if o.inputType == 'radio'}
-										<div class="flex flex-wrap gap-4">
+										<div class="flex flex-wrap gap-x-4 gap-y-2">
 											{#each o.values as v}
 												<Radio value="{v._id}" bind:modelValue="{selectedOptions[o._id]}">
-													<span class="text-zinc-500">{v.name}</span>
+													{v.name}
 												</Radio>
 											{/each}
 										</div>
 
 										<!-- checkbox -->
 									{:else if o.inputType == 'checkbox'}
-										<div class="flex flex-wrap gap-4">
-											{#each o.values as v, i}
-												<Checkbox value="{v._id}" bind:modelValue="{selectedOptions[o._id]}">
-													<span class="text-zinc-500">{v.name}</span>
-												</Checkbox>
-											{/each}
+										<div class="flex flex-wrap gap-x-4 gap-y-2">
+											<GropuCheckbox
+												items="{o.values}"
+												bind:selectedItems="{selectedOptions[o._id]}" />
 										</div>
 									{/if}
 								</div>
-							{/each}
-						</div>
-					{/if}
-				{:catch error}
-					{error?.message}
-				{/await}
+							</div>
+						{/each}
+					</div>
+				{/if}
 
 				<!-- Product details (short description) -->
 
@@ -1455,7 +1480,7 @@ async function updateVariant(variant) {
 												<input
 													type="hidden"
 													name="options"
-													value="{JSON.stringify(selectedOptions1) || null}" />
+													value="{JSON.stringify(finalSelectedOptions) || null}" />
 
 												<input type="hidden" name="customizedImg" value="{customizedImg || null}" />
 
@@ -1856,7 +1881,7 @@ async function updateVariant(variant) {
 												<input
 													type="hidden"
 													name="options"
-													value="{JSON.stringify(selectedOptions1) || null}" />
+													value="{JSON.stringify(finalSelectedOptions) || null}" />
 
 												<input type="hidden" name="customizedImg" value="{customizedImg || null}" />
 
@@ -2094,7 +2119,7 @@ async function updateVariant(variant) {
 												<input
 													type="hidden"
 													name="options"
-													value="{JSON.stringify(selectedOptions1) || null}" />
+													value="{JSON.stringify(finalSelectedOptions) || null}" />
 
 												<input type="hidden" name="customizedImg" value="{customizedImg || null}" />
 

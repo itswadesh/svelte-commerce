@@ -1,9 +1,9 @@
-import { error } from '@sveltejs/kit'
+import { error, redirect } from '@sveltejs/kit'
 import { ProductService } from '$lib/services'
 
 export const prerender = false
 
-export async function load({ url, locals, cookies, context }) {
+export async function load({ url, locals, cookies }) {
 	const pid = url.searchParams.get('pid')
 	const ref = url.searchParams.get('ref')
 
@@ -14,15 +14,18 @@ export async function load({ url, locals, cookies, context }) {
 			id: pid,
 			storeId: locals.store?.id,
 			server: true,
+			origin: locals.origin,
 			sid: cookies.get('connect.sid')
 		})
-		// console.log('zzzzzzzzzzzzzzzzzz', product)
 
 		if (!product) throw error(404, 'Product not found')
 
 		return { ref, product }
 	} catch (e) {
-		console.error(e)
-		throw error(e.status, e.message || 'Not found')
+		if (e.status === 401 || e.status === 403) {
+			throw redirect(307, '/auth/login')
+		}
+
+		throw error(e.status, e.message)
 	}
 }

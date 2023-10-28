@@ -16,6 +16,7 @@ import Footer from '$lib/themes/misiki/Footer.svelte'
 import FrequentlyBoughtProduct from '$lib/themes/misiki/FrequentlyBoughtProduct.svelte'
 import Hero from '$lib/themes/misiki/Hero.svelte'
 import HeroBanners from '$lib/themes/misiki/HeroBanners.svelte'
+import Home from '$lib/themes/misiki/Home.svelte'
 import MegamenuHorizontal from '$lib/themes/misiki/MegamenuHorizontal.svelte'
 import MegamenuVertical from '$lib/themes/misiki/MegamenuVertical.svelte'
 import Nav from '$lib/themes/misiki/Nav.svelte'
@@ -44,6 +45,7 @@ export {
     FrequentlyBoughtProduct,
     Hero,
     HeroBanners,
+    Home,
     MegamenuHorizontal,
     MegamenuVertical,
     Nav,

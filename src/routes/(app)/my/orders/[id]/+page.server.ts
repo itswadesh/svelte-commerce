@@ -15,7 +15,7 @@ export async function load({ params, locals, cookies }) {
 			sid
 		})
 
-		const orderTracking = await OrdersService.fetchTrackOrder({ id, storeId, server: true, sid })
+		const orderTracking = await OrdersService.fetchTrackOrder({ id, storeId, sid })
 
 		if (order) {
 			return { order, orderTracking }
