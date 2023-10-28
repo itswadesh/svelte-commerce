@@ -71,11 +71,18 @@ onMount(() => {
 											href="{`/product/${item.slug}`}"
 											aria-label="Click to view the product details"
 											class="shrink-0">
-											<LazyImg
-												src="{item.isCustomized ? item.customizedImg : item.img}"
-												alt=""
-												width="56"
-												class="h-auto w-14 object-contain object-top" />
+											{#if item.isCustomized}
+												<img
+													src="{item.customizedImg}"
+													alt=" "
+													class="h-auto w-14 object-contain object-top" />
+											{:else}
+												<LazyImg
+													src="{item.img}"
+													alt=" "
+													width="56"
+													class="h-auto w-14 object-contain object-top" />
+											{/if}
 										</a>
 
 										<div class="flex w-full flex-1 flex-col gap-0.5 xl:pr-4">
@@ -104,7 +111,9 @@ onMount(() => {
 												<span>
 													Qty :
 
-													{item.qty}
+													<b>
+														{item.qty}
+													</b>
 												</span>
 											{/if}
 
@@ -112,7 +121,9 @@ onMount(() => {
 												<span>
 													Size :
 
-													{item.size}
+													<b>
+														{item.size}
+													</b>
 												</span>
 											{/if}
 
@@ -120,16 +131,22 @@ onMount(() => {
 												{#each item?.usedOptions as option}
 													{#if option?.val?.length && option?.val !== undefined && option?.val != ''}
 														<div class="flex flex-wrap gap-2">
-															<h6>{option.name}:</h6>
+															<span>{option.name}:</span>
 
 															{#if option.val}
-																{#each option.val as v}
-																	{#if v}
-																		<div class="font-bold">
-																			{v}
-																		</div>
-																	{/if}
-																{/each}
+																<ul class="flex flex-wrap items-center gap-x-2 gap-y-1">
+																	{#each option.val as v, valIndex}
+																		{#if v}
+																			<b>
+																				{v}
+																			</b>
+
+																			{#if valIndex < option.val?.length - 1}
+																				,
+																			{/if}
+																		{/if}
+																	{/each}
+																</ul>
 															{/if}
 														</div>
 													{/if}
@@ -382,6 +399,16 @@ onMount(() => {
 							{date(data.order?.expectedDeliveryDate)}
 						</p>
 					</div>
+				{/if}
+
+				{#if data.order.tracking_link}
+					<a
+						href="{data.order.tracking_link}"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="mb-5 font-semibold text-indigo-500 underline hover:text-indigo-700">
+						Track your order
+					</a>
 				{/if}
 
 				<div class="mt-5 sm:mt-10 flex flex-wrap gap-10">

@@ -39,6 +39,8 @@ const saveAddress = async ({ request, cookies, locals }) => {
 
 	if (showErrorMessage === true || showErrorMessage === 'true') {
 		throw error(404, 'Please enter valid phone number')
+	} else if (zip.length !== 6) {
+		throw error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
 	} else {
 		phone = phone.replace(/[a-zA-Z ]/g, '')
 
@@ -94,6 +96,8 @@ const editAddress = async ({ request, cookies, locals }) => {
 
 	if (showErrorMessage === true || showErrorMessage === 'true') {
 		throw error(404, 'Please enter valid phone number')
+	} else if (zip.length !== 6) {
+		throw error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
 	} else {
 		phone = phone.replace(/[a-zA-Z ]/g, '')
 

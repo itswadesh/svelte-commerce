@@ -3,7 +3,9 @@ import { createEventDispatcher } from 'svelte'
 
 const dispatch = createEventDispatcher()
 
-export let modelValue, value
+export let backgroundColor
+export let modelValue
+export let value
 
 let checked = false
 
@@ -12,14 +14,16 @@ if (modelValue === value) {
 }
 </script>
 
-<label
-	class=" mr-2 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border-2 text-zinc-500 focus:outline-none focus:ring-0 focus:ring-offset-0 hover:border-primary-500 hover:font-bold hover:text-primary-500
-											{modelValue == value
-		? ` border-primary-500 bg-primary-500 text-white`
-		: `bg-zinc-100 border-zinc-400`}">
-	<div class="text-xs uppercase sm:text-sm">
-		<slot />
+<label>
+	<div
+		class="relative h-10 w-10 rounded-full border-4 flex items-center justify-center p-1 group cursor-pointer transition duration-300 focus:outline-none"
+		style="background-color: {backgroundColor}; 
+		{modelValue == value ? 'box-shadow: 0 0 6px rgb(24 24 27);' : ''}">
 	</div>
 
 	<input type="radio" bind:group="{modelValue}" value="{value}" class="hidden" />
+
+	<div class="mt-1 w-10 leading-3 text-xs text-center whitespace-nowrap">
+		<slot />
+	</div>
 </label>

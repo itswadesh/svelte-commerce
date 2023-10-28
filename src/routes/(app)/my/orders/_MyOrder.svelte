@@ -103,10 +103,9 @@ export { clazz as class }
 											<td class="p-3">
 												<div class="shrink-0">
 													{#if item.isCustomized}
-														<LazyImg
+														<img
 															src="{item.customizedImg}"
-															alt=" "
-															width="56"
+															alt="customizedImg"
 															class="h-auto w-14 object-contain object-top" />
 													{:else if item.img}
 														<LazyImg
@@ -210,10 +209,9 @@ export { clazz as class }
 									<div class="flex items-start gap-2 p-4 sm:gap-5">
 										<div class="shrink-0">
 											{#if item.isCustomized}
-												<LazyImg
+												<img
 													src="{item.customizedImg}"
 													alt=" "
-													width="56"
 													class="h-auto w-14 object-contain object-top" />
 											{:else}
 												<LazyImg

@@ -54,6 +54,29 @@ export const getCdnImageUrl = ({ src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUER
 	}
 }
 
+export const getColorNameFromVarni = (value: string) => {
+	const colorsGroup = [
+		{
+			color_codes: ['#aaaeee'],
+			name: 'Rose',
+		},
+		{
+			color_codes: ['#ffffff'],
+			name: 'White',
+		},
+		{
+			color_codes: ['#cccaaa', '#ffff00'],
+			name: 'Yellow',
+		}
+	]
+
+	for (const color of colorsGroup) {
+		if (color.color_codes.includes(value)) {
+			return color.name
+		}
+	}
+}
+
 const toast = (title, type) => {
 	title = title?.body?.message?.error || title?.body?.message || title?.message?.error || title?.message || title?.error || title || ''
 	allToasts?.remove()
