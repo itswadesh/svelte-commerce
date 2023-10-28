@@ -440,7 +440,7 @@ $: {
 		}
 	})
 
-	console.log('Final selected options', finalSelectedOptions)
+	// console.log('Final selected options', finalSelectedOptions)
 }
 
 function scrollTo(elementId) {
