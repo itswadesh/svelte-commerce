@@ -152,7 +152,7 @@ async function refreshAddress() {
 						{selectedAddress}---{selectedBillingAddress}
 					</div> -->
 
-					{#if data.store?.b2b}
+					{#if data.store?.b2b && data.store?.b2b?.allowDifferentBillingAddress && data.store?.b2b?.allowDifferentBillingAddress?.val === true}
 						<!-- Same as billing address checkbox -->
 
 						<label class="mb-5 lg:mb-10 flex items-center gap-2 text-lg font-semibold">
