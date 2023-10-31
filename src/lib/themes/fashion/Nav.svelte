@@ -108,7 +108,7 @@ function handleShowCartSidebar() {
 // 				formattedAmount: res?.formattedAmount
 // 			}
 
-// 			cookies.set('cartId', cart.cartId, { path: '/' })
+// 			cookies.set('cartId', cart.cartId, { path: '/', maxAge: 31536000 })
 // 		}
 // 	} catch (e) {
 // 		toast(e, 'error')

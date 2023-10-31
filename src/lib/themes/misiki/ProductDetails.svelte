@@ -319,7 +319,8 @@ async function addToBag(p, customizedImg, customizedJson) {
 				unavailableItems: cart?.unavailableItems,
 				formattedAmount: cart?.formattedAmount
 			}
-			cookies.set('cartId', cookieCart.cartId, { path: '/' })
+
+			cookies.set('cartId', cookieCart.cartId, { path: '/', maxAge: 31536000 })
 			// cartButtonText = 'Added To Cart'
 			bounceItemFromTop = true
 		}
