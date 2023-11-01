@@ -11,7 +11,7 @@ const getOtp: Action = async ({ request, locals }) => {
 	try {
 		const data = await UserService.getOtpService({
 			phone,
-			storeId: locals.store?.id,
+			storeId: locals.storeId,
 			origin: locals.origin
 		})
 
@@ -43,7 +43,7 @@ const verifyOtp: Action = async ({ cookies, request, locals }) => {
 		const user = await UserService.verifyOtpService({
 			phone,
 			otp,
-			storeId: locals.store?.id,
+			storeId: locals.storeId,
 			origin: locals.origin
 		})
 
@@ -65,11 +65,11 @@ const verifyOtp: Action = async ({ cookies, request, locals }) => {
 		}
 
 		cookies.set('me', JSON.stringify(me), {
-			path: '/'
+			path: '/',
+			maxAge: 31536000
 			// httpOnly: true,
 			// sameSite: 'strict',
-			// secure: process.env.NODE_ENV === 'production',
-			// maxAge: 60 * 60 * 24 * 30,
+			// secure: process.env.NODE_ENV === 'production'
 		})
 
 		cookies.set('session', user._id, {
