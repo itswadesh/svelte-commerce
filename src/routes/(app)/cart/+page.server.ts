@@ -20,7 +20,7 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 				cartId,
 				origin: origin,
 				sid,
-				storeId: store?.id,
+				storeId: store?.id
 			})
 
 			if (res) {
@@ -81,6 +81,8 @@ const add: Action = async ({ request, cookies, locals }) => {
 		return fail(400, { invalid: true })
 	}
 
+	// console.log(cartId);
+
 	try {
 		let cart = await CartService.addToCartService({
 			pid,
@@ -95,10 +97,10 @@ const add: Action = async ({ request, cookies, locals }) => {
 			sid // This is a special case to pass complete cookie
 		})
 
-		if (!cartId) {
-			cartId = cart.cart_id // This is required because when cart_id is null, it will add 3 items with null cart id hence last one prevails
-			cookies.set('cartId', cartId, { path: '/' })
-		}
+		// if (!cartId) { // Commented out because when can't find cart_id in database, it will still won't set the new cart_id in cookies
+		cartId = cart.cart_id // This is required because when cart_id is null, it will add 3 items with null cart id hence last one prevails
+		cookies.set('cartId', cartId, { path: '/' })
+		// }
 
 		if (!sid) {
 			sid = cart.sid
@@ -118,6 +120,8 @@ const add: Action = async ({ request, cookies, locals }) => {
 				})
 			}
 		}
+
+		// console.log(cart);
 
 		if (cart) {
 			const cartObj = {
@@ -156,6 +160,34 @@ const add: Action = async ({ request, cookies, locals }) => {
 	}
 }
 
+const createBackOrder: Action = async ({ request, cookies, locals }) => {
+	const data = await request.formData()
+	const pid = data.get('pid')
+	const qty = +data.get('qty')
+	let sid = cookies.get('connect.sid')
+
+	if (typeof pid !== 'string' || !pid) {
+		return fail(400, { invalid: true })
+	}
+
+	try {
+		const cart = await CartService.createBackOrder({
+			pid,
+			qty,
+			storeId: locals.store?.id,
+			origin: locals.origin,
+			sid // This is a special case to pass complete cookie
+		})
+
+		if (!sid) {
+			sid = cart.sid
+			cookies.set('connect.sid', sid, { path: '/' })
+		}
+	} catch (e) {
+		return {}
+	}
+}
+
 const handleUnavailableItems: Action = async ({ request, cookies, locals }) => {
 	const data = await request.formData()
 	const sid = cookies.get('connect.sid')
@@ -179,4 +211,4 @@ const handleUnavailableItems: Action = async ({ request, cookies, locals }) => {
 	return {}
 }
 
-export const actions: Actions = { add, handleUnavailableItems }
+export const actions: Actions = { add, createBackOrder, handleUnavailableItems }

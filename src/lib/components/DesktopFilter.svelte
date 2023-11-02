@@ -1,14 +1,16 @@
 <script lang="ts">
-import { browser } from '$app/environment'
-import { CategoryService } from '$lib/services'
 import { constructURL2, navigateToProperPath, toast } from '$lib/utils'
 import { createEventDispatcher, onMount } from 'svelte'
-// import { getMegamenuFromStore } from '$lib/store/megamenu'
+import { GetColorName } from 'hex-color-to-color-name'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { RadioEs, CheckboxEs } from '$lib/ui'
-import Cookie from 'cookie-universal'
 import { slide } from 'svelte/transition'
+import ColoredBackground from '$lib/assets/konva/colored_background.png'
+import Cookie from 'cookie-universal'
+import Fuse from 'fuse.js'
+import { browser } from '$app/environment'
+import { getAllMegamenuFromStore } from '$lib/store/megamenu'
 
 const cookies = Cookie()
 const dispatch = createEventDispatcher()
@@ -25,8 +27,10 @@ let clazz
 export { clazz as class }
 
 let pincode = null
+let searchCategoryValue = null
 let selectedCategory
 let selectedCategory2
+let showSearchBox = false
 let showSubCategory = []
 let showSubCategory2 = []
 
@@ -42,7 +46,13 @@ let allSizes = []
 let allTags = []
 let allTypes = []
 let allVendors = []
-let megamenu
+let megamenu = []
+let megamenuResult = []
+
+const options = {
+	keys: ['name', 'children.name', 'children.children.name'], // Search name and children's names
+	threshold: 0.4 // Require at least 40% match score
+}
 
 function clearFilters() {
 	fl = {}
@@ -54,9 +64,7 @@ function clearFilters() {
 }
 
 function goCheckbox(e) {
-	const selectedItems = e.detail.selectedItems.split(',')
-	const replacedString = selectedItems.map((s) => s.replace(/,/g, ';'))
-	fl[e.detail.model] = replacedString
+	fl[e.detail.model] = e.detail.selectedItems
 	fl.q = $page.url.searchParams.get('q')
 	let url = constructURL2(`${$page.url.pathname}`, fl)
 	appliedFilters = { ...fl }
@@ -70,7 +78,7 @@ function goCheckbox(e) {
 onMount(async () => {
 	$page.url.searchParams.forEach(function (value, key) {
 		fl[key] = value
-		if (key !== 'lat' && key !== 'lng' && key !== 'page' && key !== 'sort')
+		if (key !== 'page' && key !== 'sort' && key !== 'lat' && key !== 'lng')
 			appliedFilters[key] = value
 	})
 
@@ -124,31 +132,60 @@ function getFacetsWithProducts() {
 	}
 }
 
+// // let allMegamenu
+// AllMegamenuStore.subscribe((data) => {
+// 	megamenu = data
+// 	megamenuResult = megamenu
+// })
+let loadingForMegamenu = false
 async function getMegamenu() {
 	if (browser) {
 		try {
-			// megamenu = await getMegamenuFromStore({
-			// 	sid: null,
-			// 	storeId: $page?.data?.store?.id,
-			// 	isCors: $page?.data?.store?.isCors,
-			// 	origin: $page.data.origin
-			// })
+			loadingForMegamenu = true
 
-			const localmegamenu = localStorage.getItem('megamenu')
+			megamenu = await getAllMegamenuFromStore({
+				storeId: $page?.data?.store?.id,
+				isCors: $page?.data?.store?.isCors,
+				origin: $page.data.origin
+			})
 
-			if (!localmegamenu || localmegamenu === 'undefined') {
-				megamenu = await CategoryService.fetchMegamenuData({
-					origin: $page.data.origin,
-					storeId: $page.data.store?.id,
-					isCors: $page.data.store?.isCors
+			if (megamenu?.length) {
+				megamenu = megamenu.filter((e) => {
+					return e.name !== 'New Arrivals'
 				})
-			} else {
-				megamenu = JSON.parse(localmegamenu)
 			}
+
+			megamenuResult = megamenu
 		} catch (e) {
 			toast(e, 'error')
 		} finally {
+			loadingForMegamenu = false
 		}
+	}
+}
+
+function searchCategories() {
+	const fuse = new Fuse(megamenu, options)
+
+	megamenuResult = fuse.search(searchCategoryValue)
+
+	megamenuResult = megamenuResult.map((m) => {
+		return m.item
+	})
+
+	if (!megamenuResult.length) {
+		megamenuResult = megamenu
+	}
+
+	// console.log('megamenuResult', megamenuResult)
+}
+
+async function handleSearchBox() {
+	showSearchBox = !showSearchBox
+	document.getElementById(`CategoriesSearchText`).focus()
+	if (!showSearchBox) {
+		searchCategoryValue = ''
+		await searchCategories()
 	}
 }
 
@@ -165,6 +202,8 @@ $: {
 			filterLength += arr.split(',').length
 		}
 	}
+
+	// console.log('appliedFilters', appliedFilters)
 }
 
 function handleToggleSubCategory(m, mx) {
@@ -210,10 +249,38 @@ function handleToggleSubCategory2(c, cx) {
 		<ul class="flex flex-row flex-wrap gap-1 text-xs">
 			{#each Object.entries(appliedFilters) as [key, value], index (key)}
 				{#if value}
-					<li class="flex items-center gap-1 first-letter:uppercase">
-						<span>
-							{value}
-						</span>
+					<li class="flex flex-wrap items-center gap-1 first-letter:uppercase">
+						{#if key === 'colors'}
+							{#each value.toString().split(',') as v, vx}
+								{#if v === 'MultiColor'}
+									<img
+										src="{ColoredBackground}"
+										alt=""
+										class="h-5 w-5 shrink-0 border rounded-full object-cover object-center" />
+
+									<span>
+										{v}
+									</span>
+								{:else}
+									<div class="h-5 w-5 shrink-0 border rounded-full" style="background-color: {v};">
+									</div>
+
+									<span>
+										{GetColorName(v)}
+									</span>
+								{/if}
+
+								{#if value.toString().split(',')?.length > 1 && vx !== value
+											.toString()
+											.split(',')?.length - 1}
+									,
+								{/if}
+							{/each}
+						{:else}
+							<span>
+								{value}
+							</span>
+						{/if}
 
 						{#if index < Object.entries(appliedFilters)?.length - 1}
 							<div class="h-1 w-1 rounded-full bg-zinc-500"></div>
@@ -237,16 +304,61 @@ function handleToggleSubCategory2(c, cx) {
 
 	<!-- Megamenu -->
 
-	{#if megamenu?.length}
-		<div transition:slide="{{ duration: 300 }}" class="my-3">
+	{#if megamenuResult?.length}
+		<div class="my-3">
 			<hr class="mb-3 w-full" />
 
-			<h6 class="mb-3">Categories</h6>
+			<div class="relative mb-3 flex items-center justify-between gap-4">
+				<h6>Categories</h6>
+
+				<div class="absolute inset-x-0 right-0 z-10 flex h-8 justify-end">
+					<div
+						class="relative mb-3 h-8 rounded-full transition duration-300
+						{showSearchBox ? 'w-full bg-zinc-100' : 'w-8 hover:bg-zinc-100'}">
+						<input
+							type="text"
+							id="CategoriesSearchText"
+							placeholder="Search for categories"
+							class="h-8 w-full truncate rounded-full bg-transparent py-2 pl-4 pr-10 text-sm focus:outline-none"
+							bind:value="{searchCategoryValue}"
+							on:input="{searchCategories}" />
+
+						<button
+							type="button"
+							class="absolute inset-y-0 right-2 z-20 flex items-center justify-center text-zinc-500 focus:outline-none"
+							on:click="{handleSearchBox}">
+							{#if !showSearchBox}
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="h-4 w-4"
+									viewBox="0 0 20 20"
+									fill="currentColor">
+									<path
+										fill-rule="evenodd"
+										d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+										clip-rule="evenodd"></path>
+								</svg>
+							{:else}
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="h-4 w-4"
+									viewBox="0 0 20 20"
+									fill="currentColor">
+									<path
+										fill-rule="evenodd"
+										d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+										clip-rule="evenodd"></path>
+								</svg>
+							{/if}
+						</button>
+					</div>
+				</div>
+			</div>
 
 			<!-- 1st level categories -->
 
 			<ul class="flex w-full cursor-pointer flex-col text-sm">
-				{#each megamenu as m, mx}
+				{#each megamenuResult as m, mx}
 					<li>
 						{#if m.children?.length}
 							<div
@@ -255,7 +367,7 @@ function handleToggleSubCategory2(c, cx) {
 								<a
 									href="{navigateToProperPath(m.link || m.slug)}"
 									aria-label="Click to visit category related products"
-									class="block">
+									class="flex-1">
 									{m.name}
 								</a>
 
@@ -298,7 +410,7 @@ function handleToggleSubCategory2(c, cx) {
 												<a
 													href="{navigateToProperPath(c.link || c.slug)}"
 													aria-label="Click to visit category related products page"
-													class="block">
+													class="flex-1">
 													{c.name}
 												</a>
 
@@ -401,12 +513,13 @@ function handleToggleSubCategory2(c, cx) {
 				items="{allColors}"
 				title="Colors"
 				model="colors"
+				isColor
 				selectedItems="{fl.colors || []}"
 				on:go="{goCheckbox}" />
 		</div>
 	{/if}
 
-	{#if allDiscount?.length > 0}
+	{#if allDiscount?.length > 1}
 		<div transition:slide="{{ duration: 300 }}" class="my-3">
 			<hr class="mb-3 w-full" />
 
@@ -522,17 +635,4 @@ function handleToggleSubCategory2(c, cx) {
 				on:go="{goCheckbox}" />
 		</div>
 	{/if}
-
-	<!-- {#if facets?.all_aggs?.price?.all?.buckets?.length > 0}
-		<div transition:slide="{{ duration: 300 }}" class="my-3">
-			<hr class="mb-3 w-full" />
-
-			<RadioEs
-				items="{facets?.all_aggs?.price?.all?.buckets}"
-				title="Price"
-				model="price"
-				selectedItems="{fl.price || []}"
-				on:go="{goCheckbox}" />
-		</div>
-	{/if} -->
 </div>

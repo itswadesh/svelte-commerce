@@ -1,5 +1,6 @@
 <script>
 import { createEventDispatcher } from 'svelte'
+import { nanoid } from 'nanoid'
 
 const dispatch = createEventDispatcher()
 
@@ -15,12 +16,13 @@ if (modelValue === value) {
 <label class="flex items-center gap-2">
 	<input
 		type="radio"
+		id="{value + nanoid()}"
 		bind:group="{modelValue}"
-		name="{value}"
-		value="{value}"
 		checked="{checked}"
-		class="mt-0.5 h-4 w-4 text-primary-500 focus:ring-0 focus:ring-offset-0"
-		on:change="{() => dispatch('change', modelValue)}" />
+		class="mt-0.5 h-4 w-4 shrink-0 text-primary-500 focus:ring-0 focus:ring-offset-0"
+		name="{value}"
+		on:change="{() => dispatch('change', modelValue)}"
+		value="{value}" />
 
 	<span class="max-w-max text-sm">
 		<slot />

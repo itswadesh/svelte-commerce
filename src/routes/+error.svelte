@@ -7,7 +7,7 @@ import errBackground from '$lib/assets/no/error-background.png'
 import menu from '$lib/config/menu'
 
 export let data
-
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 // console.log('$page', $page)
 
 let q = ''

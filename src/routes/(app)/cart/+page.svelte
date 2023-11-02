@@ -403,19 +403,27 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 											</div>
 
 											{#if item?.usedOptions?.length}
-												<div class="mb-1 flex flex-col gap-2 text-sm">
+												<div class="mb-1 flex flex-col gap-1 text-sm">
 													{#each item?.usedOptions as option}
 														{#if option?.val?.length && option?.val !== undefined && option?.val != ''}
-															<div class="flex flex-wrap gap-2">
-																<h6>{option.name}:</h6>
+															<div class="flex flex-wrap gap-x-2">
+																<p>{option.name} :</p>
 
-																{#each option.val as v}
-																	{#if v}
-																		<div class="font-bold">
-																			{v}
-																		</div>
-																	{/if}
-																{/each}
+																<ul class="flex flex-wrap items-center gap-x-2 gap-y-1">
+																	{#each option.val as v, valIndex}
+																		{#if v}
+																			<li>
+																				<b>
+																					{v}
+																				</b>
+
+																				{#if valIndex < option.val?.length - 1}
+																					,
+																				{/if}
+																			</li>
+																		{/if}
+																	{/each}
+																</ul>
 															</div>
 														{/if}
 													{/each}
@@ -448,13 +456,17 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 																loading[ix] = false
 															}
 														}}">
-														<input type="hidden" name="pid" value="{item.pid}" />
-														<input type="hidden" name="vid" value="{item.vid}" />
+														<input type="hidden" name="pid" value="{item.pid || null}" />
+														<input type="hidden" name="vid" value="{item.vid || null}" />
 														<input type="hidden" name="qty" value="{-1}" />
 														<input
 															type="hidden"
 															name="customizedImg"
-															value="{item.customizedImg}" />
+															value="{item.customizedImg || null}" />
+														<input
+															type="hidden"
+															name="options"
+															value="{JSON.stringify(item.options) || null}" />
 
 														<button
 															type="submit"
@@ -506,13 +518,18 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 																loading[ix] = false
 															}
 														}}">
-														<input type="hidden" name="pid" value="{item.pid}" />
-														<input type="hidden" name="vid" value="{item.vid}" />
+														<input type="hidden" name="pid" value="{item.pid || null}" />
+														<input type="hidden" name="vid" value="{item.vid || null}" />
 														<input type="hidden" name="qty" value="{+1}" />
 														<input
 															type="hidden"
 															name="customizedImg"
-															value="{item.customizedImg}" />
+															value="{item.customizedImg || null}" />
+														<input
+															type="hidden"
+															name="options"
+															value="{JSON.stringify(item.options) || null}" />
+
 														<button
 															type="submit"
 															disabled="{loading[ix]}"
@@ -552,10 +569,17 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 															loading[ix] = false
 														}
 													}}">
-													<input type="hidden" name="pid" value="{item.pid}" />
-													<input type="hidden" name="vid" value="{item.vid}" />
+													<input type="hidden" name="pid" value="{item.pid || null}" />
+													<input type="hidden" name="vid" value="{item.vid || null}" />
 													<input type="hidden" name="qty" value="{-9999999}" />
-													<input type="hidden" name="customizedImg" value="{item.customizedImg}" />
+													<input
+														type="hidden"
+														name="customizedImg"
+														value="{item.customizedImg || null}" />
+													<input
+														type="hidden"
+														name="options"
+														value="{JSON.stringify(item.options) || null}" />
 
 													<button
 														type="submit"

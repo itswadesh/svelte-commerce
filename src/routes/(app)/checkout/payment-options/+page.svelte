@@ -1,47 +1,15 @@
-<style>
-.animate-slide-in-left {
-	animation: slideInLeft 0.3s ease-out forwards;
-}
-
-.animate-bounce {
-	animation: bounce 0.3s ease-out forwards;
-}
-
-@keyframes slideInLeft {
-	from {
-		transform: translateX(100%);
-	}
-	to {
-		transform: translateX(0);
-	}
-}
-
-@keyframes bounce {
-	0%,
-	100% {
-		transform: translateY(0);
-	}
-	50% {
-		transform: translateY(-20px);
-	}
-}
-</style>
-
 <script lang="ts">
-import { delay, toast } from '$lib/utils'
 import { fireGTagEvent } from '$lib/utils/gTagB'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { OrdersService } from '$lib/services'
 import { page } from '$app/stores'
+import { PaymentLoading } from '$lib/ui'
 import { Pricesummary, LazyImg, CheckoutHeader, Error, TrustBaggeContainer } from '$lib/components'
 import { slide } from 'svelte/transition'
-import lightning from '$lib/assets/payment-processing/lightning.gif'
-import list from '$lib/assets/payment-processing/list.gif'
-import logo from '$lib/assets/logo.svg'
+import { toast } from '$lib/utils'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
-import tick from '$lib/assets/payment-processing/tick.gif'
 
 const seoProps = {
 	title: 'Select Payment Option',
@@ -50,6 +18,7 @@ const seoProps = {
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
+// console.log('$page', $page)
 
 let cashfreeReady = false
 let comment = ''
@@ -57,18 +26,16 @@ let commentMissing = false
 let disabled = false
 let errorMessage = 'Select a Payment Method'
 let loading = false
+let loadingForPaymentProcessingSteps = false
+let orderNo = $page.url.searchParams.get('order_no') || ''
 let paymentDenied = false
-let paymentProcessingStep = 1
 let razorpayReady = false
 let selectedPaymentMethod = { id: '', name: '', text: '', instructions: '', qrcode: '', img: '' }
-
-$: if (data.paymentMethods?.length === 1 && data.paymentMethods[0]?.type === 'pg') {
-	const pm = data.paymentMethods[0]
-
-	submit(pm)
-}
-
 let Stripe
+
+$: if (data.err) {
+	toast(data.err, 'error')
+}
 
 onMount(async () => {
 	const StripeModule = await import('$lib/components/Stripe.svelte')
@@ -85,6 +52,13 @@ onMount(async () => {
 	cashfreeReady = true
 
 	fireGTagEvent('begin_checkout', data.cart)
+
+	const pm = data?.paymentMethods[0]
+	paymentMethodChanged(pm)
+
+	// if (data.paymentMethods?.length === 1 && data.paymentMethods[0].type === 'pg' && !orderNo) {
+	// 	submit(pm)
+	// }
 })
 
 function paymentMethodChanged(pm) {
@@ -113,246 +87,240 @@ async function submit(pm) {
 
 	// console.log('paymentMethod', paymentMethod)
 
-	if (paymentMethod === 'COD' || paymentMethod === 'manual') {
-		try {
-			data.err = null
-			loading = true
-
-			setTimeout(() => {
-				paymentProcessingStep = 2
-				setTimeout(() => {
-					paymentProcessingStep = 3
-				}, 1000)
-			}, 1000)
-
-			const res = await OrdersService.codCheckout({
-				address: data.addressId,
-				cartId: data?.cartId,
-				paymentMethod: 'COD',
-				prescription: data.prescription?._id,
-				origin: $page.data.origin,
-				storeId: $page.data.store?.id
-			})
-
-			// console.log('res of cod', res)
-
-			goto(`/payment/success?orderId=${res?._id || res?.id}&status=PAYMENT_SUCCESS&provider=COD`)
-		} catch (e) {
-			data.err = e
-		} finally {
-			loading = false
-		}
-	} else if (paymentMethod === 'BankTransfer') {
-		if (comment) {
+	if (
+		paymentMethod === 'COD' ||
+		paymentMethod === 'manual' ||
+		paymentMethod === 'BankTransfer' ||
+		paymentMethod === 'Cashfree' ||
+		paymentMethod === 'Phonepe' ||
+		paymentMethod === 'Paypal' ||
+		paymentMethod === 'Razorpay'
+	) {
+		if (paymentMethod === 'COD' || paymentMethod === 'manual') {
 			try {
 				data.err = null
 				loading = true
-
-				setTimeout(() => {
-					paymentProcessingStep = 2
-					setTimeout(() => {
-						paymentProcessingStep = 3
-					}, 1000)
-				}, 1000)
+				loadingForPaymentProcessingSteps = true
 
 				const res = await OrdersService.codCheckout({
 					address: data.addressId,
-					cartId: data?.cartId,
-					comment,
+					cartId: $page.data.cartId,
 					paymentMethod: 'COD',
 					prescription: data.prescription?._id,
 					origin: $page.data.origin,
 					storeId: $page.data.store?.id
 				})
 
-				// console.log('res of cod', res)
-
-				comment = ''
+				// console.log('res of cod',res.id,res._id, res)
 
 				goto(`/payment/success?orderId=${res?._id || res?.id}&status=PAYMENT_SUCCESS&provider=COD`)
 			} catch (e) {
 				data.err = e
+				gotoOrder(orderNo)
 			} finally {
 				loading = false
 			}
-		} else {
-			toast('Please enter your transaction id to place your order', 'info')
+		} else if (paymentMethod === 'BankTransfer') {
+			if (comment) {
+				try {
+					data.err = null
+					loading = true
+					loadingForPaymentProcessingSteps = true
 
-			commentMissing = true
+					const res = await OrdersService.codCheckout({
+						address: data.addressId,
+						cartId: data?.cartId,
+						comment,
+						paymentMethod: 'COD',
+						prescription: data.prescription?._id,
+						origin: $page.data.origin,
+						storeId: $page.data.store?.id
+					})
 
-			setTimeout(() => {
-				commentMissing = false
-			}, 820)
-		}
-	} else if (paymentMethod === 'Cashfree') {
-		try {
-			data.err = null
-			loading = true
+					// console.log('res of cod', res)
 
-			setTimeout(() => {
-				paymentProcessingStep = 2
-				setTimeout(() => {
-					paymentProcessingStep = 3
-				}, 500)
-			}, 500)
+					comment = ''
 
-			const res = await OrdersService.cashfreeCheckout({
-				address: data.addressId,
-				origin: $page.data.origin,
-				storeId: $page.data.store?.id
-			})
-
-			// console.log('res of Cashfree', res.payment_session_id)
-			if (!res.payment_session_id) {
-				data.err = 'Payment failed. Try again'
-				toast('Payment failed. Try again', 'error')
-			}
-			const cashfree = Cashfree({ mode: res.payment_mode })
-			cashfree
-				.checkout({
-					paymentSessionId: res.payment_session_id,
-					redirectTarget: '_parent',
-					returnUrl: res.order_meta?.return_url
-				})
-				.then(function () {
-					console.log('on going redirection')
-				})
-			// if (res?.redirectUrl && res?.redirectUrl !== null) {
-			// 	goto(`${res?.redirectUrl}`)
-			// } else {
-			// 	toast('Something went wrong', 'error')
-			// }
-		} catch (e) {
-			data.err = e
-			goto(`/payment/failed?id=${data.addressId}&status=PAYMENT_PENDING&provider=Cashfree`)
-		} finally {
-			loading = false
-		}
-	} else if (paymentMethod === 'Phonepe') {
-		try {
-			data.err = null
-			loading = true
-
-			setTimeout(() => {
-				paymentProcessingStep = 2
-				setTimeout(() => {
-					paymentProcessingStep = 3
-				}, 500)
-			}, 500)
-
-			const res = await OrdersService.phonepeCheckout({
-				address: data.addressId,
-				origin: $page.data.origin,
-				storeId: $page.data.store?.id
-			})
-
-			// console.log('res of Phonepe', res)
-
-			if (res?.redirectUrl && res?.redirectUrl !== null) {
-				goto(`${res?.redirectUrl}`)
-			} else {
-				toast('Something went wrong', 'error')
-			}
-		} catch (e) {
-			data.err = e
-		} finally {
-			loading = false
-		}
-	} else if (paymentMethod === 'Paypal') {
-		try {
-			data.err = null
-			loading = true
-
-			setTimeout(() => {
-				paymentProcessingStep = 2
-				setTimeout(() => {
-					paymentProcessingStep = 3
-				}, 500)
-			}, 500)
-
-			const res = await OrdersService.paypalCheckout({
-				address: data.addressId,
-				origin: $page.data.origin,
-				storeId: $page.data.store?.id
-			})
-
-			// console.log('res of Paypal', res)
-
-			if (res?.redirect_url && res?.redirect_url !== null) {
-				goto(`${res?.redirect_url}`)
-			} else {
-				toast('Something went wrong', 'error')
-			}
-		} catch (e) {
-			data.err = e
-		} finally {
-			loading = false
-		}
-	} else if (paymentMethod === 'Razorpay') {
-		try {
-			data.err = null
-			loading = true
-
-			setTimeout(() => {
-				paymentProcessingStep = 2
-				setTimeout(() => {
-					paymentProcessingStep = 3
-				}, 500)
-			}, 500)
-
-			const rp = await OrdersService.razorpayCheckout({
-				address: data.addressId,
-				cartId: data?.cartId,
-				origin: $page.data.origin,
-				storeId: $page.data.store?.id
-			})
-
-			// console.log('rp of Razorpay', res)
-
-			const options = {
-				key: rp.keyId, // Enter the Key ID generated from the Dashboard
-				name: 'Litekart.in',
-				description: 'Payment for Litekart',
-				image: logo,
-				amount: rp.amount,
-				order_id: rp.id,
-				async handler(response) {
-					try {
-						const capture = await OrdersService.razorpayCapture({
-							rpOrderId: response.razorpay_order_id,
-							rpPaymentId: response.razorpay_payment_id,
-							origin: $page.data.origin,
-							storeId: $page.data.store?.id
-						})
-
-						toast('Payment success', 'success')
-						goto(`/payment/process?pg=razorpay&order_no=${capture.order_no}`)
-					} catch (e) {
-						data.err = e
-						// goto(`/payment/failed?ref=/checkout/payment-options?address=${data.addressId}`)
-					} finally {
-					}
-				},
-				prefill: {
-					name: `${data.me.firstName} ${data.me.lastName}`,
-					phone: data.me.phone,
-					email: data.me.email || 'help@litekart.in',
-					contact: data.me.phone
-				},
-				notes: {
-					address: 'Padmajyoti Marg, Semiliguda, Odisha 764036'
-				},
-				theme: {
-					color: '#112D4E'
+					goto(
+						`/payment/success?orderId=${res?._id || res?.id}&status=PAYMENT_SUCCESS&provider=COD`
+					)
+				} catch (e) {
+					data.err = e
+					gotoOrder(orderNo)
+				} finally {
+					loading = false
 				}
-			}
+			} else {
+				toast('Please enter your transaction id to place your order', 'info')
 
-			const rzp1 = new Razorpay(options)
-			rzp1.open()
-		} catch (e) {
-			data.err = e
-		} finally {
-			loading = false
+				commentMissing = true
+
+				setTimeout(() => {
+					commentMissing = false
+				}, 820)
+			}
+		} else if (paymentMethod === 'Cashfree') {
+			try {
+				data.err = null
+				loading = true
+				loadingForPaymentProcessingSteps = true
+
+				const res = await OrdersService.cashfreeCheckout({
+					address: data.addressId,
+					orderNo: orderNo,
+					origin: $page.data.origin,
+					storeId: $page.data.store?.id,
+					cartId: $page.data.cartId
+				})
+
+				// console.log('res of cashfree', res)
+
+				orderNo = res.order_no || ''
+
+				if (!res.payment_session_id) {
+					data.err = 'Payment failed. Try again'
+					toast('Payment failed. Try again', 'error')
+				}
+
+				const cashfree = Cashfree({ mode: res.payment_mode })
+
+				cashfree
+					.checkout({
+						paymentSessionId: res.payment_session_id,
+						redirectTarget: '_parent',
+						returnUrl: res.order_meta?.return_url
+					})
+					.then(function () {
+						// console.log('on going redirection')
+					})
+				// if (res?.redirectUrl && res?.redirectUrl !== null) {
+				// 	goto(`${res?.redirectUrl}`)
+				// } else {
+				// 	toast('Something went wrong', 'error')
+				// }
+			} catch (e) {
+				data.err = e
+				toast(`Payment failed, please try again`, 'error')
+				gotoOrder(orderNo)
+
+				// goto(`/payment/failed?id=${data.addressId}&status=PAYMENT_PENDING&provider=Cashfree`)
+			} finally {
+				loading = false
+			}
+		} else if (paymentMethod === 'Phonepe') {
+			try {
+				data.err = null
+				loading = true
+				loadingForPaymentProcessingSteps = true
+
+				const res = await OrdersService.phonepeCheckout({
+					address: data.addressId,
+					origin: $page.data.origin,
+					storeId: $page.data.store?.id
+				})
+
+				// console.log('res of Phonepe', res)
+
+				if (res?.redirectUrl && res?.redirectUrl !== null) {
+					goto(`${res?.redirectUrl}`)
+				} else {
+					toast('Something went wrong', 'error')
+				}
+			} catch (e) {
+				data.err = e
+				gotoOrder(orderNo)
+			} finally {
+				loading = false
+			}
+		} else if (paymentMethod === 'Paypal') {
+			try {
+				data.err = null
+				loading = true
+				loadingForPaymentProcessingSteps = true
+
+				const res = await OrdersService.paypalCheckout({
+					address: data.addressId,
+					origin: $page.data.origin,
+					storeId: $page.data.store?.id
+				})
+
+				// console.log('res of Paypal', res)
+
+				if (res?.redirect_url && res?.redirect_url !== null) {
+					goto(`${res?.redirect_url}`)
+				} else {
+					toast('Something went wrong', 'error')
+				}
+			} catch (e) {
+				data.err = e
+				gotoOrder(orderNo)
+			} finally {
+				loading = false
+			}
+		} else if (paymentMethod === 'Razorpay') {
+			try {
+				data.err = null
+				loading = true
+				loadingForPaymentProcessingSteps = true
+
+				const rp = await OrdersService.razorpayCheckout({
+					address: data.addressId,
+					orderNo: orderNo,
+					cartId: $page.data.cartId,
+					origin: $page.data.origin,
+					storeId: $page.data.store?.id
+				})
+
+				// console.log('rp of Razorpay', rp)
+
+				orderNo = rp.order_no || ''
+
+				const options = {
+					key: rp.keyId, // Enter the Key ID generated from the Dashboard
+					// name: $page.data?.store?.websiteName || 'Litekart',
+					// description: 'Payment for Litekart',
+					// image: $page.data?.store?.logo || logo,
+					amount: rp.amount,
+					order_id: rp.id,
+					async handler(response) {
+						try {
+							const capture = await OrdersService.razorpayCapture({
+								rpOrderId: response.razorpay_order_id,
+								rpPaymentId: response.razorpay_payment_id,
+								origin: $page.data.origin,
+								storeId: $page.data.store?.id
+							})
+
+							toast('Payment success', 'success')
+							goto(`/payment/process?pg=razorpay&order_no=${capture.order_no}`)
+						} catch (e) {
+							data.err = e
+						} finally {
+						}
+					},
+					prefill: {
+						name: `${data.me.firstName} ${data.me.lastName}`,
+						phone: data.me.phone,
+						email: data.me.email || data.address.email || 'hi@litekart.in',
+						contact: data.me.phone
+					}
+					// notes: {
+					// 	address: ''
+					// },
+					// theme: {
+					// 	color: $page.data.store?.themeColor || '#18181B'
+					// }
+				}
+
+				const rzp1 = new Razorpay(options)
+				rzp1.open()
+			} catch (e) {
+				data.err = e
+				toast(`Payment failed, please try again`, 'error')
+				gotoOrder(orderNo)
+			} finally {
+				loading = false
+			}
 		}
 	} else {
 		paymentDenied = true
@@ -363,12 +331,19 @@ async function submit(pm) {
 	}
 }
 
+function gotoOrder(orderNo) {
+	const u = new URL($page.url)
+	u.searchParams.set('order_no', orderNo)
+	goto(u.toString())
+}
+
 function checkIfStripeCardValid({ detail }) {
 	disabled = !detail
 }
 </script>
 
 <SEO {...seoProps} />
+
 <div class="container mx-auto min-h-screen w-full max-w-6xl p-3 py-5 sm:p-10">
 	<CheckoutHeader selected="payment" />
 
@@ -399,9 +374,13 @@ function checkIfStripeCardValid({ detail }) {
 											{pm.name || pm.value || pm.id}
 										</h4>
 
-										{#if pm.text}
-											<p class="mt-2">{@html pm.text}</p>
-										{/if}
+										<p class="mt-2">
+											{#if pm.text}
+												{@html pm.text}
+											{:else}
+												Payment securly
+											{/if}
+										</p>
 									</div>
 
 									<div class="shrink-0">
@@ -521,55 +500,6 @@ function checkIfStripeCardValid({ detail }) {
 				</div>
 
 				<hr class="mb-5" />
-			{:else if data.cart?.shippingAddress}
-				<div class="mb-5">
-					<h5 class="mb-2">Delivery Address</h5>
-
-					<p>
-						{data.cart?.shippingAddress?.first_name || '_'}
-						{data.cart?.shippingAddress?.last_name || '_'}
-
-						<br />
-
-						{#if data.cart?.shippingAddress?.address_1}
-							{data.cart?.shippingAddress?.address_1}
-						{/if}
-
-						{#if data.cart?.shippingAddress?.address_2}
-							, {data.cart?.shippingAddress?.address_2}
-						{/if}
-
-						{#if data.cart?.shippingAddress?.city}
-							, {data.cart?.shippingAddress?.city}
-						{/if}
-
-						{#if data.cart?.shippingAddress?.state}
-							, {data.cart?.shippingAddress?.state}
-						{/if}
-
-						{#if data.cart?.shippingAddress?.country}
-							, {data.cart?.shippingAddress?.country}
-						{/if}
-
-						{#if data.cart?.shippingAddress?.postal_code}
-							- {data.cart?.shippingAddress?.postal_code}
-						{/if}
-					</p>
-
-					{#if data.cart?.shippingAddress?.phone}
-						<p>
-							{data.cart?.shippingAddress?.phone}
-						</p>
-					{/if}
-
-					{#if data.cart?.shippingAddress?.email}
-						<p>
-							{data.cart?.shippingAddress?.email}
-						</p>
-					{/if}
-				</div>
-
-				<hr class="mb-5" />
 			{/if}
 
 			{#if data.prescription}
@@ -619,40 +549,13 @@ function checkIfStripeCardValid({ detail }) {
 				hideCheckoutButton="{selectedPaymentMethod.name === 'Stripe'}"
 				on:submit="{() => submit(selectedPaymentMethod)}" />
 
-			<!-- disabled="{!razorpayReady ||
-					(!selectedPaymentMethod?.name && !selectedPaymentMethod?.value) ||
-					(selectedPaymentMethod?.name === 'Stripe' && disabled)}" -->
-
 			<TrustBaggeContainer class="mt-5" />
 		</div>
 	</div>
 </div>
 
-{#if loading}
-	<div class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-60 p-5 sm:p-10">
-		{#if paymentProcessingStep === 1}
-			<div
-				class="h-60 w-60 bg-white p-4 flex flex-col gap-4 items-center justify-center text-center font-semibold rounded transform translate-x-full animate-slide-in-left">
-				<img src="{lightning}" alt="" class="h-8 w-auto object-contain object-center" />
-
-				<span> Fetching your order info </span>
-			</div>
-		{:else if paymentProcessingStep === 2}
-			<div
-				class="h-60 w-60 bg-white p-4 flex flex-col gap-4 items-center justify-center text-center font-semibold rounded transform animate-bounce">
-				<img src="{list}" alt="" class="h-8 w-auto object-contain object-center" />
-
-				<span>Filling your information</span>
-			</div>
-		{:else}
-			<div
-				class="h-60 w-60 bg-white p-4 flex flex-col gap-4 items-center justify-center text-center font-semibold rounded transform animate-bounce">
-				<img src="{tick}" alt="" class="h-8 w-auto object-contain object-center" />
-
-				<span>All set</span>
-			</div>
-		{/if}
-	</div>
+{#if loadingForPaymentProcessingSteps}
+	<PaymentLoading bind:loadingForPaymentProcessingSteps="{loadingForPaymentProcessingSteps}" />
 {/if}
 
 <iframe name="cashfreeFrame" title="Cashfree" class="absolute" allow="payment"></iframe>

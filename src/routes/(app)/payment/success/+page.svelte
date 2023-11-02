@@ -155,16 +155,14 @@ onMount(async () => {
 					</li>
 
 					{#if data.order?.paymentGateway}
-						<li class="flex items-start gap-2">
-							<p class="flex w-36 shrink-0 items-center justify-between gap-1">
-								<span>Payment Gateway</span> <span>:</span>
-							</p>
+						<li>
+							<p class="flex items-start gap-2">
+								<span class="w-36 shrink-0">Payment Gateway </span>
 
-							<spn class="first-letter:uppercase">
-								<span>
-									{data.order?.paymentGateway || '_'}
+								<span class="uppercase">
+									: &nbsp; {data.order?.paymentGateway || '_'}
 								</span>
-							</spn>
+							</p>
 						</li>
 					{/if}
 				</ul>
@@ -172,7 +170,7 @@ onMount(async () => {
 				<div class="mb-5 flex flex-wrap items-center justify-center gap-2 sm:mb-10 sm:gap-5">
 					{#if data.order?.seatsBooked}
 						<a
-							href="/my/orders?page=1#BusTickets"
+							href="/my/orders?page=1"
 							rel="noopener"
 							aria-label="Click to view the booking details">
 							<PrimaryButton type="button">View Booking Details</PrimaryButton>
@@ -241,7 +239,9 @@ onMount(async () => {
 												<span>
 													Qty :
 
-													{item.qty}
+													<b>
+														{item.qty}
+													</b>
 												</span>
 											{/if}
 
@@ -249,7 +249,9 @@ onMount(async () => {
 												<span>
 													Size :
 
-													{item.size}
+													<b>
+														{item.size}
+													</b>
 												</span>
 											{/if}
 
@@ -257,16 +259,23 @@ onMount(async () => {
 												{#each item?.usedOptions as option}
 													{#if option?.val?.length && option?.val !== undefined && option?.val != ''}
 														<div class="flex flex-wrap gap-2">
-															<h6>{option.name}:</h6>
+															<span>{option.name}:</span>
 
 															{#if option.val}
-																{#each option.val as v}
-																	{#if v}
-																		<div class="font-bold">
-																			{v}
-																		</div>
-																	{/if}
-																{/each}
+																<ul
+																	class="flex flex-wrap items-center gap-x-2 gap-y-1 text-zinc-800">
+																	{#each option.val as v, valIndex}
+																		{#if v}
+																			<b>
+																				{v}
+																			</b>
+
+																			{#if valIndex < option.val?.length - 1}
+																				,
+																			{/if}
+																		{/if}
+																	{/each}
+																</ul>
 															{/if}
 														</div>
 													{/if}
@@ -317,15 +326,22 @@ onMount(async () => {
 												{/if}
 											</div>
 
-											{#if item?.status === 'delivered'}
-												<div class="mt-2 xl:mt-0 xl:w-1/3">
-													<a
-														href="/my/reviews/create?pid={item?.pid}&oid={item?.orderItemId}&ref=/product/{item?.slug}"
-														aria-label="Click to visit rate & review product"
-														class="whitespace-nowrap font-semibold text-indigo-500 focus:outline-none hover:underline">
-														Rate & Review Product
-													</a>
-												</div>
+											{#if item?.files?.length}
+												<ul class="mt-2 p-0 list-none flex flex-col gap-1">
+													{#each item?.files as file, fx}
+														<li>
+															<a href="{file}" download>
+																<PrimaryButton loadingringsize="xs" class="text-xs">
+																	Download File
+
+																	{#if item?.files?.length > 1}
+																		{fx + 1}
+																	{/if}
+																</PrimaryButton>
+															</a>
+														</li>
+													{/each}
+												</ul>
 											{/if}
 										</div>
 									</div>
@@ -385,6 +401,17 @@ onMount(async () => {
 										{/if}
 									</span>
 								</p>
+
+								{#if data.order?.amount.cod_charges}
+									<p class="flex items-center">
+										<span class="mr-2 w-32">COD Charges</span>
+
+										<span>
+											: &nbsp;
+											{currency(data.order?.amount.cod_charges, $page.data?.store?.currencySymbol)}
+										</span>
+									</p>
+								{/if}
 
 								<hr class="w-full border-t border-zinc-200" />
 

@@ -21,6 +21,7 @@ import MobileFooter from './MobileFooter.svelte'
 import Modal from './Modal.svelte'
 import PageIdPickedBanner from './PageIdPickedBanner.svelte'
 import PageTransitions from './PageTransitions.svelte'
+import PopUpReviews from './PopUpReviews.svelte'
 import PreloadingIndicator from './PreloadingIndicator.svelte'
 import Pricesummary from './Pricesummary.svelte'
 import ProductNav from './ProductNav.svelte'
@@ -93,6 +94,7 @@ export {
 	PageTransitions,
 	Pagination,
 	PopularProductsHome,
+	PopUpReviews,
 	PreloadingIndicator,
 	Pricesummary,
 	ProductCard,

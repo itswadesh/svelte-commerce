@@ -123,6 +123,44 @@ export const addToCartService = async ({
 	}
 }
 
+export const createBackOrder = async ({
+	pid,
+	qty,
+	origin = null,
+	sid = null,
+	storeId,
+}) => {
+	try {
+		let res = {}
+		if (isServer) {
+			res = await postBySid(
+				`backorder`,
+				{
+					pid,
+					qty,
+					store: storeId,
+				},
+				sid
+			)
+		} else {
+			res = await post(
+				`backorder`,
+				{
+					id: 'new',
+					pid,
+					qty,
+					store: storeId,
+				},
+				origin
+			)
+		}
+
+		return res || {}
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
+	}
+}
+
 export const applyCouponService = async ({
 	cartId,
 	code,

@@ -204,15 +204,18 @@ async function getWishlistedProducts() {
 								</div>
 							</a>
 
-							<input type="hidden" name="pid" value="{w.product?._id}" />
+							<input type="hidden" name="pid" value="{w.product?._id || null}" />
 
-							<input type="hidden" name="vid" value="{w.product?._id}" />
+							<input type="hidden" name="vid" value="{w.product?._id || null}" />
 
 							<input type="hidden" name="qty" value="{1}" />
 
-							<input type="hidden" name="options" value="{JSON.stringify(w.product?.options)}" />
+							<input
+								type="hidden"
+								name="options"
+								value="{JSON.stringify(w.product?.options) || null}" />
 
-							<input type="hidden" name="customizedImg" value="{'undefined'}" />
+							<input type="hidden" name="customizedImg" value="{null}" />
 
 							<button
 								type="submit"

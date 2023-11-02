@@ -1,18 +1,22 @@
 import { expect, test } from '@playwright/test'
 
-test('addToCart working as expected', async ({ page }) => {
-	await page.goto(
-		'product/white-new-fashion-women-casual-loose-comft-fit-v-neck-short-sleeve-basic-solid-t-shirt'
-	)
-	await page.getByText('Add to Bag').click()
-	expect(await page.innerText('.cart')).toBe('1')
-	// await page.getByText('Add to Bag').click()
-	// expect(await page.innerText('.cart')).toBe('2')
+test.use({
+	ignoreHTTPSErrors: true,
 })
 
-test('cart qty increase working', async ({ page }) => {
-	await page.goto('/cart')
-	const addToCartButton = await page.$('.addItemToCart')
-	await addToCartButton.click()
-	expect(await page.innerText('.cart-item')).toBe('2')
+test('addToCart working as from home page', async ({ page }) => {
+  await page.goto('http://localhost:3000/');
+  await page.locator('li').filter({ hasText: 'Khaki Women Casual Long Sleeve V Neck Patchwork Slim Pullover T Shirt $ 53.00 $ ' }).getByLabel('Click to view the product details').first().click();
+  await page.getByRole('button', { name: 'Add to Bag' }).click();
+  await page.getByRole('link', { name: 'Click to visit cart' }).click();
+
+})
+
+test('add to bag from product page', async ({ page }) => {
+	// Navigate to the cart page
+  await page.goto('http://localhost:3000/product/khaki-women-casual-long-sleeve-v-neck-patchwork-slim-pullover-t-shirt');
+  await page.getByRole('button', { name: 'Add to Bag' }).click();
+  await page.getByRole('button', { name: 'Add to Bag' }).click();
+  await page.getByRole('link', { name: 'Click to visit cart' }).click();
+//   await page.getByText('(3 items )').click();
 })

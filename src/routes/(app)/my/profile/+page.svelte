@@ -19,7 +19,6 @@ import Skeleton from '$lib/ui/Skeleton.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 const seoProps = {
 	title: 'Dashboard - Edit Profile ',
@@ -58,11 +57,8 @@ async function saveProfile() {
 
 		data.profile = await put('users/update-profile', e, $page.data.origin)
 
-		// Need to fix for medusajs
-
 		if (data.profile) {
 			data.profile.dob = data.profile.dob ? dayjs(data.profile.dob).format('YYYY-MM-DD') : null
-			formChanged = false
 			toast('Profile Info Saved.', 'success')
 		}
 
@@ -75,6 +71,7 @@ async function saveProfile() {
 		toast(e, 'error')
 	} finally {
 		loading = false
+		formChanged = false
 	}
 }
 </script>

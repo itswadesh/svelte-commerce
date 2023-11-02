@@ -8,6 +8,7 @@ import CategoryPoolButtons from '$lib/themes/misiki/CategoryPoolButtons.svelte'
 import CollectionsGeneral from '$lib/themes/misiki/CollectionsGeneral.svelte'
 import CollectionsHome from '$lib/themes/misiki/CollectionsHome.svelte'
 import CollectionsHome2 from '$lib/themes/misiki/CollectionsHome2.svelte'
+import CustomBanners from '$lib/themes/misiki/CustomBanners.svelte'
 import CustomerFeedback from '$lib/themes/misiki/CustomerFeedback.svelte'
 import Deals from '$lib/themes/misiki/Deals.svelte'
 import DeliveryOptions from '$lib/themes/misiki/DeliveryOptions.svelte'
@@ -15,6 +16,7 @@ import Footer from '$lib/themes/misiki/Footer.svelte'
 import FrequentlyBoughtProduct from '$lib/themes/misiki/FrequentlyBoughtProduct.svelte'
 import Hero from '$lib/themes/misiki/Hero.svelte'
 import HeroBanners from '$lib/themes/misiki/HeroBanners.svelte'
+import Home from '$lib/themes/misiki/Home.svelte'
 import MegamenuHorizontal from '$lib/themes/misiki/MegamenuHorizontal.svelte'
 import MegamenuVertical from '$lib/themes/misiki/MegamenuVertical.svelte'
 import Nav from '$lib/themes/misiki/Nav.svelte'
@@ -35,6 +37,7 @@ export {
     CollectionsGeneral,
     CollectionsHome,
     CollectionsHome2,
+    CustomBanners,
     CustomerFeedback,
     Deals,
     DeliveryOptions,
@@ -42,6 +45,7 @@ export {
     FrequentlyBoughtProduct,
     Hero,
     HeroBanners,
+    Home,
     MegamenuHorizontal,
     MegamenuVertical,
     Nav,

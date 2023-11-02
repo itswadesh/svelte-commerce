@@ -1,7 +1,6 @@
 <script>
-// import { getMegamenuFromStore } from '$lib/store/megamenu'
 import { browser } from '$app/environment'
-import { CategoryService } from '$lib/services'
+import { getAllMegamenuFromStore } from '$lib/store/megamenu'
 import { LazyImg, MobileFooter } from '$lib/components'
 import { navigateToProperPath, toast } from '$lib/utils'
 import { onMount } from 'svelte'
@@ -33,42 +32,23 @@ let bgColors = [
 ]
 
 onMount(() => {
-	getMegaMenu()
+	getMegamenu()
 })
 
-async function getMegaMenu() {
-	loading = true
+async function getMegamenu() {
 	if (browser) {
 		try {
-			// megamenu = await getMegamenuFromStore({
-			// 	sid: null,
-			// 	storeId: $page?.data?.store?.id,
-			// 	isCors: $page?.data?.store?.isCors,
-			// 	origin: $page.data.origin
-			// })
-
-			const localMegamenu = localStorage.getItem('megamenu')
-
-			if (!localMegamenu || localMegamenu === 'undefined') {
-				megamenu = await CategoryService.fetchMegamenuData({
-					origin: $page.data.origin,
-					storeId: $page.data.store?.id
-				})
-			} else {
-				megamenu = JSON.parse(localMegamenu)
-			}
-
-			if (megamenu?.length) {
-				megamenu = megamenu.filter((e) => {
-					return e.name !== 'New Arrivals'
-				})
-			}
+			megamenu = await getAllMegamenuFromStore({
+				forceUpdate: true,
+				storeId: $page?.data?.store?.id,
+				isCors: $page?.data?.store?.isCors,
+				origin: $page.data.origin
+			})
 		} catch (e) {
 			toast(e, 'error')
 		} finally {
 		}
 	}
-	loading = false
 }
 
 function toggle(mx) {
@@ -95,7 +75,7 @@ function toggle2(cx) {
 	<div class="mb-20 bg-white">
 		<!-- 1st level categories -->
 
-		{#if megamenu.length}
+		{#if megamenu?.length}
 			<ul class="flex flex-col divide-y-2 divide-white">
 				{#each megamenu as m, mx}
 					{#if m}
@@ -196,7 +176,7 @@ function toggle2(cx) {
 													<a
 														href="{navigateToProperPath(c.link || c.slug)}"
 														aria-label="Click to visit {c.name || '##'}"
-														class="flex items-center gap-4 py-3 px-8 font-medium">
+														class="text-left flex items-center gap-4 py-3 px-8 font-medium">
 														{#if c.img}
 															<div class="h-12 w-12 shrink-0 overflow-hidden rounded-full">
 																<LazyImg
@@ -226,7 +206,7 @@ function toggle2(cx) {
 																	<a
 																		href="{navigateToProperPath(cc.link || cc.slug)}"
 																		aria-label="Click to visit {cc.name || '##'}"
-																		class="flex w-full items-center gap-4 py-3 px-8 text-sm">
+																		class="text-left flex w-full items-center gap-4 py-3 px-8 text-sm">
 																		{cc.name}
 																	</a>
 																</li>

@@ -71,11 +71,18 @@ onMount(() => {
 											href="{`/product/${item.slug}`}"
 											aria-label="Click to view the product details"
 											class="shrink-0">
-											<LazyImg
-												src="{item.isCustomized ? item.customizedImg : item.img}"
-												alt=""
-												width="56"
-												class="h-auto w-14 object-contain object-top" />
+											{#if item.isCustomized}
+												<img
+													src="{item.customizedImg}"
+													alt=" "
+													class="h-auto w-14 object-contain object-top" />
+											{:else}
+												<LazyImg
+													src="{item.img}"
+													alt=" "
+													width="56"
+													class="h-auto w-14 object-contain object-top" />
+											{/if}
 										</a>
 
 										<div class="flex w-full flex-1 flex-col gap-0.5 xl:pr-4">
@@ -104,7 +111,9 @@ onMount(() => {
 												<span>
 													Qty :
 
-													{item.qty}
+													<b>
+														{item.qty}
+													</b>
 												</span>
 											{/if}
 
@@ -112,7 +121,9 @@ onMount(() => {
 												<span>
 													Size :
 
-													{item.size}
+													<b>
+														{item.size}
+													</b>
 												</span>
 											{/if}
 
@@ -120,16 +131,22 @@ onMount(() => {
 												{#each item?.usedOptions as option}
 													{#if option?.val?.length && option?.val !== undefined && option?.val != ''}
 														<div class="flex flex-wrap gap-2">
-															<h6>{option.name}:</h6>
+															<span>{option.name}:</span>
 
 															{#if option.val}
-																{#each option.val as v}
-																	{#if v}
-																		<div class="font-bold">
-																			{v}
-																		</div>
-																	{/if}
-																{/each}
+																<ul class="flex flex-wrap items-center gap-x-2 gap-y-1">
+																	{#each option.val as v, valIndex}
+																		{#if v}
+																			<b>
+																				{v}
+																			</b>
+
+																			{#if valIndex < option.val?.length - 1}
+																				,
+																			{/if}
+																		{/if}
+																	{/each}
+																</ul>
 															{/if}
 														</div>
 													{/if}
@@ -180,12 +197,30 @@ onMount(() => {
 												{/if}
 											</div>
 
+											{#if item?.files?.length}
+												<ul class="mt-2 p-0 list-none flex flex-col gap-1">
+													{#each item?.files as file, fx}
+														<li>
+															<a href="{file}" download>
+																<PrimaryButton loadingringsize="xs" class="text-xs">
+																	Download File
+
+																	{#if item?.files?.length > 1}
+																		{fx + 1}
+																	{/if}
+																</PrimaryButton>
+															</a>
+														</li>
+													{/each}
+												</ul>
+											{/if}
+
 											{#if item?.status === 'delivered'}
 												<div class="mt-2 xl:mt-0 xl:w-1/3">
 													<a
 														href="/my/reviews/create?pid={item?.pid}&oid={item?.orderItemId}&ref=/product/{item?.slug}"
 														aria-label="Click to visit rate & review product"
-														class="whitespace-nowrap font-semibold text-indigo-500 focus:outline-none hover:underline">
+														class="max-w-max whitespace-nowrap font-semibold text-indigo-500 focus:outline-none hover:underline">
 														Rate & Review Product
 													</a>
 												</div>
@@ -241,6 +276,21 @@ onMount(() => {
 											{/if}
 										</span>
 									</p>
+
+									{#if data.order?.amount.cod_charges}
+										<p class="flex items-center">
+											<span class="mr-2 w-32">COD Charges</span>
+
+											<span>
+												: &nbsp;
+
+												{currency(
+													data.order?.amount.cod_charges,
+													$page.data?.store?.currencySymbol
+												)}
+											</span>
+										</p>
+									{/if}
 
 									<hr class="w-full border-t border-zinc-200" />
 
@@ -349,6 +399,16 @@ onMount(() => {
 							{date(data.order?.expectedDeliveryDate)}
 						</p>
 					</div>
+				{/if}
+
+				{#if data.order.tracking_link}
+					<a
+						href="{data.order.tracking_link}"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="mb-5 font-semibold text-indigo-500 underline hover:text-indigo-700">
+						Track your order
+					</a>
 				{/if}
 
 				<div class="mt-5 sm:mt-10 flex flex-wrap gap-10">

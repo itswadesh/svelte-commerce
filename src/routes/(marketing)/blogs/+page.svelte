@@ -1,8 +1,8 @@
-<style>
+<!-- <style>
 .zinc-pattern {
 	background: linear-gradient(120deg, #b2b2b2, #f2f2f2, #b2b2b2, #f2f2f2, #b2b2b2);
 }
-</style>
+</style> -->
 
 <script>
 import { browser } from '$app/environment'
@@ -10,11 +10,13 @@ import { constructURL2 } from '$lib/utils'
 import { goto } from '$app/navigation'
 import { Pagination } from '$lib/components'
 import { PrimaryButton } from '$lib/ui'
+import blogBackground from '$lib/assets/blogs/white-gray-blogs-background.png'
 import BlogPostGrid from './_BlogPostGrid.svelte'
 import emptyBlog from '$lib/assets/no/empty-blog.svg'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 const seoProps = {
 	title: ' Blog & Collections',
@@ -81,39 +83,41 @@ function changePage(e, p) {
 <SEO {...seoProps} />
 
 <main class="min-h-screen">
-	{#if data?.blogs}
+	{#if data?.blogs?.count}
 		<div>
-			<div class="zinc-pattern mb-5 border-b shadow-md sm:mb-10">
+			<div
+				class="mb-5 border-b shadow sm:mb-10 bg-cover bg-left"
+				style="background-image: url({blogBackground});">
 				<div class="container mx-auto p-4 md:p-10">
-					<h1 class="font-hairline my-2 items-center text-xl text-zinc-800">
-						<span class="text-3xl font-bold">{data.blogs?.length}</span>
+					<h1 class="my-2 items-center">
+						<span class="text-3xl font-bold">{data?.blogs?.count}</span>
 
-						<span>awesome collection articles</span>
+						<span>
+							awesome {#if data?.blogs?.count > 1} articles collection {:else} article {/if}
+						</span>
 					</h1>
 
-					<p class="text-sm font-light">
-						Covering ecommerce, business solutions & technology advancements
-					</p>
+					<p>Covering ecommerce, business solutions & technology advancements</p>
 				</div>
 			</div>
 
 			<div class="container mx-auto px-4 md:px-10">
 				<div class="grid grid-cols-1 gap-2 sm:gap-4 md:grid-cols-2 lg:grid-cols-3">
-					{#each data.blogs as blog}
+					{#each data?.blogs?.data as blog}
 						<BlogPostGrid blog="{blog}" />
 					{/each}
 				</div>
 			</div>
 
 			<Pagination
-				count="{Math.ceil(data.blogs.length)}"
-				current="{parseInt(data?.page || 1)}"
+				count="{Math.ceil((data.blogs?.count || 1) / data.blogs?.pageSize)}"
+				current="{data?.currentPage || 1}"
 				on:change="{changePage}" />
 		</div>
 	{:else}
 		<div class="flex items-center justify-center" style="height: 60vh;">
 			<div class="m-10 flex flex-col items-center justify-center text-center">
-				<h1 class="mb-10 text-xl capitalize sm:text-2xl lg:text-3xl">Oops!!, No blog found</h1>
+				<h1 class="mb-10 capitalize">Oops!!, No blog found</h1>
 
 				<div class="mb-5">
 					<img
@@ -122,7 +126,7 @@ function changePage(e, p) {
 						class="h-60 w-auto object-contain text-xs" />
 				</div>
 
-				<p class="mb-5 text-center text-zinc-500">No data found</p>
+				<p class="mb-5 text-center">No data found</p>
 
 				<PrimaryButton class="text-sm" on:click="{() => goto('/')}">Back to Home</PrimaryButton>
 			</div>

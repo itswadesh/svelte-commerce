@@ -30,7 +30,6 @@ let states = []
 
 onMount(async () => {
 	await invalidateAll()
-
 	if (countries?.length === 1) {
 		address.country = countries[0].code
 	} else if (countries?.length > 1) {
@@ -91,35 +90,35 @@ async function fetchStates(country) {
 	}
 }
 
-// async function fetchStateAndCity(zip) {
-// 	if (zip.length != 6) {
-// 		toast('Please enter 6 digit code', 'error')
-// 		return
-// 	}
+async function fetchStateAndCity(zip) {
+	if (zip.length != 6) {
+		toast('Please enter 6 digit code', 'error')
+		return
+	}
 
-// 	try {
-// 		err = null
-// 		loadingStates = true
+	try {
+		err = null
+		loadingStates = true
 
-// 		let { city, state } = address
+		let { city, state } = address
 
-// 		const zipInfo = await ZipService.findZip({
-// 			zip,
-// 			origin
-// 		})
+		const zipInfo = await ZipService.findZip({
+			zip,
+			origin
+		})
 
-// 		// console.log('zipInfo', zipInfo)
+		// console.log('zipInfo', zipInfo)
 
-// 		address.city = zipInfo.District || ''
-// 		address.state = zipInfo.StateName || ''
-// 	} catch (e) {
-// 		err = e
-// 		// console.log(e)
-// 		toast(e.message.error, 'error')
-// 	} finally {
-// 		loadingStates = false
-// 	}
-// }
+		address.city = zipInfo.District || ''
+		address.state = zipInfo.StateName || ''
+	} catch (e) {
+		err = e
+		// console.log(e)
+		toast(e.message.error, 'error')
+	} finally {
+		loadingStates = false
+	}
+}
 
 function removeSpacesAndAlphabets(input) {
 	// Remove spaces and alphabetic characters using regular expression
@@ -339,18 +338,22 @@ function validatePhoneNumber(phoneNumber) {
 						placeholder="Enter Postal Code/Pincode/Zipcode"
 						maxlength="6"
 						bind:value="{address.zip}"
+						on:blur="{() => fetchStateAndCity(address.zip)}"
 						required />
-					<!-- on:blur="{() => fetchStateAndCity(address.zip)}" -->
 				</div>
 			</div>
 
 			<!-- City -->
 
 			<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
-				<h6 class="sm:w-60 sm:shrink-0">City</h6>
+				<h6 class="sm:w-60 sm:shrink-0">
+					City
+
+					<span class="text-accent-500">*</span>
+				</h6>
 
 				<div class="w-full">
-					<Textbox placeholder="Enter City" bind:value="{address.city}" />
+					<Textbox type="text" placeholder="Enter City" bind:value="{address.city}" required />
 				</div>
 			</div>
 
@@ -372,7 +375,7 @@ function validatePhoneNumber(phoneNumber) {
 						<option value="{null}" disabled selected>-- Select a State --</option>
 						{#each states as s}
 							{#if s}
-								<option value="{s.name}">
+								<option value="{s.name.toUpperCase()}">
 									{s.name}
 								</option>
 							{/if}
@@ -418,18 +421,18 @@ function validatePhoneNumber(phoneNumber) {
 			</div>
 		</div>
 
-		<input type="hidden" name="address" value="{address.address}" />
-		<input type="hidden" name="city" value="{address.city}" />
-		<input type="hidden" name="country" value="{address.country}" />
-		<input type="hidden" name="email" value="{address.email}" />
-		<input type="hidden" name="firstName" value="{address.firstName}" />
-		<input type="hidden" name="id" value="{address.id || address._id}" />
-		<input type="hidden" name="lastName" value="{address.lastName}" />
-		<input type="hidden" name="phone" value="{address.phone}" />
-		<input type="hidden" name="selectedCountry" value="{selectedCountry}" />
+		<input type="hidden" name="address" value="{address.address || null}" />
+		<input type="hidden" name="city" value="{address.city || null}" />
+		<input type="hidden" name="country" value="{address.country || null}" />
+		<input type="hidden" name="email" value="{address.email || null}" />
+		<input type="hidden" name="firstName" value="{address.firstName || null}" />
+		<input type="hidden" name="id" value="{address.id || address._id || null}" />
+		<input type="hidden" name="lastName" value="{address.lastName || null}" />
+		<input type="hidden" name="phone" value="{address.phone || null}" />
+		<input type="hidden" name="selectedCountry" value="{selectedCountry || null}" />
 		<input type="hidden" name="showErrorMessage" bind:value="{showErrorMessage}" />
-		<input type="hidden" name="state" value="{address.state}" />
-		<input type="hidden" name="zip" value="{address.zip}" />
+		<input type="hidden" name="state" value="{address.state || null}" />
+		<input type="hidden" name="zip" value="{address.zip || null}" />
 
 		<PrimaryButton
 			type="submit"

@@ -40,7 +40,7 @@ export const fetchWishlist = async ({
 	try {
 		let res: any = {}
 
-		if (isServer) {
+		if (isServer && sid != null) {
 			res = await getBySid(
 				`wishlists/my?search=${search || ''}&sort=${sort}&page=${currentPage}&store=${storeId}`,
 				sid
@@ -72,7 +72,7 @@ export const checkWishlist = async ({
 	try {
 		let res: any = {}
 
-		if (isServer || isCors) {
+		if (isServer) {
 			res = await getBySid(`wishlists/check?product=${pid}&variant=${vid}&store=${storeId}`, sid)
 		} else {
 			res = await getAPI(`wishlists/check?product=${pid}&variant=${vid}&store=${storeId}`, origin)

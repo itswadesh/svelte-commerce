@@ -1,5 +1,4 @@
 <script>
-// import { getMegamenuFromStore } from '$lib/store/megamenu'
 import { browser } from '$app/environment'
 import { CategoriesMobile, Hero, HeroBanners, PickedBanners } from '$lib/theme-config'
 import { CategoryService } from '$lib/services'
@@ -11,6 +10,7 @@ import { Skeleton, Textbox } from '$lib/ui'
 import dayjs from 'dayjs'
 import Fuse from 'fuse.js'
 import SEO from '$lib/components/SEO/index.svelte'
+import { getAllMegamenuFromStore } from '$lib/store/megamenu'
 
 let today = dayjs(new Date()).toISOString()
 
@@ -120,26 +120,13 @@ async function getMegaMenu() {
 
 	if (browser) {
 		try {
-			// megamenu = await getMegamenuFromStore({
-			// 	sid: null,
-			// 	storeId: $page?.data?.store?.id,
-			// 	isCors: $page?.data?.store?.isCors,
-			// 	origin: $page.data.origin
-			// })
+			megamenu = await getAllMegamenuFromStore({
+				storeId: $page?.data?.store?.id,
+				isCors: $page?.data?.store?.isCors,
+				origin: $page.data.origin
+			})
 
 			loadingForMegamenu = true
-
-			const localMegamenu = localStorage.getItem('megamenu')
-
-			if (!localMegamenu || localMegamenu === 'undefined') {
-				megamenu = await CategoryService.fetchMegamenuData({
-					origin: $page.data.origin,
-					storeId: $page.data.store?.id,
-					isCors: $page.data.store?.isCors
-				})
-			} else {
-				megamenu = JSON.parse(localMegamenu)
-			}
 
 			if (megamenu?.length) {
 				megamenu = megamenu.filter((e) => {

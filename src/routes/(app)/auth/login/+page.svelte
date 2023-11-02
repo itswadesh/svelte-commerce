@@ -176,7 +176,7 @@ function changeNumber() {
 					} else if (result?.data) {
 						if (isEmail) {
 							const me = {
-								id: result?.data?.id,
+								id: result?.data?._id || result?.data?.id,
 								email: result?.data?.email,
 								phone: result?.data?.phone,
 								firstName: result?.data?.firstName,
@@ -369,11 +369,11 @@ function changeNumber() {
 				</div>
 			{/if}
 
-			<input type="hidden" name="isEmail" value="{isEmail}" />
+			<input type="hidden" name="isEmail" value="{isEmail || null}" />
 
-			<input type="hidden" name="phoneOrEmail" value="{value}" />
+			<input type="hidden" name="phoneOrEmail" value="{value || null}" />
 
-			<input type="hidden" name="password" value="{password}" />
+			<input type="hidden" name="password" value="{password || null}" />
 
 			<!-- Submit -->
 

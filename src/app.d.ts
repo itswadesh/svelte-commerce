@@ -19,6 +19,7 @@ declare global {
 			}
 			cart: Cart
 			megamenu: Category
+			menu: any
 			store: any
 			session: string
 			origin: string

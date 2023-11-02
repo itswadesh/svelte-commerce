@@ -1,5 +1,4 @@
 <script lang="ts">
-// import { findAutocompleteFromStore } from '$lib/store/autocomplete'
 import { AutocompleteService, CategoryService } from '$lib/services'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
@@ -34,7 +33,15 @@ onMount(() => {
 function submit() {
 	showSuggestionOptions = false
 
-	if (autocomplete?.length && autocomplete[0].slug) {
+	// console.log('autocomplete', autocomplete)
+
+	if (autocomplete?.length && autocomplete[0].slug && autocomplete[0].type === 'products') {
+		goto(`/product/${autocomplete[0].slug}`)
+	} else if (
+		autocomplete?.length &&
+		autocomplete[0].slug &&
+		autocomplete[0].type === 'categories'
+	) {
 		goto(`/${autocomplete[0].slug}`)
 	} else {
 		goto(`/search?q=${q}`)
@@ -45,7 +52,9 @@ function onselect(v: any) {
 	showSuggestionOptions = false
 
 	if (v) {
-		if (v.type === 'categories') {
+		if (v.type === 'products') {
+			goto(`/product/${v.slug}`)
+		} else if (v.type === 'categories') {
 			goto(`/${v.slug}`)
 		} else {
 			goto(`/search?q=${encodeURIComponent(v.key)}`)

@@ -22,13 +22,11 @@ const saveAddress = async ({ request, cookies, locals }) => {
 
 	const address = data.get('address')
 	const city = data.get('city')
-	const company = data.get('company')
 	const country = data.get('country')
 	const email = data.get('email')
 	const firstName = data.get('firstName')
 	const id = data.get('id')
 	const lastName = data.get('lastName')
-	const locality = data.get('locality')
 	const selectedCountry = data.get('selectedCountry')
 	const showErrorMessage = data.get('showErrorMessage')
 	const state = data.get('state')
@@ -37,10 +35,12 @@ const saveAddress = async ({ request, cookies, locals }) => {
 
 	const sid = cookies.get('connect.sid')
 
-	// console.log('showErrorMessage at save address', showErrorMessage);
+	// console.log('showErrorMessage at save address', firstName)
 
 	if (showErrorMessage === true || showErrorMessage === 'true') {
 		throw error(404, 'Please enter valid phone number')
+	} else if (zip.length !== 6) {
+		throw error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
 	} else {
 		phone = phone.replace(/[a-zA-Z ]/g, '')
 
@@ -55,13 +55,11 @@ const saveAddress = async ({ request, cookies, locals }) => {
 		const res = await AddressService.saveAddress({
 			address,
 			city,
-			company,
 			country,
 			email,
 			firstName,
 			id,
 			lastName,
-			locality,
 			phone,
 			state,
 			zip,
@@ -81,13 +79,11 @@ const editAddress = async ({ request, cookies, locals }) => {
 
 	const address = data.get('address')
 	const city = data.get('city')
-	const company = data.get('company')
 	const country = data.get('country')
 	const email = data.get('email')
 	const firstName = data.get('firstName')
 	const id = data.get('id')
 	const lastName = data.get('lastName')
-	const locality = data.get('locality')
 	const selectedCountry = data.get('selectedCountry')
 	const showErrorMessage = data.get('showErrorMessage')
 	const state = data.get('state')
@@ -100,10 +96,10 @@ const editAddress = async ({ request, cookies, locals }) => {
 
 	if (showErrorMessage === true || showErrorMessage === 'true') {
 		throw error(404, 'Please enter valid phone number')
+	} else if (zip.length !== 6) {
+		throw error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
 	} else {
 		phone = phone.replace(/[a-zA-Z ]/g, '')
-
-		console.log(phone)
 
 		if (phone.startsWith('0')) {
 			phone = phone.substring(1)
@@ -116,13 +112,11 @@ const editAddress = async ({ request, cookies, locals }) => {
 		const res = await AddressService.saveAddress({
 			address,
 			city,
-			company,
 			country,
 			email,
 			firstName,
 			id,
 			lastName,
-			locality,
 			phone,
 			state,
 			zip,

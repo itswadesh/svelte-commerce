@@ -1,10 +1,10 @@
-export const prerender = false
-
 import { DOMAIN, HTTP_ENDPOINT } from '$lib/config'
 import { error } from '@sveltejs/kit'
 import type { LayoutServerLoad } from './$types'
 
-export const load: LayoutServerLoad = async ({ url, locals, cookies }) => {
+export const prerender = false
+
+export const load: LayoutServerLoad = async ({ url, locals, cookies, request, params }) => {
 	try {
 		const currentPage = +url.searchParams.get('page') || 1
 		const q = url.searchParams.get('q') || ''

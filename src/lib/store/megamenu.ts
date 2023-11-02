@@ -1,25 +1,64 @@
-import { writable } from 'svelte/store'
 import { CategoryService } from '$lib/services'
-export const megamenuStore = writable([])
-const isServer = import.meta.env.SSR
-let isLoading = false
+import { writable } from 'svelte/store'
 
-export const getMegamenuFromStore = async ({ sid, origin, storeId, isCors }) => {
+export const megamenuStore = writable([])
+export const megamenuAllStore = writable([])
+
+let loadingForMegamenu = false
+let loadingForAllMegamenu = false
+
+export const getMegamenuFromStore = async ({ origin, storeId, isCors, forceUpdate = false }) => {
 	let existingMegamenu
+
 	megamenuStore.subscribe((value) => {
-		if (value.length) {
+		if (value && Object.values(value)?.length) {
 			existingMegamenu = value
 		}
 	})
-	if (!isLoading && !existingMegamenu) {
-		isLoading = true
+
+	if ((!loadingForMegamenu && !existingMegamenu) || !!forceUpdate) {
+		loadingForMegamenu = true
+
 		const megamenuDataFromServer = await CategoryService.fetchMegamenuData({
 			megamenu: true,
 			storeId,
-			origin
+			origin,
+			isCors
 		})
+
 		megamenuStore.update((u) => megamenuDataFromServer)
-		isLoading = false
+
+		loadingForMegamenu = false
 	}
+
 	return existingMegamenu
+}
+
+export const getAllMegamenuFromStore = async ({ origin, storeId, isCors, forceUpdate = false }) => {
+	let existingAllMegamenu
+
+	megamenuAllStore.subscribe((value) => {
+		if (value && Object.values(value)?.length) {
+			existingAllMegamenu = value
+		}
+	})
+
+	if ((!loadingForAllMegamenu && !existingAllMegamenu) || !!forceUpdate) {
+		loadingForAllMegamenu = true
+
+		const megamenuAllDataFromServer = await CategoryService.fetchMegamenuData({
+			megamenu: false,
+			storeId,
+			origin,
+			isCors
+		})
+
+		megamenuAllStore.update((u) => megamenuAllDataFromServer)
+
+		loadingForAllMegamenu = false
+	}
+
+	// console.log('existingAllMegamenu', existingAllMegamenu);
+
+	return existingAllMegamenu
 }

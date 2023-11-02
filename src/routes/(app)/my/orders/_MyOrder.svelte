@@ -71,7 +71,7 @@ export { clazz as class }
 
 							<table
 								class="group min-w-full divide-y divide-zinc-200 rounded border border-zinc-200 shadow-md"
-								on:click="{() => goto(`/my/orders/${order._id}`)}">
+								on:click="{() => goto(`/my/orders/${order.orderNo}`)}">
 								<thead class="whitespace-nowrap rounded-t-md bg-zinc-100 text-xs uppercase">
 									<tr>
 										<!-- <th class="px-5 py-3 text-zinc-500"> # </th> -->
@@ -88,6 +88,8 @@ export { clazz as class }
 
 										<th class="p-3 text-zinc-500"> Price </th>
 
+										<th class="p-3 text-zinc-500"> Shipping Charges </th>
+
 										<th class="p-3 text-zinc-500"> Total </th>
 
 										<th class="p-3 text-zinc-500"> Status </th>
@@ -95,16 +97,15 @@ export { clazz as class }
 								</thead>
 
 								<tbody
-									class="cursor-pointer divide-y divide-zinc-200 rounded-b-md bg-white bg-white text-sm transition duration-300 group-hover:bg-primary-50">
+									class="cursor-pointer divide-y divide-zinc-200 rounded-b-md bg-white text-sm transition duration-300 group-hover:bg-primary-50">
 									{#each order.items as item}
 										<tr>
 											<td class="p-3">
 												<div class="shrink-0">
 													{#if item.isCustomized}
-														<LazyImg
+														<img
 															src="{item.customizedImg}"
-															alt=" "
-															width="56"
+															alt="customizedImg"
 															class="h-auto w-14 object-contain object-top" />
 													{:else if item.img}
 														<LazyImg
@@ -168,6 +169,10 @@ export { clazz as class }
 											</td>
 
 											<td class="whitespace-nowrap p-3">
+												{currency(item.shippingCharges, $page.data?.store?.currencySymbol)}
+											</td>
+
+											<td class="whitespace-nowrap p-3">
 												{currency(item.total, $page.data?.store?.currencySymbol)}
 											</td>
 
@@ -175,7 +180,8 @@ export { clazz as class }
 												<span class="whitespace-nowrap font-semibold capitalize">
 													{item.status || '_'}
 												</span>
-											</td></tr>
+											</td>
+										</tr>
 									{/each}
 								</tbody>
 							</table>
@@ -196,17 +202,16 @@ export { clazz as class }
 							</div>
 
 							<a
-								href="/my/orders/{order._id}"
+								href="/my/orders/{order.orderNo}"
 								aria-label="orders"
 								class="mb-4 block w-full divide-y rounded border bg-white text-sm shadow transition duration-300 hover:bg-primary-50 sm:mb-10">
 								{#each order.items as item}
 									<div class="flex items-start gap-2 p-4 sm:gap-5">
 										<div class="shrink-0">
 											{#if item.isCustomized}
-												<LazyImg
+												<img
 													src="{item.customizedImg}"
 													alt=" "
-													width="56"
 													class="h-auto w-14 object-contain object-top" />
 											{:else}
 												<LazyImg
@@ -259,21 +264,25 @@ export { clazz as class }
 													</b>
 												</div>
 
-												<div class="flex items-center gap-2">
-													<p>Size :</p>
+												{#if item.size}
+													<div class="flex items-center gap-2">
+														<p>Size :</p>
 
-													<b>
-														{item.size || '_'}
-													</b>
-												</div>
+														<b>
+															{item.size || '_'}
+														</b>
+													</div>
+												{/if}
 
-												<div class="flex items-center gap-2">
-													<p>Delivery :</p>
+												{#if item.shippingCharges}
+													<div class="flex items-center gap-2">
+														<p>Shipping Charges :</p>
 
-													<b>
-														{currency(item.shippingCharge, $page.data?.store?.currencySymbol)}
-													</b>
-												</div>
+														<b>
+															{currency(item.shippingCharges, $page.data?.store?.currencySymbol)}
+														</b>
+													</div>
+												{/if}
 
 												<div class="flex items-center gap-2">
 													<p>Total :</p>

@@ -16,6 +16,7 @@ export async function GET({ cookies, request, locals }) {
 			address: storeRes.storeOne?.address,
 			adminUrl: storeRes.storeOne?.adminUrl || storeRes.settings?.adminUrl, // storeRes.storeOne?.adminUrl used for arialmall
 			alert: storeRes.storeOne?.alert,
+			allowBackOrder: storeRes.storeOne?.allowBackOrder,
 			close: storeRes.storeOne?.close,
 			currencyCode: storeRes.storeOne?.storeCurrency?.isoCode || 'USD',
 			currencySymbol: storeRes.storeOne?.storeCurrency?.symbol || '$',

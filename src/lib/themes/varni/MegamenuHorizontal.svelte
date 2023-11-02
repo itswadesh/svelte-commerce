@@ -21,7 +21,6 @@
 </style>
 
 <script>
-// import { getMegamenuFromStore } from '$lib/store/megamenu'
 import { browser } from '$app/environment'
 import { CategoryService } from '$lib/services'
 import { navigateToProperPath, toast } from '$lib/utils'

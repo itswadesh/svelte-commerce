@@ -1,5 +1,5 @@
 <script>
-import { Deals } from '$lib/theme-config'
+import { Deals } from '../misiki'
 
 export let data = {}
 </script>
@@ -19,7 +19,7 @@ export let data = {}
 					{collection.name}
 				</h2>
 
-				<Deals deal="{collection}" />
+				<Deals deals="{collection}" />
 			</div>
 		{/each}
 	{/if}
