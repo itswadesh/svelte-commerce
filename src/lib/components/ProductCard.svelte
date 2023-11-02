@@ -454,7 +454,7 @@ if (product?.tags?.length) {
 
 					<div class="flex gap-2 justify-between">
 						<h4
-							class="flex-1 text-xs sm:text-sm font-normal text-zinc-500 truncate w-full group-hover:underline">
+							class="flex-1 text-xs sm:text-sm font-normal text-zinc-500 line-clamp-2 w-full group-hover:underline">
 							{product.name || '_'}
 						</h4>
 
@@ -471,12 +471,12 @@ if (product?.tags?.length) {
 				</a>
 
 				{#if $page?.data?.store?.isMultiVendor && product?.vendor && product?.vendor?.slug && product?.vendor?.businessName}
-					<div class="flex items-center gap-1 text-sm text-zinc-500">
+					<div class="flex items-center gap-1 text-xs sm:text-sm text-zinc-500">
 						<span> By </span>
 
 						<a
 							href="/store/{product?.vendor?.slug}"
-							class="block w-full truncate underline hover:text-zinc-800 capitalize">
+							class="block w-full truncate font-semibold hover:text-zinc-800 capitalize">
 							{product?.vendor?.businessName}
 						</a>
 					</div>
