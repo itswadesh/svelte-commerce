@@ -605,7 +605,9 @@ async function updateVariant(variant) {
 						<p>
 							By
 
-							<a href="/store/{data?.product?.vendor?.slug}" class="underline hover:text-zinc-800">
+							<a
+								href="/store/{data?.product?.vendor?.slug}"
+								class="capitalize font-semibold underline hover:text-zinc-800">
 								{data?.product?.vendor?.businessName || data?.product?.vendor?.name}
 							</a>
 						</p>
