@@ -578,12 +578,12 @@ async function updateVariant(variant) {
 						</div>
 					{/if}
 
-					{#if $page?.data?.store?.isMultiVendor && data?.product?.vendor && data?.product?.vendor?.slug && data?.product?.vendor?.businessName}
+					{#if $page?.data?.store?.isMultiVendor && data?.product?.vendor && data?.product?.vendor?.slug && (data?.product?.vendor?.businessName || data?.product?.vendor?.name)}
 						<p>
 							By
 
 							<a href="/store/{data?.product?.vendor?.slug}" class="underline hover:text-zinc-800">
-								{data?.product?.vendor?.businessName}
+								{data?.product?.vendor?.businessName || data?.product?.vendor?.name}
 							</a>
 						</p>
 					{/if}
