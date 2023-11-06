@@ -317,9 +317,9 @@ async function submit(pm) {
 			} catch (e) {
 				data.err = e
 				toast(`Payment failed, please try again`, 'error')
-				gotoOrder(orderNo)
 			} finally {
 				loading = false
+				gotoOrder(orderNo)
 			}
 		}
 	} else {
