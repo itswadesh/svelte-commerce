@@ -15,6 +15,8 @@ import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 import SEO from '$lib/components/SEO/index.svelte'
+import { cartStore, updateCartStore } from '$lib/store/cart.js'
+import { browser } from '$app/environment'
 
 const cookies = Cookie()
 
@@ -40,8 +42,14 @@ let openApplyPromoCodeModal = false
 let products = []
 let selectedCouponCode = null
 let selectedLoadingType = null
+$: cart = {}
 
 onMount(() => {
+	if (browser) {
+		cartStore.subscribe((value) => {
+			cart = value
+		})
+	}
 	getProducts()
 	getCoupons()
 	fireGTagEvent('view_cart', data.cart)
@@ -149,7 +157,7 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 					<Skeleton />
 				{/each}
 			</div>
-		{:else if data?.cartQty > 0}
+		{:else if cart?.qty > 0}
 			<div class="mb-14 lg:mb-0 flex flex-col gap-10 lg:flex-row lg:justify-center xl:gap-20">
 				<div class="w-full flex-1">
 					<div class="items-center justify-between h-10 sm:h-14 sm:flex">
@@ -450,8 +458,9 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 														use:enhance="{() => {
 															loading[ix] = true
 															return async ({ result }) => {
+																updateCartStore({ data: result.data })
 																fireGTagEvent('remove_from_cart', item)
-																await invalidateAll()
+																// await invalidateAll()
 																await applyAction(result)
 																loading[ix] = false
 															}
@@ -513,7 +522,8 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 															loading[ix] = true
 															return async ({ result }) => {
 																fireGTagEvent('add_to_cart', result?.data)
-																await invalidateAll()
+																updateCartStore({ data: result.data })
+																// await invalidateAll()
 																await applyAction(result)
 																loading[ix] = false
 															}
@@ -563,7 +573,8 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 														loading[ix] = true
 														return async ({ result }) => {
 															fireGTagEvent('remove_from_cart', item)
-															await invalidateAll()
+															updateCartStore({ data: result.data })
+															// await invalidateAll()
 															await applyAction(result)
 															selectedLoadingType = null
 															loading[ix] = false

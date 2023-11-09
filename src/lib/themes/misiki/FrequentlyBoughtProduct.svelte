@@ -10,6 +10,7 @@ import { LazyImg } from '$lib/components'
 import { PrimaryButton } from '$lib/ui'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
+import { updateCartStore } from '$lib/store/cart'
 
 export let product = {}
 
@@ -150,7 +151,8 @@ let bounceItemFromTop = false
 							setTimeout(() => {
 								bounceItemFromTop = false
 							}, 3000)
-							invalidateAll()
+							// invalidateAll()
+							updateCartStore({ data: result.data })
 							await applyAction(result)
 						}
 					}}">

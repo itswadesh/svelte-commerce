@@ -21,12 +21,14 @@ import menu from '$lib/config/menu'
 import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
-import type { Cart, Me } from '$lib/types'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'
+import { cartStore } from '$lib/store/cart'
+import { browser } from '$app/environment'
 
 const dispatch = createEventDispatcher()
 
-export let me: Me, cart: Cart, data, showCartSidebar: boolean, openSidebar: boolean, store
+export let me, data, showCartSidebar: boolean, openSidebar: boolean, store
+$: cart = {}
 
 let categories
 let hellobar = $page.data.store?.hellobar || {}
@@ -37,6 +39,11 @@ let showDropdownAccount = false
 
 onMount(async () => {
 	q = $page.url.searchParams.get('q') || ''
+	if (browser) {
+		cartStore.subscribe((value) => {
+			cart = value
+		})
+	}
 })
 
 function slideFade(node: any, params: any) {
@@ -218,10 +225,10 @@ const getSelectionLabel = (option) => option.name
 						Cart
 					</span>
 
-					{#if $page.data.cartQty > 0}
+					{#if cart?.qty > 0}
 						<div
 							class="absolute -top-2 -right-1.5 flex items-center justify-center rounded-full bg-primary-500 py-[0.8px] px-[5px] text-center text-xs font-bold uppercase text-white">
-							{$page.data.cartQty}
+							{cart.qty}
 						</div>
 					{/if}
 				</a>
@@ -257,7 +264,7 @@ const getSelectionLabel = (option) => option.name
 								<h2 class="border-b p-4 text-center font-bold uppercase sm:text-lg">Cart</h2>
 
 								<div class="h-full overflow-y-auto p-4 pb-20 overflow-x-hidden">
-									{#if $page.data.cartQty > 0}
+									{#if cart?.qty > 0}
 										<div class="mb-5 flex flex-col gap-5">
 											{#each cart?.items || [] as item, ix}
 												<div class="flex items-start justify-between gap-4">

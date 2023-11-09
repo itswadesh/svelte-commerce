@@ -16,6 +16,7 @@ import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { post } from '$lib/utils/api'
+import { updateCartStore } from '$lib/store/cart'
 
 export let product = {}
 
@@ -130,6 +131,7 @@ async function toggleWishlist(id) {
 						method="POST"
 						use:enhance="{() => {
 							return async ({ result }) => {
+								updateCartStore({ data: result.data })
 								result?.data?.qty < 0
 									? fireGTagEvent('remove_from_cart', result?.data)
 									: fireGTagEvent('add_to_cart', result?.data)
@@ -139,7 +141,7 @@ async function toggleWishlist(id) {
 									bounceItemFromTop = false
 								}, 3000)
 								cartButtonText = 'Go to cart'
-								await invalidateAll()
+								// await invalidateAll()
 								await applyAction(result)
 							}
 						}}">

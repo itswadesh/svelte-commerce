@@ -26,6 +26,7 @@ import SEO from '$lib/components/SEO/index.svelte'
 import SimilarProductsFromCategorySlug from './SimilarProductsFromCategorySlug.svelte'
 import Error from '$lib/components/Error.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import { updateCartStore } from '$lib/store/cart'
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
@@ -558,11 +559,11 @@ function scrollTo(elementId) {
 									}, 820)
 									return
 								}
+								updateCartStore({ data: result.data })
 								result?.data?.qty < 0
 									? fireGTagEvent('remove_from_cart', result?.data)
 									: fireGTagEvent('add_to_cart', result?.data)
-									
-									
+
 								cartButtonText = 'Added To Cart'
 								bounceItemFromTop = true
 								setTimeout(() => {
@@ -573,7 +574,7 @@ function scrollTo(elementId) {
 								if (customizedImg) {
 									goto(`/checkout/address`)
 								}
-								invalidateAll()
+								// invalidateAll()
 								await applyAction(result)
 							}
 						}}">
@@ -621,6 +622,7 @@ function scrollTo(elementId) {
 									}, 820)
 									return
 								}
+								updateCartStore({ data: result.data })
 								result?.data?.qty < 0
 									? fireGTagEvent('remove_from_cart', result?.data)
 									: fireGTagEvent('add_to_cart', result?.data)

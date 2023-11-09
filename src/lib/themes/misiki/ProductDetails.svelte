@@ -60,7 +60,6 @@ import { slide } from 'svelte/transition'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
 import Breadcrumb from '$lib/components/Breadcrumb.svelte'
 import CategoryPoolButtons from './CategoryPoolButtons.svelte'
-import Checkbox from '$lib/ui/Checkbox.svelte'
 import CheckboxOfMultiProducts from '$lib/ui/CheckboxOfMultiProducts.svelte'
 import Cookie from 'cookie-universal'
 import dayjs from 'dayjs'
@@ -85,58 +84,40 @@ import Textarea from '$lib/ui/Textarea.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 import viewport from '$lib/actions/useViewPort'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
+import { updateCartStore } from '$lib/store/cart'
 
 const cookies = Cookie()
 const isServer = import.meta.env.SSR
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let currentVariantId = $page.url.searchParams?.get('variant') || ''
 let currentVariantPrice = data.product?.price || 0
 
 let seoProps = {
-	// addressCountry: 'India',
-	// addressLocality: 'Semiliguda, Koraput',
-	// addressRegion: 'Odisha',
-	// alternateJsonHref: '',
-	// alternateXml: { title: '', href: '' },
 	brand: `${$page?.data?.store?.websiteName}`,
 	breadcrumbs: data.product?.categoryPool,
 	caption: `${$page?.data?.store?.websiteName}`,
 	category: data.product?.category?.name,
 	contentUrl: data.product?.img || $page?.data?.store?.logo,
 	createdAt: `${data.product?.createdAt || '_'}`,
-	// depth: { unitCode: '', value: '' },
 	email: `${$page?.data?.store?.email}`,
-	// entityMeta: '',
-	// facebookPage: '',
-	// gtin: '',
-	// height: '',
 	id: $page?.url?.href,
 	logo: $page?.data?.store?.logo,
-	// ogSquareImage: { url: 'https://lrnr.in/favicon.ico', width: 56, height: 56 },
 	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00'],
 	popularity: data.product?.popularity,
-	// postalCode: '764036',
 	price: currentVariantPrice,
 	priceRange: `${currentVariantPrice}-${data.product?.mrp}`,
 	ratingCount: 1,
 	ratingValue: +data.product?.ratings + 1,
 	sku: data.product?.sku,
-	// streetAddress: 'Padmajyoti Marg, Nandapur Road',
 	timeToRead: 0,
 	updatedAt: `${data.product?.updatedAt || '_'}`,
-	// weight: { unitCode: '', value: '' },
-	// width: { unitCode: '', value: '' },
-	// wlwmanifestXmlHref: '',
 	metaDescription: data.product?.metaDescription,
-	// article: false,
 	canonical: `${$page?.url.href}`,
 	datePublished: `${data.product?.publishedAt || '_'}`,
 	description: ` ${data.product?.description}`,
 	dnsPrefetch: `//cdn.jsdelivr.net`,
-	// entityMeta: null,
 	featuredImage: {
 		url: `${data.product?.img}`,
 		width: 675,
@@ -158,7 +139,6 @@ let seoProps = {
 	productPriceAmount: `${currentVariantPrice}`,
 	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
 	slug: `${data.product?.slug}`,
-	// timeToRead: 0,
 	title: `${data.product?.name}`,
 	twitterImage: { url: `${data.product?.img}` }
 }
@@ -343,7 +323,7 @@ async function addToBag(p, customizedImg, customizedJson) {
 				formattedAmount: cart?.formattedAmount
 			}
 			cookies.set('cartId', cookieCart.cartId, { path: '/' })
-			cookies.set('cartQty', cookieCart.qty, { path: '/' })
+			// cookies.set('cartQty', cookieCart.qty, { path: '/' })
 			// cookies.set('cart', JSON.stringify(cookieCart), { path: '/' })
 			// cartButtonText = 'Added To Cart'
 			bounceItemFromTop = true
@@ -1481,10 +1461,11 @@ async function updateVariant(variant) {
 															}, 820)
 															return
 														}
+														updateCartStore({ data: result.data })
 														result?.data?.qty < 0
 															? fireGTagEvent('remove_from_cart', result?.data)
 															: fireGTagEvent('add_to_cart', result?.data)
-															console.log(result?.data);
+														// console.log(result?.data);
 														cartButtonText = 'Added To Cart'
 														bounceItemFromTop = true
 														setTimeout(() => {
@@ -1495,7 +1476,7 @@ async function updateVariant(variant) {
 														if (customizedImg) {
 															goto(`/checkout/address`)
 														}
-														await invalidateAll()
+														// await invalidateAll()
 														await applyAction(result)
 													}
 												}}">
@@ -1883,6 +1864,7 @@ async function updateVariant(variant) {
 															}, 820)
 															return
 														}
+														updateCartStore({ data: result.data })
 														result?.data?.qty < 0
 															? fireGTagEvent('remove_from_cart', result?.data)
 															: fireGTagEvent('add_to_cart', result?.data)
@@ -1896,7 +1878,7 @@ async function updateVariant(variant) {
 														if (customizedImg) {
 															goto(`/checkout/address`)
 														}
-														invalidateAll()
+														// invalidateAll()
 														await applyAction(result)
 													}
 												}}">
@@ -2121,6 +2103,7 @@ async function updateVariant(variant) {
 															}, 820)
 															return
 														}
+														updateCartStore({ data: result.data })
 														result?.data?.qty < 0
 															? fireGTagEvent('remove_from_cart', result?.data)
 															: fireGTagEvent('add_to_cart', result?.data)
@@ -2134,7 +2117,7 @@ async function updateVariant(variant) {
 														if (customizedImg) {
 															goto(`/checkout/address`)
 														}
-														invalidateAll()
+														// invalidateAll()
 														await applyAction(result)
 													}
 												}}">

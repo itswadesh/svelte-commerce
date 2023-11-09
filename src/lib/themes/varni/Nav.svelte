@@ -37,13 +37,12 @@ import { logo } from '$lib/config'
 import { MegamenuHorizontal, MegamenuVertical } from '$lib/theme-config'
 import { page } from '$app/stores'
 import { PrimaryButton, WhiteButton } from '$lib/ui'
-import Cookie from 'cookie-universal'
 import menu from '$lib/config/menu'
-
+import { browser } from '$app/environment'
+import { cartStore } from '$lib/store/cart'
 const dispatch = createEventDispatcher()
-const cookies = Cookie()
 
-export let me, cart, data, showCartSidebar, openSidebar, store
+export let me, data, showCartSidebar, openSidebar, store
 
 let q = ''
 let showDropdownAccount = false
@@ -51,6 +50,7 @@ let show = false
 let loadingForDeleteItemFromCart = []
 let categories
 let hellobar = $page.data.store?.hellobar || {}
+$: cart = {}
 // let menuItems = [
 // 	{ title: 'Trending', link: '/trending-en?sort=-updatedAt' },
 // 	{ title: 'Custom Design', link: '/custom-design' },
@@ -87,6 +87,12 @@ let menuItems2 = [
 
 onMount(async () => {
 	q = $page.url.searchParams.get('q')
+
+	if (browser) {
+		cartStore.subscribe((value) => {
+			cart = value
+		})
+	}
 	// const response = await fetch('/server/cart')
 	// cart = await response.json()
 })
@@ -428,7 +434,7 @@ let y
 								<h1 class="p-4 font-bold text-center uppercase border-b sm:text-lg">Cart</h1>
 
 								<div class="h-full p-4 pb-20 overflow-x-hidden overflow-y-auto">
-									{#if $page.data.cartQty > 0}
+									{#if cart?.qty > 0}
 										<div class="flex flex-col gap-5 mb-5">
 											{#each cart?.items || [] as item, ix}
 												<div class="flex items-start justify-between gap-4">
@@ -932,10 +938,10 @@ let y
 						></path>
 					</svg>
 
-					{#if $page.data.cartQty > 0}
+					{#if cart.qty > 0}
 						<div
 							class="absolute -top-2 -right-1.5 flex items-center justify-center rounded-full bg-primary-500 py-[0.8px] px-[5px] text-center text-xs font-bold uppercase text-white">
-							{$page.data.cartQty}
+							{cart.qty}
 						</div>
 					{/if}
 				</a>
