@@ -18,10 +18,13 @@ import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'
+import { cartStore, getCartFromStore, updateCartStore } from '$lib/store/cart'
+import { onMount } from 'svelte'
+import { browser } from '$app/environment'
 
 const cookies = Cookie()
 
-export let me: Me, cart: Cart, data, showCartSidebar: boolean, openSidebar: boolean, store
+export let me, data, showCartSidebar: boolean, openSidebar: boolean, store
 
 let clazz = ''
 export { clazz as class }
@@ -43,6 +46,15 @@ let loadingForSelectedCartItem = []
 let selectedLoadingType = null
 let show = false
 let showDropdownAccount = false
+$: cart = {}
+
+onMount(async () => {
+	if (browser) {
+		cartStore.subscribe((value) => {
+			cart = value
+		})
+	}
+})
 
 function slideFade(node, params) {
 	const existingTransform = getComputedStyle(node).transform.replace('none', '')
@@ -96,7 +108,7 @@ async function fetchCart() {
 			}
 
 			cookies.set('cartId', cart.cartId, { path: '/' })
-			cookies.set('cartQty', cart.qty, { path: '/' })
+			// cookies.set('cartQty', cart.qty, { path: '/' })
 			// cookies.set('cart', JSON.stringify(cart), { path: '/' })
 		}
 	} catch (e) {
@@ -354,10 +366,10 @@ async function getCategories() {
 						></path>
 					</svg>
 
-					{#if $page.data?.cartQty > 0}
+					{#if cart?.qty > 0}
 						<div
 							class="absolute -top-2 -right-1.5 flex items-center justify-center rounded-full bg-primary-500 py-[0.8px] px-[5px] text-center text-xs font-bold uppercase text-white">
-							{$page.data?.cartQty}
+							{cart.qty}
 						</div>
 					{/if}
 				</div>
@@ -411,7 +423,7 @@ async function getCategories() {
 								</li>
 							{/each}
 						</ul>
-					{:else if $page.data?.cartQty > 0}
+					{:else if cart?.qty > 0}
 						<ul class="p-0 list-none mb-5 flex flex-col gap-5">
 							{#each cart?.items || [] as item, ix}
 								<li class="flex items-start justify-between gap-4">
@@ -496,9 +508,10 @@ async function getCategories() {
 													loadingForSelectedCartItem[ix] = true
 													return async ({ result }) => {
 														fireGTagEvent('remove_from_cart', item)
+														updateCartStore({ data: result.data })
 														await applyAction(result)
 														loadingForSelectedCartItem[ix] = false
-														fetchCart()
+														// fetchCart()
 													}
 												}}">
 												<input type="hidden" name="pid" value="{item.pid || null}" />
@@ -555,9 +568,10 @@ async function getCategories() {
 													loadingForSelectedCartItem[ix] = true
 													return async ({ result }) => {
 														fireGTagEvent('add_to_cart', result?.data)
+														updateCartStore({ data: result.data })
 														await applyAction(result)
 														loadingForSelectedCartItem[ix] = false
-														fetchCart()
+														// fetchCart()
 													}
 												}}">
 												<input type="hidden" name="pid" value="{item.pid || null}" />
@@ -606,10 +620,11 @@ async function getCategories() {
 											loadingForSelectedCartItem[ix] = true
 											return async ({ result }) => {
 												fireGTagEvent('remove_from_cart', item)
+												updateCartStore({ data: result.data })
 												await applyAction(result)
 												selectedLoadingType = null
 												loadingForSelectedCartItem[ix] = false
-												fetchCart()
+												// fetchCart()
 											}
 										}}">
 										<input type="hidden" name="pid" value="{item.pid || null}" />

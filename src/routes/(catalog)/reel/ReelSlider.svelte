@@ -1,19 +1,13 @@
 <script lang="ts">
 import { onMount } from 'svelte'
 import { SplideSlide } from '@splidejs/svelte-splide'
-// import { Video } from '@splidejs/splide-extension-video'
-// import '@splidejs/splide-extension-video/dist/css/splide-extension-video.min.css'
-
-// const videos = ['3GNQL3alB-Y', 'xLJ2QQDrN9k', 'cdz__ojQOuU', 'oS6N_ZBFDZE']
-import { LazyImg } from '$lib/components'
-import { currency } from '$lib/utils'
-import { currencySymbol } from '$lib/config'
 import { CartService } from '$lib/services'
 import { page } from '$app/stores'
 import { invalidateAll } from '$app/navigation'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { applyAction, enhance } from '$app/forms'
 import { fade } from 'svelte/transition'
+import { updateCartStore } from '$lib/store/cart'
 
 export let products = []
 export let title = ''
@@ -22,6 +16,7 @@ let showMuteButton = true
 let isMuted = true
 let paused = false
 let loadingg = false
+$: cart = {}
 
 // share button function
 
@@ -116,6 +111,11 @@ const options = {
 	direction: 'ttb'
 }
 onMount(async () => {
+	if (browser) {
+		cartStore.subscribe((value) => {
+			cart = value
+		})
+	}
 	const SplideModule = await import('$lib/components/SplideJs.svelte')
 	Splide = SplideModule.default
 	const isMobile = window.innerWidth < 768 // set your preferred breakpoint here
@@ -221,6 +221,7 @@ function handleMove(e) {
 											use:enhance="{() => {
 												return async ({ result }) => {
 													// console.log('result of add to cart', result)
+													updateCartStore({ data: result.data })
 													cartButtonText = 'Added To Cart'
 													isAddedtoBag = true
 													// if (result?.data === 'choose variant') {
@@ -246,7 +247,13 @@ function handleMove(e) {
 													// if (customizedImg) {
 													// 	goto(`/checkout/address`)
 													// }
-													await invalidateAll()
+													// await getCartFromStore({
+													// 	origin,
+													// 	storeId: $page.data.store.id,
+													// 	cartId: $page.data.cartId,
+													// 	forceUpdate: true
+													// })
+													// await invalidateAll()
 													await applyAction(result)
 												}
 											}}">
@@ -393,10 +400,10 @@ function handleMove(e) {
 												src="https://www.svgrepo.com/show/452178/cart.svg"
 												alt="cart" />
 
-											{#if $page.data.cartQty > 0}
+											{#if cart?.qty > 0}
 												<div
 													class="absolute -top-2 -right-1.5 flex items-center justify-center rounded-full bg-primary-500 py-[0.8px] px-[5px] text-center text-xs font-bold uppercase text-white">
-													{$page.data.cartQty}
+													{cart.qty}
 												</div>
 											{/if}
 										</button></a>
@@ -408,6 +415,7 @@ function handleMove(e) {
 										method="POST"
 										use:enhance="{() => {
 											return async ({ result }) => {
+												updateCartStore({ data: result.data })
 												// console.log('result of add to cart', result)
 												// if (result?.data === 'choose variant') {
 												// 	scrollTo('variants_list')
@@ -433,7 +441,7 @@ function handleMove(e) {
 												// if (customizedImg) {
 												// 	goto(`/checkout/address`)
 												// }
-												await invalidateAll()
+												// await invalidateAll()
 												await applyAction(result)
 											}
 										}}">
@@ -462,10 +470,10 @@ function handleMove(e) {
 												src="https://www.svgrepo.com/show/452178/cart.svg"
 												alt="cart" />
 
-											{#if $page.data.cartQty > 0}
+											{#if cart?.qty > 0}
 												<div
 													class="absolute -top-2 -right-1.5 flex items-center justify-center rounded-full bg-primary-500 py-[0.8px] px-[5px] text-center text-xs font-bold uppercase text-white">
-													{$page.data.cartQty}
+													{cart.qty}
 												</div>
 											{/if}
 										</button>

@@ -18,7 +18,7 @@ export const load: LayoutServerLoad = async ({ url, locals, cookies, request, pa
 		locals.currentPage = currentPage
 		locals.q = q
 		locals.sid = cookies.get('connect.sid')
-		locals.cartQty = cookies.get('cartQty')
+		// locals.cartQty = cookies.get('cartQty')
 		if (zip) locals.zip = JSON.parse(zip)
 		// me,
 		return { ...locals, pathname }

@@ -22,6 +22,7 @@ import noStoreFound from '$lib/assets/no/no_store_found.png'
 import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 import storeClosed from '$lib/assets/store-closed.png'
 import whatsappIcon from '$lib/assets/social-media/whatsapp.png'
+import { getCartFromStore } from '$lib/store/cart'
 
 // console.log('$page', $page)
 
@@ -43,6 +44,13 @@ $: if (innerWidth < 1024) {
 // let ReloadPrompt
 
 onMount(async () => {
+	if (browser) {
+		await getCartFromStore({
+			origin,
+			storeId: $page.data.store.id,
+			cartId: $page.data.cartId
+		})
+	}
 	// 	// if (pwaInfo) {
 	// 	// 	const { registerSW } = await import('virtual:pwa-register')
 	// 	// 	registerSW({

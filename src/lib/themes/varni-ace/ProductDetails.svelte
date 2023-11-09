@@ -82,6 +82,7 @@ import Textarea from '$lib/ui/Textarea.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 import viewport from '$lib/actions/useViewPort'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
+import { updateCartStore } from '$lib/store/cart'
 
 const cookies = Cookie()
 const isServer = import.meta.env.SSR
@@ -343,7 +344,7 @@ async function addToBag(p, customizedImg, customizedJson) {
 				formattedAmount: cart?.formattedAmount
 			}
 			cookies.set('cartId', cookieCart.cartId, { path: '/' })
-			cookies.set('cartQty', cookieCart.qty, { path: '/' })
+			// cookies.set('cartQty', cookieCart.qty, { path: '/' })
 			// cookies.set('cart', JSON.stringify(cookieCart), { path: '/' })
 			// cartButtonText = 'Added To Cart'
 			bounceItemFromTop = true
@@ -1382,12 +1383,12 @@ async function updateVariant(variant) {
 															scrollTo('variants_list')
 															toast('Please choose a variant', 'warning')
 															wiggleVariants = true
-
 															setTimeout(() => {
 																wiggleVariants = false
 															}, 820)
 															return
 														}
+														updateCartStore({ data: result.data })
 														result?.data?.qty < 0
 															? fireGTagEvent('remove_from_cart', result?.data)
 															: fireGTagEvent('add_to_cart', result?.data)
@@ -1401,7 +1402,7 @@ async function updateVariant(variant) {
 														if (customizedImg) {
 															goto(`/checkout/address`)
 														}
-														await invalidateAll()
+														// await invalidateAll()
 														await applyAction(result)
 													}
 												}}">
@@ -1788,12 +1789,12 @@ async function updateVariant(variant) {
 															scrollTo('variants_list')
 															toast('Please choose a variant', 'warning')
 															wiggleVariants = true
-
 															setTimeout(() => {
 																wiggleVariants = false
 															}, 820)
 															return
 														}
+														updateCartStore({ data: result.data })
 														result?.data?.qty < 0
 															? fireGTagEvent('remove_from_cart', result?.data)
 															: fireGTagEvent('add_to_cart', result?.data)
@@ -1807,7 +1808,7 @@ async function updateVariant(variant) {
 														if (customizedImg) {
 															goto(`/checkout/address`)
 														}
-														invalidateAll()
+														// invalidateAll()
 														await applyAction(result)
 													}
 												}}">
@@ -2031,12 +2032,12 @@ async function updateVariant(variant) {
 															scrollTo('variants_list')
 															toast('Please choose a variant', 'warning')
 															wiggleVariants = true
-
 															setTimeout(() => {
 																wiggleVariants = false
 															}, 820)
 															return
 														}
+														updateCartStore({ data: result.data })
 														result?.data?.qty < 0
 															? fireGTagEvent('remove_from_cart', result?.data)
 															: fireGTagEvent('add_to_cart', result?.data)
@@ -2050,7 +2051,7 @@ async function updateVariant(variant) {
 														if (customizedImg) {
 															goto(`/checkout/address`)
 														}
-														invalidateAll()
+														// invalidateAll()
 														await applyAction(result)
 													}
 												}}">

@@ -1,18 +1,20 @@
 <script lang="ts">
-import { createEventDispatcher } from 'svelte'
+import { createEventDispatcher, onMount } from 'svelte'
 import { currency } from '$lib/utils'
 import { page } from '$app/stores'
 import { PrimaryButton } from '$lib/ui'
+import { browser } from '$app/environment'
+import { cartStore } from '$lib/store/cart'
 
 const dispatch = createEventDispatcher()
 
-export let cart
 export let disabled = false
 export let hideCheckoutButton = false
 export let loading = false
 export let nextpage = null
 export let showNextIcon = false
 export let text = 'Proceed to checkout'
+$: cart = {}
 
 // console.log('zzzzzzzzzzzzzzzzzz', cart)
 
@@ -24,6 +26,14 @@ function modulo(n, m) {
 function submit() {
 	dispatch('submit')
 }
+
+onMount(async () => {
+	if (browser) {
+		cartStore.subscribe((value) => {
+			cart = value
+		})
+	}
+})
 </script>
 
 {#if cart}

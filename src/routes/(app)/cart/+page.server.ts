@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 		loading = true
 
 		const cartId = cookies.get('cartId')
-		const cartQty = cookies.get('cartQty')
+		// const cartQty = cookies.get('cartQty')
 		const sid = cookies.get('connect.sid')
 
 		if (sid) {
@@ -141,7 +141,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 			}
 			locals.cart = cartObj
 			locals.cartId = cartObj.cartId
-			locals.cartQty = cartObj.qty
+			// locals.cartQty = cartObj.qty
 
 			if (!sid) {
 				cookies.set('connect.sid', cart.sid, { path: '/' })
@@ -149,7 +149,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 
 			if (!cartId) cookies.set('cartId', cartObj.cartId, { path: '/' })
 
-			cookies.set('cartQty', JSON.stringify(cartObj.qty), { path: '/' })
+			// cookies.set('cartQty', JSON.stringify(cartObj.qty), { path: '/' })
 
 			return cartObj
 		} else {
@@ -201,9 +201,9 @@ const handleUnavailableItems: Action = async ({ request, cookies, locals }) => {
 
 		// console.log('movedRes', movedRes);
 
-		if (movedRes.qty) {
-			locals.cartQty = movedRes.qty
-		}
+		// if (movedRes.qty) {
+		// 	locals.cartQty = movedRes.qty
+		// }
 	} catch (e) {
 		return {}
 	}

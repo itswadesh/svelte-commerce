@@ -19,11 +19,13 @@ import Cookie from 'cookie-universal'
 import menu from '$lib/config/menu'
 import PincodeInputBox from '$lib/themes/misiki/PincodeInputBox.svelte'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'
+import { browser } from '$app/environment'
+import { cartStore } from '$lib/store/cart'
 
 const dispatch = createEventDispatcher()
 const cookies = Cookie()
 
-export let me: Me, cart: Cart, data, showCartSidebar: boolean, openSidebar: boolean, store
+export let me, data, showCartSidebar: boolean, openSidebar: boolean, store
 
 let clazz = ''
 export { clazz as class }
@@ -44,6 +46,7 @@ let q = ''
 let show = false
 let showDropdownAccount = false
 let showPincodeInputBox = false
+$: cart = {}
 
 onMount(async () => {
 	q = $page.url.searchParams.get('q')
@@ -51,6 +54,12 @@ onMount(async () => {
 	// cart = await response.json()
 
 	pin = cookies.get('zip')
+
+	if (browser) {
+		cartStore.subscribe((value) => {
+			cart = value
+		})
+	}
 })
 
 function slideFade(node, params) {
@@ -239,11 +248,10 @@ async function onSearchSubmit({ detail }) {
 				</svg>
 
 				<span class="hidden text-center text-xs font-semibold tracking-wider lg:block"> Cart </span>
-
-				{#if $page.data?.cartQty > 0}
+				{#if cart?.qty > 0}
 					<div
 						class="absolute -top-2 -right-1.5 flex items-center justify-center rounded-full bg-primary-500 py-[0.8px] px-[5px] text-center text-xs font-bold uppercase text-white">
-						{$page.data?.cartQty}
+						{cart.qty}
 					</div>
 				{/if}
 			</a>

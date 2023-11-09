@@ -32,6 +32,7 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { PrimaryButton, WhiteButton } from '$lib/ui'
 import { SplideSlide } from '@splidejs/svelte-splide'
+import { getCartFromStore, updateCartStore } from '$lib/store/cart'
 
 export let data = {}
 // console.log('zzzzzzzzzzzzzzzzzz', data)
@@ -167,6 +168,7 @@ onMount(async () => {
 																				: fireGTagEvent('add_to_cart', result?.data)
 																			cartButtonText = 'Added To Cart'
 																			bounceItemFromTop = true
+																			updateCartStore({ data: result.data })
 																			setTimeout(() => {
 																				bounceItemFromTop = false
 																				cartButtonText = 'Add to Bag'
@@ -175,7 +177,7 @@ onMount(async () => {
 																			if (customizedImg) {
 																				goto(`/checkout/address`)
 																			}
-																			await applyAction(result)
+																			// await applyAction(result)
 																		}
 																	}}">
 																	<input
@@ -223,6 +225,7 @@ onMount(async () => {
 																		result?.data?.qty < 0
 																			? fireGTagEvent('remove_from_cart', result?.data)
 																			: fireGTagEvent('add_to_cart', result?.data)
+																		updateCartStore({ data: result.data })
 																		goto(`/checkout/address`)
 																		await applyAction(result)
 																	}
