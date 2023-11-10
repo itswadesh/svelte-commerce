@@ -33,7 +33,7 @@ export const createUploadStream = async (key: string, mimetype: string) => {
 					ACL: 'public-read',
 					CacheControl: 'public, max-age=31536000'
 				}
-      }).done()
+			}).done()
 		}
 	} catch (e) {
 		throw new Error(e)
