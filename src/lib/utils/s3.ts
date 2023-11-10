@@ -1,6 +1,6 @@
 import stream from 'stream'
-import { Upload } from "@aws-sdk/lib-storage";
-import { S3 } from "@aws-sdk/client-s3";
+import { Upload } from '@aws-sdk/lib-storage';
+import { S3 } from '@aws-sdk/client-s3';
 import * as path from 'path'
 import AmazonS3URI from 'amazon-s3-uri'
 import { env } from '$env/dynamic/private'
@@ -10,12 +10,11 @@ const region = env.SECRET_S3_REGION
 const accessKeyId = env.SECRET_S3_ACCESS_KEY
 const secretAccessKey = env.SECRET_S3_SECRET_KEY
 const s3 = new S3({
-    credentials: {
-        accessKeyId,
-        secretAccessKey
-    },
-
-    region
+	region,
+	credentials: {
+		accessKeyId,
+		secretAccessKey
+	}
 })
 
 export const createUploadStream = async (key: string, mimetype: string) => {
@@ -24,20 +23,18 @@ export const createUploadStream = async (key: string, mimetype: string) => {
 		return {
 			writeStream: pass,
 			promise: new Upload({
-                client: s3,
-
-                params: {
-                        Bucket: bucketName,
-                        Key: key,
-                        Body: pass,
-                        ContentType: mimetype,
-                        ContentDisposition: 'inline',
-                        ACL: 'public-read',
-                        CacheControl: 'public, max-age=31536000'
-                    }
-            })
-				.done()
-		};
+				client: s3,
+				params: {
+					Bucket: bucketName,
+					Key: key,
+					Body: pass,
+					ContentType: mimetype,
+					ContentDisposition: 'inline',
+					ACL: 'public-read',
+					CacheControl: 'public, max-age=31536000'
+				}
+      }).done()
+		}
 	} catch (e) {
 		throw new Error(e)
 	}
