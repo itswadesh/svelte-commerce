@@ -1,4 +1,5 @@
 import { CartService, OrdersService } from '$lib/services'
+import { cartStore } from '$lib/store/cart'
 import { error, redirect } from '@sveltejs/kit'
 
 export const prerender = false
@@ -31,6 +32,8 @@ export async function load({ url, request, locals, cookies }) {
 		})
 		cookies.set('cartId', null, { path: '/', expires: new Date(0) })
 		cookies.set('cartQty', '0', { path: '/', expires: new Date(0) })
+
+	 
 		locals.cartId = null
 		locals.cartQty = 0
 	} catch (e) {

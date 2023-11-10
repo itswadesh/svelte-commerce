@@ -460,7 +460,7 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 															return async ({ result }) => {
 																updateCartStore({ data: result.data })
 																fireGTagEvent('remove_from_cart', item)
-																// await invalidateAll()
+																await invalidateAll()
 																await applyAction(result)
 																loading[ix] = false
 															}
@@ -523,7 +523,7 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 															return async ({ result }) => {
 																fireGTagEvent('add_to_cart', result?.data)
 																updateCartStore({ data: result.data })
-																// await invalidateAll()
+																await invalidateAll()
 																await applyAction(result)
 																loading[ix] = false
 															}
