@@ -91,6 +91,7 @@ async function onSearchSubmit({ detail }) {
 }
 </script>
 
+
 <!-- {hellobar?.active?.val ? 'h-[88px] sm:h-28' : 'h-14 sm:h-20'} -->
 <nav
 	class="{clazz} minimum-width-rem sticky inset-x-0 top-0 w-full border-b bg-white shadow-xs
