@@ -80,7 +80,7 @@ const seoProps = {
 }
 
 onMount(async () => {
-	invalidateAll()
+	// invalidateAll()
 	fireGTagEvent('purchase', data.order)
 	updateCartStore({ data: null})
 })

@@ -15,7 +15,7 @@ import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 import SEO from '$lib/components/SEO/index.svelte'
-import { cartStore, updateCartStore } from '$lib/store/cart.js'
+import { cartStore, getCartFromStore, updateCartStore } from '$lib/store/cart.js'
 import { browser } from '$app/environment'
 
 const cookies = Cookie()
@@ -77,7 +77,13 @@ async function applyCouponCode(selectedCouponCode: string, index: number) {
 		})
 
 		appliedCouponInfo = resAC
-		await invalidateAll()
+		// await invalidateAll()
+		await getCartFromStore({
+			cartId: $page.data.cartId,
+			origin: $page.data.origin,
+			storeId: $page.data.store?.id,
+			forceUpdate: true
+		})
 		openApplyPromoCodeModal = false
 	} catch (e) {
 		couponErr = e
@@ -102,7 +108,13 @@ async function removeCouponCode() {
 		})
 
 		selectedCouponCode = ''
-		await invalidateAll()
+		// await invalidateAll()
+		await getCartFromStore({
+			cartId: $page.data.cartId,
+			origin: $page.data.origin,
+			storeId: $page.data.store?.id,
+			forceUpdate: true
+		})
 	} catch (e) {
 		couponErr = e
 	} finally {
@@ -460,7 +472,7 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 															return async ({ result }) => {
 																updateCartStore({ data: result.data })
 																fireGTagEvent('remove_from_cart', item)
-																await invalidateAll()
+																// await invalidateAll()
 																await applyAction(result)
 																loading[ix] = false
 															}
@@ -523,7 +535,7 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 															return async ({ result }) => {
 																fireGTagEvent('add_to_cart', result?.data)
 																updateCartStore({ data: result.data })
-																await invalidateAll()
+																// await invalidateAll()
 																await applyAction(result)
 																loading[ix] = false
 															}
