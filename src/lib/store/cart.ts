@@ -9,7 +9,7 @@ export const getCartFromStore = async ({ origin, storeId, cartId, forceUpdate = 
 	let existingCart
 
 	cartStore.subscribe((value) => {
-		if (value && Object.values(value)?.length) {
+		if (value?.items?.length && Object.values(value)?.length) {
 			existingCart = value
 		}
 	})
