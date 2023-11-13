@@ -15,7 +15,7 @@ import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 import SEO from '$lib/components/SEO/index.svelte'
-import { cartStore, getCartFromStore, updateCartStore } from '$lib/store/cart.js'
+import { cartLoadingStore, cartStore, getCartFromStore, updateCartStore } from '$lib/store/cart.js'
 import { browser } from '$app/environment'
 
 const cookies = Cookie()
@@ -43,11 +43,15 @@ let products = []
 let selectedCouponCode = null
 let selectedLoadingType = null
 $: cart = {}
+$: isCartLoading = true
 
 onMount(() => {
 	if (browser) {
 		cartStore.subscribe((value) => {
 			cart = value
+		})
+		cartLoadingStore.subscribe((value) => {
+			isCartLoading = value
 		})
 	}
 	getProducts()
@@ -883,7 +887,7 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 					</div>
 				</div>
 			{/if}
-		{:else}
+		{:else if !isCartLoading}
 			<div class="flex h-[70vh] flex-col items-center justify-center text-center">
 				<div>
 					<img src="{noAddToCartAnimate}" alt="empty listing" class="mb-5 h-60 object-contain" />
