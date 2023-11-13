@@ -2,6 +2,7 @@ import { CartService } from '$lib/services'
 import { writable } from 'svelte/store'
 
 export const cartStore = writable({})
+export const cartLoadingStore = writable(false)
 
 let loadingForCart = false
 
@@ -16,12 +17,13 @@ export const getCartFromStore = async ({ origin, storeId, cartId, forceUpdate = 
 
 	if ((!loadingForCart && !existingCart) || !!forceUpdate) {
 		loadingForCart = true
-
+		cartLoadingStore.update((u) => true)
 		const cartDataFromServer = await CartService.fetchRefreshCart({ cartId, storeId, origin })
 
 		cartStore.update((u) => cartDataFromServer)
 
 		loadingForCart = false
+		cartLoadingStore.update((u) => false)
 	}
 
 	return existingCart
