@@ -44,7 +44,7 @@ async function handleSendOTP({ detail }) {
 		loading = true
 		const res = await UserService.getOtpService({
 			phone,
-			storeId: data.store?.id,
+			storeId: data.storeId,
 			origin: data.origin
 		})
 
@@ -65,7 +65,7 @@ async function handleVerifyOtp({ detail }) {
 		const res = await UserService.verifyOtpService({
 			phone,
 			otp,
-			storeId: data.store?.id,
+			storeId: data.storeId,
 			origin: data.origin
 		})
 

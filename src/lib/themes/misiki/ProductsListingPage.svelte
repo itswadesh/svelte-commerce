@@ -135,7 +135,7 @@ async function loadNextPage() {
 			const res = await ProductService.fetchNextPageProducts({
 				categorySlug: data.products?.category?.slug,
 				origin: $page?.data?.origin,
-				storeId: $page?.data?.store?.id,
+				storeId: $page?.data?.storeId,
 				nextPage,
 				searchParams
 			})

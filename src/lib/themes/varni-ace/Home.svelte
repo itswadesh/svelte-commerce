@@ -140,7 +140,7 @@ async function loadNextPage() {
 				searchParams,
 				isCors: $page?.data?.store?.isCors,
 				origin: $page?.data?.origin,
-				storeId: $page?.data?.store?.id
+				storeId: $page?.data?.storeId
 			})
 
 			// console.log('res', res)

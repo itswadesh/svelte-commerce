@@ -30,7 +30,7 @@ let bounceItemFromTop = false
 // 				vid: p._id,
 // 				qty: 1,
 // 				options: p.options,
-// 				store: $page.data.store?.id
+// 				store: $page.data.storeId
 // 			},
 // 			$page.data.origin
 // 		)
@@ -54,7 +54,6 @@ let bounceItemFromTop = false
 // 		// 		unavailableItems: res?.unavailableItems,
 // 		// 		formattedAmount: res?.formattedAmount
 // 		// 	}
-// 		// 	await cookies.set('cart', cookieCart, { path: '/' })
 // 		// 	$page.data.cart = cookieCart
 // 		// 	cartButtonText = 'Added To Cart'
 // 		// 	bounceItemFromTop = true

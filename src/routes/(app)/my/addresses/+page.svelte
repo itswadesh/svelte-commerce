@@ -46,7 +46,7 @@ async function saveAddr(e) {
 	try {
 		await AddressService.saveAddress({
 			id,
-			storeId: $page.data.store?.id,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 		await invalidateAll()
@@ -65,7 +65,7 @@ async function remove(id, index) {
 
 			toast('Deleting...Please wait', 'warning')
 
-			await del(`addresses/${id}?store=${$page?.data?.store?.id}`, $page.data.origin)
+			await del(`addresses/${id}?store=${$page?.data?.storeId}`, $page.data.origin)
 
 			toast('Item deleted successfully', 'success')
 

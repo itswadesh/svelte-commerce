@@ -21,6 +21,7 @@ declare global {
 			megamenu: Category
 			menu: any
 			store: any
+			storeId: string
 			session: string
 			origin: string
 			zip: string

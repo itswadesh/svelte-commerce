@@ -3,9 +3,9 @@ import { date, toast } from '$lib/utils'
 import { ReviewService } from '$lib/services'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import {BackButton} from '$lib/ui'
+import { BackButton } from '$lib/ui'
 import dotsLoading from '$lib/assets/dots-loading.gif'
-import {ReviewGallery,ProductNav} from '$lib/components'
+import { ReviewGallery, ProductNav } from '$lib/components'
 
 export let data
 
@@ -54,7 +54,7 @@ async function loadNextPage() {
 				brandIc: brandId,
 				slug: data.slug,
 				origin: $page?.data?.origin,
-				storeId: $page?.data?.store?.id
+				storeId: $page?.data?.storeId
 			})
 
 			const isProduct = type === 'product_review' ? true : false

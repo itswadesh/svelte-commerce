@@ -18,36 +18,12 @@ const send = async ({ method, path, params, data, token, headers, origin }: any)
 		return
 	}
 
-	// origin = origin || 'http://localhost:3000'
-	// const storeId = id // cookies.get('store')?.id
-
-	// if (headers && headers.get('cookie') && headers.get('cookie').includes('store')) {
-	// 	origin = headers.get('origin') || headers.get('host')
-
-	// 	if (origin === 'localhost:3000') origin = 'http://localhost:3000'
-
-	// 	else origin = 'https://' + origin
-	// 	// const cookie0 = headers.get('cookie')
-	// 	// const cookies = cookie.parse(cookie0 || '')
-	// 	// storeId = JSON.parse(cookies.store || '{}')?.id
-	// } else {
-	// }
-
 	let uri = new URL(path, origin)
 
 	if (!path.includes('/api/')) {
 		// When microservice path provided
 		uri = new URL('api/' + path, origin)
 	}
-
-	// const domain = uri.searchParams.get('domain')
-	// const st = uri.searchParams.get('store')
-
-	// if (!storeId && !domain && !st) {
-	// 	// console.error('store id not found in config', path)
-	// 	// throw 'Loading...'
-	// 	return
-	// }
 
 	const opts: any = {
 		method

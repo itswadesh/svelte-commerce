@@ -32,7 +32,7 @@ export async function load({ cookies, locals, params, url }) {
 		}
 	} else {
 		address = await AddressService.fetchAddress({
-			storeId: locals.store?.id,
+			storeId: locals.storeId,
 			id,
 			sid: cookies.get('connect.sid'),
 			server: true
@@ -40,7 +40,7 @@ export async function load({ cookies, locals, params, url }) {
 	}
 
 	countries = await CountryService.fetchCountries({
-		storeId: locals.store?.id,
+		storeId: locals.storeId,
 		server: true,
 		sid: cookies.get('connect.sid')
 	})
@@ -61,7 +61,7 @@ export async function load({ cookies, locals, params, url }) {
 
 	if (address?.country) {
 		states = await CountryService.fetchStates({
-			storeId: locals.store?.id,
+			storeId: locals.storeId,
 			server: true,
 			sid: cookies.get('connect.sid'),
 			countryCode: address?.country

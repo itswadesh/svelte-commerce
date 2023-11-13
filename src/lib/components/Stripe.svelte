@@ -61,7 +61,7 @@ const payWithStripe = async (pm: PaymentMethod) => {
 		const res: any = await OrdersService.stripeCheckoutService({
 			paymentMethodId,
 			address,
-			storeId: $page.data.store?.id,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 		if (res.errors) {

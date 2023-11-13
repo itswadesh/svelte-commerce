@@ -144,7 +144,7 @@ async function getMegamenu() {
 			loadingForMegamenu = true
 
 			megamenu = await getAllMegamenuFromStore({
-				storeId: $page?.data?.store?.id,
+				storeId: $page?.data?.storeId,
 				isCors: $page?.data?.store?.isCors,
 				origin: $page.data.origin
 			})

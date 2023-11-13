@@ -33,7 +33,7 @@ async function submit() {
 		const res = await UserService.forgotPasswordService({
 			email: email,
 			referrer: $page.data.origin,
-			storeId: $page.data.store?.id,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 

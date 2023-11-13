@@ -3,14 +3,14 @@ const isServer = import.meta.env.SSR
 
 export async function load({ params, parent, url }) {
 	const { slug } = params
-	const { sid, origin, store } = await parent()
+	const { sid, origin, storeId } = await parent()
 	return {
 		pid: slug,
 		productReviews: ReviewService.fetchProductReviews({
 			page: url?.searchParams.get('page') || 1,
 			slug,
 			origin,
-			storeId: store?.id,
+			storeId,
 			server: isServer,
 			sid
 		})

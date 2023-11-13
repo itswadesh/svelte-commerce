@@ -46,7 +46,7 @@ async function submit() {
 	try {
 		await DemoRequestService.saveScheduleDemo({
 			schedule,
-			storeId: $page.data.store?.id,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 		toast(msg, 'success')

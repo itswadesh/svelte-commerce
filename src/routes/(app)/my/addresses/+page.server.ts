@@ -3,7 +3,7 @@ import { error } from '@sveltejs/kit'
 
 export async function load({ cookies, locals }) {
 	const { myAddresses, selectedAddress, count } = await AddressService.fetchAddresses({
-		storeId: locals.store?.id,
+		storeId: locals.storeId,
 		server: true,
 		sid: cookies.get('connect.sid')
 	})
@@ -63,7 +63,7 @@ const saveAddress = async ({ request, cookies, locals }) => {
 			phone,
 			state,
 			zip,
-			storeId: locals.store?.id,
+			storeId: locals.storeId,
 			sid,
 			origin: locals?.origin
 		})
@@ -120,7 +120,7 @@ const editAddress = async ({ request, cookies, locals }) => {
 			phone,
 			state,
 			zip,
-			storeId: locals.store?.id,
+			storeId: locals.storeId,
 			sid,
 			origin: locals?.origin
 		})
@@ -138,7 +138,7 @@ const deleteAddress = async ({ request, cookies, locals }) => {
 
 	const res = await AddressService.deleteAddress({
 		id,
-		storeId: locals.store?.id,
+		storeId: locals.storeId,
 		sid
 	})
 

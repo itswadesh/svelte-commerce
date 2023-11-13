@@ -64,7 +64,7 @@ const addToCart = async ({ pid, qty, customizedImg, ix, loadingType }: any) => {
 		vid: pid,
 		qty: qty,
 		customizedImg: customizedImg || null,
-		storeId: $page.data.store?.id,
+		storeId: $page.data.storeId,
 		origin: $page.data.origin
 	})
 

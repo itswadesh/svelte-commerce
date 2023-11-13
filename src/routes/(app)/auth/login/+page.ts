@@ -7,7 +7,7 @@ export async function load({ parent }) {
 	let countries = []
 
 	// countries = await CountryService.fetchCountries({
-	// 	storeId: store?.id,
+	// 	storeId: store,
 	// 	server: isServer,
 	// 	origin
 	// })

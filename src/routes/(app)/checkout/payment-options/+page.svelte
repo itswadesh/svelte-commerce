@@ -108,7 +108,7 @@ async function submit(pm) {
 					paymentMethod: 'COD',
 					prescription: data.prescription?._id,
 					origin: $page.data.origin,
-					storeId: $page.data.store?.id
+					storeId: $page.data.storeId
 				})
 
 				// console.log('res of cod',res.id,res._id, res)
@@ -134,7 +134,7 @@ async function submit(pm) {
 						paymentMethod: 'COD',
 						prescription: data.prescription?._id,
 						origin: $page.data.origin,
-						storeId: $page.data.store?.id
+						storeId: $page.data.storeId
 					})
 
 					// console.log('res of cod', res)
@@ -169,7 +169,7 @@ async function submit(pm) {
 					address: data.addressId,
 					orderNo: orderNo,
 					origin: $page.data.origin,
-					storeId: $page.data.store?.id,
+					storeId: $page.data.storeId,
 					cartId: $page.data.cartId
 				})
 
@@ -216,7 +216,7 @@ async function submit(pm) {
 				const res = await OrdersService.phonepeCheckout({
 					address: data.addressId,
 					origin: $page.data.origin,
-					storeId: $page.data.store?.id
+					storeId: $page.data.storeId
 				})
 
 				// console.log('res of Phonepe', res)
@@ -241,7 +241,7 @@ async function submit(pm) {
 				const res = await OrdersService.paypalCheckout({
 					address: data.addressId,
 					origin: $page.data.origin,
-					storeId: $page.data.store?.id
+					storeId: $page.data.storeId
 				})
 
 				// console.log('res of Paypal', res)
@@ -268,7 +268,7 @@ async function submit(pm) {
 					orderNo: orderNo,
 					cartId: $page.data.cartId,
 					origin: $page.data.origin,
-					storeId: $page.data.store?.id
+					storeId: $page.data.storeId
 				})
 
 				// console.log('rp of Razorpay', rp)
@@ -288,7 +288,7 @@ async function submit(pm) {
 								rpOrderId: response.razorpay_order_id,
 								rpPaymentId: response.razorpay_payment_id,
 								origin: $page.data.origin,
-								storeId: $page.data.store?.id
+								storeId: $page.data.storeId
 							})
 
 							toast('Payment success', 'success')

@@ -73,7 +73,7 @@ function slideFade(node, params) {
 function handleShowCartSidebar() {
 	if ($page?.url?.pathname !== '/cart') {
 		showCartSidebar = true
-		fetchCart()
+		// fetchCart()
 		getCategories()
 	}
 
@@ -108,8 +108,6 @@ async function fetchCart() {
 			}
 
 			cookies.set('cartId', cart.cartId, { path: '/' })
-			// cookies.set('cartQty', cart.qty, { path: '/' })
-			// cookies.set('cart', JSON.stringify(cart), { path: '/' })
 		}
 	} catch (e) {
 		toast(e, 'error')
@@ -121,7 +119,7 @@ async function fetchCart() {
 async function getCategories() {
 	try {
 		const res1 = await CategoryService.fetchAllCategories({
-			storeId: $page.data.store?.id,
+			storeId: $page.data.store,
 			origin: $page.data.origin
 		})
 

@@ -52,7 +52,7 @@ onMount(async () => {
 			limit: 20,
 			sid: null,
 			origin: $page.data.origin,
-			storeId: $page.data.store?.id,
+			storeId: $page.data.storeId,
 			isCors: $page.data.store?.isCors
 		})
 	}
@@ -140,7 +140,7 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 
 										<li class="flex max-w-max items-center">
 											<a
-												href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store?.id}"
+												href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.storeId}"
 												target="_blank"
 												aria-label="Click to visit this page"
 												class="link-underline link-underline-gray whitespace-pre-wrap">

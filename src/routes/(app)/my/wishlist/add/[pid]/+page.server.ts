@@ -4,12 +4,12 @@ import { redirect } from '@sveltejs/kit'
 export async function load({ locals, cookies, params, request }) {
 	try {
 		const pid = params.pid
-		const storeId = locals.store?.id
+		const storeId = locals.storeId
 		const sid = locals.sid
 		const isExistInWishlist = await WishlistService.checkWishlist({
 			pid,
 			vid: pid,
-			storeId: locals.store?.id,
+			storeId: locals.storeId,
 			origin: locals.origin,
 			server: true,
 			sid
@@ -22,7 +22,6 @@ export async function load({ locals, cookies, params, request }) {
 				storeId,
 				sid,
 				origin: locals.origin,
-				server: true
 			})
 		}
 

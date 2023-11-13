@@ -16,10 +16,9 @@ onMount(async () => {
 		await HomeService.fetchCategoriesProducts({
 			categories,
 			origin,
-			storeId: $page.data.store?.id
+			storeId: $page.data.storeId
 		})
 	).data
-
 })
 </script>
 

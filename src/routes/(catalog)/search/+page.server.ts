@@ -4,7 +4,7 @@ const isServer = import.meta.env.SSR
 export const prerender = false
 
 export async function load({ url, params, parent, cookies }) {
-	const { store, origin } = await parent()
+	const { store, storeId, origin } = await parent()
 
 	const categorySlug = params.slug
 	const currentPage = +url.searchParams.get('page') || 1
@@ -20,7 +20,7 @@ export async function load({ url, params, parent, cookies }) {
 	return {
 		products: ProductService.searchProducts({
 			query: query.toString(),
-			storeId: store?.id,
+			storeId,
 			server: isServer,
 			sid: cookies.get('connect.sid')
 		}),

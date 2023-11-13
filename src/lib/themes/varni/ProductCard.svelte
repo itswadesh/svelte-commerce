@@ -59,7 +59,7 @@ async function toggleWishlist(id) {
 
 		isWislisted = await post(
 			`wishlists/toggle`,
-			{ product: id, variant: id, store: $page?.data?.store?.id },
+			{ product: id, variant: id, store: $page?.data?.storeId },
 			$page.data.origin
 		)
 

@@ -23,6 +23,7 @@ import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 import storeClosed from '$lib/assets/store-closed.png'
 import whatsappIcon from '$lib/assets/social-media/whatsapp.png'
 import { getCartFromStore } from '$lib/store/cart'
+import { getStoreFromStore } from '$lib/store/store'
 
 // console.log('$page', $page)
 
@@ -40,14 +41,19 @@ $: if (innerWidth < 1024) {
 } else {
 	showBackToTopButton = true
 }
-
 // let ReloadPrompt
 
 onMount(async () => {
 	if (browser) {
+		const url = new URL($page.data.url)
+		await getStoreFromStore({
+			origin,
+			host: url.host,
+			storeId: $page.data.storeId
+		})
 		await getCartFromStore({
 			origin,
-			storeId: $page.data.store.id,
+			storeId: $page.data.storeId,
 			cartId: $page.data.cartId
 		})
 	}
@@ -119,7 +125,7 @@ onMount(async () => {
 	<meta name="apple-mobile-web-app-title" content="{$page.data.store?.websiteName}" />
 	<meta name="application-name" content="{$page.data.store?.websiteName}" />
 	<link
-		href="https://fonts.googleapis.com/css2?family={$page.data.store.fontFamily ||
+		href="https://fonts.googleapis.com/css2?family={$page.data.store?.fontFamily ||
 			'Montserrat'}:wght@100;200;300;400;500;600;700;800;900&display=swap"
 		rel="stylesheet" />
 

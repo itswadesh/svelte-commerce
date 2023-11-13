@@ -38,7 +38,7 @@ async function removeFromWishlist(id, wx) {
 		await WishlistService.toggleWishlistService({
 			pid: id,
 			vid: id,
-			storeId: $page.data.store?.id,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 		await invalidateAll()
@@ -53,7 +53,7 @@ async function getWishlistedProducts() {
 	try {
 		wishlistedProducts = WishlistService.fetchWishlist({
 			origin: $page?.data?.origin,
-			storeId: $page?.data?.store?.id
+			storeId: $page?.data?.storeId
 		})
 		await invalidateAll()
 	} catch (e) {

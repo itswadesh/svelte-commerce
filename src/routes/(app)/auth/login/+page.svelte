@@ -118,7 +118,7 @@ async function handleSendOTP({ detail }) {
 
 		const res = await UserService.getOtpService({
 			phone,
-			storeId: data.store?.id,
+			storeId: data.storeId,
 			origin: data.origin
 		})
 
@@ -407,7 +407,7 @@ function changeNumber() {
 		</a>
 
 		<!-- <a
-			href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store?.id}"
+			href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store}"
 			aria-label="Click to login as vendor"
 			class="whitespace-nowrap text-primary-500 hover:text-primary-700 hover:underline">
 			Join as Vendor

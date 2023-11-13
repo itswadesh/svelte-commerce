@@ -11,6 +11,6 @@ onMount(async () => {
 
 	const { storeOne } = res
 
-	cookies.set('store', JSON.stringify(storeOne), { path: '/' })
+	cookies.set('storeId', storeOne?._id, { path: '/' })
 })
 </script>

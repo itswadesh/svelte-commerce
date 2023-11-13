@@ -126,7 +126,7 @@ function selectSize(s) {
 }
 
 const storeRecentlyViewedToLocatStorage = async () => {
-	const localRecentlyViewed = localStorage.getItem(`recently_viewed_${$page?.data?.store?.id}`)
+	const localRecentlyViewed = localStorage.getItem(`recently_viewed_${$page?.data?.storeId}`)
 
 	if (!!localRecentlyViewed && localRecentlyViewed !== 'undefined') {
 		recentlyViewed = JSON.parse(localRecentlyViewed)
@@ -155,10 +155,7 @@ const storeRecentlyViewedToLocatStorage = async () => {
 		recentlyViewed = resvw
 
 		if (browser) {
-			localStorage.setItem(
-				`recently_viewed_${$page.data?.store?.id}`,
-				JSON.stringify(recentlyViewed)
-			)
+			localStorage.setItem(`recently_viewed_${$page.data?.storeId}`, JSON.stringify(recentlyViewed))
 		}
 	}
 }

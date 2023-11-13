@@ -12,7 +12,7 @@ export async function load({ url, locals, cookies }) {
 	try {
 		const res = await OrdersService.cashfreeCapture({
 			order_no: order_no,
-			storeId: locals.store?.id,
+			storeId: locals.storeId,
 			sid: locals.sid,
 			origin: locals.origin
 		})

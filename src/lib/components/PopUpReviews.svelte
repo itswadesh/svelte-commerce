@@ -55,7 +55,7 @@ onMount(() => {
 	const res = ReviewService.fetchReviews({
 		currentPage: 0,
 		origin,
-		storeId: $page.data.store?.id,
+		storeId: $page.data.storeId,
 		sort: 'updatedAt'
 	})
 

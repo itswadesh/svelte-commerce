@@ -112,7 +112,7 @@ async function getMegamenu() {
 		try {
 			// megamenu = await getMegamenuFromStore({
 			// 	sid: null,
-			// 	storeId: $page?.data?.store?.id,
+			// 	storeId: $page?.data?.storeId,
 			// 	isCors: $page?.data?.store?.isCors,
 			// 	origin: $page.data.origin
 			// })
@@ -122,7 +122,7 @@ async function getMegamenu() {
 			if (!localmegamenu || localmegamenu === 'undefined') {
 				megamenu = await CategoryService.fetchMegamenuData({
 					origin: $page.data.origin,
-					storeId: $page.data.store?.id
+					storeId: $page.data.storeId
 				})
 			} else {
 				megamenu = JSON.parse(localmegamenu)
