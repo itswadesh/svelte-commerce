@@ -5,7 +5,7 @@ import { error, redirect } from '@sveltejs/kit'
 export const prerender = false
 
 export async function load({ params, parent, locals, url, request, cookies }) {
-	const { me, sid, store, origin } = locals
+	const { me, sid, store, storeId, origin } = locals
 	const cartId = cookies.get('cartId')
 
 	let address
@@ -26,7 +26,7 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 		cartId,
 		origin: origin,
 		sid,
-		storeId: store?.id,
+		storeId
 	})
 
 	if (!cartRes?.qty) {
@@ -55,7 +55,7 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 		if (order_no) {
 			const order = await OrdersService.fetchOrder({
 				id: order_no,
-				storeId: locals.store?.id,
+				storeId: locals.store,
 				server: true,
 				sid: cookies.get('connect.sid')
 			})
@@ -69,20 +69,27 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 		} else {
 			address = await AddressService.fetchAddress({
 				id: address_id,
-				storeId: locals.store?.id,
+				storeId: locals.store,
 				server: true,
 				sid: cookies.get('connect.sid')
 			})
 		}
 
 		paymentMethods = await PaymentMethodService.fetchPaymentMethods({
-			storeId: locals.store.id,
+			storeId: locals.store,
 			server: true,
 			sid: cookies.get('connect.sid')
 		})
 
 		return { paymentMethods, address, addressId: address_id, me, cart }
 	} catch (e) {
-		return { paymentMethods, address, addressId: address_id, me, cart, err: e.data?.message || e.message }
+		return {
+			paymentMethods,
+			address,
+			addressId: address_id,
+			me,
+			cart,
+			err: e.data?.message || e.message
+		}
 	}
 }

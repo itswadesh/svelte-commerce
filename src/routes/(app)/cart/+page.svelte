@@ -77,7 +77,7 @@ async function applyCouponCode(selectedCouponCode: string, index: number) {
 			cartId: $page.data.cartId,
 			code: selectedCouponCode,
 			origin: $page.data.origin,
-			storeId: $page.data.store?.id
+			storeId: $page.data.storeId
 		})
 
 		appliedCouponInfo = resAC
@@ -85,7 +85,7 @@ async function applyCouponCode(selectedCouponCode: string, index: number) {
 		await getCartFromStore({
 			cartId: $page.data.cartId,
 			origin: $page.data.origin,
-			storeId: $page.data.store?.id,
+			storeId: $page.data.storeId,
 			forceUpdate: true
 		})
 		openApplyPromoCodeModal = false
@@ -108,7 +108,7 @@ async function removeCouponCode() {
 			cartId: $page.data.cartId,
 			code: selectedCouponCode || cart?.discount?.code,
 			origin: $page.data.origin,
-			storeId: $page.data.store?.id
+			storeId: $page.data.storeId
 		})
 
 		selectedCouponCode = ''
@@ -116,7 +116,7 @@ async function removeCouponCode() {
 		await getCartFromStore({
 			cartId: $page.data.cartId,
 			origin: $page.data.origin,
-			storeId: $page.data.store?.id,
+			storeId: $page.data.storeId,
 			forceUpdate: true
 		})
 	} catch (e) {
@@ -133,7 +133,7 @@ async function getProducts() {
 		const resP = await ProductService.fetchProducts({
 			origin: $page?.data?.origin,
 			isCors: $page?.data?.store?.isCors,
-			storeId: $page?.data?.store?.id
+			storeId: $page?.data?.storeId
 		})
 		products = resP?.hits
 	} catch (e) {
@@ -148,7 +148,7 @@ async function getCoupons() {
 		const resC = await CouponService.fetchCoupons({
 			origin: $page?.data?.origin,
 			isCors: $page?.data?.store?.isCors,
-			storeId: $page?.data?.store?.id
+			storeId: $page?.data?.storeId
 		})
 		coupons = resC?.data
 	} catch (e) {

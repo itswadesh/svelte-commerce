@@ -73,7 +73,7 @@ async function fetchStates(country) {
 
 		states = await CountryService.fetchStates({
 			countryCode: country,
-			storeId: $page.data?.store?.id,
+			storeId: $page.data?.storeId,
 			origin: $page.data?.origin
 		})
 
@@ -159,7 +159,7 @@ async function SaveAddress(address) {
 			phone: phone,
 			state: state,
 			zip: zip,
-			storeId: $page.data.store?.id,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 

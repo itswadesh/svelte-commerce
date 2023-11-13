@@ -4,14 +4,13 @@ import type { LayoutServerLoad } from './$types'
 
 export const prerender = false
 
-export const load: LayoutServerLoad = async ({ url, locals, cookies, request, params }) => {
+export const load: LayoutServerLoad = async ({ url, locals, cookies }) => {
 	try {
 		const currentPage = +url.searchParams.get('page') || 1
 		const q = url.searchParams.get('q') || ''
 		const { pathname } = url
-
 		// setHeaders({
-		// 	'cache-control': 'public, max-age=300'
+			// 	'cache-control': 'public, max-age=300'
 		// })
 		const zip = cookies.get('zip')
 		locals.url = url.href
@@ -26,7 +25,7 @@ export const load: LayoutServerLoad = async ({ url, locals, cookies, request, pa
 		throw error(
 			404,
 			`Store Not Found @Layout 
-			<br/>ID: ${locals.store.id}
+			<br/>ID: ${locals.storeId}
 			<br/>ORIGIN: ${locals.origin}
 			<br/>DOMAIN(env): ${DOMAIN}
 			<br/>HTTP_ENDPOINT(env): ${HTTP_ENDPOINT}`

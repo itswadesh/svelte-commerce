@@ -4,14 +4,14 @@ const isServer = import.meta.env.SSR
 export async function load({ params, parent, url }) {
 	let page = +url.searchParams.get('page') || 1
 	let vendorSlug = params.slug
-	const { store, sid, origin } = await parent()
+	const { store, storeId, sid, origin } = await parent()
 	return {
 		page,
 		vendor: VendorService.fetchVendor({
 			server: isServer,
 			sid,
 			slug: vendorSlug,
-			storeId: store?.id,
+			storeId,
 			origin
 		}),
 		vendorsProduct: VendorService.fetchProductsOfVendor({
@@ -20,7 +20,7 @@ export async function load({ params, parent, url }) {
 			server: isServer,
 			sid,
 			origin,
-			storeId: store?.id
+			storeId
 		})
 	}
 }

@@ -4,7 +4,7 @@ export const prerender = false
 const isServer = import.meta.env.SSR
 
 export async function load({ url, params, parent, setHeaders }) {
-	const { store, origin, sid } = await parent()
+	const { store, storeId, origin, sid } = await parent()
 
 	const categorySlug = params.slug
 
@@ -23,14 +23,13 @@ export async function load({ url, params, parent, setHeaders }) {
 			id: categorySlug,
 			server: isServer,
 			sid,
-			storeId: store?.id,
+			storeId,
 			origin
 		}),
 		// streamed: {
 		megamenu: CategoryService.fetchMegamenuData({
-			server: isServer,
 			sid,
-			storeId: store?.id,
+			storeId,
 			origin
 		}),
 		// },

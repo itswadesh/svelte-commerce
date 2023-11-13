@@ -48,10 +48,10 @@ export let store = {}
 // 	try {
 // categories= await fetchFooterCategories({
 // 	origin: $page?.data?.origin,
-// 	storeId: $page?.data?.store?.id
+// 	storeId: $page?.data?.storeId
 // })
 // const megamenu2 = await fetchMegamenuData({
-// 	storeId: $page?.data?.store?.id,
+// 	storeId: $page?.data?.storeId,
 // 	origin: $page.data?.origin
 // })
 // localStorage.setItem('megamenu', JSON.stringify(megamenu2))
@@ -92,7 +92,7 @@ let footerItems: any = [
 			{ title: 'Blogs', link: '/blogs', new: false },
 			{
 				title: 'Join as Vendor',
-				link: `${$page.data.store?.adminUrl}?role=vendor&store=${$page?.data?.store?.id}`,
+				link: `${$page.data.store?.adminUrl}?role=vendor&store=${$page?.data?.storeId}`,
 				new: true,
 				target: '_blank'
 			},

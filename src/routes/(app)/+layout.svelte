@@ -12,7 +12,6 @@ let openSidebar = false
 <div class="{showCartSidebar || openSidebar ? 'h-screen overflow-hidden' : 'h-full'} antialiased">
 	<Nav
 		me="{data.me}"
-		cart="{data.cart}"
 		store="{data.store}"
 		bind:showCartSidebar="{showCartSidebar}"
 		bind:openSidebar="{openSidebar}" />

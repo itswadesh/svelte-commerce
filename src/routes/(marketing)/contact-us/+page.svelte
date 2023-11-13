@@ -29,7 +29,7 @@ async function submitContactInformation() {
 			phone,
 			subject: `Someone contact us from ${$page.data.store?.websiteName}`,
 			message,
-			storeId: $page.data.store?.id,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 

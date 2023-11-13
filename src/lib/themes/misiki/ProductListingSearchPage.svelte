@@ -97,7 +97,7 @@ async function saveSearchData(searchData) {
 		await PopularSearchService.savePopularSearch({
 			id: 'new',
 			text: searchData,
-			storeId: $page.data.store?.id,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 	} catch (e) {
@@ -153,7 +153,7 @@ async function loadNextPage() {
 			const res = await ProductService.fetchNextPageProducts({
 				categorySlug: data.products?.category?.slug,
 				origin: $page?.data?.origin,
-				storeId: $page?.data?.store?.id,
+				storeId: $page?.data?.storeId,
 				nextPage,
 				searchParams
 			})

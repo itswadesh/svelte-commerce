@@ -85,7 +85,7 @@ function handleShowCartSidebar() {
 
 async function getCategories() {
 	try {
-		const res1 = await getAPI(`categories?store=${$page.data.store?.id}`, $page.data.origin)
+		const res1 = await getAPI(`categories?store=${$page.data.storeId}`, $page.data.origin)
 		categories = res1?.data.filter((c) => {
 			return c.img
 		})
@@ -103,7 +103,7 @@ const removeItemFromCart = async ({ pid, qty, customizedImg, ix }: any) => {
 				pid: pid,
 				qty: qty,
 				customizedImg: customizedImg || null,
-				store: $page.data.store?.id
+				store: $page.data.storeId
 			},
 			$page.data.origin
 		)

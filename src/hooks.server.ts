@@ -50,7 +50,31 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.isDesktop = isDesktop
 		event.locals.isShowBackButton = isShowBackButton
 
-		const { menu, storeOne } = await InitService.fetchInit(url.host)
+		const storeId = event.cookies.get('storeId')
+		const store = event.cookies.get('store') || '{}'
+		const storeAsJson = JSON.parse(store)
+		if (storeId && storeAsJson?.id) {
+			event.locals.storeId = storeId
+			event.locals.store = storeAsJson
+		} else {
+			console.log('Not cookies')
+			try {
+				const { storeOne } = await InitService.fetchInit({
+					host: url.host,
+					origin: event.locals.origin
+				})
+				const storeId = storeOne?._id
+				const store = storeOne
+				if (!storeId)
+					throw { status: 404, message: `Could not find STORE for domain = ${url.host}` }
+				event.cookies.set('storeId', storeId, { path: '/' })
+				event.cookies.set('store', JSON.stringify(storeOne), { path: '/' })
+				event.locals.storeId = storeId
+				event.locals.store = store
+			} catch (e) {
+				throw { status: 404, message: `Could not find STORE for domain = ${url.host}` }
+			}
+		}
 		// console.log('menu at hooks.server.is', menu);
 		// console.log('storeOne at hooks.server.is', storeOne);
 
@@ -58,8 +82,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// const { storeOne } = await fetchStoreData(event)
 		// console.timeEnd('init1')
 
-		event.locals.menu = menu || []
-		event.locals.store = storeOne || { store: storeOne._id }
+		// event.locals.menu = menu || []
 		// event.locals.megamenu = megamenu || []
 
 		// this simply gets data from cookie
@@ -89,6 +112,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 		return response
 	} catch (e) {
 		// If the store is not found, throw a 404 error
-		throw error(404, 'Store Not Found');
+		throw error(404, 'Store Not Found')
 	}
 }

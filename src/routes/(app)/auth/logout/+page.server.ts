@@ -10,10 +10,10 @@ export const load: PageServerLoad = async () => {
 
 export const actions: Actions = {
 	async default({ cookies, locals }) {
-		await UserService.logoutService({ storeId: locals.store?.id, sid: cookies.get('connect.sid') })
+		await UserService.logoutService({ storeId: locals.storeId, sid: cookies.get('connect.sid') })
 		// eat the cookie
 
-		cookies.set('store', null, {
+		cookies.set('storeId', null, {
 			path: '/',
 			expires: new Date(0)
 		})
@@ -43,16 +43,10 @@ export const actions: Actions = {
 			expires: new Date(0)
 		})
 
-		locals.store = null
 		locals.settings = null
 		locals.session = null
 		locals.me = null
 		locals.sid = null
-
-		// cookies.set('sid', '', {
-		// 	path: '/',
-		// 	expires: new Date(0)
-		// })
 
 		//redirect the user
 

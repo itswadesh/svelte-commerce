@@ -9,7 +9,7 @@ export async function load({ request, locals, parent, cookies }) {
 	try {
 		loading = true
 		const res = await FaqService.fetchFaqs({
-			storeId: locals.store?.id,
+			storeId: locals.storeId,
 			server: true,
 			sid: cookies.get('connect.sid')
 		})

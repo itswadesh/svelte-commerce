@@ -75,8 +75,6 @@ let menuItems2 = [
 // 	} finally {
 // 	}
 
-// 	await cookies.set('me', null, { path: '/' })
-// 	await cookies.set('cart', null, { path: '/' })
 // 	await cookies.remove('token')
 // 	await cookies.remove('connect.sid')
 // 	await cookies.remove('me')
@@ -156,7 +154,7 @@ function handleShowCartSidebar() {
 
 async function getCategories() {
 	try {
-		const res1 = await getAPI(`categories?store=${$page?.data?.store?.id}`, $page.data.origin)
+		const res1 = await getAPI(`categories?store=${$page?.data?.storeId}`, $page.data.origin)
 		categories = res1?.data.filter((c) => {
 			return c.img
 		})
@@ -174,7 +172,7 @@ const removeItemFromCart = async ({ pid, qty, customizedImg, ix }: any) => {
 				pid: pid,
 				qty: qty,
 				customizedImg: customizedImg || null,
-				store: $page?.data?.store?.id
+				store: $page?.data?.storeId
 			},
 			$page.data.origin
 		)

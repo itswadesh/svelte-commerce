@@ -34,7 +34,7 @@ async function updateCart() {
 				cartId: data?.cartId,
 				email: selectedAddressFullObject[0].email,
 				shippingAddress: selectedAddressFullObject[0],
-				storeId: $page.data?.store?.id
+				storeId: $page.data?.storeId
 			})
 
 			// console.log('updated cart res =', res)

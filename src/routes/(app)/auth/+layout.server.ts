@@ -8,7 +8,7 @@ export async function load({ url, locals, cookies }) {
 	try {
 		const sid = cookies.get('connect.sid')
 		const res: any = await CartService.fetchMyCart({
-			storeId: locals.store?.id,
+			storeId: locals.storeId,
 			server: true,
 			sid,
 			origin: locals.origin
@@ -39,7 +39,6 @@ export async function load({ url, locals, cookies }) {
 	}
 
 	if (cookies) {
-		// cookies.set(serializedCart)
 	}
 	return {
 		cart,
