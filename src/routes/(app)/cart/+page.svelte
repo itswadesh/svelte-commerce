@@ -52,7 +52,7 @@ onMount(() => {
 	}
 	getProducts()
 	getCoupons()
-	fireGTagEvent('view_cart', data.cart)
+	fireGTagEvent('view_cart', cart)
 })
 
 function handleCouponCode(couponCode: string, index: number) {
@@ -102,7 +102,7 @@ async function removeCouponCode() {
 
 		await CartService.removeCouponService({
 			cartId: $page.data.cartId,
-			code: selectedCouponCode || data.cart?.discount?.code,
+			code: selectedCouponCode || cart?.discount?.code,
 			origin: $page.data.origin,
 			storeId: $page.data.store?.id
 		})
@@ -181,9 +181,9 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 							<div class="mx-3 h-1 w-1 rounded-full bg-zinc-500"></div>
 
 							<p>
-								{data.cart?.qty || ''}
+								{cart?.qty || ''}
 
-								{#if data.cart?.qty > 1}
+								{#if cart?.qty > 1}
 									Items
 								{:else}
 									Item
@@ -195,7 +195,7 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 					<hr />
 
 					<div>
-						{#if data.cart?.unavailableItems?.length}
+						{#if cart?.unavailableItems?.length}
 							<div>
 								<div class="mt-5 cursor-default border-b opacity-50">
 									<div class="flex gap-4">
@@ -218,7 +218,7 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 									</div>
 
 									<div class="flex flex-col divide-y">
-										{#each data.cart?.unavailableItems as item (item._id)}
+										{#each cart?.unavailableItems as item (item._id)}
 											<div class="flex w-full items-start gap-4 py-5">
 												<a
 													href="/product/{item?.slug}"
@@ -326,10 +326,9 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 								</form>
 							</div>
 						{/if}
-
-						{#if data.cart?.qty}
+						{#if cart?.qty}
 							<div class="flex flex-col divide-y">
-								{#each data.cart?.items as item, ix (item._id)}
+								{#each cart?.items as item, ix (item._id)}
 									<!-- PID can not be a key because in case of customized items it will repeat-->
 									<!-- Product detail start -->
 									<div
@@ -662,10 +661,10 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 
 					{#if $page.data.store?.isDiscountCoupons}
 						<div class="h-10 sm:h-14 flex items-center">
-							{#if data.cart?.discount?.amount > 0}
+							{#if cart?.discount?.amount > 0}
 								<div class="flex w-full items-center justify-between text-sm">
 									<h5 class="flex-1 truncate text-left">
-										Applied Coupon "{data.cart?.discount?.code}"
+										Applied Coupon "{cart?.discount?.code}"
 									</h5>
 
 									<button
@@ -708,7 +707,7 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 					<hr class="mb-5" />
 
 					<Pricesummary
-						cart="{data.cart}"
+						cart="{cart}"
 						nextpage="/checkout/address"
 						text="Select Address"
 						showNextIcon />
@@ -794,7 +793,7 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 													<div class="mb-2 flex items-center gap-3">
 														<div
 															class="max-w-max relative rounded border border-zinc-500 border-dashed py-1 px-4 font-semibold tracking-wide
-															{data.cart?.discount?.code === coupon.code
+															{cart?.discount?.code === coupon.code
 																? 'border-blue-500 text-blue-500'
 																: 'group-hover:border-blue-500 group-hover:text-blue-500'}">
 															{coupon.code}
@@ -824,7 +823,7 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 															{/if}
 														</div>
 
-														{#if data.cart?.discount?.code === coupon.code}
+														{#if cart?.discount?.code === coupon.code}
 															<svg
 																xmlns="http://www.w3.org/2000/svg"
 																class="h-5 w-5 text-brand-500"
