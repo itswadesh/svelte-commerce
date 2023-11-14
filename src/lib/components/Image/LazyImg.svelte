@@ -95,24 +95,25 @@ const extension = src?.split('.').pop()
 let imageLoaded = false
 let isSvg = false
 let lazyloadInstance: any
-$: IMAGE_CDN_PROVIDER = ''
-$: IMAGE_CDN_URL = ''
+const IMAGE_CDN_PROVIDER = $page?.data?.store?.imageCdn?.provider?.val
+const IMAGE_CDN_URL = $page?.data?.store?.imageCdn?.url?.val
 // let loadedImage = false
 let store = {}
 onMount(() => {
-	if (browser) {
-		storeStore.subscribe((value) => (store = value))
-		IMAGE_CDN_PROVIDER = store?.imageCdn?.provider?.val
-		IMAGE_CDN_URL = store?.imageCdn?.url?.val
-
-		lazyloadInstance = new lazyload({
-			thresholds: '50px 10%',
-			callback_error: (img) => {
-				img.setAttribute('src', 'https://i.ibb.co/ZKFtJ25/image-1.png')
-			},
-			callback_enter: handleLineLoader
-		})
-	}
+	// if (browser) {
+	// 	storeStore.subscribe((value) => {
+	// 		store = value
+	// 		IMAGE_CDN_PROVIDER = store?.imageCdn?.provider?.val
+	// 		IMAGE_CDN_URL = store?.imageCdn?.url?.val
+	// 	})
+	// }
+	lazyloadInstance = new lazyload({
+		thresholds: '50px 10%',
+		callback_error: (img) => {
+			img.setAttribute('src', 'https://i.ibb.co/ZKFtJ25/image-1.png')
+		},
+		callback_enter: handleLineLoader
+	})
 })
 
 onDestroy(() => {

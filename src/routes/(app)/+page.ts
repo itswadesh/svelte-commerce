@@ -4,7 +4,6 @@ const isServer = import.meta.env.SSR
 
 export async function load({ params, parent, url }) {
 	const { store, storeId, origin, sid } = await parent()
-
 	const categorySlug = params.slug
 	const currentPage = +url.searchParams.get('page') || 1
 	const fl = {}
