@@ -60,7 +60,7 @@ export const settings = writable({})
 // 	try {
 // 		const data = (await getBySid('settings')).data?.settings
 // 		settings.set(data)
-// 		// if (data.otpLogin) loginUrl.set(locals.store?.loginUrl)
+// 		// if (data.otpLogin) loginUrl.set('auth/login)
 // 	} catch (e) {
 // 		settings.set({})
 // 	}

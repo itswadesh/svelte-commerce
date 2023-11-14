@@ -11,11 +11,11 @@ export const load: LayoutServerLoad = async ({ url, locals, cookies }) => {
 		const { pathname } = url
 		// setHeaders({
 			// 	'cache-control': 'public, max-age=300'
-		// })
-		const zip = cookies.get('zip')
-		locals.url = url.href
-		locals.currentPage = currentPage
-		locals.q = q
+			// })
+			const zip = cookies.get('zip')
+			locals.url = url.href
+			locals.currentPage = currentPage
+			locals.q = q
 		locals.sid = cookies.get('connect.sid')
 		// locals.cartQty = cookies.get('cartQty')
 		if (zip) locals.zip = JSON.parse(zip)

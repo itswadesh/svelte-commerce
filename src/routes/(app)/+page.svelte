@@ -95,6 +95,6 @@ onMount(() => {
 })
 </script>
 
-<SEO {...seoProps} />
+<!-- <SEO {...seoProps} /> -->
 
 <Home data="{data}" showFooter="{showFooter}" showPinCodeEntryModal="{showPinCodeEntryModal}" />

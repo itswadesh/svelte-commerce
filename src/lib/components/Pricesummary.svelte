@@ -1,10 +1,10 @@
 <script lang="ts">
 import { createEventDispatcher, onMount } from 'svelte'
 import { currency } from '$lib/utils'
-import { page } from '$app/stores'
 import { PrimaryButton } from '$lib/ui'
 import { browser } from '$app/environment'
 import { cartStore } from '$lib/store/cart'
+import { storeStore } from '$lib/store/store'
 
 const dispatch = createEventDispatcher()
 
@@ -27,11 +27,11 @@ function submit() {
 	dispatch('submit')
 }
 
+let store = {}
 onMount(async () => {
 	if (browser) {
-		cartStore.subscribe((value) => {
-			cart = value
-		})
+		storeStore.subscribe((value) => (store = value))
+		cartStore.subscribe((value) => (cart = value))
 	}
 })
 </script>
@@ -72,7 +72,7 @@ onMount(async () => {
 					<span>
 						{currency(
 							cart?.formattedAmount?.savings?.value || cart?.savings,
-							cart?.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
+							cart?.formattedAmount?.subtotal?.currency
 						)}
 					</span>
 				</div>
@@ -85,7 +85,7 @@ onMount(async () => {
 					<span class="text-brand-500">
 						- {currency(
 							cart?.discount?.value || cart?.discount?.amount,
-							cart?.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
+							cart?.formattedAmount?.subtotal?.currency
 						)}
 					</span>
 				</div>
@@ -113,7 +113,7 @@ onMount(async () => {
 					<span>COD Charges</span>
 
 					<span>
-						{currency(cart.codCharges, $page.data?.store?.currencySymbol)}
+						{currency(cart.codCharges, store?.currencySymbol)}
 					</span>
 				</div>
 			{/if}
@@ -130,7 +130,7 @@ onMount(async () => {
 					{:else}
 						{currency(
 							cart?.formattedAmount?.shipping?.value || cart?.shipping?.charge,
-							cart?.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
+							cart?.formattedAmount?.subtotal?.currency
 						)}
 					{/if}
 				</span>
@@ -160,7 +160,7 @@ onMount(async () => {
 			<div class="mb-5 bg-brand-100 p-1 w-full text-center text-sm text-zinc-500">
 				You are saving
 				<span class="text-brand-500 font-bold">
-					{currency(cart?.savings + cart?.discount?.amount, $page.data?.store?.currencySymbol)}
+					{currency(cart?.savings + cart?.discount?.amount, store?.currencySymbol)}
 				</span>
 				on this order
 			</div>

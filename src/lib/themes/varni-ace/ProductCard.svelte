@@ -13,13 +13,18 @@ import { currency, getIdFromYoutubeVideo, toast } from '$lib/utils'
 import { LazyImg } from '$lib/components'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import { browser } from '$app/environment'
+import { storeStore } from '$lib/store/store'
 
 export let product = {}
 
 let isVideoUrlAvailable = false
 let newProduct = {}
-
+let store = {}
 onMount(() => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
 	if (product?._source) {
 		newProduct = product?._source
 		newProduct._id = product?._id
@@ -119,15 +124,15 @@ onMount(() => {
 
 		<div class="mt-1 flex items-center gap-1 justify-between">
 			<div
-				class="{$page.data.store?.isSecureCatalogue && !$page.data?.me ? 'hidden' : 'flex'}
+				class="{store?.isSecureCatalogue && !$page.data?.me ? 'hidden' : 'flex'}
 				flex-wrap flex-1 items-baseline gap-1 text-xs">
 				<span class="whitespace-nowrap text-sm font-bold sm:text-base text-secondary-500">
-					{currency(newProduct.price, $page.data?.store?.currencySymbol)}
+					{currency(newProduct.price, store?.currencySymbol)}
 				</span>
 
 				{#if newProduct.mrp > newProduct.price}
 					<span class="whitespace-nowrap text-zinc-500 line-through">
-						{currency(newProduct.mrp, $page.data?.store?.currencySymbol)}
+						{currency(newProduct.mrp, store?.currencySymbol)}
 					</span>
 				{/if}
 			</div>

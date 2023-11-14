@@ -32,14 +32,22 @@ import dayjs from 'dayjs'
 import PincodeInputBox from '$lib/themes/misiki/PincodeInputBox.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import Skeleton from '$lib/ui/Skeleton.svelte'
+import { browser } from '$app/environment'
+import { storeStore } from '$lib/store/store'
 
 export let data
 export let showFooter = false
 export let showPinCodeEntryModal = false
+let store = {}
+onMount(() => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
+})
 </script>
 
 <div class="bg-opacity-25 bg-center bg-repeat min-h-screen">
-	{#if $page.data.store?.isHyperlocal && showPinCodeEntryModal}
+	{#if store?.isHyperlocal && showPinCodeEntryModal}
 		<PincodeInputBox on:close="{() => (showPinCodeEntryModal = false)}" />
 	{/if}
 
@@ -188,7 +196,7 @@ export let showPinCodeEntryModal = false
 			{/if}
 		{/await}
 
-		{#if $page.data?.store?.isDeals}
+		{#if store?.isDeals}
 			{#await data?.streamed?.deals}
 				<div class="p-3 py-5 md:py-10">
 					<Skeleton />
@@ -257,7 +265,7 @@ export let showPinCodeEntryModal = false
 				type="button"
 				class="p-3 sm:px-10 w-full flex items-center justify-between gap-4 text-sm focus:outline-none"
 				on:click="{() => (showFooter = !showFooter)}">
-				<span>More about {$page.data?.store?.websiteName || 'store'}</span>
+				<span>More about {$page.data.store?.websiteName || 'store'}</span>
 
 				<svg
 					xmlns="http://www.w3.org/2000/svg"

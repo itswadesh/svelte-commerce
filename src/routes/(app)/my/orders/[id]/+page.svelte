@@ -13,6 +13,8 @@ import productVeg from '$lib/assets/product/veg.png'
 import ReturnTracking from '../_ReturnTracking.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TransparentButton from '../_TransparentButton.svelte'
+import { browser } from '$app/environment'
+import { storeStore } from '$lib/store/store'
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
@@ -36,8 +38,11 @@ function head() {
 		title: 'Order Details'
 	}
 }
-
+let store = {}
 onMount(() => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
 	// deliveryBy = dayjs().add(7, 'day').format('dddd, MMM D, YYYY')
 	now = dayjs()
 })
@@ -157,13 +162,13 @@ onMount(() => {
 												Item price :
 
 												<span class="font-bold whitespace-nowrap text-zinc-800">
-													{currency(item.price, $page.data?.store?.currencySymbol)}
+													{currency(item.price, store?.currencySymbol)}
 												</span>
 
 												{#if item?.mrp > item?.price}
 													<span class="whitespace-nowrap text-zinc-500 line-through">
 														<strike>
-															{currency(item.mrp, $page.data?.store?.currencySymbol)}
+															{currency(item.mrp, store?.currencySymbol)}
 														</strike>
 													</span>
 
@@ -179,13 +184,13 @@ onMount(() => {
 												Sub Total :
 
 												<span class="font-bold whitespace-nowrap text-zinc-800">
-													{currency(item.subtotal, $page.data?.store?.currencySymbol)}
+													{currency(item.subtotal, store?.currencySymbol)}
 												</span>
 
 												{#if item?.total > item?.subtotal}
 													<span class="whitespace-nowrap text-zinc-500 line-through">
 														<strike>
-															{currency(item.total, $page.data?.store?.currencySymbol)}
+															{currency(item.total, store?.currencySymbol)}
 														</strike>
 													</span>
 
@@ -236,10 +241,7 @@ onMount(() => {
 										<span class="mr-2 w-32">Subtotal</span>
 
 										<span>
-											: &nbsp; {currency(
-												data.order?.amount.subtotal,
-												$page.data?.store?.currencySymbol
-											)}
+											: &nbsp; {currency(data.order?.amount.subtotal, store?.currencySymbol)}
 										</span>
 									</p>
 
@@ -249,7 +251,7 @@ onMount(() => {
 										<span>
 											: &nbsp;
 
-											{currency(data.order?.amount.discount, $page.data?.store?.currencySymbol)}
+											{currency(data.order?.amount.discount, store?.currencySymbol)}
 										</span>
 									</p>
 
@@ -270,7 +272,7 @@ onMount(() => {
 										<span>
 											: &nbsp;
 											{#if data.order?.amount.shipping}
-												{currency(data.order?.amount.shipping, $page.data?.store?.currencySymbol)}
+												{currency(data.order?.amount.shipping, store?.currencySymbol)}
 											{:else}
 												Free
 											{/if}
@@ -284,10 +286,7 @@ onMount(() => {
 											<span>
 												: &nbsp;
 
-												{currency(
-													data.order?.amount.cod_charges,
-													$page.data?.store?.currencySymbol
-												)}
+												{currency(data.order?.amount.cod_charges, store?.currencySymbol)}
 											</span>
 										</p>
 									{/if}
@@ -298,10 +297,7 @@ onMount(() => {
 										<span class="mr-2 w-32">Total</span>
 
 										<span>
-											: &nbsp; {currency(
-												data.order?.amount.total,
-												$page.data?.store?.currencySymbol
-											)}
+											: &nbsp; {currency(data.order?.amount.total, store?.currencySymbol)}
 										</span>
 									</div>
 								</div>

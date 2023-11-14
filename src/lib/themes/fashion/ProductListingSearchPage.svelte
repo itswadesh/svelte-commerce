@@ -12,6 +12,8 @@ import { sorts } from '$lib/config'
 import dotsLoading from '$lib/assets/dots-loading.gif'
 import noDataAvailable from '$lib/assets/no/no-data-available.png'
 import SEO from '$lib/components/SEO/index.svelte'
+import { browser } from '$app/environment'
+import { storeStore } from '$lib/store/store'
 
 export let data
 
@@ -58,7 +60,6 @@ let seoProps = {
 }
 
 let currentPage = 1
-let hellobar = $page.data.store?.hellobar || {}
 let hidden = true
 let priceRange = []
 let reachedLast = false
@@ -154,8 +155,12 @@ async function loadNextPage() {
 async function refreshData() {}
 
 let loadMoreDiv
-
+let store = {}
 onMount(() => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
+
 	const observer = new IntersectionObserver((entries) => {
 		entries.forEach((entry) => {
 			if (
@@ -278,7 +283,7 @@ function handleFilterTags() {
 			bind:showFilter="{showFilter}"
 			bind:showSort="{showSort}"
 			class="block sticky z-40 lg:hidden
-			{hellobar?.active?.val ? 'top-[88px] sm:top-28' : 'top-14 sm:top-20'}"
+			{store?.hellobar?.active?.val ? 'top-[88px] sm:top-28' : 'top-14 sm:top-20'}"
 			facets="{data.products.facets}"
 			priceRange="{priceRange}"
 			selected="{selectedFilter}"
@@ -310,7 +315,7 @@ function handleFilterTags() {
 	<div class="mb-10 flex flex-col items-start sm:mb-20 lg:flex-row lg:gap-10 lg:p-10">
 		{#if data.products?.products?.length && data.products.facets}
 			<DesktopFilter
-				class="sticky hidden lg:block {hellobar?.active?.val ? 'top-56' : 'top-48'}"
+				class="sticky hidden lg:block {store?.hellobar?.active?.val ? 'top-56' : 'top-48'}"
 				facets="{data.products.facets}"
 				priceRange="{priceRange}"
 				query="{data.query}"
@@ -491,7 +496,7 @@ function handleFilterTags() {
 											<span class="col-span-5 text-justify">{p.name}</span>
 
 											<span class="col-span-1 whitespace-nowrap">
-												{currency(p.price, $page.data?.store?.currencySymbol)}
+												{currency(p.price, store?.currencySymbol)}
 											</span>
 										</a>
 									</li>

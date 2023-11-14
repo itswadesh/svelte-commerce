@@ -83,6 +83,7 @@ import Textbox from '$lib/ui/Textbox.svelte'
 import viewport from '$lib/actions/useViewPort'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
 import { updateCartStore } from '$lib/store/cart'
+import { storeStore } from '$lib/store/store'
 
 const cookies = Cookie()
 const isServer = import.meta.env.SSR
@@ -221,8 +222,11 @@ if (data.product?.tags?.length) {
 
 	// console.log('Ribbon tags =', ribbonTags)
 }
-
+let store = {}
 onMount(async () => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
 	try {
 		screenWidth = screen.width
 		storeRecentlyViewedToLocatStorage()
@@ -562,7 +566,7 @@ async function updateVariant(variant) {
 								{data.product?.name}
 							</h3>
 
-							{#if $page?.data?.store?.isFnb && data.product.foodType}
+							{#if store?.isFnb && data.product.foodType}
 								<div>
 									{#if data.product.foodType === 'veg'}
 										<img src="{productVeg}" alt="veg" class="h-5 w-5" />
@@ -574,7 +578,7 @@ async function updateVariant(variant) {
 						</div>
 					{/if}
 
-					{#if $page?.data?.store?.isMultiVendor && data?.product?.vendor && data?.product?.vendor?.slug && (data?.product?.vendor?.businessName || data?.product?.vendor?.name)}
+					{#if store?.isMultiVendor && data?.product?.vendor && data?.product?.vendor?.slug && (data?.product?.vendor?.businessName || data?.product?.vendor?.name)}
 						<p>
 							By
 
@@ -590,7 +594,7 @@ async function updateVariant(variant) {
 				<hr class="block sm:hidden w-full" />
 
 				<div class="block sm:hidden">
-					{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
+					{#if store?.isSecureCatalogue && !$page.data?.me}
 						<a
 							href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page?.url
 								?.search}"
@@ -600,13 +604,13 @@ async function updateVariant(variant) {
 					{:else}
 						<div class="mb-2 flex flex-wrap items-baseline gap-2 text-sm">
 							<span class="text-xl font-bold whitespace-nowrap text-secondary-500">
-								{currency(currentVariantPrice, $page.data?.store?.currencySymbol)}
+								{currency(currentVariantPrice, store?.currencySymbol)}
 							</span>
 
 							{#if data.product?.mrp > currentVariantPrice}
 								<span class="whitespace-nowrap text-zinc-500">
 									<strike>
-										{currency(data.product?.mrp, $page.data?.store?.currencySymbol)}
+										{currency(data.product?.mrp, store?.currencySymbol)}
 									</strike>
 								</span>
 
@@ -621,7 +625,7 @@ async function updateVariant(variant) {
 						{#await data.streamed?.moreProductDetails then value}
 							<h6 class="text-green-600">
 								{#if value?.igst}
-									Inclusive {currency(value?.igst, $page.data?.store?.currencySymbol)} GST
+									Inclusive {currency(value?.igst, store?.currencySymbol)} GST
 								{:else}
 									Inclusive of all taxes
 								{/if}
@@ -632,7 +636,7 @@ async function updateVariant(variant) {
 
 				<!-- ratings -->
 
-				{#if $page.data.store?.isProductReviewsAndRatings}
+				{#if store?.isProductReviewsAndRatings}
 					{#await data.streamed?.productReviews then productReviews}
 						{#if productReviews?.reviewsSummary?.productReviews?.summary?.ratings_avg?.value}
 							<button
@@ -671,7 +675,7 @@ async function updateVariant(variant) {
 
 				<!-- Delivery Options Mobile -->
 
-				{#if data.product?.handling_time_when_stock || data.product?.handling_time_when_nis || $page.data.store?.isIndianPincodes}
+				{#if data.product?.handling_time_when_stock || data.product?.handling_time_when_nis || store?.isIndianPincodes}
 					<div class="sm:hidden block">
 						<div class="mb-2 flex items-center gap-2 uppercase">
 							<h5>Delivery Options</h5>
@@ -702,7 +706,7 @@ async function updateVariant(variant) {
 								</span>
 							{/if}
 
-							{#if $page.data.store?.isIndianPincodes}
+							{#if store?.isIndianPincodes}
 								<DeliveryOptions
 									product="{data.product}"
 									deliveryDetails="{data.deliveryDetails}" />
@@ -714,23 +718,23 @@ async function updateVariant(variant) {
 				<!-- prices desktop -->
 
 				<div class="hidden sm:block">
-					{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
+					{#if store?.isSecureCatalogue && !$page.data?.me}
 						<a
-							href="{$page.data?.store?.otpLogin ? '/auth/otp-login' : '/auth/login'}?ref={$page
-								?.url?.pathname}{$page?.url?.search}"
+							href="{store?.otpLogin ? '/auth/otp-login' : '/auth/login'}?ref={$page?.url
+								?.pathname}{$page?.url?.search}"
 							class="block hover:underline max-w-max font-bold">
 							Login to view price
 						</a>
 					{:else}
 						<div class="mb-2 flex flex-wrap items-baseline gap-2">
 							<span class="text-2xl font-bold whitespace-nowrap text-secondary-500">
-								{currency(currentVariantPrice, $page.data?.store?.currencySymbol)}
+								{currency(currentVariantPrice, store?.currencySymbol)}
 							</span>
 
 							{#if data.product?.mrp > currentVariantPrice}
 								<span class="whitespace-nowrap text-zinc-500">
 									<strike>
-										{currency(data.product?.mrp, $page.data?.store?.currencySymbol)}
+										{currency(data.product?.mrp, store?.currencySymbol)}
 									</strike>
 								</span>
 
@@ -745,7 +749,7 @@ async function updateVariant(variant) {
 						{#await data.streamed?.moreProductDetails then value}
 							<h6 class="text-green-600">
 								{#if value?.igst}
-									Inclusive {currency(value?.igst, $page.data?.store?.currencySymbol)} GST
+									Inclusive {currency(value?.igst, store?.currencySymbol)} GST
 								{:else}
 									Inclusive of all taxes
 								{/if}
@@ -1190,7 +1194,7 @@ async function updateVariant(variant) {
 					</div>
 				{/if}
 
-				{#if $page?.data?.store?.allowBackOrder || data.product?.allow_back_order}
+				{#if store?.allowBackOrder || data.product?.allow_back_order}
 					<form
 						id="create_back_order"
 						in:fade="{{ duration: 300 }}"
@@ -1222,7 +1226,7 @@ async function updateVariant(variant) {
 				{#await data.streamed?.moreProductDetails then value}
 					{#if !data.product?.isCustomized}
 						<div class="w-full hidden md:grid gap-2 items-center uppercase grid-cols-5 static">
-							{#if $page.data.store?.isWishlist}
+							{#if store?.isWishlist}
 								<div class="col-span-2">
 									<form
 										id="toggle_wishlist_1"
@@ -1297,8 +1301,8 @@ async function updateVariant(variant) {
 							{/if}
 
 							{#if currentVariantPrice > 0}
-								<div class="{$page.data.store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
-									{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
+								<div class="{store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
+									{#if store?.isSecureCatalogue && !$page.data?.me}
 										<a
 											href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
 												?.url?.search}"
@@ -1441,7 +1445,7 @@ async function updateVariant(variant) {
 														</span>
 
 														<span>
-															{currency(currentVariantPrice, $page.data?.store?.currencySymbol)}
+															{currency(currentVariantPrice, store?.currencySymbol)}
 														</span>
 													</div>
 												</SecondaryButton>
@@ -1503,7 +1507,7 @@ async function updateVariant(variant) {
 
 				<!-- Delivery Options Desktop -->
 
-				{#if data.product?.handling_time_when_stock || data.product?.handling_time_when_nis || $page.data.store?.isIndianPincodes}
+				{#if data.product?.handling_time_when_stock || data.product?.handling_time_when_nis || store?.isIndianPincodes}
 					<div class="hidden sm:block">
 						<div class="mb-2 flex items-center gap-2 uppercase">
 							<h5>Delivery Options</h5>
@@ -1534,7 +1538,7 @@ async function updateVariant(variant) {
 								</span>
 							{/if}
 
-							{#if $page.data.store?.isIndianPincodes}
+							{#if store?.isIndianPincodes}
 								<DeliveryOptions
 									product="{data.product}"
 									deliveryDetails="{data.deliveryDetails}" />
@@ -1545,7 +1549,7 @@ async function updateVariant(variant) {
 
 				<!-- Ratings & Reviews -->
 
-				{#if $page.data.store?.isProductReviewsAndRatings}
+				{#if store?.isProductReviewsAndRatings}
 					{#await data.streamed?.productReviews}
 						<ul class="m-0 p-0 flex flex-col gap-5">
 							{#each { length: 3 } as _}
@@ -1599,10 +1603,10 @@ async function updateVariant(variant) {
 
 				<!-- Promo video -->
 
-				{#if $page.data.store?.storePromoVideo?.active?.val && getIdFromYoutubeVideo($page.data.store?.storePromoVideo?.url?.val)}
+				{#if store?.storePromoVideo?.active?.val && getIdFromYoutubeVideo(store?.storePromoVideo?.url?.val)}
 					<iframe
 						src="https://www.youtube.com/embed/{getIdFromYoutubeVideo(
-							$page.data.store?.storePromoVideo?.url?.val
+							store?.storePromoVideo?.url?.val
 						)}"
 						title="YouTube video player"
 						frameborder="0"
@@ -1627,7 +1631,7 @@ async function updateVariant(variant) {
 					{#if showStickyCartButton && !data.product?.isCustomized}
 						<div
 							class="w-full grid md:hidden grid-cols-5 gap-2 items-center uppercase fixed inset-x-0 bottom-0 z-40 h-16 border-t bg-white p-3 box-shadow">
-							{#if $page.data.store?.isWishlist}
+							{#if store?.isWishlist}
 								<div class="col-span-2">
 									<form
 										id="toggle_wishlist_2"
@@ -1702,8 +1706,8 @@ async function updateVariant(variant) {
 							{/if}
 
 							{#if currentVariantPrice > 0}
-								<div class="{$page.data.store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
-									{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
+								<div class="{store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
+									{#if store?.isSecureCatalogue && !$page.data?.me}
 										<a
 											href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
 												?.url?.search}"
@@ -1847,7 +1851,7 @@ async function updateVariant(variant) {
 														</span>
 
 														<span>
-															{currency(currentVariantPrice, $page.data?.store?.currencySymbol)}
+															{currency(currentVariantPrice, store?.currencySymbol)}
 														</span>
 													</div>
 												</SecondaryButton>
@@ -1870,7 +1874,7 @@ async function updateVariant(variant) {
 
 					{#if !data.product?.isCustomized}
 						<div class="w-full grid md:hidden grid-cols-5 gap-2 items-center uppercase">
-							{#if $page.data.store?.isWishlist}
+							{#if store?.isWishlist}
 								<div class="col-span-2">
 									<form
 										id="toggle_wishlist_3"
@@ -1945,8 +1949,8 @@ async function updateVariant(variant) {
 							{/if}
 
 							{#if currentVariantPrice > 0}
-								<div class="{$page.data.store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
-									{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
+								<div class="{store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
+									{#if store?.isSecureCatalogue && !$page.data?.me}
 										<a
 											href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
 												?.url?.search}"
@@ -2090,7 +2094,7 @@ async function updateVariant(variant) {
 														</span>
 
 														<span>
-															{currency(currentVariantPrice, $page.data?.store?.currencySymbol)}
+															{currency(currentVariantPrice, store?.currencySymbol)}
 														</span>
 													</div>
 												</SecondaryButton>
@@ -2212,7 +2216,7 @@ async function updateVariant(variant) {
 				type="button"
 				class="p-3 sm:px-10 w-full flex items-center justify-between gap-4 text-sm focus:outline-none"
 				on:click="{() => (showFooter = !showFooter)}">
-				<span>More about {$page.data.store?.websiteName || 'store'}</span>
+				<span>More about {store?.websiteName || 'store'}</span>
 
 				<svg
 					xmlns="http://www.w3.org/2000/svg"

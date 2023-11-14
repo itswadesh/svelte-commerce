@@ -70,6 +70,8 @@ import productVeg from '$lib/assets/product/veg.png'
 import SEO from '$lib/components/SEO/index.svelte'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
 import { updateCartStore } from '$lib/store/cart'
+import { browser } from '$app/environment'
+import { storeStore } from '$lib/store/store.js'
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
@@ -79,15 +81,18 @@ const seoProps = {
 	metaDescription: 'Payment Success '
 }
 
+let store = {}
 onMount(async () => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
 	// invalidateAll()
 	fireGTagEvent('purchase', data.order)
-	updateCartStore({ data: null})
+	updateCartStore({ data: null })
 })
 </script>
 
 <SEO {...seoProps} />
-
 
 {#if data.order}
 	<div class="min-h-screen w-full px-3 py-5 sm:p-10">
@@ -289,13 +294,13 @@ onMount(async () => {
 												Item price :
 
 												<span class="font-bold whitespace-nowrap text-zinc-800">
-													{currency(item.price, $page.data?.store?.currencySymbol)}
+													{currency(item.price, store?.currencySymbol)}
 												</span>
 
 												{#if item?.mrp > item?.price}
 													<span class="whitespace-nowrap text-zinc-500 line-through">
 														<strike>
-															{currency(item.mrp, $page.data?.store?.currencySymbol)}
+															{currency(item.mrp, store?.currencySymbol)}
 														</strike>
 													</span>
 
@@ -311,13 +316,13 @@ onMount(async () => {
 												Sub Total :
 
 												<span class="font-bold whitespace-nowrap text-zinc-800">
-													{currency(item.subtotal, $page.data?.store?.currencySymbol)}
+													{currency(item.subtotal, store?.currencySymbol)}
 												</span>
 
 												{#if item?.total > item?.subtotal}
 													<span class="whitespace-nowrap text-zinc-500 line-through">
 														<strike>
-															{currency(item.total, $page.data?.store?.currencySymbol)}
+															{currency(item.total, store?.currencySymbol)}
 														</strike>
 													</span>
 
@@ -364,10 +369,7 @@ onMount(async () => {
 									<span class="mr-2 w-32">Subtotal</span>
 
 									<span>
-										: &nbsp; {currency(
-											data.order?.amount.subtotal,
-											$page.data?.store?.currencySymbol
-										)}
+										: &nbsp; {currency(data.order?.amount.subtotal, store?.currencySymbol)}
 									</span>
 								</p>
 
@@ -377,7 +379,7 @@ onMount(async () => {
 									<span>
 										: &nbsp;
 
-										{currency(data.order?.amount.discount, $page.data?.store?.currencySymbol)}
+										{currency(data.order?.amount.discount, store?.currencySymbol)}
 									</span>
 								</p>
 
@@ -398,7 +400,7 @@ onMount(async () => {
 									<span>
 										: &nbsp;
 										{#if data.order?.amount.shipping}
-											{currency(data.order?.amount.shipping, $page.data?.store?.currencySymbol)}
+											{currency(data.order?.amount.shipping, store?.currencySymbol)}
 										{:else}
 											Free
 										{/if}
@@ -411,7 +413,7 @@ onMount(async () => {
 
 										<span>
 											: &nbsp;
-											{currency(data.order?.amount.cod_charges, $page.data?.store?.currencySymbol)}
+											{currency(data.order?.amount.cod_charges, store?.currencySymbol)}
 										</span>
 									</p>
 								{/if}
@@ -422,7 +424,7 @@ onMount(async () => {
 									<span class="mr-2 w-32">Total</span>
 
 									<span>
-										: &nbsp; {currency(data.order?.amount.total, $page.data?.store?.currencySymbol)}
+										: &nbsp; {currency(data.order?.amount.total, store?.currencySymbol)}
 									</span>
 								</div>
 							</div>
