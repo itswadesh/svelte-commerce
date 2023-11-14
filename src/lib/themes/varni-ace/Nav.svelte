@@ -51,7 +51,6 @@ export let me, cart, data, showCartSidebar, openSidebar, store
 // console.log('$page', $page)
 
 let categories
-let hellobar = $page.data.store?.hellobar || {}
 let loadingForDeleteItemFromCart = []
 let q = ''
 let show = false

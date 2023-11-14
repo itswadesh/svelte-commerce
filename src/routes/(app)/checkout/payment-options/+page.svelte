@@ -169,7 +169,7 @@ async function submit(pm) {
 					address: data.addressId,
 					orderNo,
 					origin: $page.data.origin,
-					storeId: $page.data.store?.id,
+					storeId: $page.data.storeId,
 					cartId: $page.data.cartId
 				})
 
@@ -266,7 +266,7 @@ async function submit(pm) {
 					orderNo,
 					cartId: $page.data.cartId,
 					origin: $page.data.origin,
-					storeId: $page.data.store?.id
+					storeId: $page.data.storeId
 				})
 
 				orderNo = rp.order_no || ''
@@ -274,9 +274,7 @@ async function submit(pm) {
 
 				const options = {
 					key: rp.keyId, // Enter the Key ID generated from the Dashboard
-					// name: $page.data?.store?.websiteName || 'Litekart',
 					description: `Order ${orderNo}`,
-					// image: $page.data?.store?.logo || logo,
 					amount: rp.amount,
 					order_id: rp.id,
 					async handler(response) {
@@ -285,7 +283,7 @@ async function submit(pm) {
 								rpOrderId: response.razorpay_order_id,
 								rpPaymentId: response.razorpay_payment_id,
 								origin: $page.data.origin,
-								storeId: $page.data.store?.id
+								storeId: $page.data.storeId
 							})
 
 							toast('Payment success', 'success')
@@ -301,12 +299,6 @@ async function submit(pm) {
 						email: data.me.email || data.address.email || 'help@zapvi.in',
 						contact: data.me.phone
 					}
-					// notes: {
-					// 	address: ''
-					// },
-					// theme: {
-					// 	color: $page.data.store?.themeColor || '#18181B'
-					// }
 				}
 
 				const rzp1 = new Razorpay(options)

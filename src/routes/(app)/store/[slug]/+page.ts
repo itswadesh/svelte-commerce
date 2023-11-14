@@ -17,7 +17,6 @@ export async function load({ params, parent, url }) {
 		vendorsProduct: VendorService.fetchProductsOfVendor({
 			slug: vendorSlug,
 			page: page,
-			server: isServer,
 			sid,
 			origin,
 			storeId

@@ -4,6 +4,8 @@ import { LazyImg } from '$lib/components'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { SplideSlide } from '@splidejs/svelte-splide'
+import { browser } from '$app/environment'
+import { storeStore } from '$lib/store/store'
 
 export let data = {}
 // console.log('zzzzzzzzzzzzzzzzzz', data)
@@ -18,8 +20,11 @@ $: if (innerWidth >= 640) {
 } else {
 	responsiveWidth = innerWidth - 24
 }
-
+let store = {}
 onMount(async () => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
 	const SplideModule = await import('$lib/components/SplideJs.svelte')
 	Splide = SplideModule.default
 })
@@ -187,12 +192,12 @@ onMount(async () => {
 
 														<div class="flex flex-wrap items-center gap-2 text-xs">
 															<span class="text-base font-bold whitespace-nowrap">
-																{currency(feedback.pid?.price, $page.data?.store?.currencySymbol)}
+																{currency(feedback.pid?.price, store?.currencySymbol)}
 															</span>
 
 															{#if feedback.pid?.mrp > feedback.pid?.price}
 																<span class="whitespace-nowrap text-zinc-500 line-through">
-																	{currency(feedback.pid?.mrp, $page.data?.store?.currencySymbol)}
+																	{currency(feedback.pid?.mrp, store?.currencySymbol)}
 																</span>
 
 																{#if Math.floor(((feedback.pid?.mrp - feedback.pid?.price) / feedback.pid?.mrp) * 100) > 0}

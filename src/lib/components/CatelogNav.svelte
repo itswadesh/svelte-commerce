@@ -31,7 +31,6 @@ export let me, data, showCartSidebar: boolean, openSidebar: boolean, store
 $: cart = {}
 
 let categories
-let hellobar = $page.data.store?.hellobar || {}
 let loadingForDeleteItemFromCart = []
 let q = ''
 let show = false
@@ -126,14 +125,14 @@ const getSelectionLabel = (option) => option.name
 
 <nav
 	class="minimum-width-rem sticky inset-x-0 top-0 w-full border-b bg-white shadow-md lg:hidden
-	{hellobar?.active?.val ? 'h-[88px] sm:h-[112px]' : 'h-[56px] sm:h-[80px]'}
+	{store.hellobar?.active?.val ? 'h-[88px] sm:h-[112px]' : 'h-[56px] sm:h-[80px]'}
 	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
-	{#if hellobar?.active?.val}
+	{#if store.hellobar?.active?.val}
 		<div
 			class="h-8 px-3 sm:px-10 text-center tracking-wider flex items-center justify-center text-sm"
-			style="background-color: {hellobar?.bgColor?.val || '#27272a'};
-				 color: {hellobar?.textColor?.val || '#ffffff'};">
-			{@html hellobar.content?.val}
+			style="background-color: {store.hellobar?.bgColor?.val || '#27272a'};
+				 color: {store.hellobar?.textColor?.val || '#ffffff'};">
+			{@html store.hellobar.content?.val}
 		</div>
 	{/if}
 

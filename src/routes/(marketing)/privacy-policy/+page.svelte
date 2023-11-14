@@ -1,11 +1,20 @@
 <script>
+import { browser } from '$app/environment'
 import { page } from '$app/stores'
 import SEO from '$lib/components/SEO/index.svelte'
+import { storeStore } from '$lib/store/store'
+import { onMount } from 'svelte'
 
 let seoProps = {
 	title: `Privacy Policy`,
 	description: `Privacy Policy`
 }
+let store = {}
+onMount(() => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
+})
 </script>
 
 <SEO {...seoProps} />
@@ -20,9 +29,9 @@ let seoProps = {
 
 		<ul class="flex flex-col gap-5 text-justify text-sm text-zinc-500 sm:text-base">
 			<li>
-				Your privacy is important to us. It is {$page.data.store?.websiteName}’s policy to respect
-				your privacy regarding any information we may collect from you across our website, https://{$page
-					.data.store.domain}, and other sites we own and operate.
+				Your privacy is important to us. It is {store?.websiteName}’s policy to respect your privacy
+				regarding any information we may collect from you across our website, https://{$page.data
+					.store.domain}, and other sites we own and operate.
 			</li>
 
 			<li>

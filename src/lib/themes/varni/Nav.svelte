@@ -25,8 +25,8 @@
 </style>
 
 <script lang="ts">
-import { Autocomplete, AutosuggestModal, AutocompleteItem, LazyImg } from '$lib/components'
-import { createEventDispatcher, getContext, onMount } from 'svelte'
+import { Autocomplete, AutosuggestModal, LazyImg } from '$lib/components'
+import { createEventDispatcher, onMount } from 'svelte'
 import { cubicOut } from 'svelte/easing'
 import { enhance } from '$app/forms'
 import { fade, fly } from 'svelte/transition'
@@ -34,22 +34,22 @@ import { getAPI, post } from '$lib/utils/api'
 import { getCdnImageUrl, navigateToProperPath } from '$lib/utils'
 import { goto, invalidateAll } from '$app/navigation'
 import { logo } from '$lib/config'
-import { MegamenuHorizontal, MegamenuVertical } from '$lib/theme-config'
+import { MegamenuHorizontal } from '$lib/theme-config'
 import { page } from '$app/stores'
 import { PrimaryButton, WhiteButton } from '$lib/ui'
 import menu from '$lib/config/menu'
 import { browser } from '$app/environment'
 import { cartStore } from '$lib/store/cart'
+import { storeStore } from '$lib/store/store'
 const dispatch = createEventDispatcher()
 
-export let me, data, showCartSidebar, openSidebar, store
+export let me, data, showCartSidebar, openSidebar
 
 let q = ''
 let showDropdownAccount = false
 let show = false
 let loadingForDeleteItemFromCart = []
 let categories
-let hellobar = $page.data.store?.hellobar || {}
 $: cart = {}
 // let menuItems = [
 // 	{ title: 'Trending', link: '/trending-en?sort=-updatedAt' },
@@ -82,8 +82,11 @@ let menuItems2 = [
 
 // 	return { data: logout, error }
 // }
-
+let store = {}
 onMount(async () => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
 	q = $page.url.searchParams.get('q')
 
 	if (browser) {
@@ -317,7 +320,7 @@ let y
 
 			<div class="flex-1 hidden w-full max-w-4xl min-w-min lg:block">
 				<Autocomplete
-					placeholder="{$page?.data?.store?.searchbarText || 'Search...'}"
+					placeholder="{store?.searchbarText || 'Search...'}"
 					on:search="{onSearchSubmit}" />
 			</div>
 
@@ -462,7 +465,7 @@ let y
 																class="flex-1 text-sm leading-4"
 																on:click="{() => (showCartSidebar = false)}">{item.name}</a>
 
-															{#if $page?.data?.store?.isFnb && item.foodType}
+															{#if store?.isFnb && item.foodType}
 																<div>
 																	{#if item.foodType === 'veg'}
 																		<img src="/product/veg.png" alt="veg" class="w-5 h-5" />

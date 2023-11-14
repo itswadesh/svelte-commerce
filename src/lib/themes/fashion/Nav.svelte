@@ -21,6 +21,7 @@ import userEmptyProfile from '$lib/assets/user-empty-profile.png'
 import { cartStore, getCartFromStore, updateCartStore } from '$lib/store/cart'
 import { onMount } from 'svelte'
 import { browser } from '$app/environment'
+import { storeStore } from '$lib/store/store'
 
 const cookies = Cookie()
 
@@ -40,7 +41,6 @@ export function convertParagraphs(node) {
 }
 
 let categories
-let hellobar = $page.data.store?.hellobar || {}
 let loading = false
 let loadingForSelectedCartItem = []
 let selectedLoadingType = null
@@ -50,6 +50,7 @@ $: cart = {}
 
 onMount(async () => {
 	if (browser) {
+		storeStore.subscribe((value) => (store = value))
 		cartStore.subscribe((value) => {
 			cart = value
 		})
@@ -80,41 +81,41 @@ function handleShowCartSidebar() {
 	return
 }
 
-async function fetchCart() {
-	try {
-		loading = true
+// async function fetchCart() {
+// 	try {
+// 		loading = true
 
-		const res = await CartService.fetchRefreshCart({
-			cartId: $page.data.cartId,
-			origin: origin,
-			storeId: store?.id
-		})
+// 		const res = await CartService.fetchRefreshCart({
+// 			cartId: $page.data.cartId,
+// 			origin: origin,
+// 			storeId: store.id
+// 		})
 
-		if (res) {
-			cart = {
-				cartId: res?.cart_id,
-				items: res?.items,
-				qty: res?.qty,
-				tax: +res?.tax,
-				subtotal: +res?.subtotal,
-				total: +res?.total,
-				currencySymbol: res?.currencySymbol,
-				discount: res?.discount,
-				savings: res?.savings,
-				selfTakeout: res?.selfTakeout,
-				shipping: res?.shipping,
-				unavailableItems: res?.unavailableItems,
-				formattedAmount: res?.formattedAmount
-			}
+// 		if (res) {
+// 			cart = {
+// 				cartId: res?.cart_id,
+// 				items: res?.items,
+// 				qty: res?.qty,
+// 				tax: +res?.tax,
+// 				subtotal: +res?.subtotal,
+// 				total: +res?.total,
+// 				currencySymbol: res?.currencySymbol,
+// 				discount: res?.discount,
+// 				savings: res?.savings,
+// 				selfTakeout: res?.selfTakeout,
+// 				shipping: res?.shipping,
+// 				unavailableItems: res?.unavailableItems,
+// 				formattedAmount: res?.formattedAmount
+// 			}
 
-			cookies.set('cartId', cart.cartId, { path: '/' })
-		}
-	} catch (e) {
-		toast(e, 'error')
-	} finally {
-		loading = false
-	}
-}
+// 			cookies.set('cartId', cart.cartId, { path: '/' })
+// 		}
+// 	} catch (e) {
+// 		toast(e, 'error')
+// 	} finally {
+// 		loading = false
+// 	}
+// }
 
 async function getCategories() {
 	try {
@@ -134,17 +135,17 @@ async function getCategories() {
 
 <nav
 	class="{clazz} sticky inset-x-0 top-0 w-full border-b bg-white shadow-xs
-		{hellobar?.active?.val
+		{store?.hellobar?.active?.val
 		? 'h-[96px] sm:h-[120px] lg:h-[168px]'
 		: 'h-[56px] sm:h-[80px] lg:h-[128px]'} 
 		{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
-	{#if hellobar?.active?.val}
+	{#if store?.hellobar?.active?.val}
 		<div
 			use:convertParagraphs
 			class="h-10 text-center tracking-wider flex items-center justify-center text-xs"
-			style="background-color: {hellobar?.bgColor?.val || '#27272a'};
-				 color: {hellobar?.textColor?.val || '#ffffff'};">
-			{@html hellobar.content?.val}
+			style="background-color: {store?.hellobar?.bgColor?.val || '#27272a'};
+				 color: {store?.hellobar?.textColor?.val || '#ffffff'};">
+			{@html store?.hellobar.content?.val}
 		</div>
 	{/if}
 

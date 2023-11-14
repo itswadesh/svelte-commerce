@@ -18,6 +18,8 @@ import dotsLoading from '$lib/assets/dots-loading.gif'
 import noDataAvailable from '$lib/assets/no/no-data-available.png'
 import ProductCard from './ProductCard.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+import { browser } from '$app/environment'
+import { storeStore } from '$lib/store/store'
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
@@ -65,7 +67,6 @@ let seoProps = {
 }
 
 let currentPage = 1
-let hellobar = $page.data.store?.hellobar || {}
 let hidden = true
 let priceRange = []
 let reachedLast = false
@@ -164,8 +165,11 @@ async function loadNextPage() {
 async function refreshData() {}
 
 let loadMoreDiv
-
+let store = {}
 onMount(() => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
 	const observer = new IntersectionObserver((entries) => {
 		if (!entries) return
 
@@ -323,7 +327,7 @@ function handleFilterTags() {
 	<div class="mb-10 flex flex-col items-start sm:mb-20 lg:flex-row lg:gap-10 lg:p-10">
 		{#if data.products.facets}
 			<DesktopFilter
-				class="sticky hidden lg:block {hellobar?.active?.val ? 'top-32' : 'top-24'}"
+				class="sticky hidden lg:block {store.hellobar?.active?.val ? 'top-32' : 'top-24'}"
 				facets="{data.products.facets}"
 				priceRange="{priceRange}"
 				query="{data.query}"
@@ -532,7 +536,7 @@ function handleFilterTags() {
 											<p class="col-span-5 text-justify">{p.name}</p>
 
 											<span class="col-span-1 whitespace-nowrap">
-												{currency(p.price, $page.data?.store?.currencySymbol)}
+												{currency(p.price, store?.currencySymbol)}
 											</span>
 										</a>
 									</li>

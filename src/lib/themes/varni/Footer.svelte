@@ -33,6 +33,7 @@ import paypal from '$lib/assets/payment-method/paypal.png'
 import skrill from '$lib/assets/payment-method/skrill.png'
 import type { Category, Me } from '$lib/types'
 import visa from '$lib/assets/payment-method/visa.png'
+import { storeStore } from '$lib/store/store'
 
 export let megamenu: Category[]
 export let popularSearches: { took: 0; count: 0; data: [] }
@@ -105,6 +106,11 @@ let footerItems: any = [
 let paymentMethodCards = [masterCard, paypal, skrill, visa]
 
 onMount(async () => {
+	if (browser) {
+		storeStore.subscribe((value) => {
+			store = value
+		})
+	}
 	const res = await getStoreData()
 	store = res.storeOne
 	megamenu = res.megamenu
@@ -238,7 +244,7 @@ async function getStoreData() {
 							</li>
 						{/if}
 
-						{#if $page.data.store?.guaranteed_response_time}
+						{#if store?.guaranteed_response_time}
 							<li class="max-w-max">
 								<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
 									<svg
@@ -255,11 +261,11 @@ async function getStoreData() {
 									<span>Guaranteed Response Time</span>
 								</h6>
 
-								<p>{$page.data.store?.guaranteed_response_time}</p>
+								<p>{store?.guaranteed_response_time}</p>
 							</li>
 						{/if}
 
-						{#if $page.data.store?.store_timings}
+						{#if store?.store_timings}
 							<li class="max-w-max">
 								<h6 class="mb-0.5 flex items-center gap-1 font-semibold">
 									<svg
@@ -278,7 +284,7 @@ async function getStoreData() {
 									<span>Working Days/Hours</span>
 								</h6>
 
-								<p>{@html $page.data.store?.store_timings}</p>
+								<p>{@html store?.store_timings}</p>
 							</li>
 						{/if}
 					</ul>
@@ -286,7 +292,7 @@ async function getStoreData() {
 
 				<!-- <div>
 					<h5 class="mb-4 whitespace-nowrap font-semibold uppercase">
-						Experience {$page.data.store?.websiteName} app on mobile
+						Experience {store?.websiteName} app on mobile
 					</h5>
 
 					<div class="flex items-center gap-1">
@@ -336,14 +342,14 @@ async function getStoreData() {
 				</div>
 			{/if}
 
-			{#if $page.data.store?.address}
+			{#if store?.address}
 				<hr class="w-full border-zinc-200" />
 
 				<div class="mt-4 sm:mt-8">
 					<h2 class="mb-4 whitespace-nowrap font-semibold uppercase">Registered Office Address</h2>
 
 					<p class="text-zinc-200">
-						{@html $page.data.store?.address}
+						{@html store?.address}
 					</p>
 				</div>
 			{/if}
@@ -355,19 +361,19 @@ async function getStoreData() {
 			class="container mx-auto max-w-6xl flex flex-wrap xl:grid xl:grid-cols-3 items-center justify-between gap-4">
 			<p class="col-span-1 justify-start text-xs">
 				Copyright © {getYear()}
-				{$page.data.store?.websiteName},
+				{store?.websiteName},
 				<br />
 				All Rights Reserved | Powered by <a href="http://litekart.in" target="_blank">Litekart</a>
 			</p>
 
-			{#if $page.data.store?.socialSharingButtons || $page.data.store?.email}
+			{#if store?.socialSharingButtons || store?.email}
 				<ul class="col-span-1 justify-center flex flex-wrap gap-4">
 					<!-- Facebook -->
 
-					{#if $page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.facebook?.val}
+					{#if store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.facebook?.val}
 						<li class="max-w-max">
 							<a
-								href="{$page.data.store?.socialSharingButtons?.facebook?.val}"
+								href="{store?.socialSharingButtons?.facebook?.val}"
 								target="_blank"
 								rel="noopener noreferrer"
 								aria-label="Click for facebook link">
@@ -390,10 +396,10 @@ async function getStoreData() {
 
 					<!-- Instagram -->
 
-					{#if $page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.instagram?.val}
+					{#if store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.instagram?.val}
 						<li class="max-w-max">
 							<a
-								href="{$page.data.store?.socialSharingButtons?.instagram?.val}"
+								href="{store?.socialSharingButtons?.instagram?.val}"
 								target="_blank"
 								rel="noopener noreferrer"
 								aria-label="Click for instagram link">
@@ -417,10 +423,10 @@ async function getStoreData() {
 
 					<!-- Twitter -->
 
-					{#if $page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.twitter?.val}
+					{#if store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.twitter?.val}
 						<li class="max-w-max">
 							<a
-								href="{$page.data.store?.socialSharingButtons?.twitter?.val}"
+								href="{store?.socialSharingButtons?.twitter?.val}"
 								target="_blank"
 								rel="noopener noreferrer"
 								aria-label="Click for twitter link">
@@ -444,9 +450,9 @@ async function getStoreData() {
 
 					<!-- Mail -->
 
-					{#if $page.data.store?.email}
+					{#if store?.email}
 						<li class="max-w-max">
-							<a href="mailto:{$page.data.store?.email}" aria-label="Click to contact with mail id">
+							<a href="mailto:{store?.email}" aria-label="Click to contact with mail id">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									class="h-5 w-5 transition duration-300 hover:text-[#c71610]"
@@ -466,10 +472,10 @@ async function getStoreData() {
 
 					<!-- Linkedin -->
 
-					{#if $page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.linkedin?.val}
+					{#if store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.linkedin?.val}
 						<li class="max-w-max">
 							<a
-								href="{$page.data.store?.socialSharingButtons?.linkedin?.val}"
+								href="{store?.socialSharingButtons?.linkedin?.val}"
 								target="_blank"
 								rel="noopener noreferrer"
 								aria-label="Click for linkedin link">
@@ -495,10 +501,10 @@ async function getStoreData() {
 
 					<!-- Pinterest -->
 
-					{#if $page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.youtube?.val}
+					{#if store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.youtube?.val}
 						<li class="max-w-max">
 							<a
-								href="{$page.data.store?.socialSharingButtons?.youtube?.val}"
+								href="{store?.socialSharingButtons?.youtube?.val}"
 								target="_blank"
 								rel="noopener noreferrer"
 								aria-label="Click for pinterest link">
@@ -524,10 +530,10 @@ async function getStoreData() {
 
 					<!-- Youtube -->
 
-					{#if $page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.youtubeUrl}
+					{#if store?.socialSharingButtons?.active?.val && store?.youtubeUrl}
 						<li class="max-w-max">
 							<a
-								href="{$page.data.store?.youtubeUrl}"
+								href="{store?.youtubeUrl}"
 								target="_blank"
 								rel="noopener noreferrer"
 								aria-label="Click for youtube link">

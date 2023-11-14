@@ -18,7 +18,7 @@ export let me
 export let openSidebar: boolean
 export let productName: string
 export let showCartSidebar: boolean
-export let store
+export let store = {}
 export let url: string
 
 $: scrollY = 0

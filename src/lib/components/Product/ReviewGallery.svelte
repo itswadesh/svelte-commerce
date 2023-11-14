@@ -8,9 +8,10 @@
 <script lang="ts">
 import { createEventDispatcher, onMount } from 'svelte'
 import { currency, date } from '$lib/utils'
-import { page } from '$app/stores'
 import { SplideSlide } from '@splidejs/svelte-splide'
 import LazyImg from '../Image/LazyImg.svelte'
+import { browser } from '$app/environment'
+import { storeStore } from '$lib/store/store'
 
 const dispatch = createEventDispatcher()
 
@@ -19,8 +20,11 @@ export let gallery
 
 let Splide: any
 let currentImageIndex = 0
-
+let store = {}
 onMount(async () => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
 	const SplideModule = await import('$lib/components/SplideJs.svelte')
 
 	Splide = SplideModule.default
@@ -198,12 +202,12 @@ onMount(async () => {
 
 														<div class="flex flex-wrap items-center gap-2 text-xs">
 															<span class="text-base font-bold whitespace-nowrap">
-																{currency(g.product?.price, $page.data?.store?.currencySymbol)}
+																{currency(g.product?.price, store?.currencySymbol)}
 															</span>
 
 															{#if g.product?.mrp > g.product?.price}
 																<span class="whitespace-nowrap text-zinc-500 line-through">
-																	{currency(g.product?.mrp, $page.data?.store?.currencySymbol)}
+																	{currency(g.product?.mrp, store?.currencySymbol)}
 																</span>
 
 																{#if Math.floor(((g.product?.mrp - g.product?.price) / g.product?.mrp) * 100) > 0}
@@ -311,12 +315,12 @@ onMount(async () => {
 
 											<div class="flex flex-wrap items-center gap-2 text-xs">
 												<span class="text-base font-bold whitespace-nowrap">
-													{currency(g.product?.price, $page.data?.store?.currencySymbol)}
+													{currency(g.product?.price, store?.currencySymbol)}
 												</span>
 
 												{#if g.product?.mrp > g.product?.price}
 													<span class="whitespace-nowrap text-zinc-500 line-through">
-														{currency(g.product?.mrp, $page.data?.store?.currencySymbol)}
+														{currency(g.product?.mrp, store?.currencySymbol)}
 													</span>
 
 													{#if Math.floor(((g.product?.mrp - g.product?.price) / g.product?.mrp) * 100) > 0}

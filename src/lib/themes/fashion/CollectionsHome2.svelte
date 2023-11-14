@@ -29,6 +29,8 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { PrimaryButton } from '$lib/ui'
 import { SplideSlide } from '@splidejs/svelte-splide'
+import { browser } from '$app/environment'
+import { storeStore } from '$lib/store/store'
 
 export let data = {}
 
@@ -42,8 +44,11 @@ $: if (innerWidth >= 640) {
 } else {
 	responsiveWidth = innerWidth - 24
 }
-
+let store = {}
 onMount(async () => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
 	const SplideModule = await import('$lib/components/SplideJs.svelte')
 	Splide = SplideModule.default
 })
@@ -129,7 +134,7 @@ onMount(async () => {
 																</a>
 
 																<p class="text-zinc-500">
-																	{currency(product.price, $page.data?.store?.currencySymbol)}
+																	{currency(product.price, store?.currencySymbol)}
 																</p>
 															</div>
 

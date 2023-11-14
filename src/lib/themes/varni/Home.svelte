@@ -34,14 +34,23 @@ import { slide } from 'svelte/transition'
 import PincodeInputBox from '$lib/themes/misiki/PincodeInputBox.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import Skeleton from '$lib/ui/Skeleton.svelte'
+import { onMount } from 'svelte'
+import { browser } from '$app/environment'
+import { storeStore } from '$lib/store/store'
 
 export let data
 export let showFooter = false
 export let showPinCodeEntryModal = false
+let store = {}
+onMount(() => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
+})
 </script>
 
 <div class="bg-opacity-25 bg-center bg-repeat min-h-screen">
-	{#if $page.data.store?.isHyperlocal && showPinCodeEntryModal}
+	{#if store?.isHyperlocal && showPinCodeEntryModal}
 		<PincodeInputBox on:close="{() => (showPinCodeEntryModal = false)}" />
 	{/if}
 
@@ -190,7 +199,7 @@ export let showPinCodeEntryModal = false
 			{/if}
 		{/await}
 
-		{#if $page.data?.store?.isDeals}
+		{#if store?.isDeals}
 			{#await data?.streamed?.deals}
 				<div class="p-3 py-5 md:py-10">
 					<Skeleton />

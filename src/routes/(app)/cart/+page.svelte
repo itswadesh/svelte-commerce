@@ -17,6 +17,7 @@ import productVeg from '$lib/assets/product/veg.png'
 import SEO from '$lib/components/SEO/index.svelte'
 import { cartLoadingStore, cartStore, getCartFromStore, updateCartStore } from '$lib/store/cart.js'
 import { browser } from '$app/environment'
+import { storeStore } from '$lib/store/store.js'
 
 const cookies = Cookie()
 
@@ -44,9 +45,10 @@ let selectedCouponCode = null
 let selectedLoadingType = null
 $: cart = {}
 $: isCartLoading = true
-
+let store
 onMount(() => {
 	if (browser) {
+		storeStore.subscribe((value) => (store = value))
 		cartStore.subscribe((value) => {
 			cart = value
 		})
@@ -663,7 +665,7 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 				<div class="w-full lg:w-96 lg:shrink-0 lg:grow-0">
 					<!-- Promo code section -->
 
-					{#if $page.data.store?.isDiscountCoupons}
+					{#if store?.isDiscountCoupons}
 						<div class="h-10 sm:h-14 flex items-center">
 							{#if cart?.discount?.amount > 0}
 								<div class="flex w-full items-center justify-between text-sm">

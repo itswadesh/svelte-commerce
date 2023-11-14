@@ -21,6 +21,7 @@ export async function load({ params, url, parent }) {
 			origin,
 			sid,
 			slug,
+			id: slug,
 			storeId
 		})
 

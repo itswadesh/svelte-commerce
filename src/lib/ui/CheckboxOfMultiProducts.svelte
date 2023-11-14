@@ -17,10 +17,12 @@ input[type='search']::-webkit-search-cancel-button {
 </style>
 
 <script>
-import { createEventDispatcher } from 'svelte'
+import { createEventDispatcher, onMount } from 'svelte'
 import { currency } from '$lib/utils'
 import { page } from '$app/stores'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import { browser } from '$app/environment'
+import { storeStore } from '$lib/store/store'
 
 const dispatch = createEventDispatcher()
 
@@ -29,6 +31,12 @@ export let items = []
 export let name = ''
 export let required = false
 export let selectedItems = []
+let store = {}
+onMount(() => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
+})
 </script>
 
 {#if items?.length}
@@ -59,7 +67,7 @@ export let selectedItems = []
 
 							<p class="flex-1">
 								{i.name} at
-								{currency(i.price, $page.data?.store?.currencySymbol)}
+								{currency(i.price, store?.currencySymbol)}
 							</p>
 						</div>
 					</label>

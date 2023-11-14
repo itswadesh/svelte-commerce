@@ -50,6 +50,6 @@ export const actions: Actions = {
 
 		//redirect the user
 
-		throw redirect(307, locals.store?.loginUrl || '/auth/login')
+		throw redirect(307, '/auth/login')
 	}
 }

@@ -35,6 +35,7 @@ import paypal from '$lib/assets/payment-method/paypal.png'
 import skrill from '$lib/assets/payment-method/skrill.png'
 import type { Category } from '$lib/types'
 import visa from '$lib/assets/payment-method/visa.png'
+import { storeStore } from '$lib/store/store'
 
 export let content = ``
 export let megamenu: Category[]
@@ -51,9 +52,14 @@ function getYear() {
 	let year = d.getFullYear()
 	return year
 }
-
+let store = {}
 onMount(async () => {
 	if (browser) {
+		if (browser) {
+			storeStore.subscribe((value) => {
+				store = value
+			})
+		}
 		megamenu = await getAllMegamenuFromStore({
 			storeId: $page?.data?.storeId,
 			isCors: $page?.data?.store?.isCors,
@@ -152,10 +158,10 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 												</li>
 											{/if}
 
-											{#if mx === positionToDisplayIsMultiVendor(menu.items?.length) && $page.data.store?.isMultiVendor}
+											{#if mx === positionToDisplayIsMultiVendor(menu.items?.length) && store?.isMultiVendor}
 												<li class="flex max-w-max items-center">
 													<a
-														href="{$page.data.store?.adminUrl || '#'} "
+														href="{store?.adminUrl || '#'} "
 														target="_blank"
 														aria-label="Click to visit this page"
 														class="capitalize link-underline link-underline-gray whitespace-pre-wrap">
@@ -165,8 +171,7 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 
 												<li class="flex max-w-max items-center">
 													<a
-														href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store
-															?.id}"
+														href="{store?.adminUrl}?role=vendor&store={store?.id}"
 														target="_blank"
 														aria-label="Click to visit this page"
 														class="capitalize link-underline link-underline-gray whitespace-pre-wrap">
@@ -217,10 +222,10 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 								</a>
 							</li>
 
-							{#if $page.data.store?.isMultiVendor}
+							{#if store?.isMultiVendor}
 								<li class="flex max-w-max items-center">
 									<a
-										href="{$page.data.store?.adminUrl}?role=vendor&store={$page?.data?.store}"
+										href="{store?.adminUrl}?role=vendor&store={$page?.data?.store}"
 										target="self"
 										aria-label="Click to visit this page"
 										class="link-underline link-underline-gray whitespace-pre-wrap">
@@ -342,8 +347,8 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 			class="container mx-auto max-w-6xl flex flex-wrap xl:grid xl:grid-cols-3 items-center justify-between gap-4">
 			<p class="col-span-1 justify-start text-xs">
 				Copyright © {getYear()}
-				<span class="text-secondary-500">{$page.data.store?.websiteName}</span>, All Rights
-				Reserved. Powered by
+				<span class="text-secondary-500">{store?.websiteName}</span>, All Rights Reserved. Powered
+				by
 				<a
 					href="https://litekart.in/"
 					target="_blank"
@@ -353,14 +358,14 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 				</a>
 			</p>
 
-			{#if $page.data.store?.socialSharingButtons || $page.data.store?.email}
+			{#if store?.socialSharingButtons || store?.email}
 				<ul class="col-span-1 justify-center flex flex-wrap gap-4">
 					<!-- Facebook -->
 
-					{#if $page.data.store?.socialSharingButtons?.facebook?.val}
+					{#if store?.socialSharingButtons?.facebook?.val}
 						<li class="max-w-max">
 							<a
-								href="{$page.data.store?.socialSharingButtons?.facebook?.val}"
+								href="{store?.socialSharingButtons?.facebook?.val}"
 								target="_blank"
 								rel="noopener noreferrer"
 								aria-label="Click for facebook link">
@@ -383,10 +388,10 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 
 					<!-- Instagram -->
 
-					{#if $page.data.store?.socialSharingButtons?.instagram?.val}
+					{#if store?.socialSharingButtons?.instagram?.val}
 						<li class="max-w-max">
 							<a
-								href="{$page.data.store?.socialSharingButtons?.instagram?.val}"
+								href="{store?.socialSharingButtons?.instagram?.val}"
 								target="_blank"
 								rel="noopener noreferrer"
 								aria-label="Click for instagram link">
@@ -410,10 +415,10 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 
 					<!-- Twitter -->
 
-					{#if $page.data.store?.socialSharingButtons?.twitter?.val}
+					{#if store?.socialSharingButtons?.twitter?.val}
 						<li class="max-w-max">
 							<a
-								href="{$page.data.store?.socialSharingButtons?.twitter?.val}"
+								href="{store?.socialSharingButtons?.twitter?.val}"
 								target="_blank"
 								rel="noopener noreferrer"
 								aria-label="Click for twitter link">
@@ -437,9 +442,9 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 
 					<!-- Mail -->
 
-					{#if $page.data.store?.email}
+					{#if store?.email}
 						<li class="max-w-max">
-							<a href="mailto:{$page.data.store?.email}" aria-label="Click to contact with mail id">
+							<a href="mailto:{store?.email}" aria-label="Click to contact with mail id">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									class="h-5 w-5 transition duration-300 hover:text-[#c71610]"
@@ -459,10 +464,10 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 
 					<!-- Linkedin -->
 
-					{#if $page.data.store?.socialSharingButtons?.linkedin?.val}
+					{#if store?.socialSharingButtons?.linkedin?.val}
 						<li class="max-w-max">
 							<a
-								href="{$page.data.store?.socialSharingButtons?.linkedin?.val}"
+								href="{store?.socialSharingButtons?.linkedin?.val}"
 								target="_blank"
 								rel="noopener noreferrer"
 								aria-label="Click for linkedin link">
@@ -488,10 +493,10 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 
 					<!-- Pinterest -->
 
-					{#if $page.data.store?.socialSharingButtons?.youtube?.val}
+					{#if store?.socialSharingButtons?.youtube?.val}
 						<li class="max-w-max">
 							<a
-								href="{$page.data.store?.socialSharingButtons?.youtube?.val}"
+								href="{store?.socialSharingButtons?.youtube?.val}"
 								target="_blank"
 								rel="noopener noreferrer"
 								aria-label="Click for pinterest link">
@@ -517,10 +522,10 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 
 					<!-- Youtube -->
 
-					{#if $page.data.store?.youtubeUrl}
+					{#if store?.youtubeUrl}
 						<li class="max-w-max">
 							<a
-								href="{$page.data.store?.youtubeUrl}"
+								href="{store?.youtubeUrl}"
 								target="_blank"
 								rel="noopener noreferrer"
 								aria-label="Click for youtube link">

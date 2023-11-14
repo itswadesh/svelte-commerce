@@ -29,10 +29,11 @@ import { fly } from 'svelte/transition'
 import { goto } from '$app/navigation'
 import { LazyImg } from '$lib/components'
 import { onMount } from 'svelte'
-import { page } from '$app/stores'
 import { PrimaryButton, WhiteButton } from '$lib/ui'
 import { SplideSlide } from '@splidejs/svelte-splide'
-import { getCartFromStore, updateCartStore } from '$lib/store/cart'
+import { updateCartStore } from '$lib/store/cart'
+import { browser } from '$app/environment'
+import { storeStore } from '$lib/store/store'
 
 export let data = {}
 // console.log('zzzzzzzzzzzzzzzzzz', data)
@@ -52,8 +53,11 @@ $: if (innerWidth >= 640) {
 } else {
 	responsiveWidth = innerWidth - 24
 }
-
+let store = {}
 onMount(async () => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
 	const SplideModule = await import('$lib/components/SplideJs.svelte')
 	Splide = SplideModule.default
 })
@@ -125,7 +129,7 @@ onMount(async () => {
 														</a>
 
 														<span class="text-xl text-zinc-500">
-															{currency(product.price, $page.data?.store?.currencySymbol)}
+															{currency(product.price, store?.currencySymbol)}
 														</span>
 
 														<hr />

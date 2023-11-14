@@ -71,6 +71,7 @@ import { getCdnImageUrl } from '$lib/utils'
 import { onDestroy, onMount } from 'svelte'
 import { page } from '$app/stores'
 import lazyload from 'vanilla-lazyload'
+import { storeStore } from '$lib/store/store'
 
 export let alt = ''
 export let aspect_ratio = '3:4'
@@ -90,17 +91,20 @@ const arh = aspect_ratio?.split(':')[1]
 const arw = aspect_ratio?.split(':')[0]
 
 const extension = src?.split('.').pop()
-const IMAGE_CDN_PROVIDER = $page.data?.store?.imageCdn?.provider?.val
-const IMAGE_CDN_URL = $page.data?.store?.imageCdn?.url?.val
 
 let imageLoaded = false
 let isSvg = false
 let lazyloadInstance: any
-
+$: IMAGE_CDN_PROVIDER = ''
+$: IMAGE_CDN_URL = ''
 // let loadedImage = false
-
+let store = {}
 onMount(() => {
 	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+		IMAGE_CDN_PROVIDER = store?.imageCdn?.provider?.val
+		IMAGE_CDN_URL = store?.imageCdn?.url?.val
+
 		lazyloadInstance = new lazyload({
 			thresholds: '50px 10%',
 			callback_error: (img) => {

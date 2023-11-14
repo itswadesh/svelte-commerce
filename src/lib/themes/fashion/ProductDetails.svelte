@@ -27,11 +27,15 @@ import SimilarProductsFromCategorySlug from './SimilarProductsFromCategorySlug.s
 import Error from '$lib/components/Error.svelte'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import { updateCartStore } from '$lib/store/cart'
+import { storeStore } from '$lib/store/store'
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
-
+let store = {}
 onMount(() => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
 	storeRecentlyViewedToLocatStorage()
 })
 
@@ -278,12 +282,12 @@ function scrollTo(elementId) {
 
 				<div class="flex flex-wrap leading-3 gap-2">
 					<span class="text-lg text-secondary-500">
-						{currency(currentVariantId, $page.data?.store?.currencySymbol)}
+						{currency(currentVariantId, store?.currencySymbol)}
 					</span>
 
 					<span class="text-lg text-zinc-500">
 						<strike>
-							{currency(data.product?.mrp, $page.data?.store?.currencySymbol)}
+							{currency(data.product?.mrp, store?.currencySymbol)}
 						</strike>
 					</span>
 				</div>
@@ -478,9 +482,7 @@ function scrollTo(elementId) {
 											</span>
 
 											{#if mgp.material.price}
-												<span
-													><b>{currency(mgp.material.price, $page.data?.store?.currencySymbol)}</b
-													></span>
+												<span><b>{currency(mgp.material.price, store?.currencySymbol)}</b></span>
 											{/if}
 										</a>
 									</li>

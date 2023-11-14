@@ -61,7 +61,6 @@ const verifyOtp = async ({ cookies, request, locals, url }) => {
 			phone,
 			otp,
 			cartId: cookies.get('cartId'),
-			isCors: locals.store?.isCors,
 			origin: locals.origin,
 			sid: locals.sid,
 			storeId: locals.storeId

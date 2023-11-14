@@ -21,6 +21,7 @@ import PincodeInputBox from '$lib/themes/misiki/PincodeInputBox.svelte'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'
 import { browser } from '$app/environment'
 import { cartStore } from '$lib/store/cart'
+import { storeStore } from '$lib/store/store'
 
 const dispatch = createEventDispatcher()
 const cookies = Cookie()
@@ -40,7 +41,6 @@ export function convertParagraphs(node) {
 	})
 }
 
-let hellobar = $page.data.store?.hellobar || {}
 let pin = ''
 let q = ''
 let show = false
@@ -56,6 +56,7 @@ onMount(async () => {
 	pin = cookies.get('zip')
 
 	if (browser) {
+		storeStore.subscribe((value) => (store = value))
 		cartStore.subscribe((value) => {
 			cart = value
 		})
@@ -91,28 +92,23 @@ async function onSearchSubmit({ detail }) {
 }
 </script>
 
-
 <!-- {hellobar?.active?.val ? 'h-[88px] sm:h-28' : 'h-14 sm:h-20'} -->
 <nav
 	class="{clazz} minimum-width-rem sticky inset-x-0 top-0 w-full border-b bg-white shadow-xs
-	{hellobar?.active?.val && $page.data.store?.isHyperlocal
-		? 'h-[112px] sm:h-[136px] lg:h-[112px]'
-		: ''}
-	{hellobar?.active?.val && !$page.data.store?.isHyperlocal ? 'h-[88px] sm:h-[112px]' : ''}
-	{$page.data.store?.isHyperlocal && !hellobar?.active?.val
-		? 'h-[80px] sm:h-[104px] lg:h-[80px]'
-		: ''}
-	{!hellobar?.active?.val && !$page.data.store?.isHyperlocal ? 'h-[56px] sm:h-[80px]' : ''}
+	{store.hellobar?.active?.val && store?.isHyperlocal ? 'h-[112px] sm:h-[136px] lg:h-[112px]' : ''}
+	{store.hellobar?.active?.val && !store?.isHyperlocal ? 'h-[88px] sm:h-[112px]' : ''}
+	{store?.isHyperlocal && !store?.hellobar?.active?.val ? 'h-[80px] sm:h-[104px] lg:h-[80px]' : ''}
+	{!store.hellobar?.active?.val && !store?.isHyperlocal ? 'h-[56px] sm:h-[80px]' : ''}
 	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
 	<!-- hellobar -->
 
-	{#if hellobar?.active?.val}
+	{#if store.hellobar?.active?.val}
 		<div
 			use:convertParagraphs
 			class="h-8 text-center tracking-wider flex items-center justify-center text-sm"
-			style="background-color: {hellobar?.bgColor?.val || '#27272a'};
-				 color: {hellobar?.textColor?.val || '#ffffff'};">
-			{@html hellobar.content?.val}
+			style="background-color: {store.hellobar?.bgColor?.val || '#27272a'};
+				 color: {store.hellobar?.textColor?.val || '#ffffff'};">
+			{@html store.hellobar.content?.val}
 		</div>
 	{/if}
 
@@ -161,7 +157,7 @@ async function onSearchSubmit({ detail }) {
 				{/if}
 			</a>
 
-			{#if $page.data.store?.isHyperlocal}
+			{#if store?.isHyperlocal}
 				<button
 					type="button"
 					class="hidden lg:flex max-w-max whitespace-nowrap items-center gap-2 text-sm font-semibold bg-zinc-100 py-2 px-4 rounded-full"
@@ -421,7 +417,7 @@ async function onSearchSubmit({ detail }) {
 		</div>
 	</div>
 
-	{#if $page.data.store?.isHyperlocal}
+	{#if store?.isHyperlocal}
 		<button
 			type="button"
 			class="h-6 lg:hidden flex items-center justify-start gap-1 text-xs font-semibold bg-primary-100 px-3 sm:px-10 w-full text-left"
