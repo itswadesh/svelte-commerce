@@ -1,7 +1,5 @@
 import { error } from '@sveltejs/kit'
-import {
-	getBigcommerceApi
-} from '$lib/utils/server'
+import { getBigcommerceApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import type { AllOrders, Error } from '$lib/types'
 
@@ -133,11 +131,10 @@ export const razorpayCapture = async ({
 	rpOrderId,
 	storeId,
 	origin,
-	server = false,
-	sid = null
-}: any) => {
+	server = false
+}) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		res = await getBigcommerceApi(`customers/me`, {}, sid)
 
@@ -152,11 +149,10 @@ export const stripeCheckoutService = async ({
 	address,
 	storeId,
 	origin,
-	server = false,
-	sid = null
-}: any) => {
+	server = false
+}) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		res = await getBigcommerceApi(`customers/me`, {}, sid)
 

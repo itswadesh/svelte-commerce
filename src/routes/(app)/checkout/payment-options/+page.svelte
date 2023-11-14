@@ -167,13 +167,11 @@ async function submit(pm) {
 
 				const res = await OrdersService.cashfreeCheckout({
 					address: data.addressId,
-					orderNo: orderNo,
+					orderNo,
 					origin: $page.data.origin,
-					storeId: $page.data.storeId,
+					storeId: $page.data.store?.id,
 					cartId: $page.data.cartId
 				})
-
-				// console.log('res of cashfree', res)
 
 				orderNo = res.order_no || ''
 
@@ -190,9 +188,8 @@ async function submit(pm) {
 						redirectTarget: '_parent',
 						returnUrl: res.order_meta?.return_url
 					})
-					.then(function () {
-						// console.log('on going redirection')
-					})
+					.then(function () {})
+
 				// if (res?.redirectUrl && res?.redirectUrl !== null) {
 				// 	goto(`${res?.redirectUrl}`)
 				// } else {
@@ -212,11 +209,12 @@ async function submit(pm) {
 				data.err = null
 				loading = true
 				loadingForPaymentProcessingSteps = true
-
 				const res = await OrdersService.phonepeCheckout({
 					address: data.addressId,
 					origin: $page.data.origin,
-					storeId: $page.data.storeId
+					cartId: $page.data.cartId,
+					storeId: $page.data.storeId,
+					orderNo
 				})
 
 				// console.log('res of Phonepe', res)
@@ -265,20 +263,19 @@ async function submit(pm) {
 
 				const rp = await OrdersService.razorpayCheckout({
 					address: data.addressId,
-					orderNo: orderNo,
+					orderNo,
 					cartId: $page.data.cartId,
 					origin: $page.data.origin,
-					storeId: $page.data.storeId
+					storeId: $page.data.store?.id
 				})
 
-				// console.log('rp of Razorpay', rp)
-
 				orderNo = rp.order_no || ''
+				gotoOrder(orderNo)
 
 				const options = {
 					key: rp.keyId, // Enter the Key ID generated from the Dashboard
 					// name: $page.data?.store?.websiteName || 'Litekart',
-					// description: 'Payment for Litekart',
+					description: `Order ${orderNo}`,
 					// image: $page.data?.store?.logo || logo,
 					amount: rp.amount,
 					order_id: rp.id,
@@ -288,7 +285,7 @@ async function submit(pm) {
 								rpOrderId: response.razorpay_order_id,
 								rpPaymentId: response.razorpay_payment_id,
 								origin: $page.data.origin,
-								storeId: $page.data.storeId
+								storeId: $page.data.store?.id
 							})
 
 							toast('Payment success', 'success')
@@ -301,7 +298,7 @@ async function submit(pm) {
 					prefill: {
 						name: `${data.me.firstName} ${data.me.lastName}`,
 						phone: data.me.phone,
-						email: data.me.email || data.address.email || 'hi@litekart.in',
+						email: data.me.email || data.address.email || 'help@zapvi.in',
 						contact: data.me.phone
 					}
 					// notes: {
@@ -317,9 +314,9 @@ async function submit(pm) {
 			} catch (e) {
 				data.err = e
 				toast(`Payment failed, please try again`, 'error')
+				gotoOrder(orderNo)
 			} finally {
 				loading = false
-				gotoOrder(orderNo)
 			}
 		}
 	} else {
