@@ -13,10 +13,10 @@ export const actions: Actions = {
 		await UserService.logoutService({ storeId: locals.storeId, sid: cookies.get('connect.sid') })
 		// eat the cookie
 
-		cookies.set('storeId', null, {
-			path: '/',
-			expires: new Date(0)
-		})
+		// cookies.set('storeId', null, {
+		// 	path: '/',
+		// 	expires: new Date(0)
+		// })
 
 		cookies.set('settings', null, {
 			path: '/',

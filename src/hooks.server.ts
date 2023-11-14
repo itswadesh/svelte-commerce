@@ -51,11 +51,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.isShowBackButton = isShowBackButton
 
 		const storeId = event.cookies.get('storeId')
-		const store = event.cookies.get('store') || '{}'
-		const storeAsJson = JSON.parse(store)
-		if (storeId && storeAsJson?.id) {
+		// const store = event.cookies.get('store') || '{}'
+		// const storeAsJson = JSON.parse(store)
+		if (storeId && storeId != 'undefined') {
 			event.locals.storeId = storeId
-			event.locals.store = storeAsJson
+			// event.locals.store = storeAsJson
 		} else {
 			try {
 				const { storeOne } = await InitService.fetchInit({
@@ -63,40 +63,42 @@ export const handle: Handle = async ({ event, resolve }) => {
 					origin: event.locals.origin
 				})
 				const storeId = storeOne?._id
-				const store = {
-					currencyCode: storeOne?.currencyCode,
-					description: storeOne?.description,
-					domain: storeOne?.domain,
-					email: storeOne?.email,
-					phone: storeOne?.phone,
-					favicon: storeOne?.favicon,
-					fontFamily: storeOne?.fontFamily,
-					keywords: storeOne?.keywords,
-					logo: storeOne?.logo,
-					metaDescription: storeOne?.metaDescription,
-					socialSharingButtons: storeOne?.socialSharingButtons,
-					themeColor: storeOne?.themeColor,
-					title: storeOne?.title,
-					websiteName: storeOne?.websiteName,
-					isCors: storeOne?.isCors,
-					isMultiVendor: storeOne?.isMultiVendor,
-					adminUrl: storeOne?.adminUrl,
-					address: storeOne?.address,
-					saasName: storeOne?.saasName,
-					saasDomain: storeOne?.saasDomain,
-					guaranteed_response_time: storeOne?.guaranteed_response_time,
-					product_image_dimension: storeOne?.product_image_dimension,
-					isSecureCatalogue: storeOne?.isSecureCatalogue,
-					store_timings: storeOne?.store_timings,
-					isHyperlocal: storeOne?.isHyperlocal,
-					IMAGE_CDN_URL: storeOne?.IMAGE_CDN_URL
-				}
-				if (!storeId)
-					throw { status: 404, message: `Could not find STORE for domain = ${url.host}` }
+				// const store = {
+				// 	id: storeOne?.id,
+				// 	currencyCode: storeOne?.currencyCode,
+				// 	description: storeOne?.description,
+				// 	domain: storeOne?.domain,
+				// 	email: storeOne?.email,
+				// 	phone: storeOne?.phone,
+				// 	favicon: storeOne?.favicon,
+				// 	fontFamily: storeOne?.fontFamily,
+				// 	keywords: storeOne?.keywords,
+				// 	logo: storeOne?.logo,
+				// 	metaDescription: storeOne?.metaDescription,
+				// 	socialSharingButtons: storeOne?.socialSharingButtons,
+				// 	themeColor: storeOne?.themeColor,
+				// 	title: storeOne?.title,
+				// 	websiteName: storeOne?.websiteName,
+				// 	isCors: storeOne?.isCors,
+				// 	isMultiVendor: storeOne?.isMultiVendor,
+				// 	adminUrl: storeOne?.adminUrl,
+				// 	address: storeOne?.address,
+				// 	saasName: storeOne?.saasName,
+				// 	saasDomain: storeOne?.saasDomain,
+				// 	guaranteed_response_time: storeOne?.guaranteed_response_time,
+				// 	product_image_dimension: storeOne?.product_image_dimension,
+				// 	isSecureCatalogue: storeOne?.isSecureCatalogue,
+				// 	store_timings: storeOne?.store_timings,
+				// 	isHyperlocal: storeOne?.isHyperlocal,
+				// 	IMAGE_CDN_URL: storeOne?.IMAGE_CDN_URL
+				// }
+				if (!storeId || storeId == 'undefined')
+				throw { status: 404, message: `Could not find STORE for domain = ${url.host}` }
 				event.cookies.set('storeId', storeId, { path: '/' })
-				event.cookies.set('store', JSON.stringify(store), { path: '/' })
+				// event.cookies.set('store', JSON.stringify(store), { path: '/' })
 				event.locals.storeId = storeId
-				event.locals.store = store
+
+				// event.locals.store = store
 			} catch (e) {
 				throw { status: 404, message: `Could not find STORE for domain = ${url.host}` }
 			}
@@ -113,7 +115,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 		// this simply gets data from cookie
 		event.locals.me = await authenticateUser(event)
-
+		const zip = event.cookies.get('zip')
+		event.locals.sid = event.cookies.get('connect.sid')
+		if (zip) event.locals.zip = JSON.parse(zip)
 		// This makes a call to backend on every request
 		await fetchCart(event)
 

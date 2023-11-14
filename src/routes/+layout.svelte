@@ -37,16 +37,17 @@ $: if (innerWidth < 1024) {
 	showBackToTopButton = true
 }
 // let ReloadPrompt
-let store = {}
+const store = data.store
+
 onMount(async () => {
 	if (browser) {
-		const url = new URL(data.url)
-		const storeRes = await getStoreFromStore({
-			origin,
-			host: url.host,
-			storeId: data.storeId
-		})
-		store = storeRes.existingStore
+		// const url = new URL(data.url)
+		// const storeRes = await getStoreFromStore({
+		// 	origin,
+		// 	host: data.host,
+		// 	storeId: data.storeId
+		// })
+		// store = storeRes.existingStore
 		await getCartFromStore({
 			origin,
 			storeId: data.storeId,
@@ -70,7 +71,6 @@ onMount(async () => {
 </svelte:head>
 
 <svelte:window bind:innerWidth="{innerWidth}" />
-
 <main style="font-family: {customfont};">
 	{#if store?.googleAnalytics?.active}
 		<GoogleAnalytics properties="{[store?.googleAnalytics.id.val]}" />
@@ -85,8 +85,7 @@ onMount(async () => {
 	{#if $navigating}
 		<PreloadingIndicator />
 	{/if}
-
-	{#if !$page?.data?.store || !store}
+	{#if !store}
 		<!-- If store not found -->
 
 		<div class="h-screen w-full bg-white flex items-center justify-center">

@@ -19,7 +19,7 @@ import dotsLoading from '$lib/assets/dots-loading.gif'
 import noDataAvailable from '$lib/assets/no/no-data-available.png'
 import SEO from '$lib/components/SEO/index.svelte'
 import { browser } from '$app/environment'
-import { storeStore } from '$lib/store/store'
+// import { storeStore } from '$lib/store/store'
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
@@ -82,7 +82,7 @@ if (
 ) {
 	priceRange = generatePriceRange(
 		data.products?.facets?.all_aggs?.price_stats,
-		data.store.currencySymbol
+		data.store?.currencySymbol
 	)
 }
 
@@ -165,11 +165,11 @@ async function loadNextPage() {
 async function refreshData() {}
 
 let loadMoreDiv
-let store = {}
+let store = $page?.data?.store
 onMount(() => {
-	if (browser) {
-		storeStore.subscribe((value) => (store = value))
-	}
+	// if (browser) {
+	// 	storeStore.subscribe((value) => (store = value))
+	// }
 	const observer = new IntersectionObserver((entries) => {
 		if (!entries) return
 
