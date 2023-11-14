@@ -15,12 +15,22 @@ import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import OrderListSkeleton from './_OrderListSkeleton.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
+import { onMount } from 'svelte'
+import { browser } from '$app/environment'
+import { storeStore } from '$lib/store/store'
 
 export let orders
 // console.log('zzzzzzzzzzzzzzzzzz', orders)
 
 let clazz = ''
 export { clazz as class }
+
+let store = {}
+onMount(() => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
+})
 </script>
 
 <div class="w-full {clazz}">
@@ -144,7 +154,7 @@ export { clazz as class }
 												<div class="flex w-60 items-center gap-2">
 													<span>{item.name || '_'}</span>
 
-													{#if $page?.data?.store?.isFnb && item.foodType}
+													{#if store?.isFnb && item.foodType}
 														<div class="shrink-0">
 															{#if item.foodType === 'veg'}
 																<img src="{productVeg}" alt="veg" class="h-5 w-5" />
@@ -165,15 +175,15 @@ export { clazz as class }
 											</td>
 
 											<td class="whitespace-nowrap p-3">
-												{currency(item.price, $page.data?.store?.currencySymbol)}
+												{currency(item.price, store?.currencySymbol)}
 											</td>
 
 											<td class="whitespace-nowrap p-3">
-												{currency(item.shippingCharges, $page.data?.store?.currencySymbol)}
+												{currency(item.shippingCharges, store?.currencySymbol)}
 											</td>
 
 											<td class="whitespace-nowrap p-3">
-												{currency(item.total, $page.data?.store?.currencySymbol)}
+												{currency(item.total, store?.currencySymbol)}
 											</td>
 
 											<td class="p-3">
@@ -252,7 +262,7 @@ export { clazz as class }
 													<p>Price :</p>
 
 													<b>
-														{currency(item.price, $page.data?.store?.currencySymbol)}
+														{currency(item.price, store?.currencySymbol)}
 													</b>
 												</div>
 
@@ -279,7 +289,7 @@ export { clazz as class }
 														<p>Shipping Charges :</p>
 
 														<b>
-															{currency(item.shippingCharges, $page.data?.store?.currencySymbol)}
+															{currency(item.shippingCharges, store?.currencySymbol)}
 														</b>
 													</div>
 												{/if}
@@ -288,7 +298,7 @@ export { clazz as class }
 													<p>Total :</p>
 
 													<b>
-														{currency(item.total, $page.data?.store?.currencySymbol)}
+														{currency(item.total, store?.currencySymbol)}
 													</b>
 												</div>
 

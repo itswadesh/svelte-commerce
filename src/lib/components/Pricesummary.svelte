@@ -1,18 +1,20 @@
 <script lang="ts">
-import { createEventDispatcher } from 'svelte'
+import { createEventDispatcher, onMount } from 'svelte'
 import { currency } from '$lib/utils'
-import { page } from '$app/stores'
 import { PrimaryButton } from '$lib/ui'
+import { browser } from '$app/environment'
+import { cartStore } from '$lib/store/cart'
+import { storeStore } from '$lib/store/store'
 
 const dispatch = createEventDispatcher()
 
-export let cart
 export let disabled = false
 export let hideCheckoutButton = false
 export let loading = false
 export let nextpage = null
 export let showNextIcon = false
 export let text = 'Proceed to checkout'
+$: cart = {}
 
 // console.log('zzzzzzzzzzzzzzzzzz', cart)
 
@@ -24,6 +26,14 @@ function modulo(n, m) {
 function submit() {
 	dispatch('submit')
 }
+
+let store = {}
+onMount(async () => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+		cartStore.subscribe((value) => (cart = value))
+	}
+})
 </script>
 
 {#if cart}
@@ -62,7 +72,7 @@ function submit() {
 					<span>
 						{currency(
 							cart?.formattedAmount?.savings?.value || cart?.savings,
-							cart?.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
+							cart?.formattedAmount?.subtotal?.currency
 						)}
 					</span>
 				</div>
@@ -75,7 +85,7 @@ function submit() {
 					<span class="text-brand-500">
 						- {currency(
 							cart?.discount?.value || cart?.discount?.amount,
-							cart?.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
+							cart?.formattedAmount?.subtotal?.currency
 						)}
 					</span>
 				</div>
@@ -103,7 +113,7 @@ function submit() {
 					<span>COD Charges</span>
 
 					<span>
-						{currency(cart.codCharges, $page.data?.store?.currencySymbol)}
+						{currency(cart.codCharges, store?.currencySymbol)}
 					</span>
 				</div>
 			{/if}
@@ -120,7 +130,7 @@ function submit() {
 					{:else}
 						{currency(
 							cart?.formattedAmount?.shipping?.value || cart?.shipping?.charge,
-							cart?.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
+							cart?.formattedAmount?.subtotal?.currency
 						)}
 					{/if}
 				</span>
@@ -150,7 +160,7 @@ function submit() {
 			<div class="mb-5 bg-brand-100 p-1 w-full text-center text-sm text-zinc-500">
 				You are saving
 				<span class="text-brand-500 font-bold">
-					{currency(cart?.savings + cart?.discount?.amount, $page.data?.store?.currencySymbol)}
+					{currency(cart?.savings + cart?.discount?.amount, store?.currencySymbol)}
 				</span>
 				on this order
 			</div>

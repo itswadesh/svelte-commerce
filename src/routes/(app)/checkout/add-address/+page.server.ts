@@ -5,7 +5,7 @@ import { redirect } from '@sveltejs/kit'
 export const prerender = false
 
 export async function load({ cookies, locals, params, url }) {
-	const { me, sid, store, origin } = locals
+	const { me, sid, store, storeId, origin } = locals
 	const cartId = cookies.get('cartId')
 	const id = url.searchParams.get('id')
 	// const prescriptionId = url.searchParams.get('prescription')
@@ -22,7 +22,7 @@ export async function load({ cookies, locals, params, url }) {
 		cartId,
 		origin,
 		sid,
-		storeId: store?.id,
+		storeId
 	})
 
 	// console.log('cart at add address', cart);
@@ -31,20 +31,19 @@ export async function load({ cookies, locals, params, url }) {
 		throw redirect(307, '/cart')
 	}
 
-
 	if (id === 'new') {
 		address = { id: 'new', country: null, state: null }
 	} else {
 		address = await AddressService.fetchAddress({
 			id,
-			storeId: store?.id,
+			storeId,
 			server: true,
 			sid: cookies.get('connect.sid')
 		})
 	}
 
 	countries = await CountryService.fetchCountries({
-		storeId: store?.id,
+		storeId,
 		server: true,
 		sid: cookies.get('connect.sid')
 	})
@@ -52,7 +51,9 @@ export async function load({ cookies, locals, params, url }) {
 	if (countries?.length === 1) {
 		address.country = countries[0].code || countries[0].iso_2
 	} else if (countries?.length > 1) {
-		const dafaultCountry = countries.filter((c) => { return c.dafault })
+		const dafaultCountry = countries.filter((c) => {
+			return c.dafault
+		})
 
 		// console.log('dafaultCountry', dafaultCountry);
 
@@ -63,7 +64,7 @@ export async function load({ cookies, locals, params, url }) {
 
 	if (address?.country) {
 		states = await CountryService.fetchStates({
-			storeId: store?.id,
+			storeId,
 			server: true,
 			sid: cookies.get('connect.sid'),
 			countryCode: address?.country

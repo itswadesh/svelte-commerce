@@ -5,9 +5,9 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { sorts } from '$lib/config'
 import { toast } from '$lib/utils'
-import {ProductCard,Pagination,MobileFooter,DesktopFilter,MobileFilter} from '$lib/components'
+import { ProductCard, Pagination, MobileFooter, DesktopFilter, MobileFilter } from '$lib/components'
 import noDataAvailable from '$lib/assets/no/no-data-available.png'
-import {PrimaryButton} from '$lib/ui'
+import { PrimaryButton } from '$lib/ui'
 
 export let data
 
@@ -24,7 +24,7 @@ onMount(async () => {
 	try {
 		const res = await CategoryService.fetchAllProductsOfCategories({
 			origin: $page?.data?.origin,
-			storeId: $page?.data?.store?.id
+			storeId: $page?.data?.storeId
 		})
 		products = res.products
 		productsCount = res.productsCount

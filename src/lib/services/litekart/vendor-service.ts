@@ -36,16 +36,9 @@ export const fetchVendor = async ({ origin, slug, storeId, server = false, sid =
 	}
 }
 
-export const fetchProductsOfVendor = async ({
-	slug,
-	origin,
-	page,
-	server = false,
-	sid = null,
-	storeId
-}) => {
+export const fetchProductsOfVendor = async ({ slug, origin, page, sid = null, storeId }) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		if (isServer) {
 			res = await getBySid(`es/products?vendors=${slug}&page=${page}&store=${storeId}`, sid)

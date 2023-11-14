@@ -131,10 +131,9 @@ export const razorpayCapture = async ({
 	storeId,
 	origin,
 	server = false,
-	sid = null
-}: any) => {
+}) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		res = await getShopifyApi(`customers/me`, {}, sid)
 

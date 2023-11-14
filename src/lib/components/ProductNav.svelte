@@ -8,21 +8,30 @@
 <script lang="ts">
 import { page } from '$app/stores'
 import AutosuggestModal from './AutosuggestModal.svelte'
-import type { Cart, Me } from '$lib/types'
 import { goback } from '$lib/utils'
+import { cartStore } from '$lib/store/cart'
+import { browser } from '$app/environment'
+import { onMount } from 'svelte'
 
-export let cart: Cart
 export let data
-export let me: Me
+export let me
 export let openSidebar: boolean
 export let productName: string
 export let showCartSidebar: boolean
-export let store
+export let store = {}
 export let url: string
 
 $: scrollY = 0
+$: cart = {}
 
 let show = false
+onMount(() => {
+	if (browser) {
+		cartStore.subscribe((value) => {
+			cart = value
+		})
+	}
+})
 </script>
 
 <svelte:window bind:scrollY="{scrollY}" />
@@ -126,10 +135,10 @@ let show = false
 					></path>
 				</svg>
 
-				{#if $page.data.cartQty > 0}
+				{#if cart?.qty > 0}
 					<div
 						class="absolute -top-1 -right-1 flex items-center justify-center rounded-full bg-primary-500 py-[0.8px] px-[5px] text-center text-xs font-bold uppercase text-white">
-						{$page.data.cartQty}
+						{cart.qty}
 					</div>
 				{/if}
 			</a>

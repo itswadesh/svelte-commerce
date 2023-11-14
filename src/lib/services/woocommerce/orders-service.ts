@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit'
 import { getWoocommerceApi } from '$lib/utils/server'
 import type { AllOrders, Error } from '$lib/types'
 
-export const fetchOrders = async ({ origin, storeId, server = false, sid = null }: any) => {
+export const fetchOrders = async ({ origin, storeId, server = false, sid = null }) => {
 	try {
 		let res: AllOrders | {} = {}
 
@@ -20,7 +20,7 @@ export const fetchOrders = async ({ origin, storeId, server = false, sid = null 
 	}
 }
 
-export const fetchOrder = async ({ origin, storeId, id, server = false, sid = null }: any) => {
+export const fetchOrder = async ({ origin, storeId, id, server = false, sid = null }) => {
 	try {
 		let res: any = {}
 
@@ -32,9 +32,9 @@ export const fetchOrder = async ({ origin, storeId, id, server = false, sid = nu
 	}
 }
 
-export const fetchTrackOrder = async ({ origin, storeId, id, server = false, sid = null }: any) => {
+export const fetchTrackOrder = async ({ origin, storeId, id, server = false, sid = null }) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		res = await getWoocommerceApi(`customers/me`, {}, sid)
 
@@ -53,9 +53,9 @@ export const paySuccessPageHit = async ({
 	id,
 	server = false,
 	sid = null
-}: any) => {
+}) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		res = await getWoocommerceApi(`customers/me`, {}, sid)
 
@@ -73,9 +73,9 @@ export const codCheckout = async ({
 	origin,
 	server = false,
 	sid = null
-}: any) => {
+}) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		res = await getWoocommerceApi(`customers/me`, {}, sid)
 
@@ -93,9 +93,9 @@ export const cashfreeCheckout = async ({
 	origin,
 	server = false,
 	sid = null
-}: any) => {
+}) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		res = await getWoocommerceApi(`customers/me`, {}, sid)
 
@@ -113,9 +113,9 @@ export const razorpayCheckout = async ({
 	origin,
 	server = false,
 	sid = null
-}: any) => {
+}) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		res = await getWoocommerceApi(`customers/me`, {}, sid)
 
@@ -130,11 +130,10 @@ export const razorpayCapture = async ({
 	rpOrderId,
 	storeId,
 	origin,
-	server = false,
-	sid = null
-}: any) => {
+	server = false
+}) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		res = await getWoocommerceApi(`customers/me`, {}, sid)
 
@@ -151,9 +150,9 @@ export const stripeCheckoutService = async ({
 	origin,
 	server = false,
 	sid = null
-}: any) => {
+}) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		res = await getWoocommerceApi(`customers/me`, {}, sid)
 

@@ -7,7 +7,7 @@ export async function load({ params, url, locals, cookies }) {
 		const { slug } = params
 		const id = url.searchParams.get('id')
 		const category = await CategoryService.fetchCategory({
-			storeId: locals.store?.id,
+			storeId: locals.storeId,
 			slug,
 			id,
 			server: true

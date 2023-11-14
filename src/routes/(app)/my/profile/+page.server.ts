@@ -3,12 +3,12 @@ import { UserService } from '$lib/services'
 import dayjs from 'dayjs'
 
 export async function load({ cookies, locals }) {
-	const { store, me, sid } = locals
+	const { store, storeId, me, sid } = locals
 	let profile = {}
 
 	try {
 		const data = await UserService.fetchMeData({
-			storeId: store?.id,
+			storeId,
 			server: true,
 			sid
 		})

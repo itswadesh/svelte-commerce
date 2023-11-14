@@ -34,36 +34,40 @@ export { clazz as class }
 
 	<!-- Category Pool -->
 
-	{#each categoryPool as d, dx}
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			class="h-5 w-5 px-1 shrink-0"
-			fill="none"
-			viewBox="0 0 24 24"
-			stroke="currentColor"
-			stroke-width="2">
-			<path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
-		</svg>
+	{#if categoryPool?.length}
+		{#each categoryPool as d, dx}
+			{#if dx === 0}
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="h-5 w-5 px-1 shrink-0"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+					stroke-width="2">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+				</svg>
+			{/if}
 
-		<a
-			href="{navigateToProperPath(d.link || d.slug)}?sort=-updatedAt"
-			aria-label="Click to go inside this page"
-			class="block first-letter:uppercase hover:text-primary-500 hover:underline">
-			{d.name}
-		</a>
+			<a
+				href="{navigateToProperPath(d.link || d.slug)}?sort=-updatedAt"
+				aria-label="Click to go inside this page"
+				class="block first-letter:uppercase hover:text-primary-500 hover:underline">
+				{d.name}
+			</a>
 
-		{#if dx < categoryPool?.length - 2}
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				class="h-5 w-5 px-1 shrink-0"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke="currentColor"
-				stroke-width="2">
-				<path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
-			</svg>
-		{/if}
-	{/each}
+			{#if dx < categoryPool?.length - 2}
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="h-5 w-5 px-1 shrink-0"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+					stroke-width="2">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+				</svg>
+			{/if}
+		{/each}
+	{/if}
 
 	{#if currentProductName}
 		<svg

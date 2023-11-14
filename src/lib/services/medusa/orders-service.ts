@@ -27,24 +27,25 @@ export const fetchOrders = async ({ origin, storeId, server = false, sid = null 
 			pageSize: res?.limit,
 			noOfPage: res?.noOfPage || 1,
 			page: res?.page || 1,
-			data: res.orders.map((order) => {
-				return {
-					_id: order.id,
-					orderNo: order.id,
-					createdAt: order.created_at,
-					orderItems: order.items.map((item) => {
-						return {
-							img: item.thumbnail,
-							name: item.title,
-							qty: item.quantity,
-							price: item.unit_price,
-							shippingCharge: item.shipping_total,
-							total: item.total,
-							status: order.status,
-						}
-					})
-				}
-			}) || {}
+			data:
+				res.orders.map((order) => {
+					return {
+						_id: order.id,
+						orderNo: order.id,
+						createdAt: order.created_at,
+						orderItems: order.items.map((item) => {
+							return {
+								img: item.thumbnail,
+								name: item.title,
+								qty: item.quantity,
+								price: item.unit_price,
+								shippingCharge: item.shipping_total,
+								total: item.total,
+								status: order.status
+							}
+						})
+					}
+				}) || {}
 		}
 	} catch (e) {
 		throw error(e.status, e.message)
@@ -75,8 +76,7 @@ export const fetchOrder = async ({ origin, storeId, id, server = false, sid = nu
 					size: '',
 					color: '',
 					variant: item.variant,
-					total: item.total,
-
+					total: item.total
 				}
 			}),
 			address: {
@@ -88,7 +88,7 @@ export const fetchOrder = async ({ origin, storeId, id, server = false, sid = nu
 				country: res?.shipping_address.country_code,
 				state: res?.shipping_address.province,
 				zip: res?.shipping_address.postal_code,
-				phone: res?.shipping_address.phone,
+				phone: res?.shipping_address.phone
 			},
 			billingAddress: {
 				firstName: res?.shipping_address.first_name,
@@ -99,12 +99,11 @@ export const fetchOrder = async ({ origin, storeId, id, server = false, sid = nu
 				country: res?.shipping_address.country_code,
 				state: res?.shipping_address.province,
 				zip: res?.shipping_address.postal_code,
-				phone: res?.shipping_address.phone,
+				phone: res?.shipping_address.phone
 			},
 			invoiceLink: '',
 			replaceValidTill: '',
-			status: res?.status
-				|| {}
+			status: res?.status || {}
 		}
 	} catch (e) {
 		throw error(e.status, e.message)
@@ -218,11 +217,10 @@ export const razorpayCapture = async ({
 	rpOrderId,
 	storeId,
 	origin,
-	server = false,
-	sid = null
-}: any) => {
+	server = false
+}) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		res = await getMedusajsApi(`orders/me`, {}, sid)
 

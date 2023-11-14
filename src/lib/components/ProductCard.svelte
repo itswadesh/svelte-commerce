@@ -34,6 +34,9 @@ import { page } from '$app/stores'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
+import { storeStore } from '$lib/store/store'
+import { browser } from '$app/environment'
+import { onMount } from 'svelte'
 
 export let product = {}
 // console.log('zzzzzzzzzzzzzzzzzz', product)
@@ -66,6 +69,13 @@ if (product?.tags?.length) {
 
 	// console.log('Ribbon tags =', ribbonTags)
 }
+
+let store = {}
+onMount(async () => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
+})
 </script>
 
 {#if product}
@@ -454,7 +464,7 @@ if (product?.tags?.length) {
 
 					<div class="flex gap-2 justify-between">
 						<h4
-							class="flex-1 text-xs sm:text-sm font-normal text-zinc-500 truncate w-full group-hover:underline">
+							class="flex-1 text-xs sm:text-sm font-normal text-zinc-500 line-clamp-2 w-full group-hover:underline">
 							{product.name || '_'}
 						</h4>
 
@@ -471,12 +481,12 @@ if (product?.tags?.length) {
 				</a>
 
 				{#if $page?.data?.store?.isMultiVendor && product?.vendor && product?.vendor?.slug && product?.vendor?.businessName}
-					<div class="flex items-center gap-1 text-sm text-zinc-500">
+					<div class="flex items-center gap-1 text-xs sm:text-sm text-zinc-500">
 						<span> By </span>
 
 						<a
 							href="/store/{product?.vendor?.slug}"
-							class="block w-full truncate underline hover:text-zinc-800 capitalize">
+							class="block w-full truncate font-semibold hover:text-zinc-800 capitalize">
 							{product?.vendor?.businessName}
 						</a>
 					</div>
@@ -497,12 +507,12 @@ if (product?.tags?.length) {
 								? 'hidden'
 								: 'flex'} mt-1 flex-wrap items-baseline justify-start gap-1.5 text-xs leading-3">
 							<span class="text-base font-bold whitespace-nowrap leading-3">
-								{currency(product.price, $page.data?.store?.currencySymbol)}
+								{currency(product.price, store?.currencySymbol)}
 							</span>
 
 							{#if product.mrp > product.price}
 								<span class="text-zinc-500 line-through whitespace-nowrap">
-									{currency(product.mrp, $page.data?.store?.currencySymbol)}
+									{currency(product.mrp, store?.currencySymbol)}
 								</span>
 
 								{#if Math.floor(((product.mrp - product.price) / product.mrp) * 100) > 0}
@@ -591,12 +601,12 @@ if (product?.tags?.length) {
 										<div
 											class="mt-2.5 flex flex-wrap items-baseline justify-start leading-4 text-xs gap-1.5">
 											<span class="font-semibold sm:text-sm whitespace-nowrap">
-												{currency(relatedProduct.price, $page.data?.store?.currencySymbol)}
+												{currency(relatedProduct.price, store?.currencySymbol)}
 											</span>
 
 											{#if relatedProduct.mrp > relatedProduct.price}
 												<span class="text-zinc-500 line-through whitespace-nowrap">
-													{currency(relatedProduct.mrp, $page.data?.store?.currencySymbol)}
+													{currency(relatedProduct.mrp, store?.currencySymbol)}
 												</span>
 
 												{#if Math.floor(((relatedProduct.mrp - relatedProduct.price) / relatedProduct.mrp) * 100) > 0}

@@ -12,7 +12,7 @@ export async function load({ url, locals, cookies }) {
 	try {
 		product = await ProductService.fetchProduct({
 			id: pid,
-			storeId: locals.store?.id,
+			storeId: locals.storeId,
 			server: true,
 			origin: locals.origin,
 			sid: cookies.get('connect.sid')

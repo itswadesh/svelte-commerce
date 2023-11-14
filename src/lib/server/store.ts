@@ -4,7 +4,7 @@ import type { RequestEvent } from '@sveltejs/kit'
 export const fetchStoreData = async (event: RequestEvent) => {
 	try {
 		const cookieMegamenu = event.cookies.get('megamenu')
-		const cookieStore = event.cookies.get('store')
+		const storeId = event.cookies.get('storeId')
 		const zip = event.cookies.get('zip')
 
 		if (zip) {
@@ -14,7 +14,7 @@ export const fetchStoreData = async (event: RequestEvent) => {
 		const r = await StoreService.getStoreData({
 			url: event.request.url,
 			cookies: event.cookies,
-			cookieStore,
+			cookieStore: storeId,
 			cookieMegamenu,
 			server: true
 		})
@@ -22,7 +22,7 @@ export const fetchStoreData = async (event: RequestEvent) => {
 		if (!cookieMegamenu || cookieMegamenu == 'undefined') {
 			r.megamenu1 = await CategoryService.fetchMegamenuData({
 				origin: event.request.url,
-				storeId: r.storeOne.id,
+				storeId,
 				sid: event.cookies.get('connect.sid'),
 				megamenu: true
 			})

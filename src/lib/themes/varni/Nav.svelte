@@ -25,8 +25,8 @@
 </style>
 
 <script lang="ts">
-import { Autocomplete, AutosuggestModal, AutocompleteItem, LazyImg } from '$lib/components'
-import { createEventDispatcher, getContext, onMount } from 'svelte'
+import { Autocomplete, AutosuggestModal, LazyImg } from '$lib/components'
+import { createEventDispatcher, onMount } from 'svelte'
 import { cubicOut } from 'svelte/easing'
 import { enhance } from '$app/forms'
 import { fade, fly } from 'svelte/transition'
@@ -34,23 +34,23 @@ import { getAPI, post } from '$lib/utils/api'
 import { getCdnImageUrl, navigateToProperPath } from '$lib/utils'
 import { goto, invalidateAll } from '$app/navigation'
 import { logo } from '$lib/config'
-import { MegamenuHorizontal, MegamenuVertical } from '$lib/theme-config'
+import { MegamenuHorizontal } from '$lib/theme-config'
 import { page } from '$app/stores'
 import { PrimaryButton, WhiteButton } from '$lib/ui'
-import Cookie from 'cookie-universal'
 import menu from '$lib/config/menu'
-
+import { browser } from '$app/environment'
+import { cartStore } from '$lib/store/cart'
+import { storeStore } from '$lib/store/store'
 const dispatch = createEventDispatcher()
-const cookies = Cookie()
 
-export let me, cart, data, showCartSidebar, openSidebar, store
+export let me, data, showCartSidebar, openSidebar
 
 let q = ''
 let showDropdownAccount = false
 let show = false
 let loadingForDeleteItemFromCart = []
 let categories
-let hellobar = $page.data.store?.hellobar || {}
+$: cart = {}
 // let menuItems = [
 // 	{ title: 'Trending', link: '/trending-en?sort=-updatedAt' },
 // 	{ title: 'Custom Design', link: '/custom-design' },
@@ -75,8 +75,6 @@ let menuItems2 = [
 // 	} finally {
 // 	}
 
-// 	await cookies.set('me', null, { path: '/' })
-// 	await cookies.set('cart', null, { path: '/' })
 // 	await cookies.remove('token')
 // 	await cookies.remove('connect.sid')
 // 	await cookies.remove('me')
@@ -84,9 +82,18 @@ let menuItems2 = [
 
 // 	return { data: logout, error }
 // }
-
+let store = {}
 onMount(async () => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
 	q = $page.url.searchParams.get('q')
+
+	if (browser) {
+		cartStore.subscribe((value) => {
+			cart = value
+		})
+	}
 	// const response = await fetch('/server/cart')
 	// cart = await response.json()
 })
@@ -150,7 +157,7 @@ function handleShowCartSidebar() {
 
 async function getCategories() {
 	try {
-		const res1 = await getAPI(`categories?store=${$page?.data?.store?.id}`, $page.data.origin)
+		const res1 = await getAPI(`categories?store=${$page?.data?.storeId}`, $page.data.origin)
 		categories = res1?.data.filter((c) => {
 			return c.img
 		})
@@ -168,7 +175,7 @@ const removeItemFromCart = async ({ pid, qty, customizedImg, ix }: any) => {
 				pid: pid,
 				qty: qty,
 				customizedImg: customizedImg || null,
-				store: $page?.data?.store?.id
+				store: $page?.data?.storeId
 			},
 			$page.data.origin
 		)
@@ -313,7 +320,7 @@ let y
 
 			<div class="flex-1 hidden w-full max-w-4xl min-w-min lg:block">
 				<Autocomplete
-					placeholder="{$page?.data?.store?.searchbarText || 'Search...'}"
+					placeholder="{store?.searchbarText || 'Search...'}"
 					on:search="{onSearchSubmit}" />
 			</div>
 
@@ -428,7 +435,7 @@ let y
 								<h1 class="p-4 font-bold text-center uppercase border-b sm:text-lg">Cart</h1>
 
 								<div class="h-full p-4 pb-20 overflow-x-hidden overflow-y-auto">
-									{#if $page.data.cartQty > 0}
+									{#if cart?.qty > 0}
 										<div class="flex flex-col gap-5 mb-5">
 											{#each cart?.items || [] as item, ix}
 												<div class="flex items-start justify-between gap-4">
@@ -458,7 +465,7 @@ let y
 																class="flex-1 text-sm leading-4"
 																on:click="{() => (showCartSidebar = false)}">{item.name}</a>
 
-															{#if $page?.data?.store?.isFnb && item.foodType}
+															{#if store?.isFnb && item.foodType}
 																<div>
 																	{#if item.foodType === 'veg'}
 																		<img src="/product/veg.png" alt="veg" class="w-5 h-5" />
@@ -932,10 +939,10 @@ let y
 						></path>
 					</svg>
 
-					{#if $page.data.cartQty > 0}
+					{#if cart.qty > 0}
 						<div
 							class="absolute -top-2 -right-1.5 flex items-center justify-center rounded-full bg-primary-500 py-[0.8px] px-[5px] text-center text-xs font-bold uppercase text-white">
-							{$page.data.cartQty}
+							{cart.qty}
 						</div>
 					{/if}
 				</a>

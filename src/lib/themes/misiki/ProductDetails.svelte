@@ -60,7 +60,6 @@ import { slide } from 'svelte/transition'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
 import Breadcrumb from '$lib/components/Breadcrumb.svelte'
 import CategoryPoolButtons from './CategoryPoolButtons.svelte'
-import Checkbox from '$lib/ui/Checkbox.svelte'
 import CheckboxOfMultiProducts from '$lib/ui/CheckboxOfMultiProducts.svelte'
 import Cookie from 'cookie-universal'
 import dayjs from 'dayjs'
@@ -85,58 +84,41 @@ import Textarea from '$lib/ui/Textarea.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 import viewport from '$lib/actions/useViewPort'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
+import { updateCartStore } from '$lib/store/cart'
+import { storeStore } from '$lib/store/store'
 
 const cookies = Cookie()
 const isServer = import.meta.env.SSR
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let currentVariantId = $page.url.searchParams?.get('variant') || ''
 let currentVariantPrice = data.product?.price || 0
 
 let seoProps = {
-	// addressCountry: 'India',
-	// addressLocality: 'Semiliguda, Koraput',
-	// addressRegion: 'Odisha',
-	// alternateJsonHref: '',
-	// alternateXml: { title: '', href: '' },
 	brand: `${$page?.data?.store?.websiteName}`,
 	breadcrumbs: data.product?.categoryPool,
 	caption: `${$page?.data?.store?.websiteName}`,
 	category: data.product?.category?.name,
 	contentUrl: data.product?.img || $page?.data?.store?.logo,
 	createdAt: `${data.product?.createdAt || '_'}`,
-	// depth: { unitCode: '', value: '' },
 	email: `${$page?.data?.store?.email}`,
-	// entityMeta: '',
-	// facebookPage: '',
-	// gtin: '',
-	// height: '',
 	id: $page?.url?.href,
 	logo: $page?.data?.store?.logo,
-	// ogSquareImage: { url: 'https://lrnr.in/favicon.ico', width: 56, height: 56 },
 	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00'],
 	popularity: data.product?.popularity,
-	// postalCode: '764036',
 	price: currentVariantPrice,
 	priceRange: `${currentVariantPrice}-${data.product?.mrp}`,
 	ratingCount: 1,
 	ratingValue: +data.product?.ratings + 1,
 	sku: data.product?.sku,
-	// streetAddress: 'Padmajyoti Marg, Nandapur Road',
 	timeToRead: 0,
 	updatedAt: `${data.product?.updatedAt || '_'}`,
-	// weight: { unitCode: '', value: '' },
-	// width: { unitCode: '', value: '' },
-	// wlwmanifestXmlHref: '',
 	metaDescription: data.product?.metaDescription,
-	// article: false,
 	canonical: `${$page?.url.href}`,
 	datePublished: `${data.product?.publishedAt || '_'}`,
 	description: ` ${data.product?.description}`,
 	dnsPrefetch: `//cdn.jsdelivr.net`,
-	// entityMeta: null,
 	featuredImage: {
 		url: `${data.product?.img}`,
 		width: 675,
@@ -158,7 +140,6 @@ let seoProps = {
 	productPriceAmount: `${currentVariantPrice}`,
 	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
 	slug: `${data.product?.slug}`,
-	// timeToRead: 0,
 	title: `${data.product?.name}`,
 	twitterImage: { url: `${data.product?.img}` }
 }
@@ -220,8 +201,11 @@ if (data.product?.tags?.length) {
 
 	// console.log('Ribbon tags =', ribbonTags)
 }
-
+let store = {} 
 onMount(async () => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
 	try {
 		screenWidth = screen.width
 		storeRecentlyViewedToLocatStorage()
@@ -229,7 +213,7 @@ onMount(async () => {
 })
 
 const storeRecentlyViewedToLocatStorage = async () => {
-	const localRecentlyViewed = localStorage.getItem(`recently_viewed_${$page.data.store?.id}`)
+	const localRecentlyViewed = localStorage.getItem(`recently_viewed_${$page.data.storeId}`)
 
 	if (!!localRecentlyViewed && localRecentlyViewed !== 'undefined') {
 		recentlyViewed = JSON.parse(localRecentlyViewed)
@@ -258,10 +242,7 @@ const storeRecentlyViewedToLocatStorage = async () => {
 		recentlyViewed = resvw
 
 		if (browser) {
-			localStorage.setItem(
-				`recently_viewed_${$page.data.store?.id}`,
-				JSON.stringify(recentlyViewed)
-			)
+			localStorage.setItem(`recently_viewed_${$page.data.storeId}`, JSON.stringify(recentlyViewed))
 		}
 	}
 }
@@ -303,7 +284,7 @@ async function addToBag(p, customizedImg, customizedJson) {
 			qty: 1,
 			options: selectedOptions,
 			customizedImg: customizedImg,
-			storeId: $page.data.store?.id,
+			storeId: $page.data.storeId,
 			customizedData: customizedJson,
 			origin: $page.data.origin,
 			server: isServer,
@@ -315,7 +296,7 @@ async function addToBag(p, customizedImg, customizedJson) {
 					pid: i,
 					vid: i,
 					qty: 1,
-					storeId: $page.data.store?.id,
+					storeId: $page.data.storeId,
 					origin: $page.data.origin,
 					server: isServer,
 					cookies
@@ -343,8 +324,6 @@ async function addToBag(p, customizedImg, customizedJson) {
 				formattedAmount: cart?.formattedAmount
 			}
 			cookies.set('cartId', cookieCart.cartId, { path: '/' })
-			cookies.set('cartQty', cookieCart.qty, { path: '/' })
-			// cookies.set('cart', JSON.stringify(cookieCart), { path: '/' })
 			// cartButtonText = 'Added To Cart'
 			bounceItemFromTop = true
 		}
@@ -605,7 +584,9 @@ async function updateVariant(variant) {
 						<p>
 							By
 
-							<a href="/store/{data?.product?.vendor?.slug}" class="underline hover:text-zinc-800">
+							<a
+								href="/store/{data?.product?.vendor?.slug}"
+								class="capitalize font-semibold underline hover:text-zinc-800">
 								{data?.product?.vendor?.businessName || data?.product?.vendor?.name}
 							</a>
 						</p>
@@ -617,7 +598,7 @@ async function updateVariant(variant) {
 				<hr class="block sm:hidden w-full" />
 
 				<div class="block sm:hidden">
-					{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
+					{#if store?.isSecureCatalogue && !$page.data?.me}
 						<a
 							href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page?.url
 								?.search}"
@@ -627,13 +608,13 @@ async function updateVariant(variant) {
 					{:else}
 						<div class="mb-2 flex flex-wrap items-baseline gap-2 text-sm">
 							<span class="text-xl font-bold whitespace-nowrap">
-								{currency(currentVariantPrice, $page.data?.store?.currencySymbol)}
+								{currency(currentVariantPrice, store?.currencySymbol)}
 							</span>
 
 							{#if data.product?.mrp > currentVariantPrice}
 								<span class="whitespace-nowrap text-zinc-500">
 									<strike>
-										{currency(data.product?.mrp, $page.data?.store?.currencySymbol)}
+										{currency(data.product?.mrp, store?.currencySymbol)}
 									</strike>
 								</span>
 
@@ -648,7 +629,7 @@ async function updateVariant(variant) {
 						{#await data.streamed?.moreProductDetails then value}
 							<h6 class="text-brand-500">
 								{#if value?.igst}
-									Inclusive {currency(value?.igst, $page.data?.store?.currencySymbol)} GST
+									Inclusive {currency(value?.igst, store?.currencySymbol)} GST
 								{:else}
 									Inclusive of all taxes
 								{/if}
@@ -659,7 +640,7 @@ async function updateVariant(variant) {
 
 				<!-- ratings -->
 
-				{#if $page.data.store?.isProductReviewsAndRatings}
+				{#if store?.isProductReviewsAndRatings}
 					{#await data.streamed?.productReviews then productReviews}
 						{#if productReviews?.reviewsSummary?.productReviews?.summary?.ratings_avg?.value}
 							<button
@@ -698,7 +679,7 @@ async function updateVariant(variant) {
 
 				<!-- Delivery Options Mobile -->
 
-				{#if data.product?.handling_time_when_stock || data.product?.handling_time_when_nis || $page.data.store?.isIndianPincodes}
+				{#if data.product?.handling_time_when_stock || data.product?.handling_time_when_nis || store?.isIndianPincodes}
 					<div class="sm:hidden block">
 						<div class="mb-2 flex items-center gap-2 uppercase">
 							<h5>Delivery Options</h5>
@@ -729,7 +710,7 @@ async function updateVariant(variant) {
 								</span>
 							{/if}
 
-							{#if $page.data.store?.isIndianPincodes}
+							{#if store?.isIndianPincodes}
 								<DeliveryOptions
 									product="{data.product}"
 									deliveryDetails="{data.deliveryDetails}" />
@@ -741,23 +722,23 @@ async function updateVariant(variant) {
 				<!-- prices desktop -->
 
 				<div class="hidden sm:block">
-					{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
+					{#if store?.isSecureCatalogue && !$page.data?.me}
 						<a
-							href="{$page.data?.store?.otpLogin ? '/auth/otp-login' : '/auth/login'}?ref={$page
-								?.url?.pathname}{$page?.url?.search}"
+							href="{store?.otpLogin ? '/auth/otp-login' : '/auth/login'}?ref={$page?.url
+								?.pathname}{$page?.url?.search}"
 							class="block hover:underline max-w-max font-bold">
 							Login to view price
 						</a>
 					{:else}
 						<div class="mb-2 flex flex-wrap items-baseline gap-2">
 							<span class="text-2xl font-bold whitespace-nowrap">
-								{currency(currentVariantPrice, $page.data?.store?.currencySymbol)}
+								{currency(currentVariantPrice, store?.currencySymbol)}
 							</span>
 
 							{#if data.product?.mrp > currentVariantPrice}
 								<span class="whitespace-nowrap text-zinc-500">
 									<strike>
-										{currency(data.product?.mrp, $page.data?.store?.currencySymbol)}
+										{currency(data.product?.mrp, store?.currencySymbol)}
 									</strike>
 								</span>
 
@@ -772,7 +753,7 @@ async function updateVariant(variant) {
 						{#await data.streamed?.moreProductDetails then value}
 							<h6 class="text-brand-500">
 								{#if value?.igst}
-									Inclusive {currency(value?.igst, $page.data?.store?.currencySymbol)} GST
+									Inclusive {currency(value?.igst, store?.currencySymbol)} GST
 								{:else}
 									Inclusive of all taxes
 								{/if}
@@ -1005,9 +986,7 @@ async function updateVariant(variant) {
 											</span>
 
 											{#if mgp.material.price}
-												<span
-													><b>{currency(mgp.material.price, $page.data?.store?.currencySymbol)}</b
-													></span>
+												<span><b>{currency(mgp.material.price, store?.currencySymbol)}</b></span>
 											{/if}
 										</a>
 									</li>
@@ -1323,7 +1302,7 @@ async function updateVariant(variant) {
 					{#if !data.product?.isCustomized}
 						<div
 							class="w-full hidden md:grid gap-2 items-center uppercase grid-cols-2 static max-w-sm">
-							{#if $page.data.store?.isWishlist}
+							{#if store?.isWishlist}
 								<div class="col-span-1">
 									<form
 										id="toggle_wishlist_1"
@@ -1398,7 +1377,7 @@ async function updateVariant(variant) {
 
 							{#if currentVariantPrice > 0}
 								<div class="col-span-1">
-									{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
+									{#if store?.isSecureCatalogue && !$page.data?.me}
 										<a
 											href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
 												?.url?.search}"
@@ -1479,9 +1458,11 @@ async function updateVariant(variant) {
 															}, 820)
 															return
 														}
+														updateCartStore({ data: result.data })
 														result?.data?.qty < 0
 															? fireGTagEvent('remove_from_cart', result?.data)
 															: fireGTagEvent('add_to_cart', result?.data)
+														// console.log(result?.data);
 														cartButtonText = 'Added To Cart'
 														bounceItemFromTop = true
 														setTimeout(() => {
@@ -1492,7 +1473,7 @@ async function updateVariant(variant) {
 														if (customizedImg) {
 															goto(`/checkout/address`)
 														}
-														await invalidateAll()
+														// await invalidateAll()
 														await applyAction(result)
 													}
 												}}">
@@ -1600,7 +1581,7 @@ async function updateVariant(variant) {
 
 				<!-- Delivery Options Desktop -->
 
-				{#if data.product?.handling_time_when_stock || data.product?.handling_time_when_nis || $page.data.store?.isIndianPincodes}
+				{#if data.product?.handling_time_when_stock || data.product?.handling_time_when_nis || store?.isIndianPincodes}
 					<div class="hidden sm:block">
 						<div class="mb-2 flex items-center gap-2 uppercase">
 							<h5>Delivery Options</h5>
@@ -1631,7 +1612,7 @@ async function updateVariant(variant) {
 								</span>
 							{/if}
 
-							{#if $page.data.store?.isIndianPincodes}
+							{#if store?.isIndianPincodes}
 								<DeliveryOptions
 									product="{data.product}"
 									deliveryDetails="{data.deliveryDetails}" />
@@ -1642,7 +1623,7 @@ async function updateVariant(variant) {
 
 				<!-- Ratings & Reviews -->
 
-				{#if $page.data.store?.isProductReviewsAndRatings}
+				{#if store?.isProductReviewsAndRatings}
 					{#await data.streamed?.productReviews}
 						<ul class="m-0 p-0 flex flex-col gap-5">
 							{#each { length: 3 } as _}
@@ -1696,10 +1677,10 @@ async function updateVariant(variant) {
 
 				<!-- Promo video -->
 
-				{#if $page.data.store?.storePromoVideo?.active?.val && getIdFromYoutubeVideo($page.data.store?.storePromoVideo?.url?.val)}
+				{#if store?.storePromoVideo?.active?.val && getIdFromYoutubeVideo(store?.storePromoVideo?.url?.val)}
 					<iframe
 						src="https://www.youtube.com/embed/{getIdFromYoutubeVideo(
-							$page.data.store?.storePromoVideo?.url?.val
+							store?.storePromoVideo?.url?.val
 						)}"
 						title="YouTube video player"
 						frameborder="0"
@@ -1724,7 +1705,7 @@ async function updateVariant(variant) {
 					{#if showStickyCartButton && !data.product?.isCustomized}
 						<div
 							class="w-full grid md:hidden grid-cols-5 gap-2 items-center uppercase fixed inset-x-0 bottom-0 z-40 h-16 border-t bg-white p-3 box-shadow">
-							{#if $page.data.store?.isWishlist}
+							{#if store?.isWishlist}
 								<div class="col-span-2">
 									<form
 										id="toggle_wishlist_2"
@@ -1798,8 +1779,8 @@ async function updateVariant(variant) {
 							{/if}
 
 							{#if currentVariantPrice > 0}
-								<div class="{$page.data.store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
-									{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
+								<div class="{store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
+									{#if store?.isSecureCatalogue && !$page.data?.me}
 										<a
 											href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
 												?.url?.search}"
@@ -1880,6 +1861,7 @@ async function updateVariant(variant) {
 															}, 820)
 															return
 														}
+														updateCartStore({ data: result.data })
 														result?.data?.qty < 0
 															? fireGTagEvent('remove_from_cart', result?.data)
 															: fireGTagEvent('add_to_cart', result?.data)
@@ -1893,7 +1875,7 @@ async function updateVariant(variant) {
 														if (customizedImg) {
 															goto(`/checkout/address`)
 														}
-														invalidateAll()
+														// invalidateAll()
 														await applyAction(result)
 													}
 												}}">
@@ -1962,7 +1944,7 @@ async function updateVariant(variant) {
 
 					{#if !data.product?.isCustomized}
 						<div class="w-full grid md:hidden grid-cols-5 gap-2 items-center uppercase">
-							{#if $page.data.store?.isWishlist}
+							{#if store?.isWishlist}
 								<div class="col-span-2">
 									<form
 										id="toggle_wishlist_3"
@@ -2036,8 +2018,8 @@ async function updateVariant(variant) {
 							{/if}
 
 							{#if currentVariantPrice > 0}
-								<div class="{$page.data.store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
-									{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
+								<div class="{store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
+									{#if store?.isSecureCatalogue && !$page.data?.me}
 										<a
 											href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
 												?.url?.search}"
@@ -2118,6 +2100,7 @@ async function updateVariant(variant) {
 															}, 820)
 															return
 														}
+														updateCartStore({ data: result.data })
 														result?.data?.qty < 0
 															? fireGTagEvent('remove_from_cart', result?.data)
 															: fireGTagEvent('add_to_cart', result?.data)
@@ -2131,7 +2114,7 @@ async function updateVariant(variant) {
 														if (customizedImg) {
 															goto(`/checkout/address`)
 														}
-														invalidateAll()
+														// invalidateAll()
 														await applyAction(result)
 													}
 												}}">
@@ -2275,7 +2258,7 @@ async function updateVariant(variant) {
 				type="button"
 				class="p-3 sm:px-10 w-full flex items-center justify-between gap-4 text-sm focus:outline-none"
 				on:click="{() => (showFooter = !showFooter)}">
-				<span>More about {$page.data.store?.websiteName || 'store'}</span>
+				<span>More about {store?.websiteName || 'store'}</span>
 
 				<svg
 					xmlns="http://www.w3.org/2000/svg"

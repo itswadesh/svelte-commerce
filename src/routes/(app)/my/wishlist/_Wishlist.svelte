@@ -25,6 +25,10 @@ import { WishlistService } from '$lib/services'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
 import noEmptyWishlist from '$lib/assets/no/empty-wishlist.svg'
 import WishlistSkeleton from './_WishlistSkeleton.svelte'
+import { updateCartStore } from '$lib/store/cart'
+import { onMount } from 'svelte'
+import { browser } from '$app/environment'
+import { storeStore } from '$lib/store/store'
 
 export let wishlistedProducts,
 	loadingProduct = []
@@ -37,7 +41,7 @@ async function removeFromWishlist(id, wx) {
 		await WishlistService.toggleWishlistService({
 			pid: id,
 			vid: id,
-			storeId: $page.data.store?.id,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 		await invalidateAll()
@@ -52,13 +56,20 @@ async function getWishlistedProducts() {
 	try {
 		wishlistedProducts = WishlistService.fetchWishlist({
 			origin: $page?.data?.origin,
-			storeId: $page?.data?.store?.id
+			storeId: $page?.data?.storeId
 		})
 		await invalidateAll()
 	} catch (e) {
 	} finally {
 	}
 }
+
+let store = {}
+onMount(() => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
+})
 </script>
 
 <div class="w-full">
@@ -111,6 +122,7 @@ async function getWishlistedProducts() {
 							method="POST"
 							use:enhance="{() => {
 								return async ({ result }) => {
+									updateCartStore({ data: result.data })
 									result.data.qty < 0
 										? fireGTagEvent('remove_from_cart', result.data)
 										: fireGTagEvent('add_to_cart', result.data)
@@ -119,7 +131,7 @@ async function getWishlistedProducts() {
 										bounceItemFromTop = false
 									}, 3000)
 									await removeFromWishlist(w.product?._id, wx)
-									await invalidateAll()
+									// await invalidateAll()
 									await applyAction(result)
 								}
 							}}"
@@ -154,11 +166,11 @@ async function getWishlistedProducts() {
 									</div>
 
 									<div class="flex flex-col gap-2 items-center justify-center text-center">
-										{#if $page.data?.store?.isFnb && w.product?.vendor?.businessName}
+										{#if store?.isFnb && w.product?.vendor?.businessName}
 											<h5>
 												{w.product?.vendor?.businessName}
 											</h5>
-										{:else if !$page.data?.store?.isFnb && w.product && w.product?.brand}
+										{:else if !store?.isFnb && w.product && w.product?.brand}
 											<h5>
 												{w.product?.brand.name}
 											</h5>
@@ -183,12 +195,12 @@ async function getWishlistedProducts() {
 										<div
 											class="flex flex-wrap items-baseline justify-center gap-1.5 text-xs leading-3">
 											<span class="text-base font-bold whitespace-nowrap leading-3">
-												{currency(w.product?.price, $page.data?.store?.currencySymbol)}
+												{currency(w.product?.price, store?.currencySymbol)}
 											</span>
 
 											{#if w.product?.mrp > w.product?.price}
 												<span class="whitespace-nowrap text-zinc-500 line-through">
-													{currency(w.product?.mrp, $page.data?.store?.currencySymbol)}
+													{currency(w.product?.mrp, store?.currencySymbol)}
 												</span>
 
 												{#if Math.floor(((w.product?.mrp - w.product?.price) / w.product?.mrp) * 100) > 0}

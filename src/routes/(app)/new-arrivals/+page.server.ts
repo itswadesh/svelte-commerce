@@ -12,7 +12,7 @@ export async function load({ locals, cookies }) {
 		loading = true
 
 		const res1 = await CategoryService.fetchMegamenuData({
-			storeId: locals.store?.id,
+			storeId: locals.storeId,
 			server: true,
 			sid: cookies.get('connect.sid')
 		})
@@ -25,8 +25,8 @@ export async function load({ locals, cookies }) {
 			categoryId: newArrivals[0].slug,
 			server: true,
 			sid: cookies.get('connect.sid'),
-			storeId: locals.store?.id,
-			zip: cookies.get('zip'),
+			storeId: locals.storeId,
+			zip: cookies.get('zip')
 		})
 		products = res2.products
 		productsCount = res2.count

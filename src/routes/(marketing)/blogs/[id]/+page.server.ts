@@ -6,7 +6,7 @@ export async function load({ params, locals }) {
 
 	const blog = await BlogService.fetchBlog({ id, server: true })
 
-	const latestBlogs = await BlogService.fetchLatestBlogs({ storeId: locals.store?.id, server: true })
+	const latestBlogs = await BlogService.fetchLatestBlogs({ storeId: locals.storeId, server: true })
 
 	if (blog) {
 		return { blog, latestBlogs }

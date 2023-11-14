@@ -1,14 +1,13 @@
 // import { getCache, setCache } from '$lib/server/redis'
-import { PopularityService, ProductService, ReviewService, WishlistService } from '$lib/services'
+import { ProductService, ReviewService, WishlistService } from '$lib/services'
 
 const isServer = import.meta.env.SSR // get the SSR value
 
 export async function load({ params, url, parent }) {
 	const { slug } = params
-	const { zip, sid, origin, store, me } = await parent()
+	const { zip, sid, origin, store, storeId, me } = await parent()
 	const isCors = store?.isCors
 	const page = url.searchParams.get('page') || 1
-	const storeId = store?.id
 
 	const getProductDetails = async () => {
 		// const p1 = `es/products/${slug}?store=${storeId}`
@@ -22,6 +21,7 @@ export async function load({ params, url, parent }) {
 			origin,
 			sid,
 			slug,
+			id: slug,
 			storeId
 		})
 
