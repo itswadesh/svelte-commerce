@@ -3,9 +3,9 @@ import { getBySid } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 const isServer = import.meta.env.SSR
 
-export const fetchPaymentMethods = async ({ origin, storeId, server = false, sid = null }: any) => {
+export const fetchPaymentMethods = async ({ origin, storeId, sid = null }) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		if (isServer) {
 			res = await getBySid(`payment-methods?store=${storeId}`, sid)

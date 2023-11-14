@@ -76,7 +76,7 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 		}
 
 		paymentMethods = await PaymentMethodService.fetchPaymentMethods({
-			storeId: locals.store,
+			storeId: locals.storeId,
 			server: true,
 			sid: cookies.get('connect.sid')
 		})
