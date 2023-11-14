@@ -71,7 +71,7 @@ import SEO from '$lib/components/SEO/index.svelte'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
 import { updateCartStore } from '$lib/store/cart'
 import { browser } from '$app/environment'
-import { storeStore } from '$lib/store/store.js'
+import { storeStore } from '$lib/store/store'
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
