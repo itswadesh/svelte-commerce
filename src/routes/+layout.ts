@@ -8,7 +8,7 @@ export const load = async ({ parent, data, fetch }) => {
 	try {
 		const res2 = await fetch('/server/store')
 		const storeFromServer = await res2.json()
-		locals.storeId = storeFromServer.store?.id
+		// locals.storeId = storeFromServer.store?.id
 		locals.store = storeFromServer.store
 		locals.megamenu = storeFromServer.megamenu
 		locals.menu = storeFromServer.menu
