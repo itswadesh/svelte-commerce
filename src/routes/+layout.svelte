@@ -37,7 +37,7 @@ $: if (innerWidth < 1024) {
 	showBackToTopButton = true
 }
 // let ReloadPrompt
-const store = data.store
+$: store = data.store
 
 onMount(async () => {
 	if (browser) {
@@ -85,7 +85,7 @@ onMount(async () => {
 	{#if $navigating}
 		<PreloadingIndicator />
 	{/if}
-	{#if !store}
+	{#if !data?.store}
 		<!-- If store not found -->
 
 		<div class="h-screen w-full bg-white flex items-center justify-center">
@@ -102,7 +102,7 @@ onMount(async () => {
 				<img src="{noStoreFound}" alt="" class="h-80 w-auto object-contain object-center" />
 			</div>
 		</div>
-	{:else if store && !store?.closed}
+	{:else if data?.store && !data?.store?.closed}
 		<!-- If store found and is not closed -->
 
 		<section class="minimum-width-rem relative flex min-h-screen flex-col bg-white antialiased">
@@ -117,9 +117,9 @@ onMount(async () => {
 			<BackToTop />
 		{/if}
 
-		{#if store?.whatsappChatButton?.active?.val && store?.whatsappChatButton?.phone?.val}
+		{#if data?.store?.whatsappChatButton?.active?.val && data?.store?.whatsappChatButton?.phone?.val}
 			<a
-				href="https://wa.me/{store?.whatsappChatButton?.phone?.val.replace('+', '')}"
+				href="https://wa.me/{data?.store?.whatsappChatButton?.phone?.val.replace('+', '')}"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="fixed z-40 bottom-16 left-4">
@@ -144,7 +144,7 @@ onMount(async () => {
 			<div
 				class="fixed top-0 inset-x-0 z-10 p-5 px-10 flex items-center justify-center border-b shadow-md">
 				<LazyImg
-					src="{store?.logo || '/litekart-rectangular-logo-black.png'}"
+					src="{data?.store?.logo || '/litekart-rectangular-logo-black.png'}"
 					class="h-10 w-auto object-contain object-center" />
 			</div>
 
@@ -154,7 +154,7 @@ onMount(async () => {
 					<img src="{storeClosed}" alt="" class="h-52 w-auto object-contain object-center" />
 
 					<p>
-						{store?.closedMessage}
+						{data?.store?.closedMessage}
 					</p>
 				</div>
 			</div>
