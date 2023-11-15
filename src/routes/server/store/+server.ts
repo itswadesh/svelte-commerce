@@ -5,7 +5,6 @@ export async function GET({ cookies, request, locals, setHeaders }) {
 	let menu, popularSearches, megamenu, store
 	try {
 		// const uri = new URL(request.url)
-		console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', request.url)
 		// const storeRes = await InitService.fetchInit({ host: uri.host, origin: uri.origin })
 		const storeRes = await StoreService.getStoreData({
 			url: request.url
