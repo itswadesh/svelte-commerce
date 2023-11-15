@@ -1,23 +1,23 @@
 import { DOMAIN } from '$lib/config'
-import { error } from '@sveltejs/kit'
-import { getBySid } from '$lib/utils/server'
+import { getBySid, gett } from '$lib/utils/server'
 
-export const fetchInit = async (host) => {
+export const fetchInit = async ({ host, origin }) => {
 	// This is called once during hard reload + everytime footer is hit through /server/store/server.ts
 	const isServer = import.meta.env.SSR
-
-	if (!isServer) return {}
 
 	try {
 		let res = {}
 
 		// DOMAIN value is proviede in case of self hosted and host value in case of SaaS
-		// console.log('init...............', `init?domain=${DOMAIN ? DOMAIN : host}`)
+		console.log('init...............', `init?domain=${DOMAIN ? DOMAIN : host}`, origin)
+		if (!isServer) {
+			res = await gett(`init?domain=${DOMAIN ? DOMAIN : host}`, origin)
+		} else {
+			res = await getBySid(`init?domain=${DOMAIN ? DOMAIN : host}`)
+		}
 
-		res = await getBySid(`init?domain=${DOMAIN ? DOMAIN : host}`)
-
-		return res || {}
+		return res || { storeOne: {} }
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		throw { status: e.status, message: e.data?.message || e.message }
 	}
 }

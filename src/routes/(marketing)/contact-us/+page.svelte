@@ -29,7 +29,7 @@ async function submitContactInformation() {
 			phone,
 			subject: `Someone contact us from ${$page.data.store?.websiteName}`,
 			message,
-			storeId: $page.data.store?.id,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 
@@ -67,9 +67,9 @@ async function submitContactInformation() {
 					Fill up teh form and our Team will get back to you within 24 hours.
 				</p>
 
-				{#if $page.data.store?.phone || $page.data.store?.email || $page.data.store?.address}
+				{#if store?.phone || store?.email || store?.address}
 					<ul class="mb-5 flex flex-col gap-4">
-						{#if $page.data.store?.phone}
+						{#if store?.phone}
 							<li class="flex gap-4">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -81,11 +81,11 @@ async function submitContactInformation() {
 									></path>
 								</svg>
 
-								<p class="flex-1">{$page.data.store?.phone}</p>
+								<p class="flex-1">{store?.phone}</p>
 							</li>
 						{/if}
 
-						{#if $page.data.store?.email}
+						{#if store?.email}
 							<li class="flex gap-4">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -97,11 +97,11 @@ async function submitContactInformation() {
 									<path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
 								</svg>
 
-								<p class="flex-1">{$page.data.store?.email}</p>
+								<p class="flex-1">{store?.email}</p>
 							</li>
 						{/if}
 
-						{#if $page.data.store?.address}
+						{#if store?.address}
 							<li class="flex gap-4">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -115,22 +115,22 @@ async function submitContactInformation() {
 								</svg>
 
 								<p class="flex-1">
-									{@html $page.data.store?.address}
+									{@html store?.address}
 								</p>
 							</li>
 						{/if}
 					</ul>
 				{/if}
 
-				{#if $page.data.store?.socialSharingButtons && $page.data.store?.socialSharingButtons?.active?.val}
+				{#if store?.socialSharingButtons && store?.socialSharingButtons?.active?.val}
 					<ul class="flex flex-wrap items-center gap-2">
 						<!-- Facebook -->
 
-						{#if $page.data.store?.socialSharingButtons?.facebook?.val}
+						{#if store?.socialSharingButtons?.facebook?.val}
 							<li
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#4267B2]">
 								<a
-									href="{$page.data.store?.socialSharingButtons?.facebook?.val}"
+									href="{store?.socialSharingButtons?.facebook?.val}"
 									aria-label="Click to visit facebook page"
 									target="_blank"
 									rel="noopener noreferrer"
@@ -155,11 +155,11 @@ async function submitContactInformation() {
 
 						<!-- Instagram -->
 
-						{#if $page.data.store?.socialSharingButtons?.instagram?.val}
+						{#if store?.socialSharingButtons?.instagram?.val}
 							<li
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#C13584]">
 								<a
-									href="{$page.data.store?.socialSharingButtons?.instagram?.val}"
+									href="{store?.socialSharingButtons?.instagram?.val}"
 									aria-label="Click to visit instagram page"
 									target="_blank"
 									rel="noopener noreferrer"
@@ -184,11 +184,11 @@ async function submitContactInformation() {
 
 						<!-- Twitter -->
 
-						{#if $page.data.store?.socialSharingButtons?.twitter?.val}
+						{#if store?.socialSharingButtons?.twitter?.val}
 							<li
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#1DA1F2]">
 								<a
-									href="{$page.data.store?.socialSharingButtons?.twitter?.val}"
+									href="{store?.socialSharingButtons?.twitter?.val}"
 									aria-label="Click to visit twitter page"
 									target="_blank"
 									rel="noopener noreferrer"
@@ -213,11 +213,11 @@ async function submitContactInformation() {
 
 						<!-- Linked in -->
 
-						{#if $page.data.store?.socialSharingButtons?.linkedin?.val}
+						{#if store?.socialSharingButtons?.linkedin?.val}
 							<li
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#0077b5]">
 								<a
-									href="{$page.data.store?.socialSharingButtons?.linkedin?.val}"
+									href="{store?.socialSharingButtons?.linkedin?.val}"
 									aria-label="Click to visit linkedin page"
 									target="_blank"
 									rel="noopener noreferrer"
@@ -244,11 +244,11 @@ async function submitContactInformation() {
 
 						<!-- Pinterest -->
 
-						{#if $page.data.store?.socialSharingButtons?.pinterest?.val}
+						{#if store?.socialSharingButtons?.pinterest?.val}
 							<li
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#D32D2D]">
 								<a
-									href="{$page.data.store?.socialSharingButtons?.pinterest?.val}"
+									href="{store?.socialSharingButtons?.pinterest?.val}"
 									aria-label="Click to visit pinterest page"
 									target="_blank"
 									rel="noopener noreferrer"
@@ -275,11 +275,11 @@ async function submitContactInformation() {
 
 						<!-- Youtube -->
 
-						{#if $page.data.store?.socialSharingButtons?.youtube?.val}
+						{#if store?.socialSharingButtons?.youtube?.val}
 							<li
 								class="duraton-300 h-10 w-10 overflow-hidden rounded-full transition hover:bg-[#FF0000]">
 								<a
-									href="{$page.data.store?.socialSharingButtons?.youtube?.val}"
+									href="{store?.socialSharingButtons?.youtube?.val}"
 									aria-label="Click to visit youtube page"
 									target="_blank"
 									rel="noopener noreferrer"

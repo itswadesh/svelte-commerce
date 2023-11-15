@@ -3,7 +3,7 @@ import { error, fail, redirect } from '@sveltejs/kit'
 import type { Action, Actions, PageServerLoad } from './$types'
 
 export const load: PageServerLoad = async ({ url, request, locals, cookies, depends }) => {
-	const { store, origin } = locals
+	const { store, storeId,origin } = locals
 	depends('cart:my')
 	let loading = false
 	let cart = locals.cart
@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 		loading = true
 
 		const cartId = cookies.get('cartId')
-		const cartQty = cookies.get('cartQty')
+		// const cartQty = cookies.get('cartQty')
 		const sid = cookies.get('connect.sid')
 
 		if (sid) {
@@ -20,7 +20,7 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 				cartId,
 				origin: origin,
 				sid,
-				storeId: store?.id
+				storeId
 			})
 
 			if (res) {
@@ -40,12 +40,6 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 					unavailableItems: res?.unavailableItems
 				}
 
-				// cookies.set('cartId', cart.cartId, { path: '/' })
-				// cookies.set('cartQty', cart.qty, { path: '/' })
-				// cookies.set('cart', JSON.stringify(cart), { path: '/' })
-				// locals.cartId = cart.cartId
-				// locals.cartQty = cart.qty
-				// locals.cart = cart
 			}
 		}
 	} catch (e) {
@@ -91,7 +85,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 			options,
 			customizedImg,
 			customizedData,
-			storeId: locals.store?.id,
+			storeId: locals.storeId,
 			cartId,
 			origin: locals.origin,
 			sid // This is a special case to pass complete cookie
@@ -113,7 +107,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 					pid: i,
 					vid: i,
 					qty: 1,
-					storeId: locals.store?.id,
+					storeId: locals.storeId,
 					cartId,
 					origin: locals.origin,
 					sid // This is a special case to pass complete cookie
@@ -141,15 +135,13 @@ const add: Action = async ({ request, cookies, locals }) => {
 			}
 			locals.cart = cartObj
 			locals.cartId = cartObj.cartId
-			locals.cartQty = cartObj.qty
+			// locals.cartQty = cartObj.qty
 
 			if (!sid) {
 				cookies.set('connect.sid', cart.sid, { path: '/' })
 			}
 
 			if (!cartId) cookies.set('cartId', cartObj.cartId, { path: '/' })
-
-			cookies.set('cartQty', JSON.stringify(cartObj.qty), { path: '/' })
 
 			return cartObj
 		} else {
@@ -174,7 +166,7 @@ const createBackOrder: Action = async ({ request, cookies, locals }) => {
 		const cart = await CartService.createBackOrder({
 			pid,
 			qty,
-			storeId: locals.store?.id,
+			storeId: locals.storeId,
 			origin: locals.origin,
 			sid // This is a special case to pass complete cookie
 		})
@@ -194,16 +186,16 @@ const handleUnavailableItems: Action = async ({ request, cookies, locals }) => {
 
 	try {
 		const movedRes = await WishlistService.moveUnavailableItemsToWishlist({
-			storeId: locals.store?.id,
+			storeId: locals.storeId,
 			origin: locals.origin,
 			sid // This is a special case to pass complete cookie
 		})
 
 		// console.log('movedRes', movedRes);
 
-		if (movedRes.qty) {
-			locals.cartQty = movedRes.qty
-		}
+		// if (movedRes.qty) {
+		// 	locals.cartQty = movedRes.qty
+		// }
 	} catch (e) {
 		return {}
 	}

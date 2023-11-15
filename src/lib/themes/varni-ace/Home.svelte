@@ -16,6 +16,8 @@ import dayjs from 'dayjs'
 import dotsLoading from '$lib/assets/dots-loading.gif'
 import noDataAvailable from '$lib/assets/no/no-data-available.png'
 import SEO from '$lib/components/SEO/index.svelte'
+import { browser } from '$app/environment'
+import { storeStore } from '$lib/store/store'
 
 export let data
 export let showFooter = false
@@ -67,7 +69,6 @@ let seoProps = {
 }
 
 let currentPage = 1
-let hellobar = $page.data.store?.hellobar || {}
 let hidden = true
 let priceRange = []
 let reachedLast = false
@@ -140,7 +141,7 @@ async function loadNextPage() {
 				searchParams,
 				isCors: $page?.data?.store?.isCors,
 				origin: $page?.data?.origin,
-				storeId: $page?.data?.store?.id
+				storeId: $page?.data?.storeId
 			})
 
 			// console.log('res', res)
@@ -167,8 +168,13 @@ async function loadNextPage() {
 async function refreshData() {}
 
 let loadMoreDiv
-
+let store = {}
 onMount(() => {
+	if (browser) {
+		storeStore.subscribe((value) => {
+			store = value
+		})
+	}
 	fireGTagEvent('search', { search_term: data.query })
 
 	const observer = new IntersectionObserver((entries) => {

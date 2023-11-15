@@ -30,11 +30,12 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import type { Category } from '$lib/types'
 import { browser } from '$app/environment'
+import { storeStore } from '$lib/store/store'
 
 export let content = ``
 export let me
-export let megamenu: Category[]
-export let store = {}
+export let megamenu = []
+export let menu = []
 
 // console.log('$page', $page)
 
@@ -45,24 +46,27 @@ function getYear() {
 	let year = d.getFullYear()
 	return year
 }
-
+let store = {}
 onMount(async () => {
 	if (browser) {
+		if (browser) {
+			storeStore.subscribe((value) => (store = value))
+		}
 		popularSearches = await getPopularSearchFromStore({
 			limit: 20,
 			sid: null,
 			origin: $page.data.origin,
-			storeId: $page.data.store?.id,
+			storeId: $page.data.storeId,
 			isCors: $page.data.store?.isCors
 		})
 	}
 	// console.log('popularSearches', popularSearches)
-
-	// const res2 = await getStoreData()
-
-	// store = res2.storeOne
-	// megamenu = res2.megamenu1
-	// popularSearches = res2.popularSearches
+	// const res2 = await fetch('/server/store')
+	// const storeFromServer = await res2.json()
+	// store = storeFromServer.store
+	// megamenu = storeFromServer.megamenu
+	// menu = storeFromServer.menu
+	// popularSearches = storeFromServer.popularSearches
 
 	// if (browser) {
 	// 	localStorage.setItem('megamenu', JSON.stringify(megamenu))
@@ -140,7 +144,7 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 
 										<li class="flex max-w-max items-center">
 											<a
-												href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store?.id}"
+												href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.storeId}"
 												target="_blank"
 												aria-label="Click to visit this page"
 												class="link-underline link-underline-gray whitespace-pre-wrap">
@@ -190,11 +194,9 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 				<h6 class="mb-4 whitespace-nowrap uppercase">Contact Us</h6>
 
 				<ul class="flex flex-col gap-2 text-zinc-500">
-					{#if $page.data.store?.email || $page.data.store?.websiteEmail}
+					{#if store?.email || store?.websiteEmail}
 						<li class="max-w-max">
-							<a
-								href="mailto:{$page.data.store?.email || $page.data.store?.websiteEmail}"
-								class="block">
+							<a href="mailto:{store?.email || store?.websiteEmail}" class="block">
 								<h6 class="mb-0.5 flex items-center gap-1">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
@@ -213,14 +215,14 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 									<span>Email</span>
 								</h6>
 
-								<p>{$page.data.store?.email || $page.data.store?.websiteEmail}</p>
+								<p>{store?.email || store?.websiteEmail}</p>
 							</a>
 						</li>
 					{/if}
 
-					{#if $page.data.store?.phone}
+					{#if store?.phone}
 						<li class="max-w-max">
-							<a href="tel:+{$page.data.store?.phone}" class="block">
+							<a href="tel:+{store?.phone}" class="block">
 								<h6 class="mb-0.5 flex items-center gap-1">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
@@ -239,12 +241,12 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 									<span>Phone</span>
 								</h6>
 
-								<p>{$page.data.store?.phone}</p>
+								<p>{store?.phone}</p>
 							</a>
 						</li>
 					{/if}
 
-					{#if $page.data.store?.guaranteed_response_time}
+					{#if store?.guaranteed_response_time}
 						<li class="max-w-max">
 							<h6 class="mb-0.5 flex items-center gap-1">
 								<svg
@@ -261,11 +263,11 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 								<span>Guaranteed Response Time</span>
 							</h6>
 
-							<p>{$page.data.store?.guaranteed_response_time}</p>
+							<p>{store?.guaranteed_response_time}</p>
 						</li>
 					{/if}
 
-					{#if $page.data.store?.store_timings}
+					{#if store?.store_timings}
 						<li class="max-w-max">
 							<h6 class="mb-0.5 flex items-center gap-1">
 								<svg
@@ -284,7 +286,7 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 								<span>Working Days/Hours</span>
 							</h6>
 
-							<p>{@html $page.data.store?.store_timings}</p>
+							<p>{@html store?.store_timings}</p>
 						</li>
 					{/if}
 				</ul>
@@ -292,7 +294,7 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 
 			<!-- <div>
 				<h6 class="mb-4 whitespace-nowrap uppercase">
-					Experience {$page.data.store?.websiteName} app on mobile
+					Experience {store?.websiteName} app on mobile
 				</h6>
 
 				<div class="flex items-center gap-1">
@@ -314,17 +316,17 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 				</div>
 			</div> -->
 
-			{#if ($page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.facebook?.val) || ($page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.instagram?.val) || ($page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.telegram?.val) || ($page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.twitter?.val) || ($page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.reddit?.val) || ($page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.linkedin?.val) || ($page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.pinterest?.val) || ($page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.youtube?.val)}
+			{#if (store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.facebook?.val) || (store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.instagram?.val) || (store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.telegram?.val) || (store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.twitter?.val) || (store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.reddit?.val) || (store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.linkedin?.val) || (store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.pinterest?.val) || (store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.youtube?.val)}
 				<div>
 					<h6 class="mb-4 whitespace-nowrap uppercase">Keep in touch</h6>
 
 					<ul class="flex flex-wrap gap-4 text-zinc-500">
 						<!-- Facebook -->
 
-						{#if $page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.facebook?.val}
+						{#if store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.facebook?.val}
 							<li class="max-w-max">
 								<a
-									href="{$page.data.store?.socialSharingButtons?.facebook?.val}"
+									href="{store?.socialSharingButtons?.facebook?.val}"
 									target="_blank"
 									rel="noopener noreferrer"
 									aria-label="Click for facebook link">
@@ -348,10 +350,10 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 
 						<!-- Instagram -->
 
-						{#if $page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.instagram?.val}
+						{#if store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.instagram?.val}
 							<li class="max-w-max">
 								<a
-									href="{$page.data.store?.socialSharingButtons?.instagram?.val}"
+									href="{store?.socialSharingButtons?.instagram?.val}"
 									target="_blank"
 									rel="noopener noreferrer"
 									aria-label="Click for instagram link">
@@ -375,10 +377,10 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 
 						<!-- Telegram -->
 
-						{#if $page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.telegram?.val}
+						{#if store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.telegram?.val}
 							<li class="max-w-max">
 								<a
-									href="{$page.data.store?.socialSharingButtons?.telegram?.val}"
+									href="{store?.socialSharingButtons?.telegram?.val}"
 									target="_blank"
 									rel="noopener noreferrer"
 									aria-label="Click for telegram link">
@@ -400,10 +402,10 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 
 						<!-- Twitter -->
 
-						{#if $page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.twitter?.val}
+						{#if store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.twitter?.val}
 							<li class="max-w-max">
 								<a
-									href="{$page.data.store?.socialSharingButtons?.twitter?.val}"
+									href="{store?.socialSharingButtons?.twitter?.val}"
 									target="_blank"
 									rel="noopener noreferrer"
 									aria-label="Click for twitter link">
@@ -427,10 +429,10 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 
 						<!-- Reddit -->
 
-						{#if $page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.reddit?.val}
+						{#if store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.reddit?.val}
 							<li class="max-w-max">
 								<a
-									href="{$page.data.store?.socialSharingButtons?.reddit?.val}"
+									href="{store?.socialSharingButtons?.reddit?.val}"
 									target="_blank"
 									rel="noopener noreferrer"
 									aria-label="Click for reddit link">
@@ -461,10 +463,10 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 
 						<!-- Linkedin -->
 
-						{#if $page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.linkedin?.val}
+						{#if store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.linkedin?.val}
 							<li class="max-w-max">
 								<a
-									href="{$page.data.store?.socialSharingButtons?.linkedin?.val}"
+									href="{store?.socialSharingButtons?.linkedin?.val}"
 									target="_blank"
 									rel="noopener noreferrer"
 									aria-label="Click for linkedin link">
@@ -490,10 +492,10 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 
 						<!-- Pinterest -->
 
-						{#if $page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.pinterest?.val}
+						{#if store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.pinterest?.val}
 							<li class="max-w-max">
 								<a
-									href="{$page.data.store?.socialSharingButtons?.pinterest?.val}"
+									href="{store?.socialSharingButtons?.pinterest?.val}"
 									target="_blank"
 									rel="noopener noreferrer"
 									aria-label="Click for pinterest link">
@@ -519,10 +521,10 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 
 						<!-- Youtube -->
 
-						{#if $page.data.store?.socialSharingButtons?.active?.val && $page.data.store?.socialSharingButtons?.youtube?.val}
+						{#if store?.socialSharingButtons?.active?.val && store?.socialSharingButtons?.youtube?.val}
 							<li class="max-w-max">
 								<a
-									href="{$page.data.store?.socialSharingButtons?.youtube?.val}"
+									href="{store?.socialSharingButtons?.youtube?.val}"
 									target="_blank"
 									rel="noopener noreferrer"
 									aria-label="Click for youtube link">
@@ -574,14 +576,14 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 			</div>
 		{/if}
 
-		{#if $page.data.store?.address}
+		{#if store?.address}
 			<hr class="mb-4 w-full border-t sm:mb-8" />
 
 			<div class="mb-4 sm:mb-8">
 				<h6 class="mb-4 whitespace-nowrap uppercase">Registered Office Address</h6>
 
 				<p>
-					{@html $page.data.store?.address}
+					{@html store?.address}
 				</p>
 			</div>
 		{/if}
@@ -590,14 +592,14 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 
 		<div class="flex flex-wrap items-center justify-between gap-5 md:justify-between">
 			<p class="whitespace-nowrap">
-				© {$page.data.store?.websiteName}
+				© {store?.websiteName}
 				Powered by
 				<a
-					href="{$page.data.store?.saasDomain || 'https://litekart.in'}"
+					href="{store?.saasDomain || 'https://litekart.in'}"
 					rel="external"
 					class="hover:underline"
 					target="_blank">
-					{$page.data.store?.saasName || 'Litekart'}
+					{store?.saasName || 'Litekart'}
 				</a>
 			</p>
 

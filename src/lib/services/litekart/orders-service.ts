@@ -1,16 +1,11 @@
 import { error } from '@sveltejs/kit'
 import { getAPI, post } from '$lib/utils/api'
 import { getBySid, postBySid } from '$lib/utils/server'
-import type { AllOrders, Error } from '$lib/types'
+import type { AllOrders } from '$lib/types'
 
 const isServer = import.meta.env.SSR
 
-export const fetchOrders = async ({
-	isCors = false,
-	origin,
-	sid = null,
-	storeId
-}: any) => {
+export const fetchOrders = async ({ isCors = false, origin, sid = null, storeId }) => {
 	try {
 		let res: AllOrders | {} = {}
 
@@ -25,20 +20,16 @@ export const fetchOrders = async ({
 			data: res.data || [],
 			noOfPage: res.noOfPage,
 			page: res.page,
-			pageSize: res.pageSize,
+			pageSize: res.pageSize
 		}
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)
 	}
 }
 
-export const fetchOrder = async ({
-	origin,
-	sid = null,
-	storeId, id,
-}: any) => {
+export const fetchOrder = async ({ origin, sid = null, storeId, id }) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		if (isServer) {
 			res = await getBySid(`orders/${id}?store=${storeId}`, sid)
@@ -52,14 +43,9 @@ export const fetchOrder = async ({
 	}
 }
 
-export const fetchTrackOrder = async ({
-	id,
-	origin,
-	sid = null,
-	storeId,
-}: any) => {
+export const fetchTrackOrder = async ({ id, origin, sid = null, storeId }) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		if (isServer) {
 			res = await getBySid(`order-tracking/${id}?store=${storeId}`, sid)
@@ -80,10 +66,10 @@ export const paySuccessPageHit = async ({
 	status,
 	origin,
 	sid = null,
-	storeId,
-}: any) => {
+	storeId
+}) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		if (isServer) {
 			res = await postBySid(
@@ -124,10 +110,10 @@ export const codCheckout = async ({
 	prescription,
 	origin,
 	sid = null,
-	storeId,
-}: any) => {
+	storeId
+}) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		res = await post(
 			`orders/checkout/cod?cart_id=${cartId}`,
@@ -151,21 +137,24 @@ export const codCheckout = async ({
 export const phonepeCheckout = async ({
 	address,
 	origin,
-	prescription,
-	sid = null,
+	orderNo,
+	prescription = '',
 	storeId,
-}: any) => {
+	cartId
+}) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		res = await post(
 			`checkout/phonepe`,
 			{
 				address,
+				cart_id: cartId,
 				domain: origin,
+				order_no: orderNo,
 				prescription,
 				return_url: `${origin}/payment/success`,
-				store: storeId,
+				store: storeId
 			},
 			origin
 		)
@@ -175,51 +164,46 @@ export const phonepeCheckout = async ({
 		throw error(e.status, e.message?.message || e.message)
 	}
 }
-
 export const cashfreeCheckout = async ({
 	address,
-	prescription,
+	orderNo,
+	prescription = '',
 	origin,
-	sid = null,
-	storeId,
-}: any) => {
+	cartId,
+	storeId
+}) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		res = await post(
 			`checkout/cashfree`,
 			{
 				address,
+				cart_id: cartId,
 				domain: origin,
+				order_no: orderNo,
 				prescription,
 				return_url: `${origin}/payment/process-cf`,
-				store: storeId,
+				store: storeId
 			},
 			origin
 		)
 		return res || {}
 	} catch (e) {
-		// console.log(e);
-
 		throw error(e.status, e.message?.message || e.message)
 	}
 }
 
-export const cashfreeCapture = async ({
-	order_no,
-	origin,
-	sid,
-	storeId,
-}: any) => {
+export const cashfreeCapture = async ({ order_no, origin, sid, storeId }) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		res = await postBySid(
 			`checkout/cashfree-capture`,
 			{
 				domain: origin,
 				order_no,
-				store: storeId,
+				store: storeId
 			},
 			sid
 		)
@@ -232,26 +216,27 @@ export const cashfreeCapture = async ({
 
 export const razorpayCheckout = async ({
 	address,
+	orderNo,
 	cartId,
-	paymentMethod,
-	prescription,
+	paymentMethod = 'Razorpay',
+	prescription = '',
 	origin,
-	sid = null,
-	storeId,
+	storeId
 }) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		res = await post(
-			`checkout/razorpay?cart_id=${cartId}`,
+			`checkout/razorpay`,
 			{
 				address,
 				cart_id: cartId,
 				domain: origin,
-				paymentMethod,
+				order_no: orderNo,
 				prescription,
 				return_url: `${origin}/payment/process`,
 				store: storeId,
+				paymentMethod
 			},
 			origin
 		)
@@ -262,15 +247,9 @@ export const razorpayCheckout = async ({
 	}
 }
 
-export const razorpayCapture = async ({
-	rpOrderId,
-	rpPaymentId,
-	origin,
-	sid = null,
-	storeId,
-}: any) => {
+export const razorpayCapture = async ({ rpOrderId, rpPaymentId, origin, storeId }) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		res = await post(
 			`checkout/razorpay-capture`,
@@ -279,7 +258,7 @@ export const razorpayCapture = async ({
 				return_url: `${origin}/payment/process`,
 				rpOrderId,
 				rpPaymentId,
-				store: storeId,
+				store: storeId
 			},
 			origin
 		)
@@ -290,15 +269,9 @@ export const razorpayCapture = async ({
 	}
 }
 
-export const stripeCheckoutService = async ({
-	address,
-	paymentMethodId,
-	origin,
-	sid = null,
-	storeId,
-}: any) => {
+export const stripeCheckoutService = async ({ address, paymentMethodId, origin, storeId }) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		res = await post(
 			`checkout/stripe`,
@@ -316,15 +289,9 @@ export const stripeCheckoutService = async ({
 	}
 }
 
-export const paypalCheckout = async ({
-	address,
-	paymentMethodId,
-	origin,
-	sid = null,
-	storeId,
-}: any) => {
+export const paypalCheckout = async ({ address, paymentMethodId = '', origin, storeId }) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		res = await post(
 			`checkout/paypal`,

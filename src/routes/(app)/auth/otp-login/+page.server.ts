@@ -11,7 +11,7 @@ const getOtp: Action = async ({ request, locals }) => {
 	try {
 		const data = await UserService.getOtpService({
 			phone,
-			storeId: locals.store?.id,
+			storeId: locals.storeId,
 			origin: locals.origin
 		})
 
@@ -43,7 +43,7 @@ const verifyOtp: Action = async ({ cookies, request, locals }) => {
 		const user = await UserService.verifyOtpService({
 			phone,
 			otp,
-			storeId: locals.store?.id,
+			storeId: locals.storeId,
 			origin: locals.origin
 		})
 

@@ -10,12 +10,11 @@ const login = async ({ request, cookies, locals }) => {
 	let res
 
 	try {
-
 		if (isEmail == 'true') {
 			res = await UserService.loginService({
 				email: phoneOrEmail,
 				password: password,
-				storeId: locals.store?.id,
+				storeId: locals.storeId,
 				cartId: locals.cartId,
 				server: true,
 				origin: locals.origin
@@ -29,12 +28,11 @@ const login = async ({ request, cookies, locals }) => {
 		} else {
 			res = await UserService.getOtpService({
 				phone: phoneOrEmail,
-				storeId: locals.store?.id,
+				storeId: locals.storeId,
 				server: true,
 				origin: locals.origin
 			})
 
-			// console.log('res of phone login = ', res)
 		}
 		cookies.set('connect.sid', res.sid, {
 			path: '/'
@@ -63,10 +61,9 @@ const verifyOtp = async ({ cookies, request, locals, url }) => {
 			phone,
 			otp,
 			cartId: cookies.get('cartId'),
-			isCors: locals.store?.isCors,
 			origin: locals.origin,
 			sid: locals.sid,
-			storeId: locals.store?.id
+			storeId: locals.storeId
 		})
 
 		if (!user) {
@@ -96,19 +93,6 @@ const verifyOtp = async ({ cookies, request, locals, url }) => {
 			// maxAge: 60 * 60 * 24 * 30,
 		})
 
-		// cookies.set('session', user._id, {
-		// 	// send cookie for every page
-		// 	path: '/',
-		// 	// server side only cookie so you can't use `document.cookie`
-		// 	httpOnly: true,
-		// 	// only requests from same site can send cookies
-		// 	// https://developer.mozilla.org/en-US/docs/Glossary/CSRF
-		// 	// sameSite: 'strict',
-		// 	// only sent over HTTPS in production
-		// 	secure: process.env.NODE_ENV === 'production',
-		// 	// set cookie to expire after a month
-		// 	maxAge: 60 * 60 * 24 * 30
-		// })
 
 		return me
 	} catch (e) {

@@ -16,12 +16,18 @@ import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { post } from '$lib/utils/api'
+import { updateCartStore } from '$lib/store/cart'
+import { browser } from '$app/environment'
+import { storeStore } from '$lib/store/store'
 
 export let product = {}
 
 let newProduct = {}
-
+let store = {}
 onMount(() => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
 	if (product?._source) {
 		newProduct = product?._source
 		newProduct._id = product?._id
@@ -58,7 +64,7 @@ async function toggleWishlist(id) {
 
 		isWislisted = await post(
 			`wishlists/toggle`,
-			{ product: id, variant: id, store: $page?.data?.store?.id },
+			{ product: id, variant: id, store: $page?.data?.storeId },
 			$page.data.origin
 		)
 
@@ -130,6 +136,7 @@ async function toggleWishlist(id) {
 						method="POST"
 						use:enhance="{() => {
 							return async ({ result }) => {
+								updateCartStore({ data: result.data })
 								result?.data?.qty < 0
 									? fireGTagEvent('remove_from_cart', result?.data)
 									: fireGTagEvent('add_to_cart', result?.data)
@@ -139,7 +146,7 @@ async function toggleWishlist(id) {
 									bounceItemFromTop = false
 								}, 3000)
 								cartButtonText = 'Go to cart'
-								await invalidateAll()
+								// await invalidateAll()
 								await applyAction(result)
 							}
 						}}">
@@ -260,15 +267,15 @@ async function toggleWishlist(id) {
 		</p>
 
 		<div
-			class="{$page.data.store?.isSecureCatalogue && !$page.data?.me ? 'hidden' : 'flex'}
+			class="{store?.isSecureCatalogue && !$page.data?.me ? 'hidden' : 'flex'}
 			mt-1 flex-wrap items-baseline justify-center gap-1 text-xs">
 			<span class="whitespace-nowrap text-sm font-bold sm:text-base">
-				{currency(newProduct.price, $page.data?.store?.currencySymbol)}
+				{currency(newProduct.price, store?.currencySymbol)}
 			</span>
 
 			{#if newProduct.mrp > newProduct.price}
 				<span class="whitespace-nowrap text-zinc-500 line-through">
-					{currency(newProduct.mrp, $page.data?.store?.currencySymbol)}
+					{currency(newProduct.mrp, store?.currencySymbol)}
 				</span>
 
 				{#if Math.floor(((newProduct.mrp - newProduct.price) / newProduct.mrp) * 100) > 0}

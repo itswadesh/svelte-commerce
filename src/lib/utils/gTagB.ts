@@ -7,7 +7,7 @@ export const fireGTagEvent = (event_name, data) => {
 	const items = data.items.map((item) => {
 		item.discount = item.discount || item.coupon || {}
 		return {
-			item_id: item._id,
+			item_id: item.sku ? item.sku : item._id,
 			item_name: item.name,
 			affiliation: item.vendorBusinessName,
 			item_brand: item.brandName,
@@ -26,6 +26,9 @@ export const fireGTagEvent = (event_name, data) => {
 		value: data.total,
 		items
 	}
+
+	// console.log('items', items);
+	
 	switch (event_name) {
 		case 'add_to_cart':
 			// @ts-ignore

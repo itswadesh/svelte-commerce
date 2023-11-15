@@ -47,7 +47,7 @@ async function saveProfile() {
 
 		let e = { ...data.profile }
 		e.company = 1
-		e.store = data.store?.id
+		e.store = data.storeId
 
 		toast('Saving Profile Info...', 'warning')
 

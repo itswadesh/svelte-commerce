@@ -5,7 +5,7 @@ import { loginUrl } from '$lib/config/index.js'
 export const prerender = false
 
 export async function load({ request, url, locals, cookies }) {
-	const { me, sid, store, origin } = locals
+	const { me, sid, store, storeId, origin } = locals
 	const cartId = cookies.get('cartId')
 
 	if (!me || !sid) {
@@ -19,13 +19,13 @@ export async function load({ request, url, locals, cookies }) {
 		let err
 
 		const { myAddresses, selectedAddress } = await AddressService.fetchAddresses({
-			storeId: store?.id,
+			storeId,
 			origin,
 			sid
 		})
 
 		const countries = await CountryService.fetchCountries({
-			storeId: store?.id,
+			storeId,
 			origin,
 			sid
 		})
@@ -34,7 +34,7 @@ export async function load({ request, url, locals, cookies }) {
 			cartId,
 			origin,
 			sid,
-			storeId: store?.id,
+			storeId
 		})
 
 		// console.log('cart at address', cart);
@@ -51,7 +51,7 @@ export async function load({ request, url, locals, cookies }) {
 			myAddresses,
 			q,
 			selectedAddress,
-			url: url.href,
+			url: url.href
 		}
 	} catch (e) {
 		if (e.status === 307 && e.location === '/cart') {

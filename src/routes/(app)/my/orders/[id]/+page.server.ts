@@ -6,7 +6,7 @@ export async function load({ params, locals, cookies }) {
 	try {
 		const { id } = params
 		const sid = cookies.get('connect.sid')
-		const storeId = locals?.store?.id
+		const storeId = locals?.storeId
 
 		const order = await OrdersService.fetchOrder({
 			id,

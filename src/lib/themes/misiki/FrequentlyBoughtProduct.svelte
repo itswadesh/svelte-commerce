@@ -10,6 +10,7 @@ import { LazyImg } from '$lib/components'
 import { PrimaryButton } from '$lib/ui'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
+import { updateCartStore } from '$lib/store/cart'
 
 export let product = {}
 
@@ -29,7 +30,7 @@ let bounceItemFromTop = false
 // 				vid: p._id,
 // 				qty: 1,
 // 				options: p.options,
-// 				store: $page.data.store?.id
+// 				store: $page.data.storeId
 // 			},
 // 			$page.data.origin
 // 		)
@@ -53,7 +54,6 @@ let bounceItemFromTop = false
 // 		// 		unavailableItems: res?.unavailableItems,
 // 		// 		formattedAmount: res?.formattedAmount
 // 		// 	}
-// 		// 	await cookies.set('cart', cookieCart, { path: '/' })
 // 		// 	$page.data.cart = cookieCart
 // 		// 	cartButtonText = 'Added To Cart'
 // 		// 	bounceItemFromTop = true
@@ -150,7 +150,8 @@ let bounceItemFromTop = false
 							setTimeout(() => {
 								bounceItemFromTop = false
 							}, 3000)
-							invalidateAll()
+							// invalidateAll()
+							updateCartStore({ data: result.data })
 							await applyAction(result)
 						}
 					}}">

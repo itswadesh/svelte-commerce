@@ -1,19 +1,12 @@
 import { error } from '@sveltejs/kit'
 import { getAPI } from '$lib/utils/api'
 import { getBySid } from '$lib/utils/server'
-import type { AllProducts, Error, Product } from '$lib/types'
+import type { AllProducts, Product } from '$lib/types'
 const isServer = import.meta.env.SSR
 
 // Search product
 
-export const searchProducts = async ({
-	origin,
-	query,
-	searchData,
-	storeId,
-	server = false,
-	sid = null
-}: any) => {
+export const searchProducts = async ({ origin, query, searchData, storeId, sid = null }: any) => {
 	try {
 		let res: AllProducts | {} = {}
 		let products: Product[] = []
@@ -51,14 +44,7 @@ export const searchProducts = async ({
 
 // Fetch all products
 
-export const fetchProducts = async ({
-	origin,
-	storeId,
-	slug,
-	id,
-	server = false,
-	sid = null
-}: any) => {
+export const fetchProducts = async ({ origin, storeId, sid = null }) => {
 	try {
 		let res: AllProducts | {} = {}
 
@@ -101,7 +87,7 @@ export const fetchReels = async ({
 
 // Fetch single product
 
-export const fetchProduct = async ({ origin, slug, id, storeId, isCors = false, server = false, sid = null }) => {
+export const fetchProduct = async ({ origin, slug, id, storeId, isCors = false, sid }) => {
 	try {
 		let res: Product | object = {}
 
@@ -118,14 +104,7 @@ export const fetchProduct = async ({ origin, slug, id, storeId, isCors = false, 
 
 // Fetch products more requirements
 
-export const fetchProduct2 = async ({
-	origin,
-	slug,
-	storeId,
-	id,
-	server = false,
-	sid = null
-}: any) => {
+export const fetchProduct2 = async ({ origin, slug, storeId, id, sid = null }) => {
 	try {
 		let res: Product | object = {}
 		if (isServer) {
@@ -145,13 +124,12 @@ export const fetchProductsOfCategory = async ({
 	categorySlug,
 	origin,
 	query,
-	server = false,
 	sid = null,
 	storeId,
 	zip
-}: any) => {
+}) => {
 	try {
-		let res: any = {}
+		let res = {}
 		let products: Product[] = []
 		let count = 0
 		let facets = ''
@@ -198,14 +176,13 @@ export const fetchNextPageProducts = async ({
 	origin,
 	storeId,
 	categorySlug,
-	server = false,
 	nextPage,
 	searchParams = {},
 	sid = null
-}: any) => {
+}) => {
 	try {
 		let nextPageData = []
-		let res: any = {}
+		let res = {}
 
 		if (isServer) {
 			res = await getBySid(
@@ -243,16 +220,9 @@ export const fetchNextPageProducts = async ({
 
 // Fetch related products
 
-export const fetchRelatedProducts = async ({
-	origin,
-	storeId,
-	categorySlug,
-	pid,
-	server = false,
-	sid = null
-}: any) => {
+export const fetchRelatedProducts = async ({ origin, storeId, categorySlug, pid, sid = null }) => {
 	try {
-		let relatedProductsRes: any = {}
+		let relatedProductsRes = {}
 
 		if (isServer) {
 			relatedProductsRes = await getBySid(

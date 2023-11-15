@@ -18,10 +18,14 @@ import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'
+import { cartStore, getCartFromStore, updateCartStore } from '$lib/store/cart'
+import { onMount } from 'svelte'
+import { browser } from '$app/environment'
+import { storeStore } from '$lib/store/store'
 
 const cookies = Cookie()
 
-export let me: Me, cart: Cart, data, showCartSidebar: boolean, openSidebar: boolean, store
+export let me, data, showCartSidebar: boolean, openSidebar: boolean, store
 
 let clazz = ''
 export { clazz as class }
@@ -37,12 +41,21 @@ export function convertParagraphs(node) {
 }
 
 let categories
-let hellobar = $page.data.store?.hellobar || {}
 let loading = false
 let loadingForSelectedCartItem = []
 let selectedLoadingType = null
 let show = false
 let showDropdownAccount = false
+$: cart = {}
+
+onMount(async () => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+		cartStore.subscribe((value) => {
+			cart = value
+		})
+	}
+})
 
 function slideFade(node, params) {
 	const existingTransform = getComputedStyle(node).transform.replace('none', '')
@@ -61,55 +74,53 @@ function slideFade(node, params) {
 function handleShowCartSidebar() {
 	if ($page?.url?.pathname !== '/cart') {
 		showCartSidebar = true
-		fetchCart()
+		// fetchCart()
 		getCategories()
 	}
 
 	return
 }
 
-async function fetchCart() {
-	try {
-		loading = true
+// async function fetchCart() {
+// 	try {
+// 		loading = true
 
-		const res = await CartService.fetchRefreshCart({
-			cartId: $page.data.cartId,
-			origin: origin,
-			storeId: store?.id
-		})
+// 		const res = await CartService.fetchRefreshCart({
+// 			cartId: $page.data.cartId,
+// 			origin: origin,
+// 			storeId: store.id
+// 		})
 
-		if (res) {
-			cart = {
-				cartId: res?.cart_id,
-				items: res?.items,
-				qty: res?.qty,
-				tax: +res?.tax,
-				subtotal: +res?.subtotal,
-				total: +res?.total,
-				currencySymbol: res?.currencySymbol,
-				discount: res?.discount,
-				savings: res?.savings,
-				selfTakeout: res?.selfTakeout,
-				shipping: res?.shipping,
-				unavailableItems: res?.unavailableItems,
-				formattedAmount: res?.formattedAmount
-			}
+// 		if (res) {
+// 			cart = {
+// 				cartId: res?.cart_id,
+// 				items: res?.items,
+// 				qty: res?.qty,
+// 				tax: +res?.tax,
+// 				subtotal: +res?.subtotal,
+// 				total: +res?.total,
+// 				currencySymbol: res?.currencySymbol,
+// 				discount: res?.discount,
+// 				savings: res?.savings,
+// 				selfTakeout: res?.selfTakeout,
+// 				shipping: res?.shipping,
+// 				unavailableItems: res?.unavailableItems,
+// 				formattedAmount: res?.formattedAmount
+// 			}
 
-			cookies.set('cartId', cart.cartId, { path: '/' })
-			cookies.set('cartQty', cart.qty, { path: '/' })
-			// cookies.set('cart', JSON.stringify(cart), { path: '/' })
-		}
-	} catch (e) {
-		toast(e, 'error')
-	} finally {
-		loading = false
-	}
-}
+// 			cookies.set('cartId', cart.cartId, { path: '/' })
+// 		}
+// 	} catch (e) {
+// 		toast(e, 'error')
+// 	} finally {
+// 		loading = false
+// 	}
+// }
 
 async function getCategories() {
 	try {
 		const res1 = await CategoryService.fetchAllCategories({
-			storeId: $page.data.store?.id,
+			storeId: $page.data.store,
 			origin: $page.data.origin
 		})
 
@@ -124,17 +135,17 @@ async function getCategories() {
 
 <nav
 	class="{clazz} sticky inset-x-0 top-0 w-full border-b bg-white shadow-xs
-		{hellobar?.active?.val
+		{store?.hellobar?.active?.val
 		? 'h-[96px] sm:h-[120px] lg:h-[168px]'
 		: 'h-[56px] sm:h-[80px] lg:h-[128px]'} 
 		{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
-	{#if hellobar?.active?.val}
+	{#if store?.hellobar?.active?.val}
 		<div
 			use:convertParagraphs
 			class="h-10 text-center tracking-wider flex items-center justify-center text-xs"
-			style="background-color: {hellobar?.bgColor?.val || '#27272a'};
-				 color: {hellobar?.textColor?.val || '#ffffff'};">
-			{@html hellobar.content?.val}
+			style="background-color: {store?.hellobar?.bgColor?.val || '#27272a'};
+				 color: {store?.hellobar?.textColor?.val || '#ffffff'};">
+			{@html store?.hellobar.content?.val}
 		</div>
 	{/if}
 
@@ -354,10 +365,10 @@ async function getCategories() {
 						></path>
 					</svg>
 
-					{#if $page.data?.cartQty > 0}
+					{#if cart?.qty > 0}
 						<div
 							class="absolute -top-2 -right-1.5 flex items-center justify-center rounded-full bg-primary-500 py-[0.8px] px-[5px] text-center text-xs font-bold uppercase text-white">
-							{$page.data?.cartQty}
+							{cart.qty}
 						</div>
 					{/if}
 				</div>
@@ -411,7 +422,7 @@ async function getCategories() {
 								</li>
 							{/each}
 						</ul>
-					{:else if $page.data?.cartQty > 0}
+					{:else if cart?.qty > 0}
 						<ul class="p-0 list-none mb-5 flex flex-col gap-5">
 							{#each cart?.items || [] as item, ix}
 								<li class="flex items-start justify-between gap-4">
@@ -496,9 +507,10 @@ async function getCategories() {
 													loadingForSelectedCartItem[ix] = true
 													return async ({ result }) => {
 														fireGTagEvent('remove_from_cart', item)
+														updateCartStore({ data: result.data })
 														await applyAction(result)
 														loadingForSelectedCartItem[ix] = false
-														fetchCart()
+														// fetchCart()
 													}
 												}}">
 												<input type="hidden" name="pid" value="{item.pid || null}" />
@@ -555,9 +567,10 @@ async function getCategories() {
 													loadingForSelectedCartItem[ix] = true
 													return async ({ result }) => {
 														fireGTagEvent('add_to_cart', result?.data)
+														updateCartStore({ data: result.data })
 														await applyAction(result)
 														loadingForSelectedCartItem[ix] = false
-														fetchCart()
+														// fetchCart()
 													}
 												}}">
 												<input type="hidden" name="pid" value="{item.pid || null}" />
@@ -606,10 +619,11 @@ async function getCategories() {
 											loadingForSelectedCartItem[ix] = true
 											return async ({ result }) => {
 												fireGTagEvent('remove_from_cart', item)
+												updateCartStore({ data: result.data })
 												await applyAction(result)
 												selectedLoadingType = null
 												loadingForSelectedCartItem[ix] = false
-												fetchCart()
+												// fetchCart()
 											}
 										}}">
 										<input type="hidden" name="pid" value="{item.pid || null}" />

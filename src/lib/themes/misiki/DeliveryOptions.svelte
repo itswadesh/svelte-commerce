@@ -34,7 +34,6 @@ function changePincode() {
 // 	try {
 // 		loading = true
 // 		deliveryDetails = await getAPI(`pincodes/${pincode}`, $page.data.origin)
-// 		await cookies.set('zip', pincode, { path: '/' })
 // 		$page.data.zip = pincode
 // 	} catch (e) {
 // 	} finally {

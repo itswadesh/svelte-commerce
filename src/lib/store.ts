@@ -60,24 +60,9 @@ export const settings = writable({})
 // 	try {
 // 		const data = (await getBySid('settings')).data?.settings
 // 		settings.set(data)
-// 		// if (data.otpLogin) loginUrl.set(locals.store?.loginUrl)
+// 		// if (data.otpLogin) loginUrl.set('auth/login)
 // 	} catch (e) {
 // 		settings.set({})
-// 	}
-// }
-
-// export const fetchStore = async () => {
-// 	try {
-// 		const storeOne = await cookies.get('store')
-// 		const data = { _id: storeOne.id } //await get('store?domain=misiki.io')
-// 		store.set(data)
-// 		// await gett('store-one?id=' + storeOne.id)
-// 		const data1 = (
-// 			await getBySid(`categories?store=${storeOne.id}&megamenu=true&limit=6&page=0&level=0`)
-// 		).data
-// 		megamenu.set(data1)
-// 	} catch (e) {
-// 		store.set({})
 // 	}
 // }
 

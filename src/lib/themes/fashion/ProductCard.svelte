@@ -32,6 +32,9 @@ import { page } from '$app/stores'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
+import { onMount } from 'svelte'
+import { browser } from '$app/environment'
+import { storeStore } from '$lib/store/store'
 
 export let product = {}
 
@@ -50,6 +53,13 @@ if (product?.tags?.length) {
 
 	// console.log('Ribbon tags =', ribbonTags)
 }
+
+let store = {}
+onMount(() => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
+})
 </script>
 
 {#if product}
@@ -125,7 +135,7 @@ if (product?.tags?.length) {
 					{product.name || '_'}
 				</a>
 
-				{#if $page?.data?.store?.isFnb && product.foodType}
+				{#if store?.isFnb && product.foodType}
 					<div>
 						{#if product.foodType === 'veg'}
 							<img src="{productVeg}" alt="veg" class="h-5 w-5" />
@@ -138,12 +148,12 @@ if (product?.tags?.length) {
 
 			<div class="flex flex-wrap items-center gap-2 leading-3">
 				<span class="text-secondary-500">
-					{currency(product.price, $page.data?.store?.currencySymbol)}
+					{currency(product.price, store?.currencySymbol)}
 				</span>
 
 				<span class="text-zinc-500">
 					<strike>
-						{currency(product.price, $page.data?.store?.currencySymbol)}
+						{currency(product.price, store?.currencySymbol)}
 					</strike>
 				</span>
 			</div>

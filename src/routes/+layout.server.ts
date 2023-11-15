@@ -1,35 +1,15 @@
-import { DOMAIN, HTTP_ENDPOINT } from '$lib/config'
-import { error } from '@sveltejs/kit'
-import type { LayoutServerLoad } from './$types'
-
-export const prerender = false
-
-export const load: LayoutServerLoad = async ({ url, locals, cookies, request, params }) => {
-	try {
-		const currentPage = +url.searchParams.get('page') || 1
-		const q = url.searchParams.get('q') || ''
-		const { pathname } = url
-
-		// setHeaders({
-		// 	'cache-control': 'public, max-age=300'
-		// })
-		const zip = cookies.get('zip')
-		locals.url = url.href
-		locals.currentPage = currentPage
-		locals.q = q
-		locals.sid = cookies.get('connect.sid')
-		locals.cartQty = cookies.get('cartQty')
-		if (zip) locals.zip = JSON.parse(zip)
-		// me,
-		return { ...locals, pathname }
-	} catch (e) {
-		throw error(
-			404,
-			`Store Not Found @Layout 
-			<br/>ID: ${locals.store.id}
-			<br/>ORIGIN: ${locals.origin}
-			<br/>DOMAIN(env): ${DOMAIN}
-			<br/>HTTP_ENDPOINT(env): ${HTTP_ENDPOINT}`
-		)
-	}
+export const load = async ({ locals, url, fetch }) => {
+	const currentPage = +url.searchParams.get('page') || 1
+	const q = url.searchParams.get('q') || ''
+	const { pathname, host } = url
+	locals.currentPage = currentPage
+	locals.q = q
+	// Can not do it directly from here because it will not cached
+	// const res2 = await fetch('/server/store')
+	// const storeFromServer = await res2.json()
+	// locals.store = storeFromServer.store
+	// locals.megamenu = storeFromServer.megamenu
+	// locals.menu = storeFromServer.menu
+	// locals.popularSearches = storeFromServer.popularSearches
+	return { ...locals, pathname, host, q, currentPage }
 }

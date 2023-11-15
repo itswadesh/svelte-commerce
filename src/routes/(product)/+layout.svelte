@@ -11,7 +11,6 @@ let showCartSidebar = false
 	<div class="hidden lg:block">
 		<Nav
 			me="{data.me}"
-			cart="{data.cart}"
 			store="{data.store}"
 			q="{data.q}"
 			bind:showCartSidebar="{showCartSidebar}"

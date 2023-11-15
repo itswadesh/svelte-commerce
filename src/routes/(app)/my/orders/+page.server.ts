@@ -3,7 +3,7 @@ import { error, redirect } from '@sveltejs/kit'
 
 export async function load({ locals }) {
 	try {
-		const storeId = locals.store?.id
+		const storeId = locals.storeId
 		const sid = locals.sid
 		const res = await OrdersService.fetchOrders({
 			storeId,

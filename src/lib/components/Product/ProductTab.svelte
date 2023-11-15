@@ -35,7 +35,7 @@ onMount(async () => {
 		loading = true
 		products = await ProductService.fetchProducts({
 			origin: $page?.data?.origin,
-			storeId: $page?.data?.store?.id
+			storeId: $page?.data?.storeId
 		})
 	} catch (e) {
 	} finally {
