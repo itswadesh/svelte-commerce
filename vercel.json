@@ -19,7 +19,6 @@
 	],
 	"env": {
 		"PUBLIC_LITEKART_API_URL": "https://api.litekart.in",
-		"PUBLIC_LITEKART_DOMAIN": "demo.litekart.in",
 		"NODE_OPTIONS": "--max-old-space-size=7680"
 	}
 }
