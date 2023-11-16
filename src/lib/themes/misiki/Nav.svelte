@@ -21,7 +21,7 @@ import PincodeInputBox from '$lib/themes/misiki/PincodeInputBox.svelte'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'
 import { browser } from '$app/environment'
 import { cartStore } from '$lib/store/cart'
-import { storeStore } from '$lib/store/store'
+// import { storeStore } from '$lib/store/store'
 
 const dispatch = createEventDispatcher()
 const cookies = Cookie()
@@ -47,6 +47,8 @@ let show = false
 let showDropdownAccount = false
 let showPincodeInputBox = false
 $: cart = {}
+$: store = $page.data?.store
+
 
 onMount(async () => {
 	q = $page.url.searchParams.get('q')
@@ -56,7 +58,7 @@ onMount(async () => {
 	pin = cookies.get('zip')
 
 	if (browser) {
-		storeStore.subscribe((value) => (store = value))
+		// storeStore.subscribe((value) => (store = value))
 		cartStore.subscribe((value) => {
 			cart = value
 		})

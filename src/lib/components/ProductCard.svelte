@@ -34,7 +34,7 @@ import { page } from '$app/stores'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
-import { storeStore } from '$lib/store/store'
+// import { storeStore } from '$lib/store/store'
 import { browser } from '$app/environment'
 import { onMount } from 'svelte'
 
@@ -70,10 +70,11 @@ if (product?.tags?.length) {
 	// console.log('Ribbon tags =', ribbonTags)
 }
 
-let store = {}
+$: store = $page.data?.store
+
 onMount(async () => {
 	if (browser) {
-		storeStore.subscribe((value) => (store = value))
+		// storeStore.subscribe((value) => (store = value))
 	}
 })
 </script>

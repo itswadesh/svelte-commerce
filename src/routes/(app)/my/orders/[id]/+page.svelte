@@ -14,7 +14,7 @@ import ReturnTracking from '../_ReturnTracking.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TransparentButton from '../_TransparentButton.svelte'
 import { browser } from '$app/environment'
-import { storeStore } from '$lib/store/store'
+// import { storeStore } from '$lib/store/store'
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
@@ -38,11 +38,13 @@ function head() {
 		title: 'Order Details'
 	}
 }
-let store = {}
+// let store = {}
+$: store = $page.data?.store
+
 onMount(() => {
-	if (browser) {
-		storeStore.subscribe((value) => (store = value))
-	}
+	// if (browser) {
+	// 	storeStore.subscribe((value) => (store = value))
+	// }
 	// deliveryBy = dayjs().add(7, 'day').format('dddd, MMM D, YYYY')
 	now = dayjs()
 })

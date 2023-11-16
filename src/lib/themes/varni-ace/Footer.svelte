@@ -35,7 +35,7 @@ import paypal from '$lib/assets/payment-method/paypal.png'
 import skrill from '$lib/assets/payment-method/skrill.png'
 import type { Category } from '$lib/types'
 import visa from '$lib/assets/payment-method/visa.png'
-import { storeStore } from '$lib/store/store'
+// import { storeStore } from '$lib/store/store'
 
 export let content = ``
 export let megamenu: Category[]
@@ -52,14 +52,16 @@ function getYear() {
 	let year = d.getFullYear()
 	return year
 }
-let store = {}
+// let store = {}
+$: store = $page.data?.store
+
 onMount(async () => {
 	if (browser) {
-		if (browser) {
-			storeStore.subscribe((value) => {
-				store = value
-			})
-		}
+		// if (browser) {
+		// 	storeStore.subscribe((value) => {
+		// 		store = value
+		// 	})
+		// }
 		megamenu = await getAllMegamenuFromStore({
 			storeId: $page?.data?.storeId,
 			isCors: $page?.data?.store?.isCors,

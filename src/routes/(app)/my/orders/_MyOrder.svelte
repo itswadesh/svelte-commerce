@@ -17,7 +17,7 @@ import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 import { onMount } from 'svelte'
 import { browser } from '$app/environment'
-import { storeStore } from '$lib/store/store'
+// import { storeStore } from '$lib/store/store'
 
 export let orders
 // console.log('zzzzzzzzzzzzzzzzzz', orders)
@@ -25,12 +25,14 @@ export let orders
 let clazz = ''
 export { clazz as class }
 
-let store = {}
-onMount(() => {
-	if (browser) {
-		storeStore.subscribe((value) => (store = value))
-	}
-})
+// let store = {}
+$: store = $page.data?.store
+
+// onMount(() => {
+// 	if (browser) {
+// 		storeStore.subscribe((value) => (store = value))
+// 	}
+// })
 </script>
 
 <div class="w-full {clazz}">

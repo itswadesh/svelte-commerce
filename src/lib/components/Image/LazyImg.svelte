@@ -71,7 +71,7 @@ import { getCdnImageUrl } from '$lib/utils'
 import { onDestroy, onMount } from 'svelte'
 import { page } from '$app/stores'
 import lazyload from 'vanilla-lazyload'
-import { storeStore } from '$lib/store/store'
+// import { storeStore } from '$lib/store/store'
 
 export let alt = ''
 export let aspect_ratio = '3:4'
