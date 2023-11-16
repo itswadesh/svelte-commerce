@@ -10,9 +10,11 @@ export const fetchStoreData = async (event: RequestEvent) => {
 		if (zip) {
 			event.locals.zip = JSON.parse(zip)
 		}
-
+		const host = event.locals.host
+		console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhh', host)
 		const r = await StoreService.getStoreData({
 			url: event.request.url,
+			host,
 			cookies: event.cookies,
 			cookieStore: storeId,
 			cookieMegamenu,

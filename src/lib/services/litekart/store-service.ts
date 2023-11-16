@@ -32,6 +32,7 @@ import { fetchInit } from './init-service'
 export const getStoreData = async ({
 	cookieStore,
 	cookieMegamenu,
+	host,
 	url,
 	cookies,
 	server = false,
@@ -103,9 +104,9 @@ export const getStoreData = async ({
 	// 	!cookieMegamenu ||
 	// 	cookieMegamenu == 'undefined'
 	// ) {
-	const uri = new URL(url)
+	// const uri = new URL(url)
 
-	storeRes = await fetchInit({ host: uri.host })
+	storeRes = await fetchInit({ host })
 	store = {
 		id: storeRes?.storeOne?._id,
 		address: storeRes?.storeOne?.address,
