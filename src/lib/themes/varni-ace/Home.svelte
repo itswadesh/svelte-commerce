@@ -84,7 +84,7 @@ if (
 ) {
 	priceRange = generatePriceRange(
 		data.products?.facets?.all_aggs?.price_stats,
-		data.store.currencySymbol
+		data.store?.currencySymbol
 	)
 }
 

@@ -31,7 +31,7 @@ onMount(() => {
 			<li>
 				Your privacy is important to us. It is {store?.websiteName}’s policy to respect your privacy
 				regarding any information we may collect from you across our website, https://{$page.data
-					.store.domain}, and other sites we own and operate.
+					.store?.domain}, and other sites we own and operate.
 			</li>
 
 			<li>
