@@ -218,8 +218,8 @@ const schemaOrgPublisher = {
 		'@type': 'ImageObject',
 		'@id': `${siteUrl}/#personlogo`,
 		inLanguage: siteLanguage,
-		url: `${siteUrl}/assets/logo.svg`,
-		contentUrl: `${siteUrl}/assets/logo.svg`,
+		url: `${siteUrl}/assets/logo.png`,
+		contentUrl: `${siteUrl}/assets/logo.png`,
 		width: 512,
 		height: 512,
 		caption: entity
