@@ -82,7 +82,7 @@ if (
 ) {
 	priceRange = generatePriceRange(
 		data.products?.facets?.all_aggs?.price_stats,
-		data.store.currencySymbol
+		data.store?.currencySymbol
 	)
 }
 
@@ -327,7 +327,7 @@ function handleFilterTags() {
 	<div class="mb-10 flex flex-col items-start sm:mb-20 lg:flex-row lg:gap-10 lg:p-10">
 		{#if data.products.facets}
 			<DesktopFilter
-				class="sticky hidden lg:block {store.hellobar?.active?.val ? 'top-32' : 'top-24'}"
+				class="sticky hidden lg:block {store?.hellobar?.active?.val ? 'top-32' : 'top-24'}"
 				facets="{data.products.facets}"
 				priceRange="{priceRange}"
 				query="{data.query}"

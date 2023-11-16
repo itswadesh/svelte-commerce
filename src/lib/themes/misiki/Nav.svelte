@@ -95,20 +95,20 @@ async function onSearchSubmit({ detail }) {
 <!-- {hellobar?.active?.val ? 'h-[88px] sm:h-28' : 'h-14 sm:h-20'} -->
 <nav
 	class="{clazz} minimum-width-rem sticky inset-x-0 top-0 w-full border-b bg-white shadow-xs
-	{store.hellobar?.active?.val && store?.isHyperlocal ? 'h-[112px] sm:h-[136px] lg:h-[112px]' : ''}
-	{store.hellobar?.active?.val && !store?.isHyperlocal ? 'h-[88px] sm:h-[112px]' : ''}
+	{store?.hellobar?.active?.val && store?.isHyperlocal ? 'h-[112px] sm:h-[136px] lg:h-[112px]' : ''}
+	{store?.hellobar?.active?.val && !store?.isHyperlocal ? 'h-[88px] sm:h-[112px]' : ''}
 	{store?.isHyperlocal && !store?.hellobar?.active?.val ? 'h-[80px] sm:h-[104px] lg:h-[80px]' : ''}
-	{!store.hellobar?.active?.val && !store?.isHyperlocal ? 'h-[56px] sm:h-[80px]' : ''}
+	{!store?.hellobar?.active?.val && !store?.isHyperlocal ? 'h-[56px] sm:h-[80px]' : ''}
 	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
 	<!-- hellobar -->
 
-	{#if store.hellobar?.active?.val}
+	{#if store?.hellobar?.active?.val}
 		<div
 			use:convertParagraphs
 			class="h-8 text-center tracking-wider flex items-center justify-center text-sm"
-			style="background-color: {store.hellobar?.bgColor?.val || '#27272a'};
-				 color: {store.hellobar?.textColor?.val || '#ffffff'};">
-			{@html store.hellobar.content?.val}
+			style="background-color: {store?.hellobar?.bgColor?.val || '#27272a'};
+				 color: {store?.hellobar?.textColor?.val || '#ffffff'};">
+			{@html store?.hellobar.content?.val}
 		</div>
 	{/if}
 

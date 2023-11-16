@@ -27,7 +27,8 @@ onMount(()=>{
 				<h6 class="mb-5 font-semibold">CONDITIONS OF USE</h6>
 
 				<p class="text-zinc-500">
-					Welcome to our online store! {store?.websiteName} and its associates provide their
+					Welcome to our online store! {$page
+						.data?.store?.websiteName} and its associates provide their
 					services to you subject to the following conditions. If you visit or shop within this website,
 					you accept these conditions. Please read them carefully.
 				</p>
@@ -46,7 +47,8 @@ onMount(()=>{
 				<h6 class="mb-5 font-semibold">ELECTRONIC COMMUNICATIONS</h6>
 
 				<p class="text-zinc-500">
-					When you visit {store?.websiteName} or send e-mails to us, you are communicating
+					When you visit {$page
+						.data?.store?.websiteName} or send e-mails to us, you are communicating
 					with us electronically. You consent to receive communications from us electronically. We will
 					communicate with you by e-mail or by posting notices on this site. You agree that all agreements,
 					notices, disclosures, and other communications that we provide to you electronically satisfy
@@ -60,10 +62,12 @@ onMount(()=>{
 				<p class="text-zinc-500">
 					All content included on this site, such as text, graphics, logos, button icons, images,
 					audio clips, digital downloads, data compilations, and software, is the property of {$page
-						.data.store.websiteName}
+						.data?.store?.websiteName}
 					or its content suppliers and protected by international copyright laws. The compilation of
-					all content on this site is the exclusive property of {store?.websiteName},
-					with copyright authorship for this collection by {store?.websiteName}, and
+					all content on this site is the exclusive property of {$page
+						.data?.store?.websiteName},
+					with copyright authorship for this collection by {$page
+						.data?.store?.websiteName}, and
 					protected by international copyright laws.
 				</p>
 			</li>
@@ -72,13 +76,17 @@ onMount(()=>{
 				<h6 class="mb-5 font-semibold">TRADE MARKS</h6>
 
 				<p class="text-zinc-500">
-					{store?.websiteName}’s trademarks and trade dress may not be used in connection
-					with any product or service that is not {store?.websiteName}’s, in any manner
+					{$page
+						.data?.store?.websiteName}’s trademarks and trade dress may not be used in connection
+					with any product or service that is not {$page
+						.data?.store?.websiteName}’s, in any manner
 					that is likely to cause confusion among customers, or in any manner that disparages or
-					discredits {store?.websiteName}. All other trademarks not owned by {$page.data
-						.store.websiteName} or its subsidiaries that appear on this site are the property of their
+					discredits {$page
+						.data?.store?.websiteName}. All other trademarks not owned by {$page.data
+						.store?.websiteName} or its subsidiaries that appear on this site are the property of their
 					respective owners, who may or may not be affiliated with, connected to, or sponsored by
-					{store?.websiteName} or its subsidiaries.
+					{$page
+						.data?.store?.websiteName} or its subsidiaries.
 				</p>
 			</li>
 
@@ -86,28 +94,37 @@ onMount(()=>{
 				<h6 class="mb-5 font-semibold">LICENSE AND SITE ACCESS</h6>
 
 				<p class="text-zinc-500">
-					{store?.websiteName} grants you a limited license to access and make personal use
+					{$page
+						.data?.store?.websiteName} grants you a limited license to access and make personal use
 					of this site and not to download (other than page caching) or modify it, or any portion of
-					it, except with express written consent of {store?.websiteName}. This license
+					it, except with express written consent of {$page
+						.data?.store?.websiteName}. This license
 					does not include any resale or commercial use of this site or its contents: any collection
 					and use of any product listings, descriptions, or prices: any derivative use of this site
 					or its contents: any downloading or copying of account information for the benefit of
 					another merchant: or any use of data mining, robots, or similar data gathering and
 					extraction tools. This site or any portion of this site may not be reproduced, duplicated,
 					copied, sold, resold, visited, or otherwise exploited for any commercial purpose without
-					express written consent of {store?.websiteName}. You may not frame or utilize
+					express written consent of {$page
+						.data?.store?.websiteName}. You may not frame or utilize
 					framing techniques to enclose any trademark, logo, or other proprietary information
-					(including images, text, page layout, or form) of {store?.websiteName} and our associates
+					(including images, text, page layout, or form) of {$page
+						.data?.store?.websiteName} and our associates
 					without express written consent. You may not use any meta tags or any other “hidden text” utilizing
-					{store?.websiteName}’s name or trademarks without the express written consent
-					of {store?.websiteName}. Any unauthorized use terminates the permission or
-					license granted by {store?.websiteName}. You are granted a limited, revocable,
+					{$page
+						.data?.store?.websiteName}’s name or trademarks without the express written consent
+					of {$page
+						.data?.store?.websiteName}. Any unauthorized use terminates the permission or
+					license granted by {$page
+						.data?.store?.websiteName}. You are granted a limited, revocable,
 					and nonexclusive right to create a hyperlink to the home page of {store
 						.websiteName}
-					so long as the link does not portray {store?.websiteName}, its associates, or
+					so long as the link does not portray {$page
+						.data?.store?.websiteName}, its associates, or
 					their products or services in a false, misleading, derogatory, or otherwise offensive
 					matter. You may not use any
-					{store?.websiteName} logo or other proprietary graphic or trademark as part of the
+					{$page
+						.data?.store?.websiteName} logo or other proprietary graphic or trademark as part of the
 					link without express written permission.
 				</p>
 			</li>
@@ -120,7 +137,7 @@ onMount(()=>{
 					account and password and for restricting access to your computer, and you agree to accept
 					responsibility for all activities that occur under your account or password. If you are
 					under 18, you may use our website only with involvement of a parent or guardian. {$page
-						.data.store.websiteName}
+						.data?.store?.websiteName}
 					and its associates reserve the right to refuse service, terminate accounts, remove or edit
 					content, or cancel orders in their sole discretion.
 				</p>
@@ -137,9 +154,11 @@ onMount(()=>{
 					contain software viruses, political campaigning, commercial solicitation, chain letters,
 					mass mailings, or any form of “spam.” You may not use a false e-mail address, impersonate
 					any person or entity, or otherwise mislead as to the origin of a card or other content.
-					{store?.websiteName} reserves the right (but not the obligation) to remove or edit
+					{$page
+						.data?.store?.websiteName} reserves the right (but not the obligation) to remove or edit
 					such content, but does not regularly review posted content. If you do post content or submit
-					material, and unless we indicate otherwise, you grant {store?.websiteName} and its
+					material, and unless we indicate otherwise, you grant {$page
+						.data?.store?.websiteName} and its
 					associates a nonexclusive, royalty-free, perpetual, irrevocable, and fully sub-license-able
 					right to use, reproduce, modify, adapt, publish, translate, create derivative works from, distribute,
 					and display such content throughout the world in any media. You grant {store
@@ -147,10 +166,12 @@ onMount(()=>{
 					in connection with such content, if they choose. You represent and warrant that you own or
 					otherwise control all of the rights to the content that you post: that the content is accurate:
 					that use of the content you supply does not violate this policy and will not cause injury to
-					any person or entity: and that you will indemnify {store?.websiteName}
+					any person or entity: and that you will indemnify {$page
+						.data?.store?.websiteName}
 					or its associates for all claims resulting from content you supply. {store
 						.websiteName} has the right but not the obligation to monitor and edit or remove any activity
-					or content. {store?.websiteName}
+					or content. {$page
+						.data?.store?.websiteName}
 					takes no responsibility and assumes no liability for any content posted by you or any third
 					party.
 				</p>
@@ -160,7 +181,8 @@ onMount(()=>{
 				<h6 class="mb-5 font-semibold">RISK OF LOSS</h6>
 
 				<p class="text-zinc-500">
-					All items purchased from {store?.websiteName} are made pursuant to a shipment contract.
+					All items purchased from {$page
+						.data?.store?.websiteName} are made pursuant to a shipment contract.
 					This basically means that the risk of loss and title for such items pass to you upon our delivery
 					to the carrier.
 				</p>
@@ -170,22 +192,26 @@ onMount(()=>{
 				<h6 class="mb-5 font-semibold">PRODUCT DESCRIPTIONS</h6>
 
 				<p class="mb-5 text-zinc-500">
-					{store?.websiteName} and its associates attempt to be as accurate as possible. However,
-					{store?.websiteName}
+					{$page
+						.data?.store?.websiteName} and its associates attempt to be as accurate as possible. However,
+					{$page
+						.data?.store?.websiteName}
 					does not warrant that product descriptions or other content of this site is accurate, complete,
 					reliable, current, or error-free.
 				</p>
 
 				<p class="text-zinc-500">
 					Disclaimer of warranties and limitation of liability this site is provided by {$page.data
-						.store.websiteName}
-					on an “as is” and “as available” basis. {store?.websiteName} makes no representations
+						?.store?.websiteName}
+					on an “as is” and “as available” basis. {$page
+						.data?.store?.websiteName} makes no representations
 					or warranties of any kind, express or implied, as to the operation of this site or the information,
 					content, materials, or products included on this site. you expressly agree that your use of
 					this site is at your sole risk. to the full extent permissible by applicable law, {$page
-						.data.store.websiteName}
+						.data?.store?.websiteName}
 					disclaims all warranties, express or implied, including, but not limited to, implied warranties
-					of merchant-ability and fitness for a particular purpose. {store?.websiteName} does
+					of merchant-ability and fitness for a particular purpose. {$page
+						.data?.store?.websiteName} does
 					not warrant that this site, its servers, or e-mail sent from {store
 						.websiteName} are free of viruses or other harmful components. {store
 						.websiteName} will not be liable for any damages of any kind arising from the use of this
@@ -200,10 +226,11 @@ onMount(()=>{
 				<h6 class="mb-5 font-semibold">APPLICABLE LAW</h6>
 
 				<p class="text-zinc-500">
-					By visiting {store?.websiteName}, you agree that the laws of the state of
+					By visiting {$page
+						.data?.store?.websiteName}, you agree that the laws of the state of
 					ODISHA, INDIA, without regard to principles of conflict of laws, will govern these
 					Conditions of Use and any dispute of any sort that might arise between you and {$page.data
-						.store.websiteName} or its associates.
+						?.store?.websiteName} or its associates.
 				</p>
 			</li>
 
@@ -211,11 +238,14 @@ onMount(()=>{
 				<h6 class="mb-5 font-semibold">DISPUTES</h6>
 
 				<p class="text-zinc-500">
-					Any dispute relating in any way to your visit to {store?.websiteName} or to products
+					Any dispute relating in any way to your visit to {$page
+						.data?.store?.websiteName} or to products
 					you purchase through
-					{store?.websiteName} shall be submitted to confidential arbitration in Odisha, India,
+					{$page
+						.data?.store?.websiteName} shall be submitted to confidential arbitration in Odisha, India,
 					except that, to the extent you have in any manner violated or threatened to violate
-					{store?.websiteName}’s intellectual property rights, {store
+					{$page
+						.data?.store?.websiteName}’s intellectual property rights, {store
 						.websiteName} may seek injunctive or other appropriate relief in any state or federal court
 					in the state of Telangana, India, and you consent to exclusive jurisdiction and venue in such
 					courts. Arbitration under this agreement shall be conducted under the rules then prevailing
@@ -232,7 +262,8 @@ onMount(()=>{
 
 				<p class="text-zinc-500">
 					Please review our other policies, such as our Shipping and Returns policy, posted on this
-					site. These policies also govern your visit to {store?.websiteName} . We reserve
+					site. These policies also govern your visit to {$page
+						.data?.store?.websiteName} . We reserve
 					the right to make changes to our site, policies, and these Conditions of Use at any time. If
 					any of these conditions shall be deemed invalid, void, or for any reason unenforceable, that
 					condition shall be deemed sever-able and shall not affect the validity and enforce-ability
