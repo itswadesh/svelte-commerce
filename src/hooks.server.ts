@@ -39,7 +39,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 		const host = url.hostname
 		console.log('urllllllllllllllllllllllll', host)
 
-		event.locals.origin = !IS_DEV ? `https://${host}` : `http://${host}`
+		const protocol = !IS_DEV ? `https://` : `http://`
+		event.locals.origin = protocol + host
 
 		const userAgent = event.request.headers.get('user-agent')
 
