@@ -53,7 +53,7 @@ onMount(async () => {
 
 	fireGTagEvent('begin_checkout', data.cart)
 
-	const pm = data?.paymentMethods[0]
+	const pm = data?.paymentMethods && data?.paymentMethods[0]
 	paymentMethodChanged(pm)
 
 	// if (data.paymentMethods?.length === 1 && data.paymentMethods[0].type === 'pg' && !orderNo) {
@@ -359,12 +359,12 @@ function checkIfStripeCardValid({ detail }) {
 							<div class="w-full flex-1 flex flex-col gap-2">
 								<div class="flex justify-between gap-4">
 									<div class="flex-1">
-										<h4 style="color:{pm.color}" class="leading-3 capitalize">
-											{pm.name || pm.value || pm.id}
+										<h4 style="color:{pm?.color}" class="leading-3 capitalize">
+											{pm?.name || pm?.value || pm?.id}
 										</h4>
 
 										<p class="mt-2">
-											{#if pm.text}
+											{#if pm?.text}
 												{@html pm.text}
 											{:else}
 												Payment securly
@@ -373,7 +373,7 @@ function checkIfStripeCardValid({ detail }) {
 									</div>
 
 									<div class="shrink-0">
-										{#if pm.img}
+										{#if pm?.img}
 											<img
 												src="{pm.img}"
 												alt="{pm.name}"
@@ -384,20 +384,20 @@ function checkIfStripeCardValid({ detail }) {
 											<div
 												class="flex h-10 w-10 p-2 items-center justify-center rounded-full border bg-zinc-200 text-center text-xs uppercase">
 												<span class="w-full truncate">
-													{pm.name || pm.value || pm.id}
+													{pm?.name || pm?.value || pm?.id}
 												</span>
 											</div>
 										{/if}
 									</div>
 								</div>
 
-								{#if pm.value === 'BankTransfer' && selectedPaymentMethod.value === 'BankTransfer'}
+								{#if pm?.value === 'BankTransfer' && selectedPaymentMethod?.value === 'BankTransfer'}
 									<div transition:slide="{{ duration: 300 }}" class:wiggle="{commentMissing}">
 										<TextboxFloating bind:value="{comment}" label="Transaction ID" />
 									</div>
 								{/if}
 
-								{#if pm.value === 'Stripe'}
+								{#if pm?.value === 'Stripe'}
 									<div transition:slide="{{ duration: 300 }}">
 										<svelte:component
 											this="{Stripe}"
@@ -535,7 +535,7 @@ function checkIfStripeCardValid({ detail }) {
 				cart="{data.cart}"
 				text="{errorMessage || 'Confirm Order'}"
 				loading="{loading}"
-				hideCheckoutButton="{selectedPaymentMethod.name === 'Stripe'}"
+				hideCheckoutButton="{selectedPaymentMethod?.name === 'Stripe'}"
 				on:submit="{() => submit(selectedPaymentMethod)}" />
 
 			<TrustBaggeContainer class="mt-5" />

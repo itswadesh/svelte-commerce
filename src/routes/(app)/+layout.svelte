@@ -14,7 +14,7 @@ let openSidebar = false
 		me="{data.me}"
 		store="{data.store}"
 		bind:showCartSidebar="{showCartSidebar}"
-		bind:openSidebar="{openSidebar}" />
+	bind:openSidebar="{openSidebar}" />
 
 	<PageTransitions url="{data.url}">
 		<slot />

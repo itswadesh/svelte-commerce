@@ -4,22 +4,21 @@ import { error } from '@sveltejs/kit'
 export const prerender = false
 export const load = async ({ parent, data, fetch }) => {
 	await parent()
-	let locals = data
 	try {
 		const res2 = await fetch('/server/store')
 		const storeFromServer = await res2.json()
 		// locals.storeId = storeFromServer.store?.id
-		locals.store = storeFromServer.store
-		locals.megamenu = storeFromServer.megamenu
-		locals.menu = storeFromServer.menu
-		locals.popularSearches = storeFromServer.popularSearches
-		return { ...locals }
+		data.store = storeFromServer.store
+		data.megamenu = storeFromServer.megamenu
+		data.menu = storeFromServer.menu
+		data.popularSearches = storeFromServer.popularSearches
+		return { ...data }
 	} catch (e) {
 		throw error(
 			404,
 			`Store Not Found @Layout 
-			<br/>ID: ${locals.storeId}
-			<br/>ORIGIN: ${locals.origin}
+			<br/>ID: ${data.storeId}
+			<br/>ORIGIN: ${data.origin}
 			<br/>DOMAIN(env): ${DOMAIN}
 			<br/>HTTP_ENDPOINT(env): ${HTTP_ENDPOINT}`
 		)

@@ -22,7 +22,7 @@ import { browser } from '$app/environment'
 // import { storeStore } from '$lib/store/store'
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
+// console.log('zzzzzzzzzzzzzzzzzz', data?.store)
 
 let seoProps = {
 	brand: $page.data.store?.title,
