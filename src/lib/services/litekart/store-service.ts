@@ -105,7 +105,7 @@ export const getStoreData = async ({
 	// ) {
 	const uri = new URL(url)
 
-	storeRes = await fetchInit(uri.host)
+	storeRes = await fetchInit({ host: uri.host })
 	store = {
 		id: storeRes?.storeOne?._id,
 		address: storeRes?.storeOne?.address,

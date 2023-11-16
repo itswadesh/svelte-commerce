@@ -24,7 +24,7 @@ export const fetchInitFromStore = async (host) => {
 
 	if (!existingInit?.storeOne?._id && isServer && !isLoading) {
 		isLoading = true
-		initDataFromServer = await InitService.fetchInit(host)
+		initDataFromServer = await InitService.fetchInit({ host })
 		initStore.update((u) => initDataFromServer)
 		isLoading = false
 	}

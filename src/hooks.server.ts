@@ -36,8 +36,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	try {
 		const IS_DEV = import.meta.env.DEV
 		const url = new URL(event.request.url)
-		const host = url.hostname
-		console.log('urllllllllllllllllllllllll', host)
+		const host = url.host
 
 		const protocol = !IS_DEV ? `https://` : `http://`
 		event.locals.origin = protocol + host
