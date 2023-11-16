@@ -36,9 +36,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 	try {
 		const IS_DEV = import.meta.env.DEV
 		const url = new URL(event.request.url)
-		console.log('urllllllllllllllllllllllll', url)
+		const host = url.hostname
+		console.log('urllllllllllllllllllllllll', host)
 
-		event.locals.origin = !IS_DEV ? `https://${url.host}` : `http://${url.host}`
+		event.locals.origin = !IS_DEV ? `https://${host}` : `http://${host}`
 
 		const userAgent = event.request.headers.get('user-agent')
 
@@ -59,7 +60,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		} else {
 			try {
 				const { storeOne } = await InitService.fetchInit({
-					host: url.host,
+					host,
 					origin: event.locals.origin
 				})
 				const storeId = storeOne?._id
