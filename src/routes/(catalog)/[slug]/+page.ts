@@ -1,10 +1,9 @@
 import { ProductService } from '$lib/services'
 
 export const prerender = false
-const isServer = import.meta.env.SSR
-
-export async function load({ url, params, parent, cookies }) {
-	const { store, storeId, origin, sid } = await parent()
+export async function load({ url, params, parent }) {
+	// const x = await parent()
+	const { store, storeId, origin, sid, zip } = await parent()
 	const categorySlug = params.slug
 	const currentPage = +url.searchParams.get('page') || 1
 	const fl = {}
@@ -19,13 +18,11 @@ export async function load({ url, params, parent, cookies }) {
 	return {
 		products: ProductService.fetchProductsOfCategory({
 			categorySlug,
-			isCors: store?.isCors,
 			origin,
 			query: query.toString(),
-			server: isServer,
 			sid,
-			storeId,
-			zip: cookies.get('zip')
+			zip,
+			storeId
 		}),
 		query: query.toString(),
 		searchData,

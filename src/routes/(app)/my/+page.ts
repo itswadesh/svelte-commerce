@@ -1,8 +1,8 @@
 import { OrdersService, ReviewService, WishlistService } from '$lib/services'
-import { error, redirect } from '@sveltejs/kit'
+import { redirect } from '@sveltejs/kit'
 
-export async function load({ cookies, locals, url }) {
-	const { me, sid, store, storeId, origin, isCors } = locals
+export async function load({ parent, url }) {
+	const { me, sid, storeId, origin } = await parent()
 
 	if (!me || !sid) {
 		throw redirect(307, `/auth/login?ref=${url.pathname}${url.search}`)
@@ -10,15 +10,12 @@ export async function load({ cookies, locals, url }) {
 
 	try {
 		const orders = await OrdersService.fetchOrders({
-			isCors: isCors,
-			server: true,
 			sid,
 			storeId
 		})
 
 		const wishlists = await WishlistService.fetchWishlist({
 			storeId,
-			server: true,
 			sid,
 			origin
 		})

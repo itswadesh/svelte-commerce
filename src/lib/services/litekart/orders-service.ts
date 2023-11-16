@@ -1,13 +1,12 @@
 import { error } from '@sveltejs/kit'
 import { getAPI, post } from '$lib/utils/api'
 import { getBySid, postBySid } from '$lib/utils/server'
-import type { AllOrders } from '$lib/types'
 
 const isServer = import.meta.env.SSR
 
-export const fetchOrders = async ({ isCors = false, origin, sid = null, storeId }) => {
+export const fetchOrders = async ({ isCors = false, origin = null, sid = null, storeId }) => {
 	try {
-		let res: AllOrders | {} = {}
+		let res = {}
 
 		if (isServer || isCors) {
 			res = await getBySid(`orders/my?store=${storeId}&active=true`, sid)
@@ -27,7 +26,7 @@ export const fetchOrders = async ({ isCors = false, origin, sid = null, storeId 
 	}
 }
 
-export const fetchOrder = async ({ origin, sid = null, storeId, id }) => {
+export const fetchOrder = async ({ origin = null, sid = null, storeId, id }) => {
 	try {
 		let res = {}
 

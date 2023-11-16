@@ -1,13 +1,11 @@
 import { loginUrl } from '$lib/config/index.js'
 import { AddressService, CartService, OrdersService, PaymentMethodService } from '$lib/services'
-import { error, redirect } from '@sveltejs/kit'
+import { redirect } from '@sveltejs/kit'
 
 export const prerender = false
 
-export async function load({ params, parent, locals, url, request, cookies }) {
-	const { me, sid, store, storeId, origin } = locals
-	const cartId = cookies.get('cartId')
-
+export async function load({ parent, url }) {
+	const { me, sid, store, storeId, origin, cartId } = await parent()
 	let address
 	let address_id = url.searchParams.get('address')
 	const order_no = url.searchParams.get('order_no')
@@ -22,9 +20,9 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 		throw redirect(307, '/checkout/address')
 	}
 
-	const cartRes: any = await CartService.fetchRefreshCart({
+	const cartRes = await CartService.fetchRefreshCart({
 		cartId,
-		origin: origin,
+		origin,
 		sid,
 		storeId
 	})
@@ -49,15 +47,13 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 		formattedAmount: cartRes.formattedAmount
 	}
 
-	locals.cart = cart
-
 	try {
 		if (order_no) {
 			const order = await OrdersService.fetchOrder({
 				id: order_no,
-				storeId: locals.store,
-				server: true,
-				sid: cookies.get('connect.sid')
+				storeId,
+				sid,
+				origin
 			})
 
 			// console.log('order', order);
@@ -69,19 +65,20 @@ export async function load({ params, parent, locals, url, request, cookies }) {
 		} else {
 			address = await AddressService.fetchAddress({
 				id: address_id,
-				storeId: locals.store,
+				storeId,
 				server: true,
-				sid: cookies.get('connect.sid')
+				sid,
+				origin
 			})
 		}
 
 		paymentMethods = await PaymentMethodService.fetchPaymentMethods({
-			storeId: locals.storeId,
-			server: true,
-			sid: cookies.get('connect.sid')
+			storeId,
+			sid,
+			origin
 		})
 
-		return { paymentMethods, address, addressId: address_id, me, cart }
+		return { store, paymentMethods, address, addressId: address_id, me, cart }
 	} catch (e) {
 		return {
 			paymentMethods,

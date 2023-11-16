@@ -1,15 +1,13 @@
 import { AddressService, CartService, CountryService } from '$lib/services'
 import { error, redirect } from '@sveltejs/kit'
-import { loginUrl } from '$lib/config/index.js'
 
 export const prerender = false
 
-export async function load({ request, url, locals, cookies }) {
-	const { me, sid, store, storeId, origin } = locals
-	const cartId = cookies.get('cartId')
+export async function load({ url, parent }) {
+	const { me, sid, store, storeId, origin, cartId } = await parent()
 
 	if (!me || !sid) {
-		const redirectUrl = `${loginUrl}?ref=${url?.pathname}${url?.search || ''}`
+		const redirectUrl = `/auth/login?ref=${url?.pathname}${url?.search || ''}`
 		throw redirect(307, redirectUrl)
 	}
 

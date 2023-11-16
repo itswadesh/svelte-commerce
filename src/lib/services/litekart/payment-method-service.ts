@@ -3,7 +3,7 @@ import { getBySid } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 const isServer = import.meta.env.SSR
 
-export const fetchPaymentMethods = async ({ origin, storeId, sid = null }) => {
+export const fetchPaymentMethods = async ({ origin = null, storeId, sid = null }) => {
 	try {
 		let res = {}
 
@@ -12,8 +12,7 @@ export const fetchPaymentMethods = async ({ origin, storeId, sid = null }) => {
 		} else {
 			res = await getAPI(`payment-methods?store=${storeId}`, origin)
 		}
-
-		return res.data || []
+		return res?.data || []
 	} catch (e) {
 		throw error(e.status, e.data?.message || e.message)
 	}

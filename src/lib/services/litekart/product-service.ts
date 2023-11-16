@@ -6,16 +6,15 @@ const isServer = import.meta.env.SSR
 
 // Search product
 
-export const searchProducts = async ({ origin, query, searchData, storeId, sid = null }: any) => {
+export const searchProducts = async ({ origin, query, storeId, sid = null }) => {
 	try {
-		let res: AllProducts | {} = {}
-		let products: Product[] = []
+		let res = {}
+		let products = []
 		let count = 0
 		let facets = ''
 		let pageSize = 0
 		let category = ''
 		let err = ''
-
 		if (isServer) {
 			res = await getBySid(`es/products?${query}&store=${storeId}`, sid)
 		} else {

@@ -3,7 +3,6 @@ import { Footer, Nav } from '$lib/theme-config'
 import { PageTransitions } from '$lib/components'
 
 export let data
-
 let showCartSidebar = false
 let openSidebar = false
 </script>
