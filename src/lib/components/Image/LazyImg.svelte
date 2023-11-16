@@ -95,10 +95,10 @@ const extension = src?.split('.').pop()
 let imageLoaded = false
 let isSvg = false
 let lazyloadInstance: any
-const IMAGE_CDN_PROVIDER = $page?.data?.store?.imageCdn?.provider?.val
-const IMAGE_CDN_URL = $page?.data?.store?.imageCdn?.url?.val
+$: IMAGE_CDN_PROVIDER = $page?.data?.store?.imageCdn?.provider?.val
+$: IMAGE_CDN_URL = $page?.data?.store?.imageCdn?.url?.val
 // let loadedImage = false
-let store = {}
+// let store = {}
 onMount(() => {
 	// if (browser) {
 	// 	storeStore.subscribe((value) => {

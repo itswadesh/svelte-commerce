@@ -165,7 +165,7 @@ async function loadNextPage() {
 async function refreshData() {}
 
 let loadMoreDiv
-let store = $page?.data?.store
+$: store = $page?.data?.store
 onMount(() => {
 	// if (browser) {
 	// 	storeStore.subscribe((value) => (store = value))
@@ -536,7 +536,7 @@ function handleFilterTags() {
 											<p class="col-span-5 text-justify">{p.name}</p>
 
 											<span class="col-span-1 whitespace-nowrap">
-												{currency(p.price, store?.currencySymbol)}
+												{currency(p.price, data?.store?.currencySymbol)}
 											</span>
 										</a>
 									</li>
