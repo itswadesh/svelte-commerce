@@ -12,7 +12,6 @@ const cookies = Cookie()
 let today = dayjs(new Date()).toISOString()
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -95,6 +94,6 @@ onMount(() => {
 })
 </script>
 
-<!-- <SEO {...seoProps} /> -->
+<SEO {...seoProps} />
 
 <Home data="{data}" showFooter="{showFooter}" showPinCodeEntryModal="{showPinCodeEntryModal}" />

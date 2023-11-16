@@ -77,38 +77,38 @@ export const delBySid = async (endpoint: string, sid?: any) => {
 }
 
 export async function postBySid(endpoint: string, data: any, sid?: string) {
-	try {
-		const ep = HTTP_ENDPOINT + '/api/' + endpoint
-		const response = await fetch(ep, {
-			method: 'POST',
-			credentials: 'include',
-			body: JSON.stringify(data || {}),
-			headers: {
-				'Content-Type': 'application/json',
-				cookie: `connect.sid=${sid}`
-			}
-		})
-		if (endpoint.includes('logout')) return true
-		const isJson = response.headers.get('content-type')?.includes('application/json')
-		const res = isJson ? await response.json() : await response.text()
-		if (res?.status > 399) {
-			throw { status: res.status, message: res }
-		} else if (response?.status > 399) {
-			throw { status: response.status, message: res }
-		} else {
-			const setCookieForLogin = response.headers.get('set-cookie')
-			if (setCookieForLogin) {
-				const sidCookie = cookie.parse(setCookieForLogin)
-				if (typeof res === 'object' && res !== null) {
-					res.sid = sidCookie['connect.sid']
-				}
-			}
-			return res
+	// try {
+	const ep = HTTP_ENDPOINT + '/api/' + endpoint
+	const response = await fetch(ep, {
+		method: 'POST',
+		credentials: 'include',
+		body: JSON.stringify(data || {}),
+		headers: {
+			'Content-Type': 'application/json',
+			cookie: `connect.sid=${sid}`
 		}
-	} catch (e) {
-		// console.log(`/lib/utils/server.ts postBySid(${HTTP_ENDPOINT + '/api/' + endpoint})`, e)
-		throw e
+	})
+	if (endpoint.includes('logout')) return true
+	const isJson = response.headers.get('content-type')?.includes('application/json')
+	const res = isJson ? await response.json() : await response.text()
+	if (res?.status > 399) {
+		throw { status: res.status, message: res }
+	} else if (response?.status > 399) {
+		throw { status: response.status, message: res }
+	} else {
+		const setCookieForLogin = response.headers.get('set-cookie')
+		if (setCookieForLogin) {
+			const sidCookie = cookie.parse(setCookieForLogin)
+			if (typeof res === 'object' && res !== null) {
+				res.sid = sidCookie['connect.sid']
+			}
+		}
+		return res
 	}
+	// } catch (e) {
+	// 	// console.log(`/lib/utils/server.ts postBySid(${HTTP_ENDPOINT + '/api/' + endpoint})`, e)
+	// 	throw e
+	// }
 }
 
 export async function gett(endpoint: string, ck?: any) {
