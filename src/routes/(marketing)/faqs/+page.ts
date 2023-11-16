@@ -1,6 +1,7 @@
 import { FaqService } from '$lib/services'
 
-export async function load({ request, locals, parent, cookies }) {
+export async function load({ parent }) {
+	const { storeId, sid, origin } = await parent()
 	let loading = false,
 		err,
 		faqs,
@@ -9,9 +10,9 @@ export async function load({ request, locals, parent, cookies }) {
 	try {
 		loading = true
 		const res = await FaqService.fetchFaqs({
-			storeId: locals.storeId,
-			server: true,
-			sid: cookies.get('connect.sid')
+			storeId,
+			sid,
+			origin
 		})
 		faqs = res?.data
 		count = res?.count

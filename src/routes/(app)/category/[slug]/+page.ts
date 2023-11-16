@@ -1,16 +1,17 @@
 import { CategoryService } from '$lib/services'
 import { error } from '@sveltejs/kit'
 
-export async function load({ params, url, locals, cookies }) {
+export async function load({ params, url, parent }) {
 	try {
-		// console.log("fetch cate products")
+		const { storeId, origin, sid } = await parent()
+
 		const { slug } = params
 		const id = url.searchParams.get('id')
 		const category = await CategoryService.fetchCategory({
-			storeId: locals.storeId,
-			slug,
-			id,
-			server: true
+			storeId,
+			sid,
+			id: slug || id,
+			origin
 		})
 		if (category) {
 			return { category }
