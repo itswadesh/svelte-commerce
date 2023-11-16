@@ -4,7 +4,8 @@ import { currency } from '$lib/utils'
 import { PrimaryButton } from '$lib/ui'
 import { browser } from '$app/environment'
 import { cartStore } from '$lib/store/cart'
-import { storeStore } from '$lib/store/store'
+import { page } from '$app/stores'
+// import { storeStore } from '$lib/store/store'
 
 const dispatch = createEventDispatcher()
 
@@ -27,10 +28,10 @@ function submit() {
 	dispatch('submit')
 }
 
-let store = {}
+$: store = $page.data?.store
 onMount(async () => {
 	if (browser) {
-		storeStore.subscribe((value) => (store = value))
+		// storeStore.subscribe((value) => (store = value))
 		cartStore.subscribe((value) => (cart = value))
 	}
 })

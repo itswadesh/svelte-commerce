@@ -22,7 +22,7 @@ import { currency } from '$lib/utils'
 import { page } from '$app/stores'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import { browser } from '$app/environment'
-import { storeStore } from '$lib/store/store'
+// import { storeStore } from '$lib/store/store'
 
 const dispatch = createEventDispatcher()
 
@@ -31,12 +31,14 @@ export let items = []
 export let name = ''
 export let required = false
 export let selectedItems = []
-let store = {}
-onMount(() => {
-	if (browser) {
-		storeStore.subscribe((value) => (store = value))
-	}
-})
+// let store = {}
+$: store = $page.data?.store
+
+// onMount(() => {
+// 	if (browser) {
+// 		storeStore.subscribe((value) => (store = value))
+// 	}
+// })
 </script>
 
 {#if items?.length}

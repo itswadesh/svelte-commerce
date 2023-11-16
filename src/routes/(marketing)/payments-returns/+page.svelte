@@ -2,19 +2,21 @@
 import { browser } from '$app/environment'
 import { page } from '$app/stores'
 import SEO from '$lib/components/SEO/index.svelte'
-import { storeStore } from '$lib/store/store'
+// import { storeStore } from '$lib/store/store'
 import { onMount } from 'svelte'
 
 let seoProps = {
 	title: `Payments returns`,
 	description: `Payments returns`
 }
-let store = {}
-onMount(() => {
-	if (browser) {
-		storeStore.subscribe((value) => (store = value))
-	}
-})
+$: store = $page.data?.store
+
+// let store = {}
+// onMount(() => {
+// 	if (browser) {
+// 		storeStore.subscribe((value) => (store = value))
+// 	}
+// })
 </script>
 
 <SEO {...seoProps} />

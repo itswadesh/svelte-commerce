@@ -71,7 +71,7 @@ import SEO from '$lib/components/SEO/index.svelte'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
 import { updateCartStore } from '$lib/store/cart'
 import { browser } from '$app/environment'
-import { storeStore } from '$lib/store/store'
+// import { storeStore } from '$lib/store/store'
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
@@ -81,11 +81,13 @@ const seoProps = {
 	metaDescription: 'Payment Success '
 }
 
-let store = {}
+// let store = {}
+$: store = $page.data?.store
+
 onMount(async () => {
-	if (browser) {
-		storeStore.subscribe((value) => (store = value))
-	}
+	// if (browser) {
+	// 	storeStore.subscribe((value) => (store = value))
+	// }
 	// invalidateAll()
 	fireGTagEvent('purchase', data.order)
 	updateCartStore({ data: null })

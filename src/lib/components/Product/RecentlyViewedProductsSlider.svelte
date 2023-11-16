@@ -5,7 +5,7 @@ import { page } from '$app/stores'
 import { SplideSlide } from '@splidejs/svelte-splide'
 import LazyImg from '../Image/LazyImg.svelte'
 import { browser } from '$app/environment'
-import { storeStore } from '$lib/store/store'
+// import { storeStore } from '$lib/store/store'
 
 export let products = []
 export let title = ''
@@ -20,11 +20,13 @@ $: if (innerWidth >= 640) {
 }
 
 let Splide
-let store = {}
+
+$: store = $page.data?.store
+
 onMount(async () => {
-	if (browser) {
-		storeStore.subscribe((value) => (store = value))
-	}
+	// if (browser) {
+	// 	storeStore.subscribe((value) => (store = value))
+	// }
 	const SplideModule = await import('$lib/components/SplideJs.svelte')
 	Splide = SplideModule.default
 })

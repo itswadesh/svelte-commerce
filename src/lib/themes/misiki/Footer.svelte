@@ -30,7 +30,7 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import type { Category } from '$lib/types'
 import { browser } from '$app/environment'
-import { storeStore } from '$lib/store/store'
+// import { storeStore } from '$lib/store/store'
 
 export let content = ``
 export let me
@@ -46,12 +46,14 @@ function getYear() {
 	let year = d.getFullYear()
 	return year
 }
-let store = {}
+// let store = {}
+$: store = $page.data?.store
+
 onMount(async () => {
 	if (browser) {
-		if (browser) {
-			storeStore.subscribe((value) => (store = value))
-		}
+		// if (browser) {
+		// 	storeStore.subscribe((value) => (store = value))
+		// }
 		popularSearches = await getPopularSearchFromStore({
 			limit: 20,
 			sid: null,
