@@ -1,14 +1,14 @@
 import { PageService } from '$lib/services'
 import { error } from '@sveltejs/kit'
 
-export async function load({ cookies, locals, params, url }) {
+export async function load({ parent, params }) {
 	const { slug } = params
-	const { storeId } = locals
+	const { storeId, sid, origin } = await parent()
 
 	const page = await PageService.fetchPage({
 		slug,
-		server: true,
-		sid: cookies.get('connect.sid'),
+		sid,
+		origin,
 		storeId
 	})
 

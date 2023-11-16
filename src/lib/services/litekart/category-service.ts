@@ -8,7 +8,6 @@ export const fetchFooterCategories = async ({
 	isCors = false,
 	origin,
 	megamenu = false,
-	server = false,
 	sid = null,
 	storeId
 }) => {
@@ -38,7 +37,6 @@ export const fetchCategory = async ({
 	id,
 	isCors = false,
 	origin,
-	server = false,
 	sid = null,
 	storeId
 }) => {
