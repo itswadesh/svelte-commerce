@@ -34,9 +34,9 @@ export const handleError: HandleServerError = ({ error, event }) => {
 
 export const handle: Handle = async ({ event, resolve }) => {
 	try {
-		// console.time('init1')
 		const IS_DEV = import.meta.env.DEV
 		const url = new URL(event.request.url)
+		console.log('urllllllllllllllllllllllll', url)
 
 		event.locals.origin = !IS_DEV ? `https://${url.host}` : `http://${url.host}`
 
@@ -93,7 +93,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 				// 	IMAGE_CDN_URL: storeOne?.IMAGE_CDN_URL
 				// }
 				if (!storeId || storeId == 'undefined')
-				throw { status: 404, message: `Could not find STORE for domain = ${url.host}` }
+					throw { status: 404, message: `Could not find STORE for domain = ${url.host}` }
 				event.cookies.set('storeId', storeId, { path: '/' })
 				// event.cookies.set('store', JSON.stringify(store), { path: '/' })
 				event.locals.storeId = storeId
