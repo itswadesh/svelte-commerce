@@ -26,6 +26,7 @@ declare global {
 			storeId: string
 			session: string
 			origin: string
+			host: string
 			zip: string
 			cartId: string
 			cartQty: number

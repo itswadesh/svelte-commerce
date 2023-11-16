@@ -40,6 +40,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 		const protocol = !IS_DEV ? `https://` : `http://`
 		event.locals.origin = protocol + host
+		event.locals.host = host
 
 		const userAgent = event.request.headers.get('user-agent')
 

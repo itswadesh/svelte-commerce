@@ -3,11 +3,14 @@ import { StoreService } from '$lib/services'
 
 export async function GET({ cookies, request, locals, setHeaders }) {
 	let menu, popularSearches, megamenu, store
+	const host = locals.host
+	console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh',host);
 	try {
 		// const uri = new URL(request.url)
 		// const storeRes = await InitService.fetchInit({ host: uri.host, origin: uri.origin })
 		const storeRes = await StoreService.getStoreData({
-			url: request.url
+			url: request.url,
+			host
 		})
 		// console.log('+server.ts.................', storeRes.storeOne)
 
