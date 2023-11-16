@@ -76,7 +76,7 @@ if (
 ) {
 	priceRange = generatePriceRange(
 		data.products?.facets?.all_aggs?.price_stats,
-		data.store.currencySymbol
+		data.store?.currencySymbol
 	)
 }
 
@@ -156,11 +156,11 @@ async function loadNextPage() {
 async function refreshData() {}
 
 let loadMoreDiv
-let store = {}
+$: store = $page.data?.store
 onMount(() => {
-	if (browser) {
-		storeStore.subscribe((value) => (store = value))
-	}
+	// if (browser) {
+	// 	storeStore.subscribe((value) => (store = value))
+	// }
 	const observer = new IntersectionObserver((entries) => {
 		entries.forEach((entry) => {
 			if (
