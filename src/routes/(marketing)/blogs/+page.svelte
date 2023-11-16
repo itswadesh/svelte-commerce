@@ -117,7 +117,7 @@ function changePage(e, p) {
 	{:else}
 		<div class="flex items-center justify-center" style="height: 60vh;">
 			<div class="m-10 flex flex-col items-center justify-center text-center">
-				<h1 class="mb-10 capitalize">Oops!!, No blog found</h1>
+				<!-- <h1 class="mb-10 capitalize">Oops!!, No blog found</h1> -->
 
 				<div class="mb-5">
 					<img
