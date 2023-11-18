@@ -1,8 +1,9 @@
 import { test, expect } from '@playwright/test'
-import { baseUrl } from './config'
+
+import { app_url } from './config'
 
 test('test', async ({ page }) => {
-	await page.goto(baseUrl)
+	await page.goto(app_url)
 	await page.getByRole('navigation').locator('a').filter({ hasText: 'Fashion' }).click()
 	await page
 		.locator('a')
