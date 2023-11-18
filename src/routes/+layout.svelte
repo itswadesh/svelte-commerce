@@ -22,6 +22,8 @@ import storeClosed from '$lib/assets/store-closed.png'
 import whatsappIcon from '$lib/assets/social-media/whatsapp.png'
 import { getCartFromStore } from '$lib/store/cart'
 import { getStoreFromStore } from '$lib/store/store'
+import { beforeNavigate } from '$app/navigation'
+import { updated } from '$app/stores'
 
 export let data
 
@@ -38,6 +40,12 @@ $: if (innerWidth < 1024) {
 }
 // let ReloadPrompt
 $: store = data.store
+
+beforeNavigate(({ willUnload, to }) => {
+	if ($updated && !willUnload && to?.url) {
+		location.href = to.url.href
+	}
+})
 
 onMount(async () => {
 	if (browser) {
