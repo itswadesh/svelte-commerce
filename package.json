@@ -9,7 +9,7 @@
 		"start": "NODE_ENV=production && vite preview --host --port 3000",
 		"update": "npm exec -- npx ncu -u -p npm i",
 		"preview": "vite preview",
-		"test": "playwright test",
+		"test": "playwright test --ui",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
