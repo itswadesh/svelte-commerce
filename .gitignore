@@ -14,7 +14,5 @@ dev-dist
 .vercel_build_output
 $houdini
 $kitql
-test-results/basic-test/trace.zip
-test-results/home-test/trace.zip
-package.json
+test-results/*
 .gitignore
