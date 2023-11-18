@@ -3,8 +3,9 @@ import { port } from './tests/config'
 
 const config: PlaywrightTestConfig = {
 	webServer: {
-		command: 'pnpm run build && pnpm run preview',
-		port
+		command: 'pnpm run preview',
+		port,
+		protocol: 'http'
 	},
 	testDir: 'tests',
 	timeout: 10000,
