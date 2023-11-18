@@ -1,4 +1,4 @@
-import Logo from '$lib/assets/logo.svg'
+import Logo from '$lib/assets/logo.png'
 
 // All bellow data will be replaced by Footer.svelte after the server/store call and saved to cookie
 export const id = '62b00e15c4899dc7b1f78cb1'

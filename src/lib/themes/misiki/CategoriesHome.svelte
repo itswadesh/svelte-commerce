@@ -271,7 +271,7 @@ let categoryColors = [
 							class="group flex flex-col items-center justify-center hover:text-primary-500 sm:w-24 lg:w-28">
 							<div
 								class="relative mb-2 shrink-0 overflow-hidden rounded-full border bg-cover bg-center bg-no-repeat group-hover:border-primary-500 group-hover:shadow-xl h-24 w-24 lg:h-28 lg:w-28"
-								style="background-image: url('/logo.svg');">
+								style="background-image: url('/logo.png');">
 								<div
 									class="absolute inset-0 flex items-center justify-center bg-opacity-70 text-center text-5xl font-bold text-white group-hover:font-bold
 									{categoryColors[ix >= 12 ? String(ix)[1] : ix]}">

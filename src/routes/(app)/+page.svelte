@@ -1,5 +1,5 @@
 <script>
-// import logo from '$lib/assets/logo.svg'
+// import logo from '$lib/assets/logo.png'
 // import ProductTab from '$lib/components/Product/ProductTab.svelte'
 import { Home } from '$lib/theme-config'
 import { onMount } from 'svelte'
