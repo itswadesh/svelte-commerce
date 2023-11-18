@@ -41,7 +41,7 @@ export const fetchCategory = async ({
 	storeId
 }) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		if (isServer || isCors) {
 			res = await getBySid(`es/categories/${id}?store=${storeId}&children=${children}`, sid)
@@ -59,7 +59,6 @@ export const fetchAllCategories = async ({
 	featured = false,
 	isCors = false,
 	origin,
-	server = false,
 	sid = null,
 	storeId
 }) => {
@@ -90,12 +89,11 @@ export const fetchAllProductsOfCategories = async ({
 	featured = false,
 	isCors = false,
 	origin,
-	server = false,
 	sid = null,
 	storeId
 }) => {
 	try {
-		let res: any = {}
+		let res = {}
 		let products = []
 		let productsCount = 0
 		let currentPage = 0
