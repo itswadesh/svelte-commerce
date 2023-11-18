@@ -24,6 +24,8 @@
 		"@vite-pwa/sveltekit": "0.2.7"
 	},
 	"devDependencies": {
+		"@aws-sdk/client-s3": "^3.445.0",
+		"@aws-sdk/lib-storage": "^3.445.0",
 		"@beyonk/svelte-facebook-pixel": "3.0.1",
 		"@beyonk/svelte-google-analytics": "2.6.4",
 		"@builder.io/partytown": "0.8.1",
@@ -44,7 +46,6 @@
 		"@woocommerce/woocommerce-rest-api": "1.0.1",
 		"amazon-s3-uri": "^0.1.1",
 		"autoprefixer": "^10.4.16",
-		"aws-sdk": "^2.1473.0",
 		"bcrypt": "^5.1.1",
 		"cookie": "^0.5.0",
 		"cookie-universal": "^2.2.2",
