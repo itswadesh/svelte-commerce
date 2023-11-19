@@ -16,7 +16,7 @@ ENV PUPPETEER_SKIP_DOWNLOAD="true"
 RUN pnpm ci --force
 RUN cp -R node_modules prod_node_modules
 COPY . .
-RUN pnpm run build --force
+RUN pnpm run build
 ##### Stage 2 - Production
 FROM builder as production
 WORKDIR /usr/app
