@@ -3,7 +3,7 @@ import { authorInfo, WWW_URL, entity, ogLanguage, siteLanguage, siteShortTitle }
 import OpenGraph from './OpenGraph.svelte'
 import Product from './Product.svelte'
 import SchemaOrg from './SchemaOrg.svelte'
-import Twitter from './Twitter.svelte'
+import X from './X.svelte'
 import { page } from '$app/stores'
 const {
 	author,
@@ -201,7 +201,7 @@ const productProps = {
 	<!-- <html lang="{siteLanguage}"></html> -->
 </svelte:head>
 
-<Twitter {...twitterProps} />
+<X {...twitterProps} />
 
 <Product {...productProps} />
 
