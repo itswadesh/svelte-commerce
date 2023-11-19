@@ -13,7 +13,7 @@ import {
 	LinkedIn,
 	Pinterest,
 	Telegram,
-	Twitter,
+	X,
 	WhatsApp
 } from 'svelte-share-buttons-component'
 import { page } from '$app/stores'
@@ -58,7 +58,7 @@ let media = data.vendor?.banners[0]
 			</li>
 
 			<li>
-				<Twitter
+				<X
 					class="share-button"
 					text="{text}"
 					url="{url}"
@@ -103,7 +103,7 @@ let media = data.vendor?.banners[0]
 				</li>
 
 				<li>
-					<Twitter
+					<X
 						class="share-button"
 						text="{text}"
 						url="{url}"

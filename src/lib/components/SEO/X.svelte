@@ -8,7 +8,7 @@ export let image
 export let timeToRead = 0
 
 /*
- * When there is an equivalent og tag present, Twitter takes that so check OpenGraph before
+ * When there is an equivalent og tag present, X takes that so check OpenGraph before
  * adding additional tags, unless you want to override OpenGraph.
  */
 </script>

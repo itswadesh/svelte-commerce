@@ -7,7 +7,7 @@ import {
 	LinkedIn,
 	Pinterest,
 	Telegram,
-	Twitter,
+	X,
 	WhatsApp
 } from 'svelte-share-buttons-component'
 import { toast } from '$lib/utils'
@@ -45,7 +45,7 @@ let socialSharesList = [
 	},
 	{
 		icon: twitterIcon,
-		title: 'Twitter',
+		title: 'X',
 		href: `https://twitter.com/intent/tweet/?text=${productName}&hashtags=${'zapvi'}&via=${'zapvi'}&related=${'mobile cover, mousepad, phone grips, t-shirt, keychain, mobile accessories'}&url=${url}`
 	},
 	{
@@ -117,7 +117,7 @@ const copyToClipboard = (link) => {
 			</li>
 
 			<li class="p-2">
-				<Twitter
+				<X
 					class="share-button"
 					text="{productName}"
 					url="{url}"
