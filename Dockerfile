@@ -13,10 +13,10 @@ WORKDIR /usr/app
 COPY package.json ./
 COPY .npmrc ./
 ENV PUPPETEER_SKIP_DOWNLOAD="true"
-RUN pnpm install --force
+RUN pnpm ci --force
 RUN cp -R node_modules prod_node_modules
 COPY . .
-RUN pnpm run build
+RUN pnpm run build --force
 ##### Stage 2 - Production
 FROM builder as production
 WORKDIR /usr/app
