@@ -1,7 +1,7 @@
 <script>
 import { date } from '$lib/utils'
 import { page } from '$app/stores'
-import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import { LazyImg } from '$lib/components'
 import SEO from '$lib/components/SEO/index.svelte'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'
 
@@ -63,17 +63,18 @@ let seoProps = {
 						</div>
 					{/if}
 
-					<div class="prose mb-5 max-w-none text-justify sm:mb-10">
+					<div class="mb-5 sm:mb-10 prose max-w-none">
 						{@html data.blog?.content}
 					</div>
 
 					{#if data.blog?.tags?.length}
 						<ul class="flex flex-wrap gap-2 sm:gap-4">
-							{#each data.blog?.tags as f}
-								<button
-									class="rounded-full border bg-zinc-100 px-4 py-2 text-xs shadow hover:bg-zinc-200">
-									{f}
-								</button>
+							{#each data.blog?.tags as tag}
+								{#if tag.name && tag.name !== 'SCHOOL BOARDS'}
+									<li class="rounded border bg-zinc-200 px-4 py-2 text-xs font-semibold shadow">
+										#{tag.name}
+									</li>
+								{/if}
 							{/each}
 						</ul>
 					{/if}
@@ -89,7 +90,7 @@ let seoProps = {
 							<li>
 								<a
 									href="/blogs/{blog._id}"
-									aria-label="Click to route blog details page"
+									aria-label="Click to visit blog details page"
 									data-sveltekit-preload-data
 									class="group flex items-start gap-4 py-4">
 									<div class="h-16 w-24 overflow-hidden rounded border">
