@@ -36,8 +36,8 @@ export let blog = {}
 
 {#if blog}
 	<a
-		href="/blogs/{blog._id}"
-		aria-label="Click to route blog details page"
+		href="/blogs/{blog.slug}"
+		aria-label="Click to visit blog details page"
 		class="group w-full overflow-hidden rounded border shadow-md transition duration-300 hover:shadow-xl">
 		<div class="overflow-hidden">
 			{#if blog.img}
