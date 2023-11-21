@@ -118,7 +118,7 @@ let seoProps = {
 												{#each blog?.tags as tag}
 													{#if tag.name && tag.name !== 'SCHOOL BOARDS'}
 														<li
-															class="rounded border bg-zinc-200 px-2 py-1 text-xs font-semibold shadow">
+															class="max-w-max rounded bg-zinc-200 py-0.5 px-2 text-center text-xs font-semibold uppercase">
 															#{tag.name}
 														</li>
 													{/if}
