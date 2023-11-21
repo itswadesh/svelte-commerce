@@ -69,11 +69,12 @@ let seoProps = {
 
 					{#if data.blog?.tags?.length}
 						<ul class="flex flex-wrap gap-2 sm:gap-4">
-							{#each data.blog?.tags as f}
-								<button
-									class="rounded-full border bg-zinc-100 px-4 py-2 text-xs shadow hover:bg-zinc-200">
-									{f}
-								</button>
+							{#each data.blog?.tags as tag}
+								{#if tag.name && tag.name !== 'SCHOOL BOARDS'}
+									<li class="rounded border bg-zinc-200 px-4 py-2 text-xs font-semibold shadow">
+										#{tag.name}
+									</li>
+								{/if}
 							{/each}
 						</ul>
 					{/if}
