@@ -6,7 +6,6 @@ import ReelSlider from './ReelSlider.svelte'
 
 export let data
 
-
 // let videosData = [
 // 	{
 // 		video:
@@ -86,7 +85,6 @@ export let data
 
 // data.data = videosData
 
-
 let today = dayjs(new Date()).toISOString()
 
 let seoProps = {
@@ -105,7 +103,6 @@ let seoProps = {
 	timeToRead: 0,
 	updatedAt: today,
 	metaDescription: $page.data.store?.metaDescription,
-	canonical: `${$page?.url.href}`,
 	datePublished: today,
 	description: $page.data.store?.description,
 	dnsPrefetch: `//cdn.jsdelivr.net`,

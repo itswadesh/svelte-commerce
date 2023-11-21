@@ -44,7 +44,6 @@ let seoProps = {
 	// wlwmanifestXmlHref: '',
 	metaDescription: data.category?.metaDescription,
 	// article: false,
-	canonical: `${$page?.url.href}`,
 	datePublished: `${data.category?.publishedAt || '_'}`,
 	description: ` ${data.category?.description}`,
 	dnsPrefetch: `//cdn.jsdelivr.net`,

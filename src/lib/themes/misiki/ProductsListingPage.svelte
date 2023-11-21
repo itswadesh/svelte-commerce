@@ -40,7 +40,6 @@ let seoProps = {
 	timeToRead: 0,
 	updatedAt: `${data.products?.category?.updatedAt || '_'}`,
 	metaDescription: data.products?.category?.metaDescription,
-	canonical: `${$page?.url.href}`,
 	datePublished: `${data.products?.category?.publishedAt || '_'}`,
 	description: ` ${data.products?.category?.description}`,
 	dnsPrefetch: `//cdn.jsdelivr.net`,
