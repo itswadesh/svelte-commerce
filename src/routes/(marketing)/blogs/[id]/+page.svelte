@@ -115,15 +115,11 @@ let seoProps = {
 
 										{#if blog.tags?.length}
 											<ul class="flex flex-wrap items-center gap-1">
-												{#each blog.tags as tag}
+												{#each blog?.tags as tag}
 													{#if tag.name && tag.name !== 'SCHOOL BOARDS'}
-														<li>
-															<a
-																href="/blog/{tag.slug}"
-																aria-label="{tag.name || '##'}"
-																class="block max-w-max rounded bg-zinc-100 py-0.5 px-2 text-center text-xs font-semibold uppercase text-zinc-500 transition duration-300 hover:bg-zinc-200 hover:text-zinc-800">
-																{tag.name}
-															</a>
+														<li
+															class="rounded border bg-zinc-200 px-2 py-1 text-xs font-semibold shadow">
+															#{tag.name}
 														</li>
 													{/if}
 												{/each}
