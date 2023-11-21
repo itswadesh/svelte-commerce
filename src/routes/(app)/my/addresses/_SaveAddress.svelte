@@ -43,22 +43,33 @@ if (!shipping_address?.firstName) {
 shipping_address.zip = shipping_address.zip || shipping_address.pincode || ''
 shipping_address.phone = shipping_address.phone || $page?.data?.me?.phone || ''
 
+billing_address.zip = billing_address.zip || billing_address.pincode || ''
+billing_address.phone = billing_address.phone || $page?.data?.me?.phone || ''
+
 let err = null
-let formChanged = false
 let isSameAsBillingAddress = true
-let loading = false
-let loadingStates = false
-let selectedCountry = {}
-let showErrorMessage = false
-let showBillingErrorMessage = false
-let states = []
+
+// Shipping variables
+let loadingForShippingAddressStates = false
+let selectedShippingAddressCountry = {}
+let shippingAddressStates = []
+let showShippingAddressErrorMessage = false
+let zodShippingErrors = null
+
+// Billing variables
+let billingAddressStates = []
+let loadingForBillingAddressStates = false
+let selectedBillingAddressCountry = {}
+let showBillingAddressErrorMessage = false
 let zodBillingErrors = null
-let zodErrors = null
 
 onMount(async () => {
 	await invalidateAll()
+
+	// If only country is available then make it shipping and billing address country
 	if (countries?.length === 1) {
 		shipping_address.country = countries[0].code
+		billing_address.country = countries[0].code
 	} else if (countries?.length > 1) {
 		const dafaultCountry = countries.filter((c) => {
 			return c.dafault
@@ -68,14 +79,21 @@ onMount(async () => {
 
 		if (dafaultCountry[0]) {
 			shipping_address.country = dafaultCountry[0].code
+			billing_address.country = dafaultCountry[0].code
 		}
 	}
 
 	if (shipping_address.country) {
-		fetchStates(shipping_address.country)
-		getSelectedCountry()
+		fetchShippingAddressStates(shipping_address.country)
+		getShippingAddressSelectedCountry()
 	}
 
+	if (billing_address.country) {
+		fetchBillingAddressStates(shipping_address.country)
+		getBillingAddressSelectedCountry()
+	}
+
+	// Checks is the shipping address and billing address same or not
 	if (
 		shipping_address &&
 		billing_address &&
@@ -90,43 +108,83 @@ onMount(async () => {
 	}
 })
 
-function getSelectedCountry() {
-	selectedCountry = countries.filter((c) => {
+function getShippingAddressSelectedCountry() {
+	selectedShippingAddressCountry = countries.filter((c) => {
 		if (c.code === shipping_address.country) {
 			return c
 		}
-	})
+	})[0]
 
-	// console.log('selectedCountry', selectedCountry)
+	// console.log('selectedShippingAddressCountry', selectedShippingAddressCountry)
 }
 
-async function onCountryChange(country) {
+function getBillingAddressSelectedCountry() {
+	selectedBillingAddressCountry = countries.filter((c) => {
+		if (c.code === shipping_address.country) {
+			return c
+		}
+	})[0]
+
+	// console.log('selectedBillingAddressCountry', selectedBillingAddressCountry)
+}
+
+async function onShippingAddressCountryChange(country) {
 	shipping_address.state = null
-	fetchStates(country)
-	getSelectedCountry()
+	fetchShippingAddressStates(country)
+	getShippingAddressSelectedCountry()
 }
 
-async function fetchStates(country) {
+async function onBillingAddressCountryChange(country) {
+	billing_address.state = null
+	fetchBillingAddressStates(country)
+	getBillingAddressSelectedCountry()
+}
+
+async function fetchShippingAddressStates(country) {
 	try {
 		err = null
-		loadingStates = true
+		loadingForShippingAddressStates = true
 
-		states = await CountryService.fetchStates({
+		shippingAddressStates = await CountryService.fetchStates({
 			countryCode: country,
 			storeId: $page.data?.storeId,
 			origin: $page.data?.origin
 		})
 
-		states = states.map((s) => {
+		shippingAddressStates = shippingAddressStates.map((s) => {
 			s.name = s.name.toUpperCase()
 			return s
 		})
 
-		// console.log('states', states)
+		// console.log('shippingAddressStates', shippingAddressStates)
 	} catch (e) {
 		err = e
 	} finally {
-		loadingStates = false
+		loadingForShippingAddressStates = false
+	}
+}
+
+async function fetchBillingAddressStates(country) {
+	try {
+		err = null
+		loadingForBillingAddressStates = true
+
+		billingAddressStates = await CountryService.fetchStates({
+			countryCode: country,
+			storeId: $page.data?.storeId,
+			origin: $page.data?.origin
+		})
+
+		billingAddressStates = billingAddressStates.map((s) => {
+			s.name = s.name.toUpperCase()
+			return s
+		})
+
+		// console.log('billingAddressStates', billingAddressStates)
+	} catch (e) {
+		err = e
+	} finally {
+		loadingForBillingAddressStates = false
 	}
 }
 
@@ -138,7 +196,8 @@ async function fetchStateAndCity(zip, addresstype) {
 
 	try {
 		err = null
-		loadingStates = true
+		loadingForShippingAddressStates = true
+		loadingForBillingAddressStates = true
 
 		let { city, state } = shipping_address
 
@@ -150,109 +209,56 @@ async function fetchStateAndCity(zip, addresstype) {
 		// console.log('zipInfo', zipInfo)
 		// console.log('addresstype', addresstype)
 
-		if (addresstype === 'billing') {
-			billing_address.city = zipInfo.District || ''
-			billing_address.state = zipInfo.StateName || ''
-		} else {
+		if (addresstype === 'shipping') {
 			shipping_address.city = zipInfo.District || ''
 			shipping_address.state = zipInfo.StateName || ''
+		} else if (addresstype === 'billing') {
+			billing_address.city = zipInfo.District || ''
+			billing_address.state = zipInfo.StateName || ''
 		}
 	} catch (e) {
 		err = e
 		// console.log(e)
 		toast(e.message.error, 'error')
 	} finally {
-		loadingStates = false
+		loadingForShippingAddressStates = false
+		loadingForBillingAddressStates = false
 	}
 }
-
-function removeSpacesAndAlphabets(input) {
-	// Remove spaces and alphabetic characters using regular expression
-	const result = input.replace(/[a-zA-Z ]/g, '')
-
-	return result
-}
-
-async function SaveAddress(address) {
-	try {
-		loading = true
-		err = null
-
-		let id = address._id || address.id || 'new'
-		let { city, country, email, firstName, lastName, phone, state, zip } = address
-
-		if (phone.startsWith('0')) {
-			phone = phone.substring(1)
-		}
-
-		phone = removeSpacesAndAlphabets(phone)
-
-		getSelectedCountry()
-		if (!phone.startsWith('+')) {
-			phone = (selectedCountry[0].dialCode || '+91') + phone
-		}
-
-		toast('Saving Address Info...', 'info')
-
-		const newAddress = await AddressService.saveAddress({
-			id,
-			address: address.address, // This is to ignore conflicts
-			city: city,
-			country: country,
-			email: email,
-			firstName: firstName,
-			lastName: lastName,
-			phone: phone,
-			state: state,
-			zip: zip,
-			storeId: $page.data.storeId,
-			origin: $page.data.origin
-		})
-
-		const newAddressId = newAddress._id || newAddress.id
-
-		toast('Address Info Saved.', 'success')
-		dispatch('saved', { id, newAddressId })
-	} catch (e) {
-		// console.log('error', e)
-		err = e?.body
-		toast(err, 'error')
-	} finally {
-		loading = false
-		formChanged = false
-	}
-}
-
-// $: // console.log('refinedAddress', JSON.stringify(refinedAddress))
 
 function validatePhoneNumber(phoneNumber, addresstype) {
-	// Remove any spaces from the phone number
-	phoneNumber = phoneNumber.replace(/\s/g, '')
+	if ($page.data.store?.storeCountry?.code === 'IN') {
+		// Remove any spaces from the phone number
+		phoneNumber = phoneNumber.replace(/\s/g, '')
 
-	// Remove any leading '0' or '+91'
-	if (phoneNumber.startsWith('0')) {
-		phoneNumber = phoneNumber.substring(1)
-	} else if (phoneNumber.startsWith('+91')) {
-		phoneNumber = phoneNumber.substring(3)
-	}
-
-	// Check if the resulting number is numeric and has a valid length
-	if (/^\d+$/.test(phoneNumber) && phoneNumber.length === 10) {
-		if (addresstype === 'billing') {
-			showBillingErrorMessage = false
-		} else {
-			showErrorMessage = false
+		// Remove any leading '0' or '+91'
+		if (phoneNumber.startsWith('0')) {
+			phoneNumber = phoneNumber.substring(1)
+		} else if (phoneNumber.startsWith('+91')) {
+			phoneNumber = phoneNumber.substring(3)
 		}
 
+		// Check if the resulting number is numeric and has a valid length
+		if (/^\d+$/.test(phoneNumber) && phoneNumber.length === 10) {
+			if (addresstype === 'shipping') {
+				showShippingAddressErrorMessage = false
+			} else if (addresstype === 'billing') {
+				showBillingAddressErrorMessage = false
+			}
+
+			return true
+		}
+
+		if (addresstype === 'shipping') {
+			showShippingAddressErrorMessage = true
+		} else if (addresstype === 'billing') {
+			showBillingAddressErrorMessage = true
+		}
+
+		return false
+	} else {
 		return true
 	}
-
-	if (addresstype === 'billing') {
-		showBillingErrorMessage = true
-	} else {
-		showErrorMessage = true
-	}
-	return false
 }
 </script>
 
@@ -296,7 +302,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 					}
 				} else if (result?.error) {
 					shipping_address.phone = ''
-					zodErrors = result?.error?.errors || null
+					zodShippingErrors = result?.error?.errors || null
 					zodBillingErrors = result?.error?.billing_errors || null
 					err = result?.error?.message || null
 					// toast(result?.error?.message, 'error')
@@ -322,8 +328,8 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 						autoFocus
 						required />
 
-					{#if zodErrors?.firstName}<p class="mt-1 text-red-600">
-							{zodErrors?.firstName}
+					{#if zodShippingErrors?.firstName}<p class="mt-1 text-red-600">
+							{zodShippingErrors?.firstName}
 						</p>{/if}
 				</div>
 			</div>
@@ -343,7 +349,9 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 						bind:value="{shipping_address.lastName}"
 						required />
 
-					{#if zodErrors?.lastName}<p class="mt-1 text-red-600">{zodErrors?.lastName}</p>{/if}
+					{#if zodShippingErrors?.lastName}<p class="mt-1 text-red-600">
+							{zodShippingErrors?.lastName}
+						</p>{/if}
 				</div>
 			</div>
 
@@ -359,7 +367,9 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 						bind:value="{shipping_address.email}"
 						required />
 
-					{#if zodErrors?.email}<p class="mt-1 text-red-600">{zodErrors?.email}</p>{/if}
+					{#if zodShippingErrors?.email}<p class="mt-1 text-red-600">
+							{zodShippingErrors?.email}
+						</p>{/if}
 				</div>
 			</div>
 
@@ -378,16 +388,18 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 						placeholder="Enter Phone"
 						maxlength="17"
 						bind:value="{shipping_address.phone}"
-						on:input="{() => validatePhoneNumber(shipping_address.phone, '')}"
+						on:input="{() => validatePhoneNumber(shipping_address.phone, 'shipping')}"
 						required />
 
 					<!-- <p class="mt-1">E.g.+nnxxxxxxxxxx</p> -->
 
-					{#if showErrorMessage}
+					{#if showShippingAddressErrorMessage}
 						<p id="phone-warning" class="mt-1 text-red-600">Please enter vaild phone number</p>
 					{/if}
 
-					{#if zodErrors?.phone}<p class="mt-1 text-red-600">{zodErrors?.phone}</p>{/if}
+					{#if zodShippingErrors?.phone}<p class="mt-1 text-red-600">
+							{zodShippingErrors?.phone}
+						</p>{/if}
 				</div>
 			</div>
 
@@ -403,7 +415,9 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 				<div class="w-full">
 					<Textarea placeholder="Enter Address" bind:value="{shipping_address.address}" required />
 
-					{#if zodErrors?.address}<p class="mt-1 text-red-600">{zodErrors?.address}</p>{/if}
+					{#if zodShippingErrors?.address}<p class="mt-1 text-red-600">
+							{zodShippingErrors?.address}
+						</p>{/if}
 				</div>
 			</div>
 
@@ -422,10 +436,10 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 						placeholder="Enter Postal Code/Pincode/Zipcode"
 						maxlength="6"
 						bind:value="{shipping_address.zip}"
-						on:blur="{() => fetchStateAndCity(shipping_address.zip, '')}"
+						on:blur="{() => fetchStateAndCity(shipping_address.zip, 'shipping')}"
 						required />
 
-					{#if zodErrors?.zip}<p class="mt-1 text-red-600">{zodErrors?.zip}</p>{/if}
+					{#if zodShippingErrors?.zip}<p class="mt-1 text-red-600">{zodShippingErrors?.zip}</p>{/if}
 				</div>
 			</div>
 
@@ -445,13 +459,15 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 						bind:value="{shipping_address.city}"
 						required />
 
-					{#if zodErrors?.city}<p class="mt-1 text-red-600">{zodErrors?.city}</p>{/if}
+					{#if zodShippingErrors?.city}<p class="mt-1 text-red-600">
+							{zodShippingErrors?.city}
+						</p>{/if}
 				</div>
 			</div>
 
 			<!-- State -->
 
-			{#if states?.length}
+			{#if shippingAddressStates?.length}
 				<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
 					<h6 class="sm:w-60 sm:shrink-0">
 						State/Province
@@ -463,10 +479,10 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 						<select
 							class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
 							bind:value="{shipping_address.state}"
-							disabled="{!shipping_address.country || loadingStates}"
+							disabled="{!shipping_address.country || loadingForShippingAddressStates}"
 							required>
 							<option value="{null}" disabled selected>-- Select a State --</option>
-							{#each states as s}
+							{#each shippingAddressStates as s}
 								{#if s}
 									<option value="{s.name.toUpperCase()}">
 										{s.name}
@@ -475,7 +491,9 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 							{/each}
 						</select>
 
-						{#if zodErrors?.state}<p class="mt-1 text-red-600">{zodErrors?.state}</p>{/if}
+						{#if zodShippingErrors?.state}<p class="mt-1 text-red-600">
+								{zodShippingErrors?.state}
+							</p>{/if}
 					</div>
 				</div>
 			{/if}
@@ -495,7 +513,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 							disabled="{countries?.length === 1}"
 							class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
 							bind:value="{shipping_address.country}"
-							on:change="{() => onCountryChange(shipping_address.country)}"
+							on:change="{() => onShippingAddressCountryChange(shipping_address.country)}"
 							required>
 							<option value="{null}" disabled selected>-- Select a Country --</option>
 
@@ -508,7 +526,9 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 							{/each}
 						</select>
 
-						{#if zodErrors?.country}<p class="mt-1 text-red-600">{zodErrors?.country}</p>{/if}
+						{#if zodShippingErrors?.country}<p class="mt-1 text-red-600">
+								{zodShippingErrors?.country}
+							</p>{/if}
 					{:else}
 						<a
 							href="/contact-us"
@@ -623,7 +643,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 
 								<!-- <p class="mt-1">E.g.+nnxxxxxxxxxx</p> -->
 
-								{#if showBillingErrorMessage}
+								{#if showBillingAddressErrorMessage}
 									<p id="phone-warning" class="mt-1 text-red-600">
 										Please enter vaild phone number
 									</p>
@@ -704,7 +724,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 
 						<!-- State -->
 
-						{#if states?.length}
+						{#if billingAddressStates?.length}
 							<div class="flex flex-col sm:flex-row gap-2 sm:gap-5">
 								<h6 class="sm:w-60 sm:shrink-0">
 									State/Province
@@ -716,10 +736,10 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 									<select
 										class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
 										bind:value="{billing_address.state}"
-										disabled="{!billing_address.country || loadingStates}"
+										disabled="{!billing_address.country || loadingForBillingAddressStates}"
 										required>
 										<option value="{null}" disabled selected>-- Select a State --</option>
-										{#each states as s}
+										{#each billingAddressStates as s}
 											{#if s}
 												<option value="{s.name.toUpperCase()}">
 													{s.name}
@@ -750,7 +770,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 										disabled="{countries?.length === 1}"
 										class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
 										bind:value="{billing_address.country}"
-										on:change="{() => onCountryChange(billing_address.country)}"
+										on:change="{() => onBillingAddressCountryChange(billing_address.country)}"
 										required>
 										<option value="{null}" disabled selected>-- Select a Country --</option>
 
@@ -791,15 +811,17 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 				value="{billing_address.firstName || null}" />
 			<input
 				type="hidden"
-				name="billingAddressId"
-				value="{billing_address.id || billing_address._id || null}" />
-			<input
-				type="hidden"
 				name="billingAddressLastName"
 				value="{billing_address.lastName || null}" />
 			<input type="hidden" name="billingAddressPhone" value="{billing_address.phone || null}" />
-			<input type="hidden" name="billingAddressSelectedCountry" value="{selectedCountry || null}" />
-			<input type="hidden" name="showBillingErrorMessage" bind:value="{showBillingErrorMessage}" />
+			<input
+				type="hidden"
+				name="selectedBillingAddressCountry"
+				value="{selectedBillingAddressCountry || null}" />
+			<input
+				type="hidden"
+				name="showBillingAddressErrorMessage"
+				bind:value="{showBillingAddressErrorMessage}" />
 			<input type="hidden" name="billingAddressState" value="{billing_address.state || null}" />
 			<input type="hidden" name="billingAddressZip" value="{billing_address.zip || null}" />
 		{/if}
@@ -812,17 +834,22 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 		<input type="hidden" name="id" value="{shipping_address.id || shipping_address._id || null}" />
 		<input type="hidden" name="lastName" value="{shipping_address.lastName || null}" />
 		<input type="hidden" name="phone" value="{shipping_address.phone || null}" />
-		<input type="hidden" name="selectedCountry" value="{selectedCountry || null}" />
-		<input type="hidden" name="showErrorMessage" bind:value="{showErrorMessage}" />
+		<input
+			type="hidden"
+			name="selectedShippingAddressCountry"
+			value="{selectedShippingAddressCountry || null}" />
+		<input
+			type="hidden"
+			name="showShippingAddressErrorMessage"
+			bind:value="{showShippingAddressErrorMessage}" />
 		<input type="hidden" name="state" value="{shipping_address.state || null}" />
 		<input type="hidden" name="zip" value="{shipping_address.zip || null}" />
 
 		<PrimaryButton
 			type="submit"
-			{loading}
-			disabled="{loading || showErrorMessage}"
+			disabled="{showShippingAddressErrorMessage || showBillingAddressErrorMessage}"
 			class="{$page.data.me ? 'w-60' : 'w-80'}"
-			on:click="{() => (zodErrors = null)}">
+			on:click="{() => (zodShippingErrors = null)}">
 			{#if $page.data.me}
 				Save Address
 			{:else}
