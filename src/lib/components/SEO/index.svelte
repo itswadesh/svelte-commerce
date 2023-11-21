@@ -1,18 +1,10 @@
 <script lang="ts">
-import {
-	authorInfo,
-	WWW_URL,
-	entity,
-	ogLanguage,
-	siteLanguage,
-	siteShortTitle,
-	siteTitle
-} from '$lib/config'
+import { authorInfo, WWW_URL, entity, ogLanguage, siteLanguage, siteShortTitle } from '$lib/config'
 import OpenGraph from './OpenGraph.svelte'
 import Product from './Product.svelte'
 import SchemaOrg from './SchemaOrg.svelte'
-import Twitter from './Twitter.svelte'
-
+import X from './X.svelte'
+import { page } from '$app/stores'
 const {
 	author,
 	facebookAuthorPage,
@@ -33,7 +25,6 @@ export let alternateXml = { title: '', href: '' }
 export let article = false
 export let brand = 'LRNR'
 export let breadcrumbs = []
-export let canonical = ''
 export let caption = ''
 export let category = ''
 export let contentUrl = ''
@@ -59,7 +50,7 @@ export let image = null
 export let keywords = ''
 export let lastUpdated = null
 export let logo = ''
-export let metadescription = ''
+export let metaDescription = ''
 export let msapplicationTileImage = ''
 export let ogImage = { url: '', alt: defaultAlt, width: null, height: null }
 export let ogImageSecureUrl = ''
@@ -91,12 +82,13 @@ export let wlwmanifestXmlHref = ''
 
 const url = `${WWW_URL}/${slug}`
 
+let canonical = `${$page?.url.origin}${$page?.url.pathname}`
 let pageTitle
 
 if (title) {
-	pageTitle = `${title} - ${siteTitle}`
+	pageTitle = `${title} - ${$page.data?.store?.websiteName}`
 } else {
-	pageTitle = `${siteTitle}`
+	pageTitle = `${$page.data?.store?.websiteName}`
 }
 
 const openGraphProps = {
@@ -105,10 +97,10 @@ const openGraphProps = {
 	lastUpdated,
 	image: ogImage,
 	squareImage: ogSquareImage,
-	description,
+	metaDescription,
 	ogLanguage,
 	pageTitle,
-	siteTitle,
+	siteTitle: $page.data?.store?.websiteName,
 	url,
 	...(article ? { datePublished, lastUpdated, facebookPageName, facebookAuthorPage } : {})
 }
@@ -127,7 +119,7 @@ const schemaOrgProps = {
 	linkedinProfile,
 	name: productName,
 	siteLanguage,
-	siteTitle,
+	siteTitle: $page.data?.store?.websiteName,
 	siteTitleAlt: siteShortTitle,
 	siteUrl: WWW_URL,
 	telegramUsername,
@@ -150,7 +142,7 @@ const schemaOrgProps = {
 	id,
 	image,
 	logo,
-	metadescription,
+	metaDescription,
 	openingHours,
 	popularity,
 	postalCode,
@@ -167,7 +159,7 @@ const schemaOrgProps = {
 }
 const twitterProps = {
 	title: pageTitle,
-	description: description,
+	description: metaDescription,
 	article,
 	author,
 	twitterUsername,
@@ -191,7 +183,7 @@ const productProps = {
 <svelte:head>
 	<title>{pageTitle}</title>
 
-	<meta name="description" content="{description}" />
+	<meta name="description" content="{metaDescription}" />
 
 	<meta name="keywords" content="{keywords}" />
 
@@ -210,7 +202,7 @@ const productProps = {
 	<!-- <html lang="{siteLanguage}"></html> -->
 </svelte:head>
 
-<Twitter {...twitterProps} />
+<X {...twitterProps} />
 
 <Product {...productProps} />
 
