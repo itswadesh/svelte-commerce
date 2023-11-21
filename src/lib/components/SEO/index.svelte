@@ -25,7 +25,6 @@ export let alternateXml = { title: '', href: '' }
 export let article = false
 export let brand = 'LRNR'
 export let breadcrumbs = []
-export let canonical = ''
 export let caption = ''
 export let category = ''
 export let contentUrl = ''
@@ -83,7 +82,9 @@ export let wlwmanifestXmlHref = ''
 
 const url = `${WWW_URL}/${slug}`
 
+let canonical = `${$page?.url.origin}${$page?.url.pathname}`
 let pageTitle
+
 if (title) {
 	pageTitle = `${title} - ${$page.data?.store?.websiteName}`
 } else {

@@ -115,7 +115,6 @@ let seoProps = {
 	timeToRead: 0,
 	updatedAt: `${data.product?.updatedAt || '_'}`,
 	metaDescription: data.product?.metaDescription,
-	canonical: `${$page?.url.href}`,
 	datePublished: `${data.product?.publishedAt || '_'}`,
 	description: ` ${data.product?.description}`,
 	dnsPrefetch: `//cdn.jsdelivr.net`,
@@ -201,7 +200,7 @@ if (data.product?.tags?.length) {
 
 	// console.log('Ribbon tags =', ribbonTags)
 }
-let store = {} 
+let store = {}
 onMount(async () => {
 	if (browser) {
 		storeStore.subscribe((value) => (store = value))

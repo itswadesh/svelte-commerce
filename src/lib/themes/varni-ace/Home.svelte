@@ -43,7 +43,6 @@ let seoProps = {
 	timeToRead: 0,
 	updatedAt: today,
 	metaDescription: $page.data.store?.description,
-	canonical: `${$page?.url.href}`,
 	datePublished: today,
 	description: $page.data.store?.description,
 	dnsPrefetch: `//cdn.jsdelivr.net`,
