@@ -543,7 +543,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 
 		<!-- Billing address for guest checkout -->
 
-		{#if !$page.data.me}
+		{#if $page.data.store?.b2b && $page.data.store?.b2b?.allowDifferentBillingAddress && $page.data.store?.b2b?.allowDifferentBillingAddress?.val === true}
 			<label class="mb-5 lg:mb-10 flex items-center gap-2 text-lg font-semibold">
 				<input type="checkbox" class="h-5 w-5" bind:checked="{isSameAsBillingAddress}" />
 
