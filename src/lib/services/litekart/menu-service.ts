@@ -21,6 +21,6 @@ export const fetchMenuData = async ({
 
 		return data.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }

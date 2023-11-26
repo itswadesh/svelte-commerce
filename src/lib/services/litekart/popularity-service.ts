@@ -23,6 +23,6 @@ export const updatePopulatiry = async ({
 
         return res
     } catch (err) {
-        throw error(err.status, err.message)
+        error(err.status, err.message);
     }
 }

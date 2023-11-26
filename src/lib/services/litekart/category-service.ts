@@ -8,7 +8,6 @@ export const fetchFooterCategories = async ({
 	isCors = false,
 	origin,
 	megamenu = false,
-	server = false,
 	sid = null,
 	storeId
 }) => {
@@ -29,7 +28,7 @@ export const fetchFooterCategories = async ({
 
 		return data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }
 
@@ -38,12 +37,11 @@ export const fetchCategory = async ({
 	id,
 	isCors = false,
 	origin,
-	server = false,
 	sid = null,
 	storeId
 }) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		if (isServer || isCors) {
 			res = await getBySid(`es/categories/${id}?store=${storeId}&children=${children}`, sid)
@@ -53,22 +51,23 @@ export const fetchCategory = async ({
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }
 
 export const fetchAllCategories = async ({
 	featured = false,
 	isCors = false,
+	limit = null,
 	origin,
-	server = false,
 	sid = null,
 	storeId
 }) => {
 	try {
 		let res = {}
 
-		let catQ = `categories?store=${storeId}`
+		let catQ = `categories?store=${storeId}&page=0&limit=${limit || '1000'}`
+
 		if (featured) {
 			catQ += '&featured=true'
 		}
@@ -84,7 +83,7 @@ export const fetchAllCategories = async ({
 
 		return { data, pageSize, currentPage }
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }
 
@@ -92,12 +91,11 @@ export const fetchAllProductsOfCategories = async ({
 	featured = false,
 	isCors = false,
 	origin,
-	server = false,
 	sid = null,
 	storeId
 }) => {
 	try {
-		let res: any = {}
+		let res = {}
 		let products = []
 		let productsCount = 0
 		let currentPage = 0
@@ -123,7 +121,7 @@ export const fetchAllProductsOfCategories = async ({
 
 		return { products, productsCount, currentPage, facets, err }
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }
 
@@ -151,6 +149,6 @@ export const fetchMegamenuData = async ({
 
 		return data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }

@@ -4,7 +4,7 @@ import { getBySid } from '$lib/utils/server'
 
 const isServer = import.meta.env.SSR
 
-export const fetchVendors = async ({ origin, storeId, server = false, sid = null }) => {
+export const fetchVendors = async ({ origin, storeId, sid = null }) => {
 	try {
 		let res: any = {}
 
@@ -16,11 +16,11 @@ export const fetchVendors = async ({ origin, storeId, server = false, sid = null
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }
 
-export const fetchVendor = async ({ origin, slug, storeId, server = false, sid = null }) => {
+export const fetchVendor = async ({ origin, slug, storeId, sid = null }) => {
 	try {
 		let res: any = {}
 
@@ -32,20 +32,13 @@ export const fetchVendor = async ({ origin, slug, storeId, server = false, sid =
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }
 
-export const fetchProductsOfVendor = async ({
-	slug,
-	origin,
-	page,
-	server = false,
-	sid = null,
-	storeId
-}) => {
+export const fetchProductsOfVendor = async ({ slug, origin, page, sid = null, storeId }) => {
 	try {
-		let res: any = {}
+		let res = {}
 
 		if (isServer) {
 			res = await getBySid(`es/products?vendors=${slug}&page=${page}&store=${storeId}`, sid)
@@ -55,6 +48,6 @@ export const fetchProductsOfVendor = async ({
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }

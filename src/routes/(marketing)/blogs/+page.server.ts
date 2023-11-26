@@ -1,23 +1,30 @@
-import { gett } from '$lib/utils'
+import { BlogService } from '$lib/services'
 
-export async function load({ url, params, fetch, parent, cookies }) {
-	const { store } = await parent()
-	let loading = false,
-		err,
-		blogs,
-		count
+export async function load({
+	cookies,
+	fetch,
+	locals,
+	params,
+	parent,
+	url,
+}) {
+	const { me, origin, sid, store, storeId } = locals
+
+	const currentPage = +url.searchParams.get('page') || 1
+	const query = url.searchParams
+	let blogs = {}
+	let err = null
 
 	try {
-		loading = true
-		const res = await gett(`blogs?store=${store?.id}`)
-		blogs = res?.data
-		count = res?.count
+		blogs = await BlogService.fetchBlogs({
+			origin,
+			query: query.toString(),
+			storeId
+		})
 	} catch (e) {
 		err = e
 	} finally {
-		loading = false
 	}
-	// cookies.set('cache-control', 'public, max-age=200')
 
-	return { loading, err, blogs, count }
+	return { err, blogs, currentPage }
 }

@@ -5,19 +5,18 @@ import type { Error, ProductReview } from '$lib/types'
 const isServer = import.meta.env.SSR
 
 export const fetchReviews = async ({
+	isCors = false,
 	origin,
 	storeId,
-	pid,
 	search,
 	sort,
 	currentPage,
-	server = false,
 	sid = null
 }: any) => {
 	try {
 		let res: any = {}
 
-		if (isServer) {
+		if (isServer || isCors) {
 			res = await getBySid(
 				`es/reviews?search=${search || ''
 				}&sort=${sort}&page=${currentPage}&store=${storeId}`,
@@ -39,17 +38,17 @@ export const fetchReviews = async ({
 			page: res.page
 		}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }
 
 // Fetch product reviews
 
 export const fetchProductReviews = async ({
+	isCors = false,
 	origin,
 	page,
 	slug,
-	server = false,
 	sid = null,
 	storeId
 }: any) => {
@@ -58,7 +57,7 @@ export const fetchProductReviews = async ({
 		// : ProductReviews[]
 		let productReviews: ProductReview = []
 
-		if (isServer) {
+		if (isServer || isCors) {
 			productReviewsRes = await getBySid(
 				`reviews/product-reviews?slug=${slug}&page=${page}&sort=-createdAt&store=${storeId}`,
 				sid
@@ -107,6 +106,6 @@ export const saveReview = async ({
 
 		return res
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }

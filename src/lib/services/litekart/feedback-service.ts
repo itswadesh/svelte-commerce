@@ -6,7 +6,6 @@ export const fetchFeedbacks = async ({
 	origin,
 	query,
 	storeId,
-	server = false,
 	sid = null
 }: any) => {
 	try {
