@@ -264,3 +264,47 @@ export const updateProfileService = async ({
 		throw error(e.status, e.data?.message || e.message)
 	}
 }
+
+export const verifyEmail = async ({
+	id,
+	expires,
+	signature,
+	token,
+	origin,
+	sid = null,
+	storeId
+}) => {
+	try {
+		let res = {}
+
+		if (isServer) {
+			res = await postBySid(
+				`verify-email`,
+				{
+					id,
+					expires,
+					signature,
+					token,
+					store: storeId
+				},
+				sid
+			)
+		} else {
+			res = await post(
+				`verify-email`,
+				{
+					id,
+					expires,
+					signature,
+					token,
+					store: storeId
+				},
+				origin
+			)
+		}
+
+		return res
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
+	}
+}
