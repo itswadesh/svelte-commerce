@@ -61,7 +61,8 @@ const payWithStripe = async (pm: PaymentMethod) => {
 		const res: any = await OrdersService.stripeCheckoutService({
 			paymentMethodId,
 			address,
-			storeId: $page.data.storeId,
+			cartId: $page.data.cartId,
+			storeId: $page.data.store.id,
 			origin: $page.data.origin
 		})
 		if (res.errors) {
@@ -156,7 +157,11 @@ async function loadStripeElements() {
 		{/if}
 
 		<label for="mount-point-for-stripe-elements" class="font-semibold">
-			{#if stripeCardMounting} Please wait... {:else} Enter Card Details {/if}
+			{#if stripeCardMounting}
+				Please wait...
+			{:else}
+				Enter Card Details
+			{/if}
 		</label>
 
 		<div id="mount-point-for-stripe-elements">
@@ -167,7 +172,7 @@ async function loadStripeElements() {
 
 		<PrimaryButton
 			type="submit"
-			loading="{loading}"
+			{loading}
 			disabled="{loading || !stripeReady || !isCardValid}"
 			class="w-60">
 			Make Payment
