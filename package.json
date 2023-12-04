@@ -10,6 +10,8 @@
 		"update": "npm exec -- npx ncu -u -p npm i",
 		"preview": "vite preview",
 		"test": "playwright test --ui",
+		"test-local": "playwright test",
+		"test-gen": "npx playwright codegen localhost:3000",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
