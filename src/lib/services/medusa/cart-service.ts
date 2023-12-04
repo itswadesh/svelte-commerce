@@ -21,13 +21,13 @@ export const fetchRefreshCart = async ({
 	origin,
 	storeId,
 	cookies,
+	cartId,
 	server = false,
 	sid = null
 }: any) => {
 	try {
 		let res: any = {}
-		const cart_id = cookies.get('cartId')
-
+		const cart_id = cartId
 		if (!cart_id || cart_id == 'undefined') return []
 
 		const cartRes = await getMedusajsApi(`carts/${cart_id}`)
