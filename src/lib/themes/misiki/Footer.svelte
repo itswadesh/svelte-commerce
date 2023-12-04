@@ -33,7 +33,7 @@ import { browser } from '$app/environment'
 // import { storeStore } from '$lib/store/store'
 
 export let content = ``
-export let me
+// export let me
 export let megamenu = []
 export let menu = []
 
