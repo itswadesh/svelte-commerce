@@ -3,8 +3,8 @@ import { error, redirect } from '@sveltejs/kit'
 
 export const prerender = false
 
-export async function load({ url, parent }) {
-	const { me, sid, store, storeId, origin, cartId } = await parent()
+export async function load({ locals, url, parent }) {
+	const { me, sid, store, storeId, origin, cartId } = locals
 
 	if (!me || !sid) {
 		const redirectUrl = `/auth/login?ref=${url?.pathname}${url?.search || ''}`
@@ -19,6 +19,7 @@ export async function load({ url, parent }) {
 		const { myAddresses, selectedAddress } = await AddressService.fetchAddresses({
 			storeId,
 			origin,
+			server: true,
 			sid
 		})
 
@@ -52,6 +53,7 @@ export async function load({ url, parent }) {
 			url: url.href
 		}
 	} catch (e) {
+		// console.log('errzzzzzzzzzzzzzzzzzz', e);
 		if (e.status === 307 && e.location === '/cart') {
 			throw redirect(307, '/cart')
 		} else if (e.status === 401 || e.status === 307) {
