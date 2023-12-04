@@ -9,21 +9,21 @@
 // import FetchInit from '$lib/components/FetchInit.svelte'
 import './../app.css'
 import { BackToTop, LazyImg } from '$lib/components' // Can not dynamically import Google Analytics, it throws gtag not found error, not even party town
+import { beforeNavigate } from '$app/navigation'
 import { browser } from '$app/environment'
 import { FacebookPixel } from '@beyonk/svelte-facebook-pixel'
+import { getCartFromStore } from '$lib/store/cart'
+import { getStoreFromStore } from '$lib/store/store'
 import { GoogleAnalytics } from '@beyonk/svelte-google-analytics'
 import { navigating } from '$app/stores'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { ToastContainer, FlatToast } from 'svelte-toasts'
+import { updated } from '$app/stores'
 import noStoreFound from '$lib/assets/no/no_store_found.png'
 import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 import storeClosed from '$lib/assets/store-closed.png'
 import whatsappIcon from '$lib/assets/social-media/whatsapp.png'
-import { getCartFromStore } from '$lib/store/cart'
-import { getStoreFromStore } from '$lib/store/store'
-import { beforeNavigate } from '$app/navigation'
-import { updated } from '$app/stores'
 
 export let data
 
@@ -78,7 +78,7 @@ onMount(async () => {
 		rel="stylesheet" />
 </svelte:head>
 
-<svelte:window bind:innerWidth="{innerWidth}" />
+<svelte:window bind:innerWidth />
 <main style="font-family: {customfont};">
 	{#if store?.googleAnalytics?.active}
 		<GoogleAnalytics properties="{[store?.googleAnalytics.id.val]}" />
@@ -139,7 +139,7 @@ onMount(async () => {
 		{/if}
 
 		<ToastContainer let:data>
-			<FlatToast data="{data}" />
+			<FlatToast {data} />
 		</ToastContainer>
 
 		<!-- {#if ReloadPrompt}

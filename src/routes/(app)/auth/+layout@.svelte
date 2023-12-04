@@ -13,9 +13,15 @@ import { navigating, page } from '$app/stores'
 import { scale } from 'svelte/transition'
 import { PageTransitions } from '$lib/components'
 import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
+
+export let data
+
+let customfont = data.store?.fontFamily || ''
 </script>
 
-<section class="minimum-width-rem bg-white font-sans antialiased">
+<section
+	class="minimum-width-rem bg-white font-sans antialiased"
+	style="font-family: {customfont};">
 	<!-- Page transition commented because it was not removing the layout from the login page after navigating to my/index page -->
 
 	<PageTransitions url="{$page.data?.url}">

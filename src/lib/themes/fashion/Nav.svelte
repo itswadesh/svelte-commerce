@@ -757,7 +757,7 @@ async function getCategories() {
 	</div>
 {/if}
 {#if show}
-	<AutosuggestModal bind:show="{show}" />
+	<AutosuggestModal bind:show />
 {/if}
 
 <!-- Sidebar -->

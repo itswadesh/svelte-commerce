@@ -140,7 +140,7 @@ function handleLineLoader() {
 		{#if IMAGE_CDN_PROVIDER === 'imagekit'}
 			{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } )?.includes('http')}
 				<img
-					alt="{alt}"
+					{alt}
 					src="/placeholder.png"
 					data-src="{`${getCdnImageUrl({
 						src,
@@ -155,7 +155,7 @@ function handleLineLoader() {
 					)[1]}] lazy {clazz}" />
 			{:else}
 				<img
-					alt="{alt}"
+					{alt}
 					src="/placeholder.png"
 					data-src="{`${IMAGE_CDN_URL}${getCdnImageUrl({
 						src,
@@ -176,7 +176,7 @@ function handleLineLoader() {
 		{:else if IMAGE_CDN_PROVIDER === 'thumbor'}
 			{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } )?.includes('http')}
 				<img
-					alt="{alt}"
+					{alt}
 					src="/placeholder.png"
 					data-src="{`${getCdnImageUrl({
 						src,
@@ -191,7 +191,7 @@ function handleLineLoader() {
 					)[1]}] lazy {clazz}" />
 			{:else}
 				<img
-					alt="{alt}"
+					{alt}
 					src="/placeholder.png"
 					data-src="{`${IMAGE_CDN_URL}/fit-in/${w}x${h}${getCdnImageUrl({
 						src,
