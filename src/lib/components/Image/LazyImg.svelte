@@ -271,6 +271,19 @@ function handleLineLoader() {
 				<span class="loader-line"></span>
 			</div> -->
 		{/if}
+	{:else}
+		<img
+			{alt}
+			src="/placeholder.png"
+			data-src="{`${getCdnImageUrl({
+				src,
+				IMAGE_CDN_URL,
+				IMAGE_CDN_PROVIDER,
+				NO_QUERY: true
+			})}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(':', '-')}`}"
+			height="{h}"
+			width="{w}"
+			class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(':')[1]}] lazy {clazz}" />
 	{/if}
 
 	<div class="absolute inset-0 flex itmes-center justify-center">
