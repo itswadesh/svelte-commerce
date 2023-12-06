@@ -111,24 +111,28 @@ export const codCheckout = async ({
 	sid = null,
 	storeId
 }) => {
+	console.log('origin', origin);
 	try {
 		let res = {}
 
-		res = await post(
-			`orders/checkout/cod?cart_id=${cartId}`,
-			{
-				address,
-				cart_id: cartId,
-				comment,
-				paymentMethod,
-				prescription,
-				store: storeId
-			},
-			origin
-		)
+		if (!isServer) {
+			res = await post(
+				`orders/checkout/cod?cart_id=${cartId}`,
+				{
+					address,
+					cart_id: cartId,
+					comment,
+					paymentMethod,
+					prescription,
+					store: storeId
+				},
+				origin
+			)
+		}
 
 		return res || {}
 	} catch (e) {
+		console.log('zzzzzzzzzzzzzzzzzz', e);
 		throw error(e.status, e.data?.message || e.message)
 	}
 }
@@ -163,6 +167,7 @@ export const phonepeCheckout = async ({
 		throw error(e.status, e.message?.message || e.message)
 	}
 }
+
 export const cashfreeCheckout = async ({
 	address,
 	orderNo,

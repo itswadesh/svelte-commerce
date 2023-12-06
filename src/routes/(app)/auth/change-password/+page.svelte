@@ -23,7 +23,7 @@ let oldPassowrdType = 'password'
 let newPassowrdType = 'password'
 let confirmationPassowrdType = 'password'
 let err
-let zodError = null
+let zodError = {}
 
 const zodChangePasswordSchema = z
 	.object({
@@ -80,7 +80,7 @@ async function submit(p) {
 
 		try {
 			zodChangePasswordSchema.parse(p)
-			zodError = null
+			zodError = {}
 		} catch (error) {
 			if (error instanceof z.ZodError) {
 				zodError = error.errors.reduce((acc, err) => {

@@ -111,9 +111,9 @@ async function submit(pm) {
 					storeId: $page.data.storeId
 				})
 
-				// console.log('res of cod',res.id,res._id, res)
+				// console.log('res of cod', res)
 
-				goto(`/payment/success?orderId=${res?._id || res?.id}&status=PAYMENT_SUCCESS&provider=COD`)
+				// goto(`/payment/success?orderId=${res?._id || res?.id}&status=PAYMENT_SUCCESS&provider=COD`)
 			} catch (e) {
 				data.err = e
 				gotoOrder(orderNo)
@@ -534,7 +534,7 @@ function checkIfStripeCardValid({ detail }) {
 			<Pricesummary
 				cart="{data.cart}"
 				text="{errorMessage || 'Confirm Order'}"
-				loading="{loading}"
+				{loading}
 				hideCheckoutButton="{selectedPaymentMethod?.name === 'Stripe'}"
 				on:submit="{() => submit(selectedPaymentMethod)}" />
 
@@ -544,7 +544,7 @@ function checkIfStripeCardValid({ detail }) {
 </div>
 
 {#if loadingForPaymentProcessingSteps}
-	<PaymentLoading bind:loadingForPaymentProcessingSteps="{loadingForPaymentProcessingSteps}" />
+	<PaymentLoading bind:loadingForPaymentProcessingSteps />
 {/if}
 
 <iframe name="cashfreeFrame" title="Cashfree" class="absolute" allow="payment"></iframe>
