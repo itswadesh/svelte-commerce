@@ -168,7 +168,7 @@ async function loadStripeElements() {
 			<!-- A Stripe Element will be inserted here. -->
 		</div>
 
-		<div id="error-message" role="alert" class="text-sm text-red-500"></div>
+		<div id="error-message" role="alert" class="text-sm text-red-600"></div>
 
 		<PrimaryButton
 			type="submit"

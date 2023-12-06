@@ -8,7 +8,9 @@
 	stroke: #4bb71b;
 	stroke-miterlimit: 10;
 	box-shadow: inset 0px 0px 0px #4bb71b;
-	animation: fill 0.4s ease-in-out 0.4s forwards, scale 0.3s ease-in-out 0.9s both;
+	animation:
+		fill 0.4s ease-in-out 0.4s forwards,
+		scale 0.3s ease-in-out 0.9s both;
 	position: relative;
 	top: 5px;
 	right: 5px;
@@ -134,7 +136,7 @@ async function submit() {
 	<div class="container mx-auto mb-20 w-full max-w-lg">
 		{#if err}
 			<div class="mb-5">
-				<Error err="{err}" />
+				<Error {err} />
 			</div>
 		{/if}
 
@@ -150,32 +152,32 @@ async function submit() {
 				<form on:submit|preventDefault="{submit}">
 					<ul class="mb-8 flex flex-col gap-4">
 						<li>
-							<h6 class="mb-2 font-semibold">Name <span class="text-red-500">*</span></h6>
+							<h6 class="mb-2 font-semibold">Name <span class="text-red-600">*</span></h6>
 
 							<Textbox type="text" class="w-full" bind:value="{blukOrder.name}" required />
 						</li>
 
 						<li>
-							<h6 class="mb-2 font-semibold">Company Name <span class="text-red-500">*</span></h6>
+							<h6 class="mb-2 font-semibold">Company Name <span class="text-red-600">*</span></h6>
 
 							<Textbox type="text" class="w-full" bind:value="{blukOrder.companayName}" required />
 						</li>
 
 						<li>
-							<h6 class="mb-2 font-semibold">Email <span class="text-red-500">*</span></h6>
+							<h6 class="mb-2 font-semibold">Email <span class="text-red-600">*</span></h6>
 
 							<Textbox type="email" class="w-full" bind:value="{blukOrder.email}" required />
 						</li>
 
 						<li>
-							<h6 class="mb-2 font-semibold">Phone Number <span class="text-red-500">*</span></h6>
+							<h6 class="mb-2 font-semibold">Phone Number <span class="text-red-600">*</span></h6>
 
 							<Textbox type="tel" class="w-full" bind:value="{blukOrder.phone}" required />
 						</li>
 
 						<li>
 							<h6 class="mb-2 font-semibold">
-								Interested Product <span class="text-red-500">*</span>
+								Interested Product <span class="text-red-600">*</span>
 							</h6>
 
 							<ul class="flex flex-col gap-2">
@@ -256,7 +258,7 @@ async function submit() {
 						<li>
 							<div class="mb-2">
 								<h6 class="mb-1 font-semibold">
-									Min. Quantity <span class="text-red-500">*</span>
+									Min. Quantity <span class="text-red-600">*</span>
 								</h6>
 
 								<p class="text-sm">Must be greater than or equal to 25+</p>

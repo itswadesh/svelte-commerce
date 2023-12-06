@@ -41,7 +41,7 @@ async function addressChanged(id) {
 }
 </script>
 
-<Error err="{err}" class="mb-5" />
+<Error {err} class="mb-5" />
 
 {#if loading}
 	<AddressSkeleton />
@@ -169,5 +169,5 @@ async function addressChanged(id) {
 	title="Edit Address"
 	hideFooter
 	on:close="{() => (editAddress = false)}">
-	<SaveAddress bind:editAddress="{editAddress}" address="{address}" countries="{countries}" />
+	<SaveAddress bind:editAddress {address} {countries} />
 </Modal>

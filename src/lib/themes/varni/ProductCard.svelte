@@ -289,7 +289,7 @@ async function toggleWishlist(id) {
 		<!-- Out of Stock -->
 
 		{#if !newProduct.hasStock}
-			<p class="absolute inset-x-0 top-[12.5rem] text-center text-xs text-red-500">Out of Stock</p>
+			<p class="absolute inset-x-0 top-[12.5rem] text-center text-xs text-red-600">Out of Stock</p>
 		{/if}
 	</div>
 </div>

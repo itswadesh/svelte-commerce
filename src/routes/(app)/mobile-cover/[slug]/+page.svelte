@@ -129,7 +129,7 @@ $: if (data.megamenu.length) {
 											<span>{b.name}</span>
 
 											{#if b.new}
-												<div class="absolute -top-1 -right-8 text-red-500 text-xs font-semibold">
+												<div class="absolute -top-1 -right-8 text-red-600 text-xs font-semibold">
 													NEW
 												</div>
 											{/if}

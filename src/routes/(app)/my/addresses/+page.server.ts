@@ -1,5 +1,6 @@
 import { AddressService } from '$lib/services'
 import { error } from '@sveltejs/kit'
+import { z } from 'zod';
 
 export async function load({ cookies, locals }) {
 	const { myAddresses, selectedAddress, count } = await AddressService.fetchAddresses({
@@ -16,6 +17,18 @@ export async function load({ cookies, locals }) {
 
 	throw error(404, 'Addresses not found')
 }
+
+const zodAddressSchema = z.object({
+	address: z.string({ required_error: 'Address is required' }),
+	city: z.string({ required_error: 'City is required' }),
+	country: z.string({ required_error: 'Country is required' }),
+	email: z.string({ required_error: 'Email is required' }).email({ message: 'Email must be a valid email address' }),
+	firstName: z.string({ required_error: 'First Name is required' }).min(3, { message: 'First Name must be at least 3 characters' }),
+	lastName: z.string({ required_error: 'Last Name is required' }).min(3, { message: 'Last Name must be at least 3 characters' }),
+	phone: z.string({ required_error: 'Phone is required' }).min(10, { message: 'Phone must be at least 10 digits' }).max(17, { message: 'Phone must be less then 17 digits' }),
+	state: z.string({ required_error: 'State is required' }),
+	zip: z.string({ required_error: 'ZIP is required' }).min(6, { message: 'ZIP must be at least 6 digits.' }),
+});
 
 const saveAddress = async ({ request, cookies, locals }) => {
 	const data = await request.formData()
@@ -35,6 +48,18 @@ const saveAddress = async ({ request, cookies, locals }) => {
 
 	const sid = cookies.get('connect.sid')
 
+	let formData = {
+		address: address,
+		city: city,
+		country: country,
+		email: email,
+		firstName: firstName,
+		lastName: lastName,
+		phone: phone,
+		state: state,
+		zip: zip,
+	}
+
 	// console.log('showErrorMessage at save address', firstName)
 
 	if (showErrorMessage === true || showErrorMessage === 'true') {
@@ -50,6 +75,17 @@ const saveAddress = async ({ request, cookies, locals }) => {
 
 		if (!phone.startsWith('+')) {
 			phone = (selectedCountry[0].dialCode || '+91') + phone
+		}
+
+		try {
+			zodAddressSchema.parse(formData)
+		} catch (err) {
+			const { fieldErrors: errors } = err.flatten();
+			const { address, city, ...rest } = formData
+			throw error(404, {
+				data: rest,
+				errors
+			})
 		}
 
 		const res = await AddressService.saveAddress({
@@ -92,6 +128,18 @@ const editAddress = async ({ request, cookies, locals }) => {
 
 	const sid = cookies.get('connect.sid')
 
+	let formData = {
+		address: address,
+		city: city,
+		country: country,
+		email: email,
+		firstName: firstName,
+		lastName: lastName,
+		phone: phone,
+		state: state,
+		zip: zip,
+	}
+
 	// console.log('showErrorMessage at edit address', showErrorMessage);
 
 	if (showErrorMessage === true || showErrorMessage === 'true') {
@@ -107,6 +155,18 @@ const editAddress = async ({ request, cookies, locals }) => {
 
 		if (!phone.startsWith('+')) {
 			phone = (selectedCountry[0].dialCode || '+91') + phone
+		}
+
+
+		try {
+			zodAddressSchema.parse(formData)
+		} catch (err) {
+			const { fieldErrors: errors } = err.flatten();
+			const { address, city, ...rest } = formData
+			throw error(404, {
+				data: rest,
+				errors
+			})
 		}
 
 		const res = await AddressService.saveAddress({

@@ -1,5 +1,15 @@
 import { UserService } from '$lib/services'
 import { error, fail } from '@sveltejs/kit'
+import { z } from 'zod';
+
+const zodEmailLoginSchema = z.object({
+	email: z.string({ required_error: 'Email is required' }).email({ message: 'Email must be a valid email address' }),
+	password: z.string({ required_error: 'Password is required' }),
+});
+
+const zodPhoneLoginSchema = z.object({
+	phone: z.string({ required_error: 'Phone is required' }).min(10, { message: 'Phone must be at least 10 digits' }).max(17, { message: 'Phone must be less then 17 digits' }),
+});
 
 const login = async ({ request, cookies, locals }) => {
 	const data = await request.formData()
@@ -9,40 +19,69 @@ const login = async ({ request, cookies, locals }) => {
 
 	let res
 
-	try {
-		if (isEmail == 'true') {
-			res = await UserService.loginService({
-				email: phoneOrEmail,
-				password: password,
-				storeId: locals.storeId,
-				cartId: locals.cartId,
-				server: true,
-				origin: locals.origin
-			})
-
-			// const updatedCart = await CartService.updateCart({
-			// 	customer_id: res.customer_id
-			// })
-
-			// console.log('res of email login = ', updatedCart)
-		} else {
-			res = await UserService.getOtpService({
-				phone: phoneOrEmail,
-				storeId: locals.storeId,
-				server: true,
-				origin: locals.origin
-			})
-
+	if (isEmail == 'true') {
+		const formData = {
+			email: phoneOrEmail,
+			password: password,
 		}
-		cookies.set('connect.sid', res.sid, {
-			path: '/'
+
+		try {
+			zodEmailLoginSchema.parse(formData)
+		} catch (err) {
+			const { fieldErrors: errors } = err.flatten();
+			const { ...rest } = formData
+			throw error(404, {
+				data: rest,
+				errors
+			})
+		}
+
+		res = await UserService.loginService({
+			email: phoneOrEmail,
+			password: password,
+			storeId: locals.storeId,
+			cartId: locals.cartId,
+			server: true,
+			origin: locals.origin
 		})
 
-		return res
-	} catch (e) {
-		throw error(404, e?.body?.message)
+		// const updatedCart = await CartService.updateCart({
+		// 	customer_id: res.customer_id
+		// })
+
+		// console.log('res of email login = ', updatedCart)
+	} else {
+		const formData = {
+			phone: phoneOrEmail,
+		}
+
+		try {
+			zodPhoneLoginSchema.parse(formData)
+		} catch (err) {
+			const { fieldErrors: errors } = err.flatten();
+			const { ...rest } = formData
+			throw error(404, {
+				data: rest,
+				errors
+			})
+		}
+
+		res = await UserService.getOtpService({
+			phone: phoneOrEmail,
+			storeId: locals.storeId,
+			server: true,
+			origin: locals.origin
+		})
+
 	}
+
+	cookies.set('connect.sid', res.sid, {
+		path: '/'
+	})
+
+	return res
 }
+
 
 const verifyOtp = async ({ cookies, request, locals, url }) => {
 	const data = await request.formData()
