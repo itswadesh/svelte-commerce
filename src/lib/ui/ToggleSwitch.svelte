@@ -78,16 +78,16 @@ function genId() {
 				type="checkbox"
 				id="{uniqueId}"
 				name="{name || uniqueId}"
-				disabled="{disabled}"
-				required="{required}"
+				{disabled}
+				{required}
 				class="hidden"
-				bind:checked="{checked}"
+				bind:checked
 				on:change="{() => dispatch('change')}" />
 
 			<!-- line -->
 
 			<div
-				class="block rounded-full bg-zinc-200 
+				class="block rounded-full bg-zinc-200
 				{disabled ? '' : 'opacity-100 group-hover:opacity-90 transition duration-300'}
                 {size == 'xs' ? 'h-5 w-8' : ''}
                 {size == 'sm' ? 'h-6 w-10' : ''}
@@ -116,12 +116,12 @@ function genId() {
 
 		<slot>
 			<div
-				class="font-semibold 
+				class="font-semibold
 			{textFirst ? 'mr-2' : 'ml-2'}
 			{disabled ? '' : 'opacity-100 group-hover:opacity-90 transition duration-300'}
       		{color == 'green' && checked === true ? 'text-green-500' : 'text-zinc-400'}
       		{color == 'blue' && checked === true ? 'text-blue-500' : 'text-zinc-400'}
-      		{color == 'red' && checked === true ? 'text-red-500' : 'text-zinc-400'}
+      		{color == 'red' && checked === true ? 'text-red-600' : 'text-zinc-400'}
       		{color == 'pink' && checked === true ? 'text-pink-500' : 'text-zinc-400'}
       		{color == 'purple' && checked === true ? 'text-purple-500' : 'text-zinc-400'}
       		{color == 'yellow' && checked === true ? 'text-yellow-500' : 'text-zinc-400'}

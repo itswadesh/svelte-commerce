@@ -123,25 +123,31 @@ async function saveReviewproduct(review) {
 				href="{data.ref || '##'}"
 				aria-label="Click to view the product details"
 				class="mb-2 flex max-w-max flex-row items-center gap-4 text-sm text-zinc-500 lg:flex-row-reverse lg:text-right group">
-				<div
-					class="h-14 w-14 border border-zinc-200 rounded shadow-md flex items-center justify-center">
-					<LazyImg
-						src="{data.product?.img}"
-						alt="Business img"
-						height="48"
-						class="h-12 w-auto object-contain object-center text-xs" />
-				</div>
+				{#if data.product?.img}
+					<div
+						class="h-14 w-14 border border-zinc-200 rounded shadow-md flex items-center justify-center">
+						<LazyImg
+							src="{data.product?.img}"
+							alt="Business img"
+							height="48"
+							class="h-12 w-auto object-contain object-center text-xs" />
+					</div>
+				{/if}
 
 				<div class="flex-1">
-					<h6 class="font-semibold">{data.product?.brand?.name}</h6>
+					{#if data.product?.brand?.name}
+						<h6 class="font-semibold">{data.product?.brand?.name}</h6>
+					{/if}
 
-					<span class="group-hover:underline">{data.product?.name}</span>
+					{#if data.product?.name}
+						<span class="group-hover:underline">{data.product?.name}</span>
+					{/if}
 				</div>
 			</a>
 		{/if}
 	</header>
 
-	<Error err="{err}" />
+	<Error {err} />
 
 	<div class="flex flex-col-reverse xl:flex-row xl:gap-4">
 		<div class="mt-4 flex w-full flex-col gap-2 xl:mt-0 xl:w-1/3">

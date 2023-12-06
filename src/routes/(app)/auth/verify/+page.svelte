@@ -66,7 +66,7 @@ let err
 		{/if}
 	</a>
 
-	<h2 class="mb-8 w-full text-2xl font-bold text-red-500">Verification Failed</h2>
+	<h2 class="mb-8 w-full text-2xl font-bold text-red-600">Verification Failed</h2>
 
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
@@ -79,7 +79,7 @@ let err
 			clip-rule="evenodd"></path>
 	</svg>
 
-	<Error err="{err}" class="mb-5" />
+	<Error {err} class="mb-5" />
 
 	<a href="/auth/signup-success" aria-label="Home" class="block w-full">
 		<PrimaryButton class="w-full">Try Again</PrimaryButton>

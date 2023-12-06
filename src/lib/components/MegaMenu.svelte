@@ -139,7 +139,7 @@ async function getMegaMenu() {
 										class="mb-2 block w-full font-semibold
 										{index % 6 == 0 ? 'text-yellow-500 ' : ''}
 										{index % 6 == 1 ? 'text-purple-500 ' : ''}
-										{index % 6 == 2 ? 'text-red-500 ' : ''}
+										{index % 6 == 2 ? 'text-red-600 ' : ''}
                                     	{index % 6 == 3 ? 'text-green-500 ' : ''}
                                     	{index % 6 == 4 ? 'text-pink-500 ' : ''}
                                     	{index % 6 == 5 ? 'text-blue-500 ' : ''}">

@@ -3,7 +3,7 @@ import { error, fail, redirect } from '@sveltejs/kit'
 import type { Action, Actions, PageServerLoad } from './$types'
 
 export const load: PageServerLoad = async ({ url, request, locals, cookies, depends }) => {
-	const { store, storeId,origin } = locals
+	const { store, storeId, origin } = locals
 	depends('cart:my')
 	let loading = false
 	let cart = locals.cart
@@ -91,6 +91,8 @@ const add: Action = async ({ request, cookies, locals }) => {
 			sid // This is a special case to pass complete cookie
 		})
 
+		// console.log('cart', cart);
+
 		// if (!cartId) { // Commented out because when can't find cart_id in database, it will still won't set the new cart_id in cookies
 		cartId = cart.cart_id // This is required because when cart_id is null, it will add 3 items with null cart id hence last one prevails
 		cookies.set('cartId', cartId, { path: '/' })
@@ -114,8 +116,6 @@ const add: Action = async ({ request, cookies, locals }) => {
 				})
 			}
 		}
-
-		// console.log(cart);
 
 		if (cart) {
 			const cartObj = {

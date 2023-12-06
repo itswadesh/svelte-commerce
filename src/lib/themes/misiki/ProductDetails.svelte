@@ -1506,7 +1506,7 @@ async function updateVariant(variant) {
 
 												<PrimaryButton
 													type="submit"
-													loading="{loading}"
+													{loading}
 													loadingringsize="sm"
 													class="w-full text-sm">
 													<svg
@@ -1908,7 +1908,7 @@ async function updateVariant(variant) {
 
 												<PrimaryButton
 													type="submit"
-													loading="{loading}"
+													{loading}
 													loadingringsize="sm"
 													class="w-full text-sm">
 													<svg
@@ -2147,7 +2147,7 @@ async function updateVariant(variant) {
 
 												<PrimaryButton
 													type="submit"
-													loading="{loading}"
+													{loading}
 													loadingringsize="sm"
 													class="w-full text-sm">
 													<svg
@@ -2282,8 +2282,8 @@ async function updateVariant(variant) {
 </div>
 
 <Gallery
-	bind:selectedImgIndex="{selectedImgIndex}"
-	bind:showPhotosModal="{showPhotosModal}"
+	bind:selectedImgIndex
+	bind:showPhotosModal
 	images="{data.product?.images}"
 	title="{data.product?.businessName}" />
 

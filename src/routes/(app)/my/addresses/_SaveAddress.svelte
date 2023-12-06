@@ -27,6 +27,7 @@ let loadingStates = false
 let selectedCountry = {}
 let showErrorMessage = false
 let states = []
+let zodErrors = null
 
 onMount(async () => {
 	await invalidateAll()
@@ -209,6 +210,8 @@ function validatePhoneNumber(phoneNumber) {
 		method="POST"
 		use:enhance="{() => {
 			return async ({ result }) => {
+				// console.log('result', result)
+
 				// console.log(
 				// 	'result, address.id, $page?.url?.pathname',
 				// 	result,
@@ -216,7 +219,7 @@ function validatePhoneNumber(phoneNumber) {
 				// 	$page?.url?.pathname
 				// )
 
-				if (result?.data) {
+				if (result?.status === 200 && result?.data) {
 					const newAddressId = result.data?._id || result.data?.id
 					toast('Address Info Saved.', 'success')
 
@@ -235,7 +238,9 @@ function validatePhoneNumber(phoneNumber) {
 					await applyAction(result)
 				} else if (result?.error) {
 					address.phone = ''
-					toast(result?.error?.message, 'error')
+					zodErrors = result?.error?.errors || null
+					err = result?.error?.message || null
+					// toast(result?.error?.message, 'error')
 				}
 				editAddress = false
 			}
@@ -258,6 +263,10 @@ function validatePhoneNumber(phoneNumber) {
 						bind:value="{address.firstName}"
 						autoFocus
 						required />
+
+					{#if zodErrors?.firstName}<p class="mt-1 text-red-600">
+							{zodErrors?.firstName}
+						</p>{/if}
 				</div>
 			</div>
 
@@ -272,6 +281,8 @@ function validatePhoneNumber(phoneNumber) {
 
 				<div class="w-full">
 					<Textbox placeholder="Enter Last Name" bind:value="{address.lastName}" required />
+
+					{#if zodErrors?.lastName}<p class="mt-1 text-red-600">{zodErrors?.lastName}</p>{/if}
 				</div>
 			</div>
 
@@ -282,6 +293,8 @@ function validatePhoneNumber(phoneNumber) {
 
 				<div class="w-full">
 					<Textbox type="email" placeholder="Enter Email" bind:value="{address.email}" required />
+
+					{#if zodErrors?.email}<p class="mt-1 text-red-600">{zodErrors?.email}</p>{/if}
 				</div>
 			</div>
 
@@ -306,8 +319,10 @@ function validatePhoneNumber(phoneNumber) {
 					<!-- <p class="mt-1">E.g.+nnxxxxxxxxxx</p> -->
 
 					{#if showErrorMessage}
-						<p id="phone-warning" class="mt-1 text-rose-600">Please enter vaild phone number</p>
+						<p id="phone-warning" class="mt-1 text-red-600">Please enter vaild phone number</p>
 					{/if}
+
+					{#if zodErrors?.phone}<p class="mt-1 text-red-600">{zodErrors?.phone}</p>{/if}
 				</div>
 			</div>
 
@@ -320,7 +335,11 @@ function validatePhoneNumber(phoneNumber) {
 					<span class="text-accent-500">*</span>
 				</h6>
 
-				<Textarea placeholder="Enter Address" bind:value="{address.address}" required />
+				<div class="w-full">
+					<Textarea placeholder="Enter Address" bind:value="{address.address}" required />
+
+					{#if zodErrors?.address}<p class="mt-1 text-red-600">{zodErrors?.address}</p>{/if}
+				</div>
 			</div>
 
 			<!-- Postal Code/Pincode/Zipcode -->
@@ -340,6 +359,8 @@ function validatePhoneNumber(phoneNumber) {
 						bind:value="{address.zip}"
 						on:blur="{() => fetchStateAndCity(address.zip)}"
 						required />
+
+					{#if zodErrors?.zip}<p class="mt-1 text-red-600">{zodErrors?.zip}</p>{/if}
 				</div>
 			</div>
 
@@ -354,6 +375,8 @@ function validatePhoneNumber(phoneNumber) {
 
 				<div class="w-full">
 					<Textbox type="text" placeholder="Enter City" bind:value="{address.city}" required />
+
+					{#if zodErrors?.city}<p class="mt-1 text-red-600">{zodErrors?.city}</p>{/if}
 				</div>
 			</div>
 
@@ -367,20 +390,24 @@ function validatePhoneNumber(phoneNumber) {
 						<span class="text-accent-500">*</span>
 					</h6>
 
-					<select
-						class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
-						bind:value="{address.state}"
-						disabled="{!address.country || loadingStates}"
-						required>
-						<option value="{null}" disabled selected>-- Select a State --</option>
-						{#each states as s}
-							{#if s}
-								<option value="{s.name.toUpperCase()}">
-									{s.name}
-								</option>
-							{/if}
-						{/each}
-					</select>
+					<div class="w-full">
+						<select
+							class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
+							bind:value="{address.state}"
+							disabled="{!address.country || loadingStates}"
+							required>
+							<option value="{null}" disabled selected>-- Select a State --</option>
+							{#each states as s}
+								{#if s}
+									<option value="{s.name.toUpperCase()}">
+										{s.name}
+									</option>
+								{/if}
+							{/each}
+						</select>
+
+						{#if zodErrors?.state}<p class="mt-1 text-red-600">{zodErrors?.state}</p>{/if}
+					</div>
 				</div>
 			{/if}
 
@@ -393,31 +420,35 @@ function validatePhoneNumber(phoneNumber) {
 					<span class="text-accent-500">*</span>
 				</h6>
 
-				{#if countries?.length}
-					<select
-						disabled="{countries?.length === 1}"
-						class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
-						bind:value="{address.country}"
-						on:change="{() => onCountryChange(address.country)}"
-						required>
-						<option value="{null}" disabled selected>-- Select a Country --</option>
+				<div class="w-full">
+					{#if countries?.length}
+						<select
+							disabled="{countries?.length === 1}"
+							class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
+							bind:value="{address.country}"
+							on:change="{() => onCountryChange(address.country)}"
+							required>
+							<option value="{null}" disabled selected>-- Select a Country --</option>
 
-						{#each countries as c}
-							{#if c}
-								<option value="{c.code}" selected="{c.default}">
-									{c.name}
-								</option>
-							{/if}
-						{/each}
-					</select>
-				{:else}
-					<a
-						href="/contact-us"
-						aria-label="contact us"
-						class="py-2 text-sm text-zinc-500 hover:text-zinc-800 hover:underline">
-						Contact the website admin to enable your country
-					</a>
-				{/if}
+							{#each countries as c}
+								{#if c}
+									<option value="{c.code}" selected="{c.default}">
+										{c.name}
+									</option>
+								{/if}
+							{/each}
+						</select>
+
+						{#if zodErrors?.country}<p class="mt-1 text-red-600">{zodErrors?.country}</p>{/if}
+					{:else}
+						<a
+							href="/contact-us"
+							aria-label="contact us"
+							class="py-2 text-sm text-zinc-500 hover:text-zinc-800 hover:underline">
+							Contact the website admin to enable your country
+						</a>
+					{/if}
+				</div>
 			</div>
 		</div>
 
@@ -436,8 +467,11 @@ function validatePhoneNumber(phoneNumber) {
 
 		<PrimaryButton
 			type="submit"
-			loading="{loading}"
+			{loading}
 			disabled="{loading || showErrorMessage}"
-			class="w-60">Save Address</PrimaryButton>
+			class="w-60"
+			on:click="{() => (zodErrors = null)}">
+			Save Address
+		</PrimaryButton>
 	</form>
 </div>

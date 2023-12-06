@@ -326,7 +326,7 @@ onMount(async () => {
 				{#if isWislisted}
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
-						class="h-5 w-5 text-red-500"
+						class="h-5 w-5 text-red-600"
 						viewBox="0 0 20 20"
 						fill="currentColor">
 						<path
@@ -429,7 +429,7 @@ onMount(async () => {
 			<!-- {:else} -->
 			<div>
 				<!-- {#if !product.hasStock && !show}
-					<p class="text-center text-xs text-red-500">Out of Stock</p>
+					<p class="text-center text-xs text-red-600">Out of Stock</p>
 				{/if} -->
 
 				<a
