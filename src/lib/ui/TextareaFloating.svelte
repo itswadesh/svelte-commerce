@@ -64,16 +64,16 @@ export { className as class }
 <div class="{className}">
 	<div class="floating-label">
 		<textarea
-			bind:value="{value}"
-			id="{id}"
-			name="{name}"
-			rows="{rows}"
+			bind:value
+			{id}
+			{name}
+			{rows}
 			class="floating-input w-full bg-transparent focus:outline-none"
-			placeholder="{placeholder}"
+			{placeholder}
 			aria-label="{label}"
-			required="{required}"
-			tabindex="{tabindex}"
-			maxlength="{maxlength}"
+			{required}
+			{tabindex}
+			{maxlength}
 			on:input="{() => dispatch('input')}"
 			on:focus="{() => dispatch('focus')}"></textarea>
 
@@ -83,7 +83,7 @@ export { className as class }
 			{label}
 
 			{#if required}
-				<span class="text-red-500">*</span>
+				<span class="text-red-600">*</span>
 			{/if}
 		</label>
 		<slot />

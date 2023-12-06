@@ -1,5 +1,15 @@
 import { UserService } from '$lib/services'
 import { error, fail } from '@sveltejs/kit'
+import { z } from 'zod';
+
+const zodEmailLoginSchema = z.object({
+	email: z.string({ required_error: 'Email is required' }).email({ message: 'Email must be a valid email address' }),
+	password: z.string({ required_error: 'Password is required' }),
+});
+
+const zodPhoneLoginSchema = z.object({
+	phone: z.string({ required_error: 'Phone is required' }).min(10, { message: 'Phone must be at least 10 digits' }).max(17, { message: 'Phone must be less then 17 digits' }),
+});
 
 const login = async ({ request, cookies, locals }) => {
 	const data = await request.formData()
@@ -9,42 +19,69 @@ const login = async ({ request, cookies, locals }) => {
 
 	let res
 
-	try {
-
-		if (isEmail == 'true') {
-			res = await UserService.loginService({
-				email: phoneOrEmail,
-				password: password,
-				storeId: locals.store?.id,
-				cartId: locals.cartId,
-				server: true,
-				origin: locals.origin
-			})
-
-			// const updatedCart = await CartService.updateCart({
-			// 	customer_id: res.customer_id
-			// })
-
-			// console.log('res of email login = ', updatedCart)
-		} else {
-			res = await UserService.getOtpService({
-				phone: phoneOrEmail,
-				storeId: locals.store?.id,
-				server: true,
-				origin: locals.origin
-			})
-
-			// console.log('res of phone login = ', res)
+	if (isEmail == 'true') {
+		const formData = {
+			email: phoneOrEmail,
+			password: password,
 		}
-		cookies.set('connect.sid', res.sid, {
-			path: '/'
+
+		try {
+			zodEmailLoginSchema.parse(formData)
+		} catch (err) {
+			const { fieldErrors: errors } = err.flatten();
+			const { ...rest } = formData
+			throw error(404, {
+				data: rest,
+				errors
+			})
+		}
+
+		res = await UserService.loginService({
+			email: phoneOrEmail,
+			password: password,
+			storeId: locals.storeId,
+			cartId: locals.cartId,
+			server: true,
+			origin: locals.origin
 		})
 
-		return res
-	} catch (e) {
-		throw error(404, e?.body?.message)
+		// const updatedCart = await CartService.updateCart({
+		// 	customer_id: res.customer_id
+		// })
+
+		// console.log('res of email login = ', updatedCart)
+	} else {
+		const formData = {
+			phone: phoneOrEmail,
+		}
+
+		try {
+			zodPhoneLoginSchema.parse(formData)
+		} catch (err) {
+			const { fieldErrors: errors } = err.flatten();
+			const { ...rest } = formData
+			throw error(404, {
+				data: rest,
+				errors
+			})
+		}
+
+		res = await UserService.getOtpService({
+			phone: phoneOrEmail,
+			storeId: locals.storeId,
+			server: true,
+			origin: locals.origin
+		})
+
 	}
+
+	cookies.set('connect.sid', res.sid, {
+		path: '/'
+	})
+
+	return res
 }
+
 
 const verifyOtp = async ({ cookies, request, locals, url }) => {
 	const data = await request.formData()
@@ -63,10 +100,9 @@ const verifyOtp = async ({ cookies, request, locals, url }) => {
 			phone,
 			otp,
 			cartId: cookies.get('cartId'),
-			isCors: locals.store?.isCors,
 			origin: locals.origin,
 			sid: locals.sid,
-			storeId: locals.store?.id
+			storeId: locals.storeId
 		})
 
 		if (!user) {
@@ -96,19 +132,6 @@ const verifyOtp = async ({ cookies, request, locals, url }) => {
 			// maxAge: 60 * 60 * 24 * 30,
 		})
 
-		// cookies.set('session', user._id, {
-		// 	// send cookie for every page
-		// 	path: '/',
-		// 	// server side only cookie so you can't use `document.cookie`
-		// 	httpOnly: true,
-		// 	// only requests from same site can send cookies
-		// 	// https://developer.mozilla.org/en-US/docs/Glossary/CSRF
-		// 	// sameSite: 'strict',
-		// 	// only sent over HTTPS in production
-		// 	secure: process.env.NODE_ENV === 'production',
-		// 	// set cookie to expire after a month
-		// 	maxAge: 60 * 60 * 24 * 30
-		// })
 
 		return me
 	} catch (e) {

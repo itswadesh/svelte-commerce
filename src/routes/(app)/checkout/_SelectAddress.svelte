@@ -26,7 +26,7 @@ async function remove(id) {
 	if (confirm('Are you sure to delete?')) {
 		try {
 			removing = true
-			await del(`addresses/${id}?store=${$page.data.store?.id}`, $page.data.origin)
+			await del(`addresses/${id}?store=${$page.data.storeId}`, $page.data.origin)
 			await dispatch('deleteAddress', id)
 		} catch (e) {
 			err = e
@@ -41,7 +41,7 @@ async function addressChanged(id) {
 }
 </script>
 
-<Error err="{err}" class="mb-5" />
+<Error {err} class="mb-5" />
 
 {#if loading}
 	<AddressSkeleton />
@@ -169,5 +169,5 @@ async function addressChanged(id) {
 	title="Edit Address"
 	hideFooter
 	on:close="{() => (editAddress = false)}">
-	<SaveAddress bind:editAddress="{editAddress}" address="{address}" countries="{countries}" />
+	<SaveAddress bind:editAddress {address} {countries} />
 </Modal>

@@ -16,7 +16,7 @@ $: errorMessage =
 
 {#if err}
 	<div
-		class="{clazz} rounded border border-red-500 bg-red-100 px-4 py-2 text-sm font-medium text-red-500">
+		class="{clazz} rounded border border-red-500 bg-red-100 px-4 py-2 text-sm font-medium text-red-600">
 		{#if Array.isArray(err)}
 			{#each err as e}
 				<span>{e.message}</span>
