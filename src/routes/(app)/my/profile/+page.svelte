@@ -11,6 +11,7 @@ import { page } from '$app/stores'
 import { put } from '$lib/utils/api'
 import { toast } from '$lib/utils'
 import { WhiteButton } from '$lib/ui'
+import { z } from 'zod'
 import Cookie from 'cookie-universal'
 import dayjs from 'dayjs'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
@@ -30,6 +31,21 @@ const cookies = Cookie()
 let loading = false
 let formChanged = false
 let err = ''
+let zodError = {}
+
+const zodProfileSchema = z.object({
+	// dob: z.date({ required_error: 'First Name is required' }),
+	firstName: z
+		.string({ required_error: 'First Name is required' })
+		.min(3, { message: 'First Name must be at least 3 characters' }),
+	lastName: z
+		.string({ required_error: 'Last Name is required' })
+		.min(3, { message: 'Last Name must be at least 3 characters' }),
+	phone: z
+		.string()
+		.min(10, { message: 'Phone must be at least 10 digits' })
+		.max(17, { message: 'Phone must be less then 17 digits' })
+})
 
 function saveImage(detail) {
 	data.profile.avatar = detail
@@ -43,29 +59,44 @@ function removeImage(detail) {
 
 async function saveProfile() {
 	try {
+		err = null
 		loading = true
 
 		let e = { ...data.profile }
 		e.company = 1
 		e.store = data.storeId
 
-		toast('Saving Profile Info...', 'warning')
-
 		if (e.dob) e.dob = dayjs(e.dob).format('YYYY-MM-DDTHH:mm')
 		else e.dob = null
 		// delete e.phone
 
-		data.profile = await put('users/update-profile', e, $page.data.origin)
-
-		if (data.profile) {
-			data.profile.dob = data.profile.dob ? dayjs(data.profile.dob).format('YYYY-MM-DD') : null
-			toast('Profile Info Saved.', 'success')
+		try {
+			zodProfileSchema.parse(e)
+			zodError = {}
+		} catch (error) {
+			if (error instanceof z.ZodError) {
+				zodError = error.errors.reduce((acc, err) => {
+					acc[err.path[0]] = err.message
+					return acc
+				}, {})
+			}
 		}
 
-		await cookies.set('me', data.profile, { path: '/' })
+		if (Object.keys(zodError).length === 0) {
+			toast('Saving Profile Info...', 'warning')
 
-		// $page.data.me = data.profile
-		// refreshData()
+			data.profile = await put('users/update-profile', e, $page.data.origin)
+
+			if (data.profile) {
+				data.profile.dob = data.profile.dob ? dayjs(data.profile.dob).format('YYYY-MM-DD') : null
+				toast('Profile Info Saved.', 'success')
+			}
+
+			await cookies.set('me', data.profile, { path: '/' })
+
+			// $page.data.me = data.profile
+			// refreshData()
+		}
 	} catch (e) {
 		err = e
 		toast(e, 'error')
@@ -127,7 +158,7 @@ async function saveProfile() {
 									avatar
 									folder="avatar/{(data.profile?.phone || data.profile?.email)?.replace('+', '')}"
 									images="{data.profile.avatar}"
-									loading="{loading}"
+									{loading}
 									on:save="{({ detail }) => saveImage(detail)}"
 									on:remove="{({ detail }) => removeImage(detail)}" />
 
@@ -153,6 +184,10 @@ async function saveProfile() {
 										placeholder="Enter First Name"
 										bind:value="{data.profile.firstName}"
 										on:input="{() => (formChanged = true)}" />
+
+									{#if zodError?.firstName}
+										<p class="mt-1 text-red-600">{zodError?.firstName}</p>
+									{/if}
 								</div>
 							</div>
 
@@ -165,20 +200,28 @@ async function saveProfile() {
 										placeholder="Enter Last Name"
 										bind:value="{data.profile.lastName}"
 										on:input="{() => (formChanged = true)}" />
+
+									{#if zodError?.lastName}
+										<p class="mt-1 text-red-600">{zodError?.lastName}</p>
+									{/if}
 								</div>
 							</div>
 
 							<!-- <div class="flex flex-col sm:flex-row gap-2">
-							<h6 class="w-52 shrink-0">Date Of Birth</h6>
+								<h6 class="w-52 shrink-0">Date Of Birth</h6>
 
-							<div class="w-full">
-								<Textbox
-									type="date"
-									placeholder="Enter Date Of Birth"
-									bind:value="{data.profile.dob}"
-									on:input="{() => (formChanged = true)}" />
-							</div>
-						</div> -->
+								<div class="w-full">
+									<Textbox
+										type="date"
+										placeholder="Enter Date Of Birth"
+										bind:value="{data.profile.dob}"
+										on:input="{() => (formChanged = true)}" />
+
+									{#if zodError?.dob}
+										<p class="mt-1 text-red-600">{zodError?.dob}</p>
+									{/if}
+								</div>
+							</div> -->
 
 							<div class="flex flex-col sm:flex-row gap-2">
 								<h6 class="w-52 shrink-0">Phone</h6>
@@ -190,6 +233,10 @@ async function saveProfile() {
 										maxlength="13"
 										bind:value="{data.profile.phone}"
 										on:input="{() => (formChanged = true)}" />
+
+									{#if zodError?.phone}
+										<p class="mt-1 text-red-600">{zodError?.phone}</p>
+									{/if}
 								</div>
 							</div>
 						</div>
@@ -206,8 +253,8 @@ async function saveProfile() {
 	</div>
 
 	<CtrlS
-		loading="{loading}"
+		{loading}
 		loadingMessage="Updating Profile"
-		formChanged="{formChanged}"
+		{formChanged}
 		on:save="{() => saveProfile()}" />
 </section>
