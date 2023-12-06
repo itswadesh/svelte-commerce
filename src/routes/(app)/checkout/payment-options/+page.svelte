@@ -53,7 +53,7 @@ onMount(async () => {
 
 	fireGTagEvent('begin_checkout', data.cart)
 
-	const pm = data?.paymentMethods[0]
+	const pm = data?.paymentMethods && data?.paymentMethods[0]
 	paymentMethodChanged(pm)
 
 	// if (data.paymentMethods?.length === 1 && data.paymentMethods[0].type === 'pg' && !orderNo) {
@@ -108,12 +108,12 @@ async function submit(pm) {
 					paymentMethod: 'COD',
 					prescription: data.prescription?._id,
 					origin: $page.data.origin,
-					storeId: $page.data.store?.id
+					storeId: $page.data.storeId
 				})
 
-				// console.log('res of cod',res.id,res._id, res)
+				// console.log('res of cod', res)
 
-				goto(`/payment/success?orderId=${res?._id || res?.id}&status=PAYMENT_SUCCESS&provider=COD`)
+				// goto(`/payment/success?orderId=${res?._id || res?.id}&status=PAYMENT_SUCCESS&provider=COD`)
 			} catch (e) {
 				data.err = e
 				gotoOrder(orderNo)
@@ -134,7 +134,7 @@ async function submit(pm) {
 						paymentMethod: 'COD',
 						prescription: data.prescription?._id,
 						origin: $page.data.origin,
-						storeId: $page.data.store?.id
+						storeId: $page.data.storeId
 					})
 
 					// console.log('res of cod', res)
@@ -167,13 +167,11 @@ async function submit(pm) {
 
 				const res = await OrdersService.cashfreeCheckout({
 					address: data.addressId,
-					orderNo: orderNo,
+					orderNo,
 					origin: $page.data.origin,
-					storeId: $page.data.store?.id,
+					storeId: $page.data.storeId,
 					cartId: $page.data.cartId
 				})
-
-				// console.log('res of cashfree', res)
 
 				orderNo = res.order_no || ''
 
@@ -190,9 +188,8 @@ async function submit(pm) {
 						redirectTarget: '_parent',
 						returnUrl: res.order_meta?.return_url
 					})
-					.then(function () {
-						// console.log('on going redirection')
-					})
+					.then(function () {})
+
 				// if (res?.redirectUrl && res?.redirectUrl !== null) {
 				// 	goto(`${res?.redirectUrl}`)
 				// } else {
@@ -212,11 +209,12 @@ async function submit(pm) {
 				data.err = null
 				loading = true
 				loadingForPaymentProcessingSteps = true
-
 				const res = await OrdersService.phonepeCheckout({
 					address: data.addressId,
 					origin: $page.data.origin,
-					storeId: $page.data.store?.id
+					cartId: $page.data.cartId,
+					storeId: $page.data.storeId,
+					orderNo
 				})
 
 				// console.log('res of Phonepe', res)
@@ -241,7 +239,7 @@ async function submit(pm) {
 				const res = await OrdersService.paypalCheckout({
 					address: data.addressId,
 					origin: $page.data.origin,
-					storeId: $page.data.store?.id
+					storeId: $page.data.storeId
 				})
 
 				// console.log('res of Paypal', res)
@@ -265,21 +263,18 @@ async function submit(pm) {
 
 				const rp = await OrdersService.razorpayCheckout({
 					address: data.addressId,
-					orderNo: orderNo,
+					orderNo,
 					cartId: $page.data.cartId,
 					origin: $page.data.origin,
-					storeId: $page.data.store?.id
+					storeId: $page.data.storeId
 				})
 
-				// console.log('rp of Razorpay', rp)
-
 				orderNo = rp.order_no || ''
+				gotoOrder(orderNo)
 
 				const options = {
 					key: rp.keyId, // Enter the Key ID generated from the Dashboard
-					// name: $page.data?.store?.websiteName || 'Litekart',
-					// description: 'Payment for Litekart',
-					// image: $page.data?.store?.logo || logo,
+					description: `Order ${orderNo}`,
 					amount: rp.amount,
 					order_id: rp.id,
 					async handler(response) {
@@ -288,7 +283,7 @@ async function submit(pm) {
 								rpOrderId: response.razorpay_order_id,
 								rpPaymentId: response.razorpay_payment_id,
 								origin: $page.data.origin,
-								storeId: $page.data.store?.id
+								storeId: $page.data.storeId
 							})
 
 							toast('Payment success', 'success')
@@ -301,15 +296,9 @@ async function submit(pm) {
 					prefill: {
 						name: `${data.me.firstName} ${data.me.lastName}`,
 						phone: data.me.phone,
-						email: data.me.email || data.address.email || 'hi@litekart.in',
+						email: data.me.email || data.address.email || 'help@zapvi.in',
 						contact: data.me.phone
 					}
-					// notes: {
-					// 	address: ''
-					// },
-					// theme: {
-					// 	color: $page.data.store?.themeColor || '#18181B'
-					// }
 				}
 
 				const rzp1 = new Razorpay(options)
@@ -317,9 +306,9 @@ async function submit(pm) {
 			} catch (e) {
 				data.err = e
 				toast(`Payment failed, please try again`, 'error')
+				gotoOrder(orderNo)
 			} finally {
 				loading = false
-				gotoOrder(orderNo)
 			}
 		}
 	} else {
@@ -370,12 +359,12 @@ function checkIfStripeCardValid({ detail }) {
 							<div class="w-full flex-1 flex flex-col gap-2">
 								<div class="flex justify-between gap-4">
 									<div class="flex-1">
-										<h4 style="color:{pm.color}" class="leading-3 capitalize">
-											{pm.name || pm.value || pm.id}
+										<h4 style="color:{pm?.color}" class="leading-3 capitalize">
+											{pm?.name || pm?.value || pm?.id}
 										</h4>
 
 										<p class="mt-2">
-											{#if pm.text}
+											{#if pm?.text}
 												{@html pm.text}
 											{:else}
 												Payment securly
@@ -384,7 +373,7 @@ function checkIfStripeCardValid({ detail }) {
 									</div>
 
 									<div class="shrink-0">
-										{#if pm.img}
+										{#if pm?.img}
 											<img
 												src="{pm.img}"
 												alt="{pm.name}"
@@ -395,20 +384,20 @@ function checkIfStripeCardValid({ detail }) {
 											<div
 												class="flex h-10 w-10 p-2 items-center justify-center rounded-full border bg-zinc-200 text-center text-xs uppercase">
 												<span class="w-full truncate">
-													{pm.name || pm.value || pm.id}
+													{pm?.name || pm?.value || pm?.id}
 												</span>
 											</div>
 										{/if}
 									</div>
 								</div>
 
-								{#if pm.value === 'BankTransfer' && selectedPaymentMethod.value === 'BankTransfer'}
+								{#if pm?.value === 'BankTransfer' && selectedPaymentMethod?.value === 'BankTransfer'}
 									<div transition:slide="{{ duration: 300 }}" class:wiggle="{commentMissing}">
 										<TextboxFloating bind:value="{comment}" label="Transaction ID" />
 									</div>
 								{/if}
 
-								{#if pm.value === 'Stripe'}
+								{#if pm?.value === 'Stripe'}
 									<div transition:slide="{{ duration: 300 }}">
 										<svelte:component
 											this="{Stripe}"
@@ -545,8 +534,8 @@ function checkIfStripeCardValid({ detail }) {
 			<Pricesummary
 				cart="{data.cart}"
 				text="{errorMessage || 'Confirm Order'}"
-				loading="{loading}"
-				hideCheckoutButton="{selectedPaymentMethod.name === 'Stripe'}"
+				{loading}
+				hideCheckoutButton="{selectedPaymentMethod?.name === 'Stripe'}"
 				on:submit="{() => submit(selectedPaymentMethod)}" />
 
 			<TrustBaggeContainer class="mt-5" />
@@ -555,7 +544,7 @@ function checkIfStripeCardValid({ detail }) {
 </div>
 
 {#if loadingForPaymentProcessingSteps}
-	<PaymentLoading bind:loadingForPaymentProcessingSteps="{loadingForPaymentProcessingSteps}" />
+	<PaymentLoading bind:loadingForPaymentProcessingSteps />
 {/if}
 
 <iframe name="cashfreeFrame" title="Cashfree" class="absolute" allow="payment"></iframe>
