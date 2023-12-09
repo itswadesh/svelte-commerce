@@ -1,5 +1,5 @@
 import type { PlaywrightTestConfig } from '@playwright/test'
-import { port } from './tests/config'
+import { port } from './tests/ui/config'
 
 const config: PlaywrightTestConfig = {
 	webServer: {
