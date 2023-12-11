@@ -119,10 +119,10 @@ async function refreshAddress() {
 				<h2 class="mb-5">Select Delivery Address</h2>
 
 				{#if data.myAddresses?.data?.length}
-					<div class="mb-5 rounded-lg border bg-white shadow-lg">
+					<ul class="mb-5 p-0 list-none rounded-lg border bg-white shadow-lg">
 						{#each data.myAddresses.data as ads, adsIndex}
-							{#if displayAllDeliveryAddress ? true : adsIndex === 0}
-								<div transition:slide="{{ duration: 300 }}">
+							{#if displayAllDeliveryAddress ? true : adsIndex < 2}
+								<li transition:slide="{{ duration: 300 }}">
 									<SelectAddress
 										address="{ads}"
 										{loading}
@@ -130,11 +130,11 @@ async function refreshAddress() {
 										{selectedAddress}
 										on:deleteAddress="{refreshAddress}"
 										on:addressChanged="{({ detail }) => addressChanged({ detail })}" />
-								</div>
+								</li>
 							{/if}
 						{/each}
 
-						{#if data.myAddresses.data?.length > 1}
+						{#if data.myAddresses.data?.length > 2}
 							<button
 								type="button"
 								class="w-full p-5 focus:outline-none"
@@ -146,7 +146,7 @@ async function refreshAddress() {
 								{/if}
 							</button>
 						{/if}
-					</div>
+					</ul>
 
 					<!-- <div class="mb-5">
 						{selectedAddress}---{selectedBillingAddress}
@@ -167,20 +167,22 @@ async function refreshAddress() {
 						<!-- Select Billing Address -->
 
 						{#if !isSameAsBillingAddressWithLogIn}
-							<h2 class="mb-5">Select Billing Address</h2>
+							<div transition:slide="{{ duration: 300 }}" class="flex flex-col gap-5">
+								<h2 class="mb-5">Select Billing Address</h2>
 
-							<div class="mb-5 rounded-lg border bg-white shadow-lg">
-								{#each data.myAddresses.data as ads}
-									<div transition:slide="{{ duration: 300 }}">
-										<SelectBillingAddress
-											address="{ads}"
-											{loading}
-											countries="{data.countries}"
-											{selectedBillingAddress}
-											on:deleteAddress="{refreshAddress}"
-											on:addressChanged="{({ detail }) => billingAddressChanged({ detail })}" />
-									</div>
-								{/each}
+								<ul class="mb-5 p-0 list-none rounded-lg border bg-white shadow-lg">
+									{#each data.myAddresses.data as ads}
+										<li>
+											<SelectBillingAddress
+												address="{ads}"
+												{loading}
+												countries="{data.countries}"
+												{selectedBillingAddress}
+												on:deleteAddress="{refreshAddress}"
+												on:addressChanged="{({ detail }) => billingAddressChanged({ detail })}" />
+										</li>
+									{/each}
+								</ul>
 							</div>
 						{/if}
 					{/if}
