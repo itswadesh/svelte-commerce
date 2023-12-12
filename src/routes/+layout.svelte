@@ -93,6 +93,7 @@ onMount(async () => {
 	{#if $navigating}
 		<PreloadingIndicator />
 	{/if}
+
 	{#if !data?.store}
 		<!-- If store not found -->
 
@@ -143,8 +144,8 @@ onMount(async () => {
 		</ToastContainer>
 
 		<!-- {#if ReloadPrompt}
-		<svelte:component this="{ReloadPrompt}" />
-	{/if} -->
+			<svelte:component this="{ReloadPrompt}" />
+		{/if} -->
 	{:else}
 		<!-- If store found and is closed -->
 

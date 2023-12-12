@@ -149,7 +149,7 @@ let customizedImg
 let isExpired = false
 let loading = false
 let loadingForWishlist = false
-let product_image_dimension = $page.data.store?.product_image_dimension || '3x4'
+let product_image_dimension = $page.data.$page?.data?.store?.product_image_dimension || '3x4'
 let productReviews = {}
 let recentlyViewed = []
 let ribbonTags = []
@@ -200,11 +200,8 @@ if (data.product?.tags?.length) {
 
 	// console.log('Ribbon tags =', ribbonTags)
 }
-let store = {}
+
 onMount(async () => {
-	if (browser) {
-		storeStore.subscribe((value) => (store = value))
-	}
 	try {
 		screenWidth = screen.width
 		storeRecentlyViewedToLocatStorage()
@@ -597,7 +594,7 @@ async function updateVariant(variant) {
 				<hr class="block sm:hidden w-full" />
 
 				<div class="block sm:hidden">
-					{#if store?.isSecureCatalogue && !$page.data?.me}
+					{#if $page?.data?.store?.isSecureCatalogue && !$page.data?.me}
 						<a
 							href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page?.url
 								?.search}"
@@ -607,13 +604,13 @@ async function updateVariant(variant) {
 					{:else}
 						<div class="mb-2 flex flex-wrap items-baseline gap-2 text-sm">
 							<span class="text-xl font-bold whitespace-nowrap">
-								{currency(currentVariantPrice, store?.currencySymbol)}
+								{currency(currentVariantPrice, $page?.data?.store?.currencySymbol)}
 							</span>
 
 							{#if data.product?.mrp > currentVariantPrice}
 								<span class="whitespace-nowrap text-zinc-500">
 									<strike>
-										{currency(data.product?.mrp, store?.currencySymbol)}
+										{currency(data.product?.mrp, $page?.data?.store?.currencySymbol)}
 									</strike>
 								</span>
 
@@ -628,7 +625,7 @@ async function updateVariant(variant) {
 						{#await data.streamed?.moreProductDetails then value}
 							<h6 class="text-brand-500">
 								{#if value?.igst}
-									Inclusive {currency(value?.igst, store?.currencySymbol)} GST
+									Inclusive {currency(value?.igst, $page?.data?.store?.currencySymbol)} GST
 								{:else}
 									Inclusive of all taxes
 								{/if}
@@ -639,7 +636,7 @@ async function updateVariant(variant) {
 
 				<!-- ratings -->
 
-				{#if store?.isProductReviewsAndRatings}
+				{#if $page?.data?.store?.isProductReviewsAndRatings}
 					{#await data.streamed?.productReviews then productReviews}
 						{#if productReviews?.reviewsSummary?.productReviews?.summary?.ratings_avg?.value}
 							<button
@@ -678,7 +675,7 @@ async function updateVariant(variant) {
 
 				<!-- Delivery Options Mobile -->
 
-				{#if data.product?.handling_time_when_stock || data.product?.handling_time_when_nis || store?.isIndianPincodes}
+				{#if data.product?.handling_time_when_stock || data.product?.handling_time_when_nis || $page?.data?.store?.isIndianPincodes}
 					<div class="sm:hidden block">
 						<div class="mb-2 flex items-center gap-2 uppercase">
 							<h5>Delivery Options</h5>
@@ -709,7 +706,7 @@ async function updateVariant(variant) {
 								</span>
 							{/if}
 
-							{#if store?.isIndianPincodes}
+							{#if $page?.data?.store?.isIndianPincodes}
 								<DeliveryOptions
 									product="{data.product}"
 									deliveryDetails="{data.deliveryDetails}" />
@@ -721,23 +718,23 @@ async function updateVariant(variant) {
 				<!-- prices desktop -->
 
 				<div class="hidden sm:block">
-					{#if store?.isSecureCatalogue && !$page.data?.me}
+					{#if $page?.data?.store?.isSecureCatalogue && !$page.data?.me}
 						<a
-							href="{store?.otpLogin ? '/auth/otp-login' : '/auth/login'}?ref={$page?.url
-								?.pathname}{$page?.url?.search}"
+							href="{$page?.data?.store?.otpLogin ? '/auth/otp-login' : '/auth/login'}?ref={$page
+								?.url?.pathname}{$page?.url?.search}"
 							class="block hover:underline max-w-max font-bold">
 							Login to view price
 						</a>
 					{:else}
 						<div class="mb-2 flex flex-wrap items-baseline gap-2">
 							<span class="text-2xl font-bold whitespace-nowrap">
-								{currency(currentVariantPrice, store?.currencySymbol)}
+								{currency(currentVariantPrice, $page?.data?.store?.currencySymbol)}
 							</span>
 
 							{#if data.product?.mrp > currentVariantPrice}
 								<span class="whitespace-nowrap text-zinc-500">
 									<strike>
-										{currency(data.product?.mrp, store?.currencySymbol)}
+										{currency(data.product?.mrp, $page?.data?.store?.currencySymbol)}
 									</strike>
 								</span>
 
@@ -752,7 +749,7 @@ async function updateVariant(variant) {
 						{#await data.streamed?.moreProductDetails then value}
 							<h6 class="text-brand-500">
 								{#if value?.igst}
-									Inclusive {currency(value?.igst, store?.currencySymbol)} GST
+									Inclusive {currency(value?.igst, $page?.data?.store?.currencySymbol)} GST
 								{:else}
 									Inclusive of all taxes
 								{/if}
@@ -985,7 +982,9 @@ async function updateVariant(variant) {
 											</span>
 
 											{#if mgp.material.price}
-												<span><b>{currency(mgp.material.price, store?.currencySymbol)}</b></span>
+												<span
+													><b>{currency(mgp.material.price, $page?.data?.store?.currencySymbol)}</b
+													></span>
 											{/if}
 										</a>
 									</li>
@@ -1301,7 +1300,7 @@ async function updateVariant(variant) {
 					{#if !data.product?.isCustomized}
 						<div
 							class="w-full hidden md:grid gap-2 items-center uppercase grid-cols-2 static max-w-sm">
-							{#if store?.isWishlist}
+							{#if $page?.data?.store?.isWishlist}
 								<div class="col-span-1">
 									<form
 										id="toggle_wishlist_1"
@@ -1376,7 +1375,7 @@ async function updateVariant(variant) {
 
 							{#if currentVariantPrice > 0}
 								<div class="col-span-1">
-									{#if store?.isSecureCatalogue && !$page.data?.me}
+									{#if $page?.data?.store?.isSecureCatalogue && !$page.data?.me}
 										<a
 											href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
 												?.url?.search}"
@@ -1580,7 +1579,7 @@ async function updateVariant(variant) {
 
 				<!-- Delivery Options Desktop -->
 
-				{#if data.product?.handling_time_when_stock || data.product?.handling_time_when_nis || store?.isIndianPincodes}
+				{#if data.product?.handling_time_when_stock || data.product?.handling_time_when_nis || $page?.data?.store?.isIndianPincodes}
 					<div class="hidden sm:block">
 						<div class="mb-2 flex items-center gap-2 uppercase">
 							<h5>Delivery Options</h5>
@@ -1611,7 +1610,7 @@ async function updateVariant(variant) {
 								</span>
 							{/if}
 
-							{#if store?.isIndianPincodes}
+							{#if $page?.data?.store?.isIndianPincodes}
 								<DeliveryOptions
 									product="{data.product}"
 									deliveryDetails="{data.deliveryDetails}" />
@@ -1622,7 +1621,7 @@ async function updateVariant(variant) {
 
 				<!-- Ratings & Reviews -->
 
-				{#if store?.isProductReviewsAndRatings}
+				{#if $page?.data?.store?.isProductReviewsAndRatings}
 					{#await data.streamed?.productReviews}
 						<ul class="m-0 p-0 flex flex-col gap-5">
 							{#each { length: 3 } as _}
@@ -1676,10 +1675,10 @@ async function updateVariant(variant) {
 
 				<!-- Promo video -->
 
-				{#if store?.storePromoVideo?.active?.val && getIdFromYoutubeVideo(store?.storePromoVideo?.url?.val)}
+				{#if $page?.data?.store?.storePromoVideo?.active?.val && getIdFromYoutubeVideo($page?.data?.store?.storePromoVideo?.url?.val)}
 					<iframe
 						src="https://www.youtube.com/embed/{getIdFromYoutubeVideo(
-							store?.storePromoVideo?.url?.val
+							$page?.data?.store?.storePromoVideo?.url?.val
 						)}"
 						title="YouTube video player"
 						frameborder="0"
@@ -1704,7 +1703,7 @@ async function updateVariant(variant) {
 					{#if showStickyCartButton && !data.product?.isCustomized}
 						<div
 							class="w-full grid md:hidden grid-cols-5 gap-2 items-center uppercase fixed inset-x-0 bottom-0 z-40 h-16 border-t bg-white p-3 box-shadow">
-							{#if store?.isWishlist}
+							{#if $page?.data?.store?.isWishlist}
 								<div class="col-span-2">
 									<form
 										id="toggle_wishlist_2"
@@ -1778,8 +1777,8 @@ async function updateVariant(variant) {
 							{/if}
 
 							{#if currentVariantPrice > 0}
-								<div class="{store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
-									{#if store?.isSecureCatalogue && !$page.data?.me}
+								<div class="{$page?.data?.store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
+									{#if $page?.data?.store?.isSecureCatalogue && !$page.data?.me}
 										<a
 											href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
 												?.url?.search}"
@@ -1943,7 +1942,7 @@ async function updateVariant(variant) {
 
 					{#if !data.product?.isCustomized}
 						<div class="w-full grid md:hidden grid-cols-5 gap-2 items-center uppercase">
-							{#if store?.isWishlist}
+							{#if $page?.data?.store?.isWishlist}
 								<div class="col-span-2">
 									<form
 										id="toggle_wishlist_3"
@@ -2017,8 +2016,8 @@ async function updateVariant(variant) {
 							{/if}
 
 							{#if currentVariantPrice > 0}
-								<div class="{store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
-									{#if store?.isSecureCatalogue && !$page.data?.me}
+								<div class="{$page?.data?.store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
+									{#if $page?.data?.store?.isSecureCatalogue && !$page.data?.me}
 										<a
 											href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
 												?.url?.search}"
@@ -2257,7 +2256,7 @@ async function updateVariant(variant) {
 				type="button"
 				class="p-3 sm:px-10 w-full flex items-center justify-between gap-4 text-sm focus:outline-none"
 				on:click="{() => (showFooter = !showFooter)}">
-				<span>More about {store?.websiteName || 'store'}</span>
+				<span>More about {$page?.data?.store?.websiteName || 'store'}</span>
 
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
