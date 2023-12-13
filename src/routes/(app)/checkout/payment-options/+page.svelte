@@ -17,7 +17,7 @@ const seoProps = {
 }
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
+console.log('zzzzzzzzzzzzzzzzzz', data)
 // console.log('$page', $page)
 
 let cashfreeReady = false
