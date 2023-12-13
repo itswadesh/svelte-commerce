@@ -8,17 +8,15 @@ test('Test Menu Services', async ({ request }) => {
 
 	// const storeData = await res.json()
 
-    // // expect status code should 200
+	// // expect status code should 200
 	// expect(res.status()).toBe(200)
 
-    const menus = await request.get(`${API_URL}menus?active=true&store=${storeId}`)
+	const menus = await request.get(`${API_URL}menus?active=true&store=${storeId}`)
 
-    // expect menus status code should 200
+	// expect menus status code should 200
 
 	expect(menus.status()).toBe(200)
 
-    // console.log('menus', await menus.json());
-    
-
+	// console.log('menus', await menus.json());
 })
 

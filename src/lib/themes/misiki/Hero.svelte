@@ -73,7 +73,7 @@ $: if (innerWidth < 640) {
 }
 </script>
 
-<svelte:window bind:innerHeight="{innerHeight}" bind:innerWidth="{innerWidth}" />
+<svelte:window bind:innerHeight bind:innerWidth />
 
 <!-- Desktop banner -->
 

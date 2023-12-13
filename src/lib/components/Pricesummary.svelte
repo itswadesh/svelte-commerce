@@ -171,7 +171,9 @@ onMount(async () => {
 			</div>
 		{/if} -->
 
-		{#if $page.data.me}
+		{#if $page.url.pathname === '/checkout/address' && !$page.data.me}
+			<div class="hidden"></div>
+		{:else}
 			<div class="hidden md:block">
 				{#if cart?.qty > 0 && !hideCheckoutButton}
 					{#if nextpage}

@@ -30,7 +30,7 @@ onMount(async () => {
 })
 </script>
 
-<svelte:window bind:innerWidth="{innerWidth}" />
+<svelte:window bind:innerWidth />
 
 {#await data?.streamed?.feedbacks then feedbacks}
 	{#if feedbacks?.count > 0}

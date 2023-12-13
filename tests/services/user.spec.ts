@@ -17,9 +17,7 @@ test('Test login ', async ({ request }) => {
 		store: storeId
 	}
 
-    // console.log(JSON.stringify(data));
-    
-    
+	// console.log(JSON.stringify(data));
 
 	// const opts = 
 

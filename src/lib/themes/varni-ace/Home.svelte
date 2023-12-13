@@ -23,7 +23,7 @@ export let data
 export let showFooter = false
 export let showPinCodeEntryModal = false
 
-console.log('zzzzzzzzzzzzzzzzzz', data)
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let today = dayjs(new Date()).toISOString()
 
@@ -284,7 +284,7 @@ function handleFilterTags() {
 
 <SEO {...seoProps} />
 
-<svelte:window bind:scrollY="{y}" bind:innerWidth="{innerWidth}" on:scroll="{handleOnScroll}" />
+<svelte:window bind:scrollY="{y}" bind:innerWidth on:scroll="{handleOnScroll}" />
 
 <div class="bg-opacity-25 bg-center bg-repeat min-h-screen">
 	<div class="mb-14 lg:mb-0">
@@ -329,18 +329,18 @@ function handleFilterTags() {
 				<DesktopFilter
 					class="sticky hidden lg:block {hellobar?.active?.val ? 'top-32' : 'top-24'}"
 					facets="{data.products.facets}"
-					priceRange="{priceRange}"
+					{priceRange}
 					query="{data.query}"
 					on:clearAll="{refreshData}" />
 
 				<!-- materials="{data?.products?.facets?.all_aggs?.materials?.all?.buckets}" -->
 				<MobileFilter
 					bind:selected="{selectedFilter}"
-					bind:showFilter="{showFilter}"
-					bind:showSort="{showSort}"
+					bind:showFilter
+					bind:showSort
 					class="mb-5 block lg:hidden"
 					facets="{data.products.facets}"
-					priceRange="{priceRange}"
+					{priceRange}
 					on:clearAll="{refreshData}" />
 			{/if}
 

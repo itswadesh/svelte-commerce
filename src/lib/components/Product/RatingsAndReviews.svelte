@@ -321,7 +321,7 @@ const handleSelectedProductGallery = (review, rx) => {
 
 						<ReviewGallery
 							showPhotosModal="{showGalleryModal}"
-							gallery="{gallery}"
+							{gallery}
 							on:close="{() => (showGalleryModal = false)}" />
 					{/if}
 				{/if}

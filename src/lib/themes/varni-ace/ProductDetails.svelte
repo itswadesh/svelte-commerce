@@ -89,7 +89,7 @@ const cookies = Cookie()
 const isServer = import.meta.env.SSR
 
 export let data
-console.log('zzzzzzzzzzzzzzzzzz', data)
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let currentVariantId = $page.url.searchParams?.get('variant') || ''
 let currentVariantPrice = data.product?.price || 0
@@ -1434,7 +1434,7 @@ async function updateVariant(variant) {
 
 												<SecondaryButton
 													type="submit"
-													loading="{loading}"
+													{loading}
 													loadingringsize="sm"
 													roundedNone
 													class="w-full">
@@ -1840,7 +1840,7 @@ async function updateVariant(variant) {
 
 												<SecondaryButton
 													type="submit"
-													loading="{loading}"
+													{loading}
 													loadingringsize="sm"
 													roundedNone
 													class="w-full">
@@ -2083,7 +2083,7 @@ async function updateVariant(variant) {
 
 												<SecondaryButton
 													type="submit"
-													loading="{loading}"
+													{loading}
 													loadingringsize="sm"
 													roundedNone
 													class="w-full">
@@ -2240,8 +2240,8 @@ async function updateVariant(variant) {
 </div>
 
 <Gallery
-	bind:selectedImgIndex="{selectedImgIndex}"
-	bind:showPhotosModal="{showPhotosModal}"
+	bind:selectedImgIndex
+	bind:showPhotosModal
 	images="{data.product?.images}"
 	title="{data.product?.businessName}" />
 

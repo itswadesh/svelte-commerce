@@ -93,7 +93,11 @@ function changePage(e, p) {
 						<span class="text-3xl font-bold">{data?.blogs?.count}</span>
 
 						<span>
-							awesome {#if data?.blogs?.count > 1} articles collection {:else} article {/if}
+							awesome {#if data?.blogs?.count > 1}
+								articles collection
+							{:else}
+								article
+							{/if}
 						</span>
 					</h1>
 
@@ -104,7 +108,7 @@ function changePage(e, p) {
 			<div class="container mx-auto px-4 md:px-10">
 				<div class="grid grid-cols-1 gap-2 sm:gap-4 md:grid-cols-2 lg:grid-cols-3">
 					{#each data?.blogs?.data as blog}
-						<BlogPostGrid blog="{blog}" />
+						<BlogPostGrid {blog} />
 					{/each}
 				</div>
 			</div>
