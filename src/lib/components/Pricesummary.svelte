@@ -1,18 +1,21 @@
 <script lang="ts">
-import { createEventDispatcher } from 'svelte'
+import { createEventDispatcher, onMount } from 'svelte'
 import { currency } from '$lib/utils'
-import { page } from '$app/stores'
 import { PrimaryButton } from '$lib/ui'
+import { browser } from '$app/environment'
+import { cartStore } from '$lib/store/cart'
+import { page } from '$app/stores'
+// import { storeStore } from '$lib/store/store'
 
 const dispatch = createEventDispatcher()
 
-export let cart
 export let disabled = false
 export let hideCheckoutButton = false
 export let loading = false
 export let nextpage = null
 export let showNextIcon = false
 export let text = 'Proceed to checkout'
+$: cart = {}
 
 // console.log('zzzzzzzzzzzzzzzzzz', cart)
 
@@ -24,6 +27,14 @@ function modulo(n, m) {
 function submit() {
 	dispatch('submit')
 }
+
+$: store = $page.data?.store
+onMount(async () => {
+	if (browser) {
+		// storeStore.subscribe((value) => (store = value))
+		cartStore.subscribe((value) => (cart = value))
+	}
+})
 </script>
 
 {#if cart}
@@ -33,7 +44,11 @@ function submit() {
 
 			<p>
 				({cart?.qty}
-				{#if cart?.qty > 1} items {:else} item {/if})
+				{#if cart?.qty > 1}
+					items
+				{:else}
+					item
+				{/if})
 			</p>
 		</div>
 
@@ -62,7 +77,7 @@ function submit() {
 					<span>
 						{currency(
 							cart?.formattedAmount?.savings?.value || cart?.savings,
-							cart?.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
+							cart?.formattedAmount?.subtotal?.currency
 						)}
 					</span>
 				</div>
@@ -75,7 +90,7 @@ function submit() {
 					<span class="text-brand-500">
 						- {currency(
 							cart?.discount?.value || cart?.discount?.amount,
-							cart?.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
+							cart?.formattedAmount?.subtotal?.currency
 						)}
 					</span>
 				</div>
@@ -103,7 +118,7 @@ function submit() {
 					<span>COD Charges</span>
 
 					<span>
-						{currency(cart.codCharges, $page.data?.store?.currencySymbol)}
+						{currency(cart.codCharges, store?.currencySymbol)}
 					</span>
 				</div>
 			{/if}
@@ -120,7 +135,7 @@ function submit() {
 					{:else}
 						{currency(
 							cart?.formattedAmount?.shipping?.value || cart?.shipping?.charge,
-							cart?.formattedAmount?.subtotal?.currency || $page.data?.store?.currencySymbol
+							cart?.formattedAmount?.subtotal?.currency
 						)}
 					{/if}
 				</span>
@@ -150,17 +165,41 @@ function submit() {
 			<div class="mb-5 bg-brand-100 p-1 w-full text-center text-sm text-zinc-500">
 				You are saving
 				<span class="text-brand-500 font-bold">
-					{currency(cart?.savings + cart?.discount?.amount, $page.data?.store?.currencySymbol)}
+					{currency(cart?.savings + cart?.discount?.amount, store?.currencySymbol)}
 				</span>
 				on this order
 			</div>
 		{/if} -->
 
-		<div class="hidden md:block">
-			{#if cart?.qty > 0 && !hideCheckoutButton}
-				{#if nextpage}
-					<a href="{nextpage}">
-						<PrimaryButton class="group w-full uppercase" loading="{loading}" disabled="{disabled}">
+		{#if $page.data.me}
+			<div class="hidden md:block">
+				{#if cart?.qty > 0 && !hideCheckoutButton}
+					{#if nextpage}
+						<a href="{nextpage}">
+							<PrimaryButton class="group w-full uppercase" {loading} {disabled}>
+								<span>{text}</span>
+
+								{#if showNextIcon}
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										class="h-5 w-5 transform transition duration-700 group-hover:translate-x-2"
+										viewBox="0 0 20 20"
+										fill="currentColor">
+										<path
+											fill-rule="evenodd"
+											d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+											clip-rule="evenodd"></path>
+									</svg>
+								{/if}
+							</PrimaryButton>
+						</a>
+					{:else}
+						<PrimaryButton
+							type="submit"
+							class="w-full uppercase"
+							{loading}
+							{disabled}
+							on:click="{submit}">
 							<span>{text}</span>
 
 							{#if showNextIcon}
@@ -176,43 +215,45 @@ function submit() {
 								</svg>
 							{/if}
 						</PrimaryButton>
-					</a>
-				{:else}
-					<PrimaryButton
-						type="submit"
-						class="w-full uppercase"
-						loading="{loading}"
-						disabled="{disabled}"
-						on:click="{submit}">
-						<span>{text}</span>
-
-						{#if showNextIcon}
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="h-5 w-5 transform transition duration-700 group-hover:translate-x-2"
-								viewBox="0 0 20 20"
-								fill="currentColor">
-								<path
-									fill-rule="evenodd"
-									d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-									clip-rule="evenodd"></path>
-							</svg>
-						{/if}
-					</PrimaryButton>
+					{/if}
 				{/if}
-			{/if}
-		</div>
+			</div>
 
-		<div class="fixed inset-x-0 bottom-0 z-50 block w-full md:hidden">
-			{#if cart?.qty > 0 && !hideCheckoutButton}
-				{#if nextpage}
-					<a href="{nextpage}">
+			<div class="fixed inset-x-0 bottom-0 z-50 block w-full md:hidden">
+				{#if cart?.qty > 0 && !hideCheckoutButton}
+					{#if nextpage}
+						<a href="{nextpage}">
+							<PrimaryButton
+								roundedNone
+								class="w-full uppercase h-14"
+								clickEffect="{false}"
+								{loading}
+								{disabled}>
+								<span>{text}</span>
+
+								{#if showNextIcon}
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										class="h-5 w-5 transform transition duration-700 group-hover:translate-x-2"
+										viewBox="0 0 20 20"
+										fill="currentColor">
+										<path
+											fill-rule="evenodd"
+											d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+											clip-rule="evenodd"></path>
+									</svg>
+								{/if}
+							</PrimaryButton>
+						</a>
+					{:else}
 						<PrimaryButton
 							roundedNone
+							type="submit"
 							class="w-full uppercase h-14"
 							clickEffect="{false}"
-							loading="{loading}"
-							disabled="{disabled}">
+							{loading}
+							{disabled}
+							on:click="{submit}">
 							<span>{text}</span>
 
 							{#if showNextIcon}
@@ -228,33 +269,9 @@ function submit() {
 								</svg>
 							{/if}
 						</PrimaryButton>
-					</a>
-				{:else}
-					<PrimaryButton
-						roundedNone
-						type="submit"
-						class="w-full uppercase h-14"
-						clickEffect="{false}"
-						loading="{loading}"
-						disabled="{disabled}"
-						on:click="{submit}">
-						<span>{text}</span>
-
-						{#if showNextIcon}
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="h-5 w-5 transform transition duration-700 group-hover:translate-x-2"
-								viewBox="0 0 20 20"
-								fill="currentColor">
-								<path
-									fill-rule="evenodd"
-									d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-									clip-rule="evenodd"></path>
-							</svg>
-						{/if}
-					</PrimaryButton>
+					{/if}
 				{/if}
-			{/if}
-		</div>
+			</div>
+		{/if}
 	</section>
 {/if}

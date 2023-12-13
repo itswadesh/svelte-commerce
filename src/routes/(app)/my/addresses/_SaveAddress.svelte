@@ -206,11 +206,13 @@ function validatePhoneNumber(phoneNumber) {
 	<Error err="{err?.message?.error || err}" class="mb-5" />
 
 	<form
-		action="{address.id === 'new' ? '/my/addresses?/saveAddress' : '/my/addresses?/editAddress'}"
+		action="{!address.id || address.id === 'new'
+			? '/my/addresses?/saveAddress'
+			: '/my/addresses?/editAddress'}"
 		method="POST"
 		use:enhance="{() => {
 			return async ({ result }) => {
-				// console.log('result', result)
+				console.log('result', result)
 
 				// console.log(
 				// 	'result, address.id, $page?.url?.pathname',
@@ -223,7 +225,7 @@ function validatePhoneNumber(phoneNumber) {
 					const newAddressId = result.data?._id || result.data?.id
 					toast('Address Info Saved.', 'success')
 
-					if (address.id === 'new' && newAddressId) {
+					if ((!address.id || address.id === 'new') && newAddressId) {
 						if ($page?.url?.pathname.includes('checkout')) {
 							goto(`/checkout/payment-options?address=${newAddressId}`)
 						} else {
@@ -469,9 +471,13 @@ function validatePhoneNumber(phoneNumber) {
 			type="submit"
 			{loading}
 			disabled="{loading || showErrorMessage}"
-			class="w-60"
+			class="{$page.data.me ? 'w-60' : 'w-80'}"
 			on:click="{() => (zodErrors = null)}">
-			Save Address
+			{#if $page.data.me}
+				Save Address
+			{:else}
+				Save and Proceed to Checkout
+			{/if}
 		</PrimaryButton>
 	</form>
 </div>

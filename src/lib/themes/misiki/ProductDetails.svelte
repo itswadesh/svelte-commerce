@@ -1471,7 +1471,6 @@ async function updateVariant(variant) {
 														if (customizedImg) {
 															goto(`/checkout/address`)
 														}
-														// await invalidateAll()
 														await applyAction(result)
 													}
 												}}">
@@ -1873,7 +1872,6 @@ async function updateVariant(variant) {
 														if (customizedImg) {
 															goto(`/checkout/address`)
 														}
-														// invalidateAll()
 														await applyAction(result)
 													}
 												}}">
@@ -2112,7 +2110,6 @@ async function updateVariant(variant) {
 														if (customizedImg) {
 															goto(`/checkout/address`)
 														}
-														// invalidateAll()
 														await applyAction(result)
 													}
 												}}">
