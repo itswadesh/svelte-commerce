@@ -126,7 +126,7 @@ const saveAddress = async ({ request, cookies, locals }) => {
 			})
 		}
 
-		console.log('res of save address = ', res)
+		// console.log('res of save address = ', res)
 
 		return res
 	}

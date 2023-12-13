@@ -212,7 +212,7 @@ function validatePhoneNumber(phoneNumber) {
 		method="POST"
 		use:enhance="{() => {
 			return async ({ result }) => {
-				console.log('result', result)
+				// console.log('result', result)
 
 				// console.log(
 				// 	'result, address.id, $page?.url?.pathname',

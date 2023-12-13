@@ -63,7 +63,7 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 				address_id = order.addressId
 				address = order.address
 			}
-		} else {
+		} else if (locals.me) {
 			address = await AddressService.fetchAddress({
 				id: address_id,
 				storeId,
@@ -81,6 +81,7 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 
 		return { store, paymentMethods, address, addressId: address_id, me, cart }
 	} catch (e) {
+		// console.log('eeeeeeeeeeeeeeeeeee', e);
 		return {
 			paymentMethods,
 			address,

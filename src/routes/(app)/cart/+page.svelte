@@ -15,8 +15,9 @@ import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 import SEO from '$lib/components/SEO/index.svelte'
-import { cartStore, updateCartStore } from '$lib/store/cart.js'
+import { cartLoadingStore, cartStore, getCartFromStore, updateCartStore } from '$lib/store/cart.js'
 import { browser } from '$app/environment'
+import { storeStore } from '$lib/store/store.js'
 
 const cookies = Cookie()
 
@@ -43,16 +44,21 @@ let products = []
 let selectedCouponCode = null
 let selectedLoadingType = null
 $: cart = {}
-
+$: isCartLoading = true
+let store
 onMount(() => {
 	if (browser) {
+		storeStore.subscribe((value) => (store = value))
 		cartStore.subscribe((value) => {
 			cart = value
+		})
+		cartLoadingStore.subscribe((value) => {
+			isCartLoading = value
 		})
 	}
 	getProducts()
 	getCoupons()
-	fireGTagEvent('view_cart', data.cart)
+	fireGTagEvent('view_cart', cart)
 })
 
 function handleCouponCode(couponCode: string, index: number) {
@@ -73,11 +79,17 @@ async function applyCouponCode(selectedCouponCode: string, index: number) {
 			cartId: $page.data.cartId,
 			code: selectedCouponCode,
 			origin: $page.data.origin,
-			storeId: $page.data.store?.id
+			storeId: $page.data.storeId
 		})
 
 		appliedCouponInfo = resAC
-		await invalidateAll()
+		// await invalidateAll()
+		await getCartFromStore({
+			cartId: $page.data.cartId,
+			origin: $page.data.origin,
+			storeId: $page.data.storeId,
+			forceUpdate: true
+		})
 		openApplyPromoCodeModal = false
 	} catch (e) {
 		couponErr = e
@@ -96,13 +108,19 @@ async function removeCouponCode() {
 
 		await CartService.removeCouponService({
 			cartId: $page.data.cartId,
-			code: selectedCouponCode || data.cart?.discount?.code,
+			code: selectedCouponCode || cart?.discount?.code,
 			origin: $page.data.origin,
-			storeId: $page.data.store?.id
+			storeId: $page.data.storeId
 		})
 
 		selectedCouponCode = ''
-		await invalidateAll()
+		// await invalidateAll()
+		await getCartFromStore({
+			cartId: $page.data.cartId,
+			origin: $page.data.origin,
+			storeId: $page.data.storeId,
+			forceUpdate: true
+		})
 	} catch (e) {
 		couponErr = e
 	} finally {
@@ -117,7 +135,7 @@ async function getProducts() {
 		const resP = await ProductService.fetchProducts({
 			origin: $page?.data?.origin,
 			isCors: $page?.data?.store?.isCors,
-			storeId: $page?.data?.store?.id
+			storeId: $page?.data?.storeId
 		})
 		products = resP?.hits
 	} catch (e) {
@@ -132,7 +150,7 @@ async function getCoupons() {
 		const resC = await CouponService.fetchCoupons({
 			origin: $page?.data?.origin,
 			isCors: $page?.data?.store?.isCors,
-			storeId: $page?.data?.store?.id
+			storeId: $page?.data?.storeId
 		})
 		coupons = resC?.data
 	} catch (e) {
@@ -169,9 +187,9 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 							<div class="mx-3 h-1 w-1 rounded-full bg-zinc-500"></div>
 
 							<p>
-								{data.cart?.qty || ''}
+								{cart?.qty || ''}
 
-								{#if data.cart?.qty > 1}
+								{#if cart?.qty > 1}
 									Items
 								{:else}
 									Item
@@ -183,7 +201,7 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 					<hr />
 
 					<div>
-						{#if data.cart?.unavailableItems?.length}
+						{#if cart?.unavailableItems?.length}
 							<div>
 								<div class="mt-5 cursor-default border-b opacity-50">
 									<div class="flex gap-4">
@@ -206,7 +224,7 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 									</div>
 
 									<div class="flex flex-col divide-y">
-										{#each data.cart?.unavailableItems as item (item._id)}
+										{#each cart?.unavailableItems as item (item._id)}
 											<div class="flex w-full items-start gap-4 py-5">
 												<a
 													href="/product/{item?.slug}"
@@ -301,7 +319,7 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 									use:enhance="{() => {
 										loadingMoveUnavailableItemsToWishlist = true
 										return async ({ result }) => {
-											console.log('result of unabailable items', result)
+											// console.log('result of unabailable items', result)
 											await invalidateAll()
 											await applyAction(result)
 											loadingMoveUnavailableItemsToWishlist = false
@@ -314,10 +332,9 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 								</form>
 							</div>
 						{/if}
-
-						{#if data.cart?.qty}
+						{#if cart?.qty}
 							<div class="flex flex-col divide-y">
-								{#each data.cart?.items as item, ix (item._id)}
+								{#each cart?.items as item, ix (item._id)}
 									<!-- PID can not be a key because in case of customized items it will repeat-->
 									<!-- Product detail start -->
 									<div
@@ -460,7 +477,7 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 															return async ({ result }) => {
 																updateCartStore({ data: result.data })
 																fireGTagEvent('remove_from_cart', item)
-																await invalidateAll()
+																// await invalidateAll()
 																await applyAction(result)
 																loading[ix] = false
 															}
@@ -523,7 +540,7 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 															return async ({ result }) => {
 																fireGTagEvent('add_to_cart', result?.data)
 																updateCartStore({ data: result.data })
-																await invalidateAll()
+																// await invalidateAll()
 																await applyAction(result)
 																loading[ix] = false
 															}
@@ -648,12 +665,12 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 				<div class="w-full lg:w-96 lg:shrink-0 lg:grow-0">
 					<!-- Promo code section -->
 
-					{#if $page.data.store?.isDiscountCoupons}
+					{#if store?.isDiscountCoupons}
 						<div class="h-10 sm:h-14 flex items-center">
-							{#if data.cart?.discount?.amount > 0}
+							{#if cart?.discount?.amount > 0}
 								<div class="flex w-full items-center justify-between text-sm">
 									<h5 class="flex-1 truncate text-left">
-										Applied Coupon "{data.cart?.discount?.code}"
+										Applied Coupon "{cart?.discount?.code}"
 									</h5>
 
 									<button
@@ -695,11 +712,7 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 					{/if}
 					<hr class="mb-5" />
 
-					<Pricesummary
-						cart="{data.cart}"
-						nextpage="/checkout/address"
-						text="Select Address"
-						showNextIcon />
+					<Pricesummary {cart} nextpage="/checkout/address" text="Select Address" showNextIcon />
 
 					<TrustBaggeContainer class="mt-5" />
 				</div>
@@ -782,7 +795,7 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 													<div class="mb-2 flex items-center gap-3">
 														<div
 															class="max-w-max relative rounded border border-zinc-500 border-dashed py-1 px-4 font-semibold tracking-wide
-															{data.cart?.discount?.code === coupon.code
+															{cart?.discount?.code === coupon.code
 																? 'border-blue-500 text-blue-500'
 																: 'group-hover:border-blue-500 group-hover:text-blue-500'}">
 															{coupon.code}
@@ -812,7 +825,7 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 															{/if}
 														</div>
 
-														{#if data.cart?.discount?.code === coupon.code}
+														{#if cart?.discount?.code === coupon.code}
 															<svg
 																xmlns="http://www.w3.org/2000/svg"
 																class="h-5 w-5 text-brand-500"
@@ -872,7 +885,7 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 					</div>
 				</div>
 			{/if}
-		{:else}
+		{:else if !isCartLoading}
 			<div class="flex h-[70vh] flex-col items-center justify-center text-center">
 				<div>
 					<img src="{noAddToCartAnimate}" alt="empty listing" class="mb-5 h-60 object-contain" />
