@@ -1,6 +1,6 @@
 <script>
 // import { navigateToProperPath } from '$lib/utils/index.js'
-// import logo from '$lib/assets/logo.svg'
+// import logo from '$lib/assets/logo.png'
 // import ProductTab from '$lib/components/Product/ProductTab.svelte'
 import {
 	CategoriesHome,
@@ -31,14 +31,23 @@ import { page } from '$app/stores'
 import { slide } from 'svelte/transition'
 import PincodeInputBox from '$lib/themes/misiki/PincodeInputBox.svelte'
 import Skeleton from '$lib/ui/Skeleton.svelte'
+import { onMount } from 'svelte'
+import { browser } from '$app/environment'
+import { storeStore } from '$lib/store/store'
 
 export let data
 export let showFooter = false
 export let showPinCodeEntryModal = false
+let store = {}
+onMount(() => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
+})
 </script>
 
 <div class="bg-opacity-25 bg-center bg-repeat min-h-screen">
-	{#if $page.data.store?.isHyperlocal && showPinCodeEntryModal}
+	{#if store.isHyperlocal && showPinCodeEntryModal}
 		<PincodeInputBox on:close="{() => (showPinCodeEntryModal = false)}" />
 	{/if}
 
@@ -137,7 +146,7 @@ export let showPinCodeEntryModal = false
 
 		<!-- Hero banners -->
 
-		{#await data.streamed.home}
+		<!-- {#await data.streamed.home}
 			<div class="p-3 py-5 md:py-10 grid grid-cols-2 items-center gap-2 md:grid-cols-4">
 				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 
@@ -153,11 +162,11 @@ export let showPinCodeEntryModal = false
 			{#if home.page?.heroBanners?.banners?.length}
 				<HeroBanners heroBanners="{home?.page?.heroBanners?.banners}" />
 			{/if}
-		{/await}
+		{/await} -->
 
 		<!-- Picked banners -->
 
-		{#await data.streamed.home}
+		<!-- {#await data.streamed.home}
 			<div class="w-screen overflow-x-auto scrollbar-none lg:hidden">
 				<div class="flex flex-row items-start gap-5">
 					{#each { length: 7 } as _}
@@ -175,7 +184,7 @@ export let showPinCodeEntryModal = false
 			{#if home.page?.pickedBanners?.length > 0}
 				<PickedBanners pickedBanners="{home.page?.pickedBanners}" />
 			{/if}
-		{/await}
+		{/await} -->
 
 		{#await data.streamed.home}
 			<div class="p-3 py-5 md:py-10">
@@ -187,7 +196,7 @@ export let showPinCodeEntryModal = false
 			{/if}
 		{/await}
 
-		{#if $page.data?.store?.isDeals}
+		{#if store?.isDeals}
 			{#await data?.streamed?.deals}
 				<div class="p-3 py-5 md:py-10">
 					<Skeleton />

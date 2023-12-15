@@ -217,7 +217,7 @@ function scrollTo(elementId) {
 		<div class="grid items-start grid-cols-1 gap-5 sm:gap-10 lg:grid-cols-5">
 			<div class="relative col-span-1 lg:col-span-3 flex flex-col gap-10">
 				{#if !data.product?.isCustomized && data?.product?.images?.length}
-					<ProductSliderBanner data="{data}" />
+					<ProductSliderBanner {data} />
 				{/if}
 
 				{#await data.streamed?.moreProductDetails}

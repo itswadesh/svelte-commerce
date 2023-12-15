@@ -3,19 +3,14 @@ import { Footer, Nav } from '$lib/theme-config'
 import { PageTransitions } from '$lib/components'
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data);
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let showCartSidebar = false
 let openSidebar = false
 </script>
 
 <div class="{showCartSidebar || openSidebar ? 'h-screen overflow-hidden' : 'h-full'} antialiased">
-	<Nav
-		me="{data.me}"
-		cart="{data.cart}"
-		store="{data.store}"
-		bind:showCartSidebar="{showCartSidebar}"
-		bind:openSidebar="{openSidebar}" />
+	<Nav me="{data.me}" store="{data.store}" bind:showCartSidebar bind:openSidebar />
 
 	<PageTransitions url="{data.url}">
 		<slot />

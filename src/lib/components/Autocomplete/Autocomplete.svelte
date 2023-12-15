@@ -82,7 +82,7 @@ async function getData(e: any) {
 			autocomplete = await AutocompleteService.fetchAutocompleteData({
 				q: q,
 				origin: $page?.data?.origin,
-				storeId: $page?.data?.store?.id
+				storeId: $page?.data?.storeId
 			})
 		} catch (e) {}
 	}, 200)
@@ -94,7 +94,7 @@ onMount(async () => {
 		categories = (
 			await CategoryService.fetchAllCategories({
 				featured: true,
-				storeId: $page?.data?.store?.id,
+				storeId: $page?.data?.storeId,
 				origin: $page.data.origin
 			})
 		).data
@@ -113,7 +113,7 @@ onMount(async () => {
 		<input
 			id="data-input"
 			type="search"
-			placeholder="{placeholder}"
+			{placeholder}
 			bind:this="{searchInput}"
 			on:input="{getData}"
 			class="w-full rounded border bg-white py-2 pl-4 pr-12 text-sm font-light transition duration-300 placeholder:text-zinc-500 focus:border-zinc-400 focus:outline-none" />

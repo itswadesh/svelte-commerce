@@ -218,11 +218,11 @@ function handleSearchBox() {
 						<label class="inline-flex items-center">
 							<input
 								type="checkbox"
-								name="{name}"
+								{name}
 								id="{i.key + nanoid()}"
-								disabled="{disabled}"
-								required="{required}"
-								color="{color}"
+								{disabled}
+								{required}
+								{color}
 								bind:group="{selectedItems}"
 								value="{i.key}"
 								on:change="{() => dispatch('go', { model, selectedItems })}"
@@ -290,11 +290,11 @@ function handleSearchBox() {
 					<label class="inline-flex items-center">
 						<input
 							type="checkbox"
-							name="{name}"
+							{name}
 							id="{i.key + nanoid()}"
-							disabled="{disabled}"
-							required="{required}"
-							color="{color}"
+							{disabled}
+							{required}
+							{color}
 							bind:group="{selectedItems}"
 							value="{i.key}"
 							on:change="{() => dispatch('go', { model, selectedItems })}"

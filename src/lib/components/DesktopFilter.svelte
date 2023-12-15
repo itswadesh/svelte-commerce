@@ -144,7 +144,7 @@ async function getMegamenu() {
 			loadingForMegamenu = true
 
 			megamenu = await getAllMegamenuFromStore({
-				storeId: $page?.data?.store?.id,
+				storeId: $page?.data?.storeId,
 				isCors: $page?.data?.store?.isCors,
 				origin: $page.data.origin
 			})
@@ -239,7 +239,9 @@ function handleToggleSubCategory2(c, cx) {
 		<!-- Applied filters count -->
 
 		<h4>
-			{#if filterLength} {filterLength} {/if}
+			{#if filterLength}
+				{filterLength}
+			{/if}
 
 			{filterLength > 1 ? 'Filters' : 'Filter'}
 		</h4>
