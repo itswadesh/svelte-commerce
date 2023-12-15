@@ -8,7 +8,9 @@
 	stroke: #4bb71b;
 	stroke-miterlimit: 10;
 	box-shadow: inset 0px 0px 0px #4bb71b;
-	animation: fill 0.4s ease-in-out 0.4s forwards, scale 0.3s ease-in-out 0.9s both;
+	animation:
+		fill 0.4s ease-in-out 0.4s forwards,
+		scale 0.3s ease-in-out 0.9s both;
 	position: relative;
 	top: 5px;
 	right: 5px;
@@ -139,7 +141,8 @@ onMount(async () => {
 							<span class="w-36 shrink-0">Order Placed On </span>
 
 							<span>
-								: &nbsp; {#if data.order?.createdAt}{date(data.order?.createdAt)}{:else} _{/if}
+								: &nbsp; {#if data.order?.createdAt}{date(data.order?.createdAt)}{:else}
+									_{/if}
 							</span>
 						</p>
 					</li>

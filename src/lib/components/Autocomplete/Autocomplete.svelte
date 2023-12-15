@@ -113,7 +113,7 @@ onMount(async () => {
 		<input
 			id="data-input"
 			type="search"
-			placeholder="{placeholder}"
+			{placeholder}
 			bind:this="{searchInput}"
 			on:input="{getData}"
 			class="w-full rounded border bg-white py-2 pl-4 pr-12 text-sm font-light transition duration-300 placeholder:text-zinc-500 focus:border-zinc-400 focus:outline-none" />

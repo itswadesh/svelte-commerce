@@ -137,7 +137,7 @@ export const paySuccessPageHit = async ({
 			return res.data || {}
 		}
 	} catch (e) {
-		console.log('error at medusa cart complete', e)
+		// console.log('error at medusa cart complete', e)
 		// return {}
 		throw error(e.status, e.message)
 	}

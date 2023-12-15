@@ -29,11 +29,11 @@ let showSidebar = false
 		<Nav
 			me="{$page.data.me}"
 			path="{$page?.url.pathname}"
-			menu="{menu}"
-			q="{q}"
+			{menu}
+			{q}
 			showSidenavToggler
 			store="{$page.data.store}"
-			bind:showSidebar="{showSidebar}" />
+			bind:showSidebar />
 	</header>
 
 	<section

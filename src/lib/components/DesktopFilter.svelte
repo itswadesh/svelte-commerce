@@ -239,7 +239,9 @@ function handleToggleSubCategory2(c, cx) {
 		<!-- Applied filters count -->
 
 		<h4>
-			{#if filterLength} {filterLength} {/if}
+			{#if filterLength}
+				{filterLength}
+			{/if}
 
 			{filterLength > 1 ? 'Filters' : 'Filter'}
 		</h4>

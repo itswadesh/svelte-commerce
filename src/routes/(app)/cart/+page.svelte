@@ -319,7 +319,7 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 									use:enhance="{() => {
 										loadingMoveUnavailableItemsToWishlist = true
 										return async ({ result }) => {
-											console.log('result of unabailable items', result)
+											// console.log('result of unabailable items', result)
 											await invalidateAll()
 											await applyAction(result)
 											loadingMoveUnavailableItemsToWishlist = false
@@ -712,11 +712,7 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 					{/if}
 					<hr class="mb-5" />
 
-					<Pricesummary
-						cart="{cart}"
-						nextpage="/checkout/address"
-						text="Select Address"
-						showNextIcon />
+					<Pricesummary {cart} nextpage="/checkout/address" text="Select Address" showNextIcon />
 
 					<TrustBaggeContainer class="mt-5" />
 				</div>

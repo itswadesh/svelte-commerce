@@ -269,7 +269,7 @@ async function updateOTP() {
 					class="w-12 h-12 text-center border focus:outline-none focus:border-zinc-500 focus:ring-1 ring-zinc-800 rounded"
 					type="number"
 					maxlength="1"
-					value="{value}"
+					{value}
 					autofocus="{index === 0 ? true : false}"
 					on:input="{(event) => handleInput(index, event)}"
 					on:paste="{handlePaste}"
@@ -316,7 +316,10 @@ async function updateOTP() {
 
 					<p class="flex items-center justify-center">
 						<span>
-							{#if minutes < 10} 0{minutes} {:else} {minutes}{/if}
+							{#if minutes < 10}
+								0{minutes}
+							{:else}
+								{minutes}{/if}
 						</span>
 
 						<span>:</span>
@@ -338,10 +341,7 @@ async function updateOTP() {
 			{/if}
 		</div>
 
-		<PrimaryButton
-			type="submit"
-			loading="{loading}"
-			disabled="{notACompleteOTP || loading}"
-			class="w-full">VERIFY</PrimaryButton>
+		<PrimaryButton type="submit" {loading} disabled="{notACompleteOTP || loading}" class="w-full"
+			>VERIFY</PrimaryButton>
 	</form>
 </div>

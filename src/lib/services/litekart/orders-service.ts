@@ -111,7 +111,7 @@ export const codCheckout = async ({
 	sid = null,
 	storeId
 }) => {
-	console.log('origin', origin);
+	// console.log('origin', origin);
 	try {
 		let res = {}
 
@@ -132,7 +132,7 @@ export const codCheckout = async ({
 
 		return res || {}
 	} catch (e) {
-		console.log('zzzzzzzzzzzzzzzzzz', e);
+		// console.log('zzzzzzzzzzzzzzzzzz', e);
 		throw error(e.status, e.data?.message || e.message)
 	}
 }

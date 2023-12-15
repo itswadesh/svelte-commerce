@@ -207,3 +207,93 @@ export const updateCart = async ({
 		throw error(e.status, e.data?.message || e.message)
 	}
 }
+
+export const updateCartWithoutLogIn = async ({
+	cartId,
+	address,
+	city,
+	country,
+	email,
+	firstName,
+	lastName,
+	phone,
+	state,
+	zip,
+	selfTakeout,
+	origin = null,
+	sid = null,
+	storeId
+}) => {
+	try {
+		let res = {}
+		if (isServer) {
+			res = await postBySid(
+				`carts/update-cart`,
+				{
+					cart_id: cartId,
+					selfTakeout,
+					shipping_address: {
+						address,
+						city,
+						country,
+						email,
+						firstName,
+						lastName,
+						phone,
+						pincode: zip,
+						state
+					},
+					billing_address: {
+						address,
+						city,
+						country,
+						email,
+						firstName,
+						lastName,
+						phone,
+						pincode: zip,
+						state
+					},
+					store: storeId
+				},
+				sid
+			)
+		} else {
+			res = await post(
+				`carts/update-cart`,
+				{
+					cart_id: cartId,
+					selfTakeout,
+					shipping_address: {
+						address,
+						city,
+						country,
+						email,
+						firstName,
+						lastName,
+						phone,
+						pincode: zip,
+						state
+					},
+					billing_address: {
+						address,
+						city,
+						country,
+						email,
+						firstName,
+						lastName,
+						phone,
+						pincode: zip,
+						state
+					},
+					store: storeId
+				},
+				origin
+			)
+		}
+
+		return res || {}
+	} catch (e) {
+		throw error(e.status, e.data?.message || e.message)
+	}
+}

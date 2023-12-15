@@ -575,7 +575,7 @@ let y
 </nav>
 
 {#if show}
-	<AutosuggestModal bind:show="{show}" />
+	<AutosuggestModal bind:show />
 {/if}
 
 {#if showMiniNavSearch}
