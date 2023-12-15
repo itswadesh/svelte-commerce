@@ -138,7 +138,7 @@ function handleClick(e) {
 }
 
 function handleMove(e) {
-	console.log(e)
+	// console.log(e)
 
 	const ix = e.detail.index
 	const preIX = e.detail.prev
@@ -150,22 +150,22 @@ function handleMove(e) {
 		// showMuteButton[ix] = true
 	}
 
-	// console.log(vID.paused);
+	// console.log(vID.paused)
 
 	if (vID2) {
 		vID2.pause()
 		// showMuteButton[preIX] = false
 	}
 
-	console.log('Paused video', vID, 'Played Video', vID2, showMuteButton)
+	// console.log('Paused video', vID, 'Played Video', vID2, showMuteButton)
 }
 </script>
 
-<svelte:window bind:innerWidth="{innerWidth}" />
+<svelte:window bind:innerWidth />
 
 {#if products}
 	<div class="overflow-hidden">
-		<svelte:component this="{Splide}" options="{options}" on:handleMove="{(e) => handleMove(e)}">
+		<svelte:component this="{Splide}" {options} on:handleMove="{(e) => handleMove(e)}">
 			{#each products as product, ix (product.id)}
 				<SplideSlide>
 					<div class="w-full h-full flex">

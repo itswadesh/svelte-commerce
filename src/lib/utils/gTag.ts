@@ -19,7 +19,7 @@ export const fireGTagEvent = (event_name, data) => {
 		}
 	})
 
-		// console.log('items', items)
+	// console.log('items', items)
 
 	switch (event_name) {
 		case 'add_to_cart':

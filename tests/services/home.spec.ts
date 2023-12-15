@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { host,storeId, API_URL } from './config'
+import { host, storeId, API_URL } from './config'
 
 test('Test Fetch Home', async ({ request }) => {
 	

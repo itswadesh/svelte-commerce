@@ -12,10 +12,10 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 	const order_no = url.searchParams.get('order_no')
 	let paymentMethods
 
-	if (!me || !sid) {
-		const redirectUrl = `${loginUrl}?ref=${url?.pathname}${url?.search || ''}`
-		throw redirect(307, redirectUrl)
-	}
+	// if (!me || !sid) {
+	// 	const redirectUrl = `${loginUrl}?ref=${url?.pathname}${url?.search || ''}`
+	// 	throw redirect(307, redirectUrl)
+	// }
 
 	if (!address_id && !order_no) {
 		throw redirect(307, '/checkout/address')
@@ -63,7 +63,7 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 				address_id = order.addressId
 				address = order.address
 			}
-		} else {
+		} else if (locals.me) {
 			address = await AddressService.fetchAddress({
 				id: address_id,
 				storeId,
@@ -81,6 +81,7 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 
 		return { store, paymentMethods, address, addressId: address_id, me, cart }
 	} catch (e) {
+		// console.log('eeeeeeeeeeeeeeeeeee', e);
 		return {
 			paymentMethods,
 			address,

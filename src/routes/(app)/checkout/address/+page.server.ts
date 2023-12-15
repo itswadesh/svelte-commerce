@@ -6,28 +6,10 @@ export const prerender = false
 export async function load({ locals, url, parent }) {
 	const { me, sid, store, storeId, origin, cartId } = locals
 
-	if (!me || !sid) {
-		const redirectUrl = `/auth/login?ref=${url?.pathname}${url?.search || ''}`
-		throw redirect(307, redirectUrl)
-	}
-
 	try {
 		const currentPage = +url.searchParams.get('page') || 1
 		const q = url.searchParams.get('q') || ''
 		let err
-
-		const { myAddresses, selectedAddress } = await AddressService.fetchAddresses({
-			storeId,
-			origin,
-			server: true,
-			sid
-		})
-
-		const countries = await CountryService.fetchCountries({
-			storeId,
-			origin,
-			sid
-		})
 
 		const cart = await CartService.fetchRefreshCart({
 			cartId,
@@ -42,15 +24,39 @@ export async function load({ locals, url, parent }) {
 			throw redirect(307, '/cart')
 		}
 
-		return {
-			cart,
-			countries,
-			currentPage,
-			err,
-			myAddresses,
-			q,
-			selectedAddress,
-			url: url.href
+		const countries = await CountryService.fetchCountries({
+			storeId,
+			origin,
+			sid
+		})
+
+		if (me) {
+			const { myAddresses, selectedAddress } = await AddressService.fetchAddresses({
+				storeId,
+				origin,
+				server: true,
+				sid
+			})
+
+			return {
+				cart,
+				countries,
+				currentPage,
+				err,
+				myAddresses,
+				q,
+				selectedAddress,
+				url: url.href
+			}
+		} else {
+			return {
+				cart,
+				countries,
+				currentPage,
+				err,
+				q,
+				url: url.href
+			}
 		}
 	} catch (e) {
 		// console.log('errzzzzzzzzzzzzzzzzzz', e);

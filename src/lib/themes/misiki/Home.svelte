@@ -146,7 +146,7 @@ onMount(() => {
 
 		<!-- Hero banners -->
 
-		{#await data.streamed.home}
+		<!-- {#await data.streamed.home}
 			<div class="p-3 py-5 md:py-10 grid grid-cols-2 items-center gap-2 md:grid-cols-4">
 				<div class="col-span-2 h-40 animate-pulse rounded bg-zinc-200 sm:h-60"></div>
 
@@ -162,11 +162,11 @@ onMount(() => {
 			{#if home.page?.heroBanners?.banners?.length}
 				<HeroBanners heroBanners="{home?.page?.heroBanners?.banners}" />
 			{/if}
-		{/await}
+		{/await} -->
 
 		<!-- Picked banners -->
 
-		{#await data.streamed.home}
+		<!-- {#await data.streamed.home}
 			<div class="w-screen overflow-x-auto scrollbar-none lg:hidden">
 				<div class="flex flex-row items-start gap-5">
 					{#each { length: 7 } as _}
@@ -184,7 +184,7 @@ onMount(() => {
 			{#if home.page?.pickedBanners?.length > 0}
 				<PickedBanners pickedBanners="{home.page?.pickedBanners}" />
 			{/if}
-		{/await}
+		{/await} -->
 
 		{#await data.streamed.home}
 			<div class="p-3 py-5 md:py-10">

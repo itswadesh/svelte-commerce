@@ -3,6 +3,7 @@ import { Footer, Nav } from '$lib/theme-config'
 import { PageTransitions } from '$lib/components'
 
 export let data
+
 let showCartSidebar = false
 let openSidebar = false
 </script>
@@ -14,8 +15,8 @@ let openSidebar = false
 		store="{data.store}"
 		q="{data.q}"
 		class="hidden lg:block"
-		bind:showCartSidebar="{showCartSidebar}"
-		bind:openSidebar="{openSidebar}" />
+		bind:showCartSidebar
+		bind:openSidebar />
 
 	<PageTransitions url="{data.url}">
 		<slot />

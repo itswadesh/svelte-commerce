@@ -1,4 +1,4 @@
-import { AddressService } from '$lib/services'
+import { AddressService, CartService } from '$lib/services'
 import { error } from '@sveltejs/kit'
 import { z } from 'zod';
 
@@ -35,6 +35,7 @@ const saveAddress = async ({ request, cookies, locals }) => {
 
 	const address = data.get('address')
 	const city = data.get('city')
+	const cartId = locals?.cartId
 	const country = data.get('country')
 	const email = data.get('email')
 	const firstName = data.get('firstName')
@@ -59,6 +60,8 @@ const saveAddress = async ({ request, cookies, locals }) => {
 		state: state,
 		zip: zip,
 	}
+
+	let res = {}
 
 	// console.log('showErrorMessage at save address', firstName)
 
@@ -88,21 +91,40 @@ const saveAddress = async ({ request, cookies, locals }) => {
 			})
 		}
 
-		const res = await AddressService.saveAddress({
-			address,
-			city,
-			country,
-			email,
-			firstName,
-			id,
-			lastName,
-			phone,
-			state,
-			zip,
-			storeId: locals.storeId,
-			sid,
-			origin: locals?.origin
-		})
+		if (locals?.me) {
+			res = await AddressService.saveAddress({
+				address,
+				city,
+				country,
+				email,
+				firstName,
+				id,
+				lastName,
+				phone,
+				state,
+				zip,
+				storeId: locals.storeId,
+				sid,
+				origin: locals?.origin
+			})
+		} else {
+			res = await CartService.updateCartWithoutLogIn({
+				cartId,
+				address,
+				city,
+				country,
+				email,
+				firstName,
+				lastName,
+				phone,
+				state,
+				zip,
+				selfTakeout: false,
+				storeId: locals.storeId,
+				sid,
+				origin: locals?.origin
+			})
+		}
 
 		// console.log('res of save address = ', res)
 

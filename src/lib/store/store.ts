@@ -38,7 +38,7 @@ export const getStoreFromStore = async ({ origin, host, storeId, forceUpdate = f
 			existingpopularSearches = value
 		}
 	})
-	console.log('true || true', !loadingForStore && !existingStore, !!forceUpdate)
+	// console.log('true || true', !loadingForStore && !existingStore, !!forceUpdate)
 	if ((!loadingForStore && !existingStore) || !!forceUpdate) {
 		loadingForStore = true
 		storeLoadingStore.update((u) => true)

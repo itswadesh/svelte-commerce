@@ -20,10 +20,10 @@ export let selectedItems = []
 			<label class="flex items-center gap-2">
 				<input
 					type="checkbox"
-					name="{name}"
+					{name}
 					id="{nanoid()}"
-					disabled="{disabled}"
-					required="{required}"
+					{disabled}
+					{required}
 					bind:group="{selectedItems}"
 					value="{i._id}"
 					on:change="{() => dispatch('change', selectedItems)}"

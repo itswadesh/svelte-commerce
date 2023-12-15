@@ -81,7 +81,7 @@ export let data
 // 	}
 // ]
 
-// console.log(videosData);
+// console.log(videosData)
 
 // data.data = videosData
 

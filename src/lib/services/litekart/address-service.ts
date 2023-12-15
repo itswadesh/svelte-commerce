@@ -19,7 +19,11 @@ export const fetchAddresses = async ({ origin, storeId, isCors = false, server =
 
 		return { myAddresses: { data: myAddresses }, selectedAddress, count: res?.count }
 	} catch (e) {
+		// if (e.message !== 'Unauthorized') {
 		throw error(e.status, e.data?.message || e.message)
+		// } else {
+		// 	return { myAddresses: { data: [] }, selectedAddress: {}, count: 0 }
+		// }
 	}
 }
 

@@ -40,10 +40,9 @@ export async function load({ params, parent, url }) {
 				sid: sid
 			})
 		},
-		products: ProductService.searchProducts({
+		products: await ProductService.searchProducts({
 			query: query.toString(),
 			origin,
-			server: isServer,
 			storeId,
 			isCors: store?.isCors,
 			sid: sid
