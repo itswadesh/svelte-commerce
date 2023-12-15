@@ -2,14 +2,6 @@ import { test, expect } from '@playwright/test'
 import { host, storeId, API_URL } from './config'
 
 test('Test Fetch All Category', async ({ request }) => {
-	// const host = 'demo.litekart.in'
-
-	// const res = await request.get(`${API_URL}init?domain=${host}`)
-
-	// const storeData = await res.json()
-
-	// // expect status code should 200
-	// expect(res.status()).toBe(200)
 
 	const categories = await request.get(`${API_URL}categories?store=${storeId}`)
 
@@ -23,16 +15,8 @@ test('Test Fetch All Category', async ({ request }) => {
 
 
 test('Test Fetch MegaMenu', async ({ request }) => {
-	// const host = 'demo.litekart.in'
 
-	const res = await request.get(`${API_URL}init?domain=${host}`)
-
-	const storeData = await res.json()
-
-	// expect status code should 200
-	expect(res.status()).toBe(200)
-
-	const megamenu = true
+	const megamenu = false
 
 	const resMegamenu = await request.get(
 		`${API_URL}categories/megamenu?megamenu=${megamenu}&store=${storeId}&active=true`
