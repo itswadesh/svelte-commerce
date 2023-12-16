@@ -1,13 +1,103 @@
 {
-	"html.format.endWithNewline": true,
-	"git.ignoreLimitWarning": true,
-	"editor.formatOnSave": true,
-	"editor.formatOnPaste": true,
-	"[javascript]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	// Interface
+	"window.title": "${activeEditorMedium}",
+	"window.titleBarStyle": "native",
+	"window.menuBarVisibility": "toggle",
+	"window.commandCenter": false,
+	"window.zoomLevel": 1,
+	"workbench.colorTheme": "poimandres",
+	"workbench.iconTheme": "symbols",
+	"workbench.startupEditor": "none",
+	"workbench.sideBar.location": "right",
+	"workbench.layoutControl.enabled": false,
+	"workbench.editor.enablePreview": false,
+	"workbench.editor.labelFormat": "short",
+	"workbench.tree.indent": 18,
+	"editor.lineNumbers": "on",
+	"editor.minimap.enabled": false,
+	"editor.bracketPairColorization.enabled": false,
+	"editor.cursorBlinking": "solid",
+	"editor.cursorSmoothCaretAnimation": "on",
+	"editor.scrollbar.horizontalScrollbarSize": 4,
+	"editor.scrollbar.verticalScrollbarSize": 4,
+	"explorer.compactFolders": false,
+	"explorer.autoReveal": false,
+	"breadcrumbs.enabled": false,
+	"symbols.hidesExplorerArrows": false,
+	// Font
+	"editor.fontFamily": "Monaspace Neon, MonoLisa, Geist Mono, Monocraft, JetBrains Mono, IBM Plex Mono, Mononoki Nerd Font, Droid Sans Mono, Anonymous Pro, Operator Mono Book, Fira Code, Cascadia Code",
+	"editor.fontLigatures": "'calt', 'liga', 'dlig', 'ss01', 'ss02'",
+	"editor.fontSize": 18,
+	"editor.lineHeight": 2,
+	"editor.tabSize": 2,
+	"editor.wordWrap": "on",
+	// Terminal
+	"terminal.integrated.fontFamily": "Monaspace Neon, MonoLisa, Monocraft, JetBrains Mono, IBM Plex Mono, Mononoki Nerd Font, Fira Code",
+	"terminal.integrated.fontSize": 18,
+	"terminal.integrated.cursorStyle": "line",
+	"terminal.integrated.cursorBlinking": false,
+	"terminal.integrated.defaultProfile.linux": "zsh",
+	"terminal.integrated.shellIntegration.decorationsEnabled": "never",
+	// Emmet
+	"emmet.includeLanguages": {
+		"javascript": "javascriptreact"
 	},
-	"git.confirmEmptyCommits": false,
-	"git.confirmSync": false,
-	"git.enableSmartCommit": true,
-	"vue.features.codeActions.enable": false
+	// Prettier
+	"prettier.semi": false,
+	"prettier.useTabs": true,
+	"prettier.singleQuote": true,
+	"prettier.trailingComma": "es5",
+	"prettier.printWidth": 100,
+	// Formatting
+	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"[prisma]": {
+		"editor.defaultFormatter": "Prisma.prisma"
+	},
+	// Svelte
+	"[svelte]": {
+		"editor.defaultFormatter": "svelte.svelte-vscode"
+	},
+	"svelte.enable-ts-plugin": true,
+	// Linux multi-cursor
+	"editor.multiCursorModifier": "ctrlCmd",
+	// Telemetry
+	"telemetry.telemetryLevel": "off",
+	// Git
+	"diffEditor.renderSideBySide": false,
+	// Tailwind
+	"css.lint.unknownAtRules": "ignore",
+	// +Todo
+	"todo.timekeeping.finished.time": false,
+	// GitLens
+	"gitlens.codeLens.enabled": false,
+	"gitlens.currentLine.enabled": false,
+	"gitlens.statusBar.enabled": false,
+	// CodeSnap
+	"codesnap.showWindowControls": false,
+	"codesnap.showLineNumbers": false,
+	"codesnap.shutterAction": "copy",
+	"codesnap.containerPadding": "0",
+	"codesnap.roundedCorners": false,
+	"codesnap.boxShadow": "none",
+	// XState
+	"xstate.nestTypegenFiles": false,
+	// CSS variables autocomplete
+	"cssvar.files": ["./node_modules/open-props/open-props.min.css"],
+	"cssvar.ignore": [],
+	"cssvar.extensions": ["css", "postcss", "svelte", "tsx"],
+	// Search
+	"search.exclude": {
+		"**/node_modules": true,
+		"**/bower_components": true,
+		"**/*.code-search": true,
+		"**/.svelte-kit": true
+	},
+	"search.quickOpen.includeHistory": false,
+	// Linked editing
+	"editor.linkedEditing": true,
+	// Respect keyboard mappings
+	"keyboard.dispatch": "keyCode",
+	"workbench.editor.empty.hint": "hidden",
+	// "workbench.activityBar.location": "hidden"
 }

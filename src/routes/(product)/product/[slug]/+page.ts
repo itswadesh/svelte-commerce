@@ -10,12 +10,6 @@ export async function load({ params, url, parent }) {
 	const page = url.searchParams.get('page') || 1
 
 	const getProductDetails = async () => {
-		// const p1 = `es/products/${slug}?store=${storeId}`
-		// const cached = await getCache(p1)
-		// if (cached) {
-		// 	return cached
-		// }
-
 		const product = await ProductService.fetchProduct({
 			isCors,
 			origin,
@@ -24,7 +18,6 @@ export async function load({ params, url, parent }) {
 			id: slug,
 			storeId
 		})
-
 		if (me) {
 			const isWishlisted = await WishlistService.checkWishlist({
 				pid: product?._id || product?.id,
@@ -36,12 +29,12 @@ export async function load({ params, url, parent }) {
 			})
 
 			// console.log('isWishlisted', isWishlisted);
+			return product
 
 			product.isWishlisted = isWishlisted
 		} else {
 			product.isWishlisted = false
 		}
-
 		// Enabling cache-control will not refresh cart qty indicator
 		// setHeaders({ 'cache-control': `max-age=${CACHE_DURATION}` }) // This is to tell Cloudflare to store in its own cache
 		// setCache(p1, product)
@@ -56,8 +49,6 @@ export async function load({ params, url, parent }) {
 		// })
 
 		// console.log('updated popularity res', updatedPopularityRes);
-
-		return product
 	}
 
 	const getMoreProductDetails = async () => {
@@ -66,13 +57,7 @@ export async function load({ params, url, parent }) {
 		// if (cached) {
 		// 	return cached
 		// }
-		const products2 = await ProductService.fetchProduct2({
-			isCors,
-			origin,
-			server: isServer,
-			slug,
-			storeId
-		})
+		const products2 = await ProductService.fetchProduct2({ id: slug, slug, origin, storeId })
 		// setHeaders({ 'cache-control': `max-age=${CACHE_DURATION}` }) // This is to tell Cloudflare to store in its own cache
 		// setCache(p2, products2)
 		return products2

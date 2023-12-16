@@ -1,9 +1,34 @@
 {
 	"recommendations": [
-		"esbenp.prettier-vscode",
-		"ms-vscode.sublime-keybindings",
+		"aaron-bond.better-comments",
+		"adpyke.codesnap",
+		"bbugh.change-color-format",
 		"bradlc.vscode-tailwindcss",
-		"wayou.vscode-todo-highlight",
-		"svelte.svelte-vscode"
+		"dbaeumer.vscode-eslint",
+		"eamodio.gitlens",
+		"esbenp.prettier-vscode",
+		"fabiospampinato.vscode-todo-plus",
+		"formulahendry.code-runner",
+		"GitHub.vscode-pull-request-github",
+		"inu1255.easy-snippet",
+		"Matia.night-howl",
+		"miguelsolorio.symbols",
+		"mikestead.dotenv",
+		"ms-playwright.playwright",
+		"ms-vscode.live-server",
+		"phoenisx.cssvar",
+		"pmndrs.pmndrs",
+		"Prisma.prisma",
+		"pushqrdx.inline-html",
+		"qwtel.sqlite-viewer",
+		"rangav.vscode-thunder-client",
+		"ritwickdey.LiveServer",
+		"statelyai.stately-vscode",
+		"svelte.svelte-vscode",
+		"usernamehw.errorlens",
+		"vivaxy.vscode-conventional-commits",
+		"vunguyentuan.vscode-postcss",
+		"WallabyJs.quokka-vscode",
+		"yoavbls.pretty-ts-errors"
 	]
 }
