@@ -98,7 +98,7 @@ export async function load({ params, url, parent }) {
 	}
 
 	return {
-		product: getProductDetails(),
+		product: await getProductDetails(),
 		deliveryDetails: zip,
 		streamed: {
 			moreProductDetails: getMoreProductDetails(),
