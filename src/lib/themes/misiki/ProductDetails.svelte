@@ -1060,7 +1060,7 @@ async function updateVariant(variant) {
 
 				<!-- select options  -->
 
-				{#if data.product.options?.length}
+				{#if data.product?.options?.length}
 					<div
 						class="sizeSelector mb-5 flex flex-col gap-3 text-sm"
 						class:shake-animation="{shake}">

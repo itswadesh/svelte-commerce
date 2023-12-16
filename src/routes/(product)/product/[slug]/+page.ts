@@ -29,12 +29,12 @@ export async function load({ params, url, parent }) {
 			})
 
 			// console.log('isWishlisted', isWishlisted);
-			return product
-
+			
 			product.isWishlisted = isWishlisted
 		} else {
 			product.isWishlisted = false
 		}
+		return product
 		// Enabling cache-control will not refresh cart qty indicator
 		// setHeaders({ 'cache-control': `max-age=${CACHE_DURATION}` }) // This is to tell Cloudflare to store in its own cache
 		// setCache(p1, product)
