@@ -7,7 +7,7 @@ export const prerender = false
 export async function load({ url, params, locals, parent }) {
 	const { me, sid, cart, store } = locals
 	if (!me || !sid) {
-		throw redirect(307, `/auth/login?ref=${url.pathname}${url.search}`)
+		redirect(307, `/auth/login?ref=${url.pathname}${url.search}`)
 	}
 	const isHome = url.pathname === '/'
 	const currentPage = +url.searchParams.get('page') || 1

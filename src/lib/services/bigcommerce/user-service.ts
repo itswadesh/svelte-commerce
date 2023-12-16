@@ -12,7 +12,7 @@ export const fetchMeData = async ({ origin, storeId, server = false, sid = null 
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -45,7 +45,7 @@ export const signupService = async ({
 
 		return res
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -72,7 +72,7 @@ export const loginService = async ({
 		return res
 	} catch (e) {
 		if (e.status === 401) e.message = 'email or password is invalid'
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -91,7 +91,7 @@ export const forgotPasswordService = async ({
 
 		return res
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -111,7 +111,7 @@ export const changePasswordService = async ({
 
 		return res
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -134,7 +134,7 @@ export const getOtpService = async ({
 
 		return res
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -153,7 +153,7 @@ export const verifyOtpService = async ({
 
 		return res
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -165,7 +165,7 @@ export const logoutService = async ({ storeId, origin, server = false, sid = nul
 
 		return res
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -183,6 +183,6 @@ export const updateProfileService = async ({
 
 		return res
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }

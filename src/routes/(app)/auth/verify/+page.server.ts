@@ -26,9 +26,9 @@ export async function load({ params, locals, url, cookies, request }) {
 		console.error('error at verify', e?.status)
 
 		if (e?.status === 307) {
-			throw redirect(302, '/auth/verification-success')
+			redirect(302, '/auth/verification-success')
 		}
 
-		throw error(e.status, e.message)
+		error(e.status, e.message)
 	}
 }

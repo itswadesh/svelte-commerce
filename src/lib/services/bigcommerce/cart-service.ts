@@ -13,7 +13,7 @@ export const fetchCartData = async ({ origin, storeId, server = false, sid = nul
 		return res || {}
 	} catch (err) {
 		const e = err as Error
-		throw error(e.status, e.data.message)
+		error(e.status, e.data.message)
 	}
 }
 
@@ -25,7 +25,7 @@ export const fetchRefreshCart = async ({ origin, storeId, server = false, sid = 
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.message)
+		error(e.status, e.message)
 	}
 }
 
@@ -37,7 +37,7 @@ export const fetchMyCart = async ({ origin, storeId, server = false, sid = null 
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.message)
+		error(e.status, e.message)
 	}
 }
 
@@ -58,7 +58,7 @@ export const addToCartService = async ({
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -76,7 +76,7 @@ export const applyCouponService = async ({
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -94,6 +94,6 @@ export const removeCouponService = async ({
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }

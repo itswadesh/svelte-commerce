@@ -15,6 +15,6 @@ export const fetchGallery = async ({ origin, storeId, server = false, sid = null
 
 		return res.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }

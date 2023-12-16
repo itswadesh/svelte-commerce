@@ -30,7 +30,7 @@ export const searchProducts = async ({
 
 		return { products, count, facets, pageSize, err }
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -45,7 +45,7 @@ export const fetchProducts = async ({ origin, slug, id, server = false, sid = nu
 
 		return res?.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -60,7 +60,7 @@ export const fetchProduct = async ({ origin, slug, id, server = false, sid = nul
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -91,7 +91,7 @@ export const fetchProductsOfCategory = async ({
 
 		return { products, count, facets, pageSize, category, err }
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -119,7 +119,7 @@ export const fetchNextPageProducts = async ({
 			facets: res.facets
 		}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -141,6 +141,6 @@ export const fetchRelatedProducts = async ({
 
 		return relatedProducts || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }

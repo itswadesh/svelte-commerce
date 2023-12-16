@@ -16,7 +16,7 @@ export const fetchBanners = async ({
 
 		return res.data || []
 	} catch (e) {
-		throw error(e.status, e.message)
+		error(e.status, e.message)
 	}
 }
 
@@ -34,6 +34,6 @@ export const fetchBannersGroup = async ({
 
 		return res.data || []
 	} catch (e) {
-		throw error(e.status, e.message)
+		error(e.status, e.message)
 	}
 }

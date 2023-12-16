@@ -28,7 +28,7 @@ export const fetchAddresses = async ({ origin, storeId, server = false, sid }: a
 				locality: add.address_2,
 				phone: add.phone,
 				state: add.province,
-				zip: add.postal_code,
+				zip: add.postal_code
 			}
 		})
 
@@ -37,7 +37,7 @@ export const fetchAddresses = async ({ origin, storeId, server = false, sid }: a
 		}
 		return { myAddresses: { data: myAddresses }, selectedAddress, count: res?.count }
 	} catch (e) {
-		throw error(e.status, e.message)
+		error(e.status, e.message)
 	}
 }
 
@@ -89,10 +89,10 @@ export const saveAddress = async ({
 		if (shipping_addresses) {
 			return shipping_addresses[0]
 		} else {
-			throw error(404, 'Error occured while saving address')
+			error(404, 'Error occured while saving address')
 		}
 	} catch (err) {
-		throw error(err.status || 400, err.message)
+		error(err.status || 400, err.message)
 	}
 }
 
@@ -134,10 +134,10 @@ export const editAddress = async ({
 		if (shipping_addresses) {
 			return shipping_addresses[0]
 		} else {
-			throw error(404, 'Error occured while saving address')
+			error(404, 'Error occured while saving address')
 		}
 	} catch (err) {
-		throw error(err.status || 400, err.message)
+		error(err.status || 400, err.message)
 	}
 }
 
@@ -145,6 +145,6 @@ export const deleteAddress = async ({ id, storeId, origin, sid = null }: any) =>
 	try {
 		deleteMedusajsApi(`customers/me/addresses/${id}`, sid)
 	} catch (err) {
-		throw error(err.status || 400, err.message)
+		error(err.status || 400, err.message)
 	}
 }

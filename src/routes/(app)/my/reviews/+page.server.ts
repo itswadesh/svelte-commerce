@@ -5,7 +5,7 @@ export async function load({ cookies, locals, url }) {
 	const { store, storeId, origin, me, sid } = locals
 
 	if (!me || !sid) {
-		throw redirect(307, `/auth/login?ref=${url.pathname}${url.search}`)
+		redirect(307, `/auth/login?ref=${url.pathname}${url.search}`)
 	}
 	try {
 		const res = await ReviewService.fetchReviews({
@@ -17,8 +17,8 @@ export async function load({ cookies, locals, url }) {
 		if (res) {
 			return res
 		}
-		throw error(404, 'Reviews not found')
+		error(404, 'Reviews not found')
 	} catch (e) {
-		throw redirect(307, '/auth/login')
+		redirect(307, '/auth/login')
 	}
 }

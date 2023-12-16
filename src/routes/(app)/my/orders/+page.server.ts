@@ -15,8 +15,8 @@ export async function load({ locals }) {
 			return res
 		}
 	} catch (e) {
-		throw redirect(307, '/auth/login')
+		redirect(307, '/auth/login')
 	}
 
-	throw error(404, 'Orders not found')
+	error(404, 'Orders not found')
 }

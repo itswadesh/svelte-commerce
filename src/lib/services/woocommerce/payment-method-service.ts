@@ -10,6 +10,6 @@ export const fetchPaymentMethods = async ({ origin, storeId, server = false, sid
 
 		return res.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }

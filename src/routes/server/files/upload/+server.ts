@@ -5,7 +5,7 @@ import { Readable } from 'stream'
 export async function POST({ request }) {
 	const contentType0 = request.headers.get('Content-Type')
 	const body = request.body
-	if(!body) throw "No image provided"
+	if (!body) throw 'No image provided'
 	const folderName = request.headers.get('folder')
 	const extension = request.headers.get('extension')
 	const contentType = contentType0 || 'image/png'

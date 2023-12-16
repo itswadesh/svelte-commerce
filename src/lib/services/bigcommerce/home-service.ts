@@ -1,7 +1,5 @@
 import { error } from '@sveltejs/kit'
-import {
-	getBigcommerceApi,
-} from '$lib/utils/server'
+import { getBigcommerceApi } from '$lib/utils/server'
 
 export const fetchHome = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {
@@ -11,6 +9,6 @@ export const fetchHome = async ({ origin, storeId, server = false, sid = null }:
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }

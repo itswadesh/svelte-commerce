@@ -41,9 +41,9 @@ export async function load({ url, request, locals, cookies }) {
 		err = e
 
 		if (e.status === 401) {
-			throw redirect(307, '/auth/login')
+			redirect(307, '/auth/login');
 		} else {
-			throw error(e?.status, e?.body?.message || e?.data?.message || e?.message)
+			error(e?.status, e?.body?.message || e?.data?.message || e?.message);
 		}
 	} finally {
 		loading = false

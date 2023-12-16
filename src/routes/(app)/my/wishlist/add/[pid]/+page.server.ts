@@ -21,12 +21,12 @@ export async function load({ locals, cookies, params, request }) {
 				vid: pid,
 				storeId,
 				sid,
-				origin: locals.origin,
+				origin: locals.origin
 			})
 		}
 
-		throw redirect(307, '/my/wishlist')
+		redirect(307, '/my/wishlist')
 	} catch (e) {
-		throw redirect(307, '/auth/login')
+		redirect(307, '/auth/login')
 	}
 }

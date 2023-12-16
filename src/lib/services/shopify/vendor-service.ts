@@ -8,7 +8,7 @@ export const fetchVendor = async ({ origin, id, storeId, server = false, sid = n
 		res = await getShopifyApi(`customers/me`, {}, sid)
 		return res.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -26,6 +26,6 @@ export const fetchProductsOfVendor = async ({
 
 		return res.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }

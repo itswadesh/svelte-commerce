@@ -9,7 +9,7 @@ export const findByCity = async (locals: App.Locals, q: string): Promise<Product
 		return data
 	} catch (err) {
 		const e = err as Error
-		throw error(e.status, e.data.message)
+		error(e.status, e.data.message);
 	}
 }
 
@@ -19,7 +19,7 @@ export const groupByCity = async (locals: App.Locals, id: string): Promise<Produ
 		return data
 	} catch (err) {
 		const e = err as Error
-		throw error(e.status, e.data.message)
+		error(e.status, e.data.message);
 	}
 }
 
@@ -29,6 +29,6 @@ export const groupByState = async (locals: App.Locals, id: string): Promise<Prod
 		return data
 	} catch (err) {
 		const e = err as Error
-		throw error(e.status, e.data.message)
+		error(e.status, e.data.message);
 	}
 }

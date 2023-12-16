@@ -18,7 +18,7 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 	// }
 
 	if (!address_id && !order_no) {
-		throw redirect(307, '/checkout/address')
+		redirect(307, '/checkout/address')
 	}
 
 	const cartRes = await CartService.fetchRefreshCart({
@@ -29,7 +29,7 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 	})
 
 	if (!cartRes?.qty) {
-		throw redirect(307, '/my/orders?sort=-updatedAt')
+		redirect(307, '/my/orders?sort=-updatedAt')
 	}
 
 	const cart = {

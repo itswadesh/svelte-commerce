@@ -25,7 +25,7 @@ export const fetchReviews = async ({
 			page: res.page
 		}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -43,7 +43,7 @@ export const fetchProductReviews = async ({
 
 		return res?.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -64,6 +64,6 @@ export const saveReview = async ({
 
 		return res
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }

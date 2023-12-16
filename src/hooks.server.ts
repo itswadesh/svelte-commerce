@@ -145,6 +145,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 		return response
 	} catch (e) {
 		// If the store is not found, throw a 404 error
-		throw error(404, 'Store Not Found')
+		error(404, 'Store Not Found')
 	}
 }

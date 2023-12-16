@@ -27,9 +27,9 @@ export async function load({ url, locals, cookies }) {
 		}
 	} catch (e) {
 		if (e.status == 307) {
-			throw redirect(307, e.url)
+			redirect(307, e.url)
 		} else {
-			throw redirect(307, failed_url)
+			redirect(307, failed_url)
 		}
 	}
 }

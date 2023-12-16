@@ -1,6 +1,6 @@
 import { AddressService, CartService } from '$lib/services'
 import { error } from '@sveltejs/kit'
-import { z } from 'zod';
+import { z } from 'zod'
 
 export async function load({ cookies, locals }) {
 	const { myAddresses, selectedAddress, count } = await AddressService.fetchAddresses({
@@ -15,20 +15,31 @@ export async function load({ cookies, locals }) {
 		return { addresses: myAddresses, selectedAddress }
 	}
 
-	throw error(404, 'Addresses not found')
+	error(404, 'Addresses not found')
 }
 
 const zodAddressSchema = z.object({
 	address: z.string({ required_error: 'Address is required' }),
 	city: z.string({ required_error: 'City is required' }),
 	country: z.string({ required_error: 'Country is required' }),
-	email: z.string({ required_error: 'Email is required' }).email({ message: 'Email must be a valid email address' }),
-	firstName: z.string({ required_error: 'First Name is required' }).min(3, { message: 'First Name must be at least 3 characters' }),
-	lastName: z.string({ required_error: 'Last Name is required' }).min(3, { message: 'Last Name must be at least 3 characters' }),
-	phone: z.string({ required_error: 'Phone is required' }).min(10, { message: 'Phone must be at least 10 digits' }).max(17, { message: 'Phone must be less then 17 digits' }),
+	email: z
+		.string({ required_error: 'Email is required' })
+		.email({ message: 'Email must be a valid email address' }),
+	firstName: z
+		.string({ required_error: 'First Name is required' })
+		.min(3, { message: 'First Name must be at least 3 characters' }),
+	lastName: z
+		.string({ required_error: 'Last Name is required' })
+		.min(3, { message: 'Last Name must be at least 3 characters' }),
+	phone: z
+		.string({ required_error: 'Phone is required' })
+		.min(10, { message: 'Phone must be at least 10 digits' })
+		.max(17, { message: 'Phone must be less then 17 digits' }),
 	state: z.string({ required_error: 'State is required' }),
-	zip: z.string({ required_error: 'ZIP is required' }).min(6, { message: 'ZIP must be at least 6 digits.' }),
-});
+	zip: z
+		.string({ required_error: 'ZIP is required' })
+		.min(6, { message: 'ZIP must be at least 6 digits.' })
+})
 
 const saveAddress = async ({ request, cookies, locals }) => {
 	const data = await request.formData()
@@ -58,7 +69,7 @@ const saveAddress = async ({ request, cookies, locals }) => {
 		lastName: lastName,
 		phone: phone,
 		state: state,
-		zip: zip,
+		zip: zip
 	}
 
 	let res = {}
@@ -66,9 +77,9 @@ const saveAddress = async ({ request, cookies, locals }) => {
 	// console.log('showErrorMessage at save address', firstName)
 
 	if (showErrorMessage === true || showErrorMessage === 'true') {
-		throw error(404, 'Please enter valid phone number')
+		error(404, 'Please enter valid phone number')
 	} else if (zip.length !== 6) {
-		throw error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
+		error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
 	} else {
 		phone = phone.replace(/[a-zA-Z ]/g, '')
 
@@ -83,9 +94,9 @@ const saveAddress = async ({ request, cookies, locals }) => {
 		try {
 			zodAddressSchema.parse(formData)
 		} catch (err) {
-			const { fieldErrors: errors } = err.flatten();
+			const { fieldErrors: errors } = err.flatten()
 			const { address, city, ...rest } = formData
-			throw error(404, {
+			error(404, {
 				data: rest,
 				errors
 			})
@@ -159,15 +170,15 @@ const editAddress = async ({ request, cookies, locals }) => {
 		lastName: lastName,
 		phone: phone,
 		state: state,
-		zip: zip,
+		zip: zip
 	}
 
 	// console.log('showErrorMessage at edit address', showErrorMessage);
 
 	if (showErrorMessage === true || showErrorMessage === 'true') {
-		throw error(404, 'Please enter valid phone number')
+		error(404, 'Please enter valid phone number')
 	} else if (zip.length !== 6) {
-		throw error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
+		error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
 	} else {
 		phone = phone.replace(/[a-zA-Z ]/g, '')
 
@@ -179,13 +190,12 @@ const editAddress = async ({ request, cookies, locals }) => {
 			phone = (selectedCountry[0].dialCode || '+91') + phone
 		}
 
-
 		try {
 			zodAddressSchema.parse(formData)
 		} catch (err) {
-			const { fieldErrors: errors } = err.flatten();
+			const { fieldErrors: errors } = err.flatten()
 			const { address, city, ...rest } = formData
-			throw error(404, {
+			error(404, {
 				data: rest,
 				errors
 			})

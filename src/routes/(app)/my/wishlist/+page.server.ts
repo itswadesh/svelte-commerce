@@ -5,7 +5,7 @@ export async function load({ cookies, locals, url }) {
 	const { store, storeId, origin, me, sid } = locals
 
 	if (!me || !sid) {
-		throw redirect(307, `/auth/login?ref=${url.pathname}${url.search}`)
+		redirect(307, `/auth/login?ref=${url.pathname}${url.search}`)
 	}
 
 	try {
@@ -20,10 +20,10 @@ export async function load({ cookies, locals, url }) {
 			return { wishlistedProducts }
 		}
 	} catch (e) {
-		throw redirect(307, '/auth/login')
+		redirect(307, '/auth/login')
 	}
 
-	throw error(404, 'Wishlist not found')
+	error(404, 'Wishlist not found')
 }
 
 const toggleWishlist = async ({ request, cookies, locals }) => {
@@ -35,7 +35,7 @@ const toggleWishlist = async ({ request, cookies, locals }) => {
 	const { store, origin, me, sid } = locals
 
 	if (!me || !sid) {
-		throw redirect(307, `/auth/login?ref=/my/wishlist/add/${pid}`)
+		redirect(307, `/auth/login?ref=/my/wishlist/add/${pid}`)
 	}
 
 	const res = await WishlistService.toggleWishlistService({

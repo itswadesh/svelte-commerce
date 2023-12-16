@@ -17,8 +17,8 @@ export async function load({ params, url, parent }) {
 			return { category }
 		}
 	} catch (e) {
-		throw error(400, e?.message)
+		error(400, e?.message)
 	}
 
-	throw error(404, 'Category not found')
+	error(404, 'Category not found')
 }

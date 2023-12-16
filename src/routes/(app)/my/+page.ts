@@ -5,7 +5,7 @@ export async function load({ parent, url }) {
 	const { me, sid, storeId, origin } = await parent()
 
 	if (!me || !sid) {
-		throw redirect(307, `/auth/login?ref=${url.pathname}${url.search}`)
+		redirect(307, `/auth/login?ref=${url.pathname}${url.search}`)
 	}
 
 	try {
@@ -27,6 +27,6 @@ export async function load({ parent, url }) {
 		})
 		return { orders, wishlists, reviews }
 	} catch (e) {
-		throw redirect(307, '/auth/login')
+		redirect(307, '/auth/login')
 	}
 }
