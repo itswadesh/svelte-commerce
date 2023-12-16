@@ -14,7 +14,7 @@ import { page } from '$app/stores'
 import errAnimated from '$lib/assets/no/error.svg'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 </script>
-
+<!-- <pre>{JSON.stringify($page, null, 2)}</pre> -->
 <div class="flex h-[70vh] flex-col items-center justify-center text-center sm:h-[92vh]">
 	{#if $page.status === 404}
 		<div class="container">

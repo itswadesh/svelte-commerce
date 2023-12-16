@@ -11,6 +11,9 @@ const config = {
 		})
 	],
 	kit: {
+		alias: {
+			'lib/*': 'src/lib/*'
+		},
 		adapter: adapter(),
 		csrf: {
 			checkOrigin: false
