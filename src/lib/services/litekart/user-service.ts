@@ -15,7 +15,7 @@ export const fetchMeData = async ({ origin, storeId, server = false, sid = null 
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -50,7 +50,7 @@ export const signupService = async ({
 
 		return res
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -68,7 +68,7 @@ export const googleOneTapLoginService = async ({
 
 		return res
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -89,7 +89,7 @@ export const loginService = async ({ email, password, storeId, origin, sid = nul
 		return res
 	} catch (e) {
 		if (e.status === 401) e.message = 'email or password is invalid'
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -115,7 +115,7 @@ export const forgotPasswordService = async ({
 
 		return res
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -146,7 +146,7 @@ export const resetPasswordService = async ({
 
 		return res
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 export const changePasswordService = async ({
@@ -174,7 +174,7 @@ export const changePasswordService = async ({
 
 		return res
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -204,7 +204,7 @@ export const getOtpService = async ({
 
 		return res
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -231,7 +231,7 @@ export const verifyOtpService = async ({
 
 		return res
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -243,7 +243,7 @@ export const logoutService = async ({ storeId, origin, server = false, sid = nul
 
 		return res
 	} catch (e) {
-		throw error(e?.status || 500, e.data?.message || e.message)
+		error(e?.status || 500, e.data?.message || e.message)
 	}
 }
 
@@ -261,7 +261,7 @@ export const updateProfileService = async ({
 
 		return res
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -305,6 +305,6 @@ export const verifyEmail = async ({
 
 		return res
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }

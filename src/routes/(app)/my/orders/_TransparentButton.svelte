@@ -13,7 +13,7 @@ export { clazz as class }
 
 <div class="{clazz}">
 	<button
-		type="{type}"
+		{type}
 		class="relative transform items-center justify-center border-2 px-4 py-2 text-center font-semibold tracking-wider text-primary-500 transition duration-300 focus:outline-none focus:ring-0 focus:ring-offset-0 active:scale-95
 		{disabled ? 'bg-zinc-400 cursor-not-allowed' : 'bg-transparent'}
 		{rounded ? 'rounded-full ' : 'rounded'}
@@ -35,12 +35,12 @@ export { clazz as class }
 					{loadingringsize == 'xs'
 						? 'w-4 h-4'
 						: loadingringsize == 'sm'
-						? 'h-5 w-5'
-						: loadingringsize == 'base'
-						? 'h-6 w-6'
-						: loadingringsize == 'lg'
-						? 'h-7 w-7'
-						: 'h-7 w-7'} "
+							? 'h-5 w-5'
+							: loadingringsize == 'base'
+								? 'h-6 w-6'
+								: loadingringsize == 'lg'
+									? 'h-7 w-7'
+									: 'h-7 w-7'} "
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
 					viewBox="0 0 24 24">

@@ -29,7 +29,7 @@ export const searchProducts = async ({
 
 		return { products, count, facets, pageSize, err }
 	} catch (e) {
-		throw error(e.status, e.message)
+		error(e.status, e.message)
 	}
 }
 
@@ -44,7 +44,7 @@ export const fetchProducts = async ({ origin, slug, id, server = false, sid = nu
 
 		return res?.data || []
 	} catch (e) {
-		throw error(e.status, e.message)
+		error(e.status, e.message)
 	}
 }
 
@@ -60,7 +60,7 @@ export const fetchProduct = async ({ origin, slug, id, server = false, sid = nul
 		res = await mapMedusajsProduct(productArray[0]) // assuming we only want the first product in the array
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.message)
+		error(e.status, e.message)
 	}
 }
 
@@ -79,7 +79,7 @@ export const fetchProduct2 = async ({ origin, slug, id, server = false, sid = nu
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.message)
+		error(e.status, e.message)
 	}
 }
 
@@ -106,11 +106,9 @@ export const fetchProductsOfCategory = async ({
 		let pageSize = 0
 		let products: Product[] = []
 
-
 		res1 = await getMedusajsApi(`product-categories`)
 
 		if (res1?.count) {
-
 			categories = res1?.product_categories.filter((c) => {
 				if (c.handle === categorySlug) {
 					return c
@@ -137,15 +135,15 @@ export const fetchProductsOfCategory = async ({
 						err,
 						facets,
 						pageSize,
-						products,
+						products
 					}
 				} catch (e) {
-					throw error(e.status, e.message)
+					error(e.status, e.message)
 				}
 			}
 		}
 	} catch (e) {
-		throw error(e.status, e.message)
+		error(e.status, e.message)
 	}
 }
 
@@ -173,7 +171,7 @@ export const fetchNextPageProducts = async ({
 			facets: res.facets
 		}
 	} catch (e) {
-		throw error(e.status, e.message)
+		error(e.status, e.message)
 	}
 }
 
@@ -195,6 +193,6 @@ export const fetchRelatedProducts = async ({
 
 		return relatedProducts || []
 	} catch (e) {
-		throw error(e.status, e.message)
+		error(e.status, e.message)
 	}
 }

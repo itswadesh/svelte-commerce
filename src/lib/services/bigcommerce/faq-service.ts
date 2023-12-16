@@ -1,8 +1,5 @@
 import { error } from '@sveltejs/kit'
-import {
-	getBySid,
-	getBigcommerceApi,
-} from '$lib/utils/server'
+import { getBySid, getBigcommerceApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import type { Error } from '$lib/types'
 
@@ -14,6 +11,6 @@ export const fetchFaqs = async ({ origin, storeId, server = false, sid = null }:
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }

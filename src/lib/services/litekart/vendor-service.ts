@@ -16,7 +16,7 @@ export const fetchVendors = async ({ origin, storeId, server = false, sid = null
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -32,7 +32,7 @@ export const fetchVendor = async ({ origin, slug, storeId, server = false, sid =
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -48,6 +48,6 @@ export const fetchProductsOfVendor = async ({ slug, origin, page, sid = null, st
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }

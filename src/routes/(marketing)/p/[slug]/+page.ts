@@ -16,5 +16,5 @@ export async function load({ parent, params }) {
 		return { page }
 	}
 
-	throw error(404, 'Blog not found')
+	error(404, 'Blog not found')
 }

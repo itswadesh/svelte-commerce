@@ -3,7 +3,13 @@ import { getBySid, postBySid, postt, delBySid } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 const isServer = import.meta.env.SSR
 
-export const fetchAddresses = async ({ origin, storeId, isCors = false, server = false, sid = null }: any) => {
+export const fetchAddresses = async ({
+	origin,
+	storeId,
+	isCors = false,
+	server = false,
+	sid = null
+}: any) => {
 	try {
 		let res: any = {}
 		let selectedAddress = {}
@@ -20,7 +26,7 @@ export const fetchAddresses = async ({ origin, storeId, isCors = false, server =
 		return { myAddresses: { data: myAddresses }, selectedAddress, count: res?.count }
 	} catch (e) {
 		// if (e.message !== 'Unauthorized') {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 		// } else {
 		// 	return { myAddresses: { data: [] }, selectedAddress: {}, count: 0 }
 		// }
@@ -39,7 +45,7 @@ export const fetchAddress = async ({ origin, storeId, server = false, sid = null
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -82,7 +88,7 @@ export const saveAddress = async ({
 
 		return res
 	} catch (err) {
-		throw error(err.status, err.message)
+		error(err.status, err.message)
 	}
 }
 
@@ -126,22 +132,14 @@ export const editAddress = async ({
 		)
 		return res
 	} catch (err) {
-		throw error(err.status, err.message)
+		error(err.status, err.message)
 	}
 }
 
-export const deleteAddress = async ({
-	id,
-	storeId,
-	origin,
-	sid = null
-}: any) => {
-
+export const deleteAddress = async ({ id, storeId, origin, sid = null }: any) => {
 	try {
 		const res = await delBySid(`addresses/${id}`, sid)
-
 	} catch (err) {
-
-		throw error(err.status || 400, err.message)
+		error(err.status || 400, err.message)
 	}
 }

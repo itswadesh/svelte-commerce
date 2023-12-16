@@ -12,7 +12,7 @@ export const fetchBlogs = async ({ origin, storeId, server = false, sid = null }
 
 		return res.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -24,7 +24,7 @@ export const fetchLatestBlogs = async ({ origin, storeId, server = false, sid = 
 
 		return res.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -36,6 +36,6 @@ export const fetchBlog = async ({ origin, id, storeId, server = false, sid = nul
 
 		return res.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }

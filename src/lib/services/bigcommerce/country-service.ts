@@ -1,9 +1,6 @@
 import type { Error } from '$lib/types'
 import { getAPI } from '$lib/utils/api'
-import {
-	getBySid,
-	getBigcommerceApi,
-} from '$lib/utils/server'
+import { getBySid, getBigcommerceApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 
@@ -15,7 +12,7 @@ export const fetchCountries = async ({ origin, storeId, server = false, sid = nu
 
 		return res?.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -33,6 +30,6 @@ export const fetchStates = async ({
 
 		return res?.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }

@@ -17,7 +17,7 @@ export const fetchCartData = async ({ cartId = null, origin, sid = null, storeId
 		return res || {}
 	} catch (err) {
 		const e = err as Error
-		throw error(e.status, e.data.message)
+		error(e.status, e.data.message)
 	}
 }
 
@@ -57,7 +57,7 @@ export const fetchMyCart = async ({ cartId = null, origin, sid = null, storeId }
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.message)
+		error(e.status, e.message)
 	}
 }
 
@@ -109,7 +109,7 @@ export const addToCartService = async ({
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -141,7 +141,7 @@ export const createBackOrder = async ({ pid, qty, origin = null, sid = null, sto
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -168,7 +168,7 @@ export const applyCouponService = async ({
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -187,7 +187,7 @@ export const removeCouponService = async ({
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -204,7 +204,7 @@ export const updateCart = async ({
 
 		return addressId
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -294,6 +294,6 @@ export const updateCartWithoutLogIn = async ({
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }

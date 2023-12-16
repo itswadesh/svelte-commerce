@@ -15,7 +15,7 @@ export async function load({ cookies, locals, params, url }) {
 
 	if (!me || !sid) {
 		const redirectUrl = `${loginUrl}?ref=${url?.pathname}${url?.search || ''}`
-		throw redirect(307, redirectUrl)
+		redirect(307, redirectUrl)
 	}
 
 	const cart = await CartService.fetchRefreshCart({
@@ -28,7 +28,7 @@ export async function load({ cookies, locals, params, url }) {
 	// console.log('cart at add address', cart);
 
 	if (!cart?.qty) {
-		throw redirect(307, '/cart')
+		redirect(307, '/cart')
 	}
 
 	if (id === 'new') {

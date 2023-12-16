@@ -12,7 +12,7 @@ export const fetchAutocompleteData = async ({ origin, storeId, q }: any) => {
 		// must return name:string, slug:string type:string
 		return data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 

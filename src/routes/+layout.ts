@@ -14,7 +14,7 @@ export const load = async ({ parent, data, fetch }) => {
 		data.popularSearches = storeFromServer.popularSearches
 		return { ...data }
 	} catch (e) {
-		throw error(
+		error(
 			404,
 			`Store Not Found @Layout 
 			<br/>ID: ${data.storeId}

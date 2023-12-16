@@ -39,14 +39,13 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 					total: +res?.total,
 					unavailableItems: res?.unavailableItems
 				}
-
 			}
 		}
 	} catch (e) {
 		if (e?.status === 401) {
-			throw redirect(307, `/auth/login?ref=${url?.pathname}`)
+			redirect(307, `/auth/login?ref=${url?.pathname}`)
 		}
-		throw error(400, e?.body?.message || e)
+		error(400, e?.body?.message || e)
 	} finally {
 		loading = false
 	}

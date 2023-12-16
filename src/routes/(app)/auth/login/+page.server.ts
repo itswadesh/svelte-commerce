@@ -30,10 +30,10 @@ const login = async ({ request, cookies, locals }) => {
 		} catch (err) {
 			const { fieldErrors: errors } = err.flatten();
 			const { ...rest } = formData
-			throw error(404, {
-				data: rest,
-				errors
-			})
+			error(404, {
+            				data: rest,
+            				errors
+            			});
 		}
 
 		res = await UserService.loginService({
@@ -60,10 +60,10 @@ const login = async ({ request, cookies, locals }) => {
 		} catch (err) {
 			const { fieldErrors: errors } = err.flatten();
 			const { ...rest } = formData
-			throw error(404, {
-				data: rest,
-				errors
-			})
+			error(404, {
+            				data: rest,
+            				errors
+            			});
 		}
 
 		res = await UserService.getOtpService({

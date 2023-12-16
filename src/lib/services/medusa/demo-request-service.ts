@@ -15,6 +15,6 @@ export const saveScheduleDemo = async ({
 
 		return res
 	} catch (e) {
-		throw error(e.status, e.message)
+		error(e.status, e.message)
 	}
 }

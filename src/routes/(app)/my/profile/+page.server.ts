@@ -22,10 +22,10 @@ export async function load({ cookies, locals }) {
 		}
 	} catch (e) {
 		if (e.status === 401) {
-			throw redirect(307, '/auth/login')
+			redirect(307, '/auth/login')
 		}
 
-		throw error(e.status, e.message)
+		error(e.status, e.message)
 	} finally {
 	}
 
@@ -33,5 +33,5 @@ export async function load({ cookies, locals }) {
 		return { profile, store: store }
 	}
 
-	throw redirect(307, '/auth/login')
+	redirect(307, '/auth/login')
 }

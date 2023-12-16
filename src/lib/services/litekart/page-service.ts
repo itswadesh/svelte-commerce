@@ -15,7 +15,7 @@ export const fetchPages = async ({ origin, storeId, server = false, sid = null }
 
 		return res.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -31,7 +31,7 @@ export const fetchLatestPages = async ({ origin, storeId, server = false, sid = 
 
 		return res.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -47,6 +47,6 @@ export const fetchPage = async ({ origin, id, slug, storeId, server = false, sid
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }

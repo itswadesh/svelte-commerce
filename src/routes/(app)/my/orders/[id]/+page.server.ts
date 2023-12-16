@@ -22,8 +22,8 @@ export async function load({ params, locals, cookies }) {
 			return { order, orderTracking }
 		}
 	} catch (e) {
-		throw redirect(307, '/auth/login')
+		redirect(307, '/auth/login')
 	}
 
-	throw error(404, 'Order not found')
+	error(404, 'Order not found')
 }

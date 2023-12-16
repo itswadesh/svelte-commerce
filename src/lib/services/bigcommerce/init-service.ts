@@ -13,6 +13,6 @@ export const fetchInit = async (host) => {
 		res = await getBySid(`init?domain=${DOMAIN ? DOMAIN : host}`)
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }

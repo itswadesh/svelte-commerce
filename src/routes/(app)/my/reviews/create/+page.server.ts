@@ -18,14 +18,14 @@ export async function load({ url, locals, cookies }) {
 			sid: cookies.get('connect.sid')
 		})
 
-		if (!product) throw error(404, 'Product not found')
+		if (!product) error(404, 'Product not found')
 
 		return { ref, product }
 	} catch (e) {
 		if (e.status === 401 || e.status === 403) {
-			throw redirect(307, '/auth/login')
+			redirect(307, '/auth/login')
 		}
 
-		throw error(e.status, e.message)
+		error(e.status, e.message)
 	}
 }

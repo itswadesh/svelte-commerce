@@ -11,6 +11,6 @@ export const fetchPaymentMethods = async ({ origin, storeId, cartId, sid = null 
 		res = cres.regions[0].payment_providers
 		return res || []
 	} catch (e) {
-		throw error(e.status, e.message)
+		error(e.status, e.message)
 	}
 }

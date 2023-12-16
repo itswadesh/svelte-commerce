@@ -18,7 +18,7 @@ export const fetchWishlist = async ({
 
 		return res?.data || []
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -37,7 +37,7 @@ export const checkWishlist = async ({
 
 		return res
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -56,6 +56,6 @@ export const toggleWishlistService = async ({
 
 		return res
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message)
 	}
 }
