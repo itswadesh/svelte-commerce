@@ -29,7 +29,7 @@ async function submitContactInformation() {
 			phone,
 			subject: `Someone contact us from ${$page.data.store?.websiteName}`,
 			message,
-			storeId: $page.data.store?.id,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 
@@ -307,7 +307,7 @@ async function submitContactInformation() {
 			<form
 				on:submit|preventDefault="{submitContactInformation}"
 				class="col-span-1 flex flex-col gap-5 p-5 sm:p-10 xl:col-span-2">
-				<Error err="{err}" />
+				<Error {err} />
 
 				<TextboxFloating
 					type="text"
@@ -339,9 +339,7 @@ async function submitContactInformation() {
 					bind:value="{message}" />
 
 				<div class="flex justify-end">
-					<PrimaryButton type="submit" loading="{loading}" class="px-10 uppercase">
-						submit
-					</PrimaryButton>
+					<PrimaryButton type="submit" {loading} class="px-10 uppercase">submit</PrimaryButton>
 				</div>
 			</form>
 		</div>
