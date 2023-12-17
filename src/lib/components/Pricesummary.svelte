@@ -1,6 +1,6 @@
 <script lang="ts">
 import { createEventDispatcher, onMount } from 'svelte'
-import { currency } from '$lib/utils'
+import { currency, toast } from '$lib/utils'
 import { PrimaryButton } from '$lib/ui'
 import { browser } from '$app/environment'
 import { cartStore } from '$lib/store/cart'
@@ -9,6 +9,7 @@ import { page } from '$app/stores'
 
 const dispatch = createEventDispatcher()
 
+export let checkedCartItems = []
 export let disabled = false
 export let hideCheckoutButton = false
 export let loading = false
@@ -18,6 +19,7 @@ export let text = 'Proceed to checkout'
 $: cart = {}
 
 // console.log('zzzzzzzzzzzzzzzzzz', cart)
+// console.log('checkedCartItems', checkedCartItems)
 
 function modulo(n, m) {
 	// handle negative numbers
@@ -25,7 +27,11 @@ function modulo(n, m) {
 }
 
 function submit() {
-	dispatch('submit')
+	if (checkedCartItems?.length) {
+		dispatch('submit')
+	} else {
+		toast('Select at least one item in bag to place order', 'info')
+	}
 }
 
 $: store = $page.data?.store
@@ -177,8 +183,38 @@ onMount(async () => {
 			<div class="hidden md:block">
 				{#if cart?.qty > 0 && !hideCheckoutButton}
 					{#if nextpage}
-						<a href="{nextpage}">
-							<PrimaryButton class="group w-full uppercase" {loading} {disabled}>
+						{#if checkedCartItems?.length}
+							<a href="{nextpage}">
+								<PrimaryButton
+									roundedNone
+									class="group w-full uppercase"
+									clickEffect="{false}"
+									{loading}
+									{disabled}>
+									<span>{text}</span>
+
+									{#if showNextIcon}
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											class="h-5 w-5 transform transition duration-700 group-hover:translate-x-2"
+											viewBox="0 0 20 20"
+											fill="currentColor">
+											<path
+												fill-rule="evenodd"
+												d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+												clip-rule="evenodd"></path>
+										</svg>
+									{/if}
+								</PrimaryButton>
+							</a>
+						{:else}
+							<PrimaryButton
+								roundedNone
+								class="group w-full uppercase"
+								clickEffect="{false}"
+								{loading}
+								{disabled}
+								on:click="{() => toast('Select at least one item in bag to place order', 'info')}">
 								<span>{text}</span>
 
 								{#if showNextIcon}
@@ -194,11 +230,13 @@ onMount(async () => {
 									</svg>
 								{/if}
 							</PrimaryButton>
-						</a>
+						{/if}
 					{:else}
 						<PrimaryButton
+							roundedNone
 							type="submit"
-							class="w-full uppercase"
+							class="group w-full uppercase"
+							clickEffect="{false}"
 							{loading}
 							{disabled}
 							on:click="{submit}">
@@ -224,13 +262,38 @@ onMount(async () => {
 			<div class="fixed inset-x-0 bottom-0 z-50 block w-full md:hidden">
 				{#if cart?.qty > 0 && !hideCheckoutButton}
 					{#if nextpage}
-						<a href="{nextpage}">
+						{#if checkedCartItems?.length}
+							<a href="{nextpage}">
+								<PrimaryButton
+									roundedNone
+									class="group w-full uppercase h-14"
+									clickEffect="{false}"
+									{loading}
+									{disabled}>
+									<span>{text}</span>
+
+									{#if showNextIcon}
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											class="h-5 w-5 transform transition duration-700 group-hover:translate-x-2"
+											viewBox="0 0 20 20"
+											fill="currentColor">
+											<path
+												fill-rule="evenodd"
+												d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+												clip-rule="evenodd"></path>
+										</svg>
+									{/if}
+								</PrimaryButton>
+							</a>
+						{:else}
 							<PrimaryButton
 								roundedNone
-								class="w-full uppercase h-14"
+								class="group w-full uppercase h-14"
 								clickEffect="{false}"
 								{loading}
-								{disabled}>
+								{disabled}
+								on:click="{() => toast('Select at least one item in bag to place order', 'info')}">
 								<span>{text}</span>
 
 								{#if showNextIcon}
@@ -246,12 +309,12 @@ onMount(async () => {
 									</svg>
 								{/if}
 							</PrimaryButton>
-						</a>
+						{/if}
 					{:else}
 						<PrimaryButton
 							roundedNone
 							type="submit"
-							class="w-full uppercase h-14"
+							class="group w-full uppercase h-14"
 							clickEffect="{false}"
 							{loading}
 							{disabled}

@@ -1,23 +1,24 @@
 <script lang="ts">
 import { applyAction, enhance } from '$app/forms'
+import { browser } from '$app/environment'
+import { cartLoadingStore, cartStore, getCartFromStore, updateCartStore } from '$lib/store/cart.js'
 import { CartService, CouponService, ProductService, WishlistService } from '$lib/services'
-import { currency, date, toast } from '$lib/utils'
+import { currency, date, logger, toast } from '$lib/utils'
 import { Error, LazyImg, Pricesummary, ProductCard, TrustBaggeContainer } from '$lib/components'
 import { fireGTagEvent } from '$lib/utils/gTagB'
 import { fly, slide } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
-import { onMount } from 'svelte'
+import { onMount, tick } from 'svelte'
 import { page } from '$app/stores'
 import { PrimaryButton, Skeleton, Textbox, WhiteButton } from '$lib/ui'
+import { selectedCartItemsStore, updateSelectedCartItemsStore } from 'lib/store/selected-cart-items'
+import { storeStore } from '$lib/store/store.js'
 import Cookie from 'cookie-universal'
 import dotsLoading from '$lib/assets/dots-loading.gif'
 import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 import SEO from '$lib/components/SEO/index.svelte'
-import { cartLoadingStore, cartStore, getCartFromStore, updateCartStore } from '$lib/store/cart.js'
-import { browser } from '$app/environment'
-import { storeStore } from '$lib/store/store.js'
 
 const cookies = Cookie()
 
@@ -30,6 +31,8 @@ let seoProps = {
 }
 
 let appliedCouponInfo = {}
+let checked = []
+let checkedAllCartItems = false
 let couponErr
 let coupons
 let loading = []
@@ -43,10 +46,13 @@ let openApplyPromoCodeModal = false
 let products = []
 let selectedCouponCode = null
 let selectedLoadingType = null
+
 $: cart = {}
 $: isCartLoading = true
+$: checkedCartItems = []
 let store
-onMount(() => {
+
+onMount(async () => {
 	if (browser) {
 		storeStore.subscribe((value) => (store = value))
 		cartStore.subscribe((value) => {
@@ -55,10 +61,21 @@ onMount(() => {
 		cartLoadingStore.subscribe((value) => {
 			isCartLoading = value
 		})
+		selectedCartItemsStore.subscribe((value) => {
+			checkedCartItems = value
+		})
 	}
+
 	getProducts()
 	getCoupons()
 	fireGTagEvent('view_cart', cart)
+
+	await tick()
+
+	if (cart && cart?.items && cart?.items?.length) {
+		checkedAllCartItems = true
+		handleCheckedAllCartItems()
+	}
 })
 
 function handleCouponCode(couponCode: string, index: number) {
@@ -162,6 +179,39 @@ async function getCoupons() {
 function chnageJsonInLocalStore({ json, pid, slug }) {
 	localStorage.setItem(pid, json)
 	goto('/product/' + slug)
+}
+
+function handleCheckedAllCartItems() {
+	if (cart && cart?.items && cart?.items?.length) {
+		if (checkedAllCartItems) {
+			checkedCartItems = []
+
+			cart?.items.forEach((item, ix) => {
+				checked[ix] = true
+				updateCheckedCartItems(item._id || item.id)
+			})
+		} else {
+			cart?.items.forEach((item, ix) => {
+				checked[ix] = false
+				updateCheckedCartItems(item._id || item.id)
+			})
+
+			checkedCartItems = []
+		}
+	}
+}
+
+function updateCheckedCartItems(id) {
+	// console.log('previousId, item', previousId, item)
+	let ci = [...checkedCartItems]
+	if (ci.includes(id)) {
+		ci = ci.filter((i) => i !== id)
+	} else {
+		ci.push(id)
+	}
+	checkedCartItems = ci
+	// console.log('checkedCartItems', checkedCartItems)
+	updateSelectedCartItemsStore({ data: checkedCartItems })
 }
 </script>
 
@@ -332,8 +382,27 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 								</form>
 							</div>
 						{/if}
+
 						{#if cart?.qty}
 							<div class="flex flex-col divide-y">
+								<div class="py-5 px-2">
+									<label class="flex tmes-center gap-2 font-semibold uppercase">
+										<input
+											type="checkbox"
+											class="mt-0.5 h-4 w-4"
+											bind:checked="{checkedAllCartItems}"
+											on:change="{handleCheckedAllCartItems}" />
+
+										<div class="flex flex-wrap items-center gap-1">
+											<span> {checkedCartItems?.length}/{cart.qty} items selected </span>
+
+											<span class="text-xs font-normal capitalize">
+												(Selected items will go for checkout)
+											</span>
+										</div>
+									</label>
+								</div>
+
 								{#each cart?.items as item, ix (item._id)}
 									<!-- PID can not be a key because in case of customized items it will repeat-->
 									<!-- Product detail start -->
@@ -341,39 +410,47 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 										in:slide="{{ duration: 300 }}"
 										out:fly="{{ x: -800, duration: 300 }}"
 										class="flex w-full items-start gap-4 py-5">
-										<a
-											href="/product/{item?.slug}"
-											aria-label="Click to visit product details"
-											class="block shrink-0 overflow-hidden">
-											{#if item.customizedImg || item.img}
-												<LazyImg
-													src="{item.isCustomized ? item.customizedImg : item.img}"
-													alt=" "
-													width="80"
-													height="192"
-													aspect_ratio="3:4"
-													class="object-contain object-top h-28 w-20 text-xs" />
-											{:else}
-												<div
-													class="h-32 sm:h-40 w-20 bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center">
-													<svg
-														xmlns="http://www.w3.org/2000/svg"
-														fill="none"
-														viewBox="0 0 24 24"
-														stroke-width="1.5"
-														stroke="currentColor"
-														class="w-6 h-6">
-														<path
-															stroke-linecap="round"
-															stroke-linejoin="round"
-															d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
-														></path>
-													</svg>
+										<div class="relative block shrink-0 overflow-hidden">
+											<input
+												type="checkbox"
+												id="{item._id}"
+												bind:checked="{checked[ix]}"
+												class="absolute top-2 left-2 z-10 h-4 w-4 rounded"
+												on:change="{() => updateCheckedCartItems(item._id)}" />
 
-													<span>No image available</span>
-												</div>
+											{#if item.customizedImg || item.img}
+												<a href="/product/{item?.slug}" aria-label="Click to visit product details">
+													<LazyImg
+														src="{item.isCustomized ? item.customizedImg : item.img}"
+														alt=" "
+														width="80"
+														height="192"
+														aspect_ratio="3:4"
+														class="object-contain object-top h-28 w-20 text-xs" />
+												</a>
+											{:else}
+												<a href="/product/{item?.slug}" aria-label="Click to visit product details">
+													<div
+														class="h-32 sm:h-40 w-20 bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center">
+														<svg
+															xmlns="http://www.w3.org/2000/svg"
+															fill="none"
+															viewBox="0 0 24 24"
+															stroke-width="1.5"
+															stroke="currentColor"
+															class="w-6 h-6">
+															<path
+																stroke-linecap="round"
+																stroke-linejoin="round"
+																d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
+															></path>
+														</svg>
+
+														<span>No image available</span>
+													</div>
+												</a>
 											{/if}
-										</a>
+										</div>
 
 										<div class="w-full flex-1">
 											<div class="mb-1 flex justify-between">
@@ -712,7 +789,12 @@ function chnageJsonInLocalStore({ json, pid, slug }) {
 					{/if}
 					<hr class="mb-5" />
 
-					<Pricesummary {cart} nextpage="/checkout/address" text="Select Address" showNextIcon />
+					<Pricesummary
+						{cart}
+						{checkedCartItems}
+						nextpage="/checkout/address"
+						text="Select Address"
+						showNextIcon />
 
 					<TrustBaggeContainer class="mt-5" />
 				</div>
