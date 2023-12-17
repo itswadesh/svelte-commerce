@@ -81,7 +81,7 @@ async function getMegaMenu() {
 		{#each menuItems as category, index}
 			<li
 				class="hoverable mx-1"
-				on:mouseenter="{() => {
+				on:mousemove="{() => {
 					selectedCategory = category.name
 					toggleMenuItemChildren[index] = true
 				}}"
@@ -104,7 +104,8 @@ async function getMegaMenu() {
                 	{index % 6 == 2 && selectedCategory === category.name ? 'border-red-500' : ''}
                 	{index % 6 == 3 && selectedCategory === category.name ? 'border-green-500' : ''}
                 	{index % 6 == 4 && selectedCategory === category.name ? 'border-pink-500' : ''}
-                	{index % 6 == 5 && selectedCategory === category.name ? 'border-blue-500' : ''}">
+                	{index % 6 == 5 && selectedCategory === category.name ? 'border-blue-500' : ''}"
+					on:click="{() => (toggleMenuItemChildren[index] = false)}">
 					<!-- Root category -->
 
 					<span>{category.name}</span>
