@@ -8,7 +8,7 @@
 	"workbench.colorTheme": "poimandres",
 	"workbench.iconTheme": "symbols",
 	"workbench.startupEditor": "none",
-	"workbench.sideBar.location": "right",
+	"workbench.sideBar.location": "left",
 	"workbench.layoutControl.enabled": false,
 	"workbench.editor.enablePreview": false,
 	"workbench.editor.labelFormat": "short",
@@ -27,7 +27,7 @@
 	// Font
 	"editor.fontFamily": "Monaspace Neon, MonoLisa, Geist Mono, Monocraft, JetBrains Mono, IBM Plex Mono, Mononoki Nerd Font, Droid Sans Mono, Anonymous Pro, Operator Mono Book, Fira Code, Cascadia Code",
 	"editor.fontLigatures": "'calt', 'liga', 'dlig', 'ss01', 'ss02'",
-	"editor.fontSize": 16,
+	"editor.fontSize": 14,
 	"editor.lineHeight": 2,
 	"editor.tabSize": 2,
 	"editor.wordWrap": "on",
