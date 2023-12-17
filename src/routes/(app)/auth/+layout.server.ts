@@ -45,7 +45,6 @@ export async function load({ url, locals, cookies }) {
 		currentPage,
 		q,
 		settings: locals.settings,
-		store: locals.store,
 		url: url.href
 	}
 }
