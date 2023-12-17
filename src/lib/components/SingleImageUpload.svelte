@@ -169,6 +169,7 @@ const handleSubmit = async (e) => {
 			disabled="{uploading || deleting}"
 			accept="{accept}"
 			max-size="{maxSize}"
-			multiple="{multi}" />
+			multiple="{multi}" 
+			enctype="multipart/form-data"/>
 	</div>
 </div>
