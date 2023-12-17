@@ -1,14 +1,5 @@
 import { env } from '$env/dynamic/public'
-import {
-	PUBLIC_LITEKART_DOMAIN,
-	PUBLIC_LITEKART_API_URL,
-	PUBLIC_MEDUSAJS_API_URL,
-	PUBLIC_BIG_COMMERCE_STORE_HASH,
-	PUBLIC_BIG_COMMERCE_ACCESS_TOKEN,
-	PUBLIC_WOO_COMMERCE_KEY,
-	PUBLIC_WOO_COMMERCE_SECRET,
-	PUBLIC_WOO_COMMERCE_STORE_LINK
-} from '$env/static/public'
+import publicEnv from '$env/static/public'
 
 export * from './website'
 export const adminUrl = 'https://admin.litekart.in'
@@ -26,9 +17,9 @@ export const currency = { symbol: '$', code: 'USD' }
 export const currencyCode = 'USD'
 export const currencySymbol = '$'
 export const dimentionUnit = 'cm'
-export const DOMAIN = PUBLIC_LITEKART_DOMAIN // Never add any default value here, it will break SaaS working
+export const DOMAIN = publicEnv.PUBLIC_LITEKART_DOMAIN // Never add any default value here, it will break SaaS working
 export const entity = 'Misiki'
-export const HTTP_ENDPOINT = PUBLIC_LITEKART_API_URL || 'https://api.litekart.in'
+export const HTTP_ENDPOINT = publicEnv.PUBLIC_LITEKART_API_URL || 'https://api.litekart.in'
 export const IMAGE_CDN_URL = 'https://ik.imagekit.io/3wzatecz51w3i'
 // export const IS_DEV = !!env.PUBLIC_IS_DEV
 export const listOfPagesWithoutBackButton = [
@@ -70,13 +61,13 @@ export const sorts = [
 	{ name: `Name: Desc`, val: '-name' } // { name: 'Most Viewed', val: '-views' }
 ]
 export const weightUnit = 'g'
-export const WWW_URL = PUBLIC_LITEKART_DOMAIN
+export const WWW_URL = publicEnv.PUBLIC_LITEKART_DOMAIN
 
-export const MEDUSAJS_BASE_URL = `${PUBLIC_MEDUSAJS_API_URL}/store`
+export const MEDUSAJS_BASE_URL = `${publicEnv.PUBLIC_MEDUSAJS_API_URL}/store`
 
-export const BIG_COMMERCE_STORE_HASH = PUBLIC_BIG_COMMERCE_STORE_HASH || 'ftelcymxrh'
+export const BIG_COMMERCE_STORE_HASH = publicEnv.PUBLIC_BIG_COMMERCE_STORE_HASH || 'ftelcymxrh'
 export const BIG_COMMERCE_ACCESS_TOKEN =
-	PUBLIC_BIG_COMMERCE_ACCESS_TOKEN || 'evgagyg76wcxcg9uauodegpc1eybfzx'
+	publicEnv.PUBLIC_BIG_COMMERCE_ACCESS_TOKEN || 'evgagyg76wcxcg9uauodegpc1eybfzx'
 export const BIG_COMMERCE_BASE_URL = `https://api.bigcommerce.com/stores/${BIG_COMMERCE_STORE_HASH}/v3/catalog`
 // export const BIG_COMMERCE_CLIENT_ID =
 // 	env.BIG_COMMERCE_CLIENT_ID || 'nybaukoetx98bdjo5vshh0edr3xsz42'
@@ -90,10 +81,11 @@ export const bigcommerceHeaders = {
 }
 
 export const WOO_COMMERCE_KEY =
-	PUBLIC_WOO_COMMERCE_KEY || 'ck_22a412b11bc3045bders7ederrda24d5b6d5245'
+	publicEnv.PUBLIC_WOO_COMMERCE_KEY || 'ck_22a412b11bc3045bders7ederrda24d5b6d5245'
 export const WOO_COMMERCE_SECRET =
-	PUBLIC_WOO_COMMERCE_SECRET || 'cs_98fcss4a9feaf84908197d1fdere30786c38749'
-export const WOO_COMMERCE_STORE_LINK = PUBLIC_WOO_COMMERCE_STORE_LINK || 'https://test.litekart.in'
+	publicEnv.PUBLIC_WOO_COMMERCE_SECRET || 'cs_98fcss4a9feaf84908197d1fdere30786c38749'
+export const WOO_COMMERCE_STORE_LINK =
+	publicEnv.PUBLIC_WOO_COMMERCE_STORE_LINK || 'https://test.litekart.in'
 export const woocommerceHeaders = {
 	username: WOO_COMMERCE_KEY,
 	password: WOO_COMMERCE_SECRET,
