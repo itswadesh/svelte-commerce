@@ -32,7 +32,7 @@
 	"editor.tabSize": 2,
 	"editor.wordWrap": "on",
 	// Terminal
-	"terminal.integrated.fontFamily": "Monaspace Neon, MonoLisa, Monocraft, JetBrains Mono, IBM Plex Mono, Mononoki Nerd Font, Fira Code",
+	// "terminal.integrated.fontFamily": "Monaspace Neon, MonoLisa, Monocraft, JetBrains Mono, IBM Plex Mono, Mononoki Nerd Font, Fira Code",
 	"terminal.integrated.fontSize": 14,
 	"terminal.integrated.cursorStyle": "line",
 	"terminal.integrated.cursorBlinking": true,
