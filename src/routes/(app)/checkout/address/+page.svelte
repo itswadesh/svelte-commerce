@@ -1,8 +1,11 @@
 <script>
+import { browser } from '$app/environment'
 import { CartService } from '$lib/services'
 import { CheckoutHeader, Error, Pricesummary, TrustBaggeContainer } from '$lib/components'
 import { goto, invalidateAll } from '$app/navigation'
+import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import { selectedCartItemsStore } from 'lib/store/selected-cart-items'
 import SaveAddress from '../../my/addresses/_SaveAddress.svelte'
 import SelectAddress from '../_SelectAddress.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
@@ -14,6 +17,16 @@ const seoProps = {
 	title: 'Address ',
 	metaDescription: 'Address'
 }
+
+$: checkedCartItems = []
+
+onMount(() => {
+	if (browser) {
+		selectedCartItemsStore.subscribe((value) => {
+			checkedCartItems = value
+		})
+	}
+})
 
 function addressChanged(detail) {
 	data.selectedAddress = detail.detail
@@ -132,6 +145,7 @@ async function refreshAddress() {
 			{#if data.selectedAddress}
 				<Pricesummary
 					cart="{data.cart}"
+					{checkedCartItems}
 					text="Proceed"
 					showNextIcon
 					on:submit="{updateCart}"
@@ -139,6 +153,7 @@ async function refreshAddress() {
 			{:else}
 				<Pricesummary
 					cart="{data.cart}"
+					{checkedCartItems}
 					text="Please select address"
 					disabled="{true}"
 					loading="{data.loading}" />
