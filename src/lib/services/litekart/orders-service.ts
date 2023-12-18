@@ -107,7 +107,6 @@ export const codCheckout = async ({
 	comment = '',
 	paymentMethod,
 	prescription,
-	selected_products_for_checkout,
 	origin,
 	sid = null,
 	storeId
@@ -125,7 +124,6 @@ export const codCheckout = async ({
 					comment,
 					paymentMethod,
 					prescription,
-					selected_products_for_checkout,
 					store: storeId
 				},
 				origin
