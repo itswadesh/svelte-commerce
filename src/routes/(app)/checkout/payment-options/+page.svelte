@@ -124,7 +124,7 @@ async function submit(pm) {
 
 				// console.log('res of cod', res)
 
-				// goto(`/payment/success?orderId=${res?._id || res?.id}&status=PAYMENT_SUCCESS&provider=COD`)
+				goto(`/payment/success?orderId=${res?._id || res?.id}&status=PAYMENT_SUCCESS&provider=COD`)
 			} catch (e) {
 				data.err = e
 				gotoOrder(orderNo)
