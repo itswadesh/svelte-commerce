@@ -476,7 +476,7 @@ function updateCheckedCartItems(id) {
 											{#if item.isCustomized}
 												<button
 													type="button"
-													class="mb-1 text-sm text-zinc-500 italic hover:underline focus:outline-nne"
+													class="mb-1 text-sm text-zinc-500 italic hover:underline focus:outline-none"
 													on:click="{() =>
 														chnageJsonInLocalStore({
 															json: item.customizedData,
