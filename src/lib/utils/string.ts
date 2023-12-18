@@ -1,6 +1,6 @@
+import type { ToastType } from 'svelte-toasts/types/common'
 import { currency as currencyConfig } from '../config'
 import { toasts } from 'svelte-toasts'
-import type { ToastType } from 'svelte-toasts/types/common'
 import { goto } from '$app/navigation'
 
 let allToasts: any
@@ -58,15 +58,15 @@ export const getColorNameFromVarni = (value: string) => {
 	const colorsGroup = [
 		{
 			color_codes: ['#aaaeee'],
-			name: 'Rose',
+			name: 'Rose'
 		},
 		{
 			color_codes: ['#ffffff'],
-			name: 'White',
+			name: 'White'
 		},
 		{
 			color_codes: ['#cccaaa', '#ffff00'],
-			name: 'Yellow',
+			name: 'Yellow'
 		}
 	]
 
@@ -78,7 +78,14 @@ export const getColorNameFromVarni = (value: string) => {
 }
 
 const toast = (title, type) => {
-	title = title?.body?.message?.error || title?.body?.message || title?.message?.error || title?.message || title?.error || title || ''
+	title =
+		title?.body?.message?.error ||
+		title?.body?.message ||
+		title?.message?.error ||
+		title?.message ||
+		title?.error ||
+		title ||
+		''
 	allToasts?.remove()
 	allToasts = toasts.add({
 		title: title,
@@ -88,8 +95,8 @@ const toast = (title, type) => {
 		theme: 'dark',
 		placement: 'top-center',
 		showProgress: false,
-		onClick: () => { },
-		onRemove: () => { }
+		onClick: () => {},
+		onRemove: () => {}
 		// component: BootstrapToast, // allows to override toast component/template per toast
 	})
 }
@@ -264,33 +271,3 @@ export const navigateToProperPath = (url) => {
 	// 	return url.trim();
 	// }
 }
-
-
-
-
-
-export const shopifyInit = async ({ query, variables }) => {
-	try {
-		const result = await fetch(import.meta.env.VITE_SHOPIFY_API_ENDPOINT, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'X-Shopify-Storefront-Access-Token': import.meta.env.VITE_SHOPIFY_STOREFRONT_API_TOKEN
-			},
-			body: JSON.stringify({ query, variables })
-		}).then((res) => res.json())
-		if (result.errors) {
-			console.log({ errors: result.errors })
-		} else if (!result || !result.data) {
-			console.log({ result })
-			return 'No results found.'
-		}
-		return result.data
-	} catch (error) {
-		console.log(error)
-	}
-}
-export * from './string'
-export * from './logger'
-export * from './api'
-export * from './validations'

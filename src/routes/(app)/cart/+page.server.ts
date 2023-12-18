@@ -53,16 +53,16 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 }
 
 const add: Action = async ({ request, cookies, locals }) => {
-	const data = await request.formData()
-	const pid = data.get('pid')
-	const vid = data.get('vid')
-	const variantsLength = +data.get('variantsLength')
-	const currentVariantId = data.get('currentVariantId')
-	const qty = +data.get('qty')
-	const linkedItems = JSON.parse(data.get('linkedItems'))
-	const options = JSON.parse(data.get('options')) //data.get('options') //
-	const customizedImg = data.get('customizedImg')
-	const customizedData = data.get('customizedData')
+	const data = Object.fromEntries(await request.formData())
+	const pid = data.pid
+	const vid = data.vid
+	const variantsLength = +data.variantsLength
+	const currentVariantId = data.currentVariantId
+	const qty = +data.qty
+	const linkedItems = JSON.parse(data.linkedItems||'[]')
+	const options = JSON.parse(data.options || '[]') //data.options //
+	const customizedImg = data.customizedImg
+	const customizedData = data.customizedData
 	let cartId = locals.cartId
 	let sid = cookies.get('connect.sid')
 

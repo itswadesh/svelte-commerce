@@ -263,7 +263,8 @@ async function saveReviewproduct(review) {
 								class="hidden"
 								multiple="{false}"
 								bind:files="{file}"
-								on:change="{uploadImageToS3}" />
+								on:change="{uploadImageToS3}"
+								enctype="multipart/form-data" />
 						</label>
 					</div>
 				</div>

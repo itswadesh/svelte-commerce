@@ -32,8 +32,7 @@ const toggleWishlist = async ({ request, cookies, locals }) => {
 	const pid = data.get('pid')
 	const vid = data.get('vid')
 
-	const { store, origin, me, sid } = locals
-
+	const { storeId, origin, me, sid } = locals
 	if (!me || !sid) {
 		redirect(307, `/auth/login?ref=/my/wishlist/add/${pid}`)
 	}

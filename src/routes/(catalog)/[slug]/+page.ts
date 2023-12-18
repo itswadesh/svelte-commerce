@@ -16,7 +16,7 @@ export async function load({ url, params, parent }) {
 	})
 
 	return {
-		products: ProductService.fetchProductsOfCategory({
+		products: await ProductService.fetchProductsOfCategory({
 			categorySlug,
 			origin,
 			query: query.toString(),

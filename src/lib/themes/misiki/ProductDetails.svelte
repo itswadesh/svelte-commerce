@@ -1233,6 +1233,7 @@ async function updateVariant(variant) {
 						in:fade="{{ duration: 300 }}"
 						action="/cart?/createBackOrder"
 						method="POST"
+						enctype="multipart/form-data"
 						use:enhance="{() => {
 							return async ({ result }) => {
 								// console.log('result of add to cart', result)
@@ -1306,6 +1307,7 @@ async function updateVariant(variant) {
 										id="toggle_wishlist_1"
 										action="/my/wishlist?/toggleWishlist"
 										method="POST"
+										enctype="multipart/form-data"
 										use:enhance="{() => {
 											return async ({ result }) => {
 												// console.log('wishlist toggle result', result)
@@ -1442,7 +1444,8 @@ async function updateVariant(variant) {
 												id="add_to_cart_1"
 												in:fade="{{ duration: 300 }}"
 												action="/cart?/add"
-												method="POST"
+												method="POST" 
+												enctype="multipart/form-data"
 												use:enhance="{() => {
 													return async ({ result }) => {
 														// console.log('result of add to cart', result)
@@ -1708,6 +1711,7 @@ async function updateVariant(variant) {
 										id="toggle_wishlist_2"
 										action="/my/wishlist?/toggleWishlist"
 										method="POST"
+										enctype="multipart/form-data"
 										use:enhance="{() => {
 											return async ({ result }) => {
 												// console.log('wishlist toggle result', result)
@@ -1845,6 +1849,7 @@ async function updateVariant(variant) {
 												in:fade="{{ duration: 300 }}"
 												action="/cart?/add"
 												method="POST"
+												enctype="multipart/form-data"
 												use:enhance="{() => {
 													return async ({ result }) => {
 														// console.log('result of add to cart', result)
@@ -1946,6 +1951,7 @@ async function updateVariant(variant) {
 										id="toggle_wishlist_3"
 										action="/my/wishlist?/toggleWishlist"
 										method="POST"
+										enctype="multipart/form-data"
 										use:enhance="{() => {
 											return async ({ result }) => {
 												// console.log('wishlist toggle result', result)
@@ -2083,6 +2089,7 @@ async function updateVariant(variant) {
 												in:fade="{{ duration: 300 }}"
 												action="/cart?/add"
 												method="POST"
+												enctype="multipart/form-data"
 												use:enhance="{() => {
 													return async ({ result }) => {
 														// console.log('result of add to cart', result)
