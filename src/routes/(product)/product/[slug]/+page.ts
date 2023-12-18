@@ -1,5 +1,6 @@
 // import { getCache, setCache } from '$lib/server/redis'
 import { ProductService, ReviewService, WishlistService } from '$lib/services'
+import { logger } from 'lib/utils/logger'
 
 const isServer = import.meta.env.SSR // get the SSR value
 
@@ -28,8 +29,8 @@ export async function load({ params, url, parent }) {
 				storeId
 			})
 
-			// console.log('isWishlisted', isWishlisted);
-			
+			logger.info('isWishlisted', isWishlisted)
+
 			product.isWishlisted = isWishlisted
 		} else {
 			product.isWishlisted = false
@@ -52,14 +53,8 @@ export async function load({ params, url, parent }) {
 	}
 
 	const getMoreProductDetails = async () => {
-		// const p2 = `es/products2/${slug}?store=${storeId}`
-		// const cached = await getCache(p2)
-		// if (cached) {
-		// 	return cached
-		// }
 		const products2 = await ProductService.fetchProduct2({ id: slug, slug, origin, storeId })
 		// setHeaders({ 'cache-control': `max-age=${CACHE_DURATION}` }) // This is to tell Cloudflare to store in its own cache
-		// setCache(p2, products2)
 		return products2
 	}
 

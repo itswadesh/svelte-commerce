@@ -109,7 +109,7 @@ export const addToCartService = async ({
 
 		return res || {}
 	} catch (e) {
-		error(e.status, e.data?.message || e.message)
+		error(e.status || 500, e)
 	}
 }
 

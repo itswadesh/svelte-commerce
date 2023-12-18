@@ -1,5 +1,5 @@
 ##### Stage 1 - Development - Generate dist folder
-FROM node:16 AS builder
+FROM node:21 AS builder
 LABEL author="Swadesh Behera"
 
 # RUN npm install -g npm
