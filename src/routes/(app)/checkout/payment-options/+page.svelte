@@ -117,7 +117,7 @@ async function submit(pm) {
 					cartId: $page.data.cartId,
 					paymentMethod: 'COD',
 					prescription: data.prescription?._id,
-					products: checkedCartItems,
+					selected_products_for_checkout: checkedCartItems,
 					origin: $page.data.origin,
 					storeId: $page.data.storeId
 				})
@@ -144,7 +144,7 @@ async function submit(pm) {
 						comment,
 						paymentMethod: 'COD',
 						prescription: data.prescription?._id,
-						products: checkedCartItems,
+						selected_products_for_checkout: checkedCartItems,
 						origin: $page.data.origin,
 						storeId: $page.data.storeId
 					})
