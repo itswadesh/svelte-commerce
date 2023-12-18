@@ -33,7 +33,7 @@ const send = async ({ method, path, params, data, token, headers, origin }: any)
 
 	if (data) {
 		// data.store = storeId //'6135b76e5dfeaf011301827d'
-		const contentType = data?.files && data?.files[0]?.type
+		const contentType = data?.file ? data.file?.type : data?.files && data?.files[0]?.type
 
 		if (
 			!(
