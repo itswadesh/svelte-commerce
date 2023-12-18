@@ -88,6 +88,10 @@ onMount(async () => {
 			handleCheckedAllCartItems()
 		}
 	}
+
+	if (checkedCartItems?.length === cart?.items?.length) {
+		checkedAllCartItems = true
+	}
 })
 
 function handleCouponCode(couponCode: string, index: number) {
@@ -217,11 +221,19 @@ function updateCheckedCartItems(pid) {
 	}
 
 	checkedCartItems = ci
+
+	if (checkedCartItems?.length === cart?.items?.length) {
+		checkedAllCartItems = true
+	}
 }
 
 function updateCheckedCartItemsInGroup() {
 	if (!checkedCartItems?.length) {
 		checkedAllCartItems = false
+	}
+
+	if (checkedCartItems?.length === cart?.items?.length) {
+		checkedAllCartItems = true
 	}
 }
 </script>
