@@ -1,10 +1,12 @@
 <script lang="ts">
-import { createEventDispatcher, onMount } from 'svelte'
-import { currency, toast } from '$lib/utils'
-import { PrimaryButton } from '$lib/ui'
 import { browser } from '$app/environment'
+import { CartService } from 'lib/services'
 import { cartStore } from '$lib/store/cart'
+import { createEventDispatcher, onMount } from 'svelte'
+import { currency, logger, toast } from '$lib/utils'
+import { goto } from '$app/navigation'
 import { page } from '$app/stores'
+import { PrimaryButton } from '$lib/ui'
 // import { storeStore } from '$lib/store/store'
 
 const dispatch = createEventDispatcher()
@@ -16,9 +18,16 @@ export let loading = false
 export let nextpage = null
 export let showNextIcon = false
 export let text = 'Proceed to checkout'
-$: cart = {}
 
-// console.log('zzzzzzzzzzzzzzzzzz', cart)
+$: cart = {}
+$: store = $page.data?.store
+
+onMount(async () => {
+	await cartStore.subscribe((value) => {
+		cart = value
+	})
+})
+
 // console.log('checkedCartItems', checkedCartItems)
 
 function modulo(n, m) {
@@ -26,21 +35,36 @@ function modulo(n, m) {
 	return ((n % m) + m) % m
 }
 
-function submit() {
-	if (checkedCartItems?.length) {
-		dispatch('submit')
+async function submit() {
+	if (text === 'Select Address') {
+		if (checkedCartItems?.length) {
+			try {
+				const res = await CartService.updateCart2({
+					cartId: cart?.cart_id,
+					selected_products_for_checkout: checkedCartItems,
+					origin: $page.data?.origin,
+					storeId: $page.data?.storeId
+				})
+
+				if (nextpage) {
+					goto(nextpage)
+				} else {
+					dispatch('submit')
+				}
+			} catch (e) {
+				logger.error(e)
+			}
+		} else {
+			toast('Select at least one item in bag to place order', 'info')
+		}
 	} else {
-		toast('Select at least one item in bag to place order', 'info')
+		if (nextpage) {
+			goto(nextpage)
+		} else {
+			dispatch('submit')
+		}
 	}
 }
-
-$: store = $page.data?.store
-onMount(async () => {
-	if (browser) {
-		// storeStore.subscribe((value) => (store = value))
-		cartStore.subscribe((value) => (cart = value))
-	}
-})
 </script>
 
 {#if cart}
@@ -182,159 +206,57 @@ onMount(async () => {
 		{:else}
 			<div class="hidden md:block">
 				{#if cart?.qty > 0 && !hideCheckoutButton}
-					{#if nextpage}
-						{#if checkedCartItems?.length}
-							<a href="{nextpage}">
-								<PrimaryButton
-									roundedNone
-									class="group w-full uppercase"
-									clickEffect="{false}"
-									{loading}
-									{disabled}>
-									<span>{text}</span>
+					<PrimaryButton
+						roundedNone
+						type="submit"
+						class="group w-full uppercase"
+						clickEffect="{false}"
+						{loading}
+						{disabled}
+						on:click="{submit}">
+						<span>{text}</span>
 
-									{#if showNextIcon}
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											class="h-5 w-5 transform transition duration-700 group-hover:translate-x-2"
-											viewBox="0 0 20 20"
-											fill="currentColor">
-											<path
-												fill-rule="evenodd"
-												d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-												clip-rule="evenodd"></path>
-										</svg>
-									{/if}
-								</PrimaryButton>
-							</a>
-						{:else}
-							<PrimaryButton
-								roundedNone
-								class="group w-full uppercase"
-								clickEffect="{false}"
-								{loading}
-								{disabled}
-								on:click="{() => toast('Select at least one item in bag to place order', 'info')}">
-								<span>{text}</span>
-
-								{#if showNextIcon}
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 transform transition duration-700 group-hover:translate-x-2"
-										viewBox="0 0 20 20"
-										fill="currentColor">
-										<path
-											fill-rule="evenodd"
-											d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-											clip-rule="evenodd"></path>
-									</svg>
-								{/if}
-							</PrimaryButton>
+						{#if showNextIcon}
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-5 w-5 transform transition duration-700 group-hover:translate-x-2"
+								viewBox="0 0 20 20"
+								fill="currentColor">
+								<path
+									fill-rule="evenodd"
+									d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+									clip-rule="evenodd"></path>
+							</svg>
 						{/if}
-					{:else}
-						<PrimaryButton
-							roundedNone
-							type="submit"
-							class="group w-full uppercase"
-							clickEffect="{false}"
-							{loading}
-							{disabled}
-							on:click="{submit}">
-							<span>{text}</span>
-
-							{#if showNextIcon}
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="h-5 w-5 transform transition duration-700 group-hover:translate-x-2"
-									viewBox="0 0 20 20"
-									fill="currentColor">
-									<path
-										fill-rule="evenodd"
-										d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-										clip-rule="evenodd"></path>
-								</svg>
-							{/if}
-						</PrimaryButton>
-					{/if}
+					</PrimaryButton>
 				{/if}
 			</div>
 
 			<div class="fixed inset-x-0 bottom-0 z-50 block w-full md:hidden">
 				{#if cart?.qty > 0 && !hideCheckoutButton}
-					{#if nextpage}
-						{#if checkedCartItems?.length}
-							<a href="{nextpage}">
-								<PrimaryButton
-									roundedNone
-									class="group w-full uppercase h-14"
-									clickEffect="{false}"
-									{loading}
-									{disabled}>
-									<span>{text}</span>
+					<PrimaryButton
+						roundedNone
+						type="submit"
+						class="group w-full uppercase h-14"
+						clickEffect="{false}"
+						{loading}
+						{disabled}
+						on:click="{submit}">
+						<span>{text}</span>
 
-									{#if showNextIcon}
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											class="h-5 w-5 transform transition duration-700 group-hover:translate-x-2"
-											viewBox="0 0 20 20"
-											fill="currentColor">
-											<path
-												fill-rule="evenodd"
-												d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-												clip-rule="evenodd"></path>
-										</svg>
-									{/if}
-								</PrimaryButton>
-							</a>
-						{:else}
-							<PrimaryButton
-								roundedNone
-								class="group w-full uppercase h-14"
-								clickEffect="{false}"
-								{loading}
-								{disabled}
-								on:click="{() => toast('Select at least one item in bag to place order', 'info')}">
-								<span>{text}</span>
-
-								{#if showNextIcon}
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="h-5 w-5 transform transition duration-700 group-hover:translate-x-2"
-										viewBox="0 0 20 20"
-										fill="currentColor">
-										<path
-											fill-rule="evenodd"
-											d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-											clip-rule="evenodd"></path>
-									</svg>
-								{/if}
-							</PrimaryButton>
+						{#if showNextIcon}
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-5 w-5 transform transition duration-700 group-hover:translate-x-2"
+								viewBox="0 0 20 20"
+								fill="currentColor">
+								<path
+									fill-rule="evenodd"
+									d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+									clip-rule="evenodd"></path>
+							</svg>
 						{/if}
-					{:else}
-						<PrimaryButton
-							roundedNone
-							type="submit"
-							class="group w-full uppercase h-14"
-							clickEffect="{false}"
-							{loading}
-							{disabled}
-							on:click="{submit}">
-							<span>{text}</span>
-
-							{#if showNextIcon}
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="h-5 w-5 transform transition duration-700 group-hover:translate-x-2"
-									viewBox="0 0 20 20"
-									fill="currentColor">
-									<path
-										fill-rule="evenodd"
-										d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-										clip-rule="evenodd"></path>
-								</svg>
-							{/if}
-						</PrimaryButton>
-					{/if}
+					</PrimaryButton>
 				{/if}
 			</div>
 		{/if}

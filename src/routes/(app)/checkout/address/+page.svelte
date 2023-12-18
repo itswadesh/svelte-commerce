@@ -1,32 +1,22 @@
 <script>
-import { browser } from '$app/environment'
 import { CartService } from '$lib/services'
 import { CheckoutHeader, Error, Pricesummary, TrustBaggeContainer } from '$lib/components'
 import { goto, invalidateAll } from '$app/navigation'
-import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { selectedCartItemsStore } from 'lib/store/selected-cart-items'
 import SaveAddress from '../../my/addresses/_SaveAddress.svelte'
 import SelectAddress from '../_SelectAddress.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
+console.log('zzzzzzzzzzzzzzzzzz', data)
 
 const seoProps = {
 	title: 'Address ',
 	metaDescription: 'Address'
 }
 
-$: checkedCartItems = []
-
-onMount(() => {
-	if (browser) {
-		selectedCartItemsStore.subscribe((value) => {
-			checkedCartItems = value
-		})
-	}
-})
+let billing_address = data?.cart?.billing_address || {}
+let shipping_address = data?.cart?.shipping_address || {}
 
 function addressChanged(detail) {
 	data.selectedAddress = detail.detail
@@ -133,7 +123,7 @@ async function refreshAddress() {
 			{:else}
 				<h2 class="mb-5">Enter Your Delivery Address</h2>
 
-				<SaveAddress countries="{data.countries}" />
+				<SaveAddress address="{billing_address}" countries="{data.countries}" />
 			{/if}
 		</div>
 
@@ -144,19 +134,12 @@ async function refreshAddress() {
 
 			{#if data.selectedAddress}
 				<Pricesummary
-					cart="{data.cart}"
-					{checkedCartItems}
 					text="Proceed"
 					showNextIcon
 					on:submit="{updateCart}"
 					loading="{data.loading}" />
 			{:else}
-				<Pricesummary
-					cart="{data.cart}"
-					{checkedCartItems}
-					text="Please select address"
-					disabled="{true}"
-					loading="{data.loading}" />
+				<Pricesummary text="Please select address" disabled="{true}" loading="{data.loading}" />
 			{/if}
 
 			<TrustBaggeContainer class="mt-5" />

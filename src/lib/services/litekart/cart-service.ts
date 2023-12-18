@@ -208,18 +208,19 @@ export const updateCart = async ({
 	}
 }
 
-export const updateCartWithoutLogIn = async ({
-	cartId,
+export const updateCart2 = async ({
 	address,
+	cartId,
 	city,
 	country,
 	email,
 	firstName,
 	lastName,
 	phone,
+	selected_products_for_checkout,
+	selfTakeout,
 	state,
 	zip,
-	selfTakeout,
 	origin = null,
 	sid = null,
 	storeId
@@ -231,6 +232,7 @@ export const updateCartWithoutLogIn = async ({
 				`carts/update-cart`,
 				{
 					cart_id: cartId,
+					selected_products_for_checkout,
 					selfTakeout,
 					shipping_address: {
 						address,
@@ -263,6 +265,7 @@ export const updateCartWithoutLogIn = async ({
 				`carts/update-cart`,
 				{
 					cart_id: cartId,
+					selected_products_for_checkout,
 					selfTakeout,
 					shipping_address: {
 						address,

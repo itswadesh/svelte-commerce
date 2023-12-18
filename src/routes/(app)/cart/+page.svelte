@@ -11,7 +11,7 @@ import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { PrimaryButton, Skeleton, Textbox, WhiteButton } from '$lib/ui'
-import { selectedCartItemsStore, updateSelectedCartItemsStore } from 'lib/store/selected-cart-items'
+import { selectedCartItemsStore } from 'lib/store/selected-cart-items'
 import { storeStore } from '$lib/store/store.js'
 import Cookie from 'cookie-universal'
 import dotsLoading from '$lib/assets/dots-loading.gif'
@@ -31,7 +31,6 @@ let seoProps = {
 }
 
 let appliedCouponInfo = {}
-let checked = []
 let checkedAllCartItems = false
 let couponErr
 let coupons
@@ -74,8 +73,20 @@ onMount(async () => {
 	fireGTagEvent('view_cart', cart)
 
 	if (cart && cart?.items && cart?.items?.length) {
-		checkedAllCartItems = true
-		handleCheckedAllCartItems()
+		let checkedCartItemsNew = cart?.items.map((item) => {
+			if (item.selected_for_checkout) {
+				return item.pid
+			}
+		})
+
+		checkedCartItemsNew = Array.from(checkedCartItemsNew).filter((value) => value !== undefined)
+
+		if (checkedCartItemsNew?.length) {
+			checkedCartItems = checkedCartItemsNew
+		} else {
+			checkedAllCartItems = true
+			handleCheckedAllCartItems()
+		}
 	}
 })
 
@@ -188,31 +199,30 @@ function handleCheckedAllCartItems() {
 			checkedCartItems = []
 
 			cart?.items.forEach((item, ix) => {
-				checked[ix] = true
-				updateCheckedCartItems(item._id || item.id)
+				updateCheckedCartItems(item.pid)
 			})
 		} else {
-			cart?.items.forEach((item, ix) => {
-				checked[ix] = false
-				updateCheckedCartItems(item._id || item.id)
-			})
-
 			checkedCartItems = []
 		}
 	}
 }
 
-function updateCheckedCartItems(id) {
-	// console.log('previousId, item', previousId, item)
+function updateCheckedCartItems(pid) {
 	let ci = [...checkedCartItems]
-	if (ci.includes(id)) {
-		ci = ci.filter((i) => i !== id)
+
+	if (ci.includes(pid)) {
+		ci = ci.filter((i) => i !== pid)
 	} else {
-		ci.push(id)
+		ci.push(pid)
 	}
+
 	checkedCartItems = ci
-	// console.log('checkedCartItems', checkedCartItems)
-	updateSelectedCartItemsStore({ data: checkedCartItems })
+}
+
+function updateCheckedCartItemsInGroup() {
+	if (!checkedCartItems?.length) {
+		checkedAllCartItems = false
+	}
 }
 </script>
 
@@ -414,10 +424,11 @@ function updateCheckedCartItems(id) {
 										<div class="relative block shrink-0 overflow-hidden">
 											<input
 												type="checkbox"
-												id="{item._id}"
-												bind:checked="{checked[ix]}"
+												id="{item.pid}"
+												value="{item.pid}"
 												class="absolute top-2 left-2 z-10 h-4 w-4 rounded"
-												on:change="{() => updateCheckedCartItems(item._id)}" />
+												bind:group="{checkedCartItems}"
+												on:change="{updateCheckedCartItemsInGroup}" />
 
 											{#if item.customizedImg || item.img}
 												<a href="/product/{item?.slug}" aria-label="Click to visit product details">
@@ -556,7 +567,7 @@ function updateCheckedCartItems(id) {
 																updateCartStore({ data: result.data })
 																fireGTagEvent('remove_from_cart', item)
 																if (item.qty === 1) {
-																	updateCheckedCartItems(item._id)
+																	updateCheckedCartItems(item.pid)
 																}
 																// await invalidateAll()
 																await applyAction(result)
@@ -672,7 +683,7 @@ function updateCheckedCartItems(id) {
 														return async ({ result }) => {
 															fireGTagEvent('remove_from_cart', item)
 															updateCartStore({ data: result.data })
-															updateCheckedCartItems(item._id)
+															updateCheckedCartItems(item.pid)
 															// await invalidateAll()
 															await applyAction(result)
 															selectedLoadingType = null

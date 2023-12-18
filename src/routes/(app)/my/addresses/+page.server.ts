@@ -119,7 +119,7 @@ const saveAddress = async ({ request, cookies, locals }) => {
 				origin: locals?.origin
 			})
 		} else {
-			res = await CartService.updateCartWithoutLogIn({
+			res = await CartService.updateCart2({
 				cartId,
 				address,
 				city,

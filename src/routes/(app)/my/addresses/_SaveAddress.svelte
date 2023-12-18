@@ -11,6 +11,8 @@ import { toast } from '$lib/utils'
 const dispatch = createEventDispatcher()
 
 export let address = {}
+export let billing_address = {}
+export let shipping_address = {}
 export let countries = []
 export let editAddress = false
 
@@ -18,6 +20,7 @@ export let editAddress = false
 // console.log('address', address)
 // console.log('countries', countries)
 
+address.zip = address.zip || address.pincode || ''
 address.phone = address.phone || $page?.data?.me?.phone || ''
 
 let err = null
