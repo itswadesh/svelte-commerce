@@ -8,7 +8,7 @@ import { Error, LazyImg, Pricesummary, ProductCard, TrustBaggeContainer } from '
 import { fireGTagEvent } from '$lib/utils/gTagB'
 import { fly, slide } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
-import { onMount, tick } from 'svelte'
+import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { PrimaryButton, Skeleton, Textbox, WhiteButton } from '$lib/ui'
 import { selectedCartItemsStore, updateSelectedCartItemsStore } from 'lib/store/selected-cart-items'
@@ -54,14 +54,17 @@ let store
 
 onMount(async () => {
 	if (browser) {
-		storeStore.subscribe((value) => (store = value))
-		cartStore.subscribe((value) => {
+		await storeStore.subscribe((value) => (store = value))
+
+		await cartStore.subscribe((value) => {
 			cart = value
 		})
-		cartLoadingStore.subscribe((value) => {
+
+		await cartLoadingStore.subscribe((value) => {
 			isCartLoading = value
 		})
-		selectedCartItemsStore.subscribe((value) => {
+
+		await selectedCartItemsStore.subscribe((value) => {
 			checkedCartItems = value
 		})
 	}
@@ -69,8 +72,6 @@ onMount(async () => {
 	getProducts()
 	getCoupons()
 	fireGTagEvent('view_cart', cart)
-
-	await tick()
 
 	if (cart && cart?.items && cart?.items?.length) {
 		checkedAllCartItems = true
@@ -394,7 +395,7 @@ function updateCheckedCartItems(id) {
 											on:change="{handleCheckedAllCartItems}" />
 
 										<div class="flex flex-wrap items-center gap-1">
-											<span> {checkedCartItems?.length}/{cart.qty} items selected </span>
+											<span> {checkedCartItems?.length}/{cart.items?.length} items selected </span>
 
 											<span class="text-xs font-normal capitalize">
 												(Selected items will go for checkout)
@@ -554,6 +555,9 @@ function updateCheckedCartItems(id) {
 															return async ({ result }) => {
 																updateCartStore({ data: result.data })
 																fireGTagEvent('remove_from_cart', item)
+																if (item.qty === 1) {
+																	updateCheckedCartItems(item._id)
+																}
 																// await invalidateAll()
 																await applyAction(result)
 																loading[ix] = false
@@ -668,6 +672,7 @@ function updateCheckedCartItems(id) {
 														return async ({ result }) => {
 															fireGTagEvent('remove_from_cart', item)
 															updateCartStore({ data: result.data })
+															updateCheckedCartItems(item._id)
 															// await invalidateAll()
 															await applyAction(result)
 															selectedLoadingType = null
