@@ -209,6 +209,43 @@ export const updateCart = async ({
 }
 
 export const updateCart2 = async ({
+	cartId,
+	selected_products_for_checkout,
+	origin = null,
+	sid = null,
+	storeId
+}) => {
+	try {
+		let res = {}
+		if (isServer) {
+			res = await postBySid(
+				`carts/update-cart`,
+				{
+					cart_id: cartId,
+					selected_products_for_checkout,
+					store: storeId
+				},
+				sid
+			)
+		} else {
+			res = await post(
+				`carts/update-cart`,
+				{
+					cart_id: cartId,
+					selected_products_for_checkout,
+					store: storeId
+				},
+				origin
+			)
+		}
+
+		return res || {}
+	} catch (e) {
+		error(e.status, e.data?.message || e.message)
+	}
+}
+
+export const updateCart3 = async ({
 	address,
 	cartId,
 	city,
@@ -217,7 +254,6 @@ export const updateCart2 = async ({
 	firstName,
 	lastName,
 	phone,
-	selected_products_for_checkout,
 	selfTakeout,
 	state,
 	zip,
@@ -232,7 +268,6 @@ export const updateCart2 = async ({
 				`carts/update-cart`,
 				{
 					cart_id: cartId,
-					selected_products_for_checkout,
 					selfTakeout,
 					shipping_address: {
 						address,
@@ -265,7 +300,6 @@ export const updateCart2 = async ({
 				`carts/update-cart`,
 				{
 					cart_id: cartId,
-					selected_products_for_checkout,
 					selfTakeout,
 					shipping_address: {
 						address,
