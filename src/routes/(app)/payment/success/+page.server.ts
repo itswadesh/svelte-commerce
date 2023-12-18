@@ -26,9 +26,9 @@ export async function load({ url, request, locals, cookies }) {
 			paymentMode,
 			paymentReferenceId,
 			status,
-			server: true,
 			sid,
-			storeId
+			storeId,
+			origin: locals.origin
 		})
 		cookies.set('cartId', null, { path: '/', expires: new Date(0) })
 		cookies.set('cartQty', '0', { path: '/', expires: new Date(0) })
