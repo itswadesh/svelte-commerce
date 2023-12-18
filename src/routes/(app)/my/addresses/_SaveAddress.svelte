@@ -21,7 +21,7 @@ export let editAddress = false
 // console.log('address', address)
 // console.log('countries', countries)
 
-if (!address) {
+if (!address?.firstName) {
 	address = IS_DEV
 		? {
 				address: 'Test address',
