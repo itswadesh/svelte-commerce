@@ -1,11 +1,8 @@
 {
 	// Interface
-	"window.title": "${activeEditorMedium}",
-	"window.titleBarStyle": "native",
-	"window.menuBarVisibility": "toggle",
+	// "window.title": "${activeEditorMedium}",
 	"window.commandCenter": false,
 	"window.zoomLevel": 0,
-	"workbench.colorTheme": "poimandres",
 	"workbench.iconTheme": "symbols",
 	"workbench.startupEditor": "none",
 	"workbench.sideBar.location": "left",
