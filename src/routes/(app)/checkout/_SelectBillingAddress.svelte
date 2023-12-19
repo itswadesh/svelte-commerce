@@ -5,6 +5,7 @@ import { createEventDispatcher, onMount } from 'svelte'
 import { del } from '$lib/utils/api'
 import { Error } from '$lib/components'
 import { goto, invalidateAll } from '$app/navigation'
+import { nanoid } from 'nanoid'
 import { page } from '$app/stores'
 import { toast } from '$lib/utils'
 import AddressSkeleton from './_AddressSkeleton.svelte'
@@ -16,7 +17,7 @@ const dispatch = createEventDispatcher()
 export let address
 export let countries
 export let loading
-export let selectedAddress
+export let selectedBillingAddress
 
 let editAddress = false
 let err = null
@@ -49,7 +50,8 @@ async function addressChanged(id) {
 	<div class="border-b p-4 sm:p-6">
 		<label class="flex w-full cursor-pointer flex-row gap-2 sm:gap-4">
 			<input
-				bind:group="{selectedAddress}"
+				id="{nanoid()}"
+				bind:group="{selectedBillingAddress}"
 				type="radio"
 				value="{address._id || address.id}"
 				name="group"

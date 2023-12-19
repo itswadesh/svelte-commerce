@@ -279,17 +279,10 @@ export const updateCart2 = async ({
 }
 
 export const updateCart3 = async ({
-	address,
+	shipping_address,
+	billing_address,
 	cartId,
-	city,
-	country,
-	email,
-	firstName,
-	lastName,
-	phone,
 	selfTakeout,
-	state,
-	zip,
 	origin = null,
 	sid = null,
 	storeId
@@ -303,28 +296,8 @@ export const updateCart3 = async ({
 				{
 					cart_id: cartId,
 					selfTakeout,
-					shipping_address: {
-						address,
-						city,
-						country,
-						email,
-						firstName,
-						lastName,
-						phone,
-						pincode: zip,
-						state
-					},
-					billing_address: {
-						address,
-						city,
-						country,
-						email,
-						firstName,
-						lastName,
-						phone,
-						pincode: zip,
-						state
-					},
+					shipping_address,
+					billing_address,
 					store: storeId
 				},
 				sid
@@ -336,28 +309,8 @@ export const updateCart3 = async ({
 				{
 					cart_id: cartId,
 					selfTakeout,
-					shipping_address: {
-						address,
-						city,
-						country,
-						email,
-						firstName,
-						lastName,
-						phone,
-						pincode: zip,
-						state
-					},
-					billing_address: {
-						address,
-						city,
-						country,
-						email,
-						firstName,
-						lastName,
-						phone,
-						pincode: zip,
-						state
-					},
+					shipping_address,
+					billing_address,
 					store: storeId
 				},
 				origin

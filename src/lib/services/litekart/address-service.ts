@@ -12,7 +12,7 @@ export const fetchAddresses = async ({
 }: any) => {
 	try {
 		let res: any = {}
-		let selectedAddress = {}
+		let preSelectedAddress = ''
 		let myAddresses = []
 
 		if (isServer || isCors) {
@@ -20,15 +20,15 @@ export const fetchAddresses = async ({
 		} else {
 			res = await getAPI(`addresses/my?store=${storeId}`, origin)
 		}
-		selectedAddress = res?.data[0]?._id
+		preSelectedAddress = res?.data[0]?._id
 		myAddresses = res?.data || []
 
-		return { myAddresses: { data: myAddresses }, selectedAddress, count: res?.count }
+		return { myAddresses: { data: myAddresses }, preSelectedAddress, count: res?.count }
 	} catch (e) {
 		// if (e.message !== 'Unauthorized') {
 		error(e.status, e.data?.message || e.message)
 		// } else {
-		// 	return { myAddresses: { data: [] }, selectedAddress: {}, count: 0 }
+		// 	return { myAddresses: { data: [] }, preSelectedAddress: {}, count: 0 }
 		// }
 	}
 }

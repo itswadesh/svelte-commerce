@@ -72,7 +72,7 @@ function redirectToNewAddressDetailsPage({ detail }) {
 
 	<div class="max-w-3xl">
 		<SaveAddress
-			address="{data.address}"
+			shipping_address="{data.address}"
 			countries="{data.countries}"
 			states="{data.states}"
 			on:saved="{({ detail }) => redirectToNewAddressDetailsPage({ detail })}" />
