@@ -169,5 +169,5 @@ async function addressChanged(id) {
 	title="Edit Address"
 	hideFooter
 	on:close="{() => (editAddress = false)}">
-	<SaveAddress bind:editAddress {address} {countries} />
+	<SaveAddress bind:editAddress shipping_address="{address}" {countries} />
 </Modal>
