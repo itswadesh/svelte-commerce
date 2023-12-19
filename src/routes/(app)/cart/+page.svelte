@@ -55,16 +55,18 @@ onMount(async () => {
 	if (browser) {
 		storeStore.subscribe((value) => (store = value))
 
-		// cartStore.subscribe((value) => {
-		// 	cart = value
-		// })
-
-		cart = await getCartFromStore({
-			origin: $page.data.origin,
-			storeId: $page.data.storeId,
-			cartId: $page.data.cartId,
-			forceUpdate: true
+		cartStore.subscribe((value) => {
+			cart = value
 		})
+
+		if (!cart?.items) {
+			cart = await getCartFromStore({
+				origin: $page.data.origin,
+				storeId: $page.data.storeId,
+				cartId: $page.data.cartId,
+				forceUpdate: true
+			})
+		}
 
 		cartLoadingStore.subscribe((value) => {
 			isCartLoading = value
