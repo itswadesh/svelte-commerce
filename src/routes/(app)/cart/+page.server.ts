@@ -59,7 +59,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 	const variantsLength = +data.variantsLength
 	const currentVariantId = data.currentVariantId
 	const qty = +data.qty
-	const linkedItems = JSON.parse(data.linkedItems||'[]')
+	const linkedItems = JSON.parse(data.linkedItems || '[]')
 	const options = JSON.parse(data.options || '[]') //data.options //
 	const customizedImg = data.customizedImg
 	const customizedData = data.customizedData

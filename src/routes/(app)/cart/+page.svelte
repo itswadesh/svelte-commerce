@@ -53,17 +53,24 @@ let store
 
 onMount(async () => {
 	if (browser) {
-		await storeStore.subscribe((value) => (store = value))
+		storeStore.subscribe((value) => (store = value))
 
-		await cartStore.subscribe((value) => {
-			cart = value
+		// cartStore.subscribe((value) => {
+		// 	cart = value
+		// })
+
+		cart = await getCartFromStore({
+			origin: $page.data.origin,
+			storeId: $page.data.storeId,
+			cartId: $page.data.cartId,
+			forceUpdate: true
 		})
 
-		await cartLoadingStore.subscribe((value) => {
+		cartLoadingStore.subscribe((value) => {
 			isCartLoading = value
 		})
 
-		await selectedCartItemsStore.subscribe((value) => {
+		selectedCartItemsStore.subscribe((value) => {
 			checkedCartItems = value
 		})
 	}
@@ -576,8 +583,8 @@ function updateCheckedCartItemsInGroup() {
 														use:enhance="{() => {
 															loading[ix] = true
 															return async ({ result }) => {
-																updateCartStore({ data: result.data })
 																fireGTagEvent('remove_from_cart', item)
+																updateCartStore({ data: result?.data })
 																if (item.qty === 1) {
 																	updateCheckedCartItems(item.pid)
 																}
@@ -643,7 +650,7 @@ function updateCheckedCartItemsInGroup() {
 															loading[ix] = true
 															return async ({ result }) => {
 																fireGTagEvent('add_to_cart', result?.data)
-																updateCartStore({ data: result.data })
+																updateCartStore({ data: result?.data })
 																// await invalidateAll()
 																await applyAction(result)
 																loading[ix] = false
