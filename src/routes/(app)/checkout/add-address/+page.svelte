@@ -34,7 +34,7 @@ function redirectToCheckout({ detail }) {
 	</header>
 
 	<SaveAddress
-		address="{data.address}"
+		shipping_address="{data.address}"
 		countries="{data.countries}"
 		states="{data.states}"
 		on:saved="{({ detail }) => redirectToCheckout({ detail })}" />

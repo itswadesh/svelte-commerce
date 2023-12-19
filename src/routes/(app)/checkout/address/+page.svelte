@@ -3,12 +3,15 @@ import { CartService } from '$lib/services'
 import { CheckoutHeader, Error, Pricesummary, TrustBaggeContainer } from '$lib/components'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
+import { slide } from 'svelte/transition'
 import SaveAddress from '../../my/addresses/_SaveAddress.svelte'
 import SelectAddress from '../_SelectAddress.svelte'
+import SelectBillingAddress from '../_SelectBillingAddress.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
+import { onMount } from 'svelte'
 
 export let data
-console.log('zzzzzzzzzzzzzzzzzz', data)
+// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 const seoProps = {
 	title: 'Address ',
@@ -16,28 +19,54 @@ const seoProps = {
 }
 
 let billing_address = data?.cart?.billing_address || {}
+let displayAllBillingAddress = false
+let displayAllDeliveryAddress = false
+let isSameAsBillingAddressWithLogIn = true
+let selectedAddress = data?.cart?.shipping_address_id || data?.preSelectedAddress
+let selectedBillingAddress = data?.cart?.billing_address_id || data?.preSelectedAddress
 let shipping_address = data?.cart?.shipping_address || {}
 
+onMount(() => {
+	if (
+		shipping_address &&
+		billing_address &&
+		shipping_address.address === billing_address.address &&
+		shipping_address.zip === billing_address.zip
+	) {
+		isSameAsBillingAddressWithLogIn = true
+	} else if (!billing_address.firstName) {
+		isSameAsBillingAddressWithLogIn = true
+	} else {
+		isSameAsBillingAddressWithLogIn = false
+	}
+})
+
 function addressChanged(detail) {
-	data.selectedAddress = detail.detail
+	selectedAddress = detail.detail
+}
+
+function billingAddressChanged(detail) {
+	selectedBillingAddress = detail.detail
 }
 
 async function updateCart() {
 	try {
-		// console.log('selectedAddress', data.selectedAddress)
-
+		// console.log('selectedAddress', selectedAddress)
 		const selectedAddressFullObject = data.myAddresses?.data.filter((add) => {
-			return add.id === data.selectedAddress || add._id === data.selectedAddress
+			return add.id === selectedAddress || add._id === selectedAddress
 		})
-
 		// console.log('selectedAddressFullObject', selectedAddressFullObject)
+		// console.log('selectedBillingAddress', selectedBillingAddress)
+		const selectedBillingAddressFullObject = data.myAddresses?.data.filter((add) => {
+			return add.id === selectedBillingAddress || add._id === selectedBillingAddress
+		})
+		// console.log('selectedBillingAddressFullObject', selectedBillingAddressFullObject)
 
-		if (selectedAddressFullObject[0]) {
+		if (selectedAddressFullObject[0] && selectedBillingAddressFullObject[0]) {
 			const res = await CartService.updateCart({
-				billingAddress: selectedAddressFullObject[0],
-
-				billing_address_id: data.selectedAddress,
-				shipping_address_id: data.selectedAddress,
+				billingAddress: selectedBillingAddressFullObject[0],
+				billing_address_id: selectedBillingAddress,
+				shipping_address_id: selectedAddress,
 				shippingAddress: selectedAddressFullObject[0],
 				selfTakeout: false,
 				cartId: data?.cartId,
@@ -49,10 +78,10 @@ async function updateCart() {
 
 			if (data.prescriptionId) {
 				goto(
-					`/checkout/payment-options?address=${data.selectedAddress}&prescription=${data.prescriptionId}`
+					`/checkout/payment-options?address=${selectedAddress}&prescription=${data.prescriptionId}`
 				)
 			} else {
-				goto(`/checkout/payment-options?address=${data.selectedAddress}`)
+				goto(`/checkout/payment-options?address=${selectedAddress}`)
 			}
 		}
 	} catch (e) {
@@ -81,16 +110,79 @@ async function refreshAddress() {
 
 				{#if data.myAddresses?.data?.length}
 					<div class="mb-5 rounded-lg border bg-white shadow-lg">
-						{#each data.myAddresses.data as ads}
-							<SelectAddress
-								address="{ads}"
-								loading="{data.loading}"
-								countries="{data.countries}"
-								selectedAddress="{data.selectedAddress}"
-								on:deleteAddress="{refreshAddress}"
-								on:addressChanged="{({ detail }) => addressChanged({ detail })}" />
+						{#each data.myAddresses.data as ads, adsIndex}
+							{#if displayAllDeliveryAddress ? true : adsIndex === 0}
+								<div transition:slide="{{ duration: 300 }}">
+									<SelectAddress
+										address="{ads}"
+										loading="{data.loading}"
+										countries="{data.countries}"
+										{selectedAddress}
+										on:deleteAddress="{refreshAddress}"
+										on:addressChanged="{({ detail }) => addressChanged({ detail })}" />
+								</div>
+							{/if}
 						{/each}
+
+						{#if data.myAddresses.data?.length > 1}
+							<button
+								type="button"
+								class="w-full p-5 focus:outline-none"
+								on:click="{() => (displayAllDeliveryAddress = !displayAllDeliveryAddress)}">
+								{#if displayAllDeliveryAddress}
+									Hide delivery address
+								{:else}
+									Display all delivery address
+								{/if}
+							</button>
+						{/if}
 					</div>
+
+					<div class="mb-5">
+						{selectedAddress}---{selectedBillingAddress}
+					</div>
+
+					<label class="mb-5 lg:mb-10 flex items-center gap-2 text-lg font-semibold">
+						<input
+							type="checkbox"
+							class="h-5 w-5"
+							bind:checked="{isSameAsBillingAddressWithLogIn}" />
+
+						<span>Same as billing address</span>
+					</label>
+
+					{#if !isSameAsBillingAddressWithLogIn}
+						<h2 class="mb-5">Select Billing Address</h2>
+
+						<div class="mb-5 rounded-lg border bg-white shadow-lg">
+							{#each data.myAddresses.data as ads, adsIndex}
+								{#if displayAllBillingAddress ? true : adsIndex === 0}
+									<div transition:slide="{{ duration: 300 }}">
+										<SelectBillingAddress
+											address="{ads}"
+											loading="{data.loading}"
+											countries="{data.countries}"
+											{selectedBillingAddress}
+											on:deleteAddress="{refreshAddress}"
+											on:addressChanged="{({ detail }) => billingAddressChanged({ detail })}" />
+									</div>
+								{/if}
+							{/each}
+
+							{#if data.myAddresses.data?.length > 1}
+								<button
+									type="button"
+									class="w-full p-5 focus:outline-none"
+									on:click="{() => (displayAllBillingAddress = !displayAllBillingAddress)}">
+									{#if displayAllBillingAddress}
+										Hide delivery address
+									{:else}
+										Display all delivery address
+									{/if}
+								</button>
+							{/if}
+						</div>
+					{/if}
 				{/if}
 
 				<div>
@@ -127,7 +219,7 @@ async function refreshAddress() {
 			{:else}
 				<h2 class="mb-5">Enter Your Delivery Address</h2>
 
-				<SaveAddress address="{billing_address}" countries="{data.countries}" />
+				<SaveAddress {billing_address} {shipping_address} countries="{data.countries}" />
 			{/if}
 		</div>
 
@@ -136,7 +228,7 @@ async function refreshAddress() {
 
 			<hr class="mb-5" />
 
-			{#if data.selectedAddress}
+			{#if selectedAddress}
 				<Pricesummary
 					text="Proceed"
 					showNextIcon

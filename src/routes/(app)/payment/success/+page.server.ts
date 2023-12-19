@@ -30,19 +30,6 @@ export async function load({ url, request, locals, cookies }) {
 			storeId,
 			origin: locals.origin
 		})
-
-		cart = await getCartFromStore({
-			origin: locals.origin,
-			storeId,
-			cartId,
-			forceUpdate: true
-		})
-
-		cookies.set('cartId', cart?.cart_id || cart?.cartId, { path: '/', expires: new Date(0) })
-		cookies.set('cartQty', cart?.qty, { path: '/', expires: new Date(0) })
-
-		locals.cartId = cart?.cart_id || cart?.cartId
-		locals.cartQty = cart?.qty
 	} catch (e) {
 		console.log('error at payment success page', e);
 
@@ -57,38 +44,24 @@ export async function load({ url, request, locals, cookies }) {
 		loading = false
 	}
 
-	// try {
-	// 	cart = await CartService.fetchRefreshCart({
-	// 		cartId,
-	// 		storeId,
-	// 		sid,
-	// 		origin: locals.origin
-	// 	})
+	try {
+		cart = await getCartFromStore({
+			origin: locals.origin,
+			storeId,
+			cartId,
+			forceUpdate: true
+		})
 
-	// 	if (cart) {
-	// 		const cartObj = {
-	// 			cartId: cart?.cart_id,
-	// 			items: cart?.items,
-	// 			qty: cart?.qty,
-	// 			tax: cart?.tax,
-	// 			subtotal: cart?.subtotal,
-	// 			total: cart?.total,
-	// 			currencySymbol: cart?.currencySymbol,
-	// 			discount: cart?.discount,
-	// 			savings: cart?.savings,
-	// 			selfTakeout: cart?.selfTakeout,
-	// 			shipping: cart?.shipping,
-	// 			unavailableItems: cart?.unavailableItems,
-	// 			formattedAmount: cart?.formattedAmount
-	// 		}
+		// console.log('cart at payment success', cart)
 
-	// 		locals.cartId = cartObj.cartId
-	// 		locals.cartQty = cartObj.qty
-	// 		locals.cart = cartObj
-	// 	}
-	// } catch (e) {
-	// 	// console.log('error at payment success page cart', e);
-	// }
+		cookies.set('cartId', cart?.cart_id || cart?.cartId, { path: '/' })
+		cookies.set('cartQty', cart?.qty, { path: '/' })
+
+		locals.cartId = cart?.cart_id || cart?.cartId
+		locals.cartQty = cart?.qty
+	} catch (e) {
+		console.log('error at payment success page cart', e);
+	}
 
 	return { loading, status, paymentMode, order, err, cart }
 }

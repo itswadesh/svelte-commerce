@@ -40,7 +40,7 @@ async function submit() {
 		if (checkedCartItems?.length) {
 			try {
 				const res = await CartService.updateCart2({
-					cartId: $page.data?.cartId,
+					cartId: cart?.cart_id || cart?.cartId || $page.data?.cartId,
 					selected_products_for_checkout: checkedCartItems,
 					origin: $page.data?.origin,
 					storeId: $page.data?.storeId

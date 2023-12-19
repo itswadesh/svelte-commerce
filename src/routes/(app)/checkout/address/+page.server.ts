@@ -31,7 +31,7 @@ export async function load({ locals, url, parent }) {
 		})
 
 		if (me) {
-			const { myAddresses, selectedAddress } = await AddressService.fetchAddresses({
+			const { myAddresses, preSelectedAddress } = await AddressService.fetchAddresses({
 				storeId,
 				origin,
 				server: true,
@@ -45,7 +45,7 @@ export async function load({ locals, url, parent }) {
 				err,
 				myAddresses,
 				q,
-				selectedAddress,
+				preSelectedAddress,
 				url: url.href
 			}
 		} else {
