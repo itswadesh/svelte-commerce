@@ -824,10 +824,10 @@ function updateCheckedCartItemsInGroup() {
 					{:else}
 						<h2 class="mb-5">Cart Summary</h2>
 					{/if}
+
 					<hr class="mb-5" />
 
 					<Pricesummary
-						{cart}
 						{checkedCartItems}
 						nextpage="/checkout/address"
 						text="Select Address"

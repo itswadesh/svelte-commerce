@@ -35,9 +35,13 @@ async function updateCart() {
 		if (selectedAddressFullObject[0]) {
 			const res = await CartService.updateCart({
 				billingAddress: selectedAddressFullObject[0],
-				cartId: data?.cartId,
-				email: selectedAddressFullObject[0].email,
+
+				billing_address_id: data.selectedAddress,
+				shipping_address_id: data.selectedAddress,
 				shippingAddress: selectedAddressFullObject[0],
+				selfTakeout: false,
+				cartId: data?.cartId,
+				origin: $page.data?.origin,
 				storeId: $page.data?.storeId
 			})
 

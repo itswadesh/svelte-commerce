@@ -1,5 +1,5 @@
-import { CartService, OrdersService } from '$lib/services'
-import { cartStore } from '$lib/store/cart'
+import { OrdersService } from '$lib/services'
+import { getCartFromStore } from '$lib/store/cart'
 import { error, redirect } from '@sveltejs/kit'
 
 export const prerender = false
@@ -30,13 +30,21 @@ export async function load({ url, request, locals, cookies }) {
 			storeId,
 			origin: locals.origin
 		})
-		cookies.set('cartId', null, { path: '/', expires: new Date(0) })
-		cookies.set('cartQty', '0', { path: '/', expires: new Date(0) })
 
-		locals.cartId = null
-		locals.cartQty = 0
+		cart = await getCartFromStore({
+			origin: locals.origin,
+			storeId,
+			cartId,
+			forceUpdate: true
+		})
+
+		cookies.set('cartId', cart?.cart_id || cart?.cartId, { path: '/', expires: new Date(0) })
+		cookies.set('cartQty', cart?.qty, { path: '/', expires: new Date(0) })
+
+		locals.cartId = cart?.cart_id || cart?.cartId
+		locals.cartQty = cart?.qty
 	} catch (e) {
-		// console.log('error at payment success page', e);
+		console.log('error at payment success page', e);
 
 		err = e
 

@@ -22,8 +22,8 @@ export let text = 'Proceed to checkout'
 $: cart = {}
 $: store = $page.data?.store
 
-onMount(async () => {
-	await cartStore.subscribe((value) => {
+onMount(() => {
+	cartStore.subscribe((value) => {
 		cart = value
 	})
 })
@@ -40,7 +40,7 @@ async function submit() {
 		if (checkedCartItems?.length) {
 			try {
 				const res = await CartService.updateCart2({
-					cartId: cart?.cart_id,
+					cartId: $page.data?.cartId,
 					selected_products_for_checkout: checkedCartItems,
 					origin: $page.data?.origin,
 					storeId: $page.data?.storeId

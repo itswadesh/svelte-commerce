@@ -59,24 +59,23 @@
 </style>
 
 <script>
+// import { storeStore } from '$lib/store/store'
+import { browser } from '$app/environment'
 import { Confetti } from 'svelte-confetti'
 import { currency, date } from '$lib/utils'
 import { fireGTagEvent } from '$lib/utils/gTagB'
-import { invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import { updateCartStore } from '$lib/store/cart'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 import SEO from '$lib/components/SEO/index.svelte'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
-import { updateCartStore } from '$lib/store/cart'
-import { browser } from '$app/environment'
-// import { storeStore } from '$lib/store/store'
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
+// console.log('success page data', data)
 
 const seoProps = {
 	title: 'Payment Success ',
@@ -87,12 +86,8 @@ const seoProps = {
 $: store = $page.data?.store
 
 onMount(async () => {
-	// if (browser) {
-	// 	storeStore.subscribe((value) => (store = value))
-	// }
-	// invalidateAll()
-	fireGTagEvent('purchase', data.order)
-	updateCartStore({ data: null })
+	fireGTagEvent('purchase', data?.order)
+	updateCartStore({ data: data?.cart })
 })
 </script>
 
@@ -466,46 +461,46 @@ onMount(async () => {
 
 					<!-- Billing Information -->
 
-					{#if data.order && data.order?.billingAddress}
+					{#if data.order && data.order?.billing_address}
 						<div>
 							<h4 class="mb-5 border-b border-dashed border-zinc-400 pb-2">Billing Information</h4>
 
 							<div class="flex flex-col gap-1">
-								{#if data.order?.billingAddress.firstName}
+								{#if data.order?.billing_address.firstName}
 									<p>
-										{data.order?.billingAddress.firstName}
+										{data.order?.billing_address.firstName}
 
-										{data.order?.billingAddress.lastName}
+										{data.order?.billing_address.lastName}
 									</p>
 								{/if}
 
 								<p>
-									{#if data.order?.billingAddress.address}
-										{data.order?.billingAddress.address}
+									{#if data.order?.billing_address.address}
+										{data.order?.billing_address.address}
 									{/if}
 
-									{#if data.order?.billingAddress.city}
-										, {data.order?.billingAddress.city}
+									{#if data.order?.billing_address.city}
+										, {data.order?.billing_address.city}
 									{/if}
 
-									{#if data.order?.billingAddress.country}
-										, {data.order?.billingAddress.country}
+									{#if data.order?.billing_address.country}
+										, {data.order?.billing_address.country}
 									{/if}
 
-									{#if data.order?.billingAddress.zip}
-										- {data.order?.billingAddress.zip}
+									{#if data.order?.billing_address.zip}
+										- {data.order?.billing_address.zip}
 									{/if}
 								</p>
 
-								{#if data.order?.billingAddress.phone || data.order?.billingAddress.userPhone}
+								{#if data.order?.billing_address.phone || data.order?.billing_address.userPhone}
 									<p>
-										{data.order?.billingAddress.phone || data.order?.userPhone}
+										{data.order?.billing_address.phone || data.order?.userPhone}
 									</p>
 								{/if}
 
-								{#if data.order?.billingAddress.email}
+								{#if data.order?.billing_address.email}
 									<p>
-										{data.order?.billingAddress.email}
+										{data.order?.billing_address.email}
 									</p>
 								{/if}
 							</div>
@@ -514,46 +509,46 @@ onMount(async () => {
 
 					<!-- Shipping Information -->
 
-					{#if data.order && data.order?.address}
+					{#if data.order && data.order?.shipping_address}
 						<div>
 							<h4 class="mb-5 border-b border-dashed border-zinc-400 pb-2">Shipping Information</h4>
 
 							<div class="flex flex-col gap-1">
-								{#if data.order?.address.firstName}
+								{#if data.order?.shipping_address.firstName}
 									<p>
-										{data.order?.address.firstName}
+										{data.order?.shipping_address.firstName}
 
-										{data.order?.address.lastName}
+										{data.order?.shipping_address.lastName}
 									</p>
 								{/if}
 
 								<p>
-									{#if data.order?.address.address}
-										{data.order?.address.address}
+									{#if data.order?.shipping_address.address}
+										{data.order?.shipping_address.address}
 									{/if}
 
-									{#if data.order?.address.city}
-										, {data.order?.address.city}
+									{#if data.order?.shipping_address.city}
+										, {data.order?.shipping_address.city}
 									{/if}
 
-									{#if data.order?.address.country}
-										, {data.order?.address.country}
+									{#if data.order?.shipping_address.country}
+										, {data.order?.shipping_address.country}
 									{/if}
 
-									{#if data.order?.address.zip}
-										- {data.order?.address.zip}
+									{#if data.order?.shipping_address.zip}
+										- {data.order?.shipping_address.zip}
 									{/if}
 								</p>
 
-								{#if data.order?.address.phone || data.order?.address.userPhone}
+								{#if data.order?.shipping_address.phone || data.order?.shipping_address.userPhone}
 									<p>
-										{data.order?.address.phone || data.order?.userPhone}
+										{data.order?.shipping_address.phone || data.order?.userPhone}
 									</p>
 								{/if}
 
-								{#if data.order?.address.email}
+								{#if data.order?.shipping_address.email}
 									<p>
-										{data.order?.address.email}
+										{data.order?.shipping_address.email}
 									</p>
 								{/if}
 							</div>
