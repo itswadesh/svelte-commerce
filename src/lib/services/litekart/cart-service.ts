@@ -192,17 +192,49 @@ export const removeCouponService = async ({
 }
 
 export const updateCart = async ({
+	billing_address_id,
 	billingAddress,
 	cartId = '',
-	email = '',
+	selfTakeout,
+	shipping_address_id,
 	origin = null,
+	sid = null,
 	shippingAddress,
 	storeId
 }) => {
 	try {
-		const addressId = shippingAddress?._id || shippingAddress?.id
+		let res = {}
 
-		return addressId
+		if (isServer) {
+			res = await postBySid(
+				`carts/update-cart`,
+				{
+					billing_address_id,
+					billing_address: billingAddress,
+					cart_id: cartId,
+					selfTakeout,
+					shipping_address_id,
+					shipping_address: shippingAddress,
+					store: storeId
+				},
+				sid
+			)
+		} else {
+
+			res = await post(
+				`carts/update-cart`,
+				{
+					billing_address_id,
+					billing_address: billingAddress,
+					cart_id: cartId,
+					selfTakeout,
+					shipping_address_id,
+					shipping_address: shippingAddress,
+					store: storeId
+				},
+				origin
+			)
+		}
 	} catch (e) {
 		error(e.status, e.data?.message || e.message)
 	}
@@ -217,6 +249,7 @@ export const updateCart2 = async ({
 }) => {
 	try {
 		let res = {}
+
 		if (isServer) {
 			res = await postBySid(
 				`carts/update-cart`,
@@ -263,6 +296,7 @@ export const updateCart3 = async ({
 }) => {
 	try {
 		let res = {}
+
 		if (isServer) {
 			res = await postBySid(
 				`carts/update-cart`,
@@ -296,6 +330,7 @@ export const updateCart3 = async ({
 				sid
 			)
 		} else {
+
 			res = await post(
 				`carts/update-cart`,
 				{
