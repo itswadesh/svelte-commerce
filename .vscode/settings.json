@@ -15,10 +15,8 @@
 	"editor.bracketPairColorization.enabled": false,
 	"editor.cursorBlinking": "solid",
 	"editor.cursorSmoothCaretAnimation": "on",
-	"editor.scrollbar.horizontalScrollbarSize": 4,
-	"editor.scrollbar.verticalScrollbarSize": 4,
 	"explorer.compactFolders": false,
-	"explorer.autoReveal": false,
+	"explorer.autoReveal": true,
 	"breadcrumbs.enabled": false,
 	"symbols.hidesExplorerArrows": false,
 	// Font
