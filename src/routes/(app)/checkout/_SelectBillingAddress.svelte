@@ -54,7 +54,7 @@ async function addressChanged(id) {
 				bind:group="{selectedBillingAddress}"
 				type="radio"
 				value="{address._id || address.id}"
-				name="group"
+				name="billing_address"
 				class="mt-1.5 h-4 w-4 focus:outline-none focus:ring-0 focus:ring-offset-0"
 				on:change="{() => addressChanged(address._id || address.id)}" />
 
@@ -123,7 +123,7 @@ async function addressChanged(id) {
 					return async ({ result }) => {
 						// console.log('result', result)
 
-						toast('Address deleted', 'success')
+						toast('Address deleted successfully', 'success')
 						await invalidateAll()
 						await applyAction(result)
 					}
