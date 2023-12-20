@@ -271,6 +271,8 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 				// 	$page?.url?.pathname
 				// )
 
+				toast('Address saved successfully', 'success')
+
 				if (result?.status === 200 && result?.data) {
 					const newAddressId = result.data?._id || result.data?.id
 					toast('Address Info Saved.', 'success')
@@ -295,6 +297,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 					// toast(result?.error?.message, 'error')
 				}
 				editAddress = false
+				await invalidateAll()
 			}
 		}}">
 		<!-- <form on:submit|preventDefault="{() => SaveAddress(refinedAddress)}"> -->

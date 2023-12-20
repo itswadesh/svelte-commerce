@@ -19,9 +19,9 @@ const seoProps = {
 }
 
 let billing_address = data?.cart?.billing_address || {}
-let displayAllBillingAddress = false
 let displayAllDeliveryAddress = false
 let isSameAsBillingAddressWithLogIn = true
+let loading = false
 let selectedAddress = data?.cart?.shipping_address_id || data?.preSelectedAddress
 let selectedBillingAddress = data?.cart?.billing_address_id || data?.preSelectedAddress
 let shipping_address = data?.cart?.shipping_address || {}
@@ -115,7 +115,7 @@ async function refreshAddress() {
 								<div transition:slide="{{ duration: 300 }}">
 									<SelectAddress
 										address="{ads}"
-										loading="{data.loading}"
+										{loading}
 										countries="{data.countries}"
 										{selectedAddress}
 										on:deleteAddress="{refreshAddress}"
@@ -138,9 +138,9 @@ async function refreshAddress() {
 						{/if}
 					</div>
 
-					<div class="mb-5">
+					<!-- <div class="mb-5">
 						{selectedAddress}---{selectedBillingAddress}
-					</div>
+					</div> -->
 
 					<label class="mb-5 lg:mb-10 flex items-center gap-2 text-lg font-semibold">
 						<input
@@ -155,32 +155,17 @@ async function refreshAddress() {
 						<h2 class="mb-5">Select Billing Address</h2>
 
 						<div class="mb-5 rounded-lg border bg-white shadow-lg">
-							{#each data.myAddresses.data as ads, adsIndex}
-								{#if displayAllBillingAddress ? true : adsIndex === 0}
-									<div transition:slide="{{ duration: 300 }}">
-										<SelectBillingAddress
-											address="{ads}"
-											loading="{data.loading}"
-											countries="{data.countries}"
-											{selectedBillingAddress}
-											on:deleteAddress="{refreshAddress}"
-											on:addressChanged="{({ detail }) => billingAddressChanged({ detail })}" />
-									</div>
-								{/if}
+							{#each data.myAddresses.data as ads}
+								<div transition:slide="{{ duration: 300 }}">
+									<SelectBillingAddress
+										address="{ads}"
+										{loading}
+										countries="{data.countries}"
+										{selectedBillingAddress}
+										on:deleteAddress="{refreshAddress}"
+										on:addressChanged="{({ detail }) => billingAddressChanged({ detail })}" />
+								</div>
 							{/each}
-
-							{#if data.myAddresses.data?.length > 1}
-								<button
-									type="button"
-									class="w-full p-5 focus:outline-none"
-									on:click="{() => (displayAllBillingAddress = !displayAllBillingAddress)}">
-									{#if displayAllBillingAddress}
-										Hide delivery address
-									{:else}
-										Display all delivery address
-									{/if}
-								</button>
-							{/if}
 						</div>
 					{/if}
 				{/if}
@@ -229,13 +214,9 @@ async function refreshAddress() {
 			<hr class="mb-5" />
 
 			{#if selectedAddress}
-				<Pricesummary
-					text="Proceed"
-					showNextIcon
-					on:submit="{updateCart}"
-					loading="{data.loading}" />
+				<Pricesummary text="Proceed" showNextIcon on:submit="{updateCart}" {loading} />
 			{:else}
-				<Pricesummary text="Please select address" disabled="{true}" loading="{data.loading}" />
+				<Pricesummary text="Please select address" disabled="{true}" {loading} />
 			{/if}
 
 			<TrustBaggeContainer class="mt-5" />
