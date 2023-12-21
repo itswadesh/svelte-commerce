@@ -851,7 +851,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 			<input
 				type="hidden"
 				name="selectedBillingAddressCountry"
-				value="{selectedBillingAddressCountry || null}" />
+				value="{JSON.stringify(selectedBillingAddressCountry) || null}" />
 			<input
 				type="hidden"
 				name="showBillingAddressErrorMessage"
@@ -871,7 +871,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 		<input
 			type="hidden"
 			name="selectedShippingAddressCountry"
-			value="{selectedShippingAddressCountry || null}" />
+			value="{JSON.stringify(selectedShippingAddressCountry) || null}" />
 		<input
 			type="hidden"
 			name="showShippingAddressErrorMessage"
