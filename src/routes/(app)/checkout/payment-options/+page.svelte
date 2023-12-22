@@ -239,6 +239,7 @@ async function submit(pm) {
 
 				const res = await OrdersService.paypalCheckout({
 					address: addressId,
+					cartId: $page.data.cartId,
 					origin: $page.data.origin,
 					storeId: $page.data.storeId
 				})
@@ -246,7 +247,7 @@ async function submit(pm) {
 				// console.log('res of Paypal', res)
 
 				if (res?.redirect_url && res?.redirect_url !== null) {
-					goto(`${res?.redirect_url}`)
+					window.location = res?.redirect_url
 				} else {
 					toast('Something went wrong', 'error')
 				}
