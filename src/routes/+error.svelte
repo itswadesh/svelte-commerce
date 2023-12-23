@@ -7,21 +7,10 @@ import errBackground from '$lib/assets/no/error-background.png'
 import menu from '$lib/config/menu'
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
-// console.log('$page', $page)
 
 let q = ''
 let showSidebar = false
 
-// onMount(async () => {
-// 	if ($page.status === 401 || $page.status === 403) {
-// 		const res = await fetch(`/data/logout`, {
-// 			method: 'GET'
-// 		})
-
-// 		const data = await res.json()
-// 	}
-// })
 </script>
 
 <main class="h-screen w-full bg-zinc-100">
