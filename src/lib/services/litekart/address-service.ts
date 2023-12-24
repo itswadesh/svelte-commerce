@@ -25,11 +25,7 @@ export const fetchAddresses = async ({
 
 		return { myAddresses: { data: myAddresses }, preSelectedAddress, count: res?.count }
 	} catch (e) {
-		// if (e.message !== 'Unauthorized') {
 		error(e.status, e.data?.message || e.message)
-		// } else {
-		// 	return { myAddresses: { data: [] }, preSelectedAddress: {}, count: 0 }
-		// }
 	}
 }
 

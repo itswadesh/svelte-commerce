@@ -1,19 +1,10 @@
 import { error } from '@sveltejs/kit'
 import { getAPI, post } from '$lib/utils/api'
 import { getBySid } from '$lib/utils/server'
-import type { Error, ProductReview } from '$lib/types'
+import type { ProductReview } from '$lib/types'
 const isServer = import.meta.env.SSR
 
-export const fetchReviews = async ({
-	origin,
-	storeId,
-	pid,
-	search,
-	sort,
-	currentPage,
-	server = false,
-	sid = null
-}: any) => {
+export const fetchReviews = async ({ origin, storeId, search, sort, currentPage, sid = null }) => {
 	try {
 		let res: any = {}
 
@@ -43,14 +34,7 @@ export const fetchReviews = async ({
 
 // Fetch product reviews
 
-export const fetchProductReviews = async ({
-	origin,
-	page,
-	slug,
-	server = false,
-	sid = null,
-	storeId
-}: any) => {
+export const fetchProductReviews = async ({ origin, page, slug, sid = null, storeId }) => {
 	try {
 		let productReviewsRes: any = {}
 		// : ProductReviews[]
@@ -76,16 +60,7 @@ export const fetchProductReviews = async ({
 	}
 }
 
-export const saveReview = async ({
-	id,
-	images,
-	message,
-	oid,
-	pid,
-	rating,
-	storeId,
-	origin
-}: any) => {
+export const saveReview = async ({ id, images, message, oid, pid, rating, storeId, origin }) => {
 	try {
 		let res: any = {}
 
