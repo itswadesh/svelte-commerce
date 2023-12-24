@@ -4,7 +4,7 @@ import { error, redirect } from '@sveltejs/kit'
 
 export const prerender = false
 
-export async function load({ url, request, locals, cookies }) {
+export async function load({ url,  locals, cookies }) {
 	const cartId = cookies.get('cartId')
 	const orderId = url.searchParams.get('orderId') || url.searchParams.get('order_no')
 	const paymentMode = url.searchParams.get('provider')

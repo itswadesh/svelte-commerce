@@ -203,7 +203,7 @@ export const fireGTagEvent = (event_name, data) => {
 				tax: data.tax,
 				shipping: data.amount?.shipping,
 				currency: 'INR',
-				coupon: data.coupon.code,
+				coupon: data.coupon?.code,
 				items,
 				event_time: eventTime,
 				event_day: eventDay,

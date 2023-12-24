@@ -62,7 +62,7 @@ export const fireGTagEvent = (event_name, data) => {
 				tax: data.tax,
 				shipping: data.shipping?.charge,
 				currency: 'INR',
-				coupon: data.coupon.code,
+				coupon: data.coupon?.code,
 				items
 			}
 			// @ts-ignore
