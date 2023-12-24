@@ -17,7 +17,7 @@
 	"editor.cursorSmoothCaretAnimation": "on",
 	"explorer.compactFolders": false,
 	"explorer.autoReveal": true,
-	"breadcrumbs.enabled": false,
+	"breadcrumbs.enabled": true,
 	"symbols.hidesExplorerArrows": false,
 	// Font
 	"editor.fontFamily": "Monaspace Neon, MonoLisa, Geist Mono, Monocraft, JetBrains Mono, IBM Plex Mono, Mononoki Nerd Font, Droid Sans Mono, Anonymous Pro, Operator Mono Book, Fira Code, Cascadia Code",
