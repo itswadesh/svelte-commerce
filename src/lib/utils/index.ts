@@ -265,10 +265,6 @@ export const navigateToProperPath = (url) => {
 	// }
 }
 
-
-
-
-
 export const shopifyInit = async ({ query, variables }) => {
 	try {
 		const result = await fetch(import.meta.env.VITE_SHOPIFY_API_ENDPOINT, {
