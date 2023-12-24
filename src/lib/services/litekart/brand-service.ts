@@ -3,17 +3,17 @@ import { getBySid } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 const isServer = import.meta.env.SSR
 
-export const fetchCoupons = async ({ origin, storeId, server = false, sid = null }: any) => {
+export const fetchBrands = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {
 		let res: any = {}
 
 		if (isServer) {
-			res = await getBySid(`coupons?store=${storeId}`, sid)
+			res = await getBySid(`brands?store=${storeId}`, sid)
 		} else {
-			res = await getAPI(`coupons?store=${storeId}`, origin)
+			res = await getAPI(`brands?store=${storeId}`, origin)
 		}
 
-		return res
+		return res.data || []
 	} catch (e) {
 		error(e.status, e.data?.message || e.message)
 	}
