@@ -277,6 +277,8 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 					const newAddressId = result.data?._id || result.data?.id
 					toast('Address Info Saved.', 'success')
 
+					await applyAction(result)
+
 					if ((!shipping_address.id || shipping_address.id === 'new') && newAddressId) {
 						if ($page?.url?.pathname.includes('checkout')) {
 							goto(`/checkout/payment-options?address=${newAddressId}`)
@@ -288,16 +290,14 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 					} else {
 						goto(`/my/addresses?sort=-updatedAt`)
 					}
-
-					await applyAction(result)
 				} else if (result?.error) {
 					shipping_address.phone = ''
 					zodErrors = result?.error?.errors || null
 					err = result?.error?.message || null
 					// toast(result?.error?.message, 'error')
 				}
+
 				editAddress = false
-				await invalidateAll()
 			}
 		}}">
 		<!-- <form on:submit|preventDefault="{() => SaveAddress(refinedAddress)}"> -->
