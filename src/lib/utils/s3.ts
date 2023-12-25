@@ -1,14 +1,14 @@
 import stream from 'stream'
-import { Upload } from '@aws-sdk/lib-storage';
-import { S3 } from '@aws-sdk/client-s3';
+import { Upload } from '@aws-sdk/lib-storage'
+import { S3 } from '@aws-sdk/client-s3'
 import * as path from 'path'
 import AmazonS3URI from 'amazon-s3-uri'
-import { env } from '$env/dynamic/private'
-
-const bucketName = env.SECRET_S3_BUCKET_NAME
-const region = env.SECRET_S3_REGION
-const accessKeyId = env.SECRET_S3_ACCESS_KEY
-const secretAccessKey = env.SECRET_S3_SECRET_KEY
+import * as privateEnv from '$env/static/private'
+const env: any = privateEnv || {}
+const bucketName = env.S3_BUCKET_NAME
+const region = env.S3_REGION
+const accessKeyId = env.S3_ACCESS_KEY
+const secretAccessKey = env.S3_SECRET
 const s3 = new S3({
 	region,
 	credentials: {
