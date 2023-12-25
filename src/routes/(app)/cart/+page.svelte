@@ -3,7 +3,7 @@ import { applyAction, enhance } from '$app/forms'
 import { browser } from '$app/environment'
 import { cartLoadingStore, cartStore, getCartFromStore, updateCartStore } from '$lib/store/cart.js'
 import { CartService, CouponService, ProductService, WishlistService } from '$lib/services'
-import { currency, date, logger, toast } from '$lib/utils'
+import { currency, date, toast } from '$lib/utils'
 import { Error, LazyImg, Pricesummary, ProductCard, TrustBaggeContainer } from '$lib/components'
 import { fireGTagEvent } from '$lib/utils/gTagB'
 import { fly, slide } from 'svelte/transition'
@@ -23,7 +23,7 @@ import SEO from '$lib/components/SEO/index.svelte'
 const cookies = Cookie()
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
+console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	title: `Cart`,
@@ -417,23 +417,27 @@ function updateCheckedCartItemsInGroup() {
 
 						{#if cart?.qty}
 							<div class="flex flex-col divide-y">
-								<div class="py-5 px-2">
-									<label class="flex tmes-center gap-2 font-semibold uppercase">
-										<input
-											type="checkbox"
-											class="mt-0.5 h-4 w-4"
-											bind:checked="{checkedAllCartItems}"
-											on:change="{handleCheckedAllCartItems}" />
+								{#if data.store?.isPartialCheckout}
+									<div class="py-5 px-2">
+										<label class="flex tmes-center gap-2 font-semibold uppercase">
+											<input
+												type="checkbox"
+												class="mt-0.5 h-4 w-4"
+												bind:checked="{checkedAllCartItems}"
+												on:change="{handleCheckedAllCartItems}" />
 
-										<div class="flex flex-wrap items-center gap-1">
-											<span> {checkedCartItems?.length}/{cart.items?.length} items selected </span>
+											<div class="flex flex-wrap items-center gap-1">
+												<span>
+													{checkedCartItems?.length}/{cart.items?.length} items selected
+												</span>
 
-											<span class="text-xs font-normal capitalize">
-												(Selected items will go for checkout)
-											</span>
-										</div>
-									</label>
-								</div>
+												<span class="text-xs font-normal capitalize">
+													(Selected items will go for checkout)
+												</span>
+											</div>
+										</label>
+									</div>
+								{/if}
 
 								{#each cart?.items as item, ix (item._id)}
 									<!-- PID can not be a key because in case of customized items it will repeat-->
@@ -443,13 +447,15 @@ function updateCheckedCartItemsInGroup() {
 										out:fly="{{ x: -800, duration: 300 }}"
 										class="flex w-full items-start gap-4 py-5">
 										<div class="relative block shrink-0 overflow-hidden">
-											<input
-												type="checkbox"
-												id="{item.pid}"
-												value="{item.pid}"
-												class="absolute top-2 left-2 z-10 h-4 w-4 rounded"
-												bind:group="{checkedCartItems}"
-												on:change="{updateCheckedCartItemsInGroup}" />
+											{#if data.store?.isPartialCheckout}
+												<input
+													type="checkbox"
+													id="{item.pid}"
+													value="{item.pid}"
+													class="absolute top-2 left-2 z-10 h-4 w-4 rounded"
+													bind:group="{checkedCartItems}"
+													on:change="{updateCheckedCartItemsInGroup}" />
+											{/if}
 
 											{#if item.customizedImg || item.img}
 												<a href="/product/{item?.slug}" aria-label="Click to visit product details">
@@ -485,8 +491,8 @@ function updateCheckedCartItemsInGroup() {
 											{/if}
 										</div>
 
-										<div class="w-full flex-1">
-											<div class="mb-1 flex justify-between">
+										<div class="w-full flex-1 flex flex-col gap-1">
+											<div class="flex justify-between">
 												<a
 													href="/product/{item?.slug}"
 													aria-label="Click to visit product details"
@@ -508,7 +514,7 @@ function updateCheckedCartItemsInGroup() {
 											{#if item.isCustomized}
 												<button
 													type="button"
-													class="mb-1 text-sm text-zinc-500 italic hover:underline focus:outline-none"
+													class="text-sm text-zinc-500 italic hover:underline focus:outline-none"
 													on:click="{() =>
 														chnageJsonInLocalStore({
 															json: item.customizedData,
@@ -519,7 +525,7 @@ function updateCheckedCartItemsInGroup() {
 												</button>
 											{/if}
 
-											<div class="mb-1 flex flex-wrap items-center gap-2 text-xs sm:text-sm">
+											<div class="flex flex-wrap items-center gap-2 text-xs sm:text-sm">
 												<span class="text-sm sm:text-base font-bold whitespace-nowrap">
 													{item?.formattedItemAmount?.price}
 												</span>
@@ -538,7 +544,7 @@ function updateCheckedCartItemsInGroup() {
 											</div>
 
 											{#if item?.usedOptions?.length}
-												<div class="mb-1 flex flex-col gap-1 text-sm">
+												<div class="flex flex-col gap-1 text-sm">
 													{#each item?.usedOptions as option}
 														{#if option?.val?.length && option?.val !== undefined && option?.val != ''}
 															<div class="flex flex-wrap gap-x-2">
@@ -575,7 +581,7 @@ function updateCheckedCartItemsInGroup() {
 												</p>
 											{/if}
 
-											<div class="mt-2 flex items-center justify-between">
+											<div class="flex items-center justify-between">
 												<div class="flex items-center justify-center">
 													<!-- Minus icon -->
 
@@ -610,7 +616,7 @@ function updateCheckedCartItemsInGroup() {
 														<button
 															type="submit"
 															disabled="{loading[ix]}"
-															class="flex transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none h-6 w-6
+															class="flex transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none h-8 w-8
 															{loading[ix]
 																? 'cursor-not-allowed opacity-80'
 																: 'cursor-pointer hover:opacity-80 active:scale-95'}">
@@ -632,7 +638,7 @@ function updateCheckedCartItemsInGroup() {
 													<!-- Quantity indicator -->
 
 													<div
-														class="mx-2 flex h-6 w-6 items-center justify-center text-xs font-bold">
+														class="mx-2 flex h-8 w-8 items-center justify-center text-xs font-bold">
 														{#if selectedLoadingType !== 'delete' && loading[ix]}
 															<img
 																src="{dotsLoading}"
@@ -673,7 +679,7 @@ function updateCheckedCartItemsInGroup() {
 														<button
 															type="submit"
 															disabled="{loading[ix]}"
-															class="flex transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none h-6 w-6
+															class="flex transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none h-8 w-8
 															{loading[ix]
 																? 'cursor-not-allowed opacity-80'
 																: 'cursor-pointer hover:opacity-80 active:scale-95'}">
@@ -726,7 +732,7 @@ function updateCheckedCartItemsInGroup() {
 													<button
 														type="submit"
 														disabled="{loading[ix]}"
-														class="flex transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none h-6 w-6
+														class="flex transform items-center justify-center rounded-full bg-zinc-200 transition duration-300 focus:outline-none h-8 w-8
 														{loading[ix]
 															? 'cursor-not-allowed opacity-80'
 															: 'cursor-pointer hover:opacity-80 active:scale-95'}">
@@ -767,6 +773,14 @@ function updateCheckedCartItemsInGroup() {
 														{/if}
 													</button>
 												</form>
+											</div>
+
+											<div class="text-sm">
+												{#if item?.isCod}
+													COD Available
+												{:else}
+													COD Not Available
+												{/if}
 											</div>
 										</div>
 									</div>

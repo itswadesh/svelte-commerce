@@ -4,7 +4,7 @@ import { error, redirect } from '@sveltejs/kit'
 export const prerender = false
 
 export async function load({ locals, url, parent }) {
-	const { me, sid, store, storeId, origin, cartId } = locals
+	const { me, sid, store, storeId, origin, cartId } = await parent()
 
 	try {
 		const currentPage = +url.searchParams.get('page') || 1
@@ -30,32 +30,56 @@ export async function load({ locals, url, parent }) {
 			sid
 		})
 
-		if (me) {
-			const { myAddresses, preSelectedAddress } = await AddressService.fetchAddresses({
-				storeId,
-				origin,
-				server: true,
-				sid
-			})
+		if (store?.isGuestCheckout) {
+			if (me) {
+				const { myAddresses, preSelectedAddress } = await AddressService.fetchAddresses({
+					storeId,
+					origin,
+					server: true,
+					sid
+				})
 
-			return {
-				cart,
-				countries,
-				currentPage,
-				err,
-				myAddresses,
-				q,
-				preSelectedAddress,
-				url: url.href
+				return {
+					cart,
+					countries,
+					currentPage,
+					err,
+					myAddresses,
+					q,
+					preSelectedAddress,
+					url: url.href
+				}
+			} else {
+				return {
+					cart,
+					countries,
+					currentPage,
+					err,
+					q,
+					url: url.href
+				}
 			}
 		} else {
-			return {
-				cart,
-				countries,
-				currentPage,
-				err,
-				q,
-				url: url.href
+			if (!me) {
+				redirect(307, `/auth/login?ref=${url?.pathname}`)
+			} else {
+				const { myAddresses, preSelectedAddress } = await AddressService.fetchAddresses({
+					storeId,
+					origin,
+					server: true,
+					sid
+				})
+
+				return {
+					cart,
+					countries,
+					currentPage,
+					err,
+					myAddresses,
+					q,
+					preSelectedAddress,
+					url: url.href
+				}
 			}
 		}
 	} catch (e) {
