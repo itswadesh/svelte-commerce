@@ -2,13 +2,13 @@
 import { CartService } from '$lib/services'
 import { CheckoutHeader, Error, Pricesummary, TrustBaggeContainer } from '$lib/components'
 import { goto, invalidateAll } from '$app/navigation'
+import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { slide } from 'svelte/transition'
 import SaveAddress from '../../my/addresses/_SaveAddress.svelte'
 import SelectAddress from '../_SelectAddress.svelte'
 import SelectBillingAddress from '../_SelectBillingAddress.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-import { onMount } from 'svelte'
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
