@@ -60,7 +60,8 @@ export const sorts = [
 	{ name: `Name: Desc`, val: '-name' } // { name: 'Most Viewed', val: '-views' }
 ]
 export const weightUnit = 'g'
-export const WWW_URL = env.PUBLIC_LITEKART_DOMAIN
+export const WWW_URL = env.PUBLIC_WWW_URL || env.PUBLIC_LITEKART_DOMAIN
+export const SENTRY_DSN = env.PUBLIC_SENTRY_DSN
 
 export const MEDUSAJS_BASE_URL = `${env.PUBLIC_MEDUSAJS_API_URL}/store`
 
@@ -69,9 +70,9 @@ export const BIG_COMMERCE_ACCESS_TOKEN =
 	env.PUBLIC_BIG_COMMERCE_ACCESS_TOKEN || 'evgagyg76wcxcg9uauodegpc1eybfzx'
 export const BIG_COMMERCE_BASE_URL = `https://api.bigcommerce.com/stores/${BIG_COMMERCE_STORE_HASH}/v3/catalog`
 // export const BIG_COMMERCE_CLIENT_ID =
-// 	env.BIG_COMMERCE_CLIENT_ID || 'nybaukoetx98bdjo5vshh0edr3xsz42'
+// 	env.PUBLIC_BIG_COMMERCE_CLIENT_ID || 'nybaukoetx98bdjo5vshh0edr3xsz42'
 // export const BIG_COMMERCE_CLIENT_SECRET =
-// 	env.BIG_COMMERCE_CLIENT_SECRET ||
+// 	env.PUBLIC_BIG_COMMERCE_CLIENT_SECRET ||
 // 	'09c194121a7dbf059735671991015c2e208cdfe8dfa1f74f63edc9b2353e9720'
 export const bigcommerceHeaders = {
 	'X-Auth-Token': BIG_COMMERCE_ACCESS_TOKEN,
@@ -99,8 +100,3 @@ export const slotMarginGeneralWithHelloBarAndHyperLocal = 'mt-[114px] sm:mt-[206
 export const slotMarginGeneralWithHyperLocal = 'mt-20 sm:mt-[104px]'
 export const slotMarginProduct = 'lg:mt-20'
 export const isCors = true
-
-// Varni config
-// export const slotMarginGeneral = 'mt-14 sm:mt-20 lg:mt-0'
-// export const slotMarginGeneralWithHelloBar = 'mt-14 sm:mt-20 lg:mt-0'
-// export const slotMarginProduct = 'mt-14 sm:mt-20 lg:mt-0'

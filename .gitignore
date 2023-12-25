@@ -16,3 +16,6 @@ $houdini
 $kitql
 test-results/*
 .gitignore
+
+# Sentry Config File
+.sentryclirc
