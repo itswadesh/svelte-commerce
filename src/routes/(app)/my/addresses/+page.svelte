@@ -176,9 +176,12 @@ async function remove(id, index) {
 						</div>
 
 						<div class="grid grid-cols-2 divide-x border-t">
-							<WhiteButton class="w-full" on:click="{() => (showEditAddressModal = true)}">
+							<button
+								type="button"
+								class="w-full bg-transparent p-2 text-center font-semibold uppercase text-primary-500 transition duration-300 focus:outline-none hover:bg-zinc-100 hover:text-primary-700"
+								on:click="{() => (showEditAddressModal = true)}">
 								Edit
-							</WhiteButton>
+							</button>
 
 							<!-- <button
 								type="button"
