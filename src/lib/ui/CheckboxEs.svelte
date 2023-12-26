@@ -104,7 +104,7 @@ $: filteredTerms = searchTerm
 			(item) =>
 				item.key?.toLowerCase().indexOf(searchTerm?.toLowerCase()) !== -1 ||
 				item.key?.toLowerCase().indexOf(searchTerm?.toLowerCase()) !== -1
-	  )
+		)
 	: items
 
 function handleSearchBox() {

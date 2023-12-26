@@ -4,7 +4,7 @@ const nanoid = customAlphabet('1234567890', 10)
 const nanoEmail = customAlphabet('123456sdfghjk', 10)
 
 export const randomPhone = nanoid()
-export const randomEmail = nanoEmail()+'@test.com'
+export const randomEmail = nanoEmail() + '@test.com'
 
 
 export const host = 'demo.litekart.in'

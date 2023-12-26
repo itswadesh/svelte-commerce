@@ -4,7 +4,7 @@ import { error, redirect } from '@sveltejs/kit'
 
 export const prerender = false
 
-export async function load({ url,  locals, cookies }) {
+export async function load({ url, locals, cookies }) {
 	const cartId = cookies.get('cartId')
 	const orderId = url.searchParams.get('orderId') || url.searchParams.get('order_no')
 	const paymentMode = url.searchParams.get('provider')
@@ -31,7 +31,7 @@ export async function load({ url,  locals, cookies }) {
 			origin: locals.origin
 		})
 	} catch (e) {
-		console.log('error at payment success page', e);
+		// console.log('error at payment success page', e);
 
 		err = e
 
@@ -60,7 +60,7 @@ export async function load({ url,  locals, cookies }) {
 		locals.cartId = cart?.cart_id || cart?.cartId
 		locals.cartQty = cart?.qty
 	} catch (e) {
-		console.log('error at payment success page cart', e);
+		// console.log('error at payment success page cart', e);
 	}
 
 	return { loading, status, paymentMode, order, err, cart }
