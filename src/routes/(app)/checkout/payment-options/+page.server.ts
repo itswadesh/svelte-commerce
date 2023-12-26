@@ -18,7 +18,7 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 	// }
 
 	if (!address_id && !order_no) {
-		throw redirect(307, '/checkout/address')
+		redirect(307, '/checkout/address')
 	}
 
 	const cartRes = await CartService.fetchRefreshCart({
@@ -29,23 +29,25 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 	})
 
 	if (!cartRes?.qty) {
-		throw redirect(307, '/my/orders?sort=-updatedAt')
+		redirect(307, '/my/orders?sort=-updatedAt')
 	}
 
 	const cart = {
+		billing_address: cartRes.billing_address,
 		cartId: cartRes.cart_id,
-		items: cartRes?.items,
-		qty: cartRes.qty,
-		tax: cartRes.tax,
-		subtotal: cartRes.subtotal,
-		total: cartRes.total,
 		currencySymbol: cartRes.currencySymbol,
 		discount: cartRes.discount,
+		formattedAmount: cartRes.formattedAmount,
+		items: cartRes?.items,
+		qty: cartRes.qty,
 		savings: cartRes.savings,
 		selfTakeout: cartRes.selfTakeout,
+		shipping_address: cartRes.shipping_address,
 		shipping: cartRes.shipping,
-		unavailableItems: cartRes.unavailableItems,
-		formattedAmount: cartRes.formattedAmount
+		subtotal: cartRes.subtotal,
+		tax: cartRes.tax,
+		total: cartRes.total,
+		unavailableItems: cartRes.unavailableItems
 	}
 
 	try {
