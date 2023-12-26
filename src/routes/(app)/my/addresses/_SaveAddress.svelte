@@ -20,7 +20,7 @@ export let selectedBillingAddress = ''
 export let shipping_address = {}
 
 // console.log('$page', $page)
-// console.log('address', address)
+// console.log('shipping_address', shipping_address)
 // console.log('countries', countries)
 
 if (!shipping_address?.firstName) {

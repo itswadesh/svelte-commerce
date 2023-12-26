@@ -1,103 +1,77 @@
 {
-  "sfc": {
-    "prefix": "sfc",
-    "description": "single file component",
-    "body": [
-      "<script lang=\"ts\">",
-      "  export let data",
-      "</script>",
-      "",
-      "${0}",
-      "",
-      "<style>",
-      "",
-      "</style>"
-    ]
-  },
-  "script": {
-    "prefix": "script",
-    "description": "script tag",
-    "body": [
-      "<script lang=\"ts\">",
-      "  ${0}",
-      "</script>"
-    ]
-  },
-  "script module": {
-    "prefix": "script module",
-    "description": "script module",
-    "body": [
-      "<script context=\"module\" lang=\"ts\">",
-      "  ${0}",
-      "</script>"
-    ]
-  },
-  "form": {
-    "prefix": "form",
-    "description": "Form",
-    "body": [
-      "<form method=\"${1}\" action=\"${2}\" >",
-      "  <button type=\"submit\">Submit</button>",
-      "</form>",
-      ""
-    ]
-  },
-  "each": {
-    "prefix": "each",
-    "description": "each block",
-    "body": [
-      "{#each $1 as $2}",
-      "  $3",
-      "{/each}"
-    ]
-  },
-  "if": {
-    "prefix": "if",
-    "description": "if block",
-    "body": [
-      "{#if $1}",
-      "  $2",
-      "{/if}"
-    ]
-  },
-  "log": {
-    "prefix": "c",
-    "description": "log value",
-    "body": [
-      "console.log($0)"
-    ]
-  },
-  "pre": {
-    "prefix": "pre",
-    "description": "view data",
-    "body": [
-      "<pre>",
-      " {JSON.stringify($0, null, 2)}",
-      "</pre>"
-    ]
-  },
-  "await": {
-    "prefix": "await",
-    "description": "await block ",
-    "body": [
-      "{#await $1}",
-      "\t<p>Loading...</p>",
-      "{:then $2}",
-      "  <pre>",
-      "   {JSON.stringify($2, null, 2)}",
-      "  </pre>",
-      "{:catch error}",
-      "\t<p>{error.message}</p>",
-      "{/await}"
-    ]
-  },
-  "key": {
-    "prefix": "key",
-    "description": "key block ",
-    "body": [
-      "{#key $1}",
-      "  $2",
-      "{/key}"
-    ]
-  }
+	"sfc": {
+		"prefix": "sfc",
+		"description": "single file component",
+		"body": [
+			"<script lang=\"ts\">",
+			"  export let data",
+			"</script>",
+			"",
+			"${0}",
+			"",
+			"<style>",
+			"",
+			"</style>"
+		]
+	},
+	"script": {
+		"prefix": "script",
+		"description": "script tag",
+		"body": ["<script lang=\"ts\">", "  ${0}", "</script>"]
+	},
+	"script module": {
+		"prefix": "script module",
+		"description": "script module",
+		"body": ["<script context=\"module\" lang=\"ts\">", "  ${0}", "</script>"]
+	},
+	"form": {
+		"prefix": "form",
+		"description": "Form",
+		"body": [
+			"<form method=\"${1}\" action=\"${2}\" >",
+			"  <button type=\"submit\">Submit</button>",
+			"</form>",
+			""
+		]
+	},
+	"each": {
+		"prefix": "each",
+		"description": "each block",
+		"body": ["{#each $1 as $2}", "  $3", "{/each}"]
+	},
+	"if": {
+		"prefix": "if",
+		"description": "if block",
+		"body": ["{#if $1}", "  $2", "{/if}"]
+	},
+	"log": {
+		"prefix": "c",
+		"description": "log value",
+		"body": ["console.log($0)"]
+	},
+	"pre": {
+		"prefix": "pre",
+		"description": "view data",
+		"body": ["<pre>", " {JSON.stringify($0, null, 2)}", "</pre>"]
+	},
+	"await": {
+		"prefix": "await",
+		"description": "await block ",
+		"body": [
+			"{#await $1}",
+			"\t<p>Loading...</p>",
+			"{:then $2}",
+			"  <pre>",
+			"   {JSON.stringify($2, null, 2)}",
+			"  </pre>",
+			"{:catch error}",
+			"\t<p>{error.message}</p>",
+			"{/await}"
+		]
+	},
+	"key": {
+		"prefix": "key",
+		"description": "key block ",
+		"body": ["{#key $1}", "  $2", "{/key}"]
+	}
 }

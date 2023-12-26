@@ -6,7 +6,7 @@ import { storeId, API_URL, getCookie } from './config'
 // fetch cart data
 
 // test('Test: fetch cart Data from server', async ({ request }) => {
-    
+
 //     const cartId = 'a5f9f515-f031-4e3f-9a91-d348d0041c57'
 
 // 	const cartRes = await request.get(`${API_URL}cart?store=${storeId}&cart_id=${cartId}`)
@@ -16,7 +16,7 @@ import { storeId, API_URL, getCookie } from './config'
 
 // refresh cart data
 test('Test: refresh cart Data from server', async ({ request }) => {
-    const cartId = 'a5f9f515-f031-4e3f-9a91-d348d0041c57'
+	const cartId = 'a5f9f515-f031-4e3f-9a91-d348d0041c57'
 
 	const cartRes = await request.get(
 		`${API_URL}carts/refresh-cart?store=${storeId}&cart_id=${cartId}`
@@ -28,8 +28,7 @@ test('Test: refresh cart Data from server', async ({ request }) => {
 // fetch logged in user cart data
 
 test('Test: fetch logged in user cart Data from server', async ({ request }) => {
-    
-    const cartId = 'a5f9f515-f031-4e3f-9a91-d348d0041c57'
+	const cartId = 'a5f9f515-f031-4e3f-9a91-d348d0041c57'
 
 	const cookieRes = await getCookie()
 
@@ -46,7 +45,7 @@ test('Test: fetch logged in user cart Data from server', async ({ request }) => 
 
 test('Test: add to cart', async ({ request }) => {
 
-    const cartId = undefined
+	const cartId = undefined
 
 	const cookieRes = await getCookie()
 
@@ -58,14 +57,13 @@ test('Test: add to cart', async ({ request }) => {
 		store: storeId
 	}
 
-    // console.log(cartData);
-    
+	// console.log(cartData);
 
 	const addToCartWithCookie = await request.post(
 		`${API_URL}carts/add-to-cart?store=${storeId}&cart_id=${cartId}`,
 		{
 			headers: {
-			    'Content-Type': 'application/json',
+				'Content-Type': 'application/json',
 				cookie: cookieRes
 			},
 			data: JSON.stringify(cartData)
@@ -101,7 +99,7 @@ test('Test: create backorder', async ({ request }) => {
 	const createBackorderWithCookie = await request.post(`${API_URL}backorder`, {
 		headers: {
 			'Content-Type': 'application/json',
-			 cookie: cookieRes
+			cookie: cookieRes
 		},
 		data: JSON.stringify(backorderData)
 	})

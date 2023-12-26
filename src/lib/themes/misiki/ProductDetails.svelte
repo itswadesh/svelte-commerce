@@ -1444,7 +1444,7 @@ async function updateVariant(variant) {
 												id="add_to_cart_1"
 												in:fade="{{ duration: 300 }}"
 												action="/cart?/add"
-												method="POST" 
+												method="POST"
 												enctype="multipart/form-data"
 												use:enhance="{() => {
 													return async ({ result }) => {

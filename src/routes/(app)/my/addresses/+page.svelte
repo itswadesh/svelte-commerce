@@ -24,6 +24,7 @@ const seoProps = {
 
 let loadingOnDelete = []
 let newAddress = {}
+let selectedShippingAddress = {}
 let showAddNewAddressModal = false
 let showEditAddressModal = false
 let typingTimer
@@ -179,7 +180,10 @@ async function remove(id, index) {
 							<button
 								type="button"
 								class="w-full bg-transparent p-2 text-center font-semibold uppercase text-primary-500 transition duration-300 focus:outline-none hover:bg-zinc-100 hover:text-primary-700"
-								on:click="{() => (showEditAddressModal = true)}">
+								on:click="{() => {
+									selectedShippingAddress = add
+									showEditAddressModal = true
+								}}">
 								Edit
 							</button>
 
@@ -216,21 +220,21 @@ async function remove(id, index) {
 								</button>
 							</form>
 						</div>
-
-						<Modal
-							show="{showEditAddressModal}"
-							title="Edit Address"
-							hideFooter
-							on:close="{() => (showEditAddressModal = false)}">
-							<SaveAddress
-								bind:editAddress="{showEditAddressModal}"
-								shipping_address="{add}"
-								countries="{data.countries}" />
-						</Modal>
 					</li>
 				{/if}
 			{/each}
 		</ul>
+
+		<Modal
+			show="{showEditAddressModal}"
+			title="Edit Address"
+			hideFooter
+			on:close="{() => (showEditAddressModal = false)}">
+			<SaveAddress
+				bind:editAddress="{showEditAddressModal}"
+				shipping_address="{selectedShippingAddress}"
+				countries="{data.countries}" />
+		</Modal>
 
 		<Pagination
 			count="{Math.ceil((data.count || 1) / data.pageSize)}"

@@ -50,7 +50,6 @@ test('Test: user registration flow ', async ({ request }) => {
 
 
 test('Test: user forgot password flow ', async ({ request }) => {
-	
 	const formData = {
 		email: 'hi@litekart.com',
 		referrer: host,
@@ -72,7 +71,7 @@ test('Test: user change password flow ', async ({ request }) => {
 
 	const cookieRes = await getCookie()
 
-	const formData ={
+	const formData = {
 		oldPassword: 'litekart',
 		password: 'litekart',
 		passwordConfirmation: 'litekart',
@@ -119,7 +118,7 @@ test('Test: user reset password flow ', async ({ request }) => {
 test('Test: get otp on phone number ', async ({ request }) => {
 
 	// please change the phone number before running this test
-	
+
 	const formData = {
 		phone: randomPhone || '',
 		store: storeId
@@ -138,8 +137,8 @@ test('Test: get otp on phone number ', async ({ request }) => {
 
 test('Test: verify otp on phone number ', async ({ request }) => {
 
-// please change the otp and phone number before running this test
-	
+	// please change the otp and phone number before running this test
+
 	const formData = {
 		phone: '1234567890',
 		otp: '1234',
@@ -159,7 +158,6 @@ test('Test: verify otp on phone number ', async ({ request }) => {
 
 
 test('Test: get user profile ', async ({ request }) => {
-	
 	const cookieRes = await getCookie()
 
 	const res = await request.get(`${API_URL}users/me?store=${storeId}`, {
@@ -196,7 +194,6 @@ test('Test: update user profile ', async ({ request }) => {
 
 
 test('Test: logout user ', async ({ request }) => {
-	
 	const cookieRes = await getCookie()
 
 	const formData = {

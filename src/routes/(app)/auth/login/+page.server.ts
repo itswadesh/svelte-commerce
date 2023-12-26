@@ -31,9 +31,9 @@ const login = async ({ request, cookies, locals }) => {
 			const { fieldErrors: errors } = err.flatten();
 			const { ...rest } = formData
 			error(404, {
-            				data: rest,
-            				errors
-            			});
+				data: rest,
+				errors
+			});
 		}
 
 		res = await UserService.loginService({
@@ -61,9 +61,9 @@ const login = async ({ request, cookies, locals }) => {
 			const { fieldErrors: errors } = err.flatten();
 			const { ...rest } = formData
 			error(404, {
-            				data: rest,
-            				errors
-            			});
+				data: rest,
+				errors
+			});
 		}
 
 		res = await UserService.getOtpService({
