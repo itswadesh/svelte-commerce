@@ -276,14 +276,14 @@ export const shopifyInit = async ({ query, variables }) => {
 			body: JSON.stringify({ query, variables })
 		}).then((res) => res.json())
 		if (result.errors) {
-			console.log({ errors: result.errors })
+			// console.log({ errors: result.errors })
 		} else if (!result || !result.data) {
-			console.log({ result })
+			// console.log({ result })
 			return 'No results found.'
 		}
 		return result.data
 	} catch (error) {
-		console.log(error)
+		console.error(error)
 	}
 }
 export * from './string'
