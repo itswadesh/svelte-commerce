@@ -5,6 +5,7 @@ import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { slide } from 'svelte/transition'
+import Modal from '$lib/components/Modal.svelte'
 import SaveAddress from '../../my/addresses/_SaveAddress.svelte'
 import SelectAddress from '../_SelectAddress.svelte'
 import SelectBillingAddress from '../_SelectBillingAddress.svelte'
@@ -22,9 +23,11 @@ let billing_address = data?.cart?.billing_address || {}
 let displayAllDeliveryAddress = false
 let isSameAsBillingAddressWithLogIn = true
 let loading = false
+let newAddress = {}
 let selectedAddress = data?.cart?.shipping_address_id || data?.preSelectedAddress
 let selectedBillingAddress = data?.cart?.billing_address_id || data?.preSelectedAddress
 let shipping_address = data?.cart?.shipping_address || {}
+let showAddNewAddressModal = false
 
 onMount(() => {
 	if (
@@ -106,6 +109,8 @@ async function refreshAddress() {
 		class="mb-14 lg:mb-0 mt-5 md:mt-10 flex flex-col lg:flex-row lg:justify-center gap-10 xl:gap-20">
 		<div class="w-full flex-1">
 			{#if data.me}
+				<!-- Select Delivery Address -->
+
 				<h2 class="mb-5">Select Delivery Address</h2>
 
 				{#if data.myAddresses?.data?.length}
@@ -142,6 +147,8 @@ async function refreshAddress() {
 						{selectedAddress}---{selectedBillingAddress}
 					</div> -->
 
+					<!-- Same as billing address checkbox -->
+
 					<label class="mb-5 lg:mb-10 flex items-center gap-2 text-lg font-semibold">
 						<input
 							type="checkbox"
@@ -150,6 +157,8 @@ async function refreshAddress() {
 
 						<span>Same as billing address</span>
 					</label>
+
+					<!-- Select Billing Address -->
 
 					{#if !isSameAsBillingAddressWithLogIn}
 						<h2 class="mb-5">Select Billing Address</h2>
@@ -175,10 +184,12 @@ async function refreshAddress() {
 						<hr class="mb-5" />
 					{/if}
 
-					<a
-						href="/checkout/add-address?id=new"
-						aria-label="Click to visit add address"
-						class="group flex h-40 w-1/2 flex-col items-center justify-center rounded border border-dashed border-zinc-400 hover:border-blue-500 sm:h-60">
+					<!-- Add New Address -->
+
+					<button
+						type="button"
+						class="group flex h-40 w-1/2 flex-col items-center justify-center rounded border border-dashed border-zinc-400 hover:border-blue-500 sm:h-60"
+						on:click="{() => (showAddNewAddressModal = true)}">
 						<div
 							class="flex h-8 w-8 items-center justify-center rounded-full border border-zinc-400 bg-zinc-50 group-hover:border-blue-500 sm:h-10 sm:w-10">
 							<svg
@@ -196,10 +207,23 @@ async function refreshAddress() {
 						</div>
 
 						<span
-							class="mt-2 text-sm font-medium text-zinc-800 group-hover:text-blue-500 sm:text-base">
-							ADD NEW ADDRESS
+							class="mt-2 text-sm font-medium text-zinc-800 group-hover:text-blue-500 sm:text-base uppercase">
+							Add New Address
 						</span>
-					</a>
+					</button>
+
+					<Modal
+						show="{showAddNewAddressModal}"
+						title="Add New Address"
+						hideFooter
+						on:close="{() => (showAddNewAddressModal = false)}">
+						<SaveAddress
+							bind:editAddress="{showAddNewAddressModal}"
+							bind:selectedAddress
+							bind:selectedBillingAddress
+							shipping_address="{newAddress}"
+							countries="{data.countries}" />
+					</Modal>
 				</div>
 			{:else}
 				<h2 class="mb-5">Enter Your Delivery Address</h2>

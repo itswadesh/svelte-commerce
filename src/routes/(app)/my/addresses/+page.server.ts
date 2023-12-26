@@ -1,18 +1,22 @@
-import { AddressService, CartService } from '$lib/services'
+import { AddressService, CartService, CountryService } from '$lib/services'
 import { error } from '@sveltejs/kit'
 import { z } from 'zod'
 
 export async function load({ cookies, locals }) {
-	const { myAddresses, selectedAddress, count } = await AddressService.fetchAddresses({
+	const countries = await CountryService.fetchCountries({
 		storeId: locals.storeId,
-		server: true,
+		sid: cookies.get('connect.sid')
+	})
+
+	const { myAddresses, count } = await AddressService.fetchAddresses({
+		storeId: locals.storeId,
 		sid: cookies.get('connect.sid')
 	})
 
 	myAddresses.count = count
 
 	if (myAddresses) {
-		return { addresses: myAddresses, selectedAddress }
+		return { addresses: myAddresses, countries }
 	}
 
 	error(404, 'Addresses not found')
@@ -137,6 +141,7 @@ const saveAddress = async ({ request, cookies, locals }) => {
 			})
 		}
 	}
+
 	else {
 		const new_billing_address = {
 			address: isSameAsBillingAddress ? address : billingAddressAddress,
@@ -192,8 +197,9 @@ const saveAddress = async ({ request, cookies, locals }) => {
 
 		// console.log('res of save address = ', res)
 
-		return res
 	}
+
+	return res
 }
 
 const editAddress = async ({ request, cookies, locals }) => {
