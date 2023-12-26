@@ -6,18 +6,18 @@
 </style>
 
 <script>
+// import { storeStore } from '$lib/store/store'
+import { browser } from '$app/environment'
 import { currency, date } from '$lib/utils'
 import { goto } from '$app/navigation'
 import { LazyImg, Pagination } from '$lib/components'
+import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { PrimaryButton, WhiteButton } from '$lib/ui'
 import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import OrderListSkeleton from './_OrderListSkeleton.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
-import { onMount } from 'svelte'
-import { browser } from '$app/environment'
-// import { storeStore } from '$lib/store/store'
 
 export let orders
 // console.log('zzzzzzzzzzzzzzzzzz', orders)
@@ -90,8 +90,9 @@ $: store = $page.data?.store
 
 										<th class="p-3 text-zinc-500"> Image </th>
 
-										<th class="p-3 text-zinc-500"> Vendor </th>
-
+										{#if $page.data.store?.isMultiVendor}
+											<th class="p-3 text-zinc-500"> Vendor </th>
+										{/if}
 										<th class="p-3 text-zinc-500"> Name </th>
 
 										<th class="p-3 text-zinc-500"> Qty </th>
@@ -148,9 +149,11 @@ $: store = $page.data?.store
 												</div>
 											</td>
 
-											<td class="p-3">
-												{item.vendorBusinessName || '_'}
-											</td>
+											{#if $page.data.store?.isMultiVendor}
+												<td class="p-3">
+													{item.vendorBusinessName || '_'}
+												</td>
+											{/if}
 
 											<td class="p-3">
 												<div class="flex w-60 items-center gap-2">
@@ -311,6 +314,16 @@ $: store = $page.data?.store
 														{item.status || '_'}
 													</b>
 												</div>
+
+												{#if $page.data.store?.isMultiVendor}
+													<div class="flex items-center gap-2">
+														<p>Vendor :</p>
+
+														<b class="capitalize">
+															{item.vendorBusinessName || '_'}
+														</b>
+													</div>
+												{/if}
 											</div>
 										</div>
 									</div>

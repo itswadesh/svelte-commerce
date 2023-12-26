@@ -1,4 +1,6 @@
 <script>
+// import { storeStore } from '$lib/store/store'
+import { browser } from '$app/environment'
 import { currency, date } from '$lib/utils'
 import { LazyImg } from '$lib/components'
 import { onMount } from 'svelte'
@@ -13,11 +15,8 @@ import productVeg from '$lib/assets/product/veg.png'
 import ReturnTracking from '../_ReturnTracking.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TransparentButton from '../_TransparentButton.svelte'
-import { browser } from '$app/environment'
-// import { storeStore } from '$lib/store/store'
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let clazz
 export { clazz as class }
@@ -315,23 +314,23 @@ onMount(() => {
 
 							<p class="flex flex-col">
 								<span>
-									{data.order?.address?.firstName}
-									{data.order?.address?.lastName}
+									{data.order?.shipping_address?.firstName}
+									{data.order?.shipping_address?.lastName}
 
 									<br />
 
-									{data.order?.address?.address}, {data.order?.address?.city},
-									{data.order?.address?.country}, {data.order?.address?.state}
+									{data.order?.shipping_address?.address}, {data.order?.shipping_address?.city},
+									{data.order?.shipping_address?.country}, {data.order?.shipping_address?.state}
 
 									<br />
 
-									{data.order?.address?.zip}
+									{data.order?.shipping_address?.zip}
 								</span>
 							</p>
 
-							{#if data.order?.address?.phone}
+							{#if data.order?.shipping_address?.phone}
 								<p>
-									{data.order?.address?.phone}
+									{data.order?.shipping_address?.phone}
 								</p>
 							{/if}
 						</div>
@@ -341,23 +340,23 @@ onMount(() => {
 
 							<p class="flex flex-col">
 								<span>
-									{data.order?.billingAddress?.firstName}
-									{data.order?.billingAddress?.lastName}
+									{data.order?.billing_address?.firstName}
+									{data.order?.billing_address?.lastName}
 
 									<br />
 
-									{data.order?.billingAddress?.address}, {data.order?.billingAddress?.city},
-									{data.order?.billingAddress?.country}, {data.order?.billingAddress?.state}
+									{data.order?.billing_address?.address}, {data.order?.billing_address?.city},
+									{data.order?.billing_address?.country}, {data.order?.billing_address?.state}
 
 									<br />
 
-									{data.order?.billingAddress?.zip}
+									{data.order?.billing_address?.zip}
 								</span>
 							</p>
 
-							{#if data.order?.billingAddress?.phone}
+							{#if data.order?.billing_address?.phone}
 								<p>
-									{data.order?.billingAddress?.phone}
+									{data.order?.billing_address?.phone}
 								</p>
 							{/if}
 						</div>

@@ -64,16 +64,13 @@ async function updateCart() {
 			selectedBillingAddress = selectedAddress
 		}
 
-		// console.log('selectedAddress', selectedAddress)
 		const selectedAddressFullObject = data.myAddresses?.data.filter((add) => {
 			return add.id === selectedAddress || add._id === selectedAddress
 		})
-		// console.log('selectedAddressFullObject', selectedAddressFullObject)
-		// console.log('selectedBillingAddress', selectedBillingAddress)
+
 		const selectedBillingAddressFullObject = data.myAddresses?.data.filter((add) => {
 			return add.id === selectedBillingAddress || add._id === selectedBillingAddress
 		})
-		// console.log('selectedBillingAddressFullObject', selectedBillingAddressFullObject)
 
 		if (selectedAddressFullObject[0] && selectedBillingAddressFullObject[0]) {
 			const res = await CartService.updateCart({
@@ -86,8 +83,6 @@ async function updateCart() {
 				origin: $page.data?.origin,
 				storeId: $page.data?.storeId
 			})
-
-			// console.log('updated cart res =', res)
 
 			if (data.prescriptionId) {
 				goto(
@@ -157,35 +152,37 @@ async function refreshAddress() {
 						{selectedAddress}---{selectedBillingAddress}
 					</div> -->
 
-					<!-- Same as billing address checkbox -->
+					{#if data.store?.b2b}
+						<!-- Same as billing address checkbox -->
 
-					<label class="mb-5 lg:mb-10 flex items-center gap-2 text-lg font-semibold">
-						<input
-							type="checkbox"
-							class="h-5 w-5"
-							bind:checked="{isSameAsBillingAddressWithLogIn}" />
+						<label class="mb-5 lg:mb-10 flex items-center gap-2 text-lg font-semibold">
+							<input
+								type="checkbox"
+								class="h-5 w-5"
+								bind:checked="{isSameAsBillingAddressWithLogIn}" />
 
-						<span>Same as billing address</span>
-					</label>
+							<span>Same as billing address</span>
+						</label>
 
-					<!-- Select Billing Address -->
+						<!-- Select Billing Address -->
 
-					{#if !isSameAsBillingAddressWithLogIn}
-						<h2 class="mb-5">Select Billing Address</h2>
+						{#if !isSameAsBillingAddressWithLogIn}
+							<h2 class="mb-5">Select Billing Address</h2>
 
-						<div class="mb-5 rounded-lg border bg-white shadow-lg">
-							{#each data.myAddresses.data as ads}
-								<div transition:slide="{{ duration: 300 }}">
-									<SelectBillingAddress
-										address="{ads}"
-										{loading}
-										countries="{data.countries}"
-										{selectedBillingAddress}
-										on:deleteAddress="{refreshAddress}"
-										on:addressChanged="{({ detail }) => billingAddressChanged({ detail })}" />
-								</div>
-							{/each}
-						</div>
+							<div class="mb-5 rounded-lg border bg-white shadow-lg">
+								{#each data.myAddresses.data as ads}
+									<div transition:slide="{{ duration: 300 }}">
+										<SelectBillingAddress
+											address="{ads}"
+											{loading}
+											countries="{data.countries}"
+											{selectedBillingAddress}
+											on:deleteAddress="{refreshAddress}"
+											on:addressChanged="{({ detail }) => billingAddressChanged({ detail })}" />
+									</div>
+								{/each}
+							</div>
+						{/if}
 					{/if}
 				{/if}
 
