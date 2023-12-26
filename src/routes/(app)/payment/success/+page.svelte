@@ -459,6 +459,54 @@ onMount(async () => {
 						</div>
 					{/if}
 
+					<!-- Delivery Information -->
+
+					{#if data.order && data.order?.shipping_address}
+						<div>
+							<h4 class="mb-5 border-b border-dashed border-zinc-400 pb-2">Delivery Information</h4>
+
+							<div class="flex flex-col gap-1">
+								{#if data.order?.shipping_address.firstName}
+									<p>
+										{data.order?.shipping_address.firstName}
+
+										{data.order?.shipping_address.lastName}
+									</p>
+								{/if}
+
+								<p>
+									{#if data.order?.shipping_address.address}
+										{data.order?.shipping_address.address}
+									{/if}
+
+									{#if data.order?.shipping_address.city}
+										, {data.order?.shipping_address.city}
+									{/if}
+
+									{#if data.order?.shipping_address.country}
+										, {data.order?.shipping_address.country}
+									{/if}
+
+									{#if data.order?.shipping_address.zip}
+										- {data.order?.shipping_address.zip}
+									{/if}
+								</p>
+
+								{#if data.order?.shipping_address.phone || data.order?.shipping_address.userPhone}
+									<p>
+										{data.order?.shipping_address.phone || data.order?.userPhone}
+									</p>
+								{/if}
+
+								{#if data.order?.shipping_address.email}
+									<p>
+										{data.order?.shipping_address.email}
+									</p>
+								{/if}
+							</div>
+						</div>
+					{/if}
+
 					<!-- Billing Information -->
 
 					{#if data.order && data.order?.billing_address}
@@ -501,54 +549,6 @@ onMount(async () => {
 								{#if data.order?.billing_address.email}
 									<p>
 										{data.order?.billing_address.email}
-									</p>
-								{/if}
-							</div>
-						</div>
-					{/if}
-
-					<!-- Shipping Information -->
-
-					{#if data.order && data.order?.shipping_address}
-						<div>
-							<h4 class="mb-5 border-b border-dashed border-zinc-400 pb-2">Shipping Information</h4>
-
-							<div class="flex flex-col gap-1">
-								{#if data.order?.shipping_address.firstName}
-									<p>
-										{data.order?.shipping_address.firstName}
-
-										{data.order?.shipping_address.lastName}
-									</p>
-								{/if}
-
-								<p>
-									{#if data.order?.shipping_address.address}
-										{data.order?.shipping_address.address}
-									{/if}
-
-									{#if data.order?.shipping_address.city}
-										, {data.order?.shipping_address.city}
-									{/if}
-
-									{#if data.order?.shipping_address.country}
-										, {data.order?.shipping_address.country}
-									{/if}
-
-									{#if data.order?.shipping_address.zip}
-										- {data.order?.shipping_address.zip}
-									{/if}
-								</p>
-
-								{#if data.order?.shipping_address.phone || data.order?.shipping_address.userPhone}
-									<p>
-										{data.order?.shipping_address.phone || data.order?.userPhone}
-									</p>
-								{/if}
-
-								{#if data.order?.shipping_address.email}
-									<p>
-										{data.order?.shipping_address.email}
 									</p>
 								{/if}
 							</div>

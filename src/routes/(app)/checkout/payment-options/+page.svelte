@@ -444,46 +444,93 @@ function checkIfStripeCardValid({ detail }) {
 
 			<hr class="mb-5" />
 
-			{#if data.address}
+			{#if data.cart?.shipping_address}
 				<div class="mb-5">
 					<h5 class="mb-2">Delivery Address</h5>
 
 					<p>
-						{data.address.firstName || '_'}
-						{data.address.lastName || '_'}
+						{data.cart?.shipping_address?.firstName || '_'}
+						{data.cart?.shipping_address?.lastName || '_'}
 
 						<br />
 
-						{#if data.address.address}
-							{data.address.address}
+						{#if data.cart?.shipping_address?.address}
+							{data.cart?.shipping_address?.address}
 						{/if}
 
-						{#if data.address.city}
-							, {data.address.city}
+						{#if data.cart?.shipping_address?.city}
+							, {data.cart?.shipping_address?.city}
 						{/if}
 
-						{#if data.address.state}
-							, {data.address.state}
+						{#if data.cart?.shipping_address?.state}
+							, {data.cart?.shipping_address?.state}
 						{/if}
 
-						{#if data.address.country}
-							, {data.address.country}
+						{#if data.cart?.shipping_address?.country}
+							, {data.cart?.shipping_address?.country}
 						{/if}
 
-						{#if data.address.zip}
-							- {data.address.zip}
+						{#if data.cart?.shipping_address?.zip}
+							- {data.cart?.shipping_address?.zip}
 						{/if}
 					</p>
 
-					{#if data.address.phone}
+					{#if data.cart?.shipping_address?.phone}
 						<p>
-							{data.address.phone}
+							{data.cart?.shipping_address?.phone}
 						</p>
 					{/if}
 
-					{#if data.address.email}
+					{#if data.cart?.shipping_address?.email}
 						<p>
-							{data.address.email}
+							{data.cart?.shipping_address?.email}
+						</p>
+					{/if}
+				</div>
+
+				<hr class="mb-5" />
+			{/if}
+
+			{#if data.cart?.billing_address}
+				<div class="mb-5">
+					<h5 class="mb-2">Billing Address</h5>
+
+					<p>
+						{data.cart?.billing_address?.firstName || '_'}
+						{data.cart?.billing_address?.lastName || '_'}
+
+						<br />
+
+						{#if data.cart?.billing_address?.address}
+							{data.cart?.billing_address?.address}
+						{/if}
+
+						{#if data.cart?.billing_address?.city}
+							, {data.cart?.billing_address?.city}
+						{/if}
+
+						{#if data.cart?.billing_address?.state}
+							, {data.cart?.billing_address?.state}
+						{/if}
+
+						{#if data.cart?.billing_address?.country}
+							, {data.cart?.billing_address?.country}
+						{/if}
+
+						{#if data.cart?.billing_address?.zip}
+							- {data.cart?.billing_address?.zip}
+						{/if}
+					</p>
+
+					{#if data.cart?.billing_address?.phone}
+						<p>
+							{data.cart?.billing_address?.phone}
+						</p>
+					{/if}
+
+					{#if data.cart?.billing_address?.email}
+						<p>
+							{data.cart?.billing_address?.email}
 						</p>
 					{/if}
 				</div>
