@@ -7,8 +7,10 @@ import { page } from '$app/stores'
 import { Pagination } from '$lib/components'
 import { toast } from '$lib/utils'
 import { WhiteButton } from '$lib/ui'
+import Modal from '$lib/components/Modal.svelte'
 import noEmptyAddress from '$lib/assets/no/empty-address.svg'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
+import SaveAddress from './_SaveAddress.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
@@ -20,8 +22,11 @@ const seoProps = {
 	description: 'My Addresses'
 }
 
-let typingTimer
 let loadingOnDelete = []
+let newAddress = {}
+let showAddNewAddressModal = false
+let showEditAddressModal = false
+let typingTimer
 
 function callSearch(search) {
 	clearTimeout(typingTimer)
@@ -94,29 +99,39 @@ async function remove(id, index) {
 		<!--  Back button -->
 
 		<div class="flex flex-wrap items-center gap-2">
-			<a
-				href="/my/addresses/new"
-				aria-label="Click to visit new address"
-				data-sveltekit-preload-data>
-				<PrimaryButton type="button" loadingringsize="sm" class="text-sm">
-					<svg
-						class="h-5 w-5"
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-					</svg>
+			<PrimaryButton
+				type="button"
+				loadingringsize="sm"
+				class="text-sm"
+				on:click="{() => (showAddNewAddressModal = true)}">
+				<svg
+					class="h-5 w-5"
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor">
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+				</svg>
 
-					<span>Add New Address</span>
-				</PrimaryButton>
-			</a>
+				<span>Add New Address</span>
+			</PrimaryButton>
 		</div>
 	</header>
+
+	<Modal
+		show="{showAddNewAddressModal}"
+		title="Add New Address"
+		hideFooter
+		on:close="{() => (showAddNewAddressModal = false)}">
+		<SaveAddress
+			bind:editAddress="{showAddNewAddressModal}"
+			shipping_address="{newAddress}"
+			countries="{data.countries}" />
+	</Modal>
 
 	{#if data.addresses?.isFetching}
 		Loading....
@@ -124,35 +139,35 @@ async function remove(id, index) {
 		{data.addresses?.errors}
 	{:else if data.addresses.data.length > 0}
 		<ul class="mb-5 flex w-full max-w-xl flex-col gap-4">
-			{#each data.addresses.data as i, index}
-				{#if i}
+			{#each data.addresses.data as add, index}
+				{#if add}
 					<li
 						class="overflow-hidden rounded border bg-white shadow-md transition duration-300 hover:shadow-md">
 						<div class="flex items-start gap-3 p-4 sm:p-6">
 							<div class="flex flex-1 flex-col gap-1 text-sm">
 								<span class="text-base font-semibold">
-									{i.firstName || '_'}
-									{i.lastName || '_'}
+									{add.firstName || '_'}
+									{add.lastName || '_'}
 								</span>
 
 								<span>
-									{i.address || '_'}, {i.city || '_'}
+									{add.address || '_'}, {add.city || '_'}
 
 									<br />
 
-									{i.state || '_'}, {i.country || '_'}
+									{add.state || '_'}, {add.country || '_'}
 
 									<br />
 
-									{i.zip || '_'}
+									{add.zip || '_'}
 								</span>
 
-								<span> {i.email || '_'} </span>
+								<span> {add.email || '_'} </span>
 
-								<span> {i.phone || '_'} </span>
+								<span> {add.phone || '_'} </span>
 							</div>
 
-							{#if i.isHome}
+							{#if add.isHome}
 								<div
 									class="shrink-0 rounded-full border-2 border-zinc-200 bg-zinc-100 py-0.5 px-4 text-xs font-bold uppercase tracking-wide">
 									Home
@@ -161,17 +176,14 @@ async function remove(id, index) {
 						</div>
 
 						<div class="grid grid-cols-2 divide-x border-t">
-							<a
-								href="{`/my/addresses/${i._id || i.id}`}"
-								aria-label="Click to visit address details"
-								class="w-full bg-transparent p-2 text-center font-semibold uppercase text-primary-500 transition duration-300 focus:outline-none hover:bg-zinc-100 hover:text-primary-700">
+							<WhiteButton class="w-full" on:click="{() => (showEditAddressModal = true)}">
 								Edit
-							</a>
+							</WhiteButton>
 
 							<!-- <button
 								type="button"
 								class="bg-transparent p-2 text-center font-semibold uppercase text-primary-500 transition duration-300 focus:outline-none hover:bg-zinc-100 hover:text-primary-700"
-								on:click="{() => remove(i._id || i.id, index)}">
+								on:click="{() => remove(add._id || add.id, index)}">
 								{#if loadingOnDelete[index]}
 									Removing...
 								{:else}
@@ -192,7 +204,7 @@ async function remove(id, index) {
 									}
 								}}"
 								class="w-full">
-								<input type="hidden" name="id" value="{i._id || i.id || null}" />
+								<input type="hidden" name="id" value="{add._id || add.id || null}" />
 
 								<button
 									type="submit"
@@ -201,6 +213,17 @@ async function remove(id, index) {
 								</button>
 							</form>
 						</div>
+
+						<Modal
+							show="{showEditAddressModal}"
+							title="Edit Address"
+							hideFooter
+							on:close="{() => (showEditAddressModal = false)}">
+							<SaveAddress
+								bind:editAddress="{showEditAddressModal}"
+								shipping_address="{add}"
+								countries="{data.countries}" />
+						</Modal>
 					</li>
 				{/if}
 			{/each}

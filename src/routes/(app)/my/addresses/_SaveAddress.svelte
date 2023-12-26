@@ -13,9 +13,11 @@ const IS_DEV = import.meta.env.DEV
 const dispatch = createEventDispatcher()
 
 export let billing_address = {}
-export let shipping_address = {}
 export let countries = []
 export let editAddress = false
+export let selectedAddress = ''
+export let selectedBillingAddress = ''
+export let shipping_address = {}
 
 // console.log('$page', $page)
 // console.log('address', address)
@@ -29,12 +31,13 @@ if (!shipping_address?.firstName) {
 				country: 'IN',
 				email: 'test@email.com',
 				firstName: 'Test first name',
+				id: 'new',
 				lastName: 'Test last name',
 				phone: '1111111111',
 				state: 'GOA',
 				zip: '111111'
 			}
-		: {}
+		: { id: 'new' }
 }
 
 shipping_address.zip = shipping_address.zip || shipping_address.pincode || ''
@@ -253,7 +256,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 </script>
 
 <div>
-	<Error err="{err?.message?.error || err}" class="mb-5" />
+	<Error {err} class="mb-5" />
 
 	<form
 		action="{!shipping_address.id || shipping_address.id === 'new'
@@ -271,21 +274,17 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 				// 	$page?.url?.pathname
 				// )
 
-				toast('Address saved successfully', 'success')
-
 				if (result?.status === 200 && result?.data) {
 					const newAddressId = result.data?._id || result.data?.id
-					toast('Address Info Saved.', 'success')
+					toast('Address saved successfully', 'success')
+
+					selectedBillingAddress = newAddressId
+					selectedAddress = newAddressId
 
 					await applyAction(result)
+					editAddress = false
 
-					if ((!shipping_address.id || shipping_address.id === 'new') && newAddressId) {
-						if ($page?.url?.pathname.includes('checkout')) {
-							goto(`/checkout/payment-options?address=${newAddressId}`)
-						} else {
-							goto(`${newAddressId}`)
-						}
-					} else if ($page?.url?.pathname.includes('checkout')) {
+					if ($page?.url?.pathname.includes('checkout')) {
 						goto(`/checkout/address`)
 					} else {
 						goto(`/my/addresses?sort=-updatedAt`)
@@ -296,8 +295,6 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 					err = result?.error?.message || null
 					// toast(result?.error?.message, 'error')
 				}
-
-				editAddress = false
 			}
 		}}">
 		<!-- <form on:submit|preventDefault="{() => SaveAddress(refinedAddress)}"> -->
