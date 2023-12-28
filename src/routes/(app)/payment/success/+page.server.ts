@@ -54,8 +54,8 @@ export async function load({ url, locals, cookies }) {
 
 		// console.log('cart at payment success', cart)
 
-		cookies.set('cartId', cart?.cart_id || cart?.cartId, { path: '/' })
-		cookies.set('cartQty', cart?.qty, { path: '/' })
+		cookies.set('cartId', cart?.cart_id || cart?.cartId, { path: '/', maxAge: 31536000 })
+		cookies.set('cartQty', cart?.qty, { path: '/', maxAge: 31536000 })
 
 		locals.cartId = cart?.cart_id || cart?.cartId
 		locals.cartQty = cart?.qty
