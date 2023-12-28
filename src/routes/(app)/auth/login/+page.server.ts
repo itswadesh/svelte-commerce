@@ -125,13 +125,12 @@ const verifyOtp = async ({ cookies, request, locals, url }) => {
 		cookies.set('connect.sid', user.sid, { path: '/' })
 
 		cookies.set('me', JSON.stringify(me), {
-			path: '/'
+			path: '/',
+			maxAge: 31536000
 			// httpOnly: true,
 			// sameSite: 'strict',
-			// secure: process.env.NODE_ENV === 'production',
-			// maxAge: 60 * 60 * 24 * 30,
+			// secure: process.env.NODE_ENV === 'production'
 		})
-
 
 		return me
 	} catch (e) {
