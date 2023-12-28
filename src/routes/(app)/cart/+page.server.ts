@@ -94,7 +94,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 
 		// if (!cartId) { // Commented out because when can't find cart_id in database, it will still won't set the new cart_id in cookies
 		cartId = cart.cart_id // This is required because when cart_id is null, it will add 3 items with null cart id hence last one prevails
-		cookies.set('cartId', cartId, { path: '/' })
+		cookies.set('cartId', cartId, { path: '/', maxAge: 31536000 })
 		// }
 
 		if (!sid) {
@@ -140,7 +140,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 				cookies.set('connect.sid', cart.sid, { path: '/' })
 			}
 
-			if (!cartId) cookies.set('cartId', cartObj.cartId, { path: '/' })
+			if (!cartId) cookies.set('cartId', cartObj.cartId, { path: '/', maxAge: 31536000 })
 
 			return cartObj
 		} else {
