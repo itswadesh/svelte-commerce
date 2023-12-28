@@ -23,7 +23,6 @@ import SEO from '$lib/components/SEO/index.svelte'
 const cookies = Cookie()
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	title: `Cart`,
@@ -401,7 +400,6 @@ function updateCheckedCartItemsInGroup() {
 									use:enhance="{() => {
 										loadingMoveUnavailableItemsToWishlist = true
 										return async ({ result }) => {
-											// console.log('result of unabailable items', result)
 											await invalidateAll()
 											await applyAction(result)
 											loadingMoveUnavailableItemsToWishlist = false
@@ -514,7 +512,7 @@ function updateCheckedCartItemsInGroup() {
 											{#if item.isCustomized}
 												<button
 													type="button"
-													class="text-sm text-zinc-500 italic hover:underline focus:outline-none"
+													class="max-w-max text-sm text-zinc-500 italic hover:underline focus:outline-none"
 													on:click="{() =>
 														chnageJsonInLocalStore({
 															json: item.customizedData,
@@ -524,6 +522,14 @@ function updateCheckedCartItemsInGroup() {
 													Click here to re-edit
 												</button>
 											{/if}
+
+											<div class="text-xs">
+												{#if item?.isCod}
+													COD Available
+												{:else}
+													COD Not Available
+												{/if}
+											</div>
 
 											<div class="flex flex-wrap items-center gap-2 text-xs sm:text-sm">
 												<span class="text-sm sm:text-base font-bold whitespace-nowrap">
@@ -592,10 +598,10 @@ function updateCheckedCartItemsInGroup() {
 															loading[ix] = true
 															return async ({ result }) => {
 																fireGTagEvent('remove_from_cart', item)
-																updateCartStore({ data: result?.data })
 																if (item.qty === 1) {
 																	updateCheckedCartItems(item.pid)
 																}
+																updateCartStore({ data: result?.data })
 																// await invalidateAll()
 																await applyAction(result)
 																loading[ix] = false
@@ -709,8 +715,8 @@ function updateCheckedCartItemsInGroup() {
 														loading[ix] = true
 														return async ({ result }) => {
 															fireGTagEvent('remove_from_cart', item)
-															updateCartStore({ data: result.data })
 															updateCheckedCartItems(item.pid)
+															updateCartStore({ data: result?.data })
 															// await invalidateAll()
 															await applyAction(result)
 															selectedLoadingType = null
@@ -774,14 +780,6 @@ function updateCheckedCartItemsInGroup() {
 													</button>
 												</form>
 											</div>
-
-											<div class="text-sm">
-												{#if item?.isCod}
-													COD Available
-												{:else}
-													COD Not Available
-												{/if}
-											</div>
 										</div>
 									</div>
 								{/each}
@@ -792,7 +790,6 @@ function updateCheckedCartItemsInGroup() {
 
 				<div class="w-full lg:w-96 lg:shrink-0 lg:grow-0">
 					<!-- Promo code section -->
-
 					{#if store?.isDiscountCoupons}
 						<div class="h-10 sm:h-14 flex items-center">
 							{#if cart?.discount?.amount > 0}

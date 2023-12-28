@@ -66,7 +66,7 @@ onMount(() => {
 				verified: onetap.verified,
 				active: onetap.active
 			}
-			await cookies.set('me', me, { path: '/' })
+			await cookies.set('me', me, { path: '/', maxAge: 31536000 })
 			let r = ref || '/'
 			if (browser) goto(r)
 		}
@@ -188,7 +188,7 @@ function changeNumber() {
 							}
 
 							// console.log('me =', me)
-							await cookies.set('me', me, { path: '/' })
+							await cookies.set('me', me, { path: '/', maxAge: 31536000 })
 							const r = ref || '/'
 							if (browser) goto(r)
 							await applyAction(result)

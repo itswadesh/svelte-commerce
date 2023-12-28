@@ -82,7 +82,7 @@ async function handleVerifyOtp({ detail }) {
 			store: res.store
 		}
 
-		await cookies.set('me', me, { path: '/' })
+		await cookies.set('me', me, { path: '/', maxAge: 31536000 })
 		// $page.data.me = me
 		await invalidateAll()
 
@@ -139,15 +139,12 @@ function getLoginUrl(baseUrl) {
 	<h2 class="mb-8 w-full text-center text-2xl font-semibold text-primary-500">Login/Register</h2>
 
 	{#if !otpRequestSend}
-		<SendOtp
-			loading="{loading}"
-			phone="{phone}"
-			on:send="{({ detail }) => handleSendOTP({ detail })}" />
+		<SendOtp {loading} {phone} on:send="{({ detail }) => handleSendOTP({ detail })}" />
 	{:else}
 		<VerifyOtp
-			loading="{loading}"
-			phone="{phone}"
-			resendAfter="{resendAfter}"
+			{loading}
+			{phone}
+			{resendAfter}
 			on:verifyOtp="{({ detail }) => handleVerifyOtp({ detail })}"
 			on:resend="{({ detail }) => handleSendOTP({ detail })}"
 			on:changeNumber="{changeNumber}" />

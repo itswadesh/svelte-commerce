@@ -92,7 +92,7 @@ async function saveProfile() {
 				toast('Profile Info Saved.', 'success')
 			}
 
-			await cookies.set('me', data.profile, { path: '/' })
+			await cookies.set('me', data.profile, { path: '/', maxAge: 31536000 })
 
 			// $page.data.me = data.profile
 			// refreshData()

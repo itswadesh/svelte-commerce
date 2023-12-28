@@ -151,7 +151,7 @@ async function submit(n) {
 				store: res.store
 			}
 
-			await cookies.set('me', me, { path: '/' })
+			await cookies.set('me', me, { path: '/', maxAge: 31536000 })
 			// $page.data.me = me
 			await invalidateAll()
 
