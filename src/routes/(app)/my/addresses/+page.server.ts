@@ -59,11 +59,11 @@ const saveAddress = async ({ request, cookies, locals }) => {
 	const firstName = data.get('firstName')
 	const id = data.get('id')
 	const lastName = data.get('lastName')
+	const phone = data.get('phone')
 	const selectedCountry = data.get('selectedCountry')
 	const showErrorMessage = data.get('showErrorMessage')
 	const state = data.get('state')
 	const zip = data.get('zip')
-	let phone = data.get('phone')
 
 	// for billing address
 	const billingAddressAddress = data.get('billingAddressAddress')
@@ -73,11 +73,11 @@ const saveAddress = async ({ request, cookies, locals }) => {
 	const billingAddressFirstName = data.get('billingAddressFirstName')
 	const billingAddressId = data.get('billingAddressId')
 	const billingAddressLastName = data.get('billingAddressLastName')
+	const billingAddressPhone = data.get('billingAddressPhone')
 	const billingAddressSelectedCountry = data.get('billingAddressSelectedCountry')
-	const showBillingErrorMessage = data.get('showBillingErrorMessage')
 	const billingAddressState = data.get('billingAddressState')
 	const billingAddressZip = data.get('billingAddressZip')
-	let billingAddressPhone = data.get('billingAddressPhone')
+	const showBillingErrorMessage = data.get('showBillingErrorMessage')
 
 	const sid = cookies.get('connect.sid')
 
@@ -95,6 +95,7 @@ const saveAddress = async ({ request, cookies, locals }) => {
 
 	let res = {}
 
+	// Case 1: Logged in
 	if (locals?.me) {
 		// console.log('showErrorMessage at save address', firstName)
 
@@ -103,14 +104,14 @@ const saveAddress = async ({ request, cookies, locals }) => {
 		} else if (zip.length !== 6) {
 			error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
 		} else {
-			phone = phone.replace(/[a-zA-Z ]/g, '')
+			shipping_address.phone = shipping_address.phone.replace(/[a-zA-Z ]/g, '')
 
-			if (phone.startsWith('0')) {
-				phone = phone.substring(1)
+			if (shipping_address.phone.startsWith('0')) {
+				shipping_address.phone = shipping_address.phone.substring(1)
 			}
 
-			if (!phone.startsWith('+')) {
-				phone = (selectedCountry[0].dialCode || '+91') + phone
+			if (!shipping_address.phone.startsWith('+')) {
+				shipping_address.phone = (selectedCountry[0].dialCode || '+91') + shipping_address.phone
 			}
 
 			try {
@@ -142,62 +143,91 @@ const saveAddress = async ({ request, cookies, locals }) => {
 		}
 	}
 
+	// Case 2: Not logged in
 	else {
-		const new_billing_address = {
-			address: isSameAsBillingAddress ? address : billingAddressAddress,
-			city: isSameAsBillingAddress ? city : billingAddressCity,
-			country: isSameAsBillingAddress ? country : billingAddressCountry,
-			email: isSameAsBillingAddress ? email : billingAddressEmail,
-			firstName: isSameAsBillingAddress ? firstName : billingAddressFirstName,
-			lastName: isSameAsBillingAddress ? lastName : billingAddressLastName,
-			phone: isSameAsBillingAddress ? phone : billingAddressPhone,
-			state: isSameAsBillingAddress ? state : billingAddressState,
-			zip: isSameAsBillingAddress ? zip : billingAddressZip
-		}
-
-		// console.log('new_billing_address', new_billing_address);
-		// console.log('showErrorMessage at save address', firstName)
-
-		if (showBillingErrorMessage === true || showBillingErrorMessage === 'true') {
+		if (showErrorMessage === true || showErrorMessage === 'true') {
 			error(404, 'Please enter valid phone number')
 		} else if (zip.length !== 6) {
 			error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
 		} else {
-			new_billing_address.phone = new_billing_address.phone.replace(/[a-zA-Z ]/g, '')
+			shipping_address.phone = shipping_address.phone.replace(/[a-zA-Z ]/g, '')
 
-			if (new_billing_address.phone.startsWith('0')) {
-				new_billing_address.phone = new_billing_address.phone.substring(1)
+			if (shipping_address.phone.startsWith('0')) {
+				shipping_address.phone = shipping_address.phone.substring(1)
 			}
 
-			if (!new_billing_address.phone.startsWith('+')) {
-				new_billing_address.phone = (billingAddressSelectedCountry[0].dialCode || '+91') + new_billing_address.phone
+			if (!shipping_address.phone.startsWith('+')) {
+				shipping_address.phone = (selectedCountry[0].dialCode || '+91') + shipping_address.phone
 			}
 
 			try {
-				zodAddressSchema.parse(new_billing_address)
+				zodAddressSchema.parse(shipping_address)
 			} catch (err) {
 				const { fieldErrors: errors } = err.flatten()
-				const { address, city, ...rest } = new_billing_address
+				const { address, city, ...rest } = shipping_address
 				error(404, {
 					data: rest,
 					errors
 				})
 			}
 
-			res = await CartService.updateCart3({
-				cartId,
-				shipping_address,
-				billing_address: new_billing_address,
-				selfTakeout: false,
-				storeId: locals.storeId,
-				sid,
-				origin: locals?.origin
-			})
+			const new_billing_address = {
+				address: isSameAsBillingAddress ? address : billingAddressAddress,
+				city: isSameAsBillingAddress ? city : billingAddressCity,
+				country: isSameAsBillingAddress ? country : billingAddressCountry,
+				email: isSameAsBillingAddress ? email : billingAddressEmail,
+				firstName: isSameAsBillingAddress ? firstName : billingAddressFirstName,
+				lastName: isSameAsBillingAddress ? lastName : billingAddressLastName,
+				phone: isSameAsBillingAddress ? phone : billingAddressPhone,
+				state: isSameAsBillingAddress ? state : billingAddressState,
+				zip: isSameAsBillingAddress ? zip : billingAddressZip
+			}
+
+			// console.log('new_billing_address', new_billing_address);
+			// console.log('showErrorMessage at save address', firstName)
+
+			if (showBillingErrorMessage === true || showBillingErrorMessage === 'true') {
+				error(404, 'Please enter valid phone number')
+			} else if (zip.length !== 6) {
+				error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
+			} else {
+				new_billing_address.phone = new_billing_address.phone.replace(/[a-zA-Z ]/g, '')
+
+				if (new_billing_address.phone.startsWith('0')) {
+					new_billing_address.phone = new_billing_address.phone.substring(1)
+				}
+
+				if (!new_billing_address.phone.startsWith('+')) {
+					new_billing_address.phone = (billingAddressSelectedCountry[0].dialCode || '+91') + new_billing_address.phone
+				}
+
+				try {
+					zodAddressSchema.parse(new_billing_address)
+				} catch (err) {
+					const { fieldErrors: errors } = err.flatten()
+					const { address, city, ...rest } = new_billing_address
+					error(404, {
+						data: rest,
+						billing_errors: errors
+					})
+				}
+
+				res = await CartService.updateCart3({
+					cartId,
+					shipping_address,
+					billing_address: new_billing_address,
+					selfTakeout: false,
+					storeId: locals.storeId,
+					sid,
+					origin: locals?.origin
+				})
+			}
+
+			// console.log('res of save address = ', res)
 		}
-
-		// console.log('res of save address = ', res)
-
 	}
+
+	// Return the response
 
 	return res
 }
