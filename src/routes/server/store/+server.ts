@@ -66,6 +66,12 @@ export async function GET({ cookies, request, locals, setHeaders }) {
 		// 	searchbarText: storeOne?.searchbarText,
 		// 	socialSharingButtons: storeOne?.socialSharingButtons,
 		// 	store_timings: storeOne?.store_timings,
+		//  storeCountries: storeOne?.storeCountries,
+		//  storeCountry: storeOne?.storeCountry,
+		//  storeCurrencies: storeOne?.storeCurrencies,
+		//  storeCurrency: storeOne?.storeCurrency,
+		//  storeLanguage: storeOne?.storeLanguage,
+		//  storeLanguages: storeOne?.storeLanguages,
 		// 	storePromoVideo: storeOne?.storePromoVideo,
 		// 	title: storeOne?.title,
 		// 	websiteLegalName: storeOne?.websiteLegalName,
@@ -77,6 +83,6 @@ export async function GET({ cookies, request, locals, setHeaders }) {
 		// cookies.set('storeId', storeId, { path: '/' })
 		// locals.storeId = storeId
 		setHeaders({ 'Cache-Control': 'max-age=60' })
-	} catch (e) {}
+	} catch (e) { }
 	return json({ store, menu, popularSearches, megamenu })
 }
