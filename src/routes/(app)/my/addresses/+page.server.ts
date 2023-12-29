@@ -60,8 +60,8 @@ const saveAddress = async ({ request, cookies, locals }) => {
 	const id = data.get('id')
 	const lastName = data.get('lastName')
 	const phone = data.get('phone')
-	const selectedCountry = data.get('selectedCountry')
-	const showErrorMessage = data.get('showErrorMessage')
+	const selectedShippingAddressCountry = data.get('selectedShippingAddressCountry')
+	const showShippingAddressErrorMessage = data.get('showShippingAddressErrorMessage')
 	const state = data.get('state')
 	const zip = data.get('zip')
 
@@ -71,13 +71,12 @@ const saveAddress = async ({ request, cookies, locals }) => {
 	const billingAddressCountry = data.get('billingAddressCountry')
 	const billingAddressEmail = data.get('billingAddressEmail')
 	const billingAddressFirstName = data.get('billingAddressFirstName')
-	const billingAddressId = data.get('billingAddressId')
 	const billingAddressLastName = data.get('billingAddressLastName')
 	const billingAddressPhone = data.get('billingAddressPhone')
-	const billingAddressSelectedCountry = data.get('billingAddressSelectedCountry')
 	const billingAddressState = data.get('billingAddressState')
 	const billingAddressZip = data.get('billingAddressZip')
-	const showBillingErrorMessage = data.get('showBillingErrorMessage')
+	const selectedBillingAddressCountry = data.get('selectedBillingAddressCountry')
+	const showBillingAddressErrorMessage = data.get('showBillingAddressErrorMessage')
 
 	const sid = cookies.get('connect.sid')
 
@@ -97,11 +96,11 @@ const saveAddress = async ({ request, cookies, locals }) => {
 
 	// Case 1: Logged in
 	if (locals?.me) {
-		// console.log('showErrorMessage at save address', firstName)
+		// console.log('showShippingAddressErrorMessage at save address', firstName)
 
-		if (showErrorMessage === true || showErrorMessage === 'true') {
+		if (showShippingAddressErrorMessage === true || showShippingAddressErrorMessage === 'true') {
 			error(404, 'Please enter valid phone number')
-		} else if (zip.length !== 6) {
+		} else if (selectedShippingAddressCountry.code === 'IN' && zip.length !== 6) {
 			error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
 		} else {
 			shipping_address.phone = shipping_address.phone.replace(/[a-zA-Z ]/g, '')
@@ -111,7 +110,7 @@ const saveAddress = async ({ request, cookies, locals }) => {
 			}
 
 			if (!shipping_address.phone.startsWith('+')) {
-				shipping_address.phone = (selectedCountry[0].dialCode || '+91') + shipping_address.phone
+				shipping_address.phone = (selectedShippingAddressCountry.dialCode || '+91') + shipping_address.phone
 			}
 
 			try {
@@ -145,9 +144,9 @@ const saveAddress = async ({ request, cookies, locals }) => {
 
 	// Case 2: Not logged in
 	else {
-		if (showErrorMessage === true || showErrorMessage === 'true') {
+		if (showShippingAddressErrorMessage === true || showShippingAddressErrorMessage === 'true') {
 			error(404, 'Please enter valid phone number')
-		} else if (zip.length !== 6) {
+		} else if (selectedShippingAddressCountry.code === 'IN' && zip.length !== 6) {
 			error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
 		} else {
 			shipping_address.phone = shipping_address.phone.replace(/[a-zA-Z ]/g, '')
@@ -157,7 +156,7 @@ const saveAddress = async ({ request, cookies, locals }) => {
 			}
 
 			if (!shipping_address.phone.startsWith('+')) {
-				shipping_address.phone = (selectedCountry[0].dialCode || '+91') + shipping_address.phone
+				shipping_address.phone = (selectedShippingAddressCountry.dialCode || '+91') + shipping_address.phone
 			}
 
 			try {
@@ -184,11 +183,11 @@ const saveAddress = async ({ request, cookies, locals }) => {
 			}
 
 			// console.log('new_billing_address', new_billing_address);
-			// console.log('showErrorMessage at save address', firstName)
+			// console.log('showShippingAddressErrorMessage at save address', firstName)
 
-			if (showBillingErrorMessage === true || showBillingErrorMessage === 'true') {
+			if (showBillingAddressErrorMessage === true || showBillingAddressErrorMessage === 'true') {
 				error(404, 'Please enter valid phone number')
-			} else if (zip.length !== 6) {
+			} else if (selectedBillingAddressCountry.code === 'IN' && zip.length !== 6) {
 				error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
 			} else {
 				new_billing_address.phone = new_billing_address.phone.replace(/[a-zA-Z ]/g, '')
@@ -198,7 +197,7 @@ const saveAddress = async ({ request, cookies, locals }) => {
 				}
 
 				if (!new_billing_address.phone.startsWith('+')) {
-					new_billing_address.phone = (billingAddressSelectedCountry[0].dialCode || '+91') + new_billing_address.phone
+					new_billing_address.phone = (selectedBillingAddressCountry.dialCode || '+91') + new_billing_address.phone
 				}
 
 				try {
@@ -242,8 +241,8 @@ const editAddress = async ({ request, cookies, locals }) => {
 	const firstName = data.get('firstName')
 	const id = data.get('id')
 	const lastName = data.get('lastName')
-	const selectedCountry = data.get('selectedCountry')
-	const showErrorMessage = data.get('showErrorMessage')
+	const selectedShippingAddressCountry = data.get('selectedShippingAddressCountry')
+	const showShippingAddressErrorMessage = data.get('showShippingAddressErrorMessage')
 	const state = data.get('state')
 	const zip = data.get('zip')
 	let phone = data.get('phone')
@@ -262,11 +261,11 @@ const editAddress = async ({ request, cookies, locals }) => {
 		zip: zip
 	}
 
-	// console.log('showErrorMessage at edit address', showErrorMessage);
+	// console.log('showShippingAddressErrorMessage at edit address', showShippingAddressErrorMessage);
 
-	if (showErrorMessage === true || showErrorMessage === 'true') {
+	if (showShippingAddressErrorMessage === true || showShippingAddressErrorMessage === 'true') {
 		error(404, 'Please enter valid phone number')
-	} else if (zip.length !== 6) {
+	} else if (selectedShippingAddressCountry.code === 'IN' && zip.length !== 6) {
 		error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
 	} else {
 		phone = phone.replace(/[a-zA-Z ]/g, '')
@@ -276,7 +275,7 @@ const editAddress = async ({ request, cookies, locals }) => {
 		}
 
 		if (!phone.startsWith('+')) {
-			phone = (selectedCountry[0].dialCode || '+91') + phone
+			phone = (selectedShippingAddressCountry.dialCode || '+91') + phone
 		}
 
 		try {
