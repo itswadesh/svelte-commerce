@@ -52,6 +52,7 @@ let selectedCountry = {}
 let showErrorMessage = false
 let showBillingErrorMessage = false
 let states = []
+let zodBillingErrors = null
 let zodErrors = null
 
 onMount(async () => {
@@ -284,14 +285,19 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 					await applyAction(result)
 					editAddress = false
 
-					if ($page?.url?.pathname.includes('checkout')) {
-						goto(`/checkout/address`)
-					} else {
+					if ($page?.data.me) {
+						await invalidateAll()
+					}
+
+					if (!$page?.url?.pathname.includes('checkout')) {
 						goto(`/my/addresses?sort=-updatedAt`)
+					} else if (!$page?.data.me) {
+						goto(`/checkout/payment-options?address=${newAddressId}`)
 					}
 				} else if (result?.error) {
 					shipping_address.phone = ''
 					zodErrors = result?.error?.errors || null
+					zodBillingErrors = result?.error?.billing_errors || null
 					err = result?.error?.message || null
 					// toast(result?.error?.message, 'error')
 				}
@@ -546,9 +552,11 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 									autoFocus
 									required />
 
-								{#if zodErrors?.firstName}<p class="mt-1 text-red-600">
-										{zodErrors?.firstName}
-									</p>{/if}
+								{#if zodBillingErrors?.firstName}
+									<p class="mt-1 text-red-600">
+										{zodBillingErrors?.firstName}
+									</p>
+								{/if}
 							</div>
 						</div>
 
@@ -567,7 +575,11 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 									bind:value="{billing_address.lastName}"
 									required />
 
-								{#if zodErrors?.lastName}<p class="mt-1 text-red-600">{zodErrors?.lastName}</p>{/if}
+								{#if zodBillingErrors?.lastName}
+									<p class="mt-1 text-red-600">
+										{zodBillingErrors?.lastName}
+									</p>
+								{/if}
 							</div>
 						</div>
 
@@ -583,7 +595,11 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 									bind:value="{billing_address.email}"
 									required />
 
-								{#if zodErrors?.email}<p class="mt-1 text-red-600">{zodErrors?.email}</p>{/if}
+								{#if zodBillingErrors?.email}
+									<p class="mt-1 text-red-600">
+										{zodBillingErrors?.email}
+									</p>
+								{/if}
 							</div>
 						</div>
 
@@ -613,7 +629,9 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 									</p>
 								{/if}
 
-								{#if zodErrors?.phone}<p class="mt-1 text-red-600">{zodErrors?.phone}</p>{/if}
+								{#if zodBillingErrors?.phone}
+									<p class="mt-1 text-red-600">{zodBillingErrors?.phone}</p>
+								{/if}
 							</div>
 						</div>
 
@@ -632,7 +650,9 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 									bind:value="{billing_address.address}"
 									required />
 
-								{#if zodErrors?.address}<p class="mt-1 text-red-600">{zodErrors?.address}</p>{/if}
+								{#if zodBillingErrors?.address}
+									<p class="mt-1 text-red-600">{zodBillingErrors?.address}</p>
+								{/if}
 							</div>
 						</div>
 
@@ -654,7 +674,9 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 									on:blur="{() => fetchStateAndCity(billing_address.zip, 'billing')}"
 									required />
 
-								{#if zodErrors?.zip}<p class="mt-1 text-red-600">{zodErrors?.zip}</p>{/if}
+								{#if zodBillingErrors?.zip}
+									<p class="mt-1 text-red-600">{zodBillingErrors?.zip}</p>
+								{/if}
 							</div>
 						</div>
 
@@ -674,7 +696,9 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 									bind:value="{billing_address.city}"
 									required />
 
-								{#if zodErrors?.city}<p class="mt-1 text-red-600">{zodErrors?.city}</p>{/if}
+								{#if zodBillingErrors?.city}
+									<p class="mt-1 text-red-600">{zodBillingErrors?.city}</p>
+								{/if}
 							</div>
 						</div>
 
@@ -704,7 +728,9 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 										{/each}
 									</select>
 
-									{#if zodErrors?.state}<p class="mt-1 text-red-600">{zodErrors?.state}</p>{/if}
+									{#if zodBillingErrors?.state}
+										<p class="mt-1 text-red-600">{zodBillingErrors?.state}</p>
+									{/if}
 								</div>
 							</div>
 						{/if}
@@ -737,7 +763,9 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 										{/each}
 									</select>
 
-									{#if zodErrors?.country}<p class="mt-1 text-red-600">{zodErrors?.country}</p>{/if}
+									{#if zodBillingErrors?.country}
+										<p class="mt-1 text-red-600">{zodBillingErrors?.country}</p>
+									{/if}
 								{:else}
 									<a
 										href="/contact-us"
