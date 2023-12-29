@@ -46,6 +46,7 @@ export const getStoreData = async ({
 		adminUrl,
 		alert,
 		allowBackOrder: false,
+		b2b: {},
 		close: {},
 		currencyCode,
 		currencySymbol,
@@ -122,6 +123,7 @@ export const getStoreData = async ({
 		adminUrl: storeRes?.storeOne?.adminUrl || storeRes?.settings?.adminUrl, // storeRes?.storeOne?.adminUrl used for arialmall
 		alert: storeRes?.storeOne?.alert,
 		allowBackOrder: storeRes.storeOne?.allowBackOrder,
+		b2b: storeRes?.storeOne?.b2b,
 		close: storeRes?.storeOne?.close,
 		currencyCode: storeRes?.storeOne?.storeCurrency?.isoCode || 'USD',
 		currencySymbol: storeRes?.storeOne?.storeCurrency?.symbol || '$',
