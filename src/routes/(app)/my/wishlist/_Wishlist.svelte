@@ -28,7 +28,6 @@ import WishlistSkeleton from './_WishlistSkeleton.svelte'
 import { updateCartStore } from '$lib/store/cart'
 import { onMount } from 'svelte'
 import { browser } from '$app/environment'
-// import { storeStore } from '$lib/store/store'
 
 export let wishlistedProducts,
 	loadingProduct = []
@@ -41,7 +40,7 @@ async function removeFromWishlist(id, wx) {
 		await WishlistService.toggleWishlistService({
 			pid: id,
 			vid: id,
-			storeId: $page.data.storeId,
+			storeId: $page?.data?.storeId,
 			origin: $page.data.origin
 		})
 		await invalidateAll()
@@ -57,21 +56,13 @@ async function getWishlistedProducts() {
 		wishlistedProducts = WishlistService.fetchWishlist({
 			origin: $page?.data?.origin,
 			storeId: $page?.data?.storeId
-		})
+		}).data
+
 		await invalidateAll()
 	} catch (e) {
 	} finally {
 	}
 }
-
-// let store = {}
-$: store = $page.data?.store
-
-// onMount(() => {
-// 	if (browser) {
-// 		storeStore.subscribe((value) => (store = value))
-// 	}
-// })
 </script>
 
 <div class="w-full">
@@ -168,11 +159,11 @@ $: store = $page.data?.store
 									</div>
 
 									<div class="flex flex-col gap-2 items-center justify-center text-center">
-										{#if store?.isFnb && w.product?.vendor?.businessName}
+										{#if $page.data?.store?.isFnb && w.product?.vendor?.businessName}
 											<h5>
 												{w.product?.vendor?.businessName}
 											</h5>
-										{:else if !store?.isFnb && w.product && w.product?.brand}
+										{:else if !$page.data?.store?.isFnb && w.product && w.product?.brand}
 											<h5>
 												{w.product?.brand.name}
 											</h5>
@@ -197,12 +188,12 @@ $: store = $page.data?.store
 										<div
 											class="flex flex-wrap items-baseline justify-center gap-1.5 text-xs leading-3">
 											<span class="text-base font-bold whitespace-nowrap leading-3">
-												{currency(w.product?.price, store?.currencySymbol)}
+												{currency(w.product?.price, $page.data?.store?.currencySymbol)}
 											</span>
 
 											{#if w.product?.mrp > w.product?.price}
 												<span class="whitespace-nowrap text-zinc-500 line-through">
-													{currency(w.product?.mrp, store?.currencySymbol)}
+													{currency(w.product?.mrp, $page.data?.store?.currencySymbol)}
 												</span>
 
 												{#if Math.floor(((w.product?.mrp - w.product?.price) / w.product?.mrp) * 100) > 0}

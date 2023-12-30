@@ -14,6 +14,6 @@ export const fetchPaymentMethods = async ({ origin = null, storeId, sid = null }
 		}
 		return res?.data || []
 	} catch (e) {
-		error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }

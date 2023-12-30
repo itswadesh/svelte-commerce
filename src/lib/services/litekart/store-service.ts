@@ -1,5 +1,4 @@
 import {
-	id,
 	address,
 	adminUrl,
 	alert,
@@ -10,22 +9,23 @@ import {
 	domain,
 	DOMAIN,
 	email,
+	favicon,
 	GOOGLE_ANALYTICS_ID,
 	GOOGLE_CLIENT_ID,
+	id,
+	IMAGE_CDN_URL,
 	keywords,
 	loginUrl,
 	logo,
 	phone,
+	saasDomain,
+	saasName,
 	searchbarText,
 	siteTitle,
+	themeColor,
 	websiteLegalName,
 	websiteName,
-	themeColor,
-	favicon,
-	saasName,
-	saasDomain,
-	weightUnit,
-	IMAGE_CDN_URL
+	weightUnit
 } from '$lib/config'
 import { fetchInit } from './init-service'
 
@@ -35,13 +35,11 @@ export const getStoreData = async ({
 	host,
 	url,
 	cookies,
-	server = false,
 	sid = null
 }: any) => {
 	let storeRes: any = {}
 
 	let store = {
-		id,
 		address,
 		adminUrl,
 		alert,
@@ -64,6 +62,7 @@ export const getStoreData = async ({
 		guaranteed_response_time: null,
 		hellobar: {},
 		homePageSliderBannerImageHeight: null,
+		id,
 		IMAGE_CDN_URL: IMAGE_CDN_URL,
 		imageCdn: {},
 		isBulkOrder: false,

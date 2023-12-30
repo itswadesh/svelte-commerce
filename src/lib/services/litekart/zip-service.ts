@@ -12,7 +12,7 @@ export const findZip = async ({ zip, origin }) => {
 		return data
 	} catch (err) {
 		const e = err as Error
-		error(e.status, e.data.message)
+		error(e.status, e.data.message);
 	}
 }
 
@@ -22,7 +22,7 @@ export const findByCity = async (locals: App.Locals, q: string) => {
 		return data
 	} catch (err) {
 		const e = err as Error
-		error(e.status, e.data.message)
+		error(e.status, e.data.message);
 	}
 }
 
@@ -32,7 +32,7 @@ export const groupByCity = async (locals: App.Locals, id: string) => {
 		return data
 	} catch (err) {
 		const e = err as Error
-		error(e.status, e.data.message)
+		error(e.status, e.data.message);
 	}
 }
 
@@ -42,6 +42,6 @@ export const groupByState = async (locals: App.Locals, id: string) => {
 		return data
 	} catch (err) {
 		const e = err as Error
-		error(e.status, e.data.message)
+		error(e.status, e.data.message);
 	}
 }

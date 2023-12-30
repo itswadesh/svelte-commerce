@@ -58,6 +58,7 @@ export const fetchCategory = async ({
 export const fetchAllCategories = async ({
 	featured = false,
 	isCors = false,
+	limit = null,
 	origin,
 	sid = null,
 	storeId
@@ -65,7 +66,8 @@ export const fetchAllCategories = async ({
 	try {
 		let res = {}
 
-		let catQ = `categories?store=${storeId}`
+		let catQ = `categories?store=${storeId}&page=0&limit=${limit || '1000'}`
+
 		if (featured) {
 			catQ += '&featured=true'
 		}

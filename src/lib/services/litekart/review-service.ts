@@ -1,21 +1,31 @@
 import { error } from '@sveltejs/kit'
 import { getAPI, post } from '$lib/utils/api'
 import { getBySid } from '$lib/utils/server'
-import type { ProductReview } from '$lib/types'
+import type { Error, ProductReview } from '$lib/types'
 const isServer = import.meta.env.SSR
 
-export const fetchReviews = async ({ origin, storeId, search, sort, currentPage, sid = null }) => {
+export const fetchReviews = async ({
+	isCors = false,
+	origin,
+	storeId,
+	search,
+	sort,
+	currentPage,
+	sid = null
+}: any) => {
 	try {
 		let res: any = {}
 
-		if (isServer) {
+		if (isServer || isCors) {
 			res = await getBySid(
-				`es/reviews?search=${search || ''}&sort=${sort}&page=${currentPage}&store=${storeId}`,
+				`es/reviews?search=${search || ''
+				}&sort=${sort}&page=${currentPage}&store=${storeId}`,
 				sid
 			)
 		} else {
 			res = await getAPI(
-				`es/reviews?search=${search || ''}&sort=${sort}&page=${currentPage}&store=${storeId}`,
+				`es/reviews?search=${search || ''
+				}&sort=${sort}&page=${currentPage}&store=${storeId}`,
 				origin
 			)
 		}
@@ -28,19 +38,26 @@ export const fetchReviews = async ({ origin, storeId, search, sort, currentPage,
 			page: res.page
 		}
 	} catch (e) {
-		error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }
 
 // Fetch product reviews
 
-export const fetchProductReviews = async ({ origin, page, slug, sid = null, storeId }) => {
+export const fetchProductReviews = async ({
+	isCors = false,
+	origin,
+	page,
+	slug,
+	sid = null,
+	storeId
+}: any) => {
 	try {
 		let productReviewsRes: any = {}
 		// : ProductReviews[]
 		let productReviews: ProductReview = []
 
-		if (isServer) {
+		if (isServer || isCors) {
 			productReviewsRes = await getBySid(
 				`reviews/product-reviews?slug=${slug}&page=${page}&sort=-createdAt&store=${storeId}`,
 				sid
@@ -60,7 +77,16 @@ export const fetchProductReviews = async ({ origin, page, slug, sid = null, stor
 	}
 }
 
-export const saveReview = async ({ id, images, message, oid, pid, rating, storeId, origin }) => {
+export const saveReview = async ({
+	id,
+	images,
+	message,
+	oid,
+	pid,
+	rating,
+	storeId,
+	origin
+}: any) => {
 	try {
 		let res: any = {}
 
@@ -80,6 +106,6 @@ export const saveReview = async ({ id, images, message, oid, pid, rating, storeI
 
 		return res
 	} catch (e) {
-		error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }

@@ -6,23 +6,23 @@ import { postBySid } from '$lib/utils/server'
 const isServer = import.meta.env.SSR
 
 export const updatePopulatiry = async ({
-	pid,
-	storeId,
-	origin,
-	isCors = false,
-	sid = null
+    pid,
+    storeId,
+    origin,
+    isCors = false,
+    sid = null
 }: any) => {
-	try {
-		let res: any | {}
+    try {
+        let res: any | {}
 
-		if (isServer || isCors) {
-			res = await postBySid(`update-popularity`, { pid, store: storeId }, sid)
-		} else {
-			res = await post(`update-popularity`, { pid, store: storeId }, origin)
-		}
+        if (isServer || isCors) {
+            res = await postBySid(`update-popularity`, { pid, store: storeId }, sid)
+        } else {
+            res = await post(`update-popularity`, { pid, store: storeId }, origin)
+        }
 
-		return res
-	} catch (err) {
-		error(err.status, err.message)
-	}
+        return res
+    } catch (err) {
+        error(err.status, err.message);
+    }
 }

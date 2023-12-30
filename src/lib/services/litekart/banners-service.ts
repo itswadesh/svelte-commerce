@@ -7,7 +7,6 @@ export const fetchBanners = async ({
 	origin,
 	pageId,
 	storeId,
-	server = false,
 	sid = null
 }: any) => {
 	try {
@@ -21,7 +20,7 @@ export const fetchBanners = async ({
 
 		return res.data || []
 	} catch (e) {
-		error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }
 
@@ -29,7 +28,6 @@ export const fetchBannersGroup = async ({
 	origin,
 	storeId,
 	pageId,
-	server = false,
 	sid = null
 }: any) => {
 	try {
@@ -43,6 +41,6 @@ export const fetchBannersGroup = async ({
 
 		return res.data || []
 	} catch (e) {
-		error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }

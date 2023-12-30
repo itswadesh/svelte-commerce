@@ -5,7 +5,6 @@ export const saveScheduleDemo = async ({
 	storeId,
 	schedule,
 	origin,
-	server = false,
 	sid = null
 }: any) => {
 	try {
@@ -22,6 +21,6 @@ export const saveScheduleDemo = async ({
 
 		return res
 	} catch (e) {
-		error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }

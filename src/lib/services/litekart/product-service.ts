@@ -8,13 +8,15 @@ const isServer = import.meta.env.SSR
 
 export const searchProducts = async ({ origin, query, storeId, sid = null }) => {
 	try {
-		let res = {}
-		let products = []
+		let category = ''
 		let count = 0
+		let err = ''
 		let facets = ''
 		let pageSize = 0
-		let category = ''
-		let err = ''
+		let products = []
+		let res = {}
+		let style_tags = []
+
 		if (isServer) {
 			res = await getBySid(`es/products?${query}&store=${storeId}`, sid)
 		} else {
@@ -37,25 +39,33 @@ export const searchProducts = async ({ origin, query, storeId, sid = null }) => 
 
 		return { products, count, facets, pageSize, err }
 	} catch (e) {
-		throw error(e.status || 500, e)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
 // Fetch all products
 
-export const fetchProducts = async ({ origin, storeId, sid = null }) => {
+export const fetchProducts = async ({
+	id,
+	query = '',
+	origin,
+	isCors = false,
+	sid = null,
+	slug,
+	storeId
+}: any) => {
 	try {
 		let res: AllProducts | {} = {}
 
-		if (isServer) {
-			res = await getBySid(`es/products?store=${storeId}`, sid)
+		if (isServer || isCors) {
+			res = await getBySid(`es/products?store=${storeId}&${query}`, sid)
 		} else {
-			res = await getAPI(`es/products?store=${storeId}`, origin)
+			res = await getAPI(`es/products?store=${storeId}&${query}`, origin)
 		}
 
 		return res?.data || []
 	} catch (e) {
-		throw error(e.status || 500, e)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -64,7 +74,6 @@ export const fetchReels = async ({
 	storeId,
 	slug,
 	id,
-	server = false,
 	sid = null
 }: any) => {
 	try {
@@ -80,7 +89,7 @@ export const fetchReels = async ({
 		})
 		return res || {}
 	} catch (e) {
-		throw error(e.status || 500, e)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -97,7 +106,7 @@ export const fetchProduct = async ({ origin, slug, id, storeId, isCors = false, 
 		}
 		return res || {}
 	} catch (e) {
-		throw error(e.status || 500, e)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -113,7 +122,7 @@ export const fetchProduct2 = async ({ origin, slug, storeId, id, sid = null }) =
 		}
 		return res || {}
 	} catch (e) {
-		throw error(e.status || 500, e)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -125,7 +134,7 @@ export const fetchProductsOfCategory = async ({
 	query,
 	sid = null,
 	storeId,
-	zip
+	zip = null
 }) => {
 	try {
 		let res = {}
@@ -135,6 +144,7 @@ export const fetchProductsOfCategory = async ({
 		let pageSize = 0
 		let category = {}
 		let err = ''
+
 
 		if (isServer) {
 			res = await getBySid(
@@ -172,6 +182,7 @@ export const fetchProductsOfCategory = async ({
 // Fetch next product
 
 export const fetchNextPageProducts = async ({
+	isCors = false,
 	origin,
 	storeId,
 	categorySlug,
@@ -183,7 +194,7 @@ export const fetchNextPageProducts = async ({
 		let nextPageData = []
 		let res = {}
 
-		if (isServer) {
+		if (isServer || isCors) {
 			res = await getBySid(
 				`es/products?categories=${categorySlug}&store=${storeId}&page=${nextPage}&${searchParams}`,
 				sid
@@ -213,17 +224,24 @@ export const fetchNextPageProducts = async ({
 			nextPageData: nextPageData || []
 		}
 	} catch (e) {
-		throw error(e.status || 500, e)
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
 // Fetch related products
 
-export const fetchRelatedProducts = async ({ origin, storeId, categorySlug, pid, sid = null }) => {
+export const fetchRelatedProducts = async ({
+	isCors = false,
+	origin,
+	storeId,
+	categorySlug,
+	pid,
+	sid = null
+}) => {
 	try {
 		let relatedProductsRes = {}
 
-		if (isServer) {
+		if (isServer || isCors) {
 			relatedProductsRes = await getBySid(
 				`es/products?categories=${categorySlug}&store=${storeId}`,
 				sid
@@ -241,6 +259,6 @@ export const fetchRelatedProducts = async ({ origin, storeId, categorySlug, pid,
 
 		return relatedProducts || []
 	} catch (e) {
-		throw error(e.status || 500, e)
+		error(e.status, e.data?.message || e.message)
 	}
 }

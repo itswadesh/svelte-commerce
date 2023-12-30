@@ -3,11 +3,11 @@ import { getBySid } from '$lib/utils/server'
 const isServer = import.meta.env.SSR
 
 
-export const fetchDeals = async ({ origin, query, storeId, server = false, sid = null }: any) => {
+export const fetchDeals = async ({ isCors = false, origin, query, storeId, sid = null }: any) => {
 	try {
 		let res: any = {}
 
-		if (isServer) {
+		if (isServer || isCors) {
 			res = await getBySid(`deals?store=${storeId}`, sid)
 		} else {
 			res = await getAPI(`deals?store=${storeId}`, origin)
