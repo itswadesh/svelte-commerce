@@ -25,6 +25,9 @@ import { WishlistService } from '$lib/services'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
 import noEmptyWishlist from '$lib/assets/no/empty-wishlist.svg'
 import WishlistSkeleton from './_WishlistSkeleton.svelte'
+import { updateCartStore } from '$lib/store/cart'
+import { onMount } from 'svelte'
+import { browser } from '$app/environment'
 
 export let wishlistedProducts,
 	loadingProduct = []
@@ -37,7 +40,7 @@ async function removeFromWishlist(id, wx) {
 		await WishlistService.toggleWishlistService({
 			pid: id,
 			vid: id,
-			storeId: $page.data.store?.id,
+			storeId: $page?.data?.storeId,
 			origin: $page.data.origin
 		})
 		await invalidateAll()
@@ -52,8 +55,9 @@ async function getWishlistedProducts() {
 	try {
 		wishlistedProducts = WishlistService.fetchWishlist({
 			origin: $page?.data?.origin,
-			storeId: $page?.data?.store?.id
-		})
+			storeId: $page?.data?.storeId
+		}).data
+
 		await invalidateAll()
 	} catch (e) {
 	} finally {
@@ -111,6 +115,7 @@ async function getWishlistedProducts() {
 							method="POST"
 							use:enhance="{() => {
 								return async ({ result }) => {
+									updateCartStore({ data: result.data })
 									result.data.qty < 0
 										? fireGTagEvent('remove_from_cart', result.data)
 										: fireGTagEvent('add_to_cart', result.data)
@@ -119,7 +124,7 @@ async function getWishlistedProducts() {
 										bounceItemFromTop = false
 									}, 3000)
 									await removeFromWishlist(w.product?._id, wx)
-									await invalidateAll()
+									// await invalidateAll()
 									await applyAction(result)
 								}
 							}}"

@@ -1,15 +1,9 @@
-import { del, getAPI, post } from '$lib/utils/api'
-import { getBySid, postBySid, postt, delBySid } from '$lib/utils/server'
+import { getAPI } from '$lib/utils/api'
+import { getBySid, postBySid, delBySid } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 const isServer = import.meta.env.SSR
 
-export const fetchAddresses = async ({
-	origin,
-	storeId,
-	isCors = false,
-	server = false,
-	sid = null
-}: any) => {
+export const fetchAddresses = async ({ origin, storeId, isCors = false, sid = null }) => {
 	try {
 		let res: any = {}
 		let preSelectedAddress = ''
@@ -25,20 +19,16 @@ export const fetchAddresses = async ({
 
 		return { myAddresses: { data: myAddresses }, preSelectedAddress, count: res?.count }
 	} catch (e) {
-		// if (e.message !== 'Unauthorized') {
 		error(e.status, e.data?.message || e.message)
-		// } else {
-		// 	return { myAddresses: { data: [] }, preSelectedAddress: {}, count: 0 }
-		// }
 	}
 }
 
-export const fetchAddress = async ({ origin, storeId, server = false, sid = null, id }: any) => {
+export const fetchAddress = async ({ origin, storeId, sid = null, id }) => {
 	try {
 		let res: any = {}
 
 		if (isServer) {
-			res = await getBySid(`addresses/${id}`, sid)
+			res = await getBySid(`addresses/${id}?store=${storeId}`, sid)
 		} else {
 			res = await getAPI(`addresses/${id}`, origin)
 		}
@@ -62,9 +52,8 @@ export const saveAddress = async ({
 	zip,
 	storeId,
 	origin,
-	server = false,
 	sid = null
-}: any) => {
+}) => {
 	try {
 		let res: any = {}
 
@@ -96,20 +85,17 @@ export const editAddress = async ({
 	id,
 	address,
 	city,
-	company,
 	country,
 	email,
 	firstName,
 	lastName,
-	locality,
 	phone,
 	state,
 	zip,
 	storeId,
 	origin,
-	server = false,
 	sid = null
-}: any) => {
+}) => {
 	try {
 		let res: any = {}
 		res = await postBySid(
@@ -122,7 +108,6 @@ export const editAddress = async ({
 				email,
 				firstName,
 				lastName,
-				locality,
 				phone,
 				state,
 				zip,
@@ -136,9 +121,10 @@ export const editAddress = async ({
 	}
 }
 
-export const deleteAddress = async ({ id, storeId, origin, sid = null }: any) => {
+export const deleteAddress = async ({ id, storeId, origin, sid = null }) => {
 	try {
-		const res = await delBySid(`addresses/${id}`, sid)
+		const res = await delBySid(`addresses/${id}?store=${storeId}`, sid)
+		return res
 	} catch (err) {
 		error(err.status || 400, err.message)
 	}

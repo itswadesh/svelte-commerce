@@ -3,7 +3,7 @@ import { getAPI } from '$lib/utils/api'
 import { getBySid } from '$lib/utils/server'
 const isServer = import.meta.env.SSR
 
-export const fetchProductCheckDiscount = async ({ origin, pid, storeId, server = false, sid = null }: any) => {
+export const fetchProductCheckDiscount = async ({ origin, pid, storeId, sid = null }: any) => {
 	try {
 		let res: any = {}
 
@@ -15,6 +15,6 @@ export const fetchProductCheckDiscount = async ({ origin, pid, storeId, server =
 
 		return res || {}
 	} catch (e) {
-		throw error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }

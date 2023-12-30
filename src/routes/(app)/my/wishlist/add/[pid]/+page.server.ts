@@ -4,14 +4,13 @@ import { redirect } from '@sveltejs/kit'
 export async function load({ locals, cookies, params, request }) {
 	try {
 		const pid = params.pid
-		const storeId = locals.store?.id
+		const storeId = locals.storeId
 		const sid = locals.sid
 		const isExistInWishlist = await WishlistService.checkWishlist({
 			pid,
 			vid: pid,
-			storeId: locals.store?.id,
+			storeId: locals.storeId,
 			origin: locals.origin,
-			server: true,
 			sid
 		})
 
@@ -22,12 +21,15 @@ export async function load({ locals, cookies, params, request }) {
 				storeId,
 				sid,
 				origin: locals.origin,
-				server: true
 			})
 		}
 
-		throw redirect(307, '/my/wishlist')
+		redirect(307, '/my/wishlist');
 	} catch (e) {
-		throw redirect(307, '/auth/login')
+		if (e.status === 307 && e.location) {
+			redirect(307, e.location);
+		} else if (e.status === 401) {
+			redirect(307, '/auth/login');
+		}
 	}
 }
