@@ -15,7 +15,7 @@ let seoProps = {
 
 <section>
 	<div class="mb-20">
-		<Wishlist wishlistedProducts="{data.wishlistedProducts}" />
+		<Wishlist wishlistedProducts="{data.data}" />
 	</div>
 
 	<!-- MOBILE FOOTER -->

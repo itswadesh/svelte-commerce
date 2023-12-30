@@ -3,7 +3,7 @@ import { getAPI } from '$lib/utils/api'
 import { getBySid } from '$lib/utils/server'
 const isServer = import.meta.env.SSR
 
-export const fetchGallery = async ({ origin, storeId, server = false, sid = null }: any) => {
+export const fetchGallery = async ({ origin, storeId, sid = null }: any) => {
 	try {
 		let res: any = {}
 
@@ -15,6 +15,6 @@ export const fetchGallery = async ({ origin, storeId, server = false, sid = null
 
 		return res.data || []
 	} catch (e) {
-		error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }

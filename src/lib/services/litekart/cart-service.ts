@@ -8,10 +8,12 @@ export const fetchCartData = async ({ cartId = null, origin, sid = null, storeId
 	try {
 		let res = {}
 
-		if (isServer) {
-			res = await getBySid(`cart?store=${storeId}&cart_id=${cartId}`, sid)
-		} else {
-			res = await getAPI(`cart?store=${storeId}&cart_id=${cartId}`, origin)
+		if (cartId) {
+			if (isServer) {
+				res = await getBySid(`cart?store=${storeId}&cart_id=${cartId}`, sid)
+			} else {
+				res = await getAPI(`cart?store=${storeId}&cart_id=${cartId}`, origin)
+			}
 		}
 
 		return res || {}
@@ -31,12 +33,15 @@ export const fetchRefreshCart = async ({
 	try {
 		let res = {}
 
-		if (isServer || isCors) {
-			res = await getBySid(`carts/refresh-cart?store=${storeId}&cart_id=${cartId}`, sid)
-			// res = await getBySid(`carts/my?store=${storeId}`, sid)
-		} else {
-			res = await getAPI(`carts/refresh-cart?store=${storeId}&cart_id=${cartId}`, origin)
+		if (cartId) {
+			if (isServer || isCors) {
+				res = await getBySid(`carts/refresh-cart?store=${storeId}&cart_id=${cartId}`, sid)
+				// res = await getBySid(`carts/my?store=${storeId}`, sid)
+			} else {
+				res = await getAPI(`carts/refresh-cart?store=${storeId}&cart_id=${cartId}`, origin)
+			}
 		}
+
 		return res || {}
 	} catch (err) {
 		return {}
@@ -49,10 +54,12 @@ export const fetchMyCart = async ({ cartId = null, origin, sid = null, storeId }
 	try {
 		let res = {}
 
-		if (isServer) {
-			res = await getBySid(`carts/my?store=${storeId}&cart_id=${cartId}`, sid)
-		} else {
-			res = await getAPI(`carts/my?store=${storeId}&cart_id=${cartId}`, origin)
+		if (cartId) {
+			if (isServer) {
+				res = await getBySid(`carts/my?store=${storeId}&cart_id=${cartId}`, sid)
+			} else {
+				res = await getAPI(`carts/my?store=${storeId}&cart_id=${cartId}`, origin)
+			}
 		}
 
 		return res || {}
@@ -75,6 +82,7 @@ export const addToCartService = async ({
 }) => {
 	try {
 		let res = {}
+
 		if (isServer) {
 			res = await postBySid(
 				`carts/add-to-cart?store=${storeId}&cart_id=${cartId}`,
@@ -109,7 +117,7 @@ export const addToCartService = async ({
 
 		return res || {}
 	} catch (e) {
-		error(e.status || 500, e)
+		error(e.status, e.data?.message || e.message);
 	}
 }
 
@@ -149,7 +157,6 @@ export const applyCouponService = async ({
 	cartId,
 	code,
 	origin,
-	server = false,
 	sid = null,
 	storeId
 }) => {
@@ -176,7 +183,6 @@ export const removeCouponService = async ({
 	cartId,
 	code,
 	origin,
-	server = false,
 	sid = null,
 	storeId
 }) => {

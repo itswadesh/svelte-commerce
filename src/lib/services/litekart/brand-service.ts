@@ -3,7 +3,7 @@ import { getBySid } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 const isServer = import.meta.env.SSR
 
-export const fetchBrands = async ({ origin, storeId, server = false, sid = null }: any) => {
+export const fetchBrands = async ({ origin, storeId, sid = null }: any) => {
 	try {
 		let res: any = {}
 
@@ -15,6 +15,6 @@ export const fetchBrands = async ({ origin, storeId, server = false, sid = null 
 
 		return res.data || []
 	} catch (e) {
-		error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }

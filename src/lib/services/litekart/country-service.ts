@@ -3,7 +3,7 @@ import { getBySid } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 const isServer = import.meta.env.SSR
 
-export const fetchCountries = async ({ origin, storeId, server = false, sid = null }: any) => {
+export const fetchCountries = async ({ origin, storeId, sid = null }: any) => {
 	try {
 		let res: any = {}
 
@@ -15,7 +15,7 @@ export const fetchCountries = async ({ origin, storeId, server = false, sid = nu
 
 		return res?.data || []
 	} catch (e) {
-		error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }
 
@@ -23,7 +23,6 @@ export const fetchStates = async ({
 	origin,
 	storeId,
 	countryCode,
-	server = false,
 	sid = null
 }: any) => {
 	try {
@@ -43,6 +42,6 @@ export const fetchStates = async ({
 
 		return res?.data || []
 	} catch (e) {
-		error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }

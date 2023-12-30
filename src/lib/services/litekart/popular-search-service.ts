@@ -8,7 +8,6 @@ export const savePopularSearch = async ({
 	id,
 	text,
 	origin,
-	server = false,
 	sid = null
 }: any) => {
 	try {
@@ -27,7 +26,7 @@ export const savePopularSearch = async ({
 
 		return res
 	} catch (e) {
-		error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }
 
@@ -42,6 +41,6 @@ export const fetchPopularSearch = async ({ origin, storeId, sid = null, isCors =
 
 		return res.data || []
 	} catch (e) {
-		error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }

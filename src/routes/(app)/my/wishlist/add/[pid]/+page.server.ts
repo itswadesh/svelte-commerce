@@ -11,7 +11,6 @@ export async function load({ locals, cookies, params, request }) {
 			vid: pid,
 			storeId: locals.storeId,
 			origin: locals.origin,
-			server: true,
 			sid
 		})
 
@@ -21,12 +20,16 @@ export async function load({ locals, cookies, params, request }) {
 				vid: pid,
 				storeId,
 				sid,
-				origin: locals.origin
+				origin: locals.origin,
 			})
 		}
 
-		redirect(307, '/my/wishlist')
+		redirect(307, '/my/wishlist');
 	} catch (e) {
-		redirect(307, '/auth/login')
+		if (e.status === 307 && e.location) {
+			redirect(307, e.location);
+		} else if (e.status === 401) {
+			redirect(307, '/auth/login');
+		}
 	}
 }

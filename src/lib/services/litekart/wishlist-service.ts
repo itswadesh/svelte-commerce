@@ -23,7 +23,6 @@ export const moveUnavailableItemsToWishlist = async ({ origin, storeId, sid = nu
 
 		return res || {}
 	} catch (e) {
-		// console.log('error at move unavailable items to wishlist', e)
 		error(e.status, e.data?.message || e.message)
 	}
 }
@@ -34,7 +33,6 @@ export const fetchWishlist = async ({
 	search = null,
 	sort = '-createdAt',
 	currentPage = 1,
-	server = false,
 	sid = null
 }) => {
 	try {
@@ -52,7 +50,7 @@ export const fetchWishlist = async ({
 			)
 		}
 
-		return res?.data || []
+		return res || []
 	} catch (e) {
 		error(e.status, e.data?.message || e.message)
 	}
@@ -64,7 +62,6 @@ export const checkWishlist = async ({
 	pid,
 	vid,
 	isCors = false,
-	server = false,
 	sid = null
 }) => {
 	// if (!sid) return false
@@ -85,12 +82,12 @@ export const checkWishlist = async ({
 }
 
 export const toggleWishlistService = async ({
-	storeId,
 	pid,
 	vid,
-	origin,
 	isCors = false,
-	sid = null
+	origin,
+	sid = null,
+	storeId,
 }) => {
 	try {
 		let res: any = {}

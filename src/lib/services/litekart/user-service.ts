@@ -3,11 +3,16 @@ import { getBySid, postBySid } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 const isServer = import.meta.env.SSR
 
-export const fetchMeData = async ({ origin, storeId, server = false, sid = null }: any) => {
+export const fetchMeData = async ({
+	isCors = false,
+	origin,
+	storeId,
+	sid = null
+}: any) => {
 	try {
 		let res: any = {}
 
-		if (isServer) {
+		if (isServer || isCors) {
 			res = await getBySid(`users/me?store=${storeId}`, sid)
 		} else {
 			res = await getAPI(`users/me?store=${storeId}`, origin)
@@ -15,7 +20,7 @@ export const fetchMeData = async ({ origin, storeId, server = false, sid = null 
 
 		return res || {}
 	} catch (e) {
-		error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }
 
@@ -28,7 +33,6 @@ export const signupService = async ({
 	passwordConfirmation,
 	storeId,
 	origin,
-	server = false,
 	sid = null
 }: any) => {
 	try {
@@ -50,7 +54,7 @@ export const signupService = async ({
 
 		return res
 	} catch (e) {
-		error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }
 
@@ -58,7 +62,6 @@ export const googleOneTapLoginService = async ({
 	data,
 	storeId,
 	origin,
-	server = false,
 	sid = null
 }: any) => {
 	try {
@@ -68,7 +71,7 @@ export const googleOneTapLoginService = async ({
 
 		return res
 	} catch (e) {
-		error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }
 
@@ -89,7 +92,7 @@ export const loginService = async ({ email, password, storeId, origin, sid = nul
 		return res
 	} catch (e) {
 		if (e.status === 401) e.message = 'email or password is invalid'
-		error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }
 
@@ -115,7 +118,7 @@ export const forgotPasswordService = async ({
 
 		return res
 	} catch (e) {
-		error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }
 
@@ -126,7 +129,6 @@ export const resetPasswordService = async ({
 	passwordConfirmation,
 	storeId,
 	origin,
-	server = false,
 	sid = null
 }: any) => {
 	try {
@@ -146,7 +148,7 @@ export const resetPasswordService = async ({
 
 		return res
 	} catch (e) {
-		error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }
 export const changePasswordService = async ({
@@ -155,7 +157,6 @@ export const changePasswordService = async ({
 	passwordConfirmation,
 	storeId,
 	origin,
-	server = false,
 	sid = null
 }: any) => {
 	try {
@@ -174,7 +175,7 @@ export const changePasswordService = async ({
 
 		return res
 	} catch (e) {
-		error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }
 
@@ -187,7 +188,6 @@ export const getOtpService = async ({
 	passwordConfirmation,
 	storeId,
 	origin,
-	server = false,
 	sid = null
 }: any) => {
 	try {
@@ -204,18 +204,11 @@ export const getOtpService = async ({
 
 		return res
 	} catch (e) {
-		error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }
 
-export const verifyOtpService = async ({
-	phone,
-	otp,
-	storeId,
-	origin,
-	server = false,
-	sid = null
-}: any) => {
+export const verifyOtpService = async ({ phone, otp, storeId, origin }: any) => {
 	try {
 		let res: any = {}
 
@@ -231,11 +224,11 @@ export const verifyOtpService = async ({
 
 		return res
 	} catch (e) {
-		error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }
 
-export const logoutService = async ({ storeId, origin, server = false, sid = null }: any) => {
+export const logoutService = async ({ storeId, origin, sid = null }: any) => {
 	try {
 		let res: any = {}
 
@@ -243,7 +236,7 @@ export const logoutService = async ({ storeId, origin, server = false, sid = nul
 
 		return res
 	} catch (e) {
-		error(e?.status || 500, e.data?.message || e.message)
+		error(e?.status || 500, e.data?.message || e.message);
 	}
 }
 
@@ -251,7 +244,6 @@ export const updateProfileService = async ({
 	storeId,
 	e,
 	origin,
-	server = false,
 	sid = null
 }: any) => {
 	try {
@@ -261,7 +253,7 @@ export const updateProfileService = async ({
 
 		return res
 	} catch (e) {
-		error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }
 
@@ -305,6 +297,6 @@ export const verifyEmail = async ({
 
 		return res
 	} catch (e) {
-		error(e.status, e.data?.message || e.message)
+		error(e.status, e.data?.message || e.message);
 	}
 }

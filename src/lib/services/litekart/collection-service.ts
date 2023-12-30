@@ -6,13 +6,13 @@ export const fetchCollections = async ({
 	origin,
 	query,
 	storeId,
-	server = false,
+	isCors = false,
 	sid = null
 }: any) => {
 	try {
 		let res: any = {}
 
-		if (isServer) {
+		if (isServer || isCors) {
 			res = await getBySid(`collections?store=${storeId}`, sid)
 		} else {
 			res = await getAPI(`collections?store=${storeId}`, origin)
