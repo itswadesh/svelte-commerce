@@ -25,6 +25,9 @@ devDependencies:
   '@builder.io/partytown':
     specifier: 0.8.1
     version: 0.8.1
+  '@egjs/svelte-grid':
+    specifier: 1.15.0
+    version: 1.15.0
   '@playwright/test':
     specifier: ^1.40.1
     version: 1.40.1
@@ -1895,6 +1898,47 @@ packages:
     resolution: {integrity: sha512-p4xhEtQCPe8YFJ8e7KT9RptnT+f4lvtbmXymbp1t0bLp+USkNMTxrRMNc3Dlr2w2fpxyX7uA0CyAeU3ju84O4A==}
     engines: {node: '>=18.0.0'}
     hasBin: true
+    dev: true
+
+  /@cfcs/core@0.0.24:
+    resolution: {integrity: sha512-feB38qu+eDk0Pggh/yR7gjaNmvUYA2uCxHP3Pz2MLE4LZ/9jPdtu8bzCSI47yTEhWyZCF5Pk698hdz8IN2mTjA==}
+    dependencies:
+      '@egjs/component': 3.0.5
+    dev: true
+
+  /@egjs/children-differ@1.0.1:
+    resolution: {integrity: sha512-DRvyqMf+CPCOzAopQKHtW+X8iN6Hy6SFol+/7zCUiE5y4P/OB8JP8FtU4NxtZwtafvSL4faD5KoQYPj3JHzPFQ==}
+    dependencies:
+      '@egjs/list-differ': 1.0.1
+    dev: true
+
+  /@egjs/component@3.0.5:
+    resolution: {integrity: sha512-cLcGizTrrUNA2EYE3MBmEDt2tQv1joVP1Q3oDisZ5nw0MZDx2kcgEXM+/kZpfa/PAkFvYVhRUZwytIQWoN3V/w==}
+    dev: true
+
+  /@egjs/grid@1.15.0:
+    resolution: {integrity: sha512-qJ+JxwA+mN47PYaAcYHXttmINEpsN4Mf9uBQZ6m7innIRGHw3zDf47vlTxb0iZwWGynRAwl3BjPli6oc80vuWg==}
+    dependencies:
+      '@egjs/children-differ': 1.0.1
+      '@egjs/component': 3.0.5
+      '@egjs/imready': 1.4.1
+    dev: true
+
+  /@egjs/imready@1.4.1:
+    resolution: {integrity: sha512-JIOBs4lB7FYdsKi5uvz2j3SObX8eShtZjtqlOH41tm185aJOQZwiKBK8+V4MxzG4X6DqVhpdN8UcuVwBbElfsg==}
+    dependencies:
+      '@cfcs/core': 0.0.24
+      '@egjs/component': 3.0.5
+    dev: true
+
+  /@egjs/list-differ@1.0.1:
+    resolution: {integrity: sha512-OTFTDQcWS+1ZREOdCWuk5hCBgYO4OsD30lXcOCyVOAjXMhgL5rBRDnt/otb6Nz8CzU0L/igdcaQBDLWc4t9gvg==}
+    dev: true
+
+  /@egjs/svelte-grid@1.15.0:
+    resolution: {integrity: sha512-K7g/hAxpNhDJI1vUexISStkcEwFs0f9/ql6vhoZAb2vyU0NjFk/kPWJYrZghdzqUvoutaIwtEP5r8VVaGEXMOw==}
+    dependencies:
+      '@egjs/grid': 1.15.0
     dev: true
 
   /@esbuild/android-arm64@0.19.9:
