@@ -98,7 +98,7 @@ const handleSubmit = async (e) => {
 			on:click="{() => remove(images)}">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
-				class="h-5 w-5 "
+				class="h-5 w-5"
 				fill="none"
 				viewBox="0 0 24 24"
 				stroke="currentColor">
@@ -162,14 +162,14 @@ const handleSubmit = async (e) => {
 		{/if}
 
 		<input
-			bind:files="{files}"
+			bind:files
 			on:change="{() => handleSubmit(files[0])}"
 			class="absolute inset-0 z-10 h-36 w-36 shrink-0 grow-0 cursor-pointer opacity-0"
 			type="file"
 			disabled="{uploading || deleting}"
-			accept="{accept}"
+			{accept}
 			max-size="{maxSize}"
-			multiple="{multi}" 
-			enctype="multipart/form-data"/>
+			multiple="{multi}"
+			enctype="multipart/form-data" />
 	</div>
 </div>

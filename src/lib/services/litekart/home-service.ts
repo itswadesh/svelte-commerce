@@ -9,7 +9,7 @@ export const fetchHome = async ({
 	origin,
 	pageId = 'home',
 	sid = null,
-	storeId,
+	storeId
 }: any) => {
 	try {
 		let categories = {}
@@ -34,16 +34,11 @@ export const fetchHome = async ({
 			youMayLike: res?.youMayLike
 		}
 	} catch (e) {
-		error(e.status, e.data?.message || e.message || e);
+		error(e.status, e.data?.message || e.message || e)
 	}
 }
 
-export const fetchCategoriesProducts = async ({
-	categories,
-	origin,
-	sid = null,
-	storeId,
-}) => {
+export const fetchCategoriesProducts = async ({ categories, origin, sid = null, storeId }) => {
 	let categoriesProducts
 
 	if (isServer) {

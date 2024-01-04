@@ -32,7 +32,7 @@ onMount(async () => {
 })
 </script>
 
-<svelte:window bind:innerWidth="{innerWidth}" />
+<svelte:window bind:innerWidth />
 
 {#if products}
 	<div class="mb-5 sm:mb-10">

@@ -2,7 +2,6 @@ import { test, expect } from '@playwright/test'
 import { host, storeId, API_URL } from './config'
 
 test('Test Fetch All Category', async ({ request }) => {
-
 	const categories = await request.get(`${API_URL}categories?store=${storeId}`)
 
 	// expect categories status code should 200
@@ -12,10 +11,7 @@ test('Test Fetch All Category', async ({ request }) => {
 	// console.log('categories', await categories.json())
 })
 
-
-
 test('Test Fetch MegaMenu', async ({ request }) => {
-
 	const megamenu = false
 
 	const resMegamenu = await request.get(
@@ -28,7 +24,6 @@ test('Test Fetch MegaMenu', async ({ request }) => {
 
 	// console.log('megamenu', await resMegamenu.json())
 })
-
 
 test('Test Fetch Category', async ({ request }) => {
 	// const host = 'demo.litekart.in'
@@ -56,4 +51,3 @@ test('Test Fetch Category', async ({ request }) => {
 
 	// console.log('categories', await resCategory.json())
 })
-

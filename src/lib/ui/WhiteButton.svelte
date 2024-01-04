@@ -48,8 +48,8 @@ function handleClick() {
 </script>
 
 <button
-	type="{type}"
-	title="{title}"
+	{type}
+	{title}
 	class="relative transform items-center justify-center overflow-hidden rounded border px-4 py-2 text-center font-semibold tracking-wider text-zinc-800 transition duration-300 focus:outline-none focus:ring-0 focus:ring-offset-0
 	{clazz}
 	{disabled

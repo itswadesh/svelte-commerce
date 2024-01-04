@@ -4,12 +4,7 @@ import { getBySid } from '$lib/utils/server'
 
 const isServer = import.meta.env.SSR
 
-export const fetchMenuData = async ({
-	isCors = false,
-	origin,
-	sid = null,
-	storeId
-}) => {
+export const fetchMenuData = async ({ isCors = false, origin, sid = null, storeId }) => {
 	try {
 		let data: []
 
@@ -21,6 +16,6 @@ export const fetchMenuData = async ({
 
 		return data.data || []
 	} catch (e) {
-		error(e.status, e.data?.message || e.message);
+		error(e.status, e.data?.message || e.message)
 	}
 }

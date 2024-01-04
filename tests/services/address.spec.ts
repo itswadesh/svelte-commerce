@@ -48,8 +48,8 @@ test('Test: save new address', async ({ request }) => {
 		lastName: 'Meena',
 		phone: '+9145678907888',
 		state: 'Delhi',
-		zip: '110001', 
-        store: storeId
+		zip: '110001',
+		store: storeId
 	}
 
 	const addressRes = await request.post(`${API_URL}addresses`, {
@@ -60,53 +60,45 @@ test('Test: save new address', async ({ request }) => {
 		}
 	})
 
-
-    expect(addressRes.status()).toBe(201)
+	expect(addressRes.status()).toBe(201)
 })
 
-
 test('Test: edit existing address', async ({ request }) => {
-    
-    const cookieRes = await getCookie()
+	const cookieRes = await getCookie()
 
-
-    	const address = await request.get(`${API_URL}addresses/my?store=${storeId}`, {
-				headers: {
-					cookie: cookieRes
-				}
-			})
+	const address = await request.get(`${API_URL}addresses/my?store=${storeId}`, {
+		headers: {
+			cookie: cookieRes
+		}
+	})
 
 	const addressId = (await address.json()).data[0]._id
 
+	const dummy_address = {
+		id: addressId,
+		address: '450, New Main Road',
+		city: 'Bangalore',
+		country: 'India',
+		email: 'ashok@litekart.in',
+		firstName: 'Ashok Kumar',
+		lastName: 'Meena',
+		locality: 'Near Oil Pump',
+		phone: '+91987654321',
+		state: 'Karnataka',
+		zip: '560001',
+		store: storeId
+	}
 
-    const dummy_address = {
-			id: addressId,
-			address: '450, New Main Road',
-			city: 'Bangalore',
-			country: 'India',
-			email: 'ashok@litekart.in',
-			firstName: 'Ashok Kumar',
-			lastName: 'Meena',
-			locality: 'Near Oil Pump',
-			phone: '+91987654321',
-			state: 'Karnataka',
-			zip: '560001',
-			store: storeId
+	const editAddress = await request.post(`${API_URL}addresses`, {
+		data: JSON.stringify(dummy_address),
+		headers: {
+			'Content-Type': 'application/json',
+			cookie: cookieRes
 		}
+	})
 
-    const editAddress = await request.post(`${API_URL}addresses`, {
-			data: JSON.stringify(dummy_address),
-			headers: {
-				'Content-Type': 'application/json',
-				cookie: cookieRes
-			}
-		})
-
-    expect(editAddress.status()).toBe(201)
-
+	expect(editAddress.status()).toBe(201)
 })
-
-
 
 test('Test: delete existing address', async ({ request }) => {
 	const cookieRes = await getCookie()
@@ -117,18 +109,13 @@ test('Test: delete existing address', async ({ request }) => {
 		}
 	})
 
-    const addressId = (await address.json()).data[0]._id
+	const addressId = (await address.json()).data[0]._id
 
- 
+	const deleteAddressById = await request.delete(`${API_URL}addresses/${addressId}`, {
+		headers: {
+			cookie: cookieRes
+		}
+	})
 
-    const deleteAddressById = await request.delete(`${API_URL}addresses/${addressId}`, {
-        headers: {
-            cookie: cookieRes
-        }
-    })
-    
-
-    expect(deleteAddressById.status()).toBe(200)
-
-
+	expect(deleteAddressById.status()).toBe(200)
 })

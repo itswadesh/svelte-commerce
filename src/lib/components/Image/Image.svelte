@@ -38,7 +38,7 @@ onMount(() => {
 	src="{!loaded
 		? `${getCdnImageUrl(src, $page.data.store?.IMAGE_CDN_URL)}?width=2&height=4`
 		: `${getCdnImageUrl(src, $page.data.store?.IMAGE_CDN_URL)}?width=${w}&height=${h}`}"
-	alt="{alt}"
-	class:loaded="{loaded}"
+	{alt}
+	class:loaded
 	class="{clazz} whitespace-pre-line"
 	bind:this="{thisImage}" />

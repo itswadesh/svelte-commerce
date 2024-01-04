@@ -227,11 +227,11 @@ onMount(() => {
 
 		<!-- Popular products -->
 
-		<PopularProductsHome data="{data}" />
+		<PopularProductsHome {data} />
 
 		<!-- Trending products -->
 
-		<TrendingProductsHome data="{data}" />
+		<TrendingProductsHome {data} />
 
 		<!-- Trending products -->
 		<!-- Note: Write the categories with comma separation -->
@@ -239,11 +239,11 @@ onMount(() => {
 
 		<!-- Collections Home -->
 
-		<CollectionsHome data="{data}" />
+		<CollectionsHome {data} />
 
 		<!-- Collections Home 2 -->
 
-		<CollectionsHome2 data="{data}" />
+		<CollectionsHome2 {data} />
 
 		<!-- Shop your stone -->
 
@@ -253,7 +253,7 @@ onMount(() => {
 
 		<!-- Customer feedback -->
 
-		<CustomerFeedback data="{data}" />
+		<CustomerFeedback {data} />
 
 		<!-- Legal Footer Information -->
 

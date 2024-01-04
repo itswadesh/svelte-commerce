@@ -15,6 +15,6 @@ export const fetchCoupons = async ({ isCors = false, origin, storeId, sid = null
 
 		return res
 	} catch (e) {
-		error(e.status, e.data?.message || e.message);
+		error(e.status, e.data?.message || e.message)
 	}
 }

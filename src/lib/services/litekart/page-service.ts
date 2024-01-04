@@ -15,7 +15,7 @@ export const fetchPages = async ({ isCors = false, origin, storeId, sid = null }
 
 		return res.data || []
 	} catch (e) {
-		error(e.status, e.data?.message || e.message);
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -31,7 +31,7 @@ export const fetchLatestPages = async ({ origin, storeId, sid = null }: any) => 
 
 		return res.data || []
 	} catch (e) {
-		error(e.status, e.data?.message || e.message);
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -47,6 +47,6 @@ export const fetchPage = async ({ isCors = false, origin, id, slug, storeId, sid
 
 		return res || {}
 	} catch (e) {
-		error(e.status, e.data?.message || e.message);
+		error(e.status, e.data?.message || e.message)
 	}
 }

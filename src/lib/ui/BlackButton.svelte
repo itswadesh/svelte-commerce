@@ -9,7 +9,9 @@
 	background-position: 50% 50%;
 	background-repeat: no-repeat;
 	background-size: 0% 0%;
-	transition: background-size 0.5s, color 0.5s;
+	transition:
+		background-size 0.5s,
+		color 0.5s;
 }
 
 .bg-center-to-corner:hover {
@@ -27,7 +29,9 @@
 	background-position: 50% 50%;
 	background-repeat: no-repeat;
 	background-size: 0% 0%;
-	transition: background-size 0.5s, color 0.5s;
+	transition:
+		background-size 0.5s,
+		color 0.5s;
 }
 
 .bg-center-to-corner-reverse-color:hover {
@@ -50,8 +54,8 @@ export { clazz as class }
 </script>
 
 <button
-	type="{type}"
-	title="{title}"
+	{type}
+	{title}
 	class="{clazz} focus:outline-none
 	{reverseColor ? 'bg-center-to-corner-reverse-color' : 'bg-center-to-corner'}"
 	on:click="{() => dispatch('click')}">

@@ -49,10 +49,10 @@ $: store = $page.data?.store
 					<label class="inline-flex items-center gap-2">
 						<input
 							type="checkbox"
-							name="{name}"
+							{name}
 							id="{i._id}"
-							disabled="{disabled}"
-							required="{required}"
+							{disabled}
+							{required}
 							bind:group="{selectedItems}"
 							value="{i._id}"
 							class="inputcheckbox h-3.5 w-3.5 rounded border border-zinc-200 bg-transparent text-primary-500"

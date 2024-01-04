@@ -4,7 +4,7 @@ import { port } from './tests/ui/config'
 const config: PlaywrightTestConfig = {
 	webServer: {
 		command: 'npm run preview',
-		port,
+		port
 	},
 	testDir: 'tests',
 	timeout: 150000,

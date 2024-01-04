@@ -70,13 +70,13 @@ async function refreshData() {
 	<div class="mb-20 flex min-h-screen w-full flex-col gap-5 lg:flex-row lg:gap-10 lg:px-10">
 		{#if facets}
 			<DesktopFilter
-				facets="{facets}"
-				query="{query}"
+				{facets}
+				{query}
 				class="sticky top-[7.5rem] hidden lg:top-[5.5rem] lg:block"
 				on:clearAll="{refreshData}" />
 
 			<MobileFilter
-				facets="{facets}"
+				{facets}
 				class="sticky top-[4.9rem] z-50 block lg:hidden"
 				on:clearAll="{refreshData}" />
 		{/if}
@@ -115,7 +115,8 @@ async function refreshData() {
 					<div class="flex items-center justify-center" style="height: 60vh;">
 						<div class="m-10 flex flex-col items-center justify-center text-center">
 							<h1 class="mb-10 text-xl capitalize sm:text-2xl lg:text-3xl">
-								Oops!!, No result found {#if data.category?.name} for "{data.category?.name}"{/if}
+								Oops!!, No result found {#if data.category?.name}
+									for "{data.category?.name}"{/if}
 							</h1>
 
 							<div class="mb-5">

@@ -21,7 +21,7 @@ if (modelValue === value) {
 		class="mt-0.5 h-4 w-4 shrink-0 text-primary-500 focus:ring-0 focus:ring-offset-0"
 		name="{value}"
 		on:change="{() => dispatch('change', modelValue)}"
-		value="{value}" />
+		{value} />
 
 	<span class="max-w-max text-sm">
 		<slot />

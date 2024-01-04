@@ -198,7 +198,7 @@ function handleFilterTags() {
 
 <SEO {...seoProps} />
 
-<svelte:window bind:scrollY="{y}" bind:innerWidth="{innerWidth}" on:scroll="{handleOnScroll}" />
+<svelte:window bind:scrollY="{y}" bind:innerWidth on:scroll="{handleOnScroll}" />
 
 <CatelogNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page?.data?.store}">
 	<div class="flex max-w-max flex-col items-start gap-1">
@@ -279,12 +279,12 @@ function handleFilterTags() {
 
 	{#if data.products?.products?.length && data.products.facets}
 		<MobileFilter
-			bind:showFilter="{showFilter}"
-			bind:showSort="{showSort}"
+			bind:showFilter
+			bind:showSort
 			class="block sticky z-40 lg:hidden
 			{store?.hellobar?.active?.val ? 'top-[88px] sm:top-28' : 'top-14 sm:top-20'}"
 			facets="{data.products.facets}"
-			priceRange="{priceRange}"
+			{priceRange}
 			selected="{selectedFilter}"
 			on:clearAll="{refreshData}" />
 	{/if}
@@ -316,7 +316,7 @@ function handleFilterTags() {
 			<DesktopFilter
 				class="sticky hidden lg:block {store?.hellobar?.active?.val ? 'top-56' : 'top-48'}"
 				facets="{data.products.facets}"
-				priceRange="{priceRange}"
+				{priceRange}
 				query="{data.query}"
 				on:clearAll="{refreshData}" />
 		{/if}

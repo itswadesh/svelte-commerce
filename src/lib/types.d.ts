@@ -35,7 +35,7 @@ interface AllProducts {
 	facets: Facet[]
 }
 
-interface Facet { }
+interface Facet {}
 interface EsProduct {
 	_source: Product
 }

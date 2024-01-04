@@ -3,13 +3,7 @@ import { getAPI, post } from '$lib/utils/api'
 import { getBySid } from '$lib/utils/server'
 const isServer = import.meta.env.SSR
 
-export const savePopularSearch = async ({
-	storeId,
-	id,
-	text,
-	origin,
-	sid = null
-}: any) => {
+export const savePopularSearch = async ({ storeId, id, text, origin, sid = null }: any) => {
 	try {
 		let res: any = {}
 
@@ -26,7 +20,7 @@ export const savePopularSearch = async ({
 
 		return res
 	} catch (e) {
-		error(e.status, e.data?.message || e.message);
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -41,6 +35,6 @@ export const fetchPopularSearch = async ({ origin, storeId, sid = null, isCors =
 
 		return res.data || []
 	} catch (e) {
-		error(e.status, e.data?.message || e.message);
+		error(e.status, e.data?.message || e.message)
 	}
 }

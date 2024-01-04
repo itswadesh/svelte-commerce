@@ -54,7 +54,7 @@ onMount(async () => {
 })
 </script>
 
-<svelte:window bind:innerWidth="{innerWidth}" />
+<svelte:window bind:innerWidth />
 
 {#await data?.streamed?.collections then collections}
 	{#if collections?.count > 0}
