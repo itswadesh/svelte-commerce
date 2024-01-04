@@ -69,13 +69,7 @@ export const fetchProducts = async ({
 	}
 }
 
-export const fetchReels = async ({
-	origin,
-	storeId,
-	slug,
-	id,
-	sid = null
-}: any) => {
+export const fetchReels = async ({ origin, storeId, slug, id, sid = null }: any) => {
 	try {
 		let res: AllProducts | {} = {}
 
@@ -144,7 +138,6 @@ export const fetchProductsOfCategory = async ({
 		let pageSize = 0
 		let category = {}
 		let err = ''
-
 
 		if (isServer) {
 			res = await getBySid(

@@ -3,12 +3,7 @@ import { getBySid } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 const isServer = import.meta.env.SSR
 
-export const fetchBanners = async ({
-	origin,
-	pageId,
-	storeId,
-	sid = null
-}: any) => {
+export const fetchBanners = async ({ origin, pageId, storeId, sid = null }: any) => {
 	try {
 		let res: any = {}
 
@@ -20,16 +15,11 @@ export const fetchBanners = async ({
 
 		return res.data || []
 	} catch (e) {
-		error(e.status, e.data?.message || e.message);
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
-export const fetchBannersGroup = async ({
-	origin,
-	storeId,
-	pageId,
-	sid = null
-}: any) => {
+export const fetchBannersGroup = async ({ origin, storeId, pageId, sid = null }: any) => {
 	try {
 		let res: any = {}
 
@@ -41,6 +31,6 @@ export const fetchBannersGroup = async ({
 
 		return res.data || []
 	} catch (e) {
-		error(e.status, e.data?.message || e.message);
+		error(e.status, e.data?.message || e.message)
 	}
 }

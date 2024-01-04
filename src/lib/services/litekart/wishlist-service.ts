@@ -56,14 +56,7 @@ export const fetchWishlist = async ({
 	}
 }
 
-export const checkWishlist = async ({
-	origin,
-	storeId,
-	pid,
-	vid,
-	isCors = false,
-	sid = null
-}) => {
+export const checkWishlist = async ({ origin, storeId, pid, vid, isCors = false, sid = null }) => {
 	// if (!sid) return false
 
 	try {
@@ -87,7 +80,7 @@ export const toggleWishlistService = async ({
 	isCors = false,
 	origin,
 	sid = null,
-	storeId,
+	storeId
 }) => {
 	try {
 		let res: any = {}

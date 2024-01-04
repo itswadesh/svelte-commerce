@@ -15,16 +15,11 @@ export const fetchFaqs = async ({ origin, storeId, sid = null }: any) => {
 
 		return res || {}
 	} catch (e) {
-		error(e.status, e.data?.message || e.message);
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
-export const fetchFaq = async ({
-	slug,
-	origin,
-	sid = null,
-	storeId,
-}: any) => {
+export const fetchFaq = async ({ slug, origin, sid = null, storeId }: any) => {
 	try {
 		let res: any = {}
 
@@ -36,6 +31,6 @@ export const fetchFaq = async ({
 
 		return res || {}
 	} catch (e) {
-		error(e.status, e.data?.message || e.message);
+		error(e.status, e.data?.message || e.message)
 	}
 }
