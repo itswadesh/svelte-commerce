@@ -19,5 +19,5 @@ if (modelValue === value) {
 		<slot />
 	</div>
 
-	<input type="radio" bind:group="{modelValue}" value="{value}" class="hidden" />
+	<input type="radio" bind:group="{modelValue}" {value} class="hidden" />
 </label>

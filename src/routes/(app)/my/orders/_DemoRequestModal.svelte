@@ -108,7 +108,7 @@ function hide(e) {
 					focus:outline-none focus:ring-0 focus:ring-offset-0
 					" />
 
-				<PrimaryButton disabled="{isDisabled}" loading="{loading}" class="w-full" type="submit">
+				<PrimaryButton disabled="{isDisabled}" {loading} class="w-full" type="submit">
 					Schedule
 				</PrimaryButton>
 			</form>

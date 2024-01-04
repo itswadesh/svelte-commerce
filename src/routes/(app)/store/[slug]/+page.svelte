@@ -50,29 +50,29 @@ let media = data.vendor?.banners[0]
 			</li>
 
 			<li>
-				<Telegram text="{text}" url="{url}" />
+				<Telegram {text} {url} />
 			</li>
 
 			<li>
-				<Facebook quote="{text}" url="{url}" />
+				<Facebook quote="{text}" {url} />
 			</li>
 
 			<li>
 				<X
 					class="share-button"
-					text="{text}"
-					url="{url}"
+					{text}
+					{url}
 					hashtags="litekart"
 					via="litekart"
 					related="mobile cover,t-shirt,key chain " />
 			</li>
 
 			<li>
-				<Pinterest url="{url}" media="{media}" description="{text}" />
+				<Pinterest {url} {media} description="{text}" />
 			</li>
 
 			<li>
-				<LinkedIn url="{url}" />
+				<LinkedIn {url} />
 			</li>
 
 			<li>
@@ -95,29 +95,29 @@ let media = data.vendor?.banners[0]
 				</li>
 
 				<li>
-					<Telegram text="{text}" url="{url}" />
+					<Telegram {text} {url} />
 				</li>
 
 				<li>
-					<Facebook quote="{text}" url="{url}" />
+					<Facebook quote="{text}" {url} />
 				</li>
 
 				<li>
 					<X
 						class="share-button"
-						text="{text}"
-						url="{url}"
+						{text}
+						{url}
 						hashtags="litekart"
 						via="litekart"
 						related="mobile cover,t-shirt,key chain " />
 				</li>
 
 				<li>
-					<Pinterest url="{url}" media="{media}" description="{text}" />
+					<Pinterest {url} {media} description="{text}" />
 				</li>
 
 				<li>
-					<LinkedIn url="{url}" />
+					<LinkedIn {url} />
 				</li>
 
 				<li>

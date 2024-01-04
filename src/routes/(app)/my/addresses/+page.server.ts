@@ -110,7 +110,8 @@ const saveAddress = async ({ request, cookies, locals }) => {
 			}
 
 			if (!shipping_address.phone.startsWith('+')) {
-				shipping_address.phone = (selectedShippingAddressCountry.dialCode || '+91') + shipping_address.phone
+				shipping_address.phone =
+					(selectedShippingAddressCountry.dialCode || '+91') + shipping_address.phone
 			}
 
 			try {
@@ -156,7 +157,8 @@ const saveAddress = async ({ request, cookies, locals }) => {
 			}
 
 			if (!shipping_address.phone.startsWith('+')) {
-				shipping_address.phone = (selectedShippingAddressCountry.dialCode || '+91') + shipping_address.phone
+				shipping_address.phone =
+					(selectedShippingAddressCountry.dialCode || '+91') + shipping_address.phone
 			}
 
 			try {
@@ -197,7 +199,8 @@ const saveAddress = async ({ request, cookies, locals }) => {
 				}
 
 				if (!new_billing_address.phone.startsWith('+')) {
-					new_billing_address.phone = (selectedBillingAddressCountry.dialCode || '+91') + new_billing_address.phone
+					new_billing_address.phone =
+						(selectedBillingAddressCountry.dialCode || '+91') + new_billing_address.phone
 				}
 
 				try {

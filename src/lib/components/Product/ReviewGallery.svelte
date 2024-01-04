@@ -66,7 +66,7 @@ onMount(async () => {
 			{#if gallery?.length > 1}
 				<svelte:component
 					this="{Splide}"
-					bind:currentImageIndex="{currentImageIndex}"
+					bind:currentImageIndex
 					options="{{
 						rewind: true,
 						lazyLoad: true,

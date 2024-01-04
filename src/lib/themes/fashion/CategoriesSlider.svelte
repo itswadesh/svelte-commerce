@@ -35,7 +35,7 @@ onMount(async () => {
 })
 </script>
 
-<svelte:window bind:innerWidth="{innerWidth}" />
+<svelte:window bind:innerWidth />
 
 {#if categories}
 	<div>

@@ -1,8 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { storeId, API_URL, getCookie } from './config'
 
-
-
 // fetch cart data
 
 // test('Test: fetch cart Data from server', async ({ request }) => {
@@ -44,7 +42,6 @@ test('Test: fetch logged in user cart Data from server', async ({ request }) => 
 // add to cart
 
 test('Test: add to cart', async ({ request }) => {
-
 	const cartId = undefined
 
 	const cookieRes = await getCookie()

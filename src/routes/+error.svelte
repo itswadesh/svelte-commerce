@@ -10,7 +10,6 @@ export let data
 
 let q = ''
 let showSidebar = false
-
 </script>
 
 <main class="h-screen w-full bg-zinc-100">

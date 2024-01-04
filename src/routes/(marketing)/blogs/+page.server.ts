@@ -1,13 +1,6 @@
 import { BlogService } from '$lib/services'
 
-export async function load({
-	cookies,
-	fetch,
-	locals,
-	params,
-	parent,
-	url,
-}) {
+export async function load({ cookies, fetch, locals, params, parent, url }) {
 	const { me, origin, sid, store, storeId } = locals
 
 	const currentPage = +url.searchParams.get('page') || 1

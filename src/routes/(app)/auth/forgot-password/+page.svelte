@@ -71,12 +71,12 @@ async function submit() {
 
 	<h2 class="mb-8 w-full text-center text-2xl font-semibold text-primary-500">Forgot Password</h2>
 
-	<Error err="{err}" />
+	<Error {err} />
 
 	<form class="flex flex-col gap-5" on:submit|preventDefault="{submit}">
 		<TextboxFloating type="email" label="Email" class="w-full" required bind:value="{email}" />
 
-		<PrimaryButton type="submit" loading="{loading}" class="w-full">SEND EMAIL</PrimaryButton>
+		<PrimaryButton type="submit" {loading} class="w-full">SEND EMAIL</PrimaryButton>
 
 		<div class="mx-auto flex max-w-max flex-col gap-1 text-center text-sm">
 			<a

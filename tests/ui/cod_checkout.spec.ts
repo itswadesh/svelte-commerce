@@ -14,7 +14,7 @@ test('test', async ({ page }) => {
 	await page.getByRole('button', { name: 'Add to Bag' }).click()
 	await page.getByRole('link', { name: 'Click to visit cart' }).click()
 	await page.getByRole('button', { name: 'Select Address' }).click()
-    await page.fill('input[placeholder="Enter email or mobile number"]', 'hi@litekart.in')
+	await page.fill('input[placeholder="Enter email or mobile number"]', 'hi@litekart.in')
 	await page.getByLabel('Email address').press('Tab')
 	await page.getByLabel('Password').fill('litekart')
 	await page.getByLabel('Password').press('Tab')

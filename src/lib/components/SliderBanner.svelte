@@ -275,12 +275,7 @@ onMount(async () => {
 						{/if} -->
 
 						<div class="flex flex-col gap-2">
-							<RatingStarDisplayBig
-								textWhite
-								biggerSize
-								rating="{rating}"
-								ratingCount="{ratingCount}"
-								reviewCount="{reviewCount}" />
+							<RatingStarDisplayBig textWhite biggerSize {rating} {ratingCount} {reviewCount} />
 
 							{#if needClaim}
 								<div class="text-sm font-semibold">
@@ -333,7 +328,11 @@ onMount(async () => {
 								type="button"
 								class="whitespace-nowrap rounded-md border-2 border-white py-2 px-4 font-semibold tracking-wide text-white transition duration-700 hover:border-green-500 hover:text-green-500 focus:outline-none sm:py-3 sm:px-6"
 								on:click="{() => (showPhotosModal = true)}">
-								See {#if data?.banners?.length > 1} Photos {:else} Photo {/if}
+								See {#if data?.banners?.length > 1}
+									Photos
+								{:else}
+									Photo
+								{/if}
 							</button>
 						{/if}
 
@@ -352,10 +351,7 @@ onMount(async () => {
 	</div>
 </div>
 
-<Gallery
-	bind:showPhotosModal="{showPhotosModal}"
-	images="{data.banners}"
-	title="{data?.businessName}" />
+<Gallery bind:showPhotosModal images="{data.banners}" title="{data?.businessName}" />
 
 <!-- {#if showPhotosModal}
 	<div

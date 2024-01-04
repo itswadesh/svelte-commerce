@@ -67,7 +67,7 @@ function filterProducts(selectedCategory: string) {
 						<input
 							type="radio"
 							bind:group="{selectedCategory}"
-							name="{name}"
+							{name}
 							id="{c.value}"
 							class="hidden"
 							value="{c.value}"
@@ -99,7 +99,7 @@ function filterProducts(selectedCategory: string) {
 						<input
 							type="radio"
 							bind:group="{selectedCategory}"
-							name="{name}"
+							{name}
 							id="{c.value}"
 							class="hidden"
 							value="{c.value}"

@@ -14,7 +14,7 @@ export async function load({ params, locals }) {
 			return { blog, latestBlogs }
 		}
 	} catch (e) {
-		error(404, 'Blog not found');
+		error(404, 'Blog not found')
 	} finally {
 	}
 }

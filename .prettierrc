@@ -5,9 +5,7 @@
 	"svelteSortOrder": "options-styles-scripts-markup",
 	"svelteStrictMode": true,
 	"bracketSameLine": true,
-	"plugins": [
-		"prettier-plugin-svelte"
-	],
+	"plugins": ["prettier-plugin-svelte"],
 	"svelteAllowShorthand": true,
 	"printWidth": 100,
 	"useTabs": true,

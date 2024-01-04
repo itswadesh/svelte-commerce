@@ -57,7 +57,7 @@ export let label = '',
 	placeholder = ' ',
 	required = false,
 	tabindex = 0,
-	maxlength=4000
+	maxlength = 4000
 
 export { className as class }
 </script>
@@ -67,108 +67,101 @@ export { className as class }
 		{#if type === 'text'}
 			<input
 				type="text"
-				bind:value="{value}"
-				id="{id}"
-				name="{name}"
+				bind:value
+				{id}
+				{name}
 				class="floating-input w-full bg-transparent focus:outline-none"
-				placeholder="{placeholder}"
+				{placeholder}
 				aria-label="{label}"
-				required="{required}"
-				tabindex="{tabindex}"
-				maxlength="{maxlength}"
+				{required}
+				{tabindex}
+				{maxlength}
 				on:input="{() => dispatch('input')}"
-				on:focus="{() => dispatch('focus')}"
-			/>
+				on:focus="{() => dispatch('focus')}" />
 		{:else if type === 'email'}
 			<input
 				type="email"
-				bind:value="{value}"
-				id="{id}"
-				name="{name}"
+				bind:value
+				{id}
+				{name}
 				class="floating-input w-full bg-transparent focus:outline-none"
-				placeholder="{placeholder}"
+				{placeholder}
 				aria-label="{label}"
-				required="{required}"
-				tabindex="{tabindex}"
-				maxlength="{maxlength}"
+				{required}
+				{tabindex}
+				{maxlength}
 				on:input="{() => dispatch('input')}"
-				on:focus="{() => dispatch('focus')}"
-			/>
+				on:focus="{() => dispatch('focus')}" />
 		{:else if type === 'password'}
 			<input
 				type="password"
-				bind:value="{value}"
+				bind:value
 				id="password"
 				name="password"
 				class="floating-input w-full bg-transparent focus:outline-none"
-				placeholder="{placeholder}"
+				{placeholder}
 				aria-label="{label}"
-				required="{required}"
-				tabindex="{tabindex}"
-				maxlength="{maxlength}"
+				{required}
+				{tabindex}
+				{maxlength}
 				on:input="{() => dispatch('input')}"
-				on:focus="{() => dispatch('focus')}"
-			/>
+				on:focus="{() => dispatch('focus')}" />
 		{:else if type === 'date'}
 			<input
 				type="date"
-				bind:value="{value}"
-				id="{id}"
-				name="{name}"
+				bind:value
+				{id}
+				{name}
 				class="floating-input w-full bg-transparent focus:outline-none"
-				placeholder="{placeholder}"
+				{placeholder}
 				aria-label="{label}"
-				required="{required}"
-				tabindex="{tabindex}"
-				maxlength="{maxlength}"
+				{required}
+				{tabindex}
+				{maxlength}
 				on:input="{() => dispatch('input')}"
-				on:focus="{() => dispatch('focus')}"
-			/>
+				on:focus="{() => dispatch('focus')}" />
 		{:else if type === 'time'}
 			<input
 				type="time"
-				bind:value="{value}"
+				bind:value
 				name="time"
 				id="time"
 				class="floating-input w-full bg-transparent focus:outline-none"
-				placeholder="{placeholder}"
+				{placeholder}
 				aria-label="{label}"
-				required="{required}"
-				tabindex="{tabindex}"
-				maxlength="{maxlength}"
+				{required}
+				{tabindex}
+				{maxlength}
 				on:input="{() => dispatch('input')}"
-				on:focus="{() => dispatch('focus')}"
-			/>
+				on:focus="{() => dispatch('focus')}" />
 		{:else if type === 'number'}
 			<input
 				type="number"
-				bind:value="{value}"
-				id="{id}"
-				name="{name}"
+				bind:value
+				{id}
+				{name}
 				class="floating-input w-full bg-transparent focus:outline-none"
-				placeholder="{placeholder}"
+				{placeholder}
 				aria-label="{label}"
-				required="{required}"
-				tabindex="{tabindex}"
-				maxlength="{maxlength}"
+				{required}
+				{tabindex}
+				{maxlength}
 				on:input="{() => dispatch('input')}"
-				on:focus="{() => dispatch('focus')}"
-			/>
+				on:focus="{() => dispatch('focus')}" />
 		{:else if type === 'tel'}
 			<input
 				type="tel"
-				bind:value="{value}"
-				id="{id}"
-				name="{name}"
+				bind:value
+				{id}
+				{name}
 				class="floating-input w-full bg-transparent focus:outline-none"
-				placeholder="{placeholder}"
+				{placeholder}
 				aria-label="{label}"
-				required="{required}"
-				tabindex="{tabindex}"
-				maxlength="{maxlength}"
+				{required}
+				{tabindex}
+				{maxlength}
 				on:input="{() => dispatch('input')}"
-				on:focus="{() => dispatch('focus')}"
-			/>
+				on:focus="{() => dispatch('focus')}" />
 		{/if}
 		<span class="highlight"></span>
 

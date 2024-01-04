@@ -1,13 +1,10 @@
 import { test, expect } from '@playwright/test'
 import { host, storeId, API_URL, randomPhone, randomEmail, getCookie } from './config'
 
-
 // console.log('randomPhone', randomPhone)
 // console.log('randomEmail', randomEmail)
 
-
 test('Test: user login flow ', async ({ request }) => {
-
 	const data = {
 		email: 'hi@litekart.in',
 		password: 'litekart',
@@ -25,7 +22,6 @@ test('Test: user login flow ', async ({ request }) => {
 })
 
 test('Test: user registration flow ', async ({ request }) => {
-
 	// please change the email address before running this test
 
 	const formData = {
@@ -48,7 +44,6 @@ test('Test: user registration flow ', async ({ request }) => {
 	expect(res.status()).toBe(200)
 })
 
-
 test('Test: user forgot password flow ', async ({ request }) => {
 	const formData = {
 		email: 'hi@litekart.com',
@@ -66,9 +61,7 @@ test('Test: user forgot password flow ', async ({ request }) => {
 	expect(res.status()).toBe(200)
 })
 
-
 test('Test: user change password flow ', async ({ request }) => {
-
 	const cookieRes = await getCookie()
 
 	const formData = {
@@ -89,10 +82,7 @@ test('Test: user change password flow ', async ({ request }) => {
 	expect(res.status()).toBe(200)
 })
 
-
-
 test('Test: user reset password flow ', async ({ request }) => {
-
 	// please change the token before running this test
 
 	const formData = {
@@ -113,10 +103,7 @@ test('Test: user reset password flow ', async ({ request }) => {
 	expect(res.status()).toBe(200)
 })
 
-
-
 test('Test: get otp on phone number ', async ({ request }) => {
-
 	// please change the phone number before running this test
 
 	const formData = {
@@ -134,9 +121,7 @@ test('Test: get otp on phone number ', async ({ request }) => {
 	expect(res.status()).toBe(201)
 })
 
-
 test('Test: verify otp on phone number ', async ({ request }) => {
-
 	// please change the otp and phone number before running this test
 
 	const formData = {
@@ -155,8 +140,6 @@ test('Test: verify otp on phone number ', async ({ request }) => {
 	expect(res.status()).toBe(200)
 })
 
-
-
 test('Test: get user profile ', async ({ request }) => {
 	const cookieRes = await getCookie()
 
@@ -171,7 +154,6 @@ test('Test: get user profile ', async ({ request }) => {
 })
 
 test('Test: update user profile ', async ({ request }) => {
-
 	const cookieRes = await getCookie()
 
 	const formData = {
@@ -192,7 +174,6 @@ test('Test: update user profile ', async ({ request }) => {
 	expect(res.status()).toBe(200)
 })
 
-
 test('Test: logout user ', async ({ request }) => {
 	const cookieRes = await getCookie()
 
@@ -211,9 +192,7 @@ test('Test: logout user ', async ({ request }) => {
 	expect(res.status()).toBe(200)
 })
 
-
 test('Test: verify email address ', async ({ request }) => {
-
 	// please change id and token and signautre before running this test
 
 	const formData = {

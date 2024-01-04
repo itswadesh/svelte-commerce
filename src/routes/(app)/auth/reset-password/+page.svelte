@@ -94,7 +94,7 @@ async function submit(p) {
 
 	<h2 class="mb-8 w-full text-center text-2xl font-semibold text-primary-500">Reset Password</h2>
 
-	<Error err="{err}" />
+	<Error {err} />
 
 	<form class="mb-5 flex flex-col gap-5" on:submit|preventDefault="{() => submit(password)}">
 		<div class="relative">
@@ -195,7 +195,7 @@ async function submit(p) {
 			</button>
 		</div>
 
-		<PrimaryButton type="submit" loading="{loading}" class="w-full">UPDATE PASSWORD</PrimaryButton>
+		<PrimaryButton type="submit" {loading} class="w-full">UPDATE PASSWORD</PrimaryButton>
 	</form>
 
 	<div class="mx-auto flex max-w-max flex-col gap-1 text-center text-sm">

@@ -115,5 +115,5 @@ export {
 	StoreInformationFooter,
 	Stripe,
 	TrustBaggeContainer,
-	UserForm,
+	UserForm
 }
