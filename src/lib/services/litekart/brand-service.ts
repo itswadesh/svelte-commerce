@@ -15,6 +15,6 @@ export const fetchBrands = async ({ origin, storeId, sid = null }: any) => {
 
 		return res.data || []
 	} catch (e) {
-		error(e.status, e.data?.message || e.message);
+		error(e.status, e.data?.message || e.message)
 	}
 }

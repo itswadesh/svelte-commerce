@@ -15,7 +15,7 @@ export const fetchBlogs = async ({ query, origin = null, storeId, sid = null }) 
 
 		return res || {}
 	} catch (e) {
-		error(e.status, e.data?.message || e.message);
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -31,7 +31,7 @@ export const fetchLatestBlogs = async ({ origin = null, storeId, sid = null }) =
 
 		return res.data || []
 	} catch (e) {
-		error(e.status, e.data?.message || e.message);
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -47,6 +47,6 @@ export const fetchBlog = async ({ slug, origin = null, storeId, sid = null }) =>
 
 		return res || {}
 	} catch (e) {
-		error(e.status, e.data?.message || e.message);
+		error(e.status, e.data?.message || e.message)
 	}
 }

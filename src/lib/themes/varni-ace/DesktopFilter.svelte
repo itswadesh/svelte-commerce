@@ -190,7 +190,9 @@ function handleToggleSubCategory2(c, cx) {
 
 		<h6 class="font-bold tracking-wide">
 			<span>
-				{#if filterLength} {filterLength} {/if}
+				{#if filterLength}
+					{filterLength}
+				{/if}
 			</span>
 
 			<span>

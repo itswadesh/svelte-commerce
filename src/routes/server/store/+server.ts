@@ -83,6 +83,6 @@ export async function GET({ cookies, request, locals, setHeaders }) {
 		// cookies.set('storeId', storeId, { path: '/' })
 		// locals.storeId = storeId
 		setHeaders({ 'Cache-Control': 'max-age=60' })
-	} catch (e) { }
+	} catch (e) {}
 	return json({ store, menu, popularSearches, megamenu })
 }

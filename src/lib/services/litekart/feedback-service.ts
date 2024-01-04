@@ -2,12 +2,7 @@ import { getAPI } from '$lib/utils/api'
 import { getBySid } from '$lib/utils/server'
 const isServer = import.meta.env.SSR
 
-export const fetchFeedbacks = async ({
-	origin,
-	query,
-	storeId,
-	sid = null
-}: any) => {
+export const fetchFeedbacks = async ({ origin, query, storeId, sid = null }: any) => {
 	try {
 		let res: any = {}
 

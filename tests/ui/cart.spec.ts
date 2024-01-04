@@ -21,18 +21,16 @@ test('addToCart working as from home page', async ({ page }) => {
 
 test('add to bag from product page', async ({ page }) => {
 	// Navigate to the cart page
-	await page.goto(`${app_url}product/khaki-women-casual-long-sleeve-v-neck-patchwork-slim-pullover-t-shirt`)
+	await page.goto(
+		`${app_url}product/khaki-women-casual-long-sleeve-v-neck-patchwork-slim-pullover-t-shirt`
+	)
 	await page.getByRole('button', { name: 'Add to Bag' }).click()
 	await page.getByRole('button', { name: 'Add to Bag' }).click()
 	await page.getByRole('link', { name: 'Click to visit cart' }).click()
 	//   await page.getByText('(3 items )').click();
 })
 
-
-
-
 //add to cart and remove from cart
-
 
 test('test', async ({ page }) => {
 	await page.goto('http://localhost:3000/')

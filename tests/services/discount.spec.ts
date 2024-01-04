@@ -1,7 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { storeId, API_URL, getCookie } from './config'
 
-
 test('Test: fetch product discount', async ({ request }) => {
 	const cookieRes = await getCookie()
 

@@ -117,7 +117,7 @@ export const addToCartService = async ({
 
 		return res || {}
 	} catch (e) {
-		error(e.status, e.data?.message || e.message);
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
@@ -153,13 +153,7 @@ export const createBackOrder = async ({ pid, qty, origin = null, sid = null, sto
 	}
 }
 
-export const applyCouponService = async ({
-	cartId,
-	code,
-	origin,
-	sid = null,
-	storeId
-}) => {
+export const applyCouponService = async ({ cartId, code, origin, sid = null, storeId }) => {
 	try {
 		let res = {}
 
@@ -179,13 +173,7 @@ export const applyCouponService = async ({
 	}
 }
 
-export const removeCouponService = async ({
-	cartId,
-	code,
-	origin,
-	sid = null,
-	storeId
-}) => {
+export const removeCouponService = async ({ cartId, code, origin, sid = null, storeId }) => {
 	try {
 		let res = {}
 
@@ -226,7 +214,6 @@ export const updateCart = async ({
 				sid
 			)
 		} else {
-
 			res = await post(
 				`carts/update-cart`,
 				{
@@ -309,7 +296,6 @@ export const updateCart3 = async ({
 				sid
 			)
 		} else {
-
 			res = await post(
 				`carts/update-cart`,
 				{

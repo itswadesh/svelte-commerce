@@ -19,6 +19,6 @@ let nativeLoading = false
 <IntersectionObserver once="{true}" let:intersecting>
 	{#if intersecting || nativeLoading}
 		<!-- noLazy="{intersecting}" -->
-		<Image alt="{alt}" src="{src}" width="{width}" height="{height}" clazz="{clazz}" />
+		<Image {alt} {src} {width} {height} {clazz} />
 	{/if}
 </IntersectionObserver>

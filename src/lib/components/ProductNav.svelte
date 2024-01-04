@@ -34,7 +34,7 @@ onMount(() => {
 })
 </script>
 
-<svelte:window bind:scrollY="{scrollY}" />
+<svelte:window bind:scrollY />
 
 <nav
 	class="minimum-width-rem fixed inset-x-0 top-0 flex h-14 w-full items-center justify-center px-3 sm:h-20 sm:px-10 lg:hidden
@@ -89,7 +89,7 @@ onMount(() => {
 			</button>
 
 			{#if show}
-				<AutosuggestModal bind:show="{show}" />
+				<AutosuggestModal bind:show />
 			{/if}
 
 			<!-- Wishlist-->

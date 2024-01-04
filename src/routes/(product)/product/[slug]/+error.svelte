@@ -4,7 +4,9 @@ h1 {
 	line-height: 150px;
 	font-weight: 700;
 	color: #252932;
-	text-shadow: rgba(61, 61, 61, 0.3) 1px 1px, rgba(61, 61, 61, 0.2) 2px 2px,
+	text-shadow:
+		rgba(61, 61, 61, 0.3) 1px 1px,
+		rgba(61, 61, 61, 0.2) 2px 2px,
 		rgba(61, 61, 61, 0.3) 3px 3px;
 }
 </style>
@@ -14,6 +16,7 @@ import { page } from '$app/stores'
 import errAnimated from '$lib/assets/no/error.svg'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 </script>
+
 <!-- <pre>{JSON.stringify($page, null, 2)}</pre> -->
 <div class="flex h-[70vh] flex-col items-center justify-center text-center sm:h-[92vh]">
 	{#if $page.status === 404}

@@ -15,16 +15,11 @@ export const fetchCountries = async ({ origin, storeId, sid = null }: any) => {
 
 		return res?.data || []
 	} catch (e) {
-		error(e.status, e.data?.message || e.message);
+		error(e.status, e.data?.message || e.message)
 	}
 }
 
-export const fetchStates = async ({
-	origin,
-	storeId,
-	countryCode,
-	sid = null
-}: any) => {
+export const fetchStates = async ({ origin, storeId, countryCode, sid = null }: any) => {
 	try {
 		let res: any = {}
 
@@ -42,6 +37,6 @@ export const fetchStates = async ({
 
 		return res?.data || []
 	} catch (e) {
-		error(e.status, e.data?.message || e.message);
+		error(e.status, e.data?.message || e.message)
 	}
 }

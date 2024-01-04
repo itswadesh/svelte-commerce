@@ -194,7 +194,7 @@ function toggle2(cx) {
 		{#await data.banners}
 			<div class="h-96 w-full bg-zinc-200 animate-pulse"></div>
 		{:then banners}
-			<Hero banners="{banners}" />
+			<Hero {banners} />
 		{/await}
 
 		<!-- Hero banners -->

@@ -112,7 +112,7 @@ function submit() {
 							<PrimaryButton
 								type="submit"
 								loadingringsize="xs"
-								loading="{loading}"
+								{loading}
 								disabled="{disableSubmitButton}"
 								class="whitespace-nowrap text-xs">
 								{confirmButtonText}

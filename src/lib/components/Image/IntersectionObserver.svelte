@@ -36,5 +36,5 @@ onMount(() => {
 </script>
 
 <span bind:this="{container}">
-	<slot intersecting="{intersecting}" />
+	<slot {intersecting} />
 </span>

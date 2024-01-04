@@ -66,7 +66,7 @@ function changePincode() {
 			bind:value="{pincode}"
 			maxlength="6"
 			placeholder="Enter pincode"
-			disabled="{disabled}"
+			{disabled}
 			class="w-full rounded disabled:bg-zinc-100 bg-transparent py-3 px-4 pr-24 text-sm font-semibold placeholder:font-normal focus:outline-none" />
 
 		{#if !deliveryDetails}

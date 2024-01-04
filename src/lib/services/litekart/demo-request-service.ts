@@ -1,12 +1,7 @@
 import { error } from '@sveltejs/kit'
 import { post } from '$lib/utils/api'
 
-export const saveScheduleDemo = async ({
-	storeId,
-	schedule,
-	origin,
-	sid = null
-}: any) => {
+export const saveScheduleDemo = async ({ storeId, schedule, origin, sid = null }: any) => {
 	try {
 		let res: any = {}
 
@@ -21,6 +16,6 @@ export const saveScheduleDemo = async ({
 
 		return res
 	} catch (e) {
-		error(e.status, e.data?.message || e.message);
+		error(e.status, e.data?.message || e.message)
 	}
 }

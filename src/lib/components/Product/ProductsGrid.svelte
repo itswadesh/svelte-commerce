@@ -1,6 +1,5 @@
 <script lang="ts">
-import {DummyProductCard,ProductCard} from '$lib/components'
-
+import { DummyProductCard, ProductCard } from '$lib/components'
 
 export let title = 'Recommended Products'
 export let products = []

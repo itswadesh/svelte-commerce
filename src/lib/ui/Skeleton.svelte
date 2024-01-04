@@ -4,7 +4,7 @@ export let small = false
 
 <div class="flex w-full animate-pulse gap-5">
 	<div
-		class="rounded bg-zinc-200  
+		class="rounded bg-zinc-200
 		{small ? 'w-14 h-14 sm:w-20 sm:h-20' : 'w-24 h-24 sm:w-40 sm:h-40'}">
 	</div>
 

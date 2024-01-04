@@ -15,6 +15,6 @@ export const fetchProductCheckDiscount = async ({ origin, pid, storeId, sid = nu
 
 		return res || {}
 	} catch (e) {
-		error(e.status, e.data?.message || e.message);
+		error(e.status, e.data?.message || e.message)
 	}
 }

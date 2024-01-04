@@ -1,15 +1,20 @@
 import { UserService } from '$lib/services'
 import { error, fail } from '@sveltejs/kit'
-import { z } from 'zod';
+import { z } from 'zod'
 
 const zodEmailLoginSchema = z.object({
-	email: z.string({ required_error: 'Email is required' }).email({ message: 'Email must be a valid email address' }),
-	password: z.string({ required_error: 'Password is required' }),
-});
+	email: z
+		.string({ required_error: 'Email is required' })
+		.email({ message: 'Email must be a valid email address' }),
+	password: z.string({ required_error: 'Password is required' })
+})
 
 const zodPhoneLoginSchema = z.object({
-	phone: z.string({ required_error: 'Phone is required' }).min(10, { message: 'Phone must be at least 10 digits' }).max(17, { message: 'Phone must be less then 17 digits' }),
-});
+	phone: z
+		.string({ required_error: 'Phone is required' })
+		.min(10, { message: 'Phone must be at least 10 digits' })
+		.max(17, { message: 'Phone must be less then 17 digits' })
+})
 
 const login = async ({ request, cookies, locals }) => {
 	const data = await request.formData()
@@ -22,18 +27,18 @@ const login = async ({ request, cookies, locals }) => {
 	if (isEmail == 'true') {
 		const formData = {
 			email: phoneOrEmail,
-			password: password,
+			password: password
 		}
 
 		try {
 			zodEmailLoginSchema.parse(formData)
 		} catch (err) {
-			const { fieldErrors: errors } = err.flatten();
+			const { fieldErrors: errors } = err.flatten()
 			const { ...rest } = formData
 			error(404, {
 				data: rest,
 				errors
-			});
+			})
 		}
 
 		res = await UserService.loginService({
@@ -52,18 +57,18 @@ const login = async ({ request, cookies, locals }) => {
 		// console.log('res of email login = ', updatedCart)
 	} else {
 		const formData = {
-			phone: phoneOrEmail,
+			phone: phoneOrEmail
 		}
 
 		try {
 			zodPhoneLoginSchema.parse(formData)
 		} catch (err) {
-			const { fieldErrors: errors } = err.flatten();
+			const { fieldErrors: errors } = err.flatten()
 			const { ...rest } = formData
 			error(404, {
 				data: rest,
 				errors
-			});
+			})
 		}
 
 		res = await UserService.getOtpService({
@@ -72,7 +77,6 @@ const login = async ({ request, cookies, locals }) => {
 			server: true,
 			origin: locals.origin
 		})
-
 	}
 
 	cookies.set('connect.sid', res.sid, {
@@ -81,7 +85,6 @@ const login = async ({ request, cookies, locals }) => {
 
 	return res
 }
-
 
 const verifyOtp = async ({ cookies, request, locals, url }) => {
 	const data = await request.formData()

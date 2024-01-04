@@ -49,7 +49,6 @@ let showPincodeInputBox = false
 $: cart = {}
 $: store = $page.data?.store
 
-
 onMount(async () => {
 	q = $page.url.searchParams.get('q')
 	// const response = await fetch('/server/cart')
@@ -449,7 +448,7 @@ async function onSearchSubmit({ detail }) {
 {/if}
 
 {#if show}
-	<AutosuggestModal bind:show="{show}" />
+	<AutosuggestModal bind:show />
 {/if}
 
 <!-- Sidebar -->

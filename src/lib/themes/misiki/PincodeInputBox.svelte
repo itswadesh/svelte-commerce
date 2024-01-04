@@ -80,7 +80,7 @@ async function handlePinCode(pincodeNew) {
 		<hr />
 
 		<div class="p-5 flex flex-col gap-5">
-			<Error bind:err="{err}" />
+			<Error bind:err />
 
 			<form
 				on:submit|preventDefault="{() => handlePinCode(pincode)}"
@@ -93,7 +93,7 @@ async function handlePinCode(pincodeNew) {
 					bind:value="{pincode}"
 					maxlength="6"
 					placeholder="Enter your 6 digit pin code..."
-					disabled="{disabled}"
+					{disabled}
 					required
 					class="w-full rounded disabled:bg-zinc-100 disabled:text-zinc-400 bg-transparent py-3 px-4 pr-24 text-sm font-semibold truncate placeholder:font-normal focus:outline-none" />
 

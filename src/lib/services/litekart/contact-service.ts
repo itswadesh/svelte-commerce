@@ -31,7 +31,7 @@ export const submitContactUsForm = async ({
 		return res
 	} catch (err) {
 		const e = err as Error
-		error(e.status, e.data.message);
+		error(e.status, e.data.message)
 	}
 }
 
@@ -67,6 +67,6 @@ export const bulkOrderEnquiry = async ({
 
 		return res
 	} catch (e) {
-		error(e.status, e.data?.message || e.message);
+		error(e.status, e.data?.message || e.message)
 	}
 }

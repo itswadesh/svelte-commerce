@@ -21,7 +21,7 @@ if (modelValue === value) {
 		{modelValue == value ? 'box-shadow: 0 0 6px rgb(24 24 27);' : ''}">
 	</div>
 
-	<input type="radio" bind:group="{modelValue}" value="{value}" class="hidden" />
+	<input type="radio" bind:group="{modelValue}" {value} class="hidden" />
 
 	<div class="mt-1 w-10 leading-3 text-xs text-center whitespace-nowrap">
 		<slot />

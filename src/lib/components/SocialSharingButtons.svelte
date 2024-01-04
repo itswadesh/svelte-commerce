@@ -109,29 +109,29 @@ const copyToClipboard = (link) => {
 			</li>
 
 			<li class="p-2">
-				<Telegram text="{productName}" url="{url}" />
+				<Telegram text="{productName}" {url} />
 			</li>
 
 			<li class="p-2">
-				<Facebook quote="{productName}" url="{url}" />
+				<Facebook quote="{productName}" {url} />
 			</li>
 
 			<li class="p-2">
 				<X
 					class="share-button"
 					text="{productName}"
-					url="{url}"
+					{url}
 					hashtags="litekart"
 					via="litekart"
 					related="mobile cover,t-shirt,key chain " />
 			</li>
 
 			<li class="p-2">
-				<Pinterest url="{url}" media="{productImage}" description="{productName}" />
+				<Pinterest {url} media="{productImage}" description="{productName}" />
 			</li>
 
 			<li class="p-2">
-				<LinkedIn url="{url}" />
+				<LinkedIn {url} />
 			</li>
 
 			<li class="p-2">

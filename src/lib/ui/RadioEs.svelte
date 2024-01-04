@@ -97,7 +97,7 @@ $: filteredTerms = searchTerm
 			(item) =>
 				item.key?.toLowerCase().indexOf(searchTerm?.toLowerCase()) !== -1 ||
 				item.key?.toLowerCase().indexOf(searchTerm?.toLowerCase()) !== -1
-	  )
+		)
 	: items
 
 function handleSearchBox() {
@@ -211,11 +211,11 @@ function handleSearchBox() {
 						<label class="inline-flex items-center">
 							<input
 								type="radio"
-								name="{name}"
+								{name}
 								id="{i.key}"
-								disabled="{disabled}"
-								required="{required}"
-								color="{color}"
+								{disabled}
+								{required}
+								{color}
 								bind:group="{selectedItems}"
 								value="{i.from + ',' + i.to || i.key}"
 								on:change="{() => dispatch('go', { model, selectedItems })}"
@@ -260,11 +260,11 @@ function handleSearchBox() {
 					<label class="inline-flex items-center">
 						<input
 							type="radio"
-							name="{name}"
+							{name}
 							id="{i.key}"
-							disabled="{disabled}"
-							required="{required}"
-							color="{color}"
+							{disabled}
+							{required}
+							{color}
 							bind:group="{selectedItems}"
 							value="{i.from + ',' + i.to || i.key}"
 							on:change="{() => dispatch('go', { model, selectedItems })}"

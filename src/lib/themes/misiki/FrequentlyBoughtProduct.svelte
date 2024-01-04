@@ -161,12 +161,7 @@ let bounceItemFromTop = false
 					<input type="hidden" name="options" value="{JSON.stringify(product?.options) || null}" />
 					<input type="hidden" name="customizedImg" value="{null}" />
 
-					<PrimaryButton
-						type="submit"
-						loading="{loading}"
-						loadingringsize="xs"
-						roundedFull
-						class="text-xs">
+					<PrimaryButton type="submit" {loading} loadingringsize="xs" roundedFull class="text-xs">
 						{cartButtonText}
 					</PrimaryButton>
 				</form>

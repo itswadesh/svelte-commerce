@@ -15,7 +15,7 @@ dev-dist
 $houdini
 $kitql
 test-results/*
-.gitignore
+vite.config.js.timestamp-*
 
 # Sentry Config File
 .sentryclirc

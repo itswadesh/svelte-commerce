@@ -13,9 +13,9 @@ export { clazz as class }
 <div class="relative w-full {clazz}">
 	<input
 		type="search"
-		placeholder="{placeholder}"
-		class="w-full rounded-full border  bg-zinc-50 py-2 pl-4 pr-14 text-sm font-semibold placeholder-zinc-400  transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-white"
-		bind:value="{value}"
+		{placeholder}
+		class="w-full rounded-full border bg-zinc-50 py-2 pl-4 pr-14 text-sm font-semibold placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-white"
+		bind:value
 		on:change="{() => dispatch('change', value)}" />
 
 	<button

@@ -48,9 +48,9 @@ function handleLoading() {
 </script>
 
 <button
-	type="{type}"
-	title="{title}"
-	disabled="{disabled}"
+	{type}
+	{title}
+	{disabled}
 	class="relative transform items-center justify-center overflow-hidden bg-white px-4 py-2 text-center font-semibold tracking-wider text-white shadow-md transition duration-700 focus:outline-none focus:ring-0 focus:ring-offset-0 hover:shadow
 	{disabled ? 'bg-zinc-400 cursor-not-allowed' : 'gradient active:scale-95'}
     {roundedFull ? 'rounded-full' : 'rounded'}
@@ -64,7 +64,7 @@ function handleLoading() {
 		<div
 			class="absolute inset-0 flex cursor-not-allowed items-center justify-center bg-black bg-opacity-70">
 			<svg
-				class="mx-auto animate-spin text-white 
+				class="mx-auto animate-spin text-white
 				{loadingringsize == 'xs' ? 'w-4 h-4' : ''}
 				{loadingringsize == 'sm' ? 'h-5 w-5' : ''}
 				{loadingringsize == 'base' ? 'h-6 w-6' : ''}

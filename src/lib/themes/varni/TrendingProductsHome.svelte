@@ -22,7 +22,7 @@ $: if (innerWidth <= 1280) {
 }
 </script>
 
-<svelte:window bind:innerWidth="{innerWidth}" />
+<svelte:window bind:innerWidth />
 
 <!-- Trending products -->
 

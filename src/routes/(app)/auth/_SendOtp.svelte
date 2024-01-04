@@ -1,5 +1,5 @@
 <script>
-import {TextboxFloating,PrimaryButton} from '$lib/ui'
+import { TextboxFloating, PrimaryButton } from '$lib/ui'
 
 import { createEventDispatcher } from 'svelte'
 import { onMount } from 'svelte'
@@ -31,5 +31,5 @@ export let ref = null
 		<p class="text-sm font-light text-zinc-500">Ex. 9XXXXXXXXX</p>
 	</div>
 
-	<PrimaryButton loading="{loading}" class="w-full" type="submit">SEND OTP</PrimaryButton>
+	<PrimaryButton {loading} class="w-full" type="submit">SEND OTP</PrimaryButton>
 </form>

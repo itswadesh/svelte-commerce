@@ -105,7 +105,7 @@ const schemaOrgEntity =
 					`${$page.data.store?.socialSharingButtons?.linkedin?.val}`,
 					`${$page.data.store?.socialSharingButtons?.youtube?.val}`
 				]
-		  }
+			}
 		: null
 
 const schemaOrgWebsite = {

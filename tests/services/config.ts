@@ -6,19 +6,11 @@ const nanoEmail = customAlphabet('123456sdfghjk', 10)
 export const randomPhone = nanoid()
 export const randomEmail = nanoEmail() + '@test.com'
 
-
 export const host = 'demo.litekart.in'
 export const API_URL = 'https://staging.litekart.in/api/'
 export const storeId = '6356502aca4ff28ed596cb1b'
 
-
-
-
-
-
-
 export const getCookie = async () => {
-
 	const data = {
 		email: 'hi@litekart.in',
 		password: 'litekart',

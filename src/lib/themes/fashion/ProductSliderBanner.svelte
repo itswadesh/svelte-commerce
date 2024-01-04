@@ -89,7 +89,7 @@ function handleGallery(index) {
 
 <!-- Gallery -->
 <Gallery
-	bind:selectedImgIndex="{selectedImgIndex}"
-	bind:showPhotosModal="{showPhotosModal}"
+	bind:selectedImgIndex
+	bind:showPhotosModal
 	title="{data.product.name}"
 	images="{data.product?.images || []}" />
