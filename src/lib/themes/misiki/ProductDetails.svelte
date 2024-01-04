@@ -149,7 +149,7 @@ let customizedImg
 let isExpired = false
 let loading = false
 let loadingForWishlist = false
-let product_image_dimension = $page.data.$page?.data?.store?.product_image_dimension || '3x4'
+let product_image_dimension = $page?.data?.store?.product_image_dimension || '3x4'
 let productReviews = {}
 let recentlyViewed = []
 let ribbonTags = []
