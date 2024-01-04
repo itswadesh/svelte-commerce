@@ -4,7 +4,10 @@
 	"trailingComma": "none",
 	"svelteSortOrder": "options-styles-scripts-markup",
 	"svelteStrictMode": true,
-	"svelteBracketNewLine": false,
+	"bracketSameLine": true,
+	"plugins": [
+		"prettier-plugin-svelte"
+	],
 	"svelteAllowShorthand": true,
 	"printWidth": 100,
 	"useTabs": true,
