@@ -3,7 +3,7 @@ import { CatelogNav, DummyProductCard, MobileFilter, Pagination } from '$lib/com
 import { currency, dateOnly, generatePriceRange, toast } from '$lib/utils'
 import { DesktopFilter, Footer, ProductCard } from '$lib/themes/varni-ace'
 import { fade } from 'svelte/transition'
-import { fireGTagEvent } from '$lib/utils/gTag'
+import { fireGTagEvent } from '$lib/utils/gTagB'
 import { goto, invalidateAll } from '$app/navigation'
 import { Hero } from '$lib/themes/misiki'
 import { MobileFooter } from '$lib/components'
