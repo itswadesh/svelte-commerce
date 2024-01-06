@@ -125,6 +125,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 		await fetchCart(event)
 
 		// const derivedSid: string = event.cookies.get('connect.sid') || ''
+		//Cart(event)
+
+		// const derivedSid: string = event.cookies.get('connect.sid') || ''
 		// const route = event.url
 		// const start = performance.now()
 		// event.locals.sid = derivedSid

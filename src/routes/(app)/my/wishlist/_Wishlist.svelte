@@ -15,19 +15,16 @@
 <script>
 import { applyAction, enhance } from '$app/forms'
 import { currency } from '$lib/utils'
-import { fireGTagEvent } from '$lib/utils/gTag'
+import { fireGTagEvent } from '$lib/utils/gTagB'
 import { invalidateAll } from '$app/navigation'
 import { LazyImg, DummyProductCard } from '$lib/components'
 import { page } from '$app/stores'
-import { post } from '$lib/utils/api'
 import { PrimaryButton, BlackButton, WhiteButton } from '$lib/ui'
+import { updateCartStore } from '$lib/store/cart'
 import { WishlistService } from '$lib/services'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
 import noEmptyWishlist from '$lib/assets/no/empty-wishlist.svg'
 import WishlistSkeleton from './_WishlistSkeleton.svelte'
-import { updateCartStore } from '$lib/store/cart'
-import { onMount } from 'svelte'
-import { browser } from '$app/environment'
 
 export let wishlistedProducts,
 	loadingProduct = []
@@ -43,24 +40,11 @@ async function removeFromWishlist(id, wx) {
 			storeId: $page?.data?.storeId,
 			origin: $page.data.origin
 		})
+
 		await invalidateAll()
-		await getWishlistedProducts()
 	} catch (e) {
 	} finally {
 		loadingProduct[wx] = false
-	}
-}
-
-async function getWishlistedProducts() {
-	try {
-		wishlistedProducts = WishlistService.fetchWishlist({
-			origin: $page?.data?.origin,
-			storeId: $page?.data?.storeId
-		}).data
-
-		await invalidateAll()
-	} catch (e) {
-	} finally {
 	}
 }
 </script>
@@ -110,25 +94,7 @@ async function getWishlistedProducts() {
 			<div class="grid w-full grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-between lg:mb-20">
 				{#each wishlistedProducts as w, wx}
 					{#if w.product}
-						<form
-							action="/cart?/add"
-							method="POST"
-							use:enhance="{() => {
-								return async ({ result }) => {
-									updateCartStore({ data: result.data })
-									result.data.qty < 0
-										? fireGTagEvent('remove_from_cart', result.data)
-										: fireGTagEvent('add_to_cart', result.data)
-									bounceItemFromTop = true
-									setTimeout(() => {
-										bounceItemFromTop = false
-									}, 3000)
-									await removeFromWishlist(w.product?._id, wx)
-									// await invalidateAll()
-									await applyAction(result)
-								}
-							}}"
-							class="cols-span-1 relative flex flex-col justify-between border overflow-hidden">
+						<div class="cols-span-1 relative flex flex-col justify-between border overflow-hidden">
 							<BlackButton
 								type="button"
 								class="absolute top-2 right-2 z-10"
@@ -209,24 +175,40 @@ async function getWishlistedProducts() {
 								</div>
 							</a>
 
-							<input type="hidden" name="pid" value="{w.product?._id || null}" />
+							<form
+								action="/cart?/add"
+								method="POST"
+								use:enhance="{() => {
+									return async ({ result }) => {
+										// console.log('result', result)
 
-							<input type="hidden" name="vid" value="{w.product?._id || null}" />
+										updateCartStore({ data: result.data })
+										fireGTagEvent('add_to_cart', result.data)
+										bounceItemFromTop = true
+										setTimeout(() => {
+											bounceItemFromTop = false
+										}, 3000)
 
-							<input type="hidden" name="qty" value="{1}" />
+										await removeFromWishlist(w.product?._id, wx)
+										// await invalidateAll()
+										await applyAction(result)
+									}
+								}}">
+								<input type="hidden" name="pid" value="{w.product?._id || null}" />
+								<input type="hidden" name="vid" value="{w.product?._id || null}" />
+								<input type="hidden" name="qty" value="{1}" />
+								<input
+									type="hidden"
+									name="options"
+									value="{JSON.stringify(w.product?.options) || null}" />
+								<input type="hidden" name="customizedImg" value="{null}" />
 
-							<input
-								type="hidden"
-								name="options"
-								value="{JSON.stringify(w.product?.options) || null}" />
-
-							<input type="hidden" name="customizedImg" value="{null}" />
-
-							<button
-								type="submit"
-								class="w-full border-t p-2 font-semibold uppercase tracking-wide text-primary-500 transition duration-300 focus:outline-none hover:bg-primary-50">
-								Move To Bag
-							</button>
+								<button
+									type="submit"
+									class="w-full border-t p-2 font-semibold uppercase tracking-wide text-primary-500 transition duration-300 focus:outline-none hover:bg-primary-50">
+									Move To Bag
+								</button>
+							</form>
 
 							{#if loadingProduct[wx]}
 								<div
@@ -251,7 +233,7 @@ async function getWishlistedProducts() {
 									</svg>
 								</div>
 							{/if}
-						</form>
+						</div>
 
 						{#if bounceItemFromTop}
 							<AnimatedCartItem img="{w.product?.img}" />
