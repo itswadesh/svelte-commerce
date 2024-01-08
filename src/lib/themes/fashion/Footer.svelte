@@ -11,8 +11,6 @@ import { toast } from '$lib/utils'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import type { Category } from '$lib/types'
 
-// console.log('$page', $page)
-
 export let me
 export let store = {}
 export let popularSearches: { took: 0; count: 0; data: [] }
@@ -50,10 +48,8 @@ async function getStoreData() {
 async function getPages() {
 	pages = await PageService.fetchPages({
 		origin: $page.data.origin,
-		storeId: $page.data.store?.id
+		storeId: $page?.data?.storeId
 	})
-
-	// console.log('pages', pages)
 }
 
 function subscribedForNewsletter() {
@@ -62,7 +58,7 @@ function subscribedForNewsletter() {
 }
 </script>
 
-<footer class="p-3 py-10 sm:px-10 sm:py-20 border-t text-sm text-zinc-500">
+<footer class="p-3 py-10 sm:px-10 sm:py-20 text-sm text-zinc-500">
 	<div class="mb-10 sm:mb-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
 		{#if $page.data.store?.description}
 			<div class="col-span-1 flex flex-col gap-4 justify-self-left">
@@ -404,7 +400,7 @@ function subscribedForNewsletter() {
 
 					<li class="flex max-w-max items-center">
 						<a
-							href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.store?.id}"
+							href="{$page.data.store?.adminUrl}?role=vendor&store={$page?.data?.storeId}"
 							target="_blank"
 							aria-label="Click to visit this page"
 							class="hover:text-zinc-800 whitespace-pre-wrap">
@@ -420,7 +416,7 @@ function subscribedForNewsletter() {
 			</ul>
 		</div>
 
-		<!-- <form
+		<form
 			on:submit|preventDefault="{subscribedForNewsletter}"
 			class="col-span-1 flex flex-col gap-4 max-w-xs justify-self-left md:justify-self-end">
 			<h5 class="whitespace-nowrap uppercase text-zinc-800">Newsletter</h5>
@@ -433,10 +429,10 @@ function subscribedForNewsletter() {
 				placeholder="Enter your email address"
 				class="w-full" />
 
-			<PrimaryButton type="submit" blackBackground roundedNone class="max-w-max uppercase">
+			<PrimaryButton type="submit" blackBackground roundedNone disabled class="max-w-max uppercase">
 				Subscribe
 			</PrimaryButton>
-		</form> -->
+		</form>
 	</div>
 
 	<div

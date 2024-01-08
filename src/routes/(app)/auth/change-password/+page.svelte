@@ -97,7 +97,7 @@ async function submit(p) {
 				oldPassword: oldPassword,
 				password: password,
 				passwordConfirmation: passwordConfirmation,
-				storeId: $page.data.storeId,
+				storeId: $page?.data?.storeId,
 				origin: $page.data.origin
 			})
 
