@@ -54,7 +54,7 @@ async function submit() {
 					dispatch('submit')
 				}
 			} catch (e) {
-				logger.error(e)
+				console.error(e)
 			}
 		} else {
 			toast('Select at least one item in bag to place order', 'info')
