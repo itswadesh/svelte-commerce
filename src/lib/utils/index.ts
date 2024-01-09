@@ -294,6 +294,5 @@ export const shopifyInit = async ({ query, variables }) => {
 	}
 }
 export * from './string'
-export * from './logger'
 export * from './api'
 export * from './validations'

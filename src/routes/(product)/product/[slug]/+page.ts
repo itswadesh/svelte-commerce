@@ -29,7 +29,7 @@ export async function load({ params, url, parent }) {
 				storeId
 			})
 
-			logger.info('isWishlisted', isWishlisted)
+			console.log('isWishlisted', isWishlisted)
 
 			product.isWishlisted = isWishlisted
 		} else {
