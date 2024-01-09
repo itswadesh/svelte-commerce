@@ -1,6 +1,5 @@
 // import { getCache, setCache } from '$lib/server/redis'
 import { ProductService, ReviewService, WishlistService } from '$lib/services'
-import { logger } from 'lib/utils/logger'
 
 const isServer = import.meta.env.SSR // get the SSR value
 
