@@ -20,6 +20,7 @@ export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
 // console.log('$page', $page)
 
+let addressId = $page.url.searchParams.get('address') || ''
 let cashfreeReady = false
 let comment = ''
 let commentMissing = false
@@ -103,7 +104,7 @@ async function submit(pm) {
 				loadingForPaymentProcessingSteps = true
 
 				const res = await OrdersService.codCheckout({
-					address: data.addressId,
+					address: addressId,
 					cartId: $page.data.cartId,
 					paymentMethod: 'COD',
 					prescription: data.prescription?._id,
@@ -128,7 +129,7 @@ async function submit(pm) {
 					loadingForPaymentProcessingSteps = true
 
 					const res = await OrdersService.codCheckout({
-						address: data.addressId,
+						address: addressId,
 						cartId: data?.cartId,
 						comment,
 						paymentMethod: 'COD',
@@ -166,7 +167,7 @@ async function submit(pm) {
 				loadingForPaymentProcessingSteps = true
 
 				const res = await OrdersService.cashfreeCheckout({
-					address: data.addressId,
+					address: addressId,
 					orderNo,
 					origin: $page.data.origin,
 					storeId: $page.data.storeId,
@@ -200,7 +201,7 @@ async function submit(pm) {
 				toast(`Payment failed, please try again`, 'error')
 				gotoOrder(orderNo)
 
-				// goto(`/payment/failed?id=${data.addressId}&status=PAYMENT_PENDING&provider=Cashfree`)
+				// goto(`/payment/failed?id=${addressId}&status=PAYMENT_PENDING&provider=Cashfree`)
 			} finally {
 				loading = false
 			}
@@ -210,7 +211,7 @@ async function submit(pm) {
 				loading = true
 				loadingForPaymentProcessingSteps = true
 				const res = await OrdersService.phonepeCheckout({
-					address: data.addressId,
+					address: addressId,
 					origin: $page.data.origin,
 					cartId: $page.data.cartId,
 					storeId: $page.data.storeId,
@@ -237,7 +238,7 @@ async function submit(pm) {
 				loadingForPaymentProcessingSteps = true
 
 				const res = await OrdersService.paypalCheckout({
-					address: data.addressId,
+					address: addressId,
 					origin: $page.data.origin,
 					storeId: $page.data.storeId
 				})
@@ -262,7 +263,7 @@ async function submit(pm) {
 				loadingForPaymentProcessingSteps = true
 
 				const rp = await OrdersService.razorpayCheckout({
-					address: data.addressId,
+					address: addressId,
 					orderNo,
 					cartId: $page.data.cartId,
 					origin: $page.data.origin,
