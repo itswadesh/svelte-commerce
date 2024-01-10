@@ -1,9 +1,9 @@
 <script lang="ts">
 import { browser } from '$app/environment'
-import { CartService } from 'lib/services'
+import { CartService } from '$lib/services'
 import { cartStore, updateCartStore } from '$lib/store/cart'
 import { createEventDispatcher, onMount } from 'svelte'
-import { currency, logger, toast } from '$lib/utils'
+import { currency, toast } from '$lib/utils'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { PrimaryButton } from '$lib/ui'
@@ -54,7 +54,7 @@ async function submit() {
 					dispatch('submit')
 				}
 			} catch (e) {
-				logger.error(e)
+				console.error(e)
 			}
 		} else {
 			toast('Select at least one item in bag to place order', 'info')
