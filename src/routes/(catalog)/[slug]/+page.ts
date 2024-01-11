@@ -1,4 +1,4 @@
-import { ProductService } from '$lib/services'
+import { services } from '@misiki/litekart-utils'
 
 export const prerender = false
 export async function load({ url, params, parent }) {
@@ -16,7 +16,7 @@ export async function load({ url, params, parent }) {
 	})
 
 	return {
-		products: await ProductService.fetchProductsOfCategory({
+		products: await services.ProductService.fetchProductsOfCategory({
 			categorySlug,
 			origin,
 			query: query.toString(),

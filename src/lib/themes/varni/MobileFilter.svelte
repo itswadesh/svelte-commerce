@@ -1,12 +1,13 @@
 <script lang="ts">
+// import {getMegamenuFromStore} from '$lib/store/megamenu'
 import { browser } from '$app/environment'
-import { CategoryService } from '$lib/services'
 import { CheckboxEs, PrimaryButton, RadioEs } from '$lib/ui'
 import { constructURL2, currency } from '$lib/utils'
 import { createEventDispatcher, onMount } from 'svelte'
 import { fly } from 'svelte/transition'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
+import { services } from '@misiki/litekart-utils'
 import { sorts } from '$lib/config'
 
 const dispatch = createEventDispatcher()
@@ -94,12 +95,20 @@ function getFacetsWithProducts() {
 async function getMegamenu() {
 	if (browser) {
 		try {
+			// megamenu = await getMegamenuFromStore({
+			// 	sid: null,
+			// 	storeId: $page?.data?.storeId,
+			// 	isCors: $page?.data?.store?.isCors,
+			// 	origin: $page.data.origin
+			// })
+
 			const localmegamenu = localStorage.getItem('megamenu')
 
 			if (!localmegamenu || localmegamenu === 'undefined') {
-				megamenu = await CategoryService.fetchMegamenuData({
+				megamenu = await services.CategoryService.fetchMegamenuData({
 					origin: $page?.data?.origin,
-					storeId: $page?.data?.store?.id
+					storeId: $page?.data?.storeId,
+					isCors: $page.data.store?.isCors
 				})
 			} else {
 				megamenu = JSON.parse(localmegamenu)

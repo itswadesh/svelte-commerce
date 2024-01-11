@@ -1,13 +1,15 @@
 import { json } from '@sveltejs/kit'
-import { StoreService } from '$lib/services'
+import { services } from '@misiki/litekart-utils'
 
 export async function GET({ cookies, request, locals, setHeaders }) {
 	let menu, popularSearches, megamenu, store
 	const host = locals.host
 	try {
 		// const uri = new URL(request.url)
-		// const storeRes = await InitService.fetchInit({ host: uri.host, origin: uri.origin })
-		const storeRes = await StoreService.getStoreData({
+
+		// const storeRes = await services.InitService.fetchInit({ host: uri.host, origin: uri.origin })
+
+		const storeRes = await services.StoreService.getStoreData({
 			url: request.url,
 			host,
 			cookies

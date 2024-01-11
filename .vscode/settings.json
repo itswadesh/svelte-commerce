@@ -1,11 +1,8 @@
 {
 	// Interface
-	"window.title": "${activeEditorMedium}",
-	"window.titleBarStyle": "native",
-	"window.menuBarVisibility": "toggle",
+	// "window.title": "${activeEditorMedium}",
 	"window.commandCenter": false,
 	"window.zoomLevel": 0,
-	"workbench.colorTheme": "poimandres",
 	"workbench.iconTheme": "symbols",
 	"workbench.startupEditor": "none",
 	"workbench.sideBar.location": "left",
@@ -18,10 +15,8 @@
 	"editor.bracketPairColorization.enabled": false,
 	"editor.cursorBlinking": "solid",
 	"editor.cursorSmoothCaretAnimation": "on",
-	"editor.scrollbar.horizontalScrollbarSize": 4,
-	"editor.scrollbar.verticalScrollbarSize": 4,
 	"explorer.compactFolders": false,
-	"explorer.autoReveal": false,
+	"explorer.autoReveal": true,
 	"breadcrumbs.enabled": false,
 	"symbols.hidesExplorerArrows": false,
 	// Font
@@ -33,7 +28,7 @@
 	"editor.wordWrap": "on",
 	// Terminal
 	// "terminal.integrated.fontFamily": "Monaspace Neon, MonoLisa, Monocraft, JetBrains Mono, IBM Plex Mono, Mononoki Nerd Font, Fira Code",
-	"terminal.integrated.fontSize": 14,
+	"terminal.integrated.fontSize": 11,
 	"terminal.integrated.cursorStyle": "line",
 	"terminal.integrated.cursorBlinking": true,
 	"terminal.integrated.defaultProfile.linux": "zsh",

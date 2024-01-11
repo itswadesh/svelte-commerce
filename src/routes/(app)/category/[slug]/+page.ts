@@ -1,0 +1,24 @@
+import { services } from '@misiki/litekart-utils'
+import { error } from '@sveltejs/kit'
+
+export async function load({ params, url, parent }) {
+	try {
+		const { storeId, origin, sid } = await parent()
+
+		const { slug } = params
+		const id = url.searchParams.get('id')
+		const category = await services.CategoryService.fetchCategory({
+			storeId,
+			sid,
+			id: slug || id,
+			origin
+		})
+		if (category) {
+			return { category }
+		}
+	} catch (e) {
+		error(400, e?.message)
+	}
+
+	error(404, 'Category not found')
+}

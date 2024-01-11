@@ -12,6 +12,7 @@ const cookies = Cookie()
 let today = dayjs(new Date()).toISOString()
 
 export let data
+// console.log('zzzzzzzzzzzzzzzzzz',data);
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -84,7 +85,6 @@ let showPinCodeEntryModal = false
 
 onMount(() => {
 	const pin = cookies.get('zip')
-
 	if (pin && pin.toString()?.length === 6) {
 		showPinCodeEntryModal = false
 	} else {
@@ -95,4 +95,4 @@ onMount(() => {
 
 <SEO {...seoProps} />
 
-<Home data="{data}" showFooter="{showFooter}" showPinCodeEntryModal="{showPinCodeEntryModal}" />
+<Home {data} {showFooter} {showPinCodeEntryModal} />

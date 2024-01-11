@@ -1,5 +1,5 @@
-import { CartService, PaymentMethodService } from '$lib/services'
 import { error, redirect } from '@sveltejs/kit'
+import { services } from '@misiki/litekart-utils'
 
 export const prerender = false
 
@@ -11,13 +11,13 @@ export async function load({ url, parent }) {
 
 	try {
 		const [cart, paymentMethods] = await Promise.all([
-			CartService.fetchRefreshCart({
+			services.CartService.fetchRefreshCart({
 				cartId,
 				origin,
 				sid,
 				storeId
 			}),
-			PaymentMethodService.fetchPaymentMethods({
+			services.PaymentMethodService.fetchPaymentMethods({
 				storeId,
 				sid,
 				origin

@@ -1,5 +1,6 @@
 import { CartService, WishlistService } from '$lib/services'
 import { error, fail, redirect } from '@sveltejs/kit'
+import { services } from '@misiki/litekart-utils'
 import type { Action, Actions, PageServerLoad } from './$types'
 
 export const load: PageServerLoad = async ({ url, request, locals, cookies, depends }) => {
@@ -16,7 +17,7 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 		const sid = cookies.get('connect.sid')
 
 		if (sid) {
-			const res = await CartService.fetchRefreshCart({
+			const res = await services.CartService.fetchRefreshCart({
 				cartId,
 				origin: origin,
 				sid,
