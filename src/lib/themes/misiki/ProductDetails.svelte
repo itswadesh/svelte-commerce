@@ -1228,7 +1228,7 @@ async function updateVariant(variant) {
 					</div>
 				{/if}
 
-				{#if $page?.data?.store?.allowBackOrder || data.product?.allow_back_order}
+				{#if ($page?.data?.store?.allowBackOrder || data.product?.allow_back_order) && !data.product?.hasStock}
 					<form
 						id="create_back_order"
 						in:fade="{{ duration: 300 }}"
