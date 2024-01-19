@@ -81,7 +81,7 @@
 		"tslib": "^2.6.2",
 		"typescript": "~5.3.3",
 		"vanilla-lazyload": "^17.8.5",
-		"vite": "^5.0.10",
+		"vite": "^5.0.12",
 		"vite-plugin-pwa": "0.17.4",
 		"zod": "3.22.4",
 		"zod-form-data": "2.0.2"
