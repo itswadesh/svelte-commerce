@@ -9,9 +9,9 @@ export async function load({ cookies, locals, url }) {
 	}
 	try {
 		const res = await services.ReviewService.fetchReviews({
-			storeId,
-			sid,
-			origin
+			origin: locals.origin,
+			sid: cookies.get('connect.sid'),
+			storeId: locals.storeId
 		})
 
 		if (res) {

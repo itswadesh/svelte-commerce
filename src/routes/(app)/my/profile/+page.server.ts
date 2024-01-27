@@ -8,9 +8,9 @@ export async function load({ cookies, locals }) {
 
 	try {
 		const data = await services.UserService.fetchMeData({
-			storeId,
-			server: true,
-			sid
+			origin: locals.origin,
+			sid: cookies.get('connect.sid'),
+			storeId: locals.storeId
 		})
 
 		data.dob = data.dob ? dayjs(data.dob).format('YYYY-MM-DD') : null
