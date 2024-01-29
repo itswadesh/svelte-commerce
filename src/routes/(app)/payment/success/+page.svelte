@@ -120,60 +120,138 @@ onMount(async () => {
 					Order.
 				</p>
 
-				<ul class="mx-auto mb-5 flex max-w-max flex-col gap-2 sm:mb-10">
-					<li>
-						<p class="flex items-start gap-2">
-							<span class="w-36 shrink-0"> Order No </span>
+				<div
+					class="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-10 md:gap-20 mb-8">
+					<!-- Order Info -->
+					<div class="flex flex-col gap-5 col-span-1">
+						{#if data.order && data.order?.amount}
+							<div>
+								<h4 class="mb-5 border-b border-dashed border-zinc-400 pb-2">Order Info</h4>
 
-							<span>
-								: &nbsp; {data.order?.orderNo || '_'}
-							</span>
-						</p>
-					</li>
+								<div class="flex max-w-max flex-col items-start gap-2">
+									<p class="flex items-center">
+										<span class="mr-2 w-32">Order No</span>
 
-					<li>
-						<p class="flex items-start gap-2">
-							<span class="w-36 shrink-0">Order Placed On </span>
+										<span>
+											: &nbsp; {data.order?.orderNo || '_'}
+										</span>
+									</p>
 
-							<span>
-								: &nbsp; {#if data.order?.createdAt}{date(data.order?.createdAt)}{:else}
-									_{/if}
-							</span>
-						</p>
-					</li>
+									<p class="flex items-center">
+										<span class="mr-2 w-32">Order Placed On </span>
 
-					<li>
-						<p class="flex items-start gap-2">
-							<span class="w-36 shrink-0">Payment Status </span>
+										<span>
+											: &nbsp; {#if data.order?.createdAt}{date(data.order?.createdAt)}{:else}
+												_{/if}
+										</span>
+									</p>
 
-							<span class="uppercase" class:text-brand-500="{data.order?.paymentStatus === 'paid'}">
-								: &nbsp; {data.order?.paymentStatus || '_'}
-							</span>
-						</p>
-					</li>
+									<p class="flex items-center">
+										<span class="mr-2 w-32">Payment Status </span>
 
-					<li>
-						<p class="flex items-start gap-2">
-							<span class="w-36 shrink-0">Payment Mode </span>
+										<span
+											class="uppercase"
+											class:text-brand-500="{data.order?.paymentStatus === 'paid'}">
+											: &nbsp; {data.order?.paymentStatus || '_'}
+										</span>
+									</p>
 
-							<span class="uppercase">
-								: &nbsp; {data.order?.paymentMode || '_'}
-							</span>
-						</p>
-					</li>
+									<p class="flex items-center">
+										<span class="mr-2 w-32">Payment Mode </span>
 
-					{#if data.order?.paymentGateway}
-						<li>
-							<p class="flex items-start gap-2">
-								<span class="w-36 shrink-0">Payment Gateway </span>
+										<span class="uppercase">
+											: &nbsp; {data.order?.paymentMode || '_'}
+										</span>
+									</p>
+									{#if data.order?.paymentGateway}
+										<p class="flex items-center">
+											<span class="mr-2 w-32">Payment Gateway </span>
 
-								<span class="uppercase">
-									: &nbsp; {data.order?.paymentGateway || '_'}
-								</span>
-							</p>
-						</li>
-					{/if}
-				</ul>
+											<span class="uppercase">
+												: &nbsp; {data.order?.paymentGateway || '_'}
+											</span>
+										</p>
+									{/if}
+								</div>
+							</div>
+						{/if}
+					</div>
+					<!-- Payment Information -->
+					<div class="flex flex-col gap-5 col-span-1">
+						{#if data.order && data.order?.amount}
+							<div>
+								<h4 class="mb-5 border-b border-dashed border-zinc-400 pb-2">
+									Payment Information
+								</h4>
+
+								<div class="flex max-w-max flex-col items-start gap-2">
+									<p class="flex items-center">
+										<span class="mr-2 w-32">Subtotal</span>
+
+										<span>
+											: &nbsp; {currency(data.order?.amount.subtotal, store?.currencySymbol)}
+										</span>
+									</p>
+
+									<p class="flex items-center">
+										<span class="mr-2 w-32">Discount</span>
+
+										<span>
+											: &nbsp;
+
+											{currency(data.order?.amount.discount, store?.currencySymbol)}
+										</span>
+									</p>
+
+									{#if data.order?.coupon.code}
+										<p class="flex items-center">
+											<span class="mr-2 w-32">Applied Coupon</span>
+
+											<span>
+												: &nbsp;
+												{data.order?.coupon.code}
+											</span>
+										</p>
+									{/if}
+
+									<p class="flex items-center">
+										<span class="mr-2 w-32">Shipping</span>
+
+										<span>
+											: &nbsp;
+											{#if data.order?.amount.shipping}
+												{currency(data.order?.amount.shipping, store?.currencySymbol)}
+											{:else}
+												Free
+											{/if}
+										</span>
+									</p>
+
+									{#if data.order?.amount.cod_charges}
+										<p class="flex items-center">
+											<span class="mr-2 w-32">COD Charges</span>
+
+											<span>
+												: &nbsp;
+												{currency(data.order?.amount.cod_charges, store?.currencySymbol)}
+											</span>
+										</p>
+									{/if}
+
+									<hr class="w-full border-t border-zinc-200" />
+
+									<div class="flex items-center text-sm font-bold text-zinc-800">
+										<span class="mr-2 w-32">Total</span>
+
+										<span>
+											: &nbsp; {currency(data.order?.amount.total, store?.currencySymbol)}
+										</span>
+									</div>
+								</div>
+							</div>
+						{/if}
+					</div>
+				</div>
 
 				<div class="mb-5 flex flex-wrap items-center justify-center gap-2 sm:mb-10 sm:gap-5">
 					{#if data.order?.seatsBooked}
@@ -201,8 +279,131 @@ onMount(async () => {
 
 			<div class="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-10 md:gap-20">
 				<div class="flex flex-col gap-5 col-span-1">
-					<!-- Item Details -->
+					<!-- Booking Information -->
 
+					<!-- {#if data.order?.seats?.length > 0}
+							<div>
+								<h4 class="mb-5 border-b border-dashed border-zinc-400 pb-2">Booking Information</h4>
+	
+								<div class="items-start flex flex-col divide-y text-sm">
+									{#each data.order?.seats as seat}
+										<div class="flex flex-col gap-2 py-4">
+											<span><span>Seat Number : &nbsp; </span> {seat.seatNo} </span>
+	
+											<span>
+												<span>Seat Type : &nbsp; </span>
+	
+												{#if seat.seatType === 'horizontal_sleeper'}
+													Sleeper
+												{:else}
+													Seater
+												{/if}
+											</span>
+										</div>
+									{/each}
+								</div>
+							</div>
+						{/if} -->
+
+					<!-- Delivery Information -->
+
+					{#if data.order && data.order?.shipping_address}
+						<div>
+							<h4 class="mb-5 border-b border-dashed border-zinc-400 pb-2">Delivery Information</h4>
+
+							<div class="flex flex-col gap-1">
+								{#if data.order?.shipping_address.firstName}
+									<p>
+										{data.order?.shipping_address.firstName}
+
+										{data.order?.shipping_address.lastName}
+									</p>
+								{/if}
+
+								<p>
+									{#if data.order?.shipping_address.address}
+										{data.order?.shipping_address.address}
+									{/if}
+
+									{#if data.order?.shipping_address.city}
+										, {data.order?.shipping_address.city}
+									{/if}
+
+									{#if data.order?.shipping_address.country}
+										, {data.order?.shipping_address.country}
+									{/if}
+
+									{#if data.order?.shipping_address.zip}
+										- {data.order?.shipping_address.zip}
+									{/if}
+								</p>
+
+								{#if data.order?.shipping_address.phone || data.order?.shipping_address.userPhone}
+									<p>
+										{data.order?.shipping_address.phone || data.order?.userPhone}
+									</p>
+								{/if}
+
+								{#if data.order?.shipping_address.email}
+									<p>
+										{data.order?.shipping_address.email}
+									</p>
+								{/if}
+							</div>
+						</div>
+					{/if}
+				</div>
+				<!-- Billing Information -->
+				<div class="flex flex-col gap-5 col-span-1">
+					{#if data.order && data.order?.billing_address}
+						<div>
+							<h4 class="mb-5 border-b border-dashed border-zinc-400 pb-2">Billing Information</h4>
+
+							<div class="flex flex-col gap-1">
+								{#if data.order?.billing_address.firstName}
+									<p>
+										{data.order?.billing_address.firstName}
+
+										{data.order?.billing_address.lastName}
+									</p>
+								{/if}
+
+								<p>
+									{#if data.order?.billing_address.address}
+										{data.order?.billing_address.address}
+									{/if}
+
+									{#if data.order?.billing_address.city}
+										, {data.order?.billing_address.city}
+									{/if}
+
+									{#if data.order?.billing_address.country}
+										, {data.order?.billing_address.country}
+									{/if}
+
+									{#if data.order?.billing_address.zip}
+										- {data.order?.billing_address.zip}
+									{/if}
+								</p>
+
+								{#if data.order?.billing_address.phone || data.order?.billing_address.userPhone}
+									<p>
+										{data.order?.billing_address.phone || data.order?.userPhone}
+									</p>
+								{/if}
+
+								{#if data.order?.billing_address.email}
+									<p>
+										{data.order?.billing_address.email}
+									</p>
+								{/if}
+							</div>
+						</div>
+					{/if}
+				</div>
+
+				<!-- Item Details -->
+				<div class="flex flex-col gap-5 col-span-1">
 					{#if data.order?.items?.length > 0}
 						<div>
 							<h4 class="border-b border-dashed border-zinc-400 pb-2">Item Details</h4>
@@ -354,203 +555,6 @@ onMount(async () => {
 										</div>
 									</div>
 								{/each}
-							</div>
-						</div>
-					{/if}
-
-					<!-- Payment Information -->
-
-					{#if data.order && data.order?.amount}
-						<div>
-							<h4 class="mb-5 border-b border-dashed border-zinc-400 pb-2">Payment Information</h4>
-
-							<div class="flex max-w-max flex-col items-start gap-2">
-								<p class="flex items-center">
-									<span class="mr-2 w-32">Subtotal</span>
-
-									<span>
-										: &nbsp; {currency(data.order?.amount.subtotal, store?.currencySymbol)}
-									</span>
-								</p>
-
-								<p class="flex items-center">
-									<span class="mr-2 w-32">Discount</span>
-
-									<span>
-										: &nbsp;
-
-										{currency(data.order?.amount.discount, store?.currencySymbol)}
-									</span>
-								</p>
-
-								{#if data.order?.coupon.code}
-									<p class="flex items-center">
-										<span class="mr-2 w-32">Applied Coupon</span>
-
-										<span>
-											: &nbsp;
-											{data.order?.coupon.code}
-										</span>
-									</p>
-								{/if}
-
-								<p class="flex items-center">
-									<span class="mr-2 w-32">Shipping</span>
-
-									<span>
-										: &nbsp;
-										{#if data.order?.amount.shipping}
-											{currency(data.order?.amount.shipping, store?.currencySymbol)}
-										{:else}
-											Free
-										{/if}
-									</span>
-								</p>
-
-								{#if data.order?.amount.cod_charges}
-									<p class="flex items-center">
-										<span class="mr-2 w-32">COD Charges</span>
-
-										<span>
-											: &nbsp;
-											{currency(data.order?.amount.cod_charges, store?.currencySymbol)}
-										</span>
-									</p>
-								{/if}
-
-								<hr class="w-full border-t border-zinc-200" />
-
-								<div class="flex items-center text-sm font-bold text-zinc-800">
-									<span class="mr-2 w-32">Total</span>
-
-									<span>
-										: &nbsp; {currency(data.order?.amount.total, store?.currencySymbol)}
-									</span>
-								</div>
-							</div>
-						</div>
-					{/if}
-				</div>
-
-				<div class="flex flex-col gap-5 col-span-1">
-					<!-- Booking Information -->
-
-					{#if data.order?.seats?.length > 0}
-						<div>
-							<h4 class="mb-5 border-b border-dashed border-zinc-400 pb-2">Booking Information</h4>
-
-							<div class="items-start flex flex-col divide-y text-sm">
-								{#each data.order?.seats as seat}
-									<div class="flex flex-col gap-2 py-4">
-										<span><span>Seat Number : &nbsp; </span> {seat.seatNo} </span>
-
-										<span>
-											<span>Seat Type : &nbsp; </span>
-
-											{#if seat.seatType === 'horizontal_sleeper'}
-												Sleeper
-											{:else}
-												Seater
-											{/if}
-										</span>
-									</div>
-								{/each}
-							</div>
-						</div>
-					{/if}
-
-					<!-- Delivery Information -->
-
-					{#if data.order && data.order?.shipping_address}
-						<div>
-							<h4 class="mb-5 border-b border-dashed border-zinc-400 pb-2">Delivery Information</h4>
-
-							<div class="flex flex-col gap-1">
-								{#if data.order?.shipping_address.firstName}
-									<p>
-										{data.order?.shipping_address.firstName}
-
-										{data.order?.shipping_address.lastName}
-									</p>
-								{/if}
-
-								<p>
-									{#if data.order?.shipping_address.address}
-										{data.order?.shipping_address.address}
-									{/if}
-
-									{#if data.order?.shipping_address.city}
-										, {data.order?.shipping_address.city}
-									{/if}
-
-									{#if data.order?.shipping_address.country}
-										, {data.order?.shipping_address.country}
-									{/if}
-
-									{#if data.order?.shipping_address.zip}
-										- {data.order?.shipping_address.zip}
-									{/if}
-								</p>
-
-								{#if data.order?.shipping_address.phone || data.order?.shipping_address.userPhone}
-									<p>
-										{data.order?.shipping_address.phone || data.order?.userPhone}
-									</p>
-								{/if}
-
-								{#if data.order?.shipping_address.email}
-									<p>
-										{data.order?.shipping_address.email}
-									</p>
-								{/if}
-							</div>
-						</div>
-					{/if}
-
-					<!-- Billing Information -->
-
-					{#if data.order && data.order?.billing_address}
-						<div>
-							<h4 class="mb-5 border-b border-dashed border-zinc-400 pb-2">Billing Information</h4>
-
-							<div class="flex flex-col gap-1">
-								{#if data.order?.billing_address.firstName}
-									<p>
-										{data.order?.billing_address.firstName}
-
-										{data.order?.billing_address.lastName}
-									</p>
-								{/if}
-
-								<p>
-									{#if data.order?.billing_address.address}
-										{data.order?.billing_address.address}
-									{/if}
-
-									{#if data.order?.billing_address.city}
-										, {data.order?.billing_address.city}
-									{/if}
-
-									{#if data.order?.billing_address.country}
-										, {data.order?.billing_address.country}
-									{/if}
-
-									{#if data.order?.billing_address.zip}
-										- {data.order?.billing_address.zip}
-									{/if}
-								</p>
-
-								{#if data.order?.billing_address.phone || data.order?.billing_address.userPhone}
-									<p>
-										{data.order?.billing_address.phone || data.order?.userPhone}
-									</p>
-								{/if}
-
-								{#if data.order?.billing_address.email}
-									<p>
-										{data.order?.billing_address.email}
-									</p>
-								{/if}
 							</div>
 						</div>
 					{/if}
