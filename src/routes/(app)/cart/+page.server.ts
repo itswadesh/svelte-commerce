@@ -54,18 +54,21 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 }
 
 const add: Action = async ({ request, cookies, locals }) => {
+	console.log('add to cart')
 	const data = Object.fromEntries(await request.formData())
 	const pid = data.pid
 	const vid = data.vid
 	const variantsLength = +data.variantsLength
 	const currentVariantId = data.currentVariantId
 	const qty = +data.qty
+	console.log('data', data)
 	const linkedItems = JSON.parse(data.linkedItems || '[]')
 	const options = JSON.parse(data.options || '[]') //data.options //
 	const customizedImg = data.customizedImg
 	const customizedData = data.customizedData
 	let cartId = locals.cartId
 	let sid = cookies.get('connect.sid')
+	console.log('sid', sid)
 
 	if (variantsLength > 0 && !currentVariantId) {
 		return 'choose variant'
@@ -75,7 +78,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 		return fail(400, { invalid: true })
 	}
 
-	// console.log(cartId);
+	console.log('cartId', cartId)
 
 	try {
 		// let cart = await CartService.addToCartService({
@@ -90,7 +93,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 		// 	origin: locals.origin,
 		// 	sid // This is a special case to pass complete cookie
 		// })
-		let cart = await services.CartService.addToCart({
+		let cart = await services.CartService.addToCartService({
 			pid,
 			vid: currentVariantId || vid,
 			qty,
@@ -102,9 +105,6 @@ const add: Action = async ({ request, cookies, locals }) => {
 			origin: locals.origin,
 			sid // This is a special case to pass complete cookie
 		})
-
-		// console.log('cart', cart);
-
 		// if (!cartId) { // Commented out because when can't find cart_id in database, it will still won't set the new cart_id in cookies
 		cartId = cart.cart_id // This is required because when cart_id is null, it will add 3 items with null cart id hence last one prevails
 		cookies.set('cartId', cartId, { path: '/', maxAge: 31536000 })
@@ -117,7 +117,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 
 		if (linkedItems?.length) {
 			for (const i of linkedItems) {
-				cart = await CartService.addToCartService({
+				cart = await services.CartService.addToCartService({
 					pid: i,
 					vid: i,
 					qty: 1,
@@ -160,6 +160,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 			return {}
 		}
 	} catch (e) {
+		console.log('e', e)
 		return {}
 	}
 }
@@ -175,7 +176,7 @@ const createBackOrder: Action = async ({ request, cookies, locals }) => {
 	}
 
 	try {
-		const cart = await CartService.createBackOrder({
+		const cart = await services.CartService.createBackOrder({
 			pid,
 			qty,
 			storeId: locals.storeId,
@@ -197,7 +198,7 @@ const handleUnavailableItems: Action = async ({ request, cookies, locals }) => {
 	const sid = cookies.get('connect.sid')
 
 	try {
-		const movedRes = await WishlistService.moveUnavailableItemsToWishlist({
+		const movedRes = await services.WishlistService.moveUnavailableItemsToWishlist({
 			storeId: locals.storeId,
 			origin: locals.origin,
 			sid // This is a special case to pass complete cookie

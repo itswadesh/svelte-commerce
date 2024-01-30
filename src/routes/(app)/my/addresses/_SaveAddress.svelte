@@ -202,7 +202,7 @@ async function fetchStateAndCity(zip, addresstype) {
 
 		let { city, state } = shipping_address
 
-		const zipInfo = await ZipService.findZip({
+		const zipInfo = await services.ZipService.findZip({
 			zip,
 			origin
 		})

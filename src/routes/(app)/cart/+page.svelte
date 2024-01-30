@@ -117,7 +117,7 @@ async function applyCouponCode(selectedCouponCode: string, index: number) {
 			loadingApplyCoupon = true
 		}
 
-		const resAC = await CartService.applyCouponService({
+		const resAC = await services.CartService.applyCouponService({
 			cartId: $page.data.cartId,
 			code: selectedCouponCode,
 			origin: $page.data.origin,
@@ -148,7 +148,7 @@ async function removeCouponCode() {
 	try {
 		loadingRemoveCoupon = true
 
-		await CartService.removeCouponService({
+		await services.CartService.removeCouponService({
 			cartId: $page.data.cartId,
 			code: selectedCouponCode || cart?.discount?.code,
 			origin: $page.data.origin,
@@ -176,7 +176,6 @@ async function getProducts() {
 
 		const resP = await services.ProductService.fetchProducts({
 			origin: $page?.data?.origin,
-			isCors: $page?.data?.store?.isCors,
 			storeId: $page?.data?.storeId
 		})
 		products = resP?.hits
@@ -191,7 +190,6 @@ async function getCoupons() {
 		loadingCoupon = true
 		const resC = await services.CouponService.fetchCoupons({
 			origin: $page?.data?.origin,
-			isCors: $page?.data?.store?.isCors,
 			storeId: $page?.data?.storeId
 		})
 		coupons = resC?.data

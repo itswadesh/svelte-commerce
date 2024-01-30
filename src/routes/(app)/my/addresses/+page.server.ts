@@ -43,9 +43,7 @@ const zodAddressSchema = z.object({
 		.min(10, { message: 'Phone must be at least 10 digits' })
 		.max(17, { message: 'Phone must be less then 17 digits' }),
 	state: z.string({ required_error: 'State is required' }),
-	zip: z
-		.string({ required_error: 'ZIP is required' })
-
+	zip: z.string({ required_error: 'ZIP is required' })
 })
 
 const zodAddressForINSchema = z.object({
@@ -165,7 +163,8 @@ const saveAddress = async ({ request, cookies, locals }) => {
 				}
 
 				if (!shipping_address.phone.startsWith('+')) {
-					shipping_address.phone = (selectedShippingAddressCountry?.dialCode || '+91') + shipping_address.phone
+					shipping_address.phone =
+						(selectedShippingAddressCountry?.dialCode || '+91') + shipping_address.phone
 				}
 			}
 
@@ -186,7 +185,7 @@ const saveAddress = async ({ request, cookies, locals }) => {
 				})
 			}
 
-			res = await AddressService.saveAddress({
+			res = await services.AddressService.saveAddress({
 				address,
 				city,
 				country,
@@ -220,7 +219,8 @@ const saveAddress = async ({ request, cookies, locals }) => {
 			}
 
 			if (!shipping_address.phone.startsWith('+')) {
-				shipping_address.phone = (selectedShippingAddressCountry?.dialCode || '+91') + shipping_address.phone
+				shipping_address.phone =
+					(selectedShippingAddressCountry?.dialCode || '+91') + shipping_address.phone
 			}
 
 			try {
@@ -270,7 +270,8 @@ const saveAddress = async ({ request, cookies, locals }) => {
 						}
 
 						if (!new_billing_address.phone.startsWith('+')) {
-							new_billing_address.phone = (selectedBillingAddressCountry?.dialCode || '+91') + new_billing_address.phone
+							new_billing_address.phone =
+								(selectedBillingAddressCountry?.dialCode || '+91') + new_billing_address.phone
 						}
 					}
 
@@ -293,7 +294,7 @@ const saveAddress = async ({ request, cookies, locals }) => {
 				}
 			}
 
-			res = await CartService.updateCart3({
+			res = await services.CartService.updateCart3({
 				cartId,
 				shipping_address,
 				billing_address: new_billing_address,
@@ -380,7 +381,7 @@ const editAddress = async ({ request, cookies, locals }) => {
 			})
 		}
 
-		const res = await AddressService.saveAddress({
+		const res = await services.AddressService.saveAddress({
 			address,
 			city,
 			country,
@@ -408,9 +409,10 @@ const deleteAddress = async ({ request, cookies, locals }) => {
 	const id = data.get('id')
 	const sid = cookies.get('connect.sid')
 
-	const res = await AddressService.deleteAddress({
+	const res = await services.AddressService.deleteAddress({
 		id,
 		storeId: locals.storeId,
+		origin,
 		sid
 	})
 
