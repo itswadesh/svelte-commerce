@@ -42,7 +42,53 @@ const zodAddressSchema = z.object({
 	state: z.string({ required_error: 'State is required' }),
 	zip: z
 		.string({ required_error: 'ZIP is required' })
+
+})
+
+const zodAddressForINSchema = z.object({
+	address: z.string({ required_error: 'Address is required' }),
+	city: z.string({ required_error: 'City is required' }),
+	country: z.string({ required_error: 'Country is required' }),
+	email: z
+		.string({ required_error: 'Email is required' })
+		.email({ message: 'Email must be a valid email address' }),
+	firstName: z
+		.string({ required_error: 'First Name is required' })
+		.min(3, { message: 'First Name must be at least 3 characters' }),
+	lastName: z
+		.string({ required_error: 'Last Name is required' })
+		.min(3, { message: 'Last Name must be at least 3 characters' }),
+	phone: z
+		.string({ required_error: 'Phone is required' })
+		.min(10, { message: 'Phone must be at least 10 digits' })
+		.max(17, { message: 'Phone must be less then 17 digits' }),
+	state: z.string({ required_error: 'State is required' }),
+	zip: z
+		.string({ required_error: 'ZIP is required' })
 		.min(6, { message: 'ZIP must be at least 6 digits.' })
+})
+
+const zodAddressForGBSchema = z.object({
+	address: z.string({ required_error: 'Address is required' }),
+	city: z.string({ required_error: 'City is required' }),
+	country: z.string({ required_error: 'Country is required' }),
+	email: z
+		.string({ required_error: 'Email is required' })
+		.email({ message: 'Email must be a valid email address' }),
+	firstName: z
+		.string({ required_error: 'First Name is required' })
+		.min(3, { message: 'First Name must be at least 3 characters' }),
+	lastName: z
+		.string({ required_error: 'Last Name is required' })
+		.min(3, { message: 'Last Name must be at least 3 characters' }),
+	phone: z
+		.string({ required_error: 'Phone is required' })
+		.min(10, { message: 'Phone must be at least 10 digits' })
+		.max(17, { message: 'Phone must be less then 17 digits' }),
+	state: z.string({ required_error: 'State is required' }),
+	zip: z
+		.string({ required_error: 'ZIP is required' })
+		.min(7, { message: 'ZIP must be at least 7 digits.' })
 })
 
 const saveAddress = async ({ request, cookies, locals }) => {
@@ -102,6 +148,8 @@ const saveAddress = async ({ request, cookies, locals }) => {
 			error(404, 'Please enter valid phone number')
 		} else if (selectedShippingAddressCountry.code === 'IN' && zip.length !== 6) {
 			error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
+		} else if (selectedShippingAddressCountry.code === 'GB' && zip.length !== 7) {
+			error(404, 'Please enter 7 digit Postal Code/Pincode/Zipcode')
 		} else {
 			shipping_address.phone = shipping_address.phone.replace(/[a-zA-Z ]/g, '')
 
@@ -110,12 +158,17 @@ const saveAddress = async ({ request, cookies, locals }) => {
 			}
 
 			if (!shipping_address.phone.startsWith('+')) {
-				shipping_address.phone =
-					(selectedShippingAddressCountry.dialCode || '+91') + shipping_address.phone
+				shipping_address.phone = (selectedShippingAddressCountry.dialCode || '+91') + shipping_address.phone
 			}
 
 			try {
-				zodAddressSchema.parse(shipping_address)
+				if (selectedShippingAddressCountry.code === 'IN') {
+					zodAddressForINSchema.parse(shipping_address)
+				} else if (selectedShippingAddressCountry.code === 'GB') {
+					zodAddressForGBSchema.parse(shipping_address)
+				} else {
+					zodAddressSchema.parse(shipping_address)
+				}
 			} catch (err) {
 				const { fieldErrors: errors } = err.flatten()
 				const { address, city, ...rest } = shipping_address
@@ -149,6 +202,8 @@ const saveAddress = async ({ request, cookies, locals }) => {
 			error(404, 'Please enter valid phone number')
 		} else if (selectedShippingAddressCountry.code === 'IN' && zip.length !== 6) {
 			error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
+		} else if (selectedShippingAddressCountry.code === 'GB' && zip.length !== 7) {
+			error(404, 'Please enter 7 digit Postal Code/Pincode/Zipcode')
 		} else {
 			shipping_address.phone = shipping_address.phone.replace(/[a-zA-Z ]/g, '')
 
@@ -157,12 +212,17 @@ const saveAddress = async ({ request, cookies, locals }) => {
 			}
 
 			if (!shipping_address.phone.startsWith('+')) {
-				shipping_address.phone =
-					(selectedShippingAddressCountry.dialCode || '+91') + shipping_address.phone
+				shipping_address.phone = (selectedShippingAddressCountry.dialCode || '+91') + shipping_address.phone
 			}
 
 			try {
-				zodAddressSchema.parse(shipping_address)
+				if (selectedShippingAddressCountry.code === 'IN') {
+					zodAddressForINSchema.parse(shipping_address)
+				} else if (selectedShippingAddressCountry.code === 'GB') {
+					zodAddressForGBSchema.parse(shipping_address)
+				} else {
+					zodAddressSchema.parse(shipping_address)
+				}
 			} catch (err) {
 				const { fieldErrors: errors } = err.flatten()
 				const { address, city, ...rest } = shipping_address
@@ -191,6 +251,8 @@ const saveAddress = async ({ request, cookies, locals }) => {
 				error(404, 'Please enter valid phone number')
 			} else if (selectedBillingAddressCountry.code === 'IN' && zip.length !== 6) {
 				error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
+			} else if (selectedBillingAddressCountry.code === 'GB' && zip.length !== 7) {
+				error(404, 'Please enter 7 digit Postal Code/Pincode/Zipcode')
 			} else {
 				new_billing_address.phone = new_billing_address.phone.replace(/[a-zA-Z ]/g, '')
 
@@ -199,12 +261,17 @@ const saveAddress = async ({ request, cookies, locals }) => {
 				}
 
 				if (!new_billing_address.phone.startsWith('+')) {
-					new_billing_address.phone =
-						(selectedBillingAddressCountry.dialCode || '+91') + new_billing_address.phone
+					new_billing_address.phone = (selectedBillingAddressCountry.dialCode || '+91') + new_billing_address.phone
 				}
 
 				try {
-					zodAddressSchema.parse(new_billing_address)
+					if (showBillingAddressErrorMessage.code === 'IN') {
+						zodAddressForINSchema.parse(new_billing_address)
+					} else if (showBillingAddressErrorMessage.code === 'GB') {
+						zodAddressForGBSchema.parse(new_billing_address)
+					} else {
+						zodAddressSchema.parse(new_billing_address)
+					}
 				} catch (err) {
 					const { fieldErrors: errors } = err.flatten()
 					const { address, city, ...rest } = new_billing_address
@@ -270,6 +337,8 @@ const editAddress = async ({ request, cookies, locals }) => {
 		error(404, 'Please enter valid phone number')
 	} else if (selectedShippingAddressCountry.code === 'IN' && zip.length !== 6) {
 		error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
+	} else if (selectedShippingAddressCountry.code === 'GB' && zip.length !== 7) {
+		error(404, 'Please enter 7 digit Postal Code/Pincode/Zipcode')
 	} else {
 		phone = phone.replace(/[a-zA-Z ]/g, '')
 
@@ -282,7 +351,13 @@ const editAddress = async ({ request, cookies, locals }) => {
 		}
 
 		try {
-			zodAddressSchema.parse(formData)
+			if (selectedShippingAddressCountry.code === 'IN') {
+				zodAddressForINSchema.parse(formData)
+			} else if (selectedShippingAddressCountry.code === 'GB') {
+				zodAddressForGBSchema.parse(formData)
+			} else {
+				zodAddressSchema.parse(formData)
+			}
 		} catch (err) {
 			const { fieldErrors: errors } = err.flatten()
 			const { address, city, ...rest } = formData
@@ -315,6 +390,7 @@ const editAddress = async ({ request, cookies, locals }) => {
 }
 
 const deleteAddress = async ({ request, cookies, locals }) => {
+	// if (confirm('Are you sure to delete?')) {
 	const data = await request.formData()
 	const id = data.get('id')
 	const sid = cookies.get('connect.sid')
@@ -328,6 +404,9 @@ const deleteAddress = async ({ request, cookies, locals }) => {
 	// console.log('res of save address = ', res)
 
 	return res
+	// } else {
+	// 	return
+	// }
 }
 
 export const actions = { saveAddress, editAddress, deleteAddress }

@@ -328,7 +328,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 						autoFocus
 						required />
 
-					{#if zodShippingErrors?.firstName}<p class="mt-1 text-red-600">
+					{#if zodShippingErrors?.firstName}<p class="mt-1 text-xs text-red-600">
 							{zodShippingErrors?.firstName}
 						</p>{/if}
 				</div>
@@ -349,7 +349,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 						bind:value="{shipping_address.lastName}"
 						required />
 
-					{#if zodShippingErrors?.lastName}<p class="mt-1 text-red-600">
+					{#if zodShippingErrors?.lastName}<p class="mt-1 text-xs text-red-600">
 							{zodShippingErrors?.lastName}
 						</p>{/if}
 				</div>
@@ -367,7 +367,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 						bind:value="{shipping_address.email}"
 						required />
 
-					{#if zodShippingErrors?.email}<p class="mt-1 text-red-600">
+					{#if zodShippingErrors?.email}<p class="mt-1 text-xs text-red-600">
 							{zodShippingErrors?.email}
 						</p>{/if}
 				</div>
@@ -397,7 +397,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 						<p id="phone-warning" class="mt-1 text-red-600">Please enter vaild phone number</p>
 					{/if}
 
-					{#if zodShippingErrors?.phone}<p class="mt-1 text-red-600">
+					{#if zodShippingErrors?.phone}<p class="mt-1 text-xs text-red-600">
 							{zodShippingErrors?.phone}
 						</p>{/if}
 				</div>
@@ -415,9 +415,11 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 				<div class="w-full">
 					<Textarea placeholder="Enter Address" bind:value="{shipping_address.address}" required />
 
-					{#if zodShippingErrors?.address}<p class="mt-1 text-red-600">
+					{#if zodShippingErrors?.address}
+						<p class="mt-1 text-xs text-red-600">
 							{zodShippingErrors?.address}
-						</p>{/if}
+						</p>
+					{/if}
 				</div>
 			</div>
 
@@ -431,15 +433,32 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 				</h6>
 
 				<div class="w-full">
-					<Textbox
-						type="tel"
-						placeholder="Enter Postal Code/Pincode/Zipcode"
-						maxlength="6"
-						bind:value="{shipping_address.zip}"
-						on:blur="{() => fetchStateAndCity(shipping_address.zip, 'shipping')}"
-						required />
+					{#if shipping_address.country === 'IN'}
+						<Textbox
+							type="tel"
+							placeholder="Enter Postal Code/Pincode/Zipcode"
+							maxlength="6"
+							bind:value="{shipping_address.zip}"
+							on:blur="{() => fetchStateAndCity(shipping_address.zip, 'shipping')}"
+							required />
+					{:else if shipping_address.country === 'GB'}
+						<Textbox
+							type="text"
+							placeholder="Enter Postal Code/Pincode/Zipcode"
+							maxlength="7"
+							bind:value="{shipping_address.zip}"
+							required />
+					{:else}
+						<Textbox
+							type="tel"
+							placeholder="Enter Postal Code/Pincode/Zipcode"
+							bind:value="{shipping_address.zip}"
+							required />
+					{/if}
 
-					{#if zodShippingErrors?.zip}<p class="mt-1 text-red-600">{zodShippingErrors?.zip}</p>{/if}
+					{#if zodShippingErrors?.zip}<p class="mt-1 text-xs text-red-600">
+							{zodShippingErrors?.zip}
+						</p>{/if}
 				</div>
 			</div>
 
@@ -459,7 +478,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 						bind:value="{shipping_address.city}"
 						required />
 
-					{#if zodShippingErrors?.city}<p class="mt-1 text-red-600">
+					{#if zodShippingErrors?.city}<p class="mt-1 text-xs text-red-600">
 							{zodShippingErrors?.city}
 						</p>{/if}
 				</div>
@@ -477,7 +496,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 
 					<div class="w-full">
 						<select
-							class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
+							class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-zinc-500 hover:bg-zinc-50"
 							bind:value="{shipping_address.state}"
 							disabled="{!shipping_address.country || loadingForShippingAddressStates}"
 							required>
@@ -491,7 +510,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 							{/each}
 						</select>
 
-						{#if zodShippingErrors?.state}<p class="mt-1 text-red-600">
+						{#if zodShippingErrors?.state}<p class="mt-1 text-xs text-red-600">
 								{zodShippingErrors?.state}
 							</p>{/if}
 					</div>
@@ -511,7 +530,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 					{#if countries?.length}
 						<select
 							disabled="{countries?.length === 1}"
-							class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
+							class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-zinc-500 hover:bg-zinc-50"
 							bind:value="{shipping_address.country}"
 							on:change="{() => onShippingAddressCountryChange(shipping_address.country)}"
 							required>
@@ -526,7 +545,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 							{/each}
 						</select>
 
-						{#if zodShippingErrors?.country}<p class="mt-1 text-red-600">
+						{#if zodShippingErrors?.country}<p class="mt-1 text-xs text-red-600">
 								{zodShippingErrors?.country}
 							</p>{/if}
 					{:else}
@@ -573,7 +592,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 									required />
 
 								{#if zodBillingErrors?.firstName}
-									<p class="mt-1 text-red-600">
+									<p class="mt-1 text-xs text-red-600">
 										{zodBillingErrors?.firstName}
 									</p>
 								{/if}
@@ -596,7 +615,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 									required />
 
 								{#if zodBillingErrors?.lastName}
-									<p class="mt-1 text-red-600">
+									<p class="mt-1 text-xs text-red-600">
 										{zodBillingErrors?.lastName}
 									</p>
 								{/if}
@@ -616,7 +635,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 									required />
 
 								{#if zodBillingErrors?.email}
-									<p class="mt-1 text-red-600">
+									<p class="mt-1 text-xs text-red-600">
 										{zodBillingErrors?.email}
 									</p>
 								{/if}
@@ -650,7 +669,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 								{/if}
 
 								{#if zodBillingErrors?.phone}
-									<p class="mt-1 text-red-600">{zodBillingErrors?.phone}</p>
+									<p class="mt-1 text-xs text-red-600">{zodBillingErrors?.phone}</p>
 								{/if}
 							</div>
 						</div>
@@ -671,7 +690,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 									required />
 
 								{#if zodBillingErrors?.address}
-									<p class="mt-1 text-red-600">{zodBillingErrors?.address}</p>
+									<p class="mt-1 text-xs text-red-600">{zodBillingErrors?.address}</p>
 								{/if}
 							</div>
 						</div>
@@ -686,16 +705,31 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 							</h6>
 
 							<div class="w-full">
-								<Textbox
-									type="tel"
-									placeholder="Enter Postal Code/Pincode/Zipcode"
-									maxlength="6"
-									bind:value="{billing_address.zip}"
-									on:blur="{() => fetchStateAndCity(billing_address.zip, 'billing')}"
-									required />
+								{#if billing_address.country === 'IN'}
+									<Textbox
+										type="tel"
+										placeholder="Enter Postal Code/Pincode/Zipcode"
+										maxlength="6"
+										bind:value="{billing_address.zip}"
+										on:blur="{() => fetchStateAndCity(billing_address.zip, 'shipping')}"
+										required />
+								{:else if billing_address.country === 'GB'}
+									<Textbox
+										type="text"
+										placeholder="Enter Postal Code/Pincode/Zipcode"
+										maxlength="7"
+										bind:value="{billing_address.zip}"
+										required />
+								{:else}
+									<Textbox
+										type="tel"
+										placeholder="Enter Postal Code/Pincode/Zipcode"
+										bind:value="{billing_address.zip}"
+										required />
+								{/if}
 
 								{#if zodBillingErrors?.zip}
-									<p class="mt-1 text-red-600">{zodBillingErrors?.zip}</p>
+									<p class="mt-1 text-xs text-red-600">{zodBillingErrors?.zip}</p>
 								{/if}
 							</div>
 						</div>
@@ -717,7 +751,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 									required />
 
 								{#if zodBillingErrors?.city}
-									<p class="mt-1 text-red-600">{zodBillingErrors?.city}</p>
+									<p class="mt-1 text-xs text-red-600">{zodBillingErrors?.city}</p>
 								{/if}
 							</div>
 						</div>
@@ -734,7 +768,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 
 								<div class="w-full">
 									<select
-										class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
+										class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-zinc-500 hover:bg-zinc-50"
 										bind:value="{billing_address.state}"
 										disabled="{!billing_address.country || loadingForBillingAddressStates}"
 										required>
@@ -749,7 +783,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 									</select>
 
 									{#if zodBillingErrors?.state}
-										<p class="mt-1 text-red-600">{zodBillingErrors?.state}</p>
+										<p class="mt-1 text-xs text-red-600">{zodBillingErrors?.state}</p>
 									{/if}
 								</div>
 							</div>
@@ -768,7 +802,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 								{#if countries?.length}
 									<select
 										disabled="{countries?.length === 1}"
-										class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-primary-500 hover:bg-zinc-50"
+										class="w-full rounded border border-zinc-200 bg-white p-2 text-sm placeholder-zinc-400 transition duration-300 placeholder:font-normal focus:outline-none focus:ring-1 focus:ring-zinc-500 hover:bg-zinc-50"
 										bind:value="{billing_address.country}"
 										on:change="{() => onBillingAddressCountryChange(billing_address.country)}"
 										required>
@@ -784,7 +818,7 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 									</select>
 
 									{#if zodBillingErrors?.country}
-										<p class="mt-1 text-red-600">{zodBillingErrors?.country}</p>
+										<p class="mt-1 text-xs text-red-600">{zodBillingErrors?.country}</p>
 									{/if}
 								{:else}
 									<a
