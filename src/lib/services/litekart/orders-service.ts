@@ -296,7 +296,12 @@ export const stripeCheckoutService = async ({
 	}
 }
 
-export const paypalCheckout = async ({ address, paymentMethodId = '', origin, storeId }) => {
+export const paypalCheckout = async ({
+	address,
+	cartId,
+	origin,
+	storeId
+}) => {
 	try {
 		let res = {}
 
@@ -304,7 +309,7 @@ export const paypalCheckout = async ({ address, paymentMethodId = '', origin, st
 			`checkout/paypal`,
 			{
 				address,
-				paymentMethodId,
+				cart_id: cartId,
 				store: storeId
 			},
 			origin
