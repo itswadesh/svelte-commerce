@@ -161,7 +161,7 @@ function changeNumber() {
 
 	<h2 class="mb-8 w-full text-center text-2xl font-semibold text-primary-500">Log in</h2>
 
-	<Error {err} />
+	<Error {err} class="mb-5" />
 
 	{#if !otpRequestSend}
 		<form
