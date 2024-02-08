@@ -403,7 +403,7 @@ function checkIfStripeCardValid({ detail }) {
 									<div transition:slide="{{ duration: 300 }}">
 										<svelte:component
 											this="{Stripe}"
-											address="{data.addressId}"
+											address="{addressId}"
 											isStripeSelected="{selectedPaymentMethod.value === 'Stripe'}"
 											stripePublishableKey="{pm.app_id}"
 											on:isStripeCardValid="{checkIfStripeCardValid}" />
