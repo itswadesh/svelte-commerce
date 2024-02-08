@@ -106,10 +106,10 @@ const saveAddress = async ({ request, cookies, locals }) => {
 	const id = data.get('id')
 	const lastName = data.get('lastName')
 	const phone = data.get('phone')
-	const selectedShippingAddressCountry = data.get('selectedShippingAddressCountry')
 	const showShippingAddressErrorMessage = data.get('showShippingAddressErrorMessage')
 	const state = data.get('state')
 	const zip = data.get('zip')
+	let selectedShippingAddressCountry = data.get('selectedShippingAddressCountry')
 
 	// for billing address
 	const billingAddressAddress = data.get('billingAddressAddress')
@@ -121,10 +121,13 @@ const saveAddress = async ({ request, cookies, locals }) => {
 	const billingAddressPhone = data.get('billingAddressPhone')
 	const billingAddressState = data.get('billingAddressState')
 	const billingAddressZip = data.get('billingAddressZip')
-	const selectedBillingAddressCountry = data.get('selectedBillingAddressCountry')
 	const showBillingAddressErrorMessage = data.get('showBillingAddressErrorMessage')
+	let selectedBillingAddressCountry = data.get('selectedBillingAddressCountry')
 
 	const sid = cookies.get('connect.sid')
+
+	selectedShippingAddressCountry = JSON.parse(selectedShippingAddressCountry)
+	selectedBillingAddressCountry = JSON.parse(selectedBillingAddressCountry)
 
 	let shipping_address = {
 		address: address,
@@ -146,25 +149,27 @@ const saveAddress = async ({ request, cookies, locals }) => {
 
 		if (showShippingAddressErrorMessage === true || showShippingAddressErrorMessage === 'true') {
 			error(404, 'Please enter valid phone number')
-		} else if (selectedShippingAddressCountry.code === 'IN' && zip.length !== 6) {
+		} else if (selectedShippingAddressCountry?.code === 'IN' && zip.length !== 6) {
 			error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
-		} else if (selectedShippingAddressCountry.code === 'GB' && zip.length !== 7) {
+		} else if (selectedShippingAddressCountry?.code === 'GB' && zip.length !== 7) {
 			error(404, 'Please enter 7 digit Postal Code/Pincode/Zipcode')
 		} else {
-			shipping_address.phone = shipping_address.phone.replace(/[a-zA-Z ]/g, '')
+			if (shipping_address.phone) {
+				shipping_address.phone = shipping_address.phone.replace(/[a-zA-Z ]/g, '')
 
-			if (shipping_address.phone.startsWith('0')) {
-				shipping_address.phone = shipping_address.phone.substring(1)
-			}
+				if (shipping_address.phone.startsWith('0')) {
+					shipping_address.phone = shipping_address.phone.substring(1)
+				}
 
-			if (!shipping_address.phone.startsWith('+')) {
-				shipping_address.phone = (selectedShippingAddressCountry.dialCode || '+91') + shipping_address.phone
+				if (!shipping_address.phone.startsWith('+')) {
+					shipping_address.phone = (selectedShippingAddressCountry?.dialCode || '+91') + shipping_address.phone
+				}
 			}
 
 			try {
-				if (selectedShippingAddressCountry.code === 'IN') {
+				if (selectedShippingAddressCountry?.code === 'IN') {
 					zodAddressForINSchema.parse(shipping_address)
-				} else if (selectedShippingAddressCountry.code === 'GB') {
+				} else if (selectedShippingAddressCountry?.code === 'GB') {
 					zodAddressForGBSchema.parse(shipping_address)
 				} else {
 					zodAddressSchema.parse(shipping_address)
@@ -200,9 +205,9 @@ const saveAddress = async ({ request, cookies, locals }) => {
 	else {
 		if (showShippingAddressErrorMessage === true || showShippingAddressErrorMessage === 'true') {
 			error(404, 'Please enter valid phone number')
-		} else if (selectedShippingAddressCountry.code === 'IN' && zip.length !== 6) {
+		} else if (selectedShippingAddressCountry?.code === 'IN' && zip.length !== 6) {
 			error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
-		} else if (selectedShippingAddressCountry.code === 'GB' && zip.length !== 7) {
+		} else if (selectedShippingAddressCountry?.code === 'GB' && zip.length !== 7) {
 			error(404, 'Please enter 7 digit Postal Code/Pincode/Zipcode')
 		} else {
 			shipping_address.phone = shipping_address.phone.replace(/[a-zA-Z ]/g, '')
@@ -212,13 +217,13 @@ const saveAddress = async ({ request, cookies, locals }) => {
 			}
 
 			if (!shipping_address.phone.startsWith('+')) {
-				shipping_address.phone = (selectedShippingAddressCountry.dialCode || '+91') + shipping_address.phone
+				shipping_address.phone = (selectedShippingAddressCountry?.dialCode || '+91') + shipping_address.phone
 			}
 
 			try {
-				if (selectedShippingAddressCountry.code === 'IN') {
+				if (selectedShippingAddressCountry?.code === 'IN') {
 					zodAddressForINSchema.parse(shipping_address)
-				} else if (selectedShippingAddressCountry.code === 'GB') {
+				} else if (selectedShippingAddressCountry?.code === 'GB') {
 					zodAddressForGBSchema.parse(shipping_address)
 				} else {
 					zodAddressSchema.parse(shipping_address)
@@ -245,52 +250,55 @@ const saveAddress = async ({ request, cookies, locals }) => {
 			}
 
 			// console.log('new_billing_address', new_billing_address);
-			// console.log('showShippingAddressErrorMessage at save address', firstName)
 
-			if (showBillingAddressErrorMessage === true || showBillingAddressErrorMessage === 'true') {
-				error(404, 'Please enter valid phone number')
-			} else if (selectedBillingAddressCountry.code === 'IN' && zip.length !== 6) {
-				error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
-			} else if (selectedBillingAddressCountry.code === 'GB' && zip.length !== 7) {
-				error(404, 'Please enter 7 digit Postal Code/Pincode/Zipcode')
-			} else {
-				new_billing_address.phone = new_billing_address.phone.replace(/[a-zA-Z ]/g, '')
+			if (new_billing_address && new_billing_address?.firstName && new_billing_address?.zip) {
+				if (showBillingAddressErrorMessage === true || showBillingAddressErrorMessage === 'true') {
+					error(404, 'Please enter valid phone number')
+				} else if (selectedBillingAddressCountry?.code === 'IN' && zip.length !== 6) {
+					error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
+				} else if (selectedBillingAddressCountry?.code === 'GB' && zip.length !== 7) {
+					error(404, 'Please enter 7 digit Postal Code/Pincode/Zipcode')
+				} else {
+					if (new_billing_address?.phone) {
+						new_billing_address.phone = new_billing_address.phone.replace(/[a-zA-Z ]/g, '')
 
-				if (new_billing_address.phone.startsWith('0')) {
-					new_billing_address.phone = new_billing_address.phone.substring(1)
-				}
+						if (new_billing_address.phone.startsWith('0')) {
+							new_billing_address.phone = new_billing_address.phone.substring(1)
+						}
 
-				if (!new_billing_address.phone.startsWith('+')) {
-					new_billing_address.phone = (selectedBillingAddressCountry.dialCode || '+91') + new_billing_address.phone
-				}
-
-				try {
-					if (showBillingAddressErrorMessage.code === 'IN') {
-						zodAddressForINSchema.parse(new_billing_address)
-					} else if (showBillingAddressErrorMessage.code === 'GB') {
-						zodAddressForGBSchema.parse(new_billing_address)
-					} else {
-						zodAddressSchema.parse(new_billing_address)
+						if (!new_billing_address.phone.startsWith('+')) {
+							new_billing_address.phone = (selectedBillingAddressCountry?.dialCode || '+91') + new_billing_address.phone
+						}
 					}
-				} catch (err) {
-					const { fieldErrors: errors } = err.flatten()
-					const { address, city, ...rest } = new_billing_address
-					error(404, {
-						data: rest,
-						billing_errors: errors
-					})
-				}
 
-				res = await CartService.updateCart3({
-					cartId,
-					shipping_address,
-					billing_address: new_billing_address,
-					selfTakeout: false,
-					storeId: locals.storeId,
-					sid,
-					origin: locals?.origin
-				})
+					try {
+						if (selectedBillingAddressCountry?.code === 'IN') {
+							zodAddressForINSchema.parse(new_billing_address)
+						} else if (selectedBillingAddressCountry?.code === 'GB') {
+							zodAddressForGBSchema.parse(new_billing_address)
+						} else {
+							zodAddressSchema.parse(new_billing_address)
+						}
+					} catch (err) {
+						const { fieldErrors: errors } = err.flatten()
+						const { address, city, ...rest } = new_billing_address
+						error(404, {
+							data: rest,
+							billing_errors: errors
+						})
+					}
+				}
 			}
+
+			res = await CartService.updateCart3({
+				cartId,
+				shipping_address,
+				billing_address: new_billing_address,
+				selfTakeout: false,
+				storeId: locals.storeId,
+				sid,
+				origin: locals?.origin
+			})
 
 			// console.log('res of save address = ', res)
 		}
@@ -311,11 +319,11 @@ const editAddress = async ({ request, cookies, locals }) => {
 	const firstName = data.get('firstName')
 	const id = data.get('id')
 	const lastName = data.get('lastName')
-	const selectedShippingAddressCountry = data.get('selectedShippingAddressCountry')
 	const showShippingAddressErrorMessage = data.get('showShippingAddressErrorMessage')
 	const state = data.get('state')
 	const zip = data.get('zip')
 	let phone = data.get('phone')
+	let selectedShippingAddressCountry = data.get('selectedShippingAddressCountry')
 
 	const sid = cookies.get('connect.sid')
 
@@ -335,25 +343,27 @@ const editAddress = async ({ request, cookies, locals }) => {
 
 	if (showShippingAddressErrorMessage === true || showShippingAddressErrorMessage === 'true') {
 		error(404, 'Please enter valid phone number')
-	} else if (selectedShippingAddressCountry.code === 'IN' && zip.length !== 6) {
+	} else if (selectedShippingAddressCountry?.code === 'IN' && zip.length !== 6) {
 		error(404, 'Please enter 6 digit Postal Code/Pincode/Zipcode')
-	} else if (selectedShippingAddressCountry.code === 'GB' && zip.length !== 7) {
+	} else if (selectedShippingAddressCountry?.code === 'GB' && zip.length !== 7) {
 		error(404, 'Please enter 7 digit Postal Code/Pincode/Zipcode')
 	} else {
-		phone = phone.replace(/[a-zA-Z ]/g, '')
+		if (phone) {
+			phone = phone.replace(/[a-zA-Z ]/g, '')
 
-		if (phone.startsWith('0')) {
-			phone = phone.substring(1)
-		}
+			if (phone.startsWith('0')) {
+				phone = phone.substring(1)
+			}
 
-		if (!phone.startsWith('+')) {
-			phone = (selectedShippingAddressCountry.dialCode || '+91') + phone
+			if (!phone.startsWith('+')) {
+				phone = (selectedShippingAddressCountry?.dialCode || '+91') + phone
+			}
 		}
 
 		try {
-			if (selectedShippingAddressCountry.code === 'IN') {
+			if (selectedShippingAddressCountry?.code === 'IN') {
 				zodAddressForINSchema.parse(formData)
-			} else if (selectedShippingAddressCountry.code === 'GB') {
+			} else if (selectedShippingAddressCountry?.code === 'GB') {
 				zodAddressForGBSchema.parse(formData)
 			} else {
 				zodAddressSchema.parse(formData)
