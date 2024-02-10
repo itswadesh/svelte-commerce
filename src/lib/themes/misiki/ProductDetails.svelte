@@ -1449,33 +1449,46 @@ async function updateVariant(variant) {
 												enctype="multipart/form-data"
 												use:enhance="{() => {
 													return async ({ result }) => {
-														// console.log('result of add to cart', result)
-														if (result?.data === 'choose variant') {
+														// console.log('result of Add to Bag 1', result)
+
+														if (result?.error) {
+															toast(result?.error, 'error')
+															loading = false
+															return
+														} else if (result?.data === 'choose variant') {
 															scrollTo('variants_list')
 															toast('Please choose a variant', 'warning')
 															wiggleVariants = true
-
 															setTimeout(() => {
 																wiggleVariants = false
 															}, 820)
+															loading = false
 															return
+														} else if (result?.status === 200) {
+															updateCartStore({ data: result.data })
+
+															result?.data?.qty < 0
+																? fireGTagEvent('remove_from_cart', result?.data)
+																: fireGTagEvent('add_to_cart', result?.data)
+
+															cartButtonText = 'Added To Cart'
+															bounceItemFromTop = true
+
+															setTimeout(() => {
+																bounceItemFromTop = false
+																cartButtonText = 'Add to Bag'
+															}, 3000)
+
+															loading = false
+															cartButtonText = 'Go to Cart'
+
+															if (customizedImg) {
+																goto(`/checkout/address`)
+															}
+
+															// await invalidateAll()
+															await applyAction(result)
 														}
-														updateCartStore({ data: result.data })
-														result?.data?.qty < 0
-															? fireGTagEvent('remove_from_cart', result?.data)
-															: fireGTagEvent('add_to_cart', result?.data)
-														// console.log(result?.data)
-														cartButtonText = 'Added To Cart'
-														bounceItemFromTop = true
-														setTimeout(() => {
-															bounceItemFromTop = false
-															cartButtonText = 'Add to Bag'
-														}, 3000)
-														cartButtonText = 'Go to Cart'
-														if (customizedImg) {
-															goto(`/checkout/address`)
-														}
-														await applyAction(result)
 													}
 												}}">
 												<input type="hidden" name="pid" value="{data?.product?._id || null}" />
@@ -1853,32 +1866,46 @@ async function updateVariant(variant) {
 												enctype="multipart/form-data"
 												use:enhance="{() => {
 													return async ({ result }) => {
-														// console.log('result of add to cart', result)
-														if (result?.data === 'choose variant') {
+														// console.log('result of Add to Bag 2', result)
+
+														if (result?.error) {
+															toast(result?.error, 'error')
+															loading = false
+															return
+														} else if (result?.data === 'choose variant') {
 															scrollTo('variants_list')
 															toast('Please choose a variant', 'warning')
 															wiggleVariants = true
-
 															setTimeout(() => {
 																wiggleVariants = false
 															}, 820)
+															loading = false
 															return
+														} else if (result?.status === 200) {
+															updateCartStore({ data: result.data })
+
+															result?.data?.qty < 0
+																? fireGTagEvent('remove_from_cart', result?.data)
+																: fireGTagEvent('add_to_cart', result?.data)
+
+															cartButtonText = 'Added To Cart'
+															bounceItemFromTop = true
+
+															setTimeout(() => {
+																bounceItemFromTop = false
+																cartButtonText = 'Add to Bag'
+															}, 3000)
+
+															loading = false
+															cartButtonText = 'Go to Cart'
+
+															if (customizedImg) {
+																goto(`/checkout/address`)
+															}
+
+															// await invalidateAll()
+															await applyAction(result)
 														}
-														updateCartStore({ data: result.data })
-														result?.data?.qty < 0
-															? fireGTagEvent('remove_from_cart', result?.data)
-															: fireGTagEvent('add_to_cart', result?.data)
-														cartButtonText = 'Added To Cart'
-														bounceItemFromTop = true
-														setTimeout(() => {
-															bounceItemFromTop = false
-															cartButtonText = 'Add to Bag'
-														}, 3000)
-														cartButtonText = 'Go to Cart'
-														if (customizedImg) {
-															goto(`/checkout/address`)
-														}
-														await applyAction(result)
 													}
 												}}">
 												<input type="hidden" name="pid" value="{data?.product?._id || null}" />
@@ -2093,32 +2120,46 @@ async function updateVariant(variant) {
 												enctype="multipart/form-data"
 												use:enhance="{() => {
 													return async ({ result }) => {
-														// console.log('result of add to cart', result)
-														if (result?.data === 'choose variant') {
+														// console.log('result of Add to Bag 3', result)
+
+														if (result?.error) {
+															toast(result?.error, 'error')
+															loading = false
+															return
+														} else if (result?.data === 'choose variant') {
 															scrollTo('variants_list')
 															toast('Please choose a variant', 'warning')
 															wiggleVariants = true
-
 															setTimeout(() => {
 																wiggleVariants = false
 															}, 820)
+															loading = false
 															return
+														} else if (result?.status === 200) {
+															updateCartStore({ data: result.data })
+
+															result?.data?.qty < 0
+																? fireGTagEvent('remove_from_cart', result?.data)
+																: fireGTagEvent('add_to_cart', result?.data)
+
+															cartButtonText = 'Added To Cart'
+															bounceItemFromTop = true
+
+															setTimeout(() => {
+																bounceItemFromTop = false
+																cartButtonText = 'Add to Bag'
+															}, 3000)
+
+															loading = false
+															cartButtonText = 'Go to Cart'
+
+															if (customizedImg) {
+																goto(`/checkout/address`)
+															}
+
+															// await invalidateAll()
+															await applyAction(result)
 														}
-														updateCartStore({ data: result.data })
-														result?.data?.qty < 0
-															? fireGTagEvent('remove_from_cart', result?.data)
-															: fireGTagEvent('add_to_cart', result?.data)
-														cartButtonText = 'Added To Cart'
-														bounceItemFromTop = true
-														setTimeout(() => {
-															bounceItemFromTop = false
-															cartButtonText = 'Add to Bag'
-														}, 3000)
-														cartButtonText = 'Go to Cart'
-														if (customizedImg) {
-															goto(`/checkout/address`)
-														}
-														await applyAction(result)
 													}
 												}}">
 												<input type="hidden" name="pid" value="{data?.product?._id || null}" />
