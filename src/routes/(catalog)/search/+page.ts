@@ -14,7 +14,7 @@ export async function load({ url, parent }) {
 		fl[key] = value
 	}
 	return {
-		products: ProductService.searchProducts({
+		products: await ProductService.searchProducts({
 			query: query.toString(),
 			storeId,
 			origin,
