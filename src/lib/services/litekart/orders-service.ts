@@ -58,13 +58,19 @@ export const fetchTrackOrder = async ({ id, origin, sid = null, storeId }) => {
 	}
 }
 
-export const getOrder = async ({ orderNo, origin, sid = null, storeId }) => {
+export const getOrder = async ({ orderNo, cartId, origin, sid = null, storeId }) => {
 	try {
 		let res = {}
 		if (isServer) {
-			res = await getBySid(`orders/${orderNo}?store=${storeId}`, sid)
+			res = await getBySid(
+				`orders-public?order_no=${orderNo}&store=${storeId}&cart_id=${cartId}`,
+				sid
+			)
 		} else {
-			res = await getAPI(`orders/${orderNo}?store=${storeId}`, origin)
+			res = await getAPI(
+				`orders-public?order_no=${orderNo}&store=${storeId}&cart_id=${cartId}`,
+				origin
+			)
 		}
 		return res || {}
 	} catch (e) {
