@@ -58,6 +58,20 @@ export const fetchTrackOrder = async ({ id, origin, sid = null, storeId }) => {
 	}
 }
 
+export const getOrder = async ({ orderNo, origin, sid = null, storeId }) => {
+	try {
+		let res = {}
+		if (isServer) {
+			res = await getBySid(`orders/${orderNo}?store=${storeId}`, sid)
+		} else {
+			res = await getAPI(`orders/${orderNo}?store=${storeId}`, origin)
+		}
+		return res || {}
+	} catch (e) {
+		error(e?.status, e.data?.message || e?.message)
+	}
+}
+
 export const paySuccessPageHit = async ({
 	orderId,
 	paymentMode,
@@ -217,7 +231,6 @@ export const razorpayCheckout = async ({
 	address,
 	orderNo,
 	cartId,
-	paymentMethod = 'Razorpay',
 	prescription = '',
 	origin,
 	storeId
@@ -235,7 +248,7 @@ export const razorpayCheckout = async ({
 				prescription,
 				return_url: `${origin}/payment/process`,
 				store: storeId,
-				paymentMethod
+				paymentMethod: 'Razorpay'
 			},
 			origin
 		)
@@ -296,12 +309,7 @@ export const stripeCheckoutService = async ({
 	}
 }
 
-export const paypalCheckout = async ({
-	address,
-	cartId,
-	origin,
-	storeId
-}) => {
+export const paypalCheckout = async ({ address, orderNo, cartId, origin, storeId }) => {
 	try {
 		let res = {}
 
@@ -310,7 +318,11 @@ export const paypalCheckout = async ({
 			{
 				address,
 				cart_id: cartId,
-				store: storeId
+				domain: origin,
+				order_no: orderNo,
+				return_url: `${origin}/payment/process`,
+				store: storeId,
+				paymentMethod: 'Paypal'
 			},
 			origin
 		)
