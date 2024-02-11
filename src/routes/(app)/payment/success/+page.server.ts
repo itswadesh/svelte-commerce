@@ -6,9 +6,10 @@ export const prerender = false
 
 export async function load({ url, locals, cookies }) {
 	const cartId = cookies.get('cartId')
-	const orderId = url.searchParams.get('orderId') || url.searchParams.get('order_no')
+	const orderNo = url.searchParams.get('order_no')
 	const paymentMode = url.searchParams.get('provider')
-	const paymentReferenceId = url.searchParams.get('payment_reference_id')
+	// const paymentReferenceId =
+	// 	url.searchParams.get('payment_reference_id') || url.searchParams.get('paymentId')
 	const sid = cookies.get('connect.sid')
 	const status = url.searchParams.get('status')
 	const storeId = locals.storeId
@@ -21,11 +22,8 @@ export async function load({ url, locals, cookies }) {
 	try {
 		loading = true
 
-		order = await OrdersService.paySuccessPageHit({
-			orderId,
-			paymentMode,
-			paymentReferenceId,
-			status,
+		order = await OrdersService.getOrder({
+			orderNo: orderNo,
 			sid,
 			storeId,
 			origin: locals.origin
