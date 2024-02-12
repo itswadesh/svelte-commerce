@@ -61,6 +61,7 @@ export const fetchTrackOrder = async ({ id, origin, sid = null, storeId }) => {
 export const getOrder = async ({ orderNo, cartId, origin, sid = null, storeId }) => {
 	try {
 		let res = {}
+
 		if (isServer) {
 			res = await getBySid(
 				`orders-public?order_no=${orderNo}&store=${storeId}&cart_id=${cartId}`,
