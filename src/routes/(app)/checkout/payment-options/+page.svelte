@@ -30,6 +30,7 @@ let loading = false
 let loadingForPaymentProcessingSteps = false
 let orderNo = $page.url.searchParams.get('order_no') || ''
 let paymentDenied = false
+let pg = $page.url.searchParams.get('pg') || ''
 let razorpayReady = false
 let selectedPaymentMethod = { id: '', name: '', text: '', instructions: '', qrcode: '', img: '' }
 let Stripe
@@ -54,12 +55,21 @@ onMount(async () => {
 
 	fireGTagEvent('begin_checkout', data.cart)
 
-	const pm = data?.paymentMethods && data?.paymentMethods[0]
-	paymentMethodChanged(pm)
-
-	// if (data.paymentMethods?.length === 1 && data.paymentMethods[0].type === 'pg' && !orderNo) {
-	// 	submit(pm)
-	// }
+	if (pg) {
+		const pm = data?.paymentMethods.filter((pm) => pm.value === pg)
+		// console.log('pm', pm)
+		if (pm[0]) paymentMethodChanged(pm[0])
+		// } else if (
+		// 	data.paymentMethods?.length === 1 &&
+		// 	data.paymentMethods[0].type === 'pg' &&
+		// 	!orderNo
+		// ) {
+		// 	submit(data.paymentMethods[0])
+	} else {
+		const pm = data?.paymentMethods && data?.paymentMethods[0]
+		// console.log('pm', pm)
+		paymentMethodChanged(pm)
+	}
 })
 
 function paymentMethodChanged(pm) {
