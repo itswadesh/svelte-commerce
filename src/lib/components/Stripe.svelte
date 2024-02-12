@@ -27,7 +27,7 @@ let errorMessage = { text: '', show: false }
 let errors
 let stripe: any
 
-async function payWithCard(clientSecret: string, order_no: string) {
+async function payWithCard(clientSecret: string, orderNo: string) {
 	// This is for 3d authentication
 
 	try {
@@ -43,7 +43,7 @@ async function payWithCard(clientSecret: string, order_no: string) {
 			errorMessage.show = false
 			errorMessage.text = ''
 			goto(
-				`/payment/success?payment_reference_id=${result.paymentIntent.id}&order_no=${order_no}&provider=Stripe`
+				`/payment/process?order_no=${orderNo}&payment_reference_id=${result.paymentIntent.id}&provider=Stripe`
 			)
 		}
 	} catch (e) {
@@ -70,10 +70,10 @@ const payWithStripe = async (pm: PaymentMethod) => {
 			return
 		} else {
 			if (!res.paid) {
-				await payWithCard(res.clientSecret, res?.order_no)
+				await payWithCard(res.clientSecret, res?.orderNo)
 			} else if (res) {
 				goto(
-					`/payment/success?payment_reference_id=${res.referenceId}&order_no=${res?.order_no}&provider=Stripe`
+					`/payment/success?order_no=${res?.orderNo}&payment_reference_id=${res.referenceId}&provider=Stripe`
 				)
 				paySuccess = true
 			}
