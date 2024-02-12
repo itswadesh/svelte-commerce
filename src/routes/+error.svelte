@@ -7,21 +7,9 @@ import errBackground from '$lib/assets/no/error-background.png'
 import menu from '$lib/config/menu'
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
-// console.log('$page', $page)
 
 let q = ''
 let showSidebar = false
-
-// onMount(async () => {
-// 	if ($page.status === 401 || $page.status === 403) {
-// 		const res = await fetch(`/data/logout`, {
-// 			method: 'GET'
-// 		})
-
-// 		const data = await res.json()
-// 	}
-// })
 </script>
 
 <main class="h-screen w-full bg-zinc-100">
@@ -50,8 +38,8 @@ let showSidebar = false
 						{$page.error?.message || 'Need to login again'}
 					{:else if $page.status === 403}
 						Sorry, access denied.
-					{:else if $page.status === 404}
-						Sorry, page not found
+						<!-- {:else if $page.status === 404}
+						Sorry, page not found -->
 					{:else if $page.status === 500}
 						{@html $page.error?.message}
 					{:else}
