@@ -38,8 +38,8 @@ let showSidebar = false
 						{$page.error?.message || 'Need to login again'}
 					{:else if $page.status === 403}
 						Sorry, access denied.
-						<!-- {:else if $page.status === 404}
-						Sorry, page not found -->
+					{:else if $page.status === 404}
+						{@html $page.error?.message || 'Sorry, page not found.'}
 					{:else if $page.status === 500}
 						{@html $page.error?.message}
 					{:else}
