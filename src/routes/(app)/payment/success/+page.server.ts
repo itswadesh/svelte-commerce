@@ -24,7 +24,7 @@ export async function load({ url, locals, cookies }) {
 		loading = true
 
 		order = await OrdersService.getOrder({
-			orderNo: orderNo,
+			orderNo,
 			cartId,
 			sid,
 			storeId,

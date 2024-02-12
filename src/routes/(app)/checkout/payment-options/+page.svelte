@@ -124,7 +124,7 @@ async function submit(pm) {
 
 				// console.log('res of cod', res)
 
-				goto(`/payment/success?orderId=${res?._id || res?.id}&status=PAYMENT_SUCCESS&provider=COD`)
+				goto(`/payment/success?order_no=${res?.order_no}&status=PAYMENT_SUCCESS&provider=COD`)
 			} catch (e) {
 				data.err = e
 				gotoOrder(orderNo)
@@ -152,9 +152,7 @@ async function submit(pm) {
 
 					comment = ''
 
-					goto(
-						`/payment/success?orderId=${res?._id || res?.id}&status=PAYMENT_SUCCESS&provider=COD`
-					)
+					goto(`/payment/success?order_no=${res?.orderNo}&status=PAYMENT_SUCCESS&provider=COD`)
 				} catch (e) {
 					data.err = e
 					gotoOrder(orderNo)
