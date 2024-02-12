@@ -16,8 +16,8 @@ export async function load({ url, locals, cookies }) {
 
 	const pg = url.searchParams.get('pg')
 
-	const failed_url = `/checkout/payment-options?order_no=${order_no}&pg=${pg}`
-	const success_url = `/payment/success?order_no=${order_no}&pg=${pg}`
+	const failed_url = `/checkout/payment-options?order_no=${order_no}&pg=${paymentMode || pg}`
+	const success_url = `/payment/success?order_no=${order_no}&pg=${paymentMode || pg}`
 	try {
 		// let payment_status = 'FAILED'
 

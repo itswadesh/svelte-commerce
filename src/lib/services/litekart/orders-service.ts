@@ -309,7 +309,6 @@ export const stripeCheckoutService = async ({
 			},
 			origin
 		)
-
 		return res || {}
 	} catch (e) {
 		error(e.status, e)
