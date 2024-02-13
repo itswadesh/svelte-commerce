@@ -1,5 +1,4 @@
 <script>
-import { CartService } from '$lib/services'
 import { CheckoutHeader, Error, Pricesummary, TrustBaggeContainer } from '$lib/components'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'

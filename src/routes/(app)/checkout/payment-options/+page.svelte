@@ -2,7 +2,6 @@
 import { fireGTagEvent } from '$lib/utils/gTagB'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
-import { OrdersService } from '$lib/services'
 import { page } from '$app/stores'
 import { PaymentLoading } from '$lib/ui'
 import { Pricesummary, LazyImg, CheckoutHeader, Error, TrustBaggeContainer } from '$lib/components'

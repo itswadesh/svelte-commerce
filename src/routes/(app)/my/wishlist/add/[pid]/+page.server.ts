@@ -1,6 +1,6 @@
-import { WishlistService } from '$lib/services'
 import { redirect } from '@sveltejs/kit'
 import { services } from '@misiki/litekart-utils'
+
 export async function load({ locals, cookies, params, request }) {
 	try {
 		const pid = params.pid

@@ -1,4 +1,3 @@
-import { AddressService, CartService } from '$lib/services'
 import { error } from '@sveltejs/kit'
 import { services } from '@misiki/litekart-utils'
 import { z } from 'zod'
