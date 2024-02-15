@@ -124,7 +124,9 @@ async function submit(pm) {
 
 				// console.log('res of cod', res)
 
-				goto(`/payment/success?order_no=${res?.order_no}&status=PAYMENT_SUCCESS&provider=COD`)
+				goto(
+					`/payment/success?order_no=${res?.order_no || res?.orderNo || ''}&status=PAYMENT_SUCCESS&provider=COD`
+				)
 			} catch (e) {
 				data.err = e
 				gotoOrder(orderNo)
@@ -152,7 +154,9 @@ async function submit(pm) {
 
 					comment = ''
 
-					goto(`/payment/success?order_no=${res?.orderNo}&status=PAYMENT_SUCCESS&provider=COD`)
+					goto(
+						`/payment/success?order_no=${res?.order_no || res?.orderNo || ''}&status=PAYMENT_SUCCESS&provider=COD`
+					)
 				} catch (e) {
 					data.err = e
 					gotoOrder(orderNo)
@@ -182,7 +186,7 @@ async function submit(pm) {
 					cartId: $page.data.cartId
 				})
 
-				orderNo = res.order_no || ''
+				orderNo = res?.order_no || res?.orderNo || ''
 
 				if (!res.payment_session_id) {
 					data.err = 'Payment failed. Try again'
@@ -253,7 +257,7 @@ async function submit(pm) {
 					storeId: $page.data.storeId
 				})
 
-				orderNo = res.order_no || ''
+				orderNo = res?.order_no || res?.orderNo || ''
 				gotoOrder(orderNo)
 				// console.log('res of Paypal', res)
 
@@ -282,7 +286,7 @@ async function submit(pm) {
 					storeId: $page.data.storeId
 				})
 
-				orderNo = rp.order_no || ''
+				orderNo = rp?.order_no || rp?.orderNo || ''
 				gotoOrder(orderNo)
 
 				const options = {
@@ -300,7 +304,9 @@ async function submit(pm) {
 							})
 
 							toast('Payment success', 'success')
-							goto(`/payment/process?pg=razorpay&order_no=${capture.order_no}`)
+							goto(
+								`/payment/process?pg=razorpay&order_no=${capture?.order_no || capture?.orderNo || ''}`
+							)
 						} catch (e) {
 							data.err = e
 						} finally {
@@ -606,4 +612,4 @@ function checkIfStripeCardValid({ detail }) {
 	<PaymentLoading bind:loadingForPaymentProcessingSteps />
 {/if}
 
-<iframe name="cashfreeFrame" title="Cashfree" class="absolute" allow="payment"></iframe>
+<iframe name="cashfreeFrame" title="Cashfree" allow="payment"></iframe>
