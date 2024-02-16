@@ -10,23 +10,26 @@ export async function load({ parent, url }) {
 
 	try {
 		const orders = await OrdersService.fetchOrders({
+			origin,
 			sid,
 			storeId
 		})
 
 		const wishlists = await WishlistService.fetchWishlist({
-			storeId,
+			origin,
 			sid,
-			origin
+			storeId
 		})
 
 		const reviews = await ReviewService.fetchReviews({
+			origin,
 			sid,
-			storeId,
-			origin
+			storeId
 		})
+
 		return { orders, wishlists, reviews }
 	} catch (e) {
 		redirect(307, '/auth/login')
+	} finally {
 	}
 }
