@@ -119,7 +119,7 @@ async function submit(pm) {
 					paymentMethod: 'COD',
 					prescription: data.prescription?._id,
 					origin: $page.data.origin,
-					storeId: $page.data.storeId
+					storeId: $page?.data?.storeId
 				})
 
 				// console.log('res of cod', res)
@@ -147,7 +147,7 @@ async function submit(pm) {
 						paymentMethod: 'COD',
 						prescription: data.prescription?._id,
 						origin: $page.data.origin,
-						storeId: $page.data.storeId
+						storeId: $page?.data?.storeId
 					})
 
 					// console.log('res of cod', res)
@@ -182,7 +182,7 @@ async function submit(pm) {
 					address: addressId,
 					orderNo,
 					origin: $page.data.origin,
-					storeId: $page.data.storeId,
+					storeId: $page?.data?.storeId,
 					cartId: $page.data.cartId
 				})
 
@@ -226,7 +226,7 @@ async function submit(pm) {
 					address: addressId,
 					origin: $page.data.origin,
 					cartId: $page.data.cartId,
-					storeId: $page.data.storeId,
+					storeId: $page?.data?.storeId,
 					orderNo
 				})
 
@@ -254,7 +254,7 @@ async function submit(pm) {
 					orderNo,
 					cartId: $page.data.cartId,
 					origin: $page.data.origin,
-					storeId: $page.data.storeId
+					storeId: $page?.data?.storeId
 				})
 
 				orderNo = res?.order_no || res?.orderNo || ''
@@ -283,7 +283,7 @@ async function submit(pm) {
 					orderNo,
 					cartId: $page.data.cartId,
 					origin: $page.data.origin,
-					storeId: $page.data.storeId
+					storeId: $page?.data?.storeId
 				})
 
 				orderNo = rp?.order_no || rp?.orderNo || ''
@@ -300,7 +300,7 @@ async function submit(pm) {
 								rpOrderId: response.razorpay_order_id,
 								rpPaymentId: response.razorpay_payment_id,
 								origin: $page.data.origin,
-								storeId: $page.data.storeId
+								storeId: $page?.data?.storeId
 							})
 
 							toast('Payment success', 'success')

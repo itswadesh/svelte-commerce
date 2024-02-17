@@ -1,5 +1,5 @@
 import { fail, redirect } from '@sveltejs/kit'
-import { OrdersService } from 'lib/services/index'
+import { OrdersService } from '$lib/services'
 
 export const prerender = false
 

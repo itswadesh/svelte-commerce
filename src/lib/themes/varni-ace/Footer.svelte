@@ -69,7 +69,7 @@ onMount(async () => {
 		})
 
 		menu = await getMenuFromStore({
-			storeId: $page.data.storeId,
+			storeId: $page?.data?.storeId,
 			origin: $page.data.origin,
 			isCors: $page.data.isCors
 		})
@@ -78,7 +78,7 @@ onMount(async () => {
 			limit: 20,
 			sid: null,
 			origin: $page.data.origin,
-			storeId: $page.data.storeId,
+			storeId: $page?.data?.storeId,
 			isCors: $page.data.store?.isCors
 		})
 

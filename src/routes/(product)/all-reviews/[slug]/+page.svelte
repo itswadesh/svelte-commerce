@@ -1,15 +1,22 @@
 <script>
+import { BackButton } from '$lib/ui'
 import { date, toast } from '$lib/utils'
-import { ReviewService } from '$lib/services'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { BackButton } from '$lib/ui'
-import dotsLoading from '$lib/assets/dots-loading.gif'
 import { ReviewGallery, ProductNav } from '$lib/components'
+import { ReviewService } from '$lib/services'
+import dotsLoading from '$lib/assets/dots-loading.gif'
+import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
 
+let seoProps = {
+	title: `All Reviews`,
+	description: `All Reviews`
+}
+
 const { productReviews } = data
+
 let brandId = $page.url.searchParams.get('brandId')
 let type = $page.url.searchParams.get('type')
 let allReviews = []
@@ -99,6 +106,8 @@ const handleSelectedProductGallery = (review, rx) => {
 	openReviewImages[rx] = true
 }
 </script>
+
+<SEO {...seoProps} />
 
 <ProductNav
 	cart="{$page?.data?.cart}"

@@ -97,7 +97,7 @@ async function saveSearchData(searchData) {
 		await PopularSearchService.savePopularSearch({
 			id: 'new',
 			text: searchData,
-			storeId: $page.data?.storeId,
+			storeId: $page?.data?.storeId,
 			origin: $page.data.origin
 		})
 	} catch (e) {

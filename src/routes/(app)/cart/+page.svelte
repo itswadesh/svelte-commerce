@@ -61,7 +61,7 @@ onMount(async () => {
 		if (!cart?.items) {
 			cart = await getCartFromStore({
 				origin: $page.data.origin,
-				storeId: $page.data.storeId,
+				storeId: $page?.data?.storeId,
 				cartId: $page.data.cartId,
 				forceUpdate: true
 			})
@@ -120,7 +120,7 @@ async function applyCouponCode(selectedCouponCode: string, index: number) {
 			cartId: $page.data.cartId,
 			code: selectedCouponCode,
 			origin: $page.data.origin,
-			storeId: $page.data.storeId
+			storeId: $page?.data?.storeId
 		})
 
 		appliedCouponInfo = resAC
@@ -128,7 +128,7 @@ async function applyCouponCode(selectedCouponCode: string, index: number) {
 		await getCartFromStore({
 			cartId: $page.data.cartId,
 			origin: $page.data.origin,
-			storeId: $page.data.storeId,
+			storeId: $page?.data?.storeId,
 			forceUpdate: true
 		})
 		openApplyPromoCodeModal = false
@@ -151,7 +151,7 @@ async function removeCouponCode() {
 			cartId: $page.data.cartId,
 			code: selectedCouponCode || cart?.discount?.code,
 			origin: $page.data.origin,
-			storeId: $page.data.storeId
+			storeId: $page?.data?.storeId
 		})
 
 		selectedCouponCode = ''
@@ -159,7 +159,7 @@ async function removeCouponCode() {
 		await getCartFromStore({
 			cartId: $page.data.cartId,
 			origin: $page.data.origin,
-			storeId: $page.data.storeId,
+			storeId: $page?.data?.storeId,
 			forceUpdate: true
 		})
 	} catch (e) {

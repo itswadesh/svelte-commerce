@@ -5,8 +5,11 @@
 </style>
 
 <script lang="ts">
+// import { storeStore } from '$lib/store/store'
 import { Autocomplete } from '$lib/components'
 import { AutosuggestModal, MegaMenu, LazyImg } from '$lib/components'
+import { browser } from '$app/environment'
+import { cartStore } from '$lib/store/cart'
 import { createEventDispatcher, onMount } from 'svelte'
 import { cubicOut } from 'svelte/easing'
 import { enhance } from '$app/forms'
@@ -19,9 +22,6 @@ import Cookie from 'cookie-universal'
 import menu from '$lib/config/menu'
 import PincodeInputBox from '$lib/themes/misiki/PincodeInputBox.svelte'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'
-import { browser } from '$app/environment'
-import { cartStore } from '$lib/store/cart'
-// import { storeStore } from '$lib/store/store'
 
 const dispatch = createEventDispatcher()
 const cookies = Cookie()

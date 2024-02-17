@@ -233,7 +233,7 @@ onMount(async () => {
 })
 
 const storeRecentlyViewedToLocatStorage = async () => {
-	const localRecentlyViewed = localStorage.getItem(`recently_viewed_${$page.data.storeId}`)
+	const localRecentlyViewed = localStorage.getItem(`recently_viewed_${$page?.data?.storeId}`)
 
 	if (!!localRecentlyViewed && localRecentlyViewed !== 'undefined') {
 		recentlyViewed = JSON.parse(localRecentlyViewed)
@@ -262,7 +262,10 @@ const storeRecentlyViewedToLocatStorage = async () => {
 		recentlyViewed = resvw
 
 		if (browser) {
-			localStorage.setItem(`recently_viewed_${$page.data.storeId}`, JSON.stringify(recentlyViewed))
+			localStorage.setItem(
+				`recently_viewed_${$page?.data?.storeId}`,
+				JSON.stringify(recentlyViewed)
+			)
 		}
 	}
 }
@@ -304,7 +307,7 @@ async function addToBag(p, customizedImg, customizedJson) {
 			qty: 1,
 			options: selectedOptions,
 			customizedImg: customizedImg,
-			storeId: $page.data.storeId,
+			storeId: $page?.data?.storeId,
 			customizedData: customizedJson,
 			origin: $page.data.origin,
 			server: isServer,
@@ -316,7 +319,7 @@ async function addToBag(p, customizedImg, customizedJson) {
 					pid: i,
 					vid: i,
 					qty: 1,
-					storeId: $page.data.storeId,
+					storeId: $page?.data?.storeId,
 					origin: $page.data.origin,
 					server: isServer,
 					cookies

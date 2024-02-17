@@ -53,7 +53,7 @@ async function saveAddr(e) {
 	try {
 		await AddressService.saveAddress({
 			id,
-			storeId: $page.data.storeId,
+			storeId: $page?.data?.storeId,
 			origin: $page.data.origin
 		})
 		await invalidateAll()

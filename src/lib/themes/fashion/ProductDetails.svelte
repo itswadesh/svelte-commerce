@@ -158,7 +158,10 @@ const storeRecentlyViewedToLocatStorage = async () => {
 		recentlyViewed = resvw
 
 		if (browser) {
-			localStorage.setItem(`recently_viewed_${$page.data?.storeId}`, JSON.stringify(recentlyViewed))
+			localStorage.setItem(
+				`recently_viewed_${$page?.data?.storeId}`,
+				JSON.stringify(recentlyViewed)
+			)
 		}
 	}
 }

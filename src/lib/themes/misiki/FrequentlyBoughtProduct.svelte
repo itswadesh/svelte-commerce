@@ -30,7 +30,7 @@ let bounceItemFromTop = false
 // 				vid: p._id,
 // 				qty: 1,
 // 				options: p.options,
-// 				store: $page.data.storeId
+// 				store: $page?.data?.storeId
 // 			},
 // 			$page.data.origin
 // 		)
