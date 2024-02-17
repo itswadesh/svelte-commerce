@@ -6,6 +6,8 @@
 
 <script lang="ts">
 import { Autocomplete, MegaMenu } from '$lib/components'
+import { browser } from '$app/environment'
+import { cartStore } from '$lib/store/cart'
 import { createEventDispatcher, onMount } from 'svelte'
 import { cubicOut } from 'svelte/easing'
 import { enhance } from '$app/forms'
@@ -22,8 +24,6 @@ import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'
-import { cartStore } from '$lib/store/cart'
-import { browser } from '$app/environment'
 
 const dispatch = createEventDispatcher()
 
@@ -84,7 +84,7 @@ function handleShowCartSidebar() {
 
 async function getCategories() {
 	try {
-		const res1 = await getAPI(`categories?store=${$page.data.storeId}`, $page.data.origin)
+		const res1 = await getAPI(`categories?store=${$page?.data?.storeId}`, $page.data.origin)
 		categories = res1?.data.filter((c) => {
 			return c.img
 		})
@@ -102,7 +102,7 @@ const removeItemFromCart = async ({ pid, qty, customizedImg, ix }: any) => {
 				pid: pid,
 				qty: qty,
 				customizedImg: customizedImg || null,
-				store: $page.data.storeId
+				store: $page?.data?.storeId
 			},
 			$page.data.origin
 		)

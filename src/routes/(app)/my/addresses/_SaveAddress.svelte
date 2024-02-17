@@ -147,7 +147,7 @@ async function fetchShippingAddressStates(country) {
 
 		shippingAddressStates = await CountryService.fetchStates({
 			countryCode: country,
-			storeId: $page.data?.storeId,
+			storeId: $page?.data?.storeId,
 			origin: $page.data?.origin
 		})
 
@@ -171,7 +171,7 @@ async function fetchBillingAddressStates(country) {
 
 		billingAddressStates = await CountryService.fetchStates({
 			countryCode: country,
-			storeId: $page.data?.storeId,
+			storeId: $page?.data?.storeId,
 			origin: $page.data?.origin
 		})
 

@@ -16,7 +16,7 @@ onMount(async () => {
 		await HomeService.fetchCategoriesProducts({
 			categories,
 			origin,
-			storeId: $page.data.storeId
+			storeId: $page?.data?.storeId
 		})
 	).data
 })

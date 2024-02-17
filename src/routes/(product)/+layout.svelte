@@ -1,6 +1,7 @@
 <script lang="ts">
 import { Footer, Nav } from '$lib/theme-config'
 import { PageTransitions } from '$lib/components'
+
 export let data
 
 let openSidebar = false

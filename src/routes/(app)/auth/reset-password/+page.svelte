@@ -56,7 +56,7 @@ async function submit(p) {
 			token,
 			password,
 			passwordConfirmation,
-			storeId: $page.data.storeId,
+			storeId: $page?.data?.storeId,
 			origin: $page.data.origin
 		})
 

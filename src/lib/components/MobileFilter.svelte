@@ -137,7 +137,7 @@ async function getMegamenu() {
 			// if (!localmegamenu || localmegamenu === 'undefined') {
 			// 	megamenu = await CategoryService.fetchMegamenuData({
 			// 		origin: $page.data.origin,
-			// 		storeId: $page.data.storeId,
+			// 		storeId: $page?.data?.storeId,
 			// 	})
 			// } else {
 			// 	megamenu = JSON.parse(localmegamenu)

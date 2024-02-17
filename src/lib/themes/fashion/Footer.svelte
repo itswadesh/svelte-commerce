@@ -48,7 +48,7 @@ async function getStoreData() {
 async function getPages() {
 	pages = await PageService.fetchPages({
 		origin: $page.data.origin,
-		storeId: $page.data.storeId
+		storeId: $page?.data?.storeId
 	})
 }
 
@@ -400,7 +400,7 @@ function subscribedForNewsletter() {
 
 					<li class="flex max-w-max items-center">
 						<a
-							href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.storeId}"
+							href="{$page.data.store?.adminUrl}?role=vendor&store={$page?.data?.storeId}"
 							target="_blank"
 							aria-label="Click to visit this page"
 							class="hover:text-zinc-800 whitespace-pre-wrap">
