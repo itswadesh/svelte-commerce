@@ -134,7 +134,7 @@ async function submit(n) {
 				password: password,
 				passwordConfirmation: passwordConfirmation,
 				role: role,
-				storeId: $page.data.storeId,
+				storeId: $page?.data?.storeId,
 				origin: $page.data.origin
 			})
 
