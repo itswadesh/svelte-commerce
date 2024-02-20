@@ -1,5 +1,6 @@
 import { json } from '@sveltejs/kit'
 import { services } from '@misiki/litekart-utils'
+import { StoreService } from '$lib/services'
 
 export async function GET({ cookies, request, locals, setHeaders }) {
 	let menu, popularSearches, megamenu, store
@@ -8,13 +9,11 @@ export async function GET({ cookies, request, locals, setHeaders }) {
 		// const uri = new URL(request.url)
 
 		// const storeRes = await services.InitService.fetchInit({ host: uri.host, origin: uri.origin })
-
-		const storeRes = await services.StoreService.getStoreData({
+		const storeRes = await StoreService.getStoreData({
 			url: request.url,
 			host,
 			cookies
 		})
-
 		store = storeRes.storeOne
 		// popularSearches = storeRes.popularSearches
 		// megamenu = storeRes.megamenu
@@ -85,6 +84,6 @@ export async function GET({ cookies, request, locals, setHeaders }) {
 		// cookies.set('storeId', storeId, { path: '/' })
 		// locals.storeId = storeId
 		// setHeaders({ 'Cache-Control': 'max-age=60' })
-	} catch (e) { }
+	} catch (e) {}
 	return json({ store })
 }

@@ -33,8 +33,6 @@ export const handleError: HandleServerError = ({ error, event }) => {
 }
 
 export const handle: Handle = async ({ event, resolve }) => {
-	console.log(`event.cookies.get('connect.sid')`, event.cookies.get('connect.sid'));
-
 	try {
 		const IS_DEV = import.meta.env.DEV
 		const url = new URL(event.request.url)
@@ -49,16 +47,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 		const isDesktop = !/mobile/i.test(userAgent)
 		const isShowBackButton = !listOfPagesWithoutBackButton.includes(url?.pathname)
 
-		// console.log('isDesktop', isDesktop);
-
 		event.locals.isDesktop = isDesktop
 		event.locals.isShowBackButton = isShowBackButton
 
 		const storeId = event.cookies.get('storeId')
 		// const store = event.cookies.get('store') || '{}'
 		// const storeAsJson = JSON.parse(store)
-		console.log('DOMAIN || host', DOMAIN || host);
-		console.log('storeId', storeId);
 		if (storeId && storeId != 'undefined') {
 			event.locals.storeId = storeId
 			// event.locals.store = storeAsJson
@@ -68,8 +62,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 					host: DOMAIN || host,
 					origin: event.locals.origin
 				})
-
-				console.log('storeOne', storeOne);
 
 				const storeId = storeOne?._id
 				// const store = {
@@ -100,26 +92,18 @@ export const handle: Handle = async ({ event, resolve }) => {
 				// 	isHyperlocal: storeOne?.isHyperlocal,
 				// 	IMAGE_CDN_URL: storeOne?.IMAGE_CDN_URL
 				// }
-				console.log('storeId 2222', storeId);
 				if (!storeId || storeId == 'undefined') {
 					throw { status: 404, message: `Could not find STORE for domain = ${url.host}` }
 				}
 
-				event.cookies.set('storeId', storeId, {
-					path: '/', httpOnly: true,
-				})
+				event.cookies.set('storeId', storeId, { path: '/' })
 				// event.cookies.set('store', JSON.stringify(store), { path: '/' })
 				event.locals.storeId = storeId
-
 				// event.locals.store = store
 			} catch (e) {
-				console.log('error', e);
 				throw { status: 404, message: `Could not find STORE for domain = ${url.host}` }
 			}
 		}
-
-		// console.log('menu at hooks.server.is', menu);
-		// console.log('storeOne at hooks.server.is', storeOne);
 
 		// This calls init only when store data not present in browser cookies
 		// const { storeOne } = await fetchStoreData(event)
