@@ -18,20 +18,20 @@ declare global {
 				role: string
 			}
 			cart: Cart
-			megamenu: Category
-			menu: [any]
-			popularSearches: [any]
-			store: any
-			sid: string
-			storeId: string
-			session: string
-			origin: string
-			host: string
-			zip: string
 			cartId: string
 			cartQty: number
+			host: string
 			isDesktop: boolean
 			isShowBackButton: boolean
+			megamenu: Category
+			menu: [any]
+			origin: string
+			popularSearches: [any]
+			session: string
+			sid: string
+			store: any
+			storeId: string
+			zip: string
 		}
 		// interface PageData {}
 

@@ -1,7 +1,6 @@
-// import { CartService } from '$lib/services'
-import type { RequestEvent } from '@sveltejs/kit'
+// This is unused, the code used is from routes/server/store/+server.ts
 
-export const fetchCart = async (event: RequestEvent) => {
+export const fetchCart = async (event) => {
 	try {
 		const sid = event.cookies.get('connect.sid')
 		const cartId: string = event.cookies.get('cartId')
