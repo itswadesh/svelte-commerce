@@ -1,12 +1,14 @@
-import { ReviewService } from '$lib/services'
+import { services } from '@misiki/litekart-utils'
+
 const isServer = import.meta.env.SSR
 
 export async function load({ params, parent, url }) {
 	const { slug } = params
 	const { sid, origin, storeId } = await parent()
+
 	return {
 		pid: slug,
-		productReviews: ReviewService.fetchProductReviews({
+		productReviews: services.ReviewService.fetchProductReviews({
 			page: url?.searchParams.get('page') || 1,
 			slug,
 			origin,

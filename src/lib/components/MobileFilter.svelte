@@ -1,4 +1,6 @@
 <script lang="ts">
+// import AllMegamenuStore from '$lib/store/megamenu'
+// import Cookie from 'cookie-universal'
 import { browser } from '$app/environment'
 import { constructURL2, navigateToProperPath, toast } from '$lib/utils'
 import { createEventDispatcher, onMount } from 'svelte'
@@ -7,9 +9,8 @@ import { getAllMegamenuFromStore } from '$lib/store/megamenu'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { RadioEs, CheckboxEs, PrimaryButton } from '$lib/ui'
+import { services } from '@misiki/litekart-utils'
 import { sorts } from '$lib/config'
-// import AllMegamenuStore from '$lib/store/megamenu'
-// import Cookie from 'cookie-universal'
 import Fuse from 'fuse.js'
 
 // const cookies = Cookie()
@@ -135,7 +136,7 @@ async function getMegamenu() {
 
 			// const localmegamenu = localStorage.getItem('megamenu')
 			// if (!localmegamenu || localmegamenu === 'undefined') {
-			// 	megamenu = await CategoryService.fetchMegamenuData({
+			// 	megamenu = await services.CategoryService.fetchMegamenuData({
 			// 		origin: $page.data.origin,
 			// 		storeId: $page?.data?.storeId,
 			// 	})

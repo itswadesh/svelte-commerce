@@ -1,4 +1,5 @@
-import { CartService } from '$lib/services'
+import { services } from '@misiki/litekart-utils'
+
 export const prerender = false
 
 export async function load({ url, locals, cookies }) {
@@ -7,9 +8,9 @@ export async function load({ url, locals, cookies }) {
 	let cart
 	try {
 		const sid = cookies.get('connect.sid')
-		const res: any = await CartService.fetchMyCart({
+
+		const res: any = await services.CartService.fetchMyCart({
 			storeId: locals.storeId,
-			server: true,
 			sid,
 			origin: locals.origin
 		})

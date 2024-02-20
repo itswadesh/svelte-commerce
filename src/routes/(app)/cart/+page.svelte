@@ -2,7 +2,7 @@
 import { applyAction, enhance } from '$app/forms'
 import { browser } from '$app/environment'
 import { cartLoadingStore, cartStore, getCartFromStore, updateCartStore } from '$lib/store/cart.js'
-import { CartService, CouponService, ProductService, WishlistService } from '$lib/services'
+import { CartService } from '$lib/services'
 import { currency, date, toast } from '$lib/utils'
 import { Error, LazyImg, Pricesummary, ProductCard, TrustBaggeContainer } from '$lib/components'
 import { fireGTagEvent } from '$lib/utils/gTagB'
@@ -12,6 +12,7 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { PrimaryButton, Skeleton, Textbox, WhiteButton } from '$lib/ui'
 import { selectedCartItemsStore } from '$lib/store/selected-cart-items'
+import { services } from '@misiki/litekart-utils'
 import { storeStore } from '$lib/store/store.js'
 import Cookie from 'cookie-universal'
 import dotsLoading from '$lib/assets/dots-loading.gif'
@@ -173,7 +174,7 @@ async function getProducts() {
 	try {
 		loadingProducts = true
 
-		const resP = await ProductService.fetchProducts({
+		const resP = await services.ProductService.fetchProducts({
 			origin: $page?.data?.origin,
 			isCors: $page?.data?.store?.isCors,
 			storeId: $page?.data?.storeId
@@ -188,7 +189,7 @@ async function getProducts() {
 async function getCoupons() {
 	try {
 		loadingCoupon = true
-		const resC = await CouponService.fetchCoupons({
+		const resC = await services.CouponService.fetchCoupons({
 			origin: $page?.data?.origin,
 			isCors: $page?.data?.store?.isCors,
 			storeId: $page?.data?.storeId

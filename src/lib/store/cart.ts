@@ -1,4 +1,4 @@
-import { CartService } from '$lib/services'
+import { services } from '@misiki/litekart-utils'
 import { writable } from 'svelte/store'
 
 export const cartStore = writable({})
@@ -18,7 +18,7 @@ export const getCartFromStore = async ({ origin, storeId, cartId, forceUpdate = 
 	if ((!loadingForCart && !existingCart) || !!forceUpdate) {
 		loadingForCart = true
 		cartLoadingStore.update((u) => true)
-		const cartDataFromServer = await CartService.fetchRefreshCart({ cartId, storeId, origin })
+		const cartDataFromServer = await services.CartService.fetchRefreshCart({ cartId, storeId, origin })
 
 		cartStore.update((u) => cartDataFromServer)
 

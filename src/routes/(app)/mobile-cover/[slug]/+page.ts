@@ -1,4 +1,4 @@
-import { CategoryService } from '$lib/services'
+import { services } from '@misiki/litekart-utils'
 
 export const prerender = false
 const isServer = import.meta.env.SSR
@@ -19,7 +19,7 @@ export async function load({ url, params, parent, setHeaders }) {
 	})
 
 	return {
-		category: CategoryService.fetchCategory({
+		category: services.CategoryService.fetchCategory({
 			id: categorySlug,
 			server: isServer,
 			sid,
@@ -27,7 +27,7 @@ export async function load({ url, params, parent, setHeaders }) {
 			origin
 		}),
 		// streamed: {
-		megamenu: CategoryService.fetchMegamenuData({
+		megamenu: services.CategoryService.fetchMegamenuData({
 			sid,
 			storeId,
 			origin

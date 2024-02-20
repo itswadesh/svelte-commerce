@@ -1,11 +1,13 @@
-import { HomeService } from '$lib/services'
+import { services } from '@misiki/litekart-utils'
+
 export const prerender = false
+
 const isServer = import.meta.env.SSR
 
 export async function load({ parent, params }) {
 	const { origin, storeId, store, sid } = await parent()
 
-	return HomeService.fetchHome({
+	return services.HomeService.fetchHome({
 		pageId: params.slug,
 		storeId,
 		server: isServer,

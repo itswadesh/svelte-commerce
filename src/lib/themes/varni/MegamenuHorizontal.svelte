@@ -22,10 +22,10 @@
 
 <script>
 import { browser } from '$app/environment'
-import { CategoryService } from '$lib/services'
 import { navigateToProperPath, toast } from '$lib/utils'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import { services } from '@misiki/litekart-utils'
 
 export let height = 40
 
@@ -50,7 +50,7 @@ async function getMegaMenu() {
 			if (!!localMegamenu && localMegamenu !== 'undefined') {
 				megamenu = JSON.parse(localMegamenu)
 			} else {
-				megamenu = await CategoryService.fetchMegamenuData({
+				megamenu = await services.CategoryService.fetchMegamenuData({
 					storeId: $page?.data?.storeId,
 					origin: $page.data.origin
 				})

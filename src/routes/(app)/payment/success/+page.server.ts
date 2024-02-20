@@ -1,4 +1,4 @@
-import { OrdersService } from '$lib/services'
+import { services } from '@misiki/litekart-utils'
 import { getCartFromStore } from '$lib/store/cart'
 import { error, redirect } from '@sveltejs/kit'
 
@@ -23,7 +23,7 @@ export async function load({ url, locals, cookies }) {
 	try {
 		loading = true
 
-		order = await OrdersService.getOrder({
+		order = await services.OrdersService.getOrder({
 			orderNo,
 			cartId,
 			sid,

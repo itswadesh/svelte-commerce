@@ -1,4 +1,5 @@
 import { error, redirect } from '@sveltejs/kit'
+import { services } from '@misiki/litekart-utils'
 import { WishlistService } from '$lib/services'
 
 export async function load({ locals, url }) {
@@ -9,8 +10,9 @@ export async function load({ locals, url }) {
 			redirect(307, `/auth/login?ref=${url.pathname}${url.search}`)
 		}
 
-		const wishlistedProducts = await WishlistService.fetchWishlist({
+		const wishlistedProducts = await services.WishlistService.fetchWishlist({
 			storeId,
+			origin,
 			sid
 		})
 

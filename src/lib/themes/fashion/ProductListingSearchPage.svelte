@@ -1,19 +1,25 @@
 <script lang="ts">
+import { browser } from '$app/environment'
+import {
+	CatelogNav,
+	DesktopFilter,
+	DummyProductCard,
+	MobileFilter,
+	Pagination,
+	ProductCard
+} from '$lib/components'
 import { currency, dateOnly, generatePriceRange, toast } from '$lib/utils'
 import { fade, fly } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { Pagination, CatelogNav, DesktopFilter, MobileFilter } from '$lib/components'
-import { ProductCard, DummyProductCard } from '$lib/theme-config'
 import { PrimaryButton } from '$lib/ui'
-import { ProductService } from '$lib/services'
+import { services } from '@misiki/litekart-utils'
 import { sorts } from '$lib/config'
+import { storeStore } from '$lib/store/store'
 import dotsLoading from '$lib/assets/dots-loading.gif'
 import noDataAvailable from '$lib/assets/no/no-data-available.png'
 import SEO from '$lib/components/SEO/index.svelte'
-import { browser } from '$app/environment'
-import { storeStore } from '$lib/store/store'
 
 export let data
 
@@ -125,7 +131,7 @@ async function loadNextPage() {
 		try {
 			data.isLoading = true
 
-			const res = await ProductService.fetchNextPageProducts({
+			const res = await services.ProductService.fetchNextPageProducts({
 				categorySlug: data.products?.category?.slug,
 				origin: $page?.data?.origin,
 				storeId: $page?.data?.storeId,

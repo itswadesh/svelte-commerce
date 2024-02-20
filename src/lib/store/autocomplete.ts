@@ -1,4 +1,4 @@
-import { CategoryService } from '$lib/services'
+import { services } from '@misiki/litekart-utils'
 import { writable } from 'svelte/store'
 
 export const autocompleteStore = writable({})
@@ -17,7 +17,7 @@ export const findAutocompleteFromStore = async ({ isCors, sid, storeId, origin, 
 	if ((!isLoading && !existingAutocomplete) || !!forceUpdate) {
 		isLoading = true
 
-		const autocompleteDataFromServer = await CategoryService.fetchAllCategories({
+		const autocompleteDataFromServer = await services.CategoryService.fetchAllCategories({
 			sid,
 			origin,
 			storeId,

@@ -5,7 +5,7 @@
 import { browser } from '$app/environment'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { PageService } from '$lib/services'
+import { services } from '@misiki/litekart-utils'
 import { Textbox } from '$lib/ui'
 import { toast } from '$lib/utils'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
@@ -46,7 +46,7 @@ async function getStoreData() {
 }
 
 async function getPages() {
-	pages = await PageService.fetchPages({
+	pages = await services.PageService.fetchPages({
 		origin: $page.data.origin,
 		storeId: $page?.data?.storeId
 	})

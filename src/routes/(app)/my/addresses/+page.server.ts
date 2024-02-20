@@ -1,14 +1,15 @@
-import { AddressService, CartService, CountryService } from '$lib/services'
+import { AddressService, CartService } from '$lib/services'
 import { error } from '@sveltejs/kit'
+import { services } from '@misiki/litekart-utils'
 import { z } from 'zod'
 
 export async function load({ cookies, locals }) {
-	const countries = await CountryService.fetchCountries({
+	const countries = await services.CountryService.fetchCountries({
 		storeId: locals.storeId,
 		sid: cookies.get('connect.sid')
 	})
 
-	const { myAddresses, count } = await AddressService.fetchAddresses({
+	const { myAddresses, count } = await services.AddressService.fetchAddresses({
 		storeId: locals.storeId,
 		sid: cookies.get('connect.sid')
 	})

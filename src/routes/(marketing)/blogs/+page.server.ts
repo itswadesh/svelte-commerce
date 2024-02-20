@@ -1,4 +1,4 @@
-import { BlogService } from '$lib/services'
+import { services } from '@misiki/litekart-utils'
 
 export async function load({ cookies, fetch, locals, params, parent, url }) {
 	const { me, origin, sid, store, storeId } = locals
@@ -9,7 +9,7 @@ export async function load({ cookies, fetch, locals, params, parent, url }) {
 	let err = null
 
 	try {
-		blogs = await BlogService.fetchBlogs({
+		blogs = await services.BlogService.fetchBlogs({
 			origin,
 			query: query.toString(),
 			storeId

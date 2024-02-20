@@ -1,8 +1,8 @@
 <script>
-import { HomeService } from '$lib/services'
-import { ProductCard } from '$lib/components'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import { ProductCard } from '$lib/components'
+import { services } from '@misiki/litekart-utils'
 
 export let categories = ''
 export let title = 'Products'
@@ -13,7 +13,7 @@ let showCount = 10
 
 onMount(async () => {
 	categoriesProducts = (
-		await HomeService.fetchCategoriesProducts({
+		await services.HomeService.fetchCategoriesProducts({
 			categories,
 			origin,
 			storeId: $page?.data?.storeId

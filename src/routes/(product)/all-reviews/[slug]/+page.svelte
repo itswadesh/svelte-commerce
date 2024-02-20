@@ -4,7 +4,7 @@ import { date, toast } from '$lib/utils'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { ReviewGallery, ProductNav } from '$lib/components'
-import { ReviewService } from '$lib/services'
+import { services } from '@misiki/litekart-utils'
 import dotsLoading from '$lib/assets/dots-loading.gif'
 import SEO from '$lib/components/SEO/index.svelte'
 
@@ -56,7 +56,7 @@ async function loadNextPage() {
 		try {
 			loading = true
 
-			const res = await ReviewService.fetchProductReviews({
+			const res = await services.ReviewService.fetchProductReviews({
 				page: nextPage,
 				brandIc: brandId,
 				slug: data.slug,

@@ -1,6 +1,7 @@
 <script lang="ts">
 import { applyAction, enhance } from '$app/forms'
-import { CartService, CategoryService } from '$lib/services'
+import { browser } from '$app/environment'
+import { cartStore, getCartFromStore, updateCartStore } from '$lib/store/cart'
 import { cubicOut } from 'svelte/easing'
 import { fade, fly, slide } from 'svelte/transition'
 import { fireGTagEvent } from '$lib/utils/gTagB'
@@ -9,7 +10,10 @@ import { invalidateAll } from '$app/navigation'
 import { logo } from '$lib/config'
 import { MegaMenu, LazyImg, AutosuggestModal } from '$lib/components'
 import { navigateToProperPath, toast } from '$lib/utils'
+import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import { services } from '@misiki/litekart-utils'
+import { storeStore } from '$lib/store/store'
 import { WhiteButton, PrimaryButton, Skeleton } from '$lib/ui'
 import Cookie from 'cookie-universal'
 import dotsLoading from '$lib/assets/dots-loading.gif'
@@ -18,10 +22,6 @@ import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'
-import { cartStore, getCartFromStore, updateCartStore } from '$lib/store/cart'
-import { onMount } from 'svelte'
-import { browser } from '$app/environment'
-import { storeStore } from '$lib/store/store'
 
 const cookies = Cookie()
 
@@ -85,7 +85,7 @@ function handleShowCartSidebar() {
 // 	try {
 // 		loading = true
 
-// 		const res = await CartService.fetchRefreshCart({
+// 		const res = await services.CartService.fetchRefreshCart({
 // 			cartId: $page.data.cartId,
 // 			origin: origin,
 // 			storeId: store.id
@@ -119,7 +119,7 @@ function handleShowCartSidebar() {
 
 async function getCategories() {
 	try {
-		const res1 = await CategoryService.fetchAllCategories({
+		const res1 = await services.CategoryService.fetchAllCategories({
 			storeId: $page.data.store,
 			origin: $page.data.origin
 		})

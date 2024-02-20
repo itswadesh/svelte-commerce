@@ -1,8 +1,8 @@
 <script lang="ts">
-import { AutocompleteService, CategoryService } from '$lib/services'
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import { services } from '@misiki/litekart-utils'
 import { slide } from 'svelte/transition'
 import Cookie from 'cookie-universal'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
@@ -79,7 +79,7 @@ async function getData(e: any) {
 
 	typingTimer = setTimeout(async () => {
 		try {
-			autocomplete = await AutocompleteService.fetchAutocompleteData({
+			autocomplete = await services.AutocompleteService.fetchAutocompleteData({
 				q: q,
 				origin: $page?.data?.origin,
 				storeId: $page?.data?.storeId
@@ -92,7 +92,7 @@ onMount(async () => {
 	searchInput.focus()
 	try {
 		categories = (
-			await CategoryService.fetchAllCategories({
+			await services.CategoryService.fetchAllCategories({
 				featured: true,
 				storeId: $page?.data?.storeId,
 				origin: $page.data.origin

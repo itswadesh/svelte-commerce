@@ -7,7 +7,8 @@ import { invalidateAll } from '$app/navigation'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import { applyAction, enhance } from '$app/forms'
 import { fade } from 'svelte/transition'
-import { updateCartStore } from '$lib/store/cart'
+import { cartStore, updateCartStore } from '$lib/store/cart'
+import { browser } from '$app/environment'
 
 export let products = []
 export let title = ''
@@ -116,8 +117,10 @@ onMount(async () => {
 			cart = value
 		})
 	}
+
 	const SplideModule = await import('$lib/components/SplideJs.svelte')
 	Splide = SplideModule.default
+
 	const isMobile = window.innerWidth < 768 // set your preferred breakpoint here
 
 	options.arrows = !isMobile
@@ -179,26 +182,31 @@ function handleMove(e) {
 							<div class="flex-auto w-12 mt-4 mx-1">
 								<img src="{product.img}" alt="product" />
 							</div>
+
 							<div class="flex-auto">
 								<div class="w-60 h-40">
 									<p
 										class="text-left mt-4 text-base font-bold text-black truncate group-hover:font-semibold sm:text-base">
 										{product.name}
 									</p>
+
 									<p class="sku text-left mt-1 text-xs font-bold text-slate-600 sm:text-base">
 										{product.sku}
 									</p>
+
 									<div class="flex flex-wrap gap-2">
 										<div>
 											<p class="price-tag text-left text-xs font-bold text-black sm:text-base">
 												Rs.{product.price}
 											</p>
 										</div>
+
 										<div>
 											<p class="mrp-tag text-left text-xs font-bold text-slate-700 sm:text-base">
 												<strike> Rs.{product.mrp}</strike>
 											</p>
 										</div>
+
 										<div>
 											<p class="discount-tag text-xs font-semibold text-amber-500 sm:text-base">
 												({product.discount}%) Off
@@ -210,8 +218,9 @@ function handleMove(e) {
 										<a href="/cart">
 											<button
 												class="absolute rounded-lg mt-2 w-[280px] left-2 h-12 bg-black text-white">
-												{cartButtonText}</button
-											></a>
+												{cartButtonText}
+											</button>
+										</a>
 									{:else}
 										<form
 											id="add_to_cart_1"
@@ -504,12 +513,9 @@ function handleMove(e) {
 			{/each}
 		</svelte:component>
 
-		<!---	{#each products as product, ix }
-
-		   <video src="{product.video}" on:click="{(e) => handleClick(e,ix)}" autoplay muted loop>
-
-		   </video>
-			
-		{/each}-->
+		<!-- - {#each products as product, ix}
+			<video src="{product.video}" on:click="{(e) => handleClick(e, ix)}" autoplay muted loop>
+			</video>
+		{/each} -->
 	</div>
 {/if}
