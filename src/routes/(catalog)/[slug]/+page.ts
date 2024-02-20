@@ -14,16 +14,16 @@ export async function load({ url, params, parent }) {
 	query.forEach(function (value, key) {
 		fl[key] = value
 	})
-
+	const products = await services.ProductService.fetchProductsOfCategory({
+		categorySlug,
+		origin,
+		query: query.toString(),
+		sid,
+		zip,
+		storeId
+	})
 	return {
-		products: await services.ProductService.fetchProductsOfCategory({
-			categorySlug,
-			origin,
-			query: query.toString(),
-			sid,
-			zip,
-			storeId
-		}),
+		products,
 		query: query.toString(),
 		searchData,
 		sort,

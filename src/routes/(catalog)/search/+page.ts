@@ -13,13 +13,14 @@ export async function load({ url, parent }) {
 	for (const [key, value] of query.entries()) {
 		fl[key] = value
 	}
+	const products = await services.ProductService.fetchProducts({
+		query: query.toString(),
+		storeId,
+		origin,
+		sid
+	})
 	return {
-		products: await services.ProductService.fetchProducts({
-			query: query.toString(),
-			storeId,
-			origin,
-			sid
-		}),
+		products,
 		query: query.toString(),
 		searchData,
 		sort,
