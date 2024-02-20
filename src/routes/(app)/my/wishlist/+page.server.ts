@@ -1,4 +1,5 @@
 import { error, redirect } from '@sveltejs/kit'
+import { services } from '@misiki/litekart-utils'
 import { WishlistService } from '$lib/services'
 
 export async function load({ locals, url }) {
@@ -6,11 +7,12 @@ export async function load({ locals, url }) {
 		const { me, origin, sid, store, storeId } = locals
 
 		if (!me || !sid) {
-			redirect(307, `/auth/login?ref=${url.pathname}${url.search}`);
+			redirect(307, `/auth/login?ref=${url.pathname}${url.search}`)
 		}
 
-		const wishlistedProducts = await WishlistService.fetchWishlist({
+		const wishlistedProducts = await services.WishlistService.fetchWishlist({
 			storeId,
+			origin,
 			sid
 		})
 
@@ -19,10 +21,10 @@ export async function load({ locals, url }) {
 		}
 	} catch (e) {
 		if (e.status === 401 || e.status === 403) {
-			redirect(307, '/auth/login');
+			redirect(307, '/auth/login')
 		}
 
-		error(e.status, e.message);
+		error(e.status, e.message)
 	} finally {
 	}
 }
@@ -36,7 +38,7 @@ const toggleWishlist = async ({ request, cookies, locals }) => {
 	const { me, origin, sid, storeId } = locals
 
 	if (!me || !sid) {
-		redirect(307, `/auth/login?ref=/my/wishlist/add/${pid}`);
+		redirect(307, `/auth/login?ref=/my/wishlist/add/${pid}`)
 	}
 
 	const res = await WishlistService.toggleWishlistService({

@@ -1,13 +1,14 @@
 <script>
-import { AddressService, CountryService, ZipService } from '$lib/services'
 import { applyAction, enhance } from '$app/forms'
 import { createEventDispatcher, onMount } from 'svelte'
 import { Error } from '$lib/components'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import { PrimaryButton, Textarea, Textbox } from '$lib/ui'
-import { toast } from '$lib/utils'
+import { services } from '@misiki/litekart-utils'
 import { slide } from 'svelte/transition'
+import { toast } from '$lib/utils'
+import { ZipService } from '$lib/services'
 
 const IS_DEV = import.meta.env.DEV
 const dispatch = createEventDispatcher()
@@ -145,7 +146,7 @@ async function fetchShippingAddressStates(country) {
 		err = null
 		loadingForShippingAddressStates = true
 
-		shippingAddressStates = await CountryService.fetchStates({
+		shippingAddressStates = await services.CountryService.fetchStates({
 			countryCode: country,
 			storeId: $page?.data?.storeId,
 			origin: $page.data?.origin
@@ -169,7 +170,7 @@ async function fetchBillingAddressStates(country) {
 		err = null
 		loadingForBillingAddressStates = true
 
-		billingAddressStates = await CountryService.fetchStates({
+		billingAddressStates = await services.CountryService.fetchStates({
 			countryCode: country,
 			storeId: $page?.data?.storeId,
 			origin: $page.data?.origin

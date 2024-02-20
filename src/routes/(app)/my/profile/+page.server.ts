@@ -1,14 +1,14 @@
 import { error, redirect } from '@sveltejs/kit'
-import { UserService } from '$lib/services'
+import { services } from '@misiki/litekart-utils'
 import dayjs from 'dayjs'
 
 export async function load({ cookies, locals }) {
-	const { store, me, sid } = locals
+	const { store, storeId, me, sid } = locals
 	let profile = {}
 
 	try {
-		const data = await UserService.fetchMeData({
-			storeId: store?.id,
+		const data = await services.UserService.fetchMeData({
+			storeId,
 			server: true,
 			sid
 		})
@@ -22,10 +22,10 @@ export async function load({ cookies, locals }) {
 		}
 	} catch (e) {
 		if (e.status === 401) {
-			throw redirect(307, '/auth/login')
+			redirect(307, '/auth/login')
 		}
 
-		throw error(e.status, e.message)
+		error(e.status, e.message)
 	} finally {
 	}
 
@@ -33,5 +33,5 @@ export async function load({ cookies, locals }) {
 		return { profile, store: store }
 	}
 
-	throw redirect(307, '/auth/login')
+	redirect(307, '/auth/login')
 }

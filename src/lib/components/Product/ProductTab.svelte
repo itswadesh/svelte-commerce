@@ -1,10 +1,9 @@
 <script lang="ts">
-import type { Product } from '$lib/types'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import ProductCard from '$lib/ProductCard.svelte'
-import DummyProductCard from '$lib/DummyProductCard.svelte'
-import { ProductService } from '$lib/services'
+import { ProductCard, DummyProductCard } from '$lib/components'
+import { services } from '@misiki/litekart-utils'
+import type { Product } from '$lib/types'
 
 let name = 'Product Tab'
 let allCoreCategories = [
@@ -33,9 +32,9 @@ let products: Product[] = []
 onMount(async () => {
 	try {
 		loading = true
-		products = await ProductService.fetchProducts({
+		products = await services.ProductService.fetchProducts({
 			origin: $page?.data?.origin,
-			storeId: $page?.data?.store?.id
+			storeId: $page?.data?.storeId
 		})
 	} catch (e) {
 	} finally {
@@ -67,7 +66,7 @@ function filterProducts(selectedCategory: string) {
 						<input
 							type="radio"
 							bind:group="{selectedCategory}"
-							name="{name}"
+							{name}
 							id="{c.value}"
 							class="hidden"
 							value="{c.value}"
@@ -99,7 +98,7 @@ function filterProducts(selectedCategory: string) {
 						<input
 							type="radio"
 							bind:group="{selectedCategory}"
-							name="{name}"
+							{name}
 							id="{c.value}"
 							class="hidden"
 							value="{c.value}"

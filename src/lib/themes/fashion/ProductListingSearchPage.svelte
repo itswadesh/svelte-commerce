@@ -1,19 +1,25 @@
 <script lang="ts">
+import { browser } from '$app/environment'
+import {
+	CatelogNav,
+	DesktopFilter,
+	DummyProductCard,
+	MobileFilter,
+	Pagination,
+	ProductCard
+} from '$lib/components'
 import { currency, dateOnly, generatePriceRange, toast } from '$lib/utils'
 import { fade, fly } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { Pagination, CatelogNav, DesktopFilter, MobileFilter } from '$lib/components'
-import { ProductCard, DummyProductCard } from '$lib/theme-config'
 import { PrimaryButton } from '$lib/ui'
-import { ProductService } from '$lib/services'
+import { services } from '@misiki/litekart-utils'
 import { sorts } from '$lib/config'
+import { storeStore } from '$lib/store/store'
 import dotsLoading from '$lib/assets/dots-loading.gif'
 import noDataAvailable from '$lib/assets/no/no-data-available.png'
 import SEO from '$lib/components/SEO/index.svelte'
-import { browser } from '$app/environment'
-import { storeStore } from '$lib/store/store'
 
 export let data
 
@@ -125,7 +131,7 @@ async function loadNextPage() {
 		try {
 			data.isLoading = true
 
-			const res = await ProductService.fetchNextPageProducts({
+			const res = await services.ProductService.fetchNextPageProducts({
 				categorySlug: data.products?.category?.slug,
 				origin: $page?.data?.origin,
 				storeId: $page?.data?.storeId,
@@ -198,7 +204,7 @@ function handleFilterTags() {
 
 <SEO {...seoProps} />
 
-<svelte:window bind:scrollY="{y}" bind:innerWidth="{innerWidth}" on:scroll="{handleOnScroll}" />
+<svelte:window bind:scrollY="{y}" bind:innerWidth on:scroll="{handleOnScroll}" />
 
 <CatelogNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page?.data?.store}">
 	<div class="flex max-w-max flex-col items-start gap-1">
@@ -279,12 +285,12 @@ function handleFilterTags() {
 
 	{#if data.products?.products?.length && data.products.facets}
 		<MobileFilter
-			bind:showFilter="{showFilter}"
-			bind:showSort="{showSort}"
+			bind:showFilter
+			bind:showSort
 			class="block sticky z-40 lg:hidden
 			{store?.hellobar?.active?.val ? 'top-[88px] sm:top-28' : 'top-14 sm:top-20'}"
 			facets="{data.products.facets}"
-			priceRange="{priceRange}"
+			{priceRange}
 			selected="{selectedFilter}"
 			on:clearAll="{refreshData}" />
 	{/if}
@@ -316,7 +322,7 @@ function handleFilterTags() {
 			<DesktopFilter
 				class="sticky hidden lg:block {store?.hellobar?.active?.val ? 'top-56' : 'top-48'}"
 				facets="{data.products.facets}"
-				priceRange="{priceRange}"
+				{priceRange}
 				query="{data.query}"
 				on:clearAll="{refreshData}" />
 		{/if}
