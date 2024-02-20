@@ -1,5 +1,6 @@
 import type { RequestEvent } from '@sveltejs/kit'
 import type { Me } from '$lib/types'
+// This is unused, the code used is from routes/server/store/+server.ts
 export const authenticateUser = (event: RequestEvent) => {
 	const meFromCookie: string | undefined = event.cookies.get('me')
 	const sidFromCookie: string | undefined = event.cookies.get('connect.sid')

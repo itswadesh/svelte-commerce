@@ -1,5 +1,5 @@
 // import * as SentryNode from '@sentry/node'
-import { authenticateUser, fetchCart } from '$lib/server'
+import { authenticateUser } from '$lib/server'
 import { DOMAIN, HTTP_ENDPOINT, listOfPagesWithoutBackButton } from '$lib/config'
 import { error, type Handle, type HandleServerError } from '@sveltejs/kit'
 import { nanoid } from 'nanoid'
@@ -33,6 +33,8 @@ export const handleError: HandleServerError = ({ error, event }) => {
 }
 
 export const handle: Handle = async ({ event, resolve }) => {
+	console.log(`event.cookies.get('connect.sid')`, event.cookies.get('connect.sid'));
+
 	try {
 		const IS_DEV = import.meta.env.DEV
 		const url = new URL(event.request.url)
@@ -55,15 +57,19 @@ export const handle: Handle = async ({ event, resolve }) => {
 		const storeId = event.cookies.get('storeId')
 		// const store = event.cookies.get('store') || '{}'
 		// const storeAsJson = JSON.parse(store)
+		console.log('DOMAIN || host', DOMAIN || host);
+		console.log('storeId', storeId);
 		if (storeId && storeId != 'undefined') {
 			event.locals.storeId = storeId
 			// event.locals.store = storeAsJson
 		} else {
 			try {
 				const { storeOne } = await services.InitService.fetchInit({
-					host,
+					host: DOMAIN || host,
 					origin: event.locals.origin
 				})
+
+				console.log('storeOne', storeOne);
 
 				const storeId = storeOne?._id
 				// const store = {
@@ -94,17 +100,24 @@ export const handle: Handle = async ({ event, resolve }) => {
 				// 	isHyperlocal: storeOne?.isHyperlocal,
 				// 	IMAGE_CDN_URL: storeOne?.IMAGE_CDN_URL
 				// }
-				if (!storeId || storeId == 'undefined')
+				console.log('storeId 2222', storeId);
+				if (!storeId || storeId == 'undefined') {
 					throw { status: 404, message: `Could not find STORE for domain = ${url.host}` }
-				event.cookies.set('storeId', storeId, { path: '/' })
+				}
+
+				event.cookies.set('storeId', storeId, {
+					path: '/', httpOnly: true,
+				})
 				// event.cookies.set('store', JSON.stringify(store), { path: '/' })
 				event.locals.storeId = storeId
 
 				// event.locals.store = store
 			} catch (e) {
+				console.log('error', e);
 				throw { status: 404, message: `Could not find STORE for domain = ${url.host}` }
 			}
 		}
+
 		// console.log('menu at hooks.server.is', menu);
 		// console.log('storeOne at hooks.server.is', storeOne);
 
@@ -122,7 +135,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.cartId = event.cookies.get('cartId')
 		if (zip) event.locals.zip = JSON.parse(zip)
 		// This makes a call to backend on every request
-		await fetchCart(event)
+
+		// await fetchCart(event)
 
 		// const derivedSid: string = event.cookies.get('connect.sid') || ''
 		//Cart(event)
