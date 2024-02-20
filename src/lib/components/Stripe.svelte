@@ -8,6 +8,7 @@ import { PrimaryButton } from '$lib/ui'
 import { toast } from '$lib/utils'
 import Error from './Error.svelte'
 import type { PaymentMethod } from './../types'
+import { services } from '@misiki/litekart-utils'
 
 const dispatch = createEventDispatcher()
 
@@ -27,7 +28,7 @@ let errorMessage = { text: '', show: false }
 let errors
 let stripe: any
 
-async function payWithCard(clientSecret: string, orderId: string) {
+async function payWithCard(clientSecret: string, orderNo: string) {
 	// This is for 3d authentication
 
 	try {
@@ -43,7 +44,7 @@ async function payWithCard(clientSecret: string, orderId: string) {
 			errorMessage.show = false
 			errorMessage.text = ''
 			goto(
-				`/payment/success?payment_reference_id=${result.paymentIntent.id}&id=${orderId}&provider=Stripe`
+				`/payment/process?order_no=${orderNo}&payment_reference_id=${result.paymentIntent.id}&provider=Stripe`
 			)
 		}
 	} catch (e) {
@@ -58,7 +59,7 @@ const payWithStripe = async (pm: PaymentMethod) => {
 		loading = true
 		toast('Contacting Payment Server...', 'warning')
 		const paymentMethodId = pm.id
-		const res: any = await OrdersService.stripeCheckoutService({
+		const res: any = await services.OrdersService.stripeCheckoutService({
 			paymentMethodId,
 			address,
 			cartId: $page.data.cartId,
@@ -70,10 +71,10 @@ const payWithStripe = async (pm: PaymentMethod) => {
 			return
 		} else {
 			if (!res.paid) {
-				await payWithCard(res.clientSecret, res?.orderId)
+				await payWithCard(res.clientSecret, res?.orderNo)
 			} else if (res) {
 				goto(
-					`/payment/success?payment_reference_id=${res.referenceId}&id=${res?.orderId}&provider=Stripe`
+					`/payment/success?order_no=${res?.orderNo}&payment_reference_id=${res.referenceId}&provider=Stripe`
 				)
 				paySuccess = true
 			}

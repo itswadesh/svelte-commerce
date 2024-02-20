@@ -7,6 +7,7 @@ import { UserService } from '$lib/services'
 import { LazyImg, Error } from '$lib/components'
 import { TextboxFloating, PrimaryButton } from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
+import { services } from '@misiki/litekart-utils'
 
 const seoProps = {
 	title: 'Reset Password',
@@ -51,7 +52,7 @@ async function submit(p) {
 		const id = $page.data?.id
 		const token = $page.data?.token
 
-		const res = await UserService.resetPasswordService({
+		const res = await services.UserService.resetPasswordService({
 			id,
 			token,
 			password,

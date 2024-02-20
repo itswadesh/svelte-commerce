@@ -9,7 +9,7 @@ import dayjs from 'dayjs'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
-
+import { services } from '@misiki/litekart-utils'
 const seoProps = {
 	title: 'Reviews Details',
 	description: 'Reviews Details'
@@ -89,7 +89,7 @@ async function saveReviewproduct(review) {
 		toast('Sending your business rating and review', 'info')
 		review.store = $page?.data?.storeId
 
-		await ReviewService.saveReview({
+		await services.ReviewService.saveReview({
 			id: review.id,
 			pid: review.pid,
 			oid: review.oid,
