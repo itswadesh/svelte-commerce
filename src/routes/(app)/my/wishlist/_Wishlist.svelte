@@ -25,7 +25,7 @@ import { WishlistService } from '$lib/services'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
 import noEmptyWishlist from '$lib/assets/no/empty-wishlist.svg'
 import WishlistSkeleton from './_WishlistSkeleton.svelte'
-
+import { services } from '@misiki/litekart-utils'
 export let wishlistedProducts,
 	loadingProduct = []
 
@@ -34,7 +34,7 @@ let bounceItemFromTop = false
 async function removeFromWishlist(id, wx) {
 	try {
 		loadingProduct[wx] = true
-		await WishlistService.toggleWishlistService({
+		await services.WishlistService.toggleWishlistService({
 			pid: id,
 			vid: id,
 			storeId: $page?.data?.storeId,

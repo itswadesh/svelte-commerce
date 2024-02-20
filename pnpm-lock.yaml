@@ -9,8 +9,8 @@ dependencies:
     specifier: 0.0.5
     version: 0.0.5(svelte@4.2.10)
   '@misiki/litekart-utils':
-    specifier: 1.0.4
-    version: 1.0.4(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5)
+    specifier: 1.0.5
+    version: 1.0.5(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5)
   '@vite-pwa/sveltekit':
     specifier: 0.3.0
     version: 0.3.0(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5)
@@ -2305,8 +2305,8 @@ packages:
     engines: {node: '>=16'}
     dev: true
 
-  /@misiki/litekart-utils@1.0.4(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5):
-    resolution: {integrity: sha512-eKUskhGBLImTAowt8TxDAAYMhlBDWsON28OWqgVi8NDjdTf8oWGX/4r3RuZlfoZHknKgJbro1Ln7t9zpeTjOBA==}
+  /@misiki/litekart-utils@1.0.5(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5):
+    resolution: {integrity: sha512-0yg6C2kHE0P3yY97r9yYvRNZ5dlkNKfq1t/P+ecdEowY5tDa1V1gPEUG4UlP495ZrhyeeYrR333I4Fupliz01w==}
     dependencies:
       '@vite-pwa/sveltekit': 0.3.0(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5)
       tsx: 4.7.1

@@ -1,6 +1,6 @@
 import { error, redirect } from '@sveltejs/kit'
 import { UserService } from '$lib/services'
-
+import { services } from '@misiki/litekart-utils'
 export async function load({ params, locals, url, cookies, request }) {
 	const { store, origin } = locals
 	try {
@@ -10,7 +10,7 @@ export async function load({ params, locals, url, cookies, request }) {
 		const token = url?.searchParams.get('token')
 		const sid = cookies.get('connect.sid')
 
-		const res = await UserService.verifyEmail({
+		const res = await services.UserService.verifyEmail({
 			id,
 			expires,
 			signature,

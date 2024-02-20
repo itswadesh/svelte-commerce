@@ -10,6 +10,7 @@ import { LazyImg } from '$lib/components'
 import SendOtp from '../_SendOtp.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import VerifyOtp from '../_VerifyOtp.svelte'
+import { services } from '@misiki/litekart-utils'
 
 const cookies = Cookie()
 
@@ -42,7 +43,7 @@ async function handleSendOTP({ detail }) {
 	}
 	try {
 		loading = true
-		const res = await UserService.getOtpService({
+		const res = await services.UerService.getOtpService({
 			phone,
 			storeId: data.storeId,
 			origin: data.origin
@@ -62,7 +63,7 @@ async function handleVerifyOtp({ detail }) {
 		loading = true
 		const otp = detail
 
-		const res = await UserService.verifyOtpService({
+		const res = await services.UserService.verifyOtpService({
 			phone,
 			otp,
 			storeId: data.storeId,

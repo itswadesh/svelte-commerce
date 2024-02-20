@@ -1,12 +1,12 @@
 import { WishlistService } from '$lib/services'
 import { redirect } from '@sveltejs/kit'
-
+import { services } from '@misiki/litekart-utils'
 export async function load({ locals, cookies, params, request }) {
 	try {
 		const pid = params.pid
 		const storeId = locals.storeId
 		const sid = locals.sid
-		const isExistInWishlist = await WishlistService.checkWishlist({
+		const isExistInWishlist = await services.WishlistService.checkWishlist({
 			pid,
 			vid: pid,
 			storeId: locals.storeId,
@@ -15,7 +15,7 @@ export async function load({ locals, cookies, params, request }) {
 		})
 
 		if (!isExistInWishlist) {
-			await WishlistService.toggleWishlistService({
+			await services.WishlistService.toggleWishlistService({
 				pid: pid,
 				vid: pid,
 				storeId,

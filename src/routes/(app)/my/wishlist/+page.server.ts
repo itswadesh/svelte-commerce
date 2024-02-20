@@ -41,7 +41,7 @@ const toggleWishlist = async ({ request, cookies, locals }) => {
 		redirect(307, `/auth/login?ref=/my/wishlist/add/${pid}`)
 	}
 
-	const res = await WishlistService.toggleWishlistService({
+	const res = await services.WishlistService.toggleWishlistService({
 		pid: pid,
 		vid: vid,
 		origin: locals.origin,

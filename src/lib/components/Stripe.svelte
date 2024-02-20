@@ -8,6 +8,7 @@ import { PrimaryButton } from '$lib/ui'
 import { toast } from '$lib/utils'
 import Error from './Error.svelte'
 import type { PaymentMethod } from './../types'
+import { services } from '@misiki/litekart-utils'
 
 const dispatch = createEventDispatcher()
 
@@ -58,7 +59,7 @@ const payWithStripe = async (pm: PaymentMethod) => {
 		loading = true
 		toast('Contacting Payment Server...', 'warning')
 		const paymentMethodId = pm.id
-		const res: any = await OrdersService.stripeCheckoutService({
+		const res: any = await services.OrdersService.stripeCheckoutService({
 			paymentMethodId,
 			address,
 			cartId: $page.data.cartId,

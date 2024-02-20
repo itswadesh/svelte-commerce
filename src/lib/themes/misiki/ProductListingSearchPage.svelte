@@ -95,7 +95,7 @@ $: if (data.products?.count === 0) {
 
 async function saveSearchData(searchData) {
 	try {
-		await PopularSearchService.savePopularSearch({
+		await services.PopularSearchService.savePopularSearch({
 			id: 'new',
 			text: searchData,
 			storeId: $page?.data?.storeId,

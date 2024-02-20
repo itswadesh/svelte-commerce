@@ -10,7 +10,7 @@ import { slide } from 'svelte/transition'
 import { toast } from '$lib/utils'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
-
+import { services } from '@misiki/litekart-utils'
 const seoProps = {
 	title: 'Select Payment Option',
 	metaDescription: 'Choose your payment method'
@@ -113,7 +113,7 @@ async function submit(pm) {
 				loading = true
 				loadingForPaymentProcessingSteps = true
 
-				const res = await OrdersService.codCheckout({
+				const res = await services.OrdersService.codCheckout({
 					address: addressId,
 					cartId: $page.data.cartId,
 					paymentMethod: 'COD',
@@ -140,7 +140,7 @@ async function submit(pm) {
 					loading = true
 					loadingForPaymentProcessingSteps = true
 
-					const res = await OrdersService.codCheckout({
+					const res = await services.OrdersService.codCheckout({
 						address: addressId,
 						cartId: data?.cartId,
 						comment,
@@ -178,7 +178,7 @@ async function submit(pm) {
 				loading = true
 				loadingForPaymentProcessingSteps = true
 
-				const res = await OrdersService.cashfreeCheckout({
+				const res = await services.OrdersService.cashfreeCheckout({
 					address: addressId,
 					orderNo,
 					origin: $page.data.origin,
@@ -222,7 +222,7 @@ async function submit(pm) {
 				data.err = null
 				loading = true
 				loadingForPaymentProcessingSteps = true
-				const res = await OrdersService.phonepeCheckout({
+				const res = await services.OrdersService.phonepeCheckout({
 					address: addressId,
 					origin: $page.data.origin,
 					cartId: $page.data.cartId,
@@ -249,7 +249,7 @@ async function submit(pm) {
 				loading = true
 				loadingForPaymentProcessingSteps = true
 
-				const res = await OrdersService.paypalCheckout({
+				const res = await services.OrdersService.paypalCheckout({
 					address: addressId,
 					orderNo,
 					cartId: $page.data.cartId,
@@ -278,7 +278,7 @@ async function submit(pm) {
 				loading = true
 				loadingForPaymentProcessingSteps = true
 
-				const rp = await OrdersService.razorpayCheckout({
+				const rp = await services.OrdersService.razorpayCheckout({
 					address: addressId,
 					orderNo,
 					cartId: $page.data.cartId,
@@ -296,7 +296,7 @@ async function submit(pm) {
 					order_id: rp.id,
 					async handler(response) {
 						try {
-							const capture = await OrdersService.razorpayCapture({
+							const capture = await services.OrdersService.razorpayCapture({
 								rpOrderId: response.razorpay_order_id,
 								rpPaymentId: response.razorpay_payment_id,
 								origin: $page.data.origin,

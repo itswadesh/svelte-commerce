@@ -13,6 +13,7 @@ import Modal from './_Modal.svelte'
 import { createEventDispatcher } from 'svelte'
 import { post } from '$lib/utils/api'
 import { DemoRequestService } from '$lib/services'
+import { services } from '@misiki/litekart-utils'
 const dispatch = createEventDispatcher()
 
 export let product,
@@ -44,7 +45,7 @@ async function submit() {
 	const msg = 'Schedule Done !'
 	loading = true
 	try {
-		await DemoRequestService.saveScheduleDemo({
+		await services.DemoRequestService.saveScheduleDemo({
 			schedule,
 			storeId: $page?.data?.storeId,
 			origin: $page.data.origin
