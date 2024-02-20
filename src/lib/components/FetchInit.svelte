@@ -6,13 +6,11 @@ const cookies = Cookie()
 
 onMount(async () => {
 	const response = await fetch('/server/store')
-
 	const res = await response.json()
 
-console.log('',res);
+	// console.log('res',res);
 
 	const { storeOne } = res
-
 	cookies.set('storeId', storeOne?._id, { path: '/' })
 })
 </script>
