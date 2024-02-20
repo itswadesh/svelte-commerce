@@ -1,13 +1,13 @@
 <script lang="ts">
-import { CategoryService } from '$lib/services'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
+import { PrimaryButton } from '$lib/ui'
+import { ProductCard, Pagination, MobileFooter, DesktopFilter, MobileFilter } from '$lib/components'
+import { services } from '@misiki/litekart-utils'
 import { sorts } from '$lib/config'
 import { toast } from '$lib/utils'
-import { ProductCard, Pagination, MobileFooter, DesktopFilter, MobileFilter } from '$lib/components'
 import noDataAvailable from '$lib/assets/no/no-data-available.png'
-import { PrimaryButton } from '$lib/ui'
 
 export let data
 
@@ -22,7 +22,7 @@ let query = $page?.url?.searchParams
 
 onMount(async () => {
 	try {
-		const res = await CategoryService.fetchAllProductsOfCategories({
+		const res = await services.CategoryService.fetchAllProductsOfCategories({
 			origin: $page?.data?.origin,
 			storeId: $page?.data?.storeId
 		})
@@ -49,7 +49,10 @@ async function sortNow(s) {
 
 async function refreshData() {
 	try {
-		const res = await CategoryService.fetchCategory({ id: $page?.params?.slug, origin: origin })
+		const res = await services.CategoryService.fetchCategory({
+			id: $page?.params?.slug,
+			origin: origin
+		})
 		data.category = res?.data
 		data.count = res?.count
 		data.err = !data.category ? 'No result Not Found' : null

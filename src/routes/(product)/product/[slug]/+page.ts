@@ -1,5 +1,5 @@
 // import { getCache, setCache } from '$lib/server/redis'
-import { ProductService, ReviewService, WishlistService } from '$lib/services'
+import { services } from '@misiki/litekart-utils'
 
 const isServer = import.meta.env.SSR // get the SSR value
 
@@ -10,7 +10,7 @@ export async function load({ params, url, parent }) {
 	const page = url.searchParams.get('page') || 1
 
 	const getProductDetails = async () => {
-		const product = await ProductService.fetchProduct({
+		const product = await services.ProductService.fetchProduct({
 			isCors,
 			origin,
 			sid,
@@ -18,8 +18,9 @@ export async function load({ params, url, parent }) {
 			id: slug,
 			storeId
 		})
+
 		if (me) {
-			const isWishlisted = await WishlistService.checkWishlist({
+			const isWishlisted = await services.WishlistService.checkWishlist({
 				pid: product?._id || product?.id,
 				vid: product?._id || product?.id,
 				isCors,
@@ -28,13 +29,15 @@ export async function load({ params, url, parent }) {
 				storeId
 			})
 
-			console.log('isWishlisted', isWishlisted)
+			// console.log('isWishlisted', isWishlisted)
 
 			product.isWishlisted = isWishlisted
 		} else {
 			product.isWishlisted = false
 		}
+
 		return product
+
 		// Enabling cache-control will not refresh cart qty indicator
 		// setHeaders({ 'cache-control': `max-age=${CACHE_DURATION}` }) // This is to tell Cloudflare to store in its own cache
 		// setCache(p1, product)
@@ -52,8 +55,10 @@ export async function load({ params, url, parent }) {
 	}
 
 	const getMoreProductDetails = async () => {
-		const products2 = await ProductService.fetchProduct2({ id: slug, slug, origin, storeId })
+		const products2 = await services.ProductService.fetchProduct2({ id: slug, slug, origin, storeId })
+
 		// setHeaders({ 'cache-control': `max-age=${CACHE_DURATION}` }) // This is to tell Cloudflare to store in its own cache
+
 		return products2
 	}
 
@@ -63,7 +68,8 @@ export async function load({ params, url, parent }) {
 		// if (cached) {
 		// 	return cached
 		// }
-		const reviews = await ReviewService.fetchProductReviews({
+
+		const reviews = await services.ReviewService.fetchProductReviews({
 			isCors,
 			origin,
 			page,
@@ -71,8 +77,10 @@ export async function load({ params, url, parent }) {
 			slug,
 			storeId
 		})
+
 		// setHeaders({ 'cache-control': `max-age=${CACHE_DURATION}` }) // This is to tell Cloudflare to store in its own cache
 		// setCache(r, reviews)
+
 		return reviews
 	}
 

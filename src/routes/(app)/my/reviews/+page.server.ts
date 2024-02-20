@@ -1,5 +1,5 @@
 import { error, redirect } from '@sveltejs/kit'
-import { ReviewService } from '$lib/services'
+import { services } from '@misiki/litekart-utils'
 
 export async function load({ cookies, locals, url }) {
 	const { store, storeId, origin, me, sid } = locals
@@ -8,7 +8,7 @@ export async function load({ cookies, locals, url }) {
 		redirect(307, `/auth/login?ref=${url.pathname}${url.search}`)
 	}
 	try {
-		const res = await ReviewService.fetchReviews({
+		const res = await services.ReviewService.fetchReviews({
 			storeId,
 			sid,
 			origin

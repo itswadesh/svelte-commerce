@@ -1,10 +1,9 @@
 <script lang="ts">
-import type { Product } from '$lib/types'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { ProductCard, DummyProductCard } from '$lib/components'
-
-import { ProductService } from '$lib/services'
+import { services } from '@misiki/litekart-utils'
+import type { Product } from '$lib/types'
 
 let name = 'Product Tab'
 let allCoreCategories = [
@@ -33,7 +32,7 @@ let products: Product[] = []
 onMount(async () => {
 	try {
 		loading = true
-		products = await ProductService.fetchProducts({
+		products = await services.ProductService.fetchProducts({
 			origin: $page?.data?.origin,
 			storeId: $page?.data?.storeId
 		})

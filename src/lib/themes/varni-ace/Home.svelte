@@ -1,4 +1,5 @@
 <script>
+import { browser } from '$app/environment'
 import { CatelogNav, DummyProductCard, MobileFilter, Pagination } from '$lib/components'
 import { currency, dateOnly, generatePriceRange, toast } from '$lib/utils'
 import { DesktopFilter, Footer, ProductCard } from '$lib/themes/varni-ace'
@@ -9,15 +10,14 @@ import { Hero } from '$lib/themes/misiki'
 import { MobileFooter } from '$lib/components'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { PopularSearchService, ProductService } from '$lib/services'
 import { PrimaryButton } from '$lib/ui'
+import { services } from '@misiki/litekart-utils'
 import { sorts } from '$lib/config'
+import { storeStore } from '$lib/store/store'
 import dayjs from 'dayjs'
 import dotsLoading from '$lib/assets/dots-loading.gif'
 import noDataAvailable from '$lib/assets/no/no-data-available.png'
 import SEO from '$lib/components/SEO/index.svelte'
-import { browser } from '$app/environment'
-import { storeStore } from '$lib/store/store'
 
 export let data
 export let showFooter = false
@@ -134,7 +134,7 @@ async function loadNextPage() {
 		try {
 			data.isLoading = true
 
-			const res = await ProductService.fetchNextPageProducts({
+			const res = await services.ProductService.fetchNextPageProducts({
 				categorySlug: data?.category?.slug,
 				nextPage,
 				searchParams,

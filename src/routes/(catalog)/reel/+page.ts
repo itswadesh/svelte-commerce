@@ -1,4 +1,5 @@
-import { ProductService } from '$lib/services'
+import { services } from '@misiki/litekart-utils'
+
 const isServer = import.meta.env.SSR
 
 export const prerender = false
@@ -16,7 +17,8 @@ export async function load({ url, params, parent }) {
 	query.forEach(function (value, key) {
 		fl[key] = value
 	})
-	const { data, count, facets, pageSize, err } = await ProductService.fetchReels({
+
+	const { data, count, facets, pageSize, err } = await services.ProductService.fetchReels({
 		server: isServer,
 		storeId,
 		page: currentPage,
@@ -97,6 +99,7 @@ export async function load({ url, params, parent }) {
 			muted: false
 		}
 	]
+
 	return {
 		data: videosData,
 		count,

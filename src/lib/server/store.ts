@@ -1,4 +1,4 @@
-import { CategoryService, StoreService } from '$lib/services'
+import { services } from '@misiki/litekart-utils'
 import type { RequestEvent } from '@sveltejs/kit'
 
 export const fetchStoreData = async (event: RequestEvent) => {
@@ -12,7 +12,7 @@ export const fetchStoreData = async (event: RequestEvent) => {
 		}
 		const host = event.locals.host
 		// console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhh', host)
-		const r = await StoreService.getStoreData({
+		const r = await services.StoreService.getStoreData({
 			url: event.request.url,
 			host,
 			cookies: event.cookies,
@@ -22,7 +22,7 @@ export const fetchStoreData = async (event: RequestEvent) => {
 		})
 
 		if (!cookieMegamenu || cookieMegamenu == 'undefined') {
-			r.megamenu1 = await CategoryService.fetchMegamenuData({
+			r.megamenu1 = await services.CategoryService.fetchMegamenuData({
 				origin: event.request.url,
 				storeId,
 				sid: event.cookies.get('connect.sid'),

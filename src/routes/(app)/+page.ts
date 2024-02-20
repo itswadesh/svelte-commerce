@@ -1,4 +1,4 @@
-import { CollectionService, DealsService, HomeService, ProductService } from '$lib/services'
+import { services } from '@misiki/litekart-utils'
 
 const isServer = import.meta.env.SSR
 
@@ -16,31 +16,26 @@ export async function load({ params, parent, url }) {
 
 	return {
 		streamed: {
-			home: HomeService.fetchHome({
+			home: services.HomeService.fetchHome({
 				origin,
-				server: isServer,
 				storeId,
 				isCors: store?.isCors,
 				sid: sid
 			}),
-
-			deals: DealsService.fetchDeals({
+			deals: services.DealsService.fetchDeals({
 				origin,
-				server: isServer,
 				storeId,
 				isCors: store?.isCors,
 				sid: sid
 			}),
-
-			collections: CollectionService.fetchCollections({
+			collections: services.CollectionService.fetchCollections({
 				origin,
-				server: isServer,
 				storeId,
 				isCors: store?.isCors,
 				sid: sid
 			})
 		},
-		products: await ProductService.searchProducts({
+		products: await services.ProductService.fetchProducts({
 			query: query.toString(),
 			origin,
 			storeId,

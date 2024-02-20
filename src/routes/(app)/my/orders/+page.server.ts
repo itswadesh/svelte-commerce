@@ -1,11 +1,11 @@
-import { OrdersService } from '$lib/services'
 import { error, redirect } from '@sveltejs/kit'
+import { services } from '@misiki/litekart-utils'
 
 export async function load({ locals }) {
 	try {
 		const storeId = locals.storeId
 		const sid = locals.sid
-		const res = await OrdersService.fetchOrders({
+		const res = await services.OrdersService.fetchOrders({
 			storeId,
 			server: true,
 			sid
