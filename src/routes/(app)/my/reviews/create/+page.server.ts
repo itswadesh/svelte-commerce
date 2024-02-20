@@ -12,9 +12,9 @@ export async function load({ url, locals, cookies }) {
 	try {
 		product = await services.ProductService.fetchProduct({
 			id: pid,
-			storeId: locals.storeId,
 			origin: locals.origin,
-			sid: cookies.get('connect.sid')
+			sid: cookies.get('connect.sid'),
+			storeId: locals.storeId
 		})
 
 		if (!product) error(404, 'Product not found')
