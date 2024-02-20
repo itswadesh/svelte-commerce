@@ -116,7 +116,6 @@ async function getMegamenu() {
 			// megamenu = await getMegamenuFromStore({
 			// 	sid: null,
 			// 	storeId: $page?.data?.storeId,
-			// 	isCors: $page?.data?.store?.isCors,
 			// 	origin: $page.data.origin
 			// })
 

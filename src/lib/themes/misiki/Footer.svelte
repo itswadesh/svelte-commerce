@@ -59,7 +59,6 @@ onMount(async () => {
 			sid: null,
 			origin: $page.data.origin,
 			storeId: $page?.data?.storeId,
-			isCors: $page.data.store?.isCors
 		})
 	}
 	// console.log('popularSearches', popularSearches)

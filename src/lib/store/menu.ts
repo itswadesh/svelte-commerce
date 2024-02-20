@@ -5,7 +5,7 @@ export const menuStore = writable([])
 
 let loadingForMenu = false
 
-export const getMenuFromStore = async ({ origin, storeId, isCors, forceUpdate = false }) => {
+export const getMenuFromStore = async ({ origin, storeId, forceUpdate = false }) => {
 	let existingMenu
 
 	menuStore.subscribe((value) => {
@@ -19,8 +19,7 @@ export const getMenuFromStore = async ({ origin, storeId, isCors, forceUpdate = 
 
 		const menuDataFromServer = await services.MenuService.fetchMenuData({
 			storeId,
-			origin,
-			isCors
+			origin
 		})
 
 		menuStore.update((u) => menuDataFromServer)

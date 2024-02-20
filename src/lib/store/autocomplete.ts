@@ -5,7 +5,7 @@ export const autocompleteStore = writable({})
 
 let isLoading = false
 
-export const findAutocompleteFromStore = async ({ isCors, sid, storeId, origin, forceUpdate = false }) => {
+export const findAutocompleteFromStore = async ({ sid, storeId, origin, forceUpdate = false }) => {
 	let existingAutocomplete = []
 
 	autocompleteStore.subscribe((value) => {
@@ -21,7 +21,6 @@ export const findAutocompleteFromStore = async ({ isCors, sid, storeId, origin, 
 			sid,
 			origin,
 			storeId,
-			isCors,
 			featured: false
 		})
 

@@ -14,6 +14,9 @@ dependencies:
   '@vite-pwa/sveltekit':
     specifier: 0.3.0
     version: 0.3.0(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5)
+  npm-swadesh:
+    specifier: 1.0.22
+    version: 1.0.22(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5)
 
 devDependencies:
   '@aws-sdk/client-s3':
@@ -5616,6 +5619,16 @@ packages:
       shell-quote: 1.8.1
       string.prototype.padend: 3.1.5
     dev: true
+
+  /npm-swadesh@1.0.22(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5):
+    resolution: {integrity: sha512-BW1gnVdobrDXBaKtbETfmnB6TUwMUGBfrjtg626BmkoLN4P3u+z6LIT/1wr7pna46dmcgjqWmTy9MEuUu8aJog==}
+    dependencies:
+      '@vite-pwa/sveltekit': 0.3.0(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5)
+      tsx: 4.7.1
+    transitivePeerDependencies:
+      - '@sveltejs/kit'
+      - vite-plugin-pwa
+    dev: false
 
   /npmlog@5.0.1:
     resolution: {integrity: sha512-AqZtDUWOMKs1G/8lwylVjrdYgqA4d9nu8hc+0gzRxlDb1I10+FHBGMXs6aiQHFdCUUlqH99MUMuLfzWDNDtfxw==}

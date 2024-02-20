@@ -99,4 +99,3 @@ export const slotMarginGeneralWithHelloBar = 'mt-[88px] sm:mt-28'
 export const slotMarginGeneralWithHelloBarAndHyperLocal = 'mt-[114px] sm:mt-[206px]'
 export const slotMarginGeneralWithHyperLocal = 'mt-20 sm:mt-[104px]'
 export const slotMarginProduct = 'lg:mt-20'
-export const isCors = true

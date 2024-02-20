@@ -98,7 +98,6 @@ async function getMegamenu() {
 			// megamenu = await getMegamenuFromStore({
 			// 	sid: null,
 			// 	storeId: $page?.data?.storeId,
-			// 	isCors: $page?.data?.store?.isCors,
 			// 	origin: $page.data.origin
 			// })
 
@@ -108,7 +107,6 @@ async function getMegamenu() {
 				megamenu = await services.CategoryService.fetchMegamenuData({
 					origin: $page?.data?.origin,
 					storeId: $page?.data?.storeId,
-					isCors: $page.data.store?.isCors
 				})
 			} else {
 				megamenu = JSON.parse(localmegamenu)
