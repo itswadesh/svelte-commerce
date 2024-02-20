@@ -51,7 +51,12 @@ export async function load({ params, url, parent }) {
 	}
 
 	const getMoreProductDetails = async () => {
-		const products2 = await services.ProductService.fetchProduct2({ id: slug, slug, origin, storeId })
+		const products2 = await services.ProductService.fetchProduct2({
+			id: slug,
+			slug,
+			origin,
+			storeId
+		})
 
 		// setHeaders({ 'cache-control': `max-age=${CACHE_DURATION}` }) // This is to tell Cloudflare to store in its own cache
 

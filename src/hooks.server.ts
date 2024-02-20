@@ -59,7 +59,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		} else {
 			try {
 				const { storeOne } = await services.InitService.fetchInit({
-					host,
+					host: DOMAIN || host,
 					origin: event.locals.origin
 				})
 
