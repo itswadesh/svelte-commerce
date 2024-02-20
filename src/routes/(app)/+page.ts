@@ -3,8 +3,6 @@ import { services } from '@misiki/litekart-utils'
 const isServer = import.meta.env.SSR
 
 export async function load({ params, parent, url }) {
-	console.log('await parent()', await parent());
-
 	const { store, storeId, origin, sid } = await parent()
 	const currentPage = +url.searchParams.get('page') || 1
 	const fl = {}
