@@ -23,7 +23,7 @@ import {
 	siteTitle,
 	websiteLegalName,
 	websiteName,
-	weightUnit,
+	weightUnit
 } from '$lib/config'
 import { fetchInit } from './init-service'
 
@@ -85,7 +85,7 @@ export const getStoreData = async ({
 		websiteLegalName,
 		websiteName,
 		weightUnit,
-		whatsappChatButton: {},
+		whatsappChatButton: {}
 	}
 
 	let megamenu = null
@@ -155,13 +155,13 @@ export const getStoreData = async ({
 			websiteLegalName: storeRes?.storeOne?.websiteLegalName,
 			websiteName: storeRes?.storeOne?.websiteName,
 			weightUnit: storeRes?.storeOne?.weightUnit,
-			whatsappChatButton: storeRes?.storeOne?.whatsappChatButton,
+			whatsappChatButton: storeRes?.storeOne?.whatsappChatButton
 		}
 
 		megamenu = storeRes.megamenu
 
-		cookies.set('store', JSON.stringify(store), { path: '/' })
-		cookies.set('megamenu', JSON.stringify(megamenu), { path: '/' })
+		// cookies.set('storeId', store?.id, { path: '/' })
+		// cookies.set('megamenu', JSON.stringify(megamenu), { path: '/' })
 	} else {
 		store = JSON.parse(cookieStore)
 		megamenu = JSON.parse(cookieMegamenu)

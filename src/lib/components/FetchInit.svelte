@@ -9,10 +9,10 @@ onMount(async () => {
 
 	const res = await response.json()
 
-	// console.log('zzzzzzzzzzzzzzzzzz', res)
+console.log('',res);
 
 	const { storeOne } = res
 
-	cookies.set('store', JSON.stringify(storeOne), { path: '/' })
+	cookies.set('storeId', storeOne?._id, { path: '/' })
 })
 </script>

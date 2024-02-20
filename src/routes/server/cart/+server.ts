@@ -13,5 +13,6 @@ export async function GET({ request, locals, cookies }) {
 	locals.cartQty = cart.qty
 	locals.cart = cart
 	cookies.set('cartQty', cart.qty, { path: '/' })
+
 	return new Response(JSON.stringify(cart))
 }
