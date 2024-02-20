@@ -14,7 +14,6 @@ import SaveAddress from './_SaveAddress.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
-
 // console.log('zzzzzzzzzzzzzzzzzz', data)
 
 const seoProps = {
@@ -131,7 +130,7 @@ async function remove(id, index) {
 		<SaveAddress
 			bind:editAddress="{showAddNewAddressModal}"
 			shipping_address="{newAddress}"
-			countries="{data.countries}" />
+			countries="{data.countries?.data}" />
 	</Modal>
 
 	{#if data.addresses?.isFetching}
@@ -233,7 +232,7 @@ async function remove(id, index) {
 			<SaveAddress
 				bind:editAddress="{showEditAddressModal}"
 				shipping_address="{selectedShippingAddress}"
-				countries="{data.countries}" />
+				countries="{data.countries?.data}" />
 		</Modal>
 
 		<Pagination

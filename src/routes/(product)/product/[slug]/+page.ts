@@ -10,7 +10,6 @@ export async function load({ params, url, parent }) {
 
 	const getProductDetails = async () => {
 		const product = await services.ProductService.fetchProduct({
-			isCors,
 			origin,
 			sid,
 			slug,
@@ -67,7 +66,6 @@ export async function load({ params, url, parent }) {
 		// }
 
 		const reviews = await services.ReviewService.fetchProductReviews({
-			isCors,
 			origin,
 			page,
 			server: isServer,
