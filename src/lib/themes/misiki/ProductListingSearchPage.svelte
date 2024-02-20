@@ -166,7 +166,7 @@ async function loadNextPage() {
 			data.err = !res?.estimatedTotalHits ? 'No result Not Found' : null
 			data.products.category = res?.category
 			data.products.count = res?.count
-			data.products.products = data?.products?.products?.concat(nextPageData)
+			data.products.products = data?.products?.concat(nextPageData)
 			data.products.products.facets = res?.facets
 
 			if (data.product?.count && data.products?.length === data.product?.count) {
@@ -195,7 +195,7 @@ onMount(() => {
 			if (
 				entry.isIntersecting &&
 				data.products?.count &&
-				data.products?.products?.length < data.products?.count &&
+				data.products?.length < data.products?.count &&
 				!data.isLoading
 			) {
 				// Do something when the element is intersecting
@@ -318,8 +318,7 @@ function handleFilterTags() {
 
 <div class="h-full min-h-screen">
 	<!-- Mobile black product count indicator -->
-
-	{#if !hidden && innerWidth <= 1024 && data.products?.products?.length}
+	{#if !hidden && innerWidth <= 1024 && data.products?.length}
 		<button
 			transition:fade="{{ duration: 500 }}"
 			aria-label="Click to go to top"
@@ -336,7 +335,7 @@ function handleFilterTags() {
 				></path>
 			</svg>
 
-			<span class="flex-1">{data.products?.products?.length} / {data.products?.count}</span>
+			<span class="flex-1">{data.products?.length} / {data.products?.count}</span>
 		</button>
 	{/if}
 
@@ -362,7 +361,7 @@ function handleFilterTags() {
 		{/if}
 
 		<div class="w-full flex-1 sm:px-10 sm:pt-10 lg:pt-0 lg:px-0">
-			{#if data.products?.products?.length}
+			{#if data.products?.length}
 				<div class="flex flex-col gap-5">
 					<div class="hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex">
 						<!-- Name and count -->
@@ -412,7 +411,7 @@ function handleFilterTags() {
 
 				<ul
 					class="lg:mt-5 grid grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6">
-					{#each data.products?.products as p, px}
+					{#each data.products as p, px}
 						<li in:fly="{{ y: 20, duration: 300, delay: 100 * px }}">
 							<ProductCard product="{p}" />
 						</li>
