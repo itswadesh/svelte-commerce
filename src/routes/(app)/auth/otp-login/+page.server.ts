@@ -1,6 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit'
 import { UserService, CartService } from '$lib/services'
 import type { Action, Actions, PageServerLoad } from './$types'
+import { services } from '@misiki/litekart-utils'
 
 const getOtp: Action = async ({ request, locals }) => {
 	const data = await request.formData()
@@ -9,7 +10,7 @@ const getOtp: Action = async ({ request, locals }) => {
 		return fail(400, { invalid: true })
 	}
 	try {
-		const data = await UserService.getOtpService({
+		const data = await services.UserService.getOtpService({
 			phone,
 			storeId: locals.storeId,
 			origin: locals.origin
@@ -40,7 +41,7 @@ const verifyOtp: Action = async ({ cookies, request, locals }) => {
 		return fail(400, { invalid: true })
 	}
 	try {
-		const user = await UserService.verifyOtpService({
+		const user = await services.UserService.verifyOtpService({
 			phone,
 			otp,
 			storeId: locals.storeId,

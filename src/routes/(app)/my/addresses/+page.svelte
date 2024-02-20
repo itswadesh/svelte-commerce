@@ -12,7 +12,7 @@ import noEmptyAddress from '$lib/assets/no/empty-address.svg'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SaveAddress from './_SaveAddress.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-
+import { services } from '@misiki/litekart-utils'
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
 
@@ -50,10 +50,11 @@ async function sortNow(sort) {
 async function saveAddr(e) {
 	const { _id: id, active } = e
 	try {
-		await AddressService.saveAddress({
+		await services.AddressService.saveAddress({
 			id,
 			storeId: $page?.data?.storeId,
-			origin: $page.data.origin
+			origin: $page.data.origin,
+			sid: $page.data.sid
 		})
 		await invalidateAll()
 	} catch (e) {

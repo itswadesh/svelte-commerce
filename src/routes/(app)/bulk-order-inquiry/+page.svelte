@@ -69,7 +69,7 @@ import SEO from '$lib/components/SEO/index.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
 import Textbox from '$lib/ui/Textbox.svelte'
 import { ContactService } from '$lib/services'
-
+import { services } from '@misiki/litekart-utils'
 let seoProps = {
 	title: `Bulk order inquiry`,
 	description: `Bulk order inquiry`
@@ -110,7 +110,7 @@ function updateQuantity(detail) {
 
 async function submit() {
 	try {
-		const res = await ContactService.bulkOrderEnquiry({
+		const res = await services.ContactService.bulkOrderEnquiry({
 			name: blukOrder.name,
 			companayName: blukOrder.companayName,
 			email: blukOrder.email,

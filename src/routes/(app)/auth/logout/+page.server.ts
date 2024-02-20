@@ -1,6 +1,7 @@
 import { UserService } from '$lib/services'
 import { redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
+import { services } from '@misiki/litekart-utils'
 
 export const load: PageServerLoad = async () => {
 	// we only use this endpoint for the api
@@ -10,7 +11,10 @@ export const load: PageServerLoad = async () => {
 
 export const actions: Actions = {
 	async default({ cookies, locals }) {
-		await UserService.logoutService({ storeId: locals.storeId, sid: cookies.get('connect.sid') })
+		await services.UserService.logoutService({
+			storeId: locals.storeId,
+			sid: cookies.get('connect.sid')
+		})
 		// eat the cookie
 
 		// cookies.set('storeId', null, {
