@@ -78,7 +78,19 @@ const add: Action = async ({ request, cookies, locals }) => {
 	// console.log(cartId);
 
 	try {
-		let cart = await CartService.addToCartService({
+		// let cart = await CartService.addToCartService({
+		// 	pid,
+		// 	vid: currentVariantId || vid,
+		// 	qty,
+		// 	options,
+		// 	customizedImg,
+		// 	customizedData,
+		// 	storeId: locals.storeId,
+		// 	cartId,
+		// 	origin: locals.origin,
+		// 	sid // This is a special case to pass complete cookie
+		// })
+		let cart = await services.CartService.addToCart({
 			pid,
 			vid: currentVariantId || vid,
 			qty,
