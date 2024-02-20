@@ -23,7 +23,8 @@
 		"live": "run-s build copy liveS"
 	},
 	"dependencies": {
-		"@vite-pwa/sveltekit": "0.3.0"
+		"@vite-pwa/sveltekit": "0.3.0",
+		"npm-swadesh": "1.0.22"
 	},
 	"devDependencies": {
 		"@aws-sdk/client-s3": "^3.511.0",

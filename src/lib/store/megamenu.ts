@@ -7,7 +7,7 @@ export const megamenuAllStore = writable([])
 let loadingForMegamenu = false
 let loadingForAllMegamenu = false
 
-export const getMegamenuFromStore = async ({ origin, storeId, isCors, forceUpdate = false }) => {
+export const getMegamenuFromStore = async ({ origin, storeId, forceUpdate = false }) => {
 	let existingMegamenu
 
 	megamenuStore.subscribe((value) => {
@@ -22,8 +22,7 @@ export const getMegamenuFromStore = async ({ origin, storeId, isCors, forceUpdat
 		const megamenuDataFromServer = await CategoryService.fetchMegamenuData({
 			megamenu: true,
 			storeId,
-			origin,
-			isCors
+			origin
 		})
 
 		megamenuStore.update((u) => megamenuDataFromServer)
@@ -34,7 +33,7 @@ export const getMegamenuFromStore = async ({ origin, storeId, isCors, forceUpdat
 	return existingMegamenu
 }
 
-export const getAllMegamenuFromStore = async ({ origin, storeId, isCors, forceUpdate = false }) => {
+export const getAllMegamenuFromStore = async ({ origin, storeId, forceUpdate = false }) => {
 	let existingAllMegamenu
 
 	megamenuAllStore.subscribe((value) => {
@@ -49,8 +48,7 @@ export const getAllMegamenuFromStore = async ({ origin, storeId, isCors, forceUp
 		const megamenuAllDataFromServer = await CategoryService.fetchMegamenuData({
 			megamenu: false,
 			storeId,
-			origin,
-			isCors
+			origin
 		})
 
 		megamenuAllStore.update((u) => megamenuAllDataFromServer)

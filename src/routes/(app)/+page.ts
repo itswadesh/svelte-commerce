@@ -20,32 +20,28 @@ export async function load({ params, parent, url }) {
 				origin,
 				server: isServer,
 				storeId,
-				isCors: store?.isCors,
-				sid: sid
+				sid
 			}),
 
 			deals: DealsService.fetchDeals({
 				origin,
 				server: isServer,
 				storeId,
-				isCors: store?.isCors,
-				sid: sid
+				sid
 			}),
 
 			collections: CollectionService.fetchCollections({
 				origin,
 				server: isServer,
 				storeId,
-				isCors: store?.isCors,
-				sid: sid
+				sid
 			})
 		},
 		products: await ProductService.searchProducts({
 			query: query.toString(),
 			origin,
 			storeId,
-			isCors: store?.isCors,
-			sid: sid
+			sid
 		}),
 		currentPage,
 		origin,

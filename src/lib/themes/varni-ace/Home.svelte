@@ -138,7 +138,6 @@ async function loadNextPage() {
 				categorySlug: data?.category?.slug,
 				nextPage,
 				searchParams,
-				isCors: $page?.data?.store?.isCors,
 				origin: $page?.data?.origin,
 				storeId: $page?.data?.storeId
 			})

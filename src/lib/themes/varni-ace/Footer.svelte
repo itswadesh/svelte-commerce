@@ -64,14 +64,12 @@ onMount(async () => {
 		// }
 		megamenu = await getAllMegamenuFromStore({
 			storeId: $page?.data?.storeId,
-			isCors: $page?.data?.store?.isCors,
 			origin: $page.data.origin
 		})
 
 		menu = await getMenuFromStore({
 			storeId: $page?.data?.storeId,
 			origin: $page.data.origin,
-			isCors: $page.data.isCors
 		})
 
 		popularSearches = await getPopularSearchFromStore({
@@ -79,7 +77,6 @@ onMount(async () => {
 			sid: null,
 			origin: $page.data.origin,
 			storeId: $page?.data?.storeId,
-			isCors: $page.data.store?.isCors
 		})
 
 		// console.log('megamenu', megamenu)

@@ -5,7 +5,7 @@ export const categoriesStore = writable([])
 
 let isLoading = false
 
-export const getCategoriesFromStore = async ({ origin, storeId, isCors, forceUpdate = false }) => {
+export const getCategoriesFromStore = async ({ origin, storeId, forceUpdate = false }) => {
 	let existingCategories = []
 
 	categoriesStore.subscribe((value) => {
@@ -19,8 +19,7 @@ export const getCategoriesFromStore = async ({ origin, storeId, isCors, forceUpd
 
 		const categoriesDataFromServer = await CategoryService.fetchAllCategories({
 			storeId,
-			origin,
-			isCors
+			origin
 		})
 
 		categoriesStore.update((u) => categoriesDataFromServer?.data || [])

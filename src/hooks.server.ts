@@ -81,7 +81,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 				// 	themeColor: storeOne?.themeColor,
 				// 	title: storeOne?.title,
 				// 	websiteName: storeOne?.websiteName,
-				// 	isCors: storeOne?.isCors,
 				// 	isMultiVendor: storeOne?.isMultiVendor,
 				// 	adminUrl: storeOne?.adminUrl,
 				// 	address: storeOne?.address,

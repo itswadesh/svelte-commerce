@@ -14,9 +14,9 @@ export async function GET({ cookies, request, locals, setHeaders }) {
 		})
 
 		store = storeRes.storeOne
-		popularSearches = storeRes.popularSearches
-		megamenu = storeRes.megamenu
-		menu = storeRes.menu
+		// popularSearches = storeRes.popularSearches
+		// megamenu = storeRes.megamenu
+		// menu = storeRes.menu
 		// store = {
 		// 	id: storeOne?._id,
 		// 	address: storeOne?.address,
@@ -82,7 +82,7 @@ export async function GET({ cookies, request, locals, setHeaders }) {
 		// const storeId = storeOne?._id
 		// cookies.set('storeId', storeId, { path: '/' })
 		// locals.storeId = storeId
-		setHeaders({ 'Cache-Control': 'max-age=60' })
+		// setHeaders({ 'Cache-Control': 'max-age=60' })
 	} catch (e) {}
-	return json({ store, menu, popularSearches, megamenu })
+	return json({ store})
 }

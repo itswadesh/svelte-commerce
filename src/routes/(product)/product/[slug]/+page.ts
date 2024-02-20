@@ -6,12 +6,10 @@ const isServer = import.meta.env.SSR // get the SSR value
 export async function load({ params, url, parent }) {
 	const { slug } = params
 	const { zip, sid, origin, store, storeId, me } = await parent()
-	const isCors = store?.isCors
 	const page = url.searchParams.get('page') || 1
 
 	const getProductDetails = async () => {
 		const product = await ProductService.fetchProduct({
-			isCors,
 			origin,
 			sid,
 			slug,
@@ -22,7 +20,6 @@ export async function load({ params, url, parent }) {
 			const isWishlisted = await WishlistService.checkWishlist({
 				pid: product?._id || product?.id,
 				vid: product?._id || product?.id,
-				isCors,
 				origin,
 				sid,
 				storeId
@@ -42,7 +39,6 @@ export async function load({ params, url, parent }) {
 		// Removed on 11-Oct-2023 as it was slow down the navigation
 		// const updatedPopularityRes = await PopularityService.updatePopulatiry({
 		// 	pid: product?._id || product?.id,
-		// 	isCors,
 		// 	origin,
 		// 	sid,
 		// 	storeId,
@@ -64,7 +60,6 @@ export async function load({ params, url, parent }) {
 		// 	return cached
 		// }
 		const reviews = await ReviewService.fetchProductReviews({
-			isCors,
 			origin,
 			page,
 			server: isServer,

@@ -38,7 +38,6 @@ onMount(async () => {
 	if (browser) {
 		megamenu = await getAllMegamenuFromStore({
 			storeId: $page?.data?.storeId,
-			isCors: $page?.data?.store?.isCors,
 			origin: $page.data.origin
 		})
 		popularSearches = await getPopularSearchFromStore({
@@ -46,7 +45,6 @@ onMount(async () => {
 			sid: null,
 			origin: $page.data.origin,
 			storeId: $page?.data?.storeId,
-			isCors: $page.data.store?.isCors
 		})
 	}
 })
