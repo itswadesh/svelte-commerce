@@ -5,13 +5,15 @@ import { z } from 'zod'
 
 export async function load({ cookies, locals }) {
 	const countries = await services.CountryService.fetchCountries({
-		storeId: locals.storeId,
-		sid: cookies.get('connect.sid')
+		origin: locals.origin,
+		sid: cookies.get('connect.sid'),
+		storeId: locals.storeId
 	})
 
 	const { myAddresses, count } = await services.AddressService.fetchAddresses({
-		storeId: locals.storeId,
-		sid: cookies.get('connect.sid')
+		origin: locals.origin,
+		sid: cookies.get('connect.sid'),
+		storeId: locals.storeId
 	})
 
 	myAddresses.count = count

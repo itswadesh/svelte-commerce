@@ -231,7 +231,7 @@ async function refreshAddress() {
 							bind:selectedAddress
 							bind:selectedBillingAddress
 							shipping_address="{newAddress}"
-							countries="{data.countries}" />
+							countries="{data.countries?.data}" />
 					</Modal>
 				</div>
 			{:else}
