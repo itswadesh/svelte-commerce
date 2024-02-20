@@ -151,7 +151,7 @@ export const getBySid = async (endpoint: string, sid?: any) => {
 			return res
 		}
 	} catch (e) {
-		// console.log(`/lib/utils/server.ts getBySid(${HTTP_ENDPOINT + '/api/' + endpoint})`, e)
+		// console.log(`/lib/utils/server.ts getByconnect.sidSid(${HTTP_ENDPOINT + '/api/' + endpoint})`, e)
 		throw e
 	}
 }

@@ -5,7 +5,7 @@ export const pagesStore = writable([])
 
 let isLoading = false
 
-export const getPagesFromStore = async ({ origin, storeId, isCors, forceUpdate = false }) => {
+export const getPagesFromStore = async ({ origin, storeId, forceUpdate = false }) => {
 	let existingPages = null
 
 	pagesStore.subscribe((value) => {
@@ -19,8 +19,7 @@ export const getPagesFromStore = async ({ origin, storeId, isCors, forceUpdate =
 
 		const pagesDataFromServer = await services.PageService.fetchPages({
 			storeId,
-			origin,
-			isCors
+			origin
 		})
 
 		pagesStore.update((u) => pagesDataFromServer || [])

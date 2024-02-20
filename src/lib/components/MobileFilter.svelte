@@ -123,7 +123,6 @@ async function getMegamenu() {
 
 			megamenu = await getAllMegamenuFromStore({
 				storeId: $page?.data?.storeId,
-				isCors: $page?.data?.store?.isCors,
 				origin: $page.data.origin
 			})
 			megamenuResult = megamenu

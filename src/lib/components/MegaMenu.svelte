@@ -64,7 +64,6 @@ async function getMegaMenu() {
 		try {
 			menuItems = await getMegamenuFromStore({
 				storeId: $page?.data?.storeId,
-				isCors: $page?.data?.store?.isCors,
 				origin: $page.data.origin
 			})
 		} catch (e) {

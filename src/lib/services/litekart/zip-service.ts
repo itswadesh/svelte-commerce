@@ -2,13 +2,13 @@ import type { Error } from '$lib/types'
 import { error } from '@sveltejs/kit'
 import { getBySid } from '$lib/utils/server'
 import { getAPI } from '$lib/utils/api'
-const isServer = import.meta.env.SSR
+// const isServer = import.meta.env.SSR
 
 export const findZip = async ({ zip, origin }) => {
 	try {
 		let data = {}
-		if (isServer) data = getBySid(`pincodes/${zip}`)
-		else data = getAPI(`pincodes/${zip}`, origin)
+		// if (isServer) data = getBySid(`pincodes/${zip}`)
+		const data = getAPI(`pincodes/${zip}`, origin,sid)
 		return data
 	} catch (err) {
 		const e = err as Error

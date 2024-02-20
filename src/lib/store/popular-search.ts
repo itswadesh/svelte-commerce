@@ -5,7 +5,13 @@ export const popularsearchStore = writable({})
 
 let isLoading = false
 
-export const getPopularSearchFromStore = async ({ limit, isCors, sid, storeId, origin, forceUpdate = false }) => {
+export const getPopularSearchFromStore = async ({
+	limit,
+	sid,
+	storeId,
+	origin,
+	forceUpdate = false
+}) => {
 	let existingPopularSearch = null
 
 	popularsearchStore.subscribe((value) => {
@@ -20,8 +26,7 @@ export const getPopularSearchFromStore = async ({ limit, isCors, sid, storeId, o
 		const popularsearchDataFromServer = await services.CategoryService.fetchAllCategories({
 			sid,
 			origin,
-			storeId,
-			isCors
+			storeId
 		})
 
 		// console.log('popularsearchDataFromServer', popularsearchDataFromServer);
@@ -33,7 +38,6 @@ export const getPopularSearchFromStore = async ({ limit, isCors, sid, storeId, o
 		// 	sid,
 		// 	origin,
 		// 	storeId,
-		// 	isCors
 		// })
 
 		// popularsearchStore.update((u) => popularsearchDataFromServer)

@@ -176,7 +176,6 @@ async function getProducts() {
 
 		const resP = await services.ProductService.fetchProducts({
 			origin: $page?.data?.origin,
-			isCors: $page?.data?.store?.isCors,
 			storeId: $page?.data?.storeId
 		})
 		products = resP?.hits
@@ -191,7 +190,6 @@ async function getCoupons() {
 		loadingCoupon = true
 		const resC = await services.CouponService.fetchCoupons({
 			origin: $page?.data?.origin,
-			isCors: $page?.data?.store?.isCors,
 			storeId: $page?.data?.storeId
 		})
 		coupons = resC?.data
