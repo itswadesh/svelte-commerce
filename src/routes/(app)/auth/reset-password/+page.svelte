@@ -2,8 +2,6 @@
 import { browser } from '$app/environment'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
-import { post } from '$lib/utils/api'
-import { UserService } from '$lib/services'
 import { LazyImg, Error } from '$lib/components'
 import { TextboxFloating, PrimaryButton } from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'

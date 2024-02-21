@@ -1,5 +1,4 @@
 import { fail, redirect } from '@sveltejs/kit'
-import { UserService, CartService } from '$lib/services'
 import type { Action, Actions, PageServerLoad } from './$types'
 import { services } from '@misiki/litekart-utils'
 

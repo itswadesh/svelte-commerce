@@ -1,4 +1,3 @@
-import { CartService, WishlistService } from '$lib/services'
 import { error, fail, redirect } from '@sveltejs/kit'
 import { services } from '@misiki/litekart-utils'
 import type { Action, Actions, PageServerLoad } from './$types'

@@ -1,7 +1,6 @@
 <script lang="ts">
 import { onMount } from 'svelte'
 import { SplideSlide } from '@splidejs/svelte-splide'
-import { CartService } from '$lib/services'
 import { page } from '$app/stores'
 import { invalidateAll } from '$app/navigation'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
@@ -10,6 +9,7 @@ import { fade } from 'svelte/transition'
 import { cartStore, updateCartStore } from '$lib/store/cart'
 import { browser } from '$app/environment'
 import { services } from '@misiki/litekart-utils'
+
 export let products = []
 export let title = ''
 

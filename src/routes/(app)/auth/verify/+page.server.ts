@@ -1,6 +1,6 @@
 import { error, redirect } from '@sveltejs/kit'
-import { UserService } from '$lib/services'
 import { services } from '@misiki/litekart-utils'
+
 export async function load({ params, locals, url, cookies, request }) {
 	const { store, origin } = locals
 	try {

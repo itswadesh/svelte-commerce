@@ -1,6 +1,5 @@
 import { error, redirect } from '@sveltejs/kit'
 import { services } from '@misiki/litekart-utils'
-import { WishlistService } from '$lib/services'
 
 export async function load({ cookies, locals, url }) {
 	try {

@@ -39,7 +39,6 @@
 <script lang="ts">
 import { applyAction, enhance } from '$app/forms'
 import { browser } from '$app/environment'
-import { CartService, WishlistService } from '$lib/services'
 import { cubicOut } from 'svelte/easing'
 import { currency, getColorNameFromVarni, getIdFromYoutubeVideo, toast } from '$lib/utils'
 import { fade } from 'svelte/transition'

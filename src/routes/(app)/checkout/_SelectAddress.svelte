@@ -1,6 +1,5 @@
 <script>
 import { applyAction, enhance } from '$app/forms'
-import { CountryService } from '$lib/services'
 import { createEventDispatcher, onMount } from 'svelte'
 import { del } from '$lib/utils/api'
 import { Error } from '$lib/components'

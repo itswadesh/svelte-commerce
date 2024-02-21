@@ -1,6 +1,4 @@
 <script lang="ts">
-import { browser } from '$app/environment'
-import { CartService } from '$lib/services'
 import { cartStore, updateCartStore } from '$lib/store/cart'
 import { createEventDispatcher, onMount } from 'svelte'
 import { currency, toast } from '$lib/utils'
