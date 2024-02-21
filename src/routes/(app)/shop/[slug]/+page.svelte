@@ -1,7 +1,6 @@
 <script>
 import { browser } from '$app/environment'
 import { CategoriesMobile, Hero, HeroBanners, PickedBanners } from '$lib/theme-config'
-import { CategoryService } from '$lib/services'
 import { Footer, MobileFooter } from '$lib/components'
 import { navigateToProperPath, toast } from '$lib/utils'
 import { onMount } from 'svelte'
@@ -121,7 +120,6 @@ async function getMegaMenu() {
 		try {
 			megamenu = await getAllMegamenuFromStore({
 				storeId: $page?.data?.storeId,
-				isCors: $page?.data?.store?.isCors,
 				origin: $page.data.origin
 			})
 
@@ -194,7 +192,7 @@ function toggle2(cx) {
 		{#await data.banners}
 			<div class="h-96 w-full bg-zinc-200 animate-pulse"></div>
 		{:then banners}
-			<Hero banners="{banners}" />
+			<Hero {banners} />
 		{/await}
 
 		<!-- Hero banners -->

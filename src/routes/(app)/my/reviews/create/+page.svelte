@@ -3,13 +3,13 @@ import { Error, LazyImg } from '$lib/components'
 import { getExtension, toast } from '$lib/utils'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
-import { ReviewService } from '$lib/services'
+import { services } from '@misiki/litekart-utils'
 import BackButton from '$lib/ui/BackButton.svelte'
 import dayjs from 'dayjs'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import Textarea from '$lib/ui/Textarea.svelte'
-import { services } from '@misiki/litekart-utils'
+
 const seoProps = {
 	title: 'Reviews Details',
 	description: 'Reviews Details'
