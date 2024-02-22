@@ -1,10 +1,9 @@
 // import * as SentryNode from '@sentry/node'
 import { authenticateUser } from '$lib/server'
-import { DOMAIN, IS_DEV, listOfPagesWithoutBackButton } from '$lib/config'
+import { DOMAIN, listOfPagesWithoutBackButton } from '$lib/config'
 import { error, type Handle, type HandleServerError } from '@sveltejs/kit'
 import { nanoid } from 'nanoid'
-import { services } from '@misiki/litekart-utils'
-import { dev } from '$app/environment'
+import { InitService } from '$lib/services'
 
 // const SENTRY_DSN = env.SECRET_SENTRY_DSN
 
@@ -34,7 +33,9 @@ export const handleError: HandleServerError = ({ error, event }) => {
 }
 
 export const handle: Handle = async ({ event, resolve }) => {
-	// console.log('ddddddddddddddddddddddddv', IS_DEV)
+	const IS_DEV = import.meta.env.DEV
+	console.log('IS_DEV', IS_DEV)
+
 	try {
 		const url = new URL(event.request.url)
 		const host = url.host
@@ -59,7 +60,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			// event.locals.store = storeAsJson
 		} else {
 			try {
-				const { storeOne } = await services.InitService.fetchInit({
+				const { storeOne } = await InitService.fetchInit({
 					host: DOMAIN || host,
 					origin: event.locals.origin
 				})
