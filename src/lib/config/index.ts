@@ -1,4 +1,4 @@
-import * as publicEnv from '$env/static/public'
+import * as publicEnv from '$env/dynamic/public'
 const env: any = publicEnv || {}
 export * from './website'
 export const adminUrl = 'https://admin.litekart.in'
