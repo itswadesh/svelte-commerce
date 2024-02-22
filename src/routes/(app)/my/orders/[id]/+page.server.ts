@@ -1,5 +1,5 @@
 import { error, redirect } from '@sveltejs/kit'
-import { services } from '@misiki/litekart-utils'
+import { OrdersService } from '$lib/services'
 
 export const prerender = false
 
@@ -9,15 +9,16 @@ export async function load({ params, locals, cookies }) {
 		const { storeId } = locals
 		const sid = cookies.get('connect.sid')
 
-		const order = await services.OrdersService.fetchOrder({
+		const order = await OrdersService.fetchOrder({
 			id,
 			origin: locals.origin,
 			sid: cookies.get('connect.sid'),
 			storeId: locals.storeId
 		})
 
-		const orderTracking = await services.OrdersService.fetchTrackOrder({
-			id, origin: locals.origin,
+		const orderTracking = await OrdersService.fetchTrackOrder({
+			id,
+			origin: locals.origin,
 			sid: cookies.get('connect.sid'),
 			storeId: locals.storeId
 		})

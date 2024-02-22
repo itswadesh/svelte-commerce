@@ -62,7 +62,7 @@
 import { Confetti } from 'svelte-confetti'
 import { page } from '$app/stores'
 import { post } from '$lib/utils/api'
-import { services } from '@misiki/litekart-utils'
+import { ContactService } from '$lib/services'
 import Error from '$lib/components/Error.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import Radio from '$lib/ui/Radio.svelte'
@@ -110,7 +110,7 @@ function updateQuantity(detail) {
 
 async function submit() {
 	try {
-		const res = await services.ContactService.bulkOrderEnquiry({
+		const res = await ContactService.bulkOrderEnquiry({
 			name: blukOrder.name,
 			companayName: blukOrder.companayName,
 			email: blukOrder.email,

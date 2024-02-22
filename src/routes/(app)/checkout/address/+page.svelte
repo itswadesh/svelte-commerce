@@ -9,7 +9,7 @@ import SaveAddress from '../../my/addresses/_SaveAddress.svelte'
 import SelectAddress from '../_SelectAddress.svelte'
 import SelectBillingAddress from '../_SelectBillingAddress.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-import { services } from '@misiki/litekart-utils'
+import { CartService } from '$lib/services'
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
@@ -73,7 +73,7 @@ async function updateCart() {
 		})
 
 		if (selectedAddressFullObject[0] && selectedBillingAddressFullObject[0]) {
-			const res = await services.CartService.updateCart({
+			const res = await CartService.updateCart({
 				billingAddress: selectedBillingAddressFullObject[0],
 				billing_address_id: selectedBillingAddress,
 				shipping_address_id: selectedAddress,

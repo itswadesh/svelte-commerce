@@ -1,15 +1,15 @@
 import { error } from '@sveltejs/kit'
-import { services } from '@misiki/litekart-utils'
+import { AddressService, CartService, CountryService } from '$lib/services'
 import { z } from 'zod'
 
 export async function load({ cookies, locals }) {
-	const countries = await services.CountryService.fetchCountries({
+	const countries = await CountryService.fetchCountries({
 		origin: locals.origin,
 		sid: cookies.get('connect.sid'),
 		storeId: locals.storeId
 	})
 
-	const { myAddresses, count } = await services.AddressService.fetchAddresses({
+	const { myAddresses, count } = await AddressService.fetchAddresses({
 		origin: locals.origin,
 		sid: cookies.get('connect.sid'),
 		storeId: locals.storeId
@@ -184,7 +184,7 @@ const saveAddress = async ({ request, cookies, locals }) => {
 				})
 			}
 
-			res = await services.AddressService.saveAddress({
+			res = await AddressService.saveAddress({
 				address,
 				city,
 				country,
@@ -293,7 +293,7 @@ const saveAddress = async ({ request, cookies, locals }) => {
 				}
 			}
 
-			res = await services.CartService.updateCart3({
+			res = await CartService.updateCart3({
 				cartId,
 				shipping_address,
 				billing_address: new_billing_address,
@@ -380,7 +380,7 @@ const editAddress = async ({ request, cookies, locals }) => {
 			})
 		}
 
-		const res = await services.AddressService.saveAddress({
+		const res = await AddressService.saveAddress({
 			address,
 			city,
 			country,
@@ -408,7 +408,7 @@ const deleteAddress = async ({ request, cookies, locals }) => {
 	const id = data.get('id')
 	const sid = cookies.get('connect.sid')
 
-	const res = await services.AddressService.deleteAddress({
+	const res = await AddressService.deleteAddress({
 		id,
 		storeId: locals.storeId,
 		origin,

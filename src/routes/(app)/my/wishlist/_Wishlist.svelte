@@ -20,7 +20,7 @@ import { invalidateAll } from '$app/navigation'
 import { LazyImg, DummyProductCard } from '$lib/components'
 import { page } from '$app/stores'
 import { PrimaryButton, BlackButton, WhiteButton } from '$lib/ui'
-import { services } from '@misiki/litekart-utils'
+import { WishlistService } from '$lib/services'
 import { updateCartStore } from '$lib/store/cart'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
 import noEmptyWishlist from '$lib/assets/no/empty-wishlist.svg'
@@ -34,7 +34,7 @@ let bounceItemFromTop = false
 async function removeFromWishlist(id, wx) {
 	try {
 		loadingProduct[wx] = true
-		await services.WishlistService.toggleWishlistService({
+		await WishlistService.toggleWishlistService({
 			pid: id,
 			vid: id,
 			storeId: $page?.data?.storeId,

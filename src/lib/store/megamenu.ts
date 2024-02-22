@@ -1,4 +1,4 @@
-import { services } from '@misiki/litekart-utils'
+import { CategoryService } from '$lib/services'
 import { writable } from 'svelte/store'
 
 export const megamenuStore = writable([])
@@ -19,7 +19,7 @@ export const getMegamenuFromStore = async ({ origin, storeId, forceUpdate = fals
 	if ((!loadingForMegamenu && !existingMegamenu) || !!forceUpdate) {
 		loadingForMegamenu = true
 
-		const megamenuDataFromServer = await services.CategoryService.fetchMegamenuData({
+		const megamenuDataFromServer = await CategoryService.fetchMegamenuData({
 			megamenu: true,
 			storeId,
 			origin
@@ -45,7 +45,7 @@ export const getAllMegamenuFromStore = async ({ origin, storeId, forceUpdate = f
 	if ((!loadingForAllMegamenu && !existingAllMegamenu) || !!forceUpdate) {
 		loadingForAllMegamenu = true
 
-		const megamenuAllDataFromServer = await services.CategoryService.fetchMegamenuData({
+		const megamenuAllDataFromServer = await CategoryService.fetchMegamenuData({
 			megamenu: false,
 			storeId,
 			origin

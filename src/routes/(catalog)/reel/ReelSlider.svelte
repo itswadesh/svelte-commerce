@@ -8,7 +8,7 @@ import { applyAction, enhance } from '$app/forms'
 import { fade } from 'svelte/transition'
 import { cartStore, updateCartStore } from '$lib/store/cart'
 import { browser } from '$app/environment'
-import { services } from '@misiki/litekart-utils'
+import { services } from '$lib/services'
 
 export let products = []
 export let title = ''
@@ -60,7 +60,7 @@ const addToCart = async ({ pid, qty, customizedImg, ix, loadingType }: any) => {
 	loading[ix] = true
 	cartButtonText = 'Checkout Cart'
 	isAddedtoBag = true
-	await services.CartService.addToCartService({
+	await CartService.addToCartService({
 		pid: pid,
 		vid: pid,
 		qty: qty,

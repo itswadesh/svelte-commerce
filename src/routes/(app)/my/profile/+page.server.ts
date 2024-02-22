@@ -1,5 +1,5 @@
 import { error, redirect } from '@sveltejs/kit'
-import { services } from '@misiki/litekart-utils'
+import { UserService } from '$lib/services'
 import dayjs from 'dayjs'
 
 export async function load({ cookies, locals }) {
@@ -7,7 +7,7 @@ export async function load({ cookies, locals }) {
 	let profile = {}
 
 	try {
-		const data = await services.UserService.fetchMeData({
+		const data = await UserService.fetchMeData({
 			origin: locals.origin,
 			sid: cookies.get('connect.sid'),
 			storeId: locals.storeId

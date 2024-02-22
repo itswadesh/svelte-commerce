@@ -1,5 +1,5 @@
 import { fail, redirect } from '@sveltejs/kit'
-import { services } from '@misiki/litekart-utils'
+import { OrdersService } from '$lib/services'
 
 export const prerender = false
 
@@ -38,7 +38,7 @@ export async function load({ url, locals, cookies }) {
 		// payment_status = 'SUCCESS'
 		if (pg !== 'Paypal') {
 			// This is already done at backend for paypal
-			await services.OrdersService.paySuccessPageHit({
+			await OrdersService.paySuccessPageHit({
 				orderId,
 				paymentMode,
 				paymentReferenceId,

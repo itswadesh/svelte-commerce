@@ -3,8 +3,7 @@ import { authenticateUser } from '$lib/server'
 import { DOMAIN, IS_DEV, listOfPagesWithoutBackButton } from '$lib/config'
 import { error, type Handle, type HandleServerError } from '@sveltejs/kit'
 import { nanoid } from 'nanoid'
-import { services } from '@misiki/litekart-utils'
-import { dev } from '$app/environment'
+import { InitService } from '$lib/services'
 
 // const SENTRY_DSN = env.SECRET_SENTRY_DSN
 
@@ -59,7 +58,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			// event.locals.store = storeAsJson
 		} else {
 			try {
-				const { storeOne } = await services.InitService.fetchInit({
+				const { storeOne } = await InitService.fetchInit({
 					host: DOMAIN || host,
 					origin: event.locals.origin
 				})

@@ -1,4 +1,4 @@
-import { services } from '@misiki/litekart-utils'
+import { MenuService } from 'lib/services'
 import { writable } from 'svelte/store'
 
 export const menuStore = writable([])
@@ -17,7 +17,7 @@ export const getMenuFromStore = async ({ origin, storeId, forceUpdate = false })
 	if ((!loadingForMenu && !existingMenu) || !!forceUpdate) {
 		loadingForMenu = true
 
-		const menuDataFromServer = await services.MenuService.fetchMenuData({
+		const menuDataFromServer = await MenuService.fetchMenuData({
 			storeId,
 			origin
 		})

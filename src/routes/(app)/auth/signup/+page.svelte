@@ -11,7 +11,7 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
-import { services } from '@misiki/litekart-utils'
+import { UserService } from '$lib/services'
 const IS_DEV = import.meta.env.DEV
 
 const cookies = Cookie()
@@ -124,7 +124,7 @@ async function submit(n) {
 		if (Object.keys(zodError).length === 0) {
 			const { firstName, lastName, phone, email, password, passwordConfirmation } = n
 
-			const res = await services.UserService.signupService({
+			const res = await UserService.signupService({
 				firstName: firstName,
 				lastName: lastName,
 				phone: phone,

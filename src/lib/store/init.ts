@@ -1,4 +1,4 @@
-import { services } from '@misiki/litekart-utils'
+import { InitService } from '$lib/services'
 import { writable } from 'svelte/store'
 
 export const initStore = writable({})
@@ -24,7 +24,7 @@ export const fetchInitFromStore = async (host) => {
 
 	if (!existingInit?.storeOne?._id && isServer && !isLoading) {
 		isLoading = true
-		initDataFromServer = await services.InitService.fetchInit({ host })
+		initDataFromServer = await InitService.fetchInit({ host })
 		initStore.update((u) => initDataFromServer)
 		isLoading = false
 	}

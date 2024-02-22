@@ -6,7 +6,7 @@ import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { PrimaryButton } from '$lib/ui'
 // import { storeStore } from '$lib/store/store'
-import { services } from '@misiki/litekart-utils'
+import { CartService } from '$lib/services'
 
 const dispatch = createEventDispatcher()
 
@@ -38,7 +38,7 @@ async function submit() {
 	if (text === 'Select Address') {
 		if (checkedCartItems?.length) {
 			try {
-				const res = await services.CartService.updateCart2({
+				const res = await CartService.updateCart2({
 					cartId: cart?.cart_id || cart?.cartId || $page.data?.cartId,
 					selected_products_for_checkout: checkedCartItems,
 					origin: $page.data?.origin,

@@ -3,7 +3,7 @@ import { Error, LazyImg } from '$lib/components'
 import { getExtension, toast } from '$lib/utils'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
-import { services } from '@misiki/litekart-utils'
+import { ReviewService } from '$lib/services'
 import BackButton from '$lib/ui/BackButton.svelte'
 import dayjs from 'dayjs'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
@@ -89,7 +89,7 @@ async function saveReviewproduct(review) {
 		toast('Sending your business rating and review', 'info')
 		review.store = $page?.data?.storeId
 
-		await services.ReviewService.saveReview({
+		await ReviewService.saveReview({
 			id: review.id,
 			pid: review.pid,
 			oid: review.oid,

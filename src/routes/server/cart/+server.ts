@@ -1,9 +1,9 @@
-import { services } from '@misiki/litekart-utils'
+import { CartService } from '$lib/services'
 
 export async function GET({ request, locals, cookies }) {
 	let cart: any = {}
 
-	cart = await services.CartService.fetchMyCart({
+	cart = await CartService.fetchMyCart({
 		cartId: cookies.get('cartId'),
 		origin: locals.origin,
 		sid: cookies.get('connect.sid'),

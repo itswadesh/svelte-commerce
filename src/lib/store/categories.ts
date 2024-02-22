@@ -1,4 +1,4 @@
-import { services } from '@misiki/litekart-utils'
+import { CategoryService } from '$lib/services'
 import { writable } from 'svelte/store'
 
 export const categoriesStore = writable([])
@@ -17,7 +17,7 @@ export const getCategoriesFromStore = async ({ origin, storeId, forceUpdate = fa
 	if ((!isLoading && !existingCategories) || !!forceUpdate) {
 		isLoading = true
 
-		const categoriesDataFromServer = await services.CategoryService.fetchAllCategories({
+		const categoriesDataFromServer = await CategoryService.fetchAllCategories({
 			storeId,
 			origin
 		})

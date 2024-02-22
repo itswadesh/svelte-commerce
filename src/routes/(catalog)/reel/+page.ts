@@ -1,4 +1,4 @@
-import { services } from '@misiki/litekart-utils'
+import { ProductService } from '$lib/services'
 
 const isServer = import.meta.env.SSR
 
@@ -18,7 +18,7 @@ export async function load({ url, params, parent }) {
 		fl[key] = value
 	})
 
-	const { data, count, facets, pageSize, err } = await services.ProductService.fetchReels({
+	const { data, count, facets, pageSize, err } = await ProductService.fetchReels({
 		server: isServer,
 		storeId,
 		page: currentPage,

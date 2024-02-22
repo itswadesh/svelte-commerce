@@ -1,6 +1,6 @@
 import { error, fail } from '@sveltejs/kit'
 import { z } from 'zod'
-import { services } from '@misiki/litekart-utils'
+import { UserService } from '$lib/services'
 
 const zodEmailLoginSchema = z.object({
 	email: z
@@ -41,7 +41,7 @@ const login = async ({ request, cookies, locals }) => {
 			})
 		}
 
-		res = await services.UserService.loginService({
+		res = await UserService.loginService({
 			email: phoneOrEmail,
 			password: password,
 			storeId: locals.storeId,
@@ -50,7 +50,7 @@ const login = async ({ request, cookies, locals }) => {
 			origin: locals.origin
 		})
 
-		// const updatedCart = await services.CartService.updateCart({
+		// const updatedCart = await CartService.updateCart({
 		// 	customer_id: res.customer_id
 		// })
 
@@ -71,7 +71,7 @@ const login = async ({ request, cookies, locals }) => {
 			})
 		}
 
-		res = await services.UserService.getOtpService({
+		res = await UserService.getOtpService({
 			phone: phoneOrEmail,
 			storeId: locals.storeId,
 			server: true,
@@ -99,7 +99,7 @@ const verifyOtp = async ({ cookies, request, locals, url }) => {
 		return fail(400, { invalid: true })
 	}
 	try {
-		const user = await services.UserService.verifyOtpService({
+		const user = await UserService.verifyOtpService({
 			phone,
 			otp,
 			cartId: cookies.get('cartId'),
