@@ -1,7 +1,7 @@
-import { UserService } from '$lib/services'
 import { error, fail } from '@sveltejs/kit'
 import { z } from 'zod'
 import { services } from '@misiki/litekart-utils'
+
 const zodEmailLoginSchema = z.object({
 	email: z
 		.string({ required_error: 'Email is required' })
@@ -50,7 +50,7 @@ const login = async ({ request, cookies, locals }) => {
 			origin: locals.origin
 		})
 
-		// const updatedCart = await CartService.updateCart({
+		// const updatedCart = await services.CartService.updateCart({
 		// 	customer_id: res.customer_id
 		// })
 

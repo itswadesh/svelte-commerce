@@ -1,4 +1,3 @@
-import { UserService } from '$lib/services'
 import { redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
 import { services } from '@misiki/litekart-utils'

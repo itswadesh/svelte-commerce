@@ -8,7 +8,6 @@ import { PrimaryButton, Textarea, Textbox } from '$lib/ui'
 import { services } from '@misiki/litekart-utils'
 import { slide } from 'svelte/transition'
 import { toast } from '$lib/utils'
-import { ZipService } from '$lib/services'
 
 const IS_DEV = import.meta.env.DEV
 const dispatch = createEventDispatcher()

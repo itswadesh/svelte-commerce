@@ -1,5 +1,5 @@
-import { ZipService } from '$lib/services'
 import { services } from '@misiki/litekart-utils'
+
 export async function POST({ request, cookies, locals }) {
 	const formData = Object.fromEntries(await request.formData())
 	const res = await services.ZipService.findZip({ zip: formData.zip, origin: locals.origin })

@@ -1,12 +1,10 @@
 <script lang="ts">
-import { AddressService } from '$lib/services'
 import { applyAction, enhance } from '$app/forms'
 import { del } from '$lib/utils/api'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import { Pagination } from '$lib/components'
 import { toast } from '$lib/utils'
-import { WhiteButton } from '$lib/ui'
 import Modal from '$lib/components/Modal.svelte'
 import noEmptyAddress from '$lib/assets/no/empty-address.svg'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'

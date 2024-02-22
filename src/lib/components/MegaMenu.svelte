@@ -31,7 +31,6 @@
 
 <script lang="ts">
 import { browser } from '$app/environment'
-import { CategoryService } from '$lib/services'
 import { fade } from 'svelte/transition'
 import { getContext, onMount } from 'svelte'
 import { getMegamenuFromStore } from '$lib/store/megamenu'
