@@ -33,6 +33,7 @@ export const handleError: HandleServerError = ({ error, event }) => {
 }
 
 export const handle: Handle = async ({ event, resolve }) => {
+	console.log('IS_DEV............', IS_DEV)
 	try {
 		const url = new URL(event.request.url)
 		const host = url.host
