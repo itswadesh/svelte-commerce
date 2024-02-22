@@ -35,9 +35,10 @@ export const handleError: HandleServerError = ({ error, event }) => {
 export const handle: Handle = async ({ event, resolve }) => {
 	try {
 		const IS_DEV = import.meta.env.DEV
+		console.log('IS_DEV...........', IS_DEV)
 		const url = new URL(event.request.url)
 		const host = url.host
-		const protocol = !IS_DEV ? `https://` : `http://`
+		const protocol = IS_DEV != 'true' ? `https://` : `http://`
 		// This is required for vercel as it parse URL as http instead of https
 		event.locals.origin = protocol + host
 		event.locals.host = host
