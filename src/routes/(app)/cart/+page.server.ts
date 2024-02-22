@@ -1,4 +1,3 @@
-import { CartService, WishlistService } from '$lib/services'
 import { error, fail, redirect } from '@sveltejs/kit'
 import { services } from '@misiki/litekart-utils'
 import type { Action, Actions, PageServerLoad } from './$types'
@@ -75,7 +74,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 		return fail(400, { invalid: true })
 	}
 	try {
-		// let cart = await CartService.addToCartService({
+		// let cart = await services.CartService.addToCartService({
 		// 	pid,
 		// 	vid: currentVariantId || vid,
 		// 	qty,
