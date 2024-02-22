@@ -1,6 +1,5 @@
 {
 	"recommendations": [
-		"aaron-bond.better-comments",
 		"adpyke.codesnap",
 		"bbugh.change-color-format",
 		"bradlc.vscode-tailwindcss",
@@ -13,13 +12,11 @@
 		"Matia.night-howl",
 		"miguelsolorio.symbols",
 		"mikestead.dotenv",
-		"ms-playwright.playwright",
 		"phoenisx.cssvar",
 		"pmndrs.pmndrs",
 		"pushqrdx.inline-html",
 		"svelte.svelte-vscode",
 		"usernamehw.errorlens",
-		"vivaxy.vscode-conventional-commits",
 		"vunguyentuan.vscode-postcss",
 		"yoavbls.pretty-ts-errors"
 	]

@@ -9,8 +9,8 @@ dependencies:
     specifier: 0.0.12
     version: 0.0.12(@sveltejs/kit@2.5.0)(svelte@4.2.10)(vite-plugin-pwa@0.17.5)
   '@misiki/litekart-utils':
-    specifier: 1.0.5
-    version: 1.0.5(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5)
+    specifier: 1.0.7
+    version: 1.0.7(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5)
   '@vite-pwa/sveltekit':
     specifier: 0.3.0
     version: 0.3.0(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5)
@@ -2305,8 +2305,8 @@ packages:
     engines: {node: '>=16'}
     dev: true
 
-  /@misiki/litekart-utils@1.0.5(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5):
-    resolution: {integrity: sha512-0yg6C2kHE0P3yY97r9yYvRNZ5dlkNKfq1t/P+ecdEowY5tDa1V1gPEUG4UlP495ZrhyeeYrR333I4Fupliz01w==}
+  /@misiki/litekart-utils@1.0.7(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5):
+    resolution: {integrity: sha512-u4GrlGXWqFSpJPk5rFVCSu1Tw9IP4Z9Q5BZ9xHNc9j+J4Cx557HGq9oH4XFjtgFV+H4VRYGVS1xA5hn/iIBBng==}
     dependencies:
       '@vite-pwa/sveltekit': 0.3.0(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5)
       tsx: 4.7.1
@@ -2320,7 +2320,7 @@ packages:
     peerDependencies:
       svelte: ^4.0.0
     dependencies:
-      '@misiki/litekart-utils': 1.0.5(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5)
+      '@misiki/litekart-utils': 1.0.7(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5)
       svelte: 4.2.10
       svelte-toasts: 1.1.2
     transitivePeerDependencies:
