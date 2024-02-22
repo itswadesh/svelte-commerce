@@ -5,6 +5,8 @@ import { error, type Handle, type HandleServerError } from '@sveltejs/kit'
 import { nanoid } from 'nanoid'
 import { services } from '@misiki/litekart-utils'
 import { browser, building, dev, version } from '$app/environment'
+// import 'dotenv/config'
+// import { env } from '$env/dynamic/public'
 // const SENTRY_DSN = env.SECRET_SENTRY_DSN
 
 // if (SENTRY_DSN && SENTRY_DSN !== 'YOUR_SENTRY_DSN') {
@@ -33,11 +35,11 @@ export const handleError: HandleServerError = ({ error, event }) => {
 }
 
 export const handle: Handle = async ({ event, resolve }) => {
-	console.log('IS_DEV............', IS_DEV || dev)
+	console.log('xxxxxxxxxxxxxxx', IS_DEV)
 	try {
 		const url = new URL(event.request.url)
 		const host = url.host
-		const protocol = IS_DEV || dev != true ? `https://` : `http://`
+		const protocol = !IS_DEV ? `https://` : `http://`
 		// This is required for vercel as it parse URL as http instead of https
 		event.locals.origin = protocol + host
 		event.locals.host = host
