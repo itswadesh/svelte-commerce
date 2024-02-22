@@ -35,7 +35,7 @@ export const handleError: HandleServerError = ({ error, event }) => {
 export const handle: Handle = async ({ event, resolve }) => {
 	try {
 		const IS_DEV = import.meta.env.DEV
-		console.log('IS_DEV...........', IS_DEV)
+		console.log('IS_DEV...........', IS_DEV, IS_DEV == 'true', IS_DEV == true)
 		const url = new URL(event.request.url)
 		const host = url.host
 		const protocol = IS_DEV != 'true' ? `https://` : `http://`
