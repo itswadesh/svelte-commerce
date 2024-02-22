@@ -23,7 +23,7 @@
 		"live": "run-s build copy liveS"
 	},
 	"dependencies": {
-		"@misiki/litekart": "0.0.5",
+		"@misiki/litekart": "0.0.12",
 		"@misiki/litekart-utils": "1.0.5",
 		"@vite-pwa/sveltekit": "0.3.0"
 	},

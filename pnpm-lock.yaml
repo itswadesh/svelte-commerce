@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@misiki/litekart':
-    specifier: 0.0.5
-    version: 0.0.5(svelte@4.2.10)
+    specifier: 0.0.12
+    version: 0.0.12(@sveltejs/kit@2.5.0)(svelte@4.2.10)(vite-plugin-pwa@0.17.5)
   '@misiki/litekart-utils':
     specifier: 1.0.5
     version: 1.0.5(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5)
@@ -2315,13 +2315,17 @@ packages:
       - vite-plugin-pwa
     dev: false
 
-  /@misiki/litekart@0.0.5(svelte@4.2.10):
-    resolution: {integrity: sha512-RSKFPW49ZBXMhcySVFpQnrMWyxeV+RxO6Ee/nKwru0/TK5XBnyuxQ9o7sU7W7BS5tIoqwk0kEs1NbLZOzD+mJQ==}
+  /@misiki/litekart@0.0.12(@sveltejs/kit@2.5.0)(svelte@4.2.10)(vite-plugin-pwa@0.17.5):
+    resolution: {integrity: sha512-gZdqfFP5dhYmAGSaqSdIeX4eYW1BNG81GosF5YevmfZ/AzuXUTqhgPYcsgL2rLxDM0aXC95qlPxA2mv2VG4sgA==}
     peerDependencies:
       svelte: ^4.0.0
     dependencies:
+      '@misiki/litekart-utils': 1.0.5(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5)
       svelte: 4.2.10
       svelte-toasts: 1.1.2
+    transitivePeerDependencies:
+      - '@sveltejs/kit'
+      - vite-plugin-pwa
     dev: false
 
   /@nodelib/fs.scandir@2.1.5:
