@@ -1,5 +1,4 @@
 import { env } from '$env/dynamic/public'
-console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', env)
 export * from './website'
 export const adminUrl = 'https://admin.litekart.in'
 export const alert = 'The High Performance and Scalable Ecommerce'

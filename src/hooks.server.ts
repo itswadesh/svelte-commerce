@@ -4,9 +4,8 @@ import { DOMAIN, IS_DEV, listOfPagesWithoutBackButton } from '$lib/config'
 import { error, type Handle, type HandleServerError } from '@sveltejs/kit'
 import { nanoid } from 'nanoid'
 import { services } from '@misiki/litekart-utils'
-import { browser, building, dev, version } from '$app/environment'
-// import 'dotenv/config'
-// import { env } from '$env/dynamic/public'
+import { dev } from '$app/environment'
+
 // const SENTRY_DSN = env.SECRET_SENTRY_DSN
 
 // if (SENTRY_DSN && SENTRY_DSN !== 'YOUR_SENTRY_DSN') {
@@ -35,7 +34,7 @@ export const handleError: HandleServerError = ({ error, event }) => {
 }
 
 export const handle: Handle = async ({ event, resolve }) => {
-	console.log('ddddddddddddddddddddddddv', IS_DEV)
+	// console.log('ddddddddddddddddddddddddv', IS_DEV)
 	try {
 		const url = new URL(event.request.url)
 		const host = url.host
@@ -43,7 +42,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// This is required for vercel as it parse URL as http instead of https
 		event.locals.origin = protocol + host
 		event.locals.host = host
-		console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', event.locals.origin, event.locals.host)
+		// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', event.locals.origin, event.locals.host)
 		const userAgent = event.request.headers.get('user-agent')
 
 		const isDesktop = !/mobile/i.test(userAgent)
