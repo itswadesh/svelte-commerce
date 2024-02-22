@@ -5,7 +5,7 @@ import { page } from '$app/stores'
 import { LazyImg, Error } from '$lib/components'
 import { TextboxFloating, PrimaryButton } from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
-import { services } from '@misiki/litekart-utils'
+import { UserService } from '$lib/services'
 const seoProps = {
 	title: 'Forgot Password',
 	description: 'Forgot Password'
@@ -29,7 +29,7 @@ async function submit() {
 	try {
 		loading = true
 
-		const res = await services.UserService.forgotPasswordService({
+		const res = await UserService.forgotPasswordService({
 			email: email,
 			referrer: $page.data.origin,
 			storeId: $page?.data?.storeId,

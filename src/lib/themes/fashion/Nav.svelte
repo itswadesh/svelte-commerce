@@ -12,7 +12,7 @@ import { MegaMenu, LazyImg, AutosuggestModal } from '$lib/components'
 import { navigateToProperPath, toast } from '$lib/utils'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { services } from '@misiki/litekart-utils'
+import { CategoryService } from '$lib/services'
 import { storeStore } from '$lib/store/store'
 import { WhiteButton, PrimaryButton, Skeleton } from '$lib/ui'
 import Cookie from 'cookie-universal'
@@ -85,7 +85,7 @@ function handleShowCartSidebar() {
 // 	try {
 // 		loading = true
 
-// 		const res = await services.CartService.fetchRefreshCart({
+// 		const res = await CartService.fetchRefreshCart({
 // 			cartId: $page.data.cartId,
 // 			origin: origin,
 // 			storeId: store.id
@@ -119,7 +119,7 @@ function handleShowCartSidebar() {
 
 async function getCategories() {
 	try {
-		const res1 = await services.CategoryService.fetchAllCategories({
+		const res1 = await CategoryService.fetchAllCategories({
 			storeId: $page.data.store,
 			origin: $page.data.origin
 		})

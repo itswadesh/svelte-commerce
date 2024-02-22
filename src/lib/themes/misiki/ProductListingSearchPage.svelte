@@ -14,7 +14,7 @@ import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { PrimaryButton } from '$lib/ui'
-import { services } from '@misiki/litekart-utils'
+import { ProductService } from '$lib/services'
 import { sorts } from '$lib/config'
 import { storeStore } from '$lib/store/store'
 import dayjs from 'dayjs'
@@ -94,7 +94,7 @@ $: if (data.products?.count === 0) {
 
 async function saveSearchData(searchData) {
 	try {
-		await services.PopularSearchService.savePopularSearch({
+		await PopularSearchService.savePopularSearch({
 			id: 'new',
 			text: searchData,
 			storeId: $page?.data?.storeId,
@@ -150,7 +150,7 @@ async function loadNextPage() {
 		try {
 			data.isLoading = true
 
-			const res = await services.ProductService.fetchNextPageProducts({
+			const res = await ProductService.fetchNextPageProducts({
 				categorySlug: data.products?.category?.slug,
 				origin: $page?.data?.origin,
 				storeId: $page?.data?.storeId,

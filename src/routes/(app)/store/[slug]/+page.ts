@@ -1,4 +1,4 @@
-import { services } from '@misiki/litekart-utils'
+import { VendorService } from '$lib/services'
 
 const isServer = import.meta.env.SSR
 
@@ -9,13 +9,13 @@ export async function load({ params, parent, url }) {
 
 	return {
 		page,
-		vendor: services.VendorService.fetchVendor({
+		vendor: VendorService.fetchVendor({
 			sid,
 			slug: vendorSlug,
 			storeId,
 			origin
 		}),
-		vendorsProduct: services.VendorService.fetchProductsOfVendor({
+		vendorsProduct: VendorService.fetchProductsOfVendor({
 			slug: vendorSlug,
 			page: page,
 			sid,

@@ -2,7 +2,7 @@
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { services } from '@misiki/litekart-utils'
+import { CategoryService } from '$lib/services'
 import { slide } from 'svelte/transition'
 import Cookie from 'cookie-universal'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
@@ -79,7 +79,7 @@ async function getData(e: any) {
 
 	typingTimer = setTimeout(async () => {
 		try {
-			autocomplete = await services.AutocompleteService.fetchAutocompleteData({
+			autocomplete = await AutocompleteService.fetchAutocompleteData({
 				q: q,
 				origin: $page?.data?.origin,
 				storeId: $page?.data?.storeId
@@ -92,7 +92,7 @@ onMount(async () => {
 	searchInput.focus()
 	try {
 		categories = (
-			await services.CategoryService.fetchAllCategories({
+			await CategoryService.fetchAllCategories({
 				featured: true,
 				storeId: $page?.data?.storeId,
 				origin: $page.data.origin

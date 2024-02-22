@@ -15,7 +15,7 @@ import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { PrimaryButton } from '$lib/ui'
-import { services } from '@misiki/litekart-utils'
+import { ProductService } from '$lib/services'
 import { sorts } from '$lib/config'
 import dotsLoading from '$lib/assets/dots-loading.gif'
 import noDataAvailable from '$lib/assets/no/no-data-available.png'
@@ -132,7 +132,7 @@ async function loadNextPage() {
 		try {
 			data.isLoading = true
 
-			const res = await services.ProductService.fetchNextPageProducts({
+			const res = await ProductService.fetchNextPageProducts({
 				categorySlug: data.products?.category?.slug,
 				origin: $page?.data?.origin,
 				storeId: $page?.data?.storeId,

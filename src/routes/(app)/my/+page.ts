@@ -1,4 +1,4 @@
-import { services } from '@misiki/litekart-utils'
+import { OrdersService, WishlistService, ReviewService } from '$lib/services'
 import { redirect } from '@sveltejs/kit'
 
 export async function load({ parent, url }) {
@@ -9,19 +9,19 @@ export async function load({ parent, url }) {
 	}
 
 	try {
-		const orders = await services.OrdersService.fetchOrders({
+		const orders = await OrdersService.fetchOrders({
 			origin,
 			sid,
 			storeId
 		})
 
-		const wishlists = await services.WishlistService.fetchWishlist({
+		const wishlists = await WishlistService.fetchWishlist({
 			origin,
 			sid,
 			storeId
 		})
 
-		const reviews = await services.ReviewService.fetchReviews({
+		const reviews = await ReviewService.fetchReviews({
 			origin,
 			sid,
 			storeId

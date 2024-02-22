@@ -11,7 +11,7 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { PrimaryButton, Skeleton, Textbox, WhiteButton } from '$lib/ui'
 import { selectedCartItemsStore } from '$lib/store/selected-cart-items'
-import { services } from '@misiki/litekart-utils'
+import { CartService, CouponService, ProductService } from '$lib/services'
 import { storeStore } from '$lib/store/store.js'
 import Cookie from 'cookie-universal'
 import dotsLoading from '$lib/assets/dots-loading.gif'
@@ -116,7 +116,7 @@ async function applyCouponCode(selectedCouponCode: string, index: number) {
 			loadingApplyCoupon = true
 		}
 
-		const resAC = await services.CartService.applyCouponService({
+		const resAC = await CartService.applyCouponService({
 			cartId: $page.data.cartId,
 			code: selectedCouponCode,
 			origin: $page.data.origin,
@@ -147,7 +147,7 @@ async function removeCouponCode() {
 	try {
 		loadingRemoveCoupon = true
 
-		await services.CartService.removeCouponService({
+		await CartService.removeCouponService({
 			cartId: $page.data.cartId,
 			code: selectedCouponCode || cart?.discount?.code,
 			origin: $page.data.origin,
@@ -173,7 +173,7 @@ async function getProducts() {
 	try {
 		loadingProducts = true
 
-		const resP = await services.ProductService.fetchProducts({
+		const resP = await ProductService.fetchProducts({
 			origin: $page?.data?.origin,
 			storeId: $page?.data?.storeId
 		})
@@ -187,7 +187,7 @@ async function getProducts() {
 async function getCoupons() {
 	try {
 		loadingCoupon = true
-		const resC = await services.CouponService.fetchCoupons({
+		const resC = await CouponService.fetchCoupons({
 			origin: $page?.data?.origin,
 			storeId: $page?.data?.storeId
 		})

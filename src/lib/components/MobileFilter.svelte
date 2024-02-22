@@ -9,7 +9,7 @@ import { getAllMegamenuFromStore } from '$lib/store/megamenu'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
 import { RadioEs, CheckboxEs, PrimaryButton } from '$lib/ui'
-import { services } from '@misiki/litekart-utils'
+import { CategoryService } from '$lib/services'
 import { sorts } from '$lib/config'
 import Fuse from 'fuse.js'
 
@@ -135,7 +135,7 @@ async function getMegamenu() {
 
 			// const localmegamenu = localStorage.getItem('megamenu')
 			// if (!localmegamenu || localmegamenu === 'undefined') {
-			// 	megamenu = await services.CategoryService.fetchMegamenuData({
+			// 	megamenu = await CategoryService.fetchMegamenuData({
 			// 		origin: $page.data.origin,
 			// 		storeId: $page?.data?.storeId,
 			// 	})

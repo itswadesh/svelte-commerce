@@ -1,5 +1,5 @@
 // import { getCache, setCache } from '$lib/server/redis'
-import { services } from '@misiki/litekart-utils'
+import { ProductService, ReviewService, WishlistService } from '$lib/services'
 
 const isServer = import.meta.env.SSR // get the SSR value
 
@@ -9,7 +9,7 @@ export async function load({ params, url, parent }) {
 	const page = url.searchParams.get('page') || 1
 
 	const getProductDetails = async () => {
-		const product = await services.ProductService.fetchProduct({
+		const product = await ProductService.fetchProduct({
 			origin,
 			sid,
 			slug,
@@ -18,7 +18,7 @@ export async function load({ params, url, parent }) {
 		})
 
 		if (me) {
-			const isWishlisted = await services.WishlistService.checkWishlist({
+			const isWishlisted = await WishlistService.checkWishlist({
 				pid: product?._id || product?.id,
 				vid: product?._id || product?.id,
 				origin,
@@ -40,7 +40,7 @@ export async function load({ params, url, parent }) {
 		// setCache(p1, product)
 
 		// Removed on 11-Oct-2023 as it was slow down the navigation
-		// const updatedPopularityRes = await services.PopularityService.updatePopulatiry({
+		// const updatedPopularityRes = await PopularityService.updatePopulatiry({
 		// 	pid: product?._id || product?.id,
 		// 	origin,
 		// 	sid,
@@ -51,7 +51,7 @@ export async function load({ params, url, parent }) {
 	}
 
 	const getMoreProductDetails = async () => {
-		const products2 = await services.ProductService.fetchProduct2({
+		const products2 = await ProductService.fetchProduct2({
 			id: slug,
 			slug,
 			origin,
@@ -70,7 +70,7 @@ export async function load({ params, url, parent }) {
 		// 	return cached
 		// }
 
-		const reviews = await services.ReviewService.fetchProductReviews({
+		const reviews = await ReviewService.fetchProductReviews({
 			origin,
 			page,
 			server: isServer,

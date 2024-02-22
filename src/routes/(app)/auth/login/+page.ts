@@ -1,4 +1,4 @@
-import { services } from '@misiki/litekart-utils'
+import { CountryService } from '$lib/services'
 
 export const prerender = false
 
@@ -6,7 +6,7 @@ export async function load({ parent }) {
 	const { store } = await parent()
 	let countries = []
 
-	// countries = await services.CountryService.fetchCountries({
+	// countries = await CountryService.fetchCountries({
 	// 	storeId: store,
 	// 	server: isServer,
 	// 	origin

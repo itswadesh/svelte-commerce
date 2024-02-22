@@ -5,7 +5,7 @@ import { constructURL2, toast } from '$lib/utils'
 import { createEventDispatcher, onMount } from 'svelte'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
-import { services } from '@misiki/litekart-utils'
+import { CategoryService } from '$lib/services'
 
 const dispatch = createEventDispatcher()
 
@@ -120,7 +120,7 @@ async function getMegamenu() {
 			const localmegamenu = localStorage.getItem('megamenu')
 
 			if (!localmegamenu || localmegamenu === 'undefined') {
-				megamenu = await services.CategoryService.fetchMegamenuData({
+				megamenu = await CategoryService.fetchMegamenuData({
 					origin: $page.data.origin,
 					storeId: $page?.data?.storeId
 				})

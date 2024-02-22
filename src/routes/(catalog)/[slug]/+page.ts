@@ -1,4 +1,4 @@
-import { services } from '@misiki/litekart-utils'
+import { ProductService } from '$lib/services'
 
 export const prerender = false
 export async function load({ url, params, parent }) {
@@ -14,7 +14,7 @@ export async function load({ url, params, parent }) {
 	query.forEach(function (value, key) {
 		fl[key] = value
 	})
-	const products = await services.ProductService.fetchProductsOfCategory({
+	const products = await ProductService.fetchProductsOfCategory({
 		categorySlug,
 		origin,
 		query: query.toString(),

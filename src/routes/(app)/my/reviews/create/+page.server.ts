@@ -1,5 +1,5 @@
 import { error, redirect } from '@sveltejs/kit'
-import { services } from '@misiki/litekart-utils'
+import { ProductService } from '$lib/services'
 
 export const prerender = false
 
@@ -10,7 +10,7 @@ export async function load({ url, locals, cookies }) {
 	let product
 
 	try {
-		product = await services.ProductService.fetchProduct({
+		product = await ProductService.fetchProduct({
 			id: pid,
 			origin: locals.origin,
 			sid: cookies.get('connect.sid'),

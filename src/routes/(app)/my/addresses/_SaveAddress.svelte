@@ -5,7 +5,7 @@ import { Error } from '$lib/components'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import { PrimaryButton, Textarea, Textbox } from '$lib/ui'
-import { services } from '@misiki/litekart-utils'
+import { CountryService, ZipService } from '$lib/services'
 import { slide } from 'svelte/transition'
 import { toast } from '$lib/utils'
 
@@ -145,7 +145,7 @@ async function fetchShippingAddressStates(country) {
 		err = null
 		loadingForShippingAddressStates = true
 
-		shippingAddressStates = await services.CountryService.fetchStates({
+		shippingAddressStates = await CountryService.fetchStates({
 			countryCode: country,
 			storeId: $page?.data?.storeId,
 			origin: $page.data?.origin
@@ -169,7 +169,7 @@ async function fetchBillingAddressStates(country) {
 		err = null
 		loadingForBillingAddressStates = true
 
-		billingAddressStates = await services.CountryService.fetchStates({
+		billingAddressStates = await CountryService.fetchStates({
 			countryCode: country,
 			storeId: $page?.data?.storeId,
 			origin: $page.data?.origin
@@ -201,7 +201,7 @@ async function fetchStateAndCity(zip, addresstype) {
 
 		let { city, state } = shipping_address
 
-		const zipInfo = await services.ZipService.findZip({
+		const zipInfo = await ZipService.findZip({
 			zip,
 			origin
 		})

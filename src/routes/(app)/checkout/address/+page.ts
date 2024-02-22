@@ -1,5 +1,5 @@
 import { error, redirect } from '@sveltejs/kit'
-import { services } from '@misiki/litekart-utils'
+import { AddressService, CartService, CountryService } from '$lib/services'
 
 export const prerender = false
 
@@ -11,7 +11,7 @@ export async function load({ locals, url, parent }) {
 		const q = url.searchParams.get('q') || ''
 		let err
 
-		const cart = await services.CartService.fetchRefreshCart({
+		const cart = await CartService.fetchRefreshCart({
 			cartId,
 			origin,
 			sid,
@@ -24,7 +24,7 @@ export async function load({ locals, url, parent }) {
 			redirect(307, '/cart')
 		}
 
-		const countries = await services.CountryService.fetchCountries({
+		const countries = await CountryService.fetchCountries({
 			storeId,
 			origin,
 			sid
@@ -32,7 +32,7 @@ export async function load({ locals, url, parent }) {
 
 		if (store?.isGuestCheckout) {
 			if (me) {
-				const { myAddresses, preSelectedAddress } = await services.AddressService.fetchAddresses({
+				const { myAddresses, preSelectedAddress } = await AddressService.fetchAddresses({
 					storeId,
 					origin,
 					server: true,
@@ -63,7 +63,7 @@ export async function load({ locals, url, parent }) {
 			if (!me) {
 				redirect(307, `/auth/login?ref=${url?.pathname}`)
 			} else {
-				const { myAddresses, preSelectedAddress } = await services.AddressService.fetchAddresses({
+				const { myAddresses, preSelectedAddress } = await AddressService.fetchAddresses({
 					storeId,
 					origin,
 					server: true,

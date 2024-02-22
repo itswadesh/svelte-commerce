@@ -14,7 +14,7 @@ import { toast } from '$lib/utils'
 import Cookie from 'cookie-universal'
 import SEO from '$lib/components/SEO/index.svelte'
 import VerifyOtp from '../_VerifyOtp.svelte'
-import { services } from '@misiki/litekart-utils'
+import { UserService } from '$lib/services'
 
 const cookies = Cookie()
 
@@ -51,7 +51,7 @@ onMount(() => {
 			client_id: GOOGLE_CLIENT_ID
 		},
 		async (res) => {
-			const onetap = await services.UserService.googleOneTapLoginService({
+			const onetap = await UserService.googleOneTapLoginService({
 				data: res,
 				origin: $page.data.origin
 			})
@@ -117,7 +117,7 @@ async function handleSendOTP({ detail }) {
 	try {
 		loading = true
 
-		const res = await services.UserService.getOtpService({
+		const res = await UserService.getOtpService({
 			phone,
 			storeId: data.storeId,
 			origin: data.origin

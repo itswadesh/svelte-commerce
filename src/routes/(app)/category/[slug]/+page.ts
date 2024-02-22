@@ -1,4 +1,4 @@
-import { services } from '@misiki/litekart-utils'
+import { CategoryService } from '$lib/services'
 import { error } from '@sveltejs/kit'
 
 export async function load({ params, url, parent }) {
@@ -7,7 +7,7 @@ export async function load({ params, url, parent }) {
 
 		const { slug } = params
 		const id = url.searchParams.get('id')
-		const category = await services.CategoryService.fetchCategory({
+		const category = await CategoryService.fetchCategory({
 			storeId,
 			sid,
 			id: slug || id,

@@ -3,7 +3,7 @@ import { fly } from 'svelte/transition'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { RatingStarDisplay } from '$lib/ui'
-import { services } from '@misiki/litekart-utils'
+import { ReviewService } from '$lib/services'
 import LazyImg from './Image/LazyImg.svelte'
 
 let currentIndex = 0
@@ -52,7 +52,7 @@ let reviews = [
 let selectedReview = {}
 
 onMount(() => {
-	const res = services.ReviewService.fetchReviews({
+	const res = ReviewService.fetchReviews({
 		currentPage: 0,
 		origin,
 		storeId: $page?.data?.storeId,

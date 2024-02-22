@@ -1,4 +1,4 @@
-import { services } from '@misiki/litekart-utils'
+import { FaqService } from '$lib/services'
 
 export async function load({ parent }) {
 	const { storeId, sid, origin } = await parent()
@@ -9,7 +9,7 @@ export async function load({ parent }) {
 
 	try {
 		loading = true
-		const res = await services.FaqService.fetchFaqs({
+		const res = await FaqService.fetchFaqs({
 			storeId,
 			sid,
 			origin

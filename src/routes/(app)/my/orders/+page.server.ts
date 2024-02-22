@@ -1,9 +1,9 @@
 import { error, redirect } from '@sveltejs/kit'
-import { services } from '@misiki/litekart-utils'
+import { OrdersService } from '$lib/services'
 
 export async function load({ cookies, locals }) {
 	try {
-		const res = await services.OrdersService.fetchOrders({
+		const res = await OrdersService.fetchOrders({
 			origin: locals.origin,
 			sid: cookies.get('connect.sid'),
 			storeId: locals.storeId

@@ -83,7 +83,7 @@ import viewport from '$lib/actions/useViewPort'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
 import { updateCartStore } from '$lib/store/cart'
 import { storeStore } from '$lib/store/store'
-import { services } from '@misiki/litekart-utils'
+import { CartService } from '$lib/services'
 
 const cookies = Cookie()
 const isServer = import.meta.env.SSR
@@ -301,7 +301,7 @@ async function addToBag(p, customizedImg, customizedJson) {
 		loading = true
 		cartButtonText = 'Adding...'
 
-		let cart = await services.CartService.addToCartService({
+		let cart = await CartService.addToCartService({
 			pid: p.id,
 			vid: p.id,
 			qty: 1,
@@ -315,7 +315,7 @@ async function addToBag(p, customizedImg, customizedJson) {
 		})
 		if (selectedLinkiedProducts?.length) {
 			for (const i of selectedLinkiedProducts) {
-				cart = await services.CartService.addToCartService({
+				cart = await CartService.addToCartService({
 					pid: i,
 					vid: i,
 					qty: 1,
