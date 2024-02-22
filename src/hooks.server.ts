@@ -1,6 +1,6 @@
 // import * as SentryNode from '@sentry/node'
 import { authenticateUser } from '$lib/server'
-import { DOMAIN, HTTP_ENDPOINT, listOfPagesWithoutBackButton } from '$lib/config'
+import { DOMAIN, IS_DEV, listOfPagesWithoutBackButton } from '$lib/config'
 import { error, type Handle, type HandleServerError } from '@sveltejs/kit'
 import { nanoid } from 'nanoid'
 import { services } from '@misiki/litekart-utils'
@@ -34,7 +34,6 @@ export const handleError: HandleServerError = ({ error, event }) => {
 
 export const handle: Handle = async ({ event, resolve }) => {
 	try {
-		const IS_DEV = import.meta.env.DEV
 		console.log('IS_DEV...........', IS_DEV, IS_DEV == 'true', IS_DEV == true)
 		const url = new URL(event.request.url)
 		const host = url.host
