@@ -41,7 +41,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// This is required for vercel as it parse URL as http instead of https
 		event.locals.origin = protocol + host
 		event.locals.host = host
-
+		console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', event.locals.origin, event.locals.host)
 		const userAgent = event.request.headers.get('user-agent')
 
 		const isDesktop = !/mobile/i.test(userAgent)
