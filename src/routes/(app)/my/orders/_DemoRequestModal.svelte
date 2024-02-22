@@ -1,19 +1,16 @@
 <style></style>
 
 <script>
-import { goto } from '$app/navigation'
-
-import { store } from '$lib/store'
-import { PrimaryButton } from '$lib/ui'
-import { page } from '$app/stores'
-import dayjs from 'dayjs'
-import { toast } from '$lib/utils'
-import { onMount } from 'svelte'
-import Modal from './_Modal.svelte'
 import { createEventDispatcher } from 'svelte'
-import { post } from '$lib/utils/api'
-import { DemoRequestService } from '$lib/services'
+import { goto } from '$app/navigation'
+import { onMount } from 'svelte'
+import { page } from '$app/stores'
+import { PrimaryButton } from '$lib/ui'
 import { services } from '@misiki/litekart-utils'
+import { toast } from '$lib/utils'
+import dayjs from 'dayjs'
+import Modal from './_Modal.svelte'
+
 const dispatch = createEventDispatcher()
 
 export let product,

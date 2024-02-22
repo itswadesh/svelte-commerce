@@ -1,7 +1,6 @@
 <script>
 import { browser } from '$app/environment'
 import { CategoriesMobile, Hero, HeroBanners, PickedBanners } from '$lib/theme-config'
-import { CategoryService } from '$lib/services'
 import { Footer, MobileFooter } from '$lib/components'
 import { navigateToProperPath, toast } from '$lib/utils'
 import { onMount } from 'svelte'

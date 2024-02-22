@@ -1,9 +1,10 @@
 // import * as SentryNode from '@sentry/node'
 import { authenticateUser } from '$lib/server'
-import { DOMAIN, HTTP_ENDPOINT, listOfPagesWithoutBackButton } from '$lib/config'
+import { DOMAIN, IS_DEV, listOfPagesWithoutBackButton } from '$lib/config'
 import { error, type Handle, type HandleServerError } from '@sveltejs/kit'
 import { nanoid } from 'nanoid'
 import { services } from '@misiki/litekart-utils'
+import { dev } from '$app/environment'
 
 // const SENTRY_DSN = env.SECRET_SENTRY_DSN
 
@@ -33,15 +34,15 @@ export const handleError: HandleServerError = ({ error, event }) => {
 }
 
 export const handle: Handle = async ({ event, resolve }) => {
+	// console.log('ddddddddddddddddddddddddv', IS_DEV)
 	try {
-		const IS_DEV = import.meta.env.DEV
 		const url = new URL(event.request.url)
 		const host = url.host
 		const protocol = !IS_DEV ? `https://` : `http://`
 		// This is required for vercel as it parse URL as http instead of https
 		event.locals.origin = protocol + host
 		event.locals.host = host
-
+		// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', event.locals.origin, event.locals.host)
 		const userAgent = event.request.headers.get('user-agent')
 
 		const isDesktop = !/mobile/i.test(userAgent)

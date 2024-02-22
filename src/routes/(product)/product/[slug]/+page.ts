@@ -40,7 +40,7 @@ export async function load({ params, url, parent }) {
 		// setCache(p1, product)
 
 		// Removed on 11-Oct-2023 as it was slow down the navigation
-		// const updatedPopularityRes = await PopularityService.updatePopulatiry({
+		// const updatedPopularityRes = await services.PopularityService.updatePopulatiry({
 		// 	pid: product?._id || product?.id,
 		// 	origin,
 		// 	sid,
