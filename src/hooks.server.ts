@@ -1,9 +1,10 @@
 // import * as SentryNode from '@sentry/node'
 import { authenticateUser } from '$lib/server'
-import { DOMAIN, listOfPagesWithoutBackButton } from '$lib/config'
+import { browser, building, dev, version } from '$app/environment'
+import { DOMAIN, IS_DEV, listOfPagesWithoutBackButton } from '$lib/config'
 import { error, type Handle, type HandleServerError } from '@sveltejs/kit'
-import { nanoid } from 'nanoid'
 import { InitService } from '$lib/services'
+import { nanoid } from 'nanoid'
 
 // const SENTRY_DSN = env.SECRET_SENTRY_DSN
 
@@ -33,8 +34,8 @@ export const handleError: HandleServerError = ({ error, event }) => {
 }
 
 export const handle: Handle = async ({ event, resolve }) => {
-	const IS_DEV = import.meta.env.DEV
-	console.log('IS_DEV', IS_DEV)
+	// const IS_DEV = import.meta.env.DEV
+	// console.log('IS_DEV, dev', IS_DEV, dev)
 
 	try {
 		const url = new URL(event.request.url)
