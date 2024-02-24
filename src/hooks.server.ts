@@ -44,14 +44,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// This is required for vercel as it parse URL as http instead of https
 		event.locals.origin = protocol + host
 		event.locals.host = host
-		console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', {
-			host,
-			localHost: event.locals.host,
-			eventHost: event.request.headers.get('host'),
-			protocol,
-			eventOrigin: event.request.headers.get('origin'),
-			localOrigin: event.locals.origin
-		})
+
 		// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', event.locals.origin, event.locals.host)
 		const userAgent = event.request.headers.get('user-agent')
 
@@ -69,6 +62,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 			// event.locals.store = storeAsJson
 		} else {
 			try {
+				console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', {
+					host: DOMAIN || host,
+					origin: event.locals.origin
+				})
 				const { storeOne } = await InitService.fetchInit({
 					host: DOMAIN || host,
 					origin: event.locals.origin
@@ -112,6 +109,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 				event.locals.storeId = storeId
 				// event.locals.store = store
 			} catch (e) {
+				console.log('eeeeeeeeeeeeeeeeeee', e)
 				throw { status: 404, message: `Could not find STORE for domain = ${url.host}` }
 			}
 		}
