@@ -24,8 +24,6 @@ export async function load({ url, parent }) {
 			})
 		])
 
-		// console.log('cart at payment options', cart);
-
 		if (!cart?.qty) {
 			redirect(307, '/cart')
 		}
@@ -39,7 +37,6 @@ export async function load({ url, parent }) {
 			url: url.href
 		}
 	} catch (e) {
-		// console.log('errzzzzzzzzzzzzzzzzzz', e);
 		if (e.status === 307 && e.location === '/cart') {
 			redirect(307, '/cart')
 		} else if (e.status === 401 || e.status === 307) {

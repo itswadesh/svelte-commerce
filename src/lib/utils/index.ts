@@ -230,8 +230,6 @@ export const getIdFromYoutubeVideo = (url) => {
 }
 
 export const navigateToProperPath = (url) => {
-	// console.log('url =', url);
-
 	if (!url) {
 		return '##'
 		// } else if (url.startsWith('http')) {
@@ -252,7 +250,6 @@ export const navigateToProperPath = (url) => {
 		// 			originalUrl = url.replace(i, '/')
 		// 		}
 		// 	}
-		// 	// console.log('originalUrl', originalUrl);
 		// 	return originalUrl
 	} else if (url[0] !== '/') {
 		return `/${url.trim()}`
@@ -283,9 +280,7 @@ export const shopifyInit = async ({ query, variables }) => {
 			body: JSON.stringify({ query, variables })
 		}).then((res) => res.json())
 		if (result.errors) {
-			// console.log({ errors: result.errors })
 		} else if (!result || !result.data) {
-			// console.log({ result })
 			return 'No results found.'
 		}
 		return result.data

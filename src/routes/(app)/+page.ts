@@ -15,6 +15,7 @@ export async function load({ params, parent, url }) {
 	query.forEach(function (value, key) {
 		fl[key] = value
 	})
+
 	const home = HomeService.fetchHome({
 		origin,
 		storeId,

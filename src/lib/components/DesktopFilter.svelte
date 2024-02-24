@@ -176,7 +176,6 @@ function searchCategories() {
 		megamenuResult = megamenu
 	}
 
-	// console.log('megamenuResult', megamenuResult)
 }
 
 async function handleSearchBox() {
@@ -202,7 +201,6 @@ $: {
 		}
 	}
 
-	// console.log('appliedFilters', appliedFilters)
 }
 
 function handleToggleSubCategory(m, mx) {

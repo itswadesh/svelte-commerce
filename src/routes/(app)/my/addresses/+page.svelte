@@ -12,7 +12,6 @@ import SaveAddress from './_SaveAddress.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import { AddressService } from '$lib/services'
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 const seoProps = {
 	title: 'Dashboard - Addresses ',
@@ -201,7 +200,6 @@ async function remove(id, index) {
 								method="POST"
 								use:enhance="{() => {
 									return async ({ result }) => {
-										// console.log('result', result)
 
 										toast('Address deleted', 'success')
 										await invalidateAll()

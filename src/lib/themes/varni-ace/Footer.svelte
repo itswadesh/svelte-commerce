@@ -40,8 +40,6 @@ import visa from '$lib/assets/payment-method/visa.png'
 export let content = ``
 export let megamenu: Category[]
 
-// console.log('$page', $page)
-
 let email = ''
 let menu = []
 let paymentMethodCards = [masterCard, paypal, skrill, visa]
@@ -69,19 +67,15 @@ onMount(async () => {
 
 		menu = await getMenuFromStore({
 			storeId: $page?.data?.storeId,
-			origin: $page.data.origin,
+			origin: $page.data.origin
 		})
 
 		popularSearches = await getPopularSearchFromStore({
 			limit: 20,
 			sid: null,
 			origin: $page.data.origin,
-			storeId: $page?.data?.storeId,
+			storeId: $page?.data?.storeId
 		})
-
-		// console.log('megamenu', megamenu)
-		// console.log('menu', menu)
-		// console.log('popularSearches', popularSearches)
 	}
 })
 

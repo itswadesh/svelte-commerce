@@ -23,7 +23,6 @@ export let data
 export let showFooter = false
 export let showPinCodeEntryModal = false
 
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let today = dayjs(new Date()).toISOString()
 
@@ -142,7 +141,6 @@ async function loadNextPage() {
 				storeId: $page?.data?.storeId
 			})
 
-			// console.log('res', res)
 
 			const nextPageData = res?.nextPageData
 			currentPage = currentPage + 1

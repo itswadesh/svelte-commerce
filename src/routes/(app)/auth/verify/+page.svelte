@@ -29,7 +29,6 @@ let err
 // 			$page.data?.origin
 // 		)
 
-// 		// console.log('zzzzzzzzzzzzzzzzzz', res)
 // 		userDetail = res
 
 // 		goto('/auth/verification-success')

@@ -139,8 +139,6 @@ async function loadNextPage() {
 				searchParams
 			})
 
-			// console.log('res', res)
-
 			const nextPageData = res?.nextPageData
 			currentPage = currentPage + 1
 			data.err = !res?.estimatedTotalHits ? 'No result Not Found' : null

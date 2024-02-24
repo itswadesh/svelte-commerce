@@ -39,7 +39,6 @@ import { browser } from '$app/environment'
 import { onMount } from 'svelte'
 
 export let product = {}
-// console.log('zzzzzzzzzzzzzzzzzz', product)
 
 if (product?._source) {
 	product = product?._source
@@ -60,14 +59,12 @@ function hideitems() {
 	show = false
 }
 
-// console.log('product', product)
 
 if (product?.tags?.length) {
 	ribbonTags = product?.tags.filter((tag) => {
 		return tag.type === 'Ribbon'
 	})
 
-	// console.log('Ribbon tags =', ribbonTags)
 }
 
 $: store = $page.data?.store

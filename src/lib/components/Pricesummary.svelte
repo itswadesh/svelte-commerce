@@ -27,7 +27,6 @@ onMount(() => {
 	})
 })
 
-// console.log('checkedCartItems', checkedCartItems)
 
 function modulo(n, m) {
 	// handle negative numbers

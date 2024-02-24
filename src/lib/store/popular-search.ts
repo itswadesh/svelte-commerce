@@ -29,8 +29,6 @@ export const getPopularSearchFromStore = async ({
 				storeId
 			})
 
-			// console.log('popularsearchDataFromServer', popularsearchDataFromServer);
-
 			// existingPopularSearch = popularsearchDataFromServer.data
 			popularsearchStore.update((u) => popularsearchDataFromServer.data)
 		} catch (e) {

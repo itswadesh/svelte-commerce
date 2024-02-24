@@ -10,7 +10,6 @@ import { slide } from 'svelte/transition'
 import { toast } from '$lib/utils'
 
 const IS_DEV = import.meta.env.DEV
-const dispatch = createEventDispatcher()
 
 export let billing_address = {}
 export let countries = []
@@ -18,10 +17,6 @@ export let editAddress = false
 export let selectedAddress = ''
 export let selectedBillingAddress = ''
 export let shipping_address = {}
-
-// console.log('$page', $page)
-// console.log('shipping_address', shipping_address)
-// console.log('countries', countries)
 
 if (!shipping_address?.firstName) {
 	shipping_address = IS_DEV
@@ -75,7 +70,6 @@ onMount(async () => {
 			return c.dafault
 		})
 
-		// console.log('dafaultCountry', dafaultCountry)
 
 		if (dafaultCountry[0]) {
 			shipping_address.country = dafaultCountry[0].code
@@ -115,7 +109,6 @@ function getShippingAddressSelectedCountry() {
 		}
 	})[0]
 
-	// console.log('selectedShippingAddressCountry', selectedShippingAddressCountry)
 }
 
 function getBillingAddressSelectedCountry() {
@@ -125,7 +118,6 @@ function getBillingAddressSelectedCountry() {
 		}
 	})[0]
 
-	// console.log('selectedBillingAddressCountry', selectedBillingAddressCountry)
 }
 
 async function onShippingAddressCountryChange(country) {
@@ -156,7 +148,6 @@ async function fetchShippingAddressStates(country) {
 			return s
 		})
 
-		// console.log('shippingAddressStates', shippingAddressStates)
 	} catch (e) {
 		err = e
 	} finally {
@@ -180,7 +171,6 @@ async function fetchBillingAddressStates(country) {
 			return s
 		})
 
-		// console.log('billingAddressStates', billingAddressStates)
 	} catch (e) {
 		err = e
 	} finally {
@@ -206,8 +196,6 @@ async function fetchStateAndCity(zip, addresstype) {
 			origin
 		})
 
-		// console.log('zipInfo', zipInfo)
-		// console.log('addresstype', addresstype)
 
 		if (addresstype === 'shipping') {
 			shipping_address.city = zipInfo.District || ''
@@ -218,7 +206,6 @@ async function fetchStateAndCity(zip, addresstype) {
 		}
 	} catch (e) {
 		err = e
-		// console.log(e)
 		toast(e.message.error, 'error')
 	} finally {
 		loadingForShippingAddressStates = false
@@ -272,14 +259,6 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 		method="POST"
 		use:enhance="{() => {
 			return async ({ result }) => {
-				// console.log('result', result)
-
-				// console.log(
-				// 	'result, address.id, $page?.url?.pathname',
-				// 	result,
-				// 	address.id,
-				// 	$page?.url?.pathname
-				// )
 
 				if (result?.status === 200 && result?.data) {
 					const newAddressId = result.data?._id || result.data?.id

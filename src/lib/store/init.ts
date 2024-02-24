@@ -18,10 +18,6 @@ export const fetchInitFromStore = async (host) => {
 
 	let initDataFromServer
 
-	// console.log('init from svelte store', !existingInit?.storeOne, isServer, !isLoading)
-	// console.log('existingInit', existingInit)
-	// console.log('!existingInit?.storeOne?._id && isServer && !isLoading', !existingInit?.storeOne?._id && isServer && !isLoading);
-
 	if (!existingInit?.storeOne?._id && isServer && !isLoading) {
 		isLoading = true
 		try {

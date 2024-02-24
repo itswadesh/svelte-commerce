@@ -149,8 +149,6 @@ const saveAddress = async ({ request, cookies, locals }) => {
 
 	// Case 1: Logged in
 	if (locals?.me) {
-		// console.log('showShippingAddressErrorMessage at save address', firstName)
-
 		if (showShippingAddressErrorMessage === true || showShippingAddressErrorMessage === 'true') {
 			error(404, 'Please enter valid phone number')
 		} else if (selectedShippingAddressCountry?.code === 'IN' && zip.length !== 6) {
@@ -258,8 +256,6 @@ const saveAddress = async ({ request, cookies, locals }) => {
 				zip: isSameAsBillingAddress ? zip : billingAddressZip
 			}
 
-			// console.log('new_billing_address', new_billing_address);
-
 			if (new_billing_address && new_billing_address?.firstName && new_billing_address?.zip) {
 				if (showBillingAddressErrorMessage === true || showBillingAddressErrorMessage === 'true') {
 					error(404, 'Please enter valid phone number')
@@ -312,7 +308,6 @@ const saveAddress = async ({ request, cookies, locals }) => {
 			} catch (e) {
 				error(404, { data: res })
 			}
-			// console.log('res of save address = ', res)
 		}
 	}
 
@@ -350,8 +345,6 @@ const editAddress = async ({ request, cookies, locals }) => {
 		state: state,
 		zip: zip
 	}
-
-	// console.log('showShippingAddressErrorMessage at edit address', showShippingAddressErrorMessage);
 
 	if (showShippingAddressErrorMessage === true || showShippingAddressErrorMessage === 'true') {
 		error(404, 'Please enter valid phone number')
@@ -405,8 +398,6 @@ const editAddress = async ({ request, cookies, locals }) => {
 				origin: locals?.origin
 			})
 
-			// console.log('res of save address = ', res)
-
 			return res
 		} catch (e) {
 			console.log('e', e)
@@ -427,8 +418,6 @@ const deleteAddress = async ({ request, cookies, locals }) => {
 			origin,
 			sid
 		})
-
-		// console.log('res of save address = ', res)
 
 		return res
 	} catch (e) {

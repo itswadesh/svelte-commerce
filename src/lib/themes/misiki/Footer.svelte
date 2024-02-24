@@ -37,7 +37,6 @@ export let content = ``
 export let megamenu = []
 export let menu = []
 
-// console.log('$page', $page)
 
 let popularSearches = []
 
@@ -61,7 +60,6 @@ onMount(async () => {
 			storeId: $page?.data?.storeId,
 		})
 	}
-	// console.log('popularSearches', popularSearches)
 	// const res2 = await fetch('/server/store')
 	// const storeFromServer = await res2.json()
 	// store = storeFromServer.store
@@ -82,7 +80,6 @@ onMount(async () => {
 // }
 
 function positionToDisplayIsMultiVendor(itemsLength) {
-	// console.log('itemsLength', itemsLength)
 
 	if (itemsLength >= 2) {
 		return 1

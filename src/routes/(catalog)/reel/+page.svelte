@@ -81,8 +81,6 @@ export let data
 // 	}
 // ]
 
-// console.log(videosData)
-
 // data.data = videosData
 
 let today = dayjs(new Date()).toISOString()

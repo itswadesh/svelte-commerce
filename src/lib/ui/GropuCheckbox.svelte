@@ -10,8 +10,6 @@ export let name = ''
 export let required = false
 export let selectedItems = []
 
-// console.log('items', items)
-// console.log('selectedItems', selectedItems)
 </script>
 
 <ul class="flex flex-wrap gap-x-4 gap-y-2 items-center">

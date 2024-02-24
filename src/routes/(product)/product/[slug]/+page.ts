@@ -35,8 +35,6 @@ export async function load({ params, url, parent }) {
 		// 	sid,
 		// 	storeId,
 		// })
-
-		// console.log('updated popularity res', updatedPopularityRes);
 	}
 
 	const products2 = ProductService.fetchProduct2({

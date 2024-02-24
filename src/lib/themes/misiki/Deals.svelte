@@ -4,7 +4,6 @@ import { onMount } from 'svelte'
 import { SplideSlide } from '@splidejs/svelte-splide'
 
 export let deals = []
-// console.log('deals', deals)
 
 let Splide
 $: innerWidth = 0

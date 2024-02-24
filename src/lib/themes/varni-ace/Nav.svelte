@@ -48,7 +48,6 @@ const dispatch = createEventDispatcher()
 
 export let me, cart, data, showCartSidebar, openSidebar, store
 
-// console.log('$page', $page)
 
 let categories
 let loadingForDeleteItemFromCart = []

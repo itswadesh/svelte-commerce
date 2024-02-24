@@ -124,7 +124,6 @@ async function addressChanged(id) {
 					method="POST"
 					use:enhance="{() => {
 						return async ({ result }) => {
-							// console.log('result', result)
 
 							toast('Address deleted successfully', 'success')
 							await invalidateAll()

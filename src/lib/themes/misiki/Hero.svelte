@@ -7,7 +7,6 @@ import { SplideSlide } from '@splidejs/svelte-splide'
 
 export let sliderBannersDesktop = []
 export let sliderBannersMobile = []
-// console.log('$page', $page)
 
 $: innerHeight = 0
 $: innerWidth = 0
@@ -16,8 +15,6 @@ let bannerHeight = $page?.data?.store?.homePageSliderBannerImageHeight || 50
 let hellobar = $page.data.store?.hellobar || {}
 let sliderHeightAccToPageHeight = innerHeight
 let Splide
-
-// console.log('bannerHeight', bannerHeight)
 
 onMount(async () => {
 	const SplideModule = await import('$lib/components/SplideJs.svelte')

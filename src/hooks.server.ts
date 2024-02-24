@@ -34,9 +34,6 @@ export const handleError: HandleServerError = ({ error, event }) => {
 }
 
 export const handle: Handle = async ({ event, resolve }) => {
-	// const IS_DEV = import.meta.env.DEV
-	// console.log('IS_DEV, dev', IS_DEV, dev)
-
 	try {
 		const url = new URL(event.request.url)
 		const host = url.host
@@ -45,7 +42,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.origin = protocol + host
 		event.locals.host = host
 
-		// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', event.locals.origin, event.locals.host)
 		const userAgent = event.request.headers.get('user-agent')
 
 		const isDesktop = !/mobile/i.test(userAgent)
@@ -62,15 +58,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 			// event.locals.store = storeAsJson
 		} else {
 			try {
-				console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', {
-					host: DOMAIN || host,
-					origin: event.locals.origin
-				})
 				const { storeOne } = await InitService.fetchInit({
 					host: DOMAIN || host,
 					origin: event.locals.origin
 				})
-				console.log('ssssssssssssssssssss', storeOne?._id)
 				const storeId = storeOne?._id
 				// const store = {
 				// 	id: storeOne?.id,
@@ -109,7 +100,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 				event.locals.storeId = storeId
 				// event.locals.store = store
 			} catch (e) {
-				console.log('eeeeeeeeeeeeeeeeeee', e)
 				throw { status: 404, message: `Could not find STORE for domain = ${url.host}` }
 			}
 		}

@@ -198,7 +198,6 @@ if (data.product?.tags?.length) {
 		return tag.type === 'Ribbon'
 	})
 
-	// console.log('Ribbon tags =', ribbonTags)
 }
 
 onMount(async () => {
@@ -267,7 +266,6 @@ function selectSize(s) {
 function handleSelectedLinkiedProducts(e) {
 	selectedLinkiedProducts = e.detail
 
-	// console.log('selectedLinkiedProducts', selectedLinkiedProducts)
 }
 
 // This is used only for customized product else cart?/add
@@ -395,7 +393,6 @@ function alertToSelectMandatoryOptions() {
 }
 
 $: {
-	// console.log('selected options', selectedOptions)
 
 	const newOptions = []
 
@@ -405,10 +402,8 @@ $: {
 		else newOptions.push({ option: i, values: [selectedOptions[i]] || selectedOptions[i] })
 	}
 
-	// console.log('newOptions', newOptions)
 
 	finalSelectedOptions = newOptions.filter((item) => {
-		// console.log('typeof item.values', typeof item.values)
 
 		if (item.values?.length) {
 			if (item.values[0]) {
@@ -419,7 +414,6 @@ $: {
 		}
 	})
 
-	// console.log('Final selected options', finalSelectedOptions)
 }
 
 function scrollTo(elementId) {
@@ -1240,7 +1234,6 @@ async function updateVariant(variant) {
 						enctype="multipart/form-data"
 						use:enhance="{() => {
 							return async ({ result }) => {
-								// console.log('result of add to cart', result)
 
 								toast('Your back order is created successfully', 'success')
 
@@ -1314,7 +1307,6 @@ async function updateVariant(variant) {
 										enctype="multipart/form-data"
 										use:enhance="{() => {
 											return async ({ result }) => {
-												// console.log('wishlist toggle result', result)
 
 												if (result?.type === 'redirect') {
 													goto(result?.location)
@@ -1452,7 +1444,6 @@ async function updateVariant(variant) {
 												enctype="multipart/form-data"
 												use:enhance="{() => {
 													return async ({ result }) => {
-														// console.log('result of Add to Bag 1', result)
 
 														if (result?.error) {
 															toast(result?.error, 'error')
@@ -1731,7 +1722,6 @@ async function updateVariant(variant) {
 										enctype="multipart/form-data"
 										use:enhance="{() => {
 											return async ({ result }) => {
-												// console.log('wishlist toggle result', result)
 
 												if (result?.type === 'redirect') {
 													goto(result?.location)
@@ -1869,7 +1859,6 @@ async function updateVariant(variant) {
 												enctype="multipart/form-data"
 												use:enhance="{() => {
 													return async ({ result }) => {
-														// console.log('result of Add to Bag 2', result)
 
 														if (result?.error) {
 															toast(result?.error, 'error')
@@ -1985,7 +1974,6 @@ async function updateVariant(variant) {
 										enctype="multipart/form-data"
 										use:enhance="{() => {
 											return async ({ result }) => {
-												// console.log('wishlist toggle result', result)
 
 												if (result?.type === 'redirect') {
 													goto(result?.location)
@@ -2123,7 +2111,6 @@ async function updateVariant(variant) {
 												enctype="multipart/form-data"
 												use:enhance="{() => {
 													return async ({ result }) => {
-														// console.log('result of Add to Bag 3', result)
 
 														if (result?.error) {
 															toast(result?.error, 'error')

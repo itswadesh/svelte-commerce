@@ -174,7 +174,6 @@ function changeNumber() {
 			use:enhance="{() => {
 				err = null
 				return async ({ result }) => {
-					// console.log('result', result)
 
 					resendAfter = 0
 
@@ -192,7 +191,6 @@ function changeNumber() {
 								active: result?.data?.active
 							}
 
-							// console.log('me =', me)
 							await cookies.set('me', me, { path: '/', maxAge: 31536000 })
 							const r = ref || '/'
 							if (browser) goto(r)

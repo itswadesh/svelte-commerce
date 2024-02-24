@@ -12,7 +12,6 @@ const cookies = Cookie()
 let today = dayjs(new Date()).toISOString()
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz',data);
 
 let seoProps = {
 	// addressCountry: 'India',

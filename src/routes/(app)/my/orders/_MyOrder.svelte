@@ -20,7 +20,6 @@ import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 
 export let orders
-// console.log('zzzzzzzzzzzzzzzzzz', orders)
 
 let clazz = ''
 export { clazz as class }

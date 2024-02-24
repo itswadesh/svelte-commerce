@@ -150,7 +150,6 @@ async function getMegamenu() {
 			}
 
 			megamenuResult = megamenu
-			// console.log('megamenuResult', megamenuResult)
 		} catch (e) {
 			toast(e, 'error')
 		} finally {
@@ -172,7 +171,6 @@ function searchCategories() {
 		megamenuResult = megamenu
 	}
 
-	// console.log('megamenuResult', megamenuResult)
 }
 
 async function handleSearchBox() {

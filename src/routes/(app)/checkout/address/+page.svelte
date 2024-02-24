@@ -12,7 +12,6 @@ import SEO from '$lib/components/SEO/index.svelte'
 import { CartService } from '$lib/services'
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 const seoProps = {
 	title: 'Address ',

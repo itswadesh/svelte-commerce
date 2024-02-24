@@ -180,7 +180,6 @@ async function removeFromWishlist(id, wx) {
 								method="POST"
 								use:enhance="{() => {
 									return async ({ result }) => {
-										// console.log('result', result)
 
 										updateCartStore({ data: result.data })
 										fireGTagEvent('add_to_cart', result.data)

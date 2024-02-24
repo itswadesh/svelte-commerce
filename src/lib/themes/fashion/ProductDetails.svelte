@@ -30,7 +30,6 @@ import { updateCartStore } from '$lib/store/cart'
 import { storeStore } from '$lib/store/store'
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 let store = {}
 onMount(() => {
 	if (browser) {
@@ -549,7 +548,6 @@ function scrollTo(elementId) {
 						method="POST"
 						use:enhance="{() => {
 							return async ({ result }) => {
-								// console.log('result of add to cart', result)
 								if (result?.data === 'choose variant') {
 									scrollTo('variants_list')
 									toast('Please choose a variant', 'warning')
@@ -612,7 +610,6 @@ function scrollTo(elementId) {
 						method="POST"
 						use:enhance="{() => {
 							return async ({ result }) => {
-								// console.log('result of add to cart', result)
 								if (result?.data === 'choose variant') {
 									scrollTo('variants_list')
 									toast('Please choose a variant', 'warning')

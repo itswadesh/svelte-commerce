@@ -89,17 +89,12 @@ const cookies = Cookie()
 const isServer = import.meta.env.SSR
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let currentVariantId = $page.url.searchParams?.get('variant') || ''
 let currentVariantPrice = data.product?.price || 0
 
 let seoProps = {
-	// addressCountry: 'India',
-	// addressLocality: 'Semiliguda, Koraput',
-	// addressRegion: 'Odisha',
-	// alternateJsonHref: '',
-	// alternateXml: { title: '', href: '' },
+
 	brand: `${$page?.data?.store?.websiteName}`,
 	breadcrumbs: data.product?.categoryPool,
 	caption: `${$page?.data?.store?.websiteName}`,
@@ -219,7 +214,6 @@ if (data.product?.tags?.length) {
 		return tag.type === 'Ribbon'
 	})
 
-	// console.log('Ribbon tags =', ribbonTags)
 }
 let store = {}
 onMount(async () => {
@@ -291,7 +285,6 @@ function selectSize(s) {
 function handleSelectedLinkiedProducts(e) {
 	selectedLinkiedProducts = e.detail
 
-	// console.log('selectedLinkiedProducts', selectedLinkiedProducts)
 }
 
 // This is used only for customized product else cart?/add
@@ -1205,7 +1198,6 @@ async function updateVariant(variant) {
 						method="POST"
 						use:enhance="{() => {
 							return async ({ result }) => {
-								// console.log('result of add to cart', result)
 
 								toast('Your back order is created successfully', 'success')
 
@@ -1237,7 +1229,6 @@ async function updateVariant(variant) {
 										method="POST"
 										use:enhance="{() => {
 											return async ({ result }) => {
-												// console.log('wishlist toggle result', result)
 
 												if (result?.type === 'redirect') {
 													goto(result?.location)
@@ -1380,7 +1371,6 @@ async function updateVariant(variant) {
 												method="POST"
 												use:enhance="{() => {
 													return async ({ result }) => {
-														// console.log('result of add to cart', result)
 														if (result?.data === 'choose variant') {
 															scrollTo('variants_list')
 															toast('Please choose a variant', 'warning')
@@ -1642,7 +1632,6 @@ async function updateVariant(variant) {
 										method="POST"
 										use:enhance="{() => {
 											return async ({ result }) => {
-												// console.log('wishlist toggle result', result)
 
 												if (result?.type === 'redirect') {
 													goto(result?.location)
@@ -1786,7 +1775,6 @@ async function updateVariant(variant) {
 												method="POST"
 												use:enhance="{() => {
 													return async ({ result }) => {
-														// console.log('result of add to cart', result)
 														if (result?.data === 'choose variant') {
 															scrollTo('variants_list')
 															toast('Please choose a variant', 'warning')
@@ -1885,7 +1873,6 @@ async function updateVariant(variant) {
 										method="POST"
 										use:enhance="{() => {
 											return async ({ result }) => {
-												// console.log('wishlist toggle result', result)
 
 												if (result?.type === 'redirect') {
 													goto(result?.location)
@@ -2029,7 +2016,6 @@ async function updateVariant(variant) {
 												method="POST"
 												use:enhance="{() => {
 													return async ({ result }) => {
-														// console.log('result of add to cart', result)
 														if (result?.data === 'choose variant') {
 															scrollTo('variants_list')
 															toast('Please choose a variant', 'warning')
