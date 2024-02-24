@@ -93,8 +93,9 @@ export async function load({ url, params, parent }) {
 			muted: false
 		}
 	]
+	let reelsRes: any = {}
 	try {
-		const reelsRes = await ProductService.fetchReels({
+		reelsRes = await ProductService.fetchReels({
 			server: isServer,
 			storeId,
 			page: currentPage,

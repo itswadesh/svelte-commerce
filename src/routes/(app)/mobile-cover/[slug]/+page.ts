@@ -25,13 +25,11 @@ export async function load({ url, params, parent, setHeaders }) {
 			storeId,
 			origin
 		}),
-		// streamed: {
 		megamenu: await CategoryService.fetchMegamenuData({
 			sid,
 			storeId,
 			origin
 		}),
-		// },
 		query: query.toString(),
 		searchData,
 		sort,

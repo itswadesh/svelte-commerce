@@ -54,7 +54,7 @@ export let myWishlist
 				<h2 class="mt-2">Wishlist</h2>
 
 				<div class="mt-2 flex items-baseline flex-wrap gap-2">
-					<h2>{myWishlist?.length}</h2>
+					<h2>{myWishlist?.count}</h2>
 
 					<span class="text-sm">Wishlisted items</span>
 				</div>

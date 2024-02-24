@@ -2,8 +2,6 @@
 import { ProductService, ReviewService, WishlistService } from '$lib/services'
 import { error } from '@sveltejs/kit'
 
-const isServer = import.meta.env.SSR // get the SSR value
-
 export async function load({ params, url, parent }) {
 	const { slug } = params
 	const { zip, sid, origin, store, storeId, me } = await parent()
