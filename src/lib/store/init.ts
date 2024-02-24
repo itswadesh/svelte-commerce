@@ -24,9 +24,14 @@ export const fetchInitFromStore = async (host) => {
 
 	if (!existingInit?.storeOne?._id && isServer && !isLoading) {
 		isLoading = true
-		initDataFromServer = await InitService.fetchInit({ host })
-		initStore.update((u) => initDataFromServer)
-		isLoading = false
+		try {
+			initDataFromServer = await InitService.fetchInit({ host })
+			initStore.update((u) => initDataFromServer)
+		} catch (e) {
+			console.log('error', e)
+		} finally {
+			isLoading = false
+		}
 	}
 
 	// console.log('existingInit', existingInit);

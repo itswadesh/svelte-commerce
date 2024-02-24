@@ -70,7 +70,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 					host: DOMAIN || host,
 					origin: event.locals.origin
 				})
-
+				console.log('ssssssssssssssssssss', storeOne?._id)
 				const storeId = storeOne?._id
 				// const store = {
 				// 	id: storeOne?.id,

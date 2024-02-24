@@ -51,24 +51,28 @@ onMount(() => {
 			client_id: GOOGLE_CLIENT_ID
 		},
 		async (res) => {
-			const onetap = await UserService.googleOneTapLoginService({
-				data: res,
-				origin: $page.data.origin
-			})
-			const me = {
-				id: onetap.id,
-				email: onetap.email,
-				phone: onetap.phone,
-				firstName: onetap.firstName,
-				lastName: onetap.lastName,
-				avatar: onetap.avatar,
-				role: onetap.role,
-				verified: onetap.verified,
-				active: onetap.active
+			try {
+				const onetap = await UserService.googleOneTapLoginService({
+					data: res,
+					origin: $page.data.origin
+				})
+				const me = {
+					id: onetap.id,
+					email: onetap.email,
+					phone: onetap.phone,
+					firstName: onetap.firstName,
+					lastName: onetap.lastName,
+					avatar: onetap.avatar,
+					role: onetap.role,
+					verified: onetap.verified,
+					active: onetap.active
+				}
+				await cookies.set('me', me, { path: '/', maxAge: 31536000 })
+				let r = ref || '/'
+				if (browser) goto(r)
+			} catch (e) {
+				toast(e?.body?.message || e, 'error')
 			}
-			await cookies.set('me', me, { path: '/', maxAge: 31536000 })
-			let r = ref || '/'
-			if (browser) goto(r)
 		}
 	)
 
@@ -168,6 +172,7 @@ function changeNumber() {
 			action="/auth/login?/login"
 			method="POST"
 			use:enhance="{() => {
+				err = null
 				return async ({ result }) => {
 					// console.log('result', result)
 

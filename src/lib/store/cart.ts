@@ -18,12 +18,15 @@ export const getCartFromStore = async ({ origin, storeId, cartId, forceUpdate = 
 	if ((!loadingForCart && !existingCart) || !!forceUpdate) {
 		loadingForCart = true
 		cartLoadingStore.update((u) => true)
-		const cartDataFromServer = await CartService.fetchRefreshCart({ cartId, storeId, origin })
-
-		cartStore.update((u) => cartDataFromServer)
-
-		loadingForCart = false
-		cartLoadingStore.update((u) => false)
+		try {
+			const cartDataFromServer = await CartService.fetchRefreshCart({ cartId, storeId, origin })
+			cartStore.update((u) => cartDataFromServer)
+		} catch (e) {
+			console.log('error', e)
+		} finally {
+			loadingForCart = false
+			cartLoadingStore.update((u) => false)
+		}
 	}
 
 	return existingCart

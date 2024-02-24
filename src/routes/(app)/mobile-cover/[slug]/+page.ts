@@ -19,15 +19,14 @@ export async function load({ url, params, parent, setHeaders }) {
 	})
 
 	return {
-		category: CategoryService.fetchCategory({
+		category: await CategoryService.fetchCategory({
 			id: categorySlug,
-			server: isServer,
 			sid,
 			storeId,
 			origin
 		}),
 		// streamed: {
-		megamenu: CategoryService.fetchMegamenuData({
+		megamenu: await CategoryService.fetchMegamenuData({
 			sid,
 			storeId,
 			origin

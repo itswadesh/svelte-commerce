@@ -10,49 +10,51 @@ export const load: PageServerLoad = async () => {
 
 export const actions: Actions = {
 	async default({ cookies, locals }) {
-		await UserService.logoutService({
-			storeId: locals.storeId,
-			sid: cookies.get('connect.sid')
-		})
-		// eat the cookie
+		try {
+			await UserService.logoutService({
+				storeId: locals.storeId,
+				sid: cookies.get('connect.sid')
+			})
 
-		// cookies.set('storeId', null, {
-		// 	path: '/',
-		// 	expires: new Date(0)
-		// })
+			// eat the cookie
 
-		cookies.set('settings', null, {
-			path: '/',
-			expires: new Date(0)
-		})
+			// cookies.set('storeId', null, {
+			// 	path: '/',
+			// 	expires: new Date(0)
+			// })
 
-		cookies.set('session', null, {
-			path: '/',
-			expires: new Date(0)
-		})
+			cookies.set('settings', null, {
+				path: '/',
+				expires: new Date(0)
+			})
 
-		cookies.set('connect.sid', null, {
-			path: '/',
-			expires: new Date(0)
-		})
+			cookies.set('session', null, {
+				path: '/',
+				expires: new Date(0)
+			})
 
-		cookies.set('sid', null, {
-			path: '/',
-			expires: new Date(0)
-		})
+			cookies.set('connect.sid', null, {
+				path: '/',
+				expires: new Date(0)
+			})
 
-		cookies.set('me', null, {
-			path: '/',
-			expires: new Date(0)
-		})
+			cookies.set('sid', null, {
+				path: '/',
+				expires: new Date(0)
+			})
 
-		locals.settings = null
-		locals.session = null
-		locals.me = null
-		locals.sid = null
+			cookies.set('me', null, {
+				path: '/',
+				expires: new Date(0)
+			})
 
-		//redirect the user
-
-		redirect(307, '/auth/login')
+			locals.settings = null
+			locals.session = null
+			locals.me = null
+			locals.sid = null
+			redirect(307, '/auth/login')
+		} catch (e) {
+			//redirect the user
+		}
 	}
 }

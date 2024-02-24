@@ -22,27 +22,30 @@ export const getPopularSearchFromStore = async ({
 
 	if ((!isLoading && !existingPopularSearch) || !!forceUpdate) {
 		isLoading = true
+		try {
+			const popularsearchDataFromServer = await CategoryService.fetchAllCategories({
+				sid,
+				origin,
+				storeId
+			})
 
-		const popularsearchDataFromServer = await CategoryService.fetchAllCategories({
-			sid,
-			origin,
-			storeId
-		})
+			// console.log('popularsearchDataFromServer', popularsearchDataFromServer);
 
-		// console.log('popularsearchDataFromServer', popularsearchDataFromServer);
+			// existingPopularSearch = popularsearchDataFromServer.data
+			popularsearchStore.update((u) => popularsearchDataFromServer.data)
+		} catch (e) {
+			console.log('error', e)
+		} finally {
+			// const popularsearchDataFromServer = await PopularSearchService.fetchPopularSearch({
+			// 	sid,
+			// 	origin,
+			// 	storeId,
+			// })
 
-		// existingPopularSearch = popularsearchDataFromServer.data
-		popularsearchStore.update((u) => popularsearchDataFromServer.data)
+			// popularsearchStore.update((u) => popularsearchDataFromServer)
 
-		// const popularsearchDataFromServer = await PopularSearchService.fetchPopularSearch({
-		// 	sid,
-		// 	origin,
-		// 	storeId,
-		// })
-
-		// popularsearchStore.update((u) => popularsearchDataFromServer)
-
-		isLoading = false
+			isLoading = false
+		}
 	}
 
 	return existingPopularSearch

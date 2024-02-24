@@ -16,15 +16,18 @@ export const getCategoriesFromStore = async ({ origin, storeId, forceUpdate = fa
 
 	if ((!isLoading && !existingCategories) || !!forceUpdate) {
 		isLoading = true
+		try {
+			const categoriesDataFromServer = await CategoryService.fetchAllCategories({
+				storeId,
+				origin
+			})
 
-		const categoriesDataFromServer = await CategoryService.fetchAllCategories({
-			storeId,
-			origin
-		})
-
-		categoriesStore.update((u) => categoriesDataFromServer?.data || [])
-
-		isLoading = false
+			categoriesStore.update((u) => categoriesDataFromServer?.data || [])
+		} catch (e) {
+			console.log('error', e)
+		} finally {
+			isLoading = false
+		}
 	}
 
 	return existingCategories

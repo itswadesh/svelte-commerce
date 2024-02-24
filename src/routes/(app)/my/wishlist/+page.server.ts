@@ -39,16 +39,23 @@ const toggleWishlist = async ({ request, cookies, locals }) => {
 	if (!me || !sid) {
 		redirect(307, `/auth/login?ref=/my/wishlist/add/${pid}`)
 	}
+	try {
+		const res = await WishlistService.toggleWishlistService({
+			pid: pid,
+			vid: vid,
+			origin: locals.origin,
+			sid: cookies.get('connect.sid'),
+			storeId: locals.storeId
+		})
 
-	const res = await WishlistService.toggleWishlistService({
-		pid: pid,
-		vid: vid,
-		origin: locals.origin,
-		sid: cookies.get('connect.sid'),
-		storeId: locals.storeId
-	})
+		return res
+	} catch (e) {
+		if (e.status === 401 || e.status === 403) {
+			redirect(307, '/auth/login')
+		}
 
-	return res
+		error(e.status, e.message)
+	}
 }
 
 export const actions = { toggleWishlist }

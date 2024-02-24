@@ -8,7 +8,7 @@ import { applyAction, enhance } from '$app/forms'
 import { fade } from 'svelte/transition'
 import { cartStore, updateCartStore } from '$lib/store/cart'
 import { browser } from '$app/environment'
-import { services } from '$lib/services'
+import { CartService } from 'lib/services'
 
 export let products = []
 export let title = ''
@@ -60,19 +60,23 @@ const addToCart = async ({ pid, qty, customizedImg, ix, loadingType }: any) => {
 	loading[ix] = true
 	cartButtonText = 'Checkout Cart'
 	isAddedtoBag = true
-	await CartService.addToCartService({
-		pid: pid,
-		vid: pid,
-		qty: qty,
-		customizedImg: customizedImg || null,
-		storeId: $page?.data?.storeId,
-		origin: $page.data.origin
-	})
+	try {
+		await CartService.addToCartService({
+			pid: pid,
+			vid: pid,
+			qty: qty,
+			customizedImg: customizedImg || null,
+			storeId: $page?.data?.storeId,
+			origin: $page.data.origin
+		})
 
-	await invalidateAll()
-
-	loading[ix] = false
-	selectedLoadingType = null
+		await invalidateAll()
+	} catch (e) {
+		console.log(e)
+	} finally {
+		loading[ix] = false
+		selectedLoadingType = null
+	}
 }
 
 $: innerWidth = 0

@@ -4,7 +4,7 @@ import { toast } from '$lib/utils'
 import { Error } from '$lib/components'
 import { TextboxFloating, TextareaFloating, PrimaryButton } from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
-import { services } from '$lib/services'
+import { ContactService } from 'lib/services'
 
 let seoProps = {
 	title: `Contact Us`,

@@ -21,7 +21,6 @@ const login = async ({ request, cookies, locals }) => {
 	const isEmail = data.get('isEmail')
 	const phoneOrEmail = data.get('phoneOrEmail')
 	const password = data.get('password')
-
 	let res
 
 	if (isEmail == 'true') {
@@ -41,15 +40,18 @@ const login = async ({ request, cookies, locals }) => {
 			})
 		}
 
-		res = await UserService.loginService({
-			email: phoneOrEmail,
-			password: password,
-			storeId: locals.storeId,
-			cartId: locals.cartId,
-			server: true,
-			origin: locals.origin
-		})
-
+		try {
+			res = await UserService.loginService({
+				email: phoneOrEmail,
+				password: password,
+				storeId: locals.storeId,
+				cartId: locals.cartId,
+				server: true,
+				origin: locals.origin
+			})
+		} catch (e) {
+			error(401, e.message)
+		}
 		// const updatedCart = await CartService.updateCart({
 		// 	customer_id: res.customer_id
 		// })
@@ -70,18 +72,19 @@ const login = async ({ request, cookies, locals }) => {
 				errors
 			})
 		}
-
-		res = await UserService.getOtpService({
-			phone: phoneOrEmail,
-			storeId: locals.storeId,
-			server: true,
-			origin: locals.origin
-		})
+		try {
+			res = await UserService.getOtpService({
+				phone: phoneOrEmail,
+				storeId: locals.storeId,
+				server: true,
+				origin: locals.origin
+			})
+		} catch (e) {
+			error(401, e.message)
+		}
 	}
 
-	cookies.set('connect.sid', res.sid, {
-		path: '/'
-	})
+	cookies.set('connect.sid', res.sid, { path: '/' })
 
 	return res
 }

@@ -52,13 +52,14 @@ let reviews = [
 let selectedReview = {}
 
 onMount(() => {
-	const res = ReviewService.fetchReviews({
-		currentPage: 0,
-		origin,
-		storeId: $page?.data?.storeId,
-		sort: 'updatedAt'
-	})
-
+	try {
+		const res = ReviewService.fetchReviews({
+			currentPage: 0,
+			origin,
+			storeId: $page?.data?.storeId,
+			sort: 'updatedAt'
+		})
+	} catch (err) {}
 	// console.log('zzzzzzzzzzzzzzzzzz', res)
 })
 

@@ -46,10 +46,14 @@ async function getStoreData() {
 }
 
 async function getPages() {
-	pages = await PageService.fetchPages({
-		origin: $page.data.origin,
-		storeId: $page?.data?.storeId
-	})
+	try {
+		pages = await PageService.fetchPages({
+			origin: $page.data.origin,
+			storeId: $page?.data?.storeId
+		})
+	} catch (e) {
+		console.error(e)
+	}
 }
 
 function subscribedForNewsletter() {

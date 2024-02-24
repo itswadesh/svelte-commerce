@@ -16,15 +16,18 @@ export const getMenuFromStore = async ({ origin, storeId, forceUpdate = false })
 
 	if ((!loadingForMenu && !existingMenu) || !!forceUpdate) {
 		loadingForMenu = true
+		try {
+			const menuDataFromServer = await MenuService.fetchMenuData({
+				storeId,
+				origin
+			})
 
-		const menuDataFromServer = await MenuService.fetchMenuData({
-			storeId,
-			origin
-		})
-
-		menuStore.update((u) => menuDataFromServer)
-
-		loadingForMenu = false
+			menuStore.update((u) => menuDataFromServer)
+		} catch (e) {
+			console.log('store/menu error', e)
+		} finally {
+			loadingForMenu = false
+		}
 	}
 
 	return existingMenu

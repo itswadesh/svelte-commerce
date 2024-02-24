@@ -42,14 +42,18 @@ export const getStoreFromStore = async ({ origin, host, storeId, forceUpdate = f
 	if ((!loadingForStore && !existingStore) || !!forceUpdate) {
 		loadingForStore = true
 		storeLoadingStore.update((u) => true)
-		const storeDataFromServer = await InitService.fetchInit({ host, origin })
-		storeStore.update((u) => storeDataFromServer.storeOne)
-		menuStore.update((u) => storeDataFromServer.menu)
-		megamenuStore.update((u) => storeDataFromServer.megamenu)
-		popularSearchesStore.update((u) => storeDataFromServer.popularSearches)
-
-		loadingForStore = false
-		storeLoadingStore.update((u) => false)
+		try {
+			const storeDataFromServer = await InitService.fetchInit({ host, origin })
+			storeStore.update((u) => storeDataFromServer.storeOne)
+			menuStore.update((u) => storeDataFromServer.menu)
+			megamenuStore.update((u) => storeDataFromServer.megamenu)
+			popularSearchesStore.update((u) => storeDataFromServer.popularSearches)
+		} catch (e) {
+			console.log('store/menu error', e)
+		} finally {
+			loadingForStore = false
+			storeLoadingStore.update((u) => false)
+		}
 	}
 	return { existingStore, existingMenu, existingMegamenu, existingpopularSearches }
 }

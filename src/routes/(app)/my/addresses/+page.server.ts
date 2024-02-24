@@ -3,25 +3,29 @@ import { AddressService, CartService, CountryService } from '$lib/services'
 import { z } from 'zod'
 
 export async function load({ cookies, locals }) {
-	const countries = await CountryService.fetchCountries({
-		origin: locals.origin,
-		sid: cookies.get('connect.sid'),
-		storeId: locals.storeId
-	})
-
-	const { myAddresses, count } = await AddressService.fetchAddresses({
-		origin: locals.origin,
-		sid: cookies.get('connect.sid'),
-		storeId: locals.storeId
-	})
-
-	myAddresses.count = count
-
-	if (myAddresses) {
-		return { addresses: myAddresses, countries }
+	let myAddresses = [],
+		countries = []
+	try {
+		const addressRes = await AddressService.fetchAddresses({
+			origin: locals.origin,
+			sid: cookies.get('connect.sid'),
+			storeId: locals.storeId
+		})
+		myAddresses = addressRes.myAddresses || []
+		myAddresses.count = addressRes.count || 0
+	} catch (e) {
+		error(404, 'Addresses not found')
 	}
-
-	error(404, 'Addresses not found')
+	try {
+		countries = await CountryService.fetchCountries({
+			origin: locals.origin,
+			sid: cookies.get('connect.sid'),
+			storeId: locals.storeId
+		})
+	} catch (e) {
+		console.error('countries not found')
+	}
+	return { myAddresses, countries }
 }
 
 const zodAddressSchema = z.object({
@@ -183,22 +187,25 @@ const saveAddress = async ({ request, cookies, locals }) => {
 					errors
 				})
 			}
-
-			res = await AddressService.saveAddress({
-				address,
-				city,
-				country,
-				email,
-				firstName,
-				id,
-				lastName,
-				phone,
-				state,
-				zip,
-				storeId: locals.storeId,
-				sid,
-				origin: locals?.origin
-			})
+			try {
+				res = await AddressService.saveAddress({
+					address,
+					city,
+					country,
+					email,
+					firstName,
+					id,
+					lastName,
+					phone,
+					state,
+					zip,
+					storeId: locals.storeId,
+					sid,
+					origin: locals?.origin
+				})
+			} catch (e) {
+				error(404, { data: res })
+			}
 		}
 	}
 
@@ -292,17 +299,19 @@ const saveAddress = async ({ request, cookies, locals }) => {
 					}
 				}
 			}
-
-			res = await CartService.updateCart3({
-				cartId,
-				shipping_address,
-				billing_address: new_billing_address,
-				selfTakeout: false,
-				storeId: locals.storeId,
-				sid,
-				origin: locals?.origin
-			})
-
+			try {
+				res = await CartService.updateCart3({
+					cartId,
+					shipping_address,
+					billing_address: new_billing_address,
+					selfTakeout: false,
+					storeId: locals.storeId,
+					sid,
+					origin: locals?.origin
+				})
+			} catch (e) {
+				error(404, { data: res })
+			}
 			// console.log('res of save address = ', res)
 		}
 	}
@@ -379,26 +388,30 @@ const editAddress = async ({ request, cookies, locals }) => {
 				errors
 			})
 		}
+		try {
+			const res = await AddressService.saveAddress({
+				address,
+				city,
+				country,
+				email,
+				firstName,
+				id,
+				lastName,
+				phone,
+				state,
+				zip,
+				storeId: locals.storeId,
+				sid,
+				origin: locals?.origin
+			})
 
-		const res = await AddressService.saveAddress({
-			address,
-			city,
-			country,
-			email,
-			firstName,
-			id,
-			lastName,
-			phone,
-			state,
-			zip,
-			storeId: locals.storeId,
-			sid,
-			origin: locals?.origin
-		})
+			// console.log('res of save address = ', res)
 
-		// console.log('res of save address = ', res)
-
-		return res
+			return res
+		} catch (e) {
+			console.log('e', e)
+			return null
+		}
 	}
 }
 
@@ -407,20 +420,21 @@ const deleteAddress = async ({ request, cookies, locals }) => {
 	const data = await request.formData()
 	const id = data.get('id')
 	const sid = cookies.get('connect.sid')
+	try {
+		const res = await AddressService.deleteAddress({
+			id,
+			storeId: locals.storeId,
+			origin,
+			sid
+		})
 
-	const res = await AddressService.deleteAddress({
-		id,
-		storeId: locals.storeId,
-		origin,
-		sid
-	})
+		// console.log('res of save address = ', res)
 
-	// console.log('res of save address = ', res)
-
-	return res
-	// } else {
-	// 	return
-	// }
+		return res
+	} catch (e) {
+		console.log('e', e)
+		return null
+	}
 }
 
 export const actions = { saveAddress, editAddress, deleteAddress }
