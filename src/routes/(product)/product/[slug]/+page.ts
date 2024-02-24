@@ -39,54 +39,26 @@ export async function load({ params, url, parent }) {
 		// console.log('updated popularity res', updatedPopularityRes);
 	}
 
-	const getMoreProductDetails = async () => {
-		try {
-			const products2 = await ProductService.fetchProduct2({
-				id: slug,
-				slug,
-				origin,
-				storeId
-			})
+	const products2 = ProductService.fetchProduct2({
+		id: slug,
+		slug,
+		origin,
+		storeId
+	})
 
-			// setHeaders({ 'cache-control': `max-age=${CACHE_DURATION}` }) // This is to tell Cloudflare to store in its own cache
-
-			return products2
-		} catch (e) {
-			console.log(e)
-			return null
-		}
-	}
-
-	const getProductReviews = async () => {
-		// const r = `reviews/product-reviews?slug=${slug}&page=${page}&sort=-createdAt&store=${storeId}`
-		// const cached = await getCache(r)
-		// if (cached) {
-		// 	return cached
-		// }
-		try {
-			const reviews = await ReviewService.fetchProductReviews({
-				origin,
-				page,
-				server: isServer,
-				slug,
-				storeId
-			})
-
-			// setHeaders({ 'cache-control': `max-age=${CACHE_DURATION}` }) // This is to tell Cloudflare to store in its own cache
-			// setCache(r, reviews)
-
-			return reviews
-		} catch (e) {
-			return []
-		}
-	}
+	const reviews = ReviewService.fetchProductReviews({
+		origin,
+		page,
+		slug,
+		storeId
+	})
 
 	return {
 		product: await getProductDetails(),
 		deliveryDetails: zip,
 		streamed: {
-			moreProductDetails: getMoreProductDetails(),
-			productReviews: getProductReviews()
+			moreProductDetails: products2,
+			productReviews: reviews
 		}
 	}
 }
