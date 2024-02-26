@@ -56,11 +56,10 @@ onMount(() => {
 		const res = ReviewService.fetchReviews({
 			currentPage: 0,
 			origin,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			sort: 'updatedAt'
 		})
 	} catch (err) {}
-	// console.log('zzzzzzzzzzzzzzzzzz', res)
 })
 
 function displayReview() {
@@ -74,8 +73,6 @@ function displayReview() {
 	if (currentIndex >= reviews.length) {
 		currentIndex = 0 // Reset index to loop through reviews
 	}
-
-	// console.log('currentIndex', currentIndex)
 }
 
 // Initial display
@@ -91,7 +88,6 @@ let iterationCount = 0
 function stopInterval() {
 	showPopup = false
 	clearInterval(iterationInterval)
-	// console.log('Interval stopped.')
 }
 
 setTimeout(stopInterval, maxIterations * 8000) // 8000 ms (5 seconds to show + 3 seconds to hide)

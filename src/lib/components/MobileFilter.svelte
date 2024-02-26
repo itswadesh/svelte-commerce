@@ -122,7 +122,7 @@ async function getMegamenu() {
 			loadingForMegamenu = true
 
 			megamenu = await getAllMegamenuFromStore({
-				storeId: $page?.data?.storeId,
+				storeId: $page.data.storeId,
 				origin: $page.data.origin
 			})
 			megamenuResult = megamenu
@@ -137,7 +137,7 @@ async function getMegamenu() {
 			// if (!localmegamenu || localmegamenu === 'undefined') {
 			// 	megamenu = await CategoryService.fetchMegamenuData({
 			// 		origin: $page.data.origin,
-			// 		storeId: $page?.data?.storeId,
+			// 		storeId: $page.data.storeId,
 			// 	})
 			// } else {
 			// 	megamenu = JSON.parse(localmegamenu)
@@ -150,7 +150,6 @@ async function getMegamenu() {
 			}
 
 			megamenuResult = megamenu
-			// console.log('megamenuResult', megamenuResult)
 		} catch (e) {
 			toast(e, 'error')
 		} finally {
@@ -171,8 +170,6 @@ function searchCategories() {
 	if (!megamenuResult.length) {
 		megamenuResult = megamenu
 	}
-
-	// console.log('megamenuResult', megamenuResult)
 }
 
 async function handleSearchBox() {

@@ -118,7 +118,7 @@ async function submit() {
 			interestedProducts: blukOrder.interestedProducts,
 			minQty: blukOrder.minQty,
 			message: blukOrder.message,
-			store: $page?.data?.storeId,
+			store: $page.data.storeId,
 			origin: $page.data.origin
 		})
 

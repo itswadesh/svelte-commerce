@@ -1,9 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { host, storeId, API_URL, randomPhone, randomEmail, getCookie } from './config'
 
-// console.log('randomPhone', randomPhone)
-// console.log('randomEmail', randomEmail)
-
 test('Test: user login flow ', async ({ request }) => {
 	const data = {
 		email: 'hi@litekart.in',

@@ -75,7 +75,6 @@ import SEO from '$lib/components/SEO/index.svelte'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
 
 export let data
-// console.log('success page data', data)
 
 const seoProps = {
 	title: 'Payment Success ',
@@ -83,13 +82,13 @@ const seoProps = {
 }
 
 // let store = {}
-$: store = $page.data?.store
+$: store = $page.data.store
 let cart = {}
 onMount(async () => {
 	if (browser) {
 		cart = await getCartFromStore({
 			origin: $page.data?.origin,
-			storeId: $page.data?.storeId,
+			storeId: $page.data.storeId,
 			cartId: data.cartId,
 			forceUpdate: true
 		})
@@ -441,7 +440,7 @@ onMount(async () => {
 													</p>
 												</a>
 
-												{#if $page?.data?.store?.isFnb && item.foodType}
+												{#if $page.data.store?.isFnb && item.foodType}
 													<div>
 														{#if item.foodType === 'veg'}
 															<img src="{productVeg}" alt="veg" class="h-5 w-5" />

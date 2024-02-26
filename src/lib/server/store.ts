@@ -10,7 +10,6 @@ export const fetchStoreData = async (event: RequestEvent) => {
 	// 		event.locals.zip = JSON.parse(zip)
 	// 	}
 	// 	const host = event.locals.host
-	// 	// console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhh', host)
 	// 	const r = await StoreService.getStoreData({
 	// 		url: event.request.url,
 	// 		host,
@@ -19,7 +18,6 @@ export const fetchStoreData = async (event: RequestEvent) => {
 	// 		cookieMegamenu,
 	// 		server: true
 	// 	})
-	// 	// console.log('zzzzzzzzzzzzzzzzzz', r);
 	// 	if (!cookieMegamenu || cookieMegamenu == 'undefined') {
 	// 		r.megamenu1 = await CategoryService.fetchMegamenuData({
 	// 			origin: event.request.url,

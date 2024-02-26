@@ -29,11 +29,8 @@ const share = async ({ title, text, url }: any) => {
 				text: text,
 				url: url
 			})
-		} catch (error) {
-			// console.error('Error sharing:', error)
-		}
+		} catch (error) {}
 	} else {
-		// console.log('Web Share API not supported.')
 	}
 }
 
@@ -66,7 +63,7 @@ const addToCart = async ({ pid, qty, customizedImg, ix, loadingType }: any) => {
 			vid: pid,
 			qty: qty,
 			customizedImg: customizedImg || null,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 
@@ -145,8 +142,6 @@ function handleClick(e) {
 }
 
 function handleMove(e) {
-	// console.log(e)
-
 	const ix = e.detail.index
 	const preIX = e.detail.prev
 	const vID = document.querySelector(`#active${ix}`)
@@ -154,17 +149,11 @@ function handleMove(e) {
 
 	if (vID) {
 		vID.play()
-		// showMuteButton[ix] = true
 	}
-
-	// console.log(vID.paused)
 
 	if (vID2) {
 		vID2.pause()
-		// showMuteButton[preIX] = false
 	}
-
-	// console.log('Paused video', vID, 'Played Video', vID2, showMuteButton)
 }
 </script>
 
@@ -233,7 +222,6 @@ function handleMove(e) {
 											method="POST"
 											use:enhance="{() => {
 												return async ({ result }) => {
-													// console.log('result of add to cart', result)
 													updateCartStore({ data: result.data })
 													cartButtonText = 'Added To Cart'
 													isAddedtoBag = true

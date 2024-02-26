@@ -6,8 +6,7 @@ export const popularsearchStore = writable({})
 let isLoading = false
 
 export const getPopularSearchFromStore = async ({
-	limit,
-	sid,
+	sid = null,
 	storeId,
 	origin,
 	forceUpdate = false
@@ -28,8 +27,6 @@ export const getPopularSearchFromStore = async ({
 				origin,
 				storeId
 			})
-
-			// console.log('popularsearchDataFromServer', popularsearchDataFromServer);
 
 			// existingPopularSearch = popularsearchDataFromServer.data
 			popularsearchStore.update((u) => popularsearchDataFromServer.data)

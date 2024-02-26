@@ -16,8 +16,4 @@ test('Test Init Services', async ({ request }) => {
 	expect(storeData?.storeOne?.domain).toBe(host)
 
 	expect(storeData?.storeOne?._id).toBe(storeId)
-
-	const resStoreId = storeData?.storeOne?._id
-
-	// console.log('storeId from response', resStoreId)
 })

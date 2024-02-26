@@ -27,7 +27,7 @@ async function remove(id) {
 	if (confirm('Are you sure to delete?')) {
 		try {
 			removing = true
-			await del(`addresses/${id}?store=${$page?.data?.storeId}`, $page.data.origin)
+			await del(`addresses/${id}?store=${$page.data.storeId}`, $page.data.origin)
 			await dispatch('deleteAddress', id)
 		} catch (e) {
 			err = e
@@ -124,8 +124,6 @@ async function addressChanged(id) {
 					method="POST"
 					use:enhance="{() => {
 						return async ({ result }) => {
-							// console.log('result', result)
-
 							toast('Address deleted successfully', 'success')
 							await invalidateAll()
 							await applyAction(result)

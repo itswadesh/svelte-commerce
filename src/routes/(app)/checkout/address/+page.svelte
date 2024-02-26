@@ -12,7 +12,6 @@ import SEO from '$lib/components/SEO/index.svelte'
 import { CartService } from '$lib/services'
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 const seoProps = {
 	title: 'Address ',
@@ -81,7 +80,7 @@ async function updateCart() {
 				selfTakeout: false,
 				cartId: data?.cartId,
 				origin: $page.data?.origin,
-				storeId: $page?.data?.storeId
+				storeId: $page.data.storeId
 			})
 
 			if (data.prescriptionId) {

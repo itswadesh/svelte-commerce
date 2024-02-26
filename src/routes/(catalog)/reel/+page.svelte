@@ -81,8 +81,6 @@ export let data
 // 	}
 // ]
 
-// console.log(videosData)
-
 // data.data = videosData
 
 let today = dayjs(new Date()).toISOString()
@@ -93,7 +91,7 @@ let seoProps = {
 	category: data.searchData,
 	contentUrl: $page.data.store?.logo,
 	createdAt: today,
-	email: `${$page?.data?.store?.email}`,
+	email: `${$page.data.store?.email}`,
 
 	id: $page?.url?.href,
 	image: $page.data.store?.logo,
@@ -116,12 +114,12 @@ let seoProps = {
 	lastUpdated: today,
 	msapplicationTileImage: $page.data.store?.logo,
 	ogImage: { url: $page.data.store?.logo, width: 128, height: 56 },
-	ogImageSecureUrl: `${$page?.data?.store?.logo}`,
+	ogImageSecureUrl: `${$page.data.store?.logo}`,
 	ogImageType: 'image/jpeg',
 	ogSiteName: `${$page.data.origin}/sitemap/sitemap.xml`,
 	productBrand: data.searchData,
 	productName: data.searchData,
-	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
+	productPriceCurrency: `${$page.data.store?.currencyCode}`,
 	slug: `/`,
 	title: data.searchData || 'Buy online',
 	twitterImage: { url: $page.data.store?.logo }

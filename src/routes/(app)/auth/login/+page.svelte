@@ -148,7 +148,7 @@ function changeNumber() {
 	<a href="/" aria-label="Go to home" class="mx-auto mb-8 block max-w-max">
 		{#if $page.data.store?.logo}
 			<img
-				src="{$page?.data?.store?.logo}"
+				src="{$page.data.store?.logo}"
 				alt="logo"
 				class="max-h-10 sm:max-h-16 w-40 object-contain object-center" />
 		{:else}
@@ -174,8 +174,6 @@ function changeNumber() {
 			use:enhance="{() => {
 				err = null
 				return async ({ result }) => {
-					// console.log('result', result)
-
 					resendAfter = 0
 
 					if (result?.status === 200 && result?.data) {
@@ -192,7 +190,6 @@ function changeNumber() {
 								active: result?.data?.active
 							}
 
-							// console.log('me =', me)
 							await cookies.set('me', me, { path: '/', maxAge: 31536000 })
 							const r = ref || '/'
 							if (browser) goto(r)

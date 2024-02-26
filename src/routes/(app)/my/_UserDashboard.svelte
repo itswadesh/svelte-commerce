@@ -9,10 +9,6 @@ export let me
 export let myOrders
 export let myReviews
 export let myWishlist
-
-// console.log('myOrders', myOrders)
-// console.log('myReviews', myReviews)
-// console.log('myWishlist', myWishlist)
 </script>
 
 <section class="h-full w-full tracking-wide">
@@ -54,7 +50,7 @@ export let myWishlist
 				<h2 class="mt-2">Wishlist</h2>
 
 				<div class="mt-2 flex items-baseline flex-wrap gap-2">
-					<h2>{myWishlist?.length}</h2>
+					<h2>{myWishlist?.count}</h2>
 
 					<span class="text-sm">Wishlisted items</span>
 				</div>

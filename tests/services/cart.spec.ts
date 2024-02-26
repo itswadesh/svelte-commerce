@@ -54,8 +54,6 @@ test('Test: add to cart', async ({ request }) => {
 		store: storeId
 	}
 
-	// console.log(cartData);
-
 	const addToCartWithCookie = await request.post(
 		`${API_URL}carts/add-to-cart?store=${storeId}&cart_id=${cartId}`,
 		{

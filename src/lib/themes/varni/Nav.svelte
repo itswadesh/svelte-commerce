@@ -157,7 +157,7 @@ function handleShowCartSidebar() {
 
 async function getCategories() {
 	try {
-		const res1 = await getAPI(`categories?store=${$page?.data?.storeId}`, $page.data.origin)
+		const res1 = await getAPI(`categories?store=${$page.data.storeId}`, $page.data.origin)
 		categories = res1?.data.filter((c) => {
 			return c.img
 		})
@@ -175,7 +175,7 @@ const removeItemFromCart = async ({ pid, qty, customizedImg, ix }: any) => {
 				pid: pid,
 				qty: qty,
 				customizedImg: customizedImg || null,
-				store: $page?.data?.storeId
+				store: $page.data.storeId
 			},
 			$page.data.origin
 		)
@@ -290,9 +290,9 @@ let y
 				<!-- Website Logo/Name -->
 
 				<a href="/" aria-label="Click to visit home" class="shrink-0 block">
-					{#if $page?.data?.store?.logo}
+					{#if $page.data.store?.logo}
 						<!-- <LazyImg
-							src="{$page?.data?.store?.logo}"
+							src="{$page.data.store?.logo}"
 							alt="logo"
 							height="64"
 							aspect_ratio="4:1"
@@ -301,14 +301,14 @@ let y
 							alt="logo"
 							height="160"
 							src="{`${getCdnImageUrl(
-								$page.data?.store?.logo,
-								$page.data?.store?.IMAGE_CDN_URL
+								$page.data.store?.logo,
+								$page.data.store?.IMAGE_CDN_URL
 							)}?tr=h-160`}"
 							class="max-h-10 sm:max-h-16 w-20 sm:w-40 object-contain object-left" />
-					{:else if $page?.data?.store?.websiteName}
+					{:else if $page.data.store?.websiteName}
 						<h2
 							class="bg-gradient-to-b from-primary-500 to-secondary-500 bg-clip-text text-2xl font-extrabold text-transparent sm:text-3xl">
-							{$page?.data?.store?.websiteName}
+							{$page.data.store?.websiteName}
 						</h2>
 					{:else}
 						<img src="{logo}" alt="logo" class="max-h-16 w-40 object-contain object-left" />
@@ -885,16 +885,16 @@ let y
 			transition:fly="{{ y: -20, duration: 500 }}"
 			class="fixed inset-x-0 top-0 z-40 items-center justify-between hidden w-full h-20 gap-4 px-3 bg-white border-t border-b shadow-md lg:flex sm:px-10">
 			<a class="h-full shrink-0 block" href="/" aria-label="Click to visit home">
-				{#if $page?.data?.store?.logo}
+				{#if $page.data.store?.logo}
 					<LazyImg
-						src="{$page?.data?.store?.logo}"
+						src="{$page.data.store?.logo}"
 						alt=" "
 						height="40"
 						class="object-contain object-left h-auto max-h-16" />
-				{:else if $page?.data?.store?.websiteName}
+				{:else if $page.data.store?.websiteName}
 					<h1
 						class="text-2xl font-extrabold text-transparent bg-gradient-to-b from-primary-500 to-secondary-500 bg-clip-text sm:text-3xl">
-						{$page?.data?.store?.websiteName}
+						{$page.data.store?.websiteName}
 					</h1>
 				{:else}
 					<img src="{logo}" alt=" " class="object-contain object-left h-auto max-h-8" />
@@ -1000,16 +1000,16 @@ let y
 			class="fixed inset-x-0 top-0 z-40 hidden w-full h-10 px-3 bg-white border-t border-b shadow-md lg:block sm:px-10">
 			<div class="container mx-auto max-w-6xl flex items-center justify-between gap-4">
 				<a class="h-full shrink-0 block" href="/" aria-label="Click to visit home">
-					{#if $page?.data?.store?.logo}
+					{#if $page.data.store?.logo}
 						<LazyImg
-							src="{$page?.data?.store?.logo}"
+							src="{$page.data.store?.logo}"
 							alt=" "
 							height="40"
 							class="object-contain object-left h-auto max-h-8" />
-					{:else if $page?.data?.store?.websiteName}
+					{:else if $page.data.store?.websiteName}
 						<h1
 							class="text-2xl font-extrabold text-transparent bg-gradient-to-b from-primary-500 to-secondary-500 bg-clip-text sm:text-3xl">
-							{$page?.data?.store?.websiteName}
+							{$page.data.store?.websiteName}
 						</h1>
 					{:else}
 						<img src="{logo}" alt=" " class="object-contain object-left h-auto max-h-8" />

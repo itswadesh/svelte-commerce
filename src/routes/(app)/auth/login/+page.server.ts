@@ -55,8 +55,6 @@ const login = async ({ request, cookies, locals }) => {
 		// const updatedCart = await CartService.updateCart({
 		// 	customer_id: res.customer_id
 		// })
-
-		// console.log('res of email login = ', updatedCart)
 	} else {
 		const formData = {
 			phone: phoneOrEmail

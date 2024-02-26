@@ -50,7 +50,7 @@ async function saveAddr(e) {
 	try {
 		await AddressService.saveAddress({
 			id,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin,
 			sid: $page.data.sid
 		})
@@ -70,7 +70,7 @@ async function remove(id, index) {
 
 			toast('Deleting...Please wait', 'warning')
 
-			await del(`addresses/${id}?store=${$page?.data?.storeId}`, $page.data.origin)
+			await del(`addresses/${id}?store=${$page.data.storeId}`, $page.data.origin)
 
 			toast('Item deleted successfully', 'success')
 
@@ -201,8 +201,6 @@ async function remove(id, index) {
 								method="POST"
 								use:enhance="{() => {
 									return async ({ result }) => {
-										// console.log('result', result)
-
 										toast('Address deleted', 'success')
 										await invalidateAll()
 										await applyAction(result)
