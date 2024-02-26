@@ -32,23 +32,21 @@ import {
 	LazyImg,
 	MegaMenu
 } from '$lib/components'
+import { browser } from '$app/environment'
+import { cartStore } from '$lib/store/cart'
+import { CategoryService } from 'lib/services'
 import { createEventDispatcher, onMount } from 'svelte'
 import { cubicOut } from 'svelte/easing'
 import { enhance } from '$app/forms'
 import { fade, fly } from 'svelte/transition'
-import { getAPI, post } from '$lib/utils/api'
 import { goto, invalidateAll } from '$app/navigation'
 import { logo } from '$lib/config'
 import { page } from '$app/stores'
 import menu from '$lib/config/menu'
-import { browser } from '$app/environment'
-import { cartStore } from '$lib/store/cart'
 
 const dispatch = createEventDispatcher()
 
 export let me, cart, data, showCartSidebar, openSidebar, store
-
-// console.log('$page', $page)
 
 let categories
 let loadingForDeleteItemFromCart = []
@@ -159,7 +157,12 @@ function handleShowCartSidebar() {
 
 async function getCategories() {
 	try {
-		const res1 = await getAPI(`categories?store=${$page?.data?.storeId}`, $page.data.origin)
+		const res1 = await CategoryService.fetchAllCategories({
+			origin: $page.data.origin,
+			sid: $page.data.sid,
+			storeId: $page.data.storeId
+		})
+
 		categories = res1?.data.filter((c) => {
 			return c.img
 		})
@@ -168,30 +171,30 @@ async function getCategories() {
 	}
 }
 
-const removeItemFromCart = async ({ pid, qty, customizedImg, ix }: any) => {
-	try {
-		loadingForDeleteItemFromCart[ix] = true
-		const res = await post(
-			'carts/add-to-cart',
-			{
-				pid: pid,
-				qty: qty,
-				customizedImg: customizedImg || null,
-				store: $page?.data?.storeId
-			},
-			$page.data.origin
-		)
+// const removeItemFromCart = async ({ pid, qty, customizedImg, ix }: any) => {
+// 	try {
+// 		loadingForDeleteItemFromCart[ix] = true
+// 		const res = await post(
+// 			'carts/add-to-cart',
+// 			{
+// 				pid: pid,
+// 				qty: qty,
+// 				customizedImg: customizedImg || null,
+// 				store: $page.data.storeId
+// 			},
+// 			$page.data.origin
+// 		)
 
-		// cart = res
-		// $page.data.cart = res
+// 		// cart = res
+// 		// $page.data.cart = res
 
-		// await refreshCart()
-		await invalidateAll()
-	} catch (e) {
-	} finally {
-		loadingForDeleteItemFromCart[ix] = false
-	}
-}
+// 		// await refreshCart()
+// 		await invalidateAll()
+// 	} catch (e) {
+// 	} finally {
+// 		loadingForDeleteItemFromCart[ix] = false
+// 	}
+// }
 
 const optionIdentifier = 'name'
 const getOptionLabel = (option) => option.name
@@ -332,18 +335,18 @@ let y
 			<!-- Website Logo/Name -->
 
 			<a href="/" aria-label="Go to home" class="block shrink-0">
-				{#if $page?.data?.store?.logo}
+				{#if $page.data.store?.logo}
 					<LazyImg
-						src="{$page?.data?.store?.logo}"
+						src="{$page.data.store?.logo}"
 						alt="logo"
 						height="64"
 						width="160"
 						aspect_ratio="4:1"
 						class="max-h-10 sm:max-h-16 lg:max-h-20 object-contain object-left" />
-				{:else if $page?.data?.store?.websiteName}
+				{:else if $page.data.store?.websiteName}
 					<h2
 						class="bg-gradient-to-b from-primary-500 to-secondary-500 bg-clip-text text-transparent truncate w-40 sm:w-auto sm:max-w-sm">
-						{$page?.data?.store?.websiteName}
+						{$page.data.store?.websiteName}
 					</h2>
 				{:else}
 					<img
@@ -420,7 +423,7 @@ let y
 
 				<div class="flex-1 hidden w-full max-w-4xl min-w-min lg:block">
 					<Autocomplete
-						placeholder="{$page?.data?.store?.searchbarText || 'Search...'}"
+						placeholder="{$page.data.store?.searchbarText || 'Search...'}"
 						on:search="{onSearchSubmit}" />
 				</div>
 			</div>
@@ -459,18 +462,18 @@ let y
 			<div class="container mx-auto max-w-6xl">
 				<div class="flex items-center justify-between gap-4">
 					<a href="/" aria-label="Go to home" class="block shrink-0">
-						{#if $page?.data?.store?.logo}
+						{#if $page.data.store?.logo}
 							<LazyImg
-								src="{$page?.data?.store?.logo}"
+								src="{$page.data.store?.logo}"
 								alt="logo"
 								height="32"
 								width="96"
 								aspect_ratio="4:1"
 								class="max-h-8 w-auto object-contain object-left" />
-						{:else if $page?.data?.store?.websiteName}
+						{:else if $page.data.store?.websiteName}
 							<h2
 								class="bg-gradient-to-b from-primary-500 to-secondary-500 bg-clip-text text-transparent truncate w-40 sm:w-auto sm:max-w-sm">
-								{$page?.data?.store?.websiteName}
+								{$page.data.store?.websiteName}
 							</h2>
 						{:else}
 							<img src="{logo}" alt="logo" class="max-h-8 w-auto object-contain object-left" />
@@ -565,7 +568,7 @@ let y
 				{#if showMiniNavSearch}
 					<div class="py-2 w-full">
 						<Autocomplete
-							placeholder="{$page?.data?.store?.searchbarText || 'Search...'}"
+							placeholder="{$page.data.store?.searchbarText || 'Search...'}"
 							on:search="{onSearchSubmit}" />
 					</div>
 				{/if}

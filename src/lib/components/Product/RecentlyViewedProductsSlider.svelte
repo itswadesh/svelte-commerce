@@ -21,7 +21,7 @@ $: if (innerWidth >= 640) {
 
 let Splide
 
-$: store = $page.data?.store
+$: store = $page.data.store
 
 onMount(async () => {
 	// if (browser) {

@@ -2,8 +2,8 @@
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { ProductCard, DummyProductCard } from '$lib/components'
-import { services } from '@misiki/litekart-utils'
 import type { Product } from '$lib/types'
+import { ProductService } from 'lib/services'
 
 let name = 'Product Tab'
 let allCoreCategories = [
@@ -32,9 +32,9 @@ let products: Product[] = []
 onMount(async () => {
 	try {
 		loading = true
-		products = await services.ProductService.fetchProducts({
+		products = await ProductService.fetchProducts({
 			origin: $page?.data?.origin,
-			storeId: $page?.data?.storeId
+			storeId: $page.data.storeId
 		})
 	} catch (e) {
 	} finally {

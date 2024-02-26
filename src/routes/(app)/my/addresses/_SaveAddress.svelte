@@ -5,12 +5,11 @@ import { Error } from '$lib/components'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import { PrimaryButton, Textarea, Textbox } from '$lib/ui'
-import { services } from '@misiki/litekart-utils'
+import { CountryService, ZipService } from '$lib/services'
 import { slide } from 'svelte/transition'
 import { toast } from '$lib/utils'
 
 const IS_DEV = import.meta.env.DEV
-const dispatch = createEventDispatcher()
 
 export let billing_address = {}
 export let countries = []
@@ -18,10 +17,6 @@ export let editAddress = false
 export let selectedAddress = ''
 export let selectedBillingAddress = ''
 export let shipping_address = {}
-
-// console.log('$page', $page)
-// console.log('shipping_address', shipping_address)
-// console.log('countries', countries)
 
 if (!shipping_address?.firstName) {
 	shipping_address = IS_DEV
@@ -75,8 +70,6 @@ onMount(async () => {
 			return c.dafault
 		})
 
-		// console.log('dafaultCountry', dafaultCountry)
-
 		if (dafaultCountry[0]) {
 			shipping_address.country = dafaultCountry[0].code
 			billing_address.country = dafaultCountry[0].code
@@ -114,8 +107,6 @@ function getShippingAddressSelectedCountry() {
 			return c
 		}
 	})[0]
-
-	// console.log('selectedShippingAddressCountry', selectedShippingAddressCountry)
 }
 
 function getBillingAddressSelectedCountry() {
@@ -124,8 +115,6 @@ function getBillingAddressSelectedCountry() {
 			return c
 		}
 	})[0]
-
-	// console.log('selectedBillingAddressCountry', selectedBillingAddressCountry)
 }
 
 async function onShippingAddressCountryChange(country) {
@@ -145,9 +134,9 @@ async function fetchShippingAddressStates(country) {
 		err = null
 		loadingForShippingAddressStates = true
 
-		shippingAddressStates = await services.CountryService.fetchStates({
+		shippingAddressStates = await CountryService.fetchStates({
 			countryCode: country,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			origin: $page.data?.origin
 		})
 
@@ -155,8 +144,6 @@ async function fetchShippingAddressStates(country) {
 			s.name = s.name.toUpperCase()
 			return s
 		})
-
-		// console.log('shippingAddressStates', shippingAddressStates)
 	} catch (e) {
 		err = e
 	} finally {
@@ -169,9 +156,9 @@ async function fetchBillingAddressStates(country) {
 		err = null
 		loadingForBillingAddressStates = true
 
-		billingAddressStates = await services.CountryService.fetchStates({
+		billingAddressStates = await CountryService.fetchStates({
 			countryCode: country,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			origin: $page.data?.origin
 		})
 
@@ -179,8 +166,6 @@ async function fetchBillingAddressStates(country) {
 			s.name = s.name.toUpperCase()
 			return s
 		})
-
-		// console.log('billingAddressStates', billingAddressStates)
 	} catch (e) {
 		err = e
 	} finally {
@@ -201,13 +186,10 @@ async function fetchStateAndCity(zip, addresstype) {
 
 		let { city, state } = shipping_address
 
-		const zipInfo = await services.ZipService.findZip({
+		const zipInfo = await ZipService.findZip({
 			zip,
 			origin
 		})
-
-		// console.log('zipInfo', zipInfo)
-		// console.log('addresstype', addresstype)
 
 		if (addresstype === 'shipping') {
 			shipping_address.city = zipInfo.District || ''
@@ -218,7 +200,6 @@ async function fetchStateAndCity(zip, addresstype) {
 		}
 	} catch (e) {
 		err = e
-		// console.log(e)
 		toast(e.message.error, 'error')
 	} finally {
 		loadingForShippingAddressStates = false
@@ -272,15 +253,6 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 		method="POST"
 		use:enhance="{() => {
 			return async ({ result }) => {
-				// console.log('result', result)
-
-				// console.log(
-				// 	'result, address.id, $page?.url?.pathname',
-				// 	result,
-				// 	address.id,
-				// 	$page?.url?.pathname
-				// )
-
 				if (result?.status === 200 && result?.data) {
 					const newAddressId = result.data?._id || result.data?.id
 					toast('Address saved successfully', 'success')

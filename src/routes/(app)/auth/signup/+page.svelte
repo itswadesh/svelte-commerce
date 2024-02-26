@@ -11,7 +11,7 @@ import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
-import { services } from '@misiki/litekart-utils'
+import { UserService } from '$lib/services'
 const IS_DEV = import.meta.env.DEV
 
 const cookies = Cookie()
@@ -124,7 +124,7 @@ async function submit(n) {
 		if (Object.keys(zodError).length === 0) {
 			const { firstName, lastName, phone, email, password, passwordConfirmation } = n
 
-			const res = await services.UserService.signupService({
+			const res = await UserService.signupService({
 				firstName: firstName,
 				lastName: lastName,
 				phone: phone,
@@ -132,7 +132,7 @@ async function submit(n) {
 				password: password,
 				passwordConfirmation: passwordConfirmation,
 				role: role,
-				storeId: $page?.data?.storeId,
+				storeId: $page.data.storeId,
 				origin: $page.data.origin
 			})
 
@@ -170,7 +170,7 @@ async function submit(n) {
 	<a href="/" aria-label="Go to home" class="mx-auto mb-8 block max-w-max">
 		{#if $page.data.store?.logo}
 			<img
-				src="{$page?.data?.store?.logo}"
+				src="{$page.data.store?.logo}"
 				alt="logo"
 				class="max-h-10 sm:max-h-16 w-40 object-contain object-center" />
 		{:else}

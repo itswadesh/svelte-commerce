@@ -5,14 +5,13 @@ import { cartStore, getCartFromStore, updateCartStore } from '$lib/store/cart'
 import { cubicOut } from 'svelte/easing'
 import { fade, fly, slide } from 'svelte/transition'
 import { fireGTagEvent } from '$lib/utils/gTagB'
-import { getAPI } from '$lib/utils/api'
 import { invalidateAll } from '$app/navigation'
 import { logo } from '$lib/config'
 import { MegaMenu, LazyImg, AutosuggestModal } from '$lib/components'
 import { navigateToProperPath, toast } from '$lib/utils'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { services } from '@misiki/litekart-utils'
+import { CategoryService } from '$lib/services'
 import { storeStore } from '$lib/store/store'
 import { WhiteButton, PrimaryButton, Skeleton } from '$lib/ui'
 import Cookie from 'cookie-universal'
@@ -22,8 +21,9 @@ import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'
+import { getPopularSearchFromStore } from '$lib/store/popular-search'
 
-const cookies = Cookie()
+// const cookies = Cookie()
 
 export let me, data, showCartSidebar: boolean, openSidebar: boolean, store
 
@@ -85,7 +85,7 @@ function handleShowCartSidebar() {
 // 	try {
 // 		loading = true
 
-// 		const res = await services.CartService.fetchRefreshCart({
+// 		const res = await CartService.fetchRefreshCart({
 // 			cartId: $page.data.cartId,
 // 			origin: origin,
 // 			storeId: store.id
@@ -119,7 +119,7 @@ function handleShowCartSidebar() {
 
 async function getCategories() {
 	try {
-		const res1 = await services.CategoryService.fetchAllCategories({
+		const res1 = await getPopularSearchFromStore({
 			storeId: $page.data.store,
 			origin: $page.data.origin
 		})
@@ -177,17 +177,17 @@ async function getCategories() {
 			<!-- Website Logo/Name -->
 
 			<a href="/" aria-label="Go to home" class="block shrink-0">
-				{#if $page?.data?.store?.logo}
+				{#if $page.data.store?.logo}
 					<LazyImg
-						src="{$page?.data?.store?.logo}"
+						src="{$page.data.store?.logo}"
 						alt="logo"
 						height="64"
 						aspect_ratio="4:1"
 						class="max-h-10 sm:max-h-16 max-w-[160px] object-contain object-left" />
-				{:else if $page?.data?.store?.websiteName}
+				{:else if $page.data.store?.websiteName}
 					<h2
 						class="bg-gradient-to-b from-primary-500 to-secondary-500 bg-clip-text text-2xl font-extrabold text-transparent sm:text-3xl truncate w-40 sm:w-auto sm:max-w-sm">
-						{$page?.data?.store?.websiteName}
+						{$page.data.store?.websiteName}
 					</h2>
 				{:else}
 					<img
@@ -446,7 +446,7 @@ async function getCategories() {
 												class="flex-1 leading-4"
 												on:click="{() => (showCartSidebar = false)}">{item.name}</a>
 
-											{#if $page?.data?.store?.isFnb && item.foodType}
+											{#if $page.data.store?.isFnb && item.foodType}
 												<div>
 													{#if item.foodType === 'veg'}
 														<img src="{productVeg}" alt="veg" class="h-5 w-5" />

@@ -9,21 +9,23 @@
 // import productVeg from '$lib/assets/product/veg.png'
 import { AnimatedCartItem, LazyImg } from '$lib/components'
 import { applyAction, enhance } from '$app/forms'
+import { browser } from '$app/environment'
 import { currency, toast } from '$lib/utils'
 import { fade } from 'svelte/transition'
 import { fireGTagEvent } from '$lib/utils/gTagB'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { post } from '$lib/utils/api'
-import { updateCartStore } from '$lib/store/cart'
-import { browser } from '$app/environment'
 import { storeStore } from '$lib/store/store'
+import { updateCartStore } from '$lib/store/cart'
+import { updateWishlistStore } from 'lib/store/wishlist'
 
 export let product = {}
+$: reactiveProductObject = product
 
 let newProduct = {}
 let store = {}
+
 onMount(() => {
 	if (browser) {
 		storeStore.subscribe((value) => (store = value))
@@ -53,28 +55,28 @@ function hideitems() {
 	show = false
 }
 
-async function toggleWishlist(id) {
-	if (!$page.data.me) {
-		goto(`${$page.data.loginUrl || '/auth/login'}?ref=/my/wishlist/add/${id}`)
-		return
-	}
+// async function toggleWishlist(id) {
+// 	if (!$page.data.me) {
+// 		goto(`${$page.data.loginUrl || '/auth/login'}?ref=/my/wishlist/add/${id}`)
+// 		return
+// 	}
 
-	try {
-		loadingForWishlist = true
+// 	try {
+// 		loadingForWishlist = true
 
-		isWislisted = await post(
-			`wishlists/toggle`,
-			{ product: id, variant: id, store: $page?.data?.storeId },
-			$page.data.origin
-		)
+// 		isWislisted = await post(
+// 			`wishlists/toggle`,
+// 			{ product: id, variant: id, store: $page.data.storeId },
+// 			$page.data.origin
+// 		)
 
-		toast('Added to wishlist successfully', 'success')
-	} catch (e) {
-		toast(e, 'error')
-	} finally {
-		loadingForWishlist = false
-	}
-}
+// 		toast('Added to wishlist successfully', 'success')
+// 	} catch (e) {
+// 		toast(e, 'error')
+// 	} finally {
+// 		loadingForWishlist = false
+// 	}
+// }
 </script>
 
 <div
@@ -187,26 +189,68 @@ async function toggleWishlist(id) {
 				<!-- Wishlist -->
 
 				<li class="flex items-center justify-center">
-					<button
-						type="button"
-						disabled="{loadingForWishlist}"
-						class="block transition duration-300 focus:outline-none
-						{isWislisted ? 'text-secondary-500' : 'hover:text-secondary-500'}"
-						on:click="{() => toggleWishlist(product?._id || product?.id)}">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke-width="1.5"
-							stroke="currentColor"
-							class="w-5 h-5">
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
-							></path>
-						</svg>
-					</button>
+					<form
+						id="toggle_wishlist_1"
+						action="/my/wishlist?/toggleWishlist2"
+						method="POST"
+						enctype="multipart/form-data"
+						title="save"
+						class="block transition duration-300 focus:outline-none"
+						use:enhance="{() => {
+							return async ({ result }) => {
+								// console.log('wishlist toggle result', result)
+
+								if (result?.type === 'redirect') {
+									goto(result?.location)
+								} else if (result?.data) {
+									// toast('Product added to the wishlist successfully', 'success')
+									const wishlistRes = result?.data?.wishlistData
+
+									// console.log('wishlistRes', wishlistRes)
+
+									await updateWishlistStore(wishlistRes)
+									// await verifyCartAndWishlist()
+									// await invalidateAll()
+								} else if (result?.error) {
+									toast(result?.error?.message, 'error')
+								}
+
+								await applyAction(result)
+							}
+						}}">
+						<input type="hidden" name="pid" value="{product?._id || product?.id || null}" />
+
+						<input type="hidden" name="vid" value="{product?._id || product?.id || null}" />
+
+						<button type="submit" aria-label="wishlist" class="max-w-max">
+							{#if reactiveProductObject.isWishlisted}
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="h-5 w-5 shrink-0 text-red-500"
+									viewBox="0 0 20 20"
+									fill="currentColor">
+									<path
+										fill-rule="evenodd"
+										d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+										clip-rule="evenodd"></path>
+								</svg>
+							{:else}
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke-width="1"
+									stroke="currentColor"
+									class="w-5 h-5 shrink-0 group-hover:text-red-500">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+									></path>
+								</svg>
+							{/if}
+						</button>
+					</form>
 				</li>
 
 				<!-- Details -->

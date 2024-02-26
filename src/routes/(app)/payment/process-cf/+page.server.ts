@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit'
-import { services } from '@misiki/litekart-utils'
+import { OrdersService } from '$lib/services'
 
 export const prerender = false
 
@@ -10,7 +10,7 @@ export async function load({ url, locals, cookies }) {
 	const success_url = `/payment/success?order_no=${order_no}`
 
 	try {
-		const res = await services.OrdersService.cashfreeCapture({
+		const res = await OrdersService.cashfreeCapture({
 			order_no: order_no,
 			storeId: locals.storeId,
 			sid: locals.sid,

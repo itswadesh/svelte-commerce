@@ -1,5 +1,5 @@
 import { error, redirect } from '@sveltejs/kit'
-import { services } from '@misiki/litekart-utils'
+import { CartService, PaymentMethodService } from '$lib/services'
 
 export const prerender = false
 
@@ -11,20 +11,18 @@ export async function load({ url, parent }) {
 
 	try {
 		const [cart, paymentMethods] = await Promise.all([
-			services.CartService.fetchRefreshCart({
+			CartService.fetchRefreshCart({
 				cartId,
 				origin,
 				sid,
 				storeId
 			}),
-			services.PaymentMethodService.fetchPaymentMethods({
+			PaymentMethodService.fetchPaymentMethods({
 				storeId,
 				sid,
 				origin
 			})
 		])
-
-		// console.log('cart at payment options', cart);
 
 		if (!cart?.qty) {
 			redirect(307, '/cart')
@@ -39,7 +37,6 @@ export async function load({ url, parent }) {
 			url: url.href
 		}
 	} catch (e) {
-		// console.log('errzzzzzzzzzzzzzzzzzz', e);
 		if (e.status === 307 && e.location === '/cart') {
 			redirect(307, '/cart')
 		} else if (e.status === 401 || e.status === 307) {

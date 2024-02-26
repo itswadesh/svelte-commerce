@@ -13,7 +13,7 @@ import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { PrimaryButton } from '$lib/ui'
-import { services } from '@misiki/litekart-utils'
+import { ProductService } from '$lib/services'
 import { sorts } from '$lib/config'
 import { storeStore } from '$lib/store/store'
 import dotsLoading from '$lib/assets/dots-loading.gif'
@@ -22,7 +22,6 @@ import ProductCard from './ProductCard.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	brand: $page.data.store?.title,
@@ -31,7 +30,7 @@ let seoProps = {
 	category: data.products?.category?.name,
 	contentUrl: $page.data.store?.logo,
 	createdAt: `${data.products?.category?.createdAt || '_'}`,
-	email: `${$page?.data?.store?.email}`,
+	email: `${$page.data.store?.email}`,
 	id: $page?.url?.href,
 	image: `${data.products?.category?.img}`,
 	logo: $page.data.store?.logo,
@@ -53,13 +52,13 @@ let seoProps = {
 	lastUpdated: `${data.products?.category?.updatedAt || '_'}`,
 	msapplicationTileImage: `${data.products?.category?.img}`,
 	ogImage: { url: $page.data.store?.logo, width: 128, height: 56 },
-	ogImageSecureUrl: `${$page?.data?.store?.logo}`,
+	ogImageSecureUrl: `${$page.data.store?.logo}`,
 	ogImageType: 'image/jpeg',
 	ogSiteName: `${$page.data.origin}/sitemap/sitemap.xml`,
 	productAvailability: `${data.products?.category?.stock}`,
 	productBrand: `${data.products?.category?.brandName || $page.data.store?.title}`,
 	productName: `${data.products?.category?.name}`,
-	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
+	productPriceCurrency: `${$page.data.store?.currencyCode}`,
 	slug: `${data.products?.category?.slug}`,
 	title: `${data.products?.category?.name || 'Buy online'}`,
 	twitterImage: { url: `${data.products?.category?.img}` }
@@ -132,15 +131,13 @@ async function loadNextPage() {
 		try {
 			data.isLoading = true
 
-			const res = await services.ProductService.fetchNextPageProducts({
+			const res = await ProductService.fetchNextPageProducts({
 				categorySlug: data.products?.category?.slug,
 				origin: $page?.data?.origin,
-				storeId: $page?.data?.storeId,
+				storeId: $page.data.storeId,
 				nextPage,
 				searchParams
 			})
-
-			// console.log('res', res)
 
 			const nextPageData = res?.nextPageData
 			currentPage = currentPage + 1
@@ -279,7 +276,7 @@ function handleFilterTags() {
 
 <svelte:window bind:scrollY="{y}" bind:innerWidth on:scroll="{handleOnScroll}" />
 
-<CatelogNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page?.data?.store}">
+<CatelogNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page.data.store}">
 	<div class="flex max-w-max flex-col items-start gap-1">
 		{#if data.products?.category?.name}
 			<h5 class="w-40 shrink-0 truncate capitalize leading-4 text-left">

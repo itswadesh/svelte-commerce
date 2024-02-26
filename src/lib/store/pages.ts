@@ -1,4 +1,4 @@
-import { services } from '@misiki/litekart-utils'
+import { PageService } from '$lib/services'
 import { writable } from 'svelte/store'
 
 export const pagesStore = writable([])
@@ -16,15 +16,18 @@ export const getPagesFromStore = async ({ origin, storeId, forceUpdate = false }
 
 	if ((!isLoading && !existingPages) || !!forceUpdate) {
 		isLoading = true
+		try {
+			const pagesDataFromServer = await PageService.fetchPages({
+				storeId,
+				origin
+			})
 
-		const pagesDataFromServer = await services.PageService.fetchPages({
-			storeId,
-			origin
-		})
-
-		pagesStore.update((u) => pagesDataFromServer || [])
-
-		isLoading = false
+			pagesStore.update((u) => pagesDataFromServer || [])
+		} catch (e) {
+			console.log('error', e)
+		} finally {
+			isLoading = false
+		}
 	}
 
 	return existingPages

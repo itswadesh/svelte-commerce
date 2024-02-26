@@ -1,26 +1,45 @@
-import { services } from '@misiki/litekart-utils'
-
-const isServer = import.meta.env.SSR
+import { VendorService } from '$lib/services'
+import { error } from '@sveltejs/kit'
 
 export async function load({ params, parent, url }) {
 	let page = +url.searchParams.get('page') || 1
 	let vendorSlug = params.slug
-	const { store, storeId, sid, origin } = await parent()
-
-	return {
-		page,
-		vendor: services.VendorService.fetchVendor({
+	const { storeId, sid, origin } = await parent()
+	let vendor
+	let vendorsProduct
+	const promises = [
+		VendorService.fetchVendor({
 			sid,
 			slug: vendorSlug,
 			storeId,
-			origin
+			origin: 'x'
 		}),
-		vendorsProduct: services.VendorService.fetchProductsOfVendor({
+		VendorService.fetchProductsOfVendor({
 			slug: vendorSlug,
 			page: page,
 			sid,
-			origin,
+			origin: 'x',
 			storeId
 		})
+	]
+
+	await Promise.allSettled(promises).then((results) => {
+		const res1 = results[0]
+		const res2 = results[1]
+		if (res1.status === 'fulfilled') {
+			vendor = res1.value
+		} else {
+			error(404, 'Vendor not found')
+		}
+		if (res2.status === 'fulfilled') {
+			vendorsProduct = res2.value
+		} else {
+			console.error('Error fetching products:', res2.reason)
+		}
+	})
+	return {
+		page,
+		vendor,
+		vendorsProduct
 	}
 }

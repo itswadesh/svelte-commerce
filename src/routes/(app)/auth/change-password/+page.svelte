@@ -6,7 +6,7 @@ import { page } from '$app/stores'
 import { TextboxFloating, PrimaryButton } from '$lib/ui'
 import { z } from 'zod'
 import SEO from '$lib/components/SEO/index.svelte'
-import { services } from '@misiki/litekart-utils'
+import { UserService } from '$lib/services'
 
 const seoProps = {
 	title: 'Change Password',
@@ -92,11 +92,11 @@ async function submit(p) {
 		if (Object.keys(zodError).length === 0) {
 			const { oldPassword, password, passwordConfirmation } = p
 
-			const res = await services.UserService.changePasswordService({
+			const res = await UserService.changePasswordService({
 				oldPassword: oldPassword,
 				password: password,
 				passwordConfirmation: passwordConfirmation,
-				storeId: $page?.data?.storeId,
+				storeId: $page.data.storeId,
 				origin: $page.data.origin
 			})
 
@@ -118,7 +118,7 @@ async function submit(p) {
 	<a href="/" aria-label="Go to home" class="mx-auto mb-8 block max-w-max">
 		{#if $page.data.store?.logo}
 			<img
-				src="{$page?.data?.store?.logo}"
+				src="{$page.data.store?.logo}"
 				alt="logo"
 				class="max-h-10 sm:max-h-16 w-40 object-contain object-center" />
 		{:else}

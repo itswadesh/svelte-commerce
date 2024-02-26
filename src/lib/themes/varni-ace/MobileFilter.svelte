@@ -7,7 +7,7 @@ import { createEventDispatcher, onMount } from 'svelte'
 import { fly } from 'svelte/transition'
 import { goto } from '$app/navigation'
 import { page } from '$app/stores'
-import { services } from '@misiki/litekart-utils'
+import { CategoryService } from '$lib/services'
 import { sorts } from '$lib/config'
 
 const dispatch = createEventDispatcher()
@@ -97,16 +97,16 @@ async function getMegamenu() {
 		try {
 			// megamenu = await getMegamenuFromStore({
 			// 	sid: null,
-			// 	storeId: $page?.data?.storeId,
+			// 	storeId: $page.data.storeId,
 			// 	origin: $page.data.origin
 			// })
 
 			const localmegamenu = localStorage.getItem('megamenu')
 
 			if (!localmegamenu || localmegamenu === 'undefined') {
-				megamenu = await services.CategoryService.fetchMegamenuData({
+				megamenu = await CategoryService.fetchMegamenuData({
 					origin: $page?.data?.origin,
-					storeId: $page?.data?.storeId,
+					storeId: $page.data.storeId
 				})
 			} else {
 				megamenu = JSON.parse(localmegamenu)

@@ -11,7 +11,7 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { PrimaryButton, Skeleton, Textbox, WhiteButton } from '$lib/ui'
 import { selectedCartItemsStore } from '$lib/store/selected-cart-items'
-import { services } from '@misiki/litekart-utils'
+import { CartService, CouponService, ProductService } from '$lib/services'
 import { storeStore } from '$lib/store/store.js'
 import Cookie from 'cookie-universal'
 import dotsLoading from '$lib/assets/dots-loading.gif'
@@ -61,7 +61,7 @@ onMount(async () => {
 		if (!cart?.items) {
 			cart = await getCartFromStore({
 				origin: $page.data.origin,
-				storeId: $page?.data?.storeId,
+				storeId: $page.data.storeId,
 				cartId: $page.data.cartId,
 				forceUpdate: true
 			})
@@ -116,11 +116,11 @@ async function applyCouponCode(selectedCouponCode: string, index: number) {
 			loadingApplyCoupon = true
 		}
 
-		const resAC = await services.CartService.applyCouponService({
+		const resAC = await CartService.applyCouponService({
 			cartId: $page.data.cartId,
 			code: selectedCouponCode,
 			origin: $page.data.origin,
-			storeId: $page?.data?.storeId
+			storeId: $page.data.storeId
 		})
 
 		appliedCouponInfo = resAC
@@ -128,7 +128,7 @@ async function applyCouponCode(selectedCouponCode: string, index: number) {
 		await getCartFromStore({
 			cartId: $page.data.cartId,
 			origin: $page.data.origin,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			forceUpdate: true
 		})
 		openApplyPromoCodeModal = false
@@ -147,11 +147,11 @@ async function removeCouponCode() {
 	try {
 		loadingRemoveCoupon = true
 
-		await services.CartService.removeCouponService({
+		await CartService.removeCouponService({
 			cartId: $page.data.cartId,
 			code: selectedCouponCode || cart?.discount?.code,
 			origin: $page.data.origin,
-			storeId: $page?.data?.storeId
+			storeId: $page.data.storeId
 		})
 
 		selectedCouponCode = ''
@@ -159,7 +159,7 @@ async function removeCouponCode() {
 		await getCartFromStore({
 			cartId: $page.data.cartId,
 			origin: $page.data.origin,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			forceUpdate: true
 		})
 	} catch (e) {
@@ -173,9 +173,9 @@ async function getProducts() {
 	try {
 		loadingProducts = true
 
-		const resP = await services.ProductService.fetchProducts({
+		const resP = await ProductService.fetchProducts({
 			origin: $page?.data?.origin,
-			storeId: $page?.data?.storeId
+			storeId: $page.data.storeId
 		})
 		products = resP?.hits
 	} catch (e) {
@@ -187,9 +187,9 @@ async function getProducts() {
 async function getCoupons() {
 	try {
 		loadingCoupon = true
-		const resC = await services.CouponService.fetchCoupons({
+		const resC = await CouponService.fetchCoupons({
 			origin: $page?.data?.origin,
-			storeId: $page?.data?.storeId
+			storeId: $page.data.storeId
 		})
 		coupons = resC?.data
 	} catch (e) {
@@ -348,7 +348,7 @@ function updateCheckedCartItemsInGroup() {
 															{item?.name}
 														</a>
 
-														{#if $page?.data?.store?.isFnb && item.foodType}
+														{#if $page.data.store?.isFnb && item.foodType}
 															<div>
 																{#if item.foodType === 'veg'}
 																	<img src="{productVeg}" alt="veg" class="h-5 w-5" />
@@ -496,7 +496,7 @@ function updateCheckedCartItemsInGroup() {
 													{item?.name}
 												</a>
 
-												{#if $page?.data?.store?.isFnb && item.foodType}
+												{#if $page.data.store?.isFnb && item.foodType}
 													<div>
 														{#if item.foodType === 'veg'}
 															<img src="{productVeg}" alt="veg" class="h-5 w-5" />

@@ -5,7 +5,7 @@ import { page } from '$app/stores'
 import { LazyImg, Error } from '$lib/components'
 import { TextboxFloating, PrimaryButton } from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
-import { services } from '@misiki/litekart-utils'
+import { UserService } from '$lib/services'
 const seoProps = {
 	title: 'Forgot Password',
 	description: 'Forgot Password'
@@ -29,10 +29,10 @@ async function submit() {
 	try {
 		loading = true
 
-		const res = await services.UserService.forgotPasswordService({
+		const res = await UserService.forgotPasswordService({
 			email: email,
 			referrer: $page.data.origin,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 
@@ -53,7 +53,7 @@ async function submit() {
 	<a href="/" aria-label="Go to home" class="mx-auto mb-8 block max-w-max">
 		{#if $page.data.store?.logo}
 			<img
-				src="{$page?.data?.store?.logo}"
+				src="{$page.data.store?.logo}"
 				alt="logo"
 				class="max-h-10 sm:max-h-16 w-40 object-contain object-center" />
 		{:else}

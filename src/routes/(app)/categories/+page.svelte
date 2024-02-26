@@ -40,7 +40,7 @@ async function getMegamenu() {
 		try {
 			megamenu = await getAllMegamenuFromStore({
 				forceUpdate: true,
-				storeId: $page?.data?.storeId,
+				storeId: $page.data.storeId,
 				origin: $page.data.origin
 			})
 		} catch (e) {

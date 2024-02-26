@@ -3,9 +3,10 @@ import { createEventDispatcher, onMount } from 'svelte'
 import { goto } from '$app/navigation'
 import { navigateToProperPath } from '$lib/utils'
 import { page } from '$app/stores'
-import { services } from '@misiki/litekart-utils'
 import { slide } from 'svelte/transition'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import { AutocompleteService, CategoryService } from '$lib/services'
+import { getCategoriesFromStore } from '$lib/store/categories'
 
 const dispatch = createEventDispatcher()
 
@@ -25,8 +26,6 @@ let typingTimer: any
 
 function submit() {
 	show = false
-
-	// console.log('autocomplete', autocomplete)
 
 	if (autocomplete?.length && autocomplete[0].slug && autocomplete[0].type === 'products') {
 		goto(`/product/${autocomplete[0].slug}`)
@@ -79,10 +78,10 @@ async function getData(e: any) {
 
 	typingTimer = setTimeout(async () => {
 		try {
-			autocomplete = await services.AutocompleteService.fetchAutocompleteData({
+			autocomplete = await AutocompleteService.fetchAutocompleteData({
 				q: q,
 				origin: $page?.data?.origin,
-				storeId: $page?.data?.storeId
+				storeId: $page.data.storeId
 			})
 		} catch (e) {}
 	}, 200)
@@ -96,13 +95,18 @@ function resetInput() {
 onMount(async () => {
 	searchInput.focus()
 	try {
-		categories = (
-			await services.CategoryService.fetchAllCategories({
-				featured: true,
-				storeId: $page?.data?.storeId,
-				origin: $page.data.origin
-			})
-		).data
+		const categoriesRes = await getCategoriesFromStore({
+			origin: $page?.data?.origin,
+			storeId: $page.data.storeId
+		})
+		categories = categoriesRes.data
+		// categories = (
+		// 	await CategoryService.fetchAllCategories({
+		// 		featured: true,
+		// 		storeId: $page.data.storeId,
+		// 		origin: $page.data.origin
+		// 	})
+		// ).data
 	} catch (e) {
 		err = e
 	} finally {
@@ -145,7 +149,7 @@ onMount(async () => {
 								on:submit|preventDefault="{submit}">
 								<input
 									bind:this="{searchInput}"
-									placeholder="{$page?.data?.store?.searchbarText || 'Search...'}"
+									placeholder="{$page.data.store?.searchbarText || 'Search...'}"
 									class="text-normal relative h-14 w-full truncate border px-10 font-light focus:outline-none focus:ring-2 focus:ring-primary-500"
 									on:input="{getData}" />
 
@@ -230,7 +234,7 @@ onMount(async () => {
 		{#if categories && categories?.data?.length}
 			<div class="mt-20 px-4">
 				<h6 class="mb-4 uppercase text-zinc-500">
-					Categories on {$page?.data?.store?.websiteName}
+					Categories on {$page.data.store?.websiteName}
 				</h6>
 
 				<div class="flex flex-col gap-4">

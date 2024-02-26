@@ -66,7 +66,7 @@ import { currency, date } from '$lib/utils'
 import { fireGTagEvent } from '$lib/utils/gTagB'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { updateCartStore } from '$lib/store/cart'
+import { getCartFromStore, updateCartStore } from '$lib/store/cart'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import productNonVeg from '$lib/assets/product/non-veg.png'
@@ -75,7 +75,6 @@ import SEO from '$lib/components/SEO/index.svelte'
 import WhiteButton from '$lib/ui/WhiteButton.svelte'
 
 export let data
-// console.log('success page data', data)
 
 const seoProps = {
 	title: 'Payment Success ',
@@ -83,11 +82,19 @@ const seoProps = {
 }
 
 // let store = {}
-$: store = $page.data?.store
-
+$: store = $page.data.store
+let cart = {}
 onMount(async () => {
-	fireGTagEvent('purchase', data?.order)
-	updateCartStore({ data: data?.cart })
+	if (browser) {
+		cart = await getCartFromStore({
+			origin: $page.data?.origin,
+			storeId: $page.data.storeId,
+			cartId: data.cartId,
+			forceUpdate: true
+		})
+		fireGTagEvent('purchase', data?.order)
+		updateCartStore({ data: cart })
+	}
 })
 </script>
 
@@ -433,7 +440,7 @@ onMount(async () => {
 													</p>
 												</a>
 
-												{#if $page?.data?.store?.isFnb && item.foodType}
+												{#if $page.data.store?.isFnb && item.foodType}
 													<div>
 														{#if item.foodType === 'veg'}
 															<img src="{productVeg}" alt="veg" class="h-5 w-5" />

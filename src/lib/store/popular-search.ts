@@ -1,4 +1,4 @@
-import { services } from '@misiki/litekart-utils'
+import { CategoryService } from '$lib/services'
 import { writable } from 'svelte/store'
 
 export const popularsearchStore = writable({})
@@ -6,8 +6,7 @@ export const popularsearchStore = writable({})
 let isLoading = false
 
 export const getPopularSearchFromStore = async ({
-	limit,
-	sid,
+	sid = null,
 	storeId,
 	origin,
 	forceUpdate = false
@@ -22,27 +21,28 @@ export const getPopularSearchFromStore = async ({
 
 	if ((!isLoading && !existingPopularSearch) || !!forceUpdate) {
 		isLoading = true
+		try {
+			const popularsearchDataFromServer = await CategoryService.fetchAllCategories({
+				sid,
+				origin,
+				storeId
+			})
 
-		const popularsearchDataFromServer = await services.CategoryService.fetchAllCategories({
-			sid,
-			origin,
-			storeId
-		})
+			// existingPopularSearch = popularsearchDataFromServer.data
+			popularsearchStore.update((u) => popularsearchDataFromServer.data)
+		} catch (e) {
+			console.log('error', e)
+		} finally {
+			// const popularsearchDataFromServer = await PopularSearchService.fetchPopularSearch({
+			// 	sid,
+			// 	origin,
+			// 	storeId,
+			// })
 
-		// console.log('popularsearchDataFromServer', popularsearchDataFromServer);
+			// popularsearchStore.update((u) => popularsearchDataFromServer)
 
-		// existingPopularSearch = popularsearchDataFromServer.data
-		popularsearchStore.update((u) => popularsearchDataFromServer.data)
-
-		// const popularsearchDataFromServer = await services.PopularSearchService.fetchPopularSearch({
-		// 	sid,
-		// 	origin,
-		// 	storeId,
-		// })
-
-		// popularsearchStore.update((u) => popularsearchDataFromServer)
-
-		isLoading = false
+			isLoading = false
+		}
 	}
 
 	return existingPopularSearch

@@ -1,6 +1,6 @@
 import { error, fail } from '@sveltejs/kit'
 import { z } from 'zod'
-import { services } from '@misiki/litekart-utils'
+import { UserService } from '$lib/services'
 
 const zodEmailLoginSchema = z.object({
 	email: z
@@ -21,7 +21,6 @@ const login = async ({ request, cookies, locals }) => {
 	const isEmail = data.get('isEmail')
 	const phoneOrEmail = data.get('phoneOrEmail')
 	const password = data.get('password')
-
 	let res
 
 	if (isEmail == 'true') {
@@ -41,20 +40,21 @@ const login = async ({ request, cookies, locals }) => {
 			})
 		}
 
-		res = await services.UserService.loginService({
-			email: phoneOrEmail,
-			password: password,
-			storeId: locals.storeId,
-			cartId: locals.cartId,
-			server: true,
-			origin: locals.origin
-		})
-
-		// const updatedCart = await services.CartService.updateCart({
+		try {
+			res = await UserService.loginService({
+				email: phoneOrEmail,
+				password: password,
+				storeId: locals.storeId,
+				cartId: locals.cartId,
+				server: true,
+				origin: locals.origin
+			})
+		} catch (e) {
+			error(401, e.message)
+		}
+		// const updatedCart = await CartService.updateCart({
 		// 	customer_id: res.customer_id
 		// })
-
-		// console.log('res of email login = ', updatedCart)
 	} else {
 		const formData = {
 			phone: phoneOrEmail
@@ -70,18 +70,19 @@ const login = async ({ request, cookies, locals }) => {
 				errors
 			})
 		}
-
-		res = await services.UserService.getOtpService({
-			phone: phoneOrEmail,
-			storeId: locals.storeId,
-			server: true,
-			origin: locals.origin
-		})
+		try {
+			res = await UserService.getOtpService({
+				phone: phoneOrEmail,
+				storeId: locals.storeId,
+				server: true,
+				origin: locals.origin
+			})
+		} catch (e) {
+			error(401, e.message)
+		}
 	}
 
-	cookies.set('connect.sid', res.sid, {
-		path: '/'
-	})
+	cookies.set('connect.sid', res.sid, { path: '/' })
 
 	return res
 }
@@ -99,7 +100,7 @@ const verifyOtp = async ({ cookies, request, locals, url }) => {
 		return fail(400, { invalid: true })
 	}
 	try {
-		const user = await services.UserService.verifyOtpService({
+		const user = await UserService.verifyOtpService({
 			phone,
 			otp,
 			cartId: cookies.get('cartId'),

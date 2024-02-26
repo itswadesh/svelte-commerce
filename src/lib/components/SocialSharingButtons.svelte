@@ -61,7 +61,7 @@ let socialSharesList = [
 	{
 		icon: gmailIcon,
 		title: 'Gmail',
-		href: `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=${$page?.data?.store?.email}&su=Take a look at this ${productName}&body=${url}`
+		href: `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=${$page.data.store?.email}&su=Take a look at this ${productName}&body=${url}`
 	}
 ]
 

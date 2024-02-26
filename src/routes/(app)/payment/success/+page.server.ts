@@ -1,4 +1,4 @@
-import { services } from '@misiki/litekart-utils'
+import { OrdersService } from '$lib/services'
 import { getCartFromStore } from '$lib/store/cart'
 import { error, redirect } from '@sveltejs/kit'
 
@@ -23,7 +23,7 @@ export async function load({ url, locals, cookies }) {
 	try {
 		loading = true
 
-		order = await services.OrdersService.getOrder({
+		order = await OrdersService.getOrder({
 			orderNo,
 			cartId,
 			sid,
@@ -31,35 +31,27 @@ export async function load({ url, locals, cookies }) {
 			origin: locals.origin
 		})
 	} catch (e) {
-		// console.log('error at payment success page', e)
-		// err = e
-		// if (e.status === 401) {
-		// 	redirect(307, '/auth/login')
-		// } else {
 		error(e?.status, e?.body?.message || e?.data?.message || e?.message)
-		// }
 	} finally {
 		loading = false
 	}
 
-	try {
-		cart = await getCartFromStore({
-			origin: locals.origin,
-			storeId,
-			cartId,
-			forceUpdate: true
-		})
+	// try {
+	// 	cart = await getCartFromStore({
+	// 		origin: locals.origin,
+	// 		storeId,
+	// 		cartId,
+	// 		forceUpdate: true
+	// 	})
 
-		// console.log('cart at payment success', cart)
-		locals.cartId = cart?.cart_id || cart?.cartId
-		if (locals.cartId) {
-			cookies.set('cartId', cartId, { path: '/', maxAge: 31536000 })
-			cookies.set('cartQty', cart?.qty, { path: '/', maxAge: 31536000 })
-			locals.cartQty = cart?.qty
-		}
-	} catch (e) {
-		// console.log('error at payment success page cart', e);
-	}
+	// 	locals.cartId = cart?.cart_id || cart?.cartId
+	// 	if (locals.cartId) {
+	// 		cookies.set('cartId', cartId, { path: '/', maxAge: 31536000 })
+	// 		cookies.set('cartQty', cart?.qty, { path: '/', maxAge: 31536000 })
+	// 		locals.cartQty = cart?.qty
+	// 	}
+	// } catch (e) {
+	// }
 
-	return { loading, status, paymentMode, order, err, cart, pg }
+	return { loading, status, paymentMode, order, err, cartId, pg }
 }

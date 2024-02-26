@@ -1,4 +1,4 @@
-import { services } from '@misiki/litekart-utils'
+import { CategoryService } from '$lib/services'
 import { writable } from 'svelte/store'
 
 export const megamenuStore = writable([])
@@ -18,16 +18,19 @@ export const getMegamenuFromStore = async ({ origin, storeId, forceUpdate = fals
 
 	if ((!loadingForMegamenu && !existingMegamenu) || !!forceUpdate) {
 		loadingForMegamenu = true
+		try {
+			const megamenuDataFromServer = await CategoryService.fetchMegamenuData({
+				megamenu: true,
+				storeId,
+				origin
+			})
 
-		const megamenuDataFromServer = await services.CategoryService.fetchMegamenuData({
-			megamenu: true,
-			storeId,
-			origin
-		})
-
-		megamenuStore.update((u) => megamenuDataFromServer)
-
-		loadingForMegamenu = false
+			megamenuStore.update((u) => megamenuDataFromServer)
+		} catch (e) {
+			console.log('store/megamneu error', e)
+		} finally {
+			loadingForMegamenu = false
+		}
 	}
 
 	return existingMegamenu
@@ -44,16 +47,18 @@ export const getAllMegamenuFromStore = async ({ origin, storeId, forceUpdate = f
 
 	if ((!loadingForAllMegamenu && !existingAllMegamenu) || !!forceUpdate) {
 		loadingForAllMegamenu = true
-
-		const megamenuAllDataFromServer = await services.CategoryService.fetchMegamenuData({
-			megamenu: false,
-			storeId,
-			origin
-		})
-
-		megamenuAllStore.update((u) => megamenuAllDataFromServer)
-
-		loadingForAllMegamenu = false
+		try {
+			const megamenuAllDataFromServer = await CategoryService.fetchMegamenuData({
+				megamenu: false,
+				storeId,
+				origin
+			})
+			megamenuAllStore.update((u) => megamenuAllDataFromServer)
+		} catch (e) {
+			console.log('store/megamneu error', e)
+		} finally {
+			loadingForAllMegamenu = false
+		}
 	}
 
 	// console.log('existingAllMegamenu', existingAllMegamenu);

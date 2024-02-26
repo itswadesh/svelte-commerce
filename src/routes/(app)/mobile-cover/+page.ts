@@ -1,4 +1,4 @@
-import { services } from '@misiki/litekart-utils'
+import { CategoryService } from '$lib/services'
 
 export const prerender = false
 const isServer = import.meta.env.SSR
@@ -18,20 +18,42 @@ export async function load({ url, params, parent, setHeaders }) {
 		fl[key] = value
 	})
 
-	return {
-		category: services.CategoryService.fetchCategory({
+	let category = {}
+	let megamenu = {}
+
+	const promises = [
+		CategoryService.fetchCategory({
 			id: categorySlug,
 			sid,
 			storeId,
 			origin
 		}),
-		// streamed: {
-		megamenu: services.CategoryService.fetchMegamenuData({
+		CategoryService.fetchMegamenuData({
 			sid,
 			storeId,
 			origin
-		}),
-		// },
+		})
+	]
+
+	await Promise.allSettled(promises).then((results) => {
+		const res1 = results[0]
+		const res2 = results[1]
+		if (res1.status === 'fulfilled') {
+			category = res1.value
+		} else {
+			console.error('Error fetching deals:', res1.reason)
+			// redirect(307, '/auth/login')
+		}
+		if (res2.status === 'fulfilled') {
+			megamenu = res2.value
+		} else {
+			console.error('Error fetching collections:', res2.reason)
+		}
+	})
+
+	return {
+		category,
+		megamenu,
 		query: query.toString(),
 		searchData,
 		sort,

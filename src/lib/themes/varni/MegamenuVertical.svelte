@@ -26,7 +26,7 @@ import { fly } from 'svelte/transition'
 import { navigateToProperPath, toast } from '$lib/utils'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { services } from '@misiki/litekart-utils'
+import { CategoryService } from '$lib/services'
 
 export let height = 40
 
@@ -48,8 +48,8 @@ async function getMegaMenu() {
 		try {
 			// megamenu = await getMegamenuFromStore({
 			// 	sid: null,
-			// 	storeId: $page?.data?.storeId,
-			// 	isCors: $page?.data?.store?.isCors,
+			// 	storeId: $page.data.storeId,
+			// 	isCors: $page.data.store?.isCors,
 			// 	origin: $page.data.origin
 			// })
 
@@ -58,8 +58,8 @@ async function getMegaMenu() {
 			if (!!localMegamenu && localMegamenu !== 'undefined') {
 				megamenu = JSON.parse(localMegamenu)
 			} else {
-				megamenu = await services.CategoryService.fetchMegamenuData({
-					storeId: $page?.data?.storeId,
+				megamenu = await CategoryService.fetchMegamenuData({
+					storeId: $page.data.storeId,
 					origin: $page.data.origin
 				})
 			}

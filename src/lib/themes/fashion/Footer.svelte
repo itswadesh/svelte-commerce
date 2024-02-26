@@ -5,7 +5,7 @@
 import { browser } from '$app/environment'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { services } from '@misiki/litekart-utils'
+import { PageService } from '$lib/services'
 import { Textbox } from '$lib/ui'
 import { toast } from '$lib/utils'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
@@ -46,10 +46,14 @@ async function getStoreData() {
 }
 
 async function getPages() {
-	pages = await services.PageService.fetchPages({
-		origin: $page.data.origin,
-		storeId: $page?.data?.storeId
-	})
+	try {
+		pages = await PageService.fetchPages({
+			origin: $page.data.origin,
+			storeId: $page.data.storeId
+		})
+	} catch (e) {
+		console.error(e)
+	}
 }
 
 function subscribedForNewsletter() {
@@ -400,7 +404,7 @@ function subscribedForNewsletter() {
 
 					<li class="flex max-w-max items-center">
 						<a
-							href="{$page.data.store?.adminUrl}?role=vendor&store={$page?.data?.storeId}"
+							href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.storeId}"
 							target="_blank"
 							aria-label="Click to visit this page"
 							class="hover:text-zinc-800 whitespace-pre-wrap">

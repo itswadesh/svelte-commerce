@@ -9,15 +9,13 @@ import { slide } from 'svelte/transition'
 import { toast } from '$lib/utils'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
-import { services } from '@misiki/litekart-utils'
+import { OrdersService } from '$lib/services'
 const seoProps = {
 	title: 'Select Payment Option',
 	metaDescription: 'Choose your payment method'
 }
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
-// console.log('$page', $page)
 
 let addressId = $page.url.searchParams.get('address') || ''
 let cashfreeReady = false
@@ -56,17 +54,9 @@ onMount(async () => {
 
 	if (pg) {
 		const pm = data?.paymentMethods.filter((pm) => pm.value === pg)
-		// console.log('pm', pm)
 		if (pm[0]) paymentMethodChanged(pm[0])
-		// } else if (
-		// 	data.paymentMethods?.length === 1 &&
-		// 	data.paymentMethods[0].type === 'pg' &&
-		// 	!orderNo
-		// ) {
-		// 	submit(data.paymentMethods[0])
 	} else {
 		const pm = data?.paymentMethods && data?.paymentMethods[0]
-		// console.log('pm', pm)
 		paymentMethodChanged(pm)
 	}
 })
@@ -82,8 +72,6 @@ async function submit(pm) {
 		return
 	}
 
-	// console.log('started')
-
 	fireGTagEvent('add_payment_info', data?.cart)
 
 	if (!pm || pm === undefined) {
@@ -94,8 +82,6 @@ async function submit(pm) {
 	}
 
 	const paymentMethod = pm.value || pm.id
-
-	// console.log('paymentMethod', paymentMethod)
 
 	if (
 		paymentMethod === 'COD' ||
@@ -112,16 +98,14 @@ async function submit(pm) {
 				loading = true
 				loadingForPaymentProcessingSteps = true
 
-				const res = await services.OrdersService.codCheckout({
+				const res = await OrdersService.codCheckout({
 					address: addressId,
 					cartId: $page.data.cartId,
 					paymentMethod: 'COD',
 					prescription: data.prescription?._id,
 					origin: $page.data.origin,
-					storeId: $page?.data?.storeId
+					storeId: $page.data.storeId
 				})
-
-				// console.log('res of cod', res)
 
 				goto(
 					`/payment/process?order_no=${res?.order_no || res?.orderNo || ''}&status=PAYMENT_SUCCESS&provider=COD`
@@ -139,17 +123,15 @@ async function submit(pm) {
 					loading = true
 					loadingForPaymentProcessingSteps = true
 
-					const res = await services.OrdersService.codCheckout({
+					const res = await OrdersService.codCheckout({
 						address: addressId,
 						cartId: data?.cartId,
 						comment,
 						paymentMethod: 'COD',
 						prescription: data.prescription?._id,
 						origin: $page.data.origin,
-						storeId: $page?.data?.storeId
+						storeId: $page.data.storeId
 					})
-
-					// console.log('res of cod', res)
 
 					comment = ''
 
@@ -177,11 +159,11 @@ async function submit(pm) {
 				loading = true
 				loadingForPaymentProcessingSteps = true
 
-				const res = await services.OrdersService.cashfreeCheckout({
+				const res = await OrdersService.cashfreeCheckout({
 					address: addressId,
 					orderNo,
 					origin: $page.data.origin,
-					storeId: $page?.data?.storeId,
+					storeId: $page.data.storeId,
 					cartId: $page.data.cartId
 				})
 
@@ -221,15 +203,13 @@ async function submit(pm) {
 				data.err = null
 				loading = true
 				loadingForPaymentProcessingSteps = true
-				const res = await services.OrdersService.phonepeCheckout({
+				const res = await OrdersService.phonepeCheckout({
 					address: addressId,
 					origin: $page.data.origin,
 					cartId: $page.data.cartId,
-					storeId: $page?.data?.storeId,
+					storeId: $page.data.storeId,
 					orderNo
 				})
-
-				// console.log('res of Phonepe', res)
 
 				if (res?.redirectUrl && res?.redirectUrl !== null) {
 					goto(`${res?.redirectUrl}`)
@@ -248,17 +228,16 @@ async function submit(pm) {
 				loading = true
 				loadingForPaymentProcessingSteps = true
 
-				const res = await services.OrdersService.paypalCheckout({
+				const res = await OrdersService.paypalCheckout({
 					address: addressId,
 					orderNo,
 					cartId: $page.data.cartId,
 					origin: $page.data.origin,
-					storeId: $page?.data?.storeId
+					storeId: $page.data.storeId
 				})
 
 				orderNo = res?.order_no || res?.orderNo || ''
 				gotoOrder(orderNo)
-				// console.log('res of Paypal', res)
 
 				if (res?.redirect_url && res?.redirect_url !== null) {
 					window.location = res?.redirect_url
@@ -277,12 +256,12 @@ async function submit(pm) {
 				loading = true
 				loadingForPaymentProcessingSteps = true
 
-				const rp = await services.OrdersService.razorpayCheckout({
+				const rp = await OrdersService.razorpayCheckout({
 					address: addressId,
 					orderNo,
 					cartId: $page.data.cartId,
 					origin: $page.data.origin,
-					storeId: $page?.data?.storeId
+					storeId: $page.data.storeId
 				})
 
 				orderNo = rp?.order_no || rp?.orderNo || ''
@@ -295,11 +274,11 @@ async function submit(pm) {
 					order_id: rp.id,
 					async handler(response) {
 						try {
-							const capture = await services.OrdersService.razorpayCapture({
+							const capture = await OrdersService.razorpayCapture({
 								rpOrderId: response.razorpay_order_id,
 								rpPaymentId: response.razorpay_payment_id,
 								origin: $page.data.origin,
-								storeId: $page?.data?.storeId
+								storeId: $page.data.storeId
 							})
 
 							toast('Payment success', 'success')

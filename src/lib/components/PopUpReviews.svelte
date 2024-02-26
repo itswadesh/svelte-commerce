@@ -3,7 +3,7 @@ import { fly } from 'svelte/transition'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { RatingStarDisplay } from '$lib/ui'
-import { services } from '@misiki/litekart-utils'
+import { ReviewService } from '$lib/services'
 import LazyImg from './Image/LazyImg.svelte'
 
 let currentIndex = 0
@@ -52,14 +52,14 @@ let reviews = [
 let selectedReview = {}
 
 onMount(() => {
-	const res = services.ReviewService.fetchReviews({
-		currentPage: 0,
-		origin,
-		storeId: $page?.data?.storeId,
-		sort: 'updatedAt'
-	})
-
-	// console.log('zzzzzzzzzzzzzzzzzz', res)
+	try {
+		const res = ReviewService.fetchReviews({
+			currentPage: 0,
+			origin,
+			storeId: $page.data.storeId,
+			sort: 'updatedAt'
+		})
+	} catch (err) {}
 })
 
 function displayReview() {
@@ -73,8 +73,6 @@ function displayReview() {
 	if (currentIndex >= reviews.length) {
 		currentIndex = 0 // Reset index to loop through reviews
 	}
-
-	// console.log('currentIndex', currentIndex)
 }
 
 // Initial display
@@ -90,7 +88,6 @@ let iterationCount = 0
 function stopInterval() {
 	showPopup = false
 	clearInterval(iterationInterval)
-	// console.log('Interval stopped.')
 }
 
 setTimeout(stopInterval, maxIterations * 8000) // 8000 ms (5 seconds to show + 3 seconds to hide)

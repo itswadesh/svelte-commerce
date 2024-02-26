@@ -4,7 +4,7 @@ import { toast } from '$lib/utils'
 import { Error } from '$lib/components'
 import { TextboxFloating, TextareaFloating, PrimaryButton } from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
-import { services } from '@misiki/litekart-utils'
+import { ContactService } from 'lib/services'
 
 let seoProps = {
 	title: `Contact Us`,
@@ -23,13 +23,13 @@ async function submitContactInformation() {
 		err = null
 		loading = true
 
-		await services.ContactService.submitContactUsForm({
+		await ContactService.submitContactUsForm({
 			fullName,
 			email,
 			phone,
 			subject: `Someone contact us from ${$page.data.store?.websiteName}`,
 			message,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 

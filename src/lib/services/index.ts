@@ -1,5 +1,45 @@
 // export * from './bigcommerce'
-export * from './litekart'
+import { services } from '@misiki/litekart-utils'
+export const {
+	AddressService,
+	AutocompleteService,
+	BannersService,
+	BlogService,
+	BrandService,
+	CartService,
+	CategoryService,
+	ChatService,
+	CollectionService,
+	ContactService,
+	CountryService,
+	CouponService,
+	DealsService,
+	DemoRequestService,
+	DiscountService,
+	FaqService,
+	FeedbackService,
+	GalleryService,
+	HokodoService,
+	HomeService,
+	InitService,
+	InvoiceService,
+	MenuService,
+	OrdersService,
+	PageService,
+	PaymentMethodService,
+	PopularityService,
+	PopularSearchService,
+	ProductService,
+	ReelService,
+	ReturnService,
+	ReviewService,
+	StoreService,
+	UserService,
+	VendorService,
+	WishlistService,
+	ZipService
+} = services
+
 // export * from './medusa'
 // export * from './shopify'
 // export * from './woocommerce'

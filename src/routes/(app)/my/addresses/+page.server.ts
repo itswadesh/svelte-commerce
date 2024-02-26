@@ -1,27 +1,40 @@
-import { error } from '@sveltejs/kit'
-import { services } from '@misiki/litekart-utils'
+import { error, redirect } from '@sveltejs/kit'
+import { AddressService, CartService, CountryService } from '$lib/services'
 import { z } from 'zod'
 
-export async function load({ cookies, locals }) {
-	const countries = await services.CountryService.fetchCountries({
-		origin: locals.origin,
-		sid: cookies.get('connect.sid'),
-		storeId: locals.storeId
-	})
+export async function load({ locals, url }) {
+	const { me, origin, sid, store, storeId } = locals
 
-	const { myAddresses, count } = await services.AddressService.fetchAddresses({
-		origin: locals.origin,
-		sid: cookies.get('connect.sid'),
-		storeId: locals.storeId
-	})
-
-	myAddresses.count = count
-
-	if (myAddresses) {
-		return { addresses: myAddresses, countries }
+	if (!me || !sid) {
+		redirect(307, `/auth/login?ref=${url.pathname}${url.search}`);
 	}
 
-	error(404, 'Addresses not found')
+	try {
+		const countries = await CountryService.fetchCountries({
+			origin,
+			sid,
+			storeId
+		})
+
+		const { myAddresses, count } = await AddressService.fetchAddresses({
+			origin,
+			sid,
+			storeId
+		})
+
+		myAddresses.count = count
+
+		if (myAddresses) {
+			return { addresses: myAddresses, countries }
+		}
+	} catch (e) {
+		if (e.status === 401 || e.status === 403) {
+			redirect(307, '/auth/login');
+		}
+
+		error(e.status, e.message);
+	} finally {
+	}
 }
 
 const zodAddressSchema = z.object({
@@ -145,8 +158,6 @@ const saveAddress = async ({ request, cookies, locals }) => {
 
 	// Case 1: Logged in
 	if (locals?.me) {
-		// console.log('showShippingAddressErrorMessage at save address', firstName)
-
 		if (showShippingAddressErrorMessage === true || showShippingAddressErrorMessage === 'true') {
 			error(404, 'Please enter valid phone number')
 		} else if (selectedShippingAddressCountry?.code === 'IN' && zip.length !== 6) {
@@ -183,22 +194,25 @@ const saveAddress = async ({ request, cookies, locals }) => {
 					errors
 				})
 			}
-
-			res = await services.AddressService.saveAddress({
-				address,
-				city,
-				country,
-				email,
-				firstName,
-				id,
-				lastName,
-				phone,
-				state,
-				zip,
-				storeId: locals.storeId,
-				sid,
-				origin: locals?.origin
-			})
+			try {
+				res = await AddressService.saveAddress({
+					address,
+					city,
+					country,
+					email,
+					firstName,
+					id,
+					lastName,
+					phone,
+					state,
+					zip,
+					storeId: locals.storeId,
+					sid,
+					origin: locals?.origin
+				})
+			} catch (e) {
+				error(404, { data: res })
+			}
 		}
 	}
 
@@ -251,8 +265,6 @@ const saveAddress = async ({ request, cookies, locals }) => {
 				zip: isSameAsBillingAddress ? zip : billingAddressZip
 			}
 
-			// console.log('new_billing_address', new_billing_address);
-
 			if (new_billing_address && new_billing_address?.firstName && new_billing_address?.zip) {
 				if (showBillingAddressErrorMessage === true || showBillingAddressErrorMessage === 'true') {
 					error(404, 'Please enter valid phone number')
@@ -292,18 +304,19 @@ const saveAddress = async ({ request, cookies, locals }) => {
 					}
 				}
 			}
-
-			res = await services.CartService.updateCart3({
-				cartId,
-				shipping_address,
-				billing_address: new_billing_address,
-				selfTakeout: false,
-				storeId: locals.storeId,
-				sid,
-				origin: locals?.origin
-			})
-
-			// console.log('res of save address = ', res)
+			try {
+				res = await CartService.updateCart3({
+					cartId,
+					shipping_address,
+					billing_address: new_billing_address,
+					selfTakeout: false,
+					storeId: locals.storeId,
+					sid,
+					origin: locals?.origin
+				})
+			} catch (e) {
+				error(404, { data: res })
+			}
 		}
 	}
 
@@ -342,8 +355,6 @@ const editAddress = async ({ request, cookies, locals }) => {
 		zip: zip
 	}
 
-	// console.log('showShippingAddressErrorMessage at edit address', showShippingAddressErrorMessage);
-
 	if (showShippingAddressErrorMessage === true || showShippingAddressErrorMessage === 'true') {
 		error(404, 'Please enter valid phone number')
 	} else if (selectedShippingAddressCountry?.code === 'IN' && zip.length !== 6) {
@@ -379,26 +390,28 @@ const editAddress = async ({ request, cookies, locals }) => {
 				errors
 			})
 		}
+		try {
+			const res = await AddressService.saveAddress({
+				address,
+				city,
+				country,
+				email,
+				firstName,
+				id,
+				lastName,
+				phone,
+				state,
+				zip,
+				storeId: locals.storeId,
+				sid,
+				origin: locals?.origin
+			})
 
-		const res = await services.AddressService.saveAddress({
-			address,
-			city,
-			country,
-			email,
-			firstName,
-			id,
-			lastName,
-			phone,
-			state,
-			zip,
-			storeId: locals.storeId,
-			sid,
-			origin: locals?.origin
-		})
-
-		// console.log('res of save address = ', res)
-
-		return res
+			return res
+		} catch (e) {
+			console.log('e', e)
+			return null
+		}
 	}
 }
 
@@ -407,20 +420,19 @@ const deleteAddress = async ({ request, cookies, locals }) => {
 	const data = await request.formData()
 	const id = data.get('id')
 	const sid = cookies.get('connect.sid')
+	try {
+		const res = await AddressService.deleteAddress({
+			id,
+			storeId: locals.storeId,
+			sid,
+			origin: locals?.origin
+		})
 
-	const res = await services.AddressService.deleteAddress({
-		id,
-		storeId: locals.storeId,
-		origin,
-		sid
-	})
-
-	// console.log('res of save address = ', res)
-
-	return res
-	// } else {
-	// 	return
-	// }
+		return res
+	} catch (e) {
+		console.log('e', e)
+		return null
+	}
 }
 
 export const actions = { saveAddress, editAddress, deleteAddress }

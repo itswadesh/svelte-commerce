@@ -1,6 +1,6 @@
 <script lang="ts">
+import { AddressService } from '$lib/services'
 import { applyAction, enhance } from '$app/forms'
-import { del } from '$lib/utils/api'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import { Pagination } from '$lib/components'
@@ -10,9 +10,8 @@ import noEmptyAddress from '$lib/assets/no/empty-address.svg'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SaveAddress from './_SaveAddress.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-import { services } from '@misiki/litekart-utils'
+
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 const seoProps = {
 	title: 'Dashboard - Addresses ',
@@ -48,9 +47,9 @@ async function sortNow(sort) {
 async function saveAddr(e) {
 	const { _id: id, active } = e
 	try {
-		await services.AddressService.saveAddress({
+		await AddressService.saveAddress({
 			id,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin,
 			sid: $page.data.sid
 		})
@@ -61,30 +60,30 @@ async function saveAddr(e) {
 	}
 }
 
-async function remove(id, index) {
-	data.err = null
+// async function remove(id, index) {
+// 	data.err = null
 
-	if (confirm('Are you sure to delete?')) {
-		try {
-			loadingOnDelete[index] = true
+// 	if (confirm('Are you sure to delete?')) {
+// 		try {
+// 			loadingOnDelete[index] = true
 
-			toast('Deleting...Please wait', 'warning')
+// 			toast('Deleting...Please wait', 'warning')
 
-			await del(`addresses/${id}?store=${$page?.data?.storeId}`, $page.data.origin)
+// 			await del(`addresses/${id}?store=${$page.data.storeId}`, $page.data.origin)
 
-			toast('Item deleted successfully', 'success')
+// 			toast('Item deleted successfully', 'success')
 
-			invalidateAll()
-		} catch (e) {
-			data.err = e?.message
-			toast(e, 'error')
-		} finally {
-			loadingOnDelete[index] = false
-		}
-	} else {
-		return
-	}
-}
+// 			invalidateAll()
+// 		} catch (e) {
+// 			data.err = e?.message
+// 			toast(e, 'error')
+// 		} finally {
+// 			loadingOnDelete[index] = false
+// 		}
+// 	} else {
+// 		return
+// 	}
+// }
 </script>
 
 <SEO {...seoProps} />
@@ -92,7 +91,7 @@ async function remove(id, index) {
 <section>
 	<header class="mb-5 flex flex-wrap items-start justify-between gap-4">
 		<h1>
-			Addresses {#if data.addresses.count}({data.addresses.count}){/if}
+			Addresses {#if data?.addresses?.count}({data?.addresses?.count}){/if}
 		</h1>
 
 		<!--  Back button -->
@@ -201,8 +200,6 @@ async function remove(id, index) {
 								method="POST"
 								use:enhance="{() => {
 									return async ({ result }) => {
-										// console.log('result', result)
-
 										toast('Address deleted', 'success')
 										await invalidateAll()
 										await applyAction(result)
@@ -235,7 +232,7 @@ async function remove(id, index) {
 		</Modal>
 
 		<Pagination
-			count="{Math.ceil((data.count || 1) / data.pageSize)}"
+			count="{Math.ceil((data?.addresses?.count || 1) / data.pageSize)}"
 			current="{data.currentPage || 1}" />
 	{:else}
 		<div class="flex h-[70vh] flex-col items-center justify-center text-center">

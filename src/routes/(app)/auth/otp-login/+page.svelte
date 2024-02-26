@@ -2,14 +2,13 @@
 import { browser } from '$app/environment'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
-import { post } from '$lib/utils/api'
 import { toast } from '$lib/utils'
 import Cookie from 'cookie-universal'
 import { LazyImg } from '$lib/components'
 import SendOtp from '../_SendOtp.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import VerifyOtp from '../_VerifyOtp.svelte'
-import { services } from '@misiki/litekart-utils'
+import { UserService } from '$lib/services'
 
 const cookies = Cookie()
 
@@ -42,7 +41,7 @@ async function handleSendOTP({ detail }) {
 	}
 	try {
 		loading = true
-		const res = await services.UerService.getOtpService({
+		const res = await UserService.getOtpService({
 			phone,
 			storeId: data.storeId,
 			origin: data.origin
@@ -62,7 +61,7 @@ async function handleVerifyOtp({ detail }) {
 		loading = true
 		const otp = detail
 
-		const res = await services.UserService.verifyOtpService({
+		const res = await UserService.verifyOtpService({
 			phone,
 			otp,
 			storeId: data.storeId,
@@ -121,7 +120,7 @@ function getLoginUrl(baseUrl) {
 	<a href="/" aria-label="Go to home" class="mx-auto mb-8 block max-w-max">
 		{#if $page.data.store?.logo}
 			<img
-				src="{$page?.data?.store?.logo}"
+				src="{$page.data.store?.logo}"
 				alt="logo"
 				class="max-h-10 sm:max-h-16 w-40 object-contain object-center" />
 		{:else}

@@ -14,7 +14,7 @@ import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { PrimaryButton } from '$lib/ui'
-import { services } from '@misiki/litekart-utils'
+import { ProductService } from '$lib/services'
 import { sorts } from '$lib/config'
 import { storeStore } from '$lib/store/store'
 import dayjs from 'dayjs'
@@ -23,47 +23,46 @@ import noDataAvailable from '$lib/assets/no/no-data-available.png'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 let today = dayjs(new Date()).toISOString()
 
 let seoProps = {
-	brand: $page.data?.store?.title,
+	brand: $page.data.store?.title,
 	// breadcrumbs: data.category?.children,
-	caption: $page.data?.store?.title,
+	caption: $page.data.store?.title,
 	category: data.searchData,
-	contentUrl: $page.data?.store?.logo,
+	contentUrl: $page.data.store?.logo,
 	createdAt: today,
-	email: `${$page?.data?.store?.email}`,
+	email: `${$page.data.store?.email}`,
 	id: $page?.url?.href,
-	image: $page.data?.store?.logo,
-	logo: $page.data?.store?.logo,
+	image: $page.data.store?.logo,
+	logo: $page.data.store?.logo,
 	ogSquareImage: { url: '', width: 56, height: 56 },
 	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00'],
 	timeToRead: 0,
 	updatedAt: today,
-	metaDescription: $page.data?.store?.description,
+	metaDescription: $page.data.store?.description,
 	datePublished: today,
-	description: $page.data?.store?.description,
+	description: $page.data.store?.description,
 	dnsPrefetch: `//cdn.jsdelivr.net`,
 	featuredImage: {
-		url: $page.data?.store?.logo,
+		url: $page.data.store?.logo,
 		width: 675,
 		height: 380,
-		caption: $page.data?.store?.title
+		caption: $page.data.store?.title
 	},
-	keywords: $page.data?.store?.keywords,
+	keywords: $page.data.store?.keywords,
 	lastUpdated: today,
-	msapplicationTileImage: $page.data?.store?.logo,
-	ogImage: { url: $page.data?.store?.logo, width: 128, height: 56 },
-	ogImageSecureUrl: `${$page?.data?.store?.logo}`,
+	msapplicationTileImage: $page.data.store?.logo,
+	ogImage: { url: $page.data.store?.logo, width: 128, height: 56 },
+	ogImageSecureUrl: `${$page.data.store?.logo}`,
 	ogImageType: 'image/jpeg',
 	ogSiteName: `${$page.data.origin}/sitemap/sitemap.xml`,
 	productBrand: data.searchData,
 	productName: data.searchData,
-	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
+	productPriceCurrency: `${$page.data.store?.currencyCode}`,
 	slug: `/`,
 	title: data.searchData || 'Buy online',
-	twitterImage: { url: $page.data?.store?.logo }
+	twitterImage: { url: $page.data.store?.logo }
 }
 
 let currentPage = 1
@@ -94,10 +93,10 @@ $: if (data.products?.count === 0) {
 
 async function saveSearchData(searchData) {
 	try {
-		await services.PopularSearchService.savePopularSearch({
+		await PopularSearchService.savePopularSearch({
 			id: 'new',
 			text: searchData,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 	} catch (e) {
@@ -150,15 +149,13 @@ async function loadNextPage() {
 		try {
 			data.isLoading = true
 
-			const res = await services.ProductService.fetchNextPageProducts({
+			const res = await ProductService.fetchNextPageProducts({
 				categorySlug: data.products?.category?.slug,
 				origin: $page?.data?.origin,
-				storeId: $page?.data?.storeId,
+				storeId: $page.data.storeId,
 				nextPage,
 				searchParams
 			})
-
-			// console.log('res', res)
 
 			const nextPageData = res?.nextPageData
 			currentPage = currentPage + 1
@@ -297,7 +294,7 @@ function handleFilterTags() {
 
 <svelte:window bind:scrollY="{y}" bind:innerWidth on:scroll="{handleOnScroll}" />
 
-<CatelogNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page?.data?.store}">
+<CatelogNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page.data.store}">
 	<div class="flex max-w-max flex-col items-start gap-1">
 		{#if data.searchData}
 			<h5 class="w-40 shrink-0 truncate capitalize leading-4 text-left">{data.searchData}</h5>
@@ -341,7 +338,7 @@ function handleFilterTags() {
 	<div class="mb-10 flex flex-col items-start sm:mb-20 lg:flex-row lg:gap-10 lg:p-10">
 		{#if data.products.facets}
 			<DesktopFilter
-				class="sticky hidden lg:block {$page.data?.store?.hellobar?.active?.val
+				class="sticky hidden lg:block {$page.data.store?.hellobar?.active?.val
 					? 'top-32'
 					: 'top-24'}"
 				facets="{data.products.facets}"

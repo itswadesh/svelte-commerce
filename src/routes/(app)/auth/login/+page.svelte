@@ -14,7 +14,7 @@ import { toast } from '$lib/utils'
 import Cookie from 'cookie-universal'
 import SEO from '$lib/components/SEO/index.svelte'
 import VerifyOtp from '../_VerifyOtp.svelte'
-import { services } from '@misiki/litekart-utils'
+import { UserService } from '$lib/services'
 
 const cookies = Cookie()
 
@@ -51,24 +51,28 @@ onMount(() => {
 			client_id: GOOGLE_CLIENT_ID
 		},
 		async (res) => {
-			const onetap = await services.UserService.googleOneTapLoginService({
-				data: res,
-				origin: $page.data.origin
-			})
-			const me = {
-				id: onetap.id,
-				email: onetap.email,
-				phone: onetap.phone,
-				firstName: onetap.firstName,
-				lastName: onetap.lastName,
-				avatar: onetap.avatar,
-				role: onetap.role,
-				verified: onetap.verified,
-				active: onetap.active
+			try {
+				const onetap = await UserService.googleOneTapLoginService({
+					data: res,
+					origin: $page.data.origin
+				})
+				const me = {
+					id: onetap.id,
+					email: onetap.email,
+					phone: onetap.phone,
+					firstName: onetap.firstName,
+					lastName: onetap.lastName,
+					avatar: onetap.avatar,
+					role: onetap.role,
+					verified: onetap.verified,
+					active: onetap.active
+				}
+				await cookies.set('me', me, { path: '/', maxAge: 31536000 })
+				let r = ref || '/'
+				if (browser) goto(r)
+			} catch (e) {
+				toast(e?.body?.message || e, 'error')
 			}
-			await cookies.set('me', me, { path: '/', maxAge: 31536000 })
-			let r = ref || '/'
-			if (browser) goto(r)
 		}
 	)
 
@@ -117,7 +121,7 @@ async function handleSendOTP({ detail }) {
 	try {
 		loading = true
 
-		const res = await services.UserService.getOtpService({
+		const res = await UserService.getOtpService({
 			phone,
 			storeId: data.storeId,
 			origin: data.origin
@@ -144,7 +148,7 @@ function changeNumber() {
 	<a href="/" aria-label="Go to home" class="mx-auto mb-8 block max-w-max">
 		{#if $page.data.store?.logo}
 			<img
-				src="{$page?.data?.store?.logo}"
+				src="{$page.data.store?.logo}"
 				alt="logo"
 				class="max-h-10 sm:max-h-16 w-40 object-contain object-center" />
 		{:else}
@@ -168,9 +172,8 @@ function changeNumber() {
 			action="/auth/login?/login"
 			method="POST"
 			use:enhance="{() => {
+				err = null
 				return async ({ result }) => {
-					// console.log('result', result)
-
 					resendAfter = 0
 
 					if (result?.status === 200 && result?.data) {
@@ -187,7 +190,6 @@ function changeNumber() {
 								active: result?.data?.active
 							}
 
-							// console.log('me =', me)
 							await cookies.set('me', me, { path: '/', maxAge: 31536000 })
 							const r = ref || '/'
 							if (browser) goto(r)

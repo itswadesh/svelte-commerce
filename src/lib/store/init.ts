@@ -1,4 +1,4 @@
-import { services } from '@misiki/litekart-utils'
+import { InitService } from '$lib/services'
 import { writable } from 'svelte/store'
 
 export const initStore = writable({})
@@ -18,15 +18,16 @@ export const fetchInitFromStore = async (host) => {
 
 	let initDataFromServer
 
-	// console.log('init from svelte store', !existingInit?.storeOne, isServer, !isLoading)
-	// console.log('existingInit', existingInit)
-	// console.log('!existingInit?.storeOne?._id && isServer && !isLoading', !existingInit?.storeOne?._id && isServer && !isLoading);
-
 	if (!existingInit?.storeOne?._id && isServer && !isLoading) {
 		isLoading = true
-		initDataFromServer = await services.InitService.fetchInit({ host })
-		initStore.update((u) => initDataFromServer)
-		isLoading = false
+		try {
+			initDataFromServer = await InitService.fetchInit({ host })
+			initStore.update((u) => initDataFromServer)
+		} catch (e) {
+			console.log('error', e)
+		} finally {
+			isLoading = false
+		}
 	}
 
 	// console.log('existingInit', existingInit);

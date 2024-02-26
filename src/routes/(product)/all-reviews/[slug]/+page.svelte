@@ -4,7 +4,7 @@ import { date, toast } from '$lib/utils'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { ReviewGallery, ProductNav } from '$lib/components'
-import { services } from '@misiki/litekart-utils'
+import { ReviewService } from '$lib/services'
 import dotsLoading from '$lib/assets/dots-loading.gif'
 import SEO from '$lib/components/SEO/index.svelte'
 
@@ -56,12 +56,12 @@ async function loadNextPage() {
 		try {
 			loading = true
 
-			const res = await services.ReviewService.fetchProductReviews({
+			const res = await ReviewService.fetchProductReviews({
 				page: nextPage,
 				brandIc: brandId,
 				slug: data.slug,
 				origin: $page?.data?.origin,
-				storeId: $page?.data?.storeId
+				storeId: $page.data.storeId
 			})
 
 			const isProduct = type === 'product_review' ? true : false
@@ -114,7 +114,7 @@ const handleSelectedProductGallery = (review, rx) => {
 	me="{$page?.data?.me}"
 	productName="{data.product?.name}"
 	url="{$page?.url?.href}"
-	store="{$page?.data?.store}">
+	store="{$page.data.store}">
 	<div class="flex max-w-max flex-col items-start gap-1">
 		<h2 class="max-w-[10rem] truncate font-semibold capitalize leading-4">
 			{$page?.url?.searchParams.get('type') || ''} Reviews

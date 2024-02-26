@@ -20,7 +20,7 @@ import { invalidateAll } from '$app/navigation'
 import { LazyImg, DummyProductCard } from '$lib/components'
 import { page } from '$app/stores'
 import { PrimaryButton, BlackButton, WhiteButton } from '$lib/ui'
-import { services } from '@misiki/litekart-utils'
+import { WishlistService } from '$lib/services'
 import { updateCartStore } from '$lib/store/cart'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
 import noEmptyWishlist from '$lib/assets/no/empty-wishlist.svg'
@@ -34,10 +34,10 @@ let bounceItemFromTop = false
 async function removeFromWishlist(id, wx) {
 	try {
 		loadingProduct[wx] = true
-		await services.WishlistService.toggleWishlistService({
+		await WishlistService.toggleWishlistService({
 			pid: id,
 			vid: id,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 
@@ -125,11 +125,11 @@ async function removeFromWishlist(id, wx) {
 									</div>
 
 									<div class="flex flex-col gap-2 items-center justify-center text-center">
-										{#if $page.data?.store?.isFnb && w.product?.vendor?.businessName}
+										{#if $page.data.store?.isFnb && w.product?.vendor?.businessName}
 											<h5>
 												{w.product?.vendor?.businessName}
 											</h5>
-										{:else if !$page.data?.store?.isFnb && w.product && w.product?.brand}
+										{:else if !$page.data.store?.isFnb && w.product && w.product?.brand}
 											<h5>
 												{w.product?.brand.name}
 											</h5>
@@ -140,7 +140,7 @@ async function removeFromWishlist(id, wx) {
 												{w.product?.name}
 											</p>
 
-											{#if $page?.data?.store?.isFnb && w.product?.foodType}
+											{#if $page.data.store?.isFnb && w.product?.foodType}
 												<div>
 													{#if w.product?.foodType === 'veg'}
 														<img src="/product/veg.png" alt="veg" class="h-5 w-5" />
@@ -154,12 +154,12 @@ async function removeFromWishlist(id, wx) {
 										<div
 											class="flex flex-wrap items-baseline justify-center gap-1.5 text-xs leading-3">
 											<span class="text-base font-bold whitespace-nowrap leading-3">
-												{currency(w.product?.price, $page.data?.store?.currencySymbol)}
+												{currency(w.product?.price, $page.data.store?.currencySymbol)}
 											</span>
 
 											{#if w.product?.mrp > w.product?.price}
 												<span class="whitespace-nowrap text-zinc-500 line-through">
-													{currency(w.product?.mrp, $page.data?.store?.currencySymbol)}
+													{currency(w.product?.mrp, $page.data.store?.currencySymbol)}
 												</span>
 
 												{#if Math.floor(((w.product?.mrp - w.product?.price) / w.product?.mrp) * 100) > 0}
@@ -180,8 +180,6 @@ async function removeFromWishlist(id, wx) {
 								method="POST"
 								use:enhance="{() => {
 									return async ({ result }) => {
-										// console.log('result', result)
-
 										updateCartStore({ data: result.data })
 										fireGTagEvent('add_to_cart', result.data)
 										bounceItemFromTop = true

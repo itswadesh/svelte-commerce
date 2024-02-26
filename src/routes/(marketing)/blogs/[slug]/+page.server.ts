@@ -1,13 +1,13 @@
 import { error } from '@sveltejs/kit'
-import { services } from '@misiki/litekart-utils'
+import { BlogService } from '$lib/services'
 
 export async function load({ params, locals }) {
 	const { slug } = params
 
 	try {
 		const [blog, latestBlogs] = await Promise.all([
-			services.BlogService.fetchBlog({ slug, storeId: locals.storeId }),
-			services.BlogService.fetchLatestBlogs({ storeId: locals.storeId })
+			BlogService.fetchBlog({ slug, storeId: locals.storeId }),
+			BlogService.fetchLatestBlogs({ storeId: locals.storeId })
 		])
 
 		if (blog) {

@@ -6,7 +6,7 @@ import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { PrimaryButton } from '$lib/ui'
-import { services } from '@misiki/litekart-utils'
+import { DemoRequestService } from '$lib/services'
 import { toast } from '$lib/utils'
 import dayjs from 'dayjs'
 import Modal from './_Modal.svelte'
@@ -42,9 +42,9 @@ async function submit() {
 	const msg = 'Schedule Done !'
 	loading = true
 	try {
-		await services.DemoRequestService.saveScheduleDemo({
+		await DemoRequestService.saveScheduleDemo({
 			schedule,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 		toast(msg, 'success')

@@ -26,7 +26,6 @@ import storeClosed from '$lib/assets/store-closed.png'
 import whatsappIcon from '$lib/assets/social-media/whatsapp.png'
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 $: innerWidth = 0
 // $: isAndroid = false

@@ -230,8 +230,6 @@ export const getIdFromYoutubeVideo = (url) => {
 }
 
 export const navigateToProperPath = (url) => {
-	// console.log('url =', url);
-
 	if (!url) {
 		return '##'
 		// } else if (url.startsWith('http')) {
@@ -252,7 +250,6 @@ export const navigateToProperPath = (url) => {
 		// 			originalUrl = url.replace(i, '/')
 		// 		}
 		// 	}
-		// 	// console.log('originalUrl', originalUrl);
 		// 	return originalUrl
 	} else if (url[0] !== '/') {
 		return `/${url.trim()}`

@@ -45,6 +45,7 @@
 	"prettier.printWidth": 100,
 	// Formatting
 	"editor.formatOnSave": true,
+	"editor.formatOnPaste": true,
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"[prisma]": {
 		"editor.defaultFormatter": "Prisma.prisma"

@@ -1,5 +1,5 @@
 import { error, fail, redirect } from '@sveltejs/kit'
-import { services } from '@misiki/litekart-utils'
+import { CartService, WishlistService } from '$lib/services'
 import type { Action, Actions, PageServerLoad } from './$types'
 
 export const load: PageServerLoad = async ({ url, request, locals, cookies, depends }) => {
@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 		const sid = cookies.get('connect.sid')
 
 		if (sid) {
-			const res = await services.CartService.fetchRefreshCart({
+			const res = await CartService.fetchRefreshCart({
 				cartId,
 				origin: origin,
 				sid,
@@ -53,21 +53,18 @@ export const load: PageServerLoad = async ({ url, request, locals, cookies, depe
 }
 
 const add: Action = async ({ request, cookies, locals }) => {
-	console.log('add to cart')
 	const data = Object.fromEntries(await request.formData())
 	const pid = data.pid
 	const vid = data.vid
 	const variantsLength = +data.variantsLength
 	const currentVariantId = data.currentVariantId
 	const qty = +data.qty
-	console.log('data', data)
 	const linkedItems = JSON.parse(data.linkedItems || '[]')
 	const options = JSON.parse(data.options || '[]') //data.options //
 	const customizedImg = data.customizedImg
 	const customizedData = data.customizedData
 	let cartId = locals.cartId
 	let sid = cookies.get('connect.sid')
-	console.log('sid', sid)
 
 	if (variantsLength > 0 && !currentVariantId) {
 		return 'choose variant'
@@ -76,11 +73,8 @@ const add: Action = async ({ request, cookies, locals }) => {
 	if (typeof pid !== 'string' || !pid) {
 		return fail(400, { invalid: true })
 	}
-
-	console.log('cartId', cartId)
-
 	try {
-		// let cart = await services.CartService.addToCartService({
+		// let cart = await CartService.addToCartService({
 		// 	pid,
 		// 	vid: currentVariantId || vid,
 		// 	qty,
@@ -92,7 +86,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 		// 	origin: locals.origin,
 		// 	sid // This is a special case to pass complete cookie
 		// })
-		let cart = await services.CartService.addToCartService({
+		let cart = await CartService.addToCartService({
 			pid,
 			vid: currentVariantId || vid,
 			qty,
@@ -116,7 +110,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 
 		if (linkedItems?.length) {
 			for (const i of linkedItems) {
-				cart = await services.CartService.addToCartService({
+				cart = await CartService.addToCartService({
 					pid: i,
 					vid: i,
 					qty: 1,
@@ -175,7 +169,7 @@ const createBackOrder: Action = async ({ request, cookies, locals }) => {
 	}
 
 	try {
-		const cart = await services.CartService.createBackOrder({
+		const cart = await CartService.createBackOrder({
 			pid,
 			qty,
 			storeId: locals.storeId,
@@ -197,17 +191,11 @@ const handleUnavailableItems: Action = async ({ request, cookies, locals }) => {
 	const sid = cookies.get('connect.sid')
 
 	try {
-		const movedRes = await services.WishlistService.moveUnavailableItemsToWishlist({
+		const movedRes = await WishlistService.moveUnavailableItemsToWishlist({
 			storeId: locals.storeId,
 			origin: locals.origin,
 			sid // This is a special case to pass complete cookie
 		})
-
-		// console.log('movedRes', movedRes);
-
-		// if (movedRes.qty) {
-		// 	locals.cartQty = movedRes.qty
-		// }
 	} catch (e) {
 		return {}
 	}
