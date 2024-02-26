@@ -1,4 +1,5 @@
 <script lang="ts">
+import { AddressService } from '$lib/services'
 import { applyAction, enhance } from '$app/forms'
 import { del } from '$lib/utils/api'
 import { goto, invalidateAll } from '$app/navigation'
@@ -10,9 +11,8 @@ import noEmptyAddress from '$lib/assets/no/empty-address.svg'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
 import SaveAddress from './_SaveAddress.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
-import { AddressService } from '$lib/services'
+
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 const seoProps = {
 	title: 'Dashboard - Addresses ',
@@ -92,7 +92,7 @@ async function remove(id, index) {
 <section>
 	<header class="mb-5 flex flex-wrap items-start justify-between gap-4">
 		<h1>
-			Addresses {#if data.addresses.count}({data.addresses.count}){/if}
+			Addresses {#if data?.addresses?.count}({data?.addresses?.count}){/if}
 		</h1>
 
 		<!--  Back button -->
@@ -235,7 +235,7 @@ async function remove(id, index) {
 		</Modal>
 
 		<Pagination
-			count="{Math.ceil((data.count || 1) / data.pageSize)}"
+			count="{Math.ceil((data?.addresses?.count || 1) / data.pageSize)}"
 			current="{data.currentPage || 1}" />
 	{:else}
 		<div class="flex h-[70vh] flex-col items-center justify-center text-center">

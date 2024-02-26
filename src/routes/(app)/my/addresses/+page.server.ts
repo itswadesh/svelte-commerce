@@ -2,30 +2,39 @@ import { error } from '@sveltejs/kit'
 import { AddressService, CartService, CountryService } from '$lib/services'
 import { z } from 'zod'
 
-export async function load({ cookies, locals }) {
-	let myAddresses = [],
-		countries = []
-	try {
-		const addressRes = await AddressService.fetchAddresses({
-			origin: locals.origin,
-			sid: cookies.get('connect.sid'),
-			storeId: locals.storeId
-		})
-		myAddresses = addressRes.myAddresses || []
-		myAddresses.count = addressRes.count || 0
-	} catch (e) {
-		error(404, 'Addresses not found')
+export async function load({ locals, url }) {
+	const { me, origin, sid, store, storeId } = locals
+
+	if (!me || !sid) {
+		redirect(307, `/auth/login?ref=${url.pathname}${url.search}`);
 	}
+
 	try {
-		countries = await CountryService.fetchCountries({
-			origin: locals.origin,
-			sid: cookies.get('connect.sid'),
-			storeId: locals.storeId
+		const countries = await CountryService.fetchCountries({
+			origin,
+			sid,
+			storeId
 		})
+
+		const { myAddresses, count } = await AddressService.fetchAddresses({
+			origin,
+			sid,
+			storeId
+		})
+
+		myAddresses.count = count
+
+		if (myAddresses) {
+			return { addresses: myAddresses, countries }
+		}
 	} catch (e) {
-		console.error('countries not found')
+		if (e.status === 401 || e.status === 403) {
+			redirect(307, '/auth/login');
+		}
+
+		error(e.status, e.message);
+	} finally {
 	}
-	return { myAddresses, countries }
 }
 
 const zodAddressSchema = z.object({
