@@ -611,22 +611,25 @@ async function updateVariant(variant) {
 							{/if}
 						</div>
 
-						{#await data.streamed?.moreProductDetails then value}
+						{#if data?.moreProductDetails}
 							<h6 class="text-brand-500">
-								{#if value?.igst}
-									Inclusive {currency(value?.igst, $page.data.store?.currencySymbol)} GST
+								{#if data?.moreProductDetails?.igst}
+									Inclusive {currency(
+										data?.moreProductDetails?.igst,
+										$page.data.store?.currencySymbol
+									)} GST
 								{:else}
 									Inclusive of all taxes
 								{/if}
 							</h6>
-						{/await}
+						{/if}
 					{/if}
 				</div>
 
 				<!-- ratings -->
 
 				{#if $page.data.store?.isProductReviewsAndRatings}
-					{#await data.streamed?.productReviews then productReviews}
+					{#if data?.productReviews}
 						{#if productReviews?.reviewsSummary?.productReviews?.summary?.ratings_avg?.value}
 							<button
 								type="button"
@@ -655,9 +658,7 @@ async function updateVariant(variant) {
 								</span>
 							</button>
 						{/if}
-					{:catch error}
-						<Error err="{error}" />
-					{/await}
+					{/if}
 				{/if}
 
 				<hr />
@@ -735,15 +736,18 @@ async function updateVariant(variant) {
 							{/if}
 						</div>
 
-						{#await data.streamed?.moreProductDetails then value}
+						{#if data.moreProductDetails}
 							<h6 class="text-brand-500">
-								{#if value?.igst}
-									Inclusive {currency(value?.igst, $page.data.store?.currencySymbol)} GST
+								{#if data.moreProductDetails?.igst}
+									Inclusive {currency(
+										data.moreProductDetails?.igst,
+										$page.data.store?.currencySymbol
+									)} GST
 								{:else}
 									Inclusive of all taxes
 								{/if}
 							</h6>
-						{/await}
+						{/if}
 					{/if}
 				</div>
 
@@ -767,7 +771,7 @@ async function updateVariant(variant) {
 					</div>
 				{/if}
 
-				{#await data.streamed?.moreProductDetails}
+				{#if loading}
 					<ul class="mb-5 p-0 list-none flex flex-wrap gap-4">
 						{#each { length: 3 } as _}
 							<li class="flex flex-wrap gap-1 w-14 animate-pulse">
@@ -777,10 +781,10 @@ async function updateVariant(variant) {
 							</li>
 						{/each}
 					</ul>
-				{:then value}
+
 					<!-- Color -->
 
-					{#if value?.pg?.colorGroup?.length}
+					{#if data?.moreProductDetails?.pg?.colorGroup?.length}
 						<div>
 							<div class="mb-2 flex items-center gap-2 uppercase">
 								<h5>Select Color</h5>
@@ -801,7 +805,7 @@ async function updateVariant(variant) {
 							</div>
 
 							<ul class="flex flex-wrap gap-3">
-								{#each value?.pg.colorGroup as cg}
+								{#each data?.moreProductDetails?.pg.colorGroup as cg}
 									{#if cg?.color?.name && cg.img}
 										<li>
 											{#if cg.hasStock}
@@ -1023,9 +1027,7 @@ async function updateVariant(variant) {
 							</ul>
 						</div>
 					{/if}
-				{:catch error}
-					<Error err="{error}" />
-				{/await}
+				{/if}
 
 				<!-- {#if moreOptions?.length > 0}
 					<div class="mb-5 flex flex-col gap-2">
@@ -1155,10 +1157,10 @@ async function updateVariant(variant) {
 
 				<!-- Product details (short description) -->
 
-				{#await data.streamed?.moreProductDetails}
+				{#if loading}
 					<Skeleton extraSmall />
-				{:then value}
-					{#if value.description}
+				{:else if data?.moreProductDetails}
+					{#if data?.moreProductDetails?.description}
 						<div>
 							<div class="mb-2 flex items-center gap-2 uppercase">
 								<h5>Product Details</h5>
@@ -1179,13 +1181,11 @@ async function updateVariant(variant) {
 							</div>
 
 							<div class="prose max-w-none text-sm text-zinc-500">
-								{@html value.description}
+								{@html data?.moreProductDetails?.description}
 							</div>
 						</div>
 					{/if}
-				{:catch error}
-					<Error err="{error}" />
-				{/await}
+				{/if}
 
 				<!-- Linked Products -->
 
@@ -1284,7 +1284,7 @@ async function updateVariant(variant) {
 					</div>
 				{/if}
 
-				{#await data.streamed?.moreProductDetails then value}
+				{#if loading}
 					{#if !data.product?.isCustomized}
 						<div
 							class="w-full hidden md:grid gap-2 items-center uppercase grid-cols-2 static max-w-sm">
@@ -1535,45 +1535,39 @@ async function updateVariant(variant) {
 							{/if}
 						</div>
 					{/if}
-				{:catch error}
-					<Error err="{error}" />
-				{/await}
+				{/if}
 
 				<!-- Long Description -->
 
-				{#await data.streamed?.moreProductDetails}
+				{#if loading}
 					<Skeleton extraSmall />
-				{:then value}
-					{#if value.longDescription}
-						<div class="flex flex-col border-t border-b">
-							<button
-								type="button"
-								class="py-5 w-full flex items-center gap-2 justify-between focus:outline-none"
-								on:click="{() => (showLongDescription = !showLongDescription)}">
-								<h5 class="uppercase">Description</h5>
+				{:else if data?.moreProductDetails?.longDescription}
+					<div class="flex flex-col border-t border-b">
+						<button
+							type="button"
+							class="py-5 w-full flex items-center gap-2 justify-between focus:outline-none"
+							on:click="{() => (showLongDescription = !showLongDescription)}">
+							<h5 class="uppercase">Description</h5>
 
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									viewBox="0 0 20 20"
-									fill="currentColor"
-									class="w-5 h-5 transition duration-300
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 20 20"
+								fill="currentColor"
+								class="w-5 h-5 transition duration-300
 									{showLongDescription ? 'transform -rotate-45' : ''}">
-									<path
-										d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"
-									></path>
-								</svg>
-							</button>
+								<path
+									d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"
+								></path>
+							</svg>
+						</button>
 
-							{#if showLongDescription}
-								<div transition:slide="{{ duration: 300 }}" class="pb-5 prose max-w-none">
-									{@html value.longDescription}
-								</div>
-							{/if}
-						</div>
-					{/if}
-				{:catch error}
-					{error?.message}
-				{/await}
+						{#if showLongDescription}
+							<div transition:slide="{{ duration: 300 }}" class="pb-5 prose max-w-none">
+								{@html value.longDescription}
+							</div>
+						{/if}
+					</div>
+				{/if}
 
 				<!-- Delivery Options Desktop -->
 
@@ -1620,7 +1614,7 @@ async function updateVariant(variant) {
 				<!-- Ratings & Reviews -->
 
 				{#if $page.data.store?.isProductReviewsAndRatings}
-					{#await data.streamed?.productReviews}
+					{#if loading}
 						<ul class="m-0 p-0 flex flex-col gap-5">
 							{#each { length: 3 } as _}
 								<li>
@@ -1628,7 +1622,7 @@ async function updateVariant(variant) {
 								</li>
 							{/each}
 						</ul>
-					{:then productReviews}
+					{:else if data?.productReviews}
 						<div
 							id="ratings_and_reviews"
 							class="sticky top-14 sm:top-20 z-30 lg:static lg:z-0 bg-white lg:bg-transparent">
@@ -1666,9 +1660,7 @@ async function updateVariant(variant) {
 								? productReviews.reviewsSummary?.productReviews
 								: productReviews.reviewsSummary?.brandReviews}"
 							reviews="{productReviews}" />
-					{:catch error}
-						<Error err="{error}" />
-					{/await}
+					{/if}
 				{/if}
 
 				<!-- Promo video -->
@@ -1697,7 +1689,7 @@ async function updateVariant(variant) {
 					on:exitViewport="{cartButtonExitViewport}">
 				</div>
 
-				{#await data.streamed?.moreProductDetails then value}
+				{#if loading}
 					{#if showStickyCartButton && !data.product?.isCustomized}
 						<div
 							class="w-full grid md:hidden grid-cols-5 gap-2 items-center uppercase fixed inset-x-0 bottom-0 z-40 h-16 border-t bg-white p-3 box-shadow">
@@ -2198,9 +2190,7 @@ async function updateVariant(variant) {
 							{/if}
 						</div>
 					{/if}
-				{:catch error}
-					<Error err="{error}" />
-				{/await}
+				{/if}
 			</div>
 		</div>
 
@@ -2244,7 +2234,7 @@ async function updateVariant(variant) {
 
 			<!-- Similar products From category slug -->
 
-			{#await data.streamed?.moreProductDetails}
+			{#if loading}
 				<ul class="m-0 p-0 list-none flex flex-wrap gap-5">
 					{#each { length: 7 } as _}
 						<li>
@@ -2252,13 +2242,11 @@ async function updateVariant(variant) {
 						</li>
 					{/each}
 				</ul>
-			{:then value}
-				{#if value.moreFromCategory && value.moreFromCategory[0] && value.moreFromCategory[0].slug}
-					<SimilarProductsFromCategorySlug data="{value.moreFromCategory}" />
+			{:else if data?.moreProductDetails}
+				{#if data?.moreProductDetails?.moreFromCategory && data?.moreProductDetails?.moreFromCategory[0] && data?.moreProductDetails?.moreFromCategory[0].slug}
+					<SimilarProductsFromCategorySlug data="{data?.moreProductDetails?.moreFromCategory}" />
 				{/if}
-			{:catch error}
-				<Error err="{error}" />
-			{/await}
+			{/if}
 
 			<!-- Recommended products -->
 

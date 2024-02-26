@@ -99,7 +99,6 @@ onMount(async () => {
 			origin: $page?.data?.origin,
 			storeId: $page.data.storeId
 		})
-		console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', categoriesRes)
 		categories = categoriesRes.data
 		// categories = (
 		// 	await CategoryService.fetchAllCategories({
