@@ -38,7 +38,7 @@ function head() {
 	}
 }
 // let store = {}
-$: store = $page.data?.store
+$: store = $page.data.store
 
 onMount(() => {
 	// if (browser) {

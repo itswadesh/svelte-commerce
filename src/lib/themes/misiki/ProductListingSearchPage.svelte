@@ -26,34 +26,34 @@ export let data
 let today = dayjs(new Date()).toISOString()
 
 let seoProps = {
-	brand: $page.data?.store?.title,
+	brand: $page.data.store?.title,
 	// breadcrumbs: data.category?.children,
-	caption: $page.data?.store?.title,
+	caption: $page.data.store?.title,
 	category: data.searchData,
-	contentUrl: $page.data?.store?.logo,
+	contentUrl: $page.data.store?.logo,
 	createdAt: today,
 	email: `${$page?.data?.store?.email}`,
 	id: $page?.url?.href,
-	image: $page.data?.store?.logo,
-	logo: $page.data?.store?.logo,
+	image: $page.data.store?.logo,
+	logo: $page.data.store?.logo,
 	ogSquareImage: { url: '', width: 56, height: 56 },
 	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00'],
 	timeToRead: 0,
 	updatedAt: today,
-	metaDescription: $page.data?.store?.description,
+	metaDescription: $page.data.store?.description,
 	datePublished: today,
-	description: $page.data?.store?.description,
+	description: $page.data.store?.description,
 	dnsPrefetch: `//cdn.jsdelivr.net`,
 	featuredImage: {
-		url: $page.data?.store?.logo,
+		url: $page.data.store?.logo,
 		width: 675,
 		height: 380,
-		caption: $page.data?.store?.title
+		caption: $page.data.store?.title
 	},
-	keywords: $page.data?.store?.keywords,
+	keywords: $page.data.store?.keywords,
 	lastUpdated: today,
-	msapplicationTileImage: $page.data?.store?.logo,
-	ogImage: { url: $page.data?.store?.logo, width: 128, height: 56 },
+	msapplicationTileImage: $page.data.store?.logo,
+	ogImage: { url: $page.data.store?.logo, width: 128, height: 56 },
 	ogImageSecureUrl: `${$page?.data?.store?.logo}`,
 	ogImageType: 'image/jpeg',
 	ogSiteName: `${$page.data.origin}/sitemap/sitemap.xml`,
@@ -62,7 +62,7 @@ let seoProps = {
 	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
 	slug: `/`,
 	title: data.searchData || 'Buy online',
-	twitterImage: { url: $page.data?.store?.logo }
+	twitterImage: { url: $page.data.store?.logo }
 }
 
 let currentPage = 1
@@ -338,7 +338,7 @@ function handleFilterTags() {
 	<div class="mb-10 flex flex-col items-start sm:mb-20 lg:flex-row lg:gap-10 lg:p-10">
 		{#if data.products.facets}
 			<DesktopFilter
-				class="sticky hidden lg:block {$page.data?.store?.hellobar?.active?.val
+				class="sticky hidden lg:block {$page.data.store?.hellobar?.active?.val
 					? 'top-32'
 					: 'top-24'}"
 				facets="{data.products.facets}"

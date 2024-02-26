@@ -37,7 +37,6 @@ export let content = ``
 export let megamenu = []
 export let menu = []
 
-
 let popularSearches = []
 
 function getYear() {
@@ -46,7 +45,7 @@ function getYear() {
 	return year
 }
 // let store = {}
-$: store = $page.data?.store
+$: store = $page.data.store
 
 onMount(async () => {
 	if (browser) {
@@ -57,7 +56,7 @@ onMount(async () => {
 			limit: 20,
 			sid: null,
 			origin: $page.data.origin,
-			storeId: $page?.data?.storeId,
+			storeId: $page?.data?.storeId
 		})
 	}
 	// const res2 = await fetch('/server/store')
@@ -80,7 +79,6 @@ onMount(async () => {
 // }
 
 function positionToDisplayIsMultiVendor(itemsLength) {
-
 	if (itemsLength >= 2) {
 		return 1
 	} else {

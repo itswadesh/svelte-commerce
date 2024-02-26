@@ -301,8 +301,8 @@ let y
 							alt="logo"
 							height="160"
 							src="{`${getCdnImageUrl(
-								$page.data?.store?.logo,
-								$page.data?.store?.IMAGE_CDN_URL
+								$page.data.store?.logo,
+								$page.data.store?.IMAGE_CDN_URL
 							)}?tr=h-160`}"
 							class="max-h-10 sm:max-h-16 w-20 sm:w-40 object-contain object-left" />
 					{:else if $page?.data?.store?.websiteName}

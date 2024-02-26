@@ -19,14 +19,13 @@ export let showNextIcon = false
 export let text = 'Proceed to checkout'
 
 $: cart = {}
-$: store = $page.data?.store
+$: store = $page.data.store
 
 onMount(() => {
 	cartStore.subscribe((value) => {
 		cart = value
 	})
 })
-
 
 function modulo(n, m) {
 	// handle negative numbers

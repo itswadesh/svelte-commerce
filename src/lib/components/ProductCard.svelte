@@ -59,15 +59,13 @@ function hideitems() {
 	show = false
 }
 
-
 if (product?.tags?.length) {
 	ribbonTags = product?.tags.filter((tag) => {
 		return tag.type === 'Ribbon'
 	})
-
 }
 
-$: store = $page.data?.store
+$: store = $page.data.store
 
 onMount(async () => {
 	if (browser) {

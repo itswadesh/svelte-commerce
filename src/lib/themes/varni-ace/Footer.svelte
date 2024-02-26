@@ -51,7 +51,7 @@ function getYear() {
 	return year
 }
 // let store = {}
-$: store = $page.data?.store
+$: store = $page.data.store
 
 onMount(async () => {
 	if (browser) {

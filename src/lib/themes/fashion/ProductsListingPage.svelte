@@ -160,7 +160,7 @@ async function loadNextPage() {
 async function refreshData() {}
 
 let loadMoreDiv
-$: store = $page.data?.store
+$: store = $page.data.store
 onMount(() => {
 	// if (browser) {
 	// 	storeStore.subscribe((value) => (store = value))

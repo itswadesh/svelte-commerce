@@ -47,7 +47,7 @@ let show = false
 let showDropdownAccount = false
 let showPincodeInputBox = false
 $: cart = {}
-$: store = $page.data?.store
+$: store = $page.data.store
 
 onMount(async () => {
 	q = $page.url.searchParams.get('q')

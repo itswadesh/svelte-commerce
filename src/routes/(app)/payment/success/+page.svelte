@@ -82,13 +82,13 @@ const seoProps = {
 }
 
 // let store = {}
-$: store = $page.data?.store
+$: store = $page.data.store
 let cart = {}
 onMount(async () => {
 	if (browser) {
 		cart = await getCartFromStore({
 			origin: $page.data?.origin,
-			storeId: $page.data?.storeId,
+			storeId: $page.data.storeId,
 			cartId: data.cartId,
 			forceUpdate: true
 		})
