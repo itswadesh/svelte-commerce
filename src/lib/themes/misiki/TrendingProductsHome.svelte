@@ -9,8 +9,8 @@ let product_image_dimension = $page.data.store?.product_image_dimension || '3x4'
 
 <!-- Trending products -->
 
-{#await data.streamed.home then home}
-	{#if home?.trending?.length > 0}
+{#await data.home}
+	{#if data.home?.trending?.length > 0}
 		<div in:fly="{{ y: 20, duration: 700 }}">
 			<h2 class="p-3 py-5 text-center sm:px-10 md:py-10 uppercase">
 				TRENDING ON {$page.data.store?.websiteName}
@@ -21,7 +21,7 @@ let product_image_dimension = $page.data.store?.product_image_dimension || '3x4'
 				{product_image_dimension == '16x9'
 					? 'grid-cols-1 md:grid-cols-2 lg:flex lg:flex-wrap lg:justify-between'
 					: 'grid-cols-2 sm:flex sm:flex-wrap sm:justify-between'}">
-				{#each home?.trending as p}
+				{#each data.home?.trending as p}
 					<li>
 						<ProductCard product="{p}" />
 					</li>

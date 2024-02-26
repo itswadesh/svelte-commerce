@@ -22,25 +22,6 @@ export async function load({ params, parent, url }) {
 		sid
 	})
 
-	const deals = DealsService.fetchDeals({
-		origin,
-		storeId,
-		sid
-	})
-
-	const collections = CollectionService.fetchCollections({
-		origin,
-		storeId,
-		sid
-	})
-
-	const products = ProductService.fetchProducts({
-		query: query.toString(),
-		origin,
-		storeId,
-		sid
-	})
-
 	// const promises = [
 	//
 	// ]
@@ -68,12 +49,7 @@ export async function load({ params, parent, url }) {
 	// })
 
 	return {
-		products,
-		streamed: {
-			home,
-			deals,
-			collections
-		},
+		home,
 		currentPage,
 		origin,
 		query: query.toString(),

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 // import logo from '$lib/assets/logo.png'
 // import ProductTab from '$lib/components/Product/ProductTab.svelte'
 import { Home } from '$lib/theme-config'
@@ -7,11 +7,12 @@ import { page } from '$app/stores'
 import Cookie from 'cookie-universal'
 import dayjs from 'dayjs'
 import SEO from '$lib/components/SEO/index.svelte'
+import { CollectionService, DealsService, ProductService } from 'lib/services'
 
 const cookies = Cookie()
 let today = dayjs(new Date()).toISOString()
 
-export let data
+export let data: any = {}
 
 let seoProps = {
 	// addressCountry: 'India',
@@ -82,12 +83,34 @@ let seoProps = {
 let showFooter = false
 let showPinCodeEntryModal = false
 
-onMount(() => {
+onMount(async () => {
 	const pin = cookies.get('zip')
 	if (pin && pin.toString()?.length === 6) {
 		showPinCodeEntryModal = false
 	} else {
 		showPinCodeEntryModal = true
+	}
+	try {
+		const [deals, collections, products] = await Promise.all([
+			DealsService.fetchDeals({
+				origin,
+				storeId: $page.data.storeId
+			}),
+			CollectionService.fetchCollections({
+				origin,
+				storeId: $page.data.storeId
+			}),
+			ProductService.fetchProducts({
+				query: data.query,
+				origin,
+				storeId: $page.data.storeId
+			})
+		])
+		data.deals = deals
+		data.collections = collections
+		data.products = products
+	} catch (e) {
+		console.log('isWishlisted', e)
 	}
 })
 </script>
