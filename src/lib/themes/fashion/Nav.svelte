@@ -22,8 +22,9 @@ import noAddToCartAnimate from '$lib/assets/no/add-to-cart-animate.svg'
 import productNonVeg from '$lib/assets/product/non-veg.png'
 import productVeg from '$lib/assets/product/veg.png'
 import userEmptyProfile from '$lib/assets/user-empty-profile.png'
+import { getPopularSearchFromStore } from '$lib/store/popular-search'
 
-const cookies = Cookie()
+// const cookies = Cookie()
 
 export let me, data, showCartSidebar: boolean, openSidebar: boolean, store
 
@@ -119,7 +120,7 @@ function handleShowCartSidebar() {
 
 async function getCategories() {
 	try {
-		const res1 = await CategoryService.fetchAllCategories({
+		const res1 = await getPopularSearchFromStore({
 			storeId: $page.data.store,
 			origin: $page.data.origin
 		})

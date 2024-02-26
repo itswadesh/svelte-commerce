@@ -5,7 +5,12 @@ export const categoriesStore = writable([])
 
 let isLoading = false
 
-export const getCategoriesFromStore = async ({ origin, storeId, forceUpdate = false }) => {
+export const getCategoriesFromStore = async ({
+	origin,
+	storeId,
+	featured = false,
+	forceUpdate = false
+}) => {
 	let existingCategories = []
 
 	categoriesStore.subscribe((value) => {
@@ -17,10 +22,14 @@ export const getCategoriesFromStore = async ({ origin, storeId, forceUpdate = fa
 	if ((!isLoading && !existingCategories) || !!forceUpdate) {
 		isLoading = true
 		try {
-			const categoriesDataFromServer = await CategoryService.fetchAllCategories({
+			const cQ: any = {
 				storeId,
 				origin
-			})
+			}
+			if (featured) {
+				cQ.featured = featured
+			}
+			const categoriesDataFromServer = await CategoryService.fetchAllCategories(cQ)
 
 			categoriesStore.update((u) => categoriesDataFromServer?.data || [])
 		} catch (e) {

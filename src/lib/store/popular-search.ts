@@ -6,8 +6,7 @@ export const popularsearchStore = writable({})
 let isLoading = false
 
 export const getPopularSearchFromStore = async ({
-	limit,
-	sid,
+	sid = null,
 	storeId,
 	origin,
 	forceUpdate = false

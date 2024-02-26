@@ -6,6 +6,7 @@ import { page } from '$app/stores'
 import { slide } from 'svelte/transition'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 import { AutocompleteService, CategoryService } from '$lib/services'
+import { getCategoriesFromStore } from '$lib/store/categories'
 
 const dispatch = createEventDispatcher()
 
@@ -25,7 +26,6 @@ let typingTimer: any
 
 function submit() {
 	show = false
-
 
 	if (autocomplete?.length && autocomplete[0].slug && autocomplete[0].type === 'products') {
 		goto(`/product/${autocomplete[0].slug}`)
@@ -95,13 +95,19 @@ function resetInput() {
 onMount(async () => {
 	searchInput.focus()
 	try {
-		categories = (
-			await CategoryService.fetchAllCategories({
-				featured: true,
-				storeId: $page?.data?.storeId,
-				origin: $page.data.origin
-			})
-		).data
+		const categoriesRes = await getCategoriesFromStore({
+			origin: $page?.data?.origin,
+			storeId: $page?.data?.storeId
+		})
+		console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', categoriesRes)
+		categories = categoriesRes.data
+		// categories = (
+		// 	await CategoryService.fetchAllCategories({
+		// 		featured: true,
+		// 		storeId: $page?.data?.storeId,
+		// 		origin: $page.data.origin
+		// 	})
+		// ).data
 	} catch (e) {
 		err = e
 	} finally {
