@@ -80,7 +80,7 @@ async function updateCart() {
 				selfTakeout: false,
 				cartId: data?.cartId,
 				origin: $page.data?.origin,
-				storeId: $page?.data?.storeId
+				storeId: $page.data.storeId
 			})
 
 			if (data.prescriptionId) {

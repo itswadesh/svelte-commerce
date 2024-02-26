@@ -62,7 +62,7 @@ async function getMegaMenu() {
 	if (browser && $page.data.isDesktop) {
 		try {
 			menuItems = await getMegamenuFromStore({
-				storeId: $page?.data?.storeId,
+				storeId: $page.data.storeId,
 				origin: $page.data.origin
 			})
 		} catch (e) {

@@ -250,7 +250,7 @@ $: store = $page.data.store
 											<div class="mb-2 flex items-start justify-between">
 												<p class="flex-1">{item.name || '_'}</p>
 
-												{#if $page?.data?.store?.isFnb && item.foodType}
+												{#if $page.data.store?.isFnb && item.foodType}
 													<div>
 														{#if item.foodType === 'veg'}
 															<img src="/product/veg.png" alt="veg" class="h-5 w-5" />

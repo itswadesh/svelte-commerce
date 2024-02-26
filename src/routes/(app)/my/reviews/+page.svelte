@@ -51,7 +51,7 @@ async function sortNow(sort) {
 async function remove(id) {
 	try {
 		toast('Removing the selected review please wait...', 'info')
-		await del(`reviews?id=${id}&store=${$page?.data?.storeId}`, $page.data.origin)
+		await del(`reviews?id=${id}&store=${$page.data.storeId}`, $page.data.origin)
 		toast('Removed the review successfully', 'success')
 		// await refreshData()
 		invalidateAll()
@@ -125,7 +125,7 @@ async function remove(id) {
 												{review.listing?.name}
 											</a>
 
-											{#if $page?.data?.store?.isFnb && review.listing?.foodType}
+											{#if $page.data.store?.isFnb && review.listing?.foodType}
 												<div>
 													{#if review.listing?.foodType === 'veg'}
 														<img src="/product/veg.png" alt="veg" class="h-5 w-5" />

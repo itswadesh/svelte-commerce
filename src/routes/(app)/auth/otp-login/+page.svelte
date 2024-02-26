@@ -121,7 +121,7 @@ function getLoginUrl(baseUrl) {
 	<a href="/" aria-label="Go to home" class="mx-auto mb-8 block max-w-max">
 		{#if $page.data.store?.logo}
 			<img
-				src="{$page?.data?.store?.logo}"
+				src="{$page.data.store?.logo}"
 				alt="logo"
 				class="max-h-10 sm:max-h-16 w-40 object-contain object-center" />
 		{:else}

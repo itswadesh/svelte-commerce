@@ -87,7 +87,7 @@ async function saveReviewproduct(review) {
 	try {
 		err = null
 		toast('Sending your business rating and review', 'info')
-		review.store = $page?.data?.storeId
+		review.store = $page.data.storeId
 
 		await ReviewService.saveReview({
 			id: review.id,
@@ -96,7 +96,7 @@ async function saveReviewproduct(review) {
 			message: review.message,
 			rating: review.rating,
 			images,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 

@@ -40,7 +40,7 @@ async function submit() {
 					cartId: cart?.cart_id || cart?.cartId || $page.data?.cartId,
 					selected_products_for_checkout: checkedCartItems,
 					origin: $page.data?.origin,
-					storeId: $page?.data?.storeId
+					storeId: $page.data.storeId
 				})
 
 				updateCartStore({ data: res })

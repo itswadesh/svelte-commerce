@@ -32,7 +32,7 @@ let seoProps = {
 	category: data.searchData,
 	contentUrl: $page.data.store?.logo,
 	createdAt: today,
-	email: `${$page?.data?.store?.email}`,
+	email: `${$page.data.store?.email}`,
 	id: $page?.url?.href,
 	image: $page.data.store?.logo,
 	logo: $page.data.store?.logo,
@@ -54,12 +54,12 @@ let seoProps = {
 	lastUpdated: today,
 	msapplicationTileImage: $page.data.store?.logo,
 	ogImage: { url: $page.data.store?.logo, width: 128, height: 56 },
-	ogImageSecureUrl: `${$page?.data?.store?.logo}`,
+	ogImageSecureUrl: `${$page.data.store?.logo}`,
 	ogImageType: 'image/jpeg',
 	ogSiteName: `${$page.data.origin}/sitemap/sitemap.xml`,
 	productBrand: data.searchData,
 	productName: data.searchData,
-	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
+	productPriceCurrency: `${$page.data.store?.currencyCode}`,
 	slug: `/`,
 	title: data.searchData || 'Buy online',
 	twitterImage: { url: $page.data.store?.logo }
@@ -96,7 +96,7 @@ async function saveSearchData(searchData) {
 		await PopularSearchService.savePopularSearch({
 			id: 'new',
 			text: searchData,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 	} catch (e) {
@@ -152,7 +152,7 @@ async function loadNextPage() {
 			const res = await ProductService.fetchNextPageProducts({
 				categorySlug: data.products?.category?.slug,
 				origin: $page?.data?.origin,
-				storeId: $page?.data?.storeId,
+				storeId: $page.data.storeId,
 				nextPage,
 				searchParams
 			})
@@ -294,7 +294,7 @@ function handleFilterTags() {
 
 <svelte:window bind:scrollY="{y}" bind:innerWidth on:scroll="{handleOnScroll}" />
 
-<CatelogNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page?.data?.store}">
+<CatelogNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page.data.store}">
 	<div class="flex max-w-max flex-col items-start gap-1">
 		{#if data.searchData}
 			<h5 class="w-40 shrink-0 truncate capitalize leading-4 text-left">{data.searchData}</h5>

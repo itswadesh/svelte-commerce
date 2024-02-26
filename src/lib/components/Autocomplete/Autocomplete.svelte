@@ -81,7 +81,7 @@ async function getData(e: any) {
 			autocomplete = await AutocompleteService.fetchAutocompleteData({
 				q: q,
 				origin: $page?.data?.origin,
-				storeId: $page?.data?.storeId
+				storeId: $page.data.storeId
 			})
 		} catch (e) {}
 	}, 200)
@@ -92,7 +92,7 @@ onMount(async () => {
 	try {
 		const categoriesRes = await getCategoriesFromStore({
 			featured: true,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 		categories = categoriesRes.data

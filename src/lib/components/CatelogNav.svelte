@@ -84,7 +84,7 @@ function handleShowCartSidebar() {
 
 async function getCategories() {
 	try {
-		const res1 = await getAPI(`categories?store=${$page?.data?.storeId}`, $page.data.origin)
+		const res1 = await getAPI(`categories?store=${$page.data.storeId}`, $page.data.origin)
 		categories = res1?.data.filter((c) => {
 			return c.img
 		})
@@ -102,7 +102,7 @@ const removeItemFromCart = async ({ pid, qty, customizedImg, ix }: any) => {
 				pid: pid,
 				qty: qty,
 				customizedImg: customizedImg || null,
-				store: $page?.data?.storeId
+				store: $page.data.storeId
 			},
 			$page.data.origin
 		)
@@ -125,14 +125,14 @@ const getSelectionLabel = (option) => option.name
 
 <nav
 	class="minimum-width-rem sticky inset-x-0 top-0 w-full border-b bg-white shadow-md lg:hidden
-	{$page?.data?.store?.hellobar?.active?.val ? 'h-[88px] sm:h-[112px]' : 'h-[56px] sm:h-[80px]'}
+	{$page.data.store?.hellobar?.active?.val ? 'h-[88px] sm:h-[112px]' : 'h-[56px] sm:h-[80px]'}
 	{showCartSidebar ? 'z-50 ' : 'z-40 delay-500'}">
-	{#if $page?.data?.store?.hellobar?.active?.val}
+	{#if $page.data.store?.hellobar?.active?.val}
 		<div
 			class="h-8 px-3 sm:px-10 text-center tracking-wider flex items-center justify-center text-sm"
-			style="background-color: {$page?.data?.store?.hellobar?.bgColor?.val || '#27272a'};
-				 color: {$page?.data?.store?.hellobar?.textColor?.val || '#ffffff'};">
-			{@html $page?.data?.store?.hellobar?.content?.val}
+			style="background-color: {$page.data.store?.hellobar?.bgColor?.val || '#27272a'};
+				 color: {$page.data.store?.hellobar?.textColor?.val || '#ffffff'};">
+			{@html $page.data.store?.hellobar?.content?.val}
 		</div>
 	{/if}
 
@@ -176,7 +176,7 @@ const getSelectionLabel = (option) => option.name
 
 			<div class="hidden w-full min-w-min max-w-4xl flex-1 lg:block">
 				<Autocomplete
-					placeholder="{$page?.data?.store?.searchbarText || 'Search...'}"
+					placeholder="{$page.data.store?.searchbarText || 'Search...'}"
 					on:search="{onSearchSubmit}" />
 			</div>
 
@@ -295,7 +295,7 @@ const getSelectionLabel = (option) => option.name
 																class="flex-1 text-sm leading-4"
 																on:click="{() => (showCartSidebar = false)}">{item.name}</a>
 
-															{#if $page?.data?.store?.isFnb && item.foodType}
+															{#if $page.data.store?.isFnb && item.foodType}
 																<div>
 																	{#if item.foodType === 'veg'}
 																		<img src="{productVeg}" alt="veg" class="h-5 w-5" />

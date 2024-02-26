@@ -37,7 +37,7 @@ async function removeFromWishlist(id, wx) {
 		await WishlistService.toggleWishlistService({
 			pid: id,
 			vid: id,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 
@@ -140,7 +140,7 @@ async function removeFromWishlist(id, wx) {
 												{w.product?.name}
 											</p>
 
-											{#if $page?.data?.store?.isFnb && w.product?.foodType}
+											{#if $page.data.store?.isFnb && w.product?.foodType}
 												<div>
 													{#if w.product?.foodType === 'veg'}
 														<img src="/product/veg.png" alt="veg" class="h-5 w-5" />

@@ -440,7 +440,7 @@ onMount(async () => {
 													</p>
 												</a>
 
-												{#if $page?.data?.store?.isFnb && item.foodType}
+												{#if $page.data.store?.isFnb && item.foodType}
 													<div>
 														{#if item.foodType === 'veg'}
 															<img src="{productVeg}" alt="veg" class="h-5 w-5" />

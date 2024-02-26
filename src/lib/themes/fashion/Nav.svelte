@@ -178,17 +178,17 @@ async function getCategories() {
 			<!-- Website Logo/Name -->
 
 			<a href="/" aria-label="Go to home" class="block shrink-0">
-				{#if $page?.data?.store?.logo}
+				{#if $page.data.store?.logo}
 					<LazyImg
-						src="{$page?.data?.store?.logo}"
+						src="{$page.data.store?.logo}"
 						alt="logo"
 						height="64"
 						aspect_ratio="4:1"
 						class="max-h-10 sm:max-h-16 max-w-[160px] object-contain object-left" />
-				{:else if $page?.data?.store?.websiteName}
+				{:else if $page.data.store?.websiteName}
 					<h2
 						class="bg-gradient-to-b from-primary-500 to-secondary-500 bg-clip-text text-2xl font-extrabold text-transparent sm:text-3xl truncate w-40 sm:w-auto sm:max-w-sm">
-						{$page?.data?.store?.websiteName}
+						{$page.data.store?.websiteName}
 					</h2>
 				{:else}
 					<img
@@ -447,7 +447,7 @@ async function getCategories() {
 												class="flex-1 leading-4"
 												on:click="{() => (showCartSidebar = false)}">{item.name}</a>
 
-											{#if $page?.data?.store?.isFnb && item.foodType}
+											{#if $page.data.store?.isFnb && item.foodType}
 												<div>
 													{#if item.foodType === 'veg'}
 														<img src="{productVeg}" alt="veg" class="h-5 w-5" />

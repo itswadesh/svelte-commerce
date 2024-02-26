@@ -23,7 +23,6 @@ export let data
 export let showFooter = false
 export let showPinCodeEntryModal = false
 
-
 let today = dayjs(new Date()).toISOString()
 
 let seoProps = {
@@ -33,7 +32,7 @@ let seoProps = {
 	category: data.searchData,
 	contentUrl: $page.data.store?.logo,
 	createdAt: today,
-	email: `${$page?.data?.store?.email}`,
+	email: `${$page.data.store?.email}`,
 	id: $page?.url?.href,
 	image: $page.data.store?.logo,
 	logo: $page.data.store?.logo,
@@ -55,12 +54,12 @@ let seoProps = {
 	lastUpdated: today,
 	msapplicationTileImage: $page.data.store?.logo,
 	ogImage: { url: $page.data.store?.logo, width: 128, height: 56 },
-	ogImageSecureUrl: `${$page?.data?.store?.logo}`,
+	ogImageSecureUrl: `${$page.data.store?.logo}`,
 	ogImageType: 'image/jpeg',
 	ogSiteName: `${$page.data.origin}/sitemap/sitemap.xml`,
 	productBrand: data.searchData,
 	productName: data.searchData,
-	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
+	productPriceCurrency: `${$page.data.store?.currencyCode}`,
 	slug: `/`,
 	title: data.searchData || 'Buy online in - ' + $page.data.store?.websiteName,
 	twitterImage: { url: $page.data.store?.logo }
@@ -138,9 +137,8 @@ async function loadNextPage() {
 				nextPage,
 				searchParams,
 				origin: $page?.data?.origin,
-				storeId: $page?.data?.storeId
+				storeId: $page.data.storeId
 			})
-
 
 			const nextPageData = res?.nextPageData
 			currentPage = currentPage + 1

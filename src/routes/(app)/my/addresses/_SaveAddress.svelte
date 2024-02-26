@@ -70,7 +70,6 @@ onMount(async () => {
 			return c.dafault
 		})
 
-
 		if (dafaultCountry[0]) {
 			shipping_address.country = dafaultCountry[0].code
 			billing_address.country = dafaultCountry[0].code
@@ -108,7 +107,6 @@ function getShippingAddressSelectedCountry() {
 			return c
 		}
 	})[0]
-
 }
 
 function getBillingAddressSelectedCountry() {
@@ -117,7 +115,6 @@ function getBillingAddressSelectedCountry() {
 			return c
 		}
 	})[0]
-
 }
 
 async function onShippingAddressCountryChange(country) {
@@ -139,7 +136,7 @@ async function fetchShippingAddressStates(country) {
 
 		shippingAddressStates = await CountryService.fetchStates({
 			countryCode: country,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			origin: $page.data?.origin
 		})
 
@@ -147,7 +144,6 @@ async function fetchShippingAddressStates(country) {
 			s.name = s.name.toUpperCase()
 			return s
 		})
-
 	} catch (e) {
 		err = e
 	} finally {
@@ -162,7 +158,7 @@ async function fetchBillingAddressStates(country) {
 
 		billingAddressStates = await CountryService.fetchStates({
 			countryCode: country,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			origin: $page.data?.origin
 		})
 
@@ -170,7 +166,6 @@ async function fetchBillingAddressStates(country) {
 			s.name = s.name.toUpperCase()
 			return s
 		})
-
 	} catch (e) {
 		err = e
 	} finally {
@@ -195,7 +190,6 @@ async function fetchStateAndCity(zip, addresstype) {
 			zip,
 			origin
 		})
-
 
 		if (addresstype === 'shipping') {
 			shipping_address.city = zipInfo.District || ''
@@ -259,7 +253,6 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 		method="POST"
 		use:enhance="{() => {
 			return async ({ result }) => {
-
 				if (result?.status === 200 && result?.data) {
 					const newAddressId = result.data?._id || result.data?.id
 					toast('Address saved successfully', 'success')

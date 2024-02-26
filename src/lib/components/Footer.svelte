@@ -37,14 +37,14 @@ let popularSearches = {}
 onMount(async () => {
 	if (browser) {
 		megamenu = await getAllMegamenuFromStore({
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 		popularSearches = await getPopularSearchFromStore({
 			limit: 20,
 			sid: null,
 			origin: $page.data.origin,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId
 		})
 	}
 })
@@ -121,7 +121,7 @@ onMount(async () => {
 
 						<li class="flex max-w-max items-center">
 							<a
-								href="{$page.data.store?.adminUrl}?role=vendor&store={$page?.data?.storeId}"
+								href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.storeId}"
 								target="_blank"
 								aria-label="Click to visit this page"
 								class="link-underline link-underline-gray whitespace-pre-wrap">

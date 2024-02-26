@@ -62,8 +62,8 @@ const schemaOrgEntity =
 	entityMeta !== null
 		? {
 				'@type': ['Store', 'Organization'],
-				'@id': `${$page?.data?.store?.domain}/${entityHash}`,
-				name: `${$page?.data?.store?.websiteName}`,
+				'@id': `${$page.data.store?.domain}/${entityHash}`,
+				name: `${$page.data.store?.websiteName}`,
 				url: siteUrl,
 				email,
 				address: {
@@ -279,7 +279,7 @@ const schemaOrgProduct = {
 		seller: {
 			'@type': 'Organization',
 			'@id': `${siteUrl}`,
-			name: $page?.data?.store?.websiteName,
+			name: $page.data.store?.websiteName,
 			url: $page.data.origin,
 			logo
 		}

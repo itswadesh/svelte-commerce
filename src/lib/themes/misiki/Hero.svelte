@@ -11,7 +11,7 @@ export let sliderBannersMobile = []
 $: innerHeight = 0
 $: innerWidth = 0
 
-let bannerHeight = $page?.data?.store?.homePageSliderBannerImageHeight || 50
+let bannerHeight = $page.data.store?.homePageSliderBannerImageHeight || 50
 let hellobar = $page.data.store?.hellobar || {}
 let sliderHeightAccToPageHeight = innerHeight
 let Splide

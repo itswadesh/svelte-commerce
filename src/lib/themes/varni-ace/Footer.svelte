@@ -61,12 +61,12 @@ onMount(async () => {
 		// 	})
 		// }
 		megamenu = await getAllMegamenuFromStore({
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 
 		menu = await getMenuFromStore({
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 
@@ -74,7 +74,7 @@ onMount(async () => {
 			limit: 20,
 			sid: null,
 			origin: $page.data.origin,
-			storeId: $page?.data?.storeId
+			storeId: $page.data.storeId
 		})
 	}
 })
@@ -218,7 +218,7 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 							{#if store?.isMultiVendor}
 								<li class="flex max-w-max items-center">
 									<a
-										href="{store?.adminUrl}?role=vendor&store={$page?.data?.store}"
+										href="{store?.adminUrl}?role=vendor&store={$page.data.store}"
 										target="self"
 										aria-label="Click to visit this page"
 										class="link-underline link-underline-gray whitespace-pre-wrap">

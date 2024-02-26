@@ -464,7 +464,7 @@ onMount(async () => {
 							{product.name || '_'}
 						</h4>
 
-						{#if $page?.data?.store?.isFnb && product.foodType}
+						{#if $page.data.store?.isFnb && product.foodType}
 							<div>
 								{#if product.foodType === 'veg'}
 									<img src="{productVeg}" alt="veg" class="h-5 w-5" />
@@ -476,7 +476,7 @@ onMount(async () => {
 					</div>
 				</a>
 
-				{#if $page?.data?.store?.isMultiVendor && product?.vendor && product?.vendor?.slug && product?.vendor?.businessName}
+				{#if $page.data.store?.isMultiVendor && product?.vendor && product?.vendor?.slug && product?.vendor?.businessName}
 					<div class="flex items-center gap-1 text-xs sm:text-sm text-zinc-500">
 						<span> By </span>
 

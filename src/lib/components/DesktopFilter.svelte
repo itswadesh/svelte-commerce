@@ -144,7 +144,7 @@ async function getMegamenu() {
 			loadingForMegamenu = true
 
 			megamenu = await getAllMegamenuFromStore({
-				storeId: $page?.data?.storeId,
+				storeId: $page.data.storeId,
 				origin: $page.data.origin
 			})
 
@@ -175,7 +175,6 @@ function searchCategories() {
 	if (!megamenuResult.length) {
 		megamenuResult = megamenu
 	}
-
 }
 
 async function handleSearchBox() {
@@ -200,7 +199,6 @@ $: {
 			filterLength += arr.split(',').length
 		}
 	}
-
 }
 
 function handleToggleSubCategory(m, mx) {
