@@ -36,6 +36,7 @@ import { browser } from '$app/environment'
 import { storeStore } from '$lib/store/store'
 
 export let data
+console.log('zzzzzzzzzzzzzzzzzz', data)
 export let showFooter = false
 export let showPinCodeEntryModal = false
 let store = {}
@@ -196,16 +197,16 @@ onMount(() => {
 			<div class="p-3 py-5 md:py-10">
 				<Skeleton />
 			</div>
-		{:else if data.home?.deals?.data?.length}
-			<Deals deals="{data.home?.deals.data}" />
+		{:else if data?.deals?.data?.length}
+			<Deals deals="{data?.deals.data}" />
 		{/if}
 
 		{#if loading}
 			<div class="p-3 py-5 md:py-10">
 				<Skeleton />
 			</div>
-		{:else if data.home?.collections?.data?.length}
-			<CollectionsGeneral collections="{data.home?.collections.data}" />
+		{:else if data?.collections?.data?.length}
+			<CollectionsGeneral collections="{data?.collections.data}" />
 		{/if}
 
 		{#if data.home}
