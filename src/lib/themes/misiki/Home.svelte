@@ -48,7 +48,6 @@ onMount(() => {
 })
 </script>
 
-{data.page}
 <div class="bg-opacity-25 bg-center bg-repeat min-h-screen">
 	{#if store.isHyperlocal && showPinCodeEntryModal}
 		<PincodeInputBox on:close="{() => (showPinCodeEntryModal = false)}" />

@@ -16,7 +16,7 @@ export async function load({ params, parent, url }) {
 		fl[key] = value
 	})
 
-	const home = HomeService.fetchHome({
+	const home = await HomeService.fetchHome({
 		origin,
 		storeId,
 		sid

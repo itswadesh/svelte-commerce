@@ -16,6 +16,7 @@ export async function load({ params, url, parent }) {
 				id: slug,
 				storeId
 			})
+
 			if (!product) {
 				error(404, { message: 'Product Not found.' })
 			}

@@ -25,7 +25,7 @@ export async function load({ url, params, parent }) {
 			zip,
 			storeId
 		})
-	} catch (e) {}
+	} catch (e) { }
 
 	return {
 		products,
