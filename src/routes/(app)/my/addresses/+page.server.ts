@@ -1,4 +1,4 @@
-import { error } from '@sveltejs/kit'
+import { error, redirect } from '@sveltejs/kit'
 import { AddressService, CartService, CountryService } from '$lib/services'
 import { z } from 'zod'
 
@@ -424,8 +424,8 @@ const deleteAddress = async ({ request, cookies, locals }) => {
 		const res = await AddressService.deleteAddress({
 			id,
 			storeId: locals.storeId,
-			origin,
-			sid
+			sid,
+			origin: locals?.origin
 		})
 
 		return res
