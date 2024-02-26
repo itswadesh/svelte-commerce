@@ -8,6 +8,7 @@
 import { Autocomplete, MegaMenu } from '$lib/components'
 import { browser } from '$app/environment'
 import { cartStore } from '$lib/store/cart'
+import { CategoryService } from 'lib/services'
 import { createEventDispatcher, onMount } from 'svelte'
 import { cubicOut } from 'svelte/easing'
 import { enhance } from '$app/forms'
@@ -84,7 +85,12 @@ function handleShowCartSidebar() {
 
 async function getCategories() {
 	try {
-		const res1 = await getAPI(`categories?store=${$page.data.storeId}`, $page.data.origin)
+		const res1 = await CategoryService.fetchAllCategories({
+			origin: $page.data.origin,
+			sid: $page.data.sid,
+			storeId: $page.data.storeId
+		})
+
 		categories = res1?.data.filter((c) => {
 			return c.img
 		})

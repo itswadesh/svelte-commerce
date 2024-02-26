@@ -32,17 +32,17 @@ import {
 	LazyImg,
 	MegaMenu
 } from '$lib/components'
+import { browser } from '$app/environment'
+import { cartStore } from '$lib/store/cart'
+import { CategoryService } from 'lib/services'
 import { createEventDispatcher, onMount } from 'svelte'
 import { cubicOut } from 'svelte/easing'
 import { enhance } from '$app/forms'
 import { fade, fly } from 'svelte/transition'
-import { getAPI, post } from '$lib/utils/api'
 import { goto, invalidateAll } from '$app/navigation'
 import { logo } from '$lib/config'
 import { page } from '$app/stores'
 import menu from '$lib/config/menu'
-import { browser } from '$app/environment'
-import { cartStore } from '$lib/store/cart'
 
 const dispatch = createEventDispatcher()
 
@@ -157,7 +157,12 @@ function handleShowCartSidebar() {
 
 async function getCategories() {
 	try {
-		const res1 = await getAPI(`categories?store=${$page.data.storeId}`, $page.data.origin)
+		const res1 = await CategoryService.fetchAllCategories({
+			origin: $page.data.origin,
+			sid: $page.data.sid,
+			storeId: $page.data.storeId
+		})
+
 		categories = res1?.data.filter((c) => {
 			return c.img
 		})
@@ -166,30 +171,30 @@ async function getCategories() {
 	}
 }
 
-const removeItemFromCart = async ({ pid, qty, customizedImg, ix }: any) => {
-	try {
-		loadingForDeleteItemFromCart[ix] = true
-		const res = await post(
-			'carts/add-to-cart',
-			{
-				pid: pid,
-				qty: qty,
-				customizedImg: customizedImg || null,
-				store: $page.data.storeId
-			},
-			$page.data.origin
-		)
+// const removeItemFromCart = async ({ pid, qty, customizedImg, ix }: any) => {
+// 	try {
+// 		loadingForDeleteItemFromCart[ix] = true
+// 		const res = await post(
+// 			'carts/add-to-cart',
+// 			{
+// 				pid: pid,
+// 				qty: qty,
+// 				customizedImg: customizedImg || null,
+// 				store: $page.data.storeId
+// 			},
+// 			$page.data.origin
+// 		)
 
-		// cart = res
-		// $page.data.cart = res
+// 		// cart = res
+// 		// $page.data.cart = res
 
-		// await refreshCart()
-		await invalidateAll()
-	} catch (e) {
-	} finally {
-		loadingForDeleteItemFromCart[ix] = false
-	}
-}
+// 		// await refreshCart()
+// 		await invalidateAll()
+// 	} catch (e) {
+// 	} finally {
+// 		loadingForDeleteItemFromCart[ix] = false
+// 	}
+// }
 
 const optionIdentifier = 'name'
 const getOptionLabel = (option) => option.name

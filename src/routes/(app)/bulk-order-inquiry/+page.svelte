@@ -61,7 +61,6 @@
 <script>
 import { Confetti } from 'svelte-confetti'
 import { page } from '$app/stores'
-import { post } from '$lib/utils/api'
 import { ContactService } from '$lib/services'
 import Error from '$lib/components/Error.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'

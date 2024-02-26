@@ -8,8 +8,8 @@
 <script>
 import { CtrlS, SingleImageUpload } from '$lib/components'
 import { page } from '$app/stores'
-import { put } from '$lib/utils/api'
 import { toast } from '$lib/utils'
+import { UserService } from '$lib/services'
 import { WhiteButton } from '$lib/ui'
 import { z } from 'zod'
 import Cookie from 'cookie-universal'
@@ -70,6 +70,12 @@ async function saveProfile() {
 		else e.dob = null
 		// delete e.phone
 
+		const profileData = {
+			firstName: e.firstName,
+			lastName: e.lastName,
+			phone: e.phone
+		}
+
 		try {
 			zodProfileSchema.parse(e)
 			zodError = {}
@@ -85,7 +91,12 @@ async function saveProfile() {
 		if (Object.keys(zodError).length === 0) {
 			toast('Saving Profile Info...', 'warning')
 
-			data.profile = await put('users/update-profile', e, $page.data.origin)
+			data.profile = await UserService.updateProfileService({
+				e: profileData,
+				origin: $page.data.origin,
+				sid: $page.data.sid,
+				storeId: $page.data.storeId
+			})
 
 			if (data.profile) {
 				data.profile.dob = data.profile.dob ? dayjs(data.profile.dob).format('YYYY-MM-DD') : null

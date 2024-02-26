@@ -16,6 +16,7 @@ import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import { Pagination, LazyImg } from '$lib/components'
 import { PrimaryButton } from '$lib/ui'
+import { ReviewService } from '$lib/services'
 import noOnlineReviewAnimate from '$lib/assets/no/online-review-animate.svg'
 import SEO from '$lib/components/SEO/index.svelte'
 
@@ -51,7 +52,15 @@ async function sortNow(sort) {
 async function remove(id) {
 	try {
 		toast('Removing the selected review please wait...', 'info')
-		await del(`reviews?id=${id}&store=${$page.data.storeId}`, $page.data.origin)
+		// await del(`reviews?id=${id}&store=${$page.data.storeId}`, $page.data.origin)
+
+		const res = await ReviewService.deleteReview({
+			id,
+			origin: $page.data.origin,
+			sid: $page.data.sid,
+			storeId: $page.data.storeId
+		})
+
 		toast('Removed the review successfully', 'success')
 		// await refreshData()
 		invalidateAll()

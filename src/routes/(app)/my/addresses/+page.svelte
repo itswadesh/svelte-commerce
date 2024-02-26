@@ -1,7 +1,6 @@
 <script lang="ts">
 import { AddressService } from '$lib/services'
 import { applyAction, enhance } from '$app/forms'
-import { del } from '$lib/utils/api'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
 import { Pagination } from '$lib/components'
@@ -61,30 +60,30 @@ async function saveAddr(e) {
 	}
 }
 
-async function remove(id, index) {
-	data.err = null
+// async function remove(id, index) {
+// 	data.err = null
 
-	if (confirm('Are you sure to delete?')) {
-		try {
-			loadingOnDelete[index] = true
+// 	if (confirm('Are you sure to delete?')) {
+// 		try {
+// 			loadingOnDelete[index] = true
 
-			toast('Deleting...Please wait', 'warning')
+// 			toast('Deleting...Please wait', 'warning')
 
-			await del(`addresses/${id}?store=${$page.data.storeId}`, $page.data.origin)
+// 			await del(`addresses/${id}?store=${$page.data.storeId}`, $page.data.origin)
 
-			toast('Item deleted successfully', 'success')
+// 			toast('Item deleted successfully', 'success')
 
-			invalidateAll()
-		} catch (e) {
-			data.err = e?.message
-			toast(e, 'error')
-		} finally {
-			loadingOnDelete[index] = false
-		}
-	} else {
-		return
-	}
-}
+// 			invalidateAll()
+// 		} catch (e) {
+// 			data.err = e?.message
+// 			toast(e, 'error')
+// 		} finally {
+// 			loadingOnDelete[index] = false
+// 		}
+// 	} else {
+// 		return
+// 	}
+// }
 </script>
 
 <SEO {...seoProps} />

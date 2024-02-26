@@ -2,7 +2,6 @@
 import { browser } from '$app/environment'
 import { goto, invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
-import { post } from '$lib/utils/api'
 import { toast } from '$lib/utils'
 import Cookie from 'cookie-universal'
 import { LazyImg } from '$lib/components'
