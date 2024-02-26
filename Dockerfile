@@ -1,5 +1,5 @@
 ##### Stage 1 - Development - Generate dist folder
-FROM node:21 AS builder
+FROM node:21-slim AS builder
 LABEL author="Swadesh Behera"
 
 # RUN npm install -g npm
@@ -18,7 +18,7 @@ RUN cp -R node_modules prod_node_modules
 COPY . .
 RUN npm run build
 ##### Stage 2 - Production
-FROM builder as production
+FROM node:21-slim as production
 WORKDIR /usr/app
 COPY --from=builder /usr/app/prod_node_modules ./node_modules
 COPY --from=builder /usr/app/package*.json ./
