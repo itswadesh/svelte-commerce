@@ -19,7 +19,7 @@ COPY . .
 RUN yarn run build
 
 ##### Stage 2 - Production
-FROM node:21-slim as production
+FROM builder as production
 WORKDIR /usr/app
 COPY --from=builder /usr/app/prod_node_modules ./node_modules
 COPY --from=builder /usr/app/package*.json ./
