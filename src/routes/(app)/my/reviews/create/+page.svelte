@@ -36,7 +36,10 @@ let err = null
 let review = {
 	id: 'new',
 	pid: data.product?._id,
-	oid: $page?.url?.searchParams.get('oid') || null,
+	oid:
+		$page?.url?.searchParams.get('oid') !== 'undefined'
+			? $page?.url?.searchParams.get('oid')
+			: null,
 	message: '',
 	rating: null
 }
@@ -147,7 +150,7 @@ async function saveReviewproduct(review) {
 		{/if}
 	</header>
 
-	<Error {err} />
+	<Error {err} class="mb-5" />
 
 	<div class="flex flex-col-reverse xl:flex-row xl:gap-4">
 		<div class="mt-4 flex w-full flex-col gap-2 xl:mt-0 xl:w-1/3">

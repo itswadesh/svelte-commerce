@@ -14,7 +14,7 @@ import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { PrimaryButton } from '$lib/ui'
-import { ProductService } from '$lib/services'
+import { PopularSearchService, ProductService } from '$lib/services'
 import { sorts } from '$lib/config'
 import { storeStore } from '$lib/store/store'
 import dayjs from 'dayjs'
@@ -23,6 +23,8 @@ import noDataAvailable from '$lib/assets/no/no-data-available.png'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
+// console.log('zzzzzzzzzzzzzzzzzz', data)
+
 let today = dayjs(new Date()).toISOString()
 
 let seoProps = {
@@ -150,11 +152,12 @@ async function loadNextPage() {
 			data.isLoading = true
 
 			const res = await ProductService.fetchNextPageProducts({
-				categorySlug: data.products?.category?.slug,
-				origin: $page?.data?.origin,
-				storeId: $page.data.storeId,
+				categorySlug: null,
 				nextPage,
-				searchParams
+				searchParams,
+				origin: $page?.data?.origin,
+				sid: $page?.data?.sid,
+				storeId: $page.data.storeId
 			})
 
 			const nextPageData = res?.nextPageData
@@ -162,8 +165,8 @@ async function loadNextPage() {
 			data.err = !res?.estimatedTotalHits ? 'No result Not Found' : null
 			data.products.category = res?.category
 			data.products.count = res?.count
-			data.products.products = data?.products?.concat(nextPageData)
-			data.products.products.facets = res?.facets
+			data.products.data = data?.products?.concat(nextPageData)
+			data.products.data.facets = res?.facets
 
 			if (data.product?.count && data.products?.length === data.product?.count) {
 				reachedLast = true
@@ -357,7 +360,7 @@ function handleFilterTags() {
 		{/if}
 
 		<div class="w-full flex-1 sm:px-10 sm:pt-10 lg:pt-0 lg:px-0">
-			{#if data.products?.length}
+			{#if data.products?.count}
 				<div class="flex flex-col gap-5">
 					<div class="hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex">
 						<!-- Name and count -->
@@ -370,13 +373,13 @@ function handleFilterTags() {
 							<p>
 								-
 
-								{#if data.products.count}
-									{data.products.count}
+								{#if data.products?.count}
+									{data.products?.count}
 								{:else}
 									No
 								{/if}
 
-								{#if data.products.count}
+								{#if data.products?.count}
 									items
 								{:else}
 									item
@@ -407,7 +410,7 @@ function handleFilterTags() {
 
 				<ul
 					class="lg:mt-5 grid grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6">
-					{#each data.products as p, px}
+					{#each data.products?.data as p, px}
 						<li in:fly="{{ y: 20, duration: 300, delay: 100 * px }}">
 							<ProductCard product="{p}" />
 						</li>

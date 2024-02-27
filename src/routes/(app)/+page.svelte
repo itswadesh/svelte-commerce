@@ -110,7 +110,7 @@ onMount(async () => {
 		data.collections = collections
 		data.products = products
 	} catch (e) {
-		console.log('isWishlisted', e)
+		console.log('e', e)
 	}
 })
 </script>
