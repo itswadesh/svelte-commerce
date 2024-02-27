@@ -58,7 +58,13 @@ export const handle: Handle = async ({ event, resolve }) => {
 			// event.locals.store = storeAsJson
 		} else {
 			try {
-				console.log('domain...............', DOMAIN, url.host, event.locals.origin)
+				if (url.host == 'demo.litekart.in') {
+					console.log('domain...............', {
+						host: DOMAIN || url.host,
+						origin: event.locals.origin
+					})
+				}
+
 				const { storeOne } = await InitService.fetchInit({
 					host: DOMAIN || url.host,
 					origin: event.locals.origin
