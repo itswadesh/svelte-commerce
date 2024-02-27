@@ -7,6 +7,7 @@ export async function GET({ cookies, request, locals, setHeaders }) {
 
 	const host = locals.host
 	const origin = locals.origin
+
 	try {
 		const storeRes = await StoreService.getStoreData({
 			url: request.url,
