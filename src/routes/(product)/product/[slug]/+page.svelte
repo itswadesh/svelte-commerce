@@ -31,7 +31,7 @@ onMount(async () => {
 			data.moreProductDetails = moreProductDetails
 			data.productReviews = productReviews
 		} catch (e) {
-			console.log('isWishlisted', e)
+			console.log('e', e)
 		}
 	} else {
 		try {
@@ -62,7 +62,7 @@ onMount(async () => {
 			data.moreProductDetails = moreProductDetails
 			data.productReviews = productReviews
 		} catch (e) {
-			console.log('isWishlisted', e)
+			console.log('e', e)
 		}
 	}
 })
