@@ -40,7 +40,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		const protocol = !IS_DEV && !dev ? `https://` : `http://`
 		// This is required for vercel as it parse URL as http instead of https
 		event.locals.origin = protocol + host
-		event.locals.host = host
+		event.locals.host = url.host
 
 		const userAgent = event.request.headers.get('user-agent')
 
@@ -58,13 +58,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 			// event.locals.store = storeAsJson
 		} else {
 			try {
-				if (url.host == 'demo.litekart.in') {
-					console.log('domain...............', {
-						host: DOMAIN || url.host,
-						origin: event.locals.origin
-					})
-				}
-
 				const { storeOne } = await InitService.fetchInit({
 					host: DOMAIN || url.host,
 					origin: event.locals.origin

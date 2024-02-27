@@ -5,7 +5,7 @@ import { DOMAIN } from '$lib/config'
 export async function GET({ cookies, request, locals, setHeaders }) {
 	let store
 
-	const host = locals.origin
+	const host = locals.host
 	const origin = locals.origin
 	try {
 		const storeRes = await StoreService.getStoreData({
@@ -16,7 +16,7 @@ export async function GET({ cookies, request, locals, setHeaders }) {
 		})
 		store = storeRes.storeOne
 
-		setHeaders({ 'Cache-Control': 'max-age=300' })
+		// setHeaders({ 'Cache-Control': 'max-age=300' })
 	} catch (e) {}
 	return json({ store })
 }
