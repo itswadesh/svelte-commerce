@@ -13,7 +13,9 @@ export async function load({ url, parent }) {
 	for (const [key, value] of query.entries()) {
 		fl[key] = value
 	}
+
 	let products: any = {}
+
 	try {
 		products = await ProductService.fetchProducts({
 			query: query.toString(),
@@ -24,6 +26,7 @@ export async function load({ url, parent }) {
 	} catch (e) {
 		console.log(e)
 	}
+
 	return {
 		products,
 		query: query.toString(),

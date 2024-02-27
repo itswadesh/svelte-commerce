@@ -13,6 +13,7 @@ export const actions: Actions = {
 		try {
 			await UserService.logoutService({
 				storeId: locals.storeId,
+				origin: locals.origin,
 				sid: cookies.get('connect.sid')
 			})
 

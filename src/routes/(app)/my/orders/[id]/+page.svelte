@@ -56,7 +56,7 @@ onMount(() => {
 		<OrderListSkeleton />
 	{:else if data.order}
 		<section>
-			<BackButton to="/my/orders?sort=-updatedAt" class="mb-2" />
+			<BackButton to="/my/orders?sort=-updatedAt" clazz="mb-5" />
 
 			<div class="mb-5 overflow-hidden rounded border sm:mb-10">
 				<div class="flex flex-wrap items-center justify-between border-b bg-zinc-100 px-5 py-3">

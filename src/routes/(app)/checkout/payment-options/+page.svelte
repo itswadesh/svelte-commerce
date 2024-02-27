@@ -10,6 +10,7 @@ import { toast } from '$lib/utils'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
 import { OrdersService } from '$lib/services'
+
 const seoProps = {
 	title: 'Select Payment Option',
 	metaDescription: 'Choose your payment method'
