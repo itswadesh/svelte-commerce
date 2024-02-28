@@ -19,15 +19,13 @@ export let showNextIcon = false
 export let text = 'Proceed to checkout'
 
 $: cart = {}
-$: store = $page.data?.store
+$: store = $page.data.store
 
 onMount(() => {
 	cartStore.subscribe((value) => {
 		cart = value
 	})
 })
-
-// console.log('checkedCartItems', checkedCartItems)
 
 function modulo(n, m) {
 	// handle negative numbers
@@ -42,7 +40,7 @@ async function submit() {
 					cartId: cart?.cart_id || cart?.cartId || $page.data?.cartId,
 					selected_products_for_checkout: checkedCartItems,
 					origin: $page.data?.origin,
-					storeId: $page?.data?.storeId
+					storeId: $page.data.storeId
 				})
 
 				updateCartStore({ data: res })

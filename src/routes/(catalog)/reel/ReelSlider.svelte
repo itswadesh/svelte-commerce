@@ -8,7 +8,7 @@ import { applyAction, enhance } from '$app/forms'
 import { fade } from 'svelte/transition'
 import { cartStore, updateCartStore } from '$lib/store/cart'
 import { browser } from '$app/environment'
-import { services } from '$lib/services'
+import { CartService } from 'lib/services'
 
 export let products = []
 export let title = ''
@@ -29,11 +29,8 @@ const share = async ({ title, text, url }: any) => {
 				text: text,
 				url: url
 			})
-		} catch (error) {
-			// console.error('Error sharing:', error)
-		}
+		} catch (error) {}
 	} else {
-		// console.log('Web Share API not supported.')
 	}
 }
 
@@ -60,19 +57,23 @@ const addToCart = async ({ pid, qty, customizedImg, ix, loadingType }: any) => {
 	loading[ix] = true
 	cartButtonText = 'Checkout Cart'
 	isAddedtoBag = true
-	await CartService.addToCartService({
-		pid: pid,
-		vid: pid,
-		qty: qty,
-		customizedImg: customizedImg || null,
-		storeId: $page?.data?.storeId,
-		origin: $page.data.origin
-	})
+	try {
+		await CartService.addToCartService({
+			pid: pid,
+			vid: pid,
+			qty: qty,
+			customizedImg: customizedImg || null,
+			storeId: $page.data.storeId,
+			origin: $page.data.origin
+		})
 
-	await invalidateAll()
-
-	loading[ix] = false
-	selectedLoadingType = null
+		await invalidateAll()
+	} catch (e) {
+		console.log(e)
+	} finally {
+		loading[ix] = false
+		selectedLoadingType = null
+	}
 }
 
 $: innerWidth = 0
@@ -141,8 +142,6 @@ function handleClick(e) {
 }
 
 function handleMove(e) {
-	// console.log(e)
-
 	const ix = e.detail.index
 	const preIX = e.detail.prev
 	const vID = document.querySelector(`#active${ix}`)
@@ -150,17 +149,11 @@ function handleMove(e) {
 
 	if (vID) {
 		vID.play()
-		// showMuteButton[ix] = true
 	}
-
-	// console.log(vID.paused)
 
 	if (vID2) {
 		vID2.pause()
-		// showMuteButton[preIX] = false
 	}
-
-	// console.log('Paused video', vID, 'Played Video', vID2, showMuteButton)
 }
 </script>
 
@@ -229,7 +222,6 @@ function handleMove(e) {
 											method="POST"
 											use:enhance="{() => {
 												return async ({ result }) => {
-													// console.log('result of add to cart', result)
 													updateCartStore({ data: result.data })
 													cartButtonText = 'Added To Cart'
 													isAddedtoBag = true

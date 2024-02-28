@@ -36,9 +36,13 @@ import { browser } from '$app/environment'
 import { storeStore } from '$lib/store/store'
 
 export let data
+// console.log('zzzzzzzzzzzzzzzzzz', data)
+
 export let showFooter = false
 export let showPinCodeEntryModal = false
 let store = {}
+let loading = false
+
 onMount(() => {
 	if (browser) {
 		storeStore.subscribe((value) => (store = value))
@@ -54,27 +58,25 @@ onMount(() => {
 	<div class="mb-14 lg:mb-0">
 		<!-- Categories slider mobile -->
 
-		{#await data?.streamed?.home then home}
-			{#if home?.categories?.length}
-				<div class="block sm:hidden">
-					<CategoriesMobile loading="{home.isFetching}" categories="{home?.categories}" />
-				</div>
-			{/if}
-		{/await}
+		{#if data?.home?.categories?.length}
+			<div class="block sm:hidden">
+				<CategoriesMobile loading="{data.home?.isFetching}" categories="{data.home?.categories}" />
+			</div>
+		{/if}
 
 		<!-- Main slider banner -->
 
-		{#await data.streamed.home}
+		{#if loading}
 			<div class="h-96 w-full bg-zinc-200 animate-pulse"></div>
-		{:then home}
+		{:else if data.home}
 			<Hero
-				sliderBannersDesktop="{home.page?.sliderBanners?.banners}"
-				sliderBannersMobile="{home.page?.sliderBanners?.bannersMobile}" />
-		{/await}
+				sliderBannersDesktop="{data.home?.page?.sliderBanners?.banners}"
+				sliderBannersMobile="{data.home?.page?.sliderBanners?.bannersMobile}" />
+		{/if}
 
 		<!-- Alert message -->
 
-		{#if $page?.data?.store?.alert}
+		{#if $page.data.store?.alert}
 			<div class="p-3 py-5 sm:p-10 bg-primary-50">
 				<h1 class="container mx-auto text-center">
 					{$page?.data.store.alert}
@@ -84,21 +86,20 @@ onMount(() => {
 
 		<!-- top categories -->
 
-		{#await data?.streamed?.home}
+		{#if loading}
 			<ul class="flex flex-wrap gap-3 justify-center p-3 py-5 md:py-10">
 				{#each { length: 10 } as _}
 					<li class="h-24 w-24 shrink-0 rounded-full lg:h-28 lg:w-28 bg-zinc-200 animate-pulse">
 					</li>
 				{/each}
 			</ul>
-		{:then home}
-			{#if home?.categories?.length}
-				<div class="hidden sm:block">
-					<!-- <CategoriesHome categories="{data.home?.categories}" /> -->
+		{:else if data.home?.categories?.length}
+			<div class="hidden sm:block">
+				<!-- <CategoriesHome categories="{data.home?.categories}" /> -->
 
-					<CategoriesSlider title="Top Categories" categories="{home?.categories}" />
+				<CategoriesSlider title="Top Categories" categories="{data.home?.categories}" />
 
-					<!-- <h2 class="p-3 py-5 text-center uppercase sm:px-10 md:py-10">TOP COLLECTIONS</h2>
+				<!-- <h2 class="p-3 py-5 text-center uppercase sm:px-10 md:py-10">TOP COLLECTIONS</h2>
 
 					<div class="max-w-screen overflow-x-auto scrollbar-none lg:hidden">
 						<div class="flex flex-row">
@@ -138,9 +139,8 @@ onMount(() => {
 							{/if}
 						{/each}
 					</div> -->
-				</div>
-			{/if}
-		{/await}
+			</div>
+		{/if}
 
 		<!-- Hero banners -->
 
@@ -186,41 +186,33 @@ onMount(() => {
 			{/if}
 		{/await} -->
 
-		{#await data.streamed.home}
+		{#if loading}
 			<div class="p-3 py-5 md:py-10">
 				<Skeleton />
 			</div>
-		{:then home}
-			{#if home.page?.banners?.length > 0}
-				<CustomBanners sections="{home.page?.banners}" />
-			{/if}
-		{/await}
-
-		{#if store?.isDeals}
-			{#await data?.streamed?.deals}
-				<div class="p-3 py-5 md:py-10">
-					<Skeleton />
-				</div>
-			{:then deals}
-				{#if deals?.data?.length}
-					<Deals deals="{deals.data}" />
-				{/if}
-			{/await}
+		{:else if data.home.page?.banners?.length}
+			<CustomBanners sections="{data.home?.page?.banners}" />
 		{/if}
 
-		{#await data?.streamed?.collections}
+		{#if loading}
 			<div class="p-3 py-5 md:py-10">
 				<Skeleton />
 			</div>
-		{:then collections}
-			{#if collections?.data?.length}
-				<CollectionsGeneral collections="{collections.data}" />
-			{/if}
-		{/await}
+		{:else if data?.deals?.data?.length}
+			<Deals deals="{data?.deals.data}" />
+		{/if}
 
-		{#await data.streamed.home then home}
-			<HeroBannersCollage6 heroBanners="{home.heroBanners}" />
-		{/await}
+		{#if loading}
+			<div class="p-3 py-5 md:py-10">
+				<Skeleton />
+			</div>
+		{:else if data?.collections?.data?.length}
+			<CollectionsGeneral collections="{data?.collections.data}" />
+		{/if}
+
+		{#if data.home}
+			<HeroBannersCollage6 heroBanners="{data.home?.heroBanners}" />
+		{/if}
 
 		<!-- Popular products -->
 
@@ -265,7 +257,7 @@ onMount(() => {
 				type="button"
 				class="p-3 sm:px-10 w-full flex items-center justify-between gap-4 text-sm focus:outline-none"
 				on:click="{() => (showFooter = !showFooter)}">
-				<span>More about {$page.data?.store?.websiteName || 'store'}</span>
+				<span>More about {$page.data.store?.websiteName || 'store'}</span>
 
 				<svg
 					xmlns="http://www.w3.org/2000/svg"

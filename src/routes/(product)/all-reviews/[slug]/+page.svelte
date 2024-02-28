@@ -61,7 +61,7 @@ async function loadNextPage() {
 				brandIc: brandId,
 				slug: data.slug,
 				origin: $page?.data?.origin,
-				storeId: $page?.data?.storeId
+				storeId: $page.data.storeId
 			})
 
 			const isProduct = type === 'product_review' ? true : false
@@ -114,7 +114,7 @@ const handleSelectedProductGallery = (review, rx) => {
 	me="{$page?.data?.me}"
 	productName="{data.product?.name}"
 	url="{$page?.url?.href}"
-	store="{$page?.data?.store}">
+	store="{$page.data.store}">
 	<div class="flex max-w-max flex-col items-start gap-1">
 		<h2 class="max-w-[10rem] truncate font-semibold capitalize leading-4">
 			{$page?.url?.searchParams.get('type') || ''} Reviews

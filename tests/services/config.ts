@@ -17,10 +17,6 @@ export const getCookie = async () => {
 		store: storeId
 	}
 
-	// console.log(JSON.stringify(data));
-
-	// const opts =
-
 	const resLogin = await fetch(`${API_URL}login`, {
 		method: 'POST',
 		body: JSON.stringify(data || {}),

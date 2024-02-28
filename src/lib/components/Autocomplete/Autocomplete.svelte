@@ -2,10 +2,11 @@
 import { goto } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { CategoryService } from '$lib/services'
+import { AutocompleteService } from '$lib/services'
 import { slide } from 'svelte/transition'
 import Cookie from 'cookie-universal'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import { getCategoriesFromStore } from '$lib/store/categories'
 
 const cookies = Cookie()
 
@@ -32,8 +33,6 @@ onMount(() => {
 
 function submit() {
 	showSuggestionOptions = false
-
-	// console.log('autocomplete', autocomplete)
 
 	if (autocomplete?.length && autocomplete[0].slug && autocomplete[0].type === 'products') {
 		goto(`/product/${autocomplete[0].slug}`)
@@ -82,7 +81,7 @@ async function getData(e: any) {
 			autocomplete = await AutocompleteService.fetchAutocompleteData({
 				q: q,
 				origin: $page?.data?.origin,
-				storeId: $page?.data?.storeId
+				storeId: $page.data.storeId
 			})
 		} catch (e) {}
 	}, 200)
@@ -91,13 +90,12 @@ async function getData(e: any) {
 onMount(async () => {
 	searchInput.focus()
 	try {
-		categories = (
-			await CategoryService.fetchAllCategories({
-				featured: true,
-				storeId: $page?.data?.storeId,
-				origin: $page.data.origin
-			})
-		).data
+		const categoriesRes = await getCategoriesFromStore({
+			featured: true,
+			storeId: $page.data.storeId,
+			origin: $page.data.origin
+		})
+		categories = categoriesRes.data
 	} catch (e) {
 		err = e
 	} finally {

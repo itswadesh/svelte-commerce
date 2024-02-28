@@ -60,7 +60,7 @@ onMount(async () => {
 		if (!cart?.items) {
 			cart = await getCartFromStore({
 				origin: $page.data.origin,
-				storeId: $page?.data?.storeId,
+				storeId: $page.data.storeId,
 				cartId: $page.data.cartId,
 				forceUpdate: true
 			})
@@ -119,7 +119,7 @@ async function applyCouponCode(selectedCouponCode: string, index: number) {
 			cartId: $page.data.cartId,
 			code: selectedCouponCode,
 			origin: $page.data.origin,
-			storeId: $page?.data?.storeId
+			storeId: $page.data.storeId
 		})
 
 		appliedCouponInfo = resAC
@@ -127,7 +127,7 @@ async function applyCouponCode(selectedCouponCode: string, index: number) {
 		await getCartFromStore({
 			cartId: $page.data.cartId,
 			origin: $page.data.origin,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			forceUpdate: true
 		})
 		openApplyPromoCodeModal = false
@@ -150,7 +150,7 @@ async function removeCouponCode() {
 			cartId: $page.data.cartId,
 			code: selectedCouponCode || cart?.discount?.code,
 			origin: $page.data.origin,
-			storeId: $page?.data?.storeId
+			storeId: $page.data.storeId
 		})
 
 		selectedCouponCode = ''
@@ -158,7 +158,7 @@ async function removeCouponCode() {
 		await getCartFromStore({
 			cartId: $page.data.cartId,
 			origin: $page.data.origin,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			forceUpdate: true
 		})
 	} catch (e) {
@@ -174,7 +174,7 @@ async function getProducts() {
 
 		const resP = await ProductService.fetchProducts({
 			origin: $page?.data?.origin,
-			storeId: $page?.data?.storeId
+			storeId: $page.data.storeId
 		})
 		products = resP?.hits
 	} catch (e) {
@@ -188,7 +188,7 @@ async function getCoupons() {
 		loadingCoupon = true
 		const resC = await CouponService.fetchCoupons({
 			origin: $page?.data?.origin,
-			storeId: $page?.data?.storeId
+			storeId: $page.data.storeId
 		})
 		console.log('resC', resC)
 		coupons = resC?.data
@@ -348,7 +348,7 @@ function updateCheckedCartItemsInGroup() {
 															{item?.name}
 														</a>
 
-														{#if $page?.data?.store?.isFnb && item.foodType}
+														{#if $page.data.store?.isFnb && item.foodType}
 															<div>
 																{#if item.foodType === 'veg'}
 																	<img src="{productVeg}" alt="veg" class="h-5 w-5" />
@@ -496,7 +496,7 @@ function updateCheckedCartItemsInGroup() {
 													{item?.name}
 												</a>
 
-												{#if $page?.data?.store?.isFnb && item.foodType}
+												{#if $page.data.store?.isFnb && item.foodType}
 													<div>
 														{#if item.foodType === 'veg'}
 															<img src="{productVeg}" alt="veg" class="h-5 w-5" />

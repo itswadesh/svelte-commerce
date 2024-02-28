@@ -16,17 +16,20 @@ export const findAutocompleteFromStore = async ({ sid, storeId, origin, forceUpd
 
 	if ((!isLoading && !existingAutocomplete) || !!forceUpdate) {
 		isLoading = true
+		try {
+			const autocompleteDataFromServer = await CategoryService.fetchAllCategories({
+				sid,
+				origin,
+				storeId,
+				featured: false
+			})
 
-		const autocompleteDataFromServer = await CategoryService.fetchAllCategories({
-			sid,
-			origin,
-			storeId,
-			featured: false
-		})
-
-		autocompleteStore.update((u) => autocompleteDataFromServer?.data)
-
-		isLoading = false
+			autocompleteStore.update((u) => autocompleteDataFromServer?.data)
+		} catch (e) {
+			console.log('error', e)
+		} finally {
+			isLoading = false
+		}
 	}
 
 	return existingAutocomplete

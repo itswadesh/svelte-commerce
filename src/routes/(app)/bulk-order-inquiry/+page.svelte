@@ -61,7 +61,6 @@
 <script>
 import { Confetti } from 'svelte-confetti'
 import { page } from '$app/stores'
-import { post } from '$lib/utils/api'
 import { ContactService } from '$lib/services'
 import Error from '$lib/components/Error.svelte'
 import PrimaryButton from '$lib/ui/PrimaryButton.svelte'
@@ -118,7 +117,7 @@ async function submit() {
 			interestedProducts: blukOrder.interestedProducts,
 			minQty: blukOrder.minQty,
 			message: blukOrder.message,
-			store: $page?.data?.storeId,
+			store: $page.data.storeId,
 			origin: $page.data.origin
 		})
 

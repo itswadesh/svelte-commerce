@@ -12,13 +12,17 @@ let categoriesProducts
 let showCount = 10
 
 onMount(async () => {
-	categoriesProducts = (
-		await HomeService.fetchCategoriesProducts({
-			categories,
-			origin,
-			storeId: $page?.data?.storeId
-		})
-	).data
+	try {
+		categoriesProducts = (
+			await HomeService.fetchCategoriesProducts({
+				categories,
+				origin,
+				storeId: $page.data.storeId
+			})
+		).data
+	} catch (e) {
+		console.log(e)
+	}
 })
 </script>
 

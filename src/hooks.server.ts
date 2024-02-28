@@ -1,9 +1,10 @@
 // import * as SentryNode from '@sentry/node'
 import { authenticateUser } from '$lib/server'
-import { DOMAIN, listOfPagesWithoutBackButton } from '$lib/config'
+import { browser, building, dev, version } from '$app/environment'
+import { DOMAIN, IS_DEV, listOfPagesWithoutBackButton } from '$lib/config'
 import { error, type Handle, type HandleServerError } from '@sveltejs/kit'
-import { nanoid } from 'nanoid'
 import { InitService } from '$lib/services'
+import { nanoid } from 'nanoid'
 
 // const SENTRY_DSN = env.SECRET_SENTRY_DSN
 
@@ -33,17 +34,14 @@ export const handleError: HandleServerError = ({ error, event }) => {
 }
 
 export const handle: Handle = async ({ event, resolve }) => {
-	const IS_DEV = import.meta.env.DEV
-	console.log('IS_DEV', IS_DEV)
-
 	try {
 		const url = new URL(event.request.url)
 		const host = url.host
 		const protocol = !IS_DEV && !dev ? `https://` : `http://`
 		// This is required for vercel as it parse URL as http instead of https
 		event.locals.origin = protocol + host
-		event.locals.host = host
-		// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', event.locals.origin, event.locals.host)
+		event.locals.host = url.host
+
 		const userAgent = event.request.headers.get('user-agent')
 
 		const isDesktop = !/mobile/i.test(userAgent)
@@ -61,10 +59,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 		} else {
 			try {
 				const { storeOne } = await InitService.fetchInit({
-					host: DOMAIN || host,
+					host: DOMAIN || url.host,
 					origin: event.locals.origin
 				})
-
 				const storeId = storeOne?._id
 				// const store = {
 				// 	id: storeOne?.id,
