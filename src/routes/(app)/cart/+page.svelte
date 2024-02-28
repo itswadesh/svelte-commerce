@@ -48,12 +48,11 @@ let selectedLoadingType = null
 $: cart = {}
 $: isCartLoading = true
 $: checkedCartItems = []
-let store
 
 onMount(async () => {
 	if (browser) {
-		storeStore.subscribe((value) => (store = value))
-
+		// storeStore.subscribe((value) => (store = value))
+		// console.log('store', store)
 		cartStore.subscribe((value) => {
 			cart = value
 		})
@@ -191,6 +190,7 @@ async function getCoupons() {
 			origin: $page?.data?.origin,
 			storeId: $page?.data?.storeId
 		})
+		console.log('resC', resC)
 		coupons = resC?.data
 	} catch (e) {
 	} finally {
@@ -788,7 +788,7 @@ function updateCheckedCartItemsInGroup() {
 
 				<div class="w-full lg:w-96 lg:shrink-0 lg:grow-0">
 					<!-- Promo code section -->
-					{#if store?.isDiscountCoupons}
+					{#if $page?.data?.store?.isDiscountCoupons}
 						<div class="h-10 sm:h-14 flex items-center">
 							{#if cart?.discount?.amount > 0}
 								<div class="flex w-full items-center justify-between text-sm">
