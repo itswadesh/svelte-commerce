@@ -4,7 +4,6 @@ import { date, currency, delay, toast } from '$lib/utils'
 import { fireGTagEvent } from '$lib/utils/gTagB'
 import { invalidateAll } from '$app/navigation'
 import { page } from '$app/stores'
-import { post } from '$lib/utils/api'
 import AnimatedCartItem from '$lib/components/AnimatedCartItem.svelte'
 import { LazyImg } from '$lib/components'
 import { PrimaryButton } from '$lib/ui'
@@ -30,7 +29,7 @@ let bounceItemFromTop = false
 // 				vid: p._id,
 // 				qty: 1,
 // 				options: p.options,
-// 				store: $page?.data?.storeId
+// 				store: $page.data.storeId
 // 			},
 // 			$page.data.origin
 // 		)
@@ -96,7 +95,7 @@ let bounceItemFromTop = false
 						{product.name}
 					</h2>
 
-					{#if $page?.data?.store?.isFnb && product.foodType}
+					{#if $page.data.store?.isFnb && product.foodType}
 						<div>
 							{#if product.foodType === 'veg'}
 								<img src="{productVeg}" alt="veg" class="h-5 w-5" />

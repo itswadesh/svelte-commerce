@@ -16,6 +16,4 @@ test('Test Fetch FAQ', async ({ request }) => {
 	// expect resFaq status code should 200
 
 	expect(resFaq.status()).toBe(200)
-
-	// console.log('resFaq', await resFaq.json())
 })

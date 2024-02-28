@@ -196,12 +196,6 @@ const handleUnavailableItems: Action = async ({ request, cookies, locals }) => {
 			origin: locals.origin,
 			sid // This is a special case to pass complete cookie
 		})
-
-		// console.log('movedRes', movedRes);
-
-		// if (movedRes.qty) {
-		// 	locals.cartQty = movedRes.qty
-		// }
 	} catch (e) {
 		return {}
 	}

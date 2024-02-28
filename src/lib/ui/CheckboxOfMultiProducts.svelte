@@ -32,7 +32,7 @@ export let name = ''
 export let required = false
 export let selectedItems = []
 // let store = {}
-$: store = $page.data?.store
+$: store = $page.data.store
 
 // onMount(() => {
 // 	if (browser) {

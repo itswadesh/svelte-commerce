@@ -7,8 +7,6 @@ test('Test Fetch All Category', async ({ request }) => {
 	// expect categories status code should 200
 
 	expect(categories.status()).toBe(200)
-
-	// console.log('categories', await categories.json())
 })
 
 test('Test Fetch MegaMenu', async ({ request }) => {
@@ -18,11 +16,7 @@ test('Test Fetch MegaMenu', async ({ request }) => {
 		`${API_URL}categories/megamenu?megamenu=${megamenu}&store=${storeId}&active=true`
 	)
 
-	// expect resMegamenu status code should 200
-
 	expect(resMegamenu.status()).toBe(200)
-
-	// console.log('megamenu', await resMegamenu.json())
 })
 
 test('Test Fetch Category', async ({ request }) => {
@@ -45,9 +39,5 @@ test('Test Fetch Category', async ({ request }) => {
 		`${API_URL}es/categories/${id}?store=${storeId}&children=${children}`
 	)
 
-	// expect resCategory status code should 200
-
 	expect(resCategory.status()).toBe(200)
-
-	// console.log('categories', await resCategory.json())
 })

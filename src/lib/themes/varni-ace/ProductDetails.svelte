@@ -89,31 +89,25 @@ const cookies = Cookie()
 const isServer = import.meta.env.SSR
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let currentVariantId = $page.url.searchParams?.get('variant') || ''
 let currentVariantPrice = data.product?.price || 0
 
 let seoProps = {
-	// addressCountry: 'India',
-	// addressLocality: 'Semiliguda, Koraput',
-	// addressRegion: 'Odisha',
-	// alternateJsonHref: '',
-	// alternateXml: { title: '', href: '' },
-	brand: `${$page?.data?.store?.websiteName}`,
+	brand: `${$page.data.store?.websiteName}`,
 	breadcrumbs: data.product?.categoryPool,
-	caption: `${$page?.data?.store?.websiteName}`,
+	caption: `${$page.data.store?.websiteName}`,
 	category: data.product?.category?.name,
-	contentUrl: data.product?.img || $page?.data?.store?.logo,
+	contentUrl: data.product?.img || $page.data.store?.logo,
 	createdAt: `${data.product?.createdAt || '_'}`,
 	// depth: { unitCode: '', value: '' },
-	email: `${$page?.data?.store?.email}`,
+	email: `${$page.data.store?.email}`,
 	// entityMeta: '',
 	// facebookPage: '',
 	// gtin: '',
 	// height: '',
 	id: $page?.url?.href,
-	logo: $page?.data?.store?.logo,
+	logo: $page.data.store?.logo,
 	// ogSquareImage: { url: 'https://lrnr.in/favicon.ico', width: 56, height: 56 },
 	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00'],
 	popularity: data.product?.popularity,
@@ -151,10 +145,10 @@ let seoProps = {
 	ogImageType: 'image/jpeg',
 	ogSiteName: `${$page.data.origin}/sitemap/sitemap.xml`,
 	productAvailability: `${data.product?.stock}`,
-	productBrand: `${data.product?.brandName || `${$page?.data?.store?.websiteName}`}`,
+	productBrand: `${data.product?.brandName || `${$page.data.store?.websiteName}`}`,
 	productName: `${data.product?.name}`,
 	productPriceAmount: `${currentVariantPrice}`,
-	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
+	productPriceCurrency: `${$page.data.store?.currencyCode}`,
 	slug: `${data.product?.slug}`,
 	// timeToRead: 0,
 	title: `${data.product?.name}`,
@@ -218,8 +212,6 @@ if (data.product?.tags?.length) {
 	ribbonTags = data.product?.tags.filter((tag) => {
 		return tag.type === 'Ribbon'
 	})
-
-	// console.log('Ribbon tags =', ribbonTags)
 }
 let store = {}
 onMount(async () => {
@@ -233,7 +225,7 @@ onMount(async () => {
 })
 
 const storeRecentlyViewedToLocatStorage = async () => {
-	const localRecentlyViewed = localStorage.getItem(`recently_viewed_${$page?.data?.storeId}`)
+	const localRecentlyViewed = localStorage.getItem(`recently_viewed_${$page.data.storeId}`)
 
 	if (!!localRecentlyViewed && localRecentlyViewed !== 'undefined') {
 		recentlyViewed = JSON.parse(localRecentlyViewed)
@@ -262,10 +254,7 @@ const storeRecentlyViewedToLocatStorage = async () => {
 		recentlyViewed = resvw
 
 		if (browser) {
-			localStorage.setItem(
-				`recently_viewed_${$page?.data?.storeId}`,
-				JSON.stringify(recentlyViewed)
-			)
+			localStorage.setItem(`recently_viewed_${$page.data.storeId}`, JSON.stringify(recentlyViewed))
 		}
 	}
 }
@@ -290,8 +279,6 @@ function selectSize(s) {
 
 function handleSelectedLinkiedProducts(e) {
 	selectedLinkiedProducts = e.detail
-
-	// console.log('selectedLinkiedProducts', selectedLinkiedProducts)
 }
 
 // This is used only for customized product else cart?/add
@@ -307,7 +294,7 @@ async function addToBag(p, customizedImg, customizedJson) {
 			qty: 1,
 			options: selectedOptions,
 			customizedImg: customizedImg,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			customizedData: customizedJson,
 			origin: $page.data.origin,
 			server: isServer,
@@ -319,7 +306,7 @@ async function addToBag(p, customizedImg, customizedJson) {
 					pid: i,
 					vid: i,
 					qty: 1,
-					storeId: $page?.data?.storeId,
+					storeId: $page.data.storeId,
 					origin: $page.data.origin,
 					server: isServer,
 					cookies
@@ -474,7 +461,7 @@ async function updateVariant(variant) {
 	me="{$page?.data?.me}"
 	productName="{data.product?.name}"
 	url="{$page?.url?.href}"
-	store="{$page?.data?.store}" />
+	store="{$page.data.store}" />
 
 <div class="min-h-screen lg:p-10">
 	<div class="container mx-auto max-w-6xl flex flex-col gap-5">
@@ -1205,8 +1192,6 @@ async function updateVariant(variant) {
 						method="POST"
 						use:enhance="{() => {
 							return async ({ result }) => {
-								// console.log('result of add to cart', result)
-
 								toast('Your back order is created successfully', 'success')
 
 								await invalidateAll()
@@ -1237,8 +1222,6 @@ async function updateVariant(variant) {
 										method="POST"
 										use:enhance="{() => {
 											return async ({ result }) => {
-												// console.log('wishlist toggle result', result)
-
 												if (result?.type === 'redirect') {
 													goto(result?.location)
 												} else if (result?.data) {
@@ -1380,7 +1363,6 @@ async function updateVariant(variant) {
 												method="POST"
 												use:enhance="{() => {
 													return async ({ result }) => {
-														// console.log('result of add to cart', result)
 														if (result?.data === 'choose variant') {
 															scrollTo('variants_list')
 															toast('Please choose a variant', 'warning')
@@ -1642,8 +1624,6 @@ async function updateVariant(variant) {
 										method="POST"
 										use:enhance="{() => {
 											return async ({ result }) => {
-												// console.log('wishlist toggle result', result)
-
 												if (result?.type === 'redirect') {
 													goto(result?.location)
 												} else if (result?.data) {
@@ -1786,7 +1766,6 @@ async function updateVariant(variant) {
 												method="POST"
 												use:enhance="{() => {
 													return async ({ result }) => {
-														// console.log('result of add to cart', result)
 														if (result?.data === 'choose variant') {
 															scrollTo('variants_list')
 															toast('Please choose a variant', 'warning')
@@ -1885,8 +1864,6 @@ async function updateVariant(variant) {
 										method="POST"
 										use:enhance="{() => {
 											return async ({ result }) => {
-												// console.log('wishlist toggle result', result)
-
 												if (result?.type === 'redirect') {
 													goto(result?.location)
 												} else if (result?.data) {
@@ -2029,7 +2006,6 @@ async function updateVariant(variant) {
 												method="POST"
 												use:enhance="{() => {
 													return async ({ result }) => {
-														// console.log('result of add to cart', result)
 														if (result?.data === 'choose variant') {
 															scrollTo('variants_list')
 															toast('Please choose a variant', 'warning')

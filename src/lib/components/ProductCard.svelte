@@ -39,7 +39,6 @@ import { browser } from '$app/environment'
 import { onMount } from 'svelte'
 
 export let product = {}
-// console.log('zzzzzzzzzzzzzzzzzz', product)
 
 if (product?._source) {
 	product = product?._source
@@ -60,17 +59,13 @@ function hideitems() {
 	show = false
 }
 
-// console.log('product', product)
-
 if (product?.tags?.length) {
 	ribbonTags = product?.tags.filter((tag) => {
 		return tag.type === 'Ribbon'
 	})
-
-	// console.log('Ribbon tags =', ribbonTags)
 }
 
-$: store = $page.data?.store
+$: store = $page.data.store
 
 onMount(async () => {
 	if (browser) {
@@ -469,7 +464,7 @@ onMount(async () => {
 							{product.name || '_'}
 						</h4>
 
-						{#if $page?.data?.store?.isFnb && product.foodType}
+						{#if $page.data.store?.isFnb && product.foodType}
 							<div>
 								{#if product.foodType === 'veg'}
 									<img src="{productVeg}" alt="veg" class="h-5 w-5" />
@@ -481,7 +476,7 @@ onMount(async () => {
 					</div>
 				</a>
 
-				{#if $page?.data?.store?.isMultiVendor && product?.vendor && product?.vendor?.slug && product?.vendor?.businessName}
+				{#if $page.data.store?.isMultiVendor && product?.vendor && product?.vendor?.slug && product?.vendor?.businessName}
 					<div class="flex items-center gap-1 text-xs sm:text-sm text-zinc-500">
 						<span> By </span>
 

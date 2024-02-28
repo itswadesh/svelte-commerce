@@ -9,7 +9,6 @@ export let product
 export let reviewsSummary = {}
 export let reviews = {}
 
-// console.log('reviews', reviews)
 
 let clazz = ''
 export { clazz as class }

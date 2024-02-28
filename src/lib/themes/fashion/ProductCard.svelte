@@ -44,14 +44,12 @@ if (product?._source) {
 	product = product?._source
 }
 
-// console.log('product', product)
 
 if (product?.tags?.length) {
 	ribbonTags = product?.tags.filter((tag) => {
 		return tag.type === 'Ribbon'
 	})
 
-	// console.log('Ribbon tags =', ribbonTags)
 }
 
 let store = {}

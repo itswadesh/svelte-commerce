@@ -30,7 +30,6 @@ import { updateCartStore } from '$lib/store/cart'
 import { storeStore } from '$lib/store/store'
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 let store = {}
 onMount(() => {
 	if (browser) {
@@ -48,20 +47,20 @@ let seoProps = {
 	// addressRegion: 'Odisha',
 	// alternateJsonHref: '',
 	// alternateXml: { title: '', href: '' },
-	brand: `${$page?.data?.store?.websiteName}`,
+	brand: `${$page.data.store?.websiteName}`,
 	breadcrumbs: data.product?.categoryPool,
-	caption: `${$page?.data?.store?.websiteName}`,
+	caption: `${$page.data.store?.websiteName}`,
 	category: data.product?.category?.name,
-	contentUrl: data.product?.img || $page?.data?.store?.logo,
+	contentUrl: data.product?.img || $page.data.store?.logo,
 	createdAt: `${data.product?.createdAt || '_'}`,
 	// depth: { unitCode: '', value: '' },
-	email: `${$page?.data?.store?.email}`,
+	email: `${$page.data.store?.email}`,
 	// entityMeta: '',
 	// facebookPage: '',
 	// gtin: '',
 	// height: '',
 	id: $page?.url?.href,
-	logo: $page?.data?.store?.logo,
+	logo: $page.data.store?.logo,
 	// ogSquareImage: { url: 'https://lrnr.in/favicon.ico', width: 56, height: 56 },
 	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00'],
 	popularity: data.product?.popularity,
@@ -99,10 +98,10 @@ let seoProps = {
 	ogImageType: 'image/jpeg',
 	ogSiteName: `${$page.data.origin}/sitemap/sitemap.xml`,
 	productAvailability: `${data.product?.stock}`,
-	productBrand: `${data.product?.brandName || `${$page?.data?.store?.websiteName}`}`,
+	productBrand: `${data.product?.brandName || `${$page.data.store?.websiteName}`}`,
 	productName: `${data.product?.name}`,
 	productPriceAmount: `${currentVariantId}`,
-	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
+	productPriceCurrency: `${$page.data.store?.currencyCode}`,
 	slug: `${data.product?.slug}`,
 	// timeToRead: 0,
 	title: `${data.product?.name}`,
@@ -129,7 +128,7 @@ function selectSize(s) {
 }
 
 const storeRecentlyViewedToLocatStorage = async () => {
-	const localRecentlyViewed = localStorage.getItem(`recently_viewed_${$page?.data?.storeId}`)
+	const localRecentlyViewed = localStorage.getItem(`recently_viewed_${$page.data.storeId}`)
 
 	if (!!localRecentlyViewed && localRecentlyViewed !== 'undefined') {
 		recentlyViewed = JSON.parse(localRecentlyViewed)
@@ -158,10 +157,7 @@ const storeRecentlyViewedToLocatStorage = async () => {
 		recentlyViewed = resvw
 
 		if (browser) {
-			localStorage.setItem(
-				`recently_viewed_${$page?.data?.storeId}`,
-				JSON.stringify(recentlyViewed)
-			)
+			localStorage.setItem(`recently_viewed_${$page.data.storeId}`, JSON.stringify(recentlyViewed))
 		}
 	}
 }
@@ -213,7 +209,7 @@ function scrollTo(elementId) {
 	me="{$page?.data?.me}"
 	productName="{data.product?.name}"
 	url="{$page?.url?.href}"
-	store="{$page?.data?.store}" />
+	store="{$page.data.store}" />
 
 <div class="min-h-screen lg:p-10">
 	<div class="md:container md:mx-auto max-w-6xl flex flex-col gap-10">
@@ -270,7 +266,7 @@ function scrollTo(elementId) {
 							{data.product?.name}
 						</h1>
 
-						{#if $page?.data?.store?.isFnb && data.product.foodType}
+						{#if $page.data.store?.isFnb && data.product.foodType}
 							<div>
 								{#if data.product.foodType === 'veg'}
 									<img src="{productVeg}" alt="veg" class="h-5 w-5" />
@@ -549,7 +545,6 @@ function scrollTo(elementId) {
 						method="POST"
 						use:enhance="{() => {
 							return async ({ result }) => {
-								// console.log('result of add to cart', result)
 								if (result?.data === 'choose variant') {
 									scrollTo('variants_list')
 									toast('Please choose a variant', 'warning')
@@ -612,7 +607,6 @@ function scrollTo(elementId) {
 						method="POST"
 						use:enhance="{() => {
 							return async ({ result }) => {
-								// console.log('result of add to cart', result)
 								if (result?.data === 'choose variant') {
 									scrollTo('variants_list')
 									toast('Please choose a variant', 'warning')

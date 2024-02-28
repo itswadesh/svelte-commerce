@@ -39,7 +39,6 @@ onMount(() => {
 			} else {
 				const videoId = getIdFromYoutubeVideo(img)
 
-				// console.log('videoId', videoId)
 
 				if (videoId) {
 					isVideoUrlAvailable = videoId
@@ -47,7 +46,6 @@ onMount(() => {
 			}
 		})
 
-		// console.log(`isVideoUrlAvailable`, isVideoUrlAvailable)
 	}
 })
 </script>

@@ -12,7 +12,6 @@ import SEO from '$lib/components/SEO/index.svelte'
 import { CartService } from '$lib/services'
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 const seoProps = {
 	title: 'Address ',
@@ -81,7 +80,7 @@ async function updateCart() {
 				selfTakeout: false,
 				cartId: data?.cartId,
 				origin: $page.data?.origin,
-				storeId: $page?.data?.storeId
+				storeId: $page.data.storeId
 			})
 
 			if (data.prescriptionId) {
@@ -126,7 +125,7 @@ async function refreshAddress() {
 									<SelectAddress
 										address="{ads}"
 										{loading}
-										countries="{data.countries}"
+										countries="{data.countries?.data}"
 										{selectedAddress}
 										on:deleteAddress="{refreshAddress}"
 										on:addressChanged="{({ detail }) => addressChanged({ detail })}" />
@@ -176,7 +175,7 @@ async function refreshAddress() {
 											<SelectBillingAddress
 												address="{ads}"
 												{loading}
-												countries="{data.countries}"
+												countries="{data.countries?.data}"
 												{selectedBillingAddress}
 												on:deleteAddress="{refreshAddress}"
 												on:addressChanged="{({ detail }) => billingAddressChanged({ detail })}" />
@@ -243,7 +242,7 @@ async function refreshAddress() {
 					Login to view your saved address
 				</a>
 
-				<SaveAddress {billing_address} {shipping_address} countries="{data.countries}" />
+				<SaveAddress {billing_address} {shipping_address} countries="{data.countries?.data}" />
 			{/if}
 		</div>
 

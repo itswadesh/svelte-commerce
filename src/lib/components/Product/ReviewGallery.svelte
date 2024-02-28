@@ -21,7 +21,7 @@ export let gallery
 let Splide: any
 let currentImageIndex = 0
 // let store = {}
-$: store = $page.data?.store
+$: store = $page.data.store
 
 onMount(async () => {
 	// if (browser) {

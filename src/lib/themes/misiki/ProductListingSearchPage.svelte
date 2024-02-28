@@ -14,7 +14,7 @@ import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { PrimaryButton } from '$lib/ui'
-import { ProductService } from '$lib/services'
+import { PopularSearchService, ProductService } from '$lib/services'
 import { sorts } from '$lib/config'
 import { storeStore } from '$lib/store/store'
 import dayjs from 'dayjs'
@@ -24,46 +24,47 @@ import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
 // console.log('zzzzzzzzzzzzzzzzzz', data)
+
 let today = dayjs(new Date()).toISOString()
 
 let seoProps = {
-	brand: $page.data?.store?.title,
+	brand: $page.data.store?.title,
 	// breadcrumbs: data.category?.children,
-	caption: $page.data?.store?.title,
+	caption: $page.data.store?.title,
 	category: data.searchData,
-	contentUrl: $page.data?.store?.logo,
+	contentUrl: $page.data.store?.logo,
 	createdAt: today,
-	email: `${$page?.data?.store?.email}`,
+	email: `${$page.data.store?.email}`,
 	id: $page?.url?.href,
-	image: $page.data?.store?.logo,
-	logo: $page.data?.store?.logo,
+	image: $page.data.store?.logo,
+	logo: $page.data.store?.logo,
 	ogSquareImage: { url: '', width: 56, height: 56 },
 	openingHours: ['Monday,Tuesday,Wednesday,Thursday,Friday,Saturday 10:00-20:00'],
 	timeToRead: 0,
 	updatedAt: today,
-	metaDescription: $page.data?.store?.description,
+	metaDescription: $page.data.store?.description,
 	datePublished: today,
-	description: $page.data?.store?.description,
+	description: $page.data.store?.description,
 	dnsPrefetch: `//cdn.jsdelivr.net`,
 	featuredImage: {
-		url: $page.data?.store?.logo,
+		url: $page.data.store?.logo,
 		width: 675,
 		height: 380,
-		caption: $page.data?.store?.title
+		caption: $page.data.store?.title
 	},
-	keywords: $page.data?.store?.keywords,
+	keywords: $page.data.store?.keywords,
 	lastUpdated: today,
-	msapplicationTileImage: $page.data?.store?.logo,
-	ogImage: { url: $page.data?.store?.logo, width: 128, height: 56 },
-	ogImageSecureUrl: `${$page?.data?.store?.logo}`,
+	msapplicationTileImage: $page.data.store?.logo,
+	ogImage: { url: $page.data.store?.logo, width: 128, height: 56 },
+	ogImageSecureUrl: `${$page.data.store?.logo}`,
 	ogImageType: 'image/jpeg',
 	ogSiteName: `${$page.data.origin}/sitemap/sitemap.xml`,
 	productBrand: data.searchData,
 	productName: data.searchData,
-	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
+	productPriceCurrency: `${$page.data.store?.currencyCode}`,
 	slug: `/`,
 	title: data.searchData || 'Buy online',
-	twitterImage: { url: $page.data?.store?.logo }
+	twitterImage: { url: $page.data.store?.logo }
 }
 
 let currentPage = 1
@@ -97,7 +98,7 @@ async function saveSearchData(searchData) {
 		await PopularSearchService.savePopularSearch({
 			id: 'new',
 			text: searchData,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 	} catch (e) {
@@ -151,22 +152,21 @@ async function loadNextPage() {
 			data.isLoading = true
 
 			const res = await ProductService.fetchNextPageProducts({
-				categorySlug: data.products?.category?.slug,
-				origin: $page?.data?.origin,
-				storeId: $page?.data?.storeId,
+				categorySlug: null,
 				nextPage,
-				searchParams
+				searchParams,
+				origin: $page?.data?.origin,
+				sid: $page?.data?.sid,
+				storeId: $page.data.storeId
 			})
-
-			// console.log('res', res)
 
 			const nextPageData = res?.nextPageData
 			currentPage = currentPage + 1
 			data.err = !res?.estimatedTotalHits ? 'No result Not Found' : null
 			data.products.category = res?.category
 			data.products.count = res?.count
-			data.products.products = data?.products?.concat(nextPageData)
-			data.products.products.facets = res?.facets
+			data.products.data = data?.products?.concat(nextPageData)
+			data.products.data.facets = res?.facets
 
 			if (data.product?.count && data.products?.length === data.product?.count) {
 				reachedLast = true
@@ -297,7 +297,7 @@ function handleFilterTags() {
 
 <svelte:window bind:scrollY="{y}" bind:innerWidth on:scroll="{handleOnScroll}" />
 
-<CatelogNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page?.data?.store}">
+<CatelogNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page.data.store}">
 	<div class="flex max-w-max flex-col items-start gap-1">
 		{#if data.searchData}
 			<h5 class="w-40 shrink-0 truncate capitalize leading-4 text-left">{data.searchData}</h5>
@@ -341,7 +341,7 @@ function handleFilterTags() {
 	<div class="mb-10 flex flex-col items-start sm:mb-20 lg:flex-row lg:gap-10 lg:p-10">
 		{#if data.products.facets}
 			<DesktopFilter
-				class="sticky hidden lg:block {$page.data?.store?.hellobar?.active?.val
+				class="sticky hidden lg:block {$page.data.store?.hellobar?.active?.val
 					? 'top-32'
 					: 'top-24'}"
 				facets="{data.products.facets}"
@@ -360,7 +360,7 @@ function handleFilterTags() {
 		{/if}
 
 		<div class="w-full flex-1 sm:px-10 sm:pt-10 lg:pt-0 lg:px-0">
-			{#if data.products?.length}
+			{#if data.products?.count}
 				<div class="flex flex-col gap-5">
 					<div class="hidden flex-wrap items-center justify-between gap-4 px-3 sm:px-0 lg:flex">
 						<!-- Name and count -->
@@ -373,13 +373,13 @@ function handleFilterTags() {
 							<p>
 								-
 
-								{#if data.products.count}
-									{data.products.count}
+								{#if data.products?.count}
+									{data.products?.count}
 								{:else}
 									No
 								{/if}
 
-								{#if data.products.count}
+								{#if data.products?.count}
 									items
 								{:else}
 									item
@@ -410,7 +410,7 @@ function handleFilterTags() {
 
 				<ul
 					class="lg:mt-5 grid grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6">
-					{#each data.products as p, px}
+					{#each data.products?.data as p, px}
 						<li in:fly="{{ y: 20, duration: 300, delay: 100 * px }}">
 							<ProductCard product="{p}" />
 						</li>

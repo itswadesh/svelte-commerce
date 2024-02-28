@@ -27,8 +27,6 @@ export const fireGTagEvent = (event_name, data) => {
 		items
 	}
 
-	// console.log('items', items);
-
 	switch (event_name) {
 		case 'add_to_cart':
 			// @ts-ignore

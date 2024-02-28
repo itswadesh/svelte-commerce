@@ -1,7 +1,6 @@
 <script>
 import { applyAction, enhance } from '$app/forms'
 import { createEventDispatcher, onMount } from 'svelte'
-import { del } from '$lib/utils/api'
 import { Error } from '$lib/components'
 import { goto, invalidateAll } from '$app/navigation'
 import { nanoid } from 'nanoid'
@@ -23,19 +22,19 @@ let editAddress = false
 let err = null
 let removing = false
 
-async function remove(id) {
-	if (confirm('Are you sure to delete?')) {
-		try {
-			removing = true
-			await del(`addresses/${id}?store=${$page?.data?.storeId}`, $page.data.origin)
-			await dispatch('deleteAddress', id)
-		} catch (e) {
-			err = e
-		} finally {
-			removing = false
-		}
-	}
-}
+// async function remove(id) {
+// 	if (confirm('Are you sure to delete?')) {
+// 		try {
+// 			removing = true
+// 			await del(`addresses/${id}?store=${$page.data.storeId}`, $page.data.origin)
+// 			await dispatch('deleteAddress', id)
+// 		} catch (e) {
+// 			err = e
+// 		} finally {
+// 			removing = false
+// 		}
+// 	}
+// }
 
 async function addressChanged(id) {
 	dispatch('addressChanged', id)
@@ -124,8 +123,6 @@ async function addressChanged(id) {
 					method="POST"
 					use:enhance="{() => {
 						return async ({ result }) => {
-							// console.log('result', result)
-
 							toast('Address deleted successfully', 'success')
 							await invalidateAll()
 							await applyAction(result)

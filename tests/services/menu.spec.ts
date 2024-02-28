@@ -16,6 +16,4 @@ test('Test Menu Services', async ({ request }) => {
 	// expect menus status code should 200
 
 	expect(menus.status()).toBe(200)
-
-	// console.log('menus', await menus.json());
 })

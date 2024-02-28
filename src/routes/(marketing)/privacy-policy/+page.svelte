@@ -9,7 +9,7 @@ let seoProps = {
 	title: `Privacy Policy`,
 	description: `Privacy Policy`
 }
-$: store = $page.data?.store
+$: store = $page.data.store
 
 // let store = {}
 // onMount(() => {

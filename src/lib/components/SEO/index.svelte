@@ -86,9 +86,9 @@ let canonical = `${$page?.url.origin}${$page?.url.pathname}`
 let pageTitle
 
 if (title) {
-	pageTitle = `${title} - ${$page.data?.store?.websiteName}`
+	pageTitle = `${title} - ${$page.data.store?.websiteName}`
 } else {
-	pageTitle = `${$page.data?.store?.websiteName}`
+	pageTitle = `${$page.data.store?.websiteName}`
 }
 
 const openGraphProps = {
@@ -100,7 +100,7 @@ const openGraphProps = {
 	metaDescription,
 	ogLanguage,
 	pageTitle,
-	siteTitle: $page.data?.store?.websiteName,
+	siteTitle: $page.data.store?.websiteName,
 	url,
 	...(article ? { datePublished, lastUpdated, facebookPageName, facebookAuthorPage } : {})
 }
@@ -119,7 +119,7 @@ const schemaOrgProps = {
 	linkedinProfile,
 	name: productName,
 	siteLanguage,
-	siteTitle: $page.data?.store?.websiteName,
+	siteTitle: $page.data.store?.websiteName,
 	siteTitleAlt: siteShortTitle,
 	siteUrl: WWW_URL,
 	telegramUsername,

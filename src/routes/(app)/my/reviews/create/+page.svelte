@@ -36,7 +36,10 @@ let err = null
 let review = {
 	id: 'new',
 	pid: data.product?._id,
-	oid: $page?.url?.searchParams.get('oid') || null,
+	oid:
+		$page?.url?.searchParams.get('oid') !== 'undefined'
+			? $page?.url?.searchParams.get('oid')
+			: null,
 	message: '',
 	rating: null
 }
@@ -87,7 +90,7 @@ async function saveReviewproduct(review) {
 	try {
 		err = null
 		toast('Sending your business rating and review', 'info')
-		review.store = $page?.data?.storeId
+		review.store = $page.data.storeId
 
 		await ReviewService.saveReview({
 			id: review.id,
@@ -96,7 +99,7 @@ async function saveReviewproduct(review) {
 			message: review.message,
 			rating: review.rating,
 			images,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 
@@ -147,7 +150,7 @@ async function saveReviewproduct(review) {
 		{/if}
 	</header>
 
-	<Error {err} />
+	<Error {err} class="mb-5" />
 
 	<div class="flex flex-col-reverse xl:flex-row xl:gap-4">
 		<div class="mt-4 flex w-full flex-col gap-2 xl:mt-0 xl:w-1/3">

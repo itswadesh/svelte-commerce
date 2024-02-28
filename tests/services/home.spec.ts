@@ -4,11 +4,7 @@ import { host, storeId, API_URL } from './config'
 test('Test Fetch Home', async ({ request }) => {
 	const resHome = await request.get(`${API_URL}home?store=${storeId}&pageId=home`)
 
-	// expect resHome status code should 200
-
 	expect(resHome.status()).toBe(200)
-
-	// console.log('resHome', await resHome.json())
 })
 
 test('Test: fetch categories products', async ({ request }) => {

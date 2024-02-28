@@ -84,9 +84,6 @@ export let selectedItems = []
 export let showSearchBox = false
 export let title = ''
 
-// console.log('items', items)
-// console.log('selectedItems', selectedItems)
-
 let noOfitems = 5
 let showAllList = false
 

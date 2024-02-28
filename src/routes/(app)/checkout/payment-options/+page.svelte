@@ -10,14 +10,13 @@ import { toast } from '$lib/utils'
 import SEO from '$lib/components/SEO/index.svelte'
 import TextboxFloating from '$lib/ui/TextboxFloating.svelte'
 import { OrdersService } from '$lib/services'
+
 const seoProps = {
 	title: 'Select Payment Option',
 	metaDescription: 'Choose your payment method'
 }
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
-// console.log('$page', $page)
 
 let addressId = $page.url.searchParams.get('address') || ''
 let cashfreeReady = false
@@ -56,17 +55,9 @@ onMount(async () => {
 
 	if (pg) {
 		const pm = data?.paymentMethods.filter((pm) => pm.value === pg)
-		// console.log('pm', pm)
 		if (pm[0]) paymentMethodChanged(pm[0])
-		// } else if (
-		// 	data.paymentMethods?.length === 1 &&
-		// 	data.paymentMethods[0].type === 'pg' &&
-		// 	!orderNo
-		// ) {
-		// 	submit(data.paymentMethods[0])
 	} else {
 		const pm = data?.paymentMethods && data?.paymentMethods[0]
-		// console.log('pm', pm)
 		paymentMethodChanged(pm)
 	}
 })
@@ -82,8 +73,6 @@ async function submit(pm) {
 		return
 	}
 
-	// console.log('started')
-
 	fireGTagEvent('add_payment_info', data?.cart)
 
 	if (!pm || pm === undefined) {
@@ -94,8 +83,6 @@ async function submit(pm) {
 	}
 
 	const paymentMethod = pm.value || pm.id
-
-	// console.log('paymentMethod', paymentMethod)
 
 	if (
 		paymentMethod === 'COD' ||
@@ -118,10 +105,8 @@ async function submit(pm) {
 					paymentMethod: 'COD',
 					prescription: data.prescription?._id,
 					origin: $page.data.origin,
-					storeId: $page?.data?.storeId
+					storeId: $page.data.storeId
 				})
-
-				// console.log('res of cod', res)
 
 				goto(
 					`/payment/process?order_no=${res?.order_no || res?.orderNo || ''}&status=PAYMENT_SUCCESS&provider=COD`
@@ -146,10 +131,8 @@ async function submit(pm) {
 						paymentMethod: 'COD',
 						prescription: data.prescription?._id,
 						origin: $page.data.origin,
-						storeId: $page?.data?.storeId
+						storeId: $page.data.storeId
 					})
-
-					// console.log('res of cod', res)
 
 					comment = ''
 
@@ -181,7 +164,7 @@ async function submit(pm) {
 					address: addressId,
 					orderNo,
 					origin: $page.data.origin,
-					storeId: $page?.data?.storeId,
+					storeId: $page.data.storeId,
 					cartId: $page.data.cartId
 				})
 
@@ -225,11 +208,9 @@ async function submit(pm) {
 					address: addressId,
 					origin: $page.data.origin,
 					cartId: $page.data.cartId,
-					storeId: $page?.data?.storeId,
+					storeId: $page.data.storeId,
 					orderNo
 				})
-
-				// console.log('res of Phonepe', res)
 
 				if (res?.redirectUrl && res?.redirectUrl !== null) {
 					goto(`${res?.redirectUrl}`)
@@ -253,12 +234,11 @@ async function submit(pm) {
 					orderNo,
 					cartId: $page.data.cartId,
 					origin: $page.data.origin,
-					storeId: $page?.data?.storeId
+					storeId: $page.data.storeId
 				})
 
 				orderNo = res?.order_no || res?.orderNo || ''
 				gotoOrder(orderNo)
-				// console.log('res of Paypal', res)
 
 				if (res?.redirect_url && res?.redirect_url !== null) {
 					window.location = res?.redirect_url
@@ -282,7 +262,7 @@ async function submit(pm) {
 					orderNo,
 					cartId: $page.data.cartId,
 					origin: $page.data.origin,
-					storeId: $page?.data?.storeId
+					storeId: $page.data.storeId
 				})
 
 				orderNo = rp?.order_no || rp?.orderNo || ''
@@ -299,7 +279,7 @@ async function submit(pm) {
 								rpOrderId: response.razorpay_order_id,
 								rpPaymentId: response.razorpay_payment_id,
 								origin: $page.data.origin,
-								storeId: $page?.data?.storeId
+								storeId: $page.data.storeId
 							})
 
 							toast('Payment success', 'success')

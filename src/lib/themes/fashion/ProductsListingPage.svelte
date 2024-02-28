@@ -22,7 +22,6 @@ import noDataAvailable from '$lib/assets/no/no-data-available.png'
 import SEO from '$lib/components/SEO/index.svelte'
 
 export let data
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let seoProps = {
 	brand: $page.data.store?.title,
@@ -31,7 +30,7 @@ let seoProps = {
 	category: data.products?.category?.name,
 	contentUrl: $page.data.store?.logo,
 	createdAt: `${data.products?.category?.createdAt || '_'}`,
-	email: `${$page?.data?.store?.email}`,
+	email: `${$page.data.store?.email}`,
 	id: $page?.url?.href,
 	image: `${data.products?.category?.img}`,
 	logo: $page.data.store?.logo,
@@ -53,13 +52,13 @@ let seoProps = {
 	lastUpdated: `${data.products?.category?.updatedAt || '_'}`,
 	msapplicationTileImage: `${data.products?.category?.img}`,
 	ogImage: { url: $page.data.store?.logo, width: 128, height: 56 },
-	ogImageSecureUrl: `${$page?.data?.store?.logo}`,
+	ogImageSecureUrl: `${$page.data.store?.logo}`,
 	ogImageType: 'image/jpeg',
 	ogSiteName: `${$page.data.origin}/sitemap/sitemap.xml`,
 	productAvailability: `${data.products?.category?.stock}`,
 	productBrand: `${data.products?.category?.brandName || $page.data.store?.title}`,
 	productName: `${data.products?.category?.name}`,
-	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
+	productPriceCurrency: `${$page.data.store?.currencyCode}`,
 	slug: `${data.products?.category?.slug}`,
 	title: `${data.products?.category?.name || 'Buy online'}`,
 	twitterImage: { url: `${data.products?.category?.img}` }
@@ -135,7 +134,7 @@ async function loadNextPage() {
 			const res = await ProductService.fetchNextPageProducts({
 				categorySlug: data.products?.category?.slug,
 				origin: $page?.data?.origin,
-				storeId: $page?.data?.storeId,
+				storeId: $page.data.storeId,
 				nextPage,
 				searchParams
 			})
@@ -161,7 +160,7 @@ async function loadNextPage() {
 async function refreshData() {}
 
 let loadMoreDiv
-$: store = $page.data?.store
+$: store = $page.data.store
 onMount(() => {
 	// if (browser) {
 	// 	storeStore.subscribe((value) => (store = value))
@@ -274,7 +273,7 @@ function handleFilterTags() {
 
 <svelte:window bind:scrollY="{y}" bind:innerWidth on:scroll="{handleOnScroll}" />
 
-<CatelogNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page?.data?.store}">
+<CatelogNav me="{$page?.data?.me}" cart="{$page?.data?.cart}" store="{$page.data.store}">
 	<div class="flex max-w-max flex-col items-start gap-1">
 		{#if data.products?.category?.name}
 			<h2 class="w-28 truncate font-semibold capitalize leading-4">

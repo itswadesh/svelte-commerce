@@ -74,7 +74,7 @@ onMount(() => {
 
 		<!-- Alert message -->
 
-		{#if $page?.data?.store?.alert}
+		{#if $page.data.store?.alert}
 			<div class="p-3 py-5 sm:p-10 bg-primary-50">
 				<h1 class="container mx-auto text-center">
 					{$page?.data.store.alert}

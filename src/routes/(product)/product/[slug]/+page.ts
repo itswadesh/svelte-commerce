@@ -1,40 +1,30 @@
 // import { getCache, setCache } from '$lib/server/redis'
 import { ProductService, ReviewService, WishlistService } from '$lib/services'
-
-const isServer = import.meta.env.SSR // get the SSR value
+import { error } from '@sveltejs/kit'
 
 export async function load({ params, url, parent }) {
 	const { slug } = params
 	const { zip, sid, origin, store, storeId, me } = await parent()
-	const page = url.searchParams.get('page') || 1
+	// const page = url.searchParams.get('page') || 1
 
 	const getProductDetails = async () => {
-		const product = await ProductService.fetchProduct({
-			origin,
-			sid,
-			slug,
-			id: slug,
-			storeId
-		})
-
-		if (me) {
-			const isWishlisted = await WishlistService.checkWishlist({
-				pid: product?._id || product?.id,
-				vid: product?._id || product?.id,
+		try {
+			const product = await ProductService.fetchProduct({
 				origin,
 				sid,
+				slug,
+				id: slug,
 				storeId
 			})
 
-			// console.log('isWishlisted', isWishlisted)
-
-			product.isWishlisted = isWishlisted
-		} else {
-			product.isWishlisted = false
+			if (!product) {
+				error(404, { message: 'Product Not found.' })
+			}
+			return product
+		} catch (e) {
+			console.log(e)
+			error(404, { message: 'Product Not found..' })
 		}
-
-		return product
-
 		// Enabling cache-control will not refresh cart qty indicator
 		// setHeaders({ 'cache-control': `max-age=${CACHE_DURATION}` }) // This is to tell Cloudflare to store in its own cache
 		// setCache(p1, product)
@@ -46,50 +36,29 @@ export async function load({ params, url, parent }) {
 		// 	sid,
 		// 	storeId,
 		// })
-
-		// console.log('updated popularity res', updatedPopularityRes);
 	}
+	// let products2 = {}
+	// let reviews = {}
+	// products2 = ProductService.fetchProduct2({
+	// 	id: slug,
+	// 	slug,
+	// 	origin,
+	// 	storeId
+	// })
 
-	const getMoreProductDetails = async () => {
-		const products2 = await ProductService.fetchProduct2({
-			id: slug,
-			slug,
-			origin,
-			storeId
-		})
-
-		// setHeaders({ 'cache-control': `max-age=${CACHE_DURATION}` }) // This is to tell Cloudflare to store in its own cache
-
-		return products2
-	}
-
-	const getProductReviews = async () => {
-		// const r = `reviews/product-reviews?slug=${slug}&page=${page}&sort=-createdAt&store=${storeId}`
-		// const cached = await getCache(r)
-		// if (cached) {
-		// 	return cached
-		// }
-
-		const reviews = await ReviewService.fetchProductReviews({
-			origin,
-			page,
-			server: isServer,
-			slug,
-			storeId
-		})
-
-		// setHeaders({ 'cache-control': `max-age=${CACHE_DURATION}` }) // This is to tell Cloudflare to store in its own cache
-		// setCache(r, reviews)
-
-		return reviews
-	}
-
+	// reviews = ReviewService.fetchProductReviews({
+	// 	origin,
+	// 	page,
+	// 	slug,
+	// 	storeId
+	// })
+	// console.log(products2)
 	return {
 		product: await getProductDetails(),
-		deliveryDetails: zip,
-		streamed: {
-			moreProductDetails: getMoreProductDetails(),
-			productReviews: getProductReviews()
-		}
+		deliveryDetails: zip
+		// streamed: {
+		// moreProductDetails: products2,
+		// productReviews: reviews
+		// }
 	}
 }

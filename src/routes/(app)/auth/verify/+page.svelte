@@ -29,7 +29,6 @@ let err
 // 			$page.data?.origin
 // 		)
 
-// 		// console.log('zzzzzzzzzzzzzzzzzz', res)
 // 		userDetail = res
 
 // 		goto('/auth/verification-success')
@@ -44,17 +43,17 @@ let err
 
 <div class="flex w-full max-w-md flex-col rounded-2xl border bg-white p-10 shadow-2xl">
 	<a href="/" aria-label="Go to home" class="mx-auto mb-8 block max-w-max">
-		{#if $page.data?.store?.logo}
+		{#if $page.data.store?.logo}
 			<LazyImg
-				src="{$page.data?.store?.logo}"
-				alt="{$page.data?.store?.websiteName}"
+				src="{$page.data.store?.logo}"
+				alt="{$page.data.store?.websiteName}"
 				height="80"
 				class="h-14 w-32 object-contain object-center" />
 		{:else}
 			<h2
 				class="bg-gradient-to-b from-primary-500 to-primary-700 bg-clip-text text-3xl font-extrabold text-transparent underline decoration-zinc-800">
-				{#if $page.data?.store?.websiteName}
-					{$page.data?.store?.websiteName}
+				{#if $page.data.store?.websiteName}
+					{$page.data.store?.websiteName}
 				{:else}
 					<LazyImg
 						src="/litekart-rectangular-logo-black.png"

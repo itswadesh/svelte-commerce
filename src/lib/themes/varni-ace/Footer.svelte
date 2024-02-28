@@ -40,8 +40,6 @@ import visa from '$lib/assets/payment-method/visa.png'
 export let content = ``
 export let megamenu: Category[]
 
-// console.log('$page', $page)
-
 let email = ''
 let menu = []
 let paymentMethodCards = [masterCard, paypal, skrill, visa]
@@ -53,7 +51,7 @@ function getYear() {
 	return year
 }
 // let store = {}
-$: store = $page.data?.store
+$: store = $page.data.store
 
 onMount(async () => {
 	if (browser) {
@@ -63,25 +61,21 @@ onMount(async () => {
 		// 	})
 		// }
 		megamenu = await getAllMegamenuFromStore({
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			origin: $page.data.origin
 		})
 
 		menu = await getMenuFromStore({
-			storeId: $page?.data?.storeId,
-			origin: $page.data.origin,
+			storeId: $page.data.storeId,
+			origin: $page.data.origin
 		})
 
 		popularSearches = await getPopularSearchFromStore({
 			limit: 20,
 			sid: null,
 			origin: $page.data.origin,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId
 		})
-
-		// console.log('megamenu', megamenu)
-		// console.log('menu', menu)
-		// console.log('popularSearches', popularSearches)
 	}
 })
 
@@ -224,7 +218,7 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 							{#if store?.isMultiVendor}
 								<li class="flex max-w-max items-center">
 									<a
-										href="{store?.adminUrl}?role=vendor&store={$page?.data?.store}"
+										href="{store?.adminUrl}?role=vendor&store={$page.data.store}"
 										target="self"
 										aria-label="Click to visit this page"
 										class="link-underline link-underline-gray whitespace-pre-wrap">

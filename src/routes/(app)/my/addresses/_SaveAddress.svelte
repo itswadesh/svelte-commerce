@@ -10,7 +10,6 @@ import { slide } from 'svelte/transition'
 import { toast } from '$lib/utils'
 
 const IS_DEV = import.meta.env.DEV
-const dispatch = createEventDispatcher()
 
 export let billing_address = {}
 export let countries = []
@@ -18,10 +17,6 @@ export let editAddress = false
 export let selectedAddress = ''
 export let selectedBillingAddress = ''
 export let shipping_address = {}
-
-// console.log('$page', $page)
-// console.log('shipping_address', shipping_address)
-// console.log('countries', countries)
 
 if (!shipping_address?.firstName) {
 	shipping_address = IS_DEV
@@ -75,8 +70,6 @@ onMount(async () => {
 			return c.dafault
 		})
 
-		// console.log('dafaultCountry', dafaultCountry)
-
 		if (dafaultCountry[0]) {
 			shipping_address.country = dafaultCountry[0].code
 			billing_address.country = dafaultCountry[0].code
@@ -114,8 +107,6 @@ function getShippingAddressSelectedCountry() {
 			return c
 		}
 	})[0]
-
-	// console.log('selectedShippingAddressCountry', selectedShippingAddressCountry)
 }
 
 function getBillingAddressSelectedCountry() {
@@ -124,8 +115,6 @@ function getBillingAddressSelectedCountry() {
 			return c
 		}
 	})[0]
-
-	// console.log('selectedBillingAddressCountry', selectedBillingAddressCountry)
 }
 
 async function onShippingAddressCountryChange(country) {
@@ -147,7 +136,7 @@ async function fetchShippingAddressStates(country) {
 
 		shippingAddressStates = await CountryService.fetchStates({
 			countryCode: country,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			origin: $page.data?.origin
 		})
 
@@ -155,8 +144,6 @@ async function fetchShippingAddressStates(country) {
 			s.name = s.name.toUpperCase()
 			return s
 		})
-
-		// console.log('shippingAddressStates', shippingAddressStates)
 	} catch (e) {
 		err = e
 	} finally {
@@ -171,7 +158,7 @@ async function fetchBillingAddressStates(country) {
 
 		billingAddressStates = await CountryService.fetchStates({
 			countryCode: country,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId,
 			origin: $page.data?.origin
 		})
 
@@ -179,8 +166,6 @@ async function fetchBillingAddressStates(country) {
 			s.name = s.name.toUpperCase()
 			return s
 		})
-
-		// console.log('billingAddressStates', billingAddressStates)
 	} catch (e) {
 		err = e
 	} finally {
@@ -206,9 +191,6 @@ async function fetchStateAndCity(zip, addresstype) {
 			origin
 		})
 
-		// console.log('zipInfo', zipInfo)
-		// console.log('addresstype', addresstype)
-
 		if (addresstype === 'shipping') {
 			shipping_address.city = zipInfo.District || ''
 			shipping_address.state = zipInfo.StateName || ''
@@ -218,7 +200,6 @@ async function fetchStateAndCity(zip, addresstype) {
 		}
 	} catch (e) {
 		err = e
-		// console.log(e)
 		toast(e.message.error, 'error')
 	} finally {
 		loadingForShippingAddressStates = false
@@ -272,15 +253,6 @@ function validatePhoneNumber(phoneNumber, addresstype) {
 		method="POST"
 		use:enhance="{() => {
 			return async ({ result }) => {
-				// console.log('result', result)
-
-				// console.log(
-				// 	'result, address.id, $page?.url?.pathname',
-				// 	result,
-				// 	address.id,
-				// 	$page?.url?.pathname
-				// )
-
 				if (result?.status === 200 && result?.data) {
 					const newAddressId = result.data?._id || result.data?.id
 					toast('Address saved successfully', 'success')

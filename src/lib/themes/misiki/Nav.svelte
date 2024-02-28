@@ -47,7 +47,7 @@ let show = false
 let showDropdownAccount = false
 let showPincodeInputBox = false
 $: cart = {}
-$: store = $page.data?.store
+$: store = $page.data.store
 
 onMount(async () => {
 	q = $page.url.searchParams.get('q')
@@ -140,15 +140,15 @@ async function onSearchSubmit({ detail }) {
 			<!-- Website Logo/Name -->
 
 			<a href="/" aria-label="Go to home" class="block shrink-0">
-				{#if $page?.data?.store?.logo}
+				{#if $page.data.store?.logo}
 					<img
-						src="{$page?.data?.store?.logo}"
+						src="{$page.data.store?.logo}"
 						alt="logo"
 						class="max-h-10 sm:max-h-16 w-40 object-contain object-left" />
-				{:else if $page?.data?.store?.websiteName}
+				{:else if $page.data.store?.websiteName}
 					<h2
 						class="bg-gradient-to-b from-primary-500 to-secondary-500 bg-clip-text text-transparent truncate w-40 sm:w-auto sm:max-w-sm">
-						{$page?.data?.store?.websiteName}
+						{$page.data.store?.websiteName}
 					</h2>
 				{:else}
 					<img
@@ -197,7 +197,7 @@ async function onSearchSubmit({ detail }) {
 
 		<div class="hidden w-full min-w-[200px] max-w-4xl flex-1 lg:block">
 			<Autocomplete
-				placeholder="{$page?.data?.store?.searchbarText || 'Search...'}"
+				placeholder="{$page.data.store?.searchbarText || 'Search...'}"
 				on:search="{onSearchSubmit}" />
 		</div>
 

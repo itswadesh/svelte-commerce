@@ -24,7 +24,7 @@ onMount(async () => {
 	try {
 		const res = await CategoryService.fetchAllProductsOfCategories({
 			origin: $page?.data?.origin,
-			storeId: $page?.data?.storeId
+			storeId: $page.data.storeId
 		})
 		products = res.products
 		productsCount = res.productsCount

@@ -36,7 +36,6 @@ import { browser } from '$app/environment'
 import { storeStore } from '$lib/store/store'
 
 export let data = {}
-// console.log('zzzzzzzzzzzzzzzzzz', data)
 
 let bounceItemFromTop = false
 let cartButtonText = 'Add to Bag'

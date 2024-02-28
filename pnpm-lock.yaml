@@ -6,11 +6,11 @@ settings:
 
 dependencies:
   '@misiki/litekart':
-    specifier: 0.0.12
-    version: 0.0.12(@sveltejs/kit@2.5.0)(svelte@4.2.10)(vite-plugin-pwa@0.17.5)
+    specifier: 0.0.16
+    version: 0.0.16(@sveltejs/kit@2.5.0)(svelte@4.2.10)(vite-plugin-pwa@0.17.5)
   '@misiki/litekart-utils':
-    specifier: 1.0.7
-    version: 1.0.7(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5)
+    specifier: 1.0.13
+    version: 1.0.13(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5)
   '@vite-pwa/sveltekit':
     specifier: 0.3.0
     version: 0.3.0(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5)
@@ -2305,8 +2305,8 @@ packages:
     engines: {node: '>=16'}
     dev: true
 
-  /@misiki/litekart-utils@1.0.7(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5):
-    resolution: {integrity: sha512-u4GrlGXWqFSpJPk5rFVCSu1Tw9IP4Z9Q5BZ9xHNc9j+J4Cx557HGq9oH4XFjtgFV+H4VRYGVS1xA5hn/iIBBng==}
+  /@misiki/litekart-utils@1.0.13(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5):
+    resolution: {integrity: sha512-/YIZgh7Y/AdrEYnafS2+XocvoEndg8qLTEsIrgWspRMHcmj3YLH83cOr4/TglY7wg5JIpkr5KPjjxSvVbv6WBA==}
     dependencies:
       '@vite-pwa/sveltekit': 0.3.0(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5)
       tsx: 4.7.1
@@ -2315,12 +2315,22 @@ packages:
       - vite-plugin-pwa
     dev: false
 
-  /@misiki/litekart@0.0.12(@sveltejs/kit@2.5.0)(svelte@4.2.10)(vite-plugin-pwa@0.17.5):
-    resolution: {integrity: sha512-gZdqfFP5dhYmAGSaqSdIeX4eYW1BNG81GosF5YevmfZ/AzuXUTqhgPYcsgL2rLxDM0aXC95qlPxA2mv2VG4sgA==}
+  /@misiki/litekart-utils@1.0.8(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5):
+    resolution: {integrity: sha512-nC88701U0SYIelv4jetMHrNj8p5jf39aY5ytnCxYUDyscHjMw+QwBG6z2649hUgnT2DQ1LnSrxuBkiRIpjOA1w==}
+    dependencies:
+      '@vite-pwa/sveltekit': 0.3.0(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5)
+      tsx: 4.7.1
+    transitivePeerDependencies:
+      - '@sveltejs/kit'
+      - vite-plugin-pwa
+    dev: false
+
+  /@misiki/litekart@0.0.16(@sveltejs/kit@2.5.0)(svelte@4.2.10)(vite-plugin-pwa@0.17.5):
+    resolution: {integrity: sha512-YaN6I0Fv9KGFACFMTvCbaoRmspxOBeD88mtbRwQm48EB0oMAjAUqdiDxUzEGTz2Ffw23eFsdv4Ow4UHdkdfYnA==}
     peerDependencies:
       svelte: ^4.0.0
     dependencies:
-      '@misiki/litekart-utils': 1.0.7(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5)
+      '@misiki/litekart-utils': 1.0.8(@sveltejs/kit@2.5.0)(vite-plugin-pwa@0.17.5)
       svelte: 4.2.10
       svelte-toasts: 1.1.2
     transitivePeerDependencies:

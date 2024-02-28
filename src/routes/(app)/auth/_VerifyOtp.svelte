@@ -25,8 +25,6 @@ export let loading
 export let phone
 export let resendAfter
 
-// $: console.log('resendAfter', resendAfter)
-
 $: timer = tweened(resendAfter)
 
 let disabledBtn = true
@@ -94,18 +92,6 @@ function handleResendOtp() {
 export const handlePaste = async (event) => {
 	event.preventDefault()
 
-	// console.log(
-	// 	'event.clipboardData || window.clipboardData',
-	// 	event.clipboardData || window.clipboardData
-	// )
-
-	// alert(event.target.value.length)
-	// console.log(event.target.value, event.target.value.length, event);
-
-	// alert(event.data.length)
-
-	// const text =  await navigator.clipboard.readText();
-
 	const clipboardData = event.clipboardData || window.clipboardData
 	const pastedText = clipboardData.getData('text')
 
@@ -117,14 +103,9 @@ export const handlePaste = async (event) => {
 	]
 
 	updateOTP()
-
-	// Call any function to handle the pasted text here
-	// For example: handlePastedText(pastedText);
 }
 
 function handleInput(index, event) {
-	// console.log(navigator)
-
 	otp[index].value = event.target.value
 	const value = event.target.value
 	if (value.length > 1) {
@@ -145,7 +126,6 @@ function handleInput(index, event) {
 		}
 	}
 
-	// console.log('otp', otp)
 	updateOTP()
 }
 
@@ -170,22 +150,14 @@ async function updateOTP() {
 	formattedOTP = formattedOTPValues.join('')
 
 	if (formattedOTP?.length === 4) {
-		// console.log('your otp is', formattedOTP)
-		// console.log(formattedOTP)
-
 		notACompleteOTP = false
 
-		// dispatch('verifyOtp', formattedOTP)
 		await tick()
 		const form = document.querySelector('#otp-form')
 
 		form.dispatchEvent(new Event('submit'))
 	}
 }
-
-// function handleAutoSubmit() {
-
-// }
 </script>
 
 <div>

@@ -18,8 +18,6 @@ export async function load({ locals, url, parent }) {
 			storeId
 		})
 
-		// console.log('cart at address', cart);
-
 		if (!cart?.qty) {
 			redirect(307, '/cart')
 		}
@@ -83,7 +81,6 @@ export async function load({ locals, url, parent }) {
 			}
 		}
 	} catch (e) {
-		// console.log('errzzzzzzzzzzzzzzzzzz', e);
 		if (e.status === 307 && e.location === '/cart') {
 			redirect(307, '/cart')
 		} else if (e.status === 401 || e.status === 307) {

@@ -3,7 +3,6 @@ import { navigateToProperPath } from '$lib/utils'
 import LazyImg from '$lib/components/Image/LazyImg.svelte'
 
 export let sections = []
-// console.log('sections', sections)
 </script>
 
 {#if sections?.length}

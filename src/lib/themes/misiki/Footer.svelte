@@ -37,8 +37,6 @@ export let content = ``
 export let megamenu = []
 export let menu = []
 
-// console.log('$page', $page)
-
 let popularSearches = []
 
 function getYear() {
@@ -47,7 +45,7 @@ function getYear() {
 	return year
 }
 // let store = {}
-$: store = $page.data?.store
+$: store = $page.data.store
 
 onMount(async () => {
 	if (browser) {
@@ -58,10 +56,9 @@ onMount(async () => {
 			limit: 20,
 			sid: null,
 			origin: $page.data.origin,
-			storeId: $page?.data?.storeId,
+			storeId: $page.data.storeId
 		})
 	}
-	// console.log('popularSearches', popularSearches)
 	// const res2 = await fetch('/server/store')
 	// const storeFromServer = await res2.json()
 	// store = storeFromServer.store
@@ -82,8 +79,6 @@ onMount(async () => {
 // }
 
 function positionToDisplayIsMultiVendor(itemsLength) {
-	// console.log('itemsLength', itemsLength)
-
 	if (itemsLength >= 2) {
 		return 1
 	} else {
@@ -145,7 +140,7 @@ function positionToDisplayIsMultiVendor(itemsLength) {
 
 										<li class="flex max-w-max items-center">
 											<a
-												href="{$page.data.store?.adminUrl}?role=vendor&store={$page?.data?.storeId}"
+												href="{$page.data.store?.adminUrl}?role=vendor&store={$page.data.storeId}"
 												target="_blank"
 												aria-label="Click to visit this page"
 												class="link-underline link-underline-gray whitespace-pre-wrap">

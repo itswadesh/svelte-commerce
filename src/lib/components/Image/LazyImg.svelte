@@ -95,8 +95,8 @@ const extension = src?.split('.').pop()
 let imageLoaded = false
 let isSvg = false
 let lazyloadInstance: any
-$: IMAGE_CDN_PROVIDER = $page?.data?.store?.imageCdn?.provider?.val
-$: IMAGE_CDN_URL = $page?.data?.store?.imageCdn?.url?.val
+$: IMAGE_CDN_PROVIDER = $page.data.store?.imageCdn?.provider?.val
+$: IMAGE_CDN_URL = $page.data.store?.imageCdn?.url?.val
 // let loadedImage = false
 // let store = {}
 onMount(() => {

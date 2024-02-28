@@ -9,7 +9,7 @@ let seoProps = {
 	title: `Payments returns`,
 	description: `Payments returns`
 }
-$: store = $page.data?.store
+$: store = $page.data.store
 
 // let store = {}
 // onMount(() => {
