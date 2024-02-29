@@ -8,15 +8,17 @@ import {
 	Pagination,
 	ProductCard
 } from '$lib/components'
+import { cartStore } from '$lib/store/cart'
 import { currency, dateOnly, generatePriceRange, toast } from '$lib/utils'
 import { fade, fly } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { PrimaryButton } from '$lib/ui'
 import { PopularSearchService, ProductService } from '$lib/services'
+import { PrimaryButton } from '$lib/ui'
 import { sorts } from '$lib/config'
 import { storeStore } from '$lib/store/store'
+import { wishlistStore } from '$lib/store/wishlist'
 import dayjs from 'dayjs'
 import dotsLoading from '$lib/assets/dots-loading.gif'
 import noDataAvailable from '$lib/assets/no/no-data-available.png'
@@ -184,11 +186,41 @@ async function loadNextPage() {
 async function refreshData() {}
 
 let loadMoreDiv
-let store = {}
+
+$: store = $page.data.store
+$: cart = {}
+$: productsArray = []
 
 onMount(() => {
 	if (browser) {
-		storeStore.subscribe((value) => (store = value))
+		// storeStore.subscribe((value) => (store = value))
+
+		// use productsArray at the place of product looping to display the currently activated cart and wishlist product
+		cartStore.subscribe((value) => {
+			if (value?.items?.length && Object.values(value)?.length) {
+				cart = value
+				const newArray = data.products.products.map((item2) => {
+					const matchedItem = cart?.items?.find((item1) => item1.pid == item2._id)
+					const cart_qty = matchedItem ? matchedItem.qty : 0
+					return { ...item2, cart_qty }
+				})
+				productsArray = newArray
+			} else productsArray = data.products.products
+		})
+
+		wishlistStore.subscribe((wishlists) => {
+			if (wishlists?.length) {
+				// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', wishlists)
+				const newArray = productsArray.map((p) => {
+					const matchedItem = wishlists.find((w) => w.product._id == p._id)
+					const isWishlisted = !!matchedItem
+					return { ...p, isWishlisted }
+				})
+				productsArray = newArray
+			} else productsArray = productsArray
+		})
+
+		// console.log('productsArray', productsArray)
 	}
 
 	const observer = new IntersectionObserver((entries) => {
