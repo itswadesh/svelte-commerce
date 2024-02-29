@@ -48,6 +48,7 @@
 		"@tailwindcss/typography": "^0.5.10",
 		"@typescript-eslint/eslint-plugin": "^6.21.0",
 		"@typescript-eslint/parser": "^6.21.0",
+		"@unpic/svelte": "0.0.51",
 		"@woocommerce/woocommerce-rest-api": "1.0.1",
 		"amazon-s3-uri": "^0.1.1",
 		"autoprefixer": "^10.4.17",
