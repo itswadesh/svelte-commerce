@@ -65,7 +65,7 @@ module.exports = {
 				}
 			},
 			fontFamily: {
-				sans: ['Poppins', 'sans'] // 'sans' is a fallback font in case the custom font isn't available
+				sans: ['Karla', 'sans'] // 'sans' is a fallback font in case the custom font isn't available
 			}
 		}
 	},
