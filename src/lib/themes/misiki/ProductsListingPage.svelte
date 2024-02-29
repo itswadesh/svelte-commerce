@@ -133,11 +133,14 @@ async function loadNextPage() {
 
 			const res = await ProductService.fetchNextPageProducts({
 				categorySlug: data.products?.category?.slug,
-				origin: $page?.data?.origin,
-				storeId: $page.data.storeId,
 				nextPage,
-				searchParams
+				searchParams,
+				origin: $page?.data?.origin,
+				sid: $page?.data?.sid,
+				storeId: $page.data.storeId
 			})
+
+			// console.log('res', res)
 
 			const nextPageData = res?.nextPageData
 			currentPage = currentPage + 1
@@ -145,7 +148,7 @@ async function loadNextPage() {
 			data.products.category = res?.category
 			data.products.count = res?.count
 			data.products.products = data?.products?.products?.concat(nextPageData)
-			data.products.products.facets = res?.facets
+			data.products.facets = res?.facets
 
 			if (data.product?.count && data.products?.length === data.product?.count) {
 				reachedLast = true
