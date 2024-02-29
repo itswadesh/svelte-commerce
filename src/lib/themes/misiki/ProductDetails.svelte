@@ -818,10 +818,9 @@ async function updateVariant(variant) {
 													<LazyImg
 														src="{cg.img}"
 														alt="{cg.color.name}"
-														height="160"
-														width="120"
-														aspect_ratio="3:4"
-														class="transform group-hover:scale-95 object-contain object-center w-full h-auto text-xs" />
+														height="72"
+														width="48"
+														class="transform group-hover:scale-95 object-contain object-center w-full h-full text-xs" />
 
 													<div
 														class="hidden group-hover:block absolute z-20 max-w-max min-w-max -top-2 leading-3 py-1 px-2 rounded whitespace-nowrap bg-primary-500 text-white text-[0.65em] text-center">
@@ -838,10 +837,9 @@ async function updateVariant(variant) {
 													<LazyImg
 														src="{cg.img}"
 														alt="{cg.color.name}"
-														height="160"
-														width="120"
-														aspect_ratio="3:4"
-														class="transform group-hover:scale-95 object-contain object-center w-full h-auto text-xs" />
+														height="72"
+														width="48"
+														class="transform group-hover:scale-95 object-contain object-center w-full h-full text-xs" />
 
 													<div
 														class="hidden group-hover:block absolute z-20 max-w-max min-w-max -top-2 leading-3 py-1 px-2 rounded whitespace-nowrap bg-primary-500 text-white text-[0.65em] text-center">
