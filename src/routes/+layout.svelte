@@ -74,7 +74,7 @@ onMount(async () => {
 	<meta name="application-name" content="{data.store?.websiteName}" />
 	<link
 		href="https://fonts.googleapis.com/css2?family={data.store?.fontFamily ||
-			'Montserrat'}:wght@100;200;300;400;500;600;700;800;900&display=swap"
+			'Karla'}:wght@100;200;300;400;500;600;700;800;900&display=swap"
 		rel="stylesheet" />
 </svelte:head>
 
