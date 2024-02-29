@@ -98,7 +98,7 @@ if (extension === 'svg') {
 }
 </script>
 
-<div class="relative" style="min-height:{h/2}px;">
+<div class="relative" style="min-height:{+h / 2}px;">
 	{#if IMAGE_CDN_PROVIDER === 'imagekit'}
 		{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } )?.includes('http')}
 			<Image
