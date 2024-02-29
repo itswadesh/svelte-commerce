@@ -152,21 +152,23 @@ async function loadNextPage() {
 			data.isLoading = true
 
 			const res = await ProductService.fetchNextPageProducts({
-				categorySlug: null,
+				categorySlug: undefined,
 				nextPage,
 				searchParams,
 				origin: $page?.data?.origin,
 				sid: $page?.data?.sid,
-				storeId: $page.data.storeId
+				storeId: $page?.data?.storeId
 			})
+
+			// console.log('res', res)
 
 			const nextPageData = res?.nextPageData
 			currentPage = currentPage + 1
 			data.err = !res?.estimatedTotalHits ? 'No result Not Found' : null
 			data.products.category = res?.category
 			data.products.count = res?.count
-			data.products.data = data?.products?.concat(nextPageData)
-			data.products.data.facets = res?.facets
+			data.products.data = data?.products?.data?.concat(nextPageData)
+			data.products.facets = res?.facets
 
 			if (data.product?.count && data.products?.length === data.product?.count) {
 				reachedLast = true
@@ -183,10 +185,12 @@ async function refreshData() {}
 
 let loadMoreDiv
 let store = {}
+
 onMount(() => {
 	if (browser) {
 		storeStore.subscribe((value) => (store = value))
 	}
+
 	const observer = new IntersectionObserver((entries) => {
 		if (!entries) return
 
@@ -194,7 +198,7 @@ onMount(() => {
 			if (
 				entry.isIntersecting &&
 				data.products?.count &&
-				data.products?.length < data.products?.count &&
+				data.products?.data?.length < data.products?.count &&
 				!data.isLoading
 			) {
 				// Do something when the element is intersecting
