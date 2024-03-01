@@ -14,6 +14,7 @@ onMount(async () => {
 			const [moreProductDetails, productReviews] = await Promise.all([
 				ProductService.fetchProduct2({
 					id: data.product.slug,
+					slug: data.product.slug,
 					origin: $page.data.origin,
 					sid: $page.data.sid,
 					storeId: $page.data.storeId
