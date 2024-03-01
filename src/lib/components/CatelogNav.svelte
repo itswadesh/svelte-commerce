@@ -8,7 +8,7 @@
 import { Autocomplete, MegaMenu } from '$lib/components'
 import { browser } from '$app/environment'
 import { cartStore } from '$lib/store/cart'
-import { CategoryService } from 'lib/services'
+import { CategoryService } from '$lib/services'
 import { createEventDispatcher, onMount } from 'svelte'
 import { cubicOut } from 'svelte/easing'
 import { enhance } from '$app/forms'

@@ -1,3 +1,17 @@
+## Zapvi Validate
+
+Autosuggest modal
+Breadcrumb
+CatelogNav
+Footer
+Mobile Filter
+S3.ts
+import { Footer, Nav } from '$lib/theme-config'
+Homepage
+OTP login
+Shop/slug/[]
+routes/catalog/[slug]
+
 <div align="center">
 <h2>Svelte Commerce</h2>
 </div>

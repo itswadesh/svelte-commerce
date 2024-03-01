@@ -8,7 +8,7 @@ import { applyAction, enhance } from '$app/forms'
 import { fade } from 'svelte/transition'
 import { cartStore, updateCartStore } from '$lib/store/cart'
 import { browser } from '$app/environment'
-import { CartService } from 'lib/services'
+import { CartService } from '$lib/services'
 
 export let products = []
 export let title = ''

@@ -3,7 +3,7 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { ProductCard, DummyProductCard } from '$lib/components'
 import type { Product } from '$lib/types'
-import { ProductService } from 'lib/services'
+import { ProductService } from '$lib/services'
 
 let name = 'Product Tab'
 let allCoreCategories = [
