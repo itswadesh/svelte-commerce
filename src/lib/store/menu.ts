@@ -1,4 +1,4 @@
-import { MenuService } from 'lib/services'
+import { MenuService } from '$lib/services'
 import { writable } from 'svelte/store'
 
 export const menuStore = writable([])

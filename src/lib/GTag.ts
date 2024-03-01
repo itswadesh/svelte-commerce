@@ -1,5 +1,7 @@
+import { GOOGLE_ANALYTICS_ID } from './config'
+
 if (typeof window !== 'undefined' && window) {
-	const googleAnalyticsId = ''
+	const googleAnalyticsId = GOOGLE_ANALYTICS_ID
 	// @ts-ignore
 	window.dataLayer = window.dataLayer || []
 	// @ts-ignore

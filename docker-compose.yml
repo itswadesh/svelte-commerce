@@ -1,14 +1,14 @@
-version: '3.9'
+version: '3'
+
 services:
-  svelte-commerce:
-    build:
-      dockerfile: Dockerfile
-      context: .
-    pull_policy: always
+  api:
+    build: ./
+    image: itswadesh/svelte-commerce
+    container_name: svelte-commerce
+    restart: unless-stopped
     ports:
-      - 3000:3000
+      - '3000:3000'
     environment:
+      - PUBLIC_HTTP_ENDPOINT=https://staging.litekart.in
       - NODE_ENV=production
-      - APP_VERSION="1.0.1"
-      # Add this line to use .env instead of .env.example
-      - ENV_FILE=.env
+      - PORT=3000

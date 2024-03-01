@@ -3,7 +3,7 @@ import { AddressService, CartService, CountryService } from '$lib/services'
 
 export const prerender = false
 
-export async function load({ locals, url, parent }) {
+export async function load({ url, parent }) {
 	const { me, sid, store, storeId, origin, cartId } = await parent()
 
 	try {
@@ -11,29 +11,29 @@ export async function load({ locals, url, parent }) {
 		const q = url.searchParams.get('q') || ''
 		let err
 
-		const cart = await CartService.fetchRefreshCart({
-			cartId,
-			origin,
-			sid,
-			storeId
-		})
+		const [cart, countries] = await Promise.all([
+			CartService.fetchRefreshCart({
+				cartId,
+				origin,
+				sid,
+				storeId
+			}),
+			CountryService.fetchCountries({
+				storeId,
+				origin,
+				sid
+			})
+		])
 
 		if (!cart?.qty) {
 			redirect(307, '/cart')
 		}
-
-		const countries = await CountryService.fetchCountries({
-			storeId,
-			origin,
-			sid
-		})
 
 		if (store?.isGuestCheckout) {
 			if (me) {
 				const { myAddresses, preSelectedAddress } = await AddressService.fetchAddresses({
 					storeId,
 					origin,
-					server: true,
 					sid
 				})
 
@@ -64,7 +64,6 @@ export async function load({ locals, url, parent }) {
 				const { myAddresses, preSelectedAddress } = await AddressService.fetchAddresses({
 					storeId,
 					origin,
-					server: true,
 					sid
 				})
 

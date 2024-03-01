@@ -4,7 +4,7 @@ import { toast } from '$lib/utils'
 import { Error } from '$lib/components'
 import { TextboxFloating, TextareaFloating, PrimaryButton } from '$lib/ui'
 import SEO from '$lib/components/SEO/index.svelte'
-import { ContactService } from 'lib/services'
+import { ContactService } from '$lib/services'
 
 let seoProps = {
 	title: `Contact Us`,
@@ -33,7 +33,7 @@ async function submitContactInformation() {
 			origin: $page.data.origin
 		})
 
-		toast('You have successfully contacted with us', 'success')
+		toast('We have received your query', 'success')
 
 		fullName = null
 		email = null

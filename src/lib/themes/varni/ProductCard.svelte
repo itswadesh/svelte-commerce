@@ -18,7 +18,7 @@ import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { storeStore } from '$lib/store/store'
 import { updateCartStore } from '$lib/store/cart'
-import { updateWishlistStore } from 'lib/store/wishlist'
+import { updateWishlistStore } from '$lib/store/wishlist'
 
 export let product = {}
 $: reactiveProductObject = product

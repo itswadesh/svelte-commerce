@@ -1,22 +1,11 @@
 <script>
-import { browser } from '$app/environment'
 import { page } from '$app/stores'
 import SEO from '$lib/components/SEO/index.svelte'
-// import { storeStore } from '$lib/store/store'
-import { onMount } from 'svelte'
 
 let seoProps = {
 	title: `Payments returns`,
 	description: `Payments returns`
 }
-$: store = $page.data.store
-
-// let store = {}
-// onMount(() => {
-// 	if (browser) {
-// 		storeStore.subscribe((value) => (store = value))
-// 	}
-// })
 </script>
 
 <SEO {...seoProps} />
@@ -25,33 +14,32 @@ $: store = $page.data.store
 	<div class="container mx-auto w-full max-w-6xl">
 		<!-- Payments & Returns -->
 
-		<h1 class="mb-5 text-center font-serif text-2xl font-medium sm:mb-10 md:text-3xl lg:text-4xl">
-			Payments & Returns
-		</h1>
+		<h1 class="mb-5 text-center sm:mb-10">Payments & Returns</h1>
 
 		<ul class="flex flex-col gap-5 text-justify text-sm sm:text-base">
 			<li>
-				<h6 class="mb-5 font-semibold">PAYMENTS</h6>
+				<h6 class="mb-5">PAYMENTS</h6>
 
-				<p class="text-zinc-500">
-					{store?.websiteName} accepts Debit Cards, Credit Cards, NetBanking & Wallets for payments.
+				<p>
+					{$page.data.store?.websiteName} accepts Debit Cards, Credit Cards, NetBanking & Wallets for
+					payments.
 				</p>
 			</li>
 
 			<li>
-				<h6 class="mb-5 font-semibold">SHIPPING</h6>
+				<h6 class="mb-5">SHIPPING</h6>
 
-				<p class="text-zinc-500">
-					{store?.websiteName} offers to ship to cities all over India. Customers usually receive their
-					orders within 7-8 working days. The customer is responsible for any import duty that may be
-					levied upon their order. <br /> <br />
+				<p>
+					{$page.data.store?.websiteName} offers to ship to cities all over India. Customers usually
+					receive their orders within 7-8 working days. The customer is responsible for any import duty
+					that may be levied upon their order. <br /> <br />
 
 					If you have any questions about the expected delivery period for your address, please
-					email us at {store?.websiteEmail} <br /> <br />
+					email us at {$page.data.store?.websiteEmail} <br /> <br />
 
-					Once your {store?.domain} order ships it must go to the address provided at the time you place
-					your order. If you cannot receive or pick up your order after three attempts by the courier,
-					it will come back to our warehouse. <br /> <br />
+					Once your {$page.data.store?.domain} order ships it must go to the address provided at the
+					time you place your order. If you cannot receive or pick up your order after three attempts
+					by the courier, it will come back to our warehouse. <br /> <br />
 
 					Any refund against RTO orders will be not initiated, You can Request Us to Re-Ship it with
 					New Actual Address & Contact Details. We will reship it on next working Day.
@@ -59,14 +47,15 @@ $: store = $page.data.store
 			</li>
 
 			<li>
-				<h6 class="mb-5 font-semibold">RETURNS</h6>
+				<h6 class="mb-5">RETURNS</h6>
 
 				<div class="text-zinc-500">
-					{store?.websiteName} offers a replacement guarantee only if the product received is damaged/defective.
-					Please get in touch with us at {store?.websiteEmail} within 3 days of receiving your order
-					if you would like to have it replaced. We will provide a shipping address that you can ship
-					your order back to.
-					{store?.websiteName} will dispatch a replacement as soon as we receive your returned order.<br />
+					{$page.data.store?.websiteName} offers a replacement guarantee only if the product received
+					is damaged/defective. Please get in touch with us at {$page.data.store?.websiteEmail} within
+					3 days of receiving your order if you would like to have it replaced. We will provide a shipping
+					address that you can ship your order back to.
+					{$page.data.store?.websiteName} will dispatch a replacement as soon as we receive your returned
+					order.<br />
 					<br />
 
 					We do not exchange products if the customer has ordered a wrong item. <br /> <br />
@@ -100,7 +89,7 @@ $: store = $page.data.store
 
 						<li>
 							Item received is different from their description on the product detail page on
-							{store?.domain};
+							{$page.data.store?.domain};
 						</li>
 
 						<li>

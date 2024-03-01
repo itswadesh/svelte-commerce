@@ -7,7 +7,7 @@ import { page } from '$app/stores'
 import Cookie from 'cookie-universal'
 import dayjs from 'dayjs'
 import SEO from '$lib/components/SEO/index.svelte'
-import { CollectionService, DealsService, ProductService } from 'lib/services'
+import { CollectionService, DealsService, ProductService } from '$lib/services'
 
 const cookies = Cookie()
 let today = dayjs(new Date()).toISOString()

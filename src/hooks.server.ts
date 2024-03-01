@@ -1,6 +1,6 @@
 // import * as SentryNode from '@sentry/node'
 import { authenticateUser } from '$lib/server'
-import { browser, building, dev, version } from '$app/environment'
+import { dev } from '$app/environment'
 import { DOMAIN, IS_DEV, listOfPagesWithoutBackButton } from '$lib/config'
 import { error, type Handle, type HandleServerError } from '@sveltejs/kit'
 import { InitService } from '$lib/services'
