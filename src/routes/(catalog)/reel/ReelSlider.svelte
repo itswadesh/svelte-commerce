@@ -49,33 +49,6 @@ function toggleMute(product) {
 	product.muted = !product.muted
 }
 
-const addToCart = async ({ pid, qty, customizedImg, ix, loadingType }: any) => {
-	if (loadingType) {
-		selectedLoadingType = loadingType
-	}
-
-	loading[ix] = true
-	cartButtonText = 'Checkout Cart'
-	isAddedtoBag = true
-	try {
-		await CartService.addToCartService({
-			pid: pid,
-			vid: pid,
-			qty: qty,
-			customizedImg: customizedImg || null,
-			storeId: $page.data.storeId,
-			origin: $page.data.origin
-		})
-
-		await invalidateAll()
-	} catch (e) {
-		console.log(e)
-	} finally {
-		loading[ix] = false
-		selectedLoadingType = null
-	}
-}
-
 $: innerWidth = 0
 let responsiveWidth = 0
 $: if (innerWidth >= 640) {
