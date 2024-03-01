@@ -74,18 +74,6 @@ const add: Action = async ({ request, cookies, locals }) => {
 		return fail(400, { invalid: true })
 	}
 	try {
-		// let cart = await CartService.addToCartService({
-		// 	pid,
-		// 	vid: currentVariantId || vid,
-		// 	qty,
-		// 	options,
-		// 	customizedImg,
-		// 	customizedData,
-		// 	storeId: locals.storeId,
-		// 	cartId,
-		// 	origin: locals.origin,
-		// 	sid // This is a special case to pass complete cookie
-		// })
 		let cart = await CartService.addToCartService({
 			pid,
 			vid: currentVariantId || vid,
@@ -96,7 +84,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 			storeId: locals.storeId,
 			cartId,
 			origin: locals.origin,
-			sid // This is a special case to pass complete cookie
+			sid
 		})
 		// if (!cartId) { // Commented out because when can't find cart_id in database, it will still won't set the new cart_id in cookies
 		cartId = cart.cart_id // This is required because when cart_id is null, it will add 3 items with null cart id hence last one prevails
@@ -117,7 +105,10 @@ const add: Action = async ({ request, cookies, locals }) => {
 					storeId: locals.storeId,
 					cartId,
 					origin: locals.origin,
-					sid // This is a special case to pass complete cookie
+					sid,
+					options,
+					customizedImg,
+					customizedData
 				})
 			}
 		}
@@ -153,7 +144,6 @@ const add: Action = async ({ request, cookies, locals }) => {
 			return {}
 		}
 	} catch (e) {
-		console.log('e', e)
 		return {}
 	}
 }
