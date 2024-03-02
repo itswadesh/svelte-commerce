@@ -28,7 +28,7 @@ let seoProps = {
 	contentUrl: $page.data.store?.logo,
 	createdAt: today,
 	// depth: { unitCode: '', value: '' },
-	email: `${$page?.data?.store?.email}`,
+	email: `${$page.data.store?.email}`,
 	// entityMeta: '',
 	// facebookPage: '',
 	// gtin: '',
@@ -67,14 +67,14 @@ let seoProps = {
 	lastUpdated: today,
 	msapplicationTileImage: $page.data.store?.logo,
 	ogImage: { url: $page.data.store?.logo, width: 128, height: 56 },
-	ogImageSecureUrl: `${$page?.data?.store?.logo}`,
+	ogImageSecureUrl: `${$page.data.store?.logo}`,
 	ogImageType: 'image/jpeg',
 	ogSiteName: `${$page.data.origin}/sitemap/sitemap.xml`,
 	// productAvailability: `${product.stock}`,
 	productBrand: $page.data.store?.title,
 	productName: $page.data.store?.title,
 	// productPriceAmount: `${product.price}`,
-	productPriceCurrency: `${$page?.data?.store?.currencyCode}`,
+	productPriceCurrency: `${$page.data.store?.currencyCode}`,
 	slug: `/`,
 	// timeToRead: 0,
 	title: $page.data.store?.title,
@@ -119,13 +119,13 @@ async function getMegaMenu() {
 	if (browser) {
 		try {
 			megamenu = await getAllMegamenuFromStore({
-				storeId: $page?.data?.storeId,
+				storeId: $page.data.storeId,
 				origin: $page.data.origin
 			})
 
 			loadingForMegamenu = true
 
-			if (megamenu?.length) {
+			if (megamenu && megamenu?.length) {
 				megamenu = megamenu.filter((e) => {
 					return e.name !== 'New Arrivals'
 				})
@@ -251,7 +251,7 @@ function toggle2(cx) {
 					</li>
 				{/each}
 			</ul>
-		{:else if megamenuResult.length}
+		{:else if megamenuResult && megamenuResult.length}
 			<div class="mt-5 sm:mt-10">
 				<h2 class="p-3 py-5 text-center sm:px-10 md:py-10 uppercase">Categories</h2>
 
