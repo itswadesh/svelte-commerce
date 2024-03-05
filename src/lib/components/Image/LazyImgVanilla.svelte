@@ -110,7 +110,7 @@ onMount(() => {
 	lazyloadInstance = new lazyload({
 		thresholds: '50px 10%',
 		callback_error: (img) => {
-			img.setAttribute('src', 'https://i.ibb.co/ZKFtJ25/image-1.png')
+			img.setAttribute('src', '/output.png')
 		},
 		callback_enter: handleLineLoader
 	})
