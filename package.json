@@ -23,8 +23,8 @@
 		"live": "run-s build copy liveS"
 	},
 	"dependencies": {
-		"@misiki/litekart": "0.0.12",
-		"@misiki/litekart-utils": "1.0.7",
+		"@misiki/litekart": "0.0.16",
+		"@misiki/litekart-utils": "1.0.18",
 		"@vite-pwa/sveltekit": "0.3.0"
 	},
 	"devDependencies": {
@@ -48,6 +48,7 @@
 		"@tailwindcss/typography": "^0.5.10",
 		"@typescript-eslint/eslint-plugin": "^6.21.0",
 		"@typescript-eslint/parser": "^6.21.0",
+		"@unpic/svelte": "0.0.51",
 		"@woocommerce/woocommerce-rest-api": "1.0.1",
 		"amazon-s3-uri": "^0.1.1",
 		"autoprefixer": "^10.4.17",
