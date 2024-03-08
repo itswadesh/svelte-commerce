@@ -194,20 +194,24 @@ onMount(() => {
 			<CustomBanners sections="{data.home?.page?.banners}" />
 		{/if}
 
-		{#if loading}
-			<div class="p-3 py-5 md:py-10">
-				<Skeleton />
-			</div>
-		{:else if data?.deals?.data?.length}
-			<Deals deals="{data?.deals.data}" />
+		{#if $page.data.store?.isDeals}
+			{#if loading}
+				<div class="p-3 py-5 md:py-10">
+					<Skeleton />
+				</div>
+			{:else if data?.deals?.data?.length}
+				<Deals deals="{data?.deals.data}" />
+			{/if}
 		{/if}
 
-		{#if loading}
-			<div class="p-3 py-5 md:py-10">
-				<Skeleton />
-			</div>
-		{:else if data?.collections?.data?.length}
-			<CollectionsGeneral collections="{data?.collections.data}" />
+		{#if $page.data.store?.isCollections}
+			{#if loading}
+				<div class="p-3 py-5 md:py-10">
+					<Skeleton />
+				</div>
+			{:else if data?.collections?.data?.length}
+				<CollectionsGeneral collections="{data?.collections.data}" />
+			{/if}
 		{/if}
 
 		{#if data.home}
@@ -226,13 +230,15 @@ onMount(() => {
 		<!-- Note: Write the categories with comma separation -->
 		<ProductGridShowCase topTitle="New Shop Items" title="Fashion" categories="fashion" />
 
-		<!-- Collections Home -->
+		{#if $page.data.store?.isCollections}
+			<!-- Collections Home -->
 
-		<CollectionsHome {data} />
+			<CollectionsHome {data} />
 
-		<!-- Collections Home 2 -->
+			<!-- Collections Home 2 -->
 
-		<CollectionsHome2 {data} />
+			<CollectionsHome2 {data} />
+		{/if}
 
 		<!-- Shop your stone -->
 
