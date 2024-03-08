@@ -91,24 +91,63 @@ onMount(async () => {
 		showPinCodeEntryModal = true
 	}
 	try {
-		const [deals, collections, products] = await Promise.all([
-			DealsService.fetchDeals({
-				origin,
-				storeId: $page.data.storeId
-			}),
-			CollectionService.fetchCollections({
-				origin,
-				storeId: $page.data.storeId
-			}),
-			ProductService.fetchProducts({
-				query: data.query,
-				origin,
-				storeId: $page.data.storeId
-			})
-		])
-		data.deals = deals
-		data.collections = collections
-		data.products = products
+		if ($page.data.store?.isDeals && !$page.data.store?.isCollections) {
+			const [deals, products] = await Promise.all([
+				DealsService.fetchDeals({
+					origin,
+					storeId: $page.data.storeId
+				}),
+				ProductService.fetchProducts({
+					query: data.query,
+					origin,
+					storeId: $page.data.storeId
+				})
+			])
+			data.deals = deals
+			data.products = products
+		} else if (!$page.data.store?.isDeals && $page.data.store?.isCollections) {
+			const [collections, products] = await Promise.all([
+				CollectionService.fetchCollections({
+					origin,
+					storeId: $page.data.storeId
+				}),
+				ProductService.fetchProducts({
+					query: data.query,
+					origin,
+					storeId: $page.data.storeId
+				})
+			])
+			data.collections = collections
+			data.products = products
+		} else if ($page.data.store?.isDeals && $page.data.store?.isCollections) {
+			const [deals, collections, products] = await Promise.all([
+				DealsService.fetchDeals({
+					origin,
+					storeId: $page.data.storeId
+				}),
+				CollectionService.fetchCollections({
+					origin,
+					storeId: $page.data.storeId
+				}),
+				ProductService.fetchProducts({
+					query: data.query,
+					origin,
+					storeId: $page.data.storeId
+				})
+			])
+			data.deals = deals
+			data.collections = collections
+			data.products = products
+		} else {
+			const [products] = await Promise.all([
+				ProductService.fetchProducts({
+					query: data.query,
+					origin,
+					storeId: $page.data.storeId
+				})
+			])
+			data.products = products
+		}
 	} catch (e) {
 		console.log('e', e)
 	}
