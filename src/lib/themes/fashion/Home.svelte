@@ -208,15 +208,17 @@ onMount(() => {
 			{/await}
 		{/if}
 
-		{#await data?.streamed?.collections}
-			<div class="p-3 py-5 md:py-10">
-				<Skeleton />
-			</div>
-		{:then collections}
-			{#if collections?.data?.length}
-				<CollectionsGeneral collections="{collections.data}" />
-			{/if}
-		{/await}
+		{#if store?.isCollections}
+			{#await data?.streamed?.collections}
+				<div class="p-3 py-5 md:py-10">
+					<Skeleton />
+				</div>
+			{:then collections}
+				{#if collections?.data?.length}
+					<CollectionsGeneral collections="{collections.data}" />
+				{/if}
+			{/await}
+		{/if}
 
 		{#await data.streamed.home then home}
 			<HeroBannersCollage6 heroBanners="{home.heroBanners}" />
@@ -234,13 +236,15 @@ onMount(() => {
 		<!-- Note: Write the categories with comma separation -->
 		<ProductGridShowCase topTitle="New Shop Items" title="Fashion" categories="fashion" />
 
-		<!-- Collections Home -->
+		{#if store?.isCollections}
+			<!-- Collections Home -->
 
-		<CollectionsHome {data} />
+			<CollectionsHome {data} />
 
-		<!-- Collections Home 2 -->
+			<!-- Collections Home 2 -->
 
-		<CollectionsHome2 {data} />
+			<CollectionsHome2 {data} />
+		{/if}
 
 		<!-- Shop your stone -->
 
