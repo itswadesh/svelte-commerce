@@ -34,14 +34,23 @@ import { slide } from 'svelte/transition'
 import PincodeInputBox from '$lib/themes/misiki/PincodeInputBox.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import Skeleton from '$lib/ui/Skeleton.svelte'
+import { onMount } from 'svelte'
+import { browser } from '$app/environment'
+import { storeStore } from '$lib/store/store'
 
 export let data
 export let showFooter = false
 export let showPinCodeEntryModal = false
+let store = {}
+onMount(() => {
+	if (browser) {
+		storeStore.subscribe((value) => (store = value))
+	}
+})
 </script>
 
 <div class="bg-opacity-25 bg-center bg-repeat min-h-screen">
-	{#if $page.data.store?.isHyperlocal && showPinCodeEntryModal}
+	{#if store?.isHyperlocal && showPinCodeEntryModal}
 		<PincodeInputBox on:close="{() => (showPinCodeEntryModal = false)}" />
 	{/if}
 
@@ -68,7 +77,7 @@ export let showPinCodeEntryModal = false
 
 		<!-- Alert message -->
 
-		{#if $page?.data?.store?.alert}
+		{#if $page.data.store?.alert}
 			<div class="p-3 py-5 sm:p-10 bg-primary-50">
 				<h1 class="container mx-auto text-center">
 					{$page?.data.store.alert}
@@ -190,7 +199,7 @@ export let showPinCodeEntryModal = false
 			{/if}
 		{/await}
 
-		{#if $page.data?.store?.isDeals}
+		{#if store?.isDeals}
 			{#await data?.streamed?.deals}
 				<div class="p-3 py-5 md:py-10">
 					<Skeleton />
@@ -202,15 +211,17 @@ export let showPinCodeEntryModal = false
 			{/await}
 		{/if}
 
-		{#await data?.streamed?.collections}
-			<div class="p-3 py-5 md:py-10">
-				<Skeleton />
-			</div>
-		{:then collections}
-			{#if collections?.data?.length}
-				<CollectionsGeneral collections="{collections.data}" />
-			{/if}
-		{/await}
+		{#if store?.isCollections}
+			{#await data?.streamed?.collections}
+				<div class="p-3 py-5 md:py-10">
+					<Skeleton />
+				</div>
+			{:then collections}
+				{#if collections?.data?.length}
+					<CollectionsGeneral collections="{collections.data}" />
+				{/if}
+			{/await}
+		{/if}
 
 		{#await data.streamed.home then home}
 			<HeroBannersCollage6 heroBanners="{home.heroBanners}" />
@@ -218,23 +229,25 @@ export let showPinCodeEntryModal = false
 
 		<!-- Popular products -->
 
-		<PopularProductsHome data="{data}" />
+		<PopularProductsHome {data} />
 
 		<!-- Trending products -->
 
-		<TrendingProductsHome data="{data}" />
+		<TrendingProductsHome {data} />
 
 		<!-- Trending products -->
 		<!-- Note: Write the categories with comma separation -->
 		<ProductGridShowCase topTitle="New Shop Items" title="Fashion" categories="fashion" />
 
-		<!-- Collections Home -->
+		{#if store?.isCollections}
+			<!-- Collections Home -->
 
-		<CollectionsHome data="{data}" />
+			<CollectionsHome {data} />
 
-		<!-- Collections Home 2 -->
+			<!-- Collections Home 2 -->
 
-		<CollectionsHome2 data="{data}" />
+			<CollectionsHome2 {data} />
+		{/if}
 
 		<!-- Shop your stone -->
 
@@ -244,7 +257,7 @@ export let showPinCodeEntryModal = false
 
 		<!-- Customer feedback -->
 
-		<CustomerFeedback data="{data}" />
+		<CustomerFeedback {data} />
 
 		<!-- Legal Footer Information -->
 
@@ -259,7 +272,7 @@ export let showPinCodeEntryModal = false
 				type="button"
 				class="p-3 sm:px-10 w-full flex items-center justify-between gap-4 text-sm focus:outline-none"
 				on:click="{() => (showFooter = !showFooter)}">
-				<span>More about {$page.data?.store?.websiteName || 'store'}</span>
+				<span>More about {$page.data.store?.websiteName || 'store'}</span>
 
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
