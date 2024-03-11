@@ -35,6 +35,7 @@ async function payWithCard(clientSecret: string, orderNo: string) {
 		const result = await stripe.confirmCardPayment(clientSecret, {
 			payment_method: { card: card }
 		})
+
 		if (result.error) {
 			errorMessage.show = true
 			errorMessage.text = result.error.message
@@ -65,6 +66,7 @@ const payWithStripe = async (pm: PaymentMethod) => {
 			storeId: $page.data.store.id,
 			origin: $page.data.origin
 		})
+
 		if (res.errors) {
 			errorMessage = { show: true, text: res.errors[0].message }
 			return
@@ -79,7 +81,7 @@ const payWithStripe = async (pm: PaymentMethod) => {
 			}
 		}
 	} catch (e: any) {
-		errorMessage = { show: true, text: e.toString() }
+		errorMessage = { show: true, text: e.message || e }
 	} finally {
 		loading = false
 	}
