@@ -25,12 +25,12 @@ let showAddNewAddressModal = false
 let showEditAddressModal = false
 let typingTimer
 
-function callSearch(search) {
-	clearTimeout(typingTimer)
-	typingTimer = setTimeout(() => {
-		searchData(search)
-	}, 300)
-}
+// function callSearch(search) {
+// 	clearTimeout(typingTimer)
+// 	typingTimer = setTimeout(() => {
+// 		searchData(search)
+// 	}, 300)
+// }
 
 async function searchData(search) {
 	let u = new URL($page.url)
@@ -38,27 +38,27 @@ async function searchData(search) {
 	goto(u.toString())
 }
 
-async function sortNow(sort) {
-	let u = new URL($page.url)
-	u.searchParams.set('sort', sort.toString())
-	goto(u.toString())
-}
+// async function sortNow(sort) {
+// 	let u = new URL($page.url)
+// 	u.searchParams.set('sort', sort.toString())
+// 	goto(u.toString())
+// }
 
-async function saveAddr(e) {
-	const { _id: id, active } = e
-	try {
-		await AddressService.saveAddress({
-			id,
-			storeId: $page.data.storeId,
-			origin: $page.data.origin,
-			sid: $page.data.sid
-		})
-		await invalidateAll()
-	} catch (e) {
-		data.err = e
-	} finally {
-	}
-}
+// async function saveAddr(e) {
+// 	const { _id: id, active } = e
+// 	try {
+// 		await AddressService.saveAddress({
+// 			id,
+// 			storeId: $page.data.storeId,
+// 			origin: $page.data.origin,
+// 			sid: $page.data.sid
+// 		})
+// 		await invalidateAll()
+// 	} catch (e) {
+// 		data.err = e
+// 	} finally {
+// 	}
+// }
 
 // async function remove(id, index) {
 // 	data.err = null
