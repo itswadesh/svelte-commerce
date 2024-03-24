@@ -433,7 +433,7 @@ function handleFilterTags() {
 
 				<ul
 					class="lg:mt-5 grid grid-cols-2 items-start border-t sm:flex sm:flex-wrap sm:justify-between sm:gap-3 sm:border-t-0 lg:gap-6">
-					{#each data.products?.products as p, px}
+					{#each data.products?.products as p, px (p._id)}
 						<li in:fly="{{ y: 20, duration: 300, delay: 100 * px }}">
 							<ProductCard product="{p}" />
 						</li>
