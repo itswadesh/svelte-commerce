@@ -194,6 +194,7 @@ const saveAddress = async ({ request, cookies, locals }) => {
 					errors
 				})
 			}
+
 			try {
 				res = await AddressService.saveAddress({
 					address,
@@ -304,6 +305,7 @@ const saveAddress = async ({ request, cookies, locals }) => {
 					}
 				}
 			}
+
 			try {
 				res = await CartService.updateCart3({
 					cartId,
