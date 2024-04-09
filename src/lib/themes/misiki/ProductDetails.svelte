@@ -265,79 +265,6 @@ function handleSelectedLinkiedProducts(e) {
 
 // This is used only for customized product else cart?/add
 
-async function addToBag(p, customizedImg, customizedJson) {
-	try {
-		loading = true
-		cartButtonText = 'Adding...'
-
-		let cart = await CartService.addToCartService({
-			pid: p.id,
-			vid: p.id,
-			qty: 1,
-			options: selectedOptions,
-			customizedImg: customizedImg,
-			storeId: $page.data.storeId,
-			customizedData: customizedJson,
-			origin: $page.data.origin,
-			server: isServer,
-			cookies
-		})
-		if (selectedLinkiedProducts?.length) {
-			for (const i of selectedLinkiedProducts) {
-				cart = await CartService.addToCartService({
-					pid: i,
-					vid: i,
-					qty: 1,
-					storeId: $page.data.storeId,
-					origin: $page.data.origin,
-					server: isServer,
-					cookies
-				})
-			}
-		}
-
-		const response = await fetch('/server/cart')
-		cart = await response.json()
-
-		if (cart) {
-			const cookieCart = {
-				cartId: cart?.cart_id,
-				// items: cart?.items,
-				qty: cart?.qty,
-				tax: cart?.tax,
-				subtotal: cart?.subtotal,
-				total: cart?.total,
-				currencySymbol: cart?.currencySymbol,
-				discount: cart?.discount,
-				savings: cart?.savings,
-				selfTakeout: cart?.selfTakeout,
-				shipping: cart?.shipping,
-				unavailableItems: cart?.unavailableItems,
-				formattedAmount: cart?.formattedAmount
-			}
-
-			cookies.set('cartId', cookieCart.cartId, { path: '/', maxAge: 31536000 })
-			// cartButtonText = 'Added To Cart'
-			bounceItemFromTop = true
-		}
-
-		cartButtonText = 'Go to Cart'
-		p.qty < 0 ? fireGTagEvent('remove_from_cart', cart) : fireGTagEvent('add_to_cart', cart)
-
-		await invalidateAll()
-
-		// const res = await getAPI('carts/my')
-	} catch (e) {
-		// toast(e, 'error')
-		cartButtonText = 'Error Add To Cart'
-	} finally {
-		loading = false
-		// await delay(1000)
-		cartButtonText = 'Add to Bag'
-		bounceItemFromTop = false
-	}
-}
-
 // let windowHeight
 // let cartButtonPosition = 0
 // onMount(() => {
@@ -388,6 +315,13 @@ function alertToSelectMandatoryOptions() {
 }
 
 $: {
+	if (data.product.variants) {
+		currentVariantId = $page.url.searchParams.get('variant')
+		const selectedVariant = data.product.variants.find((v) => v.id == currentVariantId)
+		if (selectedVariant?.prices) {
+			currentVariantPrice = (selectedVariant?.prices[0]?.amount || currentVariantPrice) / 100
+		}
+	}
 	const newOptions = []
 
 	for (const i in selectedOptions) {
@@ -426,15 +360,10 @@ function handleGallery(index) {
 	showPhotosModal = true
 }
 
-function handleMobileCanvas() {
-	if (screenWidth < 640 && showEditor === false) {
-		showEditor = true
-	}
-}
-
 async function updateVariant(variant) {
 	$page.url.searchParams.set('variant', variant.id)
-	currentVariantPrice = variant.prices[0]?.amount || currentVariantPrice
+	currentVariantId = variant.id
+	currentVariantPrice = (variant.prices[0]?.amount || currentVariantPrice) / 100
 	await goto($page.url.toString())
 	await invalidateAll()
 }
@@ -442,18 +371,18 @@ async function updateVariant(variant) {
 
 <SEO {...seoProps} />
 
-<svelte:window bind:scrollY="{y}" />
+<svelte:window bind:scrollY={y} />
 
 <svelte:head>
 	<title>{data.product?.name}</title>
 </svelte:head>
 
 <ProductNav
-	cart="{$page?.data?.cart}"
-	me="{$page?.data?.me}"
-	productName="{data.product?.name}"
-	url="{$page?.url?.href}"
-	store="{$page.data.store}" />
+	cart={$page?.data?.cart}
+	me={$page?.data?.me}
+	productName={data.product?.name}
+	url={$page?.url?.href}
+	store={$page.data.store} />
 
 <div class="min-h-screen lg:p-10">
 	<div class="md:container md:mx-auto flex flex-col gap-5">
@@ -461,15 +390,15 @@ async function updateVariant(variant) {
 			<!-- Breadcrumb -->
 
 			<Breadcrumb
-				categoryPool="{data.product?.categoryPool}"
-				currentProductName="{data.product?.name}" />
+				categoryPool={data.product?.categoryPool}
+				currentProductName={data.product?.name} />
 
 			<!-- Social share button -->
 
 			<SocialSharingButtons
-				productName="{data.product?.name}"
-				productImage="{data.product?.img}"
-				url="{$page?.url?.href}" />
+				productName={data.product?.name}
+				productImage={data.product?.img}
+				url={$page?.url?.href} />
 		</div>
 
 		<div class="mb-5 grid grid-cols-1 items-start gap-5 sm:mb-10 sm:gap-10 lg:grid-cols-5">
@@ -480,26 +409,37 @@ async function updateVariant(variant) {
 					class="flex w-full grid-cols-2 flex-row gap-2 overflow-x-scroll scrollbar-none md:grid">
 					{#if data?.product?.images?.length}
 						{#each data.product?.images as img, index}
-							<button
-								type="button"
-								class="cursor-zoom-in overflow-hidden rounded md:flex-shrink w-full h-auto min-h-[512px] sm:min-h-[300px] flex items-center justify-center shrink-0"
-								on:click="{() => handleGallery(index)}">
-								{#if product_image_dimension === '1x1'}
-									<LazyImg
-										src="{img}"
-										alt="{data.product?.name} catelog {index}"
-										height="512"
-										width="512"
-										aspect_ratio="1:1"
-										class="object-cover object-center w-full h-auto first-line:text-xs" />
-								{:else}
-									<LazyImg
-										src="{img}"
-										alt="{data.product?.name}"
-										height="512"
-										class="object-contain object-top w-full h-auto first-line:text-xs" />
-								{/if}
-							</button>
+							{#if img.includes('https://www.youtube.com/watch')}
+								<iframe
+									src="https://www.youtube.com/embed/{getIdFromYoutubeVideo(img)}"
+									title="YouTube video player"
+									frameborder="0"
+									allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+									class="w-full max-w-md h-auto aspect-video"
+									allowfullscreen>
+								</iframe>
+							{:else}
+								<button
+									type="button"
+									class="cursor-zoom-in overflow-hidden rounded md:flex-shrink w-full h-auto min-h-[512px] sm:min-h-[300px] flex items-center justify-center shrink-0"
+									on:click={() => handleGallery(index)}>
+									{#if product_image_dimension === '1x1'}
+										<LazyImg
+											src={img}
+											alt="{data.product?.name} catelog {index}"
+											height="512"
+											width="512"
+											aspect_ratio="1:1"
+											class="object-cover object-center w-full h-auto first-line:text-xs" />
+									{:else}
+										<LazyImg
+											src={img}
+											alt={data.product?.name}
+											height="512"
+											class="object-contain object-top w-full h-auto first-line:text-xs" />
+									{/if}
+								</button>
+							{/if}
 						{/each}
 					{:else}
 						<div
@@ -539,9 +479,9 @@ async function updateVariant(variant) {
 
 						<div class="block lg:hidden ml-auto">
 							<SocialSharingButtons
-								productName="{data.product?.name}"
-								productImage="{data.product?.img}"
-								url="{$page?.url?.href}" />
+								productName={data.product?.name}
+								productImage={data.product?.img}
+								url={$page?.url?.href} />
 						</div>
 					</div>
 
@@ -556,9 +496,9 @@ async function updateVariant(variant) {
 							{#if $page.data.store?.isFnb && data.product.foodType}
 								<div>
 									{#if data.product.foodType === 'veg'}
-										<img src="{productVeg}" alt="veg" class="h-5 w-5" />
+										<img src={productVeg} alt="veg" class="h-5 w-5" />
 									{:else if data.product.foodType === 'nonveg' || data.product.foodType === 'E'}
-										<img src="{productNonVeg}" alt="non veg" class="h-5 w-5" />
+										<img src={productNonVeg} alt="non veg" class="h-5 w-5" />
 									{/if}
 								</div>
 							{/if}
@@ -634,7 +574,7 @@ async function updateVariant(variant) {
 							<button
 								type="button"
 								class="flex max-w-max items-center divide-x divide-zinc-200 border border-zinc-200 py-1 text-sm focus:outline-none"
-								on:click="{() => scrollTo('ratings_and_reviews')}">
+								on:click={() => scrollTo('ratings_and_reviews')}>
 								<div class="flex items-center gap-1 px-2 font-semibold">
 									<span>
 										{productReviews?.reviewsSummary?.productReviews?.summary?.ratings_avg?.value.toFixed(
@@ -697,9 +637,7 @@ async function updateVariant(variant) {
 							{/if}
 
 							{#if $page.data.store?.isIndianPincodes}
-								<DeliveryOptions
-									product="{data.product}"
-									deliveryDetails="{data.deliveryDetails}" />
+								<DeliveryOptions product={data.product} deliveryDetails={data.deliveryDetails} />
 							{/if}
 						</div>
 					</div>
@@ -816,15 +754,15 @@ async function updateVariant(variant) {
 														? 'border-primary-500'
 														: 'border-zinc-300 hover:border-primary-500'}">
 													<LazyImg
-														src="{cg.img}"
-														alt="{cg.color.name}"
+														src={cg.img}
+														alt={cg.color.name}
 														height="72"
 														width="48"
 														class="transform group-hover:scale-95 object-contain object-center w-full h-full text-xs" />
 
 													<div
 														class="hidden group-hover:block absolute z-20 max-w-max min-w-max -top-2 leading-3 py-1 px-2 rounded whitespace-nowrap bg-primary-500 text-white text-[0.65em] text-center">
-														{cg?.color.name}
+														{cg?.color?.name || ''}
 													</div>
 												</a>
 											{:else}
@@ -835,15 +773,15 @@ async function updateVariant(variant) {
 														? 'border-primary-500'
 														: 'border-zinc-300 hover:border-primary-500'}">
 													<LazyImg
-														src="{cg.img}"
-														alt="{cg.color.name}"
+														src={cg.img}
+														alt={cg.color.name}
 														height="72"
 														width="48"
 														class="transform group-hover:scale-95 object-contain object-center w-full h-full text-xs" />
 
 													<div
 														class="hidden group-hover:block absolute z-20 max-w-max min-w-max -top-2 leading-3 py-1 px-2 rounded whitespace-nowrap bg-primary-500 text-white text-[0.65em] text-center">
-														{cg?.color.name}
+														{cg?.color?.name || ''}
 													</div>
 
 													<hr class="absolute z-10 w-24 transform rotate-[56deg] border-zinc-300" />
@@ -857,7 +795,15 @@ async function updateVariant(variant) {
 					{/if}
 
 					<!-- Size -->
-
+					<!-- {console.log(data.product)} -->
+					{#if data.product.sizechart}
+						<button
+							type="button"
+							class="text-right text-sm text-secondary-500 underline focus:outline-none"
+							on:click={() => (showSizeChart = !showSizeChart)}>
+							Size Chart
+						</button>
+					{/if}
 					{#if data?.moreProductDetails?.pg?.sizeGroup?.length}
 						<div>
 							<div class="mb-2 flex flex-wrap items-center gap-2 justify-between">
@@ -878,15 +824,6 @@ async function updateVariant(variant) {
 										></path>
 									</svg>
 								</div>
-
-								{#if data.product.sizechart}
-									<button
-										type="button"
-										class="text-right text-sm text-secondary-500 underline focus:outline-none"
-										on:click="{() => (showSizeChart = !showSizeChart)}">
-										Size Chart
-									</button>
-								{/if}
 							</div>
 
 							<ul class="flex flex-wrap gap-3">
@@ -901,7 +838,7 @@ async function updateVariant(variant) {
 														? 'bg-primary-500 border-primary-500 text-white'
 														: 'bg-transparent border-zinc-300 hover:border-primary-500'}">
 													<span class="w-full truncate">
-														{sg?.size?.name}
+														{sg?.size?.name || ''}
 													</span>
 
 													{#if sg.stock < 5 && sg.stock > 0}
@@ -917,7 +854,7 @@ async function updateVariant(variant) {
 													class="flex flex-col items-center justify-center text-center border text-zinc-200 rounded py-2 px-4 text-sm font-medium uppercase group transition duration-300 focus:outline-none
 													{sg?.size?.name === data.product?.size?.name ? 'border-primary-500' : 'hover:border-primary-500'}">
 													<span class="w-full truncate">
-														{sg?.size?.name}
+														{sg?.size?.name || ''}
 													</span>
 												</a>
 											{/if}
@@ -962,17 +899,17 @@ async function updateVariant(variant) {
 													? 'border-primary-500'
 													: 'border-zinc-200 hover:border-primary-500'}">
 												<LazyImg
-													src="{mgp.img}"
-													alt="{mgp.img}"
+													src={mgp.img}
+													alt={mgp.img}
 													height="56"
 													class="h-14 w-auto object-contain object-center" />
 											</div>
 
 											<span class="text-zinc-500 leading-3 line-clamp-2">
-												{mgp.material.name}
+												{mgp.material?.name || ''}
 											</span>
 
-											{#if mgp.material.price}
+											{#if mgp.material?.price}
 												<span
 													><b>{currency(mgp.material.price, $page.data.store?.currencySymbol)}</b
 													></span>
@@ -984,9 +921,8 @@ async function updateVariant(variant) {
 						</div>
 					{/if}
 
-					<!-- Variant Products -->
-
-					{#if data?.moreProductDetails?.pg?.variants?.length}
+					<!-- Variant Products (MedusaJS) -->
+					{#if data?.product?.variants?.length}
 						<div id="variants_list">
 							<div class="mb-2 flex items-center gap-2 uppercase">
 								<h5>Product Variations</h5>
@@ -1006,8 +942,8 @@ async function updateVariant(variant) {
 								</svg>
 							</div>
 
-							<ul class="flex flex-wrap gap-3" class:wiggle="{wiggleVariants}">
-								{#each data?.moreProductDetails?.pg?.variants as v}
+							<ul class="flex flex-wrap gap-3" class:wiggle={wiggleVariants}>
+								{#each data?.product?.variants as v}
 									<li>
 										<button
 											type="button"
@@ -1015,7 +951,7 @@ async function updateVariant(variant) {
 											{v?.id === currentVariantId
 												? 'bg-primary-500 border-primary-500 text-white'
 												: 'bg-transparent border-zinc-300 hover:border-primary-500'}"
-											on:click="{() => updateVariant(v)}">
+											on:click={() => updateVariant(v)}>
 											<span class="w-full truncate">
 												{v?.title}
 											</span>
@@ -1050,9 +986,7 @@ async function updateVariant(variant) {
 				<!-- select options  -->
 
 				{#if data.product?.options?.length}
-					<div
-						class="sizeSelector mb-5 flex flex-col gap-3 text-sm"
-						class:shake-animation="{shake}">
+					<div class="sizeSelector mb-5 flex flex-col gap-3 text-sm" class:shake-animation={shake}>
 						{#each data.product.options as o}
 							<div class="flex flex-col items-start sm:flex-row">
 								<h6 class="mb-1 w-full shrink-0 font-medium sm:mb-0 sm:w-52">
@@ -1063,11 +997,11 @@ async function updateVariant(variant) {
 									<!-- dropdown -->
 									{#if o.inputType == 'dropdown'}
 										<select
-											bind:value="{selectedOptions[o._id]}"
+											bind:value={selectedOptions[o._id]}
 											class="w-full rounded border border-zinc-200 p-2 text-sm placeholder-zinc-400 transition duration-300 focus:outline-none focus:ring-1 focus:ring-primary-500 bg-transparent hover:bg-zinc-50">
-											<option value="{undefined}" selected disabled>Select a Option</option>
+											<option value={undefined} selected disabled>Select a Option</option>
 											{#each o.values as i}
-												<option value="{i._id}">
+												<option value={i._id}>
 													{i.name}
 												</option>
 											{/each}
@@ -1075,11 +1009,11 @@ async function updateVariant(variant) {
 
 										<!-- textbox -->
 									{:else if o.inputType == 'textbox'}
-										<Textbox type="text" bind:value="{selectedOptions[o._id]}" />
+										<Textbox type="text" bind:value={selectedOptions[o._id]} />
 
 										<!-- date -->
 									{:else if o.inputType == 'date'}
-										<Textbox type="date" bind:value="{selectedOptions[o._id]}" />
+										<Textbox type="date" bind:value={selectedOptions[o._id]} />
 
 										<!-- daterange -->
 										<!-- {:else if o.inputType == 'daterange'}
@@ -1104,13 +1038,13 @@ async function updateVariant(variant) {
 
 										<!-- textarea -->
 									{:else if o.inputType == 'textarea'}
-										<Textarea bind:value="{selectedOptions[o._id]}" />
+										<Textarea bind:value={selectedOptions[o._id]} />
 
 										<!-- size -->
 									{:else if o.inputType == 'size'}
 										<div class="flex flex-wrap gap-2">
 											{#each o.values as v}
-												<RadioSize value="{v._id}" bind:modelValue="{selectedOptions[o._id]}">
+												<RadioSize value={v._id} bind:modelValue={selectedOptions[o._id]}>
 													{v.name}
 												</RadioSize>
 											{/each}
@@ -1121,9 +1055,9 @@ async function updateVariant(variant) {
 										<div class="flex flex-wrap gap-2">
 											{#each o.values as v}
 												<RadioColor
-													value="{v._id}"
-													backgroundColor="{v.name}"
-													bind:modelValue="{selectedOptions[o._id]}">
+													value={v._id}
+													backgroundColor={v.name}
+													bind:modelValue={selectedOptions[o._id]}>
 													{v.name}
 												</RadioColor>
 											{/each}
@@ -1133,7 +1067,7 @@ async function updateVariant(variant) {
 									{:else if o.inputType == 'radio'}
 										<div class="flex flex-wrap gap-x-4 gap-y-2">
 											{#each o.values as v}
-												<Radio value="{v._id}" bind:modelValue="{selectedOptions[o._id]}">
+												<Radio value={v._id} bind:modelValue={selectedOptions[o._id]}>
 													{v.name}
 												</Radio>
 											{/each}
@@ -1142,9 +1076,7 @@ async function updateVariant(variant) {
 										<!-- checkbox -->
 									{:else if o.inputType == 'checkbox'}
 										<div class="flex flex-wrap gap-x-4 gap-y-2">
-											<GropuCheckbox
-												items="{o.values}"
-												bind:selectedItems="{selectedOptions[o._id]}" />
+											<GropuCheckbox items={o.values} bind:selectedItems={selectedOptions[o._id]} />
 										</div>
 									{/if}
 								</div>
@@ -1208,30 +1140,30 @@ async function updateVariant(variant) {
 						</div>
 
 						<CheckboxOfMultiProducts
-							items="{data.product?.linkedProducts}"
-							selectedItems="{selectedLinkiedProducts || []}"
-							on:change="{handleSelectedLinkiedProducts}" />
+							items={data.product?.linkedProducts}
+							selectedItems={selectedLinkiedProducts || []}
+							on:change={handleSelectedLinkiedProducts} />
 					</div>
 				{/if}
 
 				{#if ($page.data.store?.allowBackOrder || data.product?.allow_back_order) && !data.product?.hasStock}
 					<form
 						id="create_back_order"
-						in:fade="{{ duration: 300 }}"
+						in:fade={{ duration: 300 }}
 						action="/cart?/createBackOrder"
 						method="POST"
 						enctype="multipart/form-data"
-						use:enhance="{() => {
+						use:enhance={() => {
 							return async ({ result }) => {
 								toast('Your back order is created successfully', 'success')
 
 								await invalidateAll()
 								await applyAction(result)
 							}
-						}}">
-						<input type="hidden" name="pid" value="{data?.product?._id || null}" />
+						}}>
+						<input type="hidden" name="pid" value={data?.product?._id || null} />
 
-						<input type="hidden" name="qty" value="{1}" />
+						<input type="hidden" name="qty" value={1} />
 
 						<button
 							type="submit"
@@ -1292,7 +1224,7 @@ async function updateVariant(variant) {
 									action="/my/wishlist?/toggleWishlist"
 									method="POST"
 									enctype="multipart/form-data"
-									use:enhance="{() => {
+									use:enhance={() => {
 										return async ({ result }) => {
 											if (result?.type === 'redirect') {
 												goto(result?.location)
@@ -1305,21 +1237,21 @@ async function updateVariant(variant) {
 											await invalidateAll()
 											await applyAction(result)
 										}
-									}}">
+									}}>
 									<input
 										type="hidden"
 										name="pid"
-										value="{data?.product?._id || data?.product?.id || null}" />
+										value={data?.product?._id || data?.product?.id || null} />
 
 									<input
 										type="hidden"
 										name="vid"
-										value="{data?.product?._id || data?.product?.id || null}" />
+										value={data?.product?._id || data?.product?.id || null} />
 
 									<WhiteButton
 										type="submit"
 										loadingringsize="sm"
-										loading="{loadingForWishlist}"
+										loading={loadingForWishlist}
 										class="w-full text-sm">
 										<!-- on:click="{() => toggleWishlist(data.product?._id)}" -->
 										{#if data?.product?.isWishlisted}
@@ -1393,7 +1325,7 @@ async function updateVariant(variant) {
 								{:else if data.product?.active && data.product?.hasStock}
 									{#if cartButtonText === 'Go to Cart'}
 										<a
-											in:fade="{{ duration: 300 }}"
+											in:fade={{ duration: 300 }}
 											class="block"
 											href="/cart"
 											data-sveltekit-preload-data>
@@ -1424,11 +1356,11 @@ async function updateVariant(variant) {
 									{:else}
 										<form
 											id="add_to_cart_1"
-											in:fade="{{ duration: 300 }}"
+											in:fade={{ duration: 300 }}
 											action="/cart?/add"
 											method="POST"
 											enctype="multipart/form-data"
-											use:enhance="{() => {
+											use:enhance={() => {
 												return async ({ result }) => {
 													if (result?.error) {
 														toast(result?.error, 'error')
@@ -1469,34 +1401,34 @@ async function updateVariant(variant) {
 														await applyAction(result)
 													}
 												}
-											}}">
-											<input type="hidden" name="pid" value="{data?.product?._id || null}" />
+											}}>
+											<input type="hidden" name="pid" value={data?.product?._id || null} />
 
-											<input type="hidden" name="vid" value="{data?.product?._id || null}" />
+											<input type="hidden" name="vid" value={data?.product?._id || null} />
 
 											<input
 												type="hidden"
 												name="variantsLength"
-												value="{data?.moreProductDetails?.pg?.variants?.length || null}" />
+												value={data?.moreProductDetails?.pg?.variants?.length || null} />
 
 											<input
 												type="hidden"
 												name="currentVariantId"
-												value="{currentVariantId || null}" />
+												value={currentVariantId || null} />
 
 											<input
 												type="hidden"
 												name="linkedItems"
-												value="{JSON.stringify(selectedLinkiedProducts) || null}" />
+												value={JSON.stringify(selectedLinkiedProducts) || null} />
 
-											<input type="hidden" name="qty" value="{1}" />
+											<input type="hidden" name="qty" value={1} />
 
 											<input
 												type="hidden"
 												name="options"
-												value="{JSON.stringify(finalSelectedOptions) || null}" />
+												value={JSON.stringify(finalSelectedOptions) || null} />
 
-											<input type="hidden" name="customizedImg" value="{customizedImg || null}" />
+											<input type="hidden" name="customizedImg" value={customizedImg || null} />
 
 											<PrimaryButton
 												type="submit"
@@ -1542,7 +1474,7 @@ async function updateVariant(variant) {
 						<button
 							type="button"
 							class="py-5 w-full flex items-center gap-2 justify-between focus:outline-none"
-							on:click="{() => (showLongDescription = !showLongDescription)}">
+							on:click={() => (showLongDescription = !showLongDescription)}>
 							<h5 class="uppercase">Description</h5>
 
 							<svg
@@ -1558,7 +1490,7 @@ async function updateVariant(variant) {
 						</button>
 
 						{#if showLongDescription}
-							<div transition:slide="{{ duration: 300 }}" class="pb-5 prose max-w-none">
+							<div transition:slide={{ duration: 300 }} class="pb-5 prose max-w-none">
 								{@html data?.moreProductDetails?.longDescription}
 							</div>
 						{/if}
@@ -1599,9 +1531,7 @@ async function updateVariant(variant) {
 							{/if}
 
 							{#if $page.data.store?.isIndianPincodes}
-								<DeliveryOptions
-									product="{data.product}"
-									deliveryDetails="{data.deliveryDetails}" />
+								<DeliveryOptions product={data.product} deliveryDetails={data.deliveryDetails} />
 							{/if}
 						</div>
 					</div>
@@ -1629,9 +1559,9 @@ async function updateVariant(variant) {
 										{selectedReviewType === 'product_review'
 										? 'border-primary-500 text-primary-500'
 										: 'border-zinc-200 text-zinc-500'}"
-									on:click="{() => {
+									on:click={() => {
 										;(selectedReviewType = 'product_review') && scrollTo('ratings_and_reviews')
-									}}">
+									}}>
 									<h5>Product Review</h5>
 								</button>
 
@@ -1641,21 +1571,21 @@ async function updateVariant(variant) {
 										{selectedReviewType === 'brand_review'
 										? 'border-primary-500 text-primary-500'
 										: 'border-zinc-200 text-zinc-500'}"
-									on:click="{() => {
+									on:click={() => {
 										;(selectedReviewType = 'brand_review') && scrollTo('ratings_and_reviews')
-									}}">
+									}}>
 									<h5>Brand Review</h5>
 								</button>
 							</div>
 						</div>
 
 						<RatingsAndReviews
-							type="{selectedReviewType}"
-							product="{data?.product}"
-							reviewsSummary="{selectedReviewType === 'product_review'
+							type={selectedReviewType}
+							product={data?.product}
+							reviewsSummary={selectedReviewType === 'product_review'
 								? productReviews.reviewsSummary?.productReviews
-								: productReviews.reviewsSummary?.brandReviews}"
-							reviews="{productReviews}" />
+								: productReviews.reviewsSummary?.brandReviews}
+							reviews={productReviews} />
 					{/if}
 				{/if}
 
@@ -1681,8 +1611,8 @@ async function updateVariant(variant) {
 				<div
 					id="cart_viewport"
 					use:viewport
-					on:enterViewport="{cartButtonEnterViewport}"
-					on:exitViewport="{cartButtonExitViewport}">
+					on:enterViewport={cartButtonEnterViewport}
+					on:exitViewport={cartButtonExitViewport}>
 				</div>
 
 				{#if showStickyCartButton && !data.product?.isCustomized}
@@ -1695,7 +1625,7 @@ async function updateVariant(variant) {
 									action="/my/wishlist?/toggleWishlist"
 									method="POST"
 									enctype="multipart/form-data"
-									use:enhance="{() => {
+									use:enhance={() => {
 										return async ({ result }) => {
 											if (result?.type === 'redirect') {
 												goto(result?.location)
@@ -1708,21 +1638,21 @@ async function updateVariant(variant) {
 											await invalidateAll()
 											await applyAction(result)
 										}
-									}}">
+									}}>
 									<input
 										type="hidden"
 										name="pid"
-										value="{data?.product?._id || data?.product?.id || null}" />
+										value={data?.product?._id || data?.product?.id || null} />
 
 									<input
 										type="hidden"
 										name="vid"
-										value="{data?.product?._id || data?.product?.id || null}" />
+										value={data?.product?._id || data?.product?.id || null} />
 
 									<WhiteButton
 										type="submit"
 										loadingringsize="sm"
-										loading="{loadingForWishlist}"
+										loading={loadingForWishlist}
 										class="w-full text-sm">
 										<!-- on:click="{() => toggleWishlist(data.product?._id)}" -->
 										{#if data?.product?.isWishlisted}
@@ -1761,7 +1691,7 @@ async function updateVariant(variant) {
 						{/if}
 
 						{#if currentVariantPrice > 0}
-							<div class="{$page.data.store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
+							<div class={$page.data.store?.isWishlist ? ' col-span-3' : ' col-span-5'}>
 								{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
 									<a
 										href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
@@ -1796,7 +1726,7 @@ async function updateVariant(variant) {
 								{:else if data.product?.active && data.product?.hasStock}
 									{#if cartButtonText === 'Go to Cart'}
 										<a
-											in:fade="{{ duration: 300 }}"
+											in:fade={{ duration: 300 }}
 											class="block"
 											href="/cart"
 											data-sveltekit-preload-data>
@@ -1827,11 +1757,11 @@ async function updateVariant(variant) {
 									{:else}
 										<form
 											id="add_to_cart_2"
-											in:fade="{{ duration: 300 }}"
+											in:fade={{ duration: 300 }}
 											action="/cart?/add"
 											method="POST"
 											enctype="multipart/form-data"
-											use:enhance="{() => {
+											use:enhance={() => {
 												return async ({ result }) => {
 													if (result?.error) {
 														toast(result?.error, 'error')
@@ -1872,34 +1802,34 @@ async function updateVariant(variant) {
 														await applyAction(result)
 													}
 												}
-											}}">
-											<input type="hidden" name="pid" value="{data?.product?._id || null}" />
+											}}>
+											<input type="hidden" name="pid" value={data?.product?._id || null} />
 
-											<input type="hidden" name="vid" value="{data?.product?._id || null}" />
+											<input type="hidden" name="vid" value={data?.product?._id || null} />
 
 											<input
 												type="hidden"
 												name="variantsLength"
-												value="{data?.moreProductDetails?.pg?.variants?.length || null}" />
+												value={data?.moreProductDetails?.pg?.variants?.length || null} />
 
 											<input
 												type="hidden"
 												name="currentVariantId"
-												value="{currentVariantId || null}" />
+												value={currentVariantId || null} />
 
 											<input
 												type="hidden"
 												name="linkedItems"
-												value="{JSON.stringify(selectedLinkiedProducts) || null}" />
+												value={JSON.stringify(selectedLinkiedProducts) || null} />
 
-											<input type="hidden" name="qty" value="{1}" />
+											<input type="hidden" name="qty" value={1} />
 
 											<input
 												type="hidden"
 												name="options"
-												value="{JSON.stringify(finalSelectedOptions) || null}" />
+												value={JSON.stringify(finalSelectedOptions) || null} />
 
-											<input type="hidden" name="customizedImg" value="{customizedImg || null}" />
+											<input type="hidden" name="customizedImg" value={customizedImg || null} />
 
 											<PrimaryButton
 												type="submit"
@@ -1945,7 +1875,7 @@ async function updateVariant(variant) {
 									action="/my/wishlist?/toggleWishlist"
 									method="POST"
 									enctype="multipart/form-data"
-									use:enhance="{() => {
+									use:enhance={() => {
 										return async ({ result }) => {
 											if (result?.type === 'redirect') {
 												goto(result?.location)
@@ -1958,21 +1888,21 @@ async function updateVariant(variant) {
 											await invalidateAll()
 											await applyAction(result)
 										}
-									}}">
+									}}>
 									<input
 										type="hidden"
 										name="pid"
-										value="{data?.product?._id || data?.product?.id || null}" />
+										value={data?.product?._id || data?.product?.id || null} />
 
 									<input
 										type="hidden"
 										name="vid"
-										value="{data?.product?._id || data?.product?.id || null}" />
+										value={data?.product?._id || data?.product?.id || null} />
 
 									<WhiteButton
 										type="submit"
 										loadingringsize="sm"
-										loading="{loadingForWishlist}"
+										loading={loadingForWishlist}
 										class="w-full text-sm">
 										<!-- on:click="{() => toggleWishlist(data.product?._id)}" -->
 										{#if data?.product?.isWishlisted}
@@ -2011,7 +1941,7 @@ async function updateVariant(variant) {
 						{/if}
 
 						{#if currentVariantPrice > 0}
-							<div class="{$page.data.store?.isWishlist ? ' col-span-3' : ' col-span-5'}">
+							<div class={$page.data.store?.isWishlist ? ' col-span-3' : ' col-span-5'}>
 								{#if $page.data.store?.isSecureCatalogue && !$page.data?.me}
 									<a
 										href="{$page.data?.loginUrl || '/auth/login'}?ref={$page?.url?.pathname}{$page
@@ -2046,7 +1976,7 @@ async function updateVariant(variant) {
 								{:else if data.product?.active && data.product?.hasStock}
 									{#if cartButtonText === 'Go to Cart'}
 										<a
-											in:fade="{{ duration: 300 }}"
+											in:fade={{ duration: 300 }}
 											class="block"
 											href="/cart"
 											data-sveltekit-preload-data>
@@ -2077,11 +2007,11 @@ async function updateVariant(variant) {
 									{:else}
 										<form
 											id="add_to_cart_3"
-											in:fade="{{ duration: 300 }}"
+											in:fade={{ duration: 300 }}
 											action="/cart?/add"
 											method="POST"
 											enctype="multipart/form-data"
-											use:enhance="{() => {
+											use:enhance={() => {
 												return async ({ result }) => {
 													if (result?.error) {
 														toast(result?.error, 'error')
@@ -2122,34 +2052,34 @@ async function updateVariant(variant) {
 														await applyAction(result)
 													}
 												}
-											}}">
-											<input type="hidden" name="pid" value="{data?.product?._id || null}" />
+											}}>
+											<input type="hidden" name="pid" value={data?.product?._id || null} />
 
-											<input type="hidden" name="vid" value="{data?.product?._id || null}" />
+											<input type="hidden" name="vid" value={data?.product?._id || null} />
 
 											<input
 												type="hidden"
 												name="variantsLength"
-												value="{data?.moreProductDetails?.pg?.variants?.length || null}" />
+												value={data?.moreProductDetails?.pg?.variants?.length || null} />
 
 											<input
 												type="hidden"
 												name="currentVariantId"
-												value="{currentVariantId || null}" />
+												value={currentVariantId || null} />
 
 											<input
 												type="hidden"
 												name="linkedItems"
-												value="{JSON.stringify(selectedLinkiedProducts) || null}" />
+												value={JSON.stringify(selectedLinkiedProducts) || null} />
 
-											<input type="hidden" name="qty" value="{1}" />
+											<input type="hidden" name="qty" value={1} />
 
 											<input
 												type="hidden"
 												name="options"
-												value="{JSON.stringify(finalSelectedOptions) || null}" />
+												value={JSON.stringify(finalSelectedOptions) || null} />
 
-											<input type="hidden" name="customizedImg" value="{customizedImg || null}" />
+											<input type="hidden" name="customizedImg" value={customizedImg || null} />
 
 											<PrimaryButton
 												type="submit"
@@ -2203,7 +2133,7 @@ async function updateVariant(variant) {
 				<div
 					class="grid w-full grid-cols-2 items-start gap-2 sm:gap-5 sm:flex sm:flex-wrap sm:justify-between lg:gap-6">
 					{#each data.product?.crossSells as csp}
-						<FrequentlyBoughtProduct product="{csp}" />
+						<FrequentlyBoughtProduct product={csp} />
 					{/each}
 
 					{#each { length: 7 } as _}
@@ -2219,12 +2149,12 @@ async function updateVariant(variant) {
 			{#if recentlyViewed?.length > 1}
 				<hr />
 
-				<RecentlyViewedProductsSlider title="Recently Viewed" products="{recentlyViewed}" />
+				<RecentlyViewedProductsSlider title="Recently Viewed" products={recentlyViewed} />
 			{/if}
 
 			<!-- Category pool buttons -->
 
-			<CategoryPoolButtons categoryPool="{data.product?.categoryPool}" />
+			<CategoryPoolButtons categoryPool={data.product?.categoryPool} />
 
 			<!-- Similar products From category slug -->
 
@@ -2238,7 +2168,7 @@ async function updateVariant(variant) {
 				</ul>
 			{:else if data?.moreProductDetails}
 				{#if data?.moreProductDetails?.moreFromCategory && data?.moreProductDetails?.moreFromCategory[0] && data?.moreProductDetails?.moreFromCategory[0].slug}
-					<SimilarProductsFromCategorySlug data="{data?.moreProductDetails?.moreFromCategory}" />
+					<SimilarProductsFromCategorySlug data={data?.moreProductDetails?.moreFromCategory} />
 				{/if}
 			{/if}
 
@@ -2247,7 +2177,7 @@ async function updateVariant(variant) {
 			{#if data.product?.relatedProducts?.length}
 				<hr />
 
-				<ProductsGrid title="Recommended Products" products="{data.product?.relatedProducts}" />
+				<ProductsGrid title="Recommended Products" products={data.product?.relatedProducts} />
 			{/if}
 		</div>
 
@@ -2257,7 +2187,7 @@ async function updateVariant(variant) {
 			<button
 				type="button"
 				class="p-3 sm:px-10 w-full flex items-center justify-between gap-4 text-sm focus:outline-none"
-				on:click="{() => (showFooter = !showFooter)}">
+				on:click={() => (showFooter = !showFooter)}>
 				<span>More about {$page.data.store?.websiteName || 'store'}</span>
 
 				<svg
@@ -2274,7 +2204,7 @@ async function updateVariant(variant) {
 			</button>
 
 			{#if showFooter}
-				<div transition:slide="{{ duration: 300 }}">
+				<div transition:slide={{ duration: 300 }}>
 					<Footer />
 				</div>
 			{/if}
@@ -2285,11 +2215,11 @@ async function updateVariant(variant) {
 <Gallery
 	bind:selectedImgIndex
 	bind:showPhotosModal
-	images="{data.product?.images}"
-	title="{data.product?.businessName}" />
+	images={data.product?.images}
+	title={data.product?.businessName} />
 
 {#if bounceItemFromTop}
-	<AnimatedCartItem img="{customizedImg || data.product?.img}" />
+	<AnimatedCartItem img={customizedImg || data.product?.img} />
 {/if}
 
 <!-- <UserForm showUserInputForm="{showUserInputForm}" /> -->
@@ -2299,17 +2229,17 @@ async function updateVariant(variant) {
 		<button
 			type="button"
 			class="absolute inset-0 cursor-default focus:outline-none"
-			on:click="{() => (showSizeChart = false)}">
+			on:click={() => (showSizeChart = false)}>
 		</button>
 
 		<div
-			transition:slideFade="{{ duration: 500 }}"
+			transition:slideFade={{ duration: 500 }}
 			class="absolute inset-y-0 right-0 z-[60] h-full w-full sm:w-96 bg-white p-5 sm:p-10 flex flex-col items-end justify-end"
 			style="box-shadow: -4px 0px 10px rgba(50, 50, 50, 0.2);">
 			<button
 				type="button"
 				class="text-zinc-500 hover:text-zinc-800 transition duration-300 transform scale-125 focus:outline-none"
-				on:click="{() => (showSizeChart = false)}">
+				on:click={() => (showSizeChart = false)}>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
@@ -2323,7 +2253,7 @@ async function updateVariant(variant) {
 
 			<div class="h-full w-full flex items-center justify-center">
 				<img
-					src="{data.product.sizechart}"
+					src={data.product.sizechart}
 					alt="{data.product?.name} size chart"
 					class="object-contain object-center w-full h-auto first-line:text-xs" />
 			</div>
