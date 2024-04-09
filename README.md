@@ -4,19 +4,13 @@
 
 <div align="center">
 
-**The open-source frontend for any eCommerce. Built with a PWA and headless approach, using a modern JS stack. We have WIP for Litekart. Woocommerce, MedusaJS, Bigcommerce and Shopify. The API approach also allows you to merge Svelte Commerce with any third-party tool like payment gateways, POS or AI.**
-
-</div>
-
-<div align="center">
-
-### [[Live Demo](https://demo.litekart.in/)] \[[What is it?](#what-is-it)] \[[Features](#features)] \[[Get Started](#get-started)]
+**The open-source frontend for any eCommerce. Built with a PWA and headless approach, using a modern JS stack. We have WIP for MedusaJS, Woocommerce, Bigcommerce and Shopify. The API approach also allows you to merge Svelte Commerce with any third-party tool like payment gateways, POS or AI.**
 
 </div>
 
 <div align="center" width="60%" height="auto">
-  <br>
-    <img src="https://res.cloudinary.com/itswadesh/image/upload/v1678600224/litekart/free_for_developers_1.png">
+  <br/>
+ <a href="https://litekart.in"> <img src="https://res.cloudinary.com/itswadesh/image/upload/v1678600224/litekart/free_for_developers_1.png"/></a>
 </div>
 <div align="center">
   <br>
@@ -84,7 +78,7 @@ Reach out to me with queries!
 <br/>
 <br/>
 
-<div align="center">
+<div align="">
 
 ### Big Brands using `svelte-commerce`
 
@@ -95,24 +89,35 @@ Reach out to me with queries!
     <img src="https://res.cloudinary.com/itswadesh/image/upload/v1682424690/tesoro.png?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="Tesoro">
   </a>
   <img src="assets/misc/transparent.png" height="1" width="15"/>
+  <a href="https://sparkinity.com" target="_blank">
+    <img style="background-color:white;padding:10px;"  src="./static/sparkinity.svg" height="32" alt="Sparkinity">
+  </a>
+  <img src="assets/misc/transparent.png" height="1" width="15"/>
   <a href="https://varnijewels.com/" target="_blank">
-    <img src="https://ik.imagekit.io/3n6cglxq6/img/varni-logo_1619291754__34835-qt10qx2uq90x.webp?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="Varni Jewels">
+    <img src="./static/varnijewels.jpg" height="64" alt="Varni Jewels">
+    <!-- <img src="https://ik.imagekit.io/3n6cglxq6/img/varni-logo_1619291754__34835-qt10qx2uq90x.webp?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="Varni Jewels"> -->
   </a>
   <img src="assets/misc/transparent.png" height="1" width="15"/>
-  <a href="https://lrnr.in/" target="_blank">
-    <img src="https://res.cloudinary.com/itswadesh/image/upload/v1682423814/logo-lrnr.png?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="LRNR">
+  <a style="color:white" href="https://lrnr.in/" target="_blank">
+    <img style="color:white" src="./static/lrnr.svg" height="64" alt="LRNR">
+    <!-- <img src="https://res.cloudinary.com/itswadesh/image/upload/v1682423814/logo-lrnr.png?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="LRNR"> -->
   </a>
   <img src="assets/misc/transparent.png" height="1" width="15"/>
-  <a href="https://tablez.com/" target="_blank">
+  <!-- <a href="https://tablez.com/" target="_blank">
     <img src="https://tablez.com/icon.png" height="64" alt="Tablez">
-  </a>
+  </a> -->
   <img src="assets/misc/transparent.png" height="1" width="15"/>
   <a href="https://b.zapvi.in/" target="_blank">
-    <img src="https://cdn.zapvi.in/img/Zapvi-Black-Logo-iKPQP43npcI2.svg?width=3&height=4&blur=25&aspect_ratio=3:4" height="64" alt="Misiki">
+    <img style="padding:10px;padding-bottom:0;" src="./static/zapvi.svg" height="64" alt="Zapvi">
+    <!-- <img src="https://cdn.zapvi.in/img/Zapvi-Black-Logo-iKPQP43npcI2.svg?width=3&height=4&blur=25&aspect_ratio=3:4" height="64" alt="Misiki"> -->
+  </a>
+  <img src="assets/misc/transparent.png" height="1" width="15"/>
+  <a href="https://secretgreen.com.au/" target="_blank">
+    <img style="padding:10px;padding-bottom:0;" src="./static/secretgreen.jpg" height="64" alt="Secretgreen">
   </a>
   <img src="assets/misc/transparent.png" height="1" width="15"/>
   <div>
-    <img src="https://res.cloudinary.com/itswadesh/image/upload/v1682424327/clicky_logo-97724356932.png?width=3&height=4&blur=25&aspect_ratio=3:4" height="64" alt="Clicky">
+<!--     <img src="https://res.cloudinary.com/itswadesh/image/upload/v1682424327/clicky_logo-97724356932.png?width=3&height=4&blur=25&aspect_ratio=3:4" height="64" alt="Clicky"> -->
   </div>
 
 </p>
@@ -127,8 +132,6 @@ Reach out to me with queries!
 
 ## Features
 
-- 🛍️ Attach Svelte store front to <a href="https://admin.litekart.in/" aria-label="Click to brouse svelte store front"> Litekart </a> and your complete ecommerce tech stack becomes free.
-- 👥 The demo uses litekart as backend
 - 👨🏻‍💻 Its both SSR and SPA
 - 🚀 Superfast
 - 🔗 It is possible to connect with any eCommerce backend if the backend has Rest API
@@ -150,16 +153,17 @@ Thats all !
 Open http://localhost:3000 on chrome. Your app should be live with awesome sveltekit up and running
 
 ## Configuration
+
 There are 3 places to configure
 
 1. `src/lib/config/`
-All non secret and application wide configs are stored here, if required, change according to your requirement.
+   All non secret and application wide configs are stored here, if required, change according to your requirement.
 
 2. `.env`
-All secrets stored here
+   All secrets stored here
 
 3. `src/lib/services/index.ts`
-This is used to define which service to use. Only 1 of the listed service can be active at a time. Valid values are `Litekart Medusa Bigcommerce Shopify Woocommerce`
+   This is used to define which service to use. Only 1 of the listed service can be active at a time. Valid values are `Litekart Medusa Bigcommerce Shopify Woocommerce`
 
 ## Deployment
 
@@ -169,7 +173,15 @@ Click on the button to directly deploy to Netlify or Vercel. Zero configuration 
 <img src="https://www.netlify.com/img/deploy/button.svg" alt="Deploy to netlify">
 </a>
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fitswadesh%2Fsvelte-commerce&demo-title=SvelteKit%20Commerce)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fitswadesh%2Fsvelte-commerce&env=PUBLIC_LITEKART_DOMAIN&envDescription=demo.litekart.in)
+
+The following envirnoment variable is mandatory
+
+```
+PUBLIC_LITEKART_DOMAIN=demo.litekart.in
+```
+
+You can replace the env variable with your store domain
 
 ### Docker
 
@@ -179,9 +191,9 @@ We also support docker images, use the following command to pull the latest dock
 docker run -d -p 3000:3000 ghcr.io/itswadesh/svelte-commerce:latest
 ```
 
-## Contributing
+## Features
 
-If you like the ideas behind Svelte Commerce and want to become a contributor - [join github discussions](https://github.com/itswadesh/svelte-commerce/discussions/new/choose), check the list of the [active issues](https://github.com/itswadesh/svelte-commerce/issues) or contact me directly via swadesh@litekart.in
+<!-- If you like the ideas behind Svelte Commerce and want to become a contributor - [join github discussions](https://github.com/itswadesh/svelte-commerce/discussions/new/choose), check the list of the [active issues](https://github.com/itswadesh/svelte-commerce/issues) or contact me directly via hi@litekart.in -->
 
 Svelte ecommerce - Headless, Authentication, Cart & Checkout, TailwindCSS, Server Rendered, Proxy + API Integrated, Animations, Lazy Loading, Loading Indicators, Carousel, Instant Search, Faceted Filters, Open Source
 
@@ -192,6 +204,7 @@ Latest update: 07-February-2023
 <details>
 <summary>Click here to see all the updates</summary>
 
+- 07-Jun-2023 - Deeplinking for social aharing buttons
 - 07-February-2023 - Prettified.
 - 06-February-2023 - Sveltekit 1.5
 - 15-December-2022 - Sveltekit 1.0 - Finally.
@@ -228,3 +241,7 @@ Latest update: 07-February-2023
 - 07-May-2021 - Completely Migrated to SvelteKit
 
 </details>
+
+### IDEAS
+
+Wherever we need store info at server page, we get it from its own api call, if store info requires in client page we take it from the layout.ts page where cached store into is available
