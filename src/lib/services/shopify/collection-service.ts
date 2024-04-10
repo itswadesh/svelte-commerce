@@ -1,5 +1,6 @@
 import { getAPI } from '$lib/utils/api'
 import { getBySid } from '$lib/utils/server'
+import { shopifyInit } from '$lib/utils'
 
 export const fetchCollections = async ({
 	origin,
@@ -11,11 +12,24 @@ export const fetchCollections = async ({
 	try {
 		let res: any = {}
 
-		if (server) {
-			res = await getBySid(`collections?store=${storeId}`, sid)
-		} else {
-			res = await getAPI(`collections?store=${storeId}`, origin)
-		}
+		res = await shopifyInit({
+			query: `{
+				products(first: 10) {
+					edges {
+						node {
+							id
+							title
+							tags
+						}
+					}
+				}
+			}
+			`,
+			variables: {}
+		})
+
+		// console.log('res', res);
+
 
 		return res || {}
 	} catch (e) {

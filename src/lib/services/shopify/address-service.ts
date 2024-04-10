@@ -1,6 +1,7 @@
 import { getShopifyApi, postShopifyApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
+import { shopifyInit } from 'lib/utils'
 
 export const fetchAddresses = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {
@@ -8,8 +9,25 @@ export const fetchAddresses = async ({ origin, storeId, server = false, sid = nu
 		let selectedAddress = {}
 		let myAddresses = []
 
-		res = (await getShopifyApi(`customers/me`, {}, sid)).customer.shipping_address
+		res = await shopifyInit({
+			query: `{
+				products(first: 10) {
+					edges {
+						node {
+							id
+							title
+							tags
+						}
+					}
+				}
+			}
+			`,
+			variables: {}
+		})
 
+		// console.log('res', res);
+
+		// return res || {}
 		return { myAddresses: { data: myAddresses }, selectedAddress, count: res?.count }
 	} catch (e) {
 		error(e.status, e.data?.message || e.message)

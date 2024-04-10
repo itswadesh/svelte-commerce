@@ -1,14 +1,32 @@
 import { getShopifyApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
+import { shopifyInit } from 'lib/utils'
 
 export const fetchAutocompleteData = async ({ origin, storeId, q }: any) => {
 	try {
 		let res: any = {}
 		let data = []
 
-		res = await getShopifyApi(`customers/me`, {})
+		res = await shopifyInit({
+			query: `{
+				products(first: 10) {
+					edges {
+						node {
+							id
+							title
+							tags
+						}
+					}
+				}
+			}
+			`,
+			variables: {}
+		})
 
+		// console.log('res', res);
+
+		// return res || {}
 		// must return name:string, slug:string type:string
 		return data || []
 	} catch (e) {

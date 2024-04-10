@@ -2,12 +2,29 @@ import type { Error } from '$lib/types'
 import { getShopifyApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
+import { shopifyInit } from 'lib/utils'
 
 export const fetchCartData = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {
 		let res: any = {}
 
-		res = await getShopifyApi(`customers/me`, {}, sid)
+		res = await shopifyInit({
+			query: `{
+				products(first: 10) {
+					edges {
+						node {
+							id
+							title
+							tags
+						}
+					}
+				}
+			}
+			`,
+			variables: {}
+		})
+
+		// console.log('res', res);
 
 		return res || {}
 	} catch (err) {
@@ -20,8 +37,21 @@ export const fetchRefreshCart = async ({ origin, storeId, server = false, sid = 
 	try {
 		let res: any = {}
 
-		res = await getShopifyApi(`customers/me`, {}, sid)
-
+		res = await shopifyInit({
+			query: `{
+				products(first: 10) {
+					edges {
+						node {
+							id
+							title
+							tags
+						}
+					}
+				}
+			}
+			`,
+			variables: {}
+		})
 		return res || {}
 	} catch (e) {
 		error(e.status, e.message)

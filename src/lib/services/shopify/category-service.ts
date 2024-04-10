@@ -1,6 +1,7 @@
 import { getShopifyApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
+import { shopifyInit } from 'lib/utils'
 
 export const fetchFooterCategories = async ({
 	origin,
@@ -11,8 +12,25 @@ export const fetchFooterCategories = async ({
 	try {
 		let data: []
 
-		data = await getShopifyApi(`customers/me`, {}, sid)
+		data = await shopifyInit({
+			query: `{
+				products(first: 10) {
+					edges {
+						node {
+							id
+							title
+							tags
+						}
+					}
+				}
+			}
+			`,
+			variables: {}
+		})
 
+		// console.log('res', res);
+
+		// return res || {}
 		return data || []
 	} catch (e) {
 		error(e.status, e.data?.message || e.message)
@@ -42,7 +60,25 @@ export const fetchAllCategories = async ({
 		let res: any = {}
 		let data, pageSize, currentPage
 
-		res = await getShopifyApi(`customers/me`, {}, sid)
+		res = await shopifyInit({
+			query: `{
+				products(first: 10) {
+					edges {
+						node {
+							id
+							title
+							tags
+						}
+					}
+				}
+			}
+			`,
+			variables: {}
+		})
+
+		// console.log('res', res);
+
+		// return res || {}
 
 		return { data, pageSize, currentPage }
 	} catch (e) {
@@ -65,7 +101,27 @@ export const fetchAllProductsOfCategories = async ({
 		let facets = {}
 		let err = null
 
-		res = await getShopifyApi(`customers/me`, {}, sid)
+		// res = await getShopifyApi(`customers/me`, {}, sid)
+
+		res = await shopifyInit({
+			query: `{
+				products(first: 10) {
+					edges {
+						node {
+							id
+							title
+							tags
+						}
+					}
+				}
+			}
+			`,
+			variables: {}
+		})
+
+		// console.log('res', res);
+
+		// return res || {}
 
 		return { products, productsCount, currentPage, facets, err }
 	} catch (e) {
@@ -77,8 +133,25 @@ export const fetchMegamenuData = async ({ origin, storeId, server = false, sid =
 	try {
 		let data: []
 
-		data = await getShopifyApi(`product-categories`, {}, sid)
+		data = await shopifyInit({
+			query: `{
+				products(first: 10) {
+					edges {
+						node {
+							id
+							title
+							tags
+						}
+					}
+				}
+			}
+			`,
+			variables: {}
+		})
 
+		// console.log('res', res);
+
+		// return res || {}
 		return data || []
 	} catch (e) {
 		error(e.status, e.data?.message || e.message)

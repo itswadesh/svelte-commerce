@@ -12,8 +12,25 @@ export const fetchBanners = async ({
 	try {
 		let res: any = {}
 
-		res = await getShopifyApi(`customers/me`, {}, sid)
+		res = await shopifyInit({
+			query: `{
+				products(first: 10) {
+					edges {
+						node {
+							id
+							title
+							tags
+						}
+					}
+				}
+			}
+			`,
+			variables: {}
+		})
 
+		// console.log('res', res);
+
+		// return res || {}
 		return res.data || []
 	} catch (e) {
 		error(e.status, e.data?.message || e.message)
