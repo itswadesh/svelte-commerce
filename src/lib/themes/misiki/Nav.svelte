@@ -146,8 +146,7 @@ async function onSearchSubmit({ detail }) {
 						alt="logo"
 						class="max-h-10 sm:max-h-16 w-40 object-contain object-left" />
 				{:else if $page.data.store?.websiteName}
-					<h2
-						class="bg-gradient-to-b from-primary-500 to-secondary-500 bg-clip-text text-transparent truncate w-40 sm:w-auto sm:max-w-sm">
+					<h2 class="truncate w-40 sm:w-auto sm:max-w-sm">
 						{$page.data.store?.websiteName}
 					</h2>
 				{:else}
