@@ -8,8 +8,10 @@ export const authorInfo = {
 	facebookPageName: 'codenx',
 	githubPage: 'itswadesh',
 	linkedinProfile: 'itswadesh',
-	telegramUsername: 'itswadesh',
 	twitterUsername: 'itswadesh'
+	telegramUsername: 'itswadesh',
+	Whatsapp: '+918249028220'
+	Website: 'http://litekart.in'
 }
 export const currency = { symbol: '$', code: 'USD' }
 export const currencyCode = 'USD'
@@ -92,7 +94,7 @@ export const woocommerceHeaders = {
 	Accept: 'application/json'
 }
 
-// Core config of svelte commerce
+// Design config of svelte commerce
 export const slotMarginGeneral = 'mt-14 sm:mt-20'
 export const slotMarginGeneralWithHelloBar = 'mt-[88px] sm:mt-28'
 export const slotMarginGeneralWithHelloBarAndHyperLocal = 'mt-[114px] sm:mt-[206px]'
