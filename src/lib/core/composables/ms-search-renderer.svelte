@@ -26,8 +26,8 @@
 		toggleSearchResults: (value: boolean) => void
 		closeSearch: () => void
 		handleKeyDown: (e: KeyboardEvent) => void
-    handleResultClick: (res: any) => void
-    showSearch: () => void
+		handleResultClick: (res: any) => void
+		showSearch: () => void
 	}
 
 	const autoComplete = async (query: string) => {
@@ -75,7 +75,7 @@
 	const closeSearch = () => {
 		expandSearch = false
 		search = ''
-    showSearchResults = false
+		showSearchResults = false
 		searchResults = []
 	}
 
@@ -98,18 +98,29 @@
 
 	function handleResultClick(result: any) {
 		goto(`/products/${result?.slug}`)
-    closeSearch()
+		closeSearch()
 	}
 
-  function toggleSearchResults(value: boolean) {
-    showSearchResults = value
-  }
+	function toggleSearchResults(value: boolean) {
+		showSearchResults = value
+	}
 
-  function showSearch() {
-	  ;(document.activeElement as any)?.blur?.()
-    expandSearch = true
-    showSearchResults = true
-  }
+	function showSearch() {
+		;(document.activeElement as any)?.blur?.()
+		expandSearch = true
+		showSearchResults = true
+	}
 </script>
 
-{@render content({ searchResults, loading, searchPlugin, expandSearch, showSearchResults, showSearch, closeSearch, toggleSearchResults, handleKeyDown, handleResultClick })}
+{@render content({
+	searchResults,
+	loading,
+	searchPlugin,
+	expandSearch,
+	showSearchResults,
+	showSearch,
+	closeSearch,
+	toggleSearchResults,
+	handleKeyDown,
+	handleResultClick
+})}

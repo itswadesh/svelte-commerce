@@ -1,5 +1,5 @@
 import { browser } from '$app/environment'
-import { goto } from '$app/navigation'
+import { afterNavigate, goto } from '$app/navigation'
 import { page } from '$app/state'
 import type { CarouselAPI } from '$lib/components/ui/carousel/context'
 import { storeProductToRecentlyViewed } from '$lib/core/logic/products.helper'
@@ -17,8 +17,6 @@ import { toast } from 'svelte-sonner'
 const PRODUCT_STATE_KEY = Symbol('product-state')
 
 class ProductState {
-	data: any = {}
-
 	ADD_TO_CART_MESSAGE_DURATION = 10000
 
 	settingState = getSettingState()
@@ -42,7 +40,7 @@ class ProductState {
 	isLoadingRelatedProducts = $state(false)
 	relatedProducts = $state({})
 	displayCarousel = $state('hidden')
-	selectedImage = $state(this.data?.product?.thumbnail || '')
+	selectedImage = $state(page.data?.product?.thumbnail || '')
 	selectedVariant: any = $state({})
 	viewPortCartPositionFromTop = $state(0)
 	select: number | null = $state(null)
@@ -50,8 +48,8 @@ class ProductState {
 	uploading = $state(false)
 	uploadedImagestoSave = $state([''])
 	showDescription = $state(false)
-	returnPlugin = $derived(this.data?.store?.plugins?.returnAndExchange)
-	showReturnPolicy = $state(this.data?.store?.plugins?.returnAndExchange?.below_more === true ? false : true)
+	returnPlugin = $derived(page.data?.store?.plugins?.returnAndExchange)
+	showReturnPolicy = $state(page.data?.store?.plugins?.returnAndExchange?.below_more === true ? false : true)
 	showAddToCartMessage = $state(false)
 	single = true
 	showLoginModal = $state(false)
@@ -65,19 +63,19 @@ class ProductState {
 	structuredData: any = $state({})
 	showEnquiryModal = $state(false)
 
-	anyVariantStockThere = $derived(this.data?.product?.variants?.some((v) => (v.stock || 0) > 0))
+	anyVariantStockThere = $derived(page.data?.product?.variants?.some((v) => (v.stock || 0) > 0))
 
-	trustBadgesPlugin = $derived(this.data?.store?.plugins?.trustBadges)
+	trustBadgesPlugin = $derived(page.data?.store?.plugins?.trustBadges)
 
 	productImagesArray = $state(
-		this.data?.product?.images?.split(',').map((i) => {
+		page.data?.product?.images?.split(',').map((i) => {
 			return i.trim()
 		}) || []
 	)
 
 	carouselImages = $state(this.productImagesArray)
 
-	productOptions: any[] = $state(this.data?.product?.options || [])
+	productOptions: any[] = $state(page.data?.product?.options || [])
 
 	images = $state([])
 	uploadedImages = $state([])
@@ -91,13 +89,14 @@ class ProductState {
 
 	warehouses = $state<Record<string, unknown>[]>([])
 
-	addToCartButtonDisabled =
+	addToCartButtonDisabled = $derived(
 		this.isAdding ||
-		(!this.data?.product?.manageInventory ? false : this.anyVariantStockThere ? !this.selectedVariant?.stock : !this.data?.product.stock)
+		(!page.data?.product?.manageInventory ? false : this.anyVariantStockThere ? !this.selectedVariant?.stock : !page.data?.product.stock)
+  )
 
 	refreshOptions = () => {
-		if (this.data?.product?.options?.length) {
-			this.productOptions = this.data.product.options.map((option) => {
+		if (page.data?.product?.options?.length) {
+			this.productOptions = page.data.product.options.map((option) => {
 				option.values = option.values?.map?.((_value: any) => {
 					_value.selectable = true
 					return _value
@@ -123,7 +122,7 @@ class ProductState {
 
 	// TODO: can we improve this
 	isAggregationAvaliable = (optionName: string, value: string) => {
-		return !!this.data?.product?.pg?.find((product: Record<string, string>) => {
+		return !!page.data?.product?.pg?.find((product: Record<string, string>) => {
 			return Object.entries({ ...this.selectedAggregations, [optionName]: value }).every(([key, val]) => {
 				return product[key] === val
 			})
@@ -135,7 +134,7 @@ class ProductState {
 		else if (this.selectedAggregations[optionName] === value) delete this.selectedAggregations[optionName]
 		else this.selectedAggregations = { ...this.selectedAggregations, [optionName]: value }
 
-		const matchingProduct = this.data?.product?.pg?.find((product) => {
+		const matchingProduct = page.data?.product?.pg?.find((product) => {
 			return Object.entries(this.selectedAggregations).every(([key, val]) => {
 				return product[key] === val
 			})
@@ -143,7 +142,7 @@ class ProductState {
 
 		/* This case is when user selects a disabled option */
 		if (Object.keys(this.selectedAggregations).length === 1) {
-			const allKeys = Object.keys(this.data.product?.ag || {})
+			const allKeys = Object.keys(page.data.product?.ag || {})
 			const selectedKey = Object.keys(this.selectedAggregations)[0]
 			const otherKeys = allKeys.filter((key) => key !== selectedKey)
 
@@ -154,22 +153,22 @@ class ProductState {
 		}
 
 		if (matchingProduct?.id) {
-			this.data.product.id = matchingProduct.id
+			page.data.product.id = matchingProduct.id
 		}
 
 		if (matchingProduct?.slug) {
 			await goto(`/products/${matchingProduct.slug}?variant_id=${matchingProduct.variantId}`, { replaceState: true })
 
 			setTimeout(() => {
-				if (this.data?.product?.images) {
+				if (page.data?.product?.images) {
 					this.productImagesArray = []
 					// carouselImages = [];
 
-					// const newImagesArray = this.data.product.images.split(",").map(i => i.trim());
-					const newImagesArray = this.data.product.images.split(',').map((i) => i.trim())
+					// const newImagesArray = page.data.product.images.split(",").map(i => i.trim());
+					const newImagesArray = page.data.product.images.split(',').map((i) => i.trim())
 					this.productImagesArray = newImagesArray
 					// carouselImages = newImagesArray;
-					this.selectedImage = this.data.product.thumbnail || ''
+					this.selectedImage = page.data.product.thumbnail || ''
 
 					this.currentIndex = 0
 					if (this.carouselApi) {
@@ -185,35 +184,37 @@ class ProductState {
 
 		this.findAndSelectVariantFromSearchParam()
 
-		browser && (await storeProductToRecentlyViewed({ product: this.data?.product, variant: this.selectedVariant }))
+		browser && (await storeProductToRecentlyViewed({ product: page.data?.product, variant: this.selectedVariant }))
 
 		this.isLoading = false
-		this.relatedProducts = await productService.listRelatedProducts({ page: 1, categoryId: this.data?.product?.categoryId })
+		this.relatedProducts = await productService.listRelatedProducts({ page: 1, categoryId: page.data?.product?.categoryId })
+		fireGTagEvent('view_item', { ...page.data.product, qty: 1 })
 	}
 
 	findAndSelectVariantFromSearchParam = () => {
-		if (this.data?.product?.variants?.length) {
+		if (page.data?.product?.variants?.length) {
 			const variantId = page.url.searchParams.get('variant_id')
 			if (variantId && variantId !== '') {
-				this.selectedVariant = this.data?.product.variants.find((v) => v.id === variantId)
+				this.selectedVariant = page.data?.product?.variants.find((v) => v.id === variantId) || page.data?.product?.variants[0]
 			} else {
-				this.selectedVariant = this.data?.product?.variants?.find((v) => v.title == 'default') || this.data?.product?.variants[0]
+				this.selectedVariant = page.data?.product?.variants?.find((v) => v.title == 'default') || page.data?.product?.variants[0]
 				goto(`?variant_id=${this.selectedVariant?.id || ''}`, { replaceState: true })
 			}
 		}
+    if (!this.selectedVariant) console.error("Failed to select a variant")
 	}
 
 	selectVariant = async ({ option, value }: { option: any; value: any }) => {
-		if (this.data?.product?.variants) {
-			this.selectedVariant = findVariantWithOptionValue(this.data?.product.variants, {
+		if (page.data?.product?.variants) {
+			this.selectedVariant = findVariantWithOptionValue(page.data?.product.variants, {
 				optionId: option.id,
 				value: value.value,
 				selectedVariant: this.selectedVariant
 			})
 
 			// Mark options that are not selectable
-			if (this.data?.product?.options) {
-				this.productOptions = this.data.product.options.map((option) => {
+			if (page.data?.product?.options) {
+				this.productOptions = page.data.product.options.map((option) => {
 					option.values = option.values.map((_value: any) => {
 						_value.selectable = this.isOptionSelectable(option.id, _value.value, option.id, value.value)
 						return _value
@@ -231,7 +232,7 @@ class ProductState {
 		if (optionId === clickedOptionId) return true
 
 		// Check if the option is selectable by checking if the option is already selected
-		const f = this.data?.product?.variants?.find?.((v) => {
+		const f = page.data?.product?.variants?.find?.((v) => {
 			const isVariantHavingClickedOption = v?.options?.some?.((option) => option.optionId === clickedOptionId && option.value === clickedValue)
 			const isVariantHavingOption = v?.options?.some?.((option) => option.optionId === optionId && option.value === value)
 			return isVariantHavingClickedOption && isVariantHavingOption
@@ -251,7 +252,7 @@ class ProductState {
 		const target = event.target as HTMLInputElement
 		if (target.files?.length) {
 			let newImages = Array.from(target.files)
-			if (single) {
+			if (this.single) {
 				newImages = [newImages[0]]
 				this.images = newImages
 				this.uploadedImages = []
@@ -281,7 +282,7 @@ class ProductState {
 
 		try {
 			const res = await wishlistService.checkWishlist({
-				productId: this.data?.product?.id,
+				productId: page.data?.product?.id,
 				variantId: this.selectedVariant?.id
 			})
 
@@ -294,7 +295,7 @@ class ProductState {
 	handleWishlistClick = async () => {
 		if (!this.userState?.user?.userId) {
 			addPendingWishlistAction({
-				productId: this.data?.product?.id,
+				productId: page.data?.product?.id,
 				variantId: this.selectedVariant?.id || ''
 			})
 
@@ -311,7 +312,7 @@ class ProductState {
 		this.wishlistLoading = true
 		try {
 			const res = await wishlistService.toggleWishlist({
-				productId: this.data?.product?.id,
+				productId: page.data?.product?.id,
 				variantId: this.selectedVariant?.id
 			})
 
@@ -329,8 +330,8 @@ class ProductState {
 
 	buyNow = async () => {
 		try {
-			const variantId = this.selectedVariant?.id || this.data?.product?.id
-			const productId = this.data?.product?.id
+			const variantId = this.selectedVariant?.id || page.data?.product?.id
+			const productId = page.data?.product?.id
 			const qty = this.qty
 
 			this.cartState.createSingleItemCheckoutSession({
@@ -346,28 +347,22 @@ class ProductState {
 		}
 	}
 
-	setState = (data: any) => {
-		data && (this.data = data)
-
-		if (this.data?.product?.variants?.length) {
+	setInitialSelectedVariant = () => {
+		if (page.data?.product?.variants?.length) {
 			const variantId = page.url.searchParams.get('variant_id')
 			if (variantId) {
-				this.selectedVariant = this.data?.product.variants.find((v) => v.id === variantId)
+				this.selectedVariant = page.data?.product.variants.find((v) => v.id === variantId)
 			} else {
-				this.selectedVariant = this.data?.product?.variants?.find((v) => v.title !== 'default')
+				this.selectedVariant = page.data?.product?.variants?.find((v) => v.title !== 'default')
 			}
 		}
-	}
-
-	getState = () => {
-		return this.data
 	}
 
 	handleAddToCart = async () => {
 		try {
 			this.isAdding = true
 			await this.cartState.addOrUpdate({
-				productId: this.data?.product?.id,
+				productId: page.data?.product?.id,
 				variantId: this.selectedVariant?.id,
 				qty: this.qty
 			})
@@ -385,10 +380,10 @@ class ProductState {
 
 			const me = this.userState?.user
 			const dataToFire = {
-				items: [{ ...this.data?.product, qty: this.qty }],
-				total: this.data?.product?.price * this.qty,
+				items: [{ ...page.data?.product, qty: this.qty }],
+				total: page.data?.product?.price * this.qty,
 				qty: this.qty,
-				vendorBusinessName: this.data?.product?.vendor?.businessName,
+				vendorBusinessName: page.data?.product?.vendor?.businessName,
 				user: {
 					id: me?._id || me?.id,
 					name: me?.firstName + ' ' + me?.lastName,
@@ -399,12 +394,19 @@ class ProductState {
 		}
 	}
 
-	constructor(data: any) {
-		this.data = data
-
-		onMount(async () => {
+	constructor() {
+    // onMount to ensure support for HMR
+    let onMountLock = false
+    onMount(async () => {
+      onMountLock = true
+      await this.mount()
+    })
+		afterNavigate(async () => {
+      if (onMountLock) {
+        onMountLock = false
+        return;
+      }
 			await this.mount()
-			fireGTagEvent('view_item', { ...this.data.product, qty: 1 })
 		})
 
 		$effect(() => {
@@ -419,8 +421,8 @@ class ProductState {
 		})
 
 		$effect(() => {
-			if (this.selectedVariant?.id || this.data?.product?.id) {
-				this.checkIfWishlisted(this.selectedVariant?.id || this.data?.product?.id)
+			if (this.selectedVariant?.id || page.data?.product?.id) {
+				this.checkIfWishlisted(this.selectedVariant?.id || page.data?.product?.id)
 					.then((val) => {
 						this.wishlisted = val || false
 					})
@@ -445,12 +447,12 @@ class ProductState {
 			}
 
 			// Load related products from same category
-			const categorySlug = this.data?.product?.categoryHierarchy?.[this.data?.product?.categoryHierarchy?.length - 1]?.slug
+			const categorySlug = page.data?.product?.categoryHierarchy?.[page.data?.product?.categoryHierarchy?.length - 1]?.slug
 			if (categorySlug) {
 				this.isLoadingRelatedProducts = true
 				try {
 					const result = await meilisearchService.search({ categories: categorySlug, query: '' })
-					this.productsOfSameCategory = result?.hits?.filter((x) => x.id !== this.data?.product?.id) || []
+					this.productsOfSameCategory = result?.hits?.filter((x) => x.id !== page.data?.product?.id) || []
 				} catch (error) {
 					console.error('Error loading related products:', error)
 				} finally {
@@ -461,7 +463,7 @@ class ProductState {
 
 		onMount(async () => {
 			try {
-				const res = await fetch(`/api/products/${this.data?.product?.id}/warehouse`, {
+				const res = await fetch(`/api/products/${page.data?.product?.id}/warehouse`, {
 					method: 'GET',
 					headers: {
 						'Content-Type': 'application/json',
@@ -481,36 +483,36 @@ class ProductState {
 		})
 
 		$effect(() => {
-			if (this.data?.product) {
+			if (page.data?.product) {
 				this.structuredData = {
-					name: this.data?.product?.title,
-					image: [this.data?.product?.thumbnail],
-					description: this.data?.product?.description,
-					sku: this.data?.product?.sku,
-					brandName: this.data?.product?.vendorId,
+					name: page.data?.product?.title,
+					image: [page.data?.product?.thumbnail],
+					description: page.data?.product?.description,
+					sku: page.data?.product?.sku,
+					brandName: page.data?.product?.vendorId,
 					aggregateRating: {
-						ratingValue: this.data?.product?.rating,
-						reviewCount: this.data?.product?.reviewCount
+						ratingValue: page.data?.product?.rating,
+						reviewCount: page.data?.product?.reviewCount
 					},
 					url: page.url.href,
 					priceCurrency: page?.data?.store?.currency?.code,
-					price: this.data?.product?.price,
-					availability: this.data?.product?.stock > 0 ? 'InStock' : 'OutOfStock'
+					price: page.data?.product?.price,
+					availability: page.data?.product?.stock > 0 ? 'InStock' : 'OutOfStock'
 				}
 			}
 		})
 
 		$effect(() => {
-			if (this.data?.product?.images) {
-				this.productImagesArray = this.data?.product?.images?.split(',').map((i) => {
+			if (page.data?.product?.images) {
+				this.productImagesArray = page.data?.product?.images?.split(',').map((i) => {
 					return i.trim()
 				})
-				this.selectedImage = this.data?.product?.thumbnail || ''
+				this.selectedImage = page.data?.product?.thumbnail || ''
 			}
 			productService
-				.listRelatedProducts({ page: 1, categoryId: this.data?.product?.categoryId })
+				.listRelatedProducts({ page: 1, categoryId: page.data?.product?.categoryId })
 				.then((data) => {
-					this.relatedProducts = deepCopy(this.data)
+					this.relatedProducts = deepCopy(page.data)
 				})
 				.catch((err) => {
 					console.log(err)
@@ -528,7 +530,7 @@ class ProductState {
 		})
 		$effect(() => {
 			// Mark all options as selectable at initial render
-			if (this.data?.product?.options?.length) {
+			if (page.data?.product?.options?.length) {
 				this.refreshOptions()
 			} else {
 				this.productOptions = []
@@ -536,12 +538,12 @@ class ProductState {
 		})
 
 		$effect(() => {
-			if (this.data?.product?.pg && this.data?.product?.slug) {
-				const currentProduct = this.data.product.pg.find((p) => p.slug === this.data.product.slug)
+			if (page.data?.product?.pg && page.data?.product?.slug) {
+				const currentProduct = page.data.product.pg.find((p) => p.slug === page.data.product.slug)
 
 				if (currentProduct) {
 					const newSelectedAggregations = {}
-					Object.entries(this.data.product.ag || {}).forEach(([key]) => {
+					Object.entries(page.data.product.ag || {}).forEach(([key]) => {
 						if (currentProduct[key]) {
 							newSelectedAggregations[key] = currentProduct[key]
 						}
@@ -559,30 +561,25 @@ class ProductState {
 		// by overwriting the selected variant as we are using goto() for variant selection
 		// $effect(() => {
 		// 	console.log('variant effect')
-		// 	if (this.data && this.data?.product?.variants) {
+		// 	if (page.data && page.data?.product?.variants) {
 		// 		const variantId = page.url.searchParams.get('variant_id')
 		// 		console.log('variantId', variantId)
 		// 		if (variantId) {
-		// 			this.selectedVariant = this.data?.product.variants.find((v) => v.id === variantId)
+		// 			this.selectedVariant = page.data?.product.variants.find((v) => v.id === variantId)
 		// 		} else {
-		// 			this.selectedVariant = this.data?.product?.variants?.find((v) => v.title !== 'default')
+		// 			this.selectedVariant = page.data?.product?.variants?.find((v) => v.title !== 'default')
 		// 		}
 		// 	}
 		// })
 	}
 }
 
-export function createProductStateContext(initialState = {}) {
-	const productState = new ProductState(initialState)
-
-	setContext(PRODUCT_STATE_KEY, productState)
+export function createProductStateContext() {
+	const productState = new ProductState()
+  ProductState.instance = productState
 	return productState
 }
 
 export function useProductState() {
-	const productState = getContext(PRODUCT_STATE_KEY) as ProductState
-	if (!productState) {
-		throw new Error('useProductState must be used within a ProductStateProvider')
-	}
-	return productState
+  return ProductState.instance
 }
