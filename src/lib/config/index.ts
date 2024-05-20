@@ -10,7 +10,7 @@ export const authorInfo = {
 	linkedinProfile: 'itswadesh',
 	twitterUsername: 'itswadesh'
 	telegramUsername: 'itswadesh',
-	Whatsapp: '+918249028220'
+	Whatsapp: '+918249028220',
 	Website: 'http://litekart.in'
 }
 export const currency = { symbol: '$', code: 'USD' }
