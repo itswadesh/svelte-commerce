@@ -131,7 +131,7 @@ if (extension === 'svg') {
 		{/if}
 	{:else if IMAGE_CDN_PROVIDER === 'thumbor'}
 		{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } )?.includes('http')}
-			<img
+			<Image
 				{alt}
 				src="{`${getCdnImageUrl({
 					src,
@@ -144,7 +144,7 @@ if (extension === 'svg') {
 				width="{+w}"
 				class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(':')[1]}] lazy {clazz}" />
 		{:else}
-			<img
+			<Image
 				{alt}
 				src="{`${IMAGE_CDN_URL}/fit-in/${w}x${h}${getCdnImageUrl({
 					src,
