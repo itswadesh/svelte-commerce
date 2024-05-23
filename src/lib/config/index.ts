@@ -8,7 +8,7 @@ export const authorInfo = {
 	facebookPageName: 'codenx',
 	githubPage: 'itswadesh',
 	linkedinProfile: 'itswadesh',
-	twitterUsername: 'itswadesh'
+	twitterUsername: 'itswadesh',
 	telegramUsername: 'itswadesh',
 	Whatsapp: '+918249028220',
 	Website: 'http://litekart.in'
