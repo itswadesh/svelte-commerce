@@ -234,11 +234,11 @@ export const navigateToProperPath = (url) => {
 		return '##'
 		// } else if (url.startsWith('http')) {
 		// 	const possibleDomainUrls = [
-		// 		'https://zapvi.in/',
-		// 		'https://a.zapvi.in/',
-		// 		'https://b.zapvi.in/',
-		// 		'https://next.zapvi.in/',
-		// 		'https://live.zapvi.in/',
+		// 		'https://litekart.in/',
+		// 		'https://a.litekart.in/',
+		// 		'https://b.litekart.in/',
+		// 		'https://next.litekart.in/',
+		// 		'https://live.litekart.in/',
 		// 		'https://localhost:3000/',
 		// 		'https://localhost:3001/'
 		// 	]
