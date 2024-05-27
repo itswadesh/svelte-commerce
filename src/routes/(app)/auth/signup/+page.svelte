@@ -55,11 +55,12 @@ const zodSignupSchema = z
 			.min(1, { message: 'Password must be at least 1 character' }),
 		passwordConfirmation: z
 			.string({ required_error: 'Confirm Password is required' })
-			.min(1, { message: 'Confirm Password must be at least 1 character' }),
-		phone: z
-			.string()
-			.min(10, { message: 'Phone must be at least 10 digits' })
-			.max(17, { message: 'Phone must be less then 17 digits' })
+			.min(1, { message: 'Confirm Password must be at least 1 character' })
+		// phone: z
+		// 	.string()
+		// 	.min(10, { message: 'Phone must be at least 10 digits' })
+		// 	.max(17, { message: 'Phone must be less then 17 digits' })
+		// 	.optional()
 	})
 	.superRefine(({ password, passwordConfirmation }, ctx) => {
 		if (password !== passwordConfirmation) {
