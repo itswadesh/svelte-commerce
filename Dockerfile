@@ -1,5 +1,5 @@
 ##### Stage 1 - Development - Generate dist folder
-FROM node:21-slim AS builder
+FROM node:20-slim AS builder
 LABEL author="Swadesh Behera"
 
 # RUN npm install -g pnpm
