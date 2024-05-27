@@ -18,12 +18,14 @@ const config = {
 		csrf: {
 			checkOrigin: false
 		}
+	},
+	vitePlugin: {
+		inspector: {
+			toggleKeyCombo: 'meta-shift',
+			showToggleButton: 'always',
+			toggleButtonPos: 'bottom-right'
+		}
 	}
-	// vitePlugin: {
-	// 	experimental: {
-	// 		inspector: true
-	// 	}
-	// }
 }
 
 export default config
