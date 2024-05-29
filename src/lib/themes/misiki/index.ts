@@ -28,6 +28,8 @@ import ProductsListingPage from '$lib/themes/misiki/ProductsListingPage.svelte'
 import SimilarProductsFromCategorySlug from '$lib/themes/misiki/SimilarProductsFromCategorySlug.svelte'
 import TrendingProductsHome from '$lib/themes/misiki/TrendingProductsHome.svelte'
 
+import Pricesummary from '$lib/components/Pricesummary.svelte'
+
 export {
 	CategoriesHome,
 	CategoriesMobile,
@@ -55,5 +57,7 @@ export {
 	ProductListingSearchPage,
 	ProductsListingPage,
 	SimilarProductsFromCategorySlug,
-	TrendingProductsHome
+	TrendingProductsHome,
+
+	Pricesummary
 }

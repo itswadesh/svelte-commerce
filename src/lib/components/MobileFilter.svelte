@@ -270,6 +270,10 @@ function applyFilter() {
 	goto(`${url}page=1`)
 }
 
+$: if ($page.url) {
+	getFacetsWithProducts()
+}
+
 async function sortNow(s) {
 	let u = new URL($page.url)
 
@@ -412,7 +416,9 @@ $: {
 		<div class="flex h-full items-start">
 			<!-- Left Sidebar Section -->
 
-			<div class="flex h-full w-2/6 flex-col border-b border-r bg-zinc-100">
+			<div class="flex h-full w-2/6 flex-col border-b border-r bg-zinc-100
+			     overflow-auto"
+					 style:height="calc(100% - 58px)">
 				{#if allAges?.length > 0}
 					<button
 						class="border-l-4 p-3 text-left text-sm font-semibold tracking-wide flex items-center gap-1 justify-between focus:outline-none

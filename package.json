@@ -1,8 +1,9 @@
 {
-	"name": "svelte-commerce",
-	"version": "2.0.1",
+	"name": "pxc-storefront",
+	"version": "1.0.0-SNAPSHOT",
 	"private": true,
 	"scripts": {
+		"prepare": "svelte-kit sync",
 		"dev": "node src/lib/services/copy && vite dev --host --port 3000",
 		"build": "vite build",
 		"start-node": "node build/index.js",
@@ -25,8 +26,9 @@
 	"dependencies": {
 		"@misiki/litekart": "0.0.16",
 		"@misiki/litekart-utils": "1.0.18",
-		"@vite-pwa/sveltekit": "0.3.0"
-	},
+		"@vite-pwa/sveltekit": "0.3.0",
+    "query-string": "^8.1.0"
+  },
 	"devDependencies": {
 		"@aws-sdk/client-s3": "^3.511.0",
 		"@aws-sdk/lib-storage": "^3.511.0",

@@ -72,7 +72,11 @@ function goCheckbox(e) {
 	delete appliedFilters?.sort
 	delete appliedFilters?.lat
 	delete appliedFilters?.lng
-	goto(`${url}page=1`)
+  goto(`${url}page=1`)
+}
+
+$: if ($page.url) {
+	getFacetsWithProducts()
 }
 
 onMount(async () => {

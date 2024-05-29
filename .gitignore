@@ -19,3 +19,4 @@ vite.config.js.timestamp-*
 
 # Sentry Config File
 .sentryclirc
+/.idea/

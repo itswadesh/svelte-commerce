@@ -1,4 +1,5 @@
 import { env } from '$env/dynamic/public'
+
 export * from './website'
 export const adminUrl = 'https://admin.litekart.in'
 export const alert = 'The High Performance and Scalable Ecommerce'
@@ -8,20 +9,25 @@ export const authorInfo = {
 	facebookPageName: 'codenx',
 	githubPage: 'itswadesh',
 	linkedinProfile: 'itswadesh',
-	twitterUsername: 'itswadesh'
+	twitterUsername: 'itswadesh',
 	telegramUsername: 'itswadesh',
 	Whatsapp: '+918249028220',
 	Website: 'http://litekart.in'
 }
-export const currency = { symbol: '$', code: 'USD' }
-export const currencyCode = 'USD'
-export const currencySymbol = '$'
+export const currencyCode = env.PUBLIC_CURRENCY_CODE || 'USD'
+export const currencySymbol = env.PUBLIC_CURRENCY_SYMBOL || '$'
+export const currency = { symbol: currencySymbol, code: currencyCode }
 export const dimentionUnit = 'cm'
 export const DOMAIN = env.PUBLIC_LITEKART_DOMAIN // Never add any default value here, it will break SaaS working
 export const entity = 'Misiki'
-export const HTTP_ENDPOINT = env.PUBLIC_LITEKART_API_URL || 'https://api.litekart.in'
-export const IMAGE_CDN_URL = 'https://ik.imagekit.io/3wzatecz51w3i'
+
+//export const HTTP_ENDPOINT = env.PUBLIC_LITEKART_API_URL || 'https://api.litekart.in'
+//export const HTTP_ENDPOINT = env.PUBLIC_PRODEXA_API_URL || 'http://localhost:8080/pxm'
+export const HTTP_ENDPOINT = env.PUBLIC_HTTP_ENDPOINT
+
+export const IMAGE_CDN_URL = env.PUBLIC_IMAGE_CDN_URL || 'https://ik.imagekit.io/3wzatecz51w3i'
 export const IS_DEV = env.PUBLIC_IS_DEV == 'true'
+
 export const listOfPagesWithoutBackButton = [
 	'/',
 	'/categories',
@@ -51,7 +57,7 @@ export const SHOPIFY_BASE_URL = `https://api.shopify.com`
 export const siteShortTitle = 'Litekart' // used as SchemaOrg siteTitleAlt
 export const siteTitle = 'Litekart'
 export const sorts = [
-	{ name: 'Recomended', val: null },
+	{ name: 'Recommended', val: null },
 	{ name: `What's New`, val: '-updatedAt' },
 	{ name: 'Price: High to Low ', val: '-price' },
 	{ name: 'Price: Low to High ', val: 'price' },
@@ -67,8 +73,7 @@ export const SENTRY_DSN = env.PUBLIC_SENTRY_DSN
 export const MEDUSAJS_BASE_URL = `${env.PUBLIC_MEDUSAJS_API_URL}/store`
 
 export const BIG_COMMERCE_STORE_HASH = env.PUBLIC_BIG_COMMERCE_STORE_HASH || 'ftelcymxrh'
-export const BIG_COMMERCE_ACCESS_TOKEN =
-	env.PUBLIC_BIG_COMMERCE_ACCESS_TOKEN || 'evgagyg76wcxcg9uauodegpc1eybfzx'
+export const BIG_COMMERCE_ACCESS_TOKEN = env.PUBLIC_BIG_COMMERCE_ACCESS_TOKEN || 'evgagyg76wcxcg9uauodegpc1eybfzx'
 export const BIG_COMMERCE_BASE_URL = `https://api.bigcommerce.com/stores/${BIG_COMMERCE_STORE_HASH}/v3/catalog`
 // export const BIG_COMMERCE_CLIENT_ID =
 // 	env.PUBLIC_BIG_COMMERCE_CLIENT_ID || 'nybaukoetx98bdjo5vshh0edr3xsz42'

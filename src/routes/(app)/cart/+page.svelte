@@ -3,7 +3,11 @@ import { applyAction, enhance } from '$app/forms'
 import { browser } from '$app/environment'
 import { cartLoadingStore, cartStore, getCartFromStore, updateCartStore } from '$lib/store/cart.js'
 import { currency, date, toast } from '$lib/utils'
-import { Error, LazyImg, Pricesummary, ProductCard, TrustBaggeContainer } from '$lib/components'
+
+// import { Error, LazyImg, Pricesummary, ProductCard, TrustBaggeContainer } from '$lib/components'
+import { Error, LazyImg, ProductCard, TrustBaggeContainer } from '$lib/components'
+import { Pricesummary } from '$lib/theme-config'
+
 import { fireGTagEvent } from '$lib/utils/gTagB'
 import { fly, slide } from 'svelte/transition'
 import { goto, invalidateAll } from '$app/navigation'
