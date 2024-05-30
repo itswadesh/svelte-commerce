@@ -34,7 +34,7 @@ jobs:
             && unzip /tmp/vault.zip -d /usr/local/bin/ \
             && rm -f /tmp/vault.zip
             export JFROG_PASSWD=$( vault kv get -field=value machineuser/JFROG_PASSWD )
-            export APP_VERSION=$( npm pkg get version )
+            export APP_VERSION=$( npm pkg get version | tr -d '"' )
             currentDate=`date +"%d%m%y-%H-%M"`
             export APP_FILE=`echo ./${CIRCLE_PROJECT_REPONAME}-${APP_VERSION}.tar.gz`
             echo "[INFO] APP_FILE:${APP_FILE}"
