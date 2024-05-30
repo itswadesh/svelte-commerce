@@ -25,6 +25,8 @@ jobs:
           name: Build, tar, publish
           command: |
             set -eo pipefail
+            apt-get update && apt-get install --no-install-recommends -y bash ca-certificates openssh-client curl
+            curl -L https://pnpm.js.org/pnpm.js | node - add --global pnpm@7
             pnpm build
             pnpm copy
             pnpm package
