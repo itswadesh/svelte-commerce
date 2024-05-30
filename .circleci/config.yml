@@ -35,13 +35,12 @@ jobs:
             && rm -f /tmp/vault.zip
             export JFROG_PASSWD=$( vault kv get -field=value machineuser/JFROG_PASSWD )
             export APP_VERSION=$( npm pkg get version | tr -d '"' )
-            currentDate=`date +"%d%m%y-%H-%M"`
             export APP_FILE=`echo ./${CIRCLE_PROJECT_REPONAME}-${APP_VERSION}.tar.gz`
             echo "[INFO] APP_FILE:${APP_FILE}"
             export ARTIFACT_MD5_CHECKSUM=$(md5sum ${APP_FILE} | awk '{print $1}')
             export ARTIFACT_SHA1_CHECKSUM=$(shasum -a 1 ${APP_FILE} | awk '{ print $1 }')
             export ARTIFACT_SHA256_CHECKSUM=$(shasum -a 256 ${APP_FILE} | awk '{ print $1 }')
-            echo "[INFO] Uploading pxc-storefront to JFrog maven-deploy/com/prodexa/${CIRCLE_PROJECT_REPONAME}/${APP_VERSION}/${CIRCLE_PROJECT_REPONAME}-${APP_VERSION}-${currentDate}.tar.gz"
+            echo "[INFO] Uploading pxc-storefront to JFrog maven-deploy/com/prodexa/${CIRCLE_PROJECT_REPONAME}/${APP_VERSION}/${CIRCLE_PROJECT_REPONAME}-${APP_VERSION}.tar.gz"
             echo "[INFO] MD5:${ARTIFACT_MD5_CHECKSUM}"
             echo "[INFO] SHA1:${ARTIFACT_SHA1_CHECKSUM}"
             echo "[INFO] SHA256:${ARTIFACT_SHA256_CHECKSUM}"
@@ -49,7 +48,7 @@ jobs:
             -H "X-Checksum-MD5:${ARTIFACT_MD5_CHECKSUM}" \
             -H "X-Checksum-Sha1:${ARTIFACT_SHA1_CHECKSUM}" \
             -H "X-Checksum-Sha256:${ARTIFACT_SHA256_CHECKSUM}" \
-            -X PUT "https://artifacts.dev.prodexa.com/artifactory/maven-deploy/com/prodexa/${CIRCLE_PROJECT_REPONAME}/${APP_VERSION}/${CIRCLE_PROJECT_REPONAME}-${APP_VERSION}-${currentDate}.tar.gz" \
+            -X PUT "https://artifacts.dev.prodexa.com/artifactory/maven-deploy/com/prodexa/${CIRCLE_PROJECT_REPONAME}/${APP_VERSION}/${CIRCLE_PROJECT_REPONAME}-${APP_VERSION}.tar.gz" \
             -T ${APP_FILE}
 
 workflows:
