@@ -34,7 +34,7 @@ jobs:
             && unzip /tmp/vault.zip -d /usr/local/bin/ \
             && rm -f /tmp/vault.zip
             JFROG_PASSWD=$( vault kv get -field=value machineuser/JFROG_PASSWD )
-            APP_VERSION = ${ npm pkg get version }
+            APP_VERSION = $( npm pkg get version )
             currentDate=`date +"%d%m%y-%H-%M"`
             APP_FILE='./$CIRCLE_PROJECT_REPONAME-$APP_VERSION.tar.gz'
             ARTIFACT_MD5_CHECKSUM=$(md5sum $APP_FILE | awk '{print $1}')
