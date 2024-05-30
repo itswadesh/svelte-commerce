@@ -9,4 +9,4 @@ const FILE_NAMES =
 // Zip to prepare file for deployment
 shell
 	.cd('prod')
-	.exec(`tar czf ../${packageInfo.name}-${packageInfo.version}.tar.gz ${FILE_NAMES}`)
+	.exec(`tar czf ${packageInfo.name}-${packageInfo.version}.tar.gz ${FILE_NAMES}`)
