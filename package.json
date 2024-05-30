@@ -20,6 +20,9 @@
 		"partytown": "partytown copylib static/~partytown",
 		"gen:manifest": "node ./generate-manifest.js",
 		"copy": "node devops/copy",
+		"package": "node devops/package",
+		"run": "node devops/run",
+		"bcpr": "run-s build copy package run",
 		"liveS": "node devops/deploy",
 		"live": "run-s build copy liveS"
 	},
