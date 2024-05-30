@@ -1,0 +1,63 @@
+version: 2.1
+
+aliases:
+  - &auth
+    username: $DOCKER_USER
+    password: $DOCKER_PASS
+
+
+jobs:
+  init:
+    docker:
+      - image: docker.artifacts.dev.prodexa.com/minsk-core-machineuser-env:2
+        auth: *auth
+    steps:
+      - run:
+          name: Inject secrets from vault to CircleCI project's environment
+          command: circle_ci_add_env.sh
+  build:
+    docker:
+      - image: node:21-slim
+        auth: *auth
+    working_directory: ~/build
+    steps:
+      - checkout
+      - run:
+          name: Build, tar, publish
+          command: |
+            set -eo pipefail
+            pnpm build
+            pnpm copy
+            pnpm package
+            JFROG_PASSWD=$( get-from-vault.sh JFROG_PASSWD)
+            APP_VERSION = ${ pnpm pkg get version }
+            currentDate=`date +"%d%m%y-%H-%M"`
+            APP_FILE='./$CIRCLE_PROJECT_REPONAME-$APP_VERSION.tar.gz'
+            ARTIFACT_MD5_CHECKSUM=$(md5sum $APP_FILE | awk '{print $1}')
+            ARTIFACT_SHA1_CHECKSUM=$(shasum -a 1 $APP_FILE | awk '{ print $1 }')
+            ARTIFACT_SHA256_CHECKSUM=$(shasum -a 256 $APP_FILE | awk '{ print $1 }')
+            echo "[INFO] Uploading pxc-storefront to JFrog maven-deploy/com/prodexa/$CIRCLE_PROJECT_REPONAME/$CIRCLE_PROJECT_REPONAME-$APP_VERSION-$currentDate.tar.gz"
+            echo "[INFO] MD5:${ARTIFACT_MD5_CHECKSUM}"
+            echo "[INFO] SHA1:${ARTIFACT_SHA1_CHECKSUM}"
+            echo "[INFO] SHA256:${ARTIFACT_SHA256_CHECKSUM}"
+            curl -H 'X-JFrog-Art-Api:'"${JFROG_PASSWD}"'' \
+            -H "X-Checksum-MD5:${ARTIFACT_MD5_CHECKSUM}" \
+            -H "X-Checksum-Sha1:${ARTIFACT_SHA1_CHECKSUM}" \
+            -H "X-Checksum-Sha256:${ARTIFACT_SHA256_CHECKSUM}" \
+            -X PUT "https://artifacts.dev.prodexa.com/artifactory/maven-deploy/com/prodexa/$CIRCLE_PROJECT_REPONAME/$CIRCLE_PROJECT_REPONAME-$APP_VERSION-$currentDate.tar.gz" \
+            -T ${APP_FILE}
+
+workflows:
+  version: 2
+  build-and-publish:
+    jobs:
+      - init:
+          filters:
+            tags:
+              only: /.*/
+      - build:
+          requires:
+            - init
+          filters:
+            tags:
+              only: /.*/
