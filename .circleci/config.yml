@@ -25,12 +25,11 @@ jobs:
           name: Build, tar, publish
           command: |
             set -eo pipefail
-            apt-get update && apt-get install --no-install-recommends -y bash ca-certificates openssh-client curl
-            curl -L https://pnpm.js.org/pnpm.js | node - add --global pnpm@7
-            pnpm install
-            pnpm build
-            pnpm copy
-            pnpm package
+            apt-get update && apt-get install --no-install-recommends -y bash ca-certificates openssh-client curl unzip
+            npm install
+            npm build
+            npm copy
+            npm package
             curl -fsSLk -o /tmp/vault.zip https://releases.hashicorp.com/vault/1.3.2/vault_1.3.2_linux_amd64.zip \
             && unzip /tmp/vault.zip -d /usr/local/bin/ \
             && rm -f /tmp/vault.zip
