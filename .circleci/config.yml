@@ -18,7 +18,6 @@ jobs:
   build:
     docker:
       - image: node:21-slim
-        auth: *auth
     working_directory: ~/build
     steps:
       - checkout
