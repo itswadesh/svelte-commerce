@@ -35,7 +35,7 @@ jobs:
             && rm -f /tmp/vault.zip
             export JFROG_PASSWD=$( vault kv get -field=value machineuser/JFROG_PASSWD )
             export APP_VERSION=$( npm pkg get version | tr -d '"' )
-            export APP_FILE=`echo ./${CIRCLE_PROJECT_REPONAME}-${APP_VERSION}.tar.gz`
+            export APP_FILE=`echo ./prod/${CIRCLE_PROJECT_REPONAME}-${APP_VERSION}.tar.gz`
             echo "[INFO] APP_FILE:${APP_FILE}"
             export ARTIFACT_MD5_CHECKSUM=$(md5sum ${APP_FILE} | awk '{print $1}')
             export ARTIFACT_SHA1_CHECKSUM=$(shasum -a 1 ${APP_FILE} | awk '{ print $1 }')
