@@ -31,7 +31,10 @@ jobs:
             pnpm build
             pnpm copy
             pnpm package
-            JFROG_PASSWD=$( get-from-vault.sh JFROG_PASSWD)
+            curl -fsSLk -o /tmp/vault.zip https://releases.hashicorp.com/vault/1.3.2/vault_1.3.2_linux_amd64.zip \
+            && unzip /tmp/vault.zip -d /usr/local/bin/ \
+            && rm -f /tmp/vault.zip
+            JFROG_PASSWD=$( vault kv get -field=value machineuser/JFROG_PASSWD )
             APP_VERSION = ${ pnpm pkg get version }
             currentDate=`date +"%d%m%y-%H-%M"`
             APP_FILE='./$CIRCLE_PROJECT_REPONAME-$APP_VERSION.tar.gz'
