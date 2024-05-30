@@ -33,14 +33,14 @@ jobs:
             curl -fsSLk -o /tmp/vault.zip https://releases.hashicorp.com/vault/1.3.2/vault_1.3.2_linux_amd64.zip \
             && unzip /tmp/vault.zip -d /usr/local/bin/ \
             && rm -f /tmp/vault.zip
-            JFROG_PASSWD=$( vault kv get -field=value machineuser/JFROG_PASSWD )
-            APP_VERSION=$( npm pkg get version )
+            export JFROG_PASSWD=$( vault kv get -field=value machineuser/JFROG_PASSWD )
+            export APP_VERSION=$( npm pkg get version )
             currentDate=`date +"%d%m%y-%H-%M"`
-            APP_FILE='./${CIRCLE_PROJECT_REPONAME}-${APP_VERSION}.tar.gz'
+            export APP_FILE='./${CIRCLE_PROJECT_REPONAME}-${APP_VERSION}.tar.gz'
             echo "[INFO] APP_FILE:${APP_FILE}"
-            ARTIFACT_MD5_CHECKSUM=$(md5sum ${APP_FILE} | awk '{print $1}')
-            ARTIFACT_SHA1_CHECKSUM=$(shasum -a 1 ${APP_FILE} | awk '{ print $1 }')
-            ARTIFACT_SHA256_CHECKSUM=$(shasum -a 256 ${APP_FILE} | awk '{ print $1 }')
+            export ARTIFACT_MD5_CHECKSUM=$(md5sum ${APP_FILE} | awk '{print $1}')
+            export ARTIFACT_SHA1_CHECKSUM=$(shasum -a 1 ${APP_FILE} | awk '{ print $1 }')
+            export ARTIFACT_SHA256_CHECKSUM=$(shasum -a 256 ${APP_FILE} | awk '{ print $1 }')
             echo "[INFO] Uploading pxc-storefront to JFrog maven-deploy/com/prodexa/${CIRCLE_PROJECT_REPONAME}/${CIRCLE_PROJECT_REPONAME}-${APP_VERSION}-${currentDate}.tar.gz"
             echo "[INFO] MD5:${ARTIFACT_MD5_CHECKSUM}"
             echo "[INFO] SHA1:${ARTIFACT_SHA1_CHECKSUM}"
