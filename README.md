@@ -74,20 +74,14 @@ Reach out to me with queries!
 
 </div>
 <br/>
-<div><h2 class="text-center text-sm font-semibold text-gray-600">TRUSTED BY TEAMS AROUND THE WORLD</h2> 
-<div style="display: flex; justify-content: space-between;">
-<div>
-<img alt="Varni Jewels" src="https://litekart.in/_app/immutable/assets/varni.DuN9QdLG.webp" class="h-fit w-28 px-2 dark:brightness-0 dark:invert" height="32"></div> 
-<div>
-<img alt="LRNR" src=".github/lrnr.svg" class="h-8 w-28 px-2 dark:brightness-0 dark:invert" height="32"></div> 
-<div>
-<img alt="Tesoro" src="https://litekart.in/_app/immutable/assets/tesoro.CSdX56Wq.png" class="h-8 w-28 px-2 dark:brightness-0 dark:invert" height="32"></div> 
-<div>
-<img alt="Secretgreen" src="https://litekart.in/_app/immutable/assets/secretgreen.BzzbCiSU.jpg" class="h-8 w-28 px-2 dark:brightness-0 dark:invert"  height="32">
-</div>
-</div>
-</div>
-<br/>
+<h2 class="text-center text-sm font-semibold text-gray-600">TRUSTED BY TEAMS AROUND THE WORLD</h2> 
+
+<p>
+<img hspace="10" alt="Varni Jewels" src="https://litekart.in/_app/immutable/assets/varni.DuN9QdLG.webp" class="h-fit w-28 px-2 dark:brightness-0 dark:invert" height="32">
+<img hspace="10" alt="LRNR" src=".github/lrnr.svg" class="h-8 w-28 px-2 dark:brightness-0 dark:invert" height="32">
+<img hspace="10" alt="Tesoro" src="https://litekart.in/_app/immutable/assets/tesoro.CSdX56Wq.png" class="h-8 w-28 px-2 dark:brightness-0 dark:invert" height="32">
+<img hspace="10" alt="Secretgreen" src="https://litekart.in/_app/immutable/assets/secretgreen.BzzbCiSU.jpg" class="h-8 w-28 px-2 dark:brightness-0 dark:invert"  height="32">
+</p>
 <br/>
 
 ## What is it?
