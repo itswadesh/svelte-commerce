@@ -1,12 +1,11 @@
 import { deleteMedusajsApi, getMedusajsApi, postMedusajsApi } from '$lib/utils/server'
 import { error } from '@sveltejs/kit'
 
-export const fetchMeData = async ({ origin, storeId, server = false, cookies }: any) => {
+export const fetchMeData = async () => {
 	try {
 		let res: any = {}
 
-		const sid = cookies.get('connect.sid')
-		// console.log(sid)
+		const sid = 's%3AT_0sGBytGTimxKauR4hTChuX4UGjQKmY.kfyXpa02FMg6bGhVfovar6gTMvSt3m6YpRwsSmwbuwc'
 		const response = await getMedusajsApi(`customers/me`, null, sid)
 		const customerResponse = response.customer
 

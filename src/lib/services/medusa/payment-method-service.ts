@@ -14,3 +14,11 @@ export const fetchPaymentMethods = async ({ origin, storeId, cartId, sid = null 
 		error(e.status, e.message)
 	}
 }
+
+export const fetchPaymentCollections = async ({}) => {
+	try {
+		return []
+	} catch (e) {
+		error(e.status, e.message)
+	}
+}
