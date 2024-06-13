@@ -5,8 +5,6 @@ import { ProductDetails } from '$lib/theme-config'
 import { ProductService, ReviewService, WishlistService } from '$lib/services'
 
 export let data: any = {}
-let moreProductDetails = {}
-let productReviews = []
 
 onMount(async () => {
 	if (!data.product || !$page.data.me?.active) {
@@ -46,6 +44,7 @@ onMount(async () => {
 				}),
 				ProductService.fetchProduct2({
 					id: data.product.slug,
+					slug: data.product.slug,
 					origin: $page.data.origin,
 					sid: $page.data.sid,
 					storeId: $page.data.storeId
