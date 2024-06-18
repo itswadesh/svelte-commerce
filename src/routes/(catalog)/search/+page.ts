@@ -1,4 +1,4 @@
-import { ProductService } from '$lib/services'
+import { fetchProducts } from '$lib/services/medusa/product-service.js'
 
 export const prerender = false
 
@@ -17,12 +17,15 @@ export async function load({ url, parent }) {
 	let products: any = {}
 
 	try {
-		products = await ProductService.fetchProducts({
-			query: query.toString(),
-			storeId,
-			origin,
-			sid
-		})
+		products = await fetchProducts(
+		// 	{
+		// 	query: query.toString(),
+		// 	storeId,
+		// 	origin,
+		// 	sid
+		// }
+	)
+		console.log('products page here', products)
 	} catch (e) {
 		console.log(e)
 	}

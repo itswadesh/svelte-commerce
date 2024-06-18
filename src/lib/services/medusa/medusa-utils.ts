@@ -7,7 +7,7 @@ export const mapMedusajsAllProducts = (p: any) => {
 			// currentPage: p.currentPage,
 			// pageSize: p.pageSize,
 			limit: p.limit,
-			products: p.products.forEach(mapMedusajsProduct),
+			products: p.products.map(mapMedusajsProduct),
 			facets: p.facets
 		}
 		return allProd

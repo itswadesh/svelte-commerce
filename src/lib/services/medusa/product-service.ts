@@ -40,7 +40,7 @@ export const searchProducts = async ({
 
 // Fetch all products
 
-export const fetchProducts = async ({ origin, slug, id }: any) => {
+export const fetchProducts = async () => {
 	try {
 		let res: AllProducts | {} = {}
 

@@ -65,6 +65,7 @@ export const WWW_URL = env.PUBLIC_WWW_URL || env.PUBLIC_LITEKART_DOMAIN
 export const SENTRY_DSN = env.PUBLIC_SENTRY_DSN
 
 export const MEDUSAJS_BASE_URL = `${env.PUBLIC_MEDUSAJS_API_URL}/store`
+// export const MEDUSAJS_BASE_URL = `http://localhost:3000/store`
 
 export const BIG_COMMERCE_STORE_HASH = env.PUBLIC_BIG_COMMERCE_STORE_HASH || 'ftelcymxrh'
 export const BIG_COMMERCE_ACCESS_TOKEN =
