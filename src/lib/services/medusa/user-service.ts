@@ -65,7 +65,6 @@ export const loginService = async ({
 }: any) => {
 	try {
 		let res: any = {}
-
 		const response = await postMedusajsApi(`auth`, {
 			email,
 			password
@@ -76,7 +75,9 @@ export const loginService = async ({
 		res.active = res.has_account
 		res.sid = response.sid
 		if (cartId) {
-			await postMedusajsApi(`carts/${cartId}`, { customer_id: res?.id }, sid)
+			try {
+				await postMedusajsApi(`carts/${cartId}`, { customer_id: res?.id }, sid)
+			} catch (e) {}
 		}
 
 		return res
