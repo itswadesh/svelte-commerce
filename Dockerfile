@@ -1,8 +1,8 @@
 ##### Stage 1 - Development - Generate dist folder
-FROM node:20-slim AS builder
+FROM node:20 AS builder
 LABEL author="Swadesh Behera"
 
-# RUN npm install -g pnpm
+RUN npm install -g pnpm
 
 # Add timezone
 RUN apt-get install -yq tzdata && \
@@ -13,17 +13,18 @@ WORKDIR /usr/app
 COPY package.json ./
 COPY .npmrc ./
 ENV PUPPETEER_SKIP_DOWNLOAD="true"
-RUN yarn install --force
+ENV COREPACK_ENABLE_STRICT=0
+RUN pnpm install --force
 RUN cp -R node_modules prod_node_modules
 COPY . .
-RUN yarn run build
-
+RUN pnpm run build
 ##### Stage 2 - Production
 FROM builder as production
 WORKDIR /usr/app
 COPY --from=builder /usr/app/prod_node_modules ./node_modules
 COPY --from=builder /usr/app/package*.json ./
 ENV PUPPETEER_SKIP_DOWNLOAD="true"
+ENV COREPACK_ENABLE_STRICT=0
 ENV NODE_ENV=production
 COPY --from=builder /usr/app/.svelte-kit ./.svelte-kit
-CMD [ "yarn", "start" ]
+CMD [ "pnpm", "start" ]

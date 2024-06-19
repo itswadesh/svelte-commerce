@@ -99,7 +99,20 @@ if (extension === 'svg') {
 </script>
 
 <div class="relative" style="min-height:{24}px;">
-	{#if IMAGE_CDN_PROVIDER === 'imagekit'}
+	{#if IMAGE_CDN_PROVIDER === 'gumlet'}
+		<Image
+			{alt}
+			loading="lazy"
+			background="/placeholder.png"
+			src="{`${getCdnImageUrl({
+				src,
+				IMAGE_CDN_URL,
+				IMAGE_CDN_PROVIDER
+			})}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(':', '-')}`}"
+			height="{+h}"
+			width="{+w}"
+			class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(':')[1]}] lazy {clazz}" />
+	{:else if IMAGE_CDN_PROVIDER === 'imagekit'}
 		{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } )?.includes('http')}
 			<Image
 				{alt}

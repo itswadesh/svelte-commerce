@@ -12,8 +12,8 @@ importers:
         specifier: 0.0.18
         version: 0.0.18(@sveltejs/kit@2.5.10(@sveltejs/vite-plugin-svelte@3.1.0(svelte@4.2.17)(vite@5.2.11(@types/node@20.12.12)(terser@5.31.0)))(svelte@4.2.17)(vite@5.2.11(@types/node@20.12.12)(terser@5.31.0)))(svelte@4.2.17)(vite-plugin-pwa@0.20.0(vite@5.2.11(@types/node@20.12.12)(terser@5.31.0)))
       '@misiki/litekart-utils':
-        specifier: 1.0.41
-        version: 1.0.41(@sveltejs/kit@2.5.10(@sveltejs/vite-plugin-svelte@3.1.0(svelte@4.2.17)(vite@5.2.11(@types/node@20.12.12)(terser@5.31.0)))(svelte@4.2.17)(vite@5.2.11(@types/node@20.12.12)(terser@5.31.0)))(vite-plugin-pwa@0.20.0(vite@5.2.11(@types/node@20.12.12)(terser@5.31.0)))
+        specifier: 1.0.50
+        version: 1.0.50(@sveltejs/kit@2.5.10(@sveltejs/vite-plugin-svelte@3.1.0(svelte@4.2.17)(vite@5.2.11(@types/node@20.12.12)(terser@5.31.0)))(svelte@4.2.17)(vite@5.2.11(@types/node@20.12.12)(terser@5.31.0)))(vite-plugin-pwa@0.20.0(vite@5.2.11(@types/node@20.12.12)(terser@5.31.0)))
       '@vite-pwa/sveltekit':
         specifier: 0.5.0
         version: 0.5.0(@sveltejs/kit@2.5.10(@sveltejs/vite-plugin-svelte@3.1.0(svelte@4.2.17)(vite@5.2.11(@types/node@20.12.12)(terser@5.31.0)))(svelte@4.2.17)(vite@5.2.11(@types/node@20.12.12)(terser@5.31.0)))(vite-plugin-pwa@0.20.0(vite@5.2.11(@types/node@20.12.12)(terser@5.31.0)))
@@ -1217,8 +1217,8 @@ packages:
     resolution: {integrity: sha512-utgD9FdDH8u/m7d9Zj2IUBIhLHXBhkBZ9IvILvdaus6BfEk+grkk1qBsAmAdgQTfOM1DGmf8vWChCNTR++uF9Q==}
     engines: {node: '>=16'}
 
-  '@misiki/litekart-utils@1.0.41':
-    resolution: {integrity: sha512-mgER3W5wrIgg+8KDWWnTcI1LMpOy5Q4x+wlH6ruisiYEkoJO7czXhHn3tOAVZH2UjdLxtUW6GZ/kT/xa4JGr/g==}
+  '@misiki/litekart-utils@1.0.50':
+    resolution: {integrity: sha512-wP5KEJBUPuhMKqcHLKCETESzuEOvR7vDabK8MBxaqVBmVXqgbLyhU4lopqyeyy1Bk0F8TNMdkUfIwB4JwQ/KXg==}
 
   '@misiki/litekart-utils@1.0.8':
     resolution: {integrity: sha512-nC88701U0SYIelv4jetMHrNj8p5jf39aY5ytnCxYUDyscHjMw+QwBG6z2649hUgnT2DQ1LnSrxuBkiRIpjOA1w==}
@@ -6028,7 +6028,7 @@ snapshots:
 
   '@medusajs/types@1.11.16': {}
 
-  '@misiki/litekart-utils@1.0.41(@sveltejs/kit@2.5.10(@sveltejs/vite-plugin-svelte@3.1.0(svelte@4.2.17)(vite@5.2.11(@types/node@20.12.12)(terser@5.31.0)))(svelte@4.2.17)(vite@5.2.11(@types/node@20.12.12)(terser@5.31.0)))(vite-plugin-pwa@0.20.0(vite@5.2.11(@types/node@20.12.12)(terser@5.31.0)))':
+  '@misiki/litekart-utils@1.0.50(@sveltejs/kit@2.5.10(@sveltejs/vite-plugin-svelte@3.1.0(svelte@4.2.17)(vite@5.2.11(@types/node@20.12.12)(terser@5.31.0)))(svelte@4.2.17)(vite@5.2.11(@types/node@20.12.12)(terser@5.31.0)))(vite-plugin-pwa@0.20.0(vite@5.2.11(@types/node@20.12.12)(terser@5.31.0)))':
     dependencies:
       '@vite-pwa/sveltekit': 0.3.0(@sveltejs/kit@2.5.10(@sveltejs/vite-plugin-svelte@3.1.0(svelte@4.2.17)(vite@5.2.11(@types/node@20.12.12)(terser@5.31.0)))(svelte@4.2.17)(vite@5.2.11(@types/node@20.12.12)(terser@5.31.0)))(vite-plugin-pwa@0.20.0(vite@5.2.11(@types/node@20.12.12)(terser@5.31.0)))
       tsx: 4.11.0
