@@ -1,4 +1,4 @@
-export const REGION_ID = 'reg_01H6R1ZCPHAAHW7KSS5VK52YK2'
+export const REGION_ID = 'reg_01HGSK5RXVMGFBHS3QVF2H4V82'
 
 export * as AddressService from './address-service'
 export * as AutocompleteService from './autocomplete-service'

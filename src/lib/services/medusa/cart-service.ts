@@ -51,22 +51,11 @@ export const fetchMyCart = async ({ origin, storeId, server = false, sid = null 
 	}
 }
 
-export const addToCartService = async ({
-	pid,
-	vid,
-	qty,
-	customizedImg,
-	origin,
-	storeId,
-	server = false,
-	cookies,
-	sid = null
-}: any) => {
+export const addToCartService = async ({ pid, vid, qty, cartId, sid = null }: any) => {
+	cartId = null
 	try {
-		let cart_id = cookies.get('cartId')
-
-		if (cart_id === undefined || cart_id === 'undefined') {
-			cart_id = null
+		if (cartId === undefined || cartId === 'undefined') {
+			cartId = null
 		}
 
 		const body = {
@@ -75,17 +64,13 @@ export const addToCartService = async ({
 		}
 
 		let res: any = {}
-
-		if (!cart_id) {
+		if (!cartId) {
 			const cartRes = await postMedusajsApi(`carts`, { region_id: REGION_ID }, sid)
-
-			cart_id = cartRes.cart?.id
+			cartId = cartRes.cart?.id
 		}
-
-		const res_data = await postMedusajsApi(`carts/${cart_id}/line-items`, body, sid)
-
-		if (cart_id) {
-			const res_cartRes = await postMedusajsApi(`carts/${cart_id}`, { customer_id: res?.id }, sid)
+		const res_data = await postMedusajsApi(`carts/${cartId}/line-items`, body, sid)
+		if (cartId) {
+			await postMedusajsApi(`carts/${cartId}`, { customer_id: res?.id }, sid)
 		}
 
 		res = mapMedusajsCart(res_data?.cart)

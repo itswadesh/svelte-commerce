@@ -39,10 +39,9 @@ export const fetchProducts = async ({ origin, slug, id, server = false, sid = nu
 	try {
 		let res: AllProducts | {} = {}
 
-		const med = (await getMedusajsApi(`products`)).product
+		const med = await getMedusajsApi(`products`)
 		res = mapMedusajsAllProducts(med)
-
-		return res?.data || []
+		return res || {}
 	} catch (e) {
 		error(e.status, e.message)
 	}
@@ -54,7 +53,7 @@ export const fetchProduct = async ({ origin, slug, id, server = false, sid = nul
 	try {
 		let res: Product | {} = {}
 		const med = await getMedusajsApi(
-			`products?handle=${slug}&expand=categories,variants,variants.prices,images&currency_code=usd`
+			`products?handle=${slug}&expand=variants,variants.prices,images&currency_code=usd`
 		)
 		const productArray = med?.products || [] // fetch the products array value from the med variable
 		res = await mapMedusajsProduct(productArray[0]) // assuming we only want the first product in the array

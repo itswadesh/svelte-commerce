@@ -144,7 +144,8 @@ const add: Action = async ({ request, cookies, locals }) => {
 			return {}
 		}
 	} catch (e) {
-		return {}
+		console.log(e.status, e.body?.message)
+		throw e
 	}
 }
 

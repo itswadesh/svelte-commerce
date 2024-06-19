@@ -2,12 +2,12 @@ import type { AllOrders, AllProducts, Category, Order, Product, Cart } from '$li
 
 export const mapMedusajsAllProducts = (p: any) => {
 	if (p) {
-		const allProd: AllProducts = {
+		const allProd = {
 			count: p.count,
 			// currentPage: p.currentPage,
 			// pageSize: p.pageSize,
 			limit: p.limit,
-			products: p.products.forEach(mapMedusajsProduct),
+			data: p.products.map(mapMedusajsProduct),
 			facets: p.facets
 		}
 		return allProd
@@ -104,8 +104,8 @@ export const mapMedusajsCategory = (c: any) => {
 			slug: c.handle,
 			children: c.category_children
 				? c.category_children.map((i: any) => {
-					if (i) return mapMedusajsCategory(i)
-				})
+						if (i) return mapMedusajsCategory(i)
+					})
 				: []
 		}
 		return r
@@ -205,7 +205,6 @@ export const mapMedusajsOrder = (o: any) => {
 		return {}
 	}
 }
-
 
 // Cart data
 export const mapMedusajsCart = (c: any) => {
