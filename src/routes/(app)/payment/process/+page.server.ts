@@ -48,7 +48,9 @@ export async function load({ url, locals, cookies }) {
 				origin: locals.origin
 			})
 		}
-		// cookies.set('cartQty', '0', { path: '/' })
+
+		cookies.set('cartId', null, { path: '/', expires: new Date(0) })
+
 		throw { status: 307, url: success_url }
 		// }
 	} catch (e) {

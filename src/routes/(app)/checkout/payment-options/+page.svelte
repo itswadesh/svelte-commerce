@@ -106,7 +106,8 @@ async function submit(pm) {
 					paymentMethod: 'COD',
 					prescription: data.prescription?._id,
 					origin: $page.data.origin,
-					storeId: $page.data.storeId
+					storeId: $page.data.storeId,
+					paymentProviderId: 'manual'
 				})
 
 				goto(
