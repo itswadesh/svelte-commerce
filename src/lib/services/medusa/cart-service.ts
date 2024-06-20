@@ -4,7 +4,7 @@ import { error } from '@sveltejs/kit'
 import { mapMedusajsCart } from './medusa-utils'
 import { REGION_ID } from '.'
 
-export const fetchCartData = async ({ origin, storeId, server = false, sid = null }: any) => {
+export const fetchCartData = async ({ origin, storeId, sid = null }: any) => {
 	try {
 		let res: any = {}
 
@@ -17,14 +17,7 @@ export const fetchCartData = async ({ origin, storeId, server = false, sid = nul
 	}
 }
 
-export const fetchRefreshCart = async ({
-	origin,
-	storeId,
-	cookies,
-	cartId,
-	server = false,
-	sid = null
-}: any) => {
+export const fetchRefreshCart = async ({ origin, storeId, cookies, cartId, sid = null }: any) => {
 	try {
 		let res: any = {}
 		const cart_id = cartId
@@ -39,7 +32,7 @@ export const fetchRefreshCart = async ({
 	}
 }
 
-export const fetchMyCart = async ({ origin, storeId, server = false, sid = null }: any) => {
+export const fetchMyCart = async ({ origin, storeId, sid = null }: any) => {
 	try {
 		let res: any = {}
 
@@ -52,16 +45,12 @@ export const fetchMyCart = async ({ origin, storeId, server = false, sid = null 
 }
 
 export const addToCartService = async ({ pid, vid, qty, cartId, sid = null }: any) => {
-	cartId = null
 	try {
 		if (cartId === undefined || cartId === 'undefined') {
 			cartId = null
 		}
 
-		const body = {
-			variant_id: vid || pid,
-			quantity: qty
-		}
+		const body = { variant_id: vid || pid, quantity: qty }
 
 		let res: any = {}
 		if (!cartId) {
@@ -82,13 +71,7 @@ export const addToCartService = async ({ pid, vid, qty, cartId, sid = null }: an
 	}
 }
 
-export const applyCouponService = async ({
-	code,
-	origin,
-	storeId,
-	server = false,
-	sid = null
-}: any) => {
+export const applyCouponService = async ({ code, origin, storeId, sid = null }: any) => {
 	try {
 		let res: any = {}
 
@@ -100,13 +83,7 @@ export const applyCouponService = async ({
 	}
 }
 
-export const removeCouponService = async ({
-	code,
-	origin,
-	storeId,
-	server = false,
-	sid = null
-}: any) => {
+export const removeCouponService = async ({ code, origin, storeId, sid = null }: any) => {
 	try {
 		let res: any = {}
 
