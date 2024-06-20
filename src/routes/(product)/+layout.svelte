@@ -14,7 +14,9 @@ let showCartSidebar = false
 	</div>
 
 	<PageTransitions url="{data.url}">
+		<!-- {#key data.url} -->
 		<slot />
+		<!-- {/key} -->
 	</PageTransitions>
 
 	<div class="hidden md:block">

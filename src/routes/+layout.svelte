@@ -116,7 +116,9 @@ onMount(async () => {
 
 		<section class="minimum-width-rem relative flex min-h-screen flex-col bg-white antialiased">
 			<div class="h-rem w-full flex-1">
-				<slot />
+				{#key data.url}
+					<slot />
+				{/key}
 			</div>
 		</section>
 

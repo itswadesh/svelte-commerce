@@ -315,6 +315,11 @@ function alertToSelectMandatoryOptions() {
 }
 
 $: {
+	currentVariantId = $page.url.searchParams.get('variant')
+	const selectedVariant = data.product.variants.find((v) => v.id == currentVariantId)
+	if (selectedVariant?.prices) {
+		currentVariantPrice = (selectedVariant?.prices[0]?.amount || currentVariantPrice) / 100
+	}
 	const newOptions = []
 
 	for (const i in selectedOptions) {
@@ -353,15 +358,10 @@ function handleGallery(index) {
 	showPhotosModal = true
 }
 
-function handleMobileCanvas() {
-	if (screenWidth < 640 && showEditor === false) {
-		showEditor = true
-	}
-}
-
 async function updateVariant(variant) {
 	$page.url.searchParams.set('variant', variant.id)
-	currentVariantPrice = variant.prices[0]?.amount || currentVariantPrice
+	currentVariantId = variant.id
+	currentVariantPrice = (variant.prices[0]?.amount || currentVariantPrice) / 100
 	await goto($page.url.toString())
 	await invalidateAll()
 }
@@ -911,9 +911,8 @@ async function updateVariant(variant) {
 						</div>
 					{/if}
 
-					<!-- Variant Products -->
-
-					{#if data?.moreProductDetails?.pg?.variants?.length}
+					<!-- Variant Products (MedusaJS) -->
+					{#if data?.product?.variants?.length}
 						<div id="variants_list">
 							<div class="mb-2 flex items-center gap-2 uppercase">
 								<h5>Product Variations</h5>
@@ -934,7 +933,7 @@ async function updateVariant(variant) {
 							</div>
 
 							<ul class="flex flex-wrap gap-3" class:wiggle="{wiggleVariants}">
-								{#each data?.moreProductDetails?.pg?.variants as v}
+								{#each data?.product?.variants as v}
 									<li>
 										<button
 											type="button"

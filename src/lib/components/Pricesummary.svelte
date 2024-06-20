@@ -125,18 +125,15 @@ async function submit() {
 				</div>
 			{/if}
 
-			{#if cart?.formattedAmount?.tax?.value || cart?.formattedAmount?.tax}
+			{#if cart?.formattedAmount?.tax?.value}
 				<div class="mt-2 flex items-center justify-between font-medium">
 					<span>Tax</span>
-
 					<span>
 						{#if cart?.formattedAmount?.tax?.value}
 							{currency(
 								cart?.formattedAmount?.tax?.value,
 								cart?.formattedAmount?.subtotal?.currency
 							)}
-						{:else if cart?.formattedAmount?.tax}
-							{cart?.formattedAmount?.tax}
 						{/if}
 					</span>
 				</div>

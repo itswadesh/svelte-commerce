@@ -99,7 +99,9 @@ $: if (innerWidth < 640) {
 
 		<div class="h-full w-full flex-1 overflow-y-auto p-3 py-5 sm:p-10">
 			<PageTransitions url="{data.url}">
+				<!-- {#key data.url} -->
 				<slot />
+				<!-- {/key} -->
 			</PageTransitions>
 		</div>
 	</div>

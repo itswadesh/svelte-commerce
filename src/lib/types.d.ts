@@ -93,6 +93,7 @@ interface Product {
 	weight: number
 	width: number
 	variants?: any[]
+	moreProductDetails?: any
 	isWishlisted: boolean
 }
 

@@ -34,7 +34,9 @@ let customfont = data.store?.fontFamily || ''
 				<div
 					in:scale="{{ duration: 150 }}"
 					class="frosted mx-auto flex h-full min-h-screen items-center justify-center overflow-y-auto p-5 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-400 sm:p-10 md:p-20">
-					<slot />
+					<!-- {#key data.url} -->
+						<slot />
+					<!-- {/key} -->
 				</div>
 			</div>
 		</div>

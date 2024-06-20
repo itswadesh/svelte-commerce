@@ -65,11 +65,11 @@ export const fetchProduct = async ({ origin, slug, id, server = false, sid = nul
 
 // Fetch other single product
 
-export const fetchProduct2 = async ({ origin, slug, id, server = false, sid = null }: any) => {
+export const fetchProduct2 = async ({ origin, slug, vid, server = false, sid = null }: any) => {
 	try {
 		let res: Product | {} = {}
 		const med = await getMedusajsApi(
-			`products?handle=${slug}&expand=categories,variants,variants.prices,images`
+			`variants/${vid}&expand=variants,variants.prices,images&currency_code=usd`
 		)
 
 		const productArray = med.products || [] // fetch the products array value from the med variable
