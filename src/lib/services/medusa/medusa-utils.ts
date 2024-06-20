@@ -166,7 +166,6 @@ export const mapMedusajsOrder = (o: any) => {
 			paymentStatus: o.payment_status,
 			cartId: o.cart_id,
 			customer: o.customer,
-			address: o.address,
 			// cart: o.cart,
 			// customer_id: o.customer_id,
 			// user: o.customer,
@@ -177,6 +176,7 @@ export const mapMedusajsOrder = (o: any) => {
 						orderItemId: i.order_id,
 						description: i.description,
 						name: i.title,
+						slug: i.handle,
 						img: i.thumbnail,
 						price: i.unit_price / 100,
 						total: i.total / 100,
@@ -190,7 +190,20 @@ export const mapMedusajsOrder = (o: any) => {
 			updatedAt: o.updated_at,
 			user: o.user,
 			userEmail: o.email,
-			billingAddress: o.billing_address.map((a: any) => {
+			billing_address: o.billing_address.map((a: any) => {
+				if (a)
+					return {
+						address: a.address_1,
+						city: a.city,
+						country: a.country_code,
+						firstName: a.first_name,
+						lastName: a.last_name,
+						phone: a.phone,
+						state: a.province,
+						zip: a.postal_code
+					}
+			}),
+			shipping_address: o.shipping_address.map((a: any) => {
 				if (a)
 					return {
 						address: a.address_1,

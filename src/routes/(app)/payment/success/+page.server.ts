@@ -23,7 +23,7 @@ export async function load({ url, locals, cookies }) {
 	try {
 		loading = true
 
-		order = await OrdersService.getOrder({
+		order = await OrdersService.fetchOrder({
 			orderNo,
 			cartId,
 			sid,

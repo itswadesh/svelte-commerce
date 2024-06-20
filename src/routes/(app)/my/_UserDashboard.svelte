@@ -50,7 +50,7 @@ export let myWishlist
 				<h2 class="mt-2">Wishlist</h2>
 
 				<div class="mt-2 flex items-baseline flex-wrap gap-2">
-					<h2>{myWishlist?.count}</h2>
+					<h2>{myWishlist?.count || 0}</h2>
 
 					<span class="text-sm">Wishlisted items</span>
 				</div>
@@ -72,7 +72,7 @@ export let myWishlist
 				<h2 class="mt-2">Reviews</h2>
 
 				<div class="mt-2 flex items-baseline flex-wrap gap-2">
-					<h2>{myReviews?.count}</h2>
+					<h2>{myReviews?.count || 0}</h2>
 
 					<span class="text-sm">Total reviews</span>
 				</div>
