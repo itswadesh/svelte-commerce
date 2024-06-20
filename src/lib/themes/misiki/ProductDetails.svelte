@@ -315,10 +315,12 @@ function alertToSelectMandatoryOptions() {
 }
 
 $: {
-	currentVariantId = $page.url.searchParams.get('variant')
-	const selectedVariant = data.product.variants.find((v) => v.id == currentVariantId)
-	if (selectedVariant?.prices) {
-		currentVariantPrice = (selectedVariant?.prices[0]?.amount || currentVariantPrice) / 100
+	if (data.product.variants) {
+		currentVariantId = $page.url.searchParams.get('variant')
+		const selectedVariant = data.product.variants.find((v) => v.id == currentVariantId)
+		if (selectedVariant?.prices) {
+			currentVariantPrice = (selectedVariant?.prices[0]?.amount || currentVariantPrice) / 100
+		}
 	}
 	const newOptions = []
 
