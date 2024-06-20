@@ -10,6 +10,7 @@ import SelectAddress from '../_SelectAddress.svelte'
 import SelectBillingAddress from '../_SelectBillingAddress.svelte'
 import SEO from '$lib/components/SEO/index.svelte'
 import { CartService } from '$lib/services'
+import { toast } from 'lib/utils'
 
 export let data
 
@@ -82,7 +83,6 @@ async function updateCart() {
 				origin: $page.data?.origin,
 				storeId: $page.data.storeId
 			})
-
 			if (data.prescriptionId) {
 				goto(
 					`/checkout/payment-options?address=${selectedAddress}&prescription=${data.prescriptionId}`
@@ -92,6 +92,7 @@ async function updateCart() {
 			}
 		}
 	} catch (e) {
+		toast(e)
 	} finally {
 	}
 }
