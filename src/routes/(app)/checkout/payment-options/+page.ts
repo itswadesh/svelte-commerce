@@ -19,6 +19,7 @@ export async function load({ url, parent }) {
 			}),
 			PaymentMethodService.fetchPaymentMethods({
 				storeId,
+				cartId,
 				sid,
 				origin
 			})

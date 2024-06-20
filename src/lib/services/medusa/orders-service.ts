@@ -33,7 +33,7 @@ export const fetchOrders = async ({ origin, storeId, server = false, sid = null 
 						_id: order.id,
 						orderNo: order.id,
 						createdAt: order.created_at,
-						orderItems: order.items.map((item) => {
+						items: order.items.map((item) => {
 							return {
 								img: item.thumbnail,
 								name: item.title,
@@ -52,11 +52,11 @@ export const fetchOrders = async ({ origin, storeId, server = false, sid = null 
 	}
 }
 
-export const fetchOrder = async ({ origin, storeId, id, server = false, sid = null }: any) => {
+export const getOrder = async ({ origin, storeId, orderNo, server = false, sid = null }: any) => {
 	try {
 		let res: any = {}
 
-		res = (await getMedusajsApi(`orders/${id}`, {}, sid)).order
+		res = (await getMedusajsApi(`orders/${orderNo}`, {}, sid)).order
 		// console.log('res', res);
 
 		return {
@@ -158,13 +158,13 @@ export const codCheckout = async ({
 		let res: any = {}
 
 		res = await postMedusajsApi(
-			`carts/${cartId}/payment-session`,
+			`carts/${cartId}/payment-sessions`,
 			{ provider_id: paymentProviderId },
 			sid
 		)
-
+		const orderRes = await postMedusajsApi(`carts/${cartId}/complete`, {}, sid)
 		// const paymentCartId = res?.cart?.id
-		res.id = '' //paymentCartId
+		res.order_no = orderRes.data.id
 
 		return res
 	} catch (e) {
