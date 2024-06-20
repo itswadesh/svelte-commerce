@@ -73,6 +73,7 @@ onMount(async () => {
 		selectedCartItemsStore.subscribe((value) => {
 			checkedCartItems = value
 		})
+		console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', cart)
 	}
 
 	getProducts()
@@ -278,7 +279,6 @@ function updateCheckedCartItemsInGroup() {
 					</div>
 
 					<hr />
-
 					<div>
 						{#if cart?.unavailableItems?.length}
 							<div>
@@ -435,7 +435,7 @@ function updateCheckedCartItemsInGroup() {
 									</div>
 								{/if}
 
-								{#each cart?.items as item, ix (item._id)}
+								{#each cart?.items as item, ix (item.id)}
 									<!-- PID can not be a key because in case of customized items it will repeat-->
 									<!-- Product detail start -->
 									<div
@@ -721,6 +721,7 @@ function updateCheckedCartItemsInGroup() {
 															loading[ix] = false
 														}
 													}}">
+													<input type="hidden" name="line_id" value="{item.id || null}" />
 													<input type="hidden" name="pid" value="{item.pid || null}" />
 													<input type="hidden" name="vid" value="{item.vid || null}" />
 													<input type="hidden" name="qty" value="{-9999999}" />
