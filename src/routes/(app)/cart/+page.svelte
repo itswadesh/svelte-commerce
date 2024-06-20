@@ -435,7 +435,7 @@ function updateCheckedCartItemsInGroup() {
 									</div>
 								{/if}
 
-								{#each cart?.items as item, ix (item.id)}
+								{#each cart?.items as item, ix (item.id || item._id)}
 									<!-- PID can not be a key because in case of customized items it will repeat-->
 									<!-- Product detail start -->
 									<div
