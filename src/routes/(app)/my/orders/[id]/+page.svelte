@@ -72,167 +72,170 @@ onMount(() => {
 						{#if data.order?.items}
 							<div class="divide-y divide-dashed text-xs text-zinc-500">
 								{#each data.order?.items as item}
-									<div class="flex gap-2 p-5 lg:gap-5">
-										<a
-											href="{`/product/${item.slug}`}"
-											aria-label="Click to view the product details"
-											class="shrink-0">
-											{#if item.isCustomized}
-												<img
-													src="{item.customizedImg}"
-													alt=" "
-													class="h-auto w-14 object-contain object-top" />
-											{:else}
-												<LazyImg
-													src="{item.img}"
-													alt=" "
-													width="56"
-													class="h-auto w-14 object-contain object-top" />
-											{/if}
-										</a>
-
-										<div class="flex w-full flex-1 flex-col gap-0.5 xl:pr-4">
-											<div class="flex justify-between gap-2 sm:gap-4">
-												<a
-													href="{`/product/${item.slug}`}"
-													aria-label="Click to view the product details"
-													class="flex-1 hover:underline">
-													<p>
-														{item.name}
-													</p>
-												</a>
-
-												{#if $page.data.store?.isFnb && item.foodType}
-													<div>
-														{#if item.foodType === 'veg'}
-															<img src="{productVeg}" alt="veg" class="h-5 w-5" />
-														{:else if item.foodType === 'nonveg'}
-															<img src="{productNonVeg}" alt="non veg" class="h-5 w-5" />
-														{/if}
-													</div>
+									{#if item}
+										<div class="flex gap-2 p-5 lg:gap-5">
+											<a
+												href="{`/product/${item.slug}`}"
+												aria-label="Click to view the product details"
+												class="shrink-0">
+												{#if item.isCustomized}
+													<img
+														src="{item.customizedImg}"
+														alt=" "
+														class="h-auto w-14 object-contain object-top" />
+												{:else}
+													<LazyImg
+														src="{item.img}"
+														alt=" "
+														width="56"
+														class="h-auto w-14 object-contain object-top" />
 												{/if}
-											</div>
+											</a>
 
-											{#if item.qty}
-												<span>
-													Qty :
+											<div class="flex w-full flex-1 flex-col gap-0.5 xl:pr-4">
+												<div class="flex justify-between gap-2 sm:gap-4">
+													<a
+														href="{`/product/${item.slug}`}"
+														aria-label="Click to view the product details"
+														class="flex-1 hover:underline">
+														<p>
+															{item.name}
+														</p>
+													</a>
 
-													<b>
-														{item.qty}
-													</b>
-												</span>
-											{/if}
-
-											{#if item.size}
-												<span>
-													Size :
-
-													<b>
-														{item.size}
-													</b>
-												</span>
-											{/if}
-
-											{#if item?.usedOptions?.length}
-												{#each item?.usedOptions as option}
-													{#if option?.val?.length && option?.val !== undefined && option?.val != ''}
-														<div class="flex flex-wrap gap-2">
-															<span>{option.name}:</span>
-
-															{#if option.val}
-																<ul class="flex flex-wrap items-center gap-x-2 gap-y-1">
-																	{#each option.val as v, valIndex}
-																		{#if v}
-																			<b>
-																				{v}
-																			</b>
-
-																			{#if valIndex < option.val?.length - 1}
-																				,
-																			{/if}
-																		{/if}
-																	{/each}
-																</ul>
+													{#if $page.data.store?.isFnb && item.foodType}
+														<div>
+															{#if item.foodType === 'veg'}
+																<img src="{productVeg}" alt="veg" class="h-5 w-5" />
+															{:else if item.foodType === 'nonveg'}
+																<img src="{productNonVeg}" alt="non veg" class="h-5 w-5" />
 															{/if}
 														</div>
 													{/if}
-												{/each}
-											{/if}
-
-											<div class="flex flex-wrap items-center gap-1">
-												Item price :
-
-												<span class="font-bold whitespace-nowrap text-zinc-800">
-													{currency(item.price, store?.currencySymbol)}
-												</span>
-
-												{#if item?.mrp > item?.price}
-													<span class="whitespace-nowrap text-zinc-500 line-through">
-														<strike>
-															{currency(item.mrp, store?.currencySymbol)}
-														</strike>
-													</span>
-
-													{#if Math.floor(((item.mrp - item.price) / item.mrp) * 100) > 0}
-														<span class="whitespace-nowrap text-secondary-500">
-															({Math.floor(((item.mrp - item.price) / item.mrp) * 100)}% off)
-														</span>
-													{/if}
-												{/if}
-											</div>
-
-											<div class="flex flex-wrap items-center gap-1">
-												Sub Total :
-
-												<span class="font-bold whitespace-nowrap text-zinc-800">
-													{currency(item.subtotal, store?.currencySymbol)}
-												</span>
-
-												{#if item?.total > item?.subtotal}
-													<span class="whitespace-nowrap text-zinc-500 line-through">
-														<strike>
-															{currency(item.total, store?.currencySymbol)}
-														</strike>
-													</span>
-
-													{#if Math.floor(((item.total - item.subtotal) / item.total) * 100) > 0}
-														<span class="whitespace-nowrap text-secondary-500">
-															({Math.floor(((item.total - item.subtotal) / item.total) * 100)}% off)
-														</span>
-													{/if}
-												{/if}
-											</div>
-
-											{#if item?.files?.length}
-												<ul class="mt-2 p-0 list-none flex flex-col gap-1">
-													{#each item?.files as file, fx}
-														<li>
-															<a href="{file}" download>
-																<PrimaryButton loadingringsize="xs" class="text-xs">
-																	Download File
-
-																	{#if item?.files?.length > 1}
-																		{fx + 1}
-																	{/if}
-																</PrimaryButton>
-															</a>
-														</li>
-													{/each}
-												</ul>
-											{/if}
-
-											{#if item?.status === 'delivered'}
-												<div class="mt-2 xl:mt-0 xl:w-1/3">
-													<a
-														href="/my/reviews/create?pid={item?.pid}&oid={item?.orderItemId}&ref=/product/{item?.slug}"
-														aria-label="Click to visit rate & review product"
-														class="max-w-max whitespace-nowrap font-semibold text-indigo-500 focus:outline-none hover:underline">
-														Rate & Review Product
-													</a>
 												</div>
-											{/if}
+
+												{#if item.qty}
+													<span>
+														Qty :
+
+														<b>
+															{item.qty}
+														</b>
+													</span>
+												{/if}
+
+												{#if item.size}
+													<span>
+														Size :
+
+														<b>
+															{item.size}
+														</b>
+													</span>
+												{/if}
+
+												{#if item?.usedOptions?.length}
+													{#each item?.usedOptions as option}
+														{#if option?.val?.length && option?.val !== undefined && option?.val != ''}
+															<div class="flex flex-wrap gap-2">
+																<span>{option.name}:</span>
+
+																{#if option.val}
+																	<ul class="flex flex-wrap items-center gap-x-2 gap-y-1">
+																		{#each option.val as v, valIndex}
+																			{#if v}
+																				<b>
+																					{v}
+																				</b>
+
+																				{#if valIndex < option.val?.length - 1}
+																					,
+																				{/if}
+																			{/if}
+																		{/each}
+																	</ul>
+																{/if}
+															</div>
+														{/if}
+													{/each}
+												{/if}
+
+												<div class="flex flex-wrap items-center gap-1">
+													Item price :
+
+													<span class="font-bold whitespace-nowrap text-zinc-800">
+														{currency(item.price, store?.currencySymbol)}
+													</span>
+
+													{#if item?.mrp > item?.price}
+														<span class="whitespace-nowrap text-zinc-500 line-through">
+															<strike>
+																{currency(item.mrp, store?.currencySymbol)}
+															</strike>
+														</span>
+
+														{#if Math.floor(((item.mrp - item.price) / item.mrp) * 100) > 0}
+															<span class="whitespace-nowrap text-secondary-500">
+																({Math.floor(((item.mrp - item.price) / item.mrp) * 100)}% off)
+															</span>
+														{/if}
+													{/if}
+												</div>
+
+												<div class="flex flex-wrap items-center gap-1">
+													Sub Total :
+
+													<span class="font-bold whitespace-nowrap text-zinc-800">
+														{currency(item.subtotal, store?.currencySymbol)}
+													</span>
+
+													{#if item?.total > item?.subtotal}
+														<span class="whitespace-nowrap text-zinc-500 line-through">
+															<strike>
+																{currency(item.total, store?.currencySymbol)}
+															</strike>
+														</span>
+
+														{#if Math.floor(((item.total - item.subtotal) / item.total) * 100) > 0}
+															<span class="whitespace-nowrap text-secondary-500">
+																({Math.floor(((item.total - item.subtotal) / item.total) * 100)}%
+																off)
+															</span>
+														{/if}
+													{/if}
+												</div>
+
+												{#if item?.files?.length}
+													<ul class="mt-2 p-0 list-none flex flex-col gap-1">
+														{#each item?.files as file, fx}
+															<li>
+																<a href="{file}" download>
+																	<PrimaryButton loadingringsize="xs" class="text-xs">
+																		Download File
+
+																		{#if item?.files?.length > 1}
+																			{fx + 1}
+																		{/if}
+																	</PrimaryButton>
+																</a>
+															</li>
+														{/each}
+													</ul>
+												{/if}
+
+												{#if item?.status === 'delivered'}
+													<div class="mt-2 xl:mt-0 xl:w-1/3">
+														<a
+															href="/my/reviews/create?pid={item?.pid}&oid={item?.orderItemId}&ref=/product/{item?.slug}"
+															aria-label="Click to visit rate & review product"
+															class="max-w-max whitespace-nowrap font-semibold text-indigo-500 focus:outline-none hover:underline">
+															Rate & Review Product
+														</a>
+													</div>
+												{/if}
+											</div>
 										</div>
-									</div>
+									{/if}
 								{/each}
 							</div>
 
@@ -242,7 +245,7 @@ onMount(() => {
 										<span class="mr-2 w-32">Subtotal</span>
 
 										<span>
-											: &nbsp; {currency(data.order?.amount.subtotal, store?.currencySymbol)}
+											: &nbsp; {currency(data.order?.amount?.subtotal, store?.currencySymbol)}
 										</span>
 									</p>
 
@@ -252,17 +255,17 @@ onMount(() => {
 										<span>
 											: &nbsp;
 
-											{currency(data.order?.amount.discount, store?.currencySymbol)}
+											{currency(data.order?.amount?.discount, store?.currencySymbol)}
 										</span>
 									</p>
 
-									{#if data.order?.coupon.code}
+									{#if data.order?.coupon?.code}
 										<p class="flex items-center">
 											<span class="mr-2 w-32">Applied Coupon</span>
 
 											<span>
 												: &nbsp;
-												{data.order?.coupon.code}
+												{data.order?.coupon?.code}
 											</span>
 										</p>
 									{/if}
@@ -272,22 +275,22 @@ onMount(() => {
 
 										<span>
 											: &nbsp;
-											{#if data.order?.amount.shipping}
-												{currency(data.order?.amount.shipping, store?.currencySymbol)}
+											{#if data.order?.amount?.shipping}
+												{currency(data.order?.amount?.shipping, store?.currencySymbol)}
 											{:else}
 												Free
 											{/if}
 										</span>
 									</p>
 
-									{#if data.order?.amount.cod_charges}
+									{#if data.order?.amount?.cod_charges}
 										<p class="flex items-center">
 											<span class="mr-2 w-32">COD Charges</span>
 
 											<span>
 												: &nbsp;
 
-												{currency(data.order?.amount.cod_charges, store?.currencySymbol)}
+												{currency(data.order?.amount?.cod_charges, store?.currencySymbol)}
 											</span>
 										</p>
 									{/if}
@@ -298,7 +301,7 @@ onMount(() => {
 										<span class="mr-2 w-32">Total</span>
 
 										<span>
-											: &nbsp; {currency(data.order?.amount.total, store?.currencySymbol)}
+											: &nbsp; {currency(data.order?.amount?.total, store?.currencySymbol)}
 										</span>
 									</div>
 								</div>
