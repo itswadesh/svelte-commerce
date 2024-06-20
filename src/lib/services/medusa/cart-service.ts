@@ -95,18 +95,19 @@ export const removeCouponService = async ({ code, origin, storeId, sid = null }:
 	}
 }
 
-export const updateCart = async ({
+export const updateCart2 = async ({
 	cartId,
 	billingAddress,
-	email,
 	customer_id,
 	shippingAddress,
-	cookies,
 	sid = null
 }: any) => {
 	try {
-		const body = {
-			billing_address: {
+		const body: any = {
+			customer_id
+		}
+		if (billingAddress) {
+			body.billing_address = {
 				address_1: billingAddress.address_1,
 				address_2: billingAddress.address_2,
 				city: billingAddress.city,
@@ -118,8 +119,11 @@ export const updateCart = async ({
 				phone: billingAddress.phone,
 				postal_code: billingAddress.postal_code,
 				province: billingAddress.province
-			},
-			shipping_address: {
+			}
+			body.email = billingAddress.email
+		}
+		if (shippingAddress) {
+			body.shipping_address = {
 				address_1: shippingAddress.address_1,
 				address_2: shippingAddress.address_2,
 				city: shippingAddress.city,
@@ -131,12 +135,9 @@ export const updateCart = async ({
 				phone: shippingAddress.phone,
 				postal_code: shippingAddress.postal_code,
 				province: shippingAddress.province
-			},
-			email: billingAddress.email,
-			customer_id
+			}
 		}
-		// console.log('body', body);
-		// console.log('cartId', cartId);
+		console.log('body', body)
 
 		let res: any = {}
 
@@ -148,7 +149,6 @@ export const updateCart = async ({
 			return res || {}
 		}
 	} catch (e) {
-		// console.error(e)
 		error(e.status, e.message)
 	}
 }
