@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as a parent image
-FROM node:20-alpine
+FROM node:21-alpine
 LABEL author="Swadesh Behera"
 
 # Set the working directory inside the container
