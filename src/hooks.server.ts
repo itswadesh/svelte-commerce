@@ -53,7 +53,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 		const storeId = event.cookies.get('storeId')
 		// const store = event.cookies.get('store') || '{}'
 		// const storeAsJson = JSON.parse(store)
-		console.log(host)
 		if (storeId && storeId != 'undefined') {
 			event.locals.storeId = storeId
 			// event.locals.store = storeAsJson
