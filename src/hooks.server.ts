@@ -41,7 +41,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// This is required for vercel as it parse URL as http instead of https
 		event.locals.origin = protocol + host
 		event.locals.host = url.host
-
 		const userAgent = event.request.headers.get('user-agent')
 
 		const isDesktop = !/mobile/i.test(userAgent)
@@ -51,6 +50,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.isShowBackButton = isShowBackButton
 
 		const storeId = event.cookies.get('storeId')
+		console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', event.locals.origin, event.locals.host, storeId)
 		// const store = event.cookies.get('store') || '{}'
 		// const storeAsJson = JSON.parse(store)
 		if (storeId && storeId != 'undefined') {
@@ -63,6 +63,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 					origin: event.locals.origin
 				})
 				const storeId = storeOne?._id
+				console.log('sssssssssssssssssssssssssssss', storeOne, storeId)
 				// const store = {
 				// 	id: storeOne?.id,
 				// 	currencyCode: storeOne?.currencyCode,
