@@ -1,6 +1,7 @@
 import { currency as currencyConfig } from '../config'
 import { toasts } from 'svelte-toasts'
 import { goto } from '$app/navigation'
+import { toast as toastSonner } from 'svelte-sonner'
 
 let allToasts: any
 
@@ -77,6 +78,30 @@ export const getColorNameFromVarni = (value: string) => {
 }
 
 const toast = (title, type) => {
+	// title =
+	// 	title?.body?.message?.error ||
+	// 	title?.body?.message ||
+	// 	title?.message?.error ||
+	// 	title?.message ||
+	// 	title?.error ||
+	// 	title ||
+	// 	''
+	// allToasts?.remove()
+	// allToasts = toasts.add({
+	// 	title: title,
+	// 	description: '',
+	// 	duration: 5000, // 0 or negative to avoid auto-remove
+	// 	type: type || 'info',
+	// 	theme: 'dark',
+	// 	placement: 'top-center',
+	// 	showProgress: false,
+	// 	onClick: () => {},
+	// 	onRemove: () => {}
+	// 	// component: BootstrapToast, // allows to override toast component/template per toast
+	// })
+
+
+
 	title =
 		title?.body?.message?.error ||
 		title?.body?.message ||
@@ -85,26 +110,24 @@ const toast = (title, type) => {
 		title?.error ||
 		title ||
 		''
-	allToasts?.remove()
-	allToasts = toasts.add({
-		title: title,
-		description: '',
-		duration: 5000, // 0 or negative to avoid auto-remove
-		type: type || 'info',
-		theme: 'dark',
-		placement: 'top-center',
-		showProgress: false,
-		onClick: () => {},
-		onRemove: () => {}
-		// component: BootstrapToast, // allows to override toast component/template per toast
-	})
+	if (type === 'success') {
+		toastSonner.success(title)
+	} else if (type === 'info') {
+		toastSonner.info(title)
+	} else if (type === 'warning') {
+		toastSonner.warning(title)
+	} else if (type === 'error') {
+		toastSonner.error(title)
+	} else {
+		toastSonner(title)
+	}
 }
 
-const removeToasts = () => {
-	allToasts.remove()
-}
+// const removeToasts = () => {
+// 	allToasts.remove()
+// }
 
-export { toast, removeToasts }
+export { toast }
 
 export function date(value: string) {
 	const date = new Date(value)

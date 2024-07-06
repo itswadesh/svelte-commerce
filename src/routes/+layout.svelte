@@ -24,6 +24,7 @@ import noStoreFound from '$lib/assets/no/no_store_found.png'
 import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 import storeClosed from '$lib/assets/store-closed.png'
 import whatsappIcon from '$lib/assets/social-media/whatsapp.png'
+import { Toaster } from 'svelte-sonner'
 
 export let data
 
@@ -174,3 +175,5 @@ onMount(async () => {
 
 	<!-- <FetchInit /> -->
 </main>
+
+<Toaster />
