@@ -409,26 +409,37 @@ async function updateVariant(variant) {
 					class="flex w-full grid-cols-2 flex-row gap-2 overflow-x-scroll scrollbar-none md:grid">
 					{#if data?.product?.images?.length}
 						{#each data.product?.images as img, index}
-							<button
-								type="button"
-								class="cursor-zoom-in overflow-hidden rounded md:flex-shrink w-full h-auto min-h-[512px] sm:min-h-[300px] flex items-center justify-center shrink-0"
-								on:click="{() => handleGallery(index)}">
-								{#if product_image_dimension === '1x1'}
-									<LazyImg
-										src="{img}"
-										alt="{data.product?.name} catelog {index}"
-										height="512"
-										width="512"
-										aspect_ratio="1:1"
-										class="object-cover object-center w-full h-auto first-line:text-xs" />
-								{:else}
-									<LazyImg
-										src="{img}"
-										alt="{data.product?.name}"
-										height="512"
-										class="object-contain object-top w-full h-auto first-line:text-xs" />
-								{/if}
-							</button>
+							{#if img.includes('https://www.youtube.com/watch')}
+								<iframe
+									src="https://www.youtube.com/embed/{getIdFromYoutubeVideo(img)}"
+									title="YouTube video player"
+									frameborder="0"
+									allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+									class="w-full max-w-md h-auto aspect-video"
+									allowfullscreen>
+								</iframe>
+							{:else}
+								<button
+									type="button"
+									class="cursor-zoom-in overflow-hidden rounded md:flex-shrink w-full h-auto min-h-[512px] sm:min-h-[300px] flex items-center justify-center shrink-0"
+									on:click="{() => handleGallery(index)}">
+									{#if product_image_dimension === '1x1'}
+										<LazyImg
+											src="{img}"
+											alt="{data.product?.name} catelog {index}"
+											height="512"
+											width="512"
+											aspect_ratio="1:1"
+											class="object-cover object-center w-full h-auto first-line:text-xs" />
+									{:else}
+										<LazyImg
+											src="{img}"
+											alt="{data.product?.name}"
+											height="512"
+											class="object-contain object-top w-full h-auto first-line:text-xs" />
+									{/if}
+								</button>
+							{/if}
 						{/each}
 					{:else}
 						<div
@@ -898,10 +909,10 @@ async function updateVariant(variant) {
 											</div>
 
 											<span class="text-zinc-500 leading-3 line-clamp-2">
-												{mgp.material.name}
+												{mgp.material?.name}
 											</span>
 
-											{#if mgp.material.price}
+											{#if mgp.material?.price}
 												<span
 													><b>{currency(mgp.material.price, $page.data.store?.currencySymbol)}</b
 													></span>
