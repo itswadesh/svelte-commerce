@@ -1,5 +1,4 @@
 import { currency as currencyConfig } from '../config'
-import { toasts } from 'svelte-toasts'
 import { goto } from '$app/navigation'
 import { toast as toastSonner } from 'svelte-sonner'
 
@@ -99,8 +98,6 @@ const toast = (title, type) => {
 	// 	onRemove: () => {}
 	// 	// component: BootstrapToast, // allows to override toast component/template per toast
 	// })
-
-
 
 	title =
 		title?.body?.message?.error ||
