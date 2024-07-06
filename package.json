@@ -24,7 +24,7 @@
 	},
 	"dependencies": {
 		"@misiki/litekart": "0.0.18",
-		"@misiki/litekart-utils": "1.0.51",
+		"@misiki/litekart-utils": "1.0.54",
 		"@vite-pwa/sveltekit": "0.5.0"
 	},
 	"devDependencies": {

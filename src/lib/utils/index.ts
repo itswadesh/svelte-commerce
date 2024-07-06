@@ -1,6 +1,5 @@
 import { currency as currencyConfig } from '../config'
 import { toasts } from 'svelte-toasts'
-import type { ToastType } from 'svelte-toasts/types/common'
 import { goto } from '$app/navigation'
 
 let allToasts: any
