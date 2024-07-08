@@ -1,21 +1,14 @@
 <script>
-import { DealCountdown, LazyImg, ProductCard } from '$lib/components'
-import { onMount } from 'svelte'
-import { SplideSlide } from '@splidejs/svelte-splide'
+import { DealCountdown, ProductCard } from '$lib/components'
+import * as Carousel from '$lib/shad-components/ui/carousel/index'
 
 export let deals = []
 
-let Splide
 $: innerWidth = 0
 let responsiveWidth = 0
 $: if (innerWidth >= 640) {
 	responsiveWidth = innerWidth - 17
 }
-
-onMount(async () => {
-	const SplideModule = await import('$lib/components/SplideJs.svelte')
-	Splide = SplideModule.default
-})
 </script>
 
 <svelte:window bind:innerWidth />
@@ -35,27 +28,25 @@ onMount(async () => {
 					</header>
 
 					<div class="hidden sm:block">
-						<svelte:component
-							this="{Splide}"
-							options="{{
-								// autoplay: true,
-								autoWidth: true,
-								gap: '12px',
-								lazyLoad: true,
-								padding: '40px',
-								pagination: false,
-								perMove: 1,
-								// type: 'loop',
-								width: responsiveWidth || '100%'
+						<Carousel.Root
+							opts="{{
+								align: 'start',
+								loop: true
 							}}">
-							{#each deal.products as p}
-								{#if p}
-									<SplideSlide>
-										<ProductCard product="{p}" />
-									</SplideSlide>
-								{/if}
-							{/each}
-						</svelte:component>
+							<Carousel.Content class="-ml-5">
+								{#each deal.products as p}
+									{#if p}
+										<Carousel.Item class="basis-auto">
+											<div class="relative w-full">
+												<ProductCard product="{p}" />
+											</div>
+										</Carousel.Item>
+									{/if}
+								{/each}
+							</Carousel.Content>
+							<Carousel.Previous />
+							<Carousel.Next />
+						</Carousel.Root>
 					</div>
 
 					<div

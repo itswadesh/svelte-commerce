@@ -34,7 +34,6 @@ import ReviewGallery from './Product/ReviewGallery.svelte'
 import SingleImageUpload from './SingleImageUpload.svelte'
 import SliderBanner from './SliderBanner.svelte'
 import SocialSharingButtons from './SocialSharingButtons.svelte'
-import SplideJs from './SplideJs.svelte'
 import Stats from './Stats.svelte'
 import StoreInformationFooter from './StoreInformationFooter.svelte'
 import Stripe from './Stripe.svelte'
@@ -110,7 +109,6 @@ export {
 	SingleImageUpload,
 	SliderBanner,
 	SocialSharingButtons,
-	SplideJs,
 	Stats,
 	StoreInformationFooter,
 	Stripe,
