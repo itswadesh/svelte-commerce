@@ -36,7 +36,9 @@ module.exports = {
 				scale: 'scale 6s ease-in infinite',
 				fade: 'fade 6s linear infinite',
 				dropdown: 'dropdown 0.3s linear',
-				slide: 'slide 0.3s ease-in-out'
+				slide: 'slide 0.3s ease-in-out',
+				"accordion-down": "accordion-down 0.2s ease-out",
+				"accordion-up": "accordion-up 0.2s ease-out"
 			},
 			keyframes: {
 				float: {
@@ -62,6 +64,14 @@ module.exports = {
 					'0%': { transform: 'translateX(10px)', opacity: '0' },
 					'50%': { transform: 'translateX(5px)', opacity: '0.3' },
 					'100%': { transform: 'translateX(0px)', opacity: '1' }
+				},
+				"accordion-down": {
+					from: { height: "0" },
+					to: { height: "var(--radix-accordion-content-height)" },
+				},
+				"accordion-up": {
+					from: { height: "var(--radix-accordion-content-height)" },
+					to: { height: "0" },
 				}
 			},
 			fontFamily: {
@@ -69,5 +79,5 @@ module.exports = {
 			}
 		}
 	},
-	plugins: [require('tailwind-scrollbar'), require('@tailwindcss/typography')]
+	plugins: [require('tailwind-scrollbar'), require('@tailwindcss/typography'), require("tailwindcss-animate")]
 }

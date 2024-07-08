@@ -13,15 +13,14 @@ import { createEventDispatcher } from 'svelte'
 import { fly } from 'svelte/transition'
 import { Gallery, LazyImg, RatingStarDisplayBig } from '$lib/components'
 import { navigateToProperPath } from '$lib/utils'
-import { onMount } from 'svelte'
-import { SplideSlide } from '@splidejs/svelte-splide'
 import dayjs from 'dayjs'
 import seamlessBusinessPatternBackground from '$lib/assets/seamless-business-pattern-background.png'
+import * as Carousel from '$lib/shad-components/ui/carousel/index'
 
 const dispatch = createEventDispatcher()
 
 export let breadCrumb
-export let data = { banners: [] }
+export let data: any = { banners: [] }
 export let isClaimed = false
 export let needClaim = false
 export let rating
@@ -34,7 +33,6 @@ export let showOneBanner = false
 
 let selectedImg
 let showPhotosModal = false
-let Splide: any
 
 if (!data.banners.length) data.banners = ['/icon.png']
 $: if (data?.banners[0].img) {
@@ -42,18 +40,37 @@ $: if (data?.banners[0].img) {
 } else if (data?.banners[0]) {
 	selectedImg = data?.banners[0]
 }
-
-onMount(async () => {
-	const SplideModule = await import('$lib/components/SplideJs.svelte')
-	Splide = SplideModule.default
-})
 </script>
 
 <div
 	class="relative z-0 h-96 max-h-max w-full bg-cover bg-center"
 	style="background-image: url({seamlessBusinessPatternBackground})">
 	{#if data?.banners?.length > 1}
-		<svelte:component
+		<Carousel.Root
+			opts="{{
+				align: 'start',
+				loop: true
+			}}">
+			<Carousel.Content class="-ml-5">
+				{#each data?.banners as b}
+					{#if b}
+						<Carousel.Item class="basis-auto">
+							<div class="relative w-full">
+								<LazyImg
+									src="{b}"
+									alt=" "
+									height="384"
+									width="384"
+									class="h-96 w-full object-cover object-center" />
+							</div>
+						</Carousel.Item>
+					{/if}
+				{/each}
+			</Carousel.Content>
+			<Carousel.Previous />
+			<Carousel.Next />
+		</Carousel.Root>
+		<!-- <svelte:component
 			this="{Splide}"
 			options="{{
 				lazyLoad: true,
@@ -80,19 +97,7 @@ onMount(async () => {
 					}
 				}
 			}}">
-			{#each data?.banners as b}
-				{#if b}
-					<SplideSlide>
-						<LazyImg
-							src="{b}"
-							alt=" "
-							height="384"
-							width="384"
-							class="h-96 w-full object-cover object-center" />
-					</SplideSlide>
-				{/if}
-			{/each}
-		</svelte:component>
+		</svelte:component> -->
 	{:else if data?.banners?.length == 1}
 		<LazyImg
 			src="{data?.banners[0]}"
