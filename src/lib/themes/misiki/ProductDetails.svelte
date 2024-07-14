@@ -764,7 +764,7 @@ async function updateVariant(variant) {
 
 													<div
 														class="hidden group-hover:block absolute z-20 max-w-max min-w-max -top-2 leading-3 py-1 px-2 rounded whitespace-nowrap bg-primary-500 text-white text-[0.65em] text-center">
-														{cg?.color.name}
+														{cg?.color?.name || ''}
 													</div>
 												</a>
 											{:else}
@@ -783,7 +783,7 @@ async function updateVariant(variant) {
 
 													<div
 														class="hidden group-hover:block absolute z-20 max-w-max min-w-max -top-2 leading-3 py-1 px-2 rounded whitespace-nowrap bg-primary-500 text-white text-[0.65em] text-center">
-														{cg?.color.name}
+														{cg?.color?.name || ''}
 													</div>
 
 													<hr class="absolute z-10 w-24 transform rotate-[56deg] border-zinc-300" />
@@ -841,7 +841,7 @@ async function updateVariant(variant) {
 														? 'bg-primary-500 border-primary-500 text-white'
 														: 'bg-transparent border-zinc-300 hover:border-primary-500'}">
 													<span class="w-full truncate">
-														{sg?.size?.name}
+														{sg?.size?.name || ''}
 													</span>
 
 													{#if sg.stock < 5 && sg.stock > 0}
@@ -857,7 +857,7 @@ async function updateVariant(variant) {
 													class="flex flex-col items-center justify-center text-center border text-zinc-200 rounded py-2 px-4 text-sm font-medium uppercase group transition duration-300 focus:outline-none
 													{sg?.size?.name === data.product?.size?.name ? 'border-primary-500' : 'hover:border-primary-500'}">
 													<span class="w-full truncate">
-														{sg?.size?.name}
+														{sg?.size?.name || ''}
 													</span>
 												</a>
 											{/if}
@@ -909,7 +909,7 @@ async function updateVariant(variant) {
 											</div>
 
 											<span class="text-zinc-500 leading-3 line-clamp-2">
-												{mgp.material?.name}
+												{mgp.material?.name || ''}
 											</span>
 
 											{#if mgp.material?.price}
