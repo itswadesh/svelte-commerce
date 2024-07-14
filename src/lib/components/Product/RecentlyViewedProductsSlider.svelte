@@ -35,9 +35,9 @@ $: store = $page.data.store
 				align: 'start',
 				loop: true
 			}}">
-			<Carousel.Content class="-ml-5">
+			<Carousel.Content class="-ml-5 max-sm:-ml-0 max-sm:w-[90vw]">
 				{#each products as p, px}
-					<Carousel.Item class="pl-5 max-sm:basis-1/2 sm:basis-1/3 lg:basis-1/5 max-sm:pl-4">
+					<Carousel.Item class="pl-5 max-sm:basis-1/2 sm:basis-1/3 lg:basis-1/5 max-sm:pl-0">
 						<div class="relative w-fit">
 							{#if p.slug && p.img && p.price && px + 1 != products?.length}
 								<a
