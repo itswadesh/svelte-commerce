@@ -13,7 +13,6 @@
 	import { showAuthModal } from '$lib/core/components/auth/auth-utils'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import { AddressModule, emptyAddress, schemas } from '$lib/core/composables/use-checkout-address.svelte'
-	import { env } from '$env/dynamic/public'
 	import { z } from 'zod'
 
 	const addressModule = new AddressModule()
@@ -22,6 +21,8 @@
 
 	// Check if phone is required based on login type
 	const isPhoneRequired = page.data?.store?.isPhoneMandatory
+  const isEmailRequired = page.data?.store?.isEmailMandatory
+
 	// Create a schema that makes phone optional when login type is email
 	const phoneSchema = isPhoneRequired
 		? schemas.phone
@@ -34,7 +35,16 @@
 	function handleContactFormSubmit(event: any, { email, phone, phoneSchema, isPhoneRequired, saveEmail }: any) {
 		event.preventDefault()
 		try {
-			schemas.email.parse(email)
+      if (email) {
+			  schemas.email.parse(email)
+      } else if (isEmailRequired) {
+				throw new z.ZodError([{
+					code: 'custom',
+					path: ['email'],
+					message: 'Email is required'
+				}])
+      }
+
 			if (phone) {
 				phoneSchema.parse(phone)
 			} else if (isPhoneRequired) {
@@ -132,7 +142,7 @@
 								{/if}
 							</div>
 
-							{#if cartState.cart.email && (!isPhoneRequired || cartState.cart.phone) && !addressModule.editEmail}
+							{#if (!isEmailRequired || cartState.cart.email) && (!isPhoneRequired || cartState.cart.phone) && !addressModule.editEmail}
 								<div class="space-y-3 p-5">
 									<div class="flex items-start space-x-3">
 										<div class="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-blue-100 text-blue-600">
@@ -166,15 +176,18 @@
 										phone: addressModule.phone,
 										phoneSchema,
 										isPhoneRequired,
+                    isEmailRequired,
 										saveEmail: addressModule.saveEmail.bind(addressModule)
 									})}
 								>
 									<div class="space-y-1">
-										<label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+										<label for="email" class="block text-sm font-medium text-gray-700">
+                      Email address {#if !isEmailRequired}<span class="text-gray-400">(optional)</span>{/if}
+                    </label>
 										<Textbox
 											type="email"
 											bind:value={addressModule.email}
-											required
+											required={isEmailRequired}
 											class="w-full"
 											schema={schemas.email}
 											placeholder="your@email.com"
@@ -221,7 +234,7 @@
 							{/if}
 						</div>
 					<!-- Shipping Address -->
-					{#if cartState?.cart?.email && (!isPhoneRequired || cartState?.cart?.phone)}
+					{#if (!isEmailRequired || cartState?.cart?.email) && (!isPhoneRequired || cartState?.cart?.phone)}
 						<div class="rounded-lg border p-4">
 							{#if cartState.cart.shippingAddress}
 								<div class="mb-6">
