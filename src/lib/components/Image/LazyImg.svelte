@@ -1,174 +1,56 @@
-<style>
-img.lazy {
-	opacity: 0.95;
-	transition: opacity 1200ms ease-out;
-}
-img:not(.initial) {
-	transition: opacity 1s;
-}
-img.initial,
-img.loaded,
-img.error {
-	opacity: 1;
-}
-img:not([src]) :not([srcset]) {
-	visibility: hidden;
-}
-/* Initially set the opacity of the loader-line span to 1 (visible) */
-span.loader-line {
-	opacity: 1;
-}
-/* When the img with the loaded class is inside the .relative div,
-   set the opacity of the loader-line span to 0 (hidden) */
-.relative img.loaded + div span.loader-line {
-	opacity: 0;
-}
-.loader-line {
-	width: 50px;
-	height: 3px;
-	position: relative;
-	overflow: hidden;
-	background-color: #ddd;
-	margin: auto;
-	-webkit-border-radius: 20px;
-	-moz-border-radius: 20px;
-	border-radius: 20px;
-}
-.loader-line:before {
-	content: '';
-	position: absolute;
-	left: -50%;
-	height: 3px;
-	width: 40%;
-	background-color: gray;
-	-webkit-animation: lineAnim 1s linear infinite;
-	-moz-animation: lineAnim 1s linear infinite;
-	animation: lineAnim 1s linear infinite;
-	-webkit-border-radius: 20px;
-	-moz-border-radius: 20px;
-	border-radius: 20px;
-}
-
-@keyframes lineAnim {
-	0% {
-		left: -40%;
-	}
-	50% {
-		left: 20%;
-		width: 80%;
-	}
-	100% {
-		left: 100%;
-		width: 100%;
-	}
-}
-</style>
-
 <script lang="ts">
-import { getCdnImageUrl } from '$lib/utils'
-import { page } from '$app/stores'
-import { Image } from '@unpic/svelte'
-// import PlaceHolder from '/placeholders/placeholder2.png'
-// import PlaceHolder from '/placeholder.png'
-import userEmptyProfile from '$lib/assets/user-empty-profile.png'
+import LazyImg from '$lib/components/Image/LazyImg.svelte'
+import { currency } from '$lib/utils/index.js'
 
-export let alt = ''
-export let aspect_ratio = '3:4'
-export let height = null
-export let src: string
-export let width = null
-
-let clazz: string
-export { clazz as class }
-
-const h = height === 'auto' ? '0' : +height * 2
-const w = width === 'auto' ? '0' : +width * 2
-
-const arh = aspect_ratio?.split(':')[1]
-const arw = aspect_ratio?.split(':')[0]
-
-const extension = src?.split('.').pop()
-
-let isSvg = false
-$: IMAGE_CDN_PROVIDER = $page.data.store?.imageCdn?.provider?.val
-$: IMAGE_CDN_URL = $page.data.store?.imageCdn?.url?.val
-
-if (extension === 'svg') {
-	isSvg = true
-}
+export let product: any = {}
 </script>
 
-<div class="relative" style="min-height:{24}px;">
-	{#if IMAGE_CDN_PROVIDER === 'gumlet'}
-		<Image
-			{alt}
-			loading="lazy"
-			background="/placeholder.png"
-			src="{`${getCdnImageUrl({
-				src,
-				IMAGE_CDN_URL,
-				IMAGE_CDN_PROVIDER
-			})}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(':', '-')}`}"
-			height="{+h}"
-			width="{+w}"
-			class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(':')[1]}] lazy {clazz}" />
-	{:else if IMAGE_CDN_PROVIDER === 'imagekit'}
-		{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } )?.includes('http')}
-			<Image
-				{alt}
-				loading="lazy"
-				background="/placeholder.png"
-				src="{`${getCdnImageUrl({
-					src,
-					IMAGE_CDN_URL,
-					IMAGE_CDN_PROVIDER,
-					NO_QUERY: true
-				})}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(':', '-')}`}"
-				height="{+h}"
-				width="{+w}"
-				class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(':')[1]}] lazy {clazz}" />
-		{:else}
-			<Image
-				{alt}
-				loading="lazy"
-				background="/placeholder.png"
-				src="{`${IMAGE_CDN_URL}${getCdnImageUrl({
-					src,
-					IMAGE_CDN_URL,
-					IMAGE_CDN_PROVIDER,
-					NO_QUERY: true
-				})}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(':', '-')}`}"
-				height="{+h}"
-				width="{+w}"
-				class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(':')[1]}] lazy {clazz}" />
+<div class="mx-auto flex w-full max-w-md flex-col rounded-lg border shadow-md">
+	<div class="flex-shrink-0">
+		{#if product?.img}
+			<a href="/products/{product.product_id}" class="text-xl font-bold">
+				<LazyImg
+					height="{64}"
+					class="h-36 w-full object-cover rounded"
+					src="{product?.img}"
+					alt="Product image" />
+			</a>
 		{/if}
-	{:else if IMAGE_CDN_PROVIDER === 'thumbor'}
-		{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } )?.includes('http')}
-			<Image
-				{alt}
-				src="{`${getCdnImageUrl({
-					src,
-					IMAGE_CDN_URL,
-					IMAGE_CDN_PROVIDER,
-					NO_QUERY: true
-				})}`}"
-				loading="lazy"
-				height="{+h}"
-				width="{+w}"
-				class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(':')[1]}] lazy {clazz}" />
-		{:else}
-			<Image
-				{alt}
-				src="{`${IMAGE_CDN_URL}/fit-in/${w}x${h}${getCdnImageUrl({
-					src,
-					IMAGE_CDN_URL,
-					IMAGE_CDN_PROVIDER,
-					NO_QUERY: true
-				})}`}"
-				loading="lazy"
-				height="{+h}"
-				width="{+w}"
-				class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(':')[1]}] lazy {clazz}" />
+	</div>
+
+	<div class="px-2 py-2">
+		{#if product.name}
+			<div class="flex items-center justify-between gap-2 text-xs">
+				<div>{currency(product.price)}</div>
+				{#if product.type == 'NON-VEG'}
+					<img src="/non-veg.png" alt="Non-Veg" class="h-4 w-4" />
+				{:else}
+					<img src="/veg.png" alt="Veg" class="h-4 w-4" />
+				{/if}
+			</div>
 		{/if}
-	{/if}
+	</div>
+	<div class="px-2 pb-2">
+		<div class="flex items-center justify-between text-xs">
+			<div class="text-xs line-clamp-2">
+				<a href="/products/{product.product_id}" class="">
+					{product.name} By {#if product.business_name}
+						{product.business_name} <br />
+					{/if}
+				</a>
+			</div>
+			<!-- <div>
+				{#if product.stock}
+					{product.stock} available <br />
+				{/if}
+			</div> -->
+		</div>
+	</div>
+	<!-- <div class="px-4 pb-2 pt-4">
+				{#if !data.me}
+					<a href="/auth/login"> <Button type="button" class="w-full">Login</Button></a>
+				{:else}
+					<a href="/product/{product.product_id}" type="button" class="w-full"> Order Now </a>
+				{/if}
+			</div> -->
 </div>
