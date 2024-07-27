@@ -93,7 +93,7 @@ let isSvg = false
 if (extension === 'svg') {
 	isSvg = true
 }
-</style>
+</script>
 
 <div class="relative h-full" style="min-height:{24}px;">
 	<Image
