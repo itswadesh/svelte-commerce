@@ -65,23 +65,24 @@ span.loader-line {
 </style>
 
 <script lang="ts">
-import { getCdnImageUrl } from '$lib/utils/index'
+import { getCdnImageUrl } from '$lib/utils'
 import { page } from '$app/stores'
 import { Image } from '@unpic/svelte'
 // import PlaceHolder from '/placeholders/placeholder2.png'
 // import PlaceHolder from '/placeholder.png'
+import userEmptyProfile from '$lib/assets/user-empty-profile.png'
 
 export let alt = ''
 export let aspect_ratio = '3:4'
-export let height = 0
+export let height = null
 export let src: string
-export let width = 0
+export let width = null
 
 let clazz: string
 export { clazz as class }
 
-const h = height === 0 ? 0 : +height * 2
-const w = width === 0 ? 0 : +width * 2
+const h = height === 'auto' ? '0' : +height * 2
+const w = width === 'auto' ? '0' : +width * 2
 
 const arh = aspect_ratio?.split(':')[1]
 const arw = aspect_ratio?.split(':')[0]
@@ -89,19 +90,85 @@ const arw = aspect_ratio?.split(':')[0]
 const extension = src?.split('.').pop()
 
 let isSvg = false
+$: IMAGE_CDN_PROVIDER = $page.data.store?.imageCdn?.provider?.val
+$: IMAGE_CDN_URL = $page.data.store?.imageCdn?.url?.val
 
 if (extension === 'svg') {
 	isSvg = true
 }
 </script>
 
-<div class="relative h-full" style="min-height:{24}px;">
-	<Image
-		{alt}
-		loading="lazy"
-		background="/placeholder.png"
-		src="{`${getCdnImageUrl({ src })}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(':', '-')}`}"
-		height="{+h}"
-		width="{+w}"
-		class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(':')[1]}] lazy {clazz}" />
+<div class="relative" style="min-height:{24}px;">
+	{#if IMAGE_CDN_PROVIDER === 'gumlet'}
+		<Image
+			{alt}
+			loading="lazy"
+			background="/placeholder.png"
+			src="{`${getCdnImageUrl({
+				src,
+				IMAGE_CDN_URL,
+				IMAGE_CDN_PROVIDER
+			})}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(':', '-')}`}"
+			height="{+h}"
+			width="{+w}"
+			class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(':')[1]}] lazy {clazz}" />
+	{:else if IMAGE_CDN_PROVIDER === 'imagekit'}
+		{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } )?.includes('http')}
+			<Image
+				{alt}
+				loading="lazy"
+				background="/placeholder.png"
+				src="{`${getCdnImageUrl({
+					src,
+					IMAGE_CDN_URL,
+					IMAGE_CDN_PROVIDER,
+					NO_QUERY: true
+				})}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(':', '-')}`}"
+				height="{+h}"
+				width="{+w}"
+				class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(':')[1]}] lazy {clazz}" />
+		{:else}
+			<Image
+				{alt}
+				loading="lazy"
+				background="/placeholder.png"
+				src="{`${IMAGE_CDN_URL}${getCdnImageUrl({
+					src,
+					IMAGE_CDN_URL,
+					IMAGE_CDN_PROVIDER,
+					NO_QUERY: true
+				})}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(':', '-')}`}"
+				height="{+h}"
+				width="{+w}"
+				class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(':')[1]}] lazy {clazz}" />
+		{/if}
+	{:else if IMAGE_CDN_PROVIDER === 'thumbor'}
+		{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } )?.includes('http')}
+			<Image
+				{alt}
+				src="{`${getCdnImageUrl({
+					src,
+					IMAGE_CDN_URL,
+					IMAGE_CDN_PROVIDER,
+					NO_QUERY: true
+				})}`}"
+				loading="lazy"
+				height="{+h}"
+				width="{+w}"
+				class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(':')[1]}] lazy {clazz}" />
+		{:else}
+			<Image
+				{alt}
+				src="{`${IMAGE_CDN_URL}/fit-in/${w}x${h}${getCdnImageUrl({
+					src,
+					IMAGE_CDN_URL,
+					IMAGE_CDN_PROVIDER,
+					NO_QUERY: true
+				})}`}"
+				loading="lazy"
+				height="{+h}"
+				width="{+w}"
+				class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(':')[1]}] lazy {clazz}" />
+		{/if}
+	{/if}
 </div>
