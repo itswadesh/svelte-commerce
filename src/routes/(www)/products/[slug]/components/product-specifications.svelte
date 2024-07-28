@@ -80,7 +80,7 @@
 		<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 			{#if data?.product?.originCountry}
 				<div class="border-b">
-					<p class="text-gray-500">Country of origin</p>
+					<p class="text-gray-500">Made in</p>
 					<p>{data?.product?.originCountry}</p>
 				</div>
 			{/if}
