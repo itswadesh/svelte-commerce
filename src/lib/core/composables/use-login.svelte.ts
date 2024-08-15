@@ -5,6 +5,7 @@ import { getUserState } from '$lib/core/stores/auth.svelte'
 import { getCartState } from '$lib/core/stores/cart.svelte'
 import { toast } from 'svelte-sonner'
 import { z } from 'zod'
+import { formatSecounds, wait } from '../utils'
 
 export const schemas = {
 	email: z
@@ -45,7 +46,18 @@ export class LoginModule {
     this.handleSubmit()
   }
 
-  resetOtpGenerationError = async () => {
+  resetOtpGenerationTimeout = async () => {
+    this.otpGenerationError = null
+  }
+
+  startOtpGenerationTimeout = async (otpCooldownRemainingTime: number) => {
+    for (let i = otpCooldownRemainingTime; i >= 0; i--) {
+      otpCooldownRemainingTime = i
+      this.otpGenerationError = `Please wait ${formatSecounds(otpCooldownRemainingTime)} before resending OTP`
+      await wait(1000)
+      if (this.otpGenerationError === null)
+        return
+    }
     this.otpGenerationError = null
   }
 
@@ -57,9 +69,9 @@ export class LoginModule {
 			if (this.isPhoneNumber) {
         try {
 				  await authService.getOtp({ phone: this.identifier })
-        } catch (e) {
+        } catch (e: any) {
           if (!e?.message?.startsWith?.('HTTP'))
-            this.otpGenerationError = e?.message
+            this.startOtpGenerationTimeout(e?.remainingTime)
           throw e
         }
 				await this.cartState.updateEmail({ phone: this.identifier })
