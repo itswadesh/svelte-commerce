@@ -1,8 +1,9 @@
 import { shopifyInit } from '$lib/utils'
+import { Shopify }  from '../shopify/utils'
 
-export const fetchInit = async ({host, origin}) => {
+export const fetchInit = async ({ host, origin }) => {
 	try {
-		const store = await shopifyInit({
+		const response = await shopifyInit({
 			query: `{
       shop {
 		id
@@ -12,11 +13,11 @@ export const fetchInit = async ({host, origin}) => {
   }`,
 			variables: {}
 		})
-		return { storeOne: {
-			_id: store?.shop?.id,
-			title: store?.shop?.name,
-			description: store?.data?.description,
-		} }
+
+		const store = new Shopify();
+		const storeData = store.initStore(response);
+
+		return storeData
 	} catch (error) {
 		console.log('error', error)
 	}

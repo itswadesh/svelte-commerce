@@ -28,7 +28,7 @@ export const fetchFooterCategories = async ({
 			variables: {}
 		})
 
-		// console.log('res', res);
+		console.log('res', data);
 
 		// return res || {}
 		return data || []
@@ -62,16 +62,17 @@ export const fetchAllCategories = async ({
 
 		res = await shopifyInit({
 			query: `{
-				products(first: 10) {
-					edges {
-						node {
-							id
-							title
-							tags
-						}
-					}
-				}
-			}
+    collections(first: 5) {
+      edges {
+        node {
+          id
+          title
+          handle
+          updatedAt
+        }
+      }
+    }
+  }
 			`,
 			variables: {}
 		})
@@ -135,16 +136,17 @@ export const fetchMegamenuData = async ({ origin, storeId, server = false, sid =
 
 		data = await shopifyInit({
 			query: `{
-				products(first: 10) {
-					edges {
-						node {
-							id
-							title
-							tags
-						}
-					}
-				}
-			}
+    collections(first: 5) {
+      edges {
+        node {
+          id
+          title
+          handle
+          updatedAt
+        }
+      }
+    }
+  }
 			`,
 			variables: {}
 		})
