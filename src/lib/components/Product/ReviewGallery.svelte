@@ -6,11 +6,12 @@
 </style>
 
 <script lang="ts">
-import { createEventDispatcher, onMount } from 'svelte'
+import { createEventDispatcher } from 'svelte'
 import { currency, date } from '$lib/utils'
-import { SplideSlide } from '@splidejs/svelte-splide'
 import LazyImg from '../Image/LazyImg.svelte'
-import { browser } from '$app/environment'
+import { page } from '$app/stores'
+import * as Carousel from '$lib/shad-components/ui/carousel/index'
+
 // import { storeStore } from '$lib/store/store'
 
 const dispatch = createEventDispatcher()
@@ -18,19 +19,9 @@ const dispatch = createEventDispatcher()
 export let showPhotosModal = false
 export let gallery
 
-let Splide: any
 let currentImageIndex = 0
 // let store = {}
 $: store = $page.data.store
-
-onMount(async () => {
-	// if (browser) {
-	// 	storeStore.subscribe((value) => (store = value))
-	// }
-	const SplideModule = await import('$lib/components/SplideJs.svelte')
-
-	Splide = SplideModule.default
-})
 </script>
 
 {#if showPhotosModal}
@@ -64,173 +55,168 @@ onMount(async () => {
 
 		<div class="container mx-auto relative bg-white rounded-3xl w-full max-w-xl max-h-max">
 			{#if gallery?.length > 1}
-				<svelte:component
-					this="{Splide}"
-					bind:currentImageIndex
-					options="{{
-						rewind: true,
-						lazyLoad: true,
-						perPage: 1,
-						perMove: 1,
-						pagination: false
-						// breakpoints: {
-						// 640: {
-						// 	perPage: 1,
-						// 	perMove: 1,
-						// 	arrows: false
-						// }
-						// },
+				<Carousel.Root
+					opts="{{
+						align: 'start',
+						loop: true
 					}}">
-					{#each gallery as g}
-						{#if g}
-							<SplideSlide>
-								<div class="bg-white rounded border shadow">
-									<div>
-										{#if g.image || g.images[0]}
-											<LazyImg
-												src="{g.image || g.images[0]}"
-												alt=""
-												height="500"
-												width="500"
-												aspect_ratio="1:1"
-												class="block h-full w-full object-contain object-center rounded" />
-										{:else}
-											<div
-												class="h-[500px] w-full items-center justify-center text-center text-sm bg-zinc-100 text-zinc-500 flex flex-col gap-2 rounded">
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													viewBox="0 0 24 24"
-													fill="currentColor"
-													class="w-6 h-6">
-													<path
-														fill-rule="evenodd"
-														d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z"
-														clip-rule="evenodd"></path>
-												</svg>
-
-												<span>Oops! No Image found</span>
-											</div>
-										{/if}
-									</div>
-
-									<div class="p-5 flex flex-col gap-4 text-xs sm:text-sm">
-										<div class="flex items-center gap-2">
-											<div class="flex items-center gap-1">
-												{#each { length: 5 } as _, index}
-													<svg
-														xmlns="http://www.w3.org/2000/svg"
-														viewBox="0 0 20 20"
-														fill="currentColor"
-														class="w-4 h-4
-                                                        {index < g.rating
-															? 'text-primary-500'
-															: 'text-zinc-200'}">
-														<path
-															fill-rule="evenodd"
-															d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z"
-															clip-rule="evenodd"></path>
-													</svg>
-												{/each}
-											</div>
-
-											{#if g.verified}
-												<div
-													class="bg-brand-500 text-white text-xs py-0.5 px-2 font-thin rounded-full">
-													Verified Purchaser
-												</div>
-											{/if}
-										</div>
-
-										{#if g.message}
-											<p>
-												{g.message}
-											</p>
-										{/if}
-
-										{#if g.user}
-											<div class="flex flex-wrap items-center gap-2">
-												{#if g.user?.avatar}
-													<div class="h-10 w-10 rounded-full overflow-hidden">
-														<img
-															src="{g.user?.avatar}"
-															alt="avatar"
-															class="h-full w-full object-cover object-top" />
-													</div>
-												{/if}
-
-												{#if g.user?.firstName || g.updatedAt}
-													<div class="flex-1 flex flex-col gap-1 leading-3">
-														{#if g.user?.firstName}
-															<h6>
-																{g.user?.firstName}
-
-																{#if g.user?.lastName}
-																	{g.user?.lastName}
-																{/if}
-															</h6>
-														{/if}
-
-														{#if g.createdAt}
-															<span class="text-xs">
-																{date(g?.createdAt)}
-															</span>
-														{/if}
-													</div>
-												{/if}
-											</div>
-										{/if}
-
-										{#if g.product}
+					<Carousel.Content class="-ml-5">
+						{#each gallery as g}
+							{#if g}
+								<Carousel.Item class="basis-auto">
+									<div class="relative w-full">
+										<div class="bg-white rounded border shadow">
 											<div>
-												<h6 class="mb-2">Purchased Item:</h6>
+												{#if g.image || g.images[0]}
+													<LazyImg
+														src="{g.image || g.images[0]}"
+														alt=""
+														height="500"
+														width="500"
+														aspect_ratio="1:1"
+														class="block h-full w-full object-contain object-center rounded" />
+												{:else}
+													<div
+														class="h-[500px] w-full items-center justify-center text-center text-sm bg-zinc-100 text-zinc-500 flex flex-col gap-2 rounded">
+														<svg
+															xmlns="http://www.w3.org/2000/svg"
+															viewBox="0 0 24 24"
+															fill="currentColor"
+															class="w-6 h-6">
+															<path
+																fill-rule="evenodd"
+																d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z"
+																clip-rule="evenodd"></path>
+														</svg>
 
-												<a
-													href="/product/{g.product?.slug}"
-													aria-label="View product"
-													target="_blank"
-													rel="noopener noreferrer"
-													class="flex items-start gap-2 group">
-													{#if g.product?.img}
-														<LazyImg
-															src="{g.product?.img}"
-															alt=""
-															class="block w-16 h-auto object-contain object-center rounded" />
+														<span>Oops! No Image found</span>
+													</div>
+												{/if}
+											</div>
+
+											<div class="p-5 flex flex-col gap-4 text-xs sm:text-sm">
+												<div class="flex items-center gap-2">
+													<div class="flex items-center gap-1">
+														{#each { length: 5 } as _, index}
+															<svg
+																xmlns="http://www.w3.org/2000/svg"
+																viewBox="0 0 20 20"
+																fill="currentColor"
+																class="w-4 h-4
+                                                        {index < g.rating
+																	? 'text-primary-500'
+																	: 'text-zinc-200'}">
+																<path
+																	fill-rule="evenodd"
+																	d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z"
+																	clip-rule="evenodd"></path>
+															</svg>
+														{/each}
+													</div>
+
+													{#if g.verified}
+														<div
+															class="bg-brand-500 text-white text-xs py-0.5 px-2 font-thin rounded-full">
+															Verified Purchaser
+														</div>
 													{/if}
+												</div>
 
-													<div class="flex-1">
-														<p class="mb-1 group-hover:underline">
-															{g.product?.name}
-														</p>
+												{#if g.message}
+													<p>
+														{g.message}
+													</p>
+												{/if}
 
-														<div class="flex flex-wrap items-center gap-2 text-xs">
-															<span class="text-base font-bold whitespace-nowrap">
-																{currency(g.product?.price, store?.currencySymbol)}
-															</span>
+												{#if g.user}
+													<div class="flex flex-wrap items-center gap-2">
+														{#if g.user?.avatar}
+															<div class="h-10 w-10 rounded-full overflow-hidden">
+																<img
+																	src="{g.user?.avatar}"
+																	alt="avatar"
+																	class="h-full w-full object-cover object-top" />
+															</div>
+														{/if}
 
-															{#if g.product?.mrp > g.product?.price}
-																<span class="whitespace-nowrap text-zinc-500 line-through">
-																	{currency(g.product?.mrp, store?.currencySymbol)}
-																</span>
+														{#if g.user?.firstName || g.updatedAt}
+															<div class="flex-1 flex flex-col gap-1 leading-3">
+																{#if g.user?.firstName}
+																	<h6>
+																		{g.user?.firstName}
 
-																{#if Math.floor(((g.product?.mrp - g.product?.price) / g.product?.mrp) * 100) > 0}
-																	<span class="whitespace-nowrap text-secondary-500">
-																		({Math.floor(
-																			((g.product?.mrp - g.product?.price) / g.product?.mrp) * 100
-																		)}% off)
+																		{#if g.user?.lastName}
+																			{g.user?.lastName}
+																		{/if}
+																	</h6>
+																{/if}
+
+																{#if g.createdAt}
+																	<span class="text-xs">
+																		{date(g?.createdAt)}
 																	</span>
 																{/if}
-															{/if}
-														</div>
+															</div>
+														{/if}
 													</div>
-												</a>
+												{/if}
+
+												{#if g.product}
+													<div>
+														<h6 class="mb-2">Purchased Item:</h6>
+
+														<a
+															href="/product/{g.product?.slug}"
+															aria-label="View product"
+															target="_blank"
+															rel="noopener noreferrer"
+															class="flex items-start gap-2 group">
+															{#if g.product?.img}
+																<LazyImg
+																	src="{g.product?.img}"
+																	alt=""
+																	class="block w-16 h-auto object-contain object-center rounded" />
+															{/if}
+
+															<div class="flex-1">
+																<p class="mb-1 group-hover:underline">
+																	{g.product?.name}
+																</p>
+
+																<div class="flex flex-wrap items-center gap-2 text-xs">
+																	<span class="text-base font-bold whitespace-nowrap">
+																		{currency(g.product?.price, store?.currencySymbol)}
+																	</span>
+
+																	{#if g.product?.mrp > g.product?.price}
+																		<span class="whitespace-nowrap text-zinc-500 line-through">
+																			{currency(g.product?.mrp, store?.currencySymbol)}
+																		</span>
+
+																		{#if Math.floor(((g.product?.mrp - g.product?.price) / g.product?.mrp) * 100) > 0}
+																			<span class="whitespace-nowrap text-secondary-500">
+																				({Math.floor(
+																					((g.product?.mrp - g.product?.price) / g.product?.mrp) *
+																						100
+																				)}% off)
+																			</span>
+																		{/if}
+																	{/if}
+																</div>
+															</div>
+														</a>
+													</div>
+												{/if}
 											</div>
-										{/if}
+										</div>
 									</div>
-								</div>
-							</SplideSlide>
-						{/if}
-					{/each}
-				</svelte:component>
+								</Carousel.Item>
+							{/if}
+						{/each}
+					</Carousel.Content>
+					<Carousel.Previous />
+					<Carousel.Next />
+				</Carousel.Root>
 			{:else}
 				{#each gallery as g}
 					{#if g}

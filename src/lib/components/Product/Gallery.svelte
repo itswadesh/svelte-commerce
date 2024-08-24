@@ -7,10 +7,9 @@
 
 <script lang="ts">
 import { fade } from 'svelte/transition'
-import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { SplideSlide } from '@splidejs/svelte-splide'
 import LazyImg from '../Image/LazyImg.svelte'
+import * as Carousel from '$lib/shad-components/ui/carousel/index'
 
 export let images = []
 export let title = ''
@@ -23,12 +22,6 @@ let selectedimg: string
 $: if (images?.length) {
 	selectedimg = images[selectedImgIndex]
 }
-
-let Splide: any
-onMount(async () => {
-	const SplideModule = await import('$lib/components/SplideJs.svelte')
-	Splide = SplideModule.default
-})
 </script>
 
 {#if showPhotosModal}
@@ -53,43 +46,42 @@ onMount(async () => {
 
 		<div class="relative block lg:hidden">
 			{#if images?.length > 1}
-				<svelte:component
-					this="{Splide}"
-					options="{{
-						rewind: true,
-						lazyLoad: true,
-						perPage: 1,
-						perMove: 1,
-						arrows: false
-						// breakpoints: {
-						// 640: {
-						// 	perPage: 1,
-						// 	perMove: 1,
-						// 	arrows: false
-						// }
-						// }
+				<Carousel.Root
+					opts="{{
+						align: 'start',
+						loop: true
 					}}">
-					{#each images as img, ix}
-						{#if img}
-							<SplideSlide>
-								{#if product_image_dimention === '1x1'}
-									<LazyImg
-										src="{img}"
-										alt="image {ix}"
-										height="512"
-										width="512"
-										aspect_ratio="1:1"
-										class="object-cover object-center w-full h-auto first-line:text-xs" />
-								{:else}
-									<LazyImg
-										src="{img}"
-										alt=""
-										class="block h-full w-full object-contain object-center" />
-								{/if}
-							</SplideSlide>
-						{/if}
-					{/each}
-				</svelte:component>
+					<Carousel.Content class="-ml-5">
+						{#each images as item, ix}
+							<Carousel.Item class="pl-5 sm:basis-1/2 md:basis-1/3">
+								<div class="relative">
+									{#if item}
+										<!-- Banner -->
+
+										<div class="w-full max-h-[500px] overflow-hidden">
+											{#if product_image_dimention === '1x1'}
+												<LazyImg
+													src="{item}"
+													alt="image {ix}"
+													height="512"
+													width="512"
+													aspect_ratio="1:1"
+													class="object-cover object-center w-full h-auto first-line:text-xs" />
+											{:else}
+												<LazyImg
+													src="{item}"
+													alt=""
+													class="block h-full w-full object-contain object-center" />
+											{/if}
+										</div>
+									{/if}
+								</div>
+							</Carousel.Item>
+						{/each}
+					</Carousel.Content>
+					<Carousel.Previous />
+					<Carousel.Next />
+				</Carousel.Root>
 			{:else if images?.length === 1}
 				{#if product_image_dimention === '1x1'}
 					<LazyImg

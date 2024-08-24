@@ -65,12 +65,13 @@ span.loader-line {
 </style>
 
 <script lang="ts">
+import { IMAGE_CDN_URL, IMAGE_CDN_PROVIDER } from '$lib/config'
 import { getCdnImageUrl } from '$lib/utils'
 import { page } from '$app/stores'
 import { Image } from '@unpic/svelte'
 // import PlaceHolder from '/placeholders/placeholder2.png'
 // import PlaceHolder from '/placeholder.png'
-import userEmptyProfile from '$lib/assets/user-empty-profile.png'
+// import userEmptyProfile from '$lib/assets/user-empty-profile.png'
 
 export let alt = ''
 export let aspect_ratio = '3:4'
@@ -90,8 +91,8 @@ const arw = aspect_ratio?.split(':')[0]
 const extension = src?.split('.').pop()
 
 let isSvg = false
-$: IMAGE_CDN_PROVIDER = $page.data.store?.imageCdn?.provider?.val
-$: IMAGE_CDN_URL = $page.data.store?.imageCdn?.url?.val
+// $: IMAGE_CDN_PROVIDER =  // $page.data.store?.imageCdn?.provider?.val
+// $: IMAGE_CDN_URL = // $page.data.store?.imageCdn?.url?.val
 
 if (extension === 'svg') {
 	isSvg = true
@@ -99,7 +100,20 @@ if (extension === 'svg') {
 </script>
 
 <div class="relative" style="min-height:{24}px;">
-	{#if IMAGE_CDN_PROVIDER === 'imagekit'}
+	{#if IMAGE_CDN_PROVIDER === 'gumlet'}
+		<Image
+			{alt}
+			loading="lazy"
+			background="/placeholder.png"
+			src="{`${getCdnImageUrl({
+				src,
+				IMAGE_CDN_URL,
+				IMAGE_CDN_PROVIDER
+			})}?tr=w-${w},h-${h},ar-${aspect_ratio.replace(':', '-')}`}"
+			height="{+h}"
+			width="{+w}"
+			class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(':')[1]}] lazy {clazz}" />
+	{:else if IMAGE_CDN_PROVIDER === 'imagekit'}
 		{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } )?.includes('http')}
 			<Image
 				{alt}
@@ -131,7 +145,7 @@ if (extension === 'svg') {
 		{/if}
 	{:else if IMAGE_CDN_PROVIDER === 'thumbor'}
 		{#if getCdnImageUrl( { src, IMAGE_CDN_URL, IMAGE_CDN_PROVIDER, NO_QUERY: true } )?.includes('http')}
-			<img
+			<Image
 				{alt}
 				src="{`${getCdnImageUrl({
 					src,
@@ -144,7 +158,7 @@ if (extension === 'svg') {
 				width="{+w}"
 				class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(':')[1]}] lazy {clazz}" />
 		{:else}
-			<img
+			<Image
 				{alt}
 				src="{`${IMAGE_CDN_URL}/fit-in/${w}x${h}${getCdnImageUrl({
 					src,

@@ -18,12 +18,12 @@ import { GoogleAnalytics } from '@beyonk/svelte-google-analytics'
 import { navigating } from '$app/stores'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { ToastContainer, FlatToast } from 'svelte-toasts'
 import { updated } from '$app/stores'
 import noStoreFound from '$lib/assets/no/no_store_found.png'
 import PreloadingIndicator from '$lib/PreloadingIndicator.svelte'
 import storeClosed from '$lib/assets/store-closed.png'
 import whatsappIcon from '$lib/assets/social-media/whatsapp.png'
+import { Toaster } from 'svelte-sonner'
 
 export let data
 
@@ -116,7 +116,9 @@ onMount(async () => {
 
 		<section class="minimum-width-rem relative flex min-h-screen flex-col bg-white antialiased">
 			<div class="h-rem w-full flex-1">
-				<slot />
+				{#key data.url}
+					<slot />
+				{/key}
 			</div>
 		</section>
 
@@ -138,10 +140,6 @@ onMount(async () => {
 					class="h-10 w-10 object-contain transform hover:scale-125 hover:-translate-y-2 transition duration-300" />
 			</a>
 		{/if}
-
-		<ToastContainer let:data>
-			<FlatToast {data} />
-		</ToastContainer>
 
 		<!-- {#if ReloadPrompt}
 			<svelte:component this="{ReloadPrompt}" />
@@ -172,3 +170,5 @@ onMount(async () => {
 
 	<!-- <FetchInit /> -->
 </main>
+
+<Toaster />

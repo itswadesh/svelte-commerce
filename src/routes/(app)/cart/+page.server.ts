@@ -56,6 +56,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 	const data = Object.fromEntries(await request.formData())
 	const pid = data.pid
 	const vid = data.vid
+	const line_id = data.line_id
 	const variantsLength = +data.variantsLength
 	const currentVariantId = data.currentVariantId
 	const qty = +data.qty
@@ -84,6 +85,7 @@ const add: Action = async ({ request, cookies, locals }) => {
 			storeId: locals.storeId,
 			cartId,
 			origin: locals.origin,
+			line_id,
 			sid
 		})
 		// if (!cartId) { // Commented out because when can't find cart_id in database, it will still won't set the new cart_id in cookies
@@ -144,7 +146,8 @@ const add: Action = async ({ request, cookies, locals }) => {
 			return {}
 		}
 	} catch (e) {
-		return {}
+		console.log(e.status, e.body?.message)
+		throw e
 	}
 }
 

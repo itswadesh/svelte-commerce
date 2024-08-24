@@ -31,15 +31,15 @@ let paymentDenied = false
 let pg = $page.url.searchParams.get('pg') || ''
 let razorpayReady = false
 let selectedPaymentMethod = { id: '', name: '', text: '', instructions: '', qrcode: '', img: '' }
-let Stripe
+// let Stripe
 
-$: if (data.err) {
-	toast(data.err, 'error')
-}
+// $: if (data.err) {
+// 	toast(data.err, 'error')
+// }
 
 onMount(async () => {
-	const StripeModule = await import('$lib/components/Stripe.svelte')
-	Stripe = StripeModule.default
+	// const StripeModule = await import('$lib/components/Stripe.svelte')
+	// Stripe = StripeModule.default
 
 	const razorpayScript = document.createElement('script')
 	razorpayScript.setAttribute('src', 'https://checkout.razorpay.com/v1/checkout.js')
@@ -90,6 +90,7 @@ async function submit(pm) {
 		paymentMethod === 'BankTransfer' ||
 		paymentMethod === 'Cashfree' ||
 		paymentMethod === 'Phonepe' ||
+		paymentMethod === 'Stripe' ||
 		paymentMethod === 'Paypal' ||
 		paymentMethod === 'Razorpay'
 	) {
@@ -105,7 +106,8 @@ async function submit(pm) {
 					paymentMethod: 'COD',
 					prescription: data.prescription?._id,
 					origin: $page.data.origin,
-					storeId: $page.data.storeId
+					storeId: $page.data.storeId,
+					paymentProviderId: 'manual'
 				})
 
 				goto(
@@ -223,6 +225,28 @@ async function submit(pm) {
 			} finally {
 				loading = false
 			}
+		} else if (paymentMethod === 'Stripe') {
+			try {
+				data.err = null
+				loading = true
+				loadingForPaymentProcessingSteps = true
+
+				const sv2 = await OrdersService.stripeCheckoutV2({
+					address: addressId,
+					cartId: $page.data.cartId,
+					origin: $page.data.origin,
+					storeId: $page?.data?.storeId,
+					paymentMethodId: 'Stripe'
+				})
+
+				window.location.replace(sv2.url)
+			} catch (e) {
+				data.err = e
+				toast(`Payment failed, please try again`, 'error')
+				gotoOrder(orderNo)
+			} finally {
+				loading = false
+			}
 		} else if (paymentMethod === 'Paypal') {
 			try {
 				data.err = null
@@ -264,10 +288,8 @@ async function submit(pm) {
 					origin: $page.data.origin,
 					storeId: $page.data.storeId
 				})
-
 				orderNo = rp?.order_no || rp?.orderNo || ''
 				gotoOrder(orderNo)
-
 				const options = {
 					key: rp.keyId, // Enter the Key ID generated from the Dashboard
 					description: `Order ${orderNo}`,
@@ -294,11 +316,10 @@ async function submit(pm) {
 					prefill: {
 						name: `${data.me.firstName} ${data.me.lastName}`,
 						phone: data.me.phone,
-						email: data.me.email || data.address.email || 'help@zapvi.in',
-						contact: data.me.phone
+						email: data.me?.email || data.cart?.shipping_address?.email || 'help@litekart.in',
+						contact: data.me.phone || data.cart?.shipping_address?.phone
 					}
 				}
-
 				const rzp1 = new Razorpay(options)
 				rzp1.open()
 			} catch (e) {
@@ -395,7 +416,7 @@ function checkIfStripeCardValid({ detail }) {
 									</div>
 								{/if}
 
-								{#if pm?.value === 'Stripe'}
+								<!-- {#if pm?.value === 'Stripe'}
 									<div transition:slide="{{ duration: 300 }}">
 										<svelte:component
 											this="{Stripe}"
@@ -404,7 +425,7 @@ function checkIfStripeCardValid({ detail }) {
 											stripePublishableKey="{pm.app_id}"
 											on:isStripeCardValid="{checkIfStripeCardValid}" />
 									</div>
-								{/if}
+								{/if} -->
 							</div>
 						</label>
 					{/each}
@@ -579,7 +600,6 @@ function checkIfStripeCardValid({ detail }) {
 			<Pricesummary
 				text="{errorMessage || 'Confirm Order'}"
 				{loading}
-				hideCheckoutButton="{selectedPaymentMethod?.name === 'Stripe'}"
 				on:submit="{() => submit(selectedPaymentMethod)}" />
 
 			<TrustBaggeContainer class="mt-5" />

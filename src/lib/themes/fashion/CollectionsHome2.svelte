@@ -28,13 +28,11 @@ import { LazyImg } from '$lib/components'
 import { onMount } from 'svelte'
 import { page } from '$app/stores'
 import { PrimaryButton } from '$lib/ui'
-import { SplideSlide } from '@splidejs/svelte-splide'
 import { browser } from '$app/environment'
 import { storeStore } from '$lib/store/store'
+import * as Carousel from '$lib/shad-components/ui/carousel/index'
 
 export let data = {}
-
-let Splide
 
 $: innerWidth = 0
 let responsiveWidth = 0
@@ -49,8 +47,6 @@ onMount(async () => {
 	if (browser) {
 		storeStore.subscribe((value) => (store = value))
 	}
-	const SplideModule = await import('$lib/components/SplideJs.svelte')
-	Splide = SplideModule.default
 })
 </script>
 
@@ -76,83 +72,78 @@ onMount(async () => {
 							</a>
 
 							{#if collection?.products?.length}
-								<svelte:component
-									this="{Splide}"
-									options="{{
-										arrows: true,
-										lazyLoad: true,
-										pagination: false,
-										perMove: 1,
-										perPage: 1,
-										rewind: true,
-										width: responsiveWidth || '100%',
-										breakpoints: {
-											1536: {
-												arrows: false
-											}
-										}
+								<Carousel.Root
+									opts="{{
+										align: 'start',
+										loop: true
 									}}">
-									{#each collection?.products as product, ix}
-										{#if product.img || product.images[0]}
-											<SplideSlide>
-												<div
-													class="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-10 md:gap-20 items-center">
-													<!-- Banner section -->
-
-													<a
-														href="{product.link || `/product/${product.slug}`}"
-														aria-label="Click to visit banner related products page"
-														class="hidden sm:block col-span-1"
-														data-sveltekit-preload-data>
-														<LazyImg
-															src="{product.img || product.images[0]}"
-															alt="{product.name}"
-															height="533"
-															aspect_ratio="3:4"
-															class="object-contain object-bottom text-xs" />
-													</a>
-
-													<!-- Details section -->
-
-													<div class="col-span-1 flex justify-center sm:justify-start">
+									<Carousel.Content class="-ml-5">
+										{#each collection?.products as product, ix}
+											{#if product.img || product.images[0]}
+												<Carousel.Item class="basis-auto">
+													<div class="relative w-full">
 														<div
-															class="flex flex-col items-center text-center gap-5 w-full sm:max-w-[250px]">
-															<LazyImg
-																src="{product.img || product.images[0]}"
-																alt="{product.name}"
-																height="533"
-																aspect_ratio="3:4"
-																class="object-contain object-bottom text-xs" />
+															class="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-10 md:gap-20 items-center">
+															<!-- Banner section -->
 
-															<div>
-																<a
-																	href="{product.link || `/product/${product.slug}`}"
-																	aria-label="Click to visit banner related products page"
-																	class="block"
-																	data-sveltekit-preload-data>
-																	{product.name}
-																</a>
+															<a
+																href="{product.link || `/product/${product.slug}`}"
+																aria-label="Click to visit banner related products page"
+																class="hidden sm:block col-span-1"
+																data-sveltekit-preload-data>
+																<LazyImg
+																	src="{product.img || product.images[0]}"
+																	alt="{product.name}"
+																	height="533"
+																	aspect_ratio="3:4"
+																	class="object-contain object-bottom text-xs" />
+															</a>
 
-																<p class="text-zinc-500">
-																	{currency(product.price, store?.currencySymbol)}
-																</p>
+															<!-- Details section -->
+
+															<div class="col-span-1 flex justify-center sm:justify-start">
+																<div
+																	class="flex flex-col items-center text-center gap-5 w-full sm:max-w-[250px]">
+																	<LazyImg
+																		src="{product.img || product.images[0]}"
+																		alt="{product.name}"
+																		height="533"
+																		aspect_ratio="3:4"
+																		class="object-contain object-bottom text-xs" />
+
+																	<div>
+																		<a
+																			href="{product.link || `/product/${product.slug}`}"
+																			aria-label="Click to visit banner related products page"
+																			class="block"
+																			data-sveltekit-preload-data>
+																			{product.name}
+																		</a>
+
+																		<p class="text-zinc-500">
+																			{currency(product.price, store?.currencySymbol)}
+																		</p>
+																	</div>
+
+																	<PrimaryButton
+																		type="button"
+																		hideLoading
+																		class="w-full text-sm uppercase"
+																		roundedNone
+																		blackBackground>
+																		View This Product
+																	</PrimaryButton>
+																</div>
 															</div>
-
-															<PrimaryButton
-																type="button"
-																hideLoading
-																class="w-full text-sm uppercase"
-																roundedNone
-																blackBackground>
-																View This Product
-															</PrimaryButton>
 														</div>
 													</div>
-												</div>
-											</SplideSlide>
-										{/if}
-									{/each}
-								</svelte:component>
+												</Carousel.Item>
+											{/if}
+										{/each}
+									</Carousel.Content>
+									<Carousel.Previous />
+									<Carousel.Next />
+								</Carousel.Root>
 							{/if}
 						</div>
 					</div>

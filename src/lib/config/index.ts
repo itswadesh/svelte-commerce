@@ -8,8 +8,10 @@ export const authorInfo = {
 	facebookPageName: 'codenx',
 	githubPage: 'itswadesh',
 	linkedinProfile: 'itswadesh',
+	twitterUsername: 'itswadesh',
 	telegramUsername: 'itswadesh',
-	twitterUsername: 'itswadesh'
+	Whatsapp: '+918249028220',
+	Website: 'http://litekart.in'
 }
 export const currency = { symbol: '$', code: 'USD' }
 export const currencyCode = 'USD'
@@ -18,7 +20,8 @@ export const dimentionUnit = 'cm'
 export const DOMAIN = env.PUBLIC_LITEKART_DOMAIN // Never add any default value here, it will break SaaS working
 export const entity = 'Misiki'
 export const HTTP_ENDPOINT = env.PUBLIC_LITEKART_API_URL || 'https://api.litekart.in'
-export const IMAGE_CDN_URL = 'https://ik.imagekit.io/3wzatecz51w3i'
+export const IMAGE_CDN_PROVIDER = 'gumlet'
+export const IMAGE_CDN_URL = 'https://misiki.gumlet.io'
 export const IS_DEV = env.PUBLIC_IS_DEV == 'true'
 export const listOfPagesWithoutBackButton = [
 	'/',
@@ -92,7 +95,7 @@ export const woocommerceHeaders = {
 	Accept: 'application/json'
 }
 
-// Core config of svelte commerce
+// Design config of svelte commerce
 export const slotMarginGeneral = 'mt-14 sm:mt-20'
 export const slotMarginGeneralWithHelloBar = 'mt-[88px] sm:mt-28'
 export const slotMarginGeneralWithHelloBarAndHyperLocal = 'mt-[114px] sm:mt-[206px]'

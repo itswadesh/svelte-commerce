@@ -12,7 +12,9 @@ let openSidebar = false
 	<Nav me="{data.me}" store="{data.store}" bind:showCartSidebar bind:openSidebar />
 
 	<PageTransitions url="{data.url}">
+		<!-- {#key data.url} -->
 		<slot />
+		<!-- {/key} -->
 	</PageTransitions>
 
 	<div class="hidden lg:block">

@@ -1,14 +1,6 @@
 <script>
-import { onMount } from 'svelte'
 import { ProductCard } from '$lib/components'
-import { SplideSlide } from '@splidejs/svelte-splide'
-
-let Splide
-
-onMount(async () => {
-	const SplideModule = await import('$lib/components/SplideJs.svelte')
-	Splide = SplideModule.default
-})
+import * as Carousel from '$lib/shad-components/ui/carousel/index'
 
 export let data
 
@@ -43,7 +35,28 @@ $: if (innerWidth <= 1280) {
 						</a>
 					</div>
 
-					<svelte:component
+					<Carousel.Root
+						opts="{{
+							align: 'start',
+							loop: true
+						}}">
+						<Carousel.Content class="-ml-5">
+							{#each home?.popular as p, ix}
+								{#if p}
+									<Carousel.Item class="basis-auto">
+										<div class="relative w-full">
+											<div class="flex justify-center">
+												<ProductCard product="{p}" />
+											</div>
+										</div>
+									</Carousel.Item>
+								{/if}
+							{/each}
+						</Carousel.Content>
+						<Carousel.Previous />
+						<Carousel.Next />
+					</Carousel.Root>
+					<!-- <svelte:component
 						this="{Splide}"
 						options="{{
 							type: 'loop',
@@ -75,16 +88,7 @@ $: if (innerWidth <= 1280) {
 								}
 							}
 						}}">
-						{#each home?.popular as p, ix}
-							{#if p}
-								<SplideSlide>
-									<div class="flex justify-center">
-										<ProductCard product="{p}" />
-									</div>
-								</SplideSlide>
-							{/if}
-						{/each}
-					</svelte:component>
+					</svelte:component> -->
 				</div>
 			</div>
 		{/if}
