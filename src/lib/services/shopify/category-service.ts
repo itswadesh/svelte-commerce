@@ -2,6 +2,7 @@ import { getShopifyApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 import { shopifyInit } from 'lib/utils'
+import { Shopify } from './utils'
 
 export const fetchFooterCategories = async ({
 	origin,
@@ -28,7 +29,7 @@ export const fetchFooterCategories = async ({
 			variables: {}
 		})
 
-		console.log('res', data);
+		console.log('res', data)
 
 		// return res || {}
 		return data || []
@@ -132,28 +133,9 @@ export const fetchAllProductsOfCategories = async ({
 
 export const fetchMegamenuData = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {
-		let data: []
-
-		data = await shopifyInit({
-			query: `{
-    collections(first: 5) {
-      edges {
-        node {
-          id
-          title
-          handle
-          updatedAt
-        }
-      }
-    }
-  }
-			`,
-			variables: {}
-		})
-
-		// console.log('res', res);
-
-		// return res || {}
+		let data: any
+		const store = new Shopify()
+		data = await store.fetchMegamenuData()
 		return data || []
 	} catch (e) {
 		error(e.status, e.data?.message || e.message)

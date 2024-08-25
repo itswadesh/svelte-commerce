@@ -46,7 +46,44 @@ export class Shopify {
 		}
 	}
 
-	public listCategories() {
-		return {}
+	public async fetchMegamenuData() {
+		const payload = {
+			query: {
+				collections: {
+					__args: {
+						first: 10
+					},
+					edges: {
+						node: {
+							id: true,
+							title: true,
+							handle: true,
+							updatedAt: true
+						}
+					}
+				}
+			}
+		};
+	
+		const query = jsonToGraphQLQuery(payload, { pretty: true });
+	
+		try {
+			const response = await shopifyInit({
+				query: query,
+				variables: {}
+			});
+	
+			const megamenuArr = response?.collections?.edges?.map((el: any) => ({
+				name: el.node.title,
+				slug: el.node.handle
+			})) || [];
+	
+			return megamenuArr;
+	
+		} catch (error) {
+			console.error("Error fetching megamenu data:", error);
+			return [];
+		}
 	}
+	
 }
