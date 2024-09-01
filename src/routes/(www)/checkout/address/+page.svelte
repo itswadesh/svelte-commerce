@@ -1,26 +1,27 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/button'
-	import { goto } from '$app/navigation'
-	import { ChevronRight, LockKeyhole, MapPin, Pencil, ShoppingBag } from 'lucide-svelte'
-	import { formatPrice } from '$lib/core/utils'
-	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
-	import AddressListModal from '$lib/components/address/address-list-modal.svelte'
-	import AddressFormModal from '$lib/components/address/address-form-modal.svelte'
-	import { page } from '$app/state'
-	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
-	import { Skeleton } from '$lib/components/ui/skeleton'
-	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
-	import { showAuthModal } from '$lib/core/components/auth/auth-utils'
-	import Textbox from '$lib/components/form/textbox.svelte'
-	import { AddressModule, emptyAddress, schemas } from '$lib/core/composables/use-checkout-address.svelte'
-	import { z } from 'zod'
+import { Button } from '$lib/components/ui/button'
+import { goto } from '$app/navigation'
+import { ChevronRight, LockKeyhole, MapPin, Pencil, ShoppingBag } from 'lucide-svelte'
+import { formatPrice } from '$lib/core/utils'
+import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
+import AddressListModal from '$lib/components/address/address-list-modal.svelte'
+import AddressFormModal from '$lib/components/address/address-form-modal.svelte'
+import { page } from '$app/state'
+import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
+import { Skeleton } from '$lib/components/ui/skeleton'
+import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
+import { showAuthModal } from '$lib/core/components/auth/auth-utils'
+import Textbox from '$lib/components/form/textbox.svelte'
+import { AddressModule, emptyAddress, schemas } from '$lib/core/composables/use-checkout-address.svelte'
+import { z } from 'zod'
+import { appendOneTimeCartId } from '$lib/core/utils/one-time-cart'
 
-	const addressModule = new AddressModule()
-	const cartState = addressModule.cartState
-	const userState = addressModule.userState
+const addressModule = new AddressModule()
+const cartState = addressModule.cartState
+const userState = addressModule.userState
 
-  const isEmailOk = $derived(addressModule.isEmailOk)
-  const isPhoneOk = $derived(addressModule.isPhoneOk)
+const isEmailOk = $derived(addressModule.isEmailOk)
+const isPhoneOk = $derived(addressModule.isPhoneOk)
 </script>
 
 <svelte:head>
@@ -32,7 +33,7 @@
 		<!-- Checkout Progress -->
 		<div class="mb-8">
 			<div class="flex items-center justify-center space-x-8">
-				<button onclick={() => goto('/checkout/cart')} class="flex cursor-pointer items-center text-gray-400">
+				<button onclick={() => goto(appendOneTimeCartId('/checkout/cart'))} class="flex cursor-pointer items-center text-gray-400">
 					<div class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-300">1</div>
 					<span class="ml-2 font-medium">Cart</span>
 				</button>
@@ -51,7 +52,7 @@
 		{#if addressModule.noItemsChecked && cartState?.cart?.lineItems?.length > 0}
 			<div class="flex h-96 flex-col items-center justify-center gap-3">
 				<p class="text-xl text-gray-400">You must select at least one item in cart for checkout</p>
-				<Button variant="outline" href="/checkout/cart">Go back to cart</Button>
+				<Button variant="outline" href={appendOneTimeCartId('/checkout/cart')}>Go back to cart</Button>
 			</div>
 		{:else if cartState?.cart?.lineItems?.length === 0 && !cartState?.isUpdatingCart}
 			<div class="flex h-96 flex-col items-center justify-center gap-3">
@@ -371,7 +372,7 @@
                         valueField="code"
                         optionSelected={(v: any) => {
                           currentAddress.countryCode = v;
-                          console.log("🚀 ~ v:", v);
+
                           handleDetailsChange();
                         }}
                       />

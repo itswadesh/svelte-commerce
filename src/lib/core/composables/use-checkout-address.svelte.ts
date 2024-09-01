@@ -16,6 +16,8 @@ import { toast } from 'svelte-sonner'
 
 import { z } from 'zod'
 
+import { appendOneTimeCartId } from '$lib/core/utils/one-time-cart'
+
 interface CartExtended extends Cart {
 	shippingAddress?: Address
 
@@ -29,7 +31,10 @@ interface CartState extends Cart2State {
 export const schemas = {
 	email: z.union([z.string().email('Please enter a valid email address').optional(), z.literal('')]),
 
-	phone: z.string().optional().refine((val) => !val || val.length > 0 && val.length <= 20 && /^\+?[0-9\s\-()]*$/.test(val), { message: 'Phone number must be valid' })
+	phone: z
+		.string()
+		.optional()
+		.refine(val => !val || (val.length > 0 && val.length <= 20 && /^\+?[0-9\s\-()]*$/.test(val)), { message: 'Phone number must be valid' })
 }
 
 export interface BaseAddress {
@@ -71,14 +76,13 @@ export class AddressModule {
 
 	noItemsChecked = $derived(this.cartState?.cart?.lineItems?.every((item: any) => !item.isSelectedForCheckout))
 
-
 	isPhoneRequired = page.data?.store?.isPhoneMandatory
 
-  isEmailRequired = page.data?.store?.isEmailMandatory
+	isEmailRequired = page.data?.store?.isEmailMandatory
 
-  isEmailOk = $derived(!this.isEmailRequired || this.cartState.cart.email)
+	isEmailOk = $derived(!this.isEmailRequired || this.cartState.cart.email)
 
-  isPhoneOk = $derived(!this.isPhoneRequired || this.cartState.cart.phone)
+	isPhoneOk = $derived(!this.isPhoneRequired || this.cartState.cart.phone)
 
 	email = $state('')
 
@@ -190,30 +194,33 @@ export class AddressModule {
 	saveContactInfo = async (e: any) => {
 		e.preventDefault()
 
-    if (this.email) {
-		  schemas.email.parse(this.email)
-    } else if (this.isEmailRequired) {
-		  throw new z.ZodError([{
-			  code: 'custom',
-			  path: ['email'],
-			  message: 'Email is required'
-		  }])
-    }
+		if (this.email) {
+			schemas.email.parse(this.email)
+		} else if (this.isEmailRequired) {
+			throw new z.ZodError([
+				{
+					code: 'custom',
+					path: ['email'],
+					message: 'Email is required'
+				}
+			])
+		}
 
 		if (this.phone) {
 			schemas.phone.parse(this.phone)
 		} else if (this.isPhoneRequired) {
-			throw new z.ZodError([{
-				code: 'custom',
-				path: ['phone'],
-				message: 'Phone is required'
-			}])
+			throw new z.ZodError([
+				{
+					code: 'custom',
+					path: ['phone'],
+					message: 'Phone is required'
+				}
+			])
 		}
-
 		try {
 			schemas.email.parse(this.email)
 
-			schemas.phone.parse(this.phone)
+			schemas.phone.parse(this.phone ?? '')
 
 			await this.cartState.updateEmail({ email: this.email, phone: this.phone })
 
@@ -308,23 +315,34 @@ export class AddressModule {
 	}
 
 	paginateAddress = async (pageNo: number) => {
-		const res: any = await addressService.list({
-			page: pageNo,
+		try {
+			const res: any = await addressService.list({
+				page: pageNo,
+				user: this.userState?.user?.userId
+			})
 
-			user: this.userState.user.userId
-		})
+			const addressIds = new Set()
 
-		const addressIds = new Set()
+			this.addresses = [...this.addresses, ...(res?.data || [])].filter(x => {
+				if (addressIds.has(x.id)) return false
+				addressIds.add(x.id)
+				return true
+			})
 
-		this.addresses = [...this.addresses, ...res?.data].filter(x => {
-			if (addressIds.has(x.id)) return false
-
-			addressIds.add(x.id)
-
-			return true
-		})
-
-		return res.pageSize == res.data?.length
+			return res?.pageSize == res?.data?.length
+		} catch (e: any) {
+			console.error(e)
+			const msg = e?.message || e?.toString?.() || ''
+			if (e?.status === 401 || e?.status === 403 || /invalid jwt/i.test(msg)) {
+				toast.error('Session expired. Please log in again.')
+				await this.userState.logout()
+				// showAuthModal is triggered by logout; keep here only if needed in future
+				// showAuthModal('login')
+			} else {
+				toast.error('Failed to load addresses')
+			}
+			return false
+		}
 	}
 
 	mount = async () => {
@@ -336,7 +354,7 @@ export class AddressModule {
 			try {
 				this.email = this.userState.user.email
 
-				this.phone = this.userState.user.phone
+				this.phone = this.userState.user.phone ?? ''
 
 				this.paginateAddress(1)
 
@@ -518,7 +536,7 @@ export class AddressModule {
 
 		this.loadingForCheckout = true
 
-		await goto('/checkout/payment')
+    await goto(appendOneTimeCartId('/checkout/payment'))
 
 		this.loadingForCheckout = false
 	}
