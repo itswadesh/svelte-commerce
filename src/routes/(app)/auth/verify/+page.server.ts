@@ -1,5 +1,5 @@
 import { error, redirect } from '@sveltejs/kit'
-import { services } from '@misiki/litekart-utils'
+import { UserService } from '$lib/services'
 
 export async function load({ params, locals, url, cookies, request }) {
 	const { store, origin } = locals
@@ -9,15 +9,16 @@ export async function load({ params, locals, url, cookies, request }) {
 		const signature = url?.searchParams.get('signature')
 		const token = url?.searchParams.get('token')
 		const sid = cookies.get('connect.sid')
+		const storeId = store?.id || url?.searchParams.get('store')
 
-		const res = await services.UserService.verifyEmail({
+		const res = await UserService.verifyEmail({
 			id,
 			expires,
 			signature,
 			token,
 			origin,
 			sid,
-			storeId: store?.id
+			storeId: storeId
 		})
 		if (res) {
 			throw { status: 307 }
