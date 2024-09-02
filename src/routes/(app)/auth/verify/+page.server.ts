@@ -9,6 +9,7 @@ export async function load({ params, locals, url, cookies, request }) {
 		const signature = url?.searchParams.get('signature')
 		const token = url?.searchParams.get('token')
 		const sid = cookies.get('connect.sid')
+		const storeId = store?.id || url?.searchParams.get('store')
 
 		const res = await UserService.verifyEmail({
 			id,
@@ -17,7 +18,7 @@ export async function load({ params, locals, url, cookies, request }) {
 			token,
 			origin,
 			sid,
-			storeId: store?.id
+			storeId: storeId
 		})
 		if (res) {
 			throw { status: 307 }
