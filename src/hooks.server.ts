@@ -1,153 +1,85 @@
-// import * as SentryNode from '@sentry/node'
-import { authenticateUser } from '$lib/server'
-import { DOMAIN, listOfPagesWithoutBackButton } from '$lib/config'
-import { error, type Handle, type HandleServerError } from '@sveltejs/kit'
-import { nanoid } from 'nanoid'
-import { InitService } from '$lib/services'
+import type { Handle } from '@sveltejs/kit'
+import { StoreService } from '$lib/core/services'
+import { env } from '$env/dynamic/public'
+import { env as privateEnv } from '$env/dynamic/private'
+import { BaseService } from '$lib/core/services'
 
-// const SENTRY_DSN = env.SECRET_SENTRY_DSN
-
-// if (SENTRY_DSN && SENTRY_DSN !== 'YOUR_SENTRY_DSN') {
-// 	SentryNode.init({
-// 		dsn: SENTRY_DSN
-// 	})
-// }
-
-/** @type {import('@sveltejs/kit').HandleFetch} */
-export const handleFetch = async ({ event, request, fetch }) => {
-	request.headers.set('cookie', event.request.headers.get('cookie'), { path: '/' })
-
-	return fetch(request)
+// Function to check if a URL is a local/IP address
+function isLocalOrIpAddress(url: string): boolean {
+	return url.includes('localhost') || url.includes('127.0.0.1') || /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/.test(url)
 }
 
-export const handleError: HandleServerError = ({ error, event }) => {
-	const errorId = nanoid()
-	// SentryNode.captureException(error, {
-	// 	contexts: { sveltekit: { event, errorId } }
-	// })
+export const init = async () => {
+	if (env.PUBLIC_SHOPIFY_STORE_DOMAIN) {
+		BaseService.setShopifyCredentials(
+			env.PUBLIC_SHOPIFY_STORE_DOMAIN,
+			privateEnv.SHOPIFY_ADMIN_ACCESS_TOKEN,
+			env.PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN
+		)
+	}
 
-	return {
-		message: "An unexpected error occurred. We're working on it.",
-		errorId
+	if (env.PUBLIC_MEDUSA_PUBLISHABLE_API_KEY) {
+		BaseService.setMedusaPublisableKey(env.PUBLIC_MEDUSA_PUBLISHABLE_API_KEY)
+		BaseService.setRegionId(env.PUBLIC_MEDUSA_REGION_ID)
 	}
 }
 
 export const handle: Handle = async ({ event, resolve }) => {
-	const IS_DEV = import.meta.env.DEV
-	console.log('IS_DEV', IS_DEV)
+	const url = new URL(event.request.url)
+	const isLocalOrIP = isLocalOrIpAddress(url.hostname)
 
-	try {
-		const url = new URL(event.request.url)
-		const host = url.host
-		const protocol = !IS_DEV && !dev ? `https://` : `http://`
-		// This is required for vercel as it parse URL as http instead of https
-		event.locals.origin = protocol + host
-		event.locals.host = host
-		// console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzz', event.locals.origin, event.locals.host)
-		const userAgent = event.request.headers.get('user-agent')
+	if (url.protocol === 'http:' && !isLocalOrIP) {
+		event.url.protocol = 'https:'
+	}
 
-		const isDesktop = !/mobile/i.test(userAgent)
-		const isShowBackButton = !listOfPagesWithoutBackButton.includes(url?.pathname)
+	const storeId = env.PUBLIC_LITEKART_STORE_ID
+	const storeIdFromCookie = event.cookies.get('litekart_store_id')
+	if (storeId && storeIdFromCookie !== storeId) {
+		event.cookies.set('litekart_store_id', storeId, { path: '/' })
+	} else if (!storeIdFromCookie) {
+		const domain = env.PUBLIC_LITEKART_DOMAIN || url.hostname
+		if (!domain) {
+			throw new Error(`Unable to retrieve hostname from URL. ${url.hostname}`)
+		}
+		if (!url.pathname.startsWith('/api')) {
 
-		event.locals.isDesktop = isDesktop
-		event.locals.isShowBackButton = isShowBackButton
-
-		const storeId = event.cookies.get('storeId')
-		// const store = event.cookies.get('store') || '{}'
-		// const storeAsJson = JSON.parse(store)
-		if (storeId && storeId != 'undefined') {
-			event.locals.storeId = storeId
-			// event.locals.store = storeAsJson
-		} else {
-			try {
-				const { storeOne } = await InitService.fetchInit({
-					host: DOMAIN || host,
-					origin: event.locals.origin
-				})
-
-				const storeId = storeOne?._id
-				// const store = {
-				// 	id: storeOne?.id,
-				// 	currencyCode: storeOne?.currencyCode,
-				// 	description: storeOne?.description,
-				// 	domain: storeOne?.domain,
-				// 	email: storeOne?.email,
-				// 	phone: storeOne?.phone,
-				// 	favicon: storeOne?.favicon,
-				// 	fontFamily: storeOne?.fontFamily,
-				// 	keywords: storeOne?.keywords,
-				// 	logo: storeOne?.logo,
-				// 	metaDescription: storeOne?.metaDescription,
-				// 	socialSharingButtons: storeOne?.socialSharingButtons,
-				// 	themeColor: storeOne?.themeColor,
-				// 	title: storeOne?.title,
-				// 	websiteName: storeOne?.websiteName,
-				// 	isMultiVendor: storeOne?.isMultiVendor,
-				// 	adminUrl: storeOne?.adminUrl,
-				// 	address: storeOne?.address,
-				// 	saasName: storeOne?.saasName,
-				// 	saasDomain: storeOne?.saasDomain,
-				// 	guaranteed_response_time: storeOne?.guaranteed_response_time,
-				// 	product_image_dimension: storeOne?.product_image_dimension,
-				// 	isSecureCatalogue: storeOne?.isSecureCatalogue,
-				// 	store_timings: storeOne?.store_timings,
-				// 	isHyperlocal: storeOne?.isHyperlocal,
-				// 	IMAGE_CDN_URL: storeOne?.IMAGE_CDN_URL
-				// }
-				if (!storeId || storeId == 'undefined') {
-					throw { status: 404, message: `Could not find STORE for domain = ${url.host}` }
-				}
-
-				event.cookies.set('storeId', storeId, { path: '/' })
-				// event.cookies.set('store', JSON.stringify(store), { path: '/' })
-				event.locals.storeId = storeId
-				// event.locals.store = store
-			} catch (e) {
-				throw { status: 404, message: `Could not find STORE for domain = ${url.host}` }
+			const storeService = new StoreService(event.fetch)
+			const storeDetails = await storeService.getStoreByIdOrDomain({ storeId, domain })
+			if (storeDetails?.id && storeIdFromCookie !== storeDetails?.id) {
+				event.cookies.set('litekart_store_id', storeDetails?.id, { path: '/' })
+				event.locals.storeDetails = storeDetails
+			} else {
+				throw new Error('Hooks: Store not found.')
 			}
 		}
+	}
 
-		// This calls init only when store data not present in browser cookies
-		// const { storeOne } = await fetchStoreData(event)
-		// console.timeEnd('init1')
+	const response = await resolve(event, {
+		filterSerializedResponseHeaders: name => name === 'content-type'
+	})
+	// response.headers.set('x-litekart-store', storeDetailsCache?.id || '')
+	return response
+}
 
-		// event.locals.menu = menu || []
-		// event.locals.megamenu = megamenu || []
+// Simplified error handler that strips stack trace information
+export function handleError({ error, event }) {
+	// Check if it's a SvelteKitError or similar object with stack trace
+	if (error && error.stack && error.status === 404 && !error.message.startsWith('/cdn/')) {
+		// Create a simplified version of the error
+		const simplifiedError = error.message || 'An error occurred'
 
-		// this simply gets data from cookie
-		event.locals.me = await authenticateUser(event)
-		const zip = event.cookies.get('zip')
-		event.locals.sid = event.cookies.get('connect.sid')
-		event.locals.cartId = event.cookies.get('cartId')
-		if (zip) event.locals.zip = JSON.parse(zip)
-		// This makes a call to backend on every request
+		console.error('Sveltekit error:', simplifiedError)
 
-		// await fetchCart(event)
+		// Return the simplified error
+		return {
+			message: simplifiedError.message,
+			status: simplifiedError.status
+		}
+	}
+	
 
-		// const derivedSid: string = event.cookies.get('connect.sid') || ''
-		//Cart(event)
-
-		// const derivedSid: string = event.cookies.get('connect.sid') || ''
-		// const route = event.url
-		// const start = performance.now()
-		// event.locals.sid = derivedSid
-		// event.request.headers.delete('connection')
-		const response = await resolve(event)
-
-		// const end = performance.now()
-		// const responseTime = end - start
-
-		// if (responseTime > 1000) {
-		// 	// console.log(`🐢 ${route} took ${responseTime.toFixed(2)} ms`)
-		// }
-
-		// if (responseTime < 100) {
-		// 	// console.log(`🚀 ${route} took ${responseTime.toFixed(2)} ms`)
-		// }
-
-		return response
-	} catch (e) {
-		// If the store is not found, throw a 404 error
-		error(404, 'Store Not Found')
+	return {
+		message: error?.message || 'An unknown error occurred',
+		status: error?.status || 500
 	}
 }
