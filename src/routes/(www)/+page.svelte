@@ -1,10 +1,12 @@
 <script lang="ts">
 	import FeaturedProductsGrid from '$lib/components/product-catalogue/featured-products-grid.svelte'
-	import { X } from 'lucide-svelte'
+	import { X } from '@lucide/svelte'
 	import { Skeleton } from '$lib/components/ui/skeleton'
 	import CategoryList from '$lib/components/category/category-list.svelte'
 	import { fly } from 'svelte/transition'
 	import GoogleStructuredDataProductsList from '$lib/core/components/plugins/google-structured-data-products-list.svelte'
+	import GoogleStructuredDataOrganization from '$lib/core/components/plugins/google-structured-data-organization.svelte'
+	import GoogleStructuredDataWebsite from '$lib/core/components/plugins/google-structured-data-website.svelte'
 	import type { Product } from '$lib/core/types/index.js'
 	import HomepageCategoryListWithImage from '$lib/components/home/homepage-category-list-with-image.svelte'
 	import HomepageBanners from '$lib/components/home/homepage-banners.svelte'
@@ -12,9 +14,10 @@
 	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
 	import Collections from '$lib/components/home/collections.svelte'
 	let { data } = $props()
-	import { HomepageModule } from '$lib/core/composables/use-homepage.svelte'
+	import { HomepageModule } from '$lib/core/composables/index.js'
 	import { timestampToAgo } from '$lib/core/utils/index.js'
   import Slider from '$lib/components/home/slider.svelte'
+	import { PUBLIC_LITEKART_DOMAIN } from '$env/static/public'
 
 	// Type definition for page data needed for this component
 	interface ExtendedPage {
@@ -41,12 +44,41 @@
 
 <GoogleStructuredDataProductsList products={homepageModule.featuredProductsStructuredData} />
 
+<GoogleStructuredDataOrganization
+	name={data?.store?.name || 'ArialShop'}
+	url={`https://${PUBLIC_LITEKART_DOMAIN}`}
+	logo={data?.store?.logo}
+	description={data?.store?.description}
+	sameAs={data?.store?.socialSharing?.active ? (Object.values(data?.store?.socialSharing || {}).filter((link: any) => typeof link === 'string' && link.startsWith('http')) as string[]) : []}
+	address={data?.store?.address ? {
+		streetAddress: data?.store?.address?.street,
+		addressLocality: data?.store?.address?.city,
+		addressRegion: data?.store?.address?.state,
+		postalCode: data?.store?.address?.pincode,
+		addressCountry: data?.store?.address?.country
+	} : undefined}
+	contactPoint={data?.store?.contact?.phone ? {
+		telephone: data?.store?.contact?.phone,
+		email: data?.store?.contact?.email,
+		contactType: 'customer service'
+	} : undefined}
+/>
+
+<GoogleStructuredDataWebsite
+	name={data?.store?.name || 'ArialShop'}
+	url={`https://${PUBLIC_LITEKART_DOMAIN}`}
+	description={data?.store?.description}
+	searchUrl={`https://${PUBLIC_LITEKART_DOMAIN}/search?q={search_term_string}`}
+/>
+
 <SeoHeader
-	metaTitle={page?.metaTitle || page?.data?.store?.name || 'Litekart'}
+	metaTitle={page?.metaTitle}
 	metaDescription={page?.metaDescription}
 	metaKeywords={page?.metaKeywords}
 	image={page?.logo}
 />
+
+<h1 class="sr-only">{data?.store?.name || 'Litekart'}</h1>
 
 {#if homepageModule.featuredCategories?.length > 0}
 	<div class="mx-2 flex justify-center bg-gray-100 px-2 lg:container lg:mx-auto lg:hidden">
@@ -87,22 +119,30 @@
 			<Skeleton class="h-full w-full rounded-none" />
 		</div>
 	{:else if page?.desktopBanners?.[0]?.url || page?.mobileBanners?.[0]?.url}
-		<!-- <div class="relative hidden md:block">
-      <LazyImg
-        src={banners?.desktopBanners[0]?.url}
-        alt=""
-        class="h-[50vh] w-full object-cover"
-        aspect_ratio="16:6"
-      />
-    </div>
-    <LazyImg
-      src={data?.page?.mobileBanners[0]?.url}
-      alt=""
-      class="relative h-[50vh] w-full object-cover md:hidden"
-      aspect_ratio="1:1"
-    /> -->
 		<Banners sliderBannersDesktop={page?.desktopBanners} sliderBannersMobile={page?.mobileBanners} />
-
+	{:else}
+		<!-- Fallback Hero Section when no banners are configured -->
+		<div class="relative bg-gradient-to-r from-gray-900 to-gray-700 py-20 px-4 text-white">
+			<div class="mx-auto max-w-7xl">
+				<div class="grid gap-8 md:grid-cols-2">
+					<div class="flex flex-col justify-center">
+						<h1 class="mb-4 text-4xl font-bold md:text-5xl">{data?.store?.name || 'Welcome to Our Store'}</h1>
+						<p class="mb-8 text-lg text-gray-200">
+							{data?.store?.description || 'Discover amazing products at unbeatable prices. Shop now and enjoy fast shipping on all orders.'}
+						</p>
+						<a
+							href="/products"
+							class="inline-block w-fit rounded-lg bg-white px-8 py-3 font-semibold text-gray-900 transition-colors hover:bg-gray-100"
+						>
+							Shop Now
+						</a>
+					</div>
+					<div class="hidden md:flex items-center justify-center">
+						<div class="text-9xl font-bold text-white/20">NEW</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	{/if}
 </div>
 

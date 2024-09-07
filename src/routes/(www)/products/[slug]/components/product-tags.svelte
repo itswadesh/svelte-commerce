@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { useProductState } from '$lib/core/composables/product'
+	import { useProductState } from '$lib/core/composables/index.js'
 	import { Badge } from '$lib/components/ui/badge'
 	import { page } from '$app/state'
 
