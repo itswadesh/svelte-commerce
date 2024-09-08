@@ -15,11 +15,12 @@ import Cookie from 'cookie-universal'
 import SEO from '$lib/components/SEO/index.svelte'
 import VerifyOtp from '../_VerifyOtp.svelte'
 import { UserService } from '$lib/services'
+import { PUBLIC_IS_DEV } from '$env/static/public'
 
 const cookies = Cookie()
 
-const IS_DEV = import.meta.env.PUBLIC_IS_DEV
-
+const IS_DEV = PUBLIC_IS_DEV
+console.log(IS_DEV)
 export let data
 
 const seoProps = {
