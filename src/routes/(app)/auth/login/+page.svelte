@@ -18,7 +18,7 @@ import { UserService } from '$lib/services'
 
 const cookies = Cookie()
 
-const IS_DEV = import.meta.env.DEV
+const IS_DEV = import.meta.env.IS_DEV
 
 export let data
 
@@ -27,7 +27,7 @@ const seoProps = {
 	description: 'Login with email/phone'
 }
 
-let email = $page?.url?.searchParams.get('email')
+let email = IS_DEV ? 'demo@litekart.in' : $page?.url?.searchParams.get('email')
 let err
 let isEmail = false
 let isMobile = false
