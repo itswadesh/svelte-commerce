@@ -19,7 +19,7 @@ import { env } from '$env/dynamic/public'
 
 const cookies = Cookie()
 
-const IS_DEV = env.PUBLIC_IS_DEV
+const IS_DEV = true // env.PUBLIC_IS_DEV
 export let data
 
 const seoProps = {
