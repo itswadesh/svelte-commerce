@@ -15,12 +15,11 @@ import Cookie from 'cookie-universal'
 import SEO from '$lib/components/SEO/index.svelte'
 import VerifyOtp from '../_VerifyOtp.svelte'
 import { UserService } from '$lib/services'
-import { PUBLIC_IS_DEV } from '$env/static/public'
+import { env } from '$env/dynamic/public'
 
 const cookies = Cookie()
 
-const IS_DEV = PUBLIC_IS_DEV
-console.log(IS_DEV)
+const IS_DEV = env.PUBLIC_IS_DEV
 export let data
 
 const seoProps = {
@@ -36,7 +35,7 @@ let loading = false
 let maxlength = null
 let otpRequestSend = false
 let password = IS_DEV ? 'litekart' : ''
-let phone = IS_DEV ? '8249028220' : ''
+let phone = IS_DEV ? '+918249028220' : ''
 let ref = $page?.url?.searchParams.get('ref')
 let resendAfter = 0
 let selectedCountry = data.countries[0]
