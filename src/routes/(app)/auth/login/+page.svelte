@@ -18,7 +18,7 @@ import { UserService } from '$lib/services'
 
 const cookies = Cookie()
 
-const IS_DEV = import.meta.env.IS_DEV
+const IS_DEV = import.meta.env.PUBLIC_IS_DEV
 
 export let data
 
