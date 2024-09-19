@@ -88,8 +88,8 @@
 					{#if productState.isIndianPincodesPluginEnabled}
 						<div class="flex flex-col gap-3 max-sm:my-5">
 							<div class="flex items-center justify-start gap-3">
-								<span class="text-sm text-gray-500"> Delivery Options </span>
-								<Truck class="h-4 w-4 text-gray-500" />
+								<span class="text-sm text-gray-600 font-medium"> Delivery Options </span>
+								<Truck class="h-4 w-4 text-gray-600" />
 							</div>
 							<PincodeCheck />
 						</div>
@@ -97,11 +97,11 @@
 					{:else}
 						<!-- Fallback delivery estimate when plugin is not enabled -->
 						<div class="flex flex-col gap-2 max-sm:my-5">
-							<div class="flex items-center gap-2 text-sm text-gray-600">
+							<div class="flex items-center gap-2 text-sm text-gray-700 font-medium">
 								<Truck class="h-4 w-4" />
 								<span>Free delivery on orders above ₹999</span>
 							</div>
-							<div class="text-xs text-gray-500">Estimated delivery: 5-7 business days</div>
+							<div class="text-xs text-gray-600">Estimated delivery: 5-7 business days</div>
 						</div>
 						<br class="max-sm:hidden" />
 					{/if}
