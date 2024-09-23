@@ -5,11 +5,18 @@ import { PrimaryButton } from '$lib/ui'
 import errAnimated from '$lib/assets/no/error.svg'
 import errBackground from '$lib/assets/no/error-background.png'
 import menu from '$lib/config/menu'
+import { goto } from '$app/navigation'
+import { browser } from '$app/environment'
 
 export let data
 
 let q = ''
 let showSidebar = false
+
+// Redirect to homepage in case of error, 404, 500. Good for SEO. e.g. URL = https://natox.litekart.in/auth/forgot-password/4985097192661
+if ($page.status == 404 || ($page.status == 500 && browser)) {
+	goto('/')
+}
 </script>
 
 <main class="h-screen w-full bg-zinc-100">
