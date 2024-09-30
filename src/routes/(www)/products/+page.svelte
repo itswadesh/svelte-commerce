@@ -22,7 +22,7 @@ let loading = $state(false)
 </script>
 
 <SeoHeader
-	metaTitle="Products Listing"
+	metaTitle={data.page?.metaTitle || (data.products?.categoryHierarchy?.length > 0 ? `${data.products.categoryHierarchy[data.products.categoryHierarchy.length-1].name} Online India — Buy at Best Price | Arialshop` : "Women's Fashion Online India — Buy at Best Price | Arialshop")}
 	metaDescription={data.page?.metaDescription ?? ''}
 	metaKeywords={data.page?.metaKeywords ?? ''}
 	image={data.page?.logo ?? ''}
@@ -54,6 +54,10 @@ let loading = $state(false)
 			{#if page.url.searchParams.get('search')}
 				<h1 class="text-2xl font-bold">
 					Search Results: "{page.url.searchParams.get('search')}"
+				</h1>
+			{:else if data.products?.categoryHierarchy?.length > 0}
+				<h1 class="text-2xl font-bold">
+					{data.products.categoryHierarchy[data.products.categoryHierarchy.length-1].name}
 				</h1>
 			{:else}
 				<h1 class="text-2xl font-bold">All Products</h1>
