@@ -104,8 +104,8 @@ onMount(async () => {
 </script>
 
 <form autocomplete="off" class="relative" on:submit|preventDefault="{submit}">
-	<button
-		type="button"
+	<div
+		
 		class="relative w-full focus:outline-none"
 		on:click="{() => (showSuggestionOptions = true)}">
 		<input
@@ -131,7 +131,7 @@ onMount(async () => {
 					clip-rule="evenodd"></path>
 			</svg>
 		</button>
-	</button>
+	</div>
 
 	{#if autocomplete?.length && showSuggestionOptions}
 		<ul
