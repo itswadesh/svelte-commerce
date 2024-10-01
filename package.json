@@ -78,7 +78,7 @@
 		"prettier-plugin-svelte": "^3.2.7",
 		"shelljs": "0.8.5",
 		"ssh2shell": "2.0.9",
-		"svelte": "^4.2.19",
+		"svelte": "^5.0.0-next.260",
 		"svelte-confetti": "^2.1.2",
 		"svelte-preprocess": "^6.0.3",
 		"svelte-share-buttons-component": "2.0.0",
