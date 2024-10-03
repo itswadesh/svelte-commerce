@@ -1,5 +1,6 @@
 # Use an official Node.js runtime as a parent image
 FROM node:22-alpine
+
 LABEL author="Swadesh Behera"
 
 # Set the working directory inside the container
@@ -9,7 +10,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install --force
+RUN npm install
 
 # Copy the rest of your application's source code to the working directory
 COPY . .
