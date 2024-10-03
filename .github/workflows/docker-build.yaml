@@ -1,31 +1,20 @@
-name: Build app and push to GHCR
+name: Build docker image and push to GHCR
 
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - master
+  workflow_dispatch:
 
 jobs:
-  build-webapp:
+  build-www:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # Build the app using nodejs
-      - name: Use node js 22
-        uses: actions/setup-node@v3
-        with:
-          node-version: '22'
-      - name: Install dependencies
-        run: npm install
-      - name: Build for production
-        run: npm run build
-
-      # Setup buildx in order to build for multiple platforms
-      # - name: Set up QEMU
-      #   uses: docker/setup-qemu-action@v2
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v2
+      - name: Setup Cache
+        uses: actions/setup-node@v4
 
       # Extract metadata for the docker image
       - name: Docker meta
@@ -50,7 +39,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.CR_PAT }}
+          password: ${{ secrets.GH_TOKEN }}
       # Build the docker image now
       - name: Build and push
         uses: docker/build-push-action@v4
@@ -58,5 +47,5 @@ jobs:
           context: .
           push: true
           platforms: linux/amd64
-          tags: ${{ steps.meta.outputs.tags }},ghcr.io/itswadesh/svelte-commerce:latest
+          tags: ${{ steps.meta.outputs.tags }},ghcr.io/itswadesh/svelte-commerce:1.0
           labels: ${{ steps.meta.outputs.labels }}
