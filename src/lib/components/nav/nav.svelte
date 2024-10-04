@@ -302,7 +302,7 @@ const cartState = navModule.cartState
 												width="40"
 												height="40"
 												src={userState.user?.avatar}
-												alt=""
+												alt="{userState.user?.firstName || userState.user?.name || 'User'}'s avatar"
 												class="h-8 w-8 rounded-full border object-cover object-top"
 											/>
 										{:else}
