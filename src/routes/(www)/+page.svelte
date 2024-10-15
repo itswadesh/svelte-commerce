@@ -17,7 +17,7 @@
 	import { HomepageModule } from '$lib/core/composables/index.js'
 	import { timestampToAgo } from '$lib/core/utils/index.js'
   import Slider from '$lib/components/home/slider.svelte'
-	import { PUBLIC_LITEKART_DOMAIN } from '$env/static/public'
+	import { page } from '$app/state'
 
 	// Type definition for page data needed for this component
 	interface ExtendedPage {
@@ -37,7 +37,7 @@
 	}
 
 	// Cast data.page to ExtendedPage type for TypeScript
-	const page = (data?.page || {}) as ExtendedPage
+	const homepage = (data?.page || {}) as ExtendedPage
 
 	const homepageModule = new HomepageModule()
 </script>
@@ -46,7 +46,7 @@
 
 <GoogleStructuredDataOrganization
 	name={data?.store?.name || 'ArialShop'}
-	url={`https://${PUBLIC_LITEKART_DOMAIN}`}
+	url={page.url.origin}
 	logo={data?.store?.logo}
 	description={data?.store?.description}
 	sameAs={data?.store?.socialSharing?.active ? (Object.values(data?.store?.socialSharing || {}).filter((link: any) => typeof link === 'string' && link.startsWith('http')) as string[]) : []}
@@ -66,25 +66,25 @@
 
 <GoogleStructuredDataWebsite
 	name={data?.store?.name || 'ArialShop'}
-	url={`https://${PUBLIC_LITEKART_DOMAIN}`}
+	url={page.url.origin}
 	description={data?.store?.description}
-	searchUrl={`https://${PUBLIC_LITEKART_DOMAIN}/search?q={search_term_string}`}
+	searchUrl={`${page.url.origin}/products?q={search_term_string}`}
 />
 
 <SeoHeader
-	metaTitle={page?.metaTitle || "Arialshop — Women's Fashion, Dresses & Co-ord Sets | Up to 70% Off"}
-	metaDescription={page?.metaDescription || "Welcome to Arialshop, your ultimate destination for trendy women's fashion. Discover our exclusive collection of stylish dresses, elegant co-ord sets, and more with amazing discounts of up to 70% off. Enjoy premium quality apparel, free delivery on orders over ₹999, and easy returns. Shop the latest fashion trends at Arialshop today!"}
-	metaKeywords={page?.metaKeywords}
-	image={page?.logo}
+	metaTitle={homepage?.metaTitle || "Arialshop — Women's Fashion, Dresses & Co-ord Sets | Up to 70% Off"}
+	metaDescription={homepage?.metaDescription || "Welcome to Arialshop, your ultimate destination for trendy women's fashion. Discover our exclusive collection of stylish dresses, elegant co-ord sets, and more with amazing discounts of up to 70% off. Enjoy premium quality apparel, free delivery on orders over ₹999, and easy returns. Shop the latest fashion trends at Arialshop today!"}
+	metaKeywords={homepage?.metaKeywords}
+	image={homepage?.logo}
 />
 
 <h1 class="sr-only">Shop Women's Fashion Online — Dresses, Co-ord Sets & More</h1>
 
-{#if homepageModule.featuredCategories?.length > 0}
+<!-- {#if homepageModule.featuredCategories?.length > 0}
 	<div class="mx-2 flex justify-center bg-gray-100 px-2 lg:container lg:mx-auto lg:hidden">
 		<CategoryList categories={homepageModule.featuredCategories} />
 	</div>
-{/if}
+{/if} -->
 
 <!-- Hello bar -->
 <!-- {#if helloBarPlugin?.active}
@@ -114,12 +114,12 @@
 {/if} -->
 
 <div class="relative w-full">
-	{#if homepageModule.loading || !page?.desktopBanners}
+	{#if homepageModule.loading || !homepage?.desktopBanners}
 		<div class="relative aspect-[16/6] max-h-[50vh] w-full">
 			<Skeleton class="h-full w-full rounded-none" />
 		</div>
-	{:else if page?.desktopBanners?.[0]?.url || page?.mobileBanners?.[0]?.url}
-		<Banners sliderBannersDesktop={page?.desktopBanners} sliderBannersMobile={page?.mobileBanners} />
+	{:else if homepage?.desktopBanners?.[0]?.url || homepage?.mobileBanners?.[0]?.url}
+		<Banners sliderBannersDesktop={homepage?.desktopBanners} sliderBannersMobile={homepage?.mobileBanners} />
 	{:else}
 		<!-- Fallback Hero Section when no banners are configured -->
 		<div class="relative bg-gradient-to-r from-gray-900 to-gray-700 py-20 px-4 text-white">
@@ -146,68 +146,27 @@
 	{/if}
 </div>
 
-<!-- <div class="mx-2 lg:container lg:mx-auto"> -->
-<!-- <BannerGrid banners={bannerData} /> -->
-
-<!-- <div class="mx-auto w-auto laptop:w-[80%]">
-		<div class="mx-auto mb-2 flex items-center justify-center">
-			<div class="ml-2 flex-1 border-2 border-black dark:border-white"></div>
-			<div class="mx-4 text-[20px] font-bold tracking-wide">TRENDING NOW</div>
-			<div class="mr-2 flex-1 border-2 border-black dark:border-white"></div>
-		</div>
-		<div class="mx-auto mb-5 flex items-center justify-center text-[12px]">
-			<a href="/products" class="mx-auto block h-fit border-b border-black pb-[2px] dark:border-white">View All</a>
-		</div>
-	</div>
-	{#if loadingTrendingProducts}
-		<div class="relative w-full">
-			<div class="flex gap-4 overflow-hidden p-4">
-				{#each Array(4) as _}
-					<div class="w-full min-w-[280px] flex-none space-y-3">
-						<Skeleton class="h-[200px] w-full" />
-						<Skeleton class="h-4 w-[250px]" />
-						<Skeleton class="h-4 w-[200px]" />
-						<Skeleton class="h-4 w-[150px]" />
-					</div>
-				{/each}
-			</div>
-		</div>
-	{:else}
-		<ProductCarousel data={featuredProducts} displayProduct={showProduct} />
-	{/if} -->
-<!-- <div class="mx-auto mt-10 w-auto laptop:w-[80%]">
-		<div class="mx-auto mb-2 flex items-center justify-center">
-			<div class="ml-2 flex-1 border-2 border-black dark:border-white"></div>
-			<div class="mx-4 text-[20px] font-bold tracking-wide">FEATURED</div>
-			<div class="mr-2 flex-1 border-2 border-black dark:border-white"></div>
-		</div>
-	</div> -->
-
 <Slider />
 <Collections />
 
-<!-- <InstagramSection /> -->
-<!-- <ProductDetails /> -->
-<!-- </div> -->
 <div class="mx-2 mb-12 lg:container lg:mx-auto">
 	<HomepageCategoryListWithImage categories={homepageModule.featuredCategories} loading={homepageModule.loading} />
 </div>
 
-{#if page?.sections?.length && page?.sections[0]?.isActive}
+{#if homepage?.sections?.length && homepage?.sections[0]?.isActive}
 	<div class="mx-2 mb-12 xl:mx-24">
-		<HomepageBanners bannersList={page?.sections} />
+		<HomepageBanners bannersList={homepage?.sections} />
 	</div>
 {/if}
 
 <div class="mx-2 lg:container lg:mx-auto">
-	<div class="">
-		<div class="mx-auto mb-2 flex items-center justify-center">
-			<div class="flex-1 border-2 border-black dark:border-white"></div>
-			<h2 class="mx-4 text-[20px] font-bold tracking-wide uppercase">NEW ARRIVALS</h2>
-			<div class="flex-1 border-2 border-black dark:border-white"></div>
+	<div class="mb-8 pt-12">
+		<div class="flex flex-col items-center justify-center space-y-2">
+			<h2 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl uppercase">NEW ARRIVALS</h2>
+			<div class="h-1 w-12 bg-primary"></div>
 		</div>
-		<div class="mx-auto mb-5 flex items-center justify-center text-[12px]">
-			<a href="/products" class="mx-auto block h-fit border-b border-black pb-[2px] dark:border-white">View All</a>
+		<div class="mt-4 flex items-center justify-center text-sm font-medium">
+			<a href="/products" class="text-gray-600 hover:text-primary transition-colors border-b border-transparent hover:border-primary pb-1 dark:text-gray-400">View All Arrivals</a>
 		</div>
 	</div>
 </div>
@@ -231,12 +190,13 @@
 			loadMore={homepageModule.loadMoreFeaturedProducts}
 		/>
 		{#if homepageModule.hasMoreFeaturedProducts}
-			<div class="mt-4 flex justify-center">
+			<div class="mt-12 flex justify-center pb-20">
 				<button
-					class="mb-2 me-2 rounded-lg border border-gray-800 px-5 py-2.5 text-center text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-gray-300 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-800"
+					class="group relative flex items-center justify-center overflow-hidden rounded-full border border-gray-900 px-10 py-4 text-sm font-bold uppercase tracking-widest text-gray-900 transition-all hover:text-white dark:border-gray-100 dark:text-white"
 					onclick={homepageModule.loadMoreFeaturedProducts}
 				>
-					Load More
+					<span class="relative z-10">Discover More</span>
+					<div class="absolute inset-0 z-0 translate-y-full bg-gray-900 transition-transform duration-300 group-hover:translate-y-0 dark:bg-gray-100"></div>
 				</button>
 			</div>
 		{/if}
