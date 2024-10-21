@@ -73,50 +73,8 @@ let isExpanded = $state(false)
 									{/await}
 								</div>
 							{/if}
-						</div>
-						<div class="grid grid-cols-2 gap-8 sm:grid-cols-3 sm:gap-10">
-							<div>
-								<h1 class="text-black-200 mb-4 text-lg font-semibold">Quick Links</h1>
-								<ul class="space-y-2">
-									<li>
-										<a href="/" class="text-sm text-gray-400 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-900">Home</a>
-									</li>
-									<li>
-										<a href="/products" class="text-sm text-gray-400 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-900">Products</a>
-									</li>
-								</ul>
-							</div>
-							{#each footerMenu as item}
-								<div>
-									<h1 class="text-black-200 mb-4 text-lg font-semibold">{item?.name}</h1>
-									{#if item?.items?.length > 0}
-										<ul class="space-y-2">
-											{#each item.items as child}
-												<li>
-													{#if child.link}
-														<a
-															href={child.link || '#'}
-															target="_blank"
-															class="text-sm text-gray-400 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-900"
-															rel="noopener noreferrer"
-														>
-															{child.name}
-														</a>
-													{:else}
-														<span class="text-sm text-gray-400">{child.name}</span>
-													{/if}
-												</li>
-											{/each}
-										</ul>
-									{:else}
-										<p class="text-sm text-gray-400">No links available</p>
-									{/if}
-								</div>
-							{/each}
-						</div>
-					</div>
-	<div class="flex flex-col gap-2 border-t px-8 py-4 sm:flex-row sm:items-center sm:justify-between">
-						{#if socialSharing?.active}
+
+													{#if socialSharing?.active}
 							<div class="flex items-center space-x-5 sm:mt-0 sm:justify-center">
 								{#each Object.entries(socialSharing || {}).filter(([key]) => !['active', 'position'].includes(key)) as [key, social]}
 									{#if social}
@@ -175,6 +133,52 @@ let isExpanded = $state(false)
 								{/each}
 							</div>
 						{/if}
+
+						
+						</div>
+						<div class="grid grid-cols-2 gap-8 sm:grid-cols-3 sm:gap-10">
+							<div>
+								<h1 class="text-black-200 mb-4 text-lg font-semibold">Quick Links</h1>
+								<ul class="space-y-2">
+									<li>
+										<a href="/" class="text-sm text-gray-400 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-900">Home</a>
+									</li>
+									<li>
+										<a href="/products" class="text-sm text-gray-400 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-900">Products</a>
+									</li>
+								</ul>
+							</div>
+							{#each footerMenu as item}
+								<div>
+									<h1 class="text-black-200 mb-4 text-lg font-semibold">{item?.name}</h1>
+									{#if item?.items?.length > 0}
+										<ul class="space-y-2">
+											{#each item.items as child}
+												<li>
+													{#if child.link}
+														<a
+															href={child.link || '#'}
+															target="_blank"
+															class="text-sm text-gray-400 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-900"
+															rel="noopener noreferrer"
+														>
+															{child.name}
+														</a>
+													{:else}
+														<span class="text-sm text-gray-400">{child.name}</span>
+													{/if}
+												</li>
+											{/each}
+										</ul>
+									{:else}
+										<p class="text-sm text-gray-400">No links available</p>
+									{/if}
+								</div>
+							{/each}
+						</div>
+					</div>
+	<div class="flex flex-col gap-2 border-t px-8 py-4 sm:flex-row sm:items-center sm:justify-between">
+
 
 						<div class="flex w-full flex-col-reverse items-start justify-between gap-6 max-sm:mt-2 sm:flex-row sm:items-center sm:gap-0">
 							<span class="text-xs font-bold uppercase tracking-widest text-gray-400 sm:text-center">
