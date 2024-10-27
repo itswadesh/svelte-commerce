@@ -7,7 +7,7 @@
       "dependencies": {
         "@internationalized/date": "^3.7.0",
         "@lucide/svelte": "^1.8.0",
-        "@misiki/kitcommerce-core": "^0.0.2",
+        "@misiki/kitcommerce-core": "^0.0.4",
         "@misiki/litekart-connector": "^2.0.26",
         "fuse.js": "^7.1.0",
         "hi-base32": "^0.5.1",
@@ -272,7 +272,7 @@
 
     "@melt-ui/svelte": ["@melt-ui/svelte@0.76.2", "", { "dependencies": { "@floating-ui/core": "^1.3.1", "@floating-ui/dom": "^1.4.5", "@internationalized/date": "^3.5.0", "dequal": "^2.0.3", "focus-trap": "^7.5.2", "nanoid": "^5.0.4" }, "peerDependencies": { "svelte": ">=3 <5" } }, "sha512-7SbOa11tXUS95T3fReL+dwDs5FyJtCEqrqG3inRziDws346SYLsxOQ6HmX+4BkIsQh1R8U3XNa+EMmdMt38lMA=="],
 
-    "@misiki/kitcommerce-core": ["@misiki/kitcommerce-core@0.0.2", "", { "dependencies": { "jsdom": "^29.0.2" }, "peerDependencies": { "@sveltejs/kit": "^2.50.2", "svelte": "^5.0.0" } }, "sha512-8q374CDmlhH7t1riaSA3epuFqXmAPlGTpURHJVORdntugxngRFd9b3f2QS+qoS1KrfERmmQiw85BYtnfZwuVuA=="],
+    "@misiki/kitcommerce-core": ["@misiki/kitcommerce-core@0.0.4", "", { "dependencies": { "jsdom": "^29.0.2" }, "peerDependencies": { "@sveltejs/kit": "^2.50.2", "svelte": "^5.0.0" } }, "sha512-p+tlCUahfGnNraxUMK9332t9Su1rJ9jPBL1K+idnOuFIBr+jH3I2Zp1f3l7wbtrq1yRTt/NG6Lx9jqlGn1B2cg=="],
 
     "@misiki/litekart-connector": ["@misiki/litekart-connector@2.0.26", "", {}, "sha512-rPlKtuS6VvbN+cYlHfGxFY/u4UfDtGndlOdayhuw6YWEDR5oGWqJXXHH912RZD5Uh98bLxo11bcFUAxiWZXCjg=="],
 

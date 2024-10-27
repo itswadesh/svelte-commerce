@@ -14,7 +14,7 @@
 				<div class="border-primary-500 h-8 w-8 animate-spin rounded-full border-4 border-t-transparent"></div>
 			</div>
 		{:else}
-			<div class="!-z-10 grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+			<div class="grid grid-cols-2 gap-1 sm:gap-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
 				{#each productState.productsOfSameCategory as { id, slug, thumbnail, price, mrp, title, vendor, variants }}
 					<ProductCard
 						product={{

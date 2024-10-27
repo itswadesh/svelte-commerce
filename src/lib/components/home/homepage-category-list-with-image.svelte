@@ -17,8 +17,8 @@
 </script>
 
 {#if categories?.length}
-	<div class="py-12">
-		<div class="mb-10 flex flex-col items-center justify-between gap-6 px-2 md:flex-row md:items-end">
+	<div class="py-8">
+		<div class="mb-6 flex flex-col items-center justify-between gap-6 px-2 md:flex-row md:items-end">
 			<div class="text-center md:text-left">
 				<h2 class="text-3xl font-extrabold tracking-tight text-foreground lg:text-4xl">
 					Top Categories
@@ -45,7 +45,7 @@
 			</a>
 		</div>
 
-		<div class="grid grid-cols-2 gap-4 px-2 mobiles:grid-cols-3 sm:gap-8 md:grid-cols-4 lg:grid-cols-6">
+		<div class="grid grid-cols-2 gap-2 px-2 mobiles:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-6">
 			{#if loading}
 				{#each Array(6) as _}
 					<div class="flex flex-col items-center">
@@ -72,7 +72,7 @@
 							></div>
 						</div>
 						<span
-							class="mt-5 px-2 text-center text-sm font-bold tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary lg:text-base"
+							class="mt-2 px-2 text-center text-sm font-bold tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary lg:text-base"
 						>
 							{name}
 						</span>
