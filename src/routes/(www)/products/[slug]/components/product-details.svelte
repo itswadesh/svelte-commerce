@@ -22,6 +22,7 @@
 	import RelatedProducts from './related-products.svelte'
 	import StoreCheck from './store-check.svelte'
 	import { page } from '$app/state'
+	import { PUBLIC_LITEKART_DOMAIN } from '$env/static/public'
 
 	const productState = useProductState()
 	const data = $derived(page.data)
@@ -42,7 +43,7 @@
 	<Breadcrumb categoryHierarchy={data?.product?.categoryHierarchy} />
 	<GoogleStructuredDataBreadcrumb breadcrumbs={data?.product?.categoryHierarchy?.map((item: any, index: number) => ({
 		name: item.name,
-		item: index === data?.product?.categoryHierarchy?.length - 1 ? undefined : `${page.url.origin}/${item.slug}`
+		item: index === data?.product?.categoryHierarchy?.length - 1 ? undefined : `https://${PUBLIC_LITEKART_DOMAIN}${item.slug}`
 	})) || []} />
 </div>
 
