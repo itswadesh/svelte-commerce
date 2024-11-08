@@ -1,22 +1,24 @@
 # Use an official Node.js runtime as a parent image
-FROM node:22-alpine
-
+ARG BASE_IMAGE="node:23-slim"
+FROM ${BASE_IMAGE}
 LABEL author="Swadesh Behera"
 
 # Set the working directory inside the container
-WORKDIR /usr/src/app
+WORKDIR /usr/app
 
 # Copy package.json and package-lock.json (if available) to the working directory
 COPY package*.json ./
 
+RUN npm install -g bun
+
 # Install dependencies
-RUN npm install
+RUN bun i
 
 # Copy the rest of your application's source code to the working directory
 COPY . .
 
 # Build the project (if needed)
-RUN npm run build
+RUN bun run build
 
 # Expose the port that your application runs on
 EXPOSE 3000
@@ -25,4 +27,4 @@ EXPOSE 3000
 ENV NODE_ENV=production
 
 # Start the application
-CMD ["npm", "start"]
+CMD ["bun", "start"]
