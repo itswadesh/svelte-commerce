@@ -11,8 +11,7 @@ const REMOTE_DIR = '/var/www/litekart/www'
 const REMOTE_HOST = '139.59.42.129'
 const REMOTE_USER = 'root'
 const PRIVATE_KEY = 'D:/ssh/node-server.pem'
-const FILE_NAMES =
-	'package.json static .svelte-kit pm2.config.js svelte.config.js tsconfig.json vite.config.js'
+const FILE_NAMES = 'package.json static .svelte-kit pm2.config.js svelte.config.js tsconfig.json vite.config.js'
 
 // End Config
 
@@ -20,16 +19,7 @@ const FILE_NAMES =
 shell
 	.cd('prod')
 	.exec('tar czf arialshop.tar.gz ' + FILE_NAMES)
-	.exec(
-		'scp -i ' +
-			PRIVATE_KEY +
-			' arialshop.tar.gz ' +
-			REMOTE_USER +
-			'@' +
-			REMOTE_HOST +
-			':' +
-			REMOTE_DIR
-	)
+	.exec('scp -i ' + PRIVATE_KEY + ' arialshop.tar.gz ' + REMOTE_USER + '@' + REMOTE_HOST + ':' + REMOTE_DIR)
 shell.rm('arialshop.tar.gz')
 
 // Extract and reload pm2
@@ -53,8 +43,7 @@ const host = {
 
 const SSH = new SSH2Shell(host)
 // Use a callback function to process the full session text
-const callback = function (sessionText) {
-}
+const callback = function (sessionText) {}
 
 // Start the process
 SSH.connect(callback)

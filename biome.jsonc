@@ -1,0 +1,109 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": true
+	},
+	"files": {
+		"include": ["src/**/*.js", "src/**/*.ts", "src/**/*.svelte", "src/**/*.json", "*.js", "*.ts", "*.json"],
+		"ignore": ["node_modules/**", "dist/**", "build/**", ".svelte-kit/**", "package-lock.json", "pnpm-lock.yaml", "yarn.lock"]
+	},
+	"organizeImports": {
+		"enabled": true
+	},
+	"formatter": {
+		"enabled": true,
+		"formatWithErrors": false,
+		"indentStyle": "tab",
+		"indentWidth": 2,
+		"lineEnding": "crlf",
+		"lineWidth": 160,
+		"attributePosition": "auto"
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"a11y": {
+				"recommended": true,
+				"useKeyWithClickEvents": "error",
+				"useKeyWithMouseEvents": "error"
+			},
+			"complexity": {
+				"recommended": true,
+				"noExtraBooleanCast": "error",
+				"noMultipleSpacesInRegularExpressionLiterals": "error",
+				"noUselessCatch": "error",
+				"noUselessTypeConstraint": "error"
+			},
+			"correctness": {
+				"recommended": true,
+				"noUnusedVariables": "error",
+				"noUnusedImports": "error",
+				"useExhaustiveDependencies": "warn"
+			},
+			"security": {
+				"recommended": true
+			},
+			"style": {
+				"recommended": true,
+				"noNegationElse": "off",
+				"useConst": "error",
+				"useTemplate": "error"
+			},
+			"suspicious": {
+				"recommended": true,
+				"noExplicitAny": "warn",
+				"noArrayIndexKey": "warn"
+			}
+		}
+	},
+	"javascript": {
+		"formatter": {
+			"jsxQuoteStyle": "single",
+			"quoteProperties": "asNeeded",
+			"trailingCommas": "none",
+			"semicolons": "asNeeded",
+			"arrowParentheses": "asNeeded",
+			"bracketSpacing": true,
+			"quoteStyle": "single",
+			"attributePosition": "auto",
+			"indentStyle": "tab"
+		}
+	},
+	"json": {
+		"formatter": {
+			"trailingCommas": "none"
+		}
+	},
+	"overrides": [
+		{
+			"include": ["*.svelte"],
+			"linter": {
+				"rules": {
+					"style": {
+						"useConst": "off"
+					},
+					"correctness": {
+						"noUnusedVariables": "off",
+						"noUnusedImports": "off"
+					},
+					"suspicious": {
+						"noImplicitAnyLet": "off"
+					}
+				}
+			}
+		},
+		{
+			"include": ["**/*.config.js", "**/*.config.ts"],
+			"linter": {
+				"rules": {
+					"style": {
+						"noDefaultExport": "off"
+					}
+				}
+			}
+		}
+	]
+}

@@ -3,17 +3,17 @@
 	import { page } from '$app/state'
 	import Footer from '$lib/components/common/footer.svelte'
 	import Nav from '$lib/components/nav/nav.svelte'
-	import { Home, Package, Users, Settings, Menu, MapPinHouse, X, Heart } from '@lucide/svelte'
+	import { Home, Package, Users, Menu, MapPinHouse, X, Heart } from '@lucide/svelte'
 	import type { Snippet } from 'svelte'
 	import Breadcrumb from '$lib/components/ui/breadcrumb-route.svelte'
-	import StorePlugins from '$lib/core/components/plugins/store-plugins.svelte'
+	import { StorePlugins } from '$lib/core/components/index.js'
 	import { fade, fly } from 'svelte/transition'
 	import { quintOut } from 'svelte/easing'
 
 	let { children }: { children: Snippet } = $props()
 	let isMobileMenuOpen = $state(false)
 
-  setWishlistState()
+	setWishlistState()
 	setCartState()
 	setUserState()
 
@@ -70,7 +70,8 @@
 				{#each menuItems as { href, icon: Icon, label }, i}
 					<a
 						{href}
-						class="group flex items-center rounded-2xl px-4 py-3.5 text-sm font-bold tracking-tight transition-all duration-300 {page.url.pathname === href ||
+						class="group flex items-center rounded-2xl px-4 py-3.5 text-sm font-bold tracking-tight transition-all duration-300 {page.url.pathname ===
+							href ||
 						(page.url.pathname.startsWith(href) && href !== '/my')
 							? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20'
 							: 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'}"

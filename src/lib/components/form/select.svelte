@@ -14,6 +14,7 @@
 		optional = false,
 		info = '',
 		class: klass = '',
+		showSearch = false,
 		success = false,
 		optionSelected = (value: any) => {},
 		data,
@@ -50,17 +51,18 @@
 						<Popover.Content class="relative z-[1000000000] p-0">
 							<Command.Root>
 								<!-- <Command.Input placeholder="Search..." /> -->
-
-								<div class="flex items-center px-3">
-									<Search class="mr-2 size-4 shrink-0 opacity-50" />
-									<Input
-										bind:value={searchQuery}
-										placeholder="Search..."
-										class={cn(
-											'flex h-10 w-full rounded-md border-none bg-transparent py-3 text-sm shadow-none outline-none placeholder:text-muted-foreground focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-50'
-										)}
-									/>
-								</div>
+								{#if showSearch}
+									<div class="flex items-center px-3">
+										<Search class="mr-2 size-4 shrink-0 opacity-50" />
+										<Input
+											bind:value={searchQuery}
+											placeholder="Search..."
+											class={cn(
+												'flex h-10 w-full rounded-md border-none bg-transparent py-3 text-sm shadow-none outline-none placeholder:text-muted-foreground focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-50'
+											)}
+										/>
+									</div>
+								{/if}
 								<Command.List>
 									<Command.Empty>Not found.</Command.Empty>
 									<Command.Group>

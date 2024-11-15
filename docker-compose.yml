@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  api:
+    build: ./
+    image: itswadesh/svelte-commerce
+    container_name: svelte-commerce
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    environment:
+      - PUBLIC_LITEKART_API_URL=https://staging.litekart.in
+      - NODE_ENV=production
+      - PORT=3000

@@ -38,7 +38,8 @@
 					<div class="space-y-1">
 						<p class="font-bold text-gray-900">Pending Transactions</p>
 						<p class="text-sm leading-relaxed text-gray-500">
-							Any pending orders, exchanges, returns, or refunds will no longer be accessible via your account. We will attempt to complete open transactions within 30 days.
+							Any pending orders, exchanges, returns, or refunds will no longer be accessible via your account. We will attempt to complete open
+							transactions within 30 days.
 						</p>
 					</div>
 				</li>
@@ -69,9 +70,7 @@
 					class="h-5 w-5 rounded border-gray-300 text-primary focus:ring-primary"
 					bind:checked={deleteModule.iAgree}
 				/>
-				<label for="deleteAccount" class="text-sm font-semibold text-gray-700">
-					I understand and agree to all the terms and conditions*
-				</label>
+				<label for="deleteAccount" class="text-sm font-semibold text-gray-700"> I understand and agree to all the terms and conditions* </label>
 			</div>
 
 			<div class="mt-8 flex justify-end">
@@ -87,4 +86,3 @@
 		</div>
 	</div>
 </div>
-

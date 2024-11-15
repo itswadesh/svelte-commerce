@@ -15,7 +15,7 @@
 </script>
 
 <ProductCardRenderer {product} {aspectRatio}>
-{console.log(product.thumbnail || product?.image_url)}
+	{console.log(product.thumbnail || product?.image_url)}
 	{#snippet content({ aspectHeight, aspectWidth, handleCardClick, changeQuantity, addToCart })}
 		<button
 			onclick={handleCardClick}
@@ -90,7 +90,7 @@
 							<Button
 								disabled={!!cartState.isUpdatingCart}
 								variant="default"
-								class="w-full rounded-none bg-gray-900 py-6 text-xs font-bold uppercase tracking-widest text-white transition-all duration-300 ease-out-expo hover:bg-primary active:scale-95"
+								class="ease-out-expo w-full rounded-none bg-gray-900 py-6 text-xs font-bold uppercase tracking-widest text-white transition-all duration-300 hover:bg-primary active:scale-95"
 								onclick={() => addToCart(product)}
 							>
 								{#if cartState.isUpdatingCart}
@@ -112,7 +112,9 @@
 				{/if} -->
 
 				<a href="/products/{product.slug}" class="group/title flex-1">
-					<h3 class="line-clamp-2 text-sm sm:text-sm font-medium text-center leading-snug text-gray-900 transition-colors group-hover/title:text-primary dark:text-gray-100">
+					<h3
+						class="line-clamp-2 text-center text-sm font-medium leading-snug text-gray-900 transition-colors group-hover/title:text-primary dark:text-gray-100 sm:text-sm"
+					>
 						{product.title}
 					</h3>
 				</a>
@@ -126,7 +128,7 @@
 							{formatPrice(product.mrp, page?.data?.store?.currency?.code)}
 						</span>
 					{/if}
-						<!-- <span class="text-[10px] font-bold text-orange-600 uppercase">
+					<!-- <span class="text-[10px] font-bold text-orange-600 uppercase">
 							{Math.round(((product.mrp - product.price) / product.mrp) * 100)}% Off
 						</span> -->
 				</div>
