@@ -1,6 +1,7 @@
 import { shopifyInit } from '$lib/utils'
 import { jsonToGraphQLQuery } from 'json-to-graphql-query'
 import { description } from 'lib/config'
+import Client from 'shopify-buy';
 
 export class Shopify {
 	// return store from shopify payload
@@ -46,6 +47,16 @@ export class Shopify {
 		}
 	}
 
+
+	// init client using shopify sdk
+	public async initClient(){
+		let client: any = {};
+		return client = await Client.buildClient({
+			domain: import.meta.env.VITE_SHOPIFY_API_ENDPOINT,
+			storefrontAccessToken: import.meta.env.VITE_SHOPIFY_STOREFRONT_API_TOKEN
+		  });
+	}
+
 	public async fetchMegamenuData() {
 		const payload = {
 			query: {
@@ -84,6 +95,20 @@ export class Shopify {
 			console.error("Error fetching megamenu data:", error);
 			return [];
 		}
+	}
+
+
+	public async addTocart(){
+	
+		const checkout  =  this.initClient().checkout.create().then((checkout) => {
+			// Do something with the checkout
+			console.log("checkout========", checkout);
+		  });
+
+		  console.log("checkout", checkout);
+		  
+		return checkout;
+
 	}
 	
 }

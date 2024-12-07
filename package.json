@@ -32,6 +32,7 @@
 		"json-to-graphql-query": "2.2.5",
 		"lucide-react": "0.400.0",
 		"lucide-svelte": "0.399.0",
+		"shopify-buy": "2.22.0",
 		"tailwind-merge": "2.3.0",
 		"tailwindcss-animate": "1.0.7"
 	},

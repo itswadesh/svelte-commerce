@@ -32,6 +32,9 @@ dependencies:
   lucide-svelte:
     specifier: 0.399.0
     version: 0.399.0(svelte@4.2.19)
+  shopify-buy:
+    specifier: 2.22.0
+    version: 2.22.0
   tailwind-merge:
     specifier: 2.3.0
     version: 2.3.0
@@ -7742,6 +7745,10 @@ packages:
   /shimmer@1.2.1:
     resolution: {integrity: sha512-sQTKC1Re/rM6XyFM6fIAGHRPVGvyXfgzIDvzoq608vM+jeyVD0Tu1E6Np0Kc2zAIFWIj963V2800iF/9LPieQw==}
     dev: true
+
+  /shopify-buy@2.22.0:
+    resolution: {integrity: sha512-Y7FXmgX+By5VjF449oGj6+f8wBEKSupeAS/7bz9MXnvFmhT4C3ka/mzTjVDZTmq0arJdx3EyxUgpaWez3ztoKg==}
+    dev: false
 
   /side-channel@1.0.6:
     resolution: {integrity: sha512-fDW/EZ6Q9RiO8eFG8Hj+7u/oW+XrPTIChwCOM2+th2A6OblDtYYIpve9m+KvI9Z4C9qSEXlaGR6bTEYHReuglA==}

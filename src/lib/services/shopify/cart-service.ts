@@ -3,6 +3,7 @@ import { getShopifyApi } from '$lib/utils/server'
 import { serializeNonPOJOs } from '$lib/utils/validations'
 import { error } from '@sveltejs/kit'
 import { shopifyInit } from 'lib/utils'
+import { Shopify } from './utils'
 
 export const fetchCartData = async ({ origin, storeId, server = false, sid = null }: any) => {
 	try {
@@ -83,7 +84,17 @@ export const addToCartService = async ({
 	try {
 		let res: any = {}
 
-		res = await getShopifyApi(`customers/me`, {}, sid)
+	
+		console.log("MyCall");
+		
+		
+
+		const store = new Shopify()
+		res = await store.addTocart()
+		// res = await getShopifyApi(`customers/me`, {}, sid)
+		console.log("res==========", res);
+
+		res = {};
 
 		return res || {}
 	} catch (e) {

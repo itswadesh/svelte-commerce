@@ -146,7 +146,7 @@ export const fetchProduct = async ({ origin, slug, id, server = false, sid = nul
 		})
 
 		// res = mapShopifyProduct(med)
-		console.log('med', med.product.variants.nodes);
+		// console.log('med', med.product.variants.nodes);
 
 		const resp = (med) => {
 			return {
@@ -166,7 +166,7 @@ export const fetchProduct = async ({ origin, slug, id, server = false, sid = nul
 		}
 
 		res = resp(med)
-		console.log('res', res)
+		// console.log('res', res)
 
 		return res || {}
 	} catch (e) {
@@ -221,7 +221,7 @@ export const fetchProduct2 = async ({ origin, slug, id, server = false, sid = nu
 		})
 
 		// res = mapShopifyProduct(med)
-		console.log('med', med.product.variants.nodes)
+		// console.log('med', med.product.variants.nodes)
 
 		const resp = (med) => {
 			return {
