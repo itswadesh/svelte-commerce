@@ -56,8 +56,8 @@
 			<a href="/products" class="text-sm font-bold uppercase tracking-widest text-primary underline underline-offset-4">Browse All Products</a>
 		</div>
 	{:else}
-		<div class="inter-gap relative grid grid-cols-1 items-start lg:grid-cols-3">
-			<div class="col-span-2 sm:mt-0">
+		<div class="inter-gap relative grid grid-cols-1 items-start lg:grid-cols-2">
+			<div class="col-span-1 sm:mt-0">
 				<ProductGallerySection />
 			</div>
 

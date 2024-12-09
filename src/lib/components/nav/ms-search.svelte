@@ -38,124 +38,118 @@
 		handleKeyDown,
 		handleResultClick
 	})}
-  	<button
-		class="flex rounded-full"
-		aria-label="Toggle Cart"
-		onclick={showSearch}
-	>
-		<Search class="h-5 w-5" />
-	</button>
+		<button class="flex rounded-full" aria-label="Toggle Cart" onclick={showSearch}>
+			<Search class="h-5 w-5" />
+		</button>
 
-			{#if expandSearch && showSearchResults}
-		<div class="relative w-full {className}">
+		{#if expandSearch && showSearchResults}
 			<!-- Search Trigger Button -->
 
 			<!-- Search Popup/Modal -->
+			<div
+				class="fixed inset-0 z-[100] flex items-start justify-center bg-black/40 backdrop-blur-sm transition-all"
+				onclick={() => {
+					closeSearch()
+					handleCloseSearch()
+				}}
+				transition:fade={{ duration: 200 }}
+			>
 				<div
-					class="fixed inset-0 z-[100] flex items-start justify-center bg-black/40 backdrop-blur-sm transition-all"
-					onclick={() => {
-						closeSearch()
-						handleCloseSearch()
-					}}
-					transition:fade={{ duration: 200 }}
+					class="mt-4 w-full max-w-2xl px-4 sm:mt-20"
+					onclick={(e) => e.stopPropagation()}
+					transition:scale={{ duration: 200, start: 0.95, opacity: 0 }}
 				>
-					<div
-						class="mt-4 w-full max-w-2xl px-4 sm:mt-20"
-						onclick={(e) => e.stopPropagation()}
-						transition:scale={{ duration: 200, start: 0.95, opacity: 0 }}
-					>
-						<div class="flex max-h-[80vh] flex-col overflow-hidden bg-white shadow-2xl ring-1 ring-black/5">
-							<!-- Search Header -->
-							<div class="flex items-center gap-3 border-b border-gray-100 p-4">
-								<Search class="h-5 w-5 text-gray-400" />
-								<Input
-									type="text"
-									class="flex-1 border-none bg-transparent text-lg shadow-none focus-visible:ring-0"
-									bind:value={search}
-									placeholder={searchPlugin?.placeholder || 'Search products...'}
-									aria-label={searchPlugin?.placeholder || 'Search products'}
-									autocomplete="off"
-									enterkeyhint="search"
-									autofocus
-									onkeydown={handleKeyDown}
-								/>
-								<button
-									onclick={() => {
-										closeSearch()
-										handleCloseSearch()
-									}}
-									class="rounded-full p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
-									aria-label="Close search"
-								>
-									<X class="h-5 w-5" />
-								</button>
-							</div>
+					<div class="flex max-h-[80vh] flex-col overflow-hidden bg-white shadow-2xl ring-1 ring-black/5">
+						<!-- Search Header -->
+						<div class="flex items-center gap-3 border-b border-gray-100 p-4">
+							<Search class="h-5 w-5 text-gray-400" />
+							<Input
+								type="text"
+								class="flex-1 border-none bg-transparent text-lg shadow-none focus-visible:ring-0"
+								bind:value={search}
+								placeholder={searchPlugin?.placeholder || 'Search products...'}
+								aria-label={searchPlugin?.placeholder || 'Search products'}
+								autocomplete="off"
+								enterkeyhint="search"
+								autofocus
+								onkeydown={handleKeyDown}
+							/>
+							<button
+								onclick={() => {
+									closeSearch()
+									handleCloseSearch()
+								}}
+								class="rounded-full p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+								aria-label="Close search"
+							>
+								<X class="h-5 w-5" />
+							</button>
+						</div>
 
-							<!-- Search Results -->
-							<div class="flex-1 overflow-y-auto p-2 scrollbar-thin scrollbar-track-transparent">
-								{#if loading || isSearching}
-									<div class="space-y-2 p-2">
-										{#each Array(5) as _}
-											<div class="h-16 w-full animate-pulse bg-gray-50"></div>
-										{/each}
-									</div>
-								{:else if searchResults.length > 0}
-									<ul class="space-y-1">
-										{#each searchResults as result}
-											<li>
-												<button
-													class="flex w-full items-center gap-4 p-3 text-left transition-all hover:bg-gray-50 active:bg-gray-100"
-													onclick={() => {
-														handleResultClick(result)
-														handleCloseSearch()
-													}}
-												>
-													<div class="h-14 w-14 flex-shrink-0 overflow-hidden bg-gray-100 ring-1 ring-black/5">
-														{#if result.thumbnail}
-															<img src={result.thumbnail} alt="" class="h-full w-full object-cover" />
-														{:else}
-															<div class="flex h-full w-full items-center justify-center">
-																<Search class="h-5 w-5 text-gray-200" />
-															</div>
-														{/if}
-													</div>
-													<div class="min-w-0 flex-1">
-														<p class="truncate font-semibold text-gray-900">
-															{result.name || result.title}
+						<!-- Search Results -->
+						<div class="flex-1 overflow-y-auto p-2 scrollbar-thin scrollbar-track-transparent">
+							{#if loading || isSearching}
+								<div class="space-y-2 p-2">
+									{#each Array(5) as _}
+										<div class="h-16 w-full animate-pulse bg-gray-50"></div>
+									{/each}
+								</div>
+							{:else if searchResults.length > 0}
+								<ul class="space-y-1">
+									{#each searchResults as result}
+										<li>
+											<button
+												class="flex w-full items-center gap-4 p-3 text-left transition-all hover:bg-gray-50 active:bg-gray-100"
+												onclick={() => {
+													handleResultClick(result)
+													handleCloseSearch()
+												}}
+											>
+												<div class="h-14 w-14 flex-shrink-0 overflow-hidden bg-gray-100 ring-1 ring-black/5">
+													{#if result.thumbnail}
+														<img src={result.thumbnail} alt="" class="h-full w-full object-cover" />
+													{:else}
+														<div class="flex h-full w-full items-center justify-center">
+															<Search class="h-5 w-5 text-gray-200" />
+														</div>
+													{/if}
+												</div>
+												<div class="min-w-0 flex-1">
+													<p class="truncate font-semibold text-gray-900">
+														{result.name || result.title}
+													</p>
+													{#if result.price}
+														<p class="text-sm font-medium text-primary">
+															{priceRoundUp(result?.price, page?.data?.store?.currency?.code)}
 														</p>
-														{#if result.price}
-															<p class="text-sm font-medium text-primary">
-																{priceRoundUp(result?.price, page?.data?.store?.currency?.code)}
-															</p>
-														{/if}
-													</div>
-													<ArrowUpRight class="h-5 w-5 text-gray-300" />
-												</button>
-											</li>
-										{/each}
-									</ul>
-								{:else if search}
-									<div class="flex flex-col items-center justify-center py-16 text-center">
-										<div class="mb-4 rounded-full bg-gray-50 p-4">
-											<Search class="h-8 w-8 text-gray-300" />
-										</div>
-										<p class="text-lg font-medium text-gray-900">No pieces found</p>
-										<p class="text-sm text-gray-500">We couldn't find any results matching "{search}".</p>
+													{/if}
+												</div>
+												<ArrowUpRight class="h-5 w-5 text-gray-300" />
+											</button>
+										</li>
+									{/each}
+								</ul>
+							{:else if search}
+								<div class="flex flex-col items-center justify-center py-16 text-center">
+									<div class="mb-4 rounded-full bg-gray-50 p-4">
+										<Search class="h-8 w-8 text-gray-300" />
 									</div>
-								{:else}
-									<div class="flex flex-col items-center justify-center py-16 text-center">
-										<div class="mb-4 rounded-full bg-gray-50 p-4">
-											<Search class="h-8 w-8 text-gray-300" />
-										</div>
-										<p class="text-lg font-medium text-gray-900">Discover our collection</p>
-										<p class="text-sm text-gray-500">Search for fine jewelry and luxury pieces</p>
+									<p class="text-lg font-medium text-gray-900">No pieces found</p>
+									<p class="text-sm text-gray-500">We couldn't find any results matching "{search}".</p>
+								</div>
+							{:else}
+								<div class="flex flex-col items-center justify-center py-16 text-center">
+									<div class="mb-4 rounded-full bg-gray-50 p-4">
+										<Search class="h-8 w-8 text-gray-300" />
 									</div>
-								{/if}
-							</div>
+									<p class="text-lg font-medium text-gray-900">Discover our collection</p>
+									<p class="text-sm text-gray-500">Search for fine jewelry and luxury pieces</p>
+								</div>
+							{/if}
 						</div>
 					</div>
 				</div>
-		</div>
-			{/if}
+			</div>
+		{/if}
 	{/snippet}
 </MsSearchRenderer>
