@@ -70,7 +70,7 @@
 				{#each menuItems as { href, icon: Icon, label }, i}
 					<a
 						{href}
-						class="group flex items-center rounded-2xl px-4 py-3.5 text-sm font-bold tracking-tight transition-all duration-300 {page.url.pathname ===
+						class="group flex items-center rounded-sm px-4 py-3.5 text-sm font-bold tracking-tight transition-all duration-300 {page.url.pathname ===
 							href ||
 						(page.url.pathname.startsWith(href) && href !== '/my')
 							? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20'
@@ -91,7 +91,7 @@
 		<div class="mb-4 block max-md:flex max-md:gap-2">
 			<!-- Mobile menu button -->
 			<button
-				class="inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary md:hidden"
+				class="inline-flex items-center justify-center p-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary md:hidden"
 				onclick={() => (isMobileMenuOpen = !isMobileMenuOpen)}
 			>
 				{#if isMobileMenuOpen}
