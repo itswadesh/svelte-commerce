@@ -90,6 +90,7 @@
 								id="countryCode"
 								title="Select Country"
 								label=""
+								showSearch={true}
 								value={address.countryCode || page?.data?.store?.country?.code || 'AU'}
 								data={page?.data?.store?.countries || []}
 								valueField="code"
