@@ -13,7 +13,7 @@
 
 <MyWishlistRenderer>
 	{#snippet content({ loading, wishlistItems, moveToCart, removeFromWishlist })}
-		<div class="mx-auto max-w-7xl px-4 py-8 md:py-12">
+		<div class="mx-auto max-w-7xl px-4 md:py-8 md:py-12">
 			<!-- Header -->
 			<div class="mb-10 flex items-center justify-between">
 				<div>

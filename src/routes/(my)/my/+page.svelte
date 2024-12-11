@@ -28,7 +28,7 @@
 	<title>My Dashboard</title>
 </svelte:head>
 
-<div class="mx-auto max-w-7xl px-4 py-8 md:py-12">
+<div class="mx-auto max-w-7xl px-4 md:py-8 md:py-12">
 	<div class="mb-12">
 		<h1 class="text-3xl font-extrabold tracking-tight text-gray-900 md:text-4xl">Account Dashboard</h1>
 		<p class="mt-2 text-lg text-muted-foreground">Welcome back! Manage your orders, wishlist, and profile settings.</p>
