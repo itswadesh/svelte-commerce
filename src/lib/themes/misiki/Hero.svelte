@@ -1,28 +1,18 @@
 <script>
 import { LazyImg } from '$lib/components'
 import { navigateToProperPath } from '$lib/utils'
-import { onMount } from 'svelte'
 import { page } from '$app/stores'
-import { SplideSlide } from '@splidejs/svelte-splide'
+import * as Carousel from '$lib/shad-components/ui/carousel/index'
 
 export let sliderBannersDesktop = []
 export let sliderBannersMobile = []
-// console.log('$page', $page)
 
 $: innerHeight = 0
 $: innerWidth = 0
 
-let bannerHeight = $page?.data?.store?.homePageSliderBannerImageHeight || 50
+let bannerHeight = $page.data.store?.homePageSliderBannerImageHeight || 'auto'
 let hellobar = $page.data.store?.hellobar || {}
 let sliderHeightAccToPageHeight = innerHeight
-let Splide
-
-// console.log('bannerHeight', bannerHeight)
-
-onMount(async () => {
-	const SplideModule = await import('$lib/components/SplideJs.svelte')
-	Splide = SplideModule.default
-})
 
 $: if (innerWidth < 640) {
 	if (hellobar?.active?.val && $page.data.store?.isHyperlocal) {
@@ -79,39 +69,38 @@ $: if (innerWidth < 640) {
 
 {#if sliderBannersDesktop?.length}
 	<div class="hidden sm:block">
-		<svelte:component
-			this="{Splide}"
-			totalImagesLength="{sliderBannersDesktop?.length}"
-			options="{{
-				// heightRatio: 0.432,
-				arrows: true,
-				autoplay: true,
-				cover: true,
-				focus: 'center',
-				height: bannerHeight == 50 ? sliderHeightAccToPageHeight / 2 : sliderHeightAccToPageHeight,
-				lazyLoad: true,
-				type: 'loop'
+		<Carousel.Root
+			opts="{{
+				align: 'start',
+				loop: true
 			}}">
-			{#each sliderBannersDesktop as b, ix}
-				{#if b.img}
-					<SplideSlide key="{b._id || b.id}">
-						<a
-							href="{navigateToProperPath(b.link || b.slug)}"
-							aria-label="Click to visit banner related products page"
-							class="block h-full"
-							data-sveltekit-preload-data>
-							<!-- <LazyImg
-								src="{b.img}"
-								alt="{b.name}"
-								height="{sliderHeightAccToPageHeight}"
-								class="h-[{sliderHeightAccToPageHeight}px] w-full object-cover" /> -->
-
-							<img src="{b.img}" alt="{b.name}" class="h-full w-full object-cover" />
-						</a>
-					</SplideSlide>
-				{/if}
-			{/each}
-		</svelte:component>
+			<Carousel.Content class="-ml-5">
+				{#each sliderBannersDesktop as b, ix}
+					<Carousel.Item class="{bannerHeight === 50 ? 'h-[300px]' : 'h-[600px]'}">
+						<div class="relative w-full">
+							{#if b.img}
+								<!-- Banner -->
+								<a
+									href="{navigateToProperPath(b.link || b.slugPath || b.slug)}"
+									aria-label="Click to visit banner related products page"
+									class="block h-full"
+									data-sveltekit-preload-data>
+									<LazyImg
+										src="{b.img}"
+										alt="banner {ix}"
+										aspect_ratio="16:9"
+										class="h-full w-full object-cover" />
+								</a>
+							{/if}
+						</div>
+					</Carousel.Item>
+				{/each}
+			</Carousel.Content>
+			{#if sliderBannersDesktop?.length > 1}
+				<Carousel.Previous />
+				<Carousel.Next />
+			{/if}
+		</Carousel.Root>
 	</div>
 {/if}
 
@@ -119,37 +108,42 @@ $: if (innerWidth < 640) {
 
 {#if sliderBannersMobile?.length}
 	<div class="block sm:hidden">
-		<svelte:component
-			this="{Splide}"
-			totalImagesLength="{sliderBannersMobile?.length}"
-			options="{{
-				arrows: false,
-				autoplay: true,
-				cover: true,
-				focus: 'center',
-				height: bannerHeight == 50 ? sliderHeightAccToPageHeight / 3 : sliderHeightAccToPageHeight,
-				lazyLoad: true,
-				type: 'loop'
+		<Carousel.Root
+			opts="{{
+				align: 'start',
+				loop: true
 			}}">
-			{#each sliderBannersMobile as b, ix}
-				{#if b.img}
-					<SplideSlide key="{b._id || b.id}">
-						<a
-							href="{navigateToProperPath(b.link || b.slug)}"
-							aria-label="Click to visit banner related products page"
-							class="block h-full"
-							data-sveltekit-preload-data>
-							<!-- <LazyImg
-								src="{b.img}"
-								alt="{b.name}"
-								height="{sliderHeightAccToPageHeight}"
-								class="h-[{sliderHeightAccToPageHeight}px] w-full object-cover" /> -->
-
-							<img src="{b.img}" alt="{b.name}" class="h-full w-full object-cover" />
-						</a>
-					</SplideSlide>
-				{/if}
-			{/each}
-		</svelte:component>
+			<Carousel.Content class="-ml-5">
+				{#each sliderBannersMobile as b, ix}
+					<Carousel.Item
+						class="{bannerHeight === 'auto'
+							? 'max-h-[300px]'
+							: bannerHeight === 50
+								? 'h-[300px]'
+								: 'h-[600px]'}">
+						<div class="relative w-full">
+							{#if b.img}
+								<!-- Banner -->
+								<a
+									href="{navigateToProperPath(b.link || b.slugPath || b.slug)}"
+									aria-label="Click to visit banner related products page"
+									class="block h-full"
+									data-sveltekit-preload-data>
+									<LazyImg
+										src="{b.img}"
+										alt="banner {ix}"
+										aspect_ratio="1:1"
+										class="h-full w-full object-cover" />
+								</a>
+							{/if}
+						</div>
+					</Carousel.Item>
+				{/each}
+			</Carousel.Content>
+			{#if sliderBannersDesktop?.length > 1}
+				<Carousel.Previous />
+				<Carousel.Next />
+			{/if}
+		</Carousel.Root>
 	</div>
 {/if}
