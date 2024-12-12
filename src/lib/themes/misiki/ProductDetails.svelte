@@ -795,7 +795,7 @@ async function updateVariant(variant) {
 					{/if}
 
 					<!-- Size -->
-					{console.log(data.product)}
+					<!-- {console.log(data.product)} -->
 					{#if data.product.sizechart}
 						<button
 							type="button"
