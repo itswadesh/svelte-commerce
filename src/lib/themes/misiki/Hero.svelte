@@ -10,7 +10,7 @@ export let sliderBannersMobile = []
 $: innerHeight = 0
 $: innerWidth = 0
 
-let bannerHeight = $page.data.store?.homePageSliderBannerImageHeight || 50
+let bannerHeight = $page.data.store?.homePageSliderBannerImageHeight || 'auto'
 let hellobar = $page.data.store?.hellobar || {}
 let sliderHeightAccToPageHeight = innerHeight
 
@@ -115,7 +115,12 @@ $: if (innerWidth < 640) {
 			}}">
 			<Carousel.Content class="-ml-5">
 				{#each sliderBannersMobile as b, ix}
-					<Carousel.Item class="{bannerHeight === 50 ? 'h-[300px]' : 'h-[600px]'}">
+					<Carousel.Item
+						class="{bannerHeight === 'auto'
+							? 'max-h-[300px]'
+							: bannerHeight === 50
+								? 'h-[300px]'
+								: 'h-[600px]'}">
 						<div class="relative w-full">
 							{#if b.img}
 								<!-- Banner -->
