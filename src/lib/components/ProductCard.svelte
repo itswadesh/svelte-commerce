@@ -39,7 +39,6 @@ import { browser } from '$app/environment'
 import { onMount } from 'svelte'
 
 export let product = {}
-// console.log('zzzzzzzzzzzzzzzzzz', product)
 
 if (product?._source) {
 	product = product?._source
@@ -60,17 +59,13 @@ function hideitems() {
 	show = false
 }
 
-// console.log('product', product)
-
 if (product?.tags?.length) {
 	ribbonTags = product?.tags.filter((tag) => {
 		return tag.type === 'Ribbon'
 	})
-
-	// console.log('Ribbon tags =', ribbonTags)
 }
 
-$: store = $page.data?.store
+$: store = $page.data.store
 
 onMount(async () => {
 	if (browser) {
@@ -84,7 +79,8 @@ onMount(async () => {
 		class="group relative col-span-1 block w-full sm:shrink-0 rounded bg-white shadow-effect overflow-hidden sm:overflow-visible
 		{product_image_dimension == '16x9' ? 'md:w-[420px]' : 'sm:w-[210px]'}"
 		on:mouseenter="{showitems}"
-		on:mouseleave="{hideitems}">
+		on:mouseleave="{hideitems}"
+		role="banner">
 		<a
 			href="/product/{product.slug}"
 			rel="noopener noreferrer"
@@ -147,9 +143,7 @@ onMount(async () => {
 					<LazyImg
 						src="{product.img || (product.images && product.images[0])}"
 						alt="{product.name}"
-						height="280"
-						aspect_ratio="3:4"
-						class="object-contain object-bottom w-[210px] h-[280px] text-xs" />
+						class="object-contain aspect-[3/4] object-bottom w-full min-h-[280px] max-h-[280px] text-xs" />
 				{:else}
 					<div
 						class="w-[210px] h-[280px] bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center">
@@ -469,7 +463,7 @@ onMount(async () => {
 							{product.name || '_'}
 						</h4>
 
-						{#if $page?.data?.store?.isFnb && product.foodType}
+						{#if $page.data.store?.isFnb && product.foodType}
 							<div>
 								{#if product.foodType === 'veg'}
 									<img src="{productVeg}" alt="veg" class="h-5 w-5" />
@@ -481,7 +475,7 @@ onMount(async () => {
 					</div>
 				</a>
 
-				{#if $page?.data?.store?.isMultiVendor && product?.vendor && product?.vendor?.slug && product?.vendor?.businessName}
+				{#if $page.data.store?.isMultiVendor && product?.vendor && product?.vendor?.slug && product?.vendor?.businessName}
 					<div class="flex items-center gap-1 text-xs sm:text-sm text-zinc-500">
 						<span> By </span>
 
