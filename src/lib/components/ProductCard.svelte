@@ -79,7 +79,8 @@ onMount(async () => {
 		class="group relative col-span-1 block w-full sm:shrink-0 rounded bg-white shadow-effect overflow-hidden sm:overflow-visible
 		{product_image_dimension == '16x9' ? 'md:w-[420px]' : 'sm:w-[210px]'}"
 		on:mouseenter="{showitems}"
-		on:mouseleave="{hideitems}">
+		on:mouseleave="{hideitems}"
+		role="banner">
 		<a
 			href="/product/{product.slug}"
 			rel="noopener noreferrer"
@@ -142,9 +143,7 @@ onMount(async () => {
 					<LazyImg
 						src="{product.img || (product.images && product.images[0])}"
 						alt="{product.name}"
-						height="280"
-						aspect_ratio="3:4"
-						class="object-contain object-bottom w-[210px] h-[280px] text-xs" />
+						class="object-contain aspect-[3/4] object-bottom w-full min-h-[280px] max-h-[280px] text-xs" />
 				{:else}
 					<div
 						class="w-[210px] h-[280px] bg-zinc-100 flex flex-col items-center justify-center p-5 text-zinc-500 text-xs text-center">
