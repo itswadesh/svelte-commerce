@@ -123,7 +123,7 @@
 										}}
 									>
 										<ShoppingBag class=" h-4 w-4" />
-										Move to Cart
+										Add to Cart
 									</Button>
 								</div>
 							</div>
