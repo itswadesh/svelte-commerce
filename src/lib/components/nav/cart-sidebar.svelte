@@ -118,7 +118,7 @@
 					{#if cartState?.cart?.total >= 0 && cartState.cart?.lineItems?.length > 0}
 						<div class="mx-4 mt-6 flex justify-between gap-3">
 							<Button
-								variant="secondary"
+								variant="outline"
 								disabled={!!cartState.isUpdatingCart}
 								onclick={onContinueShopping}
 								class="w-[48%] py-6 text-[10px] font-bold uppercase tracking-widest transition-all active:scale-95"
