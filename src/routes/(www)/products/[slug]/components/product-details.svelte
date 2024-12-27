@@ -144,9 +144,9 @@
 		</div>
 	{/if}
 
-	<div class="mx-0 border-t border-gray-100 px-0">
+	<!-- <div class="mx-0 border-t border-gray-100 px-0">
 		<ProductReviewsSection />
-	</div>
+	</div> -->
 
 	<div class="">
 		<RelatedProducts />
@@ -155,9 +155,9 @@
 
 <!-- Mobile cart button - Sticky Footer -->
 <div
-	class="sticky inset-x-0 bottom-0 z-[60] flex w-full items-center gap-3 border-t border-gray-100 bg-white/95 px-4 py-4 shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.1)] backdrop-blur-md sm:hidden"
+	class="sticky inset-x-0 bottom-0 flex w-full items-center gap-3 border-t border-gray-100 bg-white/95 px-4 py-4 shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.1)] backdrop-blur-md sm:hidden"
 >
-	<div class="flex-1">
+	<div class="flex-1 flex flex-col intra-gap">
 		<ProductCartAndWishlistButtons />
 	</div>
 </div>

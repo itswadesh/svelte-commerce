@@ -12,8 +12,8 @@
 	{#snippet content({ displayProduct, collectionData })}
 		{#if collectionData.length > 0}
 			{#each collectionData as data, index}
-				<div class="py-10 {index % 2 === 1 ? 'bg-muted/30' : ''}">
-					<div class="container mx-auto px-4">
+				<div class="py-10 page-width {index % 2 === 1 ? 'bg-muted/30' : ''}">
+					<div class="mx-auto w-full">
 						<div class="mb-6 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
 							<div class="text-left">
 								<h2 class="text-3xl font-extrabold tracking-tight text-foreground lg:text-4xl">
