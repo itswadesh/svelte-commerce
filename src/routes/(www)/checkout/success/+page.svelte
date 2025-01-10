@@ -72,11 +72,11 @@
 				<h1 class="mb-3 text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">Thank you for your order</h1>
 				<p class="mx-auto max-w-md text-lg text-gray-500">We've received your order and we'll notify you as soon as it's on its way.</p>
 
-				{#if orderNo}
+				<!--{#if orderNo}
 					<div class="mt-6 inline-flex items-center rounded-full border border-gray-100 bg-gray-50 px-4 py-1.5 text-sm font-medium text-gray-600">
 						Order #{orderNo}
 					</div>
-				{/if}
+				{/if}-->
 			</div>
 
 			<!-- Order Progress -->
@@ -116,7 +116,7 @@
 				<div class="divide-y divide-gray-100">
 					{#each orders as { lineItems }}
 						{#each lineItems as item}
-							<div class="group flex items-center gap-6 py-6 first:pt-0 last:pb-0">
+							<div class="group flex flex-col md:flex-row items-center gap-6 py-6 first:pt-0 last:pb-0">
 								<div
 									class="relative h-24 w-20 flex-shrink-0 overflow-hidden rounded-xl border border-gray-100 bg-gray-50 transition-transform duration-300 group-hover:scale-105 group-hover:shadow-sm"
 								>
