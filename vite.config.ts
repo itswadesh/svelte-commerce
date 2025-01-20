@@ -32,6 +32,10 @@ export default defineConfig(({ command, mode }) => {
 			// })
 		],
 		server: {
+			allowedHosts: [
+				'demo.litekart.in',
+				'misiki-lk-www.zo1pm1.easypanel.host'
+			],
 			host: true,
 			port: 3000,
 			proxy: {
