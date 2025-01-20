@@ -51,6 +51,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.isShowBackButton = isShowBackButton
 
 		const storeId = event.cookies.get('storeId')
+		console.log('storeId', storeId)
 		// const store = event.cookies.get('store') || '{}'
 		// const storeAsJson = JSON.parse(store)
 		if (storeId && storeId != 'undefined') {
