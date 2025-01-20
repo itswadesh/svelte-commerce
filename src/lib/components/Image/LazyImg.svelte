@@ -171,5 +171,13 @@ if (extension === 'svg') {
 				width="{+w}"
 				class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(':')[1]}] lazy {clazz}" />
 		{/if}
+	{:else}
+		<Image
+			{alt}
+			src="{src}"
+			loading="lazy"
+			height="{+h}"
+			width="{+w}"
+			class="aspect-[{aspect_ratio?.split(':')[0]}/{aspect_ratio?.split(':')[1]}] lazy {clazz}" />
 	{/if}
 </div>
