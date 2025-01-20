@@ -32,7 +32,10 @@ export default defineConfig(({ command, mode }) => {
 			// })
 		],
 		server: {
-			allowedHosts: 'all',
+			allowedHosts: [
+				'.litekart.in',
+				'.easypanel.host'
+			],
 			host: true,
 			port: 3000,
 			proxy: {
