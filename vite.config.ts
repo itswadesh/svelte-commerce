@@ -32,10 +32,7 @@ export default defineConfig(({ command, mode }) => {
 			// })
 		],
 		server: {
-			allowedHosts: [
-				'.litekart.in',
-				'.easypanel.host'
-			],
+			allowedHosts: true, // This is required, else will "throw Blocked request. This host ("shopnx.in") is not allowed."
 			host: true,
 			port: 3000,
 			proxy: {
