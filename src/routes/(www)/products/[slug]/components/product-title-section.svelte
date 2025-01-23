@@ -7,7 +7,7 @@
 
 <div class="relative sm:border-b sm:border-gray-100">
 	<div class="flex items-start justify-between">
-		<h1 class="text-md font-bold uppercase tracking-tight text-gray-900 dark:text-white sm:text-3xl">
+		<h1 class="text-md font-bold uppercase tracking-tight text-gray-900 dark:text-white sm:text-xl">
 			{product.title}
 		</h1>
 	</div>

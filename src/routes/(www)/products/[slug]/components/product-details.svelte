@@ -57,11 +57,11 @@
 		</div>
 	{:else}
 		<div class="inter-gap relative grid grid-cols-1 items-start lg:grid-cols-2">
-			<div class="col-span-1 sm:mt-0">
+			<div class="col-span-1 sm:mt-0 lg:sticky lg:top-28">
 				<ProductGallerySection />
 			</div>
 
-			<div class="intra-gap sticky top-24 mx-0 flex flex-col space-y-0">
+			<div class="intra-gap sticky top-28 mx-0 flex flex-col space-y-0">
 				<ProductTitleSection product={data?.product} />
 
 				<ProductPricing />
@@ -144,9 +144,9 @@
 		</div>
 	{/if}
 
-	<!-- <div class="mx-0 border-t border-gray-100 px-0">
+	<div class="mx-0 border-t border-gray-100 px-0">
 		<ProductReviewsSection />
-	</div> -->
+	</div>
 
 	<div class="">
 		<RelatedProducts />
