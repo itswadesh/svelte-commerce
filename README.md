@@ -89,20 +89,31 @@ Reach out to me with queries!
     <img src="https://res.cloudinary.com/itswadesh/image/upload/v1682424690/tesoro.png?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="Tesoro">
   </a>
   <img src="assets/misc/transparent.png" height="1" width="15"/>
+  <a href="https://sparkinity.com" target="_blank">
+    <img style="background-color:white;padding:10px;"  src="./static/sparkinity.svg" height="32" alt="Sparkinity">
+  </a>
+  <img src="assets/misc/transparent.png" height="1" width="15"/>
   <a href="https://varnijewels.com/" target="_blank">
-    <img src="https://ik.imagekit.io/3n6cglxq6/img/varni-logo_1619291754__34835-qt10qx2uq90x.webp?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="Varni Jewels">
+    <img src="./static/varnijewels.jpg" height="64" alt="Varni Jewels">
+    <!-- <img src="https://ik.imagekit.io/3n6cglxq6/img/varni-logo_1619291754__34835-qt10qx2uq90x.webp?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="Varni Jewels"> -->
   </a>
   <img src="assets/misc/transparent.png" height="1" width="15"/>
-  <a href="https://lrnr.in/" target="_blank">
-    <img src="https://res.cloudinary.com/itswadesh/image/upload/v1682423814/logo-lrnr.png?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="LRNR">
+  <a style="color:white" href="https://lrnr.in/" target="_blank">
+    <img style="color:white" src="./static/lrnr.svg" height="64" alt="LRNR">
+    <!-- <img src="https://res.cloudinary.com/itswadesh/image/upload/v1682423814/logo-lrnr.png?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="LRNR"> -->
   </a>
   <img src="assets/misc/transparent.png" height="1" width="15"/>
-  <a href="https://tablez.com/" target="_blank">
+  <!-- <a href="https://tablez.com/" target="_blank">
     <img src="https://tablez.com/icon.png" height="64" alt="Tablez">
-  </a>
+  </a> -->
   <img src="assets/misc/transparent.png" height="1" width="15"/>
   <a href="https://b.zapvi.in/" target="_blank">
-    <img src="https://cdn.zapvi.in/img/Zapvi-Black-Logo-iKPQP43npcI2.svg?width=3&height=4&blur=25&aspect_ratio=3:4" height="64" alt="Misiki">
+    <img style="padding:10px;padding-bottom:0;" src="./static/zapvi.svg" height="64" alt="Zapvi">
+    <!-- <img src="https://cdn.zapvi.in/img/Zapvi-Black-Logo-iKPQP43npcI2.svg?width=3&height=4&blur=25&aspect_ratio=3:4" height="64" alt="Misiki"> -->
+  </a>
+  <img src="assets/misc/transparent.png" height="1" width="15"/>
+  <a href="https://secretgreen.com.au/" target="_blank">
+    <img style="padding:10px;padding-bottom:0;" src="./static/secretgreen.jpg" height="64" alt="Secretgreen">
   </a>
   <img src="assets/misc/transparent.png" height="1" width="15"/>
   <div>
