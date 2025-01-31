@@ -21,13 +21,10 @@
 		{ title: 'Change Password', url: '/auth/change-password' }
 	]
 
-	const { storeData } = $props()
-
 	const wishlistState = getWishlistState()
 	const wishlistPlugin = $derived(page?.data?.store?.plugins?.isWishlist)
 	const navModule = new NavModule()
 	const userState = navModule.userState
-	const cartState = navModule.cartState
 </script>
 
 <svelte:window bind:scrollY={navModule.scrollY} />
@@ -150,7 +147,7 @@
 						<div class="relative px-2" role="navigation">
 							<a href="/my/wishlist" class="rounded-full" aria-label="Toggle Cart">
 								<Heart class="h-5 w-5" />
-								{#if wishlistState.count > 0}
+								{#if wishlistState?.count > 0}
 									<span
 										class="absolute right-0 top-0 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-primary px-1.5 py-1 text-xs font-bold leading-none text-white"
 									>
