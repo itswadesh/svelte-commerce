@@ -11,10 +11,46 @@
 	import CouponsDrawer from '$lib/components/coupon/coupons-drawer.svelte'
 	import { CartModule } from '$lib/core/composables/index.js'
 	import { appendOneTimeCartId } from '$lib/core/utils/index.js'
+	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 
 	const cartModule = new CartModule()
 	const cartState = cartModule.cartState
+
+	const totalSavings = $derived(
+		(cartState.cart?.lineItems || []).reduce(
+			(acc, item) => acc + (Math.max(0, (item.mrp || item.price) - item.price) * item.qty),
+			0
+		) + (cartState.cart?.discountAmount || 0)
+	)
 </script>
+
+{#snippet quantitySelector(item: any)}
+	<div
+		class="flex items-center rounded-sm border border-gray-200 bg-white p-1 shadow-sm transition-all duration-300 hover:shadow-md"
+	>
+		<button
+			onclick={(e) => cartModule.decreaseQty(e, item)}
+			class="flex h-7 w-7 items-center justify-center rounded-full transition-all hover:bg-gray-100 active:scale-75"
+			aria-label="Decrease quantity"
+		>
+			<Minus class="size-3 text-gray-900" />
+		</button>
+		<span class="flex min-w-[2.5rem] items-center justify-center px-1 text-xs font-bold text-gray-900">
+			{#if cartState.updatingItem[item.id]}
+				<LoadingDots />
+			{:else}
+				{item.qty}
+			{/if}
+		</span>
+		<button
+			class="flex h-7 w-7 items-center justify-center rounded-full transition-all hover:bg-gray-100 active:scale-75"
+			aria-label="Increase quantity"
+			onclick={(e) => cartModule.increaseQty(e, item)}
+		>
+			<Plus class="size-3 text-gray-900" />
+		</button>
+	</div>
+{/snippet}
 
 <svelte:head>
 	<title>Cart - {page?.data?.store?.name || ''}</title>
@@ -22,8 +58,9 @@
 
 <div class="min-h-screen py-8">
 	<div class="container mx-auto px-4">
-		<!-- Checkout Progress -->
-		<div class="mb-12">
+	
+			<!-- Checkout Progress -->
+		<!-- <div class="mb-8">
 			<div class="flex items-center justify-center space-x-4 sm:space-x-12">
 				<div class="flex items-center text-primary">
 					<div class="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-[11px] font-bold tracking-tight text-white">1</div>
@@ -42,6 +79,12 @@
 					<div class="flex h-7 w-7 items-center justify-center rounded-full border border-gray-200 text-[11px] font-bold tracking-tight">3</div>
 					<span class="ml-2 text-xs font-bold uppercase tracking-widest">Payment</span>
 				</div>
+			</div>
+		</div> -->
+
+		<div class="mb-8">
+		  <div>
+				<p class="font-semibold tracking-tight text-xl">My Bag <span class="font-bold">({cartState?.cart?.lineItems?.length ?? 0}) {cartState.cart.lineItems.length>1 ? "Items" : "Item"}</span></p>
 			</div>
 		</div>
 
@@ -267,25 +310,31 @@
 										</label>
 									{/if}
 
-									<a class="flex flex-1 gap-6 p-5" href={`/products/${item.slug}`} target="_blank">
-										<div class="relative flex items-center justify-center">
-											<div class="overflow-hidden rounded-lg bg-gray-50 p-1 ring-1 ring-gray-100">
-												<img
-													src={item.thumbnail || '/placeholder.svg'}
-													alt={item.title}
-													class="aspect-[3/4] w-24 object-contain transition-transform duration-500 group-hover:scale-105 sm:w-32"
-												/>
+									<a class="flex flex-1 gap-3 md:gap-6 py-5 md:p-5" href={`/products/${item.slug}`} target="_blank">
+										<div class="flex flex-col items-center gap-3">
+											<div class="relative flex items-center justify-center">
+												<div class="overflow-hidden rounded-lg bg-gray-50 p-1 ring-1 ring-gray-100">
+													<LazyImg
+														src={item.thumbnail || '/placeholder.svg'}
+														alt={item.title}
+														class="aspect-[3/4] w-24 object-contain transition-transform duration-500 group-hover:scale-105 sm:w-32"
+													/>
+												</div>
+											</div>
+
+											<div class="sm:hidden">
+												{@render quantitySelector(item)}
 											</div>
 										</div>
 
 										<div class="flex flex-1 flex-col">
 											<div class="flex flex-col justify-between gap-2 sm:flex-row sm:items-start">
 												<div class="flex-1">
-													<h3 class="line-clamp-2 text-base font-bold uppercase tracking-tight text-gray-900 sm:text-lg">{item.title}</h3>
+													<h3 class="line-clamp-2 text-base font-bold tracking-tight text-gray-900 sm:text-lg">{item.title}</h3>
 
 													<div class="mt-2 flex flex-wrap gap-2">
 														<span
-															class="inline-flex items-center rounded bg-gray-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-gray-500 ring-1 ring-gray-100"
+															class="inline-flex items-center rounded bg-gray-50 px-2 py-0.5 text-xxs font-bold uppercase tracking-widest text-gray-500 ring-1 ring-gray-100"
 														>
 															Qty: {item.qty}
 														</span>
@@ -293,7 +342,7 @@
 															{#each item.variant.options as option}
 																{#if option?.option?.title && option?.value}
 																	<span
-																		class="inline-flex items-center rounded bg-primary/5 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-primary ring-1 ring-primary/10"
+																		class="inline-flex items-center rounded bg-primary/5 px-2 py-0.5 text-xxs font-bold uppercase tracking-widest text-primary ring-1 ring-primary/10"
 																	>
 																		{option.option?.title}: {option?.value}
 																	</span>
@@ -303,19 +352,35 @@
 													</div>
 												</div>
 
-												<div class="text-right">
+												<div class="text-left lg:hidden">
 													<p class="text-base font-bold text-gray-900 sm:text-lg">
 														{formatPrice(item.price * item.qty, page?.data?.store?.currency?.code)}
 													</p>
-													<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">
-														{formatPrice(item.price, page?.data?.store?.currency?.code)} each
-													</p>
+													{#if item.mrp > item.price}
+														<p class="text-xs font-bold  tracking-tight text-green-600">
+															You saved {formatPrice((item.mrp - item.price) * item.qty, page?.data?.store?.currency?.code)}
+														</p>
+													{:else}
+														<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">
+															{formatPrice(item.price, page?.data?.store?.currency?.code)} each
+														</p>
+													{/if}
+												</div>
+												<div class="hidden lg:block">
+													<button
+													class="group/remove flex items-center gap-1.5 rounded-full border border-transparent px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-400 transition-all hover:border-red-100 hover:bg-red-50 hover:text-red-600 active:scale-95"
+													aria-label="Remove item"
+													onclick={(e) => cartModule.removeItem(e, item)}
+												>
+													<Trash class="size-3.5 text-red-500 transition-colors group-hover/remove:text-red-500" />
+													<!-- <span class="hidden sm:inline">Remove</span> -->
+												</button>
 												</div>
 											</div>
 
 											<div class="mt-auto flex items-center justify-between pt-6">
 												<div
-													class="flex items-center rounded-full border border-gray-200 bg-white p-1 shadow-sm transition-all duration-300 hover:shadow-md"
+													class="hidden items-center rounded-sm border border-gray-200 bg-white p-1 shadow-sm transition-all duration-300 hover:shadow-md sm:flex"
 												>
 													<button
 														onclick={(e) => cartModule.decreaseQty(e, item)}
@@ -340,14 +405,30 @@
 													</button>
 												</div>
 
+												<div class="lg:hidden">
 												<button
 													class="group/remove flex items-center gap-1.5 rounded-full border border-transparent px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-400 transition-all hover:border-red-100 hover:bg-red-50 hover:text-red-600 active:scale-95"
 													aria-label="Remove item"
 													onclick={(e) => cartModule.removeItem(e, item)}
 												>
-													<Trash class="size-3.5 transition-colors group-hover/remove:text-red-500" />
-													<span class="hidden sm:inline">Remove</span>
+													<Trash class="size-3.5 text-red-500 transition-colors group-hover/remove:text-red-500" />
+													<!-- <span class="hidden sm:inline">Remove</span> -->
 												</button>
+												</div>
+												<div class="text-right hidden lg:block">
+													<p class="text-base font-bold text-gray-900 sm:text-lg">
+														{formatPrice(item.price * item.qty, page?.data?.store?.currency?.code)}
+													</p>
+													{#if item.mrp > item.price}
+														<p class="text-xs font-bold tracking-tight text-green-600">
+															You saved {formatPrice((item.mrp - item.price) * item.qty, page?.data?.store?.currency?.code)}
+														</p>
+													{:else}
+														<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">
+															{formatPrice(item.price, page?.data?.store?.currency?.code)} each
+														</p>
+													{/if}
+												</div>
 											</div>
 										</div>
 									</a>
@@ -375,7 +456,7 @@
 
 						<CouponsDrawer />
 
-						<div class="space-y-4 rounded-lg border border-gray-100 bg-white p-6 shadow-sm">
+						<div class="space-y-4 rounded-lg border border-gray-100 bg-white p-3 md:p-6 shadow-sm">
 							<div class="">
 								<div class="mb-6 flex flex-col gap-1">
 									<h2 class="text-base font-bold uppercase tracking-widest text-gray-900" style="font-family: 'Montserrat', sans-serif;">
@@ -425,6 +506,14 @@
 											<span class="text-sm font-bold uppercase tracking-widest text-gray-900">Total</span>
 											<span class="text-xl font-bold text-gray-900">{formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}</span>
 										</div>
+
+										<!-- {#if totalSavings > 0}
+											<div class="flex justify-end pt-1">
+												<p class="text-[10px] font-bold uppercase tracking-tight text-green-600">
+													You saved {formatPrice(totalSavings, page?.data?.store?.currency?.code)} on this order
+												</p>
+											</div>
+										{/if} -->
 
 										{#if cartModule.showError}
 											<div class="mt-4 rounded bg-red-50 p-3 text-[11px] font-bold uppercase tracking-tight text-red-600 ring-1 ring-red-100">
