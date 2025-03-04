@@ -12,6 +12,8 @@
 	import { CartModule } from '$lib/core/composables/index.js'
 	import { appendOneTimeCartId } from '$lib/core/utils/index.js'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
+	import { tweened } from 'svelte/motion'
+	import { cubicOut } from 'svelte/easing'
 
 	const cartModule = new CartModule()
 	const cartState = cartModule.cartState
@@ -22,6 +24,15 @@
 			0
 		) + (cartState.cart?.discountAmount || 0)
 	)
+
+	const animatedSavings = tweened(0, {
+		duration: 1000,
+		easing: cubicOut
+	})
+
+	$effect(() => {
+		animatedSavings.set(totalSavings)
+	})
 </script>
 
 {#snippet quantitySelector(item: any)}
@@ -142,12 +153,20 @@
 							</p>
 						</div>
 					{/if} -->
+						<div class="py-3 px-4 mb-4 border rounded-md bg-success/5 border-success/40 flex items-center justify-between">
+							<div class="flex items-center gap-2">
+								<Tag class="size-3.5 text-success" />
+								<span class="text-sm font-medium text-success">You saved <span class="font-bold">{formatPrice($animatedSavings, page?.data?.store?.currency?.code)}</span> on this order.</span>
+							</div>
+						</div>
+
 
 						<div
 							class="h-fit divide-y divide-gray-200 overflow-hidden rounded-md sm:border {cartModule.partialCheckoutEnabled
 								? '[&>div:nth-child(2)]:max-sm:!border-t-0'
 								: ''}"
 						>
+						
 							<!-- Root checkbox -->
 							{#if cartModule.partialCheckoutEnabled}
 								<div class="flex items-center justify-between">
@@ -353,12 +372,19 @@
 												</div>
 
 												<div class="text-left lg:hidden">
-													<p class="text-base font-bold text-gray-900 sm:text-lg">
-														{formatPrice(item.price * item.qty, page?.data?.store?.currency?.code)}
-													</p>
+													<div class="flex items-baseline gap-2">
+														<p class="text-base font-bold text-gray-900 sm:text-lg">
+															{formatPrice(item.price * item.qty, page?.data?.store?.currency?.code)}
+														</p>
+														{#if item.mrp > item.price}
+															<span class="text-xs text-gray-400 line-through">
+																{formatPrice(item.mrp * item.qty, page?.data?.store?.currency?.code)}
+															</span>
+														{/if}
+													</div>
 													{#if item.mrp > item.price}
-														<p class="text-xs font-medium  tracking-tight text-green-600">
-															You saved {formatPrice((item.mrp - item.price) * item.qty, page?.data?.store?.currency?.code)}
+														<p class="text-xs font-medium tracking-tight text-green-600">
+															You saved {formatPrice((item.mrp * item.qty) - (item.price * item.qty), page?.data?.store?.currency?.code)}
 														</p>
 													{:else}
 														<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">
@@ -416,12 +442,20 @@
 												</button>
 												</div>
 												<div class="text-right hidden lg:block">
-													<p class="text-base font-bold text-gray-900 sm:text-lg">
-														{formatPrice(item.price * item.qty, page?.data?.store?.currency?.code)}
-													</p>
+													<div class="flex items-baseline justify-end gap-2">
+
+														<p class="text-base font-bold text-gray-900 sm:text-lg">
+															{formatPrice(item.price * item.qty, page?.data?.store?.currency?.code)}
+														</p>
+														{#if item.mrp > item.price}
+															<span class="text-xs text-gray-400 line-through">
+																{formatPrice(item.mrp * item.qty, page?.data?.store?.currency?.code)}
+															</span>
+														{/if}
+													</div>
 													{#if item.mrp > item.price}
 														<p class="text-xs font-medium tracking-tight text-green-600">
-															You saved {formatPrice((item.mrp - item.price) * item.qty, page?.data?.store?.currency?.code)}
+															You saved {formatPrice((item.mrp * item.qty) - (item.price * item.qty), page?.data?.store?.currency?.code)}
 														</p>
 													{:else}
 														<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">
