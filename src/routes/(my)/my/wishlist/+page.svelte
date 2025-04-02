@@ -18,17 +18,17 @@
 			<!-- Header -->
 			<div class="mb-10 flex items-center justify-between">
 				<div>
-					<h1 class="text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">My Wishlist</h1>
-					<p class="mt-2 text-lg text-gray-500">Items you've saved for later.</p>
+					<h1 class="text-lg font-bold tracking-tight text-gray-900 md:text-xl">My Wishlist</h1>
+					<p class="mt-2 text-sm text-gray-500">Items you've saved for later.</p>
 				</div>
-				{#if wishlistItems.length > 0}
+				<!-- {#if wishlistItems.length > 0}
 					<div class="hidden md:block">
 						<span class="rounded-full border border-gray-200 bg-gray-100 px-4 py-1.5 text-sm font-semibold text-gray-600">
 							{wishlistItems.length}
 							{wishlistItems.length === 1 ? 'Item' : 'Items'}
 						</span>
 					</div>
-				{/if}
+				{/if} -->
 			</div>
 
 			{#if loading}
