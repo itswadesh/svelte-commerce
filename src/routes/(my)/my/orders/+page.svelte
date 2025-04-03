@@ -152,7 +152,7 @@
 									<div class="group flex items-center gap-8 p-6 transition-colors hover:bg-gray-50/30">
 										<a
 											href="/my/orders/{order.parentOrderNo}"
-											class="relative h-24 w-20 shrink-0 overflow-hidden rounded-xl border border-gray-100 bg-gray-50 transition-transform duration-500 group-hover:scale-105"
+											class="relative h-24 w-20 shrink-0 overflow-hidden border border-gray-100 bg-gray-50 transition-transform duration-500 group-hover:scale-105"
 										>
 											{#if item.thumbnail}
 												<LazyImg src={item.thumbnail} alt={item.title} class="h-full w-full object-cover" />
