@@ -25,14 +25,13 @@
 <img height="400" src=".github/product-details-mobile.jpg" hspace="10">
 <p/>
 <br/>
-
 <p align="center">
-  <img src="https://img.shields.io/badge/Made_With-Svelte-red.svg?style=for-the-badge&color=dc8a78&logoColor=FF3E00&labelColor=302D41&logo=svelte"><br/><br/>
-  <img src="https://img.shields.io/badge/Maintained%3F-Yes-blueviolet?style=for-the-badge&color=209fb5&labelColor=5c5f77">
+  <img src="https://img.shields.io/badge/Made_With-Svelte-red.svg?style=for-the-badge" alt="Made with Svelte"><br/><br/>
+  <img src="https://img.shields.io/badge/Maintained%3F-Yes-blueviolet?style=for-the-badge" alt="Maintained">
 	<a href="https://github.com/itswadesh/svelte-commerce/stargazers" target="_blank">
-		<img alt="Stargazers" src="https://img.shields.io/github/stars/itswadesh/svelte-commerce?style=for-the-badge&logo=starship&color=C9CBFF&logoColor=D9E0EE&labelColor=302D41"></a>
+		<img alt="Stargazers" src="https://img.shields.io/github/stars/itswadesh/svelte-commerce?style=for-the-badge" ></a>
 	<a href="https://github.com/itswadesh/svelte-commerce/issues" target="_blank">
-		<img alt="Issues" src="https://img.shields.io/github/issues/itswadesh/svelte-commerce?style=for-the-badge&logo=gitbook&color=B5E8E0&logoColor=D9E0EE&labelColor=302D41"></a>
+		<img alt="Issues" src="https://img.shields.io/github/issues/itswadesh/svelte-commerce?style=for-the-badge" ></a>
   <a href="https://t.me/itswadesh" target="_blank">
     <img alt="Telegram" src="https://img.shields.io/badge/Telegram-itswadesh-blue.svg?style=for-the-badge"></a>
 </p>
@@ -40,35 +39,16 @@
 <br/>
 <p align="center">
   <a href="https://github.com/itswadesh/svelte-commerce/discussions/new/choose" target="_blank">
-    <picture>
-      <source srcset="assets/social/macchiato_github.svg" width="64" height="64" alt="Github Logo" media="(prefers-color-scheme: dark)"/>
-      <source srcset="assets/social/latte_github.svg" width="64" height="64" alt="Github Logo" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)"/>
-      <img src="assets/social/latte_github.svg" width="64" height="64" alt="Github Logo"/>
-    </picture>
+    <img src="https://img.shields.io/badge/GitHub-Discussions-blue?logo=github&style=for-the-badge" alt="GitHub Discussions" width="200" height="28"/>
   </a>
-  <img src="assets/misc/transparent.png" height="1" width="5"/>
   <a href="https://discord.gg/GgdAeccwDR" target="_blank">
-    <picture>
-      <source srcset="assets/social/macchiato_discord.svg" width="64" height="64" alt="Discord Logo" media="(prefers-color-scheme: dark)"/>
-      <source srcset="assets/social/latte_discord.svg" width="64" height="64" alt="Discord Logo" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)"/>
-      <img src="assets/social/latte_discord.svg" width="64" height="64" alt="Discord Logo"/>
-    </picture>
+    <img src="https://img.shields.io/badge/Discord-Community-blueviolet?logo=discord&style=for-the-badge" alt="Discord Community" width="200" height="28"/>
   </a>
-  <img src="assets/misc/transparent.png" height="1" width="5"/>
   <a href="https://twitter.com/itswadesh" target="_blank">
-    <picture>
-      <source srcset="assets/social/macchiato_twitter.svg" width="64" height="64" alt="Twitter Logo" media="(prefers-color-scheme: dark)"/>
-      <source srcset="assets/social/latte_twitter.svg" width="64" height="64" alt="Twitter Logo" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)"/>
-      <img src="assets/social/latte_twitter.svg" width="64" height="64" alt="Twitter Logo"/>
-    </picture>
+    <img src="https://img.shields.io/badge/Twitter-Follow-blue?logo=twitter&style=for-the-badge" alt="Twitter Follow" width="200" height="28"/>
   </a>
-  <img src="assets/misc/transparent.png" height="1" width="5"/>
   <a href="https://reddit.com/u/itswadesh" target="_blank">
-    <picture>
-      <source srcset="assets/social/macchiato_reddit.svg" width="64" height="64" alt="Reddit Logo" media="(prefers-color-scheme: dark)"/>
-      <source srcset="assets/social/latte_reddit.svg" width="64" height="64" alt="Reddit Logo" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)"/>
-      <img src="assets/social/latte_reddit.svg" width="64" height="64" alt="Reddit Logo"/>
-    </picture>
+    <img src="https://img.shields.io/badge/Reddit-Profile-FF4500?logo=reddit&style=for-the-badge" alt="Reddit Profile" width="200" height="28"/>
   </a>
 </p>
 
@@ -80,44 +60,21 @@ Reach out to me with queries!
 
 <div align="">
 
-### Big Brands using `svelte-commerce`
-
 </div>
 <br/>
-<p align="center">
-  <a href="https://tesoro.pk/" target="_blank">
-    <img src="https://res.cloudinary.com/itswadesh/image/upload/v1682424690/tesoro.png?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="Tesoro">
-  </a>
-  <img src="assets/misc/transparent.png" height="1" width="15"/>
-  <img src="assets/misc/transparent.png" height="1" width="15"/>
-  <a href="https://varnijewels.com/" target="_blank">
-    <img src="./static/varnijewels.jpg" height="64" alt="Varni Jewels">
-    <!-- <img src="https://ik.imagekit.io/3n6cglxq6/img/varni-logo_1619291754__34835-qt10qx2uq90x.webp?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="Varni Jewels"> -->
-  </a>
-  <img src="assets/misc/transparent.png" height="1" width="15"/>
-  <a style="color:white" href="https://lrnr.in/" target="_blank">
-    <img style="color:white" src="./static/lrnr.svg" height="64" alt="LRNR">
-    <!-- <img src="https://res.cloudinary.com/itswadesh/image/upload/v1682423814/logo-lrnr.png?tr=w-auto,h-80,ar-3-4,cm-pad_resize&sharpen=true" height="64" alt="LRNR"> -->
-  </a>
-  <img src="assets/misc/transparent.png" height="1" width="15"/>
-  <!-- <a href="https://tablez.com/" target="_blank">
-    <img src="https://tablez.com/icon.png" height="64" alt="Tablez">
-  </a> -->
-  <img src="assets/misc/transparent.png" height="1" width="15"/>
-  <a href="https://b.zapvi.in/" target="_blank">
-    <img style="padding:10px;padding-bottom:0;" src="./static/zapvi.svg" height="64" alt="Zapvi">
-    <!-- <img src="https://cdn.zapvi.in/img/Zapvi-Black-Logo-iKPQP43npcI2.svg?width=3&height=4&blur=25&aspect_ratio=3:4" height="64" alt="Misiki"> -->
-  </a>
-  <img src="assets/misc/transparent.png" height="1" width="15"/>
-  <a href="https://secretgreen.com.au/" target="_blank">
-    <img style="padding:10px;padding-bottom:0;" src="./static/secretgreen.jpg" height="64" alt="Secretgreen">
-  </a>
-  <img src="assets/misc/transparent.png" height="1" width="15"/>
-  <div>
-<!--     <img src="https://res.cloudinary.com/itswadesh/image/upload/v1682424327/clicky_logo-97724356932.png?width=3&height=4&blur=25&aspect_ratio=3:4" height="64" alt="Clicky"> -->
-  </div>
-
-</p>
+<div><h2 class="text-center text-sm font-semibold text-gray-600">TRUSTED BY TEAMS AROUND THE WORLD</h2> 
+<div style="display: flex; justify-content: space-between;">
+<div>
+<img alt="Varni Jewels" src="https://litekart.in/_app/immutable/assets/varni.DuN9QdLG.webp" class="h-fit w-28 px-2 dark:brightness-0 dark:invert" height="32"></div> 
+<div>
+<img alt="LRNR" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NS40IDIwLjYiPjxkZWZzPjxzdHlsZT4uY2xzLTF7Zm9udC1zaXplOjIwcHg7Zm9udC1mYW1pbHk6TGVxdWlyZURFTU8sIExlcXVpcmUgREVNTzt9LmNscy0yLC5jbHMtM3tmb250LXNpemU6MTRweDt9LmNscy0ze2ZvbnQtZmFtaWx5Ok1pY3Jvc29mdFNhbnNTZXJpZiwgTWljcm9zb2Z0IFNhbnMgU2VyaWY7fTwvc3R5bGU+PC9kZWZzPjx0aXRsZT5Bc3NldCA3PC90aXRsZT48ZyBpZD0iTGF5ZXJfMiIgZGF0YS1uYW1lPSJMYXllciAyIj48ZyBpZD0iTGF5ZXJfMS0yIiBkYXRhLW5hbWU9IkxheWVyIDEiPjx0ZXh0IGNsYXNzPSJjbHMtMSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAxNykiPkxSTlI8dHNwYW4gY2xhc3M9ImNscy0yIiB4PSI1MS4zNiIgeT0iMCI+LjwvdHNwYW4+PHRzcGFuIGNsYXNzPSJjbHMtMyIgeD0iNTQuNDMiIHk9IjAiPmluPC90c3Bhbj48L3RleHQ+PC9nPjwvZz48L3N2Zz4=" class="h-8 w-28 px-2 dark:brightness-0 dark:invert" height="32"></div> 
+<div>
+<img alt="Tesoro" src="https://litekart.in/_app/immutable/assets/tesoro.CSdX56Wq.png" class="h-8 w-28 px-2 dark:brightness-0 dark:invert" height="32"></div> 
+<div>
+<img alt="Secretgreen" src="https://litekart.in/_app/immutable/assets/secretgreen.BzzbCiSU.jpg" class="h-8 w-28 px-2 dark:brightness-0 dark:invert"  height="32">
+</div>
+</div>
+</div>
 <br/>
 <br/>
 
