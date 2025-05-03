@@ -1,103 +1,69 @@
-// import * as SentryNode from '@sentry/node'
-import { authenticateUser } from '$lib/server'
-import { dev } from '$app/environment'
-import { DOMAIN, IS_DEV, listOfPagesWithoutBackButton } from '$lib/config'
-import { error, type Handle, type HandleServerError } from '@sveltejs/kit'
-import { InitService } from '$lib/services'
-import { nanoid } from 'nanoid'
+import type { Handle } from '@sveltejs/kit'
+import { StoreService } from '$lib/core/services'
+import { env } from '$env/dynamic/public'
 
-// const SENTRY_DSN = env.SECRET_SENTRY_DSN
-
-// if (SENTRY_DSN && SENTRY_DSN !== 'YOUR_SENTRY_DSN') {
-// 	SentryNode.init({
-// 		dsn: SENTRY_DSN
-// 	})
-// }
-
-/** @type {import('@sveltejs/kit').HandleFetch} */
-export const handleFetch = async ({ event, request, fetch }) => {
-	request.headers.set('cookie', event.request.headers.get('cookie'), { path: '/' })
-
-	return fetch(request)
-}
-
-export const handleError: HandleServerError = ({ error, event }) => {
-	const errorId = nanoid()
-	// SentryNode.captureException(error, {
-	// 	contexts: { sveltekit: { event, errorId } }
-	// })
-
-	return {
-		message: "An unexpected error occurred. We're working on it.",
-		errorId
-	}
+// Function to check if a URL is a local/IP address
+function isLocalOrIpAddress(url: string): boolean {
+	return url.includes('localhost') || url.includes('127.0.0.1') || /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/.test(url)
 }
 
 export const handle: Handle = async ({ event, resolve }) => {
-	try {
-		const url = new URL(event.request.url)
-		const host = url.host
-		const protocol = !IS_DEV && !dev ? `https://` : `http://`
-		// This is required for vercel as it parse URL as http instead of https
-		event.locals.origin = protocol + host
-		event.locals.host = url.host
+	const url = new URL(event.request.url)
+	const isLocalOrIP = isLocalOrIpAddress(url.hostname)
 
-		const userAgent = event.request.headers.get('user-agent')
+	if (url.protocol === 'http:' && !isLocalOrIP) {
+		event.url.protocol = 'https:'
+	}
 
-		const isDesktop = !/mobile/i.test(userAgent)
-		const isShowBackButton = !listOfPagesWithoutBackButton.includes(url?.pathname)
-
-		event.locals.isDesktop = isDesktop
-		event.locals.isShowBackButton = isShowBackButton
-
-		const storeId = event.cookies.get('storeId')
-		if (storeId && storeId != 'undefined') {
-			event.locals.storeId = storeId
-		} else {
-			try {
-				const { storeOne } = await InitService.fetchInit({
-					host: DOMAIN || host,
-					origin: event.locals.origin
-				})
-				const storeId = storeOne?._id
-				
-				if (!storeId || storeId == 'undefined') {
-					throw { status: 404, message: `Could not find STORE for domain = ${url.host}` }
-				}
-
-				event.cookies.set('storeId', storeId, { path: '/' })
-				// event.cookies.set('store', JSON.stringify(store), { path: '/' })
-				event.locals.storeId = storeId
-				// event.locals.store = store
-			} catch (e) {
-				throw { status: 404, message: `Could not find STORE for domain = ${url.host}` }
+	const storeId = env.PUBLIC_LITEKART_STORE_ID
+	const storeIdFromCookie = event.cookies.get('litekart_store_id')
+	if (storeId && storeIdFromCookie !== storeId) {
+		event.cookies.set('litekart_store_id', storeId, { path: '/' })
+	} else if (!storeIdFromCookie) {
+		const domain = env.PUBLIC_LITEKART_DOMAIN || url.hostname
+		if (!domain) {
+			throw new Error(`Unable to retrieve hostname from URL. ${url.hostname}`)
+		}
+		if (!url.pathname.startsWith('/api')) {
+			// console.log(`PUBLIC_LITEKART_STORE_ID = ${storeId}, PUBLIC_LITEKART_DOMAIN = ${env.PUBLIC_LITEKART_DOMAIN}, URL.HOSTNAME = ${url.hostname}`)
+			const storeService = new StoreService(event.fetch)
+			const storeDetails = await storeService.getStoreByIdOrDomain({ storeId, domain })
+			if (storeDetails?.id && storeIdFromCookie !== storeDetails?.id) {
+				event.cookies.set('litekart_store_id', storeDetails?.id, { path: '/' })
+				event.locals.storeDetails = storeDetails
+			} else {
+				throw new Error('Hooks: Store not found.')
 			}
 		}
+	}
 
-		// This calls init only when store data not present in browser cookies
-		// this simply gets data from cookie
-		event.locals.me = await authenticateUser(event)
-		const zip = event.cookies.get('zip')
-		event.locals.sid = event.cookies.get('connect.sid')
-		event.locals.cartId = event.cookies.get('cartId')
-		if (zip) event.locals.zip = JSON.parse(zip)
-		
-		const response = await resolve(event)
+	const response = await resolve(event, {
+		filterSerializedResponseHeaders: (name) => name === 'content-type'
+	})
+	// response.headers.set('x-litekart-store', storeDetailsCache?.id || '')
+	return response
+}
 
-		// const end = performance.now()
-		// const responseTime = end - start
+// Simplified error handler that strips stack trace information
+export function handleError({ error, event }) {
+	// Check if it's a SvelteKitError or similar object with stack trace
+	if (error && error.stack && error.status === 404 && !error.message.startsWith('/cdn/')) {
+		// Create a simplified version of the error
+		const simplifiedError = error.message || 'An error occurred'
 
-		// if (responseTime > 1000) {
-		// 	// console.log(`🐢 ${route} took ${responseTime.toFixed(2)} ms`)
-		// }
+		console.error('Sveltekit error:', simplifiedError)
 
-		// if (responseTime < 100) {
-		// 	// console.log(`🚀 ${route} took ${responseTime.toFixed(2)} ms`)
-		// }
+		// Return the simplified error
+		return {
+			message: simplifiedError.message,
+			status: simplifiedError.status
+		}
+	}
+	console.log(error, 'error')
 
-		return response
-	} catch (e) {
-		// If the store is not found, throw a 404 error
-		error(404, 'Store Not Found')
+	return {
+		message: error?.message || 'An unknown error occurred',
+		status: error?.status || 500
 	}
 }
+

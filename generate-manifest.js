@@ -1,16 +1,54 @@
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 import sharp from 'sharp'
-import {
-	backgroundColor,
-	icon,
-	siteShortTitle,
-	siteTitle,
-	themeColor,
-	shortcuts,
-	description,
-	screenshots
-} from './src/lib/config'
+
+const icon = 'static/litekart-icon-512x512-black.png'
+const backgroundColor = '#1b4079'
+const themeColor = '#d62828'
+const siteShortTitle = 'Litekart'
+const siteTitle = 'Litekart'
+const description = 'Litekart'
+
+const shortcuts = [
+	// {
+	// 	name: 'Buy Mobile covers',
+	// 	short_name: 'Mobile',
+	// 	description: 'Buy Modern Mobile Covers',
+	// 	url: '/mobile?source=pwa',
+	// 	icons: [
+	// 		{
+	// 			src: '/category/mobile.png',
+	// 			sizes: '192x192'
+	// 		}
+	// 	]
+	// },
+	// {
+	// 	name: 'Print your mug',
+	// 	short_name: 'Mug',
+	// 	description: 'Print your photo on mug',
+	// 	url: '/mug?source=pwa',
+	// 	icons: [
+	// 		{
+	// 			src: '/category/mug.png',
+	// 			sizes: '192x192'
+	// 		}
+	// 	]
+	// }
+]
+
+const screenshots = [
+	// {
+	// 	src: '/screenshots/1.png',
+	// 	type: 'image/png',
+	// 	sizes: '540x720'
+	// },
+	// {
+	// 	src: '/screenshots/2.jpg',
+	// 	type: 'image/jpg',
+	// 	sizes: '540x720'
+	// }
+]
+
 const __dirname = path.resolve()
 const iconsDirectory = path.join(__dirname, 'static/icons')
 const manifestFile = path.join(__dirname, 'static/manifest.json')

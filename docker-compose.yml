@@ -9,6 +9,6 @@ services:
     ports:
       - '3000:3000'
     environment:
-      - PUBLIC_HTTP_ENDPOINT=https://staging.litekart.in
+      - PUBLIC_LITEKART_API_URL=https://staging.litekart.in
       - NODE_ENV=production
       - PORT=3000

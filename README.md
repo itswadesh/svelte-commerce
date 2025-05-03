@@ -147,20 +147,28 @@ npm run dev
 
 Thats all !
 
-Open http://localhost:3000 on chrome. Your app should be live with awesome sveltekit up and running
+Open http://localhost:3000 on chrome. Your app should be live with awesome svelte-commerce up and running
+
+## Development
+run `npm link` inside `litekart-utils` repo
+run `npm link @misiki/litekart-utils` inside this repo
+run `npm link` inside `litekart-connector` repo
+run `npm link @misiki/litekart-connector` inside this repo
 
 ## Configuration
 
 There are 3 places to configure
 
 1. `src/lib/config/`
-   All non secret and application wide configs are stored here, if required, change according to your requirement.
+   All non secret and application wide configs are stored here. If required, change according to your requirement.
 
 2. `.env`
    All secrets stored here
 
 3. `src/lib/services/index.ts`
-   This is used to define which service to use. Only 1 of the listed service can be active at a time. Valid values are `Litekart Medusa Bigcommerce Shopify Woocommerce`
+   This is used to define which service to use. Only 1 of the listed service can be active at a time. Valid values are
+   - `export * from '@misiki/litekart-connector'`
+   - `export * from '@misiki/medusa-connector'`
 
 ## Deployment
 
@@ -196,49 +204,51 @@ Svelte ecommerce - Headless, Authentication, Cart & Checkout, TailwindCSS, Serve
 
 ## Updates
 
-Latest update: 07-February-2023
-
 <details>
 <summary>Click here to see all the updates</summary>
 
-- 07-Jun-2023 - Deeplinking for social aharing buttons
-- 07-February-2023 - Prettified.
-- 06-February-2023 - Sveltekit 1.5
-- 15-December-2022 - Sveltekit 1.0 - Finally.
-- 05-December-2022 - fix: Close message
-- 30-November-2022 - Fixed: Coupon apply and remove, Added: Back to top fade animation
-- 29-November-2022 - Improved image lazy loading technique
-- 29-November-2022 - Added Price and Discount filters to product catalog
-- 29-November-2022 - Preload data on link hover
-- 25-November-2022 - Service worker added
-- 10-November-2022 - Product options introduced
-- 04-November-2022 - Added verify pincode / zip
-- 03-November-2022 - New slider added for more control over design
-- 02-November-2022 - Cleanup unused packages
-- 31-October-2022 - Dynamic searchbat text
-- 31-October-2022 - Added title, description, keywords
-- 27-October-2022 - Improved megamenu layout
-- 24-October-2022 - fix: login, order success, failed payment, frequently bought together
-- 20-October-2022 - Sentry added
-- 20-October-2022 - Zero-configuration Coolify deployment
-- 16-October-2022 - SEO attributes Added
-- 11-October-2022 - Add to cart animation
-- 30-September-2022 - Attached to ResT API Backend, Migrated to new Sveltekit version
-- 12-September-2022 - Modal based mobile device search instead of page based
-- 12-September-2022 - New fully working theme launched
-- 04-September-2022 - Product schema Added
-- 26-August-2022 - Added Trending Products section
-- 26-April-2022 - Latest SvelteKit version
-- 26-April-2022 - Improved image lazy loading
-- 26-April-2022 - New Banners section
-- 26-April-2022 - New Authentication System
-- 26-April-2022 - New Blogs section
-- 24-April-2022 - Zero-configuration Vercel deployment
-- 22-July-2021 - Integrated with netlify deployment
+- 07-Jun-2023 - Deeplinking for social sharing buttons
+- 07-Feb-2023 - Prettified.
+- 06-Feb-2023 - Sveltekit 1.5
+- 15-Dec-2022 - Sveltekit 1.0 - Finally.
+- 05-Dec-2022 - fix: Close message
+- 30-Nov-2022 - Fixed: Coupon apply and remove, Added: Back to top fade animation
+- 29-Nov-2022 - Improved image lazy loading technique
+- 29-Nov-2022 - Added Price and Discount filters to product catalog
+- 29-Nov-2022 - Preload data on link hover
+- 25-Nov-2022 - Service worker added
+- 10-Nov-2022 - Product options introduced
+- 04-Nov-2022 - Added verify pincode / zip
+- 03-Nov-2022 - New slider added for more control over design
+- 02-Nov-2022 - Cleanup unused packages
+- 31-Oct-2022 - Dynamic searchbat text
+- 31-Oct-2022 - Added title, description, keywords
+- 27-Oct-2022 - Improved megamenu layout
+- 24-Oct-2022 - fix: login, order success, failed payment, frequently bought together
+- 20-Oct-2022 - Sentry added
+- 20-Oct-2022 - Zero-configuration Coolify deployment
+- 16-Oct-2022 - SEO attributes Added
+- 11-Oct-2022 - Add to cart animation
+- 30-Sep-2022 - Attached to ResT API Backend, Migrated to new Sveltekit version
+- 12-Sep-2022 - Modal based mobile device search instead of page based
+- 12-Sep-2022 - New fully working theme launched
+- 04-Sep-2022 - Product schema Added
+- 26-Aug-2022 - Added Trending Products section
+- 26-Apr-2022 - Latest SvelteKit version
+- 26-Apr-2022 - Improved image lazy loading
+- 26-Apr-2022 - New Banners section
+- 26-Apr-2022 - New Authentication System
+- 26-Apr-2022 - New Blogs section
+- 24-Apr-2022 - Zero-configuration Vercel deployment
+- 22-Jul-2021 - Integrated with netlify deployment
 - 07-May-2021 - Completely Migrated to SvelteKit
+
+For a complete development story, visit [our development page](https://litekart.in/development-story)
 
 </details>
 
-### IDEAS
+## Integration API Reference
 
-Wherever we need store info at server page, we get it from its own api call, if store info requires in client page we take it from the layout.ts page where cached store into is available
+https://woocommerce.github.io/woocommerce-rest-api-docs/?javascript#products
+https://developer.bigcommerce.com/api-reference/6fe995bba597e-get-a-product
+https://docs.medusajs.com/api/store/

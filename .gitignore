@@ -1,22 +1,24 @@
-.vscode
-.DS_Store
-.env
 node_modules
-/.svelte
+
+# Output
+.output
+.vercel
 /.svelte-kit
 /build
-/functions
-package-lock.json
-/package
-/prod
-# Local Netlify folder
-.netlify
-dev-dist
-.vercel_build_output
-$houdini
-$kitql
-test-results/*
-vite.config.js.timestamp-*
 
-# Sentry Config File
-.sentryclirc
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+playwright-report/index.html
+playwright-report/*
+test-results/*
