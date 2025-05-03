@@ -1,170 +1,97 @@
-/* Write your global styles here, in PostCSS syntax */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-	body {
-		@apply text-zinc-800;
+	:root {
+		--background: 0 0% 100%;
+		--foreground: 222.2 84% 4.9%;
+		--muted: 210 40% 96.1%;
+		--muted-foreground: 215.4 16.3% 46.9%;
+		--popover: 0 0% 100%;
+		--popover-foreground: 222.2 84% 4.9%;
+		--card: 0 0% 100%;
+		--card-foreground: 222.2 84% 4.9%;
+		--border: 214.3 31.8% 91.4%;
+		--input: 214.3 31.8% 91.4%;
+		--primary: 222.2 47.4% 11.2%;
+		--primary-foreground: 210 40% 98%;
+		--secondary: 210 40% 96.1%;
+		--secondary-foreground: 222.2 47.4% 11.2%;
+		--accent: 210 40% 96.1%;
+		--accent-foreground: 222.2 47.4% 11.2%;
+		--destructive: 0 72.2% 50.6%;
+		--destructive-foreground: 210 40% 98%;
+		--ring: 222.2 84% 4.9%;
+		--radius: 0.5rem;
+		--sidebar-background: 0 0% 98%;
+		--sidebar-foreground: 240 5.3% 26.1%;
+		--sidebar-primary: 240 5.9% 10%;
+		--sidebar-primary-foreground: 0 0% 98%;
+		--sidebar-accent: 240 4.8% 95.9%;
+		--sidebar-accent-foreground: 240 5.9% 10%;
+		--sidebar-border: 220 13% 91%;
+		--sidebar-ring: 217.2 91.2% 59.8%;
+		/* --font-primary: 'Montserrat', sans-serif; */
+		--font-primary: 'DM Sans', sans-serif;
 	}
 
-	.prose {
-		@apply text-zinc-800 text-justify;
-	}
-
-	.prose p {
-		@apply text-sm text-zinc-500 font-normal;
-	}
-
-	.prose ul {
-		@apply text-zinc-500 flex flex-col gap-2 my-5;
-	}
-
-	.prose ol {
-		@apply text-zinc-500 flex flex-col gap-2 my-5;
-	}
-
-	.prose li {
-		@apply my-0;
-	}
-
-	.prose a {
-		@apply text-sm text-indigo-500 font-semibold;
-	}
-
-	p {
-		@apply text-sm text-zinc-500 font-normal;
-	}
-
-	@media only screen and (min-width: 640px) {
-		.prose h1 {
-			@apply text-3xl font-bold my-5;
-		}
-
-		.prose h2 {
-			@apply text-2xl font-bold my-5;
-		}
-
-		.prose h3 {
-			@apply text-xl font-bold my-5;
-		}
-
-		.prose h4 {
-			@apply text-lg font-bold my-5;
-		}
-
-		.prose h5 {
-			@apply text-base font-semibold my-2;
-		}
-
-		.prose h6 {
-			@apply text-sm font-semibold my-2;
-		}
-
-		h1 {
-			@apply text-3xl font-bold;
-		}
-
-		h2 {
-			@apply text-2xl font-bold;
-		}
-
-		h3 {
-			@apply text-xl font-bold;
-		}
-
-		h4 {
-			@apply text-lg font-bold;
-		}
-
-		h5 {
-			@apply text-base font-semibold;
-		}
-
-		h6 {
-			@apply text-sm font-semibold;
-		}
-	}
-
-	@media only screen and (max-width: 640px) {
-		.prose h1 {
-			@apply text-2xl font-bold my-5;
-		}
-
-		.prose h2 {
-			@apply text-xl font-bold my-5;
-		}
-
-		.prose h3 {
-			@apply text-lg font-bold my-5;
-		}
-
-		.prose h4 {
-			@apply text-base font-bold my-5;
-		}
-
-		.prose h5 {
-			@apply text-sm font-semibold my-2;
-		}
-
-		.prose h6 {
-			@apply text-xs font-semibold my-2;
-		}
-
-		h1 {
-			@apply text-2xl font-bold;
-		}
-
-		h2 {
-			@apply text-xl font-bold;
-		}
-
-		h3 {
-			@apply text-lg font-bold;
-		}
-
-		h4 {
-			@apply text-base font-bold;
-		}
-
-		h5 {
-			@apply text-sm font-semibold;
-		}
-
-		h6 {
-			@apply text-xs font-semibold;
-		}
+	.dark {
+		--background: 222.2 84% 4.9%;
+		--foreground: 210 40% 98%;
+		--muted: 217.2 32.6% 17.5%;
+		--muted-foreground: 215 20.2% 65.1%;
+		--popover: 222.2 84% 4.9%;
+		--popover-foreground: 210 40% 98%;
+		--card: 222.2 84% 4.9%;
+		--card-foreground: 210 40% 98%;
+		--border: 217.2 32.6% 17.5%;
+		--input: 217.2 32.6% 17.5%;
+		--primary: 210 40% 98%;
+		--primary-foreground: 222.2 47.4% 11.2%;
+		--secondary: 217.2 32.6% 17.5%;
+		--secondary-foreground: 210 40% 98%;
+		--accent: 217.2 32.6% 17.5%;
+		--accent-foreground: 210 40% 98%;
+		--destructive: 0 62.8% 30.6%;
+		--destructive-foreground: 210 40% 98%;
+		--ring: 212.7 26.8% 83.9%;
+		--sidebar-background: 240 5.9% 10%;
+		--sidebar-foreground: 240 4.8% 95.9%;
+		--sidebar-primary: 224.3 76.3% 48%;
+		--sidebar-primary-foreground: 0 0% 100%;
+		--sidebar-accent: 240 3.7% 15.9%;
+		--sidebar-accent-foreground: 240 4.8% 95.9%;
+		--sidebar-border: 240 3.7% 15.9%;
+		--sidebar-ring: 217.2 91.2% 59.8%;
 	}
 }
 
-@layer components {
-	.wiggle {
-		animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-		transform: translate3d(0, 0, 0);
-		backface-visibility: hidden;
-		perspective: 1000px;
+@layer base {
+	* {
+		font-family: var(--font-primary);
+		@apply border-border;
 	}
-
-	@keyframes shake {
-		10%,
-		90% {
-			transform: translate3d(-1px, 0, 0);
-		}
-
-		20%,
-		80% {
-			transform: translate3d(2px, 0, 0);
-		}
-
-		30%,
-		50%,
-		70% {
-			transform: translate3d(-4px, 0, 0);
-		}
-
-		40%,
-		60% {
-			transform: translate3d(4px, 0, 0);
-		}
+	body {
+		@apply bg-background text-foreground;
 	}
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+/* 
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+} */
+
+@media only screen and (max-width: 980px) {
+ #tidio-chat-iframe { 
+  bottom: 80px !important;
+}
+ #reamaze-widget {
+   bottom: 80px !important;
+ }
 }

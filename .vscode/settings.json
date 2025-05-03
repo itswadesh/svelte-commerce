@@ -1,0 +1,14 @@
+{
+	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"[svelte]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"editor.renderWhitespace": "all",
+	"editor.renderControlCharacters": true,
+	"editor.insertSpaces": true,
+	"editor.tabSize": 2
+}

@@ -1,43 +1,30 @@
 import { sveltekit } from '@sveltejs/kit/vite'
 import { defineConfig, loadEnv } from 'vite'
-// import { join } from 'path'
-// import { partytownVite } from '@builder.io/partytown/utils'
-import { SvelteKitPWA } from '@vite-pwa/sveltekit'
-/** @type {import('vite').UserConfig} */
+import { svelteInspector } from '@sveltejs/vite-plugin-svelte-inspector'
+
 export default defineConfig(({ command, mode }) => {
 	const env = loadEnv(mode, process.cwd(), '')
-	const HTTP_ENDPOINT = env.PUBLIC_LITEKART_API_URL || 'https://api.litekart.in'
 	return {
-		plugins: [
-			sveltekit(),
-			SvelteKitPWA({
-				registerType: 'autoUpdate',
-				workbox: {
-					globPatterns: ['**/*.{ico,png,svg,webp}']
-				},
-				srcDir: './src',
-				// mode: 'development',
-				scope: '/',
-				base: '/',
-				devOptions: {
-					// enabled: true,
-					type: 'module',
-					navigateFallback: '/'
-				},
-				// if you have shared info in svelte config file put in a separate module and use it also here
-				kit: {}
-			})
-			// partytownVite({
-			// 	dest: join(process.cwd(), 'static', '~partytown')
-			// })
-		],
+		plugins: [sveltekit(), svelteInspector()],
+		preview: { port: 80, strictPort: true, host: true },
 		server: {
-			allowedHosts: true, // This is required, else will "throw Blocked request. This host ("litekart.in") is not allowed."
+			allowedHosts: true, // This is required, else will "throw Blocked request. This host ("shopnx.in") is not allowed."
 			host: true,
 			port: 3000,
 			proxy: {
-				'/api': HTTP_ENDPOINT,
-				'/sitemap': 'https://s3.ap-south-1.amazonaws.com/litekart.in'
+				'/api': {
+					target: env.PUBLIC_LITEKART_API_URL || 'http://localhost:7000', // Backend server URL
+					changeOrigin: true, // Required for CORS
+					secure: false, // Disable SSL verification if needed
+					rewrite: (path) => path.replace(/^\/api/, 'api') // Remove `/api` prefix
+				},
+				'/static': {
+					target: env.PUBLIC_LITEKART_API_URL || 'http://localhost:7000', // Backend server URL
+					changeOrigin: true, // Required for CORS
+					secure: false, // Disable SSL verification if needed
+					rewrite: (path) => path.replace(/^\/static/, 'static') // Remove `/static` prefix
+				},
+				'/sitemaps': `https://${env.S3_BUCKET_NAME}.s3.${env.S3_REGION}.amazonaws.com`
 			}
 		}
 	}
