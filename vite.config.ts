@@ -32,7 +32,7 @@ export default defineConfig(({ command, mode }) => {
 			// })
 		],
 		server: {
-			allowedHosts: true, // This is required, else will "throw Blocked request. This host ("shopnx.in") is not allowed."
+			allowedHosts: true, // This is required, else will "throw Blocked request. This host ("litekart.in") is not allowed."
 			host: true,
 			port: 3000,
 			proxy: {
