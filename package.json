@@ -42,7 +42,7 @@
 		"@builder.io/partytown": "0.10.2",
 		"@egjs/svelte-grid": "1.16.0",
 		"@playwright/test": "^1.47.2",
-		"@sentry/node": "8.32.0",
+		"@sentry/node": "8.49.0",
 		"@sentry/svelte": "8.32.0",
 		"@sentry/tracing": "7.114.0",
 		"@splidejs/splide-extension-video": "0.8.0",
