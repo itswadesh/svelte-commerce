@@ -49,7 +49,7 @@
 			</div>
 
 			<div class="sticky top-20 mx-2 grid gap-2 sm:gap-5">
-				<ProductTitleSection product={productState.data} />
+				<ProductTitleSection product={productState.data?.product} />
 
 				<ProductPricing />
 
