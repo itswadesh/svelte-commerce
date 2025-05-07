@@ -19,6 +19,7 @@
 	import ProductTitleSection from './product-title-section.svelte'
 	import ProductVariation from './product-variation.svelte'
 	import RelatedProducts from './related-products.svelte'
+	import StoreCheck from './store-check.svelte'
 
 	const productState = useProductState()
 	const data = $derived(productState.data)
@@ -120,6 +121,8 @@
 						</div>
 					{/if}
 
+					<StoreCheck />
+
 					<ProductSpecifications />
 
 					<ProductDescription />
@@ -152,4 +155,3 @@
 />
 <!-- {/snippet}
 </ProductRenderer> -->
-

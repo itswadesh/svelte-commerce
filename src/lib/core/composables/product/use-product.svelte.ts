@@ -84,9 +84,12 @@ class ProductState {
 
 	wishlistPluginEnabled = $derived(page?.data?.store?.plugins?.isWishlist?.active)
 	isIndianPincodesPluginEnabled = $derived(page?.data?.store?.plugins?.isIndianPincodes?.active)
+	wareHousePluginEnabled = $derived(page?.data?.store?.plugins?.warehouse?.active)
 
 	wishlisted = $state(false)
 	wishlistLoading = $state(false)
+
+	warehouses = $state<Record<string, unknown>[]>([])
 
 	refreshOptions = () => {
 		if (this.data?.product?.options?.length) {
@@ -387,6 +390,27 @@ class ProductState {
 			}
 		})
 
+		onMount(async () => {
+			try {
+				const res = await fetch('/api/inventory', {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+						'x-litekart-store': page.data?.store?.id || ''
+					}
+				})
+
+				const jsonRes = await res.json()
+				if (jsonRes?.data?.length) {
+					this.warehouses = jsonRes.data
+				}
+
+				console.log(res, 'res')
+			} catch (error) {
+				console.error(error)
+			}
+		})
+
 		$effect(() => {
 			if (this.data?.product) {
 				this.structuredData = {
@@ -493,4 +517,3 @@ export function useProductState() {
 	}
 	return productState
 }
-
