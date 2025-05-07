@@ -6,7 +6,7 @@
 	const productState = useProductState()
 </script>
 
-{#if productState.wareHousePluginEnabled}
+{#if productState.wareHousePluginEnabled && productState.warehouses?.length > 0}
 	<Sheet.Root>
 		<div class="my-5 flex flex-col gap-2">
 			<div class="flex items-center gap-2">
@@ -27,7 +27,7 @@
 			</Sheet.Header>
 
 			<div class="mt-5 flex flex-col divide-y border-y">
-				{#each productState?.warehouses as house}
+				{#each productState.warehouses as house}
 					<div class="flex items-center justify-between p-6 py-4">
 						<div class="flex w-full flex-col gap-2">
 							<div class="flex w-full items-center justify-between gap-2">
