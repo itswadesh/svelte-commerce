@@ -295,7 +295,10 @@ class DesktopFilterState {
 
   formatFilterName = (key: string) => {
     let formattedKey = key
-    if (key?.includes?.('attributes') || key?.includes?.('option')) formattedKey = key.split('.')[1]
+    if (key?.includes?.('.')) {
+			const parts = key.split('.')
+			formattedKey = parts[parts.length - 1]
+		}
 
     // Capitalisation
     const regex = /[a-z][A-Z][a-z]/
