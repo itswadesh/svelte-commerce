@@ -58,7 +58,7 @@
 		</div>
 	{:else}
 		<div class="inter-gap relative grid grid-cols-1 items-start lg:grid-cols-2">
-			<div class="col-span-1 sm:mt-0 lg:sticky lg:top-28">
+			<div class="col-span-1 sm:mt-0 ">
 				<ProductGallerySection />
 			</div>
 
