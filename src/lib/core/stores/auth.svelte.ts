@@ -57,12 +57,13 @@ export class UserState {
 		try {
 			const me = await userService.signup({ email, password, firstName, lastName, phone, cartId, origin })
 			this.user = me
-			toast.success('Signup successful')
-		} catch (e) {
-			toast.error('Signup Failed')
-			console.error(e)
-		}
-		this.loading = false
+      return true
+		} catch (e: any) {
+			toast.error(e.message || 'Signup Failed')
+      return false
+		} finally {
+		  this.loading = false
+    }
 	}
 
 	async joinAsVendor({ email, password, firstName, lastName, businessName, phone, role, cartId = null }: any) {
@@ -118,7 +119,7 @@ export class UserState {
 				goto('/dash')
 			} else {
 				goto('/')
-			}
+			} 
 			return true
 		} catch (e) {
 			// console.log(e)

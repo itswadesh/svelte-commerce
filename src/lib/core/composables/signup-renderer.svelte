@@ -19,9 +19,10 @@
 	}
 	let { content, show = $bindable(false), info = $bindable() }: Props = $props()
 
+	type callbackFunction = (success: boolean) => void
 	interface SnippetParams {
 		isLoading: boolean
-		handleSubmit: (e: Event) => void
+		handleSubmit: (e: Event, callback?: callbackFunction) => void
 		closeModal: () => void
 		schemas: any
 	}
@@ -74,7 +75,7 @@
 			})
 	}
 
-	async function handleSubmit(e: Event) {
+	async function handleSubmit(e: Event, callback?: callbackFunction) {
 		e.preventDefault()
 		try {
 			isLoading = true
@@ -86,11 +87,15 @@
 				origin: page.url.origin
 				// phone,
 			})
+			if (!res) return
+
 			toast.success('Account created successfully')
+			callback?.(true)
 			goto(`/auth/signup/success?email=${encodeURIComponent(info.email)}`)
 			show = false
 		} catch (e: any) {
 			toast.error(e.message)
+			callback?.(false)
 		} finally {
 			isLoading = false
 		}
@@ -102,7 +107,7 @@
 		if (typeof window !== 'undefined') {
 			const url = new URL(window.location.href)
 			url.searchParams.delete('show_auth')
-			url.searchParams.delete('login')
+			url.searchParams.delete('signup')
 			url.searchParams.delete('redirect')
 			replaceState(url.toString(), {})
 		}
