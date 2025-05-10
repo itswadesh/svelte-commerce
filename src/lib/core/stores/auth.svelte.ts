@@ -113,13 +113,13 @@ export class UserState {
 			})
 			this.user = me
 			// console.log('🚀 ~ UserState ~ login ~ me:', me)
-			if (me?.role === 'ADMIN') {
-				goto('/select-store')
-			} else if (me?.role === 'VENDOR') {
-				goto('/dash')
-			} else {
-				goto('/')
-			} 
+			//if (me?.role === 'ADMIN') {
+			//	goto('/select-store')
+			//} else if (me?.role === 'VENDOR') {
+			//	goto('/dash')
+			//} else {
+			//	goto('/')
+			//}
 			return true
 		} catch (e) {
 			// console.log(e)
