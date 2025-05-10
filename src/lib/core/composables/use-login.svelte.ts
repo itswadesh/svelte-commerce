@@ -64,6 +64,7 @@ export class LoginModule {
 			}
 		} catch (e) {
 			toast.error((e as { message: string }).message || (e as { message: string }).toString())
+      return false
 		} finally {
 			this.isLoading = false
 		}
