@@ -2,6 +2,9 @@
 	import { page } from '$app/state'
 	import type { Address } from '$lib/core/types'
 	import { onMount, type Snippet } from 'svelte'
+	import { AddressSchema } from '../components/address/schema'
+	import { z } from 'zod'
+	import { toast } from 'svelte-sonner'
 
 	interface Props {
 		content: Snippet<[SnippetParams]>
@@ -27,6 +30,15 @@
 
 	function handleSubmit(e: Event) {
 		e.preventDefault()
+
+		if (address) address.countryCode = address.countryCode || page?.data?.store?.country?.code || 'AU'
+		const validation = z.object(AddressSchema).safeParse(address)
+
+		if (!validation.success) {
+			toast.error(validation.error?.errors?.[0]?.message || 'Fill all feilds correctly')
+			return
+		}
+
 		onsave?.(address)
 		show = false
 	}
