@@ -96,6 +96,7 @@
 									<a
 										href={social}
 										target="_blank"
+										rel="nofollow"
 										class="fill-gray-500 text-gray-500 hover:fill-gray-900 hover:text-gray-900 dark:hover:fill-gray-600 dark:hover:text-gray-600"
 									>
 										{#if key == 'twitter'}
