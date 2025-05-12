@@ -24,7 +24,7 @@ export default defineConfig(({ command, mode }) => {
 					secure: false, // Disable SSL verification if needed
 					rewrite: (path) => path.replace(/^\/static/, 'static') // Remove `/static` prefix
 				},
-				'/sitemaps': `https://${env.S3_BUCKET_NAME}.s3.${env.S3_REGION}.amazonaws.com`
+				'/sitemaps': env.PUBLIC_SITEMAP_URL || `https://${env.S3_BUCKET_NAME}.s3.${env.S3_REGION}.amazonaws.com`
 			}
 		}
 	}
