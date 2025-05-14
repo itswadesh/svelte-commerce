@@ -392,7 +392,7 @@ class ProductState {
 
 		onMount(async () => {
 			try {
-				const res = await fetch(`/api/inventory/${this.data?.product?.id}`, {
+				const res = await fetch(`/api/products/${this.data?.product?.id}/warehouse`, {
 					method: 'GET',
 					headers: {
 						'Content-Type': 'application/json',
