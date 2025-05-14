@@ -97,9 +97,8 @@
 	}
 
 	function handleResultClick(result: any) {
-    showSearchResults = false
-		searchResults = []
 		goto(`/products/${result?.slug}`)
+    closeSearch()
 	}
 
   function toggleSearchResults(value: boolean) {
