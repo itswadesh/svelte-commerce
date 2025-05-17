@@ -15,6 +15,7 @@ export function parseCookies(cookieString: string): Record<string, string> {
 const initialUser = { user_id: '0', items: [], subtotal: 0, total: 0 }
 export class UserState {
 	user = $state<any>(initialUser)
+  lastError = $state<any | null>(null)
 	loading = $state<boolean>(false)
 	hasLoaded: Promise<void>
 	retrieveUserId = () => {
@@ -29,6 +30,7 @@ export class UserState {
 			onMount(async () => {
 				try {
 					this.loading = true
+          this.lastError = null
 					const { sid, me } = this.retrieveUserId()
 					// console.log('🚀 ~ UserState ~ fetch:', sid, me)
 					if (sid) {
@@ -41,8 +43,9 @@ export class UserState {
 						this.user = null
 					}
 					res()
-				} catch (e) {
+				} catch (e: any) {
 					this.user = null
+          this.lastError = e
 					// console.log('🚀 ~ UserState ~ error ~ e:', e)
 					rej()
 				} finally {
@@ -54,11 +57,13 @@ export class UserState {
 
 	async signup({ email, password, firstName, lastName, phone, role, cartId = null, origin }: any) {
 		this.loading = true
+    this.lastError = null
 		try {
 			const me = await userService.signup({ email, password, firstName, lastName, phone, cartId, origin })
 			this.user = me
       return true
 		} catch (e: any) {
+      this.lastError = e
 			toast.error(e.message || 'Signup Failed')
       return false
 		} finally {
@@ -69,12 +74,14 @@ export class UserState {
 	async joinAsVendor({ email, password, firstName, lastName, businessName, phone, role, cartId = null }: any) {
 		try {
 			this.loading = true
+      this.lastError = null
 			const me = await userService.joinAsVendor({ email, password, businessName, firstName, lastName, phone, role: 'VENDOR', cartId })
 			this.user = me
 			toast.success('Signup successful')
 			goto('/dash')
-		} catch (e) {
+		} catch (e: any) {
 			this.user = null
+      this.lastError = e
 			// console.log(e)
 			toast.error(e.message || e.toString())
 		} finally {
@@ -86,6 +93,7 @@ export class UserState {
 		// console.log('🚀 ~ UserState ~ add:', phone, otp)
 		try {
 			this.loading = true
+      this.lastError = null
 			const me = await authService.verifyOtp({ phone, otp })
 			this.user = me
 			if (me?.role === 'VENDOR' || me?.role === 'ADMIN') {
@@ -93,9 +101,10 @@ export class UserState {
 			} else {
 				goto('/')
 			}
-		} catch (e) {
+		} catch (e: any) {
 			// console.log(e)
 			this.user = null
+      this.lastError = e
 			toast.error(e.message || e.toString())
 		} finally {
 			this.loading = false
@@ -106,6 +115,7 @@ export class UserState {
 		// console.log('🚀 ~ UserState ~ add:', email, password, cartId)
 		try {
 			this.loading = true
+      this.lastError = null
 			const me = await userService.login({
 				email,
 				password,
@@ -121,9 +131,9 @@ export class UserState {
 			//	goto('/')
 			//}
 			return true
-		} catch (e) {
-			// console.log(e)
+		} catch (e: any) {
 			this.user = null
+      this.lastError = e
 			toast.error(e.message || e.toString())
 			return false
 		} finally {
@@ -135,14 +145,16 @@ export class UserState {
 		// console.log('🚀 ~ UserState ~ lgout:')
 		try {
 			this.loading = true
+      this.lastError = null
 			const me = await userService.logout()
 			// console.log('🚀 ~ UserState ~ lgout ~ me:', me)
 			this.user = me
 			await goto('/')
 			showAuthModal('login')
-		} catch (e) {
+		} catch (e: any) {
 			// console.log(e.message)
 			this.user = null
+      this.lastError = e
 			toast.error(e.message || e.toString())
 		} finally {
 			this.loading = false
@@ -153,12 +165,14 @@ export class UserState {
 		// console.log('🚀 ~ UserState ~ update:', { firstName, lastName, phone, email })
 		try {
 			this.loading = true
+      this.lastError = null
 			// console.log("FirstName: ", firstName)
 			const me = await userService.updateProfile({ id, firstName, lastName, phone, email })
 			// console.log('🚀 ~ UserState ~ add ~ c:', c)
 			this.user = me
-		} catch (e) {
+		} catch (e: any) {
 			this.user = null
+      this.lastError = e
 			// console.log(e)
 			toast.error(e.body.message)
 		} finally {
