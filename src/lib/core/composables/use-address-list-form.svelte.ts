@@ -14,15 +14,15 @@ export class AddressListState {
 	paginateAddress = $state<(pageNo: number) => Promise<boolean>>()
 	show = $state(false)
 
-	handleAddNew() {
+	handleAddNew = () => {
 		this.onaddnew?.()
 	}
 
-	handleEdit(address: any) {
+	handleEdit = (address: any) => {
 		this.onedit?.(address)
 	}
 
-	handleSelect(address: any) {
+	handleSelect = (address: any) => {
 		this.onselect?.(address)
 		this.show = false
 	}

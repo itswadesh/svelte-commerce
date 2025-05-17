@@ -12,7 +12,7 @@
 	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
 	import { showAuthModal } from '$lib/core/components/auth/auth-utils'
 	import Textbox from '$lib/components/form/textbox.svelte'
-	import { AddressModule, schemas } from '$lib/core/composables/use-checkout-address.svelte'
+	import { AddressModule, emptyAddress, schemas } from '$lib/core/composables/use-checkout-address.svelte'
 
 	const addressModule = new AddressModule()
 	const cartState = addressModule.cartState
@@ -120,25 +120,19 @@
 					<!-- Shipping Address -->
 					{#if cartState?.cart?.email && cartState?.cart?.phone}
 						<div class="rounded-lg border p-4">
-							{#if cartState.cart.shippingAddress && !addressModule.editAddress}
+							{#if cartState.cart.shippingAddress}
 								<div class="mb-6">
 									<div class="flex items-center justify-between">
 										<h2 class="text-base font-semibold sm:text-xl">Delivery Address</h2>
-                    {#if !addressModule.loadingForShippingAddressSaveToCart}
+                    {#if !addressModule.loadingForSaveToCart}
 										  <Button
 									  		onclick={() => {
 									  			if (!userState?.user?.role && !cartState?.cart?.shippingAddress) {
-									  				addressModule.editAddress = true
-									  				addressModule.showAddressForm = true
+                            addressModule.openAddressForm(emptyAddress('new'), 'shipping', true)
 									  			} else if (!userState.user?.role) {
-									  				// addresses = [cartState.cart.shippingAddress];
-									  				// showAddressList = true;
-									  				addressModule.currentAddress = {
-									  					...cartState.cart.shippingAddress
-									  				}
-									  				addressModule.showAddressForm = true
+                            addressModule.openAddressForm({ ...cartState.cart.shippingAddress }, 'shipping', true)
 									  			} else {
-									  				addressModule.showAddressList = true
+                            addressModule.openAddressList('shipping')
 									  			}
 									  		}}
 									  		variant="ghost"
@@ -148,7 +142,7 @@
 									  	</Button>
                     {/if}
 									</div>
-									{#if addressModule.loadingForShippingAddressSaveToCart}
+									{#if addressModule.loadingForSaveToCart && addressModule.currentAddressType == 'shipping'}
 										<Skeleton class="mt-4 h-[100px] w-full rounded-lg" />
 									{:else}
 										<div class="mt-4 rounded-lg border border-gray-200 p-4">
@@ -184,9 +178,7 @@
 
 										{#if !userState?.user?.role}
 											<button
-												onclick={() => {
-													addressModule.showLoginModal = true
-												}}
+												onclick={() => showAuthModal('login')}
 												class="text-primary-500 hover:text-primary-700 block text-sm underline"
 											>
 												Login to view your saved address
@@ -194,7 +186,7 @@
 										{/if}
 									</div>
 									<form class="space-y-4">
-                    {#if addressModule.loadingForShippingAddressSaveToCart}
+                    {#if addressModule.loadingForSaveToCart && addressModule.currentAddressType == 'shipping'}
 										  <Skeleton class="mt-4 h-[100px] w-full rounded-lg" />
 									  {:else}
 										<div class="flex flex-col items-start gap-3">
@@ -367,21 +359,23 @@
 								<div class="mb-6">
 									<div class="flex items-center justify-between">
 										<h2 class="text-base font-semibold sm:text-xl">Billing Address</h2>
-										<Button
-											onclick={() => {
-												if (!userState.user?.role) {
-													addressModule.showBillingAddressForm = true
-												} else {
-													addressModule.showAddressList = true
-												}
-											}}
-											variant="ghost"
-											class="text-primary hover:text-primary/80"
-										>
-											Change Address
-										</Button>
+                    {#if !addressModule.loadingForSaveToCart}
+										  <Button
+										  	onclick={addressModule.handleBilingAddOrChangeClick}
+										  	variant="ghost"
+										  	class="text-primary hover:text-primary/80"
+										  >
+                        {#if cartState.cart.billingAddress?.address_1}
+  									  		Change Address
+                        {:else}
+                          Add Address
+                        {/if}
+										  </Button>
+                    {/if}
 									</div>
-									{#if cartState.cart?.billingAddress?.address_1}
+                  {#if addressModule.loadingForSaveToCart && addressModule.currentAddressType == 'billing'}
+										<Skeleton class="mt-4 h-[100px] w-full rounded-lg" />
+									{:else if cartState.cart?.billingAddress?.address_1}
 										<div class="mt-4 rounded-lg border border-gray-200 p-4">
 											<div class="mb-2 flex items-center">
 												<MapPin class="mr-2 h-5 w-5 text-primary" />
@@ -578,37 +572,13 @@
 	ondelete={addressModule.handleDeleteAddress}
 />
 
-<!-- Shipping address -->
+<!-- Shipping & Biling address -->
 <AddressFormModal
 	bind:show={addressModule.showAddressForm}
 	bind:address={addressModule.currentAddress}
 	isEdit={addressModule.isEditingAddress}
-	onback={() => {
-		if (userState?.user?.role) {
-			addressModule.handleBackToList()
-		}
-	}}
-	onsave={(address) => {
-		if (!userState?.user?.role) {
-			/* Logged out state */
-			addressModule.handleSaveAddress(address, true)
-		} else {
-			addressModule.handleSaveAddress(address)
-		}
-	}}
-	ondelete={addressModule.handleDeleteAddress}
-/>
-
-<!-- Billing address -->
-<AddressFormModal
-	bind:show={addressModule.showBillingAddressForm}
-	bind:address={addressModule.billingAddress}
-	isEdit={addressModule.isEditingAddress}
-	onback={() => {
-		if (userState?.user?.role) {
-			addressModule.handleBackToList()
-		}
-	}}
-	onsave={addressModule.saveBillingAddress}
+	onback={addressModule.handleFormBack}
+  onclose={addressModule.handleFormClose}
+	onsave={addressModule.handleFormSave}
 	ondelete={addressModule.handleDeleteAddress}
 />
