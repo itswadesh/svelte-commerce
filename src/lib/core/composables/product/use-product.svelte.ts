@@ -91,6 +91,10 @@ class ProductState {
 
 	warehouses = $state<Record<string, unknown>[]>([])
 
+	addToCartButtonDisabled =
+		this.isAdding ||
+		(!this.data?.product?.manageInventory ? false : this.anyVariantStockThere ? !this.selectedVariant?.stock : !this.data?.product.stock)
+
 	refreshOptions = () => {
 		if (this.data?.product?.options?.length) {
 			this.productOptions = this.data.product.options.map((option) => {
@@ -105,6 +109,16 @@ class ProductState {
 
 	onSelect(i) {
 		this.select = i
+	}
+
+	incrementQuantity = () => {
+		this.qty++
+	}
+
+	decrementQuantity = () => {
+		if (this.qty > 1) {
+			this.qty--
+		}
 	}
 
 	// TODO: can we improve this
@@ -313,6 +327,25 @@ class ProductState {
 		}
 	}
 
+	buyNow = async () => {
+		try {
+			const variantId = this.selectedVariant?.id || this.data?.product?.id
+			const productId = this.data?.product?.id
+			const qty = this.qty
+
+			this.cartState.createSingleItemCheckoutSession({
+				variantId,
+				productId,
+				qty
+			})
+
+			goto('/checkout/address')
+		} catch (error) {
+			console.error('Error during buy now:', error)
+			toast.error('Failed to proceed to checkout')
+		}
+	}
+
 	setState = (data: any) => {
 		data && (this.data = data)
 
@@ -328,6 +361,42 @@ class ProductState {
 
 	getState = () => {
 		return this.data
+	}
+
+	handleAddToCart = async () => {
+		try {
+			this.isAdding = true
+			await this.cartState.addOrUpdate({
+				productId: this.data?.product?.id,
+				variantId: this.selectedVariant?.id,
+				qty: this.qty
+			})
+		} catch (e) {
+			toast.error((e as Error).message || 'Failed to add item')
+		} finally {
+			this.isAdding = false
+		}
+		if (this.qty > 0) {
+			// cartState.isOpen = true
+			this.showAddToCartMessage = true
+			setTimeout(() => {
+				this.showAddToCartMessage = false
+			}, this.ADD_TO_CART_MESSAGE_DURATION)
+
+			const me = this.userState?.user
+			const dataToFire = {
+				items: [{ ...this.data?.product, qty: this.qty }],
+				total: this.data?.product?.price * this.qty,
+				qty: this.qty,
+				vendorBusinessName: this.data?.product?.vendor?.businessName,
+				user: {
+					id: me?._id || me?.id,
+					name: me?.firstName + ' ' + me?.lastName,
+					email: me?.email
+				}
+			}
+			fireGTagEvent('add_to_cart', dataToFire)
+		}
 	}
 
 	constructor(data: any) {

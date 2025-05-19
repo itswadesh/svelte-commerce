@@ -86,47 +86,8 @@
 				<Button
 					class="w-full {productState.cartState.addToCartMessage == 'Added to cart' ? 'bg-green-500 text-white hover:bg-green-600' : ''}"
 					size="lg"
-					disabled={productState.isAdding ||
-						(!productState.data?.product?.manageInventory
-							? false
-							: productState.anyVariantStockThere
-								? !productState.selectedVariant?.stock
-								: !productState.data?.product.stock)}
-					onclick={async () => {
-						try {
-							productState.isAdding = true
-							await productState.cartState.addOrUpdate({
-								productId: productState.data?.product?.id,
-								variantId: productState.selectedVariant?.id,
-								qty: productState.qty
-							})
-						} catch (e) {
-							toast.error((e as Error).message || 'Failed to add item')
-						} finally {
-							productState.isAdding = false
-						}
-						if (productState.qty > 0) {
-							// cartState.isOpen = true
-							productState.showAddToCartMessage = true
-							setTimeout(() => {
-								productState.showAddToCartMessage = false
-							}, productState.ADD_TO_CART_MESSAGE_DURATION)
-
-							const me = productState.userState?.user
-							const dataToFire = {
-								items: [{ ...productState.data?.product, qty: productState.qty }],
-								total: productState.data?.product?.price * productState.qty,
-								qty: productState.qty,
-								vendorBusinessName: productState.data?.product?.vendor?.businessName,
-								user: {
-									id: me?._id || me?.id,
-									name: me?.firstName + ' ' + me?.lastName,
-									email: me?.email
-								}
-							}
-							fireGTagEvent('add_to_cart', dataToFire)
-						}
-					}}
+					disabled={productState.addToCartButtonDisabled}
+					onclick={productState.handleAddToCart}
 				>
 					{#if !productState.isLoading && (!productState.data?.product?.manageInventory ? false : productState.anyVariantStockThere ? !productState.selectedVariant?.stock : !productState.data?.product.stock)}
 						Out of Stock
