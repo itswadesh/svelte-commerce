@@ -33,9 +33,12 @@ interface CartState {
 	cart: Cart
 	removeCoupon: () => void
 	setShippingRate: (params: { shippingRateId: string }) => Promise<void>
+	createSingleItemCheckoutSession: (params: { productId: string; variantId: string; qty: number }) => Promise<void>
+	restorePrevCart: () => Promise<void>
 }
 
 interface PaymentMethod {
+	img: any
 	name: string
 	apiKey?: string
 	isTest?: boolean
@@ -51,7 +54,7 @@ declare global {
 }
 
 export class PaymentModule {
-  cartState = getCartState() as CartState
+	cartState = getCartState() as CartState
 	SELECTED_PG_NAME: string = $state('')
 	listOfPaymentMethods: PaymentMethod[] = $state([])
 	paymentLoader = $state(false)
@@ -296,6 +299,7 @@ export class PaymentModule {
 					toast.error(e.message)
 					this.paymentLoader = false
 				} finally {
+					this.cartState?.restorePrevCart()
 				}
 			}
 		} else if (this.SELECTED_PG_NAME?.toUpperCase?.() == 'PHONEPE') {
@@ -402,4 +406,3 @@ export class PaymentModule {
 		}
 	}
 }
-

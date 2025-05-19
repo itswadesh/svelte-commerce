@@ -45,6 +45,7 @@ export class Cart2State {
 			onMount(async () => {
 				try {
 					this.isUpdatingCart = true
+					this.resetSingleItemCheckoutSession()
 					const cartId = this.retrieveCartId()
 					if (cartId) {
 						try {
@@ -314,6 +315,69 @@ export class Cart2State {
 		}
 	}
 
+	async createSingleItemCheckoutSession({ productId, variantId, qty }: any) {
+		try {
+			this.isUpdatingCart = true
+
+			// save cart id to local storage as prev_cart_id
+			const cartId = this.retrieveCartId()
+			if (cartId) {
+				localStorage.setItem('prev_cart_id', cartId)
+				localStorage.removeItem('cart_id')
+			}
+
+			// create new cart
+			const cart = await cartService.addToCart({
+				qty: qty,
+				productId,
+				variantId,
+				lineId: null
+			})
+
+			this.cart = cart
+		} catch (error) {
+			console.log('🚀 ~ CartState ~ createSingleItemCheckoutSession ~ error:', error)
+			toast.error(error?.message)
+		} finally {
+			this.isUpdatingCart = false
+		}
+	}
+
+	async resetSingleItemCheckoutSession() {
+		try {
+			this.isUpdatingCart = true
+			const prev_cart_id = localStorage.getItem('prev_cart_id')
+			if (prev_cart_id) {
+				localStorage.setItem('cart_id', prev_cart_id)
+				localStorage.removeItem('prev_cart_id')
+			}
+			this.cart = initialCart
+		} catch (error) {
+			console.log('🚀 ~ CartState ~ resetSingleCartSession ~ error:', error)
+			toast.error(error?.message || 'Error resetting cart')
+		} finally {
+			this.isUpdatingCart = false
+		}
+	}
+
+	async restorePrevCart() {
+		try {
+			this.isUpdatingCart = true
+			const prev_cart_id = localStorage.getItem('prev_cart_id')
+			if (prev_cart_id) {
+				const cart = await cartService.getCartByCartId(prev_cart_id)
+				this.cart = cart
+				localStorage.setItem('cart_id', prev_cart_id)
+				localStorage.removeItem('prev_cart_id')
+			}
+		} catch (error) {
+			console.log('🚀 ~ CartState ~ restorePrevCart ~ error:', error)
+			toast.error(error?.message || 'Error restoring cart')
+		} finally {
+			this.isUpdatingCart = false
+		}
+	}
+
 	// remove(item_id: string, qty: number) {
 	//   const timeout = this.cartToTimeoutMap.get(item_id)
 	//   if (timeout) {
@@ -335,4 +399,3 @@ export function getCartState() {
 	// console.log(CART_KEY)
 	return getContext<ReturnType<typeof setCartState>>(CART_KEY)
 }
-

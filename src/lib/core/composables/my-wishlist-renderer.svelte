@@ -3,22 +3,26 @@
 	import { getCartState } from '$lib/core/stores/cart.svelte'
 	import { wishlistService, profileService, type Wishlist, type Product } from '$lib/core/services'
 	import { toast } from 'svelte-sonner'
+	import { page } from '$app/state'
+
+	let wishlistPlugin = $derived(page?.data?.store?.plugins?.isWishlist)
 
 	const { content }: { content: Snippet<[SnippetParams]> } = $props()
-  
-  interface WishlistItem {
-    productId: string
-    variantId: string
-    product: Product
-  }
 
-  interface SnippetParams {
-    user: any
-    loading: boolean
-    wishlistItems: WishlistItem[]
-    removeFromWishlist: (pid: string, vid: string) => void
-    moveToCart: (item: WishlistItem) => void
-  }
+	interface WishlistItem {
+		productId: string
+		variantId: string
+		product: Product
+	}
+
+	interface SnippetParams {
+		wishlistPlugin: any
+		user: any
+		loading: boolean
+		wishlistItems: WishlistItem[]
+		removeFromWishlist: (pid: string, vid: string) => void
+		moveToCart: (item: WishlistItem) => void
+	}
 
 	const cartState = getCartState()
 
@@ -55,9 +59,9 @@
 				productId,
 				variantId
 			})
-      toast.success("Product removed from wishlist")
+			toast.success('Product removed from wishlist')
 		} catch (error: any) {
-      toast.error(error.message || "Remove operation failed")
+			toast.error(error.message || 'Remove operation failed')
 			console.log(error)
 		}
 		wishlistItems = wishlistItems.filter((item) => item?.productId !== productId)
@@ -79,12 +83,11 @@
 	})
 </script>
 
-{@render
-  content?.({
-    user,
-    loading,
-    wishlistItems,
-    removeFromWishlist,
-    moveToCart
-  })
-}
+{@render content?.({
+	user,
+	loading,
+	wishlistItems,
+	removeFromWishlist,
+	moveToCart,
+	wishlistPlugin
+})}
