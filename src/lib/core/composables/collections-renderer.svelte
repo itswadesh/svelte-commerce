@@ -3,15 +3,15 @@
 	import { collectionService } from '$lib/core/services'
 	import { onMount, type Snippet } from 'svelte'
 
-  interface Props {
-    content: Snippet<[SnippetParams]> 
-  }
+	interface Props {
+		content: Snippet<[SnippetParams]>
+	}
 
 	const { content }: Props = $props()
 
 	interface SnippetParams {
-    collectionData: Collection[]
-    displayProduct: string
+		collectionData: Collection[]
+		displayProduct: string
 	}
 
 	let displayProduct = $state('hidden')
@@ -28,6 +28,4 @@
 	})
 </script>
 
-{@render
-  content({ collectionData, displayProduct })
-}
+{@render content({ collectionData, displayProduct })}
