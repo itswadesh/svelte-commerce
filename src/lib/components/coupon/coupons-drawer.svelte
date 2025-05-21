@@ -1,12 +1,12 @@
 <script lang="ts">
-	import * as Drawer from '$lib/components/ui/drawer'
+	import * as Drawer from '$lib/components/ui/drawer/index.js'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { ChevronRight, Copy, X } from '@lucide/svelte'
 	import Input from '$lib/components/ui/input/input.svelte'
 	import { CouponDrawerRenderer } from '$lib/core/composables/index.js'
 	import { format } from 'date-fns'
 	import { fly } from 'svelte/transition'
-	import { formatPrice } from '$lib/core/utils'
+	import { formatPrice } from '$lib/core/utils/index.js'
 	import { page } from '$app/state'
 
 	let { open = false, code = $bindable('') } = $props()
