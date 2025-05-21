@@ -52,9 +52,9 @@
 								</button> -->
 			<div class="flex flex-col items-center gap-4">
 				<div class="flex min-w-40 items-center gap-5 min-[256px]:min-w-64">
-					<img src={productState.selectedVariant?.image || productState.data?.product?.thumbnail} alt="Product" class="h-12 w-12 object-contain" />
+					<img src={productState.selectedVariant?.image || page.data?.product?.thumbnail} alt="Product" class="h-12 w-12 object-contain" />
 					<div class="flex flex-col">
-						<span class="line-clamp-3 max-w-40 text-xs font-semibold min-[256px]:max-w-64 sm:text-sm">{productState.data?.product?.title}</span>
+						<span class="line-clamp-3 max-w-40 text-xs font-semibold min-[256px]:max-w-64 sm:text-sm">{page.data?.product?.title}</span>
 						<span class="text-xs text-gray-500">
 							{productState.selectedVariant?.title == 'default' ? '' : productState.selectedVariant?.title}
 						</span>
@@ -89,7 +89,7 @@
 					disabled={productState.addToCartButtonDisabled}
 					onclick={productState.handleAddToCart}
 				>
-					{#if !productState.isLoading && (!productState.data?.product?.manageInventory ? false : productState.anyVariantStockThere ? !productState.selectedVariant?.stock : !productState.data?.product.stock)}
+					{#if !productState.isLoading && (!page.data?.product?.manageInventory ? false : productState.anyVariantStockThere ? !productState.selectedVariant?.stock : !page.data?.product.stock)}
 						Out of Stock
 					{:else}
 						{#if productState.cartState.addToCartMessage == 'Added to cart'}

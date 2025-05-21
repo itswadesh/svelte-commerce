@@ -20,9 +20,10 @@
 	import ProductVariation from './product-variation.svelte'
 	import RelatedProducts from './related-products.svelte'
 	import StoreCheck from './store-check.svelte'
+	import { page } from '$app/state'
 
 	const productState = useProductState()
-	const data = $derived(productState.data)
+	const data = $derived(page.data)
 </script>
 
 <SeoHeader
@@ -50,7 +51,7 @@
 			</div>
 
 			<div class="sticky top-20 mx-2 grid gap-2 sm:gap-5">
-				<ProductTitleSection product={productState.data?.product} />
+				<ProductTitleSection product={data?.product} />
 
 				<ProductPricing />
 

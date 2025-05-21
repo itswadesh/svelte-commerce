@@ -4,7 +4,7 @@
 	import { page } from '$app/state'
 
 	const productState = useProductState()
-	const data = $derived(productState.data)
+	const data = $derived(page.data)
 </script>
 
 <div class="mt-4 rounded-lg bg-background">

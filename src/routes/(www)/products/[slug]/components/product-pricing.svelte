@@ -9,7 +9,7 @@
 <div class="flex flex-col gap-1">
 	<div class="flex gap-2">
 		<div class="text-xl font-bold">
-			{formatPrice(productState.selectedVariant?.price || productState.data?.product?.price, page?.data?.store?.currency?.code)}
+			{formatPrice(productState.selectedVariant?.price || page.data?.product?.price, page?.data?.store?.currency?.code)}
 		</div>
 
 		{#if productState.selectedVariant?.price}
@@ -21,13 +21,13 @@
 					{Math.round(((productState.selectedVariant?.mrp - productState.selectedVariant?.price) / productState.selectedVariant?.mrp) * 100)}% OFF
 				</div>
 			{/if}
-		{:else if productState.data?.product?.price}
-			{#if productState.data?.product?.mrp && productState.data?.product?.mrp > productState.data?.product?.price}
+		{:else if page.data?.product?.price}
+			{#if page.data?.product?.mrp && page.data?.product?.mrp > page.data?.product?.price}
 				<div class="text-xl text-gray-500 line-through">
-					{formatPrice(productState.data?.product?.price, page?.data?.store?.currency?.code)}
+					{formatPrice(page.data?.product?.price, page?.data?.store?.currency?.code)}
 				</div>
 				<div class="truncate text-xl font-medium text-[#00b852]">
-					{Math.round(((productState.data?.product?.mrp - productState.data?.product?.price) / productState.data?.product?.mrp) * 100)}% OFF
+					{Math.round(((page.data?.product?.mrp - page.data?.product?.price) / page.data?.product?.mrp) * 100)}% OFF
 				</div>
 			{/if}
 		{/if}

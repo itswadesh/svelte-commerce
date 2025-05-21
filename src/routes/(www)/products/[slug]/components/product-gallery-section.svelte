@@ -13,7 +13,7 @@
 <div class="relative">
 	<div class="absolute right-2 top-2 z-30 hidden rounded-full bg-white sm:block">
 		{#if page?.data?.store?.plugins?.socialSharingButtons}
-			<ShareButton productName={productState.data?.product?.title} productImage={productState.data?.product?.thumbnail} url={page?.url?.href} />
+			<ShareButton productName={page.data?.product?.title} productImage={page.data?.product?.thumbnail} url={page?.url?.href} />
 		{/if}
 	</div>
 	{#if productState.productImagesArray?.length > 0}
