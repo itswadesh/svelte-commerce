@@ -12,7 +12,7 @@
 	const productState = useProductState()
 </script>
 
-{#if page?.data?.store?.plugins?.enableReviews && productState.data?.product?.ratings?.length}
+{#if page?.data?.store?.plugins?.enableReviews && page.data?.product?.ratings?.length}
 	<!-- Reviews Section -->
 	<div class="mx-2 mt-8">
 		<div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
@@ -21,23 +21,23 @@
 				<div class="rounded-lg border bg-white p-6 shadow-sm">
 					<div class="mb-6 text-center">
 						<div class="text-primary-500 text-4xl font-bold">
-							{productState.data?.product?.rating?.toFixed(1) || '0.0'}
+							{page.data?.product?.rating?.toFixed(1) || '0.0'}
 						</div>
 						<div class="my-2 flex items-center justify-center gap-1">
 							{#each { length: 5 } as _, i}
-								<Star fill="yellow" class="h-5 w-5 {i < (productState.data?.product?.rating || 0) ? 'text-primary-500' : 'text-zinc-200'}" />
+								<Star fill="yellow" class="h-5 w-5 {i < (page.data?.product?.rating || 0) ? 'text-primary-500' : 'text-zinc-200'}" />
 							{/each}
 						</div>
 						<div class="text-sm text-zinc-500">
-							Based on {productState.data?.product?.ratings?.length || 0} reviews
+							Based on {page.data?.product?.ratings?.length || 0} reviews
 						</div>
 					</div>
 
 					<!-- Rating Distribution -->
 					<div class="space-y-3">
 						{#each [5, 4, 3, 2, 1] as stars}
-							{@const count = productState.data?.product?.ratings?.filter((r: { [key: string]: any }) => Math.floor(r.rating) === stars).length || 0}
-							{@const percentage = productState.data?.product?.ratings?.length ? (count / productState.data?.product.ratings.length) * 100 : 0}
+							{@const count = page.data?.product?.ratings?.filter((r: { [key: string]: any }) => Math.floor(r.rating) === stars).length || 0}
+							{@const percentage = page.data?.product?.ratings?.length ? (count / page.data?.product.ratings.length) * 100 : 0}
 							<div class="flex items-center gap-2">
 								<div class="flex w-16 items-center gap-1 text-sm">
 									{stars}
@@ -69,7 +69,7 @@
 					</div>
 
 					<div class="divide-y">
-						{#each productState.data?.product?.ratings || [] as rating}
+						{#each page.data?.product?.ratings || [] as rating}
 							<div class="p-6">
 								<div class="mb-3 flex items-center justify-between">
 									<div class="flex items-center gap-3">
@@ -112,7 +112,7 @@
 							</div>
 						{/each}
 
-						{#if !productState.data?.product?.ratings?.length}
+						{#if !page.data?.product?.ratings?.length}
 							<div class="p-8 text-center text-zinc-500">No reviews yet. Be the first to review this product!</div>
 						{:else}
 							<Tabs.Root value="product" class="w-full">
@@ -122,7 +122,7 @@
 								</Tabs.List>
 								<Tabs.Content value="product" class="w-full">
 									<div class="grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">
-										{#each productState.data?.product?.ratings as rating}
+										{#each page.data?.product?.ratings as rating}
 											<div class="flex w-full flex-col gap-4 rounded-lg border bg-white p-6 shadow-sm">
 												<div class="flex flex-wrap items-center gap-2">
 													<div class="flex flex-wrap items-center gap-2">
@@ -190,7 +190,7 @@
 								</Tabs.Content>
 								<Tabs.Content value="brand" class="w-full">
 									<div class="grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">
-										{#each productState.data?.allratings as rating}
+										{#each page.data?.allratings as rating}
 											<div class="flex w-full flex-col gap-4 rounded-lg border bg-white p-6 shadow-sm">
 												<div class="flex flex-wrap items-center gap-2">
 													<div class="flex flex-wrap items-center gap-2">
@@ -344,7 +344,7 @@
 								onclick={async () => {
 									try {
 										await productService.addReview({
-											productId: productState.data?.product.id,
+											productId: page.data?.product.id,
 											variantId: productState.selectedVariant?.id,
 											rating: productState.select || 0,
 											review: productState.reviewMessage,

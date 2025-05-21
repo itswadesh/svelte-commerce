@@ -1,9 +1,10 @@
 <script lang="ts">
+	import { page } from '$app/state'
 	import { useProductState } from '$lib/core/composables/product'
 	import { ChevronDown, ChevronUp, Info } from 'lucide-svelte'
 
 	const productState = useProductState()
-	const data = $derived(productState.data)
+	const data = $derived(page.data)
 </script>
 
 <div class="hidden grid-cols-1 overflow-x-auto sm:grid">

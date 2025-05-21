@@ -1,8 +1,9 @@
 <script lang="ts">
+	import { page } from '$app/state'
 	import { useProductState } from '$lib/core/composables/product'
 
 	const productState = useProductState()
-	const data = $derived(productState.data)
+	const data = $derived(page.data)
 </script>
 
 {#if data?.product?.metadata}
