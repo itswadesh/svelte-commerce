@@ -1,17 +1,12 @@
 import { getCartState } from '$lib/core/stores/cart.svelte'
-import { getProductState } from '$lib/core/stores/product.svelte'
-import { Button } from '$lib/components/ui/button'
 import { onMount } from 'svelte'
 import { goto } from '$app/navigation'
-import { LockKeyhole, ShoppingBag, X } from 'lucide-svelte'
-import { formatPrice } from '$lib/core/utils'
-import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
 import { toast } from 'svelte-sonner'
-import { getUserState } from '$lib/core/stores/auth.svelte'
-import { cartService, checkoutService, couponService } from '$lib/core/services'
+import { checkoutService, couponService } from '$lib/core/services'
 import { browser } from '$app/environment'
 import { paymentMethodService } from '$lib/core/services'
 import { page } from '$app/state'
+import { injectAffirm } from '../utils/affirm-injector'
 
 // Define interfaces for better type safety
 interface Cart {
@@ -111,28 +106,7 @@ export class PaymentModule {
 				if (this.affirmPaymentMethod) {
 					// Only proceed with Affirm initialization if country is USA
 					if (shippingAddress?.country === 'USA' || shippingAddress?.countryCode === 'US') {
-						if (document.getElementById('affirm_pay_script')) {
-							console.log('Skipping affirmjs, already injected')
-							return
-						}
-
-						const affirmPayScript = document.createElement('script')
-						affirmPayScript.id = 'affirm_pay_script'
-						const affirmScriptText = document.createTextNode(`
-  console.log("Injecting Affirm");
-
-  const _affirm_config = {
-		public_api_key: "${this.affirmPaymentMethod?.apiKey}", /* replace with public api key */
-		script: "${this.affirmPaymentMethod?.isTest ? 'https://cdn1-sandbox.affirm.com/js/v2/affirm.js' : 'https://cdn1.affirm.com/js/v2/affirm.js'}",
-		locale: "en_US",
-		country_code: "USA",
-	};
-
-(function(m,g,n,d,a,e,h,c){var b=m[n]||{},k=document.createElement(e),p=document.getElementsByTagName(e)[0],l=function(a,b,c){return function(){a[b]._.push([c,arguments])}};b[d]=l(b,d,"set");var f=b[d];b[a]={};b[a]._=[];f._=[];b._=[];b[a][h]=l(b,a,h);b[c]=function(){b._.push([h,arguments])};a=0;for(c="set add save post open empty reset on off trigger ready setProduct".split(" ");a<c.length;a++)f[c[a]]=l(b,d,c[a]);a=0;for(c=["get","token","url","items"];a<c.length;a++)f[c[a]]=function(){};k.async=
-  !0;k.src=g[e];p.parentNode.insertBefore(k,p);delete g[e];f(g);m[n]=b})(window,_affirm_config,"affirm","checkout","ui","script","ready","jsReady");
-`)
-						affirmPayScript.appendChild(affirmScriptText)
-						document.head.appendChild(affirmPayScript)
+            injectAffirm(this.affirmPaymentMethod.apiKey, this.affirmPaymentMethod.isTest)
 					}
 				}
 			}
