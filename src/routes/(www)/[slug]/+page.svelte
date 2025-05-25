@@ -9,16 +9,12 @@
 	import Pagination from '$lib/components/common/pagination.svelte'
 	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
 	import Breadcrumb from '$lib/components/ui/breadcrumb.svelte'
+	import { selectSort } from '$lib/core/utils'
+	import { sortOptions } from '$lib/config'
 
 	let { data } = $props()
 	let selectedSort = $state(page.url.searchParams.get('sort') || 'popularity:desc')
 	let loading = $state(false)
-
-	const selectSort = (value: string) => {
-		const url = new URL(window.location.href)
-		url.searchParams.set('sort', value)
-		goto(url, { replaceState: true })
-	}
 </script>
 
 <SeoHeader
@@ -62,12 +58,7 @@
 					class="!mb-0"
 					id="sort-by"
 					value={selectedSort}
-					data={[
-						{ value: 'popularity:desc', name: 'Recommended' },
-						{ value: 'updatedAt:desc', name: "What's New" },
-						{ value: 'price:asc', name: 'Price: Low to High' },
-						{ value: 'price:desc', name: 'Price: High to Low' }
-					]}
+					data={sortOptions}
 					optionSelected={(value: string) => selectSort(value)}
 				/>
 			</div>

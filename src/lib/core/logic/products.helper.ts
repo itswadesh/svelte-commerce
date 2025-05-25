@@ -9,34 +9,32 @@ import type { Product, Variant } from '$lib/core/types'
  * @returns Nothing
  */
 export const storeProductToRecentlyViewed = async ({ product, variant }: { product: Product; variant: Variant }) => {
-	const localRecentlyViewed = localStorage.getItem(`recently_viewed`)
+  const localRecentlyViewed = localStorage.getItem(`recently_viewed`)
 
-	let recentlyViewed: any[] = []
-	if (!!localRecentlyViewed && localRecentlyViewed !== 'undefined') {
-		recentlyViewed = JSON.parse(localRecentlyViewed)
-	}
+  let recentlyViewed: any[] = []
+  if (!!localRecentlyViewed && localRecentlyViewed !== 'undefined') {
+    recentlyViewed = JSON.parse(localRecentlyViewed)
+  }
 
-	if (recentlyViewed.includes(product?.id)) {
-		return
-	} else if (product?.thumbnail && product?.title && variant?.price) {
-		const prod = {
-			hasStock: variant?.stock > 0 || product?.stock > 0,
-			img: variant?.thumbnail || product?.thumbnail,
-			mrp: variant?.mrp || product?.mrp,
-			name: variant?.title || product?.title,
-			price: variant?.price || product?.price,
-			slug: product?.slug
-		}
+  if (recentlyViewed.find((x: Record<string, any>) => x?.id === product?.id)) {
+    return
+  } else if (product?.thumbnail && product?.title && variant?.price) {
+    const prod = {
+      ...product,
+      hasStock: variant?.stock > 0 || product?.stock > 0,
+      variants: [{ ...variant }]
+    }
 
-		if (recentlyViewed?.length > 10) {
-			recentlyViewed.shift()
-		}
+    if (recentlyViewed?.length > 10) {
+      recentlyViewed.shift()
+    }
 
-		const resvw = [...recentlyViewed]
-		resvw.push(prod)
-		recentlyViewed = resvw
+    const resvw = [...recentlyViewed]
+    resvw.push(prod)
+    recentlyViewed = resvw
 
-		localStorage.setItem(`recently_viewed`, JSON.stringify(recentlyViewed))
-	}
+    console.log(recentlyViewed)
+    localStorage.setItem(`recently_viewed`, JSON.stringify(recentlyViewed))
+  }
 }
 
