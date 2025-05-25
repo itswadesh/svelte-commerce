@@ -1,7 +1,7 @@
 import { goto } from '$app/navigation'
 import { page } from '$app/state'
 import Fuse from 'fuse.js'
-import { onMount } from 'svelte'
+import { formatPrice } from '../utils'
 
 const searchParamAsNumber = (name: string) => {
   const param = page.url.searchParams.get(name)
@@ -16,12 +16,6 @@ class DesktopFilterState {
   showFilter = $state(false)
   selectedSort = $state()
   menuItemsBase: { id: string; label: string }[] = []
-  sortByData = [
-    { value: 'popularity:desc', name: 'Recommended' },
-    { value: 'updatedAt:desc', name: "What's New" },
-    { value: 'price:asc', name: 'Price: Low to High' },
-    { value: 'price:desc', name: 'Price: High to Low' }
-  ]
   selectedSection = $state<string>('')
   searchQuery = $state('')
   selectedDiscount = $state('any')
@@ -74,9 +68,11 @@ class DesktopFilterState {
   maxPrice = $state(searchParamAsNumber('priceTo') || page?.data?.products?.facets?.priceStat?.max)
   minPossiblePrice = $derived(page?.data?.products?.facets?.priceStat?.min)
   maxPossiblePrice = $derived(page.data?.products?.facets?.priceStat?.max)
+  priceSliderLeftPercentage = $derived(((this.minPrice - this.minPossiblePrice) / (this.maxPossiblePrice - this.minPossiblePrice)) * 100)
+  priceSliderRightPercentage = $derived(100 - ((this.maxPrice - this.minPossiblePrice) / (this.maxPossiblePrice - this.minPossiblePrice)) * 100)
   priceRange = $derived.by(() => {
     if (this.minPrice >= 0 && this.maxPrice >= 0) {
-      return `${this.formatPrice(this.minPrice)} - ${this.formatPrice(this.maxPrice)}`
+      return `${formatPrice(this.minPrice, page.data?.store?.currency?.code)} - ${formatPrice(this.maxPrice, page.data?.store?.currency?.code)}`
     }
     return ''
   })
@@ -252,15 +248,12 @@ class DesktopFilterState {
   }
 
   handleCategorySearchKeyDown = (e: KeyboardEvent) => {
+    this.showMoreCategories = false
     if (e.key == 'Enter') this.handleCategoryClick(this.filteredCategories[0])
     else if (e.key == 'Escape') {
       this.showCategorySearch = false
       this.categorySearchQuery = ''
     }
-  }
-
-  formatPrice = (price: number) => {
-    return `${price?.toLocaleString?.('en-IN')}`
   }
 
   toggleCategorySearch = () => {
@@ -278,6 +271,7 @@ class DesktopFilterState {
   }
 
   handleTagSearchKeyDown = (e: KeyboardEvent) => {
+    this.showMoreTags = false
     if (e.key == 'Enter') {
       this.handleTagChange({
         tag: this.filteredTags[0],
@@ -296,9 +290,9 @@ class DesktopFilterState {
   formatFilterName = (key: string) => {
     let formattedKey = key
     if (key?.includes?.('.')) {
-			const parts = key.split('.')
-			formattedKey = parts[parts.length - 1]
-		}
+      const parts = key.split('.')
+      formattedKey = parts[parts.length - 1]
+    }
 
     // Capitalisation
     const regex = /[a-z][A-Z][a-z]/
@@ -413,29 +407,27 @@ class DesktopFilterState {
     })
     */
 
-    onMount(() => {
-      const url = new URL(page.url)
-      const searchParams = url.searchParams
+    const url = new URL(page.url)
+    const searchParams = url.searchParams
 
-      for (const [key, values] of searchParams.entries()) {
-        if (key === 'tags') {
-          this.selectedTags =
-            decodeURIComponent(values || '')
-              ?.split(',')
-              ?.map((tag: string) => ({ name: tag })) || []
-          continue
-        }
-
-        if (key === 'priceFrom' || key === 'priceTo') {
-          continue
-        }
-
-        this.selectedGeneralFilters = {
-          ...this.selectedGeneralFilters,
-          [key]: decodeURIComponent(values || '')?.split(',')
-        }
+    for (const [key, values] of searchParams.entries()) {
+      if (key === 'tags') {
+        this.selectedTags =
+          decodeURIComponent(values || '')
+            ?.split(',')
+            ?.map((tag: string) => ({ name: tag })) || []
+        continue
       }
-    })
+
+      if (key === 'priceFrom' || key === 'priceTo') {
+        continue
+      }
+
+      this.selectedGeneralFilters = {
+        ...this.selectedGeneralFilters,
+        [key]: decodeURIComponent(values || '')?.split(',')
+      }
+    }
 
     DesktopFilterState._instance = this
   }

@@ -279,8 +279,7 @@
 			<div class="absolute h-1 w-full rounded bg-gray-200">
 				<div
 					class="absolute h-1 bg-yellow-500"
-					style="left: {(filterState.minPrice / filterState.maxPossiblePrice) * 100}%; right: {100 -
-						(filterState.maxPrice / filterState.maxPossiblePrice) * 100}%"
+					style="left: {filterState.priceSliderLeftPercentage}%; right: {filterState.priceSliderRightPercentage}%"
 				></div>
 			</div>
 

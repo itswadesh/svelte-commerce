@@ -7,6 +7,7 @@
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
 	import Input from '$lib/components/ui/input/input.svelte'
 	import { getDesktopFilterState } from '$lib/core/composables/use-desktop-filters.svelte'
+	import { sortOptions } from '$lib/config'
 
 	let { selectedSort = $bindable(), onSortChange = (value: string) => {} } = $props()
 
@@ -23,7 +24,7 @@
 					<span class="font-semibold">Sort By</span>
 					{#if selectedSort}
 						<span class="text-xs text-gray-500">
-							{filterModule.sortByData.find((item) => item.value === selectedSort)?.name}
+							{sortOptions.find((item) => item.value === selectedSort)?.name}
 						</span>
 					{/if}
 				</div>
@@ -34,7 +35,7 @@
 				</Drawer.Header>
 
 				<div class="space-y-3 px-4 py-3" in:fly={{ y: 0, duration: 200, delay: 0 }}>
-					{#each filterModule.sortByData as item}
+					{#each sortOptions as item}
 						<div class="flex items-center justify-between">
 							<label
 								for={item.value}
@@ -225,8 +226,7 @@
 								<div class="absolute h-1 w-full rounded bg-gray-200">
 									<div
 										class="absolute h-1 bg-yellow-500"
-										style="left: {(filterModule.minPrice / filterModule.maxPossiblePrice) * 100}%; right: {100 -
-											(filterModule.maxPrice / filterModule.maxPossiblePrice) * 100}%"
+										style="left: {filterModule.priceSliderLeftPercentage}%; right: {filterModule.priceSliderRightPercentage}%"
 									></div>
 								</div>
 

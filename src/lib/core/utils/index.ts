@@ -1,3 +1,4 @@
+import { goto } from '$app/navigation'
 import { type ClassValue, clsx } from 'clsx'
 import { toast as toastSooner } from 'svelte-sonner'
 import { cubicOut } from 'svelte/easing'
@@ -51,6 +52,22 @@ export const flyAndScale = (node: Element, params: FlyAndScaleParams = { y: -8, 
 		},
 		easing: cubicOut
 	}
+}
+
+export function selectSort(value: string) {
+	const url = new URL(window.location.href)
+	if (value) url.searchParams.set('sort', value)
+	else url.searchParams.delete('sort')
+	url.searchParams.delete('page')
+	goto(url, { replaceState: true })
+}
+
+export function formatSlug(slug: string) {
+	return slug
+		.replaceAll(/[^\w]/g, ' ')
+		.trim()
+		.replaceAll(/\s+/g, ' ')
+		.replaceAll(/(^|\s)[a-z]/g, (x: string) => x.toUpperCase())
 }
 
 export const formatPrice = (price: number, currencyCode: string) => {
@@ -238,3 +255,5 @@ export const deepCopy = (obj: Record<string, any>) => {
 }
 
 export { debounce } from './debounce'
+
+export type WithoutChild<T> = T extends { child?: any } ? Omit<T, 'child'> : T
