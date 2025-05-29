@@ -254,6 +254,10 @@ export const deepCopy = (obj: Record<string, any>) => {
 	return JSON.parse(JSON.stringify(obj))
 }
 
+export const wait = (delay: number) => new Promise((res) => {
+  setTimeout(res, delay)
+})
+
 export { debounce } from './debounce'
 
 export type WithoutChild<T> = T extends { child?: any } ? Omit<T, 'child'> : T

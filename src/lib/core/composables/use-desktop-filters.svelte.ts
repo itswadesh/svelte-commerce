@@ -1,7 +1,7 @@
-import { goto } from '$app/navigation'
 import { page } from '$app/state'
 import Fuse from 'fuse.js'
 import { formatPrice } from '../utils'
+import { SerialNavigator } from '../utils/navigator'
 
 const searchParamAsNumber = (name: string) => {
   const param = page.url.searchParams.get(name)
@@ -11,6 +11,8 @@ const searchParamAsNumber = (name: string) => {
 
 class DesktopFilterState {
   static _instance: DesktopFilterState
+
+  navigator: SerialNavigator = new SerialNavigator()
 
   // Variables from outside code
   showFilter = $state(false)
@@ -94,7 +96,8 @@ class DesktopFilterState {
     'styleCode',
     'manageInventory',
     'storeId',
-    'stock'
+    'stock',
+    'originCountry',
   ]
 
   processedFilters = $derived.by(() => {
@@ -141,8 +144,8 @@ class DesktopFilterState {
     return appliedFiltersCountByKey
   })
 
-  handleApply = () => {
-    const url = new URL(page.url)
+  handleApply = async () => {
+    const url = await this.navigator.getCurrentURL()
     if (this.searchQuery) {
       url.searchParams.set('search', this.searchQuery)
     } else {
@@ -179,11 +182,13 @@ class DesktopFilterState {
       }
     }
 
-    goto(url, { replaceState: true })
+    this.navigator.goto(url, { replaceState: true })
     this.showFilter = false
   }
 
-  handleGeneralFiltersChange = ({ key, value, checked }: { key: string; value: string; checked: boolean }) => {
+  handleGeneralFiltersChange = async ({ key, value, checked }: { key: string; value: string; checked: boolean }) => {
+    const url = await this.navigator.getCurrentURL()
+
     let processedKey = key
     if (key.startsWith('attributes.')) {
       processedKey = `attributes.${key.split('.')[1]}`
@@ -203,8 +208,6 @@ class DesktopFilterState {
       }
     }
 
-    const url = new URL(page.url)
-
     if (this.selectedGeneralFilters) {
       for (const key in this.selectedGeneralFilters) {
         if (this.selectedGeneralFilters[key]?.length) {
@@ -220,31 +223,32 @@ class DesktopFilterState {
       delete this.selectedGeneralFilters[key]
     }
 
-    goto(url, { replaceState: true })
+    this.navigator.goto(url, { replaceState: true })
   }
 
   handleTagChange = async (detail: { tag: Record<string, string>; checked: boolean }) => {
+    const url = await this.navigator.getCurrentURL()
     if (detail.checked) {
       this.selectedTags = [...this.selectedTags, detail.tag]
     } else {
       this.selectedTags = this.selectedTags.filter((tag: Record<string, string>) => tag.name !== detail.tag.name || tag.slug !== detail.tag.slug)
     }
 
-    const url = new URL(page.url)
     if (this.selectedTags.length > 0) {
       url.searchParams.delete('tags')
       url.searchParams.set('tags', this.selectedTags.map((tag: Record<string, string>) => tag.slug || tag.name).join(','))
 
-      await goto(url, { replaceState: true })
+      this.navigator.goto(url, { replaceState: true })
     } else {
       url.searchParams.delete('tags')
-      await goto(url, { replaceState: true })
+      this.navigator.goto(url, { replaceState: true })
     }
   }
 
-  handleCategoryClick = (category: Record<string, string>) => {
+  handleCategoryClick = async (category: Record<string, string>) => {
+    const url = await this.navigator.getCurrentURL()
     this.showFilter = false
-    goto(`/${category?.slug || encodeURIComponent(category?.name)}`)
+    this.navigator.goto(new URL(url.origin + `/${category?.slug || encodeURIComponent(category?.name)}`))
   }
 
   handleCategorySearchKeyDown = (e: KeyboardEvent) => {
@@ -302,8 +306,8 @@ class DesktopFilterState {
     return `${formattedKey.slice(0, index + 1)} ${formattedKey.slice(index + 1)}`
   }
 
-  clearFilters = () => {
-    const url = new URL(page.url?.href)
+  clearFilters = async () => {
+    const url = await this.navigator.getCurrentURL()
     url.searchParams.delete('tags')
     url.searchParams.delete('priceFrom')
     url.searchParams.delete('priceTo')
@@ -318,7 +322,7 @@ class DesktopFilterState {
     this.maxPrice = this.priceStat?.max || 100000
     this.showFilter = false
 
-    goto(url, { replaceState: true })
+    this.navigator.goto(url, { replaceState: true })
   }
 
   anyFilterApplied = $derived.by(() => {
@@ -331,20 +335,20 @@ class DesktopFilterState {
     )
   })
 
-  handleMinPriceChange = () => {
+  handleMinPriceChange = async () => {
     if (this.maxPrice < this.minPrice)
       this.minPrice = $state.snapshot(this.maxPrice)
-    const url = new URL(page.url?.href)
+    const url = await this.navigator.getCurrentURL()
     url.searchParams.set('priceFrom', this.minPrice?.toString())
-    goto(url, { replaceState: true })
+    this.navigator.goto(url, { replaceState: true })
   }
 
-  handleMaxPriceChange = () => {
+  handleMaxPriceChange = async () => {
     if (this.maxPrice < this.minPrice)
       this.maxPrice = $state.snapshot(this.minPrice)
-    const url = new URL(page.url?.href)
+    const url = await this.navigator.getCurrentURL()
     url.searchParams.set('priceTo', this.maxPrice?.toString())
-    goto(url, { replaceState: true })
+    this.navigator.goto(url, { replaceState: true })
   }
 
   toggleShowMoreCategories = () => {
@@ -429,6 +433,7 @@ class DesktopFilterState {
       }
     }
 
+    this.navigator = new SerialNavigator()
     DesktopFilterState._instance = this
   }
 }
