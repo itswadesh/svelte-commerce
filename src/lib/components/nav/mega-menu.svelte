@@ -33,7 +33,7 @@
           {index % 6 == 3 && selectedCategory === category.name ? 'border-green-500' : ''}
           {index % 6 == 4 && selectedCategory === category.name ? 'border-pink-500' : ''}
           {index % 6 == 5 && selectedCategory === category.name ? 'border-blue-500' : ''}"
-							onclick={() => (toggleMenuItemChildren[index] = false)}
+							onclick={() => closeChildMenu(index, false)}
 						>
 							<!-- Root category -->
 
@@ -81,7 +81,7 @@
                     {index % 6 == 3 ? 'text-green-500 ' : ''}
                     {index % 6 == 4 ? 'text-pink-500 ' : ''}
                     {index % 6 == 5 ? 'text-blue-500 ' : ''}"
-												onclick={() => (toggleMenuItemChildren[index] = false)}
+												onclick={() => closeChildMenu(index, false)}
 											>
 												{c.name}
 											</a>
