@@ -33,8 +33,9 @@ export class UserState {
           this.lastError = null
 					const { sid, me } = this.retrieveUserId()
 					// console.log('🚀 ~ UserState ~ fetch:', sid, me)
+				  this.user = me ?? null
+          /*
 					if (sid) {
-						this.user = me
 						// const me = await userService.getMe()
 						// console.log('🚀 ~ UserState ~ fetch:', sid, me)
 						// this.user = me
@@ -42,6 +43,7 @@ export class UserState {
 					} else {
 						this.user = null
 					}
+          */
 					res()
 				} catch (e: any) {
 					this.user = null
