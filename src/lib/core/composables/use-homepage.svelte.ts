@@ -108,47 +108,8 @@ export class HomepageModule {
 		})
 
 		onMount(async () => {
-			try {
-				const res = await orderService.listPublic()
-				if (res?.data) {
-					this.latestOrders = res?.data
-
-					const initialInterval = Math.floor(Math.random() * 10000 + 10000)
-
-					if (this.latestOrders.length > 0) {
-						this.selectedRecentOrder = this.latestOrders[0]
-
-						setTimeout(() => {
-							this.showRecentOrderPopup = true
-
-							setTimeout(() => {
-								this.showRecentOrderPopup = false
-							}, 10000)
-						}, initialInterval)
-
-						setTimeout(() => {
-							let i = 0
-							const interval = setInterval(() => {
-								i++
-								if (i >= this.randomIntervals.length || i >= this.latestOrders.length) {
-									clearInterval(interval)
-									this.showRecentOrderPopup = false
-								} else {
-									this.currentInterval = this.randomIntervals[i]
-									this.selectedRecentOrder = this.latestOrders[i]
-									this.showRecentOrderPopup = true
-
-									setTimeout(() => {
-										this.showRecentOrderPopup = false
-									}, 10000)
-								}
-							}, this.currentInterval)
-						}, initialInterval + 10000)
-					}
-				}
-			} catch (error) {
-				console.error(error)
-			}
+      if (page?.data?.store?.plugins?.recentPurchasePopup?.active)
+        this.showRecentPurchasePopup()
 		})
 
 		$effect(() => {
@@ -179,6 +140,49 @@ export class HomepageModule {
 		})
 	}
 
+  showRecentPurchasePopup = async () => {
+	  try {
+	  	const res = await orderService.listPublic()
+			if (res?.data) {
+				this.latestOrders = res?.data
+
+				const initialInterval = Math.floor(Math.random() * 10000 + 10000)
+
+				if (this.latestOrders.length > 0) {
+					this.selectedRecentOrder = this.latestOrders[0]
+
+					setTimeout(() => {
+						this.showRecentOrderPopup = true
+
+						setTimeout(() => {
+							this.showRecentOrderPopup = false
+						}, 10000)
+					}, initialInterval)
+
+					setTimeout(() => {
+						let i = 0
+						const interval = setInterval(() => {
+							i++
+							if (i >= this.randomIntervals.length || i >= this.latestOrders.length) {
+								clearInterval(interval)
+								this.showRecentOrderPopup = false
+							} else {
+								this.currentInterval = this.randomIntervals[i]
+								this.selectedRecentOrder = this.latestOrders[i]
+								this.showRecentOrderPopup = true
+
+								setTimeout(() => {
+									this.showRecentOrderPopup = false
+								}, 10000)
+							}
+						}, this.currentInterval)
+					}, initialInterval + 10000)
+				}
+			}
+		} catch (error) {
+			console.error(error)
+		}
+  }
 	getCategoryData = async () => {
 		//  resp: any = await CategoryService.fetchFooterCategories({})
 		// bannerData = resp?.data.map((item: any) => {
