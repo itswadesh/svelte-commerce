@@ -1,15 +1,15 @@
 {
 	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
 	"vcs": {
-		"enabled": false,
+		"enabled": true,
 		"clientKind": "git",
-		"useIgnoreFile": false
+		"useIgnoreFile": true
 	},
 	"files": {
-		"ignoreUnknown": false,
-		"ignore": []
+		"include": ["src/**/*.js", "src/**/*.ts", "src/**/*.svelte", "src/**/*.json", "*.js", "*.ts", "*.json"],
+		"ignore": ["node_modules/**", "dist/**", "build/**", ".svelte-kit/**", "package-lock.json", "pnpm-lock.yaml", "yarn.lock"]
 	},
-	"organizeImports": {
+  "organizeImports": {
 		"enabled": true
 	},
 	"formatter": {
@@ -24,12 +24,38 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"style": {
-				"useConst": "off",
-				"useImportType": "off"
+			"recommended": true,
+			"a11y": {
+				"recommended": true,
+				"useKeyWithClickEvents": "error",
+				"useKeyWithMouseEvents": "error"
 			},
 			"complexity": {
-				"noStaticOnlyClass": "off"
+				"recommended": true,
+				"noExtraBooleanCast": "error",
+				"noMultipleSpacesInRegularExpressionLiterals": "error",
+				"noUselessCatch": "error",
+				"noUselessTypeConstraint": "error"
+			},
+			"correctness": {
+				"recommended": true,
+				"noUnusedVariables": "error",
+				"noUnusedImports": "error",
+				"useExhaustiveDependencies": "warn"
+			},
+			"security": {
+				"recommended": true
+			},
+			"style": {
+				"recommended": true,
+				"noNegationElse": "off",
+				"useConst": "error",
+				"useTemplate": "error"
+			},
+			"suspicious": {
+				"recommended": true,
+				"noExplicitAny": "warn",
+				"noArrayIndexKey": "warn"
 			}
 		}
 	},
@@ -45,6 +71,39 @@
 			"attributePosition": "auto",
 			"indentStyle": "tab"
 		}
-	}
+	},
+	"json": {
+		"formatter": {
+			"trailingCommas": "none"
+		}
+	},
+	"overrides": [
+		{
+			"include": ["*.svelte"],
+			"linter": {
+				"rules": {
+					"style": {
+						"useConst": "off"
+					},
+					"correctness": {
+						"noUnusedVariables": "off",
+						"noUnusedImports": "off"
+					},
+					"suspicious": {
+						"noImplicitAnyLet": "off"
+					}
+				}
+			}
+		},
+		{
+			"include": ["**/*.config.js", "**/*.config.ts"],
+			"linter": {
+				"rules": {
+					"style": {
+						"noDefaultExport": "off"
+					}
+				}
+			}
+		}
+	]
 }
-
