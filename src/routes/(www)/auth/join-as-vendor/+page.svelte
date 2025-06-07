@@ -92,10 +92,12 @@
 				</Button>
 			</form>
 
-			<div class="text-center text-sm">
-				Already have an account?
+			<div class="text-center text-sm text-gray-600">
+				Already have an account?{' '}
 				<AuthButton type="login">
-					<button class="text-gray-600 hover:text-gray-500"> Sign in </button>
+					<Button variant="link" class="h-auto p-0 text-primary-600 hover:text-primary-500">
+						Sign in
+					</Button>
 				</AuthButton>
 			</div>
 		</div>
