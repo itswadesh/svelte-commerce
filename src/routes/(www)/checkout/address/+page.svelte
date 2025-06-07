@@ -73,50 +73,104 @@
 							</p>
 						{/if}
 					{/await}
-					<div class="overflow-hidden rounded-lg border">
-						<div class="flex items-center justify-between border-b px-4 py-2">
-							<h2 class="text-base font-semibold sm:text-xl">Contact Details</h2>
-							{#if cartState.cart.email && !addressModule.editEmail && !userState.user?.userId}
-								<button class="text-primary hover:text-primary/80" onclick={addressModule.handleEditEmail}>
-									<Pencil class="size-4" />
-								</button>
-							{/if}
-						</div>
-
-						{#if cartState.cart.email && cartState.cart.phone && !addressModule.editEmail}
-							<div class="space-y-2 p-4">
-								{#if cartState.cart.email}
-									<p class="text-gray-600">Email: {cartState.cart.email}</p>
-								{/if}
-								{#if cartState.cart.phone}
-									<p class="text-gray-600">Phone: {cartState.cart.phone}</p>
+						<div class="overflow-hidden rounded-lg border border-gray-200 shadow-sm">
+							<div class="flex items-center justify-between bg-gray-50 px-4 py-3 border-b">
+								<div class="flex items-center space-x-2">
+									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary">
+										<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+									</svg>
+									<h2 class="text-lg font-semibold text-gray-800">Contact Details</h2>
+								</div>
+								{#if cartState.cart.email && !addressModule.editEmail && !userState.user?.userId}
+									<Button 
+										onclick={addressModule.handleEditEmail}
+										variant="ghost" 
+										size="sm"
+										class="text-primary hover:bg-primary/10 flex items-center space-x-1"
+									>
+										<Pencil class="h-4 w-4" />
+										<span>Edit</span>
+									</Button>
 								{/if}
 							</div>
-						{:else if !cartState.cart.email || !cartState.cart.phone || addressModule.editEmail}
-							<form class="space-y-4 p-4" onsubmit={addressModule.saveEmail}>
-								<div>
-									<label for="email" class="mb-1 block text-sm font-medium text-gray-700">Email</label>
-									<Textbox type="email" bind:value={addressModule.email} required class="w-full" schema={schemas.email} />
+
+							{#if cartState.cart.email && cartState.cart.phone && !addressModule.editEmail}
+								<div class="space-y-3 p-5">
+									<div class="flex items-start space-x-3">
+										<div class="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+											<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+												<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+												<polyline points="22,6 12,13 2,6"></polyline>
+											</svg>
+										</div>
+										<div>
+											<p class="text-sm font-medium text-gray-900">Email</p>
+											<p class="text-sm text-gray-600">{cartState.cart.email}</p>
+										</div>
+									</div>
+									<div class="flex items-start space-x-3">
+										<div class="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-green-100 text-green-600">
+											<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+												<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+											</svg>
+										</div>
+										<div>
+											<p class="text-sm font-medium text-gray-900">Phone</p>
+											<p class="text-sm text-gray-600">{cartState.cart.phone}</p>
+										</div>
+									</div>
 								</div>
-								<div>
-									<label for="phone" class="mb-1 block text-sm font-medium text-gray-700">Phone</label>
-									<Textbox type="tel" bind:value={addressModule.phone} required class="w-full" schema={schemas.phone} />
-								</div>
-								<div class="flex justify-end space-x-3">
-									{#if cartState.cart.email}
-										<Button variant="ghost" onclick={() => (addressModule.editEmail = false)}>Cancel</Button>
-									{/if}
-									<Button type="submit" disabled={cartState.isUpdatingCart}>
-										{#if cartState.isUpdatingCart}
-											<LoadingDots />
-										{:else}
-											Save Contact
+							{:else if !cartState.cart.email || !cartState.cart.phone || addressModule.editEmail}
+								<form class="space-y-4 p-5" onsubmit={addressModule.saveEmail}>
+									<div class="space-y-1">
+										<label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+										<Textbox 
+											type="email" 
+											bind:value={addressModule.email} 
+											required 
+											class="w-full" 
+											schema={schemas.email}
+											placeholder="your@email.com"
+										/>
+										<p class="mt-1 text-xs text-gray-500">We'll send order confirmation to this email</p>
+									</div>
+									<div class="space-y-1">
+										<label for="phone" class="block text-sm font-medium text-gray-700">Phone number</label>
+										<Textbox 
+											type="tel" 
+											bind:value={addressModule.phone} 
+											required 
+											class="w-full" 
+											schema={schemas.phone}
+											placeholder="+1 (555) 000-0000"
+										/>
+										<p class="mt-1 text-xs text-gray-500">For delivery updates</p>
+									</div>
+									<div class="flex justify-end space-x-3 pt-2">
+										{#if cartState.cart.email}
+											<Button 
+												variant="outline" 
+												onclick={() => (addressModule.editEmail = false)}
+												type="button"
+											>
+												Cancel
+											</Button>
 										{/if}
-									</Button>
-								</div>
-							</form>
-						{/if}
-					</div>
+										<Button 
+											type="submit" 
+											disabled={cartState.isUpdatingCart}
+											class="min-w-[120px]"
+										>
+											{#if cartState.isUpdatingCart}
+												<LoadingDots />
+											{:else}
+												Save Contact
+											{/if}
+										</Button>
+									</div>
+								</form>
+							{/if}
+						</div>
 					<!-- Shipping Address -->
 					{#if cartState?.cart?.email && cartState?.cart?.phone}
 						<div class="rounded-lg border p-4">
