@@ -26,6 +26,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",
 		"@misiki/litekart-connector": "^2.0.25",
+		"@misiki/medusa-connector": "^2.1.0",
 		"@playwright/test": "^1.50.1",
 		"@sveltejs/adapter-auto": "^4.0.0",
 		"@sveltejs/adapter-vercel": "^5.6.1",
