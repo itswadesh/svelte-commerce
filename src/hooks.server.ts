@@ -1,8 +1,7 @@
 import type { Handle } from '@sveltejs/kit'
 import { StoreService } from '$lib/core/services'
 import { env } from '$env/dynamic/public'
-import { BaseService, PUBLIC_MEDUSA_API_PREFIX } from '@misiki/medusa-connector'
-import { env } from '$env/dynamic/public'
+import { BaseService } from '@misiki/medusa-connector'
 
 
 // Function to check if a URL is a local/IP address
