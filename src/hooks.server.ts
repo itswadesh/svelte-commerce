@@ -1,10 +1,21 @@
 import type { Handle } from '@sveltejs/kit'
 import { StoreService } from '$lib/core/services'
 import { env } from '$env/dynamic/public'
+import { BaseService, PUBLIC_MEDUSA_API_PREFIX } from '@misiki/medusa-connector'
+import { PUBLIC_MEDUSA_REGION_ID, PUBLIC_MEDUSA_PUBLISHABLE_API_KEY } from '$env/static/public'
 
 // Function to check if a URL is a local/IP address
 function isLocalOrIpAddress(url: string): boolean {
 	return url.includes('localhost') || url.includes('127.0.0.1') || /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/.test(url)
+}
+
+export const init = async () => {
+  console.log("BaseService key",PUBLIC_MEDUSA_PUBLISHABLE_API_KEY)
+  if (PUBLIC_MEDUSA_PUBLISHABLE_API_KEY) {
+    console.log("setting BaseService key")
+    BaseService.setMedusaPublisableKey(PUBLIC_MEDUSA_PUBLISHABLE_API_KEY)
+    BaseService.setRegionId(PUBLIC_MEDUSA_REGION_ID)
+  }
 }
 
 export const handle: Handle = async ({ event, resolve }) => {
