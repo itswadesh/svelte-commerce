@@ -23,7 +23,19 @@
 <img height="400" src=".github/home-page-mobile.jpg" hspace="10">
 <img height="400" src=".github/catalog-listing-mobile.jpg" hspace="10">
 <img height="400" src=".github/product-details-mobile.jpg" hspace="10">
-<p/>
+</p>
+
+<br/>
+<h2 align="center"> Premium themes made using svelte-commerce </h2>
+<p align="center">
+<img height="200" src=".github/moisny.jpg" hspace="10">
+<img height="200" src=".github/jws.jpg" hspace="10">
+<br>
+<br>
+<img height="200" src=".github/varni.jpg" hspace="10">
+<img height="200" src=".github/suffolk.jpg" hspace="10">
+</p>
+
 <br/>
 <p align="center">
   <img src="https://img.shields.io/badge/Made_With-Svelte-red.svg?style=for-the-badge" alt="Made with Svelte"><br/><br/>
@@ -67,7 +79,7 @@ Reach out to me with queries!
 <div>
 <img alt="Varni Jewels" src="https://litekart.in/_app/immutable/assets/varni.DuN9QdLG.webp" class="h-fit w-28 px-2 dark:brightness-0 dark:invert" height="32"></div> 
 <div>
-<img alt="LRNR" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NS40IDIwLjYiPjxkZWZzPjxzdHlsZT4uY2xzLTF7Zm9udC1zaXplOjIwcHg7Zm9udC1mYW1pbHk6TGVxdWlyZURFTU8sIExlcXVpcmUgREVNTzt9LmNscy0yLC5jbHMtM3tmb250LXNpemU6MTRweDt9LmNscy0ze2ZvbnQtZmFtaWx5Ok1pY3Jvc29mdFNhbnNTZXJpZiwgTWljcm9zb2Z0IFNhbnMgU2VyaWY7fTwvc3R5bGU+PC9kZWZzPjx0aXRsZT5Bc3NldCA3PC90aXRsZT48ZyBpZD0iTGF5ZXJfMiIgZGF0YS1uYW1lPSJMYXllciAyIj48ZyBpZD0iTGF5ZXJfMS0yIiBkYXRhLW5hbWU9IkxheWVyIDEiPjx0ZXh0IGNsYXNzPSJjbHMtMSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAxNykiPkxSTlI8dHNwYW4gY2xhc3M9ImNscy0yIiB4PSI1MS4zNiIgeT0iMCI+LjwvdHNwYW4+PHRzcGFuIGNsYXNzPSJjbHMtMyIgeD0iNTQuNDMiIHk9IjAiPmluPC90c3Bhbj48L3RleHQ+PC9nPjwvZz48L3N2Zz4=" class="h-8 w-28 px-2 dark:brightness-0 dark:invert" height="32"></div> 
+<img alt="LRNR" src=".github/lrnr.svg" class="h-8 w-28 px-2 dark:brightness-0 dark:invert" height="32"></div> 
 <div>
 <img alt="Tesoro" src="https://litekart.in/_app/immutable/assets/tesoro.CSdX56Wq.png" class="h-8 w-28 px-2 dark:brightness-0 dark:invert" height="32"></div> 
 <div>
