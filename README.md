@@ -4,7 +4,7 @@
 
 <div align="center">
 
-**The open-source frontend for any eCommerce. Built with a PWA and headless approach, using a modern JS stack. We have WIP for MedusaJS, Woocommerce, Bigcommerce and Shopify. The API approach also allows you to merge Svelte Commerce with any third-party tool like payment gateways, POS or AI.**
+**The open-source frontend for any eCommerce. Built with a headless approach, using a modern JS stack. We have WIP for MedusaJS, Shopify. The API approach also allows you to merge Svelte Commerce with any third-party tool like payment gateways, POS or AI.**
 
 </div>
 
@@ -71,12 +71,11 @@ Reach out to me with queries!
 </div>
 <br/>
 <h2 class="text-center text-sm font-semibold text-gray-600">TRUSTED BY TEAMS AROUND THE WORLD</h2> 
-
 <p>
-<img hspace="10" alt="Varni Jewels" src="https://litekart.in/_app/immutable/assets/varni.DuN9QdLG.webp" class="h-fit w-28 px-2 dark:brightness-0 dark:invert" height="32">
-<img hspace="10" alt="LRNR" src=".github/lrnr.svg" class="h-8 w-28 px-2 dark:brightness-0 dark:invert" height="32">
-<img hspace="10" alt="Tesoro" src="https://litekart.in/_app/immutable/assets/tesoro.CSdX56Wq.png" class="h-8 w-28 px-2 dark:brightness-0 dark:invert" height="32">
-<img hspace="10" alt="Secretgreen" src="https://litekart.in/_app/immutable/assets/secretgreen.BzzbCiSU.jpg" class="h-8 w-28 px-2 dark:brightness-0 dark:invert"  height="32">
+<img hspace="10" alt="Varni Jewels" src="https://litekart.in/_app/immutable/assets/varni.DuN9QdLG.webp" class="h-fit w-28 px-2 dark:brightness-0 dark:invert" height="32" style="object-fit: contain;">
+<img hspace="10" alt="LRNR" src=".github/lrnr.svg" class="h-8 px-2 dark:brightness-0 dark:invert" height="32" style="object-fit: contain;">
+<img hspace="10" alt="Tesoro" src="https://litekart.in/_app/immutable/assets/tesoro.CSdX56Wq.png" class="h-8 px-2 dark:brightness-0 dark:invert" height="32" style="object-fit: contain;">
+<img hspace="10" alt="Secretgreen" src="https://litekart.in/_app/immutable/assets/secretgreen.BzzbCiSU.jpg" class="h-8 px-2 dark:brightness-0 dark:invert"  height="32" style="object-fit: contain;">
 </p>
 <br/>
 
@@ -84,7 +83,7 @@ Reach out to me with queries!
 
 - Svelte Commerce is a PWA storefront for your existing eCommerce based on Sveltekit.
 - It is possible to connect with any eCommerce backend that provides an API
-- We are working on adaptors of Medusajs, Shopify, Magento, Woocommerce, Litekart, Bigcommerce
+- We are working on adaptors of Medusajs, Shopify
 
 ## Features
 
@@ -137,12 +136,13 @@ Click on the button to directly deploy to Netlify or Vercel. Zero configuration 
 <img src="https://www.netlify.com/img/deploy/button.svg" alt="Deploy to netlify">
 </a>
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fitswadesh%2Fsvelte-commerce&env=PUBLIC_LITEKART_DOMAIN&envDescription=demo.litekart.in)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fitswadesh%2Fsvelte-commerce&env=PUBLIC_LITEKART_DOMAIN&envDescription=arialshop.com)
 
 The following envirnoment variable is mandatory
 
 ```
-PUBLIC_LITEKART_DOMAIN=demo.litekart.in
+PUBLIC_LITEKART_DOMAIN=arialshop.com
+PUBLIC_LITEKART_API_URL=https://api.litekart.in
 ```
 
 You can replace the env variable with your store domain
@@ -163,51 +163,4 @@ Svelte ecommerce - Headless, Authentication, Cart & Checkout, TailwindCSS, Serve
 
 ## Updates
 
-<details>
-<summary>Click here to see all the updates</summary>
-
-- 07-Jun-2023 - Deeplinking for social sharing buttons
-- 07-Feb-2023 - Prettified.
-- 06-Feb-2023 - Sveltekit 1.5
-- 15-Dec-2022 - Sveltekit 1.0 - Finally.
-- 05-Dec-2022 - fix: Close message
-- 30-Nov-2022 - Fixed: Coupon apply and remove, Added: Back to top fade animation
-- 29-Nov-2022 - Improved image lazy loading technique
-- 29-Nov-2022 - Added Price and Discount filters to product catalog
-- 29-Nov-2022 - Preload data on link hover
-- 25-Nov-2022 - Service worker added
-- 10-Nov-2022 - Product options introduced
-- 04-Nov-2022 - Added verify pincode / zip
-- 03-Nov-2022 - New slider added for more control over design
-- 02-Nov-2022 - Cleanup unused packages
-- 31-Oct-2022 - Dynamic searchbat text
-- 31-Oct-2022 - Added title, description, keywords
-- 27-Oct-2022 - Improved megamenu layout
-- 24-Oct-2022 - fix: login, order success, failed payment, frequently bought together
-- 20-Oct-2022 - Sentry added
-- 20-Oct-2022 - Zero-configuration Coolify deployment
-- 16-Oct-2022 - SEO attributes Added
-- 11-Oct-2022 - Add to cart animation
-- 30-Sep-2022 - Attached to ResT API Backend, Migrated to new Sveltekit version
-- 12-Sep-2022 - Modal based mobile device search instead of page based
-- 12-Sep-2022 - New fully working theme launched
-- 04-Sep-2022 - Product schema Added
-- 26-Aug-2022 - Added Trending Products section
-- 26-Apr-2022 - Latest SvelteKit version
-- 26-Apr-2022 - Improved image lazy loading
-- 26-Apr-2022 - New Banners section
-- 26-Apr-2022 - New Authentication System
-- 26-Apr-2022 - New Blogs section
-- 24-Apr-2022 - Zero-configuration Vercel deployment
-- 22-Jul-2021 - Integrated with netlify deployment
-- 07-May-2021 - Completely Migrated to SvelteKit
-
 For a complete development story, visit [our development page](https://litekart.in/development-story)
-
-</details>
-
-## Integration API Reference
-
-https://woocommerce.github.io/woocommerce-rest-api-docs/?javascript#products
-https://developer.bigcommerce.com/api-reference/6fe995bba597e-get-a-product
-https://docs.medusajs.com/api/store/
