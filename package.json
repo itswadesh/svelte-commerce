@@ -1,12 +1,15 @@
 {
-	"name": "kitcommerce",
-	"version": "1.0.0",
-	"description": "",
-	"main": "./src/server/index.ts",
+	"name": "svelte-commerce",
+	"version": "4.0.0",
+	"description": "A modern, performant e-commerce platform built with SvelteKit. Featuring a headless architecture, server-side rendering, and a beautiful, responsive UI. Includes essential e-commerce features like product catalog, cart, checkout, and order management.",
 	"type": "module",
 	"license": "MIT",
-	"keywords": [],
-	"author": "",
+	"keywords": ["ecommerce", "svelte", "sveltekit", "headless", "e-commerce", "storefront", "shopping-cart", "checkout", "ecommerce-platform", "tailwindcss", "typescript", "vite"],
+	"author": "Swadesh Behera",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/itswadesh/svelte-commerce"
+	},
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
