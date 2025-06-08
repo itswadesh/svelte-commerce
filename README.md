@@ -163,4 +163,4 @@ Svelte ecommerce - Headless, Authentication, Cart & Checkout, TailwindCSS, Serve
 
 ## Updates
 
-For a complete development story, visit [our development page](https://litekart.in/development-story)
+Please refer to [CHANGELOG.md](CHANGELOG.md) for updates
