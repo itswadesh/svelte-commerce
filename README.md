@@ -8,10 +8,6 @@
 
 </div>
 
-<div align="center" width="60%" height="auto">
-  <br/>
- <a href="https://litekart.in"> <img src="https://res.cloudinary.com/itswadesh/image/upload/v1678600224/litekart/free_for_developers_1.png"/></a>
-</div>
 <div align="center">
   <br>
     <img width="400" src=".github/svelte-commerce.gif" >
