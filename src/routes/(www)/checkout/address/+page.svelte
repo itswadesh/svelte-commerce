@@ -22,7 +22,6 @@
 
 	// Check if phone is required based on login type
 	const isPhoneRequired = env.PUBLIC_LOGIN_TYPE !== 'EMAIL'
-	console.log(env.PUBLIC_LOGIN_TYPE)
 	// Create a schema that makes phone optional when login type is email
 	const phoneSchema = isPhoneRequired 
 		? schemas.phone 
