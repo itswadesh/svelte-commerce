@@ -13,10 +13,49 @@
 	import { showAuthModal } from '$lib/core/components/auth/auth-utils'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import { AddressModule, emptyAddress, schemas } from '$lib/core/composables/use-checkout-address.svelte'
+	import { env } from '$env/dynamic/public'
+	import { z } from 'zod'
 
 	const addressModule = new AddressModule()
 	const cartState = addressModule.cartState
 	const userState = addressModule.userState
+
+	// Check if phone is required based on login type
+	const isPhoneRequired = env.PUBLIC_LOGIN_TYPE !== 'EMAIL'
+	console.log(env.PUBLIC_LOGIN_TYPE)
+	// Create a schema that makes phone optional when login type is email
+	const phoneSchema = isPhoneRequired 
+		? schemas.phone 
+		: z.string().optional()
+			.refine(
+				(val) => !val || /^[+\s\-()\d\s]{5,20}$/.test(val),
+				{ message: 'Please enter a valid phone number (5-20 digits, may include + - ( ) or spaces)' }
+			)
+
+	function handleContactFormSubmit(event: any, { email, phone, phoneSchema, isPhoneRequired, saveEmail }: any) {
+		event.preventDefault()
+		try {
+			schemas.email.parse(email)
+			if (phone) {
+				phoneSchema.parse(phone)
+			} else if (isPhoneRequired) {
+				throw new z.ZodError([{
+					code: 'custom',
+					path: ['phone'],
+					message: 'Phone is required'
+				}])
+			}
+			saveEmail(event)
+		} catch (e) {
+			if (e instanceof z.ZodError) {
+				const errors = e.errors.reduce((acc, err) => {
+					acc[err.path[0]] = err.message
+					return acc
+				}, {})
+				addressModule.errors = errors
+			}
+		}
+	}
 </script>
 
 <svelte:head>
@@ -121,7 +160,16 @@
 									</div>
 								</div>
 							{:else if !cartState.cart.email || !cartState.cart.phone || addressModule.editEmail}
-								<form class="space-y-4 p-5" onsubmit={addressModule.saveEmail}>
+								<form 
+									class="space-y-4 p-5" 
+									onsubmit={(e) => handleContactFormSubmit(e, {
+										email: addressModule.email,
+										phone: addressModule.phone,
+										phoneSchema,
+										isPhoneRequired,
+										saveEmail: addressModule.saveEmail.bind(addressModule)
+									})}
+								>
 									<div class="space-y-1">
 										<label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
 										<Textbox 
@@ -135,14 +183,16 @@
 										<p class="mt-1 text-xs text-gray-500">We'll send order confirmation to this email</p>
 									</div>
 									<div class="space-y-1">
-										<label for="phone" class="block text-sm font-medium text-gray-700">Phone number</label>
+										<label for="phone" class="block text-sm font-medium text-gray-700">
+											Phone number {#if !isPhoneRequired}<span class="text-gray-400">(optional)</span>{/if}
+										</label>
 										<Textbox 
 											type="tel" 
 											bind:value={addressModule.phone} 
-											required 
+											required={isPhoneRequired}
 											class="w-full" 
-											schema={schemas.phone}
-											placeholder="+1 (555) 000-0000"
+											schema={phoneSchema}
+											placeholder="XXXXXXXXXX"
 										/>
 										<p class="mt-1 text-xs text-gray-500">For delivery updates</p>
 									</div>
