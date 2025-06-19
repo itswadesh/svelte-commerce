@@ -14,6 +14,7 @@
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import { tweened } from 'svelte/motion'
 	import { cubicOut } from 'svelte/easing'
+	import CheckoutButton from '$lib/components/buttons/checkout-button.svelte'
 
 	const cartModule = new CartModule()
 	const cartState = cartModule.cartState
@@ -561,18 +562,10 @@
 										</div>
 
 										{#if !cartModule.noItemsChecked}
-											<Button
-												class="ease-out-expo group w-full bg-primary py-7 text-sm font-bold uppercase tracking-[0.2em] shadow-lg transition-all duration-300 hover:bg-black hover:shadow-xl max-sm:fixed max-sm:bottom-0 max-sm:left-0 max-sm:right-0 max-sm:z-[60] max-sm:h-20 max-sm:rounded-none disabled:bg-gray-400 disabled:opacity-100"
+											<CheckoutButton
 												onclick={cartModule.gotoCheckout}
-												disabled={cartModule.loadingForCheckout}
-											>
-												{#if cartModule.loadingForCheckout}
-													<LoadingDots />
-												{:else}
-													<span>Proceed to Shipping</span>
-													<ChevronRight class="ml-2 size-4 transition-transform duration-300 group-hover:translate-x-1" />
-												{/if}
-											</Button>
+												loading={cartModule.loadingForCheckout}
+											/>
 										{:else}
 											<div
 												class="mt-4 rounded bg-yellow-50 p-3 text-center text-[10px] font-bold uppercase tracking-widest text-yellow-700 ring-1 ring-yellow-100"
