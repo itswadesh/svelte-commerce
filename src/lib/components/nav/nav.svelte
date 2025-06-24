@@ -11,6 +11,7 @@
 	import { getWishlistState } from '@misiki/kitcommerce-core/stores'
 	import CartSidebar from './cart-sidebar.svelte'
 	import ProfileDropdown from './profile-dropdown.svelte'
+	import { Button } from '$lib/components/ui/button'
 
 	const menuItemsUser = [
 		{ title: 'Profile', url: '/my/profile' },
@@ -62,26 +63,32 @@
 	{/if}
 	<div class="page-width flex items-center justify-between bg-white py-3 sm:py-2">
 		<div class="hidden justify-center gap-3 sm:flex">
-			<button
+			<Button
+				variant="ghost"
+				size="icon"
 				aria-label="Sidebar"
-				type="button"
-				class="block text-zinc-200 transition duration-300 hover:text-white focus:outline-none md:hidden"
+				class="md:hidden"
 				onclick={() => {
 					navModule.openSidebar = true
 				}}
 			>
 				<Menu class="text-black" />
-			</button>
+			</Button>
 			<MainNav />
 		</div>
 
 		<div class="flex gap-3 sm:hidden">
 			{#if navModule.isProductListingPage}
 				<div class="flex items-center gap-2">
-					<button class="flex items-center gap-2 text-lg font-medium" aria-label="Go back" onclick={navModule.goBack}>
+					<Button
+						variant="ghost"
+						size="icon"
+						aria-label="Go back"
+						onclick={navModule.goBack}
+					>
 						<ChevronLeft class="h-6 w-6 font-bold" />
 						<span class="sr-only">Go back</span>
-					</button>
+					</Button>
 
 					<div class="flex flex-col items-start">
 						{#if page.params?.slug || page.url?.searchParams?.get?.('search')}
@@ -96,16 +103,17 @@
 					</div>
 				</div>
 			{:else}
-				<button
+				<Button
+					variant="ghost"
+					size="icon"
 					aria-label="Sidebar"
-					type="button"
-					class="block text-zinc-200 transition duration-300 hover:text-white focus:outline-none md:hidden"
+					class="md:hidden"
 					onclick={() => {
 						navModule.openSidebar = true
 					}}
 				>
 					<Menu class="text-black" />
-				</button>
+				</Button>
 				<MainNav />
 			{/if}
 		</div>
@@ -172,9 +180,7 @@
 							<ProfileDropdown onSignOut={navModule.handleSignOut} />
 						{:else}
 							<AuthButton aria-label="Login" type="login">
-								<div
-									class="flex items-center justify-center rounded-full p-2 text-gray-500 transition-all duration-300 ease-out hover:scale-110 hover:bg-gray-100 hover:text-primary active:scale-95"
-								>
+								<div class="flex items-center justify-center p-2">
 									<UserCircle class="h-5 w-5" />
 								</div>
 							</AuthButton>
@@ -189,25 +195,26 @@
 <!-- Sidebar -->
 {#if navModule.openSidebar}
 	<aside class="fixed inset-0 z-[100] flex overflow-hidden bg-transparent">
-		<button
-			transition:fade={{ duration: 500 }}
+		<Button
+			variant="ghost"
 			aria-label="Sidebar"
-			type="button"
-			class="absolute inset-0 bg-black bg-opacity-50 focus:outline-none"
+			class="absolute inset-0 bg-black/50 rounded-none hover:bg-black/50"
 			onclick={() => {
 				navModule.openSidebar = false
 			}}
 		>
-		</button>
+			<span class="sr-only">Close sidebar</span>
+		</Button>
 		<div transition:fade={{ duration: 500 }} class="relative z-[60] h-full w-full overflow-y-auto overflow-x-hidden bg-primary p-6 pt-16 text-white">
-			<button
-				type="button"
+			<Button
+				variant="ghost"
+				size="icon"
 				aria-label="Close sidebar"
-				class="absolute right-4 top-4 transform cursor-pointer rounded-full bg-zinc-800 bg-opacity-50 p-2 text-white transition duration-300 hover:scale-125 hover:text-zinc-200 focus:outline-none"
+				class="absolute right-4 top-4 rounded-full bg-zinc-800/50 text-white hover:bg-zinc-800/70"
 				onclick={() => (navModule.openSidebar = false)}
 			>
 				<X class="h-5 w-5" />
-			</button>
+			</Button>
 
 			<ul class="m-0 flex w-full list-none flex-col gap-4 p-0 text-sm">
 				{#if navModule.megaMenuPluginActive && navModule.megaMenu?.length}
@@ -217,8 +224,7 @@
 								<li>
 									{#if m?.children?.length}
 										<div
-											class="'text-zinc-200 hover:text-white' flex w-full items-center justify-between
-                     gap-2 py-1"
+											class="flex w-full items-center justify-between gap-2 py-1"
 										>
 											<a
 												href={m.link ? m.link : m.slug ? '/' + m.slug : '/products'}
@@ -229,23 +235,24 @@
 												{m.name}
 											</a>
 
-											<button
-												type="button"
+											<Button
+												variant="ghost"
+												size="icon"
 												aria-label="Toggle subcategory"
-												class="overflow-hidden p-2 focus:outline-none"
+												class="h-auto w-auto p-2"
 												onclick={() => navModule.handleToggleSubCategory(m, mx)}
 											>
 												<ChevronDown
 													class="h-5 w-5 shrink-0 transition duration-300
                                 {navModule.showSubCategory[mx] ? '-rotate-180 transform' : ''}"
 												/>
-											</button>
+											</Button>
 										</div>
 									{:else}
 										<a
 											href={m.link ? m.link : m.slug ? '/' + m.slug : '/products'}
 											aria-label="Click to visit category related products"
-											class="flex w-full items-center justify-between gap-2 py-1 text-left text-base font-medium text-zinc-200 hover:text-white focus:outline-none"
+											class="flex w-full items-center justify-between gap-2 py-1 text-left text-base font-medium text-zinc-200 hover:text-white"
 											onclick={() => (navModule.openSidebar = false)}
 										>
 											{m.name}
@@ -269,19 +276,19 @@
 																{c.name}
 															</a>
 
-															<button
-																type="button"
+															<Button
+																variant="ghost"
+																size="icon"
 																aria-label="Toggle subcategory"
-																class="overflow-hidden p-2 focus:outline-none"
+																class="h-auto w-auto p-2"
 																onclick={() => navModule.handleToggleSubCategory2(c, cx)}
 															>
 																<ChevronDown
 																	class="h-5 w-5 shrink-0 transition duration-300
                                 {navModule.showSubCategory2[cx] ? '-rotate-180 transform' : ''}"
 																/>
-															</button>
-														</div>
-													{:else}
+															</Button>
+														</div>													{:else}
 														<a
 															href={c.link ? c.link : c.slug ? '/' + c.slug : '/products'}
 															aria-label="Click to visit category related products page"

@@ -64,8 +64,8 @@
 						</div>
 					</div>
 				</div>
-				<Button href="/my/profile" variant="outline" class="group flex items-center gap-2">
-					<Pencil class="h-4 w-4 transition-transform group-hover:rotate-12" />
+				<Button href="/my/profile" variant="outline" class="flex items-center gap-2">
+					<Pencil class="h-4 w-4" />
 					Edit Profile
 				</Button>
 			</div>

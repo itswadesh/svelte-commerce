@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Star, StarHalf } from '@lucide/svelte'
 	import { page } from '$app/state'
+	import { Button } from '$lib/components/ui/button'
 
 	const { product } = $props()
 </script>
@@ -38,7 +39,7 @@
 				</div>
 				<span class="text-xs font-bold text-gray-900 dark:text-gray-100">{product.rating}</span>
 				<span class="h-1 w-1 rounded-full bg-gray-300"></span>
-				<span class="cursor-pointer text-xs font-medium text-gray-500 transition-colors hover:text-primary">View Reviews</span>
+				<Button variant="link" class="h-auto p-0 text-xs font-medium">View Reviews</Button>
 			</div>
 		{/if}
 	</div>

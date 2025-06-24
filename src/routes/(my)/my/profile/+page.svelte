@@ -90,7 +90,7 @@
 					</div>
 					<Button
 						variant="destructive"
-						class="h-12 px-6 font-semibold transition-all hover:scale-105 active:scale-95"
+						class="h-12 px-6"
 						onclick={() => goto('/my/profile/delete')}
 					>
 						Request Deletion
@@ -112,7 +112,7 @@
 				<span class="text-sm font-semibold text-gray-900">Unsaved changes</span>
 			</div>
 
-			<Button onclick={profileModule.saveProfile} class="h-10 px-6 font-semibold shadow-lg transition-all hover:scale-105 active:scale-95">
+			<Button onclick={profileModule.saveProfile} class="h-10 px-6">
 				{#if profileModule.isLoading}
 					<Loader class="mr-2 h-4 w-4 animate-spin" />
 					Saving...

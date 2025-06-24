@@ -4,12 +4,13 @@
 	import { X, UserCircle, ShoppingBag, MapPin, Heart, ArrowRightCircleIcon } from '@lucide/svelte'
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
+	import { Button } from '$lib/components/ui/button'
 	const userState = getUserState()
 	const { onSignOut } = $props()
 </script>
 
 <DropdownMenu.Root>
-	<DropdownMenu.Trigger aria-label="User Profile" class="flex items-center justify-center rounded-full px-2 transition-all duration-300 ease-out">
+	<DropdownMenu.Trigger aria-label="User Profile" class="flex items-center justify-center rounded-full px-2">
 		{#if userState.user?.avatar}
 			<div class="h-5 w-5 overflow-hidden rounded-full">
 				<LazyImg
@@ -91,16 +92,16 @@
 		<div class="my-2 h-px bg-gray-50"></div>
 
 		<DropdownMenu.Item>
-			<button
-				type="button"
-				class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold text-red-500 transition-all hover:bg-red-50"
+			<Button
+				variant="ghost"
+				class="flex h-auto w-full items-center justify-start gap-3 px-3 py-2.5 text-red-500"
 				onclick={onSignOut}
 			>
 				<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100/30">
 					<ArrowRightCircleIcon class="h-4 w-4" />
 				</div>
 				Sign Out
-			</button>
+			</Button>
 		</DropdownMenu.Item>
 	</DropdownMenu.Content>
 </DropdownMenu.Root>

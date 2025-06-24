@@ -25,7 +25,7 @@
 						placeholder="Enter Pincode"
 						aria-label="Enter Pincode"
 					/>
-					<Button disabled={!(pincode && pincode > 0) || loading} onclick={checkPincode} class="min-w-[80px] shadow-sm transition-all">
+					<Button disabled={!(pincode && pincode > 0) || loading} onclick={checkPincode} class="min-w-[80px]">
 						{#if loading}
 							<LoadingDots />
 						{:else}
@@ -36,13 +36,14 @@
 			{/if}
 
 			{#if !showPincode}
-				<button
+				<Button
+					variant="ghost"
 					onclick={toggleShowPincode}
-					class="group flex min-h-[44px] items-center text-sm font-medium transition-colors hover:text-primary focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+					class="flex min-h-[44px] items-center p-0 font-medium hover:bg-transparent"
 				>
-					<span class="mr-2 group-hover:underline">Check Availability in your area</span>
-					<MapPin class="size-4 text-primary transition-transform group-hover:scale-110" />
-				</button>
+					<span class="mr-2">Check Availability in your area</span>
+					<MapPin class="size-4 text-primary" />
+				</Button>
 			{/if}
 		{/if}
 

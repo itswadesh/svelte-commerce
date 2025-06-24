@@ -43,7 +43,7 @@
 		<!--  Back button -->
 
 		<div class="flex flex-wrap items-center gap-2">
-			<Button type="button" class="text-sm" onclick={() => (showAddNewAddressModal = true)}>
+			<Button type="button" onclick={() => (showAddNewAddressModal = true)}>
 				<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
 				</svg>
@@ -98,16 +98,17 @@
 						</div>
 
 						<div class="grid grid-cols-2 divide-x border-t">
-							<button
+							<Button
 								type="button"
-								class="text-primary-500 hover:text-primary-700 w-full bg-transparent p-2 text-center font-semibold uppercase transition duration-300 hover:bg-zinc-100 focus:outline-none"
+								variant="ghost"
+								class="w-full rounded-none p-2"
 								onclick={() => {
 									selectedShippingAddress = add
 									showEditAddressModal = true
 								}}
 							>
 								Edit
-							</button>
+							</Button>
 
 							<!-- <button
 								type="button"
@@ -134,12 +135,13 @@
 							>
 								<input type="hidden" name="id" value={add._id || add.id || null} />
 
-								<button
+								<Button
 									type="submit"
-									class="text-primary-500 hover:text-primary-700 w-full bg-transparent p-2 text-center font-semibold uppercase transition duration-300 hover:bg-zinc-100 focus:outline-none"
+									variant="ghost"
+									class="w-full rounded-none p-2 text-red-500"
 								>
 									REMOVE
-								</button>
+								</Button>
 							</form>
 						</div>
 					</li>
@@ -161,7 +163,7 @@
 			<p class="mb-5">There's no address found, start adding address by clicking the add new address button above.</p>
 
 			<a href="/" aria-label="Click to visit home" data-sveltekit-preload-data>
-				<Button class="w-40 py-2 text-sm">Shop Now</Button>
+				<Button class="w-40 py-2">Shop Now</Button>
 			</a>
 		</div>
 	{/if}

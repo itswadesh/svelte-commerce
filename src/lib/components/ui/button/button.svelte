@@ -12,7 +12,8 @@
 				outline: 'border-input bg-background border shadow-sm',
 				secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm',
 				ghost: 'hover:bg-primary hover:text-accent-foreground',
-				link: 'text-primary underline-offset-4 hover:underline'
+				link: 'text-primary underline-offset-4 hover:underline',
+				plain: ''
 			},
 			size: {
 				default: 'h-9 px-4 py-2',
@@ -38,7 +39,7 @@
 </script>
 
 <script lang="ts">
-	import { cn } from '$lib/core/utils'
+	import { cn } from '$lib/core/utils/index.js'
 
 	let {
 		class: className,

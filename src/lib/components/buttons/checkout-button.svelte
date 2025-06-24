@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/button'
+	import { Button } from '$lib/components/ui/button/index.js'
 	import { ChevronRight } from '@lucide/svelte'
 	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
 
@@ -13,7 +13,7 @@
 	} = $props()
 </script>
 
-<div 
+<div
 	class="w-full max-sm:fixed max-sm:bottom-0 max-sm:left-0 max-sm:right-0 max-sm:z-[60] {className}"
 	onclick={onclick}
 	aria-hidden="true"

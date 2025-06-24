@@ -5,6 +5,7 @@
 	import { InfoIcon, Loader } from '@lucide/svelte'
 	import { toast } from '@misiki/kitcommerce-core'
 	import { browser } from '$app/environment'
+	import { Button } from '$lib/components/ui/button'
 
 	let address: any = $state({})
 
@@ -299,11 +300,11 @@
 		<span>Unsaved changes</span>
 	</div>
 
-	<button onclick={saveAddress} class="rounded bg-white px-2 py-1 text-xs text-black shadow">
+	<Button onclick={saveAddress} size="sm">
 		{#if isLoading}
 			<Loader class="h-4 w-4 animate-spin" />
 		{:else}
 			Save
 		{/if}
-	</button>
+	</Button>
 </div>

@@ -33,7 +33,7 @@
 											fetchpriority={ix === 0 ? 'high' : 'auto'}
 											loading={ix === 0 ? 'eager' : 'lazy'}
 										/>
-										<div
+										<!-- <div
 											class="absolute inset-0 flex flex-col items-center justify-center bg-black/10 transition-opacity duration-500 group-hover:bg-black/20"
 										>
 											<div class="translate-y-4 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
@@ -45,7 +45,7 @@
 													Shop Now
 												</a>
 											</div>
-										</div>
+										</div> -->
 									</div>
 								{/if}
 							</a>

@@ -69,17 +69,21 @@
 					<span>{item.label}</span>
 				</a>
 			{:else}
-				<button onclick={item.onClick} class="flex flex-col items-center gap-1 text-xs text-gray-500">
+				<Button
+					variant="ghost"
+					onclick={item.onClick}
+					class="flex flex-col items-center gap-1 h-auto py-2"
+				>
 					<div class="relative">
-						<item.icon size={24} />
+						<item.icon size={24} class="text-gray-500" />
 						{#if cartState?.cart?.total && cartState.cart?.lineItems?.length > 0}
 							<span class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-white">
 								{cartState?.cart?.qty}
 							</span>
 						{/if}
 					</div>
-					<span>{item.label}</span>
-				</button>
+					<span class="text-gray-500">{item.label}</span>
+				</Button>
 			{/if}
 		{/each}
 
@@ -101,9 +105,9 @@
 	<div class="fixed inset-0 z-[1000001] bg-white" transition:slide={{ duration: 300 }}>
 		<div class="flex h-full flex-col">
 			<header class="flex items-center gap-4 border-b p-4">
-				<button class="rounded-full p-2 hover:bg-gray-100" onclick={() => (showCartModal = false)}>
+				<Button variant="ghost" size="icon" class="rounded-full" onclick={() => (showCartModal = false)}>
 					<ArrowLeft size={24} />
-				</button>
+				</Button>
 				<h2 class="text-lg font-medium">Your Cart</h2>
 			</header>
 
@@ -123,8 +127,10 @@
 									</a>
 									<div class="mt-2 flex items-center justify-between">
 										<div class="flex items-center gap-2">
-											<button
-												class="rounded-full p-1 hover:bg-gray-100"
+											<Button
+												variant="ghost"
+												size="icon"
+												class="rounded-full h-8 w-8"
 												onclick={() =>
 													cartState.update({
 														qty: item.qty - 1,
@@ -134,7 +140,7 @@
 													})}
 											>
 												<Minus size={16} />
-											</button>
+											</Button>
 											<span class="mx-2">
 												{#if cartState.updatingItem[item.id]}
 													<LoadingDots />
@@ -142,8 +148,10 @@
 													{item.qty}
 												{/if}
 											</span>
-											<button
-												class="rounded-full p-1 hover:bg-gray-100"
+											<Button
+												variant="ghost"
+												size="icon"
+												class="rounded-full h-8 w-8"
 												onclick={() =>
 													cartState.update({
 														qty: item.qty + 1,
@@ -153,10 +161,12 @@
 													})}
 											>
 												<Plus size={16} />
-											</button>
+											</Button>
 										</div>
-										<button
-											class="text-red-500 hover:text-red-600"
+										<Button
+											variant="ghost"
+											size="icon"
+											class="text-red-500 h-10 w-10"
 											onclick={() =>
 												cartState.update({
 													qty: 0,
@@ -166,7 +176,7 @@
 												})}
 										>
 											<Trash2 size={20} />
-										</button>
+										</Button>
 									</div>
 								</div>
 							</div>

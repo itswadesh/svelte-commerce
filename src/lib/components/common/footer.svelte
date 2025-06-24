@@ -10,6 +10,7 @@
 	import visa from '$lib/assets/payment-methods/visa.png'
 	import Newsletter from './newsletter.svelte'
 	import FooterMenu from './footer-menu.svelte'
+	import { Button } from '$lib/components/ui/button'
 
 	let paymentMethodCards = [
 		{ src: masterCard, alt: 'Mastercard' },
@@ -46,13 +47,14 @@
 	<footer class="page-width mt-2 border-t">
 		<div class="w-full xl:pb-2">
 			{#if shouldCollapseOnMobile}
-				<button
-					class="flex w-full items-center justify-between p-4 text-sm font-medium uppercase tracking-tighter text-gray-900 dark:text-white md:hidden"
+				<Button
+					variant="ghost"
+					class="flex h-auto w-full items-center justify-between p-4 md:hidden"
 					onclick={() => (isExpanded = !isExpanded)}
 				>
 					<span>More about {storeData?.name}</span>
-					<ChevronDown size={20} class="transition-transform duration-200 {isExpanded ? 'rotate-180' : ''}" />
-				</button>
+					<ChevronDown size={20} class="{isExpanded ? 'rotate-180' : ''}" />
+				</Button>
 			{/if}
 
 			<div class="overflow-hidden {shouldCollapseOnMobile ? (isExpanded ? '' : 'hidden md:block') : ''}">

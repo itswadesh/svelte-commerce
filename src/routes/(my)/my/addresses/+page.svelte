@@ -20,7 +20,7 @@
 			<h1 class="text-lg font-bold tracking-tight text-gray-900 md:text-xl">Your Addresses</h1>
 			<p class="mt-2 text-sm text-gray-500">Manage your shipping and billing addresses.</p>
 		</div>
-		<Button onclick={addressesModule.handleAddNew} class="h-12 px-6 font-semibold shadow-lg transition-all hover:scale-105 active:scale-95">
+		<Button onclick={addressesModule.handleAddNew} class="h-12 px-6">
 			<Plus class="mr-2 h-4 w-4" />
 			Add New Address
 		</Button>
@@ -75,20 +75,22 @@
 						</div>
 
 						<div class="flex border-t border-gray-100">
-							<button
+							<Button
+								variant="ghost"
 								onclick={() => addressesModule.handleEdit(address)}
-								class="flex flex-1 items-center justify-center gap-2 py-3 text-[10px] font-bold uppercase tracking-widest text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-900 border-r border-gray-100"
+								class="flex-1 h-auto py-3 rounded-none border-r border-gray-100"
 							>
-								<Pencil class="h-3 w-3" />
+								<Pencil class="h-3 w-3 mr-2" />
 								Edit
-							</button>
-							<button
+							</Button>
+							<Button
+								variant="ghost"
 								onclick={() => addressesModule.handleDelete(address)}
-								class="flex flex-1 items-center justify-center gap-2 py-3 text-[10px] font-bold uppercase tracking-widest text-gray-500 transition-colors hover:bg-red-50 hover:text-red-600"
+								class="flex-1 h-auto py-3 rounded-none text-red-500"
 							>
-								<Trash2 class="h-3 w-3" />
+								<Trash2 class="h-3 w-3 mr-2" />
 								Delete
-							</button>
+							</Button>
 						</div>
 					</div>
 				{/each}

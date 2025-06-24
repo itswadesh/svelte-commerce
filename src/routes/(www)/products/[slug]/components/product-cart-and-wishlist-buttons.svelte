@@ -18,8 +18,10 @@
 
 {#snippet wishlistButton()}
 	{#if showWishlist && productState.wishlistPluginEnabled}
-		<button
-			class="ease-out-expo flex h-full w-16 items-center justify-center rounded-md border border-gray-200 transition-all duration-300 hover:bg-gray-50 active:scale-95"
+		<Button
+			variant="outline"
+			size="icon"
+			class="h-full w-16 lg:w-20"
 			onclick={productState.handleWishlistClick}
 			aria-label="Add to wishlist"
 		>
@@ -32,7 +34,7 @@
 						: 'text-gray-900'} transition-transform duration-300"
 				/>
 			{/if}
-		</button>
+		</Button>
 	{/if}
 {/snippet}
 
@@ -57,12 +59,13 @@
 					{formatPrice(productState.selectedVariant?.price, page?.data?.store?.currency?.code)}
 				</p>
 			</div>
-			<a
+			<Button
 				href="/checkout/cart"
-				class="rounded-md bg-primary px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-white transition-all active:scale-95"
+				size="sm"
+				class="px-4"
 			>
 				View Bag
-			</a>
+			</Button>
 		</div>
 	</div>
 {/if}
@@ -78,17 +81,17 @@
 			/>
 			<Button
 				onclick={() => (showEnquiryModal = true)}
-				class="ease-out-expo h-full w-full bg-primary text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:bg-black active:scale-[0.98]"
+				class="h-full w-full"
 			>
 				{enquiryPlugin?.buttonText || 'Enquire'}
 			</Button>
 		{:else}
 			<div class="flex h-full w-full gap-2">
 				<Button
-					class="ease-out-expo h-full flex-1 py-0 text-[10px] font-bold uppercase tracking-[0.1em] transition-all duration-300 active:scale-[0.98] sm:text-xs {productState
+					class="h-full flex-1 {productState
 						.cartState.addToCartMessage == 'Added to cart'
 						? 'bg-green-600 hover:bg-green-700'
-						: 'bg-primary shadow-lg hover:shadow-xl'}"
+						: ''}"
 					size="lg"
 					disabled={productState.addToCartButtonDisabled}
 					onclick={productState.handleAddToCart}
@@ -102,15 +105,14 @@
 				</Button>
 
 				{#if productState.cartState.showCheckout}
-					<a href="/checkout/cart" class="h-full flex-1">
-						<Button
-							class="ease-out-expo h-full w-full bg-primary py-0 text-[10px] font-bold uppercase tracking-[0.1em] transition-all duration-300 hover:bg-black active:scale-[0.98] sm:text-xs"
-							size="lg"
-						>
-							Go to bag
-							<MoveRight class="ml-2 h-4 w-4" />
-						</Button>
-					</a>
+					<Button
+						href="/checkout/cart"
+						class="h-full flex-1"
+						size="lg"
+					>
+						Go to bag
+						<MoveRight class="ml-2 h-4 w-4" />
+					</Button>
 				{/if}
 			</div>
 		{/if}

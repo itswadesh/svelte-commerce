@@ -2,6 +2,7 @@
 	import { page } from '$app/state'
 	import { useProductState } from '$lib/core/composables/index.js'
 	import { ChartNoAxesGanttIcon } from '@lucide/svelte'
+	import { Button } from '$lib/components/ui/button'
 
 	const productState = useProductState()
 </script>
@@ -20,17 +21,14 @@
 						<span class="text-lg uppercase">{optionName}</span>
 						<div class="flex flex-wrap items-center gap-2">
 							{#each [...values].sort() as value}
-								<button
-									class="relative overflow-hidden border px-4 py-2 text-sm transition-colors hover:border-primary
-                            {productState.selectedAggregations?.[optionName] === value
-										? 'border-black bg-primary text-primary-foreground dark:border-white'
-										: 'border-muted'}
-                            {!productState.isAggregationAvaliable(optionName, value) ? 'bg-gray-200 text-gray-600' : ''}
-                              "
+								<Button
+									variant={productState.selectedAggregations?.[optionName] === value ? 'default' : 'outline'}
+									class="relative overflow-hidden px-4 py-2"
+									disabled={!productState.isAggregationAvaliable(optionName, value)}
 									onclick={() => productState.toggleAggregation(optionName, value)}
 								>
 									{value}
-								</button>
+								</Button>
 							{/each}
 						</div>
 					</div>
