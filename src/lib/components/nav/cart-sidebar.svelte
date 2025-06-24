@@ -39,7 +39,7 @@
 		<ShoppingBag class="h-5 w-5" />
 		{#if cartState?.cart?.total && cartState.cart?.lineItems?.length > 0}
 			<span
-				class="absolute right-0 top-0 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-primary px-1.5 py-1 text-xs font-bold leading-none text-white"
+				class="absolute right-0 top-0 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-primary px-1.5 py-1 text-xs font-bold leading-none"
 			>
 				{cartState.cart.qty}
 			</span>
