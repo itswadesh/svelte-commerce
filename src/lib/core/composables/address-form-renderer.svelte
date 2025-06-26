@@ -18,17 +18,21 @@
 	let { content, onback, ondelete, onsave, show = $bindable(), address = $bindable() }: Props = $props()
 
 	interface SnippetParams {
+    isSaving: boolean
 		handleSubmit: (e: Event) => void
 		handleBack: () => void
 		handleDelete: () => void
 	}
+
+  let isSaving = $state(false)
 
 	function handleBack() {
 		onback?.()
 		show = false
 	}
 
-	function handleSubmit(e: Event) {
+	async function handleSubmit(e: Event) {
+    isSaving = true
 		e.preventDefault()
 
 		if (address) address.countryCode = address.countryCode || page?.data?.store?.country?.code || 'AU'
@@ -39,8 +43,9 @@
 			return
 		}
 
-		onsave?.(address)
+		await onsave?.(address)
 		show = false
+    isSaving = false
 	}
 
 	function handleDelete() {
@@ -56,4 +61,4 @@
 	})
 </script>
 
-{@render content?.({ handleBack, handleSubmit, handleDelete })}
+{@render content?.({ isSaving, handleBack, handleSubmit, handleDelete })}

@@ -409,12 +409,12 @@ export class AddressModule {
 		this.currentAddressType = null
 	}
 
-	handleFormSave = (address: BaseAddress) => {
+	handleFormSave = async (address: BaseAddress) => {
 		if (!this.userState?.user?.role) {
 			/* Logged out state */
-			this.handleSaveAddress(address, true)
+			await this.handleSaveAddress(address, true)
 		} else {
-			this.handleSaveAddress(address)
+			await this.handleSaveAddress(address)
 		}
 	}
 
