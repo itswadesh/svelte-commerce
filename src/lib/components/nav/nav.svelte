@@ -1,34 +1,34 @@
 <script lang="ts">
-	import CartItem from '$lib/components/cart/cart-item.svelte'
-	import { X, UserCircle, ChevronLeftIcon, Phone, Mail, Menu, ChevronDown } from 'lucide-svelte'
-	import MainNav from './main-nav.svelte'
-	import { Button } from '$lib/components/ui/button'
-	import { goto } from '$app/navigation'
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu'
-	import { formatPrice } from '$lib/core/utils'
-	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
-	import MegaMenu from './mega-menu.svelte'
-	import { page } from '$app/state'
-	import MsSearch from './ms-search.svelte'
-	import AuthModal from '$lib/components/auth/auth-modal.svelte'
-	import AuthButton from '$lib/core/components/auth/auth-button.svelte'
-	import { fade } from 'svelte/transition'
-	import { NavModule } from '$lib/core/composables/use-nav.svelte'
+import CartItem from '$lib/components/cart/cart-item.svelte'
+import { X, UserCircle, ChevronLeftIcon, Phone, Mail, Menu, ChevronDown } from 'lucide-svelte'
+import MainNav from './main-nav.svelte'
+import { Button } from '$lib/components/ui/button'
+import { goto } from '$app/navigation'
+import * as DropdownMenu from '$lib/components/ui/dropdown-menu'
+import { formatPrice } from '$lib/core/utils'
+import LazyImg from '$lib/core/components/image/lazy-img.svelte'
+import MegaMenu from './mega-menu.svelte'
+import { page } from '$app/state'
+import MsSearch from './ms-search.svelte'
+import AuthModal from '$lib/components/auth/auth-modal.svelte'
+import AuthButton from '$lib/core/components/auth/auth-button.svelte'
+import { fade } from 'svelte/transition'
+import { NavModule } from '$lib/core/composables/use-nav.svelte'
 
-	const menuItemsUser = [
-		{ title: 'Profile', url: '/my/profile' },
-		{ title: 'Orders', url: '/my/orders' },
-		// { title: 'Buy Again', url: '/my/buy-again' },
-		{ title: 'Addresses', url: '/my/addresses' },
-		{ title: 'Wishlist', url: '/my/wishlist' },
-		{ title: 'Change Password', url: '/auth/change-password' }
-	]
+const menuItemsUser = [
+	{ title: 'Profile', url: '/my/profile' },
+	{ title: 'Orders', url: '/my/orders' },
+	// { title: 'Buy Again', url: '/my/buy-again' },
+	{ title: 'Addresses', url: '/my/addresses' },
+	{ title: 'Wishlist', url: '/my/wishlist' },
+	{ title: 'Change Password', url: '/auth/change-password' }
+]
 
-	let { storeData } = $props()
+let { storeData } = $props()
 
-	const navModule = new NavModule()
-	const userState = navModule.userState
-	const cartState = navModule.cartState
+const navModule = new NavModule()
+const userState = navModule.userState
+const cartState = navModule.cartState
 </script>
 
 <svelte:window bind:scrollY={navModule.scrollY} />

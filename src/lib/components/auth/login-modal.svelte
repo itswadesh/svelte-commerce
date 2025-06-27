@@ -1,19 +1,20 @@
 <script lang="ts">
-	import { LoaderIcon, X } from 'lucide-svelte'
-	import * as InputOTP from '$lib/components/ui/input-otp/index'
-	import Button from '$lib/components/ui/button/button.svelte'
-	import { Label } from '$lib/components/ui/label'
-	import { env } from '$env/dynamic/public'
-	import Textbox from '$lib/components/form/textbox.svelte'
-	import Modal from '../common/modal.svelte'
-	import { page } from '$app/state'
-	import AuthButton from '$lib/core/components/auth/auth-button.svelte'
-	import { LoginModule, schemas } from '$lib/core/composables/use-login.svelte'
+import { LoaderIcon, X } from 'lucide-svelte'
+import * as InputOTP from '$lib/components/ui/input-otp/index'
+import Button from '$lib/components/ui/button/button.svelte'
+import { Label } from '$lib/components/ui/label'
+import { env } from '$env/dynamic/public'
+import Textbox from '$lib/components/form/textbox.svelte'
+import Modal from '../common/modal.svelte'
+import { page } from '$app/state'
+import AuthButton from '$lib/core/components/auth/auth-button.svelte'
+import { LoginModule, schemas } from '$lib/core/composables/use-login.svelte'
+import { PUBLIC_LOGIN_TYPE } from '$env/static/public'
 
-	let { show = $bindable(false) } = $props()
+let { show = $bindable(false) } = $props()
 
-	const loginModule = new LoginModule()
-	const userState = loginModule.userState
+const loginModule = new LoginModule()
+const userState = loginModule.userState
 </script>
 
 <Modal {show} rounded={false} hideHeader hideFooter useMaxHeight class="p-0 max-sm:h-screen max-sm:w-screen max-sm:!rounded-none" hAuto wAuto>
@@ -115,15 +116,19 @@
 					</div>
 				{/if}
 
-				<Button type="submit" class="h-11 w-full text-sm font-medium" disabled={userState.loading}>
-					{#if userState.loading}
+				<Button type="submit" class="h-11 w-full text-sm font-medium" disabled={userState.loading || loginModule.isLoading}>
+					{#if userState.loading || (loginModule.isLoading && loginModule.isPhoneNumber)}
 						<LoaderIcon class="mr-2 h-4 w-4 animate-spin" />
+						Sending OTP...
+					{:else if userState.loading && !loginModule.isPhoneNumber}
+						<LoaderIcon class="mr-2 h-4 w-4 animate-spin" />
+						Signing in...
 					{:else}
 						{loginModule.isPhoneNumber ? 'Send OTP' : 'Sign In'}
 					{/if}
 				</Button>
 
-				{#if loginModule.showSignupButton}
+				{#if loginModule.showSignupButton && PUBLIC_LOGIN_TYPE !== 'PHONE'}
 					<div class="space-y-4 text-center">
 						<p class="text-sm text-gray-500">New to {page?.data?.store?.name}?</p>
 						<AuthButton
@@ -153,16 +158,17 @@
 					<p class="mt-2 text-xs text-gray-600 dark:text-gray-400">Enter the OTP code sent to your phone number.</p>
 				</div>
 				<div class="flex justify-center gap-2">
-					<InputOTP.Root maxlength={4} pattern="/^\d+$/" bind:value={loginModule.otp}>
+					<InputOTP.Root maxlength={4} pattern="\d*" bind:value={loginModule.otp}>
 						{#snippet children({ cells })}
 							<InputOTP.Group>
 								{#each cells as cell}
-									<InputOTP.Slot {cell} />
+									<InputOTP.Slot {cell} class="border-gray-300 dark:border-gray-600" />
 								{/each}
 							</InputOTP.Group>
 						{/snippet}
 					</InputOTP.Root>
 				</div>
+				<input type="hidden" name="otp" bind:value={loginModule.otp} />
 				<p class="text-center text-sm">
 					Didn't receive the OTP?{' '}
 					<button type="button" class="text-gray-600 hover:underline" onclick={() => (loginModule.step = 1)}> Resend OTP </button>
