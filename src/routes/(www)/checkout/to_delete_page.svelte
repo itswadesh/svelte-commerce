@@ -1,421 +1,420 @@
 <script lang="ts">
-	import { getCartState } from '$lib/core/stores/cart.svelte'
-	import { getProductState } from '$lib/core/stores/product.svelte'
-	import { Button } from '$lib/components/ui/button'
-	import Input from '$lib/components/ui/input/input.svelte'
-	import Select from '$lib/components/form/select.svelte'
-	import { Separator } from '$lib/components/ui/separator'
-	import { onMount } from 'svelte'
-	import { Minus, Plus, Save } from 'lucide-svelte'
-	import { goto } from '$app/navigation'
-	import { MapPin, Pencil, ShoppingBag } from 'lucide-svelte'
-	import { formatPrice } from '$lib/core/utils'
-	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
-	import { toast } from 'svelte-sonner'
-	import { getUserState } from '$lib/core/stores/auth.svelte'
-	import { addressService, checkoutService } from '$lib/core/services'
-	import { browser } from '$app/environment'
-	import AddressListModal from '$lib/components/address/address-list-modal.svelte'
-	import AddressFormModal from '$lib/components/address/address-form-modal.svelte'
-	import { paymentMethodService } from '$lib/core/services'
-	import { page } from '$app/state'
-	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
-	import { fireGTagEvent } from '$lib/core/utils/gtag'
-	import AuthButton from '$lib/core/components/auth/auth-button.svelte'
+import { getCartState } from '$lib/core/stores/cart.svelte'
+import { getProductState } from '$lib/core/stores/product.svelte'
+import { Button } from '$lib/components/ui/button'
+import Input from '$lib/components/ui/input/input.svelte'
+import Select from '$lib/components/form/select.svelte'
+import { Separator } from '$lib/components/ui/separator'
+import { onMount } from 'svelte'
+import { Minus, Plus, Save } from 'lucide-svelte'
+import { goto } from '$app/navigation'
+import { MapPin, Pencil, ShoppingBag } from 'lucide-svelte'
+import { formatPrice } from '$lib/core/utils'
+import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
+import { toast } from 'svelte-sonner'
+import { getUserState } from '$lib/core/stores/auth.svelte'
+import { addressService, checkoutService } from '$lib/core/services'
+import { browser } from '$app/environment'
+import AddressListModal from '$lib/components/address/address-list-modal.svelte'
+import AddressFormModal from '$lib/components/address/address-form-modal.svelte'
+import { paymentMethodService } from '$lib/core/services'
+import { page } from '$app/state'
+import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
+import { fireGTagEvent } from '$lib/core/utils/gtag'
+import AuthButton from '$lib/core/components/auth/auth-button.svelte'
 
-	let SELECTED_PG_NAME: string = $state('')
-	let listOfPaymentMethods = $state([])
-	const userState = getUserState()
-	const cartState = getCartState()
-	const productState = getProductState()
-	let email = $state('')
-	let phone = $state('')
-	let paymentLoader = $state(false)
-	let loadingForCart = $state(false)
-	let payment_sessions = []
-	let editAddress = $state(false)
-	let editEmail = $state(false)
-	let razorpayReady = $state(false)
-	let order_no = $state('')
-	let isBillingAddressSameAsShipping = $state(true)
-	let shippingAddress: Record<string, any> = $state({
-		id: 'new',
-		firstName: '',
-		lastName: '',
-		phone: '',
-		address_1: '',
-		address_2: '',
-		city: '',
-		state: '',
-		zip: '',
-		countryCode: ''
-	})
-	let billingAddress = $state({
-		id: 'new',
-		firstName: '',
-		lastName: '',
-		phone: '',
-		address_1: '',
-		address_2: '',
-		city: '',
-		state: '',
-		zip: '',
-		countryCode: ''
-	})
-	let showAddressList = $state(false)
-	let showAddressForm = $state(false)
-	let showBillingAddressForm = $state(false)
-	let isEditingAddress = $state(false)
-	let currentAddress = $state<Record<string, any>>({})
-	let addresses = $state([{ ...shippingAddress }])
-	let showError = $state(false)
-	let errorMessage = $state('')
-	let checkoutDisabled = $state(false)
-	let showPaymentMethods = $state(false)
-	let currentCheckoutStep = $state(1)
+let SELECTED_PG_NAME: string = $state('')
+let listOfPaymentMethods = $state([])
+const userState = getUserState()
+const cartState = getCartState()
+const productState = getProductState()
+let email = $state('')
+let phone = $state('')
+let paymentLoader = $state(false)
+let loadingForCart = $state(false)
+let payment_sessions = []
+let editAddress = $state(false)
+let editEmail = $state(false)
+let razorpayReady = $state(false)
+let order_no = $state('')
+let isBillingAddressSameAsShipping = $state(true)
+let shippingAddress: Record<string, any> = $state({
+	id: 'new',
+	firstName: '',
+	lastName: '',
+	phone: '',
+	address_1: '',
+	address_2: '',
+	city: '',
+	state: '',
+	zip: '',
+	countryCode: ''
+})
+let billingAddress = $state({
+	id: 'new',
+	firstName: '',
+	lastName: '',
+	phone: '',
+	address_1: '',
+	address_2: '',
+	city: '',
+	state: '',
+	zip: '',
+	countryCode: ''
+})
+let showAddressList = $state(false)
+let showAddressForm = $state(false)
+let showBillingAddressForm = $state(false)
+let isEditingAddress = $state(false)
+let currentAddress = $state<Record<string, any>>({})
+let addresses = $state([{ ...shippingAddress }])
+let showError = $state(false)
+let errorMessage = $state('')
+let checkoutDisabled = $state(false)
+let showPaymentMethods = $state(false)
+let currentCheckoutStep = $state(1)
 
-	declare global {
-		interface Window {
-			Razorpay: any
+declare global {
+	interface Window {
+		Razorpay: any
+	}
+}
+async function saveEmail(e) {
+	e.preventDefault()
+	await cartState.updateEmail({ email, phone })
+	editEmail = false
+}
+
+async function saveShippingAddress(e) {
+	e.preventDefault()
+	// if (isBillingAddressSameAsShipping) {
+	// 	billingAddress = { ...shippingAddress, id: 'new' }
+	// }
+	await cartState.updateShippingAddress({
+		shippingAddress,
+		billingAddress,
+		isBillingAddressSameAsShipping
+	})
+	editAddress = false
+}
+
+function cancelSaveShippingAddress(e) {
+	e.preventDefault()
+	editAddress = false
+}
+
+async function saveBillingAddress(e) {
+	e.preventDefault()
+	// console.log(billingAddress, 'Biling address......', shippingAddress)
+	await cartState.updateShippingAddress({
+		shippingAddress,
+		billingAddress,
+		isBillingAddressSameAsShipping
+	})
+	editAddress = false
+	showBillingAddressForm = false
+}
+
+function cancelSaveBillingAddress(e) {
+	e.preventDefault()
+	editAddress = false
+	showBillingAddressForm = false
+}
+
+const handleDetailsChange = () => {
+	// detailsChanged = true
+}
+
+// const mount = async () => {}
+
+// $effect(() => {
+// 	mount()
+// })
+
+onMount(async () => {
+	if (browser) {
+		const allPaymentMethods = await paymentMethodService.list({})
+		listOfPaymentMethods = allPaymentMethods?.data || []
+		if (listOfPaymentMethods.length === 0) {
+			showError = true
+			errorMessage = 'No payment methods available'
+			checkoutDisabled = true
+		} else if (listOfPaymentMethods.length === 1) {
+			SELECTED_PG_NAME = listOfPaymentMethods[0]?.name?.toUpperCase?.()
+			showPaymentMethods = false
+		} else {
+			showPaymentMethods = true
+		}
+		if (listOfPaymentMethods.find(f => f?.name?.toUpperCase?.() === 'RAZORPAY')) {
+			const razorpayScript = document.createElement('script')
+			razorpayScript.src = 'https://checkout.razorpay.com/v1/checkout.js'
+			razorpayScript.async = true
+			razorpayScript.onload = () => {
+				// Add a small delay to ensure the script is fully initialized
+				setTimeout(() => {
+					razorpayReady = true
+				}, 1000)
+			}
+			document.head.appendChild(razorpayScript)
 		}
 	}
-	async function saveEmail(e) {
-		e.preventDefault()
-		await cartState.updateEmail({ email, phone })
-		editEmail = false
-	}
 
-	async function saveShippingAddress(e) {
-		e.preventDefault()
-		// if (isBillingAddressSameAsShipping) {
-		// 	billingAddress = { ...shippingAddress, id: 'new' }
-		// }
-		await cartState.updateShippingAddress({
-			shippingAddress,
-			billingAddress,
-			isBillingAddressSameAsShipping
-		})
-		editAddress = false
-	}
-
-	function cancelSaveShippingAddress(e) {
-		e.preventDefault()
-		editAddress = false
-	}
-
-	async function saveBillingAddress(e) {
-		e.preventDefault()
-		// console.log(billingAddress, 'Biling address......', shippingAddress)
-		await cartState.updateShippingAddress({
-			shippingAddress,
-			billingAddress,
-			isBillingAddressSameAsShipping
-		})
-		editAddress = false
-		showBillingAddressForm = false
-	}
-
-	function cancelSaveBillingAddress(e) {
-		e.preventDefault()
-		editAddress = false
-		showBillingAddressForm = false
-	}
-
-	const handleDetailsChange = () => {
-		// detailsChanged = true
-	}
-
-	// const mount = async () => {}
-
-	// $effect(() => {
-	// 	mount()
-	// })
-
-	onMount(async () => {
-		if (browser) {
-			const allPaymentMethods = await paymentMethodService.list({})
-			listOfPaymentMethods = allPaymentMethods?.data || []
-			if (listOfPaymentMethods.length === 0) {
-				showError = true
-				errorMessage = 'No payment methods available'
-				checkoutDisabled = true
-			} else if (listOfPaymentMethods.length === 1) {
-				SELECTED_PG_NAME = listOfPaymentMethods[0]?.name?.toUpperCase?.()
-				showPaymentMethods = false
-			} else {
-				showPaymentMethods = true
-			}
-			if (listOfPaymentMethods.find((f) => f?.name?.toUpperCase?.() === 'RAZORPAY')) {
-				const razorpayScript = document.createElement('script')
-				razorpayScript.src = 'https://checkout.razorpay.com/v1/checkout.js'
-				razorpayScript.async = true
-				razorpayScript.onload = () => {
-					// Add a small delay to ensure the script is fully initialized
-					setTimeout(() => {
-						razorpayReady = true
-					}, 1000)
-				}
-				document.head.appendChild(razorpayScript)
-			}
-		}
-
-		if (userState.user?.email) {
-			try {
-				const res = await addressService.list({})
-				addresses = res?.data
-			} catch (e) {
-				console.log(e)
-				// toast.error((e as any)?.message)
-			}
-		}
-	})
-
-	$effect(() => {
-		// When checkbox is toggled, update billing address
-		if (isBillingAddressSameAsShipping) {
-			if (cartState.cart.billingAddress) {
-				billingAddress = {
-					id: cartState.cart.billingAddress.id || 'new',
-					firstName: cartState.cart.billingAddress.firstName,
-					lastName: cartState.cart.billingAddress.lastName,
-					phone: cartState.cart.billingAddress.phone,
-					address_1: cartState.cart.billingAddress.address_1,
-					address_2: cartState.cart.billingAddress.address_2,
-					city: cartState.cart.billingAddress.city,
-					state: cartState.cart.billingAddress.state,
-					zip: cartState.cart.billingAddress.zip,
-					countryCode: cartState.cart.billingAddress.countryCode || 'in'
-				}
-			} else {
-				billingAddress = {
-					...shippingAddress,
-					id: 'new' // Always set id to 'new' when copying
-				}
-			}
-		}
-	})
-
-	const handleManualPayment = async (providerId) => {
+	if (userState.user?.email) {
 		try {
-			// console.log('🚀 ~ Manual Payment ~ handlePayment ~ providerId:', providerId)
-			await productState.setPaymentSession(providerId)
-
-			goto('/checkout/success')
+			const res = await addressService.list({})
+			addresses = res?.data
 		} catch (e) {
 			console.log(e)
+			// toast.error((e as any)?.message)
 		}
 	}
+})
 
-	const placeOrder = async () => {
-		if (!SELECTED_PG_NAME) {
-			toast.error('Please select a payment method')
-			return
+$effect(() => {
+	// When checkbox is toggled, update billing address
+	if (isBillingAddressSameAsShipping) {
+		if (cartState.cart.billingAddress) {
+			billingAddress = {
+				id: cartState.cart.billingAddress.id || 'new',
+				firstName: cartState.cart.billingAddress.firstName,
+				lastName: cartState.cart.billingAddress.lastName,
+				phone: cartState.cart.billingAddress.phone,
+				address_1: cartState.cart.billingAddress.address_1,
+				address_2: cartState.cart.billingAddress.address_2,
+				city: cartState.cart.billingAddress.city,
+				state: cartState.cart.billingAddress.state,
+				zip: cartState.cart.billingAddress.zip,
+				countryCode: cartState.cart.billingAddress.countryCode || 'in'
+			}
+		} else {
+			billingAddress = {
+				...shippingAddress,
+				id: 'new' // Always set id to 'new' when copying
+			}
 		}
+	}
+})
 
-		paymentLoader = true
-		if (SELECTED_PG_NAME?.toUpperCase?.() == 'RAZORPAY') {
-			// Razorpay checkout
-			if (!razorpayReady) {
-				toast.error('Please wait till payment gateway is ready')
-			} else {
-				try {
-					const rp = await checkoutService.checkoutRazorpay({
-						cartId: cartState.cart.id,
-						origin: page.url.origin
-					})
-					order_no = rp?.order_no || ''
-					if (rp && rp !== null) {
-						const options = {
-							key: rp.key_id, // Enter the Key ID generated from the Dashboard
-							description: `Order #${order_no}`,
-							amount: rp.amount * 80,
-							order_id: rp.id,
-							async handler(response) {
-								// console.log('🚀 ~ captureRazorpayPayment ~ response:', response)
-								try {
-									const capture = await checkoutService.captureRazorpayPayment({
-										razorpay_order_id: response.razorpay_order_id,
-										razorpay_payment_id: response.razorpay_payment_id
-									})
-									goto(`/checkout/process?pg=razorpay&order_no=${capture?.order_no}&cart_id=${cartState.cart.id}`)
-								} catch (e) {
-									toast.error(e.message)
-								} finally {
-									paymentLoader = false
-								}
-							},
-							prefill: {
-								name: `Litekart`,
-								phone: cartState.cart.phone || '8249028220',
-								email: cartState.cart.email || 'help@litekart.in'
+const handleManualPayment = async providerId => {
+	try {
+		// console.log('🚀 ~ Manual Payment ~ handlePayment ~ providerId:', providerId)
+		await productState.setPaymentSession(providerId)
+
+		goto('/checkout/success')
+	} catch (e) {
+		console.log(e)
+	}
+}
+
+const placeOrder = async () => {
+	if (!SELECTED_PG_NAME) {
+		toast.error('Please select a payment method')
+		return
+	}
+
+	paymentLoader = true
+	if (SELECTED_PG_NAME?.toUpperCase?.() == 'RAZORPAY') {
+		// Razorpay checkout
+		if (!razorpayReady) {
+			toast.error('Please wait till payment gateway is ready')
+		} else {
+			try {
+				const rp = await checkoutService.checkoutRazorpay({
+					cartId: cartState.cart.id,
+					origin: page.url.origin
+				})
+				order_no = rp?.order_no || ''
+				if (rp && rp !== null) {
+					const options = {
+						key: rp.key_id, // Enter the Key ID generated from the Dashboard
+						description: `Order #${order_no}`,
+						amount: rp.amount * 80,
+						order_id: rp.id,
+						async handler(response) {
+							// console.log('🚀 ~ captureRazorpayPayment ~ response:', response)
+							try {
+								const capture = await checkoutService.captureRazorpayPayment({
+									razorpay_order_id: response.razorpay_order_id,
+									razorpay_payment_id: response.razorpay_payment_id
+								})
+								goto(`/checkout/process?pg=razorpay&order_no=${capture?.order_no}&cart_id=${cartState.cart.id}`)
+							} catch (e) {
+								toast.error(e.message)
+							} finally {
+								paymentLoader = false
 							}
+						},
+						prefill: {
+							name: 'Litekart',
+							phone: cartState.cart.phone || '8249028220',
+							email: cartState.cart.email || 'help@litekart.in'
 						}
-
-						if (typeof window.Razorpay === 'undefined') {
-							toast.error('Payment gateway is not ready yet')
-							return
-						}
-						const rzp1 = new window.Razorpay(options)
-						rzp1.open()
-					} else {
-						toast.error('Something went wrong')
 					}
-				} catch (e) {
-					toast.error(e.message)
-				} finally {
-				}
-			}
-		} else if (SELECTED_PG_NAME?.toUpperCase?.() == 'PHONEPE') {
-			// Phonepe checkout
-			try {
-				const pp = await checkoutService.checkoutPhonepe({
-					cartId: cartState.cart.id,
-					email: cartState.cart.email,
-					phone: '8249028220',
-					origin: page.url.origin
-				})
-				if (!pp) {
+
+					if (typeof window.Razorpay === 'undefined') {
+						toast.error('Payment gateway is not ready yet')
+						return
+					}
+					const rzp1 = new window.Razorpay(options)
+					rzp1.open()
+				} else {
 					toast.error('Something went wrong')
-					return
-				}
-				const redirectUrl = pp?.redirectUrl
-				// console.log('🚀 ~ placeOrder ~ orders', pp)
-				if (redirectUrl && redirectUrl !== null) {
-					window.location.href = redirectUrl
-				} else {
-				}
-			} catch (e) {
-				console.log(e)
-			} finally {
-				paymentLoader = false
-			}
-		} else if (SELECTED_PG_NAME?.toUpperCase?.() == 'STRIPE') {
-			try {
-				// Stripe chekout
-				const sp = await checkoutService.checkoutStripe({
-					cartId: cartState.cart.id,
-					origin: page.url.origin
-				})
-				// console.log('🚀 ~ placeOrder ~ sp', sp)
-				if (sp.url) {
-					window.location.href = sp.url
-				} else {
-					toast.error('Something went wrong, please check if order is placed by checking your email or contact support')
 				}
 			} catch (e) {
 				toast.error(e.message)
 			} finally {
-				paymentLoader = false
-			}
-		} else if (SELECTED_PG_NAME?.toUpperCase?.() == 'COD') {
-			try {
-				// COD chekout
-				const cp = await checkoutService.checkoutCOD({
-					cartId: cartState.cart.id,
-					origin: page.url.origin
-				})
-				goto(`/checkout/process?pg=COD&order_no=${cp?.order_no}&cart_id=${cartState.cart.id}`)
-			} catch (e) {
-				toast.error(e.message)
-			} finally {
-				paymentLoader = false
 			}
 		}
+	} else if (SELECTED_PG_NAME?.toUpperCase?.() == 'PHONEPE') {
+		// Phonepe checkout
+		try {
+			const pp = await checkoutService.checkoutPhonepe({
+				cartId: cartState.cart.id,
+				email: cartState.cart.email,
+				phone: '8249028220',
+				origin: page.url.origin
+			})
+			if (!pp) {
+				toast.error('Something went wrong')
+				return
+			}
+			const redirectUrl = pp?.redirectUrl
+			// console.log('🚀 ~ placeOrder ~ orders', pp)
+			if (redirectUrl && redirectUrl !== null) {
+				window.location.href = redirectUrl
+			} else {
+			}
+		} catch (e) {
+			console.log(e)
+		} finally {
+			paymentLoader = false
+		}
+	} else if (SELECTED_PG_NAME?.toUpperCase?.() == 'STRIPE') {
+		try {
+			// Stripe chekout
+			const sp = await checkoutService.checkoutStripe({
+				cartId: cartState.cart.id,
+				origin: page.url.origin
+			})
+			// console.log('🚀 ~ placeOrder ~ sp', sp)
+			if (sp.url) {
+				window.location.href = sp.url
+			} else {
+				toast.error('Something went wrong, please check if order is placed by checking your email or contact support')
+			}
+		} catch (e) {
+			toast.error(e.message)
+		} finally {
+			paymentLoader = false
+		}
+	} else if (SELECTED_PG_NAME?.toUpperCase?.() == 'COD') {
+		try {
+			// COD chekout
+			const cp = await checkoutService.checkoutCOD({
+				cartId: cartState.cart.id,
+				origin: page.url.origin
+			})
+			goto(`/checkout/process?pg=COD&order_no=${cp?.order_no}&cart_id=${cartState.cart.id}`)
+		} catch (e) {
+			toast.error(e.message)
+		} finally {
+			paymentLoader = false
+		}
 	}
-	// const handleEditAddress = async (address: any) => {
-	// 	shippingAddress = address
-	// 	editAddress = true
+}
+// const handleEditAddress = async (address: any) => {
+// 	shippingAddress = address
+// 	editAddress = true
+// }
+const handleEditEmail = async () => {
+	editEmail = true
+}
+
+function handleAddNewAddress() {
+	isEditingAddress = false
+	currentAddress = {
+		id: 'new',
+		firstName: '',
+		lastName: '',
+		phone: '',
+		address_1: '',
+		address_2: '',
+		city: '',
+		state: '',
+		zip: '',
+		countryCode: 'in'
+	}
+	showAddressList = false
+	showAddressForm = true
+}
+
+function handleEditAddress(address: any) {
+	isEditingAddress = true
+	currentAddress = { ...address }
+	showAddressList = false
+	showAddressForm = true
+}
+
+async function handleSelectAddress(address: any) {
+	// if (address.isNew) {
+	// 	address.id = 'new'
+	// 	delete address.isNew
 	// }
-	const handleEditEmail = async () => {
-		editEmail = true
-	}
 
-	function handleAddNewAddress() {
-		isEditingAddress = false
-		currentAddress = {
-			id: 'new',
-			firstName: '',
-			lastName: '',
-			phone: '',
-			address_1: '',
-			address_2: '',
-			city: '',
-			state: '',
-			zip: '',
-			countryCode: 'in'
+	shippingAddress = { ...address }
+
+	if (isBillingAddressSameAsShipping) {
+		billingAddress = shippingAddress
+	} else {
+		billingAddress.id = 'new'
+	}
+	// console.log('🚀 ~ handleSelectAddress ~ shippingAddress:', shippingAddress)
+	await cartState.updateShippingAddress({
+		shippingAddress,
+		billingAddress,
+		isBillingAddressSameAsShipping
+	})
+	showAddressList = false
+}
+
+function handleBackToList() {
+	showAddressForm = false
+	showAddressList = true
+}
+
+function removeUndefinedProperties(obj: any) {
+	return Object.keys(obj).reduce((acc, key) => {
+		if (obj[key] !== undefined && obj[key] !== null) {
+			acc[key] = obj[key]
 		}
-		showAddressList = false
-		showAddressForm = true
+		return acc
+	}, {})
+}
+
+async function handleSaveAddress(address: any) {
+	// console.log('🚀 ~ handleSaveAddress ~ address:', address)
+	const newAddress = removeUndefinedProperties(address)
+
+	if (isEditingAddress) {
+		addresses = addresses.map(addr => (addr.id === newAddress.id ? newAddress : addr))
+		await addressService.saveAddress(newAddress)
+	} else {
+		// newAddress.id = (addresses.length + 1).toString()
+		// newAddress.isNew = true
+		const res = await addressService.saveAddress(newAddress)
+		addresses = [...addresses, res]
 	}
 
-	function handleEditAddress(address: any) {
-		isEditingAddress = true
-		currentAddress = { ...address }
-		showAddressList = false
-		showAddressForm = true
-	}
+	shippingAddress = { ...newAddress }
+	showAddressForm = false
+	showAddressList = true
+}
 
-	async function handleSelectAddress(address: any) {
-		// if (address.isNew) {
-		// 	address.id = 'new'
-		// 	delete address.isNew
-		// }
-
-		shippingAddress = { ...address }
-
-		if (isBillingAddressSameAsShipping) {
-			billingAddress = shippingAddress
-		} else {
-			billingAddress.id = 'new'
-		}
-		// console.log('🚀 ~ handleSelectAddress ~ shippingAddress:', shippingAddress)
-		await cartState.updateShippingAddress({
-			shippingAddress,
-			billingAddress,
-			isBillingAddressSameAsShipping
-		})
-		showAddressList = false
-	}
-
-	function handleBackToList() {
-		showAddressForm = false
-		showAddressList = true
-	}
-
-	function removeUndefinedProperties(obj: any) {
-		return Object.keys(obj).reduce((acc, key) => {
-			if (obj[key] !== undefined && obj[key] !== null) {
-				acc[key] = obj[key]
-			}
-			return acc
-		}, {})
-	}
-
-	async function handleSaveAddress(address: any) {
-		// console.log('🚀 ~ handleSaveAddress ~ address:', address)
-		const newAddress = removeUndefinedProperties(address)
-
-		if (isEditingAddress) {
-			addresses = addresses.map((addr) => (addr.id === newAddress.id ? newAddress : addr))
-			await addressService.saveAddress(newAddress)
-		} else {
-			// newAddress.id = (addresses.length + 1).toString()
-			// newAddress.isNew = true
-			const res = await addressService.saveAddress(newAddress)
-			addresses = [...addresses, res]
-		}
-
-		shippingAddress = { ...newAddress }
-		showAddressForm = false
-		showAddressList = true
-	}
-
-	let partialCheckoutEnabled = $derived(page?.data?.store?.plugins?.isPartialCheckout?.active)
-	let allItemsChecked = $derived(cartState?.cart?.lineItems?.every((item: any) => item.isSelectedForCheckout))
-	let isIndeterminate = $derived(
-		cartState?.cart?.lineItems?.some((item: any) => item.isSelectedForCheckout) &&
-			!cartState?.cart?.lineItems?.every((item) => item.isSelectedForCheckout)
-	)
+let partialCheckoutEnabled = $derived(page?.data?.store?.plugins?.isPartialCheckout?.active)
+let allItemsChecked = $derived(cartState?.cart?.lineItems?.every((item: any) => item.isSelectedForCheckout))
+let isIndeterminate = $derived(
+	cartState?.cart?.lineItems?.some((item: any) => item.isSelectedForCheckout) && !cartState?.cart?.lineItems?.every(item => item.isSelectedForCheckout)
+)
 </script>
 
 <svelte:head>
