@@ -29,9 +29,7 @@
 
 	const userState = getUserState()
 
-	// const IS_DEV = import.meta.env.DEV
 	let isLoading = $state(false)
-	// let phone = $state(IS_DEV ? '+918249028220' : '')
 
 	const schemas = {
 		firstName: z

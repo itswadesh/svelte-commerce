@@ -1,4 +1,4 @@
-export const WHATSAPP_NUMBER = '+918249028220'
+export const WHATSAPP_NUMBER = ''
 
 export function getWhatsAppLink(message = "Hi! I'm interested in Litekart marketplace platform.") {
 	const encodedMessage = encodeURIComponent(message)
