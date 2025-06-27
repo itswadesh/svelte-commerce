@@ -28,7 +28,7 @@ export class LoginModule {
 	userState = getUserState()
 	cartState = getCartState()
 
-	identifier = $state(env.PUBLIC_LOGIN_TYPE === 'PHONE' ? '+918249028220' : '')
+	identifier = $state(env.PUBLIC_LOGIN_TYPE === 'PHONE' ? '' : '')
 	password = $state('')
 	isLoading = $state(false)
 	isPhoneNumber = $state(env.PUBLIC_LOGIN_TYPE === 'PHONE' || env.PUBLIC_LOGIN_TYPE === 'BOTH')
