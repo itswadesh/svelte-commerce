@@ -28,7 +28,7 @@
 					</div>
 				{/each}
 			{:else}
-				{#each categories.filter((category) => category.parentCategoryId != null) as { slug, icon, color, name, link, thumbnail, parentCategoryId } (slug)}
+				{#each categories as { slug, icon, color, name, link, thumbnail, parentCategoryId } (slug)}
 					<a href={link ? link : slug ? `/${slug}` : `/products`} class="mb-4 flex flex-col items-center">
 						<div class="aspect-square w-full bg-gray-100">
 							<LazyImg src={thumbnail} alt="Category Image" class="h-full w-full object-cover" />
