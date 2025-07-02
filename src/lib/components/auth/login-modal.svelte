@@ -9,7 +9,6 @@ import Modal from '../common/modal.svelte'
 import { page } from '$app/state'
 import AuthButton from '$lib/core/components/auth/auth-button.svelte'
 import { LoginModule, schemas } from '$lib/core/composables/use-login.svelte'
-import { PUBLIC_LOGIN_TYPE } from '$env/static/public'
 
 let { show = $bindable(false) } = $props()
 
@@ -128,7 +127,7 @@ const userState = loginModule.userState
 					{/if}
 				</Button>
 
-				{#if loginModule.showSignupButton && PUBLIC_LOGIN_TYPE !== 'PHONE'}
+				{#if loginModule.showSignupButton && env.PUBLIC_LOGIN_TYPE !== 'PHONE'}
 					<div class="space-y-4 text-center">
 						<p class="text-sm text-gray-500">New to {page?.data?.store?.name}?</p>
 						<AuthButton
