@@ -3,19 +3,16 @@ import { StoreService } from '$lib/core/services'
 import { env } from '$env/dynamic/public'
 import { BaseService } from '@misiki/medusa-connector'
 
-
 // Function to check if a URL is a local/IP address
 function isLocalOrIpAddress(url: string): boolean {
 	return url.includes('localhost') || url.includes('127.0.0.1') || /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/.test(url)
 }
 
 export const init = async () => {
-  console.log("BaseService key",env.PUBLIC_MEDUSA_PUBLISHABLE_API_KEY)
-  if (env.PUBLIC_MEDUSA_PUBLISHABLE_API_KEY) {
-    console.log("setting BaseService key")
-    BaseService.setMedusaPublisableKey(env.PUBLIC_MEDUSA_PUBLISHABLE_API_KEY)
-    BaseService.setRegionId(env.PUBLIC_MEDUSA_REGION_ID)
-  }
+	if (env.PUBLIC_MEDUSA_PUBLISHABLE_API_KEY) {
+		BaseService.setMedusaPublisableKey(env.PUBLIC_MEDUSA_PUBLISHABLE_API_KEY)
+		BaseService.setRegionId(env.PUBLIC_MEDUSA_REGION_ID)
+	}
 }
 
 export const handle: Handle = async ({ event, resolve }) => {
@@ -49,7 +46,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 
 	const response = await resolve(event, {
-		filterSerializedResponseHeaders: (name) => name === 'content-type'
+		filterSerializedResponseHeaders: name => name === 'content-type'
 	})
 	// response.headers.set('x-litekart-store', storeDetailsCache?.id || '')
 	return response
@@ -77,4 +74,3 @@ export function handleError({ error, event }) {
 		status: error?.status || 500
 	}
 }
-
