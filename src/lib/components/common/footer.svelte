@@ -3,7 +3,7 @@ import { ChevronDown, ShieldCheck, Lock, Truck, RefreshCw } from 'lucide-svelte'
 import WhatsappChatButton from '$lib/core/components/plugins/whatsapp-chat-button.svelte'
 import { page } from '$app/state'
 import TrustpilotPlugin from '$lib/core/components/plugins/trustpilot-plugin.svelte'
-import { sanitize } from '$lib/core/utils/sanitize';
+import { sanitize } from '$lib/core/utils/sanitize'
 import masterCard from '$lib/assets/payment-methods/mastercard.png'
 import paypal from '$lib/assets/payment-methods/paypal.png'
 import skrill from '$lib/assets/payment-methods/skrill.png'
@@ -43,7 +43,16 @@ let isExpanded = $state(false)
 									<span class="text-2xl font-semibold dark:text-white"> {storeData?.name} </span>
 								{/if}
 							</a>
-							<p class="prose text-sm text-gray-600">{@html storeData?.description ? sanitize(storeData.description) : ''}</p>
+							{#if storeData?.description}
+								<div class="prose text-sm text-gray-600">
+									{#await sanitize(storeData.description) then html}
+										{@html html}
+									{:catch error}
+										<!-- Fallback to plain text if sanitization fails -->
+										{storeData.description}
+									{/await}
+								</div>
+							{/if}
 						</div>
 						<div class="grid grid-cols-2 gap-8 sm:grid-cols-3 sm:gap-10">
 							{#each footerMenu as item}
