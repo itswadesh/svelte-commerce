@@ -3,6 +3,7 @@ import { ChevronDown, ShieldCheck, Lock, Truck, RefreshCw } from 'lucide-svelte'
 import WhatsappChatButton from '$lib/core/components/plugins/whatsapp-chat-button.svelte'
 import { page } from '$app/state'
 import TrustpilotPlugin from '$lib/core/components/plugins/trustpilot-plugin.svelte'
+import { sanitize } from '$lib/core/utils/sanitize';
 import masterCard from '$lib/assets/payment-methods/mastercard.png'
 import paypal from '$lib/assets/payment-methods/paypal.png'
 import skrill from '$lib/assets/payment-methods/skrill.png'
@@ -10,56 +11,42 @@ import visa from '$lib/assets/payment-methods/visa.png'
 
 let paymentMethodCards = [masterCard, paypal, skrill, visa]
 
+// Derive store data to prevent unnecessary re-renders
+const storeData = $derived(page?.data?.store || {})
+const footerMenu = $derived(storeData?.menu?.find(menu => menu?.menuId === 'footer')?.items || [])
+const socialSharing = $derived(storeData?.plugins?.socialSharingButtons || {})
+const shouldCollapseOnMobile = $derived(storeData?.plugins?.footerSettings?.collapseOnMobile || false)
+
 let isExpanded = $state(false)
 </script>
 	
 	<div class="mt-8">
 		<footer class="mt-2 border-t">
 			<div class="mx-auto w-full xl:pb-2">
-				{#if page?.data?.store?.plugins?.footerSettings?.collapseOnMobile}
+				{#if shouldCollapseOnMobile}
 					<button
 						class="flex w-full items-center justify-between p-4 text-sm font-medium uppercase tracking-tighter text-gray-900 dark:text-white md:hidden"
 						onclick={() => (isExpanded = !isExpanded)}
 					>
-						<span>More about {page?.data?.store?.name}</span>
+						<span>More about {storeData?.name}</span>
 						<ChevronDown size={20} class="transition-transform duration-200 {isExpanded ? 'rotate-180' : ''}" />
 					</button>
 				{/if}
 	
-				<div class="overflow-hidden {page?.data?.store?.plugins?.footerSettings?.collapseOnMobile ? (isExpanded ? '' : 'hidden md:block') : ''}">
+				<div class="overflow-hidden {shouldCollapseOnMobile ? (isExpanded ? '' : 'hidden md:block') : ''}">
 					<div class="gap-4 p-4 px-8 py-8 md:flex md:justify-between md:py-16 max-w-screen-xl mx-auto">
 						<div class="mb-12 flex max-w-xs flex-col gap-4">
 							<a href="/" class="flex items-center">
-								{#if page?.data?.store?.logo}
-									<img src={page?.data?.store?.logo} class="mr-2 h-10 object-contain" alt="Logo" />
+								{#if storeData?.logo}
+									<img src={storeData?.logo} class="mr-2 h-10 object-contain" alt="Logo" />
 								{:else}
-									<span class="text-2xl font-semibold dark:text-white"> {page?.data?.store?.name} </span>
+									<span class="text-2xl font-semibold dark:text-white"> {storeData?.name} </span>
 								{/if}
 							</a>
-							<p class="prose text-sm text-gray-600">{@html page?.data?.store?.description}</p>
-	
-							<!-- Address -->
-							<!-- {#if page?.data?.store?.address_1}
-								<p class="text-sm text-gray-600">
-									{page.data.store.address_1}
-									{#if page.data.store.address_2}
-										,
-									{/if}
-									{page.data.store.address_2}
-	
-									<br />
-									{page.data.store.city}
-									{#if page.data.store.state && page.data.store.city},
-									{/if}
-									{page.data.store.state}
-									{page.data.store.zipCode}
-									<br />
-									{page.data.store.country?.name}
-								</p>
-							{/if} -->
+							<p class="prose text-sm text-gray-600">{@html storeData?.description ? sanitize(storeData.description) : ''}</p>
 						</div>
 						<div class="grid grid-cols-2 gap-8 sm:grid-cols-3 sm:gap-10">
-							{#each page?.data?.store?.menu?.find?.((menu) => menu?.menuId === 'footer')?.items || [] as item}
+							{#each footerMenu as item}
 								<div>
 									<h1 class="text-black-200 mb-4 text-lg font-semibold">{item?.name}</h1>
 									{#if item?.items?.length > 0}
@@ -127,9 +114,9 @@ let isExpanded = $state(false)
 	</div>
 	
 	<div class="flex flex-col gap-2 border-t px-8 py-4 sm:flex-row sm:items-center sm:justify-between">
-						{#if page?.data?.store?.plugins?.socialSharingButtons?.active}
+						{#if socialSharing?.active}
 							<div class="flex items-center space-x-5 sm:mt-0 sm:justify-center">
-								{#each Object.entries(page?.data?.store?.plugins?.socialSharingButtons || {}).filter(([key]) => !['active', 'position'].includes(key)) as [key, social]}
+								{#each Object.entries(socialSharing || {}).filter(([key]) => !['active', 'position'].includes(key)) as [key, social]}
 									{#if social}
 										<a
 											href={social}
@@ -194,7 +181,7 @@ let isExpanded = $state(false)
 								{new Date().getFullYear()}
 								{' '}
 								<a href="/" class="cursor-pointer">
-									{page?.data?.store?.name}
+									{storeData?.name}
 								</a>
 								. All Rights Reserved.
 							</span>
