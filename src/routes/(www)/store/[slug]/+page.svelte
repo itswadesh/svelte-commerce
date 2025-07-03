@@ -1,86 +1,85 @@
 <script lang="ts">
-	import Product from '$lib/components/product-catalogue/product-card.svelte'
-	import { chatService, reviewService, ReviewService, vendorService, VendorService } from '$lib/core/services'
-	import { Skeleton } from '$lib/components/ui/skeleton'
-	import { Star } from 'lucide-svelte'
-	import { page } from '$app/state'
-	import { toast } from 'svelte-sonner'
-	import { onMount } from 'svelte'
-	import { goto } from '$app/navigation'
-	import Pagination from '$lib/components/common/pagination.svelte'
+import Product from '$lib/components/product-catalogue/product-card.svelte'
+import { chatService, reviewService, ReviewService, vendorService, VendorService } from '$lib/core/services'
+import { Skeleton } from '$lib/components/ui/skeleton'
+import { Star } from 'lucide-svelte'
+import { page } from '$app/state'
+import { toast } from 'svelte-sonner'
+import { onMount } from 'svelte'
+import { goto } from '$app/navigation'
+import Pagination from '$lib/components/common/pagination.svelte'
 
-	let productsCount = $state(0)
-	let products = $state({})
-	let loading = $state(true)
-	let reviews = $state([])
-	let loadingReviews = $state(true)
-	let { data } = $props()
+let productsCount = $state(0)
+let products = $state({})
+let loading = $state(true)
+let reviews = $state([])
+let loadingReviews = $state(true)
+let { data } = $props()
 
-	const mount = async () => {
-		loading = true
-		try {
-			products = await vendorService.fetchProductsOfVendor(data?.vendor?.id)
-		} finally {
-			loading = false
+const mount = async () => {
+	loading = true
+	try {
+		products = await vendorService.fetchProductsOfVendor(data?.vendor?.id)
+	} finally {
+		loading = false
+	}
+}
+
+const fetchReviews = async () => {
+	loadingReviews = true
+	try {
+		// Replace with actual review fetching logic
+		reviews = await reviewService.fetchReviews({
+			productId: data?.product?.id,
+			search: page.url.searchParams.get('search') || undefined,
+			sort: page.url.searchParams.get('sort') || undefined,
+			currentPage: page.url.searchParams.get('page') || 1
+		})
+	} finally {
+		loadingReviews = false
+	}
+}
+
+$effect(() => {
+	mount()
+	fetchReviews()
+})
+
+function getRatingColor(rating) {
+	if (rating >= 4) return 'text-green-500'
+	if (rating >= 3) return 'text-yellow-500'
+	return 'text-red-500'
+}
+
+const sendMessageToChat = async (chatId: string, vendorId: string, message: string) => {
+	const payload = {
+		chat_id: chatId,
+		message,
+		vendorId
+	}
+
+	const res = await chatService.save(payload)
+}
+
+const initiateChatWithVendor = async (vendorId: string) => {
+	try {
+		const res = await chatService.chats({ vendorId })
+		if (res?.chatId) {
+			await sendMessageToChat(res.chatId, vendorId, 'Hi, I am interested in your products.')
+				.then(() => {
+					toast.success('Chat initiated successfully')
+					goto('/messages')
+				})
+				.catch(e => {
+					// console.log('error', e)
+					toast.error((e as any)?.message)
+				})
 		}
+	} catch (e) {
+		console.log('error', e)
+		toast.error((e as any)?.message)
 	}
-
-	const fetchReviews = async () => {
-		loadingReviews = true
-		try {
-			// Replace with actual review fetching logic
-			reviews = await reviewService.fetchReviews({
-				productId: data?.product?.id,
-				search: page.url.searchParams.get('search') || undefined,
-				sort: page.url.searchParams.get('sort') || undefined,
-				currentPage: page.url.searchParams.get('page') || 1
-			})
-		} finally {
-			loadingReviews = false
-		}
-	}
-
-	$effect(() => {
-		mount()
-		fetchReviews()
-	})
-
-	function getRatingColor(rating) {
-		if (rating >= 4) return 'text-green-500'
-		if (rating >= 3) return 'text-yellow-500'
-		return 'text-red-500'
-	}
-
-	const sendMessageToChat = async (chatId: string, vendorId: string, message: string) => {
-		const payload = {
-			chat_id: chatId,
-			message,
-			vendorId
-		}
-
-		const res = await chatService.save(payload)
-	}
-
-	const initiateChatWithVendor = async (vendorId: string) => {
-		try {
-			const res = await chatService.chats({ vendorId })
-			// console.log('res', res)
-			if (res?.chatId) {
-				await sendMessageToChat(res.chatId, vendorId, 'Hi, I am interested in your products.')
-					.then(() => {
-						toast.success('Chat initiated successfully')
-						goto('/messages')
-					})
-					.catch((e) => {
-						// console.log('error', e)
-						toast.error((e as any)?.message)
-					})
-			}
-		} catch (e) {
-			console.log('error', e)
-			toast.error((e as any)?.message)
-		}
-	}
+}
 </script>
 
 <svelte:head>
