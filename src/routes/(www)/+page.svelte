@@ -15,6 +15,7 @@
 	import { timestampToAgo } from '$lib/core/utils/index.js'
 	import Slider from '$lib/components/home/slider.svelte'
 	import { page as sveltePage } from '$app/state'
+	import { Button } from '$lib/components/ui/button'
 	//import { PUBLIC_LITEKART_DOMAIN } from '$env/static/public'
 	const PUBLIC_LITEKART_DOMAIN = $derived(sveltePage.url.origin)
 
@@ -107,7 +108,9 @@
 			class="relative z-50 max-w-[90vw] rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800 dark:text-white sm:max-h-[90vh] sm:w-full sm:max-w-[600px] sm:p-4"
 		>
 			<Button
-				class="absolute right-4 top-4 m-1 h-8 w-8 rounded-full bg-gray-200 text-gray-800 hover:bg-red-500 hover:text-white focus:outline-none"
+				variant="secondary"
+				size="icon"
+				class="absolute right-4 top-4 m-1 rounded-full"
 				onclick={hideProduct}
 				aria-label="Close"
 			>
@@ -136,12 +139,14 @@
 						<p class="mb-8 text-lg text-gray-200">
 							{data?.store?.description || 'Discover amazing products at unbeatable prices. Shop now and enjoy fast shipping on all orders.'}
 						</p>
-						<a
+						<Button
 							href="/products"
-							class="inline-block w-fit rounded-lg bg-white px-8 py-3 font-semibold text-gray-900 transition-colors hover:bg-gray-100"
+							variant="outline"
+							size="lg"
+							class="w-fit bg-white font-semibold text-gray-900 hover:bg-gray-100"
 						>
 							Shop Now
-						</a>
+						</Button>
 					</div>
 					<div class="hidden items-center justify-center md:flex">
 						<div class="text-9xl font-bold text-white/20">NEW</div>
@@ -173,9 +178,9 @@
 			<div class="mx-auto mt-2 h-1 w-12 bg-primary md:mx-0"></div>
 			<p class="mt-4 text-sm font-medium text-muted-foreground">Stay ahead of the curve with our latest drops and trending pieces</p>
 		</div>
-		<a
+		<Button
 			href="/products"
-			class="group flex items-center rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-secondary-foreground transition-all hover:bg-primary hover:text-primary-foreground"
+			class="group"
 		>
 			View All Arrivals
 			<svg
@@ -187,7 +192,7 @@
 			>
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
 			</svg>
-		</a>
+		</Button>
 	</div>
 
 	{#if homepageModule.loadingFeaturedProducts}
@@ -210,15 +215,17 @@
 		/>
 		<!-- {#if homepageModule.hasMoreFeaturedProducts}
 			<div class="mt-16 flex justify-center pb-12">
-				<button
-					class="group relative flex items-center justify-center gap-3 overflow-hidden rounded-full bg-foreground px-12 py-5 text-sm font-black uppercase tracking-[0.2em] text-background shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95"
+				<Button
+					variant="default"
+					size="lg"
+					class="group relative overflow-hidden rounded-full px-12 py-5 text-sm font-black uppercase tracking-[0.2em] shadow-2xl"
 					onclick={homepageModule.loadMoreFeaturedProducts}
 				>
 					<div
 						class="absolute -inset-full top-0 z-0 block h-full w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-shimmer"
 					></div>
 
-					<span class="relative z-10 transition-colors duration-300">Discover More</span>
+					<span class="relative z-10">Discover More</span>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						class="relative z-10 h-5 w-5 transition-transform duration-300 group-hover:translate-y-1 group-hover:animate-bounce"
@@ -228,7 +235,7 @@
 					>
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
 					</svg>
-				</button>
+				</Button>
 			</div>
 		{/if} -->
 	{/if}
@@ -263,9 +270,15 @@
 					</div>
 				</div>
 			</a>
-			<button class="self-start text-gray-500 hover:text-red-500" onclick={() => (homepageModule.showRecentOrderPopup = false)}>
+			<Button
+				variant="ghost"
+				size="icon"
+				class="self-start h-8 w-8"
+				onclick={() => (homepageModule.showRecentOrderPopup = false)}
+				aria-label="Close notification"
+			>
 				<X class="h-4 w-4" />
-			</button>
+			</Button>
 		</div>
 	</div>
 {/if}

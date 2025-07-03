@@ -17,13 +17,13 @@
 <ProductCardRenderer {product} {aspectRatio}>
 	{console.log(product.thumbnail || product?.image_url)}
 	{#snippet content({ aspectHeight, aspectWidth, handleCardClick, changeQuantity, addToCart })}
-		<Button
-			variant="ghost"
+		<button
+			variant="plain"
 			onclick={handleCardClick}
-			class="aspect-[{page?.data?.store?.productImageAspectRatio?.replace(
-				':',
-				'/'
-			)}] mb-4 flex w-full flex-col justify-start overflow-hidden border-none bg-white p-0 h-auto rounded-md hover:bg-transparent"
+			class="aspect-[{page?.data?.store?.productImageAspectRatio?.replace(
+				':',
+				'/'
+			)}] mb-4 flex w-full flex-col justify-start overflow-hidden border-none bg-white p-0 h-auto rounded-md hover:bg-transparent"
 			aria-label="Product card for {product.name}"
 		>
 			<div class="group relative flex h-full w-full overflow-hidden bg-gray-50 dark:bg-gray-900">
@@ -62,7 +62,7 @@
 								disabled={!!cartState.isUpdatingCart}
 								variant="outline"
 								size="icon"
-								class="w-full rounded-none border-gray-200 bg-white/90 p-0 text-xs backdrop-blur-sm"
+								class="w-full rounded-none border-gray-200 bg-white/90 backdrop-blur-sm"
 								onclick={() => changeQuantity(product, -1)}
 								aria-label="Decrease quantity of {product.name}"
 							>
@@ -81,7 +81,7 @@
 								disabled={!!cartState.isUpdatingCart}
 								variant="outline"
 								size="icon"
-								class="w-full rounded-none border-gray-200 bg-white/90 p-0 text-xs backdrop-blur-sm"
+								class="w-full rounded-none border-gray-200 bg-white/90 backdrop-blur-sm"
 								onclick={() => changeQuantity(product, 1)}
 								aria-label="Increase quantity of {product.name}"
 							>
@@ -91,7 +91,8 @@
 							<Button
 								disabled={!!cartState.isUpdatingCart}
 								variant="default"
-								class="w-full rounded-none py-6"
+								size="lg"
+								class="w-full rounded-none"
 								onclick={() => addToCart(product)}
 							>
 								{#if cartState.isUpdatingCart}
@@ -150,7 +151,7 @@
 					</div>
 				{/if}
 			</div>
-		</Button>
+		</button>
 	{/snippet}
 </ProductCardRenderer>
 

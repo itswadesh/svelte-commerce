@@ -71,10 +71,10 @@
 
 								<div class="absolute -right-2 -top-20 hidden items-center gap-2 md:flex">
 									<CarouselPrevious
-										class="static h-10 w-10 translate-y-0 rounded-full border-muted bg-background shadow-sm hover:bg-primary hover:text-primary-foreground"
+										class="static translate-y-0"
 									/>
 									<CarouselNext
-										class="static h-10 w-10 translate-y-0 rounded-full border-muted bg-background shadow-sm hover:bg-primary hover:text-primary-foreground"
+										class="static translate-y-0"
 									/>
 								</div>
 							</Carousel>
