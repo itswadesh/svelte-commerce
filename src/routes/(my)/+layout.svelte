@@ -11,10 +11,12 @@
 	import StorePlugins from '$lib/core/components/plugins/store-plugins.svelte'
 	import { fade, fly } from 'svelte/transition'
 	import { quintOut } from 'svelte/easing'
+  import { setWishlistState } from '$lib/core/stores/wishlist.svelte'
 
 	let { children }: { children: Snippet } = $props()
 	let isMobileMenuOpen = $state(false)
 
+  setWishlistState()
 	setCartState()
 	setUserState()
 

@@ -5,8 +5,9 @@
 	import type { Snippet } from 'svelte'
 	import type { Product } from '../services'
 	import { toast } from 'svelte-sonner'
-	import { getProductKey, wishlistState } from '../stores/wishlist.svelte'
+	import { getProductKey, getWishlistState } from '../stores/wishlist.svelte'
 
+  const wishlistState = getWishlistState()
 	const cartState = getCartState()
 
 	interface Props {

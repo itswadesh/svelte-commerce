@@ -7,9 +7,11 @@
 	import BottomNav from '$lib/components/nav/bottom-nav.svelte'
 	import StorePlugins from '$lib/core/components/plugins/store-plugins.svelte'
 	import { page } from '$app/state'
+  import { setWishlistState } from '$lib/core/stores/wishlist.svelte'
 	let { children, data }: { children: Snippet; data: { store: StoreData } } = $props()
 
 	setCartState()
+  setWishlistState()
 	setProductState()
 
 	let isProductDetailsPage = $derived(page.route?.id === '/(www)/products/[slug]')
