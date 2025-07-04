@@ -29,7 +29,7 @@
 					<CarouselContent class="-ml-4">
 						{#each data?.collectionvalues as prod (prod?.id)}
 							{#if prod?.products}
-								<CarouselItem class="basis-full pl-4 mobiles:basis-[40%] mobilem:basis-[42%] tablet:basis-[30%] laptopl:basis-1/4">
+								<CarouselItem class="basis-full pl-4 mobiles:basis-[40%] mobilem:basis-[42%] tablet:basis-[30%] laptopl:basis-1/6">
 									<Product
 										product={{
 											id: prod?.products.id,
