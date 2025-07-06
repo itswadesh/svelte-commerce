@@ -75,6 +75,7 @@ const userState = loginModule.userState
 							placeholder={loginModule.isPhoneNumber ? '+91234567890' : 'johndoe@gmail.com'}
 							type={loginModule.isPhoneNumber ? 'tel' : 'email'}
 							schema={loginModule.isPhoneNumber ? schemas.phone : schemas.email}
+              oninput={loginModule.resetOtpGenerationError}
 							required
 						/>
 					</div>
@@ -115,13 +116,15 @@ const userState = loginModule.userState
 					</div>
 				{/if}
 
-				<Button type="submit" class="h-11 w-full text-sm font-medium" disabled={userState.loading || loginModule.isLoading}>
+				<Button type="submit" class="h-11 px-2 text-wrap w-full py-1 text-sm font-medium" disabled={userState.loading || loginModule.isLoading || Boolean(loginModule.otpGenerationError)}>
 					{#if userState.loading || (loginModule.isLoading && loginModule.isPhoneNumber)}
 						<LoaderIcon class="mr-2 h-4 w-4 animate-spin" />
 						Sending OTP...
 					{:else if userState.loading && !loginModule.isPhoneNumber}
 						<LoaderIcon class="mr-2 h-4 w-4 animate-spin" />
 						Signing in...
+          {:else if loginModule.otpGenerationError}
+            {loginModule.otpGenerationError}
 					{:else}
 						{loginModule.isPhoneNumber ? 'Send OTP' : 'Sign In'}
 					{/if}
@@ -170,8 +173,11 @@ const userState = loginModule.userState
 				<input type="hidden" name="otp" bind:value={loginModule.otp} />
 				<p class="text-center text-sm">
 					Didn't receive the OTP?{' '}
-					<button type="button" class="text-gray-600 hover:underline" onclick={() => (loginModule.step = 1)}> Resend OTP </button>
+					<button type="button" class="text-gray-600 hover:underline" onclick={loginModule.resendOtp}> Resend OTP </button>
 				</p>
+        <p>
+					<button type="button" class="text-gray-600 hover:underline" onclick={() => (loginModule.step = 1)}> Change Number? </button>
+        </p>
 
 				<Button class="h-11 w-full" onclick={loginModule.handleVerifyOtp}>
 					{#if userState.loading}
