@@ -39,7 +39,7 @@
 </div>
 
 <!-- Mobile -->
-<div class="block max-h-[300px] sm:hidden">
+<div class="block max-h-[600px] sm:hidden">
 	<Carousel.Root opts={{ align: 'start', loop: true }} plugins={[Autoplay({ delay: 10000 })]}>
 		<Carousel.Content class="-ml-5">
 			{#each sliderBannersMobile as b, ix}
