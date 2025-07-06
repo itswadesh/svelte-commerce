@@ -14,6 +14,7 @@
 	let { data } = $props()
 	import { HomepageModule } from '$lib/core/composables/use-homepage.svelte'
 	import { timestampToAgo } from '$lib/core/utils/index.js'
+  import Slider from '$lib/components/home/slider.svelte'
 
 	// Type definition for page data needed for this component
 	interface ExtendedPage {
@@ -101,6 +102,7 @@
       aspect_ratio="1:1"
     /> -->
 		<Banners sliderBannersDesktop={page?.desktopBanners} sliderBannersMobile={page?.mobileBanners} />
+
 	{/if}
 </div>
 
@@ -141,6 +143,7 @@
 		</div>
 	</div> -->
 
+<Slider />
 <Collections />
 
 <!-- <InstagramSection /> -->
