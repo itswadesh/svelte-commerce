@@ -33,18 +33,35 @@ export class LoginModule {
 	isLoading = $state(false)
 	isPhoneNumber = $state(env.PUBLIC_LOGIN_TYPE === 'PHONE' || env.PUBLIC_LOGIN_TYPE === 'BOTH')
 	otp = $state('')
+  otpGenerationError = $state<string | null>(null)
 	showOtp = $state(false)
 	step = $state(1)
 	otpInputRef: HTMLInputElement | null = $state(null)
 	showSignupButton = $state(true)
 
-	handleSubmit = async (e: Event) => {
-		e.preventDefault()
+  resendOtp = async (e?: Event) => {
+    e?.preventDefault?.()
+    this.step = 1
+    this.handleSubmit()
+  }
+
+  resetOtpGenerationError = async () => {
+    this.otpGenerationError = null
+  }
+
+	handleSubmit = async (e?: Event) => {
+		e?.preventDefault?.()
 		try {
 			this.isLoading = true
 
 			if (this.isPhoneNumber) {
-				await authService.getOtp({ phone: this.identifier })
+        try {
+				  await authService.getOtp({ phone: this.identifier })
+        } catch (e) {
+          if (!e?.message?.startsWith?.('HTTP'))
+            this.otpGenerationError = e?.message
+          throw e
+        }
 				await this.cartState.updateEmail({ phone: this.identifier })
 				this.step = 2
 				setTimeout(() => {
