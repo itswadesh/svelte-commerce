@@ -18,6 +18,10 @@ let isProductDetailsPage = $derived(page.route?.id === '/(www)/products/[slug]')
 let isProductsListingPage = $derived(page?.route?.id === '/(www)/products' || page?.route?.id === '/(www)/[slug]')
 </script>
 
+<svelte:head>
+	<link rel="icon" href={page?.data?.store?.favicon} />
+</svelte:head>
+
 <div class="flex min-h-screen flex-col justify-between">
 
 	<Nav storeData={data.store} />
