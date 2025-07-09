@@ -41,7 +41,7 @@ async function createSafeDocument(): Promise<Document> {
   if (typeof window !== 'undefined') {
     return document.implementation.createHTMLDocument('sanitize');
   }
-  
+
   try {
     // For server-side rendering - use dynamic import
     const { JSDOM } = await import('jsdom');
@@ -61,22 +61,22 @@ function sanitizeAttributes(element: Element): void {
   const attributes = Array.from(element.attributes);
   const tagName = element.tagName.toLowerCase();
   const allowedAttrs = ALLOWED_TAGS[tagName] || [];
-  
+
   for (const attr of attributes) {
     const attrName = attr.name.toLowerCase();
-    
+
     // Remove forbidden attributes
     if (FORBID_ATTR.includes(attrName)) {
       element.removeAttribute(attrName);
       continue;
     }
-    
+
     // Only keep allowed attributes for this tag
     if (!allowedAttrs.includes(attrName)) {
       element.removeAttribute(attrName);
       continue;
     }
-    
+
     // Make sure links are safe
     if ((attrName === 'href' || attrName === 'src') && element.getAttribute(attrName)?.toLowerCase().startsWith('javascript:')) {
       element.removeAttribute(attrName);
@@ -90,29 +90,34 @@ function sanitizeNode(node: any, doc: Document): Node | null {
   if (node.nodeType === NODE_TYPES.ELEMENT_NODE) {
     const element = node as Element;
     const tagName = element.tagName.toLowerCase();
-    
+
+    // allow svg tags and their children
+    if (tagName == 'svg') {
+      return node
+    }
+
     // Remove disallowed tags
     if (!(tagName in ALLOWED_TAGS)) {
       node.parentNode?.removeChild(node);
       return null;
     }
-    
+
     // Sanitize attributes
     sanitizeAttributes(element);
-    
+
     // Process child nodes
     const children = Array.from(node.childNodes);
     for (const child of children) {
       sanitizeNode(child, doc);
     }
   }
-  
+
   // Remove any comments
   if (node.nodeType === NODE_TYPES.COMMENT_NODE) {
     node.parentNode?.removeChild(node);
     return null;
   }
-  
+
   return node;
 }
 
@@ -123,12 +128,12 @@ function sanitizeNode(node: any, doc: Document): Node | null {
  */
 export async function sanitize(html: string): Promise<string> {
   if (!html) return '';
-  
+
   try {
     const doc = await createSafeDocument();
     const container = doc.createElement('div');
     container.innerHTML = html;
-    
+
     // Process all nodes
     const nodes = Array.from(container.childNodes);
     for (let i = 0; i < nodes.length; i++) {
@@ -137,7 +142,7 @@ export async function sanitize(html: string): Promise<string> {
         i--; // Adjust index if node was removed
       }
     }
-    
+
     return container.innerHTML;
   } catch (error) {
     console.error('Error sanitizing HTML:', error);
