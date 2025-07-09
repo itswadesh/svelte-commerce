@@ -16,11 +16,17 @@ const storeData = $derived(page?.data?.store || {})
 const footerMenu = $derived(storeData?.menu?.find(menu => menu?.menuId === 'footer')?.items || [])
 const socialSharing = $derived(storeData?.plugins?.socialSharingButtons || {})
 const shouldCollapseOnMobile = $derived(storeData?.plugins?.footerSettings?.collapseOnMobile || false)
+const footerHTMLPlugin = $derived(page.data?.store?.plugins?.footerHtml)
 
 let isExpanded = $state(false)
 </script>
-	
+
 	<div class="mt-8">
+    {#if footerHTMLPlugin?.active}
+      <div class="w-full pb-3">
+        {@html footerHTMLPlugin?.html}
+      </div>
+    {/if}
 		<footer class="mt-2 border-t">
 			<div class="mx-auto w-full xl:pb-2">
 				{#if shouldCollapseOnMobile}
@@ -32,7 +38,7 @@ let isExpanded = $state(false)
 						<ChevronDown size={20} class="transition-transform duration-200 {isExpanded ? 'rotate-180' : ''}" />
 					</button>
 				{/if}
-	
+
 				<div class="overflow-hidden {shouldCollapseOnMobile ? (isExpanded ? '' : 'hidden md:block') : ''}">
 					<div class="gap-4 p-4 px-8 py-8 md:flex md:justify-between md:py-16 max-w-screen-xl mx-auto">
 						<div class="mb-12 flex max-w-xs flex-col gap-4">
@@ -84,44 +90,6 @@ let isExpanded = $state(false)
 							{/each}
 						</div>
 					</div>
-					<!-- Trust Badges -->
-	<div class="w-full bg-gray-50 dark:bg-gray-800 py-6">
-		<div class="w-full px-4 sm:px-6 lg:px-8">
-			<div class="relative">
-				<div class="absolute inset-0 w-screen -left-4 sm:-left-6 lg:-left-8 xl:-left-[calc((100vw-1280px)/2+32px)] 2xl:-left-[calc((100vw-1536px)/2+32px)] bg-gray-50 dark:bg-gray-800 -z-10" />
-				<div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-screen-xl mx-auto relative">
-					<div class="flex items-center justify-center gap-3">
-						<div class="bg-primary-100 dark:bg-primary-900 p-2 rounded-full">
-							<ShieldCheck class="w-6 h-6 text-primary-600 dark:text-primary-300" />
-						</div>
-						<div>
-							<p class="text-sm font-medium text-gray-900 dark:text-white">Secure Payments</p>
-							<p class="text-xs text-gray-500">100% Secure</p>
-						</div>
-					</div>
-					<div class="flex items-center justify-center gap-3">
-						<div class="bg-green-100 dark:bg-green-900 p-2 rounded-full">
-							<Lock class="w-6 h-6 text-green-600 dark:text-green-300" />
-						</div>
-						<div>
-							<p class="text-sm font-medium text-gray-900 dark:text-white">SSL Certified</p>
-							<p class="text-xs text-gray-500">Safe & Secure</p>
-						</div>
-					</div>
-					<div class="flex items-center justify-center gap-3">
-						<div class="bg-blue-100 dark:bg-blue-900 p-2 rounded-full">
-							<Truck class="w-6 h-6 text-blue-600 dark:text-blue-300" />
-						</div>
-						<div>
-							<p class="text-sm font-medium text-gray-900 dark:text-white">Fast Shipping</p>
-							<p class="text-xs text-gray-500">Worldwide</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	
 	<div class="flex flex-col gap-2 border-t px-8 py-4 sm:flex-row sm:items-center sm:justify-between">
 						{#if socialSharing?.active}
 							<div class="flex items-center space-x-5 sm:mt-0 sm:justify-center">
@@ -182,7 +150,7 @@ let isExpanded = $state(false)
 								{/each}
 							</div>
 						{/if}
-	
+
 						<div class="flex w-full flex-col-reverse items-start justify-between gap-2 max-sm:mt-2 sm:flex-row sm:items-center sm:gap-0">
 							<span class="text-sm text-gray-500 dark:text-gray-400 sm:text-center">
 								Copyright
@@ -195,7 +163,7 @@ let isExpanded = $state(false)
 								. All Rights Reserved.
 							</span>
 							<TrustpilotPlugin />
-	
+
 							{#if paymentMethodCards?.length}
 								<ul class="col-span-1 m-0 flex list-none flex-wrap items-center justify-end gap-2 p-0">
 									{#each paymentMethodCards as pmc}
@@ -211,12 +179,12 @@ let isExpanded = $state(false)
 			</div>
 		</footer>
 	</div>
-	
+
 	<WhatsappChatButton />
-	
+
 	<!-- {#if page?.data?.store?.plugins?.whatsapp?.enabled}
 		<a href="https://wa.me/{page?.data?.store?.plugins.whatsapp.number}" target="_blank" rel="noopener noreferrer" class="fixed bottom-20 left-5 z-40 md:bottom-5">
 		<img src={whatsappIcon} alt="" class="h-10 w-10 transform object-contain transition duration-300 hover:-translate-y-2 hover:scale-125" />
 		</a>
 		{/if} -->
-	
+
