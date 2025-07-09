@@ -15,16 +15,20 @@ let paymentMethodCards = [masterCard, paypal, skrill, visa]
 const storeData = $derived(page?.data?.store || {})
 const footerMenu = $derived(storeData?.menu?.find(menu => menu?.menuId === 'footer')?.items || [])
 const socialSharing = $derived(storeData?.plugins?.socialSharingButtons || {})
-const shouldCollapseOnMobile = $derived(storeData?.plugins?.footerSettings?.collapseOnMobile || false)
-const footerHTMLPlugin = $derived(page.data?.store?.plugins?.footerHtml)
+const footerSettings = $derived(storeData?.plugins?.footerSettings)
+const shouldCollapseOnMobile = $derived(footerSettings?.collapseOnMobile || false)
 
 let isExpanded = $state(false)
 </script>
 
 	<div class="mt-8">
-    {#if footerHTMLPlugin?.active}
-      <div class="w-full pb-3">
-        {@html footerHTMLPlugin?.html}
+    {#if footerSettings?.active}
+      <div class="w-full pb-4">
+        {#await sanitize(footerSettings.html) then html}
+					{@html html}
+				{:catch error}
+					{footerSettings.html}
+				{/await}
       </div>
     {/if}
 		<footer class="mt-2 border-t">
