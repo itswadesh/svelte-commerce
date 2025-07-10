@@ -21,7 +21,7 @@
 	const userState = addressModule.userState
 
 	// Check if phone is required based on login type
-	const isPhoneRequired = env.PUBLIC_LOGIN_TYPE !== 'EMAIL'
+	const isPhoneRequired = page.data?.store?.isPhoneMandatory
 	// Create a schema that makes phone optional when login type is email
 	const phoneSchema = isPhoneRequired
 		? schemas.phone
