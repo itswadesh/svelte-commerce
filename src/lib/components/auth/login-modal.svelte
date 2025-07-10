@@ -117,7 +117,7 @@ const userState = loginModule.userState
 				{/if}
 
 				<Button type="submit" class="h-11 px-2 text-wrap w-full py-1 text-sm font-medium" disabled={userState.loading || loginModule.isLoading || Boolean(loginModule.otpGenerationError)}>
-					{#if userState.loading || (loginModule.isLoading && loginModule.isPhoneNumber)}
+					{#if loginModule.isPhoneNumber && (loginModule.isLoading || userState.loading)}
 						<LoaderIcon class="mr-2 h-4 w-4 animate-spin" />
 						Sending OTP...
 					{:else if userState.loading && !loginModule.isPhoneNumber}

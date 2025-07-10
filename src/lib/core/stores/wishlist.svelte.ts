@@ -1,6 +1,7 @@
 import { getContext, onMount, setContext } from "svelte";
 import { wishlistService, type Product } from "../services";
 import type { setCartState } from "./cart.svelte";
+import { getUserState } from "./auth.svelte";
 
 interface Query {
   productId: string
@@ -22,6 +23,11 @@ class WishlistState {
   constructor() {
     onMount(async () => {
       try {
+        const userState = getUserState()
+        await userState.hasLoaded
+        if (!userState.user?.id)
+          return
+
         this.loading = true
         const res = await wishlistService.fetchWishlist({})
         this.count = res?.data?.length
