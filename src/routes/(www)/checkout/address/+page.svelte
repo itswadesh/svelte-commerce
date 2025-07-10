@@ -23,8 +23,8 @@
 	// Check if phone is required based on login type
 	const isPhoneRequired = env.PUBLIC_LOGIN_TYPE !== 'EMAIL'
 	// Create a schema that makes phone optional when login type is email
-	const phoneSchema = isPhoneRequired 
-		? schemas.phone 
+	const phoneSchema = isPhoneRequired
+		? schemas.phone
 		: z.string().optional()
 			.refine(
 				(val) => !val || /^[+\s\-()\d\s]{5,20}$/.test(val),
@@ -120,9 +120,9 @@
 									<h2 class="text-lg font-semibold text-gray-800">Contact Details</h2>
 								</div>
 								{#if cartState.cart.email && !addressModule.editEmail && !userState.user?.userId}
-									<Button 
+									<Button
 										onclick={addressModule.handleEditEmail}
-										variant="ghost" 
+										variant="ghost"
 										size="sm"
 										class="text-primary hover:bg-primary/10 flex items-center space-x-1"
 									>
@@ -132,7 +132,7 @@
 								{/if}
 							</div>
 
-							{#if cartState.cart.email && cartState.cart.phone && !addressModule.editEmail}
+							{#if cartState.cart.email && (!isPhoneRequired || cartState.cart.phone) && !addressModule.editEmail}
 								<div class="space-y-3 p-5">
 									<div class="flex items-start space-x-3">
 										<div class="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-blue-100 text-blue-600">
@@ -159,8 +159,8 @@
 									</div>
 								</div>
 							{:else if !cartState.cart.email || !cartState.cart.phone || addressModule.editEmail}
-								<form 
-									class="space-y-4 p-5" 
+								<form
+									class="space-y-4 p-5"
 									onsubmit={(e) => handleContactFormSubmit(e, {
 										email: addressModule.email,
 										phone: addressModule.phone,
@@ -171,11 +171,11 @@
 								>
 									<div class="space-y-1">
 										<label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
-										<Textbox 
-											type="email" 
-											bind:value={addressModule.email} 
-											required 
-											class="w-full" 
+										<Textbox
+											type="email"
+											bind:value={addressModule.email}
+											required
+											class="w-full"
 											schema={schemas.email}
 											placeholder="your@email.com"
 										/>
@@ -185,11 +185,11 @@
 										<label for="phone" class="block text-sm font-medium text-gray-700">
 											Phone number {#if !isPhoneRequired}<span class="text-gray-400">(optional)</span>{/if}
 										</label>
-										<Textbox 
-											type="tel" 
-											bind:value={addressModule.phone} 
+										<Textbox
+											type="tel"
+											bind:value={addressModule.phone}
 											required={isPhoneRequired}
-											class="w-full" 
+											class="w-full"
 											schema={phoneSchema}
 											placeholder="XXXXXXXXXX"
 										/>
@@ -197,16 +197,16 @@
 									</div>
 									<div class="flex justify-end space-x-3 pt-2">
 										{#if cartState.cart.email}
-											<Button 
-												variant="outline" 
+											<Button
+												variant="outline"
 												onclick={() => (addressModule.editEmail = false)}
 												type="button"
 											>
 												Cancel
 											</Button>
 										{/if}
-										<Button 
-											type="submit" 
+										<Button
+											type="submit"
 											disabled={cartState.isUpdatingCart}
 											class="min-w-[120px]"
 										>
@@ -221,7 +221,7 @@
 							{/if}
 						</div>
 					<!-- Shipping Address -->
-					{#if cartState?.cart?.email && cartState?.cart?.phone}
+					{#if cartState?.cart?.email && (!isPhoneRequired || cartState?.cart?.phone)}
 						<div class="rounded-lg border p-4">
 							{#if cartState.cart.shippingAddress}
 								<div class="mb-6">
