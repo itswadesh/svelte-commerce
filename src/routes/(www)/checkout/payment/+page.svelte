@@ -9,6 +9,10 @@
 	import CouponsDrawer from '$lib/components/coupon/coupons-drawer.svelte'
 	import { PaymentModule } from '$lib/core/composables/use-payment.svelte'
 
+	// Check if phone is required based on login type
+	const isPhoneRequired = page.data?.store?.isPhoneMandatory
+  const isEmailRequired = page.data?.store?.isEmailMandatory
+
 	const paymentModule = new PaymentModule()
   const cartState = paymentModule.cartState
 </script>
@@ -267,7 +271,7 @@
 									</div>
 								</div>
 
-								{#if cartState?.cart?.email && (cartState?.cart?.shippingAddress || cartState?.cart?.shippingAddressId)}
+								{#if (!isPhoneRequired || cartState?.cart?.phone) && (!isEmailRequired || cartState?.cart?.email) && (cartState?.cart?.shippingAddress || cartState?.cart?.shippingAddressId)}
 									<Button
 										class="bottom-0 left-0 right-0 z-[45] w-full py-6 text-lg hover:bg-primary max-sm:fixed max-sm:h-16 max-sm:rounded-none max-sm:disabled:bg-gray-500"
 										onclick={paymentModule.placeOrder}
