@@ -27,7 +27,7 @@ interface CartState extends Cart2State {
 }
 
 export const schemas = {
-	email: z.string().email('Please enter a valid email address').min(5, 'Email must be at least 5 characters').max(100, 'Email must be less than 100 characters'),
+	email: z.union([z.string().email('Please enter a valid email address').optional(), z.literal('')]),
 
 	phone: z.string().optional().refine((val) => !val || val.length > 0 && val.length <= 20 && /^\+?[0-9\s\-()]*$/.test(val), { message: 'Phone number must be valid' })
 }
@@ -70,6 +70,15 @@ export class AddressModule {
 	cartState = getCartState() as CartState
 
 	noItemsChecked = $derived(this.cartState?.cart?.lineItems?.every((item: any) => !item.isSelectedForCheckout))
+
+
+	isPhoneRequired = page.data?.store?.isPhoneMandatory
+
+  isEmailRequired = page.data?.store?.isEmailMandatory
+
+  isEmailOk = $derived(!this.isEmailRequired || this.cartState.cart.email)
+
+  isPhoneOk = $derived(!this.isPhoneRequired || this.cartState.cart.phone)
 
 	email = $state('')
 
@@ -178,8 +187,28 @@ export class AddressModule {
     */
 	}
 
-	saveEmail = async (e: any) => {
+	saveContactInfo = async (e: any) => {
 		e.preventDefault()
+
+    if (this.email) {
+		  schemas.email.parse(this.email)
+    } else if (this.isEmailRequired) {
+		  throw new z.ZodError([{
+			  code: 'custom',
+			  path: ['email'],
+			  message: 'Email is required'
+		  }])
+    }
+
+		if (this.phone) {
+			schemas.phone.parse(this.phone)
+		} else if (this.isPhoneRequired) {
+			throw new z.ZodError([{
+				code: 'custom',
+				path: ['phone'],
+				message: 'Phone is required'
+			}])
+		}
 
 		try {
 			schemas.email.parse(this.email)
@@ -198,7 +227,7 @@ export class AddressModule {
 				this.isBillingAddressSameAsShipping = true
 				this.saveAddressToCart()
 			}
-		} catch (e) {
+		} catch (e: any) {
 			toast.error(`Failed to save contact details${e.toString()}`)
 		}
 
