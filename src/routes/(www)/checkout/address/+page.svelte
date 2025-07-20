@@ -19,52 +19,8 @@
 	const cartState = addressModule.cartState
 	const userState = addressModule.userState
 
-	// Check if phone is required based on login type
-	const isPhoneRequired = page.data?.store?.isPhoneMandatory
-  const isEmailRequired = page.data?.store?.isEmailMandatory
-
-	// Create a schema that makes phone optional when login type is email
-	const phoneSchema = isPhoneRequired
-		? schemas.phone
-		: z.string().optional()
-			.refine(
-				(val) => !val || /^[+\s\-()\d\s]{5,20}$/.test(val),
-				{ message: 'Please enter a valid phone number (5-20 digits, may include + - ( ) or spaces)' }
-			)
-
-	function handleContactFormSubmit(event: any, { email, phone, phoneSchema, isPhoneRequired, saveEmail }: any) {
-		event.preventDefault()
-		try {
-      if (email) {
-			  schemas.email.parse(email)
-      } else if (isEmailRequired) {
-				throw new z.ZodError([{
-					code: 'custom',
-					path: ['email'],
-					message: 'Email is required'
-				}])
-      }
-
-			if (phone) {
-				phoneSchema.parse(phone)
-			} else if (isPhoneRequired) {
-				throw new z.ZodError([{
-					code: 'custom',
-					path: ['phone'],
-					message: 'Phone is required'
-				}])
-			}
-			saveEmail(event)
-		} catch (e) {
-			if (e instanceof z.ZodError) {
-				const errors = e.errors.reduce((acc, err) => {
-					acc[err.path[0]] = err.message
-					return acc
-				}, {})
-				addressModule.errors = errors
-			}
-		}
-	}
+  const isEmailOk = $derived(addressModule.isEmailOk)
+  const isPhoneOk = $derived(addressModule.isPhoneOk)
 </script>
 
 <svelte:head>
@@ -108,7 +64,7 @@
 				<div class="space-y-6">
 					<!-- Contact Details -->
 					{#await userState.hasLoaded then _}
-						{#if (!cartState.cart.email || !cartState.cart.phone) && !userState.user?.userId}
+						{#if (!isPhoneOk || !isEmailOk) && !userState.user?.userId}
 							<p>
 								<button
 									class="cursor-pointer font-bold"
@@ -142,7 +98,7 @@
 								{/if}
 							</div>
 
-							{#if (!isEmailRequired || cartState.cart.email) && (!isPhoneRequired || cartState.cart.phone) && !addressModule.editEmail}
+							{#if isEmailOk && isPhoneOk && !addressModule.editEmail}
 								<div class="space-y-3 p-5">
 									<div class="flex items-start space-x-3">
 										<div class="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-blue-100 text-blue-600">
@@ -168,26 +124,19 @@
 										</div>
 									</div>
 								</div>
-							{:else if !cartState.cart.email || !cartState.cart.phone || addressModule.editEmail}
+							{:else if !isEmailOk || !isPhoneOk || addressModule.editEmail}
 								<form
 									class="space-y-4 p-5"
-									onsubmit={(e) => handleContactFormSubmit(e, {
-										email: addressModule.email,
-										phone: addressModule.phone,
-										phoneSchema,
-										isPhoneRequired,
-                    isEmailRequired,
-										saveEmail: addressModule.saveEmail.bind(addressModule)
-									})}
+									onsubmit={addressModule.saveContactInfo}
 								>
 									<div class="space-y-1">
 										<label for="email" class="block text-sm font-medium text-gray-700">
-                      Email address {#if !isEmailRequired}<span class="text-gray-400">(optional)</span>{/if}
+                      Email address {#if !addressModule.isEmailRequired}<span class="text-gray-400">(optional)</span>{/if}
                     </label>
 										<Textbox
 											type="email"
 											bind:value={addressModule.email}
-											required={isEmailRequired}
+											required={addressModule.isEmailRequired}
 											class="w-full"
 											schema={schemas.email}
 											placeholder="your@email.com"
@@ -196,14 +145,14 @@
 									</div>
 									<div class="space-y-1">
 										<label for="phone" class="block text-sm font-medium text-gray-700">
-											Phone number {#if !isPhoneRequired}<span class="text-gray-400">(optional)</span>{/if}
+											Phone number {#if !addressModule.isPhoneRequired}<span class="text-gray-400">(optional)</span>{/if}
 										</label>
 										<Textbox
 											type="tel"
 											bind:value={addressModule.phone}
-											required={isPhoneRequired}
+											required={addressModule.isPhoneRequired}
 											class="w-full"
-											schema={phoneSchema}
+											schema={schemas.phone}
 											placeholder="XXXXXXXXXX"
 										/>
 										<p class="mt-1 text-xs text-gray-500">For delivery updates</p>
@@ -234,7 +183,7 @@
 							{/if}
 						</div>
 					<!-- Shipping Address -->
-					{#if (!isEmailRequired || cartState?.cart?.email) && (!isPhoneRequired || cartState?.cart?.phone)}
+					{#if isEmailOk && isPhoneOk}
 						<div class="rounded-lg border p-4">
 							{#if cartState.cart.shippingAddress}
 								<div class="mb-6">
@@ -616,7 +565,7 @@
 									</div>
 								</div>
 
-								{#if cartState.cart.email && cartState.cart.shippingAddress && !addressModule.editAddress}
+								{#if isPhoneOk && isEmailOk && cartState.cart.shippingAddress && !addressModule.editAddress}
 									<Button
 										class="group bottom-0 left-0 right-0 z-[45] w-full py-6 text-lg hover:bg-primary max-sm:fixed max-sm:h-16 max-sm:rounded-none"
 										onclick={addressModule.handleProceedToPayment}
