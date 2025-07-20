@@ -172,8 +172,8 @@
 											<div class="group relative flex items-center gap-1.5">
 												<Calendar class="h-3.5 w-3.5 text-gray-400" />
 												<p class="text-xl font-bold text-green-600">
-													{order?.estimatedDeliveryDays
-														? date(order.createdAt + order.estimatedDeliveryDays)
+													{order?.shippingRate?.estimatedMaxDays
+														? date(order.createdAt + order?.shippingRate?.estimatedMaxDays)
 														: date(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000))}
 												</p>
 												<div class="absolute bottom-full left-0 mb-2 hidden rounded bg-gray-800 p-2 text-xs text-white shadow-lg group-hover:block">
