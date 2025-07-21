@@ -60,7 +60,13 @@
 							required
 						/>
 					</div>
-					<Textbox name="phone" type="tel" bind:value={address.phone} placeholder="+1234567890" schema={AddressSchema.phone} label="Phone" required />
+					<Textbox
+            info={page?.data?.store?.isPhoneMandatory ? '' : 'Phone number is recommended for delivery updates.'}
+            required={page.data?.store?.isPhoneMandatory}
+            name="phone" type="tel" bind:value={address.phone}
+            placeholder="+1234567890" schema={AddressSchema.phone}
+            label="Phone"
+          />
 					<Textbox
 						name="address_1"
 						bind:value={address.address_1}
