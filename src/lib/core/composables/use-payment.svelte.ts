@@ -195,8 +195,8 @@ export class PaymentModule {
 								// this.paymentLoader = false
 							},
 							prefill: {
-								name: this.cartState.cart?.name || this.cartState.cart?.shippingAddress?.name || '',
-								phone: this.cartState.cart?.phone || this.cartState.cart?.shippingAddress?.phone || '',
+								name: this.cartState.cart?.name || this.cartState.cart?.shippingAddress?.name || page?.data?.store?.businessEmail || '',
+								contact: this.cartState.cart?.phone || this.cartState.cart?.shippingAddress?.phone || page?.data?.store?.businessPhone || '',
 								email: this.cartState.cart?.email || this.cartState.cart?.shippingAddress?.email || ''
 							}
 						}
