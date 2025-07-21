@@ -1,13 +1,14 @@
 import { PageService } from '$lib/core/services'
 import type { PageServerLoad } from '../../../../../routes/(legal)/terms-and-conditions/$types'
+import { error } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ fetch }) => {
-	try {
-		const pageService = new PageService(fetch)
-		const page = await pageService.getOne('terms-and-conditions')
-		return { page }
-	} catch (error: any) {
-		return { page: {}, error: error.message || 'An error occurred' }
-	}
+  const pageService = new PageService(fetch)
+  const page = await pageService.getOne('terms-and-conditions')
+  if (page.status != 'published')
+    error(404, {
+      message: 'Page not found'
+    })
+  return { page }
 }
 
