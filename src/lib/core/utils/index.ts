@@ -148,6 +148,20 @@ export function dateOnly(value: string) {
 	})
 }
 
+export function formatSecounds(seconds: number) {
+	const minutes = Math.floor(seconds / 60)
+	const hours = Math.floor(minutes / 60)
+
+  let formattedOutput = ''
+  if (seconds)
+    formattedOutput = ` ${seconds % 60}s`
+  if (minutes)
+    formattedOutput = ` ${minutes % 60}m${formattedOutput}`
+  if (hours)
+    formattedOutput = `${hours}h${formattedOutput}`
+  return formattedOutput.trim()
+}
+
 export function time(value: string) {
 	const date = new Date(value)
 	return date.toLocaleString(['en-US'], {
