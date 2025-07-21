@@ -1,16 +1,8 @@
-import { PageService } from '$lib/core/services'
 import type { PageLoad } from '../../../../routes/(www)/$types'
+import { getOnePage } from '../load-page-one'
 
-export const load: PageLoad = async ({ fetch }) => {
-	try {
-		const pageService = new PageService(fetch)
-		const page = await pageService.getOne('home')
-		return { page }
-	} catch (e) {
-		console.log(e)
-		return { page: {} }
-	}
-	// let productsRes = []
+export const load: PageLoad = getOnePage('home')
+  // let productsRes = []
 	// try {
 	// 	productsRes = await ProductService.listFeaturedProducts({ page: 1 })
 	// } catch (e) {
@@ -19,5 +11,3 @@ export const load: PageLoad = async ({ fetch }) => {
 	// return {
 	// 	products: productsRes.data
 	// }
-}
-
