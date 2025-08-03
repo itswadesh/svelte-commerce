@@ -13,6 +13,7 @@
 	import { showAuthModal } from '$lib/core/components/index.js'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import { AddressModule, emptyAddress, checkoutAddressSchema as schemas } from '$lib/core/composables/index.js'
+	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
 	import { appendOneTimeCartId } from '$lib/core/utils/index.js'
 	import CheckoutButton from '$lib/components/buttons/checkout-button.svelte'
 
@@ -30,29 +31,7 @@
 
 <div class="min-h-screen py-8">
 	<div class="container mx-auto px-4">
-		<!-- Checkout Progress -->
-		<div class="mb-8">
-			<div class="flex items-center justify-center space-x-4 sm:space-x-12">
-				<Button
-					variant="ghost"
-					onclick={() => goto(appendOneTimeCartId('/checkout/cart'))}
-					class="flex h-auto items-center"
-				>
-					<div class="flex h-7 w-7 items-center justify-center rounded-full border border-gray-200 text-[11px] font-bold tracking-tight">1</div>
-					<span class="ml-2 text-xs font-bold uppercase tracking-widest">Cart</span>
-				</Button>
-				<div class="h-px w-8 bg-gray-200 sm:w-16"></div>
-				<div class="flex items-center text-primary">
-					<div class="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-[11px] font-bold tracking-tight text-white">2</div>
-					<span class="ml-2 text-xs font-bold uppercase tracking-widest">Address</span>
-				</div>
-				<div class="h-px w-8 bg-gray-200 sm:w-16"></div>
-				<div class="flex items-center text-gray-400">
-					<div class="flex h-7 w-7 items-center justify-center rounded-full border border-gray-200 text-[11px] font-bold tracking-tight">3</div>
-					<span class="ml-2 text-xs font-bold uppercase tracking-widest">Payment</span>
-				</div>
-			</div>
-		</div>
+		<CheckoutHeader step={2} />
 			<!-- <div class="mb-8 flex justify-between lg:px-4 items-center">
 		  <div>
 				<p class="font-semibold tracking-tight text-xl">My Addresses</p>
