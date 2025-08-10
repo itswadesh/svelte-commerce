@@ -50,7 +50,7 @@ declare global {
 
 export class PaymentModule {
 	cartState = getCartState() as CartState
-	SELECTED_PG_NAME: string = $state('')
+	SELECTED_PG_CODE: string = $state('')
 	listOfPaymentMethods: PaymentMethod[] = $state([])
 	paymentLoader = $state(false)
 	loadingForCart = $state(false)
@@ -77,7 +77,7 @@ export class PaymentModule {
 				// Filter out Affirm Pay if country is not USA
 				const shippingAddress = this.cartState?.cart?.shippingAddress
 				if (shippingAddress && shippingAddress?.country !== 'USA' && shippingAddress?.countryCode !== 'US') {
-					this.listOfPaymentMethods = this.listOfPaymentMethods.filter((method: PaymentMethod) => method?.name?.toUpperCase?.() !== 'AFFIRMPAY')
+					this.listOfPaymentMethods = this.listOfPaymentMethods.filter((method: PaymentMethod) => method?.code?.toUpperCase?.() !== 'AFFIRMPAY')
 				}
 
 				if (this.listOfPaymentMethods.length === 0) {
@@ -85,12 +85,12 @@ export class PaymentModule {
 					this.errorMessage = 'No payment methods available'
 					this.checkoutDisabled = true
 				} else if (this.listOfPaymentMethods.length === 1) {
-					this.SELECTED_PG_NAME = this.listOfPaymentMethods?.[0]?.name
+					this.SELECTED_PG_CODE = this.listOfPaymentMethods?.[0]?.code
 					this.showPaymentMethods = true
 				} else {
 					this.showPaymentMethods = true
 				}
-				if (this.listOfPaymentMethods.find((f: PaymentMethod) => f?.name?.toUpperCase?.() === 'RAZORPAY')) {
+				if (this.listOfPaymentMethods.find((f: PaymentMethod) => f?.code?.toUpperCase?.() === 'RAZORPAY')) {
 					const razorpayScript = document.createElement('script')
 					razorpayScript.src = 'https://checkout.razorpay.com/v1/checkout.js'
 					razorpayScript.async = true
@@ -102,11 +102,11 @@ export class PaymentModule {
 					}
 					document.head.appendChild(razorpayScript)
 				}
-				this.affirmPaymentMethod = this.listOfPaymentMethods.find((f: PaymentMethod) => f?.name?.toUpperCase?.() === 'AFFIRMPAY') || null
+				this.affirmPaymentMethod = this.listOfPaymentMethods.find((f: PaymentMethod) => f?.code?.toUpperCase?.() === 'AFFIRMPAY') || null
 				if (this.affirmPaymentMethod) {
 					// Only proceed with Affirm initialization if country is USA
 					if (shippingAddress?.country === 'USA' || shippingAddress?.countryCode === 'US') {
-            injectAffirm(this.affirmPaymentMethod.apiKey, this.affirmPaymentMethod.isTest)
+						injectAffirm(this.affirmPaymentMethod.apiKey, this.affirmPaymentMethod.isTest)
 					}
 				}
 			}
@@ -140,11 +140,11 @@ export class PaymentModule {
 
 			// If country is not USA, filter out Affirm Pay
 			if (shippingAddress && shippingAddress?.country !== 'USA' && shippingAddress?.countryCode !== 'US') {
-				this.listOfPaymentMethods = this.listOfPaymentMethods.filter((method: PaymentMethod) => method?.name?.toUpperCase?.() !== 'AFFIRMPAY')
+				this.listOfPaymentMethods = this.listOfPaymentMethods.filter((method: PaymentMethod) => method?.code?.toUpperCase?.() !== 'AFFIRMPAY')
 
 				// If Affirm was selected, reset selection
-				if (this.SELECTED_PG_NAME?.toUpperCase?.() === 'AFFIRMPAY') {
-					this.SELECTED_PG_NAME = ''
+				if (this.SELECTED_PG_CODE?.toUpperCase?.() === 'AFFIRMPAY') {
+					this.SELECTED_PG_CODE = ''
 				}
 			}
 		})
@@ -155,14 +155,14 @@ export class PaymentModule {
 	}
 
 	placeOrder = async () => {
-		if (!this.SELECTED_PG_NAME) {
+		if (!this.SELECTED_PG_CODE) {
 			toast.error('Please select a payment method')
 			return
 		}
 		if (!this.cartState) return
 
 		this.paymentLoader = true
-		if (this.SELECTED_PG_NAME?.toUpperCase?.() == 'RAZORPAY') {
+		if (this.SELECTED_PG_CODE?.toUpperCase?.() === 'RAZORPAY') {
 			// Razorpay checkout
 			if (!this.razorpayReady) {
 				toast.error('Please wait till payment gateway is ready')
@@ -216,7 +216,7 @@ export class PaymentModule {
 					this.paymentLoader = false
 				}
 			}
-		} else if (this.SELECTED_PG_NAME?.toUpperCase?.() === 'AFFIRMPAY') {
+		} else if (this.SELECTED_PG_CODE?.toUpperCase?.() === 'AFFIRMPAY') {
 			if (typeof affirm === 'undefined' || !affirm) {
 				toast.error('Affirm is not ready yet')
 			} else {
@@ -244,7 +244,7 @@ export class PaymentModule {
 						affirm.checkout.open({
 							onFail: async function (error: any) {
 								this.paymentLoader = false
-								toast.error(`Affirm Payment Failed`)
+								toast.error('Affirm Payment Failed')
 								await checkoutService.cancelAffirmOrder({
 									orderId: affirmPayOrder?.order_id || '',
 									storeId: page.data.storeId,
@@ -259,7 +259,7 @@ export class PaymentModule {
 									storeId: page.data?.store?.id,
 									origin: page.url.origin,
 									// @ts-ignore - API might require this but TS doesn't know
-									return_url: page.url.origin + '/checkout/success'
+									return_url: `${page.url.origin}/checkout/success`
 								})
 								console.log('Affirm checkout success:', res1)
 								goto(`/checkout/success?order_no=${affirmPayOrder?.order_id || ''}&status=PAYMENT_SUCCESS&provider=AffirmPay`)
@@ -276,7 +276,7 @@ export class PaymentModule {
 					this.cartState?.restorePrevCart()
 				}
 			}
-		} else if (this.SELECTED_PG_NAME?.toUpperCase?.() == 'PHONEPE') {
+		} else if (this.SELECTED_PG_CODE?.toUpperCase?.() === 'PHONEPE') {
 			// Phonepe checkout
 			try {
 				const pp: any = await checkoutService.checkoutPhonepe({
@@ -300,7 +300,7 @@ export class PaymentModule {
 			} finally {
 				this.paymentLoader = false
 			}
-		} else if (this.SELECTED_PG_NAME?.toUpperCase?.() == 'STRIPE') {
+		} else if (this.SELECTED_PG_CODE?.toUpperCase?.() === 'STRIPE') {
 			try {
 				// Stripe chekout
 				const sp: any = await checkoutService.checkoutStripe({
@@ -318,12 +318,12 @@ export class PaymentModule {
 			} finally {
 				this.paymentLoader = false
 			}
-		} else if (this.SELECTED_PG_NAME?.toUpperCase?.() == 'PAYPAL') {
+		} else if (this.SELECTED_PG_CODE?.toUpperCase?.() === 'PAYPAL') {
 			try {
 				const res: any = await checkoutService.checkoutPaypal({
 					cartId: this.cartState.cart.id,
 					origin: page.url.origin,
-					return_url: page.url.origin + '/checkout/success'
+					return_url: `${page.url.origin}/checkout/success`
 				})
 				if (res?.redirect_url && res?.redirect_url !== null) {
 					window.location.href = `${res.redirect_url}`
@@ -335,7 +335,7 @@ export class PaymentModule {
 			} finally {
 				this.paymentLoader = false
 			}
-		} else if (this.SELECTED_PG_NAME?.toUpperCase?.() == 'COD') {
+		} else if (this.SELECTED_PG_CODE?.toUpperCase?.() === 'COD') {
 			try {
 				// COD chekout
 				const cp: any = await checkoutService.checkoutCOD({
