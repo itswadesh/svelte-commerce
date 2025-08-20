@@ -1,26 +1,26 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/button'
-	import { goto } from '$app/navigation'
-	import { ChevronRight, LockKeyhole, MapPin, Pencil, ShoppingBag } from 'lucide-svelte'
-	import { formatPrice } from '$lib/core/utils'
-	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
-	import AddressListModal from '$lib/components/address/address-list-modal.svelte'
-	import AddressFormModal from '$lib/components/address/address-form-modal.svelte'
-	import { page } from '$app/state'
-	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
-	import { Skeleton } from '$lib/components/ui/skeleton'
-	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
-	import { showAuthModal } from '$lib/core/components/auth/auth-utils'
-	import Textbox from '$lib/components/form/textbox.svelte'
-	import { AddressModule, emptyAddress, schemas } from '$lib/core/composables/use-checkout-address.svelte'
-	import { z } from 'zod'
+import { Button } from '$lib/components/ui/button'
+import { goto } from '$app/navigation'
+import { ChevronRight, LockKeyhole, MapPin, Pencil, ShoppingBag } from 'lucide-svelte'
+import { formatPrice } from '$lib/core/utils'
+import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
+import AddressListModal from '$lib/components/address/address-list-modal.svelte'
+import AddressFormModal from '$lib/components/address/address-form-modal.svelte'
+import { page } from '$app/state'
+import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
+import { Skeleton } from '$lib/components/ui/skeleton'
+import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
+import { showAuthModal } from '$lib/core/components/auth/auth-utils'
+import Textbox from '$lib/components/form/textbox.svelte'
+import { AddressModule, emptyAddress, schemas } from '$lib/core/composables/use-checkout-address.svelte'
+import { z } from 'zod'
 
-	const addressModule = new AddressModule()
-	const cartState = addressModule.cartState
-	const userState = addressModule.userState
+const addressModule = new AddressModule()
+const cartState = addressModule.cartState
+const userState = addressModule.userState
 
-  const isEmailOk = $derived(addressModule.isEmailOk)
-  const isPhoneOk = $derived(addressModule.isPhoneOk)
+const isEmailOk = $derived(addressModule.isEmailOk)
+const isPhoneOk = $derived(addressModule.isPhoneOk)
 </script>
 
 <svelte:head>
