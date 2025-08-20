@@ -2,6 +2,7 @@ import { page } from '$app/state'
 import { addressService, type Address, type PaginatedResponse } from '$lib/core/services'
 import { getUserState } from '$lib/core/stores/auth.svelte'
 import { toast } from 'svelte-sonner'
+import { showAuthModal } from '$lib/core/components/auth/auth-utils'
 
 export class MyAddressesModule {
 	userState = getUserState()
@@ -73,6 +74,13 @@ export class MyAddressesModule {
 		} catch (e: any) {
 			this.error = e
 			console.error(e)
+			const msg = e?.message || e?.toString?.() || ''
+			if (e?.status === 401 || e?.status === 403 || /invalid jwt/i.test(msg)) {
+				toast.error('Session expired. Please log in again.')
+				showAuthModal('login')
+			} else {
+				toast.error('Failed to load addresses')
+			}
 		} finally {
 			this.loading = false
 		}

@@ -313,23 +313,34 @@ export class AddressModule {
 	}
 
 	paginateAddress = async (pageNo: number) => {
-		const res: any = await addressService.list({
-			page: pageNo,
+		try {
+			const res: any = await addressService.list({
+				page: pageNo,
+				user: this.userState?.user?.userId
+			})
 
-			user: this.userState.user.userId
-		})
+			const addressIds = new Set()
 
-		const addressIds = new Set()
+			this.addresses = [...this.addresses, ...(res?.data || [])].filter(x => {
+				if (addressIds.has(x.id)) return false
+				addressIds.add(x.id)
+				return true
+			})
 
-		this.addresses = [...this.addresses, ...res?.data].filter(x => {
-			if (addressIds.has(x.id)) return false
-
-			addressIds.add(x.id)
-
-			return true
-		})
-
-		return res.pageSize == res.data?.length
+			return res?.pageSize == res?.data?.length
+		} catch (e: any) {
+			console.error(e)
+			const msg = e?.message || e?.toString?.() || ''
+			if (e?.status === 401 || e?.status === 403 || /invalid jwt/i.test(msg)) {
+				toast.error('Session expired. Please log in again.')
+				await this.userState.logout()
+				// showAuthModal is triggered by logout; keep here only if needed in future
+				// showAuthModal('login')
+			} else {
+				toast.error('Failed to load addresses')
+			}
+			return false
+		}
 	}
 
 	mount = async () => {
