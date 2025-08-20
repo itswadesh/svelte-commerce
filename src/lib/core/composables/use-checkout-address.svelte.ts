@@ -29,7 +29,10 @@ interface CartState extends Cart2State {
 export const schemas = {
 	email: z.union([z.string().email('Please enter a valid email address').optional(), z.literal('')]),
 
-	phone: z.string().optional().refine((val) => !val || val.length > 0 && val.length <= 20 && /^\+?[0-9\s\-()]*$/.test(val), { message: 'Phone number must be valid' })
+	phone: z
+		.string()
+		.optional()
+		.refine(val => !val || (val.length > 0 && val.length <= 20 && /^\+?[0-9\s\-()]*$/.test(val)), { message: 'Phone number must be valid' })
 }
 
 export interface BaseAddress {
@@ -71,14 +74,13 @@ export class AddressModule {
 
 	noItemsChecked = $derived(this.cartState?.cart?.lineItems?.every((item: any) => !item.isSelectedForCheckout))
 
-
 	isPhoneRequired = page.data?.store?.isPhoneMandatory
 
-  isEmailRequired = page.data?.store?.isEmailMandatory
+	isEmailRequired = page.data?.store?.isEmailMandatory
 
-  isEmailOk = $derived(!this.isEmailRequired || this.cartState.cart.email)
+	isEmailOk = $derived(!this.isEmailRequired || this.cartState.cart.email)
 
-  isPhoneOk = $derived(!this.isPhoneRequired || this.cartState.cart.phone)
+	isPhoneOk = $derived(!this.isPhoneRequired || this.cartState.cart.phone)
 
 	email = $state('')
 
@@ -190,30 +192,33 @@ export class AddressModule {
 	saveContactInfo = async (e: any) => {
 		e.preventDefault()
 
-    if (this.email) {
-		  schemas.email.parse(this.email)
-    } else if (this.isEmailRequired) {
-		  throw new z.ZodError([{
-			  code: 'custom',
-			  path: ['email'],
-			  message: 'Email is required'
-		  }])
-    }
+		if (this.email) {
+			schemas.email.parse(this.email)
+		} else if (this.isEmailRequired) {
+			throw new z.ZodError([
+				{
+					code: 'custom',
+					path: ['email'],
+					message: 'Email is required'
+				}
+			])
+		}
 
 		if (this.phone) {
 			schemas.phone.parse(this.phone)
 		} else if (this.isPhoneRequired) {
-			throw new z.ZodError([{
-				code: 'custom',
-				path: ['phone'],
-				message: 'Phone is required'
-			}])
+			throw new z.ZodError([
+				{
+					code: 'custom',
+					path: ['phone'],
+					message: 'Phone is required'
+				}
+			])
 		}
-
 		try {
 			schemas.email.parse(this.email)
 
-			schemas.phone.parse(this.phone)
+			schemas.phone.parse(this.phone ?? '')
 
 			await this.cartState.updateEmail({ email: this.email, phone: this.phone })
 
@@ -336,7 +341,7 @@ export class AddressModule {
 			try {
 				this.email = this.userState.user.email
 
-				this.phone = this.userState.user.phone
+				this.phone = this.userState.user.phone ?? ''
 
 				this.paginateAddress(1)
 
