@@ -61,7 +61,7 @@
 	</style>
 {/if}
 
-<div class="flex flex-col-reverse gap-4 max-lg:px-4 sm:flex-row">
+<div class="flex flex-col-reverse gap-4 sm:flex-row">
 	<div class="flex gap-4 max-sm:overflow-x-auto sm:w-24 sm:flex-col">
 		{#each images as img, idx}
 			{@const youtubeId = getYoutubeId(img)}
