@@ -113,7 +113,7 @@
 								<Button
 									disabled={!!cartState.isUpdatingCart}
 									onclick={onContinueShopping}
-									class="mt-8 rounded-full px-8"
+									class="mt-8 px-8"
 								>
 									Continue Shopping
 								</Button>
