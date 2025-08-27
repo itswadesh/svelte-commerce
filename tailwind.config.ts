@@ -30,6 +30,9 @@ const config: Config = {
 			sans: ['Montserrat', ...fontFamily.sans]
 		},
 		extend: {
+			spacing: {
+				page: '8px',
+			},
 			colors: {
 				border: 'hsl(var(--border) / <alpha-value>)',
 				input: 'hsl(var(--input) / <alpha-value>)',

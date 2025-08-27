@@ -39,16 +39,17 @@
 
 <GoogleStructuredDataProduct product={productState.structuredData} />
 
+<GoogleStructuredDataBreadcrumb
+  breadcrumbs={data?.product?.categoryHierarchy?.map((item: any, index: number) => ({
+  name: item.name,
+  item: index === data?.product?.categoryHierarchy?.length - 1 ? undefined : `https://${PUBLIC_LITEKART_DOMAIN}${item.slug}`
+  })) || []}
+/>
+
 <!-- <ProductRenderer bind:data>
-	{#snippet content(productState)} -->
-<div class="page-width">
+{#snippet content(productState)} -->
+<div class="page-width hidden md:block">
 	<Breadcrumb categoryHierarchy={data?.product?.categoryHierarchy} />
-	<GoogleStructuredDataBreadcrumb
-		breadcrumbs={data?.product?.categoryHierarchy?.map((item: any, index: number) => ({
-			name: item.name,
-			item: index === data?.product?.categoryHierarchy?.length - 1 ? undefined : `https://${PUBLIC_LITEKART_DOMAIN}${item.slug}`
-		})) || []}
-	/>
 </div>
 
 <div class="page-width intra-gap flex flex-col">
@@ -166,7 +167,7 @@
 
 <!-- Mobile cart button - Sticky Footer -->
 <div
-	class="sticky inset-x-0 bottom-0 flex w-full items-center gap-3 border-t border-gray-100 bg-white/95 px-4 py-4 shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.1)] backdrop-blur-md sm:hidden"
+	class="sticky inset-x-0 bottom-0 flex w-full items-center gap-3 border-t border-gray-100 bg-white/95 p-page shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.1)] backdrop-blur-md sm:hidden"
 >
 	<div class="flex-1 flex flex-col intra-gap">
 		<ProductCartAndWishlistButtons showWishlist={false} />
