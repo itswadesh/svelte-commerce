@@ -110,12 +110,17 @@
 							autocomplete="new-password"
 						/>
 
-						<Button type="submit" class="w-full" disabled={isLoading} aria-label={isLoading ? 'Creating account...' : 'Create account'}>
+						<Button 
+							type="submit" 
+							class="w-full" 
+							disabled={isLoading || info.password !== info.confirmPassword}
+							aria-label={isLoading ? 'Creating account...' : info.password !== info.confirmPassword ? 'Passwords do not match' : 'Create account'}
+						>
 							{#if isLoading}
 								<LoaderIcon class="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
 								<span class="sr-only">Creating account...</span>
 							{/if}
-							{isLoading ? 'Creating account...' : 'Create account'}
+							{isLoading ? 'Creating account...' : info.password !== info.confirmPassword ? 'Passwords do not match' : 'Create account'}
 						</Button>
 					</form>
 
