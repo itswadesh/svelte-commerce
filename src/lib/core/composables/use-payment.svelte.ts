@@ -35,8 +35,11 @@ interface CartState {
 interface PaymentMethod {
 	img: any
 	name: string
+	code: string
 	apiKey?: string
 	isTest?: boolean
+	description?: string
+	badges?: string[]
 }
 
 // Declare affirm as global
@@ -50,7 +53,20 @@ declare global {
 
 export class PaymentModule {
 	cartState = getCartState() as CartState
-	SELECTED_PG_CODE: string = $state('')
+	private _selectedPgCode = ''
+	get SELECTED_PG_CODE(): string {
+		return this._selectedPgCode
+	}
+	set SELECTED_PG_CODE(value: string | undefined) {
+		this._selectedPgCode = value || ''
+	}
+	
+	// Helper method to safely get uppercase payment code
+	private getPaymentCode(): string {
+		const code = this.SELECTED_PG_CODE
+		if (!code) return ''
+		return typeof code.toUpperCase === 'function' ? code.toUpperCase() : String(code).toUpperCase()
+	}
 	listOfPaymentMethods: PaymentMethod[] = $state([])
 	paymentLoader = $state(false)
 	loadingForCart = $state(false)
@@ -143,7 +159,7 @@ export class PaymentModule {
 				this.listOfPaymentMethods = this.listOfPaymentMethods.filter((method: PaymentMethod) => method?.code?.toUpperCase?.() !== 'AFFIRMPAY')
 
 				// If Affirm was selected, reset selection
-				if (this.SELECTED_PG_CODE?.toUpperCase?.() === 'AFFIRMPAY') {
+				if (this.getPaymentCode() === 'AFFIRMPAY') {
 					this.SELECTED_PG_CODE = ''
 				}
 			}
@@ -162,7 +178,7 @@ export class PaymentModule {
 		if (!this.cartState) return
 
 		this.paymentLoader = true
-		if (this.SELECTED_PG_CODE?.toUpperCase?.() === 'RAZORPAY') {
+		if (this.getPaymentCode() === 'RAZORPAY') {
 			// Razorpay checkout
 			if (!this.razorpayReady) {
 				toast.error('Please wait till payment gateway is ready')
@@ -216,7 +232,7 @@ export class PaymentModule {
 					this.paymentLoader = false
 				}
 			}
-		} else if (this.SELECTED_PG_CODE?.toUpperCase?.() === 'AFFIRMPAY') {
+		} else if (this.getPaymentCode() === 'AFFIRMPAY') {
 			if (typeof affirm === 'undefined' || !affirm) {
 				toast.error('Affirm is not ready yet')
 			} else {
@@ -276,7 +292,7 @@ export class PaymentModule {
 					this.cartState?.restorePrevCart()
 				}
 			}
-		} else if (this.SELECTED_PG_CODE?.toUpperCase?.() === 'PHONEPE') {
+		} else if (this.getPaymentCode() === 'PHONEPE') {
 			// Phonepe checkout
 			try {
 				const pp: any = await checkoutService.checkoutPhonepe({
@@ -300,7 +316,7 @@ export class PaymentModule {
 			} finally {
 				this.paymentLoader = false
 			}
-		} else if (this.SELECTED_PG_CODE?.toUpperCase?.() === 'STRIPE') {
+		} else if (this.getPaymentCode() === 'STRIPE') {
 			try {
 				// Stripe chekout
 				const sp: any = await checkoutService.checkoutStripe({
@@ -318,7 +334,7 @@ export class PaymentModule {
 			} finally {
 				this.paymentLoader = false
 			}
-		} else if (this.SELECTED_PG_CODE?.toUpperCase?.() === 'PAYPAL') {
+		} else if (this.getPaymentCode() === 'PAYPAL') {
 			try {
 				const res: any = await checkoutService.checkoutPaypal({
 					cartId: this.cartState.cart.id,
@@ -335,7 +351,7 @@ export class PaymentModule {
 			} finally {
 				this.paymentLoader = false
 			}
-		} else if (this.SELECTED_PG_CODE?.toUpperCase?.() === 'COD') {
+		} else if (this.getPaymentCode() === 'COD') {
 			try {
 				// COD chekout
 				const cp: any = await checkoutService.checkoutCOD({
