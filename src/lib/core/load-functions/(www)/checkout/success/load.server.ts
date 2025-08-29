@@ -21,9 +21,9 @@ export const load: PageServerLoad = async ({ url, fetch }) => {
 
 		return { orders }
 	} catch (e: any) {
-		if (e?.message === 'failed') {
-			redirect(307, redirectUrl)
-		}
+		// if (e?.message === 'failed') {
+		// 	redirect(307, redirectUrl)
+		// }
 
 		return { orders: { data: [] } }
 	}
