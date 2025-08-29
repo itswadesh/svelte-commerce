@@ -10,11 +10,11 @@
 	<div class="flex items-center justify-center space-x-4 sm:space-x-12">
 		<!-- Step 1: Cart -->
 		<Button
-			variant="ghost"
+			variant="plain"
 			disabled={step === 1}
 			onclick={() => goto(appendOneTimeCartId('/checkout/cart'))}
 			class={cn(
-				'flex h-auto items-center p-0 font-normal hover:bg-transparent disabled:opacity-100',
+				'flex h-auto items-center p-0 font-normal disabled:opacity-100',
 				step === 1 ? 'text-primary' : 'text-inherit'
 			)}
 		>
@@ -33,7 +33,7 @@
 
 		<!-- Step 2: Address -->
 		<Button
-			variant="ghost"
+			variant="plain"
 			disabled={step === 1}
 			onclick={() => goto(appendOneTimeCartId('/checkout/address'))}
 			class={cn(
@@ -56,7 +56,7 @@
 
 		<!-- Step 3: Payment -->
 		<Button
-			variant="ghost"
+			variant="plain"
 			disabled={true}
 			class={cn(
 				'flex h-auto items-center p-0 font-normal hover:bg-transparent disabled:opacity-100',
