@@ -11,10 +11,10 @@
 
 	// Check if phone is required based on login type
 	const isPhoneRequired = page.data?.store?.isPhoneMandatory
-  const isEmailRequired = page.data?.store?.isEmailMandatory
+	const isEmailRequired = page.data?.store?.isEmailMandatory
 
 	const paymentModule = new PaymentModule()
-  const cartState = paymentModule.cartState
+	const cartState = paymentModule.cartState
 </script>
 
 <svelte:head>
@@ -47,16 +47,17 @@
 			<!-- Left Column -->
 			<div class="flex flex-col gap-4">
 				{#if paymentModule.shippingRates?.error?.message}
-					<div class="mb-4 text-red-500">
-						We currently deliver only to the following countries:
+					<div class="mb-4 border-red-400 bg-red-50 px-4 py-2 text-red-500 border">
+						We currently deliver only to 
 						{#each paymentModule.shippingRates?.error?.countriesDeliverable || [] as country, index}
 							<span class="font-semibold">{country}</span>{#if index !== paymentModule.shippingRates?.error?.countriesDeliverable?.length - 1},
 								{' '}
 							{/if}
-						{/each}
+						{/each}.
+						
 						{#if paymentModule.shippingRates?.error?.moreCountriesCount}
 							<span class="font-semibold"> and {paymentModule.shippingRates.error.moreCountriesCount} more</span>
-						{/if}. Your selected country is <span class="font-semibold">"{paymentModule.shippingRates?.error?.selectedCountry}"</span>.
+						{/if} Your selected country is <span class="font-semibold">"{paymentModule.shippingRates?.error?.selectedCountry}"</span>.
 					</div>
 				{/if}
 
@@ -72,10 +73,7 @@
 						<div class="">
 							{#each paymentModule.listOfPaymentMethods as method}
 								<label
-									class="mb-4 block h-20 cursor-pointer gap-2 rounded border px-8 py-4 transition-all duration-200 hover:bg-gray-50 {paymentModule.SELECTED_PG_NAME ===
-									method?.name
-										? 'border-2 border-primary'
-										: 'border'}"
+									class="mb-4 block h-20 cursor-pointer gap-2 rounded border px-8 py-4 transition-all duration-200 hover:bg-gray-50 {paymentModule.SELECTED_PG_CODE === method?.code ? 'border-2 border-primary' : 'border'}"
 								>
 									<div class="flex h-full items-center justify-between gap-4">
 										<div class="flex flex-1 items-center gap-3">
@@ -92,9 +90,9 @@
 										<input
 											type="radio"
 											name="paymentMethod"
-											value={method?.name}
-											checked={paymentModule.SELECTED_PG_NAME === method?.name}
-											onchange={() => (paymentModule.SELECTED_PG_NAME = method?.name)}
+											value={method?.code}
+											checked={paymentModule.SELECTED_PG_CODE === method?.code}
+											onchange={() => (paymentModule.SELECTED_PG_CODE = method?.code)}
 											class="focus:ring-primary-500 h-4 w-4 border-gray-300 text-primary"
 										/>
 									</div>
@@ -275,7 +273,7 @@
 									<Button
 										class="bottom-0 left-0 right-0 z-[45] w-full py-6 text-lg hover:bg-primary max-sm:fixed max-sm:h-16 max-sm:rounded-none max-sm:disabled:bg-gray-500"
 										onclick={paymentModule.placeOrder}
-										disabled={paymentModule.checkoutDisabled || paymentModule.SELECTED_PG_NAME === ''}
+										disabled={paymentModule.checkoutDisabled || !paymentModule.SELECTED_PG_CODE}
 									>
 										{#if paymentModule.paymentLoader}
 											<LoadingDots />
