@@ -10,7 +10,7 @@ let emblaNode: HTMLDivElement | null = $state(null)
 const newsTickerPlugin = $derived(page.data?.store?.plugins?.newsTicker)
 
 onMount(() => {
-	if (!emblaNode) return console.log('skipping slider')
+	if (!emblaNode) return console.log('.')
 	carouselApi = EmblaCarousel(
 		emblaNode,
 		{

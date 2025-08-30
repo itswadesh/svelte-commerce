@@ -35,6 +35,17 @@ export class Cart2State {
 	addToCartMessage = $state<string>('Add to cart')
 	showCheckout = $state<boolean>(false)
 	hasLoaded: Promise<void>
+
+	async setSelectedPaymentMethod(code: string) {
+		try {
+			const cartId = this.cart?.id
+			if (!cartId) return
+			const c = await cartService.updateCartPaymentMethod({ cartId, paymentMethod: code })
+			this.cart = c
+		} catch (e: any) {
+			toast.error(e?.message || 'Failed to save payment method')
+		}
+	}
 	retrieveCartId = () => {
 		const cartId = localStorage.getItem('cart_id') || null
 		return cartId
@@ -248,7 +259,7 @@ export class Cart2State {
 	}
 
 	async addOrUpdate({ productId, variantId, qty }: any) {
-		const line_item = this.cart?.lineItems?.find?.((item) => item?.productId === productId && item?.variantId === variantId)
+		const line_item = this.cart?.lineItems?.find?.(item => item?.productId === productId && item?.variantId === variantId)
 		if (line_item) {
 			await this.update({
 				qty: qty + line_item.qty,
