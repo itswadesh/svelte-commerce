@@ -271,7 +271,9 @@ const cartState = navModule.cartState
 														disabled={!!cartState.isUpdatingCart}
 														onclick={(e) => {
 															e.stopPropagation()
-															cartState.isOpen = false
+															if(cartState){
+																cartState.isOpen = false
+															}
 															goto('/checkout/cart')
 														}}
 														class="w-[48%]"

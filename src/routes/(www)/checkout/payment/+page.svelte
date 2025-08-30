@@ -268,12 +268,11 @@ const cartState = paymentModule.cartState
 										<p class="font-medium text-slate-700">Your order is secured with 256-bit encryption</p>
 									</div>
 								</div>
-{paymentModule.checkoutDisabled}---{paymentModule.checkoutDisabled} 000{paymentModule.SELECTED_PG_CODE}000
 								{#if (!isPhoneRequired || cartState?.cart?.phone) && (!isEmailRequired || cartState?.cart?.email) && (cartState?.cart?.shippingAddress || cartState?.cart?.shippingAddressId)}
 									<Button
 										class="bottom-0 left-0 right-0 z-[45] w-full py-6 text-lg hover:bg-primary disabled:!opacity-100 max-sm:fixed max-sm:h-16 max-sm:rounded-none max-sm:disabled:bg-gray-500"
 										onclick={paymentModule.placeOrder}
-										disabled={paymentModule.checkoutDisabled || !paymentModule.SELECTED_PG_CODE}
+										disabled={paymentModule.checkoutDisabled || !cartState.cart.payment_method}
 									>
 										{#if paymentModule.paymentLoader}
 											<LoadingDots />
