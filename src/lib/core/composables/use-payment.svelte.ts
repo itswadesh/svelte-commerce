@@ -14,6 +14,7 @@ interface Cart {
 	name?: string
 	phone?: string
 	email?: string
+	payment_method?: string | null
 	shippingAddress?: {
 		name?: string
 		phone?: string
@@ -22,6 +23,8 @@ interface Cart {
 		countryCode?: string
 	}
 	shippingAddressId?: string
+	// Index signature to allow additional properties
+	[prop: string]: unknown
 }
 
 interface CartState {
@@ -30,6 +33,7 @@ interface CartState {
 	setShippingRate: (params: { shippingRateId: string }) => Promise<void>
 	createSingleItemCheckoutSession: (params: { productId: string; variantId: string; qty: number }) => Promise<void>
 	restorePrevCart: () => Promise<void>
+	setSelectedPaymentMethod?: (code: string) => Promise<void> | void
 }
 
 interface PaymentMethod {
@@ -57,10 +61,14 @@ export class PaymentModule {
 	get SELECTED_PG_CODE(): string {
 		return this._selectedPgCode
 	}
+
 	set SELECTED_PG_CODE(value: string | undefined) {
 		this._selectedPgCode = value || ''
+		if (this.cartState?.cart) {
+			this.cartState.cart.payment_method = this._selectedPgCode || null
+		}
 	}
-	
+
 	// Helper method to safely get uppercase payment code
 	private getPaymentCode(): string {
 		const code = this.SELECTED_PG_CODE
@@ -95,15 +103,25 @@ export class PaymentModule {
 				if (shippingAddress && shippingAddress?.country !== 'USA' && shippingAddress?.countryCode !== 'US') {
 					this.listOfPaymentMethods = this.listOfPaymentMethods.filter((method: PaymentMethod) => method?.code?.toUpperCase?.() !== 'AFFIRMPAY')
 				}
-
 				if (this.listOfPaymentMethods.length === 0) {
 					this.showError = true
 					this.errorMessage = 'No payment methods available'
 					this.checkoutDisabled = true
-				} else if (this.listOfPaymentMethods.length === 1) {
-					this.SELECTED_PG_CODE = this.listOfPaymentMethods?.[0]?.code
-					this.showPaymentMethods = true
 				} else {
+					const savedCode = this.cartState?.cart?.payment_method as string | undefined
+					if (savedCode) {
+						const exists = this.listOfPaymentMethods.some((m: PaymentMethod) => m?.code?.toUpperCase?.() === savedCode.toUpperCase())
+						if (exists) {
+							this.SELECTED_PG_CODE = savedCode
+						}
+					}
+
+					if (!this.SELECTED_PG_CODE && this.listOfPaymentMethods.length === 1) {
+						const singleMethod = this.listOfPaymentMethods[0]
+						if (singleMethod?.code) {
+							this.SELECTED_PG_CODE = singleMethod.code
+						}
+					}
 					this.showPaymentMethods = true
 				}
 				if (this.listOfPaymentMethods.find((f: PaymentMethod) => f?.code?.toUpperCase?.() === 'RAZORPAY')) {
@@ -120,24 +138,20 @@ export class PaymentModule {
 				}
 				this.affirmPaymentMethod = this.listOfPaymentMethods.find((f: PaymentMethod) => f?.code?.toUpperCase?.() === 'AFFIRMPAY') || null
 				if (this.affirmPaymentMethod) {
-					// Only proceed with Affirm initialization if country is USA
 					if (shippingAddress?.country === 'USA' || shippingAddress?.countryCode === 'US') {
 						injectAffirm(this.affirmPaymentMethod.apiKey, this.affirmPaymentMethod.isTest)
 					}
 				}
-			}
-		})
-
-		onMount(async () => {
-			try {
-				const res: any = await couponService.listCoupons({})
-				if (res?.count > 0) {
-					this.showCouponInput = true
-					this.coupons = res?.data || []
+				try {
+					const res: any = await couponService.listCoupons({})
+					if (res?.count > 0) {
+						this.showCouponInput = true
+						this.coupons = res?.data || []
+					}
+				} catch (e: any) {
+					toast.error(e.message)
+				} finally {
 				}
-			} catch (e: any) {
-				toast.error(e.message)
-			} finally {
 			}
 		})
 
@@ -158,9 +172,13 @@ export class PaymentModule {
 			if (shippingAddress && shippingAddress?.country !== 'USA' && shippingAddress?.countryCode !== 'US') {
 				this.listOfPaymentMethods = this.listOfPaymentMethods.filter((method: PaymentMethod) => method?.code?.toUpperCase?.() !== 'AFFIRMPAY')
 
-				// If Affirm was selected, reset selection
 				if (this.getPaymentCode() === 'AFFIRMPAY') {
 					this.SELECTED_PG_CODE = ''
+					try {
+						if (this.cartState?.cart) {
+							;(this.cartState.cart as { payment_method?: string }).payment_method = ''
+						}
+					} catch (_) {}
 				}
 			}
 		})

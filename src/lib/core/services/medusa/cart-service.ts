@@ -10,7 +10,7 @@ export class CartService {
 		const res = await ApiService.get<Cart>(`/store/carts/${cartId}`)
 		return {
 			...res?.cart,
-			lineItems: res?.cart?.items?.map((item) => {
+			lineItems: res?.cart?.items?.map(item => {
 				return {
 					...item,
 					title: item.product_title
@@ -26,7 +26,7 @@ export class CartService {
 
 		return {
 			...res?.cart,
-			lineItems: res?.cart?.items?.map((item) => {
+			lineItems: res?.cart?.items?.map(item => {
 				return {
 					...item,
 					title: item.product_title
@@ -41,7 +41,7 @@ export class CartService {
 		console.log('cart', res)
 		return {
 			...res?.cart,
-			lineItems: res?.cart?.items?.map((item) => {
+			lineItems: res?.cart?.items?.map(item => {
 				return {
 					...item,
 					title: item.product_title
@@ -93,7 +93,7 @@ export class CartService {
 		}
 		return {
 			...res.cart,
-			lineItems: res?.cart?.items?.map((item) => {
+			lineItems: res?.cart?.items?.map(item => {
 				return {
 					...item,
 					title: item.product_title
@@ -129,7 +129,7 @@ export class CartService {
 
 		return {
 			...res?.cart,
-			lineItems: res?.cart?.items?.map((item) => {
+			lineItems: res?.cart?.items?.map(item => {
 				return {
 					...item,
 					title: item.product_title
@@ -145,7 +145,7 @@ export class CartService {
 
 		return {
 			...res?.cart,
-			lineItems: res?.cart?.items?.map((item) => {
+			lineItems: res?.cart?.items?.map(item => {
 				return {
 					...item,
 					title: item.product_title
@@ -158,7 +158,7 @@ export class CartService {
 		const res = await ApiService.delete<Cart>(`/store/carts/${cartId}/promotions/${promotionId}`)
 		return {
 			...res?.cart,
-			lineItems: res?.cart?.items?.map((item) => {
+			lineItems: res?.cart?.items?.map(item => {
 				return {
 					...item,
 					title: item.product_title
@@ -236,7 +236,7 @@ export class CartService {
 		const res = await ApiService.get(`/store/carts/${cartId}`)
 		return {
 			...res?.cart,
-			lineItems: res?.cart?.items?.map((item) => {
+			lineItems: res?.cart?.items?.map(item => {
 				return {
 					...item,
 					title: item.product_title
@@ -278,7 +278,7 @@ export class CartService {
 
 		return {
 			...res?.cart,
-			lineItems: res?.cart?.items?.map((item) => {
+			lineItems: res?.cart?.items?.map(item => {
 				return {
 					...item,
 					title: item.product_title
@@ -294,7 +294,7 @@ export class CartService {
 
 		return {
 			...res?.cart,
-			lineItems: res?.cart?.items?.map((item) => {
+			lineItems: res?.cart?.items?.map(item => {
 				return {
 					...item,
 					title: item.product_title
@@ -302,5 +302,18 @@ export class CartService {
 			})
 		}
 	}
-}
 
+	static async updateCartPaymentMethod({ cartId, paymentMethod }: { cartId: string; paymentMethod: string }) {
+		if (!cartId || cartId === undefined || cartId === 'undefined') {
+			cartId = localStorage.getItem('cart_id') || null
+		}
+
+		const res = await ApiService.post(`/store/carts/${cartId}`, {
+			payment_method: paymentMethod
+		})
+
+		return {
+			...res?.cart
+		}
+	}
+}
