@@ -11,7 +11,28 @@ import { getSettingState } from '$lib/core/stores/setting.svelte'
 import { deepCopy } from '$lib/core/utils'
 import { fireGTagEvent } from '$lib/core/utils/gtag'
 import { meilisearchService, productService, reviewService, wishlistService } from '@misiki/litekart-connector'
+import type { Product, Variant, Store } from '@misiki/litekart-connector'
 import { onMount } from 'svelte'
+interface ProductPageData {
+	product?: Product
+	store?: Store
+}
+
+interface StructuredData {
+	name?: string
+	image?: string[]
+	description?: string
+	sku?: string
+	brandName?: string
+	aggregateRating?: {
+		ratingValue?: number
+		reviewCount?: number
+	}
+	url?: string
+	priceCurrency?: string
+	price?: number
+	availability?: string
+}
 import { toast } from 'svelte-sonner'
 
 export class ProductState {

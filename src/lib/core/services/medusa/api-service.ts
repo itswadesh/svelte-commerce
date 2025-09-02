@@ -1,8 +1,8 @@
-import type { AxiosRequestConfig } from 'axios'
+import type { AxiosRequestConfig, AxiosError } from 'axios'
 import { axiosInstance } from './axios'
 
 export class ApiService {
-	private handleError(error: any) {
+	private handleError(error: AxiosError<any>) {
 		if (!error.response && !navigator.onLine) {
 			throw { message: 'Please check your internet connection and try again' }
 		}
@@ -27,7 +27,7 @@ export class ApiService {
 			// Return the full response object because ProductService is expecting the full response object with response.data.products
 			return data
 		} catch (e: unknown) {
-			throw new ApiService().handleError(e)
+			throw new ApiService().handleError(e as AxiosError<any>)
 		}
 	}
 
@@ -37,7 +37,7 @@ export class ApiService {
 			const { data } = await api.post<T>(url, payload, config)
 			return data
 		} catch (e: unknown) {
-			throw new ApiService().handleError(e)
+			throw new ApiService().handleError(e as AxiosError<any>)
 		}
 	}
 
@@ -47,7 +47,7 @@ export class ApiService {
 			const { data } = await api.put<T>(url, payload, config)
 			return data
 		} catch (e: unknown) {
-			throw new ApiService().handleError(e)
+			throw new ApiService().handleError(e as AxiosError<any>)
 		}
 	}
 
@@ -57,7 +57,7 @@ export class ApiService {
 			const { data } = await api.delete<T>(url, config)
 			return data
 		} catch (e: unknown) {
-			throw new ApiService().handleError(e)
+			throw new ApiService().handleError(e as AxiosError<any>)
 		}
 	}
 
@@ -67,7 +67,7 @@ export class ApiService {
 			const { data } = await api.patch<T>(url, payload, config)
 			return data
 		} catch (e: unknown) {
-			throw new ApiService().handleError(e)
+			throw new ApiService().handleError(e as AxiosError<any>)
 		}
 	}
 }

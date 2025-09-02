@@ -1,4 +1,4 @@
-import { getContext, onDestroy, onMount, setContext } from 'svelte'
+import { getContext, onMount, setContext } from 'svelte'
 import { toast } from 'svelte-sonner'
 import { cartService } from '$lib/core/services'
 import type { Cart } from '$lib/core/types'
@@ -27,10 +27,57 @@ const initialCart: Cart = {
 	metadata: null,
 	collectionId: null
 }
+
+interface AddToCartParams {
+	qty: number
+	productId: string
+	variantId: string
+	lineId?: string
+}
+
+interface UpdateCartParams {
+	qty: number
+	lineId: string
+	productId: string
+	variantId: string
+	isSelectedForCheckout?: boolean
+}
+
+interface UpdateEmailParams {
+	email: string
+	phone?: string
+}
+
+interface UpdateShippingAddressParams {
+	shippingAddress: any
+	billingAddress?: any
+	isBillingAddressSameAsShipping?: boolean
+}
+
+interface AddOrUpdateParams {
+	productId: string
+	variantId: string
+	qty: number
+}
+
+interface RemoveParams {
+	cartId: string
+	lineId: string
+}
+
+interface SetShippingRateParams {
+	shippingRateId: string
+}
+
+interface CreateSingleItemCheckoutParams {
+	productId: string
+	variantId: string
+	qty: number
+}
 export class Cart2State {
 	cart = $state<Cart>(initialCart)
 	isUpdatingCart = $state<boolean>(true)
-	updatingItem = $state<Record<string, any>>({})
+	updatingItem = $state<Record<string, boolean>>({})
 	isOpen = $state<boolean>(false)
 	addToCartMessage = $state<string>('Add to cart')
 	showCheckout = $state<boolean>(false)
@@ -42,8 +89,8 @@ export class Cart2State {
 			if (!cartId) return
 			const c = await cartService.updateCartPaymentMethod({ cartId, paymentMethod: code })
 			this.cart = c
-		} catch (e: any) {
-			toast.error(e?.message || 'Failed to save payment method')
+		} catch (e: unknown) {
+			toast.error(e instanceof Error ? e.message : 'Failed to save payment method')
 		}
 	}
 	retrieveCartId = () => {
@@ -94,7 +141,7 @@ export class Cart2State {
 		this.isUpdatingCart = false
 	}
 
-	async add({ qty, productId, variantId, lineId }: any) {
+	async add({ qty, productId, variantId, lineId }: AddToCartParams) {
 		// console.log('🚀 ~ CartState ~ add:', productId, variantId, qty, lineId)
 		// if (this.cart.lineItems.some((item) => item.productId === product.id)) {
 		//   this.cart.lineItems.find((item) => item.productId === product.id).qty += qty
@@ -102,9 +149,9 @@ export class Cart2State {
 		//   this.cart.lineItems.push({ qty, product, variant })
 		// }
 		if (!this.cart?.lineItems) this.cart = { ...this.cart, lineItems: [] }
-		let cart_item = this.cart.lineItems.find((item: any) => item?.id === lineId)
+		let cart_item = this.cart.lineItems.find((item) => item?.id === lineId)
 		if (!cart_item) {
-			cart_item = this.cart.lineItems.find((item: any) => {
+			cart_item = this.cart.lineItems.find((item) => {
 				item?.productId === productId && item?.variantId === variantId
 			})
 			lineId = cart_item?.id
@@ -116,11 +163,11 @@ export class Cart2State {
 		}
 		// this.isUpdatingCart = true
 		this.addToCartMessage = 'Adding to cart...'
-		this.updatingItem[lineId] = true
+		if (lineId) this.updatingItem[lineId] = true
 		try {
 			const c = await cartService.addToCart({
 				cartId: this.cart.id,
-				lineId: lineId,
+				lineId: lineId || null,
 				qty,
 				productId: productId,
 				variantId: variantId
@@ -133,16 +180,16 @@ export class Cart2State {
 				this.addToCartMessage = 'Add to cart'
 				this.showCheckout = false
 			}, 5000)
-		} catch (e) {
-			toast.error(e?.message)
+		} catch (e: unknown) {
+			toast.error(e instanceof Error ? e.message : 'Add to cart failed')
 			this.addToCartMessage = 'Add to cart'
 		} finally {
 			// this.isUpdatingCart = false
-			this.updatingItem[lineId] = false
+			if (lineId) this.updatingItem[lineId] = false
 		}
 	}
 
-	async update({ qty, lineId, productId, variantId, isSelectedForCheckout = true }: any) {
+	async update({ qty, lineId, productId, variantId, isSelectedForCheckout = true }: UpdateCartParams) {
 		// console.log('🚀 ~ CartState ~ update:', { lineId, qty, productId, variantId })
 		try {
 			// this.isUpdatingCart = true
@@ -165,8 +212,8 @@ export class Cart2State {
 				this.addToCartMessage = 'Add to cart'
 				this.showCheckout = false
 			}, 5000)
-		} catch (e) {
-			toast.error(e?.message)
+		} catch (e: unknown) {
+			toast.error(e instanceof Error ? e.message : 'Update cart failed')
 			this.addToCartMessage = 'Add to cart'
 		} finally {
 			// this.isUpdatingCart = false
@@ -187,16 +234,16 @@ export class Cart2State {
 	//   }
 	// }
 
-	async updateEmail({ email, phone }: any) {
+	async updateEmail({ email, phone }: UpdateEmailParams) {
 		// console.log('🚀 ~ CartState ~ update:', email)
 		try {
 			this.isUpdatingCart = true
 			const c = await cartService.updateCart2({ email, phone })
 			// console.log('🚀 ~ CartState ~ add ~ c:', c)
 			this.cart = c
-		} catch (e) {
-			toast.error(e.message)
-			throw e.message
+		} catch (e: unknown) {
+			toast.error(e instanceof Error ? e.message : 'Update email failed')
+			throw e instanceof Error ? e.message : String(e)
 		} finally {
 			this.isUpdatingCart = false
 		}
@@ -214,10 +261,10 @@ export class Cart2State {
 			// console.log('🚀 ~ CartState ~ res ~ c:', res)
 			this.cart = c
 			return c
-		} catch (e) {
+		} catch (e: unknown) {
 			// console.log(e)
-			toast.error(e?.message)
-			throw e.message
+			toast.error(e instanceof Error ? e.message : 'Apply coupon failed')
+			throw e instanceof Error ? e.message : String(e)
 		} finally {
 			this.isUpdatingCart = false
 		}
@@ -228,15 +275,15 @@ export class Cart2State {
 			this.isUpdatingCart = true
 			const c = await cartService.removeCoupon()
 			this.cart = c
-		} catch (e: any) {
-			toast.error(e.message)
-			throw e.message
+		} catch (e: unknown) {
+			toast.error(e instanceof Error ? e.message : 'Remove coupon failed')
+			throw e instanceof Error ? e.message : String(e)
 		} finally {
 			this.isUpdatingCart = false
 		}
 	}
 
-	async updateShippingAddress({ shippingAddress, billingAddress, isBillingAddressSameAsShipping = true }: any) {
+	async updateShippingAddress({ shippingAddress, billingAddress, isBillingAddressSameAsShipping = true }: UpdateShippingAddressParams) {
 		// console.log('🚀 ~ CartState ~ updateBillingAddress:', billingAddress)
 		// console.log('🚀 ~ CartState ~ updateShippingAddress:', shippingAddress)
 		try {
@@ -250,15 +297,15 @@ export class Cart2State {
 
 			const cart = await cartService.getCartByCartId(c.id)
 			this.cart = { ...cart }
-		} catch (e) {
-			toast.error(e.message)
-			throw e.message
+		} catch (e: unknown) {
+			toast.error(e instanceof Error ? e.message : 'Update shipping address failed')
+			throw e instanceof Error ? e.message : String(e)
 		} finally {
 			this.isUpdatingCart = false
 		}
 	}
 
-	async addOrUpdate({ productId, variantId, qty }: any) {
+	async addOrUpdate({ productId, variantId, qty }: AddOrUpdateParams) {
 		const line_item = this.cart?.lineItems?.find?.(item => item?.productId === productId && item?.variantId === variantId)
 		if (line_item) {
 			await this.update({
@@ -283,16 +330,16 @@ export class Cart2State {
 		// }
 	}
 
-	async remove({ cartId, lineId }: any) {
+	async remove({ cartId, lineId }: RemoveParams) {
 		try {
 			this.isUpdatingCart = true
 			const c = await cartService.removeCart({ cartId, lineId })
 			// console.log('🚀 ~ CartState ~ removed:', c)
 			this.cart = c
-		} catch (e) {
+		} catch (e: unknown) {
 			// console.log(e)
-			toast.error(e?.message)
-			throw e.message
+			toast.error(e instanceof Error ? e.message : 'Remove item failed')
+			throw e instanceof Error ? e.message : String(e)
 		} finally {
 			this.isUpdatingCart = false
 			this.showCheckout = false
@@ -306,27 +353,27 @@ export class Cart2State {
 			localStorage.removeItem('cart_id')
 			// console.log('🚀 ~ CartState ~ removed:', c)
 			this.cart = initialCart
-		} catch (e) {
-			toast.error(e.message)
-			throw e.message
+		} catch (e: unknown) {
+			toast.error(e instanceof Error ? e.message : 'Clear cart failed')
+			throw e instanceof Error ? e.message : String(e)
 		} finally {
 			this.isUpdatingCart = false
 		}
 	}
 
-	async setShippingRate({ shippingRateId }: any) {
+	async setShippingRate({ shippingRateId }: SetShippingRateParams) {
 		try {
 			this.isUpdatingCart = true
 			const c = await cartService.updateShippingRate({ shippingRateId, cartId: this.cart.id })
 			this.cart = c
-		} catch (e) {
-			throw e.message
+		} catch (e: unknown) {
+			throw e instanceof Error ? e.message : String(e)
 		} finally {
 			this.isUpdatingCart = false
 		}
 	}
 
-	async createSingleItemCheckoutSession({ productId, variantId, qty }: any) {
+	async createSingleItemCheckoutSession({ productId, variantId, qty }: CreateSingleItemCheckoutParams) {
 		try {
 			this.isUpdatingCart = true
 
@@ -346,9 +393,9 @@ export class Cart2State {
 			})
 
 			this.cart = cart
-		} catch (error) {
+		} catch (error: unknown) {
 			console.log('🚀 ~ CartState ~ createSingleItemCheckoutSession ~ error:', error)
-			toast.error(error?.message)
+			toast.error(error instanceof Error ? error.message : 'Create checkout session failed')
 		} finally {
 			this.isUpdatingCart = false
 		}
@@ -363,9 +410,9 @@ export class Cart2State {
 				localStorage.removeItem('prev_cart_id')
 			}
 			this.cart = initialCart
-		} catch (error) {
+		} catch (error: unknown) {
 			console.log('🚀 ~ CartState ~ resetSingleCartSession ~ error:', error)
-			toast.error(error?.message || 'Error resetting cart')
+			toast.error(error instanceof Error ? error.message : 'Error resetting cart')
 		} finally {
 			this.isUpdatingCart = false
 		}
@@ -381,9 +428,9 @@ export class Cart2State {
 				localStorage.setItem('cart_id', prev_cart_id)
 				localStorage.removeItem('prev_cart_id')
 			}
-		} catch (error) {
+		} catch (error: unknown) {
 			console.log('🚀 ~ CartState ~ restorePrevCart ~ error:', error)
-			toast.error(error?.message || 'Error restoring cart')
+			toast.error(error instanceof Error ? error.message : 'Error restoring cart')
 		} finally {
 			this.isUpdatingCart = false
 		}
