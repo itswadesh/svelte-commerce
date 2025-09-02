@@ -10,7 +10,7 @@
 
 	$effect(() => {
 		if (isActive && gtagId && typeof document !== 'undefined') {
-			// console.log('GTM initializing with ID:', gtagId)
+
 
 			// Clean up existing scripts to avoid duplicates
 			const existingLoader = document.querySelector(`script[src="https://www.googletagmanager.com/gtm.js?id=${gtagId}"]`)

@@ -49,7 +49,7 @@
 			// For development, return sample data
 			// In production, uncomment the following line:
 			const reelsdata = await reelsService.list()
-			// console.log('Reels:', reelsdata.data)
+
 			reels = reelsdata.data
 		} catch (e) {
 			console.error('Error loading reels:', e)

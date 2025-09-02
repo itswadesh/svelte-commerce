@@ -411,4 +411,3 @@ const deleteAddress = async ({ request, cookies, locals, fetch }) => {
 }
 
 export const actions = { saveAddress, editAddress, deleteAddress }
-

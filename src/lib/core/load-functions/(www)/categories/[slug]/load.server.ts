@@ -195,9 +195,9 @@ export const load: PageServerLoad = async ({ params }) => {
     const category = categoryDetails[slug]
 
     // const fetchAllCategories = await CategoryService.fetchAllCategories()
-    // console.log("fetchAllCategories: ", fetchAllCategories);
+    // 
     // const category =await CategoryService.fetchCategory("category_01JKQG041AQTKYK1P529FTJXQ4")
-    // console.log("Category: ", category);
+    // 
 
     if (!category) {
       throw error(404, 'Category not found')

@@ -20,10 +20,10 @@ export class RegionState {
 				this.isUpdatingRegion = true
 				const id = '' // this.retrieveRegionId()
 				// const s = (this.region = await regionService.getRegionByRegionId(id))
-				// console.log(s)
+
 				await this.listSettings()
 			} catch (e) {
-				// console.log('🚀 ~ CartState ~ error ~ e:', e)
+
 			} finally {
 			}
 			this.isUpdatingRegion = false
@@ -50,7 +50,7 @@ export class RegionState {
 			const regions = [{}]
 			this.regions = regions
 		} catch (e) {
-			// console.log(`Error fetchRegion: ${e}`)
+
 		}
 	}
 }
