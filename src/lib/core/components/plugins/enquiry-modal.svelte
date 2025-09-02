@@ -34,7 +34,7 @@
 
 	async function handleSubmit() {
 		// TODO: Implement enquiry submission logic
-		// console.log({ name, email, phone, message, productId })
+
 		try {
       loading = true
 			await enquiryService.create({ name, email, phone, message, productId })

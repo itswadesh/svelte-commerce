@@ -33,7 +33,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			throw new Error(`Unable to retrieve hostname from URL. ${url.hostname}`)
 		}
 		if (!url.pathname.startsWith('/api')) {
-			// console.log(`PUBLIC_LITEKART_STORE_ID = ${storeId}, PUBLIC_LITEKART_DOMAIN = ${env.PUBLIC_LITEKART_DOMAIN}, URL.HOSTNAME = ${url.hostname}`)
+
 			const storeService = new StoreService(event.fetch)
 			const storeDetails = await storeService.getStoreByIdOrDomain({ storeId, domain })
 			if (storeDetails?.id && storeIdFromCookie !== storeDetails?.id) {
@@ -67,7 +67,7 @@ export function handleError({ error, event }) {
 			status: simplifiedError.status
 		}
 	}
-	console.log(error, 'error')
+	
 
 	return {
 		message: error?.message || 'An unknown error occurred',

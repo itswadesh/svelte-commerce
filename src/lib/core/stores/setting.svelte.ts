@@ -130,7 +130,7 @@ export class settingState {
 			// 	console.error('Failed to fetch store:', results[6].reason)
 			// }
 		} catch (e) {
-			// console.log(e)
+
 		}
 	}
 }

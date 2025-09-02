@@ -243,7 +243,7 @@ export const fireGTagEvent = (event_name: string, data: any) => {
 			default:
 				// @ts-ignore
 				gtag('event', event_name, data)
-				// console.log('event_name', event_name, data)
+
 				break
 		}
 	}

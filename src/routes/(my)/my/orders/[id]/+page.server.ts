@@ -16,7 +16,7 @@
 // 			return { order, orderTracking }
 // 		}
 // 	} catch (e) {
-// 		console.log(e)
+
 // 		redirect(307, '/?show_auth=true&login=true')
 // 	}
 // }

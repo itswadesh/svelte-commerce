@@ -371,7 +371,7 @@ const isPhoneOk = $derived(addressModule.isPhoneOk)
                         valueField="code"
                         optionSelected={(v: any) => {
                           currentAddress.countryCode = v;
-                          console.log("🚀 ~ v:", v);
+                          
                           handleDetailsChange();
                         }}
                       />

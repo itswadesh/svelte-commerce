@@ -20,11 +20,11 @@
 		try {
 			if (page.params.id == 'new') {
 				address = await addressService.saveAddress(address)
-				// console.log(address)
+
 				return
 			}
 			address = await addressService.editAddress(page.params.id, address)
-			// console.log(address)
+
 		} catch (e: any) {
 			toast.error(e.message)
 		} finally {
@@ -56,7 +56,7 @@
 		try {
 			if (page.params.id == 'new') return
 			let res = await addressService.fetchAddress(page.params.id)
-			// console.log(res)
+
 			address = res
 		} catch (e) {}
 	}
