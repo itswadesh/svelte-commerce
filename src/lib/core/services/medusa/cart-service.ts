@@ -1,5 +1,23 @@
 import type { Address, Cart } from '$lib/core/types'
 import { ApiService } from './api-service'
+interface UpdateCart2Params {
+	cartId?: string
+	email?: string
+	billingAddress?: Address
+	customer_id?: string
+	shippingAddress?: Address
+	phone?: string
+	isBillingAddressSameAsShipping?: boolean
+}
+
+interface UpdateCartParams {
+	qty: number
+	cartId?: string
+	lineId?: string | null
+	productId: string
+	variantId: string
+	isSelectedForCheckout?: boolean
+}
 const REGION_ID = ''
 
 export class CartService {
