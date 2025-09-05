@@ -90,7 +90,7 @@
 
 						<div
 							in:fly={{ y: 20, duration: 400, delay: i * 50 }}
-							class="overflow-hidden rounded-2xl border border-gray-100 bg-white transition-all duration-300 hover:border-gray-200 hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)]"
+							class="overflow-hidden rounded-md border border-gray-100 bg-background"
 						>
 							<!-- Order Header -->
 							<div class="border-b border-gray-100 bg-gray-50/30 p-6">
@@ -147,12 +147,12 @@
 							</div>
 
 							<!-- Order Items -->
-							<div class="divide-y divide-gray-100 bg-white">
+							<div class="divide-y divide-gray-100 bg-background">
 								{#each order.lineItems as item}
-									<div class="group flex items-center gap-8 p-6 transition-colors hover:bg-gray-50/30">
+									<div class="group flex items-center intra-gap px-2">
 										<a
 											href="/my/orders/{order.parentOrderNo}"
-											class="relative h-24 w-20 shrink-0 overflow-hidden border border-gray-100 bg-gray-50 transition-transform duration-500 group-hover:scale-105"
+											class="relative h-24 w-20 shrink-0 overflow-hidden border border-gray-100 bg-gray-50 transition-transform duration-500"
 										>
 											{#if item.thumbnail}
 												<LazyImg src={item.thumbnail} alt={item.title} class="h-full w-full object-cover" />

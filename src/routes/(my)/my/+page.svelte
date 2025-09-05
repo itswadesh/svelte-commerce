@@ -40,7 +40,7 @@
 
 <div class="mx-auto max-w-7xl px-0 md:py-8 md:py-12">
 	{#if userState?.user}
-		<div class="mb-12 rounded-lg border border-gray-200 bg-white p-6 shadow-sm md:p-8">
+		<div class="mb-12 rounded-md border border-gray-200 bg-white p-6 shadow-sm md:p-8">
 			<div class="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
 				<div class="flex items-center gap-4">
 					<div class="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 text-2xl font-bold text-primary">
@@ -80,7 +80,7 @@
 		{#each importOptions as option}
 			<a
 				href={option.href}
-				class="flex flex-col rounded-md border border-gray-200 bg-white p-6 shadow-sm transition-all hover:border-primary/30 hover:bg-gray-50/50 hover:shadow-md"
+				class="flex flex-col rounded-md border border-gray-200 bg-white p-6 shadow-sm transition-all"
 			>
 				<div class="mb-4 flex h-12 w-12 items-center justify-center rounded bg-gray-100 text-gray-700 transition-colors group-hover:bg-primary/10 group-hover:text-primary">
 					<svelte:component this={option.icon} class="h-6 w-6" />
