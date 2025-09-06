@@ -43,7 +43,7 @@ export class MyAddressesModule {
 			await this.paginateAddress()
 		} catch (e) {
 			// also happens when address is used in cart
-			toast.error('Failed to delete address')
+			toast.error(e.message || 'Failed to delete address')
 			console.error('Error deleting address:', e)
 		}
 	}
