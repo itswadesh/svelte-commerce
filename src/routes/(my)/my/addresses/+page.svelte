@@ -47,7 +47,7 @@
 				{#each addressesModule.addresses?.data as address, i (address.id)}
 					<div
 						in:fly={{ y: 20, duration: 400, delay: i * 50 }}
-						class="group relative flex flex-col overflow-hidden rounded-md border border-gray-200 bg-white transition-all duration-300 hover:border-primary/30 hover:shadow-md"
+						class="group relative flex flex-col overflow-hidden rounded-md border border-gray-200 bg-white transition-all duration-300 "
 					>
 						<!-- Address Details -->
 						<div class="flex flex-1 flex-col p-6 pb-4">

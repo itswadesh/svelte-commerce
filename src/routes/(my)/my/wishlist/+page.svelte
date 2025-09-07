@@ -67,7 +67,7 @@
 								<LazyImg
 									src={item?.product?.thumbnail}
 									alt={item?.product?.title}
-									class="w-full rounded-md object-cover transition-transform duration-500 group-hover:scale-105"
+									class="w-full rounded-md object-cover transition-transform duration-500"
 									style="aspect-ratio: 4 / 5; border-radius: 8px;"
 								/>
 							</a>
