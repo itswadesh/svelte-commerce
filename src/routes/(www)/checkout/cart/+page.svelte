@@ -368,7 +368,7 @@
 														{/if}
 													</div>
 													{#if item.mrp > item.price}
-														<p class="text-xs font-medium tracking-tight text-green-600">
+														<p class="text-xs font-medium tracking-tight text-red-900">
 															You saved {formatPrice((item.mrp * item.qty) - (item.price * item.qty), page?.data?.store?.currency?.code)}
 														</p>
 													{:else}
@@ -445,7 +445,7 @@
 														{/if}
 													</div>
 													{#if item.mrp > item.price}
-														<p class="text-xs font-medium tracking-tight text-green-600">
+														<p class="text-xs font-medium tracking-tight text-success">
 															You saved {formatPrice((item.mrp * item.qty) - (item.price * item.qty), page?.data?.store?.currency?.code)}
 														</p>
 													{:else}
