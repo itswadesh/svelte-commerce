@@ -9,7 +9,7 @@
 
 <NewsletterRenderer bind:email>
 	{#snippet content({ loadingForSubmitting, subscribeToNewsletter })}
-		<div class="flex flex-col gap-5">
+		<div class="flex flex-col gap-2 sm:gap-5">
 			<div class="space-y-1.5">
 				<h3 class="text-sm font-bold uppercase tracking-widest text-foreground">Newsletter</h3>
 				<p class="text-sm text-muted-foreground">Subscribe to get the latest arrivals and offers.</p>
