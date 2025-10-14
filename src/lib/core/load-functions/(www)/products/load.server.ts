@@ -17,4 +17,3 @@ export const load: PageServerLoad = async ({ cookies, url, request, parent }) =>
 		return { page: {} }
 	}
 }
-

@@ -1,21 +1,21 @@
 <script lang="ts">
-	import { page } from '$app/state'
-	import Select from '$lib/components/form/select.svelte'
-	import { goto } from '$app/navigation'
-	import ProductCard from '$lib/components/product-catalogue/product-card.svelte'
-	import DesktopFilter from '$lib/components/product-catalogue/desktop-filter.svelte'
-	import MobileFilter from '$lib/components/product-catalogue/mobile-filter.svelte'
-	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte'
-	import Pagination from '$lib/components/common/pagination.svelte'
-	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
-	import type { PageData } from '$lib/core/types'
-	import Breadcrumb from '$lib/components/ui/breadcrumb.svelte'
-	import { selectSort } from '$lib/core/utils'
-	import { sortOptions } from '$lib/config'
+import { page } from '$app/state'
+import Select from '$lib/components/form/select.svelte'
+import { goto } from '$app/navigation'
+import ProductCard from '$lib/components/product-catalogue/product-card.svelte'
+import DesktopFilter from '$lib/components/product-catalogue/desktop-filter.svelte'
+import MobileFilter from '$lib/components/product-catalogue/mobile-filter.svelte'
+import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte'
+import Pagination from '$lib/components/common/pagination.svelte'
+import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
+import type { PageData } from '$lib/core/types'
+import Breadcrumb from '$lib/components/ui/breadcrumb.svelte'
+import { selectSort } from '$lib/core/utils'
+import { sortOptions } from '$lib/config'
 
-	let { data } = $props<{ data: PageData }>()
-	let selectedSort = $state(page.url.searchParams.get('sort') || 'popularity:desc')
-	let loading = $state(false)
+let { data } = $props<{ data: PageData }>()
+let selectedSort = $state(page.url.searchParams.get('sort') || 'popularity:desc')
+let loading = $state(false)
 </script>
 
 <SeoHeader
