@@ -1,16 +1,37 @@
 <script lang="ts">
-	import { Star, StarHalf } from '@lucide/svelte'
+	import { Star, StarHalf, HeartIcon, LoaderCircle } from '@lucide/svelte'
 	import { page } from '$app/state'
 	import { Button } from '$lib/components/ui/button'
+	import { useProductState } from '$lib/core/composables/index.js'
 
 	const { product } = $props()
+	const productState = useProductState()
 </script>
 
 <div class="relative sm:border-b sm:border-gray-100">
-	<div class="flex items-start justify-between">
-		<h1 class="text-md font-bold uppercase tracking-tight text-gray-900 dark:text-white sm:text-xl">
+	<div class="flex items-center justify-between gap-4">
+		<h1 class="text-md flex-1 font-bold uppercase tracking-tight text-gray-900 dark:text-white sm:text-xl">
 			{product.title}
 		</h1>
+
+		{#if productState.wishlistPluginEnabled}
+			<Button
+				variant="plain"
+				class="h-9 w-9 p-0 sm:hidden"
+				onclick={productState.handleWishlistClick}
+				aria-label="Add to wishlist"
+			>
+				{#if productState.wishlistLoading}
+					<LoaderCircle class="h-6 w-6 animate-spin text-primary" />
+				{:else}
+					<HeartIcon
+						class="h-6 w-6 {productState.wishlisted
+							? 'scale-110 fill-red-500 text-red-500'
+							: 'text-gray-900'} transition-transform duration-300"
+					/>
+				{/if}
+			</Button>
+		{/if}
 	</div>
 
 	{#if product.subtitle}
