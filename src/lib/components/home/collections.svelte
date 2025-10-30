@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Product from '$lib/components/product-catalogue/product-card2.svelte'
+	import Product from '$lib/components/product-catalogue/product-card.svelte'
 	import { collectionService } from '$lib/core/services/index.js'
 	import { Carousel, CarouselContent, CarouselItem } from '$lib/components/ui/carousel/index.js'
 	import CarouselPrevious from '$lib/components/ui/carousel/carousel-previous.svelte'
@@ -49,18 +49,7 @@
 											<CarouselItem class="basis-full pl-1 mobiles:basis-[48%] sm:basis-[33%] md:basis-[25%] lg:basis-[20%] xl:basis-1/6">
 												<div class="h-full">
 													<Product
-														product={{
-															id: prod?.products.id,
-															slug: prod?.products.slug,
-															thumbnail: prod?.products.thumbnail,
-															price: prod?.products.price,
-															mrp: prod?.products.mrp,
-															title: prod?.products.title,
-															vendor: prod?.products.vendor,
-															tag: prod?.products.tag,
-															variants: prod?.products.variants
-														}}
-														aspectRatio="square"
+														product={prod.products}
 														{displayProduct}
 													/>
 												</div>
