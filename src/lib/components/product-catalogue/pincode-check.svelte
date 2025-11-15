@@ -37,9 +37,9 @@
 
 			{#if !showPincode}
 				<Button
-					variant="ghost"
+					variant="plain"
 					onclick={toggleShowPincode}
-					class="flex min-h-[44px] items-center p-0 font-medium hover:bg-transparent"
+					class="flex min-h-[44px] items-center justify-start p-0 font-medium hover:bg-transparent"
 				>
 					<span class="mr-2">Check Availability in your area</span>
 					<MapPin class="size-4 text-primary" />
