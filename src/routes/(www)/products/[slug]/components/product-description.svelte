@@ -10,9 +10,9 @@
 	let isOpen = $state(false)
 </script>
 
-<div class="border-t border-gray-100">
 	{#if productState.selectedVariant?.description || data?.product?.description}
-	  <button class="flex w-full items-center justify-between gap-2 py-5 text-sm font-bold uppercase text-gray-900" onclick={() => (isOpen = !isOpen)}>
+<div class="border-b border-gray-300">
+	  <button class="flex w-full items-center justify-between gap-2 py-5 text-base font-bold text-gray-900" onclick={() => (isOpen = !isOpen)}>
 			<span>Product Description</span>
 
 			{#if isOpen}
@@ -31,5 +31,5 @@
 				</div>
 			</div>
 		{/if}
-	{/if}
 </div>
+	{/if}

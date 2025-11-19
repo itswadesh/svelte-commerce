@@ -29,15 +29,15 @@
 		<Button
 			variant="outline"
 			size="icon"
-			class="h-full w-16 lg:w-20"
+			class="h-full w-20 lg:w-24"
 			onclick={productState.handleWishlistClick}
 			aria-label="Add to wishlist"
 		>
 			{#if productState.wishlistLoading}
-				<LoaderCircle class="h-6 w-6 animate-spin text-primary" />
+				<LoaderCircle class="h-7 w-7 animate-spin text-primary" />
 			{:else}
 				<HeartIcon
-					class="h-6 w-6 {productState.wishlisted
+					class="h-7 w-7 {productState.wishlisted
 						? 'scale-110 fill-red-500 text-red-500'
 						: 'text-gray-900'} transition-transform duration-300"
 				/>
@@ -96,7 +96,7 @@
 		{:else}
 			<div class="flex h-full w-full gap-2">
 				<Button
-					class="h-full flex-1 {productState
+					class="h-full text-base flex-1 uppercase font-semibold {productState
 						.cartState.addToCartMessage == 'Added to cart'
 						? 'bg-green-600 hover:bg-green-700'
 						: ''}"
@@ -108,9 +108,9 @@
 						Out of Stock
 					{:else if productState.cartState.showCheckout}
 						Go to bag
-						<ChevronRight class="ml-2 h-4 w-4" />
+						<ChevronRight class="h-4 w-4" />
 					{:else}
-						<ShoppingCart class="mr-2 h-4 w-4" />
+						<ShoppingCart class="h-4 w-4" />
 						Add to bag
 					{/if}
 				</Button>
