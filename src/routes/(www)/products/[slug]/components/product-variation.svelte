@@ -11,7 +11,7 @@
 		{#each productState.productOptions || [] as option}
 			<div class="flex flex-col gap-3">
 				<div class="flex items-center justify-between">
-					<span class="text-xs font-bold uppercase tracking-widest text-gray-900 dark:text-gray-100">{option.title}</span>
+					<span class="text-xs font-bold uppercase  text-gray-900 dark:text-gray-100">{option.title}</span>
 					{#if option.type === 'Size'}
 						<Button variant="link" class="h-auto p-0">Size Guide</Button>
 					{/if}
