@@ -20,7 +20,7 @@
 						<a
 							href={category.link || '/' + category.slug}
 							aria-label="Visit {category.name}"
-							class="relative flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap py-3 text-xs font-bold uppercase tracking-widest text-gray-500 transition-all duration-300 hover:text-primary active:scale-95
+							class="relative flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap py-3 text-sm font-semibold uppercase  text-gray-900 transition-all duration-300 hover:text-gray-900 active:scale-95
 								{selectedCategory === category.name ? 'text-primary after:scale-x-100' : 'after:scale-x-0'}
 								after:ease-out-expo after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:transition-transform after:duration-300 hover:after:scale-x-100"
 							style="font-family: 'Montserrat', sans-serif;"
@@ -54,8 +54,7 @@
 										<div class="flex flex-col gap-5">
 											<a
 												href={c.link || '/' + c.slug}
-												class="text-xs font-black uppercase tracking-[0.2em] text-primary transition-all hover:translate-x-1"
-												style="font-family: 'Montserrat', sans-serif;"
+												class="text-sm font-semibold text-gray-900 transition-all hover:translate-x-1"
 												onclick={() => closeChildMenu(index, false)}
 											>
 												{c.name}
@@ -67,7 +66,7 @@
 														<li>
 															<a
 																href={c1.link || '/' + c1.slug}
-																class="block text-[13px] font-medium text-gray-500 transition-all hover:translate-x-1 hover:text-primary"
+																class="block text-[13px] font-medium text-gray-700 transition-all hover:translate-x-1 hover:text-primary"
 																onclick={() => closeChildMenu(index, false)}
 															>
 																{c1.name}
@@ -83,7 +82,7 @@
 								<div class="border-t border-gray-100 bg-gray-50 px-10 py-4">
 									<a
 										href={category.link || '/' + category.slug}
-										class="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400 transition-colors hover:text-primary"
+										class="text-xs font-semibold text-muted-foreground transition-colors"
 									>
 										View all {category.name}
 									</a>
