@@ -14,7 +14,7 @@
 
 		{#if productState.selectedVariant?.price}
 			{#if productState.selectedVariant?.mrp && productState.selectedVariant?.mrp > productState.selectedVariant?.price}
-				<div class="text-sm text-muted-foreground font-semibold line-through decoration-muted-foreground">
+				<div class="text-sm text-muted font-semibold line-through decoration-muted">
 					{formatPrice(productState.selectedVariant?.mrp, page?.data?.store?.currency?.code)}
 				</div>
 				<div class="text-lg tracking-tight font-semibold px-2 text-success">
@@ -23,7 +23,7 @@
 			{/if}
 		{:else if page.data?.product?.price}
 			{#if page.data?.product?.mrp && page.data?.product?.mrp > page.data?.product?.price}
-					<div class="text-sm text-muted-foreground font-semibold line-through decoration-muted-foreground">
+					<div class="text-sm text-muted font-semibold line-through decoration-muted">
 					{formatPrice(page.data?.product?.mrp, page?.data?.store?.currency?.code)}
 				</div>
 				<div class="text-lg tracking-tight font-semibold px-2 text-success">
