@@ -10,8 +10,8 @@ import { getCartState } from '$lib/core/stores/cart.svelte'
 import { getSettingState } from '$lib/core/stores/setting.svelte'
 import { deepCopy } from '$lib/core/utils'
 import { fireGTagEvent } from '$lib/core/utils/gtag'
-import { meilisearchService, productService, reviewService, wishlistService } from '@misiki/litekart-connector'
-import type { Product, Variant, Store } from '@misiki/litekart-connector'
+import { meilisearchService, productService, reviewService, wishlistService } from '$lib/core/services'
+import type { Product, Variant, Store } from '$lib/core/services'
 import { onMount } from 'svelte'
 interface ProductPageData {
 	product?: Product
