@@ -149,7 +149,7 @@
 							<!-- Order Items -->
 							<div class=" bg-background">
 								{#each order.lineItems as item}
-									<div class="group flex items-center intra-gap p-2">
+									<div class="group flex items-center intra-gap p-3">
 										<a
 											href="/my/orders/{order.parentOrderNo}"
 											class="relative shrink-0 overflow-hidden transition-transform duration-500"
