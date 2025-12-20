@@ -5,10 +5,10 @@
 <div class="flex-1">
 	<div class="grid grid-cols-2 gap-8 sm:grid-cols-3">
 		{#each items as item}
-			<div class="flex flex-col gap-4">
+			<div class="flex flex-col gap-3">
 				<h4 class="text-xs font-bold uppercase tracking-widest text-foreground">{item?.name}</h4>
 				{#if item?.items?.length > 0}
-					<ul class="flex flex-col gap-0">
+					<ul class="flex flex-col gap-1">
 						{#each item.items as child}
 							<li>
 								{#if child.link}
