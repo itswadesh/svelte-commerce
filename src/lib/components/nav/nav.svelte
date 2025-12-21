@@ -77,7 +77,7 @@
 			<MainNav />
 		</div>
 
-		<div class="flex gap-3 sm:hidden">
+		<div class="flex items-center justify-center sm:hidden">
 			{#if navModule.isProductListingPage}
 				<div class="flex items-center gap-2">
 					<Button
