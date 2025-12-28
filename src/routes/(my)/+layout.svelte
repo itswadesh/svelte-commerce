@@ -88,7 +88,7 @@
 	</aside>
 
 	<!-- Main content -->
-	<main class="flex-1 overflow-y-auto px-4 md:px-6">
+	<main class="flex-1 overflow-y-auto px-2 md:px-6">
 		<div class="mb-4 block flex justify-start items-center max-md:flex max-md:gap-2">
 			<!-- Mobile menu button -->
 			<Button
