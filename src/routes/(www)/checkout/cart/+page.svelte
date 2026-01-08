@@ -10,6 +10,7 @@
 	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
 	import CouponsDrawer from '$lib/components/coupon/coupons-drawer.svelte'
 	import { CartModule } from '$lib/core/composables/use-checkout-cart.svelte'
+	import { appendOneTimeCartId } from '$lib/core/utils/one-time-cart'
 
 	const cartModule = new CartModule()
 	const cartState = cartModule.cartState
@@ -29,7 +30,7 @@
 					<span class="ml-2 font-medium">Cart</span>
 				</div>
 				<div class="hidden h-px w-16 bg-gray-300 sm:block"></div>
-				<button onclick={() => goto('/checkout/address')} class="flex cursor-pointer items-center text-gray-400">
+				<button onclick={() => goto(appendOneTimeCartId('/checkout/address'))} class="flex cursor-pointer items-center text-gray-400">
 					<div class="border-gray-300} flex h-8 w-8 items-center justify-center rounded-full border">2</div>
 					<span class="ml-2 font-medium">Address</span>
 				</button>

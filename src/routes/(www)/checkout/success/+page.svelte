@@ -21,6 +21,7 @@
 	})
 
 	onMount(async () => {
+    cartState.resetPreviousCartIdFromLocalStorage()
 		await cartState.refershCart()
 	})
 </script>
@@ -171,7 +172,7 @@
             "email": "${cartState?.cart?.email}",
             "delivery_country": "${data?.orders?.data?.[0]?.shippingAddress?.countryCode}",
             "estimated_delivery_date": "${estimatedDeliveryDate}",
-  
+
             // OPTIONAL FIELDS
           });
       });

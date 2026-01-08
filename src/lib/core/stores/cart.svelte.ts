@@ -2,6 +2,11 @@ import { getContext, onMount, setContext } from 'svelte'
 import { toast } from 'svelte-sonner'
 import { cartService } from '$lib/core/services'
 import type { Cart } from '$lib/core/types'
+import { page } from '$app/state'
+
+const CURRENT_CART_ID_KEY = 'cart_id'
+const PREVIOUS_CART_ID_KEY = 'prev_cart_id'
+
 const initialCart: Cart = {
 	id: '',
 	lineItems: [],
@@ -94,7 +99,7 @@ export class Cart2State {
 		}
 	}
 	retrieveCartId = () => {
-		const cartId = localStorage.getItem('cart_id') || null
+		const cartId = localStorage.getItem(CURRENT_CART_ID_KEY) || null
 		return cartId
 	}
 
@@ -103,18 +108,21 @@ export class Cart2State {
 			onMount(async () => {
 				try {
 					this.isUpdatingCart = true
-					this.resetSingleItemCheckoutSession()
+					this.resetPreviousCartIdFromLocalStorage()
+          this.handleOneTimeCartCheckout()
 					const cartId = this.retrieveCartId()
 					if (cartId) {
 						try {
 							const c = await cartService.getCartByCartId(cartId)
 							// console.log('🚀 ~ CartState ~ fetch ~ c:', c)
 							if (!c.hasOwnProperty('message')) this.cart = c
-						} catch (e) {}
+						} catch (e) {
+              console.error('Cart fetch failed', e)
+            }
 					}
 					res()
 				} catch (e) {
-					// console.log('🚀 ~ CartState ~ error ~ e:', e)
+          console.error('Cart fetch failed', e)
 					rej()
 				} finally {
 				}
@@ -349,8 +357,7 @@ export class Cart2State {
 	async clear() {
 		try {
 			this.isUpdatingCart = true
-			this.cart = null
-			localStorage.removeItem('cart_id')
+			localStorage.removeItem(CURRENT_CART_ID_KEY)
 			// console.log('🚀 ~ CartState ~ removed:', c)
 			this.cart = initialCart
 		} catch (e: unknown) {
@@ -380,8 +387,8 @@ export class Cart2State {
 			// save cart id to local storage as prev_cart_id
 			const cartId = this.retrieveCartId()
 			if (cartId) {
-				localStorage.setItem('prev_cart_id', cartId)
-				localStorage.removeItem('cart_id')
+				localStorage.setItem(PREVIOUS_CART_ID_KEY, cartId)
+				localStorage.removeItem(CURRENT_CART_ID_KEY)
 			}
 
 			// create new cart
@@ -401,32 +408,45 @@ export class Cart2State {
 		}
 	}
 
-	async resetSingleItemCheckoutSession() {
+	resetPreviousCartIdFromLocalStorage() {
 		try {
-			this.isUpdatingCart = true
-			const prev_cart_id = localStorage.getItem('prev_cart_id')
+			//this.isUpdatingCart = true
+			const prev_cart_id = localStorage.getItem(PREVIOUS_CART_ID_KEY)
 			if (prev_cart_id) {
-				localStorage.setItem('cart_id', prev_cart_id)
-				localStorage.removeItem('prev_cart_id')
+				localStorage.setItem(CURRENT_CART_ID_KEY, prev_cart_id)
+				localStorage.removeItem(PREVIOUS_CART_ID_KEY)
 			}
 			this.cart = initialCart
 		} catch (error: unknown) {
 			console.log('🚀 ~ CartState ~ resetSingleCartSession ~ error:', error)
 			toast.error(error instanceof Error ? error.message : 'Error resetting cart')
 		} finally {
-			this.isUpdatingCart = false
+			//this.isUpdatingCart = false
 		}
 	}
+
+  handleOneTimeCartCheckout() {
+    const oneTimeCartId = page.url.searchParams.get('cart_id')
+    if (!oneTimeCartId)
+      return
+
+    const currentCartId = localStorage.getItem(CURRENT_CART_ID_KEY) ?? ''
+    if (currentCartId === oneTimeCartId)
+      return
+
+    localStorage.setItem(PREVIOUS_CART_ID_KEY, currentCartId)
+    localStorage.setItem(CURRENT_CART_ID_KEY, oneTimeCartId)
+  }
 
 	async restorePrevCart() {
 		try {
 			this.isUpdatingCart = true
-			const prev_cart_id = localStorage.getItem('prev_cart_id')
+			const prev_cart_id = localStorage.getItem(PREVIOUS_CART_ID_KEY)
 			if (prev_cart_id) {
 				const cart = await cartService.getCartByCartId(prev_cart_id)
 				this.cart = cart
-				localStorage.setItem('cart_id', prev_cart_id)
-				localStorage.removeItem('prev_cart_id')
+				localStorage.setItem(CURRENT_CART_ID_KEY, prev_cart_id)
+				localStorage.removeItem(PREVIOUS_CART_ID_KEY)
 			}
 		} catch (error: unknown) {
 			console.log('🚀 ~ CartState ~ restorePrevCart ~ error:', error)
