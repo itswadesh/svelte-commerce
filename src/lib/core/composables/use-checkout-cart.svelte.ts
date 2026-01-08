@@ -3,6 +3,7 @@ import { page } from '$app/state'
 import { wishlistService, type Address, type Cart, type CartLineItem, type Variant } from '$lib/core/services'
 import { getCartState, type Cart2State } from '$lib/core/stores/cart.svelte'
 import { fireGTagEvent } from '$lib/core/utils/gtag'
+import { appendOneTimeCartId } from '$lib/core/utils/one-time-cart'
 
 interface CartLineItemExtended extends CartLineItem {
 	isSelectedForCheckout: boolean
@@ -120,7 +121,7 @@ export class CartModule {
 
 	gotoCheckout = async () => {
 		this.loadingForCheckout = true
-		await goto('/checkout/address')
+		await goto(appendOneTimeCartId('/checkout/address'))
 		this.loadingForCheckout = false
 	}
 
@@ -171,7 +172,7 @@ export class CartModule {
       }
     } catch (error) {
       console.log(error)
-    } 
+    }
     setTimeout(() => {
       delete this.isMovingToWishlist[item.productId]
     }, 2000)

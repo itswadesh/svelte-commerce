@@ -8,6 +8,7 @@ import { page } from '$app/state'
 import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
 import CouponsDrawer from '$lib/components/coupon/coupons-drawer.svelte'
 import { PaymentModule } from '$lib/core/composables/use-payment.svelte'
+import { appendOneTimeCartId } from '$lib/core/utils/one-time-cart'
 
 // Check if phone is required based on login type
 const isPhoneRequired = page.data?.store?.isPhoneMandatory
@@ -26,12 +27,12 @@ const cartState = paymentModule.cartState
 		<!-- Checkout Progress -->
 		<div class="mb-8">
 			<div class="flex items-center justify-center space-x-8">
-				<button onclick={() => goto('/checkout/cart')} class="flex cursor-pointer items-center text-gray-400">
+				<button onclick={() => goto(appendOneTimeCartId('/checkout/cart'))} class="flex cursor-pointer items-center text-gray-400">
 					<div class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-300">1</div>
 					<span class="ml-2 font-medium">Cart</span>
 				</button>
 				<div class="hidden h-px w-16 bg-gray-300 sm:block"></div>
-				<button onclick={() => goto('/checkout/address')} class="flex cursor-pointer items-center text-gray-400">
+				<button onclick={() => goto(appendOneTimeCartId('/checkout/address'))} class="flex cursor-pointer items-center text-gray-400">
 					<div class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-300">2</div>
 					<span class="ml-2 font-medium">Address</span>
 				</button>
@@ -48,13 +49,13 @@ const cartState = paymentModule.cartState
 			<div class="flex flex-col gap-4">
 				{#if paymentModule.shippingRates?.error?.message}
 					<div class="mb-4 border-red-400 bg-red-50 px-4 py-2 text-red-500 border">
-						We currently deliver only to 
+						We currently deliver only to
 						{#each paymentModule.shippingRates?.error?.countriesDeliverable || [] as country, index}
 							<span class="font-semibold">{country}</span>{#if index !== paymentModule.shippingRates?.error?.countriesDeliverable?.length - 1},
 								{' '}
 							{/if}
 						{/each}.
-						
+
 						{#if paymentModule.shippingRates?.error?.moreCountriesCount}
 							<span class="font-semibold"> and {paymentModule.shippingRates.error.moreCountriesCount} more</span>
 						{/if} Your selected country is <span class="font-semibold">"{paymentModule.shippingRates?.error?.selectedCountry}"</span>.

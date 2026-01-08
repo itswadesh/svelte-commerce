@@ -16,6 +16,8 @@ import { toast } from 'svelte-sonner'
 
 import { z } from 'zod'
 
+import { appendOneTimeCartId } from '$lib/core/utils/one-time-cart'
+
 interface CartExtended extends Cart {
 	shippingAddress?: Address
 
@@ -534,7 +536,7 @@ export class AddressModule {
 
 		this.loadingForCheckout = true
 
-		await goto('/checkout/payment')
+    await goto(appendOneTimeCartId('/checkout/payment'))
 
 		this.loadingForCheckout = false
 	}
