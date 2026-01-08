@@ -1,66 +1,72 @@
 <script lang="ts">
-	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
-	import * as Carousel from '$lib/components/ui/carousel/index'
-	import type { CarouselAPI } from '$lib/components/ui/carousel/context'
-	import { X } from 'lucide-svelte'
-	import { getSettingState } from '$lib/core/stores/setting.svelte'
-	import Button from '$lib/components/ui/button/button.svelte'
+import LazyImg from '$lib/core/components/image/lazy-img.svelte'
+import * as Carousel from '$lib/components/ui/carousel/index'
+import type { CarouselAPI } from '$lib/components/ui/carousel/context'
+import { Play, X } from 'lucide-svelte'
+import { getSettingState } from '$lib/core/stores/setting.svelte'
+import Button from '$lib/components/ui/button/button.svelte'
+import { getYoutubeId } from '$lib/core/logic/youtube.helper'
 
-	let { images = [] } = $props()
+let { images = [] } = $props()
 
-	const settingState = getSettingState()
+const settingState = getSettingState()
 
-	let carouselApi: CarouselAPI | null = $state(null)
-	let currentIndex = $state(0)
+let carouselApi: CarouselAPI | null = $state(null)
+let currentIndex = $state(0)
 
-	let displayCarousel = $state('hidden')
-	let carouselImages = $state<string[]>([])
-	let selectedImage = $state<string>('')
+let displayCarousel = $state('hidden')
+let carouselImages = $state<string[]>([])
+let selectedImage = $state<string>('')
 
-	const onImageClick = (img: string) => {
-		selectedImage = img
-		showCarousel(img)
+let previewVideoPaused = $state<{ [key: string]: boolean }>({})
+
+const onImageClick = (img: string) => {
+	selectedImage = img
+	showCarousel(img)
+}
+
+const rearrangeArray = (selectedItem: any, items: any[]) => {
+	const index = items.indexOf(selectedItem)
+	if (index !== -1) {
+		return [...items.slice(index), ...items.slice(0, index)]
 	}
+	return items
+}
 
-	const rearrangeArray = (selectedItem: any, items: any[]) => {
-		const index = items.indexOf(selectedItem)
-		if (index !== -1) {
-			return [...items.slice(index), ...items.slice(0, index)]
-		}
-		return items
+const showCarousel = (img: string) => {
+	carouselImages = rearrangeArray(img, images)
+	displayCarousel = 'flex'
+}
+
+const hideCarousel = () => {
+	displayCarousel = 'hidden'
+}
+
+const handleCaroselKeyboardNavigation = (e: KeyboardEvent) => {
+	if (displayCarousel === 'hidden') return
+	if (!carouselApi) return
+
+	switch (e.code) {
+		case 'ArrowUp':
+			carouselApi.scrollPrev()
+			break
+		case 'ArrowDown':
+			carouselApi.scrollNext()
+			break
+		case 'ArrowLeft':
+			carouselApi.scrollPrev()
+			break
+		case 'ArrowRight':
+			carouselApi.scrollNext()
+			break
+		case 'Escape':
+			displayCarousel = 'hidden'
+			break
 	}
+}
 
-	const showCarousel = (img: string) => {
-		carouselImages = rearrangeArray(img, images)
-		displayCarousel = 'flex'
-	}
-
-	const hideCarousel = () => {
-		displayCarousel = 'hidden'
-	}
-
-	const handleCaroselKeyboardNavigation = (e: KeyboardEvent) => {
-		if (displayCarousel === 'hidden') return
-		if (!carouselApi) return
-
-		switch (e.code) {
-			case 'ArrowUp':
-				carouselApi.scrollPrev()
-				break
-			case 'ArrowDown':
-				carouselApi.scrollNext()
-				break
-			case 'ArrowLeft':
-				carouselApi.scrollPrev()
-				break
-			case 'ArrowRight':
-				carouselApi.scrollNext()
-				break
-			case 'Escape':
-				displayCarousel = 'hidden'
-				break
-		}
-	}
+const videoURLRegex = /mp4$|webm$/
+const isVideoURL = (x: string) => videoURLRegex.test(x)
 </script>
 
 <svelte:window onkeydown={handleCaroselKeyboardNavigation} />
@@ -76,6 +82,7 @@
 {#if images?.length === 1}
 	<div class="mx-2 hidden grid-cols-1 sm:grid lg:mx-0">
 		{#each images as img}
+			{@const youtubeId = getYoutubeId(img)}
 			<div
 				class="relative overflow-hidden rounded-lg"
 				role="button"
@@ -84,13 +91,33 @@
 				onkeydown={(e) => e.key === 'Enter' && onImageClick?.(img)}
 				aria-label="View full image"
 			>
-				<LazyImg src={img} alt="Product Image" class=" w-1/2 object-cover transition-transform duration-300 hover:scale-105" />
+				{#if youtubeId}
+					<iframe
+						width="50%"
+						height="100%"
+						class="aspect-square rounded-lg"
+						src="https://www.youtube.com/embed/{youtubeId}?rel=0&modestbranding=1&playsinline=1"
+						title="Video"
+						frameborder="0"
+						allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+						allowfullscreen
+						loading="lazy"
+					></iframe>
+        {:else if isVideoURL(img)}
+          <video height="100%" width="50%" class="aspect-square w-1/2 rounded-lg" loop autoplay>
+            <source src={img}>
+            Video not supported
+          </video>
+				{:else}
+					<LazyImg src={img} alt="Product Image" class=" w-1/2 object-cover transition-transform duration-300 hover:scale-105" />
+				{/if}
 			</div>
 		{/each}
 	</div>
 {:else}
 	<div class="mx-2 hidden grid-cols-2 gap-2 sm:grid lg:mx-0">
 		{#each images as img}
+			{@const youtubeId = getYoutubeId(img)}
 			<div
 				class="relative overflow-hidden rounded-lg"
 				role="button"
@@ -99,7 +126,33 @@
 				onkeydown={(e) => e.key === 'Enter' && onImageClick?.(img)}
 				aria-label="View full image"
 			>
-				<LazyImg src={img} alt="Product Image" class=" w-full object-cover transition-transform duration-300 hover:scale-105" />
+				{#if youtubeId}
+					<iframe
+						width="100%"
+						height="100%"
+						class="aspect-square rounded-lg"
+						src="https://www.youtube.com/embed/{youtubeId}?rel=0&modestbranding=1&playsinline=1"
+						title="Video"
+						frameborder="0"
+						allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+						allowfullscreen
+						loading="lazy"
+					></iframe>
+        {:else if isVideoURL(img)}
+          <div class="w-full h-full relative flex justify-center items-center aspect-square">
+            <video bind:paused={previewVideoPaused[img]} height="100%" width="100%" class="aspect-square absolute top-0 left-0 rounded-lg" loop autoplay muted>
+              <source src={img}>
+              Video not supported
+            </video>
+            {#if previewVideoPaused[img]}
+              <div class="bg-white p-2 rounded-full z-10">
+                <Play />
+              </div>
+            {/if}
+          </div>
+				{:else}
+					<LazyImg src={img} alt="Product Image" class=" w-full object-cover transition-transform duration-300 hover:scale-105" />
+				{/if}
 			</div>
 		{/each}
 	</div>
@@ -120,6 +173,7 @@
 		>
 			<Carousel.Content>
 				{#each images || [] as img, index (index)}
+          {@const youtubeId = getYoutubeId(img)}
 					<Carousel.Item>
 						<div
 							class=""
@@ -129,7 +183,26 @@
 							onkeydown={(e) => e.key === 'Enter' && onImageClick?.(img)}
 							aria-label="View full image"
 						>
-							<LazyImg src={img} alt="Product Image" class="max-h-[420px] w-full object-cover object-top" />
+              {#if youtubeId}
+					      <iframe
+					        width="100%"
+					        height="100%"
+					        class="aspect-square max-h-[420px] w-full rounded-lg"
+					        src="https://www.youtube.com/embed/{youtubeId}?rel=0&modestbranding=1&playsinline=1"
+					        title="Video"
+					        frameborder="0"
+					        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+					        allowfullscreen
+					        loading="lazy"
+					      ></iframe>
+              {:else if isVideoURL(img)}
+                <video height="100%" width="100%" class="aspect-square rounded-lg" loop autoplay>
+                  <source src={img}>
+                  Video not supported
+                </video>
+              {:else}
+							  <LazyImg src={img} alt="Product Image" class="max-h-[420px] w-full object-cover object-top" />
+              {/if}
 						</div>
 					</Carousel.Item>
 				{/each}
@@ -181,16 +254,36 @@
 			>
 				<Carousel.Content>
 					{#each carouselImages || [] as img, index (index)}
+            {@const youtubeId = getYoutubeId(img)}
 						<Carousel.Item>
 							<div class="flex h-[calc(100vh-6rem)] items-center justify-center">
-								<LazyImg
-									src={img}
-									alt="Product Image"
-									class="aspect-[{settingState?.selectedStore?.productImageAspectRatio?.replace(
-										':',
-										'/'
-									)}] !max-h-[calc(100vh-6rem)] w-full object-contain"
-								/>
+                {#if youtubeId}
+					        <iframe
+					        	width="100%"
+					        	height="100%"
+					        	class="aspect-square rounded-lg"
+					        	src="https://www.youtube.com/embed/{youtubeId}?rel=0&modestbranding=1&playsinline=1"
+					        	title="Video"
+					        	frameborder="0"
+					        	allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+					        	allowfullscreen
+					        	loading="lazy"
+					        ></iframe>
+              {:else if isVideoURL(img)}
+                <video height="100%" width="100%" class="aspect-square rounded-lg" loop autoplay>
+                  <source src={img}>
+                  Video not supported
+                </video>
+                {:else}
+								  <LazyImg
+								  	src={img}
+								  	alt="Product Image"
+								  	class="aspect-[{settingState?.selectedStore?.productImageAspectRatio?.replace(
+								  		':',
+								  		'/'
+								  	)}] !max-h-[calc(100vh-6rem)] w-full object-contain"
+								  />
+                {/if}
 							</div>
 						</Carousel.Item>
 					{/each}
@@ -209,6 +302,7 @@
 				class="hidden h-[calc(100vh-6rem)] min-w-[120px] max-w-[120px] flex-none items-center gap-2 overflow-y-auto py-2 scrollbar-thin md:flex md:flex-col"
 			>
 				{#each carouselImages || [] as img, i}
+					{@const youtubeId = getYoutubeId(img)}
 					<button
 						class="relative aspect-square max-h-24 min-h-24 min-w-24 max-w-24 overflow-hidden rounded-lg bg-black transition-colors hover:ring-1 hover:ring-white hover:ring-offset-2 hover:ring-offset-black
 								{currentIndex === i ? 'ring-1 ring-white ring-offset-2 ring-offset-black' : ''}"
@@ -220,7 +314,18 @@
 							}
 						}}
 					>
-						<LazyImg src={img} alt="Thumbnail" class="h-full w-full object-cover" />
+            {#if isVideoURL(img)}
+              <video height="100%" width="100%" class="aspect-square rounded-lg" loop autoplay>
+                <source src={img}>
+                Video not supported
+              </video>
+            {:else}
+						  <LazyImg
+						  	src={youtubeId ? `https://img.youtube.com/vi/${youtubeId}/default.jpg` : img}
+						  	alt="Thumbnail"
+						  	class="h-full w-full object-cover"
+						  />
+            {/if}
 					</button>
 				{/each}
 			</div>
