@@ -51,7 +51,7 @@
 
 
 						{#if paymentModule.shippingRates?.error?.message}
-						<div class="mb-4 rounded bg-red-50 p-4 text-[11px] font-bold uppercase tracking-tight text-red-600 ring-1 ring-red-100">
+						<div class="mb-4 rounded bg-red-50 p-4 text-[11px] font-bold tracking-tight text-red-600 ring-1 ring-red-100">
 							We currently deliver only to
 							{#each paymentModule.shippingRates?.error?.countriesDeliverable || [] as country, index}
 								<span class="font-black">{country}</span>{#if index !== paymentModule.shippingRates?.error?.countriesDeliverable?.length - 1},
