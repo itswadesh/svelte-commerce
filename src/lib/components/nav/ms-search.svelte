@@ -65,7 +65,7 @@
 							<Search class="h-5 w-5 text-gray-400" />
 							<Input
 								type="text"
-								class="flex-1 border-none bg-transparent text-lg shadow-none focus-visible:ring-0"
+								class="flex-1 border-none bg-transparent text-sm sm:text-lg shadow-none focus-visible:ring-0"
 								bind:value={search}
 								placeholder={searchPlugin?.placeholder || 'Search products...'}
 								aria-label={searchPlugin?.placeholder || 'Search products'}
