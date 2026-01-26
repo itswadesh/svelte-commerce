@@ -82,7 +82,7 @@
 										class="relative flex cursor-pointer items-center justify-between rounded-lg border bg-white px-6 py-5 {paymentModule.SELECTED_PG_CODE ===
 										method?.code
 											? 'border-primary ring-1 ring-primary'
-											: 'border-gray-100 shadow-sm'}"
+											: 'border-muted/20 shadow-sm'}"
 									>
 										<div class="flex items-center gap-4">
 											<div class="relative flex h-5 w-5 items-center justify-center">
@@ -92,7 +92,7 @@
 													value={method?.code}
 													checked={paymentModule.SELECTED_PG_CODE === method?.code}
 													onchange={() => (paymentModule.SELECTED_PG_CODE = method?.code)}
-													class="peer h-5 w-5 appearance-none rounded-full border-2 border-gray-200 transition-all checked:border-primary"
+													class="peer h-5 w-5 appearance-none rounded-full border-2 border-muted/20 transition-all checked:border-primary"
 												/>
 												<div class="absolute h-2.5 w-2.5 rounded-full bg-primary opacity-0 transition-opacity peer-checked:opacity-100"></div>
 											</div>
@@ -130,7 +130,7 @@
 					</div>
 
 					{#if paymentModule.shippingRates?.data?.length}
-						<div class="grid h-fit grid-cols-1 space-y-6 border-t border-gray-100 pt-6">
+						<div class="grid h-fit grid-cols-1 space-y-6  pt-4">
 							<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: 'Montserrat', sans-serif;">
 								Shipping Method
 							</h2>
@@ -207,14 +207,14 @@
 					{/if}
 
 											{#if cartState?.cart?.shippingAddress}
-							<div class="rounded-lg border border-gray-100 bg-white shadow-sm overflow-hidden text-left">
+							<div class="rounded-lg border border-muted/20 bg-white shadow-sm overflow-hidden text-left">
 								<Button
-									variant="ghost"
+									variant="plain"
 									class="flex w-full items-center justify-between px-6 py-4 h-auto"
 									onclick={() => (showAddress = !showAddress)}
 								>
 									<div class="flex flex-col items-start">
-										<span class="text-[10px] font-bold text-gray-400">Delivering Order to</span>
+										<span class="text-sm font-bold text-muted">Delivering Order to</span>
 										<span class="text-sm font-bold uppercase tracking-tight text-gray-900">
 											{cartState.cart.shippingAddress.firstName} {cartState.cart.shippingAddress.lastName}
 										</span>
@@ -262,7 +262,7 @@
 
 					<div class="space-y-4">
 
-						<div class="space-y-4 rounded-lg border border-gray-100 bg-white p-6 shadow-sm">
+						<div class="space-y-4 rounded-lg border border-muted/20 bg-white p-6 shadow-sm">
 
 
 							<div class="mb-6 flex flex-col gap-1">

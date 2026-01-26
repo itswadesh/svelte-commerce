@@ -486,7 +486,7 @@
 
 						<CouponsDrawer />
 
-						<div class="space-y-4 rounded-lg border border-gray-100 bg-white p-3 md:p-6 shadow-sm">
+						<div class="space-y-4 rounded-lg border border-muted/20 bg-white p-3 md:p-6 shadow-sm">
 							<div class="">
 								<div class="mb-6 flex flex-col gap-1">
 									<h2 class="text-base font-bold uppercase  text-gray-900" style="font-family: 'Montserrat', sans-serif;">
