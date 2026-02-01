@@ -58,7 +58,7 @@
 </div>
 
 <!-- Mobile -->
-<div class="block max-h-[600px] sm:hidden">
+<div class="block max-h-[900px] sm:hidden">
 	<Carousel.Root opts={{ align: 'start', loop: true }} plugins={[Autoplay({ delay: 10000 })]}>
 		<Carousel.Content class="-ml-5">
 			{#each sliderBannersMobile as b, ix}
@@ -82,13 +82,13 @@
 											fetchpriority={ix === 0 ? 'high' : 'auto'}
 											loading={ix === 0 ? 'eager' : 'lazy'}
 										/>
-										<div class="absolute inset-0 flex items-center justify-center">
+										<!-- <div class="absolute inset-0 flex items-center justify-center">
 											<div
 												class="rounded-full bg-white/90 px-6 py-2.5 text-xs font-black uppercase tracking-widest text-black shadow-xl backdrop-blur-sm"
 											>
 												Shop Now
 											</div>
-										</div>
+										</div> -->
 									</div>
 								{/if}
 							</a>
