@@ -15,7 +15,7 @@
 		<p class="mt-2 text-lg text-gray-500">We're sorry to see you go. Please review the following information carefully.</p>
 	</div>
 
-	<div class="overflow-hidden rounded-3xl border border-red-100 bg-white shadow-xl shadow-red-500/5">
+	<div class="overflow-hidden rounded-md border border-red-100 bg-white shadow-xl shadow-red-500/5">
 		<div class="bg-red-50/50 p-6 md:p-8">
 			<h2 class="text-xl font-bold text-red-600">Is this goodbye?</h2>
 			<p class="mt-2 text-sm font-medium text-red-600/70">Are you sure you want to delete your account? This action is permanent.</p>
@@ -63,7 +63,7 @@
 				</li>
 			</ul>
 
-			<div class="mt-12 flex items-center gap-3 rounded-2xl bg-gray-50 p-4">
+			<div class="mt-12 flex items-center gap-3 rounded-md bg-gray-50 p-4">
 				<input
 					type="checkbox"
 					id="deleteAccount"

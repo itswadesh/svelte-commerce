@@ -72,7 +72,7 @@
 		</div>
 
 		<!-- Danger Zone -->
-		<div class="overflow-hidden rounded-2xl border border-red-100 bg-white shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+		<div class="overflow-hidden rounded-md border border-red-100 bg-white shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
 			<div class="border-b border-red-50 bg-red-50/30 p-6 md:p-8">
 				<div class="flex items-center gap-3">
 					<div class="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 text-red-600">
@@ -104,7 +104,7 @@
 <!-- Floating Save Bar -->
 {#if profileModule.detailsChanged}
 	<div in:fly={{ y: 50, duration: 400 }} out:fade={{ duration: 200 }} class="fixed bottom-8 left-1/2 z-50 w-full max-w-lg -translate-x-1/2 px-4">
-		<div class="flex items-center justify-between gap-4 rounded-2xl border border-gray-200 bg-white/90 p-4 shadow-2xl backdrop-blur-md">
+		<div class="flex items-center justify-between gap-4 rounded-md border border-gray-200 bg-white/90 p-4 shadow-2xl backdrop-blur-md">
 			<div class="flex items-center gap-3 px-2">
 				<div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary">
 					<InfoIcon class="h-4 w-4" />
