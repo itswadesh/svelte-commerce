@@ -79,26 +79,21 @@
 						required
 					/>
 					<Textbox name="address_2" bind:value={address.address_2} placeholder="Apartment, suite, etc." label="Address Line 2" />
-					<div class="grid grid-cols-2 gap-2">
+					<div class="grid grid-cols-2 gap-x-2">
 						<Textbox name="city" bind:value={address.city} placeholder="City" schema={AddressSchema.city} label="City" required />
 						<Textbox name="state" bind:value={address.state} placeholder="State" schema={AddressSchema.state} label="State" required />
-						<!-- <Textbox name="countryCode" bind:value={address.countryCode} placeholder="Country" schema={schemas.countryCode} label="Country" required /> -->
-						<div class="flex flex-col">
-							<Label for="countryCode" class="mb-2 text-sm">Country</Label>
-							<Select
-								class="w-full justify-between"
-								id="countryCode"
-								title="Select Country"
-								label=""
-								showSearch={true}
-								value={address.countryCode || page?.data?.store?.country?.code || 'AU'}
-								data={page?.data?.store?.countries || []}
-								valueField="code"
-								optionSelected={(v: any) => {
-									address.countryCode = v
-								}}
-							/>
-						</div>
+						<Select
+							id="countryCode"
+							title="Select Country"
+							label="Country"
+							showSearch={true}
+							value={address.countryCode || page?.data?.store?.country?.code || 'AU'}
+							data={page?.data?.store?.countries || []}
+							valueField="code"
+							optionSelected={(v: any) => {
+								address.countryCode = v
+							}}
+						/>
 						<Textbox name="zip" bind:value={address.zip} placeholder="12345" schema={AddressSchema.zip} label="ZIP Code" required />
 					</div>
 					<br />
