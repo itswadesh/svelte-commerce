@@ -10,20 +10,6 @@
 	let { class: className = '', placeholder = 'Search...', handleCloseSearch = () => {} } = $props()
 
 	let search = $state('')
-	let isSearching = $state(false)
-	let searchTimer: ReturnType<typeof setTimeout> | null = null
-
-	$effect(() => {
-		if (search) {
-			isSearching = true
-			if (searchTimer) clearTimeout(searchTimer)
-			searchTimer = setTimeout(() => {
-				isSearching = false
-			}, 800)
-		} else {
-			isSearching = false
-		}
-	})
 </script>
 
 <MsSearchRenderer bind:search>
@@ -90,7 +76,7 @@
 
 						<!-- Search Results -->
 						<div class="flex-1 overflow-y-auto p-2 scrollbar-thin scrollbar-track-transparent">
-							{#if loading || isSearching}
+							{#if loading}
 								<div class="space-y-2 p-2">
 									{#each Array(5) as _}
 										<div class="h-16 w-full animate-pulse bg-gray-50"></div>
@@ -132,21 +118,13 @@
 										</li>
 									{/each}
 								</ul>
-							{:else if search}
-								<div class="flex flex-col items-center justify-center py-16 text-center">
-									<div class="mb-4 rounded-full bg-gray-50 p-4">
-										<Search class="h-8 w-8 text-gray-300" />
-									</div>
-									<p class="text-lg font-medium text-gray-900">No pieces found</p>
-									<p class="text-sm text-gray-500">We couldn't find any results matching "{search}".</p>
-								</div>
 							{:else}
 								<div class="flex flex-col items-center justify-center py-16 text-center">
 									<div class="mb-4 rounded-full bg-gray-50 p-4">
 										<Search class="h-8 w-8 text-gray-300" />
 									</div>
-									<p class="text-lg font-medium text-gray-900">Discover our collection</p>
-									<p class="text-sm text-gray-500">Search for fine jewelry and luxury pieces</p>
+									<p class="text-lg font-medium text-gray-900">No products found</p>
+									<p class="text-sm text-gray-500">We couldn't find any results matching "{search}".</p>
 								</div>
 							{/if}
 						</div>
