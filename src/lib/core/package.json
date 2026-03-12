@@ -1,5 +1,5 @@
 {
-  "name": "@my-company/core",
+  "name": "@misiki-in/core",
   "version": "0.1.1",
   "description": "Shared core library for svelte-commerce projects",
   "main": "index.js",
@@ -19,5 +19,13 @@
   "license": "MIT",
   "publishConfig": {
     "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/misiki-in/svelte-commerce.git"
+  },
+  "homepage": "https://github.com/misiki-in/svelte-commerce",
+  "bugs": {
+    "url": "https://github.com/misiki-in/svelte-commerce/issues"
   }
 }
