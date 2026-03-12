@@ -1,6 +1,6 @@
 {
   "name": "@my-company/core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Shared core library for svelte-commerce projects",
   "main": "index.js",
   "types": "index.d.ts",
