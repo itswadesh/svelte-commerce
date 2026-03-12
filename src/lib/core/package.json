@@ -1,0 +1,23 @@
+{
+  "name": "@my-company/core",
+  "version": "0.1.0",
+  "description": "Shared core library for svelte-commerce projects",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": "./src/lib/core/index.js"
+  },
+  "files": [
+    "**/*"
+  ],
+  "scripts": {
+    "test": "echo \"No tests required\"",
+    "build": "echo \"Add build step if needed\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}
