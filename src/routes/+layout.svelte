@@ -5,8 +5,9 @@
 	import { GoogleAnalytics } from '$lib/core/components/index.js'
 	import { navigating } from '$app/stores'
 	import { Loader } from '@lucide/svelte'
-	import type { Snippet } from 'svelte'
+	import { onMount, type Snippet } from 'svelte'
 	import type { StoreData } from '$lib/core/types/index.js'
+	import { modifyColorPalette } from '$lib/core/utils/color-palette.js'
 	interface LayoutData {
 		store: StoreData
 		timestamp: number
@@ -14,6 +15,9 @@
 	}
 	let { children, data }: { children: Snippet; data: LayoutData } = $props()
 	setUserState()
+  onMount(() => {
+    modifyColorPalette(data.store.cssVariables || {})
+  })
 </script>
 
 <svelte:head>
