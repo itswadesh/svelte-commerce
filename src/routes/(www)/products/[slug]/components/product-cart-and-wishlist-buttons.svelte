@@ -3,7 +3,7 @@
 	import { Button } from '$lib/components/ui/button'
 	import { useProductState } from '$lib/core/composables/index.js'
 	import { formatPrice } from '$lib/core/utils'
-	import { Check, ChevronRight, HeartIcon, LoaderCircle, ShoppingCart, MoveRight } from '@lucide/svelte'
+	import { Check, ChevronRight, HeartIcon, LoaderCircle, ShoppingCart, MoveRight, ShoppingBag } from '@lucide/svelte'
 	import { fly } from 'svelte/transition'
 	import EnquiryModal from '$lib/core/components/plugins/enquiry-modal.svelte'
 	import { quintOut } from 'svelte/easing'
@@ -96,7 +96,7 @@
 		{:else}
 			<div class="flex h-full w-full gap-2">
 				<Button
-					class="h-full text-base flex-1 uppercase font-semibold {productState
+					class="h-full flex justify-center items-center gap-2 text-base flex-1 uppercase font-semibold {productState
 						.cartState.addToCartMessage == 'Added to cart'
 						? 'bg-green-600 hover:bg-green-700'
 						: ''}"
@@ -108,10 +108,10 @@
 						Out of Stock
 					{:else if productState.cartState.showCheckout}
 						Go to bag
-						<ChevronRight class="h-4 w-4" />
+						<ChevronRight class="h-5 w-5" />
 					{:else}
-						<ShoppingCart class="h-4 w-4" />
-						Add to bag
+						<ShoppingBag class="h-5 w-5" />
+					<span class="">Add to bag</span>
 					{/if}
 				</Button>
 
