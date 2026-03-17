@@ -10,6 +10,11 @@
 
 <div align="center">
   <br>
+    <img width="400" src=".github/svelte-commerce-animated.gif" >
+</div>
+
+<div align="center">
+  <br>
     <img width="400" src=".github/svelte-commerce.gif" >
     <img width="400" src=".github/svelte-commerce-demo.gif" hspace="5">
 </div>
