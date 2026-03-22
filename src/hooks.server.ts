@@ -1,7 +1,8 @@
 import type { Handle } from '@sveltejs/kit'
 import { StoreService } from '$lib/core/services'
 import { env } from '$env/dynamic/public'
-import { BaseService } from '@misiki/medusa-connector'
+import { env as privateEnv } from '$env/dynamic/private'
+import { BaseService } from '$lib/core/services'
 
 // Function to check if a URL is a local/IP address
 function isLocalOrIpAddress(url: string): boolean {
@@ -9,6 +10,14 @@ function isLocalOrIpAddress(url: string): boolean {
 }
 
 export const init = async () => {
+	if (env.PUBLIC_SHOPIFY_STORE_DOMAIN) {
+		BaseService.setShopifyCredentials(
+			env.PUBLIC_SHOPIFY_STORE_DOMAIN,
+			privateEnv.SHOPIFY_ADMIN_ACCESS_TOKEN,
+			env.PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN
+		)
+	}
+
 	if (env.PUBLIC_MEDUSA_PUBLISHABLE_API_KEY) {
 		BaseService.setMedusaPublisableKey(env.PUBLIC_MEDUSA_PUBLISHABLE_API_KEY)
 		BaseService.setRegionId(env.PUBLIC_MEDUSA_REGION_ID)

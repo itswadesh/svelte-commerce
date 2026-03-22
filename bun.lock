@@ -7,6 +7,7 @@
       "dependencies": {
         "@internationalized/date": "^3.7.0",
         "fuse.js": "^7.1.0",
+        "hi-base32": "^0.5.1",
         "paneforge": "^0.0.6",
         "shadcn-svelte": "^0.14.0",
         "stripe": "^17.6.0",
@@ -641,6 +642,8 @@
     "hasown": ["hasown@2.0.2", "", { "dependencies": { "function-bind": "^1.1.2" } }, "sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ=="],
 
     "hex-color-to-color-name": ["hex-color-to-color-name@1.0.2", "", {}, "sha512-YKPBFTSbYIHH8YKcJB4Q5PV+Tr+kvDXpV60BcPMUu5CSZUcc/qOOx7lkr7luk6MSXKd5A82yfPGZTgedIdQ+aA=="],
+
+    "hi-base32": ["hi-base32@0.5.1", "", {}, "sha512-EmBBpvdYh/4XxsnUybsPag6VikPYnN30td+vQk+GI3qpahVEG9+gTkG0aXVxTjBqQ5T6ijbWIu77O+C5WFWsnA=="],
 
     "html-encoding-sniffer": ["html-encoding-sniffer@4.0.0", "", { "dependencies": { "whatwg-encoding": "^3.1.1" } }, "sha512-Y22oTqIU4uuPgEemfz7NDJz6OeKf12Lsu+QC+s3BVpda64lTiMYCyGwg5ki4vFxkMwQdeZDl2adZoqUgdFuTgQ=="],
 
