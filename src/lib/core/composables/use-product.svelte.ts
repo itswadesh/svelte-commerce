@@ -362,7 +362,13 @@ export class ProductState {
 
 		onMount(async () => {
 			await this.mount()
-			fireGTagEvent('view_item', { ...this.data.product, qty: 1 })
+
+      const categoryNames = this.data?.product?.categories?.map(c => c.category?.name) || []
+      const productObj = {
+        ...this.data?.product,
+        categoryNames
+      }
+			fireGTagEvent('view_item', { ...productObj, qty: 1 })
 		})
 
 		$effect(() => {

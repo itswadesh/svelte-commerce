@@ -34,12 +34,22 @@ export const fireGTagEvent = (event_name: string, data: any) => {
 	items = data.items.map((item: any, idx: number) => {
 		if (!item) return
 		item.discount = item?.discount || item?.coupon || {}
+
+    const categoryNames = item.categoryNames || []
+
+    const categories = {} as Record<string, string>
+    categories['item_category'] = categoryNames[0] || 'Uncategorized'
+    for (let i = 1; i < categoryNames?.length; i++) {
+      categories['item_category' + (i + 1)] = categoryNames[i]
+    }
+
 		return {
 			item_id: item.sku ? item.sku : item._id,
 			item_name: item.name,
 			affiliation: item.vendorBusinessName || item.vendor?.BusinessName || item.vendor?.business_name,
 			item_brand: item.brandName,
-			item_category: item.category?.name || item.category,
+      ...categories,
+			item_category: categories['item_category'] || item.category?.name || item.item_category || item.category,
 			price: item.price,
 			quantity: item.qty,
 			coupon: item.discount?.code,
@@ -51,12 +61,21 @@ export const fireGTagEvent = (event_name: string, data: any) => {
 	})
 
 	if (event_name == 'view_item') {
+    const categoryNames = data.categoryNames || []
+
+    const categories = {} as Record<string, string>
+    categories['item_category'] = categoryNames[0] || 'Uncategorized'
+    for (let i = 1; i < categoryNames?.length; i++) {
+      categories['item_category' + (i + 1)] = categoryNames[i]
+    }
+
 		items = {
 			item_id: data.sku ? data.sku : data.id,
 			item_name: data.title,
 			affiliation: data.vendor?.BusinessName || data.vendorBusinessName || data.vendor?.business_name,
 			item_brand: data.brand?.name,
-			item_category: data.category?.name,
+      ...categories,
+			item_category: categories['item_category'] || data.category?.name,
 			price: data.price,
 			quantity: data.qty,
 			currency: page?.data?.store?.currency?.code,

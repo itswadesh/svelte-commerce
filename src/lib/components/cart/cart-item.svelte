@@ -55,8 +55,15 @@
 						onclick={async (e) => {
 							e.stopPropagation()
 							loading = true
+
+              const categoryNames = cartProduct?.product?.categories?.flatMap?.(c => c.category?.name) || []
+              const productObj = {
+                ...(cartProduct || {}),
+                categoryNames
+              }
+
 							fireGTagEvent('remove_from_cart', {
-								items: [{ ...cartProduct }],
+								items: [{ ...productObj }],
 								price: cartProduct.price
 							})
 							await cartState.update({
@@ -88,8 +95,15 @@
 							e.stopPropagation()
 							loading = true
 							const me = userState?.user
+
+              const categoryNames = cartProduct?.product?.categories?.flatMap?.(c => c.category?.name) || []
+              const productObj = {
+                ...(cartProduct || {}),
+                categoryNames
+              }
+
 							const dataToFire = {
-								items: [{ ...cartProduct, qty: cartProduct?.qty + 1 }],
+								items: [{ ...productObj, qty: cartProduct?.qty + 1 }],
 								total: cartProduct?.price * (cartProduct?.qty + 1),
 								qty: cartProduct?.qty + 1,
 								vendorBusinessName: cartProduct?.vendor?.businessName,
@@ -119,8 +133,15 @@
 					onclick={async (e) => {
 						e?.preventDefault()
 						e?.stopPropagation()
+
+            const categoryNames = cartProduct?.product?.categories?.flatMap?.(c => c.category?.name) || []
+            const productObj = {
+              ...(cartProduct || {}),
+              categoryNames
+            }
+
 						fireGTagEvent('remove_from_cart', {
-							items: [{ ...cartProduct }],
+							items: [{ ...productObj }],
 							price: cartProduct.price
 						})
 						await cartState?.update({
