@@ -188,7 +188,13 @@ class ProductState {
 
 		this.isLoading = false
 		this.relatedProducts = await productService.listRelatedProducts({ page: 1, categoryId: page.data?.product?.categoryId })
-		fireGTagEvent('view_item', { ...page.data.product, qty: 1 })
+		
+    const categoryNames = page.data?.product?.categories?.map(c => c.category?.name) || []
+    const productObj = {
+      ...page.data?.product,
+      categoryNames
+    }
+    fireGTagEvent('view_item', { ...productObj, qty: 1 })
 	}
 
 	findAndSelectVariantFromSearchParam = () => {
@@ -379,8 +385,16 @@ class ProductState {
 			}, this.ADD_TO_CART_MESSAGE_DURATION)
 
 			const me = this.userState?.user
+
+      const categoryNames = page.data?.product?.categories?.map(c => c.category?.name) || []
+      const productObj = {
+        ...page.data?.product,
+        variant: this.selectedVariant?.id ? { ...(this.selectedVariant || {}) } : undefined,
+        categoryNames
+      }
+
 			const dataToFire = {
-				items: [{ ...page.data?.product, qty: this.qty }],
+				items: [{ ...productObj, qty: this.qty }],
 				total: page.data?.product?.price * this.qty,
 				qty: this.qty,
 				vendorBusinessName: page.data?.product?.vendor?.businessName,
