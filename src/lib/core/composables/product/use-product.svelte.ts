@@ -97,7 +97,8 @@ class ProductState {
 		if (page.data?.product?.options?.length) {
 			this.productOptions = page.data.product.options.map(option => {
 				option.values = option.values?.map?.((_value: any) => {
-					_value.selectable = true
+					if (typeof _value != 'string')
+						_value.selectable = true
 					return _value
 				})
 				return option

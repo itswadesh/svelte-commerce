@@ -101,6 +101,7 @@
 	"dependencies": {
 		"@internationalized/date": "^3.7.0",
 		"fuse.js": "^7.1.0",
+		"hi-base32": "^0.5.1",
 		"paneforge": "^0.0.6",
 		"shadcn-svelte": "^0.14.0",
 		"stripe": "^17.6.0",
