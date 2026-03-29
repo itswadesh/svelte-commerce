@@ -12,9 +12,9 @@
 </script>
 
 <svelte:head>
-	{@html `<style>
+	{@html `<` + `style>
       :root {
         ${styles}
       }
-  </style>`}
+  </` + `style>`}
 </svelte:head>
