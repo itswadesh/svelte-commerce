@@ -6,11 +6,16 @@ export const load: PageLoad = async ({ fetch, url }) => {
 	const search = url.searchParams.get('search')
 	const sort = url.searchParams.get('sort')
 
-	const collectionService = new CollectionService(fetch)
-	const collections = await collectionService.list({
-		page: currentPage,
-		sort: sort || '-createdAt'
-	})
-	return collections
+	try {
+		const collectionService = new CollectionService(fetch)
+		const collections = await collectionService.list({
+			page: currentPage,
+			sort: sort || '-createdAt'
+		})
+		return { collections }
+	} catch (e) {
+		console.error('Error loading collections:', e)
+		return { collections: { data: [], count: 0 } }
+	}
 }
 

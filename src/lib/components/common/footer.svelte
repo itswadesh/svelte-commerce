@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import { ChevronDown, ShieldCheck, Lock, Truck, RefreshCw } from 'lucide-svelte'
 import WhatsappChatButton from '$lib/core/components/plugins/whatsapp-chat-button.svelte'
 import { page } from '$app/state'
@@ -13,7 +13,7 @@ let paymentMethodCards = [masterCard, paypal, skrill, visa]
 
 // Derive store data to prevent unnecessary re-renders
 const storeData = $derived(page?.data?.store || {})
-const footerMenu = $derived(storeData?.menu?.find(menu => menu?.menuId === 'footer')?.items || [])
+const footerMenu = $derived(storeData?.menu?.find((menu: { menuId?: string }) => menu?.menuId === 'footer')?.items || [])
 const socialSharing = $derived(storeData?.plugins?.socialSharingButtons || {})
 const footerSettings = $derived(storeData?.plugins?.footerSettings)
 const shouldCollapseOnMobile = $derived(footerSettings?.collapseOnMobile || false)
@@ -54,15 +54,27 @@ let isExpanded = $state(false)
 								{/if}
 							</a>
 							{#if storeData?.description}
-								<div class="prose text-sm text-gray-600">
-									{#await sanitize(storeData.description) then html}
-										{@html html}
-									{:catch error}
-										<!-- Fallback to plain text if sanitization fails -->
-										{storeData.description}
-									{/await}
-								</div>
+								<p class="text-sm text-gray-600 dark:text-gray-400">{storeData?.description}</p>
 							{/if}
+							<!-- Newsletter Signup -->
+							<div class="mt-4">
+								<h4 class="mb-2 text-sm font-semibold text-gray-900 dark:text-white">Subscribe to our newsletter</h4>
+								<p class="mb-3 text-xs text-gray-600 dark:text-gray-400">Get updates on new arrivals and exclusive offers</p>
+								<form class="flex gap-2" onsubmit={(e) => e.preventDefault()}>
+									<input
+										type="email"
+										placeholder="Enter your email"
+										class="flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+										required
+									/>
+									<button
+										type="submit"
+										class="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90"
+									>
+										Subscribe
+									</button>
+								</form>
+							</div>
 						</div>
 						<div class="grid grid-cols-2 gap-8 sm:grid-cols-3 sm:gap-10">
 							{#each footerMenu as item}
@@ -100,7 +112,7 @@ let isExpanded = $state(false)
 								{#each Object.entries(socialSharing || {}).filter(([key]) => !['active', 'position'].includes(key)) as [key, social]}
 									{#if social}
 										<a
-											href={social}
+											href={social as string}
 											target="_blank"
 											rel="nofollow"
 											class="fill-gray-500 text-gray-500 hover:fill-gray-900 hover:text-gray-900 dark:hover:fill-gray-600 dark:hover:text-gray-600"

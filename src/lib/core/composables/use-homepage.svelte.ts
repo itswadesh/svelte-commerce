@@ -75,15 +75,22 @@ export class HomepageModule {
 					this.hasMoreFeaturedProducts = response?.data?.length >= response.pageSize
 				} catch (error) {
 					console.error('Error loading featured products:', error)
+					this.featuredProducts = []
 					this.hasMoreFeaturedProducts = false
 				} finally {
 					this.loadingFeaturedProducts = false
 				}
 			}
 			const b = async () => {
-				const response = await productService.listTrendingProducts({ page: 1 })
-				this.trendingProducts = (response?.data || []) as unknown as ProductWithVendor[]
-				this.loadingTrendingProducts = false
+				try {
+					const response = await productService.listTrendingProducts({ page: 1 })
+					this.trendingProducts = (response?.data || []) as unknown as ProductWithVendor[]
+				} catch (error) {
+					console.error('Error loading trending products:', error)
+					this.trendingProducts = []
+				} finally {
+					this.loadingTrendingProducts = false
+				}
 			}
 			a()
 			b()

@@ -7,7 +7,7 @@
 
 {#if productState.isLoadingRelatedProducts || productState.productsOfSameCategory.length > 0}
 	<div class="mx-2 mb-20 mt-4">
-		<h1 class="my-4 text-center text-2xl font-bold">Related Products</h1>
+		<h2 class="my-4 text-center text-2xl font-bold">Related Products</h2>
 
 		{#if productState.isLoadingRelatedProducts}
 			<div class="flex justify-center py-8">

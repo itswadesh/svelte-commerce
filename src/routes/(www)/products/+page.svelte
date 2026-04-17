@@ -47,15 +47,18 @@ let loading = $state(false)
 		</div>
 
 	<div class="flex-1">
-		<div class="flex flex-row items-center justify-end">
-			<!-- <span class="capitalize mx-2 justify-center flex text-center">
-        {#if page.params.slug || page.url.searchParams.get("search")}
-          {page.params.slug || page.url.searchParams.get("search")} -
-        {/if}
-        <span class="font-bold">{data?.products?.count} Products</span>
-      </span> -->
+		<div class="mb-4 flex flex-col items-start gap-2">
+			{#if page.url.searchParams.get('search')}
+				<h1 class="text-2xl font-bold">
+					Search Results: "{page.url.searchParams.get('search')}"
+				</h1>
+			{:else}
+				<h1 class="text-2xl font-bold">All Products</h1>
+			{/if}
+			<span class="text-sm text-gray-400">{data?.products?.count} Products found</span>
+		</div>
 
-			<div class="hidden flex-row items-center gap-2 md:flex">
+		<div class="flex flex-row items-center justify-end md:hidden">
 				<span class="text-sm font-normal text-gray-400">Sort by:</span>
 				<Select
 					class="!mb-0"
@@ -65,7 +68,6 @@ let loading = $state(false)
 					optionSelected={(value: string) => selectSort(value)}
 				/>
 			</div>
-		</div>
 
 		{#if loading}
 			<ul class="mt-4 grid w-full grid-cols-1 gap-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">

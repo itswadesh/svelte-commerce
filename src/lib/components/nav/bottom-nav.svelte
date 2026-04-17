@@ -104,7 +104,7 @@
 				<button class="rounded-full p-2 hover:bg-gray-100" onclick={() => (showCartModal = false)}>
 					<ArrowLeft size={24} />
 				</button>
-				<h1 class="text-lg font-medium">Your Cart</h1>
+				<h2 class="text-lg font-medium">Your Cart</h2>
 			</header>
 
 			<div class="flex-1 overflow-auto p-4">

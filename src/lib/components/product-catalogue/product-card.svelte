@@ -109,7 +109,7 @@
 				{/if}
 				<a href="/products/{product.slug}">
 					<div class="line-clamp-2 max-h-[3rem] text-xs font-medium text-gray-500 dark:text-gray-200">
-						{product.title}
+						{product.title?.length > 60 ? product.title?.slice(0, 60) + '...' : product.title}
 					</div>
 				</a>
 			</div>
@@ -122,8 +122,9 @@
 						<div class="text-xs text-gray-600 line-through">
 							{formatPrice(product.mrp, page?.data?.store?.currency?.code)}
 						</div>
+						{@const discount = Math.round(((product.mrp - product.price) / product.mrp) * 100)}
 						<div class="truncate text-xs font-thin text-[#00b852]">
-							{Math.round(((product.mrp - product.price) / product.mrp) * 100)}% OFF
+							{discount > 70 ? 70 : discount}% OFF
 						</div>
 					{/if}
 				</div>

@@ -9,6 +9,7 @@
 	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte'
 	import Pagination from '$lib/components/common/pagination.svelte'
 	import type { ProductSearchResult } from '$lib/core/types'
+	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
 
 	let collections: ProductSearchResult = $state(searchService.emptyResult())
 	let selectedSort = $state(page.url.searchParams.get('sort') || 'recommended')
@@ -40,9 +41,9 @@
 	}
 </script>
 
-<svelte:head>
-	<title>{page.params.slug || 'Collections'}</title>
-</svelte:head>
+<SeoHeader metaTitle={page.params.slug || 'Collections'} />
+
+
 
 <div class="container mx-auto mt-2 flex h-full min-h-screen flex-row max-md:px-4 md:gap-2">
 	{#if collections?.count >= 0}
@@ -71,13 +72,12 @@
 	</div>
 
 	<div class="flex-1">
-		<div class="flex flex-row items-center justify-between">
-			<span class="capitalize">
-				{#if page.params.slug || page.url.searchParams.get('search')}
-					{page.params.slug || page.url.searchParams.get('search')} -
-				{/if}
-				<span class="font-bold">{collections?.count} Collections</span>
-			</span>
+			<div class="mb-4 flex flex-col items-start gap-2">
+				<h1 class="text-2xl font-bold capitalize">
+					{page.params.slug || page.url.searchParams.get('search') || 'All Collections'}
+				</h1>
+				<span class="text-sm text-gray-400">{collections?.count} Collections found</span>
+			</div>
 
 			<div class="hidden flex-row items-center gap-2 md:flex">
 				<span class="text-sm font-normal text-gray-400">Sort by:</span>
@@ -98,7 +98,6 @@
 					optionSelected={(value: string) => selectSort(value)}
 				/>
 			</div>
-		</div>
 
 		{#if loading}
 			<ul class="mt-2 grid w-full grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">

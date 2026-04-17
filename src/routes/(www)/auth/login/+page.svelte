@@ -7,13 +7,12 @@
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import { page } from '$app/state'
 	import { LoginModule, schemas } from '$lib/core/composables/use-login.svelte'
+	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
 
 	const loginModule = new LoginModule()
 </script>
 
-<svelte:head>
-	<title>Login</title>
-</svelte:head>
+<SeoHeader metaTitle="Login" noindex={true} />
 
 <div
 	class="-mt-24 flex min-h-screen items-center justify-center bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 sm:items-center"

@@ -42,11 +42,13 @@
 <GoogleStructuredDataProductsList products={homepageModule.featuredProductsStructuredData} />
 
 <SeoHeader
-	metaTitle={page?.metaTitle || page?.data?.store?.name || 'Litekart'}
+	metaTitle={page?.metaTitle}
 	metaDescription={page?.metaDescription}
 	metaKeywords={page?.metaKeywords}
 	image={page?.logo}
 />
+
+<h1 class="sr-only">{data?.store?.name || 'Litekart'}</h1>
 
 {#if homepageModule.featuredCategories?.length > 0}
 	<div class="mx-2 flex justify-center bg-gray-100 px-2 lg:container lg:mx-auto lg:hidden">
@@ -102,7 +104,29 @@
       aspect_ratio="1:1"
     /> -->
 		<Banners sliderBannersDesktop={page?.desktopBanners} sliderBannersMobile={page?.mobileBanners} />
-
+	{:else}
+		<!-- Fallback Hero Section when no banners are configured -->
+		<div class="relative bg-gradient-to-r from-gray-900 to-gray-700 py-20 px-4 text-white">
+			<div class="mx-auto max-w-7xl">
+				<div class="grid gap-8 md:grid-cols-2">
+					<div class="flex flex-col justify-center">
+						<h1 class="mb-4 text-4xl font-bold md:text-5xl">{data?.store?.name || 'Welcome to Our Store'}</h1>
+						<p class="mb-8 text-lg text-gray-200">
+							{data?.store?.description || 'Discover amazing products at unbeatable prices. Shop now and enjoy fast shipping on all orders.'}
+						</p>
+						<a
+							href="/products"
+							class="inline-block w-fit rounded-lg bg-white px-8 py-3 font-semibold text-gray-900 transition-colors hover:bg-gray-100"
+						>
+							Shop Now
+						</a>
+					</div>
+					<div class="hidden md:flex items-center justify-center">
+						<div class="text-9xl font-bold text-white/20">NEW</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	{/if}
 </div>
 

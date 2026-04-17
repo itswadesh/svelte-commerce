@@ -3,7 +3,7 @@
 	import { Input } from '$lib/components/ui/input'
 	import { Label } from '$lib/components/ui/label'
 	import { Textarea } from '$lib/components/ui/textarea'
-	import { Check, AlertCircle } from 'lucide-svelte'
+	import { AlertCircle, Check, Mail, Phone, MapPin } from 'lucide-svelte'
 	import { page } from '$app/state'
 	import ContactUsRenderer from '$lib/core/composables/contact-us-renderer.svelte'
 
@@ -28,7 +28,8 @@
 					<p class="mb-6 text-zinc-300">Fill up the form and our Team will get back to you within 24 hours.</p>
 					<br />
 					<div class="prose-lg text-base leading-tight text-gray-300 [&>p]:my-2">{@html page?.data?.page?.content}</div>
-					<!-- {#if page?.data?.store?.businessPhone || page?.data?.store?.businessEmail}
+					
+					{#if page?.data?.store?.businessPhone || page?.data?.store?.businessEmail}
 				<ul class="mb-6 flex flex-col gap-4">
 					{#if page?.data?.store?.businessPhone}
 						<li class="flex items-center gap-4">
@@ -66,7 +67,7 @@
 						</li>
 					{/if}
 			</ul>
-			{/if} -->
+			{/if}
 
 					{#if page?.data?.store?.plugins?.socialSharingButtons?.active}
 						<div class="flex items-center gap-4">
@@ -165,7 +166,6 @@
 					{:else}
 						<div class="w-full border bg-white p-6 shadow-lg">
 							<div class="mb-6">
-								<h2 class="text-2xl font-semibold">Contact Us</h2>
 								<p class="text-sm text-gray-500">Fill out the form below and we'll get back to you as soon as possible.</p>
 							</div>
 							<div>

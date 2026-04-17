@@ -3,7 +3,10 @@
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { ShoppingBag, Home, ArrowLeft } from 'lucide-svelte'
 	import { goto } from '$app/navigation'
+	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
 </script>
+
+<SeoHeader metaTitle={`Error ${page.status}`} noindex={true} />
 
 <div class="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-4">
 	<div class="text-center">
