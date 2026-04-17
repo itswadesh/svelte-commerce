@@ -1,6 +1,5 @@
 <script lang="ts">
 import CartItem from '$lib/components/cart/cart-item.svelte'
-import type { CartProduct } from '$lib/core/types'
 import { X, UserCircle, ChevronLeftIcon, Phone, Mail, Menu, ChevronDown } from 'lucide-svelte'
 import MainNav from './main-nav.svelte'
 import { Button } from '$lib/components/ui/button'
@@ -66,7 +65,7 @@ const cartState = navModule.cartState
 		{/if}
 	{/if}
 	<div class="mx mx-2 flex items-center justify-between py-3 lg:container sm:py-2 lg:mx-auto">
-		<div class="flex items-center gap-3">
+		<div class="hidden justify-center gap-3 sm:flex">
 			<button
 				aria-label="Sidebar"
 				type="button"
@@ -80,26 +79,40 @@ const cartState = navModule.cartState
 			<MainNav />
 		</div>
 
-		{#if navModule.isProductListingPage && page.url.pathname !== '/'}
-			<div class="flex items-center gap-2 sm:hidden">
-				<button class="flex items-center gap-2 text-lg font-medium" aria-label="Go back" onclick={navModule.goBack}>
-					<ChevronLeftIcon class="h-6 w-6 font-bold" />
-					<span class="sr-only">Go back</span>
-				</button>
+		<div class="flex gap-3 sm:hidden">
+			{#if navModule.isProductListingPage}
+				<div class="flex items-center gap-2">
+					<button class="flex items-center gap-2 text-lg font-medium" aria-label="Go back" onclick={navModule.goBack}>
+						<ChevronLeftIcon class="h-6 w-6 font-bold" />
+						<span class="sr-only">Go back</span>
+					</button>
 
-				<div class="flex flex-col items-start">
-					{#if page.params?.slug || page.url?.searchParams?.get?.('search')}
-						<h1 class="text-base font-semibold capitalize">
-							{page.params?.slug?.replace?.(/-/g, ' ').replace?.(/\b\w/g, (c) => c?.toUpperCase?.()) || page.url?.searchParams?.get?.('search')}
-						</h1>
-					{:else}
-						<h1 class="text-base font-semibold">Products</h1>
-					{/if}
+					<div class="flex flex-col items-start">
+						{#if page.params?.slug || page.url?.searchParams?.get?.('search')}
+							<h1 class="text-base font-semibold capitalize">
+								{page.params?.slug?.replace?.(/-/g, ' ').replace?.(/\b\w/g, (c) => c?.toUpperCase?.()) || page.url?.searchParams?.get?.('search')}
+							</h1>
+						{:else}
+							<h1 class="text-base font-semibold">Products</h1>
+						{/if}
 
-					<p class="text-xs text-gray-500">{navModule.productsCount > 999 ? '1000+' : navModule.productsCount} products</p>
+						<p class="text-xs text-gray-500">{navModule.productsCount > 999 ? '1000+' : navModule.productsCount} products</p>
+					</div>
 				</div>
-			</div>
-		{/if}
+			{:else}
+				<button
+					aria-label="Sidebar"
+					type="button"
+					class="block text-zinc-200 transition duration-300 hover:text-white focus:outline-none md:hidden"
+					onclick={() => {
+						navModule.openSidebar = true
+					}}
+				>
+					<Menu class="text-black" />
+				</button>
+				<MainNav />
+			{/if}
+		</div>
 
 		{#if navModule.megaMenuPluginActive}
 			<div class="hidden md:block">
@@ -213,7 +226,7 @@ const cartState = navModule.cartState
 											</button>
 
 											{#each cartState.cart?.lineItems || [] as _, i}
-												<CartItem bind:cartProduct={cartState.cart.lineItems[i] as unknown as CartProduct} removeItem={navModule.removeCartItem} />
+												<CartItem bind:cartProduct={cartState.cart.lineItems[i]} removeItem={navModule.removeCartItem} />
 											{/each}
 										</div>
 
