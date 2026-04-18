@@ -21,7 +21,7 @@
 
 <script lang="ts">
 	import { Dialog as SheetPrimitive, type WithoutChildrenOrChild } from 'bits-ui'
-  import { X } from 'lucide-svelte'
+  import { X } from '@lucide/svelte'
 	import type { Snippet } from 'svelte'
 	import SheetOverlay from './sheet-overlay.svelte'
 	import { cn } from '$lib/core/utils'

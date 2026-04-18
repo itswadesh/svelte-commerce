@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { LoaderIcon } from 'lucide-svelte'
+	import { LoaderIcon } from '@lucide/svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { authService } from '$lib/core/services/index.js'
 	import { toast } from 'svelte-sonner'

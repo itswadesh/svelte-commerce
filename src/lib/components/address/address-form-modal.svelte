@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Dialog, DialogContent, DialogHeader, DialogTitle } from '$lib/components/ui/dialog'
 	import { Button } from '$lib/components/ui/button'
-	import { ArrowLeft, Trash2 } from 'lucide-svelte'
+	import { ArrowLeft, Trash2 } from '@lucide/svelte'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import Select from '../form/select.svelte'
 	import { page } from '$app/state'

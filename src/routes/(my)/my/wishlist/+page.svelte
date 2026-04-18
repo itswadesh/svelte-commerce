@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button'
-	import { X, Heart } from 'lucide-svelte'
 	import { MyWishlistRenderer } from '$lib/core/composables/index.js'
+	import { X, Heart } from '@lucide/svelte'
 </script>
 
 <svelte:head>

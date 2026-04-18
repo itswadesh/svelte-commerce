@@ -2,7 +2,7 @@
 	import { Button } from '$lib/components/ui/button'
 	import { Dialog, DialogContent, DialogHeader, DialogTitle } from '$lib/components/ui/dialog'
 	import { AddressListModule } from '$lib/core/composables/index.js'
-	import { LoaderCircle, PencilIcon as PencilSimple, Plus, Trash2 } from 'lucide-svelte'
+	import { LoaderCircle, PencilIcon as PencilSimple, Plus, Trash2 } from '@lucide/svelte'
 
 	let {
 		show = $bindable(),

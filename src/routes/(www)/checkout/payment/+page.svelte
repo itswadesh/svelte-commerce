@@ -330,4 +330,3 @@ const cartState = paymentModule.cartState
 		</div>
 	</div>
 </div>
-

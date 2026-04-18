@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ArrowUpRight, Search, X } from 'lucide-svelte'
+	import { ArrowUpRight, Search, X } from '@lucide/svelte'
 	import { Input } from '$lib/components/ui/input'
 	import { cn } from '$lib/core/utils'
 	import { MsSearchRenderer } from '$lib/core/composables/index.js'

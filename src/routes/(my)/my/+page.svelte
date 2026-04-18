@@ -1,5 +1,5 @@
 <script>
-	import { Package, ListTree, Tag, DollarSign, UploadCloud, ArrowLeft } from 'lucide-svelte'
+	import { Package, ListTree, Tag, DollarSign, UploadCloud, ArrowLeft } from '@lucide/svelte'
 	import { Button } from '$lib/components/ui/button'
 
 	const importOptions = [

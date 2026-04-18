@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { CartProduct } from '$lib/core/types/index.js'
-	import { Minus, Plus, Trash } from 'lucide-svelte'
 	import { getCartState, getUserState } from '$lib/core/stores/index.js'
+	import { Minus, Plus, Trash } from '@lucide/svelte'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import LoadingDotsGif from '$lib/assets/dots-loading.gif'
 	import { formatPrice, fireGTagEvent } from '$lib/core/utils/index.js'
@@ -30,7 +30,7 @@
 				cartState.isOpen = false
 			}}
 		>
-			<LazyImg src={cartProduct?.thumbnail} alt="Product" class="mr-4 size-36 rounded object-contain" />
+			<LazyImg src={cartProduct?.thumbnail} alt={cartProduct?.title || 'Product'} class="mr-4 size-36 rounded object-contain" />
 		</a>
 		<div>
 			<a

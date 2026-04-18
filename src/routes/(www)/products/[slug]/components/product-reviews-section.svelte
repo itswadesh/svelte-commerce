@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { toast } from 'svelte-sonner'
-	import { Image, Star, StarIcon, X } from 'lucide-svelte'
+	import { Image, Star, StarIcon, X } from '@lucide/svelte'
 	import { date } from '$lib/core/utils'
 	import * as Tabs from '$lib/components/ui/tabs'
 	import { page } from '$app/state'

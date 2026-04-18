@@ -4,7 +4,7 @@
 	import { setUserState } from '$lib/core/stores/index.js'
 	import GoogleAnalytics from '$lib/core/components/plugins/google-analytics.svelte'
 	import { navigating } from '$app/stores'
-	import { Loader } from 'lucide-svelte'
+	import { Loader } from '@lucide/svelte'
 	import type { Snippet } from 'svelte'
 	import type { StoreData } from '$lib/core/types/index.js'
 	interface LayoutData {

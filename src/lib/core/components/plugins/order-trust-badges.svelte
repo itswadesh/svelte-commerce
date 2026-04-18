@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Award, RotateCcw, ShieldCheck } from 'lucide-svelte'
+	import { Award, RotateCcw, ShieldCheck } from '@lucide/svelte'
 </script>
 
 <div class="w-full rounded-lg border border-slate-200 bg-white">

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import { ChevronRight, Home } from 'lucide-svelte'
+	import { ChevronRight, Home } from '@lucide/svelte'
 
 	let { items: providedItems, product }: { items?: []; product?: Record<string, any> } = $props()
 

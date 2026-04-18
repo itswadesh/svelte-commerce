@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Select as SelectPrimitive, type WithoutChild } from 'bits-ui'
-  import { ChevronsUpDown } from 'lucide-svelte';
+  import { ChevronsUpDown } from '@lucide/svelte';
 	import { cn } from '$lib/core/utils'
 
 	let { ref = $bindable(null), class: className, children, ...restProps }: WithoutChild<SelectPrimitive.TriggerProps> = $props()

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Pagination as PaginationPrimitive } from 'bits-ui'
-	import { ChevronRight } from 'lucide-svelte'
+	import { ChevronRight } from '@lucide/svelte'
 	import { cn } from '$lib/core/utils'
 	import { buttonVariants } from '$lib/components/ui/button/index.js'
 

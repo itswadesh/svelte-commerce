@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state'
 	import { useProductState } from '$lib/core/composables/index.js'
-	import { ChevronDown, ChevronUp, Info } from 'lucide-svelte'
+	import { ChevronDown, ChevronUp, Info } from '@lucide/svelte'
 
 	const productState = useProductState()
 	const data = $derived(page.data)
