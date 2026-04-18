@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
 import { ChevronDown, ShieldCheck, Lock, Truck, RefreshCw } from 'lucide-svelte'
 import WhatsappChatButton from '$lib/core/components/plugins/whatsapp-chat-button.svelte'
 import { page } from '$app/state'
 import TrustpilotPlugin from '$lib/core/components/plugins/trustpilot-plugin.svelte'
-import { sanitize } from '$lib/core/utils/sanitize'
+import { sanitize } from '$lib/core/utils/index.js'
 import masterCard from '$lib/assets/payment-methods/mastercard.png'
 import paypal from '$lib/assets/payment-methods/paypal.png'
 import skrill from '$lib/assets/payment-methods/skrill.png'
@@ -13,7 +13,7 @@ let paymentMethodCards = [masterCard, paypal, skrill, visa]
 
 // Derive store data to prevent unnecessary re-renders
 const storeData = $derived(page?.data?.store || {})
-const footerMenu = $derived(storeData?.menu?.find(menu => menu?.menuId === 'footer')?.items || [])
+const footerMenu = $derived(storeData?.menu?.find((menu: { menuId?: string }) => menu?.menuId === 'footer')?.items || [])
 const socialSharing = $derived(storeData?.plugins?.socialSharingButtons || {})
 const footerSettings = $derived(storeData?.plugins?.footerSettings)
 const shouldCollapseOnMobile = $derived(footerSettings?.collapseOnMobile || false)
@@ -100,7 +100,7 @@ let isExpanded = $state(false)
 								{#each Object.entries(socialSharing || {}).filter(([key]) => !['active', 'position'].includes(key)) as [key, social]}
 									{#if social}
 										<a
-											href={social}
+											href={social as string}
 											target="_blank"
 											rel="nofollow"
 											class="fill-gray-500 text-gray-500 hover:fill-gray-900 hover:text-gray-900 dark:hover:fill-gray-600 dark:hover:text-gray-600"

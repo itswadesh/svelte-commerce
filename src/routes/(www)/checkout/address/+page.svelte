@@ -12,9 +12,9 @@ import { Skeleton } from '$lib/components/ui/skeleton'
 import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
 import { showAuthModal } from '$lib/core/components/auth/auth-utils'
 import Textbox from '$lib/components/form/textbox.svelte'
-import { AddressModule, emptyAddress, schemas } from '$lib/core/composables/use-checkout-address.svelte'
+import { AddressModule, emptyAddress, checkoutAddressSchema as schemas } from '$lib/core/composables/index.js'
 import { z } from 'zod'
-import { appendOneTimeCartId } from '$lib/core/utils/one-time-cart'
+import { appendOneTimeCartId } from '$lib/core/utils/index.js'
 
 const addressModule = new AddressModule()
 const cartState = addressModule.cartState

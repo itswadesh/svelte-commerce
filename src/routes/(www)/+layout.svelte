@@ -1,13 +1,11 @@
 <script lang="ts">
-import { setCartState } from '$lib/core/stores/cart.svelte'
+import { setCartState, setProductState, setWishlistState } from '$lib/core/stores/index.js'
 import { onMount, type Snippet } from 'svelte'
 import Nav from '$lib/components/nav/nav.svelte'
 import Footer from '$lib/components/common/footer.svelte'
-import { setProductState } from '$lib/core/stores/product.svelte'
 import BottomNav from '$lib/components/nav/bottom-nav.svelte'
 import StorePlugins from '$lib/core/components/plugins/store-plugins.svelte'
 import { page } from '$app/state'
-import { setWishlistState } from '$lib/core/stores/wishlist.svelte'
 let { children, data }: { children: Snippet; data: { store: StoreData } } = $props()
 
 setCartState()

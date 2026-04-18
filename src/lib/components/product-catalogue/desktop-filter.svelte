@@ -6,7 +6,7 @@
 	import { browser } from '$app/environment'
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
 	import { GetColorName } from 'hex-color-to-color-name'
-	import { getDesktopFilterState } from '$lib/core/composables/use-desktop-filters.svelte'
+	import { getDesktopFilterState } from '$lib/core/composables/index.js'
 
 	type FilterProps = {
 		class?: string

@@ -6,8 +6,8 @@
 	import Button from '$lib/components/ui/button/button.svelte'
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
 	import Input from '$lib/components/ui/input/input.svelte'
-	import { getDesktopFilterState } from '$lib/core/composables/use-desktop-filters.svelte'
-	import { sortOptions } from '$lib/config'
+	import { getDesktopFilterState } from '$lib/core/composables/index.js'
+	import { sortOptions } from '$lib/config.js'
 
 	let { selectedSort = $bindable(), onSortChange = (value: string) => {} } = $props()
 
