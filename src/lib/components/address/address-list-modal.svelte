@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button'
 	import { Dialog, DialogContent, DialogHeader, DialogTitle } from '$lib/components/ui/dialog'
-	import { AddressListState } from '$lib/core/composables/use-address-list-form.svelte'
+	import { AddressListModule } from '$lib/core/composables/index.js'
 	import { LoaderCircle, PencilIcon as PencilSimple, Plus, Trash2 } from 'lucide-svelte'
 
 	let {
@@ -21,7 +21,7 @@
 		onaddnew?: () => void
 		ondelete?: (address: any) => void
 	} = $props()
-	const addressState = new AddressListState({ paginateAddress, onaddnew, onedit, onselect })
+	const addressState = new AddressListModule({ paginateAddress, onaddnew, onedit, onselect })
 </script>
 
 <Dialog bind:open={show}>

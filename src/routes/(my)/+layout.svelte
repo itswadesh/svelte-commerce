@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { setCartState } from '$lib/core/stores/cart.svelte'
+	import { setCartState, setUserState, setWishlistState } from '$lib/core/stores/index.js'
 	import { page } from '$app/state'
 	import Footer from '$lib/components/common/footer.svelte'
 	import Nav from '$lib/components/nav/nav.svelte'
@@ -7,11 +7,9 @@
 	import type { Snippet } from 'svelte'
 	import Breadcrumb from '$lib/components/ui/breadcrumb-route.svelte'
 	import { MapPinHouse } from 'lucide-svelte'
-	import { setUserState } from '$lib/core/stores/auth.svelte'
 	import StorePlugins from '$lib/core/components/plugins/store-plugins.svelte'
 	import { fade, fly } from 'svelte/transition'
 	import { quintOut } from 'svelte/easing'
-  import { setWishlistState } from '$lib/core/stores/wishlist.svelte'
 
 	let { children }: { children: Snippet } = $props()
 	let isMobileMenuOpen = $state(false)

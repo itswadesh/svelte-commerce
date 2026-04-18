@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { useProductState } from '$lib/core/composables/product'
+	import { useProductState } from '$lib/core/composables/index.js'
 	import QrCodeDisplayer from '$lib/core/components/common/qr-code.svelte'
 	import { page } from '$app/state'
 

@@ -5,7 +5,7 @@
 	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
 	import PincodeCheck from '$lib/components/product-catalogue/pincode-check.svelte'
 	import Breadcrumb from '$lib/components/ui/breadcrumb.svelte'
-	import { useProductState } from '$lib/core/composables/product'
+	import { useProductState } from '$lib/core/composables/index.js'
 	import { Truck } from 'lucide-svelte'
 	import ProductAggregation from './product-aggregation.svelte'
 	import ProductCartAndWishlistButtons from './product-cart-and-wishlist-buttons.svelte'

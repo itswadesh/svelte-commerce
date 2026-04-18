@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ProductCard from '$lib/components/product-catalogue/product-card.svelte'
-	import { useProductState } from '$lib/core/composables/product'
+	import { useProductState } from '$lib/core/composables/index.js'
 
 	const productState = useProductState()
 </script>

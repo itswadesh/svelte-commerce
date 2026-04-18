@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { useProductState } from '$lib/core/composables/product'
+	import { useProductState } from '$lib/core/composables/index.js'
 	import { ChartNoAxesGanttIcon } from 'lucide-svelte'
 
 	const productState = useProductState()

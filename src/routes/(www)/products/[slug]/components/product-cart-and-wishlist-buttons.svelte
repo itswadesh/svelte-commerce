@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/state'
 	import { Button } from '$lib/components/ui/button'
-	import { useProductState } from '$lib/core/composables/product'
+	import { useProductState } from '$lib/core/composables/index.js'
 	import { formatPrice } from '$lib/core/utils'
-	import { fireGTagEvent } from '$lib/core/utils/gtag'
+	import { fireGTagEvent } from '$lib/core/utils/index.js'
 	import { Check, HeartIcon, LoaderCircle, ShoppingCart } from 'lucide-svelte'
 	import { toast } from 'svelte-sonner'
 	import { innerWidth } from 'svelte/reactivity/window'

@@ -1,1 +1,1 @@
-export * from '@misiki/litekart-connector'
+export * from '@misiki/kitcommerce-core/services'

@@ -2,7 +2,7 @@
 	import { page } from '$app/state'
 	import { slide } from 'svelte/transition'
 	import { Home, Grid, Heart, ShoppingCart, Minus, Plus, Trash2, Store, ArrowLeft, Play } from 'lucide-svelte'
-	import { getCartState } from '$lib/core/stores/cart.svelte'
+	import { getCartState } from '$lib/core/stores/index.js'
 	import { Button } from '$lib/components/ui/button'
 	import { Separator } from '$lib/components/ui/separator'
 	import { goto } from '$app/navigation'

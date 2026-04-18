@@ -7,8 +7,8 @@ import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
 import { page } from '$app/state'
 import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
 import CouponsDrawer from '$lib/components/coupon/coupons-drawer.svelte'
-import { PaymentModule } from '$lib/core/composables/use-payment.svelte'
-import { appendOneTimeCartId } from '$lib/core/utils/one-time-cart'
+import { PaymentModule } from '$lib/core/composables/index.js'
+import { appendOneTimeCartId } from '$lib/core/utils/index.js'
 
 // Check if phone is required based on login type
 const isPhoneRequired = page.data?.store?.isPhoneMandatory
@@ -273,7 +273,7 @@ const cartState = paymentModule.cartState
 									<Button
 										class="bottom-0 left-0 right-0 z-[45] w-full py-6 text-lg hover:bg-primary disabled:!opacity-100 max-sm:fixed max-sm:h-16 max-sm:rounded-none max-sm:disabled:bg-gray-500"
 										onclick={paymentModule.placeOrder}
-										disabled={paymentModule.checkoutDisabled || !cartState.cart.payment_method}
+										disabled={paymentModule.checkoutDisabled}
 									>
 										{#if paymentModule.paymentLoader}
 											<LoadingDots />

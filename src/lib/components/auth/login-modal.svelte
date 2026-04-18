@@ -8,7 +8,7 @@ import Textbox from '$lib/components/form/textbox.svelte'
 import Modal from '../common/modal.svelte'
 import { page } from '$app/state'
 import AuthButton from '$lib/core/components/auth/auth-button.svelte'
-import { LoginModule, schemas } from '$lib/core/composables/use-login.svelte'
+import { LoginModule, loginModuleSchema as schemas } from '$lib/core/composables/index.js'
 
 let { show = $bindable(false) } = $props()
 

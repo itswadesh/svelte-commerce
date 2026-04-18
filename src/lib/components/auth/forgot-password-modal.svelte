@@ -4,7 +4,7 @@
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import Modal from '$lib/components/common/modal.svelte'
 	import AuthButton from '$lib/core/components/auth/auth-button.svelte'
-	import { ForgotPasswordModule, schemas } from '$lib/core/composables/use-forgot-password.svelte'
+	import { ForgotPasswordModule, forgotPasswordSchema as schemas } from '$lib/core/composables/index.js'
 
 	let { show = $bindable() } = $props()
 

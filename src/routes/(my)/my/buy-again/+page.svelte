@@ -1,7 +1,7 @@
 <script>
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
-	import { getCartState } from '$lib/core/stores/cart.svelte'
+	import { getCartState } from '$lib/core/stores/index.js'
 	import { formatPrice } from '$lib/core/utils'
 	const cartState = getCartState()
 
@@ -10,7 +10,7 @@
 	import { onMount } from 'svelte'
 	import { Plus } from 'lucide-svelte'
 	import { page } from '$app/state'
-	import { orderService } from '$lib/core/services'
+	import { orderService } from '$lib/core/services/index.js'
 
 	onMount(async () => {
 		data = await orderService.buyAgain()

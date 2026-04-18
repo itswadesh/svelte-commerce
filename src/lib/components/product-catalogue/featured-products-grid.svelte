@@ -1,5 +1,5 @@
  <script lang="ts">import Product from '$lib/components/product-catalogue/product-card.svelte'
-  import { FeaturedProductsGrid } from '$lib/core/composables/use-featured-products-grid.svelte'
+  import { FeaturedProductsGrid } from '$lib/core/composables/index.js'
 
 	let { data, displayProduct, loadMore, hasMore = false, loading = false } = $props()
   const featuredProductGrid = new FeaturedProductsGrid({ loadMore, loading, hasMore })

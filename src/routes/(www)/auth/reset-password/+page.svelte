@@ -5,7 +5,7 @@
 	import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '$lib/components/ui/card'
 	import { AlertCircle, ArrowLeft, LoaderIcon } from 'lucide-svelte'
 	import AuthButton from '$lib/core/components/auth/auth-button.svelte'
-	import { ResetPasswordModule } from '$lib/core/composables/use-reset-password.svelte'
+	import { ResetPasswordModule } from '$lib/core/composables/index.js'
 
 	const resetPasswordModule = new ResetPasswordModule()
 	const userState = resetPasswordModule.userState

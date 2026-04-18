@@ -3,7 +3,7 @@
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import { page } from '$app/state'
 	import AuthButton from '$lib/core/components/auth/auth-button.svelte'
-	import { JoinAsVendorModule } from '$lib/core/composables/use-join-as-vendor.svelte'
+	import { JoinAsVendorModule } from '$lib/core/composables/index.js'
 	import { LoaderCircle } from 'lucide-svelte'
 
 	const joinAsVendorModule = new JoinAsVendorModule()

@@ -12,7 +12,7 @@
 	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
 	import Collections from '$lib/components/home/collections.svelte'
 	let { data } = $props()
-	import { HomepageModule } from '$lib/core/composables/use-homepage.svelte'
+	import { HomepageModule } from '$lib/core/composables/index.js'
 	import { timestampToAgo } from '$lib/core/utils/index.js'
   import Slider from '$lib/components/home/slider.svelte'
 

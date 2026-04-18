@@ -4,7 +4,7 @@
 	import { Button } from '$lib/components/ui/button'
 	import Modal from '$lib/components/common/modal.svelte'
 	import { date } from '$lib/core/utils'
-	import OrderTimelineRenderer from '$lib/core/composables/order-timeline-renderer.svelte'
+	import { OrderTimelineRenderer } from '$lib/core/composables/index.js'
 
 	let { timeline } = $props()
 </script>

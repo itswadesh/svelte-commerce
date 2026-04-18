@@ -5,7 +5,7 @@
 	import { Textarea } from '$lib/components/ui/textarea'
 	import { Check, AlertCircle } from 'lucide-svelte'
 	import { page } from '$app/state'
-	import ContactUsRenderer from '$lib/core/composables/contact-us-renderer.svelte'
+	import { ContactUsRenderer } from '$lib/core/composables/index.js'
 
 	let info = $state({
 		name: '',

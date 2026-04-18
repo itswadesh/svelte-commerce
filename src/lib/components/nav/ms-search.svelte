@@ -2,7 +2,7 @@
 	import { ArrowUpRight, Search, X } from 'lucide-svelte'
 	import { Input } from '$lib/components/ui/input'
 	import { cn } from '$lib/core/utils'
-	import MsSearchRenderer from '$lib/core/composables/ms-search-renderer.svelte'
+	import { MsSearchRenderer } from '$lib/core/composables/index.js'
 
 	let { class: className = '', placeholder = 'Search...' } = $props()
 

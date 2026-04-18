@@ -7,7 +7,7 @@
 	import { page } from '$app/state'
 	import Label from '../ui/label/label.svelte'
 	import { AddressSchema } from '$lib/core/components/address/schema'
-	import AddressFormRenderer from '$lib/core/composables/address-form-renderer.svelte'
+	import { AddressFormRenderer } from '$lib/core/composables/index.js'
 	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
 
 	let {

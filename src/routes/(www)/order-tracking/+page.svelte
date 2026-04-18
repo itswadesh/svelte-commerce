@@ -9,7 +9,7 @@
 	import OrderTimeline from '$lib/components/order/order-timeline.svelte'
 	import StatusCell from '$lib/components/common/status-cell.svelte'
 	import { CheckCircle } from 'lucide-svelte'
-	import { OrderTrackingModule } from '$lib/core/composables/use-order-tracking.svelte'
+	import { OrderTrackingModule } from '$lib/core/composables/index.js'
 
 	const orderTrackingModule = new OrderTrackingModule()
 </script>

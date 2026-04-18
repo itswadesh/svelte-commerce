@@ -7,7 +7,7 @@
 	import { FileText, Truck, Calendar, CreditCard, Home, Building, ShoppingBag, Tag, Currency, RefreshCw, ChevronRight } from 'lucide-svelte'
 	import { page } from '$app/state'
 	import { date, formatPrice } from '$lib/core/utils'
-	import MyOrdersIdRenderer from '$lib/core/composables/my-orders-id-renderer.svelte'
+	import { MyOrdersIdRenderer } from '$lib/core/composables/index.js'
 
 	let { class: klass = '', data, ...rest } = $props()
 </script>

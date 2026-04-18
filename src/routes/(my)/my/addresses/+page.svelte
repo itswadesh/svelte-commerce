@@ -4,7 +4,7 @@
 	import { PencilIcon } from 'lucide-svelte'
 	import AddressFormModal from '$lib/components/address/address-form-modal.svelte'
 	import Pagination from '$lib/components/common/pagination.svelte'
-	import { MyAddressesModule } from '$lib/core/composables/use-my-addresses.svelte'
+	import { MyAddressesModule } from '$lib/core/composables/index.js'
 
 	const addressesModule = new MyAddressesModule()
 </script>

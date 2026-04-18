@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition'
-	import BlogRenderer from '$lib/core/composables/blog-renderer.svelte'
+	import { BlogRenderer } from '$lib/core/composables/index.js'
 	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
 </script>
 

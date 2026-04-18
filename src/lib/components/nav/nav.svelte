@@ -13,7 +13,7 @@ import MsSearch from './ms-search.svelte'
 import AuthModal from '$lib/components/auth/auth-modal.svelte'
 import AuthButton from '$lib/core/components/auth/auth-button.svelte'
 import { fade } from 'svelte/transition'
-import { NavModule } from '$lib/core/composables/use-nav.svelte'
+import { NavModule } from '$lib/core/composables/index.js'
 
 const menuItemsUser = [
 	{ title: 'Profile', url: '/my/profile' },

@@ -1,12 +1,10 @@
 <script lang="ts">
-	import type { CartProduct } from '$lib/core/types'
+	import type { CartProduct } from '$lib/core/types/index.js'
 	import { Minus, Plus, Trash } from 'lucide-svelte'
-	import { getCartState } from '$lib/core/stores/cart.svelte'
-	import { formatPrice } from '$lib/core/utils'
+	import { getCartState, getUserState } from '$lib/core/stores/index.js'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import LoadingDotsGif from '$lib/assets/dots-loading.gif'
-	import { fireGTagEvent } from '$lib/core/utils/gtag'
-	import { getUserState } from '$lib/core/stores/auth.svelte'
+	import { formatPrice, fireGTagEvent } from '$lib/core/utils/index.js'
   import { page } from '$app/state'
 
 	const cartState = getCartState()

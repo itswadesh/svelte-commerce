@@ -4,7 +4,7 @@
 	import { date } from '$lib/core/utils'
 	import * as Tabs from '$lib/components/ui/tabs'
 	import { page } from '$app/state'
-	import { useProductState } from '$lib/core/composables/product'
+	import { useProductState } from '$lib/core/composables/index.js'
 	import { productService } from '$lib/core/services'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { Textarea } from '$lib/components/ui/textarea'

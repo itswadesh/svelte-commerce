@@ -4,7 +4,7 @@
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import Modal from '../common/modal.svelte'
 	import AuthButton from '$lib/core/components/auth/auth-button.svelte'
-	import SignupRenderer from '$lib/core/composables/signup-renderer.svelte'
+	import { SignupRenderer } from '$lib/core/composables/index.js'
 	import { page } from '$app/state'
 
 	let { show = $bindable() } = $props()
@@ -74,14 +74,14 @@
 							autocomplete="email"
 						/>
 
-						<!-- <Textbox 
-					name="phone" 
-					type="tel" 
-					bind:value={phone} 
-					placeholder="+1234567890" 
-					schema={schemas.phone} 
-					label="Phone number" 
-					required 
+						<!-- <Textbox
+					name="phone"
+					type="tel"
+					bind:value={phone}
+					placeholder="+1234567890"
+					schema={schemas.phone}
+					label="Phone number"
+					required
 					aria-label="Phone number"
 					autocomplete="tel"
 				/> -->
@@ -110,9 +110,9 @@
 							autocomplete="new-password"
 						/>
 
-						<Button 
-							type="submit" 
-							class="w-full" 
+						<Button
+							type="submit"
+							class="w-full"
 							disabled={isLoading || info.password !== info.confirmPassword}
 							aria-label={isLoading ? 'Creating account...' : info.password !== info.confirmPassword ? 'Passwords do not match' : 'Create account'}
 						>

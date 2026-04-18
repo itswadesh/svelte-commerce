@@ -5,10 +5,10 @@
 	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import EmptyImage from '$lib/core/components/image/empty-image.svelte'
-	import { getCartState } from '$lib/core/stores/cart.svelte'
+	import { getCartState } from '$lib/core/stores/index.js'
 
 	import { formatPrice } from '$lib/core/utils'
-	import ProductCardRenderer from '$lib/core/composables/product-card-renderer.svelte'
+	import { ProductCardRenderer } from '$lib/core/composables/index.js'
 
 	const cartState = getCartState()
 	let { product, aspectRatio, displayProduct, hideVariations = true, hideCartControls = true }: any = $props()

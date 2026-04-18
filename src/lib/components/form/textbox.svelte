@@ -5,7 +5,7 @@
 	import { cn } from '$lib/core/utils'
 	import Label from '../ui/label/label.svelte'
 	import { AlertCircle, Eye, EyeOff } from 'lucide-svelte'
-	import FormTextboxRenderer from '$lib/core/composables/form-textbox-renderer.svelte'
+	import { FormTextboxRenderer } from '$lib/core/composables/index.js'
 
 	interface $$Props extends HTMLInputAttributes {
 		label?: string

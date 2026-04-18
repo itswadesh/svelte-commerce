@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { LoaderIcon } from 'lucide-svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
-	import { authService } from '$lib/core/services'
+	import { authService } from '$lib/core/services/index.js'
 	import { toast } from 'svelte-sonner'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import { z } from 'zod'
-	import { getUserState } from '$lib/core/stores/auth.svelte'
+	import { getUserState } from '$lib/core/stores/index.js'
 	import { onMount } from 'svelte'
 	const userState = getUserState()
 	import { goto } from '$app/navigation'

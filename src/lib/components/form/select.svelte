@@ -7,7 +7,7 @@
 	import Label from '../ui/label/label.svelte'
 	import { Search } from 'lucide-svelte'
 	import Input from '../ui/input/input.svelte'
-	import FormSelectRenderer from '$lib/core/composables/form-select-renderer.svelte'
+	import { FormSelectRenderer } from '$lib/core/composables/index.js'
 
 	let {
 		error = '',

@@ -2,7 +2,7 @@
 	import Input from '$lib/components/ui/input/input.svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { Lock, KeyRound, Eye, EyeOff } from 'lucide-svelte'
-	import { ChangePasswordModule } from '$lib/core/composables/use-change-password.svelte'
+	import { ChangePasswordModule } from '$lib/core/composables/index.js'
 
 	const changePasswordModule = new ChangePasswordModule()
 </script>

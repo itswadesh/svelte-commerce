@@ -1,5 +1,5 @@
 <script lang="ts">
-import { setCartState } from '$lib/core/stores/cart.svelte'
+import { setCartState } from '$lib/core/stores/index.js'
 import type { Snippet } from 'svelte'
 import Nav from '$lib/components/nav/nav.svelte'
 import Footer from '$lib/components/common/footer.svelte'

@@ -1,2 +1,3 @@
-export { load } from '$lib/core/load-functions/(www)/auth/verify/load.server'
+export { wwwAuthVerifyLoadServer as load } from "$lib/core/load-functions/index.js"
+
 
