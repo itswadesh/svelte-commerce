@@ -10,7 +10,6 @@
 	import Pagination from '$lib/components/common/pagination.svelte'
 	import type { ProductSearchResult } from '$lib/core/types'
 	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
-	import { searchService } from '$lib/core/services'
 
 	let vendors: ProductSearchResult = $state(searchService.emptyResult())
 	let selectedSort = $state(page.url.searchParams.get('sort') || 'recommended')
