@@ -4,7 +4,7 @@
 	import { page } from '$app/state'
 	import AuthButton from '$lib/core/components/auth/auth-button.svelte'
 	import { JoinAsVendorModule } from '$lib/core/composables/index.js'
-	import { LoaderCircle } from 'lucide-svelte'
+	import { LoaderCircle } from '@lucide/svelte'
 
 	const joinAsVendorModule = new JoinAsVendorModule()
 	const schemas = joinAsVendorModule.schemas

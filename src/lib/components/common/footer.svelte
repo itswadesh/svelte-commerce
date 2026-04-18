@@ -1,5 +1,5 @@
 <script lang="ts">
-import { ChevronDown, ShieldCheck, Lock, Truck, RefreshCw } from 'lucide-svelte'
+import { ChevronDown, ShieldCheck, Lock, Truck, RefreshCw } from '@lucide/svelte'
 import WhatsappChatButton from '$lib/core/components/plugins/whatsapp-chat-button.svelte'
 import { page } from '$app/state'
 import TrustpilotPlugin from '$lib/core/components/plugins/trustpilot-plugin.svelte'

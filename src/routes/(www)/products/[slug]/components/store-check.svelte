@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Sheet from '$lib/components/ui/sheet'
 	import { useProductState } from '$lib/core/composables/index.js'
-	import { AlertTriangle, Check, Clock, Home, MapPin, StoreIcon } from 'lucide-svelte'
+	import { AlertTriangle, Check, Clock, Home, MapPin, StoreIcon } from '@lucide/svelte'
 
 	const productState = useProductState()
 </script>
