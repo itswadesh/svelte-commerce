@@ -2,7 +2,6 @@ import type { Handle } from '@sveltejs/kit'
 import { StoreService } from '$lib/core/services'
 import { env } from '$env/dynamic/public'
 import { env as privateEnv } from '$env/dynamic/private'
-import { BaseService } from '$lib/core/services'
 
 // Function to check if a URL is a local/IP address
 function isLocalOrIpAddress(url: string): boolean {
@@ -11,6 +10,7 @@ function isLocalOrIpAddress(url: string): boolean {
 
 export const init = async () => {
 	if (env.PUBLIC_SHOPIFY_STORE_DOMAIN) {
+    const { BaseService } = await import('$lib/core/services')
 		BaseService.setShopifyCredentials(
 			env.PUBLIC_SHOPIFY_STORE_DOMAIN,
 			privateEnv.SHOPIFY_ADMIN_ACCESS_TOKEN,
@@ -19,6 +19,7 @@ export const init = async () => {
 	}
 
 	if (env.PUBLIC_MEDUSA_PUBLISHABLE_API_KEY) {
+    const { BaseService } = await import('$lib/core/services')
 		BaseService.setMedusaPublisableKey(env.PUBLIC_MEDUSA_PUBLISHABLE_API_KEY)
 		BaseService.setRegionId(env.PUBLIC_MEDUSA_REGION_ID)
 	}
@@ -76,7 +77,7 @@ export function handleError({ error, event }) {
 			status: simplifiedError.status
 		}
 	}
-	
+
 
 	return {
 		message: error?.message || 'An unknown error occurred',
