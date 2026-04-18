@@ -33,6 +33,9 @@ export default defineConfig(({ command, mode }) => {
 				},
 				'/sitemaps': env.PUBLIC_SITEMAP_URL || `https://${env.S3_BUCKET_NAME}.s3.${env.S3_REGION}.amazonaws.com`
 			}
+		},
+		ssr: {
+			noExternal: ['@lucide/svelte']
 		}
 	}
 })
