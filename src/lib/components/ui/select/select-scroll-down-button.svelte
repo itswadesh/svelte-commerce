@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ChevronDown } from 'lucide-svelte';
+  import { ChevronDown } from '@lucide/svelte';
 	import { Select as SelectPrimitive, type WithoutChildrenOrChild } from 'bits-ui'
 	import { cn } from '$lib/core/utils'
 

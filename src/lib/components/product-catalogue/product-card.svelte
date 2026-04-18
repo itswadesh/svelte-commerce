@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import { Plus, Minus } from 'lucide-svelte'
+	import { Plus, Minus } from '@lucide/svelte'
 	import { Button } from '$lib/components/ui/button'
 	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'

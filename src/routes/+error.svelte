@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state'
 	import Button from '$lib/components/ui/button/button.svelte'
-	import { ShoppingBag, Home, ArrowLeft } from 'lucide-svelte'
+	import { ShoppingBag, Home, ArrowLeft } from '@lucide/svelte'
 	import { goto } from '$app/navigation'
 	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
 </script>

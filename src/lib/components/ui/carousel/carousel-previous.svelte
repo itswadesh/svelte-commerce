@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ArrowLeft } from 'lucide-svelte'
+  import { ArrowLeft } from '@lucide/svelte'
 	import type { WithoutChildren } from 'bits-ui'
 	import { getEmblaContext } from './context.js'
 	import { cn } from '$lib/core/utils/index.js'

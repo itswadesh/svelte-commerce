@@ -3,7 +3,7 @@
 	import { Input } from '$lib/components/ui/input'
 	import { Label } from '$lib/components/ui/label'
 	import { Textarea } from '$lib/components/ui/textarea'
-	import { Check, AlertCircle } from 'lucide-svelte'
+	import { Check, AlertCircle } from '@lucide/svelte'
 	import { page } from '$app/state'
 	import ContactUsRenderer from '$lib/core/composables/contact-us-renderer.svelte'
 
@@ -165,7 +165,7 @@
 					{:else}
 						<div class="w-full border bg-white p-6 shadow-lg">
 							<div class="mb-6">
-								<h2 class="text-2xl font-semibold">Contact Us</h2>
+								<h1 class="text-2xl font-semibold">Contact Us</h1>
 								<p class="text-sm text-gray-500">Fill out the form below and we'll get back to you as soon as possible.</p>
 							</div>
 							<div>

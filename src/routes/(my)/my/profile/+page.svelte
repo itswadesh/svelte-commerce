@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Input from '$lib/components/form/textbox.svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
-	import { Save, ArrowLeft, InfoIcon, Loader } from 'lucide-svelte'
+	import { Save, ArrowLeft, InfoIcon, Loader } from '@lucide/svelte'
 	import { goto } from '$app/navigation'
 	import { MyProfileModule } from '$lib/core/composables/use-my-profile.svelte'
 

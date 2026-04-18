@@ -23,7 +23,10 @@ function transformProductOptions(options: Product['options']) {
 	})
 }
 
-export const load: PageLoad = async ({ fetch, params }) => {
+export const load: PageLoad = async ({ fetch, params, setHeaders }) => {
+	setHeaders({
+		'cache-control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400'
+	})
 	const slug = params.slug
 	try {
 		// Load the main product data first

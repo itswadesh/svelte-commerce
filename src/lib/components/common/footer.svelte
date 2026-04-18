@@ -1,5 +1,5 @@
 <script lang="ts">
-import { ChevronDown, ShieldCheck, Lock, Truck, RefreshCw } from 'lucide-svelte'
+import { ChevronDown, ShieldCheck, Lock, Truck, RefreshCw } from '@lucide/svelte'
 import WhatsappChatButton from '$lib/core/components/plugins/whatsapp-chat-button.svelte'
 import { page } from '$app/state'
 import TrustpilotPlugin from '$lib/core/components/plugins/trustpilot-plugin.svelte'
@@ -13,7 +13,7 @@ let paymentMethodCards = [masterCard, paypal, skrill, visa]
 
 // Derive store data to prevent unnecessary re-renders
 const storeData = $derived(page?.data?.store || {})
-const footerMenu = $derived(storeData?.menu?.find((menu: { menuId?: string }) => menu?.menuId === 'footer')?.items || [])
+const footerMenu = $derived(storeData?.menu?.find(menu => menu?.menuId === 'footer')?.items || [])
 const socialSharing = $derived(storeData?.plugins?.socialSharingButtons || {})
 const footerSettings = $derived(storeData?.plugins?.footerSettings)
 const shouldCollapseOnMobile = $derived(footerSettings?.collapseOnMobile || false)
@@ -67,7 +67,7 @@ let isExpanded = $state(false)
 						<div class="grid grid-cols-2 gap-8 sm:grid-cols-3 sm:gap-10">
 							{#each footerMenu as item}
 								<div>
-									<h1 class="text-black-200 mb-4 text-lg font-semibold">{item?.name}</h1>
+									<h3 class="text-black-200 mb-4 text-lg font-semibold">{item?.name}</h3>
 									{#if item?.items?.length > 0}
 										<ul class="space-y-2">
 											{#each item.items as child}

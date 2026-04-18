@@ -8,7 +8,7 @@
 	import OrderListSkeleton from '../../(my)/my/orders/_OrderListSkeleton.svelte'
 	import OrderTimeline from '$lib/components/order/order-timeline.svelte'
 	import StatusCell from '$lib/components/common/status-cell.svelte'
-	import { CheckCircle } from 'lucide-svelte'
+	import { CheckCircle } from '@lucide/svelte'
 	import { OrderTrackingModule } from '$lib/core/composables/use-order-tracking.svelte'
 
 	const orderTrackingModule = new OrderTrackingModule()

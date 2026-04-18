@@ -1,6 +1,6 @@
 <script lang="ts">
 import CartItem from '$lib/components/cart/cart-item.svelte'
-import { X, UserCircle, ChevronLeftIcon, Phone, Mail, Menu, ChevronDown } from 'lucide-svelte'
+import { X, UserCircle, ChevronLeft, Phone, Mail, Menu, ChevronDown } from '@lucide/svelte'
 import MainNav from './main-nav.svelte'
 import { Button } from '$lib/components/ui/button'
 import { goto } from '$app/navigation'
@@ -83,17 +83,17 @@ const cartState = navModule.cartState
 			{#if navModule.isProductListingPage}
 				<div class="flex items-center gap-2">
 					<button class="flex items-center gap-2 text-lg font-medium" aria-label="Go back" onclick={navModule.goBack}>
-						<ChevronLeftIcon class="h-6 w-6 font-bold" />
+						<ChevronLeft class="h-6 w-6 font-bold" />
 						<span class="sr-only">Go back</span>
 					</button>
 
 					<div class="flex flex-col items-start">
 						{#if page.params?.slug || page.url?.searchParams?.get?.('search')}
-							<h1 class="text-base font-semibold capitalize">
+							<p class="text-base font-semibold capitalize">
 								{page.params?.slug?.replace?.(/-/g, ' ').replace?.(/\b\w/g, (c) => c?.toUpperCase?.()) || page.url?.searchParams?.get?.('search')}
-							</h1>
+							</p>
 						{:else}
-							<h1 class="text-base font-semibold">Products</h1>
+							<p class="text-base font-semibold">Products</p>
 						{/if}
 
 						<p class="text-xs text-gray-500">{navModule.productsCount > 999 ? '1000+' : navModule.productsCount} products</p>

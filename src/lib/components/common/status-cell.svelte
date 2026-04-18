@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Undo, Package2 } from 'lucide-svelte'
+	import { Undo, Package2 } from '@lucide/svelte'
 
 	let { value }: { value?: string } = $props()
 

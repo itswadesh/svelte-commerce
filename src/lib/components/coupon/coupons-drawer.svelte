@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Drawer from '$lib/components/ui/drawer'
 	import Button from '$lib/components/ui/button/button.svelte'
-	import { ChevronRight, Copy, X } from 'lucide-svelte'
+	import { ChevronRight, Copy, X } from '@lucide/svelte'
 	import Input from '$lib/components/ui/input/input.svelte'
 	import CouponDrawerRenderer from '$lib/core/composables/coupon-drawer-renderer.svelte'
 	import { format } from 'date-fns'

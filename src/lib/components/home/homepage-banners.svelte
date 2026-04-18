@@ -46,7 +46,12 @@
 										class:opacity-0={loadedImages.has(url)}
 										class:opacity-100={!loadedImages.has(url)}
 									/> -->
-									<img src={banner.url} alt={banner.title || banner.link} class="relative w-full transition-opacity duration-300" />
+									<LazyImg
+										src={banner.url}
+										alt={banner.title || banner.link}
+										aspectRatio={itemsPerRow === 1 ? '21:9' : '1:1'}
+										class="relative w-full transition-opacity duration-300"
+									/>
 								</a>
 							{/each}
 						{/if}

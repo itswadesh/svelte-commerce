@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { CartProduct } from '$lib/core/types'
-	import { Minus, Plus, Trash } from 'lucide-svelte'
+	import { Minus, Plus, Trash } from '@lucide/svelte'
 	import { getCartState } from '$lib/core/stores/cart.svelte'
 	import { formatPrice } from '$lib/core/utils'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'

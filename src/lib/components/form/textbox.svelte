@@ -4,7 +4,7 @@
 	import type { z } from 'zod'
 	import { cn } from '$lib/core/utils'
 	import Label from '../ui/label/label.svelte'
-	import { AlertCircle, Eye, EyeOff } from 'lucide-svelte'
+	import { AlertCircle, Eye, EyeOff } from '@lucide/svelte'
 	import FormTextboxRenderer from '$lib/core/composables/form-textbox-renderer.svelte'
 
 	interface $$Props extends HTMLInputAttributes {

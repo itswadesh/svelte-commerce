@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { Check, ChevronsUpDown } from 'lucide-svelte'
+	import { Check, ChevronsUpDown } from '@lucide/svelte'
 	import * as Command from '$lib/components/ui/command'
 	import * as Popover from '$lib/components/ui/popover'
 	import { Button } from '$lib/components/ui/button'
 	import { cn } from '$lib/core/utils'
 	import Label from '../ui/label/label.svelte'
-	import { Search } from 'lucide-svelte'
+	import { Search } from '@lucide/svelte'
 	import Input from '../ui/input/input.svelte'
 	import FormSelectRenderer from '$lib/core/composables/form-select-renderer.svelte'
 

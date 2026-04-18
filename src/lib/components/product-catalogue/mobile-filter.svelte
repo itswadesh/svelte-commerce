@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Drawer from '$lib/components/ui/drawer'
 	import { GetColorName } from 'hex-color-to-color-name'
-	import { ArrowDownNarrowWide, Filter, SearchIcon, X } from 'lucide-svelte'
+	import { ArrowDownNarrowWide, Filter, SearchIcon, X } from '@lucide/svelte'
 	import { fly } from 'svelte/transition'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'

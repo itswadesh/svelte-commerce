@@ -99,6 +99,7 @@
 	},
 	"dependencies": {
 		"@internationalized/date": "^3.7.0",
+		"@lucide/svelte": "^1.8.0",
 		"@misiki/litekart-connector": "^2.0.26",
 		"fuse.js": "^7.1.0",
 		"hi-base32": "^0.5.1",

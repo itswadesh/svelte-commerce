@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/core/utils'
-	import { X } from 'lucide-svelte'
+	import { X } from '@lucide/svelte'
 	import { fade, fly } from 'svelte/transition'
 	import { quintOut } from 'svelte/easing'
 	import { browser } from '$app/environment'

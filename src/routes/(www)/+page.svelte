@@ -1,6 +1,6 @@
 <script lang="ts">
 	import FeaturedProductsGrid from '$lib/components/product-catalogue/featured-products-grid.svelte'
-	import { X } from 'lucide-svelte'
+	import { X } from '@lucide/svelte'
 	import { Skeleton } from '$lib/components/ui/skeleton'
 	import CategoryList from '$lib/components/category/category-list.svelte'
 	import { fly } from 'svelte/transition'

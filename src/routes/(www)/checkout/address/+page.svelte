@@ -1,7 +1,7 @@
 <script lang="ts">
 import { Button } from '$lib/components/ui/button'
 import { goto } from '$app/navigation'
-import { ChevronRight, LockKeyhole, MapPin, Pencil, ShoppingBag } from 'lucide-svelte'
+import { ChevronRight, LockKeyhole, MapPin, Pencil, ShoppingBag } from '@lucide/svelte'
 import { formatPrice } from '$lib/core/utils'
 import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
 import AddressListModal from '$lib/components/address/address-list-modal.svelte'

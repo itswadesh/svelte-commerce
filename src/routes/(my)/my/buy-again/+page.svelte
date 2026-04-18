@@ -8,7 +8,7 @@
 	let data = $state([])
 
 	import { onMount } from 'svelte'
-	import { Plus } from 'lucide-svelte'
+	import { Plus } from '@lucide/svelte'
 	import { page } from '$app/state'
 	import { orderService } from '$lib/core/services'
 
