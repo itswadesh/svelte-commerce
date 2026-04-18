@@ -17,6 +17,7 @@ const footerMenu = $derived(storeData?.menu?.find(menu => menu?.menuId === 'foot
 const socialSharing = $derived(storeData?.plugins?.socialSharingButtons || {})
 const footerSettings = $derived(storeData?.plugins?.footerSettings)
 const shouldCollapseOnMobile = $derived(footerSettings?.collapseOnMobile || false)
+const categories = $derived(storeData?.categories || [])
 
 let isExpanded = $state(false)
 </script>
@@ -92,6 +93,23 @@ let isExpanded = $state(false)
 									{/if}
 								</div>
 							{/each}
+							{#if categories?.length > 0}
+								<div>
+									<h3 class="text-black-200 mb-4 text-lg font-semibold">Categories</h3>
+									<ul class="space-y-2">
+										{#each categories.slice(0, 10) as category}
+											<li>
+												<a
+													href={`/categories/${category?.slug || category?.id}`}
+													class="text-sm text-gray-400 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-900"
+												>
+													{category?.name}
+												</a>
+											</li>
+										{/each}
+									</ul>
+								</div>
+							{/if}
 						</div>
 					</div>
 	<div class="flex flex-col gap-2 border-t px-8 py-4 sm:flex-row sm:items-center sm:justify-between">
@@ -170,9 +188,9 @@ let isExpanded = $state(false)
 
 							{#if paymentMethodCards?.length}
 								<ul class="col-span-1 m-0 flex list-none flex-wrap items-center justify-end gap-2 p-0">
-									{#each paymentMethodCards as pmc}
+									{#each paymentMethodCards as pmc, index}
 										<li>
-											<img src={pmc} alt="" class="h-8 w-auto object-contain" />
+											<img src={pmc} alt="Payment method {index + 1}" class="h-8 w-auto object-contain" />
 										</li>
 									{/each}
 								</ul>

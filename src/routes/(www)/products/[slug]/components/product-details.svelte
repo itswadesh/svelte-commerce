@@ -2,6 +2,7 @@
 	import LoginModal from '$lib/components/auth/login-modal.svelte'
 	import EnquiryModal from '$lib/core/components/plugins/enquiry-modal.svelte'
 	import GoogleStructuredDataProduct from '$lib/core/components/plugins/google-structured-data-product.svelte'
+	import GoogleStructuredDataBreadcrumb from '$lib/core/components/plugins/google-structured-data-breadcrumb.svelte'
 	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
 	import PincodeCheck from '$lib/components/product-catalogue/pincode-check.svelte'
 	import Breadcrumb from '$lib/components/ui/breadcrumb.svelte'
@@ -21,6 +22,7 @@
 	import RelatedProducts from './related-products.svelte'
 	import StoreCheck from './store-check.svelte'
 	import { page } from '$app/state'
+	import { PUBLIC_LITEKART_DOMAIN } from '$env/static/public'
 
 	const productState = useProductState()
 	const data = $derived(page.data)
@@ -37,8 +39,12 @@
 
 <!-- <ProductRenderer bind:data>
 	{#snippet content(productState)} -->
-<div class="mx-2 mb-3 mt-2 hidden lg:container lg:mx-auto lg:block">
+<div class="mx-2 mb-3 mt-2 lg:container lg:mx-auto">
 	<Breadcrumb categoryHierarchy={data?.product?.categoryHierarchy} />
+	<GoogleStructuredDataBreadcrumb breadcrumbs={data?.product?.categoryHierarchy?.map((item: any, index: number) => ({
+		name: item.name,
+		item: index === data?.product?.categoryHierarchy?.length - 1 ? undefined : `https://${PUBLIC_LITEKART_DOMAIN}${item.slug}`
+	})) || []} />
 </div>
 
 <div class="lg:container lg:mx-auto">

@@ -62,39 +62,67 @@ export class HomepageModule {
 	}) as Product
 
 	constructor() {
+		// Initialize with server-side loaded data if available for SSR
+		if (page?.data?.featuredProducts) {
+			this.featuredProducts = page.data.featuredProducts as unknown as ProductWithVendor[]
+			this.loadingFeaturedProducts = false
+			this.currentPage = 2
+			this.hasMoreFeaturedProducts = page.data.featuredProducts.length >= (page.data.featuredProducts?.length || 10)
+		}
+
+		if (page?.data?.trendingProducts) {
+			this.trendingProducts = page.data.trendingProducts as unknown as ProductWithVendor[]
+			this.loadingTrendingProducts = false
+		}
+
+		if (page?.data?.featuredCategories) {
+			this.featuredCategories = page.data.featuredCategories
+			this.loading = false
+		}
+
 		$effect(() => {
-			const a = async () => {
-				try {
-					this.loadingFeaturedProducts = true
-					const response = await productService.listFeaturedProducts({
-						page: 1,
-						sort: '-createdAt'
-					})
-					this.featuredProducts = (response?.data || []) as unknown as ProductWithVendor[]
-					this.currentPage = 2
-					this.hasMoreFeaturedProducts = response?.data?.length >= response.pageSize
-				} catch (error) {
-					console.error('Error loading featured products:', error)
-					this.featuredProducts = []
-					this.hasMoreFeaturedProducts = false
-				} finally {
-					this.loadingFeaturedProducts = false
+			// Only fetch client-side if no server data
+			if (!page?.data?.featuredProducts) {
+				const a = async () => {
+					try {
+						this.loadingFeaturedProducts = true
+						const response = await productService.listFeaturedProducts({
+							page: 1,
+							sort: '-createdAt'
+						})
+						this.featuredProducts = (response?.data || []) as unknown as ProductWithVendor[]
+						this.currentPage = 2
+						this.hasMoreFeaturedProducts = response?.data?.length >= response.pageSize
+					} catch (error) {
+						console.error('Error loading featured products:', error)
+						this.featuredProducts = []
+						this.hasMoreFeaturedProducts = false
+					} finally {
+						this.loadingFeaturedProducts = false
+					}
 				}
+				a()
 			}
-			const b = async () => {
-				try {
-					const response = await productService.listTrendingProducts({ page: 1 })
-					this.trendingProducts = (response?.data || []) as unknown as ProductWithVendor[]
-				} catch (error) {
-					console.error('Error loading trending products:', error)
-					this.trendingProducts = []
-				} finally {
-					this.loadingTrendingProducts = false
+
+			if (!page?.data?.trendingProducts) {
+				const b = async () => {
+					try {
+						const response = await productService.listTrendingProducts({ page: 1 })
+						this.trendingProducts = (response?.data || []) as unknown as ProductWithVendor[]
+					} catch (error) {
+						console.error('Error loading trending products:', error)
+						this.trendingProducts = []
+					} finally {
+						this.loadingTrendingProducts = false
+					}
 				}
+				b()
 			}
-			a()
-			b()
-			this.getCategoryData()
+
+			if (!page?.data?.featuredCategories) {
+				this.getCategoryData()
+			}
+
 			// Set recent order popup after 20 seconds
 			setTimeout(() => {
 				this.showRecentOrderPopup = page?.data?.store?.plugins?.recentPurchasePopup?.active
@@ -103,14 +131,17 @@ export class HomepageModule {
 
 		// let banners: any = $state([])
 		onMount(async () => {
-			try {
-				// const pageData = await PageService.getOne('home')
-				// banners = pageData
-				this.featuredCategories = (await categoryService.fetchFeaturedCategories({ limit: 18 }))?.data || []
-			} catch (e: unknown) {
-				console.error(e)
-			} finally {
-				this.loading = false
+			// Only fetch categories client-side if no server data
+			if (!page?.data?.featuredCategories) {
+				try {
+					// const pageData = await PageService.getOne('home')
+					// banners = pageData
+					this.featuredCategories = (await categoryService.fetchFeaturedCategories({ limit: 18 }))?.data || []
+				} catch (e: unknown) {
+					console.error(e)
+				} finally {
+					this.loading = false
+				}
 			}
 		})
 

@@ -1,5 +1,8 @@
 <script lang="ts">
 	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
+	import GoogleStructuredDataBreadcrumb from '$lib/core/components/plugins/google-structured-data-breadcrumb.svelte'
+	import Breadcrumb from '$lib/components/ui/breadcrumb.svelte'
+	import { PUBLIC_LITEKART_DOMAIN } from '$env/static/public'
 
 	let { data } = $props()
 </script>
@@ -10,6 +13,15 @@
 	metaKeywords={data.category.metaKeywords}
 	image={data.category.banner}
 />
+
+<div class="mx-2 mb-3 mt-2 lg:container lg:mx-auto">
+	<Breadcrumb categoryHierarchy={[{ name: 'Home', slug: '/' }, { name: data.category.name, slug: `/categories/${data.category.slug}` }]} />
+</div>
+
+<GoogleStructuredDataBreadcrumb breadcrumbs={[
+	{ name: 'Home', item: `https://${PUBLIC_LITEKART_DOMAIN}` },
+	{ name: data.category.name, item: `https://${PUBLIC_LITEKART_DOMAIN}/categories/${data.category.slug}` }
+]} />
 <div class="min-h-screen bg-gray-50">
 	<!-- Category Banner -->
 	<div class="relative h-40 overflow-hidden bg-gray-100 md:h-64">

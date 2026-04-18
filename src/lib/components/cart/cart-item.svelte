@@ -32,7 +32,7 @@
 				cartState.isOpen = false
 			}}
 		>
-			<LazyImg src={cartProduct?.thumbnail} alt="Product" class="mr-4 size-36 rounded object-contain" />
+			<LazyImg src={cartProduct?.thumbnail} alt={cartProduct?.title || 'Product'} class="mr-4 size-36 rounded object-contain" />
 		</a>
 		<div>
 			<a
