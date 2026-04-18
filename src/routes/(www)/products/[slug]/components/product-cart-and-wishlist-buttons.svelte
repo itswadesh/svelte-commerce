@@ -4,7 +4,7 @@
 	import { useProductState } from '$lib/core/composables/product'
 	import { formatPrice } from '$lib/core/utils'
 	import { fireGTagEvent } from '$lib/core/utils/gtag'
-	import { Check, HeartIcon, LoaderCircle, ShoppingCart } from 'lucide-svelte'
+	import { Check, HeartIcon, LoaderCircle, ShoppingCart } from '@lucide/svelte'
 	import { toast } from 'svelte-sonner'
 	import { innerWidth } from 'svelte/reactivity/window'
 	import { fly } from 'svelte/transition'

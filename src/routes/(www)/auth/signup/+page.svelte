@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { LoaderIcon } from 'lucide-svelte'
+	import { LoaderIcon } from '@lucide/svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { authService } from '$lib/core/services'
 	import { toast } from 'svelte-sonner'
@@ -149,7 +149,7 @@
 				name="password"
 				type="password"
 				bind:value={password}
-				placeholder="••••••••"
+				placeholder="Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢"
 				schema={schemas.password}
 				label="Password"
 				required
@@ -161,7 +161,7 @@
 				name="confirmPassword"
 				type="password"
 				bind:value={confirmPassword}
-				placeholder="••••••••"
+				placeholder="Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢"
 				schema={schemas.confirmPassword}
 				label="Confirm password"
 				required

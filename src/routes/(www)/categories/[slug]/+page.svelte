@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { ChevronRight } from 'lucide-svelte'
 	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
 
 	let { data } = $props()

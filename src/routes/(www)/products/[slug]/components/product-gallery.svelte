@@ -2,7 +2,7 @@
 import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 import * as Carousel from '$lib/components/ui/carousel/index'
 import type { CarouselAPI } from '$lib/components/ui/carousel/context'
-import { Play, X } from 'lucide-svelte'
+import { Play, X } from '@lucide/svelte'
 import { getSettingState } from '$lib/core/stores/setting.svelte'
 import Button from '$lib/components/ui/button/button.svelte'
 import { getYoutubeId } from '$lib/core/logic/youtube.helper'

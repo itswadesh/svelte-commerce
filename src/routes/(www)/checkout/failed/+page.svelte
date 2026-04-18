@@ -4,7 +4,7 @@
 	import { Button } from '$lib/components/ui/button'
 	import { getProductState } from '$lib/core/stores/product.svelte.js'
 	import { formatPrice } from '$lib/core/utils/index.js'
-	import { ArrowLeft, AlertCircle, RefreshCw } from 'lucide-svelte'
+	import { ArrowLeft, AlertCircle, RefreshCw } from '@lucide/svelte'
 	import { page } from '$app/state'
 
 	let loadingPayment = $state(false)

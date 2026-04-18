@@ -6,7 +6,7 @@
 	import PincodeCheck from '$lib/components/product-catalogue/pincode-check.svelte'
 	import Breadcrumb from '$lib/components/ui/breadcrumb.svelte'
 	import { useProductState } from '$lib/core/composables/product'
-	import { Truck } from 'lucide-svelte'
+	import { Truck } from '@lucide/svelte'
 	import ProductAggregation from './product-aggregation.svelte'
 	import ProductCartAndWishlistButtons from './product-cart-and-wishlist-buttons.svelte'
 	import ProductDescription from './product-description.svelte'
