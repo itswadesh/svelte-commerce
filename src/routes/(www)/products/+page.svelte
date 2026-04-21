@@ -12,7 +12,9 @@ import type { PageData } from '$lib/core/types'
 import Breadcrumb from '$lib/components/ui/breadcrumb.svelte'
 import { selectSort } from '$lib/core/utils'
 import { sortOptions } from '$lib/config'
+import { setDesktopFilterState } from '$lib/core/composables/index.js'
 
+setDesktopFilterState()
 let { data } = $props<{ data: PageData }>()
 let selectedSort = $state(page.url.searchParams.get('sort') || 'popularity:desc')
 let loading = $state(false)
