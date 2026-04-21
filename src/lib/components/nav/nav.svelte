@@ -36,7 +36,7 @@ const cartState = navModule.cartState
 <header
 	class="{navModule.isProductListingPage
 		? 'max-sm:border-b'
-		: ''} shadow-xs sticky top-0 z-50 w-full flex-col items-center justify-between {navModule.navBackground} transition-all duration-200"
+		: ''} shadow-xs sticky top-0 z-50 w-full flex-col bg-white items-center justify-between transition-all duration-200"
 >
 	<!-- Hello bar -->
 	{#if navModule.helloBarPlugin?.active && !navModule.isProductListingPage}
@@ -64,7 +64,7 @@ const cartState = navModule.cartState
 			</div>
 		{/if}
 	{/if}
-	<div class="mx mx-2 flex items-center justify-between py-3 lg:container sm:py-2 lg:mx-auto">
+	<div class="mx mx-2 flex items-center justify-between py-3 bg-white lg:container sm:py-2 lg:mx-auto">
 		<div class="hidden justify-center gap-3 sm:flex">
 			<button
 				aria-label="Sidebar"
