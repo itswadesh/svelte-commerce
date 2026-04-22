@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import { Plus, Minus } from 'lucide-svelte'
+	import { Plus, Minus } from '@lucide/svelte'
 	import { Button } from '$lib/components/ui/button'
 	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import EmptyImage from '$lib/core/components/image/empty-image.svelte'
-	import { getCartState } from '$lib/core/stores/cart.svelte'
+	import { getCartState } from '$lib/core/stores/index.js'
 
 	import { formatPrice } from '$lib/core/utils'
-	import ProductCardRenderer from '$lib/core/composables/product-card-renderer.svelte'
+	import { ProductCardRenderer } from '$lib/core/composables/index.js'
 
 	const cartState = getCartState()
 	let { product, aspectRatio, displayProduct, hideVariations = true, hideCartControls = true }: any = $props()
@@ -108,13 +108,13 @@
 					>
 				{/if}
 				<a href="/products/{product.slug}">
-					<div class="line-clamp-2 max-h-[3rem] text-xs font-medium text-gray-500 dark:text-gray-200">
-						{product.title}
+					<div class="line-clamp-2 max-h-[3rem] text-sm font-medium text-center text-gray-500 dark:text-gray-200">
+						{product.title?.length > 60 ? product.title?.slice(0, 60) + '...' : product.title}
 					</div>
 				</a>
 			</div>
 			<div class="mx-2 flex flex-col space-y-1 px-0">
-				<div class="flex items-baseline gap-1 overflow-hidden whitespace-nowrap">
+				<div class="flex items-baseline justify-center items-center gap-1 overflow-hidden whitespace-nowrap">
 					<div class="text-sm font-bold text-black dark:text-gray-100">
 						{formatPrice(product.price, page?.data?.store?.currency?.code)}
 					</div>
@@ -122,9 +122,10 @@
 						<div class="text-xs text-gray-600 line-through">
 							{formatPrice(product.mrp, page?.data?.store?.currency?.code)}
 						</div>
+						<!-- {@const discount = Math.round(((product.mrp - product.price) / product.mrp) * 100)}
 						<div class="truncate text-xs font-thin text-[#00b852]">
-							{Math.round(((product.mrp - product.price) / product.mrp) * 100)}% OFF
-						</div>
+							{discount > 70 ? 70 : discount}% OFF
+						</div> -->
 					{/if}
 				</div>
 				{#if !hideVariations && product.variants.length > 1}

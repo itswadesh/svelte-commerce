@@ -5,10 +5,15 @@
 	import VendorCard from '$lib/components/product-catalogue/product-card.svelte'
 	import DesktopFilter from '$lib/components/product-catalogue/desktop-filter.svelte'
 	import MobileFilter from '$lib/components/product-catalogue/mobile-filter.svelte'
-	import { SearchService } from '$lib/core/services'
+	import { searchService } from '$lib/core/services'
 	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte'
 	import Pagination from '$lib/components/common/pagination.svelte'
 	import type { ProductSearchResult } from '$lib/core/types'
+	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
+	import { setCategoryFilterState, setDesktopFilterState } from '$lib/core/composables/index.js'
+
+	setDesktopFilterState()
+	setCategoryFilterState()
 
 	let vendors: ProductSearchResult = $state(searchService.emptyResult())
 	let selectedSort = $state(page.url.searchParams.get('sort') || 'recommended')
@@ -40,9 +45,9 @@
 	}
 </script>
 
-<svelte:head>
-	<title>{page.params.slug || 'Vendors'}</title>
-</svelte:head>
+<SeoHeader metaTitle={page.params.slug || 'Vendors'} />
+
+
 
 <div class="container mx-auto mt-2 flex h-full min-h-screen flex-row max-md:px-4 md:gap-2">
 	{#if vendors?.count >= 0}
@@ -71,13 +76,12 @@
 	</div>
 
 	<div class="flex-1">
-		<div class="flex flex-row items-center justify-between">
-			<span class="capitalize">
-				{#if page.params.slug || page.url.searchParams.get('search')}
-					{page.params.slug || page.url.searchParams.get('search')} -
-				{/if}
-				<span class="font-bold">{vendors?.count} Vendors</span>
-			</span>
+			<div class="mb-4 flex flex-col items-start gap-2">
+				<h1 class="text-2xl font-bold capitalize">
+					{page.params.slug || page.url.searchParams.get('search') || 'All Vendors'}
+				</h1>
+				<span class="text-sm text-gray-400">{vendors?.count} Vendors found</span>
+			</div>
 
 			<div class="hidden flex-row items-center gap-2 md:flex">
 				<span class="text-sm font-normal text-gray-400">Sort by:</span>
@@ -98,7 +102,6 @@
 					optionSelected={(value: string) => selectSort(value)}
 				/>
 			</div>
-		</div>
 
 		{#if loading}
 			<ul class="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">

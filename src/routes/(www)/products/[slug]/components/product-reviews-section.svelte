@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { toast } from 'svelte-sonner'
-	import { Image, Star, StarIcon, X } from 'lucide-svelte'
+	import { Image, Star, StarIcon, X } from '@lucide/svelte'
 	import { date } from '$lib/core/utils'
 	import * as Tabs from '$lib/components/ui/tabs'
 	import { page } from '$app/state'
-	import { useProductState } from '$lib/core/composables/product'
+	import { useProductState } from '$lib/core/composables/index.js'
 	import { productService } from '$lib/core/services'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { Textarea } from '$lib/components/ui/textarea'
@@ -12,9 +12,9 @@
 	const productState = useProductState()
 </script>
 
-{#if page?.data?.store?.plugins?.enableReviews && page.data?.product?.ratings?.length}
-	<!-- Reviews Section -->
-	<div class="mx-2 mt-8">
+<!-- Reviews Section -->
+<div class="mx-2 mt-8">
+	{#if page?.data?.store?.plugins?.enableReviews && page.data?.product?.ratings?.length}
 		<div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
 			<!-- Rating Summary -->
 			<div class="lg:col-span-1">
@@ -330,7 +330,7 @@
 											<br />or drag and drop
 										</p>
 									</div>
-									<input id="dropzone-file" type="file" accept="image/*" class="hidden" multiple={false} onchange={handleImageChange} />
+									<input id="dropzone-file" type="file" accept="image/*" class="hidden" multiple={false} onchange={productState.handleImageChange} />
 								</label>
 							</div>
 						</div>
@@ -364,6 +364,15 @@
 				</div>
 			</div>
 		{/if}
-	</div>
-{/if}
+	{:else}
+		<!-- Fallback when reviews are disabled or no reviews exist -->
+		<div class="mx-2 mt-8 rounded-lg border bg-white p-6 shadow-sm">
+			<div class="text-center">
+				<h3 class="mb-2 text-lg font-semibold">Customer Reviews</h3>
+				<p class="mb-4 text-gray-500">No reviews yet. Be the first to review this product!</p>
+				<Button variant="outline" class="mx-auto" onclick={() => (productState.showReviewForm = true)}>Write a Review</Button>
+			</div>
+		</div>
+	{/if}
+</div>
 

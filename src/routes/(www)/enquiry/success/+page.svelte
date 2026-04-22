@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CheckCircle2 } from 'lucide-svelte'
+	import { CheckCircle2 } from '@lucide/svelte'
   import { page } from '$app/state'
 	import { Button } from '$lib/components/ui/button'
 	import { goto } from '$app/navigation'

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { GripVertical } from 'lucide-svelte';
+  import { GripVertical } from '@lucide/svelte';
 	import * as ResizablePrimitive from 'paneforge'
 	import type { WithoutChildrenOrChild } from 'bits-ui'
 	import { cn } from '$lib/core/utils'

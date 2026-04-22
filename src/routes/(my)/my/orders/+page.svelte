@@ -1,10 +1,10 @@
 <script lang="ts">
 	import Button from '$lib/components/ui/button/button.svelte'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
-	import { ChevronRight, ShoppingBag, Calendar, Tag } from 'lucide-svelte'
+	import { ChevronRight, ShoppingBag, Calendar, Tag } from '@lucide/svelte'
 	import { page } from '$app/state'
 	import { date, formatPrice } from '$lib/core/utils'
-	import MyOrdersRenderer from '$lib/core/composables/my-orders-renderer.svelte'
+	import { MyOrdersRenderer } from '$lib/core/composables/index.js'
 </script>
 
 <svelte:head>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { useProductState } from '$lib/core/composables/product'
+	import { useProductState } from '$lib/core/composables/index.js'
 	import QrCodeDisplayer from '$lib/core/components/common/qr-code.svelte'
 	import { page } from '$app/state'
 
@@ -14,7 +14,7 @@
 			{#if productState.selectedVariant?.sku || data?.product?.sku}
 				<div class="border-b">
 					<p class="text-gray-500">SKU</p>
-					<p class="break-words break-all">{productState.selectedVariant?.sku || data?.product?.sku}</p>
+					<p class="break-words break-all">{String(productState.selectedVariant?.sku || data?.product?.sku)}</p>
 				</div>
 			{/if}
 

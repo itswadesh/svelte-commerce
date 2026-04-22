@@ -1,19 +1,18 @@
 <script lang="ts">
-	import { LoaderIcon } from 'lucide-svelte'
+	import { LoaderIcon } from '@lucide/svelte'
 	import * as InputOTP from '$lib/components/ui/input-otp/index'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { Label } from '$lib/components/ui/label'
 	import { env } from '$env/dynamic/public'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import { page } from '$app/state'
-	import { LoginModule, schemas } from '$lib/core/composables/use-login.svelte'
+	import { LoginModule, loginModuleSchema as schemas } from '$lib/core/composables/index.js'
+	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
 
 	const loginModule = new LoginModule()
 </script>
 
-<svelte:head>
-	<title>Login</title>
-</svelte:head>
+<SeoHeader metaTitle="Login" noindex={true} />
 
 <div
 	class="-mt-24 flex min-h-screen items-center justify-center bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 sm:items-center"

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import MegaMenuRenderer from '$lib/core/composables/mega-menu-renderer.svelte'
+	import { MegaMenuRenderer } from '$lib/core/composables/index.js'
 	import { fade } from 'svelte/transition'
 </script>
 

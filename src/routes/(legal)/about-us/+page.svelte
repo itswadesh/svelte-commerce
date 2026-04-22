@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Page } from '$lib/core/types'
+	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
 
 	interface Props {
 		data: {
@@ -9,9 +10,7 @@
 	let { data }: Props = $props()
 </script>
 
-<svelte:head>
-	<title>About Us</title>
-</svelte:head>
+<SeoHeader metaTitle={data?.page?.metaTitle || 'About Us'} />
 
 <section class="mt-20 min-h-screen">
 	<div class="container mx-auto flex max-w-7xl flex-col px-4 md:px-10">

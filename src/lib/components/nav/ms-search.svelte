@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { ArrowUpRight, Search, X } from 'lucide-svelte'
+	import { ArrowUpRight, Search, X } from '@lucide/svelte'
 	import { Input } from '$lib/components/ui/input'
 	import { cn } from '$lib/core/utils'
-	import MsSearchRenderer from '$lib/core/composables/ms-search-renderer.svelte'
+	import { MsSearchRenderer } from '$lib/core/composables/index.js'
 
 	let { class: className = '', placeholder = 'Search...' } = $props()
 
@@ -45,7 +45,7 @@
 								autofocus
 								class="relative z-50 w-40 rounded-full border border-gray-200 px-4 py-2 focus:border-primary focus:outline-none sm:w-96"
 								bind:value={search}
-								placeholder={searchPlugin.placeholder || placeholder}
+							placeholder={searchPlugin?.placeholder || placeholder}
 								onkeydown={handleKeyDown}
 								onfocusin={() => toggleSearchResults(true)}
 							/>
@@ -63,7 +63,7 @@
 										{#each searchResults as result}
 											<button
 												class="w-full cursor-pointer px-4 py-2 text-left text-sm hover:bg-gray-100"
-												aria-label="Goto {result.title}"
+												aria-label="{result.title}"
 												onclick={() => handleResultClick(result)}
 											>
 												<p class="truncate">
@@ -87,7 +87,7 @@
 							autofocus
 							class="h-12 rounded-none border-0 border-b !border-gray-200 px-4 py-2 shadow-none focus:outline-none"
 							bind:value={search}
-							placeholder={searchPlugin.placeholder || placeholder}
+						placeholder={searchPlugin?.placeholder || placeholder}
 							onkeydown={handleKeyDown}
 						/>
 						{#if loading}
@@ -103,7 +103,7 @@
 								{#each searchResults as result}
 									<button
 										class="flex w-full cursor-pointer items-center justify-between p-3 text-left text-sm hover:bg-gray-100"
-										aria-label="Goto {result.title}"
+										aria-label="searches for {result.title}"
 										onclick={() => handleResultClick(result)}
 									>
 										<p class="truncate text-sm font-medium capitalize text-[#71717A]">

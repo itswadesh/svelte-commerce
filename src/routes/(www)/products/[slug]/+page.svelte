@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ProductDetails from './components/product-details.svelte'
-	import { ProductStateProvider } from '$lib/core/composables/product'
+	import { ProductStateProvider } from '$lib/core/composables/index.js'
 
 	let { data } = $props()
 </script>

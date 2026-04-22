@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Skeleton } from '$lib/components/ui/skeleton'
+	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	let { bannersList = [] } = $props()
 	let loading = $state(true)
 	let loadedImages = $state(new Set())
@@ -40,13 +41,18 @@
 					<div class="grid grid-cols-{itemsPerRow} gap-0">
 						{#if banners.length}
 							{#each banners as banner}
-								<a href={banner.link || link} aria-label="Goto {banner.title || banner.link}" class="relative w-full">
+								<a href={banner.link || link} aria-label="{banner.title || banner.link}" class="relative w-full">
 									<!-- <div
 										class="absolute inset-0 bg-gray-200 transition-opacity duration-300"
 										class:opacity-0={loadedImages.has(url)}
 										class:opacity-100={!loadedImages.has(url)}
 									/> -->
-									<img src={banner.url} alt={banner.title || banner.link} class="relative w-full transition-opacity duration-300" />
+									<LazyImg
+										src={banner.url}
+										alt={banner.title || banner.link}
+										aspectRatio={itemsPerRow === 1 ? '21:9' : '1:1'}
+										class="relative w-full transition-opacity duration-300"
+									/>
 								</a>
 							{/each}
 						{/if}

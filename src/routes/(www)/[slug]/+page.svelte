@@ -11,7 +11,10 @@
 	import Breadcrumb from '$lib/components/ui/breadcrumb.svelte'
 	import { selectSort } from '$lib/core/utils'
 	import { sortOptions } from '$lib/config'
+	import { setCategoryFilterState, setDesktopFilterState } from '$lib/core/composables/index.js'
 
+	setDesktopFilterState()
+	setCategoryFilterState()
 	let { data } = $props()
 	let selectedSort = $state(page.url.searchParams.get('sort') || 'popularity:desc')
 	let loading = $state(false)
@@ -46,11 +49,14 @@
 		</div>
 
 	<div class="flex-1">
-		<div class="flex flex-row items-center justify-end">
-			<!-- <span class="text-2xl font-bold capitalize">
+		<div class="mb-4 flex flex-col items-start gap-2">
+			<h1 class="text-2xl font-bold capitalize">
 				{page.params.slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}
-				<span class="text-xs font-normal text-gray-400">- {data?.products?.data?.length} Products</span>
-			</span> -->
+			</h1>
+			<p class="text-sm text-gray-400">{data?.products?.count} Products found</p>
+		</div>
+
+		<div class="flex flex-row items-center justify-end md:hidden">
 
 			<div class="hidden flex-row items-center gap-2 md:flex">
 				<span class="text-sm font-normal text-gray-400">Sort by:</span>
@@ -85,7 +91,7 @@
 					<p class="text-sm text-muted-foreground">No products found</p>
 				</div>
 			{:else}
-				<div class="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8 2xl:grid-cols-12 auto-rows-auto">
+				<div class="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 auto-rows-auto">
 					{#each data?.products?.data as product}
 						<ProductCard {product} />
 					{/each}

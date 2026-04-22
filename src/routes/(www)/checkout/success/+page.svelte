@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button'
 	import { formatPrice } from '$lib/core/utils/index.js'
-	import { CheckCircle2, MapPin, Package, Truck } from 'lucide-svelte'
+	import { CheckCircle2, MapPin, Package, Truck } from '@lucide/svelte'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
-	import { getUserState } from '$lib/core/stores/auth.svelte.js'
-	import { getCartState } from '$lib/core/stores/cart.svelte.js'
+	import { getUserState, getCartState } from '$lib/core/stores/index.js'
 	import { onMount } from 'svelte'
 	import { page } from '$app/state'
 	const userState = getUserState()

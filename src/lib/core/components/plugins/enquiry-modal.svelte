@@ -2,7 +2,7 @@
 	import { Button } from '$lib/components/ui/button'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import { Textarea } from '$lib/components/ui/textarea'
-	import { LoaderCircle, X } from 'lucide-svelte'
+	import { LoaderCircle, X } from '@lucide/svelte'
 	import { enquiryService, EnquiryService } from '$lib/core/services'
 	import { z } from 'zod'
 	import { toast } from 'svelte-sonner'

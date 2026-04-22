@@ -4,6 +4,7 @@
 	import AutoScroll from 'embla-carousel-auto-scroll'
 	import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
 	import { ReelsService } from '$lib/core/services'
+	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
 
 	let reels = $state()
 
@@ -98,10 +99,10 @@
 	}
 </script>
 
-<svelte:head>
-	<title>Reels</title>
-</svelte:head>
+<SeoHeader metaTitle="Reels | Shop Your Fashion" />
+
 <div class="fixed inset-0 bg-black">
+	<h1 class="sr-only">Fashion Reels</h1>
 	<div class="relative h-full w-full" bind:this={emblaNode}>
 		<div class="h-full">
 			{#each reels as reel}

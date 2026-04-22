@@ -1,2 +1,2 @@
-export { load } from '$lib/core/load-functions/(legal)/about-us/load.server'
+export { legalAboutUsLoadServer as load } from "$lib/core/load-functions/index.js"
 

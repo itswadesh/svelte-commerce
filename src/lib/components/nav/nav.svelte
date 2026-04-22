@@ -1,6 +1,6 @@
 <script lang="ts">
 import CartItem from '$lib/components/cart/cart-item.svelte'
-import { X, UserCircle, ChevronLeftIcon, Phone, Mail, Menu, ChevronDown } from 'lucide-svelte'
+import { X, UserCircle, ChevronLeft, Phone, Mail, Menu, ChevronDown } from '@lucide/svelte'
 import MainNav from './main-nav.svelte'
 import { Button } from '$lib/components/ui/button'
 import { goto } from '$app/navigation'
@@ -13,7 +13,7 @@ import MsSearch from './ms-search.svelte'
 import AuthModal from '$lib/components/auth/auth-modal.svelte'
 import AuthButton from '$lib/core/components/auth/auth-button.svelte'
 import { fade } from 'svelte/transition'
-import { NavModule } from '$lib/core/composables/use-nav.svelte'
+import { NavModule } from '$lib/core/composables/index.js'
 
 const menuItemsUser = [
 	{ title: 'Profile', url: '/my/profile' },
@@ -36,7 +36,7 @@ const cartState = navModule.cartState
 <header
 	class="{navModule.isProductListingPage
 		? 'max-sm:border-b'
-		: ''} shadow-xs sticky top-0 z-50 w-full flex-col items-center justify-between {navModule.navBackground} transition-all duration-200"
+		: ''} shadow-xs sticky top-0 z-50 w-full flex-col bg-white items-center justify-between transition-all duration-200"
 >
 	<!-- Hello bar -->
 	{#if navModule.helloBarPlugin?.active && !navModule.isProductListingPage}
@@ -64,7 +64,7 @@ const cartState = navModule.cartState
 			</div>
 		{/if}
 	{/if}
-	<div class="mx mx-2 flex items-center justify-between py-3 lg:container sm:py-2 lg:mx-auto">
+	<div class="mx mx-2 flex items-center justify-between py-3 bg-white lg:container sm:py-2 lg:mx-auto">
 		<div class="hidden justify-center gap-3 sm:flex">
 			<button
 				aria-label="Sidebar"
@@ -83,17 +83,17 @@ const cartState = navModule.cartState
 			{#if navModule.isProductListingPage}
 				<div class="flex items-center gap-2">
 					<button class="flex items-center gap-2 text-lg font-medium" aria-label="Go back" onclick={navModule.goBack}>
-						<ChevronLeftIcon class="h-6 w-6 font-bold" />
+						<ChevronLeft class="h-6 w-6 font-bold" />
 						<span class="sr-only">Go back</span>
 					</button>
 
 					<div class="flex flex-col items-start">
 						{#if page.params?.slug || page.url?.searchParams?.get?.('search')}
-							<h1 class="text-base font-semibold capitalize">
+							<p class="text-base font-semibold capitalize">
 								{page.params?.slug?.replace?.(/-/g, ' ').replace?.(/\b\w/g, (c) => c?.toUpperCase?.()) || page.url?.searchParams?.get?.('search')}
-							</h1>
+							</p>
 						{:else}
-							<h1 class="text-base font-semibold">Products</h1>
+							<p class="text-base font-semibold">Products</p>
 						{/if}
 
 						<p class="text-xs text-gray-500">{navModule.productsCount > 999 ? '1000+' : navModule.productsCount} products</p>
