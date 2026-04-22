@@ -3,7 +3,7 @@
 	import * as Card from '$lib/components/ui/card'
 	import type { WithElementRef } from 'bits-ui'
 	import type { HTMLAttributes } from 'svelte/elements'
-	import ModalRenderer from '$lib/core/composables/modal-renderer.svelte'
+	import { ModalRenderer } from '$lib/core/composables/index.js'
 
 	type ModalProps = {
 		confirmButtonText?: string

@@ -1,2 +1,3 @@
-export { load } from '$lib/core/load-functions/(legal)/privacy-policy/load.server'
+export { legalPrivacyPolicyLoadServer as load } from "$lib/core/load-functions/index.js"
+
 

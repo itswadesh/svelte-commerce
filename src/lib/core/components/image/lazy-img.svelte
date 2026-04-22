@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition'
 	import { onMount } from 'svelte'
-	import { Image as ImageIcon } from 'lucide-svelte'
+	import { Image as ImageIcon } from '@lucide/svelte'
 	import { page } from '$app/state'
 
 	let {
@@ -11,7 +11,19 @@
 		src = '',
 		aspectRatio = page?.data?.store?.productImageAspectRatio,
 		width = 'auto',
+		loading = 'lazy',
+		fetchpriority = 'auto',
 		...rest
+	}: {
+		class?: string
+		alt?: string
+		height?: string | number
+		src?: string
+		aspectRatio?: string
+		width?: string | number
+		loading?: 'lazy' | 'eager'
+		fetchpriority?: 'auto' | 'high' | 'low'
+		[key: string]: any
 	} = $props()
 
 	const h = height === 'auto' ? '0' : +height * 2
@@ -107,10 +119,10 @@
 					}}
 					{alt}
 					draggable="false"
-					fetchpriority="high"
+					{fetchpriority}
 					decoding="async"
 					data-nimg="1"
-					loading="lazy"
+					{loading}
 					src={`${page?.data?.store?.plugins?.imageCdn?.url}${src?.replace(
 						/^https?:\/\/[^\/]+\.s3\.amazonaws\.com\//,
 						'/'
@@ -139,8 +151,8 @@
 					{alt}
 					{src}
 					draggable="false"
-					loading="lazy"
-					fetchpriority="high"
+					{loading}
+					{fetchpriority}
 					decoding="async"
 					data-nimg="1"
 					height={+h}

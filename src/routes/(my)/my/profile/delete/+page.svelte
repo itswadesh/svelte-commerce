@@ -1,6 +1,6 @@
 <script>
 	import Button from '$lib/components/ui/button/button.svelte'
-	import { MyProfileDeleteModule } from '$lib/core/composables/use-my-profile-delete.svelte'
+	import { MyProfileDeleteModule } from '$lib/core/composables/index.js'
 
 	const deleteModule = new MyProfileDeleteModule()
 </script>

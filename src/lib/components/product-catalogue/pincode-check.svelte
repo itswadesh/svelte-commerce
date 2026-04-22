@@ -2,7 +2,7 @@
 	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
 	import { Button } from '$lib/components/ui/button'
 	import { Input } from '$lib/components/ui/input'
-	import PincodeCheckRenderer from '$lib/core/composables/pincode-check-renderer.svelte'
+	import { PincodeCheckRenderer } from '$lib/core/composables/index.js'
 
 	let pincode: number | undefined = $state()
 </script>

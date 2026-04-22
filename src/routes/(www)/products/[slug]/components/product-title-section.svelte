@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Star, StarHalf } from 'lucide-svelte'
+	import { Star, StarHalf } from '@lucide/svelte'
 	import { page } from '$app/state'
 	import ShareButton from '$lib/core/components/plugins/share-button.svelte'
 

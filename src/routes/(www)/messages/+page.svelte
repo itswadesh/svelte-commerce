@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { date } from '$lib/core/utils'
 	import Textarea from '$lib/components/ui/textarea/textarea.svelte'
-	import { MessagesModule } from '$lib/core/composables/use-messages.svelte'
+	import { MessagesModule } from '$lib/core/composables/index.js'
 	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte'
 	const messagesModule = new MessagesModule()
 </script>

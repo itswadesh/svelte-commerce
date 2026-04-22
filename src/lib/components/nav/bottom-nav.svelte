@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/state'
 	import { slide } from 'svelte/transition'
-	import { Home, Grid, Heart, ShoppingCart, Minus, Plus, Trash2, Store, ArrowLeft, Play } from 'lucide-svelte'
-	import { getCartState } from '$lib/core/stores/cart.svelte'
+	import { getCartState } from '$lib/core/stores/index.js'
+	import { Home, Grid, Heart, ShoppingCart, Minus, Plus, Trash2, Store, ArrowLeft, Play } from '@lucide/svelte'
 	import { Button } from '$lib/components/ui/button'
 	import { Separator } from '$lib/components/ui/separator'
 	import { goto } from '$app/navigation'
@@ -104,7 +104,7 @@
 				<button class="rounded-full p-2 hover:bg-gray-100" onclick={() => (showCartModal = false)}>
 					<ArrowLeft size={24} />
 				</button>
-				<h1 class="text-lg font-medium">Your Cart</h1>
+				<h2 class="text-lg font-medium">Your Cart</h2>
 			</header>
 
 			<div class="flex-1 overflow-auto p-4">

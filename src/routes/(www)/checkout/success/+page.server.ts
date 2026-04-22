@@ -1,2 +1,2 @@
-export { load } from '$lib/core/load-functions/(www)/checkout/success/load.server'
+export { wwwCheckoutSuccessLoadServer as load } from "$lib/core/load-functions/index.js"
 

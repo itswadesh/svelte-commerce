@@ -1,9 +1,9 @@
 <script lang="ts">
 	import Input from '$lib/components/form/textbox.svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
-	import { Save, ArrowLeft, InfoIcon, Loader } from 'lucide-svelte'
+	import { Save, ArrowLeft, InfoIcon, Loader } from '@lucide/svelte'
 	import { goto } from '$app/navigation'
-	import { MyProfileModule } from '$lib/core/composables/use-my-profile.svelte'
+	import { MyProfileModule } from '$lib/core/composables/index.js'
 
 	const profileModule = new MyProfileModule()
 </script>
@@ -21,9 +21,6 @@
 			<!-- Logo Field: Full Row -->
 			<div>
 				<h2 class="text-2xl font-bold text-gray-900 dark:text-white">Profile</h2>
-				<!-- <div class="mt-3 flex flex-row items-center justify-start rounded-lg overflow-hidden w-fit" id="logo">
-					<LazyImg src={profile.avatar} alt={`Logo Image`} width="90" height="90" class="rounded-lg" />
-				</div> -->
 			</div>
 			<br />
 			<!-- Grid Layout for Other Fields -->

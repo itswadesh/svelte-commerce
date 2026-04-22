@@ -1,2 +1,1 @@
-export { load } from '$lib/core/load-functions/layout.server'
-
+export { layoutServer as load } from "$lib/core/load-functions/index.js"

@@ -1,2 +1,3 @@
-export { load } from '$lib/core/load-functions/(legal)/refund-policy/load.server'
+export { legalRefundPolicyLoadServer as load } from "$lib/core/load-functions/index.js"
+
 

@@ -1,5 +1,5 @@
 <script>
-	import { Instagram } from 'lucide-svelte'
+	import { Instagram } from '@lucide/svelte'
 	import ImagesCarousel from '../images-carousel.svelte'
 	let { gallery = [] } = $props()
 </script>

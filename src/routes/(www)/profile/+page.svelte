@@ -6,7 +6,7 @@
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	// import ImageUpload from '$lib/components/image-upload.svelte'
 	import { toast } from 'svelte-sonner'
-	import { Save, ArrowLeft, InfoIcon, Loader, FileChartColumnIncreasing } from 'lucide-svelte'
+	import { Save, ArrowLeft, InfoIcon, Loader, FileChartColumnIncreasing } from '@lucide/svelte'
 	import { browser } from '$app/environment'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import { z } from 'zod'

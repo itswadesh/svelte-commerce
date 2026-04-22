@@ -1,11 +1,10 @@
 <script lang="ts">
-	import { LoaderIcon } from 'lucide-svelte'
+	import { LoaderIcon } from '@lucide/svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
-	import { authService } from '$lib/core/services'
 	import { toast } from 'svelte-sonner'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import { z } from 'zod'
-	import { getUserState } from '$lib/core/stores/auth.svelte'
+	import { getUserState } from '$lib/core/stores/index.js'
 	const userState = getUserState()
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
@@ -133,14 +132,14 @@
 				autocomplete="email"
 			/>
 
-			<!-- <Textbox 
-					name="phone" 
-					type="tel" 
-					bind:value={phone} 
-					placeholder="+1234567890" 
-					schema={schemas.phone} 
-					label="Phone number" 
-					required 
+			<!-- <Textbox
+					name="phone"
+					type="tel"
+					bind:value={phone}
+					placeholder="+1234567890"
+					schema={schemas.phone}
+					label="Phone number"
+					required
 					aria-label="Phone number"
 					autocomplete="tel"
 				/> -->
@@ -149,7 +148,7 @@
 				name="password"
 				type="password"
 				bind:value={password}
-				placeholder="••••••••"
+				placeholder="Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢"
 				schema={schemas.password}
 				label="Password"
 				required
@@ -161,7 +160,7 @@
 				name="confirmPassword"
 				type="password"
 				bind:value={confirmPassword}
-				placeholder="••••••••"
+				placeholder="Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢Ã¢â‚¬Â¢"
 				schema={schemas.confirmPassword}
 				label="Confirm password"
 				required

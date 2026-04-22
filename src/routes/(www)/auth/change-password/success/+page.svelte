@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { showAuthModal } from '$lib/core/components/auth/auth-utils'
 	import { Button } from '$lib/components/ui/button'
-	import { CheckCircle2 } from 'lucide-svelte'
+	import { CheckCircle2 } from '@lucide/svelte'
 </script>
 
 <div class="flex min-h-screen w-full items-center justify-center">

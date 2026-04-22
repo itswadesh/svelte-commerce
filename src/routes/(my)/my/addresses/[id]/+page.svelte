@@ -2,7 +2,7 @@
 	import { page } from '$app/state'
 	import Input from '$lib/components/ui/input/input.svelte'
 	import { addressService } from '$lib/core/services'
-	import { InfoIcon, Loader } from 'lucide-svelte'
+	import { InfoIcon, Loader } from '@lucide/svelte'
 	import { toast } from 'svelte-sonner'
 	import { browser } from '$app/environment'
 

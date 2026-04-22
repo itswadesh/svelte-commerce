@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { RangeCalendar as RangeCalendarPrimitive } from 'bits-ui'
-	import ChevronLeft from 'lucide-svelte/icons/chevron-left'
+	import { ChevronLeft } from '@lucide/svelte'
 	import { buttonVariants } from '$lib/components/ui/button/index.js'
 	import { cn } from '$lib/core/utils'
 	let { ref = $bindable(null), class: className, children, ...restProps }: RangeCalendarPrimitive.PrevButtonProps = $props()

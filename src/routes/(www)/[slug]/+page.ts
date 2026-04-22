@@ -1,2 +1,2 @@
-export { load } from '$lib/core/load-functions/(www)/[slug]/load'
+export { wwwSlugLoad as load } from "$lib/core/load-functions/index.js"
 

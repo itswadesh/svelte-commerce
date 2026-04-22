@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { getCartState } from '$lib/core/stores/cart.svelte.js'
+	import { getCartState, getProductState } from '$lib/core/stores/index.js'
 	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
 	import { Button } from '$lib/components/ui/button'
-	import { getProductState } from '$lib/core/stores/product.svelte.js'
 	import { formatPrice } from '$lib/core/utils/index.js'
-	import { ArrowLeft, AlertCircle, RefreshCw } from 'lucide-svelte'
+	import { ArrowLeft, AlertCircle, RefreshCw } from '@lucide/svelte'
 	import { page } from '$app/state'
 
 	let loadingPayment = $state(false)

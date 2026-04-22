@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { DropdownMenu as DropdownMenuPrimitive, type WithoutChild } from 'bits-ui'
-  import { Dot } from 'lucide-svelte'
+  import { Dot } from '@lucide/svelte'
 	import { cn } from '$lib/core/utils'
 
 	let { ref = $bindable(null), class: className, children: childrenProp, ...restProps }: WithoutChild<DropdownMenuPrimitive.RadioItemProps> = $props()

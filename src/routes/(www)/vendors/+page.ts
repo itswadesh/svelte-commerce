@@ -6,10 +6,16 @@ export const load: PageLoad = async ({ fetch, url }) => {
 	const search = url.searchParams.get('search')
 	const sort = url.searchParams.get('sort')
 
-	const vendors = await VendorService.list({
-		page: currentPage,
-		sort: sort || '-createdAt'
-	})
-	return vendors
+	try {
+		const vendorService = new VendorService(fetch)
+		const vendors = await vendorService.list({
+			page: currentPage,
+			sort: sort || '-createdAt'
+		})
+		return { vendors }
+	} catch (e) {
+		console.error('Error loading vendors:', e)
+		return { vendors: { data: [], count: 0 } }
+	}
 }
 

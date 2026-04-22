@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { LoaderIcon } from 'lucide-svelte'
+	import { LoaderIcon } from '@lucide/svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import AuthButton from '$lib/core/components/auth/auth-button.svelte'
-	import { ForgotPasswordModule, schemas } from '$lib/core/composables/use-forgot-password.svelte'
+	import { ForgotPasswordModule, forgotPasswordSchema as schemas } from '$lib/core/composables/index.js'
 
 	const forgotPasswordModule = new ForgotPasswordModule()
 </script>

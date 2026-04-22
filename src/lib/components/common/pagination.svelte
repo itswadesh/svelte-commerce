@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as Pagination from '$lib/components/ui/pagination'
-	import PaginationRenderer from '$lib/core/composables/pagination-renderer.svelte'
+	import { PaginationRenderer } from '$lib/core/composables/index.js'
 
 	type Props = {
 		noOfPage: number

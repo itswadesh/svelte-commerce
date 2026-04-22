@@ -227,7 +227,7 @@ describe('CartItem', () => {
 	it('should fire Google Analytics events for cart actions', async () => {
 		// Mock the fireGTagEvent function
 		const mockFireGTagEvent = vi.fn()
-		const gtagModule = await import('$lib/core/utils/gtag')
+		const gtagModule = await import('$lib/core/utils/index.js')
 		vi.spyOn(gtagModule, 'fireGTagEvent').mockImplementation(mockFireGTagEvent)
 
 		const mockUpdate = vi.fn().mockResolvedValue(undefined)
