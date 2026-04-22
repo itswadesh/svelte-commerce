@@ -10,6 +10,10 @@
 	import Pagination from '$lib/components/common/pagination.svelte'
 	import type { ProductSearchResult } from '$lib/core/types'
 	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
+	import { setCategoryFilterState, setDesktopFilterState } from '$lib/core/composables/index.js'
+
+	setDesktopFilterState()
+	setCategoryFilterState()
 
 	let collections: ProductSearchResult = $state(searchService.emptyResult())
 	let selectedSort = $state(page.url.searchParams.get('sort') || 'recommended')

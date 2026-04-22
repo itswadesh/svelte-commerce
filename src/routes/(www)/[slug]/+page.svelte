@@ -11,7 +11,10 @@
 	import Breadcrumb from '$lib/components/ui/breadcrumb.svelte'
 	import { selectSort } from '$lib/core/utils'
 	import { sortOptions } from '$lib/config'
+	import { setCategoryFilterState, setDesktopFilterState } from '$lib/core/composables/index.js'
 
+	setDesktopFilterState()
+	setCategoryFilterState()
 	let { data } = $props()
 	let selectedSort = $state(page.url.searchParams.get('sort') || 'popularity:desc')
 	let loading = $state(false)
