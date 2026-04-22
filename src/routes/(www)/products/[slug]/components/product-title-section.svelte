@@ -20,7 +20,7 @@
 	</div>
 
 	{#if product.subtitle}
-		<h2 class="text-gray-500 max-sm:text-sm">
+		<h2 class="text-gray-600 font-medium max-sm:text-sm">
 			{@html product.subtitle}
 		</h2>
 	{/if}
@@ -42,7 +42,7 @@
 						{/if}
 					</div>
 				</div>
-				<span class="text-sm text-gray-500">({product?.rating || 0})</span>
+				<span class="text-sm text-gray-600 font-medium">({product?.rating || 0})</span>
 			{/if}
 		</div>
 	</div>

@@ -10,8 +10,8 @@
 <div class="hidden grid-cols-1 overflow-x-auto sm:grid">
 	{#if productState.selectedVariant?.description || data?.product?.description}
 		<div class="mb-1 mt-5 flex items-center gap-2">
-			<span class="text-sm text-gray-500">Description</span>
-			<Info class="h-3 w-3" />
+			<span class="text-sm text-gray-600 font-medium">Description</span>
+			<Info class="h-3 w-3 text-gray-600" />
 		</div>
 		<p
 			class="prose text-black prose-li:list-decimal [&>table]:border [&>table]:border-gray-200 [&_*_td]:border [&_*_td]:border-gray-200 [&_*_td]:p-1 [&_*_th]:border [&_*_th]:border-gray-200"
@@ -50,14 +50,14 @@
 	<button
 		class="flex w-full items-center justify-between gap-2 {!productState.showDescription
 			? 'border-b'
-			: ''} border-gray-200 py-4 text-sm text-gray-500"
+			: ''} border-gray-200 py-4 text-sm text-gray-600 font-medium"
 		onclick={() => (productState.showDescription = !productState.showDescription)}
 	>
 		<div class="flex items-center gap-4">
 			<Info class="h-5 w-5 text-black" />
 			<div class="flex flex-col items-start">
 				<span class="font-semibold text-black">Product Description</span>
-				<span class="text-xs text-gray-500">Click to view</span>
+				<span class="text-xs text-gray-600">Click to view</span>
 			</div>
 		</div>
 
