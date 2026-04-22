@@ -63,7 +63,7 @@
 										{#each searchResults as result}
 											<button
 												class="w-full cursor-pointer px-4 py-2 text-left text-sm hover:bg-gray-100"
-												aria-label="Goto {result.title}"
+												aria-label="{result.title}"
 												onclick={() => handleResultClick(result)}
 											>
 												<p class="truncate">
@@ -103,7 +103,7 @@
 								{#each searchResults as result}
 									<button
 										class="flex w-full cursor-pointer items-center justify-between p-3 text-left text-sm hover:bg-gray-100"
-										aria-label="Goto {result.title}"
+										aria-label="searches for {result.title}"
 										onclick={() => handleResultClick(result)}
 									>
 										<p class="truncate text-sm font-medium capitalize text-[#71717A]">
