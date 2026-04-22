@@ -41,7 +41,7 @@
 					<div class="grid grid-cols-{itemsPerRow} gap-0">
 						{#if banners.length}
 							{#each banners as banner}
-								<a href={banner.link || link} aria-label="Goto {banner.title || banner.link}" class="relative w-full">
+								<a href={banner.link || link} aria-label="{banner.title || banner.link}" class="relative w-full">
 									<!-- <div
 										class="absolute inset-0 bg-gray-200 transition-opacity duration-300"
 										class:opacity-0={loadedImages.has(url)}
