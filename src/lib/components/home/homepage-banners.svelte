@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Skeleton } from '$lib/components/ui/skeleton'
+	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	let { bannersList = [] } = $props()
 	let loading = $state(true)
 	let loadedImages = $state(new Set())

@@ -119,20 +119,6 @@
 			<Skeleton class="h-full w-full rounded-none" />
 		</div>
 	{:else if page?.desktopBanners?.[0]?.url || page?.mobileBanners?.[0]?.url}
-		<!-- <div class="relative hidden md:block">
-      <LazyImg
-        src={banners?.desktopBanners[0]?.url}
-        alt=""
-        class="h-[50vh] w-full object-cover"
-        aspect_ratio="16:6"
-      />
-    </div>
-    <LazyImg
-      src={data?.page?.mobileBanners[0]?.url}
-      alt=""
-      class="relative h-[50vh] w-full object-cover md:hidden"
-      aspect_ratio="1:1"
-    /> -->
 		<Banners sliderBannersDesktop={page?.desktopBanners} sliderBannersMobile={page?.mobileBanners} />
 	{:else}
 		<!-- Fallback Hero Section when no banners are configured -->
