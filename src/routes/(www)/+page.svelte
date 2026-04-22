@@ -1,10 +1,12 @@
 <script lang="ts">
 	import FeaturedProductsGrid from '$lib/components/product-catalogue/featured-products-grid.svelte'
-	import { X } from 'lucide-svelte'
+	import { X } from '@lucide/svelte'
 	import { Skeleton } from '$lib/components/ui/skeleton'
 	import CategoryList from '$lib/components/category/category-list.svelte'
 	import { fly } from 'svelte/transition'
 	import GoogleStructuredDataProductsList from '$lib/core/components/plugins/google-structured-data-products-list.svelte'
+	import GoogleStructuredDataOrganization from '$lib/core/components/plugins/google-structured-data-organization.svelte'
+	import GoogleStructuredDataWebsite from '$lib/core/components/plugins/google-structured-data-website.svelte'
 	import type { Product } from '$lib/core/types/index.js'
 	import HomepageCategoryListWithImage from '$lib/components/home/homepage-category-list-with-image.svelte'
 	import HomepageBanners from '$lib/components/home/homepage-banners.svelte'
@@ -15,6 +17,7 @@
 	import { HomepageModule } from '$lib/core/composables/index.js'
 	import { timestampToAgo } from '$lib/core/utils/index.js'
   import Slider from '$lib/components/home/slider.svelte'
+	import { PUBLIC_LITEKART_DOMAIN } from '$env/static/public'
 
 	// Type definition for page data needed for this component
 	interface ExtendedPage {
@@ -40,6 +43,33 @@
 </script>
 
 <GoogleStructuredDataProductsList products={homepageModule.featuredProductsStructuredData} />
+
+<GoogleStructuredDataOrganization
+	name={data?.store?.name || 'ArialShop'}
+	url={`https://${PUBLIC_LITEKART_DOMAIN}`}
+	logo={data?.store?.logo}
+	description={data?.store?.description}
+	sameAs={data?.store?.socialSharing?.active ? (Object.values(data?.store?.socialSharing || {}).filter((link: any) => typeof link === 'string' && link.startsWith('http')) as string[]) : []}
+	address={data?.store?.address ? {
+		streetAddress: data?.store?.address?.street,
+		addressLocality: data?.store?.address?.city,
+		addressRegion: data?.store?.address?.state,
+		postalCode: data?.store?.address?.pincode,
+		addressCountry: data?.store?.address?.country
+	} : undefined}
+	contactPoint={data?.store?.contact?.phone ? {
+		telephone: data?.store?.contact?.phone,
+		email: data?.store?.contact?.email,
+		contactType: 'customer service'
+	} : undefined}
+/>
+
+<GoogleStructuredDataWebsite
+	name={data?.store?.name || 'ArialShop'}
+	url={`https://${PUBLIC_LITEKART_DOMAIN}`}
+	description={data?.store?.description}
+	searchUrl={`https://${PUBLIC_LITEKART_DOMAIN}/search?q={search_term_string}`}
+/>
 
 <SeoHeader
 	metaTitle={page?.metaTitle}
@@ -89,20 +119,6 @@
 			<Skeleton class="h-full w-full rounded-none" />
 		</div>
 	{:else if page?.desktopBanners?.[0]?.url || page?.mobileBanners?.[0]?.url}
-		<!-- <div class="relative hidden md:block">
-      <LazyImg
-        src={banners?.desktopBanners[0]?.url}
-        alt=""
-        class="h-[50vh] w-full object-cover"
-        aspect_ratio="16:6"
-      />
-    </div>
-    <LazyImg
-      src={data?.page?.mobileBanners[0]?.url}
-      alt=""
-      class="relative h-[50vh] w-full object-cover md:hidden"
-      aspect_ratio="1:1"
-    /> -->
 		<Banners sliderBannersDesktop={page?.desktopBanners} sliderBannersMobile={page?.mobileBanners} />
 	{:else}
 		<!-- Fallback Hero Section when no banners are configured -->
