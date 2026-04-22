@@ -13,14 +13,14 @@
 		<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 			{#if productState.selectedVariant?.sku || data?.product?.sku}
 				<div class="border-b">
-					<p class="text-gray-500">SKU</p>
+					<p class="text-gray-600 font-medium">SKU</p>
 					<p class="break-words break-all">{String(productState.selectedVariant?.sku || data?.product?.sku)}</p>
 				</div>
 			{/if}
 
 			{#if productState.selectedVariant?.barcode || data?.product?.barcode}
 				<div class="border-b">
-					<p class="text-gray-500">Barcode</p>
+					<p class="text-gray-600 font-medium">Barcode</p>
 					<!-- <QrCodeDisplayer
                       base64Data={selectedVariant?.barcode ||
                         data?.product?.barcode}
@@ -31,7 +31,7 @@
 
 			{#if productState.selectedVariant?.qrcode || data?.product?.qrcode}
 				<div class="border-b">
-					<p class="text-gray-500">QR Code</p>
+					<p class="text-gray-600 font-medium">QR Code</p>
 					<QrCodeDisplayer base64Data={productState.selectedVariant?.qrcode || data?.product?.qrcode} />
 				</div>
 			{/if}
@@ -41,7 +41,7 @@
 		<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 			{#if productState.selectedVariant?.width || data?.product?.width || productState.selectedVariant?.height || data?.product?.height || productState.selectedVariant?.length || data?.product?.length}
 				<div class="border-b">
-					<p class="text-gray-500">Dimensions</p>
+					<p class="text-gray-600 font-medium">Dimensions</p>
 					<p>
 						{#if productState.selectedVariant?.width || data?.product?.width}
 							W-{productState.selectedVariant?.width || data?.product?.width}
@@ -68,7 +68,7 @@
 
 			{#if productState.selectedVariant?.weight || data?.product?.weight}
 				<div class="border-b">
-					<p class="text-gray-500">Weight</p>
+					<p class="text-gray-600 font-medium">Weight</p>
 					<p>
 						{productState.selectedVariant?.weight || data?.product?.weight}
 						{page?.data?.store.weight_unit || productState.settingState?.selectedStore?.weight_unit}
@@ -80,7 +80,7 @@
 		<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 			{#if data?.product?.originCountry}
 				<div class="border-b">
-					<p class="text-gray-500">Made in</p>
+					<p class="text-gray-600 font-medium">Made in</p>
 					<p>{data?.product?.originCountry}</p>
 				</div>
 			{/if}
@@ -89,7 +89,7 @@
 		{#each data?.product?.attributes as { name, value }}
 			<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 				<div class="border-b">
-					<p class="text-gray-500">{name}</p>
+					<p class="text-gray-600 font-medium">{name}</p>
 					<p>{value}</p>
 				</div>
 			</div>

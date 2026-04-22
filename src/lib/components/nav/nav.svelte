@@ -452,14 +452,16 @@ const cartState = navModule.cartState
 													{#if navModule.showSubCategory2[cx]}
 														<ul class="ml-4 mt-1 list-none p-0">
 															{#each c.children as cc}
-																<a
-																	href={cc.link ? cc.link : cc.slug ? '/' + cc.slug : '/products'}
-																	aria-label="Click to visit category related products page"
-																	class="flex w-full items-center justify-between gap-2 py-1 text-left text-zinc-200 hover:text-white focus:outline-none"
-																	onclick={() => (navModule.openSidebar = false)}
-																>
-																	{cc.name}
-																</a>
+																<li>
+																	<a
+																		href={cc.link ? cc.link : cc.slug ? '/' + cc.slug : '/products'}
+																		aria-label="Click to visit category related products page"
+																		class="flex w-full items-center justify-between gap-2 py-1 text-left text-zinc-200 hover:text-white focus:outline-none"
+																		onclick={() => (navModule.openSidebar = false)}
+																	>
+																		{cc.name}
+																	</a>
+																</li>
 															{/each}
 														</ul>
 													{/if}
