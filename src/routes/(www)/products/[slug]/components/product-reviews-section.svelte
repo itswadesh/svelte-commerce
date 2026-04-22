@@ -28,7 +28,7 @@
 								<Star fill="yellow" class="h-5 w-5 {i < (page.data?.product?.rating || 0) ? 'text-primary-500' : 'text-zinc-200'}" />
 							{/each}
 						</div>
-						<div class="text-sm text-zinc-500">
+						<div class="text-sm text-zinc-600 font-medium">
 							Based on {page.data?.product?.ratings?.length || 0} reviews
 						</div>
 					</div>
@@ -39,14 +39,14 @@
 							{@const count = page.data?.product?.ratings?.filter((r: { [key: string]: any }) => Math.floor(r.rating) === stars).length || 0}
 							{@const percentage = page.data?.product?.ratings?.length ? (count / page.data?.product.ratings.length) * 100 : 0}
 							<div class="flex items-center gap-2">
-								<div class="flex w-16 items-center gap-1 text-sm">
+								<div class="flex w-16 items-center gap-1 text-sm font-medium">
 									{stars}
 									<StarIcon class="text-primary-500 h-4 w-4 fill-yellow-300" />
 								</div>
 								<div class="h-2 flex-1 overflow-hidden rounded-full bg-zinc-100">
 									<div class="bg-primary-500 h-full rounded-full transition-all" style="width: {percentage}%"></div>
 								</div>
-								<div class="w-10 text-sm text-zinc-500">{count}</div>
+								<div class="w-10 text-sm text-zinc-600 font-medium">{count}</div>
 							</div>
 						{/each}
 					</div>
@@ -77,16 +77,16 @@
 											{#if rating?.img}
 												<img src={rating.img} alt="" class="h-full w-full rounded-full object-cover" />
 											{:else}
-												<span class="text-lg font-medium text-zinc-500">
+												<span class="text-lg font-medium text-zinc-600">
 													{(rating.name || 'A')[0].toUpperCase()}
 												</span>
 											{/if}
 										</div>
 										<div>
-											<div class="font-medium">
+											<div class="font-semibold text-zinc-900">
 												{rating.name || 'Anonymous'}
 											</div>
-											<div class="text-sm text-zinc-500">
+											<div class="text-sm text-zinc-600">
 												{rating.date ? date(rating.date) : ''}
 											</div>
 										</div>
@@ -113,12 +113,12 @@
 						{/each}
 
 						{#if !page.data?.product?.ratings?.length}
-							<div class="p-8 text-center text-zinc-500">No reviews yet. Be the first to review this product!</div>
+							<div class="p-8 text-center text-zinc-600 font-medium">No reviews yet. Be the first to review this product!</div>
 						{:else}
 							<Tabs.Root value="product" class="w-full">
 								<Tabs.List class="mb-6 grid w-full grid-cols-2 border-b">
-									<Tabs.Trigger value="product" class="px-4 py-2 font-medium">Product Ratings</Tabs.Trigger>
-									<Tabs.Trigger value="brand" class="px-4 py-2 font-medium">Brand Ratings</Tabs.Trigger>
+									<Tabs.Trigger value="product" class="px-4 py-2 font-semibold">Product Ratings</Tabs.Trigger>
+									<Tabs.Trigger value="brand" class="px-4 py-2 font-semibold">Brand Ratings</Tabs.Trigger>
 								</Tabs.List>
 								<Tabs.Content value="product" class="w-full">
 									<div class="grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">
@@ -127,7 +127,7 @@
 												<div class="flex flex-wrap items-center gap-2">
 													<div class="flex flex-wrap items-center gap-2">
 														{#each { length: 5 } as _, i}
-															<button type="button" class="focus:outline-none focus:ring-0 focus:ring-offset-0">
+															<button type="button" aria-label="{i + 1} star" class="focus:outline-none focus:ring-0 focus:ring-offset-0">
 																<svg
 																	class="block h-8 w-8
 											{rating.rating >= i && rating.rating != null ? 'text-primary-500' : 'text-zinc-200'}"
@@ -281,8 +281,8 @@
 							<span class="mb-2 block text-sm font-medium">Rating</span>
 							<div class="flex items-center gap-2">
 								{#each { length: 5 } as _, i}
-									<button type="button" class="transition-transform focus:outline-none" onclick={() => productState.onSelect(i)}>
-										<Star class="h-8 w-8 {productState.select && productState.select >= i ? 'fill-primary' : 'fill-zinc-200'}" />
+									<button type="button" aria-label="Rate {i + 1} star" class="p-1 transition-transform focus:outline-none" onclick={() => productState.onSelect(i)}>
+										<Star class="h-11 w-11 {productState.select && productState.select >= i ? 'fill-primary' : 'fill-zinc-200'}" />
 									</button>
 								{/each}
 
