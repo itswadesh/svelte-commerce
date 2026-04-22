@@ -88,7 +88,7 @@
 					<p class="text-sm text-muted-foreground">No products found</p>
 				</div>
 			{:else}
-				<div class="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8 2xl:grid-cols-12 auto-rows-auto">
+				<div class="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 auto-rows-auto">
 					{#each data?.products?.data as product}
 						<ProductCard {product} />
 					{/each}

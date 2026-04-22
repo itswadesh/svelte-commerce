@@ -12,9 +12,10 @@ import type { PageData } from '$lib/core/types'
 import Breadcrumb from '$lib/components/ui/breadcrumb.svelte'
 import { selectSort } from '$lib/core/utils'
 import { sortOptions } from '$lib/config'
-import { setDesktopFilterState } from '$lib/core/composables/index.js'
+import { setCategoryFilterState, setDesktopFilterState } from '$lib/core/composables/index.js'
 
 setDesktopFilterState()
+setCategoryFilterState()
 let { data } = $props<{ data: PageData }>()
 let selectedSort = $state(page.url.searchParams.get('sort') || 'popularity:desc')
 let loading = $state(false)
@@ -31,7 +32,7 @@ let loading = $state(false)
 	<Breadcrumb categoryHierarchy={data?.products?.categoryHierarchy} />
 </div>
 
-<div class="flex h-full min-h-screen flex-row pt-4 md:gap-3 md:px-4">
+<div class="flex h-full px-5 lg:container min-h-screen flex-row pt-4 md:gap-3 ">
 		{#if Object.keys(data.products.facets || {}).length}
 			<div class="hidden border-r border-input md:block">
 				<DesktopFilter />
@@ -57,7 +58,7 @@ let loading = $state(false)
 			{:else}
 				<h1 class="text-2xl font-bold">All Products</h1>
 			{/if}
-			<span class="text-sm text-gray-400">{data?.products?.count} Products found</span>
+			<!-- <span class="text-sm text-gray-400">{data?.products?.count} Products found</span> -->
 		</div>
 
 		<div class="flex flex-row items-center justify-end md:hidden">
@@ -90,7 +91,7 @@ let loading = $state(false)
 						{data.products.count > 999 ? '1000+' : data.products.count} Products
 					</span>
 				</div>
-				<div class="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8 2xl:grid-cols-12 auto-rows-auto">
+				<div class="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-2 sm:gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 auto-rows-auto">
 					{#each data.products.data as product}
 						<ProductCard {product} />
 					{/each}

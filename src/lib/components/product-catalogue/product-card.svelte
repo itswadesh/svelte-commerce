@@ -108,13 +108,13 @@
 					>
 				{/if}
 				<a href="/products/{product.slug}">
-					<div class="line-clamp-2 max-h-[3rem] text-xs font-medium text-gray-500 dark:text-gray-200">
+					<div class="line-clamp-2 max-h-[3rem] text-sm font-medium text-center text-gray-500 dark:text-gray-200">
 						{product.title?.length > 60 ? product.title?.slice(0, 60) + '...' : product.title}
 					</div>
 				</a>
 			</div>
 			<div class="mx-2 flex flex-col space-y-1 px-0">
-				<div class="flex items-baseline gap-1 overflow-hidden whitespace-nowrap">
+				<div class="flex items-baseline justify-center items-center gap-1 overflow-hidden whitespace-nowrap">
 					<div class="text-sm font-bold text-black dark:text-gray-100">
 						{formatPrice(product.price, page?.data?.store?.currency?.code)}
 					</div>
@@ -122,10 +122,10 @@
 						<div class="text-xs text-gray-600 line-through">
 							{formatPrice(product.mrp, page?.data?.store?.currency?.code)}
 						</div>
-						{@const discount = Math.round(((product.mrp - product.price) / product.mrp) * 100)}
+						<!-- {@const discount = Math.round(((product.mrp - product.price) / product.mrp) * 100)}
 						<div class="truncate text-xs font-thin text-[#00b852]">
 							{discount > 70 ? 70 : discount}% OFF
-						</div>
+						</div> -->
 					{/if}
 				</div>
 				{#if !hideVariations && product.variants.length > 1}
