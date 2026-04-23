@@ -134,7 +134,7 @@
 							<a href={`/products/${product.slug}?variant_id=${variant.id || ''}`}>
 								<img
 									src={variant.thumbnail || product.thumbnail}
-									alt={`Variant ${i + 1}`}
+									alt="{product.title || product.name} in {variant.name || `Variant ${i + 1}`}"
 									class="h-8 w-8 rounded-full border-gray-300 object-contain dark:border-gray-600"
 								/>
 							</a>
