@@ -6,7 +6,7 @@
 	<div class="flex gap-3">
 		{#if page?.data?.store?.logo}
 			<a href="/">
-				<img src={page?.data?.store?.logo} class="h-10 object-contain" alt="{page?.data?.store?.name} Logo" />
+				<img src={page?.data?.store?.logo} class="h-10 object-contain" alt="Arialshop — Women's Fashion Online" />
 			</a>
 		{:else}
 			<a href="/" class="flex items-center space-x-2">

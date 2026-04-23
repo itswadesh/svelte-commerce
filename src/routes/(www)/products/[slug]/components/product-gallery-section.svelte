@@ -18,7 +18,7 @@
 	</div>
 	{#if productState.productImagesArray?.length > 0}
 		<div class="relative">
-			<ProductGallery images={productState.productImagesArray || []} />
+			<ProductGallery images={productState.productImagesArray || []} title={page.data?.product?.title} />
 		</div>
 
 		<Drawer.Root direction="bottom" bind:open={productState.showSimilarDrawer}>

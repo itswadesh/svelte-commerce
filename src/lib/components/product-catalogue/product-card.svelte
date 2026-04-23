@@ -38,7 +38,7 @@
 					{#if product.thumbnail || product?.image_url}
 						<LazyImg
 							src={product.thumbnail || product?.image_url}
-							alt="{product.name} product image"
+							alt="{product.title || product.name} product image"
 							height="200"
 							width={String(200 * (aspectWidth / aspectHeight))}
 							class="inset-0 h-[200px] object-contain transition-transform duration-300"

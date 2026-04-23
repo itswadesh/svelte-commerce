@@ -7,7 +7,7 @@ import { Play, X } from '@lucide/svelte'
 import Button from '$lib/components/ui/button/button.svelte'
 import { getYoutubeId } from '$lib/core/logic/index.js'
 
-let { images = [] } = $props()
+let { images = [], title = 'Product' } = $props()
 
 const settingState = getSettingState()
 
@@ -109,7 +109,7 @@ const isVideoURL = (x: string) => videoURLRegex.test(x)
             Video not supported
           </video>
 				{:else}
-					<LazyImg src={img} alt="Product Image" class=" w-1/2 object-cover transition-transform duration-300 hover:scale-105" />
+					<LazyImg src={img} alt={title} class=" w-1/2 object-cover transition-transform duration-300 hover:scale-105" />
 				{/if}
 			</div>
 		{/each}
@@ -151,7 +151,7 @@ const isVideoURL = (x: string) => videoURLRegex.test(x)
             {/if}
           </div>
 				{:else}
-					<LazyImg src={img} alt="Product Image" class=" w-full object-cover transition-transform duration-300 hover:scale-105" />
+					<LazyImg src={img} alt={title} class=" w-full object-cover transition-transform duration-300 hover:scale-105" />
 				{/if}
 			</div>
 		{/each}
@@ -201,7 +201,7 @@ const isVideoURL = (x: string) => videoURLRegex.test(x)
                   Video not supported
                 </video>
               {:else}
-							  <LazyImg src={img} alt="Product Image" class="max-h-[420px] w-full object-cover object-top" />
+							  <LazyImg src={img} alt={title} class="max-h-[420px] w-full object-cover object-top" />
               {/if}
 						</div>
 					</Carousel.Item>
@@ -277,7 +277,7 @@ const isVideoURL = (x: string) => videoURLRegex.test(x)
                 {:else}
 								  <LazyImg
 								  	src={img}
-								  	alt="Product Image"
+								  	alt={title}
 								  	class="aspect-[{settingState?.selectedStore?.productImageAspectRatio?.replace(
 								  		':',
 								  		'/'
@@ -322,7 +322,7 @@ const isVideoURL = (x: string) => videoURLRegex.test(x)
             {:else}
 						  <LazyImg
 						  	src={youtubeId ? `https://img.youtube.com/vi/${youtubeId}/default.jpg` : img}
-						  	alt="Thumbnail"
+						  	alt="{title} thumbnail"
 						  	class="h-full w-full object-cover"
 						  />
             {/if}
