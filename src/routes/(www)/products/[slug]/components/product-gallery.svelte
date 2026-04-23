@@ -74,8 +74,8 @@
 			{@const youtubeId = getYoutubeId(img)}
 			<div
 				class={cn(
-					'relative overflow-hidden border max-sm:inline-block max-sm:min-w-20 max-sm:max-w-20 p-0.5',
-					idx === currentIndex && 'border-primary'
+					'relative rounded-radius overflow-hidden border max-sm:inline-block max-sm:min-w-20 max-sm:max-w-20 p-0.5',
+					idx === currentIndex ? 'border-primary': 'border-muted'
 				)}
 				role="button"
 				tabindex="0"
@@ -101,7 +101,7 @@
 						Video not supported
 					</video>
 				{:else}
-					<LazyImg src={img} alt="Product Image" class=" w-full border object-cover" />
+					<LazyImg src={img} alt="Product Image" class=" w-full rounded-radius object-cover" />
 				{/if}
 			</div>
 		{/each}
@@ -125,7 +125,7 @@
 					{@const youtubeId = getYoutubeId(img)}
 					<Carousel.Item>
 						<div
-							class="border sm:mb-5 sm:cursor-zoom-in"
+							class="sm:mb-5 sm:cursor-zoom-in"
 							role="button"
 							tabindex="0"
 							onclick={() => showCarousel(img)}
@@ -154,7 +154,7 @@
 								<LazyImg
 									src={img}
 									alt="Product Image"
-									class="w-full object-cover"
+									class="w-full rounded-radius object-cover"
 								/>
 							{/if}
 						</div>
@@ -180,8 +180,9 @@
 	</div>
 </div>
 
+<!-- Fullscreen view -->
 <div
-	class="fixed left-0 top-0 z-[100] {displayCarousel} h-screen w-screen flex-col items-center justify-start bg-black"
+	class="fixed left-0 top-0 z-[100] {displayCarousel} h-[100dvh] w-screen flex-col items-center justify-start bg-black overflow-hidden"
 >
 	<!-- Background overlay -->
 	<Button
@@ -192,7 +193,7 @@
 		<span class="sr-only">Close Carousel</span>
 	</Button>
 
-	<div class="relative mx-auto flex h-screen max-w-[1200px] items-center gap-4 px-4 py-12">
+	<div class="relative mx-auto flex h-full w-full max-w-[1200px] items-center gap-4 px-4 py-12">
 		<!-- Close button -->
 		<Button
 			variant="plain"
@@ -204,7 +205,7 @@
 		</Button>
 
 		<!-- Main carousel -->
-		<div class="flex-1">
+		<div class="flex-1 h-full overflow-hidden">
 			<Carousel.Root
 				opts={{ loop: true }}
 				setApi={(api) => {
@@ -216,18 +217,18 @@
 						})
 					}
 				}}
-				class="relative w-full"
+				class="relative w-full h-full"
 			>
-				<Carousel.Content>
+				<Carousel.Content class="h-full">
 					{#each carouselImages || [] as img, index (index)}
 						{@const youtubeId = getYoutubeId(img)}
-						<Carousel.Item>
-							<div class="flex h-[calc(100vh-6rem)] items-center justify-center">
+						<Carousel.Item class="h-full">
+							<div class="flex h-full items-center justify-center">
 								{#if youtubeId}
 									<iframe
 										width="100%"
 										height="100%"
-										class="aspect-square rounded-lg"
+										class="aspect-square rounded-radius"
 										src="https://www.youtube.com/embed/{youtubeId}?rel=0&modestbranding=1&playsinline=1"
 										title="Video"
 										frameborder="0"
@@ -244,7 +245,7 @@
 									<LazyImg
 										src={img}
 										alt="Product Image"
-										class="!max-h-[calc(100vh-6rem)] w-full object-contain"
+										class="max-h-full rounded-radius h-full object-contain"
 									/>
 								{/if}
 							</div>
@@ -257,13 +258,13 @@
 		<!-- Thumbnails on the right -->
 		{#if carouselImages?.length > 0}
 			<div
-				class="hidden h-[calc(100vh-6rem)] min-w-[120px] max-w-[120px] flex-none items-center gap-2 overflow-y-auto py-2 scrollbar-thin md:flex md:flex-col"
+				class="hidden h-full min-w-[120px] max-w-[120px] flex-none items-center gap-2 overflow-y-auto py-2 scrollbar-thin md:flex md:flex-col"
 			>
 				{#each carouselImages || [] as img, i}
 					{@const youtubeId = getYoutubeId(img)}
 					<Button
 						variant="ghost"
-						class="relative aspect-square h-24 w-24 overflow-hidden rounded-md p-0 {currentIndex === i ? 'ring-2 ring-primary ring-offset-2 ring-offset-black' : ''}"
+						class="relative aspect-square h-24 w-24 overflow-hidden rounded-radius p-0 {currentIndex === i ? 'ring-2 ring-primary ring-offset-2 ring-offset-black' : ''}"
 						onclick={() => {
 							if (carouselApi) {
 								carouselApi.scrollTo(i)
@@ -273,7 +274,7 @@
 						}}
 					>
 						{#if isVideoURL(img)}
-							<video height="100%" width="100%" class="aspect-square rounded-lg" loop autoplay>
+							<video height="100%" width="100%" class="aspect-square rounded-radius" loop autoplay>
 								<source src={img} />
 								Video not supported
 							</video>
@@ -281,7 +282,7 @@
 							<LazyImg
 								src={youtubeId ? `https://img.youtube.com/vi/${youtubeId}/default.jpg` : img}
 								alt="Thumbnail"
-								class="h-full w-full object-cover"
+								class="h-full w-full rounded-radius object-cover"
 							/>
 						{/if}
 					</Button>

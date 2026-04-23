@@ -20,10 +20,8 @@
 	const cartState = cartModule.cartState
 
 	const totalSavings = $derived(
-		(cartState.cart?.lineItems || []).reduce(
-			(acc, item) => acc + (Math.max(0, (item.mrp || item.price) - item.price) * item.qty),
-			0
-		) + (cartState.cart?.discountAmount || 0)
+		(cartState.cart?.lineItems || []).reduce((acc, item) => acc + Math.max(0, (item.mrp || item.price) - item.price) * item.qty, 0) +
+			(cartState.cart?.discountAmount || 0)
 	)
 
 	const animatedSavings = tweened(0, {
@@ -37,14 +35,12 @@
 </script>
 
 {#snippet quantitySelector(item: any)}
-	<div
-		class="flex items-center rounded-sm border border-gray-200 bg-white p-1 shadow-sm transition-all duration-300 hover:shadow-md"
-	>
+	<div class="flex items-center rounded-radius border border-border bg-background p-1 shadow-sm transition-all duration-300 hover:shadow-md">
 		<Button
 			variant="ghost"
 			size="icon"
 			onclick={(e) => cartModule.decreaseQty(e, item)}
-			class="flex h-7 w-7 items-center justify-center rounded-full"
+			class="flex h-7 w-7 items-center justify-center"
 			aria-label="Decrease quantity"
 		>
 			<Minus class="size-3 text-gray-900" />
@@ -59,7 +55,7 @@
 		<Button
 			variant="ghost"
 			size="icon"
-			class="flex h-7 w-7 items-center justify-center rounded-full"
+			class="flex h-7 w-7 items-center justify-center"
 			aria-label="Increase quantity"
 			onclick={(e) => cartModule.increaseQty(e, item)}
 		>
@@ -74,7 +70,6 @@
 
 <div class="min-h-screen py-8">
 	<div class="container mx-auto px-4">
-
 		<CheckoutHeader step={1} />
 
 		<!-- <div class="mb-8">
@@ -113,13 +108,7 @@
 					</div>
 					<h2 class="mb-2 text-xl font-bold uppercase tracking-widest text-gray-900">Your bag is empty</h2>
 					<p class="mb-8 max-w-xs text-sm text-gray-500">Looks like you haven't added anything to your bag yet.</p>
-					<Button
-						href="/"
-						variant="default"
-						class="rounded-full px-8 py-3 text-xs font-bold uppercase tracking-[0.2em]"
-					>
-						Start Shopping
-					</Button>
+					<Button href="/" variant="default" class="rounded-full px-8 py-3 text-xs font-bold uppercase tracking-[0.2em]">Start Shopping</Button>
 				</div>
 			{:else}
 				<div class="grid gap-8 lg:grid-cols-[1fr_400px]">
@@ -138,20 +127,20 @@
 							</p>
 						</div>
 					{/if} -->
-						<div class="py-3 px-4 mb-4 border rounded-md bg-success/5 border-success/40 flex items-center justify-between">
+						<div class="mb-4 flex items-center justify-between rounded-radius border border-success/40 bg-success/5 px-4 py-3">
 							<div class="flex items-center gap-2">
 								<Tag class="size-3.5 text-success" />
-								<span class="text-sm font-medium text-success">You saved <span class="font-bold">{formatPrice($animatedSavings, page?.data?.store?.currency?.code)}</span> on this order.</span>
+								<span class="text-sm font-medium text-success"
+									>You saved <span class="font-bold">{formatPrice($animatedSavings, page?.data?.store?.currency?.code)}</span> on this order.</span
+								>
 							</div>
 						</div>
 
-
 						<div
-							class="h-fit divide-y divide-gray-200 overflow-hidden rounded-md sm:border {cartModule.partialCheckoutEnabled
+							class="h-fit divide-y divide-gray-200 overflow-hidden rounded-radius sm:border {cartModule.partialCheckoutEnabled
 								? '[&>div:nth-child(2)]:max-sm:!border-t-0'
 								: ''}"
 						>
-
 							<!-- Root checkbox -->
 							{#if cartModule.partialCheckoutEnabled}
 								<div class="flex items-center justify-between">
@@ -314,15 +303,11 @@
 										</label>
 									{/if}
 
-									<a class="flex flex-1 gap-3 md:gap-6 py-5 md:p-5" href={`/products/${item.slug}`} target="_blank">
+									<a class="flex flex-1 gap-3 sm:p-3 py-5 md:gap-6 md:p-5" href={`/products/${item.slug}`} target="_blank">
 										<div class="flex flex-col items-center gap-3">
 											<div class="relative flex items-center justify-center">
-												<div class="overflow-hidden  bg-gray-50 p-1 ring-1 ring-gray-100">
-													<LazyImg
-														src={item.thumbnail || '/placeholder.svg'}
-														alt={item.title}
-														class="aspect-[3/4] w-24 object-contain sm:w-32"
-													/>
+												<div class="overflow-hidden bg-gray-50 p-1 ring-1 ring-gray-100">
+													<LazyImg src={item.thumbnail || '/placeholder.svg'} alt={item.title} class="w-24 object-contain sm:w-32" />
 												</div>
 											</div>
 
@@ -338,7 +323,7 @@
 
 													<div class="mt-2 flex flex-wrap gap-2">
 														<span
-															class="inline-flex items-center rounded bg-gray-50 px-2 py-0.5 text-xs  text-muted font-semibold ring-1 ring-gray-100"
+															class="inline-flex items-center rounded-radius border border-primary px-2 py-0.5 text-xs font-semibold ring-1 ring-gray-100"
 														>
 															Qty: {item.qty}
 														</span>
@@ -346,7 +331,7 @@
 															{#each item.variant.options as option}
 																{#if option?.option?.title && option?.value}
 																	<span
-																		class="inline-flex items-center rounded bg-primary/5 px-2 py-0.5 text-xs font-semibold  text-muted ring-1 ring-primary/10"
+																		class="inline-flex items-center rounded-radius border border-primary px-2 py-0.5 text-xs font-semibold ring-1 ring-primary/10"
 																	>
 																		{option.option?.title}: {option?.value}
 																	</span>
@@ -356,43 +341,45 @@
 													</div>
 												</div>
 
-												<div class="text-left lg:hidden">
-													<div class="flex items-baseline gap-2">
-														<p class="text-base font-bold text-gray-900 sm:text-lg">
-															{formatPrice(item.price * item.qty, page?.data?.store?.currency?.code)}
-														</p>
+												<div class="flex justify-between">
+													<div class="text-left lg:hidden">
+														<div class="flex items-baseline gap-2">
+															<p class="text-base font-bold text-gray-900 sm:text-lg">
+																{formatPrice(item.price * item.qty, page?.data?.store?.currency?.code)}
+															</p>
+															{#if item.mrp > item.price}
+																<span class="text-xs text-gray-400 line-through">
+																	{formatPrice(item.mrp * item.qty, page?.data?.store?.currency?.code)}
+																</span>
+															{/if}
+														</div>
 														{#if item.mrp > item.price}
-															<span class="text-xs text-gray-400 line-through">
-																{formatPrice(item.mrp * item.qty, page?.data?.store?.currency?.code)}
-															</span>
+															<p class="text-xs font-medium tracking-tight text-red-900">
+																You saved {formatPrice(item.mrp * item.qty - item.price * item.qty, page?.data?.store?.currency?.code)}
+															</p>
+														{:else}
+															<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">
+																{formatPrice(item.price, page?.data?.store?.currency?.code)} each
+															</p>
 														{/if}
 													</div>
-													{#if item.mrp > item.price}
-														<p class="text-xs font-medium tracking-tight text-red-900">
-															You saved {formatPrice((item.mrp * item.qty) - (item.price * item.qty), page?.data?.store?.currency?.code)}
-														</p>
-													{:else}
-														<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">
-															{formatPrice(item.price, page?.data?.store?.currency?.code)} each
-														</p>
-													{/if}
-												</div>
-												<div class="hidden lg:block">
-													<Button
-														variant="ghost"
-														size="icon"
-														class="h-auto w-auto p-1.5 text-gray-400"
-														aria-label="Remove item"
-														onclick={(e) => cartModule.removeItem(e, item)}
-													>
-														<Trash class="size-3.5 text-red-500" />
-													</Button>
+													<div class="sm:hidden lg:block">
+														<Button
+															variant="ghost"
+															size="icon"
+															class="h-auto w-auto p-1.5 text-gray-400"
+															aria-label="Remove item"
+															onclick={(e) => cartModule.removeItem(e, item)}
+														>
+															<Trash class="size-3.5 text-destructive" />
+														</Button>
+													</div>
 												</div>
 											</div>
 
 											<div class="mt-auto flex items-center justify-between pt-6">
-													<div
-													class="hidden items-center rounded-sm border border-gray-200 bg-white p-1 shadow-sm transition-all duration-300 hover:shadow-md sm:flex"
+												<div
+													class="hidden items-center rounded-radius border border-border bg-background p-1 shadow-sm transition-all duration-300 hover:shadow-md sm:flex"
 												>
 													<Button
 														variant="ghost"
@@ -420,8 +407,7 @@
 														<Plus class="size-3 text-gray-900" />
 													</Button>
 												</div>
-
-												<div class="lg:hidden">
+												<div class="hidden sm:block lg:hidden">
 													<Button
 														variant="ghost"
 														size="icon"
@@ -429,27 +415,27 @@
 														aria-label="Remove item"
 														onclick={(e) => cartModule.removeItem(e, item)}
 													>
-														<Trash class="size-3.5 text-red-500" />
+														<Trash class="size-3.5 text-destructive" />
 													</Button>
 												</div>
-												<div class="text-right hidden lg:block">
-													<div class="flex items-baseline justify-end gap-2">
 
+												<div class="hidden text-right lg:block">
+													<div class="flex items-baseline justify-end gap-2">
 														<p class="text-base font-bold text-gray-900 sm:text-lg">
 															{formatPrice(item.price * item.qty, page?.data?.store?.currency?.code)}
 														</p>
 														{#if item.mrp > item.price}
-															<span class="text-xs text-gray-400 line-through">
+															<span class="text-xs line-through">
 																{formatPrice(item.mrp * item.qty, page?.data?.store?.currency?.code)}
 															</span>
 														{/if}
 													</div>
 													{#if item.mrp > item.price}
 														<p class="text-xs font-medium tracking-tight text-success">
-															You saved {formatPrice((item.mrp * item.qty) - (item.price * item.qty), page?.data?.store?.currency?.code)}
+															You saved {formatPrice(item.mrp * item.qty - item.price * item.qty, page?.data?.store?.currency?.code)}
 														</p>
 													{:else}
-														<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">
+														<p class="text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">
 															{formatPrice(item.price, page?.data?.store?.currency?.code)} each
 														</p>
 													{/if}
@@ -468,30 +454,23 @@
 						{#if cartState.cart.couponCode}
 							<div class="flex items-center justify-between px-1 text-sm sm:text-base">
 								<p class="font-medium">Coupon Applied</p>
-								<div class="flex items-center gap-2 rounded-lg bg-gray-100 p-2 px-3">
+								<div class="flex items-center gap-2 rounded-radius bg-gray-100 p-2 px-3">
 									<p class="text-sm font-medium text-gray-600">
 										{cartState.cart.couponCode}
 									</p>
-								<Button
-									variant="ghost"
-									size="icon"
-									class="h-auto w-auto p-1 text-red-500"
-									onclick={() => cartState.removeCoupon()}
-								>
-									<X class="size-4" />
-								</Button>
+									<Button variant="ghost" size="icon" class="h-auto w-auto p-1 text-destructive" onclick={() => cartState.removeCoupon()}>
+										<X class="size-4" />
+									</Button>
 								</div>
 							</div>
 						{/if}
 
 						<CouponsDrawer />
 
-						<div class="space-y-4 rounded-lg border border-muted/20 bg-white p-3 md:p-6 shadow-sm">
+						<div class="space-y-4 rounded-lg border border-border bg-background p-3 shadow-sm md:p-6">
 							<div class="">
 								<div class="mb-6 flex flex-col gap-1">
-									<h2 class="text-base font-bold uppercase  text-gray-900" style="font-family: 'Montserrat', sans-serif;">
-										Price Summary
-									</h2>
+									<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: 'Montserrat', sans-serif;">Price Summary</h2>
 									<div class="h-1 w-12 bg-primary"></div>
 								</div>
 								{#if cartModule.loadingForCart}
@@ -500,7 +479,7 @@
 									</div>
 								{:else}
 									<div class="space-y-4">
-										<div class="space-y-3 border-b border-gray-50 pb-6">
+										<div class="space-y-3 border-b border-border pb-6">
 											<div class="flex justify-between text-sm">
 												<span class="font-medium text-gray-500">Subtotal</span>
 												<span class="font-bold text-gray-900">{formatPrice(cartState.cart.subtotal, page?.data?.store?.currency?.code)}</span>
@@ -546,7 +525,9 @@
 										{/if} -->
 
 										{#if cartModule.showError}
-											<div class="mt-4 rounded bg-red-50 p-3 text-[11px] font-bold uppercase tracking-tight text-red-600 ring-1 ring-red-100">
+											<div
+												class="mt-4 rounded bg-destructive p-3 text-[11px] font-bold uppercase tracking-tight text-destructive-foreground ring-1 ring-red-100"
+											>
 												{cartModule.errorMessage}
 											</div>
 										{/if}
@@ -557,10 +538,7 @@
 										</div>
 
 										{#if !cartModule.noItemsChecked}
-											<CheckoutButton
-												onclick={cartModule.gotoCheckout}
-												loading={cartModule.loadingForCheckout}
-											/>
+											<CheckoutButton onclick={cartModule.gotoCheckout} loading={cartModule.loadingForCheckout} />
 										{:else}
 											<div
 												class="mt-4 rounded bg-yellow-50 p-3 text-center text-[10px] font-bold uppercase tracking-widest text-yellow-700 ring-1 ring-yellow-100"

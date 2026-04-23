@@ -53,14 +53,17 @@
 									</button>
 								{/if}
 							</div>
-							<Textbox
-								name="identifier"
-								bind:value={loginModule.identifier}
-								placeholder={loginModule.isPhoneNumber ? '1234567890' : 'johndoe@gmail.com'}
-								type={loginModule.isPhoneNumber ? 'tel' : 'email'}
-								schema={loginModule.isPhoneNumber ? schemas.phone : schemas.email}
-								required
-							/>
+							{#key loginModule.isPhoneNumber}
+								<Textbox
+									name="identifier"
+									bind:value={loginModule.identifier}
+									placeholder={loginModule.isPhoneNumber ? '1234567890' : 'johndoe@gmail.com'}
+									type={loginModule.isPhoneNumber ? 'tel' : 'email'}
+									schema={loginModule.isPhoneNumber ? schemas.phone : schemas.email}
+									class="h-12"
+									required
+								/>
+							{/key}
 						</div>
 
 						{#if !loginModule.isPhoneNumber}
@@ -72,6 +75,7 @@
 									bind:value={loginModule.password}
 									placeholder="Enter your password"
 									schema={schemas.password}
+									class="h-12"
 									required
 								/>
 							</div>
@@ -84,9 +88,13 @@
 						</div>
 					{/if}
 
-					<Button type="submit" class="h-11 w-full text-sm font-medium" disabled={loginModule.isLoading}>
+					<Button
+						type="submit"
+						class="mt-2 h-12 w-full text-wrap px-4 py-2 text-base font-medium shadow-md transition-transform hover:scale-[1.02] active:scale-[0.98]"
+						disabled={loginModule.isLoading}
+					>
 						{#if loginModule.isLoading}
-							<LoaderIcon class="mr-2 h-4 w-4 animate-spin" />
+							<LoaderIcon class="mr-2 h-5 w-5 animate-spin" />
 						{:else}
 							{loginModule.isPhoneNumber ? 'Send OTP' : 'Sign In'}
 						{/if}

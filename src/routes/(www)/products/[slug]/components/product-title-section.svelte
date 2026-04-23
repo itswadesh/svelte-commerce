@@ -13,12 +13,12 @@
 <div class="relative">
 
 		{#if product?.categories}
-		<p class="text-sm font-semibold">{product?.categories?.[product?.categories.length-1]?.category?.name}</p>
+		<p class="text-sm font-semibold leading-[1]">{product?.categories?.[product?.categories.length-1]?.category?.name}</p>
 		{/if}
 
 
 	<div class="flex items-center justify-between gap-4">
-		<h1 class="text-md flex-1 font-medium tracking-tight text-gray-900 dark:text-white sm:text-xl">
+		<h1 class="text-md flex-1 font-medium tracking-tight text-gray-900 dark:text-white sm:text-xl leading-[1]">
 			{product.title}
 		</h1>
 
@@ -43,7 +43,7 @@
 	</div>
 
 	{#if product.subtitle}
-		<div class="mt-3 line-clamp-3 text-xs font-medium text-muted-foreground sm:text-sm">
+		<div class="mt-3 line-clamp-3 text-xs font-medium sm:text-sm">
 			{@html product.subtitle}
 		</div>
 	{/if}

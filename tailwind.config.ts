@@ -33,6 +33,9 @@ const config: Config = {
 			spacing: {
 				page: '8px',
 			},
+			borderColor: {
+				DEFAULT: 'hsl(var(--border) / <alpha-value>)',
+			},
 			colors: {
 				border: 'hsl(var(--border) / <alpha-value>)',
 				input: 'hsl(var(--input) / <alpha-value>)',
@@ -86,7 +89,8 @@ const config: Config = {
 				xl: '24px',
 				lg: '8px',
 				md: '4px',
-				sm: '2px'
+				sm: '2px',
+        radius: 'var(--radius)'
 			},
 			keyframes: {
 				'accordion-down': {
