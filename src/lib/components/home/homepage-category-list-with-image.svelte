@@ -31,7 +31,7 @@
 				{#each categories as { slug, icon, color, name, link, thumbnail, parentCategoryId } (slug)}
 					<a href={link ? link : slug ? `/${slug}` : `/products`} class="mb-4 flex flex-col items-center">
 						<div class="aspect-square w-full bg-gray-100">
-							<LazyImg src={thumbnail} alt="Category Image" class="h-full w-full object-cover" />
+							<LazyImg src={thumbnail} alt={name} class="h-full w-full object-cover" />
 						</div>
 						<div class="mt-3 w-32 truncate text-center text-xs font-bold lg:text-sm">
 							{name}

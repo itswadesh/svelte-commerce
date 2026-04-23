@@ -72,13 +72,13 @@
 />
 
 <SeoHeader
-	metaTitle={page?.metaTitle}
+	metaTitle={page?.metaTitle || "Arialshop — Women's Fashion, Dresses & Co-ord Sets | Up to 70% Off"}
 	metaDescription={page?.metaDescription}
 	metaKeywords={page?.metaKeywords}
 	image={page?.logo}
 />
 
-<h1 class="sr-only">{data?.store?.name || 'Litekart'}</h1>
+<h1 class="sr-only">Shop Women's Fashion Online — Dresses, Co-ord Sets & More</h1>
 
 {#if homepageModule.featuredCategories?.length > 0}
 	<div class="mx-2 flex justify-center bg-gray-100 px-2 lg:container lg:mx-auto lg:hidden">

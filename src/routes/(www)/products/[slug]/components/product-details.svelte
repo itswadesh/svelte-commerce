@@ -29,7 +29,7 @@
 </script>
 
 <SeoHeader
-	metaTitle={data?.product?.metaTitle || data?.product?.title}
+	metaTitle={data?.product?.metaTitle || `${data?.product?.title} — Buy Online at Arialshop | Free Delivery`}
 	metaDescription={data?.product?.metaDescription || ''}
 	metaKeywords={data?.product?.keywords || ''}
 	image={data?.product?.thumbnail || ''}
