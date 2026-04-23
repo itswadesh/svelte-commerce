@@ -9,12 +9,22 @@ import paypal from '$lib/assets/payment-methods/paypal.png'
 import skrill from '$lib/assets/payment-methods/skrill.png'
 import visa from '$lib/assets/payment-methods/visa.png'
 
-let paymentMethodCards = [masterCard, paypal, skrill, visa]
+let paymentMethodCards = [
+	{ src: masterCard, alt: 'Mastercard' },
+	{ src: paypal, alt: 'PayPal' },
+	{ src: skrill, alt: 'Skrill' },
+	{ src: visa, alt: 'Visa' }
+]
 
 // Derive store data to prevent unnecessary re-renders
 const storeData = $derived(page?.data?.store || {})
 const footerMenu = $derived(storeData?.menu?.find((menu: { menuId?: string }) => menu?.menuId === 'footer')?.items || [])
-const socialSharing = $derived(storeData?.plugins?.socialSharingButtons || {})
+const socialSharing = $derived({
+	active: true, // Force active for SEO requirements
+	...storeData?.plugins?.socialSharingButtons,
+	youtube: storeData?.plugins?.socialSharingButtons?.youtube || 'https://www.youtube.com/@arialshop',
+	twitter: storeData?.plugins?.socialSharingButtons?.twitter || 'https://x.com/arialshop'
+})
 const footerSettings = $derived(storeData?.plugins?.footerSettings)
 const shouldCollapseOnMobile = $derived(footerSettings?.collapseOnMobile || false)
 
@@ -172,7 +182,7 @@ let isExpanded = $state(false)
 								<ul class="col-span-1 m-0 flex list-none flex-wrap items-center justify-end gap-2 p-0">
 									{#each paymentMethodCards as pmc}
 										<li>
-											<img src={pmc} alt="" class="h-8 w-auto object-contain" />
+											<img src={pmc.src} alt={pmc.alt} class="h-8 w-auto object-contain" />
 										</li>
 									{/each}
 								</ul>
