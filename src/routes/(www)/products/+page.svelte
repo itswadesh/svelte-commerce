@@ -22,8 +22,8 @@ let loading = $state(false)
 </script>
 
 <SeoHeader
-	metaTitle={data.page?.metaTitle || (data.products?.categoryHierarchy?.length > 0 ? `${data.products.categoryHierarchy[data.products.categoryHierarchy.length-1].name} Online India — Buy at Best Price | Arialshop` : "Women's Fashion Online India — Buy at Best Price | Arialshop")}
-	metaDescription={data.page?.metaDescription ?? ''}
+	metaTitle={data.page?.metaTitle || (data.products?.categoryHierarchy?.length > 0 ? `${data.products.categoryHierarchy[data.products.categoryHierarchy.length-1].name} — Shop Trendy Fashion Online | Arialshop` : "Women's Fashion Online — Stylish Dresses, Co-ord Sets & More | Arialshop")}
+	metaDescription={data.page?.metaDescription || "Explore Arialshop's exclusive collection of women's fashion. Shop the latest trendy dresses, elegant co-ord sets, and seasonal styles at the best prices. Enjoy free delivery on orders over ₹999, easy 7-day returns, and premium quality. Refresh your wardrobe with Arialshop today!"}
 	metaKeywords={data.page?.metaKeywords ?? ''}
 	image={data.page?.logo ?? ''}
 />
@@ -51,18 +51,15 @@ let loading = $state(false)
 
 	<div class="flex-1">
 		<div class="mb-4 flex flex-col items-start gap-2">
-			{#if page.url.searchParams.get('search')}
-				<h1 class="text-2xl font-bold">
+			<h1 class="text-2xl font-bold">
+				{#if page.url.searchParams.get('search')}
 					Search Results: "{page.url.searchParams.get('search')}"
-				</h1>
-			{:else if data.products?.categoryHierarchy?.length > 0}
-				<h1 class="text-2xl font-bold">
+				{:else if data.products?.categoryHierarchy?.length > 0}
 					{data.products.categoryHierarchy[data.products.categoryHierarchy.length-1].name}
-				</h1>
-			{:else}
-				<h1 class="text-2xl font-bold">All Products</h1>
-			{/if}
-			<!-- <span class="text-sm text-gray-400">{data?.products?.count} Products found</span> -->
+				{:else}
+					All Products
+				{/if}
+			</h1>
 		</div>
 
 		<div class="flex flex-row items-center justify-end md:hidden">
