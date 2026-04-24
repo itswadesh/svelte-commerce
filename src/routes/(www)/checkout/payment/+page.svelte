@@ -1,7 +1,7 @@
 <script lang="ts">
 import { Button } from '$lib/components/ui/button'
 import { goto } from '$app/navigation'
-import { LockKeyhole, X } from '@lucide/svelte'
+import { ChevronRight, LockKeyhole, X } from '@lucide/svelte'
 import { formatPrice } from '$lib/core/utils'
 import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
 import { page } from '$app/state'
@@ -25,82 +25,89 @@ const cartState = paymentModule.cartState
 <div class="min-h-screen py-8">
 	<div class="container mx-auto px-4">
 		<!-- Checkout Progress -->
-		<div class="mb-8">
-			<div class="flex items-center justify-center space-x-8">
-				<button onclick={() => goto(appendOneTimeCartId('/checkout/cart'))} class="flex cursor-pointer items-center text-gray-400">
-					<div class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-300">1</div>
-					<span class="ml-2 font-medium">Cart</span>
+		<div class="mb-12">
+			<div class="flex items-center justify-center space-x-4 sm:space-x-12">
+				<button onclick={() => goto(appendOneTimeCartId('/checkout/cart'))} class="flex items-center text-gray-400 hover:text-gray-900 transition-colors">
+					<div class="flex h-7 w-7 items-center justify-center rounded-full border border-gray-200 text-[11px] font-bold tracking-tight">1</div>
+					<span class="ml-2 text-xs font-bold uppercase tracking-widest">Cart</span>
 				</button>
-				<div class="hidden h-px w-16 bg-gray-300 sm:block"></div>
-				<button onclick={() => goto(appendOneTimeCartId('/checkout/address'))} class="flex cursor-pointer items-center text-gray-400">
-					<div class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-300">2</div>
-					<span class="ml-2 font-medium">Address</span>
+				<div class="h-px w-8 bg-gray-200 sm:w-16"></div>
+				<button onclick={() => goto(appendOneTimeCartId('/checkout/address'))} class="flex items-center text-gray-400 hover:text-gray-900 transition-colors">
+					<div class="flex h-7 w-7 items-center justify-center rounded-full border border-gray-200 text-[11px] font-bold tracking-tight">2</div>
+					<span class="ml-2 text-xs font-bold uppercase tracking-widest">Address</span>
 				</button>
-				<div class="hidden h-px w-16 bg-gray-300 sm:block"></div>
-				<div class="flex items-center text-gray-400">
-					<div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white">3</div>
-					<span class="ml-2 font-medium">Payment</span>
+				<div class="h-px w-8 bg-gray-200 sm:w-16"></div>
+				<div class="flex items-center text-primary">
+					<div class="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-[11px] font-bold text-white tracking-tight">3</div>
+					<span class="ml-2 text-xs font-bold uppercase tracking-widest">Payment</span>
 				</div>
 			</div>
 		</div>
 
-		<div class="grid gap-6 lg:grid-cols-[1fr_400px]">
+		<div class="grid gap-8 lg:grid-cols-[1fr_400px]">
 			<!-- Left Column -->
-			<div class="flex flex-col gap-4">
+			<div class="flex flex-col gap-6">
 				{#if paymentModule.shippingRates?.error?.message}
-					<div class="mb-4 border-red-400 bg-red-50 px-4 py-2 text-red-500 border">
+					<div class="mb-4 rounded bg-red-50 p-4 text-[11px] font-bold uppercase tracking-tight text-red-600 ring-1 ring-red-100">
 						We currently deliver only to
 						{#each paymentModule.shippingRates?.error?.countriesDeliverable || [] as country, index}
-							<span class="font-semibold">{country}</span>{#if index !== paymentModule.shippingRates?.error?.countriesDeliverable?.length - 1},
+							<span class="font-black">{country}</span>{#if index !== paymentModule.shippingRates?.error?.countriesDeliverable?.length - 1},
 								{' '}
 							{/if}
 						{/each}.
 
 						{#if paymentModule.shippingRates?.error?.moreCountriesCount}
-							<span class="font-semibold"> and {paymentModule.shippingRates.error.moreCountriesCount} more</span>
-						{/if} Your selected country is <span class="font-semibold">"{paymentModule.shippingRates?.error?.selectedCountry}"</span>.
+							<span class="font-black"> and {paymentModule.shippingRates.error.moreCountriesCount} more</span>
+						{/if} Your selected country is <span class="font-black">"{paymentModule.shippingRates?.error?.selectedCountry}"</span>.
 					</div>
 				{/if}
 
-				<div class="h-fit space-y-6 rounded-lg">
-					<h2 class="mb-4 text-xl font-semibold">Select Payment Methods</h2>
+				<div class="h-fit space-y-6">
+					<h2 class="text-base font-bold uppercase tracking-widest text-gray-900" style="font-family: 'Montserrat', sans-serif;">Select Payment Method</h2>
 					{#if paymentModule.showError}
-						<div class="mb-4 text-red-500">
+						<div class="rounded bg-red-50 p-3 text-[11px] font-bold uppercase tracking-tight text-red-600 ring-1 ring-red-100">
 							{paymentModule.errorMessage}
 						</div>
 					{/if}
 
 					{#if paymentModule.showPaymentMethods}
-						<div class="">
+						<div class="grid grid-cols-1 gap-4">
 							{#each paymentModule.listOfPaymentMethods as method}
 								<label
-									class="mb-4 block h-20 cursor-pointer gap-2 rounded border px-8 py-4 transition-all duration-200 hover:bg-gray-50 {paymentModule.SELECTED_PG_CODE === method?.code ? 'border-2 border-primary' : 'border'}"
+									class="relative flex cursor-pointer items-center justify-between rounded-lg border bg-white px-6 py-5 transition-all duration-300 hover:bg-gray-50 hover:shadow-md active:scale-[0.99] {paymentModule.SELECTED_PG_CODE === method?.code ? 'border-primary ring-1 ring-primary' : 'border-gray-100 shadow-sm'}"
 								>
-									<div class="flex h-full items-center justify-between gap-4">
-										<div class="flex flex-1 items-center gap-3">
+									<div class="flex items-center gap-4">
+										<div class="relative flex h-5 w-5 items-center justify-center">
+											<input
+												type="radio"
+												name="paymentMethod"
+												value={method?.code}
+												checked={paymentModule.SELECTED_PG_CODE === method?.code}
+												onchange={() => (paymentModule.SELECTED_PG_CODE = method?.code)}
+												class="peer h-5 w-5 appearance-none rounded-full border-2 border-gray-200 checked:border-primary transition-all"
+											/>
+											<div class="absolute h-2.5 w-2.5 rounded-full bg-primary opacity-0 peer-checked:opacity-100 transition-opacity"></div>
+										</div>
+										
+										<div class="flex items-center gap-3">
 											{#if method?.img}
-												<img src={method.img} alt={method?.name} class="h-8 w-auto object-contain" />
+												<div class="flex h-10 w-12 items-center justify-center rounded border border-gray-50 bg-white p-1 shadow-sm">
+													<img src={method.img} alt={method?.name} class="h-full w-full object-contain" />
+												</div>
 											{/if}
 											<div class="flex flex-col">
-												<span class="font-medium text-gray-900">{method?.name}</span>
+												<span class="text-sm font-bold uppercase tracking-tight text-gray-900">{method?.name}</span>
 												{#if method?.description}
-													<span class="text-sm text-gray-500">{@html method?.description}</span>
+													<span class="text-[10px] font-medium text-gray-400 uppercase tracking-tighter">{@html method?.description}</span>
 												{/if}
 											</div>
 										</div>
-										<input
-											type="radio"
-											name="paymentMethod"
-											value={method?.code}
-											checked={paymentModule.SELECTED_PG_CODE === method?.code}
-											onchange={() => (paymentModule.SELECTED_PG_CODE = method?.code)}
-											class="focus:ring-primary-500 h-4 w-4 border-gray-300 text-primary"
-										/>
 									</div>
+
 									{#if method?.badges?.length}
 										<div class="flex gap-2">
 											{#each method.badges as badge}
-												<span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">
+												<span class="rounded bg-gray-50 px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest text-gray-400 ring-1 ring-gray-100">
 													{badge}
 												</span>
 											{/each}
@@ -110,76 +117,50 @@ const cartState = paymentModule.cartState
 							{/each}
 						</div>
 					{/if}
-					<!-- {#each cartState.cart.lineItems || [] as item}
-          {#if item.isSelectedForCheckout}
-            <div class="flex items-start gap-2">
-              <a
-                class="flex flex-1 gap-4 border-b py-3"
-                href={`/products/${item.slug}`}
-                target="_blank"
-              >
-                <div class="relative">
-                  <img
-                    src={item.thumbnail}
-                    alt={item.title}
-                    class="h-20 w-16 rounded object-cover"
-                  />
-                  <div
-                    class="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-gray-500 text-xs text-white"
-                  >
-                    {item.qty}
-                  </div>
-                </div>
-                <div class="flex-1">
-                  <p class="line-clamp-2 font-medium">{item.title}</p>
-                  <p class="mt-1 text-sm text-gray-500">Qty: {item.qty}</p>
-                  <p class="mt-1 font-semibold">
-                    {formatPrice(
-                      item.price * item.qty,
-                      page?.data?.store?.currency?.code
-                    )}
-                  </p>
-                </div>
-              </a>
-            </div>
-          {/if}
-        {/each} -->
 				</div>
-				{#if paymentModule.shippingRates?.data?.length}
-					<div class="grid h-fit grid-cols-1 space-y-6 rounded-lg">
-						<h2 class="text-xl font-semibold">Shipping Methods</h2>
 
-						<div class="flex flex-col divide-y rounded-lg border">
+				{#if paymentModule.shippingRates?.data?.length}
+					<div class="grid h-fit grid-cols-1 space-y-6 pt-6 border-t border-gray-100">
+						<h2 class="text-base font-bold uppercase tracking-widest text-gray-900" style="font-family: 'Montserrat', sans-serif;">Shipping Method</h2>
+
+						<div class="flex flex-col gap-3">
 							{#each paymentModule.shippingRates?.data as rate}
 								<label
 									for={rate.id}
-									class="flex flex-row justify-between gap-3 p-4 hover:cursor-pointer {cartState?.cart?.shippingRateId === rate.id
-										? 'bg-gray-100'
-										: ''}"
+									class="flex items-center justify-between rounded-lg border bg-white p-5 transition-all duration-300 hover:bg-gray-50 hover:shadow-md active:scale-[0.99] {cartState?.cart?.shippingRateId === rate.id
+										? 'border-primary ring-1 ring-primary'
+										: 'border-gray-100 shadow-sm'}"
 								>
-									<div class="flex flex-row gap-3">
-										<div class="flex items-start justify-center">
+									<div class="flex items-center gap-4">
+										<div class="relative flex h-5 w-5 items-center justify-center">
 											<input
 												type="radio"
 												name="shippingRate"
 												id={rate.id}
 												checked={cartState?.cart?.shippingRateId === rate.id}
 												onchange={() => paymentModule.handleShippingRateChange(rate)}
-												class="focus:ring-primary-500 h-4 w-4 border-gray-300 text-primary"
+												class="peer h-5 w-5 appearance-none rounded-full border-2 border-gray-200 checked:border-primary transition-all"
 											/>
+											<div class="absolute h-2.5 w-2.5 rounded-full bg-primary opacity-0 peer-checked:opacity-100 transition-opacity"></div>
 										</div>
-										<div class="flex flex-col gap-2">
-											<span class="font-medium leading-none">
+
+										<div class="flex flex-col gap-0.5">
+											<span class="text-sm font-bold uppercase tracking-tight text-gray-900">
 												{rate.name}
-												{#if !Number.isNaN(Number.parseFloat(rate?.estimated_min_days)) && !Number.isNaN(Number.parseFloat(rate?.estimated_max_days))}
-													{'(' + rate?.estimated_min_days + ' - ' + rate?.estimated_max_days + ' business days)'}
-												{/if}
 											</span>
-											<span class="text-sm text-gray-500">{rate.description}</span>
+											<div class="flex items-center gap-2">
+												{#if !Number.isNaN(Number.parseFloat(rate?.estimated_min_days)) && !Number.isNaN(Number.parseFloat(rate?.estimated_max_days))}
+													<span class="text-[10px] font-bold uppercase tracking-tighter text-primary">
+														{rate?.estimated_min_days} - {rate?.estimated_max_days} Days
+													</span>
+													<span class="h-1 w-1 rounded-full bg-gray-200"></span>
+												{/if}
+												<span class="text-[10px] font-medium text-gray-400 uppercase tracking-tighter">{rate.description}</span>
+											</div>
 										</div>
 									</div>
-									<div class="flex flex-col">
-										<span class="text-sm font-semibold">
+									<div class="text-right">
+										<span class="text-sm font-bold text-gray-900">
 											{rate.base_rate > 0 ? formatPrice(rate.base_rate, page?.data?.store?.currency?.code) : 'FREE'}
 										</span>
 									</div>
@@ -209,76 +190,61 @@ const cartState = paymentModule.cartState
 
 				<CouponsDrawer />
 
-				<div class="space-y-6">
-					<div class="space-y-6 rounded-md border p-4">
-						<h2 class="text-xl font-semibold">Price Summary</h2>
-						<span class="mb-4 text-sm text-gray-400">Includes all government taxes</span>
+				<div class="space-y-4">
+					<div class="space-y-4 rounded-lg border border-gray-100 p-6 bg-white shadow-sm">
+						<div class="flex flex-col gap-1 mb-6">
+							<h2 class="text-base font-bold uppercase tracking-widest text-gray-900" style="font-family: 'Montserrat', sans-serif;">Price Summary</h2>
+							<div class="h-1 w-12 bg-primary"></div>
+						</div>
 						{#if paymentModule.loadingForCart}
 							<div class="flex items-center justify-center py-8">
 								<LoadingDots />
 							</div>
 						{:else}
-							<div class="space-y-4 max-sm:text-sm">
-								<div class="space-y-3 border-b py-4">
-									<div class="flex justify-between">
-										<span class="text-gray-600">Subtotal</span>
-										<span>{formatPrice(cartState.cart.subtotal, page?.data?.store?.currency?.code)}</span>
+							<div class="space-y-4">
+								<div class="space-y-3 border-b border-gray-50 pb-6">
+									<div class="flex justify-between text-sm">
+										<span class="text-gray-500 font-medium">Subtotal</span>
+										<span class="text-gray-900 font-bold">{formatPrice(cartState.cart.subtotal, page?.data?.store?.currency?.code)}</span>
 									</div>
 									{#if cartState.cart.discountAmount > 0}
-										<div class="flex justify-between text-green-600">
-											<span>Discount</span>
-											<span>- {formatPrice(cartState.cart.discountAmount, page?.data?.store?.currency?.code)}</span>
+										<div class="flex justify-between text-sm">
+											<span class="text-gray-500 font-medium">Discount</span>
+											<span class="text-orange-600 font-bold uppercase tracking-tight">- {formatPrice(cartState.cart.discountAmount, page?.data?.store?.currency?.code)}</span>
 										</div>
 									{/if}
-									<div class="flex justify-between">
-										<span class="text-gray-600">Shipping</span>
-										<!-- {#if cartState.cart.total > freeShippingOn}
-											<span class="rounded border border-green-500 px-1.5 text-xs text-green-500 sm:text-sm">FREE</span>
-										{:else} -->
-										<!-- <span
-                            >{cartState.cart.shippingCharges
-                              ? formatPrice(
-                                  cartState.cart.shippingCharges,
-                                  page?.data?.store?.currency?.code
-                                )
-                              : shippingCharges
-                                ? formatPrice(
-                                    shippingCharges,
-                                    page?.data?.store?.currency?.code
-                                  )
-                                : "FREE"}</span> -->
+									<div class="flex justify-between text-sm">
+										<span class="text-gray-500 font-medium">Shipping</span>
 										{#if !cartState.cart.shippingAddress}
-											<span class="text-gray-600"> will be calulcated after entering address. </span>
+											<span class="text-[10px] font-bold uppercase tracking-tighter text-gray-400"> Address required </span>
 										{:else if cartState.cart.shippingCharges}
-											<span>{formatPrice(cartState.cart.shippingCharges, page?.data?.store?.currency?.code)}</span>
+											<span class="text-gray-900 font-bold">{formatPrice(cartState.cart.shippingCharges, page?.data?.store?.currency?.code)}</span>
 										{:else}
-											<span class="rounded border border-green-500 px-1.5 text-xs text-green-500 sm:text-sm">FREE</span>
+											<span class="text-green-600 font-bold uppercase tracking-widest text-[10px] bg-green-50 px-2 py-0.5 rounded ring-1 ring-green-100">FREE</span>
 										{/if}
-										<!-- {/if} -->
 									</div>
 								</div>
 
-								<div class="flex items-center justify-between py-4 text-base font-semibold sm:text-lg">
-									<span>Total</span>
-									<span>{formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}</span>
+								<div class="flex items-center justify-between pt-2">
+									<span class="text-sm font-bold uppercase tracking-widest text-gray-900">Total</span>
+									<span class="text-xl font-bold text-gray-900">{formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}</span>
 								</div>
 
-								<div class="w-full rounded-lg bg-slate-100 p-4 shadow-sm">
-									<div class="flex items-center justify-center gap-3">
-										<LockKeyhole class="h-5 w-5 text-slate-600" />
-										<p class="font-medium text-slate-700">Your order is secured with 256-bit encryption</p>
-									</div>
+								<div class="mt-6 flex items-center justify-center gap-2 py-3 px-4 rounded-md border border-gray-100 bg-gray-50/50">
+									<LockKeyhole class="h-3.5 w-3.5 text-gray-400" />
+									<p class="text-[10px] font-bold uppercase tracking-widest text-gray-500">Secure 256-bit encryption</p>
 								</div>
+
 								{#if (!isPhoneRequired || cartState?.cart?.phone) && (!isEmailRequired || cartState?.cart?.email) && (cartState?.cart?.shippingAddress || cartState?.cart?.shippingAddressId)}
 									<Button
-										class="bottom-0 left-0 right-0 z-[45] w-full py-6 text-lg hover:bg-primary disabled:!opacity-100 max-sm:fixed max-sm:h-16 max-sm:rounded-none max-sm:disabled:bg-gray-500"
+										class="group w-full py-7 text-sm font-bold uppercase tracking-[0.2em] transition-all bg-primary hover:bg-black shadow-lg hover:shadow-xl active:scale-[0.98] max-sm:fixed max-sm:bottom-0 max-sm:left-0 max-sm:right-0 max-sm:z-[60] max-sm:rounded-none max-sm:h-20"
 										onclick={paymentModule.placeOrder}
 										disabled={paymentModule.checkoutDisabled}
 									>
 										{#if paymentModule.paymentLoader}
 											<LoadingDots />
 										{:else}
-											Place Order
+											<span>Complete Purchase</span> <ChevronRight class="ml-2 size-4 transition-transform duration-300 group-hover:translate-x-1" />
 										{/if}
 									</Button>
 								{/if}
@@ -286,45 +252,7 @@ const cartState = paymentModule.cartState
 						{/if}
 					</div>
 
-					<!-- <div class="rounded-lg bg-white p-4 shadow">
-              <div class="flex items-center text-sm text-gray-600">
-                <ShoppingBag class="mr-2 size-4" />
-                <span>Your order is secured with 256-bit encryption</span>
-              </div>
-            </div> -->
 					<OrderTrustBadges />
-
-					<!-- <div
-              class="mt-5 bg-white shadow flex items-start justify-between gap-3 p-5 rounded"
-            >
-              <div
-                class="flex flex-col items-center justify-center gap-2 text-center text-[0.5em] text-zinc-500 uppercase"
-              >
-                <img
-                  src="/cart-badge-trust.svg"
-                  alt="cart badge trust"
-                  class="h-8 w-8 object-contain object-bottom"
-                /> <span>100% secure payments</span>
-              </div>
-              <div
-                class="flex flex-col items-center justify-center gap-2 text-center text-[0.5em] text-zinc-500 uppercase"
-              >
-                <img
-                  src="/cart-easy-return.svg"
-                  alt="cart badge trust"
-                  class="h-8 w-8 object-contain object-bottom"
-                /> <span>Easy return &amp; quick refunds</span>
-              </div>
-              <div
-                class="flex flex-col items-center justify-center gap-2 text-center text-[0.5em] text-zinc-500 uppercase"
-              >
-                <img
-                  src="/quality-check.svg"
-                  alt="cart badge trust"
-                  class="h-8 w-8 object-contain object-bottom"
-                /> <span>Quality assurance</span>
-              </div>
-            </div> -->
 				</div>
 			</div>
 		</div>
