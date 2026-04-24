@@ -7,73 +7,45 @@
 	const data = $derived(page.data)
 </script>
 
-<div class="hidden grid-cols-1 overflow-x-auto sm:grid">
+<div class="hidden grid-cols-1 overflow-x-auto sm:grid py-2 border-t border-gray-100">
 	{#if productState.selectedVariant?.description || data?.product?.description}
-		<div class="mb-1 mt-5 flex items-center gap-2">
-			<h2 class="text-sm text-gray-900 font-semibold uppercase tracking-wider">Product Description</h2>
-			<Info class="h-3 w-3 text-gray-600" />
+		<div class="mb-4 flex items-center gap-3">
+			<h2 class="text-xs font-bold uppercase tracking-widest text-gray-900">Product Description</h2>
+			<div class="h-px flex-1 bg-gray-100"></div>
 		</div>
-		<p
-			class="prose text-black prose-li:list-decimal [&>table]:border [&>table]:border-gray-200 [&_*_td]:border [&_*_td]:border-gray-200 [&_*_td]:p-1 [&_*_th]:border [&_*_th]:border-gray-200"
+		<div
+			class="prose prose-sm max-w-none text-gray-600 leading-relaxed prose-headings:text-gray-900 prose-strong:text-gray-900 prose-li:list-disc [&>table]:w-full [&>table]:border-collapse [&_td]:border-b [&_td]:border-gray-50 [&_td]:py-3 [&_td]:text-sm [&_th]:text-left [&_th]:text-xs [&_th]:font-bold [&_th]:uppercase [&_th]:tracking-widest [&_th]:py-3 [&_th]:border-b [&_th]:border-gray-100"
 		>
 			{@html productState.selectedVariant?.description || data?.product?.description}
-		</p>
-		<!-- <p
-                class="prose text-black {!showDescription
-                  ? 'line-clamp-3 text-ellipsis'
-                  : ''} prose-li:list-decimal [&>table]:border [&>table]:border-gray-200 [&_*_td]:border [&_*_td]:border-gray-200 [&_*_td]:p-1 [&_*_th]:border [&_*_th]:border-gray-200"
-              >
-                {@html selectedVariant?.description ||
-                  data?.product?.description}
-              </p>
-              {#if !showDescription}
-                <button
-                  class="inline-block text-primary cursor-pointer text-start text-sm underline"
-                  onclick={() => (showDescription = true)}
-                >
-                  Show more
-                </button>
-              {:else}
-                <button
-                  class="inline-block text-primary cursor-pointer text-start text-sm underline"
-                  onclick={() => (showDescription = false)}
-                >
-                  Show less
-                </button>
-              {/if} -->
+		</div>
 	{/if}
 </div>
 
 <!-- Click to show description in mobile -->
-<div class="absolute w-screen -translate-x-3 border-t border-gray-200 sm:hidden"></div>
-<div class="sm:hidden">
+<div class="sm:hidden border-t border-gray-100">
 	<button
-		class="flex w-full items-center justify-between gap-2 {!productState.showDescription
-			? 'border-b'
-			: ''} border-gray-200 py-4 text-sm text-gray-600 font-medium"
+		class="flex w-full items-center justify-between gap-2 py-5 text-sm text-gray-900 font-bold uppercase tracking-widest"
 		onclick={() => (productState.showDescription = !productState.showDescription)}
 	>
 		<div class="flex items-center gap-4">
-			<Info class="h-5 w-5 text-black" />
 			<div class="flex flex-col items-start">
-				<span class="font-semibold text-black">Product Description</span>
-				<span class="text-xs text-gray-600">Click to view</span>
+				<span>Product Description</span>
 			</div>
 		</div>
 
 		{#if productState.showDescription}
-			<ChevronUp class="h-5 w-5 text-black" />
+			<ChevronUp class="h-4 w-4 text-gray-400" />
 		{:else}
-			<ChevronDown class="h-5 w-5 text-black" />
+			<ChevronDown class="h-4 w-4 text-gray-400" />
 		{/if}
 	</button>
 	{#if productState.showDescription}
-		<div class="grid grid-cols-1 overflow-x-auto">
-			<p
-				class="text-black [&>table]:border [&>table]:border-gray-200 [&_*_td]:border [&_*_td]:border-gray-200 [&_*_td]:p-1 [&_*_th]:border [&_*_th]:border-gray-200"
+		<div class="grid grid-cols-1 overflow-x-auto pb-6">
+			<div
+				class="prose prose-sm text-gray-600 leading-relaxed [&>table]:w-full [&>table]:border-collapse [&_td]:border-b [&_td]:border-gray-50 [&_td]:py-3 [&_td]:text-sm [&_th]:text-left [&_th]:text-xs [&_th]:font-bold [&_th]:uppercase [&_th]:tracking-widest [&_th]:py-3 [&_th]:border-b [&_th]:border-gray-100"
 			>
 				{@html productState.selectedVariant?.description || data?.product?.description}
-			</p>
+			</div>
 		</div>
 	{/if}
 </div>

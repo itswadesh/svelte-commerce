@@ -6,44 +6,49 @@
 	const { product } = $props()
 </script>
 
-<div class="relative sm:border-b sm:pb-3">
-	<div class="flex items-center justify-between">
-		<h1 class="break-words break-all text-base font-bold sm:text-2xl">
+<div class="relative sm:border-b sm:border-gray-100">
+	<div class="flex items-start justify-between gap-4">
+		<h1 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-3xl uppercase">
 			{product.title}
 		</h1>
 
 		{#if page?.data?.store?.plugins?.socialSharingButtons}
-			<div class="block sm:hidden">
+			<div class="block sm:hidden flex-shrink-0">
 				<ShareButton productName={product?.title} productImage={product?.thumbnail} url={page?.url?.href} />
 			</div>
 		{/if}
 	</div>
 
 	{#if product.subtitle}
-		<h3 class="text-gray-600 font-medium max-sm:text-sm">
+		<div class="mt-2 text-sm font-medium text-gray-500 uppercase tracking-widest sm:text-base">
 			{@html product.subtitle}
-		</h3>
+		</div>
 	{/if}
-	<div class="mt-1 flex items-center gap-4">
-		<div class="flex gap-2">
-			{#if product?.rating && page?.data?.store?.plugins?.enableReviews}
-				<div class="relative">
-					<div class="flex gap-1">
-						{#each { length: 5 } as _, i}
-							<Star fill="#111" strokeWidth={1} class="h-5 w-5 fill-none stroke-muted-foreground" />
+	
+	<div class="mt-4 flex items-center gap-4">
+		{#if product?.rating && page?.data?.store?.plugins?.enableReviews}
+			<div class="flex items-center gap-2">
+				<div class="relative flex items-center">
+					<div class="flex gap-0.5">
+						{#each { length: 5 } as _}
+							<Star class="h-4 w-4 fill-gray-100 text-gray-100" />
 						{/each}
 					</div>
-					<div class="absolute top-0 flex gap-1">
-						{#each { length: Math.floor(product.rating) } as _, i}
-							<Star fill="yellow" strokeWidth={0} class="h-5 w-5 fill-primary" />
+					<div class="absolute top-0 left-0 flex gap-0.5 overflow-hidden">
+						{#each { length: 5 } as _, i}
+							<Star 
+								class="h-4 w-4 {i < Math.floor(product.rating) ? 'fill-primary text-primary' : 'hidden'}" 
+							/>
 						{/each}
 						{#if product.rating % 1 > 0}
-							<StarHalf fill="yellow" strokeWidth={0} class="h-5 w-5 fill-primary" />
+							<StarHalf class="h-4 w-4 fill-primary text-primary" />
 						{/if}
 					</div>
 				</div>
-				<span class="text-sm text-gray-600 font-medium">({product?.rating || 0})</span>
-			{/if}
-		</div>
+				<span class="text-xs font-bold text-gray-900 dark:text-gray-100">{product.rating}</span>
+				<span class="h-1 w-1 rounded-full bg-gray-300"></span>
+				<span class="text-xs font-medium text-gray-500 hover:text-primary transition-colors cursor-pointer">View Reviews</span>
+			</div>
+		{/if}
 	</div>
 </div>

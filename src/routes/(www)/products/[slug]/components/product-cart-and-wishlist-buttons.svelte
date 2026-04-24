@@ -17,23 +17,21 @@
 </script>
 
 {#if productState.wishlistPluginEnabled}
-	<div class="flex items-center gap-2 sm:mb-3">
-		<Button
-			variant={innerWidth.current && innerWidth.current <= 640 ? 'ghost' : 'secondary'}
-			class="flex w-full"
+	<div class="flex items-center gap-3 sm:mb-4">
+		<button
+			class="flex flex-1 items-center justify-center gap-2 rounded-md border border-gray-200 py-3 transition-all duration-300 ease-out-expo hover:bg-gray-50 active:scale-95"
 			onclick={productState.handleWishlistClick}
 			aria-label="Add to wishlist"
 		>
 			{#if productState.wishlistLoading}
-				<LoaderCircle class="animate-spin" />
-			{:else if productState.wishlisted}
-				<HeartIcon class="h-6 w-6 fill-black text-black max-sm:min-h-6 max-sm:min-w-6" />
-				<span class="hidden sm:block">Remove from Wishlist </span>
+				<LoaderCircle class="h-5 w-5 animate-spin text-primary" />
 			{:else}
-				<HeartIcon class="h-6 w-6 max-sm:min-h-6 max-sm:min-w-6" />
-				<span class="hidden sm:block">Add to Wishlist</span>
+				<HeartIcon class="h-5 w-5 {productState.wishlisted ? 'fill-red-500 text-red-500 scale-110' : 'text-gray-900'} transition-transform duration-300" />
+				<span class="text-xs font-bold uppercase tracking-widest text-gray-900">
+					{productState.wishlisted ? 'Wishlisted' : 'Add to Wishlist'}
+				</span>
 			{/if}
-		</Button>
+		</button>
 	</div>
 {/if}
 
@@ -44,45 +42,29 @@
 		productId={page.data?.product?.id}
 		productTitle={page.data?.product?.title}
 	/>
-	<Button onclick={() => (showEnquiryModal = true)} class="w-full"> {enquiryPlugin?.buttonText || "Enquire"} </Button>
+	<Button onclick={() => (showEnquiryModal = true)} class="w-full bg-primary hover:bg-black text-xs font-bold uppercase tracking-widest py-6 transition-all duration-300 ease-out-expo active:scale-[0.98]"> {enquiryPlugin?.buttonText || "Enquire"} </Button>
 {:else}
 	<div class="relative w-full">
 		{#if productState.showAddToCartMessage}
-			<!-- Added to cart message -->
+			<!-- Added to cart message toast-like notification -->
 			<div
-				transition:fly={{ x: 50, duration: 150 }}
-				class="fixed right-0 top-0 mr-2 mt-28 rounded-lg border border-gray-200 bg-white p-4 shadow-lg sm:mr-4"
+				transition:fly={{ x: 50, duration: 300, easing: quintOut }}
+				class="fixed right-4 top-24 z-[100] w-full max-w-sm rounded-lg border border-gray-100 bg-white p-4 shadow-2xl"
 			>
-				<!-- close button -->
-				<!-- <button
-									class="absolute right-0 top-0 p-2"
-									onclick={() => {
-										showAddToCartMessage = false
-									}}
-								>
-									<X class="h-4 w-4" />
-									<span class="sr-only">Close</span>
-								</button> -->
-				<div class="flex flex-col items-center gap-4">
-					<div class="flex min-w-40 items-center gap-5 min-[256px]:min-w-64">
-						<img src={productState.selectedVariant?.image || page.data?.product?.thumbnail} alt="Product" class="h-12 w-12 object-contain" />
-						<div class="flex flex-col">
-							<span class="line-clamp-3 max-w-40 text-xs font-semibold min-[256px]:max-w-64 sm:text-sm">{page.data?.product?.title}</span>
-							<span class="text-xs text-gray-500">
-								{productState.selectedVariant?.title == 'default' ? '' : productState.selectedVariant?.title}
-							</span>
-							<span class="text-xs font-semibold"
-								>{productState.qty} x {formatPrice(productState.selectedVariant?.price, page?.data?.store?.currency?.code)}</span
-							>
-						</div>
+				<div class="flex items-center gap-4">
+					<div class="h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border border-gray-100 bg-gray-50">
+						<img src={productState.selectedVariant?.image || page.data?.product?.thumbnail} alt="Product" class="h-full w-full object-contain" />
 					</div>
-
-					<!-- Checkout button -->
-					<div class="flex w-full items-center">
-						<a href="/checkout/cart" class="block w-full">
-							<Button class="w-full" size="lg">Checkout</Button>
-						</a>
+					<div class="flex flex-1 flex-col gap-1">
+						<p class="text-xs font-bold text-gray-900 uppercase tracking-tight">Added to Bag</p>
+						<p class="line-clamp-1 text-[11px] text-gray-500">{page.data?.product?.title}</p>
+						<p class="text-xs font-bold text-primary">
+							{formatPrice(productState.selectedVariant?.price, page?.data?.store?.currency?.code)}
+						</p>
 					</div>
+					<a href="/checkout/cart" class="rounded-md bg-primary px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-white hover:bg-black transition-all active:scale-95">
+						View Bag
+					</a>
 				</div>
 			</div>
 		{/if}
@@ -91,13 +73,13 @@
 			{#if productState.cartState.showCheckout}
 				<div class="flex items-center">
 					<a href="/checkout/cart" class="block w-full">
-						<Button class="w-full" size="lg">Checkout</Button>
+						<Button class="w-full bg-primary hover:bg-black py-6 text-xs font-bold uppercase tracking-widest transition-all duration-300 ease-out-expo active:scale-[0.98]" size="lg">Go to Checkout</Button>
 					</a>
 				</div>
 			{:else}
 				<div class="flex w-full items-center">
 					<Button
-						class="w-full {productState.cartState.addToCartMessage == 'Added to cart' ? 'bg-green-500 text-white hover:bg-green-600' : ''}"
+						class="w-full py-7 text-sm font-bold uppercase tracking-[0.2em] transition-all duration-300 ease-out-expo active:scale-[0.98] {productState.cartState.addToCartMessage == 'Added to cart' ? 'bg-green-600 hover:bg-green-700' : 'bg-primary hover:bg-black shadow-lg hover:shadow-xl'}"
 						size="lg"
 						disabled={productState.addToCartButtonDisabled}
 						onclick={productState.handleAddToCart}
@@ -106,18 +88,13 @@
 							Out of Stock
 						{:else}
 							{#if productState.cartState.addToCartMessage == 'Added to cart'}
-								<Check class="mr-2 mt-0.5 h-4 w-4" />
+								<Check class="mr-3 h-5 w-5" />
 							{:else if productState.cartState.addToCartMessage == 'Add to cart'}
-								<ShoppingCart class="mr-2 mt-0.5 h-4 w-4" />
+								<ShoppingCart class="mr-3 h-5 w-5" />
 							{/if}
 							{productState.cartState.addToCartMessage}
 						{/if}
 					</Button>
-					<!-- {#if selectedVariant?.manageInventory} -- secret green wanted to hide it
-									<div class="ml-4 w-32 text-sm text-red-500">
-										Only {selectedVariant?.stock} left
-									</div>
-								{/if} -->
 				</div>
 			{/if}
 		</div>

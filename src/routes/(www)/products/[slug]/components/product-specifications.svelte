@@ -7,43 +7,36 @@
 	const data = $derived(page.data)
 </script>
 
-<div class="mt-4 rounded-lg bg-background">
-	<h3 class="mb-4 text-sm font-semibold text-gray-900 uppercase tracking-wider">Product Specifications</h3>
-	<div class="flex flex-col gap-4">
+<div class="mt-2 border-t border-gray-100">
+	<div class="mb-6 flex items-center gap-3">
+		<h3 class="text-xs font-bold uppercase tracking-widest text-gray-900">Product Specifications</h3>
+		<div class="h-px flex-1 bg-gray-100"></div>
+	</div>
+	
+	<div class="grid grid-cols-1 gap-y-4">
 		<!-- SKU and Barcode Section -->
-		<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+		<div class="grid grid-cols-2 gap-4 border-b border-gray-50 pb-4">
 			{#if productState.selectedVariant?.sku || data?.product?.sku}
-				<div class="border-b">
-					<p class="text-gray-600 font-medium">SKU</p>
-					<p class="break-words break-all">{String(productState.selectedVariant?.sku || data?.product?.sku)}</p>
+				<div class="flex flex-col gap-1">
+					<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">SKU</p>
+					<p class="text-sm font-medium text-gray-900 break-words break-all">{String(productState.selectedVariant?.sku || data?.product?.sku)}</p>
 				</div>
 			{/if}
 
 			{#if productState.selectedVariant?.barcode || data?.product?.barcode}
-				<div class="border-b">
-					<p class="text-gray-600 font-medium">Barcode</p>
-					<!-- <QrCodeDisplayer
-                      base64Data={selectedVariant?.barcode ||
-                        data?.product?.barcode}
-                    /> -->
-					<p>{productState.selectedVariant?.barcode || data?.product?.barcode}</p>
-				</div>
-			{/if}
-
-			{#if productState.selectedVariant?.qrcode || data?.product?.qrcode}
-				<div class="border-b">
-					<p class="text-gray-600 font-medium">QR Code</p>
-					<QrCodeDisplayer base64Data={productState.selectedVariant?.qrcode || data?.product?.qrcode} />
+				<div class="flex flex-col gap-1 text-right">
+					<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Barcode</p>
+					<p class="text-sm font-medium text-gray-900">{productState.selectedVariant?.barcode || data?.product?.barcode}</p>
 				</div>
 			{/if}
 		</div>
 
 		<!-- Dimensions and Weight Section -->
-		<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+		<div class="grid grid-cols-2 gap-4 border-b border-gray-50 pb-4">
 			{#if productState.selectedVariant?.width || data?.product?.width || productState.selectedVariant?.height || data?.product?.height || productState.selectedVariant?.length || data?.product?.length}
-				<div class="border-b">
-					<p class="text-gray-600 font-medium">Dimensions</p>
-					<p>
+				<div class="flex flex-col gap-1">
+					<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Dimensions</p>
+					<p class="text-sm font-medium text-gray-900">
 						{#if productState.selectedVariant?.width || data?.product?.width}
 							W-{productState.selectedVariant?.width || data?.product?.width}
 						{/if}
@@ -68,9 +61,9 @@
 			{/if}
 
 			{#if productState.selectedVariant?.weight || data?.product?.weight}
-				<div class="border-b">
-					<p class="text-gray-600 font-medium">Weight</p>
-					<p>
+				<div class="flex flex-col gap-1 text-right">
+					<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Weight</p>
+					<p class="text-sm font-medium text-gray-900">
 						{productState.selectedVariant?.weight || data?.product?.weight}
 						{page?.data?.store.weight_unit || productState.settingState?.selectedStore?.weight_unit}
 					</p>
@@ -78,23 +71,30 @@
 			{/if}
 		</div>
 
-		<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+		<div class="grid grid-cols-2 gap-4 border-b border-gray-50 pb-4">
 			{#if data?.product?.originCountry}
-				<div class="border-b">
-					<p class="text-gray-600 font-medium">Made in</p>
-					<p>{data?.product?.originCountry}</p>
+				<div class="flex flex-col gap-1">
+					<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Origin</p>
+					<p class="text-sm font-medium text-gray-900">{data?.product?.originCountry}</p>
 				</div>
 			{/if}
 		</div>
 
 		{#each data?.product?.attributes as { name, value }}
-			<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-				<div class="border-b">
-					<p class="text-gray-600 font-medium">{name}</p>
-					<p>{value}</p>
+			<div class="grid grid-cols-2 gap-4 border-b border-gray-50 pb-4 last:border-0 last:pb-0">
+				<div class="flex flex-col gap-1">
+					<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">{name}</p>
+					<p class="text-sm font-medium text-gray-900">{value}</p>
 				</div>
 			</div>
 		{/each}
+
+		{#if productState.selectedVariant?.qrcode || data?.product?.qrcode}
+			<div class="mt-4 flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg">
+				<p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Product Authenticity</p>
+				<QrCodeDisplayer base64Data={productState.selectedVariant?.qrcode || data?.product?.qrcode} />
+			</div>
+		{/if}
 	</div>
 </div>
 
