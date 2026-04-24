@@ -63,7 +63,7 @@
 				<div class="rounded-lg border bg-white shadow-sm">
 					<div class="border-b p-4">
 						<div class="flex items-center justify-between">
-							<h3 class="text-lg font-semibold">Customer Reviews</h3>
+							<h2 class="text-lg font-semibold">Customer Reviews</h2>
 							<Button variant="outline" class="hidden lg:flex" onclick={() => (productState.showReviewForm = true)}>Write a Review</Button>
 						</div>
 					</div>
@@ -75,7 +75,7 @@
 									<div class="flex items-center gap-3">
 										<div class="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100">
 											{#if rating?.img}
-												<img src={rating.img} alt="" class="h-full w-full rounded-full object-cover" />
+												<img src={rating.img} alt="{rating.name || 'Anonymous'}'s avatar" class="h-full w-full rounded-full object-cover" />
 											{:else}
 												<span class="text-lg font-medium text-zinc-600">
 													{(rating.name || 'A')[0].toUpperCase()}
@@ -368,7 +368,7 @@
 		<!-- Fallback when reviews are disabled or no reviews exist -->
 		<div class="mx-2 mt-8 rounded-lg border bg-white p-6 shadow-sm">
 			<div class="text-center">
-				<h3 class="mb-2 text-lg font-semibold">Customer Reviews</h3>
+				<h2 class="mb-2 text-lg font-semibold">Customer Reviews</h2>
 				<p class="mb-4 text-gray-500">No reviews yet. Be the first to review this product!</p>
 				<Button variant="outline" class="mx-auto" onclick={() => (productState.showReviewForm = true)}>Write a Review</Button>
 			</div>

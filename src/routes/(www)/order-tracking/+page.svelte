@@ -44,9 +44,9 @@
 										<div class="flex gap-2 p-5 lg:gap-5">
 											<a href={`/products/${item.slug}`} aria-label="Click to view the product details" class="shrink-0">
 												{#if item.isCustomized}
-													<img src={item.customizedImg} alt=" " class="h-auto w-14 object-contain object-top" />
+													<img src={item.customizedImg} alt="{item.name} (Customized)" class="h-auto w-14 object-contain object-top" />
 												{:else}
-													<LazyImg src={item.thumbnail || item.img} alt=" " width="56" class="h-auto w-14 object-contain object-top" />
+													<LazyImg src={item.thumbnail || item.img} alt={item.name} width="56" class="h-auto w-14 object-contain object-top" />
 												{/if}
 											</a>
 

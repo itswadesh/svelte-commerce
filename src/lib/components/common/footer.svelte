@@ -198,7 +198,7 @@ let isExpanded = $state(false)
 
 	<!-- {#if page?.data?.store?.plugins?.whatsapp?.enabled}
 		<a href="https://wa.me/{page?.data?.store?.plugins.whatsapp.number}" target="_blank" rel="noopener noreferrer" class="fixed bottom-20 left-5 z-40 md:bottom-5">
-		<img src={whatsappIcon} alt="" class="h-10 w-10 transform object-contain transition duration-300 hover:-translate-y-2 hover:scale-125" />
+		<img src={whatsappIcon} alt="Contact us on WhatsApp" class="h-10 w-10 transform object-contain transition duration-300 hover:-translate-y-2 hover:scale-125" />
 		</a>
 		{/if} -->
 

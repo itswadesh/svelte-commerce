@@ -153,7 +153,7 @@
 										<div class="flex items-start gap-4 p-4">
 											<a href="/my/orders/{order.parentOrderNo}" class="shrink-0">
 												{#if item.thumbnail}
-													<LazyImg src={item.thumbnail} alt=" " width="56" class="h-14 w-14 border border-gray-100 object-contain object-top" />
+													<LazyImg src={item.thumbnail} alt="{item.name || item.title || 'Order item'}" width="56" class="h-14 w-14 border border-gray-100 object-contain object-top" />
 												{:else}
 													<div class="flex h-14 w-14 flex-col items-center justify-center rounded bg-gray-100 p-2 text-center text-xs text-gray-500">
 														<svg

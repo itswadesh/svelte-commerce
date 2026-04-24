@@ -8,6 +8,7 @@
 </script>
 
 <div class="mt-4 rounded-lg bg-background">
+	<h3 class="mb-4 text-sm font-semibold text-gray-900 uppercase tracking-wider">Product Specifications</h3>
 	<div class="flex flex-col gap-4">
 		<!-- SKU and Barcode Section -->
 		<div class="grid grid-cols-1 gap-4 md:grid-cols-2">

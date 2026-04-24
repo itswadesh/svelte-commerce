@@ -30,7 +30,7 @@
 
 <SeoHeader
 	metaTitle={data?.product?.metaTitle || `${data?.product?.title} — Buy Online at Arialshop | Free Delivery`}
-	metaDescription={data?.product?.metaDescription || `${data?.product?.title}. ${data?.product?.description?.replace(/<[^>]*>?/gm, '').slice(0, 120)}... Free delivery on orders over ₹999. Easy 7-day returns.`}
+	metaDescription={data?.product?.metaDescription || `${data?.product?.title}. ${data?.product?.description?.replace(/<[^>]*>?/gm, '').slice(0, 160)}... Discover premium quality ${data?.product?.title} at Arialshop. Enjoy free delivery on orders over ₹999 and easy 7-day returns. Shop now!`}
 	metaKeywords={data?.product?.keywords || ''}
 	image={data?.product?.thumbnail || ''}
 />

@@ -50,11 +50,11 @@
 												<div class="flex gap-3 border border-gray-200 bg-white p-3 transition-colors hover:bg-gray-50">
 													<a href={`/product/${item.slug}`} aria-label="Click to view the product details" class="shrink-0">
 														{#if item.isCustomized}
-															<img src={item.customizedImg} alt=" " class="h-16 w-16 border border-gray-100 object-contain object-top" />
+															<img src={item.customizedImg} alt="{item.title} (Customized)" class="h-16 w-16 border border-gray-100 object-contain object-top" />
 														{:else}
 															<LazyImg
 																src={item.thumbnail || item.img}
-																alt=" "
+																alt={item.title}
 																width="64"
 																class="h-16 w-16 border border-gray-100 object-contain object-top"
 															/>
@@ -271,7 +271,7 @@
 													<div class="text-xs font-medium text-gray-700">Fulfillment-{ix + 1}</div>
 													{#each fulfillment?.lineItems as item}
 														<a href="/products/{item.slug}" class="relative">
-															<LazyImg src={item.thumbnail || item.img} alt=" " width="48" class="h-12 w-12 rounded-lg object-contain object-top" />
+															<LazyImg src={item.thumbnail || item.img} alt={item.title} width="48" class="h-12 w-12 rounded-lg object-contain object-top" />
 															<span
 																class="absolute right-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[10px] text-white"
 															>

@@ -203,7 +203,7 @@
 	<div class="">
 		<div class="mx-auto mb-2 flex items-center justify-center">
 			<div class="flex-1 border-2 border-black dark:border-white"></div>
-			<div class="mx-4 text-[20px] font-bold tracking-wide">NEW ARRIVALS</div>
+			<h2 class="mx-4 text-[20px] font-bold tracking-wide uppercase">NEW ARRIVALS</h2>
 			<div class="flex-1 border-2 border-black dark:border-white"></div>
 		</div>
 		<div class="mx-auto mb-5 flex items-center justify-center text-[12px]">
@@ -254,7 +254,7 @@
 							src={homepageModule.selectedRecentOrder?.image ||
 								homepageModule.selectedRecentOrder?.img ||
 								homepageModule.selectedRecentOrder?.thumbnail}
-							alt="Product"
+							alt={homepageModule.selectedRecentOrder?.title || 'Product'}
 							class="h-16 w-16 object-contain sm:h-28 sm:w-28"
 						/>
 					</div>
