@@ -5,11 +5,11 @@
 <div class="mr-4 md:flex">
 	<div class="flex gap-3">
 		{#if page?.data?.store?.logo}
-			<a href="/">
+			<a href="/" class="transition-transform duration-300 hover:scale-105 active:scale-95">
 				<img src={page?.data?.store?.logo} class="h-10 object-contain" alt="Arialshop — Women's Fashion Online" />
 			</a>
 		{:else}
-			<a href="/" class="flex items-center space-x-2">
+			<a href="/" class="flex items-center space-x-2 transition-transform duration-300 hover:scale-105 active:scale-95">
 				<span class="font-bold"> {page?.data?.store?.name || ''} </span>
 			</a>
 		{/if}
@@ -20,8 +20,9 @@
 			{#if page?.url?.pathname !== '/'}
 				<a
 					href="/"
-					class="relative text-sm font-medium text-muted-foreground transition-colors after:absolute
-					after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:text-primary hover:after:w-full"
+					class="relative text-sm font-bold uppercase tracking-widest text-gray-500 transition-all
+					after:absolute after:bottom-[-4px] after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:text-gray-900 hover:after:w-full active:scale-95"
+					style="font-family: 'Montserrat', sans-serif;"
 				>
 					Home
 				</a>
@@ -31,8 +32,9 @@
 			{#each page?.data?.store?.menu?.find?.((menu) => menu?.menuId === 'header')?.items || [] as item}
 				<a
 					href={item.link}
-					class="relative text-sm font-medium text-muted-foreground transition-colors after:absolute
-					after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:text-primary hover:after:w-full"
+					class="relative text-sm font-bold uppercase tracking-widest text-gray-500 transition-all
+					after:absolute after:bottom-[-4px] after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:text-gray-900 hover:after:w-full active:scale-95"
+					style="font-family: 'Montserrat', sans-serif;"
 				>
 					{item?.name}
 				</a>

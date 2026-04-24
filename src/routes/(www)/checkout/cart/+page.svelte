@@ -306,10 +306,10 @@
 											</div>
 
 											<div class="mt-auto flex items-center justify-between pt-6">
-												<div class="flex items-center rounded-full border border-gray-200 bg-white p-1 shadow-sm">
+												<div class="flex items-center rounded-full border border-gray-200 bg-white p-1 shadow-sm transition-all duration-300 hover:shadow-md">
 													<button
 														onclick={(e) => cartModule.decreaseQty(e, item)}
-														class="flex h-7 w-7 items-center justify-center rounded-full transition-all hover:bg-gray-100 active:scale-90"
+														class="flex h-7 w-7 items-center justify-center rounded-full transition-all hover:bg-gray-100 active:scale-75"
 														aria-label="Decrease quantity"
 													>
 														<Minus class="size-3 text-gray-900" />
@@ -322,7 +322,7 @@
 														{/if}
 													</span>
 													<button
-														class="flex h-7 w-7 items-center justify-center rounded-full transition-all hover:bg-gray-100 active:scale-90"
+														class="flex h-7 w-7 items-center justify-center rounded-full transition-all hover:bg-gray-100 active:scale-75"
 														aria-label="Increase quantity"
 														onclick={(e) => cartModule.increaseQty(e, item)}
 													>
@@ -331,7 +331,7 @@
 												</div>
 
 												<button
-													class="group/remove flex items-center gap-1.5 rounded-full border border-transparent px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-400 transition-all hover:border-red-100 hover:bg-red-50 hover:text-red-600"
+													class="group/remove flex items-center gap-1.5 rounded-full border border-transparent px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-400 transition-all hover:border-red-100 hover:bg-red-50 hover:text-red-600 active:scale-95"
 													aria-label="Remove item"
 													onclick={(e) => cartModule.removeItem(e, item)}
 												>
@@ -356,7 +356,7 @@
 									<p class="text-sm font-medium text-gray-600">
 										{cartState.cart.couponCode}
 									</p>
-									<button class="text-sm text-red-500" onclick={cartState.removeCoupon}>
+									<button class="text-sm text-red-500 transition-transform active:scale-90" onclick={cartState.removeCoupon}>
 										<X class="h-4 w-4" />
 									</button>
 								</div>
@@ -420,7 +420,7 @@
 
 										{#if !cartModule.noItemsChecked}
 											<Button
-												class="group w-full py-7 text-sm font-bold uppercase tracking-[0.2em] transition-all bg-primary hover:bg-black shadow-lg hover:shadow-xl active:scale-[0.98] max-sm:fixed max-sm:bottom-0 max-sm:left-0 max-sm:right-0 max-sm:z-[60] max-sm:rounded-none max-sm:h-20"
+												class="group w-full py-7 text-sm font-bold uppercase tracking-[0.2em] transition-all duration-300 ease-out-expo bg-primary hover:bg-black shadow-lg hover:shadow-xl active:scale-[0.98] max-sm:fixed max-sm:bottom-0 max-sm:left-0 max-sm:right-0 max-sm:z-[60] max-sm:rounded-none max-sm:h-20"
 												onclick={cartModule.gotoCheckout}
 											>
 												{#if cartModule.loadingForCheckout}
