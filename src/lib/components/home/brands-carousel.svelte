@@ -18,8 +18,7 @@
 			<CarouselItem class="md:basis-1/5">
 				<div class="h-[74px] w-[186px]">
 					{#if image}
-						<LazyImg src={image} alt="Image" class="h-full w-full rounded-none object-cover" />
-					{:else}
+						<LazyImg src={image} alt="Featured brand partner logo" class="h-full w-full rounded-none object-cover" />					{:else}
 						<div class="flex h-full w-full items-center justify-center rounded-none bg-gray-200 text-gray-500">No Image</div>
 					{/if}
 				</div>
