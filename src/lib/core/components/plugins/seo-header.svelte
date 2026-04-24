@@ -31,6 +31,8 @@
 	<meta property="og:title" content={finalTitle} />
 	<meta property="og:description" content={finalDescription} />
 	<meta property="og:image" content={image} />
+	<meta property="og:url" content={finalCanonicalUrl} />
+	<meta property="og:site_name" content={storeName} />
 	<meta property="og:type" content="website" />
 	
 	<meta name="twitter:card" content="summary_large_image" />

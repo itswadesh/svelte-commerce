@@ -73,7 +73,7 @@
 
 <SeoHeader
 	metaTitle={page?.metaTitle || "Arialshop — Women's Fashion, Dresses & Co-ord Sets | Up to 70% Off"}
-	metaDescription={page?.metaDescription || "Arialshop — Your ultimate destination for women's fashion. Shop trendy dresses, co-ord sets & more with up to 70% off. Free delivery on orders over ₹999. Shop now!"}
+	metaDescription={page?.metaDescription || "Welcome to Arialshop, your ultimate destination for trendy women's fashion. Discover our exclusive collection of stylish dresses, elegant co-ord sets, and more with amazing discounts of up to 70% off. Enjoy premium quality apparel, free delivery on orders over ₹999, and easy returns. Shop the latest fashion trends at Arialshop today!"}
 	metaKeywords={page?.metaKeywords}
 	image={page?.logo}
 />
