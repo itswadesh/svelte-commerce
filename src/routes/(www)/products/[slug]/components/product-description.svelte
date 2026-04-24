@@ -10,7 +10,7 @@
 <div class="hidden grid-cols-1 overflow-x-auto sm:grid">
 	{#if productState.selectedVariant?.description || data?.product?.description}
 		<div class="mb-1 mt-5 flex items-center gap-2">
-			<h3 class="text-sm text-gray-900 font-semibold uppercase tracking-wider">Product Description</h3>
+			<h2 class="text-sm text-gray-900 font-semibold uppercase tracking-wider">Product Description</h2>
 			<Info class="h-3 w-3 text-gray-600" />
 		</div>
 		<p
