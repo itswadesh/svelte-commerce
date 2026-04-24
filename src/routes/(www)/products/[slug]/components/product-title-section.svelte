@@ -20,9 +20,9 @@
 	</div>
 
 	{#if product.subtitle}
-		<h2 class="text-gray-600 font-medium max-sm:text-sm">
+		<h3 class="text-gray-600 font-medium max-sm:text-sm">
 			{@html product.subtitle}
-		</h2>
+		</h3>
 	{/if}
 	<div class="mt-1 flex items-center gap-4">
 		<div class="flex gap-2">
