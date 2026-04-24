@@ -102,237 +102,200 @@
 		: '-translate-x-full'} transform bg-white transition-transform"
 >
 	<div class="flex h-full flex-col">
-		<div class="flex items-center justify-between border-b border-t-input !p-2">
-			<div class="flex w-full items-center justify-between gap-4">
-				<div class="flex items-center justify-center gap-2">
-					<button class="" onclick={() => (filterModule.showFilter = false)}>
-						<X class="h-6 w-6" />
-						<span class="sr-only">Close</span>
-					</button>
+	<div class="flex items-center justify-between border-b border-gray-100 !p-3">
+		<div class="flex w-full items-center justify-between gap-4">
+			<div class="flex items-center justify-center gap-3">
+				<button class="p-1 hover:bg-gray-100 rounded-full transition-colors" onclick={() => (filterModule.showFilter = false)}>
+					<X class="h-6 w-6 text-gray-900" />
+					<span class="sr-only">Close</span>
+				</button>
 
-					{#if filterModule.anyFilterApplied}
-						<div class="h-4 w-px bg-gray-300"></div>
-						<button class="flex items-center justify-center gap-1 text-xs text-gray-500" onclick={filterModule.clearFilters}> Clear Filters </button>
-					{/if}
-				</div>
-
-				<h2 class="mr-5 text-sm font-semibold">Filters</h2>
-
-				<Button variant="default" class="text-xs uppercase" onclick={filterModule.handleApply}>Apply</Button>
+				{#if filterModule.anyFilterApplied}
+					<div class="h-4 w-px bg-gray-200"></div>
+					<button class="text-[10px] font-bold uppercase tracking-widest text-primary hover:underline" onclick={filterModule.clearFilters}> Clear All </button>
+				{/if}
 			</div>
+
+			<h2 class="text-xs font-bold uppercase tracking-widest text-gray-900">Filters</h2>
+
+			<Button variant="default" class="h-9 px-6 text-[10px] font-bold uppercase tracking-widest bg-primary hover:bg-black" onclick={filterModule.handleApply}>Apply</Button>
 		</div>
+	</div>
 
-		<!-- Left Panel - Content -->
-		<div class="flex flex-1 flex-col border-r">
-			<div class="flex h-[100dvh]">
-				<!-- Right Panel - Menu -->
-				<div class="w-[35vw] bg-gray-50">
-					{#each filterModule.menuItems as item}
-						<button
-							class="w-full border-l-4 {filterModule.selectedSection === item.id
-								? 'border-black'
-								: 'border-transparent'} flex justify-between px-4 py-3 text-left text-sm capitalize transition-colors hover:bg-gray-100"
-							class:bg-white={filterModule.selectedSection === item.id}
-							class:font-medium={filterModule.selectedSection === item.id}
-							onclick={() => (filterModule.selectedSection = item.id)}
-						>
-							{filterModule.formatFilterName(item.label)}
-							{#if filterModule.appliedFiltersCountByKey[item.id]}
-								<span class="text-xs text-gray-500">
-									{filterModule.appliedFiltersCountByKey[item.id]}
-								</span>
-							{/if}
-						</button>
-					{/each}
-				</div>
+	<!-- Left Panel - Content -->
+	<div class="flex flex-1 flex-col overflow-hidden">
+		<div class="flex h-full">
+			<!-- Right Panel - Menu -->
+			<div class="w-[35vw] bg-gray-50 overflow-y-auto">
+				{#each filterModule.menuItems as item}
+					<button
+						class="w-full border-l-4 {filterModule.selectedSection === item.id
+							? 'border-primary bg-white'
+							: 'border-transparent'} flex justify-between px-4 py-4 text-left text-[11px] font-bold uppercase tracking-widest transition-colors hover:bg-gray-100"
+						class:text-primary={filterModule.selectedSection === item.id}
+						onclick={() => (filterModule.selectedSection = item.id)}
+					>
+						{filterModule.formatFilterName(item.label)}
+						{#if filterModule.appliedFiltersCountByKey[item.id]}
+							<span class="text-[10px] text-primary">
+								({filterModule.appliedFiltersCountByKey[item.id]})
+							</span>
+						{/if}
+					</button>
+				{/each}
+			</div>
 
-				<!-- Dynamic Content Based on Selection -->
-				<div class="w-full p-4">
-					{#if filterModule.selectedSection === 'discount'}
-						<div class="space-y-4">
-							<div class="relative">
-								<input
-									type="text"
-									placeholder="Search for discount..."
-									class="w-full rounded-lg bg-gray-100 px-4 py-2"
-									bind:value={filterModule.searchQuery}
-								/>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									width="24"
-									height="24"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="currentColor"
-									stroke-width="2"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									class="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400"
-								>
-									<circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" />
-								</svg>
-							</div>
-
-							<div class="space-y-2">
-								{#each filterModule.discountOptions as option}
-									<label class="flex items-center gap-2">
-										<input type="radio" name="discount" value={option.value} bind:group={filterModule.selectedDiscount} />
-										<span class="text-gray-700">
-											{option.label}
-											<!-- <span class="text-gray-400">({option.count})</span> -->
-										</span>
-									</label>
-								{/each}
-							</div>
-						</div>
-					{:else if filterModule.selectedSection === 'category'}
-						<!-- Search -->
-						<div class="relative mb-3">
+			<!-- Dynamic Content Based on Selection -->
+			<div class="flex-1 p-4 overflow-y-auto bg-white">
+				{#if filterModule.selectedSection === 'discount'}
+					<div class="space-y-6">
+						<div class="relative">
 							<input
 								type="text"
-								placeholder="Search for category..."
-								class="w-full rounded-lg bg-gray-100 px-4 py-2"
-								bind:value={filterModule.categorySearchQuery}
+								placeholder="Search discount..."
+								class="w-full rounded-md border-0 bg-gray-100 py-2.5 pl-4 pr-10 text-sm ring-0 focus:ring-2 focus:ring-primary transition-all"
+								bind:value={filterModule.searchQuery}
 							/>
-							<SearchIcon class="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+							<SearchIcon class="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
 						</div>
-						{#if filterModule.filteredCategories?.length > 0}
+
+						<div class="space-y-3">
+							{#each filterModule.discountOptions as option}
+								<label class="flex items-center gap-3 cursor-pointer group">
+									<div class="relative flex items-center justify-center">
+										<input type="radio" name="discount" value={option.value} bind:group={filterModule.selectedDiscount} class="peer h-5 w-5 appearance-none rounded-full border-2 border-gray-200 checked:border-primary transition-all" />
+										<div class="absolute h-2.5 w-2.5 rounded-full bg-primary opacity-0 peer-checked:opacity-100 transition-opacity"></div>
+									</div>
+									<span class="text-sm font-medium text-gray-700 group-hover:text-primary transition-colors">
+										{option.label}
+									</span>
+								</label>
+							{/each}
+						</div>
+					</div>
+				{:else if filterModule.selectedSection === 'category'}
+					<!-- Search -->
+					<div class="relative mb-6">
+						<input
+							type="text"
+							placeholder="Search category..."
+							class="w-full rounded-md border-0 bg-gray-100 py-2.5 pl-4 pr-10 text-sm ring-0 focus:ring-2 focus:ring-primary transition-all"
+							bind:value={filterModule.categorySearchQuery}
+						/>
+						<SearchIcon class="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+					</div>
+					{#if filterModule.filteredCategories?.length > 0}
+						<div class="space-y-4">
 							{#each filterModule.filteredCategories as category}
 								{@const formattedCategoryName = filterModule.formatFilterOptionName(category.name)}
 								<button
-									class="flex flex-row gap-2 text-start"
+									class="flex w-full flex-row items-center gap-3 text-start group"
 									onclick={() => {
 										filterModule.handleCategoryClick(category)
 									}}
 								>
 									{#if category.thumbnail}
-										<img src={category.thumbnail} alt={formattedCategoryName} class="h-8 w-8 rounded-lg object-cover" />
+										<img src={category.thumbnail} alt={formattedCategoryName} class="h-10 w-10 rounded-md object-cover transition-opacity group-hover:opacity-80 shadow-sm" />
 									{/if}
-									<span class="flex-1 py-0.5 capitalize">{formattedCategoryName}</span>
+									<span class="flex-1 text-sm font-medium capitalize text-gray-700 group-hover:text-primary transition-colors">{formattedCategoryName}</span>
 								</button>
 							{/each}
-						{:else}
-							<div class="flex h-full w-full">
-								<p class="text-center text-sm text-gray-500">No categories found</p>
-							</div>
-						{/if}
-					{:else if filterModule.selectedSection === 'price'}
-						<!-- Price Filter -->
-						<div class="w-full">
-							<p class="my-2 text-sm font-semibold">Price</p>
-
-							<div class="relative mr-5 mt-4">
-								<!-- Range slider track -->
-								<div class="absolute h-1 w-full rounded bg-gray-200">
-									<div
-										class="absolute h-1 bg-yellow-500"
-										style="left: {filterModule.priceSliderLeftPercentage}%; right: {filterModule.priceSliderRightPercentage}%"
-									></div>
-								</div>
-
-								<!-- Range inputs -->
-								<input
-									type="range"
-									bind:value={filterModule.minPrice}
-									min={filterModule.minPossiblePrice}
-									max={filterModule.maxPossiblePrice}
-									onchange={filterModule.handleMinPriceChange}
-									class="pointer-events-none absolute h-1 w-full appearance-none bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-rose-500 [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:ring-1 [&::-moz-range-thumb]:ring-black [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-rose-500 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:ring-1 [&::-webkit-slider-thumb]:ring-gray-300"
-								/>
-								<input
-									type="range"
-									bind:value={filterModule.maxPrice}
-									min={filterModule.minPossiblePrice}
-									max={filterModule.maxPossiblePrice}
-									onchange={filterModule.handleMaxPriceChange}
-									class="pointer-events-none absolute h-1 w-full appearance-none bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-rose-500 [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:ring-1 [&::-moz-range-thumb]:ring-black [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-rose-500 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:ring-1 [&::-webkit-slider-thumb]:ring-gray-300"
-								/>
-							</div>
-
-							<!-- Price range display -->
-							<div class="mt-9 text-sm text-gray-600">
-								{filterModule.priceRange}
-							</div>
-
-							<!-- <Button
-                variant="default"
-                class="btn btn-primary mt-4 w-full"
-                onclick={() => {
-                  const url = new URL(page.url?.href);
-                  if (maxPrice >= 0)
-                    url.searchParams.set("priceTo", maxPrice.toString());
-                  if (minPrice >= 0)
-                    url.searchParams.set("priceFrom", minPrice.toString());
-                  showFilter = false;
-                  goto(url, { replaceState: true });
-                }}
-              >
-                Apply
-              </Button> -->
 						</div>
-					{:else if filterModule.selectedSection === 'tags'}
-						<!-- Tags List -->
-						{#if filterModule.tags.length > 0}
-							<p class="my-2 text-sm font-semibold">Tags</p>
-							<div class="flex max-h-[75vh] flex-col overflow-auto text-sm">
-								{#each filterModule.tags as tag}
-									<div class="flex flex-row items-center gap-2">
-										<Checkbox
-											id={`m-${tag.slug || tag.name}`}
-											checked={filterModule.selectedTags?.find?.((t: any) => t?.name === tag?.name) ? true : false}
-											onCheckedChange={(checked) => {
-												filterModule.handleTagChange({ tag, checked })
-											}}
-										/>
-										<label for={`m-${tag.slug || tag.name}`} class="flex-1 py-0.5 capitalize">{tag.name}</label>
-									</div>
-								{/each}
-							</div>
-							<!-- <Button
-                variant="default"
-                class="btn btn-primary mt-4 w-full"
-                onclick={applyTags}>Apply</Button
-              > -->
-						{:else}
-							<div class="flex h-full w-full">
-								<p class="text-center text-sm text-gray-500">No tags found</p>
-							</div>
-						{/if}
-					{:else if filterModule.processedFilters}
-						{@const valuesToShow = filterModule.processedFilters[filterModule.selectedSection]}
-						<p class="my-2 text-sm font-semibold capitalize">{filterModule.formatFilterName(filterModule.selectedSection)}</p>
-						<div class="flex h-full w-full">
-							<ul class="flex max-h-[75vh] w-full flex-col overflow-auto">
-								{#each valuesToShow as value}
-									<li class="flex items-center gap-2">
-										<Checkbox
-											id={`m-${value}`}
-											checked={filterModule.selectedGeneralFilters[filterModule.selectedSection]?.includes(value)}
-											onCheckedChange={(checked) =>
-												filterModule.handleGeneralFiltersChange({
-													key: filterModule.selectedSection,
-													value,
-													checked
-												})}
-										/>
-										<label for={`m-${value}`} class="capitalize">
-											{#if value?.startsWith?.('#')}
-												<div class="flex items-center gap-2">
-													<div class="h-5 w-5 rounded-full" style="background-color: {value};"></div>
-													{GetColorName(value)}
-												</div>
-											{:else}
-												{value}
-											{/if}
-										</label>
-									</li>
-								{/each}
-							</ul>
+					{:else}
+						<div class="flex h-40 items-center justify-center">
+							<p class="text-sm font-medium text-gray-400">No categories found</p>
 						</div>
 					{/if}
-				</div>
+				{:else if filterModule.selectedSection === 'price'}
+					<!-- Price Filter -->
+					<div class="w-full space-y-8">
+						<p class="text-xs font-bold uppercase tracking-widest text-gray-900">Price Range</p>
+
+						<div class="relative mr-5 mt-4 px-2">
+							<!-- Range slider track -->
+							<div class="absolute h-1 w-full rounded bg-gray-100">
+								<div
+									class="absolute h-1 bg-primary"
+									style="left: {filterModule.priceSliderLeftPercentage}%; right: {filterModule.priceSliderRightPercentage}%"
+								></div>
+							</div>
+
+							<!-- Range inputs -->
+							<input
+								type="range"
+								bind:value={filterModule.minPrice}
+								min={filterModule.minPossiblePrice}
+								max={filterModule.maxPossiblePrice}
+								onchange={filterModule.handleMinPriceChange}
+								class="pointer-events-none absolute h-1 w-full appearance-none bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-primary [&::-moz-range-thumb]:bg-white [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-primary [&::-webkit-slider-thumb]:bg-white"
+							/>
+							<input
+								type="range"
+								bind:value={filterModule.maxPrice}
+								min={filterModule.minPossiblePrice}
+								max={filterModule.maxPossiblePrice}
+								onchange={filterModule.handleMaxPriceChange}
+								class="pointer-events-none absolute h-1 w-full appearance-none bg-transparent [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-primary [&::-moz-range-thumb]:bg-white [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-primary [&::-webkit-slider-thumb]:bg-white"
+							/>
+						</div>
+
+						<div class="text-lg font-bold text-gray-900 pt-4">
+							{filterModule.priceRange}
+						</div>
+					</div>
+				{:else if filterModule.selectedSection === 'tags'}
+					<!-- Tags List -->
+					{#if filterModule.tags.length > 0}
+						<div class="space-y-1">
+							{#each filterModule.tags as tag}
+								<div class="flex flex-row items-center gap-3 py-2 border-b border-gray-50 last:border-0">
+									<Checkbox
+										id={`m-${tag.slug || tag.name}`}
+										checked={filterModule.selectedTags?.find?.((t: any) => t?.name === tag?.name) ? true : false}
+										onCheckedChange={(checked) => {
+											filterModule.handleTagChange({ tag, checked })
+										}}
+									/>
+									<label for={`m-${tag.slug || tag.name}`} class="flex-1 text-sm font-medium capitalize text-gray-700">{tag.name}</label>
+								</div>
+							{/each}
+						</div>
+					{:else}
+						<div class="flex h-40 items-center justify-center">
+							<p class="text-sm font-medium text-gray-400">No tags found</p>
+						</div>
+					{/if}
+				{:else if filterModule.processedFilters}
+					{@const valuesToShow = filterModule.processedFilters[filterModule.selectedSection]}
+					<div class="space-y-1">
+						{#each valuesToShow as value}
+							<div class="flex items-center gap-3 py-2 border-b border-gray-50 last:border-0">
+								<Checkbox
+									id={`m-${value}`}
+									checked={filterModule.selectedGeneralFilters[filterModule.selectedSection]?.includes(value)}
+									onCheckedChange={(checked) =>
+										filterModule.handleGeneralFiltersChange({
+											key: filterModule.selectedSection,
+											value,
+											checked
+										})}
+								/>
+								<label for={`m-${value}`} class="text-sm font-medium capitalize text-gray-700">
+									{#if value?.startsWith?.('#')}
+										<div class="flex items-center gap-2">
+											<div class="h-5 w-5 rounded-full border border-gray-100 shadow-sm" style="background-color: {value};"></div>
+											{GetColorName(value)}
+										</div>
+									{:else}
+										{value}
+									{/if}
+								</label>
+							</div>
+						{/each}
+					</div>
+				{/if}
 			</div>
 		</div>
 	</div>
-</div>
+	</div></div>
 

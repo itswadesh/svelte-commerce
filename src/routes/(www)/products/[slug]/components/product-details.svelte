@@ -47,114 +47,93 @@
 	})) || []} />
 </div>
 
-<div class="lg:container lg:mx-auto">
+<div class="lg:container lg:mx-auto px-4">
 	{#if !data?.product && !productState.isLoading}
-		<h2 class="text-center">Product not found</h2>
+		<div class="flex h-96 flex-col items-center justify-center space-y-4">
+			<h2 class="text-2xl font-bold text-gray-900">Product not found</h2>
+			<a href="/products" class="text-sm font-bold uppercase tracking-widest text-primary underline underline-offset-4">Browse All Products</a>
+		</div>
 	{:else}
-		<div class="relative grid grid-cols-1 items-start lg:grid-cols-3 lg:gap-6">
+		<div class="relative grid grid-cols-1 items-start lg:grid-cols-3 lg:gap-12 pb-12">
 			<div class="col-span-2 sm:mt-0">
 				<ProductGallerySection />
 			</div>
 
-			<div class="sticky top-20 mx-2 grid gap-2 sm:gap-5">
+			<div class="sticky top-24 mx-0 flex flex-col space-y-0">
 				<ProductTitleSection product={data?.product} />
 
 				<ProductPricing />
 
 				<ProductAggregation />
 
-				<div class="">
-					<!-- <p>{data?.product.brand} / {data?.product.category}</p> -->
-
+				<div class="flex flex-col">
 					<ProductVariation />
 
-					<br class="max-sm:hidden" />
-
-					<!-- {#if settingState?.plugins?.enquiryMode}
-			<Button
-				class="w-full mb-4"
-				onclick={(e: MouseEvent) => showEnquiryModal = true}
-			>
-				Enquire Now
-			</Button>
-		{/if} -->
-
 					<!-- Desktop Cart Button -->
-					<div class="hidden sm:block">
+					<div class="hidden sm:block mt-4">
 						<ProductCartAndWishlistButtons />
 					</div>
 
-					<br class="max-sm:hidden" />
 					{#if productState.isIndianPincodesPluginEnabled}
-						<div class="flex flex-col gap-3 max-sm:my-5">
+						<div class="flex flex-col gap-3 my-1 pt-6 border-t border-gray-100">
 							<div class="flex items-center justify-start gap-3">
-								<span class="text-sm text-gray-600 font-medium"> Delivery Options </span>
-								<Truck class="h-4 w-4 text-gray-600" />
+								<Truck class="h-4 w-4 text-gray-900" />
+								<span class="text-xs font-bold uppercase tracking-widest text-gray-900"> Delivery Options </span>
 							</div>
 							<PincodeCheck />
 						</div>
-						<br class="max-sm:hidden" />
 					{:else}
 						<!-- Fallback delivery estimate when plugin is not enabled -->
-						<div class="flex flex-col gap-2 max-sm:my-5">
-							<div class="flex items-center gap-2 text-sm text-gray-700 font-medium">
-								<Truck class="h-4 w-4" />
-								<span>Free delivery on orders above ₹999</span>
+						<div class="flex flex-col gap-3 my-1 pt-6 border-t border-gray-100">
+							<div class="flex items-center gap-3">
+								<Truck class="h-4 w-4 text-gray-900" />
+								<span class="text-xs font-bold uppercase tracking-widest text-gray-900">Delivery Information</span>
 							</div>
-							<div class="text-xs text-gray-600">Estimated delivery: 5-7 business days</div>
+							<div class="space-y-1">
+								<p class="text-sm font-medium text-gray-700">Free delivery on orders above ₹999</p>
+								<p class="text-[11px] font-bold uppercase tracking-tight text-gray-400">Estimated delivery: 5-7 business days</p>
+							</div>
 						</div>
-						<br class="max-sm:hidden" />
 					{/if}
 
 					{#if productState.trustBadgesPlugin?.active}
-						<div class="border-t border-gray-200">
+						<div class="border-t border-gray-100 py-1">
 							{@html productState.trustBadgesPlugin?.html}
 						</div>
 					{/if}
 
 					{#if productState.returnPlugin && productState.returnPlugin?.active && productState.returnPlugin?.html}
-						<div class="border-t border-gray-200">
-							<div class={!productState.showReturnPolicy ? 'line-clamp-3 overflow-hidden' : ''}>
+						<div class="border-t border-gray-100 py-1">
+							<div class="flex items-center gap-3 mb-3">
+								<span class="text-xs font-bold uppercase tracking-widest text-gray-900">Returns & Exchanges</span>
+							</div>
+							<div class="text-sm text-gray-600 leading-relaxed {!productState.showReturnPolicy ? 'line-clamp-2 overflow-hidden' : ''}">
 								{@html productState.returnPlugin?.html}
 							</div>
 
 							{#if productState.returnPlugin?.below_more}
-								{#if !productState.showReturnPolicy}
-									<button
-										class="inline-block cursor-pointer text-start text-sm text-primary underline"
-										onclick={() => (productState.showReturnPolicy = true)}
-									>
-										Show more
-									</button>
-								{:else}
-									<button
-										class="inline-block cursor-pointer text-start text-sm text-primary underline"
-										onclick={() => (productState.showReturnPolicy = false)}
-									>
-										Show less
-									</button>
-								{/if}
+								<button
+									class="mt-1 text-[10px] font-bold uppercase tracking-widest text-primary hover:underline transition-all"
+									onclick={() => (productState.showReturnPolicy = !productState.showReturnPolicy)}
+								>
+									{productState.showReturnPolicy ? 'Show Less' : 'Read Full Policy'}
+								</button>
 							{/if}
 						</div>
 					{:else}
 						<!-- Fallback return policy when plugin is not configured -->
-						<div class="border-t border-gray-200 py-4">
-							<h3 class="mb-2 text-sm font-semibold text-gray-900">Return Policy</h3>
-							<p class="text-sm text-gray-600">
-								We accept returns within 7 days of delivery for unused items in original packaging. Contact our support team to initiate a return.
+						<div class="border-t border-gray-100 py-1">
+							<h3 class="mb-2 text-xs font-bold uppercase tracking-widest text-gray-900">Returns & Exchanges</h3>
+							<p class="text-sm text-gray-600 leading-relaxed">
+								We accept returns within 7 days of delivery for unused items in original packaging.
 							</p>
 						</div>
 					{/if}
 
-					<StoreCheck />
-
-					<ProductSpecifications />
-
-					<ProductDescription />
-
-					<!-- Mobile cart button -->
-					<div class="sticky inset-x-0 bottom-0 z-50 flex h-16 w-full items-center gap-3 bg-white py-2 sm:hidden">
-						<ProductCartAndWishlistButtons />
+					<div class="border-t border-gray-100 pt-4">
+						<StoreCheck />
+						<ProductSpecifications />
+						<ProductDescription />
 					</div>
 
 					<ProductMetaDataSection />
@@ -165,9 +144,20 @@
 		</div>
 	{/if}
 
-	<ProductReviewsSection />
+	<div class="border-t border-gray-100 pt-16">
+		<ProductReviewsSection />
+	</div>
 
-	<RelatedProducts />
+	<div class="pt-16">
+		<RelatedProducts />
+	</div>
+</div>
+
+<!-- Mobile cart button - Sticky Footer -->
+<div class="sticky inset-x-0 bottom-0 z-[60] flex w-full items-center gap-3 bg-white/95 backdrop-blur-md px-4 py-4 border-t border-gray-100 shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.1)] sm:hidden">
+	<div class="flex-1">
+		<ProductCartAndWishlistButtons />
+	</div>
 </div>
 
 <LoginModal bind:show={productState.showLoginModal} />

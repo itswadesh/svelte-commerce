@@ -89,7 +89,7 @@
 							<Button
 								disabled={!!cartState.isUpdatingCart}
 								variant="default"
-								class="w-full rounded-none bg-gray-900 py-6 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-primary"
+								class="w-full rounded-none bg-gray-900 py-6 text-xs font-bold uppercase tracking-widest text-white transition-all duration-300 ease-out-expo hover:bg-primary active:scale-95"
 								onclick={() => addToCart(product)}
 							>
 								{#if cartState.isUpdatingCart}
