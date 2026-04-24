@@ -75,6 +75,17 @@ let isExpanded = $state(false)
 							{/if}
 						</div>
 						<div class="grid grid-cols-2 gap-8 sm:grid-cols-3 sm:gap-10">
+							<div>
+								<h1 class="text-black-200 mb-4 text-lg font-semibold">Quick Links</h1>
+								<ul class="space-y-2">
+									<li>
+										<a href="/" class="text-sm text-gray-400 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-900">Home</a>
+									</li>
+									<li>
+										<a href="/products" class="text-sm text-gray-400 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-900">Products</a>
+									</li>
+								</ul>
+							</div>
 							{#each footerMenu as item}
 								<div>
 									<h1 class="text-black-200 mb-4 text-lg font-semibold">{item?.name}</h1>
