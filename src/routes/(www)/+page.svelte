@@ -80,11 +80,11 @@
 
 <h1 class="sr-only">Shop Women's Fashion Online — Dresses, Co-ord Sets & More</h1>
 
-{#if homepageModule.featuredCategories?.length > 0}
+<!-- {#if homepageModule.featuredCategories?.length > 0}
 	<div class="mx-2 flex justify-center bg-gray-100 px-2 lg:container lg:mx-auto lg:hidden">
 		<CategoryList categories={homepageModule.featuredCategories} />
 	</div>
-{/if}
+{/if} -->
 
 <!-- Hello bar -->
 <!-- {#if helloBarPlugin?.active}
@@ -146,49 +146,9 @@
 	{/if}
 </div>
 
-<!-- <div class="mx-2 lg:container lg:mx-auto"> -->
-<!-- <BannerGrid banners={bannerData} /> -->
-
-<!-- <div class="mx-auto w-auto laptop:w-[80%]">
-		<div class="mx-auto mb-2 flex items-center justify-center">
-			<div class="ml-2 flex-1 border-2 border-black dark:border-white"></div>
-			<div class="mx-4 text-[20px] font-bold tracking-wide">TRENDING NOW</div>
-			<div class="mr-2 flex-1 border-2 border-black dark:border-white"></div>
-		</div>
-		<div class="mx-auto mb-5 flex items-center justify-center text-[12px]">
-			<a href="/products" class="mx-auto block h-fit border-b border-black pb-[2px] dark:border-white">View All</a>
-		</div>
-	</div>
-	{#if loadingTrendingProducts}
-		<div class="relative w-full">
-			<div class="flex gap-4 overflow-hidden p-4">
-				{#each Array(4) as _}
-					<div class="w-full min-w-[280px] flex-none space-y-3">
-						<Skeleton class="h-[200px] w-full" />
-						<Skeleton class="h-4 w-[250px]" />
-						<Skeleton class="h-4 w-[200px]" />
-						<Skeleton class="h-4 w-[150px]" />
-					</div>
-				{/each}
-			</div>
-		</div>
-	{:else}
-		<ProductCarousel data={featuredProducts} displayProduct={showProduct} />
-	{/if} -->
-<!-- <div class="mx-auto mt-10 w-auto laptop:w-[80%]">
-		<div class="mx-auto mb-2 flex items-center justify-center">
-			<div class="ml-2 flex-1 border-2 border-black dark:border-white"></div>
-			<div class="mx-4 text-[20px] font-bold tracking-wide">FEATURED</div>
-			<div class="mr-2 flex-1 border-2 border-black dark:border-white"></div>
-		</div>
-	</div> -->
-
 <Slider />
 <Collections />
 
-<!-- <InstagramSection /> -->
-<!-- <ProductDetails /> -->
-<!-- </div> -->
 <div class="mx-2 mb-12 lg:container lg:mx-auto">
 	<HomepageCategoryListWithImage categories={homepageModule.featuredCategories} loading={homepageModule.loading} />
 </div>
@@ -200,14 +160,13 @@
 {/if}
 
 <div class="mx-2 lg:container lg:mx-auto">
-	<div class="">
-		<div class="mx-auto mb-2 flex items-center justify-center">
-			<div class="flex-1 border-2 border-black dark:border-white"></div>
-			<h2 class="mx-4 text-[20px] font-bold tracking-wide uppercase">NEW ARRIVALS</h2>
-			<div class="flex-1 border-2 border-black dark:border-white"></div>
+	<div class="mb-8 pt-12">
+		<div class="flex flex-col items-center justify-center space-y-2">
+			<h2 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl uppercase">NEW ARRIVALS</h2>
+			<div class="h-1 w-12 bg-primary"></div>
 		</div>
-		<div class="mx-auto mb-5 flex items-center justify-center text-[12px]">
-			<a href="/products" class="mx-auto block h-fit border-b border-black pb-[2px] dark:border-white">View All</a>
+		<div class="mt-4 flex items-center justify-center text-sm font-medium">
+			<a href="/products" class="text-gray-600 hover:text-primary transition-colors border-b border-transparent hover:border-primary pb-1 dark:text-gray-400">View All Arrivals</a>
 		</div>
 	</div>
 </div>
@@ -231,12 +190,13 @@
 			loadMore={homepageModule.loadMoreFeaturedProducts}
 		/>
 		{#if homepageModule.hasMoreFeaturedProducts}
-			<div class="mt-4 flex justify-center">
+			<div class="mt-12 flex justify-center pb-20">
 				<button
-					class="mb-2 me-2 rounded-lg border border-gray-800 px-5 py-2.5 text-center text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-gray-300 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-800"
+					class="group relative flex items-center justify-center overflow-hidden rounded-full border border-gray-900 px-10 py-4 text-sm font-bold uppercase tracking-widest text-gray-900 transition-all hover:text-white dark:border-gray-100 dark:text-white"
 					onclick={homepageModule.loadMoreFeaturedProducts}
 				>
-					Load More
+					<span class="relative z-10">Discover More</span>
+					<div class="absolute inset-0 z-0 translate-y-full bg-gray-900 transition-transform duration-300 group-hover:translate-y-0 dark:bg-gray-100"></div>
 				</button>
 			</div>
 		{/if}
