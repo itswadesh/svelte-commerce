@@ -176,13 +176,13 @@ let isExpanded = $state(false)
 							</div>
 						{/if}
 
-						<div class="flex w-full flex-col-reverse items-start justify-between gap-2 max-sm:mt-2 sm:flex-row sm:items-center sm:gap-0">
-							<span class="text-sm text-gray-500 dark:text-gray-400 sm:text-center">
+						<div class="flex w-full flex-col-reverse items-start justify-between gap-6 max-sm:mt-2 sm:flex-row sm:items-center sm:gap-0">
+							<span class="text-xs font-bold uppercase tracking-widest text-gray-400 sm:text-center">
 								Copyright
 								{' '}
 								{new Date().getFullYear()}
 								{' '}
-								<a href="/" class="cursor-pointer">
+								<a href="/" class="cursor-pointer text-gray-900 hover:text-primary transition-colors">
 									{storeData?.name}
 								</a>
 								. All Rights Reserved.
@@ -190,10 +190,10 @@ let isExpanded = $state(false)
 							<TrustpilotPlugin />
 
 							{#if paymentMethodCards?.length}
-								<ul class="col-span-1 m-0 flex list-none flex-wrap items-center justify-end gap-2 p-0">
+								<ul class="col-span-1 m-0 flex list-none flex-wrap items-center justify-end gap-3 p-0">
 									{#each paymentMethodCards as pmc}
 										<li>
-											<img src={pmc.src} alt="payment method card - {pmc.alt}" class="h-8 w-auto object-contain" />
+											<img src={pmc.src} alt="payment method card - {pmc.alt}" class="h-6 w-auto object-contain grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300" />
 										</li>
 									{/each}
 								</ul>
