@@ -193,7 +193,7 @@ let isExpanded = $state(false)
 								<ul class="col-span-1 m-0 flex list-none flex-wrap items-center justify-end gap-2 p-0">
 									{#each paymentMethodCards as pmc}
 										<li>
-											<img src={pmc.src} alt={pmc.alt} class="h-8 w-auto object-contain" />
+											<img src={pmc.src} alt="payment method card - {pmc.alt}" class="h-8 w-auto object-contain" />
 										</li>
 									{/each}
 								</ul>
