@@ -29,12 +29,12 @@
 				<button
 					aria-label="Show search bar"
 					class={cn(
-						'flex items-center justify-center rounded-full px-1 py-2 transition-all duration-300 hover:bg-gray-100 active:scale-95',
+						'flex items-center justify-center rounded-full p-2 text-gray-500 transition-all duration-300 ease-out hover:bg-gray-100 hover:text-primary hover:scale-110 active:scale-95',
 						expandSearch ? 'scale-90 opacity-0' : 'scale-100 opacity-100'
 					)}
 					onclick={showSearch}
 				>
-					<Search class="size-5 text-gray-900" />
+					<Search class="size-5" />
 				</button>
 
 				{#if expandSearch}
