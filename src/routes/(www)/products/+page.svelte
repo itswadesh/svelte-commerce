@@ -105,7 +105,7 @@ let loading = $state(false)
 					{/each}
 				</div>
 			{/if}
-			<div class="mt-20 pb-20">
+			<div class="pb-20">
 				<Pagination noOfPage={data.products.totalPages} />
 			</div>
 		{/if}
