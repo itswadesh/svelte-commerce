@@ -27,7 +27,7 @@
 
 					<p class="mb-6 text-zinc-300">Fill up the form and our Team will get back to you within 24 hours.</p>
 					<br />
-					<div class="prose-lg text-base leading-tight text-gray-300 [&>p]:my-2">{@html page?.data?.page?.content}</div>
+					<div class="prose-lg text-base leading-tight text-gray-300 prose-p:my-0 prose-li:my-0">{@html page?.data?.page?.content}</div>
 					<!-- {#if page?.data?.store?.businessPhone || page?.data?.store?.businessEmail}
 				<ul class="mb-6 flex flex-col gap-4">
 					{#if page?.data?.store?.businessPhone}
@@ -231,10 +231,3 @@
 		</div>
 	{/snippet}
 </ContactUsRenderer>
-
-<style>
-	p {
-		margin: 0;
-	}
-</style>
-
