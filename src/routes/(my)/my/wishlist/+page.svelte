@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button'
 	import { MyWishlistRenderer } from '$lib/core/composables/index.js'
-	import { X, Heart, ShoppingBag, ArrowRight } from '@lucide/svelte'
+	import { X, Heart, ShoppingBag, ArrowRight, LoaderCircle } from '@lucide/svelte'
 	import { fade, fly } from 'svelte/transition'
 	import { page } from '$app/state'
 	import { formatPrice } from '$lib/core/utils/index.js'
@@ -32,7 +32,7 @@
 
 			{#if loading}
 				<div class="flex min-h-[400px] items-center justify-center">
-					<div class="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+					<LoaderCircle class="h-8 w-8 animate-spin text-primary" />
 				</div>
 			{:else if wishlistItems.length === 0}
 				<div in:fade class="flex flex-col items-center justify-center py-20 text-center">
@@ -56,19 +56,19 @@
 					{#each wishlistItems as item, i}
 						<div
 							in:fly={{ y: 20, duration: 400, delay: i * 50 }}
-							class="group relative flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-[0_1px_3px_rgba(0,0,0,0.05)] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+							class="group relative flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white transition-all duration-500 hover:shadow-[0_30px_60px_rgba(0,0,0,0.1)] hover:border-gray-200"
 						>
 							<!-- Product Image -->
-							<a href="/products/{item?.product?.slug}?variant_id={item.variantId}" class="relative block aspect-[4/5] overflow-hidden bg-gray-50">
+							<a href="/products/{item?.product?.slug}?variant_id={item.variantId}" class="relative block aspect-[3/4] overflow-hidden bg-gray-50">
 								<img
 									src={item?.product?.thumbnail}
 									alt={item?.product?.title}
-									class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+									class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
 								/>
 
 								<!-- Remove Button -->
 								<button
-									class="absolute right-3 top-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-gray-400 shadow-sm backdrop-blur-sm transition-all hover:bg-red-50 hover:text-red-500"
+									class="absolute right-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-gray-400 shadow-sm backdrop-blur-md transition-all hover:bg-red-500 hover:text-white"
 									onclick={(e) => {
 										e.preventDefault()
 										e.stopPropagation()
@@ -80,28 +80,28 @@
 							</a>
 
 							<!-- Product Info -->
-							<div class="flex flex-1 flex-col p-4 md:p-5">
-								<h3 class="line-clamp-1 text-sm font-bold text-gray-900 md:text-base">
-									<a href="/products/{item?.product?.slug}?variant_id={item.variantId}" class="transition-colors hover:text-primary">
+							<div class="flex flex-1 flex-col p-5 text-center">
+								<h3 class="line-clamp-1 text-xs font-bold uppercase tracking-wider text-gray-900">
+									<a href="/products/{item?.product?.slug}?variant_id={item.variantId}" class="transition-colors hover:text-gray-400">
 										{item?.product?.title}
 									</a>
 								</h3>
 
-								<div class="mt-2 flex items-baseline gap-2">
-									<span class="text-lg font-bold text-gray-900">
+								<div class="mt-3 flex items-center justify-center gap-2">
+									<span class="text-sm font-bold text-gray-900">
 										{formatPrice(item?.product?.price, page?.data?.store?.currency?.code)}
 									</span>
 									{#if item?.product?.mrp > item?.product?.price}
-										<span class="text-xs text-gray-400 line-through">
+										<span class="text-[10px] text-gray-300 line-through">
 											{formatPrice(item?.product?.mrp, page?.data?.store?.currency?.code)}
 										</span>
 									{/if}
 								</div>
 
 								<!-- Move to Cart -->
-								<div class="mt-6 border-t border-gray-50 pt-4">
+								<div class="mt-6 border-t border-gray-50 pt-5">
 									<button
-										class="flex w-full items-center justify-center gap-2 rounded-xl py-2.5 text-xs font-bold uppercase tracking-wider text-primary transition-all hover:bg-primary/5 active:scale-95"
+										class="flex w-full items-center justify-center gap-2 rounded-full border border-gray-900 py-3 text-[10px] font-bold uppercase tracking-widest text-gray-900 transition-all hover:bg-black hover:text-white active:scale-95"
 										onclick={(e) => {
 											e.preventDefault()
 											e.stopPropagation()
