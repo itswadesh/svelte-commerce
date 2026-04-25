@@ -28,7 +28,7 @@ let loading = $state(false)
 	image={data.page?.logo ?? ''}
 />
 
-<div class="mb-3 mt-2 hidden lg:container lg:mx-auto lg:block">
+<div class="mb-3 mt-5 hidden lg:container lg:mx-auto lg:block">
 	<Breadcrumb categoryHierarchy={data?.products?.categoryHierarchy} />
 </div>
 
