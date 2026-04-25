@@ -21,7 +21,7 @@
 			class="aspect-[{page?.data?.store?.productImageAspectRatio?.replace(
 				':',
 				'/'
-			)}] group mb-4 flex w-full flex-col justify-start overflow-hidden rounded-lg border-none bg-white shadow-none transition-all duration-300 hover:shadow-md dark:bg-gray-800 dark:text-white"
+			)}] group mb-4 flex w-full flex-col justify-start overflow-hidden rounded-lg border-none bg-white shadow-none transition-all duration-300 dark:bg-gray-800 dark:text-white"
 			aria-label="Product card for {product.name}"
 		>
 			<div class="group relative flex h-full w-full overflow-hidden bg-gray-50 dark:bg-gray-900">
@@ -41,7 +41,7 @@
 							alt="{product.title || product.name} product image"
 							height="200"
 							width={String(200 * (aspectWidth / aspectHeight))}
-							class="inset-0 h-[200px] object-contain transition-transform duration-500 group-hover:scale-105"
+							class="inset-0 h-[200px] object-contain transition-transform duration-500"
 							placeholder-class="bg-gray-300 dark:bg-gray-700"
 						/>
 					{:else}
@@ -104,19 +104,19 @@
 			</div>
 
 			<div class="flex flex-1 flex-col p-3 text-left">
-				{#if page?.data?.store?.plugins?.isMultiVendor?.active}
+				<!-- {#if page?.data?.store?.plugins?.isMultiVendor?.active}
 					<a href={`/store/${product?.vendor?.slug || product?.vendor?.id}`} class="mb-1 text-[10px] font-bold uppercase tracking-widest text-gray-400"
 						>{product.vendor?.businessName}</a
 					>
-				{/if}
+				{/if} -->
 				
 				<a href="/products/{product.slug}" class="group/title flex-1">
-					<h3 class="line-clamp-2 text-sm font-medium leading-snug text-gray-900 transition-colors group-hover/title:text-primary dark:text-gray-100">
+					<h3 class="line-clamp-2 text-sm sm:text-sm font-medium text-center leading-snug text-gray-900 transition-colors group-hover/title:text-primary dark:text-gray-100">
 						{product.title}
 					</h3>
 				</a>
 
-				<div class="mt-2 flex items-baseline gap-2">
+				<div class="mt-2 flex items-baseline justify-center gap-2">
 					<span class="text-sm font-bold text-gray-900 dark:text-white">
 						{formatPrice(product.price, page?.data?.store?.currency?.code)}
 					</span>
@@ -124,10 +124,10 @@
 						<span class="text-xs text-gray-400 line-through">
 							{formatPrice(product.mrp, page?.data?.store?.currency?.code)}
 						</span>
-						<span class="text-[10px] font-bold text-orange-600 uppercase">
-							{Math.round(((product.mrp - product.price) / product.mrp) * 100)}% Off
-						</span>
 					{/if}
+						<!-- <span class="text-[10px] font-bold text-orange-600 uppercase">
+							{Math.round(((product.mrp - product.price) / product.mrp) * 100)}% Off
+						</span> -->
 				</div>
 
 				{#if !hideVariations && product.variants.length > 1}

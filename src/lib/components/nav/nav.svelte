@@ -135,81 +135,45 @@
               </div>
             {/if} -->
 
-			 {#if page?.url?.pathname !== '/'}
+				<MsSearch />
+
+				{#if page?.url?.pathname !== '/'}
 				<a
 					href="/"
-					class="relative text-sm font-bold uppercase tracking-widest text-gray-500 transition-all
-					after:absolute after:bottom-[-4px] after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:text-gray-900 hover:after:w-full active:scale-95"
-					style="font-family: 'Montserrat', sans-serif;"
+					class="flex items-center justify-center rounded-full p-2 text-gray-500 transition-all duration-300 ease-out hover:bg-gray-100 hover:text-primary hover:scale-110 active:scale-95"
+					aria-label="Home"
 				>
 					<Home class="h-5 w-5" />
 				</a>
-			{/if}
-
-
-					<MsSearch class="-top-1 mr-10" />
+				{/if}
 
 					{#if !page.url.pathname.startsWith('/checkout')}
 						<div class="relative" role="navigation">
 							<a
-								class="flex items-center rounded-full transition-transform duration-300 hover:scale-110 active:scale-90 lg:hidden"
+								class="group relative flex items-center justify-center rounded-full p-2 text-gray-500 transition-all duration-300 ease-out hover:bg-gray-100 hover:text-primary hover:scale-110 active:scale-95 lg:hidden"
 								href="/checkout/cart"
 								aria-label="View Cart"
 							>
-								<svg
-									width="24"
-									height="24"
-									class="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-									aria-hidden="true"
-								>
-									<path
-										d="M15 11C15 12.6569 13.6569 14 12 14C10.3431 14 9 12.6569 9 11M20 7L18 3H6L4 7M20 7H4M20 7V18C20 19.1046 19.1046 20 18 20H6C4.89543 20 4 19.1046 4 18V7"
-										stroke="black"
-										style="stroke:black;stroke:black;stroke-opacity:1;"
-										stroke-width="1.5"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-									></path>
-								</svg>
+								<ShoppingBag class="h-5 w-5" />
 								{#if cartState?.cart?.total && cartState.cart?.lineItems?.length > 0}
 									<span
-										class="absolute right-0 top-0 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-primary px-1.5 py-1 text-xs font-bold leading-none text-white transition-all duration-300 group-hover:scale-110"
+										class="absolute right-1 top-1 inline-flex transform items-center justify-center rounded-full bg-primary px-1.5 py-1 text-[10px] font-bold leading-none text-white transition-all duration-300 group-hover:scale-110"
 									>
 										{cartState.cart.qty}
 									</span>
 								{/if}
 							</a>
 							<button
-								class="hidden items-center rounded-full transition-transform duration-300 hover:scale-110 active:scale-90 lg:flex"
+								class="group relative hidden items-center justify-center rounded-full p-2 text-gray-500 transition-all duration-300 ease-out hover:bg-gray-100 hover:text-primary hover:scale-110 active:scale-95 lg:flex"
 								aria-label="Toggle Cart"
 								onclick={() => {
 									cartState.isOpen = !cartState.isOpen
 								}}
 							>
-								<svg
-									width="24"
-									height="24"
-									class="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-									aria-hidden="true"
-								>
-									<path
-										d="M15 11C15 12.6569 13.6569 14 12 14C10.3431 14 9 12.6569 9 11M20 7L18 3H6L4 7M20 7H4M20 7V18C20 19.1046 19.1046 20 18 20H6C4.89543 20 4 19.1046 4 18V7"
-										stroke="black"
-										style="stroke:black;stroke:black;stroke-opacity:1;"
-										stroke-width="1.5"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-									></path>
-								</svg>
+								<ShoppingBag class="h-5 w-5" />
 								{#if cartState?.cart?.total && cartState.cart?.lineItems?.length > 0}
 									<span
-										class="absolute right-0 top-0 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-primary px-1.5 py-1 text-xs font-bold leading-none text-white transition-all duration-300 group-hover:scale-110"
+										class="absolute right-1 top-1 inline-flex transform items-center justify-center rounded-full bg-primary px-1.5 py-1 text-[10px] font-bold leading-none text-white transition-all duration-300 group-hover:scale-110"
 									>
 										{cartState.cart.qty}
 									</span>
@@ -324,24 +288,21 @@
 							<DropdownMenu.Root>
 								<DropdownMenu.Trigger
 									aria-label="User Profile"
-									class="group flex items-center gap-1 transition-all duration-300 hover:scale-105 active:scale-95"
+									class="flex items-center justify-center rounded-full p-2 text-gray-500 transition-all duration-300 ease-out hover:bg-gray-100 hover:text-primary hover:scale-110 active:scale-95"
 								>
-									<div
-										class="flex h-9 w-9 items-center justify-center rounded-full border border-gray-100 bg-white shadow-sm ring-0 ring-primary/10 transition-all group-hover:border-primary/20 group-hover:ring-4"
-									>
-										{#if userState.user?.avatar}
+									{#if userState.user?.avatar}
+										<div class="h-5 w-5 overflow-hidden rounded-full">
 											<LazyImg
-												width="36"
-												height="36"
+												width="20"
+												height="20"
 												src={userState.user?.avatar}
 												alt="{userState.user?.firstName || userState.user?.name || 'User'}'s avatar"
-												class="h-full w-full rounded-full object-cover object-top"
+												class="h-full w-full object-cover object-top"
 											/>
-										{:else}
-											<UserCircle class="h-5 w-5 text-gray-700 transition-colors group-hover:text-primary" />
-										{/if}
-									</div>
-									<ChevronDown class="h-3 w-3 text-gray-400 transition-transform duration-300 group-data-[state=open]:rotate-180" />
+										</div>
+									{:else}
+										<UserCircle class="h-5 w-5" />
+									{/if}
 								</DropdownMenu.Trigger>
 
 								<DropdownMenu.Content class="min-w-[240px] rounded-2xl border-gray-100 bg-white p-2 shadow-2xl">
@@ -426,9 +387,9 @@
 						{:else}
 							<AuthButton aria-label="Login" type="login">
 								<div
-									class="flex h-9 w-9 items-center justify-center rounded-full border border-gray-100 bg-white transition-all hover:bg-gray-50 active:scale-95"
+									class="flex items-center justify-center rounded-full p-2 text-gray-500 transition-all duration-300 ease-out hover:bg-gray-100 hover:text-primary hover:scale-110 active:scale-95"
 								>
-									<UserCircle class="size-5 text-gray-700" />
+									<UserCircle class="h-5 w-5" />
 								</div>
 							</AuthButton>
 						{/if}
