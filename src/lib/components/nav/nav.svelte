@@ -1,6 +1,6 @@
 <script lang="ts">
 	import CartItem from '$lib/components/cart/cart-item.svelte'
-	import { X, UserCircle, ChevronLeft, Phone, Mail, Menu, ChevronDown, ShoppingBag, MapPin, Check, Heart, ArrowRightCircleIcon } from '@lucide/svelte'
+	import { X, UserCircle, ChevronLeft, Phone, Mail, Menu,Home, ChevronDown, ShoppingBag, MapPin, Check, Heart, ArrowRightCircleIcon } from '@lucide/svelte'
 	import MainNav from './main-nav.svelte'
 	import { Button } from '$lib/components/ui/button'
 	import { goto } from '$app/navigation'
@@ -134,6 +134,18 @@
                 {/if}
               </div>
             {/if} -->
+
+			 {#if page?.url?.pathname !== '/'}
+				<a
+					href="/"
+					class="relative text-sm font-bold uppercase tracking-widest text-gray-500 transition-all
+					after:absolute after:bottom-[-4px] after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:text-gray-900 hover:after:w-full active:scale-95"
+					style="font-family: 'Montserrat', sans-serif;"
+				>
+					<Home class="h-5 w-5" />
+				</a>
+			{/if}
+
 
 					<MsSearch class="-top-1 mr-10" />
 
