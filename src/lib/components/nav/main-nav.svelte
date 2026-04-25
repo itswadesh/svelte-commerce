@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state'
+	import { Home } from '@lucide/svelte'
 </script>
 
 <div class="mr-4 md:flex">
@@ -17,16 +18,16 @@
 		<!-- Navigation menu with consistent styling -->
 		<div class="ml-6 hidden items-center space-x-6 lg:flex">
 			<!-- Home link only when not on home page -->
-			{#if page?.url?.pathname !== '/'}
+			<!-- {#if page?.url?.pathname !== '/'}
 				<a
 					href="/"
 					class="relative text-sm font-bold uppercase tracking-widest text-gray-500 transition-all
 					after:absolute after:bottom-[-4px] after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:text-gray-900 hover:after:w-full active:scale-95"
 					style="font-family: 'Montserrat', sans-serif;"
 				>
-					Home
+					<Home />
 				</a>
-			{/if}
+			{/if} -->
 
 			<!-- Dynamic menu items with same styling -->
 			{#each page?.data?.store?.menu?.find?.((menu) => menu?.menuId === 'header')?.items || [] as item}

@@ -183,7 +183,7 @@
 						{/if}
 					</div>
 				</div>
-			{#if !success}
+			<!-- {#if !success}
 				<div class="mt-24 grid gap-8 border-t border-gray-100 pt-16 sm:grid-cols-3">
 					<div class="flex items-center gap-4">
 						<div class="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-gray-100">
@@ -213,7 +213,7 @@
 						</div>
 					</div>
 				</div>
-			{/if}
+			{/if} -->
 			{/snippet}
 		</ContactUsRenderer>
 	</div>
