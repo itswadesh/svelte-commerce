@@ -3,7 +3,7 @@
 	import { Button } from '$lib/components/ui/button'
 	import AddressFormModal from '$lib/components/address/address-form-modal.svelte'
 	import Pagination from '$lib/components/common/pagination.svelte'
-	import { MyAddressesModule } from '$lib/core/composables/index.js'
+	import { MyAddressesModule, MyOrdersRenderer } from '$lib/core/composables/index.js'
 	import { fade, fly } from 'svelte/transition'
 
 	const addressesModule = new MyAddressesModule()
@@ -47,54 +47,56 @@
 				{#each addressesModule.addresses?.data as address, i (address.id)}
 					<div
 						in:fly={{ y: 20, duration: 400, delay: i * 50 }}
-						class="group relative flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-[0_1px_3px_rgba(0,0,0,0.05)] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+						class="group relative flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white transition-all duration-300 hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] hover:border-gray-200"
 					>
 						<!-- Address Type Indicator -->
-						<div class="flex items-center justify-between border-b border-gray-50 bg-gray-50/50 p-5">
-							<div class="flex items-center gap-2">
-								<div class="flex h-8 w-8 items-center justify-center rounded-full bg-white text-primary shadow-sm">
+						<div class="flex items-center justify-between border-b border-gray-100 bg-gray-50/30 p-5">
+							<div class="flex items-center gap-3">
+								<div class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-gray-900 shadow-sm transition-transform group-hover:scale-110">
 									<Home class="h-4 w-4" />
 								</div>
-								<span class="text-sm font-bold text-gray-900">Address</span>
+								<span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-900">Shipping Address</span>
 							</div>
 
-							<div class="flex items-center gap-2">
+							<div class="flex items-center gap-1">
 								<Button
 									variant="ghost"
 									size="icon"
-									class="h-8 w-8 rounded-full transition-colors hover:bg-white hover:text-primary"
+									class="h-9 w-9 rounded-full transition-all hover:bg-white hover:text-black active:scale-90"
 									onclick={() => addressesModule.handleEdit(address)}
 								>
-									<Pencil class="h-4 w-4" />
+									<Pencil class="h-3.5 w-3.5" />
 								</Button>
 								<Button
 									variant="ghost"
 									size="icon"
-									class="h-8 w-8 rounded-full transition-colors hover:bg-white hover:text-red-500"
+									class="h-9 w-9 rounded-full transition-all hover:bg-white hover:text-red-500 active:scale-90"
 									onclick={() => addressesModule.handleDelete(address)}
 								>
-									<Trash2 class="h-4 w-4" />
+									<Trash2 class="h-3.5 w-3.5" />
 								</Button>
 							</div>
 						</div>
 
 						<!-- Address Details -->
-						<div class="flex flex-1 flex-col p-6">
+						<div class="flex flex-1 flex-col p-8">
 							<div class="mb-4">
-								<p class="text-lg font-bold text-gray-900">{address.firstName} {address.lastName}</p>
+								<p class="text-base font-bold uppercase tracking-wider text-gray-900">{address.firstName} {address.lastName}</p>
 							</div>
 
-							<div class="space-y-1.5 text-sm leading-relaxed text-gray-600">
+							<div class="space-y-1 text-sm font-medium leading-relaxed text-gray-500">
 								<p>{address.address_1}</p>
 								{#if address.address_2}
 									<p>{address.address_2}</p>
 								{/if}
-								<p>{address.city}, {address.state} {address.zip}</p>
+								<p class="text-gray-900">{address.city}, {address.state} {address.zip}</p>
 							</div>
 
-							<div class="mt-auto pt-6">
-								<div class="flex items-center gap-2 text-sm font-medium text-gray-500">
-									<Phone class="h-4 w-4" />
+							<div class="mt-auto pt-8">
+								<div class="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-gray-400">
+									<div class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-100 bg-gray-50/50">
+										<Phone class="h-3.5 w-3.5" />
+									</div>
 									{address.phone}
 								</div>
 							</div>
