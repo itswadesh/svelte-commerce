@@ -308,7 +308,7 @@ const cartState = navModule.cartState
 											/>
 										{:else}
 											<div class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-50 border border-gray-100 shadow-sm">
-												<UserCircle class="h-5 w-5 text-gray-400" />
+												<UserCircle class="h-5 w-5 text-gray-800" />
 											</div>
 										{/if}
 									</div>
