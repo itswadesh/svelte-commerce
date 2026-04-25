@@ -116,11 +116,13 @@
 				<div class="divide-y divide-gray-100">
 					{#each orders as { lineItems }}
 						{#each lineItems as item}
-							<div class="flex items-center gap-6 py-6 first:pt-0 last:pb-0">
-								<div class="relative h-24 w-20 flex-shrink-0 overflow-hidden rounded-xl border border-gray-100 bg-gray-50">
+							<div class="group flex items-center gap-6 py-6 first:pt-0 last:pb-0">
+								<div
+									class="relative h-24 w-20 flex-shrink-0 overflow-hidden rounded-xl border border-gray-100 bg-gray-50 transition-transform duration-300 group-hover:scale-105 group-hover:shadow-sm"
+								>
 									<LazyImg src={item.thumbnail} alt={item.title} class="h-full w-full object-cover" />
 								</div>
-								<div class="flex flex-1 flex-col">
+								<div class="flex flex-1 flex-col transition-transform duration-300 group-hover:translate-x-1">
 									<div class="flex justify-between text-base font-semibold text-gray-900">
 										<h3 class="transition-colors hover:text-primary">
 											<a href={`/products/${item.slug}`}>
@@ -186,12 +188,21 @@
 			<!-- Action Buttons -->
 			<div class="bg-white p-8 md:p-12">
 				<div class="flex flex-col gap-4 sm:flex-row">
-					<Button href="/products" class="order-1 h-14 flex-1 text-base font-semibold sm:order-2">
+					<Button
+						href="/products"
+						class="group order-1 h-14 flex-1 text-base font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.98] sm:order-2"
+					>
 						Continue Shopping
-						<ArrowRight class="ml-2 h-4 w-4" />
+						<ArrowRight class="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
 					</Button>
 					{#if userState?.user?.role}
-						<Button variant="outline" href="/my/orders" class="order-2 h-14 flex-1 text-base font-semibold sm:order-1">Track My Order</Button>
+						<Button
+							variant="outline"
+							href="/my/orders"
+							class="order-2 h-14 flex-1 text-base font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-50 active:scale-[0.98] sm:order-1"
+						>
+							Track My Order
+						</Button>
 					{/if}
 				</div>
 				<div class="mt-8 text-center">
