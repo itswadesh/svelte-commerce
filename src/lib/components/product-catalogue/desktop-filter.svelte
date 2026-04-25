@@ -26,8 +26,8 @@
 		)}
 		style={`height: ${browser ? window?.innerHeight - (filterState.containerTop || 0) : 'auto'}px`}
 	>
-		<div class="flex items-center justify-between pr-2">
-			<p class="text-xs font-bold uppercase tracking-widest text-gray-400">Filters</p>
+		<div class="flex items-center justify-between">
+			<p class="text-sm font-bold uppercase text-gray-400">Filters</p>
 
 			{#if filterState.anyFilterApplied}
 				<button class="flex items-center justify-center gap-1 text-[10px] font-bold uppercase tracking-widest text-primary hover:underline" onclick={filterState.clearFilters}>
@@ -68,7 +68,7 @@
 
 		<!-- Category list -->
 		{#if filterState.categories.length > 0}
-			<div class="mt-4 pt-4 border-t border-gray-100"></div>
+			<!-- <div class="mt-4 pt-4 border-t border-gray-100"></div> -->
 			{#if filterState.showCategorySearch}
 				<div class="relative mx-auto w-[calc(100%-0.5rem)]" in:fly={{ x: 10, duration: 200, easing: quintOut }}>
 					<input
@@ -89,7 +89,7 @@
 				</div>
 			{:else}
 				<div class="flex items-center justify-between">
-					<p class="text-xs font-bold uppercase tracking-widest text-gray-900" in:fade={{ duration: 200, delay: 200 }}>Categories</p>
+					<p class="text-sm font-bold uppercase text-gray-900" in:fade={{ duration: 200, delay: 200 }}>Categories</p>
 					<button
 						class="flex h-8 w-8 items-center justify-center rounded-full text-gray-500 transition-all duration-200 hover:bg-gray-100 hover:text-gray-700"
 						onclick={() => filterState.toggleCategorySearch()}
@@ -129,7 +129,7 @@
 						</button>
 					{/each}
 					{#if filterState.filteredCategories.length > 5}
-						<button class="mt-1 text-left text-xs font-bold uppercase tracking-widest text-primary hover:underline" onclick={filterState.toggleShowMoreCategories}>
+						<button class="mt-1 text-left text-xs font-bold uppercase text-primary hover:underline" onclick={filterState.toggleShowMoreCategories}>
 							+ {filterState.filteredCategories.length - 5} more
 						</button>
 					{/if}
@@ -143,7 +143,7 @@
 							<span class="flex-1 py-0.5 capitalize text-gray-600 group-hover:text-primary transition-colors">{formattedCategoryName}</span>
 						</button>
 					{/each}
-					<button class="mt-1 text-left text-xs font-bold uppercase tracking-widest text-primary hover:underline" onclick={filterState.toggleShowMoreCategories}> Show less </button>
+					<button class="mt-1 text-left text-sm font-bold uppercase text-primary hover:underline" onclick={filterState.toggleShowMoreCategories}> Show less </button>
 				{/if}
 			</div>
 		{/if}
@@ -171,7 +171,7 @@
 				</div>
 			{:else}
 				<div class="flex items-center justify-between">
-					<p class="text-xs font-bold uppercase tracking-widest text-gray-900" in:fade={{ duration: 200, delay: 200 }}>Tags</p>
+					<p class="text-sm font-bold uppercase text-gray-900" in:fade={{ duration: 200, delay: 200 }}>Tags</p>
 					<button
 						class="flex h-8 w-8 items-center justify-center rounded-full text-gray-500 transition-all duration-200 hover:bg-gray-100 hover:text-gray-700"
 						onclick={() => filterState.toggleTagSearch()}
@@ -213,7 +213,7 @@
 						</div>
 					{/each}
 					{#if filterState.filteredTags.length > 5}
-						<button class="mt-1 text-left text-xs font-bold uppercase tracking-widest text-primary hover:underline" onclick={filterState.toggleShowMoreTags}>
+						<button class="mt-1 text-left text-sm font-bold uppercase text-primary hover:underline" onclick={filterState.toggleShowMoreTags}>
 							+ {filterState.filteredTags.length - 5} more
 						</button>
 					{/if}
@@ -230,14 +230,14 @@
 							<label for={`tag-${tag.slug || tag.name}`} class="flex-1 cursor-pointer py-1 capitalize text-gray-600 hover:text-gray-900 transition-colors">{tag.name}</label>
 						</div>
 					{/each}
-					<button class="mt-1 text-left text-xs font-bold uppercase tracking-widest text-primary hover:underline" onclick={filterState.toggleShowMoreTags}> Show less </button>
+					<button class="mt-1 text-left text-sm font-bold uppercase text-primary hover:underline" onclick={filterState.toggleShowMoreTags}> Show less </button>
 				{/if}
 			</div>
 		{/if}
 
 		<div class="mt-4 pt-4 border-t border-gray-100"></div>
 		<!-- Price Filter -->
-		<p class="mb-4 text-xs font-bold uppercase tracking-widest text-gray-900">Price Range</p>
+		<p class="mb-4 text-sm font-bold uppercase  text-gray-900">Price Range</p>
 
 		<div class="relative mr-5 mt-2">
 			<!-- Range slider track -->
@@ -277,9 +277,9 @@
 		<!-- Other generalized filters -->
 		{#if filterState.processedFilters}
 			{#each Object.keys(filterState.processedFilters) as key, idx}
-				<div class="mt-4 pt-4 border-t border-gray-100"></div>
-				<div class="mt-2">
-					<p class="mb-3 text-xs font-bold uppercase tracking-widest text-gray-900 capitalize">
+			
+				<div class="mt-6">
+					<p class="mb-3 text-sm font-bold uppercase text-gray-900">
 						{filterState.formatFilterName(key)}
 					</p>
 
