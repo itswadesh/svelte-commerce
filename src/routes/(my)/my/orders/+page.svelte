@@ -1,207 +1,200 @@
 <script lang="ts">
-	import Button from '$lib/components/ui/button/button.svelte'
+	import { Button } from '$lib/components/ui/button'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
-	import { ChevronRight, ShoppingBag, Calendar, Tag } from '@lucide/svelte'
+	import {
+		ChevronRight,
+		ShoppingBag,
+		Calendar,
+		Tag,
+		Package,
+		CreditCard,
+		ArrowRight,
+		CheckCircle2,
+		Clock,
+		Truck,
+		XCircle,
+		AlertCircle
+	} from '@lucide/svelte'
 	import { page } from '$app/state'
 	import { date, formatPrice } from '$lib/core/utils'
 	import { MyOrdersRenderer } from '$lib/core/composables/index.js'
+	import { fade, fly } from 'svelte/transition'
+
+	const getStatusStyles = (status: string) => {
+		switch (status?.toLowerCase()) {
+			case 'delivered':
+				return { bg: 'bg-green-50', text: 'text-green-700', ring: 'ring-green-600/20', dot: 'bg-green-500', icon: CheckCircle2 }
+			case 'shipped':
+				return { bg: 'bg-blue-50', text: 'text-blue-700', ring: 'ring-blue-600/20', dot: 'bg-blue-500', icon: Truck }
+			case 'processing':
+				return { bg: 'bg-yellow-50', text: 'text-yellow-700', ring: 'ring-yellow-600/20', dot: 'bg-yellow-500', icon: Clock }
+			case 'cancelled':
+				return { bg: 'bg-red-50', text: 'text-red-700', ring: 'ring-red-600/20', dot: 'bg-red-500', icon: XCircle }
+			default:
+				return { bg: 'bg-gray-50', text: 'text-gray-700', ring: 'ring-gray-600/20', dot: 'bg-gray-500', icon: Package }
+		}
+	}
+
+	const getPaymentStatusStyles = (status: string) => {
+		switch (status?.toLowerCase()) {
+			case 'paid':
+				return { bg: 'bg-green-50', text: 'text-green-700', ring: 'ring-green-600/20', dot: 'bg-green-500' }
+			case 'pending':
+				return { bg: 'bg-yellow-50', text: 'text-yellow-700', ring: 'ring-yellow-600/20', dot: 'bg-yellow-500' }
+			default:
+				return { bg: 'bg-red-50', text: 'text-red-700', ring: 'ring-red-600/20', dot: 'bg-red-500' }
+		}
+	}
 </script>
 
 <svelte:head>
-	<title>My Orders - KitCommerce</title>
+	<title>My Orders | Svelte Commerce</title>
 </svelte:head>
 
 <MyOrdersRenderer>
 	{#snippet content({ orders })}
-		<div class="min-h-screen">
-			<div class="">
-				<!-- Header -->
-				<!-- <div class="mb-8">
-			<h1 class="text-2xl font-bold text-gray-900 md:text-3xl">My Orders</h1>
-			<p class="mt-2 text-gray-600">Track and manage your orders</p>
-		</div> -->
+		<div class="mx-auto max-w-5xl px-4 py-8 md:py-12">
+			<!-- Header -->
+			<div class="mb-10">
+				<h1 class="text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">Order History</h1>
+				<p class="mt-2 text-lg text-gray-500">Check the status of recent orders and manage returns.</p>
+			</div>
 
-				{#if orders.data?.length === 0}
-					<div class="flex min-h-[400px] flex-col items-center justify-center rounded-lg bg-white p-8 text-center shadow-sm">
-						<div class="mb-4 rounded-full bg-gray-100 p-4">
-							<ShoppingBag class="h-8 w-8 text-gray-400" />
+			{#if orders.data?.length === 0}
+				<div in:fade class="flex flex-col items-center justify-center py-20 text-center">
+					<div class="relative mb-6">
+						<div class="absolute inset-0 scale-150 animate-pulse rounded-full bg-gray-50"></div>
+						<div class="relative flex h-24 w-24 items-center justify-center rounded-full border border-gray-100 bg-white shadow-sm">
+							<ShoppingBag class="h-10 w-10 text-gray-300" />
 						</div>
-						<h2 class="mb-2 text-xl font-semibold text-gray-900">No Orders Yet</h2>
-						<p class="mb-6 text-gray-600">Looks like you haven't placed any orders yet.</p>
-						<Button href="/">Start Shopping</Button>
 					</div>
-				{:else}
-					<!-- Orders List -->
-					<div class="space-y-4">
-						{#each orders.data as order}
-							<div class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
-								<!-- Order Header -->
-								<div class="border-b border-gray-200 bg-gray-50 p-4">
-									<div class="flex flex-wrap items-center justify-between gap-4">
-										<div class="flex gap-3">
-											<!-- <div class="bg-gray-100 rounded-full p-2 hidden sm:flex">
-										<ShoppingBag class="h-5 w-5 text-gray-500" />
-									</div> -->
-											<div>
-												<div class="flex items-center gap-1.5">
-													<p class="text-sm font-medium text-gray-800">
-														Order <span class="font-semibold text-gray-900">#{order.orderNo || '_'}</span>
-													</p>
-													<Button
-														variant="ghost"
-														size="sm"
-														class="-mr-2 ml-auto flex h-7 items-center gap-1 px-2"
-														href="/my/orders/{order.parentOrderNo}"
-													>
-														<span class="text-xs text-indigo-600">Details</span>
-														<ChevronRight class="h-3.5 w-3.5 text-indigo-600" />
-													</Button>
-												</div>
-												<div class="mt-1 flex items-center gap-1.5 text-xs text-gray-500">
-													<Calendar class="h-3.5 w-3.5" />
-													<span>{date(order.createdAt)}</span>
-												</div>
-											</div>
-										</div>
-										<div class="sm:text-right">
-											<div class="mb-1 flex items-center justify-end gap-2">
-												<!-- <DollarSign class="h-3.5 w-3.5 text-gray-500" /> -->
-												<p class="font-medium text-gray-900">
-													{formatPrice(
-														order.lineItems.reduce((acc: number, item: any) => acc + item.total, 0),
-														page?.data?.store?.currency?.code
-													)}
-												</p>
-											</div>
-											<div class="flex flex-wrap items-center justify-end gap-2">
-												<span
-													class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium uppercase {order.paymentStatus ===
-													'paid'
-														? 'bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20'
-														: order.paymentStatus === 'pending'
-															? 'bg-yellow-50 text-yellow-700 ring-1 ring-inset ring-yellow-600/20'
-															: 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/20'}"
-												>
-													{#if order.paymentStatus}
-														<span class="relative mr-1 flex h-1.5 w-1.5">
-															<span
-																class="absolute inline-flex h-full w-full animate-ping rounded-full {order.paymentStatus === 'paid'
-																	? 'bg-green-400'
-																	: order.paymentStatus === 'pending'
-																		? 'bg-yellow-400'
-																		: 'bg-red-400'} opacity-75"
-															></span>
-															<span
-																class="relative inline-flex h-1.5 w-1.5 rounded-full {order.paymentStatus === 'paid'
-																	? 'bg-green-500'
-																	: order.paymentStatus === 'pending'
-																		? 'bg-yellow-500'
-																		: 'bg-red-500'}"
-															></span>
-														</span>
-													{/if}
-													{order.paymentStatus}
-												</span>
+					<h2 class="text-2xl font-bold text-gray-900">No orders yet</h2>
+					<p class="mt-2 max-w-xs text-gray-500">Looks like you haven't placed any orders yet. Start shopping to see your history here.</p>
+					<div class="mt-8">
+						<Button href="/products" class="h-12 px-8 font-semibold shadow-lg transition-all hover:scale-105 active:scale-95">
+							Start Shopping
+							<ArrowRight class="ml-2 h-4 w-4" />
+						</Button>
+					</div>
+				</div>
+			{:else}
+				<div class="space-y-8">
+					{#each orders.data as order, i}
+						{@const status = getStatusStyles(order.status)}
+						{@const payment = getPaymentStatusStyles(order.paymentStatus)}
 
-												<span
-													class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium uppercase {order.status === 'delivered'
-														? 'bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20'
-														: order.status === 'shipped'
-															? 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-600/20'
-															: order.status === 'processing'
-																? 'bg-yellow-50 text-yellow-700 ring-1 ring-inset ring-yellow-600/20'
-																: order.status === 'cancelled'
-																	? 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/20'
-																	: 'bg-gray-50 text-gray-700 ring-1 ring-inset ring-gray-600/20'}"
-												>
-													{#if order.status}
-														<span class="relative mr-1 flex h-1.5 w-1.5">
-															<span
-																class="absolute inline-flex h-full w-full animate-ping rounded-full {order.status === 'delivered'
-																	? 'bg-green-400'
-																	: order.status === 'shipped'
-																		? 'bg-blue-400'
-																		: order.status === 'processing'
-																			? 'bg-yellow-400'
-																			: order.status === 'cancelled'
-																				? 'bg-red-400'
-																				: 'bg-gray-400'} opacity-75"
-															></span>
-															<span
-																class="relative inline-flex h-1.5 w-1.5 rounded-full {order.status === 'delivered'
-																	? 'bg-green-500'
-																	: order.status === 'shipped'
-																		? 'bg-blue-500'
-																		: order.status === 'processing'
-																			? 'bg-yellow-500'
-																			: order.status === 'cancelled'
-																				? 'bg-red-500'
-																				: 'bg-gray-500'}"
-															></span>
-														</span>
-													{/if}
-													{order.status}
-												</span>
-											</div>
+						<div
+							in:fly={{ y: 20, duration: 400, delay: i * 50 }}
+							class="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-[0_1px_3px_rgba(0,0,0,0.05)] transition-all duration-300 hover:shadow-xl"
+						>
+							<!-- Order Header -->
+							<div class="border-b border-gray-50 bg-gray-50/50 p-6">
+								<div class="flex flex-wrap items-center justify-between gap-6">
+									<div class="flex items-center gap-6">
+										<div>
+											<p class="text-xs font-bold uppercase tracking-wider text-gray-400">Order Number</p>
+											<p class="mt-1 text-sm font-bold text-gray-900">#{order.orderNo || '_'}</p>
 										</div>
+										<div class="h-8 w-px bg-gray-200"></div>
+										<div>
+											<p class="text-xs font-bold uppercase tracking-wider text-gray-400">Date Placed</p>
+											<p class="mt-1 text-sm font-bold text-gray-900">{date(order.createdAt)}</p>
+										</div>
+										<div class="hidden h-8 w-px bg-gray-200 sm:block"></div>
+										<div class="hidden sm:block">
+											<p class="text-xs font-bold uppercase tracking-wider text-gray-400">Total Amount</p>
+											<p class="mt-1 text-sm font-bold text-gray-900">
+												{formatPrice(
+													order.lineItems.reduce((acc: number, item: any) => acc + item.total, 0),
+													page?.data?.store?.currency?.code
+												)}
+											</p>
+										</div>
+									</div>
+
+									<div class="flex items-center gap-3">
+										<Button
+											variant="outline"
+											size="sm"
+											href="/my/orders/{order.parentOrderNo}"
+											class="h-9 border-gray-200 px-4 text-xs font-bold uppercase tracking-wider transition-all hover:bg-white hover:text-primary active:scale-95"
+										>
+											View Details
+										</Button>
 									</div>
 								</div>
 
-								<!-- Order Items -->
-								<div class="divide-y divide-gray-200">
-									{#each order.lineItems as item}
-										<div class="flex items-start gap-4 p-4">
-											<a href="/my/orders/{order.parentOrderNo}" class="shrink-0">
-												{#if item.thumbnail}
-													<LazyImg src={item.thumbnail} alt="{item.name || item.title || 'Order item'}" width="56" class="h-14 w-14 border border-gray-100 object-contain object-top" />
-												{:else}
-													<div class="flex h-14 w-14 flex-col items-center justify-center rounded bg-gray-100 p-2 text-center text-xs text-gray-500">
-														<svg
-															xmlns="http://www.w3.org/2000/svg"
-															fill="none"
-															viewBox="0 0 24 24"
-															stroke-width="1.5"
-															stroke="currentColor"
-															class="h-5 w-5"
-														>
-															<path
-																stroke-linecap="round"
-																stroke-linejoin="round"
-																d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
-															></path>
-														</svg>
-
-														<span>No Image</span>
-													</div>
-												{/if}
-											</a>
-											<div class="flex-1 space-y-1">
-												<div class="flex items-start justify-between">
-													<div>
-														<a href="/my/orders/{order.parentOrderNo}" class="hover:text-indigo-600 hover:underline">
-															<h3 class="line-clamp-2 text-sm font-medium text-gray-900">
-																{item.title || '_'}
-															</h3>
-														</a>
-														<p class="flex items-center gap-1 text-xs text-gray-500">
-															<Tag class="h-3 w-3" />
-															Qty: {item.qty || '_'}
-														</p>
-													</div>
-													<p class="font-medium text-gray-900">
-														{formatPrice(item.total, page?.data?.store?.currency?.code)}
-													</p>
-												</div>
-											</div>
-										</div>
-									{/each}
+								<!-- Status Badges Mobile/Small -->
+								<div class="mt-6 flex flex-wrap gap-2">
+									<span
+										class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider {status.bg} {status.text} ring-1 ring-inset {status.ring}"
+									>
+										<status.icon class="h-3.5 w-3.5" />
+										{order.status}
+									</span>
+									<span
+										class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider {payment.bg} {payment.text} ring-1 ring-inset {payment.ring}"
+									>
+										<CreditCard class="h-3.5 w-3.5" />
+										Payment: {order.paymentStatus}
+									</span>
 								</div>
 							</div>
-						{/each}
-					</div>
-				{/if}
-			</div>
+
+							<!-- Order Items -->
+							<div class="divide-y divide-gray-50 bg-white">
+								{#each order.lineItems as item}
+									<div class="group flex items-center gap-6 p-6 transition-colors hover:bg-gray-50/50">
+										<a
+											href="/my/orders/{order.parentOrderNo}"
+											class="relative h-20 w-16 shrink-0 overflow-hidden rounded-lg border border-gray-100 bg-gray-50 transition-transform duration-300 group-hover:scale-105"
+										>
+											{#if item.thumbnail}
+												<LazyImg src={item.thumbnail} alt={item.title} class="h-full w-full object-cover" />
+											{:else}
+												<div class="flex h-full w-full items-center justify-center bg-gray-100">
+													<ShoppingBag class="h-6 w-6 text-gray-300" />
+												</div>
+											{/if}
+										</a>
+
+										<div class="flex flex-1 flex-col">
+											<div class="flex items-start justify-between">
+												<div>
+													<h3 class="text-sm font-bold text-gray-900 md:text-base">
+														<a href="/my/orders/{order.parentOrderNo}" class="transition-colors hover:text-primary">
+															{item.title || '_'}
+														</a>
+													</h3>
+													<div class="mt-1 flex items-center gap-4 text-sm text-gray-500">
+														<span class="flex items-center gap-1">
+															<Tag class="h-3.5 w-3.5" />
+															Qty: {item.qty || '_'}
+														</span>
+														{#if item.variantTitle}
+															<span class="h-1 w-1 rounded-full bg-gray-300"></span>
+															<span>{item.variantTitle}</span>
+														{/if}
+													</div>
+												</div>
+												<p class="font-bold text-gray-900">
+													{formatPrice(item.total, page?.data?.store?.currency?.code)}
+												</p>
+											</div>
+										</div>
+									</div>
+								{/each}
+							</div>
+						</div>
+					{/each}
+				</div>
+			{/if}
 		</div>
 	{/snippet}
 </MyOrdersRenderer>
 
+<style>
+	:global(body) {
+		background-color: #fafafa;
+	}
+</style>
