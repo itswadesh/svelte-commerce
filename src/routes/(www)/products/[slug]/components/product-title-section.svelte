@@ -20,7 +20,7 @@
 	</div>
 
 	{#if product.subtitle}
-		<div class="mt-2 text-sm font-medium text-gray-500 uppercase tracking-widest sm:text-base">
+		<div class="mt-2 text-sm font-medium text-gray-500 sm:text-sm line-clamp-2">
 			{@html product.subtitle}
 		</div>
 	{/if}

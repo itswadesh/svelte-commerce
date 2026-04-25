@@ -78,7 +78,7 @@
 						<div class="flex flex-col gap-3 my-1 pt-6 border-t border-gray-100">
 							<div class="flex items-center justify-start gap-3">
 								<Truck class="h-4 w-4 text-gray-900" />
-								<span class="text-xs font-bold uppercase tracking-widest text-gray-900"> Delivery Options </span>
+								<span class="text-sm font-bold uppercase tracking-widest text-gray-900"> Delivery Options </span>
 							</div>
 							<PincodeCheck />
 						</div>
@@ -87,7 +87,7 @@
 						<div class="flex flex-col gap-3 my-1 pt-6 border-t border-gray-100">
 							<div class="flex items-center gap-3">
 								<Truck class="h-4 w-4 text-gray-900" />
-								<span class="text-xs font-bold uppercase tracking-widest text-gray-900">Delivery Information</span>
+								<span class="text-sm font-bold uppercase  text-gray-900">Delivery Information</span>
 							</div>
 							<div class="space-y-1">
 								<p class="text-sm font-medium text-gray-700">Free delivery on orders above ₹999</p>
@@ -97,15 +97,15 @@
 					{/if}
 
 					{#if productState.trustBadgesPlugin?.active}
-						<div class="border-t border-gray-100 py-1">
+						<div class="border-t border-gray-100 py-5">
 							{@html productState.trustBadgesPlugin?.html}
 						</div>
 					{/if}
 
 					{#if productState.returnPlugin && productState.returnPlugin?.active && productState.returnPlugin?.html}
-						<div class="border-t border-gray-100 py-1">
+						<div class="border-t border-gray-100 py-5">
 							<div class="flex items-center gap-3 mb-3">
-								<span class="text-xs font-bold uppercase tracking-widest text-gray-900">Returns & Exchanges</span>
+								<span class="text-sm font-bold uppercase  text-gray-900">Returns & Exchanges</span>
 							</div>
 							<div class="text-sm text-gray-600 leading-relaxed {!productState.showReturnPolicy ? 'line-clamp-2 overflow-hidden' : ''}">
 								{@html productState.returnPlugin?.html}
@@ -113,7 +113,7 @@
 
 							{#if productState.returnPlugin?.below_more}
 								<button
-									class="mt-1 text-[10px] font-bold uppercase tracking-widest text-primary hover:underline transition-all"
+									class="mt-1 text-[10px] font-bold uppercase  text-primary hover:underline transition-all"
 									onclick={() => (productState.showReturnPolicy = !productState.showReturnPolicy)}
 								>
 									{productState.showReturnPolicy ? 'Show Less' : 'Read Full Policy'}
@@ -122,8 +122,8 @@
 						</div>
 					{:else}
 						<!-- Fallback return policy when plugin is not configured -->
-						<div class="border-t border-gray-100 py-1">
-							<h3 class="mb-2 text-xs font-bold uppercase tracking-widest text-gray-900">Returns & Exchanges</h3>
+						<div class="border-t border-gray-100 py-5">
+							<h3 class="mb-2 text-sm font-bold uppercase text-gray-900">Returns & Exchanges</h3>
 							<p class="text-sm text-gray-600 leading-relaxed">
 								We accept returns within 7 days of delivery for unused items in original packaging.
 							</p>
