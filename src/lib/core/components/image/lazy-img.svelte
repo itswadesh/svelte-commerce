@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte'
 	import { Image as ImageIcon } from '@lucide/svelte'
 	import { page } from '$app/state'
+  import { getImageCDNUrl } from '@misiki/kitcommerce-core/utils';
 
 	let {
 		class: klass,
@@ -26,24 +27,20 @@
 		[key: string]: any
 	} = $props()
 
-	const h = height === 'auto' ? '0' : +height * 2
-	const w = width === 'auto' ? '0' : +width * 2
+	const h = $derived(height === 'auto' ? '0' : +height * 2)
+	const w = $derived(width === 'auto' ? '0' : +width * 2)
 
-	const [aspectWidth, aspectHeight] = aspectRatio?.split(':') || ['1', '1']
+	const [aspectWidth, aspectHeight] = $derived(aspectRatio?.split(':') || ['1', '1'])
 
-	const extension = src?.split('.').pop()
+	const extension = $derived(src?.split('.').pop())
 
-	let isSvg = $state(false)
 	let loaded = $state(false)
 	let error = $state(false)
 	let isIntersecting = $state(false)
 	let containerRef: HTMLDivElement
 	let usingFallback = $state(false) // Track if we're using fallback
 
-	if (extension === 'svg') {
-		isSvg = true
-	}
-
+  //$inspect(page?.data?.store, usingFallback)
 	// Transparent placeholder
 	const transparentPlaceholder = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
 
@@ -123,10 +120,7 @@
 					decoding="async"
 					data-nimg="1"
 					{loading}
-					src={`${page?.data?.store?.plugins?.imageCdn?.url}${src?.replace(
-						/^https?:\/\/[^\/]+\.s3\.amazonaws\.com\//,
-						'/'
-					)}?tr=w-${w},h-${h},ar-${page?.data?.store?.productImageAspectRatio?.replace(':', '-')}`}
+					src={getImageCDNUrl(src)}
 					height={+h}
 					width={+w}
 					class="h-full w-full object-contain object-center transition-opacity duration-300 {klass}"

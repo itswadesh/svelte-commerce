@@ -9,7 +9,6 @@
 
 	import { formatPrice } from '$lib/core/utils'
 	import { ProductCardRenderer } from '$lib/core/composables/index.js'
-	import LazyImgVanilla from '$lib/core/components/image/LazyImgVanilla.svelte'
 
 	const cartState = getCartState()
 	let { product, aspectRatio, displayProduct, hideVariations = true, hideCartControls = true }: any = $props()
@@ -38,7 +37,7 @@
 					aria-label="View details of {product.name}"
 				>
 					{#if product.thumbnail || product?.image_url}
-						<LazyImgVanilla
+						<LazyImg
 							src={product.thumbnail || product?.image_url}
 							alt="{product.title || product.name} product image"
 							height="200"
@@ -111,7 +110,7 @@
 						>{product.vendor?.businessName}</a
 					>
 				{/if} -->
-				
+
 				<a href="/products/{product.slug}" class="group/title flex-1">
 					<h3 class="line-clamp-2 text-sm sm:text-sm font-medium text-center leading-snug text-gray-900 transition-colors group-hover/title:text-primary dark:text-gray-100">
 						{product.title}
