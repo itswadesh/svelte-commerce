@@ -9,12 +9,14 @@
 
 	import { formatPrice } from '$lib/core/utils'
 	import { ProductCardRenderer } from '$lib/core/composables/index.js'
+	import LazyImgVanilla from '$lib/core/components/image/LazyImgVanilla.svelte'
 
 	const cartState = getCartState()
 	let { product, aspectRatio, displayProduct, hideVariations = true, hideCartControls = true }: any = $props()
 </script>
 
 <ProductCardRenderer {product} {aspectRatio}>
+{console.log(product.thumbnail || product?.image_url)}
 	{#snippet content({ aspectHeight, aspectWidth, handleCardClick, changeQuantity, addToCart })}
 		<button
 			onclick={handleCardClick}
@@ -36,7 +38,7 @@
 					aria-label="View details of {product.name}"
 				>
 					{#if product.thumbnail || product?.image_url}
-						<LazyImg
+						<LazyImgVanilla
 							src={product.thumbnail || product?.image_url}
 							alt="{product.title || product.name} product image"
 							height="200"
