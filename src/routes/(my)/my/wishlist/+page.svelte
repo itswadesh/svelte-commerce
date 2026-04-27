@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button'
 	import { MyWishlistRenderer } from '$lib/core/composables/index.js'
-	import { X, Heart, ShoppingBag, ArrowRight, LoaderCircle } from '@lucide/svelte'
+	import { Heart, ShoppingBag, ArrowRight, LoaderCircle, Trash2 } from '@lucide/svelte'
 	import { fade, fly } from 'svelte/transition'
 	import { page } from '$app/state'
 	import { formatPrice } from '$lib/core/utils/index.js'
@@ -52,56 +52,56 @@
 					</div>
 				</div>
 			{:else}
-				<div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-8 lg:grid-cols-4 xl:grid-cols-5">
+				<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
 					{#each wishlistItems as item, i}
 						<div
 							in:fly={{ y: 20, duration: 400, delay: i * 50 }}
-							class="group relative flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white transition-all duration-500 hover:shadow-[0_30px_60px_rgba(0,0,0,0.1)] hover:border-gray-200"
+							class="group relative flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] hover:border-gray-200 sm:flex-row"
 						>
 							<!-- Product Image -->
-							<a href="/products/{item?.product?.slug}?variant_id={item.variantId}" class="relative block aspect-[3/4] overflow-hidden bg-gray-50">
+							<a
+								href="/products/{item?.product?.slug}?variant_id={item.variantId}"
+								class="relative block aspect-[4/5] w-full overflow-hidden bg-gray-50 sm:aspect-auto sm:w-1/3"
+							>
 								<img
 									src={item?.product?.thumbnail}
 									alt={item?.product?.title}
 									class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
 								/>
-
-								<!-- Remove Button -->
-								<button
-									class="absolute right-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-gray-400 shadow-sm backdrop-blur-md transition-all hover:bg-red-500 hover:text-white"
-									onclick={(e) => {
-										e.preventDefault()
-										e.stopPropagation()
-										removeFromWishlist(item?.productId, item?.variantId)
-									}}
-								>
-									<X class="h-4 w-4" />
-								</button>
 							</a>
 
 							<!-- Product Info -->
-							<div class="flex flex-1 flex-col p-5 text-center">
-								<h3 class="line-clamp-1 text-xs font-bold uppercase tracking-wider text-gray-900">
-									<a href="/products/{item?.product?.slug}?variant_id={item.variantId}" class="transition-colors hover:text-gray-400">
+							<div class="flex flex-1 flex-col p-6">
+								<div class="flex flex-1 flex-col">
+									<h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">
+										{item?.product?.brand?.name || 'Brand'}
+									</h3>
+									<a
+										href="/products/{item?.product?.slug}?variant_id={item.variantId}"
+										class="mt-1 text-lg font-bold text-gray-900 transition-colors hover:text-primary"
+									>
 										{item?.product?.title}
 									</a>
-								</h3>
 
-								<div class="mt-3 flex items-center justify-center gap-2">
-									<span class="text-sm font-bold text-gray-900">
-										{formatPrice(item?.product?.price, page?.data?.store?.currency?.code)}
-									</span>
-									{#if item?.product?.mrp > item?.product?.price}
-										<span class="text-[10px] text-gray-300 line-through">
-											{formatPrice(item?.product?.mrp, page?.data?.store?.currency?.code)}
+									<div class="mt-3 flex items-center gap-2">
+										<span class="text-xl font-bold text-gray-900">
+											{formatPrice(item?.product?.price, page?.data?.store?.currency?.code)}
 										</span>
-									{/if}
+										{#if item?.product?.mrp > item?.product?.price}
+											<span class="text-sm text-gray-400 line-through">
+												{formatPrice(item?.product?.mrp, page?.data?.store?.currency?.code)}
+											</span>
+											<span class="text-sm font-bold text-orange-600">
+												({Math.round(((item?.product?.mrp - item?.product?.price) / item?.product?.mrp) * 100)}% OFF)
+											</span>
+										{/if}
+									</div>
 								</div>
 
-								<!-- Move to Cart -->
-								<div class="mt-6 border-t border-gray-50 pt-5">
+								<!-- Actions -->
+								<div class="mt-8 flex items-center gap-3">
 									<button
-										class="flex w-full items-center justify-center gap-2 rounded-full border border-gray-900 py-3 text-[10px] font-bold uppercase tracking-widest text-gray-900 transition-all hover:bg-black hover:text-white active:scale-95"
+										class="flex flex-1 items-center justify-center gap-2 rounded-full border border-gray-900 bg-white py-3 text-[10px] font-bold uppercase tracking-widest text-gray-900 transition-all hover:bg-gray-900 hover:text-white active:scale-95"
 										onclick={(e) => {
 											e.preventDefault()
 											e.stopPropagation()
@@ -110,6 +110,17 @@
 									>
 										<ShoppingBag class="h-3.5 w-3.5" />
 										Move to Cart
+									</button>
+									<button
+										class="flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 text-gray-400 transition-all hover:border-red-500 hover:bg-red-50 hover:text-red-500 active:scale-95"
+										onclick={(e) => {
+											e.preventDefault()
+											e.stopPropagation()
+											removeFromWishlist(item?.productId, item?.variantId)
+										}}
+										title="Remove from wishlist"
+									>
+										<Trash2 class="h-4 w-4" />
 									</button>
 								</div>
 							</div>
