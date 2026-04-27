@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button'
-	import { Check, Loader, LockKeyhole, Minus, Plus, ShoppingBag, Tag, Trash, X } from '@lucide/svelte'
+	import { Check, Loader, LoaderCircle, LockKeyhole, Minus, Plus, ShoppingBag, Tag, Trash, X } from '@lucide/svelte'
 	import { formatPrice } from '$lib/core/utils'
 	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
 	import { page } from '$app/state'
@@ -26,11 +26,14 @@
 		<div class="mb-12">
 			<div class="flex items-center justify-center space-x-4 sm:space-x-12">
 				<div class="flex items-center text-primary">
-					<div class="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-[11px] font-bold text-white tracking-tight">1</div>
+					<div class="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-[11px] font-bold tracking-tight text-white">1</div>
 					<span class="ml-2 text-xs font-bold uppercase tracking-widest">Cart</span>
 				</div>
 				<div class="h-px w-8 bg-gray-200 sm:w-16"></div>
-				<button onclick={() => goto(appendOneTimeCartId('/checkout/address'))} class="flex items-center text-gray-400 hover:text-gray-900 transition-colors">
+				<button
+					onclick={() => goto(appendOneTimeCartId('/checkout/address'))}
+					class="flex items-center text-gray-400 transition-colors hover:text-gray-900"
+				>
 					<div class="flex h-7 w-7 items-center justify-center rounded-full border border-gray-200 text-[11px] font-bold tracking-tight">2</div>
 					<span class="ml-2 text-xs font-bold uppercase tracking-widest">Address</span>
 				</button>
@@ -62,7 +65,7 @@
 
 		{#await cartState.hasLoaded}
 			<div class="flex min-h-96 items-center justify-center py-8">
-				<Loader class="animate-spin" />
+				<LoaderCircle class="animate-spin" />
 			</div>
 		{:then _}
 			{#if cartState.cart?.lineItems?.length === 0}
@@ -71,8 +74,11 @@
 						<ShoppingBag class="h-12 w-12 text-gray-300" />
 					</div>
 					<h2 class="mb-2 text-xl font-bold uppercase tracking-widest text-gray-900">Your bag is empty</h2>
-					<p class="mb-8 text-sm text-gray-500 max-w-xs">Looks like you haven't added anything to your bag yet.</p>
-					<a href="/" class="rounded-full bg-primary px-8 py-3 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-black active:scale-95">
+					<p class="mb-8 max-w-xs text-sm text-gray-500">Looks like you haven't added anything to your bag yet.</p>
+					<a
+						href="/"
+						class="rounded-full bg-primary px-8 py-3 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-black active:scale-95"
+					>
 						Start Shopping
 					</a>
 				</div>
@@ -275,10 +281,12 @@
 										<div class="flex flex-1 flex-col">
 											<div class="flex flex-col justify-between gap-2 sm:flex-row sm:items-start">
 												<div class="flex-1">
-													<h3 class="line-clamp-2 text-base font-bold tracking-tight text-gray-900 uppercase sm:text-lg">{item.title}</h3>
-													
+													<h3 class="line-clamp-2 text-base font-bold uppercase tracking-tight text-gray-900 sm:text-lg">{item.title}</h3>
+
 													<div class="mt-2 flex flex-wrap gap-2">
-														<span class="inline-flex items-center rounded bg-gray-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-gray-500 ring-1 ring-gray-100">
+														<span
+															class="inline-flex items-center rounded bg-gray-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-gray-500 ring-1 ring-gray-100"
+														>
 															Qty: {item.qty}
 														</span>
 														{#if item.variant && item.variant.options && item.variant.options.length > 0}
@@ -306,7 +314,9 @@
 											</div>
 
 											<div class="mt-auto flex items-center justify-between pt-6">
-												<div class="flex items-center rounded-full border border-gray-200 bg-white p-1 shadow-sm transition-all duration-300 hover:shadow-md">
+												<div
+													class="flex items-center rounded-full border border-gray-200 bg-white p-1 shadow-sm transition-all duration-300 hover:shadow-md"
+												>
 													<button
 														onclick={(e) => cartModule.decreaseQty(e, item)}
 														class="flex h-7 w-7 items-center justify-center rounded-full transition-all hover:bg-gray-100 active:scale-75"
@@ -365,10 +375,12 @@
 
 						<CouponsDrawer />
 
-						<div class="space-y-4 rounded-lg border border-gray-100 p-6 bg-white shadow-sm">
+						<div class="space-y-4 rounded-lg border border-gray-100 bg-white p-6 shadow-sm">
 							<div class="">
-								<div class="flex flex-col gap-1 mb-6">
-									<h2 class="text-base font-bold uppercase tracking-widest text-gray-900" style="font-family: 'Montserrat', sans-serif;">Price Summary</h2>
+								<div class="mb-6 flex flex-col gap-1">
+									<h2 class="text-base font-bold uppercase tracking-widest text-gray-900" style="font-family: 'Montserrat', sans-serif;">
+										Price Summary
+									</h2>
 									<div class="h-1 w-12 bg-primary"></div>
 								</div>
 								{#if cartModule.loadingForCart}
@@ -379,24 +391,31 @@
 									<div class="space-y-4">
 										<div class="space-y-3 border-b border-gray-50 pb-6">
 											<div class="flex justify-between text-sm">
-												<span class="text-gray-500 font-medium">Subtotal</span>
-												<span class="text-gray-900 font-bold">{formatPrice(cartState.cart.subtotal, page?.data?.store?.currency?.code)}</span>
+												<span class="font-medium text-gray-500">Subtotal</span>
+												<span class="font-bold text-gray-900">{formatPrice(cartState.cart.subtotal, page?.data?.store?.currency?.code)}</span>
 											</div>
 											{#if cartState.cart.discountAmount > 0}
 												<div class="flex justify-between text-sm">
-													<span class="text-gray-500 font-medium">Discount</span>
-													<span class="text-orange-600 font-bold uppercase tracking-tight">- {formatPrice(cartState.cart.discountAmount, page?.data?.store?.currency?.code)}</span>
+													<span class="font-medium text-gray-500">Discount</span>
+													<span class="font-bold uppercase tracking-tight text-orange-600"
+														>- {formatPrice(cartState.cart.discountAmount, page?.data?.store?.currency?.code)}</span
+													>
 												</div>
 											{/if}
 											<div class="flex flex-col gap-1">
 												<div class="flex justify-between text-sm">
-													<span class="text-gray-500 font-medium">Shipping</span>
+													<span class="font-medium text-gray-500">Shipping</span>
 													{#if !cartState.cart.shippingAddress}
 														<span class="text-[10px] font-bold uppercase tracking-tighter text-gray-400"> Address required </span>
 													{:else if cartState.cart.shippingCharges}
-														<span class="text-gray-900 font-bold">{formatPrice(cartState.cart.shippingCharges, page?.data?.store?.currency?.code)}</span>
+														<span class="font-bold text-gray-900"
+															>{formatPrice(cartState.cart.shippingCharges, page?.data?.store?.currency?.code)}</span
+														>
 													{:else}
-														<span class="text-green-600 font-bold uppercase tracking-widest text-[10px] bg-green-50 px-2 py-0.5 rounded ring-1 ring-green-100">FREE</span>
+														<span
+															class="rounded bg-green-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-green-600 ring-1 ring-green-100"
+															>FREE</span
+														>
 													{/if}
 												</div>
 											</div>
@@ -413,14 +432,14 @@
 											</div>
 										{/if}
 
-										<div class="mt-6 flex items-center justify-center gap-2 py-3 px-4 rounded-md border border-gray-100 bg-gray-50/50">
+										<div class="mt-6 flex items-center justify-center gap-2 rounded-md border border-gray-100 bg-gray-50/50 px-4 py-3">
 											<LockKeyhole class="h-3.5 w-3.5 text-gray-400" />
 											<p class="text-[10px] font-bold uppercase tracking-widest text-gray-500">Secure 256-bit encryption</p>
 										</div>
 
 										{#if !cartModule.noItemsChecked}
 											<Button
-												class="group w-full py-7 text-sm font-bold uppercase tracking-[0.2em] transition-all duration-300 ease-out-expo bg-primary hover:bg-black shadow-lg hover:shadow-xl active:scale-[0.98] max-sm:fixed max-sm:bottom-0 max-sm:left-0 max-sm:right-0 max-sm:z-[60] max-sm:rounded-none max-sm:h-20"
+												class="ease-out-expo group w-full bg-primary py-7 text-sm font-bold uppercase tracking-[0.2em] shadow-lg transition-all duration-300 hover:bg-black hover:shadow-xl active:scale-[0.98] max-sm:fixed max-sm:bottom-0 max-sm:left-0 max-sm:right-0 max-sm:z-[60] max-sm:h-20 max-sm:rounded-none"
 												onclick={cartModule.gotoCheckout}
 											>
 												{#if cartModule.loadingForCheckout}
@@ -431,7 +450,9 @@
 												{/if}
 											</Button>
 										{:else}
-											<div class="mt-4 rounded bg-yellow-50 p-3 text-[10px] font-bold uppercase tracking-widest text-yellow-700 ring-1 ring-yellow-100 text-center">
+											<div
+												class="mt-4 rounded bg-yellow-50 p-3 text-center text-[10px] font-bold uppercase tracking-widest text-yellow-700 ring-1 ring-yellow-100"
+											>
 												Select items to proceed
 											</div>
 										{/if}
