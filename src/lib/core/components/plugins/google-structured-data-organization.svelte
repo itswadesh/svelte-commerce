@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { stringify } from "querystring"
+
 	let {
 		name,
 		url,
@@ -62,8 +64,8 @@
 
 <svelte:head>
 	{#if organizationSchema}
-		<script type="application/ld+json">
-			{@html organizationSchema}
-		</script>
+	  {@html `<script type="application/ld+json">
+      ${organizationSchema}
+	  </script>`}
 	{/if}
 </svelte:head>
