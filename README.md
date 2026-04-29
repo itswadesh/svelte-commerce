@@ -4,8 +4,11 @@
 
 <div align="center">
 
-**The open-source frontend for any eCommerce. Built with a headless approach, using a modern JS stack. We have WIP for MedusaJS, Shopify. The API approach also allows you to merge Svelte Commerce with any third-party tool like payment gateways, POS or AI.**
-
+**The open-source frontend for any eCommerce. Built with a headless approach, using a modern JS stack. The API approach also allows you to merge Svelte Commerce with any third-party tool like payment gateways, POS or AI.**
+Turnkey integration with 
+- [litekart.in](https://litekart.in/)
+- [shopify.com](https://www.shopify.com)
+- [medusajs.com](https://medusajs.com/)
 </div>
 
 <div align="center">
