@@ -17,7 +17,7 @@
 	const filterState = getDesktopFilterState()
 </script>
 
-<div class="group sticky" style={`top: ${filterState.containerTop}px;`}>
+<div class="group sticky px-5" style={`top: ${filterState.containerTop}px;`}>
 	<div
 		bind:this={filterState.container}
 		class={cn(
