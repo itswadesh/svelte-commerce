@@ -40,8 +40,8 @@
 
 <svelte:head>
 	{#if websiteSchema}
-		<script type="application/ld+json">
-			{@html websiteSchema}
-		</script>
+	  {@html `<script type="application/ld+json">
+      ${websiteSchema}
+	  </script>`}
 	{/if}
 </svelte:head>
