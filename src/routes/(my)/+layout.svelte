@@ -57,24 +57,27 @@
 
 	<!-- Sidebar - Hidden on mobile unless menu is open -->
 	<aside
-		class="fixed left-0 top-0 z-30 h-full w-[80%] max-w-xs transform border-r bg-white shadow-lg transition-all duration-300 ease-in-out md:sticky md:w-64 md:translate-x-0 md:shadow-none {isMobileMenuOpen
-			? 'translate-x-0'
-			: '-translate-x-full'}"
+		class="fixed left-0 top-0 z-30 h-full w-[80%] max-w-xs transform border-r border-gray-100 bg-white transition-all duration-300 ease-in-out md:sticky md:w-72 md:translate-x-0 {isMobileMenuOpen
+			? 'translate-x-0 shadow-2xl'
+			: '-translate-x-full md:shadow-none'}"
 		class:md:relative={true}
 	>
 		{#if isMobileMenuOpen || !isMobileMenuOpen}
-			<nav class="relative top-[5rem] space-y-1 p-4 pt-6 md:top-0 md:pt-4">
+			<nav class="relative top-[5rem] space-y-2 p-6 pt-10 md:top-0 md:pt-12">
+				<div class="mb-10 px-4">
+					<p class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Account Menu</p>
+				</div>
 				{#each menuItems as { href, icon: Icon, label }, i}
 					<a
 						{href}
-						class="flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100 {page.url.pathname === href ||
+						class="group flex items-center rounded-2xl px-4 py-3.5 text-sm font-bold tracking-tight transition-all duration-300 {page.url.pathname === href ||
 						(page.url.pathname.startsWith(href) && href !== '/my')
-							? 'bg-gray-100 text-primary'
-							: 'text-gray-600 hover:text-gray-900'}"
+							? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20'
+							: 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'}"
 						onclick={() => (isMobileMenuOpen = false)}
 						in:fly={{ y: 20, x: -20, delay: 100 + i * 50, duration: 200, easing: quintOut }}
 					>
-						<Icon class="mr-3 h-5 w-5" />
+						<Icon class="mr-4 h-5 w-5 transition-transform group-hover:scale-110" />
 						{label}
 					</a>
 				{/each}

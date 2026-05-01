@@ -28,34 +28,48 @@
 	<title>My Dashboard</title>
 </svelte:head>
 
-<div class="mx-auto p-4">
-	<!-- <div class="mb-6 flex items-center gap-2">
-		<a href="/my" class="text-gray-500 hover:text-gray-600">
-			<ArrowLeft class="h-5 w-5" />
-		</a>
-		<h1 class="text-2xl font-semibold text-gray-900">My Dashboard</h1>
-	</div> -->
+<div class="mx-auto max-w-7xl px-4 py-8 md:py-12">
+	<div class="mb-12">
+		<h1 class="text-3xl font-extrabold tracking-tight text-gray-900 md:text-4xl">
+			Account Dashboard
+		</h1>
+		<p class="mt-2 text-lg text-muted-foreground">
+			Welcome back! Manage your orders, wishlist, and profile settings.
+		</p>
+	</div>
 
-	<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+	<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
 		{#each importOptions as option}
-			<a 
+			<a
 				href={option.href}
-				class="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-8 transition-all duration-300 hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] hover:border-gray-200"
+				class="group relative flex flex-col items-center justify-center overflow-hidden rounded-[3rem] border border-gray-100 bg-white p-12 text-center transition-all duration-700 hover:-translate-y-3 hover:border-primary/20 hover:shadow-[0_40px_80px_rgba(0,0,0,0.12)]"
 			>
-				<div class="flex flex-col items-center text-center">
-					<div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-gray-50 text-gray-900 transition-transform duration-500 group-hover:scale-110 group-hover:bg-black group-hover:text-white">
-						<svelte:component this={option.icon} class="h-8 w-8" />
+				<!-- Dynamic Background Circle -->
+				<div
+					class="absolute -right-6 -top-6 h-40 w-40 rounded-full bg-primary/5 transition-all duration-700 ease-out group-hover:scale-[3] group-hover:bg-primary/10"
+				></div>
+
+				<div class="relative z-10 flex flex-col items-center">
+					<!-- Icon Container with stable background transition -->
+					<div
+						class="mb-10 flex h-24 w-24 items-center justify-center rounded-[2rem] bg-gray-50 text-gray-900 shadow-sm transition-all duration-500 ease-in-out group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-2xl group-hover:shadow-primary/40"
+					>
+						<svelte:component this={option.icon} class="h-10 w-10" />
 					</div>
-					
-					<h3 class="text-sm font-bold uppercase tracking-[0.2em] text-gray-900">
+
+					<h3 class="text-xl font-black uppercase tracking-[0.2em] text-gray-900">
 						{option.title}
 					</h3>
-					<p class="mt-3 text-xs font-medium leading-relaxed text-gray-400">
+					<p class="mt-4 max-w-[200px] text-sm font-medium leading-relaxed text-muted-foreground">
 						{option.description}
 					</p>
 
-					<div class="mt-8 flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-900 opacity-0 transition-all duration-300 group-hover:opacity-100">
-						View All <ArrowRight class="h-3 w-3" />
+					<!-- Action Button with Glassmorphism -->
+					<div
+						class="mt-12 inline-flex items-center gap-2 overflow-hidden rounded-full bg-gray-900 px-8 py-3.5 text-xs font-black uppercase tracking-widest text-white transition-all duration-500 hover:scale-105 active:scale-95 group-hover:bg-primary group-hover:px-10 group-hover:shadow-xl group-hover:shadow-primary/30"
+					>
+						<span class="relative z-10">Manage</span>
+						<ArrowRight class="relative z-10 h-3.5 w-3.5 transition-transform duration-500 group-hover:translate-x-1" />
 					</div>
 				</div>
 			</a>
