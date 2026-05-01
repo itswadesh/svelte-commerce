@@ -7,57 +7,86 @@
 	import { CollectionsRenderer } from '$lib/core/composables/index.js'
 </script>
 
-<!-- Colleciton -->
+<!-- Collection -->
 <CollectionsRenderer>
 	{#snippet content({ displayProduct, collectionData })}
 		{#if collectionData.length > 0}
 			{#each collectionData as data, index}
-				<div class="flex flex-col items-center justify-center gap-5 p-3 py-5 sm:px-10 md:py-10">
-					<h2 class="text-center text-2xl font-normal">
-						{data.name}
-					</h2>
+				<div class="py-16 {index % 2 === 1 ? 'bg-muted/30' : ''}">
+					<div class="container mx-auto px-4">
+						<div class="mb-10 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+							<div class="text-left">
+								<h2 class="text-3xl font-extrabold tracking-tight text-foreground lg:text-4xl">
+									{data.name}
+								</h2>
+								<div class="mt-2 h-1 w-12 bg-primary"></div>
+								<p class="mt-4 text-sm font-medium text-muted-foreground">
+									Explore our handpicked selection of {data.name.toLowerCase()}
+								</p>
+							</div>
 
-					<hr class="w-20 border border-zinc-800" />
-				</div>
-				<Carousel
-					opts={{
-						align: 'start',
-						loop: true
-					}}
-					class="p-0 laptopl:w-full"
-				>
-					<CarouselContent class="-ml-4">
-						{#each data?.collectionvalues as prod (prod?.id)}
-							{#if prod?.products}
-								<CarouselItem class="basis-full pl-4 mobiles:basis-[40%] mobilem:basis-[42%] tablet:basis-[30%] laptopl:basis-1/6">
-									<Product
-										product={{
-											id: prod?.products.id,
-											slug: prod?.products.slug,
-											thumbnail: prod?.products.thumbnail,
-											price: prod?.products.price,
-											mrp: prod?.products.mrp,
-											title: prod?.products.title,
-											vendor: prod?.products.vendor,
-											tag: prod?.products.tag,
-											variants: prod?.products.variants
-										}}
-										aspectRatio="square"
-										{displayProduct}
+							<!-- <div class="hidden items-center gap-2 md:flex">
+								<a
+									href="/products"
+									class="mr-4 text-sm font-semibold text-primary transition-colors hover:text-primary/80"
+								>
+									View collection
+								</a>
+							</div> -->
+						</div>
+
+						<div class="relative">
+							<Carousel
+								opts={{
+									align: 'start',
+									loop: true
+								}}
+								class="w-full"
+							>
+								<CarouselContent class="-ml-4">
+									{#each data?.collectionvalues as prod (prod?.id)}
+										{#if prod?.products}
+											<CarouselItem
+												class="basis-full pl-4 mobiles:basis-[48%] sm:basis-[33%] md:basis-[25%] lg:basis-[20%] xl:basis-1/6"
+											>
+												<div class="group h-full py-2">
+													<div
+														class="h-full transition-all duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-lg rounded-xl overflow-hidden"
+													>
+														<Product
+															product={{
+																id: prod?.products.id,
+																slug: prod?.products.slug,
+																thumbnail: prod?.products.thumbnail,
+																price: prod?.products.price,
+																mrp: prod?.products.mrp,
+																title: prod?.products.title,
+																vendor: prod?.products.vendor,
+																tag: prod?.products.tag,
+																variants: prod?.products.variants
+															}}
+															aspectRatio="square"
+															{displayProduct}
+														/>
+													</div>
+												</div>
+											</CarouselItem>
+										{/if}
+									{/each}
+								</CarouselContent>
+
+								<div class="absolute -right-2 -top-20 hidden items-center gap-2 md:flex">
+									<CarouselPrevious
+										class="static h-10 w-10 translate-y-0 rounded-full border-muted bg-background shadow-sm hover:bg-primary hover:text-primary-foreground"
 									/>
-								</CarouselItem>
-							{/if}
-						{/each}
-					</CarouselContent>
-
-					<div class="absolute left-2 top-1/3 z-30 hidden -translate-y-1/2 translate-x-10 transform laptop:flex">
-						<CarouselPrevious class="rounded-full bg-white p-2 text-black shadow-md hover:bg-gray-100" />
+									<CarouselNext
+										class="static h-10 w-10 translate-y-0 rounded-full border-muted bg-background shadow-sm hover:bg-primary hover:text-primary-foreground"
+									/>
+								</div>
+							</Carousel>
+						</div>
 					</div>
-
-					<div class="absolute right-2 top-1/3 z-30 hidden -translate-x-10 -translate-y-1/2 transform laptop:flex">
-						<CarouselNext class="rounded-full bg-white p-2 text-black shadow-md hover:bg-gray-100" />
-					</div>
-				</Carousel>
+				</div>
 			{/each}
 		{/if}
 	{/snippet}

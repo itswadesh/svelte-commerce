@@ -147,11 +147,14 @@
 </div>
 
 <Slider />
-<Collections />
 
-<div class="mx-2 mb-12 lg:container lg:mx-auto">
+<div class="mb-12 container mx-auto">
 	<HomepageCategoryListWithImage categories={homepageModule.featuredCategories} loading={homepageModule.loading} />
 </div>
+
+
+<Collections />
+
 
 {#if homepage?.sections?.length && homepage?.sections[0]?.isActive}
 	<div class="mx-2 mb-12 xl:mx-24">
@@ -159,49 +162,73 @@
 	</div>
 {/if}
 
-<div class="mx-2 lg:container lg:mx-auto">
-	<div class="mb-8 pt-12">
-		<div class="flex flex-col items-center justify-center space-y-2">
-			<h2 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl uppercase">NEW ARRIVALS</h2>
-			<div class="h-1 w-12 bg-primary"></div>
+<div class="container mx-auto px-4 py-16">
+	<div class="mb-12 flex flex-col items-center justify-between gap-6 md:flex-row md:items-end">
+		<div class="text-center md:text-left">
+			<h2 class="text-3xl font-extrabold tracking-tight text-foreground lg:text-4xl">
+				New Arrivals
+			</h2>
+			<div class="mt-2 h-1 w-12 bg-primary mx-auto md:mx-0"></div>
+			<p class="mt-4 text-sm font-medium text-muted-foreground">
+				Stay ahead of the curve with our latest drops and trending pieces
+			</p>
 		</div>
-		<div class="mt-4 flex items-center justify-center text-sm font-medium">
-			<a href="/products" class="text-gray-600 hover:text-primary transition-colors border-b border-transparent hover:border-primary pb-1 dark:text-gray-400">View All Arrivals</a>
-		</div>
+		<a
+			href="/products"
+			class="group flex items-center rounded-full bg-secondary px-6 py-2.5 text-sm font-semibold text-secondary-foreground transition-all hover:bg-primary hover:text-primary-foreground"
+		>
+			View All Arrivals
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				class="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke="currentColor"
+			>
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+			</svg>
+		</a>
 	</div>
-</div>
 
-{#if homepageModule.loadingFeaturedProducts}
-	<div class="grid grid-cols-1 gap-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:mx-24">
-		{#each Array(8) as _}
-			<div class="mx-2 space-y-3 lg:container lg:mx-auto">
-				<Skeleton class="h-[200px] w-full" />
-				<Skeleton class="h-4 w-[250px]" />
-				<Skeleton class="h-4 w-[200px]" />
-				<Skeleton class="h-4 w-[150px]" />
-			</div>
-		{/each}
-	</div>
-{:else}
-	<div class="lg:container lg:mx-auto">
+	{#if homepageModule.loadingFeaturedProducts}
+		<div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+			{#each Array(12) as _}
+				<div class="space-y-4">
+					<Skeleton class="aspect-square w-full rounded-2xl" />
+					<div class="space-y-2">
+						<Skeleton class="h-4 w-3/4" />
+						<Skeleton class="h-4 w-1/2" />
+					</div>
+				</div>
+			{/each}
+		</div>
+	{:else}
 		<FeaturedProductsGrid
 			data={homepageModule.featuredProducts}
 			displayProduct={(prod: Product) => homepageModule.showProduct(prod)}
 			loadMore={homepageModule.loadMoreFeaturedProducts}
 		/>
 		{#if homepageModule.hasMoreFeaturedProducts}
-			<div class="mt-12 flex justify-center pb-20">
+			<div class="mt-16 flex justify-center pb-12">
 				<button
-					class="group relative flex items-center justify-center overflow-hidden rounded-full border border-gray-900 px-10 py-4 text-sm font-bold uppercase tracking-widest text-gray-900 transition-all hover:text-white dark:border-gray-100 dark:text-white"
+					class="group relative flex items-center justify-center gap-2 overflow-hidden rounded-full bg-primary px-12 py-4 text-sm font-bold uppercase tracking-widest text-primary-foreground shadow-lg transition-all hover:scale-105 hover:shadow-xl active:scale-95"
 					onclick={homepageModule.loadMoreFeaturedProducts}
 				>
 					<span class="relative z-10">Discover More</span>
-					<div class="absolute inset-0 z-0 translate-y-full bg-gray-900 transition-transform duration-300 group-hover:translate-y-0 dark:bg-gray-100"></div>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-4 w-4 transition-transform group-hover:translate-y-1"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+					</svg>
 				</button>
 			</div>
 		{/if}
-	</div>
-{/if}
+	{/if}
+</div>
 
 <!-- Notification to show recent order -->
 {#if homepageModule.showRecentOrderPopup}

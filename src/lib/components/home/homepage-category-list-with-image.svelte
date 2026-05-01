@@ -30,7 +30,7 @@
 			</div>
 			<a
 				href="/categories"
-				class="group flex items-center rounded-full bg-secondary px-5 py-2 text-sm font-semibold text-secondary-foreground transition-all hover:bg-primary hover:text-primary-foreground"
+				class="group flex items-center rounded-full bg-secondary px-6 py-2.5 text-sm font-semibold text-secondary-foreground transition-all hover:bg-primary hover:text-primary-foreground"
 			>
 				View all categories
 				<svg
