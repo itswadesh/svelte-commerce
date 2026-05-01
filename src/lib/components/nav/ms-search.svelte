@@ -84,6 +84,7 @@
 								{:else if searchResults.length > 0}
 									<div class="divide-y divide-gray-50">
 										{#each searchResults as result}
+											
 											<button
 												class="group flex w-full items-center gap-4 px-6 py-4 text-left transition-colors hover:bg-gray-50/50"
 												onclick={() => handleResultClick(result)}
@@ -101,8 +102,8 @@
 													<p class="text-sm font-bold text-gray-900 transition-colors group-hover:text-primary">
 														{result.name || result.title}
 													</p>
-													{#if result.category}
-														<p class="text-xs uppercase tracking-widest text-gray-400">{result.category}</p>
+													{#if result?.price}
+														<p class="text-xs uppercase tracking-widest text-gray-700">${result.price}</p>
 													{/if}
 												</div>
 												<ArrowRight class="h-4 w-4 text-gray-300 transition-all group-hover:translate-x-1 group-hover:text-primary" />
@@ -158,6 +159,7 @@
 							{:else if searchResults.length > 0}
 								<div class="divide-y divide-gray-50">
 									{#each searchResults as result}
+									
 										<button class="flex w-full items-center gap-4 p-4 active:bg-gray-50" onclick={() => handleResultClick(result)}>
 											<div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gray-50 text-gray-400">
 												{#if result.thumbnail}
@@ -173,6 +175,9 @@
 												{#if result.price}
 													<p class="text-xs font-medium text-gray-500">{result.price}</p>
 												{/if}
+												<!-- {#if result.mrp}
+													<p class="text-xs font-medium text-gray-500">{result.mrp}</p>
+												{/if} -->
 											</div>
 											<ArrowUpRight class="h-4 w-4 text-gray-300" />
 										</button>
