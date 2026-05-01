@@ -77,7 +77,7 @@
 
 					{#if selectedFaqId === faq.id}
 						<div id="faq-{faq.id}" class="px-6 pb-4" transition:slide|local={{ duration: 200 }}>
-							<div class="prose prose-sm max-w-none text-gray-600">
+							<div class="prose prose-sm max-w-none text-gray-600 prose-p:my-0 prose-li:my-0">
 								{@html faq.answer}
 							</div>
 						</div>

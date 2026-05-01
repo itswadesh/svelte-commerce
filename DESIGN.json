@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-24T12:00:00Z",
+  "title": "Design System: Svelte Commerce",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Deep Midnight Navy",
+        "canonical": "#111827",
+        "tonalRamp": ["#030712", "#111827", "#1f2937", "#374151", "#4b5563", "#6b7280", "#9ca3af", "#d1d5db"]
+      },
+      "accent": {
+        "role": "secondary",
+        "displayName": "Vibrant Svelte Orange",
+        "canonical": "#ff3e00",
+        "tonalRamp": ["#7c2d12", "#9a3412", "#c2410c", "#ea580c", "#f97316", "#fb923c", "#fdba74", "#ffedd5"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero headlines and main sections."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Standard text and product descriptions."
+      }
+    },
+    "shadows": [
+      {
+        "name": "interactive-lift",
+        "value": "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+        "purpose": "Tactile feedback on hover."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The main action button for cart and checkout.",
+      "html": "<button class=\"ds-btn-primary\">Add to Cart</button>",
+      "css": ".ds-btn-primary { background-color: #111827; color: #ffffff; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 500; font-family: sans-serif; border: none; cursor: pointer; transition: background-color 0.2s; } .ds-btn-primary:hover { background-color: #1f2937; }"
+    },
+    {
+      "name": "Product Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Displays product preview in grids.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-img\"></div><div class=\"ds-card-content\"><h3 class=\"ds-card-title\">Product Name</h3><p class=\"ds-card-price\">$99.00</p></div></div>",
+      "css": ".ds-card { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; transition: box-shadow 0.2s; } .ds-card:hover { box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); } .ds-card-img { height: 200px; background-color: #f1f5f9; } .ds-card-content { padding: 1rem; } .ds-card-title { font-weight: 500; margin: 0; } .ds-card-price { color: #64748b; margin-top: 0.25rem; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Frictionless Boutique",
+    "overview": "Svelte Commerce is designed for speed and clarity. The aesthetic is 'invisible UI'—a minimalist framework that exists solely to stage and sell products.",
+    "keyCharacteristics": [
+      "High Information Density",
+      "Typographic Hierarchy",
+      "Color Constraint"
+    ],
+    "rules": [
+      {
+        "name": "The Rarity Rule",
+        "body": "The Vibrant Svelte Orange accent should appear on less than 5% of the total screen area.",
+        "section": "colors"
+      },
+      {
+        "name": "The Flat-at-Rest Rule",
+        "body": "All elements sit on the same plane until interacted with.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use generous whitespace (32px+) between major sections.",
+      "Do prioritize large, high-quality product imagery."
+    ],
+    "donts": [
+      "Don't use border-left greater than 1px as a colored stripe on cards or alerts.",
+      "Don't use neon gradients or 'glassmorphism' effects."
+    ]
+  }
+}

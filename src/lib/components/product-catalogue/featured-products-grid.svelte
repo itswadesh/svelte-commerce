@@ -13,7 +13,7 @@
 		</div>
 	</div>
 {:else}
-	<div class="!-z-10 grid grid-cols-2 gap-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+	<div class="!-z-10 grid grid-cols-2 gap-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
 		{#each data || [] as p}
 			<Product
 				product={{

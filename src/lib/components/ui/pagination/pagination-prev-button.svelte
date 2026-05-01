@@ -8,8 +8,8 @@
 </script>
 
 {#snippet Fallback()}
-	<span>Previous</span>
 	<ChevronLeft class="size-4" />
+	<span>Previous</span>
 {/snippet}
 
 <PaginationPrimitive.PrevButton

@@ -29,7 +29,7 @@
 	image={data?.page?.categories && data?.page?.categories[0]?.banner}
 />
 
-<div class="mb-3 mt-2 hidden lg:container lg:mx-auto lg:block">
+<div class="mb-3 mt-5 hidden lg:container lg:mx-auto lg:block">
 	<Breadcrumb categoryHierarchy={data?.products?.categoryHierarchy} />
 </div>
 

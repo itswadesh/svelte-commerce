@@ -28,7 +28,7 @@ let loading = $state(false)
 	image={data.page?.logo ?? ''}
 />
 
-<div class="mb-3 mt-2 hidden lg:container lg:mx-auto lg:block">
+<div class="mb-3 mt-5 hidden lg:container lg:mx-auto lg:block">
 	<Breadcrumb categoryHierarchy={data?.products?.categoryHierarchy} />
 </div>
 
@@ -50,8 +50,8 @@ let loading = $state(false)
 		</div>
 
 	<div class="flex-1">
-		<div class="mb-4 flex flex-col items-start gap-2">
-			<h1 class="text-2xl font-bold">
+		<div class="mb-2 flex flex-col items-start gap-2">
+			<h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl uppercase">
 				{#if page.url.searchParams.get('search')}
 					Search Results: "{page.url.searchParams.get('search')}"
 				{:else if data.products?.categoryHierarchy?.length > 0}
@@ -60,45 +60,52 @@ let loading = $state(false)
 					All Products
 				{/if}
 			</h1>
+			<div class="h-1 w-12 bg-primary"></div>
 		</div>
 
-		<div class="flex flex-row items-center justify-end md:hidden">
-				<span class="text-sm font-normal text-gray-400">Sort by:</span>
-				<Select
-					class="!mb-0"
-					id="sort-by"
-					value={selectedSort}
-					data={sortOptions}
-					optionSelected={(value: string) => selectSort(value)}
-				/>
+		{#if !loading && data.products.data.length}
+			<div class="mb-6 flex flex-row items-center justify-between border-b border-gray-100 pb-4">
+				<div class="flex flex-col">
+					<span class="text-sm font-bold text-gray-600 dark:text-gray-200 uppercase tracking-widest">
+						{data.products.count > 999 ? '1000+' : data.products.count} Products
+					</span>
+				</div>
+
+				<div class="flex items-center gap-2">
+					<span class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Sort by</span>
+					<Select
+						class="!mb-0 min-w-[140px] md:min-w-[180px]"
+						id="sort-by"
+						value={selectedSort}
+						data={sortOptions}
+						optionSelected={(value: string) => selectSort(value)}
+					/>
+				</div>
 			</div>
+		{/if}
 
 		{#if loading}
-			<ul class="mt-4 grid w-full grid-cols-1 gap-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+			<ul class="mt-4 grid w-full grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 				{#each { length: 8 } as _}
 					<li class="w-full">
-						<Skeleton class="size-full min-h-56 bg-gray-100" />
+						<Skeleton class="aspect-[3/4] w-full rounded-lg bg-gray-100" />
 					</li>
 				{/each}
 			</ul>
 		{:else}
 			{#if !data.products.data.length}
-				<div class="flex h-96 items-center justify-center">
-					<p class="text-sm text-muted-foreground">No products found</p>
+				<div class="flex h-96 flex-col items-center justify-center space-y-4">
+					<p class="text-lg font-medium text-gray-500">No products found</p>
+					<a href="/products" class="text-sm font-bold uppercase tracking-widest text-primary underline underline-offset-4">Clear all filters</a>
 				</div>
 			{:else}
-				<div class="hidden flex-col sm:flex">
-					<span class="text-lg font-bold text-gray-800">
-						{data.products.count > 999 ? '1000+' : data.products.count} Products
-					</span>
-				</div>
-				<div class="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-2 sm:gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 auto-rows-auto">
+				<div class="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 auto-rows-auto">
 					{#each data.products.data as product}
 						<ProductCard {product} />
 					{/each}
 				</div>
 			{/if}
-			<div class="mt-20">
+			<div class="pb-20">
 				<Pagination noOfPage={data.products.totalPages} />
 			</div>
 		{/if}

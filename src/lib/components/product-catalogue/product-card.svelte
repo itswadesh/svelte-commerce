@@ -15,19 +15,20 @@
 </script>
 
 <ProductCardRenderer {product} {aspectRatio}>
+{console.log(product.thumbnail || product?.image_url)}
 	{#snippet content({ aspectHeight, aspectWidth, handleCardClick, changeQuantity, addToCart })}
 		<button
 			onclick={handleCardClick}
 			class="aspect-[{page?.data?.store?.productImageAspectRatio?.replace(
 				':',
 				'/'
-			)}] group mb-4 flex w-full flex-col justify-start overflow-hidden rounded-none border-none shadow-none transition-colors duration-300 hover:shadow-sm dark:bg-gray-800 dark:text-white"
+			)}] group mb-4 flex w-full flex-col justify-start overflow-hidden rounded-lg border-none bg-white shadow-none transition-all duration-300 dark:bg-gray-800 dark:text-white"
 			aria-label="Product card for {product.name}"
 		>
-			<div class="group flex h-full w-full overflow-hidden">
+			<div class="group relative flex h-full w-full overflow-hidden bg-gray-50 dark:bg-gray-900">
 				{#if product.tag}
 					<div class="absolute left-0 top-0 z-30 max-h-[20px] max-w-fit px-3 {product.tag.color}" role="status">
-						<p class="text-[12px] text-white">{product.tag.title}</p>
+						<p class="text-[10px] font-bold uppercase tracking-wider text-white">{product.tag.title}</p>
 					</div>
 				{/if}
 				<a
@@ -41,7 +42,7 @@
 							alt="{product.title || product.name} product image"
 							height="200"
 							width={String(200 * (aspectWidth / aspectHeight))}
-							class="inset-0 h-[200px] object-contain transition-transform duration-300"
+							class="inset-0 h-[200px] object-contain transition-transform duration-500"
 							placeholder-class="bg-gray-300 dark:bg-gray-700"
 						/>
 					{:else}
@@ -51,7 +52,7 @@
 
 				{#if !hideCartControls}
 					<div
-						class="relative z-10 flex w-full items-center p-0 opacity-100 duration-300 laptop:absolute laptop:bottom-0 laptop:translate-y-full laptop:transform laptop:opacity-0 laptop:transition-all laptop:group-hover:translate-y-0 laptop:group-hover:opacity-100"
+						class="absolute bottom-0 left-0 right-0 z-10 flex w-full translate-y-full items-center p-0 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
 						role="group"
 						aria-label="Quantity controls for {product.name}"
 					>
@@ -60,83 +61,87 @@
 								disabled={!!cartState.isUpdatingCart}
 								variant="outline"
 								size="icon"
-								class="w-full rounded-none border-gray-300 p-0 text-xs transition-colors duration-300 dark:border-gray-500"
+								class="w-full rounded-none border-gray-200 bg-white/90 p-0 text-xs backdrop-blur-sm transition-colors hover:bg-white dark:border-gray-500"
 								onclick={() => changeQuantity(product, -1)}
 								aria-label="Decrease quantity of {product.name}"
 							>
-								<Minus aria-hidden="true" />
+								<Minus class="h-4 w-4" />
 							</Button>
-							{#if cartState.isUpdatingCart}
-								<LoadingDots />
-							{:else}
-								<span class="text-lg font-medium" role="status" aria-live="polite">
-									{cartState.cart?.lineItems?.find((item) => item.productId === product.id)?.qty}
-								</span>
-							{/if}
+							<div class="flex flex-1 items-center justify-center bg-white/90 text-sm font-bold backdrop-blur-sm">
+								{#if cartState.isUpdatingCart}
+									<LoadingDots />
+								{:else}
+									<span role="status" aria-live="polite">
+										{cartState.cart?.lineItems?.find((item) => item.productId === product.id)?.qty}
+									</span>
+								{/if}
+							</div>
 							<Button
 								disabled={!!cartState.isUpdatingCart}
 								variant="outline"
 								size="icon"
-								class="w-full rounded-none border-gray-300 p-0 text-xs transition-colors duration-300 dark:border-gray-500"
+								class="w-full rounded-none border-gray-200 bg-white/90 p-0 text-xs backdrop-blur-sm transition-colors hover:bg-white dark:border-gray-500"
 								onclick={() => changeQuantity(product, 1)}
 								aria-label="Increase quantity of {product.name}"
 							>
-								<Plus aria-hidden="true" />
+								<Plus class="h-4 w-4" />
 							</Button>
 						{:else}
 							<Button
 								disabled={!!cartState.isUpdatingCart}
-								variant="outline"
-								class="w-full rounded-none border-gray-300 text-xs transition-colors duration-300 dark:border-gray-500"
+								variant="default"
+								class="w-full rounded-none bg-gray-900 py-6 text-xs font-bold uppercase tracking-widest text-white transition-all duration-300 ease-out-expo hover:bg-primary active:scale-95"
 								onclick={() => addToCart(product)}
-								aria-label="Add {product.name} to cart"
 							>
 								{#if cartState.isUpdatingCart}
 									<LoadingDots />
 								{:else}
-									Add to Cart
+									Quick Add
 								{/if}
 							</Button>
 						{/if}
 					</div>
 				{/if}
 			</div>
-			<div class="mx-2 px-0 pt-1 text-left">
-				{#if page?.data?.store?.plugins?.isMultiVendor?.active}
-					<a href={`/store/${product?.vendor?.slug || product?.vendor?.id}`} class="text-xs font-bold tracking-wider text-gray-800 dark:text-gray-400"
+
+			<div class="flex flex-1 flex-col p-3 text-left">
+				<!-- {#if page?.data?.store?.plugins?.isMultiVendor?.active}
+					<a href={`/store/${product?.vendor?.slug || product?.vendor?.id}`} class="mb-1 text-[10px] font-bold uppercase tracking-widest text-gray-400"
 						>{product.vendor?.businessName}</a
 					>
-				{/if}
-				<a href="/products/{product.slug}">
-					<div class="line-clamp-2 max-h-[3rem] text-sm font-medium text-center text-gray-500 dark:text-gray-200">
-						{product.title?.length > 60 ? product.title?.slice(0, 60) + '...' : product.title}
-					</div>
+				{/if} -->
+
+				<a href="/products/{product.slug}" class="group/title flex-1">
+					<h3 class="line-clamp-2 text-sm sm:text-sm font-medium text-center leading-snug text-gray-900 transition-colors group-hover/title:text-primary dark:text-gray-100">
+						{product.title}
+					</h3>
 				</a>
-			</div>
-			<div class="mx-2 flex flex-col space-y-1 px-0">
-				<div class="flex items-baseline justify-center items-center gap-1 overflow-hidden whitespace-nowrap">
-					<div class="text-sm font-bold text-black dark:text-gray-100">
+
+				<div class="mt-2 flex items-baseline justify-center gap-2">
+					<span class="text-sm font-bold text-gray-900 dark:text-white">
 						{formatPrice(product.price, page?.data?.store?.currency?.code)}
-					</div>
+					</span>
 					{#if product.mrp && product.mrp > product.price}
-						<div class="text-xs text-gray-600 line-through">
+						<span class="text-xs text-gray-400 line-through">
 							{formatPrice(product.mrp, page?.data?.store?.currency?.code)}
-						</div>
-						<!-- {@const discount = Math.round(((product.mrp - product.price) / product.mrp) * 100)}
-						<div class="truncate text-xs font-thin text-[#00b852]">
-							{discount > 70 ? 70 : discount}% OFF
-						</div> -->
+						</span>
 					{/if}
+						<!-- <span class="text-[10px] font-bold text-orange-600 uppercase">
+							{Math.round(((product.mrp - product.price) / product.mrp) * 100)}% Off
+						</span> -->
 				</div>
+
 				{#if !hideVariations && product.variants.length > 1}
-					<div class="mt-2 flex space-x-2">
+					<div class="mt-3 flex gap-1.5">
 						{#each product.variants as variant, i (variant.id)}
-							<a href={`/products/${product.slug}?variant_id=${variant.id || ''}`}>
-								<img
-									src={variant.thumbnail || product.thumbnail}
-									alt="{product.title || product.name} in {variant.name || `Variant ${i + 1}`}"
-									class="h-8 w-8 rounded-full border-gray-300 object-contain dark:border-gray-600"
-								/>
+							<a href={`/products/${product.slug}?variant_id=${variant.id || ''}`} class="group/variant">
+								<div class="h-6 w-6 overflow-hidden rounded-full border border-gray-200 p-0.5 transition-colors group-hover/variant:border-primary">
+									<img
+										src={variant.thumbnail || product.thumbnail}
+										alt="{product.title} - {variant.name}"
+										class="h-full w-full rounded-full object-cover"
+									/>
+								</div>
 							</a>
 						{/each}
 					</div>
