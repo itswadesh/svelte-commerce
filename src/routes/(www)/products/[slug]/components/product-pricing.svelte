@@ -6,32 +6,32 @@
 	const productState = useProductState()
 </script>
 
-<div class="flex flex-col gap-1">
-	<div class="flex gap-2">
-		<div class="text-xl font-bold">
+<div class="flex flex-col gap-2 py-2 sm:py-4">
+	<div class="flex items-baseline gap-3">
+		<div class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
 			{formatPrice(productState.selectedVariant?.price || page.data?.product?.price, page?.data?.store?.currency?.code)}
 		</div>
 
 		{#if productState.selectedVariant?.price}
 			{#if productState.selectedVariant?.mrp && productState.selectedVariant?.mrp > productState.selectedVariant?.price}
-				<div class="text-md text-gray-600 line-through">
+				<div class="text-lg text-gray-400 line-through decoration-gray-300">
 					{formatPrice(productState.selectedVariant?.mrp, page?.data?.store?.currency?.code)}
 				</div>
-				<div class="text-md truncate font-medium text-[#00b852]">
+				<div class="text-sm font-bold uppercase tracking-widest text-orange-600">
 					{Math.round(((productState.selectedVariant?.mrp - productState.selectedVariant?.price) / productState.selectedVariant?.mrp) * 100)}% OFF
 				</div>
 			{/if}
 		{:else if page.data?.product?.price}
 			{#if page.data?.product?.mrp && page.data?.product?.mrp > page.data?.product?.price}
-				<div class="text-xl text-gray-600 line-through">
-					{formatPrice(page.data?.product?.price, page?.data?.store?.currency?.code)}
+				<div class="text-lg text-gray-400 line-through decoration-gray-300">
+					{formatPrice(page.data?.product?.mrp, page?.data?.store?.currency?.code)}
 				</div>
-				<div class="truncate text-xl font-medium text-[#00b852]">
+				<div class="text-sm font-bold uppercase tracking-widest text-orange-600">
 					{Math.round(((page.data?.product?.mrp - page.data?.product?.price) / page.data?.product?.mrp) * 100)}% OFF
 				</div>
 			{/if}
 		{/if}
 	</div>
-	<span class="text-sm text-green-600 font-medium">Inclusive of all taxes</span>
+	<span class="text-[10px] font-bold uppercase tracking-widest text-green-600 bg-green-50 px-2 py-1 rounded w-fit">Inclusive of all taxes</span>
 </div>
 

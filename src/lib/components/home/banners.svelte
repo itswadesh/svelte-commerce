@@ -26,7 +26,7 @@
 								  <div class="relative group">
                     <LazyImg aspectRatio="auto:auto" src={b.url} alt="Promotional Banner {ix + 1} - Shop the latest collection" class="w-full object-cover" fetchpriority={ix === 0 ? 'high' : 'auto'} loading={ix === 0 ? 'eager' : 'lazy'} />
                     <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/10">
-                      <span class="bg-white text-black px-6 py-2 rounded-none font-semibold uppercase tracking-widest shadow-lg">Shop Now</span>
+                      <a href="/products" class="bg-white text-black px-6 py-2 rounded-none font-semibold uppercase tracking-widest shadow-lg">Shop Now</a>
                     </div>
                   </div>
                 {/if}

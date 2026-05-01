@@ -3,238 +3,224 @@
 	import { Input } from '$lib/components/ui/input'
 	import { Label } from '$lib/components/ui/label'
 	import { Textarea } from '$lib/components/ui/textarea'
-	import { Check, AlertCircle } from '@lucide/svelte'
+	import { Check, AlertCircle, Mail, MessageSquare, Phone, MapPin, Send, Clock, ArrowRight } from '@lucide/svelte'
 	import { page } from '$app/state'
 	import { ContactUsRenderer } from '$lib/core/composables/index.js'
+	import { fade, fly } from 'svelte/transition'
 
 	let info = $state({
 		name: '',
 		email: '',
 		message: ''
 	})
+
+	const contactMethods = [
+		{
+			icon: Mail,
+			title: 'Email',
+			value: page?.data?.store?.businessEmail || 'support@sveltecommerce.com',
+			description: 'Our team will respond within 24 hours.'
+		},
+		{
+			icon: MessageSquare,
+			title: 'Live Chat',
+			value: 'Available 9am - 6pm',
+			description: 'Average response time: 5 minutes.'
+		}
+	]
 </script>
 
 <svelte:head>
-	<title>Contact us</title>
+	<title>Contact Us | Svelte Commerce</title>
 </svelte:head>
 
-<ContactUsRenderer bind:info>
-	{#snippet content({ error, success, nameError, messageError, emailError, loading, handleSubmit })}
-		<div class="container mx-auto max-w-4xl px-4 py-8">
-			<div class="grid md:grid-cols-2">
-				<div class="w-full bg-black p-6 text-white shadow-lg sm:p-8">
-					<h2 class="mb-4 text-2xl font-semibold">Contact Information</h2>
-
-					<p class="mb-6 text-zinc-300">Fill up the form and our Team will get back to you within 24 hours.</p>
-					<br />
-					<div class="prose-lg text-base leading-tight text-gray-300 [&>p]:my-2">{@html page?.data?.page?.content}</div>
-					<!-- {#if page?.data?.store?.businessPhone || page?.data?.store?.businessEmail}
-				<ul class="mb-6 flex flex-col gap-4">
-					{#if page?.data?.store?.businessPhone}
-						<li class="flex items-center gap-4">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-zinc-300" viewBox="0 0 20 20" fill="currentColor">
-								<path
-									d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"
-								></path>
-							</svg>
-							<p class="flex-1 text-zinc-300">{page?.data?.store?.businessPhone}</p>
-						</li>
-					{/if}
-
-					{#if page?.data?.store?.businessEmail}
-						<li class="flex items-center gap-4">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-zinc-300" viewBox="0 0 20 20" fill="currentColor">
-								<path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
-								<path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
-							</svg>
-							<p class="flex-1 text-zinc-300">{page?.data?.store?.businessEmail}</p>
-						</li>
-					{/if}
-					{#if page?.data?.store?.address_1}
-						<li class="flex items-center gap-4">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-zinc-300" viewBox="0 0 20 20" fill="currentColor">
-								<path
-									fill-rule="evenodd"
-									d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-									clip-rule="evenodd"
-								></path>
-							</svg>
-							<p class="flex-1 text-zinc-300">
-								{page?.data?.store?.address_1}, {page?.data?.store?.address_2}, {page?.data?.store?.city}, {page?.data?.store?.state}, {page?.data
-									?.store?.country?.name}
+<div class="min-h-screen bg-[#fafafa] py-12 md:py-24">
+	<div class="container mx-auto max-w-6xl px-4">
+		<ContactUsRenderer bind:info>
+			{#snippet content({ error, success, nameError, messageError, emailError, loading, handleSubmit })}
+				<div class="grid gap-12 lg:grid-cols-12 lg:items-start">
+					
+					<!-- Left Column: Content & Info -->
+					<div class="lg:col-span-5" in:fly={{ x: -20, duration: 600 }}>
+						<div class="mb-10">
+							<h1 class="text-4xl font-black tracking-tight text-gray-900 md:text-5xl lg:text-6xl">
+								Let's Start a <span class="text-primary">Conversation</span>
+							</h1>
+							<p class="mt-6 text-lg leading-relaxed text-gray-500">
+								Have a question about an order or just want to say hi? We're here to help you create the perfect shopping experience.
 							</p>
-						</li>
-					{/if}
-			</ul>
-			{/if} -->
+						</div>
 
-					{#if page?.data?.store?.plugins?.socialSharingButtons?.active}
-						<div class="flex items-center gap-4">
-							{#each Object.entries(page?.data?.store?.plugins?.socialSharingButtons || {}) as [key, social]}
-								{#if key !== 'active' && key !== 'position' && social}
-									<a
-										href={social as string}
-										target="_blank"
-										rel="noopener noreferrer"
-										class="text-zinc-300 transition-colors hover:text-white"
-										aria-label={`Visit our ${key} page`}
-									>
-										{#if key === 'twitter'}
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												class="h-5 w-5"
-												viewBox="0 0 24 24"
-												stroke-width="1.5"
-												stroke="currentColor"
-												fill="none"
-												stroke-linecap="round"
-												stroke-linejoin="round"
-											>
-												<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-												<path
-													d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z"
-												></path>
-											</svg>
-										{:else if key === 'facebook'}
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												class="h-5 w-5"
-												viewBox="0 0 24 24"
-												stroke-width="1.5"
-												stroke="currentColor"
-												fill="none"
-												stroke-linecap="round"
-												stroke-linejoin="round"
-											>
-												<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-												<path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3"></path>
-											</svg>
-										{:else if key === 'linkedin'}
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												class="h-5 w-5"
-												viewBox="0 0 24 24"
-												stroke-width="1.5"
-												stroke="currentColor"
-												fill="none"
-												stroke-linecap="round"
-												stroke-linejoin="round"
-											>
-												<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-												<rect x="4" y="4" width="16" height="16" rx="2"></rect>
-												<line x1="8" y1="11" x2="8" y2="16"></line>
-												<line x1="8" y1="8" x2="8" y2="8.01"></line>
-												<line x1="12" y1="16" x2="12" y2="11"></line>
-												<path d="M16 16v-3a2 2 0 0 0 -4 0"></path>
-											</svg>
-										{:else if key === 'instagram'}
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												class="h-5 w-5"
-												viewBox="0 0 24 24"
-												stroke-width="1.5"
-												stroke="currentColor"
-												fill="none"
-												stroke-linecap="round"
-												stroke-linejoin="round"
-											>
-												<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-												<rect x="4" y="4" width="16" height="16" rx="4"></rect>
-												<circle cx="12" cy="12" r="3"></circle>
-												<line x1="16.5" y1="7.5" x2="16.5" y2="7.501"></line>
-											</svg>
-										{/if}
-									</a>
-								{/if}
+						<!-- Contact Methods Grid -->
+						<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-1">
+							{#each contactMethods as method}
+								<div class="group flex items-start gap-5 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:shadow-md">
+									<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/5 text-primary transition-colors group-hover:bg-primary group-hover:text-white">
+										<method.icon class="h-6 w-6" />
+									</div>
+									<div>
+										<h3 class="font-bold text-gray-900">{method.title}</h3>
+										<p class="mt-1 font-medium text-primary">{method.value}</p>
+										<p class="mt-1 text-sm text-gray-400">{method.description}</p>
+									</div>
+								</div>
 							{/each}
 						</div>
-					{/if}
-				</div>
 
-				<div class="w-full">
-					{#if success}
-						<div class="w-full border bg-white p-6 text-center shadow-lg">
-							<div class="mb-4 flex justify-center">
-								<div class="rounded-full bg-green-100 p-3">
-									<Check class="h-8 w-8 text-green-600" />
-								</div>
+						<!-- Socials or Additional Info -->
+						<div class="mt-10 border-t border-gray-100 pt-10">
+							<div class="prose-lg text-sm leading-relaxed text-gray-400 prose-p:my-0 prose-li:my-0">
+								{@html page?.data?.page?.content}
 							</div>
-							<h2 class="mb-2 text-2xl font-bold">Thank you for contacting us!</h2>
-							<p class="text-gray-600">We'll get back to you as soon as possible.</p>
 						</div>
-					{:else}
-						<div class="w-full border bg-white p-6 shadow-lg">
-							<div class="mb-6">
-								<h1 class="text-2xl font-semibold">Contact Us</h1>
-								<p class="text-sm text-gray-500">Fill out the form below and we'll get back to you as soon as possible.</p>
+					</div>
+
+					<!-- Right Column: Form -->
+					<div class="lg:col-span-7" in:fly={{ x: 20, duration: 600, delay: 200 }}>
+						{#if success}
+							<div in:fade class="flex min-h-[500px] flex-col items-center justify-center rounded-3xl border border-gray-100 bg-white p-8 text-center shadow-xl md:p-12">
+								<div class="relative mb-8">
+									<div class="absolute inset-0 scale-150 animate-ping rounded-full bg-green-100 opacity-20"></div>
+									<div class="relative flex h-20 w-24 items-center justify-center rounded-full bg-green-50">
+										<Check class="h-10 w-10 text-green-600" />
+									</div>
+								</div>
+								<h2 class="text-3xl font-bold text-gray-900">Message Sent!</h2>
+								<p class="mt-4 max-w-sm text-lg text-gray-500">
+									Thank you for reaching out. A member of our team will get back to you shortly.
+								</p>
+								<!-- <Button 
+									variant="outline" 
+									class="mt-10 h-12 px-8 font-bold uppercase tracking-widest transition-all hover:bg-gray-50"
+									onclick={() => { success = false
+										 info = { name: '', email: '', message: '' } }}
+								>
+									Send Another Message
+								</Button> -->
 							</div>
-							<div>
-								{#if error}
-									<div class="mb-4 flex items-center gap-2 bg-red-50 p-3 text-red-600">
-										<AlertCircle class="h-5 w-5" />
-										<p class="text-sm">{error}</p>
+						{:else}
+							<div class="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-2xl">
+								<div class="bg-gray-50/50 p-8 md:p-10">
+									<h2 class="text-2xl font-bold text-gray-900">Send us a message</h2>
+									<p class="mt-2 text-gray-500">Required fields are marked with an asterisk (*)</p>
+								</div>
+
+								<form class="p-8 space-y-6 md:p-10" onsubmit={handleSubmit}>
+									{#if error}
+										<div class="flex items-center gap-3 rounded-xl bg-red-50 p-4 text-red-600" in:fade>
+											<AlertCircle class="h-5 w-5 shrink-0" />
+											<p class="text-sm font-medium">{error}</p>
+										</div>
+									{/if}
+
+									<div class="grid gap-6 sm:grid-cols-2">
+										<div class="space-y-2">
+											<Label for="name" class="text-xs font-black uppercase tracking-widest text-gray-400">Full Name *</Label>
+											<Input
+												id="name"
+												placeholder="John Doe"
+												bind:value={info.name}
+												class="h-12 border-gray-100 bg-gray-50/30 transition-all focus:bg-white focus:ring-primary/20 {nameError ? 'border-red-500 focus:ring-red-500/20' : ''}"
+												required
+											/>
+											{#if nameError}
+												<p class="text-[10px] font-bold uppercase tracking-tight text-red-500">{nameError}</p>
+											{/if}
+										</div>
+
+										<div class="space-y-2">
+											<Label for="email" class="text-xs font-black uppercase tracking-widest text-gray-400">Email Address *</Label>
+											<Input
+												id="email"
+												type="email"
+												placeholder="john@example.com"
+												bind:value={info.email}
+												class="h-12 border-gray-100 bg-gray-50/30 transition-all focus:bg-white focus:ring-primary/20 {emailError ? 'border-red-500 focus:ring-red-500/20' : ''}"
+												required
+											/>
+											{#if emailError}
+												<p class="text-[10px] font-bold uppercase tracking-tight text-red-500">{emailError}</p>
+											{/if}
+										</div>
 									</div>
-								{/if}
-								<form class="grid gap-4" onsubmit={handleSubmit}>
-									<div class="grid gap-2">
-										<Label for="name">Name</Label>
-										<Input
-											id="name"
-											placeholder="Enter your name"
-											bind:value={info.name}
-											class={nameError ? 'border-red-500 focus:border-red-500' : ''}
-											required
-										/>
-										{#if nameError}
-											<p class="text-sm text-red-500">{nameError}</p>
-										{/if}
-									</div>
-									<div class="grid gap-2">
-										<Label for="email">Email</Label>
-										<Input
-											id="email"
-											type="email"
-											placeholder="Enter your email"
-											bind:value={info.email}
-											class={emailError ? 'border-red-500 focus:border-red-500' : ''}
-											required
-										/>
-										{#if emailError}
-											<p class="text-sm text-red-500">{emailError}</p>
-										{/if}
-									</div>
-									<div class="grid gap-2">
-										<Label for="message">Message</Label>
+
+									<div class="space-y-2">
+										<Label for="message" class="text-xs font-black uppercase tracking-widest text-gray-400">Your Message *</Label>
 										<Textarea
 											id="message"
-											placeholder="Enter your message"
-											class={messageError ? 'border-red-500 focus:border-red-500' : ''}
+											placeholder="Tell us how we can help..."
+											rows={5}
+											class="min-h-[150px] resize-none border-gray-100 bg-gray-50/30 transition-all focus:bg-white focus:ring-primary/20 {messageError ? 'border-red-500 focus:ring-red-500/20' : ''}"
 											bind:value={info.message}
 											required
 										/>
 										{#if messageError}
-											<p class="text-sm text-red-500">{messageError}</p>
+											<p class="text-[10px] font-bold uppercase tracking-tight text-red-500">{messageError}</p>
 										{/if}
 									</div>
-									<Button type="submit" class="w-full" disabled={loading}>
+
+									<Button 
+										type="submit" 
+										class="group h-14 w-full text-base font-bold uppercase tracking-[0.2em] shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.98]" 
+										disabled={loading}
+									>
 										{#if loading}
-											<div class="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+											<div class="mr-3 h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white"></div>
+											Processing...
+										{:else}
+											<Send class="mr-2 h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+											Send Message
 										{/if}
-										{loading ? 'Sending...' : 'Submit'}
 									</Button>
+
+									<p class="text-center text-[10px] font-medium text-gray-400">
+										By clicking "Send Message", you agree to our 
+										<a href="/terms-and-conditions" class="text-primary hover:underline">Terms</a> and 
+										<a href="/privacy-policy" class="text-primary hover:underline">Privacy Policy</a>.
+									</p>
 								</form>
 							</div>
-						</div>
-					{/if}
+						{/if}
+					</div>
 				</div>
-			</div>
-		</div>
-	{/snippet}
-</ContactUsRenderer>
+			<!-- {#if !success}
+				<div class="mt-24 grid gap-8 border-t border-gray-100 pt-16 sm:grid-cols-3">
+					<div class="flex items-center gap-4">
+						<div class="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-gray-100">
+							<Clock class="h-5 w-5 text-gray-400" />
+						</div>
+						<div>
+							<h4 class="text-sm font-bold text-gray-900">Support Hours</h4>
+							<p class="text-xs text-gray-500">Mon - Fri: 9am - 6pm EST</p>
+						</div>
+					</div>
+					<div class="flex items-center gap-4">
+						<div class="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-gray-100">
+							<MapPin class="h-5 w-5 text-gray-400" />
+						</div>
+						<div>
+							<h4 class="text-sm font-bold text-gray-900">Global Offices</h4>
+							<p class="text-xs text-gray-500">NY, London, Tokyo</p>
+						</div>
+					</div>
+					<div class="flex items-center gap-4">
+						<div class="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-gray-100">
+							<Check class="h-5 w-5 text-gray-400" />
+						</div>
+						<div>
+							<h4 class="text-sm font-bold text-gray-900">Quick Response</h4>
+							<p class="text-xs text-gray-500">Guaranteed 24h turnaround</p>
+						</div>
+					</div>
+				</div>
+			{/if} -->
+			{/snippet}
+		</ContactUsRenderer>
+	</div>
+</div>
 
 <style>
-	p {
-		margin: 0;
+	:global(body) {
+		background-color: #fafafa;
 	}
 </style>
-

@@ -84,7 +84,7 @@
 				{/each}
 			</div>
 
-			<div class="prose prose-lg prose-gray">
+			<div class="prose prose-lg prose-gray prose-p:my-0 prose-li:my-0">
 				{@html post.content}
 			</div>
 		</article>
@@ -99,4 +99,3 @@
 		</div>
 	{/if}
 </div>
-
