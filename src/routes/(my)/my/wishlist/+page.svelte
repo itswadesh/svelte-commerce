@@ -1,72 +1,129 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button'
 	import { MyWishlistRenderer } from '$lib/core/composables/index.js'
-	import { X, Heart } from '@lucide/svelte'
+	import { Heart, ShoppingBag, ArrowRight, LoaderCircle, Trash2 } from '@lucide/svelte'
+	import { fade, fly } from 'svelte/transition'
+	import { page } from '$app/state'
+	import { formatPrice } from '$lib/core/utils/index.js'
 </script>
 
 <svelte:head>
-	<title>My Wishlist</title>
+	<title>My Wishlist | Svelte Commerce</title>
 </svelte:head>
 
 <MyWishlistRenderer>
 	{#snippet content({ loading, wishlistItems, moveToCart, removeFromWishlist })}
-		<div class="mx-auto max-w-7xl px-4 py-8">
-			<!-- <h1 class="mb-8 text-3xl font-bold">My Wishlist</h1> -->
+		<div class="mx-auto max-w-7xl px-4 py-8 md:py-12">
+			<!-- Header -->
+			<div class="mb-10 flex items-center justify-between">
+				<div>
+					<h1 class="text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">My Wishlist</h1>
+					<p class="mt-2 text-lg text-gray-500">Items you've saved for later.</p>
+				</div>
+				{#if wishlistItems.length > 0}
+					<div class="hidden md:block">
+						<span class="rounded-full border border-gray-200 bg-gray-100 px-4 py-1.5 text-sm font-semibold text-gray-600">
+							{wishlistItems.length}
+							{wishlistItems.length === 1 ? 'Item' : 'Items'}
+						</span>
+					</div>
+				{/if}
+			</div>
+
 			{#if loading}
-				<p>Loading ...</p>
+				<div class="flex min-h-[400px] items-center justify-center">
+					<LoaderCircle class="h-8 w-8 animate-spin text-primary" />
+				</div>
 			{:else if wishlistItems.length === 0}
-				<div class="flex flex-col items-center justify-center py-12">
-					<Heart class="mb-4 h-16 w-16 text-gray-400" />
-					<p class="text-lg text-gray-600">Your wishlist is empty</p>
-					<a href="/products" class="mt-4">
-						<Button variant="outline">Browse Products</Button>
-					</a>
+				<div in:fade class="flex flex-col items-center justify-center py-20 text-center">
+					<div class="relative mb-6">
+						<div class="absolute inset-0 scale-150 animate-pulse rounded-full bg-gray-50"></div>
+						<div class="relative flex h-24 w-24 items-center justify-center rounded-full border border-gray-100 bg-white shadow-sm">
+							<Heart class="h-10 w-10 text-gray-300" />
+						</div>
+					</div>
+					<h2 class="text-2xl font-bold text-gray-900">Your wishlist is empty</h2>
+					<p class="mt-2 max-w-xs text-gray-500">Save items you like to keep track of them and buy them later.</p>
+					<div class="mt-8">
+						<Button href="/products" class="h-12 px-8 font-semibold shadow-lg transition-all hover:scale-105 active:scale-95">
+							Browse Products
+							<ArrowRight class="ml-2 h-4 w-4" />
+						</Button>
+					</div>
 				</div>
 			{:else}
-				<div class="grid grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-					{#each wishlistItems as item}
-						<div class="flex flex-col">
-							<a href="/products/{item?.product?.slug}?variant_id={item.variantId}">
-								<div class="relative">
-									<button
-										class="absolute right-2 top-2 z-10 text-gray-400 hover:text-gray-600"
-										onclick={(e) => {
-											e.preventDefault()
-											e.stopPropagation()
-											removeFromWishlist(item?.productId, item?.variantId)
-										}}
+				<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
+					{#each wishlistItems as item, i}
+						<div
+							in:fly={{ y: 20, duration: 400, delay: i * 50 }}
+							class="group relative flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] hover:border-gray-200 sm:flex-row"
+						>
+							<!-- Product Image -->
+							<a
+								href="/products/{item?.product?.slug}?variant_id={item.variantId}"
+								class="relative block aspect-[4/5] w-full overflow-hidden bg-gray-50 sm:aspect-auto sm:w-1/3"
+							>
+								<img
+									src={item?.product?.thumbnail}
+									alt={item?.product?.title}
+									class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+								/>
+							</a>
+
+							<!-- Product Info -->
+							<div class="flex flex-1 flex-col p-6">
+								<div class="flex flex-1 flex-col">
+									<h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">
+										{item?.product?.brand?.name || 'Brand'}
+									</h3>
+									<a
+										href="/products/{item?.product?.slug}?variant_id={item.variantId}"
+										class="mt-1 text-lg font-bold text-gray-900 transition-colors hover:text-primary"
 									>
-										<X class="h-5 w-5" />
-									</button>
+										{item?.product?.title}
+									</a>
 
-									<div class="aspect-square w-full overflow-hidden">
-										<img src={item?.product?.thumbnail} alt={item?.product?.title} class="h-full w-full object-contain" />
+									<div class="mt-3 flex items-center gap-2">
+										<span class="text-xl font-bold text-gray-900">
+											{formatPrice(item?.product?.price, page?.data?.store?.currency?.code)}
+										</span>
+										{#if item?.product?.mrp > item?.product?.price}
+											<span class="text-sm text-gray-400 line-through">
+												{formatPrice(item?.product?.mrp, page?.data?.store?.currency?.code)}
+											</span>
+											<span class="text-sm font-bold text-orange-600">
+												({Math.round(((item?.product?.mrp - item?.product?.price) / item?.product?.mrp) * 100)}% OFF)
+											</span>
+										{/if}
 									</div>
 								</div>
 
-								<div class="mt-2">
-									<p class="font-[Marcellus] text-sm font-normal">{item?.product?.title}</p>
-									<div class="mt-1 flex items-center gap-2">
-										<span class="font-[Montserrat] font-bold">${item?.product?.price.toFixed(2)}</span>
-										<span class="font-[Montserrat] text-sm text-[#9B111E] line-through">${item?.product?.mrp.toFixed(2)}</span>
-									</div>
-								</div>
-
-								<!-- Divider -->
-								<div class="my-2 border-t border-black"></div>
-								<div class="flex items-center justify-center font-[Montserrat]">
+								<!-- Actions -->
+								<div class="mt-8 flex items-center gap-3">
 									<button
-										class="text-xs font-semibold text-[#273B2D]"
+										class="flex flex-1 items-center justify-center gap-2 rounded-full border border-gray-900 bg-white py-3 text-[10px] font-bold uppercase tracking-widest text-gray-900 transition-all hover:bg-gray-900 hover:text-white active:scale-95"
 										onclick={(e) => {
 											e.preventDefault()
 											e.stopPropagation()
 											moveToCart(item)
 										}}
 									>
+										<ShoppingBag class="h-3.5 w-3.5" />
 										Move to Cart
 									</button>
+									<button
+										class="flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 text-gray-400 transition-all hover:border-red-500 hover:bg-red-50 hover:text-red-500 active:scale-95"
+										onclick={(e) => {
+											e.preventDefault()
+											e.stopPropagation()
+											removeFromWishlist(item?.productId, item?.variantId)
+										}}
+										title="Remove from wishlist"
+									>
+										<Trash2 class="h-4 w-4" />
+									</button>
 								</div>
-							</a>
+							</div>
 						</div>
 					{/each}
 				</div>
@@ -75,3 +132,8 @@
 	{/snippet}
 </MyWishlistRenderer>
 
+<style>
+	:global(body) {
+		background-color: #fafafa;
+	}
+</style>

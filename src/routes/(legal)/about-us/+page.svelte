@@ -20,7 +20,7 @@
 			<hr class="mt-2.5 w-20 border-t-4 border-zinc-900 opacity-50" />
 		</div>
 
-		<div class="prose-lg">
+		<div class="prose-lg prose-p:my-0 prose-li:my-0">
 			{@html data?.page?.content}
 		</div>
 	</div>
