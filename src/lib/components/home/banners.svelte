@@ -2,6 +2,7 @@
 	import Autoplay from 'embla-carousel-autoplay'
 	import * as Carousel from '$lib/components/ui/carousel'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
+	import { goto } from '$app/navigation'
 	let { sliderBannersDesktop, sliderBannersMobile } = $props()
 
   const isVideoURL = (url: string) => /\.(mp4|webm|mkv)$/.test(url)
@@ -28,9 +29,9 @@
                     <div class="absolute inset-0 flex flex-col items-center justify-center bg-black/10 transition-opacity duration-500 group-hover:bg-black/20">
                       <div class="translate-y-4 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
                         <span class="mb-6 block text-center text-sm font-black uppercase tracking-[0.4em] text-white/90">Curated for you</span>
-                        <div class="relative text-center overflow-hidden rounded-full bg-white px-10 py-4 text-sm font-black uppercase tracking-widest text-black shadow-2xl transition-all hover:scale-105 active:scale-95">
+                        <a href="/products" class="relative text-center overflow-hidden rounded-full bg-white px-10 py-4 text-sm font-black uppercase tracking-widest text-black shadow-2xl transition-all hover:scale-105 active:scale-95">
                           Shop Now
-                        </div>
+											</a>
                       </div>
                     </div>
                   </div>
