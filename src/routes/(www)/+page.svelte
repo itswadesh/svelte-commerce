@@ -204,20 +204,25 @@
 		</div>
 	{:else}
 		<FeaturedProductsGrid
-			data={homepageModule.featuredProducts}
+			data={homepageModule.featuredProducts?.slice(0, 18)}
 			displayProduct={(prod: Product) => homepageModule.showProduct(prod)}
 			loadMore={homepageModule.loadMoreFeaturedProducts}
 		/>
 		{#if homepageModule.hasMoreFeaturedProducts}
 			<div class="mt-16 flex justify-center pb-12">
 				<button
-					class="group relative flex items-center justify-center gap-2 overflow-hidden rounded-full bg-primary px-12 py-4 text-sm font-bold uppercase tracking-widest text-primary-foreground shadow-lg transition-all hover:scale-105 hover:shadow-xl active:scale-95"
+					class="group relative flex items-center justify-center gap-3 overflow-hidden rounded-full bg-foreground px-12 py-5 text-sm font-black uppercase tracking-[0.2em] text-background shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95"
 					onclick={homepageModule.loadMoreFeaturedProducts}
 				>
-					<span class="relative z-10">Discover More</span>
+					<!-- Shimmer effect -->
+					<div
+						class="absolute -inset-full top-0 z-0 block h-full w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-shimmer"
+					></div>
+
+					<span class="relative z-10 transition-colors duration-300">Discover More</span>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
-						class="h-4 w-4 transition-transform group-hover:translate-y-1"
+						class="relative z-10 h-5 w-5 transition-transform duration-300 group-hover:translate-y-1 group-hover:animate-bounce"
 						fill="none"
 						viewBox="0 0 24 24"
 						stroke="currentColor"
