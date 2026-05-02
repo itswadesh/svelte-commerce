@@ -25,8 +25,8 @@
 
 <svelte:head>
 	{#if breadcrumbSchema}
-	  {@html `<script type="application/ld+json">
-      ${breadcrumbSchema}
-	  </script>`}
+		<script type="application/ld+json">
+			{@html breadcrumbSchema}
+		</script>
 	{/if}
 </svelte:head>

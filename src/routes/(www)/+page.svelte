@@ -17,7 +17,7 @@
 	import { HomepageModule } from '$lib/core/composables/index.js'
 	import { timestampToAgo } from '$lib/core/utils/index.js'
   import Slider from '$lib/components/home/slider.svelte'
-	import { page } from '$app/state'
+	import { PUBLIC_LITEKART_DOMAIN } from '$env/static/public'
 
 	// Type definition for page data needed for this component
 	interface ExtendedPage {
@@ -37,7 +37,7 @@
 	}
 
 	// Cast data.page to ExtendedPage type for TypeScript
-	const homepage = (data?.page || {}) as ExtendedPage
+	const page = (data?.page || {}) as ExtendedPage
 
 	const homepageModule = new HomepageModule()
 </script>
@@ -46,7 +46,7 @@
 
 <GoogleStructuredDataOrganization
 	name={data?.store?.name || 'ArialShop'}
-	url={page.url.origin}
+	url={`https://${PUBLIC_LITEKART_DOMAIN}`}
 	logo={data?.store?.logo}
 	description={data?.store?.description}
 	sameAs={data?.store?.socialSharing?.active ? (Object.values(data?.store?.socialSharing || {}).filter((link: any) => typeof link === 'string' && link.startsWith('http')) as string[]) : []}
@@ -66,16 +66,16 @@
 
 <GoogleStructuredDataWebsite
 	name={data?.store?.name || 'ArialShop'}
-	url={page.url.origin}
+	url={`https://${PUBLIC_LITEKART_DOMAIN}`}
 	description={data?.store?.description}
-	searchUrl={`${page.url.origin}/products?q={search_term_string}`}
+	searchUrl={`https://${PUBLIC_LITEKART_DOMAIN}/search?q={search_term_string}`}
 />
 
 <SeoHeader
-	metaTitle={homepage?.metaTitle || "Arialshop — Women's Fashion, Dresses & Co-ord Sets | Up to 70% Off"}
-	metaDescription={homepage?.metaDescription || "Welcome to Arialshop, your ultimate destination for trendy women's fashion. Discover our exclusive collection of stylish dresses, elegant co-ord sets, and more with amazing discounts of up to 70% off. Enjoy premium quality apparel, free delivery on orders over ₹999, and easy returns. Shop the latest fashion trends at Arialshop today!"}
-	metaKeywords={homepage?.metaKeywords}
-	image={homepage?.logo}
+	metaTitle={page?.metaTitle || "Arialshop — Women's Fashion, Dresses & Co-ord Sets | Up to 70% Off"}
+	metaDescription={page?.metaDescription || "Welcome to Arialshop, your ultimate destination for trendy women's fashion. Discover our exclusive collection of stylish dresses, elegant co-ord sets, and more with amazing discounts of up to 70% off. Enjoy premium quality apparel, free delivery on orders over ₹999, and easy returns. Shop the latest fashion trends at Arialshop today!"}
+	metaKeywords={page?.metaKeywords}
+	image={page?.logo}
 />
 
 <h1 class="sr-only">Shop Women's Fashion Online — Dresses, Co-ord Sets & More</h1>
@@ -114,12 +114,12 @@
 {/if} -->
 
 <div class="relative w-full">
-	{#if homepageModule.loading || !homepage?.desktopBanners}
+	{#if homepageModule.loading || !page?.desktopBanners}
 		<div class="relative aspect-[16/6] max-h-[50vh] w-full">
 			<Skeleton class="h-full w-full rounded-none" />
 		</div>
-	{:else if homepage?.desktopBanners?.[0]?.url || homepage?.mobileBanners?.[0]?.url}
-		<Banners sliderBannersDesktop={homepage?.desktopBanners} sliderBannersMobile={homepage?.mobileBanners} />
+	{:else if page?.desktopBanners?.[0]?.url || page?.mobileBanners?.[0]?.url}
+		<Banners sliderBannersDesktop={page?.desktopBanners} sliderBannersMobile={page?.mobileBanners} />
 	{:else}
 		<!-- Fallback Hero Section when no banners are configured -->
 		<div class="relative bg-gradient-to-r from-gray-900 to-gray-700 py-20 px-4 text-white">
@@ -151,7 +151,6 @@
 <div class="mb-8 container mx-auto">
 	<HomepageCategoryListWithImage categories={homepageModule.featuredCategories} loading={homepageModule.loading} />
 </div>
-
 
 <Collections />
 
