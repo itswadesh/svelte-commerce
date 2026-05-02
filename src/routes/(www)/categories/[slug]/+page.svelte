@@ -2,11 +2,9 @@
 	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
 	import GoogleStructuredDataBreadcrumb from '$lib/core/components/plugins/google-structured-data-breadcrumb.svelte'
 	import Breadcrumb from '$lib/components/ui/breadcrumb.svelte'
-	import { page } from '$app/state'
+	import { PUBLIC_LITEKART_DOMAIN } from '$env/static/public'
 
 	let { data } = $props()
-
-  const siteDomain = $derived(page.url.origin)
 </script>
 
 <SeoHeader
@@ -21,8 +19,8 @@
 </div>
 
 <GoogleStructuredDataBreadcrumb breadcrumbs={[
-	{ name: 'Home', item: siteDomain },
-	{ name: data.category.name, item: `${siteDomain}/${data.category.slug}` }
+	{ name: 'Home', item: `https://${PUBLIC_LITEKART_DOMAIN}` },
+	{ name: data.category.name, item: `https://${PUBLIC_LITEKART_DOMAIN}/categories/${data.category.slug}` }
 ]} />
 <div class="min-h-screen bg-gray-50">
 	<!-- Category Banner -->
