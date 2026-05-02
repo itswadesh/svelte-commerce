@@ -85,10 +85,10 @@ let loading = $state(false)
 		{/if}
 
 		{#if loading}
-			<ul class="mt-4 grid w-full grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-				{#each { length: 8 } as _}
+			<ul class="mt-4 grid w-full grid-cols-2 gap-1 sm:gap-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+				{#each { length: 12 } as _}
 					<li class="w-full">
-						<Skeleton class="aspect-[3/4] w-full rounded-lg bg-gray-100" />
+						<Skeleton class="aspect-square w-full rounded-lg bg-gray-100" />
 					</li>
 				{/each}
 			</ul>
@@ -99,7 +99,7 @@ let loading = $state(false)
 					<a href="/products" class="text-sm font-bold uppercase tracking-widest text-primary underline underline-offset-4">Clear all filters</a>
 				</div>
 			{:else}
-				<div class="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 auto-rows-auto">
+				<div class="grid grid-cols-2 gap-1 sm:gap-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 auto-rows-auto">
 					{#each data.products.data as product}
 						<ProductCard {product} />
 					{/each}

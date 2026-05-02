@@ -49,7 +49,7 @@
 		</div>
 
 	<div class="flex-1">
-		<div class="mb-4 flex flex-col items-start gap-2">
+		<div class="mb-4 flex flex-col items-start gap-2 md:px-5">
 			<h1 class="text-2xl font-bold capitalize">
 				{page.params.slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}
 			</h1>
@@ -78,10 +78,10 @@
 		{/if}
 
 		{#if loading}
-			<ul class="mt-4 grid w-full grid-cols-1 gap-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-				{#each { length: 8 } as _}
+			<ul class="mt-4 grid w-full grid-cols-2 gap-1 sm:gap-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+				{#each { length: 12 } as _}
 					<li class="w-full">
-						<Skeleton class="size-full min-h-56 bg-gray-100" />
+						<Skeleton class="aspect-square w-full rounded-lg bg-gray-100" />
 					</li>
 				{/each}
 			</ul>
@@ -91,7 +91,7 @@
 					<p class="text-sm text-muted-foreground">No products found</p>
 				</div>
 			{:else}
-				<div class="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 auto-rows-auto">
+				<div class="mt-4 grid grid-cols-2 gap-1 sm:gap-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 auto-rows-auto">
 					{#each data?.products?.data as product}
 						<ProductCard {product} />
 					{/each}
