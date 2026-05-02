@@ -1,4 +1,4 @@
- <script lang="ts">import Product from '$lib/components/product-catalogue/product-card.svelte'
+ <script lang="ts">import Product from '$lib/components/product-catalogue/product-card2.svelte'
   import { FeaturedProductsGrid } from '$lib/core/composables/index.js'
 
 	let { data, displayProduct, loadMore, hasMore = false, loading = false } = $props()
@@ -13,7 +13,7 @@
 		</div>
 	</div>
 {:else}
-	<div class="!-z-10 grid grid-cols-2 gap-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+	<div class="grid grid-cols-2 gap-1 sm:gap-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
 		{#each data || [] as p}
 			<Product
 				product={{

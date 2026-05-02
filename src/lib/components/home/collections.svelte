@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Product from '$lib/components/product-catalogue/product-card.svelte'
+	import Product from '$lib/components/product-catalogue/product-card2.svelte'
 	import { collectionService } from '$lib/core/services/index.js'
 	import { Carousel, CarouselContent, CarouselItem } from '$lib/components/ui/carousel/index.js'
 	import CarouselPrevious from '$lib/components/ui/carousel/carousel-previous.svelte'
@@ -12,9 +12,9 @@
 	{#snippet content({ displayProduct, collectionData })}
 		{#if collectionData.length > 0}
 			{#each collectionData as data, index}
-				<div class="py-16 {index % 2 === 1 ? 'bg-muted/30' : ''}">
+				<div class="py-10 {index % 2 === 1 ? 'bg-muted/30' : ''}">
 					<div class="container mx-auto px-4">
-						<div class="mb-10 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+						<div class="mb-6 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
 							<div class="text-left">
 								<h2 class="text-3xl font-extrabold tracking-tight text-foreground lg:text-4xl">
 									{data.name}
@@ -43,16 +43,13 @@
 								}}
 								class="w-full"
 							>
-								<CarouselContent class="-ml-4">
+								<CarouselContent class="-ml-1">
 									{#each data?.collectionvalues as prod (prod?.id)}
 										{#if prod?.products}
 											<CarouselItem
-												class="basis-full pl-4 mobiles:basis-[48%] sm:basis-[33%] md:basis-[25%] lg:basis-[20%] xl:basis-1/6"
+												class="basis-full pl-1 mobiles:basis-[48%] sm:basis-[33%] md:basis-[25%] lg:basis-[20%] xl:basis-1/6"
 											>
-												<div class="group h-full py-2">
-													<div
-														class="h-full transition-all duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-lg rounded-xl overflow-hidden"
-													>
+												<div class="h-full">
 														<Product
 															product={{
 																id: prod?.products.id,
@@ -68,7 +65,6 @@
 															aspectRatio="square"
 															{displayProduct}
 														/>
-													</div>
 												</div>
 											</CarouselItem>
 										{/if}

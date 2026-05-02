@@ -148,7 +148,7 @@
 
 <Slider />
 
-<div class="mb-12 container mx-auto">
+<div class="mb-8 container mx-auto">
 	<HomepageCategoryListWithImage categories={homepageModule.featuredCategories} loading={homepageModule.loading} />
 </div>
 
@@ -157,13 +157,13 @@
 
 
 {#if homepage?.sections?.length && homepage?.sections[0]?.isActive}
-	<div class="mx-2 mb-12 xl:mx-24">
+	<div class="mx-2 mb-8 xl:mx-24">
 		<HomepageBanners bannersList={homepage?.sections} />
 	</div>
 {/if}
 
-<div class="container mx-auto px-4 py-16">
-	<div class="mb-12 flex flex-col items-center justify-between gap-6 md:flex-row md:items-end">
+<div class="container mx-auto px-4 py-8 md:py-12">
+	<div class="mb-8 flex flex-col items-center justify-between gap-6 md:flex-row md:items-end">
 		<div class="text-center md:text-left">
 			<h2 class="text-3xl font-extrabold tracking-tight text-foreground lg:text-4xl">
 				New Arrivals
