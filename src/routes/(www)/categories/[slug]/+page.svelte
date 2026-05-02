@@ -2,7 +2,9 @@
 	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
 	import GoogleStructuredDataBreadcrumb from '$lib/core/components/plugins/google-structured-data-breadcrumb.svelte'
 	import Breadcrumb from '$lib/components/ui/breadcrumb.svelte'
-	import { PUBLIC_LITEKART_DOMAIN } from '$env/static/public'
+	import { page } from '$app/state'
+	//import { PUBLIC_LITEKART_DOMAIN } from '$env/static/public'
+  const PUBLIC_LITEKART_DOMAIN = $derived(page.url.origin)
 
 	let { data } = $props()
 </script>
