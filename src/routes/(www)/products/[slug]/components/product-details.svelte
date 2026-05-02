@@ -22,7 +22,9 @@
 	import RelatedProducts from './related-products.svelte'
 	import StoreCheck from './store-check.svelte'
 	import { page } from '$app/state'
-	import { PUBLIC_LITEKART_DOMAIN } from '$env/static/public'
+	//import { PUBLIC_LITEKART_DOMAIN } from '$env/static/public'
+  const PUBLIC_LITEKART_DOMAIN = $derived(page.url.origin)
+
 
 	const productState = useProductState()
 	const data = $derived(page.data)
