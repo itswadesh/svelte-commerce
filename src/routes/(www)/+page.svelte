@@ -155,9 +155,9 @@
 <Collections />
 
 
-{#if homepage?.sections?.length && homepage?.sections[0]?.isActive}
+{#if page?.sections?.length && page?.sections[0]?.isActive}
 	<div class="mx-2 mb-8 xl:mx-24">
-		<HomepageBanners bannersList={homepage?.sections} />
+		<HomepageBanners bannersList={page?.sections} />
 	</div>
 {/if}
 
