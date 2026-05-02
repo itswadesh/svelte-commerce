@@ -17,7 +17,9 @@
 	import { HomepageModule } from '$lib/core/composables/index.js'
 	import { timestampToAgo } from '$lib/core/utils/index.js'
   import Slider from '$lib/components/home/slider.svelte'
-	import { PUBLIC_LITEKART_DOMAIN } from '$env/static/public'
+  import { page as sveltePage } from '$app/state'
+	//import { PUBLIC_LITEKART_DOMAIN } from '$env/static/public'
+  const PUBLIC_LITEKART_DOMAIN = $derived(sveltePage.url.origin)
 
 	// Type definition for page data needed for this component
 	interface ExtendedPage {
