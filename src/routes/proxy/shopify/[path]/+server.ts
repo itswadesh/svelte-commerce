@@ -6,11 +6,11 @@ import base32 from 'hi-base32'
 
 export const fallback: RequestHandler = async ({ request, params, url }) => {
 
-  console.log("Proxy to url", params.path)
+  //console.log("Proxy to url", params.path)
   const indetenedUrl = base32.decode(params.path)
-  console.log("Decoded", indetenedUrl)
+  //console.log("Decoded", indetenedUrl)
   const shopifyApiType = request.headers.get('X-Shopify-Api-Type')
-  console.log("Shopify api type", shopifyApiType)
+  //console.log("Shopify api type", shopifyApiType)
   const isAdminApiCall = shopifyApiType === 'admin'
   const path = params.path;
   const searchParams = url.searchParams.toString();
@@ -30,7 +30,7 @@ export const fallback: RequestHandler = async ({ request, params, url }) => {
     ? `https://${shopifyStoreDomain}/admin/api/2026-01/${indetenedUrl}`
     : `https://${shopifyStoreDomain}/api/2026-01/graphql.json`
 
-  console.log(`Proxying request to Shopify: ${shopifyUrl}`);
+  // console.log(`Proxying request to Shopify: ${shopifyUrl}`);
 
   const headers = new Headers();
   if (isAdminApiCall)
