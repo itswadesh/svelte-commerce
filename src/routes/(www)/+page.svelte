@@ -160,7 +160,7 @@
 
 <Slider />
 
-<Blocks blocks={sveltePage.data.page?.blocks}/>
+<Blocks data={sveltePage.data.page}/>
 
 <div class="page-width mb-8">
 	<HomepageCategoryListWithImage categories={homepageModule.featuredCategories} loading={homepageModule.loading} />
