@@ -17,8 +17,11 @@
 	import { page as sveltePage } from '$app/state'
 	import { Button } from '$lib/components/ui/button'
 	import Blocks from '$lib/components/page-blocks/blocks.svelte'
+	import { setCollectionState } from '$lib/core/stores/collection.svelte.js'
 	//import { PUBLIC_LITEKART_DOMAIN } from '$env/static/public'
 	const PUBLIC_LITEKART_DOMAIN = $derived(sveltePage.url.origin)
+
+  setCollectionState()
 
 	// Type definition for page data needed for this component
 	interface ExtendedPage {

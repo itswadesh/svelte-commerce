@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Collection from './blocks/collection.svelte'
 	import ImageBlock from './blocks/image-block.svelte'
 	import RichTextBlock from './blocks/rich-text-block.svelte'
 
@@ -19,6 +20,8 @@
 					<RichTextBlock {block} />
 				{:else if block.type == 'IMAGE'}
 					<ImageBlock {block} />
+        {:else if block.type == 'COLLECTION'}
+          <Collection {block} />
 				{/if}
 			</div>
 		{/each}

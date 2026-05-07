@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Product from '$lib/components/product-catalogue/product-card.svelte'
-	import { collectionService } from '$lib/core/services/index.js'
 	import { Carousel, CarouselContent, CarouselItem } from '$lib/components/ui/carousel/index.js'
 	import CarouselPrevious from '$lib/components/ui/carousel/carousel-previous.svelte'
 	import CarouselNext from '$lib/components/ui/carousel/carousel-next.svelte'
