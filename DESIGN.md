@@ -1,131 +1,278 @@
----
-name: Svelte Commerce
-description: A lightning-fast, headless e-commerce storefront.
-colors:
-  primary: "#111827"
-  accent: "#ff3e00"
-  background: "#ffffff"
-  foreground: "#020817"
-  muted: "#f1f5f9"
-  border: "#e2e8f0"
-typography:
-  display:
-    fontFamily: "DM Sans, sans-serif"
-    fontSize: "2.25rem"
-    fontWeight: 700
-    lineHeight: 1.2
-  body:
-    fontFamily: "DM Sans, sans-serif"
-    fontSize: "1rem"
-    fontWeight: 400
-    lineHeight: 1.5
-  label:
-    fontFamily: "DM Sans, sans-serif"
-    fontSize: "0.875rem"
-    fontWeight: 500
-rounded:
-  md: "8px"
-spacing:
-  sm: "8px"
-  md: "16px"
-  lg: "32px"
-components:
-  button-primary:
-    backgroundColor: "{colors.primary}"
-    textColor: "#ffffff"
-    rounded: "{rounded.md}"
-    padding: "8px 16px"
-  card:
-    backgroundColor: "{colors.background}"
-    rounded: "{rounded.md}"
-    padding: "16px"
----
+# Design System Inspired by Bewakoof
 
-# Design System: Svelte Commerce
+## 1. Visual Theme & Atmosphere
+The Bewakoof website presents a vibrant and youthful aesthetic, characterized by a clean layout that emphasizes product imagery. The use of bright accent colors against neutral backgrounds creates an inviting shopping experience, while playful typography adds to the brand's casual and fun identity.
 
-## 1. Overview
+Key Characteristics:
+- Bright accent colors such as #207bb4 and #339d9c.
+- Clean, grid-based layout focusing on product displays.
+- Use of the Montserrat font family for a modern feel.
+- High contrast between text and background for readability.
+- Minimalist approach with ample whitespace around elements.
+- Interactive elements like buttons and filters enhance user engagement.
+- Responsive design that adapts well across devices.
 
-**Creative North Star: "The Frictionless Boutique"**
-
-Svelte Commerce is designed for speed and clarity. The aesthetic is "invisible UI"—a minimalist framework that exists solely to stage and sell products. It prioritizes high-contrast typography, generous whitespace, and snappy transitions to create an atmosphere of expert confidence.
-
-The system explicitly rejects the "clunky enterprise" look. There are no heavy borders, no unnecessary shadows, and no decorative gradients. Every element has a functional purpose in the shopper's journey from discovery to checkout.
-
-**Key Characteristics:**
-- **High Information Density**: Clean grids that show more products with less scrolling.
-- **Typographic Hierarchy**: Bold headings paired with legible, airy body text.
-- **Color Constraint**: A restricted palette where color is used only for meaning (actions, status, branding).
-
-## 2. Colors
-
-The palette is anchored in deep neutrals to provide a sophisticated, professional backdrop for vibrant product photography.
-
+## 2. Color Palette & Roles
 ### Primary
-- **Deep Midnight Navy** (#111827): Used for primary navigation, headings, and core UI structural elements. It conveys stability and trust.
+- **#207bb4** — Used for accent elements and buttons.
+- **#339d9c** — Another primary accent color, featured prominently in buttons and highlights.
 
-### Secondary
-- **Vibrant Svelte Orange** (#ff3e00): The high-energy accent color. Reserved for "add to cart" actions, sale badges, and critical interactive paths.
+### Accent Colors
+- **#0000ff** — Used sparingly for accents.
+- **#008000** — Additional accent color for highlights.
+- **#fdd835** — Bright accent color for calls to action.
 
-### Neutral
-- **Paper White** (#ffffff): The canvas for the entire experience.
-- **Slate Foreground** (#020817): High-contrast text for maximum legibility.
-- **Muted Cloud** (#f1f5f9): Used for subtle backgrounds, secondary buttons, and section dividers.
+### Interactive
+- **#ffffff** — Text on dark backgrounds for high visibility.
+- **#363537** — Primary text color for body and headings.
+- **#676767** — Secondary text color for less emphasized text.
 
-### Named Rules
-**The Rarity Rule.** The Vibrant Svelte Orange accent should appear on less than 5% of the total screen area. Its power comes from its isolation.
-**The High-Contrast Rule.** All text must maintain a contrast ratio of at least 4.5:1 against its background. Accessibility is not optional.
+### Neutral Scale
+- **#f1f2f4** — Light background color used for sections.
+- **#c7cbd4** — Neutral color for subtle borders and backgrounds.
+- **#000000** — Dark background elements.
 
-## 3. Typography
+### Surface & Borders
+- **#eaeaea** — Light neutral used for subtle borders.
+- **#292d35** — Dark text for headings and important information.
 
-**Display Font:** DM Sans (with sans-serif fallback)
-**Body Font:** DM Sans (with sans-serif fallback)
-**Label/Mono Font:** Fira Mono (for technical data and order IDs)
+## 3. Typography Rules
+- **Font Family**: Montserrat, sans-serif; fallback: Arial, sans-serif.
+- **Hierarchy**:
 
-**Character:** Modern, geometric, and highly legible. DM Sans provides a clean, neutral voice that works across diverse product categories.
+| Role   | Font       | Size   | Weight | Line Height | Letter Spacing | Notes           |
+|--------|------------|--------|--------|-------------|----------------|------------------|
+| H1     | Montserrat | 24px   | 600    | 1.2         | Normal         | Main headings    |
+| H2     | Montserrat | 22px   | 400    | 1.5         | Normal         | Subheadings      |
+| H3     | Montserrat | 20px   | 400    | 1.5         | Normal         | Section titles    |
+| Body   | Montserrat | 18px   | 400    | 1.5         | Normal         | Main body text   |
+| Caption| Montserrat | 14px   | 400    | 1.5         | Normal         | Small text       |
+| Code   | Montserrat | 16px   | 400    | 1.5         | Normal         | Monospace fallback|
 
-### Hierarchy
-- **Display** (700, 2.25rem, 1.2): Used for hero sections and major landing page headlines.
-- **Headline** (600, 1.5rem, 1.3): Product titles on detail pages and category headers.
-- **Title** (500, 1.125rem, 1.4): Product names in grids and card titles.
-- **Body** (400, 1rem, 1.5): Descriptions and general content. Max line length is 70ch.
-- **Label** (500, 0.875rem, normal, uppercase): Used for small UI labels, badges, and metadata.
+### Principles
+- Consistent use of Montserrat across headings and body text.
+- Emphasis on readability through appropriate line heights.
+- Clear differentiation between headings and body text using size and weight.
 
-## 4. Elevation
-
-The system is "flat-by-default," relying on tonal layering (light gray on white) and borders rather than heavy shadows to indicate depth.
-
-### Shadow Vocabulary
-- **Interactive Lift** (box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1)): Applied only on hover to cards and buttons to provide tactile feedback.
-
-### Named Rules
-**The Flat-at-Rest Rule.** All elements sit on the same plane until interacted with. Depth is a response to user action, not a decorative state.
-
-## 5. Components
+## 4. Component Stylings
 
 ### Buttons
-- **Shape:** Rounded (8px)
-- **Primary:** Deep Midnight Navy background with white text. Horizontal padding is 1.5x the vertical padding.
-- **Hover:** Slight background darken or lift.
-- **Ghost:** No background, border-only or text-only until hover.
+**Primary Button**
+```css
+.button-primary {
+  background-color: #339d9c;
+  color: #ffffff;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
 
-### Cards
-- **Corner Style:** Rounded (8px)
-- **Background:** White
-- **Border:** 1px Slate (10% opacity)
-- **Internal Padding:** 1rem (16px)
+.button-primary:hover {
+  background-color: #207bb4;
+}
+
+.button-primary:disabled {
+  cursor: default;
+}
+```
+
+**Secondary Button**
+```css
+.button-secondary {
+  background-color: transparent;
+  color: #339d9c;
+  padding: 12px 24px;
+  border: 2px solid #339d9c;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button-secondary:hover {
+  background-color: #f1f2f4;
+}
+
+.button-secondary:disabled {
+  cursor: default;
+}
+```
+
+### Cards & Containers
+**Standard Card**
+```css
+.card {
+  background-color: #ffffff;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+}
+```
+
+### Inputs & Forms
+**Text Input**
+```css
+.input {
+  border: 1px solid #c7cbd4;
+  border-radius: 4px;
+  padding: 12px;
+  font-size: 16px;
+}
+
+.input:focus {
+  border-color: #339d9c;
+  outline: none;
+}
+```
+
+**Checkbox**
+```css
+.checkbox {
+  accent-color: #339d9c;
+}
+```
 
 ### Navigation
-- Sticky top-bar with transparent or white background. Minimalist icons (24px) for cart and search.
+**Top Navigation Bar**
+```css
+.navbar {
+  background-color: #ffffff;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-## 6. Do's and Don'ts
+.nav-link {
+  color: #363537;
+  padding: 8px 16px;
+}
 
-### Do:
-- **Do** use generous whitespace (32px+) between major sections.
-- **Do** prioritize large, high-quality product imagery.
-- **Do** keep button labels short and action-oriented (e.g., "Buy Now", "Add to Bag").
+.nav-link:hover {
+  text-decoration: underline;
+}
+```
 
-### Don't:
-- **Don't** use border-left greater than 1px as a colored stripe on cards or alerts.
-- **Don't** use neon gradients or "glassmorphism" effects.
-- **Don't** use more than two distinct font families on a single screen.
-- **Don't** hide critical shopping information (price, shipping) behind tooltips or hovers.
+### Links
+**Standard Link**
+```css
+.link {
+  color: #207bb4;
+  text-decoration: none;
+}
+
+.link:hover {
+  color: #339d9c;
+}
+```
+
+### Badges
+**Status Badge**
+```css
+.badge-success {
+  background-color: #278c03;
+  color: #ffffff;
+  padding: 4px 8px;
+  border-radius: 12px;
+}
+
+.badge-alert {
+  background-color: #fdd835;
+  color: #000000;
+  padding: 4px 8px;
+  border-radius: 12px;
+}
+```
+
+## 5. Layout Principles
+- **Spacing System**: Base unit 4px → 4, 8, 12, 16, 20, 24, 32, 40.
+  - **Usage Context**:
+    - 4px: Minor adjustments.
+    - 8px: Small element spacing.
+    - 12px: Medium element spacing.
+    - 16px: Standard padding for containers.
+    - 20px: Larger gaps between sections.
+    - 24px: Spacing around buttons.
+    - 32px: Major section margins.
+    - 40px: Large container margins.
+
+- **Grid & Container**  
+_Note: container widths and column counts are not extracted from the source. The values below are reasonable defaults inferred from the visible layout density._  
+Max width: 1200px, Columns: 12, Gutter: 16px, Section padding: 24px.
+
+- **Whitespace Philosophy**: Whitespace is used generously to separate different sections and elements, promoting a clean and organized appearance.
+
+- **Border Radius Scale**: 
+  - 4px: Small elements (buttons).
+  - 8px: Standard elements (cards).
+  - 24px: Large elements (containers).
+
+## 6. Depth & Elevation
+| Level | Treatment                       | Use                     |
+|-------|---------------------------------|------------------------|
+| z-0   | None                            | Background elements     |
+| z-1   | 0 2px 4px rgba(0, 0, 0, 0.1)  | Cards                   |
+| z-2   | 0 4px 8px rgba(0, 0, 0, 0.1)  | Dropdown menus          |
+| z-10  | 0 6px 12px rgba(0, 0, 0, 0.15) | Modals                  |
+
+### Shadow Philosophy
+Shadows are used sparingly to create depth, primarily for cards and dropdowns, enhancing the visual hierarchy without overwhelming the design.
+
+## 7. Do's and Don'ts
+
+### Do's
+- Use **#339d9c** for primary button backgrounds.
+- Maintain **14px** font size for captions.
+- Ensure at least **16px** padding around text inputs.
+- Use **#363537** for body text on **#ffffff** backgrounds.
+- Keep **24px** spacing between card elements.
+- Use **#292d35** for secondary text on **#f1f2f4** backgrounds.
+- Apply **8px** border radius for buttons.
+- Use **24px** margins around sections.
+
+### Don'ts
+- Never use **#8f98a9** for body text on **#ffffff**; it fails contrast.
+- Avoid less than **16px** font size for primary text.
+- Don't mix button colors; stick to **#339d9c** for primary actions.
+- Avoid using **#f1f2f4** for text on light backgrounds.
+- Don't use less than **40px** spacing for large sections.
+- Avoid using **#ffffff** for text on dark backgrounds.
+- Do not use border radius larger than **24px** on buttons.
+- Never place elements closer than **16px** apart.
+
+## 8. Responsive Behavior
+_Note: breakpoints below are industry-standard recommendations, not measurements from the source. Adjust to the brand's actual media queries when implementing._
+
+| Breakpoint Name   | Width | Key Changes                     |
+|-------------------|-------|---------------------------------|
+| Mobile Small      | 640px | Single column layout            |
+| Mobile Large      | 768px | Two column layout               |
+| Tablet            | 992px | Grid layout with larger items   |
+| Desktop           | 1200px| Multi-column layout             |
+| Desktop Large     | 1440px| Enhanced grid density           |
+
+- **Touch Targets**: Minimum sizes of **48px** for buttons and links.
+- **Collapsing Strategy**: 
+  - Navigation: Collapse into a hamburger menu on mobile.
+  - Cards: Stack vertically on smaller screens.
+  - Typography: Scale down to maintain readability.
+  - Padding: Reduce to **16px** on mobile.
+
+## 9. Agent Prompt Guide
+- **Quick Color Reference**:
+  - Primary: #207bb4
+  - Accent: #339d9c
+  - Background: #ffffff
+  - Text: #363537
+
+- **Iteration Guide**:
+  1. Always use **#339d9c** for primary button backgrounds.
+  2. Maintain **14px** font size for captions.
+  3. Use **16px** padding for text inputs.
+  4. Keep at least **24px** spacing between elements.
+  5. Ensure **#363537** for body text on **#ffffff** backgrounds.
+  6. Use **8px** border radius for buttons.
+  7. Apply **#f1f2f4** for background sections.
+  8. Maintain responsive breakpoints as defined.
