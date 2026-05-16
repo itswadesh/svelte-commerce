@@ -18,7 +18,6 @@
 			const res = await productService.listFeaturedProducts({
 				page: 1
 			})
-			console.log('feaured', res, block)
 			products = res?.data
 		} catch (e: any) {
 			toast.error(e?.message || 'Failed to load categories')

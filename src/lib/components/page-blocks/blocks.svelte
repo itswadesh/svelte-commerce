@@ -1,4 +1,5 @@
 <script lang="ts">
+	import CollectionCarousel from './blocks/collection-carousel.svelte'
 	import Collection from './blocks/collection.svelte'
 	import FeaturedCategories from './blocks/featured-categories.svelte'
 	import FeaturedProducts from './blocks/featured-products.svelte'
@@ -28,6 +29,8 @@
           <FeaturedCategories {block} />
         {:else if block.type == 'FEATURED_PRODUCTS'}
           <FeaturedProducts {block} />
+        {:else if block.type == 'COLLECTION_CAROUSEL'}
+          <CollectionCarousel {block} />
 				{/if}
 			</div>
 		{/each}
