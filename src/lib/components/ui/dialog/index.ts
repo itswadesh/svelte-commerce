@@ -1,4 +1,4 @@
-import { Dialog as DialogPrimitive } from 'bits-ui'
+import { Dialog } from 'bits-ui'
 
 import Content from './dialog-content.svelte'
 import Description from './dialog-description.svelte'
@@ -7,10 +7,10 @@ import Header from './dialog-header.svelte'
 import Overlay from './dialog-overlay.svelte'
 import Title from './dialog-title.svelte'
 
-const Root: typeof DialogPrimitive.Root = DialogPrimitive.Root
-const Trigger: typeof DialogPrimitive.Trigger = DialogPrimitive.Trigger
-const Close: typeof DialogPrimitive.Close = DialogPrimitive.Close
-const Portal: typeof DialogPrimitive.Portal = DialogPrimitive.Portal
+const Root: typeof Dialog.Root = Dialog.Root
+const Trigger: typeof Dialog.Trigger = Dialog.Trigger
+const Close: typeof Dialog.Close = Dialog.Close
+const Portal: typeof Dialog.Portal = Dialog.Portal
 
 export {
 	Root,

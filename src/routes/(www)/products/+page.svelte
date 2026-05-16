@@ -99,7 +99,7 @@ let loading = $state(false)
 					<a href="/products" class="text-sm font-bold uppercase tracking-widest text-primary underline underline-offset-4">Clear all filters</a>
 				</div>
 			{:else}
-				<div class="grid grid-cols-2 gap-1 sm:gap-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 auto-rows-auto">
+				<div class="grid gap-2 sm:gap-4 grid-cols-2 lg:grid-cols-3 auto-rows-auto">
 					{#each data.products.data as product}
 						<ProductCard {product} />
 					{/each}

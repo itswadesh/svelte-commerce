@@ -7,6 +7,9 @@ export default defineConfig(({ command, mode }) => {
 	const env = loadEnv(mode, process.cwd(), '')
 	return {
 		plugins: [sveltekit(), svelteInspector()],
+		ssr: {
+			noExternal: ['bits-ui']
+		},
 		//preview: { port: 80, strictPort: true, host: true },
 		server: {
 			allowedHosts: true, // This is required, else will "throw Blocked request. This host ("shopnx.in") is not allowed."
