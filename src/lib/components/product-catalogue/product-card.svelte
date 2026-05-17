@@ -34,8 +34,6 @@
     const name = product?.material?.[0]
     return name
   })
-
-  $inspect("prducs", product)
 </script>
 
 <ProductCardRenderer {product} {aspectRatio}>
