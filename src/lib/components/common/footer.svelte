@@ -1,81 +1,81 @@
 <script lang="ts">
-import { ChevronDown, ShieldCheck, Lock, Truck, RefreshCw } from '@lucide/svelte'
-import WhatsappChatButton from '$lib/core/components/plugins/whatsapp-chat-button.svelte'
-import { page } from '$app/state'
-import TrustpilotPlugin from '$lib/core/components/plugins/trustpilot-plugin.svelte'
-import { sanitize } from '$lib/core/utils/index.js'
-import masterCard from '$lib/assets/payment-methods/mastercard.png'
-import paypal from '$lib/assets/payment-methods/paypal.png'
-import skrill from '$lib/assets/payment-methods/skrill.png'
-import visa from '$lib/assets/payment-methods/visa.png'
+	import { ChevronDown, ShieldCheck, Lock, Truck, RefreshCw } from '@lucide/svelte'
+	import WhatsappChatButton from '$lib/core/components/plugins/whatsapp-chat-button.svelte'
+	import { page } from '$app/state'
+	import TrustpilotPlugin from '$lib/core/components/plugins/trustpilot-plugin.svelte'
+	import { sanitize } from '$lib/core/utils/index.js'
+	import masterCard from '$lib/assets/payment-methods/mastercard.png'
+	import paypal from '$lib/assets/payment-methods/paypal.png'
+	import skrill from '$lib/assets/payment-methods/skrill.png'
+	import visa from '$lib/assets/payment-methods/visa.png'
 
-let paymentMethodCards = [
-	{ src: masterCard, alt: 'Mastercard' },
-	{ src: paypal, alt: 'PayPal' },
-	{ src: skrill, alt: 'Skrill' },
-	{ src: visa, alt: 'Visa' }
-]
+	let paymentMethodCards = [
+		{ src: masterCard, alt: 'Mastercard' },
+		{ src: paypal, alt: 'PayPal' },
+		{ src: skrill, alt: 'Skrill' },
+		{ src: visa, alt: 'Visa' }
+	]
 
-// Derive store data to prevent unnecessary re-renders
-const storeData = $derived(page?.data?.store || {})
-const footerMenu = $derived(storeData?.menu?.find((menu: { menuId?: string }) => menu?.menuId === 'footer')?.items || [])
-const socialSharing = $derived({
-	active: true, // Force active for SEO requirements
-	...storeData?.plugins?.socialSharingButtons,
-	youtube: storeData?.plugins?.socialSharingButtons?.youtube || 'https://www.youtube.com/@arialshop',
-	twitter: storeData?.plugins?.socialSharingButtons?.twitter || 'https://x.com/arialshop'
-})
-const footerSettings = $derived(storeData?.plugins?.footerSettings)
-const shouldCollapseOnMobile = $derived(footerSettings?.collapseOnMobile || false)
+	// Derive store data to prevent unnecessary re-renders
+	const storeData = $derived(page?.data?.store || {})
+	const footerMenu = $derived(storeData?.menu?.find((menu: { menuId?: string }) => menu?.menuId === 'footer')?.items || [])
+	const socialSharing = $derived({
+		active: true, // Force active for SEO requirements
+		...storeData?.plugins?.socialSharingButtons,
+		youtube: storeData?.plugins?.socialSharingButtons?.youtube || 'https://www.youtube.com/@arialshop',
+		twitter: storeData?.plugins?.socialSharingButtons?.twitter || 'https://x.com/arialshop'
+	})
+	const footerSettings = $derived(storeData?.plugins?.footerSettings)
+	const shouldCollapseOnMobile = $derived(footerSettings?.collapseOnMobile || false)
 
-let isExpanded = $state(false)
+	let isExpanded = $state(false)
 </script>
 
-	<div class="mt-8">
-    {#if footerSettings?.active}
-      <div class="w-full pb-4">
-        {#await sanitize(footerSettings.html) then html}
-					{@html html}
-				{:catch error}
-					{footerSettings.html}
-				{/await}
-      </div>
-    {/if}
-		<footer class="mt-2 border-t">
-			<div class="mx-auto w-full xl:pb-2">
-				{#if shouldCollapseOnMobile}
-					<button
-						class="flex w-full items-center justify-between p-4 text-sm font-medium uppercase tracking-tighter text-gray-900 dark:text-white md:hidden"
-						onclick={() => (isExpanded = !isExpanded)}
-					>
-						<span>More about {storeData?.name}</span>
-						<ChevronDown size={20} class="transition-transform duration-200 {isExpanded ? 'rotate-180' : ''}" />
-					</button>
-				{/if}
+<div class="mt-5">
+	{#if footerSettings?.active}
+		<div class="w-full pb-4">
+			{#await sanitize(footerSettings.html) then html}
+				{@html html}
+			{:catch error}
+				{footerSettings.html}
+			{/await}
+		</div>
+	{/if}
+	<footer class="mt-2 page-width border-t">
+		<div class="w-full xl:pb-2">
+			{#if shouldCollapseOnMobile}
+				<button
+					class="flex w-full items-center justify-between p-4 text-sm font-medium uppercase tracking-tighter text-gray-900 dark:text-white md:hidden"
+					onclick={() => (isExpanded = !isExpanded)}
+				>
+					<span>More about {storeData?.name}</span>
+					<ChevronDown size={20} class="transition-transform duration-200 {isExpanded ? 'rotate-180' : ''}" />
+				</button>
+			{/if}
 
-				<div class="overflow-hidden {shouldCollapseOnMobile ? (isExpanded ? '' : 'hidden md:block') : ''}">
-					<div class="gap-4 p-4 px-8 py-8 md:flex md:justify-between md:py-16 max-w-screen-xl mx-auto">
-						<div class="mb-12 flex max-w-xs flex-col gap-4">
-							<a href="/" class="flex items-center">
-								{#if storeData?.logo}
-									<img src={storeData?.logo} class="mr-2 h-10 object-contain" alt="Arialshop — Women's Fashion Online" />
-								{:else}
-									<span class="text-2xl font-semibold dark:text-white"> {storeData?.name} </span>
-								{/if}
-							</a>
-							{#if storeData?.description}
-								<div class="prose text-sm text-gray-600">
-									{#await sanitize(storeData.description) then html}
-										{@html html}
-									{:catch error}
-										<!-- Fallback to plain text if sanitization fails -->
-										{storeData.description}
-									{/await}
-								</div>
+			<div class="overflow-hidden {shouldCollapseOnMobile ? (isExpanded ? '' : 'hidden md:block') : ''}">
+				<div class="mx-auto py-8 intra-gap md:flex md:justify-between">
+					<div class="mb-12 flex max-w-xs flex-col intra-gap">
+						<a href="/" class="flex items-center">
+							{#if storeData?.logo}
+								<img src={storeData?.logo} class="mr-2 h-10 object-contain" alt="Arialshop — Women's Fashion Online" />
+							{:else}
+								<span class="text-2xl font-semibold dark:text-white"> {storeData?.name} </span>
 							{/if}
+						</a>
+						{#if storeData?.description}
+							<div class="prose text-sm text-gray-600">
+								{#await sanitize(storeData.description) then html}
+									{@html html}
+								{:catch error}
+									<!-- Fallback to plain text if sanitization fails -->
+									{storeData.description}
+								{/await}
+							</div>
+						{/if}
 
-													{#if socialSharing?.active}
-							<div class="flex items-center space-x-5 sm:mt-0 sm:justify-center">
+						{#if socialSharing?.active}
+							<div class="flex items-center intra-gap sm:mt-0 sm:justify-center">
 								{#each Object.entries(socialSharing || {}).filter(([key]) => !['active', 'position'].includes(key)) as [key, social]}
 									{#if social}
 										<a
@@ -133,87 +133,88 @@ let isExpanded = $state(false)
 								{/each}
 							</div>
 						{/if}
-
-						
-						</div>
-						<div class="grid grid-cols-2 gap-8 sm:grid-cols-3 sm:gap-10">
-							<div>
-								<h1 class="text-black-200 mb-4 text-lg font-semibold">Quick Links</h1>
-								<ul class="space-y-2">
-									<li>
-										<a href="/" class="text-sm text-gray-400 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-900">Home</a>
-									</li>
-									<li>
-										<a href="/products" class="text-sm text-gray-400 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-900">Products</a>
-									</li>
-								</ul>
-							</div>
-							{#each footerMenu as item}
-								<div>
-									<h1 class="text-black-200 mb-4 text-lg font-semibold">{item?.name}</h1>
-									{#if item?.items?.length > 0}
-										<ul class="space-y-2">
-											{#each item.items as child}
-												<li>
-													{#if child.link}
-														<a
-															href={child.link || '#'}
-															target="_blank"
-															class="text-sm text-gray-400 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-900"
-															rel="noopener noreferrer"
-														>
-															{child.name}
-														</a>
-													{:else}
-														<span class="text-sm text-gray-400">{child.name}</span>
-													{/if}
-												</li>
-											{/each}
-										</ul>
-									{:else}
-										<p class="text-sm text-gray-400">No links available</p>
-									{/if}
-								</div>
-							{/each}
-						</div>
 					</div>
-	<div class="flex flex-col gap-2 border-t px-8 py-4 sm:flex-row sm:items-center sm:justify-between">
-
-
-						<div class="flex w-full flex-col-reverse items-start justify-between gap-6 max-sm:mt-2 sm:flex-row sm:items-center sm:gap-0">
-							<span class="text-xs font-bold uppercase tracking-widest text-gray-400 sm:text-center">
-								Copyright
-								{' '}
-								{new Date().getFullYear()}
-								{' '}
-								<a href="/" class="cursor-pointer text-gray-900 hover:text-primary transition-colors">
-									{storeData?.name}
-								</a>
-								. All Rights Reserved.
-							</span>
-							<TrustpilotPlugin />
-
-							{#if paymentMethodCards?.length}
-								<ul class="col-span-1 m-0 flex list-none flex-wrap items-center justify-end gap-3 p-0">
-									{#each paymentMethodCards as pmc}
-										<li>
-											<img src={pmc.src} alt="payment method card - {pmc.alt}" class="h-6 w-auto object-contain grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300" />
-										</li>
-									{/each}
-								</ul>
-							{/if}
+					<div class="grid grid-cols-2 intra-gap sm:grid-cols-3">
+						<div>
+							<h1 class="text-black-200 text-lg font-semibold">Quick Links</h1>
+							<ul class="intra-pt">
+								<li>
+									<a href="/" class="text-sm text-gray-400 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-900">Home</a>
+								</li>
+								<li>
+									<a href="/products" class="text-sm text-gray-400 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-900"
+										>Products</a
+									>
+								</li>
+							</ul>
 						</div>
+						{#each footerMenu as item}
+							<div>
+								<h1 class="text-black-200 text-lg font-semibold">{item?.name}</h1>
+								{#if item?.items?.length > 0}
+									<ul class="intra-pt">
+										{#each item.items as child}
+											<li>
+												{#if child.link}
+													<a
+														href={child.link || '#'}
+														target="_blank"
+														class="text-sm text-gray-400 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-900"
+														rel="noopener noreferrer"
+													>
+														{child.name}
+													</a>
+												{:else}
+													<span class="text-sm text-gray-400">{child.name}</span>
+												{/if}
+											</li>
+										{/each}
+									</ul>
+								{:else}
+									<p class="text-sm text-gray-400">No links available</p>
+								{/if}
+							</div>
+						{/each}
+					</div>
+				</div>
+				<div class="flex flex-col border-t py-4 sm:flex-row sm:items-center sm:justify-between">
+					<div class="flex w-full flex-col-reverse items-start justify-between gap-6 max-sm:mt-2 sm:flex-row sm:items-center sm:gap-0">
+						<span class="text-xs font-bold uppercase tracking-widest text-gray-400 sm:text-center">
+							Copyright
+							{' '}
+							{new Date().getFullYear()}
+							{' '}
+							<a href="/" class="cursor-pointer text-gray-900 transition-colors hover:text-primary">
+								{storeData?.name}
+							</a>
+							. All Rights Reserved.
+						</span>
+						<TrustpilotPlugin />
+
+						{#if paymentMethodCards?.length}
+							<ul class="col-span-1 m-0 flex list-none flex-wrap items-center justify-end intra-gap">
+								{#each paymentMethodCards as pmc}
+									<li>
+										<img
+											src={pmc.src}
+											alt="payment method card - {pmc.alt}"
+											class="h-6 w-auto object-contain opacity-50 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0"
+										/>
+									</li>
+								{/each}
+							</ul>
+						{/if}
 					</div>
 				</div>
 			</div>
-		</footer>
-	</div>
+		</div>
+	</footer>
+</div>
 
-	<WhatsappChatButton />
+<WhatsappChatButton />
 
-	<!-- {#if page?.data?.store?.plugins?.whatsapp?.enabled}
+<!-- {#if page?.data?.store?.plugins?.whatsapp?.enabled}
 		<a href="https://wa.me/{page?.data?.store?.plugins.whatsapp.number}" target="_blank" rel="noopener noreferrer" class="fixed bottom-20 left-5 z-40 md:bottom-5">
 		<img src={whatsappIcon} alt="Contact us on WhatsApp" class="h-10 w-10 transform object-contain transition duration-300 hover:-translate-y-2 hover:scale-125" />
 		</a>
 		{/if} -->
-

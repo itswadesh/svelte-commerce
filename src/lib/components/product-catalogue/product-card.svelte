@@ -93,7 +93,7 @@
 					{#if tag}
 						<div class="absolute top-2 left-2 z-10">
 							<div class="rounded-md bg-black/60 px-2 backdrop-blur-sm">
-								<span class="text-[10px] font-bold uppercase tracking-wider text-white">
+								<span class="text-xs font-bold uppercase tracking-wider text-white">
 									{tag}
 								</span>
 							</div>
@@ -105,7 +105,7 @@
 			<div data-testid="product-card-info-wrapper" class="flex flex-col pt-[7.5px] lg:pt-3">
 				<div class="flex items-center justify-between">
 					<span
-						class="truncate text-[10px] font-bold capitalize text-gray-500 lg:text-sm"
+						class="truncate text-xs font-bold capitalize text-gray-500 lg:text-sm"
 						data-testid="product-brand"
 					>
 						{categoryName || page.data?.store?.name}
@@ -129,7 +129,7 @@
 
 				<a href="/products/{product.slug}" class="block overflow-hidden">
 					<span
-						class="block truncate text-xs text-gray-600 lg:text-sm"
+						class="block w-[80%] truncate text-xs text-gray-600 lg:text-sm"
 						data-testid="product-title"
 						title={product.title}
 					>

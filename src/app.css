@@ -80,17 +80,41 @@ html {
 	scroll-behavior: smooth;
 }
 
-/* 
+/*
 ::-webkit-scrollbar {
   width: 0px;
   background: transparent;
 } */
 
 @media only screen and (max-width: 980px) {
- #tidio-chat-iframe { 
+ #tidio-chat-iframe {
   bottom: 80px !important;
 }
  #reamaze-widget {
    bottom: 80px !important;
  }
+}
+
+.inter-gap {
+  @apply gap-3 sm:gap-5
+}
+
+.inter-pt {
+  @apply pt-3 sm:gap-5
+}
+
+.intra-gap {
+  @apply gap-2 sm:gap-4
+}
+
+.intra-pt {
+  @apply pt-2 sm:pt-4
+}
+
+.page-heading {
+  @apply text-xl font-bold text-gray-900 dark:text-white sm:text-xl
+}
+
+.page-width {
+  @apply mx-2 lg:container lg:mx-auto
 }

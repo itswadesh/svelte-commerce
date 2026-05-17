@@ -14,7 +14,7 @@
 <PaginationRenderer bind:noOfPage {paginateProducts}>
 	{#snippet content({ pageSize, currentPage, goToPreviousPage, goToNextPage, goToPage, count })}
 		{#if count && noOfPage > 1}
-			<div class="mt-16 flex flex-col items-center gap-6 border-t border-gray-100 pt-10">
+			<div class="flex flex-col items-center gap-6 border-gray-200 mt-5 pt-5">
 				<Pagination.Root {count} perPage={pageSize}>
 					{#snippet children({ pages })}
 						<Pagination.Content class="gap-1">

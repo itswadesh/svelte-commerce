@@ -64,7 +64,7 @@
 			</div>
 		{/if}
 	{/if}
-	<div class="mx mx-2 flex items-center justify-between bg-white py-3 lg:container sm:py-2 lg:mx-auto">
+	<div class="page-width flex items-center justify-between bg-white py-3 sm:py-2">
 		<div class="hidden justify-center gap-3 sm:flex">
 			<button
 				aria-label="Sidebar"
