@@ -1,6 +1,20 @@
 <script lang="ts">
 	import CartItem from '$lib/components/cart/cart-item.svelte'
-	import { X, UserCircle, ChevronLeft, Phone, Mail, Menu,Home, ChevronDown, ShoppingBag, MapPin, Check, Heart, ArrowRightCircleIcon } from '@lucide/svelte'
+	import {
+		X,
+		UserCircle,
+		ChevronLeft,
+		Phone,
+		Mail,
+		Menu,
+		Home,
+		ChevronDown,
+		ShoppingBag,
+		MapPin,
+		Check,
+		Heart,
+		ArrowRightCircleIcon
+	} from '@lucide/svelte'
 	import MainNav from './main-nav.svelte'
 	import { Button } from '$lib/components/ui/button'
 	import { goto } from '$app/navigation'
@@ -14,6 +28,7 @@
 	import AuthButton from '$lib/core/components/auth/auth-button.svelte'
 	import { fade } from 'svelte/transition'
 	import { NavModule } from '$lib/core/composables/index.js'
+	import { getWishlistState } from '@misiki/kitcommerce-core/stores'
 
 	const menuItemsUser = [
 		{ title: 'Profile', url: '/my/profile' },
@@ -24,8 +39,10 @@
 		{ title: 'Change Password', url: '/auth/change-password' }
 	]
 
-	let { storeData } = $props()
+	const { storeData } = $props()
 
+  const wishlistState = getWishlistState()
+	const wishlistPlugin = $derived(page?.data?.store?.plugins?.isWishlist)
 	const navModule = new NavModule()
 	const userState = navModule.userState
 	const cartState = navModule.cartState
@@ -122,7 +139,7 @@
 		<div class="flex items-center gap-2">
 			<!-- <Search /> -->
 			<div class="flex items-center">
-				<div class="relative flex items-center gap-4 sm:gap-5">
+				<div class="relative flex items-center intra-gap">
 					<!-- {#if isProductListingPage}
               <div class="block sm:hidden">
                 {#if page?.data?.store?.plugins?.socialSharingButtons?.active}
@@ -135,9 +152,9 @@
               </div>
             {/if} -->
 
-				<MsSearch />
+					<MsSearch />
 
-				{#if page?.url?.pathname !== '/'}
+					<!-- {#if page?.url?.pathname !== '/'}
 				<a
 					href="/"
 					class="flex items-center justify-center rounded-full p-2 text-gray-500 transition-all duration-300 ease-out hover:bg-gray-100 hover:text-primary hover:scale-110 active:scale-95"
@@ -145,26 +162,27 @@
 				>
 					<Home class="h-5 w-5" />
 				</a>
-				{/if}
+				{/if} -->
 
-					{#if !page.url.pathname.startsWith('/checkout')}
-						<div class="relative" role="navigation">
-							<a
-								class="group relative flex items-center justify-center rounded-full p-2 text-gray-500 transition-all duration-300 ease-out hover:bg-gray-100 hover:text-primary hover:scale-110 active:scale-95 lg:hidden"
-								href="/checkout/cart"
-								aria-label="View Cart"
-							>
-								<ShoppingBag class="h-5 w-5" />
-								{#if cartState?.cart?.total && cartState.cart?.lineItems?.length > 0}
+					{#if wishlistPlugin.active}
+						<div class="relative px-2" role="navigation">
+							<a href="/my/wishlist" class="rounded-full" aria-label="Toggle Cart">
+                <Heart class="h-5 w-5"/>
+								{#if wishlistState.count > 0}
 									<span
-										class="absolute right-1 top-1 inline-flex transform items-center justify-center rounded-full bg-primary px-1.5 py-1 text-[10px] font-bold leading-none text-white transition-all duration-300 group-hover:scale-110"
+										class="absolute right-0 top-0 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-primary px-1.5 py-1 text-xs font-bold leading-none text-white"
 									>
-										{cartState.cart.qty}
+										{wishlistState.count}
 									</span>
 								{/if}
 							</a>
+						</div>
+					{/if}
+
+					{#if !page.url.pathname.startsWith('/checkout')}
+						<div class="relative px-2" role="navigation">
 							<button
-								class="group relative hidden items-center justify-center rounded-full p-2 text-gray-500 transition-all duration-300 ease-out hover:bg-gray-100 hover:text-primary hover:scale-110 active:scale-95 lg:flex"
+								class="rounded-full flex"
 								aria-label="Toggle Cart"
 								onclick={() => {
 									cartState.isOpen = !cartState.isOpen
@@ -173,7 +191,7 @@
 								<ShoppingBag class="h-5 w-5" />
 								{#if cartState?.cart?.total && cartState.cart?.lineItems?.length > 0}
 									<span
-										class="absolute right-1 top-1 inline-flex transform items-center justify-center rounded-full bg-primary px-1.5 py-1 text-[10px] font-bold leading-none text-white transition-all duration-300 group-hover:scale-110"
+										class="absolute right-0 top-0 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-primary px-1.5 py-1 text-xs font-bold leading-none text-white"
 									>
 										{cartState.cart.qty}
 									</span>
@@ -283,12 +301,13 @@
 						</div>
 					{/if}
 					<!-- {/if} -->
+
 					<div class="flex h-full items-center font-['Inter',_sans-serif]">
 						{#if userState?.user?.role}
 							<DropdownMenu.Root>
 								<DropdownMenu.Trigger
 									aria-label="User Profile"
-									class="flex items-center justify-center rounded-full p-2 text-gray-500 transition-all duration-300 ease-out hover:bg-gray-100 hover:text-primary hover:scale-110 active:scale-95"
+									class="flex items-center justify-center rounded-full px-2 transition-all duration-300 ease-out"
 								>
 									{#if userState.user?.avatar}
 										<div class="h-5 w-5 overflow-hidden rounded-full">
@@ -387,7 +406,7 @@
 						{:else}
 							<AuthButton aria-label="Login" type="login">
 								<div
-									class="flex items-center justify-center rounded-full p-2 text-gray-500 transition-all duration-300 ease-out hover:bg-gray-100 hover:text-primary hover:scale-110 active:scale-95"
+									class="flex items-center justify-center rounded-full p-2 text-gray-500 transition-all duration-300 ease-out hover:scale-110 hover:bg-gray-100 hover:text-primary active:scale-95"
 								>
 									<UserCircle class="h-5 w-5" />
 								</div>
