@@ -29,7 +29,7 @@
 				<button
 					aria-label="Show search bar"
 					class={cn(
-						'flex items-center justify-center rounded-full p-2 text-gray-500 transition-all duration-300 ease-out hover:bg-gray-100 hover:text-primary hover:scale-110 active:scale-95',
+						'flex items-center justify-center rounded-full px-2 transition-all duration-300 ease-out',
 						expandSearch ? 'scale-90 opacity-0' : 'scale-100 opacity-100'
 					)}
 					onclick={showSearch}
@@ -84,7 +84,7 @@
 								{:else if searchResults.length > 0}
 									<div class="divide-y divide-gray-50">
 										{#each searchResults as result}
-											
+
 											<button
 												class="group flex w-full items-center gap-4 px-6 py-4 text-left transition-colors hover:bg-gray-50/50"
 												onclick={() => handleResultClick(result)}
@@ -159,7 +159,7 @@
 							{:else if searchResults.length > 0}
 								<div class="divide-y divide-gray-50">
 									{#each searchResults as result}
-									
+
 										<button class="flex w-full items-center gap-4 p-4 active:bg-gray-50" onclick={() => handleResultClick(result)}>
 											<div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gray-50 text-gray-400">
 												{#if result.thumbnail}

@@ -6,7 +6,7 @@
 <MegaMenuRenderer>
 	{#snippet content({ menuItems, toggleMenuItemChildren, selectedCategory, openChildMenu, closeChildMenu })}
 		{#if menuItems?.length}
-			<ul class="flex max-w-[65vw] flex-row items-center overflow-x-auto scrollbar-none gap-2">
+			<ul class="flex max-w-[65vw] flex-row justify-evenly items-center overflow-x-auto scrollbar-none intra-gap">
 				{#each menuItems as category, index}
 					<li
 						class="hoverable"
@@ -20,7 +20,7 @@
 						<a
 							href={category.link || '/' + category.slug}
 							aria-label="Visit {category.name}"
-							class="relative flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap px-4 py-3 text-xs font-bold uppercase tracking-widest text-gray-500 transition-all duration-300 hover:text-primary active:scale-95
+							class="relative flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap py-3 text-xs font-bold uppercase tracking-widest text-gray-500 transition-all duration-300 hover:text-primary active:scale-95
 								{selectedCategory === category.name ? 'text-primary after:scale-x-100' : 'after:scale-x-0'}
 								after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:transition-transform after:duration-300 after:ease-out-expo hover:after:scale-x-100"
 							style="font-family: 'Montserrat', sans-serif;"
@@ -77,7 +77,7 @@
 										</div>
 									{/each}
 								</div>
-								
+
 								<div class="bg-gray-50 px-10 py-4 border-t border-gray-100">
 									<a href={category.link || '/' + category.slug} class="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400 hover:text-primary transition-colors">
 										View all {category.name}
