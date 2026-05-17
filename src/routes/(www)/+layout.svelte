@@ -23,7 +23,7 @@ let isProductsListingPage = $derived(page?.route?.id === '/(www)/products' || pa
 <div class="flex min-h-screen flex-col justify-between">
 
 	<Nav storeData={data.store} />
-  <main class="min-h-screen flex-1">
+  <main class="min-h-screen inter-pt flex flex-col inter-gap flex-1">
     {@render children()}
   </main>
   <Footer />

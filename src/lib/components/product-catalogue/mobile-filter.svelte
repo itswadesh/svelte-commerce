@@ -14,7 +14,7 @@
 	const filterModule = getDesktopFilterState()
 </script>
 
-<div class="fixed bottom-0 left-0 right-0 z-40 grid h-12 w-full grid-cols-2 border-t border-gray-200 bg-white shadow-md">
+<div class="fixed bottom-0 left-0 right-0 z-40 grid md:hidden h-12 w-full grid-cols-2 border-t border-gray-200 bg-white shadow-md">
 	<!-- Sort by -->
 	<div class="flex items-center justify-center border-r border-gray-200">
 		<Drawer.Root direction="bottom" bind:open={filterModule.showSortByDrawer}>
