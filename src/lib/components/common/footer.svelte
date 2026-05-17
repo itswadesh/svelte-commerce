@@ -55,7 +55,7 @@
 
 			<div class="overflow-hidden {shouldCollapseOnMobile ? (isExpanded ? '' : 'hidden md:block') : ''}">
 				<div class="mx-auto py-8 intra-gap md:flex md:justify-between">
-					<div class="mb-12 flex max-w-xs flex-col intra-gap">
+					<div class="mb-7 md:mb-12 flex max-w-xs flex-col intra-gap">
 						<a href="/" class="flex items-center">
 							{#if storeData?.logo}
 								<img src={storeData?.logo} class="mr-2 h-10 object-contain" alt="Arialshop — Women's Fashion Online" />
