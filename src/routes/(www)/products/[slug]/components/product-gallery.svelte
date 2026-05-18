@@ -80,7 +80,7 @@ const isVideoURL = (x: string) => videoURLRegex.test(x)
 {/if}
 
 {#if images?.length === 1}
-	<div class="mx-2 hidden grid-cols-1 sm:grid lg:mx-0">
+	<div class="hidden grid-cols-1 intra-gap sm:grid lg:mx-0">
 		{#each images as img}
 			{@const youtubeId = getYoutubeId(img)}
 			<div
@@ -115,7 +115,7 @@ const isVideoURL = (x: string) => videoURLRegex.test(x)
 		{/each}
 	</div>
 {:else}
-	<div class="mx-2 hidden grid-cols-2 gap-2 sm:grid lg:mx-0">
+	<div class="hidden grid-cols-2 intra-gap sm:grid lg:mx-0">
 		{#each images as img}
 			{@const youtubeId = getYoutubeId(img)}
 			<div

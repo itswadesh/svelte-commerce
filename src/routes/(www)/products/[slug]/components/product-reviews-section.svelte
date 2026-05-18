@@ -13,7 +13,7 @@
 </script>
 
 <!-- Reviews Section -->
-<div class="mx-2 mt-8">
+<div class="">
 	{#if page?.data?.store?.plugins?.enableReviews && page.data?.product?.ratings?.length}
 		<div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
 			<!-- Rating Summary -->
@@ -366,7 +366,7 @@
 		{/if}
 	{:else}
 		<!-- Fallback when reviews are disabled or no reviews exist -->
-		<div class="mx-2 mt-8 rounded-lg border bg-white p-6 shadow-sm">
+		<div class="mx-0 mt-8 rounded-lg border bg-white p-6 shadow-sm">
 			<div class="text-center">
 				<h2 class="mb-2 text-lg font-semibold">Customer Reviews</h2>
 				<p class="mb-4 text-gray-500">No reviews yet. Be the first to review this product!</p>

@@ -49,30 +49,30 @@
 	})) || []} />
 </div>
 
-<div class="lg:container lg:mx-auto px-4">
+<div class="page-width flex flex-col intra-gap">
 	{#if !data?.product && !productState.isLoading}
 		<div class="flex h-96 flex-col items-center justify-center space-y-4">
-			<h2 class="text-2xl font-bold text-gray-900">Product not found</h2>
+			<h2 class="page-heading">Product not found</h2>
 			<a href="/products" class="text-sm font-bold uppercase tracking-widest text-primary underline underline-offset-4">Browse All Products</a>
 		</div>
 	{:else}
-		<div class="relative grid grid-cols-1 items-start lg:grid-cols-3 lg:gap-12 pb-12">
+		<div class="relative grid grid-cols-1 items-start lg:grid-cols-3 inter-gap">
 			<div class="col-span-2 sm:mt-0">
 				<ProductGallerySection />
 			</div>
 
-			<div class="sticky top-24 mx-0 flex flex-col space-y-0">
+			<div class="sticky top-24 mx-0 flex flex-col intra-gap space-y-0">
 				<ProductTitleSection product={data?.product} />
 
 				<ProductPricing />
 
 				<ProductAggregation />
 
-				<div class="flex flex-col">
+				<div class="flex flex-col intra-gap">
 					<ProductVariation />
 
 					<!-- Desktop Cart Button -->
-					<div class="hidden sm:block mt-4">
+					<div class="hidden flex-col intra-gap sm:flex">
 						<ProductCartAndWishlistButtons />
 					</div>
 
@@ -146,11 +146,11 @@
 		</div>
 	{/if}
 
-	<div class="border-t border-gray-100 pt-16">
+	<div class="border-t px-0 mx-0 border-gray-100">
 		<ProductReviewsSection />
 	</div>
 
-	<div class="pt-16">
+	<div class="">
 		<RelatedProducts />
 	</div>
 </div>

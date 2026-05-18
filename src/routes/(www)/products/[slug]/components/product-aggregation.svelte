@@ -8,7 +8,7 @@
 
 <div class="">
 	{#if page.data?.product?.ag && Object.keys(page.data?.product?.ag).length}
-		<div class="flex items-center gap-2">
+		<div class="flex items-center intra-gap">
 			<span class="text-sm text-gray-500">Select Options</span>
 			<ChartNoAxesGanttIcon class="h-3 w-3" />
 		</div>
