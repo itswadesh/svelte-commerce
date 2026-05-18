@@ -24,8 +24,8 @@
 			{@html product.subtitle}
 		</div>
 	{/if}
-	
-	<div class="mt-4 flex items-center gap-4">
+
+	<div class="intra-pt flex items-center gap-4">
 		{#if product?.rating && page?.data?.store?.plugins?.enableReviews}
 			<div class="flex items-center gap-2">
 				<div class="relative flex items-center">
@@ -36,8 +36,8 @@
 					</div>
 					<div class="absolute top-0 left-0 flex gap-0.5 overflow-hidden">
 						{#each { length: 5 } as _, i}
-							<Star 
-								class="h-4 w-4 {i < Math.floor(product.rating) ? 'fill-primary text-primary' : 'hidden'}" 
+							<Star
+								class="h-4 w-4 {i < Math.floor(product.rating) ? 'fill-primary text-primary' : 'hidden'}"
 							/>
 						{/each}
 						{#if product.rating % 1 > 0}

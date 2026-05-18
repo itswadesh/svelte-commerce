@@ -17,7 +17,7 @@
 </script>
 
 {#if productState.wishlistPluginEnabled}
-	<div class="flex items-center gap-3 sm:mb-4">
+	<div class="flex items-center">
 		<button
 			class="flex flex-1 items-center justify-center gap-2 rounded-md border border-gray-200 py-3 transition-all duration-300 ease-out-expo hover:bg-gray-50 active:scale-95"
 			onclick={productState.handleWishlistClick}

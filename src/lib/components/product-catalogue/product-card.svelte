@@ -138,7 +138,7 @@
 				<div class="flex items-center gap-2" data-testid="product-card-price-container">
 					<span
 						data-testid="product-card-selling-price"
-						class="text-sm text-gray-900 md:font-black font-semibold"
+						class="text-sm text-gray-900 font-semibold"
 					>
 						{formatPrice(product.price, page?.data?.store?.currency?.code)}
 					</span>

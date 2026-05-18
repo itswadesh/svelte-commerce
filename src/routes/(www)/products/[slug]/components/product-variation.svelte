@@ -5,7 +5,7 @@
 	const productState = useProductState()
 </script>
 
-<div class="my-4 flex flex-col gap-5">
+<div class="flex flex-col intra-gap">
 	{#key productState.productOptions}
 		{#each productState.productOptions || [] as option}
 			<div class="flex flex-col gap-3">
@@ -15,7 +15,7 @@
 						<button class="text-[10px] font-bold uppercase tracking-widest text-primary hover:underline transition-all">Size Guide</button>
 					{/if}
 				</div>
-				
+
 				<div class="flex flex-wrap items-center gap-3">
 					{#each option.values || [] as v}
 						{#if option.type === 'Color'}
@@ -36,8 +36,8 @@
 								class="min-w-[3.5rem] rounded-md border py-2 px-4 text-xs font-bold uppercase tracking-widest transition-all
 									{productState.isVariantOptionSelected(option.id, v.value)
 										? 'border-primary bg-primary text-white'
-										: v.selectable 
-											? 'border-gray-200 text-gray-900 hover:border-gray-900' 
+										: v.selectable
+											? 'border-gray-200 text-gray-900 hover:border-gray-900'
 											: 'border-gray-100 text-gray-300 cursor-not-allowed bg-gray-50'}"
 								onclick={() => productState.selectVariant({ option, value: v })}
 							>
