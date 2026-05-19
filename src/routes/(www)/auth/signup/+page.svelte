@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { LoaderIcon } from '@lucide/svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
-	import { toast } from 'svelte-sonner'
+	import { toast } from '@misiki/kitcommerce-core'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import { z } from 'zod'
 	import { getUserState } from '$lib/core/stores/index.js'

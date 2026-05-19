@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { toast } from 'svelte-sonner'
+	import { toast } from '@misiki/kitcommerce-core'
 	import { Image, Star, StarIcon, X } from '@lucide/svelte'
-	import { date } from '$lib/core/utils'
-	import * as Tabs from '$lib/components/ui/tabs'
+	import { date } from '$lib/core/utils/index.js'
+	import * as Tabs from '$lib/components/ui/tabs/index.js'
 	import { page } from '$app/state'
 	import { useProductState } from '$lib/core/composables/index.js'
-	import { productService } from '$lib/core/services'
+	import { productService } from '$lib/core/services/index.js'
 	import Button from '$lib/components/ui/button/button.svelte'
-	import { Textarea } from '$lib/components/ui/textarea'
+	import { Textarea } from '$lib/components/ui/textarea/index.js'
 
 	const productState = useProductState()
 </script>

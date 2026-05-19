@@ -2,10 +2,8 @@
 	import Product from '$lib/components/product-catalogue/product-card.svelte'
 	import { chatService, reviewService, ReviewService, vendorService, VendorService } from '$lib/core/services'
 	import { Skeleton } from '$lib/components/ui/skeleton'
-	import { Star } from '@lucide/svelte'
 	import { page } from '$app/state'
-	import { toast } from 'svelte-sonner'
-	import { onMount } from 'svelte'
+	import { toast } from '@misiki/kitcommerce-core'
 	import { goto } from '$app/navigation'
 	import Pagination from '$lib/components/common/pagination.svelte'
 
