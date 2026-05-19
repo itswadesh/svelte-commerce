@@ -18,6 +18,7 @@ node {{scripts_path}}/load-context.mjs
 The output tells you whether PRODUCT.md and/or DESIGN.md already exist. If `migrated: true`, legacy `.impeccable.md` was auto-renamed to `PRODUCT.md`. Mention this once to the user.
 
 Decision tree:
+
 - **Neither file exists (empty project or no context yet)**: do Steps 2-4 (write PRODUCT.md), then decide on DESIGN.md based on whether there's code to analyze.
 - **PRODUCT.md exists, DESIGN.md missing**: skip to Step 5 and offer to run `/impeccable document` for DESIGN.md.
 - **PRODUCT.md exists but has no `## Register` section (legacy)**: add it. Infer a hypothesis from the codebase (see Step 2), confirm with the user, write the field.
@@ -71,17 +72,19 @@ Ask enough to complete PRODUCT.md. At minimum, cover register confirmation, user
 
 Every design task is either **brand** (marketing, landing, campaign, long-form content, portfolio: design IS the product) or **product** (app UI, admin, dashboards, tools: design SERVES the product).
 
-If Step 2 produced a clear hypothesis, lead with it: *"From the codebase, this looks like a [brand / product] surface. Does that match your intent, or should we treat it differently?"*
+If Step 2 produced a clear hypothesis, lead with it: _"From the codebase, this looks like a [brand / product] surface. Does that match your intent, or should we treat it differently?"_
 
 If the signal is genuinely split (e.g. a product with a big marketing landing), {{ask_instruction}} Ask which register describes the **primary** surface. The register can be overridden per task later, but PRODUCT.md carries one default.
 
 ### Users & Purpose
+
 - Who uses this? What's their context when using it?
 - What job are they trying to get done?
 - For brand: what emotions should the interface evoke? (confidence, delight, calm, urgency)
 - For product: what workflow are they in? What's the primary task on any given screen?
 
 ### Brand & Personality
+
 - How would you describe the brand personality in 3 words?
 - Reference sites or apps that capture the right feel? What specifically about them?
   - For brand, push for real-world references in the right lane (tech-minimal, editorial-magazine, consumer-warm, brutalist-grid, etc.), not generic "modern" adjectives.
@@ -89,6 +92,7 @@ If the signal is genuinely split (e.g. a product with a big marketing landing), 
 - What should this explicitly NOT look like? Any anti-references?
 
 ### Accessibility & Inclusion
+
 - Specific accessibility requirements? (WCAG level, known user needs)
 - Considerations for reduced motion, color blindness, or other accommodations?
 
@@ -108,21 +112,27 @@ Synthesize into a strategic document:
 product
 
 ## Users
+
 [Who they are, their context, the job to be done]
 
 ## Product Purpose
+
 [What this product does, why it exists, what success looks like]
 
 ## Brand Personality
+
 [Voice, tone, 3-word personality, emotional goals]
 
 ## Anti-references
+
 [What this should NOT look like. Specific bad-example sites or patterns to avoid.]
 
 ## Design Principles
+
 [3-5 strategic principles derived from the conversation. Principles like "practice what you preach", "show, don't tell", "expert confidence". NOT visual rules like "use OKLCH" or "magenta accent".]
 
 ## Accessibility & Inclusion
+
 [WCAG level, known user needs, considerations]
 ```
 
@@ -144,6 +154,7 @@ If the user prefers to skip, mention they can run `/impeccable document` any tim
 ## Step 6: Confirm and wrap up
 
 Summarize:
+
 - Register captured (brand / product)
 - What was written (PRODUCT.md, DESIGN.md, or both)
 - The 3-5 strategic principles from PRODUCT.md that will guide future work

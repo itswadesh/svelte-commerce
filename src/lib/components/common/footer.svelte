@@ -41,7 +41,7 @@
 			{/await}
 		</div>
 	{/if}
-	<footer class="mt-2 page-width border-t">
+	<footer class="page-width mt-2 border-t">
 		<div class="w-full xl:pb-2">
 			{#if shouldCollapseOnMobile}
 				<button
@@ -54,8 +54,8 @@
 			{/if}
 
 			<div class="overflow-hidden {shouldCollapseOnMobile ? (isExpanded ? '' : 'hidden md:block') : ''}">
-				<div class="mx-auto py-8 intra-gap md:flex md:justify-between">
-					<div class="mb-7 md:mb-12 flex max-w-xs flex-col intra-gap">
+				<div class="intra-gap mx-auto py-8 md:flex md:justify-between">
+					<div class="intra-gap mb-7 flex max-w-xs flex-col md:mb-12">
 						<a href="/" class="flex items-center">
 							{#if storeData?.logo}
 								<img src={storeData?.logo} class="mr-2 h-10 object-contain" alt="Arialshop — Women's Fashion Online" />
@@ -75,7 +75,7 @@
 						{/if}
 
 						{#if socialSharing?.active}
-							<div class="flex items-center intra-gap sm:mt-0 sm:justify-center">
+							<div class="intra-gap flex items-center sm:mt-0 sm:justify-center">
 								{#each Object.entries(socialSharing || {}).filter(([key]) => !['active', 'position'].includes(key)) as [key, social]}
 									{#if social}
 										<a
@@ -134,7 +134,7 @@
 							</div>
 						{/if}
 					</div>
-					<div class="grid grid-cols-2 intra-gap sm:grid-cols-3">
+					<div class="intra-gap grid grid-cols-2 sm:grid-cols-3">
 						<div>
 							<h1 class="text-black-200 text-lg font-semibold">Quick Links</h1>
 							<ul class="intra-pt">
@@ -192,7 +192,7 @@
 						<TrustpilotPlugin />
 
 						{#if paymentMethodCards?.length}
-							<ul class="col-span-1 m-0 flex list-none flex-wrap items-center justify-end intra-gap">
+							<ul class="intra-gap col-span-1 m-0 flex list-none flex-wrap items-center justify-end">
 								{#each paymentMethodCards as pmc}
 									<li>
 										<img

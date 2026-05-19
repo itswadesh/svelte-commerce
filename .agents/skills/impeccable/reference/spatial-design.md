@@ -21,6 +21,7 @@ Use `repeat(auto-fit, minmax(280px, 1fr))` for responsive grids without breakpoi
 ### The Squint Test
 
 Blur your eyes (or screenshot and blur). Can you still identify:
+
 - The most important element?
 - The second most important?
 - Clear groupings?
@@ -31,13 +32,13 @@ If everything looks the same weight blurred, you have a hierarchy problem.
 
 Don't rely on size alone. Combine:
 
-| Tool | Strong Hierarchy | Weak Hierarchy |
-|------|------------------|----------------|
-| **Size** | 3:1 ratio or more | <2:1 ratio |
-| **Weight** | Bold vs Regular | Medium vs Regular |
-| **Color** | High contrast | Similar tones |
-| **Position** | Top/left (primary) | Bottom/right |
-| **Space** | Surrounded by white space | Crowded |
+| Tool         | Strong Hierarchy          | Weak Hierarchy    |
+| ------------ | ------------------------- | ----------------- |
+| **Size**     | 3:1 ratio or more         | <2:1 ratio        |
+| **Weight**   | Bold vs Regular           | Medium vs Regular |
+| **Color**    | High contrast             | Similar tones     |
+| **Position** | Top/left (primary)        | Bottom/right      |
+| **Space**    | Surrounded by white space | Crowded           |
 
 **The best hierarchy uses 2-3 dimensions at once**: A heading that's larger, bolder, AND has more space above it.
 
@@ -51,19 +52,19 @@ Viewport queries are for page layouts. **Container queries are for components**:
 
 ```css
 .card-container {
-  container-type: inline-size;
+	container-type: inline-size;
 }
 
 .card {
-  display: grid;
-  gap: var(--space-md);
+	display: grid;
+	gap: var(--space-md);
 }
 
 /* Card layout changes based on its container, not viewport */
 @container (min-width: 400px) {
-  .card {
-    grid-template-columns: 120px 1fr;
-  }
+	.card {
+		grid-template-columns: 120px 1fr;
+	}
 }
 ```
 
@@ -79,15 +80,15 @@ Buttons can look small but need large touch targets (44px minimum). Use padding 
 
 ```css
 .icon-button {
-  width: 24px;  /* Visual size */
-  height: 24px;
-  position: relative;
+	width: 24px; /* Visual size */
+	height: 24px;
+	position: relative;
 }
 
 .icon-button::before {
-  content: '';
-  position: absolute;
-  inset: -10px;  /* Expand tap target to 44px */
+	content: '';
+	position: absolute;
+	inset: -10px; /* Expand tap target to 44px */
 }
 ```
 

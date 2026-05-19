@@ -11,32 +11,32 @@ The YAML frontmatter is the machine-readable layer. It's what Stitch's linter va
 name: <project title>
 description: <one-line tagline>
 colors:
-  primary: "#b8422e"
-  neutral-bg: "#faf7f2"
+  primary: '#b8422e'
+  neutral-bg: '#faf7f2'
   # ...one entry per extracted color; key = descriptive slug
 typography:
   display:
-    fontFamily: "Cormorant Garamond, Georgia, serif"
-    fontSize: "clamp(2.5rem, 7vw, 4.5rem)"
+    fontFamily: 'Cormorant Garamond, Georgia, serif'
+    fontSize: 'clamp(2.5rem, 7vw, 4.5rem)'
     fontWeight: 300
     lineHeight: 1
-    letterSpacing: "normal"
+    letterSpacing: 'normal'
   body:
     # ...
 rounded:
-  sm: "4px"
-  md: "8px"
+  sm: '4px'
+  md: '8px'
 spacing:
-  sm: "8px"
-  md: "16px"
+  sm: '8px'
+  md: '16px'
 components:
   button-primary:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.neutral-bg}"
-    rounded: "{rounded.sm}"
-    padding: "16px 48px"
+    backgroundColor: '{colors.primary}'
+    textColor: '{colors.neutral-bg}'
+    rounded: '{rounded.sm}'
+    padding: '16px 48px'
   button-primary-hover:
-    backgroundColor: "{colors.primary-deep}"
+    backgroundColor: '{colors.primary-deep}'
 ---
 ```
 
@@ -147,19 +147,24 @@ colors:
 [Describe the palette character in one sentence.]
 
 ### Primary
+
 - **[Descriptive Name]** (#HEX / oklch(...)): [Where and why this color is used. Be specific about context, not just role.]
 
 ### Secondary (optional; omit if the project has only one accent)
+
 - **[Descriptive Name]** (#HEX): [Role.]
 
 ### Tertiary (optional)
+
 - **[Descriptive Name]** (#HEX): [Role.]
 
 ### Neutral
+
 - **[Descriptive Name]** (#HEX): [Text / background / border / divider role.]
 - [...]
 
 ### Named Rules (optional, powerful)
+
 **The [Rule Name] Rule.** [Short, forceful prohibition or doctrine, e.g. "The One Voice Rule. The primary accent is used on ≤10% of any given screen. Its rarity is the point."]
 
 ## 3. Typography
@@ -171,6 +176,7 @@ colors:
 **Character:** [1-2 sentence personality description of the pairing.]
 
 ### Hierarchy
+
 - **Display** ([weight], [size/clamp], [line-height]): [Purpose; where it appears.]
 - **Headline** ([weight], [size], [line-height]): [Purpose.]
 - **Title** ([weight], [size], [line-height]): [Purpose.]
@@ -178,6 +184,7 @@ colors:
 - **Label** ([weight], [size], [letter-spacing], [case if uppercase]): [Purpose.]
 
 ### Named Rules (optional)
+
 **The [Rule Name] Rule.** [Short doctrine about type use.]
 
 ## 4. Elevation
@@ -185,10 +192,12 @@ colors:
 [One paragraph: does this system use shadows, tonal layering, or a hybrid? If "no shadows", say so explicitly and describe how depth is conveyed instead.]
 
 ### Shadow Vocabulary (if applicable)
+
 - **[Role name]** (`box-shadow: [exact value]`): [When to use it.]
 - [...]
 
 ### Named Rules (optional)
+
 **The [Rule Name] Rule.** [e.g. "The Flat-By-Default Rule. Surfaces are flat at rest. Shadows appear only as a response to state (hover, elevation, focus)."]
 
 ## 5. Components
@@ -196,16 +205,19 @@ colors:
 For each component, lead with a short character line, then specify shape, color assignment, states, and any distinctive behavior.
 
 ### Buttons
+
 - **Shape:** [radius described, exact value in parens]
 - **Primary:** [color assignment + padding, in semantic + exact terms]
 - **Hover / Focus:** [transitions, treatments]
 - **Secondary / Ghost / Tertiary (if applicable):** [brief description]
 
 ### Chips (if used)
+
 - **Style:** [background, text color, border treatment]
 - **State:** [selected / unselected, filter / action variants]
 
 ### Cards / Containers
+
 - **Corner Style:** [radius]
 - **Background:** [colors used]
 - **Shadow Strategy:** [reference Elevation section]
@@ -213,25 +225,30 @@ For each component, lead with a short character line, then specify shape, color 
 - **Internal Padding:** [scale]
 
 ### Inputs / Fields
+
 - **Style:** [stroke, background, radius]
 - **Focus:** [treatment, e.g. glow, border shift, etc.]
 - **Error / Disabled:** [if applicable]
 
 ### Navigation
+
 - **Style, typography, default/hover/active states, mobile treatment.**
 
 ### [Signature Component] (optional; if the project has a distinctive custom component worth documenting)
+
 [Description.]
 
 ## 6. Do's and Don'ts
 
-Concrete, forceful guardrails. Lead each with "Do" or "Don't". Be specific: include exact colors, pixel values, and named anti-patterns the user mentioned in PRODUCT.md. **Every anti-reference in PRODUCT.md should show up here as a "Don't" with the same language**, so the visual spec carries the strategic line through. Quote PRODUCT.md directly where possible: if PRODUCT.md says *"avoid dark mode with purple gradients, neon accents, glassmorphism"*, the Don'ts here should repeat that by name.
+Concrete, forceful guardrails. Lead each with "Do" or "Don't". Be specific: include exact colors, pixel values, and named anti-patterns the user mentioned in PRODUCT.md. **Every anti-reference in PRODUCT.md should show up here as a "Don't" with the same language**, so the visual spec carries the strategic line through. Quote PRODUCT.md directly where possible: if PRODUCT.md says _"avoid dark mode with purple gradients, neon accents, glassmorphism"_, the Don'ts here should repeat that by name.
 
 ### Do:
+
 - **Do** [specific prescription with exact values / named rule].
 - **Do** [...]
 
 ### Don't:
+
 - **Don't** [specific prohibition, e.g. "use border-left greater than 1px as a colored stripe"].
 - **Don't** [...]
 - **Don't** [...]
@@ -247,45 +264,44 @@ Regenerate the sidecar whenever you regenerate root `DESIGN.md`. If the user onl
 
 ```json
 {
-  "schemaVersion": 2,
-  "generatedAt": "ISO-8601 string",
-  "title": "Design System: [Project Title]",
-  "extensions": {
-    "colorMeta": {
-      "primary":        { "role": "primary",  "displayName": "Editorial Magenta", "canonical": "oklch(60% 0.25 350)", "tonalRamp": ["...", "...", "..."] },
-      "warm-ash-cream": { "role": "neutral",  "displayName": "Warm Ash Cream",    "canonical": "oklch(96% 0.005 350)", "tonalRamp": ["...", "...", "..."] }
-    },
-    "typographyMeta": {
-      "display": { "displayName": "Display", "purpose": "Hero headlines only." }
-    },
-    "shadows": [
-      { "name": "ambient-low", "value": "0 4px 24px rgba(0,0,0,0.12)", "purpose": "Diffuse hover glow under accent elements." }
-    ],
-    "motion": [
-      { "name": "ease-standard", "value": "cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Default easing for state transitions." }
-    ],
-    "breakpoints": [
-      { "name": "sm", "value": "640px" }
-    ]
-  },
-  "components": [
-    {
-      "name": "Primary Button",
-      "kind": "button | input | nav | chip | card | custom",
-      "refersTo": "button-primary",
-      "description": "One-line what and when.",
-      "html": "<button class=\"ds-btn-primary\">GET STARTED</button>",
-      "css": ".ds-btn-primary { background: #191c1d; color: #fff; padding: 16px 48px; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 500; border: none; border-radius: 0; transition: background 0.2s, transform 0.2s; } .ds-btn-primary:hover { background: oklch(60% 0.25 350); transform: translateY(-2px); }"
-    }
-  ],
-  "narrative": {
-    "northStar": "The Editorial Sanctuary",
-    "overview": "2-3 paragraphs of the philosophy, pulled from DESIGN.md Overview section.",
-    "keyCharacteristics": ["...", "..."],
-    "rules": [{ "name": "The One Voice Rule", "body": "...", "section": "colors|typography|elevation" }],
-    "dos":   ["Do use ..."],
-    "donts": ["Don't use ..."]
-  }
+	"schemaVersion": 2,
+	"generatedAt": "ISO-8601 string",
+	"title": "Design System: [Project Title]",
+	"extensions": {
+		"colorMeta": {
+			"primary": { "role": "primary", "displayName": "Editorial Magenta", "canonical": "oklch(60% 0.25 350)", "tonalRamp": ["...", "...", "..."] },
+			"warm-ash-cream": {
+				"role": "neutral",
+				"displayName": "Warm Ash Cream",
+				"canonical": "oklch(96% 0.005 350)",
+				"tonalRamp": ["...", "...", "..."]
+			}
+		},
+		"typographyMeta": {
+			"display": { "displayName": "Display", "purpose": "Hero headlines only." }
+		},
+		"shadows": [{ "name": "ambient-low", "value": "0 4px 24px rgba(0,0,0,0.12)", "purpose": "Diffuse hover glow under accent elements." }],
+		"motion": [{ "name": "ease-standard", "value": "cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Default easing for state transitions." }],
+		"breakpoints": [{ "name": "sm", "value": "640px" }]
+	},
+	"components": [
+		{
+			"name": "Primary Button",
+			"kind": "button | input | nav | chip | card | custom",
+			"refersTo": "button-primary",
+			"description": "One-line what and when.",
+			"html": "<button class=\"ds-btn-primary\">GET STARTED</button>",
+			"css": ".ds-btn-primary { background: #191c1d; color: #fff; padding: 16px 48px; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 500; border: none; border-radius: 0; transition: background 0.2s, transform 0.2s; } .ds-btn-primary:hover { background: oklch(60% 0.25 350); transform: translateY(-2px); }"
+		}
+	],
+	"narrative": {
+		"northStar": "The Editorial Sanctuary",
+		"overview": "2-3 paragraphs of the philosophy, pulled from DESIGN.md Overview section.",
+		"keyCharacteristics": ["...", "..."],
+		"rules": [{ "name": "The One Voice Rule", "body": "...", "section": "colors|typography|elevation" }],
+		"dos": ["Do use ..."],
+		"donts": ["Don't use ..."]
+	}
 }
 ```
 
@@ -299,7 +315,7 @@ The `html` and `css` fields must be **self-contained, drop-in snippets** that re
 2. **Token resolution.** If the project exposes tokens as CSS custom properties on `:root` (e.g. `--color-primary`, `--radius-md`), reference them via `var(--color-primary)`; they inherit through the shadow DOM and stay live-bound. If tokens live only in JS theme objects (styled-components, CSS-in-JS), resolve to literal values at generation time.
 3. **Icons.** Inline as SVG. Do not reference Lucide/Heroicons packages, icon fonts, or `<img src="...">`. A typical icon is 16-24px; copy the SVG path data directly.
 4. **States.** Include `:hover`, `:focus-visible`, and (if meaningful) `:active` rules inline. A static default-only snapshot makes the panel feel dead. Hover + focus rules in the CSS make it feel alive.
-5. **Reset bloat.** Extract only the component's *distinctive* CSS (background, color, padding, border-radius, typography, transition). Skip universal resets (`box-sizing: border-box`, `line-height: inherit`, `-webkit-font-smoothing`). The panel already has a neutral canvas; don't re-ship resets.
+5. **Reset bloat.** Extract only the component's _distinctive_ CSS (background, color, padding, border-radius, typography, transition). Skip universal resets (`box-sizing: border-box`, `line-height: inherit`, `-webkit-font-smoothing`). The panel already has a neutral canvas; don't re-ship resets.
 6. **Scoped class names.** Prefix every class with `ds-` (e.g. `ds-btn-primary`, `ds-input-search`) so component CSS doesn't collide with other components' CSS in the same shadow DOM.
 
 #### What to include
@@ -310,7 +326,7 @@ Aim for a tight set of **5-10 components** that best represent the visual system
 - **Signature components (include if distinctive):** hero CTA, featured card, filter pill, any custom pattern the user mentioned as important in PRODUCT.md.
 - **Skip the rest.** Utility components, form building blocks, wrapper layouts: not worth documenting unless visually distinctive.
 
-If the project has **no component library yet** (bare landing page, new project), synthesize canonical primitives from the tokens using best-practice defaults consistent with the DESIGN.md's rules. Every `.impeccable/design.json` has *something* to render, even on day zero.
+If the project has **no component library yet** (bare landing page, new project), synthesize canonical primitives from the tokens using best-practice defaults consistent with the DESIGN.md's rules. Every `.impeccable/design.json` has _something_ to render, even on day zero.
 
 #### Tonal ramps
 
@@ -350,14 +366,16 @@ If the user prefers to skip, stop. No file.
 Group into one `AskUserQuestion` interaction. Options must be concrete.
 
 1. **Color strategy.** Pick one:
+
    - Restrained: tinted neutrals + one accent ≤10%
    - Committed: one saturated color carries 30–60% of the surface
    - Full palette: 3–4 named color roles, each deliberate
    - Drenched: the surface IS the color
-   
+
    Then: one hue family or anchor reference ("deep teal", "mustard", "Klim #ff4500 orange").
 
 2. **Typography direction.** Pick one (specific fonts come later):
+
    - Serif display + sans body
    - Single sans (warm / technical / geometric / humanist; pick a feel)
    - Display + mono
@@ -365,6 +383,7 @@ Group into one `AskUserQuestion` interaction. Options must be concrete.
    - Editorial script + sans
 
 3. **Motion energy.** Pick one:
+
    - Restrained: state changes only
    - Responsive: feedback + transitions, no choreography
    - Choreographed: orchestrated entrances, scroll-driven sequences
@@ -386,7 +405,7 @@ Lead the file with:
 Per-section guidance in seed mode:
 
 - **Overview**: Creative North Star and philosophy phrased from the answers (color strategy + motion energy + references). Reference the user's anti-reference directly.
-- **Colors**: Color strategy as a Named Rule (e.g. *"The Drenched Rule. The surface IS the color."*). Hue family or anchor reference. No hex values; mark as `[to be resolved during implementation]`.
+- **Colors**: Color strategy as a Named Rule (e.g. _"The Drenched Rule. The surface IS the color."_). Hue family or anchor reference. No hex values; mark as `[to be resolved during implementation]`.
 - **Typography**: the direction the user picked (e.g. "Serif display + sans body"). No font names yet: `[font pairing to be chosen at implementation]`.
 - **Elevation**: inferred from motion energy. Restrained/Responsive → flat by default; Choreographed → layered. One sentence.
 - **Components**: omit entirely; no components exist yet.
@@ -410,7 +429,7 @@ Seed mode writes a minimal frontmatter with `name` and `description` only; no co
 - **Exact values in parens**: hex codes, px/rem values, font weights; always the number in parens alongside the description.
 - **Use Named Rules**: `**The [Name] Rule.** [short doctrine]`. These are memorable, citable, and much stickier for AI consumers than bullet lists. Stitch's own outputs use them heavily ("The No-Line Rule", "The Ghost Border Fallback"). Aim for 1-3 per section.
 - **Be forceful**. The voice of a design director. "Prohibited", "forbidden", "never", "always", not "consider", "might", "prefer". Match PRODUCT.md's tone.
-- **Concrete anti-pattern tests**. Stitch writes things like *"If it looks like a 2014 app, the shadow is too dark and the blur is too small."* A one-sentence audit test beats a paragraph of principle.
+- **Concrete anti-pattern tests**. Stitch writes things like _"If it looks like a 2014 app, the shadow is too dark and the blur is too small."_ A one-sentence audit test beats a paragraph of principle.
 - **Reference PRODUCT.md**. The anti-references section of PRODUCT.md should directly inform the Do's and Don'ts section here. Quote or paraphrase.
 - **Group colors by role**, not by hex-order or hue-order. Primary / Secondary / Tertiary / Neutral is the spec ordering.
 

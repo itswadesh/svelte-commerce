@@ -14,7 +14,7 @@
 <PaginationRenderer bind:noOfPage {paginateProducts}>
 	{#snippet content({ pageSize, currentPage, goToPreviousPage, goToNextPage, goToPage, count })}
 		{#if count && noOfPage > 1}
-			<div class="flex flex-col items-center gap-6 border-gray-200 mt-5 pt-5">
+			<div class="mt-5 flex flex-col items-center gap-6 border-gray-200 pt-5">
 				<Pagination.Root {count} perPage={pageSize}>
 					{#snippet children({ pages })}
 						<Pagination.Content class="gap-1">
@@ -22,7 +22,7 @@
 								<Pagination.PrevButton
 									onclick={goToPreviousPage}
 									disabled={currentPage <= 1}
-									class="h-10 px-4 rounded-full border-transparent hover:bg-gray-50 transition-colors uppercase tracking-widest text-[10px] font-bold"
+									class="h-10 rounded-full border-transparent px-4 text-[10px] font-bold uppercase tracking-widest transition-colors hover:bg-gray-50"
 								/>
 							</Pagination.Item>
 
@@ -40,9 +40,7 @@
 												onclick={() => goToPage(page.value)}
 												class={cn(
 													'h-10 w-10 rounded-full text-xs font-bold transition-all duration-200',
-													page.value === currentPage
-														? 'bg-primary text-white'
-														: 'text-gray-400 hover:bg-gray-50 hover:text-gray-900'
+													page.value === currentPage ? 'bg-primary text-white' : 'text-gray-400 hover:bg-gray-50 hover:text-gray-900'
 												)}
 											>
 												{page.value}
@@ -53,14 +51,16 @@
 							</div>
 
 							<div class="flex items-center px-6 text-[10px] font-bold uppercase tracking-widest text-gray-900 md:hidden">
-								<span class="text-gray-400 mr-2">Page</span> {currentPage} <span class="text-gray-300 mx-2">/</span> {noOfPage}
+								<span class="mr-2 text-gray-400">Page</span>
+								{currentPage} <span class="mx-2 text-gray-300">/</span>
+								{noOfPage}
 							</div>
 
 							<Pagination.Item>
 								<Pagination.NextButton
 									onclick={goToNextPage}
 									disabled={currentPage >= noOfPage}
-									class="h-10 px-4 rounded-full border-transparent hover:bg-gray-50 transition-colors uppercase tracking-widest text-[10px] font-bold"
+									class="h-10 rounded-full border-transparent px-4 text-[10px] font-bold uppercase tracking-widest transition-colors hover:bg-gray-50"
 								/>
 							</Pagination.Item>
 						</Pagination.Content>

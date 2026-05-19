@@ -8,4 +8,3 @@
 <ProductStateProvider {data}>
 	<ProductDetails />
 </ProductStateProvider>
-

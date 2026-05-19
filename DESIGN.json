@@ -1,80 +1,67 @@
 {
-  "schemaVersion": 2,
-  "generatedAt": "2026-05-16T12:00:00Z",
-  "title": "Design System Inspired by Bewakoof",
-  "extensions": {
-    "colorMeta": {
-      "primary": {
-        "role": "primary",
-        "displayName": "Bewakoof Blue",
-        "canonical": "#207bb4",
-        "tonalRamp": ["#0d3148", "#16567d", "#207bb4", "#4da2d6", "#8ec7e9", "#cfebf8"]
-      },
-      "secondary": {
-        "role": "secondary",
-        "displayName": "Teal Green",
-        "canonical": "#339d9c",
-        "tonalRamp": ["#143f3e", "#236d6c", "#339d9c", "#66bdbb", "#99ddd9", "#ccf0ef"]
-      },
-      "accent": {
-        "role": "accent",
-        "displayName": "Sunny Yellow",
-        "canonical": "#fdd835"
-      }
-    },
-    "typographyMeta": {
-      "display": {
-        "displayName": "Montserrat",
-        "purpose": "Modern, youthful feel for all headings and body text."
-      }
-    },
-    "shadows": [
-      {
-        "name": "z-1",
-        "value": "0 2px 4px rgba(0, 0, 0, 0.1)",
-        "purpose": "Standard card elevation."
-      },
-      {
-        "name": "z-2",
-        "value": "0 4px 8px rgba(0, 0, 0, 0.1)",
-        "purpose": "Dropdown menus."
-      }
-    ],
-    "breakpoints": [
-      { "name": "mobile-sm", "value": "640px" },
-      { "name": "mobile-lg", "value": "768px" },
-      { "name": "tablet", "value": "992px" },
-      { "name": "desktop", "value": "1200px" }
-    ]
-  },
-  "components": [
-    {
-      "name": "Primary Button",
-      "kind": "button",
-      "refersTo": "button-primary",
-      "description": "Main call to action button.",
-      "html": "<button class=\"button-primary\">Action</button>",
-      "css": ".button-primary { background-color: #339d9c; color: #ffffff; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; } .button-primary:hover { background-color: #207bb4; }"
-    }
-  ],
-  "narrative": {
-    "northStar": "Vibrant Youthful Aesthetic",
-    "overview": "Clean layout emphasizing product imagery with bright accent colors against neutral backgrounds.",
-    "keyCharacteristics": [
-      "Bright accent colors",
-      "Grid-based layout",
-      "Montserrat typography",
-      "Minimalist whitespace"
-    ],
-    "dos": [
-      "Use #339d9c for primary button backgrounds.",
-      "Maintain 14px font size for captions.",
-      "Keep 24px spacing between elements."
-    ],
-    "donts": [
-      "Avoid less than 16px font size for primary text.",
-      "Don't mix button colors.",
-      "Never place elements closer than 16px apart."
-    ]
-  }
+	"schemaVersion": 2,
+	"generatedAt": "2026-05-16T12:00:00Z",
+	"title": "Design System Inspired by Bewakoof",
+	"extensions": {
+		"colorMeta": {
+			"primary": {
+				"role": "primary",
+				"displayName": "Bewakoof Blue",
+				"canonical": "#207bb4",
+				"tonalRamp": ["#0d3148", "#16567d", "#207bb4", "#4da2d6", "#8ec7e9", "#cfebf8"]
+			},
+			"secondary": {
+				"role": "secondary",
+				"displayName": "Teal Green",
+				"canonical": "#339d9c",
+				"tonalRamp": ["#143f3e", "#236d6c", "#339d9c", "#66bdbb", "#99ddd9", "#ccf0ef"]
+			},
+			"accent": {
+				"role": "accent",
+				"displayName": "Sunny Yellow",
+				"canonical": "#fdd835"
+			}
+		},
+		"typographyMeta": {
+			"display": {
+				"displayName": "Montserrat",
+				"purpose": "Modern, youthful feel for all headings and body text."
+			}
+		},
+		"shadows": [
+			{
+				"name": "z-1",
+				"value": "0 2px 4px rgba(0, 0, 0, 0.1)",
+				"purpose": "Standard card elevation."
+			},
+			{
+				"name": "z-2",
+				"value": "0 4px 8px rgba(0, 0, 0, 0.1)",
+				"purpose": "Dropdown menus."
+			}
+		],
+		"breakpoints": [
+			{ "name": "mobile-sm", "value": "640px" },
+			{ "name": "mobile-lg", "value": "768px" },
+			{ "name": "tablet", "value": "992px" },
+			{ "name": "desktop", "value": "1200px" }
+		]
+	},
+	"components": [
+		{
+			"name": "Primary Button",
+			"kind": "button",
+			"refersTo": "button-primary",
+			"description": "Main call to action button.",
+			"html": "<button class=\"button-primary\">Action</button>",
+			"css": ".button-primary { background-color: #339d9c; color: #ffffff; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; } .button-primary:hover { background-color: #207bb4; }"
+		}
+	],
+	"narrative": {
+		"northStar": "Vibrant Youthful Aesthetic",
+		"overview": "Clean layout emphasizing product imagery with bright accent colors against neutral backgrounds.",
+		"keyCharacteristics": ["Bright accent colors", "Grid-based layout", "Montserrat typography", "Minimalist whitespace"],
+		"dos": ["Use #339d9c for primary button backgrounds.", "Maintain 14px font size for captions.", "Keep 24px spacing between elements."],
+		"donts": ["Avoid less than 16px font size for primary text.", "Don't mix button colors.", "Never place elements closer than 16px apart."]
+	}
 }

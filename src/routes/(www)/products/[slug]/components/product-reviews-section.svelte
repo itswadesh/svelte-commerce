@@ -28,7 +28,7 @@
 								<Star fill="yellow" class="h-5 w-5 {i < (page.data?.product?.rating || 0) ? 'text-primary-500' : 'text-zinc-200'}" />
 							{/each}
 						</div>
-						<div class="text-sm text-zinc-600 font-medium">
+						<div class="text-sm font-medium text-zinc-600">
 							Based on {page.data?.product?.ratings?.length || 0} reviews
 						</div>
 					</div>
@@ -46,7 +46,7 @@
 								<div class="h-2 flex-1 overflow-hidden rounded-full bg-zinc-100">
 									<div class="bg-primary-500 h-full rounded-full transition-all" style="width: {percentage}%"></div>
 								</div>
-								<div class="w-10 text-sm text-zinc-600 font-medium">{count}</div>
+								<div class="w-10 text-sm font-medium text-zinc-600">{count}</div>
 							</div>
 						{/each}
 					</div>
@@ -113,7 +113,7 @@
 						{/each}
 
 						{#if !page.data?.product?.ratings?.length}
-							<div class="p-8 text-center text-zinc-600 font-medium">No reviews yet. Be the first to review this product!</div>
+							<div class="p-8 text-center font-medium text-zinc-600">No reviews yet. Be the first to review this product!</div>
 						{:else}
 							<Tabs.Root value="product" class="w-full">
 								<Tabs.List class="mb-6 grid w-full grid-cols-2 border-b">
@@ -281,7 +281,12 @@
 							<span class="mb-2 block text-sm font-medium">Rating</span>
 							<div class="flex items-center gap-2">
 								{#each { length: 5 } as _, i}
-									<button type="button" aria-label="Rate {i + 1} star" class="p-1 transition-transform focus:outline-none" onclick={() => productState.onSelect(i)}>
+									<button
+										type="button"
+										aria-label="Rate {i + 1} star"
+										class="p-1 transition-transform focus:outline-none"
+										onclick={() => productState.onSelect(i)}
+									>
 										<Star class="h-11 w-11 {productState.select && productState.select >= i ? 'fill-primary' : 'fill-zinc-200'}" />
 									</button>
 								{/each}
@@ -375,4 +380,3 @@
 		</div>
 	{/if}
 </div>
-

@@ -1,14 +1,5 @@
 <script lang="ts">
-	import {
-		X,
-		UserCircle,
-		ChevronLeft,
-		Phone,
-		Mail,
-		Menu,
-		ChevronDown,
-		Heart,
-	} from '@lucide/svelte'
+	import { X, UserCircle, ChevronLeft, Phone, Mail, Menu, ChevronDown, Heart } from '@lucide/svelte'
 	import MainNav from './main-nav.svelte'
 	import MegaMenu from './mega-menu.svelte'
 	import { page } from '$app/state'
@@ -32,7 +23,7 @@
 
 	const { storeData } = $props()
 
-  const wishlistState = getWishlistState()
+	const wishlistState = getWishlistState()
 	const wishlistPlugin = $derived(page?.data?.store?.plugins?.isWishlist)
 	const navModule = new NavModule()
 	const userState = navModule.userState
@@ -130,7 +121,7 @@
 		<div class="flex items-center gap-2">
 			<!-- <Search /> -->
 			<div class="flex items-center">
-				<div class="relative flex items-center intra-gap">
+				<div class="intra-gap relative flex items-center">
 					<!-- {#if isProductListingPage}
               <div class="block sm:hidden">
                 {#if page?.data?.store?.plugins?.socialSharingButtons?.active}
@@ -158,7 +149,7 @@
 					{#if wishlistPlugin.active}
 						<div class="relative px-2" role="navigation">
 							<a href="/my/wishlist" class="rounded-full" aria-label="Toggle Cart">
-                <Heart class="h-5 w-5"/>
+								<Heart class="h-5 w-5" />
 								{#if wishlistState.count > 0}
 									<span
 										class="absolute right-0 top-0 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-primary px-1.5 py-1 text-xs font-bold leading-none text-white"
@@ -171,18 +162,17 @@
 					{/if}
 
 					{#if !page.url.pathname.startsWith('/checkout')}
-            <CartSidebar
-              onClose={navModule.closeCartSidebar}
-              onContinueShopping={navModule.handleContinueShoppingClick}
-              onRemoveCartItem={navModule.removeCartItem}
-
-            />
+						<CartSidebar
+							onClose={navModule.closeCartSidebar}
+							onContinueShopping={navModule.handleContinueShoppingClick}
+							onRemoveCartItem={navModule.removeCartItem}
+						/>
 					{/if}
 					<!-- {/if} -->
 
 					<div class="flex h-full items-center font-['Inter',_sans-serif]">
 						{#if userState?.user?.role}
-              <ProfileDropdown onSignOut={navModule.handleSignOut} />
+							<ProfileDropdown onSignOut={navModule.handleSignOut} />
 						{:else}
 							<AuthButton aria-label="Login" type="login">
 								<div

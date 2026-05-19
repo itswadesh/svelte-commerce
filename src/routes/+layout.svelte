@@ -14,7 +14,6 @@
 	}
 	let { children, data }: { children: Snippet; data: LayoutData } = $props()
 	setUserState()
-
 </script>
 
 <svelte:head>

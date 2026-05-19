@@ -90,7 +90,7 @@
 
 						<div
 							in:fly={{ y: 20, duration: 400, delay: i * 50 }}
-							class="overflow-hidden rounded-2xl border border-gray-100 bg-white transition-all duration-300 hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] hover:border-gray-200"
+							class="overflow-hidden rounded-2xl border border-gray-100 bg-white transition-all duration-300 hover:border-gray-200 hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)]"
 						>
 							<!-- Order Header -->
 							<div class="border-b border-gray-100 bg-gray-50/30 p-6">
@@ -122,7 +122,7 @@
 											variant="outline"
 											size="sm"
 											href="/my/orders/{order.parentOrderNo}"
-											class="h-10 rounded-full border-gray-200 bg-white px-6 text-[10px] font-bold uppercase tracking-widest transition-all hover:bg-black hover:text-white hover:border-black active:scale-95"
+											class="h-10 rounded-full border-gray-200 bg-white px-6 text-[10px] font-bold uppercase tracking-widest transition-all hover:border-black hover:bg-black hover:text-white active:scale-95"
 										>
 											View Details
 										</Button>

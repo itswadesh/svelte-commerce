@@ -56,7 +56,7 @@
 					{#each wishlistItems as item, i}
 						<div
 							in:fly={{ y: 20, duration: 400, delay: i * 50 }}
-							class="group relative flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] hover:border-gray-200 sm:flex-row"
+							class="group relative flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white transition-all duration-500 hover:border-gray-200 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] sm:flex-row"
 						>
 							<!-- Product Image -->
 							<a

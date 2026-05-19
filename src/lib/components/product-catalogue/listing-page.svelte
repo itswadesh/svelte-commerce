@@ -31,7 +31,7 @@
 	/>
 
 	<div class="inter-gap flex flex-1 flex-col">
-    <ListingHeader bind:selectedSort />
+		<ListingHeader bind:selectedSort />
 		<ListingGrid />
 	</div>
 </div>

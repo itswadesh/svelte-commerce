@@ -13,7 +13,7 @@
 	let { children }: { children: Snippet } = $props()
 	let isMobileMenuOpen = $state(false)
 
-  setWishlistState()
+	setWishlistState()
 	setCartState()
 	setUserState()
 
@@ -70,7 +70,8 @@
 				{#each menuItems as { href, icon: Icon, label }, i}
 					<a
 						{href}
-						class="group flex items-center rounded-2xl px-4 py-3.5 text-sm font-bold tracking-tight transition-all duration-300 {page.url.pathname === href ||
+						class="group flex items-center rounded-2xl px-4 py-3.5 text-sm font-bold tracking-tight transition-all duration-300 {page.url.pathname ===
+							href ||
 						(page.url.pathname.startsWith(href) && href !== '/my')
 							? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20'
 							: 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'}"

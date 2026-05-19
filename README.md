@@ -5,7 +5,8 @@
 <div align="center">
 
 **The open-source frontend for any eCommerce. Built with a headless approach, using a modern JS stack. The API approach also allows you to merge Svelte Commerce with any third-party tool like payment gateways, POS or AI.**
-Turnkey integration with 
+Turnkey integration with
+
 - [litekart.in](https://litekart.in/)
 - [shopify.com](https://www.shopify.com)
 - [medusajs.com](https://medusajs.com/)
@@ -116,6 +117,7 @@ Thats all !
 Open http://localhost:3000 on chrome. Your app should be live with awesome svelte-commerce up and running
 
 ## Development
+
 run `npm link` inside `litekart-utils` repo
 run `npm link @misiki/litekart-utils` inside this repo
 run `npm link` inside `litekart-connector` repo

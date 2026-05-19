@@ -24,7 +24,6 @@
 				return
 			}
 			address = await addressService.editAddress(page.params.id, address)
-
 		} catch (e: any) {
 			toast.error(e.message)
 		} finally {

@@ -5,7 +5,7 @@
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import LoadingDotsGif from '$lib/assets/dots-loading.gif'
 	import { formatPrice, fireGTagEvent } from '$lib/core/utils/index.js'
-  import { page } from '$app/state'
+	import { page } from '$app/state'
 
 	const cartState = getCartState()
 	const userState = getUserState()
@@ -54,11 +54,11 @@
 							e.stopPropagation()
 							loading = true
 
-              const categoryNames = cartProduct?.product?.categories?.flatMap?.(c => c.category?.name) || []
-              const productObj = {
-                ...(cartProduct || {}),
-                categoryNames
-              }
+							const categoryNames = cartProduct?.product?.categories?.flatMap?.((c) => c.category?.name) || []
+							const productObj = {
+								...(cartProduct || {}),
+								categoryNames
+							}
 
 							fireGTagEvent('remove_from_cart', {
 								items: [{ ...productObj }],
@@ -94,11 +94,11 @@
 							loading = true
 							const me = userState?.user
 
-              const categoryNames = cartProduct?.product?.categories?.flatMap?.(c => c.category?.name) || []
-              const productObj = {
-                ...(cartProduct || {}),
-                categoryNames
-              }
+							const categoryNames = cartProduct?.product?.categories?.flatMap?.((c) => c.category?.name) || []
+							const productObj = {
+								...(cartProduct || {}),
+								categoryNames
+							}
 
 							const dataToFire = {
 								items: [{ ...productObj, qty: cartProduct?.qty + 1 }],
@@ -132,11 +132,11 @@
 						e?.preventDefault()
 						e?.stopPropagation()
 
-            const categoryNames = cartProduct?.product?.categories?.flatMap?.(c => c.category?.name) || []
-            const productObj = {
-              ...(cartProduct || {}),
-              categoryNames
-            }
+						const categoryNames = cartProduct?.product?.categories?.flatMap?.((c) => c.category?.name) || []
+						const productObj = {
+							...(cartProduct || {}),
+							categoryNames
+						}
 
 						fireGTagEvent('remove_from_cart', {
 							items: [{ ...productObj }],

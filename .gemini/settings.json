@@ -1,12 +1,12 @@
 {
-  "mcpServers": {
-    "figma": {
-      "url": "https://mcp.figma.com/mcp",
-      "type": "http"
-    },
-    "svelte": {
-      "url": "https://mcp.svelte.dev/mcp",
-      "type": "http"
-    }
-  }
+	"mcpServers": {
+		"figma": {
+			"url": "https://mcp.figma.com/mcp",
+			"type": "http"
+		},
+		"svelte": {
+			"url": "https://mcp.svelte.dev/mcp",
+			"type": "http"
+		}
+	}
 }

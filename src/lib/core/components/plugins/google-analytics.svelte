@@ -10,8 +10,6 @@
 
 	$effect(() => {
 		if (isActive && gtagId && typeof document !== 'undefined') {
-
-
 			// Clean up existing scripts to avoid duplicates
 			const existingLoader = document.querySelector(`script[src="https://www.googletagmanager.com/gtm.js?id=${gtagId}"]`)
 			const existingConfig = document.querySelector('script#gtag-config')

@@ -11,10 +11,7 @@
 
 <div class="border-t border-gray-100">
 	{#if productState.selectedVariant?.description || data?.product?.description}
-		<button
-			class="flex w-full items-center justify-between gap-2 py-5 text-sm text-gray-900 font-bold uppercase "
-			onclick={() => (isOpen = !isOpen)}
-		>
+		<button class="flex w-full items-center justify-between gap-2 py-5 text-sm font-bold uppercase text-gray-900" onclick={() => (isOpen = !isOpen)}>
 			<span>Product Description</span>
 
 			{#if isOpen}
@@ -27,7 +24,7 @@
 		{#if isOpen}
 			<div class="grid grid-cols-1 overflow-x-auto pb-6">
 				<div
-					class="prose prose-sm max-w-none text-gray-600 leading-relaxed prose-headings:text-gray-900 prose-strong:text-gray-900 prose-li:list-disc [&>table]:w-full [&>table]:border-collapse [&_td]:border-b [&_td]:border-gray-50 [&_td]:py-3 [&_td]:text-sm [&_th]:text-left [&_th]:text-xs [&_th]:font-bold [&_th]:uppercase [&_th]:tracking-widest [&_th]:py-3 [&_th]:border-b [&_th]:border-gray-100"
+					class="prose prose-sm max-w-none leading-relaxed text-gray-600 prose-headings:text-gray-900 prose-strong:text-gray-900 prose-li:list-disc [&>table]:w-full [&>table]:border-collapse [&_td]:border-b [&_td]:border-gray-50 [&_td]:py-3 [&_td]:text-sm [&_th]:border-b [&_th]:border-gray-100 [&_th]:py-3 [&_th]:text-left [&_th]:text-xs [&_th]:font-bold [&_th]:uppercase [&_th]:tracking-widest"
 				>
 					{@html productState.selectedVariant?.description || data?.product?.description}
 				</div>
@@ -35,4 +32,3 @@
 		{/if}
 	{/if}
 </div>
-

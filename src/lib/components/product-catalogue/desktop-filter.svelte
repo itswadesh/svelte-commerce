@@ -304,7 +304,7 @@
 			{#each Object.keys(filterState.processedFilters) as key, idx}
 				<div class="w-full border-b border-gray-200"></div>
 
-				<div class="flex flex-col intra-gap">
+				<div class="intra-gap flex flex-col">
 					<p class="text-sm font-bold uppercase text-gray-900">
 						{filterState.formatFilterName(key)}
 					</p>

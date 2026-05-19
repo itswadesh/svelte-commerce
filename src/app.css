@@ -87,34 +87,34 @@ html {
 } */
 
 @media only screen and (max-width: 980px) {
- #tidio-chat-iframe {
-  bottom: 80px !important;
-}
- #reamaze-widget {
-   bottom: 80px !important;
- }
+	#tidio-chat-iframe {
+		bottom: 80px !important;
+	}
+	#reamaze-widget {
+		bottom: 80px !important;
+	}
 }
 
 .inter-gap {
-  @apply gap-3 sm:gap-5
+	@apply gap-3 sm:gap-5;
 }
 
 .inter-pt {
-  @apply pt-3 sm:gap-5
+	@apply pt-3 sm:gap-5;
 }
 
 .intra-gap {
-  @apply gap-2 sm:gap-4
+	@apply gap-2 sm:gap-4;
 }
 
 .intra-pt {
-  @apply pt-2 sm:pt-4
+	@apply pt-2 sm:pt-4;
 }
 
 .page-heading {
-  @apply text-xl font-bold text-gray-900 dark:text-white sm:text-xl
+	@apply text-xl font-bold text-gray-900 dark:text-white sm:text-xl;
 }
 
 .page-width {
-  @apply mx-2 lg:container lg:mx-auto
+	@apply mx-2 lg:container lg:mx-auto;
 }
