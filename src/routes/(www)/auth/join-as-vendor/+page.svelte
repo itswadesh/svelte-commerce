@@ -5,7 +5,7 @@
 
 	import { page } from '$app/state'
 
-	import AuthButton from '$lib/core/components/auth/auth-button.svelte'
+	import { AuthButton } from '$lib/core/components/index.js'
 
 	import { JoinAsVendorModule } from '$lib/core/composables/index.js'
 

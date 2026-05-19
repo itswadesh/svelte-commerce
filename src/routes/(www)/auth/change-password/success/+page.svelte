@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { showAuthModal } from '$lib/core/components/auth/auth-utils'
-	import { Button } from '$lib/components/ui/button'
+	import { showAuthModal } from '$lib/core/components/index.js'
+	import { Button } from '$lib/components/ui/button/index.js'
 	import { CheckCircle2 } from '@lucide/svelte'
 </script>
 
