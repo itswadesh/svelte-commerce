@@ -2,7 +2,8 @@
 	import { setCategoryFilterState, setDesktopFilterState } from '$lib/core/composables/index.js'
 	import ListingPage from '$lib/components/product-catalogue/listing-page.svelte'
 	import { page } from '$app/state'
-	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
+	import { SeoHeader } from '$lib/core/components/index.js'
+	import ListingScehma from '$lib/components/product-catalogue/listing-scehma.svelte'
 
 	setDesktopFilterState()
 	setCategoryFilterState()
@@ -10,6 +11,7 @@
 	const data = $derived(page.data)
 </script>
 
+<ListingScehma />
 <SeoHeader
 	metaTitle={data.page?.metaTitle ||
 		(data.products?.categoryHierarchy?.length > 0

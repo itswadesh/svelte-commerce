@@ -3,7 +3,7 @@
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { ShoppingBag, Home, ArrowLeft, Search, Package, Tag } from '@lucide/svelte'
 	import { goto } from '$app/navigation'
-	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
+	import { SeoHeader } from '$lib/core/components/index.js'
 
 	let searchQuery = $state('')
 

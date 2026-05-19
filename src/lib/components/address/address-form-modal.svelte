@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { Dialog, DialogContent, DialogHeader, DialogTitle } from '$lib/components/ui/dialog'
-	import { Button } from '$lib/components/ui/button'
+	import { Button } from '$lib/components/ui/button/index.js'
 	import { ArrowLeft, Trash2 } from '@lucide/svelte'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import Select from '../form/select.svelte'
 	import { page } from '$app/state'
 	import Label from '../ui/label/label.svelte'
-	import { AddressSchema } from '$lib/core/components/address/schema'
+	import { AddressSchema } from '$lib/core/components/index.js'
 	import { AddressFormRenderer } from '$lib/core/composables/index.js'
 	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
 

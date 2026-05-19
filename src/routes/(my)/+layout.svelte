@@ -3,10 +3,10 @@
 	import { page } from '$app/state'
 	import Footer from '$lib/components/common/footer.svelte'
 	import Nav from '$lib/components/nav/nav.svelte'
-	import { Home, Package, Users, Settings, Menu, MapPinHouse, X, Heart } from '@lucide/svelte'
+	import { Home, Package, Users, Menu, MapPinHouse, X, Heart } from '@lucide/svelte'
 	import type { Snippet } from 'svelte'
 	import Breadcrumb from '$lib/components/ui/breadcrumb-route.svelte'
-	import StorePlugins from '$lib/core/components/plugins/store-plugins.svelte'
+	import { StorePlugins } from '$lib/core/components/index.js'
 	import { fade, fly } from 'svelte/transition'
 	import { quintOut } from 'svelte/easing'
 

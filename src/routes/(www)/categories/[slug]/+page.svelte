@@ -1,6 +1,5 @@
 <script lang="ts">
-	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
-	import GoogleStructuredDataBreadcrumb from '$lib/core/components/plugins/google-structured-data-breadcrumb.svelte'
+	import { SeoHeader, GoogleStructuredDataBreadcrumb } from '$lib/core/components/index.js'
 	import Breadcrumb from '$lib/components/ui/breadcrumb.svelte'
 	import { page } from '$app/state'
 	//import { PUBLIC_LITEKART_DOMAIN } from '$env/static/public'

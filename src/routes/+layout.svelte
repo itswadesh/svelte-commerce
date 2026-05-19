@@ -2,7 +2,7 @@
 	import '../app.css'
 	import { Toaster } from 'svelte-sonner'
 	import { setUserState } from '$lib/core/stores/index.js'
-	import GoogleAnalytics from '$lib/core/components/plugins/google-analytics.svelte'
+	import { GoogleAnalytics } from '$lib/core/components/index.js'
 	import { navigating } from '$app/stores'
 	import { Loader } from '@lucide/svelte'
 	import type { Snippet } from 'svelte'
@@ -23,7 +23,7 @@
 	{/if}
 </svelte:head>
 
-<GoogleAnalytics storeData={data.store} />
+<GoogleAnalytics />
 
 <!-- <ThemeProvider /> -->
 
