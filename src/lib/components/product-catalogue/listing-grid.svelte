@@ -2,9 +2,9 @@
 	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte'
 	import Pagination from '$lib/components/common/pagination.svelte'
 	import ProductCard from '$lib/components/product-catalogue/product-card.svelte'
-	import { page } from "$app/state"
+	import { page } from '$app/state'
 
-  const data = $derived(page.data)
+	const data = $derived(page.data)
 	let loading = $state(false)
 </script>
 

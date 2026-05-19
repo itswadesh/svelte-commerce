@@ -17,7 +17,7 @@
 	}
 	const { amount, pageType, promoId = null, class: klass, logoType = null, sku = null, brand = null, category = null, color = null }: Props = $props()
 
-  async function loadAffirm() {
+	async function loadAffirm() {
 		try {
 			const allPaymentMethods = await paymentMethodService.list({})
 			const listOfPaymentMethods = allPaymentMethods.data || []

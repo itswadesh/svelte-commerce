@@ -8,7 +8,7 @@
 
 <div class="">
 	{#if page.data?.product?.ag && Object.keys(page.data?.product?.ag).length}
-		<div class="flex items-center intra-gap">
+		<div class="intra-gap flex items-center">
 			<span class="text-sm text-gray-500">Select Options</span>
 			<ChartNoAxesGanttIcon class="h-3 w-3" />
 		</div>
@@ -39,4 +39,3 @@
 		</div>
 	{/if}
 </div>
-

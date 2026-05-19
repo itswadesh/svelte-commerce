@@ -1,2 +1,1 @@
-export { wwwProductsLoadServer as load } from "$lib/core/load-functions/index.js"
-
+export { wwwProductsLoadServer as load } from '$lib/core/load-functions/index.js'

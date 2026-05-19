@@ -15,21 +15,25 @@ Product: predictable grids, consistent densities, familiar navigation patterns. 
 Analyze what's weak about the current spatial design:
 
 1. **Spacing**:
+
    - Is spacing consistent or arbitrary? (Random padding/margin values)
    - Is all spacing the same? (Equal padding everywhere = no rhythm)
    - Are related elements grouped tightly, with generous space between groups?
 
 2. **Visual hierarchy**:
+
    - Apply the squint test: blur your (metaphorical) eyes. Can you still identify the most important element, second most important, and clear groupings?
    - Is hierarchy achieved effectively? (Space and weight alone can be enough; is the current approach working?)
    - Does whitespace guide the eye to what matters?
 
 3. **Grid & structure**:
+
    - Is there a clear underlying structure, or does the layout feel random?
    - Are identical card grids used everywhere? (Icon + heading + text, repeated endlessly)
    - Is everything centered? (Left-aligned with asymmetric layouts feels more designed, but not a hard and fast rule)
 
 4. **Rhythm & variety**:
+
    - Does the layout have visual rhythm? (Alternating tight/generous spacing)
    - Is every section structured the same way? (Monotonous repetition)
    - Are there intentional moments of surprise or emphasis?
@@ -99,6 +103,7 @@ Create a systematic plan:
 - If an icon looks visually off-center despite being geometrically centered, nudge it. But only if you're confident it actually looks wrong. Don't adjust speculatively.
 
 **NEVER**:
+
 - Use arbitrary spacing values outside your scale
 - Make all spacing equal (variety creates hierarchy)
 - Wrap everything in cards (not everything needs a container)
@@ -125,17 +130,23 @@ When the rhythm and hierarchy land, hand off to `{{command_prefix}}impeccable po
 Each variant MUST declare a `density` param. Drive all spacing tokens in the variant's scoped CSS through `calc(var(--p-density, 1) * <base>)`: paddings, gaps, column widths. Users slide from airy to packed and see layout re-breathe with no regeneration.
 
 ```json
-{"id":"density","kind":"range","min":0.6,"max":1.4,"step":0.05,"default":1,"label":"Density"}
+{ "id": "density", "kind": "range", "min": 0.6, "max": 1.4, "step": 0.05, "default": 1, "label": "Density" }
 ```
 
 For variants whose topology genuinely changes (stacked vs. side-by-side, grid vs. bento), use a `steps` param whose scoped CSS branches via `:scope[data-p-structure="X"]`. One structure param + one density param is a powerful combo; resist adding a third.
 
 ```json
-{"id":"structure","kind":"steps","default":"grid","label":"Structure","options":[
-  {"value":"stacked","label":"Stacked"},
-  {"value":"grid","label":"Grid"},
-  {"value":"bento","label":"Bento"}
-]}
+{
+	"id": "structure",
+	"kind": "steps",
+	"default": "grid",
+	"label": "Structure",
+	"options": [
+		{ "value": "stacked", "label": "Stacked" },
+		{ "value": "grid", "label": "Grid" },
+		{ "value": "bento", "label": "Bento" }
+	]
+}
 ```
 
 See `reference/live.md` for the full params contract.

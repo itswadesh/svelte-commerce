@@ -28,12 +28,14 @@ Discovery includes at least one user-answer round unless PRODUCT.md, DESIGN.md, 
 **Assert-then-confirm, not menu-with-escape.** When PRODUCT.md and the user's prompt make one option obvious, name it and ask the user to confirm or override. Don't enumerate "Restrained / Committed / Or something else?" as a real choice; "This reads as Restrained, confirm?" beats a four-option menu when the answer is already clear.
 
 ### Purpose & Context
+
 - What is this feature for? What problem does it solve?
 - Who specifically will use it? (Not "users"; be specific: role, context, frequency)
 - What does success look like? How will you know this feature is working?
 - What's the user's state of mind when they reach this feature? (Rushed? Exploring? Anxious? Focused?)
 
 ### Content & Data
+
 - What content or data does this feature display or collect?
 - What are the realistic ranges? (Minimum, typical, maximum, e.g., 0 items, 5 items, 500 items)
 - What are the edge cases? (Empty state, error state, first-time use, power user)
@@ -60,12 +62,14 @@ Always ask. Sketch quality and shipped quality are different outputs; don't gues
 Scope answers are task-scoped. Don't write them to PRODUCT.md or DESIGN.md; carry them through the design brief only.
 
 ### Constraints
+
 - Are there technical constraints? (Framework, performance budget, browser support)
 - Are there content constraints? (Localization, dynamic text length, user-generated content)
 - Mobile/responsive requirements?
 - Accessibility requirements beyond WCAG AA?
 
 ### Anti-Goals
+
 - What should this NOT be? What would be a wrong direction?
 - What's the biggest risk of getting this wrong?
 

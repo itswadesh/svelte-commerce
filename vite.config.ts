@@ -16,12 +16,12 @@ export default defineConfig(({ command, mode }) => {
 			host: true,
 			port: 3000,
 			proxy: {
-        [PUBLIC_MEDUSA_API_PREFIX]: {
+				[PUBLIC_MEDUSA_API_PREFIX]: {
 					target: env.PUBLIC_MEDUSA_API_URL || 'http://localhost:9000', // Backend server URL
 					changeOrigin: true, // Required for CORS
 					secure: false, // Disable SSL verification if needed
 					rewrite: (path) => path.replace(PUBLIC_MEDUSA_API_PREFIX, '') // Remove prefix
-        },
+				},
 				'/api': {
 					target: env.PUBLIC_LITEKART_API_URL || 'http://localhost:7000', // Backend server URL
 					changeOrigin: true, // Required for CORS

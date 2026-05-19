@@ -6,15 +6,15 @@
 <MegaMenuRenderer>
 	{#snippet content({ menuItems, toggleMenuItemChildren, selectedCategory, openChildMenu, closeChildMenu })}
 		{#if menuItems?.length}
-			<ul class="flex max-w-[65vw] flex-row justify-evenly items-center overflow-x-auto scrollbar-none intra-gap">
+			<ul class="intra-gap flex max-w-[65vw] flex-row items-center justify-evenly overflow-x-auto scrollbar-none">
 				{#each menuItems as category, index}
 					<li
 						class="hoverable"
 						onmousemove={() => {
-              openChildMenu(category.name, index)
+							openChildMenu(category.name, index)
 						}}
 						onmouseleave={() => {
-              closeChildMenu(index, true)
+							closeChildMenu(index, true)
 						}}
 					>
 						<a
@@ -22,7 +22,7 @@
 							aria-label="Visit {category.name}"
 							class="relative flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap py-3 text-xs font-bold uppercase tracking-widest text-gray-500 transition-all duration-300 hover:text-primary active:scale-95
 								{selectedCategory === category.name ? 'text-primary after:scale-x-100' : 'after:scale-x-0'}
-								after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:transition-transform after:duration-300 after:ease-out-expo hover:after:scale-x-100"
+								after:ease-out-expo after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:transition-transform after:duration-300 hover:after:scale-x-100"
 							style="font-family: 'Montserrat', sans-serif;"
 							onclick={() => closeChildMenu(index, false)}
 						>
@@ -33,7 +33,7 @@
 									xmlns="http://www.w3.org/2000/svg"
 									viewBox="0 0 20 20"
 									fill="currentColor"
-									class="h-3.5 w-3.5 shrink-0 transition-transform duration-300 ease-out-expo
+									class="ease-out-expo h-3.5 w-3.5 shrink-0 transition-transform duration-300
               {selectedCategory === category.name ? '-rotate-180 transform' : ''}"
 								>
 									<path
@@ -46,7 +46,9 @@
 						</a>
 
 						{#if toggleMenuItemChildren[index] && category.children?.length}
-							<div class="mega-menu absolute left-1/2 top-full -translate-x-1/2 w-[90vw] max-w-screen-xl overflow-hidden rounded-b-xl border-x border-b border-gray-100 bg-white shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] transition-all duration-500 ease-out-expo">
+							<div
+								class="mega-menu ease-out-expo absolute left-1/2 top-full w-[90vw] max-w-screen-xl -translate-x-1/2 overflow-hidden rounded-b-xl border-x border-b border-gray-100 bg-white shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] transition-all duration-500"
+							>
 								<div class="grid grid-cols-4 gap-8 p-10">
 									{#each category.children as c}
 										<div class="flex flex-col gap-5">
@@ -65,7 +67,7 @@
 														<li>
 															<a
 																href={c1.link || '/' + c1.slug}
-																class="text-[13px] font-medium text-gray-500 transition-all hover:text-primary hover:translate-x-1 block"
+																class="block text-[13px] font-medium text-gray-500 transition-all hover:translate-x-1 hover:text-primary"
 																onclick={() => closeChildMenu(index, false)}
 															>
 																{c1.name}
@@ -78,8 +80,11 @@
 									{/each}
 								</div>
 
-								<div class="bg-gray-50 px-10 py-4 border-t border-gray-100">
-									<a href={category.link || '/' + category.slug} class="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400 hover:text-primary transition-colors">
+								<div class="border-t border-gray-100 bg-gray-50 px-10 py-4">
+									<a
+										href={category.link || '/' + category.slug}
+										class="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400 transition-colors hover:text-primary"
+									>
 										View all {category.name}
 									</a>
 								</div>

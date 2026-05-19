@@ -9,6 +9,7 @@ Score each of Nielsen's 10 Usability Heuristics on a 0–4 scale. Be honest: a 4
 Keep users informed about what's happening through timely, appropriate feedback.
 
 **Check for**:
+
 - Loading indicators during async operations
 - Confirmation of user actions (save, submit, delete)
 - Progress indicators for multi-step processes
@@ -29,6 +30,7 @@ Keep users informed about what's happening through timely, appropriate feedback.
 Speak the user's language. Follow real-world conventions. Information appears in natural, logical order.
 
 **Check for**:
+
 - Familiar terminology (no unexplained jargon)
 - Logical information order matching user expectations
 - Recognizable icons and metaphors
@@ -49,6 +51,7 @@ Speak the user's language. Follow real-world conventions. Information appears in
 Users need a clear "emergency exit" from unwanted states without extended dialogue.
 
 **Check for**:
+
 - Undo/redo functionality
 - Cancel buttons on forms and modals
 - Clear navigation back to safety (home, previous)
@@ -69,6 +72,7 @@ Users need a clear "emergency exit" from unwanted states without extended dialog
 Users shouldn't wonder whether different words, situations, or actions mean the same thing.
 
 **Check for**:
+
 - Consistent terminology throughout the interface
 - Same actions produce same results everywhere
 - Platform conventions followed (standard UI patterns)
@@ -89,6 +93,7 @@ Users shouldn't wonder whether different words, situations, or actions mean the 
 Better than good error messages is a design that prevents problems in the first place.
 
 **Check for**:
+
 - Confirmation before destructive actions (delete, overwrite)
 - Constraints preventing invalid input (date pickers, dropdowns)
 - Smart defaults that reduce errors
@@ -109,6 +114,7 @@ Better than good error messages is a design that prevents problems in the first 
 Minimize memory load. Make objects, actions, and options visible or easily retrievable.
 
 **Check for**:
+
 - Visible options (not buried in hidden menus)
 - Contextual help when needed (tooltips, inline hints)
 - Recent items and history
@@ -129,6 +135,7 @@ Minimize memory load. Make objects, actions, and options visible or easily retri
 Accelerators, invisible to novices, speed up expert interaction.
 
 **Check for**:
+
 - Keyboard shortcuts for common actions
 - Customizable interface elements
 - Recent items and favorites
@@ -149,6 +156,7 @@ Accelerators, invisible to novices, speed up expert interaction.
 Interfaces should not contain irrelevant or rarely needed information. Every element should serve a purpose.
 
 **Check for**:
+
 - Only necessary information visible at each step
 - Clear visual hierarchy directing attention
 - Purposeful use of color and emphasis
@@ -169,6 +177,7 @@ Interfaces should not contain irrelevant or rarely needed information. Every ele
 Error messages should use plain language, precisely indicate the problem, and constructively suggest a solution.
 
 **Check for**:
+
 - Plain language error messages (no error codes for users)
 - Specific problem identification ("Email is missing @" not "Invalid input")
 - Actionable recovery suggestions
@@ -189,6 +198,7 @@ Error messages should use plain language, precisely indicate the problem, and co
 Even if the system is usable without docs, help should be easy to find, task-focused, and concise.
 
 **Check for**:
+
 - Searchable help or documentation
 - Contextual help (tooltips, inline hints, guided tours)
 - Task-focused organization (not feature-organized)
@@ -210,13 +220,13 @@ Even if the system is usable without docs, help should be easy to find, task-foc
 
 **Total possible**: 40 points (10 heuristics × 4 max)
 
-| Score Range | Rating | What It Means |
-|-------------|--------|---------------|
-| 36–40 | Excellent | Minor polish only; ship it |
-| 28–35 | Good | Address weak areas, solid foundation |
-| 20–27 | Acceptable | Significant improvements needed before users are happy |
-| 12–19 | Poor | Major UX overhaul required; core experience broken |
-| 0–11 | Critical | Redesign needed; unusable in current state |
+| Score Range | Rating     | What It Means                                          |
+| ----------- | ---------- | ------------------------------------------------------ |
+| 36–40       | Excellent  | Minor polish only; ship it                             |
+| 28–35       | Good       | Address weak areas, solid foundation                   |
+| 20–27       | Acceptable | Significant improvements needed before users are happy |
+| 12–19       | Poor       | Major UX overhaul required; core experience broken     |
+| 0–11        | Critical   | Redesign needed; unusable in current state             |
 
 ---
 
@@ -224,11 +234,11 @@ Even if the system is usable without docs, help should be easy to find, task-foc
 
 Tag each individual issue found during scoring with a priority level:
 
-| Priority | Name | Description | Action |
-|----------|------|-------------|--------|
-| **P0** | Blocking | Prevents task completion entirely | Fix immediately; this is a showstopper |
-| **P1** | Major | Causes significant difficulty or confusion | Fix before release |
-| **P2** | Minor | Annoyance, but workaround exists | Fix in next pass |
-| **P3** | Polish | Nice-to-fix, no real user impact | Fix if time permits |
+| Priority | Name     | Description                                | Action                                 |
+| -------- | -------- | ------------------------------------------ | -------------------------------------- |
+| **P0**   | Blocking | Prevents task completion entirely          | Fix immediately; this is a showstopper |
+| **P1**   | Major    | Causes significant difficulty or confusion | Fix before release                     |
+| **P2**   | Minor    | Annoyance, but workaround exists           | Fix in next pass                       |
+| **P3**   | Polish   | Nice-to-fix, no real user impact           | Fix if time permits                    |
 
 **Tip**: If you're unsure between two levels, ask: "Would a user contact support about this?" If yes, it's at least P1.

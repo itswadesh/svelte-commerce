@@ -5,6 +5,7 @@ Designs that only work with perfect data aren't production-ready. Harden the int
 Identify weaknesses and edge cases:
 
 1. **Test with extreme inputs**:
+
    - Very long text (names, descriptions, titles)
    - Very short text (empty, single character)
    - Special characters (emoji, RTL text, accents)
@@ -13,6 +14,7 @@ Identify weaknesses and edge cases:
    - No data (empty states)
 
 2. **Test error scenarios**:
+
    - Network failures (offline, slow, timeout)
    - API errors (400, 401, 403, 404, 500)
    - Validation errors
@@ -37,46 +39,49 @@ Systematically improve resilience:
 ### Text Overflow & Wrapping
 
 **Long text handling**:
+
 ```css
 /* Single line with ellipsis */
 .truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 /* Multi-line with clamp */
 .line-clamp {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
 }
 
 /* Allow wrapping */
 .wrap {
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  hyphens: auto;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	hyphens: auto;
 }
 ```
 
 **Flex/Grid overflow**:
+
 ```css
 /* Prevent flex items from overflowing */
 .flex-item {
-  min-width: 0; /* Allow shrinking below content size */
-  overflow: hidden;
+	min-width: 0; /* Allow shrinking below content size */
+	overflow: hidden;
 }
 
 /* Prevent grid items from overflowing */
 .grid-item {
-  min-width: 0;
-  min-height: 0;
+	min-width: 0;
+	min-height: 0;
 }
 ```
 
 **Responsive text sizing**:
+
 - Use `clamp()` for fluid typography
 - Set minimum readable sizes (14px on mobile)
 - Test text scaling (zoom to 200%)
@@ -85,6 +90,7 @@ Systematically improve resilience:
 ### Internationalization (i18n)
 
 **Text expansion**:
+
 - Add 30-40% space budget for translations
 - Use flexbox/grid that adapts to content
 - Test with longest language (usually German)
@@ -99,6 +105,7 @@ Systematically improve resilience:
 ```
 
 **RTL (Right-to-Left) support**:
+
 ```css
 /* Use logical properties */
 margin-inline-start: 1rem; /* Not margin-left */
@@ -106,31 +113,36 @@ padding-inline: 1rem; /* Not padding-left/right */
 border-inline-end: 1px solid; /* Not border-right */
 
 /* Or use dir attribute */
-[dir="rtl"] .arrow { transform: scaleX(-1); }
+[dir='rtl'] .arrow {
+	transform: scaleX(-1);
+}
 ```
 
 **Character set support**:
+
 - Use UTF-8 encoding everywhere
 - Test with Chinese/Japanese/Korean (CJK) characters
 - Test with emoji (they can be 2-4 bytes)
 - Handle different scripts (Latin, Cyrillic, Arabic, etc.)
 
 **Date/Time formatting**:
+
 ```javascript
 // ✅ Use Intl API for proper formatting
-new Intl.DateTimeFormat('en-US').format(date); // 1/15/2024
-new Intl.DateTimeFormat('de-DE').format(date); // 15.1.2024
+new Intl.DateTimeFormat('en-US').format(date) // 1/15/2024
+new Intl.DateTimeFormat('de-DE').format(date) // 15.1.2024
 
-new Intl.NumberFormat('en-US', { 
-  style: 'currency', 
-  currency: 'USD' 
-}).format(1234.56); // $1,234.56
+new Intl.NumberFormat('en-US', {
+	style: 'currency',
+	currency: 'USD'
+}).format(1234.56) // $1,234.56
 ```
 
 **Pluralization**:
+
 ```javascript
 // ❌ Bad: Assumes English pluralization
-`${count} item${count !== 1 ? 's' : ''}`
+;`${count} item${count !== 1 ? 's' : ''}`
 
 // ✅ Good: Use proper i18n library
 t('items', { count }) // Handles complex plural rules
@@ -139,6 +151,7 @@ t('items', { count }) // Handles complex plural rules
 ### Error Handling
 
 **Network errors**:
+
 - Show clear error messages
 - Provide retry button
 - Explain what happened
@@ -147,15 +160,18 @@ t('items', { count }) // Handles complex plural rules
 
 ```jsx
 // Error states with recovery
-{error && (
-  <ErrorMessage>
-    <p>Failed to load data. {error.message}</p>
-    <button onClick={retry}>Try again</button>
-  </ErrorMessage>
-)}
+{
+	error && (
+		<ErrorMessage>
+			<p>Failed to load data. {error.message}</p>
+			<button onClick={retry}>Try again</button>
+		</ErrorMessage>
+	)
+}
 ```
 
 **Form validation errors**:
+
 - Inline errors near fields
 - Clear, specific messages
 - Suggest corrections
@@ -163,6 +179,7 @@ t('items', { count }) // Handles complex plural rules
 - Preserve user input on error
 
 **API errors**:
+
 - Handle each status code appropriately
   - 400: Show validation errors
   - 401: Redirect to login
@@ -172,6 +189,7 @@ t('items', { count }) // Handles complex plural rules
   - 500: Show generic error, offer support
 
 **Graceful degradation**:
+
 - Core functionality works without JavaScript
 - Images have alt text
 - Progressive enhancement
@@ -180,6 +198,7 @@ t('items', { count }) // Handles complex plural rules
 ### Edge Cases & Boundary Conditions
 
 **Empty states**:
+
 - No items in list
 - No search results
 - No notifications
@@ -187,6 +206,7 @@ t('items', { count }) // Handles complex plural rules
 - Provide clear next action
 
 **Loading states**:
+
 - Initial load
 - Pagination load
 - Refresh
@@ -194,24 +214,28 @@ t('items', { count }) // Handles complex plural rules
 - Time estimates for long operations
 
 **Large datasets**:
+
 - Pagination or virtual scrolling
 - Search/filter capabilities
 - Performance optimization
 - Don't load all 10,000 items at once
 
 **Concurrent operations**:
+
 - Prevent double-submission (disable button while loading)
 - Handle race conditions
 - Optimistic updates with rollback
 - Conflict resolution
 
 **Permission states**:
+
 - No permission to view
 - No permission to edit
 - Read-only mode
 - Clear explanation of why
 
 **Browser compatibility**:
+
 - Polyfills for modern features
 - Fallbacks for unsupported CSS
 - Feature detection (not browser detection)
@@ -220,6 +244,7 @@ t('items', { count }) // Handles complex plural rules
 ### Input Validation & Sanitization
 
 **Client-side validation**:
+
 - Required fields
 - Format validation (email, phone, URL)
 - Length limits
@@ -227,52 +252,50 @@ t('items', { count }) // Handles complex plural rules
 - Custom validation rules
 
 **Server-side validation** (always):
+
 - Never trust client-side only
 - Validate and sanitize all inputs
 - Protect against injection attacks
 - Rate limiting
 
 **Constraint handling**:
+
 ```html
 <!-- Set clear constraints -->
-<input 
-  type="text"
-  maxlength="100"
-  pattern="[A-Za-z0-9]+"
-  required
-  aria-describedby="username-hint"
-/>
-<small id="username-hint">
-  Letters and numbers only, up to 100 characters
-</small>
+<input type="text" maxlength="100" pattern="[A-Za-z0-9]+" required aria-describedby="username-hint" />
+<small id="username-hint"> Letters and numbers only, up to 100 characters </small>
 ```
 
 ### Accessibility Resilience
 
 **Keyboard navigation**:
+
 - All functionality accessible via keyboard
 - Logical tab order
 - Focus management in modals
 - Skip links for long content
 
 **Screen reader support**:
+
 - Proper ARIA labels
 - Announce dynamic changes (live regions)
 - Descriptive alt text
 - Semantic HTML
 
 **Motion sensitivity**:
+
 ```css
 @media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+	* {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
 }
 ```
 
 **High contrast mode**:
+
 - Test in Windows high contrast mode
 - Don't rely only on color
 - Provide alternative visual cues
@@ -280,29 +303,33 @@ t('items', { count }) // Handles complex plural rules
 ### Performance Resilience
 
 **Slow connections**:
+
 - Progressive image loading
 - Skeleton screens
 - Optimistic UI updates
 - Offline support (service workers)
 
 **Memory leaks**:
+
 - Clean up event listeners
 - Cancel subscriptions
 - Clear timers/intervals
 - Abort pending requests on unmount
 
 **Throttling & Debouncing**:
+
 ```javascript
 // Debounce search input
-const debouncedSearch = debounce(handleSearch, 300);
+const debouncedSearch = debounce(handleSearch, 300)
 
 // Throttle scroll handler
-const throttledScroll = throttle(handleScroll, 100);
+const throttledScroll = throttle(handleScroll, 100)
 ```
 
 ## Testing Strategies
 
 **Manual testing**:
+
 - Test with extreme data (very long, very short, empty)
 - Test in different languages
 - Test offline
@@ -312,6 +339,7 @@ const throttledScroll = throttle(handleScroll, 100);
 - Test on old browsers
 
 **Automated testing**:
+
 - Unit tests for edge cases
 - Integration tests for error scenarios
 - E2E tests for critical paths
@@ -321,6 +349,7 @@ const throttledScroll = throttle(handleScroll, 100);
 **IMPORTANT**: Hardening is about expecting the unexpected. Real users will do things you never imagined.
 
 **NEVER**:
+
 - Assume perfect input (validate everything)
 - Ignore internationalization (design for global)
 - Leave error messages generic ("Error occurred")

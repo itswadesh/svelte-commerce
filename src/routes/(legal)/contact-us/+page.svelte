@@ -39,7 +39,6 @@
 		<ContactUsRenderer bind:info>
 			{#snippet content({ error, success, nameError, messageError, emailError, loading, handleSubmit })}
 				<div class="grid gap-12 lg:grid-cols-12 lg:items-start">
-					
 					<!-- Left Column: Content & Info -->
 					<div class="lg:col-span-5" in:fly={{ x: -20, duration: 600 }}>
 						<div class="mb-10">
@@ -55,7 +54,9 @@
 						<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-1">
 							{#each contactMethods as method}
 								<div class="group flex items-start gap-5 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:shadow-md">
-									<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/5 text-primary transition-colors group-hover:bg-primary group-hover:text-white">
+									<div
+										class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/5 text-primary transition-colors group-hover:bg-primary group-hover:text-white"
+									>
 										<method.icon class="h-6 w-6" />
 									</div>
 									<div>
@@ -78,7 +79,10 @@
 					<!-- Right Column: Form -->
 					<div class="lg:col-span-7" in:fly={{ x: 20, duration: 600, delay: 200 }}>
 						{#if success}
-							<div in:fade class="flex min-h-[500px] flex-col items-center justify-center rounded-3xl border border-gray-100 bg-white p-8 text-center shadow-xl md:p-12">
+							<div
+								in:fade
+								class="flex min-h-[500px] flex-col items-center justify-center rounded-3xl border border-gray-100 bg-white p-8 text-center shadow-xl md:p-12"
+							>
 								<div class="relative mb-8">
 									<div class="absolute inset-0 scale-150 animate-ping rounded-full bg-green-100 opacity-20"></div>
 									<div class="relative flex h-20 w-24 items-center justify-center rounded-full bg-green-50">
@@ -86,9 +90,7 @@
 									</div>
 								</div>
 								<h2 class="text-3xl font-bold text-gray-900">Message Sent!</h2>
-								<p class="mt-4 max-w-sm text-lg text-gray-500">
-									Thank you for reaching out. A member of our team will get back to you shortly.
-								</p>
+								<p class="mt-4 max-w-sm text-lg text-gray-500">Thank you for reaching out. A member of our team will get back to you shortly.</p>
 								<!-- <Button 
 									variant="outline" 
 									class="mt-10 h-12 px-8 font-bold uppercase tracking-widest transition-all hover:bg-gray-50"
@@ -105,7 +107,7 @@
 									<p class="mt-2 text-gray-500">Required fields are marked with an asterisk (*)</p>
 								</div>
 
-								<form class="p-8 space-y-6 md:p-10" onsubmit={handleSubmit}>
+								<form class="space-y-6 p-8 md:p-10" onsubmit={handleSubmit}>
 									{#if error}
 										<div class="flex items-center gap-3 rounded-xl bg-red-50 p-4 text-red-600" in:fade>
 											<AlertCircle class="h-5 w-5 shrink-0" />
@@ -120,7 +122,9 @@
 												id="name"
 												placeholder="John Doe"
 												bind:value={info.name}
-												class="h-12 border-gray-100 bg-gray-50/30 transition-all focus:bg-white focus:ring-primary/20 {nameError ? 'border-red-500 focus:ring-red-500/20' : ''}"
+												class="h-12 border-gray-100 bg-gray-50/30 transition-all focus:bg-white focus:ring-primary/20 {nameError
+													? 'border-red-500 focus:ring-red-500/20'
+													: ''}"
 												required
 											/>
 											{#if nameError}
@@ -135,7 +139,9 @@
 												type="email"
 												placeholder="john@example.com"
 												bind:value={info.email}
-												class="h-12 border-gray-100 bg-gray-50/30 transition-all focus:bg-white focus:ring-primary/20 {emailError ? 'border-red-500 focus:ring-red-500/20' : ''}"
+												class="h-12 border-gray-100 bg-gray-50/30 transition-all focus:bg-white focus:ring-primary/20 {emailError
+													? 'border-red-500 focus:ring-red-500/20'
+													: ''}"
 												required
 											/>
 											{#if emailError}
@@ -150,7 +156,9 @@
 											id="message"
 											placeholder="Tell us how we can help..."
 											rows={5}
-											class="min-h-[150px] resize-none border-gray-100 bg-gray-50/30 transition-all focus:bg-white focus:ring-primary/20 {messageError ? 'border-red-500 focus:ring-red-500/20' : ''}"
+											class="min-h-[150px] resize-none border-gray-100 bg-gray-50/30 transition-all focus:bg-white focus:ring-primary/20 {messageError
+												? 'border-red-500 focus:ring-red-500/20'
+												: ''}"
 											bind:value={info.message}
 											required
 										/>
@@ -159,23 +167,23 @@
 										{/if}
 									</div>
 
-									<Button 
-										type="submit" 
-										class="group h-14 w-full text-base font-bold uppercase tracking-[0.2em] shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.98]" 
+									<Button
+										type="submit"
+										class="group h-14 w-full text-base font-bold uppercase tracking-[0.2em] shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.98]"
 										disabled={loading}
 									>
 										{#if loading}
 											<div class="mr-3 h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white"></div>
 											Processing...
 										{:else}
-											<Send class="mr-2 h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+											<Send class="mr-2 h-4 w-4 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
 											Send Message
 										{/if}
 									</Button>
 
 									<p class="text-center text-[10px] font-medium text-gray-400">
-										By clicking "Send Message", you agree to our 
-										<a href="/terms-and-conditions" class="text-primary hover:underline">Terms</a> and 
+										By clicking "Send Message", you agree to our
+										<a href="/terms-and-conditions" class="text-primary hover:underline">Terms</a> and
 										<a href="/privacy-policy" class="text-primary hover:underline">Privacy Policy</a>.
 									</p>
 								</form>
@@ -183,7 +191,7 @@
 						{/if}
 					</div>
 				</div>
-			<!-- {#if !success}
+				<!-- {#if !success}
 				<div class="mt-24 grid gap-8 border-t border-gray-100 pt-16 sm:grid-cols-3">
 					<div class="flex items-center gap-4">
 						<div class="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-gray-100">

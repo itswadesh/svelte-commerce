@@ -8,10 +8,10 @@
 	import { cubicOut } from 'svelte/easing'
 	import { page } from '$app/state'
 
-  const cartState = getCartState()
-  const storeData = $derived(page.data?.store)
+	const cartState = getCartState()
+	const storeData = $derived(page.data?.store)
 
-  const { onClose, onContinueShopping, onRemoveCartItem } = $props()
+	const { onClose, onContinueShopping, onRemoveCartItem } = $props()
 
 	function slideFadeTopRight(node: Element, params: { delay?: number; duration?: number; easing?: any; transformOrigin?: any }) {
 		const existingTransform = getComputedStyle(node).transform.replace('none', '')

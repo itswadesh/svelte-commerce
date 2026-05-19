@@ -46,6 +46,7 @@ If browser automation is available, each assessment creates its own new tab. Nev
 Read relevant source files and visually inspect the live page when browser automation is available. Think like a design director.
 
 Evaluate:
+
 - **AI slop**: Would someone believe "AI made this" immediately? Check all DON'T guidance from the parent Impeccable skill.
 - **Holistic design**: hierarchy, IA, emotional fit, discoverability, composition, typography, color, accessibility, states, copy, and edge cases.
 - **Cognitive load**: consult [cognitive-load](cognitive-load.md); report checklist failures and decision points with >4 visible options.
@@ -59,6 +60,7 @@ Return: AI slop verdict, heuristic scores, cognitive load, emotional journey, 2-
 Run the bundled detector and browser visualization evidence. Assessment B is mandatory and must remain isolated from Assessment A until both are complete.
 
 CLI scan:
+
 ```bash
 node {{scripts_path}}/detect.mjs --json [--fast] [target]
 ```
@@ -102,23 +104,24 @@ Codex final-answer note: `$impeccable critique` produces a report artifact, so t
 Structure your feedback as a design director would:
 
 #### Design Health Score
-> *Consult [heuristics-scoring](heuristics-scoring.md)*
+
+> _Consult [heuristics-scoring](heuristics-scoring.md)_
 
 Present the Nielsen's 10 heuristics scores as a table:
 
-| # | Heuristic | Score | Key Issue |
-|---|-----------|-------|-----------|
-| 1 | Visibility of System Status | ? | [specific finding or "n/a" if solid] |
-| 2 | Match System / Real World | ? | |
-| 3 | User Control and Freedom | ? | |
-| 4 | Consistency and Standards | ? | |
-| 5 | Error Prevention | ? | |
-| 6 | Recognition Rather Than Recall | ? | |
-| 7 | Flexibility and Efficiency | ? | |
-| 8 | Aesthetic and Minimalist Design | ? | |
-| 9 | Error Recovery | ? | |
-| 10 | Help and Documentation | ? | |
-| **Total** | | **??/40** | **[Rating band]** |
+| #         | Heuristic                       | Score     | Key Issue                            |
+| --------- | ------------------------------- | --------- | ------------------------------------ |
+| 1         | Visibility of System Status     | ?         | [specific finding or "n/a" if solid] |
+| 2         | Match System / Real World       | ?         |                                      |
+| 3         | User Control and Freedom        | ?         |                                      |
+| 4         | Consistency and Standards       | ?         |                                      |
+| 5         | Error Prevention                | ?         |                                      |
+| 6         | Recognition Rather Than Recall  | ?         |                                      |
+| 7         | Flexibility and Efficiency      | ?         |                                      |
+| 8         | Aesthetic and Minimalist Design | ?         |                                      |
+| 9         | Error Recovery                  | ?         |                                      |
+| 10        | Help and Documentation          | ?         |                                      |
+| **Total** |                                 | **??/40** | **[Rating band]**                    |
 
 Be honest with scores. A 4 means genuinely excellent. Most real interfaces score 20-32.
 
@@ -133,22 +136,27 @@ Be honest with scores. A 4 means genuinely excellent. Most real interfaces score
 **Visual overlays** (if injection succeeded): Tell the user that overlays are now visible in the **[Human]** tab in their browser, highlighting the detected issues. Summarize what the console output reported. If browser visualization was attempted but injection failed, say that no reliable user-visible overlay is available and report the fallback signal instead.
 
 #### Overall Impression
+
 A brief gut reaction: what works, what doesn't, and the single biggest opportunity.
 
 #### What's Working
+
 Highlight 2-3 things done well. Be specific about why they work.
 
 #### Priority Issues
+
 The 3-5 most impactful design problems, ordered by importance.
 
 For each issue, tag with **P0-P3 severity** (consult [heuristics-scoring](heuristics-scoring.md) for severity definitions):
+
 - **[P?] What**: Name the problem clearly
 - **Why it matters**: How this hurts users or undermines goals
 - **Fix**: What to do about it (be concrete)
 - **Suggested command**: Which command could address this (from: {{available_commands}})
 
 #### Persona Red Flags
-> *Consult [personas](personas.md)*
+
+> _Consult [personas](personas.md)_
 
 Auto-select 2-3 personas most relevant to this interface type (use the selection table in the reference). If `{{config_file}}` contains a `## Design Context` section from `impeccable teach`, also generate 1-2 project-specific personas from the audience/brand info.
 
@@ -161,10 +169,13 @@ For each selected persona, walk through the primary user action and list specifi
 Be specific. Name the exact elements and interactions that fail each persona. Don't write generic persona descriptions; write what broke for them.
 
 #### Minor Observations
+
 Quick notes on smaller issues worth addressing.
 
 #### Questions to Consider
+
 Provocative questions that might unlock better solutions:
+
 - "What if the primary action were more prominent?"
 - "Does this need to feel this complex?"
 - "What would a confident version of this look like?"
@@ -177,6 +188,7 @@ Codex Run Notes are final-chat only. Do not include this section in the persiste
 </codex>
 
 **Remember**:
+
 - Be direct. Vague feedback wastes everyone's time.
 - Be specific. "The submit button," not "some elements."
 - Say what's wrong AND why it matters to users.
@@ -197,18 +209,22 @@ Skip this step if the Setup slug was null (vague or root-level target).
    </codex>
 
 2. **Pass the structured metadata** through `IMPECCABLE_CRITIQUE_META` (JSON), then run the write command:
+
    ```bash
    IMPECCABLE_CRITIQUE_META='{"target":"<user phrasing>","total_score":<n>,"p0_count":<n>,"p1_count":<n>}' \
      node {{scripts_path}}/critique-storage.mjs write <slug> <body-file>
    ```
+
    The helper prints the absolute path it wrote.
 
 3. **Delete the temp body file** after the write attempt completes, whether the write succeeded or failed. If deletion fails, mention `temp-file cleanup failed: <reason>` briefly in the final output, but do not block the critique.
 
 4. **Read the trend** for context:
+
    ```bash
    node {{scripts_path}}/critique-storage.mjs trend <slug> 5
    ```
+
    This returns a JSON array of the last 5 frontmatter entries (including the one you just wrote).
 
 5. **Append a single line to the user-visible output**, after the report and before the questions:
@@ -235,6 +251,7 @@ Ask questions along these lines (adapt to the specific findings; do NOT ask gene
 4. **Constraints** (optional; only ask if relevant): If the findings touch many areas, ask if anything is off-limits. For example: "Should any sections stay as-is?" This prevents the plan from touching things the user considers done.
 
 **Rules for questions**:
+
 - Every question must reference specific findings from the report. Never ask generic "who is your audience?" questions.
 - Keep it to 2-4 questions maximum. Respect the user's time.
 - Offer concrete options, not open-ended prompts.
@@ -254,9 +271,10 @@ List recommended commands in priority order, based on the user's answers:
 
 1. **`{{command_prefix}}command-name`**: Brief description of what to fix (specific context from critique findings)
 2. **`{{command_prefix}}command-name`**: Brief description (specific context)
-...
+   ...
 
 **Rules for recommendations**:
+
 - Only recommend commands from: {{available_commands}}
 - Order by the user's stated priorities first, then by impact
 - Each item's description should carry enough context that the command knows what to focus on

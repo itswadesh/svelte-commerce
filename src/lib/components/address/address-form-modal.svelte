@@ -61,12 +61,15 @@
 						/>
 					</div>
 					<Textbox
-            info={page?.data?.store?.isPhoneMandatory ? '' : 'Phone number is recommended for delivery updates.'}
-            required={page.data?.store?.isPhoneMandatory}
-            name="phone" type="tel" bind:value={address.phone}
-            placeholder="+1234567890" schema={AddressSchema.phone}
-            label="Phone"
-          />
+						info={page?.data?.store?.isPhoneMandatory ? '' : 'Phone number is recommended for delivery updates.'}
+						required={page.data?.store?.isPhoneMandatory}
+						name="phone"
+						type="tel"
+						bind:value={address.phone}
+						placeholder="+1234567890"
+						schema={AddressSchema.phone}
+						label="Phone"
+					/>
 					<Textbox
 						name="address_1"
 						bind:value={address.address_1}
@@ -100,12 +103,12 @@
 					<br />
 					<div class="flex flex-col gap-2">
 						<Button type="submit" class="w-full">
-              {#if isSaving}
-							  <LoadingDots />
+							{#if isSaving}
+								<LoadingDots />
 							{:else}
-							  Save Contact
+								Save Contact
 							{/if}
-            </Button>
+						</Button>
 						{#if isEdit}
 							<Button type="button" variant="link" onclick={handleDelete} class="w-full">
 								<Trash2 class="h-4 w-4" />

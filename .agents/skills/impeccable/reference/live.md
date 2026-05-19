@@ -17,6 +17,7 @@ Execute in order. No step skipped, no step reordered.
 7. On `exit`: run the cleanup at the bottom.
 
 Harness policy:
+
 - **Claude Code**: run the poll as a **background task** (no short timeout). The harness notifies you when it completes, so the main conversation stays free. Do not block the shell.
 - **Cursor**: run the poll in the **foreground** (blocking shell; not a background terminal, not a subagent). Cursor background terminals and subagents do not reliably resume the chat with poll stdout.
 - **Codex**: run the poll in the **foreground** (blocking shell; not a background task, not a subagent). Codex background exec sessions do not reliably surface poll stdout back into the conversation at the moment events arrive, so a "fire-and-forget" background poll will stall live mode.
@@ -161,11 +162,11 @@ This sentence is the **identity lock**. Every variant must be readable as the sa
 
 #### Phase B: Pick mode (default vs departure)
 
-**Default mode**: the existing identity is preserved. Variants vary expression axes within it. *This is the right mode for ~90% of live sessions.* The user picked an element on a real product they're shipping; they expect variants of *their* hero, not three different brands' heroes.
+**Default mode**: the existing identity is preserved. Variants vary expression axes within it. _This is the right mode for ~90% of live sessions._ The user picked an element on a real product they're shipping; they expect variants of _their_ hero, not three different brands' heroes.
 
 **Departure mode**: the existing identity is rejected. Variants propose alternatives consistent with PRODUCT.md voice. Trigger only when at least one is true:
 
-- PRODUCT.md anti-references explicitly call out the current surface ("the current `index.html` is itself an example"; "diffuse away from this"; "the page on screen is the failure"). Generic anti-references that describe what to avoid in general do **not** trigger departure mode; only ones that point at *this* surface specifically.
+- PRODUCT.md anti-references explicitly call out the current surface ("the current `index.html` is itself an example"; "diffuse away from this"; "the page on screen is the failure"). Generic anti-references that describe what to avoid in general do **not** trigger departure mode; only ones that point at _this_ surface specifically.
 - The user's freeform prompt explicitly asks for departure ("rebuild this from scratch", "what if it weren't editorial at all", "show me something completely different").
 
 If you're unsure, you're in default mode. The cost of being wrong about default is "three on-brand variants with similar feel": recoverable, the user picks none. The cost of being wrong about departure is "three off-brand variants": unrecoverable, the user is annoyed.
@@ -176,12 +177,12 @@ If you're unsure, you're in default mode. The cost of being wrong about default 
 
 1. **Hierarchy**: which element commands the eye?
 2. **Layout topology**: stacked / side-by-side / grid / asymmetric / overlay
-3. **Typographic system**: pairing logic, scale ratio, case/weight strategy *within the available faces*
+3. **Typographic system**: pairing logic, scale ratio, case/weight strategy _within the available faces_
 4. **Color strategy**: which existing palette role carries the surface (Restrained / Committed / Full palette / Drenched). Use the brand's existing palette tokens, not new colors.
 5. **Density**: minimal / comfortable / dense
 6. **Structural decomposition**: merge, split, progressive disclosure
 
-Three variants → three DIFFERENT axes. The trio reads as *the same brand at three angles*. Do not introduce new fonts, new palette hues, or new aesthetic-family signals; those belong to departure mode.
+Three variants → three DIFFERENT axes. The trio reads as _the same brand at three angles_. Do not introduce new fonts, new palette hues, or new aesthetic-family signals; those belong to departure mode.
 
 **While planning each variant, also name its 2–3 parameter knobs** (per the §7 budget table). Parameters are part of the design, not a decoration added afterward. If the variant explores density, expose a density knob. If it explores color commitment, expose a color-amount range. Deciding "what's tunable" during planning produces better knobs than retrofitting them onto finished HTML.
 
@@ -201,7 +202,7 @@ Instead, work from the brand:
 
 **Departure mode squint.** Two passes, family before sentence:
 
-1. **Family pass.** Label each variant with one design-family word of your own choosing (any concrete noun: *exhibition, storefront, cockpit, recipe-card, playbill, field-manual*). If any two variants share a label, or if the label could apply to the other variants equally well, rework. Do not use a fixed vocabulary list for the labels. *This pass is non-negotiable in departure mode and catches the monoculture failure that the sentence pass misses.*
+1. **Family pass.** Label each variant with one design-family word of your own choosing (any concrete noun: _exhibition, storefront, cockpit, recipe-card, playbill, field-manual_). If any two variants share a label, or if the label could apply to the other variants equally well, rework. Do not use a fixed vocabulary list for the labels. _This pass is non-negotiable in departure mode and catches the monoculture failure that the sentence pass misses._
 2. **Sentence pass.** Write three one-sentence descriptions side by side. If two of them rhyme ("both feature big type" / "both are stacks of sections" / "both center the CTA"), rework the offender.
 
 **When the primary axis is color or theme, forbid the trio from sharing theme + dominant hue.** Two dark-plus-one-dark is not distinct. Aim for three color worlds, not three shades of the same.
@@ -222,11 +223,11 @@ Instead, work from the brand:
 
 ### 5. Apply the freeform prompt (if present)
 
-`event.freeformPrompt` is the user's ceiling on direction (all variants must honor it), but still explore meaningfully different *interpretations*. The interpretations stay within whichever mode you picked in Phase B.
+`event.freeformPrompt` is the user's ceiling on direction (all variants must honor it), but still explore meaningfully different _interpretations_. The interpretations stay within whichever mode you picked in Phase B.
 
-In **default mode**, the prompt narrows the axes you choose, not the identity. *"Make it feel more confident"* → variant 1 amplifies hierarchy (one element commands the eye), variant 2 commits the existing accent color (Committed strategy on the brand's hue), variant 3 tightens density and removes decorative slack. Three different axes, same brand.
+In **default mode**, the prompt narrows the axes you choose, not the identity. _"Make it feel more confident"_ → variant 1 amplifies hierarchy (one element commands the eye), variant 2 commits the existing accent color (Committed strategy on the brand's hue), variant 3 tightens density and removes decorative slack. Three different axes, same brand.
 
-In **departure mode**, the prompt narrows the lanes you draw from, not the families. *"Make it feel like a newspaper front page"* would itself be a departure-mode prompt; honor it but pick three meaningfully different newspaper-adjacent lanes (broadsheet vs. tabloid vs. trade journal), and run the family pass to confirm they don't collapse into one.
+In **departure mode**, the prompt narrows the lanes you draw from, not the families. _"Make it feel like a newspaper front page"_ would itself be a departure-mode prompt; honor it but pick three meaningfully different newspaper-adjacent lanes (broadsheet vs. tabloid vs. trade journal), and run the family pass to confirm they don't collapse into one.
 
 When the prompt and PRODUCT.md anti-references conflict (the prompt asks for X, the anti-references ban X), the anti-references win; they describe the brand's standing position, the prompt is one moment.
 
@@ -241,16 +242,16 @@ Use the `cssAuthoring` object returned by `live-wrap.mjs` to author the temporar
 ```html
 <!-- Variants: insert below this line -->
 <style data-impeccable-css="SESSION_ID">
-  /* rules matching cssAuthoring.rulePattern */
+	/* rules matching cssAuthoring.rulePattern */
 </style>
 <div data-impeccable-variant="1">
-  <!-- variant 1: full element replacement (single top-level element) -->
+	<!-- variant 1: full element replacement (single top-level element) -->
 </div>
 <div data-impeccable-variant="2" style="display: none">
-  <!-- variant 2: full element replacement -->
+	<!-- variant 2: full element replacement -->
 </div>
 <div data-impeccable-variant="3" style="display: none">
-  <!-- variant 3: full element replacement -->
+	<!-- variant 3: full element replacement -->
 </div>
 ```
 
@@ -303,7 +304,9 @@ Each variant can expose **coarse** knobs alongside the full HTML/CSS replacement
 **How to declare.** Put a JSON manifest on the variant wrapper:
 
 ```html
-<div data-impeccable-variant="1" data-impeccable-params='[
+<div
+	data-impeccable-variant="1"
+	data-impeccable-params='[
   {"id":"color-amount","kind":"range","min":0,"max":1,"step":0.05,"default":0.5,"label":"Color amount"},
   {"id":"density","kind":"steps","default":"snug","label":"Density","options":[
     {"value":"airy","label":"Airy"},
@@ -311,8 +314,9 @@ Each variant can expose **coarse** knobs alongside the full HTML/CSS replacement
     {"value":"packed","label":"Packed"}
   ]},
   {"id":"serif","kind":"toggle","default":false,"label":"Serif display"}
-]'>
-  ...variant content...
+]'
+>
+	...variant content...
 </div>
 ```
 
@@ -440,6 +444,7 @@ Dedupe is the browser's job (one prefetch per unique pathname per session); trus
 ## Exit
 
 The user can stop live mode by:
+
 - Saying "stop live mode" / "exit live" in chat
 - Closing the browser tab (SSE drops, poll returns `exit` after 8s)
 - The browser's exit button
@@ -455,6 +460,7 @@ node {{scripts_path}}/live-server.mjs stop
 Stops the HTTP server and runs `live-inject.mjs --remove` to strip `localhost:…/live.js` from the HTML entry. To stop the server but keep the inject tag (for a quick restart), use `stop --keep-inject`. `.impeccable/live/config.json` persists as project config for future sessions.
 
 Then:
+
 - Remove any leftover variant wrappers (search for `impeccable-variants-start` markers).
 - Remove any leftover carbonize blocks (search for `impeccable-carbonize-start` markers).
 
@@ -484,21 +490,21 @@ Schema:
 
 **Glob syntax.** `**` matches any number of path segments (including zero), `*` matches any characters except `/`, `?` matches a single character except `/`. Paths are always relative to the project root with forward slashes.
 
-| Framework | `files` | `insertBefore` | `commentSyntax` |
-|-----------|---------|----------------|-----------------|
-| SPA with single shell (Vite / React / Plain HTML) | `["index.html"]` | `</body>` | `html` |
-| Next.js (App Router) | `["app/layout.tsx"]` | `</body>` | `jsx` |
-| Next.js (Pages) | `["pages/_document.tsx"]` | `</body>` | `jsx` |
-| Nuxt | `["app.vue"]` | `</body>` | `html` |
-| Svelte / SvelteKit | `["src/app.html"]` | `</body>` | `html` |
-| Astro | `[" <root layout .astro>"]` | `</body>` | `html` |
-| Multi-page (separate HTML per route) | `["public/**/*.html"]`: a glob covering the served directory | `</body>` | `html` |
+| Framework                                         | `files`                                                      | `insertBefore` | `commentSyntax` |
+| ------------------------------------------------- | ------------------------------------------------------------ | -------------- | --------------- |
+| SPA with single shell (Vite / React / Plain HTML) | `["index.html"]`                                             | `</body>`      | `html`          |
+| Next.js (App Router)                              | `["app/layout.tsx"]`                                         | `</body>`      | `jsx`           |
+| Next.js (Pages)                                   | `["pages/_document.tsx"]`                                    | `</body>`      | `jsx`           |
+| Nuxt                                              | `["app.vue"]`                                                | `</body>`      | `html`          |
+| Svelte / SvelteKit                                | `["src/app.html"]`                                           | `</body>`      | `html`          |
+| Astro                                             | `[" <root layout .astro>"]`                                  | `</body>`      | `html`          |
+| Multi-page (separate HTML per route)              | `["public/**/*.html"]`: a glob covering the served directory | `</body>`      | `html`          |
 
 Pick an anchor that exists in every file (`</body>` almost always works). Use `insertAfter` if the anchor should match **after** a specific line.
 
 For multi-page sites, **prefer a glob over a literal file list**. New pages added later are picked up automatically on the next `live-inject.mjs` run; no config maintenance needed.
 
-For multi-page sites whose pages are *rebuilt* by a generator (Astro, static-site generators, custom scripts like `build-sub-pages.js`), the inject survives only until the next regeneration. Re-run `live.mjs` after each build. Accept is unaffected; it writes to true source via the fallback flow.
+For multi-page sites whose pages are _rebuilt_ by a generator (Astro, static-site generators, custom scripts like `build-sub-pages.js`), the inject survives only until the next regeneration. Re-run `live.mjs` after each build. Accept is unaffected; it writes to true source via the fallback flow.
 
 ### Drift-heal warning
 
@@ -506,14 +512,14 @@ On every `live.mjs` boot, after inject, the project is scanned for HTML files un
 
 ```json
 {
-  "ok": true,
-  "serverPort": 8400,
-  "pageFiles": [ "..." ],
-  "configDrift": {
-    "orphans": ["public/new-section/index.html", "public/docs/new-command.html"],
-    "orphanCount": 2,
-    "hint": "2 HTML file(s) exist but aren't in config.files. Consider adding them, or use a glob pattern like \"public/**/*.html\"."
-  }
+	"ok": true,
+	"serverPort": 8400,
+	"pageFiles": ["..."],
+	"configDrift": {
+		"orphans": ["public/new-section/index.html", "public/docs/new-command.html"],
+		"orphanCount": 2,
+		"hint": "2 HTML file(s) exist but aren't in config.files. Consider adding them, or use a glob pattern like \"public/**/*.html\"."
+	}
 }
 ```
 
@@ -538,14 +544,14 @@ Otherwise, run the detection helper:
 node {{scripts_path}}/detect-csp.mjs
 ```
 
-Output: `{ shape, signals }` where `shape` is one of `append-arrays`, `append-string`, `middleware`, `meta-tag`, or `null`. The shape is named by *patch mechanism*, so one template covers many frameworks.
+Output: `{ shape, signals }` where `shape` is one of `append-arrays`, `append-string`, `middleware`, `meta-tag`, or `null`. The shape is named by _patch mechanism_, so one template covers many frameworks.
 
 - **`null`**: no CSP; skip to writing `.impeccable/live/config.json` with `cspChecked: true`.
-- **`append-arrays`**: CSP defined as structured directive arrays. Auto-patchable. See *append-arrays* below. Covers:
+- **`append-arrays`**: CSP defined as structured directive arrays. Auto-patchable. See _append-arrays_ below. Covers:
   - Monorepo helpers with `additionalScriptSrc` / `additionalConnectSrc` options (Next.js + shared config package)
   - SvelteKit `kit.csp.directives`
   - Nuxt `nuxt-security` module's `contentSecurityPolicy`
-- **`append-string`**: CSP written as a literal value string. Auto-patchable. See *append-string* below. Covers:
+- **`append-string`**: CSP written as a literal value string. Auto-patchable. See _append-string_ below. Covers:
   - Inline `next.config.*` `headers()` with a CSP literal
   - Nuxt `routeRules` / `nitro.routeRules` headers
 - **`middleware`** or **`meta-tag`**: rarer. Detected but not auto-patched in v1. Show the user the detected files and ask them to add `http://localhost:8400` to `script-src` and `connect-src` manually, then mark `cspChecked: true` and proceed.
@@ -575,17 +581,17 @@ CSP expressed as structured directive arrays. Patch mechanism: declare a dev-onl
 
 ```ts
 // Dev-only allowance so impeccable live mode can load. Guarded by NODE_ENV.
-const __impeccableLiveDev =
-  process.env.NODE_ENV === "development" ? ["http://localhost:8400"] : [];
+const __impeccableLiveDev = process.env.NODE_ENV === 'development' ? ['http://localhost:8400'] : []
 ```
 
 **Append `...__impeccableLiveDev` to the script-src and connect-src directive arrays.** Per-framework specifics:
 
-- **Next.js + monorepo helper**: edit the *app's* `next.config.*` (not the shared helper), appending to `additionalScriptSrc` and `additionalConnectSrc` passed into `createBaseNextConfig` (or equivalent). Keeps the shared package clean.
+- **Next.js + monorepo helper**: edit the _app's_ `next.config.*` (not the shared helper), appending to `additionalScriptSrc` and `additionalConnectSrc` passed into `createBaseNextConfig` (or equivalent). Keeps the shared package clean.
 - **SvelteKit**: edit `svelte.config.js`, appending to `kit.csp.directives['script-src']` and `kit.csp.directives['connect-src']`.
 - **Nuxt + nuxt-security**: edit `nuxt.config.*`, appending to `security.headers.contentSecurityPolicy['script-src']` and `['connect-src']`.
 
 Reference outputs:
+
 - `tests/framework-fixtures/nextjs-turborepo/expected-after-patch.ts` (Next.js)
 - `tests/framework-fixtures/sveltekit-csp/expected-after-patch.js` (SvelteKit)
 
@@ -597,21 +603,23 @@ CSP built as a literal value string. Two-point patch: declare a dev-only string 
 
 ```ts
 // Dev-only allowance so impeccable live mode can load.
-const __impeccableLiveDev =
-  process.env.NODE_ENV === "development" ? " http://localhost:8400" : "";
+const __impeccableLiveDev = process.env.NODE_ENV === 'development' ? ' http://localhost:8400' : ''
 ```
 
 Then in the CSP value string:
+
 - `script-src 'self' 'unsafe-inline'` → `` `script-src 'self' 'unsafe-inline'${__impeccableLiveDev}` ``
 - `connect-src 'self'` → `` `connect-src 'self'${__impeccableLiveDev}` ``
 
 (Leading space on the dev string so it concatenates cleanly into the existing value. Convert the literal CSP directives into template strings as part of the edit if they aren't already.)
 
 Per-framework specifics:
+
 - **Next.js inline `headers()`**: edit `next.config.*`, splicing the variable into the CSP value.
 - **Nuxt `routeRules`**: edit `nuxt.config.*`, splicing into the CSP in `routeRules['/**'].headers['Content-Security-Policy']`.
 
 Reference outputs:
+
 - `tests/framework-fixtures/nextjs-inline-csp/expected-after-patch.js` (Next.js)
 - `tests/framework-fixtures/nuxt-csp/expected-after-patch.ts` (Nuxt)
 

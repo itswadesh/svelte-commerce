@@ -17,6 +17,7 @@ Product: semantic-first and almost always Restrained. Accent color is reserved f
 Analyze the current state and identify opportunities:
 
 1. **Understand current state**:
+
    - **Color absence**: Pure grayscale? Limited neutrals? One timid accent?
    - **Missed opportunities**: Where could color add meaning, hierarchy, or delight?
    - **Context**: What's appropriate for this domain and audience?
@@ -50,7 +51,9 @@ Create a purposeful color introduction plan:
 Add color systematically across these dimensions:
 
 ### Semantic Color
+
 - **State indicators**:
+
   - Success: Green tones (emerald, forest, mint)
   - Error: Red/pink tones (rose, crimson, coral)
   - Warning: Orange/amber tones
@@ -61,6 +64,7 @@ Add color systematically across these dimensions:
 - **Progress indicators**: Colored bars, rings, or charts showing completion or health
 
 ### Accent Color Application
+
 - **Primary actions**: Color the most important buttons/CTAs
 - **Links**: Add color to clickable text (maintain accessibility)
 - **Icons**: Colorize key icons for recognition and personality
@@ -68,19 +72,22 @@ Add color systematically across these dimensions:
 - **Hover states**: Introduce color on interaction
 
 ### Background & Surfaces
+
 - **Tinted backgrounds**: Replace pure gray (`#f5f5f5`) with warm neutrals (`oklch(97% 0.01 60)`) or cool tints (`oklch(97% 0.01 250)`)
 - **Colored sections**: Use subtle background colors to separate areas
 - **Gradient backgrounds**: Add depth with subtle, intentional gradients (not generic purple-blue)
 - **Cards & surfaces**: Tint cards or surfaces slightly for warmth
 
-**Use OKLCH for color**: It's perceptually uniform, meaning equal steps in lightness *look* equal. Great for generating harmonious scales.
+**Use OKLCH for color**: It's perceptually uniform, meaning equal steps in lightness _look_ equal. Great for generating harmonious scales.
 
 ### Data Visualization
+
 - **Charts & graphs**: Use color to encode categories or values
 - **Heatmaps**: Color intensity shows density or importance
 - **Comparison**: Color coding for different datasets or timeframes
 
 ### Borders & Accents
+
 - **Hairline borders**: 1px colored borders on full perimeter (not side-stripes; see the absolute ban on `border-left/right > 1px`)
 - **Underlines**: Color underlines for emphasis or active states
 - **Dividers**: Subtle colored dividers instead of gray lines
@@ -90,11 +97,13 @@ Add color systematically across these dimensions:
 **NEVER**: `border-left` or `border-right` greater than 1px as a colored accent stripe. This is one of the three absolute bans in the parent skill. If you want to mark a card as "active" or "warning", use a full hairline border, a background tint, a leading glyph, or a numbered prefix. Not a side stripe.
 
 ### Typography Color
+
 - **Colored headings**: Use brand colors for section headings (maintain contrast)
 - **Highlight text**: Color for emphasis or categories
 - **Labels & tags**: Small colored labels for metadata or categories
 
 ### Decorative Elements
+
 - **Illustrations**: Add colored illustrations or icons
 - **Shapes**: Geometric shapes in brand colors as background elements
 - **Gradients**: Colorful gradient overlays or mesh backgrounds
@@ -105,22 +114,26 @@ Add color systematically across these dimensions:
 Ensure color addition improves rather than overwhelms:
 
 ### Maintain Hierarchy
+
 - **Dominant color** (60%): Primary brand color or most used accent
 - **Secondary color** (30%): Supporting color for variety
 - **Accent color** (10%): High contrast for key moments
 - **Neutrals** (remaining): Gray/black/white for structure
 
 ### Accessibility
+
 - **Contrast ratios**: Ensure WCAG compliance (4.5:1 for text, 3:1 for UI components)
 - **Don't rely on color alone**: Use icons, labels, or patterns alongside color
 - **Test for color blindness**: Verify red/green combinations work for all users
 
 ### Cohesion
+
 - **Consistent palette**: Use colors from defined palette, not arbitrary choices
 - **Systematic application**: Same color meanings throughout (green always = success)
 - **Temperature consistency**: Warm palette stays warm, cool stays cool
 
 **NEVER**:
+
 - Use every color in the rainbow (choose 2-4 colors beyond neutrals)
 - Apply color randomly without semantic meaning
 - Put gray text on colored backgrounds. It looks washed out; use a darker shade of the background color or transparency instead
@@ -148,7 +161,7 @@ When the palette earns its place, hand off to `{{command_prefix}}impeccable poli
 When invoked from live mode, each variant MUST declare a `color-amount` param so the user can dial between a restrained accent and a drenched surface without regeneration. Author the variant's CSS against `var(--p-color-amount, 0.5)`, typically as the alpha multiplier on backgrounds, or as a scaling factor on the chroma axis in an OKLCH expression. 0 = neutral/monochrome, 1 = full saturation / dominant coverage.
 
 ```json
-{"id":"color-amount","kind":"range","min":0,"max":1,"step":0.05,"default":0.5,"label":"Color amount"}
+{ "id": "color-amount", "kind": "range", "min": 0, "max": 1, "step": 0.05, "default": 0.5, "label": "Color amount" }
 ```
 
 Layer 1-2 variant-specific params on top: palette selection (`steps` with named options), temperature warmth, or tint vs. true color. See `reference/live.md` for the full params contract.

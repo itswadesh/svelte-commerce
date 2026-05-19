@@ -46,25 +46,23 @@
 								<CarouselContent class="-ml-1">
 									{#each data?.collectionvalues as prod (prod?.id)}
 										{#if prod?.products}
-											<CarouselItem
-												class="basis-full pl-1 mobiles:basis-[48%] sm:basis-[33%] md:basis-[25%] lg:basis-[20%] xl:basis-1/6"
-											>
+											<CarouselItem class="basis-full pl-1 mobiles:basis-[48%] sm:basis-[33%] md:basis-[25%] lg:basis-[20%] xl:basis-1/6">
 												<div class="h-full">
-														<Product
-															product={{
-																id: prod?.products.id,
-																slug: prod?.products.slug,
-																thumbnail: prod?.products.thumbnail,
-																price: prod?.products.price,
-																mrp: prod?.products.mrp,
-																title: prod?.products.title,
-																vendor: prod?.products.vendor,
-																tag: prod?.products.tag,
-																variants: prod?.products.variants
-															}}
-															aspectRatio="square"
-															{displayProduct}
-														/>
+													<Product
+														product={{
+															id: prod?.products.id,
+															slug: prod?.products.slug,
+															thumbnail: prod?.products.thumbnail,
+															price: prod?.products.price,
+															mrp: prod?.products.mrp,
+															title: prod?.products.title,
+															vendor: prod?.products.vendor,
+															tag: prod?.products.tag,
+															variants: prod?.products.variants
+														}}
+														aspectRatio="square"
+														{displayProduct}
+													/>
 												</div>
 											</CarouselItem>
 										{/if}

@@ -19,14 +19,16 @@
 {#if productState.wishlistPluginEnabled}
 	<div class="flex items-center">
 		<button
-			class="flex flex-1 items-center justify-center gap-2 rounded-md border border-gray-200 py-3 transition-all duration-300 ease-out-expo hover:bg-gray-50 active:scale-95"
+			class="ease-out-expo flex flex-1 items-center justify-center gap-2 rounded-md border border-gray-200 py-3 transition-all duration-300 hover:bg-gray-50 active:scale-95"
 			onclick={productState.handleWishlistClick}
 			aria-label="Add to wishlist"
 		>
 			{#if productState.wishlistLoading}
 				<LoaderCircle class="h-5 w-5 animate-spin text-primary" />
 			{:else}
-				<HeartIcon class="h-5 w-5 {productState.wishlisted ? 'fill-red-500 text-red-500 scale-110' : 'text-gray-900'} transition-transform duration-300" />
+				<HeartIcon
+					class="h-5 w-5 {productState.wishlisted ? 'scale-110 fill-red-500 text-red-500' : 'text-gray-900'} transition-transform duration-300"
+				/>
 				<span class="text-xs font-bold uppercase tracking-widest text-gray-900">
 					{productState.wishlisted ? 'Wishlisted' : 'Add to Wishlist'}
 				</span>
@@ -42,7 +44,12 @@
 		productId={page.data?.product?.id}
 		productTitle={page.data?.product?.title}
 	/>
-	<Button onclick={() => (showEnquiryModal = true)} class="w-full bg-primary hover:bg-black text-xs font-bold uppercase tracking-widest py-6 transition-all duration-300 ease-out-expo active:scale-[0.98]"> {enquiryPlugin?.buttonText || "Enquire"} </Button>
+	<Button
+		onclick={() => (showEnquiryModal = true)}
+		class="ease-out-expo w-full bg-primary py-6 text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:bg-black active:scale-[0.98]"
+	>
+		{enquiryPlugin?.buttonText || 'Enquire'}
+	</Button>
 {:else}
 	<div class="relative w-full">
 		{#if productState.showAddToCartMessage}
@@ -56,13 +63,16 @@
 						<img src={productState.selectedVariant?.image || page.data?.product?.thumbnail} alt="Product" class="h-full w-full object-contain" />
 					</div>
 					<div class="flex flex-1 flex-col gap-1">
-						<p class="text-xs font-bold text-gray-900 uppercase tracking-tight">Added to Bag</p>
+						<p class="text-xs font-bold uppercase tracking-tight text-gray-900">Added to Bag</p>
 						<p class="line-clamp-1 text-[11px] text-gray-500">{page.data?.product?.title}</p>
 						<p class="text-xs font-bold text-primary">
 							{formatPrice(productState.selectedVariant?.price, page?.data?.store?.currency?.code)}
 						</p>
 					</div>
-					<a href="/checkout/cart" class="rounded-md bg-primary px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-white hover:bg-black transition-all active:scale-95">
+					<a
+						href="/checkout/cart"
+						class="rounded-md bg-primary px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-white transition-all hover:bg-black active:scale-95"
+					>
 						View Bag
 					</a>
 				</div>
@@ -73,13 +83,19 @@
 			{#if productState.cartState.showCheckout}
 				<div class="flex items-center">
 					<a href="/checkout/cart" class="block w-full">
-						<Button class="w-full bg-primary hover:bg-black py-6 text-xs font-bold uppercase tracking-widest transition-all duration-300 ease-out-expo active:scale-[0.98]" size="lg">Go to Checkout</Button>
+						<Button
+							class="ease-out-expo w-full bg-primary py-6 text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:bg-black active:scale-[0.98]"
+							size="lg">Go to Checkout</Button
+						>
 					</a>
 				</div>
 			{:else}
 				<div class="flex w-full items-center">
 					<Button
-						class="w-full py-7 text-sm font-bold uppercase tracking-[0.2em] transition-all duration-300 ease-out-expo active:scale-[0.98] {productState.cartState.addToCartMessage == 'Added to cart' ? 'bg-green-600 hover:bg-green-700' : 'bg-primary hover:bg-black shadow-lg hover:shadow-xl'}"
+						class="ease-out-expo w-full py-7 text-sm font-bold uppercase tracking-[0.2em] transition-all duration-300 active:scale-[0.98] {productState
+							.cartState.addToCartMessage == 'Added to cart'
+							? 'bg-green-600 hover:bg-green-700'
+							: 'bg-primary shadow-lg hover:bg-black hover:shadow-xl'}"
 						size="lg"
 						disabled={productState.addToCartButtonDisabled}
 						onclick={productState.handleAddToCart}

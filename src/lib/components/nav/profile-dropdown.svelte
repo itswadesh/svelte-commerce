@@ -5,7 +5,7 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	const userState = getUserState()
-  const { onSignOut } = $props()
+	const { onSignOut } = $props()
 </script>
 
 <DropdownMenu.Root>

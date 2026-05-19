@@ -1,1 +1,1 @@
-export { layoutServer as load } from "$lib/core/load-functions/index.js"
+export { layoutServer as load } from '$lib/core/load-functions/index.js'

@@ -60,10 +60,10 @@ Update design system documentation:
 - Update any Storybook or component catalog
 
 **NEVER**:
+
 - Extract one-off, context-specific implementations without generalization
 - Create components so generic they are useless
 - Extract without considering existing design system conventions
 - Skip proper TypeScript types or prop documentation
 - Create tokens for every single value (tokens should have semantic meaning)
 - Extract things that differ in intent (two buttons that look similar but serve different purposes should stay separate)
-

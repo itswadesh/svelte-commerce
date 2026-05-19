@@ -84,7 +84,6 @@
 								{:else if searchResults.length > 0}
 									<div class="divide-y divide-gray-50">
 										{#each searchResults as result}
-
 											<button
 												class="group flex w-full items-center gap-4 px-6 py-4 text-left transition-colors hover:bg-gray-50/50"
 												onclick={() => handleResultClick(result)}
@@ -159,7 +158,6 @@
 							{:else if searchResults.length > 0}
 								<div class="divide-y divide-gray-50">
 									{#each searchResults as result}
-
 										<button class="flex w-full items-center gap-4 p-4 active:bg-gray-50" onclick={() => handleResultClick(result)}>
 											<div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gray-50 text-gray-400">
 												{#if result.thumbnail}

@@ -19,6 +19,7 @@ If a design system exists, polish **must** align the feature with it. If none ex
 Understand the current state and goals before touching anything:
 
 1. **Review completeness**:
+
    - Is it functionally complete?
    - Are there known issues to preserve (mark with TODOs)?
    - What's the quality bar? (MVP vs flagship feature?)
@@ -27,6 +28,7 @@ Understand the current state and goals before touching anything:
 2. **Think experience-first**: Who actually uses this, and what's the best possible experience for them? Effective design beats decorative polish; a feature that looks beautiful but fights the user's flow is not polished. Walk the path from their perspective before opening DevTools.
 
 3. **Identify polish areas**:
+
    - Visual inconsistencies
    - Spacing and alignment issues
    - Interaction state gaps
@@ -36,10 +38,12 @@ Understand the current state and goals before touching anything:
    - Information architecture and flow drift (does this feature reveal complexity the way neighboring features do?)
 
 4. **Pull in any prior critique** (optional signal): If `{{command_prefix}}impeccable critique` has been run on the same target, its priority issues are a useful prior for what to address first. Resolve the target to a file path or URL, then:
+
    ```bash
    slug=$(node {{scripts_path}}/critique-storage.mjs slug "<resolved>")
    node {{scripts_path}}/critique-storage.mjs latest "$slug"
    ```
+
    Exit 0 with body = found; fold the P0/P1 items into your polish list and mention the snapshot path so the user sees what you read. Exit 2 = no snapshot, continue without it. The critique is one input among many. Do your own pass either way.
 
 5. **Triage cosmetic vs functional**: Classify each issue as **cosmetic** (looks off, doesn't impede the user) or **functional** (breaks, blocks, or confuses the experience). When polish time is tight, functional issues ship first; cosmetic ones can land in a follow-up. Quality should be consistent; never perfect one corner while leaving another rough.
@@ -59,6 +63,7 @@ Work through these dimensions methodically:
 - **Grid adherence**: Elements snap to baseline grid
 
 **Check**:
+
 - Enable grid overlay and verify alignment
 - Check spacing with browser inspector
 - Test at multiple viewport sizes
@@ -66,7 +71,7 @@ Work through these dimensions methodically:
 
 ### Information Architecture & Flow
 
-Visual polish on a misshapen flow is wasted work. Match the *shape* of the experience to the system, not just the surface.
+Visual polish on a misshapen flow is wasted work. Match the _shape_ of the experience to the system, not just the surface.
 
 - **Progressive disclosure**: Match how much is revealed when, compared to neighboring features. A settings page exposing 40 fields when the rest of the app reveals 5 at a time is drift, even if every field is perfectly styled.
 - **Established user flows**: Multi-step actions follow the same shape as comparable flows elsewhere: modal vs full-page, inline edit vs separate route, save-on-blur vs explicit submit, optimistic vs pessimistic updates.
@@ -210,6 +215,7 @@ Go through systematically:
 Sweat the details. Zoom in until the alignment is right and the spacing reads as deliberate. Then ship.
 
 **NEVER**:
+
 - Polish before it's functionally complete
 - Polish without aligning to the design system; that's decoration on drift
 - Guess at design system principles instead of asking when something is ambiguous
