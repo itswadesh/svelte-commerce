@@ -95,8 +95,8 @@ const userState = loginModule.userState
 					{/if}
 				</div>
 				{#if !loginModule.isPhoneNumber}
-					<div class="flex items-center justify-between gap-2">
-						<div>
+					<div class="flex items-center justify-center gap-2">
+						<!-- <div>
 							{#if env.PUBLIC_IS_DEMO_MODE}
 								<Button
 									variant="secondary"
@@ -107,7 +107,7 @@ const userState = loginModule.userState
 									Use demo credentials
 								</Button>
 							{/if}
-						</div>
+						</div> -->
 						<div class="flex items-center justify-end">
 							<AuthButton type="forgot-password" extraqueries={{ email: loginModule.identifier }}>
 								<Button variant="link" class="-mr-4 text-sm text-gray-600 hover:text-gray-500">Forgot password?</Button>
