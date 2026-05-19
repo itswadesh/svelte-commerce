@@ -1,11 +1,9 @@
 <script lang="ts">
-	import { onMount } from 'svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
-	import { userService } from '$lib/core/services'
+	import { userService } from '$lib/core/services/index.js'
 	import { goto } from '$app/navigation'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
-	// import ImageUpload from '$lib/components/image-upload.svelte'
-	import { toast } from 'svelte-sonner'
+	import { toast } from '@misiki/kitcommerce-core'
 	import { Save, ArrowLeft, InfoIcon, Loader, FileChartColumnIncreasing } from '@lucide/svelte'
 	import { browser } from '$app/environment'
 	import Textbox from '$lib/components/form/textbox.svelte'

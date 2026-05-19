@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.css'
-	import { Toaster } from 'svelte-sonner'
+	import { Toaster } from '@misiki/kitcommerce-core'
 	import { setUserState } from '$lib/core/stores/index.js'
 	import { GoogleAnalytics } from '$lib/core/components/index.js'
 	import { navigating } from '$app/stores'
