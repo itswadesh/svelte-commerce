@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte'
 	import { ChevronDownIcon, ChevronUpIcon } from '@lucide/svelte'
 	import { fade, slide } from 'svelte/transition'
-	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
+	import { SeoHeader } from '$lib/core/components/index.js'
 
 	interface FAQ {
 		id: string

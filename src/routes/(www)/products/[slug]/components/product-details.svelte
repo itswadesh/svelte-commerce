@@ -1,9 +1,7 @@
 <script lang="ts">
 	import LoginModal from '$lib/components/auth/login-modal.svelte'
 	import EnquiryModal from '$lib/core/components/plugins/enquiry-modal.svelte'
-	import GoogleStructuredDataProduct from '$lib/core/components/plugins/google-structured-data-product.svelte'
-	import GoogleStructuredDataBreadcrumb from '$lib/core/components/plugins/google-structured-data-breadcrumb.svelte'
-	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
+	import { SeoHeader, GoogleStructuredDataBreadcrumb, GoogleStructuredDataProduct } from '$lib/core/components/index.js'
 	import PincodeCheck from '$lib/components/product-catalogue/pincode-check.svelte'
 	import Breadcrumb from '$lib/components/ui/breadcrumb.svelte'
 	import { useProductState } from '$lib/core/composables/index.js'

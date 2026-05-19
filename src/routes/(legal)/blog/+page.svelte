@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition'
 	import { BlogRenderer } from '$lib/core/composables/index.js'
-	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
+	import { SeoHeader } from '$lib/core/components/index.js'
 </script>
 
 <SeoHeader metaTitle="Blog | Insights & News" />

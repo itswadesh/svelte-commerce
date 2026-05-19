@@ -2,7 +2,7 @@
 	import { ChevronDown, ShieldCheck, Lock, Truck, RefreshCw } from '@lucide/svelte'
 	import WhatsappChatButton from '$lib/core/components/plugins/whatsapp-chat-button.svelte'
 	import { page } from '$app/state'
-	import TrustpilotPlugin from '$lib/core/components/plugins/trustpilot-plugin.svelte'
+	import { TrustpilotPlugin } from '$lib/core/components/index.js'
 	import { sanitize } from '$lib/core/utils/index.js'
 	import masterCard from '$lib/assets/payment-methods/mastercard.png'
 	import paypal from '$lib/assets/payment-methods/paypal.png'

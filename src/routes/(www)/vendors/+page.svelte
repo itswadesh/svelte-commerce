@@ -9,7 +9,7 @@
 	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte'
 	import Pagination from '$lib/components/common/pagination.svelte'
 	import type { ProductSearchResult } from '$lib/core/types'
-	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
+	import { SeoHeader } from '$lib/core/components/index.js'
 	import { setCategoryFilterState, setDesktopFilterState } from '$lib/core/composables/index.js'
 
 	setDesktopFilterState()
