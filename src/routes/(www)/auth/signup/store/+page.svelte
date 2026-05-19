@@ -5,7 +5,7 @@
 	import { userService } from '$lib/core/services'
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
-	import AuthButton from '$lib/core/components/auth/auth-button.svelte'
+	import { AuthButton } from '$lib/core/components/index.js'
 
 	let email = $state('')
 	let isLoading = $state(false)

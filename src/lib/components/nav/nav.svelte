@@ -5,7 +5,7 @@
 	import { page } from '$app/state'
 	import MsSearch from './ms-search.svelte'
 	import AuthModal from '$lib/components/auth/auth-modal.svelte'
-	import AuthButton from '$lib/core/components/auth/auth-button.svelte'
+	import { AuthButton } from '$lib/core/components/index.js'
 	import { fade } from 'svelte/transition'
 	import { NavModule } from '$lib/core/composables/index.js'
 	import { getWishlistState } from '@misiki/kitcommerce-core/stores'

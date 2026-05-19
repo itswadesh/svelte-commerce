@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import AuthButton from '$lib/core/components/auth/auth-button.svelte'
+	import { AuthButton } from '$lib/core/components/index.js'
 </script>
 
 <svelte:head>

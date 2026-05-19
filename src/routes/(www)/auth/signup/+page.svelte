@@ -8,7 +8,7 @@
 	const userState = getUserState()
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
-	import AuthButton from '$lib/core/components/auth/auth-button.svelte'
+	import { AuthButton } from '$lib/core/components/index.js'
 	const IS_DEV = import.meta.env.DEV
 
 	let firstName = $state(IS_DEV ? 'Swadesh' : '')

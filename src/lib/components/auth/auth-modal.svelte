@@ -3,9 +3,8 @@
 	import LoginModal from './login-modal.svelte'
 	import SignupModal from './signup-modal.svelte'
 	import { onNavigate } from '$app/navigation'
-	import { showModal } from '../../core/components/auth/auth-store'
+	import { showModal, type AuthType } from '$lib/core/components/index.js'
 	import ForgotPasswordModal from './forgot-password-modal.svelte'
-	import type { AuthType } from '../../core/components/auth/auth-utils'
 
 	let { show = $bindable() } = $props()
 

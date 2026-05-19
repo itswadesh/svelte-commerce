@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { LoaderIcon, X } from '@lucide/svelte'
-	import * as InputOTP from '$lib/components/ui/input-otp/index'
+	import * as InputOTP from '$lib/components/ui/input-otp/index.js'
 	import Button from '$lib/components/ui/button/button.svelte'
-	import { Label } from '$lib/components/ui/label'
+	import { Label } from '$lib/components/ui/label/index.js'
 	import { env } from '$env/dynamic/public'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import Modal from '../common/modal.svelte'
 	import { page } from '$app/state'
-	import AuthButton from '$lib/core/components/auth/auth-button.svelte'
+	import { AuthButton } from '$lib/core/components/index.js'
 	import { LoginModule, loginModuleSchema as schemas } from '$lib/core/composables/index.js'
 
 	let { show = $bindable(false) } = $props()
