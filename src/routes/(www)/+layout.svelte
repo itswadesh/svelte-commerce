@@ -24,7 +24,7 @@
 
 <div class="flex min-h-screen flex-col justify-between">
 	<Nav storeData={data.store} />
-	<main class="inter-pt inter-gap flex min-h-screen flex-1 flex-col">
+	<main class="inter-gap flex min-h-screen flex-1 flex-col">
 		{@render children()}
 	</main>
 	<Footer />
