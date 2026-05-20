@@ -1,28 +1,27 @@
 <script lang="ts">
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
-	import * as Carousel from '$lib/components/ui/carousel/index'
-	import type { CarouselAPI } from '$lib/components/ui/carousel/context'
-	import { getSettingState } from '$lib/core/stores/index.js'
+	import * as Carousel from '$lib/components/ui/carousel/index.js'
+	import type { CarouselAPI } from '$lib/components/ui/carousel/context.js'
 	import { Play, X } from '@lucide/svelte'
+	import { getSettingState } from '$lib/core/stores/index.js'
 	import Button from '$lib/components/ui/button/button.svelte'
+	import { cn } from '$lib/core/utils'
 	import { getYoutubeId } from '$lib/core/logic/index.js'
+	import LazyImgWithZoom from '$lib/core/components/image/lazy-img-with-zoom.svelte'
 
-	let { images = [], title = 'Product' } = $props()
-
-	const settingState = getSettingState()
+	let { images = [] } = $props()
 
 	let carouselApi: CarouselAPI | null = $state(null)
-	let currentIndex = $state(0)
-
-	let displayCarousel = $state('hidden')
 	let carouselImages = $state<string[]>([])
-	let selectedImage = $state<string>('')
-
+	let currentIndex = $state(0)
 	let previewVideoPaused = $state<{ [key: string]: boolean }>({})
+	let displayCarousel = $state('hidden')
+	let selectedImage = $state<string>('')
+	const settingState = getSettingState()
 
 	const onImageClick = (img: string) => {
 		selectedImage = img
-		showCarousel(img)
+		currentIndex = images.indexOf(img)
 	}
 
 	const rearrangeArray = (selectedItem: any, items: any[]) => {
@@ -34,42 +33,25 @@
 	}
 
 	const showCarousel = (img: string) => {
-		carouselImages = rearrangeArray(img, images)
+		carouselImages = images
 		displayCarousel = 'flex'
+		const index = images.indexOf(img)
+		currentIndex = index
+		selectedImage = img
+		setTimeout(() => {
+			if (carouselApi) {
+				carouselApi.scrollTo(index, true)
+			}
+		}, 0)
 	}
 
 	const hideCarousel = () => {
 		displayCarousel = 'hidden'
 	}
 
-	const handleCaroselKeyboardNavigation = (e: KeyboardEvent) => {
-		if (displayCarousel === 'hidden') return
-		if (!carouselApi) return
-
-		switch (e.code) {
-			case 'ArrowUp':
-				carouselApi.scrollPrev()
-				break
-			case 'ArrowDown':
-				carouselApi.scrollNext()
-				break
-			case 'ArrowLeft':
-				carouselApi.scrollPrev()
-				break
-			case 'ArrowRight':
-				carouselApi.scrollNext()
-				break
-			case 'Escape':
-				displayCarousel = 'hidden'
-				break
-		}
-	}
-
 	const videoURLRegex = /mp4$|webm$/
 	const isVideoURL = (x: string) => videoURLRegex.test(x)
 </script>
-
-<svelte:window onkeydown={handleCaroselKeyboardNavigation} />
 
 {#if displayCarousel !== 'hidden'}
 	<style>
@@ -79,12 +61,15 @@
 	</style>
 {/if}
 
-{#if images?.length === 1}
-	<div class="intra-gap hidden grid-cols-1 sm:grid lg:mx-0">
-		{#each images as img}
+<div class="flex flex-col-reverse gap-4 max-lg:px-4 sm:flex-row">
+	<div class="flex gap-4 max-sm:overflow-x-auto sm:w-24 sm:flex-col">
+		{#each images as img, idx}
 			{@const youtubeId = getYoutubeId(img)}
 			<div
-				class="relative overflow-hidden rounded-lg"
+				class={cn(
+					'relative overflow-hidden border max-sm:inline-block max-sm:min-w-20 max-sm:max-w-20',
+					idx === currentIndex && 'border-primary'
+				)}
 				role="button"
 				tabindex="0"
 				onclick={() => onImageClick?.(img)}
@@ -95,7 +80,7 @@
 					<iframe
 						width="50%"
 						height="100%"
-						class="aspect-square rounded-lg"
+						class="aspect-square"
 						src="https://www.youtube.com/embed/{youtubeId}?rel=0&modestbranding=1&playsinline=1"
 						title="Video"
 						frameborder="0"
@@ -104,136 +89,59 @@
 						loading="lazy"
 					></iframe>
 				{:else if isVideoURL(img)}
-					<video height="100%" width="50%" class="aspect-square w-1/2 rounded-lg" loop autoplay>
+					<video height="100%" width="100%" class="aspect-square w-full" loop autoplay>
 						<source src={img} />
 						Video not supported
 					</video>
 				{:else}
-					<LazyImg src={img} alt={title} class=" w-1/2 object-cover transition-transform duration-300 hover:scale-105" />
+					<LazyImg src={img} alt="Product Image" class=" w-full border object-cover" />
 				{/if}
 			</div>
 		{/each}
 	</div>
-{:else}
-	<div class="intra-gap hidden grid-cols-2 sm:grid lg:mx-0">
-		{#each images as img}
-			{@const youtubeId = getYoutubeId(img)}
-			<div
-				class="relative overflow-hidden rounded-lg"
-				role="button"
-				tabindex="0"
-				onclick={() => onImageClick?.(img)}
-				onkeydown={(e) => e.key === 'Enter' && onImageClick?.(img)}
-				aria-label="View full image"
-			>
-				{#if youtubeId}
-					<iframe
-						width="100%"
-						height="100%"
-						class="aspect-square rounded-lg"
-						src="https://www.youtube.com/embed/{youtubeId}?rel=0&modestbranding=1&playsinline=1"
-						title="Video"
-						frameborder="0"
-						allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-						allowfullscreen
-						loading="lazy"
-					></iframe>
-				{:else if isVideoURL(img)}
-					<div class="relative flex aspect-square h-full w-full items-center justify-center">
-						<video
-							bind:paused={previewVideoPaused[img]}
-							height="100%"
-							width="100%"
-							class="absolute left-0 top-0 aspect-square rounded-lg"
-							loop
-							autoplay
-							muted
-						>
-							<source src={img} />
-							Video not supported
-						</video>
-						{#if previewVideoPaused[img]}
-							<div class="z-10 rounded-full bg-white p-2">
-								<Play />
-							</div>
-						{/if}
-					</div>
-				{:else}
-					<LazyImg src={img} alt={title} class=" w-full object-cover transition-transform duration-300 hover:scale-105" />
-				{/if}
-			</div>
-		{/each}
-	</div>
-{/if}
 
-<div class="sm:hidden">
-	<div class="">
-		<Carousel.Root
-			class="relative"
-			opts={{ loop: true }}
-			setApi={(api) => {
-				if (api) carouselApi = api
-				api?.on('select', (e) => {
-					const selectedIndex = e?.selectedScrollSnap() || 0
-					currentIndex = selectedIndex
-				})
-			}}
+	<div class="flex-1">
+		<div
+			class="border sm:mb-5"
+			role="button"
+			tabindex="0"
+			onclick={() => images[currentIndex] && showCarousel(images[currentIndex])}
+			onkeydown={(e) =>
+				e.key === 'Enter' && images[currentIndex] && showCarousel(images[currentIndex])}
 		>
-			<Carousel.Content>
-				{#each images || [] as img, index (index)}
-					{@const youtubeId = getYoutubeId(img)}
-					<Carousel.Item>
-						<div
-							class=""
-							role="button"
-							tabindex="0"
-							onclick={() => onImageClick?.(img)}
-							onkeydown={(e) => e.key === 'Enter' && onImageClick?.(img)}
-							aria-label="View full image"
-						>
-							{#if youtubeId}
-								<iframe
-									width="100%"
-									height="100%"
-									class="aspect-square max-h-[420px] w-full rounded-lg"
-									src="https://www.youtube.com/embed/{youtubeId}?rel=0&modestbranding=1&playsinline=1"
-									title="Video"
-									frameborder="0"
-									allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-									allowfullscreen
-									loading="lazy"
-								></iframe>
-							{:else if isVideoURL(img)}
-								<video height="100%" width="100%" class="aspect-square rounded-lg" loop autoplay>
-									<source src={img} />
-									Video not supported
-								</video>
-							{:else}
-								<LazyImg src={img} alt={title} class="max-h-[420px] w-full object-cover object-top" />
-							{/if}
-						</div>
-					</Carousel.Item>
-				{/each}
-			</Carousel.Content>
-		</Carousel.Root>
-
-		<div class="mt-2 flex justify-center">
-			{#each images || [] as img, index (index)}
-				<button
-					class="mx-1 h-2 w-2 rounded-full bg-opacity-50 {index === currentIndex ? 'bg-black' : 'bg-gray-400'}"
-					onclick={() => {
-						currentIndex = index
-						carouselApi?.scrollTo(index)
-					}}
-				>
-					<span class="sr-only">Go to slide {index + 1}</span>
-				</button>
-			{/each}
+			{#if images?.length}
+				{@const img = images[currentIndex]}
+				{@const youtubeId = getYoutubeId(img)}
+				{#if youtubeId}
+					<div class="relative aspect-square w-full">
+						<iframe
+							width="100%"
+							height="100%"
+							class="aspect-square"
+							src="https://www.youtube.com/embed/{youtubeId}?rel=0&modestbranding=1&playsinline=1"
+							title="Video"
+							frameborder="0"
+							allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+							allowfullscreen
+							loading="lazy"
+						></iframe>
+					</div>
+				{:else if isVideoURL(img)}
+					<video height="100%" width="100%" class="aspect-square w-full" loop autoplay muted>
+						<source src={img} />
+						Video not supported
+					</video>
+				{:else}
+					<LazyImgWithZoom aspectRatio="2:3" src={images[currentIndex]} alt="Product Image" class="w-full object-cover" />
+				{/if}
+			{/if}
 		</div>
 	</div>
 </div>
 
-<div class="fixed left-0 top-0 z-[60] {displayCarousel} h-screen w-screen flex-col items-center justify-start bg-black">
+<div
+	class="fixed left-0 top-0 z-[60] {displayCarousel} h-screen w-screen flex-col items-center justify-start bg-black"
+>
 	<!-- Background overlay -->
 	<button class="absolute left-0 top-0 h-full w-full" onclick={hideCarousel}>
 		<span class="hidden">Close Carousel</span>
@@ -283,24 +191,17 @@
 										Video not supported
 									</video>
 								{:else}
-									<LazyImg
+									<LazyImgWithZoom
 										src={img}
-										alt={title}
-										class="aspect-[{settingState?.selectedStore?.productImageAspectRatio?.replace(
-											':',
-											'/'
-										)}] !max-h-[calc(100vh-6rem)] w-full object-contain"
+                    aspectRatio="2:3"
+										alt="Product Image"
+										class="!max-h-[calc(100vh-6rem)] w-full object-contain"
 									/>
 								{/if}
 							</div>
 						</Carousel.Item>
 					{/each}
 				</Carousel.Content>
-
-				<div class="hidden md:block">
-					<Carousel.Previous class="absolute left-2 top-1/2 z-30 h-10 w-10 -translate-y-1/2 transform bg-white/10 text-white hover:bg-white/20" />
-					<Carousel.Next class="absolute right-2 top-1/2 z-30 h-10 w-10 -translate-y-1/2 transform bg-white/10 text-white hover:bg-white/20" />
-				</div>
 			</Carousel.Root>
 		</div>
 
@@ -330,7 +231,7 @@
 						{:else}
 							<LazyImg
 								src={youtubeId ? `https://img.youtube.com/vi/${youtubeId}/default.jpg` : img}
-								alt="{title} thumbnail"
+								alt="Thumbnail"
 								class="h-full w-full object-cover"
 							/>
 						{/if}
