@@ -14,7 +14,7 @@
 							openChildMenu(category.name, index)
 						}}
 						onmouseleave={() => {
-							closeChildMenu(index, true)
+							//closeChildMenu(index, true)
 						}}
 					>
 						<a
