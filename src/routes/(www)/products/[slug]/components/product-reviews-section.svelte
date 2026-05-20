@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { toast } from '@misiki/kitcommerce-core'
-	import { Image, Star, StarIcon, X } from '@lucide/svelte'
+	import { Image, Star, StarIcon, X, Check, Camera, MessageSquare, ThumbsUp } from '@lucide/svelte'
 	import { date } from '$lib/core/utils/index.js'
 	import * as Tabs from '$lib/components/ui/tabs/index.js'
 	import { page } from '$app/state'
@@ -8,356 +8,367 @@
 	import { productService } from '$lib/core/services/index.js'
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { Textarea } from '$lib/components/ui/textarea/index.js'
+	import { fade, fly, scale } from 'svelte/transition'
+	import { quintOut } from 'svelte/easing'
 
 	const productState = useProductState()
-	$inspect('product', page.data)
+	const accRating = $derived.by(() => {
+		if (!page.data?.product?.ratings?.length) return 0
+		const total = page.data?.product?.ratings?.reduce((acc, cur) => acc + cur.rating, 0)
+		const rating = total / page.data?.product?.ratings?.length
+		return Math.floor((rating + 1) * 10) / 10
+	})
+
+	const ratingLabels = [
+		{ text: 'Very Disappointed', color: 'text-red-500' },
+		{ text: 'Slightly Disappointed', color: 'text-orange-500' },
+		{ text: 'Good', color: 'text-emerald-500' },
+		{ text: 'Very Good', color: 'text-emerald-600' },
+		{ text: 'Excellent', color: 'text-emerald-700' }
+	]
 </script>
+
+<style>
+	:global(.font-montserrat) {
+		font-family: 'Montserrat', sans-serif;
+	}
+
+	.rating-bar-glow {
+		box-shadow: 0 0 12px rgba(32, 123, 180, 0.2);
+	}
+
+	.custom-scrollbar::-webkit-scrollbar {
+		width: 4px;
+	}
+	.custom-scrollbar::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	.custom-scrollbar::-webkit-scrollbar-thumb {
+		background: #e4e4e7;
+		border-radius: 10px;
+	}
+</style>
 
 <!-- Reviews Section -->
 {#if page.data.store?.plugins?.isProductReviewsAndRatings?.active}
-	<div class="">
+	<section class="">
 		{#if page.data?.product?.ratings?.length}
-			<div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
-				<!-- Rating Summary -->
-				<div class="lg:col-span-1">
-					<div class="rounded-lg border bg-white p-6 shadow-sm">
-						<div class="mb-6 text-center">
-							<div class="text-primary-500 text-4xl font-bold">
-								{page.data?.product?.rating?.toFixed(1) || '0.0'}
+			<div class="grid grid-cols-1 lg:grid-cols-12 intra-gap">
+				<!-- Left Column: Summary & Stats -->
+				<div class="lg:col-span-4 lg:sticky lg:top-24 lg:h-fit">
+					<div class="space-y-6 lg:space-y-8">
+						<div class="flex flex-col items-center text-center lg:items-start lg:text-left">
+							<h2 class="mb-1 text-2xl font-bold tracking-tight text-zinc-900 lg:mb-2 lg:text-3xl">Reviews</h2>
+							<p class="text-sm text-zinc-500 lg:text-base">Real feedback from our community</p>
+
+							<div class="mt-6 flex items-baseline gap-2 lg:mt-8">
+								<span class="text-5xl font-black text-[#207bb4] lg:text-6xl">{accRating || '0.0'}</span>
+								<span class="text-lg font-semibold text-zinc-400 lg:text-xl">/ 5.0</span>
 							</div>
-							<div class="my-2 flex items-center justify-center gap-1">
-								{#each { length: 5 } as _, i}
-									<Star fill="yellow" class="h-5 w-5 {i < (page.data?.product?.rating || 0) ? 'text-primary-500' : 'text-zinc-200'}" />
-								{/each}
-							</div>
-							<div class="text-sm font-medium text-zinc-600">
-								Based on {page.data?.product?.ratings?.length || 0} reviews
+
+							<div class="mt-2 flex items-center gap-1.5 lg:mt-3">
+								<div class="flex items-center gap-0.5">
+									{#each { length: 5 } as _, i}
+										<Star
+											fill={i < Math.floor(accRating) ? '#207bb4' : 'none'}
+											class="h-5 w-5 {i < Math.floor(accRating) ? 'text-[#207bb4]' : 'text-zinc-200'}"
+										/>
+									{/each}
+								</div>
+								<span class="ml-2 text-sm font-medium text-zinc-600">
+									{page.data?.product?.ratings?.length || 0} global ratings
+								</span>
 							</div>
 						</div>
 
 						<!-- Rating Distribution -->
-						<div class="space-y-3">
-							{#each [5, 4, 3, 2, 1] as stars}
-								{@const count = page.data?.product?.ratings?.filter((r: { [key: string]: any }) => Math.floor(r.rating) === stars).length || 0}
-								{@const percentage = page.data?.product?.ratings?.length ? (count / page.data?.product.ratings.length) * 100 : 0}
-								<div class="flex items-center gap-2">
-									<div class="flex w-16 items-center gap-1 text-sm font-medium">
-										{stars}
-										<StarIcon class="text-primary-500 h-4 w-4 fill-yellow-300" />
+						<div class="rounded-2xl bg-zinc-50 p-6 ring-1 ring-zinc-100">
+							<div class="space-y-4">
+								{#each [5, 4, 3, 2, 1] as stars}
+									{@const count = page.data?.product?.ratings?.filter((r: { [key: string]: any }) => Math.floor(r.rating) === stars - 1).length || 0}
+									{@const percentage = page.data?.product?.ratings?.length ? (count / page.data?.product?.ratings?.length) * 100 : 0}
+									<div class="group flex items-center gap-4">
+										<button class="flex w-12 items-center gap-1.5 text-sm font-bold text-zinc-600 transition-colors hover:text-[#207bb4]">
+											{stars}
+											<StarIcon class="h-3.5 w-3.5 fill-current" />
+										</button>
+										<div class="relative h-2.5 flex-1 overflow-hidden rounded-full bg-zinc-200">
+											<div
+												class="bg-[#207bb4] absolute inset-y-0 left-0 rounded-full transition-all duration-700 ease-out"
+												style="width: {percentage}%"
+											></div>
+										</div>
+										<div class="w-10 text-right text-sm font-bold text-zinc-400 group-hover:text-zinc-900">
+											{count}
+										</div>
 									</div>
-									<div class="h-2 flex-1 overflow-hidden rounded-full bg-zinc-100">
-										<div class="bg-primary-500 h-full rounded-full transition-all" style="width: {percentage}%"></div>
-									</div>
-									<div class="w-10 text-sm font-medium text-zinc-600">{count}</div>
-								</div>
-							{/each}
-						</div>
-					</div>
-
-					<!-- Write Review Button (Mobile) -->
-					<div class="mt-4 lg:hidden">
-						<Button variant="outline" class="w-full" size="lg" onclick={() => (productState.showReviewForm = true)}>Write a Review</Button>
-					</div>
-				</div>
-
-				<!-- Reviews List -->
-				<div class="lg:col-span-2">
-					<div class="rounded-lg border bg-white shadow-sm">
-						<div class="border-b p-4">
-							<div class="flex items-center justify-between">
-								<h2 class="text-lg font-semibold">Customer Reviews</h2>
-								<Button variant="outline" class="hidden lg:flex" onclick={() => (productState.showReviewForm = true)}>Write a Review</Button>
+								{/each}
 							</div>
 						</div>
 
-						<div class="divide-y">
-							{#each page.data?.product?.ratings || [] as rating}
-								<div class="p-6">
-									<div class="mb-3 flex items-center justify-between">
-										<div class="flex items-center gap-3">
-											<div class="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100">
-												{#if rating?.img}
-													<img src={rating.img} alt="{rating.name || 'Anonymous'}'s avatar" class="h-full w-full rounded-full object-cover" />
-												{:else}
-													<span class="text-lg font-medium text-zinc-600">
-														{(rating.name || 'A')[0].toUpperCase()}
-													</span>
-												{/if}
-											</div>
-											<div>
-												<div class="font-semibold text-zinc-900">
-													{rating.name || 'Anonymous'}
+						<div class="space-y-4">
+							<!-- <div class="flex items-center gap-3 rounded-xl bg-blue-50/50 p-4 ring-1 ring-blue-100/50">
+								<div class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+									<Check class="h-5 w-5" />
+								</div>
+								<div>
+									<p class="text-sm font-bold text-blue-900">Verified Purchases Only</p>
+									<p class="text-xs text-blue-700">Only customers who bought this can review</p>
+								</div>
+							</div> -->
+
+							<Button
+								class="h-12 w-full bg-[#207bb4] text-base font-bold text-white shadow-lg shadow-[#207bb4]/20 active:scale-[0.98]"
+								onclick={() => (productState.showReviewForm = true)}
+							>
+								Write a Review
+							</Button>
+						</div>
+					</div>
+				</div>
+
+				<!-- Right Column: Reviews Feed -->
+				<div class="lg:col-span-8">
+					<Tabs.Root value="product" class="w-full">
+						<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between intra-gap">
+							<Tabs.List class="flex h-11 w-full items-center justify-center rounded-lg bg-zinc-100 p-1 text-zinc-500 sm:w-auto sm:inline-flex">
+								<Tabs.Trigger
+									value="product"
+									class="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-md px-4 py-2 text-sm font-bold transition-all focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:text-zinc-950 data-[state=active]:shadow-sm sm:flex-none"
+								>
+									Product Reviews
+								</Tabs.Trigger>
+								<Tabs.Trigger
+									value="brand"
+									class="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-md px-4 py-2 text-sm font-bold transition-all focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:text-zinc-950 data-[state=active]:shadow-sm sm:flex-none"
+								>
+									Brand Feedback
+								</Tabs.Trigger>
+							</Tabs.List>
+						</div>
+
+						<Tabs.Content value="product" class="intra-pt space-y-4">
+							{#each page.data?.product?.ratings as rating, i}
+								<div
+									class="relative flex flex-col gap-4 rounded-md bg-white p-5 transition-all hover:shadow-xl hover:shadow-zinc-200/50 ring-1 ring-zinc-100 sm:gap-6 sm:p-6"
+									in:fly={{ y: 20, delay: i * 50, duration: 400, easing: quintOut }}
+								>
+									<div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+										<div class="flex items-center gap-3 sm:gap-4">
+											<div class="relative flex-shrink-0">
+												<div class="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 ring-2 ring-white ring-offset-2 sm:h-12 sm:w-12">
+													{#if rating?.img}
+														<img src={rating.img} alt={rating.name} class="h-full w-full rounded-full object-cover" />
+													{:else}
+														<span class="text-base font-black text-zinc-400 sm:text-lg">
+															{(rating.name || 'G')[0].toUpperCase()}
+														</span>
+													{/if}
 												</div>
-												<div class="text-sm text-zinc-600">
-													{rating.date ? date(rating.date) : ''}
+												<div class="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-blue-500 text-white ring-2 ring-white sm:h-5 sm:w-5">
+													<Check class="h-2.5 w-2.5 stroke-[3] sm:h-3 sm:w-3" />
+												</div>
+											</div>
+											<div class="min-w-0">
+												<h4 class="truncate font-bold text-zinc-900">{rating.name || 'Guest'}</h4>
+												<div class="flex flex-wrap items-center gap-x-2 text-[10px] font-medium text-zinc-400 sm:text-xs">
+													<span>{rating.createdAt ? date(rating.createdAt) : 'Recently'}</span>
+													<span class="h-1 w-1 rounded-full bg-zinc-300"></span>
 												</div>
 											</div>
 										</div>
-										<div class="flex items-center gap-1">
+										<div class="flex w-fit items-center gap-0.5 rounded-full bg-zinc-50 px-2.5 py-1 ring-1 ring-zinc-100 sm:px-3 sm:py-1.5">
 											{#each { length: 5 } as _, i}
-												<Star fill="yellow" class="h-5 w-5 {i < rating.rating ? 'fill-primary' : 'fill-zinc-200'}" />
+												<StarIcon
+													class="h-3 w-3 {i <= rating.rating ? 'fill-[#207bb4] text-[#207bb4]' : 'text-zinc-200'} sm:h-3.5 sm:w-3.5"
+												/>
 											{/each}
 										</div>
 									</div>
 
-									{#if rating.review}
-										<p class="mb-4 text-zinc-700">{rating.review}</p>
-									{/if}
+									<div class="space-y-4">
+										{#if rating.review}
+											<p class="text-base leading-relaxed text-zinc-700 first-letter:uppercase sm:text-lg">
+												"{rating.review}"
+											</p>
+										{/if}
 
-									{#if rating.images?.length}
-										<div class="flex flex-wrap gap-2">
-											{#each rating.images as img}
-												<img src={img} alt="Review" class="h-20 w-20 cursor-pointer rounded-lg object-cover" />
-											{/each}
-										</div>
-									{/if}
+										{#if rating.images?.length}
+											<div class="flex flex-wrap gap-2 sm:gap-3">
+												{#each rating.images as img}
+													<button class="group relative aspect-square w-20 overflow-hidden rounded-md ring-2 ring-white transition-all hover:ring-[#207bb4] hover:scale-105 sm:w-24">
+														<img src={img} alt="Review" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+														<div class="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10"></div>
+													</button>
+												{/each}
+											</div>
+										{/if}
+									</div>
 								</div>
 							{/each}
+						</Tabs.Content>
 
-							{#if !page.data?.product?.ratings?.length}
-								<div class="p-8 text-center font-medium text-zinc-600">No reviews yet. Be the first to review this product!</div>
+						<Tabs.Content value="brand" class="space-y-6">
+							{#each page.data?.allratings as rating, i}
+								<div
+									class="flex flex-col gap-4 rounded-md bg-white p-5 transition-all hover:shadow-xl hover:shadow-zinc-200/50 ring-1 ring-zinc-100 sm:gap-6 sm:p-6"
+									in:fly={{ y: 20, delay: i * 50, duration: 400, easing: quintOut }}
+								>
+									<!-- Similar structure for brand ratings -->
+									<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+										<div class="flex items-center gap-3 sm:gap-4">
+											<div class="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 font-black text-zinc-400 sm:h-12 sm:w-12">
+												{(rating.name || 'G')[0].toUpperCase()}
+											</div>
+											<div>
+												<h4 class="font-bold text-zinc-900">{rating.name || 'Guest'}</h4>
+												<p class="text-[10px] font-medium text-zinc-400 sm:text-xs">{rating.createdAt ? date(rating.createdAt) : 'Recently'}</p>
+											</div>
+										</div>
+										<div class="flex w-fit items-center gap-0.5 rounded-full bg-zinc-50 px-2.5 py-1 ring-1 ring-zinc-100 sm:px-3 sm:py-1.5">
+											{#each { length: 5 } as _, i}
+												<StarIcon
+													class="h-3 w-3 {rating.rating >= i ? 'fill-[#207bb4] text-[#207bb4]' : 'text-zinc-200'} sm:h-3.5 sm:w-3.5"
+												/>
+											{/each}
+										</div>
+									</div>
+									<p class="text-base text-zinc-700 sm:text-lg">"{rating.review || 'No comment left'}"</p>
+								</div>
 							{:else}
-								<Tabs.Root value="product" class="w-full">
-									<Tabs.List class="mb-6 grid w-full grid-cols-2 border-b">
-										<Tabs.Trigger value="product" class="px-4 py-2 font-semibold">Product Ratings</Tabs.Trigger>
-										<Tabs.Trigger value="brand" class="px-4 py-2 font-semibold">Brand Ratings</Tabs.Trigger>
-									</Tabs.List>
-									<Tabs.Content value="product" class="w-full">
-										<div class="grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">
-											{#each page.data?.product?.ratings as rating}
-												<div class="flex w-full flex-col gap-4 rounded-lg border bg-white p-6 shadow-sm">
-													<div class="flex flex-wrap items-center gap-2">
-														<div class="flex flex-wrap items-center gap-2">
-															{#each { length: 5 } as _, i}
-																<button type="button" aria-label="{i + 1} star" class="focus:outline-none focus:ring-0 focus:ring-offset-0">
-																	<svg
-																		class="block h-8 w-8
-											{rating.rating >= i && rating.rating != null ? 'text-primary-500' : 'text-zinc-200'}"
-																		fill="currentColor"
-																		xmlns="http://www.w3.org/2000/svg"
-																		viewBox="0 0 20 20"
-																	>
-																		<path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"
-																			>{rating.rating}</path
-																		>
-																	</svg>
-																</button>
-															{/each}
-
-															{#if rating.rating == 0}
-																<span class="font-semibold text-red-600"> Very Disappointed </span>
-															{/if}
-
-															{#if rating.rating == 1}
-																<span class="font-semibold text-orange-600"> Slightly Disappointed </span>
-															{/if}
-
-															{#if rating.rating == 2}
-																<span class="font-semibold text-green-600"> Good</span>
-															{/if}
-
-															{#if rating.rating == 3}
-																<span class="font-semibold text-green-600"> Very Good</span>
-															{/if}
-
-															{#if rating.rating == 4}
-																<span class="font-semibold text-green-600"> Excellent</span>
-															{/if}
-														</div>
-													</div>
-
-													<div class="flex flex-1 flex-col gap-1">
-														{#if rating.review}
-															<p class="first-letter:uppercase">
-																{rating.review}
-															</p>
-														{/if}
-
-														<div class="flex flex-wrap items-center gap-1 text-xs text-zinc-500">
-															<img src={rating?.img} alt="User" class="h-6 w-6 rounded-full" />
-															{#if rating.name}
-																<span>{rating.name}</span>
-
-																<span class="h-2.5 border-l border-zinc-200"></span>
-															{/if}
-
-															{#if rating.createdAt}
-																<span>{date(rating.createdAt)}</span>
-															{/if}
-														</div>
-													</div>
-												</div>
-											{/each}
-										</div>
-									</Tabs.Content>
-									<Tabs.Content value="brand" class="w-full">
-										<div class="grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">
-											{#each page.data?.allratings as rating}
-												<div class="flex w-full flex-col gap-4 rounded-lg border bg-white p-6 shadow-sm">
-													<div class="flex flex-wrap items-center gap-2">
-														<div class="flex flex-wrap items-center gap-2">
-															{#each { length: 5 } as _, i}
-																<button type="button" class="focus:outline-none focus:ring-0 focus:ring-offset-0">
-																	<svg
-																		class="block h-8 w-8
-											{rating.rating >= i && rating.rating != null ? 'text-primary-500' : 'text-zinc-200'}"
-																		fill="currentColor"
-																		xmlns="http://www.w3.org/2000/svg"
-																		viewBox="0 0 20 20"
-																	>
-																		<path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"
-																			>{rating.rating}</path
-																		>
-																	</svg>
-																</button>
-															{/each}
-
-															{#if rating.rating == 0}
-																<span class="font-semibold text-red-600"> Very Disappointed </span>
-															{/if}
-
-															{#if rating.rating == 1}
-																<span class="font-semibold text-orange-600"> Slightly Disappointed </span>
-															{/if}
-
-															{#if rating.rating == 2}
-																<span class="font-semibold text-green-600"> Good</span>
-															{/if}
-
-															{#if rating.rating == 3}
-																<span class="font-semibold text-green-600"> Very Good</span>
-															{/if}
-
-															{#if rating.rating == 4}
-																<span class="font-semibold text-green-600"> Excellent</span>
-															{/if}
-														</div>
-													</div>
-
-													<div class="flex flex-1 flex-col gap-1">
-														{#if rating.review}
-															<p class="first-letter:uppercase">
-																{rating.review}
-															</p>
-														{/if}
-
-														<div class="flex flex-wrap items-center gap-1 text-xs text-zinc-500">
-															<img src={rating?.img} alt="User" class="h-6 w-6 rounded-full" />
-															{#if rating.name}
-																<span>{rating.name}</span>
-
-																<span class="h-2.5 border-l border-zinc-200"></span>
-															{/if}
-
-															{#if rating.createdAt}
-																<span>{date(rating.createdAt)}</span>
-															{/if}
-														</div>
-													</div>
-												</div>
-											{/each}
-										</div>
-									</Tabs.Content>
-								</Tabs.Root>
-							{/if}
-						</div>
-					</div>
+								<div class="flex flex-col items-center justify-center py-12 text-center text-zinc-400 bg-zinc-50/50 rounded-md border-2 border-dashed border-zinc-200">
+									<MessageSquare class="h-10 w-10 mb-3 opacity-20 sm:h-12 sm:w-12 sm:mb-4" />
+									<p class="font-bold text-base sm:text-lg">No brand feedback yet</p>
+									<p class="text-xs sm:text-sm">Be the first to share your experience!</p>
+								</div>
+							{/each}
+						</Tabs.Content>
+					</Tabs.Root>
 				</div>
 			</div>
 		{:else}
-			<!-- Fallback when reviews are disabled or no reviews exist -->
-			<div class="mx-0 mt-8 rounded-lg border bg-white p-6 shadow-sm">
-				<div class="text-center">
-					<h2 class="mb-2 text-lg font-semibold">Customer Reviews</h2>
-					<p class="mb-4 text-gray-500">No reviews yet. Be the first to review this product!</p>
-					<Button variant="outline" class="mx-auto" onclick={() => (productState.showReviewForm = true)}>Write a Review</Button>
+			<!-- Empty State -->
+			<div class="flex flex-col items-center justify-center py-12 text-center sm:py-20">
+				<div class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-zinc-50 text-zinc-200 ring-1 ring-zinc-100 sm:mb-8 sm:h-24 sm:w-24">
+					<Star class="h-10 w-10 sm:h-12 sm:w-12" />
 				</div>
+				<h2 class="mb-2 text-2xl font-bold tracking-tight text-zinc-900 sm:mb-3 sm:text-3xl">No reviews yet</h2>
+				<p class="mb-8 max-w-xs text-base text-zinc-500 sm:mb-10 sm:max-w-sm sm:text-lg">
+					Be the first to share your thoughts on this product and help other shoppers.
+				</p>
+				<Button
+					class="h-12 rounded-md bg-[#207bb4] px-6 text-base font-bold text-white shadow-xl shadow-[#207bb4]/20 transition-all hover:bg-[#339d9c] hover:scale-105 active:scale-95 sm:h-14 sm:px-8 sm:text-lg"
+					onclick={() => (productState.showReviewForm = true)}
+				>
+					Write the First Review
+				</Button>
 			</div>
 		{/if}
-	</div>
-	<!-- Review Form Dialog -->
+	</section>
+
+	<!-- Review Form Modal Overlay -->
 	{#if productState.showReviewForm}
-		<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-			<div class="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white">
-				<div class="sticky top-0 z-10 border-b bg-white p-6">
-					<div class="flex items-center justify-between">
-						<h3 class="text-lg font-semibold">Write a Review</h3>
-						<button onclick={() => (productState.showReviewForm = false)} class="text-zinc-500 hover:text-zinc-700">
-							<X class="h-5 w-5" />
-						</button>
+		<div
+			class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/60 sm:p-4 backdrop-blur-sm"
+			transition:fade={{ duration: 200 }}
+		>
+			<div
+				class="font-montserrat relative h-full w-full overflow-hidden bg-white sm:h-auto sm:max-h-[90vh] sm:max-w-2xl sm:rounded-3xl sm:shadow-2xl"
+				transition:scale={{ start: 0.95, duration: 300, easing: quintOut }}
+			>
+				<!-- Modal Header -->
+				<div class="sticky top-0 z-10 flex items-center justify-between border-b border-zinc-100 bg-white/80 px-6 py-4 backdrop-blur-md sm:px-8 sm:py-6">
+					<div>
+						<h3 class="text-xl font-black text-zinc-900 tracking-tight sm:text-2xl">Write a Review</h3>
+						<p class="text-xs font-medium text-zinc-500 sm:text-sm">Share your experience with us</p>
 					</div>
+					<button
+						onclick={() => (productState.showReviewForm = false)}
+						class="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 text-zinc-500 transition-all hover:bg-red-50 hover:text-red-500"
+					>
+						<X class="h-6 w-6" />
+					</button>
 				</div>
 
-				<div class="space-y-6 p-6">
-					<div>
-						<span class="mb-2 block text-sm font-medium">Rating</span>
-						<div class="flex items-center gap-2">
-							{#each { length: 5 } as _, i}
-								<button
-									type="button"
-									aria-label="Rate {i + 1} star"
-									class="p-1 transition-transform focus:outline-none"
-									onclick={() => productState.onSelect(i)}
-								>
-									<Star class="h-11 w-11 {productState.select && productState.select >= i ? 'fill-primary' : 'fill-zinc-200'}" />
-								</button>
-							{/each}
+				<!-- Modal Body -->
+				<div class="custom-scrollbar max-h-[calc(100vh-140px)] overflow-y-auto px-6 py-8 sm:max-h-[calc(90vh-180px)] sm:px-8 sm:py-10">
+					<div class="space-y-10 sm:space-y-12">
+						<!-- Rating Selection -->
+						<div class="space-y-4 sm:space-y-6">
+							<span class="block text-base font-bold text-zinc-900 sm:text-lg">Overall Rating</span>
+							<div class="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+								<div class="flex items-center gap-1">
+									{#each { length: 5 } as _, i}
+										<button
+											type="button"
+											class="group relative p-1 transition-transform focus:outline-none hover:scale-110 active:scale-90"
+											onclick={() => productState.onSelect(i)}
+										>
+											<Star
+												fill={productState.select !== null && productState.select >= i ? '#207bb4' : 'none'}
+												strokeWidth={1.5}
+												class="h-10 w-10 transition-colors {productState.select !== null && productState.select >= i ? 'text-[#207bb4]' : 'text-zinc-200'} sm:h-12 sm:w-12"
+											/>
+										</button>
+									{/each}
+								</div>
 
-							{#if productState.select !== null}
-								<span class="ml-2 font-medium {productState.ratingLabels[productState.select].color}">
-									{productState.ratingLabels[productState.select].text}
-								</span>
-							{/if}
-						</div>
-					</div>
-
-					<div>
-						<label for="review" class="mb-2 block text-sm font-medium">Your Review</label>
-						<Textarea
-							id="review"
-							placeholder="Share your experience with this product..."
-							bind:value={productState.reviewMessage}
-							class="min-h-[120px]"
-						/>
-					</div>
-
-					<!-- <div>
-						<span class="mb-2 block text-sm font-medium">Photos</span>
-						<div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
-							{#each productState.uploadedImagestoSave as img, index}
-								<div class="group relative aspect-square">
-									<img src={img} alt="Review image {index + 1}" class="h-full w-full rounded-lg object-cover" />
-									<button
-										onclick={() => productState.removeSelectedImage(img)}
-										class="absolute right-2 top-2 rounded-full bg-white/90 p-1.5 opacity-0 shadow-sm transition-opacity group-hover:opacity-100 hover:bg-white"
+								{#if productState.select !== null}
+									<div
+										class="rounded-full px-4 py-1.5 text-xs font-black ring-1 ring-inset {ratingLabels[productState.select].color.replace('text-', 'bg-').replace('-500', '-50')} {ratingLabels[productState.select].color} sm:text-sm"
+										in:scale={{ start: 0.9, duration: 200 }}
 									>
-										<X class="h-4 w-4" />
-									</button>
-								</div>
-							{/each}
-
-							<label
-								for="dropzone-file"
-								class="flex aspect-square cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-200 bg-zinc-50 transition-colors hover:bg-zinc-100"
-							>
-								<div class="flex flex-col items-center justify-center p-4 text-center">
-									<Image class="mb-2 h-8 w-8 text-zinc-400" />
-									<p class="text-sm text-zinc-500">
-										<span class="text-primary-500 font-medium">Upload a photo</span>
-										<br />or drag and drop
-									</p>
-								</div>
-								<input id="dropzone-file" type="file" accept="image/*" class="hidden" multiple={false} onchange={productState.handleImageChange} />
-							</label>
+										{ratingLabels[productState.select].text}
+									</div>
+								{/if}
+							</div>
 						</div>
-					</div> -->
+
+						<!-- Review Message -->
+						<div class="space-y-4">
+							<label for="review" class="block text-base font-bold text-zinc-900 sm:text-lg">Your Story</label>
+							<div class="relative">
+								<Textarea
+									id="review"
+									placeholder="What did you love? What could be better? We're all ears."
+									bind:value={productState.reviewMessage}
+									class="min-h-[140px] rounded-2xl border-2 border-zinc-100 p-4 text-base transition-all focus:ring-0 sm:min-h-[160px] sm:p-6 sm:text-lg"
+								/>
+								<div class="absolute bottom-4 right-4 text-[10px] font-bold text-zinc-300 sm:text-xs">
+									{productState.reviewMessage?.length || 0} characters
+								</div>
+							</div>
+						</div>
+
+						<!-- Photo Upload -->
+						<!-- <div class="space-y-4">
+							<span class="block text-base font-bold text-zinc-900 sm:text-lg">Add Photos</span>
+							<div class="grid grid-cols-3 gap-3 sm:grid-cols-4 sm:gap-4">
+								<label
+									for="review-photos"
+									class="flex aspect-square cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-zinc-200 bg-zinc-50 transition-all hover:border-[#207bb4] hover:bg-blue-50/30"
+								>
+									<Camera class="mb-1 h-6 w-6 text-zinc-400 sm:mb-2 sm:h-8 sm:w-8" />
+									<span class="text-[10px] font-bold text-zinc-500 sm:text-xs">Add Photo</span>
+									<input id="review-photos" type="file" class="hidden" accept="image/*" />
+								</label>
+							</div>
+						</div> -->
+					</div>
 				</div>
 
-				<div class="sticky bottom-0 z-10 border-t bg-white p-6">
-					<div class="flex items-center justify-end gap-3">
-						<Button variant="outline" onclick={() => (productState.showReviewForm = false)}>Cancel</Button>
+				<!-- Modal Footer -->
+				<div class="border-t border-zinc-100 bg-white/80 px-6 py-4 backdrop-blur-md sm:px-8 sm:py-6">
+					<div class="flex items-center justify-end gap-3 sm:gap-4">
+						<button
+							onclick={() => (productState.showReviewForm = false)}
+							class="h-10 px-4 text-xs font-bold text-zinc-500 hover:bg-zinc-100 sm:h-12 sm:px-6 sm:text-sm"
+						>
+							Discard
+						</button>
 						<Button
-							disabled={!productState.select || !productState.reviewMessage}
+							disabled={productState.select === null || !productState.reviewMessage}
+							class="h-10 bg-[#207bb4] px-6 text-xs font-black text-white shadow-xl shadow-[#207bb4]/20 transition-all hover:bg-[#339d9c] disabled:opacity-30 sm:h-12 sm:px-10 sm:text-sm"
 							onclick={async () => {
 								try {
 									await productService.addReview({
@@ -368,13 +379,13 @@
 										uploadedImages: productState.uploadedImagestoSave
 									})
 									productState.showReviewForm = false
-									toast.success('Review submitted successfully')
+									toast.success('Review published! Thanks for sharing.')
 								} catch (error) {
-									toast.error('Failed to submit review')
+									toast.error('Could not post review. Try again?')
 								}
 							}}
 						>
-							Submit Review
+							Post Review
 						</Button>
 					</div>
 				</div>
