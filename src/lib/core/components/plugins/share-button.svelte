@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { fly } from 'svelte/transition'
+	import { fly, fade } from 'svelte/transition'
 	import { page } from '$app/state'
 	import { Email, Facebook, LinkedIn, Pinterest, Telegram, X, WhatsApp } from 'svelte-share-buttons-component'
 	import facebookIcon from '$lib/assets/social-media/facebook.png'
@@ -45,7 +45,7 @@
 		},
 		{
 			icon: linkedinIcon,
-			title: 'LInkedIn',
+			title: 'LinkedIn',
 			href: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`
 		},
 		{
@@ -57,21 +57,20 @@
 
 	const copyToClipboard = (link: string) => {
 		navigator.clipboard.writeText(link)
-
-		toast.success('Copied')
+		toast.success('Link copied')
 	}
 </script>
 
 <div class="relative max-w-max">
 	<button
 		type="button"
-		aria-label="Open Share Dropdown"
-		class="group flex items-center gap-2 rounded-full border border-transparent p-1 transition duration-300 focus:outline-none lg:border-zinc-200 lg:px-2 lg:py-1
-		{showDropDown ? 'border-primary-500 bg-black text-white shadow-lg' : 'lg:hover:border-primary-500 lg:hover:text-primary-500'}
+		aria-label="Open Share Options"
+		class="group flex items-center gap-2 rounded-full border border-zinc-200 px-3 py-1.5 transition-all duration-300 hover:border-primary-500 hover:text-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 lg:px-4
+		{showDropDown ? 'bg-zinc-900 text-white border-zinc-900 ring-2 ring-primary-500 ring-offset-2' : 'bg-white text-zinc-700'}
 		"
 		onclick={() => (showDropDown = !showDropDown)}
 	>
-		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 lg:h-4 lg:w-4">
+		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -79,118 +78,159 @@
 			></path>
 		</svg>
 
-		{#if !showDropDown}
-			<span class="hidden text-sm lg:group-hover:block"> Share </span>
-		{:else}
-			<span class="hidden text-sm lg:block">Share</span>
-		{/if}
+		<span class="text-sm font-medium">Share</span>
 	</button>
 
 	{#if showDropDown}
-		<!-- Desktop social share buttons -->
-
-		<ul
-			transition:fly={{ y: -5, duration: 300 }}
-			class="absolute right-0 top-10 z-10 hidden min-w-max list-none flex-col rounded-full border bg-white py-1 shadow-md lg:flex"
-		>
-			<li class="p-2">
-				<WhatsApp class="flex items-center justify-center rounded-full" text="{productName} {url}" />
-			</li>
-
-			<li class="p-2">
-				<Telegram class="flex items-center justify-center rounded-full" text={productName} {url} />
-			</li>
-
-			<li class="p-2">
-				<Facebook class="flex items-center justify-center rounded-full" quote={productName} {url} />
-			</li>
-
-			<li class="p-2">
-				<X
-					class="share-button flex items-center justify-center rounded-full"
-					text={productName}
-					{url}
-					hashtags="litekart"
-					via="litekart"
-					related="mobile cover,t-shirt,key chain "
-				/>
-			</li>
-
-			<li class="p-2">
-				<Pinterest class="flex items-center justify-center rounded-full" {url} media={productImage} description={productName} />
-			</li>
-
-			<li class="p-2">
-				<LinkedIn class="flex items-center justify-center rounded-full" {url} />
-			</li>
-
-			<li class="p-2">
-				<Email class="flex items-center justify-center rounded-full" subject="Take a look at this {productName}" body={url} />
-			</li>
-		</ul>
-
-		<!-- Mobile social share buttons -->
-
-		<div
-			transition:fly={{ y: 100, duration: 300 }}
-			class="fixed inset-x-0 bottom-0 z-[10000000] bg-white lg:hidden"
-			style="box-shadow: 0px -4px 10px rgba(50, 50, 50, 0.075);"
-		>
-			<div class="flex items-center gap-2 px-4 py-2">
-				<button type="button" aria-label="Close share dropdown" class="focus:outline-none" onclick={() => (showDropDown = false)}>
-					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5">
-						<path
-							d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
-						></path>
-					</svg>
-					<span class="sr-only">Close</span>
-				</button>
-
-				<span class="font-medium">Share</span>
-			</div>
-
-			<hr />
-
-			<ul class="m-0 grid list-none grid-cols-4 items-end justify-items-center gap-4 p-4">
-				<li class="col-span-1">
-					<button
-						type="button"
-						class="flex max-w-max flex-col items-center justify-center gap-1 text-xs focus:outline-none"
-						onclick={() => {
-							copyToClipboard(`${page?.url?.href}`), (showDropDown = false)
-						}}
-					>
-						<img src={linkIcon} alt="Link icon" class="h-8 w-auto object-contain object-center" />
-
-						<span class="leading-3">Copy Link</span>
-					</button>
-				</li>
-
-				{#each socialSharesList as ss}
-					<li class="col-span-1">
-						<a
-							href={encodeURI(ss.href)}
-							data-action={ss.dataAction || ''}
-							target="_blank"
-							rel="noopener noreferrer"
-							class="flex max-w-max flex-col items-center justify-center gap-1 text-xs"
-							onclick={() => (showDropDown = false)}
-						>
-							<img src={ss.icon} alt="{ss.title} icon" class="h-8 w-auto object-contain object-center" />
-
-							<span class="leading-3">{ss.title}</span>
-						</a>
-					</li>
-				{/each}
-			</ul>
-		</div>
-
+		<!-- Backdrop for closing -->
 		<button
 			type="button"
-			class="fixed inset-0 z-40 h-full w-full bg-black bg-opacity-0 focus:outline-none lg:z-0"
+			class="fixed inset-0 z-[9999998] bg-zinc-950/20 backdrop-blur-[2px] transition-opacity focus:outline-none"
 			onclick={() => (showDropDown = false)}
+			transition:fade={{ duration: 200 }}
 		>
-			<span class="sr-only">Close</span>
+			<span class="sr-only">Close Share Menu</span>
 		</button>
+
+		<!-- Desktop Share Popover -->
+		<div
+			transition:fly={{ y: -10, duration: 300 }}
+			class="absolute right-0 top-12 z-[9999999] hidden w-72 flex-col rounded-2xl border border-zinc-200 bg-white p-4 shadow-2xl lg:flex"
+		>
+			<div class="mb-4 flex items-center justify-between px-1">
+				<h3 class="text-sm font-bold text-zinc-900">Share Product</h3>
+				<button
+					type="button"
+					class="rounded-full p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 focus:outline-none transition-colors"
+					onclick={() => (showDropDown = false)}
+				>
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5">
+						<path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+					</svg>
+				</button>
+			</div>
+
+			<div class="grid grid-cols-4 gap-y-6 gap-x-2">
+				<div class="flex flex-col items-center gap-1.5">
+					<div class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full shadow-sm transition-transform hover:scale-110">
+						<WhatsApp class="h-full flex w-full" text="{productName} {url}" />
+					</div>
+					<span class="text-[10px] font-medium text-zinc-500">WhatsApp</span>
+				</div>
+				<div class="flex flex-col items-center gap-1.5">
+					<div class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full shadow-sm transition-transform hover:scale-110">
+						<Telegram class="h-full flex w-full" text={productName} {url} />
+					</div>
+					<span class="text-[10px] font-medium text-zinc-500">Telegram</span>
+				</div>
+				<div class="flex flex-col items-center gap-1.5">
+					<div class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full shadow-sm transition-transform hover:scale-110">
+						<Facebook class="h-full flex w-full" quote={productName} {url} />
+					</div>
+					<span class="text-[10px] flex font-medium text-zinc-500">Facebook</span>
+				</div>
+				<div class="flex flex-col items-center gap-1.5">
+					<div class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full shadow-sm transition-transform hover:scale-110">
+						<X
+							class="h-full flex w-full"
+							text={productName}
+							{url}
+							hashtags="zapvi"
+							via="zapvi"
+							related="mobile cover, mousepad, phone grips, t-shirt, keychain, mobile accessories"
+						/>
+					</div>
+					<span class="text-[10px] font-medium text-zinc-500">X</span>
+				</div>
+				<div class="flex flex-col items-center gap-1.5">
+					<div class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full shadow-sm transition-transform hover:scale-110">
+						<Pinterest class="h-full flex w-full" {url} media={productImage} description={productName} />
+					</div>
+					<span class="text-[10px] font-medium text-zinc-500">Pinterest</span>
+				</div>
+				<div class="flex flex-col items-center gap-1.5">
+					<div class="flex h-10 w-10 overflow-hidden rounded-full shadow-sm transition-transform hover:scale-110">
+						<LinkedIn class="h-full flex w-full" {url} />
+					</div>
+					<span class="text-[10px] font-medium text-zinc-500">LinkedIn</span>
+				</div>
+				<div class="flex flex-col items-center gap-1.5">
+					<div class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full shadow-sm transition-transform hover:scale-110">
+						<Email class="h-full flex w-full" subject="Check this out: {productName}" body={url} />
+					</div>
+					<span class="text-[10px] font-medium text-zinc-500">Email</span>
+				</div>
+				<div class="flex flex-col items-center gap-1.5">
+					<button
+						type="button"
+						class="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 text-zinc-600 transition-all hover:bg-primary-500 hover:text-white"
+						onclick={() => copyToClipboard(url)}
+					>
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-4 w-4">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+						</svg>
+					</button>
+					<span class="text-[10px] font-medium text-zinc-500">Copy Link</span>
+				</div>
+			</div>
+		</div>
+
+		<!-- Mobile Share Bottom Sheet -->
+		<div
+			transition:fly={{ y: '100%', duration: 400, opacity: 1 }}
+			class="fixed inset-x-0 bottom-0 z-[99] overflow-hidden rounded-t-[2rem] bg-white pb-safe lg:hidden"
+			style="box-shadow: 0px -8px 40px rgba(0, 0, 0, 0.12);"
+		>
+			<!-- Drag Handle -->
+			<div class="flex justify-center pt-3">
+				<div class="h-1.5 w-12 rounded-full bg-zinc-200"></div>
+			</div>
+
+			<div class="flex items-center justify-between px-6 py-4">
+				<h3 class="text-lg font-bold text-zinc-900">Share Product</h3>
+				<button
+					type="button"
+					class="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 text-zinc-500 active:bg-zinc-200"
+					onclick={() => (showDropDown = false)}
+				>
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-6 w-6">
+						<path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+					</svg>
+				</button>
+			</div>
+
+			<div class="grid grid-cols-4 items-start justify-items-center gap-y-6 px-4 pb-12 pt-2">
+				<button
+					type="button"
+					class="group flex flex-col items-center gap-2 focus:outline-none"
+					onclick={() => {
+						copyToClipboard(url)
+						showDropDown = false
+					}}
+				>
+					<div class="flex h-14 w-14 items-center justify-center rounded-full bg-zinc-100 text-zinc-600 group-active:scale-95 group-active:bg-zinc-200 transition-all">
+						<img src={linkIcon} alt="Copy Link" class="h-7 w-7 opacity-80" />
+					</div>
+					<span class="text-xs font-medium text-zinc-600">Copy Link</span>
+				</button>
+
+				{#each socialSharesList as ss}
+					<a
+						href={encodeURI(ss.href)}
+						data-action={ss.dataAction || ''}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="group flex flex-col items-center gap-2 focus:outline-none"
+						onclick={() => (showDropDown = false)}
+					>
+						<div class="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-zinc-50 group-active:scale-95 group-active:bg-zinc-100 transition-all border border-zinc-100">
+							<img src={ss.icon} alt={ss.title} class="h-14 w-14 rounded-full object-cover" />
+						</div>
+						<span class="text-xs font-medium text-zinc-600">{ss.title}</span>
+					</a>
+				{/each}
+			</div>
+		</div>
 	{/if}
 </div>
+
