@@ -65,8 +65,8 @@
 	<button
 		type="button"
 		aria-label="Open Share Options"
-		class="group flex items-center gap-2 rounded-full border border-zinc-200 px-3 py-1.5 transition-all duration-300 hover:border-primary-500 hover:text-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 lg:px-4
-		{showDropDown ? 'bg-zinc-900 text-white border-zinc-900 ring-2 ring-primary-500 ring-offset-2' : 'bg-white text-zinc-700'}
+		class="group flex items-center gap-2 rounded-full sm:border border-zinc-200 px-3 py-1.5 transition-all duration-300 hover:border-primary-500 hover:text-primary-500 focus:outline-none sm:focus:ring-2 sm:focus:ring-primary-500 sm:focus:ring-offset-2 lg:px-4
+		{showDropDown ? 'sm:bg-zinc-900 sm:text-white sm:border-zinc-900 sm:ring-2 sm:ring-primary-500 sm:ring-offset-2' : 'bg-white text-zinc-700'}
 		"
 		onclick={() => (showDropDown = !showDropDown)}
 	>
@@ -78,14 +78,14 @@
 			></path>
 		</svg>
 
-		<span class="text-sm font-medium">Share</span>
+		<span class="text-sm hidden sm:block font-medium">Share</span>
 	</button>
 
 	{#if showDropDown}
 		<!-- Backdrop for closing -->
 		<button
 			type="button"
-			class="fixed inset-0 z-[9999998] bg-zinc-950/20 backdrop-blur-[2px] transition-opacity focus:outline-none"
+			class="fixed inset-0 z-[9999997] bg-zinc-950/20 backdrop-blur-[2px] transition-opacity focus:outline-none"
 			onclick={() => (showDropDown = false)}
 			transition:fade={{ duration: 200 }}
 		>
@@ -95,7 +95,7 @@
 		<!-- Desktop Share Popover -->
 		<div
 			transition:fly={{ y: -10, duration: 300 }}
-			class="absolute right-0 top-12 z-[9999999] hidden w-72 flex-col rounded-2xl border border-zinc-200 bg-white p-4 shadow-2xl lg:flex"
+			class="absolute right-0 top-12 z-[9999998] hidden w-72 flex-col rounded-2xl border border-zinc-200 bg-white p-4 shadow-2xl lg:flex"
 		>
 			<div class="mb-4 flex items-center justify-between px-1">
 				<h3 class="text-sm font-bold text-zinc-900">Share Product</h3>
@@ -178,7 +178,7 @@
 		<!-- Mobile Share Bottom Sheet -->
 		<div
 			transition:fly={{ y: '100%', duration: 400, opacity: 1 }}
-			class="fixed inset-x-0 bottom-0 z-[99] overflow-hidden rounded-t-[2rem] bg-white pb-safe lg:hidden"
+			class="fixed inset-x-0 bottom-0 z-[9999997] overflow-hidden rounded-t-[2rem] bg-white pb-safe lg:hidden"
 			style="box-shadow: 0px -8px 40px rgba(0, 0, 0, 0.12);"
 		>
 			<!-- Drag Handle -->
