@@ -24,11 +24,11 @@
 	{#if isOpen}
 		<div class="grid grid-cols-1 gap-y-4 pb-6">
 			<!-- SKU and Barcode Section -->
-			<div class="grid grid-cols-2 gap-4 border-b border-gray-50 pb-4">
+			<div class="grid grid-cols-1 gap-4 border-b border-gray-50 pb-4">
 				{#if productState.selectedVariant?.sku || data?.product?.sku}
 					<div class="flex flex-col gap-1">
 						<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">SKU</p>
-						<p class="break-words break-all text-sm font-medium text-gray-900">
+						<p class="break-words break-all text-sm font-medium text-gray-600">
 							{String(productState.selectedVariant?.sku || data?.product?.sku)}
 						</p>
 					</div>
@@ -45,7 +45,7 @@
 			</div>
 
 			<!-- Dimensions and Weight Section -->
-			<div class="grid grid-cols-2 gap-4 border-b border-gray-50 pb-4">
+			<div class="grid grid-cols-1 gap-4 border-b border-gray-50 pb-4">
 				{#if productState.selectedVariant?.width || data?.product?.width || productState.selectedVariant?.height || data?.product?.height || productState.selectedVariant?.length || data?.product?.length}
 					<div class="flex flex-col gap-1">
 						<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Dimensions</p>
@@ -84,7 +84,7 @@
 				{/if}
 			</div>
 
-			<div class="grid grid-cols-2 gap-4 border-b border-gray-50 pb-4">
+			<div class="grid grid-cols-1 gap-4 border-b border-gray-50 pb-4">
 				{#if data?.product?.originCountry}
 					<div class="flex flex-col gap-1">
 						<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">Origin</p>
@@ -94,7 +94,7 @@
 			</div>
 
 			{#each data?.product?.attributes as { name, value }}
-				<div class="grid grid-cols-2 gap-4 border-b border-gray-50 pb-4 last:border-0 last:pb-0">
+				<div class="grid grid-cols-1 gap-4 border-b border-gray-50 pb-4 last:border-0 last:pb-0">
 					<div class="flex flex-col gap-1">
 						<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">{name}</p>
 						<p class="text-sm font-medium text-gray-900">{value}</p>
