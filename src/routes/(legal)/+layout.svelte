@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { setCartState } from '$lib/core/stores/index.js'
+	import { setCartState, setWishlistState } from '$lib/core/stores/index.js'
 	import type { Snippet } from 'svelte'
 	import Nav from '$lib/components/nav/nav.svelte'
 	import Footer from '$lib/components/common/footer.svelte'
@@ -8,6 +8,7 @@
 	let { children }: { children: Snippet } = $props()
 
 	setCartState()
+  setWishlistState()
 </script>
 
 <StorePlugins />
