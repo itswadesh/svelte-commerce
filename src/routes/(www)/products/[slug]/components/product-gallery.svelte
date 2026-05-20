@@ -191,9 +191,8 @@
 										Video not supported
 									</video>
 								{:else}
-									<LazyImgWithZoom
+									<LazyImg
 										src={img}
-                    aspectRatio="2:3"
 										alt="Product Image"
 										class="!max-h-[calc(100vh-6rem)] w-full object-contain"
 									/>

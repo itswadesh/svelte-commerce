@@ -17,8 +17,8 @@
 </script>
 
 {#if categories?.length}
-	<div class="py-8">
-		<div class="mb-6 flex flex-col items-center justify-between gap-6 px-2 md:flex-row md:items-end">
+	<div class="py-8 w-full">
+		<div class="mb-6 flex flex-col items-center justify-between gap-6 md:flex-row md:items-end">
 			<div class="text-center md:text-left">
 				<h2 class="text-3xl font-extrabold tracking-tight text-foreground lg:text-4xl">Top Categories</h2>
 				<div class="mx-auto mt-2 h-1 w-12 bg-primary md:mx-0"></div>
