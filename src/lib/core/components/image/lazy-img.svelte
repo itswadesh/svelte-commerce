@@ -48,7 +48,9 @@
 		observer = new IntersectionObserver(
 			(entries) => {
 				for (const entry of entries) {
-					isIntersecting = entry.isIntersecting
+          if (!isIntersecting) {
+					  isIntersecting = entry.isIntersecting
+          }
 				}
 			},
 			{
