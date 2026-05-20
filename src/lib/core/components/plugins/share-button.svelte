@@ -163,7 +163,7 @@
 				<div class="flex flex-col items-center gap-1.5">
 					<button
 						type="button"
-						class="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 text-zinc-600 transition-all hover:bg-primary-500 hover:text-white"
+						class="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 text-zinc-600 transition-all hover:bg-primary-500 "
 						onclick={() => copyToClipboard(url)}
 					>
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-4 w-4">
@@ -208,7 +208,7 @@
 						showDropDown = false
 					}}
 				>
-					<div class="flex h-14 w-14 items-center justify-center rounded-full bg-zinc-100 text-zinc-600 group-active:scale-95 group-active:bg-zinc-200 transition-all">
+					<div class="flex h-14 w-14 items-center justify-center rounded-full bg-zinc-100 text-zinc-600 group-active:scale-95 transition-all">
 						<img src={linkIcon} alt="Copy Link" class="h-7 w-7 opacity-80" />
 					</div>
 					<span class="text-xs font-medium text-zinc-600">Copy Link</span>
