@@ -175,7 +175,7 @@
 		</div>
 		<a
 			href="/products"
-			class="group flex items-center rounded-full bg-secondary px-6 py-2.5 text-sm font-semibold text-secondary-foreground transition-all hover:bg-primary hover:text-primary-foreground"
+			class="group flex items-center rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-secondary-foreground transition-all hover:bg-primary hover:text-primary-foreground"
 		>
 			View All Arrivals
 			<svg
