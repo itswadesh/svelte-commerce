@@ -412,7 +412,7 @@
 
 					<!-- Action Buttons -->
 					<div class="mt-4 flex flex-wrap gap-3 border-t border-gray-200 bg-gray-50 p-4">
-						<Button variant="outline" href="/products?collection={order?.collection?.slug || ''}">Buy Again</Button>
+						<!-- <Button variant="outline" href="/products?collection={order?.collection?.slug || ''}">Buy Again</Button> -->
 						<Button variant="ghost" class="flex items-center gap-1" href="/my/orders">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"

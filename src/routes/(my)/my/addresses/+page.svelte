@@ -13,7 +13,7 @@
 	<title>Addresses | Svelte Commerce</title>
 </svelte:head>
 
-<div class="mx-auto max-w-7xl px-4 md:py-8 md:py-12">
+<div class="mx-auto max-w-7xl px-0 md:py-8 md:py-12">
 	<!-- Header -->
 	<div class="mb-10 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
 		<div>
