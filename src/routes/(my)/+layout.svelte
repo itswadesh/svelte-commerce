@@ -88,7 +88,7 @@
 
 	<!-- Main content -->
 	<main class="flex-1 overflow-y-auto px-4 md:px-6">
-		<div class="mb-4 block max-md:flex max-md:gap-2">
+		<div class="mb-4 block flex justify-start items-center max-md:flex max-md:gap-2">
 			<!-- Mobile menu button -->
 			<button
 				class="inline-flex items-center justify-center p-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary md:hidden"
@@ -101,7 +101,9 @@
 				{/if}
 				<!-- <span class="ml-2 text-lg font-semibold">Menu</span> -->
 			</button>
+			<div class="md:hidden">
 			<Breadcrumb items={breadcrumbItems} />
+			</div>
 		</div>
 		{@render children()}
 	</main>
