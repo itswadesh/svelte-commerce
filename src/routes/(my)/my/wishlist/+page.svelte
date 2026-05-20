@@ -4,7 +4,7 @@
 	import { Heart, ArrowRight, LoaderCircle, Trash2, ShoppingBag } from '@lucide/svelte'
 	import { fade, fly } from 'svelte/transition'
 	import { page } from '$app/state'
-	import { formatPrice } from '$lib/core/utils/index.js'
+	import { formatPrice, toast } from '$lib/core/utils/index.js'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 </script>
 
@@ -116,10 +116,11 @@
 									<Button
 										variant="default"
 										class="w-full py-5 text-[10px] font-bold uppercase tracking-widest text-white bg-primary"
-										onclick={(e) => {
+										onclick={async (e) => {
 											e.preventDefault()
 											e.stopPropagation()
-											moveToCart(item)
+											await moveToCart(item)
+                      toast("Item added to cart", "success")
 										}}
 									>
 										<ShoppingBag class=" h-4 w-4" />

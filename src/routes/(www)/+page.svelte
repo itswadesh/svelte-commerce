@@ -175,7 +175,7 @@
 		</div>
 		<a
 			href="/products"
-			class="group flex items-center rounded-full bg-secondary px-6 py-2.5 text-sm font-semibold text-secondary-foreground transition-all hover:bg-primary hover:text-primary-foreground"
+			class="group flex items-center rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-secondary-foreground transition-all hover:bg-primary hover:text-primary-foreground"
 		>
 			View All Arrivals
 			<svg
@@ -208,13 +208,12 @@
 			displayProduct={(prod: Product) => homepageModule.showProduct(prod)}
 			loadMore={homepageModule.loadMoreFeaturedProducts}
 		/>
-		{#if homepageModule.hasMoreFeaturedProducts}
+		<!-- {#if homepageModule.hasMoreFeaturedProducts}
 			<div class="mt-16 flex justify-center pb-12">
 				<button
 					class="group relative flex items-center justify-center gap-3 overflow-hidden rounded-full bg-foreground px-12 py-5 text-sm font-black uppercase tracking-[0.2em] text-background shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95"
 					onclick={homepageModule.loadMoreFeaturedProducts}
 				>
-					<!-- Shimmer effect -->
 					<div
 						class="absolute -inset-full top-0 z-0 block h-full w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-shimmer"
 					></div>
@@ -231,7 +230,7 @@
 					</svg>
 				</button>
 			</div>
-		{/if}
+		{/if} -->
 	{/if}
 </div>
 
