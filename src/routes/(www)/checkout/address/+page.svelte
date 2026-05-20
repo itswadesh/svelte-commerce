@@ -24,7 +24,7 @@
 </script>
 
 <svelte:head>
-	<title>Checkout - Address</title>
+	<title>Address - {page?.data?.store?.name || ''}</title>
 </svelte:head>
 
 <div class="min-h-screen py-8">
