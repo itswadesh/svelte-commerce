@@ -13,7 +13,7 @@
 	<title>My Profile | Svelte Commerce</title>
 </svelte:head>
 
-<div class="mx-auto max-w-4xl py-8 md:py-12">
+<div class="mx-auto max-w-4xl md:py-8 md:py-12">
 	<div in:fly={{ y: 20, duration: 600 }} class="space-y-10">
 		<!-- Profile Header -->
 		<div class="flex items-center justify-between">

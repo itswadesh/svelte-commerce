@@ -54,7 +54,7 @@
 
 <MyOrdersRenderer>
 	{#snippet content({ loading, orders })}
-		<div class="mx-auto max-w-5xl px-4 py-8 md:py-12">
+		<div class="mx-auto max-w-5xl px-4 md:py-8 md:py-12">
 			<!-- Header -->
 			<div class="mb-10">
 				<h1 class="text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">Order History</h1>
