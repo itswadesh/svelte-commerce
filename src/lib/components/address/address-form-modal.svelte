@@ -32,7 +32,7 @@
 <AddressFormRenderer bind:address bind:show {onback} {ondelete} {onsave}>
 	{#snippet content({ isSaving, handleBack, handleSubmit, handleDelete })}
 		<Dialog bind:open={show}>
-			<DialogContent class="sm:max-w-[425px]">
+			<DialogContent class="sm:max-w-[425px] [&>button]:!bg-transparent">
 				<DialogHeader>
 					<div class="flex items-center gap-2">
 						<Button variant="ghost" size="icon" onclick={handleBack}>

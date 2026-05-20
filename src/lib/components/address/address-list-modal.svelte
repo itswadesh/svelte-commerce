@@ -25,7 +25,7 @@
 </script>
 
 <Dialog bind:open={show}>
-	<DialogContent class="sm:max-w-[425px]">
+	<DialogContent class="sm:max-w-[425px] [&>button]:!bg-transparent">
 		<DialogHeader>
 			<DialogTitle>Select Address</DialogTitle>
 		</DialogHeader>
