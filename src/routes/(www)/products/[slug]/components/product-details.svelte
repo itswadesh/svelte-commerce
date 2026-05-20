@@ -158,7 +158,7 @@
 	class="sticky inset-x-0 bottom-0 flex w-full items-center gap-3 border-t border-gray-100 bg-white/95 px-4 py-4 shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.1)] backdrop-blur-md sm:hidden"
 >
 	<div class="flex-1 flex flex-col intra-gap">
-		<ProductCartAndWishlistButtons />
+		<ProductCartAndWishlistButtons showWishlist={false} />
 	</div>
 </div>
 
