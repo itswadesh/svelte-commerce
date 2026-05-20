@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button'
 	import { MyWishlistRenderer } from '$lib/core/composables/index.js'
-	import { Heart, ShoppingBag, ArrowRight, LoaderCircle, Trash2 } from '@lucide/svelte'
+	import { Heart, ArrowRight, LoaderCircle, Trash2, ShoppingBag } from '@lucide/svelte'
 	import { fade, fly } from 'svelte/transition'
 	import { page } from '$app/state'
 	import { formatPrice } from '$lib/core/utils/index.js'
+	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 </script>
 
 <svelte:head>
@@ -52,67 +53,33 @@
 					</div>
 				</div>
 			{:else}
-				<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
+				<div class="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4 lg:gap-8">
 					{#each wishlistItems as item, i}
 						<div
 							in:fly={{ y: 20, duration: 400, delay: i * 50 }}
-							class="group relative flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white transition-all duration-500 hover:border-gray-200 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] sm:flex-row"
+							class="group relative flex w-full flex-col overflow-hidden bg-white transition-all duration-300 dark:bg-gray-800"
 						>
 							<!-- Product Image -->
 							<a
 								href="/products/{item?.product?.slug}?variant_id={item.variantId}"
-								class="relative block aspect-[4/5] w-full overflow-hidden bg-gray-50 sm:aspect-auto sm:w-1/3"
+								class="relative block w-full overflow-hidden"
 							>
-								<img
+								<LazyImg
 									src={item?.product?.thumbnail}
 									alt={item?.product?.title}
-									class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+									class="w-full rounded-md object-cover transition-transform duration-500 group-hover:scale-110"
+									style="aspect-ratio: 3 / 4; border-radius: 8px;"
 								/>
 							</a>
 
 							<!-- Product Info -->
-							<div class="flex flex-1 flex-col p-6">
-								<div class="flex flex-1 flex-col">
-									<h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">
-										{item?.product?.brand?.name || 'Brand'}
-									</h3>
-									<a
-										href="/products/{item?.product?.slug}?variant_id={item.variantId}"
-										class="mt-1 text-lg font-bold text-gray-900 transition-colors hover:text-primary"
-									>
-										{item?.product?.title}
-									</a>
-
-									<div class="mt-3 flex items-center gap-2">
-										<span class="text-xl font-bold text-gray-900">
-											{formatPrice(item?.product?.price, page?.data?.store?.currency?.code)}
-										</span>
-										{#if item?.product?.mrp > item?.product?.price}
-											<span class="text-sm text-gray-400 line-through">
-												{formatPrice(item?.product?.mrp, page?.data?.store?.currency?.code)}
-											</span>
-											<span class="text-sm font-bold text-orange-600">
-												({Math.round(((item?.product?.mrp - item?.product?.price) / item?.product?.mrp) * 100)}% OFF)
-											</span>
-										{/if}
-									</div>
-								</div>
-
-								<!-- Actions -->
-								<div class="mt-8 flex items-center gap-3">
+							<div class="flex flex-col pt-[7.5px] lg:pt-3">
+								<div class="flex items-center justify-between">
+									<span class="truncate text-xs font-bold capitalize text-gray-500 lg:text-sm">
+										{item?.product?.brand?.name || page.data?.store?.name}
+									</span>
 									<button
-										class="flex flex-1 items-center justify-center gap-2 rounded-full border border-gray-900 bg-white py-3 text-[10px] font-bold uppercase tracking-widest text-gray-900 transition-all hover:bg-gray-900 hover:text-white active:scale-95"
-										onclick={(e) => {
-											e.preventDefault()
-											e.stopPropagation()
-											moveToCart(item)
-										}}
-									>
-										<ShoppingBag class="h-3.5 w-3.5" />
-										Move to Cart
-									</button>
-									<button
-										class="flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 text-gray-400 transition-all hover:border-red-500 hover:bg-red-50 hover:text-red-500 active:scale-95"
+										class="text-gray-400 transition-colors hover:text-red-500"
 										onclick={(e) => {
 											e.preventDefault()
 											e.stopPropagation()
@@ -120,8 +87,44 @@
 										}}
 										title="Remove from wishlist"
 									>
-										<Trash2 class="h-4 w-4" />
+										<Trash2 class="size-4" />
 									</button>
+								</div>
+
+								<a href="/products/{item?.product?.slug}?variant_id={item.variantId}" class="block overflow-hidden">
+									<span class="block w-[90%] truncate text-xs text-gray-600 lg:text-sm" title={item?.product?.title}>
+										{item?.product?.title}
+									</span>
+								</a>
+
+								<div class="flex items-center gap-2">
+									<span class="text-sm font-semibold text-gray-900">
+										{formatPrice(item?.product?.price, page?.data?.store?.currency?.code)}
+									</span>
+									{#if item?.product?.mrp > item?.product?.price}
+										<span class="text-xs text-gray-400 line-through">
+											{formatPrice(item?.product?.mrp, page?.data?.store?.currency?.code)}
+										</span>
+										<span class="hidden text-xs font-bold uppercase text-green-600 md:block lg:text-sm">
+											{Math.round(((item?.product?.mrp - item?.product?.price) / item?.product?.mrp) * 100)}% OFF
+										</span>
+									{/if}
+								</div>
+
+								<!-- Actions -->
+								<div class="mt-3">
+									<Button
+										variant="default"
+										class="w-full py-5 text-[10px] font-bold uppercase tracking-widest text-white bg-primary"
+										onclick={(e) => {
+											e.preventDefault()
+											e.stopPropagation()
+											moveToCart(item)
+										}}
+									>
+										<ShoppingBag class=" h-4 w-4" />
+										Move to Cart
+									</Button>
 								</div>
 							</div>
 						</div>
