@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/state'
 	import { useProductState } from '$lib/core/composables/index.js'
-	import * as Drawer from '$lib/components/ui/drawer'
-	import * as Carousel from '$lib/components/ui/carousel'
+	import * as Drawer from '$lib/components/ui/drawer/index.js'
+	import * as Carousel from '$lib/components/ui/carousel/index.js'
 	import ProductGallery from './product-gallery.svelte'
 	import ShareButton from '$lib/core/components/plugins/share-button.svelte'
 	import ProductCard from '$lib/components/product-catalogue/product-card.svelte'
