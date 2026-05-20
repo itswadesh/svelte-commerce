@@ -4,7 +4,7 @@
 	import { fade } from 'svelte/transition'
 	import { blogService } from '$lib/core/services'
 	import type { BlogPost } from '$lib/core/types'
-	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
+	import { SeoHeader } from '$lib/core/components/index.js'
 
 	let loading = $state(false)
 	let error = $state('')

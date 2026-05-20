@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { CheckCircle2 } from '@lucide/svelte'
-  import { page } from '$app/state'
+	import { page } from '$app/state'
 	import { Button } from '$lib/components/ui/button'
 	import { goto } from '$app/navigation'
 	const enquiryPlugin = $derived(page.data?.store?.plugins?.enquiryMode)
@@ -20,11 +20,10 @@
 						<CheckCircle2 class="h-12 w-12 text-green-500" />
 					</div>
 				</div>
-				<h1 class="mb-2 text-2xl font-bold text-gray-900 md:text-3xl">{enquiryPlugin?.successHeader || "Thank You For Your Enquiry!"}</h1>
-				<p class="text-gray-600">{ enquiryPlugin?.successMessage || "We will get back to you soon!" }</p>
-        <Button class="mt-5" onclick={() => goto('/products')}> Continue Shopping </Button>
+				<h1 class="mb-2 text-2xl font-bold text-gray-900 md:text-3xl">{enquiryPlugin?.successHeader || 'Thank You For Your Enquiry!'}</h1>
+				<p class="text-gray-600">{enquiryPlugin?.successMessage || 'We will get back to you soon!'}</p>
+				<Button class="mt-5" onclick={() => goto('/products')}>Continue Shopping</Button>
 			</div>
 		</div>
 	</div>
 </div>
-

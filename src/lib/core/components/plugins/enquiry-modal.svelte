@@ -6,7 +6,7 @@
 	import { enquiryService, EnquiryService } from '$lib/core/services'
 	import { z } from 'zod'
 	import { toast } from 'svelte-sonner'
-  import { goto } from '$app/navigation'
+	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
 
 	let { isOpen = false, productId = '', productTitle = '', onClose = () => {} } = $props()
@@ -17,7 +17,7 @@
 	let email = $state('')
 	let phone = $state('')
 	let message = $state('')
-  let loading = $state(false)
+	let loading = $state(false)
 
 	const schema = {
 		name: z.string().min(2, 'First name must be at least 2 characters'),
@@ -36,15 +36,15 @@
 		// TODO: Implement enquiry submission logic
 
 		try {
-      loading = true
+			loading = true
 			await enquiryService.create({ name, email, phone, message, productId })
-      toast.success("Enquiry submitted successfully")
-      await goto('/enquiry/success')
+			toast.success('Enquiry submitted successfully')
+			await goto('/enquiry/success')
 		} catch (e: any) {
-      toast.error(e?.message || "Failed to submit enquiry")
+			toast.error(e?.message || 'Failed to submit enquiry')
 		} finally {
-      loading = false
-		  onClose()
+			loading = false
+			onClose()
 		}
 	}
 </script>
@@ -59,7 +59,7 @@
 				<X size={20} />
 			</button>
 
-			<h2 class="mb-4 text-xl font-semibold dark:text-white"> {productTitle}</h2>
+			<h2 class="mb-4 text-xl font-semibold dark:text-white">{productTitle}</h2>
 
 			<form
 				onsubmit={(e: SubmitEvent) => {
@@ -85,12 +85,12 @@
 				</div>
 
 				<Button type="submit" class="w-full" disabled={loading}>
-          {#if loading}
-            <LoaderCircle class="animate-spin" />
-          {:else}
-            Submit Enquiry
-          {/if}
-        </Button>
+					{#if loading}
+						<LoaderCircle class="animate-spin" />
+					{:else}
+						Submit Enquiry
+					{/if}
+				</Button>
 			</form>
 		</div>
 	</div>

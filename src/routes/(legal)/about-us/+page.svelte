@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Page } from '$lib/core/types'
-	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
+	import { SeoHeader } from '$lib/core/components/index.js'
 
 	interface Props {
 		data: {

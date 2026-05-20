@@ -6,8 +6,8 @@
 	const productState = useProductState()
 </script>
 
-<div class="flex flex-col gap-2 py-2 sm:py-4">
-	<div class="flex items-baseline gap-3">
+<div class="intra-gap flex flex-col">
+	<div class="intra-gap flex items-baseline">
 		<div class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
 			{formatPrice(productState.selectedVariant?.price || page.data?.product?.price, page?.data?.store?.currency?.code)}
 		</div>
@@ -32,6 +32,5 @@
 			{/if}
 		{/if}
 	</div>
-	<span class="text-[10px] font-bold uppercase tracking-widest text-green-600 bg-green-50 px-2 py-1 rounded w-fit">Inclusive of all taxes</span>
+	<span class="w-fit rounded bg-green-50 px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">Inclusive of all taxes</span>
 </div>
-
