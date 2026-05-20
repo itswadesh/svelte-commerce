@@ -27,7 +27,7 @@ const config: Config = {
 			}
 		},
 		fontFamily: {
-			sans: ['Bricolage Grotesque', ...fontFamily.sans]
+			sans: ['Montserrat', ...fontFamily.sans]
 		},
 		extend: {
 			colors: {
@@ -76,10 +76,10 @@ const config: Config = {
 				}
 			},
 			borderRadius: {
-				xl: 'calc(var(--radius) + 4px)',
-				lg: 'var(--radius)',
-				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				xl: '24px',
+				lg: '8px',
+				md: '4px',
+				sm: '2px'
 			},
 			keyframes: {
 				'accordion-down': {
@@ -103,6 +103,11 @@ const config: Config = {
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'caret-blink': 'caret-blink 1.25s ease-out infinite',
 				shimmer: 'shimmer 1s infinite'
+			},
+			boxShadow: {
+				'z-1': '0 2px 4px rgba(0, 0, 0, 0.1)',
+				'z-2': '0 4px 8px rgba(0, 0, 0, 0.1)',
+				'z-10': '0 6px 12px rgba(0, 0, 0, 0.15)'
 			}
 		}
 	},

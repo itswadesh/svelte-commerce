@@ -3,8 +3,7 @@
 	import Button from '$lib/components/ui/button/button.svelte'
 	import { toast } from 'svelte-sonner'
 	import { goto } from '$app/navigation'
-	import { onMount } from 'svelte'
-	import { userService } from '$lib/core/services'
+	import { userService } from '$lib/core/services/index.js'
 	let otp: any = ''
 	const handleSubmit = () => {
 		toast.info('OTP Verification Success')

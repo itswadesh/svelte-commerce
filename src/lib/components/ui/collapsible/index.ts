@@ -1,8 +1,8 @@
-import { Collapsible as CollapsiblePrimitive } from 'bits-ui'
+import { Collapsible } from 'bits-ui'
 
-const Root: typeof CollapsiblePrimitive.Root = CollapsiblePrimitive.Root
-const Trigger: typeof CollapsiblePrimitive.Trigger = CollapsiblePrimitive.Trigger
-const Content: typeof CollapsiblePrimitive.Content = CollapsiblePrimitive.Content
+const Root: typeof Collapsible.Root = Collapsible.Root
+const Trigger: typeof Collapsible.Trigger = Collapsible.Trigger
+const Content: typeof Collapsible.Content = Collapsible.Content
 
 export {
 	Root,

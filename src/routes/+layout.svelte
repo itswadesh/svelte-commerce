@@ -1,8 +1,8 @@
 <script lang="ts">
 	import '../app.css'
-	import { Toaster } from 'svelte-sonner'
+	import { Toaster } from '@misiki/kitcommerce-core'
 	import { setUserState } from '$lib/core/stores/index.js'
-	import GoogleAnalytics from '$lib/core/components/plugins/google-analytics.svelte'
+	import { GoogleAnalytics } from '$lib/core/components/index.js'
 	import { navigating } from '$app/stores'
 	import { Loader } from '@lucide/svelte'
 	import type { Snippet } from 'svelte'
@@ -14,7 +14,6 @@
 	}
 	let { children, data }: { children: Snippet; data: LayoutData } = $props()
 	setUserState()
-
 </script>
 
 <svelte:head>
@@ -24,7 +23,7 @@
 	{/if}
 </svelte:head>
 
-<GoogleAnalytics storeData={data.store} />
+<GoogleAnalytics />
 
 <!-- <ThemeProvider /> -->
 

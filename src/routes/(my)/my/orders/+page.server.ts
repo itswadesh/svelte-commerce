@@ -9,4 +9,3 @@ export async function load({ fetch }) {
 	//     redirect(307, '/?show_auth=true&login=true')
 	// }
 }
-

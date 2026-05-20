@@ -3,7 +3,7 @@
 	import Button from '$lib/components/ui/button/button.svelte'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import Modal from '../common/modal.svelte'
-	import AuthButton from '$lib/core/components/auth/auth-button.svelte'
+	import { AuthButton } from '$lib/core/components/index.js'
 	import { SignupRenderer } from '$lib/core/composables/index.js'
 	import { page } from '$app/state'
 

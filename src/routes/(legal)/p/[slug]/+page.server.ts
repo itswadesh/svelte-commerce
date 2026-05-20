@@ -13,4 +13,3 @@ export async function load({ parent, params, fetch }) {
 		error(404, 'Page not found')
 	}
 }
-

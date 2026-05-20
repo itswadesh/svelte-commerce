@@ -10,7 +10,7 @@ function isLocalOrIpAddress(url: string): boolean {
 
 export const init = async () => {
 	if (env.PUBLIC_SHOPIFY_STORE_DOMAIN) {
-    const { BaseService } = await import('$lib/core/services')
+		const { BaseService } = await import('$lib/core/services')
 		BaseService.setShopifyCredentials(
 			env.PUBLIC_SHOPIFY_STORE_DOMAIN,
 			privateEnv.SHOPIFY_ADMIN_ACCESS_TOKEN,
@@ -19,7 +19,7 @@ export const init = async () => {
 	}
 
 	if (env.PUBLIC_MEDUSA_PUBLISHABLE_API_KEY) {
-    const { BaseService } = await import('$lib/core/services')
+		const { BaseService } = await import('$lib/core/services')
 		BaseService.setMedusaPublisableKey(env.PUBLIC_MEDUSA_PUBLISHABLE_API_KEY)
 		BaseService.setRegionId(env.PUBLIC_MEDUSA_REGION_ID)
 	}
@@ -43,7 +43,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 			throw new Error(`Unable to retrieve hostname from URL. ${url.hostname}`)
 		}
 		if (!url.pathname.startsWith('/api')) {
-
 			const storeService = new StoreService(event.fetch)
 			const storeDetails = await storeService.getStoreByIdOrDomain({ storeId, domain })
 			if (storeDetails?.id && storeIdFromCookie !== storeDetails?.id) {
@@ -56,7 +55,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 
 	const response = await resolve(event, {
-		filterSerializedResponseHeaders: name => name === 'content-type'
+		filterSerializedResponseHeaders: (name) => name === 'content-type'
 	})
 	// response.headers.set('x-litekart-store', storeDetailsCache?.id || '')
 	return response
@@ -77,7 +76,6 @@ export function handleError({ error, event }) {
 			status: simplifiedError.status
 		}
 	}
-
 
 	return {
 		message: error?.message || 'An unknown error occurred',

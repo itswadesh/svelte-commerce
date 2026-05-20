@@ -1,4 +1,4 @@
-import { Command as CommandPrimitive } from 'bits-ui'
+import { Command } from 'bits-ui'
 
 import Dialog from './command-dialog.svelte'
 import Empty from './command-empty.svelte'
@@ -11,7 +11,7 @@ import Separator from './command-separator.svelte'
 import Shortcut from './command-shortcut.svelte'
 import Root from './command.svelte'
 
-const Loading: typeof CommandPrimitive.Loading = CommandPrimitive.Loading
+const Loading: typeof Command.Loading = Command.Loading
 
 export {
 	Root,

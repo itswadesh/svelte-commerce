@@ -92,7 +92,11 @@
 						<div class="block gap-2 p-5 md:hidden lg:gap-5">
 							<div class="flex items-center justify-between">
 								<div>
-									<a href={`/product/${item.slug}?variant_id=${item.variantId || ''}`} aria-label="Click to view the product details" class="shrink-0">
+									<a
+										href={`/product/${item.slug}?variant_id=${item.variantId || ''}`}
+										aria-label="Click to view the product details"
+										class="shrink-0"
+									>
 										<LazyImg src={item.img} alt={item.title} width="56" class="h-auto w-14 object-contain object-top" />
 									</a>
 								</div>

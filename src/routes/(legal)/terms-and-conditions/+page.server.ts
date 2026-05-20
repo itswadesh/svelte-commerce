@@ -1,3 +1,1 @@
-export { legalTermsLoadServer as load } from "$lib/core/load-functions/index.js"
-
-
+export { legalTermsLoadServer as load } from '$lib/core/load-functions/index.js'

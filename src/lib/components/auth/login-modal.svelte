@@ -1,19 +1,19 @@
 <script lang="ts">
-import { LoaderIcon, X } from '@lucide/svelte'
-import * as InputOTP from '$lib/components/ui/input-otp/index'
-import Button from '$lib/components/ui/button/button.svelte'
-import { Label } from '$lib/components/ui/label'
-import { env } from '$env/dynamic/public'
-import Textbox from '$lib/components/form/textbox.svelte'
-import Modal from '../common/modal.svelte'
-import { page } from '$app/state'
-import AuthButton from '$lib/core/components/auth/auth-button.svelte'
-import { LoginModule, loginModuleSchema as schemas } from '$lib/core/composables/index.js'
+	import { LoaderIcon, X } from '@lucide/svelte'
+	import * as InputOTP from '$lib/components/ui/input-otp/index.js'
+	import Button from '$lib/components/ui/button/button.svelte'
+	import { Label } from '$lib/components/ui/label/index.js'
+	import { env } from '$env/dynamic/public'
+	import Textbox from '$lib/components/form/textbox.svelte'
+	import Modal from '../common/modal.svelte'
+	import { page } from '$app/state'
+	import { AuthButton } from '$lib/core/components/index.js'
+	import { LoginModule, loginModuleSchema as schemas } from '$lib/core/composables/index.js'
 
-let { show = $bindable(false) } = $props()
+	let { show = $bindable(false) } = $props()
 
-const loginModule = new LoginModule()
-const userState = loginModule.userState
+	const loginModule = new LoginModule()
+	const userState = loginModule.userState
 </script>
 
 <Modal {show} rounded={false} hideHeader hideFooter useMaxHeight class="p-0 max-sm:h-screen max-sm:w-screen max-sm:!rounded-none" hAuto wAuto>
@@ -75,7 +75,7 @@ const userState = loginModule.userState
 							placeholder={loginModule.isPhoneNumber ? '+91234567890' : 'johndoe@gmail.com'}
 							type={loginModule.isPhoneNumber ? 'tel' : 'email'}
 							schema={loginModule.isPhoneNumber ? schemas.phone : schemas.email}
-              oninput={loginModule.resetOtpGenerationError}
+							oninput={loginModule.resetOtpGenerationError}
 							required
 						/>
 					</div>
@@ -116,15 +116,19 @@ const userState = loginModule.userState
 					</div>
 				{/if}
 
-				<Button type="submit" class="h-11 px-2 text-wrap w-full py-1 text-sm font-medium" disabled={userState.loading || loginModule.isLoading || Boolean(loginModule.otpGenerationError)}>
+				<Button
+					type="submit"
+					class="h-11 w-full text-wrap px-2 py-1 text-sm font-medium"
+					disabled={userState.loading || loginModule.isLoading || Boolean(loginModule.otpGenerationError)}
+				>
 					{#if loginModule.isPhoneNumber && (loginModule.isLoading || userState.loading)}
 						<LoaderIcon class="mr-2 h-4 w-4 animate-spin" />
 						Sending OTP...
 					{:else if userState.loading && !loginModule.isPhoneNumber}
 						<LoaderIcon class="mr-2 h-4 w-4 animate-spin" />
 						Signing in...
-          {:else if loginModule.otpGenerationError}
-            {loginModule.otpGenerationError}
+					{:else if loginModule.otpGenerationError}
+						{loginModule.otpGenerationError}
 					{:else}
 						{loginModule.isPhoneNumber ? 'Send OTP' : 'Sign In'}
 					{/if}
@@ -175,9 +179,9 @@ const userState = loginModule.userState
 					Didn't receive the OTP?{' '}
 					<button type="button" class="text-gray-600 hover:underline" onclick={loginModule.resendOtp}> Resend OTP </button>
 				</p>
-        <p>
+				<p>
 					<button type="button" class="text-gray-600 hover:underline" onclick={() => (loginModule.step = 1)}> Change Number? </button>
-        </p>
+				</p>
 
 				<Button class="h-11 w-full" onclick={loginModule.handleVerifyOtp}>
 					{#if userState.loading}

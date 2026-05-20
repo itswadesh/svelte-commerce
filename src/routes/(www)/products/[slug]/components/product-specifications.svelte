@@ -11,10 +11,7 @@
 </script>
 
 <div class="border-t border-gray-100">
-	<button
-		class="flex w-full items-center justify-between gap-2 py-5 text-sm text-gray-900 font-bold uppercase"
-		onclick={() => (isOpen = !isOpen)}
-	>
+	<button class="flex w-full items-center justify-between gap-2 py-5 text-sm font-bold uppercase text-gray-900" onclick={() => (isOpen = !isOpen)}>
 		<span>Product Specifications</span>
 
 		{#if isOpen}
@@ -31,7 +28,7 @@
 				{#if productState.selectedVariant?.sku || data?.product?.sku}
 					<div class="flex flex-col gap-1">
 						<p class="text-[10px] font-bold uppercase tracking-tighter text-gray-400">SKU</p>
-						<p class="text-sm font-medium text-gray-900 break-words break-all">
+						<p class="break-words break-all text-sm font-medium text-gray-900">
 							{String(productState.selectedVariant?.sku || data?.product?.sku)}
 						</p>
 					</div>
@@ -106,7 +103,7 @@
 			{/each}
 
 			{#if productState.selectedVariant?.qrcode || data?.product?.qrcode}
-				<div class="mt-4 flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg">
+				<div class="mt-4 flex flex-col items-center gap-2 rounded-lg bg-gray-50 p-4">
 					<p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Product Authenticity</p>
 					<QrCodeDisplayer base64Data={productState.selectedVariant?.qrcode || data?.product?.qrcode} />
 				</div>
@@ -114,4 +111,3 @@
 		</div>
 	{/if}
 </div>
-

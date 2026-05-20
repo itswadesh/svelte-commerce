@@ -40,4 +40,3 @@ export const load: PageLoad = async ({ fetch, params }) => {
 		error(404, 'Vendor not found')
 	}
 }
-

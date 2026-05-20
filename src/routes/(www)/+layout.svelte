@@ -1,19 +1,21 @@
 <script lang="ts">
-import { setCartState, setProductState, setWishlistState } from '$lib/core/stores/index.js'
-import { onMount, type Snippet } from 'svelte'
-import Nav from '$lib/components/nav/nav.svelte'
-import Footer from '$lib/components/common/footer.svelte'
-import BottomNav from '$lib/components/nav/bottom-nav.svelte'
-import StorePlugins from '$lib/core/components/plugins/store-plugins.svelte'
-import { page } from '$app/state'
-let { children, data }: { children: Snippet; data: { store: StoreData } } = $props()
+	import { setCartState, setProductState, setWishlistState } from '$lib/core/stores/index.js'
+	import { type Snippet } from 'svelte'
+	import Nav from '$lib/components/nav/nav.svelte'
+	import Footer from '$lib/components/common/footer.svelte'
+	import BottomNav from '$lib/components/nav/bottom-nav.svelte'
+	import { StorePlugins } from '$lib/core/components/index.js'
+	import { page } from '$app/state'
+	import type { StoreData } from '$lib/core/services/index.js'
 
-setCartState()
-setProductState()
-setWishlistState()
+	const { children, data }: { children: Snippet; data: { store: StoreData } } = $props()
 
-let isProductDetailsPage = $derived(page.route?.id === '/(www)/products/[slug]')
-let isProductsListingPage = $derived(page?.route?.id === '/(www)/products' || page?.route?.id === '/(www)/[slug]')
+	setCartState()
+	setProductState()
+	setWishlistState()
+
+	let isProductDetailsPage = $derived(page.route?.id === '/(www)/products/[slug]')
+	let isProductsListingPage = $derived(page?.route?.id === '/(www)/products' || page?.route?.id === '/(www)/[slug]')
 </script>
 
 <svelte:head>
@@ -21,12 +23,11 @@ let isProductsListingPage = $derived(page?.route?.id === '/(www)/products' || pa
 </svelte:head>
 
 <div class="flex min-h-screen flex-col justify-between">
-
 	<Nav storeData={data.store} />
-  <main class="min-h-screen flex-1">
-    {@render children()}
-  </main>
-  <Footer />
+	<main class="inter-pt inter-gap flex min-h-screen flex-1 flex-col">
+		{@render children()}
+	</main>
+	<Footer />
 	{#if !isProductDetailsPage}
 		<BottomNav class={isProductsListingPage ? 'invisible' : ''} />
 	{/if}
