@@ -11,11 +11,11 @@
 </script>
 
 <div class="relative">
-	<div class="absolute right-2 top-2 z-30 hidden rounded-full bg-white sm:block">
-		{#if page?.data?.store?.plugins?.socialSharingButtons}
+  {#if page?.data?.store?.plugins?.socialSharingButtons}
+	  <div class="absolute right-4 sm:right-2 top-2 z-30 rounded-full bg-white block">
 			<ShareButton productName={page.data?.product?.title} productImage={page.data?.product?.thumbnail} url={page?.url?.href} />
-		{/if}
-	</div>
+	  </div>
+	{/if}
 	{#if productState.productImagesArray?.length > 0}
 		<div class="relative">
 			<ProductGallery images={productState.productImagesArray || []} title={page.data?.product?.title} />
