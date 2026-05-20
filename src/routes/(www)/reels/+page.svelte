@@ -3,8 +3,7 @@
 	import EmblaCarousel from 'embla-carousel'
 	import AutoScroll from 'embla-carousel-auto-scroll'
 	import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
-	import { ReelsService } from '$lib/core/services'
-	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
+	import { SeoHeader } from '$lib/core/components/index.js'
 
 	let reels = $state()
 
@@ -185,7 +184,7 @@
             <path d="M15 18l-6-6 6-6" />
         </svg>
     </button>
-    
+
     <button
         class="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/20 p-2 text-white backdrop-blur-sm transition-colors hover:bg-white/30"
         onclick={() => emblaApi?.scrollNext()}

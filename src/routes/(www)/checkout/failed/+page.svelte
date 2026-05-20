@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getCartState, getProductState } from '$lib/core/stores/index.js'
-	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
-	import { Button } from '$lib/components/ui/button'
+	import { SeoHeader } from '$lib/core/components/index.js'
+	import { Button } from '$lib/components/ui/button/index.js'
 	import { formatPrice } from '$lib/core/utils/index.js'
 	import { ArrowLeft, AlertCircle, RefreshCw } from '@lucide/svelte'
 	import { page } from '$app/state'

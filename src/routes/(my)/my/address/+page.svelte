@@ -6,7 +6,7 @@
 	// import noEmptyAddress from '$lib/assets/no/empty-address.svg'
 	import { Button } from '$lib/components/ui/button'
 	import Pagination from '$lib/components/common/pagination.svelte'
-	import { toast } from 'svelte-sonner'
+	import { toast } from '@misiki/kitcommerce-core'
 
 	let data: any = $state({})
 

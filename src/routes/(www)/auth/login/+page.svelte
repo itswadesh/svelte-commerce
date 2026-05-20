@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { LoaderIcon } from '@lucide/svelte'
-	import * as InputOTP from '$lib/components/ui/input-otp/index'
+	import * as InputOTP from '$lib/components/ui/input-otp/index.js'
 	import Button from '$lib/components/ui/button/button.svelte'
-	import { Label } from '$lib/components/ui/label'
+	import { Label } from '$lib/components/ui/label/index.js'
 	import { env } from '$env/dynamic/public'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import { page } from '$app/state'
 	import { LoginModule, loginModuleSchema as schemas } from '$lib/core/composables/index.js'
-	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
+	import { SeoHeader } from '$lib/core/components/index.js'
 
 	const loginModule = new LoginModule()
 </script>
@@ -191,4 +191,3 @@
 		</div>
 	</div>
 </div>
-

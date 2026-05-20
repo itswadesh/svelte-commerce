@@ -246,8 +246,6 @@
 		method="POST"
 		use:enhance={() => {
 			return async ({ result }) => {
-
-
 				if (result?.status === 200 && result?.data) {
 					const newAddressId = result.data?._id || result.data?.id
 					toast('Address saved successfully', 'success')

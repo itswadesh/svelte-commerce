@@ -1,25 +1,22 @@
 <script lang="ts">
 	import FeaturedProductsGrid from '$lib/components/product-catalogue/featured-products-grid.svelte'
 	import { X } from '@lucide/svelte'
-	import { Skeleton } from '$lib/components/ui/skeleton'
+	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 	import CategoryList from '$lib/components/category/category-list.svelte'
 	import { fly } from 'svelte/transition'
-	import GoogleStructuredDataProductsList from '$lib/core/components/plugins/google-structured-data-products-list.svelte'
-	import GoogleStructuredDataOrganization from '$lib/core/components/plugins/google-structured-data-organization.svelte'
-	import GoogleStructuredDataWebsite from '$lib/core/components/plugins/google-structured-data-website.svelte'
 	import type { Product } from '$lib/core/types/index.js'
 	import HomepageCategoryListWithImage from '$lib/components/home/homepage-category-list-with-image.svelte'
 	import HomepageBanners from '$lib/components/home/homepage-banners.svelte'
 	import Banners from '$lib/components/home/banners.svelte'
-	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
+	import { SeoHeader, GoogleStructuredDataWebsite, GoogleStructuredDataOrganization, GoogleStructuredDataProductsList } from '$lib/core/components/index.js'
 	import Collections from '$lib/components/home/collections.svelte'
 	let { data } = $props()
 	import { HomepageModule } from '$lib/core/composables/index.js'
 	import { timestampToAgo } from '$lib/core/utils/index.js'
-  import Slider from '$lib/components/home/slider.svelte'
-  import { page as sveltePage } from '$app/state'
+	import Slider from '$lib/components/home/slider.svelte'
+	import { page as sveltePage } from '$app/state'
 	//import { PUBLIC_LITEKART_DOMAIN } from '$env/static/public'
-  const PUBLIC_LITEKART_DOMAIN = $derived(sveltePage.url.origin)
+	const PUBLIC_LITEKART_DOMAIN = $derived(sveltePage.url.origin)
 
 	// Type definition for page data needed for this component
 	interface ExtendedPage {
@@ -51,19 +48,25 @@
 	url={`https://${PUBLIC_LITEKART_DOMAIN}`}
 	logo={data?.store?.logo}
 	description={data?.store?.description}
-	sameAs={data?.store?.socialSharing?.active ? (Object.values(data?.store?.socialSharing || {}).filter((link: any) => typeof link === 'string' && link.startsWith('http')) as string[]) : []}
-	address={data?.store?.address ? {
-		streetAddress: data?.store?.address?.street,
-		addressLocality: data?.store?.address?.city,
-		addressRegion: data?.store?.address?.state,
-		postalCode: data?.store?.address?.pincode,
-		addressCountry: data?.store?.address?.country
-	} : undefined}
-	contactPoint={data?.store?.contact?.phone ? {
-		telephone: data?.store?.contact?.phone,
-		email: data?.store?.contact?.email,
-		contactType: 'customer service'
-	} : undefined}
+	sameAs={data?.store?.socialSharing?.active
+		? (Object.values(data?.store?.socialSharing || {}).filter((link: any) => typeof link === 'string' && link.startsWith('http')) as string[])
+		: []}
+	address={data?.store?.address
+		? {
+				streetAddress: data?.store?.address?.street,
+				addressLocality: data?.store?.address?.city,
+				addressRegion: data?.store?.address?.state,
+				postalCode: data?.store?.address?.pincode,
+				addressCountry: data?.store?.address?.country
+			}
+		: undefined}
+	contactPoint={data?.store?.contact?.phone
+		? {
+				telephone: data?.store?.contact?.phone,
+				email: data?.store?.contact?.email,
+				contactType: 'customer service'
+			}
+		: undefined}
 />
 
 <GoogleStructuredDataWebsite
@@ -75,7 +78,8 @@
 
 <SeoHeader
 	metaTitle={page?.metaTitle || "Arialshop — Women's Fashion, Dresses & Co-ord Sets | Up to 70% Off"}
-	metaDescription={page?.metaDescription || "Welcome to Arialshop, your ultimate destination for trendy women's fashion. Discover our exclusive collection of stylish dresses, elegant co-ord sets, and more with amazing discounts of up to 70% off. Enjoy premium quality apparel, free delivery on orders over ₹999, and easy returns. Shop the latest fashion trends at Arialshop today!"}
+	metaDescription={page?.metaDescription ||
+		"Welcome to Arialshop, your ultimate destination for trendy women's fashion. Discover our exclusive collection of stylish dresses, elegant co-ord sets, and more with amazing discounts of up to 70% off. Enjoy premium quality apparel, free delivery on orders over ₹999, and easy returns. Shop the latest fashion trends at Arialshop today!"}
 	metaKeywords={page?.metaKeywords}
 	image={page?.logo}
 />
@@ -124,7 +128,7 @@
 		<Banners sliderBannersDesktop={page?.desktopBanners} sliderBannersMobile={page?.mobileBanners} />
 	{:else}
 		<!-- Fallback Hero Section when no banners are configured -->
-		<div class="relative bg-gradient-to-r from-gray-900 to-gray-700 py-20 px-4 text-white">
+		<div class="relative bg-gradient-to-r from-gray-900 to-gray-700 px-4 py-20 text-white">
 			<div class="mx-auto max-w-7xl">
 				<div class="grid gap-8 md:grid-cols-2">
 					<div class="flex flex-col justify-center">
@@ -139,7 +143,7 @@
 							Shop Now
 						</a>
 					</div>
-					<div class="hidden md:flex items-center justify-center">
+					<div class="hidden items-center justify-center md:flex">
 						<div class="text-9xl font-bold text-white/20">NEW</div>
 					</div>
 				</div>
@@ -150,12 +154,11 @@
 
 <Slider />
 
-<div class="mb-8 container mx-auto">
+<div class="container mx-auto mb-8">
 	<HomepageCategoryListWithImage categories={homepageModule.featuredCategories} loading={homepageModule.loading} />
 </div>
 
 <Collections />
-
 
 {#if page?.sections?.length && page?.sections[0]?.isActive}
 	<div class="mx-2 mb-8 xl:mx-24">
@@ -166,13 +169,9 @@
 <div class="container mx-auto px-4 py-8 md:py-12">
 	<div class="mb-8 flex flex-col items-center justify-between gap-6 md:flex-row md:items-end">
 		<div class="text-center md:text-left">
-			<h2 class="text-3xl font-extrabold tracking-tight text-foreground lg:text-4xl">
-				New Arrivals
-			</h2>
-			<div class="mt-2 h-1 w-12 bg-primary mx-auto md:mx-0"></div>
-			<p class="mt-4 text-sm font-medium text-muted-foreground">
-				Stay ahead of the curve with our latest drops and trending pieces
-			</p>
+			<h2 class="text-3xl font-extrabold tracking-tight text-foreground lg:text-4xl">New Arrivals</h2>
+			<div class="mx-auto mt-2 h-1 w-12 bg-primary md:mx-0"></div>
+			<p class="mt-4 text-sm font-medium text-muted-foreground">Stay ahead of the curve with our latest drops and trending pieces</p>
 		</div>
 		<a
 			href="/products"
@@ -271,4 +270,3 @@
 		</div>
 	</div>
 {/if}
-

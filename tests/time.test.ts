@@ -5,7 +5,6 @@ describe('Time Utils', () => {
 	let consoleLogSpy: vi.SpyInstance
 
 	beforeEach(() => {
-
 		consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
 		// Mock Date to ensure consistent timestamps
 		vi.useFakeTimers()
@@ -172,7 +171,6 @@ describe('Time Utils', () => {
 	// Error handling tests
 	describe('Error Handling', () => {
 		it('should handle console.log errors gracefully', () => {
-
 			consoleLogSpy.mockImplementation(() => {
 				throw new Error('Console error')
 			})

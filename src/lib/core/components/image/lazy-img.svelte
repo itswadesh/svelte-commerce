@@ -1,9 +1,7 @@
 <script lang="ts">
-	import { fade } from 'svelte/transition'
 	import { onMount } from 'svelte'
-	import { Image as ImageIcon } from '@lucide/svelte'
 	import { page } from '$app/state'
-  import { getImageCDNUrl } from '@misiki/kitcommerce-core/utils';
+	import { getImageCDNUrl } from '@misiki/kitcommerce-core/utils'
 
 	let {
 		class: klass,
@@ -40,7 +38,7 @@
 	let containerRef: HTMLDivElement
 	let usingFallback = $state(false) // Track if we're using fallback
 
-  //$inspect(page?.data?.store, usingFallback)
+	//$inspect(page?.data?.store, usingFallback)
 	// Transparent placeholder
 	const transparentPlaceholder = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
 
@@ -177,4 +175,3 @@
 		animation: shimmer 1.5s infinite;
 	}
 </style>
-

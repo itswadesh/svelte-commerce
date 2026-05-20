@@ -1,3 +1,1 @@
-export { wwwProductsSlugLoadServer as load } from "$lib/core/load-functions/index.js"
-
-
+export { wwwProductsSlugLoadServer as load } from '$lib/core/load-functions/index.js'

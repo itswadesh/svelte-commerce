@@ -1,1 +1,1 @@
-export { wwwLoad as load } from "$lib/core/load-functions/index.js"
+export { wwwLoad as load } from '$lib/core/load-functions/index.js'

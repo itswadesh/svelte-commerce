@@ -3,7 +3,7 @@
 	import Input from '$lib/components/ui/input/input.svelte'
 	import { addressService } from '$lib/core/services'
 	import { InfoIcon, Loader } from '@lucide/svelte'
-	import { toast } from 'svelte-sonner'
+	import { toast } from '@misiki/kitcommerce-core'
 	import { browser } from '$app/environment'
 
 	let address: any = $state({})
@@ -24,7 +24,6 @@
 				return
 			}
 			address = await addressService.editAddress(page.params.id, address)
-
 		} catch (e: any) {
 			toast.error(e.message)
 		} finally {

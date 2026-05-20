@@ -1,19 +1,18 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/button'
+	import { Button } from '$lib/components/ui/button/index.js'
 	import { goto } from '$app/navigation'
 	import { ChevronRight, LoaderCircle, LockKeyhole, MapPin, Pencil, ShoppingBag, Truck } from '@lucide/svelte'
-	import { formatPrice } from '$lib/core/utils'
+	import { formatPrice } from '$lib/core/utils/index.js'
 	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
 	import AddressListModal from '$lib/components/address/address-list-modal.svelte'
 	import AddressFormModal from '$lib/components/address/address-form-modal.svelte'
 	import { page } from '$app/state'
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
-	import { Skeleton } from '$lib/components/ui/skeleton'
+	import { Skeleton } from '$lib/components/ui/skeleton/index.js'
 	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
-	import { showAuthModal } from '$lib/core/components/auth/auth-utils'
+	import { showAuthModal } from '$lib/core/components/index.js'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import { AddressModule, emptyAddress, checkoutAddressSchema as schemas } from '$lib/core/composables/index.js'
-	import { z } from 'zod'
 	import { appendOneTimeCartId } from '$lib/core/utils/index.js'
 
 	const addressModule = new AddressModule()

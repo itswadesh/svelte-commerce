@@ -9,7 +9,7 @@
 		"include": ["src/**/*.js", "src/**/*.ts", "src/**/*.svelte", "src/**/*.json", "*.js", "*.ts", "*.json"],
 		"ignore": ["node_modules/**", "dist/**", "build/**", ".svelte-kit/**", "package-lock.json", "pnpm-lock.yaml", "yarn.lock"]
 	},
-  "organizeImports": {
+	"organizeImports": {
 		"enabled": true
 	},
 	"formatter": {

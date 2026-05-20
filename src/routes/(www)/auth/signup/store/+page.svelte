@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { toast } from 'svelte-sonner'
+	import { toast } from '@misiki/kitcommerce-core'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import { z } from 'zod'
-	import { userService } from '$lib/core/services'
+	import { userService } from '$lib/core/services/index.js'
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
-	import AuthButton from '$lib/core/components/auth/auth-button.svelte'
+	import { AuthButton } from '$lib/core/components/index.js'
 
 	let email = $state('')
 	let isLoading = $state(false)

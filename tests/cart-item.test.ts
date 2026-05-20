@@ -200,7 +200,7 @@ describe('CartItem', () => {
 	})
 
 	it('should show loading state during quantity update', async () => {
-		const mockUpdate = vi.fn().mockImplementation(() => new Promise(resolve => setTimeout(resolve, 100)))
+		const mockUpdate = vi.fn().mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 100)))
 		mockCartState.update = mockUpdate
 
 		render(CartItem, {

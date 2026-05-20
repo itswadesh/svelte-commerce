@@ -10,7 +10,7 @@
 	import telegramIcon from '$lib/assets/social-media/telegram.png'
 	import twitterIcon from '$lib/assets/social-media/twitter.png'
 	import whatsappIcon from '$lib/assets/social-media/whatsapp.png'
-	import { toast } from 'svelte-sonner'
+	import { toast } from '@misiki/kitcommerce-core'
 
 	let { productImage, productName, url } = $props()
 

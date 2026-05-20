@@ -18,4 +18,3 @@ export const load: PageLoad = async ({ fetch, url }) => {
 		return { vendors: { data: [], count: 0 } }
 	}
 }
-

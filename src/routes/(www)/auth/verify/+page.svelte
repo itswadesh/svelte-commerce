@@ -1,6 +1,6 @@
 <script lang="ts">
-	import AuthButton from '$lib/core/components/auth/auth-button.svelte'
-	import { Button } from '$lib/components/ui/button'
+	import { AuthButton } from '$lib/core/components/index.js'
+	import { Button } from '$lib/components/ui/button/index.js'
 	let { data } = $props()
 </script>
 

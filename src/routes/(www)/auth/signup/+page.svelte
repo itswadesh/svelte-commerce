@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { LoaderIcon } from '@lucide/svelte'
 	import Button from '$lib/components/ui/button/button.svelte'
-	import { toast } from 'svelte-sonner'
+	import { toast } from '@misiki/kitcommerce-core'
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import { z } from 'zod'
 	import { getUserState } from '$lib/core/stores/index.js'
 	const userState = getUserState()
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
-	import AuthButton from '$lib/core/components/auth/auth-button.svelte'
+	import { AuthButton } from '$lib/core/components/index.js'
 	const IS_DEV = import.meta.env.DEV
 
 	let firstName = $state(IS_DEV ? 'Swadesh' : '')

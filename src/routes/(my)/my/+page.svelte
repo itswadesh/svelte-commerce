@@ -30,12 +30,8 @@
 
 <div class="mx-auto max-w-7xl px-4 py-8 md:py-12">
 	<div class="mb-12">
-		<h1 class="text-3xl font-extrabold tracking-tight text-gray-900 md:text-4xl">
-			Account Dashboard
-		</h1>
-		<p class="mt-2 text-lg text-muted-foreground">
-			Welcome back! Manage your orders, wishlist, and profile settings.
-		</p>
+		<h1 class="text-3xl font-extrabold tracking-tight text-gray-900 md:text-4xl">Account Dashboard</h1>
+		<p class="mt-2 text-lg text-muted-foreground">Welcome back! Manage your orders, wishlist, and profile settings.</p>
 	</div>
 
 	<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -66,7 +62,7 @@
 
 					<!-- Action Button with Glassmorphism -->
 					<div
-						class="mt-12 inline-flex items-center gap-2 overflow-hidden rounded-full bg-gray-900 px-8 py-3.5 text-xs font-black uppercase tracking-widest text-white transition-all duration-500 hover:scale-105 active:scale-95 group-hover:bg-primary group-hover:px-10 group-hover:shadow-xl group-hover:shadow-primary/30"
+						class="mt-12 inline-flex items-center gap-2 overflow-hidden rounded-full bg-gray-900 px-8 py-3.5 text-xs font-black uppercase tracking-widest text-white transition-all duration-500 group-hover:bg-primary group-hover:px-10 group-hover:shadow-xl group-hover:shadow-primary/30 hover:scale-105 active:scale-95"
 					>
 						<span class="relative z-10">Manage</span>
 						<ArrowRight class="relative z-10 h-3.5 w-3.5 transition-transform duration-500 group-hover:translate-x-1" />

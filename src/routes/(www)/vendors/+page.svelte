@@ -9,7 +9,7 @@
 	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte'
 	import Pagination from '$lib/components/common/pagination.svelte'
 	import type { ProductSearchResult } from '$lib/core/types'
-	import SeoHeader from '$lib/core/components/plugins/seo-header.svelte'
+	import { SeoHeader } from '$lib/core/components/index.js'
 	import { setCategoryFilterState, setDesktopFilterState } from '$lib/core/composables/index.js'
 
 	setDesktopFilterState()
@@ -47,8 +47,6 @@
 
 <SeoHeader metaTitle={page.params.slug || 'Vendors'} />
 
-
-
 <div class="container mx-auto mt-2 flex h-full min-h-screen flex-row max-md:px-4 md:gap-2">
 	{#if vendors?.count >= 0}
 		<div class="hidden border-r border-input md:block">
@@ -76,32 +74,32 @@
 	</div>
 
 	<div class="flex-1">
-			<div class="mb-4 flex flex-col items-start gap-2">
-				<h1 class="text-2xl font-bold capitalize">
-					{page.params.slug || page.url.searchParams.get('search') || 'All Vendors'}
-				</h1>
-				<span class="text-sm text-gray-400">{vendors?.count} Vendors found</span>
-			</div>
+		<div class="mb-4 flex flex-col items-start gap-2">
+			<h1 class="text-2xl font-bold capitalize">
+				{page.params.slug || page.url.searchParams.get('search') || 'All Vendors'}
+			</h1>
+			<span class="text-sm text-gray-400">{vendors?.count} Vendors found</span>
+		</div>
 
-			<div class="hidden flex-row items-center gap-2 md:flex">
-				<span class="text-sm font-normal text-gray-400">Sort by:</span>
-				<Select
-					class="!mb-0"
-					id="sort-by"
-					value={selectedSort}
-					data={[
-						{ value: 'recommended', name: 'Recommended' },
-						{ value: 'updatedAt', name: "What's New" },
-						{ value: 'price-low-to-high', name: 'Price: Low to High' },
-						{ value: 'price-high-to-low', name: 'Price: High to Low' },
-						{ value: 'asc', name: 'Name: A-Z' },
-						{ value: 'desc', name: 'Name: Z-A' },
-						{ value: 'discount', name: 'Discount: High to Low' },
-						{ value: 'rating', name: 'Rating: High to Low' }
-					]}
-					optionSelected={(value: string) => selectSort(value)}
-				/>
-			</div>
+		<div class="hidden flex-row items-center gap-2 md:flex">
+			<span class="text-sm font-normal text-gray-400">Sort by:</span>
+			<Select
+				class="!mb-0"
+				id="sort-by"
+				value={selectedSort}
+				data={[
+					{ value: 'recommended', name: 'Recommended' },
+					{ value: 'updatedAt', name: "What's New" },
+					{ value: 'price-low-to-high', name: 'Price: Low to High' },
+					{ value: 'price-high-to-low', name: 'Price: High to Low' },
+					{ value: 'asc', name: 'Name: A-Z' },
+					{ value: 'desc', name: 'Name: Z-A' },
+					{ value: 'discount', name: 'Discount: High to Low' },
+					{ value: 'rating', name: 'Rating: High to Low' }
+				]}
+				optionSelected={(value: string) => selectSort(value)}
+			/>
+		</div>
 
 		{#if loading}
 			<ul class="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">

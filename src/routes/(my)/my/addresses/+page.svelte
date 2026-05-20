@@ -47,12 +47,14 @@
 				{#each addressesModule.addresses?.data as address, i (address.id)}
 					<div
 						in:fly={{ y: 20, duration: 400, delay: i * 50 }}
-						class="group relative flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white transition-all duration-300 hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] hover:border-gray-200"
+						class="group relative flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white transition-all duration-300 hover:border-gray-200 hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)]"
 					>
 						<!-- Address Type Indicator -->
 						<div class="flex items-center justify-between border-b border-gray-100 bg-gray-50/30 p-5">
 							<div class="flex items-center gap-3">
-								<div class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-gray-900 shadow-sm transition-transform group-hover:scale-110">
+								<div
+									class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-gray-900 shadow-sm transition-transform group-hover:scale-110"
+								>
 									<Home class="h-4 w-4" />
 								</div>
 								<span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-900">Shipping Address</span>
