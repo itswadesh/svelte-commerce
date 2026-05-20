@@ -1,22 +1,15 @@
 <script lang="ts">
 	import { Star, StarHalf } from '@lucide/svelte'
 	import { page } from '$app/state'
-	import ShareButton from '$lib/core/components/plugins/share-button.svelte'
 
 	const { product } = $props()
 </script>
 
 <div class="relative sm:border-b sm:border-gray-100">
-	<div class="flex items-start justify-between gap-4">
-		<h1 class="text-xl font-bold uppercase tracking-tight text-gray-900 dark:text-white sm:text-3xl">
+	<div class="flex items-start justify-between">
+		<h1 class="text-md font-bold uppercase tracking-tight text-gray-900 dark:text-white sm:text-3xl">
 			{product.title}
 		</h1>
-
-		{#if page?.data?.store?.plugins?.socialSharingButtons}
-			<div class="block flex-shrink-0 sm:hidden">
-				<ShareButton productName={product?.title} productImage={product?.thumbnail} url={page?.url?.href} />
-			</div>
-		{/if}
 	</div>
 
 	{#if product.subtitle}
