@@ -10,19 +10,8 @@
 		src = '',
 		aspectRatio = page?.data?.store?.productImageAspectRatio,
 		width = 'auto',
-		loading = 'lazy',
-		fetchpriority = 'auto',
+		priority = false,
 		...rest
-	}: {
-		class?: string
-		alt?: string
-		height?: string | number
-		src?: string
-		aspectRatio?: string
-		width?: string | number
-		loading?: 'lazy' | 'eager'
-		fetchpriority?: 'auto' | 'high' | 'low'
-		[key: string]: any
 	} = $props()
 
 	const h = $derived(height === 'auto' ? '0' : +height * 2)
@@ -32,13 +21,21 @@
 
 	const extension = $derived(src?.split('.').pop())
 
+	let isSvg = $state(false)
 	let loaded = $state(false)
 	let error = $state(false)
 	let isIntersecting = $state(false)
-	let containerRef: HTMLDivElement
+	let containerRef: HTMLDivElement | undefined = $state()
 	let usingFallback = $state(false) // Track if we're using fallback
 
-	//$inspect(page?.data?.store, usingFallback)
+	// Zoom state
+	let isHovered = $state(false)
+	let zoomPos = $state({ x: 50, y: 50 })
+
+	if (extension === 'svg') {
+		isSvg = true
+	}
+
 	// Transparent placeholder
 	const transparentPlaceholder = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
 
@@ -77,25 +74,32 @@
 			usingFallback = false
 		}
 	})
+
+	function handleMouseMove(e: MouseEvent) {
+		if (!containerRef) return
+		const { left, top, width, height } = containerRef.getBoundingClientRect()
+		const x = ((e.clientX - left) / width) * 100
+		const y = ((e.clientY - top) / height) * 100
+		zoomPos = { x, y }
+	}
 </script>
 
+<!-- svelte-ignore a11y_mouse_events_have_key_events -->
 <div
 	bind:this={containerRef}
-	class="relative w-full bg-gray-50"
+	onmouseenter={() => (isHovered = true)}
+	onmouseleave={() => (isHovered = false)}
+	onmousemove={handleMouseMove}
+	class="relative w-full overflow-hidden bg-gray-50"
 	style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"
 >
 	{#if !loaded || error}
 		<div class="absolute inset-0 flex items-center justify-center bg-gray-50">
 			<!-- <ImageIcon class="h-8 w-8 text-gray-400" /> -->
+			<img class="animate-pulse" src="/images/emptyimage.png" alt="empty placeholder" />
 		</div>
 	{/if}
-	<!-- {#if !loaded && !error}
-		<div class="absolute inset-0 flex items-center justify-center bg-gray-50/50" transition:fade={{ duration: 150 }}>
-			<div class="h-1 w-1/3 overflow-hidden rounded-full bg-primary/20">
-				<div class="h-full w-1/3 animate-[shimmer_1.5s_ease-in-out_infinite] rounded-full bg-primary"></div>
-			</div>
-		</div>
-	{/if} -->
+
 	{#if page?.data?.store?.plugins?.imageCdn?.active && !usingFallback}
 		<div class={klass}>
 			{#if isIntersecting}
@@ -116,16 +120,19 @@
 					}}
 					{alt}
 					draggable="false"
-					{fetchpriority}
+					fetchpriority={priority ? 'high' : 'auto'}
 					decoding="async"
 					data-nimg="1"
-					{loading}
+					loading={priority ? 'eager' : 'lazy'}
 					src={getImageCDNUrl(src)}
 					height={+h}
 					width={+w}
-					class="h-full w-full object-contain object-center transition-opacity duration-300 {klass}"
+					class="h-full w-full object-contain object-center {klass}"
 					class:opacity-0={!loaded}
 					class:opacity-100={loaded}
+					style:transform-origin="{zoomPos.x}% {zoomPos.y}%"
+					style:transform={isHovered ? 'scale(2.5)' : 'scale(1)'}
+					style:transition="transform 0.5s cubic-bezier(0.33, 1, 0.68, 1), transform-origin 0.15s ease-out"
 					{...rest}
 				/>
 			{/if}
@@ -145,15 +152,18 @@
 					{alt}
 					{src}
 					draggable="false"
-					{loading}
-					{fetchpriority}
+					loading={priority ? 'eager' : 'lazy'}
+					fetchpriority={priority ? 'high' : 'auto'}
 					decoding="async"
 					data-nimg="1"
 					height={+h}
 					width={+w}
-					class="h-full w-full object-contain object-center transition-opacity duration-300 {klass}"
+					class="h-full w-full object-contain object-center {klass}"
 					class:opacity-0={!loaded}
 					class:opacity-100={loaded}
+					style:transform-origin="{zoomPos.x}% {zoomPos.y}%"
+					style:transform={isHovered ? 'scale(2.5)' : 'scale(1)'}
+					style:transition="transform 0.5s cubic-bezier(0.33, 1, 0.68, 1), transform-origin 0.15s ease-out"
 					{...rest}
 				/>
 			{/if}

@@ -6,6 +6,7 @@
 	import { Check, HeartIcon, LoaderCircle, ShoppingCart } from '@lucide/svelte'
 	import { fly } from 'svelte/transition'
 	import EnquiryModal from '$lib/core/components/plugins/enquiry-modal.svelte'
+	import { quintOut } from 'svelte/easing'
 
 	const productState = useProductState()
 	const enquiryPlugin = $derived(page.data?.store?.plugins?.enquiryMode)
