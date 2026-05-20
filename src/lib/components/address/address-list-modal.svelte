@@ -57,7 +57,7 @@
 								</Button>
 							<!-- {/if} -->
 						</div>
-						<Button variant="secondary" onclick={() => addressState.handleSelect(address)}>Select</Button>
+						<Button variant="default" onclick={() => addressState.handleSelect(address)}>Select</Button>
 					</div>
 				</div>
 			{/each}
