@@ -190,7 +190,7 @@
 														}
 													}}
 													variant="ghost"
-													class="h-8 text-[10px] font-bold uppercase tracking-widest text-primary transition-all hover:bg-primary/5 active:scale-95"
+													class="h-8 text-[10px] font-bold uppercase tracking-widest text-primary transition-all hover:bg-primary/50 active:scale-95"
 												>
 													Change
 												</Button>
