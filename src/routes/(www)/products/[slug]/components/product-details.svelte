@@ -144,9 +144,7 @@
 		</div>
 	{/if}
 
-	<div class="mx-0 border-t border-gray-100 px-0">
-		<ProductReviewsSection />
-	</div>
+	<ProductReviewsSection />
 
 	<div class="">
 		<RelatedProducts />
