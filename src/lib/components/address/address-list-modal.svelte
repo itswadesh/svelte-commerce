@@ -25,7 +25,7 @@
 </script>
 
 <Dialog bind:open={show}>
-	<DialogContent class="sm:max-w-[425px]">
+	<DialogContent class="sm:max-w-[425px] [&>button]:!bg-transparent">
 		<DialogHeader>
 			<DialogTitle>Select Address</DialogTitle>
 		</DialogHeader>
@@ -51,11 +51,11 @@
 							<Button variant="ghost" onclick={() => addressState.handleEdit(address)} class="w-fit opacity-0 group-hover:opacity-100">
 								<PencilSimple class="h-4 w-4" />
 							</Button>
-							{#if addressState.cartState.cart?.shippingAddress?.id !== address.id}
-								<Button type="button" variant="ghost" onclick={() => ondelete?.(address)} class="w-fit opacity-0 group-hover:opacity-100">
+							<!-- {#if addressState.cartState.cart?.shippingAddress?.id !== address.id} -->
+								<Button type="button" variant="ghost" disabled={addressState.cartState.cart?.shippingAddress?.id === address.id}  onclick={() => ondelete?.(address)} class="w-fit opacity-0 group-hover:opacity-100">
 									<Trash2 class="h-4 w-4" />
 								</Button>
-							{/if}
+							<!-- {/if} -->
 						</div>
 						<Button variant="secondary" onclick={() => addressState.handleSelect(address)}>Select</Button>
 					</div>
