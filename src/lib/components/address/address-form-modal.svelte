@@ -111,7 +111,7 @@
 							{/if}
 						</Button>
 						{#if isEdit}
-							<Button type="button" variant="link" onclick={handleDelete} class="w-full">
+							<Button type="button" variant="link" onclick={handleDelete} class="w-full text-red-700">
 								<Trash2 class="h-4 w-4" />
 								Delete Address
 							</Button>
