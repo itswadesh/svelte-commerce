@@ -4,6 +4,7 @@
 	import { date } from '$lib/core/utils/index.js'
 	import * as Tabs from '$lib/components/ui/tabs/index.js'
 	import { page } from '$app/state'
+	import { invalidateAll } from '$app/navigation'
 	import { useProductState } from '$lib/core/composables/index.js'
 	import { productService } from '$lib/core/services/index.js'
 	import Button from '$lib/components/ui/button/button.svelte'
@@ -16,7 +17,7 @@
 		if (!page.data?.product?.ratings?.length) return 0
 		const total = page.data?.product?.ratings?.reduce((acc, cur) => acc + cur.rating, 0)
 		const rating = total / page.data?.product?.ratings?.length
-		return Math.floor((rating + 1) * 10) / 10
+		return Math.floor(rating * 10) / 10
 	})
 
 	const ratingLabels = [
@@ -28,34 +29,13 @@
 	]
 </script>
 
-<style>
-	:global(.font-montserrat) {
-		font-family: 'Montserrat', sans-serif;
-	}
-
-	.rating-bar-glow {
-		box-shadow: 0 0 12px rgba(32, 123, 180, 0.2);
-	}
-
-	.custom-scrollbar::-webkit-scrollbar {
-		width: 4px;
-	}
-	.custom-scrollbar::-webkit-scrollbar-track {
-		background: transparent;
-	}
-	.custom-scrollbar::-webkit-scrollbar-thumb {
-		background: #e4e4e7;
-		border-radius: 10px;
-	}
-</style>
-
 <!-- Reviews Section -->
 {#if page.data.store?.plugins?.isProductReviewsAndRatings?.active}
 	<section class="">
 		{#if page.data?.product?.ratings?.length}
-			<div class="grid grid-cols-1 lg:grid-cols-12 intra-gap">
+			<div class="intra-gap grid grid-cols-1 lg:grid-cols-12">
 				<!-- Left Column: Summary & Stats -->
-				<div class="lg:col-span-4 lg:sticky lg:top-24 lg:h-fit">
+				<div class="lg:sticky lg:top-24 lg:col-span-4 lg:h-fit">
 					<div class="space-y-6 lg:space-y-8">
 						<div class="flex flex-col items-center text-center lg:items-start lg:text-left">
 							<h2 class="mb-1 text-2xl font-bold tracking-tight text-zinc-900 lg:mb-2 lg:text-3xl">Reviews</h2>
@@ -94,7 +74,7 @@
 										</button>
 										<div class="relative h-2.5 flex-1 overflow-hidden rounded-full bg-zinc-200">
 											<div
-												class="bg-[#207bb4] absolute inset-y-0 left-0 rounded-full transition-all duration-700 ease-out"
+												class="absolute inset-y-0 left-0 rounded-full bg-[#207bb4] transition-all duration-700 ease-out"
 												style="width: {percentage}%"
 											></div>
 										</div>
@@ -130,17 +110,17 @@
 				<!-- Right Column: Reviews Feed -->
 				<div class="lg:col-span-8">
 					<Tabs.Root value="product" class="w-full">
-						<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between intra-gap">
-							<Tabs.List class="flex h-11 w-full items-center justify-center rounded-lg bg-zinc-100 p-1 text-zinc-500 sm:w-auto sm:inline-flex">
+						<div class="intra-gap flex flex-col sm:flex-row sm:items-center sm:justify-between">
+							<Tabs.List class="flex h-11 w-full items-center justify-center rounded-lg bg-zinc-100 p-1 text-zinc-500 sm:inline-flex sm:w-auto">
 								<Tabs.Trigger
 									value="product"
-									class="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-md px-4 py-2 text-sm font-bold transition-all focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:text-zinc-950 data-[state=active]:shadow-sm sm:flex-none"
+									class="inline-flex flex-1 items-center justify-center whitespace-nowrap rounded-md px-4 py-2 text-sm font-bold transition-all data-[state=active]:bg-white data-[state=active]:text-zinc-950 data-[state=active]:shadow-sm focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 sm:flex-none"
 								>
 									Product Reviews
 								</Tabs.Trigger>
 								<Tabs.Trigger
 									value="brand"
-									class="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-md px-4 py-2 text-sm font-bold transition-all focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:text-zinc-950 data-[state=active]:shadow-sm sm:flex-none"
+									class="inline-flex flex-1 items-center justify-center whitespace-nowrap rounded-md px-4 py-2 text-sm font-bold transition-all data-[state=active]:bg-white data-[state=active]:text-zinc-950 data-[state=active]:shadow-sm focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 sm:flex-none"
 								>
 									Brand Feedback
 								</Tabs.Trigger>
@@ -150,13 +130,15 @@
 						<Tabs.Content value="product" class="intra-pt space-y-4">
 							{#each page.data?.product?.ratings as rating, i}
 								<div
-									class="relative flex flex-col gap-4 rounded-md bg-white p-5 transition-all hover:shadow-xl hover:shadow-zinc-200/50 ring-1 ring-zinc-100 sm:gap-6 sm:p-6"
+									class="relative flex flex-col gap-4 rounded-md bg-white p-5 ring-1 ring-zinc-100 transition-all hover:shadow-xl hover:shadow-zinc-200/50 sm:gap-6 sm:p-6"
 									in:fly={{ y: 20, delay: i * 50, duration: 400, easing: quintOut }}
 								>
 									<div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
 										<div class="flex items-center gap-3 sm:gap-4">
 											<div class="relative flex-shrink-0">
-												<div class="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 ring-2 ring-white ring-offset-2 sm:h-12 sm:w-12">
+												<div
+													class="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 ring-2 ring-white ring-offset-2 sm:h-12 sm:w-12"
+												>
 													{#if rating?.img}
 														<img src={rating.img} alt={rating.name} class="h-full w-full rounded-full object-cover" />
 													{:else}
@@ -165,7 +147,9 @@
 														</span>
 													{/if}
 												</div>
-												<div class="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-blue-500 text-white ring-2 ring-white sm:h-5 sm:w-5">
+												<div
+													class="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-blue-500 text-white ring-2 ring-white sm:h-5 sm:w-5"
+												>
 													<Check class="h-2.5 w-2.5 stroke-[3] sm:h-3 sm:w-3" />
 												</div>
 											</div>
@@ -179,9 +163,7 @@
 										</div>
 										<div class="flex w-fit items-center gap-0.5 rounded-full bg-zinc-50 px-2.5 py-1 ring-1 ring-zinc-100 sm:px-3 sm:py-1.5">
 											{#each { length: 5 } as _, i}
-												<StarIcon
-													class="h-3 w-3 {i <= rating.rating ? 'fill-[#207bb4] text-[#207bb4]' : 'text-zinc-200'} sm:h-3.5 sm:w-3.5"
-												/>
+												<StarIcon class="h-3 w-3 {i <= rating.rating ? 'fill-[#207bb4] text-[#207bb4]' : 'text-zinc-200'} sm:h-3.5 sm:w-3.5" />
 											{/each}
 										</div>
 									</div>
@@ -196,7 +178,9 @@
 										{#if rating.images?.length}
 											<div class="flex flex-wrap gap-2 sm:gap-3">
 												{#each rating.images as img}
-													<button class="group relative aspect-square w-20 overflow-hidden rounded-md ring-2 ring-white transition-all hover:ring-[#207bb4] hover:scale-105 sm:w-24">
+													<button
+														class="group relative aspect-square w-20 overflow-hidden rounded-md ring-2 ring-white transition-all hover:scale-105 hover:ring-[#207bb4] sm:w-24"
+													>
 														<img src={img} alt="Review" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
 														<div class="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10"></div>
 													</button>
@@ -211,7 +195,7 @@
 						<Tabs.Content value="brand" class="space-y-6">
 							{#each page.data?.allratings as rating, i}
 								<div
-									class="flex flex-col gap-4 rounded-md bg-white p-5 transition-all hover:shadow-xl hover:shadow-zinc-200/50 ring-1 ring-zinc-100 sm:gap-6 sm:p-6"
+									class="flex flex-col gap-4 rounded-md bg-white p-5 ring-1 ring-zinc-100 transition-all hover:shadow-xl hover:shadow-zinc-200/50 sm:gap-6 sm:p-6"
 									in:fly={{ y: 20, delay: i * 50, duration: 400, easing: quintOut }}
 								>
 									<!-- Similar structure for brand ratings -->
@@ -227,16 +211,16 @@
 										</div>
 										<div class="flex w-fit items-center gap-0.5 rounded-full bg-zinc-50 px-2.5 py-1 ring-1 ring-zinc-100 sm:px-3 sm:py-1.5">
 											{#each { length: 5 } as _, i}
-												<StarIcon
-													class="h-3 w-3 {rating.rating >= i ? 'fill-[#207bb4] text-[#207bb4]' : 'text-zinc-200'} sm:h-3.5 sm:w-3.5"
-												/>
+												<StarIcon class="h-3 w-3 {rating.rating >= i ? 'fill-[#207bb4] text-[#207bb4]' : 'text-zinc-200'} sm:h-3.5 sm:w-3.5" />
 											{/each}
 										</div>
 									</div>
 									<p class="text-base text-zinc-700 sm:text-lg">"{rating.review || 'No comment left'}"</p>
 								</div>
 							{:else}
-								<div class="flex flex-col items-center justify-center py-12 text-center text-zinc-400 bg-zinc-50/50 rounded-md border-2 border-dashed border-zinc-200">
+								<div
+									class="flex flex-col items-center justify-center py-12 text-center text-zinc-400 bg-zinc-50/50 rounded-md border-2 border-dashed border-zinc-200"
+								>
 									<MessageSquare class="h-10 w-10 mb-3 opacity-20 sm:h-12 sm:w-12 sm:mb-4" />
 									<p class="font-bold text-base sm:text-lg">No brand feedback yet</p>
 									<p class="text-xs sm:text-sm">Be the first to share your experience!</p>
@@ -249,7 +233,9 @@
 		{:else}
 			<!-- Empty State -->
 			<div class="flex flex-col items-center justify-center py-12 text-center sm:py-20">
-				<div class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-zinc-50 text-zinc-200 ring-1 ring-zinc-100 sm:mb-8 sm:h-24 sm:w-24">
+				<div
+					class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-zinc-50 text-zinc-200 ring-1 ring-zinc-100 sm:mb-8 sm:h-24 sm:w-24"
+				>
 					<Star class="h-10 w-10 sm:h-12 sm:w-12" />
 				</div>
 				<h2 class="mb-2 text-2xl font-bold tracking-tight text-zinc-900 sm:mb-3 sm:text-3xl">No reviews yet</h2>
@@ -257,7 +243,7 @@
 					Be the first to share your thoughts on this product and help other shoppers.
 				</p>
 				<Button
-					class="h-12 rounded-md bg-[#207bb4] px-6 text-base font-bold text-white shadow-xl shadow-[#207bb4]/20 transition-all hover:bg-[#339d9c] hover:scale-105 active:scale-95 sm:h-14 sm:px-8 sm:text-lg"
+					class="h-12 rounded-md bg-[#207bb4] px-6 text-base font-bold text-white shadow-xl shadow-[#207bb4]/20 transition-all hover:scale-105 hover:bg-[#339d9c] active:scale-95 sm:h-14 sm:px-8 sm:text-lg"
 					onclick={() => (productState.showReviewForm = true)}
 				>
 					Write the First Review
@@ -268,18 +254,17 @@
 
 	<!-- Review Form Modal Overlay -->
 	{#if productState.showReviewForm}
-		<div
-			class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/60 sm:p-4 backdrop-blur-sm"
-			transition:fade={{ duration: 200 }}
-		>
+		<div class="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/60 backdrop-blur-sm sm:p-4" transition:fade={{ duration: 200 }}>
 			<div
 				class="font-montserrat relative h-full w-full overflow-hidden bg-white sm:h-auto sm:max-h-[90vh] sm:max-w-2xl sm:rounded-3xl sm:shadow-2xl"
 				transition:scale={{ start: 0.95, duration: 300, easing: quintOut }}
 			>
 				<!-- Modal Header -->
-				<div class="sticky top-0 z-10 flex items-center justify-between border-b border-zinc-100 bg-white/80 px-6 py-4 backdrop-blur-md sm:px-8 sm:py-6">
+				<div
+					class="sticky top-0 z-10 flex items-center justify-between border-b border-zinc-100 bg-white/80 px-6 py-4 backdrop-blur-md sm:px-8 sm:py-6"
+				>
 					<div>
-						<h3 class="text-xl font-black text-zinc-900 tracking-tight sm:text-2xl">Write a Review</h3>
+						<h3 class="text-xl font-black tracking-tight text-zinc-900 sm:text-2xl">Write a Review</h3>
 						<p class="text-xs font-medium text-zinc-500 sm:text-sm">Share your experience with us</p>
 					</div>
 					<button
@@ -301,13 +286,15 @@
 									{#each { length: 5 } as _, i}
 										<button
 											type="button"
-											class="group relative p-1 transition-transform focus:outline-none hover:scale-110 active:scale-90"
-											onclick={() => productState.onSelect(i)}
+											class="group relative p-1 transition-transform hover:scale-110 focus:outline-none active:scale-90"
+											onclick={() => productState.onSelect(i + 1)}
 										>
 											<Star
-												fill={productState.select !== null && productState.select >= i ? '#207bb4' : 'none'}
+												fill={productState.select !== null && productState.select >= i + 1 ? '#207bb4' : 'none'}
 												strokeWidth={1.5}
-												class="h-10 w-10 transition-colors {productState.select !== null && productState.select >= i ? 'text-[#207bb4]' : 'text-zinc-200'} sm:h-12 sm:w-12"
+												class="h-10 w-10 transition-colors {productState.select !== null && productState.select >= i + 1
+													? 'text-[#207bb4]'
+													: 'text-zinc-200'} sm:h-12 sm:w-12"
 											/>
 										</button>
 									{/each}
@@ -315,10 +302,12 @@
 
 								{#if productState.select !== null}
 									<div
-										class="rounded-full px-4 py-1.5 text-xs font-black ring-1 ring-inset {ratingLabels[productState.select].color.replace('text-', 'bg-').replace('-500', '-50')} {ratingLabels[productState.select].color} sm:text-sm"
+										class="rounded-full px-4 py-1.5 text-xs font-black ring-1 ring-inset {ratingLabels[productState.select - 1].color
+											.replace('text-', 'bg-')
+											.replace('-500', '-50')} {ratingLabels[productState.select - 1].color} sm:text-sm"
 										in:scale={{ start: 0.9, duration: 200 }}
 									>
-										{ratingLabels[productState.select].text}
+										{ratingLabels[productState.select - 1].text}
 									</div>
 								{/if}
 							</div>
@@ -374,11 +363,12 @@
 									await productService.addReview({
 										productId: page.data?.product.id,
 										variantId: productState.selectedVariant?.id,
-										rating: productState.select || 0,
+										rating: productState.select || 1,
 										review: productState.reviewMessage,
 										uploadedImages: productState.uploadedImagestoSave
 									})
 									productState.showReviewForm = false
+									await invalidateAll()
 									toast.success('Review published! Thanks for sharing.')
 								} catch (error: any) {
 									toast.error(error?.message || 'Could not post review. Try again?')
@@ -393,3 +383,24 @@
 		</div>
 	{/if}
 {/if}
+
+<style>
+	:global(.font-montserrat) {
+		font-family: 'Montserrat', sans-serif;
+	}
+
+	.rating-bar-glow {
+		box-shadow: 0 0 12px rgba(32, 123, 180, 0.2);
+	}
+
+	.custom-scrollbar::-webkit-scrollbar {
+		width: 4px;
+	}
+	.custom-scrollbar::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	.custom-scrollbar::-webkit-scrollbar-thumb {
+		background: #e4e4e7;
+		border-radius: 10px;
+	}
+</style>
