@@ -13,28 +13,28 @@
 	<title>My Profile | Svelte Commerce</title>
 </svelte:head>
 
-<div class="mx-auto max-w-4xl md:py-8 md:py-12">
+<div class="mx-auto max-w-6xl md:py-8 md:py-12">
 	<div in:fly={{ y: 20, duration: 600 }} class="space-y-10">
 		<!-- Profile Header -->
 		<div class="flex items-center justify-between">
 			<div>
-				<h1 class="text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">Profile Settings</h1>
-				<p class="mt-2 text-lg text-gray-500">Manage your personal information and account security.</p>
+				<h1 class="text-lg font-bold tracking-tight text-gray-900 md:text-xl">Profile Settings</h1>
+				<p class="mt-2 text-sm text-gray-500">Manage your personal information and account security.</p>
 			</div>
 		</div>
 
 		<!-- Main Profile Form -->
-		<div class="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-[0_1px_3px_rgba(0,0,0,0.05),0_20px_40px_rgba(0,0,0,0.02)]">
-			<div class="border-b border-gray-100 bg-gray-50/50 p-6 md:p-8">
+		<div class="overflow-hidden bg-white">
+			<!-- <div class="border-b pb-5 border-gray-100 bg-gray-50/50 ">
 				<div class="flex items-center gap-3">
 					<div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
 						<User class="h-5 w-5" />
 					</div>
 					<h2 class="text-xl font-bold text-gray-900">Personal Information</h2>
 				</div>
-			</div>
+			</div> -->
 
-			<div class="p-6 md:p-8">
+			<div class="">
 				<form onsubmit={profileModule.saveProfile} class="space-y-8" oninput={profileModule.handleDetailsChange}>
 					<div class="grid grid-cols-1 gap-8 md:grid-cols-2">
 						<div class="space-y-2">
