@@ -48,6 +48,10 @@ const config: Config = {
 					DEFAULT: 'hsl(var(--destructive) / <alpha-value>)',
 					foreground: 'hsl(var(--destructive-foreground) / <alpha-value>)'
 				},
+				success: {
+					DEFAULT: 'hsl(var(--success) / <alpha-value>)',
+					foreground: 'hsl(var(--success-foreground) / <alpha-value>)'
+				},
 				muted: {
 					DEFAULT: 'hsl(var(--muted) / <alpha-value>)',
 					foreground: 'hsl(var(--muted-foreground) / <alpha-value>)'
@@ -108,6 +112,9 @@ const config: Config = {
 				'z-1': '0 2px 4px rgba(0, 0, 0, 0.1)',
 				'z-2': '0 4px 8px rgba(0, 0, 0, 0.1)',
 				'z-10': '0 6px 12px rgba(0, 0, 0, 0.15)'
+			},
+			fontSize: {
+				xxs: '9px'
 			}
 		}
 	},
