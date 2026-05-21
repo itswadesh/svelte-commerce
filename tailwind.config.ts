@@ -114,7 +114,7 @@ const config: Config = {
 				'z-10': '0 6px 12px rgba(0, 0, 0, 0.15)'
 			},
 			fontSize: {
-				xxs: '9px'
+				xxs: '10px'
 			}
 		}
 	},
