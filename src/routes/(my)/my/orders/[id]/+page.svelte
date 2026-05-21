@@ -22,7 +22,7 @@
 			{#if loading}
 				<OrderListSkeleton />
 			{:else if order}
-				<section class="space-y-4">
+				<section class="space-y-4 lg:pt-8">
 					<div class="flex flex-wrap items-center gap-2">
 						<BackButton to="/my/orders" title="Orders" />
 					</div>
