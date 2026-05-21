@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button'
 	import { goto } from '$app/navigation'
-	import { ChevronRight, LoaderCircle, LockKeyhole, X } from '@lucide/svelte'
+	import { ChevronDown, ChevronRight, LoaderCircle, LockKeyhole, X } from '@lucide/svelte'
 	import { formatPrice } from '$lib/core/utils'
 	import LoadingDots from '$lib/core/components/common/loading-dots.svelte'
 	import { page } from '$app/state'
@@ -16,6 +16,8 @@
 
 	const paymentModule = new PaymentModule()
 	const cartState = paymentModule.cartState
+
+	let showAddress = $state(false)
 </script>
 
 <svelte:head>
@@ -67,8 +69,10 @@
 		{:else}
 			<div class="grid gap-8 lg:grid-cols-[1fr_400px]">
 				<!-- Left Column -->
-				<div class="flex flex-col gap-6">
-					{#if paymentModule.shippingRates?.error?.message}
+					<div class="flex flex-col gap-6">
+
+
+						{#if paymentModule.shippingRates?.error?.message}
 						<div class="mb-4 rounded bg-red-50 p-4 text-[11px] font-bold uppercase tracking-tight text-red-600 ring-1 ring-red-100">
 							We currently deliver only to
 							{#each paymentModule.shippingRates?.error?.countriesDeliverable || [] as country, index}
@@ -219,10 +223,64 @@
 						</div>
 					{/if}
 
+											{#if cartState?.cart?.shippingAddress}
+							<div class="rounded-lg border border-gray-100 bg-white shadow-sm overflow-hidden">
+								<button
+									class="flex w-full items-center justify-between px-6 py-4 transition-colors hover:bg-gray-50"
+									onclick={() => (showAddress = !showAddress)}
+								>
+									<div class="flex flex-col items-start">
+										<span class="text-[10px] font-bold text-gray-400">Delivering Order to</span>
+										<span class="text-sm font-bold uppercase tracking-tight text-gray-900">
+											{cartState.cart.shippingAddress.firstName} {cartState.cart.shippingAddress.lastName}
+										</span>
+									</div>
+									<ChevronDown
+										class="h-5 w-5 text-gray-400 transition-transform duration-300 {showAddress ? 'rotate-180' : ''}"
+									/>
+								</button>
+
+								{#if showAddress}
+									<div class="border-t border-gray-50 bg-gray-50/30 px-6 py-2">
+										<div class="flex items-start justify-between gap-4">
+											<div class="flex-1">
+												<p class="text-sm leading-relaxed text-gray-600">
+													{cartState.cart.shippingAddress?.address_1},<br />
+													{cartState.cart.shippingAddress.locality ? cartState.cart.shippingAddress.locality + ',' : ''}
+													{cartState.cart.shippingAddress.city}, {cartState.cart.shippingAddress.state} - {cartState.cart.shippingAddress.zip}<br />
+													{cartState.cart.shippingAddress.country}
+												</p>
+												{#if cartState.cart.shippingAddress?.address_2}
+													<p class="text-xs leading-relaxed text-gray-600">{cartState.cart.shippingAddress?.address_2}</p>
+												{/if}
+											</div>
+											<Button
+												variant="outline"
+												size="sm"
+												class="h-7 px-3 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-gray-900 hover:text-white"
+												onclick={() => goto(appendOneTimeCartId('/checkout/address'))}
+											>
+												Change
+											</Button>
+										</div>
+										{#if cartState.cart.phone}
+											<p class="mt-2 text-xs font-bold text-gray-900">
+												Phone: {cartState.cart.phone}
+											</p>
+										{/if}
+									</div>
+								{/if}
+							</div>
+						{/if}
+
+
 					<CouponsDrawer />
 
 					<div class="space-y-4">
+
 						<div class="space-y-4 rounded-lg border border-gray-100 bg-white p-6 shadow-sm">
+
+
 							<div class="mb-6 flex flex-col gap-1">
 								<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: 'Montserrat', sans-serif;">
 									Price Summary
