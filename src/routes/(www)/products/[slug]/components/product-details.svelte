@@ -25,7 +25,7 @@
 
 	const productState = useProductState()
   const data = $derived(page.data)
-
+  const showPincodeCheck = $derived(productState.wareHousePluginEnabled && productState.isIndianPincodesPluginEnabled)
 </script>
 
 <SeoHeader
@@ -62,7 +62,7 @@
 				<ProductGallerySection />
 			</div>
 
-			<div class="intra-gap sticky top-28 mx-0 flex flex-col space-y-0">
+			<div class="intra-gap top-28 mx-0 flex flex-col space-y-0">
 				<ProductTitleSection product={data?.product} />
 
 				<ProductPricing />
@@ -77,40 +77,48 @@
 						<ProductCartAndWishlistButtons />
 					</div>
 
-					{#if productState.wareHousePluginEnabled && productState.isIndianPincodesPluginEnabled}
-						<div class="my-1 flex flex-col gap-3 border-t border-gray-100 pt-6">
-							<div class="flex items-center justify-start gap-3">
-								<Truck class="h-4 w-4 text-gray-900" />
-								<span class="text-sm font-bold uppercase tracking-widest text-gray-900"> Delivery Options </span>
+					{#if showPincodeCheck}
+						<div class="intra-gap border-t border-gray-100 intra-pt flex flex-col">
+							<div class="intra-gap flex items-center justify-start">
+								<Truck class="size-4 text-gray-900" />
+								<span class="text-sm font-bold uppercase tracking-widest text-gray-900">
+									Delivery Options
+								</span>
 							</div>
 							<PincodeCheck />
 						</div>
 					{:else}
 						<!-- Fallback delivery estimate when plugin is not enabled -->
-						<div class="my-1 flex flex-col gap-3 border-t border-gray-100 pt-6">
-							<div class="flex items-center gap-3">
-								<Truck class="h-4 w-4 text-gray-900" />
+						<div class="intra-gap border-t border-gray-100 intra-pt flex flex-col">
+							<div class="intra-gap flex items-center">
+								<Truck class="size-4 text-gray-900" />
 								<span class="text-sm font-bold uppercase text-gray-900">Delivery Information</span>
 							</div>
 							<div class="space-y-1">
 								<p class="text-sm font-medium text-gray-700">Free delivery on orders above ₹999</p>
-								<p class="text-[11px] font-bold uppercase tracking-tight text-gray-400">Estimated delivery: 5-7 business days</p>
+								<p class="text-[11px] font-bold uppercase tracking-tight text-gray-400">
+									Estimated delivery: 5-7 business days
+								</p>
 							</div>
 						</div>
 					{/if}
 
 					{#if productState.trustBadgesPlugin?.active}
-						<div class="border-t border-gray-100 py-5">
+						<div class="border-t border-gray-100 intra-pt">
 							{@html productState.trustBadgesPlugin?.html}
 						</div>
 					{/if}
 
 					{#if productState.returnPlugin && productState.returnPlugin?.active && productState.returnPlugin?.html}
-						<div class="border-t border-gray-100 py-5">
+						<div class="border-t border-gray-100 intra-pt">
 							<div class="mb-3 flex items-center gap-3">
 								<span class="text-sm font-bold uppercase text-gray-900">Returns & Exchanges</span>
 							</div>
-							<div class="text-sm leading-relaxed text-gray-600 {!productState.showReturnPolicy ? 'line-clamp-2 overflow-hidden' : ''}">
+							<div
+								class="text-sm leading-relaxed text-gray-600 {!productState.showReturnPolicy
+									? 'line-clamp-2 overflow-hidden'
+									: ''}"
+							>
 								{@html productState.returnPlugin?.html}
 							</div>
 
@@ -125,13 +133,15 @@
 						</div>
 					{:else}
 						<!-- Fallback return policy when plugin is not configured -->
-						<div class="border-t border-gray-100 py-5">
+						<div class="border-t border-gray-100 intra-pt">
 							<h3 class="mb-2 text-sm font-bold uppercase text-gray-900">Returns & Exchanges</h3>
-							<p class="text-sm leading-relaxed text-gray-600">We accept returns within 7 days of delivery for unused items in original packaging.</p>
+							<p class="text-sm leading-relaxed text-gray-600">
+								We accept returns within 7 days of delivery for unused items in original packaging.
+							</p>
 						</div>
 					{/if}
 
-					<div class="border-t border-gray-100 pt-4">
+					<div class="border-t border-gray-100 intra-pt">
 						<StoreCheck />
 						<ProductSpecifications />
 						<ProductDescription />
