@@ -60,7 +60,7 @@
 	<div class="container mx-auto px-4">
 	
 			<!-- Checkout Progress -->
-		<!-- <div class="mb-8">
+		<div class="mb-8">
 			<div class="flex items-center justify-center space-x-4 sm:space-x-12">
 				<div class="flex items-center text-primary">
 					<div class="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-[11px] font-bold tracking-tight text-white">1</div>
@@ -80,13 +80,13 @@
 					<span class="ml-2 text-xs font-bold uppercase tracking-widest">Payment</span>
 				</div>
 			</div>
-		</div> -->
+		</div>
 
-		<div class="mb-8">
+		<!-- <div class="mb-8">
 		  <div>
 				<p class="font-semibold tracking-tight text-xl">My Bag <span class="font-bold">({cartState?.cart?.lineItems?.length ?? 0}) {cartState.cart.lineItems.length>1 ? "Items" : "Item"}</span></p>
 			</div>
-		</div>
+		</div> -->
 
 		<!-- {#if freeShippingOn && cartState?.cart?.total <= freeShippingOn}
       <div class="bg-gray-100 p-4 py-2 rounded-lg text-sm text-gray-600 w-fit mb-5">
@@ -357,7 +357,7 @@
 														{formatPrice(item.price * item.qty, page?.data?.store?.currency?.code)}
 													</p>
 													{#if item.mrp > item.price}
-														<p class="text-xs font-bold  tracking-tight text-green-600">
+														<p class="text-xs font-medium  tracking-tight text-green-600">
 															You saved {formatPrice((item.mrp - item.price) * item.qty, page?.data?.store?.currency?.code)}
 														</p>
 													{:else}
@@ -420,7 +420,7 @@
 														{formatPrice(item.price * item.qty, page?.data?.store?.currency?.code)}
 													</p>
 													{#if item.mrp > item.price}
-														<p class="text-xs font-bold tracking-tight text-green-600">
+														<p class="text-xs font-medium tracking-tight text-green-600">
 															You saved {formatPrice((item.mrp - item.price) * item.qty, page?.data?.store?.currency?.code)}
 														</p>
 													{:else}
@@ -459,7 +459,7 @@
 						<div class="space-y-4 rounded-lg border border-gray-100 bg-white p-3 md:p-6 shadow-sm">
 							<div class="">
 								<div class="mb-6 flex flex-col gap-1">
-									<h2 class="text-base font-bold uppercase tracking-widest text-gray-900" style="font-family: 'Montserrat', sans-serif;">
+									<h2 class="text-base font-bold uppercase  text-gray-900" style="font-family: 'Montserrat', sans-serif;">
 										Price Summary
 									</h2>
 									<div class="h-1 w-12 bg-primary"></div>
@@ -503,7 +503,7 @@
 										</div>
 
 										<div class="flex items-center justify-between pt-2">
-											<span class="text-sm font-bold uppercase tracking-widest text-gray-900">Total</span>
+											<span class="text-sm font-bold uppercase text-gray-900">Total</span>
 											<span class="text-xl font-bold text-gray-900">{formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}</span>
 										</div>
 

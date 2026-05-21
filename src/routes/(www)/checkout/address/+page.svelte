@@ -30,7 +30,7 @@
 <div class="min-h-screen py-8">
 	<div class="container mx-auto px-4">
 		<!-- Checkout Progress -->
-		<!-- <div class="mb-12">
+		<div class="mb-8">
 			<div class="flex items-center justify-center space-x-4 sm:space-x-12">
 				<button
 					onclick={() => goto(appendOneTimeCartId('/checkout/cart'))}
@@ -50,8 +50,8 @@
 					<span class="ml-2 text-xs font-bold uppercase tracking-widest">Payment</span>
 				</div>
 			</div>
-		</div> -->
-			<div class="mb-8 flex justify-between lg:px-4 items-center">
+		</div>
+			<!-- <div class="mb-8 flex justify-between lg:px-4 items-center">
 		  <div>
 				<p class="font-semibold tracking-tight text-xl">My Addresses</p>
 			</div>
@@ -60,7 +60,7 @@
 			}} >
 				Back to Cart
 			</Button>
-		</div>
+		</div> -->
 
 		{#await cartState.hasLoaded}
 			<div class="flex min-h-96 items-center justify-center py-8">
