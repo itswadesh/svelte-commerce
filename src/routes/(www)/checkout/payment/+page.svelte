@@ -25,7 +25,7 @@
 <div class="min-h-screen py-8">
 	<div class="container mx-auto px-4">
 		<!-- Checkout Progress -->
-		<div class="mb-12">
+		<!-- <div class="mb-12">
 			<div class="flex items-center justify-center space-x-4 sm:space-x-12">
 				<button
 					onclick={() => goto(appendOneTimeCartId('/checkout/cart'))}
@@ -48,6 +48,16 @@
 					<span class="ml-2 text-xs font-bold uppercase tracking-widest">Payment</span>
 				</div>
 			</div>
+		</div> -->
+					<div class="mb-8 flex justify-between items-center">
+		  <div>
+				<p class="font-bold tracking-tight text-xl">Payment</p>
+			</div>
+			<Button variant="link" onclick={() => {
+				goto("/checkout/address")
+			}} >
+				Back to Address
+			</Button>
 		</div>
 
 		{#if paymentModule.loadingForPaymentMethods}
@@ -74,7 +84,7 @@
 					{/if}
 
 					<div class="h-fit space-y-6">
-						<h2 class="text-base font-bold uppercase tracking-widest text-gray-900" style="font-family: 'Montserrat', sans-serif;">
+						<h2 class="text-base font-bold uppercase text-gray-900" >
 							Select Payment Method
 						</h2>
 						{#if paymentModule.showError}
@@ -139,7 +149,7 @@
 
 					{#if paymentModule.shippingRates?.data?.length}
 						<div class="grid h-fit grid-cols-1 space-y-6 border-t border-gray-100 pt-6">
-							<h2 class="text-base font-bold uppercase tracking-widest text-gray-900" style="font-family: 'Montserrat', sans-serif;">
+							<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: 'Montserrat', sans-serif;">
 								Shipping Method
 							</h2>
 
@@ -214,7 +224,7 @@
 					<div class="space-y-4">
 						<div class="space-y-4 rounded-lg border border-gray-100 bg-white p-6 shadow-sm">
 							<div class="mb-6 flex flex-col gap-1">
-								<h2 class="text-base font-bold uppercase tracking-widest text-gray-900" style="font-family: 'Montserrat', sans-serif;">
+								<h2 class="text-base font-bold uppercase text-gray-900" style="font-family: 'Montserrat', sans-serif;">
 									Price Summary
 								</h2>
 								<div class="h-1 w-12 bg-primary"></div>
@@ -254,7 +264,7 @@
 									</div>
 
 									<div class="flex items-center justify-between pt-2">
-										<span class="text-sm font-bold uppercase tracking-widest text-gray-900">Total</span>
+										<span class="text-sm font-bold uppercase  text-gray-900">Total</span>
 										<span class="text-xl font-bold text-gray-900">{formatPrice(cartState.cart.total, page?.data?.store?.currency?.code)}</span>
 									</div>
 
