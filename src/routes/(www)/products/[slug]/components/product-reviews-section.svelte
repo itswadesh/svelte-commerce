@@ -380,8 +380,8 @@
 									})
 									productState.showReviewForm = false
 									toast.success('Review published! Thanks for sharing.')
-								} catch (error) {
-									toast.error('Could not post review. Try again?')
+								} catch (error: any) {
+									toast.error(error?.message || 'Could not post review. Try again?')
 								}
 							}}
 						>
