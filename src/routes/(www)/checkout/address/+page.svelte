@@ -419,8 +419,9 @@
 
 									{#if isPhoneOk && isEmailOk && cartState.cart.shippingAddress && !addressModule.editAddress}
 										<Button
-											class="ease-out-expo group w-full bg-primary py-7 text-sm font-bold uppercase tracking-[0.2em] shadow-lg transition-all duration-300 hover:bg-black hover:shadow-xl active:scale-[0.98] max-sm:fixed max-sm:bottom-0 max-sm:left-0 max-sm:right-0 max-sm:z-[60] max-sm:h-20 max-sm:rounded-none"
+											class="ease-out-expo group w-full bg-primary py-7 text-sm font-bold uppercase tracking-[0.2em] shadow-lg transition-all duration-300 hover:bg-black hover:shadow-xl active:scale-[0.98] max-sm:fixed max-sm:bottom-0 max-sm:left-0 max-sm:right-0 max-sm:z-[60] max-sm:h-20 max-sm:rounded-none disabled:bg-gray-400 disabled:opacity-100"
 											onclick={addressModule.handleProceedToPayment}
+											disabled={addressModule.loadingForCheckout}
 										>
 											{#if addressModule.loadingForCheckout}
 												<LoadingDots />
