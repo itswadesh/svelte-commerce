@@ -47,7 +47,7 @@
 
 <Nav />
 
-<div class="container relative flex min-h-screen flex-col overflow-hidden p-0 md:flex-row md:p-0">
+<div class="page-width relative flex min-h-screen flex-col overflow-hidden p-0 md:flex-row md:p-0">
 	<!-- Backdrop overlay for mobile -->
 	{#if isMobileMenuOpen}
 		<button class="fixed inset-0 z-20 bg-black/30 md:hidden" transition:fade={{ duration: 200 }} onclick={() => (isMobileMenuOpen = false)}>
@@ -57,16 +57,13 @@
 
 	<!-- Sidebar - Hidden on mobile unless menu is open -->
 	<aside
-		class="fixed left-0 top-0 z-30 h-full w-[80%] max-w-xs transform border-r border-gray-100 bg-white transition-all duration-300 ease-in-out md:sticky md:w-72 md:translate-x-0 {isMobileMenuOpen
+		class="fixed left-0 top-0 z-30 h-full w-[80%] max-w-xs transform  bg-white transition-all duration-300 ease-in-out md:sticky md:w-72 md:translate-x-0 {isMobileMenuOpen
 			? 'translate-x-0 shadow-2xl'
 			: '-translate-x-full md:shadow-none'}"
 		class:md:relative={true}
 	>
 		{#if isMobileMenuOpen || !isMobileMenuOpen}
 			<nav class="relative top-[5rem] space-y-2 p-6 pt-10 md:top-0 md:pt-12">
-				<div class="mb-10 px-4">
-					<p class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Account Menu</p>
-				</div>
 				{#each menuItems as { href, icon: Icon, label }, i}
 					<a
 						{href}
