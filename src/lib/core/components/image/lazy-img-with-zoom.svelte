@@ -96,7 +96,6 @@
 	{#if !loaded || error}
 		<div class="absolute inset-0 flex items-center justify-center bg-gray-50">
 			<!-- <ImageIcon class="h-8 w-8 text-gray-400" /> -->
-			<img class="animate-pulse" src="/images/emptyimage.png" alt="empty placeholder" />
 		</div>
 	{/if}
 
