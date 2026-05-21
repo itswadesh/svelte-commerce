@@ -23,7 +23,7 @@
 								<button
 									class="relative overflow-hidden border px-4 py-2 text-sm transition-colors hover:border-primary
                             {productState.selectedAggregations?.[optionName] === value
-										? 'border-black bg-secondary dark:border-white'
+										? 'border-black bg-primary text-primary-foreground dark:border-white'
 										: 'border-muted'}
                             {!productState.isAggregationAvaliable(optionName, value) ? 'bg-gray-200 text-gray-600' : ''}
                               "
