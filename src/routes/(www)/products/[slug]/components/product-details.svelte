@@ -24,7 +24,8 @@
 	const PUBLIC_LITEKART_DOMAIN = $derived(page.url.origin)
 
 	const productState = useProductState()
-	const data = $derived(page.data)
+  const data = $derived(page.data)
+
 </script>
 
 <SeoHeader
@@ -76,7 +77,7 @@
 						<ProductCartAndWishlistButtons />
 					</div>
 
-					{#if productState.isIndianPincodesPluginEnabled}
+					{#if productState.wareHousePluginEnabled && productState.isIndianPincodesPluginEnabled}
 						<div class="my-1 flex flex-col gap-3 border-t border-gray-100 pt-6">
 							<div class="flex items-center justify-start gap-3">
 								<Truck class="h-4 w-4 text-gray-900" />
