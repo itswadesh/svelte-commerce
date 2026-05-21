@@ -54,11 +54,11 @@
 
 <MyOrdersRenderer>
 	{#snippet content({ loading, orders })}
-		<div class="mx-auto max-w-5xl px-0 md:py-8 md:py-12">
+		<div class="mx-auto max-w-6xl px-0 md:py-8 md:py-12">
 			<!-- Header -->
 			<div class="mb-10">
-				<h1 class="text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">Order History</h1>
-				<p class="mt-2 text-lg text-gray-500">Check the status of recent orders and manage returns.</p>
+				<h1 class="text-lg font-bold tracking-tight text-gray-900 md:text-xl">Order History</h1>
+				<p class="mt-2 text-sm text-gray-500">Check the status of recent orders and manage returns.</p>
 			</div>
 
 			{#if loading}
@@ -97,17 +97,17 @@
 								<div class="flex flex-wrap items-center justify-between gap-6">
 									<div class="flex items-center gap-8">
 										<div>
-											<p class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">Order Number</p>
+											<p class="text-xs font-bold uppercase  text-gray-400">Order Number</p>
 											<p class="mt-1.5 text-sm font-bold text-gray-900">#{order.orderNo || '_'}</p>
 										</div>
 										<div class="h-10 w-px bg-gray-200"></div>
 										<div>
-											<p class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">Date Placed</p>
+											<p class="text-xs font-bold uppercase  text-gray-400">Date Placed</p>
 											<p class="mt-1.5 text-sm font-bold text-gray-900">{date(order.createdAt)}</p>
 										</div>
 										<div class="hidden h-10 w-px bg-gray-200 sm:block"></div>
 										<div class="hidden sm:block">
-											<p class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">Total Amount</p>
+											<p class="text-xs font-bold uppercase  text-gray-400">Total Amount</p>
 											<p class="mt-1.5 text-sm font-bold text-gray-900">
 												{formatPrice(
 													order.lineItems.reduce((acc: number, item: any) => acc + item.total, 0),
@@ -122,7 +122,7 @@
 											variant="outline"
 											size="sm"
 											href="/my/orders/{order.parentOrderNo}"
-											class="h-10 rounded-full border-gray-200 bg-white px-6 text-[10px] font-bold uppercase tracking-widest transition-all hover:border-black hover:bg-black hover:text-white active:scale-95"
+											class="h-10 rounded-md border-gray-200 bg-white px-6 text-xs font-bold uppercase transition-all "
 										>
 											View Details
 										</Button>
@@ -132,13 +132,13 @@
 								<!-- Status Badges Mobile/Small -->
 								<div class="mt-6 flex flex-wrap gap-3">
 									<span
-										class="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest {status.bg} {status.text} ring-1 ring-inset {status.ring}"
+										class="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[10px] font-bold uppercase  {status.bg} {status.text} ring-1 ring-inset {status.ring}"
 									>
 										<status.icon class="h-3.5 w-3.5" />
 										{order.status}
 									</span>
 									<span
-										class="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest {payment.bg} {payment.text} ring-1 ring-inset {payment.ring}"
+										class="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[10px] font-bold uppercase  {payment.bg} {payment.text} ring-1 ring-inset {payment.ring}"
 									>
 										<CreditCard class="h-3.5 w-3.5" />
 										Payment: {order.paymentStatus}
@@ -166,12 +166,12 @@
 										<div class="flex flex-1 flex-col">
 											<div class="flex items-start justify-between gap-4">
 												<div>
-													<h3 class="text-sm font-bold uppercase tracking-wider text-gray-900 md:text-base">
+													<h3 class="text-sm font-medium text-gray-900 md:text-base">
 														<a href="/my/orders/{order.parentOrderNo}" class="transition-colors hover:text-gray-500">
 															{item.title || '_'}
 														</a>
 													</h3>
-													<div class="mt-2 flex items-center gap-4 text-xs font-bold uppercase tracking-widest text-gray-400">
+													<div class="mt-2 flex items-center gap-4 text-xs font-bold uppercase text-gray-400">
 														<span class="flex items-center gap-1.5">
 															<Tag class="h-3.5 w-3.5" />
 															Qty: {item.qty || '_'}
