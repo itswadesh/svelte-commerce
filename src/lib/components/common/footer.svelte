@@ -8,6 +8,8 @@
 	import paypal from '$lib/assets/payment-methods/paypal.png'
 	import skrill from '$lib/assets/payment-methods/skrill.png'
 	import visa from '$lib/assets/payment-methods/visa.png'
+	import Newsletter from './newsletter.svelte'
+	import FooterMenu from './footer-menu.svelte'
 
 	let paymentMethodCards = [
 		{ src: masterCard, alt: 'Mastercard' },
@@ -134,48 +136,8 @@
 							</div>
 						{/if}
 					</div>
-					<div class="intra-gap grid grid-cols-2 sm:grid-cols-3">
-						<div>
-							<h1 class="text-black-200 text-lg font-semibold">Quick Links</h1>
-							<ul class="intra-pt">
-								<li>
-									<a href="/" class="text-sm text-gray-400 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-900">Home</a>
-								</li>
-								<li>
-									<a href="/products" class="text-sm text-gray-400 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-900"
-										>Products</a
-									>
-								</li>
-							</ul>
-						</div>
-						{#each footerMenu as item}
-							<div>
-								<h1 class="text-black-200 text-lg font-semibold">{item?.name}</h1>
-								{#if item?.items?.length > 0}
-									<ul class="intra-pt">
-										{#each item.items as child}
-											<li>
-												{#if child.link}
-													<a
-														href={child.link || '#'}
-														target="_blank"
-														class="text-sm text-gray-400 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-900"
-														rel="noopener noreferrer"
-													>
-														{child.name}
-													</a>
-												{:else}
-													<span class="text-sm text-gray-400">{child.name}</span>
-												{/if}
-											</li>
-										{/each}
-									</ul>
-								{:else}
-									<p class="text-sm text-gray-400">No links available</p>
-								{/if}
-							</div>
-						{/each}
-					</div>
+          <Newsletter />
+					<FooterMenu items={footerMenu} />
 				</div>
 				<div class="flex flex-col border-t py-4 sm:flex-row sm:items-center sm:justify-between">
 					<div class="flex w-full flex-col-reverse items-start justify-between gap-6 max-sm:mt-2 sm:flex-row sm:items-center sm:gap-0">
