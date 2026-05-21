@@ -17,8 +17,8 @@
 	<!-- Header -->
 	<div class="mb-10 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
 		<div>
-			<h1 class="text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">Your Addresses</h1>
-			<p class="mt-2 text-lg text-gray-500">Manage your shipping and billing addresses.</p>
+			<h1 class="text-lg font-bold tracking-tight text-gray-900 md:text-xl">Your Addresses</h1>
+			<p class="mt-2 text-sm text-gray-500">Manage your shipping and billing addresses.</p>
 		</div>
 		<Button onclick={addressesModule.handleAddNew} class="h-12 px-6 font-semibold shadow-lg transition-all hover:scale-105 active:scale-95">
 			<Plus class="mr-2 h-4 w-4" />
@@ -47,61 +47,48 @@
 				{#each addressesModule.addresses?.data as address, i (address.id)}
 					<div
 						in:fly={{ y: 20, duration: 400, delay: i * 50 }}
-						class="group relative flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white transition-all duration-300 hover:border-gray-200 hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)]"
+						class="group relative flex flex-col overflow-hidden rounded-md border border-gray-200 bg-white transition-all duration-300 hover:border-primary/30 hover:shadow-md"
 					>
-						<!-- Address Type Indicator -->
-						<div class="flex items-center justify-between border-b border-gray-100 bg-gray-50/30 p-5">
-							<div class="flex items-center gap-3">
-								<div
-									class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-gray-900 shadow-sm transition-transform group-hover:scale-110"
-								>
-									<Home class="h-4 w-4" />
-								</div>
-								<span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-900">Shipping Address</span>
-							</div>
-
-							<div class="flex items-center gap-1">
-								<Button
-									variant="ghost"
-									size="icon"
-									class="h-9 w-9 rounded-full transition-all hover:bg-white hover:text-black active:scale-90"
-									onclick={() => addressesModule.handleEdit(address)}
-								>
-									<Pencil class="h-3.5 w-3.5" />
-								</Button>
-								<Button
-									variant="ghost"
-									size="icon"
-									class="h-9 w-9 rounded-full transition-all hover:bg-white hover:text-red-500 active:scale-90"
-									onclick={() => addressesModule.handleDelete(address)}
-								>
-									<Trash2 class="h-3.5 w-3.5" />
-								</Button>
-							</div>
-						</div>
-
 						<!-- Address Details -->
-						<div class="flex flex-1 flex-col p-8">
-							<div class="mb-4">
-								<p class="text-base font-bold uppercase tracking-wider text-gray-900">{address.firstName} {address.lastName}</p>
+						<div class="flex flex-1 flex-col p-6 pb-4">
+							<div class="mb-4 flex items-start justify-between">
+								<div>
+									<p class="text-sm font-bold uppercase tracking-widest text-gray-900">{address.firstName} {address.lastName}</p>
+								</div>
 							</div>
 
 							<div class="space-y-1 text-sm font-medium leading-relaxed text-gray-500">
-								<p>{address.address_1}</p>
-								{#if address.address_2}
-									<p>{address.address_2}</p>
-								{/if}
+								<p>
+									{address.address_1}
+									{#if address.address_2}
+										, {address.address_2}
+									{/if}
+								</p>
 								<p class="text-gray-900">{address.city}, {address.state} {address.zip}</p>
+								<p>{address.country}</p>
 							</div>
 
-							<div class="mt-auto pt-8">
-								<div class="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-gray-400">
-									<div class="flex h-8 w-8 items-center justify-center rounded-full border border-gray-100 bg-gray-50/50">
-										<Phone class="h-3.5 w-3.5" />
-									</div>
-									{address.phone}
-								</div>
+							<div class="mt-6 flex items-center gap-2 text-xs font-bold text-gray-400">
+								<Phone class="h-3.5 w-3.5" />
+								{address.phone}
 							</div>
+						</div>
+
+						<div class="flex border-t border-gray-100">
+							<button
+								onclick={() => addressesModule.handleEdit(address)}
+								class="flex flex-1 items-center justify-center gap-2 py-3 text-[10px] font-bold uppercase tracking-widest text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-900 border-r border-gray-100"
+							>
+								<Pencil class="h-3 w-3" />
+								Edit
+							</button>
+							<button
+								onclick={() => addressesModule.handleDelete(address)}
+								class="flex flex-1 items-center justify-center gap-2 py-3 text-[10px] font-bold uppercase tracking-widest text-gray-500 transition-colors hover:bg-red-50 hover:text-red-600"
+							>
+								<Trash2 class="h-3 w-3" />
+								Delete
+							</button>
 						</div>
 					</div>
 				{/each}
