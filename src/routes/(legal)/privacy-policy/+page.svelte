@@ -1,12 +1,12 @@
 <script lang="ts">
-	import type { Page } from '$lib/core/types'
+	import type { Page } from '$lib/core/types/index.js'
 
 	interface Props {
 		data: {
 			page: Page
 		}
 	}
-	let { data }: Props = $props()
+	const { data }: Props = $props()
 </script>
 
 <svelte:head>

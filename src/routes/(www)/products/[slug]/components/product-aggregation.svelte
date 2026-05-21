@@ -6,8 +6,8 @@
 	const productState = useProductState()
 </script>
 
-<div class="">
-	{#if page.data?.product?.ag && Object.keys(page.data?.product?.ag).length}
+{#if page.data?.product?.ag && Object.keys(page.data?.product?.ag).length}
+	<div class="">
 		<div class="intra-gap flex items-center">
 			<span class="text-sm text-gray-500">Select Options</span>
 			<ChartNoAxesGanttIcon class="h-3 w-3" />
@@ -37,5 +37,5 @@
 				{/if}
 			{/each}
 		</div>
-	{/if}
-</div>
+	</div>
+{/if}
