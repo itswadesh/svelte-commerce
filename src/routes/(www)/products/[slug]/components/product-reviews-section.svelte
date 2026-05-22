@@ -51,7 +51,7 @@
 									{#each { length: 5 } as _, i}
 										<Star
 											fill={i < Math.floor(accRating) ? 'currentColor' : 'none'}
-											class="h-5 w-5 {i < Math.floor(accRating) ? 'text-primary' : 'text-muted'}"
+											class="h-5 w-5 {i < Math.floor(accRating) ? 'text-primary' : 'text-muted-foreground'}"
 										/>
 									{/each}
 								</div>
@@ -87,18 +87,8 @@
 						</div>
 
 						<div class="space-y-4">
-							<!-- <div class="flex items-center gap-3 rounded-xl bg-blue-50/50 p-4 ring-1 ring-blue-100/50">
-								<div class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600">
-									<Check class="h-5 w-5" />
-								</div>
-								<div>
-									<p class="text-sm font-bold text-blue-900">Verified Purchases Only</p>
-									<p class="text-xs text-blue-700">Only customers who bought this can review</p>
-								</div>
-							</div> -->
-
 							<Button
-								class="h-12 w-full bg-primary text-base font-bold text-primary-foreground shadow-lg"
+								class="h-12 w-full"
 								onclick={() => (productState.showReviewForm = true)}
 							>
 								Write a Review
@@ -163,7 +153,7 @@
 										</div>
 										<div class="flex w-fit items-center gap-0.5 rounded-full bg-muted/50 px-2.5 py-1 ring-1 ring-border sm:px-3 sm:py-1.5">
 											{#each { length: 5 } as _, i}
-												<StarIcon class="h-3 w-3 {i <= rating.rating ? 'fill-primary text-primary' : 'text-muted'} sm:h-3.5 sm:w-3.5" />
+												<StarIcon class="h-3 w-3 {i <= rating.rating ? 'fill-primary text-primary' : 'text-muted-foreground'} sm:h-3.5 sm:w-3.5" />
 											{/each}
 										</div>
 									</div>
@@ -211,7 +201,7 @@
 										</div>
 										<div class="flex w-fit items-center gap-0.5 rounded-full bg-muted/50 px-2.5 py-1 ring-1 ring-border sm:px-3 sm:py-1.5">
 											{#each { length: 5 } as _, i}
-												<StarIcon class="h-3 w-3 {rating.rating >= i ? 'fill-primary text-primary' : 'text-muted'} sm:h-3.5 sm:w-3.5" />
+												<StarIcon class="h-3 w-3 {rating.rating >= i ? 'fill-primary text-primary' : 'text-muted-foreground'} sm:h-3.5 sm:w-3.5" />
 											{/each}
 										</div>
 									</div>
@@ -243,7 +233,7 @@
 					Be the first to share your thoughts on this product and help other shoppers.
 				</p>
 				<Button
-					class="h-12 rounded-md bg-primary px-6 text-base font-bold text-primary-foreground shadow-xl transition-all sm:h-14 sm:px-8 sm:text-lg"
+					class="h-12 sm:h-14 px-8 sm:px-8"
 					onclick={() => (productState.showReviewForm = true)}
 				>
 					Write the First Review
@@ -267,12 +257,14 @@
 						<h3 class="text-xl font-black tracking-tight text-foreground sm:text-2xl">Write a Review</h3>
 						<p class="text-xs font-medium text-muted-foreground sm:text-sm">Share your experience with us</p>
 					</div>
-					<button
+					<Button
+						variant="ghost"
+						size="icon"
 						onclick={() => (productState.showReviewForm = false)}
-						class="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground transition-all hover:bg-destructive/10 hover:text-destructive"
+						class="rounded-full"
 					>
 						<X class="h-6 w-6" />
-					</button>
+					</Button>
 				</div>
 
 				<!-- Modal Body -->
@@ -284,19 +276,19 @@
 							<div class="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
 								<div class="flex items-center gap-1">
 									{#each { length: 5 } as _, i}
-										<button
-											type="button"
-											class="group relative p-1 focus:outline-none"
+										<Button
+											variant="plain"
+											class="h-12 w-12 p-0"
 											onclick={() => productState.onSelect(i + 1)}
 										>
 											<Star
 												fill={productState.select !== null && productState.select >= i + 1 ? 'currentColor' : 'none'}
 												strokeWidth={1.5}
-												class="h-10 w-10 transition-colors {productState.select !== null && productState.select >= i + 1
+												class="!h-10 !w-10 transition-colors {productState.select !== null && productState.select >= i + 1
 													? 'text-primary'
-													: 'text-muted'} sm:h-12 sm:w-12"
+													: 'text-muted-foreground'} sm:!h-12 sm:!w-12"
 											/>
-										</button>
+										</Button>
 									{/each}
 								</div>
 
@@ -334,15 +326,16 @@
 				<!-- Modal Footer -->
 				<div class="border-t border-border bg-background/80 px-6 py-4 backdrop-blur-md sm:px-8 sm:py-6">
 					<div class="flex items-center justify-end gap-3 sm:gap-4">
-						<button
+						<Button
+							variant="ghost"
 							onclick={() => (productState.showReviewForm = false)}
-							class="h-10 px-4 text-xs font-bold text-muted-foreground hover:bg-muted sm:h-12 sm:px-6 sm:text-sm"
+							class="h-10 sm:h-12 px-4 sm:px-6"
 						>
 							Discard
-						</button>
+						</Button>
 						<Button
 							disabled={productState.select === null || !productState.reviewMessage}
-							class="h-10 bg-primary px-6 text-xs font-black text-primary-foreground shadow-xl transition-all disabled:opacity-30 sm:h-12 sm:px-10 sm:text-sm"
+							class="h-10 sm:h-12 px-6 sm:px-10"
 							onclick={async () => {
 								try {
 									await productService.addReview({

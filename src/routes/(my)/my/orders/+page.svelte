@@ -76,7 +76,7 @@
 					<h2 class="text-2xl font-bold text-gray-900">No orders yet</h2>
 					<p class="mt-2 max-w-xs text-gray-500">Looks like you haven't placed any orders yet. Start shopping to see your history here.</p>
 					<div class="mt-8">
-						<Button href="/products" class="h-12 px-8 font-semibold shadow-lg transition-all hover:scale-105 active:scale-95">
+						<Button href="/products" class="h-12 px-8">
 							Start Shopping
 							<ArrowRight class="ml-2 h-4 w-4" />
 						</Button>
@@ -122,7 +122,7 @@
 											variant="outline"
 											size="sm"
 											href="/my/orders/{order.parentOrderNo}"
-											class="h-10 rounded-md border-gray-200 bg-white px-6 text-xs font-bold uppercase transition-all "
+											class="h-10 px-6"
 										>
 											View Details
 										</Button>
