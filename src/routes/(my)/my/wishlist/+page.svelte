@@ -55,6 +55,7 @@
 			{:else}
 				<div class="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4 lg:gap-8">
 					{#each wishlistItems as item, i}
+				
 						<div
 							in:fly={{ y: 20, duration: 400, delay: i * 50 }}
 							class="group relative flex w-full flex-col overflow-hidden bg-white transition-all duration-300 dark:bg-gray-800"
@@ -73,23 +74,12 @@
 							</a>
 
 							<!-- Product Info -->
-							<div class="flex flex-col pt-[7.5px] lg:pt-3">
-								<div class="flex items-center justify-between">
+							<div class="flex flex-col pt-9 lg:pt-3">
+								<!-- <div class="flex items-center">
 									<span class="truncate text-xs font-bold capitalize text-gray-500 lg:text-sm">
 										{item?.product?.brand?.name || page.data?.store?.name}
 									</span>
-									<button
-										class="text-gray-400 transition-colors hover:text-red-500"
-										onclick={(e) => {
-											e.preventDefault()
-											e.stopPropagation()
-											removeFromWishlist(item?.productId, item?.variantId)
-										}}
-										title="Remove from wishlist"
-									>
-										<Trash2 class="size-4" />
-									</button>
-								</div>
+								</div> -->
 
 								<a href="/products/{item?.product?.slug}?variant_id={item.variantId}" class="block overflow-hidden">
 									<span class="block w-[90%] truncate text-xs text-gray-600 lg:text-sm" title={item?.product?.title}>
@@ -112,18 +102,31 @@
 								</div>
 
 								<!-- Actions -->
-								<div class="mt-3">
+								<div class="mt-3 flex items-center gap-2">
+									<Button
+										variant="outline"
+										class="aspect-square h-10 w-[20%] p-0 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-500 md:h-11"
+										onclick={(e) => {
+											e.preventDefault()
+											e.stopPropagation()
+											removeFromWishlist(item?.productId, item?.variantId)
+										}}
+										title="Remove from wishlist"
+									>
+										<Trash2 class="size-4" />
+									</Button>
+
 									<Button
 										variant="default"
-										class="w-full py-5 text-[10px] font-bold uppercase tracking-widest text-white bg-primary"
+										class="h-10 w-[80%] text-[10px] font-bold uppercase 	 text-white bg-primary md:h-11"
 										onclick={async (e) => {
 											e.preventDefault()
 											e.stopPropagation()
 											await moveToCart(item)
-                      toast("Item added to cart", "success")
+											toast('Item added to cart', 'success')
 										}}
 									>
-										<ShoppingBag class=" h-4 w-4" />
+										<!-- <ShoppingBag class="h-4 w-4" /> -->
 										Add to Cart
 									</Button>
 								</div>
