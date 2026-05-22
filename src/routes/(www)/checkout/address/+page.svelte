@@ -418,13 +418,13 @@
 										<p class="text-[10px] font-bold uppercase tracking-widest text-gray-500">Secure 256-bit encryption</p>
 									</div>
 
-									{#if isPhoneOk && isEmailOk && cartState.cart.shippingAddress && !addressModule.editAddress}
-										<CheckoutButton
-											text="Continue to Payment"
-											onclick={addressModule.handleProceedToPayment}
-											loading={addressModule.loadingForCheckout}
-										/>
-									{/if}
+									<CheckoutButton
+										text="Continue to Payment"
+										disabledText="Select Address"
+										disabled={!(isPhoneOk && isEmailOk && cartState.cart.shippingAddress && !addressModule.editAddress)}
+										onclick={addressModule.handleProceedToPayment}
+										loading={addressModule.loadingForCheckout}
+									/>
 								</div>
 							{/if}
 						</div>
