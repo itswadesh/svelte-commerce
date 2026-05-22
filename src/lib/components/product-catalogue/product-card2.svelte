@@ -17,12 +17,13 @@
 <ProductCardRenderer {product} {aspectRatio}>
 	{console.log(product.thumbnail || product?.image_url)}
 	{#snippet content({ aspectHeight, aspectWidth, handleCardClick, changeQuantity, addToCart })}
-		<button
+		<Button
+			variant="ghost"
 			onclick={handleCardClick}
 			class="aspect-[{page?.data?.store?.productImageAspectRatio?.replace(
 				':',
 				'/'
-			)}] group mb-4 flex w-full flex-col justify-start overflow-hidden rounded-lg border-none bg-white shadow-none transition-all duration-300 dark:bg-gray-800 dark:text-white"
+			)}] mb-4 flex w-full flex-col justify-start overflow-hidden border-none bg-white p-0 h-auto rounded-md hover:bg-transparent"
 			aria-label="Product card for {product.name}"
 		>
 			<div class="group relative flex h-full w-full overflow-hidden bg-gray-50 dark:bg-gray-900">
@@ -61,7 +62,7 @@
 								disabled={!!cartState.isUpdatingCart}
 								variant="outline"
 								size="icon"
-								class="w-full rounded-none border-gray-200 bg-white/90 p-0 text-xs backdrop-blur-sm transition-colors hover:bg-white dark:border-gray-500"
+								class="w-full rounded-none border-gray-200 bg-white/90 p-0 text-xs backdrop-blur-sm"
 								onclick={() => changeQuantity(product, -1)}
 								aria-label="Decrease quantity of {product.name}"
 							>
@@ -80,7 +81,7 @@
 								disabled={!!cartState.isUpdatingCart}
 								variant="outline"
 								size="icon"
-								class="w-full rounded-none border-gray-200 bg-white/90 p-0 text-xs backdrop-blur-sm transition-colors hover:bg-white dark:border-gray-500"
+								class="w-full rounded-none border-gray-200 bg-white/90 p-0 text-xs backdrop-blur-sm"
 								onclick={() => changeQuantity(product, 1)}
 								aria-label="Increase quantity of {product.name}"
 							>
@@ -90,7 +91,7 @@
 							<Button
 								disabled={!!cartState.isUpdatingCart}
 								variant="default"
-								class="ease-out-expo w-full rounded-none bg-gray-900 py-6 text-xs font-bold uppercase tracking-widest text-white transition-all duration-300 hover:bg-primary active:scale-95"
+								class="w-full rounded-none py-6"
 								onclick={() => addToCart(product)}
 							>
 								{#if cartState.isUpdatingCart}
@@ -149,7 +150,7 @@
 					</div>
 				{/if}
 			</div>
-		</button>
+		</Button>
 	{/snippet}
 </ProductCardRenderer>
 

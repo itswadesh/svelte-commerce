@@ -33,13 +33,14 @@
 		<!-- Checkout Progress -->
 		<div class="mb-8">
 			<div class="flex items-center justify-center space-x-4 sm:space-x-12">
-				<button
+				<Button
+					variant="ghost"
 					onclick={() => goto(appendOneTimeCartId('/checkout/cart'))}
-					class="flex items-center text-gray-400 transition-colors hover:text-gray-900"
+					class="flex h-auto items-center"
 				>
 					<div class="flex h-7 w-7 items-center justify-center rounded-full border border-gray-200 text-[11px] font-bold tracking-tight">1</div>
 					<span class="ml-2 text-xs font-bold uppercase tracking-widest">Cart</span>
-				</button>
+				</Button>
 				<div class="h-px w-8 bg-gray-200 sm:w-16"></div>
 				<div class="flex items-center text-primary">
 					<div class="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-[11px] font-bold tracking-tight text-white">2</div>
@@ -86,14 +87,15 @@
 						{#await userState.hasLoaded then _}
 							{#if (!isPhoneOk || !isEmailOk) && !userState.user?.userId}
 								<p class="text-sm text-gray-600">
-									<button
-										class="cursor-pointer font-bold text-primary hover:underline"
+									<Button
+										variant="link"
+										class="h-auto p-0"
 										onclick={() => {
 											showAuthModal('login')
 										}}
 									>
 										Login
-									</button> to autofill your details
+									</Button> to autofill your details
 								</p>
 							{/if}
 						{/await}
@@ -109,7 +111,7 @@
 										onclick={addressModule.handleEditEmail}
 										variant="ghost"
 										size="sm"
-										class="h-8 text-[10px] font-bold uppercase tracking-widest text-primary transition-all hover:bg-primary/5 active:scale-95"
+										class="h-8"
 									>
 										<Pencil class="mr-1.5 h-3 w-3" />
 										<span>Edit</span>
@@ -164,12 +166,11 @@
 												variant="outline"
 												onclick={() => (addressModule.editEmail = false)}
 												type="button"
-												class="transition-transform active:scale-95"
 											>
 												Cancel
 											</Button>
 										{/if}
-										<Button type="submit" disabled={cartState.isUpdatingCart} class="min-w-[120px] transition-all active:scale-95">
+										<Button type="submit" disabled={cartState.isUpdatingCart} class="min-w-[120px]">
 											{#if cartState.isUpdatingCart}
 												<LoadingDots />
 											{:else}
@@ -201,7 +202,7 @@
 														}
 													}}
 													variant="ghost"
-													class="h-8 text-[10px] font-bold uppercase tracking-widest"
+													class="h-8"
 												>
 													Change
 												</Button>
@@ -248,12 +249,13 @@
 											</h2>
 
 											{#if !userState?.user?.role}
-												<button
+												<Button
+													variant="link"
 													onclick={() => showAuthModal('login')}
-													class="text-left text-[10px] font-bold uppercase tracking-widest text-primary transition-all hover:underline active:scale-95"
+													class="h-auto p-0"
 												>
 													Login to view saved addresses
-												</button>
+												</Button>
 											{/if}
 										</div>
 										<form class="">
@@ -267,7 +269,7 @@
 													<Button
 														type="button"
 														variant="default"
-														class="bg-primary px-8 text-[10px] font-bold uppercase tracking-widest transition-all hover:bg-black active:scale-95"
+														class="px-8"
 														onclick={addressModule.handleAddNewAddress}>Add New Address</Button
 													>
 												</div>
@@ -288,7 +290,7 @@
 												<Button
 													onclick={addressModule.handleBilingAddOrChangeClick}
 													variant="ghost"
-													class="h-8 text-[10px] font-bold uppercase tracking-widest text-primary transition-all hover:bg-primary/5 active:scale-95"
+													class="h-8"
 												>
 													{#if cartState.cart.billingAddress?.address_1}
 														Change

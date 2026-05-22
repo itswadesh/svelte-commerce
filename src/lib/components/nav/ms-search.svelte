@@ -38,7 +38,7 @@
 		handleKeyDown,
 		handleResultClick
 	})}
-		<button class="flex rounded-full" aria-label="Toggle Cart" onclick={showSearch}>
+		<button variant="ghost" size="icon" class="flex rounded-full" aria-label="Toggle Cart" onclick={showSearch}>
 			<Search class="h-5 w-5" />
 		</button>
 
@@ -74,16 +74,18 @@
 								autofocus
 								onkeydown={handleKeyDown}
 							/>
-							<button
+							<Button
+								variant="ghost"
+								size="icon"
 								onclick={() => {
 									closeSearch()
 									handleCloseSearch()
 								}}
-								class="rounded-full p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+								class="rounded-full text-gray-400 hover:text-gray-600"
 								aria-label="Close search"
 							>
 								<X class="h-5 w-5" />
-							</button>
+							</Button>
 						</div>
 
 						<!-- Search Results -->
@@ -98,8 +100,9 @@
 								<ul class="space-y-1">
 									{#each searchResults as result}
 										<li>
-											<button
-												class="flex w-full items-center gap-4 p-3 text-left transition-all hover:bg-gray-50 active:bg-gray-100"
+											<Button
+												variant="ghost"
+												class="flex w-full h-auto items-center justify-start gap-4 p-3 text-left"
 												onclick={() => {
 													handleResultClick(result)
 													handleCloseSearch()
@@ -114,7 +117,7 @@
 														</div>
 													{/if}
 												</div>
-												<div class="min-w-0 flex-1">
+												<div class="min-w-0 flex-1 text-left">
 													<p class="truncate font-semibold text-gray-900">
 														{result.name || result.title}
 													</p>
@@ -125,7 +128,7 @@
 													{/if}
 												</div>
 												<ArrowUpRight class="h-5 w-5 text-gray-300" />
-											</button>
+											</Button>
 										</li>
 									{/each}
 								</ul>

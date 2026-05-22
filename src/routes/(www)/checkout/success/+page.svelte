@@ -190,16 +190,16 @@
 				<div class="flex flex-col gap-4 sm:flex-row">
 					<Button
 						href="/products"
-						class="group order-1 h-14 flex-1 text-base font-semibold transition-all duration-300 sm:order-2"
+						class="group order-1 h-14 flex-1 sm:order-2"
 					>
 						Continue Shopping
-						<ArrowRight class="ml-2 h-4 w-4 transition-transform duration-300" />
+						<ArrowRight class="ml-2 h-4 w-4" />
 					</Button>
 					{#if userState?.user?.role}
 						<Button
 							variant="outline"
 							href="/my/orders"
-							class="order-2 h-14 flex-1 text-base font-semibold transition-all duration-300 hover:bg-gray-50 sm:order-1"
+							class="order-2 h-14 flex-1 sm:order-1"
 						>
 							Track My Order
 						</Button>

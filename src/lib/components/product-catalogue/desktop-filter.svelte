@@ -7,6 +7,7 @@
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte'
 	import { GetColorName } from 'hex-color-to-color-name'
 	import { getDesktopFilterState } from '$lib/core/composables/index.js'
+	import { Button } from '$lib/components/ui/button'
 
 	type FilterProps = {
 		class?: string
@@ -26,17 +27,19 @@
 		)}
 		style={`height: ${browser ? window?.innerHeight - (filterState.containerTop || 0) : 'auto'}px`}
 	>
-		<div class="flex justify-between">
+		<div class="flex justify-between items-center">
 			<p class="text-lg font-bold">Filters</p>
 
 			{#if filterState.anyFilterApplied}
-				<button
-					class="flex items-center justify-center gap-1 text-[10px] font-bold uppercase tracking-widest text-primary hover:underline"
+				<Button
+					variant="link"
+					size="sm"
+					class="h-auto p-0"
 					onclick={filterState.clearFilters}
 				>
-					<X class="h-3 w-3" />
+					<X class="h-3 w-3 mr-1" />
 					Clear
-				</button>
+				</Button>
 			{/if}
 		</div>
 
@@ -84,22 +87,25 @@
 						onkeydown={filterState.handleCategorySearchKeyDown}
 						autofocus
 					/>
-					<button
-						class="absolute right-2 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+					<Button
+						variant="ghost"
+						size="icon"
+						class="absolute right-2 top-1/2 h-6 w-6 -translate-y-1/2 rounded-full"
 						onclick={() => filterState.toggleCategorySearch()}
 					>
 						<X class="h-4 w-4" />
 						<span class="sr-only">Close search</span>
-					</button>
+					</Button>
 				</div>
 			{:else}
 				<div class="flex items-center justify-between">
 					<p class="text-sm font-bold uppercase text-gray-900" in:fade={{ duration: 200, delay: 200 }}>Categories</p>
-					<button
-						class="flex w-8 items-center justify-center rounded-full text-gray-500 transition-all duration-200 hover:bg-gray-100 hover:text-gray-700"
+					<Button
+						variant="ghost"
+						size="icon"
+						class="rounded-full h-8 w-8"
 						onclick={() => filterState.toggleCategorySearch()}
 						aria-label="Toggle category search"
-						in:fade={{ duration: 500 }}
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -117,7 +123,7 @@
 							<path d="m21 21-4.3-4.3"></path>
 						</svg>
 						<span class="sr-only">Search</span>
-					</button>
+					</Button>
 				</div>
 			{/if}
 
@@ -126,7 +132,11 @@
 					{@const categoriesToShow = filterState.filteredCategories.slice(0, 5)}
 					{#each categoriesToShow as category}
 						{@const formattedCategoryName = filterState.formatFilterOptionName(category.name)}
-						<button class="group flex flex-row items-center gap-2 text-start" onclick={() => filterState.handleCategoryClick(category)}>
+						<Button
+							variant="ghost"
+							class="group flex flex-row items-center justify-start gap-2 h-auto py-1 px-0 hover:bg-transparent"
+							onclick={() => filterState.handleCategoryClick(category)}
+						>
 							{#if category.thumbnail}
 								<img
 									src={category.thumbnail}
@@ -135,17 +145,26 @@
 								/>
 							{/if}
 							<span class="flex-1 py-0.5 capitalize text-gray-600 transition-colors group-hover:text-primary">{formattedCategoryName}</span>
-						</button>
+						</Button>
 					{/each}
 					{#if filterState.filteredCategories.length > 5}
-						<button class="mt-1 text-left text-xs font-bold uppercase text-primary hover:underline" onclick={filterState.toggleShowMoreCategories}>
+						<Button
+							variant="link"
+							size="sm"
+							class="mt-1 h-auto p-0 justify-start"
+							onclick={filterState.toggleShowMoreCategories}
+						>
 							+ {filterState.filteredCategories.length - 5} more
-						</button>
+						</Button>
 					{/if}
 				{:else}
 					{#each filterState.filteredCategories as category}
 						{@const formattedCategoryName = filterState.formatFilterOptionName(category.name)}
-						<button class="group flex flex-row items-center gap-3 text-start" onclick={() => filterState.handleCategoryClick(category)}>
+						<Button
+							variant="ghost"
+							class="group flex flex-row items-center justify-start gap-3 h-auto py-1 px-0 hover:bg-transparent"
+							onclick={() => filterState.handleCategoryClick(category)}
+						>
 							{#if category.thumbnail}
 								<img
 									src={category.thumbnail}
@@ -154,11 +173,16 @@
 								/>
 							{/if}
 							<span class="flex-1 py-0.5 capitalize text-gray-600 transition-colors group-hover:text-primary">{formattedCategoryName}</span>
-						</button>
+						</Button>
 					{/each}
-					<button class="mt-1 text-left text-sm font-bold uppercase text-primary hover:underline" onclick={filterState.toggleShowMoreCategories}>
+					<Button
+						variant="link"
+						size="sm"
+						class="mt-1 h-auto p-0 justify-start"
+						onclick={filterState.toggleShowMoreCategories}
+					>
 						Show less
-					</button>
+					</Button>
 				{/if}
 			</div>
 		{/if}
@@ -177,21 +201,24 @@
 						onkeydown={filterState.handleTagSearchKeyDown}
 						autofocus
 					/>
-					<button
-						class="absolute right-2 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+					<Button
+						variant="ghost"
+						size="icon"
+						class="absolute right-2 top-1/2 h-6 w-6 -translate-y-1/2 rounded-full"
 						onclick={() => filterState.toggleTagSearch()}
 					>
 						<X class="h-4 w-4" />
 						<span class="sr-only">Close search</span>
-					</button>
+					</Button>
 				</div>
 			{:else}
 				<div class="flex items-center justify-between">
 					<p class="text-sm font-bold uppercase text-gray-900" in:fade={{ duration: 200, delay: 200 }}>Tags</p>
-					<button
+					<Button
 						class="flex w-8 items-center justify-center rounded-full text-gray-500 transition-all duration-200 hover:bg-gray-100 hover:text-gray-700"
+						variant="ghost"
+						size="icon"
 						onclick={() => filterState.toggleTagSearch()}
-						in:fade={{ duration: 500 }}
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -209,7 +236,7 @@
 							<path d="m21 21-4.3-4.3"></path>
 						</svg>
 						<span class="sr-only">Search</span>
-					</button>
+					</Button>
 				</div>
 			{/if}
 
@@ -232,9 +259,14 @@
 						</div>
 					{/each}
 					{#if filterState.filteredTags.length > 5}
-						<button class="mt-1 text-left text-sm font-bold uppercase text-primary hover:underline" onclick={filterState.toggleShowMoreTags}>
+						<Button
+							variant="link"
+							size="sm"
+							class="mt-1 h-auto p-0 justify-start"
+							onclick={filterState.toggleShowMoreTags}
+						>
 							+ {filterState.filteredTags.length - 5} more
-						</button>
+						</Button>
 					{/if}
 				{:else}
 					{#each filterState.filteredTags as tag}
@@ -252,9 +284,14 @@
 							>
 						</div>
 					{/each}
-					<button class="mt-1 text-left text-sm font-bold uppercase text-primary hover:underline" onclick={filterState.toggleShowMoreTags}>
+					<Button
+						variant="link"
+						size="sm"
+						class="mt-1 h-auto p-0 justify-start"
+						onclick={filterState.toggleShowMoreTags}
+					>
 						Show less
-					</button>
+					</Button>
 				{/if}
 			</div>
 
@@ -334,14 +371,16 @@
 								</div>
 							{/each}
 							{#if filterState.processedFilters[key].length > 3}
-								<button
-									class="mt-1 text-left text-xs font-bold uppercase tracking-widest text-primary hover:underline"
+								<Button
+									variant="link"
+									size="sm"
+									class="mt-1 h-auto p-0 justify-start"
 									onclick={() => {
 										filterState.showMoreGeneralFilters[idx] = true
 									}}
 								>
 									+ {filterState.processedFilters[key].length - 3} more
-								</button>
+								</Button>
 							{/if}
 						{:else}
 							{#each filterState.processedFilters[key] as value}
@@ -365,14 +404,16 @@
 									</label>
 								</div>
 							{/each}
-							<button
-								class="mt-1 text-left text-xs font-bold uppercase tracking-widest text-primary hover:underline"
+							<Button
+								variant="link"
+								size="sm"
+								class="mt-1 h-auto p-0 justify-start"
 								onclick={() => {
 									filterState.showMoreGeneralFilters[idx] = false
 								}}
 							>
 								Show less
-							</button>
+							</Button>
 						{/if}
 					</div>
 				</div>

@@ -4,6 +4,7 @@
 	import type { WithElementRef } from 'bits-ui'
 	import type { HTMLAttributes } from 'svelte/elements'
 	import { ModalRenderer } from '$lib/core/composables/index.js'
+	import { Button } from '$lib/components/ui/button'
 
 	type ModalProps = {
 		confirmButtonText?: string
@@ -72,13 +73,13 @@
 								<div class="flex flex-row gap-3">
 									{#if confirmButtonPosition === 'top'}
 										<div class="flex items-center justify-end gap-2">
-											<button type="submit" onclick={handleSubmit} disabled={disableSubmitButton} class="min-w-40 whitespace-nowrap rounded-full">
+											<Button type="submit" onclick={handleSubmit} disabled={disableSubmitButton} class="min-w-40">
 												{confirmButtonText}
-											</button>
+											</Button>
 										</div>
 									{/if}
 
-									<button aria-label="Close modal button" type="button" onclick={handleClose}>
+									<Button variant="ghost" size="icon" aria-label="Close modal button" type="button" onclick={handleClose}>
 										<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
 											<path
 												fill-rule="evenodd"
@@ -86,7 +87,7 @@
 												clip-rule="evenodd"
 											></path>
 										</svg>
-									</button>
+									</Button>
 								</div>
 							</Card.Header>
 						{/if}
@@ -99,9 +100,9 @@
 							{#if !hideFooter}
 								{#if confirmButtonPosition === 'bottom'}
 									<div class="flex items-center justify-end gap-2 border-t p-4">
-										<button type="submit" disabled={disableSubmitButton} class="whitespace-nowrap text-xs">
+										<Button type="submit" disabled={disableSubmitButton}>
 											{confirmButtonText}
-										</button>
+										</Button>
 									</div>
 								{/if}
 							{/if}

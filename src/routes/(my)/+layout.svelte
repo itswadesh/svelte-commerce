@@ -4,6 +4,7 @@
 	import Footer from '$lib/components/common/footer.svelte'
 	import Nav from '$lib/components/nav/nav.svelte'
 	import { Home, Package, Users, Menu, MapPinHouse, X, Heart } from '@lucide/svelte'
+	import { Button } from '$lib/components/ui/button'
 	import type { Snippet } from 'svelte'
 	import Breadcrumb from '$lib/components/ui/breadcrumb-route.svelte'
 	import { StorePlugins } from '$lib/core/components/index.js'
@@ -50,9 +51,15 @@
 <div class="page-width relative flex min-h-screen flex-col overflow-hidden p-0 md:flex-row md:p-0">
 	<!-- Backdrop overlay for mobile -->
 	{#if isMobileMenuOpen}
-		<button class="fixed inset-0 z-20 bg-black/30 md:hidden" transition:fade={{ duration: 200 }} onclick={() => (isMobileMenuOpen = false)}>
-			<span class="sr-only">Close menu</span>
-		</button>
+		<div transition:fade={{ duration: 200 }} class="fixed inset-0 z-20 md:hidden">
+			<Button
+				variant="ghost"
+				class="h-full w-full rounded-none bg-black/30 p-0 hover:bg-black/30"
+				onclick={() => (isMobileMenuOpen = false)}
+			>
+				<span class="sr-only">Close menu</span>
+			</Button>
+		</div>
 	{/if}
 
 	<!-- Sidebar - Hidden on mobile unless menu is open -->
@@ -65,19 +72,16 @@
 		{#if isMobileMenuOpen || !isMobileMenuOpen}
 			<nav class="relative top-[5rem] space-y-2 p-6 pt-10 md:top-0 md:pt-12">
 				{#each menuItems as { href, icon: Icon, label }, i}
-					<a
+					{@const isActive = page.url.pathname === href || (page.url.pathname.startsWith(href) && href !== '/my')}
+					<Button
 						{href}
-						class="group flex items-center rounded-sm px-4 py-3.5 text-sm font-bold tracking-tight transition-all duration-300 {page.url.pathname ===
-							href ||
-						(page.url.pathname.startsWith(href) && href !== '/my')
-							? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20'
-							: 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'}"
+						variant={isActive ? 'default' : 'ghost'}
+						class="w-full justify-start"
 						onclick={() => (isMobileMenuOpen = false)}
-						in:fly={{ y: 20, x: -20, delay: 100 + i * 50, duration: 200, easing: quintOut }}
 					>
-						<Icon class="mr-4 h-5 w-5 transition-transform group-hover:scale-110" />
+						<Icon class="mr-4 h-5 w-5" />
 						{label}
-					</a>
+					</Button>
 				{/each}
 			</nav>
 		{/if}
@@ -87,8 +91,10 @@
 	<main class="flex-1 overflow-y-auto px-4 md:px-6">
 		<div class="mb-4 block flex justify-start items-center max-md:flex max-md:gap-2">
 			<!-- Mobile menu button -->
-			<button
-				class="inline-flex items-center justify-center p-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary md:hidden"
+			<Button
+				variant="ghost"
+				size="icon"
+				class="md:hidden"
 				onclick={() => (isMobileMenuOpen = !isMobileMenuOpen)}
 			>
 				{#if isMobileMenuOpen}
@@ -96,8 +102,7 @@
 				{:else}
 					<Menu class="h-4 w-4" />
 				{/if}
-				<!-- <span class="ml-2 text-lg font-semibold">Menu</span> -->
-			</button>
+			</Button>
 			<div class="md:hidden">
 			<Breadcrumb items={breadcrumbItems} />
 			</div>

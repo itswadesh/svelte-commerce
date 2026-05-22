@@ -20,6 +20,7 @@
 	import RelatedProducts from './related-products.svelte'
 	import StoreCheck from './store-check.svelte'
 	import { page } from '$app/state'
+	import { Button } from '$lib/components/ui/button'
 	//import { PUBLIC_LITEKART_DOMAIN } from '$env/static/public'
 	const PUBLIC_LITEKART_DOMAIN = $derived(page.url.origin)
 
@@ -123,12 +124,13 @@
 							</div>
 
 							{#if productState.returnPlugin?.below_more}
-								<button
-									class="mt-1 text-[10px] font-bold uppercase text-primary transition-all hover:underline"
+								<Button
+									variant="link"
+									class="h-auto p-0 mt-1"
 									onclick={() => (productState.showReturnPolicy = !productState.showReturnPolicy)}
 								>
 									{productState.showReturnPolicy ? 'Show Less' : 'Read Full Policy'}
-								</button>
+								</Button>
 							{/if}
 						</div>
 					{:else}

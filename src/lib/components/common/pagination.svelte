@@ -22,7 +22,7 @@
 								<Pagination.PrevButton
 									onclick={goToPreviousPage}
 									disabled={currentPage <= 1}
-									class="h-10 rounded-full border-transparent px-4 text-[10px] font-bold uppercase tracking-widest transition-colors hover:bg-gray-50"
+									class="h-10 px-4"
 								/>
 							</Pagination.Item>
 
@@ -30,7 +30,7 @@
 								{#each pages as page (page.key)}
 									{#if page.type === 'ellipsis'}
 										<Pagination.Item>
-											<Pagination.Ellipsis class="text-gray-300" />
+											<Pagination.Ellipsis />
 										</Pagination.Item>
 									{:else}
 										<Pagination.Item>
@@ -38,10 +38,7 @@
 												{page}
 												isActive={page.value === currentPage}
 												onclick={() => goToPage(page.value)}
-												class={cn(
-													'h-10 w-10 rounded-full text-xs font-bold transition-all duration-200',
-													page.value === currentPage ? 'bg-primary text-white' : 'text-gray-400 hover:bg-gray-50 hover:text-gray-900'
-												)}
+												class="h-10 w-10"
 											>
 												{page.value}
 											</Pagination.Link>
@@ -60,7 +57,7 @@
 								<Pagination.NextButton
 									onclick={goToNextPage}
 									disabled={currentPage >= noOfPage}
-									class="h-10 rounded-full border-transparent px-4 text-[10px] font-bold uppercase tracking-widest transition-colors hover:bg-gray-50"
+									class="h-10 px-4"
 								/>
 							</Pagination.Item>
 						</Pagination.Content>

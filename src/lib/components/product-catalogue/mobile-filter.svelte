@@ -66,8 +66,9 @@
 
 	<!-- Filter -->
 	<div class="flex flex-col items-center justify-center bg-white transition hover:bg-gray-50">
-		<button
-			class="flex h-full w-full items-center justify-center"
+		<Button
+			variant="ghost"
+			class="flex h-full w-full items-center justify-center p-0 rounded-none hover:bg-transparent"
 			onclick={() => {
 				filterModule.showFilter = true
 			}}
@@ -91,7 +92,7 @@
 					{/if}
 				</div>
 			</div>
-		</button>
+		</Button>
 	</div>
 </div>
 
@@ -105,16 +106,16 @@
 		<div class="flex items-center justify-between border-b border-gray-100 !p-3">
 			<div class="flex w-full items-center justify-between gap-4">
 				<div class="flex items-center justify-center gap-3">
-					<button class="rounded-full p-1 transition-colors hover:bg-gray-100" onclick={() => (filterModule.showFilter = false)}>
+					<Button variant="ghost" size="icon" class="rounded-full" onclick={() => (filterModule.showFilter = false)}>
 						<X class="h-6 w-6 text-gray-900" />
 						<span class="sr-only">Close</span>
-					</button>
+					</Button>
 
 					{#if filterModule.anyFilterApplied}
 						<div class="h-4 w-px bg-gray-200"></div>
-						<button class="text-[10px] font-bold uppercase tracking-widest text-primary hover:underline" onclick={filterModule.clearFilters}>
+						<Button variant="link" size="sm" class="h-auto p-0" onclick={filterModule.clearFilters}>
 							Clear All
-						</button>
+						</Button>
 					{/if}
 				</div>
 
@@ -134,20 +135,22 @@
 				<!-- Right Panel - Menu -->
 				<div class="w-[35vw] overflow-y-auto bg-gray-50">
 					{#each filterModule.menuItems as item}
-						<button
-							class="w-full border-l-4 {filterModule.selectedSection === item.id
-								? 'border-primary bg-white'
-								: 'border-transparent'} flex justify-between px-4 py-4 text-left text-[11px] font-bold uppercase tracking-widest transition-colors hover:bg-gray-100"
-							class:text-primary={filterModule.selectedSection === item.id}
+						<Button
+							variant="ghost"
+							class="w-full border-l-4 rounded-none h-auto px-4 py-4 justify-between {filterModule.selectedSection === item.id
+								? 'border-primary bg-white text-primary hover:bg-white'
+								: 'border-transparent text-gray-500 hover:bg-gray-100'}"
 							onclick={() => (filterModule.selectedSection = item.id)}
 						>
-							{filterModule.formatFilterName(item.label)}
+							<span class="text-left text-[11px] font-bold uppercase tracking-widest">
+								{filterModule.formatFilterName(item.label)}
+							</span>
 							{#if filterModule.appliedFiltersCountByKey[item.id]}
 								<span class="text-[10px] text-primary">
 									({filterModule.appliedFiltersCountByKey[item.id]})
 								</span>
 							{/if}
-						</button>
+						</Button>
 					{/each}
 				</div>
 
@@ -200,8 +203,9 @@
 							<div class="space-y-4">
 								{#each filterModule.filteredCategories as category}
 									{@const formattedCategoryName = filterModule.formatFilterOptionName(category.name)}
-									<button
-										class="group flex w-full flex-row items-center gap-3 text-start"
+									<Button
+										variant="ghost"
+										class="group flex w-full flex-row items-center justify-start gap-3 h-auto p-0 hover:bg-transparent"
 										onclick={() => {
 											filterModule.handleCategoryClick(category)
 										}}
@@ -216,7 +220,7 @@
 										<span class="flex-1 text-sm font-medium capitalize text-gray-700 transition-colors group-hover:text-primary"
 											>{formattedCategoryName}</span
 										>
-									</button>
+									</Button>
 								{/each}
 							</div>
 						{:else}

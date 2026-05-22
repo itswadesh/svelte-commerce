@@ -77,7 +77,7 @@
 				<Button
 					onclick={deleteModule.deleteUser}
 					variant="destructive"
-					class="h-12 px-10 font-bold shadow-lg shadow-red-500/20 transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
+					class="h-12 px-10"
 					disabled={!deleteModule.iAgree}
 				>
 					Permanently Delete My Account

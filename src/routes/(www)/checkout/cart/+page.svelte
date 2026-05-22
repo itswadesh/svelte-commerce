@@ -40,13 +40,15 @@
 	<div
 		class="flex items-center rounded-sm border border-gray-200 bg-white p-1 shadow-sm transition-all duration-300 hover:shadow-md"
 	>
-		<button
+		<Button
+			variant="ghost"
+			size="icon"
 			onclick={(e) => cartModule.decreaseQty(e, item)}
-			class="flex h-7 w-7 items-center justify-center rounded-full transition-all hover:bg-gray-100"
+			class="flex h-7 w-7 items-center justify-center rounded-full"
 			aria-label="Decrease quantity"
 		>
 			<Minus class="size-3 text-gray-900" />
-		</button>
+		</Button>
 		<span class="flex min-w-[2.5rem] items-center justify-center px-1 text-xs font-bold text-gray-900">
 			{#if cartState.updatingItem[item.id]}
 				<LoadingDots />
@@ -54,13 +56,15 @@
 				{item.qty}
 			{/if}
 		</span>
-		<button
-			class="flex h-7 w-7 items-center justify-center rounded-full transition-all hover:bg-gray-100"
+		<Button
+			variant="ghost"
+			size="icon"
+			class="flex h-7 w-7 items-center justify-center rounded-full"
 			aria-label="Increase quantity"
 			onclick={(e) => cartModule.increaseQty(e, item)}
 		>
 			<Plus class="size-3 text-gray-900" />
-		</button>
+		</Button>
 	</div>
 {/snippet}
 
@@ -79,13 +83,14 @@
 					<span class="ml-2 text-xs font-bold uppercase tracking-widest">Cart</span>
 				</div>
 				<div class="h-px w-8 bg-gray-200 sm:w-16"></div>
-				<button
+				<Button
+					variant="ghost"
 					onclick={() => goto(appendOneTimeCartId('/checkout/address'))}
-					class="flex items-center text-gray-400 transition-colors hover:text-gray-900"
+					class="flex h-auto items-center p-0 font-normal text-gray-400 hover:bg-transparent hover:text-gray-900"
 				>
 					<div class="flex h-7 w-7 items-center justify-center rounded-full border border-gray-200 text-[11px] font-bold tracking-tight">2</div>
 					<span class="ml-2 text-xs font-bold uppercase tracking-widest">Address</span>
-				</button>
+				</Button>
 				<div class="h-px w-8 bg-gray-200 sm:w-16"></div>
 				<div class="flex items-center text-gray-400">
 					<div class="flex h-7 w-7 items-center justify-center rounded-full border border-gray-200 text-[11px] font-bold tracking-tight">3</div>
@@ -130,12 +135,13 @@
 					</div>
 					<h2 class="mb-2 text-xl font-bold uppercase tracking-widest text-gray-900">Your bag is empty</h2>
 					<p class="mb-8 max-w-xs text-sm text-gray-500">Looks like you haven't added anything to your bag yet.</p>
-					<a
+					<Button
 						href="/"
-						class="rounded-full bg-primary px-8 py-3 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-black"
+						variant="default"
+						class="rounded-full px-8 py-3 text-xs font-bold uppercase tracking-[0.2em]"
 					>
 						Start Shopping
-					</a>
+					</Button>
 				</div>
 			{:else}
 				<div class="grid gap-8 lg:grid-cols-[1fr_400px]">
@@ -394,28 +400,31 @@
 													{/if}
 												</div>
 												<div class="hidden lg:block">
-													<button
-													class="group/remove flex items-center gap-1.5 rounded-full border border-transparent px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-400 transition-all hover:border-red-100 hover:bg-red-50 hover:text-red-600"
-													aria-label="Remove item"
-													onclick={(e) => cartModule.removeItem(e, item)}
-												>
-													<Trash class="size-3.5 text-red-500 transition-colors group-hover/remove:text-red-500" />
-													<!-- <span class="hidden sm:inline">Remove</span> -->
-												</button>
+													<Button
+														variant="ghost"
+														size="icon"
+														class="h-auto w-auto p-1.5 text-gray-400"
+														aria-label="Remove item"
+														onclick={(e) => cartModule.removeItem(e, item)}
+													>
+														<Trash class="size-3.5 text-red-500" />
+													</Button>
 												</div>
 											</div>
 
 											<div class="mt-auto flex items-center justify-between pt-6">
-												<div
+													<div
 													class="hidden items-center rounded-sm border border-gray-200 bg-white p-1 shadow-sm transition-all duration-300 hover:shadow-md sm:flex"
 												>
-													<button
+													<Button
+														variant="ghost"
+														size="icon"
 														onclick={(e) => cartModule.decreaseQty(e, item)}
-														class="flex h-7 w-7 items-center justify-center transition-all hover:bg-gray-100"
+														class="flex h-7 w-7 items-center justify-center rounded-full"
 														aria-label="Decrease quantity"
 													>
 														<Minus class="size-3 text-gray-900" />
-													</button>
+													</Button>
 													<span class="flex min-w-[2.5rem] items-center justify-center px-1 text-xs font-bold text-gray-900">
 														{#if cartState.updatingItem[item.id]}
 															<LoadingDots />
@@ -423,24 +432,27 @@
 															{item.qty}
 														{/if}
 													</span>
-													<button
-														class="flex h-7 w-7 items-center justify-center transition-all hover:bg-gray-100"
+													<Button
+														variant="ghost"
+														size="icon"
+														class="flex h-7 w-7 items-center justify-center rounded-full"
 														aria-label="Increase quantity"
 														onclick={(e) => cartModule.increaseQty(e, item)}
 													>
 														<Plus class="size-3 text-gray-900" />
-													</button>
+													</Button>
 												</div>
 
 												<div class="lg:hidden">
-												<button
-													class="group/remove flex items-center gap-1.5 rounded-full border border-transparent px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-400 transition-all hover:border-red-100 hover:bg-red-50 hover:text-red-600"
-													aria-label="Remove item"
-													onclick={(e) => cartModule.removeItem(e, item)}
-												>
-													<Trash class="size-3.5 text-red-500 transition-colors group-hover/remove:text-red-500" />
-													<!-- <span class="hidden sm:inline">Remove</span> -->
-												</button>
+													<Button
+														variant="ghost"
+														size="icon"
+														class="h-auto w-auto p-1.5 text-gray-400"
+														aria-label="Remove item"
+														onclick={(e) => cartModule.removeItem(e, item)}
+													>
+														<Trash class="size-3.5 text-red-500" />
+													</Button>
 												</div>
 												<div class="text-right hidden lg:block">
 													<div class="flex items-baseline justify-end gap-2">
@@ -482,9 +494,14 @@
 									<p class="text-sm font-medium text-gray-600">
 										{cartState.cart.couponCode}
 									</p>
-									<button class="text-sm text-red-500 transition-transform" onclick={cartState.removeCoupon}>
-										<X class="h-4 w-4" />
-									</button>
+								<Button
+									variant="ghost"
+									size="icon"
+									class="h-auto w-auto p-1 text-red-500"
+									onclick={cartState.removeCoupon}
+								>
+									<X class="size-4" />
+								</Button>
 								</div>
 							</div>
 						{/if}

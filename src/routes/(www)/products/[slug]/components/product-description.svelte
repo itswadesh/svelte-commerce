@@ -2,6 +2,7 @@
 	import { page } from '$app/state'
 	import { useProductState } from '$lib/core/composables/index.js'
 	import { ChevronDown, ChevronUp } from '@lucide/svelte'
+	import { Button } from '$lib/components/ui/button'
 
 	const productState = useProductState()
 	const data = $derived(page.data)
@@ -11,7 +12,11 @@
 
 <div class="border-t border-gray-100">
 	{#if productState.selectedVariant?.description || data?.product?.description}
-		<button class="flex w-full items-center justify-between gap-2 py-5 text-sm font-bold uppercase text-gray-900" onclick={() => (isOpen = !isOpen)}>
+		<Button
+			variant="ghost"
+			class="flex w-full items-center justify-between gap-2 py-5 h-auto"
+			onclick={() => (isOpen = !isOpen)}
+		>
 			<span>Product Description</span>
 
 			{#if isOpen}
@@ -19,7 +24,7 @@
 			{:else}
 				<ChevronDown class="h-4 w-4 text-gray-800" />
 			{/if}
-		</button>
+		</Button>
 
 		{#if isOpen}
 			<div class="grid grid-cols-1 overflow-x-auto pb-6">

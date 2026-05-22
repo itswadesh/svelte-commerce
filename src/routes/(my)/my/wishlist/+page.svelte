@@ -46,7 +46,7 @@
 					<h2 class="text-2xl font-bold text-gray-900">Your wishlist is empty</h2>
 					<p class="mt-2 max-w-xs text-gray-500">Save items you like to keep track of them and buy them later.</p>
 					<div class="mt-8">
-						<Button href="/products" class="h-12 px-8 font-semibold shadow-lg transition-all hover:scale-105 active:scale-95">
+						<Button href="/products" class="h-12 px-8">
 							Browse Products
 							<ArrowRight class="ml-2 h-4 w-4" />
 						</Button>
@@ -98,7 +98,8 @@
 								<div class="mt-auto pt-5 flex items-center gap-2">
 									<Button
 										variant="outline"
-										class="aspect-square h-8 w-[20%] p-0 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-500 md:h-9"
+										size="icon"
+										class="h-8 w-[20%] md:h-9"
 										onclick={(e) => {
 											e.preventDefault()
 											e.stopPropagation()
@@ -111,7 +112,7 @@
 
 									<Button
 										variant="default"
-										class="h-8 w-[80%] text-xs font-bold uppercase  text-white bg-primary md:h-9 md:text-xs"
+										class="h-8 w-[80%] md:h-9"
 										onclick={async (e) => {
 											e.preventDefault()
 											e.stopPropagation()

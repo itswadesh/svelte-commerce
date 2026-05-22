@@ -85,9 +85,11 @@
 					<span class="truncate text-xs font-bold capitalize text-gray-500 lg:text-sm" data-testid="product-brand">
 						{categoryName || page.data?.store?.name}
 					</span>
-					<button
+					<Button
+						variant="ghost"
+						size="icon"
+						class="h-auto w-auto p-1"
 						data-testid="wishlist-button"
-						class="transition-colors hover:text-red-500"
 						onclick={(e) => {
 							e.stopPropagation()
 							e.preventDefault()
@@ -99,7 +101,8 @@
 						{:else}
 							<Heart class="size-4" />
 						{/if}
-					</button>
+						<span class="sr-only">Toggle wishlist</span>
+					</Button>
 				</div>
 
 				<a href="/products/{product.slug}" class="block overflow-hidden">
@@ -126,7 +129,12 @@
 					<div class="mt-3">
 						{#if cartState.cart?.lineItems?.some((item) => item.productId === product.id)}
 							<div class="flex items-center justify-between rounded-md border border-gray-200 p-1">
-								<Button disabled={!!cartState.isUpdatingCart} variant="ghost" size="icon" class="h-8 w-8" onclick={() => changeQuantity(product, -1)}>
+								<Button
+									disabled={!!cartState.isUpdatingCart}
+									variant="ghost"
+									size="icon"
+									onclick={() => changeQuantity(product, -1)}
+								>
 									<Minus class="h-4 w-4" />
 								</Button>
 								<div class="flex-1 text-center text-sm font-bold">
@@ -136,7 +144,12 @@
 										{cartState.cart?.lineItems?.find((item) => item.productId === product.id)?.qty}
 									{/if}
 								</div>
-								<Button disabled={!!cartState.isUpdatingCart} variant="ghost" size="icon" class="h-8 w-8" onclick={() => changeQuantity(product, 1)}>
+								<Button
+									disabled={!!cartState.isUpdatingCart}
+									variant="ghost"
+									size="icon"
+									onclick={() => changeQuantity(product, 1)}
+								>
 									<Plus class="h-4 w-4" />
 								</Button>
 							</div>
@@ -144,7 +157,7 @@
 							<Button
 								disabled={!!cartState.isUpdatingCart}
 								variant="default"
-								class="w-full bg-secondary py-5 text-[10px] font-bold uppercase tracking-widest text-white hover:bg-primary"
+								class="w-full py-5"
 								onclick={() => addToCart(product)}
 							>
 								{#if cartState.isUpdatingCart}

@@ -143,13 +143,22 @@
 	class="fixed left-0 top-0 z-[100] {displayCarousel} h-screen w-screen flex-col items-center justify-start bg-black"
 >
 	<!-- Background overlay -->
-	<button class="absolute left-0 top-0 h-full w-full" onclick={hideCarousel}>
-		<span class="hidden">Close Carousel</span>
-	</button>
+	<Button
+		variant="ghost"
+		class="absolute left-0 top-0 h-full w-full rounded-none hover:bg-transparent"
+		onclick={hideCarousel}
+	>
+		<span class="sr-only">Close Carousel</span>
+	</Button>
 
 	<div class="relative mx-auto flex h-screen max-w-[1200px] items-center gap-4 px-4 py-12">
 		<!-- Close button -->
-		<Button class="absolute right-6 top-6 z-30 h-10 w-10 p-0" onclick={hideCarousel}>
+		<Button
+			variant="ghost"
+			size="icon"
+			class="absolute right-6 top-6 z-30 text-white hover:bg-white/10"
+			onclick={hideCarousel}
+		>
 			<X class="h-6 w-6" />
 		</Button>
 
@@ -211,9 +220,9 @@
 			>
 				{#each carouselImages || [] as img, i}
 					{@const youtubeId = getYoutubeId(img)}
-					<button
-						class="relative aspect-square max-h-24 min-h-24 min-w-24 max-w-24 overflow-hidden rounded-lg bg-black transition-colors hover:ring-1 hover:ring-white hover:ring-offset-2 hover:ring-offset-black
-								{currentIndex === i ? 'ring-1 ring-white ring-offset-2 ring-offset-black' : ''}"
+					<Button
+						variant="ghost"
+						class="relative aspect-square h-24 w-24 overflow-hidden rounded-md p-0 {currentIndex === i ? 'ring-2 ring-primary ring-offset-2 ring-offset-black' : ''}"
 						onclick={() => {
 							if (carouselApi) {
 								carouselApi.scrollTo(i)
@@ -234,7 +243,7 @@
 								class="h-full w-full object-cover"
 							/>
 						{/if}
-					</button>
+					</Button>
 				{/each}
 			</div>
 		{/if}
