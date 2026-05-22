@@ -72,7 +72,7 @@
 									<Button
 										disabled={!!cartState.isUpdatingCart}
 										variant="outline"
-										class="w-full rounded-none border-gray-300 text-gray-900 transition-colors duration-300 dark:border-gray-500 dark:text-gray-100"
+										class="w-full"
 										onclick={() => {
 											cartState.add({
 												qty: item.qty,
@@ -81,7 +81,7 @@
 											})
 										}}
 									>
-										<Plus class="mr-2 max-h-4 max-w-4 hover:animate-spin" />
+										<Plus class="mr-2 max-h-4 max-w-4" />
 										Add to cart
 									</Button>
 								{/if}
@@ -140,7 +140,7 @@
 											<Button
 												disabled={!!cartState.isUpdatingCart}
 												variant="outline"
-												class="w-full rounded-none border-gray-300 text-gray-900 transition-colors duration-300 dark:border-gray-500 dark:text-gray-100"
+												class="w-full"
 												onclick={() => {
 													cartState.add({
 														qty: item.qty,
@@ -149,7 +149,7 @@
 													})
 												}}
 											>
-												<Plus class="mr-2 max-h-4 max-w-4 hover:animate-spin" />
+												<Plus class="mr-2 max-h-4 max-w-4" />
 												Add to cart
 											</Button>
 										{/if}

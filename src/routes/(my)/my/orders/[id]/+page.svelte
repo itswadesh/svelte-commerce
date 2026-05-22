@@ -388,7 +388,7 @@
 						<div class="flex flex-wrap gap-3">
 							{#if order?.invoiceLink}
 								<a href={order?.invoiceLink} aria-label="Click to download invoice" target="blank" class="inline-flex items-center gap-2">
-									<Button class="w-40 py-2 text-sm" type="button">
+									<Button class="w-40 py-2" type="button">
 										<FileText class="h-4 w-4" />
 										Download Invoice
 									</Button>
@@ -401,7 +401,7 @@
 									aria-label="Click to visit exchange"
 									class="inline-flex items-center gap-2"
 								>
-									<Button class="w-40 py-2 text-sm" type="button">
+									<Button class="w-40 py-2" type="button">
 										<RefreshCw class="h-4 w-4" />
 										Exchange
 									</Button>
@@ -413,10 +413,10 @@
 					<!-- Action Buttons -->
 					<div class="mt-4 flex flex-wrap gap-3 border-t border-gray-200 bg-gray-50 p-4">
 						<!-- <Button variant="outline" href="/products?collection={order?.collection?.slug || ''}">Buy Again</Button> -->
-						<Button variant="ghost" class="flex items-center gap-1" href="/my/orders">
+						<Button variant="ghost" href="/my/orders">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
-								class="h-4 w-4"
+								class="h-4 w-4 mr-1"
 								viewBox="0 0 24 24"
 								fill="none"
 								stroke="currentColor"
@@ -433,7 +433,7 @@
 					<h2 class="mb-2 text-xl font-semibold">You haven't Ordered Yet!</h2>
 					<p class="mb-5 text-gray-600">Add items to it now</p>
 					<a href="/" aria-label="Click to visit home" data-sveltekit-preload-data>
-						<Button class="w-40 py-2 text-sm">Shop Now</Button>
+						<Button class="w-40 py-2">Shop Now</Button>
 					</a>
 				</div>
 			{/if}

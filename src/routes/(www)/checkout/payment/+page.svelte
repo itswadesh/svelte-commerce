@@ -30,21 +30,23 @@
 		<!-- Checkout Progress -->
 		<div class="mb-8">
 			<div class="flex items-center justify-center space-x-4 sm:space-x-12">
-				<button
+				<Button
+					variant="ghost"
 					onclick={() => goto(appendOneTimeCartId('/checkout/cart'))}
-					class="flex items-center text-gray-400 transition-colors hover:text-gray-900"
+					class="flex h-auto items-center"
 				>
 					<div class="flex h-7 w-7 items-center justify-center rounded-full border border-gray-200 text-[11px] font-bold tracking-tight">1</div>
 					<span class="ml-2 text-xs font-bold uppercase tracking-widest">Cart</span>
-				</button>
+				</Button>
 				<div class="h-px w-8 bg-gray-200 sm:w-16"></div>
-				<button
+				<Button
+					variant="ghost"
 					onclick={() => goto(appendOneTimeCartId('/checkout/address'))}
-					class="flex items-center text-gray-400 transition-colors hover:text-gray-900"
+					class="flex h-auto items-center"
 				>
 					<div class="flex h-7 w-7 items-center justify-center rounded-full border border-gray-200 text-[11px] font-bold tracking-tight">2</div>
 					<span class="ml-2 text-xs font-bold uppercase tracking-widest">Address</span>
-				</button>
+				</Button>
 				<div class="h-px w-8 bg-gray-200 sm:w-16"></div>
 				<div class="flex items-center text-primary">
 					<div class="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-[11px] font-bold tracking-tight text-white">3</div>
@@ -217,17 +219,23 @@
 								<p class="text-sm font-medium text-gray-600">
 									{cartState.cart.couponCode}
 								</p>
-								<button class="text-sm text-red-500" onclick={paymentModule.removeAppliedCoupon}>
-									<X class="h-4 w-4" />
-								</button>
+								<Button
+									variant="ghost"
+									size="icon"
+									class="h-auto w-auto p-1 text-red-500"
+									onclick={paymentModule.removeAppliedCoupon}
+								>
+									<X class="size-4" />
+								</Button>
 							</div>
 						</div>
 					{/if}
 
 											{#if cartState?.cart?.shippingAddress}
-							<div class="rounded-lg border border-gray-100 bg-white shadow-sm overflow-hidden">
-								<button
-									class="flex w-full items-center justify-between px-6 py-4 transition-colors 50"
+							<div class="rounded-lg border border-gray-100 bg-white shadow-sm overflow-hidden text-left">
+								<Button
+									variant="ghost"
+									class="flex w-full items-center justify-between px-6 py-4 h-auto"
 									onclick={() => (showAddress = !showAddress)}
 								>
 									<div class="flex flex-col items-start">
@@ -239,7 +247,7 @@
 									<ChevronDown
 										class="h-5 w-5 text-gray-400 transition-transform duration-300 {showAddress ? 'rotate-180' : ''}"
 									/>
-								</button>
+								</Button>
 
 								{#if showAddress}
 									<div class="border-t border-gray-50 bg-gray-50/30 px-6 py-2">
@@ -258,7 +266,7 @@
 											<Button
 												variant="outline"
 												size="sm"
-												class="h-7 px-3 text-[10px] font-bold uppercase"
+												class="h-7 px-3"
 												onclick={() => goto(appendOneTimeCartId('/checkout/address'))}
 											>
 												Change
