@@ -140,7 +140,7 @@
 </div>
 
 <div
-	class="fixed left-0 top-0 z-[60] {displayCarousel} h-screen w-screen flex-col items-center justify-start bg-black"
+	class="fixed left-0 top-0 z-[100] {displayCarousel} h-screen w-screen flex-col items-center justify-start bg-black"
 >
 	<!-- Background overlay -->
 	<button class="absolute left-0 top-0 h-full w-full" onclick={hideCarousel}>
