@@ -9,7 +9,7 @@
 			variant: {
 				default: 'bg-primary text-primary-foreground hover:bg-primary/90 shadow',
 				destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm',
-				outline: 'border-input bg-background hover:bg-primary hover:text-accent-foreground border shadow-sm',
+				outline: 'border-input bg-background border shadow-sm',
 				secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm',
 				ghost: 'hover:bg-primary hover:text-accent-foreground',
 				link: 'text-primary underline-offset-4 hover:underline'
