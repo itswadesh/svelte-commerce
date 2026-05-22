@@ -53,12 +53,11 @@
 					</div>
 				</div>
 			{:else}
-				<div class="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4 lg:gap-8">
+				<div class="grid grid-cols-2 gap-6 md:grid-cols-3 md:gap-8 lg:grid-cols-3 lg:gap-10">
 					{#each wishlistItems as item, i}
-				
 						<div
 							in:fly={{ y: 20, duration: 400, delay: i * 50 }}
-							class="group relative flex w-full flex-col overflow-hidden bg-white transition-all duration-300 dark:bg-gray-800"
+							class="group relative flex h-full w-full flex-col overflow-hidden bg-white transition-all duration-300 dark:bg-gray-800"
 						>
 							<!-- Product Image -->
 							<a
@@ -68,27 +67,21 @@
 								<LazyImg
 									src={item?.product?.thumbnail}
 									alt={item?.product?.title}
-									class="w-full rounded-md object-cover transition-transform duration-500 group-hover:scale-110"
-									style="aspect-ratio: 3 / 4; border-radius: 8px;"
+									class="w-full rounded-md object-cover transition-transform duration-500 group-hover:scale-105"
+									style="aspect-ratio: 4 / 5; border-radius: 8px;"
 								/>
 							</a>
 
 							<!-- Product Info -->
-							<div class="flex flex-col pt-9 lg:pt-3">
-								<!-- <div class="flex items-center">
-									<span class="truncate text-xs font-bold capitalize text-gray-500 lg:text-sm">
-										{item?.product?.brand?.name || page.data?.store?.name}
-									</span>
-								</div> -->
-
+							<div class="flex flex-1 flex-col pt-4">
 								<a href="/products/{item?.product?.slug}?variant_id={item.variantId}" class="block overflow-hidden">
-									<span class="block w-[90%] truncate text-xs text-gray-600 lg:text-sm" title={item?.product?.title}>
+									<span class="block w-[95%] truncate text-sm font-medium text-gray-700 lg:text-sm" title={item?.product?.title}>
 										{item?.product?.title}
 									</span>
 								</a>
 
-								<div class="flex items-center gap-2">
-									<span class="text-sm font-semibold text-gray-900">
+								<div class="mt-1 flex items-center gap-2">
+									<span class="text-base font-bold text-gray-900">
 										{formatPrice(item?.product?.price, page?.data?.store?.currency?.code)}
 									</span>
 									{#if item?.product?.mrp > item?.product?.price}
@@ -102,10 +95,10 @@
 								</div>
 
 								<!-- Actions -->
-								<div class="mt-3 flex items-center gap-2">
+								<div class="mt-auto pt-5 flex items-center gap-2">
 									<Button
 										variant="outline"
-										class="aspect-square h-10 w-[20%] p-0 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-500 md:h-11"
+										class="aspect-square h-8 w-[20%] p-0 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-500 md:h-9"
 										onclick={(e) => {
 											e.preventDefault()
 											e.stopPropagation()
@@ -113,12 +106,12 @@
 										}}
 										title="Remove from wishlist"
 									>
-										<Trash2 class="size-4" />
+										<Trash2 class="size-5" />
 									</Button>
 
 									<Button
 										variant="default"
-										class="h-10 w-[80%] text-[10px] font-bold uppercase 	 text-white bg-primary md:h-11"
+										class="h-8 w-[80%] text-xs font-bold uppercase  text-white bg-primary md:h-9 md:text-xs"
 										onclick={async (e) => {
 											e.preventDefault()
 											e.stopPropagation()
@@ -126,7 +119,6 @@
 											toast('Item added to cart', 'success')
 										}}
 									>
-										<!-- <ShoppingBag class="h-4 w-4" /> -->
 										Add to Cart
 									</Button>
 								</div>
