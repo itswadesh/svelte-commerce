@@ -339,6 +339,9 @@
 										>
 											{#if paymentModule.paymentLoader}
 												<LoadingDots />
+											{:else if paymentModule.checkoutDisabled}
+												<span>Select Method</span>
+												<ChevronRight class="ml-2 size-4 transition-transform duration-300 group-hover:translate-x-1" />
 											{:else}
 												<span>Complete Purchase</span>
 												<ChevronRight class="ml-2 size-4 transition-transform duration-300 group-hover:translate-x-1" />
