@@ -101,7 +101,7 @@
 							<div class="grid grid-cols-1 gap-4">
 								{#each paymentModule.listOfPaymentMethods as method}
 									<label
-										class="relative flex cursor-pointer items-center justify-between rounded-lg border bg-white px-6 py-5 transition-all duration-300 hover:bg-gray-50 hover:shadow-md active:scale-[0.99] {paymentModule.SELECTED_PG_CODE ===
+										class="relative flex cursor-pointer items-center justify-between rounded-lg border bg-white px-6 py-5 {paymentModule.SELECTED_PG_CODE ===
 										method?.code
 											? 'border-primary ring-1 ring-primary'
 											: 'border-gray-100 shadow-sm'}"
@@ -161,10 +161,10 @@
 								{#each paymentModule.shippingRates?.data as rate}
 									<label
 										for={rate.id}
-										class="flex items-center justify-between rounded-lg border bg-white p-5 transition-all duration-300 hover:bg-gray-50 hover:shadow-md active:scale-[0.99] {cartState
+										class="flex items-center justify-between rounded-lg border bg-white p-5 transition-all duration-300 active:scale-[0.99] {cartState
 											?.cart?.shippingRateId === rate.id
-											? 'border-primary ring-1 ring-primary'
-											: 'border-gray-100 shadow-sm'}"
+											? ''
+											: 'shadow-sm'}"
 									>
 										<div class="flex items-center gap-4">
 											<div class="relative flex h-5 w-5 items-center justify-center">
@@ -226,7 +226,7 @@
 											{#if cartState?.cart?.shippingAddress}
 							<div class="rounded-lg border border-gray-100 bg-white shadow-sm overflow-hidden">
 								<button
-									class="flex w-full items-center justify-between px-6 py-4 transition-colors hover:bg-gray-50"
+									class="flex w-full items-center justify-between px-6 py-4 transition-colors 50"
 									onclick={() => (showAddress = !showAddress)}
 								>
 									<div class="flex flex-col items-start">
@@ -257,7 +257,7 @@
 											<Button
 												variant="outline"
 												size="sm"
-												class="h-7 px-3 text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-gray-900 hover:text-white"
+												class="h-7 px-3 text-[10px] font-bold uppercase"
 												onclick={() => goto(appendOneTimeCartId('/checkout/address'))}
 											>
 												Change
@@ -333,7 +333,7 @@
 
 									{#if (!isPhoneRequired || cartState?.cart?.phone) && (!isEmailRequired || cartState?.cart?.email) && (cartState?.cart?.shippingAddress || cartState?.cart?.shippingAddressId)}
 										<Button
-											class="group w-full bg-primary py-7 text-sm font-bold uppercase tracking-[0.2em] shadow-lg transition-all hover:bg-black hover:shadow-xl active:scale-[0.98] max-sm:fixed max-sm:bottom-0 max-sm:left-0 max-sm:right-0 max-sm:z-[60] max-sm:h-20 max-sm:rounded-none disabled:bg-gray-400 disabled:opacity-100"
+											class="group w-full bg-primary py-7 text-sm font-bold uppercase tracking-[0.2em] shadow-lg transition-all hover:bg-black hover:shadow-xl max-sm:fixed max-sm:bottom-0 max-sm:left-0 max-sm:right-0 max-sm:z-[60] max-sm:h-20 max-sm:rounded-none disabled:bg-gray-400 disabled:opacity-100"
 											onclick={paymentModule.placeOrder}
 											disabled={paymentModule.checkoutDisabled}
 										>

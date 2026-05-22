@@ -181,7 +181,7 @@
 						</div>
 						<!-- Shipping Address -->
 						{#if isEmailOk && isPhoneOk}
-							<div class="overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:shadow-md">
+							<div class="overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm">
 								{#if cartState.cart.shippingAddress}
 									<div class="">
 										<div class="flex items-center justify-between border-b border-gray-50 px-5 py-4">
@@ -200,7 +200,7 @@
 														}
 													}}
 													variant="ghost"
-													class="h-8 text-[10px] font-bold uppercase tracking-widest text-primary transition-all hover:bg-primary/50 active:scale-95"
+													class="h-8 text-[10px] font-bold uppercase tracking-widest"
 												>
 													Change
 												</Button>

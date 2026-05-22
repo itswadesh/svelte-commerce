@@ -41,7 +41,7 @@
 	>
 		<button
 			onclick={(e) => cartModule.decreaseQty(e, item)}
-			class="flex h-7 w-7 items-center justify-center rounded-full transition-all hover:bg-gray-100 active:scale-75"
+			class="flex h-7 w-7 items-center justify-center rounded-full transition-all hover:bg-gray-100"
 			aria-label="Decrease quantity"
 		>
 			<Minus class="size-3 text-gray-900" />
@@ -54,7 +54,7 @@
 			{/if}
 		</span>
 		<button
-			class="flex h-7 w-7 items-center justify-center rounded-full transition-all hover:bg-gray-100 active:scale-75"
+			class="flex h-7 w-7 items-center justify-center rounded-full transition-all hover:bg-gray-100"
 			aria-label="Increase quantity"
 			onclick={(e) => cartModule.increaseQty(e, item)}
 		>
@@ -69,7 +69,7 @@
 
 <div class="min-h-screen py-8">
 	<div class="container mx-auto px-4">
-	
+
 			<!-- Checkout Progress -->
 		<div class="mb-8">
 			<div class="flex items-center justify-center space-x-4 sm:space-x-12">
@@ -131,7 +131,7 @@
 					<p class="mb-8 max-w-xs text-sm text-gray-500">Looks like you haven't added anything to your bag yet.</p>
 					<a
 						href="/"
-						class="rounded-full bg-primary px-8 py-3 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-black active:scale-95"
+						class="rounded-full bg-primary px-8 py-3 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-black"
 					>
 						Start Shopping
 					</a>
@@ -166,7 +166,7 @@
 								? '[&>div:nth-child(2)]:max-sm:!border-t-0'
 								: ''}"
 						>
-						
+
 							<!-- Root checkbox -->
 							{#if cartModule.partialCheckoutEnabled}
 								<div class="flex items-center justify-between">
@@ -304,7 +304,7 @@
 						{/each} -->
 
 							{#each cartState.cart.lineItems || [] as item}
-								<div class="group relative flex transition-all duration-200 hover:bg-gray-50">
+								<div class="group relative flex">
 									{#if cartModule.partialCheckoutEnabled}
 										<label
 											for={item.id}
@@ -336,7 +336,7 @@
 													<LazyImg
 														src={item.thumbnail || '/placeholder.svg'}
 														alt={item.title}
-														class="aspect-[3/4] w-24 object-contain transition-transform duration-500 group-hover:scale-105 sm:w-32"
+														class="aspect-[3/4] w-24 object-contain sm:w-32"
 													/>
 												</div>
 											</div>
@@ -394,7 +394,7 @@
 												</div>
 												<div class="hidden lg:block">
 													<button
-													class="group/remove flex items-center gap-1.5 rounded-full border border-transparent px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-400 transition-all hover:border-red-100 hover:bg-red-50 hover:text-red-600 active:scale-95"
+													class="group/remove flex items-center gap-1.5 rounded-full border border-transparent px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-400 transition-all hover:border-red-100 hover:bg-red-50 hover:text-red-600"
 													aria-label="Remove item"
 													onclick={(e) => cartModule.removeItem(e, item)}
 												>
@@ -410,7 +410,7 @@
 												>
 													<button
 														onclick={(e) => cartModule.decreaseQty(e, item)}
-														class="flex h-7 w-7 items-center justify-center rounded-full transition-all hover:bg-gray-100 active:scale-75"
+														class="flex h-7 w-7 items-center justify-center transition-all hover:bg-gray-100"
 														aria-label="Decrease quantity"
 													>
 														<Minus class="size-3 text-gray-900" />
@@ -423,7 +423,7 @@
 														{/if}
 													</span>
 													<button
-														class="flex h-7 w-7 items-center justify-center rounded-full transition-all hover:bg-gray-100 active:scale-75"
+														class="flex h-7 w-7 items-center justify-center transition-all hover:bg-gray-100"
 														aria-label="Increase quantity"
 														onclick={(e) => cartModule.increaseQty(e, item)}
 													>
@@ -433,7 +433,7 @@
 
 												<div class="lg:hidden">
 												<button
-													class="group/remove flex items-center gap-1.5 rounded-full border border-transparent px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-400 transition-all hover:border-red-100 hover:bg-red-50 hover:text-red-600 active:scale-95"
+													class="group/remove flex items-center gap-1.5 rounded-full border border-transparent px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-400 transition-all hover:border-red-100 hover:bg-red-50 hover:text-red-600"
 													aria-label="Remove item"
 													onclick={(e) => cartModule.removeItem(e, item)}
 												>
@@ -481,7 +481,7 @@
 									<p class="text-sm font-medium text-gray-600">
 										{cartState.cart.couponCode}
 									</p>
-									<button class="text-sm text-red-500 transition-transform active:scale-90" onclick={cartState.removeCoupon}>
+									<button class="text-sm text-red-500 transition-transform" onclick={cartState.removeCoupon}>
 										<X class="h-4 w-4" />
 									</button>
 								</div>
@@ -562,7 +562,7 @@
 
 										{#if !cartModule.noItemsChecked}
 											<Button
-												class="ease-out-expo group w-full bg-primary py-7 text-sm font-bold uppercase tracking-[0.2em] shadow-lg transition-all duration-300 hover:bg-black hover:shadow-xl active:scale-[0.98] max-sm:fixed max-sm:bottom-0 max-sm:left-0 max-sm:right-0 max-sm:z-[60] max-sm:h-20 max-sm:rounded-none disabled:bg-gray-400 disabled:opacity-100"
+												class="ease-out-expo group w-full bg-primary py-7 text-sm font-bold uppercase tracking-[0.2em] shadow-lg transition-all duration-300 hover:bg-black hover:shadow-xl max-sm:fixed max-sm:bottom-0 max-sm:left-0 max-sm:right-0 max-sm:z-[60] max-sm:h-20 max-sm:rounded-none disabled:bg-gray-400 disabled:opacity-100"
 												onclick={cartModule.gotoCheckout}
 												disabled={cartModule.loadingForCheckout}
 											>
