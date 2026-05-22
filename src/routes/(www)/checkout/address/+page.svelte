@@ -14,6 +14,7 @@
 	import Textbox from '$lib/components/form/textbox.svelte'
 	import { AddressModule, emptyAddress, checkoutAddressSchema as schemas } from '$lib/core/composables/index.js'
 	import { appendOneTimeCartId } from '$lib/core/utils/index.js'
+	import CheckoutButton from '$lib/components/buttons/checkout-button.svelte'
 
 	const addressModule = new AddressModule()
 	const cartState = addressModule.cartState
@@ -418,18 +419,11 @@
 									</div>
 
 									{#if isPhoneOk && isEmailOk && cartState.cart.shippingAddress && !addressModule.editAddress}
-										<Button
-											class="ease-out-expo group w-full bg-primary py-7 text-sm font-bold uppercase tracking-[0.2em] shadow-lg transition-all duration-300 hover:bg-black hover:shadow-xl active:scale-[0.98] max-sm:fixed max-sm:bottom-0 max-sm:left-0 max-sm:right-0 max-sm:z-[60] max-sm:h-20 max-sm:rounded-none disabled:bg-gray-400 disabled:opacity-100"
+										<CheckoutButton
+											text="Continue to Payment"
 											onclick={addressModule.handleProceedToPayment}
-											disabled={addressModule.loadingForCheckout}
-										>
-											{#if addressModule.loadingForCheckout}
-												<LoadingDots />
-											{:else}
-												<span>Continue to Payment</span>
-												<ChevronRight class="ml-2 size-4 transition-transform duration-300 group-hover:translate-x-1" />
-											{/if}
-										</Button>
+											loading={addressModule.loadingForCheckout}
+										/>
 									{/if}
 								</div>
 							{/if}

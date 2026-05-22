@@ -9,6 +9,7 @@
 	import CouponsDrawer from '$lib/components/coupon/coupons-drawer.svelte'
 	import { PaymentModule } from '$lib/core/composables/index.js'
 	import { appendOneTimeCartId } from '$lib/core/utils/index.js'
+	import CheckoutButton from '$lib/components/buttons/checkout-button.svelte'
 
 	// Check if phone is required based on login type
 	const isPhoneRequired = page.data?.store?.isPhoneMandatory
@@ -332,21 +333,13 @@
 									</div>
 
 									{#if (!isPhoneRequired || cartState?.cart?.phone) && (!isEmailRequired || cartState?.cart?.email) && (cartState?.cart?.shippingAddress || cartState?.cart?.shippingAddressId)}
-										<Button
-											class="group w-full bg-primary py-7 text-sm font-bold uppercase tracking-[0.2em] shadow-lg transition-all hover:bg-black hover:shadow-xl max-sm:fixed max-sm:bottom-0 max-sm:left-0 max-sm:right-0 max-sm:z-[60] max-sm:h-20 max-sm:rounded-none disabled:bg-gray-400 disabled:opacity-100"
+										<CheckoutButton
+											text="Complete Purchase"
+											disabledText="Select Method"
 											onclick={paymentModule.placeOrder}
 											disabled={paymentModule.checkoutDisabled}
-										>
-											{#if paymentModule.paymentLoader}
-												<LoadingDots />
-											{:else if paymentModule.checkoutDisabled}
-												<span>Select Method</span>
-												<ChevronRight class="ml-2 size-4 transition-transform duration-300 group-hover:translate-x-1" />
-											{:else}
-												<span>Complete Purchase</span>
-												<ChevronRight class="ml-2 size-4 transition-transform duration-300 group-hover:translate-x-1" />
-											{/if}
-										</Button>
+											loading={paymentModule.paymentLoader}
+										/>
 									{/if}
 								</div>
 							{/if}

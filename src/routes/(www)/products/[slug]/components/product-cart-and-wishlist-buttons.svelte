@@ -59,7 +59,7 @@
 			</div>
 			<a
 				href="/checkout/cart"
-				class="rounded-md bg-primary px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-white transition-all hover:bg-black active:scale-95"
+				class="rounded-md bg-primary px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-white transition-all active:scale-95"
 			>
 				View Bag
 			</a>
@@ -88,7 +88,7 @@
 					class="ease-out-expo h-full flex-1 py-0 text-[10px] font-bold uppercase tracking-[0.1em] transition-all duration-300 active:scale-[0.98] sm:text-xs {productState
 						.cartState.addToCartMessage == 'Added to cart'
 						? 'bg-green-600 hover:bg-green-700'
-						: 'bg-primary shadow-lg hover:bg-black hover:shadow-xl'}"
+						: 'bg-primary shadow-lg hover:shadow-xl'}"
 					size="lg"
 					disabled={productState.addToCartButtonDisabled}
 					onclick={productState.handleAddToCart}

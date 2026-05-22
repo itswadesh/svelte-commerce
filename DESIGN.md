@@ -1,311 +1,102 @@
-# Design System Inspired by Bewakoof
+# Design System
 
 ## 1. Visual Theme & Atmosphere
 
-The Bewakoof website presents a vibrant and youthful aesthetic, characterized by a clean layout that emphasizes product imagery. The use of bright accent colors against neutral backgrounds creates an inviting shopping experience, while playful typography adds to the brand's casual and fun identity.
+The design system is built around a stark, high-contrast aesthetic that combines a minimalist monochrome foundation with vibrant, attention-grabbing accents. It emphasizes modern typography, generous whitespace, and a stable, motion-efficient interaction model.
 
 Key Characteristics:
 
-- Bright accent colors such as #207bb4 and #339d9c.
-- Clean, grid-based layout focusing on product displays.
-- Use of the Montserrat font family for a modern feel.
-- High contrast between text and background for readability.
-- Minimalist approach with ample whitespace around elements.
-- Interactive elements like buttons and filters enhance user engagement.
-- Responsive design that adapts well across devices.
+- **High-Contrast Palette**: Pure black and white foundation for maximum readability and a clean, modern look.
+- **Vibrant Accents**: Use of a specific Yellow (rgb(255, 186, 25)) for primary actions, hover states, and focal points.
+- **Typography-First**: Reliance on the Montserrat font family for a bold, contemporary feel.
+- **Minimalist Depth**: Sparing use of shadows and borders; relying on whitespace for hierarchy.
+- **Stable Interactions**: Intentional removal of hover/active scale animations to ensure a stable, distraction-free user experience.
+- **Standardized Radius**: Consistent use of `rounded-md` across all non-circular elements.
 
 ## 2. Color Palette & Roles
 
-### Primary
+### Primary & Accent
+- **Yellow (Primary)**: `HSL 42 100% 55%` / `rgb(255, 186, 25)` — Used for primary buttons, active states, hover transitions, and critical notifications.
+- **Yellow Foreground**: `HSL 0 0% 0%` — Pure black text/icons on yellow backgrounds.
 
-- **#207bb4** — Used for accent elements and buttons.
-- **#339d9c** — Another primary accent color, featured prominently in buttons and highlights.
+### Monochrome Foundation (Light Mode)
+- **Background**: `#ffffff` (White) — Primary page background.
+- **Foreground**: `#000000` (Black) — Primary text and heading color.
+- **Muted**: `HSL 0 0% 96.1%` — Subtle backgrounds for secondary sections or cards.
+- **Border/Input**: `HSL 0 0% 89.8%` — Soft borders for inputs and structural separation.
 
-### Accent Colors
-
-- **#0000ff** — Used sparingly for accents.
-- **#008000** — Additional accent color for highlights.
-- **#fdd835** — Bright accent color for calls to action.
-
-### Interactive
-
-- **#ffffff** — Text on dark backgrounds for high visibility.
-- **#363537** — Primary text color for body and headings.
-- **#676767** — Secondary text color for less emphasized text.
-
-### Neutral Scale
-
-- **#f1f2f4** — Light background color used for sections.
-- **#c7cbd4** — Neutral color for subtle borders and backgrounds.
-- **#000000** — Dark background elements.
-
-### Surface & Borders
-
-- **#eaeaea** — Light neutral used for subtle borders.
-- **#292d35** — Dark text for headings and important information.
+### Monochrome Foundation (Dark Mode)
+- **Background**: `#000000` (Black) — Primary page background.
+- **Foreground**: `#ffffff` (White) — Primary text and heading color.
+- **Muted**: `HSL 0 0% 14.9%` — Dark gray for secondary sections or cards.
+- **Border/Input**: `HSL 0 0% 14.9%` — Subtle separation in dark environments.
 
 ## 3. Typography Rules
 
-- **Font Family**: Montserrat, sans-serif; fallback: Arial, sans-serif.
+- **Font Family**: Montserrat, sans-serif; fallback: system-ui.
 - **Hierarchy**:
 
-| Role    | Font       | Size | Weight | Line Height | Letter Spacing | Notes              |
-| ------- | ---------- | ---- | ------ | ----------- | -------------- | ------------------ |
-| H1      | Montserrat | 24px | 600    | 1.2         | Normal         | Main headings      |
-| H2      | Montserrat | 22px | 400    | 1.5         | Normal         | Subheadings        |
-| H3      | Montserrat | 20px | 400    | 1.5         | Normal         | Section titles     |
-| Body    | Montserrat | 18px | 400    | 1.5         | Normal         | Main body text     |
-| Caption | Montserrat | 14px | 400    | 1.5         | Normal         | Small text         |
-| Code    | Montserrat | 16px | 400    | 1.5         | Normal         | Monospace fallback |
+| Role    | Font       | Size | Weight | Line Height | Notes              |
+| ------- | ---------- | ---- | ------ | ----------- | ------------------ |
+| H1      | Montserrat | 24px | 700    | 1.2         | Main page headings |
+| H2      | Montserrat | 20px | 700    | 1.5         | Section titles     |
+| Body    | Montserrat | 16px | 400    | 1.5         | Main body text     |
+| Caption | Montserrat | 12px | 600    | 1.5         | Metadata / Labels  |
 
 ### Principles
-
-- Consistent use of Montserrat across headings and body text.
-- Emphasis on readability through appropriate line heights.
-- Clear differentiation between headings and body text using size and weight.
+- **Bold Headers**: Headings should always be bold or black (weight 700+) to contrast with body text.
+- **Uppercase Labels**: Use uppercase with tracking for secondary buttons and metadata labels to enhance the professional feel.
 
 ## 4. Component Stylings
 
 ### Buttons
-
-**Primary Button**
-
-```css
-.button-primary {
-	background-color: #339d9c;
-	color: #ffffff;
-	padding: 12px 24px;
-	border: none;
-	border-radius: 8px;
-	font-size: 14px;
-	font-weight: 600;
-	cursor: pointer;
-}
-
-.button-primary:hover {
-	background-color: #207bb4;
-}
-
-.button-primary:disabled {
-	cursor: default;
-}
-```
-
-**Secondary Button**
-
-```css
-.button-secondary {
-	background-color: transparent;
-	color: #339d9c;
-	padding: 12px 24px;
-	border: 2px solid #339d9c;
-	border-radius: 8px;
-	font-size: 14px;
-	font-weight: 600;
-	cursor: pointer;
-}
-
-.button-secondary:hover {
-	background-color: #f1f2f4;
-}
-
-.button-secondary:disabled {
-	cursor: default;
-}
-```
+- **Primary Button**: `bg-primary` (Yellow), `text-primary-foreground` (Black), `rounded-md`.
+- **Outline Button**: `border-2 border-primary`, `text-foreground`, `rounded-md`.
+- **Interaction**: Transition colors on hover (e.g., `hover:bg-black` or `hover:bg-gray-100`), but **never scale**.
 
 ### Cards & Containers
-
-**Standard Card**
-
-```css
-.card {
-	background-color: #ffffff;
-	border: 1px solid #eaeaea;
-	border-radius: 8px;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-	padding: 16px;
-}
-```
+- **Border Radius**: Strictly `rounded-md` (approx. 4px) for all boxes.
+- **Circular Elements**: Use `rounded-full` only for avatars, checkmarks, or status badges.
+- **Elevation**: Use `shadow-sm` for static cards and `shadow-md` for interactive states.
 
 ### Inputs & Forms
-
-**Text Input**
-
-```css
-.input {
-	border: 1px solid #c7cbd4;
-	border-radius: 4px;
-	padding: 12px;
-	font-size: 16px;
-}
-
-.input:focus {
-	border-color: #339d9c;
-	outline: none;
-}
-```
-
-**Checkbox**
-
-```css
-.checkbox {
-	accent-color: #339d9c;
-}
-```
-
-### Navigation
-
-**Top Navigation Bar**
-
-```css
-.navbar {
-	background-color: #ffffff;
-	padding: 16px;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.nav-link {
-	color: #363537;
-	padding: 8px 16px;
-}
-
-.nav-link:hover {
-	text-decoration: underline;
-}
-```
-
-### Links
-
-**Standard Link**
-
-```css
-.link {
-	color: #207bb4;
-	text-decoration: none;
-}
-
-.link:hover {
-	color: #339d9c;
-}
-```
-
-### Badges
-
-**Status Badge**
-
-```css
-.badge-success {
-	background-color: #278c03;
-	color: #ffffff;
-	padding: 4px 8px;
-	border-radius: 12px;
-}
-
-.badge-alert {
-	background-color: #fdd835;
-	color: #000000;
-	padding: 4px 8px;
-	border-radius: 12px;
-}
-```
+- **Radius**: `rounded-md`.
+- **Focus**: `ring-2 ring-primary` with no offset for a clean, sharp look.
 
 ## 5. Layout Principles
 
-- **Spacing System**: Base unit 4px → 4, 8, 12, 16, 20, 24, 32, 40.
+- **Spacing**: Base unit 4px. Standard gaps: `gap-4` (16px) or `gap-8` (32px).
+- **Whitespace**: Generous margins around sections (`py-12` to `py-20`) to prevent visual clutter.
+- **Grid**: 12-column responsive grid with a max-width container of `1200px`.
 
-  - **Usage Context**:
-    - 4px: Minor adjustments.
-    - 8px: Small element spacing.
-    - 12px: Medium element spacing.
-    - 16px: Standard padding for containers.
-    - 20px: Larger gaps between sections.
-    - 24px: Spacing around buttons.
-    - 32px: Major section margins.
-    - 40px: Large container margins.
+## 6. Interaction & Motion
 
-- **Grid & Container**  
-  _Note: container widths and column counts are not extracted from the source. The values below are reasonable defaults inferred from the visible layout density._  
-  Max width: 1200px, Columns: 12, Gutter: 16px, Section padding: 24px.
+### Scale Animations (STRICT RULE)
+- **Do Not Use**: `hover:scale-*`, `active:scale-*`, or any transition that modifies the size of elements upon interaction.
+- **Reasoning**: To maintain layout stability and a fast, tool-like feel for the shopping experience.
 
-- **Whitespace Philosophy**: Whitespace is used generously to separate different sections and elements, promoting a clean and organized appearance.
-
-- **Border Radius Scale**:
-  - 4px: Small elements (buttons).
-  - 8px: Standard elements (cards).
-  - 24px: Large elements (containers).
-
-## 6. Depth & Elevation
-
-| Level | Treatment                      | Use                 |
-| ----- | ------------------------------ | ------------------- |
-| z-0   | None                           | Background elements |
-| z-1   | 0 2px 4px rgba(0, 0, 0, 0.1)   | Cards               |
-| z-2   | 0 4px 8px rgba(0, 0, 0, 0.1)   | Dropdown menus      |
-| z-10  | 0 6px 12px rgba(0, 0, 0, 0.15) | Modals              |
-
-### Shadow Philosophy
-
-Shadows are used sparingly to create depth, primarily for cards and dropdowns, enhancing the visual hierarchy without overwhelming the design.
+### Color & Opacity
+- Use smooth color transitions (`transition-all duration-300`) for hover states.
+- Use subtle shifts in background opacity (e.g., `bg-primary/90`) for feedback.
 
 ## 7. Do's and Don'ts
 
 ### Do's
-
-- Use **#339d9c** for primary button backgrounds.
-- Maintain **14px** font size for captions.
-- Ensure at least **16px** padding around text inputs.
-- Use **#363537** for body text on **#ffffff** backgrounds.
-- Keep **24px** spacing between card elements.
-- Use **#292d35** for secondary text on **#f1f2f4** backgrounds.
-- Apply **8px** border radius for buttons.
-- Use **24px** margins around sections.
+- Use **Yellow** specifically for "Attention" or "Action".
+- Stick to **Black and White** for all structural elements.
+- Use **rounded-md** for almost everything.
+- Maintain high contrast ratios for accessibility.
+- Use **Montserrat** for all text elements.
 
 ### Don'ts
+- Never use **Blue**, **Teal**, or other brand colors from legacy versions.
+- Never use **scale animations** on buttons or images.
+- Avoid using **rounded-lg** or larger radii on structural components.
+- Don't use light grays on white backgrounds for important text.
 
-- Never use **#8f98a9** for body text on **#ffffff**; it fails contrast.
-- Avoid less than **16px** font size for primary text.
-- Don't mix button colors; stick to **#339d9c** for primary actions.
-- Avoid using **#f1f2f4** for text on light backgrounds.
-- Don't use less than **40px** spacing for large sections.
-- Avoid using **#ffffff** for text on dark backgrounds.
-- Do not use border radius larger than **24px** on buttons.
-- Never place elements closer than **16px** apart.
+## 8. Agent Prompt Guide
 
-## 8. Responsive Behavior
-
-_Note: breakpoints below are industry-standard recommendations, not measurements from the source. Adjust to the brand's actual media queries when implementing._
-
-| Breakpoint Name | Width  | Key Changes                   |
-| --------------- | ------ | ----------------------------- |
-| Mobile Small    | 640px  | Single column layout          |
-| Mobile Large    | 768px  | Two column layout             |
-| Tablet          | 992px  | Grid layout with larger items |
-| Desktop         | 1200px | Multi-column layout           |
-| Desktop Large   | 1440px | Enhanced grid density         |
-
-- **Touch Targets**: Minimum sizes of **48px** for buttons and links.
-- **Collapsing Strategy**:
-  - Navigation: Collapse into a hamburger menu on mobile.
-  - Cards: Stack vertically on smaller screens.
-  - Typography: Scale down to maintain readability.
-  - Padding: Reduce to **16px** on mobile.
-
-## 9. Agent Prompt Guide
-
-- **Quick Color Reference**:
-
-  - Primary: #207bb4
-  - Accent: #339d9c
-  - Background: #ffffff
-  - Text: #363537
-
-- **Iteration Guide**:
-  1. Always use **#339d9c** for primary button backgrounds.
-  2. Maintain **14px** font size for captions.
-  3. Use **16px** padding for text inputs.
-  4. Keep at least **24px** spacing between elements.
-  5. Ensure **#363537** for body text on **#ffffff** backgrounds.
-  6. Use **8px** border radius for buttons.
-  7. Apply **#f1f2f4** for background sections.
-  8. Maintain responsive breakpoints as defined.
+- **Color Reference**: Primary: `HSL 42 100% 55%`, Base: Black/White.
+- **Radius Reference**: Default to `rounded-md`.
+- **Motion Reference**: Colors only, no scaling.
+- **Typography Reference**: Bold headings, clean body, Montserrat everywhere.
