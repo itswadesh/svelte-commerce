@@ -12,11 +12,7 @@
 
 <div class="border-t border-gray-100">
 	{#if productState.selectedVariant?.description || data?.product?.description}
-		<Button
-			variant="ghost"
-			class="flex w-full items-center justify-between gap-2 py-5 h-auto"
-			onclick={() => (isOpen = !isOpen)}
-		>
+	  <button class="flex w-full items-center justify-between gap-2 py-5 text-sm font-bold uppercase text-gray-900" onclick={() => (isOpen = !isOpen)}>
 			<span>Product Description</span>
 
 			{#if isOpen}
@@ -24,7 +20,7 @@
 			{:else}
 				<ChevronDown class="h-4 w-4 text-gray-800" />
 			{/if}
-		</Button>
+		</button>
 
 		{#if isOpen}
 			<div class="grid grid-cols-1 overflow-x-auto pb-6">
