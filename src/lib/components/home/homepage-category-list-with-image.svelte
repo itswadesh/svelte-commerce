@@ -4,16 +4,10 @@
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import { Skeleton } from '$lib/components/ui/skeleton'
 
+	import { Button } from '$lib/components/ui/button'
+
 	// let categories = $state([])
 	let { categories, loading } = $props()
-
-	// onMount(async () => {
-	// 	try {
-	// 		featuredCategories = (await CategoryService.fetchFeaturedCategories({ limit: 18 }))?.data || []
-	// 	} finally {
-	// 		loading = false
-	// 	}
-	// })
 </script>
 
 {#if categories?.length}
@@ -24,9 +18,9 @@
 				<div class="mx-auto mt-2 h-1 w-12 bg-primary md:mx-0"></div>
 				<p class="mt-4 text-sm font-medium text-muted-foreground">Discover our curated range of products by category</p>
 			</div>
-			<a
+			<Button
 				href="/categories"
-				class="group flex items-center rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-secondary-foreground transition-all hover:bg-primary hover:text-primary-foreground"
+				class="group"
 			>
 				View all categories
 				<svg
@@ -38,7 +32,7 @@
 				>
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
 				</svg>
-			</a>
+			</Button>
 		</div>
 
 		<div class="grid grid-cols-2 gap-2 px-2 mobiles:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-6">
