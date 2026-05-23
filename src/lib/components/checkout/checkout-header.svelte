@@ -21,7 +21,7 @@
 			<div
 				class={cn(
 					'flex h-7 w-7 items-center justify-center rounded-full border text-[11px] font-bold tracking-tight',
-					step === 1 ? 'bg-primary border-primary text-white' : 'border-gray-200'
+					step === 1 ? 'bg-primary border-primary text-foreground' : 'border-gray-200'
 				)}
 			>
 				1
@@ -34,7 +34,7 @@
 		<!-- Step 2: Address -->
 		<Button
 			variant="ghost"
-			disabled={step === 2 || step === 3}
+			disabled={step === 1}
 			onclick={() => goto(appendOneTimeCartId('/checkout/address'))}
 			class={cn(
 				'flex h-auto items-center p-0 font-normal hover:bg-transparent disabled:opacity-100',
@@ -44,7 +44,7 @@
 			<div
 				class={cn(
 					'flex h-7 w-7 items-center justify-center rounded-full border text-[11px] font-bold tracking-tight',
-					step === 2 ? 'bg-primary border-primary text-white' : 'border-gray-200'
+					step === 2 ? 'bg-primary border-primary text-foreground' : 'border-gray-200'
 				)}
 			>
 				2
@@ -66,7 +66,7 @@
 			<div
 				class={cn(
 					'flex h-7 w-7 items-center justify-center rounded-full border text-[11px] font-bold tracking-tight',
-					step === 3 ? 'bg-primary border-primary text-white' : 'border-gray-200'
+					step === 3 ? 'bg-primary border-primary text-foreground' : 'border-gray-200'
 				)}
 			>
 				3
