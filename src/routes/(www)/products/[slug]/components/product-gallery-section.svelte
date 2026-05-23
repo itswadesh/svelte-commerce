@@ -12,7 +12,7 @@
 
 <div class="relative">
   {#if page?.data?.store?.plugins?.socialSharingButtons}
-	  <div class="absolute right-4 sm:right-2 top-2 z-30 rounded-full bg-white block">
+	  <div class="absolute right-2 top-2 z-30 rounded-full bg-white block">
 			<ShareButton productName={page.data?.product?.title} productImage={page.data?.product?.thumbnail} url={page?.url?.href} />
 	  </div>
 	{/if}
