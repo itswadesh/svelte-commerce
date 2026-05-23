@@ -25,7 +25,7 @@
 				View all categories
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
-					class="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"
+					class="ml-2 h-4 w-4"
 					fill="none"
 					viewBox="0 0 24 24"
 					stroke="currentColor"
@@ -39,7 +39,7 @@
 			{#if loading}
 				{#each Array(6) as _}
 					<div class="flex flex-col items-center">
-						<Skeleton class="aspect-square w-full rounded-[2rem]" />
+						<Skeleton class="aspect-square w-full" />
 						<Skeleton class="mt-4 h-4 w-2/3 rounded-full" />
 					</div>
 				{/each}
@@ -47,12 +47,12 @@
 				{#each categories as { slug, icon, color, name, link, thumbnail, parentCategoryId } (slug)}
 					<a href={link ? link : slug ? `/${slug}` : `/products`} class="group flex flex-col items-center focus:outline-none">
 						<div
-							class="relative aspect-square w-full overflow-hidden rounded-[2rem] bg-muted shadow-sm transition-all duration-500 ease-out group-hover:-translate-y-2 group-hover:shadow-xl group-hover:ring-2 group-hover:ring-primary/20"
+							class="relative aspect-square w-full overflow-hidden bg-red-200 bg-muted shadow-sm transition-all duration-500 ease-out"
 						>
 							<LazyImg
 								src={thumbnail}
 								alt={name}
-								class="h-full w-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+								class="h-full w-full object-cover transition-transform duration-700 ease-in-out"
 							/>
 							<div
 								class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
