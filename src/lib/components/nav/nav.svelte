@@ -42,7 +42,7 @@
 		</div> -->
 
 		{#if navModule.helloBarPlugin?.content}
-			<div class="max-w-none bg-primary py-2 text-center text-xs text-white sm:text-sm">
+			<div class="max-w-none bg-primary py-2 text-center text-xs text-foreground sm:text-sm">
 				<ul class="sliding-list" style="--item-count: {navModule.itemCount}; --anim-duration: {navModule.animationDuration}s;">
 					{#if navModule.helloBarPlugin?.content}
 						<li style="--index: 1;">{@html navModule.helloBarPlugin?.content}</li>
@@ -56,7 +56,7 @@
 				</ul>
 			</div>
 		{:else}
-			<div class="bg-primary py-2 text-center text-xs text-white sm:text-sm">
+			<div class="bg-primary py-2 text-center text-xs text-foreground sm:text-sm">
 				{@html navModule.helloBarPlugin?.content}
 			</div>
 		{/if}
@@ -205,12 +205,12 @@
 		>
 			<span class="sr-only">Close sidebar</span>
 		</Button>
-		<div transition:fade={{ duration: 500 }} class="relative z-[60] h-full w-full overflow-y-auto overflow-x-hidden bg-primary p-6 pt-16 text-white">
+		<div transition:fade={{ duration: 500 }} class="relative z-[60] h-full w-full overflow-y-auto overflow-x-hidden bg-white p-6 pt-16 text-foreground">
 			<Button
 				variant="ghost"
 				size="icon"
 				aria-label="Close sidebar"
-				class="absolute right-4 top-4 rounded-full bg-zinc-800/50 text-white hover:bg-zinc-800/70"
+				class="absolute right-4 top-4 rounded-full bg-gray-100 text-foreground hover:bg-gray-200"
 				onclick={() => (navModule.openSidebar = false)}
 			>
 				<X class="h-5 w-5" />
@@ -229,7 +229,7 @@
 											<a
 												href={m.link ? m.link : m.slug ? '/' + m.slug : '/products'}
 												aria-label="Click to visit category related products"
-												class="flex-1 text-base font-medium"
+												class="flex-1 text-base font-bold text-foreground"
 												onclick={() => (navModule.openSidebar = false)}
 											>
 												{m.name}
@@ -252,7 +252,7 @@
 										<a
 											href={m.link ? m.link : m.slug ? '/' + m.slug : '/products'}
 											aria-label="Click to visit category related products"
-											class="flex w-full items-center justify-between gap-2 py-1 text-left text-base font-medium text-zinc-200 hover:text-white"
+											class="flex w-full items-center justify-between gap-2 py-1 text-left text-base font-bold text-foreground hover:text-primary"
 											onclick={() => (navModule.openSidebar = false)}
 										>
 											{m.name}
@@ -266,11 +266,11 @@
 													{#if c.children?.length}
 														<div
 															class="flex w-full items-center justify-between gap-2 py-1
-                          {navModule.selectedCategory2 === c.name ? 'text-white' : 'text-zinc-200 hover:text-white'}"
+                          {navModule.selectedCategory2 === c.name ? 'text-primary' : 'text-muted-foreground hover:text-foreground'}"
 														>
 															<a
 																href={c.link ? c.link : c.slug ? '/' + c.slug : '/products'}
-																class="flex-1"
+																class="flex-1 font-semibold"
 																onclick={() => (navModule.openSidebar = false)}
 															>
 																{c.name}
@@ -292,7 +292,7 @@
 														<a
 															href={c.link ? c.link : c.slug ? '/' + c.slug : '/products'}
 															aria-label="Click to visit category related products page"
-															class="flex w-full items-center justify-between gap-2 py-1 text-left text-zinc-200 hover:text-white focus:outline-none"
+															class="flex w-full items-center justify-between gap-2 py-1 text-left font-semibold text-muted-foreground hover:text-foreground focus:outline-none"
 															onclick={() => (navModule.openSidebar = false)}
 														>
 															{c.name}
@@ -306,7 +306,7 @@
 																	<a
 																		href={cc.link ? cc.link : cc.slug ? '/' + cc.slug : '/products'}
 																		aria-label="Click to visit category related products page"
-																		class="flex w-full items-center justify-between gap-2 py-1 text-left text-zinc-200 hover:text-white focus:outline-none"
+																		class="flex w-full items-center justify-between gap-2 py-1 text-left text-muted-foreground hover:text-foreground focus:outline-none"
 																		onclick={() => (navModule.openSidebar = false)}
 																	>
 																		{cc.name}
@@ -326,13 +326,13 @@
 				{/if}
 
 				{#if navModule.navMenu?.length}
-					<li class="mt-4 border-t border-zinc-700 pt-4">
+					<li class="mt-4 border-t border-gray-100 pt-4">
 						<ul class="m-0 flex w-full list-none flex-col gap-3 p-0 text-sm">
 							{#each navModule.navMenu as menuItem}
 								<li>
 									<a
 										href={menuItem?.link}
-										class="transiton block py-1 text-base text-zinc-200 duration-300 hover:text-white focus:outline-none"
+										class="transiton block py-1 text-base font-semibold text-muted-foreground duration-300 hover:text-foreground focus:outline-none"
 										onclick={() => (navModule.openSidebar = false)}
 									>
 										{menuItem.name}
@@ -344,14 +344,14 @@
 				{/if}
 
 				{#if page?.data?.store?.businessEmail || page?.data?.store?.businessPhone}
-					<li class="mt-4 border-zinc-700 pt-4 {navModule.navMenu?.length ? 'border-t' : ''}">
+					<li class="mt-4 border-gray-100 pt-4 {navModule.navMenu?.length ? 'border-t' : ''}">
 						<!-- Email/Phone -->
 						<div class="flex flex-col gap-2">
 							{#if page?.data?.store?.businessEmail}
 								<a
 									href="mailto:{page?.data?.store?.businessEmail}"
 									aria-label="Email us"
-									class="transiton flex items-center gap-2 text-zinc-200 duration-300 hover:text-white focus:outline-none"
+									class="transiton flex items-center gap-2 text-muted-foreground duration-300 hover:text-foreground focus:outline-none"
 								>
 									<Mail class="size-4" />
 									{page?.data?.store?.businessEmail}
@@ -362,7 +362,7 @@
 								<a
 									href="tel:+{page?.data?.store?.businessPhone}}"
 									aria-label="Call us"
-									class="transiton flex items-center gap-2 text-zinc-200 duration-300 hover:text-white focus:outline-none"
+									class="transiton flex items-center gap-2 text-muted-foreground duration-300 hover:text-foreground focus:outline-none"
 								>
 									<Phone class="size-4" />
 									{page?.data?.store?.businessPhone}
@@ -373,13 +373,13 @@
 				{/if}
 
 				{#if menuItemsUser?.length}
-					<li class="mt-4 border-t border-zinc-700 pt-4">
+					<li class="mt-4 border-t border-gray-100 pt-4">
 						<ul class="m-0 flex w-full list-none flex-col gap-3 p-0 text-sm">
 							{#each menuItemsUser as m}
 								<li>
 									<a
 										href={m.url}
-										class="transiton block py-1 text-base text-zinc-200 duration-300 hover:text-white focus:outline-none"
+										class="transiton block py-1 text-base font-semibold text-muted-foreground duration-300 hover:text-foreground focus:outline-none"
 										onclick={() => (navModule.openSidebar = false)}
 									>
 										{m.title}
