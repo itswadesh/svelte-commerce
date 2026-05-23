@@ -77,7 +77,7 @@
 					<div class="relative">
 						<item.icon size={24} class="text-gray-500" />
 						{#if cartState?.cart?.total && cartState.cart?.lineItems?.length > 0}
-							<span class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-white">
+							<span class="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px]">
 								{cartState?.cart?.qty}
 							</span>
 						{/if}
