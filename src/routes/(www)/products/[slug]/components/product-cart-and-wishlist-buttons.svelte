@@ -3,10 +3,11 @@
 	import { Button } from '$lib/components/ui/button'
 	import { useProductState } from '$lib/core/composables/index.js'
 	import { formatPrice } from '$lib/core/utils'
-	import { Check, HeartIcon, LoaderCircle, ShoppingCart, MoveRight } from '@lucide/svelte'
+	import { Check, ChevronRight, HeartIcon, LoaderCircle, ShoppingCart, MoveRight } from '@lucide/svelte'
 	import { fly } from 'svelte/transition'
 	import EnquiryModal from '$lib/core/components/plugins/enquiry-modal.svelte'
 	import { quintOut } from 'svelte/easing'
+	import { goto } from '$app/navigation'
 
 	const { showWishlist = true } = $props()
 
@@ -14,6 +15,13 @@
 	const enquiryPlugin = $derived(page.data?.store?.plugins?.enquiryMode)
 
 	let showEnquiryModal = $state(false)
+
+  function handleClick() {
+    if (productState.cartState.showCheckout)
+      goto('/checkout/cart')
+    else
+      productState.handleAddToCart()
+  }
 </script>
 
 {#snippet wishlistButton()}
@@ -42,7 +50,7 @@
 	<!-- Added to cart message toast-like notification -->
 	<div
 		transition:fly={{ x: 50, duration: 300, easing: quintOut }}
-		class="fixed right-4 top-24 z-[100] w-full max-w-sm rounded-lg border border-gray-100 bg-white p-4 shadow-2xl"
+		class="fixed hidden md:block right-4 top-24 z-[100] w-full max-w-sm rounded-lg border border-gray-100 bg-white p-4 shadow-2xl"
 	>
 		<div class="flex items-center gap-4">
 			<div class="h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border border-gray-100 bg-gray-50">
@@ -94,17 +102,20 @@
 						: ''}"
 					size="lg"
 					disabled={productState.addToCartButtonDisabled}
-					onclick={productState.handleAddToCart}
+					onclick={handleClick}
 				>
 					{#if !productState.isLoading && (!page.data?.product?.manageInventory ? false : productState.anyVariantStockThere ? !productState.selectedVariant?.stock : !page.data?.product.stock)}
 						Out of Stock
+					{:else if productState.cartState.showCheckout}
+						Go to bag
+						<ChevronRight class="ml-2 h-4 w-4" />
 					{:else}
 						<ShoppingCart class="mr-2 h-4 w-4" />
 						Add to bag
 					{/if}
 				</Button>
 
-				{#if productState.cartState.showCheckout}
+				<!-- {#if productState.cartState.showCheckout}
 					<Button
 						href="/checkout/cart"
 						class="h-full flex-1"
@@ -113,7 +124,7 @@
 						Go to bag
 						<MoveRight class="ml-2 h-4 w-4" />
 					</Button>
-				{/if}
+				{/if} -->
 			</div>
 		{/if}
 	</div>
