@@ -120,5 +120,5 @@ html {
 }
 
 .page-width {
-	@apply mx-2 lg:container lg:mx-auto;
+	@apply mx-page lg:container lg:mx-auto;
 }
