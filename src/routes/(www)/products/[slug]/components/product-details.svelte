@@ -20,7 +20,7 @@
 	import RelatedProducts from './related-products.svelte'
 	import StoreCheck from './store-check.svelte'
 	import { page } from '$app/state'
-	import { Button } from '$lib/components/ui/button'
+	import { Button } from '$lib/components/ui/button/index.js'
 	//import { PUBLIC_LITEKART_DOMAIN } from '$env/static/public'
 	const PUBLIC_LITEKART_DOMAIN = $derived(page.url.origin)
 
@@ -41,7 +41,7 @@
 
 <!-- <ProductRenderer bind:data>
 	{#snippet content(productState)} -->
-<div class="mx-2 mb-3 mt-2 lg:container lg:mx-auto">
+<div class="page-width">
 	<Breadcrumb categoryHierarchy={data?.product?.categoryHierarchy} />
 	<GoogleStructuredDataBreadcrumb
 		breadcrumbs={data?.product?.categoryHierarchy?.map((item: any, index: number) => ({
