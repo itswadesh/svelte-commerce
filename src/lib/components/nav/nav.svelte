@@ -157,7 +157,7 @@
 								<Heart class="h-5 w-5" />
 								{#if wishlistState?.count > 0}
 									<span
-										class="absolute right-0 top-0 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-primary px-1.5 py-1 text-xs font-bold leading-none text-white"
+										class="absolute right-0 top-0 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-primary px-1.5 py-1 text-xs font-bold leading-none"
 									>
 										{wishlistState.count}
 									</span>
