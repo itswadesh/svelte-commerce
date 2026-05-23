@@ -10,7 +10,7 @@
 	import OrderTrustBadges from '$lib/core/components/plugins/order-trust-badges.svelte'
 	import CouponsDrawer from '$lib/components/coupon/coupons-drawer.svelte'
 	import { CartModule } from '$lib/core/composables/index.js'
-	import { appendOneTimeCartId } from '$lib/core/utils/index.js'
+	import CheckoutHeader from '$lib/components/checkout/checkout-header.svelte'
 	import LazyImg from '$lib/core/components/image/lazy-img.svelte'
 	import { tweened } from 'svelte/motion'
 	import { cubicOut } from 'svelte/easing'
@@ -75,29 +75,7 @@
 <div class="min-h-screen py-8">
 	<div class="container mx-auto px-4">
 
-			<!-- Checkout Progress -->
-		<div class="mb-8">
-			<div class="flex items-center justify-center space-x-4 sm:space-x-12">
-				<div class="flex items-center text-primary">
-					<div class="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-[11px] font-bold tracking-tight text-white">1</div>
-					<span class="ml-2 text-xs font-bold uppercase tracking-widest">Cart</span>
-				</div>
-				<div class="h-px w-8 bg-gray-200 sm:w-16"></div>
-				<Button
-					variant="ghost"
-					onclick={() => goto(appendOneTimeCartId('/checkout/address'))}
-					class="flex h-auto items-center p-0 font-normal text-gray-400 hover:bg-transparent hover:text-gray-900"
-				>
-					<div class="flex h-7 w-7 items-center justify-center rounded-full border border-gray-200 text-[11px] font-bold tracking-tight">2</div>
-					<span class="ml-2 text-xs font-bold uppercase tracking-widest">Address</span>
-				</Button>
-				<div class="h-px w-8 bg-gray-200 sm:w-16"></div>
-				<div class="flex items-center text-gray-400">
-					<div class="flex h-7 w-7 items-center justify-center rounded-full border border-gray-200 text-[11px] font-bold tracking-tight">3</div>
-					<span class="ml-2 text-xs font-bold uppercase tracking-widest">Payment</span>
-				</div>
-			</div>
-		</div>
+		<CheckoutHeader step={1} />
 
 		<!-- <div class="mb-8">
 		  <div>
