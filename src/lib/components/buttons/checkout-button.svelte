@@ -13,14 +13,11 @@
 	} = $props()
 </script>
 
-<div
-	class="w-full max-sm:fixed max-sm:bottom-0 max-sm:left-0 max-sm:right-0 max-sm:z-[60] {className}"
-	onclick={onclick}
-	aria-hidden="true"
->
+<div class="w-full max-sm:fixed max-sm:bottom-0 max-sm:left-0 max-sm:right-0 max-sm:z-[60] {className}">
 	<Button
 		class="ease-out-expo group w-full bg-primary py-7 text-sm font-bold uppercase tracking-[0.2em] shadow-lg transition-all duration-300 hover:shadow-xl max-sm:h-20 max-sm:rounded-none disabled:bg-gray-400 disabled:opacity-100"
 		disabled={disabled || loading}
+		{onclick}
 	>
 		{#if loading}
 			<LoadingDots />
