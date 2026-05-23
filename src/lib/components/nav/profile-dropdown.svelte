@@ -26,7 +26,7 @@
 		{/if}
 	</DropdownMenu.Trigger>
 
-	<DropdownMenu.Content class="min-w-[240px] rounded-2xl border-gray-100 bg-white p-2 shadow-2xl">
+	<DropdownMenu.Content class="min-w-[240px] border-gray-100 bg-white p-2 shadow-2xl">
 		<!-- User Header -->
 		<div class="mb-2 flex items-center gap-3 border-b border-gray-50 px-4 py-4">
 			<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/5 text-primary">
@@ -49,9 +49,9 @@
 		<DropdownMenu.Group>
 			<a href="/my/profile" class="block w-full">
 				<DropdownMenu.Item
-					class="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50 hover:text-primary"
+					class="flex cursor-pointer items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50 hover:text-primary"
 				>
-					<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-50 transition-colors group-hover:bg-white">
+					<div class="flex h-8 w-8 items-center justify-center bg-gray-50 transition-colors group-hover:bg-white">
 						<UserCircle class="h-4 w-4" />
 					</div>
 					Profile Settings
@@ -59,9 +59,9 @@
 			</a>
 			<a href="/my/orders" class="block w-full">
 				<DropdownMenu.Item
-					class="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50 hover:text-primary"
+					class="flex cursor-pointer items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50 hover:text-primary"
 				>
-					<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-50">
+					<div class="flex h-8 w-8 items-center justify-center bg-gray-50">
 						<ShoppingBag class="h-4 w-4" />
 					</div>
 					Order History
@@ -69,9 +69,9 @@
 			</a>
 			<a href="/my/addresses" class="block w-full">
 				<DropdownMenu.Item
-					class="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50 hover:text-primary"
+					class="flex cursor-pointer items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50 hover:text-primary"
 				>
-					<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-50">
+					<div class="flex h-8 w-8 items-center justify-center bg-gray-50">
 						<MapPin class="h-4 w-4" />
 					</div>
 					My Addresses
@@ -79,9 +79,9 @@
 			</a>
 			<a href="/my/wishlist" class="block w-full">
 				<DropdownMenu.Item
-					class="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50 hover:text-primary"
+					class="flex cursor-pointer items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-600 transition-all hover:bg-gray-50 hover:text-primary"
 				>
-					<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-50">
+					<div class="flex h-8 w-8 items-center justify-center bg-gray-50">
 						<Heart class="h-4 w-4" />
 					</div>
 					My Wishlist
