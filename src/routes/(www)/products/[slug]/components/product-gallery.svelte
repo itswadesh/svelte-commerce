@@ -154,9 +154,9 @@
 	<div class="relative mx-auto flex h-screen max-w-[1200px] items-center gap-4 px-4 py-12">
 		<!-- Close button -->
 		<Button
-			variant="ghost"
+			variant="plain"
 			size="icon"
-			class="absolute right-6 top-6 z-30 text-white hover:bg-white/10"
+			class="absolute right-0 top-4 hover:border hover:border-primary rounded-full z-30 text-white hover:bg-white/10"
 			onclick={hideCarousel}
 		>
 			<X class="h-6 w-6" />
