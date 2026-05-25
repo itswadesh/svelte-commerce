@@ -67,7 +67,7 @@
 			{@const youtubeId = getYoutubeId(img)}
 			<div
 				class={cn(
-					'relative overflow-hidden border max-sm:inline-block max-sm:min-w-20 max-sm:max-w-20',
+					'relative overflow-hidden border max-sm:inline-block max-sm:min-w-20 max-sm:max-w-20 p-0.5',
 					idx === currentIndex && 'border-primary'
 				)}
 				role="button"
