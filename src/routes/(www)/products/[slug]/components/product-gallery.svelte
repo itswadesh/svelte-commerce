@@ -12,6 +12,7 @@
 	let { images = [] } = $props()
 
 	let carouselApi: CarouselAPI | null = $state(null)
+	let mainCarouselApi: CarouselAPI | null = $state(null)
 	let carouselImages = $state<string[]>([])
 	let currentIndex = $state(0)
 	let previewVideoPaused = $state<{ [key: string]: boolean }>({})
@@ -23,6 +24,12 @@
 		selectedImage = img
 		currentIndex = images.indexOf(img)
 	}
+
+	$effect(() => {
+		if (mainCarouselApi && mainCarouselApi.selectedScrollSnap() !== currentIndex) {
+			mainCarouselApi.scrollTo(currentIndex)
+		}
+	})
 
 	const rearrangeArray = (selectedItem: any, items: any[]) => {
 		const index = items.indexOf(selectedItem)
@@ -62,7 +69,7 @@
 {/if}
 
 <div class="flex flex-col-reverse gap-4 sm:flex-row">
-	<div class="flex gap-4 max-sm:overflow-x-auto sm:w-24 sm:flex-col">
+	<div class="hidden sm:flex sm:w-24 sm:flex-col gap-4">
 		{#each images as img, idx}
 			{@const youtubeId = getYoutubeId(img)}
 			<div
@@ -101,41 +108,76 @@
 	</div>
 
 	<div class="flex-1">
-		<div
-			class="border sm:mb-5"
-			role="button"
-			tabindex="0"
-			onclick={() => images[currentIndex] && showCarousel(images[currentIndex])}
-			onkeydown={(e) =>
-				e.key === 'Enter' && images[currentIndex] && showCarousel(images[currentIndex])}
+		<Carousel.Root
+			opts={{ loop: true }}
+			setApi={(api) => {
+				if (api) {
+					mainCarouselApi = api
+					api.on('select', () => {
+						currentIndex = api.selectedScrollSnap()
+					})
+				}
+			}}
+			class="relative w-full"
 		>
-			{#if images?.length}
-				{@const img = images[currentIndex]}
-				{@const youtubeId = getYoutubeId(img)}
-				{#if youtubeId}
-					<div class="relative aspect-square w-full">
-						<iframe
-							width="100%"
-							height="100%"
-							class="aspect-square"
-							src="https://www.youtube.com/embed/{youtubeId}?rel=0&modestbranding=1&playsinline=1"
-							title="Video"
-							frameborder="0"
-							allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-							allowfullscreen
-							loading="lazy"
-						></iframe>
-					</div>
-				{:else if isVideoURL(img)}
-					<video height="100%" width="100%" class="aspect-square w-full" loop autoplay muted>
-						<source src={img} />
-						Video not supported
-					</video>
-				{:else}
-					<LazyImgWithZoom aspectRatio="2:3" src={images[currentIndex]} alt="Product Image" class="w-full object-cover" />
-				{/if}
-			{/if}
-		</div>
+			<Carousel.Content>
+				{#each images as img, index}
+					{@const youtubeId = getYoutubeId(img)}
+					<Carousel.Item>
+						<div
+							class="border sm:mb-5 sm:cursor-zoom-in"
+							role="button"
+							tabindex="0"
+							onclick={() => showCarousel(img)}
+							onkeydown={(e) => e.key === 'Enter' && showCarousel(img)}
+						>
+							{#if youtubeId}
+								<div class="relative aspect-square w-full">
+									<iframe
+										width="100%"
+										height="100%"
+										class="aspect-square"
+										src="https://www.youtube.com/embed/{youtubeId}?rel=0&modestbranding=1&playsinline=1"
+										title="Video"
+										frameborder="0"
+										allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+										allowfullscreen
+										loading="lazy"
+									></iframe>
+								</div>
+							{:else if isVideoURL(img)}
+								<video height="100%" width="100%" class="aspect-square w-full" loop autoplay muted>
+									<source src={img} />
+									Video not supported
+								</video>
+							{:else}
+								<LazyImgWithZoom
+									aspectRatio="2:3"
+									src={img}
+									alt="Product Image"
+									class="w-full object-cover"
+								/>
+							{/if}
+						</div>
+					</Carousel.Item>
+				{/each}
+			</Carousel.Content>
+			<div class="hidden sm:block">
+				<Carousel.Previous class="-left-4" />
+				<Carousel.Next class="-right-4" />
+			</div>
+
+			<!-- Mobile Pagination Dots -->
+			<div class="flex justify-center gap-1.5 mt-4 sm:hidden">
+				{#each images as _, i}
+					<button
+						class="h-1.5 rounded-full transition-all duration-300 {currentIndex === i ? 'bg-primary w-6' : 'bg-gray-300 w-1.5'}"
+						onclick={() => mainCarouselApi?.scrollTo(i)}
+						aria-label="Go to slide {i + 1}"
+					></button>
+				{/each}
+			</div>
+		</Carousel.Root>
 	</div>
 </div>
 
