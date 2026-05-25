@@ -31,6 +31,7 @@
 	// Zoom state
 	let isHovered = $state(false)
 	let zoomPos = $state({ x: 50, y: 50 })
+	let isMobile = $state(false)
 
 	if (extension === 'svg') {
 		isSvg = true
@@ -42,6 +43,12 @@
 	let observer: IntersectionObserver
 
 	onMount(() => {
+		isMobile = window.innerWidth < 640
+		const handleResize = () => {
+			isMobile = window.innerWidth < 640
+		}
+		window.addEventListener('resize', handleResize)
+
 		observer = new IntersectionObserver(
 			(entries) => {
 				for (const entry of entries) {
@@ -64,6 +71,7 @@
 			if (observer) {
 				observer.disconnect()
 			}
+			window.removeEventListener('resize', handleResize)
 		}
 	})
 
@@ -76,7 +84,7 @@
 	})
 
 	function handleMouseMove(e: MouseEvent) {
-		if (!containerRef) return
+		if (!containerRef || isMobile) return
 		const { left, top, width, height } = containerRef.getBoundingClientRect()
 		const x = ((e.clientX - left) / width) * 100
 		const y = ((e.clientY - top) / height) * 100
@@ -87,8 +95,8 @@
 <!-- svelte-ignore a11y_mouse_events_have_key_events -->
 <div
 	bind:this={containerRef}
-	onmouseenter={() => (isHovered = true)}
-	onmouseleave={() => (isHovered = false)}
+	onmouseenter={() => !isMobile && (isHovered = true)}
+	onmouseleave={() => !isMobile && (isHovered = false)}
 	onmousemove={handleMouseMove}
 	class="relative w-full overflow-hidden bg-gray-50"
 	style="aspect-ratio: {aspectWidth}/{aspectHeight}; {height !== 'auto' ? `height: ${height}px;` : ''} {width !== 'auto' ? `width: ${width}px;` : ''}"
@@ -130,7 +138,7 @@
 					class:opacity-0={!loaded}
 					class:opacity-100={loaded}
 					style:transform-origin="{zoomPos.x}% {zoomPos.y}%"
-					style:transform={isHovered ? 'scale(2.5)' : 'scale(1)'}
+					style:transform={isHovered && !isMobile ? 'scale(2.5)' : 'scale(1)'}
 					style:transition="transform 0.5s cubic-bezier(0.33, 1, 0.68, 1), transform-origin 0.15s ease-out"
 					{...rest}
 				/>
@@ -161,7 +169,7 @@
 					class:opacity-0={!loaded}
 					class:opacity-100={loaded}
 					style:transform-origin="{zoomPos.x}% {zoomPos.y}%"
-					style:transform={isHovered ? 'scale(2.5)' : 'scale(1)'}
+					style:transform={isHovered && !isMobile ? 'scale(2.5)' : 'scale(1)'}
 					style:transition="transform 0.5s cubic-bezier(0.33, 1, 0.68, 1), transform-origin 0.15s ease-out"
 					{...rest}
 				/>
