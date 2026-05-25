@@ -59,7 +59,7 @@
 
 			<div class="overflow-hidden {shouldCollapseOnMobile ? (isExpanded ? '' : 'hidden md:block') : ''}">
 				<div class="flex flex-col gap-8 py-8 md:gap-12 md:py-12 lg:flex-row lg:justify-between">
-					<div class="flex max-w-xs flex-col gap-6">
+					<div class="flex max-w-xs flex-col gap-3 sm:gap-4">
 						<a href="/" class="flex items-center">
 							{#if storeData?.logo}
 								<img src={storeData?.logo} class="h-10 object-contain" alt="{storeData?.name} logo" />
