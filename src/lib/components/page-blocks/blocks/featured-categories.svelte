@@ -47,7 +47,7 @@
 		</div>
 	{/if}
 
-	<div class="grid grid-cols-2 gap-2 px-2 mobiles:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-6">
+	<div class="grid gap-2 px-2" style="grid-template-columns: repeat({block.metadata.columnCount || 5}, 1fr);">
 		{#if loadingForCategory}
 			{#each Array(6) as _}
 				<div class="flex flex-col items-center">
