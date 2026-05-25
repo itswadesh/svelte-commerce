@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ArrowRight } from '@lucide/svelte'
+	import { ChevronRight } from '@lucide/svelte'
 	import type { WithoutChildren } from 'bits-ui'
 	import { getEmblaContext } from './context.js'
 	import { cn } from '$lib/core/utils/index.js'
@@ -24,6 +24,6 @@
 	bind:ref
 	{...restProps}
 >
-	<ArrowRight class="size-4" />
+	<ChevronRight class="size-4" />
 	<span class="sr-only">Next slide</span>
 </Button>
