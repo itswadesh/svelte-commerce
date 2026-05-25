@@ -22,7 +22,7 @@
 		--accent-foreground: 0 0% 0%;
 		--destructive: 0 0% 0%;
 		--destructive-foreground: 0 0% 100%;
-		--success: 0 0% 0%;
+		--success: 120 100% 40%;
 		--success-foreground: 0 0% 100%;
 		--ring: 42 100% 55%;
 		--radius: 0.5rem;
@@ -56,7 +56,7 @@
 		--accent-foreground: 0 0% 0%;
 		--destructive: 0 0% 100%;
 		--destructive-foreground: 0 0% 0%;
-		--success: 0 0% 100%;
+		--success: 120 100% 40%;
 		--success-foreground: 0 0% 0%;
 		--ring: 42 100% 55%;
 		--sidebar-background: 0 0% 10%;
