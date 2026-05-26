@@ -476,7 +476,7 @@
 									variant="ghost"
 									size="icon"
 									class="h-auto w-auto p-1 text-red-500"
-									onclick={cartState.removeCoupon}
+									onclick={() => cartState.removeCoupon()}
 								>
 									<X class="size-4" />
 								</Button>
