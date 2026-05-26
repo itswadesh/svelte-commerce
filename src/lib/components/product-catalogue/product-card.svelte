@@ -52,7 +52,7 @@
 						<EmptyImage class="w-full object-cover" style="aspect-ratio: 3 / 4; border-radius: 8px;" />
 					{/if}
 
-					{#if product.ratings || product.rating}
+					{#if product.rating || (Array.isArray(product.ratings) && product.ratings.length > 0)}
 						<div data-testid="product-card-rating-container" class="absolute bottom-[6px] left-1 z-10">
 							<div class="flex items-center gap-1 rounded-3xl bg-white px-[6px] py-1 lg:px-[9px]">
 								<div class="min-w-[12px]">
@@ -63,7 +63,9 @@
 										></path>
 									</svg>
 								</div>
-								<span class="text-[10px] font-bold text-gray-900 lg:text-xs">{product.ratings || product.rating}</span>
+								<span class="text-[10px] font-bold text-gray-900 lg:text-xs">
+									{product.rating || (Array.isArray(product.ratings) ? product.ratings.length : product.ratings)}
+								</span>
 							</div>
 						</div>
 					{/if}
